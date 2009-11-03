@@ -242,10 +242,10 @@ int xmlconfigurator::open_config_file(const char *filename)
 
 	this->populate_tree_model();
 
-	std::vector <ui_config_entry *> edps = ui_model::instance().getRootNode().getChildByType(ui_config_entry::EDP);
+	ui_config_entry::childrens_t edps = ui_model::instance().getRootNode().getChildByType(ui_config_entry::EDP);
 	ui_model::instance().setEdpsLoadButton((edps.size() > 0), true);
 
-	std::vector <ui_config_entry *> mps = ui_model::instance().getRootNode().getChildByType(ui_config_entry::MP);
+	ui_config_entry::childrens_t mps = ui_model::instance().getRootNode().getChildByType(ui_config_entry::MP);
 	ui_model::instance().setMpLoadButton((mps.size() > 0), true);
 
 	return 0;

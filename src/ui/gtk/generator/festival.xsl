@@ -17,6 +17,7 @@ Festival window
     <child>
       <widget class="GtkVBox" id="vbox1">
         <property name="visible">True</property>
+        <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
         <child>
           <widget class="GtkLabel" id="label1">
             <property name="visible">True</property>

@@ -11,51 +11,49 @@ Inc window callback signals
 <xsl:variable name="name" select="name"/>
 <xsl:variable name="fullName" select="fullName"/>
 <xsl:variable name="motorsNo" select="motorsNo"/>
-<xsl:text>
+
 
 extern "C"
 {
-	void on_arrow_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_int (GtkButton* button, gpointer userdata)
+	void on_arrow_button_clicked_<xsl:value-of select="$fullName" />_int (GtkButton* button, gpointer userdata)
 	{
 		ui_config_entry * ChoseEntry = (ui_config_entry *) userdata;
         GtkBuilder &amp; thisBuilder = ((*ChoseEntry).getBuilder());
         
-		</xsl:text><xsl:call-template name="irp6.int.repeat.signals.cc.arrow">
+		<xsl:call-template name="irp6.int.repeat.signals.cc.arrow">
     		<xsl:with-param name="motorsNo" select="$motorsNo"/>
 			<xsl:with-param name="i" select="1"/>
 			<xsl:with-param name="name" select="$name"/>
- 		</xsl:call-template><xsl:text>
+ 		</xsl:call-template>
 	}
 	
-	void on_read_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_int (GtkButton* button, gpointer userdata)
+	void on_read_button_clicked_<xsl:value-of select="$fullName" />_int (GtkButton* button, gpointer userdata)
 	{
 		ui_config_entry * ChoseEntry = (ui_config_entry *) userdata;
         GtkBuilder &amp; thisBuilder = ((*ChoseEntry).getBuilder());
         
-	</xsl:text><xsl:call-template name="irp6.int.repeat.signals.cc.read.1">
+	<xsl:call-template name="irp6.int.repeat.signals.cc.read.1">
     		<xsl:with-param name="motorsNo" select="$motorsNo"/>
 			<xsl:with-param name="i" select="1"/>
 			<xsl:with-param name="name" select="$name"/>
- 		</xsl:call-template><xsl:text>
+ 		</xsl:call-template>
  		
-		if (robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text></xsl:text><xsl:choose><xsl:when test="$name = 'conveyor'"></xsl:when><xsl:otherwise><xsl:text>->ecp</xsl:text></xsl:otherwise></xsl:choose><xsl:text>->get_EDP_pid()!=-1)
+		if (robot_<xsl:value-of select="$fullName" />->ecp->get_EDP_pid()!=-1)
 		{
-			if (state_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>.is_synchronised) // Czy robot jest zsynchronizowany?
+			if (state_<xsl:value-of select="$fullName" />.is_synchronised) // Czy robot jest zsynchronizowany?
 			{
 				try {
-    				robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>->read_joints(</xsl:text><xsl:value-of select="$name" /><xsl:text>_current_pos); // Odczyt polozenia walow silnikow
-    					
-    </xsl:text><xsl:call-template name="irp6.int.repeat.signals.cc.read.2">
+    				robot_<xsl:value-of select="$fullName" />->read_joints(<xsl:value-of select="$name" />_current_pos); // Odczyt polozenia walow silnikow    					
+					<xsl:call-template name="irp6.int.repeat.signals.cc.read.2">
         				<xsl:with-param name="motorsNo" select="$motorsNo"/>
         				<xsl:with-param name="name" select="$name"/>
     					<xsl:with-param name="i" select="1"/>
-     				</xsl:call-template><xsl:text>		
-     				
-     				for (int i = 0; i &lt; </xsl:text><xsl:value-of select="$motorsNo" /><xsl:text>; i++)
-    				</xsl:text><xsl:value-of select="$name" /><xsl:text>_desired_pos[i] = </xsl:text><xsl:value-of select="$name" /><xsl:text>_current_pos[i];		
+     				</xsl:call-template>
+     				for (int i = 0; i &lt; <xsl:value-of select="$motorsNo" />; i++)
+    				<xsl:value-of select="$name" />_desired_pos[i] = <xsl:value-of select="$name" />_current_pos[i];		
     			}
     			
-    			</xsl:text><xsl:call-template name="catch" /><xsl:text>
+    			<xsl:call-template name="catch" />
 			}
 			else
 			{
@@ -66,88 +64,94 @@ extern "C"
 	
 	}
 	
-	void on_execute_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_int (GtkButton* button, gpointer userdata)
+	void on_execute_button_clicked_<xsl:value-of select="$fullName" />_int (GtkButton* button, gpointer userdata)
 	{
 		ui_config_entry * ChoseEntry = (ui_config_entry *) userdata;
         GtkBuilder &amp; thisBuilder = ((*ChoseEntry).getBuilder());
         
-	</xsl:text><xsl:call-template name="irp6.int.repeat.signals.cc.execute.1">
+	<xsl:call-template name="irp6.int.repeat.signals.cc.execute.1">
     		<xsl:with-param name="motorsNo" select="$motorsNo"/>
 			<xsl:with-param name="i" select="1"/>
 			<xsl:with-param name="name" select="$name"/>
- 		</xsl:call-template><xsl:text>    
+ 		</xsl:call-template>    
 
-		if (robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text></xsl:text><xsl:choose><xsl:when test="$name = 'conveyor'"></xsl:when><xsl:otherwise><xsl:text>->ecp</xsl:text></xsl:otherwise></xsl:choose><xsl:text>->get_EDP_pid()!=-1)
+		if (robot_<xsl:value-of select="$fullName" />->ecp->get_EDP_pid()!=-1)
 		{
-	</xsl:text><xsl:call-template name="irp6.int.repeat.signals.cc.execute.2">
+	<xsl:call-template name="irp6.int.repeat.signals.cc.execute.2">
     		<xsl:with-param name="motorsNo" select="$motorsNo"/>
     		<xsl:with-param name="name" select="$name"/>
 			<xsl:with-param name="i" select="1"/>
- 		</xsl:call-template><xsl:text>    
+ 		</xsl:call-template>    
 			
-			robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>->move_joints(</xsl:text><xsl:value-of select="$name" /><xsl:text>_desired_pos);
+				try {
+					robot_<xsl:value-of select="$fullName" />->move_joints(<xsl:value-of select="$name" />_desired_pos);
+				}
+			<xsl:call-template name="catch" />
 			
-			 if (state_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>.is_synchronised) {
-	</xsl:text><xsl:call-template name="irp6.int.repeat.signals.cc.execute.3">
+			if (state_<xsl:value-of select="$fullName" />.is_synchronised) {
+	<xsl:call-template name="irp6.int.repeat.signals.cc.execute.3">
     		<xsl:with-param name="motorsNo" select="$motorsNo"/>
     		<xsl:with-param name="name" select="$name"/>
 			<xsl:with-param name="i" select="1"/>
- 		</xsl:call-template><xsl:text>  
-			 }
+ 		</xsl:call-template>  
+			}
 		}
-		on_read_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_int (button, userdata);
-
+		
+		on_read_button_clicked_<xsl:value-of select="$fullName" />_int (button, userdata);
 	}
 	
-	void on_export_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_int (GtkButton* button, gpointer userdata)
+	void on_export_button_clicked_<xsl:value-of select="$fullName" />_int (GtkButton* button, gpointer userdata)
 	{
 		GtkEntry * entryConsole =  GTK_ENTRY(ui_model::instance().getUiGObject("entryConsole"));
      
  		ui_config_entry * ChoseEntry = (ui_config_entry *) userdata;
         GtkBuilder &amp; thisBuilder = ((*ChoseEntry).getBuilder());
         
-	</xsl:text><xsl:call-template name="irp6.int.repeat.signals.cc.execute.1">
+	<xsl:call-template name="irp6.int.repeat.signals.cc.execute.1">
     	<xsl:with-param name="motorsNo" select="$motorsNo"/>
 		<xsl:with-param name="i" select="1"/>
 		<xsl:with-param name="name" select="$name"/>
- 	</xsl:call-template><xsl:text>
- 		sprintf(buffer, "edp_</xsl:text><xsl:value-of select="$name" /><xsl:text> INTERNAL position </xsl:text><xsl:call-template name="irp6.int.repeat.signals.cc.export.1">
+ 	</xsl:call-template>
+ 		sprintf(buffer, "edp_<xsl:value-of select="$name" /> INTERNAL position<xsl:call-template name="irp6.int.repeat.signals.cc.export.1">
     		<xsl:with-param name="motorsNo" select="$motorsNo"/>
 			<xsl:with-param name="i" select="1"/>
 			<xsl:with-param name="name" select="$name"/>
- 		</xsl:call-template><xsl:text>" 
- 		</xsl:text><xsl:call-template name="irp6.int.repeat.signals.cc.export.2">
+ 		</xsl:call-template>" 
+ 		<xsl:call-template name="irp6.int.repeat.signals.cc.export.2">
     		<xsl:with-param name="motorsNo" select="$motorsNo"/>
 			<xsl:with-param name="i" select="1"/>
 			<xsl:with-param name="name" select="$name"/>
- 		</xsl:call-template><xsl:text>);
+ 		</xsl:call-template>);
  		  
  		gtk_entry_set_text (entryConsole, buffer);  
 	}
 	
-	void on_import_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_int (GtkButton* button, gpointer userdata)
+	void on_import_button_clicked_<xsl:value-of select="$fullName" />_int (GtkButton* button, gpointer userdata)
 	{
 		GtkEntry * entryConsole =  GTK_ENTRY(ui_model::instance().getUiGObject("entryConsole"));
         
  		ui_config_entry * ChoseEntry = (ui_config_entry *) userdata;
         GtkBuilder &amp; thisBuilder = ((*ChoseEntry).getBuilder());
-		
-		</xsl:text><xsl:call-template name="irp6.int.repeat.signals.cc.import.1">
+        
+        guint16 line_length = gtk_entry_get_text_length (entryConsole); 
+        char line[line_length+1];
+        strcpy(line, gtk_entry_get_text(entryConsole));
+        
+        char *ptr = line;		
+		<xsl:call-template name="irp6.int.repeat.signals.cc.import.1">
     		<xsl:with-param name="motorsNo" select="$motorsNo"/>
 			<xsl:with-param name="i" select="1"/>
- 		</xsl:call-template><xsl:text>  
+			<xsl:with-param name="name" select="$name"/>
+ 		</xsl:call-template>  
  	}
 	
-</xsl:text>
 		<xsl:call-template name="for.each.edp.irp6.int.signals.cc">
     		<xsl:with-param name="motorsNo" select="$motorsNo"/>
     		<xsl:with-param name="fullName" select="$fullName"/>
 			<xsl:with-param name="i" select="1"/>
 			<xsl:with-param name="name" select="$name"/>
  		</xsl:call-template>
-<xsl:text>
 }
-</xsl:text>
 </xsl:template>
 
 <!-- irp6 servo algorithm repeatable part -->
@@ -156,11 +160,11 @@ extern "C"
 <xsl:param name="i"/>
 <xsl:param name="name"/>
 	<xsl:if test="$i &lt;= $motorsNo">
-	<xsl:text>
-        GtkEntry * entry</xsl:text><xsl:value-of select="$i" /><xsl:text>_int_</xsl:text><xsl:value-of select="$name" /><xsl:text> = GTK_ENTRY(gtk_builder_get_object(&amp;thisBuilder, "entry</xsl:text><xsl:value-of select="$i" /><xsl:text>_int_</xsl:text><xsl:value-of select="$name" /><xsl:text>"));
-        GtkSpinButton * spin</xsl:text><xsl:value-of select="$i" /><xsl:text>_int_</xsl:text><xsl:value-of select="$name" /><xsl:text> = GTK_SPIN_BUTTON(gtk_builder_get_object(&amp;thisBuilder, "spinbutton</xsl:text><xsl:value-of select="$i" /><xsl:text>_int_</xsl:text><xsl:value-of select="$name" /><xsl:text>"));
-        gtk_spin_button_set_value(spin</xsl:text><xsl:value-of select="$i" /><xsl:text>_int_</xsl:text><xsl:value-of select="$name" /><xsl:text>, atof(gtk_entry_get_text(entry</xsl:text><xsl:value-of select="$i" /><xsl:text>_int_</xsl:text><xsl:value-of select="$name" /><xsl:text>)));
-	</xsl:text>
+	
+        GtkEntry * entry<xsl:value-of select="$i" />_int_<xsl:value-of select="$name" /> = GTK_ENTRY(gtk_builder_get_object(&amp;thisBuilder, "entry<xsl:value-of select="$i" />_int_<xsl:value-of select="$name" />"));
+        GtkSpinButton * spin<xsl:value-of select="$i" />_int_<xsl:value-of select="$name" /> = GTK_SPIN_BUTTON(gtk_builder_get_object(&amp;thisBuilder, "spinbutton<xsl:value-of select="$i" />_int_<xsl:value-of select="$name" />"));
+        gtk_spin_button_set_value(spin<xsl:value-of select="$i" />_int_<xsl:value-of select="$name" />, atof(gtk_entry_get_text(entry<xsl:value-of select="$i" />_int_<xsl:value-of select="$name" />)));
+	
        </xsl:if>
 	<!-- for loop --> 
        <xsl:if test="$i &lt;= $motorsNo">
@@ -184,11 +188,9 @@ extern "C"
 <xsl:param name="i"/>
 <xsl:param name="name"/>
 	<xsl:if test="$i &lt;= $motorsNo">
-	<xsl:text>
- 	    GtkSpinButton * spin</xsl:text><xsl:value-of select="$i" /><xsl:text>_int_</xsl:text><xsl:value-of select="$name" /><xsl:text> = GTK_SPIN_BUTTON(gtk_builder_get_object(&amp;thisBuilder, "spinbutton</xsl:text><xsl:value-of select="$i" /><xsl:text>_int_</xsl:text><xsl:value-of select="$name" /><xsl:text>"));
-        gtk_spin_button_set_value(spin</xsl:text><xsl:value-of select="$i" /><xsl:text>_int_</xsl:text><xsl:value-of select="$name" /><xsl:text>, atof(gtk_entry_get_text(entryConsole)));
-	</xsl:text>
-       </xsl:if>
+ 	    GtkSpinButton * spin<xsl:value-of select="$i" />_int_<xsl:value-of select="$name" /> = GTK_SPIN_BUTTON(gtk_builder_get_object(&amp;thisBuilder, "spinbutton<xsl:value-of select="$i" />_int_<xsl:value-of select="$name" />"));
+        gtk_spin_button_set_value(spin<xsl:value-of select="$i" />_int_<xsl:value-of select="$name" />, strtod(ptr, &amp;ptr));
+	</xsl:if>
 	<!-- for loop --> 
        <xsl:if test="$i &lt;= $motorsNo">
           <xsl:call-template name="irp6.int.repeat.signals.cc.import.1">
@@ -211,9 +213,8 @@ extern "C"
 <xsl:param name="i"/>
 <xsl:param name="name"/>
 	<xsl:if test="$i &lt;= $motorsNo">
-	<xsl:text>	GtkSpinButton * spin</xsl:text><xsl:value-of select="$i" /><xsl:text>_int_</xsl:text><xsl:value-of select="$name" /><xsl:text> = GTK_SPIN_BUTTON(gtk_builder_get_object(&amp;thisBuilder, "spinbutton</xsl:text><xsl:value-of select="$i" /><xsl:text>_int_</xsl:text><xsl:value-of select="$name" /><xsl:text>"));
- 	</xsl:text>
-       </xsl:if>
+		GtkSpinButton * spin<xsl:value-of select="$i" />_int_<xsl:value-of select="$name" /> = GTK_SPIN_BUTTON(gtk_builder_get_object(&amp;thisBuilder, "spinbutton<xsl:value-of select="$i" />_int_<xsl:value-of select="$name" />"));
+	</xsl:if>
 	<!-- for loop --> 
        <xsl:if test="$i &lt;= $motorsNo">
           <xsl:call-template name="irp6.int.repeat.signals.cc.execute.1">
@@ -235,9 +236,7 @@ extern "C"
 <xsl:param name="motorsNo"/>
 <xsl:param name="i"/>
 <xsl:param name="name"/>
-	<xsl:if test="$i &lt;= $motorsNo">
-	<xsl:text> %.3f</xsl:text>
-       </xsl:if>
+	<xsl:if test="$i &lt;= $motorsNo"> %.3f</xsl:if>
 	<!-- for loop --> 
        <xsl:if test="$i &lt;= $motorsNo">
           <xsl:call-template name="irp6.int.repeat.signals.cc.export.1">
@@ -259,9 +258,8 @@ extern "C"
 <xsl:param name="motorsNo"/>
 <xsl:param name="i"/>
 <xsl:param name="name"/>
-	<xsl:if test="$i &lt;= $motorsNo">
-	<xsl:text>, gtk_spin_button_get_value(spin</xsl:text><xsl:value-of select="$i" /><xsl:text>_int_</xsl:text><xsl:value-of select="$name" /><xsl:text>)</xsl:text>
-       </xsl:if>
+	<xsl:if test="$i &lt;= $motorsNo">, gtk_spin_button_get_value(spin<xsl:value-of select="$i" />_int_<xsl:value-of select="$name" />)
+	</xsl:if>
 	<!-- for loop --> 
        <xsl:if test="$i &lt;= $motorsNo">
           <xsl:call-template name="irp6.int.repeat.signals.cc.export.2">
@@ -284,9 +282,8 @@ extern "C"
 <xsl:param name="i"/>
 <xsl:param name="name"/>
 	<xsl:if test="$i &lt;= $motorsNo">
-	<xsl:text>	GtkEntry * entry</xsl:text><xsl:value-of select="$i" /><xsl:text>_int_</xsl:text><xsl:value-of select="$name" /><xsl:text> = GTK_ENTRY(gtk_builder_get_object(&amp;thisBuilder, "entry</xsl:text><xsl:value-of select="$i" /><xsl:text>_int_</xsl:text><xsl:value-of select="$name" /><xsl:text>"));
-	</xsl:text>
-       </xsl:if>
+		GtkEntry * entry<xsl:value-of select="$i" />_int_<xsl:value-of select="$name" /> = GTK_ENTRY(gtk_builder_get_object(&amp;thisBuilder, "entry<xsl:value-of select="$i" />_int_<xsl:value-of select="$name" />"));
+	</xsl:if>
 	<!-- for loop --> 
        <xsl:if test="$i &lt;= $motorsNo">
           <xsl:call-template name="irp6.int.repeat.signals.cc.read.1">
@@ -309,11 +306,10 @@ extern "C"
 <xsl:param name="name"/>
 <xsl:param name="i"/>
 	<xsl:if test="$i &lt;= $motorsNo">
-	<xsl:text>					snprintf (buf, sizeof(buf), "%.3f", </xsl:text><xsl:value-of select="$name" /><xsl:text>_current_pos[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>]);
-					gtk_entry_set_text(entry</xsl:text><xsl:value-of select="$i" /><xsl:text>_int_</xsl:text><xsl:value-of select="$name" /><xsl:text>, buf);
-					</xsl:text><xsl:value-of select="$name" /><xsl:text>_desired_pos[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>] = </xsl:text><xsl:value-of select="$name" /><xsl:text>_current_pos[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>];				
-</xsl:text>
-       </xsl:if>
+					snprintf (buf, sizeof(buf), "%.3f", <xsl:value-of select="$name" />_current_pos[<xsl:value-of select="($i - 1)" />]);
+					gtk_entry_set_text(entry<xsl:value-of select="$i" />_int_<xsl:value-of select="$name" />, buf);
+					<xsl:value-of select="$name" />_desired_pos[<xsl:value-of select="($i - 1)" />] = <xsl:value-of select="$name" />_current_pos[<xsl:value-of select="($i - 1)" />];				
+	</xsl:if>
 	<!-- for loop --> 
        <xsl:if test="$i &lt;= $motorsNo">
           <xsl:call-template name="irp6.int.repeat.signals.cc.read.2">
@@ -336,9 +332,8 @@ extern "C"
 <xsl:param name="name"/>
 <xsl:param name="i"/>
 	<xsl:if test="$i &lt;= $motorsNo">
-	<xsl:text>			</xsl:text><xsl:value-of select="$name" /><xsl:text>_desired_pos[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>] = gtk_spin_button_get_value(spin</xsl:text><xsl:value-of select="$i" /><xsl:text>_int_</xsl:text><xsl:value-of select="$name" /><xsl:text>);
-	</xsl:text>
-       </xsl:if>
+		<xsl:value-of select="$name" />_desired_pos[<xsl:value-of select="($i - 1)" />] = gtk_spin_button_get_value(spin<xsl:value-of select="$i" />_int_<xsl:value-of select="$name" />);	
+	</xsl:if>
 	<!-- for loop --> 
        <xsl:if test="$i &lt;= $motorsNo">
           <xsl:call-template name="irp6.int.repeat.signals.cc.execute.2">
@@ -361,9 +356,8 @@ extern "C"
 <xsl:param name="name"/>
 <xsl:param name="i"/>
 	<xsl:if test="$i &lt;= $motorsNo">
-	<xsl:text>			gtk_spin_button_set_value(spin</xsl:text><xsl:value-of select="$i" /><xsl:text>_int_</xsl:text><xsl:value-of select="$name" /><xsl:text>, </xsl:text><xsl:value-of select="$name" /><xsl:text>_desired_pos[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>]);
-	</xsl:text>
-       </xsl:if>
+				gtk_spin_button_set_value(spin<xsl:value-of select="$i" />_int_<xsl:value-of select="$name" />, <xsl:value-of select="$name" />_desired_pos[<xsl:value-of select="($i - 1)" />]);
+	</xsl:if>
 	<!-- for loop --> 
        <xsl:if test="$i &lt;= $motorsNo">
           <xsl:call-template name="irp6.int.repeat.signals.cc.execute.3">
@@ -387,31 +381,29 @@ extern "C"
 <xsl:param name="i"/>
 <xsl:param name="name"/>
 	<xsl:if test="$i &lt;= $motorsNo">
-<xsl:text>
-	void on_button</xsl:text><xsl:value-of select="($i*2)-1" /><xsl:text>_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_int (GtkButton* button, gpointer userdata)
+	void on_button<xsl:value-of select="($i*2)-1" />_clicked_<xsl:value-of select="$fullName" />_int (GtkButton* button, gpointer userdata)
 	{
  		ui_config_entry * ChoseEntry = (ui_config_entry *) userdata;
         GtkBuilder &amp; thisBuilder = ((*ChoseEntry).getBuilder());
        
-        GtkSpinButton * spinbuttonDown1_int_</xsl:text><xsl:value-of select="$name" /><xsl:text> = GTK_SPIN_BUTTON(gtk_builder_get_object(&amp;thisBuilder, "spinbuttonDown1_int_</xsl:text><xsl:value-of select="$name" /><xsl:text>"));
-        GtkSpinButton * spin</xsl:text><xsl:value-of select="$i" /><xsl:text>_int_</xsl:text><xsl:value-of select="$name" /><xsl:text> = GTK_SPIN_BUTTON(gtk_builder_get_object(&amp;thisBuilder, "spinbutton</xsl:text><xsl:value-of select="$i" /><xsl:text>_int_</xsl:text><xsl:value-of select="$name" /><xsl:text>"));
-        gtk_spin_button_set_value(spin</xsl:text><xsl:value-of select="$i" /><xsl:text>_int_</xsl:text><xsl:value-of select="$name" /><xsl:text>, gtk_spin_button_get_value(spin</xsl:text><xsl:value-of select="$i" /><xsl:text>_int_</xsl:text><xsl:value-of select="$name" /><xsl:text>) - gtk_spin_button_get_value(spinbuttonDown1_int_</xsl:text><xsl:value-of select="$name" /><xsl:text>));
+        GtkSpinButton * spinbuttonDown1_int_<xsl:value-of select="$name" /> = GTK_SPIN_BUTTON(gtk_builder_get_object(&amp;thisBuilder, "spinbuttonDown1_int_<xsl:value-of select="$name" />"));
+        GtkSpinButton * spin<xsl:value-of select="$i" />_int_<xsl:value-of select="$name" /> = GTK_SPIN_BUTTON(gtk_builder_get_object(&amp;thisBuilder, "spinbutton<xsl:value-of select="$i" />_int_<xsl:value-of select="$name" />"));
+        gtk_spin_button_set_value(spin<xsl:value-of select="$i" />_int_<xsl:value-of select="$name" />, gtk_spin_button_get_value(spin<xsl:value-of select="$i" />_int_<xsl:value-of select="$name" />) - gtk_spin_button_get_value(spinbuttonDown1_int_<xsl:value-of select="$name" />));
  		
- 		on_execute_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_int (button, userdata);
+ 		on_execute_button_clicked_<xsl:value-of select="$fullName" />_int (button, userdata);
  	}
 	
-	void on_button</xsl:text><xsl:value-of select="($i*2)" /><xsl:text>_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_int (GtkButton* button, gpointer userdata)
+	void on_button<xsl:value-of select="($i*2)" />_clicked_<xsl:value-of select="$fullName" />_int (GtkButton* button, gpointer userdata)
 	{
  		ui_config_entry * ChoseEntry = (ui_config_entry *) userdata;
         GtkBuilder &amp; thisBuilder = ((*ChoseEntry).getBuilder());
        
-        GtkSpinButton * spinbuttonDown1_int_</xsl:text><xsl:value-of select="$name" /><xsl:text> = GTK_SPIN_BUTTON(gtk_builder_get_object(&amp;thisBuilder, "spinbuttonDown1_int_</xsl:text><xsl:value-of select="$name" /><xsl:text>"));
-        GtkSpinButton * spin</xsl:text><xsl:value-of select="$i" /><xsl:text>_int_</xsl:text><xsl:value-of select="$name" /><xsl:text> = GTK_SPIN_BUTTON(gtk_builder_get_object(&amp;thisBuilder, "spinbutton</xsl:text><xsl:value-of select="$i" /><xsl:text>_int_</xsl:text><xsl:value-of select="$name" /><xsl:text>"));
-        gtk_spin_button_set_value(spin</xsl:text><xsl:value-of select="$i" /><xsl:text>_int_</xsl:text><xsl:value-of select="$name" /><xsl:text>, gtk_spin_button_get_value(spin</xsl:text><xsl:value-of select="$i" /><xsl:text>_int_</xsl:text><xsl:value-of select="$name" /><xsl:text>) + gtk_spin_button_get_value(spinbuttonDown1_int_</xsl:text><xsl:value-of select="$name" /><xsl:text>));
+        GtkSpinButton * spinbuttonDown1_int_<xsl:value-of select="$name" /> = GTK_SPIN_BUTTON(gtk_builder_get_object(&amp;thisBuilder, "spinbuttonDown1_int_<xsl:value-of select="$name" />"));
+        GtkSpinButton * spin<xsl:value-of select="$i" />_int_<xsl:value-of select="$name" /> = GTK_SPIN_BUTTON(gtk_builder_get_object(&amp;thisBuilder, "spinbutton<xsl:value-of select="$i" />_int_<xsl:value-of select="$name" />"));
+        gtk_spin_button_set_value(spin<xsl:value-of select="$i" />_int_<xsl:value-of select="$name" />, gtk_spin_button_get_value(spin<xsl:value-of select="$i" />_int_<xsl:value-of select="$name" />) + gtk_spin_button_get_value(spinbuttonDown1_int_<xsl:value-of select="$name" />));
  		
- 		on_execute_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_int (button, userdata);
- 	}   
-</xsl:text>
+ 		on_execute_button_clicked_<xsl:value-of select="$fullName" />_int (button, userdata);
+ 	}
     </xsl:if>
 	<!-- for loop --> 
        <xsl:if test="$i &lt;= $motorsNo">

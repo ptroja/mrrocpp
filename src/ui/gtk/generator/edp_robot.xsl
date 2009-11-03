@@ -21,6 +21,7 @@ Main robot window
     <child>
       <widget class="GtkVBox" id="vbox1">
         <property name="visible">True</property>
+        <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
          <child>
           <widget class="GtkHBox" id="hbox1">
             <property name="visible">True</property>

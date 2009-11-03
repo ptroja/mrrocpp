@@ -4,7 +4,7 @@
 #include <gtk/gtk.h>
 #include <gtkmm.h>
 
-#include <pthread.h>
+#include <boost/thread/once.hpp>
 
 #include "ui_config_entry.h"
 
@@ -80,10 +80,11 @@ class ui_model
 		lib::configurator & getConfigurator(void) const;
 
 	private:
-		static pthread_mutex_t mtx;
+		static boost::once_flag once;
 		static ui_model * pointerToTheSingletonInstance;
 
 		ui_model();
+		static void createInstance(void);
 
 		ui_config_entry root_entry;
 

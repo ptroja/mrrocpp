@@ -12,44 +12,44 @@ Festival window callback signals
 <xsl:document method="text" doctype-system="glade-2.0.dtd" indent="yes" version="1.0" href="../signals/{$name}_uimodule.cc">
 
 
-<xsl:text>
+
 #include &lt;iostream&gt;
 #include &lt;gtk/gtk.h&gt;
 #include &lt;glib.h&gt;
 #include "ui_model.h"
-#include "</xsl:text><xsl:value-of select="$name" /><xsl:text>_uimodule.h"
+#include "<xsl:value-of select="$name" />_uimodule.h"
 
 
-</xsl:text><xsl:value-of select="$name" /><xsl:text>::</xsl:text><xsl:value-of select="$name" /><xsl:text>(ui_config_entry &amp;entry) 
+<xsl:value-of select="$name" />::<xsl:value-of select="$name" />(ui_config_entry &amp;entry) 
 {
 }
 
-static </xsl:text><xsl:value-of select="$name" /><xsl:text> *</xsl:text><xsl:value-of select="$fullName" /><xsl:text>Panel;
+static <xsl:value-of select="$name" /> *<xsl:value-of select="$fullName" />Panel;
 
 
 extern "C"
 {
-	void on_say_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text> (GtkButton* button, gpointer userdata)
+	void on_say_button_clicked_<xsl:value-of select="$fullName" /> (GtkButton* button, gpointer userdata)
 	{
-		std::cout &lt;&lt; "Wcisniety przycisk Say dla </xsl:text><xsl:value-of select="$fullName" /><xsl:text>" &lt;&lt; std::endl;
+		std::cout &lt;&lt; "Wcisniety przycisk Say dla <xsl:value-of select="$fullName" />" &lt;&lt; std::endl;
 	}
 	
 	void ui_module_init(ui_config_entry &amp;entry) 
 	{
-		</xsl:text><xsl:value-of select="$fullName" /><xsl:text>Panel = new </xsl:text><xsl:value-of select="$name" /><xsl:text>(entry);
+		<xsl:value-of select="$fullName" />Panel = new <xsl:value-of select="$name" />(entry);
 		fprintf(stderr, "module %s loaded\n", __FILE__);
 	}
 
 	void ui_module_unload(void) 
 	{
-		if (</xsl:text><xsl:value-of select="$fullName" /><xsl:text>Panel) 
+		if (<xsl:value-of select="$fullName" />Panel) 
 		{
-			delete </xsl:text><xsl:value-of select="$fullName" /><xsl:text>Panel;
+			delete <xsl:value-of select="$fullName" />Panel;
 		}
 		fprintf(stderr, "module %s unloaded\n", __FILE__);
 	}
 }
-</xsl:text>
+
 
 </xsl:document>	
 <xsl:call-template name="festival.main.signals.h"/>
@@ -60,9 +60,9 @@ extern "C"
 <xsl:variable name="name" select="name"/>
 <xsl:document method="text" href="../signals/{$name}_uimodule.h">
 
-<xsl:text>
-#ifndef __</xsl:text><xsl:value-of select="$name" /><xsl:text>
-#define __</xsl:text><xsl:value-of select="$name" /><xsl:text>
+
+#ifndef __<xsl:value-of select="$name" />
+#define __<xsl:value-of select="$name" />
 
 #include &lt;iostream&gt;
 #include &lt;vector&gt;
@@ -70,18 +70,18 @@ extern "C"
 #include &lt;gtk/gtkbuilder.h&gt;
 #include &lt;gtk/gtk.h&gt;
 
-class </xsl:text><xsl:value-of select="$name" /><xsl:text>
+class <xsl:value-of select="$name" />
 {
 	public:
 
-		</xsl:text><xsl:value-of select="$name" /><xsl:text>(ui_config_entry &amp;entry);
-		~</xsl:text><xsl:value-of select="$name" /><xsl:text>();
+		<xsl:value-of select="$name" />(ui_config_entry &amp;entry);
+		~<xsl:value-of select="$name" />();
 
 
 };
 
-#endif /* __</xsl:text><xsl:value-of select="$name" /><xsl:text> */
-</xsl:text>
+#endif /* __<xsl:value-of select="$name" /> */
+
 </xsl:document>
 </xsl:template>
 

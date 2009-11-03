@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Mon Oct 19 01:24:09 2009 -->
+<!--Generated with glade3 3.4.5 on Sun Nov  1 20:47:16 2009 -->
 <glade-interface>
   <widget class="GtkDialog" id="window_input_number">
     <property name="border_width">5</property>
@@ -81,6 +81,7 @@
     </child>
   </widget>
   <widget class="GtkWindow" id="window">
+    <signal name="destroy" handler="on_window_destroy"/>
     <child>
       <widget class="GtkVBox" id="vbox4">
         <property name="visible">True</property>
@@ -112,7 +113,7 @@
                       </widget>
                     </child>
                     <child>
-                      <widget class="GtkImageMenuItem" id="imagemenuitem1">
+                      <widget class="GtkImageMenuItem" id="quit">
                         <property name="visible">True</property>
                         <property name="label" translatable="yes">gtk-quit</property>
                         <property name="use_underline">True</property>
@@ -369,7 +370,7 @@
                   </widget>
                 </child>
                 <child>
-                  <widget class="GtkEntry" id="entryConsole1">
+                  <widget class="GtkEntry" id="entryConsole">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                   </widget>

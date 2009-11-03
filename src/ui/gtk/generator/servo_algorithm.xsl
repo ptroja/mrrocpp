@@ -72,6 +72,7 @@ Servo_algorithm window
 		<child>
                   <widget class="GtkVSeparator" id="vseparator2"><xsl:attribute name="id">vseparator2_servo_<xsl:value-of select="$name" /></xsl:attribute>
                     <property name="visible">True</property>
+                    <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
                   </widget>
                   <packing>
                     <property name="left_attach">1</property>
@@ -92,6 +93,7 @@ Servo_algorithm window
                 <child>
                   <widget class="GtkVSeparator" id="vseparator1"><xsl:attribute name="id">vseparator1_servo_<xsl:value-of select="$name" /></xsl:attribute>
                     <property name="visible">True</property>
+                    <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
                   </widget>
                   <packing>
                     <property name="left_attach">4</property>
@@ -285,6 +287,7 @@ Servo_algorithm window
                         <property name="width_request">30</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="editable">False</property>
                         <property name="text" translatable="yes">0</property>
                       </widget>
                     </child>
@@ -293,6 +296,7 @@ Servo_algorithm window
                         <property name="width_request">30</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="editable">False</property>
                         <property name="text" translatable="yes">0</property>
                       </widget>
                       <packing>

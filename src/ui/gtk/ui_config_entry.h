@@ -95,7 +95,7 @@ class ui_config_entry
 		GtkNotebook *getNotebook(void);
 
 		//! manual motion windows
-		std::vector <ui_widget_entry *> widgetVector;
+		std::vector<ui_widget_entry *> widgetVector;
 
 		//! process running flag
 		bool is_running;

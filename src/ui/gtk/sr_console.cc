@@ -160,9 +160,10 @@ void *sr_thread(void* arg)
 					COL_DESCRIPTION, sr_msg.description,
 					-1);
 
-			// scroll buffer to the most recent entry
-			gboolean ret;
-			g_signal_emit_by_name(G_OBJECT(scrolled), "scroll-child", GTK_SCROLL_END, false, &ret);
+			// TODO: emitting the signal from thread seems to be problem for GTK
+//			// scroll buffer to the most recent entry
+//			gboolean ret;
+//			g_signal_emit_by_name(G_OBJECT(scrolled), "scroll-child", GTK_SCROLL_END, false, &ret);
 
 			// write to logfile
 			char current_line[400];

@@ -2,10 +2,13 @@
 #include <glib.h>
 #include <gtkmm.h>
 
+#include <boost/foreach.hpp>
+
 #include <vector>
 #include <iostream>
 
 #include <sys/types.h>
+#include <sys/wait.h>
 #include <signal.h>
 
 #include "ui_config_entry.h"
@@ -123,7 +126,7 @@ MpPanel::MpPanel(ui_config_entry &entry)
 	}
 
 	// get the ECPs
-	std::vector <ui_config_entry *> ecps = ui_model::instance().getRootNode().getChildByType(ui_config_entry::ECP);
+	ui_config_entry::childrens_t ecps(ui_model::instance().getRootNode().getChildByType(ui_config_entry::ECP));
 
 	GtkTable *pulsetable = GTK_TABLE(gtk_builder_get_object(&builder, "pulsetable"));
 	g_assert(pulsetable);
@@ -137,7 +140,7 @@ MpPanel::MpPanel(ui_config_entry &entry)
 	PulseTable.resize(nrows+ecps.size(), ncolumns);
 
 	int ecp_num = 0;
-	for (std::vector<ui_config_entry *>::iterator Iter = ecps.begin(); Iter != ecps.end(); Iter++, ecp_num++) {
+	for (ui_config_entry::childrens_t::iterator Iter = ecps.begin(); Iter != ecps.end(); Iter++, ecp_num++) {
 
 		//! create label widget
 		Gtk::Label *EcpLabel = new Gtk::Label((*Iter)->program_name.c_str());
@@ -256,24 +259,29 @@ MpPanel::MpPanel(ui_config_entry &entry)
 
 MpPanel::~MpPanel(void) {
 
-	for (std::vector<Gtk::Widget *>::iterator Iter = PanelWidgets.begin(); Iter != PanelWidgets.end(); Iter++) {
-		delete (*Iter);
+	BOOST_FOREACH(Gtk::Widget * widget, PanelWidgets) {
+		delete widget;
 	}
-	PanelWidgets.clear();
-/*
 
+/*
 	if ((ui_state.mp.state == UI_MP_TASK_RUNNING) || (ui_state.mp.state == UI_MP_TASK_PAUSED)){
 
 		pulse_stop_mp (widget,apinfo,cbinfo);
 	}
-
 */
+
 	if (pulse_fd) {
 		messip_channel_disconnect(pulse_fd, MESSIP_NOTIMEOUT);
 	}
 
 	if (mp_pid > 0) {
-		kill(mp_pid, SIGTERM);
+		if(kill(mp_pid, SIGTERM) == -1) {
+			perror("kill()");
+			return;
+		}
+		if(waitpid(mp_pid, NULL, 0) == -1) {
+			perror("waitpid()");
+		}
 	}
 }
 

@@ -18,6 +18,7 @@ extern "C" {
 
 	void on_window_destroy(GtkObject *object, gpointer user_data)
 	{
+		ui_model::freeInstance();
 		gtk_main_quit();
 	}
 
@@ -98,18 +99,19 @@ int main(int argc, char *argv[])
 	//! Gtk::Main object initialized for use GTKMM in process tabs
 	Gtk::Main kit(argc, argv);
 
+	// TODO: this should be singleton
 	xmlconfig = new xmlconfigurator();
 
 	// create SR thread
-	GThread *sr_t = g_thread_create(sr_thread, NULL, false, &error);
-	if (sr_t == NULL) {
+	GThread *sr_tid = g_thread_create(sr_thread, NULL, FALSE, &error);
+	if (sr_tid == NULL) {
 		fprintf(stderr, "g_thread_create(): %s\n", error->message);
 		return -1;
 	}
 
 	// create common ECP->UI communication thread
-	GThread *comm_t = g_thread_create(comm_thread, NULL, false, &error);
-	if (comm_t == NULL) {
+	GThread *comm_tid = g_thread_create(comm_thread, NULL, FALSE, &error);
+	if (comm_tid == NULL) {
 		fprintf(stderr, "g_thread_create(): %s\n", error->message);
 		return -1;
 	}
@@ -133,20 +135,17 @@ int main(int argc, char *argv[])
 //	GtkDialog *input = GTK_DIALOG(ui_model::instance().getUiGObject("window-input-number"));
 //	gtk_widget_show_all(GTK_WIDGET(input));
 
-
-	try {
+	// call the main event loop
 	gtk_main();
-	}
-	catch (...) {  /* Dla zewnetrznej petli try*/ \
-		/* Wylapywanie niezdefiniowanych bledow*/ \
-		/* Komunikat o bledzie wysylamy do SR (?) */ \
-		fprintf(stderr, "unidentified error in UI\n"); \
-	}
 
-	printf("main() exiting...\n");
+	// we are going back home
+	printf("UI: exiting...\n");
 
+	// clean up the staff
 	ui_model::freeInstance();
+	delete xmlconfig;
 
+	// leave the critical GTK section
 	gdk_threads_leave();
 
 	return 0;

@@ -79,7 +79,7 @@ xyz_euler_zyz window
                     <signal name="clicked" handler="on_execute_button_clicked_{$fullName}_xyz_euler_zyz"/>
                   </widget>
                   <packing>
-                    <property name="left_attach">4</property>
+                    <property name="left_attach">5</property>
                     <property name="right_attach">6</property>
                     <property name="top_attach"><xsl:value-of select="$xyz_euler_zyz + 3" /></property>  <!-- 3 + RN  -->
                     <property name="bottom_attach"><xsl:value-of select="$xyz_euler_zyz + 4" /></property> <!-- 4 + RN  -->
@@ -95,8 +95,8 @@ xyz_euler_zyz window
                     <signal name="clicked" handler="on_import_button_clicked_{$fullName}_xyz_euler_zyz"/>
                   </widget>
                   <packing>
-                    <property name="left_attach">4</property>
-                    <property name="right_attach">5</property>
+                    <property name="left_attach">2</property>
+                    <property name="right_attach">3</property>
                     <property name="top_attach"><xsl:value-of select="$xyz_euler_zyz + 4" /></property>  <!-- 4 + RN  -->
                     <property name="bottom_attach"><xsl:value-of select="$xyz_euler_zyz + 5" /></property>  <!-- 5 + RN  -->
                   </packing>
@@ -218,6 +218,7 @@ xyz_euler_zyz window
                 <child>
                   <widget class="GtkVSeparator" id="vseparator1"><xsl:attribute name="id">vseparator1_xyz_euler_zyz_<xsl:value-of select="$name" /></xsl:attribute>
                     <property name="visible">True</property>
+                    <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
                   </widget>
                   <packing>
                     <property name="left_attach">4</property>
@@ -238,6 +239,7 @@ xyz_euler_zyz window
                 <child>
                   <widget class="GtkVSeparator" id="vseparator2"><xsl:attribute name="id">vseparator2_xyz_euler_zyz_<xsl:value-of select="$name" /></xsl:attribute>
                     <property name="visible">True</property>
+                    <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
                   </widget>
                   <packing>
                     <property name="left_attach">6</property>
@@ -248,6 +250,7 @@ xyz_euler_zyz window
                 <child>
                   <widget class="GtkVSeparator" id="vseparator3"><xsl:attribute name="id">vseparator3_xyz_euler_zyz_<xsl:value-of select="$name" /></xsl:attribute>
                     <property name="visible">True</property>
+                    <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
                   </widget>
                   <packing>
                     <property name="left_attach">1</property>
@@ -317,6 +320,7 @@ xyz_euler_zyz window
                     <property name="width_request">66</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="editable">False</property>
                     <property name="text" translatable="yes">0.000</property>
                   </widget>
                   <packing>

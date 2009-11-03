@@ -11,42 +11,42 @@ kinematic window callback signals
 <xsl:variable name="name" select="name"/>
 <xsl:variable name="fullName" select="fullName"/>
 <xsl:variable name="kinematic" select="kinematic"/>
-<xsl:text>
+
 
 extern "C"
 {
-	void on_arrow_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_kinematic (GtkButton* button, gpointer userdata)
+	void on_arrow_button_clicked_<xsl:value-of select="$fullName" />_kinematic (GtkButton* button, gpointer userdata)
 	{
 		ui_config_entry * ChoseEntry = (ui_config_entry *) userdata;
         GtkBuilder &amp; thisBuilder = ((*ChoseEntry).getBuilder());
 
-		</xsl:text><xsl:call-template name="irp6.kinematic.repeat.signals.cc.arrow">
+		<xsl:call-template name="irp6.kinematic.repeat.signals.cc.arrow">
     		<xsl:with-param name="kinematic" select="$kinematic"/>
 			<xsl:with-param name="i" select="1"/>
 			<xsl:with-param name="name" select="$name"/>
- 		</xsl:call-template><xsl:text>
+ 		</xsl:call-template>
  	}
 
-	void on_read_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_kinematic (GtkButton* button, gpointer userdata)
+	void on_read_button_clicked_<xsl:value-of select="$fullName" />_kinematic (GtkButton* button, gpointer userdata)
 	{
 		ui_config_entry * ChoseEntry = (ui_config_entry *) userdata;
         GtkBuilder &amp; thisBuilder = ((*ChoseEntry).getBuilder());
 
-		GtkEntry * entry1_kinematic_</xsl:text><xsl:value-of select="$name" /><xsl:text> = GTK_ENTRY(gtk_builder_get_object(&amp;thisBuilder, "entry1_kinematic_</xsl:text><xsl:value-of select="$name" /><xsl:text>"));
+		GtkEntry * entry1_kinematic_<xsl:value-of select="$name" /> = GTK_ENTRY(gtk_builder_get_object(&amp;thisBuilder, "entry1_kinematic_<xsl:value-of select="$name" />"));
 
 
-		if (robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text></xsl:text><xsl:choose><xsl:when test="$name = 'conveyor'"></xsl:when><xsl:otherwise><xsl:text>->ecp</xsl:text></xsl:otherwise></xsl:choose><xsl:text>->get_EDP_pid()!=-1)
+		if (robot_<xsl:value-of select="$fullName" />->ecp->get_EDP_pid()!=-1)
 		{
-			if (state_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>.is_synchronised) // Czy robot jest zsynchronizowany?
+			if (state_<xsl:value-of select="$fullName" />.is_synchronised) // Czy robot jest zsynchronizowany?
 			{
 			    try {
-    				robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>->get_kinematic(&amp;model_no); // Odczyt polozenia walow silnikow
+    				robot_<xsl:value-of select="$fullName" />->get_kinematic(&amp;model_no); // Odczyt polozenia walow silnikow
     
     				snprintf (buf, sizeof(buf), "%u", model_no);
-    				gtk_entry_set_text(entry1_kinematic_</xsl:text><xsl:value-of select="$name" /><xsl:text>, buf);
+    				gtk_entry_set_text(entry1_kinematic_<xsl:value-of select="$name" />, buf);
                 }
                 
-                </xsl:text><xsl:call-template name="catch" /><xsl:text>
+                <xsl:call-template name="catch" />
 			}
 			else
 			{
@@ -57,25 +57,28 @@ extern "C"
 
 	}
 
-	void on_set_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_kinematic (GtkButton* button, gpointer userdata)
+	void on_set_button_clicked_<xsl:value-of select="$fullName" />_kinematic (GtkButton* button, gpointer userdata)
 	{
 		ui_config_entry * ChoseEntry = (ui_config_entry *) userdata;
         GtkBuilder &amp; thisBuilder = ((*ChoseEntry).getBuilder());
 
- 		GtkSpinButton * spin1_kinematic_</xsl:text><xsl:value-of select="$name" /><xsl:text> = GTK_SPIN_BUTTON(gtk_builder_get_object(&amp;thisBuilder, "spinbutton1_kinematic_</xsl:text><xsl:value-of select="$name" /><xsl:text>"));
+ 		GtkSpinButton * spin1_kinematic_<xsl:value-of select="$name" /> = GTK_SPIN_BUTTON(gtk_builder_get_object(&amp;thisBuilder, "spinbutton1_kinematic_<xsl:value-of select="$name" />"));
 
-		if (state_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>.is_synchronised)
+		if (state_<xsl:value-of select="$fullName" />.is_synchronised)
 		{
-			model_no_tmp = gtk_spin_button_get_value(spin1_kinematic_</xsl:text><xsl:value-of select="$name" /><xsl:text>);
+			model_no_tmp = gtk_spin_button_get_value(spin1_kinematic_<xsl:value-of select="$name" />);
 			model_no = uint8_t(model_no_tmp);
 
-			robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>->set_kinematic(model_no);
+			try {
+				robot_<xsl:value-of select="$fullName" />->set_kinematic(model_no);
+	        }
+    	    <xsl:call-template name="catch" />	
 		}
-		on_read_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_kinematic (button, userdata);
+		on_read_button_clicked_<xsl:value-of select="$fullName" />_kinematic (button, userdata);
 
 	}
 }
-</xsl:text>
+
 </xsl:template>
 
 
@@ -88,11 +91,11 @@ extern "C"
 <xsl:param name="i"/>
 <xsl:param name="name"/>
 	<xsl:if test="$i &lt;= $kinematic">
-	<xsl:text>
-        GtkEntry * entry</xsl:text><xsl:value-of select="$i" /><xsl:text>_kinematic_</xsl:text><xsl:value-of select="$name" /><xsl:text> = GTK_ENTRY(gtk_builder_get_object(&amp;thisBuilder, "entry</xsl:text><xsl:value-of select="$i" /><xsl:text>_kinematic_</xsl:text><xsl:value-of select="$name" /><xsl:text>"));
-        GtkSpinButton * spin</xsl:text><xsl:value-of select="$i" /><xsl:text>_kinematic_</xsl:text><xsl:value-of select="$name" /><xsl:text> = GTK_SPIN_BUTTON(gtk_builder_get_object(&amp;thisBuilder, "spinbutton</xsl:text><xsl:value-of select="$i" /><xsl:text>_kinematic_</xsl:text><xsl:value-of select="$name" /><xsl:text>"));
-        gtk_spin_button_set_value(spin</xsl:text><xsl:value-of select="$i" /><xsl:text>_kinematic_</xsl:text><xsl:value-of select="$name" /><xsl:text>, atof(gtk_entry_get_text(entry</xsl:text><xsl:value-of select="$i" /><xsl:text>_kinematic_</xsl:text><xsl:value-of select="$name" /><xsl:text>)));
-	</xsl:text>
+	
+        GtkEntry * entry<xsl:value-of select="$i" />_kinematic_<xsl:value-of select="$name" /> = GTK_ENTRY(gtk_builder_get_object(&amp;thisBuilder, "entry<xsl:value-of select="$i" />_kinematic_<xsl:value-of select="$name" />"));
+        GtkSpinButton * spin<xsl:value-of select="$i" />_kinematic_<xsl:value-of select="$name" /> = GTK_SPIN_BUTTON(gtk_builder_get_object(&amp;thisBuilder, "spinbutton<xsl:value-of select="$i" />_kinematic_<xsl:value-of select="$name" />"));
+        gtk_spin_button_set_value(spin<xsl:value-of select="$i" />_kinematic_<xsl:value-of select="$name" />, atof(gtk_entry_get_text(entry<xsl:value-of select="$i" />_kinematic_<xsl:value-of select="$name" />)));
+	
        </xsl:if>
 	<!-- for loop -->
        <xsl:if test="$i &lt;= $kinematic">

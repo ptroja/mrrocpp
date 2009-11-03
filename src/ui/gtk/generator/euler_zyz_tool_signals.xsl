@@ -11,48 +11,48 @@ xyz_euler_zyz_tool window callback signals
 <xsl:variable name="name" select="name"/>
 <xsl:variable name="fullName" select="fullName"/>
 <xsl:variable name="xyz_euler_zyz_tool" select="xyz_euler_zyz_tool"/>
-<xsl:text>
+
 
 extern "C"
 {
-	void on_arrow_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_xyz_euler_zyz_tool (GtkButton* button, gpointer userdata)
+	void on_arrow_button_clicked_<xsl:value-of select="$fullName" />_xyz_euler_zyz_tool (GtkButton* button, gpointer userdata)
 	{
 		ui_config_entry * ChoseEntry = (ui_config_entry *) userdata;
         GtkBuilder &amp; thisBuilder = ((*ChoseEntry).getBuilder());
         
-		</xsl:text><xsl:call-template name="irp6.xyz_euler_zyz_tool.repeat.signals.cc.arrow">
+		<xsl:call-template name="irp6.xyz_euler_zyz_tool.repeat.signals.cc.arrow">
     		<xsl:with-param name="xyz_euler_zyz_tool" select="$xyz_euler_zyz_tool"/>
 			<xsl:with-param name="i" select="1"/>
 			<xsl:with-param name="name" select="$name"/>
- 		</xsl:call-template><xsl:text>	
+ 		</xsl:call-template>	
  	}
 	
-	void on_read_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_xyz_euler_zyz_tool (GtkButton* button, gpointer userdata)
+	void on_read_button_clicked_<xsl:value-of select="$fullName" />_xyz_euler_zyz_tool (GtkButton* button, gpointer userdata)
 	{
 		ui_config_entry * ChoseEntry = (ui_config_entry *) userdata;
         GtkBuilder &amp; thisBuilder = ((*ChoseEntry).getBuilder());
         
-	</xsl:text><xsl:call-template name="irp6.xyz_euler_zyz_tool.repeat.signals.cc.read.1">
+	<xsl:call-template name="irp6.xyz_euler_zyz_tool.repeat.signals.cc.read.1">
     		<xsl:with-param name="xyz_euler_zyz_tool" select="$xyz_euler_zyz_tool"/>
 			<xsl:with-param name="i" select="1"/>
 			<xsl:with-param name="name" select="$name"/>
- 		</xsl:call-template><xsl:text>
+ 		</xsl:call-template>
  		
-		if (robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text></xsl:text><xsl:choose><xsl:when test="$name = 'conveyor'"></xsl:when><xsl:otherwise><xsl:text>->ecp</xsl:text></xsl:otherwise></xsl:choose><xsl:text>->get_EDP_pid()!=-1)
+		if (robot_<xsl:value-of select="$fullName" />->ecp->get_EDP_pid()!=-1)
 		{
-			if (state_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>.is_synchronised) // Czy robot jest zsynchronizowany?
+			if (state_<xsl:value-of select="$fullName" />.is_synchronised) // Czy robot jest zsynchronizowany?
 			{
 			    try {
-    				robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>->read_tool_xyz_euler_zyz(tool_vector_e); // Odczyt polozenia walow silnikow
+    				robot_<xsl:value-of select="$fullName" />->read_tool_xyz_euler_zyz(tool_vector_e); // Odczyt polozenia walow silnikow
     					
-    </xsl:text><xsl:call-template name="irp6.xyz_euler_zyz_tool.repeat.signals.cc.read.2">
+<xsl:call-template name="irp6.xyz_euler_zyz_tool.repeat.signals.cc.read.2">
         				<xsl:with-param name="xyz_euler_zyz_tool" select="$xyz_euler_zyz_tool"/>
     					<xsl:with-param name="name" select="$name"/>
     					<xsl:with-param name="i" select="1"/>
-     				</xsl:call-template><xsl:text>				
+     				</xsl:call-template>				
      			}
      			
-     			</xsl:text><xsl:call-template name="catch" /><xsl:text>
+     			<xsl:call-template name="catch" />
 			}
 			else
 			{
@@ -63,32 +63,35 @@ extern "C"
 	
 	}
 	
-	void on_set_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_xyz_euler_zyz_tool (GtkButton* button, gpointer userdata)
+	void on_set_button_clicked_<xsl:value-of select="$fullName" />_xyz_euler_zyz_tool (GtkButton* button, gpointer userdata)
 	{
 		ui_config_entry * ChoseEntry = (ui_config_entry *) userdata;
         GtkBuilder &amp; thisBuilder = ((*ChoseEntry).getBuilder());
         
-	</xsl:text><xsl:call-template name="irp6.xyz_euler_zyz_tool.repeat.signals.cc.set.1">
+	<xsl:call-template name="irp6.xyz_euler_zyz_tool.repeat.signals.cc.set.1">
     		<xsl:with-param name="xyz_euler_zyz_tool" select="$xyz_euler_zyz_tool"/>
 			<xsl:with-param name="i" select="1"/>
 			<xsl:with-param name="name" select="$name"/>
- 		</xsl:call-template><xsl:text>    
+ 		</xsl:call-template>    
 
-		if (state_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>.is_synchronised)
+		if (state_<xsl:value-of select="$fullName" />.is_synchronised)
 		{
-	</xsl:text><xsl:call-template name="irp6.xyz_euler_zyz_tool.repeat.signals.cc.set.2">
+	<xsl:call-template name="irp6.xyz_euler_zyz_tool.repeat.signals.cc.set.2">
     		<xsl:with-param name="xyz_euler_zyz_tool" select="$xyz_euler_zyz_tool"/>
 			<xsl:with-param name="name" select="$name"/>
 			<xsl:with-param name="i" select="1"/>
- 		</xsl:call-template><xsl:text>    
+ 		</xsl:call-template>    
 			
-			robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>->set_tool_xyz_euler_zyz(tool_vector_e);
+			try {
+				robot_<xsl:value-of select="$fullName" />->set_tool_xyz_euler_zyz(tool_vector_e);
+			}
+	        <xsl:call-template name="catch" />		
 		}
-		on_read_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_xyz_euler_zyz_tool (button, userdata);
+		on_read_button_clicked_<xsl:value-of select="$fullName" />_xyz_euler_zyz_tool (button, userdata);
 
 	}
 }
-</xsl:text>
+
 </xsl:template>
 
 <!-- irp6 servo algorithm repeatable part -->
@@ -97,8 +100,8 @@ extern "C"
 <xsl:param name="i"/>
 <xsl:param name="name"/>
 	<xsl:if test="$i &lt;= $xyz_euler_zyz_tool">
-	<xsl:text>	GtkSpinButton * spin</xsl:text><xsl:value-of select="$i" /><xsl:text>_xyz_euler_zyz_tool_</xsl:text><xsl:value-of select="$name" /><xsl:text> = GTK_SPIN_BUTTON(gtk_builder_get_object(&amp;thisBuilder, "spinbutton</xsl:text><xsl:value-of select="$i" /><xsl:text>_xyz_euler_zyz_tool_</xsl:text><xsl:value-of select="$name" /><xsl:text>"));
- 	</xsl:text>
+		GtkSpinButton * spin<xsl:value-of select="$i" />_xyz_euler_zyz_tool_<xsl:value-of select="$name" /> = GTK_SPIN_BUTTON(gtk_builder_get_object(&amp;thisBuilder, "spinbutton<xsl:value-of select="$i" />_xyz_euler_zyz_tool_<xsl:value-of select="$name" />"));
+ 	
        </xsl:if>
 	<!-- for loop --> 
        <xsl:if test="$i &lt;= $xyz_euler_zyz_tool">
@@ -122,8 +125,8 @@ extern "C"
 <xsl:param name="i"/>
 <xsl:param name="name"/>
 	<xsl:if test="$i &lt;= $xyz_euler_zyz_tool">
-	<xsl:text>	GtkEntry * entry</xsl:text><xsl:value-of select="$i" /><xsl:text>_xyz_euler_zyz_tool_</xsl:text><xsl:value-of select="$name" /><xsl:text> = GTK_ENTRY(gtk_builder_get_object(&amp;thisBuilder, "entry</xsl:text><xsl:value-of select="$i" /><xsl:text>_xyz_euler_zyz_tool_</xsl:text><xsl:value-of select="$name" /><xsl:text>"));
-	</xsl:text>
+		GtkEntry * entry<xsl:value-of select="$i" />_xyz_euler_zyz_tool_<xsl:value-of select="$name" /> = GTK_ENTRY(gtk_builder_get_object(&amp;thisBuilder, "entry<xsl:value-of select="$i" />_xyz_euler_zyz_tool_<xsl:value-of select="$name" />"));
+	
        </xsl:if>
 	<!-- for loop --> 
        <xsl:if test="$i &lt;= $xyz_euler_zyz_tool">
@@ -147,9 +150,9 @@ extern "C"
 <xsl:param name="name"/>
 <xsl:param name="i"/>
 	<xsl:if test="$i &lt;= $xyz_euler_zyz_tool">
-	<xsl:text>					snprintf (buf, sizeof(buf), "%.3f", tool_vector_e[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>]);
-					gtk_entry_set_text(entry</xsl:text><xsl:value-of select="$i" /><xsl:text>_xyz_euler_zyz_tool_</xsl:text><xsl:value-of select="$name" /><xsl:text>, buf);		
-</xsl:text>
+						snprintf (buf, sizeof(buf), "%.3f", tool_vector_e[<xsl:value-of select="($i - 1)" />]);
+					gtk_entry_set_text(entry<xsl:value-of select="$i" />_xyz_euler_zyz_tool_<xsl:value-of select="$name" />, buf);		
+
        </xsl:if>
 	<!-- for loop --> 
        <xsl:if test="$i &lt;= $xyz_euler_zyz_tool">
@@ -176,8 +179,8 @@ extern "C"
 <xsl:param name="name"/>
 <xsl:param name="i"/>
 	<xsl:if test="$i &lt;= $xyz_euler_zyz_tool">
-	<xsl:text>			tool_vector_e[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>] = gtk_spin_button_get_value(spin</xsl:text><xsl:value-of select="$i" /><xsl:text>_xyz_euler_zyz_tool_</xsl:text><xsl:value-of select="$name" /><xsl:text>);
-	</xsl:text>
+				tool_vector_e[<xsl:value-of select="($i - 1)" />] = gtk_spin_button_get_value(spin<xsl:value-of select="$i" />_xyz_euler_zyz_tool_<xsl:value-of select="$name" />);
+	
        </xsl:if>
 	<!-- for loop --> 
        <xsl:if test="$i &lt;= $xyz_euler_zyz_tool">
@@ -201,11 +204,11 @@ extern "C"
 <xsl:param name="i"/>
 <xsl:param name="name"/>
 	<xsl:if test="$i &lt;= $xyz_euler_zyz_tool">
-	<xsl:text>
-        GtkEntry * entry</xsl:text><xsl:value-of select="$i" /><xsl:text>_xyz_euler_zyz_tool_</xsl:text><xsl:value-of select="$name" /><xsl:text> = GTK_ENTRY(gtk_builder_get_object(&amp;thisBuilder, "entry</xsl:text><xsl:value-of select="$i" /><xsl:text>_xyz_euler_zyz_tool_</xsl:text><xsl:value-of select="$name" /><xsl:text>"));
-        GtkSpinButton * spin</xsl:text><xsl:value-of select="$i" /><xsl:text>_xyz_euler_zyz_tool_</xsl:text><xsl:value-of select="$name" /><xsl:text> = GTK_SPIN_BUTTON(gtk_builder_get_object(&amp;thisBuilder, "spinbutton</xsl:text><xsl:value-of select="$i" /><xsl:text>_xyz_euler_zyz_tool_</xsl:text><xsl:value-of select="$name" /><xsl:text>"));
-        gtk_spin_button_set_value(spin</xsl:text><xsl:value-of select="$i" /><xsl:text>_xyz_euler_zyz_tool_</xsl:text><xsl:value-of select="$name" /><xsl:text>, atof(gtk_entry_get_text(entry</xsl:text><xsl:value-of select="$i" /><xsl:text>_xyz_euler_zyz_tool_</xsl:text><xsl:value-of select="$name" /><xsl:text>)));
-	</xsl:text>
+	
+        GtkEntry * entry<xsl:value-of select="$i" />_xyz_euler_zyz_tool_<xsl:value-of select="$name" /> = GTK_ENTRY(gtk_builder_get_object(&amp;thisBuilder, "entry<xsl:value-of select="$i" />_xyz_euler_zyz_tool_<xsl:value-of select="$name" />"));
+        GtkSpinButton * spin<xsl:value-of select="$i" />_xyz_euler_zyz_tool_<xsl:value-of select="$name" /> = GTK_SPIN_BUTTON(gtk_builder_get_object(&amp;thisBuilder, "spinbutton<xsl:value-of select="$i" />_xyz_euler_zyz_tool_<xsl:value-of select="$name" />"));
+        gtk_spin_button_set_value(spin<xsl:value-of select="$i" />_xyz_euler_zyz_tool_<xsl:value-of select="$name" />, atof(gtk_entry_get_text(entry<xsl:value-of select="$i" />_xyz_euler_zyz_tool_<xsl:value-of select="$name" />)));
+	
        </xsl:if>
 	<!-- for loop --> 
        <xsl:if test="$i &lt;= $xyz_euler_zyz_tool">

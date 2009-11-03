@@ -1,6 +1,8 @@
 #include <gtk/gtk.h>
 #include <gtkmm.h>
 
+#include <boost/foreach.hpp>
+
 #include <exception>
 
 #include "ui_model.h"
@@ -10,7 +12,7 @@
 ui_model * ui_model::pointerToTheSingletonInstance = NULL;
 
 // TODO: rewrite to boost::mutex
-pthread_mutex_t ui_model::mtx = PTHREAD_MUTEX_INITIALIZER;
+boost::once_flag ui_model::once = BOOST_ONCE_INIT;
 
 ui_config_entry & ui_model::getNodeByPath(GtkTreePath *path) {
 	gint depth = gtk_tree_path_get_depth(path);
@@ -20,29 +22,20 @@ ui_config_entry & ui_model::getNodeByPath(GtkTreePath *path) {
 
 	for(int i = 0; i < depth; i++) {
 		ret = ret->children[indices[i]];
-	};
+	}
 
 	return *ret;
 }
 
+void ui_model::createInstance(void) {
+	assert(!pointerToTheSingletonInstance);
+	pointerToTheSingletonInstance = new ui_model;
+}
+
 ui_model& ui_model::instance()
 {
-	// lock the guard mutex
-	if (pthread_mutex_lock(&mtx) != 0) {
-		perror("ui_model::pthread_mutex_lock()");
-		throw std::exception();
-	}
-
-	// create instance if necessary
-	if (!pointerToTheSingletonInstance) {
-		pointerToTheSingletonInstance = new ui_model;
-	}
-
-	// unlock the guard mutex
-	if (pthread_mutex_unlock(&mtx) != 0) {
-		perror("ui_model::pthread_mutex_lock()");
-		throw std::exception();
-	}
+	// make the signleton initialization in thread-safe manner
+	boost::call_once(&createInstance, once);
 
 	return *pointerToTheSingletonInstance;
 }
@@ -50,24 +43,11 @@ ui_model& ui_model::instance()
 void ui_model::freeInstance()
 {
 	// TODO: guard with mutex or not...?
-//	// lock the guard mutex
-////	printf("pthread_mutex_lock()..."); fflush(stdout);
-//	if (pthread_mutex_lock(&mtx) != 0) {
-//		perror("ui_model::pthread_mutex_lock()");
-//		return;
-//	}
 
 	if (pointerToTheSingletonInstance) {
 		delete pointerToTheSingletonInstance;
 		pointerToTheSingletonInstance = NULL;
 	}
-
-//	// unlock the guard mutex
-//	if (pthread_mutex_unlock(&mtx) != 0) {
-//		perror("ui_model::pthread_mutex_lock()");
-//		return;
-//	}
-//	printf("done\n");
 }
 
 void ui_model::clear(void)
@@ -152,12 +132,12 @@ ui_model::~ui_model()
 
 	if (ecp_report) {
 		// TODO: fix this, bug in messip?
-//		delete ecp_report;
+		delete ecp_report;
 	}
 
 	if (ui_report) {
 		// TODO: fix this, bug in messip?
-//		delete ui_report;
+		delete ui_report;
 	}
 
 	if (config) {
@@ -310,8 +290,8 @@ int ui_model::set_tree_view(void)
 void ui_model::loadEdps(void) {
 	ui_config_entry::childrens_t edps = ui_model::instance().getRootNode().getChildByType(ui_config_entry::EDP);
 
-	for(ui_config_entry::childrens_t::iterator Iter = edps.begin(); Iter != edps.end(); Iter++) {
-		std::cout << (*Iter)->program_name << "@" << (*Iter)->node_name << std::endl;
+	BOOST_FOREACH(ui_config_entry * entry, edps) {
+		std::cout << entry->program_name << "@" << entry->node_name << std::endl;
 	}
 }
 
@@ -327,26 +307,24 @@ void ui_model::slayAll(void)
 	const string RSHcommand = "rsh ";
 	const string slayCommand = " killall -9 ";
 
-	ui_config_entry::childrens_t edps = ui_model::instance().getRootNode().getChildByType(ui_config_entry::EDP);
-	ui_config_entry::childrens_t ecps = ui_model::instance().getRootNode().getChildByType(ui_config_entry::ECP);
-	ui_config_entry::childrens_t mp = ui_model::instance().getRootNode().getChildByType(ui_config_entry::MP);
+	ui_config_entry::childrens_t edps(ui_model::instance().getRootNode().getChildByType(ui_config_entry::EDP));
+	ui_config_entry::childrens_t ecps(ui_model::instance().getRootNode().getChildByType(ui_config_entry::ECP));
+	ui_config_entry::childrens_t mp(ui_model::instance().getRootNode().getChildByType(ui_config_entry::MP));
 
-	// TODO: rewrite with boost::foreach
-
-	for(ui_config_entry::childrens_t::iterator Iter = edps.begin(); Iter != edps.end(); Iter++) {
-		string command = RSHcommand + (*Iter)->node_name + slayCommand + (*Iter)->program_name;
+	BOOST_FOREACH(ui_config_entry * entry, edps) {
+		string command = RSHcommand + entry->node_name + slayCommand + entry->program_name;
 		cout << command << endl;
 //		system(command.c_str());
 	}
 
-	for(ui_config_entry::childrens_t::iterator Iter = ecps.begin(); Iter != ecps.end(); Iter++) {
-		string command = RSHcommand + (*Iter)->node_name + slayCommand + (*Iter)->program_name;
+	BOOST_FOREACH(ui_config_entry * entry, ecps) {
+		string command = RSHcommand + entry->node_name + slayCommand + entry->program_name;
 		cout << command << endl;
 //		system(command.c_str());
 	}
 
-	for(ui_config_entry::childrens_t::iterator Iter = mp.begin(); Iter != mp.end(); Iter++) {
-		string command = RSHcommand + (*Iter)->node_name + slayCommand + (*Iter)->program_name;
+	BOOST_FOREACH(ui_config_entry * entry, mp) {
+		string command = RSHcommand + entry->node_name + slayCommand + entry->program_name;
 		cout << command << endl;
 //		system(command.c_str());
 	}

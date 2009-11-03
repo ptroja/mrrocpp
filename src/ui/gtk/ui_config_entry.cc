@@ -1,6 +1,8 @@
 #include "ui_config_entry.h"
 #include "ui_model.h"
 
+#include <boost/foreach.hpp>
+
 #include <dlfcn.h>
 
 extern "C" {
@@ -55,14 +57,14 @@ void ui_config_entry::add_child(ui_config_entry & child)  {
 
 void ui_config_entry::remove_childs(void)  {
 
-	for (childrens_t::iterator Iter = children.begin(); Iter != children.end(); Iter++) {
-
-		if ((*Iter)->childrens()) {
-			(*Iter)->remove_childs();
+	// TODO: rewrite with reverse iterator
+	for(int i = children.size(); i; i--) {
+		ui_config_entry * entry = children[i-1];
+		if (entry->childrens()) {
+			entry->remove_childs();
 		}
 
-		ui_config_entry *empty_child = (*Iter);
-		delete empty_child;
+		delete entry;
 	}
 	children.clear();
 }
@@ -205,14 +207,14 @@ ui_config_entry::childrens_t ui_config_entry::getChildByType(ui_config_entry_typ
 
 	childrens_t ret;
 
-	for (childrens_t::iterator Iter = children.begin(); Iter != children.end(); Iter++) {
-		if ((*Iter)->type == _type) {
-			ret.push_back((*Iter));
+	BOOST_FOREACH(ui_config_entry * entry, children) {
+		if (entry->type == _type) {
+			ret.push_back(entry);
 		}
 
-		childrens_t childrensOf = (*Iter)->getChildByType(_type);
-		for (childrens_t::iterator Iter2 = childrensOf.begin(); Iter2 != childrensOf.end(); Iter2++) {
-			ret.push_back((*Iter2));
+		childrens_t childrensOf = entry->getChildByType(_type);
+		BOOST_FOREACH(ui_config_entry * child_entry, childrensOf) {
+			ret.push_back(child_entry);
 		}
 	}
 

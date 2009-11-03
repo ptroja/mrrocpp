@@ -149,6 +149,7 @@ kinematic window
                 <child>
                   <widget class="GtkVSeparator" id="vseparator1"><xsl:attribute name="id">vseperator1_kinematic_<xsl:value-of select="$name" /></xsl:attribute>
                     <property name="visible">True</property>
+                    <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
                   </widget>
                   <packing>
                     <property name="left_attach">4</property>
@@ -169,6 +170,7 @@ kinematic window
                 <child>
                   <widget class="GtkVSeparator" id="vseparator3"><xsl:attribute name="id">vseperator3_kinematic_<xsl:value-of select="$name" /></xsl:attribute>
                     <property name="visible">True</property>
+                    <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
                   </widget>
                   <packing>
                     <property name="left_attach">1</property>
@@ -223,6 +225,7 @@ kinematic window
                     <property name="width_request">66</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="editable">False</property>
                     <property name="text" translatable="yes">0</property>
                   </widget>
                   <packing>
