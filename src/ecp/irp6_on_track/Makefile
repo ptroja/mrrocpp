@@ -37,7 +37,8 @@ BINARIES =			ecp_pr \
 ifneq ($(BUILD_TARGET), linux)
 BINARIES+=			ecp_fct \
 				ecp_tr \
-				ecp_t_smooth2_test
+				ecp_t_smooth2_test \
+				ecp_t_kcz_test
 endif
 
 #-----------------------------------------------------------------------------------------------------------------------#
@@ -190,6 +191,9 @@ ecp_t_box_irp6ot: ecp_t_box_irp6ot.o ../common/ecp_g_smooth.o ../common/ecp_gene
 	$(LD) $(LDFLAGS) -o $@ $^ 
 #-----------------------------------------------------------------------------------------------------------------------#
 ecp_t_smooth2_test: ecp_t_smooth2_test.o ../common/ecp_g_smooth2.o ../common/ecp_generator_t.o ../common/ecp_g_jarosz.o ../common/ecp_operator_reaction_condition.o $(SHOBJ)
+	$(LD) $(LDFLAGS) -o $@ $^ 
+#-----------------------------------------------------------------------------------------------------------------------#
+ecp_t_kcz_test: ecp_t_kcz_test.o ../common/ecp_g_smooth2.o ../common/ecp_generator_t.o ../common/ecp_g_jarosz.o ../common/ecp_operator_reaction_condition.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 
 #---------------------------------Special object build rules (user made)-------------------------------------#
