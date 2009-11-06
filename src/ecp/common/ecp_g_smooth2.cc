@@ -58,8 +58,8 @@ void smooth2::load_trajectory_from_xml(ecp_mp::common::Trajectory &trajectory) {
 	trajectory.showTime();
 
 	flush_pose_list(); // Usuniecie listy pozycji, o ile istnieje
-	pose_list = &trajectory.getPoses2();
-	pose_list_iterator = pose_list->end();
+	pose_list = trajectory.getPoses2();
+	pose_list_iterator = pose_list.end();
 }
 
 void smooth2::set_pose_from_xml(xmlNode *stateNode, bool &first_time) {
@@ -402,25 +402,23 @@ void smooth2::reset() {
 }
 
 void smooth2::flush_pose_list(void) {
-   if (pose_list != NULL) {
-       pose_list->clear();
-	   first_coordinate=true;
-   }
+   pose_list.clear();
+   first_coordinate=true;
 }
 
 // -------------------------------------------------------return iterator to beginning of the list
 void smooth2::initiate_pose_list(void) {
-    pose_list_iterator = pose_list->begin();
+    pose_list_iterator = pose_list.begin();
 }
 // -------------------------------------------------------move pose_list iterator to the next position
 void smooth2::next_pose_list_ptr(void) {
-    if (pose_list_iterator != pose_list->end()) {
+    if (pose_list_iterator != pose_list.end()) {
         pose_list_iterator++;
     }
 }
 
 void smooth2::prev_pose_list_ptr(void) {
-	if (pose_list_iterator != pose_list->begin()) {
+	if (pose_list_iterator != pose_list.begin()) {
 		pose_list_iterator--;
 	}
 }
@@ -428,9 +426,9 @@ void smooth2::prev_pose_list_ptr(void) {
 bool smooth2::is_last_list_element(void) {
     // sprawdza czy aktualnie wskazywany element listy ma nastepnik
     // jesli <> nulla
-    if ( pose_list_iterator != pose_list->end() )
+    if ( pose_list_iterator != pose_list.end() )
     {
-        if ( (++pose_list_iterator) != pose_list->end() )
+        if ( (++pose_list_iterator) != pose_list.end() )
         {
             --pose_list_iterator;
             return false;
@@ -445,31 +443,25 @@ bool smooth2::is_last_list_element(void) {
 }
 
 void smooth2::create_pose_list_head (lib::POSE_SPECIFICATION ps, double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR]) {
-    pose_list->push_back(ecp_mp::common::smooth2_trajectory_pose(ps, coordinates, v, a));
-    pose_list_iterator = pose_list->begin();
+    pose_list.push_back(ecp_mp::common::smooth2_trajectory_pose(ps, coordinates, v, a));
+    pose_list_iterator = pose_list.begin();
 }
 
 void smooth2::insert_pose_list_element (lib::POSE_SPECIFICATION ps, double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR]) {
-    pose_list->push_back(ecp_mp::common::smooth2_trajectory_pose(ps, coordinates, v, a));
+    pose_list.push_back(ecp_mp::common::smooth2_trajectory_pose(ps, coordinates, v, a));
     pose_list_iterator++;
 }
 
 int smooth2::pose_list_length(void) {
-    return pose_list->size();
+    return pose_list.size();
 }
 
 void smooth2::initiate_coordinate_list(void) {
-
-	if (coordinate_list != NULL) {
-		coordinate_list_iterator = coordinate_list->begin();
-	}
+	coordinate_list_iterator = coordinate_list.begin();
 }
 
 void smooth2::flush_coordinate_list(void) {
-
-	if (coordinate_list != NULL) {
-		coordinate_list->clear();
-	}
+	coordinate_list.clear();
 }
 
 void smooth2::load_a_v_min (const char* file_name)
@@ -583,8 +575,8 @@ smooth2::smooth2 (common::task::task& _ecp_task, bool _is_synchronised)
     //double v[MAX_SERVOS_NR]={1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
     //double a[MAX_SERVOS_NR]={1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
 
-	pose_list = new std::list<ecp_mp::common::smooth2_trajectory_pose>();
-	coordinate_list = new std::list<coordinates>();
+	pose_list = std::list<ecp_mp::common::smooth2_trajectory_pose>();
+	coordinate_list = std::list<coordinates>();
 
 	trajectory_generated = false;
 	trajectory_calculated = false;
@@ -830,7 +822,7 @@ void smooth2::generate_cords() {
 				}
 			}
 			private_node_counter++;
-			coordinate_list->push_back(coordinates(coordinate));
+			coordinate_list.push_back(coordinates(coordinate));
 		}
 		private_node_counter = 1;
 		next_pose_list_ptr();
@@ -838,7 +830,7 @@ void smooth2::generate_cords() {
 
 	//printowanie listy coordinate
 	initiate_coordinate_list();
-	for (int m = 0; m < coordinate_list->size(); m++) {
+	for (int m = 0; m < coordinate_list.size(); m++) {
 		printf("makrokrok: %d\t", m);
 		for (int n = 0; n < 8; n++) {
 			printf("%f\t", coordinate_list_iterator->coordinate[n]);

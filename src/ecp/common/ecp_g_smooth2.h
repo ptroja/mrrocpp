@@ -31,14 +31,13 @@ class smooth2 : public delta {
 				coordinates(double coordinate[MAX_SERVOS_NR]) {
 					memcpy(this->coordinate, coordinate, MAX_SERVOS_NR*sizeof(double));
 				};
-				~coordinates() { };
 				double coordinate[MAX_SERVOS_NR];
 		};
 
-		std::list<ecp_mp::common::smooth2_trajectory_pose> *pose_list;
+		std::list<ecp_mp::common::smooth2_trajectory_pose> pose_list;
 		std::list<ecp_mp::common::smooth2_trajectory_pose>::iterator pose_list_iterator;
 
-		std::list<coordinates> *coordinate_list;
+		std::list<coordinates> coordinate_list;
 		std::list<coordinates>::iterator coordinate_list_iterator;
 
 		double a_max_motor[MAX_SERVOS_NR], a_max_joint[MAX_SERVOS_NR], a_max_zyz[MAX_SERVOS_NR], a_max_aa[MAX_SERVOS_NR];
