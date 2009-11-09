@@ -26,7 +26,7 @@ public:
 
 	bool check_and_null_trigger(); 		// zwraca wartosc trigger i zeruje go
 
-	int node_counter;  // biezacy wezel interpolacji
+	unsigned int node_counter;  // biezacy wezel interpolacji
 
 	virtual ~generator();
 

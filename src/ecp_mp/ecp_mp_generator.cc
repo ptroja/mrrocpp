@@ -8,8 +8,8 @@ generator::generator(lib::sr_ecp& _sr_ecp_msg) :
 	sr_ecp_msg(_sr_ecp_msg),
 	trigger(false),
 	node_counter(0)
-	{}
-
+{
+}
 
 bool generator::check_and_null_trigger()
 {
@@ -22,7 +22,6 @@ bool generator::check_and_null_trigger()
 
 	return returned_value;
 }
-
 
 generator::~generator()
 {}

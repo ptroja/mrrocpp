@@ -1089,6 +1089,8 @@ struct MP_COMMAND_PACKAGE
 struct ECP_REPLY_PACKAGE
 {
 	ECP_REPLY reply;
+
+	// TODO: this should be rather union, but it is not possible to union objects with constructors
 	r_buffer reply_package;
 	char commandRecognized[SPEECH_RECOGNITION_TEXT_LEN];
 };

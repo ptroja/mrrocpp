@@ -11,7 +11,6 @@ namespace ecp_mp {
 
 struct robot_transmission_data
 {
-
 	robot_transmission_data(void) :
 		instruction_type(lib::INVALID), reply_type(lib::ACKNOWLEDGE)
 	{
@@ -38,9 +37,10 @@ struct robot_transmission_data
 
 	lib::MOTION_TYPE motion_type; // sposob zadania ruchu
 	lib::INTERPOLATION_TYPE next_interpolation_type; // sposob interpolacji
-	lib::INTERPOLATION_TYPE current_interpolation_type; // sposob interpolacji - narazie nieuzywane
+//	lib::INTERPOLATION_TYPE current_interpolation_type; // sposob interpolacji - narazie nieuzywane
 
 	uint16_t motion_steps; // liczba krokow ruchu zadanego (makrokroku)
+
 	/*
 	 liczba krokow pierwszej fazy ruchu, czyli krok,
 	 w ktorym ma zostac przekazana informacja o realizacji pierwszej fazy ruchu:
@@ -135,7 +135,6 @@ struct robot_transmission_data
 
 	// moment zadany dla Dunga
 	double desired_torque[MAX_SERVOS_NR];
-
 };
 
 class robot
