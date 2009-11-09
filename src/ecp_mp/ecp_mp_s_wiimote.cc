@@ -25,9 +25,9 @@ wiimote::wiimote(lib::SENSOR_ENUM _sensor_name, const char* _section_name, task:
 
 	// Retrieve wiimote node name and port from configuration file.
 	int wiimote_port = _ecp_mp_object.config.return_int_value("wiimote_port", _section_name);
-	const char* wiimote_node_name = _ecp_mp_object.config.return_string_value("wiimote_node_name", _section_name).c_str();
+	std::string wiimote_node_name = _ecp_mp_object.config.return_string_value("wiimote_node_name", _section_name);
 
-	// Try to open socket.
+    // Try to open socket.
 	sockfd = socket(AF_INET, SOCK_STREAM, 0);
 	if (sockfd < 0) {
 		sr_ecp_msg.message("ERROR opening socket");
@@ -35,9 +35,9 @@ wiimote::wiimote(lib::SENSOR_ENUM _sensor_name, const char* _section_name, task:
 	}
 
 	// Get server hostname.
-	server = gethostbyname(wiimote_node_name);
+	server = gethostbyname(wiimote_node_name.c_str());
 	if (server == NULL) {
-		sprintf(buffer,"ERROR, no host %s", wiimote_node_name);
+		sprintf(buffer,"ERROR, no host %s", wiimote_node_name.c_str());
 		sr_ecp_msg.message(buffer);
 		throw sensor_error(lib::SYSTEM_ERROR, CANNOT_LOCATE_DEVICE);
 	}
