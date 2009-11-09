@@ -296,9 +296,9 @@ void fsautomat::main_task_algorithm(void)
 				double gen_args[4];
 				int size = lib::setValuesInArray(gen_args, mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 				if(size > 3)
-					rgg->configure(gen_args[0], gen_args[1], (int)gen_args[2], (bool)gen_args[3]);
+					rgg->configure(gen_args[0], gen_args[1], (unsigned int)gen_args[2], (bool)gen_args[3]);
 				else
-					rgg->configure(gen_args[0], gen_args[1], (int)gen_args[2]);
+					rgg->configure(gen_args[0], gen_args[1], (unsigned int)gen_args[2]);
 				rgg->Move();
 				break;
 			}
@@ -314,7 +314,7 @@ void fsautomat::main_task_algorithm(void)
 			{
 				double gen_args[2];
 				lib::setValuesInArray(gen_args, mp_command.ecp_next_state.mp_2_ecp_next_state_string);
-				gag->configure(gen_args[0] , (int)gen_args[1]);
+				gag->configure(gen_args[0] , (unsigned int)gen_args[1]);
 				gag->Move();
 				break;
 			}
