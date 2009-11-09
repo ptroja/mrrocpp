@@ -53,13 +53,13 @@ class smooth2 : public delta {
 		int type; //1 - polozenie bezwzgledne , 2 - polozenie przyrostowe
 		bool first_coordinate;
 		float distance_eps;
-	    int rec_pos;
-	    int rec_ax;
-	    int actual_ax;
+	   // int rec_pos;
+	   // int rec_ax;
+	    //int actual_ax;
 
 		bool trajectory_generated;
 		bool trajectory_calculated;
-		bool rec;
+		//bool rec;
 
 		bool eq(double a, double b);
 		void generate_cords();
