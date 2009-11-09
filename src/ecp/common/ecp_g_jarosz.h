@@ -62,6 +62,7 @@ public:
 
 class linear : public delta
 {
+  int mp_communication_mode; // by Y - 0 bez TASK TERMINATED, 1 - z TASK TERMINATED
 public:
 	// konstruktor
 	linear (common::task::task& _ecp_task);
@@ -383,6 +384,7 @@ protected:
 								// pozycjami dzielona jest na przedzialy interpolacji.
 								// Kazdy przedzial interpolacji jest rownowazny jednemu makrokrokowi
 								// wykonywanemu przez EDP.
+  one_sample *trj_ptr;			// wskaznik na bufor z rzeczywista trajektoria
 
   bool first_interval;		// true  - jezeli ruch odbywa sie w pierwszym przedziale interpolacji
 								// false	- w przeciwnym przypadku
