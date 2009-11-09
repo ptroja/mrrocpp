@@ -227,7 +227,6 @@ typedef struct sensor_image_t
 			int right;
 			int up;
 			int down;
-                        int down;
                         int buttonA;
                         int buttonB;
                         int button1;
