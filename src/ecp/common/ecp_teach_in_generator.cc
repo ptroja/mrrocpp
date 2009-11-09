@@ -41,7 +41,6 @@ void ecp_teach_in_generator::teach(lib::POSE_SPECIFICATION ps, const char *msg)
     lib::UI_reply ui_to_ecp_rep; // Odpowiedz UI do ECP
     uint64_t e; // kod bledu systemowego
     bool first_time = true; // Znacznik
-    ecp_to_ui_msg.hdr.type=0;
 
     // by Y - okreslenie robota
 
@@ -53,6 +52,7 @@ void ecp_teach_in_generator::teach(lib::POSE_SPECIFICATION ps, const char *msg)
       {
         // Polecenie uczenia do UI
 #if !defined(USE_MESSIP_SRR)
+    	ecp_to_ui_msg.hdr.type=0;
     	if (MsgSend(ecp_t.UI_fd, &ecp_to_ui_msg, sizeof(lib::ECP_message), &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0)
 #else
     	int status;
@@ -99,12 +99,11 @@ void ecp_teach_in_generator::save_file(lib::POSE_SPECIFICATION ps)
     uint64_t number_of_poses; // Liczba pozycji do zapamietania
     uint64_t i, j; // Liczniki petli
 
-    ecp_to_ui_msg.hdr.type=0;
-
     ecp_to_ui_msg.ecp_message = lib::SAVE_FILE; // Polecenie wprowadzenia nazwy pliku
     strcpy(ecp_to_ui_msg.string, "*.trj"); // Wzorzec nazwy pliku
     // if ( Send (UI_pid, &ecp_to_ui_msg, &ui_to_ecp_rep, sizeof(lib::ECP_message), sizeof(lib::UI_reply)) == -1) {
 #if !defined(USE_MESSIP_SRR)
+    ecp_to_ui_msg.hdr.type=0;
     if (MsgSend(ecp_t.UI_fd, &ecp_to_ui_msg, sizeof(lib::ECP_message), &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0)
 #else
     int status;
@@ -192,11 +191,10 @@ bool ecp_teach_in_generator::load_file_from_ui()
 
     uint64_t e; // Kod bledu systemowego
 
-    ecp_to_ui_msg.hdr.type=0;
-
     ecp_to_ui_msg.ecp_message = lib::LOAD_FILE; // Polecenie wprowadzenia nazwy odczytywanego pliku
 
 #if !defined(USE_MESSIP_SRR)
+    ecp_to_ui_msg.hdr.type=0;
     if (MsgSend(ecp_t.UI_fd, &ecp_to_ui_msg, sizeof(lib::ECP_message), &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0)
 #else
     int status;

@@ -47,7 +47,7 @@ bool smooth::eq(double a, double b)
 {
 	const double EPS = 0.0001f;
 	const double diff = a - b;
-	return fabs((double) (diff < EPS));
+	return diff < EPS && diff > -EPS;
 }
 
 void smooth::generate_next_coords (void)

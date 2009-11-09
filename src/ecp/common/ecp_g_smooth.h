@@ -22,6 +22,8 @@ namespace ecp {
 namespace common {
 namespace generator {
 
+// TODO: this generator should depend (be initialized?) on actual number of robot axis, not MAX_SERVOS_NR
+
 class smooth : public delta
 {
 

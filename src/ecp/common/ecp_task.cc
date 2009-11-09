@@ -23,7 +23,16 @@ task::task(lib::configurator &_config) :
 
 task::~task()
 {
-	// TODO: do reverse to initialize_communication()
+	// TODO: error check
+#if !defined(USE_MESSIP_SRR)
+	name_detach(trigger_attach, 0);
+	name_detach(ecp_attach, 0);
+	name_close(MP_fd);
+#else
+	messip_channel_delete(trigger_attach, MESSIP_NOTIMEOUT);
+	messip_channel_delete(ecp_attach, MESSIP_NOTIMEOUT);
+	messip_channel_disconnect(MP_fd, MESSIP_NOTIMEOUT);
+#endif
 }
 
 bool task::pulse_check()
@@ -95,22 +104,7 @@ bool task::pulse_check()
 	return false;
 #endif
 }
-// ---------------------------------------------------------------
 
-
-void task::catch_signal_in_ecp_task(int sig)
-{
-	switch (sig) {
-		case SIGTERM:
-			sr_ecp_msg->message("ECP terminated");
-			_exit(EXIT_SUCCESS);
-			break;
-		case SIGSEGV:
-			fprintf(stderr, "Segmentation fault in ECP process %s\n", config.section_name.c_str());
-			signal(SIGSEGV, SIG_DFL);
-			break;
-	}
-}
 
 // ---------------------------------------------------------------
 void task::initialize_communication()
@@ -121,12 +115,10 @@ void task::initialize_communication()
 	std::string ecp_attach_point = config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "ecp_attach_point");
 	std::string sr_net_attach_point = config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", "[ui]");
 
-	if ((sr_ecp_msg = new lib::sr_ecp(lib::ECP, ecp_attach_point.c_str(), sr_net_attach_point.c_str())) == NULL) { // Obiekt do komuniacji z SR
-		int e = errno; // kod bledu systemowego
-		perror("Unable to locate SR");
-		throw ECP_main_error(lib::SYSTEM_ERROR, e);
-	}
-//	std::cout << "ECP: Opening MP pulses channel at '" << mp_pulse_attach_point << "'" << std::endl;
+	// Obiekt do komuniacji z SR
+	sr_ecp_msg = new lib::sr_ecp(lib::ECP, ecp_attach_point.c_str(), sr_net_attach_point.c_str());
+
+	//	std::cout << "ECP: Opening MP pulses channel at '" << mp_pulse_attach_point << "'" << std::endl;
 
 #if !defined(USE_MESSIP_SRR)
 	if ( (MP_fd = name_open(mp_pulse_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) < 0)
@@ -184,12 +176,10 @@ void task::set_ecp_reply(lib::ECP_REPLY ecp_r)
 // Informacja dla MP o zakonczeniu zadania uzytkownika
 void task::ecp_termination_notice(void)
 {
-
-	if (mp_command_type()!= lib::END_MOTION) {
+	if (mp_command_type() != lib::END_MOTION) {
 
 		set_ecp_reply(lib::TASK_TERMINATED);
 		mp_buffer_receive_and_send();
-
 	}
 }
 
@@ -211,7 +201,7 @@ void task::send_pulse_to_mp(int pulse_code, int pulse_value)
 void task::ecp_wait_for_stop(void)
 {
 	// Wyslanie pulsu do MP
-	send_pulse_to_mp(ECP_WAIT_FOR_STOP, 1);
+	send_pulse_to_mp(ECP_WAIT_FOR_STOP);
 
 	// Oczekiwanie na wiadomosc.
 	int caller = receive_mp_message();
@@ -248,7 +238,7 @@ bool task::ecp_wait_for_start(void)
 	bool ecp_stop = false;
 
 	// Wyslanie pulsu do MP
-	send_pulse_to_mp( ECP_WAIT_FOR_START, 1);
+	send_pulse_to_mp(ECP_WAIT_FOR_START);
 
 	int caller = receive_mp_message();
 
@@ -294,12 +284,12 @@ bool task::ecp_wait_for_start(void)
 // Oczekiwanie na kolejne zlecenie od MP
 void task::get_next_state(void)
 {
-	bool ecp_stop = false;
-
 	// Wyslanie pulsu do MP
-	send_pulse_to_mp(ECP_WAIT_FOR_NEXT_STATE, 1);
+	send_pulse_to_mp(ECP_WAIT_FOR_NEXT_STATE);
 
 	int caller = receive_mp_message();
+
+	bool ecp_stop = false;
 
 	switch (mp_command_type() ) {
 		case lib::NEXT_STATE:
@@ -339,13 +329,13 @@ void task::get_next_state(void)
 // Oczekiwanie na polecenie od MP
 bool task::mp_buffer_receive_and_send(void)
 {
-	bool returned_value = true;
-	bool ecp_stop = false;
-
 	// Wyslanie pulsu do MP
-	send_pulse_to_mp(ECP_WAIT_FOR_COMMAND, 1);
+	send_pulse_to_mp(ECP_WAIT_FOR_COMMAND);
 
 	int caller = receive_mp_message();
+
+	bool returned_value = true;
+	bool ecp_stop = false;
 
 	switch (mp_command_type()) {
 		case lib::NEXT_POSE:
@@ -357,7 +347,7 @@ bool task::mp_buffer_receive_and_send(void)
 			ecp_stop = true;
 			break;
 		case lib::END_MOTION:
-			// dla ulatwienia programowania apliakcji wielorobotowych
+			// dla ulatwienia programowania aplikacji wielorobotowych
 			if (ecp_reply.reply != lib::ERROR_IN_ECP)
 				set_ecp_reply(lib::TASK_TERMINATED);
 			returned_value = false;
