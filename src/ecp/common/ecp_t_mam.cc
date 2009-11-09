@@ -54,28 +54,6 @@ bool TERMINATE=false;
 // Flaga uzywana do zatrzymywania/uruchamiania zbierania pomiarow.
 bool START_MEASURES=false;
 
-// Zmienna uzywana przy konczeniu watkow.
-void* value_ptr;
-
-/********************************** SIGCATCH ********************************/
-void mam::catch_signal(int sig)
-{
-	switch (sig) {
-		case SIGTERM:
-			// Zakonczenie pracy watkow.
-			TERMINATE = true;
-			// Zwolnienie pamieci - generator.
-			delete(mam_gen);
-			// Zwolnienie pamieci - robot.
-			delete(((mam*)ecp_t)->ecp_m_robot);
-			// Odlaczenie nazwy.
-			name_detach(UI_ECP_attach, 0);
-			((mam*)ecp_t)->sr_ecp_msg->message("ECP terminated");
-			exit(EXIT_SUCCESS);
-			break;
-	}
-}
-
 /************************ UI COMMUNICATION THREAD ***************************/
 void* UI_communication_thread(void* arg)
 {
@@ -156,7 +134,7 @@ void* measures_thread(void* arg)
 			usleep(1000*50);
 			// Jezeli koniec pracy.
 			if (TERMINATE)
-				pthread_exit(value_ptr);
+				return NULL;
 		}
 		// Zebranie pomiarow co np. 300 ms.
 		mam_gen->Move();
@@ -165,8 +143,8 @@ void* measures_thread(void* arg)
 		// Oraz odswierzenie okna.
 		//        ((ecp_task_mam*)ecp_t)->sr_ecp_msg->message("Tak sobie iteruje.");
 	}
+
 	// koniec dzialania
-	pthread_exit(value_ptr);
 	return NULL;
 }
 
