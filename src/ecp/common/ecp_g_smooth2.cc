@@ -794,11 +794,9 @@ void smooth2::generate_cords() {
 			for (int i = 0; i < MAX_SERVOS_NR; i++) {
 				if (type == 1 && fabs(pose_list_iterator->start_position[i] - pose_list_iterator->coordinates[i]) < distance_eps) {
 					coordinate[i] = pose_list_iterator->start_position[i]; //dla drogi 0
-					flushall();
 				} else if (type == 2 && eq(pose_list_iterator->coordinates[i], 0)) {//dla drogi 0 w relative (type == 2)
 					coordinate[i] = 0;
 				} else {
-					flushall();
 					coordinate[i] = generate_next_coords(private_node_counter,
 							pose_list_iterator->interpolation_node_no,
 							pose_list_iterator->start_position[i],
@@ -915,7 +913,7 @@ bool smooth2::next_step () {
     		//calculate_absolute_positions();
     	//}
     	//printf("poczatek next_step\n");
-    	flushall();
+    	//flushall();
     	calculate(); //wypelnienie pozostalych zmiennych w liscie pose_list
     	generate_cords(); //wypelnienie listy coordinate_list (lista kolejnych pozycji w makrokrokach)
     	trajectory_generated = true;
@@ -967,11 +965,6 @@ bool smooth2::next_step () {
     			}
 
     			//gripper
-    			/*if(pose_list_iterator->v_grip*node_counter < pose_list_iterator->coordinates[6]) {
-    			    the_robot->EDP_data.next_gripper_coordinate = pose_list_iterator->v_grip*node_counter;
-    			} else {
-    			    the_robot->EDP_data.next_gripper_coordinate = pose_list_iterator->coordinates[6];
-    			}*/
     			gripper_position = pose_list_iterator->start_position[6] +
     			                                   pose_list_iterator->k[6]*((node_counter*tk)*pose_list_iterator->v_grip);
     			//printf(" %f ", gripper_position);
@@ -982,7 +975,6 @@ bool smooth2::next_step () {
                 } else {
                 	the_robot->EDP_data.next_gripper_coordinate = pose_list_iterator->coordinates[6];
                 }
-                //the_robot->EDP_data.next_gripper_coordinate = the_robot->EDP_data.current_gripper_coordinate;//TODO to jest tymczasowe wiec trzeba poprawic
 
     			coordinate_list_iterator++;
 
@@ -1007,12 +999,6 @@ bool smooth2::next_step () {
     			}
 
     			//gripper
-
-    			/*if(pose_list_iterator->v_grip*node_counter < pose_list_iterator->coordinates[6]) {
-    			    the_robot->EDP_data.next_gripper_coordinate = pose_list_iterator->v_grip*node_counter;
-    			} else {
-    			    the_robot->EDP_data.next_gripper_coordinate = pose_list_iterator->coordinates[6];
-    			}*/
     			gripper_position = pose_list_iterator->start_position[6] +
     			                                   pose_list_iterator->k[6]*((node_counter*tk)*pose_list_iterator->v_grip);
     			//printf(" %f ", gripper_position);
@@ -1023,7 +1009,7 @@ bool smooth2::next_step () {
                 } else {
                 	the_robot->EDP_data.next_gripper_coordinate = pose_list_iterator->coordinates[6];
                 }
-    			//the_robot->EDP_data.next_gripper_coordinate = the_robot->EDP_data.current_gripper_coordinate;//TODO to jest tymczasowe wiec trzeba poprawic
+
     			coordinate_list_iterator++;
 
     			break;
@@ -1047,7 +1033,6 @@ bool smooth2::next_step () {
     		    }
 
     		    //gripper
-
     		    if(the_robot->robot_name == lib::ROBOT_IRP6_ON_TRACK) {
     		        i=7;
     		    } else if(the_robot->robot_name == lib::ROBOT_IRP6_POSTUMENT) {
@@ -1064,7 +1049,6 @@ bool smooth2::next_step () {
                 } else {
                 	the_robot->EDP_data.next_gripper_coordinate = pose_list_iterator->coordinates[i];
                 }
-    		    //the_robot->EDP_data.next_joint_arm_coordinates[i] = pose_list_iterator->coordinates[i];
 
     		    coordinate_list_iterator++;
 
@@ -1089,18 +1073,12 @@ bool smooth2::next_step () {
     		    }
 
     		    //gripper
-
     		    if(the_robot->robot_name == lib::ROBOT_IRP6_ON_TRACK) {
     		        i=7;
     		    } else if(the_robot->robot_name == lib::ROBOT_IRP6_POSTUMENT) {
     		        i=6;
 				}
 
-    		    /*if(pose_list_iterator->v_grip*node_counter < coordinate_list_iterator->coordinate[i]) {
-    		    	the_robot->EDP_data.next_motor_arm_coordinates[i] = pose_list_iterator->v_grip*node_counter;
-    		    } else {
-    		    	the_robot->EDP_data.next_motor_arm_coordinates[i] = pose_list_iterator->coordinates[i];
-    		    }*/
     			gripper_position = pose_list_iterator->start_position[i] +
     			                                   pose_list_iterator->k[i]*((node_counter*tk)*pose_list_iterator->v_grip);
     			//printf(" %f ", gripper_position);
@@ -1111,7 +1089,7 @@ bool smooth2::next_step () {
                 } else {
                 	the_robot->EDP_data.next_gripper_coordinate = pose_list_iterator->coordinates[i];
                 }
-    		    //the_robot->EDP_data.next_motor_arm_coordinates[i] = coordinate_list_iterator->coordinate[i];//TODO to jest tymczasowe wiec trzeba poprawic
+
     		    coordinate_list_iterator++;
 
     		    break;
@@ -1136,7 +1114,7 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
     int gripp; //os grippera
 
     trajectory_calculated = false;
-    //TODO dorobic zabezpieczenia dla 0 predkosci w osmej wspolrzednej postumenta i w angle axis
+    //TODO dorobic zabezpieczenia dla 0 predkosci w osmej wspolrzednej postumenta i w angle axes
 
     double v_r_next[MAX_SERVOS_NR];//predkosc kolejnego ruchu
 
@@ -1194,10 +1172,8 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 					}
 					//printf("predkosci (max i zadane): %f\t %f\n", v_max_zyz[i], pose_list_iterator->v[i]);
 					//printf("przyspieszenia (max i zadane): %f\t %f\n", a_max_zyz[i], pose_list_iterator->a[i]);
-					//if (rec == false || j > rec_pos || (j == rec_pos && rec_ax >= i)) {
-						pose_list_iterator->v_r[i] = v_max_zyz[i] * pose_list_iterator->v[i];
-						pose_list_iterator->a_r[i] = a_max_zyz[i] * pose_list_iterator->a[i];
-					//}
+					pose_list_iterator->v_r[i] = v_max_zyz[i] * pose_list_iterator->v[i];
+					pose_list_iterator->a_r[i] = a_max_zyz[i] * pose_list_iterator->a[i];
 
 					pose_list_iterator->v_p[i] = 0; //zalozenie, ze poczatkowa predkosc jest rowna 0
 					if (type == 1) {
@@ -1252,11 +1228,8 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 						throw ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
 					}
 
-					//if (rec == false || j > rec_pos || (j == rec_pos && rec_ax >= i)) {
-						//printf("v: %f, p_v: %f\n", v_max_aa[i], pose_list_iterator->v[i]);
-						pose_list_iterator->v_r[i] = v_max_aa[i] * pose_list_iterator->v[i];
-						pose_list_iterator->a_r[i] = a_max_aa[i] * pose_list_iterator->a[i];
-					//}
+					pose_list_iterator->v_r[i] = v_max_aa[i] * pose_list_iterator->v[i];
+					pose_list_iterator->a_r[i] = a_max_aa[i] * pose_list_iterator->a[i];
 
 					pose_list_iterator->v_p[i] = 0; //zalozenie, ze poczatkowa predkosc jest rowna 0
 
@@ -1318,10 +1291,8 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 					}
 					//printf("predkosci (max i zadane): %f\t %f\n", v_max_zyz[i], pose_list_iterator->v[i]);
 					//printf("przyspieszenia (max i zadane): %f\t %f\n", a_max_zyz[i], pose_list_iterator->a[i]);
-					//if (rec == false || j > rec_pos || (j == rec_pos && rec_ax >= i)) {
-						pose_list_iterator->v_r[i] = v_max_joint[i] * pose_list_iterator->v[i];
-						pose_list_iterator->a_r[i] = a_max_joint[i] * pose_list_iterator->a[i];
-					//}
+					pose_list_iterator->v_r[i] = v_max_joint[i] * pose_list_iterator->v[i];
+					pose_list_iterator->a_r[i] = a_max_joint[i] * pose_list_iterator->a[i];
 
 					pose_list_iterator->v_p[i] = 0; //zalozenie, ze poczatkowa predkosc jest rowna 0
 
@@ -1381,10 +1352,8 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 					}
 					//printf("predkosci (max i zadane): %f\t %f\n", v_max_zyz[i], pose_list_iterator->v[i]);
 					//printf("przyspieszenia (max i zadane): %f\t %f\n", a_max_zyz[i], pose_list_iterator->a[i]);
-					//if (rec == false || j > rec_pos || (j == rec_pos && rec_ax >= i)) {
-						pose_list_iterator->v_r[i] = v_max_motor[i] * pose_list_iterator->v[i];
-						pose_list_iterator->a_r[i] = a_max_motor[i] * pose_list_iterator->a[i];
-					//}
+					pose_list_iterator->v_r[i] = v_max_motor[i] * pose_list_iterator->v[i];
+					pose_list_iterator->a_r[i] = a_max_motor[i] * pose_list_iterator->a[i];
 
 					pose_list_iterator->v_p[i] = 0; //zalozenie, ze poczatkowa predkosc jest rowna 0
 
@@ -1446,9 +1415,6 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 					}
 				}
 
-				//pose_list_iterator->start_position[gripp] = the_robot->EDP_data.current_gripper_coordinate;
-				//pose_list_iterator->start_position[7] = 0.0;
-
 				for (i = 0; i < MAX_SERVOS_NR; i++) {
 					if (v_max_zyz[i] == 0 || a_max_zyz[i] == 0 || pose_list_iterator->v[i] == 0 || pose_list_iterator->a[i] == 0) {
 						sr_ecp_msg.message("One or more of 'v' or 'a' values is 0");
@@ -1456,11 +1422,8 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 					}
 					//printf("predkosci (max i zadane): %f\t %f\n", v_max_zyz[i], pose_list_iterator->v[i]);
 					//printf("przyspieszenia (max i zadane): %f\t %f\n", a_max_zyz[i], pose_list_iterator->a[i]);
-			//		if (rec == false || j > rec_pos || (j == rec_pos && rec_ax >= i)) {
-						pose_list_iterator->v_r[i] = v_max_zyz[i] * pose_list_iterator->v[i];
-						pose_list_iterator->a_r[i] = a_max_zyz[i] * pose_list_iterator->a[i];
-			//		}
-
+					pose_list_iterator->v_r[i] = v_max_zyz[i] * pose_list_iterator->v[i];
+					pose_list_iterator->a_r[i] = a_max_zyz[i] * pose_list_iterator->a[i];
 				}
 
 				break;
@@ -1489,9 +1452,6 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 					}
 				}
 
-				//pose_list_iterator->start_position[gripp] = the_robot->EDP_data.current_gripper_coordinate;
-				//pose_list_iterator->start_position[7] = 0.0;
-
 				for (i = 0; i < MAX_SERVOS_NR; i++) {
 					if (v_max_aa[i] == 0 || a_max_aa[i] == 0 || pose_list_iterator->v[i] == 0 || pose_list_iterator->a[i] == 0) {
 						//printf("nie first interval: v_max: %f\t a_max: %f\t v: %f\t a: %f\n",v_max_aa[i], a_max_aa[i], pose_list_iterator->v[i], pose_list_iterator->a[i]);
@@ -1501,11 +1461,8 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 					}
 					//printf("predkosci (max i zadane): %f\t %f\n", v_max_zyz[i], pose_list_iterator->v[i]);
 					//printf("przyspieszenia (max i zadane): %f\t %f\n", a_max_zyz[i], pose_list_iterator->a[i]);
-			//		if (rec == false || j > rec_pos || (j == rec_pos && rec_ax >= i)) {
-						pose_list_iterator->v_r[i] = v_max_aa[i] * pose_list_iterator->v[i];
-						pose_list_iterator->a_r[i] = a_max_aa[i] * pose_list_iterator->a[i];
-			//		}
-
+					pose_list_iterator->v_r[i] = v_max_aa[i] * pose_list_iterator->v[i];
+					pose_list_iterator->a_r[i] = a_max_aa[i] * pose_list_iterator->a[i];
 				}
 
 				break;
@@ -1540,7 +1497,6 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 					}
 				}
 
-				//pose_list_iterator->start_position[gripp] = the_robot->EDP_data.current_joint_arm_coordinates[gripp];
 				if (gripp < (MAX_SERVOS_NR -1)) {//jesli postument
 					pose_list_iterator->start_position[gripp + 1] = 0.0;//TODO sprawdzic
 				}
@@ -1552,11 +1508,8 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 					}
 					//printf("predkosci (max i zadane): %f\t %f\n", v_max_zyz[i], pose_list_iterator->v[i]);
 					//printf("przyspieszenia (max i zadane): %f\t %f\n", a_max_zyz[i], pose_list_iterator->a[i]);
-			//		if (rec == false || j > rec_pos || (j == rec_pos && rec_ax >= i)) {
-						pose_list_iterator->v_r[i] = v_max_joint[i] * pose_list_iterator->v[i];
-						pose_list_iterator->a_r[i] = a_max_joint[i] * pose_list_iterator->a[i];
-			//		}
-
+					pose_list_iterator->v_r[i] = v_max_joint[i] * pose_list_iterator->v[i];
+					pose_list_iterator->a_r[i] = a_max_joint[i] * pose_list_iterator->a[i];
 				}
 
 				break;
@@ -1591,7 +1544,6 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 					}
 				}
 
-				//pose_list_iterator->start_position[gripp] = the_robot->EDP_data.current_motor_arm_coordinates[gripp];
 				if (gripp < (MAX_SERVOS_NR -1)) {//jesli postument
 					pose_list_iterator->start_position[gripp + 1] = 0.0;//TODO sprawdzic
 				}
@@ -1603,11 +1555,8 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 					}
 					//printf("predkosci (max i zadane): %f\t %f\n", v_max_zyz[i], pose_list_iterator->v[i]);
 					//printf("przyspieszenia (max i zadane): %f\t %f\n", a_max_zyz[i], pose_list_iterator->a[i]);
-			//		if (rec == false || j > rec_pos || (j == rec_pos && rec_ax >= i)) {
-						pose_list_iterator->v_r[i] = v_max_motor[i] * pose_list_iterator->v[i];
-						pose_list_iterator->a_r[i] = a_max_motor[i] * pose_list_iterator->a[i];
-			//		}
-
+					pose_list_iterator->v_r[i] = v_max_motor[i] * pose_list_iterator->v[i];
+					pose_list_iterator->a_r[i] = a_max_motor[i] * pose_list_iterator->a[i];
 				}
 
 				break;
@@ -1630,7 +1579,6 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 			if (is_last_list_element()) {
 				//printf("ostatni ruch\n");
 				v_r_next[i] = 0.0;
-				//pose_list_iterator->v_k[i] = 0; //to nie jest potrzebne tak naprawde...
 			} else {
 				temp = pose_list_iterator->k[i];
 				next_pose_list_ptr();
@@ -1660,7 +1608,6 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 					//wyrzuc wyjatek o niepoprawnym type
 				}
 
-				//if (rec == false || j > rec_pos || (j == rec_pos && rec_ax >= i)) {//TODO sprawdzic czy to jest potrzebne w odniesieniu do rekurencji
 				switch (td.arm_type) {
 					case lib::XYZ_EULER_ZYZ:
 						pose_list_iterator->v_r[i] = v_max_zyz[i] * pose_list_iterator->v[i];
@@ -1681,8 +1628,6 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 						break;
 
 					case lib::JOINT:
-						//printf("dziwne miejsce v: %f\t i: \n", pose_list_iterator->v[i], i);
-						//flushall();
 						pose_list_iterator->v_r[i] = v_max_joint[i] * pose_list_iterator->v[i];
 						pose_list_iterator->a_r[i] = a_max_joint[i] * pose_list_iterator->a[i];
 
@@ -1690,7 +1635,6 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 					default:
 						throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 				}
-				//}
 
 				if (pose_list_iterator->k[i] != temp) {
 					//printf("ustawianie v_r_next w osi %d\n", i);
@@ -1708,11 +1652,7 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 		}
 		// ==================================== poczatek oliczen ========================================
 
-		/*if (rec == true) {
-			t_max = pose_list_iterator->t;
-		} else {*/
-			t_max = 0;
-		//}
+		t_max = 0;
 
 		//obliczenie drogi dla kazdej osi
 		for (i = 0; i < MAX_SERVOS_NR; i++) {
@@ -1732,8 +1672,6 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 			//printf("=============================================\n");
 			//printf("v_p: %f\t v_r: %f\t v_r_next: %f\t a_r: %f\t v_k: %f\n", pose_list_iterator->v_p[i], pose_list_iterator->v_r[i], v_r_next[i], pose_list_iterator->a_r[i], pose_list_iterator->v_k[i]);
 			//flushall();
-
-			//actual_ax = i;
 
 			if (s[i] < distance_eps) {//najmniejsza wykrywalna droga
 				//printf("droga 0 %d\n", i);
@@ -1813,7 +1751,7 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 
 				pose_list_iterator->s_przysp[i] = 0;
 
-				if (v_r_next[i] > pose_list_iterator->v_r[i] || (eq(v_r_next[i],0) && eq(pose_list_iterator->v_r[i],0))) { //ten przypadek wystepuje w rekurencji, po redukcji
+				if (v_r_next[i] > pose_list_iterator->v_r[i] || (eq(v_r_next[i],0) && eq(pose_list_iterator->v_r[i],0))) { //ten przypadek wystepuje w rekurencji, po redukcji (prawdopodobnie po ostatnich zmianach juz nie wystepuje...)
 
 					//printf("tajemniczy czas: %f\n", pose_list_iterator->t);
 					t[i] = pose_list_iterator->t;
@@ -1828,10 +1766,7 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 						pose_list_iterator->s_jedn[i] = s[i] -
 										((pose_list_iterator->a_r[i] * t_temp1 * t_temp1)/2 + (pose_list_iterator->v_r[i] * t_temp1));
 					}
-					//TODO dodatkowe obliczanie gdy predkosc w rekurencji zostanie obnizona w nastepnym kroku a tutaj wszystko oprocz v_k jest zerem
-					//if (eq(pose_list_iterator->v_r[i], 0) && eq(pose_list_iterator->v_p[i],0)) {//jak tego nie bylo to droga przebyta sie zmniejszala...
-					//	reduction_model_1(pose_list_iterator, i, s[i]);
-					//}
+
 				} else {
 					t[i] = s[i]/pose_list_iterator->v_r[i];
 
@@ -1878,7 +1813,6 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 
 			if (t[i] > t_max) {//nadpisanie najdluzszego czasu
 				t_max = t[i];
-				//pose_list_iterator->t = t_max; //wymagane dla dzialania rekurencji
 			}
 			//printf("t_i: %f\n", t[i]);
 		}
@@ -1896,8 +1830,6 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 		//printf("liczba makrokrokow w ruchu %d\n", pose_list_iterator->interpolation_node_no);
 
 		for (i = 0; i < MAX_SERVOS_NR; i++) {//obliczanie przysp i jedn a takze ewentualna redukcja predkosci z powodu zbyt krotkiego czasu
-
-			//actual_ax = i;
 
 			//printf("czas ruchu w osi %d = %f\n", i, t[i]);
 
@@ -1949,9 +1881,6 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 		}
 
 		//obliczanie v_grip
-	    /*pose_list_iterator->v_grip = (pose_list_iterator->coordinates[gripp]/pose_list_iterator->interpolation_node_no);
-	    if(pose_list_iterator->v_grip<v_grip_min)
-	    	pose_list_iterator->v_grip=v_grip_min;*/
 		pose_list_iterator->v_grip = (s[gripp]/pose_list_iterator->t);
 
 		switch (td.arm_type) {
@@ -1982,23 +1911,18 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 				throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 		}
 
-		/*if(pose_list_iterator->v_grip < pose_list_iterator->v_r[gripp]) {
-			pose_list_iterator->v_grip = pose_list_iterator->v_r[gripp];
-		}*/
-
 		for (int os = 0; os < MAX_SERVOS_NR; os++) {
-		//int os = 1;
-		printf("\n=============== pozycja trajektorii nr %d pos: %d ============== os: %d ====\n", j, pose_list_iterator->pos_num, os);
-		printf("czas ruchu %f\n", pose_list_iterator->t);
-		printf("coordinates: %f\n", pose_list_iterator->coordinates[os]);
-		printf("jedn: %f\t przysp: %f\n", pose_list_iterator->jedn[os], pose_list_iterator->przysp[os]);
-		printf("liczba makrokrokow: %d\n", pose_list_iterator->interpolation_node_no);
-		printf("start pos: %f\t kierunek (k): %f\n", pose_list_iterator->start_position[os], pose_list_iterator->k[os]);
-		printf("s: %f\ns_przysp: %f\t s_jedn: %f\n", s[os], pose_list_iterator->s_przysp[os], pose_list_iterator->s_jedn[os]);
-		printf("czas\t\tv_r\t\tv_r_next\ta_r\t\tv_p\t\tv_k\n");
-		printf("%f\t%f\t%f\t%f\t%f\t%f\n", t[os], pose_list_iterator->v_r[os], v_r_next[os], pose_list_iterator->a_r[os], pose_list_iterator->v_p[os], pose_list_iterator->v_k[os]);
-		printf("v_grip: %f\n\n", pose_list_iterator->v_grip);
-		flushall();
+			printf("\n=============== pozycja trajektorii nr %d pos: %d ============== os: %d ====\n", j, pose_list_iterator->pos_num, os);
+			printf("czas ruchu %f\n", pose_list_iterator->t);
+			printf("coordinates: %f\n", pose_list_iterator->coordinates[os]);
+			printf("jedn: %f\t przysp: %f\n", pose_list_iterator->jedn[os], pose_list_iterator->przysp[os]);
+			printf("liczba makrokrokow: %d\n", pose_list_iterator->interpolation_node_no);
+			printf("start pos: %f\t kierunek (k): %f\n", pose_list_iterator->start_position[os], pose_list_iterator->k[os]);
+			printf("s: %f\ns_przysp: %f\t s_jedn: %f\n", s[os], pose_list_iterator->s_przysp[os], pose_list_iterator->s_jedn[os]);
+			printf("czas\t\tv_r\t\tv_r_next\ta_r\t\tv_p\t\tv_k\n");
+			printf("%f\t%f\t%f\t%f\t%f\t%f\n", t[os], pose_list_iterator->v_r[os], v_r_next[os], pose_list_iterator->a_r[os], pose_list_iterator->v_p[os], pose_list_iterator->v_k[os]);
+			printf("v_grip: %f\n\n", pose_list_iterator->v_grip);
+			flushall();
 		}
 
 		printf("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% nowa pozycja %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n");
@@ -2007,7 +1931,7 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 
     }
     trajectory_calculated = true;
-    //rec = false;
+
 }//end - calculate
 
 void smooth2::reduction_model_1(std::list<ecp_mp::common::smooth2_trajectory_pose>::iterator pose_list_iterator, int i, double s) {
@@ -2232,7 +2156,6 @@ void smooth2::reduction_model_4(std::list<ecp_mp::common::smooth2_trajectory_pos
 
 void smooth2::vp_reduction(std::list<ecp_mp::common::smooth2_trajectory_pose>::iterator pose_list_iterator, int i, double s, double t) {
 	//printf("v_p redukcja w osi: %d\n", i);
-	//TODO sprawdzic czy to wyczerpuje wszystkie przypadki... chyba tak
 	double v_r; //zmiana ruchu na jednostajny
 
 	v_r = s/t;

@@ -53,17 +53,13 @@ class smooth2 : public delta {
 		int type; //1 - polozenie bezwzgledne , 2 - polozenie przyrostowe
 		bool first_coordinate;
 		float distance_eps;
-	   // int rec_pos;
-	   // int rec_ax;
-	    //int actual_ax;
 
 		bool trajectory_generated;
 		bool trajectory_calculated;
-		//bool rec;
 
 		bool eq(double a, double b);
 		void generate_cords();
-		//void calculate_absolute_positions();//for relative type of given coordinates
+		//void calculate_absolute_positions();//for (non real) relative type of given coordinates
 		void calculate(void);
 		double generate_next_coords(int node_counter, int interpolation_node_no, double start_position, double v_p, double v_r, double v_k, double a_r, int k, double przysp, double jedn, double s_przysp, double s_jedn);
 
