@@ -50,16 +50,8 @@ bool wii_velocity::next_step()
 {
 	char buffer[200];
 	int operate = 0;
-	
-	try
-	{
-		sensor_m[lib::SENSOR_WIIMOTE]->get_reading();
-	}
-	catch(...)
-	{
-	}
 
-	++step_no;
+	sensor_m[lib::SENSOR_WIIMOTE]->get_reading();
 
 	if (pulse_check_activated && check_and_null_trigger())
 	{
@@ -92,7 +84,7 @@ bool wii_velocity::next_step()
 	{
 		 the_robot->EDP_data.next_velocity[i] = generator_edp_data.next_velocity[i];
 	}
-	
+
 	//sprintf(buffer,"P%d %f %f %f %f %f %f",step_no,the_robot->EDP_data.current_joint_arm_coordinates[0],the_robot->EDP_data.current_joint_arm_coordinates[1],the_robot->EDP_data.current_joint_arm_coordinates[2],the_robot->EDP_data.current_joint_arm_coordinates[3],the_robot->EDP_data.current_joint_arm_coordinates[4],the_robot->EDP_data.current_joint_arm_coordinates[5]);
 	//sprintf(buffer,"V%d %f %f %f %f	 %f %f",step_no,the_robot->EDP_data.next_velocity[0],the_robot->EDP_data.next_velocity[1],the_robot->EDP_data.next_velocity[2],the_robot->EDP_data.next_velocity[3],the_robot->EDP_data.next_velocity[4],the_robot->EDP_data.next_velocity[5]);
 	//sr_ecp_msg.message(buffer);
@@ -106,7 +98,6 @@ bool wii_velocity::next_step()
 
 	return true;
 }
-; // end: bool ecp_wii_velocity_generator::next_step ()
 
 }
 } // namespace irp6ot
