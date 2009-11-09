@@ -127,7 +127,7 @@ void pr::main_task_algorithm(void)
 			sr_ecp_msg->message("Uczenie trajektorii");
 			sr_ecp_msg->message("Nastepny etap - nacisnij PULSE ECP trigger");
 			tig->flush_pose_list(); // Usuniecie listy pozycji, o ile istnieje
-			tig->teach_or_move=common::generator::YG_TEACH;
+			tig->teach_or_move=common::generator::y_drawing_teach_in_force::YG_TEACH;
 			tig->Move();
 
 			sr_ecp_msg->message("Krotki ruch w gore");
@@ -145,7 +145,7 @@ void pr::main_task_algorithm(void)
 			ynrlg->Move();
 
 			sr_ecp_msg->message("Odtwarzanie nauczonej trajektorii");
-			tig->teach_or_move=common::generator::YG_MOVE;
+			tig->teach_or_move=common::generator::y_drawing_teach_in_force::YG_MOVE;
 			tig->Move();
 
 			sr_ecp_msg->message("Krotki ruch w gore");
