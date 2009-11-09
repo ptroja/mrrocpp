@@ -29,6 +29,7 @@ protected:
 
 public:
     rcsc(lib::configurator &_config);
+    ~rcsc();
 
     // methods for ECP template to redefine in concrete classes
     void main_task_algorithm(void);

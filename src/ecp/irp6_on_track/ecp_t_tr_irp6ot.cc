@@ -65,30 +65,6 @@ bool PAUSE_MOVE=true;
 // Flaga - polecenie zakonczenia ruchu.
 bool STOP_MOVE=true;
 
-// Zmienna uzywana przy konczeniu watkow.
-void* value_ptr;
-
-/********************************** SIGCATCH ********************************/
-void tr::catch_signal(int sig)
-{
-	switch (sig) {
-		case SIGTERM:
-			// Zakonczenie pracy watkow.
-			TERMINATE = true;
-			// Zwolnienie pamieci - generator.
-			delete(trg);
-			// Zwolnienie pamieci - warunek.
-			delete(rsc);
-			// Zwolnienie pamieci - robot.
-			delete(common::ecp_t->ecp_m_robot);
-			// Odlaczenie nazwy.
-			name_detach(UI_ECP_attach, 0);
-			common::ecp_t->sr_ecp_msg->message("ECP terminated");
-			exit(EXIT_SUCCESS);
-			break;
-	}
-}
-
 /************************ UI COMMUNICATION THREAD ***************************/
 void* UI_communication_thread(void* arg)
 {
@@ -205,7 +181,7 @@ void* trajectory_reproduce_thread(void* arg)
 			usleep(1000*50);
 			// Jezeli koniec pracy.
 			if (TERMINATE)
-				pthread_exit(value_ptr);
+				return NULL;
 		}
 		// Przygotowanie danych do ruchu.
 		trg->prepare_generator_for_motion();
@@ -220,7 +196,7 @@ void* trajectory_reproduce_thread(void* arg)
 					usleep(1000*50);
 					// Jezeli koniec pracy.
 					if(TERMINATE)
-					pthread_exit(value_ptr);
+						return NULL;
 				}
 				// Jesli wcisnieto STOP -> koniec ruchow.
 				if (STOP_MOVE)
@@ -255,7 +231,7 @@ void* trajectory_reproduce_thread(void* arg)
 				usleep(1000*50);
 				// Jezeli koniec pracy.
 				if (TERMINATE)
-					pthread_exit(value_ptr);
+					return NULL;
 			}
 			// Jesli wcisnieto STOP -> koniec ruchow.
 			if (STOP_MOVE)
@@ -278,7 +254,7 @@ void* trajectory_reproduce_thread(void* arg)
 				}
 				// Jezeli koniec pracy.
 				if(TERMINATE)
-				pthread_exit(value_ptr);
+					return NULL;
 				// Oczekiwanie na calkowite zatrzymanie robota.
 				rsc->Move();
 			} // end: try wewnetrzne.
@@ -303,8 +279,8 @@ void* trajectory_reproduce_thread(void* arg)
 		ZERO_POSITION_MOVE = false;
 		common::ecp_t->sr_ecp_msg->message("Trajectory finished. Press STOP.");
 	}
+
 	// koniec dzialania
-	pthread_exit(value_ptr);
 	return NULL;
 }
 

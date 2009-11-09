@@ -54,28 +54,6 @@ short MOVE_TYPE = 0;
 // Rodzaj sterowania.
 lib::POSE_SPECIFICATION ps;
 
-// Zmienna uzywana do konczenia pracy watkow.
-void* value_ptr;
-
-// Funkcja - obsluga przychodzacych sygnalow.
-void fct::catch_signal(int sig)
-{
-	switch (sig) {
-		case SIGTERM:
-			// Zakonczenie pracy watkow.
-			TERMINATE = true;
-			// Zwolnienie pamieci - generator.
-			delete(fctg);
-			// Zwolnienie pamieci - robot.
-			delete(ecp_m_robot);
-			// Odlaczenie nazwy.
-			name_detach(UI_ECP_attach, 0);
-			sr_ecp_msg->message("ECP terminated");
-			exit(EXIT_SUCCESS);
-			break;
-	}
-}
-
 /************************ UI COMMUNICATION THREAD ***************************/
 
 // Cialo watku, ktorego zadaniem jest komunikacja z UI.
@@ -186,7 +164,7 @@ void* forcesensor_move_thread(void* arg)
 			usleep(1000*50);
 			// Jezeli koniec pracy.
 			if (TERMINATE)
-				pthread_exit(value_ptr);
+				return NULL;
 			// Jezeli przyszedl rozkaz kalibracji czujnika.
 			if (CALIBRATE_SENSOR) {
 				// Kalibracja czujnika.
@@ -218,8 +196,8 @@ void* forcesensor_move_thread(void* arg)
 		// Ruch wykonano.
 		MOVE_TYPE = 0;
 	}
+
 	// Koniec dzialania.
-	pthread_exit(value_ptr);
 	return NULL;
 }
 
