@@ -94,8 +94,8 @@ bool task::operator_reaction (const char* question )
 	ecp_to_ui_msg.ecp_message = lib::YES_NO;     // Polecenie odpowiedzi na zadane
 	strcpy(ecp_to_ui_msg.string, question); // Komunikat przesylany do UI podczas uczenia
 
-	ecp_to_ui_msg.hdr.type=0;
 #if !defined(USE_MESSIP_SRR)
+	ecp_to_ui_msg.hdr.type=0;
 	if (MsgSend(UI_fd, &ecp_to_ui_msg, sizeof(lib::ECP_message), &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0) {// by Y&W
 #else
 	int status;
@@ -124,8 +124,8 @@ uint8_t task::choose_option (const char* question, uint8_t nr_of_options_input )
 	strcpy(ecp_to_ui_msg.string, question); // Komunikat przesylany do UI
 	ecp_to_ui_msg.nr_of_options = nr_of_options_input;
 
-	ecp_to_ui_msg.hdr.type=0;
 #if !defined(USE_MESSIP_SRR)
+	ecp_to_ui_msg.hdr.type=0;
 	if (MsgSend(UI_fd, &ecp_to_ui_msg,  sizeof(lib::ECP_message),  &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0) {// by Y&W
 #else
 	int status;
@@ -153,8 +153,8 @@ int task::input_integer (const char* question )
 	ecp_to_ui_msg.ecp_message = lib::INTEGER_NUMBER; // Polecenie odpowiedzi na zadane
 	strcpy(ecp_to_ui_msg.string, question); // Komunikat przesylany do UI
 
-	ecp_to_ui_msg.hdr.type=0;
 #if !defined(USE_MESSIP_SRR)
+	ecp_to_ui_msg.hdr.type=0;
 	if (MsgSend(UI_fd, &ecp_to_ui_msg,  sizeof(lib::ECP_message),  &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0) {// by Y&W
 #else
 	int status;
@@ -182,8 +182,8 @@ double task::input_double (const char* question )
 	ecp_to_ui_msg.ecp_message = lib::DOUBLE_NUMBER; // Polecenie odpowiedzi na zadane
 	strcpy(ecp_to_ui_msg.string, question); // Komunikat przesylany do UI
 
-	ecp_to_ui_msg.hdr.type=0;
 #if !defined(USE_MESSIP_SRR)
+	ecp_to_ui_msg.hdr.type=0;
 	if (MsgSend(UI_fd, &ecp_to_ui_msg,  sizeof(lib::ECP_message),  &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0) {// by Y&W
 #else
 	int status;
@@ -210,8 +210,8 @@ bool task::show_message (const char* message)
 	ecp_to_ui_msg.ecp_message = lib::MESSAGE; // Polecenie wyswietlenia komunikatu
 	strcpy(ecp_to_ui_msg.string, message);
 
-	ecp_to_ui_msg.hdr.type=0;
 #if !defined(USE_MESSIP_SRR)
+	ecp_to_ui_msg.hdr.type=0;
 	if (MsgSend(UI_fd, &ecp_to_ui_msg,  sizeof(lib::ECP_message),  &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0) {// by Y&W
 #else
 	int status;

@@ -159,7 +159,9 @@ enum ECP_TO_UI_COMMAND {
  */
 struct ECP_message
 {
+#ifndef USE_MESSIP_SRR
 	msg_header_t hdr;
+#endif
 	/*! Type of message. */
 	ECP_TO_UI_COMMAND ecp_message;
 	/*! Robot name. */
@@ -168,7 +170,7 @@ struct ECP_message
 	uint8_t nr_of_options;
 
 	//----------------------------------------------------------
-	union{
+	union {
 		/*! A comment for the command. */
 		char string[MSG_LENGTH];
 
@@ -207,7 +209,9 @@ struct ECP_message
  */
 struct UI_reply
 {
+#ifndef USE_MESSIP_SRR
 	msg_header_t hdr;
+#endif
 	UI_TO_ECP_COMMAND reply;
 	int integer_number;
 	double double_number;
@@ -222,7 +226,10 @@ struct UI_reply
  */
 struct UI_ECP_message
 {
+#ifndef USE_MESSIP_SRR
 	msg_header_t hdr;
+#endif
+
 	UI_TO_ECP_COMMAND command;
 
 	union {
@@ -740,7 +747,6 @@ typedef union c_buffer_arm
 //------------------------------------------------------------------------------
 struct c_buffer
 {
-
 	/*! Type of the instruction. */
 	INSTRUCTION_TYPE instruction_type;
 	/*! Type of the SET instruction. */
@@ -1073,7 +1079,9 @@ struct ecp_command_buffer
 /*! MP to ECP command. */
 struct MP_COMMAND_PACKAGE
 {
+#ifndef USE_MESSIP_SRR
 	msg_header_t hdr;
+#endif
 	MP_COMMAND command;
 	ecp_next_state_t ecp_next_state;
 	c_buffer instruction;
