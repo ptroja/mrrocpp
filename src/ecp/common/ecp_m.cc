@@ -27,8 +27,19 @@ common::task::task *ecp_t;
 
 void catch_signal_in_ecp(int sig)
 {
-	ecp_t->catch_signal_in_ecp_task(sig);
-	delete ecp_t;
+	fprintf(stderr, "ECP: %s\n", strsignal(sig));
+	switch (sig) {
+		// print info message
+		case SIGTERM:
+			ecp_t->sr_ecp_msg->message("ECP terminated");
+			delete ecp_t;
+			exit(EXIT_SUCCESS);
+			break;
+		case SIGSEGV:
+			fprintf(stderr, "Segmentation fault in ECP process %s\n", ecp_t->config.section_name.c_str());
+			signal(SIGSEGV, SIG_DFL);
+			break;
+	}
 }
 
 } // namespace common
@@ -37,7 +48,6 @@ void catch_signal_in_ecp(int sig)
 
 int main(int argc, char *argv[])
 {
-
 	try {
 
 		// liczba argumentow
@@ -57,6 +67,7 @@ int main(int argc, char *argv[])
 		signal(SIGTERM, &(ecp::common::catch_signal_in_ecp));
 		signal(SIGSEGV, &(ecp::common::catch_signal_in_ecp));
 #if defined(PROCESS_SPAWN_RSH)
+		// ignore Ctrl-C signal, which cames from UI console
 		signal(SIGINT, SIG_IGN);
 #endif
 	}

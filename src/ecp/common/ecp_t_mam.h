@@ -28,9 +28,6 @@ public:
 
 	// methods for ECP template to redefine in concrete classes
 	void main_task_algorithm(void);
-
-	void catch_signal(int sig);
-
 };
 
 } // namespace task

@@ -20,7 +20,7 @@ class task : public ecp_mp::task::task
 		messip_channel_t *ecp_attach, *trigger_attach, *MP_fd;
 #endif
 		// Wysyla puls do Mp przed oczekiwaniem na spotkanie
-		void send_pulse_to_mp(int pulse_code, int pulse_value);
+		void send_pulse_to_mp(int pulse_code, int pulse_value = 1);
 
 		// Receive of mp message
 		int receive_mp_message(void);
@@ -52,9 +52,6 @@ class task : public ecp_mp::task::task
 
 		// dla gcc: `'class Foo' has virtual functions but non-virtual destructor` warning.
 		virtual ~task();
-
-		// obsluga sygnalu
-		virtual void catch_signal_in_ecp_task(int sig);
 
 		// methods for ECP template to redefine in concrete classes
 		virtual void main_task_algorithm(void) = 0;

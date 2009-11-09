@@ -801,9 +801,11 @@ legobrick_attach_force::legobrick_attach_force(
 	step_no(step)//, tool_frame(0.026551, -0.011313, 0.25 + 0.028)
 {
 	//macierz jednorodna przejscia na uklad narzedzia do przemieszczania klockow
-	lib::frame_tab tmp_tool_frame = {{cos(-M_PI/4), -1 * sin (-M_PI/4), 0, 0.02655}
-				, {sin(-M_PI/4), cos(-M_PI/4), 0, -0.011313}
-				, {0, 0, 1, 0.25 + 0.028}};
+	lib::frame_tab tmp_tool_frame = {
+			{cos(-M_PI/4), -1 * sin (-M_PI/4), 0, 0.02655},
+			{sin(-M_PI/4), cos(-M_PI/4), 0, -0.011313},
+			{0, 0, 1, 0.25 + 0.028}
+	};
 
 	tool_frame = lib::Homog_matrix(tmp_tool_frame);
 }
