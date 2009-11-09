@@ -67,13 +67,12 @@ public:
 // Generator trajektorii dla zadan z wodzeniem za nos
 class y_nose_run_force : public common::generator::generator
 {
-
-
-public:
+private:
     lib::trajectory_description td;
-    int step_no;
+    const int step_no;
     double delta[6];
 
+public:
     // konstruktor
     y_nose_run_force(common::task::task& _ecp_task, int step=0);
 
@@ -106,25 +105,22 @@ public:
 
 class y_egg_force : public common::generator::generator
 {
-
-protected:
-
+private:
     short gen_state, next_gen_state, prev_gen_state; // stan w ktorym znajduje sie generator
     int in_state_iteration; // numer interacji dla biezacego stanu generatora (powierzchni, uniesienia etc.)
 
-public:
     lib::trajectory_description td;
-    int step_no;
-    int int_mode; // wewnetrzny tryb pracy
+    const int step_no;
+    // TODO: this should be enum(erated)
+    const int int_mode; // wewnetrzny tryb pracy
     double delta[6];
 
+public:
     // konstruktor
     y_egg_force(common::task::task& _ecp_task, int step=0, int mode=0);
 
     virtual bool first_step ();
-
     virtual bool next_step ();
-
 }; // end:
 // --------------------------------------------------------------------------
 
@@ -134,33 +130,27 @@ public:
 // zadania procesowi MP
 
 #define SILA_DOCISKU 0.00002 // by Y
-	#define MIN_SILA_DOCISKUEDP 20
-	#define SILA_DOCISKUEDP 20 // by Y
-	#define SILA_DOCISKUEDP_OPADANIE 40
-
-
-enum Y_DRAWING_GEN_ENUM {
-    YG_TEACH,
-    YG_MOVE
-};
-
+#define MIN_SILA_DOCISKUEDP 20
+#define SILA_DOCISKUEDP 20 // by Y
+#define SILA_DOCISKUEDP_OPADANIE 40
 
 // po osiagnieciu powierzhcni zaczyna od MAX_SILA_DOCISKUEDP i osiaga SILA_DOCISKUEDP
 
 class y_drawing_teach_in_force : public ecp_teach_in_generator
 {
-
 protected:
-
     lib::POSE_SPECIFICATION emptyps;
 
-public:
     double delta[6];
     lib::trajectory_description td;
-    int step_no;
+    const int step_no;
 
+public:
     // uczenie czy ruch - wybor trybu pracy generatora (definicje YG_TEACH, YG_MOVE)
-    Y_DRAWING_GEN_ENUM teach_or_move;
+    enum Y_DRAWING_GEN_ENUM {
+        YG_TEACH,
+        YG_MOVE
+    } teach_or_move;
 
     y_drawing_teach_in_force(common::task::task& _ecp_task, int step);
 
@@ -169,12 +159,10 @@ public:
 }; // end: class y_drawing_teach_in_force_generator
 // --------------------------------------------------------------------------
 
-
+// nowy silowy generator uczacy ( z odrywaniem )
 
 class y_advanced_drawing_teach_in_force : public y_drawing_teach_in_force
 {
-    // nowy silowy generator uczacy ( z odrywaniem )
-
 private:
     int in_state_iteration; // numer interacji dla biezacego stanu generatora (powierzchni, uniesienia etc.)
     short gen_state, next_gen_state, prev_gen_state; // stan w ktorym znajduje sie generator
@@ -190,12 +178,11 @@ public:
 
 class y_edge_follow_force : public ecp_teach_in_generator
 {
-
 protected:
 
     lib::POSE_SPECIFICATION emptyps;
     lib::trajectory_description td;
-    int step_no;
+    const int step_no;
     double delta[6];
     lib::Homog_matrix basic_rot_frame;
     lib::Homog_matrix tool_frame;
@@ -220,7 +207,7 @@ protected:
 
     lib::POSE_SPECIFICATION emptyps;
     lib::trajectory_description td;
-    int step_no;
+    const int step_no;
     double delta[6];
     lib::Homog_matrix basic_rot_frame;
     lib::Homog_matrix tool_frame;
@@ -246,7 +233,7 @@ protected:
 
     lib::POSE_SPECIFICATION emptyps;
     lib::trajectory_description td;
-    int step_no;
+    const int step_no;
     double delta[6];
     lib::Homog_matrix basic_rot_frame;
     lib::Homog_matrix tool_frame;
@@ -276,10 +263,8 @@ public:
 class tff_nose_run : public common::generator::generator
 {
 protected:
-
-
     lib::trajectory_description td;
-    // skladowesilowe i pozycyjne (zablokowane)
+    // skladowe silowe i pozycyjne (zablokowane)
     bool selection_vector_l[6];
     // czy pulse_check ma byc aktywne
     bool pulse_check_activated;
@@ -292,9 +277,8 @@ protected:
 		lib::BEHAVIOUR_SPECIFICATION next_behaviour[6];
 	} generator_edp_data;
 
-
 public:
-    int step_no;
+    const int step_no;
 
     // konstruktor
     tff_nose_run(common::task::task& _ecp_task, int step=0);
@@ -343,7 +327,6 @@ class sr_nose_run : public common::generator::generator
 
 protected:
 
-
     lib::trajectory_description td;
     // skladowesilowe i pozycyjne (zablokowane)
     bool selection_vector_l[6];
@@ -358,9 +341,8 @@ protected:
 		lib::BEHAVIOUR_SPECIFICATION next_behaviour[6];
 	} generator_edp_data;
 
-
 public:
-    int step_no;
+    const int step_no;
 
     // konstruktor
     sr_nose_run(common::task::task& _ecp_task, int step=0);
@@ -386,17 +368,9 @@ public:
 }; // end : class ecp_sr_nose_run_generator
 
 
-
-
-
-// --------------------------------------------------------------------------
-// Generator do lapania kostki
-
 class bias_edp_force : public common::generator::generator
 {
-
 public:
-
     // konstruktor
     bias_edp_force(common::task::task& _ecp_task);
 
@@ -411,27 +385,20 @@ public:
 class tff_rubik_grab : public common::generator::generator
 {
 protected:
-
-
-
     lib::trajectory_description td;
 
     // do konfiguracji pracy generatora
     double goal_position, position_increment;
-    int min_node_counter;
+    unsigned int min_node_counter;
     bool both_axes_running;
 
-    // czy generator ma sie zakonczyc
-    bool finished;
-
 public:
-    int step_no;
-
+    const int step_no;
 
     // konstruktor
     tff_rubik_grab(common::task::task& _ecp_task, int step=0);
 
-    void configure(double l_goal_position, double l_position_increment, int l_min_node_counter,
+    void configure(double l_goal_position, double l_position_increment, unsigned int l_min_node_counter,
                    bool l_both_axes_running = true);
 
     virtual bool first_step ();
@@ -446,8 +413,6 @@ public:
 class tff_rubik_face_rotate : public common::generator::generator
 {
 protected:
-
-
     lib::trajectory_description td;
 
     // do konfiguracji pracy generatora
@@ -455,11 +420,8 @@ protected:
     double stored_gamma, turn_angle;
     bool range_change;
 
-    // czy generator ma sie zakonczyc
-    bool finished;
-
 public:
-    int step_no;
+    const int step_no;
 
     // konstruktor
     tff_rubik_face_rotate(common::task::task& _ecp_task, int step=0);
@@ -484,19 +446,15 @@ protected:
 
     // do konfiguracji pracy generatora
     double speed;
-    int motion_time;
-
-    // czy generator ma sie zakonczyc
-    bool finished;
+    unsigned int motion_time;
 
 public:
-    int step_no;
-
+    const int step_no;
 
     // konstruktor
     tff_gripper_approach(common::task::task& _ecp_task, int step=0);
 
-    void configure(double l_speed, int l_motion_time);
+    void configure(double l_speed, unsigned int l_motion_time);
 
     virtual bool first_step ();
     virtual bool next_step ();
