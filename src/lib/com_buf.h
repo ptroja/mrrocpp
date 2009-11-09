@@ -258,7 +258,7 @@ struct trajectory_description
 	/*! Robot arm representation. */
 	POSE_SPECIFICATION arm_type;
 	/*! Number of interpolation nodes. */
-	int interpolation_node_no;
+	unsigned int interpolation_node_no;
 	/*! Number of steps for a single internode. */
 	int internode_step_no;
 	/*! Step in which the read position is returned. */

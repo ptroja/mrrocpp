@@ -154,7 +154,7 @@ bool linear::next_step()
 	int i; // licznik kolejnych wspolrzednych wektora [0..5]
 
 	// Kontakt z MP
-	if (node_counter-1 == td.interpolation_node_no) { // Koniec odcinka
+	if (node_counter == td.interpolation_node_no + 1) { // Koniec odcinka
 
 		return false;
 	}
@@ -3230,12 +3230,12 @@ void ecp_save_trajectory(elipsoid& the_generator, common::task::task& _ecp_task)
 	uint64_t i, j; // Liczniki petli
 	one_sample cp; // Pojedynczy pomiar
 
-	ecp_to_ui_msg.hdr.type=0;
-
 	ecp_to_ui_msg.ecp_message = lib::SAVE_FILE; // Polecenie wprowadzenia nazwy pliku
 	strcpy(ecp_to_ui_msg.string, "*.dat"); // Wzorzec nazwy pliku
 	// if ( Send (UI_pid, &ecp_to_ui_msg, &ui_to_ecp_rep, sizeof(lib::ECP_message), sizeof(lib::UI_reply)) == -1) {
 #if !defined(USE_MESSIP_SRR)
+	ecp_to_ui_msg.hdr.type=0;
+
 	if (MsgSend(_ecp_task.UI_fd, &ecp_to_ui_msg, sizeof(lib::ECP_message), &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0) {// by Y&W
 #else
 	int status;
@@ -3289,12 +3289,12 @@ void ecp_save_extended_file(calibration& the_generator, operator_reaction_condit
 	uint64_t number_of_sup; // Liczba pozycji z listy odczytow
 	uint64_t i, j; // Liczniki petli
 
-	ecp_to_ui_msg.hdr.type=0;
-
 	ecp_to_ui_msg.ecp_message = lib::SAVE_FILE; // Polecenie wprowadzenia nazwy pliku
 	strcpy(ecp_to_ui_msg.string, "*.cdt"); // Wzorzec nazwy pliku
 	// if ( Send (UI_pid, &ecp_to_ui_msg, &ui_to_ecp_rep, sizeof(lib::ECP_message), sizeof(lib::UI_reply)) == -1) {
 #if !defined(USE_MESSIP_SRR)
+	ecp_to_ui_msg.hdr.type=0;
+
 	if (MsgSend(_ecp_task.UI_fd, &ecp_to_ui_msg, sizeof(lib::ECP_message), &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0) {// by Y&W
 #else
 	int status;

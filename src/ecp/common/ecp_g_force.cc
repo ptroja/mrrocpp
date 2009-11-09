@@ -636,7 +636,7 @@ bool y_edge_follow_force::first_step()
 	for (int i=0; i<6; i++)
 		delta[i]=0.0;
 
-	create_pose_list_head(emptyps, 0.0, 2, delta);
+	create_pose_list_head(emptyps, 0.0, delta, 2);
 
 	td.interpolation_node_no = 1;
 	td.internode_step_no = step_no;
@@ -708,7 +708,7 @@ bool y_edge_follow_force::next_step()
 	for (int i=0; i<6; i++)
 		inc_delta[i]+=tmp_delta[i];
 
-	insert_pose_list_element(emptyps, 0.0, 2, inc_delta);
+	insert_pose_list_element(emptyps, 0.0, inc_delta, 2);
 
 	// wyznaczenie nowej macierzy referencyjnej i predkosci ruchu
 
@@ -815,7 +815,7 @@ bool legobrick_attach_force::first_step()
 	for (int i=0; i<6; i++)
 		delta[i]=0.0;
 
-	create_pose_list_head(emptyps, 0.0, 2, delta);
+	create_pose_list_head(emptyps, 0.0, delta, 2);
 
 	td.interpolation_node_no = 1;
 	td.internode_step_no = step_no;
@@ -933,7 +933,7 @@ bool legobrick_detach_force::first_step()
 	for (int i=0; i<6; i++)
 		delta[i]=0.0;
 
-	create_pose_list_head(emptyps, 0.0, 2, delta);
+	create_pose_list_head(emptyps, 0.0, delta, 2);
 
 	td.interpolation_node_no = 1;
 	td.internode_step_no = step_no;
@@ -1309,7 +1309,7 @@ bool y_advanced_drawing_teach_in_force::first_step()
 		for (int i=0; i<6; i++)
 			delta[i]=0.0;
 
-		create_pose_list_head(emptyps, 0.0, 2, delta);
+		create_pose_list_head(emptyps, 0.0, delta, 2);
 
 		td.interpolation_node_no = 1;
 		td.internode_step_no = step_no;
@@ -1619,7 +1619,8 @@ bool y_advanced_drawing_teach_in_force::next_step()
 
 		if (gen_state == 1)
 		{
-			insert_pose_list_element(emptyps, 0.0, (sensor_m.begin())->second->image.sensor_union.force.event_type, inc_delta);
+			insert_pose_list_element(emptyps, 0.0, inc_delta,
+					(sensor_m.begin())->second->image.sensor_union.force.event_type);
 		}
 
 		return true;

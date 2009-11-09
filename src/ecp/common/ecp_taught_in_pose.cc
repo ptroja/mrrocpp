@@ -8,17 +8,10 @@ namespace ecp {
 namespace common {
 
 ecp_taught_in_pose::ecp_taught_in_pose (void)
-{}
-
-ecp_taught_in_pose::ecp_taught_in_pose (lib::POSE_SPECIFICATION at, double mt, const double* c)
-		:
-		arm_type(at),
-		motion_time(mt)
 {
-	memcpy(coordinates, c, MAX_SERVOS_NR*sizeof(double));
-} // end: ecp_taught_in_pose::ecp_taught_in_pose
+}
 
-ecp_taught_in_pose::ecp_taught_in_pose (lib::POSE_SPECIFICATION at, double mt, int e_info, const double* c) // by Y
+ecp_taught_in_pose::ecp_taught_in_pose (lib::POSE_SPECIFICATION at, double mt, const double c[MAX_SERVOS_NR], int e_info) // by Y
 		:
 		arm_type(at),
 		motion_time(mt),

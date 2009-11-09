@@ -54,7 +54,7 @@ void generator::Move()
     ecp_t.set_ecp_reply(lib::ECP_ACKNOWLEDGE);
 
     if (!first_step() ||
-            (!(!communicate_with_mp_in_move || ecp_t.mp_buffer_receive_and_send())))
+            (communicate_with_mp_in_move && !ecp_t.mp_buffer_receive_and_send()))
     {
         return; // Warunek koncowy spelniony w pierwszym kroku
     }

@@ -308,13 +308,12 @@ bool ecp_teach_in_generator::load_file_with_path(const char* file_name)
               {
                 // Tworzymy glowe listy
                 first_time = false;
-                create_pose_list_head(ps, motion_time, extra_info, coordinates);
+                create_pose_list_head(ps, motion_time, coordinates, extra_info);
               }
             else
               {
                 // Wstaw do listy nowa pozycje
-                insert_pose_list_element(ps, motion_time, extra_info,
-                    coordinates);
+                insert_pose_list_element(ps, motion_time, coordinates, extra_info);
               }
           }
         else
@@ -356,11 +355,7 @@ void ecp_teach_in_generator::next_pose_list_ptr(void)
 // -------------------------------------------------------
 void ecp_teach_in_generator::get_pose(ecp_taught_in_pose& tip)
   { // by Y
-    tip.arm_type = pose_list_iterator->arm_type;
-    tip.motion_time = pose_list_iterator->motion_time;
-    tip.extra_info = pose_list_iterator->extra_info;
-    memcpy(tip.coordinates, pose_list_iterator->coordinates,
-    MAX_SERVOS_NR*sizeof(double));
+    tip = *pose_list_iterator;
   }
 // -------------------------------------------------------
 // Pobierz nastepna pozycje z listy
@@ -370,10 +365,11 @@ void ecp_teach_in_generator::get_next_pose(double next_pose[MAX_SERVOS_NR])
   }
 // -------------------------------------------------------
 void ecp_teach_in_generator::set_pose(lib::POSE_SPECIFICATION ps,
-    double motion_time, double coordinates[MAX_SERVOS_NR])
+    double motion_time, double coordinates[MAX_SERVOS_NR], int extra_info)
   {
     pose_list_iterator->arm_type = ps;
     pose_list_iterator->motion_time = motion_time;
+    pose_list_iterator->extra_info = extra_info;
     memcpy(pose_list_iterator->coordinates, coordinates, MAX_SERVOS_NR*sizeof(double));
   }
 // -------------------------------------------------------
@@ -408,36 +404,17 @@ bool ecp_teach_in_generator::is_last_list_element(void)
 // -------------------------------------------------------
 
 void ecp_teach_in_generator::create_pose_list_head(lib::POSE_SPECIFICATION ps,
-    double motion_time, double coordinates[MAX_SERVOS_NR])
-  {
-    pose_list.push_back(ecp_taught_in_pose(ps, motion_time, coordinates));
-    pose_list_iterator = pose_list.begin();
-  }
-
-// by Y
-
-void ecp_teach_in_generator::create_pose_list_head(lib::POSE_SPECIFICATION ps,
-    double motion_time, int extra_info, double coordinates[MAX_SERVOS_NR])
-  {
-    pose_list.push_back(ecp_taught_in_pose(ps, motion_time, extra_info,
-        coordinates));
-    pose_list_iterator = pose_list.begin();
-  }
+    double motion_time, const double coordinates[MAX_SERVOS_NR], int extra_info)
+{
+	pose_list.push_back(ecp_taught_in_pose(ps, motion_time, coordinates, extra_info));
+	pose_list_iterator = pose_list.begin();
+}
 
 void ecp_teach_in_generator::insert_pose_list_element(lib::POSE_SPECIFICATION ps,
-    double motion_time, double coordinates[MAX_SERVOS_NR])
+    double motion_time, const double coordinates[MAX_SERVOS_NR], int extra_info)
   {
-    pose_list.push_back(ecp_taught_in_pose(ps, motion_time, coordinates));
-    pose_list_iterator++;
-  }
-
-// by Y
-
-void ecp_teach_in_generator::insert_pose_list_element(lib::POSE_SPECIFICATION ps,
-    double motion_time, int extra_info, double coordinates[MAX_SERVOS_NR])
-  {
-    pose_list.push_back(ecp_taught_in_pose(ps, motion_time, extra_info,
-        coordinates));
+    pose_list.push_back(ecp_taught_in_pose(ps, motion_time,
+        coordinates, extra_info));
     pose_list_iterator++;
   }
 

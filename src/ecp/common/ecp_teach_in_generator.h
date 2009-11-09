@@ -24,30 +24,30 @@ public:
   // -------------------------------------------------------
   // konstruktor
   ecp_teach_in_generator (common::task::task& _ecp_task);
-  
+
   // -------------------------------------------------------
   // destruktor
   virtual ~ecp_teach_in_generator (void);
-  
+
   	// Uczenie robota
 	void teach (lib::POSE_SPECIFICATION ps, const char* msg);
-	
+
 	// --------------------------------------------------------------------------
 	// Wczytanie trajektorii z pliku
 	bool load_file_from_ui ();
-		
+
 	// --------------------------------------------------------------------------
 	// Wczytanie trajektorii z pliku
 	bool load_file_with_path (const char* file_name);
-	
+
 	// --------------------------------------------------------------------------
 	// Zapis trajektorii do pliku
 	void save_file (lib::POSE_SPECIFICATION ps);
 	// --------------------------------------------------------------------------
-  
-  
+
+
   // -------------------------------------------------------
-  void flush_pose_list ( void ); // end: flush_pose_list
+  void flush_pose_list ( void );
   // -------------------------------------------------------
   void initiate_pose_list(void);
   // -------------------------------------------------------
@@ -58,25 +58,17 @@ public:
   // Pobierz nastepna pozycje z listy
   void get_next_pose (double next_pose[MAX_SERVOS_NR]);
   // -------------------------------------------------------
-  void set_pose (lib::POSE_SPECIFICATION ps, double motion_time, double coordinates[MAX_SERVOS_NR]);
+  void set_pose (lib::POSE_SPECIFICATION ps, double motion_time, double coordinates[MAX_SERVOS_NR], int extra_info = 0);
   // -------------------------------------------------------
   bool is_pose_list_element ( void ) ;
   // -------------------------------------------------------
   bool is_last_list_element ( void );
   // -------------------------------------------------------
-  
-   void create_pose_list_head (lib::POSE_SPECIFICATION ps, double motion_time, double coordinates[MAX_SERVOS_NR]);
-  
-  // by Y
-  
-   void create_pose_list_head (lib::POSE_SPECIFICATION ps, double motion_time, int extra_info, double coordinates[MAX_SERVOS_NR]);
 
-  void insert_pose_list_element (lib::POSE_SPECIFICATION ps, double motion_time, double coordinates[MAX_SERVOS_NR]);
-  
-  // by Y
-  
-  void insert_pose_list_element (lib::POSE_SPECIFICATION ps, double motion_time, int extra_info, double coordinates[MAX_SERVOS_NR]);
-  
+  void create_pose_list_head (lib::POSE_SPECIFICATION ps, double motion_time, const double coordinates[MAX_SERVOS_NR], int extra_info = 0);
+
+  void insert_pose_list_element (lib::POSE_SPECIFICATION ps, double motion_time, const double coordinates[MAX_SERVOS_NR], int extra_info = 0);
+
   // -------------------------------------------------------
   int pose_list_length(void);
   // -------------------------------------------------------
@@ -88,7 +80,7 @@ public:
   virtual bool next_step ();
      // generuje kazdy nastepny krok ruchu
      // (zadanie realizowane przez klase konkretna)
-  
+
   lib::ECP_TO_UI_COMMAND convert(lib::POSE_SPECIFICATION ps) const;
 
 };

@@ -39,6 +39,8 @@ sk::sk(lib::configurator &_config) : task(_config)
 	else if (config.section_name == "[ecp_irp6_postument]")
 	{
 		ecp_m_robot = new irp6p::robot (*this);
+	} else {
+		// TODO: throw
 	}
 
 	nrg = new generator::tff_nose_run(*this, 8);

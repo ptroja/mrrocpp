@@ -20,12 +20,8 @@ public:
 
   ecp_taught_in_pose (lib::POSE_SPECIFICATION at,
 		  double mt,
-		  const double* c);
-
-  ecp_taught_in_pose (lib::POSE_SPECIFICATION at,
-		  double mt,
-		  int e_info,
-		  const double* c);
+		  const double c[MAX_SERVOS_NR],
+		  int e_info = 0);
 }; // end:class ecp_taught_in_pose
 
 } // namespace common
