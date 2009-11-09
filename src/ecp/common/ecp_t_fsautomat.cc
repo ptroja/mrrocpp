@@ -86,7 +86,7 @@ fsautomat::fsautomat(lib::configurator &_config) : task(_config),
 		return;
 	}
 
-	const char * whichECP = lib::toString(ecp_m_robot->robot_name).c_str();
+	const std::string whichECP = lib::toString(ecp_m_robot->robot_name);
 
 	std::string filePath(mrrocpp_network_path);
 	std::string fileName = config.return_string_value("xml_file", "[xml_settings]");
@@ -125,7 +125,7 @@ fsautomat::fsautomat(lib::configurator &_config) : task(_config),
 					if (child_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(child_node->name, (const xmlChar *)"ecp") )
 					{
 						xmlChar * robot = xmlGetProp(child_node, (const xmlChar *)"name");
-						if(robot && !xmlStrcmp(robot, (const xmlChar *) whichECP))
+						if(robot && !xmlStrcmp(robot, (const xmlChar *) whichECP.c_str()))
 						{
 							for(;child_node->children; child_node->children = child_node->children->next)
 							{
