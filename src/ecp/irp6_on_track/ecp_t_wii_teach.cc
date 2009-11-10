@@ -36,6 +36,7 @@ void wii_teach::main_task_algorithm(void)
     a = read_double((char*)"a",0,MAX_MAJOR);
     b = read_double((char*)"b",0,MAX_MINOR);
     sg = new common::generator::smooth(*this,true);
+    sg2 = new common::generator::smooth2(*this,true);
     eg = new generator::wii_teach(*this,a,b,100);
     firstPosition = eg->getFirstPosition();
 

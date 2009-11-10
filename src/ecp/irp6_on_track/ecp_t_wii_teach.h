@@ -4,6 +4,7 @@
 #include "ecp_mp/ecp_mp_task.h"
 #include "ecp/irp6_on_track/ecp_g_wii_teach.h"
 #include "ecp/common/ecp_g_smooth.h"
+#include "ecp/common/ecp_g_smooth2.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -24,6 +25,7 @@ class wii_teach: public common::task::task
 	//Generator ruchu
 	generator::wii_teach* eg;
 	common::generator::smooth* sg;
+        common::generator::smooth2* sg2;
 
 	/**
 	 * Pobiera od uzytkownika wartosc typu double
