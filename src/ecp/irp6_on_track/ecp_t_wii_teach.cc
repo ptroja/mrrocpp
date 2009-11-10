@@ -29,64 +29,22 @@ wii_teach::wii_teach(lib::configurator &_config) : task(_config)
 
 void wii_teach::main_task_algorithm(void)
 {
-    //Polosie elipsy
-    double a,b;
-    double* firstPosition;
+    double kw_bok = 0.2;
 
-    a = read_double((char*)"a",0,MAX_MAJOR);
-    b = read_double((char*)"b",0,MAX_MINOR);
-    sg = new common::generator::smooth(*this,true);
-    sg2 = new common::generator::smooth2(*this,true);
-    eg = new generator::wii_teach(*this,a,b,100);
-    firstPosition = eg->getFirstPosition();
+    sg = new common::generator::smooth2(*this,true);
 
-    sg->reset();
-    sg->load_coordinates(lib::XYZ_EULER_ZYZ, firstPosition[0],firstPosition[1],firstPosition[2],firstPosition[3],firstPosition[4],firstPosition[5],firstPosition[6],firstPosition[7]);
+    sg->set_absolute();
+    sg->load_file_with_path("/net/koleszko/mnt/mrroc/trj/smooth2test.trj");
+    sg->load_coordinates(lib::XYZ_EULER_ZYZ, 0.849, -0.298, 	   0.200, 		 -0.004, 1.560, -3.141, 0.074, 0.000, false);
+    sg->load_coordinates(lib::XYZ_EULER_ZYZ, 0.849, -0.298+kw_bok, 0.200, 		 -0.004, 1.560, -3.141, 0.074, 0.000, false);
+    sg->load_coordinates(lib::XYZ_EULER_ZYZ, 0.849, -0.298+kw_bok, 0.200+kw_bok, -0.004, 1.560, -3.141, 0.074, 0.000, false);
+    sg->load_coordinates(lib::XYZ_EULER_ZYZ, 0.849, -0.298, 	   0.200+kw_bok, -0.004, 1.560, -3.141, 0.074, 0.000, false);
+    sg->load_coordinates(lib::XYZ_EULER_ZYZ, 0.849, -0.298, 	   0.200, 		 -0.004, 1.560, -3.141, 0.074, 0.000, false);
     sg->Move();
 
-    eg->sensor_m[lib::SENSOR_WIIMOTE] = sensor_m[lib::SENSOR_WIIMOTE];
-    eg->Move();
+
     ecp_termination_notice();
 }
-
-double wii_teach::read_double(char* name,double min,double max)
-{
-	double value;
-	int cnt = 0;
-
-	if(min > max)
-	{
-		min += max;
-		max = min - max;
-		min = min - max;
-	}
-
-	//bufor pomocniczy
-	char tmp[666];
-
-	while(true)
-	{
-		if(cnt > 0)
-		{
-			sprintf(tmp,"BLAD! Podaj '%s' [%.3f;%.3f]",name,min,max);
-		}
-		else
-		{
-			sprintf(tmp,"Podaj '%s' [%.3f;%.3f]",name,min,max);
-		}
-
-		value = input_double(tmp);
-		if(value >= min && value <= max)
-		{
-			return value;
-		}
-
-		++cnt;
-	}
-}
-
-}
-} // namespace irp6ot
 
 namespace common {
 namespace task {
