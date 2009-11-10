@@ -34,7 +34,6 @@ void wii_teach::main_task_algorithm(void)
     sg = new common::generator::smooth2(*this,true);
 
     sg->set_absolute();
-    sg->load_file_with_path("/net/koleszko/mnt/mrroc/trj/smooth2test.trj");
     sg->load_coordinates(lib::XYZ_EULER_ZYZ, 0.849, -0.298, 	   0.200, 		 -0.004, 1.560, -3.141, 0.074, 0.000, false);
     sg->load_coordinates(lib::XYZ_EULER_ZYZ, 0.849, -0.298+kw_bok, 0.200, 		 -0.004, 1.560, -3.141, 0.074, 0.000, false);
     sg->load_coordinates(lib::XYZ_EULER_ZYZ, 0.849, -0.298+kw_bok, 0.200+kw_bok, -0.004, 1.560, -3.141, 0.074, 0.000, false);
