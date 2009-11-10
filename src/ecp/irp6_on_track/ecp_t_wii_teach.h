@@ -17,7 +17,7 @@ class wii_teach: public common::task::task
 {
     protected:
 	//Generator ruchu
-        common::generator::smooth2* sg2;
+        common::generator::smooth2* sg;
 
     public:
 	/**
