@@ -33,6 +33,7 @@ BINARIES =			ecp_pr \
 				ecp_robot_calibration \
 			        ecp_wii \
 			        ecp_wii_velocity \
+			        ecp_wii_teach \
 				ecp_t_box_irp6ot
 ifneq ($(BUILD_TARGET), linux)
 BINARIES+=			ecp_fct \
@@ -76,6 +77,10 @@ ecp_wii_velocity: ecp_t_wii_velocity.o ecp_g_wii_velocity.o ../common/ecp_g_forc
                 ../common/ecp_operator_reaction_condition.o ../common/ecp_g_sleep.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 
+#-----------------------------------------------------------------------------------------------------------------------#
+ecp_wii_teach: ecp_t_wii_teach.o ecp_g_wii_teach.o ../common/ecp_g_force.o ../common/ecp_g_smooth.o ../common/ecp_generator_t.o ../common/ecp_g_jarosz.o $(ECP_MPDIR)/ecp_mp_s_wiimote.o \
+                ../common/ecp_operator_reaction_condition.o ../common/ecp_g_sleep.o $(SHOBJ)
+	$(LD) $(LDFLAGS) -o $@ $^
 
 #-----------------------------------------------------------------------------------------------------------------------#
 ecp_pw_kolo: ecp_g_pw_kolo.o ecp_t_pw_kolo_irp6ot.o ../common/ecp_g_force.o ../common/ecp_st_go.o ../common/ecp_g_smooth.o ../common/ecp_generator_t.o ../common/ecp_g_jarosz.o\
