@@ -46,6 +46,9 @@ void wii_teach::main_task_algorithm(void)
     ecp_termination_notice();
 }
 
+}
+} // namespace irp6ot
+
 namespace common {
 namespace task {
 
