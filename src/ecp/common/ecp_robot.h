@@ -56,6 +56,8 @@ protected:
 	// Funkcja generator.next_step() przygotowuje rozkazy dla EDP wypelniajac
 
 public:
+	void send  ();
+	void query ();
 
 	lib::ecp_command_buffer ecp_command;
 	lib::r_buffer reply_package;
@@ -63,9 +65,6 @@ public:
 	lib::sr_ecp & sr_ecp_msg;     // obiekt do komunikacji z SR
 
 	bool synchronised; // Flaga synchronizacji robota (true - zsynchronizowany, false - nie)
-
-	void send  ();
-	void query ();
 
 	int number_of_servos;
 
@@ -98,7 +97,7 @@ public:
 	// robota wykorzystywanych przez generator
 	// Ten bufor znajduje sie w robocie
 
-	virtual void get_reply (void)  = 0;
+	virtual void get_reply (void) = 0;
 	// pobiera z pakietu przeslanego z EDP informacje i wstawia je do
 	// odpowiednich skladowych obrazu robota wykorzystywanych przez generator
 	// Ten bufor znajduje sie w robocie
@@ -108,20 +107,20 @@ public:
 	class ECP_error
 	{  // Klasa obslugi bledow robota
 	public:
-		uint64_t error_class;
-		uint64_t error_no;
+		const lib::error_class_t error_class;
+		const uint64_t error_no;
 		lib::edp_error error;
 
-		ECP_error ( uint64_t err_cl, uint64_t err_no, uint64_t err0 = 0, uint64_t err1 = 0);
+		ECP_error ( lib::error_class_t err_cl, uint64_t err_no, uint64_t err0 = 0, uint64_t err1 = 0);
 	};
 
 	class ECP_main_error
 	{  // Klasa obslugi bledow ECP
 	public:
-		const lib::ERROR_CLASS error_class;
+		const lib::error_class_t error_class;
 		const uint64_t error_no;
 
-		ECP_main_error ( lib::ERROR_CLASS err_cl, uint64_t err_no);
+		ECP_main_error ( lib::error_class_t err_cl, uint64_t err_no);
 	};
 };
 

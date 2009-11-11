@@ -76,9 +76,9 @@ public:
     class MP_error
     {  // Klasa obslugi bledow robotow
     public:
-        const lib::ERROR_CLASS error_class;
+        const lib::error_class_t error_class;
         const uint64_t mp_error;
-        MP_error (lib::ERROR_CLASS err0, uint64_t err1);
+        MP_error (lib::error_class_t err0, uint64_t err1);
     };
 
     // Zlecenie wykonania ruchu przez robota

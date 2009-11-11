@@ -67,18 +67,18 @@ protected:
 public :
   sr(process_type_t process_type, const std::string & process_name, const std::string & sr_name);
   virtual ~sr(void);
-  int message(enum ERROR_CLASS message_type, uint64_t error_code);
-  int message(enum ERROR_CLASS message_type, uint64_t error_code0, uint64_t error_code1);
-  int message(enum ERROR_CLASS message_type, uint64_t error_code, const char *text);
-  int message(enum ERROR_CLASS message_type, uint64_t error_code, std::string text) {
+  int message(error_class_t message_type, uint64_t error_code);
+  int message(error_class_t message_type, uint64_t error_code0, uint64_t error_code1);
+  int message(error_class_t message_type, uint64_t error_code, const char *text);
+  int message(error_class_t message_type, uint64_t error_code, std::string text) {
 	  return message(message_type, error_code, text.c_str());
   }
   int message(const char *text);
   int message(std::string text) {
 	  return message(text.c_str());
   }
-  int message(enum ERROR_CLASS message_type, const char *text);
-  int message(enum ERROR_CLASS message_type, std::string text) {
+  int message(error_class_t message_type, const char *text);
+  int message(error_class_t message_type, std::string text) {
 	  return message(message_type, text.c_str());
   }
 

@@ -158,7 +158,7 @@ int sr::message(const char *text) {
 } // end: sr::message()
 
 
-int sr::message(enum ERROR_CLASS message_type, const char *text) {
+int sr::message(error_class_t message_type, const char *text) {
   boost::mutex::scoped_lock lock(srMutex);
 
   sr_message.message_type = message_type;
@@ -174,7 +174,7 @@ int sr::message(enum ERROR_CLASS message_type, const char *text) {
 } // end: sr::message()
 
 
-int sr::message(enum ERROR_CLASS message_type, uint64_t error_code, const char *text) {
+int sr::message(error_class_t message_type, uint64_t error_code, const char *text) {
   boost::mutex::scoped_lock lock(srMutex);
 
   sr_message.message_type = message_type;
@@ -184,7 +184,7 @@ int sr::message(enum ERROR_CLASS message_type, uint64_t error_code, const char *
   return send_package();
 } // end: sr::message()
 
-int sr::message(enum ERROR_CLASS message_type, uint64_t error_code) {
+int sr::message(error_class_t message_type, uint64_t error_code) {
   boost::mutex::scoped_lock lock(srMutex);
 
   sr_message.message_type = message_type;
@@ -193,7 +193,7 @@ int sr::message(enum ERROR_CLASS message_type, uint64_t error_code) {
   return send_package();
 } // end: sr::message()
 
-int sr::message(enum ERROR_CLASS message_type, uint64_t error_code0, uint64_t error_code1) {
+int sr::message(error_class_t message_type, uint64_t error_code0, uint64_t error_code1) {
   boost::mutex::scoped_lock lock(srMutex);
 
   sr_message.message_type = message_type;

@@ -108,10 +108,10 @@ class transmitter
 		class transmitter_error
 		{  // Klasa obslugi bledow czujnikow
 			public:
-				const lib::ERROR_CLASS error_class;
+				const lib::error_class_t error_class;
 				const uint64_t error_no;
 
-				transmitter_error ( lib::ERROR_CLASS err_cl, uint64_t err_no) :
+				transmitter_error ( lib::error_class_t err_cl, uint64_t err_no) :
 					error_class(err_cl), error_no(err_no)
 				{
 				};

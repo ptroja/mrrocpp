@@ -35,9 +35,9 @@ typedef std::map <lib::robot_name_t, robot::robot*> robots_t;
 class MP_main_error
 { // Klasa obslugi bledow poziomie MP
 	public:
-		const lib::ERROR_CLASS error_class;
+		const lib::error_class_t error_class;
 		const uint64_t mp_error;
-		MP_main_error(lib::ERROR_CLASS err0, uint64_t err1, const char *file, int line) :
+		MP_main_error(lib::error_class_t err0, uint64_t err1, const char *file, int line) :
 			error_class(err0), mp_error(err1)
 		{
 			fprintf(stderr, "ECP_MP_main_error @ %s:%d\n", file, line);

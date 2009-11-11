@@ -43,11 +43,11 @@ class generator : public ecp_mp::generator::generator {
 
 		class ECP_error {  // Klasa obslugi bledow generatora
 			public:
-				const lib::ERROR_CLASS error_class;
+				const lib::error_class_t error_class;
 				const uint64_t error_no;
 				lib::edp_error error;
 
-				ECP_error ( lib::ERROR_CLASS err_cl, uint64_t err_no, uint64_t err0 = 0, uint64_t err1 = 0);
+				ECP_error ( lib::error_class_t err_cl, uint64_t err_no, uint64_t err0 = 0, uint64_t err1 = 0);
 		}; // end: class ECP_error
 
 };
