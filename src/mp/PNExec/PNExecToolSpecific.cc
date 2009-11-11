@@ -6,6 +6,7 @@
  */
 
 #include "PNExecToolSpecific.hh"
+#include "Task.hh"
 
 #include <cstdlib>
 

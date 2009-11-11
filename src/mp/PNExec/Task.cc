@@ -6,9 +6,12 @@
  */
 
 #include <iostream>
+#include <boost/foreach.hpp>
 
 #include "Task.hh"
 #include "ecp_mp/ecp_mp_t_fsautomat.h"
+
+#include "lib/datastr.h"
 
 namespace pnexec {
 
@@ -43,20 +46,35 @@ TrajectoryTask::TrajectoryTask(const task_t & task) : Task(task),
 
 // TODO: it probably should be:
 //ecp_next_state_t TrajectoryTask::execute(void)
-void TrajectoryTask::execute(mrrocpp::mp::common::robots_t & _robots)
+//! \return {returns true if MP has to wait for task completion signal}
+mrrocpp::lib::robot_name_t TrajectoryTask::execute(mrrocpp::mp::common::robots_t & _robots, workers_t & _workers)
 {
-	_robots[robot_name]->ecp_td.ecp_next_state.mp_2_ecp_next_state =
-		mrrocpp::ecp_mp::task::ECP_GEN_SMOOTH;
+	bool robot_name_found = false;
+	BOOST_FOREACH(mrrocpp::mp::common::robot_pair_t & robot_node, _robots) {
+		if (robot_node.second->robot_name == robot_name) {
+			robot_name_found = true;
+			break;
+		}
+	}
+	assert(robot_name_found);
 
-	strncpy(_robots[robot_name]->ecp_td.ecp_next_state.mp_2_ecp_next_state_string,
+	mrrocpp::mp::robot::robot & _robot = *_robots[robot_name];
+
+	std::cerr << "executing for " << lib::toString(_robot.robot_name) << std::endl; fflush(stderr);
+
+	_robot.ecp_td.mp_command = lib::NEXT_STATE;
+	_robot.ecp_td.ecp_next_state.mp_2_ecp_next_state = mrrocpp::ecp_mp::task::ECP_GEN_SMOOTH;
+
+	strncpy(_robot.ecp_td.ecp_next_state.mp_2_ecp_next_state_string,
 			file.c_str(),
-			sizeof(_robots[robot_name]->ecp_td.ecp_next_state.mp_2_ecp_next_state_string));
+			sizeof(_robot.ecp_td.ecp_next_state.mp_2_ecp_next_state_string));
 
+	_robot.ecp_td.mp_command = lib::NEXT_STATE;
+	_robot.communicate = true;
 
-	_robots[robot_name]->ecp_td.mp_command = lib::NEXT_STATE;
-	_robots[robot_name]->communicate = true;
+	std::cerr << "commanding " << robot << " @ " << file << std::endl;
 
-	std::cout << "commanding " << robot << " @ " << file << std::endl;
+	return robot_name;
 }
 
 } // namespace

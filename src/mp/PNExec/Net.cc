@@ -62,10 +62,22 @@ void Net::Add(Arc * _arc) {
 	}
 }
 
-void Net::ExecuteStep(void)
+bool Net::ExecuteStep(mrrocpp::mp::common::robots_t & _robots)
 {
 	// scoped access lock
 	boost::mutex::scoped_lock l(mtx);
+
+	// place a mark in Places where robot has finished a job
+	BOOST_FOREACH(mrrocpp::mp::common::robot_pair_t & robot_node, _robots) {
+		if (robot_node.second->new_pulse && robot_node.second->pulse_code == ECP_WAIT_FOR_NEXT_STATE) {
+//			robot_node.second->new_pulse = false;
+			Place * p = workers[robot_node.second->robot_name];
+			if (p){
+				p->addMarker();
+				workers.erase(robot_node.second->robot_name);
+			}
+		}
+	}
 
 	// look for active transitions, sort by priority
 	std::multimap<unsigned int, Transition*> activeTransitions;
@@ -106,11 +118,13 @@ void Net::ExecuteStep(void)
 	}
 
 	if (activeTransitions.empty()) {
-		printf("wait()..."); fflush(stdout);
 //		while(!stop)
-		cond.wait(l);
-		printf("done\n");
-		return;
+//		cond.wait(l);
+//		printf("done\n");
+		if(workers.size() == 0) {
+			fprintf(stderr, "deadlock :-(\n");
+		}
+		return workers.size();
 //		throw DeadlockException("deadlock");
 	}
 
@@ -149,8 +163,11 @@ void Net::ExecuteStep(void)
 		Place &p = *(pit->second);
 
 		// make this do something usefull
-		executor.create_thread(boost::bind(&PlaceExecutor::run, &p, &cond, &mtx));
+//		executor.create_thread(boost::bind(&PlaceExecutor::execute, &p, &cond, &mtx));
+		p.execute(_robots, workers);
 	}
+
+	return false;
 }
 
 void Net::PrintMarkedPlaces(void) {

@@ -12,9 +12,11 @@
 
 #include <string>
 #include <iostream>
+#include <map>
 
-#include "lib/impconst.h"
-#include "mp/mp_generator.h"
+#include "Worker.hh"
+
+#include "mp/mp.h"
 #include "lib/datastr.h"
 
 namespace pnexec {
@@ -32,7 +34,7 @@ class Task {
 
 		TASK_TYPE getType() const;
 
-		virtual void execute(mrrocpp::mp::common::robots_t & _robots) = 0;
+		virtual mrrocpp::lib::robot_name_t execute(mrrocpp::mp::common::robots_t & _robots, workers_t & _workers) = 0;
 
 	private:
 		TASK_TYPE type;
@@ -49,8 +51,10 @@ class ExecTask : public Task {
 			std::cout << "ExecTask()" << std::endl;
 		}
 
-		virtual void execute(mrrocpp::mp::common::robots_t & _robots) {
-			system(job.c_str());
+		virtual mrrocpp::lib::robot_name_t execute(mrrocpp::mp::common::robots_t & _robots, workers_t & _workers) {
+//			system(job.c_str());
+			std::cerr << "executing " << job << std::endl;
+			return mrrocpp::lib::ROBOT_UNDEFINED;
 		}
 
 		virtual ~ExecTask() {
@@ -68,7 +72,7 @@ class TrajectoryTask : public Task {
 	public:
 		TrajectoryTask(const task_t & task);
 
-		virtual void execute(mrrocpp::mp::common::robots_t & _robots);
+		virtual mrrocpp::lib::robot_name_t execute(mrrocpp::mp::common::robots_t & _robots, workers_t & _workers);
 };
 
 } // namespace

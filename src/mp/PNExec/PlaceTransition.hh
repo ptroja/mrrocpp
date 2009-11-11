@@ -12,6 +12,10 @@
 #include "Arc.hh"
 #include "PNExecToolSpecific.hh"
 
+#include <map>
+#include "lib/impconst.h"
+#include "mp/mp.h"
+
 #include <boost/ptr_container/ptr_list.hpp>
 
 namespace pnexec {

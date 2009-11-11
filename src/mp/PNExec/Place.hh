@@ -20,7 +20,7 @@
 
 namespace pnexec {
 
-class Place: public PlaceTransition
+class Place : public PlaceTransition
 {
 	private:
 	unsigned int marking;
@@ -53,7 +53,7 @@ class Place: public PlaceTransition
 			std::cout << name << "+" << marking << std::endl;
 		}
 
-		void run(void);
+		void execute(mrrocpp::mp::common::robots_t & _robots, workers_t & _workers);
 
 //		virtual ~Place(void) {
 //			std::cout << "~Place " << name << std::endl;
@@ -65,7 +65,7 @@ class Place: public PlaceTransition
 class PlaceExecutor {
 
 	public:
-		static void run(Place *_place, boost::condition_variable *_cond, boost::mutex *_mtx);
+		static void execute(Place *_place, boost::condition_variable *_cond, boost::mutex *_mtx);
 };
 
 } // namespace

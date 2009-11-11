@@ -9,17 +9,18 @@
 #define NET_HH_
 
 #include <map>
+#include <exception>
 
-#include "Node.hh"
 #include "Arc.hh"
 #include "Place.hh"
 #include "Transition.hh"
-#include "PNExecToolSpecific.hh"
+#include "Worker.hh"
 
 #include <boost/thread/thread.hpp>
 #include <boost/ptr_container/ptr_map.hpp>
 
-#include <exception>
+#include "lib/impconst.h"
+#include "mp/mp.h"
 
 namespace pnexec {
 
@@ -47,6 +48,18 @@ class DeadlockException : public std::exception {
 
 class Net
 {
+	public:
+		Net(void);
+
+		void BuildFromPNML(const char *pnmlfile);
+		bool ExecuteStep(mrrocpp::mp::common::robots_t & _robots);
+		void Add(Place * _node);
+		void Add(Transition * _node);
+		void Add(Arc * _arc);
+		~Net();
+
+		void PrintMarkedPlaces(void);
+
 	private:
 		typedef boost::ptr_container_detail::ref_pair<NodeId, Place * const> Place_pair_t;
 		typedef boost::ptr_container_detail::ref_pair<NodeId, Transition * const> Transition_pair_t;
@@ -67,17 +80,8 @@ class Net
 		boost::condition_variable cond;
 		boost::mutex mtx;
 
-	public:
-		Net(void);
-
-		void BuildFromPNML(const char *pnmlfile);
-		void ExecuteStep(void);
-		void Add(Place * _node);
-		void Add(Transition * _node);
-		void Add(Arc * _arc);
-		~Net();
-
-		void PrintMarkedPlaces(void);
+		// container for robots, that are busy at the moment
+		workers_t workers;
 };
 
 } // namespace
