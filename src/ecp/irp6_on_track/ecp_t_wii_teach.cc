@@ -51,16 +51,20 @@ void wii_teach::main_task_algorithm(void)
     int mv = 0;
     int pos = 0;
     int mode = 0;
+    char buffer[80];
 
     sg = new common::generator::smooth2(*this,true);
-    wg = new irp6ot::generator::wii_teach(*this,true);
+    wg = new irp6ot::generator::wii_teach(*this);
 
     sg->set_absolute();
-    sg->load_coordinates(lib::XYZ_EULER_ZYZ, 0.849, -0.298, 	   0.200, 		 -0.004, 1.560, -3.141, 0.074, 0.000, false);
-    sg->load_coordinates(lib::XYZ_EULER_ZYZ, 0.849, -0.298+kw_bok, 0.200, 		 -0.004, 1.560, -3.141, 0.074, 0.000, false);
-    sg->load_coordinates(lib::XYZ_EULER_ZYZ, 0.849, -0.298+kw_bok, 0.200+kw_bok, -0.004, 1.560, -3.141, 0.074, 0.000, false);
-    sg->load_coordinates(lib::XYZ_EULER_ZYZ, 0.849, -0.298, 	   0.200+kw_bok, -0.004, 1.560, -3.141, 0.074, 0.000, false);
-    sg->load_coordinates(lib::XYZ_EULER_ZYZ, 0.849, -0.298, 	   0.200, 		 -0.004, 1.560, -3.141, 0.074, 0.000, false);
+    sg->load_coordinates(lib::XYZ_EULER_ZYZ, 0.92, -0.1, 0.27, 0, 1.570, -3.141, 0.08, 0.000, false);
+    sg->load_coordinates(lib::XYZ_EULER_ZYZ, 0.92, 0.1, 0.27, 0, 1.570, -3.141, 0.08, 0.000, false);
+    sg->load_coordinates(lib::XYZ_EULER_ZYZ, 0.92, 0.1, 0.4, 0, 1.570, -3.141, 0.08, 0.000, false);
+    sg->load_coordinates(lib::XYZ_EULER_ZYZ, 0.92, -0.1, 0.4, 0, 1.570, -3.141, 0.08, 0.000, false);
+    sg->load_coordinates(lib::XYZ_EULER_ZYZ, 0.92, -0.1, 0.27, 0, 1.570, -3.141, 0.08, 0.000, false);
+    sg->load_coordinates(lib::XYZ_EULER_ZYZ, 0.92, 0.1, 0.27, 0, 1.570, -3.141, 0.08, 0.000, false);
+    sg->load_coordinates(lib::XYZ_EULER_ZYZ, 0.92, 0.1, 0.4, 0, 1.570, -3.141, 0.08, 0.000, false);
+    sg->load_coordinates(lib::XYZ_EULER_ZYZ, 0.92, -0.1, 0.4, 0, 1.570, -3.141, 0.08, 0.000, false);
     sg->Move();
 
     while(1)
@@ -72,55 +76,55 @@ void wii_teach::main_task_algorithm(void)
         if(sensor_m[lib::SENSOR_WIIMOTE]->image.sensor_union.wiimote.buttonB)
         {
             sprintf(buffer,"RUCH %d",++m);
-            sr_ecp_msg.message(buffer);
+            sr_ecp_msg->message(buffer);
             wg->Move();
         }
         else
         {
             sprintf(buffer,"CZEKAM %d",++s);
-            sr_ecp_msg.message(buffer);
+            sr_ecp_msg->message(buffer);
 
             if(buttonsPressed.button1)
             {
                 buttonsPressed.button1 = 0;
                 mode = 1;
-                sr_ecp_msg.message("mode add");
+                sr_ecp_msg->message("mode add");
             }
             else if(buttonsPressed.button2)
             {
                 buttonsPressed.button2 = 0;
                 mode = 2;
-                sr_ecp_msg.message("mode edit");
+                sr_ecp_msg->message("mode edit");
             }
             else if(buttonsPressed.buttonMinus)
             {
                 buttonsPressed.buttonMinus = 0;
-                sr_ecp_msg.message("1 step back");
+                sr_ecp_msg->message("1 step back");
                 if(pos > 1) --pos;
                 sprintf(buffer,"pos %d",pos);
-                sr_ecp_msg.message(buffer);
+                sr_ecp_msg->message(buffer);
             }
             else if(buttonsPressed.buttonPlus)
             {
                 buttonsPressed.buttonPlus = 0;
-                sr_ecp_msg.message("1 step forward");
+                sr_ecp_msg->message("1 step forward");
                 if(pos < mv) ++pos;
                 sprintf(buffer,"pos %d",pos);
-                sr_ecp_msg.message(buffer);
+                sr_ecp_msg->message(buffer);
             }
             else if(buttonsPressed.buttonHome)
             {
                 buttonsPressed.buttonPlus = 0;
                 if(mv > 0)
                 {
-                    sr_ecp_msg.message("start");
+                    sr_ecp_msg->message("start");
                     pos = 1;
                     sprintf(buffer,"pos %d",pos);
-                    sr_ecp_msg.message(buffer);
+                    sr_ecp_msg->message(buffer);
                 }
                 else
                 {
-                    sr_ecp_msg.message("add points first");
+                    sr_ecp_msg->message("add points first");
                 }
                 
             }
@@ -136,7 +140,7 @@ void wii_teach::main_task_algorithm(void)
                 {
                     sprintf(buffer,"edit point %d",pos);
                 }
-                sr_ecp_msg.message(buffer);
+                sr_ecp_msg->message(buffer);
             }
         }
 

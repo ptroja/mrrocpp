@@ -20,8 +20,8 @@ class wii_teach: public common::task::task
 	//Generator ruchu
         common::generator::smooth2* sg;
         irp6ot::generator::wii_teach* wg;
-        wiimote_t lastButtons;
-        wiimote_t buttonsPressed;
+        lib::sensor_image_t::sensor_union_t::wiimote_t lastButtons;
+        lib::sensor_image_t::sensor_union_t::wiimote_t buttonsPressed;
 
         void updateButtonsPressed();
 

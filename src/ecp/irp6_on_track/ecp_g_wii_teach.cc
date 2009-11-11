@@ -1,5 +1,3 @@
-#include "ecp/irp6_on_track/ecp_g_wii_teach.h"
-
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 #include "math.h"
