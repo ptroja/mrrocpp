@@ -53,7 +53,11 @@ class manual_moves_automatic_measures : public common::generator::generator {
 private:
 	// Ostatnia pozycja.
 	double* last_motor_position;
+#if !defined(USE_MESSIP_SRR)
 	const int UI_fd;
+#else
+	messip_channel_t *UI_fd;
+#endif
 	// Czy pomiar dodany do listy.
 	bool measure_added;
 	// Liczba osi robota.

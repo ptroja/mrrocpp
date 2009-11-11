@@ -113,8 +113,8 @@ int manual_moves_automatic_measures::mam_list_length(void) const
 manual_moves_automatic_measures::manual_moves_automatic_measures(common::task::task& _ecp_task, int _axes_number) :
 	generator(_ecp_task),
 	UI_fd(_ecp_task.UI_fd),
-	axes_number(_axes_number),
-	measure_added(false)	// Pomiar nie zostal dodany do listy.
+	measure_added(false),	// Pomiar nie zostal dodany do listy.
+	axes_number(_axes_number)
 {
 	// Przydzielenie pamieci na pozycje z ostatniego ruchu.
 	last_motor_position = new double [axes_number];
@@ -197,25 +197,27 @@ void manual_moves_automatic_measures::get_sensor_reading(ecp_mp::sensor::digital
 }
 
 /**************************** REFRESH WINDOW *******************************/
-void manual_moves_automatic_measures::refresh_window
-	(ecp_mp::sensor::digital_scales& the_sensor){
+void manual_moves_automatic_measures::refresh_window (ecp_mp::sensor::digital_scales& the_sensor)
+{
 	// Wiadomosc wysylana do UI.
 	lib::ECP_message ecp_ui_msg;
-	// Odswiezenie okna.
-	ecp_ui_msg.hdr.type=0;
+
 	// Polecenie odswiezenia okna.
 	ecp_ui_msg.ecp_message = lib::MAM_REFRESH_WINDOW;
 	// Przepisanie polozenia oraz odczytow z linialow do wiadomosci.
 	get_current_position(ecp_ui_msg.MAM.robot_position);
 	get_sensor_reading(the_sensor, ecp_ui_msg.MAM.sensor_reading);
 	ecp_ui_msg.MAM.measure_number = mam_list_length();
-/*
-		for(int j=0; j<8; j++)
-			printf("%f\t",ecp_ui_msg.MAM.robot_position[j]);
-		printf("\n");
-*/
+
 	// Wyslanie polecenia do UI -> Polecenie odswiezenia okna.
-	if (MsgSend(UI_fd, &ecp_ui_msg,  sizeof(lib::ECP_message),  NULL, 0) < 0){
+#if !defined(USE_MESSIP_SRR)
+	ecp_ui_msg.hdr.type=0;
+	if (MsgSend(UI_fd, &ecp_ui_msg, sizeof(ecp_ui_msg), NULL, 0) < 0)
+#else
+	int status;
+	if (messip_send(UI_fd, 0, 0, &ecp_ui_msg, sizeof(ecp_ui_msg), &status, NULL, 0, MESSIP_NOTIMEOUT) < 0)
+#endif
+	{
 		 perror("ECP trajectory_reproduce_thread(): Send() to UI failed");
 		 sr_ecp_msg.message (lib::SYSTEM_ERROR, errno, "ECP: Send() to UI failed");
 	}
