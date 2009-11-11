@@ -13,9 +13,6 @@
 #include <stdio.h>
 #include <errno.h>
 #include <fstream>
-#if defined(__QNXNTO__)
-#include <sys/neutrino.h>
-#endif /* __QNXNTO__ */
 
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
