@@ -83,12 +83,12 @@ int main (int argc, char *argv[], char **arge)
 				exit(EXIT_FAILURE);
 
 			/* Obsluga lib::NON_FATAL_ERROR*/
-			switch (e.mp_error) {
+			switch (e.error_no) {
 				case ECP_ERRORS:
 				case INVALID_ECP_PULSE_IN_MP_START_ALL:
 				case INVALID_ECP_PULSE_IN_MP_EXECUTE_ALL:
 				case INVALID_ECP_PULSE_IN_MP_TERMINATE_ALL:
-					mp::common::mp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, e.mp_error);
+					mp::common::mp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, e.error_no);
 					break;
 				default:
 					perror("Message to SR has been already sent");
@@ -103,7 +103,7 @@ int main (int argc, char *argv[], char **arge)
 		} /* end: catch sensor_error  */
 		catch (mp::generator::generator::MP_error e) {
 					/* Wyswietlenie komunikatu. */
-			mp::common::mp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, e.mp_error);
+			mp::common::mp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, e.error_no);
 					printf("Mam blad mp_generator section 1 (@%s:%d)\n", __FILE__, __LINE__);
 		} /* end: catch sensor_error  */
 		catch (ecp_mp::transmitter::transmitter::transmitter_error e) {
@@ -149,12 +149,12 @@ int main (int argc, char *argv[], char **arge)
 					exit(EXIT_FAILURE);
 
 				/* Obsluga lib::NON_FATAL_ERROR */
-				switch (e.mp_error) {
+				switch (e.error_no) {
 					case ECP_ERRORS:
 					case INVALID_ECP_PULSE_IN_MP_START_ALL:
 					case INVALID_ECP_PULSE_IN_MP_EXECUTE_ALL:
 					case INVALID_ECP_PULSE_IN_MP_TERMINATE_ALL:
-						mp::common::mp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, e.mp_error);
+						mp::common::mp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, e.error_no);
 						mp::common::mp_t->stop_and_terminate();
 						break;
 					case ECP_STOP_ACCEPTED:
@@ -174,7 +174,7 @@ int main (int argc, char *argv[], char **arge)
 				}
 
 				/* Obsluga lib::NON_FATAL_ERROR */
-				switch (e.mp_error) {
+				switch (e.error_no) {
 					case ECP_ERRORS:
 					case INVALID_POSE_SPECIFICATION:
 					case INVALID_ECP_COMMAND:
@@ -182,7 +182,7 @@ int main (int argc, char *argv[], char **arge)
 					case EDP_ERROR:
 					case INVALID_EDP_REPLY:
 					case INVALID_RMODEL_TYPE:
-						mp::common::mp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, e.mp_error);
+						mp::common::mp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, e.error_no);
 						break;
 					default:
 						perror("Unidentified mp error");
@@ -197,7 +197,7 @@ int main (int argc, char *argv[], char **arge)
 					exit(EXIT_FAILURE);
 
 				/* Obsluga lib::NON_FATAL_ERROR*/
-				switch (e.mp_error) {
+				switch (e.error_no) {
 					case ECP_ERRORS:
 					case INVALID_POSE_SPECIFICATION:
 					case NON_EXISTENT_DIRECTORY:
@@ -208,7 +208,7 @@ int main (int argc, char *argv[], char **arge)
 					case MAX_ACCELERATION_EXCEEDED:
 					case MAX_VELOCITY_EXCEEDED:
 					case NOT_ENOUGH_MEMORY:
-						mp::common::mp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, e.mp_error);
+						mp::common::mp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, e.error_no);
 						break;
 					default:
 						perror("Unidentified mp error");

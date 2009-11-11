@@ -24,7 +24,7 @@ namespace robot {
 
 
 robot::MP_error::MP_error(lib::error_class_t err0, uint64_t err1) :
-        error_class(err0), mp_error(err1)
+        error_class(err0), error_no(err1)
 {}
 
 // -------------------------------------------------------------------
