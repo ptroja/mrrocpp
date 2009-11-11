@@ -1,10 +1,6 @@
 // -------------------------------------------------------------------------
-// Proces: 	USER INTERFACE (UI)
 // Plik:			srlib.cc
-// System:	QNX/MRROC++  v. 6.3
-// Opis:		metody klas sr
-// Autor:		tkornuta
-// Data:		30.11.2006
+// Opis:		metody klas SR
 // -------------------------------------------------------------------------
 
 #include <stdio.h>
@@ -130,7 +126,6 @@ sr::~sr(void) {
 }
 
 int sr::send_package(void) {
-
 	if(!ch)
 		return -1;
 
@@ -142,6 +137,7 @@ int sr::send_package(void) {
 			&answer, &status, sizeof(status), MESSIP_NOTIMEOUT);
 }
 #endif /* !USE_MESSIP_SRR */
+
 /* -------------------------------------------------------------------- */
 /* Wysylka wiadomosci do procesu SR                                     */
 /* -------------------------------------------------------------------- */
@@ -212,13 +208,13 @@ int sr::message(enum ERROR_CLASS message_type, uint64_t error_code0, uint64_t er
 // interpretacja bledu dla EDP robota irp6_on_track
 
 sr_edp::sr_edp(process_type_t process_type, const std::string & process_name, const std::string & sr_name) :
-	sr(process_type, process_name, sr_name) { }
-
+	sr(process_type, process_name, sr_name)
+{
+}
 
 void sr_edp::interpret(void) {
   uint64_t s_error;             // zmienna pomocnicza
-  int j;                      // licznik petli
-  char tbuf[8*sizeof(int)+1]; // bufor tymczasowy na liczby
+  char tbuf[1+1]; // bufor tymczasowy na liczby
 
   sr_message.description[0] = '\0';
   switch (sr_message.message_type) {
@@ -230,13 +226,12 @@ void sr_edp::interpret(void) {
   case NON_FATAL_ERROR: // interpretacja do funkcji:
           // message(int16_t message_type, uint64_t error_code0, uint64_t error_code1)
     s_error = error_tab[0];
-    for (j = 0; j < MAX_SERVOS_NR; j++) {
+    for (int j = 0; j < MAX_SERVOS_NR; j++) {
 	  if ( s_error & 0x00000001 ) {
         sprintf(tbuf, "%1d", j+1);
 	    strcpy(sr_message.description,"SERVO_");
 	    strcat(sr_message.description, tbuf);
         strcat(sr_message.description, "_LOWER_LIMIT_SWITCH ");
-      //  printf("aaaa\n");
       }
 	  s_error >>= 1;
 	  if ( s_error & 0x00000001 ) {
@@ -268,8 +263,7 @@ void sr_edp::interpret(void) {
 	  case SYNCHRO_DELAY_ERROR: strcat (sr_message.description, "SYNCHRO_DELAY_ERROR "); break;
 	  default:
 	    strcat (sr_message.description, "UNIDENTIFIED_SERVO_ERROR "); break;
-    }; // end: switch
-
+    }
 
     switch ( s_error & 0xFF00000000000000ULL ) {
 	  case OK: break;// OK
@@ -343,11 +337,11 @@ void sr_edp::interpret(void) {
   	  case NOT_A_NUMBER_JOINT_VALUE_THETA7: strcat (sr_message.description, "NOT_A_NUMBER_JOINT_VALUE_THETA7"); break;
 	    default:
 	    strcat (sr_message.description, "UNIDENTIFIED_ERROR"); break;
-    }; // end: switch
+    }
 
-     // analiza informacji zawartej w error_tab[1]
+    // analiza informacji zawartej w error_tab[1]
     s_error = error_tab[1];
-    for (j = 0; j < MAX_SERVOS_NR; j++) {
+    for (int j = 0; j < MAX_SERVOS_NR; j++) {
       if ( s_error & 0x00000001 ) {
         sprintf(tbuf, "%1d", j+1);
 	    strcat(sr_message.description,"SERVO ");
@@ -362,11 +356,11 @@ void sr_edp::interpret(void) {
         strcat(sr_message.description, " : UNIDENTIFIED_ALGORITHM_PARAMETERS_NO");
       }
 	  s_error >>= 1;
-    }; // end: for
+    }
     break;
   default:
     strcat (sr_message.description, "EDP UNIDENTIFIED ERROR");
-  }; // end: switch (message_type)
+  }
 } // end: sr_edp::interpret()
 // ---------------------------------------------------------------------
 
@@ -396,7 +390,7 @@ switch (sr_message.message_type) {
            sprintf(sr_message.description, "NAME ATTACH ERROR"); break;
       default:
 	      sprintf(sr_message.description, "%s",strerror(error_tab[0]));
-	  };
+	  }
       break; // SYSTEM_ERROR
   case FATAL_ERROR:
     switch (error_tab[0]) {
@@ -404,7 +398,7 @@ switch (sr_message.message_type) {
            sprintf(sr_message.description, "SAVE FILE ERROR"); break;
       default:
 	      sprintf(sr_message.description, "%s",strerror(error_tab[0]));
-	  };
+	  }
       break; // FATAL_ERROR
   case NON_FATAL_ERROR: // interpretacja do funkcji:
           // message(int16_t message_type, uint64_t error_code)
@@ -466,41 +460,28 @@ switch (sr_message.message_type) {
     sprintf(sr_message.description, "UNIDENTIFIED ECP or MP ERROR");
 } // end: switch (sr_message.message_type)
 } // end: sr_ecp::interpret()
+
 // ---------------------------------------------------------------------
 sr_ui::sr_ui(process_type_t process_type, const std::string & process_name, const std::string & sr_name) :
-		  sr(process_type, process_name, sr_name) { }
+		  sr(process_type, process_name, sr_name)
+{
+}
 
 // Interpretacja bledow generowanych w UI // by Y - UWAGA UZUPELNIC
 void sr_ui::interpret(void) {
-switch (sr_message.message_type) {
-  case SYSTEM_ERROR:
-    switch (error_tab[0]) {
-       default:
-           sprintf(sr_message.description, "UNIDENTIFIED UI ERROR ");
-	  };
-      break; // SYSTEM_ERROR
-  case FATAL_ERROR:
-    switch (error_tab[0]) {
-      default:
-           sprintf(sr_message.description, "UNIDENTIFIED UI ERROR ");
-	  };
-      break; // FATAL_ERROR
-  case NON_FATAL_ERROR:
-    switch (error_tab[0]) {
-      default:
-           sprintf(sr_message.description, "UNIDENTIFIED UI ERROR ");
-    } // end: switch (sr_message.error_tab[0])
-    break;
-  case NEW_MESSAGE:
-      sprintf(sr_message.description, "%s",strerror(error_tab[0]));
-      break; // NEW_MESSAGE
-  default:
-    sprintf(sr_message.description, "UNIDENTIFIED UI ERROR");
-} // end: switch (sr_message.message_type)
-} // end: sr_vsp::interpret()
+	switch (sr_message.message_type) {
+	  case NEW_MESSAGE:
+		  sprintf(sr_message.description, "%s", strerror(error_tab[0]));
+		  break; // NEW_MESSAGE
+	  default:
+		sprintf(sr_message.description, "UNIDENTIFIED UI ERROR");
+	}
+}
 
-  sr_vsp::sr_vsp(process_type_t process_type, const std::string & process_name, const std::string & sr_name) :
-              sr(process_type, process_name, sr_name) { }
+sr_vsp::sr_vsp(process_type_t process_type, const std::string & process_name, const std::string & sr_name) :
+              sr(process_type, process_name, sr_name)
+{
+}
 
 // Interpretacja bledow generowanych w VSP
 void sr_vsp::interpret(void) {
@@ -509,17 +490,17 @@ switch (sr_message.message_type) {
     switch (error_tab[0]) {
         case DISPATCH_ALLOCATION_ERROR:
            sprintf(sr_message.description, "SENSOR DISPATCH ALLOCATION ERROR "); break;
-      case DEVICE_EXISTS:
+        case DEVICE_EXISTS:
            sprintf(sr_message.description, "SENSOR DEVICE ALREADY EXISTS "); break;
-      default:
+        default:
            sprintf(sr_message.description, "UNIDENTIFIED VSP ERROR ");
-	  };
+	  }
       break; // SYSTEM_ERROR
   case FATAL_ERROR:
     switch (error_tab[0]) {
       default:
            sprintf(sr_message.description, "UNIDENTIFIED VSP ERROR ");
-	  };
+	  }
       break; // FATAL_ERROR
   case NON_FATAL_ERROR:
     switch (error_tab[0]) {
@@ -538,9 +519,8 @@ switch (sr_message.message_type) {
       break; // NEW_MESSAGE
   default:
     sprintf(sr_message.description, "UNIDENTIFIED VSP ERROR");
-} // end: switch (sr_message.message_type)
-} // end: sr_ui::interpret()
+}
+}
 
 } // namespace lib
 } // namespace mrrocpp
-
