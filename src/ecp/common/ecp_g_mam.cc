@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------------
-// Proces: 	EFFECTOR CONTROL PROCESS (lib::ECP) 
+// Proces: 	EFFECTOR CONTROL PROCESS (lib::ECP)
 // Plik:			ecp_gen_mam.h
 // System:	QNX/MRROC++  v. 6.3
 // Opis:		manual_moves_automatic_measures_generator - definicja metod klasy
@@ -43,39 +43,36 @@ void manual_moves_automatic_measures::flush_mam_list ( void ) {
 		last_motor_position[i] = 0;
 	// Pomiar nie zostal dodany do listy.
 	measure_added = false;
-	}; // end: flush_mam_list
+}
 
 void manual_moves_automatic_measures::initiate_mam_list(void) {
 	mam_list_iterator = mam_list.begin();
-	};
+}
 
 void manual_moves_automatic_measures::next_mam_list_element (void) {
 	// Przejscie na nastepny element.
 	mam_list_iterator++;
-	};
+}
 
 void manual_moves_automatic_measures::get_mam_list_element (mam_element& mam){
 	// Przepisanie pozycji robota.
 	memcpy(mam.robot_position, mam_list_iterator->robot_position, axes_number*sizeof(double));
 	// Przepisanie odczytow z czujnikow.
 	memcpy(mam.sensor_reading, mam_list_iterator->sensor_reading, 6*sizeof(double));
-	};
+}
 
 void manual_moves_automatic_measures::get_mam_list_data (double* robot_position, double* sensor_reading){
 	// Przepisanie pozycji robota.
 	memcpy(robot_position, mam_list_iterator->robot_position, axes_number*sizeof(double));
 	// Przepisanie odczytow z czujnikow.
 	memcpy(sensor_reading, mam_list_iterator->sensor_reading, 6*sizeof(double));
-};
-			
+}
+
 bool manual_moves_automatic_measures::is_mam_list_element ( void ) {
 	// sprawdza czy aktualnie wskazywany jest element listy, czy lista sie skonczyla
-	if (mam_list_iterator != mam_list.end())
-		return true;
-	else
-		return false;
-};
-	
+	return (mam_list_iterator != mam_list.end());
+}
+
 bool manual_moves_automatic_measures::is_mam_list_last_element ( void ) {
 	// sprawdza czy aktualnie wskazywany element listy ma nastepnik
 	// jesli <> nulla
@@ -91,52 +88,48 @@ bool manual_moves_automatic_measures::is_mam_list_last_element ( void ) {
 			mam_list_iterator--;
 			return true;
 		}
-	}; // end if
+	}
 	return false;
-};
+}
 
-void manual_moves_automatic_measures::create_mam_list_head (double* robot_position, double* sensor_reading) {
+void manual_moves_automatic_measures::create_mam_list_head (const double* robot_position, const double* sensor_reading) {
 	// Wstawienie glowy.
 	mam_list.push_back(mam_element (robot_position, sensor_reading));
 	mam_list_iterator = mam_list.begin();
-	};
-			
-void manual_moves_automatic_measures::insert_mam_list_element (double* robot_position, double* sensor_reading) {
+}
+
+void manual_moves_automatic_measures::insert_mam_list_element (const double* robot_position, const double* sensor_reading) {
 	// Wlasciwe wstawienie elementu.
 	mam_list.push_back(mam_element (robot_position, sensor_reading));
 	mam_list_iterator++;
-	};
+}
 
-int manual_moves_automatic_measures::mam_list_length(void) {
+int manual_moves_automatic_measures::mam_list_length(void) const
+{
 	return mam_list.size();
-};
+}
 
 /****************** KONIEC: METODY ZWIAZANE Z LISTA MAM ********************/
 
 
 /*****************************  KONSTRUKTOR *********************************/
 manual_moves_automatic_measures::manual_moves_automatic_measures(common::task::task& _ecp_task, int _axes_number) :
-	generator(_ecp_task)
+	generator(_ecp_task),
+	UI_fd(_ecp_task.UI_fd),
+	axes_number(_axes_number),
+	measure_added(false)	// Pomiar nie zostal dodany do listy.
 {
-	UI_fd = _ecp_task.UI_fd;
-	// Ustawienie elementow list na NULL.
-	mam_list.clear();
-	// Przepisanie liczby osi robota.
-	axes_number = _axes_number;
 	// Przydzielenie pamieci na pozycje z ostatniego ruchu.
 	last_motor_position = new double [axes_number];
+
 	// Wyzerowanie ostatniego polozenia.
 	for (int i =0; i<axes_number; i++)
 		last_motor_position[i] = 0;
-	// Pomiar nie zostal dodany do listy.
-	measure_added = false;
 }
 
 /******************************  DESTRUKTOR **********************************/
 manual_moves_automatic_measures::~manual_moves_automatic_measures(void)
 {
-	// Usuniecie elementow z listy MAM.
-	flush_mam_list();
 	// Zwolnienie pamieci.
 	delete(last_motor_position);
 }
@@ -149,11 +142,10 @@ bool manual_moves_automatic_measures::first_step (){
     the_robot->EDP_data.get_type = ARM_DV; // ARM
     // Sprawdzenie rodzaju ramienia.
     the_robot->EDP_data.get_arm_type = lib::MOTOR;
- 
+
      // Mozna wykonac ruch - odebrac polozenie
     return true;
-    }; // end: first_step
-
+}
 
 /******************************** NEXT STEP ***********************************/
 bool manual_moves_automatic_measures::next_step (){
@@ -170,7 +162,7 @@ bool manual_moves_automatic_measures::next_step (){
 			// Polozenia rozne.
 			position_changed = true;
 			break;
-		};
+		}
 	// Jezeli polozenia rozne - zapamietanie obecnego.
 	if (position_changed)
 	{
@@ -187,28 +179,25 @@ bool manual_moves_automatic_measures::next_step (){
 			add_mam_element(*dss);
 			measure_added = true;
 			printf("\a\n");
-		};
-	};
+		}
+	}
     // Odswiezenie okna.
     refresh_window(*dss);
      // Koniec ruchu.
     return false;
-    }; // end: next_step
-
+}
 
 /************************* GET CURRENT POSITION *****************************/
 void manual_moves_automatic_measures::get_current_position(double* current_position){
     // Przepisanie obecnego polozenia robota do bufora w zaleznosci od rodzaju wspolrzednych.
     memcpy(current_position, the_robot->EDP_data.current_motor_arm_coordinates, axes_number*sizeof(double));
-    }; // end: get_current_position
+}
 
 /*********************** RETURN SENSOR READING ***************************/
 void manual_moves_automatic_measures::get_sensor_reading(ecp_mp::sensor::digital_scales& the_sensor, double* sensor_reading){
     // Przepisanie pozycji z bufora.
     memcpy(sensor_reading, the_sensor.image.sensor_union.ds.readings, 6*sizeof(double));
-    }; // end: return_sensor_reading
-
-
+}
 
 /**************************** REFRESH WINDOW *******************************/
 void manual_moves_automatic_measures::refresh_window
@@ -232,9 +221,8 @@ void manual_moves_automatic_measures::refresh_window
 	if (MsgSend(UI_fd, &ecp_ui_msg,  sizeof(lib::ECP_message),  NULL, 0) < 0){
 		 perror("ECP trajectory_reproduce_thread(): Send() to UI failed");
 		 sr_ecp_msg.message (lib::SYSTEM_ERROR, errno, "ECP: Send() to UI failed");
-		};
-	}; //: refresh_window
-
+	}
+}
 
 /***************************** ADD MAM ELEMENT *******************************/
 void manual_moves_automatic_measures::add_mam_element(ecp_mp::sensor::digital_scales& the_sensor){
@@ -244,12 +232,12 @@ void manual_moves_automatic_measures::add_mam_element(ecp_mp::sensor::digital_sc
 		create_mam_list_head(
 			the_robot->EDP_data.current_motor_arm_coordinates,
 			the_sensor.image.sensor_union.ds.readings);
-	}else{
+	} else {
 		// Jesli nastepny element.
 		insert_mam_list_element(
 			the_robot->EDP_data.current_motor_arm_coordinates,
 			the_sensor.image.sensor_union.ds.readings);
-		}; // end else
+	}
 	// Wyswietlenie dodanego elementu.
 	mam_element mam;
 	get_mam_list_element(mam);
@@ -261,27 +249,26 @@ void manual_moves_automatic_measures::add_mam_element(ecp_mp::sensor::digital_sc
 	for(i=0; i<6; i++)
 		printf("%f\t", mam.sensor_reading[i]);
 	printf("\n");*/
-	};//: add_mam_element
+}
 
 /**************************** SAVE MAM ELEMENTS ******************************/
 void manual_moves_automatic_measures::save_mam_element(std::ofstream& to_file)
 {
-	int i;
 	// Element listy.
 	mam_element mam;
 	// Pobranie elementu.
 	get_mam_list_element (mam);
 	// Zapis polozenia robota.
-	for(i=0; i<axes_number; i++)
+	for(int i=0; i<axes_number; i++)
 		to_file << mam.robot_position[i] << ' ';
 	// Zapis odczytow z czujnika
-	for(i=0; i<6; i++)
+	for(int i=0; i<6; i++)
 		to_file << mam.sensor_reading[i] << ' ';
 	// Nastepna linia.
 	to_file << '\n';
 }//: save_mam_element
 
-void manual_moves_automatic_measures::save_mam_list(char* filename)
+void manual_moves_automatic_measures::save_mam_list(const std::string & filename)
 {
 	// Sprawdzenie, czy lista nie jest pusta.
 	if (mam_list_length() == 0) {
@@ -290,7 +277,7 @@ void manual_moves_automatic_measures::save_mam_list(char* filename)
 	}
 	try {
 		// Otworzenie pliku.
-        std::ofstream to_file(filename);
+        std::ofstream to_file(filename.c_str());
 		if (!to_file.good())
 		throw ECP_main_error(lib::FATAL_ERROR, SAVE_FILE_ERROR);
 		// Przejscie na poczatek listy.
