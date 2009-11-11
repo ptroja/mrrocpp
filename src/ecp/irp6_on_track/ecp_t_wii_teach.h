@@ -3,6 +3,7 @@
 
 #include "ecp_mp/ecp_mp_task.h"
 #include "ecp/common/ecp_g_smooth2.h"
+#include "ecp/irp6_on_track/ecp_g_wii_teach.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -18,6 +19,11 @@ class wii_teach: public common::task::task
     protected:
 	//Generator ruchu
         common::generator::smooth2* sg;
+        irp6ot::generator::wii_teach* wg;
+        wiimote_t lastButtons;
+        wiimote_t buttonsPressed;
+
+        void updateButtonsPressed();
 
     public:
 	/**

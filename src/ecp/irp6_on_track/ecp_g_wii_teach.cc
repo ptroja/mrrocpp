@@ -3,6 +3,7 @@
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 #include "math.h"
+#include "ecp_g_wii_teach.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -51,15 +52,18 @@ bool wii_teach::next_step()
     the_robot->EDP_data.value_in_step_no = 8;
 
 
+    if(sensor_m[lib::SENSOR_WIIMOTE]->image.sensor_union.wiimote.buttonB)
+    {
+        the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[0] = 0.92;
+        the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[1] = 0;
+        the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[2] = 0.27;
+        the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[3] = -1.136 + sensor_m[lib::SENSOR_WIIMOTE]->image.sensor_union.wiimote.orientation_x;
+        the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[4] = 1.39 + sensor_m[lib::SENSOR_WIIMOTE]->image.sensor_union.wiimote.orientation_y;
+        the_robot->EDP_data.next_gripper_coordinate = 0.074;
+        return true;
+    }
 
-    the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[0] = 0.92;
-    the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[1] = 0;
-    the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[2] = 0.27;
-    the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[3] = -1.136 + sensor_m[lib::SENSOR_WIIMOTE]->image.sensor_union.wiimote.orientation_x;
-    the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[4] = 1.39 + sensor_m[lib::SENSOR_WIIMOTE]->image.sensor_union.wiimote.orientation_y;
-    the_robot->EDP_data.next_gripper_coordinate = 0.074;
-
-	return true;
+    return false;
 }
 
 double* wii_teach::getFirstPosition()
