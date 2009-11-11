@@ -47,10 +47,10 @@ class generator : public ecp_mp::generator::generator
 		{
 			public:
 				const lib::error_class_t error_class;
-				const uint64_t mp_error;
+				const uint64_t error_no;
 
 				MP_error(lib::error_class_t err0, uint64_t err1) :
-					error_class(err0), mp_error(err1)
+					error_class(err0), error_no(err1)
 				{
 				}
 		};
