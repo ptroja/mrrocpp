@@ -17,11 +17,9 @@ BINARIES = ecp_tran \
 	ecp_pcbird \
 	ecp_visioncoordinates \
 	ecp_eihcalibration \
+	ecp_mam \
 	ecp_fsautomat
 
-ifneq ($(BUILD_TARGET), linux)
-BINARIES+= ecp_mam
-endif
 #-----------------------------------------------------------------------------------------------------------------------#
 # Should be modified only by developers not by users
 HOMEDIR = ../../..
