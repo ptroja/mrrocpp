@@ -66,7 +66,7 @@ void rcsc::main_task_algorithm(void)
 				nrg->Move();
 				break;
 			case ecp_mp::task::ECP_GEN_TFF_RUBIK_GRAB:
-				switch ( (ecp_mp::task::RCSC_RUBIK_GRAB_PHASES) mp_command.ecp_next_state.mp_2_ecp_next_state_variant)
+				switch ((ecp_mp::task::RCSC_RUBIK_GRAB_PHASES) mp_command.ecp_next_state.mp_2_ecp_next_state_variant)
 				{
 					case ecp_mp::task::RCSC_RG_FACE_TURN_PHASE_0:
 						rgg->configure(0.072, 0.00005, 0, false);

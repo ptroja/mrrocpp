@@ -46,6 +46,7 @@ void manip_and_conv::create_next_pose_command(void)
 	mp_command.instruction.get_arm_type = ecp_td.get_arm_type;
 	mp_command.instruction.output_values = ecp_td.output_values;
 	mp_command.instruction.interpolation_type = ecp_td.next_interpolation_type;
+
 	switch (ecp_td.instruction_type) {
 		case lib::SET:
 		case lib::SET_GET:
@@ -348,5 +349,3 @@ void manip_and_conv::get_rmodel_reply(void)
 } // namespace robot
 } // namespace mp
 } // namespace mrrocpp
-
-

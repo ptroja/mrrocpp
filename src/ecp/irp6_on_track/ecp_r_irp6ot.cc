@@ -35,9 +35,6 @@ void robot::create_command(void)
 	ecp_command.instruction.instruction_type = EDP_data.instruction_type;
 	ecp_command.instruction.set_type = EDP_data.set_type;
 	ecp_command.instruction.get_type = EDP_data.get_type;
-	// printf("EDP_data.get_type: %d, ecp_command.instruction.get_type: %d\n",
-	// EDP_data.get_type,ecp_command.instruction.get_type);
-
 	ecp_command.instruction.set_rmodel_type = EDP_data.set_rmodel_type;
 	ecp_command.instruction.get_rmodel_type = EDP_data.get_rmodel_type;
 	ecp_command.instruction.set_arm_type = EDP_data.set_arm_type;
@@ -48,7 +45,6 @@ void robot::create_command(void)
 	switch (EDP_data.instruction_type) {
 		case lib::SET:
 		case lib::SET_GET:
-
 			if (EDP_data.set_type & RMODEL_DV) {
 				switch (EDP_data.set_rmodel_type) {
 					case lib::TOOL_FRAME:
@@ -69,13 +65,12 @@ void robot::create_command(void)
 								= EDP_data.next_kinematic_model_no;
 						break;
 					case lib::SERVO_ALGORITHM:
-						for (int j=0; j<IRP6_ON_TRACK_NUM_OF_SERVOS; j++) {
+						for (int j=0; j<number_of_servos; j++) {
 							ecp_command.instruction.rmodel.servo_algorithm.servo_algorithm_no[j]
 									= EDP_data.next_servo_algorithm_no[j];
 							ecp_command.instruction.rmodel.servo_algorithm.servo_parameters_no[j]
 									= EDP_data.next_servo_parameters_no[j];
 						}
-						; // end: for
 						break;
 					case lib::FORCE_TOOL:
 						for (int j=0; j<3; j++) {
@@ -113,17 +108,17 @@ void robot::create_command(void)
 						break;
 
 					case lib::JOINT:
-						for (int j=0; j<IRP6_ON_TRACK_NUM_OF_SERVOS; j++)
+						for (int j=0; j<number_of_servos; j++)
 							ecp_command.instruction.arm.pf_def.arm_coordinates[j]
 									= EDP_data.next_joint_arm_coordinates[j];
 						break;
 					case lib::MOTOR:
-						for (int j=0; j<IRP6_ON_TRACK_NUM_OF_SERVOS; j++)
+						for (int j=0; j<number_of_servos; j++)
 							ecp_command.instruction.arm.pf_def.arm_coordinates[j]
 									= EDP_data.next_motor_arm_coordinates[j];
 						break;
 					case lib::PF_VELOCITY:
-						for (int j=0; j<IRP6_ON_TRACK_NUM_OF_SERVOS; j++) {
+						for (int j=0; j<number_of_servos; j++) {
 							ecp_command.instruction.arm.pf_def.arm_coordinates[j]
 									= EDP_data.next_velocity[j]; // pozycja poczatkowa
 						}
@@ -205,9 +200,8 @@ void robot::get_reply(void)
 			break;
 		default: // bledna przesylka
 			throw ECP_error (lib::NON_FATAL_ERROR, INVALID_EDP_REPLY);
-	}; // end: switch (EDP_data.reply_type)
+	}
 }
-; // end: ecp_irp6_on_track_robot::get_reply ()
 
 
 void robot::get_input_reply(void)
@@ -222,12 +216,12 @@ void robot::get_arm_reply(void)
 {
 	switch (reply_package.arm_type) {
 		case lib::MOTOR:
-			for (int i=0; i<IRP6_ON_TRACK_NUM_OF_SERVOS; i++)
+			for (int i=0; i<number_of_servos; i++)
 				EDP_data.current_motor_arm_coordinates[i]
 						= reply_package.arm.pf_def.arm_coordinates[i];
 			break;
 		case lib::JOINT:
-			for (int i=0; i<IRP6_ON_TRACK_NUM_OF_SERVOS; i++)
+			for (int i=0; i<number_of_servos; i++)
 				EDP_data.current_joint_arm_coordinates[i]
 						= reply_package.arm.pf_def.arm_coordinates[i];
 			break;
@@ -285,7 +279,7 @@ void robot::get_rmodel_reply(void)
 					= reply_package.rmodel.kinematic_model.kinematic_model_no;
 			break;
 		case lib::SERVO_ALGORITHM:
-			for (int i=0; i<IRP6_ON_TRACK_NUM_OF_SERVOS; i++) {
+			for (int i=0; i<number_of_servos; i++) {
 				EDP_data.current_servo_algorithm_no[i]
 						= reply_package.rmodel.servo_algorithm.servo_algorithm_no[i];
 				EDP_data.current_servo_parameters_no[i]

@@ -128,13 +128,13 @@ void two_robots_measures::save_measures_to_file (void)
 	lib::ECP_message ecp_to_ui_msg;
 	// Odpowiedz UI do ECP
 	lib::UI_reply ui_to_ecp_rep;
-	ecp_to_ui_msg.hdr.type=0;
 	// Polecenie wprowadzenia nazwy pliku
 	ecp_to_ui_msg.ecp_message = lib::SAVE_FILE;
 	// Wzorzec nazwy pliku
 	strcpy(ecp_to_ui_msg.string,"*.*");
 	// Wyslanie polecenia pokazania okna wyboru pliku.
 #if !defined(USE_MESSIP_SRR)
+	ecp_to_ui_msg.hdr.type=0;
 	if (MsgSend(UI_fd, &ecp_to_ui_msg, sizeof(lib::ECP_message), &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0)
 #else
 	int status;
