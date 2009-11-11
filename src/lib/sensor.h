@@ -488,7 +488,9 @@ public:
 // Przesylka z VSP do EDP
 struct VSP_EDP_message
 {
+#ifndef USE_MESSIP_SRR
 	msg_header_t hdr;
+#endif
 	char vsp_name[20];
 	short konfigurowac;
 };

@@ -31,9 +31,12 @@
 
 #include "lib/impconst.h"
 #include "lib/configurator.h"
+#if defined(PROCESS_SPAWN_SPAWN)
 #include "lib/y_spawn.h"
+#endif
 #include "lib/messip/messip.h"
 #include "lib/config_types.h"
+#include "lib/typedefs.h"
 
 namespace mrrocpp {
 namespace lib {
@@ -416,6 +419,11 @@ pid_t configurator::process_spawn(const std::string & _section_name) {
 				node.c_str(), dir.c_str(), ini_file.c_str(), _section_name.c_str(),
 				session_name.length() ? session_name.c_str() : "\"\"", asa.c_str()
 		);
+
+//		// create new session for separation of signal delivery
+//		if(setsid() == (pid_t) -1) {
+//			perror("setsid()");
+//		}
 
 		if (exists("username", _section_name)) {
 			std::string username = return_string_value("username", _section_name);

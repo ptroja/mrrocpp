@@ -2,7 +2,6 @@
 //                            typedefs.h
 // Definicje typow calkowitych
 //
-// Ostatnia modyfikacja: 16.04.98
 // -------------------------------------------------------------------------
 
 #if !defined(__TYPEDEFS_H) // Czy 'typedefs.h' juz wczytany ?
@@ -11,6 +10,14 @@
 #if defined(__QNXNTO__)
 #include <sys/iofunc.h>
 #include <sys/dispatch.h>
+
+typedef struct _pulse msg_header_t;
+
+typedef struct  { // wiadomosc odbierana przez readera
+    msg_header_t hdr;
+    int data;	// TODO: to pole chyba nie jest potrzebne (ptroja)
+} _pulse_msg;
+
 #else
 #include <stdint.h>
 #include <signal.h>
@@ -20,15 +27,6 @@
 #define EOK              0  /* No error */
 
 #define _PULSE_CODE_MINAVAIL	0	/* QNX managers will never use this range */
-
-struct _pulse {
-	uint16_t	type;
-	uint16_t	subtype;
-	int8_t		code;
-	uint8_t		zero[3];
-	union sigval	value;
-	int32_t		scoid;
-};
 
 #define ND_LOCAL_NODE			0
 
@@ -65,12 +63,5 @@ struct _pulse {
 #endif
 
 #endif /* ! __QNXNTO__ */
-
-typedef struct _pulse msg_header_t;
-
-typedef struct  { // wiadomosc odbierana przez readera
-    msg_header_t hdr;
-    int data;	// TODO: to pole chyba nie jest potrzebne (ptroja)
-} _pulse_msg;
 
 #endif /* __TYPEDEFS_H */
