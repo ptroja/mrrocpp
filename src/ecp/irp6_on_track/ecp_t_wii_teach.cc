@@ -46,7 +46,6 @@ void wii_teach::updateButtonsPressed(void)
 void wii_teach::main_task_algorithm(void)
 {
     double kw_bok = 0.2;
-    int s = 0;
     int m = 0;
     int mv = 0;
     int pos = 0;
@@ -65,7 +64,7 @@ void wii_teach::main_task_algorithm(void)
     sg->load_coordinates(lib::XYZ_EULER_ZYZ, 0.92, 0.1, 0.27, 0, 1.570, -3.141, 0.08, 0.000, false);
     sg->load_coordinates(lib::XYZ_EULER_ZYZ, 0.92, 0.1, 0.4, 0, 1.570, -3.141, 0.08, 0.000, false);
     sg->load_coordinates(lib::XYZ_EULER_ZYZ, 0.92, -0.1, 0.4, 0, 1.570, -3.141, 0.08, 0.000, false);
-    sg->Move();
+    //sg->Move();
 
     while(1)
     {
@@ -73,17 +72,15 @@ void wii_teach::main_task_algorithm(void)
         updateButtonsPressed();
         lastButtons = sensor_m[lib::SENSOR_WIIMOTE]->image.sensor_union.wiimote;
 
-        if(sensor_m[lib::SENSOR_WIIMOTE]->image.sensor_union.wiimote.buttonB)
+        if(buttonsPressed.buttonB)
         {
+        	buttonsPressed.buttonB = 0;
             sprintf(buffer,"RUCH %d",++m);
             sr_ecp_msg->message(buffer);
-            wg->Move();
+            //wg->Move();
         }
         else
         {
-            sprintf(buffer,"CZEKAM %d",++s);
-            sr_ecp_msg->message(buffer);
-
             if(buttonsPressed.button1)
             {
                 buttonsPressed.button1 = 0;
@@ -99,18 +96,22 @@ void wii_teach::main_task_algorithm(void)
             else if(buttonsPressed.buttonMinus)
             {
                 buttonsPressed.buttonMinus = 0;
-                sr_ecp_msg->message("1 step back");
-                if(pos > 1) --pos;
-                sprintf(buffer,"pos %d",pos);
-                sr_ecp_msg->message(buffer);
+                if(pos > 1)
+                {
+	                --pos;
+    	            sprintf(buffer,"1 step back, pos %d",pos);
+	                sr_ecp_msg->message(buffer);
+	            }
             }
             else if(buttonsPressed.buttonPlus)
             {
                 buttonsPressed.buttonPlus = 0;
-                sr_ecp_msg->message("1 step forward");
-                if(pos < mv) ++pos;
-                sprintf(buffer,"pos %d",pos);
-                sr_ecp_msg->message(buffer);
+                if(pos < mv)
+                {
+	                ++pos;
+    	            sprintf(buffer,"1 step forward, pos %d",pos);
+	                sr_ecp_msg->message(buffer);
+	            }
             }
             else if(buttonsPressed.buttonHome)
             {
@@ -126,20 +127,29 @@ void wii_teach::main_task_algorithm(void)
                 {
                     sr_ecp_msg->message("add points first");
                 }
-                
             }
             else if(buttonsPressed.buttonA)
             {
                 buttonsPressed.buttonPlus = 0;
+
+				if(!mode)
+                {
+   	            	sprintf(buffer,"choose mode");
+       	        }
                 if(mode == 1)
-                {
-                    ++mv;
-                    sprintf(buffer,"add point %d, have %d",pos,mv);
-                }
-                else
-                {
-                    sprintf(buffer,"edit point %d",pos);
-                }
+   	            {
+       	            ++mv;
+       	            ++pos;
+           	        sprintf(buffer,"add point %d, have %d",pos,mv);
+               	}
+                else if(pos > 0 && mode == 2)
+   	            {
+       	            sprintf(buffer,"edit point %d",pos);
+           	    }
+        	    else
+        	    {
+        	    	sprintf(buffer,"add points first");
+        	    }
                 sr_ecp_msg->message(buffer);
             }
         }
