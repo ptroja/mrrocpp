@@ -73,7 +73,7 @@ pid_t ecp_robot::get_EDP_pid(void) const
     return EDP_MASTER_Pid;
 }
 
-ecp_robot::ECP_error::ECP_error ( uint64_t err_cl, uint64_t err_no,
+ecp_robot::ECP_error::ECP_error ( lib::error_class_t err_cl, uint64_t err_no,
                                   uint64_t err0, uint64_t err1 )
         : error_class(err_cl), error_no(err_no)
 {
@@ -93,7 +93,7 @@ ecp_robot::ECP_error::ECP_error ( uint64_t err_cl, uint64_t err_no,
 #endif /* __gnu_linux__ */
 }
 
-ecp_robot::ECP_main_error::ECP_main_error ( lib::ERROR_CLASS err_cl, uint64_t err_no)
+ecp_robot::ECP_main_error::ECP_main_error ( lib::error_class_t err_cl, uint64_t err_no)
         : error_class(err_cl), error_no(err_no)
 {}
 

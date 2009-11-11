@@ -23,7 +23,7 @@ namespace mp {
 namespace robot {
 
 
-robot::MP_error::MP_error(lib::ERROR_CLASS err0, uint64_t err1) :
+robot::MP_error::MP_error(lib::error_class_t err0, uint64_t err1) :
         error_class(err0), mp_error(err1)
 {}
 
