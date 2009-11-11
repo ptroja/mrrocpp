@@ -6,6 +6,8 @@ KINEMATDIR = ${HOMEDIR}/src/kinematics
 include $(HOMEDIR)/common.mk
 
 SOURCES = ${wildcard *.cc}
+OBJECTS = ${patsubst %.cc,%.o,${SOURCES}}
+
 EDPOBJ = edp_common.o edp_m.o edp_effector.o\
 	edp_e_manip.o edp_e_manip_and_conv.o \
 	edp_force_sensor.o force.o \
@@ -17,7 +19,7 @@ EDPOBJ = edp_common.o edp_m.o edp_effector.o\
 #======================================================#	
 .PHONY: all clean install
 #------------------------------------------------- Build rules -------------------------------------------------------#
-all: libedp.a
+all: $(OBJECTS) libedp.a
 
 libedp.a: $(EDPOBJ)
 	$(AR) $(ARFLAGS) $@ $?
