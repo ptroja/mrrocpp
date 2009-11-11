@@ -1068,7 +1068,7 @@ struct ecp_command_buffer
 {
 #ifndef USE_MESSIP_SRR
 	/*! This is a message buffer, so it needs a message header */
-	struct _pulse hdr;
+	msg_header_t hdr;
 #endif
 	c_buffer instruction;
 };
