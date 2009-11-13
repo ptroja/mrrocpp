@@ -29,7 +29,7 @@ class wii_teach: public common::task::task
                 n* next;
                 n* prev;
                 int id;
-                double position[8];
+                double position[6];
 
                 n() : next(NULL), prev(NULL) {}
 

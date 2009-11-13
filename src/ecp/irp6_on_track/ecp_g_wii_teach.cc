@@ -8,16 +8,16 @@ namespace ecp {
 namespace irp6ot {
 namespace generator {
 
-wii_teach::wii_teach (common::task::task& _ecp_task,lib::sensor* _wiimote) : generator (_ecp_task), _wiimote(_wiimote) {}
+wii_teach::wii_teach (common::task::task& _ecp_task,lib::sensor* _wiimote,common::generator::smooth2* sg) : generator (_ecp_task), _wiimote(_wiimote), sg(sg) {}
 
 bool wii_teach::first_step()
 {
     the_robot->EDP_data.instruction_type = lib::GET;
     the_robot->EDP_data.get_type = ARM_DV;
     the_robot->EDP_data.set_type = ARM_DV;
-    the_robot->EDP_data.set_arm_type = lib::XYZ_EULER_ZYZ;
-    the_robot->EDP_data.get_arm_type = lib::XYZ_EULER_ZYZ;
-    the_robot->EDP_data.motion_type = lib::ABSOLUTE;
+    the_robot->EDP_data.set_arm_type = lib::XYZ_ANGLE_AXIS;
+    the_robot->EDP_data.get_arm_type = lib::XYZ_ANGLE_AXIS;
+    the_robot->EDP_data.motion_type = lib::RELATIVE;
     the_robot->EDP_data.next_interpolation_type = lib::MIM;
     the_robot->EDP_data.motion_steps = 8;
     the_robot->EDP_data.value_in_step_no = 6;
@@ -42,31 +42,26 @@ bool wii_teach::next_step()
     the_robot->EDP_data.instruction_type = lib::SET;
     the_robot->EDP_data.get_type = ARM_DV;
     the_robot->EDP_data.set_type = ARM_DV;
-    the_robot->EDP_data.set_arm_type = lib::XYZ_EULER_ZYZ;
-    the_robot->EDP_data.get_arm_type = lib::XYZ_EULER_ZYZ;
-    the_robot->EDP_data.motion_type = lib::ABSOLUTE;
+    the_robot->EDP_data.set_arm_type = lib::XYZ_ANGLE_AXIS;
+    the_robot->EDP_data.get_arm_type = lib::XYZ_ANGLE_AXIS;
+    the_robot->EDP_data.motion_type = lib::RELATIVE;
     the_robot->EDP_data.next_interpolation_type = lib::MIM;
     the_robot->EDP_data.motion_steps = 8;
     the_robot->EDP_data.value_in_step_no = 8;
 
     if(_wiimote->image.sensor_union.wiimote.buttonB)
     {
-        the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[0] = 0.92;
-        the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[1] = 0;
-        the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[2] = 0.27;
-        the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[3] = 0 + _wiimote->image.sensor_union.wiimote.orientation_x;
-        the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[4] = 0.8 + _wiimote->image.sensor_union.wiimote.orientation_y;
-        the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[5] = -3.141;
-        the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[6] =  0.074;
-        the_robot->EDP_data.next_gripper_coordinate = 0.074;
-
-        sprintf(buffer,"Moved to %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f",the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[0],the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[1],the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[2],the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[3],the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[4],the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[5],the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[6],the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[7]);
-	sr_ecp_msg.message(buffer);
-
+        the_robot->EDP_data.next_XYZ_AA_arm_coordinates[0] = 0;
+        the_robot->EDP_data.next_XYZ_AA_arm_coordinates[1] = 0;
+        the_robot->EDP_data.next_XYZ_AA_arm_coordinates[2] = 0;
+        the_robot->EDP_data.next_XYZ_AA_arm_coordinates[3] = _wiimote->image.sensor_union.wiimote.orientation_x * 0.003;
+        the_robot->EDP_data.next_XYZ_AA_arm_coordinates[4] = _wiimote->image.sensor_union.wiimote.orientation_y * 0.003;
+        the_robot->EDP_data.next_XYZ_AA_arm_coordinates[5] = 0;
+        the_robot->EDP_data.next_gripper_coordinate = 0;
+        
         return true;
     }
 
-    sr_ecp_msg.message("=== Move - koniec ===");
     return false;
 }
 

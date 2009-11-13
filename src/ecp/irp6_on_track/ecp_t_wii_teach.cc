@@ -55,7 +55,7 @@ void wii_teach::print_trajectory(void)
     sr_ecp_msg->message("=== Trajektoria ===");
     while(current)
     {
-        sprintf(buffer,"Pozycja %d: %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f",++i,current->position[0],current->position[1],current->position[2],current->position[3],current->position[4],current->position[5],current->position[6],current->position[7]);
+        sprintf(buffer,"Pozycja %d: %.4f %.4f %.4f %.4f %.4f %.4f",++i,current->position[0],current->position[1],current->position[2],current->position[3],current->position[4],current->position[5]);
         sr_ecp_msg->message(buffer);
         current = current->next;
     }
@@ -67,9 +67,10 @@ void wii_teach::move_to_current(void)
     char buffer[80];
     if(trajectory.current)
     {
-        sprintf(buffer,"Move to %d: %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f",trajectory.current->id,trajectory.current->position[0],trajectory.current->position[1],trajectory.current->position[2],trajectory.current->position[3],trajectory.current->position[4],trajectory.current->position[5],trajectory.current->position[6],trajectory.current->position[7]);
+        sprintf(buffer,"Move to %d: %.4f %.4f %.4f %.4f %.4f %.4f",trajectory.current->id,trajectory.current->position[0],trajectory.current->position[1],trajectory.current->position[2],trajectory.current->position[3],trajectory.current->position[4],trajectory.current->position[5]);
         sr_ecp_msg->message(buffer);
-        sg->load_coordinates(lib::XYZ_EULER_ZYZ,trajectory.current->position[0],trajectory.current->position[1],trajectory.current->position[2],trajectory.current->position[3],trajectory.current->position[4],trajectory.current->position[5],trajectory.current->position[6],trajectory.current->position[7],true);
+        sg->set_absolute();
+        sg->load_coordinates(lib::XYZ_ANGLE_AXIS,trajectory.current->position[0],trajectory.current->position[1],trajectory.current->position[2],trajectory.current->position[3],trajectory.current->position[4],trajectory.current->position[5],0,0,true);
         sg->Move();
     }
 }
@@ -77,22 +78,10 @@ void wii_teach::move_to_current(void)
 void wii_teach::main_task_algorithm(void)
 {
     int cnt = 0;
-    int m;
     char buffer[80];
 
     sg = new common::generator::smooth2(*this,true);
-    wg = new irp6ot::generator::wii_teach(*this,sensor_m[lib::SENSOR_WIIMOTE]);
-
-    sg->set_absolute();
-    //sg->load_coordinates(lib::XYZ_EULER_ZYZ, 0.92, -0.1, 0.27, 0, 1.570, -3.141, 0.08, 0.000, false);
-//    sg->load_coordinates(lib::XYZ_EULER_ZYZ, 0.92, 0.1, 0.27, 0, 1.570, -3.141, 0.08, 0.000, false);
-//    sg->load_coordinates(lib::XYZ_EULER_ZYZ, 0.92, 0.1, 0.4, 0, 1.570, -3.141, 0.08, 0.000, false);
-//    sg->load_coordinates(lib::XYZ_EULER_ZYZ, 0.92, -0.1, 0.4, 0, 1.570, -3.141, 0.08, 0.000, false);
-//    sg->load_coordinates(lib::XYZ_EULER_ZYZ, 0.92, -0.1, 0.27, 0, 1.570, -3.141, 0.08, 0.000, false);
-//    sg->load_coordinates(lib::XYZ_EULER_ZYZ, 0.92, 0.1, 0.27, 0, 1.570, -3.141, 0.08, 0.000, false);
-//    sg->load_coordinates(lib::XYZ_EULER_ZYZ, 0.92, 0.1, 0.4, 0, 1.570, -3.141, 0.08, 0.000, false);
-//    sg->load_coordinates(lib::XYZ_EULER_ZYZ, 0.92, -0.1, 0.4, 0, 1.570, -3.141, 0.08, 0.000, false);
-//    sg->Move();
+    wg = new irp6ot::generator::wii_teach(*this,sensor_m[lib::SENSOR_WIIMOTE],sg);
 
     while(1)
     {
@@ -103,8 +92,6 @@ void wii_teach::main_task_algorithm(void)
         if(buttonsPressed.buttonB)
         {
             buttonsPressed.buttonB = 0;
-            sprintf(buffer,"=== Move %d ===",++m);
-            sr_ecp_msg->message(buffer);
             wg->Move();
         }
         else
@@ -116,8 +103,6 @@ void wii_teach::main_task_algorithm(void)
                 {
 	            --trajectory.position;
                     trajectory.current = trajectory.current->prev;
-//    	            sprintf(buffer,"1 step back, pos %d, node %d",trajectory.position,trajectory.current->id);
-//	            sr_ecp_msg->message(buffer);
                     move_to_current();
 	        }
             }
@@ -128,8 +113,6 @@ void wii_teach::main_task_algorithm(void)
                 {
 	            ++trajectory.position;
                     trajectory.current = trajectory.current->next;
-//    	            sprintf(buffer,"1 step forward, pos %d, node %d",trajectory.position,trajectory.current->id);
-//	            sr_ecp_msg->message(buffer);
                     move_to_current();
 	        }
             }
@@ -140,8 +123,6 @@ void wii_teach::main_task_algorithm(void)
                 {
                     trajectory.position = trajectory.count;
                     trajectory.current = trajectory.tail;
-//    	            sprintf(buffer,"end, pos %d, node %d",trajectory.position,trajectory.current->id);
-//	            sr_ecp_msg->message(buffer);
                     move_to_current();
 	        }
             }
@@ -152,8 +133,6 @@ void wii_teach::main_task_algorithm(void)
                 {
                     trajectory.position = 1;
                     trajectory.current = trajectory.head;
-//    	            sprintf(buffer,"start, pos %d, node %d",trajectory.position,trajectory.current->id);
-//	            sr_ecp_msg->message(buffer);
                     move_to_current();
 	        }
             }
@@ -163,14 +142,12 @@ void wii_teach::main_task_algorithm(void)
 
                 node* current = new node;
                 current->id = ++cnt;
-                current->position[0] = ecp_m_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[0];
-                current->position[1] = ecp_m_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[1];
-                current->position[2] = ecp_m_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[2];
-                current->position[3] = ecp_m_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[3];
-                current->position[4] = ecp_m_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[4];
-                current->position[5] = ecp_m_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[5];
-                current->position[6] = ecp_m_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[6];
-                current->position[7] = ecp_m_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[7];
+                current->position[0] = ecp_m_robot->EDP_data.current_XYZ_AA_arm_coordinates[0];
+                current->position[1] = ecp_m_robot->EDP_data.current_XYZ_AA_arm_coordinates[1];
+                current->position[2] = ecp_m_robot->EDP_data.current_XYZ_AA_arm_coordinates[2];
+                current->position[3] = ecp_m_robot->EDP_data.current_XYZ_AA_arm_coordinates[3];
+                current->position[4] = ecp_m_robot->EDP_data.current_XYZ_AA_arm_coordinates[4];
+                current->position[5] = ecp_m_robot->EDP_data.current_XYZ_AA_arm_coordinates[5];
 
                 if(trajectory.current)
                 {
@@ -188,7 +165,7 @@ void wii_teach::main_task_algorithm(void)
                 ++trajectory.position;
                 ++trajectory.count;
 
-                sprintf(buffer,"Added %d: %.3f %.3f",trajectory.current->id,trajectory.current->position[3],trajectory.current->position[4]);
+                sprintf(buffer,"Added %d: %.4f %.4f %.4f %.4f %.4f %.4f",trajectory.current->id,trajectory.current->position[0],trajectory.current->position[1],trajectory.current->position[2],trajectory.current->position[3],trajectory.current->position[4],trajectory.current->position[5]);
                 sr_ecp_msg->message(buffer);
 
                 print_trajectory();
@@ -236,16 +213,14 @@ void wii_teach::main_task_algorithm(void)
                 {
                     int old = trajectory.current->id;
                     trajectory.current->id = ++cnt;
-                    trajectory.current->position[0] = ecp_m_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[0];
-                    trajectory.current->position[1] = ecp_m_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[1];
-                    trajectory.current->position[2] = ecp_m_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[2];
-                    trajectory.current->position[3] = ecp_m_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[3];
-                    trajectory.current->position[4] = ecp_m_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[4];
-                    trajectory.current->position[5] = ecp_m_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[5];
-                    trajectory.current->position[6] = ecp_m_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[6];
-                    trajectory.current->position[7] = ecp_m_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[7];
+                    trajectory.current->position[0] = ecp_m_robot->EDP_data.current_XYZ_AA_arm_coordinates[0];
+                    trajectory.current->position[1] = ecp_m_robot->EDP_data.current_XYZ_AA_arm_coordinates[1];
+                    trajectory.current->position[2] = ecp_m_robot->EDP_data.current_XYZ_AA_arm_coordinates[2];
+                    trajectory.current->position[3] = ecp_m_robot->EDP_data.current_XYZ_AA_arm_coordinates[3];
+                    trajectory.current->position[4] = ecp_m_robot->EDP_data.current_XYZ_AA_arm_coordinates[4];
+                    trajectory.current->position[5] = ecp_m_robot->EDP_data.current_XYZ_AA_arm_coordinates[5];
 
-                    sprintf(buffer,"Changed %d: %.3f %.3f",trajectory.current->id,trajectory.current->position[3],trajectory.current->position[4]);
+                    sprintf(buffer,"Changed %d: %.4f %.4f",trajectory.current->id,trajectory.current->position[3],trajectory.current->position[4]);
                     sr_ecp_msg->message(buffer);
                 }
 
