@@ -16,14 +16,12 @@ class wii_teach : public common::generator::generator
     private:
         //ilosc krokow
 	int max_steps;
-	//przyrost kata
-	double d_rad;
-	//wartosc kata
-	double rad;
 	//numer kroku
 	int step_no;
 	//nowa pozycja
     	double position[8];
+        //kontroler
+        lib::sensor* _wiimote;
 
     public:
 	/**
@@ -33,7 +31,7 @@ class wii_teach : public common::generator::generator
 	 * @param minor_axis wartosc mniejszej polosi
 	 * @author jedrzej
 	 */
-        wii_teach (common::task::task& _ecp_task);
+        wii_teach (common::task::task& _ecp_task,lib::sensor* _wiimote);
 
         /**
          * Generuje pierwszy krok
@@ -46,8 +44,6 @@ class wii_teach : public common::generator::generator
          * @author jedrzej
          */
         virtual bool next_step();
-
-        double* getFirstPosition();
 
         void execute_motion(void);
 };

@@ -10,7 +10,6 @@ namespace ecp {
 namespace irp6ot {
 namespace task {
 
-
 /**
  * @author jkurylo
  */
@@ -22,6 +21,30 @@ class wii_teach: public common::task::task
         irp6ot::generator::wii_teach* wg;
         lib::sensor_image_t::sensor_union_t::wiimote_t lastButtons;
         lib::sensor_image_t::sensor_union_t::wiimote_t buttonsPressed;
+
+        class n;
+        class n
+        {
+            public:
+                n* next;
+                n* prev;
+                int id;
+                double position[8];
+
+                n() : next(NULL), prev(NULL) {}
+
+        };
+
+        typedef n node;
+
+        struct
+        {
+            node* head;
+            node* tail;
+            int count;
+            node* current;
+            int position;
+        } trajectory;
 
         void updateButtonsPressed();
 
@@ -38,6 +61,10 @@ class wii_teach: public common::task::task
 	 * @author jkurylo
 	 */
 	void main_task_algorithm(void);
+
+        void print_trajectory(void);
+
+        void move_to_current(void);
 };
 
 }

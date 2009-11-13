@@ -18,9 +18,12 @@ namespace ecp {
 namespace irp6ot {
 namespace task {
 
+
 wii_teach::wii_teach(lib::configurator &_config) : task(_config)
 {
     ecp_m_robot = new robot (*this);
+    trajectory.count = trajectory.position = 0;
+    trajectory.head = trajectory.tail = trajectory.current = NULL;
 
     //create Wii-mote virtual sensor object
     sensor_m[lib::SENSOR_WIIMOTE] = new ecp_mp::sensor::wiimote(lib::SENSOR_WIIMOTE, "[vsp_wiimote]", *this, sizeof(lib::sensor_image_t::sensor_union_t::wiimote_t));
@@ -43,28 +46,53 @@ void wii_teach::updateButtonsPressed(void)
     buttonsPressed.buttonHome = !lastButtons.buttonHome && sensor_m[lib::SENSOR_WIIMOTE]->image.sensor_union.wiimote.buttonHome;
 }
 
+void wii_teach::print_trajectory(void)
+{
+    char buffer[80];
+    node* current = trajectory.head;
+    int i = 0;
+    
+    sr_ecp_msg->message("=== Trajektoria ===");
+    while(current)
+    {
+        sprintf(buffer,"Pozycja %d: %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f",++i,current->position[0],current->position[1],current->position[2],current->position[3],current->position[4],current->position[5],current->position[6],current->position[7]);
+        sr_ecp_msg->message(buffer);
+        current = current->next;
+    }
+    sr_ecp_msg->message("=== Trajektoria - koniec ===");
+}
+
+void wii_teach::move_to_current(void)
+{
+    char buffer[80];
+    if(trajectory.current)
+    {
+        sprintf(buffer,"Move to %d: %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f",trajectory.current->id,trajectory.current->position[0],trajectory.current->position[1],trajectory.current->position[2],trajectory.current->position[3],trajectory.current->position[4],trajectory.current->position[5],trajectory.current->position[6],trajectory.current->position[7]);
+        sr_ecp_msg->message(buffer);
+        sg->load_coordinates(lib::XYZ_EULER_ZYZ,trajectory.current->position[0],trajectory.current->position[1],trajectory.current->position[2],trajectory.current->position[3],trajectory.current->position[4],trajectory.current->position[5],trajectory.current->position[6],trajectory.current->position[7],true);
+        sg->Move();
+    }
+}
+
 void wii_teach::main_task_algorithm(void)
 {
-    double kw_bok = 0.2;
-    int m = 0;
-    int mv = 0;
-    int pos = 0;
-    int mode = 0;
+    int cnt = 0;
+    int m;
     char buffer[80];
 
     sg = new common::generator::smooth2(*this,true);
-    wg = new irp6ot::generator::wii_teach(*this);
+    wg = new irp6ot::generator::wii_teach(*this,sensor_m[lib::SENSOR_WIIMOTE]);
 
     sg->set_absolute();
-    sg->load_coordinates(lib::XYZ_EULER_ZYZ, 0.92, -0.1, 0.27, 0, 1.570, -3.141, 0.08, 0.000, false);
-    sg->load_coordinates(lib::XYZ_EULER_ZYZ, 0.92, 0.1, 0.27, 0, 1.570, -3.141, 0.08, 0.000, false);
-    sg->load_coordinates(lib::XYZ_EULER_ZYZ, 0.92, 0.1, 0.4, 0, 1.570, -3.141, 0.08, 0.000, false);
-    sg->load_coordinates(lib::XYZ_EULER_ZYZ, 0.92, -0.1, 0.4, 0, 1.570, -3.141, 0.08, 0.000, false);
-    sg->load_coordinates(lib::XYZ_EULER_ZYZ, 0.92, -0.1, 0.27, 0, 1.570, -3.141, 0.08, 0.000, false);
-    sg->load_coordinates(lib::XYZ_EULER_ZYZ, 0.92, 0.1, 0.27, 0, 1.570, -3.141, 0.08, 0.000, false);
-    sg->load_coordinates(lib::XYZ_EULER_ZYZ, 0.92, 0.1, 0.4, 0, 1.570, -3.141, 0.08, 0.000, false);
-    sg->load_coordinates(lib::XYZ_EULER_ZYZ, 0.92, -0.1, 0.4, 0, 1.570, -3.141, 0.08, 0.000, false);
-    //sg->Move();
+    //sg->load_coordinates(lib::XYZ_EULER_ZYZ, 0.92, -0.1, 0.27, 0, 1.570, -3.141, 0.08, 0.000, false);
+//    sg->load_coordinates(lib::XYZ_EULER_ZYZ, 0.92, 0.1, 0.27, 0, 1.570, -3.141, 0.08, 0.000, false);
+//    sg->load_coordinates(lib::XYZ_EULER_ZYZ, 0.92, 0.1, 0.4, 0, 1.570, -3.141, 0.08, 0.000, false);
+//    sg->load_coordinates(lib::XYZ_EULER_ZYZ, 0.92, -0.1, 0.4, 0, 1.570, -3.141, 0.08, 0.000, false);
+//    sg->load_coordinates(lib::XYZ_EULER_ZYZ, 0.92, -0.1, 0.27, 0, 1.570, -3.141, 0.08, 0.000, false);
+//    sg->load_coordinates(lib::XYZ_EULER_ZYZ, 0.92, 0.1, 0.27, 0, 1.570, -3.141, 0.08, 0.000, false);
+//    sg->load_coordinates(lib::XYZ_EULER_ZYZ, 0.92, 0.1, 0.4, 0, 1.570, -3.141, 0.08, 0.000, false);
+//    sg->load_coordinates(lib::XYZ_EULER_ZYZ, 0.92, -0.1, 0.4, 0, 1.570, -3.141, 0.08, 0.000, false);
+//    sg->Move();
 
     while(1)
     {
@@ -74,86 +102,156 @@ void wii_teach::main_task_algorithm(void)
 
         if(buttonsPressed.buttonB)
         {
-        	buttonsPressed.buttonB = 0;
-            sprintf(buffer,"RUCH %d",++m);
+            buttonsPressed.buttonB = 0;
+            sprintf(buffer,"=== Move %d ===",++m);
             sr_ecp_msg->message(buffer);
-            //wg->Move();
+            wg->Move();
         }
         else
         {
-            if(buttonsPressed.button1)
+            if(buttonsPressed.left)
             {
-                buttonsPressed.button1 = 0;
-                mode = 1;
-                sr_ecp_msg->message("mode add");
-            }
-            else if(buttonsPressed.button2)
-            {
-                buttonsPressed.button2 = 0;
-                mode = 2;
-                sr_ecp_msg->message("mode edit");
-            }
-            else if(buttonsPressed.buttonMinus)
-            {
-                buttonsPressed.buttonMinus = 0;
-                if(pos > 1)
+                buttonsPressed.left = 0;
+                if(trajectory.position > 1)
                 {
-	                --pos;
-    	            sprintf(buffer,"1 step back, pos %d",pos);
-	                sr_ecp_msg->message(buffer);
-	            }
+	            --trajectory.position;
+                    trajectory.current = trajectory.current->prev;
+//    	            sprintf(buffer,"1 step back, pos %d, node %d",trajectory.position,trajectory.current->id);
+//	            sr_ecp_msg->message(buffer);
+                    move_to_current();
+	        }
+            }
+            else if(buttonsPressed.right)
+            {
+                buttonsPressed.right = 0;
+                if(trajectory.position < trajectory.count)
+                {
+	            ++trajectory.position;
+                    trajectory.current = trajectory.current->next;
+//    	            sprintf(buffer,"1 step forward, pos %d, node %d",trajectory.position,trajectory.current->id);
+//	            sr_ecp_msg->message(buffer);
+                    move_to_current();
+	        }
+            }
+            else if(buttonsPressed.up)
+            {
+                buttonsPressed.up = 0;
+                if(trajectory.count > 0)
+                {
+                    trajectory.position = trajectory.count;
+                    trajectory.current = trajectory.tail;
+//    	            sprintf(buffer,"end, pos %d, node %d",trajectory.position,trajectory.current->id);
+//	            sr_ecp_msg->message(buffer);
+                    move_to_current();
+	        }
+            }
+            else if(buttonsPressed.down)
+            {
+                buttonsPressed.down = 0;
+                if(trajectory.count > 0)
+                {
+                    trajectory.position = 1;
+                    trajectory.current = trajectory.head;
+//    	            sprintf(buffer,"start, pos %d, node %d",trajectory.position,trajectory.current->id);
+//	            sr_ecp_msg->message(buffer);
+                    move_to_current();
+	        }
             }
             else if(buttonsPressed.buttonPlus)
             {
                 buttonsPressed.buttonPlus = 0;
-                if(pos < mv)
+
+                node* current = new node;
+                current->id = ++cnt;
+                current->position[0] = ecp_m_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[0];
+                current->position[1] = ecp_m_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[1];
+                current->position[2] = ecp_m_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[2];
+                current->position[3] = ecp_m_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[3];
+                current->position[4] = ecp_m_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[4];
+                current->position[5] = ecp_m_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[5];
+                current->position[6] = ecp_m_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[6];
+                current->position[7] = ecp_m_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[7];
+
+                if(trajectory.current)
                 {
-	                ++pos;
-    	            sprintf(buffer,"1 step forward, pos %d",pos);
-	                sr_ecp_msg->message(buffer);
-	            }
-            }
-            else if(buttonsPressed.buttonHome)
-            {
-                buttonsPressed.buttonPlus = 0;
-                if(mv > 0)
-                {
-                    sr_ecp_msg->message("start");
-                    pos = 1;
-                    sprintf(buffer,"pos %d",pos);
-                    sr_ecp_msg->message(buffer);
+                    current->next = trajectory.current->next;
+                    current->prev = trajectory.current;
+                    trajectory.current->next = current;
+                    if(trajectory.tail == trajectory.current) trajectory.tail = current;
+                    trajectory.current = current;
                 }
                 else
                 {
-                    sr_ecp_msg->message("add points first");
+                    trajectory.current = trajectory.head = trajectory.tail = current;
+                }
+
+                ++trajectory.position;
+                ++trajectory.count;
+
+                sprintf(buffer,"Added %d: %.3f %.3f",trajectory.current->id,trajectory.current->position[3],trajectory.current->position[4]);
+                sr_ecp_msg->message(buffer);
+
+                print_trajectory();
+            }
+            else if(buttonsPressed.buttonMinus)
+            {
+                buttonsPressed.buttonMinus = 0;
+                if(trajectory.position > 0)
+                {
+                    node* tmp = trajectory.current;
+                    if(trajectory.current == trajectory.head)
+                    {
+                        trajectory.head = trajectory.current->next;
+                    }
+                    if(trajectory.current == trajectory.tail)
+                    {
+                        trajectory.tail = trajectory.current->prev;
+                    }
+                    if(trajectory.current->prev)
+                    {
+                        trajectory.current->prev->next = trajectory.current->next;
+                    }
+                    if(trajectory.current->next)
+                    {
+                        trajectory.current->next->prev = trajectory.current->prev;
+                    }
+                    trajectory.current = trajectory.current->prev;
+
+                    sprintf(buffer,"Removed %d",tmp->id);
+                    sr_ecp_msg->message(buffer);
+                    delete tmp;
+                    
+                    --trajectory.count;
+                    --trajectory.position;
+                    if(!trajectory.position && trajectory.count) trajectory.position = 1;
+                    print_trajectory();
+
+                    move_to_current();
                 }
             }
-            else if(buttonsPressed.buttonA)
+            else if(buttonsPressed.buttonHome)
             {
-                buttonsPressed.buttonPlus = 0;
-
-				if(!mode)
+                buttonsPressed.buttonHome = 0;
+                if(trajectory.position > 0)
                 {
-   	            	sprintf(buffer,"choose mode");
-       	        }
-                if(mode == 1)
-   	            {
-       	            ++mv;
-       	            ++pos;
-           	        sprintf(buffer,"add point %d, have %d",pos,mv);
-               	}
-                else if(pos > 0 && mode == 2)
-   	            {
-       	            sprintf(buffer,"edit point %d",pos);
-           	    }
-        	    else
-        	    {
-        	    	sprintf(buffer,"add points first");
-        	    }
-                sr_ecp_msg->message(buffer);
+                    int old = trajectory.current->id;
+                    trajectory.current->id = ++cnt;
+                    trajectory.current->position[0] = ecp_m_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[0];
+                    trajectory.current->position[1] = ecp_m_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[1];
+                    trajectory.current->position[2] = ecp_m_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[2];
+                    trajectory.current->position[3] = ecp_m_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[3];
+                    trajectory.current->position[4] = ecp_m_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[4];
+                    trajectory.current->position[5] = ecp_m_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[5];
+                    trajectory.current->position[6] = ecp_m_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[6];
+                    trajectory.current->position[7] = ecp_m_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[7];
+
+                    sprintf(buffer,"Changed %d: %.3f %.3f",trajectory.current->id,trajectory.current->position[3],trajectory.current->position[4]);
+                    sr_ecp_msg->message(buffer);
+                }
+
+                print_trajectory();
             }
         }
-
     }
 
     ecp_termination_notice();

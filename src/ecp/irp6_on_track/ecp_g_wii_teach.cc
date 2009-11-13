@@ -8,7 +8,7 @@ namespace ecp {
 namespace irp6ot {
 namespace generator {
 
-wii_teach::wii_teach (common::task::task& _ecp_task) : generator (_ecp_task) {}
+wii_teach::wii_teach (common::task::task& _ecp_task,lib::sensor* _wiimote) : generator (_ecp_task), _wiimote(_wiimote) {}
 
 bool wii_teach::first_step()
 {
@@ -23,7 +23,7 @@ bool wii_teach::first_step()
     the_robot->EDP_data.value_in_step_no = 6;
 
     step_no = 0;
-    rad = 0;
+
     return true;
 }
 
@@ -32,7 +32,7 @@ bool wii_teach::next_step()
     char buffer[200];
     try
     {
-    	sensor_m[lib::SENSOR_WIIMOTE]->get_reading();
+    	_wiimote->get_reading();
     }
     catch(...)
     {
@@ -49,35 +49,25 @@ bool wii_teach::next_step()
     the_robot->EDP_data.motion_steps = 8;
     the_robot->EDP_data.value_in_step_no = 8;
 
-
-    if(sensor_m[lib::SENSOR_WIIMOTE]->image.sensor_union.wiimote.buttonB)
+    if(_wiimote->image.sensor_union.wiimote.buttonB)
     {
         the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[0] = 0.92;
         the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[1] = 0;
         the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[2] = 0.27;
-        the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[3] = -1.136 + sensor_m[lib::SENSOR_WIIMOTE]->image.sensor_union.wiimote.orientation_x;
-        the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[4] = 1.39 + sensor_m[lib::SENSOR_WIIMOTE]->image.sensor_union.wiimote.orientation_y;
+        the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[3] = 0 + _wiimote->image.sensor_union.wiimote.orientation_x;
+        the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[4] = 0.8 + _wiimote->image.sensor_union.wiimote.orientation_y;
+        the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[5] = -3.141;
+        the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[6] =  0.074;
         the_robot->EDP_data.next_gripper_coordinate = 0.074;
+
+        sprintf(buffer,"Moved to %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f",the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[0],the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[1],the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[2],the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[3],the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[4],the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[5],the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[6],the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[7]);
+	sr_ecp_msg.message(buffer);
+
         return true;
     }
 
+    sr_ecp_msg.message("=== Move - koniec ===");
     return false;
-}
-
-double* wii_teach::getFirstPosition()
-{
-
-    double* firstPosition = new double[8];
-    firstPosition[0] = 0.92;
-    firstPosition[1] = 0;
-    firstPosition[2] = 0.27;
-
-    firstPosition[3] = -1.136 + sensor_m[lib::SENSOR_WIIMOTE]->image.sensor_union.wiimote.orientation_x;
-    firstPosition[4] = 1.38 + sensor_m[lib::SENSOR_WIIMOTE]->image.sensor_union.wiimote.orientation_y;
-    firstPosition[5] = 2.3;
-    firstPosition[6] = 0.074;
-
-    return firstPosition;
 }
 
 void wii_teach::execute_motion(void)
