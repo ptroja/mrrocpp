@@ -360,7 +360,7 @@ try{
     sr_ecp_msg.message (e.error_class, e.error_no);
 }catch (...){
     // Wylapywanie niezdefiniowanych bledow.
-    sr_ecp_msg.message (lib::NON_FATAL_ERROR, (uint64_t) ECP_UNIDENTIFIED_ERROR);
+    sr_ecp_msg.message (lib::NON_FATAL_ERROR, ECP_UNIDENTIFIED_ERROR);
     } // end: catch
 } // end load_trajectory
 
