@@ -22,23 +22,6 @@ namespace mrrocpp {
 namespace edp {
 namespace speaker {
 
-
-/********************************* GLOBALS **********************************/
-
-
-
-/********************************** SIGCATCH ********************************/
-void catch_signal_speak_t(int sig)
-{
-    switch(sig)
-    {
-    case SIGTERM :
-        exit(EXIT_SUCCESS);
-        break;
-    } // end: switch
-}
-
-
 void * effector::speak_thread_start(void* arg)
 {
 //	 edp_irp6s_and_conv_effector *master = (edp_irp6s_and_conv_effector *) arg;

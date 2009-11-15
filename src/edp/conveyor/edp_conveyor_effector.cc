@@ -109,7 +109,6 @@ void effector::get_rmodel (lib::c_buffer &instruction)
 // servo_joints_and_frame_actualization_and_upload.
 void effector::servo_joints_and_frame_actualization_and_upload (void)
 {
-	int i;
 	static int catch_nr=0;
 	// wyznaczenie nowych wartosci joints and frame dla obliczen w servo
 	try
@@ -127,7 +126,7 @@ void effector::servo_joints_and_frame_actualization_and_upload (void)
 		boost::mutex::scoped_lock lock(edp_irp6s_effector_mutex);
 
 		// przepisnie danych na zestaw globalny
-		for (i=0; i < number_of_servos; i++)
+		for (int i=0; i < number_of_servos; i++)
 		{
 			global_current_motor_pos[i]=servo_current_motor_pos[i];
 			global_current_joints[i]=servo_current_joints[i];

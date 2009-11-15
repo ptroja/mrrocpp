@@ -768,7 +768,6 @@ void irp6s_postument_track_effector::get_arm_position(bool read_hardware, lib::c
 
 void irp6s_postument_track_effector::servo_joints_and_frame_actualization_and_upload(void)
 {
-	int i;
 	static int catch_nr=0;
 
 	//	static double rkpminusone[6] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
@@ -891,13 +890,13 @@ void irp6s_postument_track_effector::servo_joints_and_frame_actualization_and_up
 		boost::mutex::scoped_lock lock(edp_irp6s_effector_mutex);
 
 		// przepisnie danych na zestaw globalny
-		for (i=0; i < number_of_servos; i++)
+		for (int i=0; i < number_of_servos; i++)
 		{
 			global_current_motor_pos[i]=servo_current_motor_pos[i];
 			global_current_joints[i]=servo_current_joints[i];
 		}
-		lib::copy_frame(global_current_frame_wo_tool, servo_current_frame_wo_tool);
 
+		lib::copy_frame(global_current_frame_wo_tool, servo_current_frame_wo_tool);
 	}
 }
 

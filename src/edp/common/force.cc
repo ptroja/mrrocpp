@@ -177,7 +177,7 @@ void * irp6s_postument_track_effector::force_thread(void *arg)
 
 	catch(...)
 	{
-		printf("unidentified error force thread w EDP\n");
+		fprintf(stderr, "unidentified error force thread w EDP\n");
 	}
 
 	while (!vs->TERMINATE) //!< for (;;)
