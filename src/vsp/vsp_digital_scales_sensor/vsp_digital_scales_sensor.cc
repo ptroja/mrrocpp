@@ -60,13 +60,13 @@ sensor* return_created_sensor (lib::configurator &_config)
 }// : return_created_sensor
 
 /*************************** DIGITAL SCALE THREAD ****************************/
-void* digital_scale_thread(void*  arg ){
+void* digital_scale_thread(void * arg){
     // Odczytanie numeru linialu.
-    int number = (int)arg;
+    int number = (int) arg;
     // Ustawienie priorytetu watku.
     lib::set_thread_priority(pthread_self() , MAX_PRIORITY-4);
     // Stworzenie obiektu pomiarowego zwiazanego z danym linialem.
-    MOXADigitalScale* ds = new MOXADigitalScale(number);
+    MOXADigitalScale ds(number);
     // Glowna petla oczekiwania na polecenie odczytu.
     while(true){
         // Oczekiwanie na polecenie (zawieszenie na barierze).
@@ -76,9 +76,9 @@ void* digital_scale_thread(void*  arg ){
             break;
         try{
             // Pobranie odczytu.
-            ds->get_reading();
+            ds.get_reading();
             // Przeksztalcenie odczytu do postaci zmiennoprzecinkowej.
-            common::vs->image.sensor_union.ds.readings[number-1] = ds->transform_reading_to_double();
+            common::vs->image.sensor_union.ds.readings[number-1] = ds.transform_reading_to_double();
             } // end: try
         catch(lib::sensor::sensor_error e){
         	common::vs->sr_msg->message(e.error_class, e.error_no);
@@ -86,8 +86,7 @@ void* digital_scale_thread(void*  arg ){
             } // end: catch
         // Odczyt gotowy (zawieszenie na barierze).
         pthread_barrier_wait( &reading_ready_barrier);
-        }; // end: while
-    delete ds;
+        }
 
         return NULL;
     } // end: digital_scale_thread
@@ -120,10 +119,10 @@ digital_scales::digital_scales(lib::configurator &_config)  : sensor(_config) {
     for(int i=0; i<6; i++){
         position_zero[i] = 0;
         image.sensor_union.ds.readings[i]=0;
-        };
+        }
     // Ustawienie flagi stanu procesu.
     readings_initiated = false;
-    };// end: vsp_digital_scales_sensor
+    }
 
 
 digital_scales::~digital_scales(void){};
@@ -144,7 +143,7 @@ void digital_scales::configure_sensor (void){
     // Ustawienie flagi stanu procesu.
     readings_initiated = false;
     common::vs->sr_msg->message ("Digital Scale sensor calibrated");
-    };// end: configure_sensor
+    }
 
 /**************************** INITIATE READING *******************************/
 void digital_scales::initiate_reading (void){
@@ -155,7 +154,7 @@ void digital_scales::initiate_reading (void){
     readings_initiated = true;
     // Rozpoczecie pomiarow.
     pthread_barrier_wait(&initiate_reading_barrier);
-    };// end: initiate_reading
+    }
 
 /***************************** GET  READING *********************************/
 void digital_scales::get_reading (void){
@@ -175,7 +174,7 @@ void digital_scales::get_reading (void){
             from_vsp.comm_image.sensor_union.ds.readings[i] = 0;
     // Ustawienie flagi stanu procesu.
     readings_initiated = false;
-    };// end: get_reading
+    }
 } // namespace sensor
 } // namespace vsp
 } // namespace mrrocpp
