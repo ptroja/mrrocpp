@@ -82,7 +82,7 @@ void error_handler(ERROR e){
 				break;
 			default:
 				vs->sr_msg->message (lib::NON_FATAL_ERROR, VSP_UNIDENTIFIED_ERROR);
-			}; // end switch
+			}s
 			break;
 		default:
 			vs->sr_msg->message (lib::NON_FATAL_ERROR, VSP_UNIDENTIFIED_ERROR);

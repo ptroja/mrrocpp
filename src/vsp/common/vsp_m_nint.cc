@@ -65,7 +65,7 @@ pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;	// inicjalizacja MUTEXa
 /********************************** SIGCATCH ********************************/
 void catch_signal(int sig) {
   switch(sig) {
-	case SIGTERM :
+	case SIGTERM:
 	  TERMINATE = true;
 	  vsp::common::vs->sr_msg->message ("VSP terminated");
 	  delete vsp::common::vs;

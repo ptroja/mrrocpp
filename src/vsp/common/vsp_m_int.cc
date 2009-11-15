@@ -340,7 +340,7 @@ int main(int argc, char *argv[]) {
                        &io_funcs,				/* I/O routines           */
                        &attr)) 	== -1){		/* handle                 */
 			throw lib::VSP_main_error(lib::SYSTEM_ERROR, DEVICE_CREATION_ERROR);	// wyrzucany blad
-			};
+			}
 
 		/* allocate a context structure */
 	 	ctp = dispatch_context_alloc(dpp);

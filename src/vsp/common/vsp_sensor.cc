@@ -36,32 +36,25 @@ namespace sensor {
 
 sensor::sensor (lib::configurator &_config) :
 	config(_config)
-	{
-
+{
 	/* Lokalizacja procesu wyswietlania komunikatow SR */
-	if ((sr_msg = new lib::sr_vsp(lib::VSP, config.return_string_value("resourceman_attach_point").c_str(),
-			config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", "[ui]").c_str())) == NULL)
-	{
-		printf("communication with SR not ready\n");
-		perror("Unable to locate SR ");
-	//	throw System_error();
-	}
-	else
-	{
-		sr_msg->message ("Communication with SR ready");
-	}
+	sr_msg = new lib::sr_vsp(lib::VSP,
+			config.return_string_value("resourceman_attach_point").c_str(),
+			config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", "[ui]").c_str());
 
+	sr_msg->message ("Communication with SR ready");
 
 	mrrocpp_network_path = config.return_mrrocpp_network_path();
+}
 
 
-	}
-
-
-void sensor::wait_for_event(void){};
+void sensor::wait_for_event(void)
+{
+}
 
 sensor::~sensor() {
 	sr_msg->message("VSP terminated");
+	delete sr_msg;
 }
 
 } // namespace sensor
