@@ -104,7 +104,7 @@ void error_handler(ERROR e){
 			vsp::common::vs->sr_msg->message (lib::FATAL_ERROR, e.error_no);
 			break;
 		case lib::NON_FATAL_ERROR:
-			switch(e.error_no){
+			switch(e.error_no) {
 			case INVALID_COMMAND_TO_VSP:
 				vsp::common::vs->from_vsp.vsp_report= lib::INVALID_VSP_COMMAND;
 				vsp::common::vs->sr_msg->message (lib::NON_FATAL_ERROR, e.error_no);
@@ -118,7 +118,7 @@ void error_handler(ERROR e){
 				break;
 			default:
 				vsp::common::vs->sr_msg->message (lib::NON_FATAL_ERROR, VSP_UNIDENTIFIED_ERROR);
-			}; // end switch
+			}
 			break;
 		default:
 			vsp::common::vs->sr_msg->message (lib::NON_FATAL_ERROR, VSP_UNIDENTIFIED_ERROR);
@@ -132,7 +132,6 @@ void* cyclic_read( void*  arg ){
 
 	// aktywne oczekiwanie na zainicjowanie czujnika
 	sem_wait( &(start_sem));
-
 
 	while(!TERMINATE) { // for (;;)
 		try{
@@ -150,7 +149,7 @@ void* cyclic_read( void*  arg ){
 		catch (lib::sensor::sensor_error e){
 			error_handler(e);
 			pthread_mutex_unlock( &mutex );
-			}; // end CATCH
+			}
 		}	// end for(;;)
 	return(0);
 	}
@@ -336,7 +335,7 @@ int main(int argc, char *argv[]) {
 	if(argc < 6){
 		printf("Za malo argumentow VSP\n");
 		return -1;
-		};
+		}
 
 	 // zczytanie konfiguracji calego systemu
 	lib::configurator * _config = new lib::configurator(argv[1], argv[2], argv[3], argv[4], argv[5]);
@@ -352,7 +351,7 @@ int main(int argc, char *argv[]) {
 
 		if( access(resourceman_attach_point.c_str(), R_OK)== 0 ){
 			throw lib::VSP_main_error(lib::SYSTEM_ERROR, DEVICE_EXISTS);	// wyrzucany blad
-		};
+		}
 
 		/* initialize dispatch interface */
 		if((dpp = dispatch_create()) == NULL)
@@ -385,7 +384,7 @@ int main(int argc, char *argv[]) {
                        &io_funcs,				/* I/O routines           */
                        &attr)) 	== -1){		/* handle                 */
 			throw lib::VSP_main_error(lib::SYSTEM_ERROR, DEVICE_CREATION_ERROR);	// wyrzucany blad
-			};
+			}
 
 		/* allocate a context structure */
 	 	ctp = dispatch_context_alloc(dpp);

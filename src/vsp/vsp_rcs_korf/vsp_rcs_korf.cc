@@ -67,7 +67,7 @@ rcs_korf::rcs_korf(lib::configurator &_config) : sensor(_config){
 	// Czysci odczyt.
 	image.sensor_union.rcs.cube_solution[0] = '\0';
 
-};// end: vsp_rcs_korf
+}
 
 
 // Destruktor czujnika wirtualnego.
@@ -79,7 +79,7 @@ rcs_korf::~rcs_korf(void) {
 	KorfSolver::SClear();
 	DataTable::ClearFolderName();
 
-};// end: ~vsp_rcs_korf
+}
 
 
 // Konfiguracja czujnika.
@@ -105,7 +105,7 @@ void rcs_korf::configure_sensor (void){
 	is_sensor_configured=true;
 
     printf("VSP KR END configure\n");
-};// end: configure_sensor
+}
 
 
 // Inicjacja odczytu.
@@ -152,7 +152,7 @@ void rcs_korf::initiate_reading (void) {
 	is_reading_ready=true;
 
     printf("VSP KR END initiate_reading\n");
-}; // end: initiate_reading
+}
 
 
 // Odeslanie odczytu.
@@ -202,7 +202,7 @@ void rcs_korf::get_reading (void) {
 	delete pSol;
 	pSol = NULL;
 
-}; // end: get_reading
+}
 } // namespace sensor
 } // namespace vsp
 } // namespace mrrocpp

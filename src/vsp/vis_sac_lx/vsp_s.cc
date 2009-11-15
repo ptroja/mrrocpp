@@ -286,10 +286,6 @@ void vis_sac_lx::initiate_reading(void)
 		//printf("VSP_EIH - %d %d %d %d %d %d %d %d\n", f1x_eih, f1y_eih, f2x_eih, f2y_eih, f3x_eih, f3y_eih, f4x_eih, f4y_eih);
 		//printf("VSP_EIH - %d %d %d %d %d %d %d %d %d %d %d %d\n", x,y,z, a, b, g, x_jack_eih, y_jack_eih, z_jack_eih, a_jack_eih, b_jack_eih, g_jack_eih);
 //	}
-//	catch(...)
-//	{
-//		sr_msg->message ("Catched ERROR"); // 7
-//	}
 	//for(int i=0; i<12; i++)
 	/*
 	 sscanf(buffer,"%d %d %d %d %d %d %d %d %d %d %d %d",

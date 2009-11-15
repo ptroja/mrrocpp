@@ -72,7 +72,7 @@ rcs_kociemba::rcs_kociemba(lib::configurator &_config) : sensor(_config){
 	// Ustawia brak rozwiazania optymalnego
 	bRCSOpt = false;
 
-}; // end: vsp_rcs_kociemba
+}
 
 
 // Destruktor czujnika wirtualnego.
@@ -92,7 +92,7 @@ rcs_kociemba::~rcs_kociemba(void) {
 	delete pSol;
 	pSol = NULL;
 
-}; // end: ~vsp_rcs_kociemba
+}
 
 
 // Konfiguracja czujnika.
@@ -157,7 +157,7 @@ void rcs_kociemba::configure_sensor (void){
 	bRCSOpt = false;
 
     printf("VSP KC END configure\n");
-};// end: configure_sensor
+}
 
 
 // Inicjacja odczytu.
@@ -208,7 +208,7 @@ void rcs_kociemba::initiate_reading (void) {
 		is_reading_ready=true;
 	}
 
-}; // end: initiate_reading
+}
 
 
 // Oczekiwanie na wydarzenie.
@@ -221,7 +221,7 @@ void rcs_kociemba::wait_for_event(void) {
 	else
 		usleep(1000*100);
 
-}; // end: wait_for_event
+}
 
 
 // Odeslanie odczytu.
@@ -265,7 +265,7 @@ void rcs_kociemba::get_reading (void) {
 	// Ustawia odczyt jako juz odczytany
 	is_reading_ready=false;
 
-}; // end: get_reading
+}
 } // namespace sensor
 } // namespace vsp
 } // namespace mrrocpp

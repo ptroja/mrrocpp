@@ -95,8 +95,6 @@ void error_handler(ERROR e){
 
 /*********************************** MAIN ***********************************/
 int main(int argc, char *argv[]) {
-    std::string attach_point;
-	messip_channel_t *ch;
 
 	// ustawienie priorytetow
 	//setprio(getpid(), MAX_PRIORITY-3);
@@ -112,18 +110,19 @@ int main(int argc, char *argv[]) {
 	if(argc <=6){
 		printf("Za malo argumentow VSP\n");
 		return -1;
-		};
+	}
 
 	 // zczytanie konfiguracji calego systemu
-	lib::configurator *_config = new lib::configurator(argv[1], argv[2], argv[3], argv[4], argv[5]);
+	lib::configurator _config(argv[1], argv[2], argv[3], argv[4], argv[5]);
 
-	attach_point = _config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "resourceman_attach_point");
+	std::string attach_point = _config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "resourceman_attach_point");
 
 	try {
 
 		// Stworzenie nowego czujnika za pomoca funkcji (cos na ksztalt szablonu abstract factory).
-		vsp::common::vs = vsp::sensor::return_created_sensor(*_config);
+		vsp::common::vs = vsp::sensor::return_created_sensor(_config);
 
+		messip_channel_t *ch;
 		if ((ch = messip_channel_create(NULL, attach_point.c_str(), MESSIP_NOTIMEOUT, 0)) == NULL) {
 		}
 
@@ -146,7 +145,7 @@ int main(int argc, char *argv[]) {
 				continue;
 			}
 
-			vsp::common::vs->from_vsp.vsp_report= lib::VSP_REPLY_OK;
+			vsp::common::vs->from_vsp.vsp_report = lib::VSP_REPLY_OK;
 
 			try {
 				switch(vsp::common::vs->to_vsp.i_code) {

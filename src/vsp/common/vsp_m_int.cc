@@ -111,7 +111,7 @@ void error_handler(ERROR e){
 				break;
 			default:
 				vs->sr_msg->message (lib::NON_FATAL_ERROR, VSP_UNIDENTIFIED_ERROR);
-			}; // end switch
+			}
 			break;
 		default:
 			vs->sr_msg->message (lib::NON_FATAL_ERROR, VSP_UNIDENTIFIED_ERROR);
@@ -137,7 +137,7 @@ void write_to_sensor(lib::VSP_COMMAND i_code){
 			break;
 		default :
 			throw lib::VSP_main_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_VSP);
-		};
+		}
 }
 
 

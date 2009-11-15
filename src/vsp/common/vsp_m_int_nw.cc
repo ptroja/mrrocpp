@@ -131,7 +131,7 @@ void error_handler(ERROR e){
 
 			default:
 				vs->sr_msg->message (lib::NON_FATAL_ERROR, VSP_UNIDENTIFIED_ERROR);
-			}; // end switch
+			}
 			break;
 		default:
 			vs->sr_msg->message (lib::NON_FATAL_ERROR, VSP_UNIDENTIFIED_ERROR);
@@ -160,7 +160,7 @@ void* realize_command( void*  arg ){
 	pthread_mutex_unlock( &image_mutex );
      sensor_configuration_task = false;
 	CONFIGURE_FLAG = true;
-	}; // end if
+	}
 
 	// Zadanie inicjacji odczytow.
     if(reading_initiation_task){
@@ -175,7 +175,7 @@ void* realize_command( void*  arg ){
         pthread_mutex_unlock( &image_mutex );
 	   reading_initiation_task = false;
        INITIATE_FLAG = true;
-      };  // end if
+      }
     }	// koniec for(;;)
    return (0);
 }//: realize_command
@@ -235,7 +235,7 @@ void write_to_sensor( lib::VSP_COMMAND i_code){
 			return;
 		default :
 			throw lib::VSP_main_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_VSP);
-		};
+		}
 //printf("VSP: write_to_sensor_end\n");
 }
 
@@ -392,7 +392,7 @@ int main(int argc, char *argv[]) {
 	if(argc < 6){
 		printf("Za malo argumentow VSP\n");
 		return -1;
-		};
+		}
 
 	 // zczytanie konfiguracji calego systemu
 	lib::configurator *_config = new lib::configurator(argv[1], argv[2], argv[3], argv[4], argv[5]);
@@ -409,7 +409,7 @@ int main(int argc, char *argv[]) {
 		if( access(resourceman_attach_point.c_str(), R_OK)== 0  ){
 
 			throw lib::VSP_main_error(lib::SYSTEM_ERROR, DEVICE_EXISTS);	// wyrzucany blad
-			};
+			}
 
 		/* initialize dispatch interface */
 		if((dpp = dispatch_create()) == NULL)
@@ -441,7 +441,7 @@ int main(int argc, char *argv[]) {
                        &io_funcs,				/* I/O routines           */
                        &attr)) 	== -1){		/* handle                 */
 			throw lib::VSP_main_error(lib::SYSTEM_ERROR, DEVICE_CREATION_ERROR);	// wyrzucany blad
-			};
+			}
 
 		/* allocate a context structure */
 	 	ctp = dispatch_context_alloc(dpp);
@@ -470,5 +470,5 @@ int main(int argc, char *argv[]) {
 	catch (lib::VSP_main_error e){
 		vsp::common::error_handler(e);
 		exit(EXIT_FAILURE);
-		}; // end CATCH
+		}
 	}	// end MAIN
