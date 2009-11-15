@@ -50,10 +50,6 @@ namespace common {
 /********************************* GLOBALS **********************************/
 sensor::sensor *vs;		// czujnik wirtualny
 
-//lib::sr_vsp *vs->sr_msg;		// komunikacja z SR
-
-//configurator* config;
-
 bool TERMINATE = false;									// zakonczenie obu watkow
 
 /********************************** SIGCATCH ********************************/
@@ -294,21 +290,21 @@ int main(int argc, char *argv[]) {
 		};
 
 	 // zczytanie konfiguracji calego systemu
-	lib::configurator * _config = new lib::configurator(argv[1], argv[2], argv[3], argv[4], argv[5]);
+	lib::configurator _config(argv[1], argv[2], argv[3], argv[4], argv[5]);
 
-	resourceman_attach_point = _config->return_attach_point_name(lib::configurator::CONFIG_RESOURCEMAN_LOCAL, "resourceman_attach_point");
+	resourceman_attach_point = _config.return_attach_point_name(lib::configurator::CONFIG_RESOURCEMAN_LOCAL, "resourceman_attach_point");
 
 	try{
 
 
 		// Stworzenie nowego czujnika za pomoca funkcji (cos na ksztalt szablonu abstract factory).
-		vsp::common::vs = vsp::sensor::return_created_sensor(*_config);
+		vsp::common::vs = vsp::sensor::return_created_sensor(_config);
 
 		// Sprawdzenie czy istnieje /dev/TWOJSENSOR.
 		if( access(resourceman_attach_point.c_str(), R_OK)== 0  ){
 
 			throw lib::VSP_main_error(lib::SYSTEM_ERROR, DEVICE_EXISTS);	// wyrzucany blad
-			};
+			}
 
 		/* initialize dispatch interface */
 		if((dpp = dispatch_create()) == NULL)
