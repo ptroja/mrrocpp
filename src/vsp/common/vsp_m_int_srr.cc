@@ -124,6 +124,8 @@ int main(int argc, char *argv[]) {
 
 		messip_channel_t *ch;
 		if ((ch = messip_channel_create(NULL, attach_point.c_str(), MESSIP_NOTIMEOUT, 0)) == NULL) {
+			fprintf(stderr, "creating channel failed\n");
+			return -1;
 		}
 
 		/* start the resource manager message loop */
