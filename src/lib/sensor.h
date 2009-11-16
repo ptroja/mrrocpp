@@ -355,6 +355,11 @@ struct ECP_VSP_MSG
 
 		// Tryb HaarDetect
 		HD_MODE haar_detect_mode;
+
+                struct
+                {
+                  unsigned int led_status;
+                } wii_command;
 	};//: koniec unii
 };
 

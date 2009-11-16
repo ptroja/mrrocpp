@@ -24,6 +24,7 @@ class wii_teach : public common::generator::generator
         //kontroler
         lib::sensor* _wiimote;
         common::generator::smooth2* sg;
+        int releasedB;
 
     public:
 	/**

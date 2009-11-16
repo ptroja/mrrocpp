@@ -70,7 +70,7 @@ void wii_teach::move_to_current(void)
         sprintf(buffer,"Move to %d: %.4f %.4f %.4f %.4f %.4f %.4f",trajectory.current->id,trajectory.current->position[0],trajectory.current->position[1],trajectory.current->position[2],trajectory.current->position[3],trajectory.current->position[4],trajectory.current->position[5]);
         sr_ecp_msg->message(buffer);
         sg->set_absolute();
-        sg->load_coordinates(lib::XYZ_ANGLE_AXIS,trajectory.current->position[0],trajectory.current->position[1],trajectory.current->position[2],trajectory.current->position[3],trajectory.current->position[4],trajectory.current->position[5],0,0,true);
+        sg->load_coordinates(lib::XYZ_ANGLE_AXIS,trajectory.current->position[0],trajectory.current->position[1],trajectory.current->position[2],trajectory.current->position[3],trajectory.current->position[4],trajectory.current->position[5],0.074,0,true);
         sg->Move();
     }
 }
@@ -79,6 +79,7 @@ void wii_teach::main_task_algorithm(void)
 {
     int cnt = 0;
     char buffer[80];
+    struct lib::ECP_VSP_MSG message;
 
     sg = new common::generator::smooth2(*this,true);
     wg = new irp6ot::generator::wii_teach(*this,sensor_m[lib::SENSOR_WIIMOTE],sg);
@@ -92,7 +93,13 @@ void wii_teach::main_task_algorithm(void)
         if(buttonsPressed.buttonB)
         {
             buttonsPressed.buttonB = 0;
+            message.i_code = lib::VSP_CONFIGURE_SENSOR;
+            message.wii_command.led_status = 0xF;
+            ((ecp_mp::sensor::wiimote*)sensor_m[lib::SENSOR_WIIMOTE])->send_reading(message);
             wg->Move();
+            message.wii_command.led_status = 0x0;
+            ((ecp_mp::sensor::wiimote*)sensor_m[lib::SENSOR_WIIMOTE])->send_reading(message);
+            buttonsPressed.buttonB = 0;
         }
         else
         {
@@ -203,7 +210,7 @@ void wii_teach::main_task_algorithm(void)
                     if(!trajectory.position && trajectory.count) trajectory.position = 1;
                     print_trajectory();
 
-                    move_to_current();
+                    if(trajectory.current) move_to_current();
                 }
             }
             else if(buttonsPressed.buttonHome)
@@ -220,7 +227,7 @@ void wii_teach::main_task_algorithm(void)
                     trajectory.current->position[4] = ecp_m_robot->EDP_data.current_XYZ_AA_arm_coordinates[4];
                     trajectory.current->position[5] = ecp_m_robot->EDP_data.current_XYZ_AA_arm_coordinates[5];
 
-                    sprintf(buffer,"Changed %d: %.4f %.4f",trajectory.current->id,trajectory.current->position[3],trajectory.current->position[4]);
+                    sprintf(buffer,"Changed %d: %.4f %.4f %.4f %.4f %.4f %.4f",trajectory.current->id,trajectory.current->position[0],trajectory.current->position[1],trajectory.current->position[2],trajectory.current->position[3],trajectory.current->position[4],trajectory.current->position[5]);
                     sr_ecp_msg->message(buffer);
                 }
 
