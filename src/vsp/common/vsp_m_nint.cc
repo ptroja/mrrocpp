@@ -67,9 +67,6 @@ void catch_signal(int sig) {
   switch(sig) {
 	case SIGTERM:
 	  TERMINATE = true;
-	  vsp::common::vs->sr_msg->message ("VSP terminated");
-	  delete vsp::common::vs;
-	  _exit(EXIT_SUCCESS);
 	  break;
 	case SIGSEGV:
 	  fprintf(stderr, "Segmentation fault in VSP process\n");
@@ -402,6 +399,7 @@ int main(int argc, char *argv[]) {
 			dispatch_handler(ctp);
 	 		} // end for(;;)
 	     vsp::common::vs->sr_msg->message ("VSP terminated");
+	     delete vsp::common::vs;
 		} // koniec TRY
 	catch (lib::VSP_main_error e){
 		vsp::common::error_handler(e);

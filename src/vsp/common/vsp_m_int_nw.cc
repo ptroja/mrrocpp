@@ -74,11 +74,7 @@ void catch_signal(int sig) {
   switch(sig) {
 	case SIGTERM :
 	  TERMINATE = true;
-	  printf("vsp sig term\n");
-	  flushall();
-	  sem_post( &(new_command_sem));
-	  delete vs;
-	  _exit(EXIT_SUCCESS);
+	  sem_post(&new_command_sem);
 	  break;
 	case SIGSEGV:
 	  fprintf(stderr, "Segmentation fault in VSP process\n");
@@ -108,7 +104,7 @@ void error_handler(ERROR e){
 			printf("VSP aborted due to lib::SYSTEM_ERROR\n");
 			vs->sr_msg->message (lib::SYSTEM_ERROR, e.error_no);
 			TERMINATE=true;
-			sem_post( &(new_command_sem));
+			sem_post(&new_command_sem);
 			break;
 		case lib::FATAL_ERROR:
 			vs->sr_msg->message (lib::FATAL_ERROR, e.error_no);
@@ -145,7 +141,7 @@ void* realize_command( void*  arg ){
   while(!TERMINATE){ // for (;;)
     // aktywne oczekiwanie, az bedzie jakies zadanie do wykonania
 
-	sem_wait( &(new_command_sem));
+	sem_wait( &new_command_sem);
 
 	// Zadanie konfiguracji czujnika.
     if(sensor_configuration_task){
@@ -188,7 +184,7 @@ void write_to_sensor( lib::VSP_COMMAND i_code){
 		case lib::VSP_CONFIGURE_SENSOR:
 			ret_msg.vsp_report= lib::VSP_REPLY_OK;
 			sensor_configuration_task = true;
-			sem_post( &(new_command_sem));
+			sem_post( &new_command_sem);
 			return;
 		case lib::VSP_INITIATE_READING:
 			ret_msg.vsp_report= lib::VSP_REPLY_OK;
@@ -196,7 +192,7 @@ void write_to_sensor( lib::VSP_COMMAND i_code){
 				if(!CONFIGURE_FLAG)
 					throw lib::VSP_main_error(lib::NON_FATAL_ERROR, SENSOR_NOT_CONFIGURED);
 				reading_initiation_task = true;
-				sem_post( &(new_command_sem));
+				sem_post( &new_command_sem);
 				} // end TRY
 			catch (lib::VSP_main_error e){
 				error_handler(e);
@@ -231,7 +227,7 @@ void write_to_sensor( lib::VSP_COMMAND i_code){
 			vs->from_vsp.vsp_report= lib::VSP_REPLY_OK;
 			delete vs;
 			TERMINATE=true;
-			sem_post( &(new_command_sem));
+			sem_post( &new_command_sem);
 			return;
 		default :
 			throw lib::VSP_main_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_VSP);
@@ -385,7 +381,7 @@ int main(int argc, char *argv[]) {
     signal(SIGTERM, &vsp::common::catch_signal);
     signal(SIGSEGV, &vsp::common::catch_signal);
 #if defined(PROCESS_SPAWN_RSH)
-		signal(SIGINT, SIG_IGN);
+    signal(SIGINT, SIG_IGN);
 #endif
 
 	// liczba argumentow
@@ -466,6 +462,7 @@ int main(int argc, char *argv[]) {
 //printf("VSP: main loop end\n");
 	 		} // end for(;;)
 		vsp::common::vs->sr_msg->message ("VSP terminated");
+		delete vsp::common::vs;
 		} // koniec TRY
 	catch (lib::VSP_main_error e){
 		vsp::common::error_handler(e);

@@ -15,6 +15,7 @@
 /********************************* INCLUDES *********************************/
 #include <stdio.h>
 #include <stdlib.h>
+#include <memory>
 
 #include <errno.h>
 #include <stddef.h>
@@ -57,8 +58,6 @@ void catch_signal(int sig) {
   switch(sig) {
 	case SIGTERM :
 	  TERMINATE = true;
-	  delete vs;
-	  _exit(EXIT_SUCCESS);
 	  break;
 	case SIGSEGV:
 	  fprintf(stderr, "Segmentation fault in VSP process\n");
@@ -349,10 +348,11 @@ int main(int argc, char *argv[]) {
 			dispatch_handler(ctp);
 	 		} // end for(;;)
 		vsp::common::vs->sr_msg->message ("VSP terminated");
+		delete vsp::common::vs;
 		} // koniec TRY
 	catch (lib::VSP_main_error e){
 		vsp::common::error_handler(e);
 		exit(EXIT_FAILURE);
-		}; // end CATCH
+		} // end CATCH
 	}	// end MAIN
 
