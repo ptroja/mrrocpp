@@ -21,6 +21,8 @@ class wii_teach: public common::task::task
         irp6ot::generator::wii_teach* wg;
         lib::sensor_image_t::sensor_union_t::wiimote_t lastButtons;
         lib::sensor_image_t::sensor_union_t::wiimote_t buttonsPressed;
+        char path[80];
+        char filename[20];
 
         class n;
         class n
@@ -65,6 +67,10 @@ class wii_teach: public common::task::task
         void print_trajectory(void);
 
         void move_to_current(void);
+
+        bool get_file_name(void);
+
+        void save_trajectory(void);
 };
 
 }
