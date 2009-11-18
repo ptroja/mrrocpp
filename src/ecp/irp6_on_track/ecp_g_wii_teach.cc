@@ -8,7 +8,7 @@ namespace ecp {
 namespace irp6ot {
 namespace generator {
 
-wii_teach::wii_teach (common::task::task& _ecp_task,lib::sensor* _wiimote,common::generator::smooth2* sg) : generator (_ecp_task), _wiimote(_wiimote), sg(sg) {}
+wii_teach::wii_teach (common::task::task& _ecp_task,lib::sensor* _wiimote) : generator (_ecp_task), _wiimote(_wiimote) {}
 
 bool wii_teach::first_step()
 {

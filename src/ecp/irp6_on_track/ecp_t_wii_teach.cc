@@ -158,7 +158,7 @@ void wii_teach::main_task_algorithm(void)
     struct lib::ECP_VSP_MSG message;
 
     sg = new common::generator::smooth2(*this,true);
-    wg = new irp6ot::generator::wii_teach(*this,sensor_m[lib::SENSOR_WIIMOTE],sg);
+    wg = new irp6ot::generator::wii_teach(*this,sensor_m[lib::SENSOR_WIIMOTE]);
 
     if(get_file_name())
     {

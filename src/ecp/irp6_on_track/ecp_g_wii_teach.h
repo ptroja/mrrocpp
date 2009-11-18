@@ -5,7 +5,6 @@
 #include <math.h>
 
 #include "ecp/common/ecp_generator.h"
-#include "ecp/common/ecp_g_smooth2.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -21,7 +20,6 @@ class wii_teach : public common::generator::generator
 	int step_no;
         //kontroler
         lib::sensor* _wiimote;
-        common::generator::smooth2* sg;
         int releasedA;
 
     public:
@@ -32,7 +30,7 @@ class wii_teach : public common::generator::generator
 	 * @param minor_axis wartosc mniejszej polosi
 	 * @author jedrzej
 	 */
-        wii_teach (common::task::task& _ecp_task,lib::sensor* _wiimote,common::generator::smooth2*);
+        wii_teach (common::task::task& _ecp_task,lib::sensor* _wiimote);
 
         /**
          * Generuje pierwszy krok
