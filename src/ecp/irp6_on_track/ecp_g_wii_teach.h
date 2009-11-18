@@ -19,12 +19,10 @@ class wii_teach : public common::generator::generator
 	int max_steps;
 	//numer kroku
 	int step_no;
-	//nowa pozycja
-    	double position[8];
         //kontroler
         lib::sensor* _wiimote;
         common::generator::smooth2* sg;
-        int releasedB;
+        int releasedA;
 
     public:
 	/**

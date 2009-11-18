@@ -168,16 +168,16 @@ void wii_teach::main_task_algorithm(void)
             updateButtonsPressed();
             lastButtons = sensor_m[lib::SENSOR_WIIMOTE]->image.sensor_union.wiimote;
 
-            if(buttonsPressed.buttonB)
+            if(buttonsPressed.buttonA)
             {
-                buttonsPressed.buttonB = 0;
+                buttonsPressed.buttonA = 0;
                 message.i_code = lib::VSP_CONFIGURE_SENSOR;
                 message.wii_command.led_status = 0xF;
                 ((ecp_mp::sensor::wiimote*)sensor_m[lib::SENSOR_WIIMOTE])->send_reading(message);
                 wg->Move();
                 message.wii_command.led_status = 0x0;
                 ((ecp_mp::sensor::wiimote*)sensor_m[lib::SENSOR_WIIMOTE])->send_reading(message);
-                buttonsPressed.buttonB = 0;
+                buttonsPressed.buttonA = 0;
             }
             else
             {
@@ -311,9 +311,9 @@ void wii_teach::main_task_algorithm(void)
 
                     print_trajectory();
                 }
-                else if(buttonsPressed.buttonA)
+                else if(buttonsPressed.buttonB)
                 {
-                    buttonsPressed.buttonA = 0;
+                    buttonsPressed.buttonB = 0;
                     save_trajectory();
                 }
             }
