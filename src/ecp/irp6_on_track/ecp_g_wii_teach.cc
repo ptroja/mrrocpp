@@ -28,6 +28,17 @@ bool wii_teach::first_step()
     return true;
 }
 
+void wii_teach::clear_position(void)
+{
+    the_robot->EDP_data.next_XYZ_AA_arm_coordinates[0] = 0;
+    the_robot->EDP_data.next_XYZ_AA_arm_coordinates[1] = 0;
+    the_robot->EDP_data.next_XYZ_AA_arm_coordinates[2] = 0;
+    the_robot->EDP_data.next_XYZ_AA_arm_coordinates[3] = 0;
+    the_robot->EDP_data.next_XYZ_AA_arm_coordinates[4] = 0;
+    the_robot->EDP_data.next_XYZ_AA_arm_coordinates[5] = 0;
+    the_robot->EDP_data.next_gripper_coordinate = 0;
+}
+
 bool wii_teach::next_step()
 {
     char buffer[200];
@@ -54,70 +65,45 @@ bool wii_teach::next_step()
 
     if(releasedA && _wiimote->image.sensor_union.wiimote.buttonA) return false;
 
+    clear_position();
     if(!_wiimote->image.sensor_union.wiimote.buttonB && _wiimote->image.sensor_union.wiimote.left)
     {
         the_robot->EDP_data.next_XYZ_AA_arm_coordinates[0] = _wiimote->image.sensor_union.wiimote.orientation_x * 0.003;
-        the_robot->EDP_data.next_XYZ_AA_arm_coordinates[1] = 0;
-        the_robot->EDP_data.next_XYZ_AA_arm_coordinates[2] = 0;
-        the_robot->EDP_data.next_XYZ_AA_arm_coordinates[3] = 0;
-        the_robot->EDP_data.next_XYZ_AA_arm_coordinates[4] = 0;
-        the_robot->EDP_data.next_XYZ_AA_arm_coordinates[5] = 0;
     }
     else if(!_wiimote->image.sensor_union.wiimote.buttonB && _wiimote->image.sensor_union.wiimote.right)
     {
-        the_robot->EDP_data.next_XYZ_AA_arm_coordinates[0] = 0;
         the_robot->EDP_data.next_XYZ_AA_arm_coordinates[1] = _wiimote->image.sensor_union.wiimote.orientation_x * 0.003;
-        the_robot->EDP_data.next_XYZ_AA_arm_coordinates[2] = 0;
-        the_robot->EDP_data.next_XYZ_AA_arm_coordinates[3] = 0;
-        the_robot->EDP_data.next_XYZ_AA_arm_coordinates[4] = 0;
-        the_robot->EDP_data.next_XYZ_AA_arm_coordinates[5] = 0;
     }
     else if(!_wiimote->image.sensor_union.wiimote.buttonB && _wiimote->image.sensor_union.wiimote.up)
     {
-        the_robot->EDP_data.next_XYZ_AA_arm_coordinates[0] = 0;
-        the_robot->EDP_data.next_XYZ_AA_arm_coordinates[1] = 0;
         the_robot->EDP_data.next_XYZ_AA_arm_coordinates[2] = _wiimote->image.sensor_union.wiimote.orientation_x * 0.003;
-        the_robot->EDP_data.next_XYZ_AA_arm_coordinates[3] = 0;
-        the_robot->EDP_data.next_XYZ_AA_arm_coordinates[4] = 0;
-        the_robot->EDP_data.next_XYZ_AA_arm_coordinates[5] = 0;
     }
     else if(_wiimote->image.sensor_union.wiimote.buttonB && _wiimote->image.sensor_union.wiimote.left)
     {
-        the_robot->EDP_data.next_XYZ_AA_arm_coordinates[0] = 0;
-        the_robot->EDP_data.next_XYZ_AA_arm_coordinates[1] = 0;
-        the_robot->EDP_data.next_XYZ_AA_arm_coordinates[2] = 0;
         the_robot->EDP_data.next_XYZ_AA_arm_coordinates[3] = _wiimote->image.sensor_union.wiimote.orientation_x * 0.003;
-        the_robot->EDP_data.next_XYZ_AA_arm_coordinates[4] = 0;
-        the_robot->EDP_data.next_XYZ_AA_arm_coordinates[5] = 0;
     }
     else if(_wiimote->image.sensor_union.wiimote.buttonB && _wiimote->image.sensor_union.wiimote.right)
     {
-        the_robot->EDP_data.next_XYZ_AA_arm_coordinates[0] = 0;
-        the_robot->EDP_data.next_XYZ_AA_arm_coordinates[1] = 0;
-        the_robot->EDP_data.next_XYZ_AA_arm_coordinates[2] = 0;
-        the_robot->EDP_data.next_XYZ_AA_arm_coordinates[3] = 0;
         the_robot->EDP_data.next_XYZ_AA_arm_coordinates[4] = _wiimote->image.sensor_union.wiimote.orientation_x * 0.003;
-        the_robot->EDP_data.next_XYZ_AA_arm_coordinates[5] = 0;
     }
     else if(_wiimote->image.sensor_union.wiimote.buttonB && _wiimote->image.sensor_union.wiimote.up)
     {
-        the_robot->EDP_data.next_XYZ_AA_arm_coordinates[0] = 0;
-        the_robot->EDP_data.next_XYZ_AA_arm_coordinates[1] = 0;
-        the_robot->EDP_data.next_XYZ_AA_arm_coordinates[2] = 0;
-        the_robot->EDP_data.next_XYZ_AA_arm_coordinates[3] = 0;
-        the_robot->EDP_data.next_XYZ_AA_arm_coordinates[4] = 0;
         the_robot->EDP_data.next_XYZ_AA_arm_coordinates[5] = _wiimote->image.sensor_union.wiimote.orientation_x * 0.003;
     }
-    else
+    else if(_wiimote->image.sensor_union.wiimote.down)
     {
-        the_robot->EDP_data.next_XYZ_AA_arm_coordinates[0] = 0;
-        the_robot->EDP_data.next_XYZ_AA_arm_coordinates[1] = 0;
-        the_robot->EDP_data.next_XYZ_AA_arm_coordinates[2] = 0;
-        the_robot->EDP_data.next_XYZ_AA_arm_coordinates[3] = 0;
-        the_robot->EDP_data.next_XYZ_AA_arm_coordinates[4] = 0;
-        the_robot->EDP_data.next_XYZ_AA_arm_coordinates[5] = 0;
+        the_robot->EDP_data.next_gripper_coordinate = _wiimote->image.sensor_union.wiimote.orientation_x * 0.003;
     }
-    the_robot->EDP_data.next_gripper_coordinate = 0;
+
+    sprintf(buffer,"Moving to: %.4f %.4f %.4f %.4f %.4f %.4f %.4f",
+            the_robot->EDP_data.next_XYZ_AA_arm_coordinates[0],
+            the_robot->EDP_data.next_XYZ_AA_arm_coordinates[1],
+            the_robot->EDP_data.next_XYZ_AA_arm_coordinates[2],
+            the_robot->EDP_data.next_XYZ_AA_arm_coordinates[3],
+            the_robot->EDP_data.next_XYZ_AA_arm_coordinates[4],
+            the_robot->EDP_data.next_XYZ_AA_arm_coordinates[5],
+            the_robot->EDP_data.next_gripper_coordinate);
+    sr_ecp_msg.message(buffer);
 
     return true;
 }

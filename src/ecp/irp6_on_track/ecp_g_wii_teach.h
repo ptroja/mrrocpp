@@ -47,6 +47,8 @@ class wii_teach : public common::generator::generator
         virtual bool next_step();
 
         void execute_motion(void);
+
+        void clear_position(void);
 };
 
 }
