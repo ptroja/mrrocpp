@@ -158,7 +158,7 @@ void wii_teach::main_task_algorithm(void)
     struct lib::ECP_VSP_MSG message;
 
     sg = new common::generator::smooth2(*this,true);
-    wg = new irp6ot::generator::wii_teach(*this,sensor_m[lib::SENSOR_WIIMOTE]);
+    wg = new irp6ot::generator::wii_teach(*this,(ecp_mp::sensor::wiimote*)sensor_m[lib::SENSOR_WIIMOTE]);
 
     if(get_file_name())
     {
@@ -172,10 +172,14 @@ void wii_teach::main_task_algorithm(void)
             {
                 buttonsPressed.buttonA = 0;
                 message.i_code = lib::VSP_CONFIGURE_SENSOR;
+                message.wii_command.led_change = true;
                 message.wii_command.led_status = 0xF;
+                message.wii_command.rumble = false;
                 ((ecp_mp::sensor::wiimote*)sensor_m[lib::SENSOR_WIIMOTE])->send_reading(message);
                 wg->Move();
+                message.wii_command.led_change = true;
                 message.wii_command.led_status = 0x0;
+                message.wii_command.rumble = false;
                 ((ecp_mp::sensor::wiimote*)sensor_m[lib::SENSOR_WIIMOTE])->send_reading(message);
                 buttonsPressed.buttonA = 0;
             }

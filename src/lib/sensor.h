@@ -358,7 +358,9 @@ struct ECP_VSP_MSG
 
                 struct
                 {
+                  bool led_change;
                   unsigned int led_status;
+                  bool rumble;
                 } wii_command;
 	};//: koniec unii
 };

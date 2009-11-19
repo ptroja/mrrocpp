@@ -77,6 +77,7 @@ public:
 	 * @author jedrzej
 	 */
 	void get_reading (void);
+        void get_reading (lib::ECP_VSP_MSG);
 
 	/**
 	 * Terminates the connection to the Wii-mote server

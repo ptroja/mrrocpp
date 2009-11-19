@@ -87,6 +87,16 @@ void wiimote::send_reading(lib::ECP_VSP_MSG to) {
 void wiimote::get_reading() {
 	// Send adequate command to wiimote.
 	to_vsp.i_code = lib::VSP_GET_READING;
+        to_vsp.wii_command.led_change = false;
+        to_vsp.wii_command.rumble = false;
+        get_reading(to_vsp);
+}
+
+void wiimote::get_reading(lib::ECP_VSP_MSG message) {
+	// Send adequate command to wiimote.
+	to_vsp.i_code = lib::VSP_GET_READING;
+        to_vsp.wii_command = message.wii_command;
+        
 	if(write(sockfd, &to_vsp, sizeof(lib::ECP_VSP_MSG)) == -1)
 		throw sensor_error (lib::SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE);
 
