@@ -10,15 +10,15 @@
 // Data:		31.01.2007
 // ------------------------------------------------------------------------
 
-#if !defined(_POLYCRANK_KIN_model)
-#define _POLYCRANK_KIN_model
+#if !defined(_SPM_KIN_model)
+#define _SPM_KIN_model
 
 // Definicja klasy kinematic_model.
 #include "kinematics/common/kinematic_model.h"
 
 namespace mrrocpp {
 namespace kinematic {
-namespace polycrank {
+namespace spm {
 
 class model : public common::model
 {
@@ -91,7 +91,7 @@ public:
 };//: kinematic_model_irp6m_with_wrist;
 
 
-} // namespace polycrank
+} // namespace spm
 } // namespace kinematic
 } // namespace mrrocpp
 
