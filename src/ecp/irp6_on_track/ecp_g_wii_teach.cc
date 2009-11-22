@@ -8,7 +8,15 @@ namespace ecp {
 namespace irp6ot {
 namespace generator {
 
-wii_teach::wii_teach (common::task::task& _ecp_task,ecp_mp::sensor::wiimote* _wiimote) : generator (_ecp_task), _wiimote(_wiimote) {}
+wii_teach::wii_teach (common::task::task& _ecp_task,ecp_mp::sensor::wiimote* _wiimote) : generator (_ecp_task), _wiimote(_wiimote)
+{
+    int i;
+    for(i = 0;i<7;++i) 
+    {
+        multipliers[i] = 0.003;
+        maxChange[i] = 0.0001;
+    }
+}
 
 bool wii_teach::first_step()
 {
@@ -24,6 +32,7 @@ bool wii_teach::first_step()
 
     step_no = 0;
     releasedA = false;
+    stop = false;
 
     return true;
 }
@@ -37,12 +46,87 @@ void wii_teach::clear_position(void)
     the_robot->EDP_data.next_XYZ_AA_arm_coordinates[4] = 0;
     the_robot->EDP_data.next_XYZ_AA_arm_coordinates[5] = 0;
     the_robot->EDP_data.next_gripper_coordinate = 0;
+
+    int i;
+    for(i = 0;i < 7;++i)
+    {
+        requestedChange[i] = 0;
+    }
+}
+
+bool wii_teach::calculate_position(void)
+{
+    int i;
+    bool changed = false;
+    for(i = 0;i < 7;++i)
+    {
+        if(fabs(nextChange[i] - requestedChange[i]) < maxChange[i])
+        {
+            nextChange[i] = requestedChange[i];
+        }
+        else
+        {
+            if(requestedChange[i] > nextChange[i]) nextChange[i] = nextChange[i] + maxChange[i];
+            else nextChange[i] = nextChange[i] - maxChange[i];
+        }
+        if(nextChange[i] != 0) changed = true;
+    }
+
+    return changed;
+}
+
+int wii_teach::get_axis(void)
+{
+    int axis = -1;
+    if(!_wiimote->image.sensor_union.wiimote.buttonB && _wiimote->image.sensor_union.wiimote.left)
+    {
+        axis = 0;
+    }
+    else if(!_wiimote->image.sensor_union.wiimote.buttonB && _wiimote->image.sensor_union.wiimote.right)
+    {
+        axis = 1;
+    }
+    else if(!_wiimote->image.sensor_union.wiimote.buttonB && _wiimote->image.sensor_union.wiimote.up)
+    {
+        axis = 2;
+    }
+    else if(_wiimote->image.sensor_union.wiimote.buttonB && _wiimote->image.sensor_union.wiimote.left)
+    {
+        axis = 3;
+    }
+    else if(_wiimote->image.sensor_union.wiimote.buttonB && _wiimote->image.sensor_union.wiimote.right)
+    {
+        axis = 4;
+    }
+    else if(_wiimote->image.sensor_union.wiimote.buttonB && _wiimote->image.sensor_union.wiimote.up)
+    {
+        axis = 5;
+    }
+    else if(_wiimote->image.sensor_union.wiimote.down)
+    {
+        axis = 6;
+    }
+
+    return axis;
+}
+
+void wii_teach::set_position(void)
+{
+    the_robot->EDP_data.next_XYZ_AA_arm_coordinates[0] = nextChange[0];
+    the_robot->EDP_data.next_XYZ_AA_arm_coordinates[1] = nextChange[1];
+    the_robot->EDP_data.next_XYZ_AA_arm_coordinates[2] = nextChange[2];
+    the_robot->EDP_data.next_XYZ_AA_arm_coordinates[3] = nextChange[3];
+    the_robot->EDP_data.next_XYZ_AA_arm_coordinates[4] = nextChange[4];
+    the_robot->EDP_data.next_XYZ_AA_arm_coordinates[5] = nextChange[5];
+    the_robot->EDP_data.next_gripper_coordinate = nextChange[6];
 }
 
 bool wii_teach::next_step()
 {
     char buffer[200];
     struct lib::ECP_VSP_MSG message;
+    int axis;
+    double value;
     message.i_code = lib::VSP_CONFIGURE_SENSOR;
     message.wii_command.led_change = false;
     
@@ -76,60 +160,32 @@ bool wii_teach::next_step()
     the_robot->EDP_data.motion_steps = 8;
     the_robot->EDP_data.value_in_step_no = 8;
 
-    if(releasedA && _wiimote->image.sensor_union.wiimote.buttonA) return false;
+    if(releasedA && _wiimote->image.sensor_union.wiimote.buttonA) stop = true;
 
-    clear_position();
-
-    double value = _wiimote->image.sensor_union.wiimote.orientation_x;
-    //convert to nonlinear
+    //get value and convert to nonlinear when needed
+    value = _wiimote->image.sensor_union.wiimote.orientation_x;
     if(value > -1 && value < 1) value = pow(value,3);
-    bool show = false;
 
-    if(!_wiimote->image.sensor_union.wiimote.buttonB && _wiimote->image.sensor_union.wiimote.left)
+    
+    clear_position();
+    axis = get_axis();
+    if(!stop && axis >= 0)
     {
-        the_robot->EDP_data.next_XYZ_AA_arm_coordinates[0] = value * 0.003;
-        show = true;
+        requestedChange[axis] = value * multipliers[axis];
     }
-    else if(!_wiimote->image.sensor_union.wiimote.buttonB && _wiimote->image.sensor_union.wiimote.right)
-    {
-        the_robot->EDP_data.next_XYZ_AA_arm_coordinates[1] = value * 0.003;
-        show = true;
-    }
-    else if(!_wiimote->image.sensor_union.wiimote.buttonB && _wiimote->image.sensor_union.wiimote.up)
-    {
-        the_robot->EDP_data.next_XYZ_AA_arm_coordinates[2] = value * 0.003;
-        show = true;
-    }
-    else if(_wiimote->image.sensor_union.wiimote.buttonB && _wiimote->image.sensor_union.wiimote.left)
-    {
-        the_robot->EDP_data.next_XYZ_AA_arm_coordinates[3] = value * 0.003;
-        show = true;
-    }
-    else if(_wiimote->image.sensor_union.wiimote.buttonB && _wiimote->image.sensor_union.wiimote.right)
-    {
-        the_robot->EDP_data.next_XYZ_AA_arm_coordinates[4] = value * 0.003;
-        show = true;
-    }
-    else if(_wiimote->image.sensor_union.wiimote.buttonB && _wiimote->image.sensor_union.wiimote.up)
-    {
-        the_robot->EDP_data.next_XYZ_AA_arm_coordinates[5] = value * 0.003;
-        show = true;
-    }
-    else if(_wiimote->image.sensor_union.wiimote.down)
-    {
-        the_robot->EDP_data.next_gripper_coordinate = value * 0.003;
-        show = true;
-    }
+    if(!calculate_position() && stop) return false;
+    set_position();
 
-    sprintf(buffer,"Moving to: %.4f %.4f %.4f %.4f %.4f %.4f %.4f",
+    sprintf(buffer,"Moving to: %.5f %.5f %.5f %.5f %.5f %.5f %.5f",
             the_robot->EDP_data.next_XYZ_AA_arm_coordinates[0],
             the_robot->EDP_data.next_XYZ_AA_arm_coordinates[1],
             the_robot->EDP_data.next_XYZ_AA_arm_coordinates[2],
             the_robot->EDP_data.next_XYZ_AA_arm_coordinates[3],
             the_robot->EDP_data.next_XYZ_AA_arm_coordinates[4],
             the_robot->EDP_data.next_XYZ_AA_arm_coordinates[5],
-            the_robot->EDP_data.next_gripper_coordinate);
-    //if(show) sr_ecp_msg.message(buffer);
+            the_robot->EDP_data.next_gripper_coordinate
+            );
+    if(false) sr_ecp_msg.message(buffer);
 
     return true;
 }

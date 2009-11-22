@@ -160,7 +160,7 @@ void wii_teach::main_task_algorithm(void)
     sg = new common::generator::smooth2(*this,true);
     wg = new irp6ot::generator::wii_teach(*this,(ecp_mp::sensor::wiimote*)sensor_m[lib::SENSOR_WIIMOTE]);
 
-    if(get_file_name())
+    if(1 || get_file_name())
     {
         while(1)
         {

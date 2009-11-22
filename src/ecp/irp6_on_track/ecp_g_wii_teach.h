@@ -23,6 +23,13 @@ class wii_teach : public common::generator::generator
         ecp_mp::sensor::wiimote* _wiimote;
         bool releasedA;
         bool rumble;
+        bool stop;
+
+        double currentChange[7];
+        double requestedChange[7];
+        double nextChange[7];
+        double maxChange[7];
+        double multipliers[7];
 
     public:
 	/**
@@ -49,6 +56,12 @@ class wii_teach : public common::generator::generator
         void execute_motion(void);
 
         void clear_position(void);
+
+        void set_position(void);
+
+        bool calculate_position(void);
+
+        int get_axis(void);
 };
 
 }
