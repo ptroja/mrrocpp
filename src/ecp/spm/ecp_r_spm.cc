@@ -17,9 +17,9 @@ namespace ecp {
 namespace spm {
 
 robot::robot (lib::configurator &_config, lib::sr_ecp &_sr_ecp):
-	ecp_robot (lib::ROBOT_SPM, _config, _sr_ecp){};
+	ecp_robot (lib::ROBOT_SPM, SPM_NUM_OF_SERVOS, "[edp_spm]", _config, _sr_ecp){};
 robot::robot (common::task::task& _ecp_object):
-	ecp_robot (lib::ROBOT_SPM, _ecp_object){};
+	ecp_robot (lib::ROBOT_SPM, SPM_NUM_OF_SERVOS, "[edp_spm]", _ecp_object){};
 
 // --------------------------------------------------------------------------
 void robot::create_command (void) {

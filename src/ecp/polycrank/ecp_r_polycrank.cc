@@ -17,9 +17,9 @@ namespace ecp {
 namespace polycrank {
 
 robot::robot (lib::configurator &_config, lib::sr_ecp &_sr_ecp):
-	ecp_robot (lib::ROBOT_POLYCRANK, _config, _sr_ecp){};
+	ecp_robot (lib::ROBOT_POLYCRANK, POLYCRANK_NUM_OF_SERVOS, "[edp_polycrank]", _config, _sr_ecp){};
 robot::robot (common::task::task& _ecp_object):
-	ecp_robot (lib::ROBOT_POLYCRANK, _ecp_object){};
+	ecp_robot (lib::ROBOT_POLYCRANK, POLYCRANK_NUM_OF_SERVOS, "[edp_polycrank]", _ecp_object){};
 
 // --------------------------------------------------------------------------
 void robot::create_command (void) {

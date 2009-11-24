@@ -67,6 +67,7 @@ public:
 	bool synchronised; // Flaga synchronizacji robota (true - zsynchronizowany, false - nie)
 
 	int number_of_servos;
+	const std::string edp_section;
 
 #if !defined(USE_MESSIP_SRR)
 	int EDP_fd;	// by Y&W
@@ -80,8 +81,8 @@ public:
 	// Zlecenie wykonania ruchu przez robota (realizowane przez klase konkretna):
 	// na poziomie ECP jest to polecenie dla EDP
 
-	ecp_robot(lib::robot_name_t _robot_name, lib::configurator &_config, lib::sr_ecp &_sr_ecp);
-	ecp_robot(lib::robot_name_t _robot_name, common::task::task& _ecp_object);
+	ecp_robot(lib::robot_name_t _robot_name, int _number_of_servos, const std::string &_edp_section, lib::configurator &_config, lib::sr_ecp &_sr_ecp);
+	ecp_robot(lib::robot_name_t _robot_name, int _number_of_servos, const std::string &_edp_section, common::task::task& _ecp_object);
 
 	pid_t get_EDP_pid(void) const;
 

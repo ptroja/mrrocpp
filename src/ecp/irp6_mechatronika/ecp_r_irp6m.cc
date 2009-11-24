@@ -17,9 +17,9 @@ namespace ecp {
 namespace irp6m {
 
 robot::robot (lib::configurator &_config, lib::sr_ecp &_sr_ecp):
-	ecp_robot (lib::ROBOT_IRP6_MECHATRONIKA, _config, _sr_ecp){}
+	ecp_robot (lib::ROBOT_IRP6_MECHATRONIKA, IRP6_MECHATRONIKA_NUM_OF_SERVOS, "[edp_irp6_mechatronika]", _config, _sr_ecp){}
 robot::robot (common::task::task& _ecp_object):
-	ecp_robot (lib::ROBOT_IRP6_MECHATRONIKA, _ecp_object){}
+	ecp_robot (lib::ROBOT_IRP6_MECHATRONIKA, IRP6_MECHATRONIKA_NUM_OF_SERVOS, "[edp_irp6_mechatronika]", _ecp_object){}
 
 // --------------------------------------------------------------------------
 void robot::create_command (void) {
