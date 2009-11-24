@@ -161,6 +161,8 @@ public:
     void synchronise (); // synchronizacja robota
     void get_controller_state (lib::c_buffer &instruction); // synchronizacja robota
 
+    virtual void create_threads ();
+
     // wyznaczenie polozenia lokalnego i globalnego transformera
     // przepisanie lokalnego zestawu lokalnego edp_servo na globalny (chronione mutexem)
     void master_joints_and_frame_download(void);// by Y przepisanie z zestawu globalnego na lokalny dla edp_master

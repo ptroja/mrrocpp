@@ -5,8 +5,8 @@
 // Ostatnia modyfikacja: 16.04.98
 // -------------------------------------------------------------------------
 
-#ifndef __HI_LOCAL_IRP6M_H
-#define __HI_LOCAL_IRP6M_H
+#ifndef __HI_LOCAL_POLYCRACK_H
+#define __HI_LOCAL_POLYCRACK_H
 
 #include "edp/common/hi_rydz.h"
 

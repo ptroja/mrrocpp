@@ -40,21 +40,6 @@ effector::effector (lib::configurator &_config) :
     reset_variables();
 }
 
-
-
-void effector::create_threads ()
-{
-
-    // Y&W - utworzenie watku readera
-    if (pthread_create (&reader_tid, NULL, &reader_thread_start, (void *) this))
-    {
-        msg->message(lib::SYSTEM_ERROR, errno, "EDP: Failed to create READER thread");
-        throw common::System_error();
-    }
-
-}
-
-
 /*--------------------------------------------------------------------------*/
 void effector::set_rmodel (lib::c_buffer &instruction)
 {
@@ -361,6 +346,40 @@ void effector::servo_joints_and_frame_actualization_and_upload(void)
 {
 
 }
+
+
+
+/*--------------------------------------------------------------------------*/
+void effector::create_threads ()
+{
+
+    // Y&W - utworzenie watku readera
+    if (pthread_create (&reader_tid, NULL, &reader_thread_start, (void *) this))
+    {
+        msg->message(lib::SYSTEM_ERROR, errno, "EDP: Failed to create READER thread");
+        throw common::System_error();
+    }
+
+    // PT - utworzenie watku wizualizacji
+    if (pthread_create (&vis_t_tid, NULL, &visualisation_thread_start, (void *) this))
+    {
+        msg->message(lib::SYSTEM_ERROR, errno, "EDP: Failed to create VISUALISATION thread");
+        throw common::System_error();
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }
 // namespace smb

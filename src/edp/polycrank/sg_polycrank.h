@@ -7,8 +7,8 @@
 
 
 
-#ifndef __SG_IRP6M_H
-#define __SG_IRP6M_H
+#ifndef __SG_POLYCRACK_H
+#define __SG_POLYCRACK_H
 
 #include "edp/common/edp.h"
 

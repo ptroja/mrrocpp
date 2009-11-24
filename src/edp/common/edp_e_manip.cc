@@ -743,6 +743,12 @@ void manip_effector::get_controller_state(lib::c_buffer &instruction)
 	}
 }
 
+void manip_effector::create_threads ()
+{
+}
+
+
+
 } // namespace common
 } // namespace edp
 } // namespace mrrocpp

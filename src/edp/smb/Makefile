@@ -11,7 +11,7 @@ SOURCES = ${wildcard *.cc}
 #OBJECTS = ${patsubst %.cc,%.o,${SOURCES}}
 KIN_OBJECTS = ${KINEMATDIR}/smb/kinematic_model_smb.o
 
-OBJECTS = edp_e_smb.o
+OBJECTS = sg_smb.o edp_e_smb.o
 EDPOBJS  = ${OBJECTS} ${KIN_OBJECTS}
 BINARIES  = edp_smb
 
