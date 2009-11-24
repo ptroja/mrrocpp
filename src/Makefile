@@ -30,4 +30,3 @@ clean:
 install:
 	@for i in ${INSTALLDIRS} ; do ($(MAKE) -C $$i install) ; done
 #======================================================#	
-
