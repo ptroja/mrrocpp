@@ -2193,7 +2193,7 @@ uint8_t NL_regulator_8_irp6ot::compute_set_value (void)
 	case 0:  // algorytm nr 0
 
 
-		if (meassured_current != 0) fprintf(stdout,"alg 0: %d\n", meassured_current);
+	//	if (meassured_current != 0) fprintf(stdout,"alg 0: %d\n", meassured_current);
 /*
 	    display++;
 		        if (display >= 500)
