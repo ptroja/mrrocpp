@@ -195,8 +195,8 @@ void Draughts::goToInitialPos(){
 
 /*===============================goUp=======================================*/
 void Draughts::goUp(){
-	double v[MAX_SERVOS_NR]={0.15, 0.15, 0.15, 0.15, 0.15, 0.15, 0.15, 0.15};
-	double a[MAX_SERVOS_NR]={0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1};
+	double v[MAX_SERVOS_NR]={0.20, 0.20, 0.20, 0.20, 0.20, 0.20, 0.20, 0.20};
+	double a[MAX_SERVOS_NR]={0.15, 0.15, 0.15, 0.15, 0.15, 0.15, 0.15, 0.15};
 	sgen2->reset();
 	sgen2->set_relative();
 	sgen2->load_coordinates(lib::XYZ_ANGLE_AXIS,v,a,0,0,-0.1,0,0,0,0,0, true);	//move up

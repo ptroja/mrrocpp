@@ -15,8 +15,8 @@ namespace irp6ot {
 
 ecp_vis_ib_eih_follower_irp6ot::ecp_vis_ib_eih_follower_irp6ot(common::task::task& _ecp_task) :
 	common::ecp_visual_servo(_ecp_task) {
-	v_max[1] = v_max[0] = 0.015;
-	a_max[1] = a_max[0] = 0.015;
+	v_max[1] = v_max[0] = 0.020;
+	a_max[1] = a_max[0] = 0.025;
 	v_max[2] = 0.03;
 	a_max[2] = 0.02;
 	v_stop[0] = v_stop[1] = 0.0020;
