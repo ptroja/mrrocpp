@@ -3,6 +3,7 @@
 
 #include "ecp/common/ecp_task.h"
 #include "ecp/common/ecp_g_smooth.h"
+#include "ecp/common/ecp_g_smooth2.h"
 #include "ecp/common/ecp_g_force.h"
 #include "lib/com_buf.h"
 #include "ecp/common/ecp_st_go.h"
@@ -30,6 +31,7 @@ class Draughts: public common::task::task{
 	private:
 		lib::sensor *vsp_fradia;						//Virtual sensor
 		common::generator::smooth* sgen;				//smooth movement generator
+		common::generator::smooth2* sgen2;				//smooth2 movement generator
 		common::generator::bias_edp_force* befgen;		//calibration of force
 		common::generator::tff_gripper_approach* gagen;	//gripper approach with force control
 		lib::trajectory_description tdes;				//trajectory description from com_buf.h

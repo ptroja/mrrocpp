@@ -1790,8 +1790,7 @@ bool tff_nose_run::next_step()
 
 	if (node_counter==1)
 	{
-		the_robot->EDP_data.next_gripper_coordinate
-				= the_robot->EDP_data.current_gripper_coordinate;
+		the_robot->EDP_data.next_gripper_coordinate=0;
 	}
 
 	// wyrzucanie odczytu sil
@@ -2097,8 +2096,7 @@ bool sr_nose_run::next_step()
 
 	if (node_counter==1)
 	{
-		the_robot->EDP_data.next_gripper_coordinate
-				= the_robot->EDP_data.current_gripper_coordinate;
+		the_robot->EDP_data.next_gripper_coordinate=0;
 	}
 
 	// wyrzucanie odczytu sil
@@ -2351,13 +2349,12 @@ bool tff_rubik_grab::next_step()
 
 	if (node_counter==1)
 	{
-		the_robot->EDP_data.next_gripper_coordinate
-				= the_robot->EDP_data.current_gripper_coordinate;
+		the_robot->EDP_data.next_gripper_coordinate=0;
 	}
 
 	if ((the_robot->EDP_data.next_gripper_coordinate > goal_position)
 			|| (node_counter < min_node_counter))
-		the_robot->EDP_data.next_gripper_coordinate -= position_increment;
+		the_robot->EDP_data.next_gripper_coordinate =- position_increment;
 	else
 	{
 		return false;
@@ -2467,8 +2464,7 @@ bool tff_rubik_face_rotate::next_step()
 
 	if (node_counter==1)
 	{
-		the_robot->EDP_data.next_gripper_coordinate
-				= the_robot->EDP_data.current_gripper_coordinate;
+		the_robot->EDP_data.next_gripper_coordinate=0;
 		if (turn_angle < -0.1 || 0.1 < turn_angle)
 		{
 			lib::Homog_matrix frame(the_robot->EDP_data.current_arm_frame);
@@ -2605,8 +2601,7 @@ bool tff_gripper_approach::next_step()
 
 	if (node_counter==1)
 	{
-		the_robot->EDP_data.next_gripper_coordinate
-				= the_robot->EDP_data.current_gripper_coordinate;
+		the_robot->EDP_data.next_gripper_coordinate=0;
 	}
 	else if (node_counter > motion_time)
 	{

@@ -15,12 +15,12 @@ namespace irp6ot {
 
 ecp_vis_ib_eih_follower_irp6ot::ecp_vis_ib_eih_follower_irp6ot(common::task::task& _ecp_task) :
 	common::ecp_visual_servo(_ecp_task) {
-	v_max[1] = v_max[0] = 0.012;
-	a_max[1] = a_max[0] = 0.01;
+	v_max[1] = v_max[0] = 0.015;
+	a_max[1] = a_max[0] = 0.015;
 	v_max[2] = 0.03;
-	a_max[2] = 0.01;
-	v_stop[0] = v_stop[1] = 0.0005;
-	v_min[0] = 	v_min[1] = 0.0015;
+	a_max[2] = 0.02;
+	v_stop[0] = v_stop[1] = 0.0020;
+	v_min[0] = 	v_min[1] = 0.0035;
 	s_z = 0.35;
 }
 
@@ -33,9 +33,14 @@ bool ecp_vis_ib_eih_follower_irp6ot::first_step() {
 	the_robot->EDP_data.motion_type = lib::RELATIVE;
 	the_robot->EDP_data.set_type = ARM_DV;
 	the_robot->EDP_data.set_arm_type = lib::XYZ_ANGLE_AXIS;
-	the_robot->EDP_data.next_interpolation_type = lib::MIM;
+	the_robot->EDP_data.next_interpolation_type = lib::TCIM;
 	the_robot->EDP_data.motion_steps = MOTION_STEPS;
 	the_robot->EDP_data.value_in_step_no = MOTION_STEPS - 1;
+
+	for (int i=0; i<6; i++)
+	{
+		the_robot->EDP_data.next_behaviour[i] = lib::UNGUARDED_MOTION;
+	}
 
 
 
@@ -68,6 +73,7 @@ bool ecp_vis_ib_eih_follower_irp6ot::next_step_without_constraints() {
 		memcpy(next_position,
 	 			the_robot->EDP_data.current_XYZ_AA_arm_coordinates, 6
 						* sizeof(double));
+
 		//next_position[6] = the_robot->EDP_data.current_gripper_coordinate;
 
 		next_position[3] = 0;
@@ -107,10 +113,10 @@ bool ecp_vis_ib_eih_follower_irp6ot::next_step_without_constraints() {
 	if (v[2] < v_max[2] && (s_z - s_acc) > z_s) {//przyspieszanie
 		s[2] = (a_max[2] * t * t)/2 + (v[2] * t);
 		v[2] += a_max[2] * t;
-	} else if (v[2] > 0 && (s_z - s_acc) <= z_s) {//hamowanie
+	} else if (v[2] >= 0 && (s_z - s_acc) <= z_s) {//hamowanie
 		s[2] = (a_max[2] * t * t)/2 + (v[2] * t);
 		v[2] -= a_max[2] * t;
-		if (v[2] < 0) {
+		if (v[2] <= 0) {
 			z_stop = true;
 		}
 	} else {//jednostajny
@@ -121,22 +127,27 @@ bool ecp_vis_ib_eih_follower_irp6ot::next_step_without_constraints() {
 		z_s += s[2];
 		next_position[2] = s[2];
 		//next_position[2] = 0;
+	} else {
+		next_position[2] = 0;
 	}
 	//ruch w z (koniec)
 
 	//alpha = the_robot->EDP_data.current_joint_arm_coordinates[1]- the_robot->EDP_data.current_joint_arm_coordinates[6];
 	//Uchyb wyrazony w pikselach.
-	u[0] = vsp_fradia->from_vsp.comm_image.sensor_union.tracker.x - 40;
-	u[1] = vsp_fradia->from_vsp.comm_image.sensor_union.tracker.y + 40;
+	u[0] = vsp_fradia->from_vsp.comm_image.sensor_union.tracker.x-20;
+	u[1] = vsp_fradia->from_vsp.comm_image.sensor_union.tracker.y;
 	bool tracking = vsp_fradia->from_vsp.comm_image.sensor_union.tracker.tracking;
+
+	printf("ux: %f\t", u[0]);
+	printf("uy: %f\n", u[1]);
 
 	lib::VSP_REPORT vsp_report = vsp_fradia->from_vsp.vsp_report;
 	if (vsp_report == lib::VSP_REPLY_OK) {
 
-		if (fabs(u[0]) < 5 && fabs(u[1]) < 5 && v[0] <= v_stop[0] & v[1] <= v_stop[1]) {
+		if (fabs(u[0]) < 20 && fabs(u[1]) < 20 && v[0] <= v_stop[0] & v[1] <= v_stop[1]) {
 			if (z_stop) {
-				//printf("koniec sledzenia\n");
-				//flushall();
+				printf("#################################### koniec sledzenia ##################################\n");
+				flushall();
 				return false;
 			}
 		}
@@ -156,8 +167,9 @@ bool ecp_vis_ib_eih_follower_irp6ot::next_step_without_constraints() {
 				v_max[i] = v_min[i];
 			}
 
-			if (fabs(u[i]) < 25) {
+			if (fabs(u[i]) < 20) {
 				reached[i] = true;
+				printf("==================================== reached true w osi %d\n", i);
 			} else {
 				reached[i] = false;
 			}
@@ -184,6 +196,7 @@ bool ecp_vis_ib_eih_follower_irp6ot::next_step_without_constraints() {
 				v[i] -= a_max[i] * t;
 				if (v[i] < 0) {
 					v[i] = 0;
+					s[i] = 0;
 				}
 			} else { //jednostajny
 				s[i] = v[i] * t;
@@ -192,11 +205,35 @@ bool ecp_vis_ib_eih_follower_irp6ot::next_step_without_constraints() {
 		}
 	}
 
+	/*for (int i = 0; i < 6; i++) {
+		next_position[i] = 0;
+		printf("%f\t", next_position[i]);
+	}*/
+	next_position[6] = 0.0;
+
 	memcpy(the_robot->EDP_data.next_XYZ_AA_arm_coordinates, next_position,
 			6 * sizeof(double));
 
 	the_robot->EDP_data.next_gripper_coordinate = next_position[6];
 
+	printf("s_x: %f\t s_y %f\t s_z: %f\n", next_position[0],next_position[1],next_position[2]);
+
+	printf("\n");
+	for (int k = 0; k < 3; k++) {
+		printf("v[%d]: %f\t", k, v[k]);
+	}
+	printf("\n\n");
+
+	memcpy(next_position,
+ 			the_robot->EDP_data.current_XYZ_AA_arm_coordinates, 6
+					* sizeof(double));
+	for (int i = 0; i < 6; i++) {
+	//	printf("%f\t", next_position[i]);
+		next_position[i] = 0;
+	}
+	next_position[6] = 0;
+
+	printf("\n*********************************************************************************\n");
 	return true;
 }
 

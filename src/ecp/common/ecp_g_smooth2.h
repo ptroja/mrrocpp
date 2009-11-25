@@ -71,6 +71,8 @@ class smooth2 : public delta {
 		void vk_reduction(std::list<ecp_mp::common::smooth2_trajectory_pose>::iterator pose_list_iterator, int i, double s, double t);
 		void vp_reduction(std::list<ecp_mp::common::smooth2_trajectory_pose>::iterator pose_list_iterator, int i, double s, double t);
 
+		void optimize_time1(std::list<ecp_mp::common::smooth2_trajectory_pose>::iterator pose_list_iterator, int i, double s);
+
 		//metody zwiazane z pose_list
 		void flush_pose_list(void);
 		void initiate_pose_list(void);

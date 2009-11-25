@@ -561,8 +561,22 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buff
 		rb_obj.unlock_mutex();
 
 		next_frame.get_frame_tab(desired_end_effector_frame);
-		desired_joints_tmp[gripper_servo_nr] = beginning_gripper_coordinate + (((desired_gripper_coordinate
-				- beginning_gripper_coordinate) / ECP_motion_steps) * step);
+
+
+
+		switch (motion_type)
+		{
+			case lib::ABSOLUTE:
+				desired_joints_tmp[gripper_servo_nr] = beginning_gripper_coordinate + (((desired_gripper_coordinate
+								- beginning_gripper_coordinate) / ECP_motion_steps) * step);
+			break;
+			case lib::RELATIVE:
+				desired_joints_tmp[gripper_servo_nr] = beginning_gripper_coordinate +
+					((desired_gripper_coordinate / ECP_motion_steps) * step);
+			break;
+			default:
+			break;
+		}
 
 		// Przeliczenie wspolrzednych zewnetrznych na wspolrzedne wewnetrzne
 		get_current_kinematic_model()->e2i_transform(desired_joints_tmp, current_joints, &desired_end_effector_frame);

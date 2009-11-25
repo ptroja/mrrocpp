@@ -26,6 +26,8 @@
 
 #include "edp/common/edp_e_manip.h"
 
+using std::cout;
+
 namespace mrrocpp {
 namespace edp {
 namespace common {
