@@ -274,7 +274,7 @@ void irp6s_postument_track_effector::create_threads()
 		}
 	}
 
-	manip_effector::create_threads();
+	manip_and_conv_effector::create_threads();
 }
 
 
