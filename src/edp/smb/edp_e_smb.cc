@@ -28,6 +28,38 @@ namespace edp {
 namespace smb {
 
 
+int effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
+{
+	// przekopiowanie instrukcji z bufora watku komunikacji z ECP (edp_master)
+	memcpy( &(current_instruction), &(new_instruction), sizeof(lib::c_buffer) );
+
+	switch (nm_task)
+	{
+	case common::MT_GET_CONTROLLER_STATE:
+		get_controller_state(current_instruction);
+		break;
+	case common::MT_SET_RMODEL:
+		set_rmodel(current_instruction);
+		break;
+	case common::MT_GET_ARM_POSITION:
+		get_arm_position(nm_tryb, current_instruction);
+		break;
+	case common::MT_GET_ALGORITHMS:
+		get_algorithms();
+		break;
+	case common::MT_SYNCHRONISE:
+		synchronise();
+		break;
+	case common::MT_MOVE_ARM:
+		move_arm(current_instruction);
+		break;
+	default: // blad: z reply_type wynika, e odpowied nie ma zawiera narzedzia
+	break;
+	}
+	return 1;
+}
+
+
 // Konstruktor.
 effector::effector (lib::configurator &_config) :
         manip_effector (_config, lib::ROBOT_SMB)

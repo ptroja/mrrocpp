@@ -43,9 +43,15 @@ namespace edp {
 namespace common {
 
 
-servo_buffer* manip_and_conv_effector::return_created_servo_buffa ()
+int	manip_and_conv_effector::master_order(MT_ORDER nm_task, int nm_tryb)
 {
-	printf("return_created_servo_buffa: MUSISZ PRZECIAZYC metode w klasie potomnej\n");
+	return mt_tt_obj.master_to_trans_t_order(nm_task, nm_tryb);
+}
+
+
+servo_buffer* manip_and_conv_effector::return_created_servo_buffer ()
+{
+	printf("return_created_servo_buffer: MUSISZ PRZECIAZYC metode w klasie potomnej\n");
 	printf("TA METODA NIE MA PRAWA SIE URUCHOMIC\n");
 	return NULL;
 }
@@ -243,12 +249,12 @@ void manip_and_conv_effector::interpret_instruction (lib::c_buffer &instruction)
         if (instruction.is_set_rmodel())
             // zmiana modelu robota
             // set_rmodel();
-            mt_tt_obj.master_to_trans_t_order(MT_SET_RMODEL, 0);
+            master_order(MT_SET_RMODEL, 0);
         if (instruction.is_set_arm())
         {
             // przemieszczenie koncowki
             // move_arm();
-            mt_tt_obj.master_to_trans_t_order(MT_MOVE_ARM, 0);
+            master_order(MT_MOVE_ARM, 0);
             instruction.get_arm_type = instruction.set_arm_type;
             get_arm_position(false, instruction); // Aktualizacja transformera
             instruction.get_arm_type = lib::INVALID_END_EFFECTOR;
@@ -265,19 +271,19 @@ void manip_and_conv_effector::interpret_instruction (lib::c_buffer &instruction)
         case lib::CONTROLLER_STATE:
             // odczytanie TCP i orientacji koncowki
             // get_arm_position(true);
-            mt_tt_obj.master_to_trans_t_order(MT_GET_CONTROLLER_STATE, 0);
+            master_order(MT_GET_CONTROLLER_STATE, 0);
             break;
         case lib::ARM:
             // odczytanie TCP i orientacji koncowki
             // get_arm_position(true);
-            mt_tt_obj.master_to_trans_t_order(MT_GET_ARM_POSITION, true);
+            master_order(MT_GET_ARM_POSITION, true);
             break;
         case lib::RMODEL:
             // ewentualna aktualizacja numerow algorytmow i ich zestawow parametrow
             if (instruction.get_rmodel_type == lib::SERVO_ALGORITHM)
             {
                 // get_algorithms();
-                mt_tt_obj.master_to_trans_t_order(MT_GET_ALGORITHMS, 0);
+                master_order(MT_GET_ALGORITHMS, 0);
             }
             // odczytanie aktualnie uzywanego modelu robota (narzedzie, model kinematyczny,
             // jego korektor, nr algorytmu regulacji i zestawu jego parametrow)
@@ -290,7 +296,7 @@ void manip_and_conv_effector::interpret_instruction (lib::c_buffer &instruction)
         case lib::ARM_RMODEL:
             // odczytanie TCP i orientacji koncowki
             // get_arm_position(true);
-            mt_tt_obj.master_to_trans_t_order(MT_GET_ARM_POSITION, true);
+            master_order(MT_GET_ARM_POSITION, true);
             // odczytanie aktualnie uzywanego modelu robota (narzedzie, model kinematyczny,
             // jego korektor, nr algorytmu regulacji i zestawu jego parametrow)
             get_rmodel(instruction);
@@ -300,13 +306,13 @@ void manip_and_conv_effector::interpret_instruction (lib::c_buffer &instruction)
             get_inputs(&reply);
             // odczytanie TCP i orientacji koncowki
             // get_arm_position(true);
-            mt_tt_obj.master_to_trans_t_order(MT_GET_ARM_POSITION, true);
+            master_order(MT_GET_ARM_POSITION, true);
             break;
         case lib::RMODEL_INPUTS:
             // ewentualna aktualizacja numerow algorytmow i ich zestawow parametrow
             if (instruction.get_rmodel_type == lib::SERVO_ALGORITHM)
                 // get_algorithms();
-                mt_tt_obj.master_to_trans_t_order(MT_GET_ALGORITHMS, 0);
+                master_order(MT_GET_ALGORITHMS, 0);
             // odczytanie wej
             get_inputs(&reply);
             // odczytanie aktualnie uzywanego modelu robota (narzedzie, model kinematyczny,
@@ -318,7 +324,7 @@ void manip_and_conv_effector::interpret_instruction (lib::c_buffer &instruction)
             get_inputs(&reply);
             // odczytanie TCP i orientacji koncowki
             // get_arm_position(true);
-            mt_tt_obj.master_to_trans_t_order(MT_GET_ARM_POSITION, true);
+            master_order(MT_GET_ARM_POSITION, true);
             // odczytanie aktualnie uzywanego modelu robota (narzedzie, model kinematyczny,
             // jego korektor, nr algorytmu regulacji i zestawu jego parametrow)
             get_rmodel(instruction);
@@ -338,11 +344,11 @@ void manip_and_conv_effector::interpret_instruction (lib::c_buffer &instruction)
             // zmiana aktualnie uzywanego modelu robota (narzedzie, model kinematyczny,
             // jego korektor, nr algorytmu regulacji i zestawu jego parametrow)
             //        set_rmodel();
-            mt_tt_obj.master_to_trans_t_order(MT_SET_RMODEL, 0);
+            master_order(MT_SET_RMODEL, 0);
         if (instruction.is_set_arm())
             // przemieszczenie koncowki
             // move_arm();
-            mt_tt_obj.master_to_trans_t_order(MT_MOVE_ARM, 0);
+            master_order(MT_MOVE_ARM, 0);
         // Cz GET
         // ustalenie formatu odpowiedzi
         switch (rep_type(instruction))
@@ -350,7 +356,7 @@ void manip_and_conv_effector::interpret_instruction (lib::c_buffer &instruction)
         case lib::CONTROLLER_STATE:
             // odczytanie TCP i orientacji koncowki
             // get_arm_position(true);
-            mt_tt_obj.master_to_trans_t_order(MT_GET_CONTROLLER_STATE, 0);
+            master_order(MT_GET_CONTROLLER_STATE, 0);
             break;
         case lib::ARM:
             // odczytanie TCP i orientacji koncowki
@@ -358,14 +364,14 @@ void manip_and_conv_effector::interpret_instruction (lib::c_buffer &instruction)
                 get_arm_position(false, instruction);
             else
                 // get_arm_position(true);
-                mt_tt_obj.master_to_trans_t_order(MT_GET_ARM_POSITION, true);
+                master_order(MT_GET_ARM_POSITION, true);
             break;
         case lib::RMODEL:
             if(!instruction.is_set_arm())
                 // ewentualna aktualizacja numerow algorytmow i ich zestawow parametrow
                 if (instruction.get_rmodel_type == lib::SERVO_ALGORITHM)
                     // get_algorithms();
-                    mt_tt_obj.master_to_trans_t_order(MT_GET_ALGORITHMS, 0);
+                    master_order(MT_GET_ALGORITHMS, 0);
             // odczytanie aktualnie uzywanego modelu robota (narzedzie, model kinematyczny,
             // jego korektor, nr algorytmu regulacji i zestawu jego parametrow)
             get_rmodel(instruction);
@@ -380,7 +386,7 @@ void manip_and_conv_effector::interpret_instruction (lib::c_buffer &instruction)
                 get_arm_position(false, instruction);
             else
                 // get_arm_position(true);
-                mt_tt_obj.master_to_trans_t_order(MT_GET_ARM_POSITION, true);
+                master_order(MT_GET_ARM_POSITION, true);
             // odczytanie aktualnie uzywanego modelu robota (narzedzie, model kinematyczny,
             // jego korektor, nr algorytmu regulacji i zestawu jego parametrow)
             get_rmodel(instruction);
@@ -393,14 +399,14 @@ void manip_and_conv_effector::interpret_instruction (lib::c_buffer &instruction)
                 get_arm_position(false, instruction);
             else
                 // get_arm_position(true);
-                mt_tt_obj.master_to_trans_t_order(MT_GET_ARM_POSITION, true);
+                master_order(MT_GET_ARM_POSITION, true);
             break;
         case lib::RMODEL_INPUTS:
             if(!instruction.is_set_arm())
                 // ewentualna aktualizacja numerow algorytmow i ich zestawow parametrow
                 if (instruction.get_rmodel_type == lib::SERVO_ALGORITHM)
                     //   get_algorithms();
-                    mt_tt_obj.master_to_trans_t_order(MT_GET_ALGORITHMS, 0);
+                    master_order(MT_GET_ALGORITHMS, 0);
             // odczytanie wej
             get_inputs(&reply);
             // odczytanie aktualnie uzywanego modelu robota (narzedzie, model kinematyczny,
@@ -414,7 +420,7 @@ void manip_and_conv_effector::interpret_instruction (lib::c_buffer &instruction)
                 get_arm_position(false, instruction);
             else
                 // get_arm_position(true);
-                mt_tt_obj.master_to_trans_t_order(MT_GET_ARM_POSITION, true);
+                master_order(MT_GET_ARM_POSITION, true);
             // odczytanie aktualnie uzywanego modelu robota (narzedzie, model kinematyczny,
             // jego korektor, nr algorytmu regulacji i zestawu jego parametrow)
             get_rmodel(instruction);
@@ -962,7 +968,7 @@ void manip_and_conv_effector::main_loop ()
 
                     if ((rep_type(new_instruction)) == lib::CONTROLLER_STATE)
                     {
-                        // mt_tt_obj.master_to_trans_t_order(MT_GET_CONTROLLER_STATE, 0);
+                        // master_order(MT_GET_CONTROLLER_STATE, 0);
                         interpret_instruction (new_instruction);
                     }
                     else
@@ -1100,7 +1106,7 @@ void manip_and_conv_effector::main_loop ()
                     insert_reply_type(lib::ACKNOWLEDGE);
                     reply_to_instruction();
                     /* Zlecenie wykonania synchronizacji */
-                    mt_tt_obj.master_to_trans_t_order(MT_SYNCHRONISE, 0);   // by Y przejscie przez watek transfor w celu ujednolicenia
+                    master_order(MT_SYNCHRONISE, 0);   // by Y przejscie przez watek transfor w celu ujednolicenia
                     // synchronise();
                     // Jezeli synchronizacja okae sie niemoliwa, to zostanie zgloszony wyjatek:
                     /* Oczekiwanie na poprawne zakoczenie synchronizacji */

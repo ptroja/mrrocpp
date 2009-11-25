@@ -33,7 +33,7 @@ protected:
 
 public:
     effector (lib::configurator &_config);
-    common::servo_buffer *return_created_servo_buffa ();
+    common::servo_buffer *return_created_servo_buffer ();
 };
 
 } // namespace irp6ot

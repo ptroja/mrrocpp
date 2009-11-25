@@ -26,7 +26,7 @@ namespace mrrocpp {
 namespace edp {
 namespace irp6ot {
 
-common::servo_buffer* effector::return_created_servo_buffa ()
+common::servo_buffer* effector::return_created_servo_buffer ()
 {
 	return new irp6ot::servo_buffer (*this);
 }

@@ -167,7 +167,8 @@ public:
     // przepisanie lokalnego zestawu lokalnego edp_servo na globalny (chronione mutexem)
     void master_joints_and_frame_download(void);// by Y przepisanie z zestawu globalnego na lokalny dla edp_master
 
-    virtual servo_buffer* return_created_servo_buffa ();
+    virtual servo_buffer* return_created_servo_buffer ();
+    virtual int	master_order(MT_ORDER nm_task, int nm_tryb);
 };
 
 } // namespace common

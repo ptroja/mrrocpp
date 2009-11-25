@@ -50,7 +50,7 @@ public:
 
     void get_arm_position (bool read_hardware, lib::c_buffer &instruction); // odczytanie pozycji ramienia
 
-    common::servo_buffer *return_created_servo_buffa ();
+    common::servo_buffer *return_created_servo_buffer ();
 };
 
 } // namespace common

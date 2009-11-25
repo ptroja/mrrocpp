@@ -49,6 +49,7 @@ public:
     void move_arm (lib::c_buffer &instruction);            // przemieszczenie ramienia
 
     void get_arm_position (bool read_hardware, lib::c_buffer &instruction); // odczytanie pozycji ramienia
+    int	master_order(common::MT_ORDER nm_task, int nm_tryb);
 };
 
 } // namespace smb

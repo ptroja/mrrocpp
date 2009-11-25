@@ -27,7 +27,7 @@ namespace edp {
 namespace conveyor {
 
 
-common::servo_buffer* effector::return_created_servo_buffa ()
+common::servo_buffer* effector::return_created_servo_buffer ()
 {
 	return new conveyor::servo_buffer (*this);
 }

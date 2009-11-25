@@ -33,9 +33,17 @@ namespace edp {
 namespace common {
 
 
-servo_buffer* manip_effector::return_created_servo_buffa ()
+
+int	manip_effector::master_order(MT_ORDER nm_task, int nm_tryb)
 {
-	printf("return_created_servo_buffa: MUSISZ PRZECIAZYC metode w klasie potomnej\n");
+	return manip_and_conv_effector::master_order(nm_task, nm_tryb);
+}
+
+
+
+servo_buffer* manip_effector::return_created_servo_buffer ()
+{
+	printf("return_created_servo_buffer: MUSISZ PRZECIAZYC metode w klasie potomnej\n");
 	printf("TA METODA NIE MA PRAWA SIE URUCHOMIC\n");
 	return NULL;
 }

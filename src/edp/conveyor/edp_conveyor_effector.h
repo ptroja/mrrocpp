@@ -40,7 +40,7 @@ public:
     // Aktualizacja polozenia.
     void servo_joints_and_frame_actualization_and_upload(void);
 
-    common::servo_buffer *return_created_servo_buffa ();
+    common::servo_buffer *return_created_servo_buffer ();
 
 };
 
