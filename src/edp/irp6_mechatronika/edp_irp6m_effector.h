@@ -14,6 +14,7 @@
 #define __EDP_IRP6_MECHATRONIKA_H
 
 // Klasa edp_irp6s_robot.
+#include "edp/irp6_mechatronika/sg_irp6m.h"
 #include "edp/common/edp_e_manip.h"
 
 namespace mrrocpp {
@@ -48,6 +49,8 @@ public:
     void move_arm (lib::c_buffer &instruction);            // przemieszczenie ramienia
 
     void get_arm_position (bool read_hardware, lib::c_buffer &instruction); // odczytanie pozycji ramienia
+
+    common::servo_buffer *return_created_servo_buffa ();
 };
 
 } // namespace common

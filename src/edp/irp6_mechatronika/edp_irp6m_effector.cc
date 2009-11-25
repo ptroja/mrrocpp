@@ -28,6 +28,12 @@ namespace mrrocpp {
 namespace edp {
 namespace irp6m {
 
+common::servo_buffer* effector::return_created_servo_buffa ()
+{
+	return new irp6m::servo_buffer (*this);
+}
+
+
 
 // Konstruktor.
 effector::effector (lib::configurator &_config) :

@@ -14,6 +14,7 @@
 #define __EDP_IRP6_ON_TRACK_H
 
 // Klasa edp_irp6s_robot.
+#include "edp/irp6_on_track/sg_irp6ot.h"
 #include "edp/common/edp_irp6s_postument_track.h"
 
 #define IRP6OT_GRIPPER_CATCH_AXE 7
@@ -32,6 +33,7 @@ protected:
 
 public:
     effector (lib::configurator &_config);
+    common::servo_buffer *return_created_servo_buffa ();
 };
 
 } // namespace irp6ot

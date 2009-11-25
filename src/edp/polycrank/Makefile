@@ -11,7 +11,7 @@ SOURCES = ${wildcard *.cc}
 #OBJECTS = ${patsubst %.cc,%.o,${SOURCES}}
 KIN_OBJECTS = ${KINEMATDIR}/polycrank/kinematic_model_polycrank.o
 
-OBJECTS = hi_polycrank.o int_hand_polycrank.o sg_polycrank.o edp_e_polycrank.o
+OBJECTS = edp_e_polycrank.o
 EDPOBJS  = ${OBJECTS} ${KIN_OBJECTS}
 BINARIES  = edp_polycrank
 

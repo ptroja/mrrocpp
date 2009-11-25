@@ -12,6 +12,7 @@
 #ifndef __edp_conveyor_effector_H
 #define __edp_conveyor_effector_H
 
+#include "edp/conveyor/sg_conv.h"
 #include "edp/common/edp_e_manip_and_conv.h"
 
 namespace mrrocpp {
@@ -38,6 +39,8 @@ public:
     void get_arm_position (bool read_hardware, lib::c_buffer &instruction);
     // Aktualizacja polozenia.
     void servo_joints_and_frame_actualization_and_upload(void);
+
+    common::servo_buffer *return_created_servo_buffa ();
 
 };
 

@@ -17,7 +17,7 @@
 namespace mrrocpp {
 namespace edp {
 namespace irp6ot {
-
+class effector;
 #define IRP6_ON_TRACK_GRIPPER_SUM_OF_CURRENTS_NR_OF_ELEMENTS 10
 #define IRP6_ON_TRACK_GRIPPER_SUM_OF_CURRENTS_MAX_VALUE 100
 // #define IRP6_ON_TRACK_GRIPPER_SUM_PWM_MIN 80

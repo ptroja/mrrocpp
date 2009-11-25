@@ -30,6 +30,14 @@ namespace mrrocpp {
 namespace edp {
 namespace common {
 
+
+servo_buffer* manip_effector::return_created_servo_buffa ()
+{
+	printf("return_created_servo_buffa: MUSISZ PRZECIAZYC metode w klasie potomnej\n");
+	printf("TA METODA NIE MA PRAWA SIE URUCHOMIC\n");
+	return NULL;
+}
+
 /*--------------------------------------------------------------------------*/
 manip_effector::manip_effector (lib::configurator &_config, lib::robot_name_t l_robot_name) :
         manip_and_conv_effector (_config, l_robot_name)

@@ -29,6 +29,11 @@ namespace mrrocpp {
 namespace edp {
 namespace irp6p {
 
+common::servo_buffer* effector::return_created_servo_buffa ()
+{
+	return new irp6p::servo_buffer (*this);
+}
+
 // Konstruktor.
 effector::effector(lib::configurator &_config) :
 	irp6s_postument_track_effector(_config, lib::ROBOT_IRP6_POSTUMENT)

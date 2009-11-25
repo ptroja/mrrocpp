@@ -17,7 +17,7 @@
 namespace mrrocpp {
 namespace edp {
 namespace irp6m {
-
+class effector;
 // numeracja od 2 ze wzgledu na analogie irp6_postument
 
 // ograniczenia przyrostu PWM dla IRP6_MECHATRONIKA

@@ -25,6 +25,7 @@ ati3084: common
 ati6284: common
 conveyor: common
 smb: common
+spm: common
 
 IRP6ONT_DEPS = common ati3084 ati3084MK ati6284
 ifdef DOCENT_SENSOR

@@ -18,6 +18,7 @@
 namespace mrrocpp {
 namespace edp {
 namespace irp6p {
+class effector;
 
 class servo_buffer: public common::servo_buffer
 {

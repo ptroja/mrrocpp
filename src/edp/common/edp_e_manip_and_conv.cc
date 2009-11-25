@@ -29,9 +29,10 @@
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
+#include "edp/common/servo_gr.h"
 #include "edp/common/edp_e_manip_and_conv.h"
 
-#include "edp/common/servo_gr.h"
+
 
 #include "lib/mathtr.h"
 
@@ -40,6 +41,15 @@
 namespace mrrocpp {
 namespace edp {
 namespace common {
+
+
+servo_buffer* manip_and_conv_effector::return_created_servo_buffa ()
+{
+	printf("return_created_servo_buffa: MUSISZ PRZECIAZYC metode w klasie potomnej\n");
+	printf("TA METODA NIE MA PRAWA SIE URUCHOMIC\n");
+	return NULL;
+}
+
 
 
 /*--------------------------------------------------------------------------*/

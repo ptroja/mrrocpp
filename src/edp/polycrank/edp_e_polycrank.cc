@@ -250,88 +250,6 @@ void effector::move_arm (lib::c_buffer &instruction)
 
 
 
-
-
-// sprawdza stan EDP zaraz po jego uruchomieniu
-
-
-void effector::servo_joints_and_frame_actualization_and_upload (void)
-{
-    static int catch_nr=0;
-
-    // wyznaczenie nowych wartosci joints and frame dla obliczen w servo
-    try
-    {
-        get_current_kinematic_model()->mp2i_transform(servo_current_motor_pos, servo_current_joints);
-
-        rb_obj.lock_mutex();
-
-        for (int j = 0; j < number_of_servos; j++)
-        {
-            rb_obj.step_data.current_joints[j] = servo_current_joints[j];
-        }
-
-        rb_obj.unlock_mutex();
-
-
-
-        // T.K.: Obecne wywolanie
-        // get_current_kinematic_model()->i2e_transform(servo_current_joints, &servo_current_end_effector_frame, NULL);
-        // zastepuje wywolaniem metody, direct_kinematics_transform(), ktora rozwiazuje proste zagadnienie kinematyki
-        // bez uwzglednienia narzedzia, czyli robi to, co poprzednio i2e z TOOL = null.
-        //Uwaga: w edp_conveyor_effector jest podobnie.
-        get_current_kinematic_model()->direct_kinematics_transform(servo_current_joints, &servo_current_frame_wo_tool);
-        lib::Homog_matrix A(servo_current_frame_wo_tool);
-        A.get_mech_xyz_euler_zyz(servo_real_kartez_pos);
-        //A.get_xyz_euler_zyz(servo_real_kartez_pos);
-
-
-        // zapisanie wartosci rzeczywistej dla readera
-        rb_obj.lock_mutex();
-
-        for (int i=0; i<6; i++)
-        {
-            rb_obj.step_data.real_cartesian_position[i] = servo_real_kartez_pos[i];
-
-        }
-
-        rb_obj.unlock_mutex();
-
-        // Jesli obliczenia zwiazane z baza maja byc wykonane.
-        if (get_current_kinematic_model()->global_frame_computations)
-        {
-            lib::Homog_matrix tmp_eem(servo_current_frame_wo_tool);
-            get_current_kinematic_model()->global_frame_transform(tmp_eem);
-            tmp_eem.get_frame_tab(servo_current_frame_wo_tool);
-        }//: if
-
-
-        catch_nr=0;
-    }//: try
-
-    catch (...)
-    {
-        if ((++catch_nr) == 1)
-            printf("servo thread servo_joints_and_frame_actualization_and_upload throw catch exception\n");
-    }
-
-    {
-    	boost::mutex::scoped_lock lock(edp_irp6s_effector_mutex);
-		// przepisnie danych na zestaw globalny
-		for (int i=0; i < number_of_servos; i++)
-		{
-			global_current_motor_pos[i]=servo_current_motor_pos[i];
-			global_current_joints[i]=servo_current_joints[i];
-		}
-
-		// T.K.: Nad tym trzeba pomyslec - co w tym momencie dzieje sie z global_current_end_effector_frame?
-		// Jezeli zmienna ta przechowyje polozenie bez narzedzia, to nazwa jest nie tylko nieadekwatna, a wrecz mylaca.
-		lib::copy_frame(global_current_frame_wo_tool, servo_current_frame_wo_tool);
-
-    }
-}
-
-
 /*--------------------------------------------------------------------------*/
 void effector::get_arm_position (bool read_hardware, lib::c_buffer &instruction)
 { // odczytanie pozycji ramienia
@@ -423,7 +341,50 @@ void effector::create_kinematic_models_for_given_robot(void)
     set_kinematic_model(0);
 }
 
-} // namespace polycrank
+
+void effector::servo_joints_and_frame_actualization_and_upload(void)
+{
+
+}
+
+
+
+/*--------------------------------------------------------------------------*/
+void effector::create_threads ()
+{
+
+    // Y&W - utworzenie watku readera
+    if (pthread_create (&reader_tid, NULL, &reader_thread_start, (void *) this))
+    {
+        msg->message(lib::SYSTEM_ERROR, errno, "EDP: Failed to create READER thread");
+        throw common::System_error();
+    }
+
+    // PT - utworzenie watku wizualizacji
+    if (pthread_create (&vis_t_tid, NULL, &visualisation_thread_start, (void *) this))
+    {
+        msg->message(lib::SYSTEM_ERROR, errno, "EDP: Failed to create VISUALISATION thread");
+        throw common::System_error();
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
+// namespace polycrank
+
+
 namespace common {
 
 // Stworzenie obiektu edp_irp6m_effector.

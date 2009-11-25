@@ -26,6 +26,13 @@ namespace mrrocpp {
 namespace edp {
 namespace conveyor {
 
+
+common::servo_buffer* effector::return_created_servo_buffa ()
+{
+	return new conveyor::servo_buffer (*this);
+}
+
+
 // Konstruktor.
 effector::effector (lib::configurator &_config) :
 	manip_and_conv_effector (_config, lib::ROBOT_CONVEYOR)

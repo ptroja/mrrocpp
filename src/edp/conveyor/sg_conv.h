@@ -17,6 +17,8 @@ namespace mrrocpp {
 namespace edp {
 namespace conveyor {
 
+class effector;
+
 class servo_buffer: public common::servo_buffer
 {
 		// Bufor polecen przysylanych z EDP_MASTER dla SERVO

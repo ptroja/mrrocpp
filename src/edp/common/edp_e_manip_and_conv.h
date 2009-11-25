@@ -21,6 +21,8 @@
 #include "kinematics/common/transformer_error.h"
 #include "kinematics/common/kinematics_manager.h"
 #include "edp/common/edp_effector.h"
+
+
 // Konfigurator
 #include "lib/configurator.h"
 
@@ -263,6 +265,9 @@ public:
 
     // Czy robot zsynchronizowany? // by Y - wziete z ecp
     bool is_synchronised ( void ) const;
+
+    virtual servo_buffer* return_created_servo_buffa ();
+
 };
 /************************ edp_irp6s_and_conv_effector ****************************/
 
