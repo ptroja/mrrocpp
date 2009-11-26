@@ -17,7 +17,7 @@
 
 namespace mrrocpp {
 namespace edp {
-namespace spm {
+namespace spkm {
 
 // Klasa reprezentujaca robota IRp-6 na postumencie.
 class effector : public common::manip_effector
@@ -52,7 +52,7 @@ public:
     int	master_order(common::MT_ORDER nm_task, int nm_tryb);
 };
 
-} // namespace spm
+} // namespace spkm
 } // namespace edp
 } // namespace mrrocpp
 

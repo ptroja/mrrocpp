@@ -19,13 +19,13 @@
 #include "lib/mathtr.h"
 
 // Klasa edp_irp6ot_effector.
-#include "edp/spm/edp_e_spm.h"
+#include "edp/spkm/edp_e_spkm.h"
 // Kinematyki.
-#include "kinematics/spm/kinematic_model_spm.h"
+#include "kinematics/spkm/kinematic_model_spkm.h"
 
 namespace mrrocpp {
 namespace edp {
-namespace spm {
+namespace spkm {
 
 int effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
 {
@@ -368,7 +368,7 @@ void effector::get_arm_position (bool read_hardware, lib::c_buffer &instruction)
 void effector::create_kinematic_models_for_given_robot(void)
 {
     // Stworzenie wszystkich modeli kinematyki.
-    add_kinematic_model(new kinematic::spm::model());
+    add_kinematic_model(new kinematic::spkm::model());
     // Ustawienie aktywnego modelu.
     set_kinematic_model(0);
 }
@@ -402,19 +402,8 @@ void effector::create_threads ()
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 }
-// namespace spm
+// namespace spkm
 
 
 namespace common {
@@ -422,7 +411,7 @@ namespace common {
 // Stworzenie obiektu edp_irp6m_effector.
 effector* return_created_efector(lib::configurator &_config)
 {
-	return new spm::effector (_config);
+	return new spkm::effector (_config);
 }
 
 } // namespace common
