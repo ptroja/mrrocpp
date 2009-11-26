@@ -9,11 +9,11 @@ include $(HOMEDIR)/common.mk
 
 SOURCES = ${wildcard *.cc}
 #OBJECTS = ${patsubst %.cc,%.o,${SOURCES}}
-KIN_OBJECTS = ${KINEMATDIR}/spm/kinematic_model_spm.o
+KIN_OBJECTS = ${KINEMATDIR}/spkm/kinematic_model_spkm.o
 
-OBJECTS = edp_e_spm.o
+OBJECTS = edp_e_spkm.o
 EDPOBJS  = ${OBJECTS} ${KIN_OBJECTS}
-BINARIES  = edp_spm
+BINARIES  = edp_spkm
 
 
 SHOBJ = ../common/libedp.a $(LIBDIR)/libmrrocpp.a
@@ -22,7 +22,7 @@ SHOBJ = ../common/libedp.a $(LIBDIR)/libmrrocpp.a
 #------------------------------------------------- Build rules -------------------------------------------------------#
 all: ${BINARIES}
 #-----------------------------------------------------------------------------------------------------------------------#
-edp_spm: $(EDPOBJS) $(SHOBJ)
+edp_spkm: $(EDPOBJS) $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 
 #---------------------------------Special object build rules (user made)-------------------------------------#
