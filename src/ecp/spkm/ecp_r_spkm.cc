@@ -17,9 +17,9 @@ namespace ecp {
 namespace spkm {
 
 robot::robot (lib::configurator &_config, lib::sr_ecp &_sr_ecp):
-	ecp_robot (lib::ROBOT_SPM, SPM_NUM_OF_SERVOS, "[edp_spkm]", _config, _sr_ecp){};
+	ecp_robot (lib::ROBOT_SPKM, SPKM_NUM_OF_SERVOS, "[edp_spkm]", _config, _sr_ecp){};
 robot::robot (common::task::task& _ecp_object):
-	ecp_robot (lib::ROBOT_SPM, SPM_NUM_OF_SERVOS, "[edp_spkm]", _ecp_object){};
+	ecp_robot (lib::ROBOT_SPKM, SPKM_NUM_OF_SERVOS, "[edp_spkm]", _ecp_object){};
 
 // --------------------------------------------------------------------------
 void robot::create_command (void) {
@@ -69,7 +69,7 @@ void robot::create_command (void) {
                     = EDP_data.next_kinematic_model_no;
               break;
             case lib::SERVO_ALGORITHM:
-              for (int j=0; j<SPM_NUM_OF_SERVOS; j++) {
+              for (int j=0; j<SPKM_NUM_OF_SERVOS; j++) {
                 ecp_command.instruction.rmodel.servo_algorithm.servo_algorithm_no[j]
                    = EDP_data.next_servo_algorithm_no[j];
                 ecp_command.instruction.rmodel.servo_algorithm.servo_parameters_no[j]
@@ -102,13 +102,13 @@ void robot::create_command (void) {
                    = EDP_data.next_XYZ_ZYZ_arm_coordinates[j];
               break;
             case lib::JOINT:
-              for (int j=0; j<SPM_NUM_OF_SERVOS ; j++){
+              for (int j=0; j<SPKM_NUM_OF_SERVOS ; j++){
                 ecp_command.instruction.arm.pf_def.arm_coordinates[j]
                    = EDP_data.next_joint_arm_coordinates[j];
                   }
               break;
             case lib::MOTOR:
-              for (int j=0; j<SPM_NUM_OF_SERVOS ; j++)
+              for (int j=0; j<SPKM_NUM_OF_SERVOS ; j++)
                 ecp_command.instruction.arm.pf_def.arm_coordinates[j]
                    = EDP_data.next_motor_arm_coordinates[j];
               break;
@@ -185,12 +185,12 @@ void robot::get_arm_reply (void)
 {
     switch (reply_package.arm_type) {
        case lib::MOTOR:
-         for (int i=0; i<SPM_NUM_OF_SERVOS; i++)
+         for (int i=0; i<SPKM_NUM_OF_SERVOS; i++)
            EDP_data.current_motor_arm_coordinates[i] =
              reply_package.arm.pf_def.arm_coordinates[i];
          break;
        case lib::JOINT:
-         for (int i=0; i<SPM_NUM_OF_SERVOS; i++)
+         for (int i=0; i<SPKM_NUM_OF_SERVOS; i++)
            EDP_data.current_joint_arm_coordinates[i] =
              reply_package.arm.pf_def.arm_coordinates[i];
                break;
@@ -242,7 +242,7 @@ void robot::get_rmodel_reply (void)
 			    reply_package.rmodel.kinematic_model.kinematic_model_no;
 			break;
 		case lib::SERVO_ALGORITHM:
-			for (int i=0; i<SPM_NUM_OF_SERVOS; i++) {
+			for (int i=0; i<SPKM_NUM_OF_SERVOS; i++) {
 				EDP_data.current_servo_algorithm_no[i] =
 				    reply_package.rmodel.servo_algorithm.servo_algorithm_no[i];
 				EDP_data.current_servo_parameters_no[i] =

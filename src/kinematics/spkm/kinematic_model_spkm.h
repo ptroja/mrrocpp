@@ -10,8 +10,8 @@
 // Data:		31.01.2007
 // ------------------------------------------------------------------------
 
-#if !defined(_SPM_KIN_model)
-#define _SPM_KIN_model
+#if !defined(_SPKM_KIN_model)
+#define _SPKM_KIN_model
 
 // Definicja klasy kinematic_model.
 #include "kinematics/common/kinematic_model.h"

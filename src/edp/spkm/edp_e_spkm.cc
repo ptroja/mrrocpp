@@ -62,12 +62,12 @@ int effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
 
 // Konstruktor.
 effector::effector (lib::configurator &_config) :
-        manip_effector (_config, lib::ROBOT_SPM)
+        manip_effector (_config, lib::ROBOT_SPKM)
 {
     //  Stworzenie listy dostepnych kinematyk.
     create_kinematic_models_for_given_robot();
 
-    number_of_servos = SPM_NUM_OF_SERVOS;
+    number_of_servos = SPKM_NUM_OF_SERVOS;
 
     reset_variables();
 }

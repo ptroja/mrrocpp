@@ -5,8 +5,8 @@
 //
 // -------------------------------------------------------------------------
 
-#if !defined(_ECP_R_SPM_H)
-#define _ECP_R_SPM_H
+#if !defined(_ECP_R_SPKM_H)
+#define _ECP_R_SPKM_H
 
 #include "ecp/common/ecp_robot.h"
 

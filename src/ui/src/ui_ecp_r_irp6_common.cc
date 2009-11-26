@@ -54,7 +54,7 @@ ui_common_robot::ui_common_robot (lib::configurator &_config, lib::sr_ecp &_sr_e
     case lib::ROBOT_SMB:
         ecp = new ecp::smb::robot(_config, _sr_ecp_msg);
         break;
-    case lib::ROBOT_SPM:
+    case lib::ROBOT_SPKM:
         ecp = new ecp::spkm::robot(_config, _sr_ecp_msg);
         break;
 //    case lib::ROBOT_SPEAKER:

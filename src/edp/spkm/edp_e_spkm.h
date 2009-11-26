@@ -10,8 +10,8 @@
 // ------------------------------------------------------------------------
 
 
-#ifndef __EDP_E_SPM_H
-#define __EDP_E_SPM_H
+#ifndef __EDP_E_SPKM_H
+#define __EDP_E_SPKM_H
 
 #include "edp/common/edp_e_manip.h"
 
