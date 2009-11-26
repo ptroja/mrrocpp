@@ -878,7 +878,7 @@ bool smooth2::first_step() { //wywolywane tylko raz w calej trajektorii
         if (type == 2) {
             the_robot->EDP_data.motion_type = lib::RELATIVE;
             the_robot->EDP_data.next_interpolation_type = lib::TCIM;
-            for (int i=0; i<6; i++)
+            for (int i=0; i<6; i++)//TODO sprawdzic czy tylko do 6
             {
             	the_robot->EDP_data.next_behaviour[i] = lib::UNGUARDED_MOTION;
             }
@@ -1000,6 +1000,7 @@ bool smooth2::next_step () {
 						the_robot->EDP_data.next_gripper_coordinate = pose_list_iterator->coordinates[6];
 					}
 				}
+
     			coordinate_list_iterator++;
 
     			break;
@@ -1078,16 +1079,30 @@ bool smooth2::next_step () {
     		        i=6;
 				}
 
-    			gripper_position = pose_list_iterator->start_position[i] +
-    			                                   pose_list_iterator->k[i]*((node_counter*tk)*pose_list_iterator->v_grip);
-    			//printf(" %f ", gripper_position);
-                if((gripper_position > pose_list_iterator->coordinates[i] && pose_list_iterator->k[i] == -1) ||
-                		(gripper_position < pose_list_iterator->coordinates[i] && pose_list_iterator->k[i] == 1)) {
-                	//printf("git");
-                	the_robot->EDP_data.next_gripper_coordinate = gripper_position;
-                } else {
-                	the_robot->EDP_data.next_gripper_coordinate = pose_list_iterator->coordinates[i];
-                }
+    		    if (type == 2) {
+					gripper_position = pose_list_iterator->k[i]*((tk)*pose_list_iterator->v_grip);
+
+					//printf(" %f \t", gripper_position);
+					if((node_counter * gripper_position > pose_list_iterator->coordinates[i] && pose_list_iterator->k[i] == -1) ||
+					(node_counter * gripper_position < pose_list_iterator->coordinates[i] && pose_list_iterator->k[i] == 1)) {
+					//printf("git");
+						the_robot->EDP_data.next_gripper_coordinate = gripper_position;
+					} else {
+						the_robot->EDP_data.next_gripper_coordinate = 0;
+					}
+				} else {
+
+					gripper_position = pose_list_iterator->start_position[i] +
+													   pose_list_iterator->k[i]*((node_counter*tk)*pose_list_iterator->v_grip);
+					//printf(" %f ", gripper_position);
+					if((gripper_position > pose_list_iterator->coordinates[i] && pose_list_iterator->k[i] == -1) ||
+							(gripper_position < pose_list_iterator->coordinates[i] && pose_list_iterator->k[i] == 1)) {
+						//printf("git");
+						the_robot->EDP_data.next_gripper_coordinate = gripper_position;
+					} else {
+						the_robot->EDP_data.next_gripper_coordinate = pose_list_iterator->coordinates[i];
+					}
+				}
 
     		    coordinate_list_iterator++;
 
@@ -1117,17 +1132,30 @@ bool smooth2::next_step () {
     		    } else if(the_robot->robot_name == lib::ROBOT_IRP6_POSTUMENT) {
     		        i=6;
 				}
+    		    if (type == 2) {
+					gripper_position = pose_list_iterator->k[i]*((tk)*pose_list_iterator->v_grip);
 
-    			gripper_position = pose_list_iterator->start_position[i] +
-    			                                   pose_list_iterator->k[i]*((node_counter*tk)*pose_list_iterator->v_grip);
-    			//printf(" %f ", gripper_position);
-                if((gripper_position > pose_list_iterator->coordinates[i] && pose_list_iterator->k[i] == -1) ||
-                		(gripper_position < pose_list_iterator->coordinates[i] && pose_list_iterator->k[i] == 1)) {
-                	//printf("git");
-                	the_robot->EDP_data.next_gripper_coordinate = gripper_position;
-                } else {
-                	the_robot->EDP_data.next_gripper_coordinate = pose_list_iterator->coordinates[i];
-                }
+					//printf(" %f \t", gripper_position);
+					if((node_counter * gripper_position > pose_list_iterator->coordinates[i] && pose_list_iterator->k[i] == -1) ||
+					(node_counter * gripper_position < pose_list_iterator->coordinates[i] && pose_list_iterator->k[i] == 1)) {
+					//printf("git");
+						the_robot->EDP_data.next_gripper_coordinate = gripper_position;
+					} else {
+						the_robot->EDP_data.next_gripper_coordinate = 0;
+					}
+				} else {
+
+					gripper_position = pose_list_iterator->start_position[i] +
+													   pose_list_iterator->k[i]*((node_counter*tk)*pose_list_iterator->v_grip);
+					//printf(" %f ", gripper_position);
+					if((gripper_position > pose_list_iterator->coordinates[i] && pose_list_iterator->k[i] == -1) ||
+							(gripper_position < pose_list_iterator->coordinates[i] && pose_list_iterator->k[i] == 1)) {
+						//printf("git");
+						the_robot->EDP_data.next_gripper_coordinate = gripper_position;
+					} else {
+						the_robot->EDP_data.next_gripper_coordinate = pose_list_iterator->coordinates[i];
+					}
+				}
 
     		    coordinate_list_iterator++;
 
