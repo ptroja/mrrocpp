@@ -92,8 +92,14 @@ public:
   // Przeliczenie polozenia ze wspolrzednych wewnetrznych na wspolrzedne zewnetrzne.
   virtual void i2e_transform(const double* local_current_joints, lib::frame_tab* local_current_end_effector_frame);
 
-  // Przeliczenie polozenia ze wspolrzednych zewnetrznych na wspolrzedne zewnetrzne.
-   virtual void e2i_transform(double* local_desired_joints, double* local_current_joints, lib::frame_tab* local_desired_end_effector_frame);
+  // Przeliczenie polozenia ze wspolrzednych wewnetrznych na wspolrzedne zewnetrzne - bez obliczen zwiazanych z narzedziem
+  virtual void i2e_wo_tool_transform(const double* local_current_joints, lib::frame_tab* local_current_end_effector_frame);
+
+  // Przeliczenie polozenia ze wspolrzednych zewnetrznych na wspolrzedne wewnetrzne.
+  virtual void e2i_transform(double* local_desired_joints, double* local_current_joints, lib::frame_tab* local_desired_end_effector_frame);
+
+  // Przeliczenie polozenia ze wspolrzednych zewnetrznych na wspolrzedne wewnetrzne - bez obliczen zwiazanych z narzedziem.
+  virtual void e2i_wo_tool_transform(double* local_desired_joints, double* local_current_joints, lib::frame_tab* local_desired_end_effector_frame);
 
   // Przeliczenie bazy manipulatora w globalnym ukladzie odniesienia.
   virtual void global_frame_transform(lib::Homog_matrix&);

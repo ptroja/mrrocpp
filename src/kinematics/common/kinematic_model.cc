@@ -191,6 +191,29 @@ void model::i2e_transform(const double* local_current_joints, lib::frame_tab* lo
 }
 
 
+// Przeliczenie polozenia ze wspolrzednych wewnetrznych na wspolrzedne zewnetrzne - bez obliczen zwiazanych z narzedziem
+void model::i2e_wo_tool_transform(const double* local_current_joints, lib::frame_tab* local_current_end_effector_frame) {
+
+    // Rozwiazanie prostego zagadnienia kinematyki.
+    direct_kinematics_transform(local_current_joints, local_current_end_effector_frame);
+
+    // Stworzenie macierzy, ktora bedzie uzywana w dalszych obliczeniach.
+    lib::Homog_matrix local_current_end_effector_matrix (*local_current_end_effector_frame);
+
+    // Obliczenia zwiazane z przeksztalceniami do globalnego ukladu odniesienia.
+    if(global_frame_computations)
+        global_frame_transform(local_current_end_effector_matrix);
+
+    // Obliczenia zwiazane z macierza korekcji lokalnej.
+    if(local_corrector_computations)
+        local_corrector_transform(local_current_end_effector_matrix);
+
+    // Przepisanie wyniku z macierzy.
+    local_current_end_effector_matrix.get_frame_tab(*local_current_end_effector_frame);
+
+}
+
+
 /* ------------------------------------------------------------------------
   Przeliczenie polozenia ze wspolrzednych zewnetrznych na wspolrzedne zewnetrzne (e2i - external to internal).
 
@@ -226,6 +249,27 @@ void model::e2i_transform(double* local_desired_joints, double* local_current_jo
     printf("%lf; %lf; %lf; %lf \n",(*local_desired_end_effector_frame)[2][0], (*local_desired_end_effector_frame)[2][1], (*local_desired_end_effector_frame)[2][2], (*local_desired_end_effector_frame)[2][3]);
     printf("%lf; %lf; %lf; %lf \n",(*local_desired_end_effector_frame)[3][0], (*local_desired_end_effector_frame)[3][1], (*local_desired_end_effector_frame)[3][2], (*local_desired_end_effector_frame)[3][3]);
       */
+
+}
+
+// Przeliczenie polozenia ze wspolrzednych zewnetrznych na wspolrzedne wewnetrzne - bez obliczen zwiazanych z narzedziem.
+void model::e2i_wo_tool_transform(double* local_desired_joints, double* local_current_joints, lib::frame_tab* local_desired_end_effector_frame) {
+    // Stworzenie macierzy, ktora bedzie uzywana w dalszych obliczeniach.
+    lib::Homog_matrix local_desired_end_effector_matrix (*local_desired_end_effector_frame);
+
+    // Obliczenia odwrotne zwiazane z macierza korekcji lokalnej.
+    if (local_corrector_computations)
+        local_corrector_inverse_transform(local_desired_end_effector_matrix);
+
+    // Obliczenia odwrotne zwiazane z przeksztalceniami do globalnego ukladu odniesienia.
+    if(global_frame_computations)
+        global_frame_inverse_transform(local_desired_end_effector_matrix);
+
+    // Przepisanie wyniku z macierzy.
+    local_desired_end_effector_matrix.get_frame_tab(*local_desired_end_effector_frame);
+
+    // Rozwiazanie odwrotnego zagadnienia kinematyki.
+    inverse_kinematics_transform(local_desired_joints, local_current_joints, local_desired_end_effector_frame);
 
 }
 

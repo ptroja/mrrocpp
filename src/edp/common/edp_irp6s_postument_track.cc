@@ -810,6 +810,7 @@ void irp6s_postument_track_effector::servo_joints_and_frame_actualization_and_up
 			get_current_kinematic_model()->mp2i_transform(servo_current_motor_pos, servo_current_joints);
 		}
 
+
 		rb_obj.lock_mutex();
 
 		for (int j = 0; j < number_of_servos; j++)
@@ -819,81 +820,26 @@ void irp6s_postument_track_effector::servo_joints_and_frame_actualization_and_up
 
 		rb_obj.unlock_mutex();
 
-		// T.K.: Obecne wywolanie
-		// get_current_kinematic_model()->i2e_transform(servo_current_joints, &servo_current_end_effector_frame, NULL);
-		// zastepuje wywolaniem metody, direct_kinematics_transform(), ktora rozwiazuje proste zagadnienie kinematyki
-		// bez uwzglednienia narzedzia, czyli robi to, co poprzednio i2e z TOOL = null.
-		//Uwaga: w edp_conveyor_effector jest podobnie.
+		// Obliczenie lokalnej macierzy oraz obliczenie położenia robota we wsp. zewnętrznych.
+		lib::frame_tab local_frame;
+		get_current_kinematic_model()->i2e_transform(servo_current_joints, &local_frame);
+		// Pobranie wsp. zewnętrznych w układzie
+		lib::Homog_matrix local_matrix(local_frame);
+		local_matrix.get_xyz_euler_zyz(servo_real_kartez_pos);
 
-		get_current_kinematic_model()->direct_kinematics_transform(servo_current_joints, &servo_current_frame_wo_tool);
-		//
-
-		// Stworzenie macierzy, ktora bedzie uzywana w dalszych obliczeniach.
-		lib::Homog_matrix servo_current_frame (servo_current_frame_wo_tool);
-
-		get_current_kinematic_model()->global_frame_transform(servo_current_frame);
-		//        get_current_kinematic_model()->local_corrector_transform(servo_current_frame);
-		get_current_kinematic_model()->attached_tool_transform(servo_current_frame);
-
-
-		servo_current_frame.get_xyz_euler_zyz(servo_real_kartez_pos);
-
-#ifdef EXTRA_COMPUTATION
-		get_current_kinematic_model()->i2e_transform(servo_current_joints, &tmp);
-		servo_current_end_effector_frame_with_tool_and_base.set_frame_tab(tmp);
-		servo_current_end_effector_frame_with_tool_and_base_wo_offset = servo_current_end_effector_frame_with_tool_and_base;
-		servo_current_end_effector_frame_with_tool_and_base_wo_offset.remove_translation();
-
-		// wyznaczenie przyrostu miedzy dwoma kolejnymi krokami
-		step_increment_frame = !servo_previous_end_effector_frame_with_tool_and_base * servo_current_end_effector_frame_with_tool_and_base;
-
-		// przepisanie starej na nowa
-		servo_previous_end_effector_frame_with_tool_and_base = servo_current_end_effector_frame_with_tool_and_base;
-
-		// przyrost w notacji xyz_angle_axis
-		step_increment_frame.get_xyz_angle_axis (servo_xyz_angle_axis_rotation, servo_xyz_angle_axis_translation);
-		/*
-         printf("b rx: %f, ry: %f, rz: %f\n", servo_xyz_angle_axis_translation[0], servo_xyz_angle_axis_translation[1],
-         servo_xyz_angle_axis_translation[2]);
-		 */
-
-		// sprowadzenie przyrostu do wsp. bazowych
-		servo_xyz_angle_axis_rotation = servo_current_end_effector_frame_with_tool_and_base_wo_offset * servo_xyz_angle_axis_rotation;
-		servo_xyz_angle_axis_translation = servo_current_end_effector_frame_with_tool_and_base_wo_offset * servo_xyz_angle_axis_translation;
-		/*
-         printf("b rx: %f, ry: %f, rz: %f\n", servo_xyz_angle_axis_translation[0], servo_xyz_angle_axis_translation[1],
-         servo_xyz_angle_axis_translation[2]);
-		 */
-		// wyliczenie predkosci i przyspieszenia
-		for (int i=0; i<6; i++)
-		{
-			servo_real_kartez_vel[i] = servo_real_kartez_pos[i] - rkpminusone[i];
-			servo_real_kartez_acc[i] = servo_real_kartez_pos[i] - 2*rkpminusone[i] + rkpminustwo[i];
-			rkpminustwo[i] = rkpminusone[i];
-			rkpminusone[i] = servo_real_kartez_pos[i];
-		}
-
-#endif
-
-		// zapisanie wartosci rzeczywistej dla readera
+		// Zapisanie wartosci rzeczywistej dla readera
 		rb_obj.lock_mutex();
-
 		for (int i=0; i<6; i++)
 		{
 			rb_obj.step_data.real_cartesian_position[i] = servo_real_kartez_pos[i];
 			rb_obj.step_data.real_cartesian_vel[i] = servo_real_kartez_vel[i];
 			rb_obj.step_data.real_cartesian_acc[i] = servo_real_kartez_acc[i];
 		}
-
 		rb_obj.unlock_mutex();
 
-		// Jesli obliczenia zwiazane z baza maja byc wykonane.
-		if (get_current_kinematic_model()->global_frame_computations)
-		{
-			lib::Homog_matrix tmp_eem(servo_current_frame_wo_tool);
-			get_current_kinematic_model()->global_frame_transform(tmp_eem);
-			tmp_eem.get_frame_tab(servo_current_frame_wo_tool);
-		}
+		// Obliczenie polozenia robota we wsp. zewnetrznych bez narzedzia.
+		get_current_kinematic_model()->i2e_wo_tool_transform(servo_current_joints, &servo_current_frame_wo_tool);
+
 
 		if ( (force_tryb> 0)&&(is_synchronised())&&(!(vs->first_configure_done))&&(!(vs->force_sensor_do_first_configure)))
 		{
