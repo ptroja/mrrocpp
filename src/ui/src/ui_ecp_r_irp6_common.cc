@@ -27,7 +27,7 @@
 #include "ecp/irp6_mechatronika/ecp_r_irp6m.h"
 #include "ecp/polycrank/ecp_r_polycrank.h"
 #include "ecp/smb/ecp_r_smb.h"
-#include "ecp/spm/ecp_r_spm.h"
+#include "ecp/spkm/ecp_r_spkm.h"
 #include "ui/ui_ecp_r_irp6_common.h"
 
 #include <math.h>
@@ -55,7 +55,7 @@ ui_common_robot::ui_common_robot (lib::configurator &_config, lib::sr_ecp &_sr_e
         ecp = new ecp::smb::robot(_config, _sr_ecp_msg);
         break;
     case lib::ROBOT_SPM:
-        ecp = new ecp::spm::robot(_config, _sr_ecp_msg);
+        ecp = new ecp::spkm::robot(_config, _sr_ecp_msg);
         break;
 //    case lib::ROBOT_SPEAKER:
 //    case lib::ROBOT_CONVEYOR:

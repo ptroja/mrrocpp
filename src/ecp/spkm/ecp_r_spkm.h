@@ -12,7 +12,7 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace spm {
+namespace spkm {
 
 // ---------------------------------------------------------------
 class robot: public common::ecp_robot
@@ -36,7 +36,7 @@ class robot: public common::ecp_robot
 }; // end: class ecp_irp6_mechatronika_robot
 // ---------------------------------------------------------------
 
-} // namespace spm
+} // namespace spkm
 } // namespace ecp
 } // namespace mrrocpp
 

@@ -18,7 +18,7 @@
 
 namespace mrrocpp {
 namespace kinematic {
-namespace spm {
+namespace spkm {
 
 class model : public common::model
 {
@@ -91,7 +91,7 @@ public:
 };//: kinematic_model_irp6m_with_wrist;
 
 
-} // namespace spm
+} // namespace spkm
 } // namespace kinematic
 } // namespace mrrocpp
 

@@ -10,16 +10,16 @@
 #include "lib/com_buf.h"
 #include "lib/mis_fun.h"
 
-#include "ecp/spm/ecp_r_spm.h"
+#include "ecp/spkm/ecp_r_spkm.h"
 
 namespace mrrocpp {
 namespace ecp {
-namespace spm {
+namespace spkm {
 
 robot::robot (lib::configurator &_config, lib::sr_ecp &_sr_ecp):
-	ecp_robot (lib::ROBOT_SPM, SPM_NUM_OF_SERVOS, "[edp_spm]", _config, _sr_ecp){};
+	ecp_robot (lib::ROBOT_SPM, SPM_NUM_OF_SERVOS, "[edp_spkm]", _config, _sr_ecp){};
 robot::robot (common::task::task& _ecp_object):
-	ecp_robot (lib::ROBOT_SPM, SPM_NUM_OF_SERVOS, "[edp_spm]", _ecp_object){};
+	ecp_robot (lib::ROBOT_SPM, SPM_NUM_OF_SERVOS, "[edp_spkm]", _ecp_object){};
 
 // --------------------------------------------------------------------------
 void robot::create_command (void) {
@@ -254,7 +254,7 @@ void robot::get_rmodel_reply (void)
 	} // end: switch (...rmodel_type)
 }
 
-} // namespace spm
+} // namespace spkm
 } // namespace ecp
 } // namespace mrrocpp
 

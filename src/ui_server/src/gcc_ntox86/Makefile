@@ -26,7 +26,7 @@ MRROCOBJ = \
 	$(ECP_DIR)/conveyor/ecp_r_conv.o \
 	$(ECP_DIR)/speaker/ecp_r_speaker.o \
 	$(ECP_DIR)/smb/ecp_r_smb.o \
-	$(ECP_DIR)/spm/ecp_r_spm.o \
+	$(ECP_DIR)/spkm/ecp_r_spkm.o \
 	$(LIBDIR)/libecp.a $(LIBDIR)/libecp_mp.a  $(LIBDIR)/libmrrocpp.a
 
 MYOBJ = $(UISRCDIR)/gcc_ntox86/ui_ecp_r_irp6_common.o \

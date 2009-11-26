@@ -18,11 +18,11 @@
 #include "kinematics/common/transformer_error.h"
 
 // Klasa kinematic_model_irp6m_with_wrist.
-#include "kinematics/spm/kinematic_model_spm.h"
+#include "kinematics/spkm/kinematic_model_spkm.h"
 
 namespace mrrocpp {
 namespace kinematic {
-namespace spm {
+namespace spkm {
 
 /* -----------------------------------------------------------------------
   Konstruktor.
@@ -630,7 +630,7 @@ void model::inverse_kinematics_transform(double* local_desired_joints, double* l
 
 }; //: inverse_kinematics_transform()
 
-} // namespace spm
+} // namespace spkm
 } // namespace kinematic
 } // namespace mrrocpp
 
