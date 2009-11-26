@@ -4,7 +4,7 @@
 HOMEDIR = ../..
 include $(HOMEDIR)/common.mk
 
-SOURCEDIRS = irp6_on_track conveyor irp6_postument speaker irp6_mechatronika polycrank festival player smb spm multi_robot_binaries common 
+SOURCEDIRS = irp6_on_track conveyor irp6_postument speaker irp6_mechatronika polycrank festival player smb spkm multi_robot_binaries common 
 INSTALLDIRS = ${SOURCEDIRS}
 CLEANDIRS = ${SOURCEDIRS}
 #======================================================#
@@ -22,8 +22,8 @@ speaker: common
 festival: common
 player: common
 smb: common
-spm: common
-multi_robot_binaries: irp6_on_track conveyor irp6_postument speaker irp6_mechatronika smb spm
+spkm: common
+multi_robot_binaries: irp6_on_track conveyor irp6_postument speaker irp6_mechatronika smb spkm
 
 $(SOURCEDIRS):
 	@$(MAKE) -C $@

@@ -7,7 +7,7 @@ ifeq ($(BUILD_TARGET), linux)
 SOURCEDIRS = common irp6_mechatronika irp6_on_track irp6_postument conveyor
 else
 SOURCEDIRS = common ati3084 ati3084MK ati6284 conveyor irp6_on_track speaker\
-	polycrank irp6_postument irp6_mechatronika smb spm
+	polycrank irp6_postument irp6_mechatronika smb spkm
 endif
 
 ifdef DOCENT_SENSOR
@@ -25,7 +25,7 @@ ati3084: common
 ati6284: common
 conveyor: common
 smb: common
-spm: common
+spkm: common
 
 IRP6ONT_DEPS = common ati3084 ati3084MK ati6284
 ifdef DOCENT_SENSOR
