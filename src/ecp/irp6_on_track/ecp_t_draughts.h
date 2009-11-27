@@ -30,7 +30,7 @@ class Draughts: public common::task::task{
 
 	private:
 		lib::sensor *vsp_fradia;						//Virtual sensor
-		common::generator::smooth* sgen;				//smooth movement generator
+		//common::generator::smooth* sgen;				//smooth movement generator
 		common::generator::smooth2* sgen2;				//smooth2 movement generator
 		common::generator::bias_edp_force* befgen;		//calibration of force
 		common::generator::tff_gripper_approach* gagen;	//gripper approach with force control

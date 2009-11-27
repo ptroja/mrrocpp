@@ -343,7 +343,7 @@ void smooth2::load_coordinates(lib::POSE_SPECIFICATION ps, double v[MAX_SERVOS_N
 void smooth2::load_coordinates(lib::POSE_SPECIFICATION ps, double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset) {
 
 	double v[MAX_SERVOS_NR]={0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1};
-	double a[MAX_SERVOS_NR]={0.03, 0.03, 0.03, 0.03, 0.03, 0.03, 0.03, 0.03};
+	double a[MAX_SERVOS_NR]={0.03, 0.03, 0.03, 0.03, 0.03, 0.03, 0.03, 0.02};
 	double coordinates[MAX_SERVOS_NR];
 
 	if (reset == true) {

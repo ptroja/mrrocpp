@@ -39,7 +39,7 @@ public:
     double u[MAX_AXES_NUM]; //tablica uchybów
     bool tracking; //jesli true, obiekt jest sledzony, jesli false, zagubiony (przychodzi z fradii)
 	double t;//czas makrokroku
-	bool first_move; //flaga pierwszego makrokroku
+	//bool first_move; //flaga pierwszego makrokroku
 
     //zmienne ruchu
     double a_max[MAX_AXES_NUM]; //maks przyspieszenie;

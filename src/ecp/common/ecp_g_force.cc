@@ -2350,11 +2350,15 @@ bool tff_rubik_grab::next_step()
 	if (node_counter==1)
 	{
 		the_robot->EDP_data.next_gripper_coordinate=0;
+		desired_absolute_gripper_coordinate = the_robot->EDP_data.current_gripper_coordinate;
 	}
 
-	if ((the_robot->EDP_data.next_gripper_coordinate > goal_position)
+	if ((desired_absolute_gripper_coordinate > goal_position)
 			|| (node_counter < min_node_counter))
+	{
+		desired_absolute_gripper_coordinate -= position_increment;
 		the_robot->EDP_data.next_gripper_coordinate =- position_increment;
+	}
 	else
 	{
 		return false;

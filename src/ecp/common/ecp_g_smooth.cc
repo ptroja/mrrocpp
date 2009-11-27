@@ -100,7 +100,9 @@ void smooth::generate_next_coords (void)
                                         (node_counter*tk - fabs(v_r[i]-v_p[i])/a_r[i])*v_r[i])));
                 if(i==7)
                     printf("\n");
-            }
+            }                            printf("blad! nie da sie obliczyc predkosci (%d)\n", i);
+            throw ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
+
             next_position[i] = start_position[i] +
                                k[i]*(s_przysp[i] + (node_counter*tk - fabs(v_r[i]-v_p[i])/a_r[i])*v_r[i]);
         }
@@ -591,6 +593,7 @@ void smooth::calculate(void)
                     else
                     {
                         printf("Blad w obliczaniu predkosci w 2 etapach!!\n");
+                        flushall();
                         throw ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
                     }
 
@@ -661,6 +664,7 @@ void smooth::calculate(void)
                         else
                         {//blad - brak rozwiazania
                             printf("blad! nie da sie obliczyc predkosci (%d)\n", i);
+                            flushall();
                             throw ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
 
                             v_r[i]=0;

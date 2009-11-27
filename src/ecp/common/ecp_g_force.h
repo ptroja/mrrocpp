@@ -391,6 +391,7 @@ protected:
     double goal_position, position_increment;
     unsigned int min_node_counter;
     bool both_axes_running;
+    double desired_absolute_gripper_coordinate;
 
 public:
     const int step_no;

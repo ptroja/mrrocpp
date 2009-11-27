@@ -16,10 +16,6 @@ namespace irp6ot {
 ecp_vis_ib_eih_object_tracker_irp6ot::ecp_vis_ib_eih_object_tracker_irp6ot(common::task::task& _ecp_task) :
 	common::ecp_visual_servo(_ecp_task) {
 
-	for (int i = 0; i <= 6; i++) {//ustawianie next_position dla wszystkich osi na 0
-		next_position[i] = 0;
-	}
-
 	t = MOTION_STEPS * STEP; //ustawianie czasu makrokroku (50 milisekund)
 
 	//s_z = 0.35;
@@ -28,7 +24,10 @@ ecp_vis_ib_eih_object_tracker_irp6ot::ecp_vis_ib_eih_object_tracker_irp6ot(commo
 }
 
 bool ecp_vis_ib_eih_object_tracker_irp6ot::first_step() {
-	vsp_fradia = sensor_m[lib::SENSOR_CVFRADIA];
+
+	printf("first step\n");
+	flushall();
+	//vsp_fradia = sensor_m[lib::SENSOR_CVFRADIA];
 
 	the_robot->EDP_data.instruction_type = lib::GET;
 	the_robot->EDP_data.get_type = ARM_DV;
@@ -36,24 +35,33 @@ bool ecp_vis_ib_eih_object_tracker_irp6ot::first_step() {
 	the_robot->EDP_data.motion_type = lib::RELATIVE;
 	the_robot->EDP_data.set_type = ARM_DV;
 	the_robot->EDP_data.set_arm_type = lib::XYZ_ANGLE_AXIS;
-	the_robot->EDP_data.next_interpolation_type = lib::MIM;
+	the_robot->EDP_data.next_interpolation_type = lib::TCIM;
 	the_robot->EDP_data.motion_steps = MOTION_STEPS;
 	the_robot->EDP_data.value_in_step_no = MOTION_STEPS - 1;
 
-	vsp_fradia->to_vsp.haar_detect_mode = lib::WITHOUT_ROTATION;
-	first_move =  true;
+	for (int i=0; i<6; i++)
+	{
+		the_robot->EDP_data.next_behaviour[i] = lib::UNGUARDED_MOTION;
+	}
+
+	for (int i = 0; i < 7; i++) {//ustawianie next_position dla wszystkich osi (lacznie z chwytakiem) na 0
+		next_position[i] = 0;
+	}
+
+	//vsp_fradia->to_vsp.haar_detect_mode = lib::WITHOUT_ROTATION;
+	//first_move =  true;
 
 	//z_s = 0;
 	//z_stop = false;
 
-	if (read_parametres() == false) {//czytanie predkosci maksymalnych i przyspieszen z pliku konfiguracyjnego zadania, jesli sie nie powiodlo to przypisz domyslne
-		v_max[1] = v_max[0] = 0.012;
-		a_max[1] = a_max[0] = 0.01;
+	//if (read_parametres() == false) {//czytanie predkosci maksymalnych i przyspieszen z pliku konfiguracyjnego zadania, jesli sie nie powiodlo to przypisz domyslne
+		v_max[1] = v_max[0] = 0.02;
+		a_max[1] = a_max[0] = 0.02;
 		v_max[2] = 0.03;
-		a_max[2] = 0.01;
+		a_max[2] = 0.02;
 		v_stop[0] = v_stop[1] = v_stop[2] = 0.0005;
 		v_min[0] = 	v_min[1] = v_min[2] = 0.0015;
-	}
+	//}
 
 	//pierwsze ustawienie flag dotarcia i kierunku
 	for (int i = 0; i < MAX_AXES_NUM; i++) {
@@ -69,7 +77,7 @@ bool ecp_vis_ib_eih_object_tracker_irp6ot::first_step() {
 
 bool ecp_vis_ib_eih_object_tracker_irp6ot::next_step_without_constraints() {
 
-	if (first_move == true) {
+	//if (first_move == true) {
 		the_robot->EDP_data.instruction_type = lib::SET_GET;//TODO sprawdzic czy to moze byc robione tylko raz
 		//printf("poczatek sledzenia\n");
 		//flushall();
@@ -100,8 +108,8 @@ bool ecp_vis_ib_eih_object_tracker_irp6ot::next_step_without_constraints() {
 	    }*/
 	    //ruch w z (koniec)
 
-		first_move = false;
-	}
+	//	first_move = false;
+	//}
 	//ruch w z
 	/*if (v[2] < v_max[2] && (s_z - s_acc) > z_s) {//przyspieszanie
 		s[2] = (a_max[2] * t * t)/2 + (v[2] * t);
@@ -126,24 +134,37 @@ bool ecp_vis_ib_eih_object_tracker_irp6ot::next_step_without_constraints() {
 	//alpha = the_robot->EDP_data.current_joint_arm_coordinates[1]- the_robot->EDP_data.current_joint_arm_coordinates[6];
 	//Uchyb wyrazony w pikselach.
 
-	lib::VSP_REPORT vsp_report = vsp_fradia->from_vsp.vsp_report;
-	if (vsp_report == lib::VSP_REPLY_OK) {
+	//lib::VSP_REPORT vsp_report = vsp_fradia->from_vsp.vsp_report;
+	//if (vsp_report == lib::VSP_REPLY_OK) {
 
-		if (fabs(u[0]) < 5 && fabs(u[1]) < 5 && v[0] <= v_stop[0] & v[1] <= v_stop[1]) {//TODO przemyśleć, poprawić
+		//u[0] = vsp_fradia->from_vsp.comm_image.sensor_union.object_tracker.x;//TODO zapytać czy da sie to zrobic w petli
+		//u[1] = vsp_fradia->from_vsp.comm_image.sensor_union.object_tracker.y;
+		//u[2] = vsp_fradia->from_vsp.comm_image.sensor_union.object_tracker.z;
+
+		u[0] = 0;
+		u[1] = 0;
+		u[2] = -100;
+
+		printf("ux: %f\t", u[0]);
+		printf("uy: %f\n", u[1]);
+		printf("uz: %f\n", u[2]);
+		flushall();
+
+		if (fabs(u[0]) < 5 && fabs(u[1]) < 5 && fabs(u[2]) < 5 && v[0] <= v_stop[0] && v[1] <= v_stop[1] && v[2] <= v_stop[2]) {//TODO przemyśleć, poprawić
 			//if (z_stop) {
-				//printf("koniec sledzenia\n");
+				printf("koniec sledzenia\n");
 				//flushall();
 				return false;
 			//}
 		}
 
-		u[0] = vsp_fradia->from_vsp.comm_image.sensor_union.object_tracker.x;//TODO zapytać czy da sie to zrobic w petli
-		u[1] = vsp_fradia->from_vsp.comm_image.sensor_union.object_tracker.y;
-		u[2] = vsp_fradia->from_vsp.comm_image.sensor_union.object_tracker.z;
-
 		for (int i = 0; i < MAX_AXES_NUM; i++) {
+			if (u[i] == 0) {
+				continue;
+			}
 
-			tracking = vsp_fradia->from_vsp.comm_image.sensor_union.tracker.tracking;
+			tracking = true;
+			//tracking = vsp_fradia->from_vsp.comm_image.sensor_union.tracker.tracking;
 
 			//funkcja zmniejszajaca predkosc w x i y w zaleznosci od odleglosci od przebytej drogi w z
 			/*double u_param;
@@ -181,6 +202,9 @@ bool ecp_vis_ib_eih_object_tracker_irp6ot::next_step_without_constraints() {
 				}
 				s[i] = (a_max[i] * t * t)/2 + (v[i] * t);
 				v[i] += a_max[i] * t;
+				if (v[i] > v_max[i]) {
+					v[i] = v_max[i];
+				}
 			} else if(v[i] > 0 && (change[i] == true || reached[i] == true || tracking == false || v[i] > v_max[i])) {//hamowanie
 				s[i] = (a_max[i] * t * t)/2 + (v[i] * t);
 				v[i] -= a_max[i] * t;
@@ -192,12 +216,27 @@ bool ecp_vis_ib_eih_object_tracker_irp6ot::next_step_without_constraints() {
 			}
 			next_position[i] = - (dir[i] * s[i]);
 		}
-	}
+	//}
 
 	memcpy(the_robot->EDP_data.next_XYZ_AA_arm_coordinates, next_position,
 			6 * sizeof(double)); //zapisanie pozycji w angle axes
 
 	the_robot->EDP_data.next_gripper_coordinate = next_position[6]; //zapisanie pozycji grippera
+
+	printf("s_x: %f\t s_y %f\t s_z: %f\n", next_position[0],next_position[1],next_position[2]);
+
+	printf("\n");
+	for (int k = 0; k < 3; k++) {
+		printf("v[%d]: %f\t", k, v[k]);
+	}
+	printf("\n\n");
+	printf("\n*********************************************************************************\n");
+
+	for (int i = 0; i <= 7; i++) {//ustawianie next_position dla wszystkich osi (lacznie z chwytakiem) na 0
+		next_position[i] = 0;
+	}
+
+	flushall();
 
 	return true;
 }

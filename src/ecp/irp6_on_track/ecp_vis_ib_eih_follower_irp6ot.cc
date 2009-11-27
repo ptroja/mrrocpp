@@ -144,7 +144,7 @@ bool ecp_vis_ib_eih_follower_irp6ot::next_step_without_constraints() {
 	lib::VSP_REPORT vsp_report = vsp_fradia->from_vsp.vsp_report;
 	if (vsp_report == lib::VSP_REPLY_OK) {
 
-		if (fabs(u[0]) < 20 && fabs(u[1]) < 20 && v[0] <= v_stop[0] & v[1] <= v_stop[1]) {
+		if (fabs(u[0]) < 20 && fabs(u[1]) < 20 && v[0] <= v_stop[0] && v[1] <= v_stop[1]) {
 			if (z_stop) {
 				printf("#################################### koniec sledzenia ##################################\n");
 				flushall();

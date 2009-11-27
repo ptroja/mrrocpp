@@ -86,21 +86,21 @@ Draughts::Draughts(lib::configurator &_config): task(_config){
 
 	ecp_m_robot=new robot(*this);				//initialization of robot
 
-	sgen=new common::generator::smooth(*this, true);
+	//sgen=new common::generator::smooth(*this, true);
 	sgen2 = new common::generator::smooth2(*this, true);
 	befgen=new common::generator::bias_edp_force(*this);
 	gagen=new common::generator::tff_gripper_approach (*this, 8);	//gripper approach constructor (task&, no_of_steps)
 	sleepgen=new common::generator::sleep(*this);
 	aitrans=new ecp_mp::transmitter::TRDraughtsAI(ecp_mp::transmitter::TRANSMITTER_DRAUGHTSAI,"[transmitter_draughts_ai]",*this);
 
-	follower_vis = new ecp_vis_ib_eih_follower_irp6ot(*this);	//planar servomechanism generator
+	follower_vis = new ecp_vis_ib_eih_follower_irp6ot(*this);	//follower servomechanism generator
 	follower_vis->sensor_m = sensor_m;
 };
 
 /*============================Destructor=====================================*/
 Draughts::~Draughts(){
 	delete ecp_m_robot;
-	delete sgen;
+	//delete sgen;
 	delete sgen2;
 	delete befgen;
 	delete gagen;
@@ -366,9 +366,12 @@ void Draughts::takeDynamicPawn(int from){
 	gagen->configure(0.01,300);
 	gagen->Move();
 
+	double v[MAX_SERVOS_NR]={0.20, 0.20, 0.01, 0.20, 0.20, 0.20, 0.20, 0.20};
+	double a[MAX_SERVOS_NR]={0.15, 0.15, 0.5, 0.15, 0.15, 0.15, 0.15, 0.15};
+
 	sgen2->reset();
 	sgen2->set_relative();
-	sgen2->load_coordinates(lib::XYZ_ANGLE_AXIS,0,0,-0.001,0,0,0,0,0,true);	//go up to not touch board
+	sgen2->load_coordinates(lib::XYZ_ANGLE_AXIS,v,a,0,0,-0.001,0,0,0,0,0,true);	//go up to not touch board
 	sgen2->load_coordinates(lib::XYZ_ANGLE_AXIS,0,0,0,0,0,0,-0.033,0,false);	//close gripper
 	sgen2->Move();
 	goUp();
@@ -404,9 +407,12 @@ void Draughts::takeStaticPawn(int from,int type){
 	gagen->configure(0.01,300);
 	gagen->Move();
 
+	double v[MAX_SERVOS_NR]={0.20, 0.20, 0.01, 0.20, 0.20, 0.20, 0.20, 0.20};
+	double a[MAX_SERVOS_NR]={0.15, 0.15, 0.5, 0.15, 0.15, 0.15, 0.15, 0.15};
+
 	sgen2->reset();
 	sgen2->set_relative();
-	sgen2->load_coordinates(lib::XYZ_ANGLE_AXIS,0,0,-0.001,0,0,0,0,0,true);	//go up to not touch board
+	sgen2->load_coordinates(lib::XYZ_ANGLE_AXIS,v,a,0,0,-0.001,0,0,0,0,0,true);	//go up to not touch board
 	sgen2->load_coordinates(lib::XYZ_ANGLE_AXIS,0,0,0,0,0,0,-0.033,0,false);	//close gripper
 	sgen2->Move();
 	goUp();

@@ -1052,15 +1052,15 @@ void rubik_cube_solver::main_task_algorithm(void)
 		identify_colors();
 
 		if (vis_servoing)
-			{
+		{
 				printf("if vis servoing 2\n");
 				flushall();
-		if (communicate_with_windows_solver())
-		{
-			break;
-		}
+				if (communicate_with_windows_solver())
+				{
+					break;
+				}
 
-			}
+		}
 
 		if ((vis_servoing)&&(manipulation_sequence_computed))
 		{
