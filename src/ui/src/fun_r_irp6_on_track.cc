@@ -18,6 +18,8 @@
 #include <process.h>
 #include <math.h>
 
+#include <boost/bind.hpp>
+
 #include "lib/srlib.h"
 #include "ui/ui_const.h"
 // #include "ui/ui.h"
@@ -30,7 +32,11 @@
 #include "abimport.h"
 #include "proto.h"
 
+int
+EDP_irp6_on_track_create_int( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo );
 
+int dawaj=0;
+extern boost::function<int()> com_fun;
 extern ui_msg_def ui_msg;
 extern ui_ecp_buffer* ui_ecp_obj;
 
@@ -2277,49 +2283,77 @@ EDP_irp6_on_track_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
+//	EDP_irp6_on_track_create_int(widget, apinfo, cbinfo);
+
+
+	com_fun = boost::bind(EDP_irp6_on_track_create_int, widget, apinfo, cbinfo);
+	dawaj=1;
+	//com_fun();
+
+	return( Pt_CONTINUE );
+
+	}
+
+
+
+
+int
+EDP_irp6_on_track_create_int( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
+
+	{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+	printf("EDP_irp6_on_track_create_int: \n");
+	PtEnter(0);
 	set_ui_state_notification(UI_N_PROCESS_CREATION);
-
+	PtLeave(0);
+	printf("EDP_irp6_on_track_create_int a: \n");
 	try { // dla bledow robot :: ECP_error
-
+		printf("EDP_irp6_on_track_create_int b: \n");
 	// dla robota irp6_on_track
 	if (ui_state.irp6_on_track.edp.state == 0)
 	{
-
+		printf("EDP_irp6_on_track_create_int c: \n");
 		ui_state.irp6_on_track.edp.state = 0;
 		ui_state.irp6_on_track.edp.is_synchronised = false;
-
+		printf("EDP_irp6_on_track_create_int d: \n");
 		std::string tmp_string("/dev/name/global/");
 		tmp_string += ui_state.irp6_on_track.edp.hardware_busy_attach_point;
 
 		std::string tmp2_string("/dev/name/global/");
 		tmp2_string += ui_state.irp6_on_track.edp.network_resourceman_attach_point;
-
+		printf("EDP_irp6_on_track_create_int 2: \n");
 		// sprawdzenie czy nie jest juz zarejestrowany zarzadca zasobow
 		if((!(ui_state.irp6_on_track.edp.test_mode)) && ( access(tmp_string.c_str(), R_OK)== 0  )
 			|| (access(tmp2_string.c_str(), R_OK)== 0 )
 		)
 		{
+			printf("EDP_irp6_on_track_create_int 2a: \n");
 			ui_msg.ui->message("edp_irp6_on_track already exists");
 		} else {
+			printf("EDP_irp6_on_track_create_int 2b: \n");
 			ui_state.irp6_on_track.edp.node_nr = config->return_node_number(ui_state.irp6_on_track.edp.node_name);
-
+			printf("EDP_irp6_on_track_create_int 2a: \n");
 			ui_state.irp6_on_track.edp.state = 1;
-
+			printf("EDP_irp6_on_track_create_int 2c: \n");
 			ui_robot.irp6_on_track = new ui_common_robot
 				(*config, *ui_msg.all_ecp,
 						lib::ROBOT_IRP6_ON_TRACK);
-
+			printf("EDP_irp6_on_track_create_int 2d: \n");
 			ui_state.irp6_on_track.edp.pid = ui_robot.irp6_on_track->ecp->get_EDP_pid();
-
+			printf("EDP_irp6_on_track_create_int 2e: \n");
 			if (ui_state.irp6_on_track.edp.pid<0)
 			{
+				printf("EDP_irp6_on_track_create_int 2f: \n");
 				ui_state.irp6_on_track.edp.state = 0;
 				fprintf( stderr, "EDP spawn failed: %s\n", strerror( errno ));
 				delete ui_robot.irp6_on_track;
 			} else {  // jesli spawn sie powiodl
-
+				printf("EDP_irp6_on_track_create_int 2g: \n");
 				short tmp = 0;
 			 	// kilka sekund  (~1) na otworzenie urzadzenia
+				printf("EDP_irp6_on_track_create_int 2h: \n");
 				while((ui_state.irp6_on_track.edp.reader_fd = name_open(ui_state.irp6_on_track.edp.network_reader_attach_point.c_str(),
 					NAME_FLAG_ATTACH_GLOBAL))  < 0)
 					if((tmp++)<CONNECT_RETRY) {
@@ -2328,26 +2362,34 @@ EDP_irp6_on_track_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t
 					   perror("blad odwolania do READER_OT");
 					   break;
 					}
+				printf("EDP_irp6_on_track_create_int 2i: \n");
 				// odczytanie poczatkowego stanu robota (komunikuje sie z EDP)
 				lib::controller_state_t robot_controller_initial_state_tmp;
+				printf("EDP_irp6_on_track_create_int 2j: \n");
+
 				ui_robot.irp6_on_track->get_controller_state(robot_controller_initial_state_tmp);
 
+				printf("EDP_irp6_on_track_create_int 2k: \n");
 				//ui_state.irp6_on_track.edp.state = 1; // edp wlaczone reader czeka na start
 
 				ui_state.irp6_on_track.edp.is_synchronised = robot_controller_initial_state_tmp.is_synchronised;
+				printf("EDP_irp6_on_track_create_int 2l: \n");
 			}
 		}
 	}
-
+	printf("EDP_irp6_on_track_create_int 3bez: \n");
 
 	} // end try
+
 	CATCH_SECTION_UI
-
+	printf("EDP_irp6_on_track_create_int: 3\n");
+	PtEnter(0);
 	manage_interface();
-
-	return( Pt_CONTINUE );
-
+	PtLeave(0);
+	printf("EDP_irp6_on_track_create_int: 4\n");
+	return 1;
 	}
+
 
 
 

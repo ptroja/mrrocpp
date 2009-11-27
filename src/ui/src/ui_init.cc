@@ -23,6 +23,9 @@
 
 #include <sys/dispatch.h>
 
+#include <boost/bind.hpp>
+
+
 #include <fcntl.h>
 #include <string.h>
 #include <process.h>
@@ -43,6 +46,7 @@
 #include "ui/ui.h"
 #include "lib/configurator.h"
 #include "lib/mis_fun.h"
+#include "ui/ui_ecp.h"
 
 #include "lib/messip/messip.h"
 
@@ -53,6 +57,8 @@
 #include <Pt.h>
 #include <Ph.h>
 
+extern int dawaj;
+boost::function<int()> com_fun;
 
 ui_sr_buffer* ui_sr_obj;
 
@@ -62,6 +68,7 @@ ui_ecp_buffer* ui_ecp_obj;
 lib::configurator* config;
 
 ui_state_def ui_state;
+extern ui_robot_def ui_robot;
 
 ui_msg_def ui_msg;
 
@@ -573,6 +580,36 @@ UI_close(void) {
 	ui_state.ui_state=2;// funcja OnTimer dowie sie ze aplikacja ma byc zamknieta
 }
 
+
+
+
+void *edp_irp6ot_thread(void* arg) {
+
+
+	while(1)
+	{
+
+		if(dawaj)
+		{
+			printf("edp_irp6ot_thread: \n");
+			dawaj=0;
+			com_fun();
+		}
+
+		sleep(1);
+	}
+	return 0;
+}
+
+
+int f(int a, int b)
+{
+	printf("dupala: %d\n",a+b);
+    return a + b;
+}
+
+
+
 int init( PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
 
 {
@@ -597,6 +634,9 @@ int init( PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo 
 	lib::set_thread_priority(pthread_self() , MAX_PRIORITY-6);
 
 	config = NULL;
+	 boost::function<int()> lalala = boost::bind(f, 1, 2);
+	 lalala();
+	printf("lallala: %d\n", (int)(lalala()));
 
 	ui_state.ui_state=1;// ui working
 
@@ -738,6 +778,12 @@ int init( PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo 
 
 	if (pthread_create (&ui_tid, NULL, comm_thread, NULL)!=EOK) {// Y&W - utowrzenie watku serwa
 		printf (" Failed to thread comm_thread\n");
+	}
+
+	int edp_irp6ot_tid;
+
+	if (pthread_create (&edp_irp6ot_tid, NULL, edp_irp6ot_thread, NULL)!=EOK) {// Y&W - utowrzenie watku serwa
+		printf (" Failed to thread edp_irp6ot_tid\n");
 	}
 
 

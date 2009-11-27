@@ -33,6 +33,10 @@
 #include <math.h>
 #include "lib/mathtr.h"
 
+#include "ablibs.h"
+#include "abimport.h"
+#include "proto.h"
+
 // ---------------------------------------------------------------
 ui_common_robot::ui_common_robot (lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg, lib::robot_name_t _robot_name)
 {
@@ -115,7 +119,10 @@ void ui_common_robot::execute_motion(void)
 {
 
 	// Zlecenie wykonania ruchu przez robota jest to polecenie dla EDP
+
+
 	set_ui_state_notification(UI_N_COMMUNICATION);
+
 
 	// TODO: in QNX/Photon exceptions are handled at the main loop
 	// in GTK exceptions triggered signals cannot be handled in main loop

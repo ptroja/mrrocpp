@@ -108,7 +108,9 @@ int set_ui_state_notification (UI_NOTIFICATION_STATE_ENUM new_notifacion)
 {
 	if (new_notifacion != ui_state.notification_state)
 	{
-		ui_state.notification_state = new_notifacion;
+		 int res=PtEnter(0);
+
+		 ui_state.notification_state = new_notifacion;
 
 		switch (new_notifacion)
 		{
@@ -144,6 +146,8 @@ int set_ui_state_notification (UI_NOTIFICATION_STATE_ENUM new_notifacion)
 
 		PtDamageWidget(ABW_PtLabel_ready_busy);
 		PtFlush();
+
+		if (res>0) PtLeave(0);
 
 	return 1;
 
@@ -1701,6 +1705,8 @@ manage_interface()
 		default:
 		break;
 	}
+
+//	PtFlush();
 
 	return 1;
 }
