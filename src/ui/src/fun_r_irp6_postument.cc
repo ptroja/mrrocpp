@@ -17,6 +17,7 @@
 #include <errno.h>
 #include <process.h>
 #include <math.h>
+#include <boost/bind.hpp>
 
 #include "lib/srlib.h"
 #include "ui/ui_const.h"
@@ -30,6 +31,11 @@
 #include "abimport.h"
 #include "proto.h"
 
+int
+EDP_irp6_postument_create_int( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo );
+
+
+extern function_execution_buffer edp_irp6p_eb;
 
 extern ui_msg_def ui_msg;
 extern ui_ecp_buffer* ui_ecp_obj;
@@ -2200,11 +2206,32 @@ irp6p_servo_algorithm_set( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_
 	}
 
 
-
 int
 EDP_irp6_postument_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
 
 	{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+//	EDP_irp6_postumentcreate_int(widget, apinfo, cbinfo);
+
+
+	edp_irp6p_eb.com_fun = boost::bind(EDP_irp6_postument_create_int, widget, apinfo, cbinfo);
+	edp_irp6p_eb.notify();
+
+
+	return( Pt_CONTINUE );
+
+	}
+
+
+int
+EDP_irp6_postument_create_int( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
+
+	{
+
+	int pt_res;
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
@@ -2274,9 +2301,11 @@ EDP_irp6_postument_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_
 	} // end try
 	CATCH_SECTION_UI
 
+	pt_res=PtEnter(0);
 	manage_interface();
+	if (pt_res>=0) PtLeave(0);
 
-	return( Pt_CONTINUE );
+	return 1;
 
 	}
 

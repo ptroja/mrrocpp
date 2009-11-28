@@ -2303,9 +2303,10 @@ EDP_irp6_on_track_create_int( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackIn
 	{
 
 	int pt_res;
-
+//	sleep(10);
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
 
 	set_ui_state_notification(UI_N_PROCESS_CREATION);
 
@@ -2385,7 +2386,7 @@ EDP_irp6_on_track_create_int( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackIn
 
 	pt_res=PtEnter(0);
 	manage_interface();
-	if (pt_res) PtLeave(0);
+	if (pt_res>=0) PtLeave(0);
 
 	return 1;
 	}

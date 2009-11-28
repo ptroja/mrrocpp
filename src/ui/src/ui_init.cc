@@ -60,6 +60,7 @@
 #include <Ph.h>
 
 function_execution_buffer edp_irp6ot_eb;
+function_execution_buffer edp_irp6p_eb;
 
 ui_sr_buffer* ui_sr_obj;
 
@@ -597,6 +598,18 @@ void *edp_irp6ot_thread(void* arg) {
 }
 
 
+void *edp_irp6p_thread(void* arg) {
+
+
+	while(1)
+	{
+		edp_irp6p_eb.wait();
+		edp_irp6p_eb.com_fun();
+		printf("edp_irp6p_thread: \n");
+	}
+	return 0;
+}
+
 
 function_execution_buffer::function_execution_buffer()
 {
@@ -796,6 +809,12 @@ int init( PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo 
 
 	if (pthread_create (&edp_irp6ot_tid, NULL, edp_irp6ot_thread, NULL)!=EOK) {// Y&W - utowrzenie watku serwa
 		printf (" Failed to thread edp_irp6ot_tid\n");
+	}
+
+	int edp_irp6p_tid;
+
+	if (pthread_create (&edp_irp6p_tid, NULL, edp_irp6p_thread, NULL)!=EOK) {// Y&W - utowrzenie watku serwa
+		printf (" Failed to thread edp_irp6p_tid\n");
 	}
 
 
