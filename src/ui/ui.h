@@ -12,8 +12,11 @@
 #include <pthread.h>
 #include <list>
 
+
 #include "lib/com_buf.h"
 #include "lib/srlib.h"
+
+
 
 
 #define CATCH_SECTION_UI catch (ecp::common::ecp_robot::ECP_main_error e) { \
@@ -295,6 +298,27 @@ typedef struct
 } ui_msg_def;
 
 void UI_close(void);
+
+
+class function_execution_buffer
+{
+private:
+    sem_t sem; // semafor pomiedzy edp_master a edp_trans
+
+public:
+
+
+	function_execution_buffer();
+    ~function_execution_buffer();
+
+    boost::function<int()> com_fun;
+
+    int	wait();
+    int	notify();
+};
+/**************************** master_trans_t_buffer *****************************/
+
+
 
 #endif
 

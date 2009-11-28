@@ -24,7 +24,9 @@
 #include <sys/dispatch.h>
 
 #include <boost/bind.hpp>
-
+#include <boost/utility.hpp>
+#include <boost/thread/condition.hpp>
+#include <boost/thread/thread.hpp>
 
 #include <fcntl.h>
 #include <string.h>
@@ -57,8 +59,7 @@
 #include <Pt.h>
 #include <Ph.h>
 
-extern int dawaj;
-boost::function<int()> com_fun;
+function_execution_buffer edp_irp6ot_eb;
 
 ui_sr_buffer* ui_sr_obj;
 
@@ -588,24 +589,38 @@ void *edp_irp6ot_thread(void* arg) {
 
 	while(1)
 	{
-
-		if(dawaj)
-		{
-			printf("edp_irp6ot_thread: \n");
-			dawaj=0;
-			com_fun();
-		}
-
-		sleep(1);
+		edp_irp6ot_eb.wait();
+		edp_irp6ot_eb.com_fun();
+		printf("edp_irp6ot_thread: \n");
 	}
 	return 0;
 }
 
 
-int f(int a, int b)
+
+function_execution_buffer::function_execution_buffer()
 {
-	printf("dupala: %d\n",a+b);
-    return a + b;
+	sem_init(&sem, 0, 0);
+}
+
+function_execution_buffer::~function_execution_buffer()
+{
+	sem_destroy(&sem);
+}
+
+int function_execution_buffer::notify()
+{
+
+	// odwieszenie watku transformation
+	while (sem_trywait(&sem)==0);
+	return sem_post(&sem);
+}
+
+// oczekiwanie na semafor statusu polecenia z trans_t
+int function_execution_buffer::wait()
+{
+	// oczekiwanie na odpowiedz z watku transformation
+	return sem_wait(&sem);
 }
 
 
@@ -634,9 +649,6 @@ int init( PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo 
 	lib::set_thread_priority(pthread_self() , MAX_PRIORITY-6);
 
 	config = NULL;
-	 boost::function<int()> lalala = boost::bind(f, 1, 2);
-	 lalala();
-	printf("lallala: %d\n", (int)(lalala()));
 
 	ui_state.ui_state=1;// ui working
 
