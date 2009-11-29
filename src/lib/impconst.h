@@ -41,7 +41,7 @@ typedef double frame_tab[3][4];
 
 // by Y - ROBOTY
 
-#define EDP_IRP6_ON_TRACK_SECTION "[edp_irp6_on_track]";
+#define EDP_IRP6_ON_TRACK_SECTION "[edp_irp6_on_track]"
 
 
 typedef enum _ROBOT_ENUM {
