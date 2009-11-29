@@ -41,6 +41,9 @@ typedef double frame_tab[3][4];
 
 // by Y - ROBOTY
 
+const char* EDP_IRP6_ON_TRACK_SECTION = "[edp_irp6_on_track]";
+
+
 typedef enum _ROBOT_ENUM {
 	ROBOT_UNDEFINED,
 	ROBOT_IRP6_ON_TRACK,

@@ -3424,7 +3424,7 @@ int init()
 	ui_state.irp6_on_track.edp.state=-1; // edp nieaktywne
 	ui_state.irp6_on_track.edp.last_state=-1; // edp nieaktywne
 	ui_state.irp6_on_track.ecp.trigger_fd = -1;
-	ui_state.irp6_on_track.edp.section_name = "[edp_irp6_on_track]";
+	ui_state.irp6_on_track.edp.section_name = EDP_IRP6_ON_TRACK_SECTION;
 	ui_state.irp6_on_track.ecp.section_name = "[ecp_irp6_on_track]";
 	ui_state.irp6_postument.edp.state=-1; // edp nieaktywne
 	ui_state.irp6_postument.edp.last_state=-1; // edp nieaktywne
