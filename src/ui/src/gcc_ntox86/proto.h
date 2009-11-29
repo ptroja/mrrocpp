@@ -245,6 +245,7 @@ int init_wnd_irp6_on_track_servo_algorithm ( PtWidget_t *widget , ApInfo_t *apin
 int wnd_irp6ot_seralg_copy_current_to_desired ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int irp6ot_servo_algorithm_set ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int EDP_irp6_on_track_create ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
+int EDP_irp6_on_track_create_int ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int EDP_irp6_on_track_slay ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int close_all_irp6ot_windows ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int pulse_reader_irp6ot_start ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
@@ -319,6 +320,7 @@ int init_wnd_irp6_postument_servo_algorithm ( PtWidget_t *widget , ApInfo_t *api
 int wnd_irp6p_ser_alg_copy_cur_to_desired ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int irp6p_servo_algorithm_set ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int EDP_irp6_postument_create ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
+int EDP_irp6_postument_create_int ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int EDP_irp6_postument_slay ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int close_all_irp6p_windows ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int pulse_reader_irp6p_start ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
@@ -365,6 +367,12 @@ void *sr_thread ( void *arg );
 void *comm_thread ( void *arg );
 void catch_signal ( int sig );
 void UI_close ( void );
+void *edp_irp6ot_thread ( void *arg );
+void *edp_irp6p_thread ( void *arg );
+function_execution_buffer ::function_execution_buffer ( void );
+function_execution_buffer ::~function_execution_buffer ( void );
+int function_execution_buffer ::notify ( void );
+int function_execution_buffer ::wait ( void );
 int init ( PtWidget_t *link_instance , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 
 /* ../wndFileLocationEvents.cc */
