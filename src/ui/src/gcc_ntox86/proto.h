@@ -369,10 +369,6 @@ void catch_signal ( int sig );
 void UI_close ( void );
 void *edp_irp6ot_thread ( void *arg );
 void *edp_irp6p_thread ( void *arg );
-function_execution_buffer ::function_execution_buffer ( void );
-function_execution_buffer ::~function_execution_buffer ( void );
-int function_execution_buffer ::notify ( void );
-int function_execution_buffer ::wait ( void );
 int init ( PtWidget_t *link_instance , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 
 /* ../wndFileLocationEvents.cc */
