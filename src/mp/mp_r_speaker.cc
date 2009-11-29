@@ -12,7 +12,7 @@ namespace mp {
 namespace robot {
 
 speaker::speaker (task::task &mp_object_l) :
-		robot (lib::ROBOT_SPEAKER, "[ecp_speaker]", mp_object_l)
+		robot (lib::ROBOT_SPEAKER, ECP_SPEAKER_SECTION, mp_object_l)
 {}
 
 void speaker::create_next_pose_command (void)

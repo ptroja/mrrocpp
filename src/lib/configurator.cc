@@ -407,8 +407,8 @@ pid_t configurator::process_spawn(const std::string & _section_name) {
 
 		//ewentualne dodatkowe argumenty wywolania np. przekierowanie na konsole
 		std::string asa;
-		if (exists("additional_spawn_argument", "[ui]")) {
-			asa = return_string_value("additional_spawn_argument", "[ui]");
+		if (exists("additional_spawn_argument", UI_SECTION)) {
+			asa = return_string_value("additional_spawn_argument", UI_SECTION);
 		}
 
 		char process_path[PATH_MAX];

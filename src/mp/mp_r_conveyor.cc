@@ -11,7 +11,7 @@ namespace mp {
 namespace robot {
 
 conveyor::conveyor(task::task &mp_object_l) :
-	manip_and_conv(lib::ROBOT_CONVEYOR, "[ecp_conveyor]", mp_object_l)
+	manip_and_conv(lib::ROBOT_CONVEYOR, ECP_CONVEYOR_SECTION, mp_object_l)
 {
 }
 

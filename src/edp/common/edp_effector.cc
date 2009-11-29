@@ -39,7 +39,7 @@ effector::effector(lib::configurator &_config, lib::robot_name_t l_robot_name) :
 
 	/* Lokalizacja procesu wywietlania komunikatow SR */
 	msg = new lib::sr_edp(lib::EDP, config.return_string_value("resourceman_attach_point").c_str(),
-			config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", "[ui]").c_str());
+			config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", UI_SECTION).c_str());
 
 	if (config.exists("test_mode"))
 		test_mode = config.return_int_value("test_mode");

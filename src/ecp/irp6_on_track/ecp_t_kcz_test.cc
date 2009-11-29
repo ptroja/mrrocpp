@@ -19,8 +19,8 @@ kcz_test::kcz_test(lib::configurator &_config): task(_config)
 	//delay(20000);
 	smoothgen2 = new common::generator::smooth2(*this, true);
 
-    if (_config.exists("kwadrat_bok", "[ecp_irp6_on_track]"))
-        kw_bok = _config.return_double_value("kwadrat_bok", "[ecp_irp6_on_track]");
+    if (_config.exists("kwadrat_bok", ECP_IRP6_ON_TRACK_SECTION))
+        kw_bok = _config.return_double_value("kwadrat_bok", ECP_IRP6_ON_TRACK_SECTION);
     else
     	kw_bok = 0.0;
 

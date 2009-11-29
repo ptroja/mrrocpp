@@ -198,7 +198,7 @@ int MAM_tmr_connect( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbi
     #endif
     // Nazwa polacznia.
     std::string attach_point = config->return_attach_point_name	(lib::configurator::CONFIG_SERVER, "attach_point", "[ecp_ui_channel]");
-//    tmp_name = config->return_attach_point_name	(CONFIG_SERVER, "ecp_chan_attach_point", "[ui]");
+//    tmp_name = config->return_attach_point_name	(CONFIG_SERVER, "ecp_chan_attach_point", UI_SECTION);
     
     #ifdef MAMDEBUG
         printf("MAM_tmr_connect: %s\n", tmp_name);

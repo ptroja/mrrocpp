@@ -110,10 +110,10 @@ bool task::pulse_check()
 void task::initialize_communication()
 {
 	std::string mp_pulse_attach_point =
-				config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "mp_pulse_attach_point", "[mp]");
+				config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "mp_pulse_attach_point", MP_SECTION);
 
 	std::string ecp_attach_point = config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "ecp_attach_point");
-	std::string sr_net_attach_point = config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", "[ui]");
+	std::string sr_net_attach_point = config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", UI_SECTION);
 
 	// Obiekt do komuniacji z SR
 	sr_ecp_msg = new lib::sr_ecp(lib::ECP, ecp_attach_point.c_str(), sr_net_attach_point.c_str());

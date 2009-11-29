@@ -42,6 +42,31 @@ typedef double frame_tab[3][4];
 // by Y - ROBOTY
 
 #define EDP_IRP6_ON_TRACK_SECTION "[edp_irp6_on_track]"
+#define ECP_IRP6_ON_TRACK_SECTION "[ecp_irp6_on_track]"
+
+#define EDP_IRP6_POSTUMENT_SECTION "[edp_irp6_postument]"
+#define ECP_IRP6_POSTUMENT_SECTION "[ecp_irp6_postument]"
+
+#define EDP_IRP6_MECHATRONIKA_SECTION "[edp_irp6_mechatronika]"
+#define ECP_IRP6_MECHATRONIKA_SECTION "[ecp_irp6_mechatronika]"
+
+#define EDP_SPEAKER_SECTION "[edp_speaker]"
+#define ECP_SPEAKER_SECTION "[ecp_speaker]"
+
+#define EDP_CONVEYOR_SECTION "[edp_conveyor]"
+#define ECP_CONVEYOR_SECTION "[ecp_conveyor]"
+
+#define EDP_POLYCRACNK_SECTION "[edp_polycrank]"
+#define ECP_POLYCRACNK_SECTION "[ecp_polycrank]"
+
+#define EDP_SMB_SECTION "[edp_smb]"
+#define ECP_SMB_SECTION "[ecp_smb]"
+
+#define EDP_SPKM_SECTION "[edp_spkm]"
+#define ECP_SPKM_SECTION "[ecp_spkm]"
+
+#define MP_SECTION "[mp]"
+#define UI_SECTION "[ui]"
 
 
 typedef enum _ROBOT_ENUM {

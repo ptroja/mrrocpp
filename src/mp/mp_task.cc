@@ -146,55 +146,55 @@ void task::create_robots()
 	robot::robot* created_robot;
 
 	// ROBOT IRP6_ON_TRACK
-	if (config.return_int_value("is_irp6_on_track_active", "[ui]")) {
+	if (config.return_int_value("is_irp6_on_track_active", UI_SECTION)) {
 		created_robot = new robot::irp6_on_track (*this);
 		robot_m[lib::ROBOT_IRP6_ON_TRACK] = created_robot;
 	}
 
 	// ROBOT IRP6_POSTUMENT
-	if (config.return_int_value("is_irp6_postument_active", "[ui]")) {
+	if (config.return_int_value("is_irp6_postument_active", UI_SECTION)) {
 		created_robot = new robot::irp6_postument (*this);
 		robot_m[lib::ROBOT_IRP6_POSTUMENT] = created_robot;
 	}
 
 	// ROBOT CONVEYOR
-	if (config.return_int_value("is_conveyor_active", "[ui]")) {
+	if (config.return_int_value("is_conveyor_active", UI_SECTION)) {
 		created_robot = new robot::conveyor (*this);
 		robot_m[lib::ROBOT_CONVEYOR] = created_robot;
 	}
 
 	// ROBOT SPEAKER
-	if (config.return_int_value("is_speaker_active", "[ui]")) {
+	if (config.return_int_value("is_speaker_active", UI_SECTION)) {
 		created_robot = new robot::speaker (*this);
 		robot_m[lib::ROBOT_SPEAKER] = created_robot;
 	}
 
 	// ROBOT IRP6_MECHATRONIKA
-	if (config.return_int_value("is_irp6_mechatronika_active", "[ui]")) {
+	if (config.return_int_value("is_irp6_mechatronika_active", UI_SECTION)) {
 		created_robot = new robot::irp6_mechatronika (*this);
 		robot_m[lib::ROBOT_IRP6_MECHATRONIKA] = created_robot;
 	}
 
 	// ROBOT POLYCRANK
-	if (config.return_int_value("is_polycrank_active", "[ui]")) {
+	if (config.return_int_value("is_polycrank_active", UI_SECTION)) {
 		created_robot = new robot::polycrank (*this);
 		robot_m[lib::ROBOT_POLYCRANK] = created_robot;
 	}
 
 	// ROBOT_ELECTRON
-	if (config.return_int_value("is_electron_robot_active", "[ui]")) {
+	if (config.return_int_value("is_electron_robot_active", UI_SECTION)) {
 		created_robot = new robot::robot (lib::ROBOT_ELECTRON, "[ecp_electron]", *this);
 		robot_m[lib::ROBOT_ELECTRON] = created_robot;
 	}
 
 	// ROBOT_SPEECHRECOGNITION
-	if (config.return_int_value("is_speechrecognition_active", "[ui]")) {
+	if (config.return_int_value("is_speechrecognition_active", UI_SECTION)) {
 		created_robot = new robot::robot (lib::ROBOT_SPEECHRECOGNITION, "[ecp_speechrecognition]", *this);
 		robot_m[lib::ROBOT_SPEECHRECOGNITION] = created_robot;
 	}
 
 	// ROBOT_FESTIVAL
-	if (config.return_int_value("is_festival_active", "[ui]")) {
+	if (config.return_int_value("is_festival_active", UI_SECTION)) {
 		created_robot = new robot::robot (lib::ROBOT_FESTIVAL, "[ecp_festival]", *this);
 		robot_m[lib::ROBOT_FESTIVAL] = created_robot;
 	}
@@ -873,7 +873,7 @@ void task::mp_receive_ui_or_ecp_pulse (common::robots_t & _robot_m, generator::g
 // -------------------------------------------------------------------
 void task::initialize_communication()
 {
-	std::string sr_net_attach_point = config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", "[ui]");
+	std::string sr_net_attach_point = config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", UI_SECTION);
 	std::string mp_attach_point = config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "mp_attach_point");
 
 	if (( sr_ecp_msg = new lib::sr_ecp(lib::MP, mp_attach_point, sr_net_attach_point)) == NULL) { // Obiekt do komuniacji z SR

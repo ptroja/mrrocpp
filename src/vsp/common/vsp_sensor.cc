@@ -40,7 +40,7 @@ sensor::sensor (lib::configurator &_config) :
 	/* Lokalizacja procesu wyswietlania komunikatow SR */
 	sr_msg = new lib::sr_vsp(lib::VSP,
 			config.return_string_value("resourceman_attach_point").c_str(),
-			config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", "[ui]").c_str());
+			config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", UI_SECTION).c_str());
 
 	sr_msg->message ("Communication with SR ready");
 

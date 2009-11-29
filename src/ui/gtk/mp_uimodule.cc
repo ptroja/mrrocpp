@@ -230,12 +230,12 @@ MpPanel::MpPanel(ui_config_entry &entry)
 	}
 
 	//! spawn MP
-	mp_pid = ui_model::instance().getConfigurator().process_spawn("[mp]");
+	mp_pid = ui_model::instance().getConfigurator().process_spawn(MP_SECTION);
 
 	if (mp_pid > 0) {
 
 		const std::string network_pulse_attach_point = ui_model::instance().getConfigurator()
-			.return_attach_point_name(lib::configurator::CONFIG_SERVER, "mp_pulse_attach_point", "[mp]");
+			.return_attach_point_name(lib::configurator::CONFIG_SERVER, "mp_pulse_attach_point", MP_SECTION);
 
 		short tmp = 0;
 		// try to open channel

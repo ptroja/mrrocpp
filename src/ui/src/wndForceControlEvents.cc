@@ -95,7 +95,7 @@ int FCCreateConnection(void){
 // 	lib::ECP_message from_ecp;
 
 	// Stworzenie nazwy.
-	std::string tmp_name = config->return_attach_point_name	(lib::configurator::CONFIG_SERVER, "ecp_sec_chan_attach_point", "[ecp_irp6_on_track]");
+	std::string tmp_name = config->return_attach_point_name	(lib::configurator::CONFIG_SERVER, "ecp_sec_chan_attach_point", ECP_IRP6_ON_TRACK_SECTION);
 
 	#ifdef FCDEBUG
 		printf("FCCreateConnection: %s\n",tmp_name.c_str());

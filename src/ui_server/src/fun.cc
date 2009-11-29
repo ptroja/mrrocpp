@@ -612,7 +612,7 @@ int MPup()
 		}
 		else
 		{
-			ui_state.mp.pid = config->process_spawn("[mp]");
+			ui_state.mp.pid = config->process_spawn(MP_SECTION);
 
 			if(ui_state.mp.pid>0) {
 
@@ -969,10 +969,10 @@ int initiate_configuration()
 				ui_state.ui_node_name.c_str(),
 				ui_state.mrrocpp_local_path.c_str(),
 				ui_state.config_file.c_str(),
-				"[ui]",
+				UI_SECTION,
 				ui_state.session_name.c_str());
 
-		std::string tmp = config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", "[ui]");
+		std::string tmp = config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", UI_SECTION);
 
 		// wykrycie identyczneych nazw sesji
 		wyjscie = true;
@@ -995,9 +995,9 @@ int initiate_configuration()
 	    }
 	}
 
-	ui_state.ui_attach_point = config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "ui_attach_point", "[ui]");
-	ui_state.sr_attach_point = config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", "[ui]");
-	ui_state.network_sr_attach_point = config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", "[ui]");
+	ui_state.ui_attach_point = config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "ui_attach_point", UI_SECTION);
+	ui_state.sr_attach_point = config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", UI_SECTION);
+	ui_state.network_sr_attach_point = config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", UI_SECTION);
 
 	clear_all_configuration_lists();
 
@@ -1093,9 +1093,9 @@ reload_whole_configuration() {
 		if (ui_state.is_mp_and_ecps_active)
 		{
 
-			ui_state.mp.network_pulse_attach_point = config->return_attach_point_name (lib::configurator::CONFIG_SERVER, "mp_pulse_attach_point", "[mp]");
+			ui_state.mp.network_pulse_attach_point = config->return_attach_point_name (lib::configurator::CONFIG_SERVER, "mp_pulse_attach_point", MP_SECTION);
 
-			ui_state.mp.node_name = config->return_string_value ("node_name", "[mp]");
+			ui_state.mp.node_name = config->return_string_value ("node_name", MP_SECTION);
 
 			ui_state.mp.pid = -1;
 		}

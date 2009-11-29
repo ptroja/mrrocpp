@@ -17,12 +17,12 @@ namespace ecp {
 namespace irp6p {
 
 robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
-	ecp_robot(lib::ROBOT_IRP6_POSTUMENT, IRP6_POSTUMENT_NUM_OF_SERVOS, "[edp_irp6_postument]", _config, _sr_ecp)
+	ecp_robot(lib::ROBOT_IRP6_POSTUMENT, IRP6_POSTUMENT_NUM_OF_SERVOS, EDP_IRP6_POSTUMENT_SECTION, _config, _sr_ecp)
 {
 }
 
 robot::robot(common::task::task& _ecp_object) :
-	ecp_robot(lib::ROBOT_IRP6_POSTUMENT, IRP6_POSTUMENT_NUM_OF_SERVOS, "[edp_irp6_postument]", _ecp_object)
+	ecp_robot(lib::ROBOT_IRP6_POSTUMENT, IRP6_POSTUMENT_NUM_OF_SERVOS, EDP_IRP6_POSTUMENT_SECTION, _ecp_object)
 {
 }
 

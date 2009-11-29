@@ -68,7 +68,7 @@ void * manip_and_conv_effector::reader_thread(void* arg)
 	std::string reader_meassures_dir;
 
 	if (config.exists("reader_meassures_dir")) {
-		reader_meassures_dir = config.return_string_value("reader_meassures_dir", "[ui]");
+		reader_meassures_dir = config.return_string_value("reader_meassures_dir", UI_SECTION);
 	} else {
 		reader_meassures_dir = config.return_default_reader_measures_path();
 	}

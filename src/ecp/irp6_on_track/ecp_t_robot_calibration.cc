@@ -25,7 +25,7 @@ robot_calibration::robot_calibration(lib::configurator &_config): task(_config)
 	sr_ecp_msg->message("(TASK: initialization");
 
 	// Create an adequate robot. - depending on the ini section name.
-/*	if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
+/*	if (strcmp(config.section_name, ECP_IRP6_ON_TRACK_SECTION) == 0)
 	{
     		ecp_m_robot = new ecp_irp6_on_track_robot (*this);
     		sr_ecp_msg->message("IRp6 on Track loaded");

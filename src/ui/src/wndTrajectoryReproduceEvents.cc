@@ -249,7 +249,7 @@ int TRConnect( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo ){
         printf("TRConnect: Create connection.\n");
     #endif
     // Nazwa polacznia.
-    std::string tmp_name = config->return_attach_point_name	(lib::configurator::CONFIG_SERVER, "ecp_third_chan_attach_point", "[ecp_irp6_on_track]");
+    std::string tmp_name = config->return_attach_point_name	(lib::configurator::CONFIG_SERVER, "ecp_third_chan_attach_point", ECP_IRP6_ON_TRACK_SECTION);
 
     #ifdef TRDEBUG
         printf("TRConnect: %s\n", tmp_name.c_str());

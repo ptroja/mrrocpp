@@ -250,7 +250,7 @@ fct::fct(lib::configurator &_config) :
 	ecp_m_robot = new robot (*this);
 
 	// Stworzenie nazwy.
-	std::string attach_point = config.return_attach_point_name	(lib::configurator::CONFIG_SERVER, "ecp_sec_chan_attach_point", "[ecp_irp6_on_track]");
+	std::string attach_point = config.return_attach_point_name	(lib::configurator::CONFIG_SERVER, "ecp_sec_chan_attach_point", ECP_IRP6_ON_TRACK_SECTION);
 
 	// Dolaczenie globalnej nazwy procesu ECP - kanal do odbioru polecen z UI.
 	if ((UI_ECP_attach = name_attach(NULL, attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) == NULL) {

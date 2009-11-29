@@ -30,11 +30,11 @@ namespace task {
 // KONSTRUKTORY
 nalewanie::nalewanie(lib::configurator &_config) : task(_config)
 {
-    if (config.section_name == "[ecp_irp6_on_track]")
+    if (config.section_name == ECP_IRP6_ON_TRACK_SECTION)
     {
         ecp_m_robot = new irp6ot::robot (*this);
     }
-    else if (config.section_name == "[ecp_irp6_postument]")
+    else if (config.section_name == ECP_IRP6_POSTUMENT_SECTION)
     {
         ecp_m_robot = new irp6p::robot (*this);
     }

@@ -10,7 +10,7 @@ namespace mp {
 namespace robot {
 
 polycrank::polycrank (task::task &mp_object_l) :
-		manip_and_conv (lib::ROBOT_POLYCRANK, "[ecp_polycrank]", mp_object_l)
+		manip_and_conv (lib::ROBOT_POLYCRANK, ECP_POLYCRACNK_SECTION, mp_object_l)
 {}
 
 } // namespace robot

@@ -189,9 +189,9 @@ mam::mam(lib::configurator &_config) :
 	task(_config)
 {
 	// the robot is choose dependendant on the section of configuration file sent as argv[4]
-	if (config.section_name == "[ecp_irp6_on_track]") {
+	if (config.section_name == ECP_IRP6_ON_TRACK_SECTION) {
 		ecp_m_robot = new irp6ot::robot (*this);
-	} else if (config.section_name == "[ecp_irp6_postument]") {
+	} else if (config.section_name == ECP_IRP6_POSTUMENT_SECTION) {
 		ecp_m_robot = new irp6p::robot (*this);
 	}
 
