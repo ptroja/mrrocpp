@@ -314,6 +314,7 @@ public:
     boost::function<int()> com_fun;
 
     int	wait();
+    int	wait_and_execute();
     int	notify();
 };
 /**************************** master_trans_t_buffer *****************************/

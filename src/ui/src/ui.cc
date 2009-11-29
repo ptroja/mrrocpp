@@ -74,16 +74,21 @@ function_execution_buffer::~function_execution_buffer()
 
 int function_execution_buffer::notify()
 {
-
-	// odwieszenie watku transformation
 	while (sem_trywait(&sem)==0);
 	return sem_post(&sem);
 }
 
-// oczekiwanie na semafor statusu polecenia z trans_t
 int function_execution_buffer::wait()
 {
-	// oczekiwanie na odpowiedz z watku transformation
 	return sem_wait(&sem);
 }
+
+
+int function_execution_buffer::wait_and_execute()
+{
+	sem_wait(&sem);
+	return com_fun();
+}
+
+
 

@@ -590,8 +590,7 @@ void *edp_irp6ot_thread(void* arg) {
 
 	while(1)
 	{
-		edp_irp6ot_eb.wait();
-		edp_irp6ot_eb.com_fun();
+		edp_irp6ot_eb.wait_and_execute();
 		printf("edp_irp6ot_thread: \n");
 	}
 	return 0;
@@ -603,8 +602,7 @@ void *edp_irp6p_thread(void* arg) {
 
 	while(1)
 	{
-		edp_irp6p_eb.wait();
-		edp_irp6p_eb.com_fun();
+		edp_irp6p_eb.wait_and_execute();
 		printf("edp_irp6p_thread: \n");
 	}
 	return 0;
