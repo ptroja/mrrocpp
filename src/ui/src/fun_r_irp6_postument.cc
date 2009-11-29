@@ -31,10 +31,6 @@
 #include "abimport.h"
 #include "proto.h"
 
-int
-EDP_irp6_postument_create_int( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo );
-
-
 extern function_execution_buffer edp_irp6p_eb;
 
 extern ui_msg_def ui_msg;

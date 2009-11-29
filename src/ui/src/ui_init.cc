@@ -611,32 +611,6 @@ void *edp_irp6p_thread(void* arg) {
 }
 
 
-function_execution_buffer::function_execution_buffer()
-{
-	sem_init(&sem, 0, 0);
-}
-
-function_execution_buffer::~function_execution_buffer()
-{
-	sem_destroy(&sem);
-}
-
-int function_execution_buffer::notify()
-{
-
-	// odwieszenie watku transformation
-	while (sem_trywait(&sem)==0);
-	return sem_post(&sem);
-}
-
-// oczekiwanie na semafor statusu polecenia z trans_t
-int function_execution_buffer::wait()
-{
-	// oczekiwanie na odpowiedz z watku transformation
-	return sem_wait(&sem);
-}
-
-
 
 int init( PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
 

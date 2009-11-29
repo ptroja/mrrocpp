@@ -61,3 +61,29 @@ int	ui_ecp_buffer::trywait_sem() // oczekiwanie na semafor
 	return sem_trywait(&sem);
 }
 
+
+function_execution_buffer::function_execution_buffer()
+{
+	sem_init(&sem, 0, 0);
+}
+
+function_execution_buffer::~function_execution_buffer()
+{
+	sem_destroy(&sem);
+}
+
+int function_execution_buffer::notify()
+{
+
+	// odwieszenie watku transformation
+	while (sem_trywait(&sem)==0);
+	return sem_post(&sem);
+}
+
+// oczekiwanie na semafor statusu polecenia z trans_t
+int function_execution_buffer::wait()
+{
+	// oczekiwanie na odpowiedz z watku transformation
+	return sem_wait(&sem);
+}
+
