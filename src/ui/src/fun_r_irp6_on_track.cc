@@ -2390,12 +2390,32 @@ EDP_irp6_on_track_create_int( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackIn
 
 
 
-
 int
 EDP_irp6_on_track_slay( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
 
 	{
 
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+//	EDP_irp6_on_track_create_int(widget, apinfo, cbinfo);
+
+
+	edp_irp6ot_eb.com_fun = boost::bind(EDP_irp6_on_track_create_int, widget, apinfo, cbinfo);
+	edp_irp6ot_eb.notify();
+
+
+	return( Pt_CONTINUE );
+
+	}
+
+
+
+int
+EDP_irp6_on_track_slay_int( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
+
+	{
+	int pt_res;
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 	// dla robota irp6_on_track
@@ -2413,12 +2433,15 @@ EDP_irp6_on_track_slay( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *
 
 		ui_state.irp6_on_track.edp.pid = -1;
 		ui_state.irp6_on_track.edp.reader_fd = -1;
-
+		pt_res=PtEnter(0);
 		close_all_irp6ot_windows (NULL, NULL, NULL);
+		if (pt_res>=0) PtLeave(0);
 	}
 
 	// modyfikacja menu
+	pt_res=PtEnter(0);
 	manage_interface();
+	if (pt_res>=0) PtLeave(0);
 
 	return( Pt_CONTINUE );
 

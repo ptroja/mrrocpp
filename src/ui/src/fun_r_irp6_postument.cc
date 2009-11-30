@@ -2306,9 +2306,31 @@ EDP_irp6_postument_create_int( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackI
 	}
 
 
+int
+EDP_irp6_postument_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
+
+	{
+
+	int pt_res;
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+//	EDP_irp6_postumentcreate_int(widget, apinfo, cbinfo);
+
+
+	edp_irp6p_eb.com_fun = boost::bind(EDP_irp6_postument_slay_int, widget, apinfo, cbinfo);
+	edp_irp6p_eb.notify();
+
+
+	return( Pt_CONTINUE );
+
+	}
+
+
 
 int
-EDP_irp6_postument_slay( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
+EDP_irp6_postument_slay_int( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
 
 	{
 
@@ -2330,14 +2352,17 @@ EDP_irp6_postument_slay( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t 
 
 		ui_state.irp6_postument.edp.pid = -1;
 		ui_state.irp6_postument.edp.reader_fd = -1;
-
+		pt_res=PtEnter(0);
 		close_all_irp6p_windows (NULL, NULL, NULL);
+		if (pt_res>=0) PtLeave(0);
 	}
 
 	// modyfikacja menu
+	pt_res=PtEnter(0);
 	manage_interface();
+	if (pt_res>=0) PtLeave(0);
 
-	return( Pt_CONTINUE );
+	return 1;
 
 	}
 
