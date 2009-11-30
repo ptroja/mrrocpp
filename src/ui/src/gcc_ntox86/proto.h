@@ -247,6 +247,7 @@ int irp6ot_servo_algorithm_set ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallb
 int EDP_irp6_on_track_create ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int EDP_irp6_on_track_create_int ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int EDP_irp6_on_track_slay ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
+int EDP_irp6_on_track_slay_int ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int close_all_irp6ot_windows ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int pulse_reader_irp6ot_start ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 bool pulse_reader_irp6ot_start_exec_pulse ( void );
@@ -321,7 +322,8 @@ int wnd_irp6p_ser_alg_copy_cur_to_desired ( PtWidget_t *widget , ApInfo_t *apinf
 int irp6p_servo_algorithm_set ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int EDP_irp6_postument_create ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int EDP_irp6_postument_create_int ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
-int EDP_irp6_postument_slay ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
+int EDP_irp6_postument_create ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
+int EDP_irp6_postument_slay_int ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int close_all_irp6p_windows ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int pulse_reader_irp6p_start ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 bool pulse_reader_irp6p_start_exec_pulse ( void );
@@ -337,6 +339,7 @@ int start_wnd_irp6_postument_xyz_aa_relative ( PtWidget_t *widget , ApInfo_t *ap
 int clear_wnd_irp6p_xyz_aa_relative_flag ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int close_wnd_irp6_postument_xyz_aa_relative ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int irp6p_xyz_aa_relative_motion ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
+int EDP_irp6_postument_slay ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 
 /* ../fun_r_speaker.cc */
 int close_wnd_speaker_play ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );

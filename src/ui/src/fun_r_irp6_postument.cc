@@ -2924,3 +2924,16 @@ irp6p_xyz_aa_relative_motion( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackIn
 
 	}
 
+
+int
+EDP_irp6_postument_slay( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
+
+	{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	return( Pt_CONTINUE );
+
+	}
+
