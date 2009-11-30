@@ -1666,6 +1666,26 @@ EDP_irp6_on_track_synchronise( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackI
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
+//	EDP_irp6_postumentcreate_int(widget, apinfo, cbinfo);
+
+
+	edp_irp6ot_eb.com_fun = boost::bind(EDP_irp6_on_track_synchronise_int, widget, apinfo, cbinfo);
+	edp_irp6ot_eb.notify();
+
+
+	return( Pt_CONTINUE );
+
+	}
+
+
+int
+EDP_irp6_on_track_synchronise_int( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
+
+	{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
 	set_ui_state_notification(UI_N_SYNCHRONISATION);
 
 	// wychwytania ew. bledow ECP::robot
@@ -2381,9 +2401,9 @@ EDP_irp6_on_track_create_int( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackIn
 
 	CATCH_SECTION_UI
 
-	pt_res=PtEnter(0);
+
 	manage_interface();
-	if (pt_res>=0) PtLeave(0);
+
 
 	return 1;
 	}
@@ -2401,7 +2421,7 @@ EDP_irp6_on_track_slay( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *
 //	EDP_irp6_on_track_create_int(widget, apinfo, cbinfo);
 
 
-	edp_irp6ot_eb.com_fun = boost::bind(EDP_irp6_on_track_create_int, widget, apinfo, cbinfo);
+	edp_irp6ot_eb.com_fun = boost::bind(EDP_irp6_on_track_slay_int, widget, apinfo, cbinfo);
 	edp_irp6ot_eb.notify();
 
 
@@ -2439,9 +2459,9 @@ EDP_irp6_on_track_slay_int( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo
 	}
 
 	// modyfikacja menu
-	pt_res=PtEnter(0);
+
 	manage_interface();
-	if (pt_res>=0) PtLeave(0);
+
 
 	return( Pt_CONTINUE );
 

@@ -1604,6 +1604,26 @@ EDP_irp6_postument_synchronise( PtWidget_t *widget, ApInfo_t *apinfo, PtCallback
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
+//	EDP_irp6_postumentcreate_int(widget, apinfo, cbinfo);
+
+
+	edp_irp6p_eb.com_fun = boost::bind(EDP_irp6_postument_synchronise_int, widget, apinfo, cbinfo);
+	edp_irp6p_eb.notify();
+
+
+	return( Pt_CONTINUE );
+
+	}
+
+
+int
+EDP_irp6_postument_synchronise_int( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
+
+	{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
 	set_ui_state_notification(UI_N_SYNCHRONISATION);
 
 	// wychwytania ew. bledow ECP::robot
@@ -1624,7 +1644,9 @@ EDP_irp6_postument_synchronise( PtWidget_t *widget, ApInfo_t *apinfo, PtCallback
 	CATCH_SECTION_UI
 
 	// modyfikacje menu
+
 	manage_interface();
+
 
 	return( Pt_CONTINUE );
 
@@ -2297,9 +2319,9 @@ EDP_irp6_postument_create_int( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackI
 	} // end try
 	CATCH_SECTION_UI
 
-	pt_res=PtEnter(0);
+
 	manage_interface();
-	if (pt_res>=0) PtLeave(0);
+
 
 	return 1;
 
@@ -2307,11 +2329,10 @@ EDP_irp6_postument_create_int( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackI
 
 
 int
-EDP_irp6_postument_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
+EDP_irp6_postument_slay( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
 
 	{
 
-	int pt_res;
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
@@ -2333,6 +2354,8 @@ int
 EDP_irp6_postument_slay_int( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
 
 	{
+
+	int pt_res;
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
@@ -2358,9 +2381,9 @@ EDP_irp6_postument_slay_int( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInf
 	}
 
 	// modyfikacja menu
-	pt_res=PtEnter(0);
+
 	manage_interface();
-	if (pt_res>=0) PtLeave(0);
+
 
 	return 1;
 
@@ -2923,17 +2946,3 @@ irp6p_xyz_aa_relative_motion( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackIn
 
 
 	}
-
-
-int
-EDP_irp6_postument_slay( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
-
-	{
-
-	/* eliminate 'unreferenced' warnings */
-	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
-
-	return( Pt_CONTINUE );
-
-	}
-

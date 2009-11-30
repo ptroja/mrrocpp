@@ -1580,6 +1580,8 @@ int check_edps_state_and_modify_mp_state ()
 int
 manage_interface()
 {
+	int pt_res;
+	pt_res=PtEnter(0);
 
 	check_edps_state_and_modify_mp_state();
 
@@ -1707,6 +1709,8 @@ manage_interface()
 	}
 
 //	PtFlush();
+
+	if (pt_res>=0) PtLeave(0);
 
 	return 1;
 }
