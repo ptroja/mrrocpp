@@ -44,8 +44,14 @@ typedef double frame_tab[3][4];
 #define EDP_IRP6_ON_TRACK_SECTION "[edp_irp6_on_track]"
 #define ECP_IRP6_ON_TRACK_SECTION "[ecp_irp6_on_track]"
 
+#define EDP_IRP6_ON_TRACK_TFG_SECTION "[edp_irp6_on_track_tfg]"
+#define ECP_IRP6_ON_TRACK_TFG_SECTION "[ecp_irp6_on_track_tfg]"
+
 #define EDP_IRP6_POSTUMENT_SECTION "[edp_irp6_postument]"
 #define ECP_IRP6_POSTUMENT_SECTION "[ecp_irp6_postument]"
+
+#define EDP_IRP6_POSTUMENT_TFG_SECTION "[edp_irp6_postument_tfg]"
+#define ECP_IRP6_POSTUMENT_TFG_SECTION "[ecp_irp6_postument_tfg]"
 
 #define EDP_IRP6_MECHATRONIKA_SECTION "[edp_irp6_mechatronika]"
 #define ECP_IRP6_MECHATRONIKA_SECTION "[ecp_irp6_mechatronika]"
@@ -72,7 +78,9 @@ typedef double frame_tab[3][4];
 typedef enum _ROBOT_ENUM {
 	ROBOT_UNDEFINED,
 	ROBOT_IRP6_ON_TRACK,
+	ROBOT_IRP6_ON_TRACK_TFG,
 	ROBOT_IRP6_POSTUMENT,
+	ROBOT_IRP6_POSTUMENT_TFG,
 	ROBOT_CONVEYOR,
 	ROBOT_SPEAKER,
 	ROBOT_IRP6_MECHATRONIKA,
@@ -95,7 +103,9 @@ enum FORCE_SENSOR_ENUM {
 
 // Liczba osi (stopni swobody)
 #define IRP6_ON_TRACK_NUM_OF_SERVOS	8
+#define IRP6_ON_TRACK_TFG_NUM_OF_SERVOS	1
 #define IRP6_POSTUMENT_NUM_OF_SERVOS	7
+#define IRP6_POSTUMENT_TFG_NUM_OF_SERVOS	1
 #define IRP6_MECHATRONIKA_NUM_OF_SERVOS	5
 #define POLYCRANK_NUM_OF_SERVOS	8
 #define SMB_NUM_OF_SERVOS	8
