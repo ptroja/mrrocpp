@@ -157,15 +157,6 @@ int set_ui_state_notification (UI_NOTIFICATION_STATE_ENUM new_notifacion)
 
 }
 
-int
-EDP_irp6_postument_create ()
-{
-	PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_TEXT_STRING, "READY", 0);
-	PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_COLOR, Pg_BLUE, 0);
-
-	return 1;
-}
-
 // zamyka okno proces control
 
 int
