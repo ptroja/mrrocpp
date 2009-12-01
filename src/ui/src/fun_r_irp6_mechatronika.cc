@@ -158,7 +158,7 @@ EDP_irp6_mechatronika_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackIn
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	set_ui_state_notification(UI_N_PROCESS_CREATION);
+	//set_ui_state_notification(UI_N_PROCESS_CREATION);
 
 	try { // dla bledow robot :: ECP_error
 
@@ -301,7 +301,7 @@ EDP_irp6_mechatronika_synchronise( PtWidget_t *widget, ApInfo_t *apinfo, PtCallb
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	set_ui_state_notification(UI_N_SYNCHRONISATION);
+	//set_ui_state_notification(UI_N_SYNCHRONISATION);
 
 	// wychwytania ew. bledow ECP::robot
 	try

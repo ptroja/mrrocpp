@@ -23,12 +23,10 @@
 #include "abimport.h"
 #include "proto.h"
 
+extern int busy;
 extern ui_sr_buffer* ui_sr_obj;
-
 extern ui_msg_def ui_msg;
-
 extern ui_state_def ui_state;
-
 extern std::ofstream *log_file_outfile;
 
 int
@@ -177,7 +175,14 @@ OnTimer( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
 		printf("UI CLOSED\n");
 		PtExit( EXIT_SUCCESS );
 	}  else {
-		set_ui_ready_state_notification(widget, apinfo, cbinfo);
+		if (busy)
+		{
+			set_ui_state_notification(UI_N_BUSY);
+		} else
+		{
+			set_ui_state_notification(UI_N_READY);
+
+		}
 	}
 
 	/* eliminate 'unreferenced' warnings */

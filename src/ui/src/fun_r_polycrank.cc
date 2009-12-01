@@ -159,7 +159,7 @@ EDP_polycrank_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cb
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	set_ui_state_notification(UI_N_PROCESS_CREATION);
+	//set_ui_state_notification(UI_N_PROCESS_CREATION);
 
 	try { // dla bledow robot :: ECP_error
 
@@ -302,7 +302,7 @@ EDP_polycrank_synchronise( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	set_ui_state_notification(UI_N_SYNCHRONISATION);
+	//set_ui_state_notification(UI_N_SYNCHRONISATION);
 
 	// wychwytania ew. bledow ECP::robot
 	try

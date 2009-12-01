@@ -2294,7 +2294,7 @@ MPup( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	set_ui_state_notification(UI_N_PROCESS_CREATION);
+	//set_ui_state_notification(UI_N_PROCESS_CREATION);
 
 	if (ui_state.mp.pid ==-1) {
 

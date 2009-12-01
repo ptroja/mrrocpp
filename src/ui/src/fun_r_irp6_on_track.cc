@@ -1686,7 +1686,7 @@ EDP_irp6_on_track_synchronise_int( PtWidget_t *widget, ApInfo_t *apinfo, PtCallb
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	set_ui_state_notification(UI_N_SYNCHRONISATION);
+	//set_ui_state_notification(UI_N_SYNCHRONISATION);
 
 	// wychwytania ew. bledow ECP::robot
 	try
@@ -2325,7 +2325,7 @@ EDP_irp6_on_track_create_int( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackIn
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
 
-	set_ui_state_notification(UI_N_PROCESS_CREATION);
+	//set_ui_state_notification(UI_N_PROCESS_CREATION);
 
 	try { // dla bledow robot :: ECP_error
 
