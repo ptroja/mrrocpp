@@ -61,34 +61,71 @@ int	ui_ecp_buffer::trywait_sem() // oczekiwanie na semafor
 	return sem_trywait(&sem);
 }
 
-
-function_execution_buffer::function_execution_buffer()
+busy_flagger::busy_flagger(busy_flag & _flag)
+	: flag(_flag)
 {
-	sem_init(&sem, 0, 0);
+	flag.increment();
 }
 
-function_execution_buffer::~function_execution_buffer()
+busy_flagger::~busy_flagger()
 {
-	sem_destroy(&sem);
+	flag.decrement();
 }
 
-int function_execution_buffer::notify()
+busy_flag::busy_flag() :
+	counter(0)
 {
-	while (sem_trywait(&sem)==0);
-	return sem_post(&sem);
 }
 
-int function_execution_buffer::wait()
+void busy_flag::increment(void)
 {
-	return sem_wait(&sem);
+	boost::mutex::scoped_lock lock(m_mutex);
+	counter++;
 }
 
+void busy_flag::decrement(void)
+{
+	boost::mutex::scoped_lock lock(m_mutex);
+	counter--;
+}
+
+bool busy_flag::is_busy() const
+{
+//	boost::mutex::scoped_lock lock(m_mutex);
+	return (counter);
+}
+
+
+void function_execution_buffer::command(command_function_t _com_fun)
+{
+	boost::unique_lock<boost::mutex> lock(mtx);
+
+	// assign command for execution
+	com_fun = _com_fun;
+	has_command = true;
+
+	cond.notify_one();
+
+	return;
+}
 
 int function_execution_buffer::wait_and_execute()
 {
-	sem_wait(&sem);
-	return com_fun();
+	command_function_t popped_command;
+
+	{
+		boost::unique_lock<boost::mutex> lock(mtx);
+
+		while(!has_command) {
+			cond.wait(lock);
+		}
+
+		has_command = false;
+		popped_command = com_fun;
+	}
+
+	busy_flagger flagger(communication_flag);
+
+	return popped_command();
 }
-
-
 

@@ -62,7 +62,7 @@
 function_execution_buffer edp_irp6ot_eb;
 function_execution_buffer edp_irp6p_eb;
 
-int busy=0;
+busy_flag communication_flag;
 
 ui_sr_buffer* ui_sr_obj;
 
@@ -589,32 +589,23 @@ UI_close(void) {
 
 void *edp_irp6ot_thread(void* arg) {
 
-
-
-	while(1)
+	while(true)
 	{
-		edp_irp6ot_eb.wait();
-		busy++;
-		edp_irp6ot_eb.com_fun();
-		busy--;
-		printf("edp_irp6ot_thread: \n");
+		edp_irp6ot_eb.wait_and_execute();
 	}
-	return 0;
+
+	return NULL;
 }
 
 
 void *edp_irp6p_thread(void* arg) {
 
-
-	while(1)
+	while(true)
 	{
-		edp_irp6p_eb.wait();
-		busy++;
-		edp_irp6p_eb.com_fun();
-		busy--;
-		printf("edp_irp6p_thread: \n");
+		edp_irp6p_eb.wait_and_execute();
 	}
-	return 0;
+
+	return NULL;
 }
 
 

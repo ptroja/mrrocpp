@@ -1607,9 +1607,7 @@ EDP_irp6_postument_synchronise( PtWidget_t *widget, ApInfo_t *apinfo, PtCallback
 //	EDP_irp6_postumentcreate_int(widget, apinfo, cbinfo);
 
 
-	edp_irp6p_eb.com_fun = boost::bind(EDP_irp6_postument_synchronise_int, widget, apinfo, cbinfo);
-	edp_irp6p_eb.notify();
-
+	edp_irp6p_eb.command(boost::bind(EDP_irp6_postument_synchronise_int, widget, apinfo, cbinfo));
 
 	return( Pt_CONTINUE );
 
@@ -2235,9 +2233,7 @@ EDP_irp6_postument_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_
 //	EDP_irp6_postumentcreate_int(widget, apinfo, cbinfo);
 
 
-	edp_irp6p_eb.com_fun = boost::bind(EDP_irp6_postument_create_int, widget, apinfo, cbinfo);
-	edp_irp6p_eb.notify();
-
+	edp_irp6p_eb.command(boost::bind(EDP_irp6_postument_create_int, widget, apinfo, cbinfo));
 
 	return( Pt_CONTINUE );
 
@@ -2340,9 +2336,7 @@ EDP_irp6_postument_slay( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t 
 //	EDP_irp6_postumentcreate_int(widget, apinfo, cbinfo);
 
 
-	edp_irp6p_eb.com_fun = boost::bind(EDP_irp6_postument_slay_int, widget, apinfo, cbinfo);
-	edp_irp6p_eb.notify();
-
+	edp_irp6p_eb.command(boost::bind(EDP_irp6_postument_slay_int, widget, apinfo, cbinfo));
 
 	return( Pt_CONTINUE );
 

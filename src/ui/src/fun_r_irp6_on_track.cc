@@ -1668,10 +1668,7 @@ EDP_irp6_on_track_synchronise( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackI
 
 //	EDP_irp6_postumentcreate_int(widget, apinfo, cbinfo);
 
-
-	edp_irp6ot_eb.com_fun = boost::bind(EDP_irp6_on_track_synchronise_int, widget, apinfo, cbinfo);
-	edp_irp6ot_eb.notify();
-
+	edp_irp6ot_eb.command(boost::bind(EDP_irp6_on_track_synchronise_int, widget, apinfo, cbinfo));
 
 	return( Pt_CONTINUE );
 
@@ -2303,9 +2300,7 @@ EDP_irp6_on_track_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t
 //	EDP_irp6_on_track_create_int(widget, apinfo, cbinfo);
 
 
-	edp_irp6ot_eb.com_fun = boost::bind(EDP_irp6_on_track_create_int, widget, apinfo, cbinfo);
-	edp_irp6ot_eb.notify();
-
+	edp_irp6ot_eb.command(boost::bind(EDP_irp6_on_track_create_int, widget, apinfo, cbinfo));
 
 	return( Pt_CONTINUE );
 
@@ -2420,10 +2415,7 @@ EDP_irp6_on_track_slay( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *
 
 //	EDP_irp6_on_track_create_int(widget, apinfo, cbinfo);
 
-
-	edp_irp6ot_eb.com_fun = boost::bind(EDP_irp6_on_track_slay_int, widget, apinfo, cbinfo);
-	edp_irp6ot_eb.notify();
-
+	edp_irp6ot_eb.command(boost::bind(EDP_irp6_on_track_slay_int, widget, apinfo, cbinfo));
 
 	return( Pt_CONTINUE );
 

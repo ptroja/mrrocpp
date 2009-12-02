@@ -23,7 +23,6 @@
 #include "abimport.h"
 #include "proto.h"
 
-extern int busy;
 extern ui_sr_buffer* ui_sr_obj;
 extern ui_msg_def ui_msg;
 extern ui_state_def ui_state;
@@ -175,14 +174,7 @@ OnTimer( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
 		printf("UI CLOSED\n");
 		PtExit( EXIT_SUCCESS );
 	}  else {
-		if (busy)
-		{
-			set_ui_state_notification(UI_N_BUSY);
-		} else
-		{
-			set_ui_state_notification(UI_N_READY);
-
-		}
+		set_ui_state_notification(communication_flag.is_busy() ? UI_N_BUSY : UI_N_READY);
 	}
 
 	/* eliminate 'unreferenced' warnings */
