@@ -12,6 +12,8 @@
 #include <pthread.h>
 #include <list>
 
+#include <boost/thread/condition_variable.hpp>
+#include <boost/thread/mutex.hpp>
 
 #include "lib/com_buf.h"
 #include "lib/srlib.h"
@@ -302,24 +304,62 @@ void UI_close(void);
 
 class function_execution_buffer
 {
-private:
-    sem_t sem; // semafor pomiedzy edp_master a edp_trans
-
 public:
+	typedef boost::function<int()> command_function_t;
 
-
-	function_execution_buffer();
-    ~function_execution_buffer();
-
-    boost::function<int()> com_fun;
-
-    int	wait();
     int	wait_and_execute();
-    int	notify();
+    void command(command_function_t _com_fun);
+
+private:
+    boost::condition_variable cond; //! active command condition
+    boost::mutex mtx; //! mutex related to condition variable
+
+    bool has_command;	//! flag indicating active command to execute
+
+    command_function_t com_fun; //! command functor
 };
-/**************************** master_trans_t_buffer *****************************/
 
+// forward declaration
+class busy_flag;
 
+class busy_flagger {
+	private:
+		//! flag object to decrement in destructor
+		busy_flag & flag;
+
+	public:
+		//! increment busy flag for in a  scoped manner
+		busy_flagger(busy_flag & _flag);
+
+		//! desctructor makes flag unbusy
+		~busy_flagger();
+};
+
+class busy_flag {
+	friend class busy_flagger;
+
+	private:
+		//! count busy flagging
+		int counter;
+
+		//! guard counter variable
+		mutable boost::mutex m_mutex;
+
+		//! increment counter
+		void increment();
+
+		//! decrement counter
+		void decrement();
+
+	public:
+		bool is_busy() const;
+
+		//! constructor
+		busy_flag();
+};
+
+// TODO: reimplement this as a singleton
+extern busy_flag communication_flag;
 
 #endif
 
