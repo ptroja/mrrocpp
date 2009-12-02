@@ -517,7 +517,7 @@ void *comm_thread(void* arg) {
 	}// end while
 
 	return 0;
-};
+}
 
 
 /* Przechwycenie sygnalu */
