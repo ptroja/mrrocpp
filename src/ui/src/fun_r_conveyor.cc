@@ -33,7 +33,7 @@
 
 
 
-
+extern function_execution_buffer edp_conv_eb;
 
 extern ui_msg_def ui_msg;
 extern ui_ecp_buffer* ui_ecp_obj;

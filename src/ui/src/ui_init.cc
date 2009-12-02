@@ -61,6 +61,7 @@
 
 function_execution_buffer edp_irp6ot_eb;
 function_execution_buffer edp_irp6p_eb;
+function_execution_buffer edp_conv_eb;
 
 busy_flag communication_flag;
 
@@ -608,6 +609,16 @@ void *edp_irp6p_thread(void* arg) {
 	return NULL;
 }
 
+void *edp_conv_thread(void* arg) {
+
+	while(true)
+	{
+		edp_conv_eb.wait_and_execute();
+	}
+
+	return NULL;
+}
+
 
 
 int init( PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
@@ -788,6 +799,13 @@ int init( PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo 
 	if (pthread_create (&edp_irp6p_tid, NULL, edp_irp6p_thread, NULL)!=EOK) {// Y&W - utowrzenie watku serwa
 		printf (" Failed to thread edp_irp6p_tid\n");
 	}
+
+	int edp_conv_tid;
+
+	if (pthread_create (&edp_conv_tid, NULL, edp_conv_thread, NULL)!=EOK) {// Y&W - utowrzenie watku serwa
+		printf (" Failed to thread edp_irp6p_tid\n");
+	}
+
 
 
 	// Zablokowanie domyslnej obslugi sygnalu SIGINT w watkach UI_SR i UI_COMM
