@@ -78,6 +78,8 @@
 #define SA_RESTART 1
 	pthread_t server_tid;
 
+	busy_flag communication_flag;
+
 sem_t sem;
 sem_t sem_ui;
 sem_t sem_all;
