@@ -390,7 +390,7 @@ EDP_conveyor_synchronise( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	//set_ui_state_notification(UI_N_SYNCHRONISATION);
+	set_ui_state_notification(UI_N_SYNCHRONISATION);
 
 	// wychwytania ew. bledow ECP::robot
 	try
@@ -511,7 +511,7 @@ EDP_conveyor_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbi
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	//set_ui_state_notification(UI_N_PROCESS_CREATION);
+	set_ui_state_notification(UI_N_PROCESS_CREATION);
 
 	try { // dla bledow robot :: ECP_error
 

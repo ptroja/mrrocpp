@@ -1622,7 +1622,7 @@ EDP_irp6_postument_synchronise_int( PtWidget_t *widget, ApInfo_t *apinfo, PtCall
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	//set_ui_state_notification(UI_N_SYNCHRONISATION);
+	set_ui_state_notification(UI_N_SYNCHRONISATION);
 
 	// wychwytania ew. bledow ECP::robot
 	try
@@ -2250,7 +2250,7 @@ EDP_irp6_postument_create_int( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackI
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	//set_ui_state_notification(UI_N_PROCESS_CREATION);
+	set_ui_state_notification(UI_N_PROCESS_CREATION);
 
 	try { // dla bledow robot :: ECP_error
 

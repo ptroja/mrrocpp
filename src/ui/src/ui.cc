@@ -125,7 +125,7 @@ int function_execution_buffer::wait_and_execute()
 	}
 
 	busy_flagger flagger(communication_flag);
-
+	set_ui_state_notification(UI_N_BUSY);
 	return popped_command();
 }
 

@@ -121,7 +121,7 @@ void ui_common_robot::execute_motion(void)
 	// Zlecenie wykonania ruchu przez robota jest to polecenie dla EDP
 
 
-	//set_ui_state_notification(UI_N_COMMUNICATION);
+	set_ui_state_notification(UI_N_COMMUNICATION);
 
 
 	// TODO: in QNX/Photon exceptions are handled at the main loop

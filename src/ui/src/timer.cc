@@ -174,7 +174,11 @@ OnTimer( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
 		printf("UI CLOSED\n");
 		PtExit( EXIT_SUCCESS );
 	}  else {
-		set_ui_state_notification(communication_flag.is_busy() ? UI_N_BUSY : UI_N_READY);
+		if (!(communication_flag.is_busy()))
+		{
+			set_ui_state_notification(UI_N_READY);
+		}
+
 	}
 
 	/* eliminate 'unreferenced' warnings */

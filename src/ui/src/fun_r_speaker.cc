@@ -250,7 +250,7 @@ EDP_speaker_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbin
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	//set_ui_state_notification(UI_N_PROCESS_CREATION);
+	set_ui_state_notification(UI_N_PROCESS_CREATION);
 
 	char tmp_string[100];
 	char tmp2_string[100];
