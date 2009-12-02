@@ -44,14 +44,20 @@ typedef double frame_tab[3][4];
 #define EDP_IRP6_ON_TRACK_SECTION "[edp_irp6_on_track]"
 #define ECP_IRP6_ON_TRACK_SECTION "[ecp_irp6_on_track]"
 
-#define EDP_IRP6_ON_TRACK_TFG_SECTION "[edp_irp6_on_track_tfg]"
-#define ECP_IRP6_ON_TRACK_TFG_SECTION "[ecp_irp6_on_track_tfg]"
+#define EDP_IRP6OT_TFG_SECTION "[edp_irp6ot_tfg]"
+#define ECP_IRP6OT_TFG_SECTION "[ecp_irp6ot_tfg]"
+
+#define EDP_IRP6OT_M_SECTION "[edp_irp6ot_m]"
+#define ECP_IRP6OT_MSECTION "[ecp_irp6ot_m]"
 
 #define EDP_IRP6_POSTUMENT_SECTION "[edp_irp6_postument]"
 #define ECP_IRP6_POSTUMENT_SECTION "[ecp_irp6_postument]"
 
-#define EDP_IRP6_POSTUMENT_TFG_SECTION "[edp_irp6_postument_tfg]"
-#define ECP_IRP6_POSTUMENT_TFG_SECTION "[ecp_irp6_postument_tfg]"
+#define EDP_IRP6P_TFG_SECTION "[edp_irp6p_tfg]"
+#define ECP_IRP6P_TFG_SECTION "[ecp_irp6p_tfg]"
+
+#define EDP_IRP6P_M_SECTION "[edp_irp6p_m]"
+#define ECP_IRP6P_M_SECTION "[ecp_irp6p_m]"
 
 #define EDP_IRP6_MECHATRONIKA_SECTION "[edp_irp6_mechatronika]"
 #define ECP_IRP6_MECHATRONIKA_SECTION "[ecp_irp6_mechatronika]"
@@ -78,9 +84,11 @@ typedef double frame_tab[3][4];
 typedef enum _ROBOT_ENUM {
 	ROBOT_UNDEFINED,
 	ROBOT_IRP6_ON_TRACK,
-	ROBOT_IRP6_ON_TRACK_TFG,
+	ROBOT_IRP6OT_TFG,
+	ROBOT_IRP6OT_M,
 	ROBOT_IRP6_POSTUMENT,
-	ROBOT_IRP6_POSTUMENT_TFG,
+	ROBOT_IRP6P_TFG,
+	ROBOT_IRP6P_M,
 	ROBOT_CONVEYOR,
 	ROBOT_SPEAKER,
 	ROBOT_IRP6_MECHATRONIKA,
