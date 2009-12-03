@@ -869,8 +869,6 @@ wnd_irp6ot_joints_copy_current_to_desired( PtWidget_t *widget, ApInfo_t *apinfo,
 
 	}
 
-int execute_motor_motion();
-
 
 int
 irp6ot_move_to_preset_position( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
@@ -928,7 +926,7 @@ irp6ot_move_to_preset_position( PtWidget_t *widget, ApInfo_t *apinfo, PtCallback
 		}
 	}
 
-	edp_irp6ot_eb.command(boost::bind(execute_motor_motion));
+	edp_irp6ot_eb.command(boost::bind(irp6ot_execute_motor_motion));
 
 //	ui_robot.irp6_on_track->move_motors(irp6ot_desired_pos);
 
@@ -940,7 +938,7 @@ irp6ot_move_to_preset_position( PtWidget_t *widget, ApInfo_t *apinfo, PtCallback
 
 
 
-int execute_motor_motion()
+int irp6ot_execute_motor_motion()
 {
 	try
 	{
