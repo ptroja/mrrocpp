@@ -370,6 +370,8 @@ int manage_interface_speaker ( void );
 int OnTimer ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 
 /* ../ui_init.cc */
+void catch_signal ( int sig );
+void UI_close ( void );
 int init ( PtWidget_t *link_instance , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 
 /* ../wndFileLocationEvents.cc */
