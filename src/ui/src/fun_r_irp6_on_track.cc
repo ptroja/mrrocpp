@@ -2314,7 +2314,6 @@ EDP_irp6_on_track_create_int( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackIn
 
 	{
 
-	int pt_res;
 //	sleep(10);
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;

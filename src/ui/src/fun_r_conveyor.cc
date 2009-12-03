@@ -380,10 +380,25 @@ wind_conveyor_moves_move( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t
 }
 
 
+int
+EDP_conveyor_synchronise( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
+
+	{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+//	EDP_irp6_postumentcreate_int(widget, apinfo, cbinfo);
+
+	edp_conv_eb.command(boost::bind(EDP_conveyor_synchronise_int, widget, apinfo, cbinfo));
+
+	return( Pt_CONTINUE );
+
+	}
 
 
 int
-EDP_conveyor_synchronise( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
+EDP_conveyor_synchronise_int( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
 
 	{
 
@@ -500,11 +515,25 @@ conv_servo_algorithm_set( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t
 	}
 
 
+int
+EDP_conveyor_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
 
+	{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+//	EDP_irp6_postumentcreate_int(widget, apinfo, cbinfo);
+
+	edp_conv_eb.command(boost::bind(EDP_conveyor_create_int, widget, apinfo, cbinfo));
+
+	return( Pt_CONTINUE );
+
+	}
 
 
 int
-EDP_conveyor_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
+EDP_conveyor_create_int( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
 
 	{
 
@@ -580,12 +609,28 @@ EDP_conveyor_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbi
 	}
 
 
-
 int
 EDP_conveyor_slay( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
 
 	{
 
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+//	EDP_irp6_postumentcreate_int(widget, apinfo, cbinfo);
+
+	edp_conv_eb.command(boost::bind(EDP_conveyor_slay_int, widget, apinfo, cbinfo));
+
+	return( Pt_CONTINUE );
+
+	}
+
+
+int
+EDP_conveyor_slay_int( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
+
+	{
+	int pt_res;
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
@@ -605,9 +650,10 @@ EDP_conveyor_slay( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinf
 
 		ui_state.conveyor.edp.pid = -1;
 		ui_state.conveyor.edp.reader_fd = -1;
-
+		pt_res=PtEnter(0);
 		close_wind_conveyor_moves(NULL, NULL, NULL);
 		close_wnd_conveyor_servo_algorithm (NULL, NULL, NULL);
+		if (pt_res>=0) PtLeave(0);
 	}
 
 	// modyfikacja menu
