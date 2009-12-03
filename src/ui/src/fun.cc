@@ -2734,6 +2734,13 @@ create_threads( )
 	{
 
 
+	sigset_t set;
+
+	sigemptyset( &set );
+	sigaddset( &set, SIGINT );
+	sigaddset( &set, SIGALRM );
+
+
 	if (pthread_create (&sr_tid, NULL, sr_thread, NULL)!=EOK) {// Y&W - utowrzenie watku serwa
 		printf (" Failed to thread sr_thread\n");
 	}
@@ -2756,6 +2763,27 @@ create_threads( )
 	}
 
 
+	if  (SignalProcmask(0, sr_tid, SIG_BLOCK, &set, NULL)==-1) {
+		perror("SignalProcmask(sr_tid)");
+	}
+
+	if  (SignalProcmask(0, ui_tid, SIG_BLOCK, &set, NULL)==-1) {
+		perror("SignalProcmask(ui_tid)");
+	}
+
+	if  (SignalProcmask(0, edp_irp6ot_tid, SIG_BLOCK, &set, NULL)==-1) {
+		perror("SignalProcmask(sr_tid)");
+	}
+
+	if  (SignalProcmask(0, edp_irp6p_tid, SIG_BLOCK, &set, NULL)==-1) {
+		perror("SignalProcmask(ui_tid)");
+	}
+
+	if  (SignalProcmask(0, edp_conv_tid, SIG_BLOCK, &set, NULL)==-1) {
+		perror("SignalProcmask(sr_tid)");
+	}
+
+
 	return 1;
 
 	}
@@ -2765,7 +2793,11 @@ abort_threads( )
 
 	{
 
-
+	pthread_abort(ui_tid);
+	pthread_abort(sr_tid);
+	pthread_abort(edp_irp6ot_tid);
+	pthread_abort(edp_irp6p_tid);
+	pthread_abort(edp_conv_tid);
 
 	return 1;
 

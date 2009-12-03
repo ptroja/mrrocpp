@@ -166,11 +166,7 @@ OnTimer( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
 		ui_state.ui_state=5;
 		EDP_all_robots_slay (widget, apinfo, cbinfo);
 
-		pthread_abort(edp_irp6ot_tid);
-		pthread_abort(edp_irp6p_tid);
-		pthread_abort(edp_conv_tid);
-
-	} else if (ui_state.ui_state==5) {// odlcizanie do zamnkiecia
+			} else if (ui_state.ui_state==5) {// odlcizanie do zamnkiecia
  	//	printf("w ontimer 5\n");
 		if ((--closing_delay_counter)<=0)
 			ui_state.ui_state=6;
@@ -178,6 +174,7 @@ OnTimer( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
 	      (*log_file_outfile).close();
 	      delete log_file_outfile;
 		printf("UI CLOSED\n");
+		abort_threads();
 		PtExit( EXIT_SUCCESS );
 	}  else {
 		if (!(communication_flag.is_busy()))

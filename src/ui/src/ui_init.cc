@@ -785,19 +785,6 @@ int init( PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo 
 
 	// Zablokowanie domyslnej obslugi sygnalu SIGINT w watkach UI_SR i UI_COMM
 
-	sigset_t set;
-
-	sigemptyset( &set );
-	sigaddset( &set, SIGINT );
-	sigaddset( &set, SIGALRM );
-
-	if  (SignalProcmask(0, sr_tid, SIG_BLOCK, &set, NULL)==-1) {
-		perror("SignalProcmask(sr_tid)");
-	}
-
-	if  (SignalProcmask(0, ui_tid, SIG_BLOCK, &set, NULL)==-1) {
-		perror("SignalProcmask(ui_tid)");
-	}
 
 	// kolejne zczytanie pliku konfiguracyjnego
 	if (get_default_configuration_file_name()==1) // zczytaj nazwe pliku konfiguracyjnego
