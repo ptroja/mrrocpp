@@ -63,6 +63,7 @@
 function_execution_buffer edp_irp6ot_eb;
 function_execution_buffer edp_irp6p_eb;
 function_execution_buffer edp_conv_eb;
+function_execution_buffer main_eb;
 
 busy_flag communication_flag;
 
@@ -615,6 +616,16 @@ void *edp_conv_thread(void* arg) {
 	while(true)
 	{
 		edp_conv_eb.wait_and_execute();
+	}
+
+	return NULL;
+}
+
+void *meb_thread(void* arg) {
+
+	while(true)
+	{
+		meb_eb.wait_and_execute();
 	}
 
 	return NULL;

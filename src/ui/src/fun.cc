@@ -31,12 +31,15 @@
 #include "abimport.h"
 #include "proto.h"
 
+function_execution_buffer main_eb;
+
 
 pthread_t edp_irp6ot_tid;
 pthread_t edp_irp6p_tid;
 pthread_t edp_conv_tid;
 pthread_t ui_tid;
 pthread_t sr_tid;
+pthread_t meb_tid;
 
 
 extern ui_msg_def ui_msg;
@@ -2759,7 +2762,11 @@ create_threads( )
 	}
 
 	if (pthread_create (&edp_conv_tid, NULL, edp_conv_thread, NULL)!=EOK) {// Y&W - utowrzenie watku serwa
-		printf (" Failed to thread edp_irp6p_tid\n");
+		printf (" Failed to thread edp_conv_tid\n");
+	}
+
+	if (pthread_create (&meb_tid, NULL, meb_thread, NULL)!=EOK) {// Y&W - utowrzenie watku serwa
+		printf (" Failed to thread meb_tid\n");
 	}
 
 
@@ -2772,16 +2779,20 @@ create_threads( )
 	}
 
 	if  (SignalProcmask(0, edp_irp6ot_tid, SIG_BLOCK, &set, NULL)==-1) {
-		perror("SignalProcmask(sr_tid)");
+		perror("SignalProcmask(edp_irp6ot_tid)");
 	}
 
 	if  (SignalProcmask(0, edp_irp6p_tid, SIG_BLOCK, &set, NULL)==-1) {
-		perror("SignalProcmask(ui_tid)");
+		perror("SignalProcmask(edp_irp6p_tid)");
 	}
 
 	if  (SignalProcmask(0, edp_conv_tid, SIG_BLOCK, &set, NULL)==-1) {
-		perror("SignalProcmask(sr_tid)");
+		perror("SignalProcmask(edp_conv_tid)");
 	}
+
+	if  (SignalProcmask(0, meb_tid, SIG_BLOCK, &set, NULL)==-1) {
+		perror("SignalProcmask(meb_tid)");
+
 
 
 	return 1;
@@ -2798,6 +2809,7 @@ abort_threads( )
 	pthread_abort(edp_irp6ot_tid);
 	pthread_abort(edp_irp6p_tid);
 	pthread_abort(edp_conv_tid);
+	pthread_abort(meb_tid);
 
 	return 1;
 
