@@ -869,7 +869,7 @@ wnd_irp6ot_joints_copy_current_to_desired( PtWidget_t *widget, ApInfo_t *apinfo,
 
 	}
 
-
+int execute_motor_motion();
 
 
 int
@@ -887,10 +887,6 @@ irp6ot_move_to_preset_position( PtWidget_t *widget, ApInfo_t *apinfo, PtCallback
 		my_data = (PhKeyEvent_t *) PhGetData(cbinfo->event);
 	}
 
-
-	// wychwytania ew. bledow ECP::robot
-	try
-	{
 
 	if (ui_state.irp6_on_track.edp.pid!=-1) {
 
@@ -932,14 +928,31 @@ irp6ot_move_to_preset_position( PtWidget_t *widget, ApInfo_t *apinfo, PtCallback
 		}
 	}
 
-	ui_robot.irp6_on_track->move_motors(irp6ot_desired_pos);
+	edp_irp6ot_eb.command(boost::bind(execute_motor_motion));
+
+//	ui_robot.irp6_on_track->move_motors(irp6ot_desired_pos);
 
 	} // end if (ui_state.irp6_on_track.edp.pid!=-1)
-} // end try
-	CATCH_SECTION_UI
+
 
 	return( Pt_CONTINUE );
 }
+
+
+
+int execute_motor_motion()
+{
+	try
+	{
+
+		ui_robot.irp6_on_track->move_motors(irp6ot_desired_pos);
+
+} // end try
+	CATCH_SECTION_UI
+
+	return 1;
+}
+
 
 
 int
