@@ -31,7 +31,7 @@
 #include "abimport.h"
 #include "proto.h"
 
-function_execution_buffer main_eb;
+extern function_execution_buffer main_eb;
 
 
 pthread_t edp_irp6ot_tid;
