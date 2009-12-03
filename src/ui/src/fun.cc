@@ -2792,6 +2792,7 @@ create_threads( )
 
 	if  (SignalProcmask(0, meb_tid, SIG_BLOCK, &set, NULL)==-1) {
 		perror("SignalProcmask(meb_tid)");
+	}
 
 
 

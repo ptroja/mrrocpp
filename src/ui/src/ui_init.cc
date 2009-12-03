@@ -625,7 +625,7 @@ void *meb_thread(void* arg) {
 
 	while(true)
 	{
-		meb_eb.wait_and_execute();
+		main_eb.wait_and_execute();
 	}
 
 	return NULL;
