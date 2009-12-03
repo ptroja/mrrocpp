@@ -59,6 +59,7 @@
 #include <Pt.h>
 #include <Ph.h>
 
+
 function_execution_buffer edp_irp6ot_eb;
 function_execution_buffer edp_irp6p_eb;
 function_execution_buffer edp_conv_eb;
@@ -632,8 +633,6 @@ int init( PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo 
 	struct utsname sysinfo;
 	char* cwd;
 	char buff[PATH_MAX + 1];
-	pthread_t ui_tid;
-	pthread_t sr_tid;
 
 	signal( SIGINT, &catch_signal );// by y aby uniemozliwic niekontrolowane zakonczenie aplikacji ctrl-c z kalwiatury
 	signal( SIGALRM, &catch_signal );
@@ -780,31 +779,7 @@ int init( PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo 
 	ui_sr_obj = new ui_sr_buffer();
 	ui_ecp_obj = new ui_ecp_buffer();
 
-	if (pthread_create (&sr_tid, NULL, sr_thread, NULL)!=EOK) {// Y&W - utowrzenie watku serwa
-		printf (" Failed to thread sr_thread\n");
-	}
-
-	if (pthread_create (&ui_tid, NULL, comm_thread, NULL)!=EOK) {// Y&W - utowrzenie watku serwa
-		printf (" Failed to thread comm_thread\n");
-	}
-
-	int edp_irp6ot_tid;
-
-	if (pthread_create (&edp_irp6ot_tid, NULL, edp_irp6ot_thread, NULL)!=EOK) {// Y&W - utowrzenie watku serwa
-		printf (" Failed to thread edp_irp6ot_tid\n");
-	}
-
-	int edp_irp6p_tid;
-
-	if (pthread_create (&edp_irp6p_tid, NULL, edp_irp6p_thread, NULL)!=EOK) {// Y&W - utowrzenie watku serwa
-		printf (" Failed to thread edp_irp6p_tid\n");
-	}
-
-	int edp_conv_tid;
-
-	if (pthread_create (&edp_conv_tid, NULL, edp_conv_thread, NULL)!=EOK) {// Y&W - utowrzenie watku serwa
-		printf (" Failed to thread edp_irp6p_tid\n");
-	}
+	create_threads();
 
 
 

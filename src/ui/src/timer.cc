@@ -23,6 +23,7 @@
 #include "abimport.h"
 #include "proto.h"
 
+
 extern ui_sr_buffer* ui_sr_obj;
 extern ui_msg_def ui_msg;
 extern ui_state_def ui_state;
@@ -164,6 +165,11 @@ OnTimer( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
 		closing_delay_counter=20;// opoznienie zamykania
 		ui_state.ui_state=5;
 		EDP_all_robots_slay (widget, apinfo, cbinfo);
+
+		pthread_abort(edp_irp6ot_tid);
+		pthread_abort(edp_irp6p_tid);
+		pthread_abort(edp_conv_tid);
+
 	} else if (ui_state.ui_state==5) {// odlcizanie do zamnkiecia
  	//	printf("w ontimer 5\n");
 		if ((--closing_delay_counter)<=0)

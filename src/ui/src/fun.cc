@@ -31,6 +31,14 @@
 #include "abimport.h"
 #include "proto.h"
 
+
+pthread_t edp_irp6ot_tid;
+pthread_t edp_irp6p_tid;
+pthread_t edp_conv_tid;
+pthread_t ui_tid;
+pthread_t sr_tid;
+
+
 extern ui_msg_def ui_msg;
 extern ui_ecp_buffer* ui_ecp_obj;
 
@@ -2716,5 +2724,49 @@ pulse_ecp_all_robots( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cb
 	pulse_ecp_irp6_mechatronika (widget, apinfo, cbinfo);
 
 	return( Pt_CONTINUE );
+
+	}
+
+
+int
+create_threads( )
+
+	{
+
+
+	if (pthread_create (&sr_tid, NULL, sr_thread, NULL)!=EOK) {// Y&W - utowrzenie watku serwa
+		printf (" Failed to thread sr_thread\n");
+	}
+
+	if (pthread_create (&ui_tid, NULL, comm_thread, NULL)!=EOK) {// Y&W - utowrzenie watku serwa
+		printf (" Failed to thread comm_thread\n");
+	}
+
+	if (pthread_create (&edp_irp6ot_tid, NULL, edp_irp6ot_thread, NULL)!=EOK) {// Y&W - utowrzenie watku serwa
+		printf (" Failed to thread edp_irp6ot_tid\n");
+	}
+
+
+	if (pthread_create (&edp_irp6p_tid, NULL, edp_irp6p_thread, NULL)!=EOK) {// Y&W - utowrzenie watku serwa
+		printf (" Failed to thread edp_irp6p_tid\n");
+	}
+
+	if (pthread_create (&edp_conv_tid, NULL, edp_conv_thread, NULL)!=EOK) {// Y&W - utowrzenie watku serwa
+		printf (" Failed to thread edp_irp6p_tid\n");
+	}
+
+
+	return 1;
+
+	}
+
+int
+abort_threads( )
+
+	{
+
+
+
+	return 1;
 
 	}
