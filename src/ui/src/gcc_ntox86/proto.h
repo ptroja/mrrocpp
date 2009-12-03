@@ -89,8 +89,6 @@ int pulse_reader_all_robots_stop ( PtWidget_t *widget , ApInfo_t *apinfo , PtCal
 int pulse_reader_all_robots_trigger ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int pulse_reader_execute ( int coid , int pulse_code , int pulse_value );
 int pulse_ecp_all_robots ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
-int create_threads ( void );
-int abort_threads ( void );
 
 /* ../fun_r_conveyor.cc */
 int close_wind_conveyor_moves ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
@@ -227,6 +225,7 @@ int init_wnd_irp6_on_track_inc ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallb
 int wnd_irp6ot_motors_copy_current_to_desired ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int wnd_irp6ot_joints_copy_current_to_desired ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int irp6ot_move_to_preset_position ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
+int irp6ot_execute_motor_motion ( void );
 int irp6ot_inc_motion ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int init_wnd_irp6_on_track_int ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int irp6ot_int_motion ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
@@ -303,6 +302,7 @@ int export_wnd_irp6_postument_xyz_euler_zyz ( PtWidget_t *widget , ApInfo_t *api
 int init_wnd_irp6_postument_inc ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int wnd_irp6p_motors_copy_current_to_desired ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int irp6p_move_to_preset_position ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
+int irp6p_execute_motor_motion ( void );
 int irp6p_inc_motion ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int init_wnd_irp6_postument_int ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int wnd_irp6p_joints_copy_current_to_desired ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
@@ -370,15 +370,6 @@ int manage_interface_speaker ( void );
 int OnTimer ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 
 /* ../ui_init.cc */
-void *sr_thread ( void *arg );
-void *sr_thread ( void *arg );
-void *comm_thread ( void *arg );
-void catch_signal ( int sig );
-void UI_close ( void );
-void *edp_irp6ot_thread ( void *arg );
-void *edp_irp6p_thread ( void *arg );
-void *edp_conv_thread ( void *arg );
-void *meb_thread ( void *arg );
 int init ( PtWidget_t *link_instance , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 
 /* ../wndFileLocationEvents.cc */
