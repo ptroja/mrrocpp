@@ -361,5 +361,11 @@ class busy_flag {
 // TODO: reimplement this as a singleton
 extern busy_flag communication_flag;
 
+
+
+int create_threads( );
+int abort_threads( );
+
+
 #endif
 
