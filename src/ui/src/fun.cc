@@ -34,14 +34,6 @@
 extern function_execution_buffer main_eb;
 
 
-pthread_t edp_irp6ot_tid;
-pthread_t edp_irp6p_tid;
-pthread_t edp_conv_tid;
-pthread_t ui_tid;
-pthread_t sr_tid;
-pthread_t meb_tid;
-
-
 extern ui_msg_def ui_msg;
 extern ui_ecp_buffer* ui_ecp_obj;
 
@@ -2730,88 +2722,3 @@ pulse_ecp_all_robots( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cb
 
 	}
 
-
-int
-create_threads( )
-
-	{
-
-
-	sigset_t set;
-
-	sigemptyset( &set );
-	sigaddset( &set, SIGINT );
-	sigaddset( &set, SIGALRM );
-
-
-	if (pthread_create (&sr_tid, NULL, sr_thread, NULL)!=EOK) {// Y&W - utowrzenie watku serwa
-		printf (" Failed to thread sr_thread\n");
-	}
-
-	if (pthread_create (&ui_tid, NULL, comm_thread, NULL)!=EOK) {// Y&W - utowrzenie watku serwa
-		printf (" Failed to thread comm_thread\n");
-	}
-
-	if (pthread_create (&edp_irp6ot_tid, NULL, edp_irp6ot_thread, NULL)!=EOK) {// Y&W - utowrzenie watku serwa
-		printf (" Failed to thread edp_irp6ot_tid\n");
-	}
-
-
-	if (pthread_create (&edp_irp6p_tid, NULL, edp_irp6p_thread, NULL)!=EOK) {// Y&W - utowrzenie watku serwa
-		printf (" Failed to thread edp_irp6p_tid\n");
-	}
-
-	if (pthread_create (&edp_conv_tid, NULL, edp_conv_thread, NULL)!=EOK) {// Y&W - utowrzenie watku serwa
-		printf (" Failed to thread edp_conv_tid\n");
-	}
-
-	if (pthread_create (&meb_tid, NULL, meb_thread, NULL)!=EOK) {// Y&W - utowrzenie watku serwa
-		printf (" Failed to thread meb_tid\n");
-	}
-
-
-	if  (SignalProcmask(0, sr_tid, SIG_BLOCK, &set, NULL)==-1) {
-		perror("SignalProcmask(sr_tid)");
-	}
-
-	if  (SignalProcmask(0, ui_tid, SIG_BLOCK, &set, NULL)==-1) {
-		perror("SignalProcmask(ui_tid)");
-	}
-
-	if  (SignalProcmask(0, edp_irp6ot_tid, SIG_BLOCK, &set, NULL)==-1) {
-		perror("SignalProcmask(edp_irp6ot_tid)");
-	}
-
-	if  (SignalProcmask(0, edp_irp6p_tid, SIG_BLOCK, &set, NULL)==-1) {
-		perror("SignalProcmask(edp_irp6p_tid)");
-	}
-
-	if  (SignalProcmask(0, edp_conv_tid, SIG_BLOCK, &set, NULL)==-1) {
-		perror("SignalProcmask(edp_conv_tid)");
-	}
-
-	if  (SignalProcmask(0, meb_tid, SIG_BLOCK, &set, NULL)==-1) {
-		perror("SignalProcmask(meb_tid)");
-	}
-
-
-
-	return 1;
-
-	}
-
-int
-abort_threads( )
-
-	{
-
-	pthread_abort(ui_tid);
-	pthread_abort(sr_tid);
-	pthread_abort(edp_irp6ot_tid);
-	pthread_abort(edp_irp6p_tid);
-	pthread_abort(edp_conv_tid);
-	pthread_abort(meb_tid);
-
-	return 1;
-
-	}
