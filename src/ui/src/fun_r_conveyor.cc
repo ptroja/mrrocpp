@@ -18,6 +18,8 @@
 #include <process.h>
 #include <math.h>
 
+#include <boost/bind.hpp>
+
 #include "lib/srlib.h"
 #include "ui/ui_const.h"
 // #include "ui/ui.h"
