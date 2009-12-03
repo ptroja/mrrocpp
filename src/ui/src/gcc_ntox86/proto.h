@@ -89,6 +89,8 @@ int pulse_reader_all_robots_stop ( PtWidget_t *widget , ApInfo_t *apinfo , PtCal
 int pulse_reader_all_robots_trigger ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int pulse_reader_execute ( int coid , int pulse_code , int pulse_value );
 int pulse_ecp_all_robots ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
+int create_threads ( void );
+int abort_threads ( void );
 
 /* ../fun_r_conveyor.cc */
 int close_wind_conveyor_moves ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
