@@ -44,8 +44,8 @@ void robot::create_command(void)
 	{
 		case lib::SET:
 		case lib::SET_GET:
-			strcpy(ecp_command.instruction.arm.text_def.text, EDP_data.text);
-			strcpy(ecp_command.instruction.arm.text_def.prosody, EDP_data.prosody);
+			strcpy(ecp_command.instruction.arm.text_def.text, ecp_command.instruction.arm.text_def.text);
+			strcpy(ecp_command.instruction.arm.text_def.prosody, ecp_command.instruction.arm.text_def.prosody);
 			break;
 		case lib::GET:
 		case lib::QUERY:
@@ -71,7 +71,7 @@ void robot::get_reply(void)
 			reply_package.error_no.error1 = reply_package.error_no.error1;
 			break;
 		case lib::ACKNOWLEDGE:
-			EDP_data.speaking = reply_package.arm.text_def.speaking;
+			reply_package.arm.text_def.speaking = reply_package.arm.text_def.speaking;
 			break;
 		default: // bledna przesylka
 			throw ECP_error(lib::NON_FATAL_ERROR, INVALID_EDP_REPLY);

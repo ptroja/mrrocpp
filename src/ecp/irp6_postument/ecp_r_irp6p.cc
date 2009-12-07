@@ -125,7 +125,7 @@ void robot::create_command(void)
 					case lib::JOINT:
 						for (int j=0; j<number_of_servos; j++) {
 							ecp_command.instruction.arm.pf_def.desired_torque[j]
-									= EDP_data.desired_torque[j];
+									= ecp_command.instruction.arm.pf_def.desired_torque[j];
 							ecp_command.instruction.arm.pf_def.arm_coordinates[j]
 									= ecp_command.instruction.arm.pf_def.arm_coordinates[j];
 						}

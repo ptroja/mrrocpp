@@ -301,7 +301,7 @@ bool dung::next_step ( )
     // output the torque to the controller
     for (int i=0; i<3; i++)
     {
-        the_robot->EDP_data.desired_torque[i] = t[i];
+        the_robot->ecp_command.instruction.arm.pf_def.desired_torque[i] = t[i];
     } // end:for
 
     for (int i=0; i<MAX_SERVOS_NR; i++)

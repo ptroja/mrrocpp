@@ -27,8 +27,8 @@ speaking::speaking(common::task::task& _ecp_task, int step):
 bool speaking::configure(const char* text)
 {
 	if (text != NULL) {
-		strcpy(the_robot->EDP_data.text, text);
-		strcpy(the_robot->EDP_data.prosody, "neutral");
+		strcpy(the_robot->ecp_command.instruction.arm.text_def.text, text);
+		strcpy(the_robot->ecp_command.instruction.arm.text_def.prosody, "neutral");
 		return true;
 	} else {
 		return false;
@@ -76,7 +76,7 @@ bool speaking::next_step ( ) {
 	switch (last_sg_state)
 	{
 		case SG_FIRST_GET:
-			if (the_robot->EDP_data.speaking == 0) {
+			if (the_robot->reply_package.arm.text_def.speaking == 0) {
 				the_robot->ecp_command.instruction.instruction_type = lib::SET;
 				new_sg_state = SG_AFTER_SET;
 			} else {
@@ -89,7 +89,7 @@ bool speaking::next_step ( ) {
 			new_sg_state=SG_LAST_GET;
 			break;
 		case SG_LAST_GET:
-			if (the_robot->EDP_data.speaking == 0) {
+			if (the_robot->reply_package.arm.text_def.speaking == 0) {
 				new_sg_state = SG_FINISH;
 				communicate_with_edp = false;
 			} else {
@@ -109,7 +109,7 @@ bool speaking::next_step ( ) {
 	// for mic
 	// printf("%d \n",(sensor_m.begin())->second->image.sensor_union.mic.word_id);
 
-	// strcpy( the_robot->EDP_data.text, "przesu� kostk� w prawo" );
+	// strcpy( the_robot->ecp_command.instruction.arm.text_def.text, "przesu� kostk� w prawo" );
 
 	return true; //false;
 }
