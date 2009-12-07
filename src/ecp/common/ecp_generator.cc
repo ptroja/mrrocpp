@@ -10,7 +10,6 @@ generator::generator (common::task::task& _ecp_task)
         ecp_t(_ecp_task),
         communicate_with_mp_in_move(true),
         communicate_with_edp(true),
-        copy_edp_buffers_in_move(true),
         the_robot(ecp_t.ecp_m_robot)
 {
 }
@@ -68,18 +67,16 @@ void generator::Move()
         // wykonanie kroku ruchu
         if ((the_robot) && communicate_with_edp)
         {
-            if (copy_edp_buffers_in_move)
-            {
-                the_robot->create_command();
-            }
+
+
+
             // zlecenie ruchu SET oraz odczyt stanu robota GET
 
             execute_motion();
 
-            if (copy_edp_buffers_in_move)
-            {
-                the_robot->get_reply();
-            }
+
+
+
         }
 
         // odczytanie danych z wszystkich czujnikow

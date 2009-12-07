@@ -45,7 +45,7 @@ void kin_test::main_task_algorithm(void)
         ecp_m_robot->ecp_command.instruction.get_arm_type = lib::MOTOR;
         ecp_m_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
         ecp_m_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-        ecp_m_robot->create_command();
+
         ecp_m_robot->execute_motion();
     }
     clock_gettime( CLOCK_REALTIME, &stop);
@@ -59,7 +59,7 @@ void kin_test::main_task_algorithm(void)
     //          accum /= n;
     std::cout<<"Time of  get = "<< accum<< "("<<n <<" gets set" <<")"<<std::endl;
 
-    ecp_m_robot->get_reply();
+
 
     for(int i =0; i<IRP6_ON_TRACK_NUM_OF_SERVOS; i++)
         std::cout<<ecp_m_robot->reply_package.arm.pf_def.arm_coordinates[i]<<" ";
@@ -77,7 +77,7 @@ void kin_test::main_task_algorithm(void)
         ecp_m_robot->ecp_command.instruction.motion_steps = (uint16_t) 1;
         ecp_m_robot->ecp_command.instruction.value_in_step_no = 1;
         memcpy (ecp_m_robot->ecp_command.instruction.arm.pf_def.arm_coordinates, ecp_m_robot->reply_package.arm.pf_def.arm_coordinates, IRP6_ON_TRACK_NUM_OF_SERVOS*sizeof (double));
-        ecp_m_robot->create_command();
+
         ecp_m_robot->execute_motion();
 
     }

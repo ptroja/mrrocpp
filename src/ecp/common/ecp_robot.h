@@ -91,16 +91,6 @@ public:
 	// Zlecenie synchronizacji robota
 	// Pobranie aktualnych polozen
 
-	virtual void create_command (void) = 0;
-	// wypelnia bufor wysylkowy do EDP na podstawie danych zawartych w obrazie
-	// robota wykorzystywanych przez generator
-	// Ten bufor znajduje sie w robocie
-
-	virtual void get_reply (void) = 0;
-	// pobiera z pakietu przeslanego z EDP informacje i wstawia je do
-	// odpowiednich skladowych obrazu robota wykorzystywanych przez generator
-	// Ten bufor znajduje sie w robocie
-
 	bool is_synchronised ( void ) const; // Czy robot zsynchronizowany?
 
 	class ECP_error

@@ -32,51 +32,6 @@ robot::robot(common::task::task& _ecp_object) :
 {
 }
 
-// --------------------------------------------------------------------------
-void robot::create_command(void)
-{
-	// wypelnia bufor wysylkowy do EDP na podstawie danych
-	// zawartych w skladowych generatora lub warunku
-
-	ecp_command.instruction.instruction_type = ecp_command.instruction.instruction_type;
-
-	switch (ecp_command.instruction.instruction_type)
-	{
-		case lib::SET:
-		case lib::SET_GET:
-			strcpy(ecp_command.instruction.arm.text_def.text, ecp_command.instruction.arm.text_def.text);
-			strcpy(ecp_command.instruction.arm.text_def.prosody, ecp_command.instruction.arm.text_def.prosody);
-			break;
-		case lib::GET:
-		case lib::QUERY:
-			break;
-		case lib::SYNCHRO:
-		default: // blad: nieprawidlowe polecenie
-			throw ECP_error(lib::NON_FATAL_ERROR, INVALID_ECP_COMMAND);
-	} // end: switch (instruction_type)
-}
-// ---------------------------------------------------------------
-
-/*---------------------------------------------------------------------*/
-void robot::get_reply(void)
-{
-	// pobiera z pakietu przeslanego z EDP informacje i wstawia je do
-	// odpowiednich skladowych generatora lub warunku
-	reply_package.reply_type = reply_package.reply_type;
-
-	switch (reply_package.reply_type)
-	{
-		case lib::ERROR:
-			reply_package.error_no.error0 = reply_package.error_no.error0;
-			reply_package.error_no.error1 = reply_package.error_no.error1;
-			break;
-		case lib::ACKNOWLEDGE:
-			reply_package.arm.text_def.speaking = reply_package.arm.text_def.speaking;
-			break;
-		default: // bledna przesylka
-			throw ECP_error(lib::NON_FATAL_ERROR, INVALID_EDP_REPLY);
-	} // end: switch (reply_package.reply_type)
-} // end: ecp_speaker_robot::get_reply ()
 } // namespace speaker
 } // namespace ecp
 } // namespace mrrocpp

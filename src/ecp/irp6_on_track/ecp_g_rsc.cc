@@ -86,13 +86,12 @@ void robot_stopped_condition::get_current_position(double current_position[6]){
 	// Sprawdzenie rodzaju ramienia.
 	the_robot->ecp_command.instruction.get_arm_type = lib::MOTOR;
 	// Przepisanie rozkazu do bufora wysylkowego.
-	the_robot->create_command();
 	// Zlecenie ruchu robota.
 	communicate_with_edp=true;
 	the_robot->execute_motion();
 	communicate_with_edp=false;
 	// Odebranie danych.
-	the_robot->get_reply();
+
 	// Przepisanie obecnego polozenia robota do bufora w zaleznosci od rodzaju wspolrzednych.
 	memcpy(current_position, the_robot->reply_package.arm.pf_def.arm_coordinates, 6*sizeof(double));
  	} // end: get_current_position
@@ -140,13 +139,13 @@ void robot_stopped_condition::add_rse_element(ecp_mp::sensor::digital_scales& th
 	the_robot->ecp_command.instruction.motion_steps = 1;
 	the_robot->ecp_command.instruction.value_in_step_no = the_robot->ecp_command.instruction.motion_steps;
 	// Stworzenie rozkazu.
-	the_robot->create_command();
+
 	// Wyslanie rozkazu.
 	communicate_with_edp=true;
 	the_robot->execute_motion();
 	communicate_with_edp=false;
 	// Odebranie odczytow polozenia.
-	the_robot->get_reply();
+
 	// Pobranie odczytow z linialow.
 	the_sensor.initiate_reading();
 	the_sensor.get_reading();

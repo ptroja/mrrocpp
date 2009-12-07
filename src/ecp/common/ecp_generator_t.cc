@@ -8,7 +8,6 @@ namespace generator {
 transparent::transparent(common::task::task& _ecp_task) :
 	generator(_ecp_task)
 {
-	copy_edp_buffers_in_move=false;
 	throw_kinematics_exceptions = true;
 }
 
@@ -31,7 +30,7 @@ bool transparent::next_step()
 {
 	// Kopiowanie danych z bufora przyslanego z EDP do
 	// obrazu danych wykorzystywanych przez generator
-	// the_robot->get_reply();	
+	// the_robot->get_reply();
 		communicate_with_edp=true;
 
 	// by Y - Przepisanie przyslanej z EDP pozycji do MP
@@ -80,9 +79,9 @@ void transparent::execute_motion(void)
 	 }
 	 */
 	if (the_robot->reply_package.reply_type == lib::ERROR) {
-		
-		
-		
+
+
+
 		switch ( the_robot->reply_package.error_no.error0 ) {
 			case BEYOND_UPPER_D0_LIMIT:
 			case BEYOND_UPPER_THETA1_LIMIT:
@@ -100,19 +99,19 @@ void transparent::execute_motion(void)
 			case BEYOND_LOWER_THETA5_LIMIT:
 			case BEYOND_LOWER_THETA6_LIMIT:
 			case BEYOND_LOWER_THETA7_LIMIT:
-				if (throw_kinematics_exceptions) 
+				if (throw_kinematics_exceptions)
 				{
 					throw ecp_robot::ECP_error (lib::NON_FATAL_ERROR, EDP_ERROR);
 				}
-				
+
 			break;
 			default:
 				throw ecp_robot::ECP_error (lib::NON_FATAL_ERROR, EDP_ERROR);
 			break;
 
 		} /* end: switch */
-		
-	
+
+
 	}
 }
 

@@ -44,11 +44,11 @@ void trajectory_reproduce::get_current_position(double current_position[6]){
     // Sprawdzenie rodzaju ramienia.
     the_robot->ecp_command.instruction.get_arm_type = lib::MOTOR;
     // Przepisanie rozkazu do bufora wysylkowego.
-    the_robot->create_command();
+
     // Zlecenie ruchu robota.
     the_robot->execute_motion();
     // Odebranie danych.
-    the_robot->get_reply();
+
     // Przepisanie obecnego polozenia robota do bufora w zaleznosci od rodzaju wspolrzednych.
     memcpy(current_position, the_robot->reply_package.arm.pf_def.arm_coordinates, MAX_SERVOS_NR*sizeof(double));
     } // end: get_current_position
@@ -110,7 +110,7 @@ void trajectory_reproduce::create_command_for_pose(common::ecp_taught_in_pose& t
     default:
         break;
         } // end: switch
-    the_robot->create_command();
+
     } // end: create_command_for_pose
 
 

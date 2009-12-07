@@ -82,11 +82,11 @@ void force_controlled_trajectory::get_current_position (){
         the_robot->ecp_command.instruction.get_type = ARM_DV; // ARM
         the_robot->ecp_command.instruction.get_arm_type = current_control;
         // Przepisanie rozkazu do bufora wysylkowego.
-        the_robot->create_command();
+
         // Zlecenie ruchu robota.
         the_robot->execute_motion();
         // Odebranie danych.
-        the_robot->get_reply();
+
         // Przepisanie obecnego polozenia robota do bufora.
         if (current_control == lib::MOTOR){
             memcpy(current_position, the_robot->reply_package.arm.pf_def.arm_coordinates, 8*sizeof(double));
@@ -100,11 +100,11 @@ void force_controlled_trajectory::get_current_position (){
             the_robot->ecp_command.instruction.get_type = ARM_DV; // ARM
             the_robot->ecp_command.instruction.get_arm_type = lib::MOTOR;
             // Przepisanie rozkazu do bufora wysylkowego.
-            the_robot->create_command();
+
             // Zlecenie ruchu robota.
             the_robot->execute_motion();
             // Odebranie danych.
-            the_robot->get_reply();
+
             memcpy(current_motor_position, the_robot->reply_package.arm.pf_def.arm_coordinates, 8*sizeof(double));
             } // end: if*/
     // Koniec sekcji krytycznej.
