@@ -296,7 +296,7 @@ void robot::get_rmodel_reply(void)
 						= reply_package.rmodel.tool_coordinate_def.tool_coordinates[i];
 			break;
 		case lib::ARM_KINEMATIC_MODEL:
-			EDP_data.current_kinematic_model_no
+			reply_package.rmodel.kinematic_model.kinematic_model_no
 					= reply_package.rmodel.kinematic_model.kinematic_model_no;
 			break;
 		case lib::SERVO_ALGORITHM:

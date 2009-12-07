@@ -238,7 +238,7 @@ void robot::get_rmodel_reply (void)
 			break;
 			//////////////////K
 		case lib::ARM_KINEMATIC_MODEL:
-			EDP_data.current_kinematic_model_no =
+			reply_package.rmodel.kinematic_model.kinematic_model_no =
 			    reply_package.rmodel.kinematic_model.kinematic_model_no;
 			break;
 		case lib::SERVO_ALGORITHM:
