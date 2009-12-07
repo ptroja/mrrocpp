@@ -109,7 +109,7 @@ bool weight_meassure::first_step()
 	the_robot->ecp_command.instruction.instruction_type = lib::GET;
 	the_robot->ecp_command.instruction.get_type = ARM_DV;
 	the_robot->ecp_command.instruction.get_arm_type = lib::FRAME;
-	the_robot->EDP_data.next_interpolation_type
+	the_robot->ecp_command.instruction.interpolation_type
 			= lib::TCIM;
 
 	return true;
@@ -220,11 +220,11 @@ bool y_nose_run_force::first_step()
 
 	the_robot->ecp_command.instruction.set_arm_type = lib::PF_VELOCITY;
 	the_robot->ecp_command.instruction.get_arm_type = lib::FRAME;
-	the_robot->EDP_data.motion_type = lib::RELATIVE;
-	the_robot->EDP_data.next_interpolation_type
+	the_robot->ecp_command.instruction.motion_type = lib::RELATIVE;
+	the_robot->ecp_command.instruction.interpolation_type
 			= lib::TCIM;
-	the_robot->EDP_data.motion_steps = td.internode_step_no;
-	the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
+	the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
+	the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
 	/*
 	 the_robot->EDP_data.ECPtoEDP_force_coordinates[0]=0.0;
 	 the_robot->EDP_data.ECPtoEDP_force_coordinates[1]=0.0;
@@ -316,9 +316,9 @@ bool y_egg_force::first_step()
 
 	 the_robot->ecp_command.instruction.set_arm_type = POSE_FORCE_LINEAR;
 	 the_robot->ecp_command.instruction.get_arm_type = POSE_FORCE_LINEAR;
-	 the_robot->EDP_data.motion_type = lib::ABSOLUTE;
-	 the_robot->EDP_data.motion_steps = td.internode_step_no;
-	 the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
+	 the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
+	 the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
+	 the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
 
 	 the_robot->EDP_data.ECPtoEDP_force_coordinates[0]=0.0;
 	 the_robot->EDP_data.ECPtoEDP_force_coordinates[1]=0.0;
@@ -370,8 +370,8 @@ bool y_egg_force::next_step()
 		td.value_in_step_no = td.internode_step_no - 2;
 		/*
 		 the_robot->EDP_data.force_axis_quantity=3; // DOBRZE
-		 the_robot->EDP_data.motion_steps = td.internode_step_no;
-		 the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
+		 the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
+		 the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
 
 		 the_robot->EDP_data.ECPtoEDP_force_coordinates[0]=0.0;
 		 the_robot->EDP_data.ECPtoEDP_force_coordinates[1]=0.0;
@@ -404,8 +404,8 @@ bool y_egg_force::next_step()
 		/*
 		 the_robot->EDP_data.force_axis_quantity=0; // ruch czysto pozycyjny
 
-		 the_robot->EDP_data.motion_steps = td.internode_step_no;
-		 the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
+		 the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
+		 the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
 
 		 // inkrementacja numeru iteracji dla biezacego stanu
 		 in_state_iteration++;
@@ -447,8 +447,8 @@ bool y_egg_force::next_step()
 		/*
 		 the_robot->EDP_data.force_axis_quantity = 0;
 
-		 the_robot->EDP_data.motion_steps = td.internode_step_no;
-		 the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
+		 the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
+		 the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
 
 		 the_robot->EDP_data.position_increment[0]=0.0;
 		 the_robot->EDP_data.position_increment[1]=0.0;
@@ -493,8 +493,8 @@ bool y_egg_force::next_step()
 		/*
 		 the_robot->EDP_data.force_axis_quantity = 0;
 
-		 the_robot->EDP_data.motion_steps = td.internode_step_no;
-		 the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
+		 the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
+		 the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
 
 		 the_robot->EDP_data.position_increment[0]=0.0;
 		 the_robot->EDP_data.position_increment[1]=0.0;
@@ -531,8 +531,8 @@ bool y_egg_force::next_step()
 		 the_robot->EDP_data.relative_force_vector[1]=0.0;
 		 the_robot->EDP_data.relative_force_vector[2]=1.0;
 
-		 the_robot->EDP_data.motion_steps = td.internode_step_no;
-		 the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
+		 the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
+		 the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
 		 the_robot->EDP_data.ECPtoEDP_force_coordinates[2]=SILA_DOCISKUEDP_OPADANIE_EGG;
 
 		 in_state_iteration++;
@@ -561,8 +561,8 @@ bool y_egg_force::next_step()
 		/*
 		 the_robot->EDP_data.force_axis_quantity=0;
 
-		 the_robot->EDP_data.motion_steps = td.internode_step_no;
-		 the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
+		 the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
+		 the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
 
 		 the_robot->EDP_data.position_increment[0]=0.0;
 		 the_robot->EDP_data.position_increment[1]=0.0;
@@ -650,10 +650,10 @@ bool y_edge_follow_force::first_step()
 	the_robot->ecp_command.instruction.get_rmodel_type = lib::TOOL_FRAME;
 	the_robot->ecp_command.instruction.set_arm_type = lib::PF_VELOCITY;
 	the_robot->ecp_command.instruction.get_arm_type = lib::FRAME;
-	the_robot->EDP_data.motion_type = lib::ABSOLUTE;
-	the_robot->EDP_data.next_interpolation_type = lib::TCIM;
-	the_robot->EDP_data.motion_steps = td.internode_step_no;
-	the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
+	the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
+	the_robot->ecp_command.instruction.interpolation_type = lib::TCIM;
+	the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
+	the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
 
 	tool_frame.get_frame_tab(the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame);
 
@@ -719,7 +719,7 @@ bool y_edge_follow_force::next_step()
 
 	for (int i=0; i<MAX_SERVOS_NR; i++)
 	{
-		the_robot->EDP_data.next_motor_arm_coordinates[i]=0.0;
+		the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]=0.0;
 	}
 
 
@@ -829,10 +829,10 @@ bool legobrick_attach_force::first_step()
 	the_robot->ecp_command.instruction.get_rmodel_type = lib::TOOL_FRAME;
 	the_robot->ecp_command.instruction.set_arm_type = lib::PF_VELOCITY;
 	the_robot->ecp_command.instruction.get_arm_type = lib::FRAME;
-	the_robot->EDP_data.motion_type = lib::ABSOLUTE;
-	the_robot->EDP_data.next_interpolation_type = lib::TCIM;
-	the_robot->EDP_data.motion_steps = td.internode_step_no;
-	the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
+	the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
+	the_robot->ecp_command.instruction.interpolation_type = lib::TCIM;
+	the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
+	the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
 
 	tool_frame.get_frame_tab(the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame);
 
@@ -896,7 +896,7 @@ bool legobrick_attach_force::next_step()
 
 	for (int i=0; i<MAX_SERVOS_NR; i++)
 	{
-		the_robot->EDP_data.next_motor_arm_coordinates[i]=0.0;
+		the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]=0.0;
 	}
 
 	lib::Ft_v_vector force_torque(the_robot->EDP_data.current_force_xyz_torque_xyz);
@@ -947,10 +947,10 @@ bool legobrick_detach_force::first_step()
 	the_robot->ecp_command.instruction.get_rmodel_type = lib::TOOL_FRAME;
 	the_robot->ecp_command.instruction.set_arm_type = lib::PF_VELOCITY;
 	the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_ANGLE_AXIS;
-	the_robot->EDP_data.motion_type = lib::ABSOLUTE;
-	the_robot->EDP_data.next_interpolation_type = lib::TCIM;
-	the_robot->EDP_data.motion_steps = td.internode_step_no;
-	the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
+	the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
+	the_robot->ecp_command.instruction.interpolation_type = lib::TCIM;
+	the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
+	the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
 
 	tool_frame.get_frame_tab(the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame);
 
@@ -1013,7 +1013,7 @@ bool legobrick_detach_force::next_step()
 
 	for (int i=0; i<MAX_SERVOS_NR; i++)
 	{
-		the_robot->EDP_data.next_motor_arm_coordinates[i]=0.0;
+		the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]=0.0;
 	}
 
 	if(isStart){
@@ -1078,9 +1078,9 @@ bool y_drawing_teach_in_force::first_step()
 
 		 the_robot->ecp_command.instruction.set_arm_type = POSE_FORCE_LINEAR;
 		 the_robot->ecp_command.instruction.get_arm_type = POSE_FORCE_LINEAR;
-		 the_robot->EDP_data.motion_type = lib::ABSOLUTE;
-		 the_robot->EDP_data.motion_steps = td.internode_step_no;
-		 the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
+		 the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
+		 the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
+		 the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
 
 		 the_robot->EDP_data.ECPtoEDP_force_coordinates[2]=SILA_DOCISKUEDP;
 
@@ -1120,9 +1120,9 @@ bool y_drawing_teach_in_force::first_step()
 
 		 the_robot->ecp_command.instruction.set_arm_type = POSE_FORCE_LINEAR;
 		 the_robot->ecp_command.instruction.get_arm_type = POSE_FORCE_LINEAR;
-		 the_robot->EDP_data.motion_type = lib::ABSOLUTE;
-		 the_robot->EDP_data.motion_steps = td.internode_step_no;
-		 the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
+		 the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
+		 the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
+		 the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
 
 		 the_robot->EDP_data.ECPtoEDP_force_coordinates[0]=0;
 		 the_robot->EDP_data.ECPtoEDP_force_coordinates[1]=0;
@@ -1275,9 +1275,9 @@ bool y_advanced_drawing_teach_in_force::first_step()
 
 		 the_robot->ecp_command.instruction.set_arm_type = POSE_FORCE_LINEAR;
 		 the_robot->ecp_command.instruction.get_arm_type = POSE_FORCE_LINEAR;
-		 the_robot->EDP_data.motion_type = lib::ABSOLUTE;
-		 the_robot->EDP_data.motion_steps = td.internode_step_no;
-		 the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
+		 the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
+		 the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
+		 the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
 
 		 the_robot->EDP_data.ECPtoEDP_force_coordinates[2]=SILA_DOCISKUEDP;
 
@@ -1326,9 +1326,9 @@ bool y_advanced_drawing_teach_in_force::first_step()
 
 		 the_robot->ecp_command.instruction.set_arm_type = POSE_FORCE_LINEAR;
 		 the_robot->ecp_command.instruction.get_arm_type = POSE_FORCE_LINEAR;
-		 the_robot->EDP_data.motion_type = lib::ABSOLUTE;
-		 the_robot->EDP_data.motion_steps = td.internode_step_no;
-		 the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
+		 the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
+		 the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
+		 the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
 
 		 the_robot->EDP_data.ECPtoEDP_force_coordinates[0]=0;
 		 the_robot->EDP_data.ECPtoEDP_force_coordinates[1]=0;
@@ -1400,8 +1400,8 @@ bool y_advanced_drawing_teach_in_force::next_step()
 			/*
 			 the_robot->EDP_data.force_axis_quantity=1;
 
-			 the_robot->EDP_data.motion_steps = td.internode_step_no;
-			 the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
+			 the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
+			 the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
 
 			 // inkrementacja numeru iteracji dla biezacego stanu
 			 in_state_iteration++;
@@ -1450,8 +1450,8 @@ bool y_advanced_drawing_teach_in_force::next_step()
 			/*
 			 the_robot->EDP_data.force_axis_quantity=0;
 
-			 the_robot->EDP_data.motion_steps = td.internode_step_no;
-			 the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
+			 the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
+			 the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
 
 			 the_robot->EDP_data.position_increment[0]=0.0;
 			 the_robot->EDP_data.position_increment[1]=0.0;
@@ -1477,8 +1477,8 @@ bool y_advanced_drawing_teach_in_force::next_step()
 			/*
 			 the_robot->EDP_data.force_axis_quantity = 0;
 
-			 the_robot->EDP_data.motion_steps = td.internode_step_no;
-			 the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
+			 the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
+			 the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
 
 			 the_robot->EDP_data.position_increment[0]=tip.coordinates[0];
 			 the_robot->EDP_data.position_increment[1]=tip.coordinates[1];
@@ -1520,8 +1520,8 @@ bool y_advanced_drawing_teach_in_force::next_step()
 				td.value_in_step_no = td.internode_step_no - 2;
 				/*
 				 the_robot->EDP_data.force_axis_quantity=1;
-				 the_robot->EDP_data.motion_steps = td.internode_step_no;
-				 the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
+				 the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
+				 the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
 				 the_robot->EDP_data.ECPtoEDP_force_coordinates[2]=SILA_DOCISKUEDP_OPADANIE;
 
 				 the_robot->EDP_data.position_increment[0]=0.0;
@@ -1548,8 +1548,8 @@ bool y_advanced_drawing_teach_in_force::next_step()
 			td.value_in_step_no = td.internode_step_no - 2;
 			/*
 			 the_robot->EDP_data.force_axis_quantity=1;
-			 the_robot->EDP_data.motion_steps = td.internode_step_no;
-			 the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
+			 the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
+			 the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
 
 			 the_robot->EDP_data.position_increment[0]=0.0;
 			 the_robot->EDP_data.position_increment[1]=0.0;
@@ -1746,10 +1746,10 @@ bool tff_nose_run::first_step()
 	the_robot->ecp_command.instruction.get_rmodel_type = lib::TOOL_FRAME;
 	the_robot->ecp_command.instruction.set_arm_type = lib::PF_VELOCITY;
 	the_robot->ecp_command.instruction.get_arm_type = lib::FRAME;
-	the_robot->EDP_data.motion_type = lib::RELATIVE;
-	the_robot->EDP_data.next_interpolation_type = lib::TCIM;
-	the_robot->EDP_data.motion_steps = td.internode_step_no;
-	the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
+	the_robot->ecp_command.instruction.motion_type = lib::RELATIVE;
+	the_robot->ecp_command.instruction.interpolation_type = lib::TCIM;
+	the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
+	the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
 
 	for (int i=0; i<6; i++)
 	{
@@ -2037,10 +2037,10 @@ bool sr_nose_run::first_step()
 	the_robot->ecp_command.instruction.get_rmodel_type = lib::TOOL_FRAME;
 	the_robot->ecp_command.instruction.set_arm_type = lib::PF_VELOCITY;
 	the_robot->ecp_command.instruction.get_arm_type = lib::FRAME;
-	the_robot->EDP_data.motion_type = lib::RELATIVE;
-	the_robot->EDP_data.next_interpolation_type = lib::TCIM;
-	the_robot->EDP_data.motion_steps = td.internode_step_no;
-	the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
+	the_robot->ecp_command.instruction.motion_type = lib::RELATIVE;
+	the_robot->ecp_command.instruction.interpolation_type = lib::TCIM;
+	the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
+	the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
 
 	for (int i=0; i<6; i++)
 	{
@@ -2288,11 +2288,11 @@ bool tff_rubik_grab::first_step()
 	the_robot->ecp_command.instruction.get_rmodel_type = lib::TOOL_FRAME;
 	the_robot->ecp_command.instruction.set_arm_type = lib::PF_VELOCITY;
 	the_robot->ecp_command.instruction.get_arm_type = lib::FRAME;
-	the_robot->EDP_data.motion_type = lib::RELATIVE;
-	the_robot->EDP_data.next_interpolation_type
+	the_robot->ecp_command.instruction.motion_type = lib::RELATIVE;
+	the_robot->ecp_command.instruction.interpolation_type
 			= lib::TCIM;
-	the_robot->EDP_data.motion_steps = td.internode_step_no;
-	the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
+	the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
+	the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
 
 	for (int i=0; i<6; i++)
 	{
@@ -2404,10 +2404,10 @@ bool tff_rubik_face_rotate::first_step()
 	the_robot->ecp_command.instruction.get_rmodel_type = lib::TOOL_FRAME;
 	the_robot->ecp_command.instruction.set_arm_type = lib::PF_VELOCITY;
 	the_robot->ecp_command.instruction.get_arm_type = lib::FRAME;
-	the_robot->EDP_data.motion_type = lib::RELATIVE;
-	the_robot->EDP_data.next_interpolation_type	= lib::TCIM;
-	the_robot->EDP_data.motion_steps = td.internode_step_no;
-	the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
+	the_robot->ecp_command.instruction.motion_type = lib::RELATIVE;
+	the_robot->ecp_command.instruction.interpolation_type	= lib::TCIM;
+	the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
+	the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
 
 	for (int i=0; i<6; i++)
 	{
@@ -2559,11 +2559,11 @@ bool tff_gripper_approach::first_step()
 	the_robot->ecp_command.instruction.get_rmodel_type = lib::TOOL_FRAME;
 	the_robot->ecp_command.instruction.set_arm_type = lib::PF_VELOCITY;
 	the_robot->ecp_command.instruction.get_arm_type = lib::FRAME;
-	the_robot->EDP_data.motion_type = lib::RELATIVE;
-	the_robot->EDP_data.next_interpolation_type
+	the_robot->ecp_command.instruction.motion_type = lib::RELATIVE;
+	the_robot->ecp_command.instruction.interpolation_type
 			= lib::TCIM;
-	the_robot->EDP_data.motion_steps = td.internode_step_no;
-	the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
+	the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
+	the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
 
 	for (int i=0; i<6; i++)
 	{

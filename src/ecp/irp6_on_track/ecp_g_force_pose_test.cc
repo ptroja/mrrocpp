@@ -36,10 +36,10 @@ bool y_simple::first_step ( )
     the_robot->ecp_command.instruction.set_type = ARM_DV;
     the_robot->ecp_command.instruction.set_arm_type = POSE_FORCE_TORQUE_AT_FRAME;
     the_robot->ecp_command.instruction.get_arm_type = POSE_FORCE_TORQUE_AT_FRAME;
-    the_robot->EDP_data.motion_type = lib::RELATIVE;
-     the_robot->EDP_data.next_interpolation_type = lib::TCIM;
-    the_robot->EDP_data.motion_steps = td.internode_step_no;
-    the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
+    the_robot->ecp_command.instruction.motion_type = lib::RELATIVE;
+     the_robot->ecp_command.instruction.interpolation_type = lib::TCIM;
+    the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
+    the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
 
 
     return true;

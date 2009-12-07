@@ -18,10 +18,10 @@ bool ellipse::first_step()
     the_robot->ecp_command.instruction.set_type = ARM_DV;
     the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
     the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_EULER_ZYZ;
-    the_robot->EDP_data.motion_type = lib::ABSOLUTE;
-    the_robot->EDP_data.next_interpolation_type = lib::MIM;
-    the_robot->EDP_data.motion_steps = 8;
-    the_robot->EDP_data.value_in_step_no = 6;
+    the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
+    the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
+    the_robot->ecp_command.instruction.motion_steps = 8;
+    the_robot->ecp_command.instruction.value_in_step_no = 6;
 
 	step_no = 0;
     rad = 0;
@@ -68,10 +68,10 @@ bool ellipse::next_step()
     the_robot->ecp_command.instruction.set_type = ARM_DV;
     the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
     the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_EULER_ZYZ;
-    the_robot->EDP_data.motion_type = lib::ABSOLUTE;
-    the_robot->EDP_data.next_interpolation_type = lib::MIM;
-    the_robot->EDP_data.motion_steps = max_steps;
-    the_robot->EDP_data.value_in_step_no = max_steps;
+    the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
+    the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
+    the_robot->ecp_command.instruction.motion_steps = max_steps;
+    the_robot->ecp_command.instruction.value_in_step_no = max_steps;
 
 
 	if(step_no > max_steps)
@@ -81,12 +81,12 @@ bool ellipse::next_step()
 
 	rad += d_rad;
 
-    the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[0] = 1;
-    the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[1] = major_axis*sin(rad);
-    the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[2] = 0.15+minor_axis*cos(rad);
-    the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[3] = 0.0;
-    the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[4] = 1.57;
-    the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[5] = 3.14;
+    the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[0] = 1;
+    the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[1] = major_axis*sin(rad);
+    the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[2] = 0.15+minor_axis*cos(rad);
+    the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[3] = 0.0;
+    the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[4] = 1.57;
+    the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[5] = 3.14;
     the_robot->EDP_data.next_gripper_coordinate = 0.08;
 
 	return true;

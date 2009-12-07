@@ -230,10 +230,10 @@ the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[2][2]=1; the
       the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_EULER_ZYZ;
        the_robot->ecp_command.instruction.set_rmodel_type = lib::TOOL_FRAME;
       the_robot->ecp_command.instruction.get_rmodel_type = lib::TOOL_FRAME;
-      the_robot->EDP_data.motion_type = lib::ABSOLUTE;
-       the_robot->EDP_data.next_interpolation_type = lib::MIM;
-      the_robot->EDP_data.motion_steps = td.internode_step_no;
-      the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
+      the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
+       the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
+      the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
+      the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
    
 /* } else {
    
@@ -243,9 +243,9 @@ the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[2][2]=1; the
       the_robot->ecp_command.instruction.set_type = 0x04;
       the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
       the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_EULER_ZYZ;
-      the_robot->EDP_data.motion_type = lib::ABSOLUTE;
-      the_robot->EDP_data.motion_steps = td.internode_step_no;
-      the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
+      the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
+      the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
+      the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
       the_robot->create_command ();
 // }
 
@@ -685,7 +685,7 @@ if(the_second)
 
 for (i=0; i<6; i++)
 {
-		the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[i]=stearing[i][0];
+		the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]=stearing[i][0];
 		
 		stearing[i][2]=stearing[i][1];
 		stearing[i][1]=stearing[i][0];
@@ -698,17 +698,17 @@ for (i=0; i<6; i++)
 	/*CHYCHAMY NA ZIMNE - WYLACZENIE NIESTEROWANYCH OSI*/
 	for (i=0; i<0; i++)
       {
-      	the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[i]=the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[i];
+      	the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]=the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[i];
       }
       for (i=6; i<6; i++)
       {
-      	the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[i]=the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[i];
+      	the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]=the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[i];
       }
 	/*******************************************************/
 #ifdef PRINTA		
 printf("%d ARM 2d= ", nr);
  	for (int i=0; i<6 ; i++)             
-       printf("%f  ",the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[i]);
+       printf("%f  ",the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]);
       
 	printf("\n");
 	
@@ -723,7 +723,7 @@ else
 {
       for (i=0; i<6; i++)
       {
-      	the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[i]=stearing[i][0];
+      	the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]=stearing[i][0];
 		
 		stearing[i][2]=stearing[i][1];
 		stearing[i][1]=stearing[i][0];
@@ -738,18 +738,18 @@ else
 	/*CHYCHAMY NA ZIMNE - WYLACZENIE NIESTEROWANYCH OSI*/
 	for (i=0; i<0; i++)
       {
-      	the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[i]=the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[i];
+      	the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]=the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[i];
       }
       for (i=6; i<6; i++)
       {
-      	the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[i]=the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[i];
+      	the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]=the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[i];
       }
 	/*******************************************************/
 	the_robot->EDP_data.next_gripper_coordinate=the_robot->EDP_data.current_gripper_coordinate;
 #ifdef PRINTA	
 	printf("%d ARM= ", nr);
  	for (int i=0; i<6 ; i++)             
-       printf("%f  ",the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[i]);
+       printf("%f  ",the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]);
 	printf("\n");
 	
 	

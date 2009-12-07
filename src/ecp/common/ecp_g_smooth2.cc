@@ -850,11 +850,11 @@ bool smooth2::first_step() { //wywolywane tylko raz w calej trajektorii
         the_robot->ecp_command.instruction.set_arm_type = lib::MOTOR;
         the_robot->ecp_command.instruction.get_arm_type = lib::MOTOR;
     	if (type == 2) {
-    		the_robot->EDP_data.motion_type = lib::RELATIVE;
+    		the_robot->ecp_command.instruction.motion_type = lib::RELATIVE;
     	} else {
-    		the_robot->EDP_data.motion_type = lib::ABSOLUTE;
+    		the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
     	}
-        the_robot->EDP_data.next_interpolation_type = lib::MIM;
+        the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
         break;
     case lib::JOINT:
         the_robot->ecp_command.instruction.instruction_type = lib::GET;
@@ -863,11 +863,11 @@ bool smooth2::first_step() { //wywolywane tylko raz w calej trajektorii
         the_robot->ecp_command.instruction.set_arm_type = lib::JOINT;
         the_robot->ecp_command.instruction.get_arm_type = lib::JOINT;
     	if (type == 2) {
-    		the_robot->EDP_data.motion_type = lib::RELATIVE;
+    		the_robot->ecp_command.instruction.motion_type = lib::RELATIVE;
     	} else {
-    		the_robot->EDP_data.motion_type = lib::ABSOLUTE;
+    		the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
     	}
-        the_robot->EDP_data.next_interpolation_type = lib::MIM;
+        the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
         break;
     case lib::XYZ_EULER_ZYZ:
         the_robot->ecp_command.instruction.instruction_type = lib::GET;
@@ -876,15 +876,15 @@ bool smooth2::first_step() { //wywolywane tylko raz w calej trajektorii
         the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
         the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_EULER_ZYZ;
         if (type == 2) {
-            the_robot->EDP_data.motion_type = lib::RELATIVE;
-            the_robot->EDP_data.next_interpolation_type = lib::TCIM;
+            the_robot->ecp_command.instruction.motion_type = lib::RELATIVE;
+            the_robot->ecp_command.instruction.interpolation_type = lib::TCIM;
             for (int i=0; i<6; i++)//TODO sprawdzic czy tylko do 6
             {
             	the_robot->EDP_data.next_behaviour[i] = lib::UNGUARDED_MOTION;
             }
         } else {
-            the_robot->EDP_data.motion_type = lib::ABSOLUTE;
-            the_robot->EDP_data.next_interpolation_type = lib::MIM;
+            the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
+            the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
         }
         break;
     case lib::XYZ_ANGLE_AXIS:
@@ -894,15 +894,15 @@ bool smooth2::first_step() { //wywolywane tylko raz w calej trajektorii
         the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
         the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_ANGLE_AXIS;
     	if (type == 2) {
-    		the_robot->EDP_data.motion_type = lib::RELATIVE;
-    		the_robot->EDP_data.next_interpolation_type = lib::TCIM;
+    		the_robot->ecp_command.instruction.motion_type = lib::RELATIVE;
+    		the_robot->ecp_command.instruction.interpolation_type = lib::TCIM;
     		for (int i=0; i<6; i++)
     		{
     			the_robot->EDP_data.next_behaviour[i] = lib::UNGUARDED_MOTION;
     		}
     	} else {
-    		the_robot->EDP_data.motion_type = lib::ABSOLUTE;
-    		the_robot->EDP_data.next_interpolation_type = lib::MIM;
+    		the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
+    		the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
     	}
         break;
     default:
@@ -962,17 +962,17 @@ bool smooth2::next_step () {
     			the_robot->ecp_command.instruction.set_type = ARM_DV; // ARM
     			the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
     	    	if (type == 2) {
-    	    		the_robot->EDP_data.motion_type = lib::RELATIVE;
-    	    		the_robot->EDP_data.next_interpolation_type = lib::TCIM;
+    	    		the_robot->ecp_command.instruction.motion_type = lib::RELATIVE;
+    	    		the_robot->ecp_command.instruction.interpolation_type = lib::TCIM;
     	    	} else {
-    	    		the_robot->EDP_data.motion_type = lib::ABSOLUTE;
-    	    		the_robot->EDP_data.next_interpolation_type = lib::MIM;
+    	    		the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
+    	    		the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
     	    	}
-    			the_robot->EDP_data.motion_steps = td.internode_step_no;
-    			the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
+    			the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
+    			the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
 
     			for (i = 0; i < 6; i++) {//zapisanie nastepnego polazenia (makrokroku) do robota
-    			    the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[i] = coordinate_list_iterator->coordinate[i];
+    			    the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = coordinate_list_iterator->coordinate[i];
     			}
 
     			if (type == 2) {
@@ -1011,17 +1011,17 @@ bool smooth2::next_step () {
     			the_robot->ecp_command.instruction.set_type = ARM_DV; // ARM
     			the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
     	    	if (type == 2) {
-    	    		the_robot->EDP_data.motion_type = lib::RELATIVE;
-    	    		the_robot->EDP_data.next_interpolation_type = lib::TCIM;
+    	    		the_robot->ecp_command.instruction.motion_type = lib::RELATIVE;
+    	    		the_robot->ecp_command.instruction.interpolation_type = lib::TCIM;
     	    	} else {
-    	    		the_robot->EDP_data.motion_type = lib::ABSOLUTE;
-    	    		the_robot->EDP_data.next_interpolation_type = lib::MIM;
+    	    		the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
+    	    		the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
     	    	}
-    			the_robot->EDP_data.motion_steps = td.internode_step_no;
-    			the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
+    			the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
+    			the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
 
     			for (i = 0; i < 6; i++) {//zapisanie nastepnego polazenia (makrokroku) do robota
-    			    the_robot->EDP_data.next_XYZ_AA_arm_coordinates[i] = coordinate_list_iterator->coordinate[i];
+    			    the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = coordinate_list_iterator->coordinate[i];
     			}
 
     			//gripper
@@ -1060,16 +1060,16 @@ bool smooth2::next_step () {
     		    the_robot->ecp_command.instruction.set_type = ARM_DV; // ARM
     		    the_robot->ecp_command.instruction.set_arm_type = lib::JOINT;
     	    	if (type == 2) {
-    	    		the_robot->EDP_data.motion_type = lib::RELATIVE;
+    	    		the_robot->ecp_command.instruction.motion_type = lib::RELATIVE;
     	    	} else {
-    	    		the_robot->EDP_data.motion_type = lib::ABSOLUTE;
+    	    		the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
     	    	}
-    		    the_robot->EDP_data.next_interpolation_type = lib::MIM;
-    		    the_robot->EDP_data.motion_steps = td.internode_step_no;
-    		    the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
+    		    the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
+    		    the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
+    		    the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
 
     		    for (i = 0; i < MAX_SERVOS_NR; i++) {
-    		        the_robot->EDP_data.next_joint_arm_coordinates[i] = coordinate_list_iterator->coordinate[i];
+    		        the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = coordinate_list_iterator->coordinate[i];
     		    }
 
     		    //gripper
@@ -1114,16 +1114,16 @@ bool smooth2::next_step () {
     		    the_robot->ecp_command.instruction.set_type = ARM_DV; // ARM
     		    the_robot->ecp_command.instruction.set_arm_type = lib::MOTOR;
     	    	if (type == 2) {
-    	    		the_robot->EDP_data.motion_type = lib::RELATIVE;
+    	    		the_robot->ecp_command.instruction.motion_type = lib::RELATIVE;
     	    	} else {
-    	    		the_robot->EDP_data.motion_type = lib::ABSOLUTE;
+    	    		the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
     	    	}
-    		    the_robot->EDP_data.next_interpolation_type = lib::MIM;
-    		    the_robot->EDP_data.motion_steps = td.internode_step_no;
-    		    the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
+    		    the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
+    		    the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
+    		    the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
 
     		    for (i=0; i < MAX_SERVOS_NR; i++) {
-    		        the_robot->EDP_data.next_motor_arm_coordinates[i] = coordinate_list_iterator->coordinate[i];
+    		        the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = coordinate_list_iterator->coordinate[i];
     		    }
 
     		    //gripper

@@ -38,7 +38,7 @@ bool cvfradia::first_step()
 /*	the_robot->ecp_command.instruction.instruction_type = lib::GET;
 	the_robot->ecp_command.instruction.get_type = ARM_DV;
 	the_robot->ecp_command.instruction.get_arm_type = lib::FRAME;
-	the_robot->EDP_data.next_interpolation_type
+	the_robot->ecp_command.instruction.interpolation_type
 			= EXTERNAL_INTERPOLATION_WITH_FORCE;*/
 
 	communicate_with_edp=false;

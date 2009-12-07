@@ -25,10 +25,10 @@ bool pw_kolo::first_step()
     the_robot->ecp_command.instruction.set_type = ARM_DV;
     the_robot->ecp_command.instruction.set_arm_type = lib::MOTOR;
     the_robot->ecp_command.instruction.get_arm_type = lib::MOTOR;
-    the_robot->EDP_data.motion_type = lib::ABSOLUTE;
-    the_robot->EDP_data.next_interpolation_type = lib::MIM;
-    the_robot->EDP_data.motion_steps = 8;
-    the_robot->EDP_data.value_in_step_no = 6;
+    the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
+    the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
+    the_robot->ecp_command.instruction.motion_steps = 8;
+    the_robot->ecp_command.instruction.value_in_step_no = 6;
 
     r = 0.20;
     prev_rad = 0; // zaczynam od kata 0;
@@ -94,12 +94,12 @@ bool pw_kolo::next_step()
     the_robot->ecp_command.instruction.instruction_type = lib::SET;
     the_robot->ecp_command.instruction.set_type = ARM_DV; // ARM
     the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
-    the_robot->EDP_data.motion_type = lib::ABSOLUTE;
-    the_robot->EDP_data.next_interpolation_type = lib::MIM;
-    the_robot->EDP_data.motion_steps = (uint16_t) ceil(time/STEP);//ceil(tip.motion_time/STEP);
-    the_robot->EDP_data.value_in_step_no = the_robot->EDP_data.motion_steps;
+    the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
+    the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
+    the_robot->ecp_command.instruction.motion_steps = (uint16_t) ceil(time/STEP);//ceil(tip.motion_time/STEP);
+    the_robot->ecp_command.instruction.value_in_step_no = the_robot->ecp_command.instruction.motion_steps;
 
-    memcpy(the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates, next_position,
+    memcpy(the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates, next_position,
            6*sizeof (double));
     the_robot->EDP_data.next_gripper_coordinate = next_position[6];
     printf("po robocie \n");

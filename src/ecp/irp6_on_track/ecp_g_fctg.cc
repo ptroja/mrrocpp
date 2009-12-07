@@ -307,17 +307,17 @@ bool force_controlled_trajectory::first_step(){
     the_robot->ecp_command.instruction.instruction_type = lib::SET;
     the_robot->ecp_command.instruction.set_type = ARM_DV; // ARM
     the_robot->ecp_command.instruction.set_arm_type = current_control;
-    the_robot->EDP_data.motion_type = lib::ABSOLUTE;
-     the_robot->EDP_data.next_interpolation_type = lib::MIM;
-    the_robot->EDP_data.motion_steps = 70;
-    the_robot->EDP_data.value_in_step_no = the_robot->EDP_data.motion_steps-5;
+    the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
+     the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
+    the_robot->ecp_command.instruction.motion_steps = 70;
+    the_robot->ecp_command.instruction.value_in_step_no = the_robot->ecp_command.instruction.motion_steps-5;
 
     // Zerowe przesuniecie na innych osiach.
     if (current_control == lib::MOTOR)
-        memcpy(the_robot->EDP_data.next_motor_arm_coordinates, robot_position, 8*sizeof(double));
+        memcpy(the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates, robot_position, 8*sizeof(double));
     // Zerowe przesuniecie robota do danej pozycji - wspolrzedne zewnetrzne.
     else if (current_control == lib::XYZ_EULER_ZYZ)
-        memcpy(the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates, robot_position, 6*sizeof(double));
+        memcpy(the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates, robot_position, 6*sizeof(double));
     // Przesuniecie sie na pierwszy element listy.
     initiate_position_list();
     if(!is_position_list_element()){
@@ -328,10 +328,10 @@ bool force_controlled_trajectory::first_step(){
     get_position_list_element(tmp_position);
     // Przesuniecie robota do pierwszej pozycji - na motorach.
     if (current_control == lib::MOTOR)
-        the_robot->EDP_data.next_motor_arm_coordinates[number] = tmp_position;
+        the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[number] = tmp_position;
     // Przesuniecie robota do pierwszej pozycji - wspolrzedne zewnetrzne.
     if (current_control == lib::XYZ_EULER_ZYZ)
-        the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[number] = tmp_position;
+        the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[number] = tmp_position;
     // Przepisanie rozkazu do bufora wysylkowego.
 
     // Przesuniecie na nastepny element z listy.
@@ -365,10 +365,10 @@ bool force_controlled_trajectory::next_step ( ) {
     get_position_list_element(tmp_position);
     // Przesuniecie robota do danej pozycji - na motorach.
     if (current_control == lib::MOTOR)
-        the_robot->EDP_data.next_motor_arm_coordinates[number] = tmp_position;
+        the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[number] = tmp_position;
     // Przesuniecie robota do danej pozycji - wspolrzedne zewnetrzne.
     if (current_control == lib::XYZ_EULER_ZYZ)
-        the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[number] = tmp_position;
+        the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[number] = tmp_position;
     // Przepisanie rozkazu do bufora wysylkowego.
 
     // Przesuniecie na nastepny element z listy.

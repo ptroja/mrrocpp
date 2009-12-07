@@ -83,10 +83,10 @@ bool pawel::first_step ( )
     the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
     the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_EULER_ZYZ;
 
-    the_robot->EDP_data.motion_type = lib::RELATIVE;
-     the_robot->EDP_data.next_interpolation_type = lib::MIM;
-    the_robot->EDP_data.motion_steps = td.internode_step_no;
-    the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
+    the_robot->ecp_command.instruction.motion_type = lib::RELATIVE;
+     the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
+    the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
+    the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
 
 
 
@@ -190,15 +190,15 @@ bool pawel::next_step ( )
     uy = (double)((ey + uy1*INERTIA)/(INERTIA + FRICTION));
     uz = (double)(Z_AMPLIFIER*(ez + uz1*INERTIA)/(INERTIA + FRICTION));
 
-    //		the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[0] = 0.0;
-    //		the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[1] = 0.0;
-    //		the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[2] = 0.0;
-    the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[0] = ux;
-    the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[1] = uy;
-    the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[2] = uz;
-    the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[3] = 0.0;
-    the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[4] = 0.0;
-    the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[5] = 0.0;
+    //		the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[0] = 0.0;
+    //		the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[1] = 0.0;
+    //		the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[2] = 0.0;
+    the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[0] = ux;
+    the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[1] = uy;
+    the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[2] = uz;
+    the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[3] = 0.0;
+    the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[4] = 0.0;
+    the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[5] = 0.0;
     the_robot->EDP_data.next_gripper_coordinate = the_robot->EDP_data.current_gripper_coordinate;
 
     // zapis do pliku

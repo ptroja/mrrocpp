@@ -25,10 +25,10 @@ bool wii_teach::first_step()
     the_robot->ecp_command.instruction.set_type = ARM_DV;
     the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
     the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_ANGLE_AXIS;
-    the_robot->EDP_data.motion_type = lib::RELATIVE;
-    the_robot->EDP_data.next_interpolation_type = lib::MIM;
-    the_robot->EDP_data.motion_steps = 8;
-    the_robot->EDP_data.value_in_step_no = 8;
+    the_robot->ecp_command.instruction.motion_type = lib::RELATIVE;
+    the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
+    the_robot->ecp_command.instruction.motion_steps = 8;
+    the_robot->ecp_command.instruction.value_in_step_no = 8;
 
     step_no = 0;
     releasedA = false;
@@ -39,12 +39,12 @@ bool wii_teach::first_step()
 
 void wii_teach::clear_position(void)
 {
-    the_robot->EDP_data.next_XYZ_AA_arm_coordinates[0] = 0;
-    the_robot->EDP_data.next_XYZ_AA_arm_coordinates[1] = 0;
-    the_robot->EDP_data.next_XYZ_AA_arm_coordinates[2] = 0;
-    the_robot->EDP_data.next_XYZ_AA_arm_coordinates[3] = 0;
-    the_robot->EDP_data.next_XYZ_AA_arm_coordinates[4] = 0;
-    the_robot->EDP_data.next_XYZ_AA_arm_coordinates[5] = 0;
+    the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[0] = 0;
+    the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[1] = 0;
+    the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[2] = 0;
+    the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[3] = 0;
+    the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[4] = 0;
+    the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[5] = 0;
     the_robot->EDP_data.next_gripper_coordinate = 0;
 
     int i;
@@ -112,12 +112,12 @@ int wii_teach::get_axis(void)
 
 void wii_teach::set_position(void)
 {
-    the_robot->EDP_data.next_XYZ_AA_arm_coordinates[0] = nextChange[0];
-    the_robot->EDP_data.next_XYZ_AA_arm_coordinates[1] = nextChange[1];
-    the_robot->EDP_data.next_XYZ_AA_arm_coordinates[2] = nextChange[2];
-    the_robot->EDP_data.next_XYZ_AA_arm_coordinates[3] = nextChange[3];
-    the_robot->EDP_data.next_XYZ_AA_arm_coordinates[4] = nextChange[4];
-    the_robot->EDP_data.next_XYZ_AA_arm_coordinates[5] = nextChange[5];
+    the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[0] = nextChange[0];
+    the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[1] = nextChange[1];
+    the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[2] = nextChange[2];
+    the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[3] = nextChange[3];
+    the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[4] = nextChange[4];
+    the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[5] = nextChange[5];
     the_robot->EDP_data.next_gripper_coordinate = nextChange[6];
 }
 
@@ -155,10 +155,10 @@ bool wii_teach::next_step()
     the_robot->ecp_command.instruction.set_type = ARM_DV;
     the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
     the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_ANGLE_AXIS;
-    the_robot->EDP_data.motion_type = lib::RELATIVE;
-    the_robot->EDP_data.next_interpolation_type = lib::MIM;
-    the_robot->EDP_data.motion_steps = 8;
-    the_robot->EDP_data.value_in_step_no = 8;
+    the_robot->ecp_command.instruction.motion_type = lib::RELATIVE;
+    the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
+    the_robot->ecp_command.instruction.motion_steps = 8;
+    the_robot->ecp_command.instruction.value_in_step_no = 8;
 
     if(releasedA && _wiimote->image.sensor_union.wiimote.buttonA) stop = true;
 
@@ -177,12 +177,12 @@ bool wii_teach::next_step()
     set_position();
 
     sprintf(buffer,"Moving to: %.5f %.5f %.5f %.5f %.5f %.5f %.5f",
-            the_robot->EDP_data.next_XYZ_AA_arm_coordinates[0],
-            the_robot->EDP_data.next_XYZ_AA_arm_coordinates[1],
-            the_robot->EDP_data.next_XYZ_AA_arm_coordinates[2],
-            the_robot->EDP_data.next_XYZ_AA_arm_coordinates[3],
-            the_robot->EDP_data.next_XYZ_AA_arm_coordinates[4],
-            the_robot->EDP_data.next_XYZ_AA_arm_coordinates[5],
+            the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[0],
+            the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[1],
+            the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[2],
+            the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[3],
+            the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[4],
+            the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[5],
             the_robot->EDP_data.next_gripper_coordinate
             );
     if(false) sr_ecp_msg.message(buffer);

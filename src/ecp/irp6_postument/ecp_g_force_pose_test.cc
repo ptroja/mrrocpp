@@ -48,10 +48,10 @@ bool y_simple::first_step()
 	the_robot->ecp_command.instruction.get_rmodel_type = lib::TOOL_FRAME;
 	the_robot->ecp_command.instruction.set_arm_type = lib::PF_VELOCITY;
 	the_robot->ecp_command.instruction.get_arm_type = lib::FRAME;
-	the_robot->EDP_data.motion_type = lib::RELATIVE;
-	the_robot->EDP_data.next_interpolation_type = lib::TCIM;
-	the_robot->EDP_data.motion_steps = td.internode_step_no;
-	the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
+	the_robot->ecp_command.instruction.motion_type = lib::RELATIVE;
+	the_robot->ecp_command.instruction.interpolation_type = lib::TCIM;
+	the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
+	the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
 
 	for (int i=0; i<6; i++) {
 		the_robot->EDP_data.next_velocity[i] = 0;

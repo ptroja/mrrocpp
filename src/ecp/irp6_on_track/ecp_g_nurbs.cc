@@ -73,22 +73,22 @@ bool nurbs::first_step (  )
 //		cout<<"firststep(): B4 dynamic_cast \n"<<flush;
 //		if (ntdes_ptr_->ncptr==NULL) cerr<<"Blad: ntdes.ncptr==NULL\n";
 		if (dynamic_cast< NurbsCurve<Irp6ot_Point_nD< MOTOR, Dim > >* >(ntdes_ptr_->ncptr) ) {
-			EDP_data_next_ptr_=&the_robot->EDP_data.next_motor_arm_coordinates[0];
+			EDP_data_next_ptr_=&the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[0];
 			EDP_data_current_ptr_=&the_robot->EDP_data.current_motor_arm_coordinates[0];
 //			cout<<"MOTOR\n";
 			atype_=MOTOR; }
 		else if (dynamic_cast< NurbsCurve<Irp6ot_Point_nD< JOINT, Dim > >* >(ntdes_ptr_->ncptr) ) {
-			EDP_data_next_ptr_=&the_robot->EDP_data.next_joint_arm_coordinates[0];
+			EDP_data_next_ptr_=&the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[0];
 			EDP_data_current_ptr_=&the_robot->EDP_data.current_joint_arm_coordinates[0];
 //			cout<<"JOINT\n";
 			atype_=JOINT; }
 		else if (dynamic_cast< NurbsCurve<Irp6ot_Point_nD< XYZ_EULER_ZYZ, Dim > >* >(ntdes_ptr_->ncptr) ) {
-			EDP_data_next_ptr_=&the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[0];
+			EDP_data_next_ptr_=&the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[0];
 			EDP_data_current_ptr_=&the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[0];
 //			cout<<"XYZ_EULER_ZYZ\n";
 			atype_=XYZ_EULER_ZYZ; }
 		else if (dynamic_cast< NurbsCurve<Irp6ot_Point_nD< XYZ_ANGLE_AXIS, Dim > >* >(ntdes_ptr_->ncptr) ) {
-			EDP_data_next_ptr_=&the_robot->EDP_data.next_XYZ_AA_arm_coordinates[0];
+			EDP_data_next_ptr_=&the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[0];
 			EDP_data_current_ptr_=&the_robot->EDP_data.current_XYZ_AA_arm_coordinates[0];
 //			cout<<"XYZ_ANGLE_AXIS\n";
 			atype_=XYZ_ANGLE_AXIS; }
@@ -98,10 +98,10 @@ bool nurbs::first_step (  )
 			the_robot->ecp_command.instruction.set_type = ARM_DV;
 			the_robot->ecp_command.instruction.set_arm_type = atype_;
 			the_robot->ecp_command.instruction.get_arm_type = atype_;
-			the_robot->EDP_data.motion_type = lib::ABSOLUTE;
-			 the_robot->EDP_data.next_interpolation_type = lib::MIM;
-			the_robot->EDP_data.motion_steps = ntdes_ptr_->internode_step_no;
-			the_robot->EDP_data.value_in_step_no = ntdes_ptr_->value_in_step_no; }
+			the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
+			 the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
+			the_robot->ecp_command.instruction.motion_steps = ntdes_ptr_->internode_step_no;
+			the_robot->ecp_command.instruction.value_in_step_no = ntdes_ptr_->value_in_step_no; }
 		else {
 //			cout<<"firststep: dynamic_cast faild \n"<<flush;
 			throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION); }
@@ -136,8 +136,8 @@ bool nurbs::next_step (  )
    the_robot->ecp_command.instruction.get_arm_type = lib::INVALID_END_EFFECTOR;
    the_robot->ecp_command.instruction.set_type = ARM_DV; // ARM
    the_robot->ecp_command.instruction.set_arm_type = atype_;
-   the_robot->EDP_data.motion_type = lib::ABSOLUTE;
-    the_robot->EDP_data.next_interpolation_type = lib::MIM;
+   the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
+    the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
 
    
 //	cout<<"nextstep: Start2 \n"<<flush;  

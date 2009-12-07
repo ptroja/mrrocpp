@@ -200,7 +200,7 @@ void ecp_vis_ib_eih_irp6ot::entertain_constraints(){
 
 	for (int i=0; i<6; i++)
 	{
-		the_robot->EDP_data.next_XYZ_AA_arm_coordinates[i] = O_r_Ep[0][i];
+		the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = O_r_Ep[0][i];
 		std::cout << O_r_Ep[0][i] << " ";
 	}
 
@@ -208,7 +208,7 @@ void ecp_vis_ib_eih_irp6ot::entertain_constraints(){
 	/*
 	for (int i=0; i<6; i++)
 	{
-		the_robot->EDP_data.next_XYZ_AA_arm_coordinates[i] = the_robot->EDP_data.current_XYZ_AA_arm_coordinates[i];
+		the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = the_robot->EDP_data.current_XYZ_AA_arm_coordinates[i];
 	}
 	*/
 
@@ -256,15 +256,15 @@ bool ecp_vis_ib_eih_irp6ot::first_step(void){
 	the_robot->ecp_command.instruction.get_arm_type = lib::FRAME;
 	the_robot->ecp_command.instruction.set_rmodel_type = lib::TOOL_FRAME;
 	the_robot->ecp_command.instruction.get_rmodel_type = lib::TOOL_FRAME;
-	the_robot->EDP_data.next_interpolation_type= lib::MIM;
-	the_robot->EDP_data.motion_type = lib::ABSOLUTE;
+	the_robot->ecp_command.instruction.interpolation_type= lib::MIM;
+	the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
 
-	the_robot->EDP_data.motion_steps = td.internode_step_no;
-	the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
+	the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
+	the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
 
 	for (int i=0; i<6; i++)
 	{
-		the_robot->EDP_data.next_XYZ_AA_arm_coordinates[i] = 0;
+		the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = 0;
 		the_robot->EDP_data.next_force_xyz_torque_xyz[i] = 0;
 	}
 

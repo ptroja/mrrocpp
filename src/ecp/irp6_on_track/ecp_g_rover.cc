@@ -211,16 +211,16 @@ bool vis_sac_lx::first_step()
 	//FRAME; //XYZ_EULER_ZYZ; //POSE_FORCE_TORQUE_AT_FRAME;
 	the_robot->ecp_command.instruction.set_rmodel_type = lib::TOOL_FRAME;
 	the_robot->ecp_command.instruction.get_rmodel_type = lib::TOOL_FRAME;
-	//the_robot->EDP_data.motion_type = lib::ABSOLUTE; //RELATIVE;
-	the_robot->EDP_data.next_interpolation_type= lib::MIM; //TCIM
-	the_robot->EDP_data.motion_type = lib::ABSOLUTE; //PF_FIXED_FRAME_WITH_DESIRED_FORCE_OR_SPEED;
+	//the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE; //RELATIVE;
+	the_robot->ecp_command.instruction.interpolation_type= lib::MIM; //TCIM
+	the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE; //PF_FIXED_FRAME_WITH_DESIRED_FORCE_OR_SPEED;
 
-	the_robot->EDP_data.motion_steps = td.internode_step_no;
-	the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
+	the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
+	the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
 
 	for (int i=0; i<6; i++)
 	{
-		the_robot->EDP_data.next_XYZ_AA_arm_coordinates[i] = 0;
+		the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = 0;
 		the_robot->EDP_data.next_force_xyz_torque_xyz[i] = 0;
 		//	the_robot->EDP_data.MPselection_vector[i] = FORCE_SV_AX;
 		//		 the_robot->EDP_data.MPselection_vector[i] = POSE_SV_AX;
@@ -831,7 +831,7 @@ CEIH_Tx_G.get_xyz_angle_axis(CEIH_r_G[0]);
 
 	//	E_Tx_Ep.get_xyz_angle_axis(E_r_Ep[0]);
 
-	//O_Tx_Ep.get_frame_tab(the_robot->EDP_data.next_arm_frame); //jesli sie chcemy ruszyc
+	//O_Tx_Ep.get_frame_tab(the_robot->ecp_command.instruction.arm.pf_def.arm_frame); //jesli sie chcemy ruszyc
 
 	//	std::cout << "O_Tx_Ep" <<std::endl;
 	//	std::cout << O_Tx_Ep << std::endl;
@@ -881,7 +881,7 @@ CEIH_Tx_G.get_xyz_angle_axis(CEIH_r_G[0]);
 
 	for (int i=0; i<6; i++)
 	{
-		the_robot->EDP_data.next_XYZ_AA_arm_coordinates[i] = O_r_Ep[0][i];
+		the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = O_r_Ep[0][i];
 	}
 
 

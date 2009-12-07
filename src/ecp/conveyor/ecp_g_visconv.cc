@@ -33,10 +33,10 @@ bool incremental_move::first_step ( )
 
 			the_robot->ecp_command.instruction.set_arm_type = lib::JOINT;
 			the_robot->ecp_command.instruction.get_arm_type = lib::JOINT;
-			the_robot->EDP_data.motion_type = lib::ABSOLUTE;
-			the_robot->EDP_data.next_interpolation_type = lib::MIM;
-			the_robot->EDP_data.motion_steps = td.internode_step_no;
-			the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
+			the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
+			the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
+			the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
+			the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
 
 			first=1;
 			stepno=ecp_t.config.return_int_value("steps");//100;
@@ -91,7 +91,7 @@ bool incremental_move::next_step ( )
 	std::cout << acctime.tv_sec << " " << acctime.tv_usec << " " << next_pose << " ";
 	std::cout << std::endl;
 	
-	the_robot->EDP_data.next_joint_arm_coordinates[0] = next_pose;//the_robot->EDP_data.current_joint_arm_coordinates[0]; //next_pose;
+	the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[0] = next_pose;//the_robot->EDP_data.current_joint_arm_coordinates[0]; //next_pose;
 	//current_pose=next_pose;	
 	
 	step++;

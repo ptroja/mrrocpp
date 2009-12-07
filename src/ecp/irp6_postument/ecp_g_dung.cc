@@ -46,10 +46,10 @@ bool dung::first_step()
     the_robot->ecp_command.instruction.set_type = ARM_DV;
     the_robot->ecp_command.instruction.set_arm_type = lib::JOINT;
     the_robot->ecp_command.instruction.get_arm_type = lib::JOINT;
-    the_robot->EDP_data.motion_type = lib::ABSOLUTE;
-     the_robot->EDP_data.next_interpolation_type = lib::MIM;
-    the_robot->EDP_data.motion_steps = td.internode_step_no;
-    the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
+    the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
+     the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
+    the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
+    the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
 
     return true;
 }
@@ -306,7 +306,7 @@ bool dung::next_step ( )
 
     for (int i=0; i<MAX_SERVOS_NR; i++)
     {
-        the_robot->EDP_data.next_joint_arm_coordinates[i] =
+        the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] =
             the_robot->EDP_data.current_joint_arm_coordinates[i];
     } // end:for
 

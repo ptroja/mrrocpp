@@ -137,8 +137,8 @@ void robot_stopped_condition::add_rse_element(ecp_mp::sensor::digital_scales& th
 	the_robot->ecp_command.instruction.instruction_type = lib::GET;
 	the_robot->ecp_command.instruction.get_type = ARM_DV; // ARM
 	the_robot->ecp_command.instruction.get_arm_type = lib::MOTOR;
-	the_robot->EDP_data.motion_steps = 1;
-	the_robot->EDP_data.value_in_step_no = the_robot->EDP_data.motion_steps;
+	the_robot->ecp_command.instruction.motion_steps = 1;
+	the_robot->ecp_command.instruction.value_in_step_no = the_robot->ecp_command.instruction.motion_steps;
 	// Stworzenie rozkazu.
 	the_robot->create_command();
 	// Wyslanie rozkazu.

@@ -57,10 +57,10 @@ bool y_simple::first_step ( ) {
 //				else if (i==3 && j==2) the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[i][j]= 0.08;
 				else the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[i][j]=0;
 		the_robot->ecp_command.instruction.get_arm_type = lib::FRAME;
-		the_robot->EDP_data.motion_type = lib::ABSOLUTE;
-		 the_robot->EDP_data.next_interpolation_type = lib::MIM;
-		the_robot->EDP_data.motion_steps = td.internode_step_no;
-		the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
+		the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
+		 the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
+		the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
+		the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
 	
 
 	return true;
@@ -126,7 +126,7 @@ bool y_simple::next_step (std::map <lib::SENSOR_ENUM, lib::sensor*>& sensor_m ) 
 	}
 	else next_frame = move_frame * prev_frame * rot_frame;
 	next_frame.to_table(previous_frame);
-	lib::copy_frame(the_robot->EDP_data.next_arm_frame, previous_frame);
+	lib::copy_frame(the_robot->ecp_command.instruction.arm.pf_def.arm_frame, previous_frame);
 						// przepisanie nowej ramki do EDP
 	the_robot->EDP_data.next_gripper_coordinate=the_robot->EDP_data.current_gripper_coordinate;
 	

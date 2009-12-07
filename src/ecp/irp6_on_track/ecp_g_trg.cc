@@ -71,41 +71,41 @@ void trajectory_reproduce::create_command_for_pose(common::ecp_taught_in_pose& t
         the_robot->ecp_command.instruction.instruction_type = lib::SET;
         the_robot->ecp_command.instruction.set_type = ARM_DV; // ARM
         the_robot->ecp_command.instruction.set_arm_type = lib::MOTOR;
-        the_robot->EDP_data.motion_type = lib::ABSOLUTE;
-         the_robot->EDP_data.next_interpolation_type = lib::MIM;
-        the_robot->EDP_data.motion_steps = (uint16_t) ceil(tip.motion_time/STEP);
-        the_robot->EDP_data.value_in_step_no = the_robot->EDP_data.motion_steps;
-        memcpy (the_robot->EDP_data.next_motor_arm_coordinates, tip.coordinates, IRP6_ON_TRACK_NUM_OF_SERVOS*sizeof (double));
+        the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
+         the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
+        the_robot->ecp_command.instruction.motion_steps = (uint16_t) ceil(tip.motion_time/STEP);
+        the_robot->ecp_command.instruction.value_in_step_no = the_robot->ecp_command.instruction.motion_steps;
+        memcpy (the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates, tip.coordinates, IRP6_ON_TRACK_NUM_OF_SERVOS*sizeof (double));
         break;
     case lib::C_JOINT:
         the_robot->ecp_command.instruction.instruction_type = lib::SET;
         the_robot->ecp_command.instruction.set_type = ARM_DV; // ARM
         the_robot->ecp_command.instruction.set_arm_type = lib::JOINT;
-        the_robot->EDP_data.motion_type = lib::ABSOLUTE;
-         the_robot->EDP_data.next_interpolation_type = lib::MIM;
-        the_robot->EDP_data.motion_steps = (uint16_t) ceil(tip.motion_time/STEP);
-        the_robot->EDP_data.value_in_step_no = the_robot->EDP_data.motion_steps;
-        memcpy (the_robot->EDP_data.next_joint_arm_coordinates, tip.coordinates, IRP6_ON_TRACK_NUM_OF_SERVOS*sizeof (double));
+        the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
+         the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
+        the_robot->ecp_command.instruction.motion_steps = (uint16_t) ceil(tip.motion_time/STEP);
+        the_robot->ecp_command.instruction.value_in_step_no = the_robot->ecp_command.instruction.motion_steps;
+        memcpy (the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates, tip.coordinates, IRP6_ON_TRACK_NUM_OF_SERVOS*sizeof (double));
         break;
     case lib::C_XYZ_EULER_ZYZ:
         the_robot->ecp_command.instruction.instruction_type = lib::SET;
         the_robot->ecp_command.instruction.set_type = ARM_DV; // ARM
         the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
-        the_robot->EDP_data.motion_type = lib::ABSOLUTE;
-         the_robot->EDP_data.next_interpolation_type = lib::MIM;
-        the_robot->EDP_data.motion_steps = (uint16_t) ceil(tip.motion_time/STEP);
-        the_robot->EDP_data.value_in_step_no = the_robot->EDP_data.motion_steps;
-        memcpy (the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates, tip.coordinates, MAX_SERVOS_NR*sizeof (double));
+        the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
+         the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
+        the_robot->ecp_command.instruction.motion_steps = (uint16_t) ceil(tip.motion_time/STEP);
+        the_robot->ecp_command.instruction.value_in_step_no = the_robot->ecp_command.instruction.motion_steps;
+        memcpy (the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates, tip.coordinates, MAX_SERVOS_NR*sizeof (double));
         break;
     case lib::C_XYZ_ANGLE_AXIS:
         the_robot->ecp_command.instruction.instruction_type = lib::SET;
         the_robot->ecp_command.instruction.set_type = ARM_DV; // ARM
         the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
-        the_robot->EDP_data.motion_type = lib::ABSOLUTE;
-         the_robot->EDP_data.next_interpolation_type = lib::MIM;
-        the_robot->EDP_data.motion_steps = (uint16_t) ceil(tip.motion_time/STEP);
-        the_robot->EDP_data.value_in_step_no = the_robot->EDP_data.motion_steps;
-        memcpy (the_robot->EDP_data.next_XYZ_AA_arm_coordinates, tip.coordinates, MAX_SERVOS_NR*sizeof (double));
+        the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
+         the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
+        the_robot->ecp_command.instruction.motion_steps = (uint16_t) ceil(tip.motion_time/STEP);
+        the_robot->ecp_command.instruction.value_in_step_no = the_robot->ecp_command.instruction.motion_steps;
+        memcpy (the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates, tip.coordinates, MAX_SERVOS_NR*sizeof (double));
         break;
     default:
         break;

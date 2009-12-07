@@ -37,7 +37,7 @@ bool ecp_vis_ib_eih_planar_irp6ot::first_step() {
 	the_robot->ecp_command.instruction.instruction_type = lib::GET;
 	the_robot->ecp_command.instruction.get_type = ARM_DV;
 	the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_ANGLE_AXIS;
-	the_robot->EDP_data.motion_type = lib::ABSOLUTE;
+	the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
 	vsp_fradia->to_vsp.haar_detect_mode = lib::WITHOUT_ROTATION;
 	t_m = MOTION_STEPS * STEP;
 	x = 0;y = 0;v = 0;s = 0;
@@ -67,12 +67,12 @@ bool ecp_vis_ib_eih_planar_irp6ot::next_step_without_constraints() {
 		the_robot->ecp_command.instruction.set_type = ARM_DV;
 		the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
 		the_robot->ecp_command.instruction.get_arm_type = lib::JOINT;
-		the_robot->EDP_data.motion_type = lib::ABSOLUTE;
-		the_robot->EDP_data.next_interpolation_type = lib::MIM;
-		the_robot->EDP_data.motion_steps = MOTION_STEPS;
-		the_robot->EDP_data.value_in_step_no = MOTION_STEPS - 1;
+		the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
+		the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
+		the_robot->ecp_command.instruction.motion_steps = MOTION_STEPS;
+		the_robot->ecp_command.instruction.value_in_step_no = MOTION_STEPS - 1;
 
-		memcpy(the_robot->EDP_data.next_XYZ_AA_arm_coordinates, next_position,
+		memcpy(the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates, next_position,
 				6 * sizeof(double));
 		the_robot->EDP_data.next_gripper_coordinate = next_position[6];
 	}
@@ -143,11 +143,11 @@ bool ecp_vis_ib_eih_planar_irp6ot::next_step_without_constraints() {
 		the_robot->ecp_command.instruction.set_type = ARM_DV;
 		the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
 		the_robot->ecp_command.instruction.get_arm_type = lib::JOINT;
-		the_robot->EDP_data.motion_type = lib::ABSOLUTE;
-		the_robot->EDP_data.next_interpolation_type = lib::MIM;
-		the_robot->EDP_data.motion_steps = MOTION_STEPS;
-		the_robot->EDP_data.value_in_step_no = MOTION_STEPS - 1;
-		memcpy(the_robot->EDP_data.next_XYZ_AA_arm_coordinates, next_position,
+		the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
+		the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
+		the_robot->ecp_command.instruction.motion_steps = MOTION_STEPS;
+		the_robot->ecp_command.instruction.value_in_step_no = MOTION_STEPS - 1;
+		memcpy(the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates, next_position,
 				6 * sizeof(double));
 		the_robot->EDP_data.next_gripper_coordinate = next_position[6];
 

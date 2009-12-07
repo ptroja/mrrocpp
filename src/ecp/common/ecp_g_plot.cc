@@ -57,10 +57,10 @@ bool y_simple::first_step ( )
     the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;			// orientacja euler'owska
     the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_EULER_ZYZ;
 
-    the_robot->EDP_data.motion_type = lib::ABSOLUTE;
-     the_robot->EDP_data.next_interpolation_type = lib::MIM;
-    the_robot->EDP_data.motion_steps = td.internode_step_no;
-    the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
+    the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
+     the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
+    the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
+    the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
 
 
 
@@ -114,7 +114,7 @@ bool y_simple::next_step ( )
 
         // zatrzymanie robota w miejscu
         for (int i = 0; i < 6; i++)
-            the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[i] = the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[i];
+            the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[i];
         the_robot->EDP_data.next_gripper_coordinate = the_robot->EDP_data.current_gripper_coordinate;
     }
 
@@ -127,24 +127,24 @@ bool y_simple::next_step ( )
         if(nowa_pozycja[0] - pozycja[0] <= 0.04 && ruch == 0)
         {
             nowa_pozycja[0] += 0.0002;
-            the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[0] += 0.0002;
+            the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[0] += 0.0002;
         }
         else if(nowa_pozycja[1] - pozycja[1] <= 0.04 && ruch == 0)
         {
             nowa_pozycja[1] += 0.0002;
-            the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[1] += 0.0002;
+            the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[1] += 0.0002;
             if(nowa_pozycja[1] - pozycja[1]>0.04 )
                 ruch = 2;
         }
         else if(nowa_pozycja[0] - pozycja[0] >= 0.0 && ruch == 2)
         {
             nowa_pozycja[0] -= 0.0002;
-            the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[0] -= 0.0002;
+            the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[0] -= 0.0002;
         }
         else if(nowa_pozycja[1] - pozycja[1] >= 0.0 && ruch == 2)
         {
             nowa_pozycja[1] -= 0.0002;
-            the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[1] -= 0.0002;
+            the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[1] -= 0.0002;
             if(nowa_pozycja[1] - pozycja[1] < 0.0)
                 ruch = 99;
         }
@@ -160,7 +160,7 @@ bool y_simple::next_step ( )
         {
             // posuwamy do przodu
             nowa_pozycja[0] += 0.0001;
-            the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[0] += 0.0001;
+            the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[0] += 0.0001;
 
             akt_pozycja = nowa_pozycja[0] - promien;
             // przesuwamy jednoczesnie w bok
@@ -174,7 +174,7 @@ bool y_simple::next_step ( )
 
             //			assert(((promien - temp) - abs(roznica)) > 0.01 || ((promien - temp) - abs(roznica)) < -0.01);
 
-            the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[1] -= (temp) - fabs(roznica);
+            the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[1] -= (temp) - fabs(roznica);
 
             printf("jeden: %f; %f ->%f, ->%f; r=%f\n", nowa_pozycja[0], nowa_pozycja[1], akt_pozycja, temp, roznica);
             //			printf("-> %f\n", (temp) - abs(roznica));
@@ -184,7 +184,7 @@ bool y_simple::next_step ( )
         {
             // posuwamy do przodu
             nowa_pozycja[0] += 0.0001;
-            the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[0] += 0.0001;
+            the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[0] += 0.0001;
 
             akt_pozycja = nowa_pozycja[0] - promien;
             // przesuwamy jednoczesnie w bok
@@ -202,7 +202,7 @@ bool y_simple::next_step ( )
                 ruch = 2;
             }
 
-            the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[1] += (temp) + fabs(roznica);
+            the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[1] += (temp) + fabs(roznica);
 
             printf("dwa: %f; %f ->%f, ->%f; r=%f\n", nowa_pozycja[0], nowa_pozycja[1], akt_pozycja, temp, roznica);
             fprintf(file, "dwa: %f; %f\n", nowa_pozycja[0], nowa_pozycja[1]);
@@ -218,7 +218,7 @@ bool y_simple::next_step ( )
 
             // posuwamy do tylu
             nowa_pozycja[0] -= 0.0001;
-            the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[0] -= 0.0001;
+            the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[0] -= 0.0001;
             // przesuwamy jednoczesnie w bok
             temp = sqrt(pow(promien, 2) - pow(akt_pozycja, 2));
             if ( !(temp == temp) )
@@ -227,7 +227,7 @@ bool y_simple::next_step ( )
             roznica = nowa_pozycja[1] - pozycja[1];
             nowa_pozycja[1] += (temp) - fabs(roznica);
 
-            the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[1] += (temp) - fabs(roznica);
+            the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[1] += (temp) - fabs(roznica);
             printf("trzy: %f; %f ->%f, ->%f; r=%f\n", nowa_pozycja[0], nowa_pozycja[1], akt_pozycja, temp, roznica);
             fprintf(file, "trzy: %f; %f\n", nowa_pozycja[0], nowa_pozycja[1]);
         }
@@ -235,7 +235,7 @@ bool y_simple::next_step ( )
         {
             // posuwamy do tylu
             nowa_pozycja[0] -= 0.0001;
-            the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[0] -= 0.0002;
+            the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[0] -= 0.0002;
             // przesuwamy jednoczesnie w bok
             temp = sqrt(pow(promien, 2) - pow(akt_pozycja, 2));
             if ( !(temp == temp) )
@@ -244,7 +244,7 @@ bool y_simple::next_step ( )
             roznica = nowa_pozycja[1] - pozycja[1];
             nowa_pozycja[1] -= (temp) - fabs(roznica);
 
-            the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[1] -= (temp) - fabs(roznica);
+            the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[1] -= (temp) - fabs(roznica);
             if(nowa_pozycja[0] - pozycja[0] <= 0)
             {
                 ruch = 99;
@@ -266,7 +266,7 @@ bool y_simple::next_step ( )
 
                 return true;
             }
-            the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[0] += 0.0001;
+            the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[0] += 0.0001;
             temp = sqrt(pow(0.04/2, 2) - pow((nowa_pozycja[0] - pozycja[0]), 2));
             if(temp ==0)
             {
@@ -282,13 +282,13 @@ bool y_simple::next_step ( )
                 return true;
             }
 
-            //			the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[1] += (0.02 -temp) - (nowa_pozycja[1] - pozycja[1]);
-            the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[1] += (0.02 -temp)- roznica;
+            //			the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[1] += (0.02 -temp) - (nowa_pozycja[1] - pozycja[1]);
+            the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[1] += (0.02 -temp)- roznica;
             //			if(nowa_pozycja[0] - pozycja[0] >= 0.02)
             //				return 99;
 
-            printf("jeden: %f; %f  <%f; %f>\n", nowa_pozycja[0], nowa_pozycja[1], the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[0],
-                   the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[1]);
+            printf("jeden: %f; %f  <%f; %f>\n", nowa_pozycja[0], nowa_pozycja[1], the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[0],
+                   the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[1]);
 
             fprintf(file, "jeden: %f; %f\n", nowa_pozycja[0], nowa_pozycja[1]);
         }
@@ -303,13 +303,13 @@ bool y_simple::next_step ( )
 
                 return true;
             }
-            the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[0] += 0.0001;
+            the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[0] += 0.0001;
             temp = sqrt(pow(0.04/2, 2) - pow((nowa_pozycja[0] - pozycja[0]) -0.04/2, 2));
             //			nowa_pozycja[1] += (temp - 0.02) - (nowa_pozycja[1] - pozycja[1] - 0.02);
             roznica = nowa_pozycja[1]- pozycja[1];
             nowa_pozycja[1] += (temp - 0.04/2) - roznica;
-            //			the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[1] += (temp - 0.02) - (nowa_pozycja[1] - pozycja[1] - 0.02);
-            the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[1] += (temp - 0.04/2) - roznica;
+            //			the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[1] += (temp - 0.02) - (nowa_pozycja[1] - pozycja[1] - 0.02);
+            the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[1] += (temp - 0.04/2) - roznica;
             if(nowa_pozycja[0] - pozycja[0] >= 0.04)
             {
                 ruch = 2;
@@ -317,37 +317,37 @@ bool y_simple::next_step ( )
 
                 ruch = 99;
             }
-            printf("dwa: %f; %f  <%f; %f>\n", nowa_pozycja[0], nowa_pozycja[1], the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[0],
-                   the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[1]);
+            printf("dwa: %f; %f  <%f; %f>\n", nowa_pozycja[0], nowa_pozycja[1], the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[0],
+                   the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[1]);
             fprintf(file, "dwa: %f; %f\n", nowa_pozycja[0], nowa_pozycja[1]);
         }
         else if(nowa_pozycja[0] - pozycja[0] >= (0.04/2) && ruch == 2)
             //		else if(nowa_pozycja[0] - pozycja[0] <= 0.04 + 0.005 && ruch == 0 && nowa_pozycja[0] - pozycja[0] >=0.04)
         {
             nowa_pozycja[0] -= 0.0001;
-            the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[0] -= 0.0001;
+            the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[0] -= 0.0001;
             temp = sqrt(pow(0.04/2, 2) - pow((nowa_pozycja[0] - pozycja[0]) - 0.04/2, 2));
             //			temp = sqrt(pow(0.04/2, 2) - pow((nowa_pozycja[0] - pozycja[0]), 2));
 
             roznica = nowa_pozycja[1]- pozycja[1];
             nowa_pozycja[1] -= temp - roznica;
-            //			printf("__trzy: %f; %f  <%f; %f>\n", nowa_pozycja[0], nowa_pozycja[1], the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[0],
-            //		the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[1]+temp);
-            the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[1] += temp;
-            printf("trzy: %f; %f  <%f; %f>\n", nowa_pozycja[0], nowa_pozycja[1], the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[0],
-                   the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[1]);
+            //			printf("__trzy: %f; %f  <%f; %f>\n", nowa_pozycja[0], nowa_pozycja[1], the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[0],
+            //		the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[1]+temp);
+            the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[1] += temp;
+            printf("trzy: %f; %f  <%f; %f>\n", nowa_pozycja[0], nowa_pozycja[1], the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[0],
+                   the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[1]);
             fprintf(file, "trzy: %f; %f\n", nowa_pozycja[0], nowa_pozycja[1]);
         }
         else if(nowa_pozycja[0] - pozycja[0] < (0.04/2) && nowa_pozycja[0] - pozycja[0] > 0 && ruch == 2)
             //		else if(nowa_pozycja[0] - pozycja[0] <= 0.04/2 && ruch == 2)
         {
             nowa_pozycja[0] -= 0.0002;
-            the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[0] -= 0.0002;
+            the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[0] -= 0.0002;
             temp = sqrt(pow(0.04/2, 2) - pow((nowa_pozycja[0] - pozycja[0]), 2));
             //			nowa_pozycja[1] += -temp - (nowa_pozycja[1] - pozycja[1]);
             nowa_pozycja[1] += -temp;
-            //			the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[1] += -temp - (nowa_pozycja[1] - pozycja[1]);
-            the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[1] += -temp;
+            //			the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[1] += -temp - (nowa_pozycja[1] - pozycja[1]);
+            the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[1] += -temp;
             if(nowa_pozycja[0] - pozycja[0] > 0.04)
             {
 

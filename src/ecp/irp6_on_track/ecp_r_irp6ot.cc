@@ -40,7 +40,7 @@ void robot::create_command(void)
 	ecp_command.instruction.set_arm_type = ecp_command.instruction.set_arm_type;
 	ecp_command.instruction.get_arm_type = ecp_command.instruction.get_arm_type;
 	ecp_command.instruction.output_values = ecp_command.instruction.output_values;
-	ecp_command.instruction.interpolation_type = EDP_data.next_interpolation_type;
+	ecp_command.instruction.interpolation_type = ecp_command.instruction.interpolation_type;
 
 	switch (ecp_command.instruction.instruction_type) {
 		case lib::SET:
@@ -88,34 +88,34 @@ void robot::create_command(void)
 			}
 
 			if (ecp_command.instruction.set_type & ARM_DV) {
-				ecp_command.instruction.motion_type = EDP_data.motion_type;
-				ecp_command.instruction.motion_steps = EDP_data.motion_steps;
-				ecp_command.instruction.value_in_step_no = EDP_data.value_in_step_no;
+				ecp_command.instruction.motion_type = ecp_command.instruction.motion_type;
+				ecp_command.instruction.motion_steps = ecp_command.instruction.motion_steps;
+				ecp_command.instruction.value_in_step_no = ecp_command.instruction.value_in_step_no;
 				// Wypelniamy czesc zwiazana z polozeniem ramienia
 				switch (ecp_command.instruction.set_arm_type) {
 					case lib::FRAME:
-						lib::copy_frame(ecp_command.instruction.arm.pf_def.arm_frame, EDP_data.next_arm_frame);
+						lib::copy_frame(ecp_command.instruction.arm.pf_def.arm_frame, ecp_command.instruction.arm.pf_def.arm_frame);
 						break;
 					case lib::XYZ_ANGLE_AXIS:
 						for (int j=0; j<6; j++)
 							ecp_command.instruction.arm.pf_def.arm_coordinates[j]
-									= EDP_data.next_XYZ_AA_arm_coordinates[j];
+									= ecp_command.instruction.arm.pf_def.arm_coordinates[j];
 						break;
 					case lib::XYZ_EULER_ZYZ:
 						for (int j=0; j<6; j++)
 							ecp_command.instruction.arm.pf_def.arm_coordinates[j]
-									= EDP_data.next_XYZ_ZYZ_arm_coordinates[j];
+									= ecp_command.instruction.arm.pf_def.arm_coordinates[j];
 						break;
 
 					case lib::JOINT:
 						for (int j=0; j<number_of_servos; j++)
 							ecp_command.instruction.arm.pf_def.arm_coordinates[j]
-									= EDP_data.next_joint_arm_coordinates[j];
+									= ecp_command.instruction.arm.pf_def.arm_coordinates[j];
 						break;
 					case lib::MOTOR:
 						for (int j=0; j<number_of_servos; j++)
 							ecp_command.instruction.arm.pf_def.arm_coordinates[j]
-									= EDP_data.next_motor_arm_coordinates[j];
+									= ecp_command.instruction.arm.pf_def.arm_coordinates[j];
 						break;
 					case lib::PF_VELOCITY:
 						for (int j=0; j<number_of_servos; j++) {
@@ -127,7 +127,7 @@ void robot::create_command(void)
 						throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 				} // end: (set_arm_type)
 
-				switch (EDP_data.next_interpolation_type) {
+				switch (ecp_command.instruction.interpolation_type) {
 					case lib::MIM:
 						break;
 					case lib::TCIM:

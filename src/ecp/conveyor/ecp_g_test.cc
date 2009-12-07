@@ -40,10 +40,10 @@ bool y_simple::first_step ( )
 
 			the_robot->ecp_command.instruction.set_arm_type = lib::MOTOR;
 			the_robot->ecp_command.instruction.get_arm_type = lib::MOTOR;
-			the_robot->EDP_data.motion_type = lib::ABSOLUTE;
-			 the_robot->EDP_data.next_interpolation_type = lib::MIM;
-			the_robot->EDP_data.motion_steps = td.internode_step_no;
-			the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
+			the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
+			 the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
+			the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
+			the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
 
 	
 
@@ -87,7 +87,7 @@ bool y_simple::next_step ( )
 
 	for (i=0; i<6; i++) {
 		// nastepna pozycja
-		the_robot->EDP_data.next_motor_arm_coordinates[i] =
+		the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] =
 		    the_robot->EDP_data.current_motor_arm_coordinates[i]	+ td.coordinate_delta[i];
 	}
 	

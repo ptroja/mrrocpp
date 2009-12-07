@@ -282,10 +282,10 @@ bool hermite_spline::next_step (  )
         the_robot->ecp_command.instruction.instruction_type = lib::SET;
         the_robot->ecp_command.instruction.set_arm_type = starting_pose.arm_type;
         the_robot->ecp_command.instruction.set_type = ARM_DV; // ARM
-        the_robot->EDP_data.motion_type = lib::ABSOLUTE;
-         the_robot->EDP_data.next_interpolation_type = lib::MIM;
-        the_robot->EDP_data.motion_steps = (uint16_t) (10);
-        the_robot->EDP_data.value_in_step_no = the_robot->EDP_data.motion_steps-2;
+        the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
+         the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
+        the_robot->ecp_command.instruction.motion_steps = (uint16_t) (10);
+        the_robot->ecp_command.instruction.value_in_step_no = the_robot->ecp_command.instruction.motion_steps-2;
         first_time = false;
         T = time[0];
         log_file=fopen("log_file.txt","w");
@@ -309,20 +309,20 @@ bool hermite_spline::next_step (  )
     {
     case lib::MOTOR:
         for (i = 0; i < MAX_SERVOS_NR; i++)
-            the_robot->EDP_data.next_motor_arm_coordinates[i] = y[i];
+            the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = y[i];
         break;
     case lib::JOINT:
             for (i = 0; i < MAX_SERVOS_NR; i++)
-                the_robot->EDP_data.next_joint_arm_coordinates[i] = y[i];
+                the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = y[i];
         break;
     case lib::XYZ_EULER_ZYZ:
             for (i = 0; i < 6; i++)
-                the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[i] =y[i];
+                the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] =y[i];
         the_robot->EDP_data.next_gripper_coordinate = y[6];
         break;
     case lib::XYZ_ANGLE_AXIS:
             for (i = 0; i < 6; i++)
-                the_robot->EDP_data.next_XYZ_AA_arm_coordinates[i] = y[i];
+                the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = y[i];
         the_robot->EDP_data.next_gripper_coordinate = y[6];
         break;
     default:
@@ -635,10 +635,10 @@ bool natural_spline::next_step ()
         the_robot->ecp_command.instruction.instruction_type = lib::SET;
         the_robot->ecp_command.instruction.set_arm_type = starting_pose.arm_type;
         the_robot->ecp_command.instruction.set_type = ARM_DV; // ARM
-        the_robot->EDP_data.motion_type = lib::ABSOLUTE;
-         the_robot->EDP_data.next_interpolation_type = lib::MIM;
-        the_robot->EDP_data.motion_steps = (uint16_t) (10);
-        the_robot->EDP_data.value_in_step_no = the_robot->EDP_data.motion_steps-2;
+        the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
+         the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
+        the_robot->ecp_command.instruction.motion_steps = (uint16_t) (10);
+        the_robot->ecp_command.instruction.value_in_step_no = the_robot->ecp_command.instruction.motion_steps-2;
         first_time = false;
         T = time[0];
         log_file=fopen("log_file.txt","w");
@@ -662,20 +662,20 @@ bool natural_spline::next_step ()
     {
     case lib::MOTOR:
         for (i = 0; i < MAX_SERVOS_NR; i++)
-            the_robot->EDP_data.next_motor_arm_coordinates[i] = y[i];
+            the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = y[i];
         break;
     case lib::JOINT:
             for (i = 0; i < MAX_SERVOS_NR; i++)
-                the_robot->EDP_data.next_joint_arm_coordinates[i] = y[i];
+                the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = y[i];
         break;
     case lib::XYZ_EULER_ZYZ:
             for (i = 0; i < 6; i++)
-                the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[i] =y[i];
+                the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] =y[i];
         the_robot->EDP_data.next_gripper_coordinate = y[6];
         break;
     case lib::XYZ_ANGLE_AXIS:
             for (i = 0; i < 6; i++)
-                the_robot->EDP_data.next_XYZ_AA_arm_coordinates[i] = y[i];
+                the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = y[i];
         the_robot->EDP_data.next_gripper_coordinate = y[6];
         break;
     default:

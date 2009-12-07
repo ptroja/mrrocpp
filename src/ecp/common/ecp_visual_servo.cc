@@ -126,7 +126,7 @@ void ecp_visual_servo::entertain_constraints(){
 
 	for (int i=0; i<6; i++)
 	{
-		the_robot->EDP_data.next_XYZ_AA_arm_coordinates[i] = O_r_Ep[0][i];
+		the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = O_r_Ep[0][i];
 	//	std::cout << O_r_Ep[0][i] << " ";
 	}
 /*
@@ -142,12 +142,12 @@ void ecp_visual_servo::entertain_constraints(){
 */
 	for (int i=0; i<1; i++)
 	{
-			the_robot->EDP_data.next_XYZ_AA_arm_coordinates[i] = O_r_E1[i];
+			the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = O_r_E1[i];
 	}
 	
 	for (int i=2; i<6; i++)
 	{
-		the_robot->EDP_data.next_XYZ_AA_arm_coordinates[i] = O_r_E1[i];
+		the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = O_r_E1[i];
 	}
 	
 

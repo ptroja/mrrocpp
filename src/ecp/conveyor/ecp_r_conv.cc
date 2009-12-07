@@ -70,22 +70,22 @@ void robot::create_command (void)
 
         if (ecp_command.instruction.set_type & ARM_DV)
         {
-            ecp_command.instruction.motion_type = EDP_data.motion_type;
-            ecp_command.instruction.interpolation_type = EDP_data.next_interpolation_type;
-            ecp_command.instruction.motion_steps = EDP_data.motion_steps;
-            ecp_command.instruction.value_in_step_no = EDP_data.value_in_step_no;
+            ecp_command.instruction.motion_type = ecp_command.instruction.motion_type;
+            ecp_command.instruction.interpolation_type = ecp_command.instruction.interpolation_type;
+            ecp_command.instruction.motion_steps = ecp_command.instruction.motion_steps;
+            ecp_command.instruction.value_in_step_no = ecp_command.instruction.value_in_step_no;
             // Wypelniamy czesc zwiazana z polozeniem ramienia
             switch (ecp_command.instruction.set_arm_type)
             {
             case lib::JOINT:
                 for (int j=0; j<CONVEYOR_NUM_OF_SERVOS ; j++)
                     ecp_command.instruction.arm.pf_def.arm_coordinates[j]
-                    = EDP_data.next_joint_arm_coordinates[j];
+                    = ecp_command.instruction.arm.pf_def.arm_coordinates[j];
                 break;
             case lib::MOTOR:
                     for (int j=0; j<CONVEYOR_NUM_OF_SERVOS ; j++)
                         ecp_command.instruction.arm.pf_def.arm_coordinates[j]
-                        = EDP_data.next_motor_arm_coordinates[j];
+                        = ecp_command.instruction.arm.pf_def.arm_coordinates[j];
                 break;
             default: // Blad: niewlasciwy sposob zadawania polozenia ramienia
                     throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
