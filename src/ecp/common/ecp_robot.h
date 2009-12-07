@@ -75,8 +75,6 @@ public:
 	messip_channel_t *EDP_fd;
 #endif
 
-	ecp_mp::robot_transmission_data EDP_data; // Obraz robota wykorzystywany przez generator
-
 	virtual void execute_motion (void);
 	// Zlecenie wykonania ruchu przez robota (realizowane przez klase konkretna):
 	// na poziomie ECP jest to polecenie dla EDP

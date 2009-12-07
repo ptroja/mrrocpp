@@ -53,15 +53,16 @@ bool visioncoordinates::first_step()
 		debugmsg("ecp_g_visioncoordinates: the robot not exists");
 
 	// --- przygotowywujemy sie do pobrania polozenia robota w ramach Move() -> execute_motion() ---
-	ecp_mp::robot_transmission_data& data = the_robot->EDP_data;
+
+	//ecp_mp::robot_transmission_data& data = the_robot->ecp_command.instruction;
 
 	debugmsg("ecp_g_visioncoordinates: robot_transmission_data ready");
 
-	data.instruction_type = lib::GET;
-	data.get_type = ARM_DV;
-	data.get_arm_type = lib::XYZ_ANGLE_AXIS;
-	data.motion_type = lib::ABSOLUTE;
-	data.next_interpolation_type = lib::MIM;
+	the_robot->ecp_command.instruction.instruction_type = lib::GET;
+	the_robot->ecp_command.instruction.get_type = ARM_DV;
+	the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_ANGLE_AXIS;
+	the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
+	the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
 
 	// FraDIA ma znale�� wszystkie obiekty, nawet troch� podobne do poszukiwanego
 	sensor_out->esa.mode = lib::EM_SEARCH;
@@ -137,10 +138,10 @@ bool visioncoordinates::next_step()
 
 	debugmsg("ecp_g_visioncoordinates: Processing data");
 
-	ecp_mp::robot_transmission_data& data = the_robot->EDP_data;
+	//ecp_mp::robot_transmission_data& data = the_robot->EDP_data;
 
 	// current_XYZ_AA_arm_coordinates zawiera 6 elementow, chwytak (gripper) jest osobno
-	lib::Homog_matrix current_position(lib::Homog_matrix::MTR_XYZ_ANGLE_AXIS, data.current_XYZ_AA_arm_coordinates); // aktualna pozycja ramienia robota
+	lib::Homog_matrix current_position(lib::Homog_matrix::MTR_XYZ_ANGLE_AXIS, the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates); // aktualna pozycja ramienia robota
 
 	itsCoordinates.clear();
 	for (int it = 0; it < 8 /* sizeof(sensor_in->sensor_union.visioncoordinates_union.search) / sizeof(sensor_in->sensor_union.visioncoordinates_union.search[0])*/ ; ++it)
@@ -153,7 +154,7 @@ bool visioncoordinates::next_step()
 
 		EulerCoordinates ec;
 		target.get_xyz_euler_zyz(ec.bf);
-		ec.bf[6] = data.current_gripper_coordinate;
+		ec.bf[6] = the_robot->reply_package.arm.pf_def.gripper_coordinate;
 		itsCoordinates.push_back(ec);
 	}
 
