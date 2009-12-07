@@ -107,8 +107,8 @@ bool weight_meassure::first_step()
 	clear_buffer();
 
 	the_robot->ecp_command.instruction.instruction_type = lib::GET;
-	the_robot->EDP_data.get_type = ARM_DV;
-	the_robot->EDP_data.get_arm_type = lib::FRAME;
+	the_robot->ecp_command.instruction.get_type = ARM_DV;
+	the_robot->ecp_command.instruction.get_arm_type = lib::FRAME;
 	the_robot->EDP_data.next_interpolation_type
 			= lib::TCIM;
 
@@ -210,16 +210,16 @@ bool y_nose_run_force::first_step()
 	td.value_in_step_no = td.internode_step_no - 2;
 
 	the_robot->ecp_command.instruction.instruction_type = lib::GET;
-	the_robot->EDP_data.get_type = ARM_DV; // arm - ORYGINAL
-	the_robot->EDP_data.set_type = ARM_DV;
+	the_robot->ecp_command.instruction.get_type = ARM_DV; // arm - ORYGINAL
+	the_robot->ecp_command.instruction.set_type = ARM_DV;
 
 	//		the_robot->EDP_data.force_move_mode=2; // z regulacja silowa po query
 	//		the_robot->EDP_data.position_set_mode=1; // przyrostowo
 
 	//		the_robot->EDP_data.force_axis_quantity=3; // DOBRZE
 
-	the_robot->EDP_data.set_arm_type = lib::PF_VELOCITY;
-	the_robot->EDP_data.get_arm_type = lib::FRAME;
+	the_robot->ecp_command.instruction.set_arm_type = lib::PF_VELOCITY;
+	the_robot->ecp_command.instruction.get_arm_type = lib::FRAME;
 	the_robot->EDP_data.motion_type = lib::RELATIVE;
 	the_robot->EDP_data.next_interpolation_type
 			= lib::TCIM;
@@ -305,17 +305,17 @@ bool y_egg_force::first_step()
 	td.value_in_step_no = td.internode_step_no - 2;
 
 	the_robot->ecp_command.instruction.instruction_type = lib::GET;
-	// 		the_robot->EDP_data.get_type = ARM_DV; // arm - ORYGINAL
-	the_robot->EDP_data.get_type = ARM_DV+OUTPUTS_DV; // arm_inputs DEBUG
-	the_robot->EDP_data.set_type = ARM_DV;
+	// 		the_robot->ecp_command.instruction.get_type = ARM_DV; // arm - ORYGINAL
+	the_robot->ecp_command.instruction.get_type = ARM_DV+OUTPUTS_DV; // arm_inputs DEBUG
+	the_robot->ecp_command.instruction.set_type = ARM_DV;
 	/*
 	 the_robot->EDP_data.force_move_mode=2; // z regulacja silowa po query
 	 the_robot->EDP_data.position_set_mode=1; // przyrostowo
 
 	 the_robot->EDP_data.force_axis_quantity=3; // DOBRZE
 
-	 the_robot->EDP_data.set_arm_type = POSE_FORCE_LINEAR;
-	 the_robot->EDP_data.get_arm_type = POSE_FORCE_LINEAR;
+	 the_robot->ecp_command.instruction.set_arm_type = POSE_FORCE_LINEAR;
+	 the_robot->ecp_command.instruction.get_arm_type = POSE_FORCE_LINEAR;
 	 the_robot->EDP_data.motion_type = lib::ABSOLUTE;
 	 the_robot->EDP_data.motion_steps = td.internode_step_no;
 	 the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
@@ -600,8 +600,8 @@ bias_edp_force::bias_edp_force(common::task::task& _ecp_task) :
 bool bias_edp_force::first_step()
 {
 	the_robot->ecp_command.instruction.instruction_type = lib::SET;
-	the_robot->EDP_data.set_type = RMODEL_DV;
-	the_robot->EDP_data.set_rmodel_type = lib::FORCE_BIAS;
+	the_robot->ecp_command.instruction.set_type = RMODEL_DV;
+	the_robot->ecp_command.instruction.set_rmodel_type = lib::FORCE_BIAS;
 
 	return true;
 }
@@ -643,13 +643,13 @@ bool y_edge_follow_force::first_step()
 	td.value_in_step_no = td.internode_step_no - 2;
 
 	the_robot->ecp_command.instruction.instruction_type = lib::GET;
-	the_robot->EDP_data.get_type = ARM_DV; // arm - ORYGINAL
-	the_robot->EDP_data.set_type = ARM_DV | RMODEL_DV;
-	//	the_robot->EDP_data.set_type = ARM_DV;
-	the_robot->EDP_data.set_rmodel_type = lib::TOOL_FRAME;
-	the_robot->EDP_data.get_rmodel_type = lib::TOOL_FRAME;
-	the_robot->EDP_data.set_arm_type = lib::PF_VELOCITY;
-	the_robot->EDP_data.get_arm_type = lib::FRAME;
+	the_robot->ecp_command.instruction.get_type = ARM_DV; // arm - ORYGINAL
+	the_robot->ecp_command.instruction.set_type = ARM_DV | RMODEL_DV;
+	//	the_robot->ecp_command.instruction.set_type = ARM_DV;
+	the_robot->ecp_command.instruction.set_rmodel_type = lib::TOOL_FRAME;
+	the_robot->ecp_command.instruction.get_rmodel_type = lib::TOOL_FRAME;
+	the_robot->ecp_command.instruction.set_arm_type = lib::PF_VELOCITY;
+	the_robot->ecp_command.instruction.get_arm_type = lib::FRAME;
 	the_robot->EDP_data.motion_type = lib::ABSOLUTE;
 	the_robot->EDP_data.next_interpolation_type = lib::TCIM;
 	the_robot->EDP_data.motion_steps = td.internode_step_no;
@@ -822,13 +822,13 @@ bool legobrick_attach_force::first_step()
 	td.value_in_step_no = td.internode_step_no - 2;
 
 	the_robot->ecp_command.instruction.instruction_type = lib::GET;
-	the_robot->EDP_data.get_type = ARM_DV; // arm - ORYGINAL
-	the_robot->EDP_data.set_type = ARM_DV | RMODEL_DV;
-	//	the_robot->EDP_data.set_type = ARM_DV;
-	the_robot->EDP_data.set_rmodel_type = lib::TOOL_FRAME;
-	the_robot->EDP_data.get_rmodel_type = lib::TOOL_FRAME;
-	the_robot->EDP_data.set_arm_type = lib::PF_VELOCITY;
-	the_robot->EDP_data.get_arm_type = lib::FRAME;
+	the_robot->ecp_command.instruction.get_type = ARM_DV; // arm - ORYGINAL
+	the_robot->ecp_command.instruction.set_type = ARM_DV | RMODEL_DV;
+	//	the_robot->ecp_command.instruction.set_type = ARM_DV;
+	the_robot->ecp_command.instruction.set_rmodel_type = lib::TOOL_FRAME;
+	the_robot->ecp_command.instruction.get_rmodel_type = lib::TOOL_FRAME;
+	the_robot->ecp_command.instruction.set_arm_type = lib::PF_VELOCITY;
+	the_robot->ecp_command.instruction.get_arm_type = lib::FRAME;
 	the_robot->EDP_data.motion_type = lib::ABSOLUTE;
 	the_robot->EDP_data.next_interpolation_type = lib::TCIM;
 	the_robot->EDP_data.motion_steps = td.internode_step_no;
@@ -940,13 +940,13 @@ bool legobrick_detach_force::first_step()
 	td.value_in_step_no = td.internode_step_no - 2;
 
 	the_robot->ecp_command.instruction.instruction_type = lib::GET;
-	the_robot->EDP_data.get_type = ARM_DV; // arm - ORYGINAL
-	the_robot->EDP_data.set_type = ARM_DV | RMODEL_DV;
-	//	the_robot->EDP_data.set_type = ARM_DV;
-	the_robot->EDP_data.set_rmodel_type = lib::TOOL_FRAME;
-	the_robot->EDP_data.get_rmodel_type = lib::TOOL_FRAME;
-	the_robot->EDP_data.set_arm_type = lib::PF_VELOCITY;
-	the_robot->EDP_data.get_arm_type = lib::XYZ_ANGLE_AXIS;
+	the_robot->ecp_command.instruction.get_type = ARM_DV; // arm - ORYGINAL
+	the_robot->ecp_command.instruction.set_type = ARM_DV | RMODEL_DV;
+	//	the_robot->ecp_command.instruction.set_type = ARM_DV;
+	the_robot->ecp_command.instruction.set_rmodel_type = lib::TOOL_FRAME;
+	the_robot->ecp_command.instruction.get_rmodel_type = lib::TOOL_FRAME;
+	the_robot->ecp_command.instruction.set_arm_type = lib::PF_VELOCITY;
+	the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_ANGLE_AXIS;
 	the_robot->EDP_data.motion_type = lib::ABSOLUTE;
 	the_robot->EDP_data.next_interpolation_type = lib::TCIM;
 	the_robot->EDP_data.motion_steps = td.internode_step_no;
@@ -1064,8 +1064,8 @@ bool y_drawing_teach_in_force::first_step()
 		td.value_in_step_no = td.internode_step_no - 2;
 
 		the_robot->ecp_command.instruction.instruction_type = lib::GET;
-		the_robot->EDP_data.get_type = ARM_DV;
-		the_robot->EDP_data.set_type = ARM_DV;
+		the_robot->ecp_command.instruction.get_type = ARM_DV;
+		the_robot->ecp_command.instruction.set_type = ARM_DV;
 
 		/*
 		 the_robot->EDP_data.force_axis_quantity=1;
@@ -1076,8 +1076,8 @@ bool y_drawing_teach_in_force::first_step()
 
 		 normalize_vector(the_robot->EDP_data.relative_force_vector,the_robot->EDP_data.relative_force_vector,3);
 
-		 the_robot->EDP_data.set_arm_type = POSE_FORCE_LINEAR;
-		 the_robot->EDP_data.get_arm_type = POSE_FORCE_LINEAR;
+		 the_robot->ecp_command.instruction.set_arm_type = POSE_FORCE_LINEAR;
+		 the_robot->ecp_command.instruction.get_arm_type = POSE_FORCE_LINEAR;
 		 the_robot->EDP_data.motion_type = lib::ABSOLUTE;
 		 the_robot->EDP_data.motion_steps = td.internode_step_no;
 		 the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
@@ -1110,16 +1110,16 @@ bool y_drawing_teach_in_force::first_step()
 		td.value_in_step_no = td.internode_step_no - 2;
 
 		the_robot->ecp_command.instruction.instruction_type = lib::GET;
-		the_robot->EDP_data.get_type = ARM_DV;
-		the_robot->EDP_data.set_type = ARM_DV;
+		the_robot->ecp_command.instruction.get_type = ARM_DV;
+		the_robot->ecp_command.instruction.set_type = ARM_DV;
 		/*
 		 the_robot->EDP_data.force_move_mode=2;
 		 the_robot->EDP_data.position_set_mode=1; // przyrostowo
 
 		 the_robot->EDP_data.force_axis_quantity=3;
 
-		 the_robot->EDP_data.set_arm_type = POSE_FORCE_LINEAR;
-		 the_robot->EDP_data.get_arm_type = POSE_FORCE_LINEAR;
+		 the_robot->ecp_command.instruction.set_arm_type = POSE_FORCE_LINEAR;
+		 the_robot->ecp_command.instruction.get_arm_type = POSE_FORCE_LINEAR;
 		 the_robot->EDP_data.motion_type = lib::ABSOLUTE;
 		 the_robot->EDP_data.motion_steps = td.internode_step_no;
 		 the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
@@ -1261,8 +1261,8 @@ bool y_advanced_drawing_teach_in_force::first_step()
 		td.value_in_step_no = td.internode_step_no - 2;
 
 		the_robot->ecp_command.instruction.instruction_type = lib::GET;
-		the_robot->EDP_data.get_type = ARM_DV;
-		the_robot->EDP_data.set_type = ARM_DV;
+		the_robot->ecp_command.instruction.get_type = ARM_DV;
+		the_robot->ecp_command.instruction.set_type = ARM_DV;
 
 		/*
 		 the_robot->EDP_data.force_axis_quantity=1;
@@ -1273,8 +1273,8 @@ bool y_advanced_drawing_teach_in_force::first_step()
 
 		 normalize_vector(the_robot->EDP_data.relative_force_vector,the_robot->EDP_data.relative_force_vector,3);
 
-		 the_robot->EDP_data.set_arm_type = POSE_FORCE_LINEAR;
-		 the_robot->EDP_data.get_arm_type = POSE_FORCE_LINEAR;
+		 the_robot->ecp_command.instruction.set_arm_type = POSE_FORCE_LINEAR;
+		 the_robot->ecp_command.instruction.get_arm_type = POSE_FORCE_LINEAR;
 		 the_robot->EDP_data.motion_type = lib::ABSOLUTE;
 		 the_robot->EDP_data.motion_steps = td.internode_step_no;
 		 the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
@@ -1316,16 +1316,16 @@ bool y_advanced_drawing_teach_in_force::first_step()
 		td.value_in_step_no = td.internode_step_no - 2;
 
 		the_robot->ecp_command.instruction.instruction_type = lib::GET;
-		the_robot->EDP_data.get_type = ARM_DV;
-		the_robot->EDP_data.set_type = ARM_DV;
+		the_robot->ecp_command.instruction.get_type = ARM_DV;
+		the_robot->ecp_command.instruction.set_type = ARM_DV;
 		/*
 		 the_robot->EDP_data.force_move_mode=2;
 		 the_robot->EDP_data.position_set_mode=1; // przyrostowo
 
 		 the_robot->EDP_data.force_axis_quantity=3;
 
-		 the_robot->EDP_data.set_arm_type = POSE_FORCE_LINEAR;
-		 the_robot->EDP_data.get_arm_type = POSE_FORCE_LINEAR;
+		 the_robot->ecp_command.instruction.set_arm_type = POSE_FORCE_LINEAR;
+		 the_robot->ecp_command.instruction.get_arm_type = POSE_FORCE_LINEAR;
 		 the_robot->EDP_data.motion_type = lib::ABSOLUTE;
 		 the_robot->EDP_data.motion_steps = td.internode_step_no;
 		 the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
@@ -1739,13 +1739,13 @@ bool tff_nose_run::first_step()
 	tool_frame.get_frame_tab(the_robot->EDP_data.next_tool_frame);
 
 	the_robot->ecp_command.instruction.instruction_type = lib::GET;
-	the_robot->EDP_data.get_type = ARM_DV; // arm - ORYGINAL
-	the_robot->EDP_data.set_type = ARM_DV | RMODEL_DV;
-	//	the_robot->EDP_data.set_type = ARM_DV;
-	the_robot->EDP_data.set_rmodel_type = lib::TOOL_FRAME;
-	the_robot->EDP_data.get_rmodel_type = lib::TOOL_FRAME;
-	the_robot->EDP_data.set_arm_type = lib::PF_VELOCITY;
-	the_robot->EDP_data.get_arm_type = lib::FRAME;
+	the_robot->ecp_command.instruction.get_type = ARM_DV; // arm - ORYGINAL
+	the_robot->ecp_command.instruction.set_type = ARM_DV | RMODEL_DV;
+	//	the_robot->ecp_command.instruction.set_type = ARM_DV;
+	the_robot->ecp_command.instruction.set_rmodel_type = lib::TOOL_FRAME;
+	the_robot->ecp_command.instruction.get_rmodel_type = lib::TOOL_FRAME;
+	the_robot->ecp_command.instruction.set_arm_type = lib::PF_VELOCITY;
+	the_robot->ecp_command.instruction.get_arm_type = lib::FRAME;
 	the_robot->EDP_data.motion_type = lib::RELATIVE;
 	the_robot->EDP_data.next_interpolation_type = lib::TCIM;
 	the_robot->EDP_data.motion_steps = td.internode_step_no;
@@ -2030,13 +2030,13 @@ bool sr_nose_run::first_step()
 	tool_frame.get_frame_tab(the_robot->EDP_data.next_tool_frame);
 
 	the_robot->ecp_command.instruction.instruction_type = lib::GET;
-	the_robot->EDP_data.get_type = ARM_DV; // arm - ORYGINAL
-	the_robot->EDP_data.set_type = ARM_DV | RMODEL_DV;
-	//	the_robot->EDP_data.set_type = ARM_DV;
-	the_robot->EDP_data.set_rmodel_type = lib::TOOL_FRAME;
-	the_robot->EDP_data.get_rmodel_type = lib::TOOL_FRAME;
-	the_robot->EDP_data.set_arm_type = lib::PF_VELOCITY;
-	the_robot->EDP_data.get_arm_type = lib::FRAME;
+	the_robot->ecp_command.instruction.get_type = ARM_DV; // arm - ORYGINAL
+	the_robot->ecp_command.instruction.set_type = ARM_DV | RMODEL_DV;
+	//	the_robot->ecp_command.instruction.set_type = ARM_DV;
+	the_robot->ecp_command.instruction.set_rmodel_type = lib::TOOL_FRAME;
+	the_robot->ecp_command.instruction.get_rmodel_type = lib::TOOL_FRAME;
+	the_robot->ecp_command.instruction.set_arm_type = lib::PF_VELOCITY;
+	the_robot->ecp_command.instruction.get_arm_type = lib::FRAME;
 	the_robot->EDP_data.motion_type = lib::RELATIVE;
 	the_robot->EDP_data.next_interpolation_type = lib::TCIM;
 	the_robot->EDP_data.motion_steps = td.internode_step_no;
@@ -2281,13 +2281,13 @@ bool tff_rubik_grab::first_step()
 	tool_frame.get_frame_tab(the_robot->EDP_data.next_tool_frame);
 
 	the_robot->ecp_command.instruction.instruction_type = lib::GET;
-	the_robot->EDP_data.get_type = ARM_DV; // arm - ORYGINAL
-	the_robot->EDP_data.set_type = ARM_DV | RMODEL_DV;
-	//	the_robot->EDP_data.set_type = ARM_DV;
-	the_robot->EDP_data.set_rmodel_type = lib::TOOL_FRAME;
-	the_robot->EDP_data.get_rmodel_type = lib::TOOL_FRAME;
-	the_robot->EDP_data.set_arm_type = lib::PF_VELOCITY;
-	the_robot->EDP_data.get_arm_type = lib::FRAME;
+	the_robot->ecp_command.instruction.get_type = ARM_DV; // arm - ORYGINAL
+	the_robot->ecp_command.instruction.set_type = ARM_DV | RMODEL_DV;
+	//	the_robot->ecp_command.instruction.set_type = ARM_DV;
+	the_robot->ecp_command.instruction.set_rmodel_type = lib::TOOL_FRAME;
+	the_robot->ecp_command.instruction.get_rmodel_type = lib::TOOL_FRAME;
+	the_robot->ecp_command.instruction.set_arm_type = lib::PF_VELOCITY;
+	the_robot->ecp_command.instruction.get_arm_type = lib::FRAME;
 	the_robot->EDP_data.motion_type = lib::RELATIVE;
 	the_robot->EDP_data.next_interpolation_type
 			= lib::TCIM;
@@ -2397,13 +2397,13 @@ bool tff_rubik_face_rotate::first_step()
 	tool_frame.get_frame_tab(the_robot->EDP_data.next_tool_frame);
 
 	the_robot->ecp_command.instruction.instruction_type = lib::GET;
-	the_robot->EDP_data.get_type = ARM_DV; // arm - ORYGINAL
-	the_robot->EDP_data.set_type = ARM_DV | RMODEL_DV;
-	//	the_robot->EDP_data.set_type = ARM_DV;
-	the_robot->EDP_data.set_rmodel_type = lib::TOOL_FRAME;
-	the_robot->EDP_data.get_rmodel_type = lib::TOOL_FRAME;
-	the_robot->EDP_data.set_arm_type = lib::PF_VELOCITY;
-	the_robot->EDP_data.get_arm_type = lib::FRAME;
+	the_robot->ecp_command.instruction.get_type = ARM_DV; // arm - ORYGINAL
+	the_robot->ecp_command.instruction.set_type = ARM_DV | RMODEL_DV;
+	//	the_robot->ecp_command.instruction.set_type = ARM_DV;
+	the_robot->ecp_command.instruction.set_rmodel_type = lib::TOOL_FRAME;
+	the_robot->ecp_command.instruction.get_rmodel_type = lib::TOOL_FRAME;
+	the_robot->ecp_command.instruction.set_arm_type = lib::PF_VELOCITY;
+	the_robot->ecp_command.instruction.get_arm_type = lib::FRAME;
 	the_robot->EDP_data.motion_type = lib::RELATIVE;
 	the_robot->EDP_data.next_interpolation_type	= lib::TCIM;
 	the_robot->EDP_data.motion_steps = td.internode_step_no;
@@ -2552,13 +2552,13 @@ bool tff_gripper_approach::first_step()
 	tool_frame.get_frame_tab(the_robot->EDP_data.next_tool_frame);
 
 	the_robot->ecp_command.instruction.instruction_type = lib::GET;
-	the_robot->EDP_data.get_type = ARM_DV; // arm - ORYGINAL
-	the_robot->EDP_data.set_type = ARM_DV | RMODEL_DV;
-	//	the_robot->EDP_data.set_type = ARM_DV;
-	the_robot->EDP_data.set_rmodel_type = lib::TOOL_FRAME;
-	the_robot->EDP_data.get_rmodel_type = lib::TOOL_FRAME;
-	the_robot->EDP_data.set_arm_type = lib::PF_VELOCITY;
-	the_robot->EDP_data.get_arm_type = lib::FRAME;
+	the_robot->ecp_command.instruction.get_type = ARM_DV; // arm - ORYGINAL
+	the_robot->ecp_command.instruction.set_type = ARM_DV | RMODEL_DV;
+	//	the_robot->ecp_command.instruction.set_type = ARM_DV;
+	the_robot->ecp_command.instruction.set_rmodel_type = lib::TOOL_FRAME;
+	the_robot->ecp_command.instruction.get_rmodel_type = lib::TOOL_FRAME;
+	the_robot->ecp_command.instruction.set_arm_type = lib::PF_VELOCITY;
+	the_robot->ecp_command.instruction.get_arm_type = lib::FRAME;
 	the_robot->EDP_data.motion_type = lib::RELATIVE;
 	the_robot->EDP_data.next_interpolation_type
 			= lib::TCIM;
@@ -2630,8 +2630,8 @@ force_tool_change::force_tool_change (common::task::task& _ecp_task)
 bool force_tool_change::first_step ()
 {
 	the_robot->ecp_command.instruction.instruction_type = lib::SET;
-	the_robot->EDP_data.set_type = RMODEL_DV;
-	the_robot->EDP_data.set_rmodel_type = lib::FORCE_TOOL;
+	the_robot->ecp_command.instruction.set_type = RMODEL_DV;
+	the_robot->ecp_command.instruction.set_rmodel_type = lib::FORCE_TOOL;
 
 	for(int i = 0 ; i < 3 ; i++)
 		the_robot->EDP_data.next_force_tool_position[i] = tool_parameters[i];

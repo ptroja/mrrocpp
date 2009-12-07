@@ -77,11 +77,11 @@ bool pawel::first_step ( )
 
 
     the_robot->ecp_command.instruction.instruction_type = lib::GET;
-    the_robot->EDP_data.get_type = ARM_DV;
-    the_robot->EDP_data.set_type = ARM_DV;
+    the_robot->ecp_command.instruction.get_type = ARM_DV;
+    the_robot->ecp_command.instruction.set_type = ARM_DV;
 
-    the_robot->EDP_data.set_arm_type = lib::XYZ_EULER_ZYZ;
-    the_robot->EDP_data.get_arm_type = lib::XYZ_EULER_ZYZ;
+    the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
+    the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_EULER_ZYZ;
 
     the_robot->EDP_data.motion_type = lib::RELATIVE;
      the_robot->EDP_data.next_interpolation_type = lib::MIM;
@@ -104,9 +104,9 @@ bool pawel::next_step ( )
 
     // Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
     the_robot->ecp_command.instruction.instruction_type = lib::SET;
-    the_robot->EDP_data.set_type = ARM_DV;
-    the_robot->EDP_data.get_type = NOTHING_DV;
-    the_robot->EDP_data.get_arm_type = lib::XYZ_EULER_ZYZ;
+    the_robot->ecp_command.instruction.set_type = ARM_DV;
+    the_robot->ecp_command.instruction.get_type = NOTHING_DV;
+    the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_EULER_ZYZ;
 
 
     x = sensor_m[lib::SENSOR_PAWEL]->image.sensor_union.ball.x;

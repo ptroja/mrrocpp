@@ -27,8 +27,8 @@ bool robotcalibgen::first_step()
 	sr_ecp_msg.message("GENERATOR: first_step");
 
 /*	the_robot->ecp_command.instruction.instruction_type = lib::GET;
-    	the_robot->EDP_data.get_type = ARM_DV;
-    	the_robot->EDP_data.get_arm_type = lib::XYZ_EULER_ZYZ;
+    	the_robot->ecp_command.instruction.get_type = ARM_DV;
+    	the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_EULER_ZYZ;
     	the_robot->EDP_data.motion_type = lib::ABSOLUTE;
     	the_robot->EDP_data.next_interpolation_type = lib::MIM;
 */

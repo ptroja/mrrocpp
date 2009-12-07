@@ -24,12 +24,12 @@ bool wii_velocity::first_step()
 	tool_frame.get_frame_tab(the_robot->EDP_data.next_tool_frame);
 
 	the_robot->ecp_command.instruction.instruction_type = lib::GET;
-	the_robot->EDP_data.get_type = ARM_DV; // arm - ORYGINAL
-	the_robot->EDP_data.set_type = ARM_DV | RMODEL_DV;
-	the_robot->EDP_data.set_rmodel_type = lib::TOOL_FRAME;
-	the_robot->EDP_data.get_rmodel_type = lib::TOOL_FRAME;
-	the_robot->EDP_data.set_arm_type = lib::PF_VELOCITY;
-	the_robot->EDP_data.get_arm_type = lib::JOINT;
+	the_robot->ecp_command.instruction.get_type = ARM_DV; // arm - ORYGINAL
+	the_robot->ecp_command.instruction.set_type = ARM_DV | RMODEL_DV;
+	the_robot->ecp_command.instruction.set_rmodel_type = lib::TOOL_FRAME;
+	the_robot->ecp_command.instruction.get_rmodel_type = lib::TOOL_FRAME;
+	the_robot->ecp_command.instruction.set_arm_type = lib::PF_VELOCITY;
+	the_robot->ecp_command.instruction.get_arm_type = lib::JOINT;
 	the_robot->EDP_data.motion_type = lib::RELATIVE;
 	the_robot->EDP_data.next_interpolation_type = lib::TCIM;
 	the_robot->EDP_data.motion_steps = td.internode_step_no;

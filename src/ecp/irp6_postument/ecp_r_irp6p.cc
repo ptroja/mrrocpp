@@ -33,16 +33,16 @@ void robot::create_command(void)
 	// zawartych w skladowych generatora lub warunku
 
 	ecp_command.instruction.instruction_type = ecp_command.instruction.instruction_type;
-	ecp_command.instruction.set_type = EDP_data.set_type;
-	ecp_command.instruction.get_type = EDP_data.get_type;
-	// printf("EDP_data.get_type: %d, ecp_command.instruction.get_type: %d\n",
-	// EDP_data.get_type,ecp_command.instruction.get_type);
+	ecp_command.instruction.set_type = ecp_command.instruction.set_type;
+	ecp_command.instruction.get_type = ecp_command.instruction.get_type;
+	// printf("ecp_command.instruction.get_type: %d, ecp_command.instruction.get_type: %d\n",
+	// ecp_command.instruction.get_type,ecp_command.instruction.get_type);
 
-	ecp_command.instruction.set_rmodel_type = EDP_data.set_rmodel_type;
-	ecp_command.instruction.get_rmodel_type = EDP_data.get_rmodel_type;
-	ecp_command.instruction.set_arm_type = EDP_data.set_arm_type;
-	ecp_command.instruction.get_arm_type = EDP_data.get_arm_type;
-	ecp_command.instruction.output_values = EDP_data.output_values;
+	ecp_command.instruction.set_rmodel_type = ecp_command.instruction.set_rmodel_type;
+	ecp_command.instruction.get_rmodel_type = ecp_command.instruction.get_rmodel_type;
+	ecp_command.instruction.set_arm_type = ecp_command.instruction.set_arm_type;
+	ecp_command.instruction.get_arm_type = ecp_command.instruction.get_arm_type;
+	ecp_command.instruction.output_values = ecp_command.instruction.output_values;
 
 	ecp_command.instruction.interpolation_type = EDP_data.next_interpolation_type;
 
@@ -50,8 +50,8 @@ void robot::create_command(void)
 		case lib::SET:
 		case lib::SET_GET:
 
-			if (EDP_data.set_type & RMODEL_DV) {
-				switch (EDP_data.set_rmodel_type) {
+			if (ecp_command.instruction.set_type & RMODEL_DV) {
+				switch (ecp_command.instruction.set_rmodel_type) {
 					case lib::TOOL_FRAME:
 						lib::copy_frame(ecp_command.instruction.rmodel.tool_frame_def.tool_frame, EDP_data.next_tool_frame);
 						break;
@@ -99,12 +99,12 @@ void robot::create_command(void)
 				} // end: switch (set_rmodel_type)
 			}
 
-			if (EDP_data.set_type & ARM_DV) {
+			if (ecp_command.instruction.set_type & ARM_DV) {
 				ecp_command.instruction.motion_type = EDP_data.motion_type;
 				ecp_command.instruction.motion_steps = EDP_data.motion_steps;
 				ecp_command.instruction.value_in_step_no = EDP_data.value_in_step_no;
 				// Wypelniamy czesc zwiazana z polozeniem ramienia
-				switch (EDP_data.set_arm_type) {
+				switch (ecp_command.instruction.set_arm_type) {
 					case lib::FRAME:
 						lib::copy_frame(ecp_command.instruction.arm.pf_def.arm_frame, EDP_data.next_arm_frame);
 

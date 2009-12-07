@@ -32,10 +32,10 @@ bool y_simple::first_step ( )
 
 
     the_robot->ecp_command.instruction.instruction_type = lib::GET;
-    the_robot->EDP_data.get_type = ARM_DV; // arm - ORYGINAL
-    the_robot->EDP_data.set_type = ARM_DV;
-    the_robot->EDP_data.set_arm_type = POSE_FORCE_TORQUE_AT_FRAME;
-    the_robot->EDP_data.get_arm_type = POSE_FORCE_TORQUE_AT_FRAME;
+    the_robot->ecp_command.instruction.get_type = ARM_DV; // arm - ORYGINAL
+    the_robot->ecp_command.instruction.set_type = ARM_DV;
+    the_robot->ecp_command.instruction.set_arm_type = POSE_FORCE_TORQUE_AT_FRAME;
+    the_robot->ecp_command.instruction.get_arm_type = POSE_FORCE_TORQUE_AT_FRAME;
     the_robot->EDP_data.motion_type = lib::RELATIVE;
      the_robot->EDP_data.next_interpolation_type = lib::TCIM;
     the_robot->EDP_data.motion_steps = td.internode_step_no;
@@ -58,9 +58,9 @@ bool y_simple::next_step ( )
     }
 
     the_robot->ecp_command.instruction.instruction_type = lib::SET_GET;
-    the_robot->EDP_data.set_type = ARM_DV;
-    the_robot->EDP_data.get_type = ARM_DV;
-    the_robot->EDP_data.get_arm_type = POSE_FORCE_TORQUE_AT_FRAME;
+    the_robot->ecp_command.instruction.set_type = ARM_DV;
+    the_robot->ecp_command.instruction.get_type = ARM_DV;
+    the_robot->ecp_command.instruction.get_arm_type = POSE_FORCE_TORQUE_AT_FRAME;
     for(int i =0; i<4; i++)
     {
         for(int j=0; j<3; j++)

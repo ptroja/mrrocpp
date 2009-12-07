@@ -74,7 +74,7 @@ ecp_vis_pb_eol_sac_irp6ot::ecp_vis_pb_eol_sac_irp6ot(common::task::task& _ecp_ta
 
 bool ecp_vis_pb_eol_sac_irp6ot::next_step_without_constraints(){
 
-	 the_robot->EDP_data.set_type = ARM_DV;
+	 the_robot->ecp_command.instruction.set_type = ARM_DV;
 	the_robot->ecp_command.instruction.instruction_type = lib::SET_GET;
 
 	//G_Tx_G2.set_xyz_euler_zyz( 0,0,0, 0.002, 1.481+0.03, 2.341);	//jesli chwytamy po przekatnej
@@ -321,12 +321,12 @@ bool ecp_vis_pb_eol_sac_irp6ot::first_step(void){
 	the_robot->EDP_data.next_XYZ_ZYZ_tool_coordinates[0]=0; //3.141;
 */
 	the_robot->ecp_command.instruction.instruction_type = lib::SET_GET;
-	the_robot->EDP_data.get_type = ARM_DV;
-	the_robot->EDP_data.set_type = RMODEL_DV;
-	the_robot->EDP_data.set_arm_type = lib::XYZ_ANGLE_AXIS;
-	the_robot->EDP_data.get_arm_type = lib::FRAME;
-	the_robot->EDP_data.set_rmodel_type = lib::TOOL_FRAME; //TOOL_XYZ_EULER_ZYZ; //TOOL_FRAME;
-	the_robot->EDP_data.get_rmodel_type = lib::TOOL_FRAME; //TOOL_XYZ_EULER_ZYZ;  //TOOL_FRAME;
+	the_robot->ecp_command.instruction.get_type = ARM_DV;
+	the_robot->ecp_command.instruction.set_type = RMODEL_DV;
+	the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
+	the_robot->ecp_command.instruction.get_arm_type = lib::FRAME;
+	the_robot->ecp_command.instruction.set_rmodel_type = lib::TOOL_FRAME; //TOOL_XYZ_EULER_ZYZ; //TOOL_FRAME;
+	the_robot->ecp_command.instruction.get_rmodel_type = lib::TOOL_FRAME; //TOOL_XYZ_EULER_ZYZ;  //TOOL_FRAME;
 	the_robot->EDP_data.next_interpolation_type= lib::MIM;
 	the_robot->EDP_data.motion_type = lib::ABSOLUTE;
 

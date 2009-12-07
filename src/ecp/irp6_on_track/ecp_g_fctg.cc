@@ -79,8 +79,8 @@ void force_controlled_trajectory::get_current_position (){
         // Odczytanie polozenia robota
         // Przygotowanie rozkazu dla EDP.
         the_robot->ecp_command.instruction.instruction_type = lib::GET;
-        the_robot->EDP_data.get_type = ARM_DV; // ARM
-        the_robot->EDP_data.get_arm_type = current_control;
+        the_robot->ecp_command.instruction.get_type = ARM_DV; // ARM
+        the_robot->ecp_command.instruction.get_arm_type = current_control;
         // Przepisanie rozkazu do bufora wysylkowego.
         the_robot->create_command();
         // Zlecenie ruchu robota.
@@ -97,8 +97,8 @@ void force_controlled_trajectory::get_current_position (){
             // Odczytanie polowenia na motorach.
             // Przygotowanie rozkazu dla EDP.
             the_robot->ecp_command.instruction.instruction_type = lib::GET;
-            the_robot->EDP_data.get_type = ARM_DV; // ARM
-            the_robot->EDP_data.get_arm_type = lib::MOTOR;
+            the_robot->ecp_command.instruction.get_type = ARM_DV; // ARM
+            the_robot->ecp_command.instruction.get_arm_type = lib::MOTOR;
             // Przepisanie rozkazu do bufora wysylkowego.
             the_robot->create_command();
             // Zlecenie ruchu robota.
@@ -305,8 +305,8 @@ bool force_controlled_trajectory::first_step(){
 	}
     // Przygotowanie rozkazu dla EDP.
     the_robot->ecp_command.instruction.instruction_type = lib::SET;
-    the_robot->EDP_data.set_type = ARM_DV; // ARM
-    the_robot->EDP_data.set_arm_type = current_control;
+    the_robot->ecp_command.instruction.set_type = ARM_DV; // ARM
+    the_robot->ecp_command.instruction.set_arm_type = current_control;
     the_robot->EDP_data.motion_type = lib::ABSOLUTE;
      the_robot->EDP_data.next_interpolation_type = lib::MIM;
     the_robot->EDP_data.motion_steps = 70;

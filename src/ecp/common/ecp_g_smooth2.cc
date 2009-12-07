@@ -845,10 +845,10 @@ bool smooth2::first_step() { //wywolywane tylko raz w calej trajektorii
 
     case lib::MOTOR:
         the_robot->ecp_command.instruction.instruction_type = lib::GET;
-        the_robot->EDP_data.get_type = ARM_DV;
-        the_robot->EDP_data.set_type = ARM_DV;
-        the_robot->EDP_data.set_arm_type = lib::MOTOR;
-        the_robot->EDP_data.get_arm_type = lib::MOTOR;
+        the_robot->ecp_command.instruction.get_type = ARM_DV;
+        the_robot->ecp_command.instruction.set_type = ARM_DV;
+        the_robot->ecp_command.instruction.set_arm_type = lib::MOTOR;
+        the_robot->ecp_command.instruction.get_arm_type = lib::MOTOR;
     	if (type == 2) {
     		the_robot->EDP_data.motion_type = lib::RELATIVE;
     	} else {
@@ -858,10 +858,10 @@ bool smooth2::first_step() { //wywolywane tylko raz w calej trajektorii
         break;
     case lib::JOINT:
         the_robot->ecp_command.instruction.instruction_type = lib::GET;
-        the_robot->EDP_data.get_type = ARM_DV;
-        the_robot->EDP_data.set_type = ARM_DV;
-        the_robot->EDP_data.set_arm_type = lib::JOINT;
-        the_robot->EDP_data.get_arm_type = lib::JOINT;
+        the_robot->ecp_command.instruction.get_type = ARM_DV;
+        the_robot->ecp_command.instruction.set_type = ARM_DV;
+        the_robot->ecp_command.instruction.set_arm_type = lib::JOINT;
+        the_robot->ecp_command.instruction.get_arm_type = lib::JOINT;
     	if (type == 2) {
     		the_robot->EDP_data.motion_type = lib::RELATIVE;
     	} else {
@@ -871,10 +871,10 @@ bool smooth2::first_step() { //wywolywane tylko raz w calej trajektorii
         break;
     case lib::XYZ_EULER_ZYZ:
         the_robot->ecp_command.instruction.instruction_type = lib::GET;
-        the_robot->EDP_data.get_type = ARM_DV;
-        the_robot->EDP_data.set_type = ARM_DV;
-        the_robot->EDP_data.set_arm_type = lib::XYZ_EULER_ZYZ;
-        the_robot->EDP_data.get_arm_type = lib::XYZ_EULER_ZYZ;
+        the_robot->ecp_command.instruction.get_type = ARM_DV;
+        the_robot->ecp_command.instruction.set_type = ARM_DV;
+        the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
+        the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_EULER_ZYZ;
         if (type == 2) {
             the_robot->EDP_data.motion_type = lib::RELATIVE;
             the_robot->EDP_data.next_interpolation_type = lib::TCIM;
@@ -889,10 +889,10 @@ bool smooth2::first_step() { //wywolywane tylko raz w calej trajektorii
         break;
     case lib::XYZ_ANGLE_AXIS:
         the_robot->ecp_command.instruction.instruction_type = lib::GET;
-        the_robot->EDP_data.get_type = ARM_DV;
-        the_robot->EDP_data.set_type = ARM_DV;
-        the_robot->EDP_data.set_arm_type = lib::XYZ_ANGLE_AXIS;
-        the_robot->EDP_data.get_arm_type = lib::XYZ_ANGLE_AXIS;
+        the_robot->ecp_command.instruction.get_type = ARM_DV;
+        the_robot->ecp_command.instruction.set_type = ARM_DV;
+        the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
+        the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_ANGLE_AXIS;
     	if (type == 2) {
     		the_robot->EDP_data.motion_type = lib::RELATIVE;
     		the_robot->EDP_data.next_interpolation_type = lib::TCIM;
@@ -952,15 +952,15 @@ bool smooth2::next_step () {
     } else {
 
     	the_robot->ecp_command.instruction.instruction_type = lib::SET; //ustawienie parametrow ruchu w edp_data
-    	the_robot->EDP_data.get_type = NOTHING_DV; //ponizej w caseach jest dalsze ustawianie
-    	the_robot->EDP_data.get_arm_type = lib::INVALID_END_EFFECTOR;
+    	the_robot->ecp_command.instruction.get_type = NOTHING_DV; //ponizej w caseach jest dalsze ustawianie
+    	the_robot->ecp_command.instruction.get_arm_type = lib::INVALID_END_EFFECTOR;
 
     	switch ( td.arm_type ) {
     		case lib::XYZ_EULER_ZYZ:
 
     			the_robot->ecp_command.instruction.instruction_type = lib::SET; //dalsze ustawianie parametrow ruchu w edp
-    			the_robot->EDP_data.set_type = ARM_DV; // ARM
-    			the_robot->EDP_data.set_arm_type = lib::XYZ_EULER_ZYZ;
+    			the_robot->ecp_command.instruction.set_type = ARM_DV; // ARM
+    			the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
     	    	if (type == 2) {
     	    		the_robot->EDP_data.motion_type = lib::RELATIVE;
     	    		the_robot->EDP_data.next_interpolation_type = lib::TCIM;
@@ -1008,8 +1008,8 @@ bool smooth2::next_step () {
     		case lib::XYZ_ANGLE_AXIS:
 
     			the_robot->ecp_command.instruction.instruction_type = lib::SET; //dalsze ustawianie parametrow ruchu w edp
-    			the_robot->EDP_data.set_type = ARM_DV; // ARM
-    			the_robot->EDP_data.set_arm_type = lib::XYZ_ANGLE_AXIS;
+    			the_robot->ecp_command.instruction.set_type = ARM_DV; // ARM
+    			the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
     	    	if (type == 2) {
     	    		the_robot->EDP_data.motion_type = lib::RELATIVE;
     	    		the_robot->EDP_data.next_interpolation_type = lib::TCIM;
@@ -1057,8 +1057,8 @@ bool smooth2::next_step () {
     		case lib::JOINT:
 
     			the_robot->ecp_command.instruction.instruction_type = lib::SET;
-    		    the_robot->EDP_data.set_type = ARM_DV; // ARM
-    		    the_robot->EDP_data.set_arm_type = lib::JOINT;
+    		    the_robot->ecp_command.instruction.set_type = ARM_DV; // ARM
+    		    the_robot->ecp_command.instruction.set_arm_type = lib::JOINT;
     	    	if (type == 2) {
     	    		the_robot->EDP_data.motion_type = lib::RELATIVE;
     	    	} else {
@@ -1111,8 +1111,8 @@ bool smooth2::next_step () {
     		case lib::MOTOR:
 
     			the_robot->ecp_command.instruction.instruction_type = lib::SET;
-    		    the_robot->EDP_data.set_type = ARM_DV; // ARM
-    		    the_robot->EDP_data.set_arm_type = lib::MOTOR;
+    		    the_robot->ecp_command.instruction.set_type = ARM_DV; // ARM
+    		    the_robot->ecp_command.instruction.set_arm_type = lib::MOTOR;
     	    	if (type == 2) {
     	    		the_robot->EDP_data.motion_type = lib::RELATIVE;
     	    	} else {

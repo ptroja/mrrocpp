@@ -203,24 +203,24 @@ bool hermite_spline::first_step (  )
     case lib::MOTOR:
         // printf("\n first step MOTOR");
         the_robot->ecp_command.instruction.instruction_type = lib::GET;
-        the_robot->EDP_data.get_type = ARM_DV; // ARM
-        the_robot->EDP_data.get_arm_type = lib::MOTOR;
+        the_robot->ecp_command.instruction.get_type = ARM_DV; // ARM
+        the_robot->ecp_command.instruction.get_arm_type = lib::MOTOR;
         break;
     case lib::JOINT:
         the_robot->ecp_command.instruction.instruction_type = lib::GET;
-        the_robot->EDP_data.get_type = ARM_DV; // ARM
-        the_robot->EDP_data.get_arm_type = lib::JOINT;
+        the_robot->ecp_command.instruction.get_type = ARM_DV; // ARM
+        the_robot->ecp_command.instruction.get_arm_type = lib::JOINT;
         break;
     case lib::XYZ_EULER_ZYZ:
         // printf("\n  first step, XYZ_EULER_ZYZ");
         the_robot->ecp_command.instruction.instruction_type = lib::GET;
-        the_robot->EDP_data.get_type = ARM_DV; // ARM
-        the_robot->EDP_data.get_arm_type = lib::XYZ_EULER_ZYZ;
+        the_robot->ecp_command.instruction.get_type = ARM_DV; // ARM
+        the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_EULER_ZYZ;
         break;
     case lib::XYZ_ANGLE_AXIS:
         the_robot->ecp_command.instruction.instruction_type = lib::GET;
-        the_robot->EDP_data.get_type = ARM_DV; // ARM
-        the_robot->EDP_data.get_arm_type = lib::XYZ_ANGLE_AXIS;
+        the_robot->ecp_command.instruction.get_type = ARM_DV; // ARM
+        the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_ANGLE_AXIS;
         break;
     default:
         throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
@@ -280,8 +280,8 @@ bool hermite_spline::next_step (  )
 
         fill_hermite_arrays(); // fill arrays 'time', 'yi', 'yiprim'
         the_robot->ecp_command.instruction.instruction_type = lib::SET;
-        the_robot->EDP_data.set_arm_type = starting_pose.arm_type;
-        the_robot->EDP_data.set_type = ARM_DV; // ARM
+        the_robot->ecp_command.instruction.set_arm_type = starting_pose.arm_type;
+        the_robot->ecp_command.instruction.set_type = ARM_DV; // ARM
         the_robot->EDP_data.motion_type = lib::ABSOLUTE;
          the_robot->EDP_data.next_interpolation_type = lib::MIM;
         the_robot->EDP_data.motion_steps = (uint16_t) (10);
@@ -558,23 +558,23 @@ bool natural_spline::first_step ()
     {
     case lib::MOTOR:
         the_robot->ecp_command.instruction.instruction_type = lib::GET;
-        the_robot->EDP_data.get_type = ARM_DV; // ARM
-        the_robot->EDP_data.get_arm_type = lib::MOTOR;
+        the_robot->ecp_command.instruction.get_type = ARM_DV; // ARM
+        the_robot->ecp_command.instruction.get_arm_type = lib::MOTOR;
         break;
     case lib::JOINT:
         the_robot->ecp_command.instruction.instruction_type = lib::GET;
-        the_robot->EDP_data.get_type = ARM_DV; // ARM
-        the_robot->EDP_data.get_arm_type = lib::JOINT;
+        the_robot->ecp_command.instruction.get_type = ARM_DV; // ARM
+        the_robot->ecp_command.instruction.get_arm_type = lib::JOINT;
         break;
     case lib::XYZ_EULER_ZYZ:
         the_robot->ecp_command.instruction.instruction_type = lib::GET;
-        the_robot->EDP_data.get_type = ARM_DV; // ARM
-        the_robot->EDP_data.get_arm_type = lib::XYZ_EULER_ZYZ;
+        the_robot->ecp_command.instruction.get_type = ARM_DV; // ARM
+        the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_EULER_ZYZ;
         break;
     case lib::XYZ_ANGLE_AXIS:
         the_robot->ecp_command.instruction.instruction_type = lib::GET;
-        the_robot->EDP_data.get_type = ARM_DV; // ARM
-        the_robot->EDP_data.get_arm_type = lib::XYZ_ANGLE_AXIS;
+        the_robot->ecp_command.instruction.get_type = ARM_DV; // ARM
+        the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_ANGLE_AXIS;
         break;
     default:
         throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
@@ -633,8 +633,8 @@ bool natural_spline::next_step ()
 
         fill_natural_arrays();
         the_robot->ecp_command.instruction.instruction_type = lib::SET;
-        the_robot->EDP_data.set_arm_type = starting_pose.arm_type;
-        the_robot->EDP_data.set_type = ARM_DV; // ARM
+        the_robot->ecp_command.instruction.set_arm_type = starting_pose.arm_type;
+        the_robot->ecp_command.instruction.set_type = ARM_DV; // ARM
         the_robot->EDP_data.motion_type = lib::ABSOLUTE;
          the_robot->EDP_data.next_interpolation_type = lib::MIM;
         the_robot->EDP_data.motion_steps = (uint16_t) (10);

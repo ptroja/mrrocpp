@@ -28,11 +28,11 @@ bool incremental_move::first_step ( )
 
 
 			the_robot->ecp_command.instruction.instruction_type = lib::GET;
-			the_robot->EDP_data.get_type = ARM_DV; // arm - ORYGINAL
-			the_robot->EDP_data.set_type = ARM_DV;
+			the_robot->ecp_command.instruction.get_type = ARM_DV; // arm - ORYGINAL
+			the_robot->ecp_command.instruction.set_type = ARM_DV;
 
-			the_robot->EDP_data.set_arm_type = lib::JOINT;
-			the_robot->EDP_data.get_arm_type = lib::JOINT;
+			the_robot->ecp_command.instruction.set_arm_type = lib::JOINT;
+			the_robot->ecp_command.instruction.get_arm_type = lib::JOINT;
 			the_robot->EDP_data.motion_type = lib::ABSOLUTE;
 			the_robot->EDP_data.next_interpolation_type = lib::MIM;
 			the_robot->EDP_data.motion_steps = td.internode_step_no;
@@ -54,8 +54,8 @@ bool incremental_move::next_step ( )
 
 	// nie aktualizujemy pozycjio na podstawie odczytu z EDP
 	the_robot->ecp_command.instruction.instruction_type = lib::SET;
-	the_robot->EDP_data.get_type = NOTHING_DV;
-	the_robot->EDP_data.get_arm_type = lib::INVALID_END_EFFECTOR;
+	the_robot->ecp_command.instruction.get_type = NOTHING_DV;
+	the_robot->ecp_command.instruction.get_arm_type = lib::INVALID_END_EFFECTOR;
 	
 	if(first)
 	{

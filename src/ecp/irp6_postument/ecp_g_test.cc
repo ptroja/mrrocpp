@@ -49,10 +49,10 @@ bool y_simple::first_step ( )
 
 
     the_robot->ecp_command.instruction.instruction_type = lib::SET_GET;
-    the_robot->EDP_data.get_type = ARM_DV; // arm - ORYGINAL
-    the_robot->EDP_data.set_type = RMODEL_DV;
-    the_robot->EDP_data.set_arm_type = lib::FRAME;
-    the_robot->EDP_data.set_rmodel_type = lib::TOOL_FRAME;
+    the_robot->ecp_command.instruction.get_type = ARM_DV; // arm - ORYGINAL
+    the_robot->ecp_command.instruction.set_type = RMODEL_DV;
+    the_robot->ecp_command.instruction.set_arm_type = lib::FRAME;
+    the_robot->ecp_command.instruction.set_rmodel_type = lib::TOOL_FRAME;
     for(int i=0; i<4; i++)
         for(int j=0; j<3; j++)
             if(i==j)
@@ -62,7 +62,7 @@ bool y_simple::first_step ( )
                 the_robot->EDP_data.next_tool_frame[i][j]= 0.2;
             else
                 the_robot->EDP_data.next_tool_frame[i][j]=0;
-    the_robot->EDP_data.get_arm_type = lib::FRAME;
+    the_robot->ecp_command.instruction.get_arm_type = lib::FRAME;
     the_robot->EDP_data.motion_type = lib::ABSOLUTE;
      the_robot->EDP_data.next_interpolation_type = lib::MIM;
     the_robot->EDP_data.motion_steps = td.internode_step_no;
@@ -88,9 +88,9 @@ bool y_simple::next_step ( )
     }
 
     the_robot->ecp_command.instruction.instruction_type = lib::SET;
-    the_robot->EDP_data.set_type = ARM_DV;
-    the_robot->EDP_data.get_type = NOTHING_DV;
-    the_robot->EDP_data.get_arm_type = lib::INVALID_END_EFFECTOR;
+    the_robot->ecp_command.instruction.set_type = ARM_DV;
+    the_robot->ecp_command.instruction.get_type = NOTHING_DV;
+    the_robot->ecp_command.instruction.get_arm_type = lib::INVALID_END_EFFECTOR;
     
 
     double axis_table[3][3] = {{1,0,0},{0,1,0},{0,0,1}};

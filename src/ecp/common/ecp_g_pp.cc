@@ -39,11 +39,11 @@ bool progpanel::first_step ( )
 
 
     the_robot->ecp_command.instruction.instruction_type = lib::GET;
-    the_robot->EDP_data.get_type = ARM_DV; // arm - ORYGINAL
-    the_robot->EDP_data.set_type = ARM_DV;
+    the_robot->ecp_command.instruction.get_type = ARM_DV; // arm - ORYGINAL
+    the_robot->ecp_command.instruction.set_type = ARM_DV;
 
-    the_robot->EDP_data.set_arm_type = lib::JOINT;
-    the_robot->EDP_data.get_arm_type = lib::JOINT;
+    the_robot->ecp_command.instruction.set_arm_type = lib::JOINT;
+    the_robot->ecp_command.instruction.get_arm_type = lib::JOINT;
 
     the_robot->EDP_data.motion_type = lib::ABSOLUTE;
      the_robot->EDP_data.next_interpolation_type = lib::MIM;
@@ -69,9 +69,9 @@ bool progpanel::next_step ( )
 
     // Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
     the_robot->ecp_command.instruction.instruction_type = lib::SET;
-    the_robot->EDP_data.set_type = ARM_DV;
-    the_robot->EDP_data.get_type = NOTHING_DV;
-    the_robot->EDP_data.get_arm_type = lib::INVALID_END_EFFECTOR;
+    the_robot->ecp_command.instruction.set_type = ARM_DV;
+    the_robot->ecp_command.instruction.get_type = NOTHING_DV;
+    the_robot->ecp_command.instruction.get_arm_type = lib::INVALID_END_EFFECTOR;
 
 
     ecp_mp::sensor::pp* pps = (ecp_mp::sensor::pp*)(sensor_m[lib::SENSOR_PP]);

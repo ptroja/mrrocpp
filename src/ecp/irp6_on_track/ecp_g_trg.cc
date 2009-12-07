@@ -40,9 +40,9 @@ void trajectory_reproduce::get_current_position(double current_position[6]){
     // Odczytanie polozenia robota
     // Przygotowanie rozkazu dla EDP.
     the_robot->ecp_command.instruction.instruction_type = lib::GET;
-    the_robot->EDP_data.get_type = ARM_DV; // ARM
+    the_robot->ecp_command.instruction.get_type = ARM_DV; // ARM
     // Sprawdzenie rodzaju ramienia.
-    the_robot->EDP_data.get_arm_type = lib::MOTOR;
+    the_robot->ecp_command.instruction.get_arm_type = lib::MOTOR;
     // Przepisanie rozkazu do bufora wysylkowego.
     the_robot->create_command();
     // Zlecenie ruchu robota.
@@ -69,8 +69,8 @@ void trajectory_reproduce::create_command_for_pose(common::ecp_taught_in_pose& t
     switch ( tip.arm_type ) {
     case lib::C_MOTOR:
         the_robot->ecp_command.instruction.instruction_type = lib::SET;
-        the_robot->EDP_data.set_type = ARM_DV; // ARM
-        the_robot->EDP_data.set_arm_type = lib::MOTOR;
+        the_robot->ecp_command.instruction.set_type = ARM_DV; // ARM
+        the_robot->ecp_command.instruction.set_arm_type = lib::MOTOR;
         the_robot->EDP_data.motion_type = lib::ABSOLUTE;
          the_robot->EDP_data.next_interpolation_type = lib::MIM;
         the_robot->EDP_data.motion_steps = (uint16_t) ceil(tip.motion_time/STEP);
@@ -79,8 +79,8 @@ void trajectory_reproduce::create_command_for_pose(common::ecp_taught_in_pose& t
         break;
     case lib::C_JOINT:
         the_robot->ecp_command.instruction.instruction_type = lib::SET;
-        the_robot->EDP_data.set_type = ARM_DV; // ARM
-        the_robot->EDP_data.set_arm_type = lib::JOINT;
+        the_robot->ecp_command.instruction.set_type = ARM_DV; // ARM
+        the_robot->ecp_command.instruction.set_arm_type = lib::JOINT;
         the_robot->EDP_data.motion_type = lib::ABSOLUTE;
          the_robot->EDP_data.next_interpolation_type = lib::MIM;
         the_robot->EDP_data.motion_steps = (uint16_t) ceil(tip.motion_time/STEP);
@@ -89,8 +89,8 @@ void trajectory_reproduce::create_command_for_pose(common::ecp_taught_in_pose& t
         break;
     case lib::C_XYZ_EULER_ZYZ:
         the_robot->ecp_command.instruction.instruction_type = lib::SET;
-        the_robot->EDP_data.set_type = ARM_DV; // ARM
-        the_robot->EDP_data.set_arm_type = lib::XYZ_EULER_ZYZ;
+        the_robot->ecp_command.instruction.set_type = ARM_DV; // ARM
+        the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
         the_robot->EDP_data.motion_type = lib::ABSOLUTE;
          the_robot->EDP_data.next_interpolation_type = lib::MIM;
         the_robot->EDP_data.motion_steps = (uint16_t) ceil(tip.motion_time/STEP);
@@ -99,8 +99,8 @@ void trajectory_reproduce::create_command_for_pose(common::ecp_taught_in_pose& t
         break;
     case lib::C_XYZ_ANGLE_AXIS:
         the_robot->ecp_command.instruction.instruction_type = lib::SET;
-        the_robot->EDP_data.set_type = ARM_DV; // ARM
-        the_robot->EDP_data.set_arm_type = lib::XYZ_ANGLE_AXIS;
+        the_robot->ecp_command.instruction.set_type = ARM_DV; // ARM
+        the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
         the_robot->EDP_data.motion_type = lib::ABSOLUTE;
          the_robot->EDP_data.next_interpolation_type = lib::MIM;
         the_robot->EDP_data.motion_steps = (uint16_t) ceil(tip.motion_time/STEP);

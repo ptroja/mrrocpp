@@ -41,8 +41,8 @@ void kin_test::main_task_algorithm(void)
     for(int i =0; i<n; i++)
     {
         ecp_m_robot->ecp_command.instruction.instruction_type = lib::GET;
-        ecp_m_robot->EDP_data.get_type = ARM_DV;
-        ecp_m_robot->EDP_data.get_arm_type = lib::MOTOR;
+        ecp_m_robot->ecp_command.instruction.get_type = ARM_DV;
+        ecp_m_robot->ecp_command.instruction.get_arm_type = lib::MOTOR;
         ecp_m_robot->EDP_data.motion_type = lib::ABSOLUTE;
         ecp_m_robot->EDP_data.next_interpolation_type = lib::MIM;
         ecp_m_robot->create_command();
@@ -70,8 +70,8 @@ void kin_test::main_task_algorithm(void)
     for(int i =0; i<n; i++)
     {
         ecp_m_robot->ecp_command.instruction.instruction_type = lib::SET;
-        ecp_m_robot->EDP_data.set_type = ARM_DV;
-        ecp_m_robot->EDP_data.set_arm_type = lib::MOTOR;
+        ecp_m_robot->ecp_command.instruction.set_type = ARM_DV;
+        ecp_m_robot->ecp_command.instruction.set_arm_type = lib::MOTOR;
         ecp_m_robot->EDP_data.motion_type = lib::ABSOLUTE;
         ecp_m_robot->EDP_data.next_interpolation_type = lib::MIM;
         ecp_m_robot->EDP_data.motion_steps = (uint16_t) 1;

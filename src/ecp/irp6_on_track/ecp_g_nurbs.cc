@@ -94,10 +94,10 @@ bool nurbs::first_step (  )
 			atype_=XYZ_ANGLE_AXIS; }
      	if (EDP_data_next_ptr_!=0) {//ntdes_ptr_->arm_type==MOTOR || ntdes_ptr_->arm_type== lib::JOINT || ntdes_ptr_->arm_type==XYZ_EULER_ZYZ || ntdes_ptr_->arm_type== lib::XYZ_ANGLE_AXIS) {
 			the_robot->ecp_command.instruction.instruction_type = lib::GET;
-			the_robot->EDP_data.get_type = ARM_DV;
-			the_robot->EDP_data.set_type = ARM_DV;
-			the_robot->EDP_data.set_arm_type = atype_;
-			the_robot->EDP_data.get_arm_type = atype_;
+			the_robot->ecp_command.instruction.get_type = ARM_DV;
+			the_robot->ecp_command.instruction.set_type = ARM_DV;
+			the_robot->ecp_command.instruction.set_arm_type = atype_;
+			the_robot->ecp_command.instruction.get_arm_type = atype_;
 			the_robot->EDP_data.motion_type = lib::ABSOLUTE;
 			 the_robot->EDP_data.next_interpolation_type = lib::MIM;
 			the_robot->EDP_data.motion_steps = ntdes_ptr_->internode_step_no;
@@ -132,10 +132,10 @@ bool nurbs::next_step (  )
    // Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
 
    the_robot->ecp_command.instruction.instruction_type = lib::SET;
-   the_robot->EDP_data.get_type = NOTHING_DV;
-   the_robot->EDP_data.get_arm_type = lib::INVALID_END_EFFECTOR;
-   the_robot->EDP_data.set_type = ARM_DV; // ARM
-   the_robot->EDP_data.set_arm_type = atype_;
+   the_robot->ecp_command.instruction.get_type = NOTHING_DV;
+   the_robot->ecp_command.instruction.get_arm_type = lib::INVALID_END_EFFECTOR;
+   the_robot->ecp_command.instruction.set_type = ARM_DV; // ARM
+   the_robot->ecp_command.instruction.set_arm_type = atype_;
    the_robot->EDP_data.motion_type = lib::ABSOLUTE;
     the_robot->EDP_data.next_interpolation_type = lib::MIM;
 

@@ -82,9 +82,9 @@ void robot_stopped_condition::get_current_position(double current_position[6]){
 	// Odczytanie polozenia robota
 	// Przygotowanie rozkazu dla EDP.
 	the_robot->ecp_command.instruction.instruction_type = lib::GET;
-	the_robot->EDP_data.get_type = ARM_DV; // ARM
+	the_robot->ecp_command.instruction.get_type = ARM_DV; // ARM
 	// Sprawdzenie rodzaju ramienia.
-	the_robot->EDP_data.get_arm_type = lib::MOTOR;
+	the_robot->ecp_command.instruction.get_arm_type = lib::MOTOR;
 	// Przepisanie rozkazu do bufora wysylkowego.
 	the_robot->create_command();
 	// Zlecenie ruchu robota.
@@ -135,8 +135,8 @@ void robot_stopped_condition::add_rse_element(ecp_mp::sensor::digital_scales& th
 	// Pobranie pozycji robota.
 	// Rozkaz dla EDP.
 	the_robot->ecp_command.instruction.instruction_type = lib::GET;
-	the_robot->EDP_data.get_type = ARM_DV; // ARM
-	the_robot->EDP_data.get_arm_type = lib::MOTOR;
+	the_robot->ecp_command.instruction.get_type = ARM_DV; // ARM
+	the_robot->ecp_command.instruction.get_arm_type = lib::MOTOR;
 	the_robot->EDP_data.motion_steps = 1;
 	the_robot->EDP_data.value_in_step_no = the_robot->EDP_data.motion_steps;
 	// Stworzenie rozkazu.

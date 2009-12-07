@@ -34,8 +34,8 @@ bool ecp_g_rotate_gripper::first_step() {
 	ecp_t.sr_ecp_msg->message("first_step");
 
     the_robot->ecp_command.instruction.instruction_type = lib::GET;
-    the_robot->EDP_data.get_type = ARM_DV;
-    the_robot->EDP_data.get_arm_type = td.arm_type;
+    the_robot->ecp_command.instruction.get_type = ARM_DV;
+    the_robot->ecp_command.instruction.get_arm_type = td.arm_type;
     the_robot->EDP_data.motion_type = lib::RELATIVE;
     the_robot->EDP_data.next_interpolation_type = lib::MIM;
     the_robot->EDP_data.motion_steps = td.internode_step_no;
@@ -94,10 +94,10 @@ bool ecp_g_rotate_gripper::next_step() {
 	}
 
     the_robot->ecp_command.instruction.instruction_type = lib::SET;
-    the_robot->EDP_data.set_type = ARM_DV;
-    the_robot->EDP_data.get_type = NOTHING_DV;
+    the_robot->ecp_command.instruction.set_type = ARM_DV;
+    the_robot->ecp_command.instruction.get_type = NOTHING_DV;
     the_robot->EDP_data.motion_type = lib::RELATIVE;
-    the_robot->EDP_data.get_arm_type = td.arm_type;
+    the_robot->ecp_command.instruction.get_arm_type = td.arm_type;
   //  td.internode_step_no = (2000*angle)/0.55;
     the_robot->EDP_data.motion_steps = td.internode_step_no;
     the_robot->EDP_data.value_in_step_no = td.value_in_step_no-1;

@@ -432,13 +432,13 @@ bool ecp_teach_in_generator::first_step()
   {
     //	 printf("w irp6ot_teach_in_generator::first_step\n");
     initiate_pose_list();
-    the_robot->EDP_data.get_type = ARM_DV; // ARM
+    the_robot->ecp_command.instruction.get_type = ARM_DV; // ARM
 
     the_robot->ecp_command.instruction.instruction_type = lib::GET;
-    the_robot->EDP_data.get_type = ARM_DV;
-    the_robot->EDP_data.set_type = ARM_DV;
-    the_robot->EDP_data.set_arm_type = lib::MOTOR;
-    the_robot->EDP_data.get_arm_type = lib::MOTOR;
+    the_robot->ecp_command.instruction.get_type = ARM_DV;
+    the_robot->ecp_command.instruction.set_type = ARM_DV;
+    the_robot->ecp_command.instruction.set_arm_type = lib::MOTOR;
+    the_robot->ecp_command.instruction.get_arm_type = lib::MOTOR;
     the_robot->EDP_data.motion_type = lib::ABSOLUTE;
     the_robot->EDP_data.next_interpolation_type = lib::MIM;
     the_robot->EDP_data.motion_steps = 8;
@@ -473,8 +473,8 @@ bool ecp_teach_in_generator::next_step()
       {
     case lib::C_MOTOR:
       the_robot->ecp_command.instruction.instruction_type = lib::SET;
-      the_robot->EDP_data.set_type = ARM_DV; // ARM
-      the_robot->EDP_data.set_arm_type = lib::MOTOR;
+      the_robot->ecp_command.instruction.set_type = ARM_DV; // ARM
+      the_robot->ecp_command.instruction.set_arm_type = lib::MOTOR;
       the_robot->EDP_data.motion_type = lib::ABSOLUTE;
       the_robot->EDP_data.next_interpolation_type = lib::MIM;
       the_robot->EDP_data.motion_steps = (uint16_t) ceil(tip.motion_time/STEP);
@@ -484,8 +484,8 @@ bool ecp_teach_in_generator::next_step()
       break;
     case lib::C_JOINT:
       the_robot->ecp_command.instruction.instruction_type = lib::SET;
-      the_robot->EDP_data.set_type = ARM_DV; // ARM
-      the_robot->EDP_data.set_arm_type = lib::JOINT;
+      the_robot->ecp_command.instruction.set_type = ARM_DV; // ARM
+      the_robot->ecp_command.instruction.set_arm_type = lib::JOINT;
       the_robot->EDP_data.motion_type = lib::ABSOLUTE;
       the_robot->EDP_data.next_interpolation_type = lib::MIM;
       the_robot->EDP_data.motion_steps = (uint16_t) ceil(tip.motion_time/STEP);
@@ -496,8 +496,8 @@ bool ecp_teach_in_generator::next_step()
       break;
     case lib::C_XYZ_EULER_ZYZ:
       the_robot->ecp_command.instruction.instruction_type = lib::SET;
-      the_robot->EDP_data.set_type = ARM_DV; // ARM
-      the_robot->EDP_data.set_arm_type = lib::XYZ_EULER_ZYZ;
+      the_robot->ecp_command.instruction.set_type = ARM_DV; // ARM
+      the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
       the_robot->EDP_data.motion_type = lib::ABSOLUTE;
       the_robot->EDP_data.next_interpolation_type = lib::MIM;
       the_robot->EDP_data.motion_steps = (uint16_t) ceil(tip.motion_time/STEP);
@@ -508,8 +508,8 @@ bool ecp_teach_in_generator::next_step()
       break;
     case lib::C_XYZ_ANGLE_AXIS:
       the_robot->ecp_command.instruction.instruction_type = lib::SET;
-      the_robot->EDP_data.set_type = ARM_DV; // ARM
-      the_robot->EDP_data.set_arm_type = lib::XYZ_ANGLE_AXIS;
+      the_robot->ecp_command.instruction.set_type = ARM_DV; // ARM
+      the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
       the_robot->EDP_data.motion_type = lib::ABSOLUTE;
       the_robot->EDP_data.next_interpolation_type = lib::MIM;
       the_robot->EDP_data.motion_steps = (uint16_t) ceil(tip.motion_time/STEP);
