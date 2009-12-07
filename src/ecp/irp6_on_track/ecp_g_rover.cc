@@ -200,7 +200,7 @@ bool vis_sac_lx::first_step()
 
 
 	//	the_robot->EDP_data.mp_command = lib::NEXT_POSE;
-	the_robot->EDP_data.instruction_type = lib::SET_GET; //GET;
+	the_robot->ecp_command.instruction.instruction_type = lib::SET_GET; //GET;
 	the_robot->EDP_data.get_type = ARM_DV;
 	the_robot->EDP_data.set_type = RMODEL_DV; //ARM_DV;
 	//the_robot->EDP_data.set_arm_type = lib::FRAME; //XYZ_EULER_ZYZ; //POSE_FORCE_TORQUE_AT_FRAME;
@@ -254,7 +254,7 @@ bool vis_sac_lx::next_step()
 
 
 	 	the_robot->EDP_data.set_type = ARM_DV;
-		the_robot->EDP_data.instruction_type = lib::SET_GET;
+		the_robot->ecp_command.instruction.instruction_type = lib::SET_GET;
 	  	//the_robot->EDP_data.get_type = NOTHING_DV;
 	 	//the_robot->EDP_data.get_arm_type = lib::INVALID_END_EFFECTOR;
 	 	//the_robot->EDP_data.get_arm_type = lib::INVALID_END_EFFECTOR;

@@ -23,7 +23,7 @@ bool wii_velocity::first_step()
 	lib::Homog_matrix tool_frame(0.0, 0.0, 0.25);
 	tool_frame.get_frame_tab(the_robot->EDP_data.next_tool_frame);
 
-	the_robot->EDP_data.instruction_type = lib::GET;
+	the_robot->ecp_command.instruction.instruction_type = lib::GET;
 	the_robot->EDP_data.get_type = ARM_DV; // arm - ORYGINAL
 	the_robot->EDP_data.set_type = ARM_DV | RMODEL_DV;
 	the_robot->EDP_data.set_rmodel_type = lib::TOOL_FRAME;
@@ -59,7 +59,7 @@ bool wii_velocity::next_step()
 	}
 
 	// Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
-	the_robot->EDP_data.instruction_type = lib::SET_GET;
+	the_robot->ecp_command.instruction.instruction_type = lib::SET_GET;
 
 	operate = (int)sensor_m[lib::SENSOR_WIIMOTE]->image.sensor_union.wiimote.up || (int)sensor_m[lib::SENSOR_WIIMOTE]->image.sensor_union.wiimote.right || (int)sensor_m[lib::SENSOR_WIIMOTE]->image.sensor_union.wiimote.down || (int)sensor_m[lib::SENSOR_WIIMOTE]->image.sensor_union.wiimote.left;
 

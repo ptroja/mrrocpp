@@ -20,7 +20,7 @@ bool pw_kolo::first_step()
     //Tak bylo w teach_in_generatorze.
     the_robot->EDP_data.get_type = ARM_DV; // ARM
 
-    the_robot->EDP_data.instruction_type = lib::GET;
+    the_robot->ecp_command.instruction.instruction_type = lib::GET;
     the_robot->EDP_data.get_type = ARM_DV;
     the_robot->EDP_data.set_type = ARM_DV;
     the_robot->EDP_data.set_arm_type = lib::MOTOR;
@@ -91,7 +91,7 @@ bool pw_kolo::next_step()
         return false;
 
     printf("przed robotem\n");
-    the_robot->EDP_data.instruction_type = lib::SET;
+    the_robot->ecp_command.instruction.instruction_type = lib::SET;
     the_robot->EDP_data.set_type = ARM_DV; // ARM
     the_robot->EDP_data.set_arm_type = lib::XYZ_EULER_ZYZ;
     the_robot->EDP_data.motion_type = lib::ABSOLUTE;

@@ -39,7 +39,7 @@ namespace generator {
 void trajectory_reproduce::get_current_position(double current_position[6]){
     // Odczytanie polozenia robota
     // Przygotowanie rozkazu dla EDP.
-    the_robot->EDP_data.instruction_type = lib::GET;
+    the_robot->ecp_command.instruction.instruction_type = lib::GET;
     the_robot->EDP_data.get_type = ARM_DV; // ARM
     // Sprawdzenie rodzaju ramienia.
     the_robot->EDP_data.get_arm_type = lib::MOTOR;
@@ -68,7 +68,7 @@ void trajectory_reproduce::create_command_for_pose(common::ecp_taught_in_pose& t
     // sprawdzenie rodzaju wspolrzednych
     switch ( tip.arm_type ) {
     case lib::C_MOTOR:
-        the_robot->EDP_data.instruction_type = lib::SET;
+        the_robot->ecp_command.instruction.instruction_type = lib::SET;
         the_robot->EDP_data.set_type = ARM_DV; // ARM
         the_robot->EDP_data.set_arm_type = lib::MOTOR;
         the_robot->EDP_data.motion_type = lib::ABSOLUTE;
@@ -78,7 +78,7 @@ void trajectory_reproduce::create_command_for_pose(common::ecp_taught_in_pose& t
         memcpy (the_robot->EDP_data.next_motor_arm_coordinates, tip.coordinates, IRP6_ON_TRACK_NUM_OF_SERVOS*sizeof (double));
         break;
     case lib::C_JOINT:
-        the_robot->EDP_data.instruction_type = lib::SET;
+        the_robot->ecp_command.instruction.instruction_type = lib::SET;
         the_robot->EDP_data.set_type = ARM_DV; // ARM
         the_robot->EDP_data.set_arm_type = lib::JOINT;
         the_robot->EDP_data.motion_type = lib::ABSOLUTE;
@@ -88,7 +88,7 @@ void trajectory_reproduce::create_command_for_pose(common::ecp_taught_in_pose& t
         memcpy (the_robot->EDP_data.next_joint_arm_coordinates, tip.coordinates, IRP6_ON_TRACK_NUM_OF_SERVOS*sizeof (double));
         break;
     case lib::C_XYZ_EULER_ZYZ:
-        the_robot->EDP_data.instruction_type = lib::SET;
+        the_robot->ecp_command.instruction.instruction_type = lib::SET;
         the_robot->EDP_data.set_type = ARM_DV; // ARM
         the_robot->EDP_data.set_arm_type = lib::XYZ_EULER_ZYZ;
         the_robot->EDP_data.motion_type = lib::ABSOLUTE;
@@ -98,7 +98,7 @@ void trajectory_reproduce::create_command_for_pose(common::ecp_taught_in_pose& t
         memcpy (the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates, tip.coordinates, MAX_SERVOS_NR*sizeof (double));
         break;
     case lib::C_XYZ_ANGLE_AXIS:
-        the_robot->EDP_data.instruction_type = lib::SET;
+        the_robot->ecp_command.instruction.instruction_type = lib::SET;
         the_robot->EDP_data.set_type = ARM_DV; // ARM
         the_robot->EDP_data.set_arm_type = lib::XYZ_ANGLE_AXIS;
         the_robot->EDP_data.motion_type = lib::ABSOLUTE;

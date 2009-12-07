@@ -76,7 +76,7 @@ bool pawel::first_step ( )
     //	start = (double)time_start.tv_sec + ((double)(time_start.tv_nsec))/1000000000.0;
 
 
-    the_robot->EDP_data.instruction_type = lib::GET;
+    the_robot->ecp_command.instruction.instruction_type = lib::GET;
     the_robot->EDP_data.get_type = ARM_DV;
     the_robot->EDP_data.set_type = ARM_DV;
 
@@ -103,7 +103,7 @@ bool pawel::next_step ( )
     double x,y,z,t,vx,vy,v,tmp;
 
     // Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
-    the_robot->EDP_data.instruction_type = lib::SET;
+    the_robot->ecp_command.instruction.instruction_type = lib::SET;
     the_robot->EDP_data.set_type = ARM_DV;
     the_robot->EDP_data.get_type = NOTHING_DV;
     the_robot->EDP_data.get_arm_type = lib::XYZ_EULER_ZYZ;

@@ -95,7 +95,7 @@ bool linear::first_step()
 
 	switch (td.arm_type) {
 		case lib::MOTOR:
-			the_robot->EDP_data.instruction_type = lib::GET;
+			the_robot->ecp_command.instruction.instruction_type = lib::GET;
 			the_robot->EDP_data.get_type = ARM_DV;
 			the_robot->EDP_data.set_type = ARM_DV;
 			the_robot->EDP_data.set_arm_type = lib::MOTOR;
@@ -106,7 +106,7 @@ bool linear::first_step()
 			the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 			break;
 		case lib::JOINT:
-			the_robot->EDP_data.instruction_type = lib::GET;
+			the_robot->ecp_command.instruction.instruction_type = lib::GET;
 			the_robot->EDP_data.get_type = ARM_DV;
 			the_robot->EDP_data.set_type = ARM_DV;
 			the_robot->EDP_data.set_arm_type = lib::JOINT;
@@ -117,7 +117,7 @@ bool linear::first_step()
 			the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 			break;
 		case lib::XYZ_EULER_ZYZ:
-			the_robot->EDP_data.instruction_type = lib::GET;
+			the_robot->ecp_command.instruction.instruction_type = lib::GET;
 			the_robot->EDP_data.get_type = ARM_DV;
 			the_robot->EDP_data.set_type = ARM_DV;
 			the_robot->EDP_data.set_arm_type = lib::XYZ_EULER_ZYZ;
@@ -128,7 +128,7 @@ bool linear::first_step()
 			the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 			break;
 		case lib::XYZ_ANGLE_AXIS:
-			the_robot->EDP_data.instruction_type = lib::GET;
+			the_robot->ecp_command.instruction.instruction_type = lib::GET;
 			the_robot->EDP_data.get_type = ARM_DV;
 			the_robot->EDP_data.set_type = ARM_DV;
 			the_robot->EDP_data.set_arm_type = lib::XYZ_ANGLE_AXIS;
@@ -161,13 +161,13 @@ bool linear::next_step()
 
 	// Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
 
-	the_robot->EDP_data.instruction_type = lib::SET;
+	the_robot->ecp_command.instruction.instruction_type = lib::SET;
 	the_robot->EDP_data.get_type = NOTHING_DV;
 	the_robot->EDP_data.get_arm_type = lib::INVALID_END_EFFECTOR;
 
 	switch (td.arm_type) {
 		case lib::MOTOR:
-			the_robot->EDP_data.instruction_type = lib::SET;
+			the_robot->ecp_command.instruction.instruction_type = lib::SET;
 			the_robot->EDP_data.set_type = ARM_DV; // ARM
 			the_robot->EDP_data.set_arm_type = lib::MOTOR;
 			the_robot->EDP_data.motion_type = lib::ABSOLUTE;
@@ -188,7 +188,7 @@ bool linear::next_step()
 			break;
 
 		case lib::XYZ_EULER_ZYZ:
-			the_robot->EDP_data.instruction_type = lib::SET;
+			the_robot->ecp_command.instruction.instruction_type = lib::SET;
 			the_robot->EDP_data.set_type = ARM_DV; // ARM
 			the_robot->EDP_data.set_arm_type = lib::XYZ_EULER_ZYZ;
 			the_robot->EDP_data.motion_type = lib::ABSOLUTE;
@@ -203,7 +203,7 @@ bool linear::next_step()
 			break;
 
 		case lib::XYZ_ANGLE_AXIS:
-			the_robot->EDP_data.instruction_type = lib::SET;
+			the_robot->ecp_command.instruction.instruction_type = lib::SET;
 			the_robot->EDP_data.set_type = ARM_DV; // ARM
 			the_robot->EDP_data.set_arm_type = lib::XYZ_ANGLE_AXIS;
 			the_robot->EDP_data.motion_type = lib::ABSOLUTE;
@@ -326,7 +326,7 @@ bool linear_parabolic::first_step()
 	switch (td.arm_type) {
 
 		case lib::MOTOR:
-			the_robot->EDP_data.instruction_type = lib::GET;
+			the_robot->ecp_command.instruction.instruction_type = lib::GET;
 			the_robot->EDP_data.get_type = ARM_DV;
 			the_robot->EDP_data.set_type = ARM_DV;
 			the_robot->EDP_data.set_arm_type = lib::MOTOR;
@@ -337,7 +337,7 @@ bool linear_parabolic::first_step()
 			the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 			break;
 		case lib::JOINT:
-			the_robot->EDP_data.instruction_type = lib::GET;
+			the_robot->ecp_command.instruction.instruction_type = lib::GET;
 			the_robot->EDP_data.get_type = ARM_DV;
 			the_robot->EDP_data.set_type = ARM_DV;
 			the_robot->EDP_data.set_arm_type = lib::JOINT;
@@ -348,7 +348,7 @@ bool linear_parabolic::first_step()
 			the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 			break;
 		case lib::XYZ_EULER_ZYZ:
-			the_robot->EDP_data.instruction_type = lib::GET;
+			the_robot->ecp_command.instruction.instruction_type = lib::GET;
 			the_robot->EDP_data.get_type = ARM_DV;
 			the_robot->EDP_data.set_type = ARM_DV;
 			the_robot->EDP_data.set_arm_type = lib::XYZ_EULER_ZYZ;
@@ -359,7 +359,7 @@ bool linear_parabolic::first_step()
 			the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 			break;
 		case lib::XYZ_ANGLE_AXIS:
-			the_robot->EDP_data.instruction_type = lib::GET;
+			the_robot->ecp_command.instruction.instruction_type = lib::GET;
 			the_robot->EDP_data.get_type = ARM_DV;
 			the_robot->EDP_data.set_type = ARM_DV;
 			the_robot->EDP_data.set_arm_type = lib::XYZ_ANGLE_AXIS;
@@ -436,7 +436,7 @@ bool linear_parabolic::next_step()
 
 	// Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
 
-	the_robot->EDP_data.instruction_type = lib::SET;
+	the_robot->ecp_command.instruction.instruction_type = lib::SET;
 	the_robot->EDP_data.get_type = NOTHING_DV;
 	the_robot->EDP_data.get_arm_type = lib::INVALID_END_EFFECTOR;
 
@@ -446,7 +446,7 @@ bool linear_parabolic::next_step()
 
 	switch (td.arm_type) {
 		case lib::MOTOR:
-			the_robot->EDP_data.instruction_type = lib::SET;
+			the_robot->ecp_command.instruction.instruction_type = lib::SET;
 			the_robot->EDP_data.set_type = ARM_DV; // ARM
 			the_robot->EDP_data.set_arm_type = lib::MOTOR;
 			the_robot->EDP_data.motion_type = lib::ABSOLUTE;
@@ -478,7 +478,7 @@ bool linear_parabolic::next_step()
 			break;
 
 		case lib::JOINT:
-			the_robot->EDP_data.instruction_type = lib::SET;
+			the_robot->ecp_command.instruction.instruction_type = lib::SET;
 			the_robot->EDP_data.set_type = ARM_DV; // ARM
 			the_robot->EDP_data.set_arm_type = lib::JOINT;
 			the_robot->EDP_data.motion_type = lib::ABSOLUTE;
@@ -507,7 +507,7 @@ bool linear_parabolic::next_step()
 			break;
 
 		case lib::XYZ_EULER_ZYZ:
-			the_robot->EDP_data.instruction_type = lib::SET;
+			the_robot->ecp_command.instruction.instruction_type = lib::SET;
 			the_robot->EDP_data.set_type = ARM_DV; // ARM
 			the_robot->EDP_data.set_arm_type = lib::XYZ_EULER_ZYZ;
 			the_robot->EDP_data.motion_type = lib::ABSOLUTE;
@@ -549,7 +549,7 @@ bool linear_parabolic::next_step()
 			break;
 
 		case lib::XYZ_ANGLE_AXIS:
-			the_robot->EDP_data.instruction_type = lib::SET;
+			the_robot->ecp_command.instruction.instruction_type = lib::SET;
 			the_robot->EDP_data.set_type = ARM_DV; // ARM
 			the_robot->EDP_data.set_arm_type = lib::XYZ_ANGLE_AXIS;
 			the_robot->EDP_data.motion_type = lib::ABSOLUTE;
@@ -620,7 +620,7 @@ bool polynomial::first_step()
 
 	switch (td.arm_type) {
 		case lib::MOTOR:
-			the_robot->EDP_data.instruction_type = lib::GET;
+			the_robot->ecp_command.instruction.instruction_type = lib::GET;
 			the_robot->EDP_data.get_type = ARM_DV;
 			the_robot->EDP_data.set_type = ARM_DV;
 			the_robot->EDP_data.set_arm_type = lib::MOTOR;
@@ -631,7 +631,7 @@ bool polynomial::first_step()
 			the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 			break;
 		case lib::JOINT:
-			the_robot->EDP_data.instruction_type = lib::GET;
+			the_robot->ecp_command.instruction.instruction_type = lib::GET;
 			the_robot->EDP_data.get_type = ARM_DV;
 			the_robot->EDP_data.set_type = ARM_DV;
 			the_robot->EDP_data.set_arm_type = lib::JOINT;
@@ -642,7 +642,7 @@ bool polynomial::first_step()
 			the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 			break;
 		case lib::XYZ_EULER_ZYZ:
-			the_robot->EDP_data.instruction_type = lib::GET;
+			the_robot->ecp_command.instruction.instruction_type = lib::GET;
 			the_robot->EDP_data.get_type = ARM_DV;
 			the_robot->EDP_data.set_type = ARM_DV;
 			the_robot->EDP_data.set_arm_type = lib::XYZ_EULER_ZYZ;
@@ -653,7 +653,7 @@ bool polynomial::first_step()
 			the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 			break;
 		case lib::XYZ_ANGLE_AXIS:
-			the_robot->EDP_data.instruction_type = lib::GET;
+			the_robot->ecp_command.instruction.instruction_type = lib::GET;
 			the_robot->EDP_data.get_type = ARM_DV;
 			the_robot->EDP_data.set_type = ARM_DV;
 			the_robot->EDP_data.set_arm_type = lib::XYZ_ANGLE_AXIS;
@@ -784,7 +784,7 @@ bool cubic::next_step()
 
 	// Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
 
-	the_robot->EDP_data.instruction_type = lib::SET;
+	the_robot->ecp_command.instruction.instruction_type = lib::SET;
 	the_robot->EDP_data.get_type = NOTHING_DV;
 	the_robot->EDP_data.get_arm_type = lib::INVALID_END_EFFECTOR;
 
@@ -793,7 +793,7 @@ bool cubic::next_step()
 
 	switch (td.arm_type) {
 		case lib::MOTOR:
-			the_robot->EDP_data.instruction_type = lib::SET;
+			the_robot->ecp_command.instruction.instruction_type = lib::SET;
 			the_robot->EDP_data.set_type = ARM_DV; // ARM
 			the_robot->EDP_data.set_arm_type = lib::MOTOR;
 			the_robot->EDP_data.motion_type = lib::ABSOLUTE;
@@ -823,7 +823,7 @@ bool cubic::next_step()
 			break;
 
 		case lib::JOINT:
-			the_robot->EDP_data.instruction_type = lib::SET;
+			the_robot->ecp_command.instruction.instruction_type = lib::SET;
 			the_robot->EDP_data.set_type = ARM_DV; // ARM
 			the_robot->EDP_data.set_arm_type = lib::JOINT;
 			the_robot->EDP_data.motion_type = lib::ABSOLUTE;
@@ -852,7 +852,7 @@ bool cubic::next_step()
 			break;
 
 		case lib::XYZ_EULER_ZYZ:
-			the_robot->EDP_data.instruction_type = lib::SET;
+			the_robot->ecp_command.instruction.instruction_type = lib::SET;
 			the_robot->EDP_data.set_type = ARM_DV; // ARM
 			the_robot->EDP_data.set_arm_type = lib::XYZ_EULER_ZYZ;
 			the_robot->EDP_data.motion_type = lib::ABSOLUTE;
@@ -882,7 +882,7 @@ bool cubic::next_step()
 			break;
 
 		case lib::XYZ_ANGLE_AXIS:
-			the_robot->EDP_data.instruction_type = lib::SET;
+			the_robot->ecp_command.instruction.instruction_type = lib::SET;
 			the_robot->EDP_data.set_type = ARM_DV; // ARM
 			the_robot->EDP_data.set_arm_type = lib::XYZ_ANGLE_AXIS;
 			the_robot->EDP_data.motion_type = lib::ABSOLUTE;
@@ -1037,7 +1037,7 @@ bool quintic::next_step()
 
 	// Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
 
-	the_robot->EDP_data.instruction_type = lib::SET;
+	the_robot->ecp_command.instruction.instruction_type = lib::SET;
 	the_robot->EDP_data.get_type = NOTHING_DV;
 	the_robot->EDP_data.get_arm_type = lib::INVALID_END_EFFECTOR;
 
@@ -1046,7 +1046,7 @@ bool quintic::next_step()
 
 	switch (td.arm_type) {
 		case lib::MOTOR:
-			the_robot->EDP_data.instruction_type = lib::SET;
+			the_robot->ecp_command.instruction.instruction_type = lib::SET;
 			the_robot->EDP_data.set_type = ARM_DV; // ARM
 			the_robot->EDP_data.set_arm_type = lib::MOTOR;
 			the_robot->EDP_data.motion_type = lib::ABSOLUTE;
@@ -1075,7 +1075,7 @@ bool quintic::next_step()
 			break;
 
 		case lib::JOINT:
-			the_robot->EDP_data.instruction_type = lib::SET;
+			the_robot->ecp_command.instruction.instruction_type = lib::SET;
 			the_robot->EDP_data.set_type = ARM_DV; // ARM
 			the_robot->EDP_data.set_arm_type = lib::JOINT;
 			the_robot->EDP_data.motion_type = lib::ABSOLUTE;
@@ -1104,7 +1104,7 @@ bool quintic::next_step()
 			break;
 
 		case lib::XYZ_EULER_ZYZ:
-			the_robot->EDP_data.instruction_type = lib::SET;
+			the_robot->ecp_command.instruction.instruction_type = lib::SET;
 			the_robot->EDP_data.set_type = ARM_DV; // ARM
 			the_robot->EDP_data.set_arm_type = lib::XYZ_EULER_ZYZ;
 			the_robot->EDP_data.motion_type = lib::ABSOLUTE;
@@ -1141,7 +1141,7 @@ bool quintic::next_step()
 			break;
 
 		case lib::XYZ_ANGLE_AXIS:
-			the_robot->EDP_data.instruction_type = lib::SET;
+			the_robot->ecp_command.instruction.instruction_type = lib::SET;
 			the_robot->EDP_data.set_type = ARM_DV; // ARM
 			the_robot->EDP_data.set_arm_type = lib::XYZ_ANGLE_AXIS;
 			the_robot->EDP_data.motion_type = lib::ABSOLUTE;
@@ -1267,22 +1267,22 @@ bool parabolic_teach_in::first_step()
 	first_interval = true;
 	switch (tip.arm_type) {
 		case lib::MOTOR:
-			the_robot->EDP_data.instruction_type = lib::GET;
+			the_robot->ecp_command.instruction.instruction_type = lib::GET;
 			the_robot->EDP_data.get_type = ARM_DV; // ARM
 			the_robot->EDP_data.get_arm_type = lib::MOTOR;
 			break;
 		case lib::JOINT:
-			the_robot->EDP_data.instruction_type = lib::GET;
+			the_robot->ecp_command.instruction.instruction_type = lib::GET;
 			the_robot->EDP_data.get_type = ARM_DV; // ARM
 			the_robot->EDP_data.get_arm_type = lib::JOINT;
 			break;
 		case lib::XYZ_EULER_ZYZ:
-			the_robot->EDP_data.instruction_type = lib::GET;
+			the_robot->ecp_command.instruction.instruction_type = lib::GET;
 			the_robot->EDP_data.get_type = ARM_DV; // ARM
 			the_robot->EDP_data.get_arm_type = lib::XYZ_EULER_ZYZ;
 			break;
 		case lib::XYZ_ANGLE_AXIS:
-			the_robot->EDP_data.instruction_type = lib::GET;
+			the_robot->ecp_command.instruction.instruction_type = lib::GET;
 			the_robot->EDP_data.get_type = ARM_DV; // ARM
 			the_robot->EDP_data.get_arm_type = lib::XYZ_ANGLE_AXIS;
 			break;
@@ -1409,7 +1409,7 @@ bool parabolic_teach_in::next_step()
 			default:
 				throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 		} // end: switch
-		the_robot->EDP_data.instruction_type = lib::SET;
+		the_robot->ecp_command.instruction.instruction_type = lib::SET;
 		the_robot->EDP_data.set_type = ARM_DV; // ARM
 		the_robot->EDP_data.motion_type = lib::ABSOLUTE;
 		the_robot->EDP_data.next_interpolation_type = lib::MIM;
@@ -1580,22 +1580,22 @@ bool calibration::first_step()
 	first_interval = true;
 	switch (tip.arm_type) {
 		case lib::MOTOR:
-			the_robot->EDP_data.instruction_type = lib::GET;
+			the_robot->ecp_command.instruction.instruction_type = lib::GET;
 			the_robot->EDP_data.get_type = ARM_DV; // ARM
 			the_robot->EDP_data.get_arm_type = lib::MOTOR;
 			break;
 		case lib::JOINT:
-			the_robot->EDP_data.instruction_type = lib::GET;
+			the_robot->ecp_command.instruction.instruction_type = lib::GET;
 			the_robot->EDP_data.get_type = ARM_DV; // ARM
 			the_robot->EDP_data.get_arm_type = lib::JOINT;
 			break;
 		case lib::XYZ_EULER_ZYZ:
-			the_robot->EDP_data.instruction_type = lib::GET;
+			the_robot->ecp_command.instruction.instruction_type = lib::GET;
 			the_robot->EDP_data.get_type = ARM_DV; // ARM
 			the_robot->EDP_data.get_arm_type = lib::XYZ_EULER_ZYZ;
 			break;
 		case lib::XYZ_ANGLE_AXIS:
-			the_robot->EDP_data.instruction_type = lib::GET;
+			the_robot->ecp_command.instruction.instruction_type = lib::GET;
 			the_robot->EDP_data.get_type = ARM_DV; // ARM
 			the_robot->EDP_data.get_arm_type = lib::XYZ_ANGLE_AXIS;
 			break;
@@ -1717,7 +1717,7 @@ bool calibration::next_step()
 			default:
 				throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 		} // end: switch
-		the_robot->EDP_data.instruction_type = lib::SET;
+		the_robot->ecp_command.instruction.instruction_type = lib::SET;
 		the_robot->EDP_data.set_type = ARM_DV; // ARM
 		the_robot->EDP_data.motion_type = lib::ABSOLUTE;
 		the_robot->EDP_data.next_interpolation_type = lib::MIM;
@@ -1909,22 +1909,22 @@ bool cubic_spline::first_step()
 	first_interval = true;
 	switch (tip.arm_type) {
 		case lib::MOTOR:
-			the_robot->EDP_data.instruction_type = lib::GET;
+			the_robot->ecp_command.instruction.instruction_type = lib::GET;
 			the_robot->EDP_data.get_type = ARM_DV; // ARM
 			the_robot->EDP_data.get_arm_type = lib::MOTOR;
 			break;
 		case lib::JOINT:
-			the_robot->EDP_data.instruction_type = lib::GET;
+			the_robot->ecp_command.instruction.instruction_type = lib::GET;
 			the_robot->EDP_data.get_type = ARM_DV; // ARM
 			the_robot->EDP_data.get_arm_type = lib::JOINT;
 			break;
 		case lib::XYZ_EULER_ZYZ:
-			the_robot->EDP_data.instruction_type = lib::GET;
+			the_robot->ecp_command.instruction.instruction_type = lib::GET;
 			the_robot->EDP_data.get_type = ARM_DV; // ARM
 			the_robot->EDP_data.get_arm_type = lib::XYZ_EULER_ZYZ;
 			break;
 		case lib::XYZ_ANGLE_AXIS:
-			the_robot->EDP_data.instruction_type = lib::GET;
+			the_robot->ecp_command.instruction.instruction_type = lib::GET;
 			the_robot->EDP_data.get_type = ARM_DV; // ARM
 			the_robot->EDP_data.get_arm_type = lib::XYZ_ANGLE_AXIS;
 			break;
@@ -2012,7 +2012,7 @@ bool cubic_spline::next_step()
 				throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 		}// end:switch
 
-		the_robot->EDP_data.instruction_type = lib::SET;
+		the_robot->ecp_command.instruction.instruction_type = lib::SET;
 		the_robot->EDP_data.set_type = ARM_DV; // ARM
 		the_robot->EDP_data.motion_type = lib::ABSOLUTE;
 		the_robot->EDP_data.next_interpolation_type = lib::MIM;
@@ -2257,22 +2257,22 @@ bool smooth_cubic_spline::first_step()
 	first_interval = true;
 	switch (tip.arm_type) {
 		case lib::MOTOR:
-			the_robot->EDP_data.instruction_type = lib::GET;
+			the_robot->ecp_command.instruction.instruction_type = lib::GET;
 			the_robot->EDP_data.get_type = ARM_DV; // ARM
 			the_robot->EDP_data.get_arm_type = lib::MOTOR;
 			break;
 		case lib::JOINT:
-			the_robot->EDP_data.instruction_type = lib::GET;
+			the_robot->ecp_command.instruction.instruction_type = lib::GET;
 			the_robot->EDP_data.get_type = ARM_DV; // ARM
 			the_robot->EDP_data.get_arm_type = lib::JOINT;
 			break;
 		case lib::XYZ_EULER_ZYZ:
-			the_robot->EDP_data.instruction_type = lib::GET;
+			the_robot->ecp_command.instruction.instruction_type = lib::GET;
 			the_robot->EDP_data.get_type = ARM_DV; // ARM
 			the_robot->EDP_data.get_arm_type = lib::XYZ_EULER_ZYZ;
 			break;
 		case lib::XYZ_ANGLE_AXIS:
-			the_robot->EDP_data.instruction_type = lib::GET;
+			the_robot->ecp_command.instruction.instruction_type = lib::GET;
 			the_robot->EDP_data.get_type = ARM_DV; // ARM
 			the_robot->EDP_data.get_arm_type = lib::XYZ_ANGLE_AXIS;
 			break;
@@ -2461,7 +2461,7 @@ bool smooth_cubic_spline::next_step()
 		}// end:switch
 
 
-		the_robot->EDP_data.instruction_type = lib::SET;
+		the_robot->ecp_command.instruction.instruction_type = lib::SET;
 		the_robot->EDP_data.set_type = ARM_DV; // ARM
 		the_robot->EDP_data.motion_type = lib::ABSOLUTE;
 		the_robot->EDP_data.next_interpolation_type = lib::MIM;
@@ -2711,22 +2711,22 @@ bool quintic_spline::first_step()
 	first_interval = true;
 	switch (tip.arm_type) {
 		case lib::MOTOR:
-			the_robot->EDP_data.instruction_type = lib::GET;
+			the_robot->ecp_command.instruction.instruction_type = lib::GET;
 			the_robot->EDP_data.get_type = ARM_DV; // ARM
 			the_robot->EDP_data.get_arm_type = lib::MOTOR;
 			break;
 		case lib::JOINT:
-			the_robot->EDP_data.instruction_type = lib::GET;
+			the_robot->ecp_command.instruction.instruction_type = lib::GET;
 			the_robot->EDP_data.get_type = ARM_DV; // ARM
 			the_robot->EDP_data.get_arm_type = lib::JOINT;
 			break;
 		case lib::XYZ_EULER_ZYZ:
-			the_robot->EDP_data.instruction_type = lib::GET;
+			the_robot->ecp_command.instruction.instruction_type = lib::GET;
 			the_robot->EDP_data.get_type = ARM_DV; // ARM
 			the_robot->EDP_data.get_arm_type = lib::XYZ_EULER_ZYZ;
 			break;
 		case lib::XYZ_ANGLE_AXIS:
-			the_robot->EDP_data.instruction_type = lib::GET;
+			the_robot->ecp_command.instruction.instruction_type = lib::GET;
 			the_robot->EDP_data.get_type = ARM_DV; // ARM
 			the_robot->EDP_data.get_arm_type = lib::XYZ_ANGLE_AXIS;
 			break;
@@ -2832,7 +2832,7 @@ bool quintic_spline::next_step()
 				throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 		}// end:switch
 
-		the_robot->EDP_data.instruction_type = lib::SET;
+		the_robot->ecp_command.instruction.instruction_type = lib::SET;
 		the_robot->EDP_data.set_type = ARM_DV; // ARM
 		the_robot->EDP_data.motion_type = lib::ABSOLUTE;
 		the_robot->EDP_data.next_interpolation_type = lib::MIM;
@@ -3068,22 +3068,22 @@ bool elipsoid::first_step()
 	first_interval = true;
 	switch (tip.arm_type) {
 		case lib::MOTOR:
-			the_robot->EDP_data.instruction_type = lib::GET;
+			the_robot->ecp_command.instruction.instruction_type = lib::GET;
 			the_robot->EDP_data.get_type = ARM_DV; // ARM
 			the_robot->EDP_data.get_arm_type = lib::MOTOR;
 			break;
 		case lib::JOINT:
-			the_robot->EDP_data.instruction_type = lib::GET;
+			the_robot->ecp_command.instruction.instruction_type = lib::GET;
 			the_robot->EDP_data.get_type = ARM_DV; // ARM
 			the_robot->EDP_data.get_arm_type = lib::JOINT;
 			break;
 		case lib::XYZ_EULER_ZYZ:
-			the_robot->EDP_data.instruction_type = lib::GET;
+			the_robot->ecp_command.instruction.instruction_type = lib::GET;
 			the_robot->EDP_data.get_type = ARM_DV; // ARM
 			the_robot->EDP_data.get_arm_type = lib::XYZ_EULER_ZYZ;
 			break;
 		case lib::XYZ_ANGLE_AXIS:
-			the_robot->EDP_data.instruction_type = lib::GET;
+			the_robot->ecp_command.instruction.instruction_type = lib::GET;
 			the_robot->EDP_data.get_type = ARM_DV; // ARM
 			the_robot->EDP_data.get_arm_type = lib::XYZ_ANGLE_AXIS;
 			break;
@@ -3135,7 +3135,7 @@ bool elipsoid::next_step()
 			default:
 				throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 		} // end: switch
-		the_robot->EDP_data.instruction_type = lib::SET_GET;
+		the_robot->ecp_command.instruction.instruction_type = lib::SET_GET;
 		the_robot->EDP_data.set_type = ARM_DV; // ARM
 		the_robot->EDP_data.get_type = ARM_DV; // ARM
 		the_robot->EDP_data.get_arm_type = lib::JOINT;

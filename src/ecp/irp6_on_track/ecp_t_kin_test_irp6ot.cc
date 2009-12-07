@@ -40,7 +40,7 @@ void kin_test::main_task_algorithm(void)
     // petla 1000 getow
     for(int i =0; i<n; i++)
     {
-        ecp_m_robot->EDP_data.instruction_type = lib::GET;
+        ecp_m_robot->ecp_command.instruction.instruction_type = lib::GET;
         ecp_m_robot->EDP_data.get_type = ARM_DV;
         ecp_m_robot->EDP_data.get_arm_type = lib::MOTOR;
         ecp_m_robot->EDP_data.motion_type = lib::ABSOLUTE;
@@ -69,7 +69,7 @@ void kin_test::main_task_algorithm(void)
     // petla 100 getow
     for(int i =0; i<n; i++)
     {
-        ecp_m_robot->EDP_data.instruction_type = lib::SET;
+        ecp_m_robot->ecp_command.instruction.instruction_type = lib::SET;
         ecp_m_robot->EDP_data.set_type = ARM_DV;
         ecp_m_robot->EDP_data.set_arm_type = lib::MOTOR;
         ecp_m_robot->EDP_data.motion_type = lib::ABSOLUTE;

@@ -33,7 +33,7 @@ bool ecp_g_rotate_gripper::first_step() {
 	vsp_fradia->to_vsp.haar_detect_mode = lib::PERFORM_ROTATION;
 	ecp_t.sr_ecp_msg->message("first_step");
 
-    the_robot->EDP_data.instruction_type = lib::GET;
+    the_robot->ecp_command.instruction.instruction_type = lib::GET;
     the_robot->EDP_data.get_type = ARM_DV;
     the_robot->EDP_data.get_arm_type = td.arm_type;
     the_robot->EDP_data.motion_type = lib::RELATIVE;
@@ -93,7 +93,7 @@ bool ecp_g_rotate_gripper::next_step() {
 		ecp_t.sr_ecp_msg->message("Weszlo do NOT VSP_REP_OK\n");
 	}
 
-    the_robot->EDP_data.instruction_type = lib::SET;
+    the_robot->ecp_command.instruction.instruction_type = lib::SET;
     the_robot->EDP_data.set_type = ARM_DV;
     the_robot->EDP_data.get_type = NOTHING_DV;
     the_robot->EDP_data.motion_type = lib::RELATIVE;

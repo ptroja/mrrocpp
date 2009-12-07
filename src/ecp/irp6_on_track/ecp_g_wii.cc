@@ -13,7 +13,7 @@ wii::wii (common::task::task& _ecp_task) : generator (_ecp_task) {}
 
 bool wii::first_step()
 {
-    the_robot->EDP_data.instruction_type = lib::GET;
+    the_robot->ecp_command.instruction.instruction_type = lib::GET;
     the_robot->EDP_data.get_type = ARM_DV;
     the_robot->EDP_data.set_type = ARM_DV;
     the_robot->EDP_data.set_arm_type = lib::XYZ_EULER_ZYZ;
@@ -40,7 +40,7 @@ bool wii::next_step()
 	}
 
 	++step_no;
-    the_robot->EDP_data.instruction_type = lib::SET;
+    the_robot->ecp_command.instruction.instruction_type = lib::SET;
     the_robot->EDP_data.get_type = ARM_DV;
     the_robot->EDP_data.set_type = ARM_DV;
     the_robot->EDP_data.set_arm_type = lib::XYZ_EULER_ZYZ;

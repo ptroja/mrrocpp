@@ -509,7 +509,7 @@ void force_meassure_generator::set_configuration(int _sleep_time, int _meassurem
 /** first step **/
 bool force_meassure_generator::first_step()
 {
-	the_robot->EDP_data.instruction_type = lib::GET;
+	the_robot->ecp_command.instruction.instruction_type = lib::GET;
  	the_robot->EDP_data.get_type = ARM_DV;
 	the_robot->EDP_data.get_arm_type = lib::FRAME;
 	the_robot->EDP_data.next_interpolation_type

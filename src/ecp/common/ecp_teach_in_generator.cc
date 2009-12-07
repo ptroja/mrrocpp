@@ -434,7 +434,7 @@ bool ecp_teach_in_generator::first_step()
     initiate_pose_list();
     the_robot->EDP_data.get_type = ARM_DV; // ARM
 
-    the_robot->EDP_data.instruction_type = lib::GET;
+    the_robot->ecp_command.instruction.instruction_type = lib::GET;
     the_robot->EDP_data.get_type = ARM_DV;
     the_robot->EDP_data.set_type = ARM_DV;
     the_robot->EDP_data.set_arm_type = lib::MOTOR;
@@ -472,7 +472,7 @@ bool ecp_teach_in_generator::next_step()
     switch (tip.arm_type)
       {
     case lib::C_MOTOR:
-      the_robot->EDP_data.instruction_type = lib::SET;
+      the_robot->ecp_command.instruction.instruction_type = lib::SET;
       the_robot->EDP_data.set_type = ARM_DV; // ARM
       the_robot->EDP_data.set_arm_type = lib::MOTOR;
       the_robot->EDP_data.motion_type = lib::ABSOLUTE;
@@ -483,7 +483,7 @@ bool ecp_teach_in_generator::next_step()
       MAX_SERVOS_NR*sizeof (double));
       break;
     case lib::C_JOINT:
-      the_robot->EDP_data.instruction_type = lib::SET;
+      the_robot->ecp_command.instruction.instruction_type = lib::SET;
       the_robot->EDP_data.set_type = ARM_DV; // ARM
       the_robot->EDP_data.set_arm_type = lib::JOINT;
       the_robot->EDP_data.motion_type = lib::ABSOLUTE;
@@ -495,7 +495,7 @@ bool ecp_teach_in_generator::next_step()
       // printf("lumpu: %f\n", the_robot->EDP_data.next_joint_arm_coordinates[6]);
       break;
     case lib::C_XYZ_EULER_ZYZ:
-      the_robot->EDP_data.instruction_type = lib::SET;
+      the_robot->ecp_command.instruction.instruction_type = lib::SET;
       the_robot->EDP_data.set_type = ARM_DV; // ARM
       the_robot->EDP_data.set_arm_type = lib::XYZ_EULER_ZYZ;
       the_robot->EDP_data.motion_type = lib::ABSOLUTE;
@@ -507,7 +507,7 @@ bool ecp_teach_in_generator::next_step()
       the_robot->EDP_data.next_gripper_coordinate = tip.coordinates[6];
       break;
     case lib::C_XYZ_ANGLE_AXIS:
-      the_robot->EDP_data.instruction_type = lib::SET;
+      the_robot->ecp_command.instruction.instruction_type = lib::SET;
       the_robot->EDP_data.set_type = ARM_DV; // ARM
       the_robot->EDP_data.set_arm_type = lib::XYZ_ANGLE_AXIS;
       the_robot->EDP_data.motion_type = lib::ABSOLUTE;

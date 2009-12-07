@@ -135,7 +135,7 @@ manual_moves_automatic_measures::~manual_moves_automatic_measures(void)
 /******************************** FIRST STEP ***********************************/
 bool manual_moves_automatic_measures::first_step (){
     // Przygotowanie rozkazu dla EDP.
-    the_robot->EDP_data.instruction_type = lib::GET;
+    the_robot->ecp_command.instruction.instruction_type = lib::GET;
     the_robot->EDP_data.get_type = ARM_DV; // ARM
     // Sprawdzenie rodzaju ramienia.
     the_robot->EDP_data.get_arm_type = lib::MOTOR;

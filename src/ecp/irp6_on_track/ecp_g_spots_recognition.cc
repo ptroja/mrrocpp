@@ -37,7 +37,7 @@ bool spots::first_step()
 	sensor = (ecp_mp::sensor::cvfradia *)sensor_m[lib::SENSOR_CVFRADIA];
 
 	//proste zadanie kinematyki
-	the_robot->EDP_data.instruction_type = lib::GET;
+	the_robot->ecp_command.instruction.instruction_type = lib::GET;
 	the_robot->EDP_data.get_type = ARM_DV;
 	the_robot->EDP_data.get_arm_type = lib::FRAME;
 

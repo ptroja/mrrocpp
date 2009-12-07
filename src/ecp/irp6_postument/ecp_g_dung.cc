@@ -41,7 +41,7 @@ bool dung::first_step()
     lib::Homog_matrix tool_frame(0.0, 0.0, 0.25);
     tool_frame.get_frame_tab(the_robot->EDP_data.next_tool_frame);
 
-    the_robot->EDP_data.instruction_type = lib::GET;
+    the_robot->ecp_command.instruction.instruction_type = lib::GET;
     the_robot->EDP_data.get_type = ARM_DV; // arm - ORYGINAL
     the_robot->EDP_data.set_type = ARM_DV;
     the_robot->EDP_data.set_arm_type = lib::JOINT;
@@ -85,7 +85,7 @@ bool dung::next_step ( )
     {
         return false;
     }
-    the_robot->EDP_data.instruction_type = lib::SET_GET;
+    the_robot->ecp_command.instruction.instruction_type = lib::SET_GET;
 
     // DUNG START
     q1 = the_robot->EDP_data.current_joint_arm_coordinates[0];

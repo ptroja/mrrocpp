@@ -20,7 +20,7 @@ wii_teach::wii_teach (common::task::task& _ecp_task,ecp_mp::sensor::wiimote* _wi
 
 bool wii_teach::first_step()
 {
-    the_robot->EDP_data.instruction_type = lib::GET;
+    the_robot->ecp_command.instruction.instruction_type = lib::GET;
     the_robot->EDP_data.get_type = ARM_DV;
     the_robot->EDP_data.set_type = ARM_DV;
     the_robot->EDP_data.set_arm_type = lib::XYZ_ANGLE_AXIS;
@@ -150,7 +150,7 @@ bool wii_teach::next_step()
     if(!_wiimote->image.sensor_union.wiimote.buttonA) releasedA = true;
 
     ++step_no;
-    the_robot->EDP_data.instruction_type = lib::SET;
+    the_robot->ecp_command.instruction.instruction_type = lib::SET;
     the_robot->EDP_data.get_type = ARM_DV;
     the_robot->EDP_data.set_type = ARM_DV;
     the_robot->EDP_data.set_arm_type = lib::XYZ_ANGLE_AXIS;

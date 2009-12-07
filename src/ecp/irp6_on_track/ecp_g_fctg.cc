@@ -78,7 +78,7 @@ void force_controlled_trajectory::get_current_position (){
     pthread_mutex_lock(&ROBOT_POSITION_MUTEX);
         // Odczytanie polozenia robota
         // Przygotowanie rozkazu dla EDP.
-        the_robot->EDP_data.instruction_type = lib::GET;
+        the_robot->ecp_command.instruction.instruction_type = lib::GET;
         the_robot->EDP_data.get_type = ARM_DV; // ARM
         the_robot->EDP_data.get_arm_type = current_control;
         // Przepisanie rozkazu do bufora wysylkowego.
@@ -96,7 +96,7 @@ void force_controlled_trajectory::get_current_position (){
             memcpy(current_position, the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates, 6*sizeof(double));
             // Odczytanie polowenia na motorach.
             // Przygotowanie rozkazu dla EDP.
-            the_robot->EDP_data.instruction_type = lib::GET;
+            the_robot->ecp_command.instruction.instruction_type = lib::GET;
             the_robot->EDP_data.get_type = ARM_DV; // ARM
             the_robot->EDP_data.get_arm_type = lib::MOTOR;
             // Przepisanie rozkazu do bufora wysylkowego.
@@ -304,7 +304,7 @@ bool force_controlled_trajectory::first_step(){
         insert_position_list_element(tmp_position);
 	}
     // Przygotowanie rozkazu dla EDP.
-    the_robot->EDP_data.instruction_type = lib::SET;
+    the_robot->ecp_command.instruction.instruction_type = lib::SET;
     the_robot->EDP_data.set_type = ARM_DV; // ARM
     the_robot->EDP_data.set_arm_type = current_control;
     the_robot->EDP_data.motion_type = lib::ABSOLUTE;

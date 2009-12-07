@@ -29,7 +29,7 @@ void robot::create_command (void)
     // wypelnia bufor wysylkowy do EDP na podstawie danych
     // zawartych w skladowych generatora lub warunku
 
-    ecp_command.instruction.instruction_type = EDP_data.instruction_type;
+    ecp_command.instruction.instruction_type = ecp_command.instruction.instruction_type;
     ecp_command.instruction.set_type = EDP_data.set_type;
     ecp_command.instruction.get_type = EDP_data.get_type;
     // printf("EDP_data.get_type: %d, ecp_command.instruction.get_type: %d\n",
@@ -41,7 +41,7 @@ void robot::create_command (void)
     ecp_command.instruction.get_arm_type = EDP_data.get_arm_type;
     ecp_command.instruction.output_values = EDP_data.output_values;
 
-    switch (EDP_data.instruction_type)
+    switch (ecp_command.instruction.instruction_type)
     {
     case lib::SET:
     case lib::SET_GET:

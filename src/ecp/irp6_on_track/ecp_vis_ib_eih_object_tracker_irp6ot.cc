@@ -29,7 +29,7 @@ bool ecp_vis_ib_eih_object_tracker_irp6ot::first_step() {
 	flushall();
 	vsp_fradia = sensor_m[lib::SENSOR_CVFRADIA];
 
-	the_robot->EDP_data.instruction_type = lib::GET;
+	the_robot->ecp_command.instruction.instruction_type = lib::GET;
 	the_robot->EDP_data.get_type = ARM_DV;
 	the_robot->EDP_data.get_arm_type = lib::XYZ_ANGLE_AXIS;
 	the_robot->EDP_data.motion_type = lib::RELATIVE;
@@ -78,7 +78,7 @@ bool ecp_vis_ib_eih_object_tracker_irp6ot::first_step() {
 bool ecp_vis_ib_eih_object_tracker_irp6ot::next_step_without_constraints() {
 
 	//if (first_move == true) {
-		the_robot->EDP_data.instruction_type = lib::SET_GET;//TODO sprawdzic czy to moze byc robione tylko raz
+		the_robot->ecp_command.instruction.instruction_type = lib::SET_GET;//TODO sprawdzic czy to moze byc robione tylko raz
 		//printf("poczatek sledzenia\n");
 		//flushall();
 		/*memcpy(next_position,

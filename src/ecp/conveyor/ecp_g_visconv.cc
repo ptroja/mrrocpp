@@ -27,7 +27,7 @@ bool incremental_move::first_step ( )
 	td.value_in_step_no = td.internode_step_no - 2;
 
 
-			the_robot->EDP_data.instruction_type = lib::GET;
+			the_robot->ecp_command.instruction.instruction_type = lib::GET;
 			the_robot->EDP_data.get_type = ARM_DV; // arm - ORYGINAL
 			the_robot->EDP_data.set_type = ARM_DV;
 
@@ -53,7 +53,7 @@ bool incremental_move::next_step ( )
 	// Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
 
 	// nie aktualizujemy pozycjio na podstawie odczytu z EDP
-	the_robot->EDP_data.instruction_type = lib::SET;
+	the_robot->ecp_command.instruction.instruction_type = lib::SET;
 	the_robot->EDP_data.get_type = NOTHING_DV;
 	the_robot->EDP_data.get_arm_type = lib::INVALID_END_EFFECTOR;
 	

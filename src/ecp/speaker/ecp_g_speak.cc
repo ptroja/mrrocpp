@@ -46,7 +46,7 @@ bool speaking::first_step ( ) {
 
 	last_sg_state = new_sg_state = SG_FIRST_GET;
 
-	the_robot->EDP_data.instruction_type = lib::GET;
+	the_robot->ecp_command.instruction.instruction_type = lib::GET;
 
 	return true;
 }
@@ -77,7 +77,7 @@ bool speaking::next_step ( ) {
 	{
 		case SG_FIRST_GET:
 			if (the_robot->EDP_data.speaking == 0) {
-				the_robot->EDP_data.instruction_type = lib::SET;
+				the_robot->ecp_command.instruction.instruction_type = lib::SET;
 				new_sg_state = SG_AFTER_SET;
 			} else {
 				new_sg_state = SG_FIRST_GET;
@@ -85,7 +85,7 @@ bool speaking::next_step ( ) {
 			}
 			break;
 		case SG_AFTER_SET:
-			the_robot->EDP_data.instruction_type = lib::GET;
+			the_robot->ecp_command.instruction.instruction_type = lib::GET;
 			new_sg_state=SG_LAST_GET;
 			break;
 		case SG_LAST_GET:

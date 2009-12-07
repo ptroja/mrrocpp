@@ -928,7 +928,7 @@ bool smooth::first_step ()
     {
 
     case lib::MOTOR:
-        the_robot->EDP_data.instruction_type = lib::GET;
+        the_robot->ecp_command.instruction.instruction_type = lib::GET;
         the_robot->EDP_data.get_type = ARM_DV;
         the_robot->EDP_data.set_type = ARM_DV;
         the_robot->EDP_data.set_arm_type = lib::MOTOR;
@@ -937,7 +937,7 @@ bool smooth::first_step ()
         the_robot->EDP_data.next_interpolation_type = lib::MIM;
         break;
     case lib::JOINT:
-        the_robot->EDP_data.instruction_type = lib::GET;
+        the_robot->ecp_command.instruction.instruction_type = lib::GET;
         the_robot->EDP_data.get_type = ARM_DV;
         the_robot->EDP_data.set_type = ARM_DV;
         the_robot->EDP_data.set_arm_type = lib::JOINT;
@@ -946,7 +946,7 @@ bool smooth::first_step ()
         the_robot->EDP_data.next_interpolation_type = lib::MIM;
         break;
     case lib::XYZ_EULER_ZYZ:
-        the_robot->EDP_data.instruction_type = lib::GET;
+        the_robot->ecp_command.instruction.instruction_type = lib::GET;
         the_robot->EDP_data.get_type = ARM_DV;
         the_robot->EDP_data.set_type = ARM_DV;
         the_robot->EDP_data.set_arm_type = lib::XYZ_EULER_ZYZ;
@@ -955,7 +955,7 @@ bool smooth::first_step ()
         the_robot->EDP_data.next_interpolation_type = lib::MIM;
         break;
     case lib::XYZ_ANGLE_AXIS:
-        the_robot->EDP_data.instruction_type = lib::GET;
+        the_robot->ecp_command.instruction.instruction_type = lib::GET;
         the_robot->EDP_data.get_type = ARM_DV;
         the_robot->EDP_data.set_type = ARM_DV;
         the_robot->EDP_data.set_arm_type = lib::XYZ_ANGLE_AXIS;
@@ -1137,7 +1137,7 @@ bool smooth::next_step ()
 
     // Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
 
-    the_robot->EDP_data.instruction_type = lib::SET;
+    the_robot->ecp_command.instruction.instruction_type = lib::SET;
     the_robot->EDP_data.get_type = NOTHING_DV;
     the_robot->EDP_data.get_arm_type = lib::INVALID_END_EFFECTOR;
 
@@ -1145,7 +1145,7 @@ bool smooth::next_step ()
     switch ( td.arm_type )
     {
     case lib::MOTOR:
-        the_robot->EDP_data.instruction_type = lib::SET;
+        the_robot->ecp_command.instruction.instruction_type = lib::SET;
         the_robot->EDP_data.set_type = ARM_DV; // ARM
         the_robot->EDP_data.set_arm_type = lib::MOTOR;
         the_robot->EDP_data.motion_type = lib::ABSOLUTE;
@@ -1186,7 +1186,7 @@ bool smooth::next_step ()
         break;
 
     case lib::JOINT:
-    	the_robot->EDP_data.instruction_type = lib::SET;
+    	the_robot->ecp_command.instruction.instruction_type = lib::SET;
     	the_robot->EDP_data.set_type = ARM_DV; // ARM
     	the_robot->EDP_data.set_arm_type = lib::JOINT;
     	the_robot->EDP_data.motion_type = lib::ABSOLUTE;
@@ -1229,7 +1229,7 @@ bool smooth::next_step ()
         break;
 
     case lib::XYZ_EULER_ZYZ:
-    	the_robot->EDP_data.instruction_type = lib::SET;
+    	the_robot->ecp_command.instruction.instruction_type = lib::SET;
     	the_robot->EDP_data.set_type = ARM_DV; // ARM
     	the_robot->EDP_data.set_arm_type = lib::XYZ_EULER_ZYZ;
     	the_robot->EDP_data.motion_type = lib::ABSOLUTE;
@@ -1264,7 +1264,7 @@ bool smooth::next_step ()
         break;
 
     case lib::XYZ_ANGLE_AXIS:
-    	the_robot->EDP_data.instruction_type = lib::SET;
+    	the_robot->ecp_command.instruction.instruction_type = lib::SET;
     	the_robot->EDP_data.set_type = ARM_DV; // ARM
     	the_robot->EDP_data.set_arm_type = lib::XYZ_ANGLE_AXIS;
     	the_robot->EDP_data.motion_type = lib::ABSOLUTE;
@@ -1304,7 +1304,7 @@ bool tool_change::first_step ()
     lib::Homog_matrix tool_frame(tool_parameters[0], tool_parameters[1], tool_parameters[2]);
     tool_frame.get_frame_tab(the_robot->EDP_data.next_tool_frame);
 
-    the_robot->EDP_data.instruction_type = lib::SET;
+    the_robot->ecp_command.instruction.instruction_type = lib::SET;
     the_robot->EDP_data.get_type = ARM_DV;
     the_robot->EDP_data.set_type = RMODEL_DV;
     the_robot->EDP_data.set_rmodel_type = lib::TOOL_FRAME;

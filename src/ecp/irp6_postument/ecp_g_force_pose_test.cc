@@ -40,7 +40,7 @@ bool y_simple::first_step()
 	lib::Homog_matrix tool_frame(0.0, 0.0, 0.25);
 	tool_frame.get_frame_tab(the_robot->EDP_data.next_tool_frame);
 
-	the_robot->EDP_data.instruction_type = lib::GET;
+	the_robot->ecp_command.instruction.instruction_type = lib::GET;
 	the_robot->EDP_data.get_type = ARM_DV; // arm - ORYGINAL
 	the_robot->EDP_data.set_type = ARM_DV | RMODEL_DV;
 	//	the_robot->EDP_data.set_type = ARM_DV;
@@ -94,7 +94,7 @@ bool y_simple::next_step()
 		ecp_t.mp_buffer_receive_and_send();
 		return false;
 	}
-	the_robot->EDP_data.instruction_type = lib::SET_GET;
+	the_robot->ecp_command.instruction.instruction_type = lib::SET_GET;
 
 	/*if(the_robot->EDP_data.current_gripper_coordinate < 0.058) */
 	the_robot->EDP_data.next_gripper_coordinate = the_robot->EDP_data.current_gripper_coordinate;

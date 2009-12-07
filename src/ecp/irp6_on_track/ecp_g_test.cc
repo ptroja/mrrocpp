@@ -45,7 +45,7 @@ bool y_simple::first_step ( ) {
 	td.value_in_step_no = td.internode_step_no - 2;
 
 
-		the_robot->EDP_data.instruction_type = lib::SET_GET;
+		the_robot->ecp_command.instruction.instruction_type = lib::SET_GET;
 		the_robot->EDP_data.get_type = ARM_DV; // arm - ORYGINAL
 		the_robot->EDP_data.set_type = RMODEL_DV;
 		the_robot->EDP_data.set_arm_type = lib::FRAME;
@@ -80,7 +80,7 @@ bool y_simple::next_step (std::map <lib::SENSOR_ENUM, lib::sensor*>& sensor_m ) 
 	}
 	
 
-	the_robot->EDP_data.instruction_type = lib::SET;
+	the_robot->ecp_command.instruction.instruction_type = lib::SET;
 	the_robot->EDP_data.set_type = ARM_DV;
 	the_robot->EDP_data.get_type = NOTHING_DV;
 	the_robot->EDP_data.get_arm_type = lib::INVALID_END_EFFECTOR;
