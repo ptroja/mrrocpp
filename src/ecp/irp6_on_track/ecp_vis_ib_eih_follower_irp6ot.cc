@@ -39,7 +39,7 @@ bool ecp_vis_ib_eih_follower_irp6ot::first_step() {
 
 	for (int i=0; i<6; i++)
 	{
-		the_robot->EDP_data.next_behaviour[i] = lib::UNGUARDED_MOTION;
+		the_robot->ecp_command.instruction.arm.pf_def.behaviour[i] = lib::UNGUARDED_MOTION;
 	}
 
 
@@ -74,7 +74,7 @@ bool ecp_vis_ib_eih_follower_irp6ot::next_step_without_constraints() {
 	 			the_robot->reply_package.arm.pf_def.arm_coordinates, 6
 						* sizeof(double));
 
-		//next_position[6] = the_robot->EDP_data.current_gripper_coordinate;
+		//next_position[6] = the_robot->reply_package.arm.pf_def.gripper_coordinate;
 
 		next_position[3] = 0;
 		next_position[4] = 0;
@@ -216,7 +216,7 @@ bool ecp_vis_ib_eih_follower_irp6ot::next_step_without_constraints() {
 	memcpy(the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates, next_position,
 			6 * sizeof(double));
 
-	the_robot->EDP_data.next_gripper_coordinate = next_position[6];
+	the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = next_position[6];
 
 	printf("s_x: %f\t s_y %f\t s_z: %f\n", next_position[0],next_position[1],next_position[2]);
 

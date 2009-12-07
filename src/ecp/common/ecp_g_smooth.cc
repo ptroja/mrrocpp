@@ -1016,7 +1016,7 @@ bool smooth::next_step ()
         case lib::XYZ_EULER_ZYZ:
             for(int i=0;i<6;i++)
                 start_position[i]=the_robot->reply_package.arm.pf_def.arm_coordinates[i];
-            start_position[6]=the_robot->EDP_data.current_gripper_coordinate;
+            start_position[6]=the_robot->reply_package.arm.pf_def.gripper_coordinate;
             start_position[7]=0.0;
             for(int i=0; i<MAX_SERVOS_NR; i++)
             {
@@ -1030,7 +1030,7 @@ bool smooth::next_step ()
         case lib::XYZ_ANGLE_AXIS:
             for(int i=0;i<6;i++)
                 start_position[i]=the_robot->reply_package.arm.pf_def.arm_coordinates[i];
-            start_position[6]=the_robot->EDP_data.current_gripper_coordinate;
+            start_position[6]=the_robot->reply_package.arm.pf_def.gripper_coordinate;
             start_position[7]=0.0;
             for(int i=0; i<MAX_SERVOS_NR; i++)
             {
@@ -1247,11 +1247,11 @@ bool smooth::next_step ()
 
             if(v_grip*node_counter < final_position[6])
             {
-                the_robot->EDP_data.next_gripper_coordinate = v_grip*node_counter;
+                the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = v_grip*node_counter;
             }
             else
             {
-                the_robot->EDP_data.next_gripper_coordinate = final_position[6];
+                the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = final_position[6];
             }
         }
         else
@@ -1259,7 +1259,7 @@ bool smooth::next_step ()
             //OSTATNI PUNKT
             for (int i=0; i<6; i++)
                 the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = final_position[i];
-            the_robot->EDP_data.next_gripper_coordinate = final_position[6];
+            the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = final_position[6];
         }
         break;
 
@@ -1278,14 +1278,14 @@ bool smooth::next_step ()
             for (int i=0; i<6; i++)
                 the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = next_position[i];
 
-            the_robot->EDP_data.next_gripper_coordinate = next_position[6];
+            the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = next_position[6];
         }
         else
         {
             //OSTATNI PUNKT
             for (int i=0; i<6; i++)
                 the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = final_position[i];
-            the_robot->EDP_data.next_gripper_coordinate = final_position[6];
+            the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = final_position[6];
         }
         break;
     default:

@@ -45,7 +45,7 @@ void wii_teach::clear_position(void)
     the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[3] = 0;
     the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[4] = 0;
     the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[5] = 0;
-    the_robot->EDP_data.next_gripper_coordinate = 0;
+    the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = 0;
 
     int i;
     for(i = 0;i < 7;++i)
@@ -118,7 +118,7 @@ void wii_teach::set_position(void)
     the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[3] = nextChange[3];
     the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[4] = nextChange[4];
     the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[5] = nextChange[5];
-    the_robot->EDP_data.next_gripper_coordinate = nextChange[6];
+    the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = nextChange[6];
 }
 
 bool wii_teach::next_step()
@@ -183,7 +183,7 @@ bool wii_teach::next_step()
             the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[3],
             the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[4],
             the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[5],
-            the_robot->EDP_data.next_gripper_coordinate
+            the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate
             );
     if(false) sr_ecp_msg.message(buffer);
 

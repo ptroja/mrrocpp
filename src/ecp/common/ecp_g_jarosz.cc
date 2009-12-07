@@ -198,7 +198,7 @@ bool linear::next_step()
 						= the_robot->reply_package.arm.pf_def.arm_coordinates[i] + node_counter*td.coordinate_delta[i]
 								/td.interpolation_node_no;
 			} // end:for
-			the_robot->EDP_data.next_gripper_coordinate = the_robot->EDP_data.current_gripper_coordinate + node_counter
+			the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = the_robot->reply_package.arm.pf_def.gripper_coordinate + node_counter
 					*td.coordinate_delta[6]/td.interpolation_node_no;
 			break;
 
@@ -213,7 +213,7 @@ bool linear::next_step()
 						= the_robot->reply_package.arm.pf_def.arm_coordinates[i] + node_counter*td.coordinate_delta[i]
 								/td.interpolation_node_no;
 			} // end:for
-			the_robot->EDP_data.next_gripper_coordinate = the_robot->EDP_data.current_gripper_coordinate + node_counter
+			the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = the_robot->reply_package.arm.pf_def.gripper_coordinate + node_counter
 					*td.coordinate_delta[6]/td.interpolation_node_no;
 			break;
 		default:
@@ -410,13 +410,13 @@ bool linear_parabolic::next_step()
 				for (int i=0; i<6; i++) {
 					prev_s[i]= the_robot->reply_package.arm.pf_def.arm_coordinates[i];
 				} // end:for
-				prev_s[7] = the_robot->EDP_data.current_gripper_coordinate;
+				prev_s[7] = the_robot->reply_package.arm.pf_def.gripper_coordinate;
 				break;
 			case lib::XYZ_ANGLE_AXIS:
 				for (int i=0; i<6; i++) {
 					prev_s[i]= the_robot->reply_package.arm.pf_def.arm_coordinates[i];
 				} // end:for
-				prev_s[7] = the_robot->EDP_data.current_gripper_coordinate;
+				prev_s[7] = the_robot->reply_package.arm.pf_def.gripper_coordinate;
 				break;
 			default:
 				throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
@@ -516,9 +516,9 @@ bool linear_parabolic::next_step()
 				double s = calculate_s((double)node_counter/td.interpolation_node_no, ta[i], tb[i]);
 
 				if (i==6) {
-					the_robot->EDP_data.next_gripper_coordinate = the_robot->EDP_data.current_gripper_coordinate + s
+					the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = the_robot->reply_package.arm.pf_def.gripper_coordinate + s
 							*td.coordinate_delta[i];
-					vel_avg[i] = the_robot->EDP_data.next_gripper_coordinate - prev_s[i];
+					vel_avg[i] = the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate - prev_s[i];
 				} else {
 					the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
 							= the_robot->reply_package.arm.pf_def.arm_coordinates[i] + s*td.coordinate_delta[i];
@@ -539,7 +539,7 @@ bool linear_parabolic::next_step()
 				} // end : if
 
 				if (i==6) {
-					prev_s[i] = the_robot->EDP_data.next_gripper_coordinate;
+					prev_s[i] = the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate;
 				} else {
 					prev_s[i] = the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i];
 				}
@@ -558,9 +558,9 @@ bool linear_parabolic::next_step()
 				double s = calculate_s((double)node_counter/td.interpolation_node_no, ta[i], tb[i]);
 
 				if (i==6) {
-					the_robot->EDP_data.next_gripper_coordinate = the_robot->EDP_data.current_gripper_coordinate + s
+					the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = the_robot->reply_package.arm.pf_def.gripper_coordinate + s
 							*td.coordinate_delta[i];
-					vel_avg[i] = the_robot->EDP_data.next_gripper_coordinate - prev_s[i];
+					vel_avg[i] = the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate - prev_s[i];
 				} else {
 					the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
 							= the_robot->reply_package.arm.pf_def.arm_coordinates[i] + s*td.coordinate_delta[i];
@@ -581,7 +581,7 @@ bool linear_parabolic::next_step()
 					throw ECP_error (lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
 				} // end : if
 				if (i==6) {
-					prev_s[i] = the_robot->EDP_data.next_gripper_coordinate;
+					prev_s[i] = the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate;
 				} else {
 					prev_s[i] = the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i];
 				}
@@ -758,13 +758,13 @@ bool cubic::next_step()
 				for (int i=0; i<6; i++) {
 					A0[i]= the_robot->reply_package.arm.pf_def.arm_coordinates[i];
 				} // end:for
-				A0[6]= the_robot->EDP_data.current_gripper_coordinate;
+				A0[6]= the_robot->reply_package.arm.pf_def.gripper_coordinate;
 				break;
 			case lib::XYZ_ANGLE_AXIS:
 				for (int i=0; i<6; i++) {
 					A0[i]= the_robot->reply_package.arm.pf_def.arm_coordinates[i];
 				} // end:for
-				A0[6]= the_robot->EDP_data.current_gripper_coordinate;
+				A0[6]= the_robot->reply_package.arm.pf_def.gripper_coordinate;
 				break;
 			default:
 				throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
@@ -871,7 +871,7 @@ bool cubic::next_step()
 					throw ECP_error (lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
 				} // end : if
 				if (i==6) {
-					the_robot->EDP_data.next_gripper_coordinate = A0[i] + A1[i]*(node_counter) + A2[i]*(node_counter
+					the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = A0[i] + A1[i]*(node_counter) + A2[i]*(node_counter
 							*node_counter) + A3[i]*(node_counter*node_counter*node_counter);
 				} else {
 					the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = A0[i] + A1[i]*(node_counter) + A2[i]
@@ -901,7 +901,7 @@ bool cubic::next_step()
 					throw ECP_error (lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
 				} // end : if
 				if (i==6) {
-					the_robot->EDP_data.next_gripper_coordinate = A0[i] + A1[i]*(node_counter) + A2[i]*(node_counter
+					the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = A0[i] + A1[i]*(node_counter) + A2[i]*(node_counter
 							*node_counter) + A3[i]*(node_counter*node_counter*node_counter);
 				} else {
 					the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = A0[i] + A1[i]*(node_counter) + A2[i]
@@ -1012,13 +1012,13 @@ bool quintic::next_step()
 				for (int i=0; i<6; i++) {
 					A0[i]= the_robot->reply_package.arm.pf_def.arm_coordinates[i];
 				} // end:for
-				A0[6]= the_robot->EDP_data.current_gripper_coordinate;
+				A0[6]= the_robot->reply_package.arm.pf_def.gripper_coordinate;
 				break;
 			case lib::XYZ_ANGLE_AXIS:
 				for (int i=0; i<6; i++) {
 					A0[i]= the_robot->reply_package.arm.pf_def.arm_coordinates[i];
 				} // end:for
-				A0[6]= the_robot->EDP_data.current_gripper_coordinate;
+				A0[6]= the_robot->reply_package.arm.pf_def.gripper_coordinate;
 				break;
 			default:
 				throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
@@ -1126,7 +1126,7 @@ bool quintic::next_step()
 					throw ECP_error (lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
 				} // end : if
 				if (i==6) {
-					the_robot->EDP_data.next_gripper_coordinate = A0[i] + A1[i]*(node_counter) + A2[i]*(node_counter
+					the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = A0[i] + A1[i]*(node_counter) + A2[i]*(node_counter
 							*node_counter) + A3[i]*(node_counter*node_counter*node_counter) + A4[i]*(node_counter
 							*node_counter*node_counter*node_counter) + A5[i]*(node_counter*node_counter*node_counter
 							*node_counter*node_counter);
@@ -1163,7 +1163,7 @@ bool quintic::next_step()
 					throw ECP_error (lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
 				} // end : if
 				if (i==6) {
-					the_robot->EDP_data.next_gripper_coordinate = A0[i] + A1[i]*(node_counter) + A2[i]*(node_counter
+					the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = A0[i] + A1[i]*(node_counter) + A2[i]*(node_counter
 							*node_counter) + A3[i]*(node_counter*node_counter*node_counter) + A4[i]*(node_counter
 							*node_counter*node_counter*node_counter) + A5[i]*(node_counter*node_counter*node_counter
 							*node_counter*node_counter);
@@ -1357,7 +1357,7 @@ bool parabolic_teach_in::next_step()
 				the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
 				for (i=0; i < 7; i++) {
 					if (i==6) {
-						Delta = tip.coordinates[i] - the_robot->EDP_data.current_gripper_coordinate;
+						Delta = tip.coordinates[i] - the_robot->reply_package.arm.pf_def.gripper_coordinate;
 					} else {
 						Delta = tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i];
 					}
@@ -1385,7 +1385,7 @@ bool parabolic_teach_in::next_step()
 				the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
 				for (i=0; i < 7; i++) {
 					if (i==6) {
-						a[i] = 4.0*(tip.coordinates[i] - the_robot->EDP_data.current_gripper_coordinate)
+						a[i] = 4.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.gripper_coordinate)
 								/(number_of_intervals*INTERVAL*number_of_intervals*INTERVAL);
 					} else {
 						a[i] = 4.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i])
@@ -1460,10 +1460,10 @@ bool parabolic_teach_in::next_step()
 								- node_counter*INTERVAL);
 
 				if (node_counter < half_number_of_intervals)
-					the_robot->EDP_data.next_gripper_coordinate = the_robot->EDP_data.current_gripper_coordinate + 0.5
+					the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = the_robot->reply_package.arm.pf_def.gripper_coordinate + 0.5
 							* a[6]* node_counter*INTERVAL*node_counter*INTERVAL;
 				else
-					the_robot->EDP_data.next_gripper_coordinate = tip.coordinates[6] - 0.5 * a[6]
+					the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = tip.coordinates[6] - 0.5 * a[6]
 							* (number_of_intervals*INTERVAL - node_counter*INTERVAL)* (number_of_intervals*INTERVAL
 							- node_counter*INTERVAL);
 
@@ -1480,10 +1480,10 @@ bool parabolic_teach_in::next_step()
 								- node_counter*INTERVAL);
 
 				if (node_counter < half_number_of_intervals)
-					the_robot->EDP_data.next_gripper_coordinate = the_robot->EDP_data.current_gripper_coordinate + 0.5
+					the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = the_robot->reply_package.arm.pf_def.gripper_coordinate + 0.5
 							* a[6]* node_counter*INTERVAL*node_counter*INTERVAL;
 				else
-					the_robot->EDP_data.next_gripper_coordinate = tip.coordinates[6] - 0.5 * a[6]
+					the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = tip.coordinates[6] - 0.5 * a[6]
 							* (number_of_intervals*INTERVAL - node_counter*INTERVAL)* (number_of_intervals*INTERVAL
 							- node_counter*INTERVAL);
 
@@ -1670,7 +1670,7 @@ bool calibration::next_step()
 				the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
 				for (i=0; i < 7; i++) {
 					if (i==6) {
-						a[i] = 4.0*(tip.coordinates[i] - the_robot->EDP_data.current_gripper_coordinate)
+						a[i] = 4.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.gripper_coordinate)
 								/(number_of_intervals*INTERVAL*number_of_intervals*INTERVAL);
 					} else {
 						a[i] = 4.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i])
@@ -1694,7 +1694,7 @@ bool calibration::next_step()
 				the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
 				for (i=0; i < 7; i++) {
 					if (i==6) {
-						a[i] = 4.0*(tip.coordinates[i] - the_robot->EDP_data.current_gripper_coordinate)
+						a[i] = 4.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.gripper_coordinate)
 								/(number_of_intervals*INTERVAL*number_of_intervals*INTERVAL);
 					} else {
 						a[i] = 4.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i])
@@ -1987,10 +1987,10 @@ bool cubic_spline::next_step()
 							/ (number_of_intervals*number_of_intervals*number_of_intervals);
 				} // end:for
 
-				A0[6]= the_robot->EDP_data.current_gripper_coordinate;
-				A2[6]=(3.0*(tip.coordinates[6] - the_robot->EDP_data.current_gripper_coordinate) )
+				A0[6]= the_robot->reply_package.arm.pf_def.gripper_coordinate;
+				A2[6]=(3.0*(tip.coordinates[6] - the_robot->reply_package.arm.pf_def.gripper_coordinate) )
 						/ (number_of_intervals*number_of_intervals);
-				A3[6]=(-2.0*(tip.coordinates[6] - the_robot->EDP_data.current_gripper_coordinate) )
+				A3[6]=(-2.0*(tip.coordinates[6] - the_robot->reply_package.arm.pf_def.gripper_coordinate) )
 						/ (number_of_intervals*number_of_intervals*number_of_intervals);
 				break;
 			case lib::XYZ_ANGLE_AXIS:
@@ -2002,10 +2002,10 @@ bool cubic_spline::next_step()
 					A3[i]=(-2.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i]) )
 							/ (number_of_intervals*number_of_intervals*number_of_intervals);
 				} // end:for
-				A0[6]= the_robot->EDP_data.current_gripper_coordinate;
-				A2[6]=(3.0*(tip.coordinates[6] - the_robot->EDP_data.current_gripper_coordinate) )
+				A0[6]= the_robot->reply_package.arm.pf_def.gripper_coordinate;
+				A2[6]=(3.0*(tip.coordinates[6] - the_robot->reply_package.arm.pf_def.gripper_coordinate) )
 						/ (number_of_intervals*number_of_intervals);
-				A3[6]=(-2.0*(tip.coordinates[6] - the_robot->EDP_data.current_gripper_coordinate) )
+				A3[6]=(-2.0*(tip.coordinates[6] - the_robot->reply_package.arm.pf_def.gripper_coordinate) )
 						/ (number_of_intervals*number_of_intervals*number_of_intervals);
 				break;
 			default:
@@ -2089,7 +2089,7 @@ bool cubic_spline::next_step()
 						throw ECP_error (lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
 					} // end : if
 					if (i==6) {
-						the_robot->EDP_data.next_gripper_coordinate = A0[i] + A2[i]*(node_counter*node_counter) + A3[i]
+						the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = A0[i] + A2[i]*(node_counter*node_counter) + A3[i]
 								*(node_counter*node_counter*node_counter);
 					} else {
 						the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = A0[i] + A2[i]*(node_counter*node_counter)
@@ -2113,7 +2113,7 @@ bool cubic_spline::next_step()
 						throw ECP_error (lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
 					} // end : if
 					if (i==6) {
-						the_robot->EDP_data.next_gripper_coordinate = A0[i] + A2[i]*(node_counter*node_counter) + A3[i]
+						the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = A0[i] + A2[i]*(node_counter*node_counter) + A3[i]
 								*(node_counter*node_counter*node_counter);
 					} else {
 						the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = A0[i] + A2[i]*(node_counter*node_counter)
@@ -2318,7 +2318,7 @@ bool smooth_cubic_spline::next_step()
 				the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
 				for (int i=0; i<7; i++) {
 					if (i==6) {
-						y(0, i) = the_robot->EDP_data.current_gripper_coordinate;
+						y(0, i) = the_robot->reply_package.arm.pf_def.gripper_coordinate;
 					} else {
 						y(0, i) = the_robot->reply_package.arm.pf_def.arm_coordinates[i];
 					}
@@ -2330,7 +2330,7 @@ bool smooth_cubic_spline::next_step()
 				the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
 				for (int i=0; i<7; i++) {
 					if (i==6) {
-						y(0, i) = the_robot->EDP_data.current_gripper_coordinate;
+						y(0, i) = the_robot->reply_package.arm.pf_def.gripper_coordinate;
 					} else {
 						y(0, i) = the_robot->reply_package.arm.pf_def.arm_coordinates[i];
 					}
@@ -2570,7 +2570,7 @@ bool smooth_cubic_spline::next_step()
 						throw ECP_error (lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
 					} // end : if
 					if (i==6) {
-						the_robot->EDP_data.next_gripper_coordinate = A*y(j, i) + B*y(j+1, i) + C*a(j, i) +D*a(j+1, i) ;
+						the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = A*y(j, i) + B*y(j+1, i) + C*a(j, i) +D*a(j+1, i) ;
 					} else {
 						the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = A*y(j, i) + B*y(j+1, i) + C*a(j, i) +D
 								*a(j+1, i) ;
@@ -2602,7 +2602,7 @@ bool smooth_cubic_spline::next_step()
 						throw ECP_error (lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
 					} // end : if
 					if (i==6) {
-						the_robot->EDP_data.next_gripper_coordinate = A*y(j, i) + B*y(j+1, i) + C*a(j, i) +D*a(j+1, i) ;
+						the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = A*y(j, i) + B*y(j+1, i) + C*a(j, i) +D*a(j+1, i) ;
 					} else {
 						the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = A*y(j, i) + B*y(j+1, i) + C*a(j, i) +D*a(j
 								+1, i) ;
@@ -2797,12 +2797,12 @@ bool quintic_spline::next_step()
 							/ (number_of_intervals*number_of_intervals*number_of_intervals *number_of_intervals
 									*number_of_intervals);
 				} // end:for
-				A0[6]= the_robot->EDP_data.current_gripper_coordinate;
-				A3[6]=(10.0*(tip.coordinates[6] - the_robot->EDP_data.current_gripper_coordinate) )
+				A0[6]= the_robot->reply_package.arm.pf_def.gripper_coordinate;
+				A3[6]=(10.0*(tip.coordinates[6] - the_robot->reply_package.arm.pf_def.gripper_coordinate) )
 						/ (number_of_intervals*number_of_intervals*number_of_intervals);
-				A4[6]=(-15.0*(tip.coordinates[6] - the_robot->EDP_data.current_gripper_coordinate) )
+				A4[6]=(-15.0*(tip.coordinates[6] - the_robot->reply_package.arm.pf_def.gripper_coordinate) )
 						/ (number_of_intervals*number_of_intervals*number_of_intervals*number_of_intervals);
-				A5[6]=(6.0*(tip.coordinates[6] - the_robot->EDP_data.current_gripper_coordinate) )
+				A5[6]=(6.0*(tip.coordinates[6] - the_robot->reply_package.arm.pf_def.gripper_coordinate) )
 						/ (number_of_intervals*number_of_intervals*number_of_intervals *number_of_intervals
 								*number_of_intervals);
 
@@ -2819,12 +2819,12 @@ bool quintic_spline::next_step()
 							/ (number_of_intervals*number_of_intervals*number_of_intervals *number_of_intervals
 									*number_of_intervals);
 				} // end:for
-				A0[6]= the_robot->EDP_data.current_gripper_coordinate;
-				A3[6]=(10.0*(tip.coordinates[6] - the_robot->EDP_data.current_gripper_coordinate) )
+				A0[6]= the_robot->reply_package.arm.pf_def.gripper_coordinate;
+				A3[6]=(10.0*(tip.coordinates[6] - the_robot->reply_package.arm.pf_def.gripper_coordinate) )
 						/ (number_of_intervals*number_of_intervals*number_of_intervals);
-				A4[6]=(-15.0*(tip.coordinates[6] - the_robot->EDP_data.current_gripper_coordinate) )
+				A4[6]=(-15.0*(tip.coordinates[6] - the_robot->reply_package.arm.pf_def.gripper_coordinate) )
 						/ (number_of_intervals*number_of_intervals*number_of_intervals*number_of_intervals);
-				A5[6]=(6.0*(tip.coordinates[6] - the_robot->EDP_data.current_gripper_coordinate) )
+				A5[6]=(6.0*(tip.coordinates[6] - the_robot->reply_package.arm.pf_def.gripper_coordinate) )
 						/ (number_of_intervals*number_of_intervals*number_of_intervals *number_of_intervals
 								*number_of_intervals);
 				break;
@@ -2919,7 +2919,7 @@ bool quintic_spline::next_step()
 					} // end : if
 
 					if (i==6) {
-						the_robot->EDP_data.next_gripper_coordinate = A0[i] + A3[i]*(node_counter*node_counter
+						the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = A0[i] + A3[i]*(node_counter*node_counter
 								*node_counter) + A4[i]*(node_counter*node_counter*node_counter*node_counter) + A5[i]
 								*(node_counter*node_counter*node_counter*node_counter*node_counter);
 					} else {
@@ -2948,7 +2948,7 @@ bool quintic_spline::next_step()
 						throw ECP_error (lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
 					} // end : if
 					if (i==6) {
-						the_robot->EDP_data.next_gripper_coordinate = A0[i] + A3[i]*(node_counter*node_counter
+						the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = A0[i] + A3[i]*(node_counter*node_counter
 								*node_counter) + A4[i]*(node_counter*node_counter*node_counter*node_counter) + A5[i]
 								*(node_counter*node_counter*node_counter*node_counter*node_counter);
 					} else {

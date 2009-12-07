@@ -87,10 +87,10 @@ void robot::create_command(void)
 					case lib::FORCE_TOOL:
 						for (int j=0; j<3; j++) {
 							ecp_command.instruction.rmodel.force_tool.position[j]
-									= EDP_data.next_force_tool_position[j];
+									= ecp_command.instruction.rmodel.force_tool.position[j];
 						}
 						ecp_command.instruction.rmodel.force_tool.weight
-								= EDP_data.next_force_tool_weight;
+								= ecp_command.instruction.rmodel.force_tool.weight;
 						break;
 					case lib::FORCE_BIAS:
 						break;
@@ -139,7 +139,7 @@ void robot::create_command(void)
 
 						for (int j=0; j<number_of_servos; j++) {
 							ecp_command.instruction.arm.pf_def.arm_coordinates[j]
-									= EDP_data.next_velocity[j]; // pozycja poczatkowa
+									= ecp_command.instruction.arm.pf_def.arm_coordinates[j]; // pozycja poczatkowa
 						}
 						break;
 					default: // Blad: niewlasciwy sposob zadawania polozenia ramienia
@@ -151,13 +151,13 @@ void robot::create_command(void)
 						break;
 					case lib::TCIM:
 						for (int j=0; j<6; j++) {
-							ecp_command.instruction.arm.pf_def.inertia[j] = EDP_data.next_inertia[j];
+							ecp_command.instruction.arm.pf_def.inertia[j] = ecp_command.instruction.arm.pf_def.inertia[j];
 							ecp_command.instruction.arm.pf_def.reciprocal_damping[j]
-									= EDP_data.next_reciprocal_damping[j];
+									= ecp_command.instruction.arm.pf_def.reciprocal_damping[j];
 							ecp_command.instruction.arm.pf_def.force_xyz_torque_xyz[j]
-									= EDP_data.next_force_xyz_torque_xyz[j]; // pozycja docelowa
+									= ecp_command.instruction.arm.pf_def.force_xyz_torque_xyz[j]; // pozycja docelowa
 							ecp_command.instruction.arm.pf_def.behaviour[j]
-									= EDP_data.next_behaviour[j]; // pozycja docelowa
+									= ecp_command.instruction.arm.pf_def.behaviour[j]; // pozycja docelowa
 						}
 						break;
 					default:
@@ -165,7 +165,7 @@ void robot::create_command(void)
 						break;
 				}
 				ecp_command.instruction.arm.pf_def.gripper_coordinate
-						= EDP_data.next_gripper_coordinate; // zadany stopien rozwarcia chwytaka
+						= ecp_command.instruction.arm.pf_def.gripper_coordinate; // zadany stopien rozwarcia chwytaka
 
 			}
 			break;
@@ -266,12 +266,12 @@ void robot::get_arm_reply(void)
 
 
 	for (int i=0; i<6; i++) {
-		EDP_data.current_force_xyz_torque_xyz[i]
+		reply_package.arm.pf_def.force_xyz_torque_xyz[i]
 				= reply_package.arm.pf_def.force_xyz_torque_xyz[i];
 	}
 
-	EDP_data.current_gripper_coordinate = reply_package.arm.pf_def.gripper_coordinate;
-	EDP_data.gripper_reg_state = reply_package.arm.pf_def.gripper_reg_state;
+	reply_package.arm.pf_def.gripper_coordinate = reply_package.arm.pf_def.gripper_coordinate;
+	reply_package.arm.pf_def.gripper_reg_state = reply_package.arm.pf_def.gripper_reg_state;
 }
 
 void robot::get_rmodel_reply(void)
@@ -309,10 +309,10 @@ void robot::get_rmodel_reply(void)
 			break;
 		case lib::FORCE_TOOL:
 			for (int j=0; j<3; j++) {
-				EDP_data.current_force_tool_position[j]
+				reply_package.rmodel.force_tool.position[j]
 						= reply_package.rmodel.force_tool.position[j];
 			}
-			EDP_data.current_force_tool_weight = reply_package.rmodel.force_tool.weight;
+			reply_package.rmodel.force_tool.weight = reply_package.rmodel.force_tool.weight;
 			break;
 		default: // bledny typ specyfikacji modelu robota
 			throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);

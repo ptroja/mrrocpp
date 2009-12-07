@@ -131,7 +131,7 @@ bool weight_meassure::next_step()
 	//	std::cout << 	current_frame_wo_offset << std::endl;
 
 	lib::Ft_v_vector force_torque(lib::Ft_v_tr(current_frame_wo_offset, lib::Ft_v_tr::FT)
-			* lib::Ft_v_vector(the_robot->EDP_data.current_force_xyz_torque_xyz));
+			* lib::Ft_v_vector(the_robot->reply_package.arm.pf_def.force_xyz_torque_xyz));
 
 	insert_in_buffer(-force_torque[2]);
 
@@ -659,22 +659,22 @@ bool y_edge_follow_force::first_step()
 
 	for (int i=0; i<3; i++)
 	{
-		the_robot->EDP_data.next_inertia[i] = FORCE_INERTIA;
-		the_robot->EDP_data.next_inertia[i+3] = TORQUE_INERTIA;
+		the_robot->ecp_command.instruction.arm.pf_def.inertia[i] = FORCE_INERTIA;
+		the_robot->ecp_command.instruction.arm.pf_def.inertia[i+3] = TORQUE_INERTIA;
 	}
 
 	for (int i=0; i<6; i++)
 	{
-		the_robot->EDP_data.next_velocity[i] = 0;
-		the_robot->EDP_data.next_force_xyz_torque_xyz[i] = 0;
+		the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = 0;
+		the_robot->ecp_command.instruction.arm.pf_def.force_xyz_torque_xyz[i] = 0;
 		//	the_robot->EDP_data.ECPtoEDP_reciprocal_damping[i] = 0.0;
-		the_robot->EDP_data.next_behaviour[i] = lib::UNGUARDED_MOTION;
+		the_robot->ecp_command.instruction.arm.pf_def.behaviour[i] = lib::UNGUARDED_MOTION;
 	}
 
-	the_robot->EDP_data.next_reciprocal_damping[0] = FORCE_RECIPROCAL_DAMPING;
-	the_robot->EDP_data.next_behaviour[0] = lib::CONTACT;
+	the_robot->ecp_command.instruction.arm.pf_def.reciprocal_damping[0] = FORCE_RECIPROCAL_DAMPING;
+	the_robot->ecp_command.instruction.arm.pf_def.behaviour[0] = lib::CONTACT;
 	// Sila dosciku do rawedzi
-	the_robot->EDP_data.next_force_xyz_torque_xyz[0] = 4;
+	the_robot->ecp_command.instruction.arm.pf_def.force_xyz_torque_xyz[0] = 4;
 
 	return true;
 }
@@ -714,8 +714,8 @@ bool y_edge_follow_force::next_step()
 
 	the_robot->ecp_command.instruction.instruction_type = lib::SET_GET;
 
-	the_robot->EDP_data.next_gripper_coordinate
-			= the_robot->EDP_data.current_gripper_coordinate;
+	the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate
+			= the_robot->reply_package.arm.pf_def.gripper_coordinate;
 
 	for (int i=0; i<MAX_SERVOS_NR; i++)
 	{
@@ -728,7 +728,7 @@ bool y_edge_follow_force::next_step()
 
 
 	// sprowadzenie sil do ukladu kisci
-	lib::Ft_v_vector force_torque(the_robot->EDP_data.current_force_xyz_torque_xyz);
+	lib::Ft_v_vector force_torque(the_robot->reply_package.arm.pf_def.force_xyz_torque_xyz);
 
 	double wx = force_torque[0];
 	double wy = force_torque[1];
@@ -740,8 +740,8 @@ bool y_edge_follow_force::next_step()
 		double s_alfa = wy / v;
 		double c_alfa = wx / v;
 
-		the_robot->EDP_data.next_velocity[1] = 0.002*v;
-		//     the_robot->EDP_data.next_velocity[1] = -0.00;
+		the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[1] = 0.002*v;
+		//     the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[1] = -0.00;
 		//	the_robot->EDP_data.ECPtoEDP_position_velocity[1] = 0.0;
 
 		// basic_rot_frame = lib::Homog_matrix(c_alfa, s_alfa, 0.0,	-s_alfa, c_alfa, 0.0,	0.0, 0.0, 1,	0.0, 0.0, 0.0);
@@ -838,46 +838,46 @@ bool legobrick_attach_force::first_step()
 
 	for (int i=0; i<3; i++)
 	{
-		the_robot->EDP_data.next_inertia[i] = FORCE_INERTIA;
-		the_robot->EDP_data.next_inertia[i+3] = TORQUE_INERTIA;
+		the_robot->ecp_command.instruction.arm.pf_def.inertia[i] = FORCE_INERTIA;
+		the_robot->ecp_command.instruction.arm.pf_def.inertia[i+3] = TORQUE_INERTIA;
 	}
 
 	//os x
-	//the_robot->EDP_data.next_reciprocal_damping[0] = FORCE_RECIPROCAL_DAMPING;
-	the_robot->EDP_data.next_velocity[0] = 0;
-	the_robot->EDP_data.next_force_xyz_torque_xyz[0] = 0.0;
-	//the_robot->EDP_data.next_behaviour[0] = lib::CONTACT;
-	the_robot->EDP_data.next_behaviour[0] = lib::UNGUARDED_MOTION;
+	//the_robot->ecp_command.instruction.arm.pf_def.reciprocal_damping[0] = FORCE_RECIPROCAL_DAMPING;
+	the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[0] = 0;
+	the_robot->ecp_command.instruction.arm.pf_def.force_xyz_torque_xyz[0] = 0.0;
+	//the_robot->ecp_command.instruction.arm.pf_def.behaviour[0] = lib::CONTACT;
+	the_robot->ecp_command.instruction.arm.pf_def.behaviour[0] = lib::UNGUARDED_MOTION;
 
-	//the_robot->EDP_data.next_reciprocal_damping[3] = 0.0;
-	the_robot->EDP_data.next_velocity[3] = 0;
-	the_robot->EDP_data.next_force_xyz_torque_xyz[3] = 0;
-	the_robot->EDP_data.next_behaviour[3] = lib::UNGUARDED_MOTION;
+	//the_robot->ecp_command.instruction.arm.pf_def.reciprocal_damping[3] = 0.0;
+	the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[3] = 0;
+	the_robot->ecp_command.instruction.arm.pf_def.force_xyz_torque_xyz[3] = 0;
+	the_robot->ecp_command.instruction.arm.pf_def.behaviour[3] = lib::UNGUARDED_MOTION;
 
 	//os y (obrotu)
-	//the_robot->EDP_data.next_reciprocal_damping[1] = FORCE_RECIPROCAL_DAMPING;
-	the_robot->EDP_data.next_velocity[1] = 0;
-	the_robot->EDP_data.next_force_xyz_torque_xyz[1] = 0.0;
-	the_robot->EDP_data.next_behaviour[1] = lib::UNGUARDED_MOTION;
-	//the_robot->EDP_data.next_behaviour[1] = lib::CONTACT;
+	//the_robot->ecp_command.instruction.arm.pf_def.reciprocal_damping[1] = FORCE_RECIPROCAL_DAMPING;
+	the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[1] = 0;
+	the_robot->ecp_command.instruction.arm.pf_def.force_xyz_torque_xyz[1] = 0.0;
+	the_robot->ecp_command.instruction.arm.pf_def.behaviour[1] = lib::UNGUARDED_MOTION;
+	//the_robot->ecp_command.instruction.arm.pf_def.behaviour[1] = lib::CONTACT;
 
-	//the_robot->EDP_data.next_reciprocal_damping[4] = TORQUE_RECIPROCAL_DAMPING;
-	the_robot->EDP_data.next_velocity[4] = 0.0;
-	the_robot->EDP_data.next_force_xyz_torque_xyz[4] = 0.0;
-	//the_robot->EDP_data.next_behaviour[4] = lib::GUARDED_MOTION;
-	the_robot->EDP_data.next_behaviour[4] = lib::UNGUARDED_MOTION;
+	//the_robot->ecp_command.instruction.arm.pf_def.reciprocal_damping[4] = TORQUE_RECIPROCAL_DAMPING;
+	the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[4] = 0.0;
+	the_robot->ecp_command.instruction.arm.pf_def.force_xyz_torque_xyz[4] = 0.0;
+	//the_robot->ecp_command.instruction.arm.pf_def.behaviour[4] = lib::GUARDED_MOTION;
+	the_robot->ecp_command.instruction.arm.pf_def.behaviour[4] = lib::UNGUARDED_MOTION;
 
 	//os z
-	the_robot->EDP_data.next_reciprocal_damping[2] = FORCE_RECIPROCAL_DAMPING;
-	the_robot->EDP_data.next_velocity[2] = 0;
-	the_robot->EDP_data.next_force_xyz_torque_xyz[2] = 5.0;
-	//the_robot->EDP_data.next_behaviour[2] = lib::UNGUARDED_MOTION;
-	the_robot->EDP_data.next_behaviour[2] = lib::CONTACT;
+	the_robot->ecp_command.instruction.arm.pf_def.reciprocal_damping[2] = FORCE_RECIPROCAL_DAMPING;
+	the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[2] = 0;
+	the_robot->ecp_command.instruction.arm.pf_def.force_xyz_torque_xyz[2] = 5.0;
+	//the_robot->ecp_command.instruction.arm.pf_def.behaviour[2] = lib::UNGUARDED_MOTION;
+	the_robot->ecp_command.instruction.arm.pf_def.behaviour[2] = lib::CONTACT;
 
-	//the_robot->EDP_data.next_reciprocal_damping[5] = 0.0;
-	the_robot->EDP_data.next_velocity[5] = 0;
-	the_robot->EDP_data.next_force_xyz_torque_xyz[5] = 0;
-	the_robot->EDP_data.next_behaviour[5] = lib::UNGUARDED_MOTION;
+	//the_robot->ecp_command.instruction.arm.pf_def.reciprocal_damping[5] = 0.0;
+	the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[5] = 0;
+	the_robot->ecp_command.instruction.arm.pf_def.force_xyz_torque_xyz[5] = 0;
+	the_robot->ecp_command.instruction.arm.pf_def.behaviour[5] = lib::UNGUARDED_MOTION;
 
 	return true;
 }
@@ -891,15 +891,15 @@ bool legobrick_attach_force::next_step()
 
 	the_robot->ecp_command.instruction.instruction_type = lib::SET_GET;
 
-	the_robot->EDP_data.next_gripper_coordinate
-			= the_robot->EDP_data.current_gripper_coordinate;
+	the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate
+			= the_robot->reply_package.arm.pf_def.gripper_coordinate;
 
 	for (int i=0; i<MAX_SERVOS_NR; i++)
 	{
 		the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]=0.0;
 	}
 
-	lib::Ft_v_vector force_torque(the_robot->EDP_data.current_force_xyz_torque_xyz);
+	lib::Ft_v_vector force_torque(the_robot->reply_package.arm.pf_def.force_xyz_torque_xyz);
 
 	double wz = force_torque[2];
 
@@ -956,45 +956,45 @@ bool legobrick_detach_force::first_step()
 
 	for (int i=0; i<3; i++)
 	{
-		the_robot->EDP_data.next_inertia[i] = FORCE_INERTIA/4;
-		the_robot->EDP_data.next_inertia[i+3] = TORQUE_INERTIA;
+		the_robot->ecp_command.instruction.arm.pf_def.inertia[i] = FORCE_INERTIA/4;
+		the_robot->ecp_command.instruction.arm.pf_def.inertia[i+3] = TORQUE_INERTIA;
 	}
 
 	//os x
-	the_robot->EDP_data.next_reciprocal_damping[0] = FORCE_RECIPROCAL_DAMPING;
-	the_robot->EDP_data.next_velocity[0] = 0;
-	the_robot->EDP_data.next_force_xyz_torque_xyz[0] = 0.0;
-	the_robot->EDP_data.next_behaviour[0] = lib::CONTACT;
-	//the_robot->EDP_data.next_behaviour[0] = lib::UNGUARDED_MOTION;
+	the_robot->ecp_command.instruction.arm.pf_def.reciprocal_damping[0] = FORCE_RECIPROCAL_DAMPING;
+	the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[0] = 0;
+	the_robot->ecp_command.instruction.arm.pf_def.force_xyz_torque_xyz[0] = 0.0;
+	the_robot->ecp_command.instruction.arm.pf_def.behaviour[0] = lib::CONTACT;
+	//the_robot->ecp_command.instruction.arm.pf_def.behaviour[0] = lib::UNGUARDED_MOTION;
 
-	//the_robot->EDP_data.next_reciprocal_damping[3] = 0.0;
-	the_robot->EDP_data.next_velocity[3] = 0;
-	the_robot->EDP_data.next_force_xyz_torque_xyz[3] = 0;
-	the_robot->EDP_data.next_behaviour[3] = lib::UNGUARDED_MOTION;
+	//the_robot->ecp_command.instruction.arm.pf_def.reciprocal_damping[3] = 0.0;
+	the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[3] = 0;
+	the_robot->ecp_command.instruction.arm.pf_def.force_xyz_torque_xyz[3] = 0;
+	the_robot->ecp_command.instruction.arm.pf_def.behaviour[3] = lib::UNGUARDED_MOTION;
 
 	//os y (obrotu)
-	the_robot->EDP_data.next_reciprocal_damping[1] = FORCE_RECIPROCAL_DAMPING;
-	the_robot->EDP_data.next_velocity[1] = 0;
-	the_robot->EDP_data.next_force_xyz_torque_xyz[1] = 0.0;
-	//the_robot->EDP_data.next_behaviour[1] = lib::UNGUARDED_MOTION;//CONTACT;
-	the_robot->EDP_data.next_behaviour[1] = lib::CONTACT;
+	the_robot->ecp_command.instruction.arm.pf_def.reciprocal_damping[1] = FORCE_RECIPROCAL_DAMPING;
+	the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[1] = 0;
+	the_robot->ecp_command.instruction.arm.pf_def.force_xyz_torque_xyz[1] = 0.0;
+	//the_robot->ecp_command.instruction.arm.pf_def.behaviour[1] = lib::UNGUARDED_MOTION;//CONTACT;
+	the_robot->ecp_command.instruction.arm.pf_def.behaviour[1] = lib::CONTACT;
 
-	the_robot->EDP_data.next_reciprocal_damping[4] = TORQUE_RECIPROCAL_DAMPING;
-	the_robot->EDP_data.next_velocity[4] = -0.05;
-	the_robot->EDP_data.next_force_xyz_torque_xyz[4] = 0.0;
-	the_robot->EDP_data.next_behaviour[4] = lib::GUARDED_MOTION;
+	the_robot->ecp_command.instruction.arm.pf_def.reciprocal_damping[4] = TORQUE_RECIPROCAL_DAMPING;
+	the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[4] = -0.05;
+	the_robot->ecp_command.instruction.arm.pf_def.force_xyz_torque_xyz[4] = 0.0;
+	the_robot->ecp_command.instruction.arm.pf_def.behaviour[4] = lib::GUARDED_MOTION;
 
 	//os z
-	the_robot->EDP_data.next_reciprocal_damping[2] = FORCE_RECIPROCAL_DAMPING/4;
-	the_robot->EDP_data.next_velocity[2] = 0;
-	the_robot->EDP_data.next_force_xyz_torque_xyz[2] = 20.0;
-	//the_robot->EDP_data.next_behaviour[2] = lib::UNGUARDED_MOTION;//CONTACT;
-	the_robot->EDP_data.next_behaviour[2] = lib::CONTACT;
+	the_robot->ecp_command.instruction.arm.pf_def.reciprocal_damping[2] = FORCE_RECIPROCAL_DAMPING/4;
+	the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[2] = 0;
+	the_robot->ecp_command.instruction.arm.pf_def.force_xyz_torque_xyz[2] = 20.0;
+	//the_robot->ecp_command.instruction.arm.pf_def.behaviour[2] = lib::UNGUARDED_MOTION;//CONTACT;
+	the_robot->ecp_command.instruction.arm.pf_def.behaviour[2] = lib::CONTACT;
 
-	//the_robot->EDP_data.next_reciprocal_damping[5] = 0.0;
-	the_robot->EDP_data.next_velocity[5] = 0;
-	the_robot->EDP_data.next_force_xyz_torque_xyz[5] = 0;
-	the_robot->EDP_data.next_behaviour[5] = lib::UNGUARDED_MOTION;
+	//the_robot->ecp_command.instruction.arm.pf_def.reciprocal_damping[5] = 0.0;
+	the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[5] = 0;
+	the_robot->ecp_command.instruction.arm.pf_def.force_xyz_torque_xyz[5] = 0;
+	the_robot->ecp_command.instruction.arm.pf_def.behaviour[5] = lib::UNGUARDED_MOTION;
 
 	return true;
 }
@@ -1008,8 +1008,8 @@ bool legobrick_detach_force::next_step()
 
 	the_robot->ecp_command.instruction.instruction_type = lib::SET_GET;
 
-	the_robot->EDP_data.next_gripper_coordinate
-			= the_robot->EDP_data.current_gripper_coordinate;
+	the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate
+			= the_robot->reply_package.arm.pf_def.gripper_coordinate;
 
 	for (int i=0; i<MAX_SERVOS_NR; i++)
 	{
@@ -1753,11 +1753,11 @@ bool tff_nose_run::first_step()
 
 	for (int i=0; i<6; i++)
 	{
-		 the_robot->EDP_data.next_behaviour[i] = generator_edp_data.next_behaviour[i];
-		 the_robot->EDP_data.next_velocity[i] = generator_edp_data.next_velocity[i];
-		 the_robot->EDP_data.next_force_xyz_torque_xyz[i] = generator_edp_data.next_force_xyz_torque_xyz[i];
-		 the_robot->EDP_data.next_reciprocal_damping[i] = generator_edp_data.next_reciprocal_damping[i];
-		 the_robot->EDP_data.next_inertia[i] = generator_edp_data.next_inertia[i];
+		 the_robot->ecp_command.instruction.arm.pf_def.behaviour[i] = generator_edp_data.next_behaviour[i];
+		 the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = generator_edp_data.next_velocity[i];
+		 the_robot->ecp_command.instruction.arm.pf_def.force_xyz_torque_xyz[i] = generator_edp_data.next_force_xyz_torque_xyz[i];
+		 the_robot->ecp_command.instruction.arm.pf_def.reciprocal_damping[i] = generator_edp_data.next_reciprocal_damping[i];
+		 the_robot->ecp_command.instruction.arm.pf_def.inertia[i] = generator_edp_data.next_inertia[i];
 	}
 
 
@@ -1790,7 +1790,7 @@ bool tff_nose_run::next_step()
 
 	if (node_counter==1)
 	{
-		the_robot->EDP_data.next_gripper_coordinate=0;
+		the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate=0;
 	}
 
 	// wyrzucanie odczytu sil
@@ -1800,7 +1800,7 @@ bool tff_nose_run::next_step()
 		lib::Homog_matrix current_frame_wo_offset(the_robot->reply_package.arm.pf_def.arm_frame);
 		current_frame_wo_offset.remove_translation();
 
-		lib::Ft_v_vector force_torque(the_robot->EDP_data.current_force_xyz_torque_xyz);
+		lib::Ft_v_vector force_torque(the_robot->reply_package.arm.pf_def.force_xyz_torque_xyz);
 
 		std::cout<<"force: "<<force_torque<<std::endl;
 	}
@@ -1901,8 +1901,8 @@ bool eih_nose_run::next_step()
 
 	if (node_counter==1)
 	{
-		the_robot->EDP_data.next_gripper_coordinate
-				= the_robot->EDP_data.current_gripper_coordinate;
+		the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate
+				= the_robot->reply_package.arm.pf_def.gripper_coordinate;
 	}
 
 	// wyrzucanie odczytu sil
@@ -1912,7 +1912,7 @@ bool eih_nose_run::next_step()
 		lib::Homog_matrix current_frame_wo_offset(the_robot->reply_package.arm.pf_def.arm_frame);
 		current_frame_wo_offset.remove_translation();
 
-		lib::Ft_v_vector force_torque(the_robot->EDP_data.current_force_xyz_torque_xyz);
+		lib::Ft_v_vector force_torque(the_robot->reply_package.arm.pf_def.force_xyz_torque_xyz);
 
 		std::cout<<"force: "<<force_torque<<std::endl;
 	}
@@ -2044,11 +2044,11 @@ bool sr_nose_run::first_step()
 
 	for (int i=0; i<6; i++)
 	{
-		 the_robot->EDP_data.next_behaviour[i] = generator_edp_data.next_behaviour[i];
-		 the_robot->EDP_data.next_velocity[i] = generator_edp_data.next_velocity[i];
-		 the_robot->EDP_data.next_force_xyz_torque_xyz[i] = generator_edp_data.next_force_xyz_torque_xyz[i];
-		 the_robot->EDP_data.next_reciprocal_damping[i] = generator_edp_data.next_reciprocal_damping[i];
-		 the_robot->EDP_data.next_inertia[i] = generator_edp_data.next_inertia[i];
+		 the_robot->ecp_command.instruction.arm.pf_def.behaviour[i] = generator_edp_data.next_behaviour[i];
+		 the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = generator_edp_data.next_velocity[i];
+		 the_robot->ecp_command.instruction.arm.pf_def.force_xyz_torque_xyz[i] = generator_edp_data.next_force_xyz_torque_xyz[i];
+		 the_robot->ecp_command.instruction.arm.pf_def.reciprocal_damping[i] = generator_edp_data.next_reciprocal_damping[i];
+		 the_robot->ecp_command.instruction.arm.pf_def.inertia[i] = generator_edp_data.next_inertia[i];
 	}
 
 
@@ -2087,8 +2087,8 @@ bool sr_nose_run::next_step()
 	//Kwantowanie sily
 	for (int i=0; i<12; i++)
 	{
-		int temp = (int)the_robot->EDP_data.current_force_xyz_torque_xyz[i];
-		the_robot->EDP_data.current_force_xyz_torque_xyz[i] = (double)temp;
+		int temp = (int)the_robot->reply_package.arm.pf_def.force_xyz_torque_xyz[i];
+		the_robot->reply_package.arm.pf_def.force_xyz_torque_xyz[i] = (double)temp;
 	}
 
 
@@ -2096,7 +2096,7 @@ bool sr_nose_run::next_step()
 
 	if (node_counter==1)
 	{
-		the_robot->EDP_data.next_gripper_coordinate=0;
+		the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate=0;
 	}
 
 	// wyrzucanie odczytu sil
@@ -2106,7 +2106,7 @@ bool sr_nose_run::next_step()
 		lib::Homog_matrix current_frame_wo_offset(the_robot->reply_package.arm.pf_def.arm_frame);
 		current_frame_wo_offset.remove_translation();
 
-		lib::Ft_v_vector force_torque(the_robot->EDP_data.current_force_xyz_torque_xyz);
+		lib::Ft_v_vector force_torque(the_robot->reply_package.arm.pf_def.force_xyz_torque_xyz);
 
 		std::cout<<"force: "<<force_torque<<std::endl;
 	}
@@ -2118,7 +2118,7 @@ bool sr_nose_run::next_step()
 
 
 //	for (int i=0; i<6; i++)
-//		std::cerr << the_robot->EDP_data.current_force_xyz_torque_xyz[i] << "   ";
+//		std::cerr << the_robot->reply_package.arm.pf_def.force_xyz_torque_xyz[i] << "   ";
 //	std::cerr << std::endl;
 
 
@@ -2135,9 +2135,9 @@ bool sr_nose_run::check_and_decide()
 
 	for (int i=0; i<6; i++)
 	{
-		cond = cond && (fabs(the_robot->EDP_data.current_force_xyz_torque_xyz[i])<2);
-//		if (fabs(the_robot->EDP_data.current_force_xyz_torque_xyz[i])>=0.8)
-//		fprintf(stderr, "%d -> %.2f\n", i, the_robot->EDP_data.current_force_xyz_torque_xyz[i]);
+		cond = cond && (fabs(the_robot->reply_package.arm.pf_def.force_xyz_torque_xyz[i])<2);
+//		if (fabs(the_robot->reply_package.arm.pf_def.force_xyz_torque_xyz[i])>=0.8)
+//		fprintf(stderr, "%d -> %.2f\n", i, the_robot->reply_package.arm.pf_def.force_xyz_torque_xyz[i]);
 	}
 	//std::cerr << std::endl;
 
@@ -2296,34 +2296,34 @@ bool tff_rubik_grab::first_step()
 
 	for (int i=0; i<6; i++)
 	{
-		the_robot->EDP_data.next_force_xyz_torque_xyz[i] = 0;
-		the_robot->EDP_data.next_velocity[i] = 0;
+		the_robot->ecp_command.instruction.arm.pf_def.force_xyz_torque_xyz[i] = 0;
+		the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = 0;
 	}
 
 	for (int i=0; i<3; i++)
 	{
-		the_robot->EDP_data.next_inertia[i] = FORCE_INERTIA;
-		the_robot->EDP_data.next_inertia[i+3] = TORQUE_INERTIA;
+		the_robot->ecp_command.instruction.arm.pf_def.inertia[i] = FORCE_INERTIA;
+		the_robot->ecp_command.instruction.arm.pf_def.inertia[i+3] = TORQUE_INERTIA;
 	}
 
 	if (both_axes_running)
 		for (int i=0; i<2; i++)
 		{
-			the_robot->EDP_data.next_reciprocal_damping[i]
+			the_robot->ecp_command.instruction.arm.pf_def.reciprocal_damping[i]
 					= FORCE_RECIPROCAL_DAMPING;
-			the_robot->EDP_data.next_behaviour[i] = lib::CONTACT;
+			the_robot->ecp_command.instruction.arm.pf_def.behaviour[i] = lib::CONTACT;
 		}
 	else
 	{
-		the_robot->EDP_data.next_reciprocal_damping[1]
+		the_robot->ecp_command.instruction.arm.pf_def.reciprocal_damping[1]
 				= FORCE_RECIPROCAL_DAMPING;
-		the_robot->EDP_data.next_behaviour[1] = lib::CONTACT;
-		the_robot->EDP_data.next_behaviour[0] = lib::UNGUARDED_MOTION;
+		the_robot->ecp_command.instruction.arm.pf_def.behaviour[1] = lib::CONTACT;
+		the_robot->ecp_command.instruction.arm.pf_def.behaviour[0] = lib::UNGUARDED_MOTION;
 	}
 
 	for (int i=2; i<6; i++)
 	{
-		the_robot->EDP_data.next_behaviour[i] = lib::UNGUARDED_MOTION;
+		the_robot->ecp_command.instruction.arm.pf_def.behaviour[i] = lib::UNGUARDED_MOTION;
 	}
 
 	return true;
@@ -2349,15 +2349,15 @@ bool tff_rubik_grab::next_step()
 
 	if (node_counter==1)
 	{
-		the_robot->EDP_data.next_gripper_coordinate=0;
-		desired_absolute_gripper_coordinate = the_robot->EDP_data.current_gripper_coordinate;
+		the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate=0;
+		desired_absolute_gripper_coordinate = the_robot->reply_package.arm.pf_def.gripper_coordinate;
 	}
 
 	if ((desired_absolute_gripper_coordinate > goal_position)
 			|| (node_counter < min_node_counter))
 	{
 		desired_absolute_gripper_coordinate -= position_increment;
-		the_robot->EDP_data.next_gripper_coordinate =- position_increment;
+		the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate =- position_increment;
 	}
 	else
 	{
@@ -2411,38 +2411,38 @@ bool tff_rubik_face_rotate::first_step()
 
 	for (int i=0; i<6; i++)
 	{
-		the_robot->EDP_data.next_force_xyz_torque_xyz[i] = 0;
-		the_robot->EDP_data.next_velocity[i] = 0;
+		the_robot->ecp_command.instruction.arm.pf_def.force_xyz_torque_xyz[i] = 0;
+		the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = 0;
 	}
 
 	for (int i=0; i<3; i++)
 	{
-		the_robot->EDP_data.next_inertia[i] = FORCE_INERTIA;
-		the_robot->EDP_data.next_inertia[i+3] = TORQUE_INERTIA;
+		the_robot->ecp_command.instruction.arm.pf_def.inertia[i] = FORCE_INERTIA;
+		the_robot->ecp_command.instruction.arm.pf_def.inertia[i+3] = TORQUE_INERTIA;
 	}
 
-	the_robot->EDP_data.next_reciprocal_damping[5] = TORQUE_RECIPROCAL_DAMPING/4;
-	the_robot->EDP_data.next_behaviour[5] = lib::CONTACT;
+	the_robot->ecp_command.instruction.arm.pf_def.reciprocal_damping[5] = TORQUE_RECIPROCAL_DAMPING/4;
+	the_robot->ecp_command.instruction.arm.pf_def.behaviour[5] = lib::CONTACT;
 
 	if (-0.1 < turn_angle && turn_angle < 0.1)
 	{
 		for (int i=0; i<6; i++)
-			the_robot->EDP_data.next_behaviour[i] = lib::UNGUARDED_MOTION;
+			the_robot->ecp_command.instruction.arm.pf_def.behaviour[i] = lib::UNGUARDED_MOTION;
 	}
 	else
 	{
 		for (int i=0; i<3; i++)
 		{
-			the_robot->EDP_data.next_reciprocal_damping[i]
+			the_robot->ecp_command.instruction.arm.pf_def.reciprocal_damping[i]
 					= FORCE_RECIPROCAL_DAMPING;
-			the_robot->EDP_data.next_behaviour[i] = lib::CONTACT;
+			the_robot->ecp_command.instruction.arm.pf_def.behaviour[i] = lib::CONTACT;
 		}
 		for (int i=3; i<5; i++)
-			the_robot->EDP_data.next_behaviour[i] = lib::UNGUARDED_MOTION;
+			the_robot->ecp_command.instruction.arm.pf_def.behaviour[i] = lib::UNGUARDED_MOTION;
 
-		the_robot->EDP_data.next_reciprocal_damping[5] = TORQUE_RECIPROCAL_DAMPING;
-		the_robot->EDP_data.next_behaviour[5] = lib::CONTACT;
-		the_robot->EDP_data.next_force_xyz_torque_xyz[5] = copysign(5.0, turn_angle);
+		the_robot->ecp_command.instruction.arm.pf_def.reciprocal_damping[5] = TORQUE_RECIPROCAL_DAMPING;
+		the_robot->ecp_command.instruction.arm.pf_def.behaviour[5] = lib::CONTACT;
+		the_robot->ecp_command.instruction.arm.pf_def.force_xyz_torque_xyz[5] = copysign(5.0, turn_angle);
 	}
 
 	return true;
@@ -2468,7 +2468,7 @@ bool tff_rubik_face_rotate::next_step()
 
 	if (node_counter==1)
 	{
-		the_robot->EDP_data.next_gripper_coordinate=0;
+		the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate=0;
 		if (turn_angle < -0.1 || 0.1 < turn_angle)
 		{
 			lib::Homog_matrix frame(the_robot->reply_package.arm.pf_def.arm_frame);
@@ -2567,26 +2567,26 @@ bool tff_gripper_approach::first_step()
 
 	for (int i=0; i<6; i++)
 	{
-		the_robot->EDP_data.next_force_xyz_torque_xyz[i] = 0;
-		the_robot->EDP_data.next_velocity[i] = 0;
+		the_robot->ecp_command.instruction.arm.pf_def.force_xyz_torque_xyz[i] = 0;
+		the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = 0;
 	}
 
 	for (int i=0; i<6; i++)
 	{
-		the_robot->EDP_data.next_inertia[i] = 0;
+		the_robot->ecp_command.instruction.arm.pf_def.inertia[i] = 0;
 	}
 
-	the_robot->EDP_data.next_inertia[2] = FORCE_INERTIA / 4;
-	the_robot->EDP_data.next_velocity[2] = speed;
+	the_robot->ecp_command.instruction.arm.pf_def.inertia[2] = FORCE_INERTIA / 4;
+	the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[2] = speed;
 
 	for (int i=0; i<6; i++)
 	{
-		the_robot->EDP_data.next_behaviour[i] = lib::UNGUARDED_MOTION;
+		the_robot->ecp_command.instruction.arm.pf_def.behaviour[i] = lib::UNGUARDED_MOTION;
 		//		the_robot->EDP_data.ECPtoEDP_reciprocal_damping[i] = 0;
 	}
 
-	the_robot->EDP_data.next_behaviour[2] = lib::GUARDED_MOTION;
-	the_robot->EDP_data.next_reciprocal_damping[2]
+	the_robot->ecp_command.instruction.arm.pf_def.behaviour[2] = lib::GUARDED_MOTION;
+	the_robot->ecp_command.instruction.arm.pf_def.reciprocal_damping[2]
 			= FORCE_RECIPROCAL_DAMPING / 2;
 
 	return true;
@@ -2605,7 +2605,7 @@ bool tff_gripper_approach::next_step()
 
 	if (node_counter==1)
 	{
-		the_robot->EDP_data.next_gripper_coordinate=0;
+		the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate=0;
 	}
 	else if (node_counter > motion_time)
 	{
@@ -2634,8 +2634,8 @@ bool force_tool_change::first_step ()
 	the_robot->ecp_command.instruction.set_rmodel_type = lib::FORCE_TOOL;
 
 	for(int i = 0 ; i < 3 ; i++)
-		the_robot->EDP_data.next_force_tool_position[i] = tool_parameters[i];
-	the_robot->EDP_data.next_force_tool_weight = weight;
+		the_robot->ecp_command.instruction.rmodel.force_tool.position[i] = tool_parameters[i];
+	the_robot->ecp_command.instruction.rmodel.force_tool.weight = weight;
 
 	return true;
 }

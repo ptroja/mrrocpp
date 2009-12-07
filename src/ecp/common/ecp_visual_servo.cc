@@ -152,8 +152,8 @@ void ecp_visual_servo::entertain_constraints(){
 	
 
 
-		the_robot->EDP_data.next_gripper_coordinate
-			=the_robot->EDP_data.current_gripper_coordinate;
+		the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate
+			=the_robot->reply_package.arm.pf_def.gripper_coordinate;
 
 }
 #endif

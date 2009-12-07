@@ -54,18 +54,18 @@ bool y_simple::first_step()
 	the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
 
 	for (int i=0; i<6; i++) {
-		the_robot->EDP_data.next_velocity[i] = 0;
-		the_robot->EDP_data.next_force_xyz_torque_xyz[i] = 0;
+		the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = 0;
+		the_robot->ecp_command.instruction.arm.pf_def.force_xyz_torque_xyz[i] = 0;
 		//	the_robot->EDP_data.selection_vector[i] = FORCE_SV_AX;
 	}
 
-	the_robot->EDP_data.next_force_xyz_torque_xyz[2] = -5;
+	the_robot->ecp_command.instruction.arm.pf_def.force_xyz_torque_xyz[2] = -5;
 
 	for (int i=0; i<3; i++) {
-		the_robot->EDP_data.next_inertia[i] = FORCE_INERTIA;
-		the_robot->EDP_data.next_inertia[i+3] = TORQUE_INERTIA;
-		the_robot->EDP_data.next_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
-		the_robot->EDP_data.next_reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING;
+		the_robot->ecp_command.instruction.arm.pf_def.inertia[i] = FORCE_INERTIA;
+		the_robot->ecp_command.instruction.arm.pf_def.inertia[i+3] = TORQUE_INERTIA;
+		the_robot->ecp_command.instruction.arm.pf_def.reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
+		the_robot->ecp_command.instruction.arm.pf_def.reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING;
 	}
 
 	//	the_robot->EDP_data.selection_vector[0] = POSE_SV_AX;
@@ -96,8 +96,8 @@ bool y_simple::next_step()
 	}
 	the_robot->ecp_command.instruction.instruction_type = lib::SET_GET;
 
-	/*if(the_robot->EDP_data.current_gripper_coordinate < 0.058) */
-	the_robot->EDP_data.next_gripper_coordinate = the_robot->EDP_data.current_gripper_coordinate;
+	/*if(the_robot->reply_package.arm.pf_def.gripper_coordinate < 0.058) */
+	the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = the_robot->reply_package.arm.pf_def.gripper_coordinate;
 	/*
 	 double wx = sensor_m.begin()->second->image.sensor_union.force.rez[0];
 	 double wy = sensor_m.begin()->second->image.sensor_union.force.rez[1];
@@ -124,9 +124,9 @@ bool y_simple::next_step()
 	 printf("sensor: x: %+ld, y: %+ld, v:%+ld\n", lround(wx), lround(wy), lround(v));
 	 */
 
-	printf("sensor: z: %f\n", the_robot->EDP_data.current_force_xyz_torque_xyz[2]);
+	printf("sensor: z: %f\n", the_robot->reply_package.arm.pf_def.force_xyz_torque_xyz[2]);
 
-	//	else the_robot->EDP_data.next_gripper_coordinate = the_robot->EDP_data.current_gripper_coordinate-0.0001;
+	//	else the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = the_robot->reply_package.arm.pf_def.gripper_coordinate-0.0001;
 
 	/*
 	 lib::frame_tab beggining_frame;
@@ -142,7 +142,7 @@ bool y_simple::next_step()
 	 lib::Homog_matrix pred_frame = lib::Homog_matrix(predicted_frame);
 	 cout << endl << "ecp: predicted_frame" << endl << endl<< pred_frame;
 	 double force[6];
-	 for (int i=0;i<6;i++) force[i] = the_robot->EDP_data.current_force_xyz_torque_xyz[i];
+	 for (int i=0;i<6;i++) force[i] = the_robot->reply_package.arm.pf_def.force_xyz_torque_xyz[i];
 	 cout << "force" << endl << endl;
 	 for(int i=0;i<6;i++) cout << force[i] << "  " ;
 	 cout << endl;

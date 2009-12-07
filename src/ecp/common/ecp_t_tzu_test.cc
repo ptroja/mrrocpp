@@ -527,7 +527,7 @@ bool force_meassure_generator::next_step()
 	lib::Homog_matrix current_frame_wo_offset(the_robot->reply_package.arm.pf_def.arm_frame);
 	current_frame_wo_offset.remove_translation();
 
-	lib::Ft_v_vector force_torque(the_robot->EDP_data.current_force_xyz_torque_xyz);
+	lib::Ft_v_vector force_torque(the_robot->reply_package.arm.pf_def.force_xyz_torque_xyz);
 	weight += force_torque;
 
 //	cout<<"force_torque: "<<force_torque<<endl;

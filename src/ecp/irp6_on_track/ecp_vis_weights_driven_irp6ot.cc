@@ -180,8 +180,8 @@ void ecp_vis_weights_driven_irp6ot::entertain_constraints(){
 	*/
 
 
-		the_robot->EDP_data.next_gripper_coordinate
-			=the_robot->EDP_data.current_gripper_coordinate;
+		the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate
+			=the_robot->reply_package.arm.pf_def.gripper_coordinate;
 
 }
 #endif
@@ -242,7 +242,7 @@ bool ecp_vis_weights_driven_irp6ot::first_step(void){
 	for (int i=0; i<6; i++)
 	{
 		the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = 0;
-		the_robot->EDP_data.next_force_xyz_torque_xyz[i] = 0;
+		the_robot->ecp_command.instruction.arm.pf_def.force_xyz_torque_xyz[i] = 0;
 	}
 
 	O_eps_EG_norm=10;

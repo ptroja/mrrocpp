@@ -101,7 +101,7 @@ bool pw_kolo::next_step()
 
     memcpy(the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates, next_position,
            6*sizeof (double));
-    the_robot->EDP_data.next_gripper_coordinate = next_position[6];
+    the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = next_position[6];
     printf("po robocie \n");
     return true;
 }

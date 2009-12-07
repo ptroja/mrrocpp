@@ -128,7 +128,7 @@ bool y_simple::next_step (std::map <lib::SENSOR_ENUM, lib::sensor*>& sensor_m ) 
 	next_frame.to_table(previous_frame);
 	lib::copy_frame(the_robot->ecp_command.instruction.arm.pf_def.arm_frame, previous_frame);
 						// przepisanie nowej ramki do EDP
-	the_robot->EDP_data.next_gripper_coordinate=the_robot->EDP_data.current_gripper_coordinate;
+	the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate=the_robot->reply_package.arm.pf_def.gripper_coordinate;
 	
 // // 	if(++run_counter==1000) return false;	
 	return true;

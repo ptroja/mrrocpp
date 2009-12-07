@@ -199,7 +199,7 @@ bool pawel::next_step ( )
     the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[3] = 0.0;
     the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[4] = 0.0;
     the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[5] = 0.0;
-    the_robot->EDP_data.next_gripper_coordinate = the_robot->EDP_data.current_gripper_coordinate;
+    the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = the_robot->reply_package.arm.pf_def.gripper_coordinate;
 
     // zapis do pliku
 

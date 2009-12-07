@@ -266,13 +266,13 @@ bool hermite_spline::next_step (  )
         case lib::XYZ_EULER_ZYZ:
                 for(i=0; i<6; i++)
                     starting_pose.coordinates[i]=the_robot->reply_package.arm.pf_def.arm_coordinates[i];
-            starting_pose.coordinates[6]=the_robot->EDP_data.current_gripper_coordinate;
+            starting_pose.coordinates[6]=the_robot->reply_package.arm.pf_def.gripper_coordinate;
             // for(i=0; i<6; i++) printf("\n dddddd  %f     %f",starting_pose.coordinates[i],the_robot->reply_package.arm.pf_def.arm_coordinates[i] );
             break;
         case lib::XYZ_ANGLE_AXIS:
                 for(i=0; i<6; i++)
                     starting_pose.coordinates[i]=the_robot->reply_package.arm.pf_def.arm_coordinates[i];
-            starting_pose.coordinates[6]=the_robot->EDP_data.current_gripper_coordinate;
+            starting_pose.coordinates[6]=the_robot->reply_package.arm.pf_def.gripper_coordinate;
             break;
         default:
                 throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
@@ -318,12 +318,12 @@ bool hermite_spline::next_step (  )
     case lib::XYZ_EULER_ZYZ:
             for (i = 0; i < 6; i++)
                 the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] =y[i];
-        the_robot->EDP_data.next_gripper_coordinate = y[6];
+        the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = y[6];
         break;
     case lib::XYZ_ANGLE_AXIS:
             for (i = 0; i < 6; i++)
                 the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = y[i];
-        the_robot->EDP_data.next_gripper_coordinate = y[6];
+        the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = y[6];
         break;
     default:
             throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
@@ -619,13 +619,13 @@ bool natural_spline::next_step ()
         case lib::XYZ_EULER_ZYZ:
                 for(i=0; i<6; i++)
                     starting_pose.coordinates[i]=the_robot->reply_package.arm.pf_def.arm_coordinates[i];
-            starting_pose.coordinates[6]=the_robot->EDP_data.current_gripper_coordinate;
+            starting_pose.coordinates[6]=the_robot->reply_package.arm.pf_def.gripper_coordinate;
             // for(i=0; i<6; i++) printf("\n dddddd  %f     %f",starting_pose.coordinates[i],the_robot->reply_package.arm.pf_def.arm_coordinates[i] );
             break;
         case lib::XYZ_ANGLE_AXIS:
                 for(i=0; i<6; i++)
                     starting_pose.coordinates[i]=the_robot->reply_package.arm.pf_def.arm_coordinates[i];
-            starting_pose.coordinates[6]=the_robot->EDP_data.current_gripper_coordinate;
+            starting_pose.coordinates[6]=the_robot->reply_package.arm.pf_def.gripper_coordinate;
             break;
         default:
                 throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
@@ -671,12 +671,12 @@ bool natural_spline::next_step ()
     case lib::XYZ_EULER_ZYZ:
             for (i = 0; i < 6; i++)
                 the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] =y[i];
-        the_robot->EDP_data.next_gripper_coordinate = y[6];
+        the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = y[6];
         break;
     case lib::XYZ_ANGLE_AXIS:
             for (i = 0; i < 6; i++)
                 the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = y[i];
-        the_robot->EDP_data.next_gripper_coordinate = y[6];
+        the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = y[6];
         break;
     default:
             throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);

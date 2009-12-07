@@ -257,19 +257,19 @@ bool vis_sac_lx::first_step()
 	for (int i=0; i<6; i++)
 	{
 		the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = 0;
-		the_robot->EDP_data.next_force_xyz_torque_xyz[i] = 0;
+		the_robot->ecp_command.instruction.arm.pf_def.force_xyz_torque_xyz[i] = 0;
 		//	the_robot->EDP_data.MPselection_vector[i] = FORCE_SV_AX;
 		//		 the_robot->EDP_data.MPselection_vector[i] = POSE_SV_AX;
 	}
 
 	for (int i=0; i<3; i++)
 	{
-		the_robot->EDP_data.next_inertia[i] = force_inertia_; // FORCE_INERTIA;
-		the_robot->EDP_data.next_inertia[i+3] = torque_inertia_; //TORQUE_INERTIA;
+		the_robot->ecp_command.instruction.arm.pf_def.inertia[i] = force_inertia_; // FORCE_INERTIA;
+		the_robot->ecp_command.instruction.arm.pf_def.inertia[i+3] = torque_inertia_; //TORQUE_INERTIA;
 
-		the_robot->EDP_data.next_reciprocal_damping[i]
+		the_robot->ecp_command.instruction.arm.pf_def.reciprocal_damping[i]
 				= force_reciprocal_damping_;
-		the_robot->EDP_data.next_reciprocal_damping[i+3]
+		the_robot->ecp_command.instruction.arm.pf_def.reciprocal_damping[i+3]
 				= torque_reciprocal_damping_;
 	}
 
@@ -1030,8 +1030,8 @@ CEIH_Tx_G.get_xyz_angle_axis(CEIH_r_G[0]);
 	//	}
 
 
-	the_robot->EDP_data.next_gripper_coordinate
-			=the_robot->EDP_data.current_gripper_coordinate;
+	the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate
+			=the_robot->reply_package.arm.pf_def.gripper_coordinate;
 
 	/*******************************************************/
 

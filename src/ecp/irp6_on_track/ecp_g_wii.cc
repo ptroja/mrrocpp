@@ -58,7 +58,7 @@ bool wii::next_step()
 	the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[3] = -1.136 + sensor_m[lib::SENSOR_WIIMOTE]->image.sensor_union.wiimote.orientation_x;
 	the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[4] = 1.39 + sensor_m[lib::SENSOR_WIIMOTE]->image.sensor_union.wiimote.orientation_y;
 	//the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[5] = 2.3 + sensor_m[lib::SENSOR_WIIMOTE]->image.sensor_union.wiimote.orientation_z;
-	the_robot->EDP_data.next_gripper_coordinate = 0.074;
+	the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = 0.074;
 
 	return true;
 }

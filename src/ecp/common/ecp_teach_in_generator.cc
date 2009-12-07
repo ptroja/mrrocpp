@@ -504,7 +504,7 @@ bool ecp_teach_in_generator::next_step()
       the_robot->ecp_command.instruction.value_in_step_no = the_robot->ecp_command.instruction.motion_steps;
       memcpy(the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates, tip.coordinates,
           6*sizeof(double));
-      the_robot->EDP_data.next_gripper_coordinate = tip.coordinates[6];
+      the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = tip.coordinates[6];
       break;
     case lib::C_XYZ_ANGLE_AXIS:
       the_robot->ecp_command.instruction.instruction_type = lib::SET;
@@ -516,7 +516,7 @@ bool ecp_teach_in_generator::next_step()
       the_robot->ecp_command.instruction.value_in_step_no = the_robot->ecp_command.instruction.motion_steps;
       memcpy(the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates, tip.coordinates,
           6*sizeof(double));
-      the_robot->EDP_data.next_gripper_coordinate = tip.coordinates[6];
+      the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = tip.coordinates[6];
       break;
     default:
       throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);

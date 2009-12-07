@@ -37,11 +37,11 @@ bool wii_velocity::first_step()
 
 	for (int i=0; i<6; i++)
 	{
-		 the_robot->EDP_data.next_behaviour[i] = generator_edp_data.next_behaviour[i];
-		 the_robot->EDP_data.next_velocity[i] = generator_edp_data.next_velocity[i];
-		 the_robot->EDP_data.next_force_xyz_torque_xyz[i] = generator_edp_data.next_force_xyz_torque_xyz[i];
-		 the_robot->EDP_data.next_reciprocal_damping[i] = generator_edp_data.next_reciprocal_damping[i];
-		 the_robot->EDP_data.next_inertia[i] = generator_edp_data.next_inertia[i];
+		 the_robot->ecp_command.instruction.arm.pf_def.behaviour[i] = generator_edp_data.next_behaviour[i];
+		 the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = generator_edp_data.next_velocity[i];
+		 the_robot->ecp_command.instruction.arm.pf_def.force_xyz_torque_xyz[i] = generator_edp_data.next_force_xyz_torque_xyz[i];
+		 the_robot->ecp_command.instruction.arm.pf_def.reciprocal_damping[i] = generator_edp_data.next_reciprocal_damping[i];
+		 the_robot->ecp_command.instruction.arm.pf_def.inertia[i] = generator_edp_data.next_inertia[i];
 	}
 	return true;
 }
@@ -82,18 +82,18 @@ bool wii_velocity::next_step()
 
 	for (int i=0; i<6; i++)
 	{
-		 the_robot->EDP_data.next_velocity[i] = generator_edp_data.next_velocity[i];
+		 the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = generator_edp_data.next_velocity[i];
 	}
 
 	//sprintf(buffer,"P%d %f %f %f %f %f %f",step_no,the_robot->reply_package.arm.pf_def.arm_coordinates[0],the_robot->reply_package.arm.pf_def.arm_coordinates[1],the_robot->reply_package.arm.pf_def.arm_coordinates[2],the_robot->reply_package.arm.pf_def.arm_coordinates[3],the_robot->reply_package.arm.pf_def.arm_coordinates[4],the_robot->reply_package.arm.pf_def.arm_coordinates[5]);
-	//sprintf(buffer,"V%d %f %f %f %f	 %f %f",step_no,the_robot->EDP_data.next_velocity[0],the_robot->EDP_data.next_velocity[1],the_robot->EDP_data.next_velocity[2],the_robot->EDP_data.next_velocity[3],the_robot->EDP_data.next_velocity[4],the_robot->EDP_data.next_velocity[5]);
+	//sprintf(buffer,"V%d %f %f %f %f	 %f %f",step_no,the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[0],the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[1],the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[2],the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[3],the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[4],the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[5]);
 	//sr_ecp_msg.message(buffer);
 
 	// Obliczenie zadanej pozycji posredniej w tym kroku ruchu
 	if (node_counter==1)
 	{
-		the_robot->EDP_data.next_gripper_coordinate
-				= the_robot->EDP_data.current_gripper_coordinate;
+		the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate
+				= the_robot->reply_package.arm.pf_def.gripper_coordinate;
 	}
 
 	return true;

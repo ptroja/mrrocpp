@@ -115,7 +115,7 @@ bool y_simple::next_step ( )
         // zatrzymanie robota w miejscu
         for (int i = 0; i < 6; i++)
             the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = the_robot->reply_package.arm.pf_def.arm_coordinates[i];
-        the_robot->EDP_data.next_gripper_coordinate = the_robot->EDP_data.current_gripper_coordinate;
+        the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = the_robot->reply_package.arm.pf_def.gripper_coordinate;
     }
 
     // do zapisu logfile'a z ruchu

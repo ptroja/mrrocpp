@@ -625,7 +625,7 @@ smooth2::smooth2 (common::task::task& _ecp_task, bool _is_synchronised)
 		    	}
 
 	    		if (first_coordinate == true) {
-	    			actual_coordinates[gripp] = the_robot->EDP_data.current_gripper_coordinate;
+	    			actual_coordinates[gripp] = the_robot->reply_package.arm.pf_def.gripper_coordinate;
 	    		}
 	    		pose_list_iterator->coordinates[gripp] += actual_coordinates[gripp];
 	    		actual_coordinates[gripp] = pose_list_iterator->coordinates[gripp];
@@ -649,7 +649,7 @@ smooth2::smooth2 (common::task::task& _ecp_task, bool _is_synchronised)
 		    	}
 
 	    		if (first_coordinate == true) {
-	    			actual_coordinates[gripp] = the_robot->EDP_data.current_gripper_coordinate;
+	    			actual_coordinates[gripp] = the_robot->reply_package.arm.pf_def.gripper_coordinate;
 	    		}
 	    		pose_list_iterator->coordinates[gripp] += actual_coordinates[gripp];
 	    		actual_coordinates[gripp] = pose_list_iterator->coordinates[gripp];
@@ -666,7 +666,7 @@ smooth2::smooth2 (common::task::task& _ecp_task, bool _is_synchronised)
 		    	}
 
 	    		if (first_coordinate == true) {
-	    			actual_coordinates[6] = the_robot->EDP_data.current_gripper_coordinate;
+	    			actual_coordinates[6] = the_robot->reply_package.arm.pf_def.gripper_coordinate;
 	    		}
 	    		pose_list_iterator->coordinates[6] += actual_coordinates[6];
 	    		actual_coordinates[6] = pose_list_iterator->coordinates[6];
@@ -683,7 +683,7 @@ smooth2::smooth2 (common::task::task& _ecp_task, bool _is_synchronised)
 		    	}
 
 	    		if (first_coordinate == true) {
-	    			actual_coordinates[6] = the_robot->EDP_data.current_gripper_coordinate;
+	    			actual_coordinates[6] = the_robot->reply_package.arm.pf_def.gripper_coordinate;
 	    		}
 	    		pose_list_iterator->coordinates[6] += actual_coordinates[6];
 	    		actual_coordinates[6] = pose_list_iterator->coordinates[6];
@@ -880,7 +880,7 @@ bool smooth2::first_step() { //wywolywane tylko raz w calej trajektorii
             the_robot->ecp_command.instruction.interpolation_type = lib::TCIM;
             for (int i=0; i<6; i++)//TODO sprawdzic czy tylko do 6
             {
-            	the_robot->EDP_data.next_behaviour[i] = lib::UNGUARDED_MOTION;
+            	the_robot->ecp_command.instruction.arm.pf_def.behaviour[i] = lib::UNGUARDED_MOTION;
             }
         } else {
             the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
@@ -898,7 +898,7 @@ bool smooth2::first_step() { //wywolywane tylko raz w calej trajektorii
     		the_robot->ecp_command.instruction.interpolation_type = lib::TCIM;
     		for (int i=0; i<6; i++)
     		{
-    			the_robot->EDP_data.next_behaviour[i] = lib::UNGUARDED_MOTION;
+    			the_robot->ecp_command.instruction.arm.pf_def.behaviour[i] = lib::UNGUARDED_MOTION;
     		}
     	} else {
     		the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
@@ -982,9 +982,9 @@ bool smooth2::next_step () {
 					if((node_counter * gripper_position > pose_list_iterator->coordinates[6] && pose_list_iterator->k[6] == -1) ||
 					(node_counter * gripper_position < pose_list_iterator->coordinates[6] && pose_list_iterator->k[6] == 1)) {
 					//printf("git");
-						the_robot->EDP_data.next_gripper_coordinate = gripper_position;
+						the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = gripper_position;
 					} else {
-						the_robot->EDP_data.next_gripper_coordinate = 0;
+						the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = 0;
 					}
 
 				} else {
@@ -995,9 +995,9 @@ bool smooth2::next_step () {
 					if((gripper_position > pose_list_iterator->coordinates[6] && pose_list_iterator->k[6] == -1) ||
 							(gripper_position < pose_list_iterator->coordinates[6] && pose_list_iterator->k[6] == 1)) {
 						//printf("git");
-						the_robot->EDP_data.next_gripper_coordinate = gripper_position;
+						the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = gripper_position;
 					} else {
-						the_robot->EDP_data.next_gripper_coordinate = pose_list_iterator->coordinates[6];
+						the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = pose_list_iterator->coordinates[6];
 					}
 				}
 
@@ -1032,9 +1032,9 @@ bool smooth2::next_step () {
                     if((node_counter * gripper_position > pose_list_iterator->coordinates[6] && pose_list_iterator->k[6] == -1) ||
                     		(node_counter * gripper_position < pose_list_iterator->coordinates[6] && pose_list_iterator->k[6] == 1)) {
                     	//printf("git");
-                    	the_robot->EDP_data.next_gripper_coordinate = gripper_position;
+                    	the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = gripper_position;
                     } else {
-                    	the_robot->EDP_data.next_gripper_coordinate = 0;
+                    	the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = 0;
                     }
 
     			} else {
@@ -1044,9 +1044,9 @@ bool smooth2::next_step () {
                     if((gripper_position > pose_list_iterator->coordinates[6] && pose_list_iterator->k[6] == -1) ||
                     		(gripper_position < pose_list_iterator->coordinates[6] && pose_list_iterator->k[6] == 1)) {
                     	//printf("git");
-                    	the_robot->EDP_data.next_gripper_coordinate = gripper_position;
+                    	the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = gripper_position;
                     } else {
-                    	the_robot->EDP_data.next_gripper_coordinate = pose_list_iterator->coordinates[6];
+                    	the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = pose_list_iterator->coordinates[6];
                     }
     			}
 
@@ -1086,9 +1086,9 @@ bool smooth2::next_step () {
 					if((node_counter * gripper_position > pose_list_iterator->coordinates[i] && pose_list_iterator->k[i] == -1) ||
 					(node_counter * gripper_position < pose_list_iterator->coordinates[i] && pose_list_iterator->k[i] == 1)) {
 					//printf("git");
-						the_robot->EDP_data.next_gripper_coordinate = gripper_position;
+						the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = gripper_position;
 					} else {
-						the_robot->EDP_data.next_gripper_coordinate = 0;
+						the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = 0;
 					}
 				} else {
 
@@ -1098,9 +1098,9 @@ bool smooth2::next_step () {
 					if((gripper_position > pose_list_iterator->coordinates[i] && pose_list_iterator->k[i] == -1) ||
 							(gripper_position < pose_list_iterator->coordinates[i] && pose_list_iterator->k[i] == 1)) {
 						//printf("git");
-						the_robot->EDP_data.next_gripper_coordinate = gripper_position;
+						the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = gripper_position;
 					} else {
-						the_robot->EDP_data.next_gripper_coordinate = pose_list_iterator->coordinates[i];
+						the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = pose_list_iterator->coordinates[i];
 					}
 				}
 
@@ -1139,9 +1139,9 @@ bool smooth2::next_step () {
 					if((node_counter * gripper_position > pose_list_iterator->coordinates[i] && pose_list_iterator->k[i] == -1) ||
 					(node_counter * gripper_position < pose_list_iterator->coordinates[i] && pose_list_iterator->k[i] == 1)) {
 					//printf("git");
-						the_robot->EDP_data.next_gripper_coordinate = gripper_position;
+						the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = gripper_position;
 					} else {
-						the_robot->EDP_data.next_gripper_coordinate = 0;
+						the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = 0;
 					}
 				} else {
 
@@ -1151,9 +1151,9 @@ bool smooth2::next_step () {
 					if((gripper_position > pose_list_iterator->coordinates[i] && pose_list_iterator->k[i] == -1) ||
 							(gripper_position < pose_list_iterator->coordinates[i] && pose_list_iterator->k[i] == 1)) {
 						//printf("git");
-						the_robot->EDP_data.next_gripper_coordinate = gripper_position;
+						the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = gripper_position;
 					} else {
-						the_robot->EDP_data.next_gripper_coordinate = pose_list_iterator->coordinates[i];
+						the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = pose_list_iterator->coordinates[i];
 					}
 				}
 
@@ -1223,7 +1223,7 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 					//printf("start pos: %f\t w osi: %d\n",pose_list_iterator->start_position[i], i);
 				}
 				temp = pose_list_iterator->coordinates[gripp];
-				pose_list_iterator->start_position[gripp] = the_robot->EDP_data.current_gripper_coordinate;
+				pose_list_iterator->start_position[gripp] = the_robot->reply_package.arm.pf_def.gripper_coordinate;
 				if (!is_last_list_element()) {		   //musi byc zrobione tutaj zeby zadzialalo przypisanie kierunkow dla drugiego ruchu
 					next_pose_list_ptr();
 					pose_list_iterator->start_position[gripp] = temp;//przypisanie pozycji koncowej poprzedniego ruchu jako
@@ -1278,7 +1278,7 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 					}
 				}
 				temp = pose_list_iterator->coordinates[gripp];
-				pose_list_iterator->start_position[gripp] = the_robot->EDP_data.current_gripper_coordinate;
+				pose_list_iterator->start_position[gripp] = the_robot->reply_package.arm.pf_def.gripper_coordinate;
 				if (!is_last_list_element()) {		   //musi byc zrobione tutaj zeby zadzialalo przypisanie kierunkow dla drugiego ruchu
 					next_pose_list_ptr();
 					pose_list_iterator->start_position[gripp] = temp;//przypisanie pozycji koncowej poprzedniego ruchu jako

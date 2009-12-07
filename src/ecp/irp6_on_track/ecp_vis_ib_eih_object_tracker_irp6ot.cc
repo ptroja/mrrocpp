@@ -41,7 +41,7 @@ bool ecp_vis_ib_eih_object_tracker_irp6ot::first_step() {
 
 	for (int i=0; i<6; i++)
 	{
-		the_robot->EDP_data.next_behaviour[i] = lib::UNGUARDED_MOTION;
+		the_robot->ecp_command.instruction.arm.pf_def.behaviour[i] = lib::UNGUARDED_MOTION;
 	}
 
 	for (int i = 0; i < 7; i++) {//ustawianie next_position dla wszystkich osi (lacznie z chwytakiem) na 0
@@ -84,7 +84,7 @@ bool ecp_vis_ib_eih_object_tracker_irp6ot::next_step_without_constraints() {
 		/*memcpy(next_position,
 	 			the_robot->reply_package.arm.pf_def.arm_coordinates, 6
 						* sizeof(double));*/
-		//next_position[6] = the_robot->EDP_data.current_gripper_coordinate;
+		//next_position[6] = the_robot->reply_package.arm.pf_def.gripper_coordinate;
 
 		//ruch w z
 		//z_start = next_position[2];
@@ -222,7 +222,7 @@ bool ecp_vis_ib_eih_object_tracker_irp6ot::next_step_without_constraints() {
 	memcpy(the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates, next_position,
 			6 * sizeof(double)); //zapisanie pozycji w angle axes
 
-	the_robot->EDP_data.next_gripper_coordinate = next_position[6]; //zapisanie pozycji grippera
+	the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = next_position[6]; //zapisanie pozycji grippera
 
 	printf("s_x: %f\t s_y %f\t s_z: %f\n", next_position[0],next_position[1],next_position[2]);
 

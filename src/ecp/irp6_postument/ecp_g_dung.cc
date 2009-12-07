@@ -312,7 +312,7 @@ bool dung::next_step ( )
 
     // DUNG STOP
 
-    //	else the_robot->EDP_data.next_gripper_coordinate = the_robot->EDP_data.current_gripper_coordinate-0.0001;
+    //	else the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = the_robot->reply_package.arm.pf_def.gripper_coordinate-0.0001;
 
 
     return true;

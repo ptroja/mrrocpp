@@ -150,7 +150,7 @@ bool nurbs::next_step (  )
 	for (unsigned int i=0; i<Dim; i++) {
 		EDP_data_next_ptr_[i] = (*Pdelta)[i] + EDP_data_current_ptr_[i]; }
 		
-	the_robot->EDP_data.next_gripper_coordinate=the_robot->EDP_data.current_gripper_coordinate;	
+	the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate=the_robot->reply_package.arm.pf_def.gripper_coordinate;	
 //	cout<<"nextstep: start3 \n"<<flush;
 
 	// skopiowac przygotowany rozkaz dla EDP do bufora wysylkowego

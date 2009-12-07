@@ -715,7 +715,7 @@ printf("%d ARM 2d= ", nr);
 #endif
 
 the_second=0;
-the_robot->EDP_data.next_gripper_coordinate=the_robot->EDP_data.current_gripper_coordinate;
+the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate=the_robot->reply_package.arm.pf_def.gripper_coordinate;
 (sensor_m.begin())->second->base_period=1;
  (sensor_m.begin())->second->current_period=1;
 }
@@ -745,7 +745,7 @@ else
       	the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]=the_robot->reply_package.arm.pf_def.arm_coordinates[i];
       }
 	/*******************************************************/
-	the_robot->EDP_data.next_gripper_coordinate=the_robot->EDP_data.current_gripper_coordinate;
+	the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate=the_robot->reply_package.arm.pf_def.gripper_coordinate;
 #ifdef PRINTA	
 	printf("%d ARM= ", nr);
  	for (int i=0; i<6 ; i++)             
