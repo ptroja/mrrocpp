@@ -107,14 +107,14 @@ bool y_simple::next_step ( )
         ruch =0;
         for(int i = 0; i<3; i++)
         {
-            pozycja[i] = the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[i];
-            nowa_pozycja[i] = the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[i];
+            pozycja[i] = the_robot->reply_package.arm.pf_def.arm_coordinates[i];
+            nowa_pozycja[i] = the_robot->reply_package.arm.pf_def.arm_coordinates[i];
         }
         //	printf("-=%f - %f - %f=-\n", pozycja[0], pozycja[1], pozycja[2]);
 
         // zatrzymanie robota w miejscu
         for (int i = 0; i < 6; i++)
-            the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[i];
+            the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = the_robot->reply_package.arm.pf_def.arm_coordinates[i];
         the_robot->EDP_data.next_gripper_coordinate = the_robot->EDP_data.current_gripper_coordinate;
     }
 

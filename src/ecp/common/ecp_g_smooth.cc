@@ -986,7 +986,7 @@ bool smooth::next_step ()
         {
         case lib::MOTOR:
             for(int i=0;i<MAX_SERVOS_NR;i++){
-                start_position[i]=the_robot->EDP_data.current_motor_arm_coordinates[i];
+                start_position[i]=the_robot->reply_package.arm.pf_def.arm_coordinates[i];
 					 if(type==2)
 						final_position[i]+=start_position[i];
 				}
@@ -1002,7 +1002,7 @@ bool smooth::next_step ()
 
         case lib::JOINT:
             for(int i=0;i<MAX_SERVOS_NR;i++)
-                start_position[i]=the_robot->EDP_data.current_joint_arm_coordinates[i];
+                start_position[i]=the_robot->reply_package.arm.pf_def.arm_coordinates[i];
             for(int i=0; i<MAX_SERVOS_NR; i++)
             {
                 v_r[i]=v_max_joint[i]*v[i];
@@ -1015,7 +1015,7 @@ bool smooth::next_step ()
 
         case lib::XYZ_EULER_ZYZ:
             for(int i=0;i<6;i++)
-                start_position[i]=the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[i];
+                start_position[i]=the_robot->reply_package.arm.pf_def.arm_coordinates[i];
             start_position[6]=the_robot->EDP_data.current_gripper_coordinate;
             start_position[7]=0.0;
             for(int i=0; i<MAX_SERVOS_NR; i++)
@@ -1029,7 +1029,7 @@ bool smooth::next_step ()
             break;
         case lib::XYZ_ANGLE_AXIS:
             for(int i=0;i<6;i++)
-                start_position[i]=the_robot->EDP_data.current_XYZ_AA_arm_coordinates[i];
+                start_position[i]=the_robot->reply_package.arm.pf_def.arm_coordinates[i];
             start_position[6]=the_robot->EDP_data.current_gripper_coordinate;
             start_position[7]=0.0;
             for(int i=0; i<MAX_SERVOS_NR; i++)

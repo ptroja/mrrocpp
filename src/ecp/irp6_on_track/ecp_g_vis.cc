@@ -305,14 +305,14 @@ if(the_second)
 for (i=0; i<6; i++)
 {	
 		
-	pose[i][0]=the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[i];
-	pose[i][1]=the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[i];
-	pose[i][2]=the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[i];
-	measure[i][0]=the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[i]; //GDY NIE MA INFO Z KAM
-	measure[i][1]=the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[i];
-	measure[i][2]=the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[i];
-	stearing[i][1]=the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[i];
-	stearing[i][2]=the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[i];
+	pose[i][0]=the_robot->reply_package.arm.pf_def.arm_coordinates[i];
+	pose[i][1]=the_robot->reply_package.arm.pf_def.arm_coordinates[i];
+	pose[i][2]=the_robot->reply_package.arm.pf_def.arm_coordinates[i];
+	measure[i][0]=the_robot->reply_package.arm.pf_def.arm_coordinates[i]; //GDY NIE MA INFO Z KAM
+	measure[i][1]=the_robot->reply_package.arm.pf_def.arm_coordinates[i];
+	measure[i][2]=the_robot->reply_package.arm.pf_def.arm_coordinates[i];
+	stearing[i][1]=the_robot->reply_package.arm.pf_def.arm_coordinates[i];
+	stearing[i][2]=the_robot->reply_package.arm.pf_def.arm_coordinates[i];
 	stearing_d[i][1]=0;
 	stearing_d[i][2]=0;
 }
@@ -325,7 +325,7 @@ printf("%ld CRR =", nr);
 for (i=0; i<6; i++)
 {	
 
-printf("%f ",the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[i]);
+printf("%f ",the_robot->reply_package.arm.pf_def.arm_coordinates[i]);
 	
 }
 printf("\n");
@@ -698,11 +698,11 @@ for (i=0; i<6; i++)
 	/*CHYCHAMY NA ZIMNE - WYLACZENIE NIESTEROWANYCH OSI*/
 	for (i=0; i<0; i++)
       {
-      	the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]=the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[i];
+      	the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]=the_robot->reply_package.arm.pf_def.arm_coordinates[i];
       }
       for (i=6; i<6; i++)
       {
-      	the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]=the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[i];
+      	the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]=the_robot->reply_package.arm.pf_def.arm_coordinates[i];
       }
 	/*******************************************************/
 #ifdef PRINTA		
@@ -738,11 +738,11 @@ else
 	/*CHYCHAMY NA ZIMNE - WYLACZENIE NIESTEROWANYCH OSI*/
 	for (i=0; i<0; i++)
       {
-      	the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]=the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[i];
+      	the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]=the_robot->reply_package.arm.pf_def.arm_coordinates[i];
       }
       for (i=6; i<6; i++)
       {
-      	the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]=the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[i];
+      	the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]=the_robot->reply_package.arm.pf_def.arm_coordinates[i];
       }
 	/*******************************************************/
 	the_robot->EDP_data.next_gripper_coordinate=the_robot->EDP_data.current_gripper_coordinate;

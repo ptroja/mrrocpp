@@ -82,7 +82,7 @@ bool time::next_step ( )
     if (node_counter <= 2)
     {
         for (int i = 0; i < 8; i++)
-            start_joint_arm_coordinates[i] = the_robot->EDP_data.current_joint_arm_coordinates[i];
+            start_joint_arm_coordinates[i] = the_robot->reply_package.arm.pf_def.arm_coordinates[i];
     }
     else
     {

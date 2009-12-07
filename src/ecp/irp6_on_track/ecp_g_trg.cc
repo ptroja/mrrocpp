@@ -50,7 +50,7 @@ void trajectory_reproduce::get_current_position(double current_position[6]){
     // Odebranie danych.
     the_robot->get_reply();
     // Przepisanie obecnego polozenia robota do bufora w zaleznosci od rodzaju wspolrzednych.
-    memcpy(current_position, the_robot->EDP_data.current_motor_arm_coordinates, MAX_SERVOS_NR*sizeof(double));
+    memcpy(current_position, the_robot->reply_package.arm.pf_def.arm_coordinates, MAX_SERVOS_NR*sizeof(double));
     } // end: get_current_position
 
 /******************** PREPARE GENERATOR FOR MOTION  ************************/

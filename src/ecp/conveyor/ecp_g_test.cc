@@ -72,7 +72,7 @@ bool y_simple::next_step ( )
 			printf("blad pomiaru czasu");
 		}
 		printf("ECP conv pomiarow: %d,  czas: %ld, pozycja %f\n", node_counter,
-		       start[0].tv_sec%100, the_robot->EDP_data.current_motor_arm_coordinates[0]);
+		       start[0].tv_sec%100, the_robot->reply_package.arm.pf_def.arm_coordinates[0]);
 	}
 
 	// Wspolrzedne kartezjanskie XYZ i katy Eulera ZYZ
@@ -88,7 +88,7 @@ bool y_simple::next_step ( )
 	for (i=0; i<6; i++) {
 		// nastepna pozycja
 		the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] =
-		    the_robot->EDP_data.current_motor_arm_coordinates[i]	+ td.coordinate_delta[i];
+		    the_robot->reply_package.arm.pf_def.arm_coordinates[i]	+ td.coordinate_delta[i];
 	}
 	
 	return true;

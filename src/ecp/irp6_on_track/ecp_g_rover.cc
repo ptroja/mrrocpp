@@ -280,10 +280,10 @@ bool vis_sac_lx::next_step()
 		std::cout << std::endl << std::endl << std::endl << std::endl
 				<< std::endl;
 
-		O_Tx_E.set_frame_tab(the_robot->EDP_data.current_arm_frame); // zarem
+		O_Tx_E.set_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame); // zarem
 		std::cout << "YYY " << O_Tx_E << std::endl;
 
-		//O_Tx_E.set_frame_tab(the_robot->EDP_data.current_arm_frame); // zarem
+		//O_Tx_E.set_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame); // zarem
 		O_Tx_E.get_xyz_angle_axis(O_r_E[0]);
 		O_Tx_E=O_Tx_E*!G_Tx_G2;
 
@@ -457,7 +457,7 @@ bool vis_sac_lx::next_step()
 
 	G_Tx_S.set_xyz_rpy(x2g, 0, 0, 0, 0, 0);
 
-	O_Tx_E.set_frame_tab(the_robot->EDP_data.current_arm_frame);
+	O_Tx_E.set_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame);
 	O_Tx_E=O_Tx_E*!G_Tx_G2;
 	O_Tx_E.get_xyz_angle_axis(O_r_E[0]);
 

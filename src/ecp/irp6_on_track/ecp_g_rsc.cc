@@ -94,7 +94,7 @@ void robot_stopped_condition::get_current_position(double current_position[6]){
 	// Odebranie danych.
 	the_robot->get_reply();
 	// Przepisanie obecnego polozenia robota do bufora w zaleznosci od rodzaju wspolrzednych.
-	memcpy(current_position, the_robot->EDP_data.current_motor_arm_coordinates, 6*sizeof(double));
+	memcpy(current_position, the_robot->reply_package.arm.pf_def.arm_coordinates, 6*sizeof(double));
  	} // end: get_current_position
 
 /**************************** REFRESH WINDOW *******************************/
@@ -154,12 +154,12 @@ void robot_stopped_condition::add_rse_element(ecp_mp::sensor::digital_scales& th
 	if (rse_list.empty()){
 		// Jesli glowa pusta.
 		create_rse_list_head(
-			the_robot->EDP_data.current_motor_arm_coordinates,
+			the_robot->reply_package.arm.pf_def.arm_coordinates,
 			the_sensor.image.sensor_union.ds.readings);
 	}else{
 		// Jesli nastepny element.
 		insert_rse_list_element(
-			the_robot->EDP_data.current_motor_arm_coordinates,
+			the_robot->reply_package.arm.pf_def.arm_coordinates,
 			the_sensor.image.sensor_union.ds.readings);
 		} // end else
 	// Wyswietlenie dodanego elementu.

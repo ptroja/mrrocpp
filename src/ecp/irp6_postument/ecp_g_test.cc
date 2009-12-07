@@ -97,7 +97,7 @@ bool y_simple::next_step ( )
     vector x_axis(axis_table[0]);
     vector y_axis(axis_table[1]);
     vector z_axis(axis_table[2]);
-    lib::Homog_matrix curr_frame(the_robot->EDP_data.current_arm_frame);								// pobranie aktualnej ramki (tylko na poczatku ruchu)
+    lib::Homog_matrix curr_frame(the_robot->reply_package.arm.pf_def.arm_frame);								// pobranie aktualnej ramki (tylko na poczatku ruchu)
     lib::Homog_matrix prev_frame(previous_frame);
     lib::Homog_matrix next_frame;
     lib::Homog_matrix temp = !curr_frame;

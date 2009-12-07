@@ -88,7 +88,7 @@ bool dung::next_step ( )
     the_robot->ecp_command.instruction.instruction_type = lib::SET_GET;
 
     // DUNG START
-    q1 = the_robot->EDP_data.current_joint_arm_coordinates[0];
+    q1 = the_robot->reply_package.arm.pf_def.arm_coordinates[0];
     if (oq1 >= 100)
     {
         dq1 = 0.0;
@@ -99,7 +99,7 @@ bool dung::next_step ( )
         dq1 = (q1-oq1)/0.01;
         oq1 = q1;
     }
-    q2 = the_robot->EDP_data.current_joint_arm_coordinates[1];
+    q2 = the_robot->reply_package.arm.pf_def.arm_coordinates[1];
     if (oq2 >= 100)
     {
         dq2 = 0.0;
@@ -110,7 +110,7 @@ bool dung::next_step ( )
         dq2 = (q2-oq2)/0.01;
         oq2 = q2;
     }
-    q3 = the_robot->EDP_data.current_joint_arm_coordinates[2] - the_robot->EDP_data.current_joint_arm_coordinates[1];
+    q3 = the_robot->reply_package.arm.pf_def.arm_coordinates[2] - the_robot->reply_package.arm.pf_def.arm_coordinates[1];
     if (oq3 >= 100)
     {
         dq3 = 0.0;
@@ -121,7 +121,7 @@ bool dung::next_step ( )
         dq3 = (q3-oq3)/0.01;
         oq3 = q3;
     }
-    q4 = the_robot->EDP_data.current_joint_arm_coordinates[3] - the_robot->EDP_data.current_joint_arm_coordinates[2] - M_PI_2;
+    q4 = the_robot->reply_package.arm.pf_def.arm_coordinates[3] - the_robot->reply_package.arm.pf_def.arm_coordinates[2] - M_PI_2;
     if (oq4 >= 100)
     {
         dq4 = 0.0;
@@ -132,7 +132,7 @@ bool dung::next_step ( )
         dq4 = (q4-oq4)/0.01;
         oq4 = q4;
     }
-    q5 = the_robot->EDP_data.current_joint_arm_coordinates[4];
+    q5 = the_robot->reply_package.arm.pf_def.arm_coordinates[4];
     if (oq5 >= 100)
     {
         dq5 = 0.0;
@@ -143,7 +143,7 @@ bool dung::next_step ( )
         dq5 = (q5-oq5)/0.01;
         oq5 = q5;
     }
-    q6 = the_robot->EDP_data.current_joint_arm_coordinates[5];
+    q6 = the_robot->reply_package.arm.pf_def.arm_coordinates[5];
     if (oq6 >= 100)
     {
         dq6 = 0.0;
@@ -307,7 +307,7 @@ bool dung::next_step ( )
     for (int i=0; i<MAX_SERVOS_NR; i++)
     {
         the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] =
-            the_robot->EDP_data.current_joint_arm_coordinates[i];
+            the_robot->reply_package.arm.pf_def.arm_coordinates[i];
     } // end:for
 
     // DUNG STOP

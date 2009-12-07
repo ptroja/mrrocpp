@@ -186,26 +186,26 @@ void robot::get_arm_reply (void)
     switch (reply_package.arm_type) {
        case lib::MOTOR:
          for (int i=0; i<IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++)
-           EDP_data.current_motor_arm_coordinates[i] =
+           reply_package.arm.pf_def.arm_coordinates[i] =
              reply_package.arm.pf_def.arm_coordinates[i];
          break;
        case lib::JOINT:
          for (int i=0; i<IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++)
-           EDP_data.current_joint_arm_coordinates[i] =
+           reply_package.arm.pf_def.arm_coordinates[i] =
              reply_package.arm.pf_def.arm_coordinates[i];
                break;
        case lib::FRAME:
-       lib::copy_frame(EDP_data.current_arm_frame, reply_package.arm.pf_def.arm_frame);
+       lib::copy_frame(reply_package.arm.pf_def.arm_frame, reply_package.arm.pf_def.arm_frame);
         break;
        case lib::XYZ_EULER_ZYZ:
         for (int i=0; i<6; i++)
-           EDP_data.current_XYZ_ZYZ_arm_coordinates[i] =
+           reply_package.arm.pf_def.arm_coordinates[i] =
              reply_package.arm.pf_def.arm_coordinates[i];
          break;
 
        case lib::XYZ_ANGLE_AXIS:
          for (int i=0; i<6; i++)
-           EDP_data.current_XYZ_AA_arm_coordinates[i] =
+           reply_package.arm.pf_def.arm_coordinates[i] =
              reply_package.arm.pf_def.arm_coordinates[i];
          break;
 

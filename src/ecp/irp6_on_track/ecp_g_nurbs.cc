@@ -74,22 +74,22 @@ bool nurbs::first_step (  )
 //		if (ntdes_ptr_->ncptr==NULL) cerr<<"Blad: ntdes.ncptr==NULL\n";
 		if (dynamic_cast< NurbsCurve<Irp6ot_Point_nD< MOTOR, Dim > >* >(ntdes_ptr_->ncptr) ) {
 			EDP_data_next_ptr_=&the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[0];
-			EDP_data_current_ptr_=&the_robot->EDP_data.current_motor_arm_coordinates[0];
+			EDP_data_current_ptr_=&the_robot->reply_package.arm.pf_def.arm_coordinates[0];
 //			cout<<"MOTOR\n";
 			atype_=MOTOR; }
 		else if (dynamic_cast< NurbsCurve<Irp6ot_Point_nD< JOINT, Dim > >* >(ntdes_ptr_->ncptr) ) {
 			EDP_data_next_ptr_=&the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[0];
-			EDP_data_current_ptr_=&the_robot->EDP_data.current_joint_arm_coordinates[0];
+			EDP_data_current_ptr_=&the_robot->reply_package.arm.pf_def.arm_coordinates[0];
 //			cout<<"JOINT\n";
 			atype_=JOINT; }
 		else if (dynamic_cast< NurbsCurve<Irp6ot_Point_nD< XYZ_EULER_ZYZ, Dim > >* >(ntdes_ptr_->ncptr) ) {
 			EDP_data_next_ptr_=&the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[0];
-			EDP_data_current_ptr_=&the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[0];
+			EDP_data_current_ptr_=&the_robot->reply_package.arm.pf_def.arm_coordinates[0];
 //			cout<<"XYZ_EULER_ZYZ\n";
 			atype_=XYZ_EULER_ZYZ; }
 		else if (dynamic_cast< NurbsCurve<Irp6ot_Point_nD< XYZ_ANGLE_AXIS, Dim > >* >(ntdes_ptr_->ncptr) ) {
 			EDP_data_next_ptr_=&the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[0];
-			EDP_data_current_ptr_=&the_robot->EDP_data.current_XYZ_AA_arm_coordinates[0];
+			EDP_data_current_ptr_=&the_robot->reply_package.arm.pf_def.arm_coordinates[0];
 //			cout<<"XYZ_ANGLE_AXIS\n";
 			atype_=XYZ_ANGLE_AXIS; }
      	if (EDP_data_next_ptr_!=0) {//ntdes_ptr_->arm_type==MOTOR || ntdes_ptr_->arm_type== lib::JOINT || ntdes_ptr_->arm_type==XYZ_EULER_ZYZ || ntdes_ptr_->arm_type== lib::XYZ_ANGLE_AXIS) {

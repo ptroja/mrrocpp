@@ -174,7 +174,7 @@ bool linear::next_step()
 			the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
 			for (i=0; i<MAX_SERVOS_NR; i++) {
 				the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
-						= the_robot->EDP_data.current_motor_arm_coordinates[i] + node_counter*td.coordinate_delta[i]
+						= the_robot->reply_package.arm.pf_def.arm_coordinates[i] + node_counter*td.coordinate_delta[i]
 								/td.interpolation_node_no;
 			} // end:for
 			break;
@@ -182,7 +182,7 @@ bool linear::next_step()
 		case lib::JOINT:
 			for (i=0; i<MAX_SERVOS_NR; i++) {
 				the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
-						= the_robot->EDP_data.current_joint_arm_coordinates[i] + node_counter*td.coordinate_delta[i]
+						= the_robot->reply_package.arm.pf_def.arm_coordinates[i] + node_counter*td.coordinate_delta[i]
 								/td.interpolation_node_no;
 			} // end:for
 			break;
@@ -195,7 +195,7 @@ bool linear::next_step()
 			the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
 			for (i=0; i<6; i++) {
 				the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
-						= the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[i] + node_counter*td.coordinate_delta[i]
+						= the_robot->reply_package.arm.pf_def.arm_coordinates[i] + node_counter*td.coordinate_delta[i]
 								/td.interpolation_node_no;
 			} // end:for
 			the_robot->EDP_data.next_gripper_coordinate = the_robot->EDP_data.current_gripper_coordinate + node_counter
@@ -210,7 +210,7 @@ bool linear::next_step()
 			the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
 			for (i=0; i<6; i++) {
 				the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
-						= the_robot->EDP_data.current_XYZ_AA_arm_coordinates[i] + node_counter*td.coordinate_delta[i]
+						= the_robot->reply_package.arm.pf_def.arm_coordinates[i] + node_counter*td.coordinate_delta[i]
 								/td.interpolation_node_no;
 			} // end:for
 			the_robot->EDP_data.next_gripper_coordinate = the_robot->EDP_data.current_gripper_coordinate + node_counter
@@ -396,25 +396,25 @@ bool linear_parabolic::next_step()
 		switch (td.arm_type) {
 			case lib::MOTOR:
 				for (int i=0; i<MAX_SERVOS_NR; i++) {
-					prev_s[i]= the_robot->EDP_data.current_motor_arm_coordinates[i];
+					prev_s[i]= the_robot->reply_package.arm.pf_def.arm_coordinates[i];
 				} // end:for
 				break;
 
 			case lib::JOINT:
 				for (int i=0; i<MAX_SERVOS_NR; i++) {
-					prev_s[i]= the_robot->EDP_data.current_joint_arm_coordinates[i];
+					prev_s[i]= the_robot->reply_package.arm.pf_def.arm_coordinates[i];
 				} // end:for
 				break;
 
 			case lib::XYZ_EULER_ZYZ:
 				for (int i=0; i<6; i++) {
-					prev_s[i]= the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[i];
+					prev_s[i]= the_robot->reply_package.arm.pf_def.arm_coordinates[i];
 				} // end:for
 				prev_s[7] = the_robot->EDP_data.current_gripper_coordinate;
 				break;
 			case lib::XYZ_ANGLE_AXIS:
 				for (int i=0; i<6; i++) {
-					prev_s[i]= the_robot->EDP_data.current_XYZ_AA_arm_coordinates[i];
+					prev_s[i]= the_robot->reply_package.arm.pf_def.arm_coordinates[i];
 				} // end:for
 				prev_s[7] = the_robot->EDP_data.current_gripper_coordinate;
 				break;
@@ -454,7 +454,7 @@ bool linear_parabolic::next_step()
 			for (i=0; i<MAX_SERVOS_NR; i++) {
 				double s = calculate_s((double)node_counter/td.interpolation_node_no, ta[i], tb[i]);
 				the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
-						= the_robot->EDP_data.current_motor_arm_coordinates[i] + s*td.coordinate_delta[i];
+						= the_robot->reply_package.arm.pf_def.arm_coordinates[i] + s*td.coordinate_delta[i];
 				vel_avg[i] = the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] - prev_s[i];
 				acc[i] = vel_avg[i] - prev_vel_avg[i];
 				vel[i] = acc[i] * node_counter;
@@ -486,7 +486,7 @@ bool linear_parabolic::next_step()
 			for (i=0; i<MAX_SERVOS_NR; i++) {
 				double s = calculate_s((double)node_counter/td.interpolation_node_no, ta[i], tb[i]);
 				the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
-						= the_robot->EDP_data.current_joint_arm_coordinates[i] + s*td.coordinate_delta[i];
+						= the_robot->reply_package.arm.pf_def.arm_coordinates[i] + s*td.coordinate_delta[i];
 				vel_avg[i] = the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] - prev_s[i];
 				acc[i] = vel_avg[i] - prev_vel_avg[i];
 				vel[i] = acc[i] * node_counter;
@@ -521,7 +521,7 @@ bool linear_parabolic::next_step()
 					vel_avg[i] = the_robot->EDP_data.next_gripper_coordinate - prev_s[i];
 				} else {
 					the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
-							= the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[i] + s*td.coordinate_delta[i];
+							= the_robot->reply_package.arm.pf_def.arm_coordinates[i] + s*td.coordinate_delta[i];
 					vel_avg[i] = the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] - prev_s[i];
 				}
 				acc[i] = vel_avg[i] - prev_vel_avg[i];
@@ -563,7 +563,7 @@ bool linear_parabolic::next_step()
 					vel_avg[i] = the_robot->EDP_data.next_gripper_coordinate - prev_s[i];
 				} else {
 					the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
-							= the_robot->EDP_data.current_XYZ_AA_arm_coordinates[i] + s*td.coordinate_delta[i];
+							= the_robot->reply_package.arm.pf_def.arm_coordinates[i] + s*td.coordinate_delta[i];
 					vel_avg[i] = the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] - prev_s[i];
 				}
 
@@ -744,25 +744,25 @@ bool cubic::next_step()
 		switch (td.arm_type) {
 			case lib::MOTOR:
 				for (int i=0; i<MAX_SERVOS_NR; i++) {
-					A0[i]= the_robot->EDP_data.current_motor_arm_coordinates[i];
+					A0[i]= the_robot->reply_package.arm.pf_def.arm_coordinates[i];
 				} // end:for
 				break;
 
 			case lib::JOINT:
 				for (int i=0; i<MAX_SERVOS_NR; i++) {
-					A0[i]= the_robot->EDP_data.current_joint_arm_coordinates[i];
+					A0[i]= the_robot->reply_package.arm.pf_def.arm_coordinates[i];
 				} // end:for
 				break;
 
 			case lib::XYZ_EULER_ZYZ:
 				for (int i=0; i<6; i++) {
-					A0[i]= the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[i];
+					A0[i]= the_robot->reply_package.arm.pf_def.arm_coordinates[i];
 				} // end:for
 				A0[6]= the_robot->EDP_data.current_gripper_coordinate;
 				break;
 			case lib::XYZ_ANGLE_AXIS:
 				for (int i=0; i<6; i++) {
-					A0[i]= the_robot->EDP_data.current_XYZ_AA_arm_coordinates[i];
+					A0[i]= the_robot->reply_package.arm.pf_def.arm_coordinates[i];
 				} // end:for
 				A0[6]= the_robot->EDP_data.current_gripper_coordinate;
 				break;
@@ -998,25 +998,25 @@ bool quintic::next_step()
 		switch (td.arm_type) {
 			case lib::MOTOR:
 				for (int i=0; i<MAX_SERVOS_NR; i++) {
-					A0[i]= the_robot->EDP_data.current_motor_arm_coordinates[i];
+					A0[i]= the_robot->reply_package.arm.pf_def.arm_coordinates[i];
 				} // end:for
 				break;
 
 			case lib::JOINT:
 				for (int i=0; i<MAX_SERVOS_NR; i++) {
-					A0[i]= the_robot->EDP_data.current_joint_arm_coordinates[i];
+					A0[i]= the_robot->reply_package.arm.pf_def.arm_coordinates[i];
 				} // end:for
 				break;
 
 			case lib::XYZ_EULER_ZYZ:
 				for (int i=0; i<6; i++) {
-					A0[i]= the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[i];
+					A0[i]= the_robot->reply_package.arm.pf_def.arm_coordinates[i];
 				} // end:for
 				A0[6]= the_robot->EDP_data.current_gripper_coordinate;
 				break;
 			case lib::XYZ_ANGLE_AXIS:
 				for (int i=0; i<6; i++) {
-					A0[i]= the_robot->EDP_data.current_XYZ_AA_arm_coordinates[i];
+					A0[i]= the_robot->reply_package.arm.pf_def.arm_coordinates[i];
 				} // end:for
 				A0[6]= the_robot->EDP_data.current_gripper_coordinate;
 				break;
@@ -1322,7 +1322,7 @@ bool parabolic_teach_in::next_step()
 			case lib::MOTOR:
 				the_robot->ecp_command.instruction.set_arm_type = lib::MOTOR;
 				for (i=0; i <MAX_SERVOS_NR; i++) {
-					a[i] = 4.0*(tip.coordinates[i] - the_robot->EDP_data.current_motor_arm_coordinates[i])
+					a[i] = 4.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i])
 							/(number_of_intervals*INTERVAL*number_of_intervals*INTERVAL);
 					if (fabs(a[i]) > a_max_motor[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
 						sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i+1, fabs(a[i]), a_max_motor[i]);
@@ -1339,7 +1339,7 @@ bool parabolic_teach_in::next_step()
 			case lib::JOINT:
 				the_robot->ecp_command.instruction.set_arm_type = lib::JOINT;
 				for (i=0; i <MAX_SERVOS_NR; i++) {
-					a[i] = 4.0*(tip.coordinates[i] - the_robot->EDP_data.current_joint_arm_coordinates[i])
+					a[i] = 4.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i])
 							/(number_of_intervals*INTERVAL*number_of_intervals*INTERVAL);
 					if (fabs(a[i]) > a_max_joint[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
 						sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i+1, fabs(a[i]), a_max_joint[i]);
@@ -1359,7 +1359,7 @@ bool parabolic_teach_in::next_step()
 					if (i==6) {
 						Delta = tip.coordinates[i] - the_robot->EDP_data.current_gripper_coordinate;
 					} else {
-						Delta = tip.coordinates[i] - the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[i];
+						Delta = tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i];
 					}
 
 					if (i > 2 && i < 6) // Wymuszenie ruchu po krotszym luku okregu
@@ -1388,7 +1388,7 @@ bool parabolic_teach_in::next_step()
 						a[i] = 4.0*(tip.coordinates[i] - the_robot->EDP_data.current_gripper_coordinate)
 								/(number_of_intervals*INTERVAL*number_of_intervals*INTERVAL);
 					} else {
-						a[i] = 4.0*(tip.coordinates[i] - the_robot->EDP_data.current_XYZ_AA_arm_coordinates[i])
+						a[i] = 4.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i])
 								/(number_of_intervals*INTERVAL*number_of_intervals*INTERVAL);
 					}
 
@@ -1429,7 +1429,7 @@ bool parabolic_teach_in::next_step()
 				for (i = 0; i <MAX_SERVOS_NR; i++) {
 					if (node_counter < half_number_of_intervals)
 						the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
-								= the_robot->EDP_data.current_motor_arm_coordinates[i] + 0.5* a[i]* node_counter
+								= the_robot->reply_package.arm.pf_def.arm_coordinates[i] + 0.5* a[i]* node_counter
 										*INTERVAL*node_counter*INTERVAL;
 					else
 						the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = tip.coordinates[i] - 0.5 * a[i]
@@ -1441,7 +1441,7 @@ bool parabolic_teach_in::next_step()
 				for (i = 0; i <MAX_SERVOS_NR; i++)
 					if (node_counter < half_number_of_intervals)
 						the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
-								= the_robot->EDP_data.current_joint_arm_coordinates[i] + 0.5* a[i]* node_counter
+								= the_robot->reply_package.arm.pf_def.arm_coordinates[i] + 0.5* a[i]* node_counter
 										*INTERVAL*node_counter*INTERVAL;
 					else
 						the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = tip.coordinates[i] - 0.5 * a[i]
@@ -1452,7 +1452,7 @@ bool parabolic_teach_in::next_step()
 				for (i = 0; i < 6; i++)
 					if (node_counter < half_number_of_intervals)
 						the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
-								= the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[i] + 0.5* a[i]* node_counter
+								= the_robot->reply_package.arm.pf_def.arm_coordinates[i] + 0.5* a[i]* node_counter
 										*INTERVAL*node_counter*INTERVAL;
 					else
 						the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = tip.coordinates[i] - 0.5 * a[i]
@@ -1472,7 +1472,7 @@ bool parabolic_teach_in::next_step()
 				for (i = 0; i < 6; i++)
 					if (node_counter < half_number_of_intervals)
 						the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
-								= the_robot->EDP_data.current_XYZ_AA_arm_coordinates[i] + 0.5* a[i]* node_counter
+								= the_robot->reply_package.arm.pf_def.arm_coordinates[i] + 0.5* a[i]* node_counter
 										*INTERVAL*node_counter*INTERVAL;
 					else
 						the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = tip.coordinates[i] - 0.5 * a[i]
@@ -1635,7 +1635,7 @@ bool calibration::next_step()
 			case lib::MOTOR:
 				the_robot->ecp_command.instruction.set_arm_type = lib::MOTOR;
 				for (i=0; i <MAX_SERVOS_NR; i++) {
-					a[i] = 4.0*(tip.coordinates[i] - the_robot->EDP_data.current_motor_arm_coordinates[i])
+					a[i] = 4.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i])
 							/(number_of_intervals*INTERVAL*number_of_intervals*INTERVAL);
 					if (fabs(a[i]) > a_max_motor[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
 						sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i+1, fabs(a[i]), a_max_motor[i]);
@@ -1652,7 +1652,7 @@ bool calibration::next_step()
 			case lib::JOINT:
 				the_robot->ecp_command.instruction.set_arm_type = lib::JOINT;
 				for (i=0; i <MAX_SERVOS_NR; i++) {
-					a[i] = 4.0*(tip.coordinates[i] - the_robot->EDP_data.current_joint_arm_coordinates[i])
+					a[i] = 4.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i])
 							/(number_of_intervals*INTERVAL*number_of_intervals*INTERVAL);
 					if (fabs(a[i]) > a_max_joint[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
 						sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i+1, fabs(a[i]), a_max_joint[i]);
@@ -1673,7 +1673,7 @@ bool calibration::next_step()
 						a[i] = 4.0*(tip.coordinates[i] - the_robot->EDP_data.current_gripper_coordinate)
 								/(number_of_intervals*INTERVAL*number_of_intervals*INTERVAL);
 					} else {
-						a[i] = 4.0*(tip.coordinates[i] - the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[i])
+						a[i] = 4.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i])
 								/(number_of_intervals*INTERVAL*number_of_intervals*INTERVAL);
 					}
 
@@ -1697,7 +1697,7 @@ bool calibration::next_step()
 						a[i] = 4.0*(tip.coordinates[i] - the_robot->EDP_data.current_gripper_coordinate)
 								/(number_of_intervals*INTERVAL*number_of_intervals*INTERVAL);
 					} else {
-						a[i] = 4.0*(tip.coordinates[i] - the_robot->EDP_data.current_XYZ_AA_arm_coordinates[i])
+						a[i] = 4.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i])
 								/(number_of_intervals*INTERVAL*number_of_intervals*INTERVAL);
 					}
 					if (fabs(a[i]) > a_max_aa[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
@@ -1736,11 +1736,11 @@ bool calibration::next_step()
 				for (i = 0; i <MAX_SERVOS_NR; i++) {
 					if (node_counter < half_number_of_intervals)
 						the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
-								= the_robot->EDP_data.current_motor_arm_coordinates[i] + 0.5* a[i]* node_counter
+								= the_robot->reply_package.arm.pf_def.arm_coordinates[i] + 0.5* a[i]* node_counter
 										*INTERVAL*node_counter*INTERVAL;
 					else
 						the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
-								= the_robot->EDP_data.current_motor_arm_coordinates[i] + a[i] * (node_counter*INTERVAL
+								= the_robot->reply_package.arm.pf_def.arm_coordinates[i] + a[i] * (node_counter*INTERVAL
 										*number_of_intervals*INTERVAL -0.5*node_counter*INTERVAL*node_counter*INTERVAL
 										-0.25*number_of_intervals*INTERVAL*number_of_intervals*INTERVAL);
 				}
@@ -1749,11 +1749,11 @@ bool calibration::next_step()
 				for (i = 0; i <MAX_SERVOS_NR; i++)
 					if (node_counter < half_number_of_intervals)
 						the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
-								= the_robot->EDP_data.current_joint_arm_coordinates[i] + 0.5* a[i]* node_counter
+								= the_robot->reply_package.arm.pf_def.arm_coordinates[i] + 0.5* a[i]* node_counter
 										*INTERVAL*node_counter*INTERVAL;
 					else
 						the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
-								= the_robot->EDP_data.current_joint_arm_coordinates[i] + a[i] * (node_counter*INTERVAL
+								= the_robot->reply_package.arm.pf_def.arm_coordinates[i] + a[i] * (node_counter*INTERVAL
 										*number_of_intervals*INTERVAL -0.5*node_counter*INTERVAL*node_counter*INTERVAL
 										-0.25*number_of_intervals*INTERVAL*number_of_intervals*INTERVAL);
 				break;
@@ -1761,21 +1761,21 @@ bool calibration::next_step()
 				for (i = 0; i < 6; i++)
 					if (node_counter < half_number_of_intervals)
 						the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
-								= the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[i] + 0.5* a[i]* node_counter
+								= the_robot->reply_package.arm.pf_def.arm_coordinates[i] + 0.5* a[i]* node_counter
 										*INTERVAL*node_counter*INTERVAL;
 					else
 						the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
-								= the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[i] + a[i] * (node_counter
+								= the_robot->reply_package.arm.pf_def.arm_coordinates[i] + a[i] * (node_counter
 										*INTERVAL*number_of_intervals*INTERVAL -0.5*node_counter*INTERVAL*node_counter
 										*INTERVAL -0.25*number_of_intervals*INTERVAL*number_of_intervals*INTERVAL);
 
 				if (node_counter < half_number_of_intervals)
 					the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[6]
-							= the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[6] + 0.5* a[6]* node_counter*INTERVAL
+							= the_robot->reply_package.arm.pf_def.arm_coordinates[6] + 0.5* a[6]* node_counter*INTERVAL
 									*node_counter*INTERVAL;
 				else
 					the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[6]
-							= the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[6] + a[6] * (node_counter*INTERVAL
+							= the_robot->reply_package.arm.pf_def.arm_coordinates[6] + a[6] * (node_counter*INTERVAL
 									*number_of_intervals*INTERVAL -0.5*node_counter*INTERVAL*node_counter*INTERVAL
 									-0.25*number_of_intervals*INTERVAL*number_of_intervals*INTERVAL);
 
@@ -1784,21 +1784,21 @@ bool calibration::next_step()
 				for (i = 0; i < 6; i++)
 					if (node_counter < half_number_of_intervals)
 						the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
-								= the_robot->EDP_data.current_XYZ_AA_arm_coordinates[i] + 0.5* a[i]* node_counter
+								= the_robot->reply_package.arm.pf_def.arm_coordinates[i] + 0.5* a[i]* node_counter
 										*INTERVAL*node_counter*INTERVAL;
 					else
 						the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
-								= the_robot->EDP_data.current_XYZ_AA_arm_coordinates[i] + a[i] * (node_counter*INTERVAL
+								= the_robot->reply_package.arm.pf_def.arm_coordinates[i] + a[i] * (node_counter*INTERVAL
 										*number_of_intervals*INTERVAL -0.5*node_counter*INTERVAL*node_counter*INTERVAL
 										-0.25*number_of_intervals*INTERVAL*number_of_intervals*INTERVAL);
 
 				if (node_counter < half_number_of_intervals)
 					the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[6]
-							= the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[6] + 0.5* a[6]* node_counter*INTERVAL
+							= the_robot->reply_package.arm.pf_def.arm_coordinates[6] + 0.5* a[6]* node_counter*INTERVAL
 									*node_counter*INTERVAL;
 				else
 					the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[6]
-							= the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[6] + a[6] * (node_counter*INTERVAL
+							= the_robot->reply_package.arm.pf_def.arm_coordinates[6] + a[6] * (node_counter*INTERVAL
 									*number_of_intervals*INTERVAL -0.5*node_counter*INTERVAL*node_counter*INTERVAL
 									-0.25*number_of_intervals*INTERVAL*number_of_intervals*INTERVAL);
 
@@ -1958,10 +1958,10 @@ bool cubic_spline::next_step()
 			case lib::MOTOR:
 				the_robot->ecp_command.instruction.set_arm_type = lib::MOTOR;
 				for (int i=0; i<MAX_SERVOS_NR; i++) {
-					A0[i]= the_robot->EDP_data.current_motor_arm_coordinates[i];
-					A2[i]=(3.0*(tip.coordinates[i] - the_robot->EDP_data.current_motor_arm_coordinates[i]) )
+					A0[i]= the_robot->reply_package.arm.pf_def.arm_coordinates[i];
+					A2[i]=(3.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i]) )
 							/ (number_of_intervals*number_of_intervals);
-					A3[i]=(-2.0*(tip.coordinates[i] - the_robot->EDP_data.current_motor_arm_coordinates[i]) )
+					A3[i]=(-2.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i]) )
 							/ (number_of_intervals*number_of_intervals*number_of_intervals);
 				} // end:for
 				break;
@@ -1969,10 +1969,10 @@ bool cubic_spline::next_step()
 			case lib::JOINT:
 				the_robot->ecp_command.instruction.set_arm_type = lib::JOINT;
 				for (int i=0; i<MAX_SERVOS_NR; i++) {
-					A0[i]= the_robot->EDP_data.current_joint_arm_coordinates[i];
-					A2[i]=(3.0*(tip.coordinates[i] - the_robot->EDP_data.current_joint_arm_coordinates[i]) )
+					A0[i]= the_robot->reply_package.arm.pf_def.arm_coordinates[i];
+					A2[i]=(3.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i]) )
 							/ (number_of_intervals*number_of_intervals);
-					A3[i]=(-2.0*(tip.coordinates[i] - the_robot->EDP_data.current_joint_arm_coordinates[i]) )
+					A3[i]=(-2.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i]) )
 							/ (number_of_intervals*number_of_intervals*number_of_intervals);
 				} // end:for
 				break;
@@ -1980,10 +1980,10 @@ bool cubic_spline::next_step()
 			case lib::XYZ_EULER_ZYZ:
 				the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
 				for (int i=0; i<6; i++) {
-					A0[i]= the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[i];
-					A2[i]=(3.0*(tip.coordinates[i] - the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[i]) )
+					A0[i]= the_robot->reply_package.arm.pf_def.arm_coordinates[i];
+					A2[i]=(3.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i]) )
 							/ (number_of_intervals*number_of_intervals);
-					A3[i]=(-2.0*(tip.coordinates[i] - the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[i]) )
+					A3[i]=(-2.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i]) )
 							/ (number_of_intervals*number_of_intervals*number_of_intervals);
 				} // end:for
 
@@ -1996,10 +1996,10 @@ bool cubic_spline::next_step()
 			case lib::XYZ_ANGLE_AXIS:
 				the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
 				for (int i=0; i<6; i++) {
-					A0[i]= the_robot->EDP_data.current_XYZ_AA_arm_coordinates[i];
-					A2[i]=(3.0*(tip.coordinates[i] - the_robot->EDP_data.current_XYZ_AA_arm_coordinates[i]) )
+					A0[i]= the_robot->reply_package.arm.pf_def.arm_coordinates[i];
+					A2[i]=(3.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i]) )
 							/ (number_of_intervals*number_of_intervals);
-					A3[i]=(-2.0*(tip.coordinates[i] - the_robot->EDP_data.current_XYZ_AA_arm_coordinates[i]) )
+					A3[i]=(-2.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i]) )
 							/ (number_of_intervals*number_of_intervals*number_of_intervals);
 				} // end:for
 				A0[6]= the_robot->EDP_data.current_gripper_coordinate;
@@ -2301,7 +2301,7 @@ bool smooth_cubic_spline::next_step()
 			case lib::MOTOR:
 				the_robot->ecp_command.instruction.set_arm_type = lib::MOTOR;
 				for (int i=0; i<MAX_SERVOS_NR; i++) {
-					y(0, i) = the_robot->EDP_data.current_motor_arm_coordinates[i];
+					y(0, i) = the_robot->reply_package.arm.pf_def.arm_coordinates[i];
 					t(0, i) = (double) 0;
 				} // end:for
 				break;
@@ -2309,7 +2309,7 @@ bool smooth_cubic_spline::next_step()
 			case lib::JOINT:
 				the_robot->ecp_command.instruction.set_arm_type = lib::JOINT;
 				for (int i=0; i<MAX_SERVOS_NR; i++) {
-					y(0, i) = the_robot->EDP_data.current_joint_arm_coordinates[i];
+					y(0, i) = the_robot->reply_package.arm.pf_def.arm_coordinates[i];
 					t(0, i) = (double) 0;
 				} // end:for
 				break;
@@ -2320,7 +2320,7 @@ bool smooth_cubic_spline::next_step()
 					if (i==6) {
 						y(0, i) = the_robot->EDP_data.current_gripper_coordinate;
 					} else {
-						y(0, i) = the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[i];
+						y(0, i) = the_robot->reply_package.arm.pf_def.arm_coordinates[i];
 					}
 					t(0, i) = (double) 0;
 				} // end:for
@@ -2332,7 +2332,7 @@ bool smooth_cubic_spline::next_step()
 					if (i==6) {
 						y(0, i) = the_robot->EDP_data.current_gripper_coordinate;
 					} else {
-						y(0, i) = the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[i];
+						y(0, i) = the_robot->reply_package.arm.pf_def.arm_coordinates[i];
 					}
 					t(0, i) = (double) 0;
 					t(0, i) = (double) 0;
@@ -2760,12 +2760,12 @@ bool quintic_spline::next_step()
 			case lib::MOTOR:
 				for (int i=0; i<MAX_SERVOS_NR; i++) {
 					the_robot->ecp_command.instruction.set_arm_type = lib::MOTOR;
-					A0[i]= the_robot->EDP_data.current_motor_arm_coordinates[i];
-					A3[i]=(10.0*(tip.coordinates[i] - the_robot->EDP_data.current_motor_arm_coordinates[i]) )
+					A0[i]= the_robot->reply_package.arm.pf_def.arm_coordinates[i];
+					A3[i]=(10.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i]) )
 							/ (number_of_intervals*number_of_intervals*number_of_intervals);
-					A4[i]=(-15.0*(tip.coordinates[i] - the_robot->EDP_data.current_motor_arm_coordinates[i]) )
+					A4[i]=(-15.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i]) )
 							/ (number_of_intervals*number_of_intervals*number_of_intervals*number_of_intervals);
-					A5[i]=(6.0*(tip.coordinates[i] - the_robot->EDP_data.current_motor_arm_coordinates[i]) )
+					A5[i]=(6.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i]) )
 							/ (number_of_intervals*number_of_intervals*number_of_intervals *number_of_intervals
 									*number_of_intervals);
 				} // end:for
@@ -2774,12 +2774,12 @@ bool quintic_spline::next_step()
 			case lib::JOINT:
 				the_robot->ecp_command.instruction.set_arm_type = lib::JOINT;
 				for (int i=0; i<MAX_SERVOS_NR; i++) {
-					A0[i]= the_robot->EDP_data.current_joint_arm_coordinates[i];
-					A3[i]=(10.0*(tip.coordinates[i] - the_robot->EDP_data.current_motor_arm_coordinates[i]) )
+					A0[i]= the_robot->reply_package.arm.pf_def.arm_coordinates[i];
+					A3[i]=(10.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i]) )
 							/ (number_of_intervals*number_of_intervals*number_of_intervals);
-					A4[i]=(-15.0*(tip.coordinates[i] - the_robot->EDP_data.current_motor_arm_coordinates[i]) )
+					A4[i]=(-15.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i]) )
 							/ (number_of_intervals*number_of_intervals*number_of_intervals*number_of_intervals);
-					A5[i]=(6.0*(tip.coordinates[i] - the_robot->EDP_data.current_motor_arm_coordinates[i]) )
+					A5[i]=(6.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i]) )
 							/ (number_of_intervals*number_of_intervals*number_of_intervals *number_of_intervals
 									*number_of_intervals);
 				} // end:for
@@ -2788,12 +2788,12 @@ bool quintic_spline::next_step()
 			case lib::XYZ_EULER_ZYZ:
 				the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
 				for (int i=0; i<6; i++) {
-					A0[i]= the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[i];
-					A3[i]=(10.0*(tip.coordinates[i] - the_robot->EDP_data.current_motor_arm_coordinates[i]) )
+					A0[i]= the_robot->reply_package.arm.pf_def.arm_coordinates[i];
+					A3[i]=(10.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i]) )
 							/ (number_of_intervals*number_of_intervals*number_of_intervals);
-					A4[i]=(-15.0*(tip.coordinates[i] - the_robot->EDP_data.current_motor_arm_coordinates[i]) )
+					A4[i]=(-15.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i]) )
 							/ (number_of_intervals*number_of_intervals*number_of_intervals*number_of_intervals);
-					A5[i]=(6.0*(tip.coordinates[i] - the_robot->EDP_data.current_motor_arm_coordinates[i]) )
+					A5[i]=(6.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i]) )
 							/ (number_of_intervals*number_of_intervals*number_of_intervals *number_of_intervals
 									*number_of_intervals);
 				} // end:for
@@ -2810,12 +2810,12 @@ bool quintic_spline::next_step()
 			case lib::XYZ_ANGLE_AXIS:
 				the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
 				for (int i=0; i<6; i++) {
-					A0[i]= the_robot->EDP_data.current_XYZ_AA_arm_coordinates[i];
-					A3[i]=(10.0*(tip.coordinates[i] - the_robot->EDP_data.current_motor_arm_coordinates[i]) )
+					A0[i]= the_robot->reply_package.arm.pf_def.arm_coordinates[i];
+					A3[i]=(10.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i]) )
 							/ (number_of_intervals*number_of_intervals*number_of_intervals);
-					A4[i]=(-15.0*(tip.coordinates[i] - the_robot->EDP_data.current_motor_arm_coordinates[i]) )
+					A4[i]=(-15.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i]) )
 							/ (number_of_intervals*number_of_intervals*number_of_intervals*number_of_intervals);
-					A5[i]=(6.0*(tip.coordinates[i] - the_robot->EDP_data.current_motor_arm_coordinates[i]) )
+					A5[i]=(6.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i]) )
 							/ (number_of_intervals*number_of_intervals*number_of_intervals *number_of_intervals
 									*number_of_intervals);
 				} // end:for
@@ -3147,7 +3147,7 @@ bool elipsoid::next_step()
 
 	}
 	trj_ptr[node_counter-1].ctime = (node_counter-1)*INTERVAL;
-	memcpy(trj_ptr[node_counter-1].coordinates, the_robot->EDP_data.current_joint_arm_coordinates, MAX_SERVOS_NR*sizeof(double));
+	memcpy(trj_ptr[node_counter-1].coordinates, the_robot->reply_package.arm.pf_def.arm_coordinates, MAX_SERVOS_NR*sizeof(double));
 
 	// (ten, do ktorego zmierza ramie)
 

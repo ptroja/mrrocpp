@@ -231,12 +231,12 @@ void wii_teach::main_task_algorithm(void)
 
                     node* current = new node;
                     current->id = ++cnt;
-                    current->position[0] = ecp_m_robot->EDP_data.current_XYZ_AA_arm_coordinates[0];
-                    current->position[1] = ecp_m_robot->EDP_data.current_XYZ_AA_arm_coordinates[1];
-                    current->position[2] = ecp_m_robot->EDP_data.current_XYZ_AA_arm_coordinates[2];
-                    current->position[3] = ecp_m_robot->EDP_data.current_XYZ_AA_arm_coordinates[3];
-                    current->position[4] = ecp_m_robot->EDP_data.current_XYZ_AA_arm_coordinates[4];
-                    current->position[5] = ecp_m_robot->EDP_data.current_XYZ_AA_arm_coordinates[5];
+                    current->position[0] = ecp_m_robot->reply_package.arm.pf_def.arm_coordinates[0];
+                    current->position[1] = ecp_m_robot->reply_package.arm.pf_def.arm_coordinates[1];
+                    current->position[2] = ecp_m_robot->reply_package.arm.pf_def.arm_coordinates[2];
+                    current->position[3] = ecp_m_robot->reply_package.arm.pf_def.arm_coordinates[3];
+                    current->position[4] = ecp_m_robot->reply_package.arm.pf_def.arm_coordinates[4];
+                    current->position[5] = ecp_m_robot->reply_package.arm.pf_def.arm_coordinates[5];
 
                     if(trajectory.current)
                     {
@@ -302,12 +302,12 @@ void wii_teach::main_task_algorithm(void)
                     {
                         int old = trajectory.current->id;
                         trajectory.current->id = ++cnt;
-                        trajectory.current->position[0] = ecp_m_robot->EDP_data.current_XYZ_AA_arm_coordinates[0];
-                        trajectory.current->position[1] = ecp_m_robot->EDP_data.current_XYZ_AA_arm_coordinates[1];
-                        trajectory.current->position[2] = ecp_m_robot->EDP_data.current_XYZ_AA_arm_coordinates[2];
-                        trajectory.current->position[3] = ecp_m_robot->EDP_data.current_XYZ_AA_arm_coordinates[3];
-                        trajectory.current->position[4] = ecp_m_robot->EDP_data.current_XYZ_AA_arm_coordinates[4];
-                        trajectory.current->position[5] = ecp_m_robot->EDP_data.current_XYZ_AA_arm_coordinates[5];
+                        trajectory.current->position[0] = ecp_m_robot->reply_package.arm.pf_def.arm_coordinates[0];
+                        trajectory.current->position[1] = ecp_m_robot->reply_package.arm.pf_def.arm_coordinates[1];
+                        trajectory.current->position[2] = ecp_m_robot->reply_package.arm.pf_def.arm_coordinates[2];
+                        trajectory.current->position[3] = ecp_m_robot->reply_package.arm.pf_def.arm_coordinates[3];
+                        trajectory.current->position[4] = ecp_m_robot->reply_package.arm.pf_def.arm_coordinates[4];
+                        trajectory.current->position[5] = ecp_m_robot->reply_package.arm.pf_def.arm_coordinates[5];
 
                         sprintf(buffer,"Changed %d: %.4f %.4f %.4f %.4f %.4f %.4f",trajectory.current->id,trajectory.current->position[0],trajectory.current->position[1],trajectory.current->position[2],trajectory.current->position[3],trajectory.current->position[4],trajectory.current->position[5]);
                         sr_ecp_msg->message(buffer);

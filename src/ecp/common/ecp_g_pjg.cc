@@ -72,7 +72,7 @@ bool playerjoy::next_step ( )
     {
         if (node_counter <= 2)
         {
-            start_joint_arm_coordinates[i] = the_robot->EDP_data.current_joint_arm_coordinates[i];
+            start_joint_arm_coordinates[i] = the_robot->reply_package.arm.pf_def.arm_coordinates[i];
         }
         else
         {

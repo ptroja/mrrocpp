@@ -175,7 +175,7 @@ void ecp_vis_weights_driven_irp6ot::entertain_constraints(){
 	/*
 	for (int i=0; i<6; i++)
 	{
-		the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = the_robot->EDP_data.current_XYZ_AA_arm_coordinates[i];
+		the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = the_robot->reply_package.arm.pf_def.arm_coordinates[i];
 	}
 	*/
 

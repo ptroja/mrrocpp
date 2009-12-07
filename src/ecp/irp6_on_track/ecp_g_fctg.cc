@@ -89,11 +89,11 @@ void force_controlled_trajectory::get_current_position (){
         the_robot->get_reply();
         // Przepisanie obecnego polozenia robota do bufora.
         if (current_control == lib::MOTOR){
-            memcpy(current_position, the_robot->EDP_data.current_motor_arm_coordinates, 8*sizeof(double));
-            memcpy(current_motor_position, the_robot->EDP_data.current_motor_arm_coordinates, 8*sizeof(double));
+            memcpy(current_position, the_robot->reply_package.arm.pf_def.arm_coordinates, 8*sizeof(double));
+            memcpy(current_motor_position, the_robot->reply_package.arm.pf_def.arm_coordinates, 8*sizeof(double));
             }
         else if (current_control == lib::XYZ_EULER_ZYZ){
-            memcpy(current_position, the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates, 6*sizeof(double));
+            memcpy(current_position, the_robot->reply_package.arm.pf_def.arm_coordinates, 6*sizeof(double));
             // Odczytanie polowenia na motorach.
             // Przygotowanie rozkazu dla EDP.
             the_robot->ecp_command.instruction.instruction_type = lib::GET;
@@ -105,7 +105,7 @@ void force_controlled_trajectory::get_current_position (){
             the_robot->execute_motion();
             // Odebranie danych.
             the_robot->get_reply();
-            memcpy(current_motor_position, the_robot->EDP_data.current_motor_arm_coordinates, 8*sizeof(double));
+            memcpy(current_motor_position, the_robot->reply_package.arm.pf_def.arm_coordinates, 8*sizeof(double));
             } // end: if*/
     // Koniec sekcji krytycznej.
     pthread_mutex_unlock(&ROBOT_POSITION_MUTEX);

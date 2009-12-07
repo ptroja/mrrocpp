@@ -71,7 +71,7 @@ bool ecp_vis_ib_eih_follower_irp6ot::next_step_without_constraints() {
 		//printf("poczatek sledzenia\n");
 		//flushall();
 		memcpy(next_position,
-	 			the_robot->EDP_data.current_XYZ_AA_arm_coordinates, 6
+	 			the_robot->reply_package.arm.pf_def.arm_coordinates, 6
 						* sizeof(double));
 
 		//next_position[6] = the_robot->EDP_data.current_gripper_coordinate;
@@ -132,7 +132,7 @@ bool ecp_vis_ib_eih_follower_irp6ot::next_step_without_constraints() {
 	}
 	//ruch w z (koniec)
 
-	//alpha = the_robot->EDP_data.current_joint_arm_coordinates[1]- the_robot->EDP_data.current_joint_arm_coordinates[6];
+	//alpha = the_robot->reply_package.arm.pf_def.arm_coordinates[1]- the_robot->reply_package.arm.pf_def.arm_coordinates[6];
 	//Uchyb wyrazony w pikselach.
 	u[0] = vsp_fradia->from_vsp.comm_image.sensor_union.tracker.x-20;
 	u[1] = vsp_fradia->from_vsp.comm_image.sensor_union.tracker.y;
@@ -227,7 +227,7 @@ bool ecp_vis_ib_eih_follower_irp6ot::next_step_without_constraints() {
 	printf("\n\n");
 
 	memcpy(next_position,
- 			the_robot->EDP_data.current_XYZ_AA_arm_coordinates, 6
+ 			the_robot->reply_package.arm.pf_def.arm_coordinates, 6
 					* sizeof(double));
 	for (int i = 0; i < 6; i++) {
 	//	printf("%f\t", next_position[i]);

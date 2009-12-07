@@ -165,12 +165,12 @@ void robot::get_arm_reply (void)
     {
     case lib::MOTOR:
         for (int i=0; i<CONVEYOR_NUM_OF_SERVOS; i++)
-            EDP_data.current_motor_arm_coordinates[i] =
+            reply_package.arm.pf_def.arm_coordinates[i] =
                 reply_package.arm.pf_def.arm_coordinates[i];
         break;
     case lib::JOINT:
             for (int i=0; i<CONVEYOR_NUM_OF_SERVOS; i++)
-                EDP_data.current_joint_arm_coordinates[i] =
+                reply_package.arm.pf_def.arm_coordinates[i] =
                     reply_package.arm.pf_def.arm_coordinates[i];
         break;
 

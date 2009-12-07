@@ -134,12 +134,12 @@ bool operator_reaction_condition::next_step ()
 
 		if (!is_supplementary_list_head()) { // Czy wskaznik na glowe listy jest NULL
 			// Tworzymy glowe listy
-//      create_supplementary_list_head(lib::XYZ_EULER_ZYZ, 0.0, the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates); // W.S.
-			create_supplementary_list_head(lib::MOTOR, 0.0, the_robot->EDP_data.current_motor_arm_coordinates);
+//      create_supplementary_list_head(lib::XYZ_EULER_ZYZ, 0.0, the_robot->reply_package.arm.pf_def.arm_coordinates); // W.S.
+			create_supplementary_list_head(lib::MOTOR, 0.0, the_robot->reply_package.arm.pf_def.arm_coordinates);
 		} else {
 			// Wstaw do listy nowa pozycje
-//      insert_supplementary_list_element(lib::XYZ_EULER_ZYZ, 0.0, the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates);
-			insert_supplementary_list_element(lib::MOTOR, 0.0, the_robot->EDP_data.current_motor_arm_coordinates);
+//      insert_supplementary_list_element(lib::XYZ_EULER_ZYZ, 0.0, the_robot->reply_package.arm.pf_def.arm_coordinates);
+			insert_supplementary_list_element(lib::MOTOR, 0.0, the_robot->reply_package.arm.pf_def.arm_coordinates);
 		}
 		return false;
 	} else {

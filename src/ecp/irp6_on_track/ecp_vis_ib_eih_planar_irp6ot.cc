@@ -58,7 +58,7 @@ bool ecp_vis_ib_eih_planar_irp6ot::next_step_without_constraints() {
 	if (node_counter == 1) {
 
 		memcpy(next_position,
-	 			the_robot->EDP_data.current_XYZ_AA_arm_coordinates, 6
+	 			the_robot->reply_package.arm.pf_def.arm_coordinates, 6
 						* sizeof(double));
 		next_position[6] = the_robot->EDP_data.current_gripper_coordinate;
 
@@ -79,7 +79,7 @@ bool ecp_vis_ib_eih_planar_irp6ot::next_step_without_constraints() {
 
 	//Zadawanie ruchu wzgledem aktualnego polozenia koncowki.
 	else {
-		alpha = the_robot->EDP_data.current_joint_arm_coordinates[1]- the_robot->EDP_data.current_joint_arm_coordinates[6];
+		alpha = the_robot->reply_package.arm.pf_def.arm_coordinates[1]- the_robot->reply_package.arm.pf_def.arm_coordinates[6];
 		//Uchyb wyrazony w pikselach.
 		double ux = vsp_fradia->from_vsp.comm_image.sensor_union.deviation.x;
 		double uy = vsp_fradia->from_vsp.comm_image.sensor_union.deviation.y;

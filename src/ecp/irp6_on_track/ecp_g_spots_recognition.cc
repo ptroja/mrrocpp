@@ -106,7 +106,7 @@ void spots::get_frame(double t[12])
 	for(int i=0; i<3; i++)
 	{
 		for(int j=0; j<4; j++)
-			t[4*i+j] = the_robot->EDP_data.current_arm_frame[i][j];
+			t[4*i+j] = the_robot->reply_package.arm.pf_def.arm_frame[i][j];
 	}
 
 }

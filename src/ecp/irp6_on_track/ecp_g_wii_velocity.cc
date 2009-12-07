@@ -85,7 +85,7 @@ bool wii_velocity::next_step()
 		 the_robot->EDP_data.next_velocity[i] = generator_edp_data.next_velocity[i];
 	}
 
-	//sprintf(buffer,"P%d %f %f %f %f %f %f",step_no,the_robot->EDP_data.current_joint_arm_coordinates[0],the_robot->EDP_data.current_joint_arm_coordinates[1],the_robot->EDP_data.current_joint_arm_coordinates[2],the_robot->EDP_data.current_joint_arm_coordinates[3],the_robot->EDP_data.current_joint_arm_coordinates[4],the_robot->EDP_data.current_joint_arm_coordinates[5]);
+	//sprintf(buffer,"P%d %f %f %f %f %f %f",step_no,the_robot->reply_package.arm.pf_def.arm_coordinates[0],the_robot->reply_package.arm.pf_def.arm_coordinates[1],the_robot->reply_package.arm.pf_def.arm_coordinates[2],the_robot->reply_package.arm.pf_def.arm_coordinates[3],the_robot->reply_package.arm.pf_def.arm_coordinates[4],the_robot->reply_package.arm.pf_def.arm_coordinates[5]);
 	//sprintf(buffer,"V%d %f %f %f %f	 %f %f",step_no,the_robot->EDP_data.next_velocity[0],the_robot->EDP_data.next_velocity[1],the_robot->EDP_data.next_velocity[2],the_robot->EDP_data.next_velocity[3],the_robot->EDP_data.next_velocity[4],the_robot->EDP_data.next_velocity[5]);
 	//sr_ecp_msg.message(buffer);
 

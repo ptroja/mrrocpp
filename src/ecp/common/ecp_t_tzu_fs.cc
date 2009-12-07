@@ -354,7 +354,7 @@ bool force_meassure_generator::first_step()
 bool force_meassure_generator::next_step()
 {
 	usleep(sleep_time);
-	lib::Homog_matrix current_frame_wo_offset(the_robot->EDP_data.current_arm_frame);
+	lib::Homog_matrix current_frame_wo_offset(the_robot->reply_package.arm.pf_def.arm_frame);
 	current_frame_wo_offset.remove_translation();
 
 	lib::Ft_v_vector force_torque(the_robot->EDP_data.current_force_xyz_torque_xyz);

@@ -154,7 +154,7 @@ bool manual_moves_automatic_measures::next_step (){
 	// Porownanie ostatniego polozenia z obecnym.
 	bool position_changed = false;
 	for(int i =0; i<axes_number; i++)
-		if (the_robot->EDP_data.current_motor_arm_coordinates[i] - last_motor_position[i] > eps)
+		if (the_robot->reply_package.arm.pf_def.arm_coordinates[i] - last_motor_position[i] > eps)
 		{
 			// Polozenia rozne.
 			position_changed = true;
@@ -187,7 +187,7 @@ bool manual_moves_automatic_measures::next_step (){
 /************************* GET CURRENT POSITION *****************************/
 void manual_moves_automatic_measures::get_current_position(double* current_position){
     // Przepisanie obecnego polozenia robota do bufora w zaleznosci od rodzaju wspolrzednych.
-    memcpy(current_position, the_robot->EDP_data.current_motor_arm_coordinates, axes_number*sizeof(double));
+    memcpy(current_position, the_robot->reply_package.arm.pf_def.arm_coordinates, axes_number*sizeof(double));
 }
 
 /*********************** RETURN SENSOR READING ***************************/
@@ -229,12 +229,12 @@ void manual_moves_automatic_measures::add_mam_element(ecp_mp::sensor::digital_sc
 	if (mam_list.empty()){
 		// Jesli glowa pusta.
 		create_mam_list_head(
-			the_robot->EDP_data.current_motor_arm_coordinates,
+			the_robot->reply_package.arm.pf_def.arm_coordinates,
 			the_sensor.image.sensor_union.ds.readings);
 	} else {
 		// Jesli nastepny element.
 		insert_mam_list_element(
-			the_robot->EDP_data.current_motor_arm_coordinates,
+			the_robot->reply_package.arm.pf_def.arm_coordinates,
 			the_sensor.image.sensor_union.ds.readings);
 	}
 	// Wyswietlenie dodanego elementu.

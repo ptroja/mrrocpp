@@ -618,7 +618,7 @@ smooth2::smooth2 (common::task::task& _ecp_task, bool _is_synchronised)
 
 		    	for (int i = 0; i < gripp; i++) {
 		    		if (first_coordinate == true) {
-		    			actual_coordinates[i] = the_robot->EDP_data.current_motor_arm_coordinates[i];
+		    			actual_coordinates[i] = the_robot->reply_package.arm.pf_def.arm_coordinates[i];
 		    		}
 		    		pose_list_iterator->coordinates[i] += actual_coordinates[i];
 		    		actual_coordinates[i] = pose_list_iterator->coordinates[i];
@@ -642,7 +642,7 @@ smooth2::smooth2 (common::task::task& _ecp_task, bool _is_synchronised)
 
 		    	for (int i = 0; i < gripp; i++) {
 		    		if (first_coordinate == true) {
-		    			actual_coordinates[i] = the_robot->EDP_data.current_joint_arm_coordinates[i];
+		    			actual_coordinates[i] = the_robot->reply_package.arm.pf_def.arm_coordinates[i];
 		    		}
 		    		pose_list_iterator->coordinates[i] += actual_coordinates[i];
 		    		actual_coordinates[i] = pose_list_iterator->coordinates[i];
@@ -659,7 +659,7 @@ smooth2::smooth2 (common::task::task& _ecp_task, bool _is_synchronised)
 		    case lib::XYZ_EULER_ZYZ:
 		    	for (int i = 0; i < 6; i++) {
 		    		if (first_coordinate == true) {
-		    			actual_coordinates[i] = the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[i];
+		    			actual_coordinates[i] = the_robot->reply_package.arm.pf_def.arm_coordinates[i];
 		    		}
 		    		pose_list_iterator->coordinates[i] += actual_coordinates[i];
 		    		actual_coordinates[i] = pose_list_iterator->coordinates[i];
@@ -676,7 +676,7 @@ smooth2::smooth2 (common::task::task& _ecp_task, bool _is_synchronised)
 		    case lib::XYZ_ANGLE_AXIS:
 		    	for (int i = 0; i < 6; i++) {
 		    		if (first_coordinate == true) {
-		    			actual_coordinates[i] = the_robot->EDP_data.current_XYZ_AA_arm_coordinates[i];
+		    			actual_coordinates[i] = the_robot->reply_package.arm.pf_def.arm_coordinates[i];
 		    		}
 		    		pose_list_iterator->coordinates[i] += actual_coordinates[i];
 		    		actual_coordinates[i] = pose_list_iterator->coordinates[i];
@@ -1212,7 +1212,7 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 				//printf("euler w first_interval\n");
 				for (i = 0; i < gripp; i++) {
 					temp = pose_list_iterator->coordinates[i];
-					pose_list_iterator->start_position[i] = the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[i];//pierwsze przypisanie start_position
+					pose_list_iterator->start_position[i] = the_robot->reply_package.arm.pf_def.arm_coordinates[i];//pierwsze przypisanie start_position
 
 
 					if (!is_last_list_element()) {		   //musi byc zrobione tutaj zeby zadzialalo przypisanie kierunkow dla drugiego ruchu
@@ -1270,7 +1270,7 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 
 				for (i = 0; i < gripp; i++) {
 					temp = pose_list_iterator->coordinates[i];
-					pose_list_iterator->start_position[i] = the_robot->EDP_data.current_XYZ_AA_arm_coordinates[i];//pierwsze przypisanie start_position
+					pose_list_iterator->start_position[i] = the_robot->reply_package.arm.pf_def.arm_coordinates[i];//pierwsze przypisanie start_position
 					if (!is_last_list_element()) {		   //musi byc zrobione tutaj zeby zadzialalo przypisanie kierunkow dla drugiego ruchu
 						next_pose_list_ptr();
 						pose_list_iterator->start_position[i] = temp;//przypisanie pozycji koncowej poprzedniego ruchu jako
@@ -1331,7 +1331,7 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 
 				for (i = 0; i < gripp; i++) {
 					temp = pose_list_iterator->coordinates[i];
-					pose_list_iterator->start_position[i] = the_robot->EDP_data.current_joint_arm_coordinates[i];//pierwsze przypisanie start_position
+					pose_list_iterator->start_position[i] = the_robot->reply_package.arm.pf_def.arm_coordinates[i];//pierwsze przypisanie start_position
 					if (!is_last_list_element()) {		   //musi byc zrobione tutaj zeby zadzialalo przypisanie kierunkow dla drugiego ruchu
 						next_pose_list_ptr();
 						pose_list_iterator->start_position[i] = temp;//przypisanie pozycji koncowej poprzedniego ruchu jako
@@ -1339,7 +1339,7 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 					}
 				}
 				temp = pose_list_iterator->coordinates[gripp];
-				pose_list_iterator->start_position[gripp] = the_robot->EDP_data.current_joint_arm_coordinates[gripp];
+				pose_list_iterator->start_position[gripp] = the_robot->reply_package.arm.pf_def.arm_coordinates[gripp];
 				if (!is_last_list_element()) {		   //musi byc zrobione tutaj zeby zadzialalo przypisanie kierunkow dla drugiego ruchu
 					next_pose_list_ptr();
 					pose_list_iterator->start_position[gripp] = temp;//przypisanie pozycji koncowej poprzedniego ruchu jako
@@ -1394,7 +1394,7 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 
 				for (i = 0; i < gripp; i++) {
 					temp = pose_list_iterator->coordinates[i];
-					pose_list_iterator->start_position[i] = the_robot->EDP_data.current_motor_arm_coordinates[i];//pierwsze przypisanie start_position
+					pose_list_iterator->start_position[i] = the_robot->reply_package.arm.pf_def.arm_coordinates[i];//pierwsze przypisanie start_position
 					if (!is_last_list_element()) {		   //musi byc zrobione tutaj zeby zadzialalo przypisanie kierunkow dla drugiego ruchu
 						next_pose_list_ptr();
 						pose_list_iterator->start_position[i] = temp;//przypisanie pozycji koncowej poprzedniego ruchu jako
@@ -1402,7 +1402,7 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 					}
 				}
 				temp = pose_list_iterator->coordinates[gripp];
-				pose_list_iterator->start_position[gripp] = the_robot->EDP_data.current_motor_arm_coordinates[gripp];
+				pose_list_iterator->start_position[gripp] = the_robot->reply_package.arm.pf_def.arm_coordinates[gripp];
 				if (!is_last_list_element()) {		   //musi byc zrobione tutaj zeby zadzialalo przypisanie kierunkow dla drugiego ruchu
 					next_pose_list_ptr();
 					pose_list_iterator->start_position[gripp] = temp;//przypisanie pozycji koncowej poprzedniego ruchu jako

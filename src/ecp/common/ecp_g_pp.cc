@@ -91,7 +91,7 @@ bool progpanel::next_step ( )
 
     if (node_counter <= 2)
     {
-        memcpy(start_joint_arm_coordinates, the_robot->EDP_data.current_joint_arm_coordinates, 8*(sizeof(double)));
+        memcpy(start_joint_arm_coordinates, the_robot->reply_package.arm.pf_def.arm_coordinates, 8*(sizeof(double)));
     }
     else
     {
