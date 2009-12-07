@@ -190,9 +190,9 @@ void robot::get_rmodel_reply (void)
     case lib::SERVO_ALGORITHM:
         for(int i=0; i<CONVEYOR_NUM_OF_SERVOS; i++)
         {
-            EDP_data.current_servo_algorithm_no[i] =
+            reply_package.rmodel.servo_algorithm.servo_algorithm_no[i] =
                 reply_package.rmodel.servo_algorithm.servo_algorithm_no[i];
-            EDP_data.current_servo_parameters_no[i] =
+            reply_package.rmodel.servo_algorithm.servo_parameters_no[i] =
                 reply_package.rmodel.servo_algorithm.servo_parameters_no[i];
         }
         break;

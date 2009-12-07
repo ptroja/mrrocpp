@@ -218,22 +218,22 @@ void robot::get_rmodel_reply (void)
 {
 	switch (reply_package.rmodel_type) {
 		case lib::TOOL_FRAME:
-			lib::copy_frame(EDP_data.current_tool_frame, reply_package.rmodel.tool_frame_def.tool_frame);
+			lib::copy_frame(reply_package.rmodel.tool_frame_def.tool_frame, reply_package.rmodel.tool_frame_def.tool_frame);
 			break;
 		case lib::TOOL_XYZ_ANGLE_AXIS:
 			for (int i=0; i<6; i++)
-				EDP_data.current_XYZ_AA_tool_coordinates[i] =
+				reply_package.rmodel.tool_coordinate_def.tool_coordinates[i] =
 				    reply_package.rmodel.tool_coordinate_def.tool_coordinates[i];
 			break;
 		case lib::TOOL_XYZ_EULER_ZYZ:
 			for (int i=0; i<6; i++)
-				EDP_data.current_XYZ_ZYZ_tool_coordinates[i] =
+				reply_package.rmodel.tool_coordinate_def.tool_coordinates[i] =
 				    reply_package.rmodel.tool_coordinate_def.tool_coordinates[i];
 			break;
 			////////////////////K
 		case lib::TOOL_AS_XYZ_EULER_ZY:
 			for (int i=0; i<6; i++)
-				EDP_data.current_XYZ_ZYZ_tool_coordinates[i] =
+				reply_package.rmodel.tool_coordinate_def.tool_coordinates[i] =
 				    reply_package.rmodel.tool_coordinate_def.tool_coordinates[i];
 			break;
 			//////////////////K
@@ -243,9 +243,9 @@ void robot::get_rmodel_reply (void)
 			break;
 		case lib::SERVO_ALGORITHM:
 			for (int i=0; i<SPKM_NUM_OF_SERVOS; i++) {
-				EDP_data.current_servo_algorithm_no[i] =
+				reply_package.rmodel.servo_algorithm.servo_algorithm_no[i] =
 				    reply_package.rmodel.servo_algorithm.servo_algorithm_no[i];
-				EDP_data.current_servo_parameters_no[i] =
+				reply_package.rmodel.servo_algorithm.servo_parameters_no[i] =
 				    reply_package.rmodel.servo_algorithm.servo_parameters_no[i];
 			}
 			break;
