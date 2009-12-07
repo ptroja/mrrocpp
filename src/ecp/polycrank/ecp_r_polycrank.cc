@@ -45,35 +45,35 @@ void robot::create_command (void) {
         if (ecp_command.instruction.set_type & RMODEL_DV) {
           switch (ecp_command.instruction.set_rmodel_type) {
             case lib::TOOL_FRAME:
-            lib::copy_frame(ecp_command.instruction.rmodel.tool_frame_def.tool_frame, EDP_data.next_tool_frame);
+            lib::copy_frame(ecp_command.instruction.rmodel.tool_frame_def.tool_frame, ecp_command.instruction.rmodel.tool_frame_def.tool_frame);
               break;
             case lib::TOOL_XYZ_ANGLE_AXIS:
               for (int j=0; j<6; j++)
                 ecp_command.instruction.rmodel.tool_coordinate_def.tool_coordinates[j]
-                     = EDP_data.next_XYZ_AA_tool_coordinates[j];
+                     = ecp_command.instruction.rmodel.tool_coordinate_def.tool_coordinates[j];
               break;
             case lib::TOOL_XYZ_EULER_ZYZ:
               for (int j=0; j<6; j++)
                 ecp_command.instruction.rmodel.tool_coordinate_def.tool_coordinates[j]
-                     = EDP_data.next_XYZ_ZYZ_tool_coordinates[j];
+                     = ecp_command.instruction.rmodel.tool_coordinate_def.tool_coordinates[j];
               break;
 			  ///////////////////K
 			case lib::TOOL_AS_XYZ_EULER_ZY:
               for (int j=0; j<6; j++)
                 ecp_command.instruction.rmodel.tool_coordinate_def.tool_coordinates[j]
-                     = EDP_data.next_XYZ_ZYZ_tool_coordinates[j];
+                     = ecp_command.instruction.rmodel.tool_coordinate_def.tool_coordinates[j];
               break;
 			  /////////////////K
             case lib::ARM_KINEMATIC_MODEL:
                 ecp_command.instruction.rmodel.kinematic_model.kinematic_model_no
-                    = EDP_data.next_kinematic_model_no;
+                    = ecp_command.instruction.rmodel.kinematic_model.kinematic_model_no;
               break;
             case lib::SERVO_ALGORITHM:
               for (int j=0; j<POLYCRANK_NUM_OF_SERVOS; j++) {
                 ecp_command.instruction.rmodel.servo_algorithm.servo_algorithm_no[j]
-                   = EDP_data.next_servo_algorithm_no[j];
+                   = ecp_command.instruction.rmodel.servo_algorithm.servo_algorithm_no[j];
                 ecp_command.instruction.rmodel.servo_algorithm.servo_parameters_no[j]
-                   = EDP_data.next_servo_parameters_no[j];
+                   = ecp_command.instruction.rmodel.servo_algorithm.servo_parameters_no[j];
               }; // end: for
               break;
             default: // Blad: niewlasciwy typ modelu robota

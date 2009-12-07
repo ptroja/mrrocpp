@@ -183,20 +183,20 @@ bool vis_sac_lx::first_step()
 	//TOOL
 
 
-	the_robot->EDP_data.next_tool_frame[0][0]=1;
-	the_robot->EDP_data.next_tool_frame[1][0]=0;
-	the_robot->EDP_data.next_tool_frame[2][0]=0;
-	the_robot->EDP_data.next_tool_frame[0][3]=0;
+	the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[0][0]=1;
+	the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[1][0]=0;
+	the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[2][0]=0;
+	the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[0][3]=0;
 
-	the_robot->EDP_data.next_tool_frame[0][1]=0;
-	the_robot->EDP_data.next_tool_frame[1][1]=1;
-	the_robot->EDP_data.next_tool_frame[2][1]=0;
-	the_robot->EDP_data.next_tool_frame[1][3]=0;
+	the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[0][1]=0;
+	the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[1][1]=1;
+	the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[2][1]=0;
+	the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[1][3]=0;
 
-	the_robot->EDP_data.next_tool_frame[0][2]=0;
-	the_robot->EDP_data.next_tool_frame[1][2]=0;
-	the_robot->EDP_data.next_tool_frame[2][2]=1;
-	the_robot->EDP_data.next_tool_frame[2][3]=0.25; //0.25;
+	the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[0][2]=0;
+	the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[1][2]=0;
+	the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[2][2]=1;
+	the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[2][3]=0.25; //0.25;
 
 
 	//	the_robot->EDP_data.mp_command = lib::NEXT_POSE;

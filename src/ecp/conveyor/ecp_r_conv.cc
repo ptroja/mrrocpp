@@ -52,15 +52,15 @@ void robot::create_command (void)
             {
             case lib::ARM_KINEMATIC_MODEL:
                 ecp_command.instruction.rmodel.kinematic_model.kinematic_model_no
-                = EDP_data.next_kinematic_model_no;
+                = ecp_command.instruction.rmodel.kinematic_model.kinematic_model_no;
                 break;
             case lib::SERVO_ALGORITHM:
                 for (int j=0; j<CONVEYOR_NUM_OF_SERVOS; j++)
                 {
                     ecp_command.instruction.rmodel.servo_algorithm.servo_algorithm_no[j]
-                    = EDP_data.next_servo_algorithm_no[j];
+                    = ecp_command.instruction.rmodel.servo_algorithm.servo_algorithm_no[j];
                     ecp_command.instruction.rmodel.servo_algorithm.servo_parameters_no[j]
-                    = EDP_data.next_servo_parameters_no[j];
+                    = ecp_command.instruction.rmodel.servo_algorithm.servo_parameters_no[j];
                 } // end: for
                 break;
             default: // Blad: niewlasciwy typ modelu robota

@@ -1302,7 +1302,7 @@ bool smooth::next_step ()
 bool tool_change::first_step ()
 {
     lib::Homog_matrix tool_frame(tool_parameters[0], tool_parameters[1], tool_parameters[2]);
-    tool_frame.get_frame_tab(the_robot->EDP_data.next_tool_frame);
+    tool_frame.get_frame_tab(the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame);
 
     the_robot->ecp_command.instruction.instruction_type = lib::SET;
     the_robot->ecp_command.instruction.get_type = ARM_DV;

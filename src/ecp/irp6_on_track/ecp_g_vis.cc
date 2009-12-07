@@ -134,24 +134,24 @@ measure[i][j]=0;
 		   
 
 /*
-the_robot->EDP_data.next_tool_frame[0][0]=0.706825; the_robot->EDP_data.next_tool_frame[1][0]=-0.706825;
-the_robot->EDP_data.next_tool_frame[2][0]=0; the_robot->EDP_data.next_tool_frame[3][0]=0;
+the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[0][0]=0.706825; the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[1][0]=-0.706825;
+the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[2][0]=0; the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[3][0]=0;
 
-the_robot->EDP_data.next_tool_frame[0][1]=0.706825; the_robot->EDP_data.next_tool_frame[1][1]=0.706825;
-the_robot->EDP_data.next_tool_frame[2][1]=0; the_robot->EDP_data.next_tool_frame[3][1]=0;
+the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[0][1]=0.706825; the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[1][1]=0.706825;
+the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[2][1]=0; the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[3][1]=0;
 
-the_robot->EDP_data.next_tool_frame[0][2]=0; the_robot->EDP_data.next_tool_frame[1][2]=0;
-the_robot->EDP_data.next_tool_frame[2][2]=1; the_robot->EDP_data.next_tool_frame[3][2]=0;
+the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[0][2]=0; the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[1][2]=0;
+the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[2][2]=1; the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[3][2]=0;
 */
 /*
-the_robot->EDP_data.next_tool_frame[0][0]=cos(M_PI/4); the_robot->EDP_data.next_tool_frame[1][0]=-sin(M_PI/4);
-the_robot->EDP_data.next_tool_frame[2][0]=0; the_robot->EDP_data.next_tool_frame[3][0]=0;
+the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[0][0]=cos(M_PI/4); the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[1][0]=-sin(M_PI/4);
+the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[2][0]=0; the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[3][0]=0;
 
-the_robot->EDP_data.next_tool_frame[0][1]=sin(M_PI/4); the_robot->EDP_data.next_tool_frame[1][1]=cos(M_PI/4);
-the_robot->EDP_data.next_tool_frame[2][1]=0; the_robot->EDP_data.next_tool_frame[3][1]=0;
+the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[0][1]=sin(M_PI/4); the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[1][1]=cos(M_PI/4);
+the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[2][1]=0; the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[3][1]=0;
 
-the_robot->EDP_data.next_tool_frame[0][2]=0; the_robot->EDP_data.next_tool_frame[1][2]=0;
-the_robot->EDP_data.next_tool_frame[2][2]=1; the_robot->EDP_data.next_tool_frame[3][2]=0;
+the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[0][2]=0; the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[1][2]=0;
+the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[2][2]=1; the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[3][2]=0;
 */
 
 
@@ -191,32 +191,32 @@ for(int i=0; i<6; i++)
 printf("\n");
 
 
-	A_B_TOOL.to_table(the_robot->EDP_data.next_tool_frame);
+	A_B_TOOL.to_table(the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame);
 	*/
 
 /*
-the_robot->EDP_data.next_tool_frame[0][0]=cos(xalfa)*cos(xbeta)*cos(xgamma)-sin(xalfa)*sin(xgamma); 
-the_robot->EDP_data.next_tool_frame[1][0]=-cos(xalfa)*cos(xbeta)*sin(xgamma)-sin(xalfa)*cos(xgamma);
-the_robot->EDP_data.next_tool_frame[2][0]=cos(xalfa)*sin(xbeta); the_robot->EDP_data.next_tool_frame[3][0]=xx;
+the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[0][0]=cos(xalfa)*cos(xbeta)*cos(xgamma)-sin(xalfa)*sin(xgamma); 
+the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[1][0]=-cos(xalfa)*cos(xbeta)*sin(xgamma)-sin(xalfa)*cos(xgamma);
+the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[2][0]=cos(xalfa)*sin(xbeta); the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[3][0]=xx;
 
-the_robot->EDP_data.next_tool_frame[0][1]=sin(xalfa)*cos(xbeta)*cos(xgamma)+cos(xalfa)*sin(xgamma);
-the_robot->EDP_data.next_tool_frame[1][1]=-sin(xalfa)*cos(xbeta)*sin(xgamma)+cos(xalfa)*cos(xgamma);
-the_robot->EDP_data.next_tool_frame[2][1]=sin(xalfa)*sin(xbeta); the_robot->EDP_data.next_tool_frame[3][1]=xy;
+the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[0][1]=sin(xalfa)*cos(xbeta)*cos(xgamma)+cos(xalfa)*sin(xgamma);
+the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[1][1]=-sin(xalfa)*cos(xbeta)*sin(xgamma)+cos(xalfa)*cos(xgamma);
+the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[2][1]=sin(xalfa)*sin(xbeta); the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[3][1]=xy;
 
-the_robot->EDP_data.next_tool_frame[0][2]=-sin(xbeta)*cos(xgamma); the_robot->EDP_data.next_tool_frame[1][2]=sin(xbeta)*sin(xgamma);
-the_robot->EDP_data.next_tool_frame[2][2]=cos(xbeta); the_robot->EDP_data.next_tool_frame[3][2]=xz;
+the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[0][2]=-sin(xbeta)*cos(xgamma); the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[1][2]=sin(xbeta)*sin(xgamma);
+the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[2][2]=cos(xbeta); the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[3][2]=xz;
 */
 
 // TOOL jednostkowy
 
-the_robot->EDP_data.next_tool_frame[0][0]=1; the_robot->EDP_data.next_tool_frame[1][0]=0;
-the_robot->EDP_data.next_tool_frame[2][0]=0; the_robot->EDP_data.next_tool_frame[0][3]=0;
+the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[0][0]=1; the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[1][0]=0;
+the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[2][0]=0; the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[0][3]=0;
 
-the_robot->EDP_data.next_tool_frame[0][1]=0; the_robot->EDP_data.next_tool_frame[1][1]=1;
-the_robot->EDP_data.next_tool_frame[2][1]=0; the_robot->EDP_data.next_tool_frame[1][3]=0;
+the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[0][1]=0; the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[1][1]=1;
+the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[2][1]=0; the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[1][3]=0;
 
-the_robot->EDP_data.next_tool_frame[0][2]=0; the_robot->EDP_data.next_tool_frame[1][2]=0;
-the_robot->EDP_data.next_tool_frame[2][2]=1; the_robot->EDP_data.next_tool_frame[2][3]=0.25;
+the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[0][2]=0; the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[1][2]=0;
+the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[2][2]=1; the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[2][3]=0.25;
 
 
 
@@ -334,7 +334,7 @@ printf("\n");
    
    
    // for (int j=0; j<3 ; j++)
-   //       	the_robot->EDP_data.next_tool_frame[3][j]+=0.001;
+   //       	the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[3][j]+=0.001;
    
 // Obliczenie zadanej pozycji posredniej w tym kroku ruchu
    // (okreslenie kolejnego wezla interpolacji)

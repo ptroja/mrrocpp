@@ -281,44 +281,44 @@ bool ecp_vis_pb_eol_sac_irp6ot::first_step(void){
 
 	//TOOL
 
-	the_robot->EDP_data.next_tool_frame[0][0]=1;
-	the_robot->EDP_data.next_tool_frame[1][0]=0;
-	the_robot->EDP_data.next_tool_frame[2][0]=0;
-	the_robot->EDP_data.next_tool_frame[0][3]=0;
+	the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[0][0]=1;
+	the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[1][0]=0;
+	the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[2][0]=0;
+	the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[0][3]=0;
 
-	the_robot->EDP_data.next_tool_frame[0][1]=0;
-	the_robot->EDP_data.next_tool_frame[1][1]=1;
-	the_robot->EDP_data.next_tool_frame[2][1]=0;
-	the_robot->EDP_data.next_tool_frame[1][3]=0;
+	the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[0][1]=0;
+	the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[1][1]=1;
+	the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[2][1]=0;
+	the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[1][3]=0;
 
-	the_robot->EDP_data.next_tool_frame[0][2]=0;
-	the_robot->EDP_data.next_tool_frame[1][2]=0;
-	the_robot->EDP_data.next_tool_frame[2][2]=1;
-	the_robot->EDP_data.next_tool_frame[2][3]=0.25;
+	the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[0][2]=0;
+	the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[1][2]=0;
+	the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[2][2]=1;
+	the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[2][3]=0.25;
 
 	/*
-	the_robot->EDP_data.next_tool_frame[0][0]=0;
-		the_robot->EDP_data.next_tool_frame[0][1]=0;
-		the_robot->EDP_data.next_tool_frame[0][2]=1;
-		the_robot->EDP_data.next_tool_frame[0][3]=0;
+	the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[0][0]=0;
+		the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[0][1]=0;
+		the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[0][2]=1;
+		the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[0][3]=0;
 
-		the_robot->EDP_data.next_tool_frame[1][0]=0;
-		the_robot->EDP_data.next_tool_frame[1][1]=1;
-		the_robot->EDP_data.next_tool_frame[1][2]=0;
-		the_robot->EDP_data.next_tool_frame[1][3]=0;
+		the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[1][0]=0;
+		the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[1][1]=1;
+		the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[1][2]=0;
+		the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[1][3]=0;
 
-		the_robot->EDP_data.next_tool_frame[2][0]=1;
-		the_robot->EDP_data.next_tool_frame[2][1]=0;
-		the_robot->EDP_data.next_tool_frame[2][2]=0;
-		the_robot->EDP_data.next_tool_frame[2][3]=0.25;
+		the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[2][0]=1;
+		the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[2][1]=0;
+		the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[2][2]=0;
+		the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[2][3]=0.25;
 	*/
 /*
-	the_robot->EDP_data.next_XYZ_ZYZ_tool_coordinates[0]=0;
-	the_robot->EDP_data.next_XYZ_ZYZ_tool_coordinates[0]=0;
-	the_robot->EDP_data.next_XYZ_ZYZ_tool_coordinates[0]=0.25;
-	the_robot->EDP_data.next_XYZ_ZYZ_tool_coordinates[0]=0;//3.141;
-	the_robot->EDP_data.next_XYZ_ZYZ_tool_coordinates[0]=0; //1.57;
-	the_robot->EDP_data.next_XYZ_ZYZ_tool_coordinates[0]=0; //3.141;
+	the_robot->ecp_command.instruction.rmodel.tool_coordinate_def.tool_coordinates[0]=0;
+	the_robot->ecp_command.instruction.rmodel.tool_coordinate_def.tool_coordinates[0]=0;
+	the_robot->ecp_command.instruction.rmodel.tool_coordinate_def.tool_coordinates[0]=0.25;
+	the_robot->ecp_command.instruction.rmodel.tool_coordinate_def.tool_coordinates[0]=0;//3.141;
+	the_robot->ecp_command.instruction.rmodel.tool_coordinate_def.tool_coordinates[0]=0; //1.57;
+	the_robot->ecp_command.instruction.rmodel.tool_coordinate_def.tool_coordinates[0]=0; //3.141;
 */
 	the_robot->ecp_command.instruction.instruction_type = lib::SET_GET;
 	the_robot->ecp_command.instruction.get_type = ARM_DV;

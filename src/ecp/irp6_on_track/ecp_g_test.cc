@@ -52,10 +52,10 @@ bool y_simple::first_step ( ) {
 		the_robot->ecp_command.instruction.set_rmodel_type = lib::TOOL_FRAME;
 		for(int i=0; i<4; i++)
 			for(int j=0; j<3; j++)
-				if(i==j) the_robot->EDP_data.next_tool_frame[i][j]=1;
-//				else if (i==3 && j==1) the_robot->EDP_data.next_tool_frame[i][j]=-0.1;
-//				else if (i==3 && j==2) the_robot->EDP_data.next_tool_frame[i][j]= 0.08;
-				else the_robot->EDP_data.next_tool_frame[i][j]=0;
+				if(i==j) the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[i][j]=1;
+//				else if (i==3 && j==1) the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[i][j]=-0.1;
+//				else if (i==3 && j==2) the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[i][j]= 0.08;
+				else the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[i][j]=0;
 		the_robot->ecp_command.instruction.get_arm_type = lib::FRAME;
 		the_robot->EDP_data.motion_type = lib::ABSOLUTE;
 		 the_robot->EDP_data.next_interpolation_type = lib::MIM;

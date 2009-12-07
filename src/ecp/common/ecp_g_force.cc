@@ -655,7 +655,7 @@ bool y_edge_follow_force::first_step()
 	the_robot->EDP_data.motion_steps = td.internode_step_no;
 	the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 
-	tool_frame.get_frame_tab(the_robot->EDP_data.next_tool_frame);
+	tool_frame.get_frame_tab(the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame);
 
 	for (int i=0; i<3; i++)
 	{
@@ -769,7 +769,7 @@ bool y_edge_follow_force::next_step()
 		tool_frame = tool_frame * basic_rot_frame;
 		// basic_rot_frame.set_translation_vector(0, 0, 0.25);
 
-		tool_frame.get_frame_tab(the_robot->EDP_data.next_tool_frame);
+		tool_frame.get_frame_tab(the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame);
 
 		//	ECPtoEDP_ref_frame.get_frame_tab(the_robot->EDP_data.ECPtoEDP_reference_frame);
 
@@ -834,7 +834,7 @@ bool legobrick_attach_force::first_step()
 	the_robot->EDP_data.motion_steps = td.internode_step_no;
 	the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 
-	tool_frame.get_frame_tab(the_robot->EDP_data.next_tool_frame);
+	tool_frame.get_frame_tab(the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame);
 
 	for (int i=0; i<3; i++)
 	{
@@ -952,7 +952,7 @@ bool legobrick_detach_force::first_step()
 	the_robot->EDP_data.motion_steps = td.internode_step_no;
 	the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 
-	tool_frame.get_frame_tab(the_robot->EDP_data.next_tool_frame);
+	tool_frame.get_frame_tab(the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame);
 
 	for (int i=0; i<3; i++)
 	{
@@ -1736,7 +1736,7 @@ bool tff_nose_run::first_step()
 	td.value_in_step_no = td.internode_step_no - 2;
 
 	lib::Homog_matrix tool_frame(0.0, 0.0, 0.25);
-	tool_frame.get_frame_tab(the_robot->EDP_data.next_tool_frame);
+	tool_frame.get_frame_tab(the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame);
 
 	the_robot->ecp_command.instruction.instruction_type = lib::GET;
 	the_robot->ecp_command.instruction.get_type = ARM_DV; // arm - ORYGINAL
@@ -2027,7 +2027,7 @@ bool sr_nose_run::first_step()
 	td.value_in_step_no = td.internode_step_no - 2;
 
 	lib::Homog_matrix tool_frame(0.0, 0.0, 0.25);
-	tool_frame.get_frame_tab(the_robot->EDP_data.next_tool_frame);
+	tool_frame.get_frame_tab(the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame);
 
 	the_robot->ecp_command.instruction.instruction_type = lib::GET;
 	the_robot->ecp_command.instruction.get_type = ARM_DV; // arm - ORYGINAL
@@ -2278,7 +2278,7 @@ bool tff_rubik_grab::first_step()
 	td.value_in_step_no = td.internode_step_no - 2;
 
 	lib::Homog_matrix tool_frame(0.0, 0.0, 0.25);
-	tool_frame.get_frame_tab(the_robot->EDP_data.next_tool_frame);
+	tool_frame.get_frame_tab(the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame);
 
 	the_robot->ecp_command.instruction.instruction_type = lib::GET;
 	the_robot->ecp_command.instruction.get_type = ARM_DV; // arm - ORYGINAL
@@ -2394,7 +2394,7 @@ bool tff_rubik_face_rotate::first_step()
 	td.value_in_step_no = td.internode_step_no - 2;
 
 	lib::Homog_matrix tool_frame(0.0, 0.0, 0.25);
-	tool_frame.get_frame_tab(the_robot->EDP_data.next_tool_frame);
+	tool_frame.get_frame_tab(the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame);
 
 	the_robot->ecp_command.instruction.instruction_type = lib::GET;
 	the_robot->ecp_command.instruction.get_type = ARM_DV; // arm - ORYGINAL
@@ -2549,7 +2549,7 @@ bool tff_gripper_approach::first_step()
 	td.value_in_step_no = td.internode_step_no - 2;
 
 	lib::Homog_matrix tool_frame(0.0, 0.0, 0.25);
-	tool_frame.get_frame_tab(the_robot->EDP_data.next_tool_frame);
+	tool_frame.get_frame_tab(the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame);
 
 	the_robot->ecp_command.instruction.instruction_type = lib::GET;
 	the_robot->ecp_command.instruction.get_type = ARM_DV; // arm - ORYGINAL
