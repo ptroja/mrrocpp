@@ -111,13 +111,13 @@ void robot::get_reply (void)
     // pobiera z pakietu przeslanego z EDP informacje i wstawia je do
     // odpowiednich skladowych generatora lub warunku
 
-    EDP_data.reply_type = reply_package.reply_type;
+    reply_package.reply_type = reply_package.reply_type;
 
-    switch (EDP_data.reply_type)
+    switch (reply_package.reply_type)
     {
     case lib::ERROR:
-        EDP_data.error_no.error0 = reply_package.error_no.error0;
-        EDP_data.error_no.error1 = reply_package.error_no.error1;
+        reply_package.error_no.error0 = reply_package.error_no.error0;
+        reply_package.error_no.error1 = reply_package.error_no.error1;
         break;
     case lib::ACKNOWLEDGE:
         break;
@@ -144,17 +144,17 @@ void robot::get_reply (void)
         break;
     default:  // bledna przesylka
         throw ECP_error (lib::NON_FATAL_ERROR, INVALID_EDP_REPLY);
-    } // end: switch (EDP_data.reply_type)
+    } // end: switch (reply_package.reply_type)
 } // end: ecp_conveyor_robot::get_reply ()
 
 
 
 void robot::get_input_reply (void)
 {
-    EDP_data.input_values = reply_package.input_values;
+    reply_package.input_values = reply_package.input_values;
     for (int i=0; i<8; i++)
     {
-        EDP_data.analog_input[i]=reply_package.analog_input[i];
+        reply_package.analog_input[i]=reply_package.analog_input[i];
     }
 }
 

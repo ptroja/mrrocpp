@@ -350,7 +350,7 @@ bool y_egg_force::next_step()
 
 	// Obliczenie zadanej pozycji posredniej w tym kroku ruchu
 	// (okreslenie kolejnego wezla interpolacji)
-	// 	printf("odczyt: %d, sila: %f\n", the_robot->EDP_data.analog_input[1], (sensor_m.begin())->second->image.sensor_union.force.rez[2]);
+	// 	printf("odczyt: %d, sila: %f\n", the_robot->reply_package.analog_input[1], (sensor_m.begin())->second->image.sensor_union.force.rez[2]);
 
 	gen_state=next_gen_state;
 
@@ -461,8 +461,8 @@ bool y_egg_force::next_step()
 
 		if ( (in_state_iteration>INIT_ITER_NUMBER)&&(
 		/*
-		 ((the_robot->EDP_data.analog_input[1]<PROG_ODLEGLOSCI_PODCZERWIEN_EGG)
-		 &&(the_robot->EDP_data.analog_input[1]>ODLEGLOSCI_PODCZERWIEN_MIN_VALUE))|| // sieje zerami bugami
+		 ((the_robot->reply_package.analog_input[1]<PROG_ODLEGLOSCI_PODCZERWIEN_EGG)
+		 &&(the_robot->reply_package.analog_input[1]>ODLEGLOSCI_PODCZERWIEN_MIN_VALUE))|| // sieje zerami bugami
 		 */
 		((sensor_m.begin())->second->image.sensor_union.force.rez[2]>SILA_KONTAKTU_EGG) ))
 		{

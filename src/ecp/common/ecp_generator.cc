@@ -33,7 +33,7 @@ bool generator::is_EDP_error (ecp_robot& _robot) const
     // Sprawdzenie czy nie wystapil blad w EDP
     // Funkcja zaklada, ze error_no zostalo zaktualizowane
     // za pomoca conveyor_generator::get_reply
-    if ( _robot.EDP_data.error_no.error0 || _robot.EDP_data.error_no.error1 )
+    if ( _robot.reply_package.error_no.error0 || _robot.reply_package.error_no.error1 )
     {
         return true;
     }
