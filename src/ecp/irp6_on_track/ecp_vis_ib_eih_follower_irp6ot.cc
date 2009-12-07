@@ -194,7 +194,9 @@ bool ecp_vis_ib_eih_follower_irp6ot::next_step_without_constraints() {
 			} else if(v[i] > 0 && (change[i] == true || reached[i] == true || tracking == false || v[i] > v_max[i])) {//hamowanie
 				s[i] = (a_max[i] * t * t)/2 + (v[i] * t);
 				v[i] -= a_max[i] * t;
-				if (v[i] < 0) {
+				if (v[i] < 0) {u[0] = vsp_fradia->from_vsp.comm_image.sensor_union.tracker.x-20;
+				u[1] = vsp_fradia->from_vsp.comm_image.sensor_union.tracker.y;
+				bool tracking = vsp_fradia->from_vsp.comm_image.sensor_union.tracker.tracking;
 					v[i] = 0;
 					s[i] = 0;
 				}

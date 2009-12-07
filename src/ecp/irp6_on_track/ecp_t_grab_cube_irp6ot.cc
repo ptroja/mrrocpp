@@ -19,6 +19,10 @@ grab_cube::grab_cube(lib::configurator &_config): task(_config)
 
 	smoothgen2 = new common::generator::smooth2(*this, true);
 	tracker = new ecp_vis_ib_eih_object_tracker_irp6ot(*this);
+
+	sensor_m[lib::SENSOR_CVFRADIA] = new ecp_mp::sensor::cvfradia(lib::SENSOR_CVFRADIA,"[vsp_cvfradia]", *this,	sizeof(lib::sensor_image_t::sensor_union_t::fradia_t));
+	sensor_m[lib::SENSOR_CVFRADIA]->configure_sensor();
+	tracker->sensor_m = sensor_m;
 };
 
 void grab_cube::main_task_algorithm(void ) {
@@ -29,6 +33,13 @@ void grab_cube::main_task_algorithm(void ) {
 	smoothgen2->load_coordinates(lib::JOINT,0,-0.013,-1.442,-0.275,0.01,4.686,-0.070,0.090,true);
 	smoothgen2->Move();
 	smoothgen2->reset();
+
+	vsp_fradia = sensor_m[lib::SENSOR_CVFRADIA];
+
+	vsp_fradia->get_reading();
+	while(vsp_fradia->from_vsp.vsp_report == lib::VSP_SENSOR_NOT_CONFIGURED){
+		vsp_fradia->get_reading();
+	}
 
 	tracker->Move();
 

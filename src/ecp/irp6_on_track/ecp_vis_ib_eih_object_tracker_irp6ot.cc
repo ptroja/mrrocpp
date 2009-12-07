@@ -27,7 +27,7 @@ bool ecp_vis_ib_eih_object_tracker_irp6ot::first_step() {
 
 	printf("first step\n");
 	flushall();
-	//vsp_fradia = sensor_m[lib::SENSOR_CVFRADIA];
+	vsp_fradia = sensor_m[lib::SENSOR_CVFRADIA];
 
 	the_robot->EDP_data.instruction_type = lib::GET;
 	the_robot->EDP_data.get_type = ARM_DV;
@@ -134,16 +134,17 @@ bool ecp_vis_ib_eih_object_tracker_irp6ot::next_step_without_constraints() {
 	//alpha = the_robot->EDP_data.current_joint_arm_coordinates[1]- the_robot->EDP_data.current_joint_arm_coordinates[6];
 	//Uchyb wyrazony w pikselach.
 
-	//lib::VSP_REPORT vsp_report = vsp_fradia->from_vsp.vsp_report;
-	//if (vsp_report == lib::VSP_REPLY_OK) {
+	lib::VSP_REPORT vsp_report = vsp_fradia->from_vsp.vsp_report;
+	if (vsp_report == lib::VSP_REPLY_OK) {
 
-		//u[0] = vsp_fradia->from_vsp.comm_image.sensor_union.object_tracker.x;//TODO zapytać czy da sie to zrobic w petli
-		//u[1] = vsp_fradia->from_vsp.comm_image.sensor_union.object_tracker.y;
-		//u[2] = vsp_fradia->from_vsp.comm_image.sensor_union.object_tracker.z;
+		u[0] = vsp_fradia->from_vsp.comm_image.sensor_union.object_tracker.x;//TODO zapytać czy da sie to zrobic w petli
+		u[1] = vsp_fradia->from_vsp.comm_image.sensor_union.object_tracker.y;
+		u[2] = vsp_fradia->from_vsp.comm_image.sensor_union.object_tracker.z;
+		tracking = vsp_fradia->from_vsp.comm_image.sensor_union.object_tracker.tracking;
 
-		u[0] = 0;
-		u[1] = 0;
-		u[2] = -100;
+		//u[0] = 0;
+		//u[1] = 0;
+		//u[2] = -100;
 
 		printf("ux: %f\t", u[0]);
 		printf("uy: %f\n", u[1]);
@@ -163,7 +164,7 @@ bool ecp_vis_ib_eih_object_tracker_irp6ot::next_step_without_constraints() {
 				continue;
 			}
 
-			tracking = true;
+			//tracking = true;
 			//tracking = vsp_fradia->from_vsp.comm_image.sensor_union.tracker.tracking;
 
 			//funkcja zmniejszajaca predkosc w x i y w zaleznosci od odleglosci od przebytej drogi w z
@@ -216,7 +217,7 @@ bool ecp_vis_ib_eih_object_tracker_irp6ot::next_step_without_constraints() {
 			}
 			next_position[i] = - (dir[i] * s[i]);
 		}
-	//}
+	}
 
 	memcpy(the_robot->EDP_data.next_XYZ_AA_arm_coordinates, next_position,
 			6 * sizeof(double)); //zapisanie pozycji w angle axes
