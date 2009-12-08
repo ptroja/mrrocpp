@@ -21,8 +21,6 @@
 #include <signal.h>
 #include <dirent.h>
 
-#include <sys/dispatch.h>
-
 #include <boost/bind.hpp>
 #include <boost/utility.hpp>
 #include <boost/thread/condition.hpp>
@@ -30,10 +28,6 @@
 
 #include <fcntl.h>
 #include <string.h>
-#include <process.h>
-#include <sys/neutrino.h>
-#include <sys/iofunc.h>
-#include <sys/dispatch.h>
 #include <sys/types.h>
 #include <sys/utsname.h>
 #include <iostream>
@@ -90,139 +84,6 @@ ui_msg_def ui_msg;
 extern std::ofstream *log_file_outfile;
 
 #if !defined(USE_MESSIP_SRR)
-void *sr_thread(void* arg)
-{
-	lib::set_thread_name("sr");
-
-	name_attach_t *attach;
-
-	if ((attach = name_attach(NULL, ui_state.sr_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) == NULL)
-	{
-		perror("BLAD SR ATTACH, przypuszczalnie nie uruchomiono gns, albo blad wczytywania konfiguracji");
-		return NULL;
-	}
-
-	while(1)
-	{
-		lib::sr_package_t sr_msg;
-
-		int rcvid = MsgReceive_r(attach->chid, &sr_msg, sizeof(sr_msg), NULL);
-
-		if (rcvid < 0) /* Error condition, exit */
-		{
-			if (rcvid == -EINTR) {
-				//fprintf(stderr, "MsgReceive_r() interrupted by signal\n");
-				continue;
-			}
-
-			fprintf(stderr, "SR: Receive failed (%s)\n", strerror(-rcvid));
-			// 	  throw generator::ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
-			break;
-		}
-
-		if (rcvid == 0) /* Pulse received */
-		{
-			// printf("sr puls\n");
-			switch (sr_msg.hdr.code)
-			{
-			case _PULSE_CODE_DISCONNECT:
-				ConnectDetach(sr_msg.hdr.scoid);
-				break;
-			case _PULSE_CODE_UNBLOCK:
-				break;
-			default:
-				break;
-			}
-			continue;
-		}
-
-		/* A QNX IO message received, reject */
-		if (sr_msg.hdr.type >= _IO_BASE && sr_msg.hdr.type <= _IO_MAX)
-		{
-			//  	  printf("w SR _IO_BASE _IO_MAX %d\n",_IO_CONNECT );
-			//  MsgError(rcvid, ENOSYS);
-			MsgReply(rcvid, EOK, 0, 0);
-			continue;
-		}
-
-		int16_t status;
-		MsgReply(rcvid, EOK, &status, sizeof(status));
-
-		if (strlen(sr_msg.process_name)>1) // by Y jesli ten string jest pusty to znaczy ze przyszedl smiec
-		{
-
-			ui_sr_obj->lock_mutex();
-
-			ui_sr_obj->writer_buf_position++;
-			ui_sr_obj->writer_buf_position %= UI_SR_BUFFER_LENGHT;
-
-			ui_sr_obj->message_buffer[ui_sr_obj->writer_buf_position]=sr_msg;
-
-			ui_sr_obj->set_new_msg();
-			ui_sr_obj->unlock_mutex();
-
-		} else {
-			printf("SR(%s:%d) unexpected message\n", __FILE__, __LINE__);
-		}
-
-	}
-
-	return 0;
-}
-#else /* USE_MESSIP_SRR */
-#warning "use messip :)"
-void *sr_thread(void* arg)
-{
-	messip_channel_t *ch;
-
-	if ((ch = messip_channel_create(NULL, ui_state.sr_attach_point, MESSIP_NOTIMEOUT, 0)) == NULL) {
-		return NULL;
-	}
-
-	while(1)
-	{
-		int32_t type, subtype;
-		sr_package_t sr_msg;
-
-		int rcvid = messip_receive(ch, &type, &subtype, &sr_msg, sizeof(sr_msg), MESSIP_NOTIMEOUT);
-
-		if (rcvid == -1) /* Error condition, exit */
-		{
-			perror("SR: Receive failed");
-			// 	  throw generator::ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
-			break;
-		} else if (rcvid < -1) {
-			// ie. MESSIP_MSG_DISCONNECT
-			fprintf(stderr, "ie. MESSIP_MSG_DISCONNECT\n");
-			continue;
-		}
-
-		int16_t status = 0;
-		messip_reply(ch, rcvid, EOK, &status, sizeof(status), MESSIP_NOTIMEOUT);
-
-		if (strlen(sr_msg.process_name)>1) // by Y jesli ten string jest pusty to znaczy ze przyszedl smiec
-		{
-			ui_sr_obj->lock_mutex();
-			// to sie zdarza choc nie wiem dlaczego
-
-			ui_sr_obj->writer_buf_position++;
-			ui_sr_obj->writer_buf_position %= UI_SR_BUFFER_LENGHT;
-
-			ui_sr_obj->message_buffer[ui_sr_obj->writer_buf_position]=sr_msg;
-
-			ui_sr_obj->set_new_msg();
-			ui_sr_obj->unlock_mutex();
-
-		} else {
-			printf("SR(%s:%d) unexpected message\n", __FILE__, __LINE__);
-		}
-	}
-
-	return 0;
-}
-#endif /* USE_MESSIP_SRR */
-
-
 void *comm_thread(void* arg) {
 
 	lib::set_thread_name("comm");
@@ -529,6 +390,138 @@ void *comm_thread(void* arg) {
 
 	return 0;
 }
+
+void *sr_thread(void* arg)
+{
+	lib::set_thread_name("sr");
+
+	name_attach_t *attach;
+
+	if ((attach = name_attach(NULL, ui_state.sr_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) == NULL)
+	{
+		perror("BLAD SR ATTACH, przypuszczalnie nie uruchomiono gns, albo blad wczytywania konfiguracji");
+		return NULL;
+	}
+
+	while(1)
+	{
+		lib::sr_package_t sr_msg;
+
+		int rcvid = MsgReceive_r(attach->chid, &sr_msg, sizeof(sr_msg), NULL);
+
+		if (rcvid < 0) /* Error condition, exit */
+		{
+			if (rcvid == -EINTR) {
+				//fprintf(stderr, "MsgReceive_r() interrupted by signal\n");
+				continue;
+			}
+
+			fprintf(stderr, "SR: Receive failed (%s)\n", strerror(-rcvid));
+			// 	  throw generator::ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
+			break;
+		}
+
+		if (rcvid == 0) /* Pulse received */
+		{
+			// printf("sr puls\n");
+			switch (sr_msg.hdr.code)
+			{
+			case _PULSE_CODE_DISCONNECT:
+				ConnectDetach(sr_msg.hdr.scoid);
+				break;
+			case _PULSE_CODE_UNBLOCK:
+				break;
+			default:
+				break;
+			}
+			continue;
+		}
+
+		/* A QNX IO message received, reject */
+		if (sr_msg.hdr.type >= _IO_BASE && sr_msg.hdr.type <= _IO_MAX)
+		{
+			//  	  printf("w SR _IO_BASE _IO_MAX %d\n",_IO_CONNECT );
+			//  MsgError(rcvid, ENOSYS);
+			MsgReply(rcvid, EOK, 0, 0);
+			continue;
+		}
+
+		int16_t status;
+		MsgReply(rcvid, EOK, &status, sizeof(status));
+
+		if (strlen(sr_msg.process_name)>1) // by Y jesli ten string jest pusty to znaczy ze przyszedl smiec
+		{
+
+			ui_sr_obj->lock_mutex();
+
+			ui_sr_obj->writer_buf_position++;
+			ui_sr_obj->writer_buf_position %= UI_SR_BUFFER_LENGHT;
+
+			ui_sr_obj->message_buffer[ui_sr_obj->writer_buf_position]=sr_msg;
+
+			ui_sr_obj->set_new_msg();
+			ui_sr_obj->unlock_mutex();
+
+		} else {
+			printf("SR(%s:%d) unexpected message\n", __FILE__, __LINE__);
+		}
+
+	}
+
+	return 0;
+}
+#else /* USE_MESSIP_SRR */
+#warning "use messip :)"
+void *sr_thread(void* arg)
+{
+	messip_channel_t *ch;
+
+	if ((ch = messip_channel_create(NULL, ui_state.sr_attach_point, MESSIP_NOTIMEOUT, 0)) == NULL) {
+		return NULL;
+	}
+
+	while(1)
+	{
+		int32_t type, subtype;
+		sr_package_t sr_msg;
+
+		int rcvid = messip_receive(ch, &type, &subtype, &sr_msg, sizeof(sr_msg), MESSIP_NOTIMEOUT);
+
+		if (rcvid == -1) /* Error condition, exit */
+		{
+			perror("SR: Receive failed");
+			// 	  throw generator::ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
+			break;
+		} else if (rcvid < -1) {
+			// ie. MESSIP_MSG_DISCONNECT
+			fprintf(stderr, "ie. MESSIP_MSG_DISCONNECT\n");
+			continue;
+		}
+
+		int16_t status = 0;
+		messip_reply(ch, rcvid, EOK, &status, sizeof(status), MESSIP_NOTIMEOUT);
+
+		if (strlen(sr_msg.process_name)>1) // by Y jesli ten string jest pusty to znaczy ze przyszedl smiec
+		{
+			ui_sr_obj->lock_mutex();
+			// to sie zdarza choc nie wiem dlaczego
+
+			ui_sr_obj->writer_buf_position++;
+			ui_sr_obj->writer_buf_position %= UI_SR_BUFFER_LENGHT;
+
+			ui_sr_obj->message_buffer[ui_sr_obj->writer_buf_position]=sr_msg;
+
+			ui_sr_obj->set_new_msg();
+			ui_sr_obj->unlock_mutex();
+
+		} else {
+			printf("SR(%s:%d) unexpected message\n", __FILE__, __LINE__);
+		}
+	}
+
+	return 0;
+}
+#endif /* USE_MESSIP_SRR */
 
 
 
