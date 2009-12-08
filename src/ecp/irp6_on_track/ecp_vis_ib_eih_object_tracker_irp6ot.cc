@@ -55,10 +55,10 @@ bool ecp_vis_ib_eih_object_tracker_irp6ot::first_step() {
 	//z_stop = false;
 
 	//if (read_parametres() == false) {//czytanie predkosci maksymalnych i przyspieszen z pliku konfiguracyjnego zadania, jesli sie nie powiodlo to przypisz domyslne
-		v_max[1] = v_max[0] = 0.02;
-		a_max[1] = a_max[0] = 0.02;
+		v_max[1] = v_max[0] = 0.05;
+		a_max[1] = a_max[0] = 0.05;
 		v_max[2] = 0.03;
-		a_max[2] = 0.02;
+		a_max[2] = 0.04;
 		v_stop[0] = v_stop[1] = v_stop[2] = 0.0005;
 		v_min[0] = 	v_min[1] = v_min[2] = 0.0015;
 	//}
@@ -155,14 +155,14 @@ bool ecp_vis_ib_eih_object_tracker_irp6ot::next_step_without_constraints() {
 			//if (z_stop) {
 				printf("koniec sledzenia\n");
 				//flushall();
-				return false;
+				//return false;
 			//}
 		}
 
 		for (int i = 0; i < MAX_AXES_NUM; i++) {
-			if (u[i] == 0) {
-				continue;
-			}
+			//if (u[i] == 0) {
+			//	continue;
+			//}
 
 			//tracking = true;
 			//tracking = vsp_fradia->from_vsp.comm_image.sensor_union.tracker.tracking;
@@ -180,7 +180,7 @@ bool ecp_vis_ib_eih_object_tracker_irp6ot::next_step_without_constraints() {
 				v_max[i] = v_min[i];
 			}
 
-			if (fabs(u[i]) < 25) {
+			if (fabs(u[i]) < 25) {//TODO to 25 powinno byc zmienna inna dla kazdej osi
 				reached[i] = true;
 			} else {
 				reached[i] = false;
@@ -211,6 +211,7 @@ bool ecp_vis_ib_eih_object_tracker_irp6ot::next_step_without_constraints() {
 				v[i] -= a_max[i] * t;
 				if (v[i] < 0) {
 					v[i] = 0;
+					s[i] = 0;
 				}
 			} else { //jednostajny
 				s[i] = v[i] * t;

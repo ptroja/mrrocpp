@@ -30,7 +30,8 @@ void grab_cube::main_task_algorithm(void ) {
 
 	smoothgen2->set_absolute();
 	//smoothgen2->load_file_with_path("/net/koleszko/mnt/mrroc/trj/smooth2test2.trj");
-	smoothgen2->load_coordinates(lib::JOINT,0,-0.013,-1.442,-0.275,0.01,4.686,-0.070,0.090,true);
+	//smoothgen2->load_coordinates(lib::JOINT,0,-0.013,-1.442,-0.275,0.01,4.686,-0.070,0.090,true);
+	smoothgen2->load_coordinates(lib::JOINT,0,0,-1.57,0,1.56,1.571,-1.570,0.090,true);
 	smoothgen2->Move();
 	smoothgen2->reset();
 
