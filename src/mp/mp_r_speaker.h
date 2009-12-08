@@ -21,15 +21,6 @@ class speaker: public robot {
 // virtual void terminate_ecp (void); // Zlecenie STOP
  // virtual void start_ecp ( void );      // Zlecenie START
 
-  virtual void create_next_pose_command (void);
-    // wypelnia bufor wysylkowy do EDP na podstawie danych zawartych w swych skladowych
-	// Ten bufor znajduje sie w robocie
-
-  virtual void get_reply (void);
-
-    // pobiera z pakietu przeslanego z EDP informacje (aktualnie znajdujace sie
-    // w kla sie robot) i wstawia je do odpowiednich swoich skladowych
-	// Ten bufor znajduje sie w robocie
 
 }; // end: class mp_conveyor_robot
 // --------------------------------------------------------------------------

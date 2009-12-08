@@ -183,48 +183,6 @@ void robot::terminate_ecp(void) { // zlecenie STOP zakonczenia ruchu
 // ---------------------------------------------------------------
 
 
-// --------------------------------------------------------------------------
-void robot::create_command (void) {
-// wypelnia bufor wysylkowy do ECP na podstawie danych
-// zawartych w skladowych generatora lub warunku
-
-	mp_command.command = mp_command.command;
-
-	switch (mp_command.command) {
-		case lib::NEXT_STATE:
-			mp_command.ecp_next_state = mp_command.ecp_next_state;
-			break;
-		case lib::NEXT_POSE:
-			create_next_pose_command();
-			break;
-		default:
-			break;
-	}
-}
-// ---------------------------------------------------------------
-void robot::get_reply(void) {
-	// pobiera z pakietu przeslanego z ECP informacje i wstawia je do
-	// odpowiednich skladowych generatora lub warunku
-
-	ecp_reply_package.reply = ecp_reply_package.reply;
-	ecp_reply_package.reply_package.reply_type = ecp_reply_package.reply_package.reply_type;
-
-	// TODO: czy warto wprowadzac klase potomna?
-	if (robot_name == lib::ROBOT_SPEECHRECOGNITION) {
-		strncpy(ecp_reply_package.commandRecognized, ecp_reply_package.commandRecognized, SPEECH_RECOGNITION_TEXT_LEN);
-	}
-
-	switch (ecp_reply_package.reply_package.reply_type) {
-		case lib::ERROR:
-			ecp_reply_package.reply_package.error_no.error0 = ecp_reply_package.reply_package.error_no.error0;
-			ecp_reply_package.reply_package.error_no.error1 = ecp_reply_package.reply_package.error_no.error1;
-			break;
-		case lib::ACKNOWLEDGE:
-			break;
-		default:  // bledna przesylka
-			throw MP_error (lib::NON_FATAL_ERROR, INVALID_EDP_REPLY);
-	}
-}
 
 } // namespace robot
 } // namespace mp

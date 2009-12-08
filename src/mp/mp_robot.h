@@ -74,16 +74,10 @@ public:
 
     void start_ecp ( void );
 
-    // wypelnia bufor wysylkowy do EDP na podstawie danych zawartych w swych skladowych
-    // Ten bufor znajduje sie w robocie
-    void create_command ( void );
 
-    virtual void create_next_pose_command (void)
-    {}
 
-    // pobiera z pakietu przeslanego z EDP informacje i wstawia je do odpowiednich swoich skladowych
-    virtual void get_reply ( void );
 };
+
 } // namespace robot
 } // namespace mp
 } // namespace mrrocpp

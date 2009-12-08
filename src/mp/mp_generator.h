@@ -12,13 +12,7 @@ class generator : public ecp_mp::generator::generator
 {
 	private:
 
-		//! Kopiuje dane z robotow do generatora
-		void copy_data(const common::robots_t & _robot_m);
-
-		//! Kopiuje polecenie stworzone w generatorze do robotow
-		void copy_generator_command (const common::robots_t & _robot_m);
-
-		// Zadanie, któremu podlega generator
+				// Zadanie, któremu podlega generator
 		task::task& mp_t;
 
 	protected:

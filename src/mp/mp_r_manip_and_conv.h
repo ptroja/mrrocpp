@@ -15,12 +15,7 @@ class manip_and_conv : public robot
 	public:
 		manip_and_conv (lib::robot_name_t l_robot_name, const char* _section_name, task::task &mp_object_l);
 
-		virtual void create_next_pose_command (void);
 
-		virtual void get_reply (void);
-		virtual void get_input_reply (void);
-		virtual void get_arm_reply (void);
-		virtual void get_rmodel_reply (void);
 };
 } // namespace robot
 } // namespace mp

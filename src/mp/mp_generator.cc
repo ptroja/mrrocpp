@@ -7,21 +7,8 @@ namespace mrrocpp {
 namespace mp {
 namespace generator {
 
-// kopiuje dane z robotow do generatora
-void generator::copy_data(const common::robots_t & _robot_m)
-{
-	BOOST_FOREACH(const common::robot_pair_t & robot_node, _robot_m) {
-		robot_node.second->get_reply(); // odpowiedz z ECP
-	}
-}
 
-// kopiuje polecenie stworzone w generatorze do robotow
-void generator::copy_generator_command(const common::robots_t & _robot_m)
-{
-	BOOST_FOREACH(const common::robot_pair_t & robot_node, _robot_m) {
-		robot_node.second->create_command(); // rozkaz dla ECP
-	}
-}
+
 
 generator::generator(task::task& _mp_task) :
 	ecp_mp::generator::generator(*_mp_task.sr_ecp_msg),
@@ -64,12 +51,12 @@ void generator::Move()
 		// zadanie przygotowania danych od czujnikow
 		mp_t.all_sensors_initiate_reading(sensor_m);
 
-		copy_generator_command(robot_m);
+
 
 		// wykonanie kroku ruchu przez wybrane roboty (z flaga 'communicate')
 		mp_t.execute_all(robot_m);
 
-		copy_data(robot_m);
+
 
 		// odczytanie danych z wszystkich czujnikow
 		mp_t.all_sensors_get_reading(sensor_m);
