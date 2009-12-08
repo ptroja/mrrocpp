@@ -128,7 +128,7 @@ bool vis_sac::first_step () {
 	irp6ot->mp_command.instruction.rmodel.tool_frame_def.tool_frame[2][2]=1; irp6ot->mp_command.instruction.rmodel.tool_frame_def.tool_frame[2][3]=0.25;
 
 	
-	irp6ot->ecp_td.mp_command = lib::NEXT_POSE; 
+	irp6ot->mp_command.command = lib::NEXT_POSE; 
 	irp6ot->mp_command.instruction.instruction_type = lib::SET_GET; //GET;
 	irp6ot->mp_command.instruction.get_type = RMODEL_DV; //ARM_DV;
 	irp6ot->mp_command.instruction.set_type = RMODEL_DV; //ARM_DV;

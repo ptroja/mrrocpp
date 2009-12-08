@@ -188,11 +188,11 @@ void robot::create_command (void) {
 // wypelnia bufor wysylkowy do ECP na podstawie danych
 // zawartych w skladowych generatora lub warunku
 
-	mp_command.command = ecp_td.mp_command;
+	mp_command.command = mp_command.command;
 
 	switch (mp_command.command) {
 		case lib::NEXT_STATE:
-			mp_command.ecp_next_state = ecp_td.ecp_next_state;
+			mp_command.ecp_next_state = mp_command.ecp_next_state;
 			break;
 		case lib::NEXT_POSE:
 			create_next_pose_command();
@@ -211,7 +211,7 @@ void robot::get_reply(void) {
 
 	// TODO: czy warto wprowadzac klase potomna?
 	if (robot_name == lib::ROBOT_SPEECHRECOGNITION) {
-		strncpy(ecp_td.commandRecognized, ecp_reply_package.commandRecognized, SPEECH_RECOGNITION_TEXT_LEN);
+		strncpy(ecp_reply_package.commandRecognized, ecp_reply_package.commandRecognized, SPEECH_RECOGNITION_TEXT_LEN);
 	}
 
 	switch (ecp_reply_package.reply_package.reply_type) {

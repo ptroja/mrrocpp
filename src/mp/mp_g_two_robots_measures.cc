@@ -35,7 +35,7 @@ bool two_robots_measures::first_step()
 	idle_step_counter = 2;
 	// Ustawienie polecen dla robota na torze.
 	irp6ot = robot_m[lib::ROBOT_IRP6_ON_TRACK];
-	irp6ot->ecp_td.mp_command = lib::NEXT_POSE;
+	irp6ot->mp_command.command = lib::NEXT_POSE;
 	irp6ot->mp_command.instruction.instruction_type = lib::GET;
 	irp6ot->mp_command.instruction.get_type = ARM_DV;
 	irp6ot->mp_command.instruction.get_arm_type = lib::XYZ_EULER_ZYZ;
@@ -43,7 +43,7 @@ bool two_robots_measures::first_step()
 	irp6ot->mp_command.instruction.interpolation_type = lib::MIM;
 	// Ustawienie polecen dla robota na postumencie.
 	irp6p = robot_m[lib::ROBOT_IRP6_POSTUMENT];
-	irp6p->ecp_td.mp_command = lib::NEXT_POSE;
+	irp6p->mp_command.command = lib::NEXT_POSE;
 	irp6p->mp_command.instruction.instruction_type = lib::GET;
 	irp6p->mp_command.instruction.get_type = ARM_DV;
 	irp6p->mp_command.instruction.get_arm_type = lib::XYZ_EULER_ZYZ;

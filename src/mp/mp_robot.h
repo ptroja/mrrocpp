@@ -8,22 +8,6 @@ namespace mrrocpp {
 namespace mp {
 namespace robot {
 
-// ------------------------------------------------------------------------
-struct robot_ECP_transmission_data
-{
-public:
-    lib::MP_COMMAND mp_command;                // polecenie przesylane z MP do ECP
-    lib::ECP_REPLY  ecp_reply;                 // odpowiedz z ECP do MP
-
-    lib::ecp_next_state_t ecp_next_state;
-
-    // speech command interface
-    char commandRecognized[SPEECH_RECOGNITION_TEXT_LEN];
-
-};
-// ------------------------------------------------------------------------
-
-
 
 
 class robot : public ecp_mp::robot
@@ -67,10 +51,7 @@ public:
     bool new_pulse; // okresla czy jest nowy puls
     bool new_pulse_checked; // okresla czy czy nowy puls zostal juz uwzgledniony w generatorze
 
-    robot_ECP_transmission_data ecp_td; // Obraz danych robota wykorzystywanych przez generator
-    // - do uzytku uzytkownika (generatora)
-
-    robot (lib::robot_name_t l_robot_name, const char* _section_name, task::task &mp_object_l);
+      robot (lib::robot_name_t l_robot_name, const char* _section_name, task::task &mp_object_l);
     virtual ~robot();
 
     class MP_error

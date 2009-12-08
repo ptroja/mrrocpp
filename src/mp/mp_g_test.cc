@@ -64,7 +64,7 @@ bool vis_force::first_step () {
      td.value_in_step_no = td.internode_step_no - 2;
     
         // track
-	robot_m[lib::ROBOT_IRP6_ON_TRACK]->ecp_td.mp_command = lib::NEXT_POSE; 
+	robot_m[lib::ROBOT_IRP6_ON_TRACK]->mp_command.command = lib::NEXT_POSE; 
 	robot_m[lib::ROBOT_IRP6_ON_TRACK]->mp_command.instruction.instruction_type = lib::GET;
 	robot_m[lib::ROBOT_IRP6_ON_TRACK]->mp_command.instruction.get_type = ARM_DV;
 	robot_m[lib::ROBOT_IRP6_ON_TRACK]->mp_command.instruction.set_type = ARM_DV;
@@ -78,7 +78,7 @@ bool vis_force::first_step () {
     
     
         // postument
- 	robot_m[lib::ROBOT_IRP6_POSTUMENT]->ecp_td.mp_command = lib::NEXT_POSE; 
+ 	robot_m[lib::ROBOT_IRP6_POSTUMENT]->mp_command.command = lib::NEXT_POSE; 
 	robot_m[lib::ROBOT_IRP6_POSTUMENT]->mp_command.instruction.instruction_type = lib::GET;
 	robot_m[lib::ROBOT_IRP6_POSTUMENT]->mp_command.instruction.get_type = ARM_DV;
 	robot_m[lib::ROBOT_IRP6_POSTUMENT]->mp_command.instruction.set_type = ARM_DV;
@@ -92,7 +92,7 @@ bool vis_force::first_step () {
  
 /*   
     // speaker
-    	robot_list->next->next->E_ptr->ecp_td.mp_command = lib::NEXT_POSE; 
+    	robot_list->next->next->E_ptr->mp_command.command = lib::NEXT_POSE; 
 	robot_list->next->next->E_ptr->mp_command.instruction.instruction_type = lib::GET;
 	robot_list->next->next->E_ptr->mp_command.instruction.get_type = ARM_DV;
 	robot_list->next->next->E_ptr->mp_command.instruction.set_type = ARM_DV;

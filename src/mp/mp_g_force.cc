@@ -50,7 +50,7 @@ bool tff_single_robot_nose_run::first_step()
 	vsp_force->base_period=1;
 	td.internode_step_no = step_no;
 	td.value_in_step_no = td.internode_step_no - 2;
-	irp6->ecp_td.mp_command = lib::NEXT_POSE;
+	irp6->mp_command.command = lib::NEXT_POSE;
 	irp6->mp_command.instruction.instruction_type = lib::GET;
 	irp6->mp_command.instruction.get_type = ARM_DV;
 	irp6->mp_command.instruction.set_type = ARM_DV | RMODEL_DV;
@@ -163,7 +163,7 @@ bool tff_nose_run::first_step()
 	vsp_force_irp6p->base_period=1;
 	td.internode_step_no = step_no;
 	td.value_in_step_no = td.internode_step_no - 2;
-	irp6ot->ecp_td.mp_command = lib::NEXT_POSE;
+	irp6ot->mp_command.command = lib::NEXT_POSE;
 	irp6ot->mp_command.instruction.instruction_type = lib::GET;
 	irp6ot->mp_command.instruction.get_type = ARM_DV;
 	irp6ot->mp_command.instruction.set_type = ARM_DV | RMODEL_DV;
@@ -199,7 +199,7 @@ bool tff_nose_run::first_step()
 	lib::Homog_matrix tool_frame(0.0, 0.0, 0.25);
 	tool_frame.get_frame_tab(irp6ot->mp_command.instruction.rmodel.tool_frame_def.tool_frame);
 
-	irp6p->ecp_td.mp_command = lib::NEXT_POSE;
+	irp6p->mp_command.command = lib::NEXT_POSE;
 	irp6p->mp_command.instruction.instruction_type = lib::GET;
 	irp6p->mp_command.instruction.get_type = ARM_DV;
 	irp6p->mp_command.instruction.set_type = ARM_DV | RMODEL_DV;
@@ -314,7 +314,7 @@ bool haptic::first_step()
 
 	td.internode_step_no = step_no;
 	td.value_in_step_no = td.internode_step_no - 2;
-	irp6ot->ecp_td.mp_command = lib::NEXT_POSE;
+	irp6ot->mp_command.command = lib::NEXT_POSE;
 	irp6ot->mp_command.instruction.instruction_type = lib::GET;
 	irp6ot->mp_command.instruction.get_type = ARM_DV;
 	irp6ot->mp_command.instruction.set_type = ARM_DV | RMODEL_DV;
@@ -355,7 +355,7 @@ bool haptic::first_step()
 	lib::Homog_matrix tool_frame(0.0, 0.0, 0.25);
 	tool_frame.get_frame_tab(irp6ot->mp_command.instruction.rmodel.tool_frame_def.tool_frame);
 
-	irp6p->ecp_td.mp_command = lib::NEXT_POSE;
+	irp6p->mp_command.command = lib::NEXT_POSE;
 	irp6p->mp_command.instruction.instruction_type = lib::GET;
 	irp6p->mp_command.instruction.get_type = ARM_DV;
 	irp6p->mp_command.instruction.set_type = ARM_DV | RMODEL_DV;
@@ -524,7 +524,7 @@ bool tff_rubik_grab::first_step()
 	vsp_force_irp6p->base_period=1;
 	td.internode_step_no = step_no;
 	td.value_in_step_no = td.internode_step_no - 2;
-	irp6ot->ecp_td.mp_command = lib::NEXT_POSE;
+	irp6ot->mp_command.command = lib::NEXT_POSE;
 	irp6ot->mp_command.instruction.instruction_type = lib::GET;
 	irp6ot->mp_command.instruction.get_type = ARM_DV;
 	irp6ot->mp_command.instruction.set_type = ARM_DV | RMODEL_DV;
@@ -579,7 +579,7 @@ bool tff_rubik_grab::first_step()
 		for (int i=0; i<6; i++)
 			irp6ot->mp_command.instruction.arm.pf_def.behaviour[i] = lib::UNGUARDED_MOTION;
 
-	irp6p->ecp_td.mp_command = lib::NEXT_POSE;
+	irp6p->mp_command.command = lib::NEXT_POSE;
 	irp6p->mp_command.instruction.instruction_type = lib::GET;
 	irp6p->mp_command.instruction.get_type = ARM_DV;
 	irp6p->mp_command.instruction.set_type = ARM_DV | RMODEL_DV;
@@ -732,7 +732,7 @@ bool tff_rubik_face_rotate::first_step()
 	vsp_force_irp6p->base_period=1;
 	td.internode_step_no = step_no;
 	td.value_in_step_no = td.internode_step_no - 2;
-	irp6ot->ecp_td.mp_command = lib::NEXT_POSE;
+	irp6ot->mp_command.command = lib::NEXT_POSE;
 	irp6ot->mp_command.instruction.instruction_type = lib::GET;
 	irp6ot->mp_command.instruction.get_type = ARM_DV;
 	irp6ot->mp_command.instruction.set_type = ARM_DV | RMODEL_DV;
@@ -788,7 +788,7 @@ bool tff_rubik_face_rotate::first_step()
 		if (irp6ot_con < 0.0)
 			irp6ot->mp_command.instruction.arm.pf_def.force_xyz_torque_xyz[5] = 5;
 	}
-	irp6p->ecp_td.mp_command = lib::NEXT_POSE;
+	irp6p->mp_command.command = lib::NEXT_POSE;
 	irp6p->mp_command.instruction.instruction_type = lib::GET;
 	irp6p->mp_command.instruction.get_type = ARM_DV;
 	irp6p->mp_command.instruction.set_type = ARM_DV | RMODEL_DV;
@@ -986,7 +986,7 @@ bool tff_gripper_approach::first_step()
 	vsp_force_irp6p->base_period=1;
 	td.internode_step_no = step_no;
 	td.value_in_step_no = td.internode_step_no - 2;
-	irp6ot->ecp_td.mp_command = lib::NEXT_POSE;
+	irp6ot->mp_command.command = lib::NEXT_POSE;
 	irp6ot->mp_command.instruction.instruction_type = lib::GET;
 	irp6ot->mp_command.instruction.get_type = ARM_DV;
 	irp6ot->mp_command.instruction.set_type = ARM_DV | RMODEL_DV;
@@ -1019,7 +1019,7 @@ bool tff_gripper_approach::first_step()
 	irp6ot->mp_command.instruction.arm.pf_def.reciprocal_damping[2] = FORCE_RECIPROCAL_DAMPING;
 	irp6ot->mp_command.instruction.arm.pf_def.behaviour[2] = lib::CONTACT;
 
-	irp6p->ecp_td.mp_command = lib::NEXT_POSE;
+	irp6p->mp_command.command = lib::NEXT_POSE;
 	irp6p->mp_command.instruction.instruction_type = lib::GET;
 	irp6p->mp_command.instruction.get_type = ARM_DV;
 	irp6p->mp_command.instruction.set_type = ARM_DV | RMODEL_DV;
@@ -1138,7 +1138,7 @@ bool nose_run_force::first_step()
 	td.value_in_step_no = td.internode_step_no - 2;
 
 	// track
-	irp6ot->ecp_td.mp_command = lib::NEXT_POSE;
+	irp6ot->mp_command.command = lib::NEXT_POSE;
 	irp6ot->mp_command.instruction.instruction_type = lib::GET;
 	irp6ot->mp_command.instruction.get_type = ARM_DV;
 	irp6ot->mp_command.instruction.set_type = ARM_DV;
@@ -1171,7 +1171,7 @@ bool nose_run_force::first_step()
 
 
 	 // postument
-	 irp6p->ecp_td.mp_command = lib::NEXT_POSE;
+	 irp6p->mp_command.command = lib::NEXT_POSE;
 	 irp6p->mp_command.instruction.instruction_type = lib::GET;
 	 irp6p->mp_command.instruction.get_type = ARM_DV;
 	 irp6p->mp_command.instruction.set_type = ARM_DV;
@@ -1209,7 +1209,7 @@ bool nose_run_force::first_step()
 	 */
 
 	// conveyor
-	conv->ecp_td.mp_command = lib::NEXT_POSE;
+	conv->mp_command.command = lib::NEXT_POSE;
 	conv->mp_command.instruction.instruction_type = lib::GET;
 	conv->mp_command.instruction.get_type = ARM_DV;
 	conv->mp_command.instruction.set_type = ARM_DV;
@@ -1397,7 +1397,7 @@ bool drawing_teach_in_force::first_step()
 		 */
 
 		// conveyor
-		conv->ecp_td.mp_command = lib::NEXT_POSE;
+		conv->mp_command.command = lib::NEXT_POSE;
 		conv->mp_command.instruction.instruction_type = lib::GET;
 		conv->mp_command.instruction.get_type = ARM_DV;
 		conv->mp_command.instruction.set_type = ARM_DV;
@@ -1473,7 +1473,7 @@ bool drawing_teach_in_force::first_step()
 		 irp6ot->ecp_td.dyslocation_matrix[5][5]=0;
 
 		 // postument
-		 irp6p->ecp_td.mp_command = lib::NEXT_POSE;
+		 irp6p->mp_command.command = lib::NEXT_POSE;
 		 irp6p->mp_command.instruction.instruction_type = lib::GET;
 		 irp6p->mp_command.instruction.get_type = ARM_DV;
 		 irp6p->mp_command.instruction.set_type = ARM_DV;
@@ -1486,7 +1486,7 @@ bool drawing_teach_in_force::first_step()
 		 */
 
 		// conveyor
-		conv->ecp_td.mp_command = lib::NEXT_POSE;
+		conv->mp_command.command = lib::NEXT_POSE;
 		conv->mp_command.instruction.instruction_type = lib::GET;
 		conv->mp_command.instruction.get_type = ARM_DV;
 		conv->mp_command.instruction.set_type = ARM_DV;

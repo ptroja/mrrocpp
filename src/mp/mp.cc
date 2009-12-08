@@ -105,8 +105,8 @@ bool set_next_ecps_state::first_step ()
 {
     BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
     {
-    	robot_node.second->ecp_td.mp_command = lib::NEXT_STATE;
-    	robot_node.second->ecp_td.ecp_next_state = ecp_next_state;
+    	robot_node.second->mp_command.command = lib::NEXT_STATE;
+    	robot_node.second->mp_command.ecp_next_state = ecp_next_state;
     	robot_node.second->communicate = true;
     }
 
@@ -134,7 +134,7 @@ bool send_end_motion_to_ecps::first_step ()
 {
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
     {
-    	robot_node.second->ecp_td.mp_command = lib::END_MOTION;
+    	robot_node.second->mp_command.command = lib::END_MOTION;
     	robot_node.second->communicate = true;
     }
 
@@ -174,7 +174,7 @@ bool extended_empty::first_step ()
     wait_for_ECP_pulse = true;
     BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
     {
-    	robot_node.second->ecp_td.mp_command = lib::NEXT_POSE;
+    	robot_node.second->mp_command.command = lib::NEXT_POSE;
     	robot_node.second->mp_command.instruction.instruction_type = lib::QUERY;
     	robot_node.second->communicate = false;
     }
@@ -240,7 +240,7 @@ bool empty::first_step ()
     // wait_for_ECP_pulse = true;
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
     {
-		robot_node.second->ecp_td.mp_command = lib::NEXT_POSE;
+		robot_node.second->mp_command.command = lib::NEXT_POSE;
 		robot_node.second->mp_command.instruction.instruction_type = lib::QUERY;
 		robot_node.second->communicate = true;
     }
@@ -305,7 +305,7 @@ bool tight_coop::first_step ()
 
     BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
     {
-    	robot_node.second->ecp_td.mp_command = lib::NEXT_POSE;
+    	robot_node.second->mp_command.command = lib::NEXT_POSE;
     	robot_node.second->mp_command.instruction.instruction_type = lib::GET;
     	robot_node.second->mp_command.instruction.get_type = ARM_DV;
     	robot_node.second->mp_command.instruction.set_type = ARM_DV;
@@ -368,7 +368,7 @@ bool tight_coop::next_step ()
     /*
       if (node_counter == td.interpolation_node_no) {
         // Zakonczenie generacji trajektorii
-        robot_list->E_ptr->ecp_td.mp_command = lib::END_MOTION;
+        robot_list->E_ptr->mp_command.command = lib::END_MOTION;
       }
     */
 

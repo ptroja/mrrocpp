@@ -494,7 +494,7 @@ bool teach_in::first_step () {
 	initiate_pose_list();
 
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m) {
-		robot_node.second->ecp_td.mp_command = lib::NEXT_POSE;
+		robot_node.second->mp_command.command = lib::NEXT_POSE;
 		robot_node.second->mp_command.instruction.instruction_type = lib::GET;
 		robot_node.second->mp_command.instruction.get_type = ARM_DV;
 		robot_node.second->mp_command.instruction.get_arm_type = lib::MOTOR;

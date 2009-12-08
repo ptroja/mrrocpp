@@ -99,7 +99,7 @@ void multiplayer::main_task_algorithm(void)
 		run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 				(1, 1, lib::ROBOT_SPEECHRECOGNITION, lib::ROBOT_SPEECHRECOGNITION);
 
-		char *qq = robot_m[lib::ROBOT_SPEECHRECOGNITION]->ecp_td.commandRecognized;
+		char *qq = robot_m[lib::ROBOT_SPEECHRECOGNITION]->ecp_reply_package.commandRecognized;
 		printf("commandRecognized = \"%s\"\n", qq);
 
 		const char *komunikat;
