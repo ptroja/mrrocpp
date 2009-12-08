@@ -66,9 +66,10 @@ ui_sr_buffer* ui_sr_obj;
 
 ui_ecp_buffer* ui_ecp_obj;
 
-extern ui_state_def ui_state;
-
 ui_msg_def ui_msg;
+
+// forward declaration
+void *sr_thread(void* arg);
 
 #if !defined(USE_MESSIP_SRR)
 /* Local headers */
@@ -385,6 +386,8 @@ void *comm_thread(void* arg) {
 	return 0;
 }
 
+extern ui_state_def ui_state;
+
 void *sr_thread(void* arg)
 {
 	lib::set_thread_name("sr");
@@ -464,64 +467,7 @@ void *sr_thread(void* arg)
 
 	return 0;
 }
-#else /* USE_MESSIP_SRR */
-
-#include "lib/messip/messip.h"
-
-void *sr_thread(void* arg)
-{
-	messip_channel_t *ch;
-
-	if ((ch = messip_channel_create(NULL, ui_state.sr_attach_point.c_str(), MESSIP_NOTIMEOUT, 0)) == NULL) {
-		return NULL;
-	}
-
-	while(1)
-	{
-		int32_t type, subtype;
-		lib::sr_package_t sr_msg;
-
-		int rcvid = messip_receive(ch, &type, &subtype, &sr_msg, sizeof(sr_msg), MESSIP_NOTIMEOUT);
-
-		if (rcvid == -1) /* Error condition, exit */
-		{
-			perror("SR: Receive failed");
-			// 	  throw generator::ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
-			break;
-		} else if (rcvid < -1) {
-			// ie. MESSIP_MSG_DISCONNECT
-			fprintf(stderr, "ie. MESSIP_MSG_DISCONNECT\n");
-			continue;
-		}
-
-		int16_t status = 0;
-		messip_reply(ch, rcvid, EOK, &status, sizeof(status), MESSIP_NOTIMEOUT);
-
-		if (strlen(sr_msg.process_name)>1) // by Y jesli ten string jest pusty to znaczy ze przyszedl smiec
-		{
-			ui_sr_obj->lock_mutex();
-			// to sie zdarza choc nie wiem dlaczego
-
-			ui_sr_obj->writer_buf_position++;
-			ui_sr_obj->writer_buf_position %= UI_SR_BUFFER_LENGHT;
-
-			ui_sr_obj->message_buffer[ui_sr_obj->writer_buf_position]=sr_msg;
-
-			ui_sr_obj->set_new_msg();
-			ui_sr_obj->unlock_mutex();
-
-		} else {
-			printf("SR(%s:%d) unexpected message\n", __FILE__, __LINE__);
-		}
-	}
-
-	return 0;
-}
 #endif /* USE_MESSIP_SRR */
-
-
-
-
 
 
 void *edp_irp6ot_thread(void* arg) {
