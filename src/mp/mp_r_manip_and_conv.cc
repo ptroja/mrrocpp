@@ -184,12 +184,12 @@ void manip_and_conv::get_reply(void)
 {
 	// pobiera z pakietu przeslanego z ECP informacje i wstawia je do
 	// odpowiednich skladowych generatora lub warunku
-	ecp_td.ecp_reply = ecp_reply_package.reply;
-	ecp_td.reply_type = ecp_reply_package.reply_package.reply_type;
-	switch (ecp_td.reply_type) {
+	ecp_reply_package.reply = ecp_reply_package.reply;
+	ecp_reply_package.reply_package.reply_type = ecp_reply_package.reply_package.reply_type;
+	switch (ecp_reply_package.reply_package.reply_type) {
 		case lib::ERROR:
-			ecp_td.error_no.error0 = ecp_reply_package.reply_package.error_no.error0;
-			ecp_td.error_no.error1 = ecp_reply_package.reply_package.error_no.error1;
+			ecp_reply_package.reply_package.error_no.error0 = ecp_reply_package.reply_package.error_no.error0;
+			ecp_reply_package.reply_package.error_no.error1 = ecp_reply_package.reply_package.error_no.error1;
 			break;
 		case lib::ACKNOWLEDGE:
 			break;
@@ -221,9 +221,9 @@ void manip_and_conv::get_reply(void)
 
 void manip_and_conv::get_input_reply(void)
 {
-	ecp_td.input_values = ecp_reply_package.reply_package.input_values;
+	ecp_reply_package.reply_package.input_values = ecp_reply_package.reply_package.input_values;
 	for (int i=0; i<8; i++) {
-		ecp_td.analog_input[i]=ecp_reply_package.reply_package.analog_input[i];
+		ecp_reply_package.reply_package.analog_input[i]=ecp_reply_package.reply_package.analog_input[i];
 	}
 }
 

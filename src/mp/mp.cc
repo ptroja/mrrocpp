@@ -209,7 +209,7 @@ bool extended_empty::next_step ()
 
     BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
     {
-        if ( robot_node.second->ecp_td.ecp_reply == lib::TASK_TERMINATED )
+        if ( robot_node.second->ecp_reply_package.reply == lib::TASK_TERMINATED )
         {
           //  sr_ecp_msg.message("w mp task terminated");
             return false;
@@ -267,7 +267,7 @@ bool empty::next_step ()
 
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
     {
-        if ( robot_node.second->ecp_td.ecp_reply == lib::TASK_TERMINATED )
+        if ( robot_node.second->ecp_reply_package.reply == lib::TASK_TERMINATED )
         {
             sr_ecp_msg.message("w mp task terminated");
             return false;

@@ -206,18 +206,18 @@ void robot::get_reply(void) {
 	// pobiera z pakietu przeslanego z ECP informacje i wstawia je do
 	// odpowiednich skladowych generatora lub warunku
 
-	ecp_td.ecp_reply = ecp_reply_package.reply;
-	ecp_td.reply_type = ecp_reply_package.reply_package.reply_type;
+	ecp_reply_package.reply = ecp_reply_package.reply;
+	ecp_reply_package.reply_package.reply_type = ecp_reply_package.reply_package.reply_type;
 
 	// TODO: czy warto wprowadzac klase potomna?
 	if (robot_name == lib::ROBOT_SPEECHRECOGNITION) {
 		strncpy(ecp_td.commandRecognized, ecp_reply_package.commandRecognized, SPEECH_RECOGNITION_TEXT_LEN);
 	}
 
-	switch (ecp_td.reply_type) {
+	switch (ecp_reply_package.reply_package.reply_type) {
 		case lib::ERROR:
-			ecp_td.error_no.error0 = ecp_reply_package.reply_package.error_no.error0;
-			ecp_td.error_no.error1 = ecp_reply_package.reply_package.error_no.error1;
+			ecp_reply_package.reply_package.error_no.error0 = ecp_reply_package.reply_package.error_no.error0;
+			ecp_reply_package.reply_package.error_no.error1 = ecp_reply_package.reply_package.error_no.error1;
 			break;
 		case lib::ACKNOWLEDGE:
 			break;

@@ -374,7 +374,7 @@ else
 
 
  // UWAGA: dzialamy na jednoelementowej liscie robotow
-   if ( robot_m[lib::ROBOT_IRP6_ON_TRACK]->ecp_td.ecp_reply == lib::TASK_TERMINATED ) {
+   if ( robot_m[lib::ROBOT_IRP6_ON_TRACK]->ecp_reply_package.reply == lib::TASK_TERMINATED ) {
    sr_ecp_msg.message("w mp task terminated");
      return false;
    }

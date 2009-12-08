@@ -369,7 +369,7 @@ void task::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_term
 
 		// sprawdzenie zbioru robots_to_move
 		BOOST_FOREACH(const common::robot_pair_t & robot_node, robots_to_move_tmp) {
-			if (robot_node.second->ecp_td.ecp_reply == lib::TASK_TERMINATED  ) {
+			if (robot_node.second->ecp_reply_package.reply == lib::TASK_TERMINATED  ) {
 				//	if (debug_tmp) robot_m_iterator->second->printf_state("1 ");
 				robots_to_move.erase (robot_node.first);
 			}
@@ -377,7 +377,7 @@ void task::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_term
 
 		// sprawdzenie zbioru robots_to_wait_for_task_termination
 		BOOST_FOREACH(const common::robot_pair_t & robot_node, robots_to_wait_for_task_termination_tmp) {
-			if (robot_node.second->ecp_td.ecp_reply == lib::TASK_TERMINATED  ) {
+			if (robot_node.second->ecp_reply_package.reply == lib::TASK_TERMINATED  ) {
 				//	if (debug_tmp) robot_m_iterator->second->printf_state("2 ");
 				robots_to_wait_for_task_termination.erase (robot_node.first);
 			}
@@ -470,7 +470,7 @@ void task::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_term
 
 		// sprawdzenie zbioru robots_to_move
 		BOOST_FOREACH(const common::robot_pair_t & robot_node, robots_to_move_tmp) {
-			if (robot_node.second->ecp_td.ecp_reply == lib::TASK_TERMINATED  ) {
+			if (robot_node.second->ecp_reply_package.reply == lib::TASK_TERMINATED  ) {
 				//	if (debug_tmp) robot_m_iterator->second->printf_state("1 ");
 				robots_to_move.erase (robot_node.first);
 			}
@@ -478,7 +478,7 @@ void task::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_term
 
 		// sprawdzenie zbioru robots_to_wait_for_task_termination
 		BOOST_FOREACH(const common::robot_pair_t & robot_node, robots_to_wait_for_task_termination_tmp) {
-			if (robot_node.second->ecp_td.ecp_reply == lib::TASK_TERMINATED  ) {
+			if (robot_node.second->ecp_reply_package.reply == lib::TASK_TERMINATED  ) {
 				//	if (debug_tmp) robot_m_iterator->second->printf_state("2 ");
 				robots_to_wait_for_task_termination.erase (robot_node.first);
 			}

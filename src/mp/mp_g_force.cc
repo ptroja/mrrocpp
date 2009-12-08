@@ -120,7 +120,7 @@ bool tff_single_robot_nose_run::next_step()
 	irp6->mp_command.instruction.instruction_type = lib::SET_GET;
 
 	// UWAGA: dzialamy na jednoelementowej liscie robotow
-	if (irp6->ecp_td.ecp_reply == lib::TASK_TERMINATED) {
+	if (irp6->ecp_reply_package.reply == lib::TASK_TERMINATED) {
 		sr_ecp_msg.message("w mp task terminated");
 		return false;
 	} else
@@ -277,7 +277,7 @@ bool tff_nose_run::next_step()
 	irp6p->mp_command.instruction.instruction_type = lib::SET_GET;
 
 	// UWAGA: dzialamy na jednoelementowej liscie robotow
-	if ((irp6ot->ecp_td.ecp_reply == lib::TASK_TERMINATED ) || (irp6ot->ecp_td.ecp_reply == lib::TASK_TERMINATED )) {
+	if ((irp6ot->ecp_reply_package.reply == lib::TASK_TERMINATED ) || (irp6ot->ecp_reply_package.reply == lib::TASK_TERMINATED )) {
 		sr_ecp_msg.message("w mp task terminated");
 		return false;
 	} else
@@ -470,7 +470,7 @@ bool haptic::next_step()
 
 	}
 
-	if ((irp6ot->ecp_td.ecp_reply == lib::TASK_TERMINATED ) || (irp6ot->ecp_td.ecp_reply == lib::TASK_TERMINATED )) {
+	if ((irp6ot->ecp_reply_package.reply == lib::TASK_TERMINATED ) || (irp6ot->ecp_reply_package.reply == lib::TASK_TERMINATED )) {
 		sr_ecp_msg.message("w mp task terminated");
 		return false;
 	} else
@@ -695,7 +695,7 @@ bool tff_rubik_grab::next_step()
 	irp6p->mp_command.instruction.instruction_type = lib::SET_GET;
 
 	// UWAGA: dzialamy na jednoelementowej liscie robotow
-	if (irp6ot->ecp_td.ecp_reply == lib::TASK_TERMINATED) {
+	if (irp6ot->ecp_reply_package.reply == lib::TASK_TERMINATED) {
 		sr_ecp_msg.message("w mp task terminated");
 		return false;
 	} else
@@ -947,7 +947,7 @@ bool tff_rubik_face_rotate::next_step()
 	irp6p->mp_command.instruction.arm.pf_def.gripper_coordinate = irp6p->ecp_td.current_gripper_coordinate;
 
 	// UWAGA: dzialamy na jednoelementowej liscie robotow
-	if (irp6ot->ecp_td.ecp_reply == lib::TASK_TERMINATED) {
+	if (irp6ot->ecp_reply_package.reply == lib::TASK_TERMINATED) {
 		sr_ecp_msg.message("w mp task terminated");
 		return false;
 	} else
@@ -1091,7 +1091,7 @@ bool tff_gripper_approach::next_step()
 	}
 
 	// UWAGA: dzialamy na jednoelementowej liscie robotow
-	if (irp6ot->ecp_td.ecp_reply == lib::TASK_TERMINATED) {
+	if (irp6ot->ecp_reply_package.reply == lib::TASK_TERMINATED) {
 		sr_ecp_msg.message("w mp task terminated");
 		return false;
 	} else
@@ -1273,7 +1273,7 @@ bool nose_run_force::next_step()
 	}
 
 	// UWAGA: dzialamy na jednoelementowej liscie robotow
-	if (irp6ot->ecp_td.ecp_reply == lib::TASK_TERMINATED) {
+	if (irp6ot->ecp_reply_package.reply == lib::TASK_TERMINATED) {
 		sr_ecp_msg.message("w mp task terminated");
 		return false;
 	} else {

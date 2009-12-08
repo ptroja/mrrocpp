@@ -221,7 +221,7 @@ bool vis_sac_lx::next_step ()
         std::cout << "YYY " << 	O_Tx_E  << std::endl;
 
         // UWAGA: dzialamy na jednoelementowej liscie robotow
-        if ( irp6ot->ecp_td.ecp_reply == lib::TASK_TERMINATED )
+        if ( irp6ot->ecp_reply_package.reply == lib::TASK_TERMINATED )
         {
             sr_ecp_msg.message("w mp task terminated");
             return false;
@@ -689,7 +689,7 @@ bool vis_sac_lx::next_step ()
 
 
     // UWAGA: dzialamy na jednoelementowej liscie robotow
-    if ( irp6ot->ecp_td.ecp_reply == lib::TASK_TERMINATED )
+    if ( irp6ot->ecp_reply_package.reply == lib::TASK_TERMINATED )
     {
         sr_ecp_msg.message("w mp task terminated");
         return false;

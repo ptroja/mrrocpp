@@ -160,7 +160,7 @@ bool nn_eye::next_step () {
 		irp6ot->mp_command.instruction.get_type = ARM_DV | RMODEL_DV;
 		  		
 		// UWAGA: dzialamy na jednoelementowej liscie robotow
-		if ( irp6ot->ecp_td.ecp_reply == lib::TASK_TERMINATED ) {
+		if ( irp6ot->ecp_reply_package.reply == lib::TASK_TERMINATED ) {
 			sr_ecp_msg.message("w mp task terminated");
 			return false;
 		} else return true;
@@ -543,7 +543,7 @@ else
 
 	
 	// UWAGA: dzialamy na jednoelementowej liscie robotow
-	if ( irp6ot->ecp_td.ecp_reply == lib::TASK_TERMINATED ) {
+	if ( irp6ot->ecp_reply_package.reply == lib::TASK_TERMINATED ) {
 		sr_ecp_msg.message("w mp task terminated");
 		return false;
 	} else return true;
