@@ -39,7 +39,7 @@ bool two_robots_measures::first_step()
 	irp6ot->mp_command.instruction.instruction_type = lib::GET;
 	irp6ot->mp_command.instruction.get_type = ARM_DV;
 	irp6ot->mp_command.instruction.get_arm_type = lib::XYZ_EULER_ZYZ;
-	irp6ot->ecp_td.motion_type = lib::ABSOLUTE;
+	irp6ot->mp_command.instruction.motion_type = lib::ABSOLUTE;
 	irp6ot->mp_command.instruction.interpolation_type = lib::MIM;
 	// Ustawienie polecen dla robota na postumencie.
 	irp6p = robot_m[lib::ROBOT_IRP6_POSTUMENT];
@@ -47,7 +47,7 @@ bool two_robots_measures::first_step()
 	irp6p->mp_command.instruction.instruction_type = lib::GET;
 	irp6p->mp_command.instruction.get_type = ARM_DV;
 	irp6p->mp_command.instruction.get_arm_type = lib::XYZ_EULER_ZYZ;
-	irp6p->ecp_td.motion_type = lib::ABSOLUTE;
+	irp6p->mp_command.instruction.motion_type = lib::ABSOLUTE;
 		irp6p->mp_command.instruction.interpolation_type = lib::MIM;
 	// Przepisanie polecen.
 

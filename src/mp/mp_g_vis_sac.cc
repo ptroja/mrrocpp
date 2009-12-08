@@ -136,10 +136,10 @@ bool vis_sac::first_step () {
 	irp6ot->mp_command.instruction.get_arm_type = lib::XYZ_EULER_ZYZ; //POSE_FORCE_TORQUE_AT_FRAME;
 	irp6ot->mp_command.instruction.set_rmodel_type = lib::TOOL_FRAME;
 	irp6ot->mp_command.instruction.get_rmodel_type = lib::TOOL_FRAME;
-	irp6ot->ecp_td.motion_type = lib::ABSOLUTE; //RELATIVE;
+	irp6ot->mp_command.instruction.motion_type = lib::ABSOLUTE; //RELATIVE;
 			irp6ot->mp_command.instruction.interpolation_type = lib::MIM;
-	irp6ot->ecp_td.motion_steps = td.internode_step_no;
-	irp6ot->ecp_td.value_in_step_no = td.value_in_step_no;
+	irp6ot->mp_command.instruction.motion_steps = td.internode_step_no;
+	irp6ot->mp_command.instruction.value_in_step_no = td.value_in_step_no;
 	
 	
 	return true;
@@ -589,7 +589,7 @@ else
 
      for (i=0; i<6; i++)
 	{
-		irp6ot->ecp_td.next_XYZ_ZYZ_arm_coordinates[i]=stearing[i][0];
+		irp6ot->mp_command.instruction.arm.pf_def.arm_coordinates[i]=stearing[i][0];
 		
 		stearing[i][2]=stearing[i][1];
 		stearing[i][1]=stearing[i][0];
@@ -598,23 +598,23 @@ else
 		measure[i][2]=measure[i][1];
 		measure[i][1]=measure[i][0];
 	}
-	irp6ot->ecp_td.next_gripper_coordinate=irp6ot->ecp_td.current_gripper_coordinate;
+	irp6ot->mp_command.instruction.arm.pf_def.gripper_coordinate=irp6ot->ecp_td.current_gripper_coordinate;
 	
 	/*WYLACZENIE NIESTEROWANYCH OSI*/
 	for (i=6; i<6; i++)
       {
-      	irp6ot->ecp_td.next_XYZ_ZYZ_arm_coordinates[i]=irp6ot->ecp_td.current_XYZ_ZYZ_arm_coordinates[i];
+      	irp6ot->mp_command.instruction.arm.pf_def.arm_coordinates[i]=irp6ot->ecp_td.current_XYZ_ZYZ_arm_coordinates[i];
       }
       for (i=0; i<6; i++)
       {
-      	irp6ot->ecp_td.next_XYZ_ZYZ_arm_coordinates[i]=irp6ot->ecp_td.current_XYZ_ZYZ_arm_coordinates[i];
+      	irp6ot->mp_command.instruction.arm.pf_def.arm_coordinates[i]=irp6ot->ecp_td.current_XYZ_ZYZ_arm_coordinates[i];
       }
 	/*******************************************************/
 	
 #ifdef PRINTA	
 	printf("%d ARM= ", node_counter);
  	for (int i=0; i<6 ; i++)             
-		printf("%f  ",irp6ot->ecp_td.next_XYZ_ZYZ_arm_coordinates[i]);
+		printf("%f  ",irp6ot->mp_command.instruction.arm.pf_def.arm_coordinates[i]);
 	printf("\n");	
 #endif
 

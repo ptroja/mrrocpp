@@ -547,43 +547,43 @@ bool teach_in::next_step () {
 				robot_m_iterator->second->mp_command.instruction.instruction_type = lib::SET;
 				robot_m_iterator->second->mp_command.instruction.set_type = ARM_DV; // ARM
 				robot_m_iterator->second->mp_command.instruction.set_arm_type = lib::MOTOR;
-				robot_m_iterator->second->ecp_td.motion_type = lib::ABSOLUTE;
+				robot_m_iterator->second->mp_command.instruction.motion_type = lib::ABSOLUTE;
 				robot_m_iterator->second->mp_command.instruction.interpolation_type = lib::MIM;
-				robot_m_iterator->second->ecp_td.motion_steps = (uint16_t) ceil(tip.motion_time / STEP);
-				robot_m_iterator->second->ecp_td.value_in_step_no = robot_m_iterator->second->ecp_td.motion_steps;
-				memcpy (robot_m_iterator->second->ecp_td.next_motor_arm_coordinates, tip.coordinates, MAX_SERVOS_NR*sizeof (double));
+				robot_m_iterator->second->mp_command.instruction.motion_steps = (uint16_t) ceil(tip.motion_time / STEP);
+				robot_m_iterator->second->mp_command.instruction.value_in_step_no = robot_m_iterator->second->mp_command.instruction.motion_steps;
+				memcpy (robot_m_iterator->second->mp_command.instruction.arm.pf_def.arm_coordinates, tip.coordinates, MAX_SERVOS_NR*sizeof (double));
 				break;
 			case lib::C_JOINT:
 				robot_m_iterator->second->mp_command.instruction.instruction_type = lib::SET;
 				robot_m_iterator->second->mp_command.instruction.set_type = ARM_DV; // ARM
 				robot_m_iterator->second->mp_command.instruction.set_arm_type = lib::JOINT;
-				robot_m_iterator->second->ecp_td.motion_type = lib::ABSOLUTE;
+				robot_m_iterator->second->mp_command.instruction.motion_type = lib::ABSOLUTE;
 				robot_m_iterator->second->mp_command.instruction.interpolation_type = lib::MIM;
-				robot_m_iterator->second->ecp_td.motion_steps = (uint16_t) ceil(tip.motion_time / STEP);
-				robot_m_iterator->second->ecp_td.value_in_step_no = robot_m_iterator->second->ecp_td.motion_steps;
-				memcpy (robot_m_iterator->second->ecp_td.next_joint_arm_coordinates, tip.coordinates, MAX_SERVOS_NR*sizeof (double));
+				robot_m_iterator->second->mp_command.instruction.motion_steps = (uint16_t) ceil(tip.motion_time / STEP);
+				robot_m_iterator->second->mp_command.instruction.value_in_step_no = robot_m_iterator->second->mp_command.instruction.motion_steps;
+				memcpy (robot_m_iterator->second->mp_command.instruction.arm.pf_def.arm_coordinates, tip.coordinates, MAX_SERVOS_NR*sizeof (double));
 				break;
 			case lib::C_XYZ_EULER_ZYZ:
 				robot_m_iterator->second->mp_command.instruction.instruction_type = lib::SET;
 				robot_m_iterator->second->mp_command.instruction.set_type = ARM_DV; // ARM
 				robot_m_iterator->second->mp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
-				robot_m_iterator->second->ecp_td.motion_type = lib::ABSOLUTE;
+				robot_m_iterator->second->mp_command.instruction.motion_type = lib::ABSOLUTE;
 				robot_m_iterator->second->mp_command.instruction.interpolation_type = lib::MIM;
-				robot_m_iterator->second->ecp_td.motion_steps = (uint16_t) ceil(tip.motion_time / STEP);
-				robot_m_iterator->second->ecp_td.value_in_step_no = robot_m_iterator->second->ecp_td.motion_steps;
-				memcpy (robot_m_iterator->second->ecp_td.next_XYZ_ZYZ_arm_coordinates, tip.coordinates, 6*sizeof (double));
-				robot_m_iterator->second->ecp_td.next_gripper_coordinate = tip.coordinates[6];
+				robot_m_iterator->second->mp_command.instruction.motion_steps = (uint16_t) ceil(tip.motion_time / STEP);
+				robot_m_iterator->second->mp_command.instruction.value_in_step_no = robot_m_iterator->second->mp_command.instruction.motion_steps;
+				memcpy (robot_m_iterator->second->mp_command.instruction.arm.pf_def.arm_coordinates, tip.coordinates, 6*sizeof (double));
+				robot_m_iterator->second->mp_command.instruction.arm.pf_def.gripper_coordinate = tip.coordinates[6];
 				break;
 			case lib::C_XYZ_ANGLE_AXIS:
 				robot_m_iterator->second->mp_command.instruction.instruction_type = lib::SET;
 				robot_m_iterator->second->mp_command.instruction.set_type = ARM_DV; // ARM
 				robot_m_iterator->second->mp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
-				robot_m_iterator->second->ecp_td.motion_type = lib::ABSOLUTE;
+				robot_m_iterator->second->mp_command.instruction.motion_type = lib::ABSOLUTE;
 				robot_m_iterator->second->mp_command.instruction.interpolation_type = lib::MIM;
-				robot_m_iterator->second->ecp_td.motion_steps = (uint16_t) ceil(tip.motion_time / STEP);
-				robot_m_iterator->second->ecp_td.value_in_step_no = robot_m_iterator->second->ecp_td.motion_steps;
-				memcpy (robot_m_iterator->second->ecp_td.next_XYZ_AA_arm_coordinates, tip.coordinates, 6*sizeof (double));
-				robot_m_iterator->second->ecp_td.next_gripper_coordinate = tip.coordinates[6];
+				robot_m_iterator->second->mp_command.instruction.motion_steps = (uint16_t) ceil(tip.motion_time / STEP);
+				robot_m_iterator->second->mp_command.instruction.value_in_step_no = robot_m_iterator->second->mp_command.instruction.motion_steps;
+				memcpy (robot_m_iterator->second->mp_command.instruction.arm.pf_def.arm_coordinates, tip.coordinates, 6*sizeof (double));
+				robot_m_iterator->second->mp_command.instruction.arm.pf_def.gripper_coordinate = tip.coordinates[6];
 				break;
 			default:
 				throw MP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
@@ -598,43 +598,43 @@ bool teach_in::next_step () {
 				robot_m_iterator->second->mp_command.instruction.instruction_type = lib::SET;
 				robot_m_iterator->second->mp_command.instruction.set_type = ARM_DV; // ARM
 				robot_m_iterator->second->mp_command.instruction.set_arm_type = lib::MOTOR;
-				robot_m_iterator->second->ecp_td.motion_type = lib::ABSOLUTE;
+				robot_m_iterator->second->mp_command.instruction.motion_type = lib::ABSOLUTE;
 				robot_m_iterator->second->mp_command.instruction.interpolation_type = lib::MIM;
-				robot_m_iterator->second->ecp_td.motion_steps = (uint16_t) ceil(tip.motion_time / STEP);
-				robot_m_iterator->second->ecp_td.value_in_step_no = robot_m_iterator->second->ecp_td.motion_steps;
-				memcpy (robot_m_iterator->second->ecp_td.next_motor_arm_coordinates, tip.irp6p_coordinates, MAX_SERVOS_NR*sizeof (double));
+				robot_m_iterator->second->mp_command.instruction.motion_steps = (uint16_t) ceil(tip.motion_time / STEP);
+				robot_m_iterator->second->mp_command.instruction.value_in_step_no = robot_m_iterator->second->mp_command.instruction.motion_steps;
+				memcpy (robot_m_iterator->second->mp_command.instruction.arm.pf_def.arm_coordinates, tip.irp6p_coordinates, MAX_SERVOS_NR*sizeof (double));
 				break;
 			case lib::C_JOINT:
 				robot_m_iterator->second->mp_command.instruction.instruction_type = lib::SET;
 				robot_m_iterator->second->mp_command.instruction.set_type = ARM_DV; // ARM
 				robot_m_iterator->second->mp_command.instruction.set_arm_type = lib::JOINT;
-				robot_m_iterator->second->ecp_td.motion_type = lib::ABSOLUTE;
+				robot_m_iterator->second->mp_command.instruction.motion_type = lib::ABSOLUTE;
 				robot_m_iterator->second->mp_command.instruction.interpolation_type = lib::MIM;
-				robot_m_iterator->second->ecp_td.motion_steps = (uint16_t) ceil(tip.motion_time / STEP);
-				robot_m_iterator->second->ecp_td.value_in_step_no = robot_m_iterator->second->ecp_td.motion_steps;
-				memcpy (robot_m_iterator->second->ecp_td.next_joint_arm_coordinates, tip.irp6p_coordinates, MAX_SERVOS_NR*sizeof (double));
+				robot_m_iterator->second->mp_command.instruction.motion_steps = (uint16_t) ceil(tip.motion_time / STEP);
+				robot_m_iterator->second->mp_command.instruction.value_in_step_no = robot_m_iterator->second->mp_command.instruction.motion_steps;
+				memcpy (robot_m_iterator->second->mp_command.instruction.arm.pf_def.arm_coordinates, tip.irp6p_coordinates, MAX_SERVOS_NR*sizeof (double));
 				break;
 			case lib::C_XYZ_EULER_ZYZ:
 				robot_m_iterator->second->mp_command.instruction.instruction_type = lib::SET;
 				robot_m_iterator->second->mp_command.instruction.set_type = ARM_DV; // ARM
 				robot_m_iterator->second->mp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
-				robot_m_iterator->second->ecp_td.motion_type = lib::ABSOLUTE;
+				robot_m_iterator->second->mp_command.instruction.motion_type = lib::ABSOLUTE;
 				robot_m_iterator->second->mp_command.instruction.interpolation_type = lib::MIM;
-				robot_m_iterator->second->ecp_td.motion_steps = (uint16_t) ceil(tip.motion_time / STEP);
-				robot_m_iterator->second->ecp_td.value_in_step_no = robot_m_iterator->second->ecp_td.motion_steps;
-				memcpy (robot_m_iterator->second->ecp_td.next_XYZ_ZYZ_arm_coordinates, tip.irp6p_coordinates, 6*sizeof (double));
-				robot_m_iterator->second->ecp_td.next_gripper_coordinate = tip.irp6p_coordinates[6];
+				robot_m_iterator->second->mp_command.instruction.motion_steps = (uint16_t) ceil(tip.motion_time / STEP);
+				robot_m_iterator->second->mp_command.instruction.value_in_step_no = robot_m_iterator->second->mp_command.instruction.motion_steps;
+				memcpy (robot_m_iterator->second->mp_command.instruction.arm.pf_def.arm_coordinates, tip.irp6p_coordinates, 6*sizeof (double));
+				robot_m_iterator->second->mp_command.instruction.arm.pf_def.gripper_coordinate = tip.irp6p_coordinates[6];
 				break;
 			case lib::C_XYZ_ANGLE_AXIS:
 				robot_m_iterator->second->mp_command.instruction.instruction_type = lib::SET;
 				robot_m_iterator->second->mp_command.instruction.set_type = ARM_DV; // ARM
 				robot_m_iterator->second->mp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
-				robot_m_iterator->second->ecp_td.motion_type = lib::ABSOLUTE;
+				robot_m_iterator->second->mp_command.instruction.motion_type = lib::ABSOLUTE;
 				robot_m_iterator->second->mp_command.instruction.interpolation_type = lib::MIM;
-				robot_m_iterator->second->ecp_td.motion_steps = (uint16_t) ceil(tip.motion_time / STEP);
-				robot_m_iterator->second->ecp_td.value_in_step_no = robot_m_iterator->second->ecp_td.motion_steps;
-				memcpy (robot_m_iterator->second->ecp_td.next_XYZ_AA_arm_coordinates, tip.irp6p_coordinates, 6*sizeof (double));
-				robot_m_iterator->second->ecp_td.next_gripper_coordinate = tip.irp6p_coordinates[6];
+				robot_m_iterator->second->mp_command.instruction.motion_steps = (uint16_t) ceil(tip.motion_time / STEP);
+				robot_m_iterator->second->mp_command.instruction.value_in_step_no = robot_m_iterator->second->mp_command.instruction.motion_steps;
+				memcpy (robot_m_iterator->second->mp_command.instruction.arm.pf_def.arm_coordinates, tip.irp6p_coordinates, 6*sizeof (double));
+				robot_m_iterator->second->mp_command.instruction.arm.pf_def.gripper_coordinate = tip.irp6p_coordinates[6];
 				break;
 			default:
 				throw MP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);

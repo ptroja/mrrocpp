@@ -103,44 +103,44 @@ void manip_and_conv::create_next_pose_command(void)
 			}
 
 			if (mp_command.instruction.set_type & ARM_DV) { // ramie
-				mp_command.instruction.motion_type = ecp_td.motion_type;
+				mp_command.instruction.motion_type = mp_command.instruction.motion_type;
 
-				mp_command.instruction.motion_steps = ecp_td.motion_steps;
-				mp_command.instruction.value_in_step_no = ecp_td.value_in_step_no;
+				mp_command.instruction.motion_steps = mp_command.instruction.motion_steps;
+				mp_command.instruction.value_in_step_no = mp_command.instruction.value_in_step_no;
 				// Wypelniamy czesc zwiazana z polozeniem ramienia
 				switch (mp_command.instruction.set_arm_type) {
 					case lib::FRAME:
-						lib::copy_frame(mp_command.instruction.arm.pf_def.arm_frame, ecp_td.next_arm_frame);
+						lib::copy_frame(mp_command.instruction.arm.pf_def.arm_frame, mp_command.instruction.arm.pf_def.arm_frame);
 
 						break;
 					case lib::XYZ_ANGLE_AXIS:
 						for (int j=0; j<6; j++) {
 							mp_command.instruction.arm.pf_def.arm_coordinates[j]
-									= ecp_td.next_XYZ_AA_arm_coordinates[j];
+									= mp_command.instruction.arm.pf_def.arm_coordinates[j];
 						}
 
 						break;
 					case lib::XYZ_EULER_ZYZ:
 						for (int j=0; j<6; j++) {
 							mp_command.instruction.arm.pf_def.arm_coordinates[j]
-									= ecp_td.next_XYZ_ZYZ_arm_coordinates[j];
+									= mp_command.instruction.arm.pf_def.arm_coordinates[j];
 						}
 
 						break;
 					case lib::JOINT:
 						for (int j=0; j<servos_number; j++) {
 							mp_command.instruction.arm.pf_def.arm_coordinates[j]
-									= ecp_td.next_joint_arm_coordinates[j];
+									= mp_command.instruction.arm.pf_def.arm_coordinates[j];
 						}
 						break;
 					case lib::MOTOR:
 						for (int j=0; j<servos_number; j++) {
 							mp_command.instruction.arm.pf_def.arm_coordinates[j]
-									= ecp_td.next_motor_arm_coordinates[j];
+									= mp_command.instruction.arm.pf_def.arm_coordinates[j];
 						}
 					case lib::PF_VELOCITY:
 						for (int j=0; j<servos_number; j++) {
-							mp_command.instruction.arm.pf_def.arm_coordinates[j] = ecp_td.next_velocity[j];
+							mp_command.instruction.arm.pf_def.arm_coordinates[j] = mp_command.instruction.arm.pf_def.arm_coordinates[j];
 						}
 						break;
 					default: // Blad: niewlasciwy sposob zadawania polozenia ramienia
@@ -152,12 +152,12 @@ void manip_and_conv::create_next_pose_command(void)
 						break;
 					case lib::TCIM:
 						for (int i=0; i<6; i++) {
-							mp_command.instruction.arm.pf_def.inertia[i] =ecp_td.next_inertia[i];
+							mp_command.instruction.arm.pf_def.inertia[i] =mp_command.instruction.arm.pf_def.inertia[i];
 							mp_command.instruction.arm.pf_def.reciprocal_damping[i]
-									=ecp_td.next_reciprocal_damping[i];
+									=mp_command.instruction.arm.pf_def.reciprocal_damping[i];
 							mp_command.instruction.arm.pf_def.force_xyz_torque_xyz[i]
-									=ecp_td.next_force_xyz_torque_xyz[i];
-							mp_command.instruction.arm.pf_def.behaviour[i] = ecp_td.next_behaviour[i]; // pozycja docelowa
+									=mp_command.instruction.arm.pf_def.force_xyz_torque_xyz[i];
+							mp_command.instruction.arm.pf_def.behaviour[i] = mp_command.instruction.arm.pf_def.behaviour[i]; // pozycja docelowa
 						}
 						break;
 					default:
@@ -166,7 +166,7 @@ void manip_and_conv::create_next_pose_command(void)
 				}
 
 				if (has_gripper) {
-					mp_command.instruction.arm.pf_def.gripper_coordinate = ecp_td.next_gripper_coordinate; // zadany stopien rozwarcia chwytaka
+					mp_command.instruction.arm.pf_def.gripper_coordinate = mp_command.instruction.arm.pf_def.gripper_coordinate; // zadany stopien rozwarcia chwytaka
 				}
 
 			}

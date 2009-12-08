@@ -160,16 +160,16 @@ bool vis_sac_lx::first_step ()
     //FRAME; //XYZ_EULER_ZYZ; //POSE_FORCE_TORQUE_AT_FRAME;
     irp6ot->mp_command.instruction.set_rmodel_type = lib::TOOL_FRAME;
     irp6ot->mp_command.instruction.get_rmodel_type = lib::TOOL_FRAME;
-    //irp6ot->ecp_td.motion_type = lib::ABSOLUTE; //RELATIVE;
-    irp6ot->ecp_td.motion_type = lib::ABSOLUTE; //PF_FIXED_FRAME_WITH_DESIRED_FORCE_OR_SPEED;
+    //irp6ot->mp_command.instruction.motion_type = lib::ABSOLUTE; //RELATIVE;
+    irp6ot->mp_command.instruction.motion_type = lib::ABSOLUTE; //PF_FIXED_FRAME_WITH_DESIRED_FORCE_OR_SPEED;
     irp6ot->mp_command.instruction.interpolation_type = lib::TCIM;
 
-    irp6ot->ecp_td.motion_steps = td.internode_step_no;
-    irp6ot->ecp_td.value_in_step_no = td.value_in_step_no;
+    irp6ot->mp_command.instruction.motion_steps = td.internode_step_no;
+    irp6ot->mp_command.instruction.value_in_step_no = td.value_in_step_no;
 
     for(int i=0;i<6;i++)
     {
-        irp6ot->ecp_td.next_XYZ_AA_arm_coordinates[i] = 0;
+        irp6ot->mp_command.instruction.arm.pf_def.arm_coordinates[i] = 0;
         //		irp6ot->ecp_td.MPtoECP_force_xyz_torque_xyz[i] = 0;
         //	irp6ot->ecp_td.MPselection_vector[i] = FORCE_SV_AX;
         //		 irp6ot->ecp_td.MPselection_vector[i] = POSE_SV_AX;
@@ -179,12 +179,12 @@ bool vis_sac_lx::first_step ()
 
     for (int i=0;i<3;i++)
     {
-        irp6ot->ecp_td.next_inertia[i] = FORCE_INERTIA;
-        irp6ot->ecp_td.next_inertia[i+3] = TORQUE_INERTIA;
-        irp6ot->ecp_td.next_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
-        irp6ot->ecp_td.next_reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING;
-        irp6ot->ecp_td.next_behaviour[i] = lib::GUARDED_MOTION;
-        irp6ot->ecp_td.next_behaviour[i+3] = lib::GUARDED_MOTION;
+        irp6ot->mp_command.instruction.arm.pf_def.inertia[i] = FORCE_INERTIA;
+        irp6ot->mp_command.instruction.arm.pf_def.inertia[i+3] = TORQUE_INERTIA;
+        irp6ot->mp_command.instruction.arm.pf_def.reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
+        irp6ot->mp_command.instruction.arm.pf_def.reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING;
+        irp6ot->mp_command.instruction.arm.pf_def.behaviour[i] = lib::GUARDED_MOTION;
+        irp6ot->mp_command.instruction.arm.pf_def.behaviour[i+3] = lib::GUARDED_MOTION;
     }
 
 
@@ -585,7 +585,7 @@ bool vis_sac_lx::next_step ()
 
     E_Tx_Ep.get_xyz_angle_axis(E_r_Ep[0]);
 
-    //O_Tx_Ep.get_frame_tab(irp6ot->ecp_td.next_arm_frame); //jesli sie chcemy ruszyc
+    //O_Tx_Ep.get_frame_tab(irp6ot->mp_command.instruction.arm.pf_def.arm_frame); //jesli sie chcemy ruszyc
 
     //	std::cout << "O_Tx_Ep" <<std::endl;
     //	std::cout << O_Tx_Ep << std::endl;
@@ -615,7 +615,7 @@ bool vis_sac_lx::next_step ()
 
 
 
-    //	O_Tx_Ep.get_frame_tab( irp6ot->ecp_td.next_arm_frame); //jesli ABSOLUTNIE zadajemy O_Tx_E
+    //	O_Tx_Ep.get_frame_tab( irp6ot->mp_command.instruction.arm.pf_def.arm_frame); //jesli ABSOLUTNIE zadajemy O_Tx_E
 
     if(node_counter==4)
     {
@@ -628,7 +628,7 @@ bool vis_sac_lx::next_step ()
     /*
     for (int i=0; i<6; i++)
 {
-    	irp6ot->ecp_td.next_XYZ_AA_arm_coordinates[i]=E_r_Ep[0][i];
+    	irp6ot->mp_command.instruction.arm.pf_def.arm_coordinates[i]=E_r_Ep[0][i];
 }
      */
 
@@ -664,7 +664,7 @@ bool vis_sac_lx::next_step ()
 
     for(int i=0;i<6;i++)
     {
-        irp6ot->ecp_td.next_XYZ_AA_arm_coordinates[i] = O_r_Ep[0][i];
+        irp6ot->mp_command.instruction.arm.pf_def.arm_coordinates[i] = O_r_Ep[0][i];
     }
     /*
     for(int i=0;i<6;i++) {
@@ -683,7 +683,7 @@ bool vis_sac_lx::next_step ()
     //	}
 
 
-    irp6ot->ecp_td.next_gripper_coordinate=irp6ot->ecp_td.current_gripper_coordinate;
+    irp6ot->mp_command.instruction.arm.pf_def.gripper_coordinate=irp6ot->ecp_td.current_gripper_coordinate;
 
     /*******************************************************/
 
