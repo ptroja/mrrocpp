@@ -353,14 +353,14 @@ bool tight_coop::next_step ()
     // (okreslenie kolejnego wezla interpolacji)
     for (i = 0; i < 6; i++) // zakladamy, ze na liscie jest jeden robot
         robot_m_iterator->second->mp_command.instruction.arm.pf_def.arm_coordinates[i] =
-            robot_m_iterator->second->ecp_td.current_XYZ_ZYZ_arm_coordinates[i]
+            robot_m_iterator->second->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[i]
             + node_counter * irp6ot_td.coordinate_delta[i] / irp6ot_td.interpolation_node_no;
-    // printf("X_d= %lf  X_a= %lf\n",robot_list->E_ptr->mp_command.instruction.arm.pf_def.arm_coordinates[0],robot_list->E_ptr->ecp_td.current_XYZ_ZYZ_arm_coordinates[0]);
-    // printf("Y_d= %lf  Y_a= %lf\n",robot_list->E_ptr->mp_command.instruction.arm.pf_def.arm_coordinates[1],robot_list->E_ptr->ecp_td.current_XYZ_ZYZ_arm_coordinates[1]);
-    // printf("Z_d= %lf  Z_a= %lf\n",robot_list->E_ptr->mp_command.instruction.arm.pf_def.arm_coordinates[2],robot_list->E_ptr->ecp_td.current_XYZ_ZYZ_arm_coordinates[2]);
+    // printf("X_d= %lf  X_a= %lf\n",robot_list->E_ptr->mp_command.instruction.arm.pf_def.arm_coordinates[0],robot_list->E_ptr->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[0]);
+    // printf("Y_d= %lf  Y_a= %lf\n",robot_list->E_ptr->mp_command.instruction.arm.pf_def.arm_coordinates[1],robot_list->E_ptr->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[1]);
+    // printf("Z_d= %lf  Z_a= %lf\n",robot_list->E_ptr->mp_command.instruction.arm.pf_def.arm_coordinates[2],robot_list->E_ptr->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[2]);
 
     robot_m_iterator->second->mp_command.instruction.arm.pf_def.gripper_coordinate =
-        robot_m_iterator->second->ecp_td.current_gripper_coordinate
+        robot_m_iterator->second->ecp_reply_package.reply_package.arm.pf_def.gripper_coordinate
         + node_counter * irp6ot_td.coordinate_delta[6] / irp6ot_td.interpolation_node_no;
 
     // by Y - ZAKOMENTOWANE ponizej - nie wiadomo jaka idea temu przyswiecala
@@ -382,11 +382,11 @@ bool tight_coop::next_step ()
         // (okreslenie kolejnego wezla interpolacji)
         for (i = 0; i < 6; i++) // zakladamy, ze na liscie jest jeden robot
             robot_m_iterator->second->mp_command.instruction.arm.pf_def.arm_coordinates[i] =
-                robot_m_iterator->second->ecp_td.current_XYZ_ZYZ_arm_coordinates[i]
+                robot_m_iterator->second->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[i]
                 + node_counter * irp6p_td.coordinate_delta[i] / irp6p_td.interpolation_node_no;
 
         robot_m_iterator->second->mp_command.instruction.arm.pf_def.gripper_coordinate =
-            robot_m_iterator->second->ecp_td.current_gripper_coordinate
+            robot_m_iterator->second->ecp_reply_package.reply_package.arm.pf_def.gripper_coordinate
             + node_counter * irp6p_td.coordinate_delta[6] / irp6p_td.interpolation_node_no;
 
     }

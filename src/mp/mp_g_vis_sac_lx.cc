@@ -213,7 +213,7 @@ bool vis_sac_lx::next_step ()
         irp6ot->mp_command.instruction.instruction_type = lib::GET;
         irp6ot->mp_command.instruction.get_type = ARM_DV | RMODEL_DV;
 
-        O_Tx_E.set_frame_tab(irp6ot->ecp_td.current_arm_frame); // zarem
+        O_Tx_E.set_frame_tab(irp6ot->ecp_reply_package.reply_package.arm.pf_def.arm_frame); // zarem
 
         //O_Tx_E.get_xyz_angle_axis(O_r_E[0]);
 
@@ -243,11 +243,11 @@ bool vis_sac_lx::next_step ()
 
     if(node_counter==1 || node_counter==2 || node_counter==3 || node_counter==4)
     {
-        O_Tx_E.set_frame_tab(irp6ot->ecp_td.current_arm_frame); // zarem
+        O_Tx_E.set_frame_tab(irp6ot->ecp_reply_package.reply_package.arm.pf_def.arm_frame); // zarem
         std::cout << "YYY " << 	O_Tx_E  << std::endl;
 
 
-        //O_Tx_E.set_frame_tab(irp6ot->ecp_td.current_arm_frame); // zarem
+        //O_Tx_E.set_frame_tab(irp6ot->ecp_reply_package.reply_package.arm.pf_def.arm_frame); // zarem
         O_Tx_E.get_xyz_angle_axis(O_r_E[0]);
 
         std::cout << "MMM " << node_counter << std::endl;
@@ -408,7 +408,7 @@ bool vis_sac_lx::next_step ()
 
     O_Tx_G.get_xyz_angle_axis(O_r_G[0]);
 
-    O_Tx_E.set_frame_tab(irp6ot->ecp_td.current_arm_frame);
+    O_Tx_E.set_frame_tab(irp6ot->ecp_reply_package.reply_package.arm.pf_def.arm_frame);
     O_Tx_E.get_xyz_angle_axis(O_r_E[0]);
 
 
@@ -683,7 +683,7 @@ bool vis_sac_lx::next_step ()
     //	}
 
 
-    irp6ot->mp_command.instruction.arm.pf_def.gripper_coordinate=irp6ot->ecp_td.current_gripper_coordinate;
+    irp6ot->mp_command.instruction.arm.pf_def.gripper_coordinate=irp6ot->ecp_reply_package.reply_package.arm.pf_def.gripper_coordinate;
 
     /*******************************************************/
 

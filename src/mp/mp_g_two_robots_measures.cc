@@ -87,8 +87,8 @@ bool two_robots_measures::next_step()
 
 	// Przepisanie odczytow do wektora.
 	two_robots_measure current_measure;
-	memcpy(current_measure.irp6ot, irp6ot->ecp_td.current_XYZ_ZYZ_arm_coordinates, 6*sizeof(double));
-	memcpy(current_measure.irp6p, irp6p->ecp_td.current_XYZ_ZYZ_arm_coordinates, 6*sizeof(double));
+	memcpy(current_measure.irp6ot, irp6ot->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates, 6*sizeof(double));
+	memcpy(current_measure.irp6p, irp6p->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates, 6*sizeof(double));
 /*	std::cout<<"current_measure"<<std::endl;
 	for(int i=0; i<6; i++)
 		std::cout<< current_measure.irp6ot[i] <<"\t";

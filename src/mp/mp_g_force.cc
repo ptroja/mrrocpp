@@ -115,7 +115,7 @@ bool tff_single_robot_nose_run::next_step()
 		return false;
 	}
 
-	irp6->mp_command.instruction.arm.pf_def.gripper_coordinate = irp6->ecp_td.current_gripper_coordinate;
+	irp6->mp_command.instruction.arm.pf_def.gripper_coordinate = irp6->ecp_reply_package.reply_package.arm.pf_def.gripper_coordinate;
 
 	irp6->mp_command.instruction.instruction_type = lib::SET_GET;
 
@@ -269,8 +269,8 @@ bool tff_nose_run::next_step()
 	}
 
 	if (node_counter==3) {
-		irp6ot->mp_command.instruction.arm.pf_def.gripper_coordinate = irp6ot->ecp_td.current_gripper_coordinate;
-		irp6p->mp_command.instruction.arm.pf_def.gripper_coordinate = irp6p->ecp_td.current_gripper_coordinate;
+		irp6ot->mp_command.instruction.arm.pf_def.gripper_coordinate = irp6ot->ecp_reply_package.reply_package.arm.pf_def.gripper_coordinate;
+		irp6p->mp_command.instruction.arm.pf_def.gripper_coordinate = irp6p->ecp_reply_package.reply_package.arm.pf_def.gripper_coordinate;
 	}
 
 	irp6ot->mp_command.instruction.instruction_type = lib::SET_GET;
@@ -435,12 +435,12 @@ bool haptic::next_step()
 		irp6ot->mp_command.instruction.instruction_type = lib::SET_GET;
 		irp6p->mp_command.instruction.instruction_type = lib::SET_GET;
 
-		irp6ot->mp_command.instruction.arm.pf_def.gripper_coordinate = irp6ot->ecp_td.current_gripper_coordinate;
-		irp6p->mp_command.instruction.arm.pf_def.gripper_coordinate = irp6p->ecp_td.current_gripper_coordinate;
+		irp6ot->mp_command.instruction.arm.pf_def.gripper_coordinate = irp6ot->ecp_reply_package.reply_package.arm.pf_def.gripper_coordinate;
+		irp6p->mp_command.instruction.arm.pf_def.gripper_coordinate = irp6p->ecp_reply_package.reply_package.arm.pf_def.gripper_coordinate;
 	}
 
-	lib::Homog_matrix irp6ot_current_arm_frame(irp6ot->ecp_td.current_arm_frame);
-	lib::Homog_matrix irp6p_current_arm_frame(irp6p->ecp_td.current_arm_frame);
+	lib::Homog_matrix irp6ot_current_arm_frame(irp6ot->ecp_reply_package.reply_package.arm.pf_def.arm_frame);
+	lib::Homog_matrix irp6p_current_arm_frame(irp6p->ecp_reply_package.reply_package.arm.pf_def.arm_frame);
 
 	lib::Homog_matrix irp6p_goal_frame(global_base*irp6ot_current_arm_frame);
 	irp6p_goal_frame.get_xyz_angle_axis(irp6p->mp_command.instruction.arm.pf_def.arm_coordinates);
@@ -458,7 +458,7 @@ bool haptic::next_step()
 	 */
 	//	irp6p->ecp_td.MPtoECP_position_velocity[2] = 0.01;
 
-	lib::Ft_v_vector irp6p_ECPtoMP_force_xyz_torque_xyz(irp6p->ecp_td.current_force_xyz_torque_xyz);
+	lib::Ft_v_vector irp6p_ECPtoMP_force_xyz_torque_xyz(irp6p->ecp_reply_package.reply_package.arm.pf_def.force_xyz_torque_xyz);
 
 	for (int i=0; i<6; i++) {
 		irp6ot->mp_command.instruction.arm.pf_def.force_xyz_torque_xyz[i] = -irp6p_ECPtoMP_force_xyz_torque_xyz[i];
@@ -669,8 +669,8 @@ bool tff_rubik_grab::next_step()
 	// if (irp6p->new_pulse) printf("irp6p: \n");
 
 	if (node_counter==2) {
-		irp6ot->mp_command.instruction.arm.pf_def.gripper_coordinate = irp6ot->ecp_td.current_gripper_coordinate;
-		irp6p->mp_command.instruction.arm.pf_def.gripper_coordinate = irp6p->ecp_td.current_gripper_coordinate;
+		irp6ot->mp_command.instruction.arm.pf_def.gripper_coordinate = irp6ot->ecp_reply_package.reply_package.arm.pf_def.gripper_coordinate;
+		irp6p->mp_command.instruction.arm.pf_def.gripper_coordinate = irp6p->ecp_reply_package.reply_package.arm.pf_def.gripper_coordinate;
 	}
 
 	if (irp6ot_con) {
@@ -680,7 +680,7 @@ bool tff_rubik_grab::next_step()
 			return false;
 		}
 	} else
-		irp6ot->mp_command.instruction.arm.pf_def.gripper_coordinate = irp6ot->ecp_td.current_gripper_coordinate;
+		irp6ot->mp_command.instruction.arm.pf_def.gripper_coordinate = irp6ot->ecp_reply_package.reply_package.arm.pf_def.gripper_coordinate;
 
 	if (irp6p_con) {
 		if ((irp6p->mp_command.instruction.arm.pf_def.gripper_coordinate > goal_position) || (node_counter < min_node_counter))
@@ -689,7 +689,7 @@ bool tff_rubik_grab::next_step()
 			return false;
 		}
 	} else
-		irp6p->mp_command.instruction.arm.pf_def.gripper_coordinate = irp6p->ecp_td.current_gripper_coordinate;
+		irp6p->mp_command.instruction.arm.pf_def.gripper_coordinate = irp6p->ecp_reply_package.reply_package.arm.pf_def.gripper_coordinate;
 
 	irp6ot->mp_command.instruction.instruction_type = lib::SET_GET;
 	irp6p->mp_command.instruction.instruction_type = lib::SET_GET;
@@ -864,10 +864,10 @@ bool tff_rubik_face_rotate::next_step()
 	if (node_counter==3) {
 		irp6ot->mp_command.instruction.instruction_type = lib::SET_GET;
 		irp6p->mp_command.instruction.instruction_type = lib::SET_GET;
-		irp6p->mp_command.instruction.arm.pf_def.gripper_coordinate = irp6p->ecp_td.current_gripper_coordinate;
-		irp6ot->mp_command.instruction.arm.pf_def.gripper_coordinate = irp6ot->ecp_td.current_gripper_coordinate;
+		irp6p->mp_command.instruction.arm.pf_def.gripper_coordinate = irp6p->ecp_reply_package.reply_package.arm.pf_def.gripper_coordinate;
+		irp6ot->mp_command.instruction.arm.pf_def.gripper_coordinate = irp6ot->ecp_reply_package.reply_package.arm.pf_def.gripper_coordinate;
 		if (irp6ot_con < -0.1 || 0.1 < irp6ot_con) {
-			lib::Homog_matrix frame(irp6ot->ecp_td.current_arm_frame);
+			lib::Homog_matrix frame(irp6ot->ecp_reply_package.reply_package.arm.pf_def.arm_frame);
 			double xyz_eul_zyz[6];
 			frame.get_xyz_euler_zyz(xyz_eul_zyz);
 			double angle_to_move = (irp6ot_con / 180.0) * M_PI;
@@ -883,7 +883,7 @@ bool tff_rubik_face_rotate::next_step()
 			}
 		}
 		if (irp6p_con < -0.1 || 0.1 < irp6p_con) {
-			lib::Homog_matrix frame(irp6p->ecp_td.current_arm_frame);
+			lib::Homog_matrix frame(irp6p->ecp_reply_package.reply_package.arm.pf_def.arm_frame);
 			double xyz_eul_zyz[6];
 			frame.get_xyz_euler_zyz(xyz_eul_zyz);
 			double angle_to_move = (irp6p_con / 180.0) * M_PI;
@@ -901,7 +901,7 @@ bool tff_rubik_face_rotate::next_step()
 	}
 	if (node_counter >= 3) {
 		if (irp6p_con < -0.1 || 0.1 < irp6p_con) {
-			lib::Homog_matrix current_frame(irp6p->ecp_td.current_arm_frame);
+			lib::Homog_matrix current_frame(irp6p->ecp_reply_package.reply_package.arm.pf_def.arm_frame);
 			double xyz_eul_zyz[6];
 			current_frame.get_xyz_euler_zyz(xyz_eul_zyz);
 			double current_gamma = xyz_eul_zyz[5];
@@ -917,7 +917,7 @@ bool tff_rubik_face_rotate::next_step()
 			}
 		}
 		if (irp6ot_con < -0.1 || 0.1 < irp6ot_con) {
-			lib::Homog_matrix current_frame(irp6ot->ecp_td.current_arm_frame);
+			lib::Homog_matrix current_frame(irp6ot->ecp_reply_package.reply_package.arm.pf_def.arm_frame);
 			double xyz_eul_zyz[6];
 			current_frame.get_xyz_euler_zyz(xyz_eul_zyz);
 			double current_gamma = xyz_eul_zyz[5];
@@ -943,8 +943,8 @@ bool tff_rubik_face_rotate::next_step()
 		return false;
 	}
 
-	irp6ot->mp_command.instruction.arm.pf_def.gripper_coordinate = irp6ot->ecp_td.current_gripper_coordinate;
-	irp6p->mp_command.instruction.arm.pf_def.gripper_coordinate = irp6p->ecp_td.current_gripper_coordinate;
+	irp6ot->mp_command.instruction.arm.pf_def.gripper_coordinate = irp6ot->ecp_reply_package.reply_package.arm.pf_def.gripper_coordinate;
+	irp6p->mp_command.instruction.arm.pf_def.gripper_coordinate = irp6p->ecp_reply_package.reply_package.arm.pf_def.gripper_coordinate;
 
 	// UWAGA: dzialamy na jednoelementowej liscie robotow
 	if (irp6ot->ecp_reply_package.reply == lib::TASK_TERMINATED) {
@@ -1073,8 +1073,8 @@ bool tff_gripper_approach::next_step()
 	if (node_counter==3) {
 		irp6ot->mp_command.instruction.instruction_type = lib::SET_GET;
 		irp6p->mp_command.instruction.instruction_type = lib::SET_GET;
-		irp6p->mp_command.instruction.arm.pf_def.gripper_coordinate = irp6p->ecp_td.current_gripper_coordinate;
-		irp6ot->mp_command.instruction.arm.pf_def.gripper_coordinate = irp6ot->ecp_td.current_gripper_coordinate;
+		irp6p->mp_command.instruction.arm.pf_def.gripper_coordinate = irp6p->ecp_reply_package.reply_package.arm.pf_def.gripper_coordinate;
+		irp6ot->mp_command.instruction.arm.pf_def.gripper_coordinate = irp6ot->ecp_reply_package.reply_package.arm.pf_def.gripper_coordinate;
 
 	}
 
@@ -1269,7 +1269,7 @@ bool nose_run_force::next_step()
 	conv->mp_command.instruction.get_arm_type = lib::INVALID_END_EFFECTOR;
 
 	for (i=0; i<6; i++) {
-		conv->mp_command.instruction.arm.pf_def.arm_coordinates[i]=conv->ecp_td.current_joint_arm_coordinates[i];
+		conv->mp_command.instruction.arm.pf_def.arm_coordinates[i]=conv->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[i];
 	}
 
 	// UWAGA: dzialamy na jednoelementowej liscie robotow
@@ -1824,7 +1824,7 @@ bool drawing_teach_in_force::next_step()
 		prev_gen_state=gen_state;
 
 		// DRUGI ROBOT - CONVEYOR
-		conv->mp_command.instruction.arm.pf_def.arm_coordinates[0]= conv->ecp_td.current_joint_arm_coordinates[0]+conv_summar_inc;
+		conv->mp_command.instruction.arm.pf_def.arm_coordinates[0]= conv->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[0]+conv_summar_inc;
 
 		return true;
 
@@ -1844,11 +1844,11 @@ bool drawing_teach_in_force::next_step()
 		}
 
 		for (i=0; i<6; i++) {
-			inc_delta[i]=-irp6ot->ecp_td.current_XYZ_ZYZ_arm_coordinates[i];
+			inc_delta[i]=-irp6ot->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[i];
 		}
 
 		for (i=0; i<6; i++) {
-			inc_delta[i]+=irp6ot->ecp_td.current_XYZ_ZYZ_arm_coordinates[i];
+			inc_delta[i]+=irp6ot->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[i];
 		}
 
 		// Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
@@ -1860,7 +1860,7 @@ bool drawing_teach_in_force::next_step()
 		irp6p->mp_command.instruction.get_arm_type = lib::INVALID_END_EFFECTOR;
 
 		for (i=0; i<6; i++) {
-			irp6p->mp_command.instruction.arm.pf_def.arm_coordinates[i]=irp6p->ecp_td.current_joint_arm_coordinates[i];
+			irp6p->mp_command.instruction.arm.pf_def.arm_coordinates[i]=irp6p->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[i];
 		}
 
 		irp6p->mp_command.instruction.instruction_type = lib::SET_GET;
@@ -1872,7 +1872,7 @@ bool drawing_teach_in_force::next_step()
 		conv->mp_command.instruction.get_type = NOTHING_DV;
 		conv->mp_command.instruction.get_arm_type = lib::INVALID_END_EFFECTOR;
 
-		conv->mp_command.instruction.arm.pf_def.arm_coordinates[0]= conv->ecp_td.current_joint_arm_coordinates[0];
+		conv->mp_command.instruction.arm.pf_def.arm_coordinates[0]= conv->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[0];
 
 		// 	if (vsp_force_irp6ot->image.sensor_union.force.event_type==2) {
 		if (vsp_force_irp6ot->image.sensor_union.force.event_type==2) {

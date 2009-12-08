@@ -232,14 +232,14 @@ void manip_and_conv::get_arm_reply(void)
 	switch (ecp_reply_package.reply_package.arm_type) {
 		case lib::MOTOR:
 			for (int i=0; i<servos_number; i++) {
-				ecp_td.current_motor_arm_coordinates[i]
+				ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[i]
 						= ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[i];
 			}
 
 			break;
 		case lib::JOINT:
 			for (int i=0; i<servos_number; i++) {
-				ecp_td.current_joint_arm_coordinates[i]
+				ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[i]
 						= ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[i];
 			}
 
@@ -247,14 +247,14 @@ void manip_and_conv::get_arm_reply(void)
 		case lib::FRAME:
 			if (robot_name == lib::ROBOT_CONVEYOR)
 				throw MP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
-			lib::copy_frame(ecp_td.current_arm_frame, ecp_reply_package.reply_package.arm.pf_def.arm_frame);
+			lib::copy_frame(ecp_reply_package.reply_package.arm.pf_def.arm_frame, ecp_reply_package.reply_package.arm.pf_def.arm_frame);
 
 			break;
 		case lib::XYZ_EULER_ZYZ:
 			if (robot_name == lib::ROBOT_CONVEYOR)
 				throw MP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 			for (int i=0; i<6; i++) {
-				ecp_td.current_XYZ_ZYZ_arm_coordinates[i]
+				ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[i]
 						= ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[i];
 			}
 
@@ -263,7 +263,7 @@ void manip_and_conv::get_arm_reply(void)
 			if (robot_name == lib::ROBOT_CONVEYOR)
 				throw MP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 			for (int i=0; i<6; i++) {
-				ecp_td.current_XYZ_AA_arm_coordinates[i]
+				ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[i]
 						= ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[i];
 			}
 
@@ -273,13 +273,13 @@ void manip_and_conv::get_arm_reply(void)
 	}
 
 	for (int i = 0; i<6; i++) {
-		ecp_td.current_force_xyz_torque_xyz[i]
+		ecp_reply_package.reply_package.arm.pf_def.force_xyz_torque_xyz[i]
 				= ecp_reply_package.reply_package.arm.pf_def.force_xyz_torque_xyz[i];
 	}
 
 	if (has_gripper) {
-		ecp_td.gripper_reg_state = ecp_reply_package.reply_package.arm.pf_def.gripper_reg_state;
-		ecp_td.current_gripper_coordinate = ecp_reply_package.reply_package.arm.pf_def.gripper_coordinate;
+		ecp_reply_package.reply_package.arm.pf_def.gripper_reg_state = ecp_reply_package.reply_package.arm.pf_def.gripper_reg_state;
+		ecp_reply_package.reply_package.arm.pf_def.gripper_coordinate = ecp_reply_package.reply_package.arm.pf_def.gripper_coordinate;
 	}
 
 }
@@ -292,7 +292,7 @@ void manip_and_conv::get_rmodel_reply(void)
 					!= lib::ROBOT_IRP6_MECHATRONIKA) {
 				throw MP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 			}
-			lib::copy_frame(ecp_td.current_tool_frame, ecp_reply_package.reply_package.rmodel.tool_frame_def.tool_frame);
+			lib::copy_frame(ecp_reply_package.reply_package.rmodel.tool_frame_def.tool_frame, ecp_reply_package.reply_package.rmodel.tool_frame_def.tool_frame);
 			break;
 		case lib::TOOL_XYZ_ANGLE_AXIS:
 			if (robot_name != lib::ROBOT_IRP6_POSTUMENT && robot_name != lib::ROBOT_IRP6_ON_TRACK && robot_name
@@ -300,7 +300,7 @@ void manip_and_conv::get_rmodel_reply(void)
 				throw MP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 			}
 			for (int i=0; i<6; i++) {
-				ecp_td.current_XYZ_AA_tool_coordinates[i]
+				ecp_reply_package.reply_package.rmodel.tool_coordinate_def.tool_coordinates[i]
 						= ecp_reply_package.reply_package.rmodel.tool_coordinate_def.tool_coordinates[i];
 			}
 			break;
@@ -310,7 +310,7 @@ void manip_and_conv::get_rmodel_reply(void)
 				throw MP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 			}
 			for (int i=0; i<6; i++) {
-				ecp_td.current_XYZ_ZYZ_tool_coordinates[i]
+				ecp_reply_package.reply_package.rmodel.tool_coordinate_def.tool_coordinates[i]
 						= ecp_reply_package.reply_package.rmodel.tool_coordinate_def.tool_coordinates[i];
 			}
 			break;
@@ -319,28 +319,28 @@ void manip_and_conv::get_rmodel_reply(void)
 				throw MP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 			}
 			for (int i=0; i<6; i++) {
-				ecp_td.current_XYZ_ZYZ_tool_coordinates[i]
+				ecp_reply_package.reply_package.rmodel.tool_coordinate_def.tool_coordinates[i]
 						= ecp_reply_package.reply_package.rmodel.tool_coordinate_def.tool_coordinates[i];
 			}
 			break;
 		case lib::ARM_KINEMATIC_MODEL:
-			ecp_td.current_kinematic_model_no
+			ecp_reply_package.reply_package.rmodel.kinematic_model.kinematic_model_no
 					= ecp_reply_package.reply_package.rmodel.kinematic_model.kinematic_model_no;
 			break;
 		case lib::SERVO_ALGORITHM:
 			for (int j=0; j<servos_number; j++) {
-				ecp_td.current_servo_algorithm_no[j]
+				ecp_reply_package.reply_package.rmodel.servo_algorithm.servo_algorithm_no[j]
 						= ecp_reply_package.reply_package.rmodel.servo_algorithm.servo_algorithm_no[j];
-				ecp_td.current_servo_parameters_no[j]
+				ecp_reply_package.reply_package.rmodel.servo_algorithm.servo_parameters_no[j]
 						= ecp_reply_package.reply_package.rmodel.servo_algorithm.servo_parameters_no[j];
 			}
 			break;
 		case lib::FORCE_TOOL:
 			for (int j=0; j<3; j++) {
-				ecp_td.current_force_tool_position[j]
+				ecp_reply_package.reply_package.rmodel.force_tool.position[j]
 						= ecp_reply_package.reply_package.rmodel.force_tool.position[j];
 			}
-			ecp_td.current_force_tool_weight = ecp_reply_package.reply_package.rmodel.force_tool.weight;
+			ecp_reply_package.reply_package.rmodel.force_tool.weight = ecp_reply_package.reply_package.rmodel.force_tool.weight;
 			break;
 		default: // bledny typ specyfikacji modelu robota
 			throw MP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);

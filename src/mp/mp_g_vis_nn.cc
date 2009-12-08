@@ -182,14 +182,14 @@ bool nn_eye::next_step () {
 		for (i=0; i<6; i++)
 		{	
 				
-			pose[i][0]=irp6ot->ecp_td.current_XYZ_ZYZ_arm_coordinates[i];
-			pose[i][1]=irp6ot->ecp_td.current_XYZ_ZYZ_arm_coordinates[i];
-			pose[i][2]=irp6ot->ecp_td.current_XYZ_ZYZ_arm_coordinates[i];
-			measure[i][0]=irp6ot->ecp_td.current_XYZ_ZYZ_arm_coordinates[i]; //GDY NIE MA INFO Z KAM
-			measure[i][1]=irp6ot->ecp_td.current_XYZ_ZYZ_arm_coordinates[i];
-			measure[i][2]=irp6ot->ecp_td.current_XYZ_ZYZ_arm_coordinates[i];
-			stearing[i][1]=irp6ot->ecp_td.current_XYZ_ZYZ_arm_coordinates[i];
-			stearing[i][2]=irp6ot->ecp_td.current_XYZ_ZYZ_arm_coordinates[i];
+			pose[i][0]=irp6ot->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[i];
+			pose[i][1]=irp6ot->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[i];
+			pose[i][2]=irp6ot->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[i];
+			measure[i][0]=irp6ot->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[i]; //GDY NIE MA INFO Z KAM
+			measure[i][1]=irp6ot->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[i];
+			measure[i][2]=irp6ot->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[i];
+			stearing[i][1]=irp6ot->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[i];
+			stearing[i][2]=irp6ot->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[i];
 			stearing_d[i][1]=0;
 			stearing_d[i][2]=0;
 			lasty=1000*(measure[i][0]-0.934); //proteza y skacze o 10mm
@@ -201,7 +201,7 @@ bool nn_eye::next_step () {
 	for (i=0; i<6; i++)
 	{	
 	
-	printf("%f ",irp6ot->ecp_td.current_XYZ_ZYZ_arm_coordinates[i]);
+	printf("%f ",irp6ot->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[i]);
 		
 	}
 	printf("\n");
@@ -521,16 +521,16 @@ else
 		measure[i][2]=measure[i][1];
 		measure[i][1]=measure[i][0];
 	}
-	irp6ot->mp_command.instruction.arm.pf_def.gripper_coordinate=irp6ot->ecp_td.current_gripper_coordinate;
+	irp6ot->mp_command.instruction.arm.pf_def.gripper_coordinate=irp6ot->ecp_reply_package.reply_package.arm.pf_def.gripper_coordinate;
 	
 	/*WYLACZENIE NIESTEROWANYCH OSI*/
 	for (i=0; i<0; i++)
       {
-      	irp6ot->mp_command.instruction.arm.pf_def.arm_coordinates[i]=irp6ot->ecp_td.current_XYZ_ZYZ_arm_coordinates[i];
+      	irp6ot->mp_command.instruction.arm.pf_def.arm_coordinates[i]=irp6ot->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[i];
       }
       for (i=0; i<6; i++)
       {
-      	irp6ot->mp_command.instruction.arm.pf_def.arm_coordinates[i]=irp6ot->ecp_td.current_XYZ_ZYZ_arm_coordinates[i];
+      	irp6ot->mp_command.instruction.arm.pf_def.arm_coordinates[i]=irp6ot->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[i];
       }
 	/*******************************************************/
 	

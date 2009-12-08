@@ -216,7 +216,7 @@ bool vis_force::next_step () {
  		
  		for (int i=0; i<6 ; i++)             
        printf("%f  ", robot_m[lib::ROBOT_IRP6_ON_TRACK]->mp_command.instruction.arm.pf_def.arm_coordinates[i]);
-       // printf("%f  ",robot_list->E_ptr->ecp_td.current_joint_arm_coordinates[i]);
+       // printf("%f  ",robot_list->E_ptr->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[i]);
 	printf("\n");
 	
 	printf("PO eAAAAAAAAAAAAAAAAAAAAAAAAA\n");
@@ -226,16 +226,16 @@ bool vis_force::next_step () {
 	// co blokujemy
 	// 1szy robot
 	for (i=0; i<1; i++)
-		td.coordinate_delta[i]= robot_m[lib::ROBOT_IRP6_ON_TRACK]->ecp_td.current_joint_arm_coordinates[i];
+		td.coordinate_delta[i]= robot_m[lib::ROBOT_IRP6_ON_TRACK]->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[i];
 
 	for (i=2; i<6; i++)
-		td.coordinate_delta[i]= robot_m[lib::ROBOT_IRP6_ON_TRACK]->ecp_td.current_joint_arm_coordinates[i];
+		td.coordinate_delta[i]= robot_m[lib::ROBOT_IRP6_ON_TRACK]->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[i];
 	// 2gi robot	
 // 	for (i=0; i<1; i++)
-// 		coordinate_delta2[i]=robot_list->next->E_ptr->ecp_td.current_joint_arm_coordinates[i];
+// 		coordinate_delta2[i]=robot_list->next->E_ptr->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[i];
 
 	for (i=1; i<6; i++)
-		coordinate_delta2[i]= robot_m[lib::ROBOT_IRP6_POSTUMENT]->ecp_td.current_joint_arm_coordinates[i];
+		coordinate_delta2[i]= robot_m[lib::ROBOT_IRP6_POSTUMENT]->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[i];
 	
 	
 	
@@ -294,7 +294,7 @@ if(the_first_big==1) {
 }
 
 td.coordinate_delta[1]=stearing[1][0];
-coordinate_delta2[0]=stearing[1][0]; // robot_list->next->E_ptr->ecp_td.current_joint_arm_coordinates[0];
+coordinate_delta2[0]=stearing[1][0]; // robot_list->next->E_ptr->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[0];
 	
 	if(the_first)
 {
@@ -303,15 +303,15 @@ the_second=1;
 printf("XXXXXXXXXXXXXXXXFIRST\n");
 for (i=0; i<6; i++)
 {	
-	robot_m[lib::ROBOT_IRP6_ON_TRACK]->mp_command.instruction.arm.pf_def.arm_coordinates[i]= robot_m[lib::ROBOT_IRP6_ON_TRACK]->ecp_td.current_joint_arm_coordinates[i];
-	robot_m[lib::ROBOT_IRP6_ON_TRACK]->mp_command.instruction.arm.pf_def.arm_coordinates[i]= robot_m[lib::ROBOT_IRP6_ON_TRACK]->ecp_td.current_joint_arm_coordinates[i];
-	measure[i][0]= robot_m[lib::ROBOT_IRP6_ON_TRACK]->ecp_td.current_joint_arm_coordinates[i];
-	measure[i][1]= robot_m[lib::ROBOT_IRP6_ON_TRACK]->ecp_td.current_joint_arm_coordinates[i];
-	measure[i][2]= robot_m[lib::ROBOT_IRP6_ON_TRACK]->ecp_td.current_joint_arm_coordinates[i];
+	robot_m[lib::ROBOT_IRP6_ON_TRACK]->mp_command.instruction.arm.pf_def.arm_coordinates[i]= robot_m[lib::ROBOT_IRP6_ON_TRACK]->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[i];
+	robot_m[lib::ROBOT_IRP6_ON_TRACK]->mp_command.instruction.arm.pf_def.arm_coordinates[i]= robot_m[lib::ROBOT_IRP6_ON_TRACK]->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[i];
+	measure[i][0]= robot_m[lib::ROBOT_IRP6_ON_TRACK]->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[i];
+	measure[i][1]= robot_m[lib::ROBOT_IRP6_ON_TRACK]->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[i];
+	measure[i][2]= robot_m[lib::ROBOT_IRP6_ON_TRACK]->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[i];
 	
 	// 2gi robot
-	robot_m[lib::ROBOT_IRP6_POSTUMENT]->mp_command.instruction.arm.pf_def.arm_coordinates[i]= robot_m[lib::ROBOT_IRP6_POSTUMENT]->ecp_td.current_joint_arm_coordinates[i];
-	robot_m[lib::ROBOT_IRP6_POSTUMENT]->mp_command.instruction.arm.pf_def.arm_coordinates[i]= robot_m[lib::ROBOT_IRP6_POSTUMENT]->ecp_td.current_joint_arm_coordinates[i];
+	robot_m[lib::ROBOT_IRP6_POSTUMENT]->mp_command.instruction.arm.pf_def.arm_coordinates[i]= robot_m[lib::ROBOT_IRP6_POSTUMENT]->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[i];
+	robot_m[lib::ROBOT_IRP6_POSTUMENT]->mp_command.instruction.arm.pf_def.arm_coordinates[i]= robot_m[lib::ROBOT_IRP6_POSTUMENT]->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[i];
 	}
 }
 else
@@ -320,21 +320,21 @@ if(the_second)
 printf("XXXXXXXXXXXXXXXXSEC\n");
 for (i=0; i<6; i++)
 {	
-	robot_m[lib::ROBOT_IRP6_ON_TRACK]->mp_command.instruction.arm.pf_def.arm_coordinates[i]= robot_m[lib::ROBOT_IRP6_ON_TRACK]->ecp_td.current_joint_arm_coordinates[i];
+	robot_m[lib::ROBOT_IRP6_ON_TRACK]->mp_command.instruction.arm.pf_def.arm_coordinates[i]= robot_m[lib::ROBOT_IRP6_ON_TRACK]->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[i];
 	// 2gi robot
-	robot_m[lib::ROBOT_IRP6_POSTUMENT]->mp_command.instruction.arm.pf_def.arm_coordinates[i]= robot_m[lib::ROBOT_IRP6_POSTUMENT]->ecp_td.current_joint_arm_coordinates[i];
+	robot_m[lib::ROBOT_IRP6_POSTUMENT]->mp_command.instruction.arm.pf_def.arm_coordinates[i]= robot_m[lib::ROBOT_IRP6_POSTUMENT]->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[i];
 	
 	
-// 	td.coordinate_delta[i]=robot_list->E_ptr->ecp_td.current_joint_arm_coordinates[i]; // DEBUG	
-	pose[i][0]= robot_m[lib::ROBOT_IRP6_ON_TRACK]->ecp_td.current_joint_arm_coordinates[i];
-	pose[i][1]= robot_m[lib::ROBOT_IRP6_ON_TRACK]->ecp_td.current_joint_arm_coordinates[i];
-	pose[i][2]= robot_m[lib::ROBOT_IRP6_ON_TRACK]->ecp_td.current_joint_arm_coordinates[i];
-	measure[i][0]= robot_m[lib::ROBOT_IRP6_ON_TRACK]->ecp_td.current_joint_arm_coordinates[i];
-	measure[i][1]= robot_m[lib::ROBOT_IRP6_ON_TRACK]->ecp_td.current_joint_arm_coordinates[i];
-	measure[i][2]= robot_m[lib::ROBOT_IRP6_ON_TRACK]->ecp_td.current_joint_arm_coordinates[i];
-	stearing[i][0]= robot_m[lib::ROBOT_IRP6_ON_TRACK]->ecp_td.current_joint_arm_coordinates[i];
-	stearing[i][1]= robot_m[lib::ROBOT_IRP6_ON_TRACK]->ecp_td.current_joint_arm_coordinates[i];
-	stearing[i][3]= robot_m[lib::ROBOT_IRP6_ON_TRACK]->ecp_td.current_joint_arm_coordinates[i];
+// 	td.coordinate_delta[i]=robot_list->E_ptr->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[i]; // DEBUG	
+	pose[i][0]= robot_m[lib::ROBOT_IRP6_ON_TRACK]->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[i];
+	pose[i][1]= robot_m[lib::ROBOT_IRP6_ON_TRACK]->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[i];
+	pose[i][2]= robot_m[lib::ROBOT_IRP6_ON_TRACK]->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[i];
+	measure[i][0]= robot_m[lib::ROBOT_IRP6_ON_TRACK]->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[i];
+	measure[i][1]= robot_m[lib::ROBOT_IRP6_ON_TRACK]->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[i];
+	measure[i][2]= robot_m[lib::ROBOT_IRP6_ON_TRACK]->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[i];
+	stearing[i][0]= robot_m[lib::ROBOT_IRP6_ON_TRACK]->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[i];
+	stearing[i][1]= robot_m[lib::ROBOT_IRP6_ON_TRACK]->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[i];
+	stearing[i][3]= robot_m[lib::ROBOT_IRP6_ON_TRACK]->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[i];
 }
 	
 the_second=0;
@@ -344,7 +344,7 @@ the_second=0;
 	
  	for (int i=0; i<6 ; i++)             
        printf("%f  ", robot_m[lib::ROBOT_IRP6_ON_TRACK]->mp_command.instruction.arm.pf_def.arm_coordinates[i]);
-       // printf("%f  ",robot_list->E_ptr->ecp_td.current_joint_arm_coordinates[i]);
+       // printf("%f  ",robot_list->E_ptr->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[i]);
 	printf("\n");
 	
 	printf("PO eAAAAAAAAAAAAAAAAAAAAAAAAA\n");
@@ -358,15 +358,15 @@ else
 		robot_m[lib::ROBOT_IRP6_POSTUMENT]->mp_command.instruction.arm.pf_def.arm_coordinates[i] = coordinate_delta2[i]; // 2gi robot
 		pose[i][2]=pose[i][1];		
 		pose[i][1]=pose[i][0];
-		pose[i][0]=robot_m[lib::ROBOT_IRP6_ON_TRACK]->ecp_td.current_joint_arm_coordinates[i];
+		pose[i][0]=robot_m[lib::ROBOT_IRP6_ON_TRACK]->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[i];
 		
 		stearing[i][2]=stearing[i][1];
 		stearing[i][1]=stearing[i][2];
 		stearing[i][1]=stearing[i][0];
 		if(the_first_big==1) {
-		measure[i][0]= robot_m[lib::ROBOT_IRP6_ON_TRACK]->ecp_td.current_joint_arm_coordinates[i];
-		measure[i][1]= robot_m[lib::ROBOT_IRP6_ON_TRACK]->ecp_td.current_joint_arm_coordinates[i];
-		measure[i][2]= robot_m[lib::ROBOT_IRP6_ON_TRACK]->ecp_td.current_joint_arm_coordinates[i];
+		measure[i][0]= robot_m[lib::ROBOT_IRP6_ON_TRACK]->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[i];
+		measure[i][1]= robot_m[lib::ROBOT_IRP6_ON_TRACK]->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[i];
+		measure[i][2]= robot_m[lib::ROBOT_IRP6_ON_TRACK]->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[i];
 		}
 		
 		
