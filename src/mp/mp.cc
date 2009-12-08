@@ -175,7 +175,7 @@ bool extended_empty::first_step ()
     BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
     {
     	robot_node.second->ecp_td.mp_command = lib::NEXT_POSE;
-    	robot_node.second->ecp_td.instruction_type = lib::QUERY;
+    	robot_node.second->mp_command.instruction.instruction_type = lib::QUERY;
     	robot_node.second->communicate = false;
     }
 
@@ -241,7 +241,7 @@ bool empty::first_step ()
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
     {
 		robot_node.second->ecp_td.mp_command = lib::NEXT_POSE;
-		robot_node.second->ecp_td.instruction_type = lib::QUERY;
+		robot_node.second->mp_command.instruction.instruction_type = lib::QUERY;
 		robot_node.second->communicate = true;
     }
 
@@ -306,13 +306,13 @@ bool tight_coop::first_step ()
     BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
     {
     	robot_node.second->ecp_td.mp_command = lib::NEXT_POSE;
-    	robot_node.second->ecp_td.instruction_type = lib::GET;
-    	robot_node.second->ecp_td.get_type = ARM_DV;
-    	robot_node.second->ecp_td.set_type = ARM_DV;
-    	robot_node.second->ecp_td.set_arm_type = lib::XYZ_EULER_ZYZ;
-    	robot_node.second->ecp_td.get_arm_type = lib::XYZ_EULER_ZYZ;
+    	robot_node.second->mp_command.instruction.instruction_type = lib::GET;
+    	robot_node.second->mp_command.instruction.get_type = ARM_DV;
+    	robot_node.second->mp_command.instruction.set_type = ARM_DV;
+    	robot_node.second->mp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
+    	robot_node.second->mp_command.instruction.get_arm_type = lib::XYZ_EULER_ZYZ;
     	robot_node.second->ecp_td.motion_type = lib::ABSOLUTE;
-    	robot_node.second->ecp_td.next_interpolation_type = lib::MIM;
+    	robot_node.second->mp_command.instruction.interpolation_type = lib::MIM;
     	robot_node.second->ecp_td.motion_steps = irp6ot_td.internode_step_no;
     	robot_node.second->ecp_td.value_in_step_no = irp6ot_td.value_in_step_no;
     	robot_node.second->communicate = true;
@@ -345,9 +345,9 @@ bool tight_coop::next_step ()
     common::robots_t::iterator robot_m_iterator = robot_m.begin();
 
     // Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
-    robot_m_iterator->second->ecp_td.instruction_type = lib::SET;
-    robot_m_iterator->second->ecp_td.get_type = NOTHING_DV;
-    robot_m_iterator->second->ecp_td.get_arm_type = lib::INVALID_END_EFFECTOR;
+    robot_m_iterator->second->mp_command.instruction.instruction_type = lib::SET;
+    robot_m_iterator->second->mp_command.instruction.get_type = NOTHING_DV;
+    robot_m_iterator->second->mp_command.instruction.get_arm_type = lib::INVALID_END_EFFECTOR;
 
     // Obliczenie zadanej pozycji posredniej w tym kroku ruchu
     // (okreslenie kolejnego wezla interpolacji)
@@ -375,9 +375,9 @@ bool tight_coop::next_step ()
     if ((++robot_m_iterator) != robot_m.end())
     {
         // Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
-        robot_m_iterator->second->ecp_td.instruction_type = lib::SET;
-        robot_m_iterator->second->ecp_td.get_type = NOTHING_DV;
-        robot_m_iterator->second->ecp_td.get_arm_type = lib::INVALID_END_EFFECTOR;
+        robot_m_iterator->second->mp_command.instruction.instruction_type = lib::SET;
+        robot_m_iterator->second->mp_command.instruction.get_type = NOTHING_DV;
+        robot_m_iterator->second->mp_command.instruction.get_arm_type = lib::INVALID_END_EFFECTOR;
         // Obliczenie zadanej pozycji posredniej w tym kroku ruchu
         // (okreslenie kolejnego wezla interpolacji)
         for (i = 0; i < 6; i++) // zakladamy, ze na liscie jest jeden robot

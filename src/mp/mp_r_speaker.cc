@@ -20,9 +20,9 @@ void speaker::create_next_pose_command (void)
 	// wypelnia bufor wysylkowy do ECP na podstawie danych
 	// zawartych w skladowych generatora lub warunku
 
-	mp_command.instruction.instruction_type = ecp_td.instruction_type;
+	mp_command.instruction.instruction_type = mp_command.instruction.instruction_type;
 
-	switch (ecp_td.instruction_type) {
+	switch (mp_command.instruction.instruction_type) {
 		case lib::SET:
 		case lib::SET_GET:
 			// Wypelniamy czesc zwiazana z polozeniem ramienia

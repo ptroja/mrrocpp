@@ -51,20 +51,20 @@ bool tff_single_robot_nose_run::first_step()
 	td.internode_step_no = step_no;
 	td.value_in_step_no = td.internode_step_no - 2;
 	irp6->ecp_td.mp_command = lib::NEXT_POSE;
-	irp6->ecp_td.instruction_type = lib::GET;
-	irp6->ecp_td.get_type = ARM_DV;
-	irp6->ecp_td.set_type = ARM_DV | RMODEL_DV;
-	irp6->ecp_td.set_rmodel_type = lib::TOOL_FRAME;
-	irp6->ecp_td.get_rmodel_type = lib::TOOL_FRAME;
-	irp6->ecp_td.set_arm_type = lib::PF_VELOCITY;
-	irp6->ecp_td.get_arm_type = lib::FRAME;
+	irp6->mp_command.instruction.instruction_type = lib::GET;
+	irp6->mp_command.instruction.get_type = ARM_DV;
+	irp6->mp_command.instruction.set_type = ARM_DV | RMODEL_DV;
+	irp6->mp_command.instruction.set_rmodel_type = lib::TOOL_FRAME;
+	irp6->mp_command.instruction.get_rmodel_type = lib::TOOL_FRAME;
+	irp6->mp_command.instruction.set_arm_type = lib::PF_VELOCITY;
+	irp6->mp_command.instruction.get_arm_type = lib::FRAME;
 	irp6->ecp_td.motion_type = lib::RELATIVE;
-	irp6->ecp_td.next_interpolation_type = lib::TCIM;
+	irp6->mp_command.instruction.interpolation_type = lib::TCIM;
 	irp6->ecp_td.motion_steps = td.internode_step_no;
 	irp6->ecp_td.value_in_step_no = td.value_in_step_no;
 
 	lib::Homog_matrix tool_frame(0.0, 0.0, 0.25);
-	tool_frame.get_frame_tab(irp6->ecp_td.next_tool_frame);
+	tool_frame.get_frame_tab(irp6->mp_command.instruction.rmodel.tool_frame_def.tool_frame);
 
 	for (int i=0; i<6; i++) {
 		irp6->ecp_td.next_velocity[i] = 0;
@@ -117,7 +117,7 @@ bool tff_single_robot_nose_run::next_step()
 
 	irp6->ecp_td.next_gripper_coordinate = irp6->ecp_td.current_gripper_coordinate;
 
-	irp6->ecp_td.instruction_type = lib::SET_GET;
+	irp6->mp_command.instruction.instruction_type = lib::SET_GET;
 
 	// UWAGA: dzialamy na jednoelementowej liscie robotow
 	if (irp6->ecp_td.ecp_reply == lib::TASK_TERMINATED) {
@@ -164,15 +164,15 @@ bool tff_nose_run::first_step()
 	td.internode_step_no = step_no;
 	td.value_in_step_no = td.internode_step_no - 2;
 	irp6ot->ecp_td.mp_command = lib::NEXT_POSE;
-	irp6ot->ecp_td.instruction_type = lib::GET;
-	irp6ot->ecp_td.get_type = ARM_DV;
-	irp6ot->ecp_td.set_type = ARM_DV | RMODEL_DV;
-	irp6ot->ecp_td.set_rmodel_type = lib::TOOL_FRAME;
-	irp6ot->ecp_td.get_rmodel_type = lib::TOOL_FRAME;
-	irp6ot->ecp_td.set_arm_type = lib::PF_VELOCITY;
-	irp6ot->ecp_td.get_arm_type = lib::FRAME;
+	irp6ot->mp_command.instruction.instruction_type = lib::GET;
+	irp6ot->mp_command.instruction.get_type = ARM_DV;
+	irp6ot->mp_command.instruction.set_type = ARM_DV | RMODEL_DV;
+	irp6ot->mp_command.instruction.set_rmodel_type = lib::TOOL_FRAME;
+	irp6ot->mp_command.instruction.get_rmodel_type = lib::TOOL_FRAME;
+	irp6ot->mp_command.instruction.set_arm_type = lib::PF_VELOCITY;
+	irp6ot->mp_command.instruction.get_arm_type = lib::FRAME;
 	irp6ot->ecp_td.motion_type = lib::RELATIVE;
-	irp6ot->ecp_td.next_interpolation_type = lib::TCIM;
+	irp6ot->mp_command.instruction.interpolation_type = lib::TCIM;
 	irp6ot->ecp_td.motion_steps = td.internode_step_no;
 	irp6ot->ecp_td.value_in_step_no = td.value_in_step_no;
 
@@ -197,22 +197,22 @@ bool tff_nose_run::first_step()
 	}
 
 	lib::Homog_matrix tool_frame(0.0, 0.0, 0.25);
-	tool_frame.get_frame_tab(irp6ot->ecp_td.next_tool_frame);
+	tool_frame.get_frame_tab(irp6ot->mp_command.instruction.rmodel.tool_frame_def.tool_frame);
 
 	irp6p->ecp_td.mp_command = lib::NEXT_POSE;
-	irp6p->ecp_td.instruction_type = lib::GET;
-	irp6p->ecp_td.get_type = ARM_DV;
-	irp6p->ecp_td.set_type = ARM_DV | RMODEL_DV;
-	irp6p->ecp_td.set_rmodel_type = lib::TOOL_FRAME;
-	irp6p->ecp_td.get_rmodel_type = lib::TOOL_FRAME;
-	irp6p->ecp_td.set_arm_type = lib::PF_VELOCITY;
-	irp6p->ecp_td.get_arm_type = lib::FRAME;
+	irp6p->mp_command.instruction.instruction_type = lib::GET;
+	irp6p->mp_command.instruction.get_type = ARM_DV;
+	irp6p->mp_command.instruction.set_type = ARM_DV | RMODEL_DV;
+	irp6p->mp_command.instruction.set_rmodel_type = lib::TOOL_FRAME;
+	irp6p->mp_command.instruction.get_rmodel_type = lib::TOOL_FRAME;
+	irp6p->mp_command.instruction.set_arm_type = lib::PF_VELOCITY;
+	irp6p->mp_command.instruction.get_arm_type = lib::FRAME;
 	irp6p->ecp_td.motion_type = lib::RELATIVE;
-	irp6p->ecp_td.next_interpolation_type = lib::TCIM;
+	irp6p->mp_command.instruction.interpolation_type = lib::TCIM;
 	irp6p->ecp_td.motion_steps = td.internode_step_no;
 	irp6p->ecp_td.value_in_step_no = td.value_in_step_no;
 
-	tool_frame.get_frame_tab(irp6p->ecp_td.next_tool_frame);
+	tool_frame.get_frame_tab(irp6p->mp_command.instruction.rmodel.tool_frame_def.tool_frame);
 
 	for (int i=0; i<3; i++) {
 		irp6p->ecp_td.next_velocity[i] = 0;
@@ -273,8 +273,8 @@ bool tff_nose_run::next_step()
 		irp6p->ecp_td.next_gripper_coordinate = irp6p->ecp_td.current_gripper_coordinate;
 	}
 
-	irp6ot->ecp_td.instruction_type = lib::SET_GET;
-	irp6p->ecp_td.instruction_type = lib::SET_GET;
+	irp6ot->mp_command.instruction.instruction_type = lib::SET_GET;
+	irp6p->mp_command.instruction.instruction_type = lib::SET_GET;
 
 	// UWAGA: dzialamy na jednoelementowej liscie robotow
 	if ((irp6ot->ecp_td.ecp_reply == lib::TASK_TERMINATED ) || (irp6ot->ecp_td.ecp_reply == lib::TASK_TERMINATED )) {
@@ -315,15 +315,15 @@ bool haptic::first_step()
 	td.internode_step_no = step_no;
 	td.value_in_step_no = td.internode_step_no - 2;
 	irp6ot->ecp_td.mp_command = lib::NEXT_POSE;
-	irp6ot->ecp_td.instruction_type = lib::GET;
-	irp6ot->ecp_td.get_type = ARM_DV;
-	irp6ot->ecp_td.set_type = ARM_DV | RMODEL_DV;
-	irp6ot->ecp_td.set_rmodel_type = lib::TOOL_FRAME;
-	irp6ot->ecp_td.get_rmodel_type = lib::TOOL_FRAME;
-	irp6ot->ecp_td.set_arm_type = lib::PF_VELOCITY;
-	irp6ot->ecp_td.get_arm_type = lib::FRAME;
+	irp6ot->mp_command.instruction.instruction_type = lib::GET;
+	irp6ot->mp_command.instruction.get_type = ARM_DV;
+	irp6ot->mp_command.instruction.set_type = ARM_DV | RMODEL_DV;
+	irp6ot->mp_command.instruction.set_rmodel_type = lib::TOOL_FRAME;
+	irp6ot->mp_command.instruction.get_rmodel_type = lib::TOOL_FRAME;
+	irp6ot->mp_command.instruction.set_arm_type = lib::PF_VELOCITY;
+	irp6ot->mp_command.instruction.get_arm_type = lib::FRAME;
 	irp6ot->ecp_td.motion_type = lib::RELATIVE;
-	irp6ot->ecp_td.next_interpolation_type = lib::TCIM;
+	irp6ot->mp_command.instruction.interpolation_type = lib::TCIM;
 	irp6ot->ecp_td.motion_steps = td.internode_step_no;
 	irp6ot->ecp_td.value_in_step_no = td.value_in_step_no;
 
@@ -353,22 +353,22 @@ bool haptic::first_step()
 	}
 
 	lib::Homog_matrix tool_frame(0.0, 0.0, 0.25);
-	tool_frame.get_frame_tab(irp6ot->ecp_td.next_tool_frame);
+	tool_frame.get_frame_tab(irp6ot->mp_command.instruction.rmodel.tool_frame_def.tool_frame);
 
 	irp6p->ecp_td.mp_command = lib::NEXT_POSE;
-	irp6p->ecp_td.instruction_type = lib::GET;
-	irp6p->ecp_td.get_type = ARM_DV;
-	irp6p->ecp_td.set_type = ARM_DV | RMODEL_DV;
-	irp6p->ecp_td.set_rmodel_type = lib::TOOL_FRAME;
-	irp6p->ecp_td.get_rmodel_type = lib::TOOL_FRAME;
-	irp6p->ecp_td.set_arm_type = lib::XYZ_ANGLE_AXIS;
-	irp6p->ecp_td.get_arm_type = lib::FRAME;
+	irp6p->mp_command.instruction.instruction_type = lib::GET;
+	irp6p->mp_command.instruction.get_type = ARM_DV;
+	irp6p->mp_command.instruction.set_type = ARM_DV | RMODEL_DV;
+	irp6p->mp_command.instruction.set_rmodel_type = lib::TOOL_FRAME;
+	irp6p->mp_command.instruction.get_rmodel_type = lib::TOOL_FRAME;
+	irp6p->mp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
+	irp6p->mp_command.instruction.get_arm_type = lib::FRAME;
 	irp6p->ecp_td.motion_type = lib::ABSOLUTE;
-	irp6p->ecp_td.next_interpolation_type = lib::TCIM;
+	irp6p->mp_command.instruction.interpolation_type = lib::TCIM;
 	irp6p->ecp_td.motion_steps = td.internode_step_no;
 	irp6p->ecp_td.value_in_step_no = td.value_in_step_no;
 
-	tool_frame.get_frame_tab(irp6p->ecp_td.next_tool_frame);
+	tool_frame.get_frame_tab(irp6p->mp_command.instruction.rmodel.tool_frame_def.tool_frame);
 
 	for (int i=0; i<3; i++) {
 		irp6p->ecp_td.next_XYZ_AA_arm_coordinates[i] = 0;
@@ -432,8 +432,8 @@ bool haptic::next_step()
 
 	if (node_counter==3) {
 
-		irp6ot->ecp_td.instruction_type = lib::SET_GET;
-		irp6p->ecp_td.instruction_type = lib::SET_GET;
+		irp6ot->mp_command.instruction.instruction_type = lib::SET_GET;
+		irp6p->mp_command.instruction.instruction_type = lib::SET_GET;
 
 		irp6ot->ecp_td.next_gripper_coordinate = irp6ot->ecp_td.current_gripper_coordinate;
 		irp6p->ecp_td.next_gripper_coordinate = irp6p->ecp_td.current_gripper_coordinate;
@@ -525,20 +525,20 @@ bool tff_rubik_grab::first_step()
 	td.internode_step_no = step_no;
 	td.value_in_step_no = td.internode_step_no - 2;
 	irp6ot->ecp_td.mp_command = lib::NEXT_POSE;
-	irp6ot->ecp_td.instruction_type = lib::GET;
-	irp6ot->ecp_td.get_type = ARM_DV;
-	irp6ot->ecp_td.set_type = ARM_DV | RMODEL_DV;
-	irp6ot->ecp_td.set_rmodel_type = lib::TOOL_FRAME;
-	irp6ot->ecp_td.get_rmodel_type = lib::TOOL_FRAME;
-	irp6ot->ecp_td.set_arm_type = lib::PF_VELOCITY;
-	irp6ot->ecp_td.get_arm_type = lib::FRAME;
+	irp6ot->mp_command.instruction.instruction_type = lib::GET;
+	irp6ot->mp_command.instruction.get_type = ARM_DV;
+	irp6ot->mp_command.instruction.set_type = ARM_DV | RMODEL_DV;
+	irp6ot->mp_command.instruction.set_rmodel_type = lib::TOOL_FRAME;
+	irp6ot->mp_command.instruction.get_rmodel_type = lib::TOOL_FRAME;
+	irp6ot->mp_command.instruction.set_arm_type = lib::PF_VELOCITY;
+	irp6ot->mp_command.instruction.get_arm_type = lib::FRAME;
 	irp6ot->ecp_td.motion_type = lib::RELATIVE;
-	irp6ot->ecp_td.next_interpolation_type = lib::TCIM;
+	irp6ot->mp_command.instruction.interpolation_type = lib::TCIM;
 	irp6ot->ecp_td.motion_steps = td.internode_step_no;
 	irp6ot->ecp_td.value_in_step_no = td.value_in_step_no;
 
 	lib::Homog_matrix tool_frame(0.0, 0.0, 0.25);
-	tool_frame.get_frame_tab(irp6ot->ecp_td.next_tool_frame);
+	tool_frame.get_frame_tab(irp6ot->mp_command.instruction.rmodel.tool_frame_def.tool_frame);
 
 	for (int i=0; i<3; i++) {
 		irp6ot->ecp_td.next_velocity[i] = 0;
@@ -580,19 +580,19 @@ bool tff_rubik_grab::first_step()
 			irp6ot->ecp_td.next_behaviour[i] = lib::UNGUARDED_MOTION;
 
 	irp6p->ecp_td.mp_command = lib::NEXT_POSE;
-	irp6p->ecp_td.instruction_type = lib::GET;
-	irp6p->ecp_td.get_type = ARM_DV;
-	irp6p->ecp_td.set_type = ARM_DV | RMODEL_DV;
-	irp6p->ecp_td.set_rmodel_type = lib::TOOL_FRAME;
-	irp6p->ecp_td.get_rmodel_type = lib::TOOL_FRAME;
-	irp6p->ecp_td.set_arm_type = lib::PF_VELOCITY;
-	irp6p->ecp_td.get_arm_type = lib::FRAME;
+	irp6p->mp_command.instruction.instruction_type = lib::GET;
+	irp6p->mp_command.instruction.get_type = ARM_DV;
+	irp6p->mp_command.instruction.set_type = ARM_DV | RMODEL_DV;
+	irp6p->mp_command.instruction.set_rmodel_type = lib::TOOL_FRAME;
+	irp6p->mp_command.instruction.get_rmodel_type = lib::TOOL_FRAME;
+	irp6p->mp_command.instruction.set_arm_type = lib::PF_VELOCITY;
+	irp6p->mp_command.instruction.get_arm_type = lib::FRAME;
 	irp6p->ecp_td.motion_type = lib::RELATIVE;
-	irp6p->ecp_td.next_interpolation_type = lib::TCIM;
+	irp6p->mp_command.instruction.interpolation_type = lib::TCIM;
 	irp6p->ecp_td.motion_steps = td.internode_step_no;
 	irp6p->ecp_td.value_in_step_no = td.value_in_step_no;
 
-	tool_frame.get_frame_tab(irp6p->ecp_td.next_tool_frame);
+	tool_frame.get_frame_tab(irp6p->mp_command.instruction.rmodel.tool_frame_def.tool_frame);
 
 	for (int i=0; i<3; i++) {
 		irp6p->ecp_td.next_velocity[i] = 0;
@@ -691,8 +691,8 @@ bool tff_rubik_grab::next_step()
 	} else
 		irp6p->ecp_td.next_gripper_coordinate = irp6p->ecp_td.current_gripper_coordinate;
 
-	irp6ot->ecp_td.instruction_type = lib::SET_GET;
-	irp6p->ecp_td.instruction_type = lib::SET_GET;
+	irp6ot->mp_command.instruction.instruction_type = lib::SET_GET;
+	irp6p->mp_command.instruction.instruction_type = lib::SET_GET;
 
 	// UWAGA: dzialamy na jednoelementowej liscie robotow
 	if (irp6ot->ecp_td.ecp_reply == lib::TASK_TERMINATED) {
@@ -733,20 +733,20 @@ bool tff_rubik_face_rotate::first_step()
 	td.internode_step_no = step_no;
 	td.value_in_step_no = td.internode_step_no - 2;
 	irp6ot->ecp_td.mp_command = lib::NEXT_POSE;
-	irp6ot->ecp_td.instruction_type = lib::GET;
-	irp6ot->ecp_td.get_type = ARM_DV;
-	irp6ot->ecp_td.set_type = ARM_DV | RMODEL_DV;
-	irp6ot->ecp_td.set_rmodel_type = lib::TOOL_FRAME;
-	irp6ot->ecp_td.get_rmodel_type = lib::TOOL_FRAME;
-	irp6ot->ecp_td.set_arm_type = lib::PF_VELOCITY;
-	irp6ot->ecp_td.get_arm_type = lib::FRAME;
+	irp6ot->mp_command.instruction.instruction_type = lib::GET;
+	irp6ot->mp_command.instruction.get_type = ARM_DV;
+	irp6ot->mp_command.instruction.set_type = ARM_DV | RMODEL_DV;
+	irp6ot->mp_command.instruction.set_rmodel_type = lib::TOOL_FRAME;
+	irp6ot->mp_command.instruction.get_rmodel_type = lib::TOOL_FRAME;
+	irp6ot->mp_command.instruction.set_arm_type = lib::PF_VELOCITY;
+	irp6ot->mp_command.instruction.get_arm_type = lib::FRAME;
 	irp6ot->ecp_td.motion_type = lib::RELATIVE;
-	irp6ot->ecp_td.next_interpolation_type = lib::TCIM;
+	irp6ot->mp_command.instruction.interpolation_type = lib::TCIM;
 	irp6ot->ecp_td.motion_steps = td.internode_step_no;
 	irp6ot->ecp_td.value_in_step_no = td.value_in_step_no;
 
 	lib::Homog_matrix tool_frame(0.0, 0.0, 0.25);
-	tool_frame.get_frame_tab(irp6ot->ecp_td.next_tool_frame);
+	tool_frame.get_frame_tab(irp6ot->mp_command.instruction.rmodel.tool_frame_def.tool_frame);
 
 	for (int i=0; i<3; i++) {
 		irp6ot->ecp_td.next_velocity[i] = 0;
@@ -789,19 +789,19 @@ bool tff_rubik_face_rotate::first_step()
 			irp6ot->ecp_td.next_force_xyz_torque_xyz[5] = 5;
 	}
 	irp6p->ecp_td.mp_command = lib::NEXT_POSE;
-	irp6p->ecp_td.instruction_type = lib::GET;
-	irp6p->ecp_td.get_type = ARM_DV;
-	irp6p->ecp_td.set_type = ARM_DV | RMODEL_DV;
-	irp6p->ecp_td.set_rmodel_type = lib::TOOL_FRAME;
-	irp6p->ecp_td.get_rmodel_type = lib::TOOL_FRAME;
-	irp6p->ecp_td.set_arm_type = lib::PF_VELOCITY;
-	irp6p->ecp_td.get_arm_type = lib::FRAME;
+	irp6p->mp_command.instruction.instruction_type = lib::GET;
+	irp6p->mp_command.instruction.get_type = ARM_DV;
+	irp6p->mp_command.instruction.set_type = ARM_DV | RMODEL_DV;
+	irp6p->mp_command.instruction.set_rmodel_type = lib::TOOL_FRAME;
+	irp6p->mp_command.instruction.get_rmodel_type = lib::TOOL_FRAME;
+	irp6p->mp_command.instruction.set_arm_type = lib::PF_VELOCITY;
+	irp6p->mp_command.instruction.get_arm_type = lib::FRAME;
 	irp6p->ecp_td.motion_type = lib::RELATIVE;
-	irp6p->ecp_td.next_interpolation_type = lib::TCIM;
+	irp6p->mp_command.instruction.interpolation_type = lib::TCIM;
 	irp6p->ecp_td.motion_steps = td.internode_step_no;
 	irp6p->ecp_td.value_in_step_no = td.value_in_step_no;
 
-	tool_frame.get_frame_tab(irp6p->ecp_td.next_tool_frame);
+	tool_frame.get_frame_tab(irp6p->mp_command.instruction.rmodel.tool_frame_def.tool_frame);
 
 	for (int i=0; i<3; i++) {
 		irp6p->ecp_td.next_velocity[i] = 0;
@@ -862,8 +862,8 @@ bool tff_rubik_face_rotate::next_step()
 		return true;
 	}
 	if (node_counter==3) {
-		irp6ot->ecp_td.instruction_type = lib::SET_GET;
-		irp6p->ecp_td.instruction_type = lib::SET_GET;
+		irp6ot->mp_command.instruction.instruction_type = lib::SET_GET;
+		irp6p->mp_command.instruction.instruction_type = lib::SET_GET;
 		irp6p->ecp_td.next_gripper_coordinate = irp6p->ecp_td.current_gripper_coordinate;
 		irp6ot->ecp_td.next_gripper_coordinate = irp6ot->ecp_td.current_gripper_coordinate;
 		if (irp6ot_con < -0.1 || 0.1 < irp6ot_con) {
@@ -987,20 +987,20 @@ bool tff_gripper_approach::first_step()
 	td.internode_step_no = step_no;
 	td.value_in_step_no = td.internode_step_no - 2;
 	irp6ot->ecp_td.mp_command = lib::NEXT_POSE;
-	irp6ot->ecp_td.instruction_type = lib::GET;
-	irp6ot->ecp_td.get_type = ARM_DV;
-	irp6ot->ecp_td.set_type = ARM_DV | RMODEL_DV;
-	irp6ot->ecp_td.set_rmodel_type = lib::TOOL_FRAME;
-	irp6ot->ecp_td.get_rmodel_type = lib::TOOL_FRAME;
-	irp6ot->ecp_td.set_arm_type = lib::PF_VELOCITY;
-	irp6ot->ecp_td.get_arm_type = lib::FRAME;
+	irp6ot->mp_command.instruction.instruction_type = lib::GET;
+	irp6ot->mp_command.instruction.get_type = ARM_DV;
+	irp6ot->mp_command.instruction.set_type = ARM_DV | RMODEL_DV;
+	irp6ot->mp_command.instruction.set_rmodel_type = lib::TOOL_FRAME;
+	irp6ot->mp_command.instruction.get_rmodel_type = lib::TOOL_FRAME;
+	irp6ot->mp_command.instruction.set_arm_type = lib::PF_VELOCITY;
+	irp6ot->mp_command.instruction.get_arm_type = lib::FRAME;
 	irp6ot->ecp_td.motion_type = lib::RELATIVE;
-	irp6ot->ecp_td.next_interpolation_type = lib::TCIM;
+	irp6ot->mp_command.instruction.interpolation_type = lib::TCIM;
 	irp6ot->ecp_td.motion_steps = td.internode_step_no;
 	irp6ot->ecp_td.value_in_step_no = td.value_in_step_no;
 
 	lib::Homog_matrix tool_frame(0.0, 0.0, 0.25);
-	tool_frame.get_frame_tab(irp6ot->ecp_td.next_tool_frame);
+	tool_frame.get_frame_tab(irp6ot->mp_command.instruction.rmodel.tool_frame_def.tool_frame);
 
 	for (int i=0; i<3; i++) {
 		irp6ot->ecp_td.next_inertia[i] = FORCE_INERTIA;
@@ -1020,19 +1020,19 @@ bool tff_gripper_approach::first_step()
 	irp6ot->ecp_td.next_behaviour[2] = lib::CONTACT;
 
 	irp6p->ecp_td.mp_command = lib::NEXT_POSE;
-	irp6p->ecp_td.instruction_type = lib::GET;
-	irp6p->ecp_td.get_type = ARM_DV;
-	irp6p->ecp_td.set_type = ARM_DV | RMODEL_DV;
-	irp6p->ecp_td.set_rmodel_type = lib::TOOL_FRAME;
-	irp6p->ecp_td.get_rmodel_type = lib::TOOL_FRAME;
-	irp6p->ecp_td.set_arm_type = lib::PF_VELOCITY;
-	irp6p->ecp_td.get_arm_type = lib::FRAME;
+	irp6p->mp_command.instruction.instruction_type = lib::GET;
+	irp6p->mp_command.instruction.get_type = ARM_DV;
+	irp6p->mp_command.instruction.set_type = ARM_DV | RMODEL_DV;
+	irp6p->mp_command.instruction.set_rmodel_type = lib::TOOL_FRAME;
+	irp6p->mp_command.instruction.get_rmodel_type = lib::TOOL_FRAME;
+	irp6p->mp_command.instruction.set_arm_type = lib::PF_VELOCITY;
+	irp6p->mp_command.instruction.get_arm_type = lib::FRAME;
 	irp6p->ecp_td.motion_type = lib::RELATIVE;
-	irp6p->ecp_td.next_interpolation_type = lib::TCIM;
+	irp6p->mp_command.instruction.interpolation_type = lib::TCIM;
 	irp6p->ecp_td.motion_steps = td.internode_step_no;
 	irp6p->ecp_td.value_in_step_no = td.value_in_step_no;
 
-	tool_frame.get_frame_tab(irp6p->ecp_td.next_tool_frame);
+	tool_frame.get_frame_tab(irp6p->mp_command.instruction.rmodel.tool_frame_def.tool_frame);
 
 	for (int i=0; i<3; i++) {
 		irp6p->ecp_td.next_inertia[i] = FORCE_INERTIA;
@@ -1071,8 +1071,8 @@ bool tff_gripper_approach::next_step()
 		return true;
 	}
 	if (node_counter==3) {
-		irp6ot->ecp_td.instruction_type = lib::SET_GET;
-		irp6p->ecp_td.instruction_type = lib::SET_GET;
+		irp6ot->mp_command.instruction.instruction_type = lib::SET_GET;
+		irp6p->mp_command.instruction.instruction_type = lib::SET_GET;
 		irp6p->ecp_td.next_gripper_coordinate = irp6p->ecp_td.current_gripper_coordinate;
 		irp6ot->ecp_td.next_gripper_coordinate = irp6ot->ecp_td.current_gripper_coordinate;
 
@@ -1139,9 +1139,9 @@ bool nose_run_force::first_step()
 
 	// track
 	irp6ot->ecp_td.mp_command = lib::NEXT_POSE;
-	irp6ot->ecp_td.instruction_type = lib::GET;
-	irp6ot->ecp_td.get_type = ARM_DV;
-	irp6ot->ecp_td.set_type = ARM_DV;
+	irp6ot->mp_command.instruction.instruction_type = lib::GET;
+	irp6ot->mp_command.instruction.get_type = ARM_DV;
+	irp6ot->mp_command.instruction.set_type = ARM_DV;
 	/*
 	 irp6ot->ecp_td.force_move_mode=2; // z regulacja silowa po query
 	 irp6ot->ecp_td.position_set_mode=1; // przyrostowo
@@ -1163,8 +1163,8 @@ bool nose_run_force::first_step()
 	 irp6ot->ecp_td.dyslocation_matrix[4][4]=0;
 	 irp6ot->ecp_td.dyslocation_matrix[5][5]=0;
 
-	 irp6ot->ecp_td.set_arm_type = POSE_FORCE_TORQUE_AT_FRAME;
-	 irp6ot->ecp_td.get_arm_type = POSE_FORCE_TORQUE_AT_FRAME;
+	 irp6ot->mp_command.instruction.set_arm_type = POSE_FORCE_TORQUE_AT_FRAME;
+	 irp6ot->mp_command.instruction.get_arm_type = POSE_FORCE_TORQUE_AT_FRAME;
 	 irp6ot->ecp_td.motion_type = PF_MOVING_FRAME_WITH_DESIRED_FORCE_OR_SPEED;
 	 irp6ot->ecp_td.motion_steps = td.internode_step_no;
 	 irp6ot->ecp_td.value_in_step_no = td.value_in_step_no;
@@ -1172,9 +1172,9 @@ bool nose_run_force::first_step()
 
 	 // postument
 	 irp6p->ecp_td.mp_command = lib::NEXT_POSE;
-	 irp6p->ecp_td.instruction_type = lib::GET;
-	 irp6p->ecp_td.get_type = ARM_DV;
-	 irp6p->ecp_td.set_type = ARM_DV;
+	 irp6p->mp_command.instruction.instruction_type = lib::GET;
+	 irp6p->mp_command.instruction.get_type = ARM_DV;
+	 irp6p->mp_command.instruction.set_type = ARM_DV;
 
 	 irp6p->ecp_td.force_move_mode=2; // z regulacja silowa po query
 	 irp6p->ecp_td.position_set_mode=1; // przyrostowo
@@ -1200,8 +1200,8 @@ bool nose_run_force::first_step()
 	 irp6p->ecp_td.dyslocation_matrix[4][4]=0;
 	 irp6p->ecp_td.dyslocation_matrix[5][5]=0;
 
-	 irp6p->ecp_td.set_arm_type = POSE_FORCE_LINEAR;
-	 irp6p->ecp_td.get_arm_type = POSE_FORCE_LINEAR;
+	 irp6p->mp_command.instruction.set_arm_type = POSE_FORCE_LINEAR;
+	 irp6p->mp_command.instruction.get_arm_type = POSE_FORCE_LINEAR;
 	 irp6p->ecp_td.motion_type = lib::ABSOLUTE;
 	 irp6p->ecp_td.motion_steps = td.internode_step_no;
 	 irp6p->ecp_td.value_in_step_no = td.value_in_step_no;
@@ -1210,14 +1210,14 @@ bool nose_run_force::first_step()
 
 	// conveyor
 	conv->ecp_td.mp_command = lib::NEXT_POSE;
-	conv->ecp_td.instruction_type = lib::GET;
-	conv->ecp_td.get_type = ARM_DV;
-	conv->ecp_td.set_type = ARM_DV;
+	conv->mp_command.instruction.instruction_type = lib::GET;
+	conv->mp_command.instruction.get_type = ARM_DV;
+	conv->mp_command.instruction.set_type = ARM_DV;
 
-	conv->ecp_td.set_arm_type = lib::JOINT;
-	conv->ecp_td.get_arm_type = lib::JOINT;
+	conv->mp_command.instruction.set_arm_type = lib::JOINT;
+	conv->mp_command.instruction.get_arm_type = lib::JOINT;
 	conv->ecp_td.motion_type = lib::ABSOLUTE;
-	conv->ecp_td.next_interpolation_type = lib::MIM;
+	conv->mp_command.instruction.interpolation_type = lib::MIM;
 	conv->ecp_td.motion_steps = td.internode_step_no;
 	conv->ecp_td.value_in_step_no = td.value_in_step_no;
 
@@ -1258,15 +1258,15 @@ bool nose_run_force::next_step()
 		return false;
 	}
 
-	irp6ot->ecp_td.instruction_type = lib::SET_GET;
+	irp6ot->mp_command.instruction.instruction_type = lib::SET_GET;
 
 	// irp6_postument
-	irp6p->ecp_td.instruction_type = lib::SET_GET;
+	irp6p->mp_command.instruction.instruction_type = lib::SET_GET;
 
 	// conveyor
-	conv->ecp_td.instruction_type = lib::SET_GET;
-	conv->ecp_td.get_type = NOTHING_DV;
-	conv->ecp_td.get_arm_type = lib::INVALID_END_EFFECTOR;
+	conv->mp_command.instruction.instruction_type = lib::SET_GET;
+	conv->mp_command.instruction.get_type = NOTHING_DV;
+	conv->mp_command.instruction.get_arm_type = lib::INVALID_END_EFFECTOR;
 
 	for (i=0; i<6; i++) {
 		conv->ecp_td.next_joint_arm_coordinates[i]=conv->ecp_td.current_joint_arm_coordinates[i];
@@ -1334,9 +1334,9 @@ bool drawing_teach_in_force::first_step()
 
 		// on_track
 
-		irp6ot->ecp_td.instruction_type = lib::GET;
-		irp6ot->ecp_td.get_type = ARM_DV;
-		irp6ot->ecp_td.set_type = ARM_DV;
+		irp6ot->mp_command.instruction.instruction_type = lib::GET;
+		irp6ot->mp_command.instruction.get_type = ARM_DV;
+		irp6ot->mp_command.instruction.set_type = ARM_DV;
 		/*
 		 irp6ot->ecp_td.force_move_mode=2;
 		 irp6ot->ecp_td.position_set_mode=1; // przyrostowo
@@ -1349,8 +1349,8 @@ bool drawing_teach_in_force::first_step()
 
 		 normalize_vector(irp6ot->ecp_td.relative_force_vector, irp6ot->ecp_td.relative_force_vector, 3);
 
-		 irp6ot->ecp_td.set_arm_type = POSE_FORCE_LINEAR;
-		 irp6ot->ecp_td.get_arm_type = POSE_FORCE_LINEAR;
+		 irp6ot->mp_command.instruction.set_arm_type = POSE_FORCE_LINEAR;
+		 irp6ot->mp_command.instruction.get_arm_type = POSE_FORCE_LINEAR;
 		 irp6ot->ecp_td.motion_type = lib::ABSOLUTE;
 		 irp6ot->ecp_td.motion_steps = td.internode_step_no;
 		 irp6ot->ecp_td.value_in_step_no = td.value_in_step_no;
@@ -1366,9 +1366,9 @@ bool drawing_teach_in_force::first_step()
 
 		 // postument
 
-		 irp6p->ecp_td.instruction_type = lib::GET;
-		 irp6p->ecp_td.get_type = ARM_DV;
-		 irp6p->ecp_td.set_type = ARM_DV;
+		 irp6p->mp_command.instruction.instruction_type = lib::GET;
+		 irp6p->mp_command.instruction.get_type = ARM_DV;
+		 irp6p->mp_command.instruction.set_type = ARM_DV;
 		 irp6p->ecp_td.force_move_mode=2;
 		 irp6p->ecp_td.position_set_mode=1; // przyrostowo
 
@@ -1380,8 +1380,8 @@ bool drawing_teach_in_force::first_step()
 
 		 normalize_vector(irp6p->ecp_td.relative_force_vector, irp6p->ecp_td.relative_force_vector, 3);
 
-		 irp6p->ecp_td.set_arm_type = POSE_FORCE_LINEAR;
-		 irp6p->ecp_td.get_arm_type = POSE_FORCE_LINEAR;
+		 irp6p->mp_command.instruction.set_arm_type = POSE_FORCE_LINEAR;
+		 irp6p->mp_command.instruction.get_arm_type = POSE_FORCE_LINEAR;
 		 irp6p->ecp_td.motion_type = lib::ABSOLUTE;
 		 irp6p->ecp_td.motion_steps = td.internode_step_no;
 		 irp6p->ecp_td.value_in_step_no = td.value_in_step_no;
@@ -1398,14 +1398,14 @@ bool drawing_teach_in_force::first_step()
 
 		// conveyor
 		conv->ecp_td.mp_command = lib::NEXT_POSE;
-		conv->ecp_td.instruction_type = lib::GET;
-		conv->ecp_td.get_type = ARM_DV;
-		conv->ecp_td.set_type = ARM_DV;
+		conv->mp_command.instruction.instruction_type = lib::GET;
+		conv->mp_command.instruction.get_type = ARM_DV;
+		conv->mp_command.instruction.set_type = ARM_DV;
 
-		conv->ecp_td.set_arm_type = lib::JOINT;
-		conv->ecp_td.get_arm_type = lib::JOINT;
+		conv->mp_command.instruction.set_arm_type = lib::JOINT;
+		conv->mp_command.instruction.get_arm_type = lib::JOINT;
 		conv->ecp_td.motion_type = lib::ABSOLUTE;
-		conv->ecp_td.next_interpolation_type = lib::MIM;
+		conv->mp_command.instruction.interpolation_type = lib::MIM;
 		conv->ecp_td.motion_steps = td.internode_step_no;
 		conv->ecp_td.value_in_step_no = td.value_in_step_no;
 
@@ -1443,15 +1443,15 @@ bool drawing_teach_in_force::first_step()
 		td.internode_step_no = step_no;
 		td.value_in_step_no = td.internode_step_no - 2;
 
-		irp6ot->ecp_td.instruction_type = lib::GET;
-		irp6ot->ecp_td.get_type = ARM_DV;
-		irp6ot->ecp_td.set_type = ARM_DV;
+		irp6ot->mp_command.instruction.instruction_type = lib::GET;
+		irp6ot->mp_command.instruction.get_type = ARM_DV;
+		irp6ot->mp_command.instruction.set_type = ARM_DV;
 
 		/*
 		 irp6ot->ecp_td.force_axis_quantity=3;
 
-		 irp6ot->ecp_td.set_arm_type = POSE_FORCE_LINEAR;
-		 irp6ot->ecp_td.get_arm_type = POSE_FORCE_LINEAR;
+		 irp6ot->mp_command.instruction.set_arm_type = POSE_FORCE_LINEAR;
+		 irp6ot->mp_command.instruction.get_arm_type = POSE_FORCE_LINEAR;
 		 irp6ot->ecp_td.motion_type = lib::ABSOLUTE;
 		 irp6ot->ecp_td.motion_steps = td.internode_step_no;
 		 irp6ot->ecp_td.value_in_step_no = td.value_in_step_no;
@@ -1474,12 +1474,12 @@ bool drawing_teach_in_force::first_step()
 
 		 // postument
 		 irp6p->ecp_td.mp_command = lib::NEXT_POSE;
-		 irp6p->ecp_td.instruction_type = lib::GET;
-		 irp6p->ecp_td.get_type = ARM_DV;
-		 irp6p->ecp_td.set_type = ARM_DV;
+		 irp6p->mp_command.instruction.instruction_type = lib::GET;
+		 irp6p->mp_command.instruction.get_type = ARM_DV;
+		 irp6p->mp_command.instruction.set_type = ARM_DV;
 
-		 irp6p->ecp_td.set_arm_type = lib::JOINT;
-		 irp6p->ecp_td.get_arm_type = lib::JOINT;
+		 irp6p->mp_command.instruction.set_arm_type = lib::JOINT;
+		 irp6p->mp_command.instruction.get_arm_type = lib::JOINT;
 		 irp6p->ecp_td.motion_type = lib::ABSOLUTE;
 		 irp6p->ecp_td.motion_steps = td.internode_step_no;
 		 irp6p->ecp_td.value_in_step_no = td.value_in_step_no;
@@ -1487,14 +1487,14 @@ bool drawing_teach_in_force::first_step()
 
 		// conveyor
 		conv->ecp_td.mp_command = lib::NEXT_POSE;
-		conv->ecp_td.instruction_type = lib::GET;
-		conv->ecp_td.get_type = ARM_DV;
-		conv->ecp_td.set_type = ARM_DV;
+		conv->mp_command.instruction.instruction_type = lib::GET;
+		conv->mp_command.instruction.get_type = ARM_DV;
+		conv->mp_command.instruction.set_type = ARM_DV;
 
-		conv->ecp_td.set_arm_type = lib::JOINT;
-		conv->ecp_td.get_arm_type = lib::JOINT;
+		conv->mp_command.instruction.set_arm_type = lib::JOINT;
+		conv->mp_command.instruction.get_arm_type = lib::JOINT;
 		conv->ecp_td.motion_type = lib::ABSOLUTE;
-		conv->ecp_td.next_interpolation_type = lib::MIM;
+		conv->mp_command.instruction.interpolation_type = lib::MIM;
 		conv->ecp_td.motion_steps = td.internode_step_no;
 		conv->ecp_td.value_in_step_no = td.value_in_step_no;
 
@@ -1541,15 +1541,15 @@ bool drawing_teach_in_force::next_step()
 		}
 
 		// irp6_on_track
-		irp6ot->ecp_td.instruction_type = lib::SET_GET;
+		irp6ot->mp_command.instruction.instruction_type = lib::SET_GET;
 
 		// Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
-		irp6p->ecp_td.instruction_type = lib::SET_GET;
+		irp6p->mp_command.instruction.instruction_type = lib::SET_GET;
 
 		// wersja dwurobotowa
-		conv->ecp_td.instruction_type = lib::SET_GET;
-		conv->ecp_td.get_type = NOTHING_DV;
-		conv->ecp_td.get_arm_type = lib::INVALID_END_EFFECTOR;
+		conv->mp_command.instruction.instruction_type = lib::SET_GET;
+		conv->mp_command.instruction.get_type = NOTHING_DV;
+		conv->mp_command.instruction.get_arm_type = lib::INVALID_END_EFFECTOR;
 
 		get_pose(tip);
 
@@ -1852,25 +1852,25 @@ bool drawing_teach_in_force::next_step()
 		}
 
 		// Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
-		irp6ot->ecp_td.instruction_type = lib::SET_GET;
+		irp6ot->mp_command.instruction.instruction_type = lib::SET_GET;
 
 		// irp6_postument
-		irp6p->ecp_td.instruction_type = lib::SET_GET;
-		irp6p->ecp_td.get_type = NOTHING_DV;
-		irp6p->ecp_td.get_arm_type = lib::INVALID_END_EFFECTOR;
+		irp6p->mp_command.instruction.instruction_type = lib::SET_GET;
+		irp6p->mp_command.instruction.get_type = NOTHING_DV;
+		irp6p->mp_command.instruction.get_arm_type = lib::INVALID_END_EFFECTOR;
 
 		for (i=0; i<6; i++) {
 			irp6p->ecp_td.next_joint_arm_coordinates[i]=irp6p->ecp_td.current_joint_arm_coordinates[i];
 		}
 
-		irp6p->ecp_td.instruction_type = lib::SET_GET;
-		irp6p->ecp_td.get_type = NOTHING_DV;
-		irp6p->ecp_td.get_arm_type = lib::INVALID_END_EFFECTOR;
+		irp6p->mp_command.instruction.instruction_type = lib::SET_GET;
+		irp6p->mp_command.instruction.get_type = NOTHING_DV;
+		irp6p->mp_command.instruction.get_arm_type = lib::INVALID_END_EFFECTOR;
 
 		// wersja dwurobotowa
-		conv->ecp_td.instruction_type = lib::SET_GET;
-		conv->ecp_td.get_type = NOTHING_DV;
-		conv->ecp_td.get_arm_type = lib::INVALID_END_EFFECTOR;
+		conv->mp_command.instruction.instruction_type = lib::SET_GET;
+		conv->mp_command.instruction.get_type = NOTHING_DV;
+		conv->mp_command.instruction.get_arm_type = lib::INVALID_END_EFFECTOR;
 
 		conv->ecp_td.next_joint_arm_coordinates[0]= conv->ecp_td.current_joint_arm_coordinates[0];
 

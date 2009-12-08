@@ -65,40 +65,40 @@ bool vis_force::first_step () {
     
         // track
 	robot_m[lib::ROBOT_IRP6_ON_TRACK]->ecp_td.mp_command = lib::NEXT_POSE; 
-	robot_m[lib::ROBOT_IRP6_ON_TRACK]->ecp_td.instruction_type = lib::GET;
-	robot_m[lib::ROBOT_IRP6_ON_TRACK]->ecp_td.get_type = ARM_DV;
-	robot_m[lib::ROBOT_IRP6_ON_TRACK]->ecp_td.set_type = ARM_DV;
+	robot_m[lib::ROBOT_IRP6_ON_TRACK]->mp_command.instruction.instruction_type = lib::GET;
+	robot_m[lib::ROBOT_IRP6_ON_TRACK]->mp_command.instruction.get_type = ARM_DV;
+	robot_m[lib::ROBOT_IRP6_ON_TRACK]->mp_command.instruction.set_type = ARM_DV;
 	
-	robot_m[lib::ROBOT_IRP6_ON_TRACK]->ecp_td.set_arm_type = lib::JOINT;
-	robot_m[lib::ROBOT_IRP6_ON_TRACK]->ecp_td.get_arm_type = lib::JOINT;
+	robot_m[lib::ROBOT_IRP6_ON_TRACK]->mp_command.instruction.set_arm_type = lib::JOINT;
+	robot_m[lib::ROBOT_IRP6_ON_TRACK]->mp_command.instruction.get_arm_type = lib::JOINT;
 	robot_m[lib::ROBOT_IRP6_ON_TRACK]->ecp_td.motion_type = lib::ABSOLUTE;
-	robot_m[lib::ROBOT_IRP6_ON_TRACK]->ecp_td.next_interpolation_type = lib::MIM;
+	robot_m[lib::ROBOT_IRP6_ON_TRACK]->mp_command.instruction.interpolation_type = lib::MIM;
 	robot_m[lib::ROBOT_IRP6_ON_TRACK]->ecp_td.motion_steps = td.internode_step_no;
 	robot_m[lib::ROBOT_IRP6_ON_TRACK]->ecp_td.value_in_step_no = td.value_in_step_no;
     
     
         // postument
  	robot_m[lib::ROBOT_IRP6_POSTUMENT]->ecp_td.mp_command = lib::NEXT_POSE; 
-	robot_m[lib::ROBOT_IRP6_POSTUMENT]->ecp_td.instruction_type = lib::GET;
-	robot_m[lib::ROBOT_IRP6_POSTUMENT]->ecp_td.get_type = ARM_DV;
-	robot_m[lib::ROBOT_IRP6_POSTUMENT]->ecp_td.set_type = ARM_DV;
+	robot_m[lib::ROBOT_IRP6_POSTUMENT]->mp_command.instruction.instruction_type = lib::GET;
+	robot_m[lib::ROBOT_IRP6_POSTUMENT]->mp_command.instruction.get_type = ARM_DV;
+	robot_m[lib::ROBOT_IRP6_POSTUMENT]->mp_command.instruction.set_type = ARM_DV;
 	
-	robot_m[lib::ROBOT_IRP6_POSTUMENT]->ecp_td.set_arm_type = lib::JOINT;
-	robot_m[lib::ROBOT_IRP6_POSTUMENT]->ecp_td.get_arm_type = lib::JOINT;
+	robot_m[lib::ROBOT_IRP6_POSTUMENT]->mp_command.instruction.set_arm_type = lib::JOINT;
+	robot_m[lib::ROBOT_IRP6_POSTUMENT]->mp_command.instruction.get_arm_type = lib::JOINT;
 	robot_m[lib::ROBOT_IRP6_POSTUMENT]->ecp_td.motion_type = lib::ABSOLUTE;
-	robot_m[lib::ROBOT_IRP6_POSTUMENT]->ecp_td.next_interpolation_type = lib::MIM;
+	robot_m[lib::ROBOT_IRP6_POSTUMENT]->mp_command.instruction.interpolation_type = lib::MIM;
 	robot_m[lib::ROBOT_IRP6_POSTUMENT]->ecp_td.motion_steps = td.internode_step_no;
 	robot_m[lib::ROBOT_IRP6_POSTUMENT]->ecp_td.value_in_step_no = td.value_in_step_no;
  
 /*   
     // speaker
     	robot_list->next->next->E_ptr->ecp_td.mp_command = lib::NEXT_POSE; 
-	robot_list->next->next->E_ptr->ecp_td.instruction_type = lib::GET;
-	robot_list->next->next->E_ptr->ecp_td.get_type = ARM_DV;
-	robot_list->next->next->E_ptr->ecp_td.set_type = ARM_DV;
+	robot_list->next->next->E_ptr->mp_command.instruction.instruction_type = lib::GET;
+	robot_list->next->next->E_ptr->mp_command.instruction.get_type = ARM_DV;
+	robot_list->next->next->E_ptr->mp_command.instruction.set_type = ARM_DV;
 	
-	robot_list->next->next->E_ptr->ecp_td.set_arm_type = lib::XYZ_EULER_ZYZ;
-	robot_list->next->next->E_ptr->ecp_td.get_arm_type = lib::XYZ_EULER_ZYZ;
+	robot_list->next->next->E_ptr->mp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
+	robot_list->next->next->E_ptr->mp_command.instruction.get_arm_type = lib::XYZ_EULER_ZYZ;
 	robot_list->next->next->E_ptr->ecp_td.motion_type = lib::ABSOLUTE;
 	robot_list->next->next->E_ptr->ecp_td.motion_steps = td.internode_step_no;
 	robot_list->next->next->E_ptr->ecp_td.value_in_step_no = td.value_in_step_no;
@@ -133,15 +133,15 @@ bool vis_force::next_step () {
 
  
   
-	robot_m[lib::ROBOT_IRP6_ON_TRACK]->ecp_td.instruction_type = lib::SET;
-	robot_m[lib::ROBOT_IRP6_ON_TRACK]->ecp_td.get_type = NOTHING_DV;
-	robot_m[lib::ROBOT_IRP6_ON_TRACK]->ecp_td.get_arm_type = lib::INVALID_END_EFFECTOR;
+	robot_m[lib::ROBOT_IRP6_ON_TRACK]->mp_command.instruction.instruction_type = lib::SET;
+	robot_m[lib::ROBOT_IRP6_ON_TRACK]->mp_command.instruction.get_type = NOTHING_DV;
+	robot_m[lib::ROBOT_IRP6_ON_TRACK]->mp_command.instruction.get_arm_type = lib::INVALID_END_EFFECTOR;
 	
-	robot_m[lib::ROBOT_IRP6_POSTUMENT]->ecp_td.instruction_type = lib::SET;
-	robot_m[lib::ROBOT_IRP6_POSTUMENT]->ecp_td.get_type = NOTHING_DV;
-	robot_m[lib::ROBOT_IRP6_POSTUMENT]->ecp_td.get_arm_type = lib::INVALID_END_EFFECTOR;
+	robot_m[lib::ROBOT_IRP6_POSTUMENT]->mp_command.instruction.instruction_type = lib::SET;
+	robot_m[lib::ROBOT_IRP6_POSTUMENT]->mp_command.instruction.get_type = NOTHING_DV;
+	robot_m[lib::ROBOT_IRP6_POSTUMENT]->mp_command.instruction.get_arm_type = lib::INVALID_END_EFFECTOR;
 	
-// 	robot_list->next->next->E_ptr->ecp_td.instruction_type = lib::SET;
+// 	robot_list->next->next->E_ptr->mp_command.instruction.instruction_type = lib::SET;
 	
 	
 

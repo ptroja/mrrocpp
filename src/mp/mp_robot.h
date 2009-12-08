@@ -38,14 +38,14 @@ private:
     pid_t ECP_pid;
 
 protected:
-    lib::MP_COMMAND_PACKAGE mp_command;      // Bufor z rozkazem dla ECP
-    // - uzytkownik nie powinien z tego korzystac
-    lib::ECP_REPLY_PACKAGE ecp_reply_package;        // Bufor z odpowiedzia z ECP
-    // - uzytkownik nie powinien z tego korzystac
+
 
     task::task &mp_object;
 
 public:
+    lib::MP_COMMAND_PACKAGE mp_command;      // Bufor z rozkazem dla ECP
+    lib::ECP_REPLY_PACKAGE ecp_reply_package;        // Bufor z odpowiedzia z ECP
+
     bool communicate; // okresla czy robot ma byc obslugiwany w Move
 
     lib::sr_ecp &sr_ecp_msg;    // obiekt do komunikacji z SR

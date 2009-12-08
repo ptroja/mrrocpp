@@ -37,34 +37,34 @@ void manip_and_conv::create_next_pose_command(void)
 	// wypelnia bufor wysylkowy do ECP na podstawie danych
 	// zawartych w skladowych generatora lub warunku
 
-	mp_command.instruction.instruction_type = ecp_td.instruction_type;
-	mp_command.instruction.set_type = ecp_td.set_type;
-	mp_command.instruction.get_type = ecp_td.get_type;
-	mp_command.instruction.set_rmodel_type = ecp_td.set_rmodel_type;
-	mp_command.instruction.get_rmodel_type = ecp_td.get_rmodel_type;
-	mp_command.instruction.set_arm_type = ecp_td.set_arm_type;
-	mp_command.instruction.get_arm_type = ecp_td.get_arm_type;
-	mp_command.instruction.output_values = ecp_td.output_values;
-	mp_command.instruction.interpolation_type = ecp_td.next_interpolation_type;
+	mp_command.instruction.instruction_type = mp_command.instruction.instruction_type;
+	mp_command.instruction.set_type = mp_command.instruction.set_type;
+	mp_command.instruction.get_type = mp_command.instruction.get_type;
+	mp_command.instruction.set_rmodel_type = mp_command.instruction.set_rmodel_type;
+	mp_command.instruction.get_rmodel_type = mp_command.instruction.get_rmodel_type;
+	mp_command.instruction.set_arm_type = mp_command.instruction.set_arm_type;
+	mp_command.instruction.get_arm_type = mp_command.instruction.get_arm_type;
+	mp_command.instruction.output_values = mp_command.instruction.output_values;
+	mp_command.instruction.interpolation_type = mp_command.instruction.interpolation_type;
 
-	switch (ecp_td.instruction_type) {
+	switch (mp_command.instruction.instruction_type) {
 		case lib::SET:
 		case lib::SET_GET:
-			if (ecp_td.set_type & RMODEL_DV) {
-				switch (ecp_td.set_rmodel_type) {
+			if (mp_command.instruction.set_type & RMODEL_DV) {
+				switch (mp_command.instruction.set_rmodel_type) {
 					case lib::TOOL_FRAME:
-						lib::copy_frame(mp_command.instruction.rmodel.tool_frame_def.tool_frame, ecp_td.next_tool_frame);
+						lib::copy_frame(mp_command.instruction.rmodel.tool_frame_def.tool_frame, mp_command.instruction.rmodel.tool_frame_def.tool_frame);
 						break;
 					case lib::TOOL_XYZ_ANGLE_AXIS:
 						for (int j=0; j<6; j++) {
 							mp_command.instruction.rmodel.tool_coordinate_def.tool_coordinates[j]
-									= ecp_td.next_XYZ_AA_tool_coordinates[j];
+									= mp_command.instruction.rmodel.tool_coordinate_def.tool_coordinates[j];
 						}
 						break;
 					case lib::TOOL_XYZ_EULER_ZYZ:
 						for (int j=0; j<6; j++) {
 							mp_command.instruction.rmodel.tool_coordinate_def.tool_coordinates[j]
-									= ecp_td.next_XYZ_ZYZ_tool_coordinates[j];
+									= mp_command.instruction.rmodel.tool_coordinate_def.tool_coordinates[j];
 						}
 						break;
 					case lib::TOOL_AS_XYZ_EULER_ZY:
@@ -73,27 +73,27 @@ void manip_and_conv::create_next_pose_command(void)
 						}
 						for (int j=0; j<6; j++) {
 							mp_command.instruction.rmodel.tool_coordinate_def.tool_coordinates[j]
-									= ecp_td.next_XYZ_ZYZ_tool_coordinates[j];
+									= mp_command.instruction.rmodel.tool_coordinate_def.tool_coordinates[j];
 						}
 						break;
 					case lib::ARM_KINEMATIC_MODEL:
 						mp_command.instruction.rmodel.kinematic_model.kinematic_model_no
-								= ecp_td.next_kinematic_model_no;
+								= mp_command.instruction.rmodel.kinematic_model.kinematic_model_no;
 						break;
 					case lib::SERVO_ALGORITHM:
 						for (int j=0; j<servos_number; j++) {
 							mp_command.instruction.rmodel.servo_algorithm.servo_algorithm_no[j]
-									= ecp_td.next_servo_algorithm_no[j];
+									= mp_command.instruction.rmodel.servo_algorithm.servo_algorithm_no[j];
 							mp_command.instruction.rmodel.servo_algorithm.servo_parameters_no[j]
-									= ecp_td.next_servo_parameters_no[j];
+									= mp_command.instruction.rmodel.servo_algorithm.servo_parameters_no[j];
 						}
 						break;
 					case lib::FORCE_TOOL:
 						for (int j=0; j<3; j++) {
 							mp_command.instruction.rmodel.force_tool.position[j]
-									= ecp_td.next_force_tool_position[j];
+									= mp_command.instruction.rmodel.force_tool.position[j];
 						}
-						mp_command.instruction.rmodel.force_tool.weight = ecp_td.next_force_tool_weight;
+						mp_command.instruction.rmodel.force_tool.weight = mp_command.instruction.rmodel.force_tool.weight;
 						break;
 					case lib::FORCE_BIAS:
 						break;
@@ -102,13 +102,13 @@ void manip_and_conv::create_next_pose_command(void)
 				}
 			}
 
-			if (ecp_td.set_type & ARM_DV) { // ramie
+			if (mp_command.instruction.set_type & ARM_DV) { // ramie
 				mp_command.instruction.motion_type = ecp_td.motion_type;
 
 				mp_command.instruction.motion_steps = ecp_td.motion_steps;
 				mp_command.instruction.value_in_step_no = ecp_td.value_in_step_no;
 				// Wypelniamy czesc zwiazana z polozeniem ramienia
-				switch (ecp_td.set_arm_type) {
+				switch (mp_command.instruction.set_arm_type) {
 					case lib::FRAME:
 						lib::copy_frame(mp_command.instruction.arm.pf_def.arm_frame, ecp_td.next_arm_frame);
 
@@ -147,7 +147,7 @@ void manip_and_conv::create_next_pose_command(void)
 						throw MP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 				}
 
-				switch (ecp_td.next_interpolation_type) {
+				switch (mp_command.instruction.interpolation_type) {
 					case lib::MIM:
 						break;
 					case lib::TCIM:
