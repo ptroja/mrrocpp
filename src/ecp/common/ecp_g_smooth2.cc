@@ -10,28 +10,7 @@
 // Ostatnia modyfikacja: 2009
 // -------------------------------------------------------------------------
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
-#include <ctype.h>
-
-#include <libxml/xmlmemory.h>
-#include <libxml/parser.h>
-#include <libxml/tree.h>
-#include <libxml/xinclude.h>
-
-#include <fstream>
-
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
-
-#include "lib/srlib.h"
-#include "lib/mathtr.h"
 #include "ecp/common/ecp_g_smooth2.h"
-#include "ecp_mp/smooth2_trajectory_pose.h"
-
-#include "lib/datastr.h"
 
 namespace mrrocpp {
 namespace ecp {

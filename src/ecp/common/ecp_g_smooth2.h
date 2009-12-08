@@ -1,18 +1,33 @@
 // -------------------------------------------------------------------------
 //                            ecp_g_smooth2.h dla QNX6
-// Deklaracje generatora plynnego ruchu 2 dla ECP
+// Deklaracje generatora plynnego ruchu smooth2 dla ECP
 //
 // -------------------------------------------------------------------------
 
 #if !defined(_ECP_GEN_SMOOTH2_H)
 # define _ECP_GEN_SMOOTH2_H
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <ctype.h>
+
+#include <libxml/xmlmemory.h>
+#include <libxml/parser.h>
+#include <libxml/tree.h>
+#include <libxml/xinclude.h>
+
+#include <fstream>
+#include <string.h>
+#include <list>
+
+#include "lib/typedefs.h"
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
+#include "lib/datastr.h"
+#include "lib/srlib.h"
+#include "lib/mathtr.h"
 
-#include <string.h>
-
-#include <list>
 #include "ecp_mp/smooth2_trajectory_pose.h"
 
 #include "ecp/common/ecp_g_jarosz.h"
@@ -46,7 +61,7 @@ class smooth2 : public delta {
 
 		int first_interval;
 		lib::trajectory_description td;
-#include "lib/com_buf.h"
+
 		bool is_synchronised;
 		bool debug; //czy maja byc wyswietlane debugi
 
