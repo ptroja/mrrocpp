@@ -1,8 +1,8 @@
 #---------------------- lib catalog makefile of the MRROC++ frame system -----------------------------#
 #======================================================#
-SOURCES = ${wildcard *.c}
+SOURCES = ${wildcard *.c} messip_port.cc
 OBJECTS = ${patsubst %.c,%.o,${SOURCES}}
-MESSIP_OBJECTS = logg_messip.o messip_lib.o messip_utils.o
+MESSIP_OBJECTS = logg_messip.o messip_lib.o messip_utils.o messip_port.o
 BINARIES = messip_sin messip_mgr
 #-----------------------------------------------------------------------------------------------------------------------#
 # Should be modified only by developers not by users
