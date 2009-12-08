@@ -79,6 +79,8 @@ void *sr_thread(void* arg);
 #include <Pt.h>
 #include <Ph.h>
 
+extern ui_state_def ui_state;
+
 void *comm_thread(void* arg) {
 
 	lib::set_thread_name("comm");
@@ -385,8 +387,6 @@ void *comm_thread(void* arg) {
 
 	return 0;
 }
-
-extern ui_state_def ui_state;
 
 void *sr_thread(void* arg)
 {
