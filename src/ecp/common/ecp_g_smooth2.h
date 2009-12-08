@@ -46,11 +46,12 @@ class smooth2 : public delta {
 
 		int first_interval;
 		lib::trajectory_description td;
-
+#include "lib/com_buf.h"
 		bool is_synchronised;
 		bool debug; //czy maja byc wyswietlane debugi
 
-		int type; //1 - polozenie bezwzgledne , 2 - polozenie przyrostowe
+		lib::MOTION_TYPE type;
+
 		bool first_coordinate;
 		float distance_eps;
 

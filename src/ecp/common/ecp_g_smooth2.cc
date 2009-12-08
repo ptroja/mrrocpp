@@ -39,11 +39,11 @@ namespace common {
 namespace generator {
 
 void smooth2::set_relative(void) {
-	type=2;
+	type=lib::RELATIVE;
 }
 
 void smooth2::set_absolute(void) {
-	type=1;
+	type=lib::ABSOLUTE;
 }
 
 bool smooth2::eq(double a, double b) {
@@ -591,12 +591,12 @@ smooth2::smooth2 (common::task::task& _ecp_task, bool _is_synchronised)
 	load_a_v_min(min_path.c_str());
 
 	is_synchronised = _is_synchronised;
-	type=1;
+	type=lib::ABSOLUTE;
 
 } // end : konstruktor
 
 /*void smooth2::calculate_absolute_positions() {
-	if (type == 1) {//dodatkowe zabezpieczenie
+	if (type == lib::ABSOLUTE) {//dodatkowe zabezpieczenie
 		return;
 	}
 
@@ -710,66 +710,56 @@ double smooth2::generate_next_coords(int node_counter, int interpolation_node_no
 		if(v_p <= v_r) { //przyspieszanie w pierwszym etapie
 			//printf("start pos: %f\t node counter: %d\n", start_position, node_counter);
 			//printf(" przysp1 %d ", node_counter);
-			if (type == 1) {
+			if (type == lib::ABSOLUTE) {
 				next_position = start_position +
 								   k*(node_counter*v_p*tk + node_counter*node_counter*a_r*tk*tk/2);
-			} else if (type == 2) {
+			} else if (type == lib::RELATIVE) {
 				next_position = k * (v_p * tk + (node_counter - 1) * a_r * tk * tk + (a_r * tk * tk)/2);
-			} else {
-				//wyrzuc blad o nieznanym type
 			}
 
 		} else { //hamowanie w pierwszym etapie
 			//printf(" ham1 %d ", node_counter);
-			if (type == 1) {
+			if (type == lib::ABSOLUTE) {
 				next_position = start_position +
 							   k*(node_counter*tk*v_p -
 									 node_counter*node_counter*tk*tk*a_r/2);
-			} else if (type == 2) {
+			} else if (type == lib::RELATIVE) {
 				next_position = k * (v_p * tk - ((node_counter - 1) * a_r * tk * tk + (a_r * tk * tk)/2));
-			} else {
-				//wyrzuc wyjatek o nieznanym type
 			}
 		}
 		//printf("%f\t", next_position);
 	} else if(node_counter <= jedn) { // drugi etap - ruch jednostajny
 		//printf(" jedn %d ", node_counter);
-		if (type == 1) {
+		if (type == lib::ABSOLUTE) {
 			next_position = start_position +
 							   k*(s_przysp + ((node_counter - przysp)*tk)*v_r);
-		} else if (type == 2) {
+		} else if (type == lib::RELATIVE) {
 			next_position = k * v_r * tk;
-		} else {
-			//wyrzuc wyjatek o nieznanym type
-		}
 		//printf("%f\t", next_position);
+		}
 
 	} else if(node_counter <= interpolation_node_no) { //trzeci etap
 
 		if(v_k <= v_r) { //hamowanie w trzecim etapie
 			//printf(" ham2 %d ", node_counter);
-			if (type == 1) {
+			if (type == lib::ABSOLUTE) {
 				next_position = start_position +
 								   k*(s_przysp + s_jedn +
 										 ((node_counter - jedn) * tk ) * v_r -
 										 ((node_counter - jedn) * tk) * ((node_counter - jedn) * tk) * a_r / 2);
-			} else if (type == 2) {
+			} else if (type == lib::RELATIVE) {
 				next_position = k * (v_k * tk + ((interpolation_node_no - node_counter) * a_r * tk * tk + (a_r * tk * tk)/2));
-			} else {
-				//wyrzuc wyjatek o nieznanym type
 			}
 			//printf("next pos: %f\t node: %d\t", next_position, node_counter);
 		} else { //przyspieszanie w trzecim etapie
 			//printf(" przysp2 %d ", node_counter);
-			if (type == 1) {
+			if (type == lib::ABSOLUTE) {
 				next_position = start_position +
 								   k*(s_przysp + s_jedn +
 										 ((node_counter - jedn) * tk) * v_r +
 										 a_r * ((node_counter - jedn) * tk) * ((node_counter - jedn) * tk) / 2);
-			} else if (type == 2) {
+			} else if (type == lib::RELATIVE) {
 				next_position = k* (v_k * tk - ((interpolation_node_no - node_counter) * a_r * tk * tk + (a_r * tk * tk)/2));
-			} else {
-				//wyrzuc wyjatek o nieznanym type
 			}
 		}
 		//printf("%f\t", next_position);
@@ -792,9 +782,9 @@ void smooth2::generate_cords() {
 
 		for (int z = 0; z < pose_list_iterator->interpolation_node_no; z++) {
 			for (int i = 0; i < MAX_SERVOS_NR; i++) {
-				if (type == 1 && fabs(pose_list_iterator->start_position[i] - pose_list_iterator->coordinates[i]) < distance_eps) {
+				if (type == lib::ABSOLUTE && fabs(pose_list_iterator->start_position[i] - pose_list_iterator->coordinates[i]) < distance_eps) {
 					coordinate[i] = pose_list_iterator->start_position[i]; //dla drogi 0
-				} else if (type == 2 && eq(pose_list_iterator->coordinates[i], 0)) {//dla drogi 0 w relative (type == 2)
+				} else if (type == lib::RELATIVE && eq(pose_list_iterator->coordinates[i], 0)) {//dla drogi 0 w relative
 					coordinate[i] = 0;
 				} else {
 					coordinate[i] = generate_next_coords(private_node_counter,
@@ -961,7 +951,7 @@ bool smooth2::next_step () {
     			the_robot->ecp_command.instruction.instruction_type = lib::SET; //dalsze ustawianie parametrow ruchu w edp
     			the_robot->ecp_command.instruction.set_type = ARM_DV; // ARM
     			the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
-    	    	if (type == 2) {
+    	    	if (type == lib::RELATIVE) {
     	    		the_robot->ecp_command.instruction.motion_type = lib::RELATIVE;
     	    		the_robot->ecp_command.instruction.interpolation_type = lib::TCIM;
     	    	} else {
@@ -975,7 +965,7 @@ bool smooth2::next_step () {
     			    the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = coordinate_list_iterator->coordinate[i];
     			}
 
-    			if (type == 2) {
+    			if (type == lib::RELATIVE) {
 					gripper_position = pose_list_iterator->k[6]*((tk)*pose_list_iterator->v_grip);
 
 					//printf(" %f \t", gripper_position);
@@ -1010,7 +1000,7 @@ bool smooth2::next_step () {
     			the_robot->ecp_command.instruction.instruction_type = lib::SET; //dalsze ustawianie parametrow ruchu w edp
     			the_robot->ecp_command.instruction.set_type = ARM_DV; // ARM
     			the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
-    	    	if (type == 2) {
+    	    	if (type == lib::RELATIVE) {
     	    		the_robot->ecp_command.instruction.motion_type = lib::RELATIVE;
     	    		the_robot->ecp_command.instruction.interpolation_type = lib::TCIM;
     	    	} else {
@@ -1025,7 +1015,7 @@ bool smooth2::next_step () {
     			}
 
     			//gripper
-    			if (type == 2) {
+    			if (type == lib::RELATIVE) {
     				gripper_position = pose_list_iterator->k[6]*((tk)*pose_list_iterator->v_grip);
 
         			//printf(" %f \t", gripper_position);
@@ -1059,7 +1049,7 @@ bool smooth2::next_step () {
     			the_robot->ecp_command.instruction.instruction_type = lib::SET;
     		    the_robot->ecp_command.instruction.set_type = ARM_DV; // ARM
     		    the_robot->ecp_command.instruction.set_arm_type = lib::JOINT;
-    	    	if (type == 2) {
+    	    	if (type == lib::RELATIVE) {
     	    		the_robot->ecp_command.instruction.motion_type = lib::RELATIVE;
     	    	} else {
     	    		the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
@@ -1079,7 +1069,7 @@ bool smooth2::next_step () {
     		        i=6;
 				}
 
-    		    if (type == 2) {
+    		    if (type == lib::RELATIVE) {
 					gripper_position = pose_list_iterator->k[i]*((tk)*pose_list_iterator->v_grip);
 
 					//printf(" %f \t", gripper_position);
@@ -1113,7 +1103,7 @@ bool smooth2::next_step () {
     			the_robot->ecp_command.instruction.instruction_type = lib::SET;
     		    the_robot->ecp_command.instruction.set_type = ARM_DV; // ARM
     		    the_robot->ecp_command.instruction.set_arm_type = lib::MOTOR;
-    	    	if (type == 2) {
+    	    	if (type == lib::RELATIVE) {
     	    		the_robot->ecp_command.instruction.motion_type = lib::RELATIVE;
     	    	} else {
     	    		the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
@@ -1132,7 +1122,7 @@ bool smooth2::next_step () {
     		    } else if(the_robot->robot_name == lib::ROBOT_IRP6_POSTUMENT) {
     		        i=6;
 				}
-    		    if (type == 2) {
+    		    if (type == lib::RELATIVE) {
 					gripper_position = pose_list_iterator->k[i]*((tk)*pose_list_iterator->v_grip);
 
 					//printf(" %f \t", gripper_position);
@@ -1243,7 +1233,7 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 					pose_list_iterator->a_r[i] = a_max_zyz[i] * pose_list_iterator->a[i];
 
 					pose_list_iterator->v_p[i] = 0; //zalozenie, ze poczatkowa predkosc jest rowna 0
-					if (type == 1) {
+					if (type == lib::ABSOLUTE) {
 						if(pose_list_iterator->coordinates[i]-pose_list_iterator->start_position[i] < 0) { //zapisanie kierunku dla pierwszego ruchu
 							//printf("ustawienie k w osi %d na -1\n", i);
 							pose_list_iterator->k[i] = -1;			//zapisanie kierunku nastepnych ruchow dokonywane jest dalej
@@ -1252,14 +1242,12 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 							//printf("ustawienie k w osi %d na 1\n", i);
 							pose_list_iterator->k[i] = 1;
 						}
-					} else if (type == 2) {
+					} else if (type == lib::RELATIVE) {
 						if (pose_list_iterator->coordinates[i] < 0) {
 							pose_list_iterator->k[i] = -1;
 						} else {
 							pose_list_iterator->k[i] = 1;
 						}
-					} else {
-						//wyrzuc wyjatek o zlej wartosci type
 					}
 				}
 
@@ -1300,7 +1288,7 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 
 					pose_list_iterator->v_p[i] = 0; //zalozenie, ze poczatkowa predkosc jest rowna 0
 
-					if (type == 1) {
+					if (type == lib::ABSOLUTE) {
 						if(pose_list_iterator->coordinates[i]-pose_list_iterator->start_position[i] < 0) { //zapisanie kierunku dla pierwszego ruchu
 							//printf("ustawienie k w osi %d na -1\n", i);
 							pose_list_iterator->k[i] = -1;			//zapisanie kierunku nastepnych ruchow dokonywane jest dalej
@@ -1309,14 +1297,12 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 							//printf("ustawienie k w osi %d na 1\n", i);
 							pose_list_iterator->k[i] = 1;
 						}
-					} else if (type == 2) {
+					} else if (type == lib::RELATIVE) {
 						if (pose_list_iterator->coordinates[i] < 0) {
 							pose_list_iterator->k[i] = -1;
 						} else {
 							pose_list_iterator->k[i] = 1;
 						}
-					} else {
-						//wyrzuc wyjatek o zlej wartosci type
 					}
 				}
 
@@ -1363,7 +1349,7 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 
 					pose_list_iterator->v_p[i] = 0; //zalozenie, ze poczatkowa predkosc jest rowna 0
 
-					if (type == 1) {
+					if (type == lib::ABSOLUTE) {
 						if(pose_list_iterator->coordinates[i]-pose_list_iterator->start_position[i] < 0) { //zapisanie kierunku dla pierwszego ruchu
 							//printf("ustawienie k w osi %d na -1\n", i);
 							pose_list_iterator->k[i] = -1;			//zapisanie kierunku nastepnych ruchow dokonywane jest dalej
@@ -1372,14 +1358,12 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 							//printf("ustawienie k w osi %d na 1\n", i);
 							pose_list_iterator->k[i] = 1;
 						}
-					} else if (type == 2) {
+					} else if (type == lib::RELATIVE) {
 						if (pose_list_iterator->coordinates[i] < 0) {
 							pose_list_iterator->k[i] = -1;
 						} else {
 							pose_list_iterator->k[i] = 1;
 						}
-					} else {
-						//wyrzuc wyjatek o zlej wartosci type
 					}
 				}
 
@@ -1424,7 +1408,7 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 
 					pose_list_iterator->v_p[i] = 0; //zalozenie, ze poczatkowa predkosc jest rowna 0
 
-					if (type == 1) {
+					if (type == lib::ABSOLUTE) {
 						if(pose_list_iterator->coordinates[i]-pose_list_iterator->start_position[i] < 0) { //zapisanie kierunku dla pierwszego ruchu
 							//printf("ustawienie k w osi %d na -1\n", i);
 							pose_list_iterator->k[i] = -1;			//zapisanie kierunku nastepnych ruchow dokonywane jest dalej
@@ -1433,14 +1417,12 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 							//printf("ustawienie k w osi %d na 1\n", i);
 							pose_list_iterator->k[i] = 1;
 						}
-					} else if (type == 2) {
+					} else if (type == lib::RELATIVE) {
 						if (pose_list_iterator->coordinates[i] < 0) {
 							pose_list_iterator->k[i] = -1;
 						} else {
 							pose_list_iterator->k[i] = 1;
 						}
-					} else {
-						//wyrzuc wyjatek o zlej wartosci type
 					}
 				}
 
@@ -1634,9 +1616,9 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 		} //end else (first interval)
 
 		for(i=0;i<MAX_SERVOS_NR;i++) {//zapisanie coordinate_delta
-			if (type == 1) {
+			if (type == lib::ABSOLUTE) {
 				td.coordinate_delta[i] = pose_list_iterator->coordinates[i]-pose_list_iterator->start_position[i];
-			} else if (type == 2) {
+			} else if (type == lib::RELATIVE) {
 				td.coordinate_delta[i] = pose_list_iterator->coordinates[i];
 			}
 			//printf("delta : coordinates %f i start_position %f\n",pose_list_iterator->coordinates[i], pose_list_iterator->start_position[i]);
@@ -1651,7 +1633,7 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 				next_pose_list_ptr();
 
 				//printf("coordinates %f i start_position %f\n",pose_list_iterator->coordinates[i], pose_list_iterator->start_position[i]);
-				if (type == 1) {
+				if (type == lib::ABSOLUTE) {
 					if (eq(pose_list_iterator->coordinates[i],pose_list_iterator->start_position[i])) {
 						pose_list_iterator->k[i] = -temp;//jesli droga jest rowna 0 w nastepnym ruchu to kierunek ustawiany jest na przeciwny aby robot zwolnil do 0
 					} else if(pose_list_iterator->coordinates[i]-pose_list_iterator->start_position[i] < 0) {//nadpisanie k dla nastepnego ruchu
@@ -1661,7 +1643,7 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 						//printf("nadpisanie k dla ruchu nastepnego w osi %d na 1\n", i);
 						pose_list_iterator->k[i] = 1;
 					}
-				} else if (type == 2) {
+				} else if (type == lib::RELATIVE) {
 					if (eq(pose_list_iterator->coordinates[i],0)) {
 						pose_list_iterator->k[i] = -temp;//jesli droga jest rowna 0 w nastepnym ruchu to kierunek ustawiany jest na przeciwny aby robot zwolnil do 0
 					} else if(pose_list_iterator->coordinates[i] < 0) {//nadpisanie k dla nastepnego ruchu
@@ -1671,8 +1653,6 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 						//printf("nadpisanie k dla ruchu nastepnego w osi %d na 1\n", i);
 						pose_list_iterator->k[i] = 1;
 					}
-				} else {
-					//wyrzuc wyjatek o niepoprawnym type
 				}
 
 				switch (td.arm_type) {
@@ -1723,12 +1703,10 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 
 		//obliczenie drogi dla kazdej osi
 		for (i = 0; i < MAX_SERVOS_NR; i++) {
-			if (type == 1) {
+			if (type == lib::ABSOLUTE) {
 				s[i]=fabs(pose_list_iterator->coordinates[i] - pose_list_iterator->start_position[i]);
-			} else if (type == 2) {
+			} else if (type == lib::RELATIVE) {
 				s[i] = fabs(pose_list_iterator->coordinates[i]);//tryb relative
-			} else {
-				//wyrzuc wyjatek o niepoprawnej wartosci type
 			}
 			//printf("droga dla osi %d = %f\n", i, s[i]);
 		}
