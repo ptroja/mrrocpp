@@ -36,7 +36,8 @@ ECP_DIR = $(HOMEDIR)/src/ecp
 ui.gtk: main.o xmlconfigurator.o \
 	ui_model.o ui_config_entry.o ui_widget_entry.o \
 	sr_console.o comm_thread.o \
-	../src/gcc_ntox86/ui.o
+	../src/gcc_ntox86/ui.o \
+	../src/gcc_ntox86/threads.o
 	$(CXX) -Wl,-rpath $(LIBDIR) -g -o $@ $^ ${LDFLAGS}
 
 %.xml: %.glade

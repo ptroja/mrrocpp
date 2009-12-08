@@ -3,6 +3,7 @@ include abplatform
 ifeq ($(BUILD_TARGET), linux)
 SOURCES = \
 	ui.cc \
+	threads.cc \
 	ui_ecp_r_conveyor.cc \
 	ui_ecp_r_irp6_common.cc \
 	ui_ecp_r_speaker.cc

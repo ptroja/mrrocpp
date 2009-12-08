@@ -363,8 +363,8 @@ extern busy_flag communication_flag;
 
 
 
-int create_threads( );
-int abort_threads( );
+void create_threads( );
+void abort_threads( );
 
 
 #endif

@@ -44,14 +44,7 @@
 #include "lib/mis_fun.h"
 #include "ui/ui_ecp.h"
 
-#include "lib/messip/messip.h"
-
-/* Local headers */
-#include "ablibs.h"
-#include "abimport.h"
-#include "proto.h"
-#include <Pt.h>
-#include <Ph.h>
+#include "lib/srlib.h"
 
 pthread_t edp_irp6ot_tid;
 pthread_t edp_irp6p_tid;
@@ -73,17 +66,18 @@ ui_sr_buffer* ui_sr_obj;
 
 ui_ecp_buffer* ui_ecp_obj;
 
-// ini_configs* ini_con;
-extern lib::configurator* config;
-
 extern ui_state_def ui_state;
-extern ui_robot_def ui_robot;
 
 ui_msg_def ui_msg;
 
-extern std::ofstream *log_file_outfile;
-
 #if !defined(USE_MESSIP_SRR)
+/* Local headers */
+#include "ablibs.h"
+#include "abimport.h"
+#include "proto.h"
+#include <Pt.h>
+#include <Ph.h>
+
 void *comm_thread(void* arg) {
 
 	lib::set_thread_name("comm");
@@ -471,19 +465,21 @@ void *sr_thread(void* arg)
 	return 0;
 }
 #else /* USE_MESSIP_SRR */
-#warning "use messip :)"
+
+#include "lib/messip/messip.h"
+
 void *sr_thread(void* arg)
 {
 	messip_channel_t *ch;
 
-	if ((ch = messip_channel_create(NULL, ui_state.sr_attach_point, MESSIP_NOTIMEOUT, 0)) == NULL) {
+	if ((ch = messip_channel_create(NULL, ui_state.sr_attach_point.c_str(), MESSIP_NOTIMEOUT, 0)) == NULL) {
 		return NULL;
 	}
 
 	while(1)
 	{
 		int32_t type, subtype;
-		sr_package_t sr_msg;
+		lib::sr_package_t sr_msg;
 
 		int rcvid = messip_receive(ch, &type, &subtype, &sr_msg, sizeof(sr_msg), MESSIP_NOTIMEOUT);
 
@@ -570,7 +566,7 @@ void *meb_thread(void* arg) {
 }
 
 
-int
+void
 create_threads( )
 
 	{
@@ -590,11 +586,11 @@ create_threads( )
 	if (pthread_create (&sr_tid, NULL, sr_thread, NULL)!=EOK) {// Y&W - utowrzenie watku serwa
 		printf (" Failed to thread sr_thread\n");
 	}
-
+#if defined(__QNXNTO__)
 	if (pthread_create (&ui_tid, NULL, comm_thread, NULL)!=EOK) {// Y&W - utowrzenie watku serwa
 		printf (" Failed to thread comm_thread\n");
 	}
-
+#endif
 	if (pthread_create (&edp_irp6ot_tid, NULL, edp_irp6ot_thread, NULL)!=EOK) {// Y&W - utowrzenie watku serwa
 		printf (" Failed to thread edp_irp6ot_tid\n");
 	}
@@ -612,7 +608,7 @@ create_threads( )
 		printf (" Failed to thread meb_tid\n");
 	}
 
-
+#if defined(__QNXNTO__)
 	if  (SignalProcmask(0, sr_tid, SIG_BLOCK, &set, NULL)==-1) {
 		perror("SignalProcmask(sr_tid)");
 	}
@@ -636,27 +632,22 @@ create_threads( )
 	if  (SignalProcmask(0, meb_tid, SIG_BLOCK, &set, NULL)==-1) {
 		perror("SignalProcmask(meb_tid)");
 	}
-
-
-
-	return 1;
+#endif
 
 	}
 
-int
+void
 abort_threads( )
 
 	{
-
+#if defined(__QNXNTO__)
 	pthread_abort(ui_tid);
 	pthread_abort(sr_tid);
 	pthread_abort(edp_irp6ot_tid);
 	pthread_abort(edp_irp6p_tid);
 	pthread_abort(edp_conv_tid);
 	pthread_abort(meb_tid);
-
-	return 1;
-
+#endif
 	}
 
 
