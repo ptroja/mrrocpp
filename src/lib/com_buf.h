@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////
-/*! \file     include/lib/com_buf.h
+/*! \file     src/lib/com_buf.h
  *
  *  Data structures for IPC.
  *
