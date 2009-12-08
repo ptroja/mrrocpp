@@ -33,10 +33,6 @@
 #include <math.h>
 #include "lib/mathtr.h"
 
-#include "ablibs.h"
-#include "abimport.h"
-#include "proto.h"
-
 // ---------------------------------------------------------------
 ui_common_robot::ui_common_robot (lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg, lib::robot_name_t _robot_name)
 {
