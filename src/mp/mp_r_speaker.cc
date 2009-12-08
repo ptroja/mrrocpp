@@ -26,8 +26,8 @@ void speaker::create_next_pose_command (void)
 		case lib::SET:
 		case lib::SET_GET:
 			// Wypelniamy czesc zwiazana z polozeniem ramienia
-			strcpy(mp_command.instruction.arm.text_def.text, ecp_td.text);
-			strcpy(mp_command.instruction.arm.text_def.prosody, ecp_td.prosody);
+			strcpy(mp_command.instruction.arm.text_def.text, mp_command.instruction.arm.text_def.text);
+			strcpy(mp_command.instruction.arm.text_def.prosody, mp_command.instruction.arm.text_def.prosody);
 			break;
 		case lib::GET:
 		case lib::QUERY:
@@ -54,7 +54,7 @@ void speaker::get_reply(void)
 					= ecp_reply_package.reply_package.error_no.error1;
 			break;
 		case lib::ACKNOWLEDGE:
-			ecp_td.speaking
+			ecp_reply_package.reply_package.arm.text_def.speaking
 					= ecp_reply_package.reply_package.arm.text_def.speaking;
 			break;
 		default: // bledna przesylka

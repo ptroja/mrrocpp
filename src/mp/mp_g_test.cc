@@ -103,7 +103,7 @@ bool vis_force::first_step () {
 	robot_list->next->next->E_ptr->mp_command.instruction.motion_steps = td.internode_step_no;
 	robot_list->next->next->E_ptr->mp_command.instruction.value_in_step_no = td.value_in_step_no;
 	
-	strcpy( robot_list->next->next->E_ptr->ecp_td.prosody, "joy" );
+	strcpy( robot_list->next->next->E_ptr->mp_command.instruction.arm.text_def.prosody, "joy" );
 */
     
     return true;
@@ -271,9 +271,9 @@ printf("m %f s0 %f s1 %f\n", measure[1][0], stearing[1][0], stearing[1][1]);
  
 /*
 if(stearing_d[i][0]>0)
-	strcpy( robot_list->next->next->E_ptr->ecp_td.text, "prawo" ); 
+	strcpy( robot_list->next->next->E_ptr->mp_command.instruction.arm.text_def.text, "prawo" ); 
 else
-	strcpy( robot_list->next->next->E_ptr->ecp_td.text, "lewo" );
+	strcpy( robot_list->next->next->E_ptr->mp_command.instruction.arm.text_def.text, "lewo" );
 */
 /*
 // chuchamy na zimne - krancowki na sterowaniu 

@@ -9,7 +9,7 @@ namespace mp {
 namespace robot {
 
 // ------------------------------------------------------------------------
-struct robot_ECP_transmission_data : ecp_mp::robot_transmission_data
+struct robot_ECP_transmission_data
 {
 public:
     lib::MP_COMMAND mp_command;                // polecenie przesylane z MP do ECP
