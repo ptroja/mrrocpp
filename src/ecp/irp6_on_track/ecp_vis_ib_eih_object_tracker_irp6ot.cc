@@ -56,11 +56,16 @@ bool ecp_vis_ib_eih_object_tracker_irp6ot::first_step() {
 
 	//if (read_parametres() == false) {//czytanie predkosci maksymalnych i przyspieszen z pliku konfiguracyjnego zadania, jesli sie nie powiodlo to przypisz domyslne
 		v_max[1] = v_max[0] = 0.05;
-		a_max[1] = a_max[0] = 0.05;
-		v_max[2] = 0.03;
-		a_max[2] = 0.04;
-		v_stop[0] = v_stop[1] = v_stop[2] = 0.0005;
+		a_max[1] = a_max[0] = 0.06;
+		v_max[2] = 0.05;
+		a_max[2] = 0.06;
+		v_stop[0] = v_stop[1] = v_stop[2] = 0.0015;
 		v_min[0] = 	v_min[1] = v_min[2] = 0.0015;
+		u_stop[0] = u_stop[1] = 25;
+		u_stop[2] = 2000;
+		u_max[0] = 300;
+		u_max[1] = 250;
+		u_max[2] = -80000;
 	//}
 
 	//pierwsze ustawienie flag dotarcia i kierunku
@@ -151,11 +156,13 @@ bool ecp_vis_ib_eih_object_tracker_irp6ot::next_step_without_constraints() {
 		printf("uz: %f\n", u[2]);
 		flushall();
 
-		if (fabs(u[0]) < 5 && fabs(u[1]) < 5 && fabs(u[2]) < 5 && v[0] <= v_stop[0] && v[1] <= v_stop[1] && v[2] <= v_stop[2]) {//TODO przemyśleć, poprawić
+		if (fabs(u[0]) < u_stop[0]/5 && fabs(u[1]) < u_stop[1]/5 && fabs(u[2]) < u_stop[2]/5 &&
+				v[0] <= v_stop[0] && v[1] <= v_stop[1] && v[2] <= v_stop[2] &&
+				reached[0] == true && reached[1] == true && reached[2] == true && tracking == true) {//TODO przemyśleć, poprawić
 			//if (z_stop) {
 				printf("koniec sledzenia\n");
-				//flushall();
-				//return false;
+				flushall();
+				return false;
 			//}
 		}
 
@@ -169,18 +176,24 @@ bool ecp_vis_ib_eih_object_tracker_irp6ot::next_step_without_constraints() {
 
 			//funkcja zmniejszajaca predkosc w x i y w zaleznosci od odleglosci od przebytej drogi w z
 			/*double u_param;
-			if (fabs(u[i]) == 0 || z_stop) {
+			if (fabs(u[i]) == 0) {
 				u_param = 10000;//dowolna relatywnie duza liczba daje zredukowanie predkosci do minimalnej przy zakonczonym z
 			} else {
 				u_param = 1/fabs(u[i]);
 			}*/
 			//im mniejsza liczba przy wspolczynniku tym wieksze znaczenie wspolczynnika
-			//v_max[i] = v_max[i] - ((z_s * z_s) * 0.0005 * (u_param * 0.01));//TODO ta funkcje trzeba przerobic... (delikatnie mowiac)
-			if (v_max[i] < v_min[i]) {//potrzebne jesli predkosc jest w jakis sposob redukowana
-				v_max[i] = v_min[i];
+			//v_max[i] = v_max[i] - ((1/(u[2]*u[2])) * 0.0005 * (u_param * 0.01));//TODO ta funkcje trzeba przerobic... (delikatnie mowiac)
+			v_max_act[i] = v_max[i] * fabs(u[i]/u_max[i]); //kontroler p
+
+			if (v_max_act[i] < v_min[i]) {//potrzebne jesli predkosc jest w jakis sposob redukowana
+				v_max_act[i] = v_min[i];
 			}
 
-			if (fabs(u[i]) < 25) {//TODO to 25 powinno byc zmienna inna dla kazdej osi
+			if (v_max_act[i] > v_max[i]) { //potrzebne jesli uchyb przekroczy zalozony uchyb maksymalny
+				v_max_act[i] = v_max[i];
+			}
+
+			if (fabs(u[i]) < fabs(u_stop[i])) {
 				reached[i] = true;
 			} else {
 				reached[i] = false;
@@ -203,10 +216,10 @@ bool ecp_vis_ib_eih_object_tracker_irp6ot::next_step_without_constraints() {
 				}
 				s[i] = (a_max[i] * t * t)/2 + (v[i] * t);
 				v[i] += a_max[i] * t;
-				if (v[i] > v_max[i]) {
-					v[i] = v_max[i];
+				if (v[i] > v_max_act[i]) {
+					v[i] = v_max_act[i];
 				}
-			} else if(v[i] > 0 && (change[i] == true || reached[i] == true || tracking == false || v[i] > v_max[i])) {//hamowanie
+			} else if(v[i] > 0 && (change[i] == true || reached[i] == true || tracking == false || v[i] > v_max_act[i])) {//hamowanie
 				s[i] = (a_max[i] * t * t)/2 + (v[i] * t);
 				v[i] -= a_max[i] * t;
 				if (v[i] < 0) {
@@ -257,6 +270,12 @@ bool ecp_vis_ib_eih_object_tracker_irp6ot::read_parametres() {//metoda wczytujac
 	v_min[0] = ecp_t.config.return_double_value("v_min_x");
 	v_min[1] = ecp_t.config.return_double_value("v_min_y");
 	v_min[2] = ecp_t.config.return_double_value("v_min_z");
+	u_stop[0] = ecp_t.config.return_double_value("u_stop_x");
+	u_stop[1] = ecp_t.config.return_double_value("u_stop_y");
+	u_stop[2] = ecp_t.config.return_double_value("u_stop_z");
+	u_max[0] = ecp_t.config.return_double_value("u_max_x");
+	u_max[1] = ecp_t.config.return_double_value("u_max_y");
+	u_max[2] = ecp_t.config.return_double_value("u_max_z");
 
 	return true;
 }

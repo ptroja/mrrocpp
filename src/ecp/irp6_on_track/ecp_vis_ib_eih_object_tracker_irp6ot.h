@@ -46,8 +46,12 @@ public:
     double s[MAX_AXES_NUM]; //droga jednego makrokroku ruchu
     double v[MAX_AXES_NUM]; //aktualna predkosc
     double v_max[MAX_AXES_NUM]; //maks predkosc
+    double v_max_act[MAX_AXES_NUM]; //aktualna predkosc maksymalna
     double v_stop[MAX_AXES_NUM]; //predkosc przy ktorej mozna sie zatrzymac
     double v_min[MAX_AXES_NUM]; //minimalna mozliwa do ustawienia predkosc maksymalna
+
+    double u_stop[MAX_AXES_NUM]; //uchyb przy ktorym sie zatrzymujemy (uchyb minimalny)
+    double u_max[MAX_AXES_NUM];
 
     //double s_z; //droga do przebycia w z
     //double z_start; //pozycja poczatkowa z

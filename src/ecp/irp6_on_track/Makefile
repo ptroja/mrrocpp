@@ -201,7 +201,7 @@ ecp_t_box_irp6ot: ecp_t_box_irp6ot.o ../common/ecp_g_smooth.o ../common/ecp_gene
 ecp_t_smooth2_test: ecp_t_smooth2_test.o ../common/ecp_g_smooth2.o ../common/ecp_generator_t.o ../common/ecp_g_jarosz.o ../common/ecp_operator_reaction_condition.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 #-----------------------------------------------------------------------------------------------------------------------#
-ecp_t_grab_cube_irp6ot: ecp_vis_ib_eih_object_tracker_irp6ot.o ecp_t_grab_cube_irp6ot.o ../common/ecp_g_smooth2.o ../common/ecp_generator_t.o ../common/ecp_g_jarosz.o $(ECP_MPDIR)/ecp_mp_s_cvfradia.o ../common/ecp_operator_reaction_condition.o $(SHOBJ)
+ecp_t_grab_cube_irp6ot: ecp_vis_ib_eih_object_tracker_irp6ot.o ../common/ecp_g_force.o ecp_t_grab_cube_irp6ot.o ../common/ecp_g_smooth2.o ../common/ecp_generator_t.o ../common/ecp_g_jarosz.o $(ECP_MPDIR)/ecp_mp_s_cvfradia.o ../common/ecp_operator_reaction_condition.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 #-----------------------------------------------------------------------------------------------------------------------#
 ecp_t_kcz_test: ecp_t_kcz_test.o ../common/ecp_g_smooth2.o ../common/ecp_generator_t.o ../common/ecp_g_jarosz.o ../common/ecp_operator_reaction_condition.o $(SHOBJ)
