@@ -1,9 +1,9 @@
  // -------------------------------------------------------------------------
 //                            vsp_s.cc 		dla QNX6.2
-// 
+//
 //            Virtual Sensor Process (lib::VSP) - methods
 // Metody klasy VSP
-// 
+//
 // Ostatnia modyfikacja: 25.06.03
 // Autor: tkornuta
 // odrem - prywrocic pry podlaczeniu klasy kamera
@@ -29,7 +29,7 @@
 #include "lib/com_buf.h"
 
 #include "lib/srlib.h"
-#include "vsp/vsp_vis_sac.h"
+#include "vsp/vis_sac/vsp_vis_sac.h"
 //#include "vsp/cmvision.h"
 //#include "vsp/cube.h"
 
@@ -71,7 +71,7 @@ int interatt=0;
 int x=0;
 int y=0;
 int z=0;
-int id;  
+int id;
 int md;
 struct timespec start[9], stop[9], res;
 //short tmp[9];
@@ -102,16 +102,16 @@ vis_sac::vis_sac(lib::configurator &_config) : sensor(_config){
 	union_size = sizeof(image.sensor_union.vis_sac);
 
 //	uint64_t e;			// kod bledu systemowego
-	
-	is_sensor_configured=false;	// czujnik niezainicjowany 
+
+	is_sensor_configured=false;	// czujnik niezainicjowany
 	is_reading_ready=false;				// nie ma zadnego gotowego odczytu
-	
-	
+
+
 	// Obliczenie dlugosci sciezki do pliku INI.
-/*	
+/*
 	char* node_l = config->return_node();
 	char* dir_l = config->return_dir();
-	
+
 	//int size = strlen("/net/") + strlen(node_l) + strlen(dir_l) + strlen("data/color.txt");
 	int size = strlen("../data/color.txt");
 	char * file_location = new char[size];
@@ -131,10 +131,10 @@ vis_sac::vis_sac(lib::configurator &_config) : sensor(_config){
 	//strcat(file_location2, dir_l);
 	//strcat(file_location2, "data/pattern.txt");
 	strcat(file_location2, "../data/pattern.txt");
-	
+
 	//vision.loadColors("color.txt");
   	//printf("ret%d",ret);
-  	
+
 			if (vision.loadColors(file_location)){
 				 vision.initialize(XMAX,YMAX);
 				 vision.countLUT();
@@ -142,9 +142,9 @@ vis_sac::vis_sac(lib::configurator &_config) : sensor(_config){
 
 }
 else printf("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\n");
-	fd = open("/dev/bttvx",O_RDWR); // bezposrednio odczyt ze sterownika zamiast konstruktora 
+	fd = open("/dev/bttvx",O_RDWR); // bezposrednio odczyt ze sterownika zamiast konstruktora
 */
-		
+
 	z=0;
 	x=0;
 		portno = PORT;
@@ -156,29 +156,29 @@ else printf("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 	}
 	server = gethostbyname(HOST);
 	if (server == NULL) {
-	    printf("ERROR, no such host\n");	    
+	    printf("ERROR, no such host\n");
 	    throw sensor_error (lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
 	}
 	   bzero((char *) &serv_addr, sizeof(serv_addr));
 	serv_addr.sin_family = AF_INET;
-	bcopy((char *)server->h_addr, 
+	bcopy((char *)server->h_addr,
 	     (char *)&serv_addr.sin_addr.s_addr,
 	     server->h_length);
 	serv_addr.sin_port = htons(portno);
-	  if (connect(sockfd, (const struct sockaddr *) &serv_addr,sizeof(serv_addr)) < 0) 
+	  if (connect(sockfd, (const struct sockaddr *) &serv_addr,sizeof(serv_addr)) < 0)
 	  {
 	    printf("ERROR connecting");
 	    throw sensor_error (lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
 		}
 	sr_msg->message ("VSP VIS PB-ECL-SAC started");
-	
+
 	};
 
 vis_sac::~vis_sac(void){
 	close (fd);
 
-	
-	
+
+
 	printf("Destruktor VSP\n");
 	};
 
@@ -187,12 +187,12 @@ void vis_sac::configure_sensor (void){
 
 	is_sensor_configured=true;
 
-     sr_msg->message ("Sensor initiated"); // 7 
+     sr_msg->message ("Sensor initiated"); // 7
 	};
-	
+
 void vis_sac::wait_for_event(){
 
-};	
+};
 
 /*************************** inicjacja odczytu ******************************/
 void vis_sac::initiate_reading (void){
@@ -200,18 +200,18 @@ void vis_sac::initiate_reading (void){
 
 	if(!is_sensor_configured)
 	     throw sensor_error (lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
-	     
+
 //clock_gettime( CLOCK_REALTIME , &s_time);
- 
+
 
  /*
 	size_read = read( fd, buffer, sizeof( buffer ) ); // bezposredni odczyt zamiast przez klase
-   
+
 	lseek(fd,0,SEEK_SET);
 
 //recog
   vision.findBlobs(buffer);
- 
+
 vision.filterBlobsReset();
 vision.filterBlobs(BLOB_SIZE_BIGGER,200.0);
 vision.filterBlobs(BLOB_SIZE_SMALLER,10000.0);
@@ -236,27 +236,27 @@ vision.setRoi(k1.roi,1000);
 
 
 	n = write(sockfd,"x",strlen("x"));
-    if (n < 0) 
+    if (n < 0)
          printf("ERROR writing to socket");
     bzero(buffer,256);
     n = read(sockfd,buffer,255);
-    if (n < 0) 
+    if (n < 0)
          printf("ERROR reading from socket");
     x = atoi(buffer);
     n = write(sockfd,"y",strlen("y"));
-    if (n < 0) 
+    if (n < 0)
          printf("ERROR writing to socket");
     bzero(buffer,256);
     n = read(sockfd,buffer,255);
-    if (n < 0) 
+    if (n < 0)
          printf("ERROR reading from socket");
 	y = atoi(buffer);
-	
+
 	is_reading_ready=true;							// odczyt jakikolwiek
-	
-   
+
+
 	}; // wait_for_event
-		
+
 /***************************** odczyt z czujnika *****************************/
 void vis_sac::get_reading (void){
 // printf("7 - get reading\n");
@@ -264,17 +264,17 @@ void vis_sac::get_reading (void){
 	     throw sensor_error (lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
 	// jezeli chcemy jakikolwiek odczyt	-> is_reading_ready
 	if(!is_reading_ready)
-	     throw sensor_error (lib::FATAL_ERROR, READING_NOT_READY);   
+	     throw sensor_error (lib::FATAL_ERROR, READING_NOT_READY);
 
 	from_vsp.vsp_report= lib::VSP_REPLY_OK;
 	// tutaj: czujnik skalibrowany, odczyt dokonany, zapisany w "image", przepisanie wszystkich pol
 	// przepisanie do bufora komunikacyjnego
-	
+
 	printf("QQQQQQQQQQQQQQQQQQQQQ get readX %d %d\n", x,y);
 double aux=0;
-	
+
 	// fill up frame
-	
+
 	for(int i=0; i<3; i++)
 		for(int j=0; j<3; j++)
 		{
@@ -284,7 +284,7 @@ double aux=0;
 	for(int i=0; i<3; i++)
 	{
 	//		vision.E_Tx_G.get_value(3,i,aux);
-			from_vsp.comm_image.sensor_union.camera.frame[4*i+3]=aux; 
+			from_vsp.comm_image.sensor_union.camera.frame[4*i+3]=aux;
 	}
 	for(int j=0; j<3; j++)
 			from_vsp.comm_image.sensor_union.camera.frame[12+j]=0;
@@ -292,7 +292,7 @@ double aux=0;
 	//		from_vsp.comm_image.sensor_union.camera.frame[15]=1;
 	//else
 	//		from_vsp.comm_image.sensor_union.camera.frame[15]=0;
-			
+
 	for(int i=0; i<3; i++)
 		for(int j=0; j<3; j++)
 		{
@@ -302,7 +302,7 @@ double aux=0;
 	for(int i=0; i<3; i++)
 	{
 	//		vision.E_Tx_G.get_value(3,i,aux);
-			from_vsp.comm_image.sensor_union.vis_sac.frame_E_T_G[4*i+3]=aux; 
+			from_vsp.comm_image.sensor_union.vis_sac.frame_E_T_G[4*i+3]=aux;
 	}
 	for(int j=0; j<3; j++)
 			from_vsp.comm_image.sensor_union.vis_sac.frame_E_T_G[12+j]=0;
@@ -310,20 +310,20 @@ double aux=0;
 	//		from_vsp.comm_image.sensor_union.vis_sac.frame_E_T_G[15]=1;
 	//else
 	//		from_vsp.comm_image.sensor_union.vis_sac.frame_E_T_G[15]=0;
-	
+
 	from_vsp.comm_image.sensor_union.vis_sac.frame_E_r_G__f[0]=0;//vision.C_eps_EG[0];
 	from_vsp.comm_image.sensor_union.vis_sac.frame_E_r_G__f[1]=0;//vision.C_eps_EG[1];
-	
+
 	for(int i=2; i<6; i++)
 		from_vsp.comm_image.sensor_union.vis_sac.frame_E_r_G__f[i]=0;
-	
+
 	//cout << "from VSP" << endl;
 	//for(int i=0; i<16; i++)
 	//	cout << from_vsp.comm_image.sensor_union.vis_sac.frame_E_T_G[i] << " ";
 	//cout << endl;
 	// for(int i=0; i<16; i++)
 	// 	from_vsp.comm_image.sensor_union.camera.frame[i] = 0.5;
-     // sr_msg->message ("VSP Get reading ok");   
+     // sr_msg->message ("VSP Get reading ok");
      is_reading_ready=false; // 7
 	};
 

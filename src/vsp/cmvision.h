@@ -1,10 +1,10 @@
 #define CMVISION
-#include "./global.h"
-#include "./calib.h"
-#include "./macierze_nr.h"
+#include "global.h"
+#include "calib.h"
+#include "macierze_nr.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include<math.h>
+#include <math.h>
 #include "lib/mathtr.h"
 
 #define CMV_COLOR_LEVELS  256

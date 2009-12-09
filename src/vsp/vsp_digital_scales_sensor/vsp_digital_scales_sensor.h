@@ -25,7 +25,7 @@ private:
     short number_of_scales;
     // Flagi stanu procesu.
     short readings_initiated;
-    
+
 public:
     // Konstruktor czujnika wirtualnego.
     digital_scales(lib::configurator &_config);

@@ -1,9 +1,9 @@
  // -------------------------------------------------------------------------
 //                            vsp_s.cc 		dla QNX6.2
-// 
+//
 //            Virtual Sensor Process (lib::VSP) - methods
 // Metody klasy VSP
-// 
+//
 // Ostatnia modyfikacja: 25.06.03
 // Autor: tkornuta
 // odrem - prywrocic pry podlaczeniu klasy kamera
@@ -23,7 +23,7 @@
 #include "lib/com_buf.h"
 
 #include "lib/srlib.h"
-#include "vsp/vsp_vis_pbeclsac.h"
+#include "vsp/vis_pbeclsac/vsp_vis_pbeclsac.h"
 #include "vsp/cmvision.h"
 #include "vsp/cube.h"
 
@@ -57,7 +57,7 @@ int interatt=0;
 int x=0;
 int z=0;
 int irq_no;
-int id;  
+int id;
 int md;
 struct timespec start[9], stop[9], res;
 //short tmp[9];
@@ -99,10 +99,10 @@ vis_pbeclsac::vis_pbeclsac(lib::configurator &_config) : sensor(_config){
 	// Wielkosc unii.
 	union_size = sizeof(image.sensor_union.camera);
 
-	is_sensor_configured=false;	// czujnik niezainicjowany 
+	is_sensor_configured=false;	// czujnik niezainicjowany
 	is_reading_ready=false;				// nie ma zadnego gotowego odczytu
 	irq_no = 0;
-	ThreadCtl (_NTO_TCTL_IO, NULL);  // by YOYEK & 7 - nadanie odpowiednich uprawnien watkowi 
+	ThreadCtl (_NTO_TCTL_IO, NULL);  // by YOYEK & 7 - nadanie odpowiednich uprawnien watkowi
 
 	std::string colors_file(mrrocpp_network_path);
 	colors_file += "data/color_eih.txt";
@@ -120,8 +120,8 @@ vis_pbeclsac::vis_pbeclsac(lib::configurator &_config) : sensor(_config){
 	{
 		printf("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\n");
 	}
-	
-	fd = open("/dev/bttvx",O_RDWR); // bezposrednio odczyt ze sterownika zamiast konstruktora 
+
+	fd = open("/dev/bttvx",O_RDWR); // bezposrednio odczyt ze sterownika zamiast konstruktora
 
 	z=0;
 	x=0;
@@ -141,12 +141,12 @@ void vis_pbeclsac::configure_sensor (void){
 
 	is_sensor_configured=true;
 
-     sr_msg->message ("Sensor initiated"); // 7 
+     sr_msg->message ("Sensor initiated"); // 7
 	};
-	
+
 void vis_pbeclsac::wait_for_event(){
 
-};	
+};
 
 /*************************** inicjacja odczytu ******************************/
 void vis_pbeclsac::initiate_reading (void){
@@ -154,18 +154,18 @@ void vis_pbeclsac::initiate_reading (void){
 
 	if(!is_sensor_configured)
 	     throw sensor_error (lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
-	     
-clock_gettime( CLOCK_REALTIME , &s_time);
- 
 
- 
+clock_gettime( CLOCK_REALTIME , &s_time);
+
+
+
 	size_read = read( fd, buffer, sizeof( buffer ) ); // bezposredni odczyt zamiast przez klase
-   
+
 	lseek(fd,0,SEEK_SET);
 
 //recog
   vision.findBlobs(buffer);
- 
+
 vision.filterBlobsReset();
 vision.filterBlobs(BLOB_SIZE_BIGGER,200.0);
 vision.filterBlobs(BLOB_SIZE_SMALLER,10000.0);
@@ -185,13 +185,13 @@ if(k1.build(&vision))	vision.setRoi(k1.roi,40);
 else
 vision.setRoi(k1.roi,1000);
 
-		
+
 // koniec przepisywania
 	is_reading_ready=true;							// odczyt jakikolwiek
-	
-   
+
+
 	}; // wait_for_event
-		
+
 /***************************** odczyt z czujnika *****************************/
 void vis_pbeclsac::get_reading (void){
 // printf("7 - get reading\n");
@@ -199,13 +199,13 @@ void vis_pbeclsac::get_reading (void){
 	     throw sensor_error (lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
 	// jezeli chcemy jakikolwiek odczyt	-> is_reading_ready
 	if(!is_reading_ready)
-	     throw sensor_error (lib::FATAL_ERROR, READING_NOT_READY);   
+	     throw sensor_error (lib::FATAL_ERROR, READING_NOT_READY);
 
 	from_vsp.vsp_report= lib::VSP_REPLY_OK;
 	// tutaj: czujnik skalibrowany, odczyt dokonany, zapisany w "image", przepisanie wszystkich pol
 	// przepisanie do bufora komunikacyjnego
 double aux=0;
-	
+
 	// fill up frame
 	for(int i=0; i<3; i++)
 		for(int j=0; j<3; j++)
@@ -216,7 +216,7 @@ double aux=0;
 	for(int i=0; i<3; i++)
 	{
 			vision.E_Tx_G.get_value(3,i,aux);
-			from_vsp.comm_image.sensor_union.camera.frame[4*i+3]=aux; 
+			from_vsp.comm_image.sensor_union.camera.frame[4*i+3]=aux;
 	}
 	for(int j=0; j<3; j++)
 			from_vsp.comm_image.sensor_union.camera.frame[12+j]=0;
@@ -226,7 +226,7 @@ double aux=0;
 			from_vsp.comm_image.sensor_union.camera.frame[15]=0;
 	// for(int i=0; i<16; i++)
 	// 	from_vsp.comm_image.sensor_union.camera.frame[i] = 0.5;
-     // sr_msg->message ("VSP Get reading ok");   
+     // sr_msg->message ("VSP Get reading ok");
      is_reading_ready=false; // 7
 	};
 

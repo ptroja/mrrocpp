@@ -19,7 +19,7 @@
 
 // Konfigurator
 #include "lib/configurator.h"
-#include "vsp/vsp_rcs_korf.h"
+#include "vsp/vsp_rcs_korf/vsp_rcs_korf.h"
 
 // CubeSolver
 #include "vsp/rcs/Cube/CubeTranslator.h"

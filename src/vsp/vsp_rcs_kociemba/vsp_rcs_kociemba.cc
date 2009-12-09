@@ -19,7 +19,7 @@
 
 // Konfigurator
 #include "lib/configurator.h"
-#include "vsp/vsp_rcs_kociemba.h"
+#include "vsp/vsp_rcs_kociemba/vsp_rcs_kociemba.h"
 
 // CubeSolver
 #include "vsp/rcs/Cube/CubeTranslator.h"

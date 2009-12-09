@@ -23,7 +23,7 @@
 #include "lib/com_buf.h"
 
 #include "lib/srlib.h"
-#include "vsp/vsp_schunk.h"
+#include "vsp/schunk/vsp_schunk.h"
 
 // Konfigurator
 #include "lib/configurator.h"
@@ -65,7 +65,7 @@ schunk::schunk(lib::configurator &_config) : sensor(_config)
 			delay(CONNECT_DELAY);
 		else{
 			throw sensor_error (lib::SYSTEM_ERROR, CANNOT_LOCATE_DEVICE);
-		};
+		}
 
 }
 
@@ -108,7 +108,7 @@ void schunk::configure_sensor (void)// w obecnej implementacji zeruje poziom odc
 	} else if (to_vsp.parameters>=2) {
 		next_ap_state=to_vsp.parameters;
 	}
-};
+}
 
 void schunk::wait_for_event()
 {
@@ -138,7 +138,7 @@ void schunk::wait_for_event()
 	delete msg_send_timeout;
 
 // 	delay(1); // BY Y DEBUG
-};
+}
 
 
 #define SURFACE_IMPACT 30
@@ -216,7 +216,7 @@ void schunk::initiate_reading (void)
 	//    printf("%d, %d, %d, %d, %d, %d VSP pomiarow: %d,  czas: %ld\n",image.sensor_union.force.rez[0], image.sensor_union.force.rez[1],
 	// 	image.sensor_union.force.rez[2], image.sensor_union.force.rez[3], image.sensor_union.force.rez[4],image.sensor_union.force.rez[5],ms_nr, start[0].tv_sec%100);
 	}
-};
+}
 
 /***************************** odczyt z czujnika *****************************/
 void schunk::get_reading (void)
@@ -254,7 +254,7 @@ void schunk::get_reading (void)
 
 	//    sr_msg->message ("VSP Get reading ok");
 	is_reading_ready=false;
-};
+}
 
 } // namespace sensor
 } // namespace vsp

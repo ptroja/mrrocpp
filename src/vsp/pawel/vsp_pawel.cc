@@ -39,7 +39,7 @@
 #include "lib/sensor.h"
 
 #include "lib/srlib.h"
-#include "vsp/vsp_pawel.h"
+#include "vsp/pawel/vsp_pawel.h"
 
 // Konfigurator
 #include "lib/configurator.h"

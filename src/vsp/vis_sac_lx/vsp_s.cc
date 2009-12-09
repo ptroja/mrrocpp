@@ -20,7 +20,7 @@
 #include "lib/com_buf.h"
 
 #include "lib/srlib.h"
-#include "vsp/vsp_vis_sac_lx.h"
+#include "vsp/vis_sac_lx/vsp_vis_sac_lx.h"
 
 #include "lib/configurator.h"
 

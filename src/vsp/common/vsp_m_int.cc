@@ -51,7 +51,7 @@ namespace common {
 /********************************* GLOBALS **********************************/
 sensor::sensor *vs;		// czujnik wirtualny
 
-bool TERMINATE = false;									// zakonczenie obu watkow
+static bool TERMINATE = false;									// zakonczenie obu watkow
 
 /********************************** SIGCATCH ********************************/
 void catch_signal(int sig) {

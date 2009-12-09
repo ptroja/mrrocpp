@@ -21,7 +21,7 @@
 #include "lib/com_buf.h"
 
 #include "lib/sensor.h"
-#include "vsp/moxaclass.h"
+#include "vsp/vsp_digital_scales_sensor/moxaclass.h"
 
 /***************************** INCREMENT MARKER ******************************/
 void MOXADigitalScale::increment_marker(int * marker){

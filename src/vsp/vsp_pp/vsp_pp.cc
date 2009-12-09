@@ -40,30 +40,13 @@
 
 // Konfigurator
 #include "lib/configurator.h"
-#include "vsp/vsp_pp.h"
-//#include "vsp/moxaclass.h"
+#include "vsp/vsp_pp/vsp_pp.h"
 
 namespace mrrocpp {
 namespace vsp {
 namespace sensor {
 
 /********************************* GLOBALS **********************************/
-// Wskaznik na obiekt do komunikacji z SR.
-// extern sr_vsp* sr_msg;
-
-// Flaga uzywana do konczenia pracy watkow.
-// extern short TERMINATE;
-
-// Objekt uzywane do konfiguracji.
-// extern common_config* common_c;
-// extern vsp_config* vsp_c;
-// extern config_directories_class* config_directories;
-// extern ini_configs* ini_con;
-// extern lib::configurator* config;
-
-
-// Czujnik wirtualny
-// extern vsp_pp_sensor *vs;
 
 // Zwrocenie stworzonego obiektu - czujnika. Funkcja implementowana w plikach klas dziedziczacych.
 sensor* return_created_sensor (lib::configurator &_config)
@@ -86,7 +69,7 @@ pp::pp(lib::configurator &_config) : sensor(_config){
         image.sensor_union.pp.joy[i]=0.0;
 	   from_vsp.comm_image.sensor_union.pp.joy[i] = 0.0;
 	   joy_axis_img[i] = 0.0;
-        };
+        }
 	image.sensor_union.pp.active_motors = 0;
 	from_vsp.comm_image.sensor_union.pp.active_motors = 0;
 	Word_received = 0;
@@ -97,13 +80,13 @@ pp::pp(lib::configurator &_config) : sensor(_config){
 
     // Ustawienie flagi stanu procesu.
     readings_initiated = false;
-    };// end: vsp_pp_sensor
+    }// end: vsp_pp_sensor
 
 
 pp::~pp(void){
     // Zamkniecie deskryptora urzadzenia.
     close(RS_descriptor);
-};
+}
 
 
 /************************** CONFIGURE SENSOR ******************************/
@@ -200,7 +183,7 @@ void pp::configure_sensor (void){
     // Ustawienie flagi stanu procesu.
     is_sensor_configured = true;
     sr_msg->message ("Programming panel calibrated");
-    };// end: configure_sensor
+    }// end: configure_sensor
 
 /**************************** INITIATE READING *******************************/
 void pp::initiate_reading (void){
@@ -304,7 +287,7 @@ printf("Axis_Z: %d\n", axis_reading[2]);
 
     // Ustawienie flagi stanu procesu.
 	is_reading_ready=true;
-    };// end: initiate_reading
+    }// end: initiate_reading
 
 /***************************** GET  READING *********************************/
 void pp::get_reading (void){
@@ -326,7 +309,7 @@ void pp::get_reading (void){
 
     // Ustawienie flagi stanu procesu.
 	is_reading_ready=false;
-    };// end: get_reading
+    }// end: get_reading
 
 } // namespace sensor
 } // namespace vsp

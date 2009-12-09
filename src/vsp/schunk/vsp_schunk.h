@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------------
-// Proces: 	VIRTUAL SENSOR PROCESS (lib::VSP) 
+// Proces: 	VIRTUAL SENSOR PROCESS (lib::VSP)
 // Plik:			vsp_force_sensor.h
 // System:	QNX/MRROCPP  v. 6.3
 // Opis:		Deklaracja klasy vsp_schunk - czujnik sily.
@@ -26,18 +26,18 @@ private:
 	short ap_state, prev_ap_state, next_ap_state; // stan aplikacji z punktu widzenia wykrywanych zdarzen
 		// 1- po biasie, 2 - przyleganie do powierzchni, 3 - unoszenie, 4 - uniesienie (jazda w powietrzu),
 		// 5- opuszczanie, (dalej 2 przyleganie do powierzchni), 6 - nie wykrywa zdarzen
-		
+
 		int edp_vsp_fd; // do polaczenia z EDP
-		
-		
+
+
 		struct sigevent event;
 		lib::VSP_EDP_message vsp_edp_command;// by Y do komuniacji z EDP
 		lib::EDP_VSP_reply edp_vsp_reply;
-		
+
 		unsigned int ms_nr; // numer odczytu z czujnika
-		
+
 		struct timespec start[9];
-		
+
 public:
 	schunk(lib::configurator &_config);
 	~schunk(void);

@@ -58,7 +58,7 @@ sem_t start_sem;
 
 // configurator* config;
 
-bool TERMINATE=false;											// zakonczenie obu watkow
+static bool TERMINATE=false;											// zakonczenie obu watkow
 
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;	// inicjalizacja MUTEXa
 

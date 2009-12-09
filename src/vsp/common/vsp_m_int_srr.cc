@@ -35,11 +35,7 @@ namespace common {
 /********************************* GLOBALS **********************************/
 sensor::sensor *vs;		// czujnik wirtualny
 
-// lib::sr_vsp *vs->sr_msg;		// komunikacja z SR
-
-// configurator* config;
-
-bool TERMINATE = false;									// zakonczenie obu watkow
+static bool TERMINATE = false;									// zakonczenie obu watkow
 
 /********************************** SIGCATCH ********************************/
 void catch_signal(int sig) {

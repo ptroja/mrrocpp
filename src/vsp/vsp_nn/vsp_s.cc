@@ -1,9 +1,9 @@
  // -------------------------------------------------------------------------
 //                            vsp_s.cc 		dla QNX6.2
-// 
+//
 //            Virtual Sensor Process (lib::VSP) - methods
 // Metody klasy VSP
-// 
+//
 // Ostatnia modyfikacja: 25.06.03
 // Autor: tkornuta
 // odrem - prywrocic pry podlaczeniu klasy kamera
@@ -34,7 +34,7 @@
 
 
 #include "lib/srlib.h"
-#include "vsp/vsp_nn.h"
+#include "vsp/vsp_nn/vsp_nn.h"
 
 
 // Konfigurator
@@ -56,7 +56,7 @@ int size_read;
 int interatt=0;
 
 int irq_no;
-int id;  
+int id;
 int md;
 //short tmp[9];
 
@@ -94,12 +94,12 @@ nn::nn(lib::configurator &_config) : sensor(_config){
 	union_size = sizeof(image.sensor_union.camera);
 
 //	uint64_t e;			// kod bledu systemowego
-	
-	is_sensor_configured=false;	// czujnik niezainicjowany 
+
+	is_sensor_configured=false;	// czujnik niezainicjowany
 	is_reading_ready=false;				// nie ma zadnego gotowego odczytu
 	irq_no = 0;
-	ThreadCtl (_NTO_TCTL_IO, NULL);  // by YOYEK & 7 - nadanie odpowiednich uprawnien watkowi 
-	
+	ThreadCtl (_NTO_TCTL_IO, NULL);  // by YOYEK & 7 - nadanie odpowiednich uprawnien watkowi
+
 	portno = PORT;
 	sockfd = socket(AF_INET, SOCK_STREAM, 0);
 	if (sockfd < 0)
@@ -109,16 +109,16 @@ nn::nn(lib::configurator &_config) : sensor(_config){
 	}
 	server = gethostbyname(HOST);
 	if (server == NULL) {
-	    printf("ERROR, no such host\n");	    
+	    printf("ERROR, no such host\n");
 	    throw sensor_error (lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
 	}
 	   bzero((char *) &serv_addr, sizeof(serv_addr));
 	serv_addr.sin_family = AF_INET;
-	bcopy((char *)server->h_addr, 
+	bcopy((char *)server->h_addr,
 	     (char *)&serv_addr.sin_addr.s_addr,
 	     server->h_length);
 	serv_addr.sin_port = htons(portno);
-	  if (connect(sockfd, (const struct sockaddr *) &serv_addr,sizeof(serv_addr)) < 0) 
+	  if (connect(sockfd, (const struct sockaddr *) &serv_addr,sizeof(serv_addr)) < 0)
 	  {
 	    printf("ERROR connecting");
 	    throw sensor_error (lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
@@ -127,8 +127,8 @@ nn::nn(lib::configurator &_config) : sensor(_config){
 
 nn::~nn(void){
 
-	
-	
+
+
 	printf("Destruktor VSP\n");
 	};
 
@@ -136,13 +136,13 @@ nn::~nn(void){
 void nn::configure_sensor (void){
 
 	is_sensor_configured=true;
- 
-     sr_msg->message ("Sensor initiated"); // 7 
+
+     sr_msg->message ("Sensor initiated"); // 7
 	};
-	
+
 void nn::wait_for_event(){
 
-};	
+};
 
 /*************************** inicjacja odczytu ******************************/
 void nn::initiate_reading (void){
@@ -150,33 +150,33 @@ void nn::initiate_reading (void){
 
 	if(!is_sensor_configured)
 	     throw sensor_error (lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
-	     
+
 
 //read from linux
 	n = write(sockfd,"x",strlen("x"));
-    if (n < 0) 
+    if (n < 0)
          printf("ERROR writing to socket");
     bzero(buffer,256);
     n = read(sockfd,buffer,255);
-    if (n < 0) 
+    if (n < 0)
          printf("ERROR reading from socket");
     x = atoi(buffer);
     n = write(sockfd,"y",strlen("y"));
-    if (n < 0) 
+    if (n < 0)
          printf("ERROR writing to socket");
     bzero(buffer,256);
     n = read(sockfd,buffer,255);
-    if (n < 0) 
+    if (n < 0)
          printf("ERROR reading from socket");
 	y = atoi(buffer);
- 
+
     //printf("X: %d, Y: %d\n",x,y);
-		
+
 // koniec przepisywania
 	is_reading_ready=true;							// odczyt jakikolwiek
-   
+
 	}; // wait_for_event
-		
+
 /***************************** odczyt z czujnika *****************************/
 void nn::get_reading (void){
 
@@ -184,7 +184,7 @@ void nn::get_reading (void){
 	     throw sensor_error (lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
 	// jezeli chcemy jakikolwiek odczyt	-> is_reading_ready
 	if(!is_reading_ready)
-	     throw sensor_error (lib::FATAL_ERROR, READING_NOT_READY);   
+	     throw sensor_error (lib::FATAL_ERROR, READING_NOT_READY);
 
 	// ok
 	from_vsp.vsp_report= lib::VSP_REPLY_OK;
@@ -197,9 +197,9 @@ void nn::get_reading (void){
 	from_vsp.comm_image.sensor_union.camera.frame[4*0+0]=0; from_vsp.comm_image.sensor_union.camera.frame[4*0+1]= 1; from_vsp.comm_image.sensor_union.camera.frame[4*0+2]= 0; from_vsp.comm_image.sensor_union.camera.frame[4*0+3]= 0.185*(x-384)/290;
 	from_vsp.comm_image.sensor_union.camera.frame[4*2+0]=0; from_vsp.comm_image.sensor_union.camera.frame[4*2+1]=0; from_vsp.comm_image.sensor_union.camera.frame[4*2+2]= 1; from_vsp.comm_image.sensor_union.camera.frame[4*2+3]= 982.285;
 	from_vsp.comm_image.sensor_union.camera.frame[4*3+0]=0; from_vsp.comm_image.sensor_union.camera.frame[4*3+1]=0; from_vsp.comm_image.sensor_union.camera.frame[4*3+2]= 0; from_vsp.comm_image.sensor_union.camera.frame[4*3+3]= 1;
-	
-	
-	
+
+
+
 /*
 	for(int i=0; i<3; i++)
 		for(int j=0; j<3; j++)
@@ -212,7 +212,7 @@ void nn::get_reading (void){
 			from_vsp.comm_image.sensor_union.camera.frame[15]=1;
 	else
 			from_vsp.comm_image.sensor_union.camera.frame[15]=0;
-*/   
+*/
      is_reading_ready=false; // 7
 	};
 } // namespace sensor

@@ -1,4 +1,4 @@
-#include "vsp/rosm.h"
+#include "vsp/vsp_mic/rosm.h"
 
 
 //M1W4-6L1Y-H82Y-T6BK-UNPW

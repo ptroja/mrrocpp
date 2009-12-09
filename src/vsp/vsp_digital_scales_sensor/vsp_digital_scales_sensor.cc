@@ -19,25 +19,12 @@
 
 // Konfigurator
 #include "lib/configurator.h"
-#include "vsp/vsp_digital_scales_sensor.h"
-#include "vsp/moxaclass.h"
+#include "vsp/vsp_digital_scales_sensor/vsp_digital_scales_sensor.h"
+#include "vsp/vsp_digital_scales_sensor/moxaclass.h"
 
 namespace mrrocpp {
 namespace vsp {
 namespace common {
-// Wskaznik na obiekt do komunikacji z SR.
-// extern sr_vsp* vs->sr_msg;
-
-// Flaga uzywana do konczenia pracy watkow.
-extern short TERMINATE;
-
-// Objekt uzywane do konfiguracji.
-// extern common_config* common_c;
-// extern vsp_config* vsp_c;
-// extern config_directories_class* config_directories;
-// extern ini_configs* ini_con;
-// extern lib::configurator* config;
-
 
 // Czujnik wirtualny
 extern sensor::digital_scales *vs;
@@ -49,9 +36,9 @@ namespace sensor {
 
 
 // Bariera uzywana do zawieszania watkow w oczekiwaniu na polecenie INITIATE_READING.
-pthread_barrier_t initiate_reading_barrier;
+static pthread_barrier_t initiate_reading_barrier;
 // Bariera uzywana przez watek koordynatora - oczekiwanie na odczyty GET_READING.
-pthread_barrier_t reading_ready_barrier;
+static pthread_barrier_t reading_ready_barrier;
 
 // Zwrocenie stworzonego obiektu - czujnika. Funkcja implementowana w plikach klas dziedziczacych.
 sensor* return_created_sensor (lib::configurator &_config)
@@ -72,8 +59,8 @@ void* digital_scale_thread(void * arg){
         // Oczekiwanie na polecenie (zawieszenie na barierze).
         pthread_barrier_wait( &initiate_reading_barrier);
         // Koniec pracy.
-        if(common::TERMINATE)
-            break;
+        pthread_testcancel();
+
         try{
             // Pobranie odczytu.
             ds.get_reading();
@@ -97,7 +84,7 @@ digital_scales::digital_scales(lib::configurator &_config)  : sensor(_config) {
 	union_size = sizeof(image.sensor_union.ds);
 
     // Struktura do pobierania danych z pliku konfiguracyjnego.
-      number_of_scales = config.return_int_value("number_of_scales");
+    number_of_scales = config.return_int_value("number_of_scales");
 
     // Jesii za duzo linialow.
     if(number_of_scales > 6)
@@ -108,24 +95,27 @@ digital_scales::digital_scales(lib::configurator &_config)  : sensor(_config) {
     // Stworzenie barier uzywanych do synchronizacji watkow.
     pthread_barrier_init(&initiate_reading_barrier, NULL, number_of_scales+1);
     pthread_barrier_init(&reading_ready_barrier, NULL, number_of_scales+1);
-    // Atrybuty watkow.
-    pthread_attr_t tattr;
-    pthread_attr_init( &tattr );
-    pthread_attr_setdetachstate( &tattr, PTHREAD_CREATE_DETACHED );
+
     // Inicjacja watkow.
     for(int i=1; i<= number_of_scales; i++)
-        pthread_create( NULL, &tattr, &digital_scale_thread, (void *)i);
+        pthread_create( NULL, NULL, &digital_scale_thread, (void *)i);
     // Zerowe polozenia poczatkowe.
     for(int i=0; i<6; i++){
         position_zero[i] = 0;
         image.sensor_union.ds.readings[i]=0;
         }
+
     // Ustawienie flagi stanu procesu.
     readings_initiated = false;
     }
 
 
-digital_scales::~digital_scales(void){};
+digital_scales::~digital_scales(void){
+	// TODO: call pthread_cancel() on all created threads
+	// TODO: and then do pthread_join() on them
+	pthread_barrier_destroy(&reading_ready_barrier);
+	pthread_barrier_destroy(&initiate_reading_barrier);
+}
 
 
 /************************** CONFIGURE SENSOR ******************************/

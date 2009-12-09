@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------------
-// Proces: 	VIRTUAL SENSOR PROCESS (lib::ECP) 
+// Proces: 	VIRTUAL SENSOR PROCESS (lib::ECP)
 // Plik:			vsp_fs.cc
 // System:	QNX/MRROC++  v. 6.3
 // Opis:		Metody czujnika sily - po stronie procesu VSP.
@@ -15,9 +15,7 @@
 
 #include "lib/srlib.h"
 
-// Konfigurator
-#include "vsp/vsp_time_sensor.h"
-
+#include "vsp/vsp_time_sensor/vsp_time_sensor.h"
 
 namespace mrrocpp {
 namespace vsp {
@@ -36,9 +34,9 @@ time::time(lib::configurator &_config) : sensor(_config){
 	union_size = sizeof(image.sensor_union.time);
 
 	// Czujnik niezainicjowany.
-	is_sensor_configured=false;	
+	is_sensor_configured=false;
 	// Nie ma zadnego gotowego odczytu.
-	is_reading_ready=false;				
+	is_reading_ready=false;
 }; // end: vsp_time_sensor
 
 // Metoda sluzaca do konfiguracji czujnika.

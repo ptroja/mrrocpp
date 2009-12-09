@@ -63,7 +63,7 @@ pthread_mutex_t image_mutex = PTHREAD_MUTEX_INITIALIZER;	// inicjalizacja MUTEXa
 
 sem_t new_command_sem;
 
-bool TERMINATE = false;									// zakonczenie obu watkow
+static bool TERMINATE = false;									// zakonczenie obu watkow
 static bool CONFIGURE_FLAG = false;								// czy skonfigurowany czujnik
 static bool INITIATE_FLAG = false;								// czy odczyt zainicjowany
 static bool sensor_configuration_task = false;					// nalezy wykonac konfiguracje sensora
