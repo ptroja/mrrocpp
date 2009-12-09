@@ -19,11 +19,11 @@ int port_send( messip_channel_t * ch,
    int32_t type,
    int32_t subtype,
    const SendData & send,
-   int32_t * answer,
    ReceiveData & reply,
    int32_t msec_timeout = MESSIP_NOTIMEOUT)
 {
-	return messip_send(ch, type, subtype, &send, sizeof(send), answer, &reply, sizeof(reply), msec_timeout);
+	int32_t answer;
+	return messip_send(ch, type, subtype, &send, sizeof(send), &answer, &reply, sizeof(reply), msec_timeout);
 }
 
 template <class SendData>
@@ -31,10 +31,10 @@ int port_send_sync( messip_channel_t * ch,
    int32_t type,
    int32_t subtype,
    const SendData & send,
-   int32_t * answer,
    int32_t msec_timeout = MESSIP_NOTIMEOUT)
 {
-	return messip_send(ch, type, subtype, &send, sizeof(send), answer, NULL, 0, msec_timeout);
+	int32_t answer;
+	return messip_send(ch, type, subtype, &send, sizeof(send), &answer, NULL, 0, msec_timeout);
 }
 
 template <class SendData>

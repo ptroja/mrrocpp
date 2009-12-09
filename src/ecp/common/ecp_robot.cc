@@ -216,8 +216,7 @@ void ecp_robot::send()
 #if !defined(USE_MESSIP_SRR)
 			if (MsgSend(EDP_fd, &ecp_command, sizeof(ecp_command), &reply_package, sizeof(lib::r_buffer)) == -1)
 #else
-			int32_t answer;
-			if ( messip::port_send(EDP_fd, 0, 0, ecp_command, &answer, reply_package) == -1 )
+			if ( messip::port_send(EDP_fd, 0, 0, ecp_command, reply_package) == -1 )
 #endif
 			{
 				int e = errno; // kod bledu systemowego

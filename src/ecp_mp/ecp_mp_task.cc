@@ -102,8 +102,7 @@ bool task::operator_reaction (const char* question )
 	ecp_to_ui_msg.hdr.type=0;
 	if (MsgSend(UI_fd, &ecp_to_ui_msg, sizeof(lib::ECP_message), &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0) {// by Y&W
 #else
-	int status;
-	if(messip::port_send(UI_fd, 0, 0, &ecp_to_ui_msg, &status, ui_to_ecp_rep) < 0) {
+	if(messip::port_send(UI_fd, 0, 0, &ecp_to_ui_msg, ui_to_ecp_rep) < 0) {
 #endif
 		uint64_t e = errno;
 		perror("ECP operator_reaction(): Send() to UI failed");
@@ -131,8 +130,7 @@ uint8_t task::choose_option (const char* question, uint8_t nr_of_options_input )
 	ecp_to_ui_msg.hdr.type=0;
 	if (MsgSend(UI_fd, &ecp_to_ui_msg,  sizeof(lib::ECP_message),  &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0) {// by Y&W
 #else
-	int status;
-	if(messip::port_send(UI_fd, 0, 0, ecp_to_ui_msg, &status, ui_to_ecp_rep) < 0) {
+	if(messip::port_send(UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0) {
 #endif
 		uint64_t e = errno;
 		perror("ECP: Send() to UI failed");
@@ -159,8 +157,7 @@ int task::input_integer (const char* question )
 	ecp_to_ui_msg.hdr.type=0;
 	if (MsgSend(UI_fd, &ecp_to_ui_msg,  sizeof(lib::ECP_message),  &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0) {// by Y&W
 #else
-	int status;
-	if(messip::port_send(UI_fd, 0, 0, ecp_to_ui_msg, &status, ui_to_ecp_rep) < 0) {
+	if(messip::port_send(UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0) {
 #endif
 		uint64_t e = errno;
 		perror("ECP: Send() to UI failed");
@@ -187,8 +184,7 @@ double task::input_double (const char* question )
 	ecp_to_ui_msg.hdr.type=0;
 	if (MsgSend(UI_fd, &ecp_to_ui_msg,  sizeof(lib::ECP_message),  &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0) {// by Y&W
 #else
-	int status;
-	if(messip::port_send(UI_fd, 0, 0, ecp_to_ui_msg, &status, ui_to_ecp_rep) < 0) {
+	if(messip::port_send(UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0) {
 #endif
 		uint64_t e = errno;
 		perror("ECP: Send() to UI failed");
@@ -214,8 +210,7 @@ bool task::show_message (const char* message)
 	ecp_to_ui_msg.hdr.type=0;
 	if (MsgSend(UI_fd, &ecp_to_ui_msg,  sizeof(lib::ECP_message),  &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0) {// by Y&W
 #else
-	int status;
-	if(messip::port_send(UI_fd, 0, 0, ecp_to_ui_msg, &status, ui_to_ecp_rep) < 0) {
+	if(messip::port_send(UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0) {
 #endif
 		uint64_t e = errno;
 		perror("ECP: Send() to UI failed");

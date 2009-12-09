@@ -59,8 +59,7 @@ void ecp_teach_in_generator::teach(lib::POSE_SPECIFICATION ps, const char *msg)
     	ecp_to_ui_msg.hdr.type=0;
     	if (MsgSend(ecp_t.UI_fd, &ecp_to_ui_msg, sizeof(lib::ECP_message), &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0)
 #else
-    	int status;
-    	if(messip::port_send(ecp_t.UI_fd, 0, 0, ecp_to_ui_msg, &status, ui_to_ecp_rep) < 0)
+    	if(messip::port_send(ecp_t.UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0)
 #endif
           { // Y&W
 
@@ -109,8 +108,7 @@ void ecp_teach_in_generator::save_file(lib::POSE_SPECIFICATION ps)
     ecp_to_ui_msg.hdr.type=0;
     if (MsgSend(ecp_t.UI_fd, &ecp_to_ui_msg, sizeof(lib::ECP_message), &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0)
 #else
-    int status;
-    if(messip::port_send(ecp_t.UI_fd, 0, 0, ecp_to_ui_msg, &status, ui_to_ecp_rep) < 0)
+    if(messip::port_send(ecp_t.UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0)
 #endif
     {// by Y&W
         e = errno;
@@ -199,8 +197,7 @@ bool ecp_teach_in_generator::load_file_from_ui()
     ecp_to_ui_msg.hdr.type=0;
     if (MsgSend(ecp_t.UI_fd, &ecp_to_ui_msg, sizeof(lib::ECP_message), &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0)
 #else
-    int status;
-    if(messip::port_send(ecp_t.UI_fd, 0, 0, ecp_to_ui_msg, &status, ui_to_ecp_rep) < 0)
+    if(messip::port_send(ecp_t.UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0)
 #endif
     {// by Y&W
         e = errno;

@@ -77,14 +77,12 @@ void configurator::change_ini_file (const std::string & _ini_file)
 #ifdef USE_MESSIP_SRR
 	configfile_t configfile;
 	snprintf(configfile, sizeof(configfile), "%s", _ini_file.c_str());
-	int32_t answer;
 
 	boost::mutex::scoped_lock l(file_mutex);
 
 	messip::port_send_sync(this->ch,
 			CONFIG_CHANGE_INI_FILE, 0,
-			configfile,
-			&answer);
+			configfile);
 #else
 	boost::mutex::scoped_lock l(file_mutex);
 
@@ -185,7 +183,6 @@ bool configurator::exists(const char* _key, const char* __section_name)
 	query_t query;
 	snprintf(query.key, sizeof(query.key), "%s", _key);
 	snprintf(query.section, sizeof(query.section), "%s", _section_name);
-	int32_t answer;
 
 	bool value;
 
@@ -193,8 +190,7 @@ bool configurator::exists(const char* _key, const char* __section_name)
 
 	messip::port_send(this->ch,
 			CONFIG_EXISTS, 0,
-			query,
-			&answer, value);
+			query, value);
 
 	return value;
 #else
@@ -230,7 +226,6 @@ int configurator::return_int_value(const char* _key, const char* __section_name)
 	query_t query;
 	snprintf(query.key, sizeof(query.key), "%s", _key);
 	snprintf(query.section, sizeof(query.section), "%s", _section_name);
-	int32_t answer;
 
 	int value = 0;
 
@@ -238,8 +233,7 @@ int configurator::return_int_value(const char* _key, const char* __section_name)
 
 	messip::port_send(this->ch,
 			CONFIG_RETURN_INT_VALUE, 0,
-			query,
-			&answer, value);
+			query, value);
 
 	return value;
 #else
@@ -280,7 +274,6 @@ double configurator::return_double_value(const char* _key, const char*__section_
 	query_t query;
 	snprintf(query.key, sizeof(query.key), "%s", _key);
 	snprintf(query.section, sizeof(query.section), "%s", _section_name);
-	int32_t answer;
 
 	double value = 0;
 
@@ -288,8 +281,7 @@ double configurator::return_double_value(const char* _key, const char*__section_
 
 	messip::port_send(this->ch,
 			CONFIG_RETURN_INT_VALUE, 0,
-			query,
-			&answer, value);
+			query, value);
 
 	return value;
 #else
@@ -330,15 +322,13 @@ std::string configurator::return_string_value(const char* _key, const char*__sec
 
 	snprintf(query.key, sizeof(query.key), "%s", _key);
 	snprintf(query.section, sizeof(query.section), "%s", _section_name);
-	int32_t answer;
 
 	char value[255];
 
 	boost::mutex::scoped_lock l(file_mutex);
 
 	messip::port_send(this->ch, CONFIG_RETURN_STRING_VALUE, 0,
-			query,
-			&answer, value);
+			query, value);
 
 	// Zwrocenie wartosci.
 	return std::string(value);

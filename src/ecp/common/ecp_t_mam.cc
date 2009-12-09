@@ -159,8 +159,7 @@ void mam::show_mam_window
 	ecp_ui_msg.hdr.type=0;
 	if (MsgSend(UI_fd, &ecp_ui_msg, sizeof(lib::ECP_message), NULL, 0) < 0)
 #else
-	int status;
-	if (messip::port_send_sync(UI_fd, 0, 0, ecp_ui_msg, &status) < 0)
+	if (messip::port_send_sync(UI_fd, 0, 0, ecp_ui_msg) < 0)
 #endif
 	{
 		perror("show_mam_window: Send to UI failed");

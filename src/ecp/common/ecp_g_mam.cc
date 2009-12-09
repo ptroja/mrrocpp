@@ -218,8 +218,7 @@ void manual_moves_automatic_measures::refresh_window (ecp_mp::sensor::digital_sc
 	ecp_ui_msg.hdr.type=0;
 	if (MsgSend(UI_fd, &ecp_ui_msg, sizeof(ecp_ui_msg), NULL, 0) < 0)
 #else
-	int status;
-	if (messip::port_send_sync(UI_fd, 0, 0, ecp_ui_msg, &status) < 0)
+	if (messip::port_send_sync(UI_fd, 0, 0, ecp_ui_msg) < 0)
 #endif
 	{
 		 perror("ECP trajectory_reproduce_thread(): Send() to UI failed");
