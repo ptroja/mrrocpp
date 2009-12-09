@@ -20,6 +20,7 @@
 
 // Klasa edp_irp6ot_effector.
 #include "edp/smb/edp_e_smb.h"
+#include "edp/common/reader.h"
 // Kinematyki.
 #include "kinematics/smb/kinematic_model_smb.h"
 

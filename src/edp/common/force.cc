@@ -29,6 +29,7 @@
 #include "lib/srlib.h"
 #include "lib/mis_fun.h"
 #include "edp/common/edp.h"
+#include "edp/common/reader.h"
 #include "edp/common/edp_irp6s_postument_track.h"
 
 /********************************* GLOBALS **********************************/

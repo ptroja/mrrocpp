@@ -12,6 +12,7 @@
 #include "edp/common/hi_rydz.h"
 #include "edp/common/servo_gr.h"
 #include "edp/common/edp.h"
+#include "edp/common/reader.h"
 #include "lib/mis_fun.h"
 
 #include <memory>

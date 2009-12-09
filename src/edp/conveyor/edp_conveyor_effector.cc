@@ -16,6 +16,7 @@
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 #include "lib/mathtr.h"
+#include "edp/common/reader.h"
 
 // Klasa edp_conveyor_effector.
 #include "edp/conveyor/edp_conveyor_effector.h"

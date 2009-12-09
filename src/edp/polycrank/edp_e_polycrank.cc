@@ -20,6 +20,7 @@
 
 // Klasa edp_irp6ot_effector.
 #include "edp/polycrank/edp_e_polycrank.h"
+#include "edp/common/reader.h"
 // Kinematyki.
 #include "kinematics/polycrank/kinematic_model_polycrank.h"
 

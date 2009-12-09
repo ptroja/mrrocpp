@@ -16,6 +16,7 @@
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 #include "edp/common/edp.h"
+#include "edp/common/reader.h"
 #include "edp/common/hi_rydz.h"
 #include "edp/common/servo_gr.h"
 
