@@ -1,8 +1,6 @@
 #if !defined(_CONFIG_TYPES_H)
 #define _CONFIG_TYPES_H
 
-#include <boost/variant.hpp>
-
 #define CONFIG_MAX_KEY_LEN				80
 #define CONFIG_MAX_SECTION_NAME_LEN		80
 #define CONFIG_MAX_CONFIGFILE_LEN		80
@@ -25,11 +23,7 @@ typedef struct config_query {
 			char section[CONFIG_MAX_SECTION_NAME_LEN];
 		} query;
 		char configfile[CONFIG_MAX_CONFIGFILE_LEN];
-		char nodename[CONFIG_MAX_NODENAME_LEN];
 	} data;
-	config_query() {
-		memset(&data, 0, sizeof(data));
-	}
 } config_msg_t;
 
 #endif /* _CONFIG_TYPES_H */
