@@ -285,6 +285,8 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buff
 	//	static int debugi=0;
 	//   debugi++;
 
+	double desired_motor_pos_new_tmp[MAX_SERVOS_NR];
+
 	motion_type = instruction.motion_type;
 
 	// zmienne z bufora wejsciowego

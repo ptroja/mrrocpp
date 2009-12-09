@@ -157,10 +157,6 @@ protected:
     // Polozenia walow silnikow -
     // aktualnie obliczone (zadane) (w radianach)
 
-    double desired_motor_pos_new_tmp[MAX_SERVOS_NR];
-    // Polozenia walow silnikow -
-    // aktualnie obliczone (zadane) (w radianach)    przed sprawdzeniem na ograniczenia kinematyczne
-
     double current_motor_pos[MAX_SERVOS_NR];   // Polozenia walow silnikow -
     // ostatnio odczytane (w radianach)
     double motor_pos_increment_reading[MAX_SERVOS_NR];

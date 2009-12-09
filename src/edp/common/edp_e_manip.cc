@@ -56,6 +56,9 @@ manip_effector::manip_effector (lib::configurator &_config, lib::robot_name_t l_
 /*--------------------------------------------------------------------------*/
 void manip_effector::compute_xyz_euler_zyz (const lib::c_buffer &instruction)
 {
+
+	double desired_motor_pos_new_tmp[MAX_SERVOS_NR];
+
     // obliczenia dla ruchu ramienia (kocwk: XYZ_EULER_ZYZ)
     /* Wypenienie struktury danych transformera na podstawie parametrow polecenia otrzymanego z ECP */
     /* Zlecenie transformerowi przeliczenie wspolrzednych */
@@ -118,6 +121,9 @@ void manip_effector::compute_xyz_euler_zyz (const lib::c_buffer &instruction)
 /*--------------------------------------------------------------------------*/
 void manip_effector::compute_xyz_angle_axis (const lib::c_buffer &instruction)
 {
+
+	double desired_motor_pos_new_tmp[MAX_SERVOS_NR];
+
     // obliczenia dla ruchu ramienia (kocwk: XYZ_ANGLE_AXIS)
     /* Wypenienie struktury danych transformera na podstawie parametrow polecenia otrzymanego z ECP */
     /* Zlecenie transformerowi przeliczenie wspolrzednych */
@@ -173,6 +179,8 @@ void manip_effector::compute_xyz_angle_axis (const lib::c_buffer &instruction)
 /*--------------------------------------------------------------------------*/
 void manip_effector::compute_frame (const lib::c_buffer &instruction)
 {
+
+	double desired_motor_pos_new_tmp[MAX_SERVOS_NR];
     // obliczenia dla ruchu ramienia (kocwk: FRAME)
     /* Wypenienie struktury danych transformera na podstawie parametrow polecenia otrzymanego z ECP */
     /* Zlecenie transformerowi przeliczenie wspolrzednych */

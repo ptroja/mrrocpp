@@ -445,6 +445,9 @@ void manip_and_conv_effector::interpret_instruction (lib::c_buffer &instruction)
 // Synchronizacja robota.
 void manip_and_conv_effector::synchronise ()
 {
+
+	double desired_motor_pos_new_tmp[MAX_SERVOS_NR];
+
 #ifdef __QNXNTO__
 	flushall();
 #endif
@@ -764,6 +767,9 @@ lib::REPLY_TYPE manip_and_conv_effector::rep_type (const lib::c_buffer &instruct
 /*--------------------------------------------------------------------------*/
 void manip_and_conv_effector::compute_motors(const lib::c_buffer &instruction)
 {
+
+	double desired_motor_pos_new_tmp[MAX_SERVOS_NR];
+
     // obliczenia dla ruchu ramienia (silnikami)
     /* Wypenienie struktury danych transformera na podstawie parametrow polecenia otrzymanego z ECP */
     /* Zlecenie transformerowi przeliczenie wspolrzednych */
@@ -822,6 +828,8 @@ void manip_and_conv_effector::compute_motors(const lib::c_buffer &instruction)
 /*--------------------------------------------------------------------------*/
 void manip_and_conv_effector::compute_joints (const lib::c_buffer &instruction)
 {
+	double desired_motor_pos_new_tmp[MAX_SERVOS_NR];
+
     // obliczenia dla ruchu ramienia (stawami)
     /* Wypenienie struktury danych transformera na podstawie parametrow polecenia otrzymanego z ECP */
     /* Zlecenie transformerowi przeliczenie wspolrzednych */
@@ -916,6 +924,8 @@ void manip_and_conv_effector::update_servo_current_motor_pos_abs(double abs_moto
 
 void manip_and_conv_effector::get_controller_state(lib::c_buffer &instruction)
 {
+
+	double desired_motor_pos_new_tmp[MAX_SERVOS_NR];
 	//printf("get_controller_state: %d\n", controller_state_edp_buf.is_synchronised); fflush(stdout);
     reply.controller_state = controller_state_edp_buf;
 
