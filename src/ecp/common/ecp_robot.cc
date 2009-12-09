@@ -53,7 +53,7 @@ ecp_robot::~ecp_robot(void)
 #else /* USE_MESSIP_SRR */
     if (EDP_fd)
     {
-        messip_channel_disconnect(EDP_fd, MESSIP_NOTIMEOUT);
+        messip::port_disconnect(EDP_fd);
     }
 #endif /* USE_MESSIP_SRR */
 
@@ -135,7 +135,7 @@ void ecp_robot::connect_to_edp(lib::configurator &config)
 #if !defined(USE_MESSIP_SRR)
 	while ((EDP_fd = name_open(edp_net_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) < 0)
 #else
-	while ((EDP_fd = messip_channel_connect(NULL, edp_net_attach_point.c_str(), MESSIP_NOTIMEOUT)) == NULL )
+	while ((EDP_fd = messip::port_connect(edp_net_attach_point)) == NULL )
 #endif
 	{
 		if ((tmp++)<CONNECT_RETRY) {

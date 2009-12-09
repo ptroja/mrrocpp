@@ -243,7 +243,7 @@ MpPanel::MpPanel(ui_config_entry &entry)
 
 		short tmp = 0;
 		// try to open channel
-		while( (pulse_fd = messip_channel_connect(NULL, network_pulse_attach_point.c_str(), MESSIP_NOTIMEOUT)) == NULL)
+		while( (pulse_fd = messip::port_connect(network_pulse_attach_point)) == NULL)
 			if((tmp++)<CONNECT_RETRY) {
 //				fprintf(stderr, "."); fflush(stderr);
 				delay(CONNECT_DELAY);
@@ -251,7 +251,6 @@ MpPanel::MpPanel(ui_config_entry &entry)
 				fprintf(stderr, "blad odwolania do: %s,\n", network_pulse_attach_point.c_str());
 				break;
 			}
-//		fprintf(stderr, "messip_channel_connect done\n");
 	} else {
 		fprintf(stderr, "MP spawn failed\n");
 		return;

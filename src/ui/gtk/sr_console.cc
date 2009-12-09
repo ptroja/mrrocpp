@@ -130,7 +130,7 @@ void *sr_thread(void* arg)
 		sr_package_t sr_msg;
 		int32_t type, subtype;
 
-		int rcvid = messip_receive(ch, &type, &subtype, &sr_msg, sizeof(sr_msg), MESSIP_NOTIMEOUT);
+		int rcvid = messip::port_receive(ch, type, subtype, sr_msg);
 
 		if (rcvid == -1) /* Error condition, exit */
 		{
@@ -139,7 +139,7 @@ void *sr_thread(void* arg)
 			break;
 		} else if (rcvid < -1) {
 			// ie. MESSIP_MSG_DISCONNECT
-			fprintf(stderr, "messip_receive() -> %d, ie. MESSIP_MSG_DISCONNECT\n", rcvid);
+			fprintf(stderr, "messip::port_receive() -> %d, ie. MESSIP_MSG_DISCONNECT\n", rcvid);
 			continue;
 		}
 

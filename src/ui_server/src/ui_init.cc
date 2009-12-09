@@ -3030,7 +3030,7 @@ void *sr_thread(void* arg)
 {
 	messip_channel_t *ch;
 
-	if ((ch = messip::port_create(NULL, ui_state.sr_attach_point)) == NULL) {
+	if ((ch = messip::port_create(ui_state.sr_attach_point)) == NULL) {
 		return NULL;
 	}
 
