@@ -437,7 +437,7 @@ int task::receive_mp_message(void)
 #else
 		if (caller < -1) {
 			// ie. MESSIP_MSG_DISCONNECT
-			fprintf(stderr, "MP: messip_receive() -> %d, ie. MESSIP_MSG_DISCONNECT\n", caller);
+			fprintf(stderr, "MP: messip::port_receive() -> %d, ie. MESSIP_MSG_DISCONNECT\n", caller);
 			continue;
 		}
 #endif
