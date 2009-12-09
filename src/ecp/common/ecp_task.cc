@@ -196,7 +196,7 @@ void task::send_pulse_to_mp(int pulse_code, int pulse_value)
 	if (messip::port_send_pulse(MP_fd, pulse_code, pulse_value) < 0)
 #endif
 	{
-		perror("Blad w wysylaniu pulsu do mp");
+		perror("MsgSendPulse()");
 	}
 }
 

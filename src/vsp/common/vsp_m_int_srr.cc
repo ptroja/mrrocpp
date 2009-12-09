@@ -22,10 +22,11 @@
 
 #include "lib/srlib.h"
 #include "vsp/vsp_sensor.h"				// zawiera deklaracje klasy vsp_sensor + struktury komunikacyjne
-#include "lib/messip/messip.h"
 
 // Konfigurator
 #include "lib/configurator.h"
+
+#include "lib/messip/messip_dataport.h"
 
 namespace mrrocpp {
 namespace vsp {
@@ -134,7 +135,7 @@ int main(int argc, char *argv[]) {
 
 			int32_t type, subtype;
 
-			int rcvid = messip_receive(ch, type, subtype, vsp::common::vs->to_vsp);
+			int rcvid = messip::port_receive(ch, type, subtype, vsp::common::vs->to_vsp);
 
 			if (rcvid == -1) /* Error condition, exit */
 			{
