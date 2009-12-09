@@ -389,7 +389,7 @@ void effector::create_threads ()
 	rb_obj = new common::reader_buffer(*this);
 
     // Y&W - utworzenie watku readera
-    if (pthread_create (&rb_obj->reader_tid, NULL, &rb_obj->reader_thread_start, (void *) this))
+    if (pthread_create (&rb_obj->reader_tid, NULL, &rb_obj->reader_thread_start, (void *) rb_obj))
     {
         msg->message(lib::SYSTEM_ERROR, errno, "EDP: Failed to create READER thread");
         throw common::System_error();

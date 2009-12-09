@@ -145,7 +145,7 @@ void manip_and_conv_effector::create_threads ()
     }
 
     // Y&W - utworzenie watku readera
-    if (pthread_create (&rb_obj->reader_tid, NULL, &rb_obj->reader_thread_start, (void *) this))
+    if (pthread_create (&rb_obj->reader_tid, NULL, &rb_obj->reader_thread_start, (void *) rb_obj))
     {
         msg->message(lib::SYSTEM_ERROR, errno, "EDP: Failed to create READER thread");
         throw System_error();
