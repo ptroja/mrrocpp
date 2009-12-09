@@ -176,7 +176,7 @@ int main(int argc, char *argv[]) {
 				vsp::common::error_handler(e);
 			} // end CATCH
 
-			messip_reply(ch, rcvid, 0, &vsp::common::vs->from_vsp, sizeof(lib::VSP_REPORT) + vsp::common::vs->union_size, MESSIP_NOTIMEOUT);
+			messip::port_reply(ch, rcvid, 0, vsp::common::vs->from_vsp);
  		} // end while()
 		vsp::common::vs->sr_msg->message ("VSP terminated");
 	} // koniec TRY
