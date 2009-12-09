@@ -90,7 +90,7 @@ int sr::send_package(void) {
 sr::sr(process_type_t process_type, const std::string & process_name, const std::string & sr_name) {
 
 	int tmp = 0;
-	while ((ch = messip::port_connect(NULL, sr_name)) == NULL) {
+	while ((ch = messip::port_connect(sr_name)) == NULL) {
 		if (tmp++ < 50) {
 			delay(50);
 		} else {

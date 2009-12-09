@@ -123,7 +123,7 @@ int main(int argc, char *argv[]) {
 		vsp::common::vs = vsp::sensor::return_created_sensor(_config);
 
 		messip_channel_t *ch;
-		if ((ch = messip::port_create(NULL, attach_point)) == NULL) {
+		if ((ch = messip::port_create(attach_point)) == NULL) {
 			fprintf(stderr, "creating channel failed\n");
 			return -1;
 		}

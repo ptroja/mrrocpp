@@ -149,7 +149,7 @@ void * manip_and_conv_effector::reader_thread(void* arg)
 #else
 	messip_channel_t *my_attach;
 
-	if ((my_attach = messip::port_create(NULL,
+	if ((my_attach = messip::port_create(
 			config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "reader_attach_point")))
 			== NULL) {
 #endif

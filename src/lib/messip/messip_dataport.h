@@ -70,11 +70,11 @@ int port_receive_pulse( messip_channel_t * ch,
 template <class ReplyData>
 int port_reply( messip_channel_t * ch,
    int index,
-   int32_t answer,
+   int32_t status,
    const ReplyData & data,
    int32_t msec_timeout = MESSIP_NOTIMEOUT)
 {
-	return messip_reply(ch, index, answer, &data, sizeof(data), msec_timeout);
+	return messip_reply(ch, index, status, &data, sizeof(data), msec_timeout);
 }
 
 int port_reply_ack( messip_channel_t * ch,
@@ -86,8 +86,7 @@ int port_reply_nack( messip_channel_t * ch,
    int32_t msec_timeout = MESSIP_NOTIMEOUT);
 
 messip_channel_t *
-port_create(messip_cnx_t * cnx,
-   const std::string & name,
+port_create(const std::string & name,
    int32_t msec_timeout = MESSIP_NOTIMEOUT,
    int32_t maxnb_msg_buffered = 0);
 
@@ -96,8 +95,7 @@ port_delete(messip_channel_t * ch,
    int32_t msec_timeout = MESSIP_NOTIMEOUT);
 
 messip_channel_t *
-port_connect( messip_cnx_t * cnx,
-   const std::string & name,
+port_connect(const std::string & name,
    int32_t msec_timeout = MESSIP_NOTIMEOUT);
 
 int

@@ -108,7 +108,7 @@ bool effector::initialize_communication()
 #if !defined(USE_MESSIP_SRR)
 		name_attach(NULL, server_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL);
 #else /* USE_MESSIP_SRR */
-		messip::port_create(NULL, server_attach_point);
+		messip::port_create(server_attach_point);
 #endif /* USE_MESSIP_SRR */
 
 	if (attach == NULL) {

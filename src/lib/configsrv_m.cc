@@ -21,7 +21,7 @@ main(int argc, char *argv[])
 {
 	configsrv config(argv[1], argv[2], argv[3]);
 
-	messip_channel_t *ch = messip::port_create(NULL, CONFIGSRV_CHANNEL_NAME);
+	messip_channel_t *ch = messip::port_create(CONFIGSRV_CHANNEL_NAME);
 	assert(ch);
 
 	if (signal(SIGINT, sigint_handler) == SIG_ERR) {

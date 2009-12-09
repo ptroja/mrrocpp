@@ -40,12 +40,11 @@ int port_reply_nack( messip_channel_t * ch,
 }
 
 messip_channel_t *
-port_create(messip_cnx_t * cnx,
-   const std::string & name,
+port_create(const std::string & name,
    int32_t msec_timeout,
    int32_t maxnb_msg_buffered)
 {
-	return messip_channel_create(cnx, name.c_str(), msec_timeout, maxnb_msg_buffered);
+	return messip_channel_create(NULL, name.c_str(), msec_timeout, maxnb_msg_buffered);
 }
 
 int
@@ -56,11 +55,10 @@ port_delete(messip_channel_t * ch,
 }
 
 messip_channel_t *
-port_connect( messip_cnx_t * cnx,
-   const std::string & name,
+port_connect(const std::string & name,
    int32_t msec_timeout)
 {
-	return messip_channel_connect(cnx, name.c_str(), msec_timeout);
+	return messip_channel_connect(NULL, name.c_str(), msec_timeout);
 }
 
 int

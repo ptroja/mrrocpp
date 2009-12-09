@@ -65,7 +65,7 @@ sensor::sensor(lib::SENSOR_ENUM _sensor_name, const char* _section_name, task::t
  	// cout<<"VSP_NAME = "<<VSP_NAME<<endl;
 
 	// Sprawdzeie czy nie jest juz zarejestrowany zarzadca zasobow o tej nazwie.
-	if( (sd = messip::port_connect(NULL, VSP_NAME)))
+	if( (sd = messip::port_connect(VSP_NAME)))
 	{
 		// by Y - usuniete bo mozna podlaczyc sie do istniejacego czujnika
 		// throw sensor_error(lib::SYSTEM_ERROR, DEVICE_ALREADY_EXISTS);
@@ -79,7 +79,7 @@ sensor::sensor(lib::SENSOR_ENUM _sensor_name, const char* _section_name, task::t
 
 	short tmp = 0;
  	// Kilka sekund  (~2) na otworzenie urzadzenia.
-	while( (sd = messip::port_connect(NULL, VSP_NAME)) == NULL)
+	while( (sd = messip::port_connect(VSP_NAME)) == NULL)
 	{
 // 		cout<<tmp<<endl;
 		if((tmp++)<CONNECT_RETRY)

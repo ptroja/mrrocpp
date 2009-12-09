@@ -62,7 +62,7 @@ task::task(lib::configurator &_config)
 #if !defined(USE_MESSIP_SRR)
     while ((UI_fd = name_open(ui_net_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) < 0) {
 #else
-	while ((UI_fd = messip::port_connect(NULL, ui_net_attach_point)) == NULL) {
+	while ((UI_fd = messip::port_connect(ui_net_attach_point)) == NULL) {
 #endif
         if ((tmp++)<CONNECT_RETRY)
             usleep(1000*CONNECT_DELAY);

@@ -63,7 +63,7 @@ configurator::configurator (
 	mrrocpp_network_path += dir;
 
 #ifdef USE_MESSIP_SRR
-	if ((ch = messip::port_connect(NULL, CONFIGSRV_CHANNEL_NAME)) == NULL) {
+	if ((ch = messip::port_connect(CONFIGSRV_CHANNEL_NAME)) == NULL) {
 	}
 	assert(ch);
 #else
