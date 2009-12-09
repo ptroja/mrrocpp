@@ -8,7 +8,7 @@
 #include "ecp_mp/ecp_mp_sensor.h"
 #include "ecp_mp/ecp_mp_task.h"
 
-#include "lib/messip/messip.h"
+#include "lib/messip/messip_dataport.h"
 
 #include <iostream>
 #include <sys/types.h>
@@ -65,7 +65,7 @@ sensor::sensor(lib::SENSOR_ENUM _sensor_name, const char* _section_name, task::t
  	// cout<<"VSP_NAME = "<<VSP_NAME<<endl;
 
 	// Sprawdzeie czy nie jest juz zarejestrowany zarzadca zasobow o tej nazwie.
-	if( (sd = messip_channel_connect(NULL, VSP_NAME.c_str(), MESSIP_NOTIMEOUT)))
+	if( (sd = messip::port_connect(NULL, VSP_NAME)))
 	{
 		// by Y - usuniete bo mozna podlaczyc sie do istniejacego czujnika
 		// throw sensor_error(lib::SYSTEM_ERROR, DEVICE_ALREADY_EXISTS);
@@ -79,13 +79,13 @@ sensor::sensor(lib::SENSOR_ENUM _sensor_name, const char* _section_name, task::t
 
 	short tmp = 0;
  	// Kilka sekund  (~2) na otworzenie urzadzenia.
-	while( (sd = messip_channel_connect(NULL, VSP_NAME.c_str(), MESSIP_NOTIMEOUT)) == NULL)
+	while( (sd = messip::port_connect(NULL, VSP_NAME)) == NULL)
 	{
 // 		cout<<tmp<<endl;
 		if((tmp++)<CONNECT_RETRY)
 			usleep(1000*CONNECT_DELAY);
 		else {
-			fprintf(stderr, "ecp_mp_sensor: messip_channel_connect(%s) failed\n", VSP_NAME.c_str());
+			std::cerr << "ecp_mp_sensor: messip::port_connect(" << VSP_NAME << ") failed" << std::endl;
 			throw sensor_error(lib::SYSTEM_ERROR, CANNOT_LOCATE_DEVICE);
 		}
 	}// end: while
@@ -102,11 +102,10 @@ sensor::~sensor() {
 		close(sd);
 #else /* USE_MESSIP_SRR */
 	int status;
-	if(messip_send(sd, 0, 0, &to_vsp, sizeof(lib::ECP_VSP_MSG),
-				&status, &from_vsp, sizeof(lib::VSP_ECP_MSG), MESSIP_NOTIMEOUT) < 0)
+	if(messip::port_send(sd, 0, 0, to_vsp, &status, from_vsp) < 0)
 		sr_ecp_msg.message (lib::SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE, VSP_NAME);
 	else
-		messip_channel_disconnect(sd, MESSIP_NOTIMEOUT);
+		messip::port_disconnect(sd);
 #endif /* !USE_MESSIP_SRR */
 
 #if defined(PROCESS_SPAWN_RSH)
@@ -123,8 +122,7 @@ void sensor::initiate_reading(void) {
 	if(write(sd, &to_vsp, sizeof(lib::ECP_VSP_MSG)) == -1)
 #else /* USE_MESSIP_SRR */
 	int status;
-	if(messip_send(sd, 0, 0, &to_vsp, sizeof(lib::ECP_VSP_MSG),
-				&status, &from_vsp, sizeof(lib::VSP_ECP_MSG), MESSIP_NOTIMEOUT) < 0)
+	if(messip::port_send(sd, 0, 0, to_vsp, &status, from_vsp) < 0)
 #endif /* !USE_MESSIP_SRR */
 		sr_ecp_msg.message (lib::SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE, VSP_NAME);
 }
@@ -135,8 +133,7 @@ void sensor::configure_sensor(void) {
 	if(write(sd, &to_vsp, sizeof(lib::ECP_VSP_MSG)) == -1)
 #else /* USE_MESSIP_SRR */
 	int status;
-	if(messip_send(sd, 0, 0, &to_vsp, sizeof(lib::ECP_VSP_MSG),
-				&status, &from_vsp, sizeof(lib::VSP_ECP_MSG), MESSIP_NOTIMEOUT) < 0)
+	if(messip::port_send(sd, 0, 0, to_vsp, &status, from_vsp) < 0)
 #endif /* !USE_MESSIP_SRR */
 		sr_ecp_msg.message (lib::SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE, VSP_NAME);
 }
@@ -153,8 +150,7 @@ void sensor::get_reading(lib::SENSOR_IMAGE & sensor_image) {
  	if(read(sd, &from_vsp, sizeof(lib::VSP_ECP_MSG))==-1)
 #else /* USE_MESSIP_SRR */
 	int status;
-	if(messip_send(sd, 0, 0, &to_vsp, sizeof(lib::ECP_VSP_MSG),
-				&status, &from_vsp, sizeof(lib::VSP_ECP_MSG), MESSIP_NOTIMEOUT) < 0)
+	if(messip::port_send(sd, 0, 0, to_vsp, &status, from_vsp) < 0)
 #endif /* !USE_MESSIP_SRR */
 		sr_ecp_msg.message (lib::SYSTEM_ERROR, CANNOT_READ_FROM_DEVICE, VSP_NAME);
 	vsp_report_aux = from_vsp.vsp_report;

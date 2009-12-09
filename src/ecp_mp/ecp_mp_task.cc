@@ -29,6 +29,10 @@
 #include "ecp_mp/ecp_mp_sensor.h"
 #include "ecp/common/ECP_main_error.h"
 
+#if defined(USE_MESSIP_SRR)
+#include "lib/messip/messip_dataport.h"
+#endif
+
 #include <libxml/xmlmemory.h>
 #include <libxml/parser.h>
 #include <libxml/tree.h>
@@ -58,7 +62,7 @@ task::task(lib::configurator &_config)
 #if !defined(USE_MESSIP_SRR)
     while ((UI_fd = name_open(ui_net_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) < 0) {
 #else
-	while ((UI_fd = messip_channel_connect(NULL, ui_net_attach_point.c_str(), MESSIP_NOTIMEOUT)) == NULL) {
+	while ((UI_fd = messip::port_connect(NULL, ui_net_attach_point)) == NULL) {
 #endif
         if ((tmp++)<CONNECT_RETRY)
             usleep(1000*CONNECT_DELAY);
@@ -99,8 +103,7 @@ bool task::operator_reaction (const char* question )
 	if (MsgSend(UI_fd, &ecp_to_ui_msg, sizeof(lib::ECP_message), &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0) {// by Y&W
 #else
 	int status;
-	if(messip_send(UI_fd, 0, 0, &ecp_to_ui_msg, sizeof(lib::ECP_message),
-					&status, &ui_to_ecp_rep, sizeof(lib::UI_reply), MESSIP_NOTIMEOUT) < 0) {
+	if(messip::port_send(UI_fd, 0, 0, &ecp_to_ui_msg, &status, ui_to_ecp_rep) < 0) {
 #endif
 		uint64_t e = errno;
 		perror("ECP operator_reaction(): Send() to UI failed");
@@ -129,8 +132,7 @@ uint8_t task::choose_option (const char* question, uint8_t nr_of_options_input )
 	if (MsgSend(UI_fd, &ecp_to_ui_msg,  sizeof(lib::ECP_message),  &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0) {// by Y&W
 #else
 	int status;
-	if(messip_send(UI_fd, 0, 0, &ecp_to_ui_msg, sizeof(lib::ECP_message),
-					&status, &ui_to_ecp_rep, sizeof(lib::UI_reply), MESSIP_NOTIMEOUT) < 0) {
+	if(messip::port_send(UI_fd, 0, 0, ecp_to_ui_msg, &status, ui_to_ecp_rep) < 0) {
 #endif
 		uint64_t e = errno;
 		perror("ECP: Send() to UI failed");
@@ -158,8 +160,7 @@ int task::input_integer (const char* question )
 	if (MsgSend(UI_fd, &ecp_to_ui_msg,  sizeof(lib::ECP_message),  &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0) {// by Y&W
 #else
 	int status;
-	if(messip_send(UI_fd, 0, 0, &ecp_to_ui_msg, sizeof(lib::ECP_message),
-					&status, &ui_to_ecp_rep, sizeof(lib::UI_reply), MESSIP_NOTIMEOUT) < 0) {
+	if(messip::port_send(UI_fd, 0, 0, ecp_to_ui_msg, &status, ui_to_ecp_rep) < 0) {
 #endif
 		uint64_t e = errno;
 		perror("ECP: Send() to UI failed");
@@ -187,8 +188,7 @@ double task::input_double (const char* question )
 	if (MsgSend(UI_fd, &ecp_to_ui_msg,  sizeof(lib::ECP_message),  &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0) {// by Y&W
 #else
 	int status;
-	if(messip_send(UI_fd, 0, 0, &ecp_to_ui_msg, sizeof(lib::ECP_message),
-					&status, &ui_to_ecp_rep, sizeof(lib::UI_reply), MESSIP_NOTIMEOUT) < 0) {
+	if(messip::port_send(UI_fd, 0, 0, ecp_to_ui_msg, &status, ui_to_ecp_rep) < 0) {
 #endif
 		uint64_t e = errno;
 		perror("ECP: Send() to UI failed");
@@ -215,8 +215,7 @@ bool task::show_message (const char* message)
 	if (MsgSend(UI_fd, &ecp_to_ui_msg,  sizeof(lib::ECP_message),  &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0) {// by Y&W
 #else
 	int status;
-	if(messip_send(UI_fd, 0, 0, &ecp_to_ui_msg, sizeof(lib::ECP_message),
-					&status, &ui_to_ecp_rep, sizeof(lib::UI_reply), MESSIP_NOTIMEOUT) < 0) {
+	if(messip::port_send(UI_fd, 0, 0, ecp_to_ui_msg, &status, ui_to_ecp_rep) < 0) {
 #endif
 		uint64_t e = errno;
 		perror("ECP: Send() to UI failed");
