@@ -9,6 +9,14 @@
 
 namespace messip {
 
+int port_send_pulse( messip_channel_t * ch,
+   int32_t type,
+   int32_t subtype,
+   int32_t msec_timeout)
+{
+	return messip_send(ch, type, subtype, NULL, 0, NULL, NULL, -1, msec_timeout);
+}
+
 int port_receive_pulse( messip_channel_t * ch,
    int32_t & type,
    int32_t & subtype,

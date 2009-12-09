@@ -24,6 +24,10 @@
 #include "ecp_mp/ecp_mp_s_digital_scales.h"
 #include "ecp/common/ECP_main_error.h"
 
+#if defined(USE_MESSIP_SRR)
+#include "lib/messip/messip_dataport.h"
+#endif
+
 namespace mrrocpp {
 namespace ecp {
 namespace common {
@@ -215,7 +219,7 @@ void manual_moves_automatic_measures::refresh_window (ecp_mp::sensor::digital_sc
 	if (MsgSend(UI_fd, &ecp_ui_msg, sizeof(ecp_ui_msg), NULL, 0) < 0)
 #else
 	int status;
-	if (messip_send(UI_fd, 0, 0, &ecp_ui_msg, sizeof(ecp_ui_msg), &status, NULL, 0, MESSIP_NOTIMEOUT) < 0)
+	if (messip::port_send_sync(UI_fd, 0, 0, ecp_ui_msg, &status) < 0)
 #endif
 	{
 		 perror("ECP trajectory_reproduce_thread(): Send() to UI failed");

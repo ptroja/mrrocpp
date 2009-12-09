@@ -2,11 +2,7 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <errno.h>
-
-
 #include <stdint.h>
-
-
 
 #include <sys/types.h>
 #include <sys/wait.h>
@@ -20,6 +16,10 @@
 
 #include "ecp/common/ecp_robot.h"
 #include "ecp/common/ecp_task.h"
+
+#if defined(USE_MESSIP_SRR)
+#include "lib/messip/messip_dataport.h"
+#endif
 
 #include "lib/mis_fun.h"
 
@@ -211,22 +211,19 @@ void ecp_robot::send()
 		case lib::INVALID:
 			// command_size = ((uint8_t*) (&instruction.address_byte)) - ((uint8_t*) (&instruction.instruction_type));
 			// by Y bylo command_size zamiast sizeof(in..)
-			// by Y&W doszlo  dodatkowe pole w instruction zwiazane z obsluga resource managera
+			// by Y&W doszlo dodatkowe pole w instruction zwiazane z obsluga resource managera
 
 #if !defined(USE_MESSIP_SRR)
 			if (MsgSend(EDP_fd, &ecp_command, sizeof(ecp_command), &reply_package, sizeof(lib::r_buffer)) == -1)
 #else
 			int32_t answer;
-			if ( messip_send(EDP_fd, 0, 0,
-							&ecp_command, sizeof(ecp_command),
-							&answer, &reply_package, sizeof(lib::r_buffer),
-							MESSIP_NOTIMEOUT) == -1 )
+			if ( messip::port_send(EDP_fd, 0, 0, ecp_command, &answer, reply_package) == -1 )
 #endif
 			{
-				uint64_t e = errno; // kod bledu systemowego
+				int e = errno; // kod bledu systemowego
 				perror("ECP: Send to EDP_MASTER error");
 				sr_ecp_msg.message(lib::SYSTEM_ERROR, e, "ECP: Send to EDP_MASTER error");
-				throw ecp_robot::ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
+				throw ecp_robot::ECP_error(lib::SYSTEM_ERROR, 0);
 			}
 			//printf("sizeof(lib::r_buffer) = %d\n", sizeof(lib::r_buffer));
 

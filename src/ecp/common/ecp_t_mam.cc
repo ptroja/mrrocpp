@@ -7,6 +7,8 @@
 #include <sys/neutrino.h>
 #include <sys/iofunc.h>
 #include <sys/dispatch.h>
+#else
+#include "lib/messip/messip_dataport.h"
 #endif
 
 #include "lib/typedefs.h"
@@ -65,9 +67,9 @@ void* mam::UI_communication_thread(void* arg)
 		}
 #else
 		int type, subtype;
-		int rcvid = messip_receive(UI_ECP_attach, &type, &subtype, &from_ui_msg, sizeof(from_ui_msg), MESSIP_NOTIMEOUT);
+		int rcvid = messip::port_receive(UI_ECP_attach, type, subtype, from_ui_msg);
 		if (rcvid < 0) {
-			fprintf(stderr, "MAM: messip_receive() failed\n");
+			fprintf(stderr, "MAM: messip::port_receive() failed\n");
 			continue;
 		}
 #endif
@@ -158,7 +160,7 @@ void mam::show_mam_window
 	if (MsgSend(UI_fd, &ecp_ui_msg, sizeof(lib::ECP_message), NULL, 0) < 0)
 #else
 	int status;
-	if (messip_send(UI_fd, 0,0, &ecp_ui_msg, sizeof(lib::ECP_message), &status, NULL, 0, MESSIP_NOTIMEOUT) < 0)
+	if (messip::port_send_sync(UI_fd, 0, 0, ecp_ui_msg, &status) < 0)
 #endif
 	{
 		perror("show_mam_window: Send to UI failed");
@@ -199,7 +201,7 @@ mam::mam(lib::configurator &_config) :
 #if !defined(USE_MESSIP_SRR)
 	if ((UI_ECP_attach = name_attach(NULL, "ECP_M_MAM", NAME_FLAG_ATTACH_GLOBAL)) == NULL)
 #else
-	if ((UI_ECP_attach = messip_channel_create(NULL, "ECP_M_MAM", MESSIP_NOTIMEOUT, 0)) == NULL)
+	if ((UI_ECP_attach = messip::port_create(NULL, "ECP_M_MAM")) == NULL)
 #endif
 	{
 		// W razie niepowodzenia.

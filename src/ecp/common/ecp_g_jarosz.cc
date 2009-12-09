@@ -23,6 +23,10 @@
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 
+#if defined(USE_MESSIP_SRR)
+#include "lib/messip/messip_dataport.h"
+#endif
+
 #include "lib/srlib.h"
 #include "ecp/common/ecp_g_jarosz.h"
 
@@ -3239,7 +3243,7 @@ void ecp_save_trajectory(elipsoid& the_generator, common::task::task& _ecp_task)
 	if (MsgSend(_ecp_task.UI_fd, &ecp_to_ui_msg, sizeof(lib::ECP_message), &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0) {// by Y&W
 #else
 	int status;
-	if (messip_send(_ecp_task.UI_fd, 0, 0, &ecp_to_ui_msg, sizeof(lib::ECP_message), &status, &ui_to_ecp_rep, sizeof(lib::UI_reply), MESSIP_NOTIMEOUT) < 0) {
+	if (messip::port_send(_ecp_task.UI_fd, 0, 0, ecp_to_ui_msg, &status, ui_to_ecp_rep) < 0) {
 #endif
 		e = errno;
 		perror("ECP: Send() to UI failed");
@@ -3298,7 +3302,7 @@ void ecp_save_extended_file(calibration& the_generator, operator_reaction_condit
 	if (MsgSend(_ecp_task.UI_fd, &ecp_to_ui_msg, sizeof(lib::ECP_message), &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0) {// by Y&W
 #else
 	int status;
-	if (messip_send(_ecp_task.UI_fd, 0, 0, &ecp_to_ui_msg, sizeof(lib::ECP_message), &status, &ui_to_ecp_rep, sizeof(lib::UI_reply), MESSIP_NOTIMEOUT) < 0) {
+	if (messip::port_send(_ecp_task.UI_fd, 0, 0, ecp_to_ui_msg, &status, ui_to_ecp_rep) < 0) {
 #endif
 		e = errno;
 		perror("ECP: Send() to UI failed");

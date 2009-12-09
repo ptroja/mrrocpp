@@ -38,7 +38,7 @@ int port_send_sync( messip_channel_t * ch,
 }
 
 template <class SendData>
-int port_send_sync( messip_channel_t * ch,
+int port_send_async( messip_channel_t * ch,
    int32_t type,
    int32_t subtype,
    const SendData & send,
@@ -46,6 +46,11 @@ int port_send_sync( messip_channel_t * ch,
 {
 	return messip_send(ch, type, subtype, &send, sizeof(send), NULL, NULL, -1, msec_timeout);
 }
+
+int port_send_pulse( messip_channel_t * ch,
+   int32_t type,
+   int32_t subtype,
+   int32_t msec_timeout = MESSIP_NOTIMEOUT);
 
 template <class ReceiveData>
 int port_receive( messip_channel_t * ch,

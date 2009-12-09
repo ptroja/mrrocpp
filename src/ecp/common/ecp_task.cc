@@ -9,6 +9,10 @@
 #include "ecp/common/ECP_main_error.h"
 #include "ecp/common/ecp_teach_in_generator.h"
 
+#if defined(USE_MESSIP_SRR)
+#include "lib/messip/messip_dataport.h"
+#endif
+
 namespace mrrocpp {
 namespace ecp {
 namespace common {
@@ -29,9 +33,9 @@ task::~task()
 	name_detach(ecp_attach, 0);
 	name_close(MP_fd);
 #else
-	messip_channel_delete(trigger_attach, MESSIP_NOTIMEOUT);
-	messip_channel_delete(ecp_attach, MESSIP_NOTIMEOUT);
-	messip_channel_disconnect(MP_fd, MESSIP_NOTIMEOUT);
+	messip::port_delete(trigger_attach);
+	messip::port_delete(ecp_attach);
+	messip::port_delete(MP_fd);
 #endif
 }
 
@@ -92,7 +96,7 @@ bool task::pulse_check()
 #else
 	int32_t type, subtype;
 	int recvid;
-	if ((recvid = messip_receive(trigger_attach, &type, &subtype, NULL, 0, 0)) == -1) {
+	if ((recvid = messip::port_receive_pulse(trigger_attach, type, subtype)) == -1) {
 		perror("messip_receive()");
 		return false;
 	}
@@ -123,7 +127,7 @@ void task::initialize_communication()
 #if !defined(USE_MESSIP_SRR)
 	if ( (MP_fd = name_open(mp_pulse_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) < 0)
 #else
-	if ( (MP_fd = messip_channel_connect(NULL, mp_pulse_attach_point.c_str(), MESSIP_NOTIMEOUT)) == NULL)
+	if ( (MP_fd = messip::port_connect(NULL, mp_pulse_attach_point)) == NULL)
 #endif
 	{
 		int e = errno; // kod bledu systemowego
@@ -136,7 +140,7 @@ void task::initialize_communication()
 #if !defined(USE_MESSIP_SRR)
 	if ((ecp_attach = name_attach(NULL, ecp_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) == NULL)
 #else
-	if ((ecp_attach = messip_channel_create(NULL, ecp_attach_point.c_str(), MESSIP_NOTIMEOUT, 0)) == NULL)
+	if ((ecp_attach = messip::port_create(NULL, ecp_attach_point)) == NULL)
 #endif
 	{
 		int e = errno; // kod bledu systemowego
@@ -150,7 +154,7 @@ void task::initialize_communication()
 #if !defined(USE_MESSIP_SRR)
 	if ((trigger_attach = name_attach(NULL, trigger_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) == NULL)
 #else
-	if ((trigger_attach = messip_channel_create(NULL, trigger_attach_point.c_str(), MESSIP_NOTIMEOUT, 0)) == NULL)
+	if ((trigger_attach = messip::port_create(NULL, trigger_attach_point)) == NULL)
 #endif
 	{
 		int e = errno; // kod bledu systemowego
@@ -189,8 +193,7 @@ void task::send_pulse_to_mp(int pulse_code, int pulse_value)
 #if !defined(USE_MESSIP_SRR)
 	if (MsgSendPulse(MP_fd, sched_get_priority_min(SCHED_FIFO), pulse_code, pulse_value) == -1)
 #else
-	int32_t answer;
-	if (messip_send(MP_fd, pulse_code, pulse_value, NULL, 0, &answer, NULL, -1, MESSIP_NOTIMEOUT) < 0)
+	if (messip::port_send_pulse(MP_fd, pulse_code, pulse_value) < 0)
 #endif
 	{
 		perror("Blad w wysylaniu pulsu do mp");
@@ -216,7 +219,7 @@ void task::ecp_wait_for_stop(void)
 #if !defined(USE_MESSIP_SRR)
 	if (MsgReply(caller, EOK, &ecp_reply, sizeof(ecp_reply)) ==-1)
 #else
-	if (messip_reply(ecp_attach, caller, 0, &ecp_reply, sizeof(ecp_reply), MESSIP_NOTIMEOUT) < 0)
+	if (messip::port_reply(ecp_attach, caller, 0, ecp_reply) < 0)
 #endif
 	{// by Y&W
 		uint64_t e= errno; // kod bledu systemowego
@@ -260,7 +263,7 @@ bool task::ecp_wait_for_start(void)
 #if !defined(USE_MESSIP_SRR)
 	if (MsgReply(caller, EOK, &ecp_reply, sizeof(lib::ECP_REPLY_PACKAGE)) ==-1)
 #else
-	if (messip_reply(ecp_attach, caller, 0, &ecp_reply, sizeof(ecp_reply), MESSIP_NOTIMEOUT) < 0)
+	if (messip::port_reply(ecp_attach, caller, 0, ecp_reply) < 0)
 #endif
 	{// by Y&W
 		uint64_t e= errno; // kod bledu systemowego
@@ -307,7 +310,7 @@ void task::get_next_state(void)
 #if !defined(USE_MESSIP_SRR)
 	if (MsgReply(caller, EOK, &ecp_reply, sizeof(lib::ECP_REPLY_PACKAGE)) ==-1)
 #else
-	if (messip_reply(ecp_attach, caller, 0, &ecp_reply, sizeof(ecp_reply), MESSIP_NOTIMEOUT) < 0)
+	if (messip::port_reply(ecp_attach, caller, 0, ecp_reply) < 0)
 #endif
 	{// by Y&W{
 		uint64_t e = errno; // kod bledu systemowego
@@ -359,7 +362,7 @@ bool task::mp_buffer_receive_and_send(void)
 #if !defined(USE_MESSIP_SRR)
 	if (MsgReply(caller, EOK, &ecp_reply, sizeof(ecp_reply)) ==-1)
 #else
-	if (messip_reply(ecp_attach, caller, 0, &ecp_reply, sizeof(ecp_reply), MESSIP_NOTIMEOUT) < 0)
+	if (messip::port_reply(ecp_attach, caller, 0, ecp_reply) < 0)
 #endif
 	{// by Y&W
 		uint64_t e= errno; // kod bledu systemowego
@@ -388,7 +391,7 @@ int task::receive_mp_message(void)
 		int caller = MsgReceive(ecp_attach->chid, &mp_command, sizeof(mp_command), NULL);
 #else
 		int32_t type, subtype;
-		int caller = messip_receive(ecp_attach, &type, &subtype, &mp_command, sizeof(mp_command), MESSIP_NOTIMEOUT);
+		int caller = messip::port_receive(ecp_attach, type, subtype, mp_command);
 #endif
 
 		if (caller == -1) {/* Error condition, exit */
