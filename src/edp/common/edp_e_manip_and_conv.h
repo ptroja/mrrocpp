@@ -203,7 +203,7 @@ public:
     boost::condition sg_reply_cond;
 #endif
     in_out_buffer in_out_obj; // bufor wejsc wyjsc
-    reader_buffer rb_obj;
+    reader_buffer *rb_obj;
     master_trans_t_buffer mt_tt_obj;
 
     manip_and_conv_effector (lib::configurator &_config, lib::robot_name_t l_robot_name);       // konstruktor

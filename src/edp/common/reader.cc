@@ -80,53 +80,53 @@ void * manip_and_conv_effector::reader_thread(void* arg)
 	else
 		nr_of_samples = 1000;
 
-	rb_obj.reader_cnf.step = 1;
-	rb_obj.reader_cnf.servo_mode = check_config("servo_tryb");
-	rb_obj.reader_cnf.msec = check_config("msec");
+	rb_obj->reader_cnf.step = 1;
+	rb_obj->reader_cnf.servo_mode = check_config("servo_tryb");
+	rb_obj->reader_cnf.msec = check_config("msec");
 
 	char tmp_string[50];
 
 	for (int j = 0; j < MAX_SERVOS_NR; j++) {
 
 		sprintf(tmp_string, "desired_inc_%d", j);
-		rb_obj.reader_cnf.desired_inc[j] = check_config(tmp_string);
+		rb_obj->reader_cnf.desired_inc[j] = check_config(tmp_string);
 
 		sprintf(tmp_string, "current_inc_%d", j);
-		rb_obj.reader_cnf.current_inc[j] = check_config(tmp_string);
+		rb_obj->reader_cnf.current_inc[j] = check_config(tmp_string);
 
 		sprintf(tmp_string, "pwm_%d", j);
-		rb_obj.reader_cnf.pwm[j] = check_config(tmp_string);
+		rb_obj->reader_cnf.pwm[j] = check_config(tmp_string);
 
 		sprintf(tmp_string, "uchyb_%d", j);
-		rb_obj.reader_cnf.uchyb[j] = check_config(tmp_string);
+		rb_obj->reader_cnf.uchyb[j] = check_config(tmp_string);
 
 		sprintf(tmp_string, "abs_pos_%d", j);
-		rb_obj.reader_cnf.abs_pos[j] = check_config(tmp_string);
+		rb_obj->reader_cnf.abs_pos[j] = check_config(tmp_string);
 
 		sprintf(tmp_string, "current_joints_%d", j);
-		rb_obj.reader_cnf.current_joints[j] = check_config(tmp_string);
+		rb_obj->reader_cnf.current_joints[j] = check_config(tmp_string);
 
 		if (j < 6) {
 			sprintf(tmp_string, "force_%d", j);
-			rb_obj.reader_cnf.force[j] = check_config(tmp_string);
+			rb_obj->reader_cnf.force[j] = check_config(tmp_string);
 
 			sprintf(tmp_string, "desired_force_%d", j);
-			rb_obj.reader_cnf.desired_force[j] = check_config(tmp_string);
+			rb_obj->reader_cnf.desired_force[j] = check_config(tmp_string);
 
 			sprintf(tmp_string, "filtered_force_%d", j);
-			rb_obj.reader_cnf.filtered_force[j] = check_config(tmp_string);
+			rb_obj->reader_cnf.filtered_force[j] = check_config(tmp_string);
 
 			sprintf(tmp_string, "current_cartesian_position_%d", j);
-			rb_obj.reader_cnf.current_cartesian_position[j] = check_config(tmp_string);
+			rb_obj->reader_cnf.current_cartesian_position[j] = check_config(tmp_string);
 
 			sprintf(tmp_string, "real_cartesian_position_%d", j);
-			rb_obj.reader_cnf.real_cartesian_position[j] = check_config(tmp_string);
+			rb_obj->reader_cnf.real_cartesian_position[j] = check_config(tmp_string);
 
 			sprintf(tmp_string, "real_cartesian_vel_%d", j);
-			rb_obj.reader_cnf.real_cartesian_vel[j] = check_config(tmp_string);
+			rb_obj->reader_cnf.real_cartesian_vel[j] = check_config(tmp_string);
 
 			sprintf(tmp_string, "real_cartesian_acc_%d", j);
-			rb_obj.reader_cnf.real_cartesian_acc[j] = check_config(tmp_string);
+			rb_obj->reader_cnf.real_cartesian_acc[j] = check_config(tmp_string);
 		}
 	}
 
@@ -224,22 +224,22 @@ void * manip_and_conv_effector::reader_thread(void* arg)
 
 		lib::set_thread_priority(pthread_self(), MAX_PRIORITY+1);
 
-		rb_obj.reader_wait_for_new_step();
+		rb_obj->reader_wait_for_new_step();
 		// dopoki nie przyjdzie puls stopu
 		do {
 			// czekamy na opuszcenie semafora przez watek EDP_SERVO (co mikrokrok)
-			rb_obj.reader_wait_for_new_step();
+			rb_obj->reader_wait_for_new_step();
 
 			// sekcja krytyczna odczytu danych pomiarowych dla biezacego kroku
-			rb_obj.lock_mutex();
+			rb_obj->lock_mutex();
 
-			rb_obj.step_data.ui_trigger = ui_trigger;
+			rb_obj->step_data.ui_trigger = ui_trigger;
 
-			// printf("EDPX: %f\n", rb_obj.step_data.current_cartesian_position[1]);
+			// printf("EDPX: %f\n", rb_obj->step_data.current_cartesian_position[1]);
 			// przepisanie danych dla biezacego kroku do bufora lokalnego reader
-			memcpy(&(r_measptr[msr_nr]), &rb_obj.step_data, sizeof(reader_data));
+			memcpy(&(r_measptr[msr_nr]), &rb_obj->step_data, sizeof(reader_data));
 
-			rb_obj.unlock_mutex();
+			rb_obj->unlock_mutex();
 
 			// wykrycie przepelnienia
 			if ((++msr_nr) >= nr_of_samples) {
@@ -351,67 +351,67 @@ void * manip_and_conv_effector::reader_thread(void* arg)
 				// printf("EDP %f\n", r_measptr[k].current_cartesian_position[1]);
 
 				outfile << r_measptr[k].step << " ";
-				if (rb_obj.reader_cnf.msec)
+				if (rb_obj->reader_cnf.msec)
 					outfile << r_measptr[k].msec << " ";
-				if (rb_obj.reader_cnf.servo_mode)
+				if (rb_obj->reader_cnf.servo_mode)
 					outfile << (r_measptr[k].servo_mode ? "1" : "0") << " ";
 
 				for (int j = 0; j < MAX_SERVOS_NR; j++) {
-					if (rb_obj.reader_cnf.desired_inc[j])
+					if (rb_obj->reader_cnf.desired_inc[j])
 						outfile << r_measptr[k].desired_inc[j] << " ";
-					if (rb_obj.reader_cnf.current_inc[j])
+					if (rb_obj->reader_cnf.current_inc[j])
 						outfile << r_measptr[k].current_inc[j] << " ";
-					if (rb_obj.reader_cnf.pwm[j])
+					if (rb_obj->reader_cnf.pwm[j])
 						outfile << r_measptr[k].pwm[j] << " ";
-					if (rb_obj.reader_cnf.uchyb[j])
+					if (rb_obj->reader_cnf.uchyb[j])
 						outfile << r_measptr[k].uchyb[j] << " ";
-					if (rb_obj.reader_cnf.abs_pos[j])
+					if (rb_obj->reader_cnf.abs_pos[j])
 						outfile << r_measptr[k].abs_pos[j] << " ";
 				}
 
 				outfile << "j: ";
 
 				for (int j = 0; j < MAX_SERVOS_NR; j++) {
-					if (rb_obj.reader_cnf.current_joints[j])
+					if (rb_obj->reader_cnf.current_joints[j])
 						outfile << r_measptr[k].current_joints[j] << " ";
 				}
 
 				outfile << "f: ";
 
 				for (int j = 0; j < 6; j++) {
-					if (rb_obj.reader_cnf.force[j])
+					if (rb_obj->reader_cnf.force[j])
 						outfile << r_measptr[k].force[j] << " ";
-					if (rb_obj.reader_cnf.desired_force[j])
+					if (rb_obj->reader_cnf.desired_force[j])
 						outfile << r_measptr[k].desired_force[j] << " ";
-					if (rb_obj.reader_cnf.filtered_force[j])
+					if (rb_obj->reader_cnf.filtered_force[j])
 						outfile << r_measptr[k].filtered_force[j] << " ";
 				}
 
 				outfile << "k: ";
 
 				for (int j = 0; j < 6; j++) {
-					if (rb_obj.reader_cnf.current_cartesian_position[j])
+					if (rb_obj->reader_cnf.current_cartesian_position[j])
 						outfile << r_measptr[k].current_cartesian_position[j] << " ";
 				}
 
 				outfile << "r: ";
 
 				for (int j = 0; j < 6; j++) {
-					if (rb_obj.reader_cnf.real_cartesian_position[j])
+					if (rb_obj->reader_cnf.real_cartesian_position[j])
 						outfile << r_measptr[k].real_cartesian_position[j] << " ";
 				}
 
 				outfile << "v: ";
 
 				for (int j = 0; j < 6; j++) {
-					if (rb_obj.reader_cnf.real_cartesian_vel[j])
+					if (rb_obj->reader_cnf.real_cartesian_vel[j])
 						outfile << r_measptr[k].real_cartesian_vel[j] << " ";
 				}
 
 				outfile << "a: ";
 
 				for (int j = 0; j < 6; j++) {
-					if (rb_obj.reader_cnf.real_cartesian_acc[j])
+					if (rb_obj->reader_cnf.real_cartesian_acc[j])
 						outfile << r_measptr[k].real_cartesian_acc[j] << " ";
 				}
 

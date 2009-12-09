@@ -206,9 +206,9 @@ void effector::arm_frame_2_xyz_eul_zyz ()
     case lib::ARM_RMODEL:
     case lib::ARM_RMODEL_INPUTS:
         A.get_mech_xyz_euler_zyz(reply.arm.pf_def.arm_coordinates);
-        A.get_mech_xyz_euler_zyz(rb_obj.step_data.current_cartesian_position);
+        A.get_mech_xyz_euler_zyz(rb_obj->step_data.current_cartesian_position);
         //A.get_xyz_euler_zyz(reply.arm.pf_def.arm_coordinates);
-        //A.get_xyz_euler_zyz(rb_obj.step_data.current_cartesian_position);
+        //A.get_xyz_euler_zyz(rb_obj->step_data.current_cartesian_position);
         break;
     default: // blad:
         throw NonFatal_error_2(STRANGE_GET_ARM_REQUEST);
@@ -247,14 +247,14 @@ void effector::move_arm (lib::c_buffer &instruction)
     case lib::XYZ_EULER_ZYZ:
 
         // zapisanie wartosci zadanej dla readera
-        rb_obj.lock_mutex();
+        rb_obj->lock_mutex();
 
         for (int i=0; i<6;i++)
         {
-            rb_obj.step_data.current_cartesian_position[i]=instruction.arm.pf_def.arm_coordinates[i];
+            rb_obj->step_data.current_cartesian_position[i]=instruction.arm.pf_def.arm_coordinates[i];
         }
 
-        rb_obj.unlock_mutex();
+        rb_obj->unlock_mutex();
 
         compute_xyz_euler_zyz(instruction);
         move_servos ();
@@ -355,9 +355,9 @@ void effector::get_arm_position (bool read_hardware, lib::c_buffer &instruction)
         throw NonFatal_error_2(INVALID_GET_END_EFFECTOR_TYPE);
     }
 
-    rb_obj.lock_mutex();// by Y
-    reply.servo_step=rb_obj.step_data.step;
-    rb_obj.unlock_mutex();
+    rb_obj->lock_mutex();// by Y
+    reply.servo_step=rb_obj->step_data.step;
+    rb_obj->unlock_mutex();
 
 }
 /*--------------------------------------------------------------------------*/

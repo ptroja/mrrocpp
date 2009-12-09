@@ -122,6 +122,10 @@ void manip_and_conv_effector::master_joints_read (double* output)
 /*--------------------------------------------------------------------------*/
 void manip_and_conv_effector::create_threads ()
 {
+
+	rb_obj = new reader_buffer();
+
+
     // Y&W - utworzenie watku serwa
     if (pthread_create (&serwo_tid, NULL, &servo_thread_start, (void *) this))
     {

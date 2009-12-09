@@ -154,14 +154,14 @@ uint8_t servo_buffer::Move_1_step (void)
     // Obliczenie nowej wartosci zadanej
     // Wyslanie wartosci zadanej do hardware'u
 
-    master.rb_obj.set_new_step();// odwieszenie watku edp_reader - teraz moze odczytac dane pomiarowe
+    master.rb_obj->set_new_step();// odwieszenie watku edp_reader - teraz moze odczytac dane pomiarowe
 
     reply_status_tmp.error1 = compute_all_set_values();  // obliczenie nowej wartosci zadanej dla regulatorow
     reply_status_tmp.error0 = hi->read_write_hardware();  // realizacja kroku przez wszystkie napedy oraz
     // odczyt poprzedniego polozenia
     master.step_counter++;
 
-    master.rb_obj.lock_mutex();
+    master.rb_obj->lock_mutex();
 
     struct timespec step_time;
 
@@ -170,10 +170,10 @@ uint8_t servo_buffer::Move_1_step (void)
         perror("clock_gettime()");
     }
 
-    master.rb_obj.step_data.step =  master.step_counter;
-    master.rb_obj.step_data.msec=(int)(step_time.tv_nsec/1000000);
+    master.rb_obj->step_data.step =  master.step_counter;
+    master.rb_obj->step_data.msec=(int)(step_time.tv_nsec/1000000);
 
-    master.rb_obj.unlock_mutex();
+    master.rb_obj->unlock_mutex();
 
 
     if ( reply_status_tmp.error0 || reply_status_tmp.error1 )

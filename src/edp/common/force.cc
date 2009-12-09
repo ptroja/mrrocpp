@@ -118,13 +118,13 @@ void * irp6s_postument_track_effector::edp_vsp_thread(void *arg)
 
 		counter++;
 
-		rb_obj.lock_mutex();
-		edp_vsp_reply.servo_step=rb_obj.step_data.step;
+		rb_obj->lock_mutex();
+		edp_vsp_reply.servo_step=rb_obj->step_data.step;
 		for (int i=0; i<=5; i++) {
-			edp_vsp_reply.current_present_XYZ_ZYZ_arm_coordinates[i]=rb_obj.step_data.current_cartesian_position[i];
+			edp_vsp_reply.current_present_XYZ_ZYZ_arm_coordinates[i]=rb_obj->step_data.current_cartesian_position[i];
 		}
 
-		rb_obj.unlock_mutex();
+		rb_obj->unlock_mutex();
 
 		//!< wyslanie danych
 		if (MsgReply(vsp_caller, EOK, &edp_vsp_reply, sizeof(edp_vsp_reply)) ==-1) //!< by Y&W
@@ -231,12 +231,12 @@ void * irp6s_postument_track_effector::force_thread(void *arg)
 
 				lib::Ft_v_vector current_force_torque (ft_tr_inv_tool_matrix * ft_tr_inv_current_frame_matrix * lib::Ft_v_vector (current_force));
 
-				rb_obj.lock_mutex();
+				rb_obj->lock_mutex();
 				for (int i=0;i<=5;i++)
 				{
-					current_force_torque.to_table (rb_obj.step_data.force);
+					current_force_torque.to_table (rb_obj->step_data.force);
 				}
-				rb_obj.unlock_mutex();
+				rb_obj->unlock_mutex();
 			}
 			sem_trywait(&(vs->new_ms));
 			sem_post(&(vs->new_ms)); //!< jest gotowy nowy pomiar

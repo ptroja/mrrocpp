@@ -74,7 +74,7 @@ void manip_effector::compute_xyz_euler_zyz (const lib::c_buffer &instruction)
     }
 
     for (int i=0;i<6;i++)
-        rb_obj.step_data.current_cartesian_position[i] = instruction.arm.pf_def.arm_coordinates[i];
+        rb_obj->step_data.current_cartesian_position[i] = instruction.arm.pf_def.arm_coordinates[i];
 
     // if ( (value_in_step_no <= 0) || (motion_steps <= 0) || (value_in_step_no   > motion_steps + 1) )
     if ( (motion_steps <= 0) || (value_in_step_no   > motion_steps + 1) )// by Y
