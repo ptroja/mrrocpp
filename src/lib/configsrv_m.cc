@@ -7,7 +7,7 @@
 #include <string>
 
 #include "lib/configsrv.h"
-#include "lib/messip/messip.h"
+#include "lib/messip/messip_dataport.h"
 #include "lib/config_types.h"
 
 void
@@ -21,29 +21,26 @@ main(int argc, char *argv[])
 {
 	configsrv config(argv[1], argv[2], argv[3]);
 
-	messip_channel_t *ch = messip_channel_create(NULL, CONFIGSRV_CHANNEL_NAME, MESSIP_NOTIMEOUT, 0);
+	messip_channel_t *ch = messip::port_create(NULL, CONFIGSRV_CHANNEL_NAME);
 	assert(ch);
 
 	if (signal(SIGINT, sigint_handler) == SIG_ERR) {
 		perror("signal()");
 	}
 
-	while(1) {
-		int rcvid;
+	while(true) {
 		int32_t type, subtype;
-		config_request req;
 		config_msg_t config_msg;
 
-		rcvid = messip_receive(ch,
-				&type, &subtype,
-				&config_msg, sizeof(config_msg),
-				MESSIP_NOTIMEOUT);
+		int rcvid = messip::port_receive(ch,
+				type, subtype,
+				config_msg);
 
 		if (rcvid < 0) {
 			continue;
 		}
 
-		req = (config_request) type;
+		config_request req = (config_request) type;
 
 		switch(req) {
 			case CONFIG_CHANGE_INI_FILE:
@@ -82,9 +79,6 @@ main(int argc, char *argv[])
 							config_msg.data.query.key,
 							config_msg.data.query.section);
 
-					//printf("convigsrv(CONFIG_RETURN_STRING_VALUE, key:%s, section:%s) = %s\n",
-					//		config_msg.key, config_msg.section, rep);
-
 					messip_reply(ch, rcvid,
 						0, rep.c_str(), rep.size()+1,
 						MESSIP_NOTIMEOUT);
@@ -108,7 +102,7 @@ main(int argc, char *argv[])
 		}
 	}
 
-	messip_channel_delete(ch, MESSIP_NOTIMEOUT);
+	messip::port_delete(ch);
 
 	return 0;
 }

@@ -27,6 +27,8 @@
 #include "lib/impconst.h"
 #include "lib/messip/messip.h"
 
+#include <boost/serialization/serialization.hpp>
+
 namespace mrrocpp {
 namespace lib {
 
@@ -342,7 +344,6 @@ typedef enum _PROCESS_TYPE {
 #define BEYOND_UPPER_THETA6_LIMIT               0x3600000000000000ULL
 #define BEYOND_UPPER_THETA7_LIMIT               0x3700000000000000ULL
 
-
 #define BEYOND_LOWER_D0_LIMIT                   0x3800000000000000ULL
 #define BEYOND_LOWER_THETA1_LIMIT               0x3900000000000000ULL
 #define BEYOND_LOWER_THETA2_LIMIT               0x3A00000000000000ULL
@@ -656,8 +657,6 @@ typedef union c_buffer_rmodel
 	{
 		/*! Tool trihedron ralative to the collar. */
 		frame_tab tool_frame;
-		//*! Byte for calculating the command's length. */
-		//	uint8_t address_byte;
 	}
 	tool_frame_def;
 	//----------------------------------------------------------
@@ -665,8 +664,6 @@ typedef union c_buffer_rmodel
 	{
 		/*! XYZ + tool orientation relative to the collar. */
 		double tool_coordinates[6];
-		//*! Byte for calculating the command's length. */
-		// 	uint8_t address_byte;
 	}
 	tool_coordinate_def;
 	//----------------------------------------------------------
@@ -674,8 +671,6 @@ typedef union c_buffer_rmodel
 	{
 		/*! Parameter set number for the kinematic model. */
 		uint8_t kinematic_model_no;
-		//*! Byte for calculating the command's length. */
-		// 	uint8_t address_byte;
 	}
 	kinematic_model;
 	//----------------------------------------------------------
@@ -685,8 +680,6 @@ typedef union c_buffer_rmodel
 		uint8_t servo_algorithm_no[MAX_SERVOS_NR];
 		/*! Parameter set numbers for the servo-regulation algorithms. */
 		uint8_t servo_parameters_no[MAX_SERVOS_NR];
-		//*! Byte for calculating the command's length. */
-		// 	uint8_t address_byte;
 	}
 	servo_algorithm;
 	//----------------------------------------------------------
@@ -725,19 +718,15 @@ typedef union c_buffer_arm
 		BEHAVIOUR_SPECIFICATION behaviour[6];
 		/*! Dilation degree of the gripper. */
 		double gripper_coordinate;
-		//*! Byte for calculating the command's length. */
-		// 	uint8_t address_byte;
 	}
 	pf_def;
 	//----------------------------------------------------------
 	struct
 	{
-		/*! MAC7. */
+		/*! text to speak */
 		char text[MAX_TEXT];
-		/*! MAC7. */
+		/*! prosody of the text to speak */
 		char prosody[MAX_PROSODY];
-		//*! Byte for calculating the command's length. */
-		// 	uint8_t address_byte;
 	}
 	text_def;
 
@@ -763,8 +752,6 @@ struct c_buffer
 	POSE_SPECIFICATION get_arm_type;
 	/*! Binary outputs values. */
 	uint16_t output_values;
-	//*! Byte for calculating the command's length. */
-	//uint8_t address_byte;
 
 	/*! Type of interpolation. */
 	INTERPOLATION_TYPE interpolation_type;
@@ -773,6 +760,7 @@ struct c_buffer
 	MOTION_TYPE motion_type;
 	/*! Number of steps for a given shift (macrostep). */
 	uint16_t motion_steps;
+
 	/*!
 	 *  Number of steps for the 1st movemement phase.
 	 *  Krok, w ktorym ma zostac przekazana informacja
@@ -798,6 +786,24 @@ struct c_buffer
 	uint16_t value_in_step_no;
 	c_buffer_rmodel_t rmodel;
 	c_buffer_arm_t arm;
+
+	friend class boost::serialization::access;
+
+	template<class Archive>
+		void serialize(Archive & ar, const unsigned int version)
+		{
+			ar & instruction_type;
+			ar & set_type;
+			ar & get_type;
+			ar & set_rmodel_type;
+			ar & get_rmodel_type;
+			ar & set_arm_type;
+			ar & get_arm_type;
+			ar & output_values;
+			ar & interpolation_type;
+			ar & motion_type;
+			ar & motion_steps;
+		}
 
 	//-----------------------------------------------------
 	//                      METHODS
@@ -1098,7 +1104,7 @@ struct ECP_REPLY_PACKAGE
 {
 	ECP_REPLY reply;
 
-	// TODO: this should be rather union, but it is not possible to union objects with constructors
+	// TODO: this should be rather union, but it is not possible to union non-POD objects
 	r_buffer reply_package;
 	char commandRecognized[SPEECH_RECOGNITION_TEXT_LEN];
 };

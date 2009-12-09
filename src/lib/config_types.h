@@ -21,7 +21,6 @@ typedef struct config_query {
 		struct query_t {
 			char key[CONFIG_MAX_KEY_LEN];
 			char section[CONFIG_MAX_SECTION_NAME_LEN];
-			int attach_type;
 		} query;
 		char configfile[CONFIG_MAX_CONFIGFILE_LEN];
 		char nodename[CONFIG_MAX_NODENAME_LEN];

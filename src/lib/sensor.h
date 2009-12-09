@@ -84,7 +84,7 @@ typedef struct sensor_image_t
 	// wlasciwe pola obrazu - unie!
 	union sensor_union_t
 	{
-		char begin; // pole uzywane jako adres do wlasciwych eementow unii dla memcpy()
+		char begin; // pole uzywane jako adres do wlasciwych elementow unii dla memcpy()
 		struct
 		{
 			short reading;
@@ -163,19 +163,19 @@ typedef struct sensor_image_t
 			struct timespec ts;
 		} time;
 
-		//uchyb vsp pwilkows
+		// uchyb vsp pwilkows
 		struct deviation_t{
 			int frame_number;
 			int x;
 			int y;
-		}deviation;
+		} deviation;
 
-		//uchyb w follower
+		// uchyb w follower
 		struct { //do zlikwidowania, razem z followerem w przyszlosci
 			bool tracking;
 			int x;
 			int y;
-		}tracker;
+		} tracker;
 
 		struct {
 			bool tracking;
@@ -189,16 +189,16 @@ typedef struct sensor_image_t
 		 * used in Draughts task
 		 * \author tbem
 		 */
-		struct{
+		struct {
 			char fields[32];
 			BOARD_STATUS status;
-		}board;
+		} board;
 
 		//Obraz fradii dla rotate_gripper
 		struct {
 			HD_READING reading_state;
 			float angle;
-		}hd_angle;
+		} hd_angle;
 
 		/*!
 		 * \struct fradia_t
@@ -271,7 +271,7 @@ typedef struct sensor_image_t
 			int frame_number;
 			bool found;
 			bool calibrated;
-		}chessboard;
+		} chessboard;
 
 	} sensor_union; // koniec unii
 } SENSOR_IMAGE;

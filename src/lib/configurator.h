@@ -90,32 +90,32 @@ public:
 	} config_path_type_t;
 
 	std::string return_attach_point_name (config_path_type_t _type, const char* _key, const char* __section_name = NULL);
-	std::string return_attach_point_name (config_path_type_t _type, const char* _key, std::string __section_name) {
-		return return_attach_point_name(_type, _key, __section_name.c_str());
+	std::string return_attach_point_name (config_path_type_t _type, const std::string & _key, const std::string & __section_name) {
+		return return_attach_point_name(_type, _key.c_str(), __section_name.c_str());
 	};
 
 	// Zwraca wartosc (int) dla klucza.
 	int return_int_value(const char* _key, const char* __section_name = NULL);
-	int return_int_value(const char* _key, std::string __section_name) {
-		return return_int_value(_key, __section_name.c_str());
+	int return_int_value(const std::string & _key, const std::string & __section_name) {
+		return return_int_value(_key.c_str(), __section_name.c_str());
 	};
 
 	// Zwraca wartosc (double) dla klucza.
 	double return_double_value(const char* _key, const char* __section_name = NULL);
-	double return_double_value(const char* _key, std::string __section_name) {
-		return return_double_value(_key, __section_name.c_str());
+	double return_double_value(const std::string & _key, const std::string & __section_name) {
+		return return_double_value(_key.c_str(), __section_name.c_str());
 	};
 
 	// Zwraca wartosc (char*) dla klucza.
 	std::string return_string_value(const char* _key, const char* __section_name = NULL);
-	std::string return_string_value(const char* _key, std::string __section_name) {
-		return return_string_value(_key, __section_name.c_str());
+	std::string return_string_value(const std::string & _key, const std::string & __section_name) {
+		return return_string_value(_key.c_str(), __section_name.c_str());
 	};
 
 	// Zwraca czy dany klucz istnieje
 	bool exists(const char* _key, const char* __section_name = NULL);
-	bool exists(const char* _key, std::string __section_name) {
-		return exists(_key, __section_name.c_str());
+	bool exists(const std::string & _key, const std::string & __section_name) {
+		return exists(_key.c_str(), __section_name.c_str());
 	};
 
 	~configurator();

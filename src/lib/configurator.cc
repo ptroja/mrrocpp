@@ -34,7 +34,7 @@
 #if defined(PROCESS_SPAWN_SPAWN)
 #include "lib/y_spawn.h"
 #endif
-#include "lib/messip/messip.h"
+#include "lib/messip/messip_dataport.h"
 #include "lib/config_types.h"
 #include "lib/typedefs.h"
 
@@ -63,7 +63,7 @@ configurator::configurator (
 	mrrocpp_network_path += dir;
 
 #ifdef USE_MESSIP_SRR
-	if ((ch = messip_channel_connect(NULL, CONFIGSRV_CHANNEL_NAME, MESSIP_NOTIMEOUT)) == NULL) {
+	if ((ch = messip::port_connect(NULL, CONFIGSRV_CHANNEL_NAME)) == NULL) {
 	}
 	assert(ch);
 #else
@@ -420,10 +420,10 @@ pid_t configurator::process_spawn(const std::string & _section_name) {
 				session_name.length() ? session_name.c_str() : "\"\"", asa.c_str()
 		);
 
-//		// create new session for separation of signal delivery
-//		if(setsid() == (pid_t) -1) {
-//			perror("setsid()");
-//		}
+		// create new session for separation of signal delivery
+		if(setsid() == (pid_t) -1) {
+			perror("setsid()");
+		}
 
 		if (exists("username", _section_name)) {
 			std::string username = return_string_value("username", _section_name);
@@ -581,7 +581,7 @@ pid_t configurator::process_spawn(const std::string & _section_name) {
 
 configurator::~configurator() {
 #ifdef USE_MESSIP_SRR
-	messip_channel_disconnect(ch, MESSIP_NOTIMEOUT);
+	messip::port_disconnect(ch);
 #endif /* USE_MESSIP_SRR */
 }
 
