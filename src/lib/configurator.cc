@@ -408,9 +408,11 @@ pid_t configurator::process_spawn(const std::string & _section_name) {
 		);
 
 		// create new session for separation of signal delivery
+		/*
 		if(setsid() == (pid_t) -1) {
 			perror("setsid()");
 		}
+		*/
 
 		if (exists("username", _section_name)) {
 			std::string username = return_string_value("username", _section_name);
