@@ -1,16 +1,4 @@
-#include <string.h>
-#include <unistd.h>
-#include <cmath>
-#include <stdio.h>
-
-#include "lib/srlib.h"
-#include "ecp/irp6_on_track/ecp_r_irp6ot.h"
-#include "ecp/irp6_postument/ecp_r_irp6p.h"
-#include "ecp/common/ecp_g_smooth2.h"
 #include "ecp/common/ecp_t_calibration.h"
-#include "gsl/gsl_vector.h"
-#include "gsl/gsl_matrix.h"
-#include "gsl/gsl_multimin.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -20,6 +8,12 @@ namespace task {
 // KONSTRUKTORY
 calibration::calibration(lib::configurator &_config) : task(_config)
 {
+	dimension = 12;
+}
+
+calibration::calibration(lib::configurator &_config, int _dimension = 12) : task(_config)
+{
+	dimension = _dimension;
 }
 
 void calibration::main_task_algorithm(void)
@@ -57,238 +51,65 @@ void calibration::main_task_algorithm(void)
 	fclose(FP);
 //TODO: STOP -> acq_task -> write_data(ofp)
 
-	////////////////// eih calibration
-	gsl_vector *x, *step_size;
+	//calibration
+	gsl_vector *x;
 
 	// initialize starting point
-	x = gsl_vector_calloc(12);
-	step_size = gsl_vector_calloc(12);
+	x = gsl_vector_calloc(dimension);
 
 	int status;
 	size_t count = 0;
-	double size;
 
 	const gsl_multimin_fdfminimizer_type *T2;
 	gsl_multimin_fdfminimizer *s2;
 	T2 = gsl_multimin_fdfminimizer_vector_bfgs2;
-	s2 = gsl_multimin_fdfminimizer_alloc (T2, 12);
+	s2 = gsl_multimin_fdfminimizer_alloc (T2, dimension);
 
-	float temp, c, min = 1000.0;
+	ofp.magical_c = 0.3;
 
-//	cout.precision(3);
-//	cout.width(6);
-//	cout.setf(ios::fixed,ios::floatfield);
-	for(ofp.magical_c = 0.1; ofp.magical_c < 200.64; ofp.magical_c *= 2.0)
+	sr_ecp_msg->message("");
+
+	count = 0;
+
+	gsl_multimin_fdfminimizer_set (s2, &fdf, x, 0.1, 0.1);
+
+	do
 	{
-		gsl_vector_set(x, 0, 0.0);
-		gsl_vector_set(x, 1, 0.0);
-		gsl_vector_set(x, 2, 0.0);
-		gsl_vector_set(x, 3, 0.0);
-		gsl_vector_set(x, 4, 0.0);
-		gsl_vector_set(x, 5, 0.0);
-		gsl_vector_set(x, 6, 0.0);
-		gsl_vector_set(x, 7, 0.0);
-		gsl_vector_set(x, 8, 0.0);
-		gsl_vector_set(x, 9, 0.0);
-		gsl_vector_set(x, 10, 0.0);
-		gsl_vector_set(x, 11, 0.0);
+		++count;
+		status = gsl_multimin_fdfminimizer_iterate (s2);
 
-		sr_ecp_msg->message("");
-		for(k = 0; k < 3; ++k)
-		{
-			count = 0;
+		if (status)  //check if solver is stuck
+			break;
 
-			gsl_multimin_fdfminimizer_set (s2, &fdf, x, 0.1, 0.1);
+		status = gsl_multimin_test_gradient (s2->gradient, 1e-5);
 
-			do
-			{
-				++count;
-				status = gsl_multimin_fdfminimizer_iterate (s2);
+		if (status == GSL_SUCCESS)
+			sr_ecp_msg->message("Converged to minimum at");
 
-				if (status)  //check if solver is stuck
-					break;
+//		sprintf(buffer, "%i", count);
+//		sr_ecp_msg->message(buffer);
 
-				status = gsl_multimin_test_gradient (s2->gradient, 1e-5);
-
-				if (status == GSL_SUCCESS)
-					sr_ecp_msg->message("Converged to minimum at");
-
-//				cout<<count<<endl;
-//				sprintf(buffer, "%i", count);
-//				sr_ecp_msg->message(buffer);
-
-//				for (i = 0; i < 12; ++i){
-//					cout<<gsl_vector_get(s2->x,i)<<" ";
-//				}
-//				cout<<"Function value="<< s2->f<< endl;
-			}
-			while (status == GSL_CONTINUE && count < 1000);
-
-			if (k == 2)
-			{
-				sprintf(buffer, "%f6.3", ofp.magical_c);
-				sr_ecp_msg->message(buffer);
-//				cout<<endl<<ofp.magical_c<<endl;
-
-
-				for (i = 0; i < 12; ++i){
-					sprintf(buffer, "%f6.3", gsl_vector_get(s2->x,i));
-					sr_ecp_msg->message(buffer);
-//					cout<<gsl_vector_get(s2->x,i)<<" ";
-					if (i % 3 == 2)
-						sr_ecp_msg->message("\t");
-				}
-
-				sr_ecp_msg->message("Function value=");
-				sprintf(buffer, "%f6.3", s2->f);
-				sr_ecp_msg->message(buffer);
-//				cout<<"Function value="<< s2->f<< endl;
-
-				temp = sqrt(pow(gsl_vector_get(s2->x, 6), 2) + pow(gsl_vector_get(s2->x, 7), 2) + pow(gsl_vector_get(s2->x, 8), 2));
-
-				sr_ecp_msg->message("srednio = ");
-				sprintf(buffer, "%f6.3", temp);
-				sr_ecp_msg->message(buffer);
-//				cout <<"srednio = " << temp<<endl;
-
-				gsl_vector *angles;
-				gsl_matrix *matrix;
-				angles = gsl_vector_calloc(3);
-				gsl_vector_set(angles,0,gsl_vector_get(s2->x, 9));
-				gsl_vector_set(angles,1,gsl_vector_get(s2->x, 10));
-				gsl_vector_set(angles,2,gsl_vector_get(s2->x, 11));
-				matrix = gsl_matrix_calloc(3, 3);
-				angles_to_rotation_matrix(angles, matrix);
-				gsl_vector_set(angles,0,gsl_vector_get(s2->x, 6));
-				gsl_vector_set(angles,1,gsl_vector_get(s2->x, 7));
-				gsl_vector_set(angles,2,gsl_vector_get(s2->x, 8));
-				gsl_matrix_transpose(matrix);
-				gsl_matrix_scale (matrix, -1.0);
-
-				matrix_vector_multiply(matrix, angles);
-				for(i = 0; i < 3; ++i){
-					sprintf(buffer, "%f6.3", gsl_vector_get(angles, i));
-					sr_ecp_msg->message(buffer);
-					sr_ecp_msg->message("\t");
-//					cout<<gsl_vector_get(angles, i)<<"\t";
-				}
-
-			}
-
-			for (j = 0; j < 12; ++j){
-				gsl_vector_set(x, j, gsl_vector_get(s2->x, j));
-			}
-
-
-
-		}
+//		for (i = 0; i < dimension; ++i){
+//			cout<<gsl_vector_get(s2->x,i)<<" ";
+//		}
 	}
+	while (status == GSL_CONTINUE && count < 1000);
+
+//	sprintf(buffer, "%f6.3", ofp.magical_c);
+//	sr_ecp_msg->message(buffer);
+
+	for (i = 0; i < dimension; ++i){
+		sprintf(buffer, "%f6.3", gsl_vector_get(s2->x,i));
+		sr_ecp_msg->message(buffer);
+//		if (i % 3 == 2)
+//			sr_ecp_msg->message("\t");
+	}
+
+//	sr_ecp_msg->message("Function value=");
+//	sprintf(buffer, "%f6.3", s2->f);
+//	sr_ecp_msg->message(buffer);
 
 	gsl_multimin_fdfminimizer_free (s2);
-
-/*	gsl_multimin_function f;
-	f.n = 12;
-	f.f = &objective_function;
-	f.params = (void*)&ofp;
-
-	// minimizer and solver
-	const gsl_multimin_fminimizer_type* T;
-	T = gsl_multimin_fminimizer_nmsimplex2;
-	gsl_multimin_fminimizer* solver;
-	solver = gsl_multimin_fminimizer_alloc(T, 12);
-	float temp, c, min = 1000.0;
-
-	cout.precision(3);
-	cout.width(6);
-	cout.setf(ios::fixed,ios::floatfield);
-
-	for(ofp.magical_c = 0.01; ofp.magical_c < 200.64; ofp.magical_c *= 2.0)
-	{
-		gsl_vector_set(x, 0, 0.7);
-		gsl_vector_set(x, 1, 2.0);
-		gsl_vector_set(x, 2, 0.0);
-		gsl_vector_set(x, 3, 0.0);
-		gsl_vector_set(x, 4, 0.0);
-		gsl_vector_set(x, 5, 0.0);
-		gsl_vector_set(x, 6, 0.0);
-		gsl_vector_set(x, 7, 0.0);
-		gsl_vector_set(x, 8, 0.0);
-		gsl_vector_set(x, 9, 0.0);
-		gsl_vector_set(x, 10, 0.0);
-		gsl_vector_set(x, 11, 0.0);
-
-		cout<<endl;
-		for(k = 0; k < 5; ++k)
-		{
-
-	//		ofp.magical_c = 0.1;
-
-			count = 0;
-
-			//set initial step sizes
-			for (j = 0; j < 12; ++j){
-				gsl_vector_set(step_size, j, 6.5);
-			}
-
-			gsl_multimin_fminimizer_set (solver, &f, x, step_size);
-
-			do
-			{
-				++count;
-				status = gsl_multimin_fminimizer_iterate (solver);
-
-				if (status)  //check if solver is stuck
-					break;
-
-				size = gsl_multimin_fminimizer_size(solver);
-
-				status = gsl_multimin_test_size (size, 1e-1);
-
-//				if (status == GSL_SUCCESS)
-//					cout<<"Converged to minimum at"<<endl;
-
-//				cout<<count<<endl;
-
-//				for (i = 0; i < 12; ++i){
-//					cout<<gsl_vector_get(solver->x,i)<<" ";
-//				}
-//				cout<<"Function value="<< solver->fval<< "size ="<<size << endl;
-			}
-			while (status == GSL_CONTINUE && count < 100);
-
-			if (k == 4)
-			{
-				cout<<ofp.magical_c<<endl;
-
-
-				for (i = 0; i < 12; ++i){
-					cout<<gsl_vector_get(solver->x,i)<<" ";
-					if (i % 3 == 2)
-						cout<<"\t";
-				}
-
-//				cout<<"Function value="<< solver->fval<< "size ="<<size << endl;
-
-				temp = sqrt(pow(gsl_vector_get(solver->x, 6), 2) + pow(gsl_vector_get(solver->x, 7), 2) + pow(gsl_vector_get(solver->x, 8), 2));
-
-				cout <<endl<< "srednio = " << temp<< endl;
-			}
-
-			if(temp < min)
-			{
-				min = temp;
-				c = ofp.magical_c;
-			}
-
-			for (j = 0; j < 12; ++j){
-				gsl_vector_set(x, j, gsl_vector_get(solver->x, j));
-			}
-		}
-	}
-//	cout << " minimum" << min <<"  c = "<<c<<endl;
-
-	gsl_multimin_fminimizer_free (solver);
-*/
 }
 
 /*!
@@ -445,9 +266,9 @@ bool calibration::angles_to_rotation_matrix(const gsl_vector * angles, gsl_matri
 	beta = gsl_vector_get(angles, 1);
 	gamma = gsl_vector_get(angles, 2);
 
-/*				1		0		0
+/*						1		0		0
 		rotation = [	0		cos(alfa)	-sin	]
-				0		sin		cos		*/
+						0		sin		cos		*/
 	gsl_matrix_set (rotation, 1, 1, cos(alfa));
 	gsl_matrix_set (rotation, 1, 2, -1.0*sin(alfa));
 	gsl_matrix_set (rotation, 2, 1, sin(alfa));

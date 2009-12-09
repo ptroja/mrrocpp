@@ -1,12 +1,17 @@
 #if !defined(_ECP_T_CALIBRATION_H)
 #define _ECP_T_CALIBRATION_H
 
+#include <string.h>
+#include <unistd.h>
+#include <cmath>
+#include <iostream>
+#include <stdio.h>
+
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 #include "lib/srlib.h"
 #include "lib/configurator.h"
 #include "ecp/common/ecp_task.h"
-#include "ecp/common/ecp_g_smooth2.h"
 #include "ecp/common/ecp_t_acquisition.h"
 #include "gsl/gsl_vector.h"
 #include "gsl/gsl_matrix.h"
@@ -23,8 +28,11 @@ class calibration: public common::task::task  {
 
 		gsl_multimin_function_fdf fdf;
 
+		int dimension;
+
 		// KONSTRUKTORY
 		calibration(lib::configurator &_config);
+		calibration(lib::configurator &_config, int dimension);
 
 		// methods for ECP template to redefine in concrete classes
 		void main_task_algorithm(void);

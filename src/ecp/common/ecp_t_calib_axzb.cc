@@ -1,14 +1,4 @@
-#include <string.h>
-#include <unistd.h>
-
-#include "lib/srlib.h"
-#include "ecp/irp6_on_track/ecp_r_irp6ot.h"
-#include "ecp/irp6_postument/ecp_r_irp6p.h"
-#include "ecp/common/ecp_g_smooth2.h"
-#include "ecp/common/ecp_t_calibration.h"
-#include "ecp/common/ecp_t_calib_axzb.h"
-#include "gsl/gsl_vector.h"
-#include "gsl/gsl_matrix.h"
+#include "ecp_t_calib_axzb.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -16,7 +6,7 @@ namespace common {
 namespace task {
 
 // KONSTRUKTORY
-calib_axzb::calib_axzb(lib::configurator &_config) : calibration(_config)
+calib_axzb::calib_axzb(lib::configurator &_config) : calibration(_config, 12)
 {
 	fdf.n = 12;  // number of function components
 	fdf.f = &objective_function;
@@ -27,6 +17,7 @@ calib_axzb::calib_axzb(lib::configurator &_config) : calibration(_config)
 void calib_axzb::main_task_algorithm(void)
 {
 	calibration::main_task_algorithm();
+	ecp_termination_notice();
 }
 
 /*!

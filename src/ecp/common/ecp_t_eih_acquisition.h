@@ -1,10 +1,10 @@
-/// \file ecp_t_eihcalibration.h
-/// \brief definicja zadania kalibracji ukladu oko - reka
+/// \file ecp_t_eih_acquisition.h
+/// \brief definicja zadania akwizycji danych potrzebnych do kalibracji ukladu oko - reka
 /// \author 2009 Jakub Kosiorek
 ///////////////////////////////////////////////////////////////////////////////
 
-#if !defined(_ECP_T_EIHCALIBRATION_H)
-#define _ECP_T_EIHCALIBRATION_H
+#if !defined(_ECP_T_EIH_ACQUISITION_H)
+#define _ECP_T_EIH_ACQUISITION_H
 
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
@@ -31,7 +31,8 @@ namespace ecp {
 namespace common {
 namespace task {
 
-class eihcalibration: public common::task::task {
+/*
+class eihacquisition: public common::task::acquisition {
 	std::string smooth_path;
 	int delay_ms, robot, M;
 	double A, C, D, E;
@@ -45,11 +46,11 @@ class eihcalibration: public common::task::task {
 		generator::eihgenerator* generator;
 
 	public:
-		eihcalibration(lib::configurator &_config);
+		eihacquisition(lib::configurator &_config);
 
 		void main_task_algorithm(void);
 };
-
+*/
 }
 } // namespace common
 } // namespace ecp

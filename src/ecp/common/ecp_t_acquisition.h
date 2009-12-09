@@ -1,11 +1,14 @@
 #if !defined(_ECP_T_ACQUISITION_H)
 #define _ECP_T_ACQUISITION_H
 
+#include <string.h>
+#include <unistd.h>
+
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 #include "lib/srlib.h"
 #include "lib/configurator.h"
-#include "gsl/gsl_vector.h"
+#include "ecp/common/ecp_task.h"
 
 namespace mrrocpp {
 namespace ecp {

@@ -69,11 +69,12 @@ void eihgenerator::get_frame(float t[12])
 		for(int j=0; j<4; j++)
 		{
 			t[4*i+j] = the_robot->reply_package.arm.pf_def.arm_frame[i][j];
-			std::cout << t[4*i+j] << "\t";
+			tab[4*i+j] = the_robot->reply_package.arm.pf_def.arm_frame[i][j];
+			//std::cout << t[4*i+j] << "\t";
 		}
-		std::cout<<std::endl;
+		//std::cout<<std::endl;
 	}
-	std::cout<<std::endl;
+	//std::cout<<std::endl;
 
 }
 

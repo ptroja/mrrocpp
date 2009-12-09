@@ -1,17 +1,17 @@
-/// \file ecp_t_eihcalibration.cc
-/// \brief definicja zadania kalibracji ukladu oko - reka
+/// \file ecp_t_eih_acquisition.cc
+/// \brief definicja zadania akwizycji danych potrzebnych do kalibracji ukladu oko - reka
 /// \author 2009 Jakub Kosiorek
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "ecp/common/ecp_t_eihcalibration.h"
+#include "ecp/common/ecp_t_eih_acquisition.h"
 
 namespace mrrocpp {
 namespace ecp {
 namespace common {
 namespace task {
-
+/*
 //Constructors
-eihcalibration::eihcalibration(lib::configurator &_config) : task(_config)
+eihacquisition::eihacquisition(lib::configurator &_config) : acquisition(_config)
 {
     // Create an adequate robot. - depending on the ini section name.
     if (config.section_name == ECP_IRP6_ON_TRACK_SECTION)
@@ -46,10 +46,10 @@ eihcalibration::eihcalibration(lib::configurator &_config) : task(_config)
 	generator = new generator::eihgenerator(*this);
 	generator->sensor_m = sensor_m;
 
-	sr_ecp_msg->message("ECP loaded eihcalibration");
+	sr_ecp_msg->message("ECP loaded eihacquisition");
 }
 
-void eihcalibration::main_task_algorithm(void ){
+void eihacquisition::main_task_algorithm(void ){
 
 	int i = 0, j = 0, k, l, m = 0;
 	double a, b, c, d, e;
@@ -57,7 +57,7 @@ void eihcalibration::main_task_algorithm(void ){
 	delay.tv_nsec = (delay_ms % 1000) * 1000000;//delay in ms
 	delay.tv_sec = (int)(delay_ms / 1000);
 
-	sr_ecp_msg->message("ECP eihcalibration ready");
+	sr_ecp_msg->message("ECP eihacquisition ready");
 
 	//Czekam, az czujnik bedzie skonfigurowany.
 	sensor_m[lib::SENSOR_CVFRADIA]->get_reading();
@@ -66,30 +66,7 @@ void eihcalibration::main_task_algorithm(void ){
 	}
 
 	smooth2gen->set_absolute();
-/*	if(robot == POSTUMENT)
-	{
-		if (smooth2gen->load_file_with_path("../trj/eihcalibration/pozycja1.trj")) {
-			smooth2gen->Move();
-			nanosleep(&delay, NULL);
-			sensor_m[lib::SENSOR_CVFRADIA]->get_reading();
-			generator->Move();
-		}
 
-		if (smooth2gen->load_file_with_path("../trj/eihcalibration/pozycja2.trj")) {
-			smooth2gen->Move();
-			nanosleep(&delay, NULL);
-			sensor_m[lib::SENSOR_CVFRADIA]->get_reading();
-			generator->Move();
-		}
-
-		if (smooth2gen->load_file_with_path("../trj/eihcalibration/pozycja3.trj")) {
-			smooth2gen->Move();
-			nanosleep(&delay, NULL);
-			sensor_m[lib::SENSOR_CVFRADIA]->get_reading();
-			generator->Move();
-		}
-	}
-*/
 	// wczytanie pozycji poczatkowej i przejscie do niej za pomoca smooth
 	smooth2gen->load_file_with_path(smooth_path.c_str());
 	smooth2gen->Move();
@@ -99,7 +76,6 @@ void eihcalibration::main_task_algorithm(void ){
 		sensor_m[lib::SENSOR_CVFRADIA]->get_reading();
 		nose->Move();
 		generator->Move();
-		std::cout<<generator->tab[3]<<std::endl;
 	}
 	nose->Move();
 
@@ -135,13 +111,7 @@ void eihcalibration::main_task_algorithm(void ){
 	// pomachaj chwytakiem zeby zrobic fajne zdjecia
 	while(i >= 0 && sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.chessboard.calibrated == false)
 	{
-/*		if (i % 2 == 1)
-			l = 1;
-		else
-			l = 0;
-
-		for(; l < 6; l += 2)
-*/		for(l = 0; l < 6; l += 1)
+		for(l = 0; l < 6; l += 1)
 		{
 			c = 0.0;
 			d = 0.0;
@@ -244,13 +214,7 @@ void eihcalibration::main_task_algorithm(void ){
 				++j;
 				sensor_m[lib::SENSOR_CVFRADIA]->get_reading();
 
-/*				if (i % 2 == 1)
-					l = 1;
-				else
-					l = 0;
-
-				for(; l < 6; l += 2)
-*/				for(l = 0; l < 6; l += 1)
+				for(l = 0; l < 6; l += 1)
 				{
 					c = 0.0;
 					d = 0.0;
@@ -281,8 +245,8 @@ void eihcalibration::main_task_algorithm(void ){
 					}
 
 					// zabezpieczenie przed przekroczeniem obszaru roboczego robota
-/*start2 b>0 d<0*/				if (a > 0.0 && m == 0 && c > 0 && ((i == 0 && j == 1) || ( i == 1 && j == 1) || (i == 2 && j == 2) || (i == 3 && j == 3)))
-/*start1 a>0 c>0 ot i p*/					flaga = false;
+start2 b>0 d<0				if (a > 0.0 && m == 0 && c > 0 && ((i == 0 && j == 1) || ( i == 1 && j == 1) || (i == 2 && j == 2) || (i == 3 && j == 3)))
+start1 a>0 c>0 ot i p					flaga = false;
 
 					while(((sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.chessboard.found) == true)
 						&& ((sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.chessboard.calibrated) == false) && m < M && flaga)
@@ -308,8 +272,8 @@ void eihcalibration::main_task_algorithm(void ){
 					}
 				}
 				// zabezpieczenie przed przekroczeniem obszaru roboczego robota
-/*start2 b>0*/				if(a > 0.0 && ((i == 1 && j == 1) || (i == 2 && j == 2) || (i == 3 && j == 3) || (i == 0 && j == 1)))
-/*start1 a>0*/					flaga = false;
+start2 b>0				if(a > 0.0 && ((i == 1 && j == 1) || (i == 2 && j == 2) || (i == 3 && j == 3) || (i == 0 && j == 1)))
+start1 a>0					flaga = false;
 			}
 
 			flaga = true;
@@ -338,9 +302,9 @@ void eihcalibration::main_task_algorithm(void ){
 }
 
 task* return_created_ecp_task(lib::configurator &_config){
-	return new eihcalibration(_config);
+	return new eihacquisition(_config);
 }
-
+*/
 } // namespace task
 } // namespace common
 } // namespace ecp

@@ -1901,8 +1901,7 @@ bool eih_nose_run::next_step()
 
 	if (node_counter==1)
 	{
-		the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate
-				= the_robot->reply_package.arm.pf_def.gripper_coordinate;
+		the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate=0;
 	}
 
 	// wyrzucanie odczytu sil

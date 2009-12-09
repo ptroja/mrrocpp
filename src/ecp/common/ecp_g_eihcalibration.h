@@ -25,6 +25,7 @@ class eihgenerator : public common::generator::generator
 	int count;
 
   public:
+	double tab[12];
 	eihgenerator(common::task::task& _ecp_task);
 	~eihgenerator();
 	bool first_step();
