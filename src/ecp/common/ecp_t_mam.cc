@@ -200,7 +200,7 @@ mam::mam(lib::configurator &_config) :
 #if !defined(USE_MESSIP_SRR)
 	if ((UI_ECP_attach = name_attach(NULL, "ECP_M_MAM", NAME_FLAG_ATTACH_GLOBAL)) == NULL)
 #else
-	if ((UI_ECP_attach = messip::port_create(NULL, "ECP_M_MAM")) == NULL)
+	if ((UI_ECP_attach = messip::port_create("ECP_M_MAM")) == NULL)
 #endif
 	{
 		// W razie niepowodzenia.

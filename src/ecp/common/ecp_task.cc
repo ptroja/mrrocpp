@@ -127,7 +127,7 @@ void task::initialize_communication()
 #if !defined(USE_MESSIP_SRR)
 	if ( (MP_fd = name_open(mp_pulse_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) < 0)
 #else
-	if ( (MP_fd = messip::port_connect(NULL, mp_pulse_attach_point)) == NULL)
+	if ( (MP_fd = messip::port_connect(mp_pulse_attach_point)) == NULL)
 #endif
 	{
 		int e = errno; // kod bledu systemowego
@@ -140,7 +140,7 @@ void task::initialize_communication()
 #if !defined(USE_MESSIP_SRR)
 	if ((ecp_attach = name_attach(NULL, ecp_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) == NULL)
 #else
-	if ((ecp_attach = messip::port_create(NULL, ecp_attach_point)) == NULL)
+	if ((ecp_attach = messip::port_create(ecp_attach_point)) == NULL)
 #endif
 	{
 		int e = errno; // kod bledu systemowego
@@ -154,7 +154,7 @@ void task::initialize_communication()
 #if !defined(USE_MESSIP_SRR)
 	if ((trigger_attach = name_attach(NULL, trigger_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) == NULL)
 #else
-	if ((trigger_attach = messip::port_create(NULL, trigger_attach_point)) == NULL)
+	if ((trigger_attach = messip::port_create(trigger_attach_point)) == NULL)
 #endif
 	{
 		int e = errno; // kod bledu systemowego
