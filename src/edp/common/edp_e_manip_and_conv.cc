@@ -46,7 +46,7 @@ namespace common {
 
 int	manip_and_conv_effector::master_order(MT_ORDER nm_task, int nm_tryb)
 {
-	return mt_tt_obj.master_to_trans_t_order(nm_task, nm_tryb);
+	return mt_tt_obj->master_to_trans_t_order(nm_task, nm_tryb);
 }
 
 
@@ -125,6 +125,7 @@ void manip_and_conv_effector::create_threads ()
 {
 
 	rb_obj = new reader_buffer(*this);
+	mt_tt_obj = new master_trans_t_buffer();
 
 
     // Y&W - utworzenie watku serwa

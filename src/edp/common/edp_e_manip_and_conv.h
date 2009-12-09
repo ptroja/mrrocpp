@@ -202,7 +202,7 @@ public:
 #endif
     in_out_buffer in_out_obj; // bufor wejsc wyjsc
     reader_buffer *rb_obj;
-    master_trans_t_buffer mt_tt_obj;
+    master_trans_t_buffer *mt_tt_obj;
 
     manip_and_conv_effector (lib::configurator &_config, lib::robot_name_t l_robot_name);       // konstruktor
     virtual ~manip_and_conv_effector();

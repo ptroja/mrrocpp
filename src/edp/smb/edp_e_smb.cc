@@ -237,12 +237,12 @@ void effector::move_arm (lib::c_buffer &instruction)
     case lib::MOTOR:
         compute_motors(instruction);
         move_servos ();
-        mt_tt_obj.trans_t_to_master_order_status_ready();
+        mt_tt_obj->trans_t_to_master_order_status_ready();
         break;
     case lib::JOINT:
         compute_joints(instruction);
         move_servos ();
-        mt_tt_obj.trans_t_to_master_order_status_ready();
+        mt_tt_obj->trans_t_to_master_order_status_ready();
         break;
     case lib::XYZ_EULER_ZYZ:
 
@@ -258,18 +258,18 @@ void effector::move_arm (lib::c_buffer &instruction)
 
         compute_xyz_euler_zyz(instruction);
         move_servos ();
-        mt_tt_obj.trans_t_to_master_order_status_ready();
+        mt_tt_obj->trans_t_to_master_order_status_ready();
 
         break;
     case lib::XYZ_ANGLE_AXIS:
         compute_xyz_angle_axis(instruction);
         move_servos ();
-        mt_tt_obj.trans_t_to_master_order_status_ready();
+        mt_tt_obj->trans_t_to_master_order_status_ready();
         break;
     case lib::FRAME:
         compute_frame(instruction);
         move_servos ();
-        mt_tt_obj.trans_t_to_master_order_status_ready();
+        mt_tt_obj->trans_t_to_master_order_status_ready();
         break;
     default: // blad: niezdefiniowany sposb specyfikacji pozycji koncowki
         throw NonFatal_error_2(INVALID_SET_END_EFFECTOR_TYPE);

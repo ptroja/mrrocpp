@@ -609,7 +609,7 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buff
              reply.arm.pf_def.force_xyz_torque_xyz[i] = current_force_torque[i];
              }
 			 */
-			mt_tt_obj.trans_t_to_master_order_status_ready();
+			mt_tt_obj->trans_t_to_master_order_status_ready();
 		}
 
 		last_force_step_counter = step_counter;
@@ -636,12 +636,12 @@ void irp6s_postument_track_effector::move_arm(lib::c_buffer &instruction)
 		case lib::MOTOR:
 			compute_motors(instruction);
 			move_servos();
-			mt_tt_obj.trans_t_to_master_order_status_ready();
+			mt_tt_obj->trans_t_to_master_order_status_ready();
 			break;
 		case lib::JOINT:
 			compute_joints(instruction);
 			move_servos();
-			mt_tt_obj.trans_t_to_master_order_status_ready();
+			mt_tt_obj->trans_t_to_master_order_status_ready();
 			break;
 		case lib::XYZ_EULER_ZYZ:
 
@@ -657,18 +657,18 @@ void irp6s_postument_track_effector::move_arm(lib::c_buffer &instruction)
 
 			compute_xyz_euler_zyz(instruction);
 			move_servos();
-			mt_tt_obj.trans_t_to_master_order_status_ready();
+			mt_tt_obj->trans_t_to_master_order_status_ready();
 
 			break;
 		case lib::XYZ_ANGLE_AXIS:
 			compute_xyz_angle_axis(instruction);
 			move_servos();
-			mt_tt_obj.trans_t_to_master_order_status_ready();
+			mt_tt_obj->trans_t_to_master_order_status_ready();
 			break;
 		case lib::FRAME:
 			compute_frame(instruction);
 			move_servos();
-			mt_tt_obj.trans_t_to_master_order_status_ready();
+			mt_tt_obj->trans_t_to_master_order_status_ready();
 			break;
 		default: // blad: niezdefiniowany sposb specyfikacji pozycji koncowki
 		throw NonFatal_error_2(INVALID_SET_END_EFFECTOR_TYPE);
