@@ -23,7 +23,7 @@ messip:
 	@$(MAKE) -C $@
 
 #-----------------------------------------------------------------------------------------------------------------------#
-MESSIP_OBJECTS = messip/logg_messip.o messip/messip_lib.o messip/messip_utils.o
+MESSIP_OBJECTS = messip/logg_messip.o messip/messip_lib.o messip/messip_utils.o messip/messip_dataport.o
 MESSIP_OBJECTS: messip
 
 LIBMRROCPP_OBJECTS = \

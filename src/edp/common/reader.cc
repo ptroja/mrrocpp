@@ -22,7 +22,7 @@
 #include <sys/dispatch.h>
 #include <sys/netmgr.h>
 #else
-#include "lib/messip/messip.h"
+#include "lib/messip/messip_dataport.h"
 #endif
 #include <errno.h>
 #include <pthread.h>
@@ -149,8 +149,9 @@ void * manip_and_conv_effector::reader_thread(void* arg)
 #else
 	messip_channel_t *my_attach;
 
-	if ((my_attach = messip_channel_create(NULL, config.return_attach_point_name(lib::configurator::CONFIG_SERVER,
-			"reader_attach_point").c_str(), MESSIP_NOTIMEOUT, 0)) == NULL) {
+	if ((my_attach = messip::port_create(NULL,
+			config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "reader_attach_point")))
+			== NULL) {
 #endif
 		e = errno;
 		perror("Failed to attach pulse chanel for READER");
@@ -209,7 +210,7 @@ void * manip_and_conv_effector::reader_thread(void* arg)
 			rcvid = MsgReceive(my_attach->chid, &ui_msg, sizeof(ui_msg), NULL);
 #else
 			int32_t type, subtype;
-			int rcvid = messip_receive(my_attach, &type, &subtype, NULL, 0, MESSIP_NOTIMEOUT);
+			int rcvid = messip::port_receive_pulse(my_attach, type, subtype);
 
 			if (rcvid >= 0) {
 				if (type == READER_START) {
@@ -296,7 +297,7 @@ void * manip_and_conv_effector::reader_thread(void* arg)
 			}
 #else
 			int32_t type, subtype;
-			int rcvid = messip_receive(my_attach, &type, &subtype, NULL, 0, 0);
+			int rcvid = messip::port_receive_pulse(my_attach, type, subtype, 0);
 
 			if (rcvid >= 0) {
 				if (type == READER_STOP) {

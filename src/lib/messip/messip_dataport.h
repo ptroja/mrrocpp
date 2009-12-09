@@ -26,6 +26,27 @@ int port_send( messip_channel_t * ch,
 	return messip_send(ch, type, subtype, &send, sizeof(send), answer, &reply, sizeof(reply), msec_timeout);
 }
 
+template <class SendData>
+int port_send_sync( messip_channel_t * ch,
+   int32_t type,
+   int32_t subtype,
+   const SendData & send,
+   int32_t * answer,
+   int32_t msec_timeout = MESSIP_NOTIMEOUT)
+{
+	return messip_send(ch, type, subtype, &send, sizeof(send), answer, NULL, 0, msec_timeout);
+}
+
+template <class SendData>
+int port_send_sync( messip_channel_t * ch,
+   int32_t type,
+   int32_t subtype,
+   const SendData & send,
+   int32_t msec_timeout = MESSIP_NOTIMEOUT)
+{
+	return messip_send(ch, type, subtype, &send, sizeof(send), NULL, NULL, -1, msec_timeout);
+}
+
 template <class ReceiveData>
 int port_receive( messip_channel_t * ch,
    int32_t & type,
@@ -33,8 +54,13 @@ int port_receive( messip_channel_t * ch,
    ReceiveData & data,
    int32_t msec_timeout = MESSIP_NOTIMEOUT)
 {
-	return messip_receive(ch, type, subtype, &data, sizeof(data), msec_timeout);
+	return messip_receive(ch, &type, &subtype, &data, sizeof(data), msec_timeout);
 }
+
+int port_receive_pulse( messip_channel_t * ch,
+   int32_t & type,
+   int32_t & subtype,
+   int32_t msec_timeout = MESSIP_NOTIMEOUT);
 
 template <class ReplyData>
 int port_reply( messip_channel_t * ch,
@@ -50,32 +76,20 @@ messip_channel_t *
 port_create(messip_cnx_t * cnx,
    const std::string & name,
    int32_t msec_timeout = MESSIP_NOTIMEOUT,
-   int32_t maxnb_msg_buffered = 0)
-{
-	return messip_channel_create(cnx, name.c_str(), msec_timeout, maxnb_msg_buffered);
-}
+   int32_t maxnb_msg_buffered = 0);
 
 int
 port_delete(messip_channel_t * ch,
-   int32_t msec_timeout = MESSIP_NOTIMEOUT)
-{
-	return messip_channel_delete(ch, msec_timeout);
-}
+   int32_t msec_timeout = MESSIP_NOTIMEOUT);
 
 messip_channel_t *
 port_connect( messip_cnx_t * cnx,
    const std::string & name,
-   int32_t msec_timeout = MESSIP_NOTIMEOUT)
-{
-	return messip_channel_connect(cnx, name.c_str(), msec_timeout);
-}
+   int32_t msec_timeout = MESSIP_NOTIMEOUT);
 
 int
 port_disconnect( messip_channel_t * ch,
-   int32_t msec_timeout = MESSIP_NOTIMEOUT)
-{
-	return messip_channel_disconnect(ch, msec_timeout);
-}
+   int32_t msec_timeout = MESSIP_NOTIMEOUT);
 
 } /* namespace messip */
 

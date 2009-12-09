@@ -20,7 +20,7 @@
 #include <sys/iofunc.h>
 #include <sys/dispatch.h>
 #else
-#include "lib/messip/messip.h"
+#include "lib/messip/messip_dataport.h"
 #endif /* !USE_MESSIP_SRR */
 #include <pthread.h>
 #include <errno.h>
@@ -108,7 +108,7 @@ bool effector::initialize_communication()
 #if !defined(USE_MESSIP_SRR)
 		name_attach(NULL, server_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL);
 #else /* USE_MESSIP_SRR */
-		messip_channel_create(NULL, server_attach_point.c_str(), MESSIP_NOTIMEOUT, 0);
+		messip::port_create(NULL, server_attach_point);
 #endif /* USE_MESSIP_SRR */
 
 	if (attach == NULL) {
@@ -220,11 +220,11 @@ lib::INSTRUCTION_TYPE effector::receive_instruction(void)
 		}
 #else /* USE_MESSIP_SRR */
 		int32_t type, subtype;
-		rcvid = messip_receive(attach, &type, &subtype, &new_ecp_command, sizeof(lib::ecp_command_buffer), MESSIP_NOTIMEOUT);
+		rcvid = messip::port_receive(attach, type, subtype, new_ecp_command);
 
 		if (rcvid == -1)
 		{/* Error condition, exit */
-			perror("messip_receive()");
+			perror("messip::port_receive()");
 			break;
 		}
 		else if (rcvid < -1)
@@ -261,7 +261,7 @@ void effector::reply_to_instruction(void)
 #if !defined(USE_MESSIP_SRR)
 	if (MsgReply(caller, 0, &reply, sizeof(reply)) == -1) { // Odpowiedz dla procesu ECP badz UI by Y
 #else /* USE_MESSIP_SRR */
-	if (messip_reply(attach, caller, 0, &reply, sizeof(reply), MESSIP_NOTIMEOUT) == -1) {
+	if (messip::port_reply(attach, caller, 0, reply) == -1) {
 #endif /* USE_MESSIP_SRR */
 		uint64_t e = errno;
 		perror("Reply() to ECP failed");
