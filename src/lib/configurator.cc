@@ -75,15 +75,15 @@ configurator::configurator (
 void configurator::change_ini_file (const std::string & _ini_file)
 {
 #ifdef USE_MESSIP_SRR
-	config_msg_t config_msg;
-	snprintf(config_msg.data.configfile, sizeof(config_msg.data.configfile), "%s", _ini_file.c_str());
+	configfile_t configfile;
+	snprintf(configfile, sizeof(configfile), "%s", _ini_file.c_str());
 	int32_t answer;
 
 	boost::mutex::scoped_lock l(file_mutex);
 
 	messip::port_send_sync(this->ch,
 			CONFIG_CHANGE_INI_FILE, 0,
-			config_msg,
+			configfile,
 			&answer);
 #else
 	boost::mutex::scoped_lock l(file_mutex);
@@ -182,9 +182,9 @@ bool configurator::exists(const char* _key, const char* __section_name)
 #ifdef USE_MESSIP_SRR
 	const char *_section_name = (__section_name) ? __section_name : section_name.c_str();
 
-	config_msg_t config_msg;
-	snprintf(config_msg.data.query.key, sizeof(config_msg.data.query.key), "%s", _key);
-	snprintf(config_msg.data.query.section, sizeof(config_msg.data.query.section), "%s", _section_name);
+	query_t query;
+	snprintf(query.key, sizeof(query.key), "%s", _key);
+	snprintf(query.section, sizeof(query.section), "%s", _section_name);
 	int32_t answer;
 
 	bool value;
@@ -193,7 +193,7 @@ bool configurator::exists(const char* _key, const char* __section_name)
 
 	messip::port_send(this->ch,
 			CONFIG_EXISTS, 0,
-			config_msg,
+			query,
 			&answer, value);
 
 	return value;
@@ -227,9 +227,9 @@ int configurator::return_int_value(const char* _key, const char* __section_name)
 #ifdef USE_MESSIP_SRR
 	const char *_section_name = (__section_name) ? __section_name : section_name.c_str();
 
-	config_msg_t config_msg;
-	snprintf(config_msg.data.query.key, sizeof(config_msg.data.query.key), "%s", _key);
-	snprintf(config_msg.data.query.section, sizeof(config_msg.data.query.section), "%s", _section_name);
+	query_t query;
+	snprintf(query.key, sizeof(query.key), "%s", _key);
+	snprintf(query.section, sizeof(query.section), "%s", _section_name);
 	int32_t answer;
 
 	int value = 0;
@@ -238,7 +238,7 @@ int configurator::return_int_value(const char* _key, const char* __section_name)
 
 	messip::port_send(this->ch,
 			CONFIG_RETURN_INT_VALUE, 0,
-			config_msg,
+			query,
 			&answer, value);
 
 	return value;
@@ -277,9 +277,9 @@ double configurator::return_double_value(const char* _key, const char*__section_
 #ifdef USE_MESSIP_SRR
 	const char *_section_name = (__section_name) ? __section_name : section_name.c_str();
 
-	config_msg_t config_msg;
-	snprintf(config_msg.data.query.key, sizeof(config_msg.data.query.key), "%s", _key);
-	snprintf(config_msg.data.query.section, sizeof(config_msg.data.query.section), "%s", _section_name);
+	query_t query;
+	snprintf(query.key, sizeof(query.key), "%s", _key);
+	snprintf(query.section, sizeof(query.section), "%s", _section_name);
 	int32_t answer;
 
 	double value = 0;
@@ -288,7 +288,7 @@ double configurator::return_double_value(const char* _key, const char*__section_
 
 	messip::port_send(this->ch,
 			CONFIG_RETURN_INT_VALUE, 0,
-			config_msg,
+			query,
 			&answer, value);
 
 	return value;
@@ -326,10 +326,10 @@ std::string configurator::return_string_value(const char* _key, const char*__sec
 #ifdef USE_MESSIP_SRR
 	const char *_section_name = (__section_name) ? __section_name : section_name.c_str();
 
-	config_msg_t config_msg;
+	query_t query;
 
-	snprintf(config_msg.data.query.key, sizeof(config_msg.data.query.key), "%s", _key);
-	snprintf(config_msg.data.query.section, sizeof(config_msg.data.query.section), "%s", _section_name);
+	snprintf(query.key, sizeof(query.key), "%s", _key);
+	snprintf(query.section, sizeof(query.section), "%s", _section_name);
 	int32_t answer;
 
 	char value[255];
@@ -337,7 +337,7 @@ std::string configurator::return_string_value(const char* _key, const char*__sec
 	boost::mutex::scoped_lock l(file_mutex);
 
 	messip::port_send(this->ch, CONFIG_RETURN_STRING_VALUE, 0,
-			config_msg,
+			query,
 			&answer, value);
 
 	// Zwrocenie wartosci.
@@ -482,18 +482,16 @@ pid_t configurator::process_spawn(const std::string & _section_name) {
 	inherit.pgroup = SPAWN_NEWPGROUP;
 
 	// Sciezka do binariow.
-	char * bin_path;
 	int size = 1 + strlen("/net/") + strlen(node) +strlen(dir) + strlen("bin/");
-	bin_path = new char[size];
+	char * bin_path = new char[size];
 	strcpy(bin_path,"/net/");
 	strcat(bin_path, node);
 	strcat(bin_path, dir);
 	strcat(bin_path,"bin/");
 
 	// Zlozenie lokalizacji odpalanego y_spawn_process
-	char* spawn_process;
 	size = 1 + strlen(bin_path) + strlen("y_spawn_process");
-	spawn_process = new char[size];
+	char* spawn_process = new char[size];
 	strcpy(spawn_process, bin_path);
 	strcat(spawn_process,"y_spawn_process");
 

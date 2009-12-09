@@ -45,7 +45,7 @@ main(int argc, char *argv[])
 		switch(req) {
 			case CONFIG_CHANGE_INI_FILE:
 				{
-					config.change_ini_file(config_msg.data.configfile);
+					config.change_ini_file(config_msg.configfile);
 					messip_reply(ch, rcvid,
 						0, NULL, 0,
 						MESSIP_NOTIMEOUT);
@@ -54,8 +54,8 @@ main(int argc, char *argv[])
 			case CONFIG_RETURN_INT_VALUE:
 				{
 					const int reply = config.return_int_value(
-							config_msg.data.query.key,
-							config_msg.data.query.section);
+							config_msg.query.key,
+							config_msg.query.section);
 
 					messip::port_reply(ch, rcvid, 0, reply);
 				}
@@ -63,8 +63,8 @@ main(int argc, char *argv[])
 			case CONFIG_RETURN_DOUBLE_VALUE:
 				{
 					const double reply = config.return_double_value(
-							config_msg.data.query.key,
-							config_msg.data.query.section);
+							config_msg.query.key,
+							config_msg.query.section);
 
 					messip::port_reply(ch, rcvid, 0, reply);
 				}
@@ -72,8 +72,8 @@ main(int argc, char *argv[])
 			case CONFIG_RETURN_STRING_VALUE:
 				{
 					const std::string reply = config.return_string_value(
-							config_msg.data.query.key,
-							config_msg.data.query.section);
+							config_msg.query.key,
+							config_msg.query.section);
 
 					messip_reply(ch, rcvid,
 						0, reply.c_str(), reply.size()+1,
@@ -83,8 +83,8 @@ main(int argc, char *argv[])
 			case CONFIG_EXISTS:
 				{
 					const bool reply = config.exists(
-							config_msg.data.query.key,
-							config_msg.data.query.section);
+							config_msg.query.key,
+							config_msg.query.section);
 
 					messip::port_reply(ch, rcvid, 0, reply);
 				}

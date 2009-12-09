@@ -16,14 +16,16 @@ typedef enum _config_request {
 	CONFIG_EXISTS
 } config_request_t;
 
-typedef struct config_query {
-	union data_t {
-		struct query_t {
+typedef struct _query {
 			char key[CONFIG_MAX_KEY_LEN];
 			char section[CONFIG_MAX_SECTION_NAME_LEN];
-		} query;
-		char configfile[CONFIG_MAX_CONFIGFILE_LEN];
-	} data;
+} query_t;
+
+typedef char configfile_t[CONFIG_MAX_CONFIGFILE_LEN];
+
+typedef union data_t {
+	query_t query;
+	configfile_t configfile;
 } config_msg_t;
 
 #endif /* _CONFIG_TYPES_H */
