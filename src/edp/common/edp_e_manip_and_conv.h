@@ -21,6 +21,7 @@
 #include "kinematics/common/transformer_error.h"
 #include "kinematics/common/kinematics_manager.h"
 #include "edp/common/edp_effector.h"
+#include "edp/common/master_trans_t_buffer.h"
 
 
 // Konfigurator

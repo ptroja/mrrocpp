@@ -5,8 +5,8 @@
 // Ostatnia modyfikacja: 16.04.98
 // -------------------------------------------------------------------------
 
-#ifndef __EDP_H
-#define __EDP_H
+#ifndef __MASTER_TRANS_T_BUFFER_H
+#define __MASTER_TRANS_T_BUFFER_H
 
 #include <stdint.h>
 #include <semaphore.h>

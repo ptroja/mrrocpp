@@ -36,11 +36,6 @@ namespace common {
 
 
 
-int	manip_effector::master_order(MT_ORDER nm_task, int nm_tryb)
-{
-	return manip_and_conv_effector::master_order(nm_task, nm_tryb);
-}
-
 
 
 servo_buffer* manip_effector::return_created_servo_buffer ()

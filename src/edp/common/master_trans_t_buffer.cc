@@ -12,7 +12,7 @@
 #include "lib/com_buf.h"
 
 #include "lib/mis_fun.h"
-#include "edp/common/edp_e_manip_and_conv.h"
+#include "edp/common/edp_e_manip.h"
 #include "edp/common/master_trans_t_buffer.h"
 
 /********************************* GLOBALS **********************************/
@@ -21,7 +21,10 @@ namespace mrrocpp {
 namespace edp {
 namespace common {
 
-
+int	manip_effector::master_order(MT_ORDER nm_task, int nm_tryb)
+{
+	return manip_and_conv_effector::master_order(nm_task, nm_tryb);
+}
 
 
 master_trans_t_buffer::master_trans_t_buffer()
