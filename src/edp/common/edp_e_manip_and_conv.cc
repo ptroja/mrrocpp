@@ -124,7 +124,7 @@ void manip_and_conv_effector::master_joints_read (double* output)
 void manip_and_conv_effector::create_threads ()
 {
 
-	rb_obj = new reader_buffer();
+	rb_obj = new reader_buffer(*this);
 
 
     // Y&W - utworzenie watku serwa
@@ -145,7 +145,7 @@ void manip_and_conv_effector::create_threads ()
     }
 
     // Y&W - utworzenie watku readera
-    if (pthread_create (&reader_tid, NULL, &reader_thread_start, (void *) this))
+    if (pthread_create (&rb_obj->reader_tid, NULL, &rb_obj->reader_thread_start, (void *) this))
     {
         msg->message(lib::SYSTEM_ERROR, errno, "EDP: Failed to create READER thread");
         throw System_error();

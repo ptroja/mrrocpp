@@ -13,7 +13,10 @@
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 
+#include "edp/common/edp_effector.h"
+
 #include "kinematics/common/transformer_error.h"
+
 
 namespace mrrocpp {
 namespace edp {
@@ -77,14 +80,19 @@ struct reader_data
 class reader_buffer
 {
 private:
+
     sem_t reader_sem;
     pthread_mutex_t reader_mutex;
-
+    effector &master;
 public:
+    static void *reader_thread_start(void* arg);
+    void *reader_thread(void* arg);
+
+    pthread_t reader_tid;
     reader_data step_data; // dane pomiarowe dla biezacego mikrokroku
     reader_config reader_cnf; //   Struktura z informacja, ktore elementy struktury reader_data maja byc zapisane do pliku
 
-    reader_buffer();
+    reader_buffer(effector &_master);
     ~reader_buffer();
 
     int	set_new_step(); // podniesienie semafora

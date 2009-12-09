@@ -44,7 +44,8 @@ namespace common {
 
 
 
-reader_buffer::reader_buffer()
+reader_buffer::reader_buffer(effector &_master) :
+	master (_master)
 {
 	pthread_mutex_init(&reader_mutex, NULL);
 	sem_init(&reader_sem, 0, 0);
@@ -82,12 +83,12 @@ int reader_buffer::unlock_mutex() // zwolnienie mutex'a
 
 
 
-void * manip_and_conv_effector::reader_thread_start(void* arg)
+void * reader_buffer::reader_thread_start(void* arg)
 {
-	return static_cast<manip_and_conv_effector*> (arg)->reader_thread(arg);
+	return static_cast<reader_buffer*> (arg)->reader_thread(arg);
 }
 
-void * manip_and_conv_effector::reader_thread(void* arg)
+void * reader_buffer::reader_thread(void* arg)
 {
 	uint64_t k;
 	uint64_t nr_of_samples; // maksymalna liczba pomiarow
@@ -109,66 +110,66 @@ void * manip_and_conv_effector::reader_thread(void* arg)
 	// czytanie konfiguracji
 	std::string reader_meassures_dir;
 
-	if (config.exists("reader_meassures_dir")) {
-		reader_meassures_dir = config.return_string_value("reader_meassures_dir", UI_SECTION);
+	if (master.config.exists("reader_meassures_dir")) {
+		reader_meassures_dir = master.config.return_string_value("reader_meassures_dir", UI_SECTION);
 	} else {
-		reader_meassures_dir = config.return_default_reader_measures_path();
+		reader_meassures_dir = master.config.return_default_reader_measures_path();
 	}
 
-	std::string robot_filename = config.return_string_value("reader_attach_point");
+	std::string robot_filename = master.config.return_string_value("reader_attach_point");
 
-	if (config.exists("reader_samples"))
-		nr_of_samples = config.return_int_value("reader_samples");
+	if (master.config.exists("reader_samples"))
+		nr_of_samples = master.config.return_int_value("reader_samples");
 	else
 		nr_of_samples = 1000;
 
-	rb_obj->reader_cnf.step = 1;
-	rb_obj->reader_cnf.servo_mode = check_config("servo_tryb");
-	rb_obj->reader_cnf.msec = check_config("msec");
+	reader_cnf.step = 1;
+	reader_cnf.servo_mode = master.check_config("servo_tryb");
+	reader_cnf.msec = master.check_config("msec");
 
 	char tmp_string[50];
 
 	for (int j = 0; j < MAX_SERVOS_NR; j++) {
 
 		sprintf(tmp_string, "desired_inc_%d", j);
-		rb_obj->reader_cnf.desired_inc[j] = check_config(tmp_string);
+		reader_cnf.desired_inc[j] = master.check_config(tmp_string);
 
 		sprintf(tmp_string, "current_inc_%d", j);
-		rb_obj->reader_cnf.current_inc[j] = check_config(tmp_string);
+		reader_cnf.current_inc[j] = master.check_config(tmp_string);
 
 		sprintf(tmp_string, "pwm_%d", j);
-		rb_obj->reader_cnf.pwm[j] = check_config(tmp_string);
+		reader_cnf.pwm[j] = master.check_config(tmp_string);
 
 		sprintf(tmp_string, "uchyb_%d", j);
-		rb_obj->reader_cnf.uchyb[j] = check_config(tmp_string);
+		reader_cnf.uchyb[j] = master.check_config(tmp_string);
 
 		sprintf(tmp_string, "abs_pos_%d", j);
-		rb_obj->reader_cnf.abs_pos[j] = check_config(tmp_string);
+		reader_cnf.abs_pos[j] = master.check_config(tmp_string);
 
 		sprintf(tmp_string, "current_joints_%d", j);
-		rb_obj->reader_cnf.current_joints[j] = check_config(tmp_string);
+		reader_cnf.current_joints[j] = master.check_config(tmp_string);
 
 		if (j < 6) {
 			sprintf(tmp_string, "force_%d", j);
-			rb_obj->reader_cnf.force[j] = check_config(tmp_string);
+			reader_cnf.force[j] = master.check_config(tmp_string);
 
 			sprintf(tmp_string, "desired_force_%d", j);
-			rb_obj->reader_cnf.desired_force[j] = check_config(tmp_string);
+			reader_cnf.desired_force[j] = master.check_config(tmp_string);
 
 			sprintf(tmp_string, "filtered_force_%d", j);
-			rb_obj->reader_cnf.filtered_force[j] = check_config(tmp_string);
+			reader_cnf.filtered_force[j] = master.check_config(tmp_string);
 
 			sprintf(tmp_string, "current_cartesian_position_%d", j);
-			rb_obj->reader_cnf.current_cartesian_position[j] = check_config(tmp_string);
+			reader_cnf.current_cartesian_position[j] = master.check_config(tmp_string);
 
 			sprintf(tmp_string, "real_cartesian_position_%d", j);
-			rb_obj->reader_cnf.real_cartesian_position[j] = check_config(tmp_string);
+			reader_cnf.real_cartesian_position[j] = master.check_config(tmp_string);
 
 			sprintf(tmp_string, "real_cartesian_vel_%d", j);
-			rb_obj->reader_cnf.real_cartesian_vel[j] = check_config(tmp_string);
+			reader_cnf.real_cartesian_vel[j] = master.check_config(tmp_string);
 
 			sprintf(tmp_string, "real_cartesian_acc_%d", j);
-			rb_obj->reader_cnf.real_cartesian_acc[j] = check_config(tmp_string);
+			reader_cnf.real_cartesian_acc[j] = master.check_config(tmp_string);
 		}
 	}
 
@@ -187,17 +188,17 @@ void * manip_and_conv_effector::reader_thread(void* arg)
 #if !defined(USE_MESSIP_SRR)
 	name_attach_t *my_attach; // nazwa kanalu komunikacyjnego
 
-	if ((my_attach = name_attach(NULL, config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "reader_attach_point").c_str(), NAME_FLAG_ATTACH_GLOBAL)) == NULL) {
+	if ((my_attach = name_attach(NULL, master.config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "reader_attach_point").c_str(), NAME_FLAG_ATTACH_GLOBAL)) == NULL) {
 #else
 	messip_channel_t *my_attach;
 
 	if ((my_attach = messip::port_create(
-			config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "reader_attach_point")))
+			master.config.return_attach_point_name(lib::master.configurator::CONFIG_SERVER, "reader_attach_point")))
 			== NULL) {
 #endif
 		e = errno;
 		perror("Failed to attach pulse chanel for READER");
-		msg->message("Failed to attach pulse chanel for READER");
+		master.msg->message("Failed to attach pulse chanel for READER");
 		//  throw MP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 	}
 
@@ -262,26 +263,26 @@ void * manip_and_conv_effector::reader_thread(void* arg)
 #endif
 		}
 
-		msg->message("measures started");
+		master.msg->message("measures started");
 
 		lib::set_thread_priority(pthread_self(), MAX_PRIORITY+1);
 
-		rb_obj->reader_wait_for_new_step();
+		reader_wait_for_new_step();
 		// dopoki nie przyjdzie puls stopu
 		do {
 			// czekamy na opuszcenie semafora przez watek EDP_SERVO (co mikrokrok)
-			rb_obj->reader_wait_for_new_step();
+			reader_wait_for_new_step();
 
 			// sekcja krytyczna odczytu danych pomiarowych dla biezacego kroku
-			rb_obj->lock_mutex();
+			lock_mutex();
 
-			rb_obj->step_data.ui_trigger = ui_trigger;
+			step_data.ui_trigger = ui_trigger;
 
-			// printf("EDPX: %f\n", rb_obj->step_data.current_cartesian_position[1]);
+			// printf("EDPX: %f\n", step_data.current_cartesian_position[1]);
 			// przepisanie danych dla biezacego kroku do bufora lokalnego reader
-			memcpy(&(r_measptr[msr_nr]), &rb_obj->step_data, sizeof(reader_data));
+			memcpy(&(r_measptr[msr_nr]), &step_data, sizeof(reader_data));
 
-			rb_obj->unlock_mutex();
+			unlock_mutex();
 
 			// wykrycie przepelnienia
 			if ((++msr_nr) >= nr_of_samples) {
@@ -353,7 +354,7 @@ void * manip_and_conv_effector::reader_thread(void* arg)
 
 
 		lib::set_thread_priority(pthread_self(), 1);// Najnizszy priorytet podczas proby zapisu do pliku
-		msg->message("measures stopped");
+		master.msg->message("measures stopped");
 
 		// przygotowanie nazwy pliku do ktorego beda zapisane pomiary
 		time_of_day = time(NULL);
@@ -369,7 +370,7 @@ void * manip_and_conv_effector::reader_thread(void* arg)
 		{
 			std::cerr << "Cannot open file: " << file_name << '\n';
 			perror("because of");
-			msg->message("cannot open destination file");
+			master.msg->message("cannot open destination file");
 			// TODO: throw
 		} else { // jesli plik istnieje
 
@@ -393,67 +394,67 @@ void * manip_and_conv_effector::reader_thread(void* arg)
 				// printf("EDP %f\n", r_measptr[k].current_cartesian_position[1]);
 
 				outfile << r_measptr[k].step << " ";
-				if (rb_obj->reader_cnf.msec)
+				if (reader_cnf.msec)
 					outfile << r_measptr[k].msec << " ";
-				if (rb_obj->reader_cnf.servo_mode)
+				if (reader_cnf.servo_mode)
 					outfile << (r_measptr[k].servo_mode ? "1" : "0") << " ";
 
 				for (int j = 0; j < MAX_SERVOS_NR; j++) {
-					if (rb_obj->reader_cnf.desired_inc[j])
+					if (reader_cnf.desired_inc[j])
 						outfile << r_measptr[k].desired_inc[j] << " ";
-					if (rb_obj->reader_cnf.current_inc[j])
+					if (reader_cnf.current_inc[j])
 						outfile << r_measptr[k].current_inc[j] << " ";
-					if (rb_obj->reader_cnf.pwm[j])
+					if (reader_cnf.pwm[j])
 						outfile << r_measptr[k].pwm[j] << " ";
-					if (rb_obj->reader_cnf.uchyb[j])
+					if (reader_cnf.uchyb[j])
 						outfile << r_measptr[k].uchyb[j] << " ";
-					if (rb_obj->reader_cnf.abs_pos[j])
+					if (reader_cnf.abs_pos[j])
 						outfile << r_measptr[k].abs_pos[j] << " ";
 				}
 
 				outfile << "j: ";
 
 				for (int j = 0; j < MAX_SERVOS_NR; j++) {
-					if (rb_obj->reader_cnf.current_joints[j])
+					if (reader_cnf.current_joints[j])
 						outfile << r_measptr[k].current_joints[j] << " ";
 				}
 
 				outfile << "f: ";
 
 				for (int j = 0; j < 6; j++) {
-					if (rb_obj->reader_cnf.force[j])
+					if (reader_cnf.force[j])
 						outfile << r_measptr[k].force[j] << " ";
-					if (rb_obj->reader_cnf.desired_force[j])
+					if (reader_cnf.desired_force[j])
 						outfile << r_measptr[k].desired_force[j] << " ";
-					if (rb_obj->reader_cnf.filtered_force[j])
+					if (reader_cnf.filtered_force[j])
 						outfile << r_measptr[k].filtered_force[j] << " ";
 				}
 
 				outfile << "k: ";
 
 				for (int j = 0; j < 6; j++) {
-					if (rb_obj->reader_cnf.current_cartesian_position[j])
+					if (reader_cnf.current_cartesian_position[j])
 						outfile << r_measptr[k].current_cartesian_position[j] << " ";
 				}
 
 				outfile << "r: ";
 
 				for (int j = 0; j < 6; j++) {
-					if (rb_obj->reader_cnf.real_cartesian_position[j])
+					if (reader_cnf.real_cartesian_position[j])
 						outfile << r_measptr[k].real_cartesian_position[j] << " ";
 				}
 
 				outfile << "v: ";
 
 				for (int j = 0; j < 6; j++) {
-					if (rb_obj->reader_cnf.real_cartesian_vel[j])
+					if (reader_cnf.real_cartesian_vel[j])
 						outfile << r_measptr[k].real_cartesian_vel[j] << " ";
 				}
 
 				outfile << "a: ";
 
 				for (int j = 0; j < 6; j++) {
-					if (rb_obj->reader_cnf.real_cartesian_acc[j])
+					if (reader_cnf.real_cartesian_acc[j])
 						outfile << r_measptr[k].real_cartesian_acc[j] << " ";
 				}
 
@@ -464,7 +465,7 @@ void * manip_and_conv_effector::reader_thread(void* arg)
 				k++;
 			} // end for(i = 0; i < msr_counter; i++)
 
-			msg->message("file writing is finished");
+			master.msg->message("file writing is finished");
 		}
 
 		lib::set_thread_priority(pthread_self(), MAX_PRIORITY-10);

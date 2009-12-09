@@ -45,8 +45,6 @@ class servo_buffer;
 class manip_and_conv_effector : public effector, public kinematic::common::manager
 {
 protected:
-    static void *reader_thread_start(void* arg);
-    void *reader_thread(void* arg);
     static void *trans_thread_start(void* arg);
     void *trans_thread(void* arg);
     static void *servo_thread_start(void* arg);
@@ -79,7 +77,6 @@ protected:
     short gripper_servo_nr;
 
     pthread_t serwo_tid;
-    pthread_t reader_tid;
     pthread_t trans_t_tid;
     pthread_t vis_t_tid;
 
