@@ -81,10 +81,10 @@ void configurator::change_ini_file (const std::string & _ini_file)
 
 	boost::mutex::scoped_lock l(file_mutex);
 
-	messip_send(this->ch, CONFIG_CHANGE_INI_FILE, 0,
-			&config_msg, sizeof(config_msg),
-			&answer, NULL, 0,
-			MESSIP_NOTIMEOUT);
+	messip::port_send_sync(this->ch,
+			CONFIG_CHANGE_INI_FILE, 0,
+			config_msg,
+			&answer);
 #else
 	boost::mutex::scoped_lock l(file_mutex);
 
@@ -191,10 +191,10 @@ bool configurator::exists(const char* _key, const char* __section_name)
 
 	boost::mutex::scoped_lock l(file_mutex);
 
-	messip_send(this->ch, CONFIG_EXISTS, 0,
-			&config_msg, sizeof(config_msg),
-			&answer, &value, sizeof(value),
-			MESSIP_NOTIMEOUT);
+	messip::port_send(this->ch,
+			CONFIG_EXISTS, 0,
+			config_msg,
+			&answer, value);
 
 	return value;
 #else
@@ -236,10 +236,10 @@ int configurator::return_int_value(const char* _key, const char* __section_name)
 
 	boost::mutex::scoped_lock l(file_mutex);
 
-	messip_send(this->ch, CONFIG_RETURN_INT_VALUE, 0,
-			&config_msg, sizeof(config_msg),
-			&answer, &value, sizeof(value),
-			MESSIP_NOTIMEOUT);
+	messip::port_send(this->ch,
+			CONFIG_RETURN_INT_VALUE, 0,
+			config_msg,
+			&answer, value);
 
 	return value;
 #else
@@ -286,10 +286,10 @@ double configurator::return_double_value(const char* _key, const char*__section_
 
 	boost::mutex::scoped_lock l(file_mutex);
 
-	messip_send(this->ch, CONFIG_RETURN_INT_VALUE, 0,
-			&config_msg, sizeof(config_msg),
-			&answer, &value, sizeof(value),
-			MESSIP_NOTIMEOUT);
+	messip::port_send(this->ch,
+			CONFIG_RETURN_INT_VALUE, 0,
+			config_msg,
+			&answer, value);
 
 	return value;
 #else
@@ -336,12 +336,9 @@ std::string configurator::return_string_value(const char* _key, const char*__sec
 
 	boost::mutex::scoped_lock l(file_mutex);
 
-	messip_send(this->ch, CONFIG_RETURN_STRING_VALUE, 0,
-			&config_msg, sizeof(config_msg),
-			&answer, &value, sizeof(value),
-			MESSIP_NOTIMEOUT);
-
-	//printf("configurator::return_string_value(%s, %s) = %s\n", _key, _section_name, value);
+	messip::port_send(this->ch, CONFIG_RETURN_STRING_VALUE, 0,
+			config_msg,
+			&answer, value);
 
 	// Zwrocenie wartosci.
 	return std::string(value);

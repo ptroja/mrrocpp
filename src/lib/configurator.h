@@ -83,7 +83,7 @@ public:
 
 	// Zwraca attach point'a serwerow w zaleznosci od typu
 
-	typedef enum config_path_type {
+	typedef enum _config_path_type {
 		CONFIG_RESOURCEMAN_LOCAL,
 		CONFIG_RESOURCEMAN_GLOBAL,
 		CONFIG_SERVER

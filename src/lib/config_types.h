@@ -1,6 +1,8 @@
 #if !defined(_CONFIG_TYPES_H)
 #define _CONFIG_TYPES_H
 
+#include <boost/variant.hpp>
+
 #define CONFIG_MAX_KEY_LEN				80
 #define CONFIG_MAX_SECTION_NAME_LEN		80
 #define CONFIG_MAX_CONFIGFILE_LEN		80
@@ -8,13 +10,13 @@
 
 #define CONFIGSRV_CHANNEL_NAME			"configsrv"
 
-enum config_request {
+typedef enum _config_request {
 	CONFIG_CHANGE_INI_FILE,
 	CONFIG_RETURN_INT_VALUE,
 	CONFIG_RETURN_DOUBLE_VALUE,
 	CONFIG_RETURN_STRING_VALUE,
 	CONFIG_EXISTS
-};
+} config_request_t;
 
 typedef struct config_query {
 	union data_t {

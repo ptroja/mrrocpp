@@ -40,7 +40,7 @@ main(int argc, char *argv[])
 			continue;
 		}
 
-		config_request req = (config_request) type;
+		config_request_t req = (config_request_t) type;
 
 		switch(req) {
 			case CONFIG_CHANGE_INI_FILE:
@@ -53,46 +53,40 @@ main(int argc, char *argv[])
 				break;
 			case CONFIG_RETURN_INT_VALUE:
 				{
-					const int rep = config.return_int_value(
+					const int reply = config.return_int_value(
 							config_msg.data.query.key,
 							config_msg.data.query.section);
 
-					messip_reply(ch, rcvid,
-						0, &rep, sizeof(rep),
-						MESSIP_NOTIMEOUT);
+					messip::port_reply(ch, rcvid, 0, reply);
 				}
 				break;
 			case CONFIG_RETURN_DOUBLE_VALUE:
 				{
-					const double rep = config.return_double_value(
+					const double reply = config.return_double_value(
 							config_msg.data.query.key,
 							config_msg.data.query.section);
 
-					messip_reply(ch, rcvid,
-						0, &rep, sizeof(rep),
-						MESSIP_NOTIMEOUT);
+					messip::port_reply(ch, rcvid, 0, reply);
 				}
 				break;
 			case CONFIG_RETURN_STRING_VALUE:
 				{
-					const std::string rep = config.return_string_value(
+					const std::string reply = config.return_string_value(
 							config_msg.data.query.key,
 							config_msg.data.query.section);
 
 					messip_reply(ch, rcvid,
-						0, rep.c_str(), rep.size()+1,
+						0, reply.c_str(), reply.size()+1,
 						MESSIP_NOTIMEOUT);
 				}
 				break;
 			case CONFIG_EXISTS:
 				{
-					const bool rep = config.exists(
+					const bool reply = config.exists(
 							config_msg.data.query.key,
 							config_msg.data.query.section);
 
-					messip_reply(ch, rcvid,
-						0, &rep, sizeof(rep),
-						MESSIP_NOTIMEOUT);
+					messip::port_reply(ch, rcvid, 0, reply);
 				}
 				break;
 			default:
