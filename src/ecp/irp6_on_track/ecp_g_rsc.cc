@@ -118,8 +118,7 @@ void robot_stopped_condition::refresh_window(void){
 #if !defined(USE_MESSIP_SRR)
 		if (MsgSend(UI_fd, &ecp_ui_msg, sizeof(lib::ECP_message), NULL, 0) < 0){
 #else
-		int32_t answer;
-		if (messip_send(UI_fd, 0, 0, &ecp_ui_msg, sizeof(lib::ECP_message), &answer, NULL, 0, MESSIP_NOTIMEOUT) < 0){
+		if (messip::port_send_sync(UI_fd, 0, 0, ecp_ui_msg) < 0){
 #endif
 			 perror("ECP trajectory_reproduce_thread(): Send() to UI failed");
 			 sr_ecp_msg.message (lib::SYSTEM_ERROR, errno, "ECP: Send() to UI failed");

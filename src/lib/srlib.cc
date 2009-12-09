@@ -19,7 +19,9 @@
 #include "lib/com_buf.h"
 #include "lib/srlib.h"
 
-#include "lib/messip/messip.h"
+#if defined(USE_MESSIP_SRR)
+#include "lib/messip/messip_dataport.h"
+#endif
 
 namespace mrrocpp {
 namespace lib {
@@ -88,11 +90,11 @@ int sr::send_package(void) {
 sr::sr(process_type_t process_type, const std::string & process_name, const std::string & sr_name) {
 
 	int tmp = 0;
-	while ((ch = messip_channel_connect(NULL, sr_name.c_str(), MESSIP_NOTIMEOUT)) == NULL) {
+	while ((ch = messip::port_connect(NULL, sr_name)) == NULL) {
 		if (tmp++ < 50) {
 			delay(50);
 		} else {
-			fprintf(stderr, "messip_channel_connect(\"%s\") @ %s:%d: %s\n",
+			fprintf(stderr, "messip::port_connect(\"%s\") @ %s:%d: %s\n",
 				sr_name.c_str(), __FILE__, __LINE__, strerror(errno));
 			// TODO: throw
 			assert(0);
@@ -119,9 +121,9 @@ sr::sr(process_type_t process_type, const std::string & process_name, const std:
 
 // Destruktor
 sr::~sr(void) {
-	fprintf(stderr, "~sr::messip_channel_disconnect(%s)\n", sr_message.process_name);
-    if(messip_channel_disconnect(ch, MESSIP_NOTIMEOUT) == -1) {
-    	perror("messip_channel_disconnect()");
+	fprintf(stderr, "~sr: messip::port_disconnect(%s)\n", sr_message.process_name);
+    if(messip::port_disconnect(ch) == -1) {
+    	perror("messip::port_disconnect()");
     }
 }
 
@@ -129,12 +131,8 @@ int sr::send_package(void) {
 	if(!ch)
 		return -1;
 
-	int32_t answer;
-	int16_t status;
-
 	clock_gettime(CLOCK_REALTIME, &sr_message.ts);
-	return messip_send(ch, 100, 200, &sr_message, sizeof(sr_message),
-			&answer, &status, sizeof(status), MESSIP_NOTIMEOUT);
+	return messip::port_send_sync(ch, 0, 0, sr_message);
 }
 #endif /* !USE_MESSIP_SRR */
 

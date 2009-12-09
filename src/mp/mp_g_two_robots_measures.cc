@@ -19,6 +19,10 @@
 
 #include "mp/mp_g_two_robots_measures.h"
 
+#if defined(USE_MESSIP_SRR)
+#include "lib/messip/messip_dataport.h"
+#endif
+
 namespace mrrocpp {
 namespace mp {
 namespace generator {
@@ -137,9 +141,7 @@ void two_robots_measures::save_measures_to_file (void)
 	ecp_to_ui_msg.hdr.type=0;
 	if (MsgSend(UI_fd, &ecp_to_ui_msg, sizeof(lib::ECP_message), &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0)
 #else
-	int status;
-	if(messip_send(UI_fd, 0, 0, &ecp_to_ui_msg, sizeof(lib::ECP_message),
-					&status, &ui_to_ecp_rep, sizeof(lib::UI_reply), MESSIP_NOTIMEOUT) < 0)
+	if(messip::port_send(UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0)
 #endif
 	{
 		sr_ecp_msg.message (lib::SYSTEM_ERROR, errno, "Send to UI failed");

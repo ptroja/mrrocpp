@@ -24,6 +24,10 @@
 
 #include "ecp/common/ECP_main_error.h"
 
+#if defined(USE_MESSIP_SRR)
+#include "lib/messip/messip_dataport.h"
+#endif
+
 namespace mrrocpp {
 namespace ecp {
 namespace common {
@@ -223,8 +227,7 @@ void show_force_control_window
 #if !defined(USE_MESSIP_SRR)
 	if (MsgSend(UI_fd, &ecp_msg, sizeof(lib::ECP_message), &ui_rep, sizeof(lib::UI_reply)) < 0) {
 #else
-	int status;
-	if (messip_send(UI_fd, 0, 0, &ecp_msg, sizeof(lib::ECP_message), &status, &ui_rep, sizeof(lib::UI_reply), MESSIP_NOTIMEOUT) < 0) {
+	if (messip::port_send(UI_fd, 0, 0, ecp_msg, ui_rep) < 0) {
 #endif
 		common::ecp_t->sr_ecp_msg->message(lib::SYSTEM_ERROR, errno, "ECP: Send() to UI failed");
 		throw common::ECP_main_error(lib::SYSTEM_ERROR, 0);

@@ -14,6 +14,10 @@
 #include "ui_config_entry.h"
 #include "ui_model.h"
 
+#if defined(USE_MESSIP_SRR)
+#include "lib/messip/messip_dataport.h"
+#endif
+
 using namespace Glib;
 using namespace Gtk;
 
@@ -271,7 +275,7 @@ MpPanel::~MpPanel(void) {
 */
 
 	if (pulse_fd) {
-		messip_channel_disconnect(pulse_fd, MESSIP_NOTIMEOUT);
+		messip::port_disconnect(pulse_fd);
 	}
 
 	if (mp_pid > 0) {
@@ -288,10 +292,9 @@ MpPanel::~MpPanel(void) {
 void MpPanel::execute_mp_pulse (int pulse_code, int pulse_value)
 {
 	if (pulse_fd) {
-		int32_t answer;
 		// send 1WAY empty message
-		if (messip_send(pulse_fd, pulse_code, pulse_value, NULL, 0, &answer, NULL, -1, MESSIP_NOTIMEOUT) ==-1) {
-			  perror("messip_send");
+		if (messip::port_send_pulse(pulse_fd, pulse_code, pulse_value) ==-1) {
+			  perror("messip::port_send_pulse");
 			  throw;
 		}
 	}

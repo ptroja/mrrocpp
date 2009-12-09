@@ -34,6 +34,10 @@
 #include "mp/mp.h"
 #include "mp/mp_g_teach_in.h"
 
+#if defined(USE_MESSIP_SRR)
+#include "lib/messip/messip_dataport.h"
+#endif
+
 namespace mrrocpp {
 namespace mp {
 namespace generator {
@@ -77,9 +81,7 @@ void teach_in::save_file (lib::POSE_SPECIFICATION ps) {
 	ecp_to_ui_msg.hdr.type = 0;
 	if (MsgSend(UI_fd, &ecp_to_ui_msg,  sizeof(lib::ECP_message), &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0) {// by Y&W
 #else
-	int status;
-	if(messip_send(UI_fd, 0, 0, &ecp_to_ui_msg, sizeof(lib::ECP_message),
-					&status, &ui_to_ecp_rep, sizeof(lib::UI_reply), MESSIP_NOTIMEOUT) < 0) {
+	if(messip::port_send(UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0) {
 #endif
 		e = errno;
 		perror("ECP: Send() to UI failed");
@@ -271,9 +273,7 @@ bool teach_in::load_file () {
 	ecp_to_ui_msg.hdr.type = 0;
 	if (MsgSend(UI_fd, &ecp_to_ui_msg, sizeof(lib::ECP_message), &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0) {// by Y&W
 #else
-	int status;
-	if(messip_send(UI_fd, 0, 0, &ecp_to_ui_msg, sizeof(lib::ECP_message),
-					&status, &ui_to_ecp_rep, sizeof(lib::UI_reply), MESSIP_NOTIMEOUT) < 0) {
+	if(messip::port_send(UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0) {
 #endif
 		e = errno;
 		perror("ECP: Send() to UI failed");
