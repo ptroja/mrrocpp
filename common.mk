@@ -1,10 +1,3 @@
-
-include $(MKFILES_ROOT)/qmacros.mk
-ifndef QNX_INTERNAL
-QNX_INTERNAL=$(PROJECT_ROOT)/.qnx_internal.mk
-endif
-include $(QNX_INTERNAL)
-
 #///////////////////////////////////////////////////////////////////////////////
 # /** @file     common.mk
 #  *

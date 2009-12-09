@@ -53,7 +53,6 @@ void eihcalibration::main_task_algorithm(void ){
 
 	int i = 0, j = 0, k, l, m = 0;
 	double a, b, c, d, e;
-	gsl_vector *h;
 	struct timespec delay;
 	delay.tv_nsec = (delay_ms % 1000) * 1000000;//delay in ms
 	delay.tv_sec = (int)(delay_ms / 1000);

@@ -88,85 +88,14 @@ void calibration::main_task_algorithm(void)
 
 //		sprintf(buffer, "%i", count);
 //		sr_ecp_msg->message(buffer);
-
-<<<<<<< .mine
-//				for (i = 0; i < 12; ++i){
-//					cout<<gsl_vector_get(s2->x,i)<<" ";
-//				}
-//				cout<<"Function value="<< s2->f<< endl;
-			}
-			while (status == GSL_CONTINUE && count < 1000);
-
-			if (k == 2)
-			{
-				sprintf(buffer, "%f6.3", ofp.magical_c);
-				sr_ecp_msg->message(buffer);
-//				cout<<endl<<ofp.magical_c<<endl;
-
-
-				for (i = 0; i < 12; ++i){
-					sprintf(buffer, "%f6.3", gsl_vector_get(s2->x,i));
-					sr_ecp_msg->message(buffer);
-					std::cout<<gsl_vector_get(s2->x,i)<<"\t";
-					if (i % 3 == 2)
-						sr_ecp_msg->message("\t");
-				}
-
-				sr_ecp_msg->message("Function value=");
-				sprintf(buffer, "%f6.3", s2->f);
-				sr_ecp_msg->message(buffer);
-//				cout<<"Function value="<< s2->f<< endl;
-
-				temp = sqrt(pow(gsl_vector_get(s2->x, 6), 2) + pow(gsl_vector_get(s2->x, 7), 2) + pow(gsl_vector_get(s2->x, 8), 2));
-
-				sr_ecp_msg->message("srednio = ");
-				sprintf(buffer, "%f6.3", temp);
-				sr_ecp_msg->message(buffer);
-//				cout <<"srednio = " << temp<<endl;
-
-				gsl_vector *angles;
-				gsl_matrix *matrix;
-				angles = gsl_vector_calloc(3);
-				gsl_vector_set(angles,0,gsl_vector_get(s2->x, 9));
-				gsl_vector_set(angles,1,gsl_vector_get(s2->x, 10));
-				gsl_vector_set(angles,2,gsl_vector_get(s2->x, 11));
-				matrix = gsl_matrix_calloc(3, 3);
-				angles_to_rotation_matrix(angles, matrix);
-				gsl_vector_set(angles,0,gsl_vector_get(s2->x, 6));
-				gsl_vector_set(angles,1,gsl_vector_get(s2->x, 7));
-				gsl_vector_set(angles,2,gsl_vector_get(s2->x, 8));
-				gsl_matrix_transpose(matrix);
-				gsl_matrix_scale (matrix, -1.0);
-
-				matrix_vector_multiply(matrix, angles);
-				for(i = 0; i < 3; ++i){
-					sprintf(buffer, "%f6.3", gsl_vector_get(angles, i));
-					sr_ecp_msg->message(buffer);
-					sr_ecp_msg->message("\t");
-//					cout<<gsl_vector_get(angles, i)<<"\t";
-				}
-
-			}
-
-			for (j = 0; j < 12; ++j){
-				gsl_vector_set(x, j, gsl_vector_get(s2->x, j));
-			}
-
-
-
-		}
-=======
 //		for (i = 0; i < dimension; ++i){
 //			cout<<gsl_vector_get(s2->x,i)<<" ";
 //		}
->>>>>>> .r3054
 	}
 	while (status == GSL_CONTINUE && count < 1000);
 
 //	sprintf(buffer, "%f6.3", ofp.magical_c);
 //	sr_ecp_msg->message(buffer);
-<<<<<<< .mine
-=======
 
 	for (i = 0; i < dimension; ++i){
 		sprintf(buffer, "%f6.3", gsl_vector_get(s2->x,i));
@@ -180,7 +109,6 @@ void calibration::main_task_algorithm(void)
 //	sr_ecp_msg->message(buffer);
 
 	gsl_multimin_fdfminimizer_free (s2);
->>>>>>> .r3054
 }
 
 /*!
