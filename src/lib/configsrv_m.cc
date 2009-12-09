@@ -46,9 +46,7 @@ main(int argc, char *argv[])
 			case CONFIG_CHANGE_INI_FILE:
 				{
 					config.change_ini_file(config_msg.configfile);
-					messip_reply(ch, rcvid,
-						0, NULL, 0,
-						MESSIP_NOTIMEOUT);
+					messip::port_reply_ack(ch, rcvid);
 				}
 				break;
 			case CONFIG_RETURN_INT_VALUE:
@@ -90,9 +88,7 @@ main(int argc, char *argv[])
 				}
 				break;
 			default:
-				messip_reply(ch, rcvid,
-						-1, (void *) NULL, 0,
-						MESSIP_NOTIMEOUT);
+				messip::port_reply_nack(ch, rcvid);
 		}
 	}
 

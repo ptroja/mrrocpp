@@ -17,8 +17,11 @@
 
 #include "ui_model.h"
 
-#include "lib/messip/messip.h"
 #include "lib/srlib.h"
+
+#if defined(USE_MESSIP_SRR)
+#include "lib/messip/messip_dataport.h"
+#endif
 
 enum
 {
@@ -45,7 +48,7 @@ void *sr_thread(void* arg)
 	messip_channel_t *ch;
 
 	// TODO: config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", UI_SECTION);
-	if ((ch = messip_channel_create(NULL, "sr", MESSIP_NOTIMEOUT, 0)) == NULL) {
+	if ((ch = messip::port_create(NULL, "sr")) == NULL) {
 		return NULL;
 	}
 
@@ -140,8 +143,7 @@ void *sr_thread(void* arg)
 			continue;
 		}
 
-		int16_t status = 0;
-		messip_reply(ch, rcvid, EOK, &status, sizeof(status), MESSIP_NOTIMEOUT);
+		messip::port_reply_ack(ch, rcvid);
 
 		if (strlen(sr_msg.process_name)>1) // by Y jesli ten string jest pusty to znaczy ze przyszedl smiec
 		{
@@ -226,7 +228,7 @@ void *sr_thread(void* arg)
 		}
 	}
 
-	messip_channel_delete(ch, MESSIP_NOTIMEOUT);
+	messip::port_delete(ch);
 
 	return NULL;
 }

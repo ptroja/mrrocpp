@@ -123,7 +123,7 @@ int main(int argc, char *argv[]) {
 		vsp::common::vs = vsp::sensor::return_created_sensor(_config);
 
 		messip_channel_t *ch;
-		if ((ch = messip_channel_create(NULL, attach_point.c_str(), MESSIP_NOTIMEOUT, 0)) == NULL) {
+		if ((ch = messip::port_create(NULL, attach_point)) == NULL) {
 			fprintf(stderr, "creating channel failed\n");
 			return -1;
 		}
@@ -133,9 +133,8 @@ int main(int argc, char *argv[]) {
 		while(!vsp::common::TERMINATE) { // for(;;)
 
 			int32_t type, subtype;
-			int rcvid;
 
-			rcvid = messip_receive(ch, &type, &subtype, &(vsp::common::vs->to_vsp), sizeof(vsp::common::vs->to_vsp), MESSIP_NOTIMEOUT);
+			int rcvid = messip_receive(ch, type, subtype, vsp::common::vs->to_vsp);
 
 			if (rcvid == -1) /* Error condition, exit */
 			{

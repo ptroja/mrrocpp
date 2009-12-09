@@ -109,7 +109,7 @@ void* mam::UI_communication_thread(void* arg)
 #if !defined(USE_MESSIP_SRR)
 		MsgReply(rcvid, EOK, NULL, 0);
 #else
-		messip_reply(UI_ECP_attach, rcvid, 0, NULL, 0, MESSIP_NOTIMEOUT);
+		messip::port_reply_ack(UI_ECP_attach, rcvid);
 #endif
 	}
 	return NULL;

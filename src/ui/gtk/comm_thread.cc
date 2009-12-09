@@ -3,7 +3,7 @@
 
 #include "ui_model.h"
 
-#include "lib/messip/messip.h"
+#include "lib/messip/messip_dataport.h"
 
 #include "ui/ui.h"
 
@@ -19,7 +19,7 @@ void *comm_thread(void* arg)
 	messip_channel_t *ch;
 
 	// TODO: config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "ui_attach_point", UI_SECTION)
-	if ((ch = messip_channel_create(NULL, "ui", MESSIP_NOTIMEOUT, 0)) == NULL) {
+	if ((ch = messip::port_create(NULL, "ui")) == NULL) {
 		return NULL;
 	}
 
@@ -32,8 +32,7 @@ void *comm_thread(void* arg)
 
 		int32_t type, subtype;
 
-		int rcvid = messip_receive(ch, &type, &subtype, &ui_ecp_obj.ecp_to_ui_msg, sizeof(ui_ecp_obj.ecp_to_ui_msg),
-				MESSIP_NOTIMEOUT);
+		int rcvid = messip::port_receive(ch, type, subtype, ui_ecp_obj.ecp_to_ui_msg);
 		//		ui_ecp_obj->communication_state = UI_ECP_AFTER_RECEIVE;
 
 		if (rcvid == -1) {/* Error condition, exit */
@@ -70,8 +69,8 @@ void *comm_thread(void* arg)
 
 				gdk_threads_leave();
 
-				if (messip_reply(ch, rcvid, EOK, &ui_ecp_obj.ui_rep, sizeof(ui_ecp_obj.ui_rep), MESSIP_NOTIMEOUT) < 0) {
-					perror("messip_reply()");
+				if (messip::port_reply(ch, rcvid, EOK, ui_ecp_obj.ui_rep) < 0) {
+					perror("messip::port_reply()");
 				}
 			}
 			break;
@@ -98,8 +97,8 @@ void *comm_thread(void* arg)
 
 				gdk_threads_leave();
 
-				if (messip_reply(ch, rcvid, EOK, &ui_ecp_obj.ui_rep, sizeof(ui_ecp_obj.ui_rep), MESSIP_NOTIMEOUT) < 0) {
-					perror("messip_reply()");
+				if (messip::port_reply(ch, rcvid, EOK, ui_ecp_obj.ui_rep) < 0) {
+					perror("messip::port_reply()");
 				}
 			}
 			break;
@@ -314,13 +313,13 @@ void *comm_thread(void* arg)
 #else
 			default:
 				perror("Strange ECP message");
-		}; // end: switch
+		}
 
-		messip_reply(ch, rcvid, EOK, NULL, 0, MESSIP_NOTIMEOUT);
+		messip::port_reply_nack(ch, rcvid);
 #endif
 	}// end while
 
-	messip_channel_delete(ch, MESSIP_NOTIMEOUT);
+	messip::port_delete(ch);
 
 	return 0;
 }

@@ -77,6 +77,14 @@ int port_reply( messip_channel_t * ch,
 	return messip_reply(ch, index, answer, &data, sizeof(data), msec_timeout);
 }
 
+int port_reply_ack( messip_channel_t * ch,
+   int index,
+   int32_t msec_timeout = MESSIP_NOTIMEOUT);
+
+int port_reply_nack( messip_channel_t * ch,
+   int index,
+   int32_t msec_timeout = MESSIP_NOTIMEOUT);
+
 messip_channel_t *
 port_create(messip_cnx_t * cnx,
    const std::string & name,

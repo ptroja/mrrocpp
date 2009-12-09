@@ -3028,21 +3028,18 @@ void *sr_thread(void* arg)
 #warning "use messip :)"
 void *sr_thread(void* arg)
 {
-	sr_package_t sr_msg;
-	int16_t status;
-
 	messip_channel_t *ch;
-	int32_t type, subtype;
-	int rcvid;
 
-	if ((ch = messip_channel_create(NULL, ui_state.sr_attach_point, MESSIP_NOTIMEOUT, 0)) == NULL) {
+	if ((ch = messip::port_create(NULL, ui_state.sr_attach_point)) == NULL) {
 		return NULL;
 	}
 
 	while(1)
 	{
+		sr_package_t sr_msg;
+		int32_t type, subtype;
 
-		rcvid = messip_receive(ch, &type, &subtype, &sr_msg, sizeof(sr_msg), MESSIP_NOTIMEOUT);
+		int rcvid = messip::port_receive(ch, type, subtype, sr_msg);
 
 		if (rcvid == -1) /* Error condition, exit */
 		{
@@ -3055,8 +3052,7 @@ void *sr_thread(void* arg)
 			continue;
 		}
 
-		status = 0;
-		messip_reply(ch, rcvid, EOK, &status, sizeof(status), MESSIP_NOTIMEOUT);
+		messip::port_reply_ack(ch, rcvid);
 
 		if (strlen(sr_msg.process_name)>1) // by Y jesli ten string jest pusty to znaczy ze przyszedl smiec
 		{

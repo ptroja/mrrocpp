@@ -25,6 +25,20 @@ int port_receive_pulse( messip_channel_t * ch,
 	return messip_receive(ch, &type, &subtype, NULL, 0, msec_timeout);
 }
 
+int port_reply_ack( messip_channel_t * ch,
+   int index,
+   int32_t msec_timeout)
+{
+	return messip_reply(ch, index, 0, NULL, 0, msec_timeout);
+}
+
+int port_reply_nack( messip_channel_t * ch,
+   int index,
+   int32_t msec_timeout)
+{
+	return messip_reply(ch, index, -1, NULL, 0, msec_timeout);
+}
+
 messip_channel_t *
 port_create(messip_cnx_t * cnx,
    const std::string & name,
