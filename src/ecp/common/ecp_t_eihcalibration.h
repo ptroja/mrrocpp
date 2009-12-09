@@ -23,6 +23,9 @@
 #include "ecp/common/ecp_g_force.h"
 #include "ecp/common/ecp_g_eihcalibration.h"
 
+#include "ecp/irp6_on_track/ecp_r_irp6ot.h"
+#include "ecp/irp6_postument/ecp_r_irp6p.h"
+
 #define POSTUMENT 0
 #define TRACK 1
 

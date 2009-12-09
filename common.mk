@@ -1,3 +1,10 @@
+
+include $(MKFILES_ROOT)/qmacros.mk
+ifndef QNX_INTERNAL
+QNX_INTERNAL=$(PROJECT_ROOT)/.qnx_internal.mk
+endif
+include $(QNX_INTERNAL)
+
 #///////////////////////////////////////////////////////////////////////////////
 # /** @file     common.mk
 #  *
@@ -85,7 +92,6 @@ endif
 
 
 
-#===== USEFILE - the file containing the usage message for the application. 
 USEFILE=
 
 #test zmiany repozytorium

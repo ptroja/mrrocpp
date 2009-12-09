@@ -269,6 +269,7 @@ typedef struct sensor_image_t
 		struct chessboard_t
 		{
 			int frame_number;
+			float transformation_matrix[12];
 			bool found;
 			bool calibrated;
 		} chessboard;
