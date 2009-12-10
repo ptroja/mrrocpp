@@ -35,7 +35,7 @@ manip_trans_t::~manip_trans_t()
 
 void * manip_trans_t::trans_thread_start(void* arg)
 {
-    return static_cast<trans_t*> (arg)->trans_thread(arg);
+    return static_cast<manip_trans_t*> (arg)->trans_thread(arg);
 }
 
 
