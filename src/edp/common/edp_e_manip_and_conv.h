@@ -47,8 +47,6 @@ class servo_buffer;
 class manip_and_conv_effector : public effector, public kinematic::common::manager
 {
 protected:
-    static void *servo_thread_start(void* arg);
-    void *servo_thread(void* arg);
     static void *visualisation_thread_start(void* arg);
     void *visualisation_thread(void* arg);
 

@@ -131,7 +131,7 @@ void manip_and_conv_effector::create_threads ()
 	sb = return_created_servo_buffer();
 
     // Y&W - utworzenie watku serwa
-    if (pthread_create (&serwo_tid, NULL, &servo_thread_start, (void *) this))
+    if (pthread_create (&serwo_tid, NULL, &sb->servo_thread_start, (void *) sb))
     {
         msg->message(lib::SYSTEM_ERROR, errno, "EDP: Failed to create SERVO_GROUP thread");
         throw System_error();

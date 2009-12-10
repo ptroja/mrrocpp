@@ -26,12 +26,12 @@ namespace edp {
 namespace common {
 
 
-void * manip_and_conv_effector::servo_thread_start(void* arg)
+void * servo_buffer::servo_thread_start(void* arg)
 {
-    return static_cast<manip_and_conv_effector*> (arg)->servo_thread(arg);
+    return static_cast<servo_buffer*> (arg)->servo_thread(arg);
 }
 
-void * manip_and_conv_effector::servo_thread(void* arg)
+void * servo_buffer::servo_thread(void* arg)
 {
 	// servo buffer has to be created before servo thread starts
 //	std::auto_ptr<servo_buffer> sb(return_created_servo_buffer()); // bufor do komunikacji z EDP_MASTER
@@ -40,11 +40,11 @@ void * manip_and_conv_effector::servo_thread(void* arg)
 
     // signal master thread to continue executing
     {
-    	boost::mutex::scoped_lock lock(thread_started_mutex);
+    	boost::mutex::scoped_lock lock(master.thread_started_mutex);
 
-    	thread_started = true;
+    	master.thread_started = true;
 
-    	thread_started_cond.notify_one();
+    	master.thread_started_cond.notify_one();
     }
 
     /* BEGIN SERVO_GROUP */
@@ -52,38 +52,38 @@ void * manip_and_conv_effector::servo_thread(void* arg)
     for (;;)
     {
         // komunikacja z transformation
-        if (!sb->get_command())
+        if (!get_command())
         {
 
-            rb_obj->lock_mutex();
-            rb_obj->step_data.servo_mode = false; // tryb bierny
-            rb_obj->unlock_mutex();
+            master.rb_obj->lock_mutex();
+            master.rb_obj->step_data.servo_mode = false; // tryb bierny
+            master.rb_obj->unlock_mutex();
 
             /* Nie otrzymano nowego polecenia */
             /* Krok bierny - zerowy przyrost polozenia */
             // Wykonanie pojedynczego kroku ruchu
-            sb->Move_passive();
+            Move_passive();
         }
         else
         {
         	// nowe polecenie
-            rb_obj->lock_mutex();
-            rb_obj->step_data.servo_mode = true; // tryb czynny
-            rb_obj->unlock_mutex();
+            master.rb_obj->lock_mutex();
+            master.rb_obj->step_data.servo_mode = true; // tryb czynny
+            master.rb_obj->unlock_mutex();
 
-            switch (sb->command_type())
+            switch (command_type())
             {
 				case lib::SYNCHRONISE:
-					sb->synchronise(); // synchronizacja
+					synchronise(); // synchronizacja
 					break;
 				case lib::MOVE:
-					sb->Move(); // realizacja makrokroku ruchu
+					Move(); // realizacja makrokroku ruchu
 					break;
 				case lib::READ:
-					sb->Read(); // Odczyt polozen
+					Read(); // Odczyt polozen
 					break;
 				case lib::SERVO_ALGORITHM_AND_PARAMETERS:
-					sb->Change_algorithm(); // Zmiana algorytmu serworegulacji lub jego parametrow
+					Change_algorithm(); // Zmiana algorytmu serworegulacji lub jego parametrow
 					break;
 				default:
 					// niezidentyfikowane polecenie (blad) nie moze wystapic, bo juz

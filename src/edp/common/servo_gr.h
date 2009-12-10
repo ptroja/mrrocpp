@@ -127,6 +127,8 @@ protected:
     void constraint_detector(double max_acc_local, double max_vel_local, bool debug = false);
 
 public:
+
+
     manip_and_conv_effector &master;
     regulator ( uint8_t reg_no, uint8_t reg_par_no,    manip_and_conv_effector &_master ); // konstruktor
 
@@ -255,6 +257,9 @@ protected:
     void clear_reply_status_tmp ( void );
 
 public:
+
+    static void *servo_thread_start(void* arg);
+    void *servo_thread(void* arg);
 
     manip_and_conv_effector &master;
 
