@@ -24,7 +24,7 @@ namespace mrrocpp {
 namespace edp {
 namespace common {
 
-class manip_and_conv_effector;
+class effector;
 
 /**************************** trans_t *****************************/
 
@@ -35,20 +35,21 @@ class trans_t : public kinematic::common::transformer_error
 private:
     sem_t master_to_trans_t_sem; // semafor pomiedzy edp_master a edp_trans
     sem_t trans_t_to_master_sem; // semafor pomiedzy edp_master a edp_trans
-    manip_and_conv_effector &master;
+    effector &master;
 
 public:
-    static void *trans_thread_start(void* arg);
-    void *trans_thread(void* arg);
-	   pthread_t trans_t_tid;
+
+	pthread_t trans_t_tid;
     MT_ORDER trans_t_task;
     int trans_t_tryb;
     ERROR_TYPE error;
 
+    virtual void *trans_thread(void* arg) = 0;
+
     // wskaznik na bledy (rzutowany na odpowiedni blad)
     void* error_pointer;
 
-    trans_t(manip_and_conv_effector& _master);
+    trans_t(effector& _master);
     ~trans_t();
 
     int	master_to_trans_t_order(MT_ORDER nm_task, int nm_tryb);

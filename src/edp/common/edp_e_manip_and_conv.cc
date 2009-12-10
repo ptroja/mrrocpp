@@ -32,7 +32,7 @@
 #include "edp/common/servo_gr.h"
 #include "edp/common/reader.h"
 #include "edp/common/edp_e_manip_and_conv.h"
-#include "edp/common/trans_t.h"
+#include "edp/common/manip_trans_t.h"
 
 
 #include "lib/mathtr.h"
@@ -125,7 +125,7 @@ void manip_and_conv_effector::create_threads ()
 {
 
 	rb_obj = new reader_buffer(*this);
-	mt_tt_obj = new trans_t(*this);
+	mt_tt_obj = new manip_trans_t(*this);
 
 
     // Y&W - utworzenie watku serwa

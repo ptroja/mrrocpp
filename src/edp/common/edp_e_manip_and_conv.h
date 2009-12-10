@@ -34,7 +34,7 @@ namespace mrrocpp {
 namespace edp {
 namespace common {
 
-class trans_t;
+class manip_trans_t;
 
 
 
@@ -201,7 +201,7 @@ public:
 #endif
     in_out_buffer in_out_obj; // bufor wejsc wyjsc
     reader_buffer *rb_obj;
-    trans_t *mt_tt_obj;
+    manip_trans_t *mt_tt_obj;
 
     manip_and_conv_effector (lib::configurator &_config, lib::robot_name_t l_robot_name);       // konstruktor
     virtual ~manip_and_conv_effector();

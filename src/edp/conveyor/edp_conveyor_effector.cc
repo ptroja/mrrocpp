@@ -22,7 +22,7 @@
 #include "edp/conveyor/edp_conveyor_effector.h"
 // Model kinematyczny tasmociagu.
 #include "kinematics/conveyor/kinematic_model_conveyor.h"
-#include "edp/common/trans_t.h"
+#include "edp/common/manip_trans_t.h"
 namespace mrrocpp {
 namespace edp {
 namespace conveyor {

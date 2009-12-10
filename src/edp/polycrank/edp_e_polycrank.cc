@@ -23,7 +23,7 @@
 #include "edp/common/reader.h"
 // Kinematyki.
 #include "kinematics/polycrank/kinematic_model_polycrank.h"
-#include "edp/common/trans_t.h"
+#include "edp/common/manip_trans_t.h"
 
 namespace mrrocpp {
 namespace edp {
