@@ -202,6 +202,7 @@ public:
     in_out_buffer *in_out_obj; // bufor wejsc wyjsc
     reader_buffer *rb_obj;
     manip_trans_t *mt_tt_obj;
+  //  servo_buffer* sb;
 
     manip_and_conv_effector (lib::configurator &_config, lib::robot_name_t l_robot_name);       // konstruktor
     virtual ~manip_and_conv_effector();
