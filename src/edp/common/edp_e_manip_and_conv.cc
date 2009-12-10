@@ -128,6 +128,7 @@ void manip_and_conv_effector::create_threads ()
 	rb_obj = new reader_buffer(*this);
 	mt_tt_obj = new manip_trans_t(*this);
 	in_out_obj = new in_out_buffer();
+	sb = return_created_servo_buffer();
 
     // Y&W - utworzenie watku serwa
     if (pthread_create (&serwo_tid, NULL, &servo_thread_start, (void *) this))
