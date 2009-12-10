@@ -24,7 +24,7 @@
 // Kinematyki.
 #include "kinematics/irp6_mechatronika/kinematic_model_irp6m_with_wrist.h"
 #include "kinematics/irp6_mechatronika/kinematic_model_irp6m_5dof.h"
-#include "edp/common/master_trans_t_buffer.h"
+#include "edp/common/trans_t.h"
 
 namespace mrrocpp {
 namespace edp {

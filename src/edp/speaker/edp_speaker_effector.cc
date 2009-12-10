@@ -45,7 +45,7 @@
 
 // Klasa edp_speaker_effector.
 #include "edp/speaker/edp_speaker_effector.h"
-#include "edp/common/master_trans_t_buffer.h"
+#include "edp/common/trans_t.h"
 
 
 // char text2speak[MAX_TEXT]; // MAC 7
@@ -207,7 +207,7 @@ effector::~effector ()
 void effector::create_threads ()
 {
 
-	mt_tt_obj = new common::master_trans_t_buffer(*this);
+	mt_tt_obj = new common::trans_t(*this);
 
 	if (pthread_create (&speak_t_tid, NULL, &speak_thread_start, (void *) this)!=EOK)
 	{

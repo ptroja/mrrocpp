@@ -34,7 +34,7 @@
 #include "edp/common/edp_irp6s_postument_track.h"
 #include "lib/mathtr.h"
 #include "lib/srlib.h"
-#include "edp/common/master_trans_t_buffer.h"
+#include "edp/common/trans_t.h"
 
 
 namespace mrrocpp {

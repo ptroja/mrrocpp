@@ -35,7 +35,7 @@ protected:
 
 public:
 
-	common::master_trans_t_buffer *mt_tt_obj;
+	common::trans_t *mt_tt_obj;
 
     char text2speak[MAX_TEXT]; // MAC 7
     char prosody[MAX_PROSODY]; // MAC 7

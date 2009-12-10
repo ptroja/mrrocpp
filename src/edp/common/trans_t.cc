@@ -13,7 +13,7 @@
 
 #include "lib/mis_fun.h"
 #include "edp/common/edp_e_manip_and_conv.h"
-#include "edp/common/master_trans_t_buffer.h"
+#include "edp/common/trans_t.h"
 
 /********************************* GLOBALS **********************************/
 
@@ -22,7 +22,7 @@ namespace edp {
 namespace common {
 
 
-master_trans_t_buffer::master_trans_t_buffer(manip_and_conv_effector& _master):
+trans_t::trans_t(manip_and_conv_effector& _master):
 	master (_master)
 {
 	// semafory do komunikacji miedzy EDP_MASTER a EDP_TRANS
@@ -30,14 +30,14 @@ master_trans_t_buffer::master_trans_t_buffer(manip_and_conv_effector& _master):
 	sem_init(&trans_t_to_master_sem, 0, 0);
 }
 
-master_trans_t_buffer::~master_trans_t_buffer()
+trans_t::~trans_t()
 {
 	// semafory do komunikacji miedzy EDP_MASTER a EDP_TRANS
 	sem_destroy(&master_to_trans_t_sem);
 	sem_destroy(&trans_t_to_master_sem);
 }
 
-int master_trans_t_buffer::master_to_trans_t_order(MT_ORDER nm_task, int nm_tryb)
+int trans_t::master_to_trans_t_order(MT_ORDER nm_task, int nm_tryb)
 { // zlecenie z watku master dla trans_t
 	trans_t_task = nm_task; // force, arm etc.
 	trans_t_tryb = nm_tryb; // tryb dla zadania
@@ -78,14 +78,14 @@ int master_trans_t_buffer::master_to_trans_t_order(MT_ORDER nm_task, int nm_tryb
 }
 
 // oczekiwanie na semafor statusu polecenia z trans_t
-int master_trans_t_buffer::master_wait_for_trans_t_order_status()
+int trans_t::master_wait_for_trans_t_order_status()
 {
 	// oczekiwanie na odpowiedz z watku transformation
 	return sem_wait(&trans_t_to_master_sem);
 }
 
 // oczekiwanie na semafor statusu polecenia z trans_t
-int master_trans_t_buffer::trans_t_to_master_order_status_ready()
+int trans_t::trans_t_to_master_order_status_ready()
 {
 	// odwieszenie watku new master
 	sem_trywait(&trans_t_to_master_sem);
@@ -93,7 +93,7 @@ int master_trans_t_buffer::trans_t_to_master_order_status_ready()
 }
 
 // oczekiwanie na semafor statusu polecenia z trans_t
-int master_trans_t_buffer::trans_t_wait_for_master_order()
+int trans_t::trans_t_wait_for_master_order()
 {
 	// oczekiwanie na rozkaz z watku master
 	return sem_wait(&master_to_trans_t_sem);
@@ -101,12 +101,12 @@ int master_trans_t_buffer::trans_t_wait_for_master_order()
 
 
 
-void * master_trans_t_buffer::trans_thread_start(void* arg)
+void * trans_t::trans_thread_start(void* arg)
 {
-    return static_cast<master_trans_t_buffer*> (arg)->trans_thread(arg);
+    return static_cast<trans_t*> (arg)->trans_thread(arg);
 }
 
-void * master_trans_t_buffer::trans_thread(void *arg)
+void * trans_t::trans_thread(void *arg)
 {
 
     lib::set_thread_priority(pthread_self(), MAX_PRIORITY);

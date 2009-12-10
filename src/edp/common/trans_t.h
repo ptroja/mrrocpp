@@ -6,8 +6,8 @@
 // Ostatnia modyfikacja: 16.04.98
 // -------------------------------------------------------------------------
 
-#ifndef __MASTER_TRANS_T_BUFFER_H
-#define __MASTER_TRANS_T_BUFFER_H
+#ifndef __TRANS_T_H
+#define __TRANS_T_H
 
 #include <stdint.h>
 #include <semaphore.h>
@@ -26,11 +26,11 @@ namespace common {
 
 class manip_and_conv_effector;
 
-/**************************** master_trans_t_buffer *****************************/
+/**************************** trans_t *****************************/
 
 
 
-class master_trans_t_buffer : public kinematic::common::transformer_error
+class trans_t : public kinematic::common::transformer_error
 {
 private:
     sem_t master_to_trans_t_sem; // semafor pomiedzy edp_master a edp_trans
@@ -48,15 +48,15 @@ public:
     // wskaznik na bledy (rzutowany na odpowiedni blad)
     void* error_pointer;
 
-    master_trans_t_buffer(manip_and_conv_effector& _master);
-    ~master_trans_t_buffer();
+    trans_t(manip_and_conv_effector& _master);
+    ~trans_t();
 
     int	master_to_trans_t_order(MT_ORDER nm_task, int nm_tryb);
     int	master_wait_for_trans_t_order_status();
     int	trans_t_to_master_order_status_ready();
     int	trans_t_wait_for_master_order();
 };
-/**************************** master_trans_t_buffer *****************************/
+/**************************** trans_t *****************************/
 
 
 
