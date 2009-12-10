@@ -21,6 +21,7 @@ grab_cube::grab_cube(lib::configurator &_config): task(_config)
 	befgen=new common::generator::bias_edp_force(*this);
 	gagen=new common::generator::tff_gripper_approach (*this, 8);	//gripper approach constructor (task&, no_of_steps)
 	tracker = new ecp_vis_ib_eih_object_tracker_irp6ot(*this);
+	turner = new ecp_vis_ib_eih_wrist_turner_irp6ot(*this);
 
 	sensor_m[lib::SENSOR_CVFRADIA] = new ecp_mp::sensor::cvfradia(lib::SENSOR_CVFRADIA,"[vsp_cvfradia]", *this,	sizeof(lib::sensor_image_t::sensor_union_t::fradia_t));
 	sensor_m[lib::SENSOR_CVFRADIA]->configure_sensor();
@@ -31,9 +32,9 @@ void grab_cube::main_task_algorithm(void ) {
 
 
 	smoothgen2->set_absolute();
-	//smoothgen2->load_file_with_path("/net/koleszko/mnt/mrroc/trj/smooth2test2.trj");
-	smoothgen2->load_coordinates(lib::JOINT,0,-0.013,-1.442,-0.275,0.01,4.712,-0.070,0.090,true);
-	//smoothgen2->load_coordinates(lib::JOINT,0,0,-1.57,0,1.56,1.571,-1.570,0.090,true);
+
+	smoothgen2->load_coordinates(lib::JOINT,0,-0.013,-1.442,-0.275,0.01,4.712,-0.070,0.090,true);//grab cube from the track (desk)
+	//smoothgen2->load_coordinates(lib::JOINT,0,0,-1.57,0,1.56,1.571,-1.570,0.090,true);//grab cube from the operator
 	smoothgen2->Move();
 	smoothgen2->reset();
 

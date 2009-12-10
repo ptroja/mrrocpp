@@ -17,10 +17,6 @@ ecp_vis_ib_eih_object_tracker_irp6ot::ecp_vis_ib_eih_object_tracker_irp6ot(commo
 	common::ecp_visual_servo(_ecp_task) {
 
 	t = MOTION_STEPS * STEP; //ustawianie czasu makrokroku (50 milisekund)
-
-	//s_z = 0.35;
-
-	//axes_num = 2;
 }
 
 bool ecp_vis_ib_eih_object_tracker_irp6ot::first_step() {
@@ -48,12 +44,6 @@ bool ecp_vis_ib_eih_object_tracker_irp6ot::first_step() {
 		next_position[i] = 0;
 	}
 
-	//vsp_fradia->to_vsp.haar_detect_mode = lib::WITHOUT_ROTATION;
-	//first_move =  true;
-
-	//z_s = 0;
-	//z_stop = false;
-
 	//if (read_parametres() == false) {//czytanie predkosci maksymalnych i przyspieszen z pliku konfiguracyjnego zadania, jesli sie nie powiodlo to przypisz domyslne
 		v_max[1] = v_max[0] = 0.05;
 		a_max[1] = a_max[0] = 0.06;
@@ -75,69 +65,12 @@ bool ecp_vis_ib_eih_object_tracker_irp6ot::first_step() {
 		v[i] = 0;
 	}
 
-	//ecp_t.sr_ecp_msg->message("PIERWSZY");
-
 	return true;
 }
 
 bool ecp_vis_ib_eih_object_tracker_irp6ot::next_step_without_constraints() {
 
-	//if (first_move == true) {
-		the_robot->ecp_command.instruction.instruction_type = lib::SET_GET;//TODO sprawdzic czy to moze byc robione tylko raz
-		//printf("poczatek sledzenia\n");
-		//flushall();
-		/*memcpy(next_position,
-	 			the_robot->reply_package.arm.pf_def.arm_coordinates, 6
-						* sizeof(double));*/
-		//next_position[6] = the_robot->reply_package.arm.pf_def.gripper_coordinate;
-
-		//ruch w z
-		//z_start = next_position[2];
-
-		//s_acc = (v_max[2] * v_max[2]) / (2 * a_max[2]);
-
-		/*if ((2 * s_acc) > s_z) {
-			//TODO przetestowac
-			v_max[2] = sqrt(s_z * a_max[2]);
-			s_acc = (v_max[2] * v_max[2]) / (2 * a_max[2]);
-		}*/
-
-		//double z_t = 2 * v_max[2]/a_max[2] + (s_z - 2 * s_acc)/v_max[2];
-
-	   /* if(ceil(z_t/t)*t != z_t)//zaokraglenie czasu do wielokrotnosci trwania makrokroku (dla ruchu w z)
-	    {
-	        z_t = ceil(z_t/t);
-	        z_t = z_t*t;
-	        reduce_velocity(a_max[2], z_t, s_z, 2); //nadpisanie v_max[2]
-	        s_acc = (v_max[2] * v_max[2]) / (2 * a_max[2]);
-	    }*/
-	    //ruch w z (koniec)
-
-	//	first_move = false;
-	//}
-	//ruch w z
-	/*if (v[2] < v_max[2] && (s_z - s_acc) > z_s) {//przyspieszanie
-		s[2] = (a_max[2] * t * t)/2 + (v[2] * t);
-		v[2] += a_max[2] * t;
-	} else if (v[2] > 0 && (s_z - s_acc) <= z_s) {//hamowanie
-		s[2] = (a_max[2] * t * t)/2 + (v[2] * t);
-		v[2] -= a_max[2] * t;
-		if (v[2] < 0) {
-			z_stop = true;
-		}
-	} else {//jednostajny
-		s[2] = v[2] * t;
-	}
-
-	if (z_stop == false) {
-		z_s += s[2];
-		next_position[2] = s[2];
-		//next_position[2] = 0;
-	}*/
-	//ruch w z (koniec)
-
-	//alpha = the_robot->reply_package.arm.pf_def.arm_coordinates[1]- the_robot->reply_package.arm.pf_def.arm_coordinates[6];
-	//Uchyb wyrazony w pikselach.
+	the_robot->ecp_command.instruction.instruction_type = lib::SET_GET;//TODO sprawdzic czy to moze byc robione tylko raz
 
 	lib::VSP_REPORT vsp_report = vsp_fradia->from_vsp.vsp_report;
 	if (vsp_report == lib::VSP_REPLY_OK) {
@@ -146,10 +79,6 @@ bool ecp_vis_ib_eih_object_tracker_irp6ot::next_step_without_constraints() {
 		u[1] = vsp_fradia->from_vsp.comm_image.sensor_union.object_tracker.y;
 		u[2] = vsp_fradia->from_vsp.comm_image.sensor_union.object_tracker.z;
 		tracking = vsp_fradia->from_vsp.comm_image.sensor_union.object_tracker.tracking;
-
-		//u[0] = 0;
-		//u[1] = 0;
-		//u[2] = -100;
 
 		printf("ux: %f\t", u[0]);
 		printf("uy: %f\n", u[1]);
@@ -167,22 +96,7 @@ bool ecp_vis_ib_eih_object_tracker_irp6ot::next_step_without_constraints() {
 		}
 
 		for (int i = 0; i < MAX_AXES_NUM; i++) {
-			//if (u[i] == 0) {
-			//	continue;
-			//}
 
-			//tracking = true;
-			//tracking = vsp_fradia->from_vsp.comm_image.sensor_union.tracker.tracking;
-
-			//funkcja zmniejszajaca predkosc w x i y w zaleznosci od odleglosci od przebytej drogi w z
-			/*double u_param;
-			if (fabs(u[i]) == 0) {
-				u_param = 10000;//dowolna relatywnie duza liczba daje zredukowanie predkosci do minimalnej przy zakonczonym z
-			} else {
-				u_param = 1/fabs(u[i]);
-			}*/
-			//im mniejsza liczba przy wspolczynniku tym wieksze znaczenie wspolczynnika
-			//v_max[i] = v_max[i] - ((1/(u[2]*u[2])) * 0.0005 * (u_param * 0.01));//TODO ta funkcje trzeba przerobic... (delikatnie mowiac)
 			v_max_act[i] = v_max[i] * fabs(u[i]/u_max[i]); //kontroler p
 
 			if (v_max_act[i] < v_min[i]) {//potrzebne jesli predkosc jest w jakis sposob redukowana
@@ -279,17 +193,6 @@ bool ecp_vis_ib_eih_object_tracker_irp6ot::read_parametres() {//metoda wczytujac
 
 	return true;
 }
-
-/*void ecp_vis_ib_eih_object_tracker_irp6ot::reduce_velocity(double a, double t, double s, int i) {
-
-	double delta;//delta w rownaniu kwadratowym
-
-	delta = (2 * a * t) *
-			(2 * a * t) +
-			8 * ( -2 * a * s);
-
-	v_max[i] = (-(2 * a * t) + sqrt(delta)) / (-4);
-}*/
 
 void ecp_vis_ib_eih_object_tracker_irp6ot::entertain_constraints() {
 

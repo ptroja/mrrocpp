@@ -171,13 +171,14 @@ typedef struct sensor_image_t
 		} deviation;
 
 		// uchyb w follower
-		struct { //do zlikwidowania, razem z followerem w przyszlosci
+		struct {
 			bool tracking;
 			int x;
 			int y;
 		} tracker;
 
-		struct {
+		struct {//unia do lapania kostki
+			bool reached;
 			bool tracking;
 			int x;
 			int y;

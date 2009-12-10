@@ -34,12 +34,9 @@ public:
 
 	lib::sensor *vsp_fradia; //wirtualny sensor
     double next_position[MAX_SERVOS_NR]; 	//pozycja w nastepnym kroku.
-    //double alpha; //orientacja koncokwi wzgledem ukladu bazowego.
-    //int axes_num; //ilosc osi w ktorych podawany jest uchyb
     double u[MAX_AXES_NUM]; //tablica uchybów
     bool tracking; //jesli true, obiekt jest sledzony, jesli false, zagubiony (przychodzi z fradii)
 	double t;//czas makrokroku
-	//bool first_move; //flaga pierwszego makrokroku
 
     //zmienne ruchu
     double a_max[MAX_AXES_NUM]; //maks przyspieszenie;
@@ -53,12 +50,6 @@ public:
     double u_stop[MAX_AXES_NUM]; //uchyb przy ktorym sie zatrzymujemy (uchyb minimalny)
     double u_max[MAX_AXES_NUM];
 
-    //double s_z; //droga do przebycia w z
-    //double z_start; //pozycja poczatkowa z
-    //double s_acc; //droga przyspieszania, hamowania w z
-    //bool z_stop; //flaga zatrzymania z
-    //double z_s; //droga przebyta w z
-
     int dir[MAX_AXES_NUM]; //kierunki
     bool change[MAX_AXES_NUM]; //flaga zmiany kierunku
     bool reached[MAX_AXES_NUM]; // flaga dotarcia do celu
@@ -67,7 +58,6 @@ public:
 	virtual bool first_step(void);
 	virtual bool next_step_without_constraints();
 	virtual void entertain_constraints();
-	//void reduce_velocity(double a, double t, double s, int i);
 
 private:
 
