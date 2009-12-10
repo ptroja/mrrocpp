@@ -193,7 +193,7 @@ void * reader_buffer::reader_thread(void* arg)
 	messip_channel_t *my_attach;
 
 	if ((my_attach = messip::port_create(
-			master.config.return_attach_point_name(lib::master.configurator::CONFIG_SERVER, "reader_attach_point")))
+			master.config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "reader_attach_point")))
 			== NULL) {
 #endif
 		e = errno;
