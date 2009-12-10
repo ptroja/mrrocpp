@@ -13,9 +13,9 @@
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 
-#include "edp/common/edp_effector.h"
-
 #include "kinematics/common/transformer_error.h"
+
+class effector;
 
 
 namespace mrrocpp {
