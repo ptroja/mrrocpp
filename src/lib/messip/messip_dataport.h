@@ -178,7 +178,7 @@ class ClientPort {
 			}
 		}
 
-		//! Send data with the port
+		//! Send and receive data with the port
 		//! @param type message type
 		//! @param subtype message subtype
 		//! @param send data to trasmit
@@ -191,6 +191,11 @@ class ClientPort {
 		   ReceiveData & reply,
 		   int32_t msec_timeout = MESSIP_NOTIMEOUT);
 
+		//! Send data synchronously with the port
+		//! @param type message type
+		//! @param subtype message subtype
+		//! @param send data to trasmit
+		//! @param msec_timeout operation timeout
 		template <class SendData>
 		int SendSync(int32_t type,
 		   int32_t subtype,
@@ -200,6 +205,11 @@ class ClientPort {
 			return port_send_sync(ch, type, subtype, send, msec_timeout);
 		}
 
+		//! Send data asynchronously with the port
+		//! @param type message type
+		//! @param subtype message subtype
+		//! @param send data to trasmit
+		//! @param msec_timeout operation timeout
 		template <class SendData>
 		int SendAsync(int32_t type,
 		   int32_t subtype,
@@ -209,11 +219,14 @@ class ClientPort {
 			return port_send_async(ch, type, subtype, send, msec_timeout);
 		}
 
+		//! Send pulse with the port
+		//! @param type message type
+		//! @param subtype message subtype
+		//! @param msec_timeout operation timeout
 		int SendPulse(int32_t type,
 		   int32_t subtype,
 		   int32_t msec_timeout = MESSIP_NOTIMEOUT);
 };
-
 
 } /* namespace messip */
 
