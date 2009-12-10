@@ -35,7 +35,7 @@ namespace edp {
 namespace common {
 
 class manip_trans_t;
-
+class in_out_buffer;
 
 
 // base class for EDP robots with manipulators and conveyor
@@ -199,7 +199,7 @@ public:
     boost::mutex sg_reply_mtx;
     boost::condition sg_reply_cond;
 #endif
-    in_out_buffer in_out_obj; // bufor wejsc wyjsc
+    in_out_buffer *in_out_obj; // bufor wejsc wyjsc
     reader_buffer *rb_obj;
     manip_trans_t *mt_tt_obj;
 

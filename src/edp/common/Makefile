@@ -11,7 +11,7 @@ OBJECTS = ${patsubst %.cc,%.o,${SOURCES}}
 EDPOBJ = edp_m.o edp_effector.o\
 	edp_e_manip.o edp_e_manip_and_conv.o \
 	edp_force_sensor.o force.o \
-	servo_gr.o servo_ms.o \
+	servo_gr.o servo_ms.o in_out.o\
 	trans_t.o manip_trans_t.o vis_server.o reader.o \
 	${KINEMATDIR}/common/transformer_error.o ${KINEMATDIR}/common/kinematic_model.o ${KINEMATDIR}/common/kinematics_manager.o \
 	hi_rydz.o sg_irp6p_and_conv.o edp_irp6s_postument_track.o

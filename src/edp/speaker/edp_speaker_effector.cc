@@ -217,9 +217,9 @@ void effector::create_threads ()
 		printf (" Failed to thread SPEAKER on node: %s\n", buf);
 		throw common::System_error();
 	}
-
-
 };
+
+
 
 /*--------------------------------------------------------------------------*/
 void effector::interpret_instruction (lib::c_buffer &instruction)

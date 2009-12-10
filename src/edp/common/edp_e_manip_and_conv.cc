@@ -38,6 +38,7 @@
 #include "lib/mathtr.h"
 
 #include "kinematics/common/kinematic_model.h"
+#include "edp/common/in_out.h"
 
 namespace mrrocpp {
 namespace edp {
@@ -126,7 +127,7 @@ void manip_and_conv_effector::create_threads ()
 
 	rb_obj = new reader_buffer(*this);
 	mt_tt_obj = new manip_trans_t(*this);
-
+	in_out_obj = new in_out_buffer();
 
     // Y&W - utworzenie watku serwa
     if (pthread_create (&serwo_tid, NULL, &servo_thread_start, (void *) this))
@@ -667,7 +668,7 @@ void manip_and_conv_effector::send_to_SERVO_GROUP ()
 void manip_and_conv_effector::set_outputs (const lib::c_buffer &instruction)
 {
     // ustawienie wyjsc binarnych
-    in_out_obj.set_output(&instruction.output_values);
+    in_out_obj->set_output(&instruction.output_values);
     // throw NonFatal_error_2(NOT_IMPLEMENTED_YET);
     // printf(" OUTPUTS SET\n");
 }
@@ -678,7 +679,7 @@ void manip_and_conv_effector::set_outputs (const lib::c_buffer &instruction)
 void manip_and_conv_effector::get_inputs (lib::r_buffer *local_reply)
 {
     // odczytanie wejsc binarnych
-    in_out_obj.get_input(&((*local_reply).input_values), ((*local_reply).analog_input));
+    in_out_obj->get_input(&((*local_reply).input_values), ((*local_reply).analog_input));
     // throw NonFatal_error_2(NOT_IMPLEMENTED_YET);
     // printf(" INPUTS GET\n");
 }
@@ -1397,174 +1398,6 @@ void manip_and_conv_effector::main_loop ()
     } // end: for (;;)
 
 }
-
-
-
-/**************************** IN_OUT_BUFFER *****************************/
-
-in_out_buffer::in_out_buffer()
-{
-    binary_input = 0;
-    binary_output = 0;
-    for (int i=0; i<8; i++)
-    {
-        analog_input[i]=0;
-    }
-
-    // inicjacja spinlockow
-#ifdef __QNXNTO__
-    memset( &input_spinlock, 0, sizeof(input_spinlock));
-    memset( &output_spinlock, 0, sizeof(output_spinlock));
-#else
-    pthread_spin_init(&input_spinlock, PTHREAD_PROCESS_PRIVATE);
-    pthread_spin_init(&output_spinlock, PTHREAD_PROCESS_PRIVATE);
-#endif
-    set_output_flag=false;
-}
-
-in_out_buffer::~in_out_buffer() {
-#ifndef __QNXNTO__
-	pthread_spin_destroy(&input_spinlock);
-	pthread_spin_destroy(&output_spinlock);
-#endif
-}
-
-
-// ustawienie wyjsc
-void in_out_buffer::set_output(const uint16_t *out_value)
-{
-#ifdef __QNXNTO__
-    InterruptLock
-#else
-    pthread_spin_lock
-#endif
-		(&output_spinlock);
-
-    set_output_flag=true;   // aby f. obslugi przerwania wiedziala ze ma ustawic wyjscie
-    binary_output=*out_value;
-
-#ifdef __QNXNTO__
-    InterruptUnlock
-#else
-    pthread_spin_unlock
-#endif
-		(&output_spinlock);
-}
-
-// odczytanie wyjsc
-void in_out_buffer::get_output(uint16_t *out_value)
-{
-#ifdef __QNXNTO__
-    InterruptLock
-#else
-    pthread_spin_lock
-#endif
-		(&output_spinlock);
-
-    *out_value=binary_output;
-
-#ifdef __QNXNTO__
-    InterruptUnlock
-#else
-    pthread_spin_unlock
-#endif
-		(&output_spinlock);
-}
-
-
-// ustawienie wejsc
-void in_out_buffer::set_input (const uint16_t *binary_in_value, const uint8_t *analog_in_table)
-{
-#ifdef __QNXNTO__
-    InterruptLock
-#else
-    pthread_spin_lock
-#endif
-		(&input_spinlock);
-
-    binary_input=*binary_in_value;		// wejscie binarne
-    for (int i=0; i<8; i++)
-    {
-        analog_input[i]=analog_in_table[i];
-    }
-
-#ifdef __QNXNTO__
-    InterruptUnlock
-#else
-    pthread_spin_unlock
-#endif
-		(&input_spinlock);
-
-    /*	analog_in_value = & read_analog;
-    	binary_in_value =   & read_binary;*/
-
-    // printf("%x\n", 0x00FF&(~odczyt));
-}
-
-
-// odczytanie wejsc
-void in_out_buffer::get_input (uint16_t *binary_in_value, uint8_t *analog_in_table)
-{
-#ifdef __QNXNTO__
-    InterruptLock
-#else
-    pthread_spin_lock
-#endif
-		(&input_spinlock);
-
-    *binary_in_value=binary_input;		// wejscie binarne
-    for (int i=0; i<8; i++)
-    {
-        analog_in_table[i]=analog_input[i];
-    }
-
-    /*	// ustawienie korzystanie z ukladu we-wy
-    	out8((ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), IN_OUT_PTR);
-
-    	// odczytanie wejsc
-    	// (SERVO_REPLY_STATUS_ADR+ ISA_CARD_OFFSET)     0x210
-    	uint16_t read_analog = 0x00FF & in16((SERVO_REPLY_STATUS_ADR+ ISA_CARD_OFFSET));
-    	// (SERVO_REPLY_REG_1_ADR + ISA_CARD_OFFSET)       0x218
-    	uint16_t read_binary = 0x00FF & in16((SERVO_REPLY_REG_1_ADR + ISA_CARD_OFFSET));*/
-
-#ifdef __QNXNTO__
-    InterruptUnlock
-#else
-    pthread_spin_unlock
-#endif
-		(&input_spinlock);
-
-    /*	analog_in_value = & read_analog;
-    	binary_in_value =   & read_binary;*/
-
-    // printf("%x\n", 0x00FF&(~odczyt));
-}
-
-#ifdef DOCENT_SENSOR
-
-void manip_and_conv_effector::registerReaderStartedCallback(boost::function<void()> startedCallback) {
-	startedCallback_ = startedCallback;
-	startedCallbackRegistered_ = true;
-}
-
-void manip_and_conv_effector::registerReaderStoppedCallback(boost::function<void()> stoppedCallback) {
-	stoppedCallback_ = stoppedCallback;
-	stoppedCallbackRegistered_ = true;
-}
-
-void manip_and_conv_effector::onReaderStarted() {
-	if (startedCallbackRegistered_) {
-		startedCallback_();
-	}
-}
-void manip_and_conv_effector::onReaderStopped() {
-	if (stoppedCallbackRegistered_) {
-		stoppedCallback_();
-	}
-}
-#endif
-
-/**************************** IN_OUT_BUFFER *****************************/
 
 } // namespace common
 } // namespace edp

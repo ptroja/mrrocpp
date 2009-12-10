@@ -28,6 +28,7 @@
 #include "edp/irp6_on_track/edp_irp6ot_effector.h"
 // Klasa hardware_interface.
 #include "edp/irp6_on_track/hi_irp6ot.h"
+#include "edp/common/in_out.h"
 
 namespace mrrocpp {
 namespace edp {
@@ -242,13 +243,13 @@ int_handler (void *arg, int int_id)
         analog_input[6]=0x00ff & tmp_buf;
         analog_input[7]=((0xff00 & tmp_buf)>>8);
 
-        common::master->in_out_obj.set_input(&binary_input, analog_input);
+        common::master->in_out_obj->set_input(&binary_input, analog_input);
 
         // ustawienie wyjscia o ile bylo takie zlecenie
-        if (common::master->in_out_obj.set_output_flag)
+        if (common::master->in_out_obj->set_output_flag)
         {
-            common::master->in_out_obj.set_output_flag=false;
-            common::master->in_out_obj.get_output(&binary_output);
+            common::master->in_out_obj->set_output_flag=false;
+            common::master->in_out_obj->get_output(&binary_output);
 
             out8((ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), IN_OUT_PACKET);
             // (SERVO_COMMAND2_ADR + ISA_CARD_OFFSET)       0x212
