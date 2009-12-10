@@ -23,6 +23,7 @@
 #include "edp/common/reader.h"
 // Kinematyki.
 #include "kinematics/spkm/kinematic_model_spkm.h"
+#include "edp/common/master_trans_t_buffer.h"
 
 namespace mrrocpp {
 namespace edp {

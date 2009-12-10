@@ -45,6 +45,7 @@
 
 // Klasa edp_speaker_effector.
 #include "edp/speaker/edp_speaker_effector.h"
+#include "edp/common/master_trans_t_buffer.h"
 
 
 // char text2speak[MAX_TEXT]; // MAC 7
@@ -59,7 +60,6 @@ namespace speaker {
 effector::effector (lib::configurator &_config)
 	: common::effector(_config, lib::ROBOT_SPEAKER)
 {
-	mt_tt_obj = new common::master_trans_t_buffer();
 
 	real_reply_type = lib::ACKNOWLEDGE;
 	// inicjacja deskryptora pliku by 7&Y
@@ -206,6 +206,8 @@ effector::~effector ()
 
 void effector::create_threads ()
 {
+
+	mt_tt_obj = new common::master_trans_t_buffer(*this);
 
 	if (pthread_create (&speak_t_tid, NULL, &speak_thread_start, (void *) this)!=EOK)
 	{

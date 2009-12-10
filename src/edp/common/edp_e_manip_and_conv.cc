@@ -32,7 +32,7 @@
 #include "edp/common/servo_gr.h"
 #include "edp/common/reader.h"
 #include "edp/common/edp_e_manip_and_conv.h"
-
+#include "edp/common/master_trans_t_buffer.h"
 
 
 #include "lib/mathtr.h"
@@ -125,7 +125,7 @@ void manip_and_conv_effector::create_threads ()
 {
 
 	rb_obj = new reader_buffer(*this);
-	mt_tt_obj = new master_trans_t_buffer();
+	mt_tt_obj = new master_trans_t_buffer(*this);
 
 
     // Y&W - utworzenie watku serwa
@@ -152,7 +152,7 @@ void manip_and_conv_effector::create_threads ()
         throw System_error();
     }
 
-    if (pthread_create (&trans_t_tid, NULL, &trans_thread_start, (void *) this))
+    if (pthread_create (&mt_tt_obj->trans_t_tid, NULL, &mt_tt_obj->trans_thread_start, (void *) mt_tt_obj))
     {
         msg->message(lib::SYSTEM_ERROR, errno, "EDP: Failed to create TRANSFORMER thread");
         throw System_error();

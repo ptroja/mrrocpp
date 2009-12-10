@@ -17,7 +17,7 @@
 #include "kinematics/common/transformer_error.h"
 #include "kinematics/common/kinematics_manager.h"
 #include "edp/common/edp_e_manip_and_conv.h"
-#include "edp/common/master_trans_t_buffer.h"
+
 
 // Konfigurator
 #include "lib/configurator.h"
@@ -25,6 +25,7 @@
 namespace mrrocpp {
 namespace edp {
 namespace common {
+
 
 // base class for EDP robots with manipulators
 

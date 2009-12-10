@@ -21,7 +21,6 @@
 #include "kinematics/common/transformer_error.h"
 #include "kinematics/common/kinematics_manager.h"
 #include "edp/common/edp_effector.h"
-#include "edp/common/master_trans_t_buffer.h"
 
 
 // Konfigurator
@@ -35,6 +34,8 @@ namespace mrrocpp {
 namespace edp {
 namespace common {
 
+class master_trans_t_buffer;
+
 
 
 // base class for EDP robots with manipulators and conveyor
@@ -46,8 +47,6 @@ class servo_buffer;
 class manip_and_conv_effector : public effector, public kinematic::common::manager
 {
 protected:
-    static void *trans_thread_start(void* arg);
-    void *trans_thread(void* arg);
     static void *servo_thread_start(void* arg);
     void *servo_thread(void* arg);
     static void *visualisation_thread_start(void* arg);
@@ -78,7 +77,7 @@ protected:
     short gripper_servo_nr;
 
     pthread_t serwo_tid;
-    pthread_t trans_t_tid;
+
     pthread_t vis_t_tid;
 
     STATE next_state;    // stan nastepny, do ktorego przejdzie EDP_MASTER

@@ -12,7 +12,7 @@
 #include "lib/com_buf.h"
 
 #include "lib/mis_fun.h"
-#include "edp/common/edp_e_manip.h"
+#include "edp/common/edp_e_manip_and_conv.h"
 #include "edp/common/master_trans_t_buffer.h"
 
 /********************************* GLOBALS **********************************/
@@ -21,13 +21,9 @@ namespace mrrocpp {
 namespace edp {
 namespace common {
 
-int	manip_effector::master_order(MT_ORDER nm_task, int nm_tryb)
-{
-	return manip_and_conv_effector::master_order(nm_task, nm_tryb);
-}
 
-
-master_trans_t_buffer::master_trans_t_buffer()
+master_trans_t_buffer::master_trans_t_buffer(manip_and_conv_effector& _master):
+	master (_master)
 {
 	// semafory do komunikacji miedzy EDP_MASTER a EDP_TRANS
 	sem_init(&master_to_trans_t_sem, 0, 0);
@@ -105,12 +101,12 @@ int master_trans_t_buffer::trans_t_wait_for_master_order()
 
 
 
-void * manip_and_conv_effector::trans_thread_start(void* arg)
+void * master_trans_t_buffer::trans_thread_start(void* arg)
 {
-    return static_cast<manip_and_conv_effector*> (arg)->trans_thread(arg);
+    return static_cast<master_trans_t_buffer*> (arg)->trans_thread(arg);
 }
 
-void * manip_and_conv_effector::trans_thread(void *arg)
+void * master_trans_t_buffer::trans_thread(void *arg)
 {
 
     lib::set_thread_priority(pthread_self(), MAX_PRIORITY);
@@ -118,42 +114,42 @@ void * manip_and_conv_effector::trans_thread(void *arg)
     while(1)
     {
         // oczekiwanie na zezwolenie ruchu od edp_master
-        mt_tt_obj->trans_t_wait_for_master_order();
+        trans_t_wait_for_master_order();
 
         // przekopiowanie instrukcji z bufora watku komunikacji z ECP (edp_master)
-        memcpy( &(current_instruction), &(new_instruction), sizeof(lib::c_buffer) );
+        memcpy( &(master.current_instruction), &(master.new_instruction), sizeof(lib::c_buffer) );
 
-        mt_tt_obj->error = NO_ERROR; // wyjsciowo brak bledu (dla rzutowania)
+        error = NO_ERROR; // wyjsciowo brak bledu (dla rzutowania)
 
         try
         {
 			// TODO: this thread is for handling special case of move_arm instruction;
         	// all the othrer call can (and should...) be done from the main communication thread;
         	// they do not need to be processed asynchronously.
-            switch (mt_tt_obj->trans_t_task)
+            switch (trans_t_task)
             {
             case MT_GET_CONTROLLER_STATE:
-                get_controller_state(current_instruction);
-                mt_tt_obj->trans_t_to_master_order_status_ready();
+            	master.get_controller_state(master.current_instruction);
+                trans_t_to_master_order_status_ready();
                 break;
             case MT_SET_RMODEL:
-                set_rmodel(current_instruction);
-                mt_tt_obj->trans_t_to_master_order_status_ready();
+            	master.set_rmodel(master.current_instruction);
+                trans_t_to_master_order_status_ready();
                 break;
             case MT_GET_ARM_POSITION:
-                get_arm_position(mt_tt_obj->trans_t_tryb, current_instruction);
-                mt_tt_obj->trans_t_to_master_order_status_ready();
+            	master.get_arm_position(trans_t_tryb, master.current_instruction);
+                trans_t_to_master_order_status_ready();
                 break;
             case MT_GET_ALGORITHMS:
-                get_algorithms();
-                mt_tt_obj->trans_t_to_master_order_status_ready();
+            	master.get_algorithms();
+                trans_t_to_master_order_status_ready();
                 break;
             case MT_SYNCHRONISE:
-                synchronise();
-                mt_tt_obj->trans_t_to_master_order_status_ready();
+            	master.synchronise();
+                trans_t_to_master_order_status_ready();
                 break;
             case MT_MOVE_ARM:
-                move_arm(current_instruction); 	 // wariant dla watku edp_trans_t
+            	master.move_arm(master.current_instruction); 	 // wariant dla watku edp_trans_t
                 break;
             default: // blad: z reply_type wynika, e odpowied nie ma zawiera narzedzia
                 break;
@@ -164,51 +160,51 @@ void * manip_and_conv_effector::trans_thread(void *arg)
 
         catch(transformer_error::NonFatal_error_1 nfe)
         {
-            mt_tt_obj->error_pointer= new transformer_error::NonFatal_error_1(nfe);
-            mt_tt_obj->error = NonFatal_erroR_1;
-            mt_tt_obj->trans_t_to_master_order_status_ready();
+            error_pointer= new transformer_error::NonFatal_error_1(nfe);
+            error = NonFatal_erroR_1;
+            trans_t_to_master_order_status_ready();
         }
 
         catch(transformer_error::NonFatal_error_2 nfe)
         {
-            mt_tt_obj->error_pointer= new transformer_error::NonFatal_error_2(nfe);
-            mt_tt_obj->error = NonFatal_erroR_2;
-            mt_tt_obj->trans_t_to_master_order_status_ready();
+            error_pointer= new transformer_error::NonFatal_error_2(nfe);
+            error = NonFatal_erroR_2;
+            trans_t_to_master_order_status_ready();
         }
 
         catch(transformer_error::NonFatal_error_3 nfe)
         {
-            mt_tt_obj->error_pointer= new transformer_error::NonFatal_error_3(nfe);
-            mt_tt_obj->error = NonFatal_erroR_3;
-            mt_tt_obj->trans_t_to_master_order_status_ready();
+            error_pointer= new transformer_error::NonFatal_error_3(nfe);
+            error = NonFatal_erroR_3;
+            trans_t_to_master_order_status_ready();
         }
 
         catch(transformer_error::NonFatal_error_4 nfe)
         {
-            mt_tt_obj->error_pointer= new transformer_error::NonFatal_error_4(nfe);
-            mt_tt_obj->error = NonFatal_erroR_4;
-            mt_tt_obj->trans_t_to_master_order_status_ready();
+            error_pointer= new transformer_error::NonFatal_error_4(nfe);
+            error = NonFatal_erroR_4;
+            trans_t_to_master_order_status_ready();
         }
 
         catch(transformer_error::Fatal_error fe)
         {
-            mt_tt_obj->error_pointer= new transformer_error::Fatal_error(fe);
-            mt_tt_obj->error = Fatal_erroR;
-            mt_tt_obj->trans_t_to_master_order_status_ready();
+            error_pointer= new transformer_error::Fatal_error(fe);
+            error = Fatal_erroR;
+            trans_t_to_master_order_status_ready();
         }
 
         catch (System_error fe)
         {
-            mt_tt_obj->error_pointer= new System_error(fe);
-            mt_tt_obj->error = System_erroR;
-            mt_tt_obj->trans_t_to_master_order_status_ready();
+            error_pointer= new System_error(fe);
+            error = System_erroR;
+            trans_t_to_master_order_status_ready();
         }
 
         catch (...)
         {
             printf("transformation thread unidentified_error\n");
 
-            mt_tt_obj->trans_t_to_master_order_status_ready();
+            trans_t_to_master_order_status_ready();
             // Wylapywanie niezdefiniowanych bledow
             // printf("zlapane cos");// by Y&W
         }
