@@ -22,9 +22,9 @@ namespace sensor {
 class sensor : public lib::sensor {
 protected:
 	// Flaga - czy czujnik jest skonfigurowany.
-	short is_sensor_configured;
+	bool is_sensor_configured;
 	// Flaga - czy jakikolwiek odczyt jest gotowy.
-	short is_reading_ready;
+	bool is_reading_ready;
 
 public:
 	lib::configurator &config;

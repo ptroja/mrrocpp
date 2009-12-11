@@ -142,11 +142,11 @@ void vis_pbeclsac::configure_sensor (void){
 	is_sensor_configured=true;
 
      sr_msg->message ("Sensor initiated"); // 7
-	};
+	}
 
 void vis_pbeclsac::wait_for_event(){
 
-};
+}
 
 /*************************** inicjacja odczytu ******************************/
 void vis_pbeclsac::initiate_reading (void){
@@ -190,7 +190,7 @@ vision.setRoi(k1.roi,1000);
 	is_reading_ready=true;							// odczyt jakikolwiek
 
 
-	}; // wait_for_event
+	} // wait_for_event
 
 /***************************** odczyt z czujnika *****************************/
 void vis_pbeclsac::get_reading (void){
@@ -228,7 +228,7 @@ double aux=0;
 	// 	from_vsp.comm_image.sensor_union.camera.frame[i] = 0.5;
      // sr_msg->message ("VSP Get reading ok");
      is_reading_ready=false; // 7
-	};
+	}
 
 } // namespace sensor
 } // namespace vsp

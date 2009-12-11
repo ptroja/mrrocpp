@@ -69,10 +69,8 @@ force::force(lib::configurator &_config) : sensor(_config){
 			delay(CONNECT_DELAY);
 		else{
 			throw sensor_error (lib::SYSTEM_ERROR, CANNOT_LOCATE_DEVICE);
-		};
-
-
-	}; // end: vsp_force_sensor
+		}
+	} // end: vsp_force_sensor
 
 // Metoda sluzaca do konfiguracji czujnika.
 void force::configure_sensor (void){// w obecnej implementacji zeruje poziom odczytow z czujnika w EDP
@@ -83,7 +81,7 @@ void force::configure_sensor (void){// w obecnej implementacji zeruje poziom odc
 		printf("blad odwolonia vsp do edp podczas proby konfiguracji\n");
 	}else
 		sr_msg->message ("Sensor configured");
-	}; // end: configure_sensor
+	} // end: configure_sensor
 
 // Metoda oczekujaca na dane, otrzymane z czujnika sily (poprzez proces EDP).
 void force::wait_for_event(void){
@@ -93,8 +91,8 @@ void force::wait_for_event(void){
 	// Wyslanie i odbior danych z edp.
 	while(MsgSend(edp_vsp_fd, &vsp_edp_command, sizeof(vsp_edp_command), &edp_vsp_reply, sizeof(edp_vsp_reply)) < 0){
 		delay(1);
-		};
-	}; // end: wait_for_event
+		}
+	} // end: wait_for_event
 
 // Metoda dokonujaca przepisania odczytu do obrazu czujnika.
 void force::initiate_reading (void){
@@ -109,9 +107,9 @@ void force::initiate_reading (void){
 	if ((((ms_nr++)%5000)==0)&& (1)){
 		if( clock_gettime( CLOCK_REALTIME , &start[0]) == -1 ) {
 		    printf("blad pomiaru czasu");
-		     };
-		};
-	}; // end: initiate_reading
+		     }
+		}
+	} // end: initiate_reading
 
 // Metoda wysyla przepisuje dane z obrazu czujnika do bufora oraz wysyla bufor do procesu oczekujacego na odczyty.
 void force::get_reading (void){
@@ -127,7 +125,7 @@ void force::get_reading (void){
 	memcpy(from_vsp.comm_image.sensor_union.force.rez, image.sensor_union.force.rez, 6*sizeof(double));
 	// Obacny odczyt nie jest "nowy".
      is_reading_ready=false;
-	}; // end: get_reading
+	} // end: get_reading
 
 } // namespace sensor
 } // namespace vsp

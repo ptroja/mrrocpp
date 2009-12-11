@@ -460,7 +460,7 @@ void CROSMDoc::UstawTablice() // Alokuj tablice dla cech klas
 	{
 		for (long j=0; j< rozmiar_spektra; j++)
 			u[i][j]=s[i][j]= p[i][j] =0.0;
-	};
+	}
 }
 
 
@@ -784,8 +784,8 @@ void CROSMDoc::ObliczCechyOkien(int typ_spektro, int bezPrzerw)
 // Testuje algorytmy fft
 //	int lprobek = 8;
 //	int mokno = 8;
-//	double ptrprobki[] = {10.0, 20.0, 30.0, 10.0, 0.0, -10.0, -20.0, -30.0 };
-//	double wFun[] = {1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
+//	double ptrprobki[] = {10.0, 20.0, 30.0, 10.0, 0.0, -10.0, -20.0, -30.0 }
+//	double wFun[] = {1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0}
 
 //	double *newSTFT= stft(ptrprobki, lprobek, mokno, wFun); // Short time Fourier Transform
 //	if (lprobek % mokno > 0)
@@ -1375,21 +1375,21 @@ void CROSMDoc::WczytajKlasy() // Otwarcia pliku z danymi klasyfikatora
 			  {
 				 u[i][j]=buf[k];
 				 k++;
-			  };
+			  }
 
 		   for(i=1; i<=LA_KLAS; i++)
 		      for(j=0; j< rozmiar_spektra; j++)
 			  {
 				 s[i][j]=buf[k];
 				 k++;
-			  };
+			  }
 
 		   for(i=1; i<= LA_KLAS; i++)
 		      for(j=0; j<rozmiar_spektra; j++)
 			  {
 				 p[i][j]=buf[k];
 				 k++;
-			  };
+			  }
 
 		   // Na koncu nazwy klas
 		   char chbuf[16];

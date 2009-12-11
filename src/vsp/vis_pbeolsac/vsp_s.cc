@@ -1,9 +1,9 @@
  // -------------------------------------------------------------------------
 //                            vsp_s.cc 		dla QNX6.2
-// 
+//
 //            Virtual Sensor Process (lib::VSP) - methods
 // Metody klasy VSP
-// 
+//
 // Ostatnia modyfikacja: 25.06.03
 // Autor: tkornuta
 // odrem - prywrocic pry podlaczeniu klasy kamera
@@ -63,7 +63,7 @@ int interatt=0;
 int x=0;
 int z=0;
 int irq_no;
-int id;  
+int id;
 int md;
 struct timespec start[9], stop[9], res;
 //short tmp[9];
@@ -72,7 +72,7 @@ struct sigevent event;
 /****7****/
 
 
-// unsigned char buffer[1000000]; 
+// unsigned char buffer[1000000];
 
 float timex;
 float timex1;
@@ -110,10 +110,10 @@ vis::vis(lib::configurator &_config) : sensor(_config){
 	// Wielkosc unii.
 	union_size = sizeof(image.sensor_union.camera);
 
-	is_sensor_configured=false;	// czujnik niezainicjowany 
+	is_sensor_configured=false;	// czujnik niezainicjowany
 	is_reading_ready=false;				// nie ma zadnego gotowego odczytu
 	irq_no = 0;
-	ThreadCtl (_NTO_TCTL_IO, NULL);  // by YOYEK & 7 - nadanie odpowiednich uprawnien watkowi 
+	ThreadCtl (_NTO_TCTL_IO, NULL);  // by YOYEK & 7 - nadanie odpowiednich uprawnien watkowi
 
 	//	printf("Konstruktor VSP_VIS pbeolsac!\n");
 	/*
@@ -127,13 +127,13 @@ vis::vis(lib::configurator &_config) : sensor(_config){
 	fc[1]=751.860077541601300;
 	fc[2]=757.240379484519850;
 
-	cc[1]=368.297088758283450; 
+	cc[1]=368.297088758283450;
 	cc[2]=275.241113833860310;
 
-	kc[1]= -0.353305987532453; 
-	kc[2]= 0.224942921451107; 
-	kc[3]= 0.002144573630332; 
-	kc[4]= 0.000737975434375; 
+	kc[1]= -0.353305987532453;
+	kc[2]= 0.224942921451107;
+	kc[3]= 0.002144573630332;
+	kc[4]= 0.000737975434375;
 	kc[5]= 0.000000000000000;
 	 */ //stare
 
@@ -141,13 +141,13 @@ vis::vis(lib::configurator &_config) : sensor(_config){
 		fc[1]=1624.23566; //751.860077541601300;
 	fc[2]=1630.87379; //757.240379484519850;
 
-	cc[1]=378.16536; //368.297088758283450; 
+	cc[1]=378.16536; //368.297088758283450;
 	cc[2]=266.82798; //275.241113833860310;
 
-	kc[1]= 0.00481; //-0.353305987532453; 
-	kc[2]= 0.47232; //0.224942921451107; 
-	kc[3]= -0.00174; //0.002144573630332; 
-	kc[4]= -0.00569; //0.000737975434375; 
+	kc[1]= 0.00481; //-0.353305987532453;
+	kc[2]= 0.47232; //0.224942921451107;
+	kc[3]= -0.00174; //0.002144573630332;
+	kc[4]= -0.00569; //0.000737975434375;
 	kc[5]= 0.000000000000000;
 
 
@@ -174,8 +174,8 @@ vis::vis(lib::configurator &_config) : sensor(_config){
 	{
 		printf("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\n");
 	}
-	
-	fd = open("/dev/bttvx",O_RDWR); // bezposrednio odczyt ze sterownika zamiast konstruktora 
+
+	fd = open("/dev/bttvx",O_RDWR); // bezposrednio odczyt ze sterownika zamiast konstruktora
 
 	z=0;
 	x=0;
@@ -203,9 +203,9 @@ void vis::configure_sensor (void){
 // printf("7 - config\n");
 	is_sensor_configured=true;
  //   printf("Sensor initiated\n");
-     sr_msg->message ("Sensor initiated"); // 7 
-	};
-	
+     sr_msg->message ("Sensor initiated"); // 7
+	}
+
 void vis::wait_for_event(){
 // printf("7 - wait_for_event\n");
 /*
@@ -215,10 +215,10 @@ if(interatt==0){
 	if ( (id =InterruptAttach (irq_no, int_handler, (void *) &md , sizeof(md), 0)) == -1)
 		  printf( "Unable to attach interrupt handler: \n");
 	interatt=1;
-	};
+	}
 InterruptWait (NULL, NULL);
 */
-};	
+}
 
 /*************************** inicjacja odczytu ******************************/
 void vis::initiate_reading (void){
@@ -226,21 +226,21 @@ void vis::initiate_reading (void){
 
 	if(!is_sensor_configured)
 	     throw sensor_error (lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
-	     
+
 clock_gettime( CLOCK_REALTIME , &s_time);
- 
+
  /****IPL7************/
  /*
-  start_time = clock();	
+  start_time = clock();
 */
- 
+
 	size_read = read( fd, buffer, sizeof( buffer ) ); // bezposredni odczyt zamiast przez klase
-   
+
 	lseek(fd,0,SEEK_SET);
 
 //recog
   vision.findBlobs(buffer);
- 
+
 vision.filterBlobsReset();
 vision.filterBlobs(BLOB_SIZE_BIGGER,200.0);
 vision.filterBlobs(BLOB_SIZE_SMALLER,10000.0);
@@ -272,23 +272,23 @@ else
 vision.setRoi(k1.roi,1000);
 
 //2unrem
-/*	
-	X_kk[1][1]=0; X_kk[1][2]=37; X_kk[1][3]=0; X_kk[1][4]=37; 
-	X_kk[2][1]=37; X_kk[2][2]=37; X_kk[2][3]=0; X_kk[2][4]=0; 
-	X_kk[3][1]=0; X_kk[3][2]=0; X_kk[3][3]=0; X_kk[3][4]=0; 
-	
-	x_kk[1][1]=vision.x_kk[1][1]; x_kk[1][2]=vision.x_kk[1][2]; x_kk[1][3]=vision.x_kk[1][3]; x_kk[1][4]=vision.x_kk[1][4]; 
-	x_kk[2][1]=vision.x_kk[2][1]; x_kk[2][2]=vision.x_kk[2][2]; x_kk[2][3]=vision.x_kk[2][3]; x_kk[2][4]=vision.x_kk[2][4]; 
+/*
+	X_kk[1][1]=0; X_kk[1][2]=37; X_kk[1][3]=0; X_kk[1][4]=37;
+	X_kk[2][1]=37; X_kk[2][2]=37; X_kk[2][3]=0; X_kk[2][4]=0;
+	X_kk[3][1]=0; X_kk[3][2]=0; X_kk[3][3]=0; X_kk[3][4]=0;
+
+	x_kk[1][1]=vision.x_kk[1][1]; x_kk[1][2]=vision.x_kk[1][2]; x_kk[1][3]=vision.x_kk[1][3]; x_kk[1][4]=vision.x_kk[1][4];
+	x_kk[2][1]=vision.x_kk[2][1]; x_kk[2][2]=vision.x_kk[2][2]; x_kk[2][3]=vision.x_kk[2][3]; x_kk[2][4]=vision.x_kk[2][4];
 */
 /*
  if(vision.whole_face==1)
  {
 	compute_extrinsic_init(x_kk,X_kk,omckk,Tckk,Rckk);
 	compute_extrinsic_refine(x_kk,X_kk,omckk,Tckk,Rckk);
- }	
+ }
 */ //2unrem
-	
-	/*		
+
+	/*
 		current=(float)(X1+X2+X3+X4)*2.5;
 		current_y=(float)(Y1+Y2+Y3+Y4)*2.5;
 		current_z=(float)(Z1+Z2+Z3+Z4)*2.5;
@@ -296,13 +296,13 @@ vision.setRoi(k1.roi,1000);
 		pose_x_prev=current;
 		pose_y_prev=current_y;
 		pose_z_prev=current_z;
-	*/	
+	*/
 		// printf(" VSP pose z= %f %f %f %f %f\n", current_z, Z1, Z2, Z3, Z4);
 /*
 }
 else
 {
-	current=pose_x_prev; 
+	current=pose_x_prev;
 	current_y=pose_y_prev;
 	current_z=pose_z_prev;
 	// printf(" VSP bad = %f %f %f\n", current_y, current, current_z);
@@ -319,17 +319,17 @@ clock_gettime( CLOCK_REALTIME , &e_time);
 //printf("VSP\n");
 //printf( "VSP= %f %f\n",(double)(e_time.tv_nsec-s_time.tv_nsec)/1000000,Tckk[1]);
 
-// printf( "FXX= %d, %f %f\n",debug,(float)(curr_time) / CLOCKS_PER_SEC, (double)(e_time.tv_nsec-s_time.tv_nsec));	  
+// printf( "FXX= %d, %f %f\n",debug,(float)(curr_time) / CLOCKS_PER_SEC, (double)(e_time.tv_nsec-s_time.tv_nsec));
 // printf( "VSP= %f %f\n",(double)(crr_time.tv_nsec), (double)(e_time.tv_nsec-s_time.tv_nsec));
 // printf(" VSP pose after filtr= %f\n", current);
 /****KONIEC IPL7**************/
-		
+
 // koniec przepisywania
 	is_reading_ready=true;							// odczyt jakikolwiek
-// InterruptEnable();	
-//    sr_msg->message ("VSP Reading initiate ok");   
-	}; // wait_for_event
-		
+// InterruptEnable();
+//    sr_msg->message ("VSP Reading initiate ok");
+	} // wait_for_event
+
 /***************************** odczyt z czujnika *****************************/
 void vis::get_reading (void){
 // printf("7 - get reading\n");
@@ -338,7 +338,7 @@ void vis::get_reading (void){
 	// jezeli chcemy jakikolwiek odczyt	-> is_reading_ready
 	// printf("7 - still reading %d\n",is_reading_ready);
 	if(!is_reading_ready)
-	     throw sensor_error (lib::FATAL_ERROR, READING_NOT_READY);   
+	     throw sensor_error (lib::FATAL_ERROR, READING_NOT_READY);
 
 	// ok
 	from_vsp.vsp_report= lib::VSP_REPLY_OK;
@@ -358,11 +358,11 @@ void vis::get_reading (void){
 		for(int j=0; j<4; j++)
 	// from_vsp.comm_image.sensor_union.camera.frame[i][j] = i+0.1*((double)(j));
 	from_vsp.comm_image.sensor_union.camera.frame[4*i+j] = 0.5;
-	
+
 	for(int j=0; j<6; j++)
 	from_vsp.comm_image.sensor_union.ds.readings[j] = 0.5;
 	*/
-	
+
 	// fill up frame
 	for(int i=0; i<3; i++)
 		for(int j=0; j<3; j++)
@@ -377,9 +377,9 @@ void vis::get_reading (void){
 			from_vsp.comm_image.sensor_union.camera.frame[15]=0;
 	// for(int i=0; i<16; i++)
 	// 	from_vsp.comm_image.sensor_union.camera.frame[i] = 0.5;
-     // sr_msg->message ("VSP Get reading ok");   
+     // sr_msg->message ("VSP Get reading ok");
      is_reading_ready=false; // 7
-	};
+	}
 
 } // namespace sensor
 } // namespace vsp

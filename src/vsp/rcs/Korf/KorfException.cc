@@ -38,10 +38,10 @@ Exception* KorfException::Clone()
 // ERROR TEXTS AND ACCESS TO THEM
 ////////////////////////////////////////////////////////////////////////////////
 
-char* KorfException::ErrorText[] = 
+const char* KorfException::ErrorText[] = 
   {  
-	  (char*)"",
-	  (char*)"Solver accepts only CubieCube or KorfCube as input.",
+	  "",
+	  "Solver accepts only CubieCube or KorfCube as input.",
   };
 
 const char* KorfException::GetErrorText()

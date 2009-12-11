@@ -90,7 +90,7 @@ class CombinatorialsException : public Exception
   private:
 
     // wiadomosci bledow
-    static char *ErrorText[];
+    static const char *ErrorText[];
 
 };
 

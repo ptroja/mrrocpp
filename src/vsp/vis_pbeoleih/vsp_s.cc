@@ -1,9 +1,9 @@
  // -------------------------------------------------------------------------
 //                            vsp_s.cc 		dla QNX6.2
-// 
+//
 //            Virtual Sensor Process (lib::VSP) - methods
 // Metody klasy VSP
-// 
+//
 // Ostatnia modyfikacja: 25.06.03
 // Autor: tkornuta
 // odrem - prywrocic pry podlaczeniu klasy kamera
@@ -69,7 +69,7 @@ int interatt=0;
 int x=0;
 int z=0;
 int irq_no;
-int id;  
+int id;
 int md;
 struct timespec start[9], stop[9], res;
 //short tmp[9];
@@ -83,7 +83,7 @@ unsigned char Rx[384][288];
 unsigned char Gx[384][288];
 unsigned char Bx[384][288];
 
-//do antybalansu bieli 
+//do antybalansu bieli
 
 int Rm;
 int Gm;
@@ -113,7 +113,7 @@ int Bwb;
 int WBx[4], WBy[4], WBs[4];
 
 
-// unsigned char buffer[1000000]; 
+// unsigned char buffer[1000000];
 
 float timex;
 float timex1;
@@ -151,10 +151,10 @@ vis::vis(lib::configurator &_config) : sensor(_config){
 	// Wielkosc unii.
 	union_size = sizeof(image.sensor_union.cube_face);
 
-	is_sensor_configured=false;	// czujnik niezainicjowany 
+	is_sensor_configured=false;	// czujnik niezainicjowany
 	is_reading_ready=false;				// nie ma zadnego gotowego odczytu
 	irq_no = 0;
-	ThreadCtl (_NTO_TCTL_IO, NULL);  // by YOYEK & 7 - nadanie odpowiednich uprawnien watkowi 
+	ThreadCtl (_NTO_TCTL_IO, NULL);  // by YOYEK & 7 - nadanie odpowiednich uprawnien watkowi
 
 	//	printf("Konstruktor VSP_VIS pbeoleih!\n");
 
@@ -170,13 +170,13 @@ vis::vis(lib::configurator &_config) : sensor(_config){
 	fc[1]=751.860077541601300;
 	fc[2]=757.240379484519850;
 
-	cc[1]=368.297088758283450; 
+	cc[1]=368.297088758283450;
 	cc[2]=275.241113833860310;
 
-	kc[1]= -0.353305987532453; 
-	kc[2]= 0.224942921451107; 
-	kc[3]= 0.002144573630332; 
-	kc[4]= 0.000737975434375; 
+	kc[1]= -0.353305987532453;
+	kc[2]= 0.224942921451107;
+	kc[3]= 0.002144573630332;
+	kc[4]= 0.000737975434375;
 	kc[5]= 0.000000000000000;
 	 */ //stare
 
@@ -184,13 +184,13 @@ vis::vis(lib::configurator &_config) : sensor(_config){
 		fc[1]=1624.23566; //751.860077541601300;
 	fc[2]=1630.87379; //757.240379484519850;
 
-	cc[1]=378.16536; //368.297088758283450; 
+	cc[1]=378.16536; //368.297088758283450;
 	cc[2]=266.82798; //275.241113833860310;
 
-	kc[1]= 0.00481; //-0.353305987532453; 
-	kc[2]= 0.47232; //0.224942921451107; 
-	kc[3]= -0.00174; //0.002144573630332; 
-	kc[4]= -0.00569; //0.000737975434375; 
+	kc[1]= 0.00481; //-0.353305987532453;
+	kc[2]= 0.47232; //0.224942921451107;
+	kc[3]= -0.00174; //0.002144573630332;
+	kc[4]= -0.00569; //0.000737975434375;
 	kc[5]= 0.000000000000000;
 
 
@@ -218,7 +218,7 @@ vis::vis(lib::configurator &_config) : sensor(_config){
 		printf("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\n");
 	}
 
-	fd = open("/dev/bttvx",O_RDWR); // bezposrednio odczyt ze sterownika zamiast konstruktora 
+	fd = open("/dev/bttvx",O_RDWR); // bezposrednio odczyt ze sterownika zamiast konstruktora
 	printf("vsp fs:%d\n",fd);
 
 	z=0;
@@ -249,7 +249,7 @@ void vis::configure_sensor (void){
 	//   printf("Sensor initiated\n");
 	sr_msg->message ("Sensor initiated"); // 7
 }
-	
+
 void vis::wait_for_event(){
 // printf("7 - wait_for_event\n");
 /*
@@ -259,10 +259,10 @@ if(interatt==0){
 	if ( (id =InterruptAttach (irq_no, int_handler, (void *) &md , sizeof(md), 0)) == -1)
 		  printf( "Unable to attach interrupt handler: \n");
 	interatt=1;
-	};
+	}
 InterruptWait (NULL, NULL);
 */
-};	
+}
 
 /*************************** inicjacja odczytu ******************************/
 void vis::initiate_reading (void){
@@ -270,22 +270,22 @@ void vis::initiate_reading (void){
 
 	if(!is_sensor_configured)
 	     throw sensor_error (lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
-	     
+
 clock_gettime( CLOCK_REALTIME , &s_time);
- 
+
  /****IPL7************/
  /*
-  start_time = clock();	
+  start_time = clock();
 */
- 
+
 	size_read = read( fd, buffer, sizeof( buffer ) ); // bezposredni odczyt zamiast przez klase
-   
+
 	lseek(fd,0,SEEK_SET);
 
 	for(int i=0; i<YMAX; i++)
 		for(int j=0; j<XMAX; j++)
 			buffer1[i*XMAX+j]=buffer[4*i*XMAX+2*j];
-			
+
 	for(int i=0; i<YMAX; i++)
 		for(int j=0; j<XMAX; j++)
    		{
@@ -319,7 +319,7 @@ clock_gettime( CLOCK_REALTIME , &s_time);
 			Gm+=Gx[j][i];
 			Bm+=Bx[j][i];
 		}
-		
+
 	Rmx=(unsigned short)(Rm/((2*WBs[0]+1)*(2*WBs[0]+1)+(2*WBs[1]+1)*(2*WBs[1]+1)+(2*WBs[2]+1)*(2*WBs[2]+1)+(2*WBs[3]+1)*(2*WBs[3]+1)));
 	Gmx=(unsigned short)(Gm/((2*WBs[0]+1)*(2*WBs[0]+1)+(2*WBs[1]+1)*(2*WBs[1]+1)+(2*WBs[2]+1)*(2*WBs[2]+1)+(2*WBs[3]+1)*(2*WBs[3]+1)));
 	Bmx=(unsigned short)(Bm/((2*WBs[0]+1)*(2*WBs[0]+1)+(2*WBs[1]+1)*(2*WBs[1]+1)+(2*WBs[2]+1)*(2*WBs[2]+1)+(2*WBs[3]+1)*(2*WBs[3]+1)));
@@ -329,11 +329,11 @@ clock_gettime( CLOCK_REALTIME , &s_time);
 	for(int i=0; i<YMAX; i++)
 		for(int j=0; j<XMAX; j++)
 		{
-	
+
 			Rnew=Rx[j][i]*Vmx/Rmx;
 			Gnew=Gx[j][i]*Vmx/Gmx;
 			Bnew=Bx[j][i]*Vmx/Bmx;
-		 
+
 			Rnew = SMIN(SMAX(Rnew,0),255);
 			Gnew = SMIN(SMAX(Gnew,0),255);
 			Bnew = SMIN(SMAX(Bnew,0),255);
@@ -343,17 +343,17 @@ clock_gettime( CLOCK_REALTIME , &s_time);
 			Bnew2=((unsigned short)Bnew&248)>>3;
 
   			buffer1[i*XMAX+j]=Rnew2 | Gnew2 | Bnew2;
-  	
+
 			}
 
 
 
-	
 
 
-	
+
+
 	//czy dobrze wstawilismy w bufor
-	
+
 	for(int i=0; i<YMAX; i++)
 		for(int j=0; j<XMAX; j++)
    		{
@@ -361,16 +361,16 @@ clock_gettime( CLOCK_REALTIME , &s_time);
 			Gx[j][i]=(buffer1[i*XMAX+j]&0x07e0)>>3;
 			Bx[j][i]=(buffer1[i*XMAX+j]&0x001f)<<3;
 		}
-	
-	
+
+
 	vision.classifyFace(buffer1);
-	
+
 	sprintf(name,"kostka%d.bmp",nr);
 
 	fp=fopen(name,"wb");
 
 	nr++;
-	
+
 	 putc(0x42, fp);
 	 putc(0x4D, fp);
 	 putc(0x36, fp);
@@ -409,27 +409,27 @@ clock_gettime( CLOCK_REALTIME , &s_time);
 	 putc(0x10, fp);
 	  putc(0x05, fp);
 	 putc(0x00, fp);
-	 
+
 	  putc(0x00, fp);
 	 putc(0x00, fp);
 	  putc(0x00, fp);
 	 putc(0x00, fp);
-	 
+
 	 putc(0x00, fp);
 	 putc(0x00, fp);
 	  putc(0x00, fp);
 	 putc(0x00, fp);
-	 
+
 	 putc(0x00, fp);
 	 putc(0x00, fp);
 	  putc(0x00, fp);
 	 putc(0x00, fp);
-	 
+
 	 putc(0x00, fp);
 	 putc(0x00, fp);
 	  putc(0x00, fp);
 	 putc(0x00, fp);
-	 
+
 	 int found=0;
 
 	for(int i=288-1; i>=0; i--)
@@ -455,7 +455,7 @@ clock_gettime( CLOCK_REALTIME , &s_time);
 				   found=1;
 				   //break;
 				 }
-				 
+
 				 if(found==0)
 				 {
 					putc(Bx[j][i], fp);
@@ -464,15 +464,15 @@ clock_gettime( CLOCK_REALTIME , &s_time);
 				  }
 				  found=0;
 			}
-			
-			
+
+
 	fclose(fp);
-	
+
 
 //recog
 /*
   vision.findBlobs(buffer);
- 
+
 vision.filterBlobsReset();
 vision.filterBlobs(BLOB_SIZE_BIGGER,200.0);
 vision.filterBlobs(BLOB_SIZE_SMALLER,10000.0);
@@ -507,17 +507,17 @@ clock_gettime( CLOCK_REALTIME , &e_time);
 //printf("VSP\n");
 //printf( "VSP= %f %f\n",(double)(e_time.tv_nsec-s_time.tv_nsec)/1000000,Tckk[1]);
 
-// printf( "FXX= %d, %f %f\n",debug,(float)(curr_time) / CLOCKS_PER_SEC, (double)(e_time.tv_nsec-s_time.tv_nsec));	  
+// printf( "FXX= %d, %f %f\n",debug,(float)(curr_time) / CLOCKS_PER_SEC, (double)(e_time.tv_nsec-s_time.tv_nsec));
 // printf( "VSP= %f %f\n",(double)(crr_time.tv_nsec), (double)(e_time.tv_nsec-s_time.tv_nsec));
 // printf(" VSP pose after filtr= %f\n", current);
 /****KONIEC IPL7**************/
-		
+
 // koniec przepisywania
 	is_reading_ready=true;							// odczyt jakikolwiek
-// InterruptEnable();	
-//    sr_msg->message ("VSP Reading initiate ok");   
-	}; // wait_for_event
-		
+// InterruptEnable();
+//    sr_msg->message ("VSP Reading initiate ok");
+	} // wait_for_event
+
 /***************************** odczyt z czujnika *****************************/
 void vis::get_reading (void){
 // printf("7 - get reading\n");
@@ -526,13 +526,13 @@ void vis::get_reading (void){
 	// jezeli chcemy jakikolwiek odczyt	-> is_reading_ready
 	// printf("7 - still reading %d\n",is_reading_ready);
 	if(!is_reading_ready)
-	     throw sensor_error (lib::FATAL_ERROR, READING_NOT_READY);   
+	     throw sensor_error (lib::FATAL_ERROR, READING_NOT_READY);
 
 	// ok
 	from_vsp.vsp_report= lib::VSP_REPLY_OK;
 	// tutaj: czujnik skalibrowany, odczyt dokonany, zapisany w "image", przepisanie wszystkich pol
 	// przepisanie do bufora komunikacyjnego
-	
+
 	// fill up frame
 	/*
 	for(int i=0; i<3; i++)
@@ -548,16 +548,16 @@ void vis::get_reading (void){
 			from_vsp.comm_image.sensor_union.camera.frame[15]=0;
 	*/
 	//fill up colors
-	
+
 	for(int i=0; i<3; i++)
 		for(int j=0; j<3; j++)
 			from_vsp.comm_image.sensor_union.cube_face.colors[3*i+j]=vision.face_colors[3*i+j];
-	
+
 	// for(int i=0; i<16; i++)
 	// 	from_vsp.comm_image.sensor_union.camera.frame[i] = 0.5;
-     // sr_msg->message ("VSP Get reading ok");   
+     // sr_msg->message ("VSP Get reading ok");
      is_reading_ready=false; // 7
-	};
+	}
 
 } // namespace sensor
 } // namespace vsp

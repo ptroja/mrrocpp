@@ -182,35 +182,35 @@ char* CubeException::ToString()
 // ERROR TEXTS AND ACCESS TO THEM
 ////////////////////////////////////////////////////////////////////////////////
 
-char* CubeException::ErrorText[] = 
+const char* CubeException::ErrorText[] = 
   {  
-	  (char*)"",  
-	  (char*)"Facelet marking does not match any center marking", 
-	  (char*)"There must be 9 facelets for each marking", 
-	  (char*)"Duplicate center marking", 
-	  (char*)"Invalid corner markings", 
-	  (char*)"Invalid corner orientation parity", 
-	  (char*)"Invalid edge markings", 
-	  (char*)"Invalid edge orientation parity", 
-	  (char*)"Invalid total permutation parity", 
-	  (char*)"Invalid face", 
-	  (char*)"Invalid facelet", 
-	  (char*)"Invalid face name", 
-	  (char*)"Parsing failed on NULL string", 
-	  (char*)"Parsing failed on too short string", 
-	  (char*)"Parsing failed on invalid face", 
-	  (char*)"Parsing failed on invalid facelet", 
-	  (char*)"Parsing failed on invalid string format", 
-	  (char*)"Parsing failed on repeated face name",
-	  (char*)"Table contains elements with too small values",
-	  (char*)"Table contains elements with too big values",
-	  (char*)"Move is not implemented on FaceletCube",
-	  (char*)"Table does not contain valid cube state",
-	  (char*)"Invalid corner parity",
-	  (char*)"Invalid edge parity",
-	  (char*)"Unequal parity of corner and edge permutation",
-	  (char*)"Invalid move name",
-	  (char*)"Invalid turn name"
+	  "",  
+	  "Facelet marking does not match any center marking", 
+	  "There must be 9 facelets for each marking", 
+	  "Duplicate center marking", 
+	  "Invalid corner markings", 
+	  "Invalid corner orientation parity", 
+	  "Invalid edge markings", 
+	  "Invalid edge orientation parity", 
+	  "Invalid total permutation parity", 
+	  "Invalid face", 
+	  "Invalid facelet", 
+	  "Invalid face name", 
+	  "Parsing failed on NULL string", 
+	  "Parsing failed on too short string", 
+	  "Parsing failed on invalid face", 
+	  "Parsing failed on invalid facelet", 
+	  "Parsing failed on invalid string format", 
+	  "Parsing failed on repeated face name",
+	  "Table contains elements with too small values",
+	  "Table contains elements with too big values",
+	  "Move is not implemented on FaceletCube",
+	  "Table does not contain valid cube state",
+	  "Invalid corner parity",
+	  "Invalid edge parity",
+	  "Unequal parity of corner and edge permutation",
+	  "Invalid move name",
+	  "Invalid turn name"
   };
 
 const char* CubeException::GetErrorText()

@@ -172,7 +172,7 @@ else printf("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 		}
 	sr_msg->message ("VSP VIS PB-ECL-SAC started");
 
-	};
+	}
 
 vis_sac::~vis_sac(void){
 	close (fd);
@@ -180,7 +180,7 @@ vis_sac::~vis_sac(void){
 
 
 	printf("Destruktor VSP\n");
-	};
+	}
 
 /**************************** inicjacja czujnika ****************************/
 void vis_sac::configure_sensor (void){
@@ -188,11 +188,11 @@ void vis_sac::configure_sensor (void){
 	is_sensor_configured=true;
 
      sr_msg->message ("Sensor initiated"); // 7
-	};
+	}
 
 void vis_sac::wait_for_event(){
 
-};
+}
 
 /*************************** inicjacja odczytu ******************************/
 void vis_sac::initiate_reading (void){
@@ -255,7 +255,7 @@ vision.setRoi(k1.roi,1000);
 	is_reading_ready=true;							// odczyt jakikolwiek
 
 
-	}; // wait_for_event
+	} // wait_for_event
 
 /***************************** odczyt z czujnika *****************************/
 void vis_sac::get_reading (void){
@@ -325,7 +325,7 @@ double aux=0;
 	// 	from_vsp.comm_image.sensor_union.camera.frame[i] = 0.5;
      // sr_msg->message ("VSP Get reading ok");
      is_reading_ready=false; // 7
-	};
+	}
 
 } // namespace sensor
 } // namespace vsp

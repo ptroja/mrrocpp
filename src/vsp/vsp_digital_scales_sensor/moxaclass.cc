@@ -29,7 +29,7 @@ void MOXADigitalScale::increment_marker(int * marker){
         (*marker)++;
     else
         *marker = 0;
-    }; // end: increment_marker
+    } // end: increment_marker
 
 /***************************** EXTRACT MESSAGE *******************************/
 void MOXADigitalScale::extract_message(void){
@@ -43,10 +43,10 @@ void MOXADigitalScale::extract_message(void){
         *(message_buffer+(message_length++)) = *(cyclic_buffer+read_marker);
         // Przesuniecie znacznika odczytu na nastepna pozycje.
         increment_marker(&read_marker);
-        };
+        }
     // Przesuniecie znacznika na nastepna wiadomosc.
     read_marker = write_marker;
-    }; // end: extract_message
+    } // end: extract_message
 
 /******************************* KONSTRUKTOR *********************************/
 MOXADigitalScale::MOXADigitalScale(short RS_number){
@@ -70,7 +70,7 @@ MOXADigitalScale::MOXADigitalScale(short RS_number){
         case 6: RS_descriptor = open ("/dev/ser8", O_RDWR); break;
         case 7: RS_descriptor = open ("/dev/ser9", O_RDWR); break;
         case 8: RS_descriptor = open ("/dev/ser10", O_RDWR); break;
-        }; // end: switch
+        } // end: switch
     // Ustawienie parameterow transmisji.
     tcgetattr(RS_descriptor, &RS232_mode);
     cfsetispeed(&RS232_mode,600);
@@ -79,13 +79,13 @@ MOXADigitalScale::MOXADigitalScale(short RS_number){
     tcsetattr(RS_descriptor, TCSANOW, &RS232_mode);
     // Usuniecie znakow z ukladu UART.
     tcflush(RS_descriptor, TCIOFLUSH);
-    }; // end: MOXADigitalScale
+    } // end: MOXADigitalScale
 
 /******************************** DESTRUCTOR *********************************/
 MOXADigitalScale::~MOXADigitalScale(void){
     // Zamkniecie deskryptora urzadzenia.
     close(RS_descriptor);
-    };
+    }
 
 /******************************* GET READING *********************************/
 void MOXADigitalScale::get_reading(void){
@@ -114,12 +114,12 @@ void MOXADigitalScale::get_reading(void){
                 throw lib::sensor::sensor_error(lib::FATAL_ERROR, CYCLIC_BUFFER_OVERFLOW);
             // Przesuniecie sie na nastepny znak w bforze RS_read_buffer.
             i++;
-            }; // end: while
+            } // end: while
         // Sprawdzenie, czy otrzymano cala wiadomosc.
         if(*(RS_read_buffer+RS_read_length-1) == '\r')
             break;
-        }; // end: while(1)
-    }; // end: get_reading
+        } // end: while(1)
+    } // end: get_reading
 
 /*********************** TRANSFORM READING TO DOUBLE *************************/
 double MOXADigitalScale::transform_reading_to_double(void){
@@ -138,7 +138,7 @@ double MOXADigitalScale::transform_reading_to_double(void){
         // Sprawdzenie, czy nie przekroczono wielkosci wiadomosci.
         if (i == message_length)
             throw lib::sensor::sensor_error(lib::FATAL_ERROR, CYCLIC_BUFFER_PARSE_ERROR);
-        }; // end: while
+        } // end: while
     // Zapamietanie znaku.
     char sign = *(message_buffer+(i++));
     // Zmienna tymczasowa - odczytana cyfra.
@@ -153,7 +153,7 @@ double MOXADigitalScale::transform_reading_to_double(void){
         // Sprawdzenie, czy nie przekroczono wielkosci wiadomosci.
         if (i == message_length)
             throw lib::sensor::sensor_error(lib::FATAL_ERROR, CYCLIC_BUFFER_PARSE_ERROR);
-        }; // end: while
+        } // end: while
     // Przesuniecie sie za przecinek.
     i++;
     // Mnoznik.
@@ -164,11 +164,11 @@ double MOXADigitalScale::transform_reading_to_double(void){
         reading +=  ((double)tmp)*fraction;
         fraction *= 0.1;
         i++;
-        };
+        }
     // Zmiana znaku odczytu.
     if( sign == '-')
         reading *= -1;
     //printf("odczyt = %f\n",reading);
     // Zwrocenie odczytu.
     return reading;
-    }; // end: transform_reading_to_double
+    } // end: transform_reading_to_double

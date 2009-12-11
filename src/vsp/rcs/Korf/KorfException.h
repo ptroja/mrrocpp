@@ -53,7 +53,7 @@ class KorfException : public Exception
   private:
 
     // Wiadomosci bledow.
-    static char *ErrorText[];
+    static const char *ErrorText[];
 
 };
 

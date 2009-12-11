@@ -8,14 +8,14 @@
 inline unsigned int max(unsigned int a,unsigned int b)
 {
   return((a > b)? a : b);
-};
+}
 
 // returns minimal value of two parameters
 
 inline unsigned int min(unsigned int a,unsigned int b)
 {
   return((a < b)? a : b);
-};
+}
 
 void RubiksCube::clear()
 {
@@ -47,12 +47,12 @@ void RubiksCube::clear()
 		tiles[i].center.y=0;
 	}
 
-};
+}
 
 void RubiksCube::close()
 {
   
-};
+}
 
 rubik_compare RubiksCube::compare(RubiksCube *k)
 {
@@ -81,7 +81,7 @@ rubik_compare RubiksCube::compare(RubiksCube *k)
 
 	return(compare);
 
-};
+}
 
 
 int RubiksCube::findTile(int nr,RubiksCube *k)
@@ -160,7 +160,7 @@ if(suspected_count==1)
 	return(suspected[0]);
 else
 	return(-1);
-};
+}
 
 bool RubiksCube::build(CMVision *vision)
 {
@@ -213,8 +213,7 @@ bool RubiksCube::build(CMVision *vision)
 	roi.center.x=(roi.x2+roi.x1)/2.0;
 	roi.center.y=(roi.y2+roi.y1)/2.0;
 	return true;
-
-};
+}
 
 
 
@@ -224,4 +223,4 @@ point_d RubiksCube::findShift(RubiksCube *k){
 	shift.y=k->roi.center.y-roi.center.y;
 
 	return(shift);
-};
+}

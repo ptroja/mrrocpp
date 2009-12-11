@@ -37,16 +37,16 @@ time::time(lib::configurator &_config) : sensor(_config){
 	is_sensor_configured=false;
 	// Nie ma zadnego gotowego odczytu.
 	is_reading_ready=false;
-}; // end: vsp_time_sensor
+} // end: vsp_time_sensor
 
 // Metoda sluzaca do konfiguracji czujnika.
 void time::configure_sensor (void){// w obecnej implementacji zeruje poziom odczytow z czujnika w EDP
    	is_sensor_configured=true;
-}; // end: configure_sensor
+} // end: configure_sensor
 
 // Metoda oczekujaca na dane, otrzymane z czujnika sily (poprzez proces EDP).
 void time::wait_for_event(void){
-}; // end: wait_for_event
+} // end: wait_for_event
 
 // Metoda dokonujaca przepisania odczytu do obrazu czujnika.
 void time::initiate_reading (void){
@@ -55,7 +55,7 @@ void time::initiate_reading (void){
 	     throw sensor_error (lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
 	// Odczyt w porzadku.
 	is_reading_ready=true;
-}; // end: initiate_reading
+} // end: initiate_reading
 
 // Metoda wysyla przepisuje dane z obrazu czujnika do bufora oraz wysyla bufor do procesu oczekujacego na odczyty.
 void time::get_reading (void){
@@ -72,7 +72,7 @@ void time::get_reading (void){
 
 	// Obacny odczyt nie jest "nowy".
 	is_reading_ready=false;
-}; // end: get_reading
+} // end: get_reading
 
 } // namespace sensor
 } // namespace vsp

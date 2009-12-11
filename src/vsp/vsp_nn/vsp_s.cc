@@ -123,14 +123,11 @@ nn::nn(lib::configurator &_config) : sensor(_config){
 	    printf("ERROR connecting");
 	    throw sensor_error (lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
 		}
-	};
+	}
 
 nn::~nn(void){
-
-
-
 	printf("Destruktor VSP\n");
-	};
+	}
 
 /**************************** inicjacja czujnika ****************************/
 void nn::configure_sensor (void){
@@ -138,11 +135,11 @@ void nn::configure_sensor (void){
 	is_sensor_configured=true;
 
      sr_msg->message ("Sensor initiated"); // 7
-	};
+	}
 
 void nn::wait_for_event(){
 
-};
+}
 
 /*************************** inicjacja odczytu ******************************/
 void nn::initiate_reading (void){
@@ -175,7 +172,7 @@ void nn::initiate_reading (void){
 // koniec przepisywania
 	is_reading_ready=true;							// odczyt jakikolwiek
 
-	}; // wait_for_event
+	} // wait_for_event
 
 /***************************** odczyt z czujnika *****************************/
 void nn::get_reading (void){
@@ -214,7 +211,7 @@ void nn::get_reading (void){
 			from_vsp.comm_image.sensor_union.camera.frame[15]=0;
 */
      is_reading_ready=false; // 7
-	};
+	}
 } // namespace sensor
 } // namespace vsp
 } // namespace mrrocpp

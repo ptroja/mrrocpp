@@ -52,11 +52,6 @@ namespace mrrocpp {
 namespace vsp {
 namespace sensor {
 
-
-#define TRUE 1
-#define FALSE 0
-
-
 // extern pid_t UI_pid;           // identyfikator procesu UI
 // extern lib::configurator* config;
 
@@ -71,8 +66,8 @@ mic::mic(lib::configurator &_config) : sensor(_config){
 
 //	unsigned long int e;			// kod bledu systemowego
 	printf("Konstruktor VSP! - SOUND\n");
-	is_sensor_configured=FALSE;	// czujnik niezainicjowany
-	is_reading_ready=FALSE;				// nie ma zadnego gotowego odczytu
+	is_sensor_configured=false;	// czujnik niezainicjowany
+	is_reading_ready=false;				// nie ma zadnego gotowego odczytu
 
 	ThreadCtl (_NTO_TCTL_IO, NULL);  // by YOYEK & 7 - nadanie odpowiednich uprawinien watkowi
 
@@ -207,7 +202,7 @@ mSamples = mSampleRate * mSampleChannels  * mSampleTime;
 	//r.LA_KLAS=4;
 	std::cout << "ROSM" << std::endl;
 	r.WczytajKlasy();
-};
+}
 
 mic::~mic(void){
 
@@ -216,14 +211,14 @@ mic::~mic(void){
     fclose (file1);
 	printf("Destruktor VSP\n");
 
-};
+}
 
 /**************************** inicjacja czujnika ****************************/
 void mic::configure_sensor (void){
 
-	is_sensor_configured=TRUE;
+	is_sensor_configured=true;
   	 sr_msg->message ("Sensor MIC initiated"); // 7
-};
+}
 
 /*
 void vsp_mic::wait_for_event(){
@@ -234,10 +229,10 @@ void vsp_mic::wait_for_event(){
 	if ( (id =InterruptAttach (irq_no, int_handler, (void *) &md , sizeof(md), 0)) == -1)
 		  printf( "Unable to attach interrupt handler: \n");
 	interatt=1;
-	};
+	}
 	InterruptWait (NULL, NULL);
 
-};
+}
 */ // useless in no-wait interactive mode
 
 /*************************** inicjacja odczytu ******************************/
@@ -350,9 +345,9 @@ void mic::initiate_reading (void){
 	 // end of listening
 
 
-	is_reading_ready=TRUE;							// odczyt jakikolwiek
+	is_reading_ready=true;							// odczyt jakikolwiek
 
-}; //wait_for_event
+} //wait_for_event
 
 /***************************** odczyt z czujnika *****************************/
 void mic::get_reading (void){
@@ -403,8 +398,8 @@ void mic::get_reading (void){
      // sr_msg->message ("VSP Get reading ok");
      is_reading_ready=false; // 7
 
-    // is_reading_ready=FALSE;
-	};
+    // is_reading_ready=false;
+	}
 } // namespace sensor
 } // namespace vsp
 } // namespace mrrocpp

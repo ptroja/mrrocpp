@@ -13,26 +13,26 @@
 inline int range_sum(int x,int w)
 {
   return(w*(2*x + w-1) / 2);
-};
+}
 
 // returns maximal value of two parameters
 inline unsigned int max(unsigned int a,unsigned int b)
 {
   return((a > b)? a : b);
-};
+}
 
 // returns minimal value of two parameters
 
 inline unsigned int min(unsigned int a,unsigned int b)
 {
   return((a < b)? a : b);
-};
+}
 
 inline unsigned int max3(unsigned int a,unsigned int b, unsigned int c)
 {
 	unsigned tmp=(a > b)? a : b;
   return((c > tmp)? c : tmp);
-};
+}
 
 // returns minimal value of two parameters
 
@@ -40,7 +40,7 @@ inline unsigned int min3(unsigned int a,unsigned int b,unsigned int c)
 {
 	unsigned tmp=(a < b)? a : b;
   return((c < tmp)? c : tmp);
-};
+}
 
 
 // returns index of least significant set bit
@@ -63,7 +63,7 @@ inline int top_bit(int n)
   if(!n) return(0);
   while(n>>i) i++;
   return(i);
-};
+}
 
 
 
@@ -109,7 +109,7 @@ void CMVision::classifyFrame(unsigned short * buffer, unsigned * map)
 	}
   }
 
-};
+}
 
 void CMVision::classifyFace(unsigned short * buffer)
 // Classifies an image passed in as img, saving bits in the entries
@@ -167,7 +167,7 @@ void CMVision::classifyFace(unsigned short * buffer)
 	 //printf("%d\n", m);
   }
   //printf("\n");
-};
+}
 
 int CMVision::encodeRuns(rle * out,unsigned * map)
 // Changes the flat array version of the threshold satisfaction map
@@ -223,7 +223,7 @@ int CMVision::encodeRuns(rle * out,unsigned * map)
   }
 
   return(j);
-};
+}
 
 void CMVision::connectComponents(rle * rmap,int num)
 // Connect components using four-connecteness so that the runs each
@@ -301,7 +301,7 @@ void CMVision::connectComponents(rle * rmap,int num)
       rmap[i].parent = rmap[p].parent;
     }
   }
-};
+}
 
 int CMVision::extractRegions(rle * rmap,int num)
 // Takes the list of runs and formats them into a region table,
@@ -390,7 +390,7 @@ int CMVision::extractRegions(rle * rmap,int num)
 
   blobs_count=n;
   return(n);
-};
+}
 
 
 //==== Interface/Public Functions ==================================//
@@ -406,7 +406,7 @@ void CMVision::clear()
 
   map = NULL;
 
-};
+}
 
 bool CMVision::countLUT()
 {
@@ -467,7 +467,7 @@ RGB2S[0xffff]=4;
 RGB2V[0xffff]=252;
 
 return 0;
-};
+}
 
 bool CMVision::initialize(int nwidth,int nheight)
 // Initializes library to work with images of specified size
@@ -494,7 +494,7 @@ bool CMVision::initialize(int nwidth,int nheight)
 // ZERO(labels);
 
   return(map != NULL);
-};
+}
 
 bool CMVision::initGrid()
 {
@@ -528,7 +528,7 @@ bool CMVision::initGrid()
 	}
 
 return 0;
-};
+}
 
 bool CMVision::initEstim(const char *filename)
 {
@@ -609,7 +609,7 @@ bool CMVision::initEstim(const char *filename)
 	fclose(pattern_fp);
 
 	return 1;
-};
+}
 
 void CMVision::freeEstim()
 {
@@ -621,7 +621,7 @@ void CMVision::freeEstim()
 	free_vector(kc);
 	free_vector(omckk);
 	free_vector(Tckk);
-};
+}
 
 // sets bits in k in array arr[l..r]
 
@@ -633,7 +633,7 @@ void set_bits(unsigned int *arr,int len,int l,int r,unsigned int k)
   r = min(r+1,len);
 
   for(i=l; i<r; i++) arr[i] |= k;
-};
+}
 
 
 void clear_bits(unsigned int *arr,int len,int l,int r,unsigned int k)
@@ -645,7 +645,7 @@ void clear_bits(unsigned int *arr,int len,int l,int r,unsigned int k)
 
   k = ~k;
   for(i=l; i<r; i++) arr[i] &= k;
-};
+}
 
 #define CMV_STATE_SCAN   0
 #define CMV_STATE_COLORS 1
@@ -748,7 +748,7 @@ bool CMVision::loadColors(const char *filename)
   fclose(in);
 
   return(true);
-};
+}
 
 
 void CMVision::close()
@@ -768,7 +768,7 @@ void CMVision::close()
 //	free_vector(cube_vector);
 // 	free_vector(cube_center);
 // 	free_vector(cube_temp);
-};
+}
 
 
 //==== Main Vision Functions =======================================//
@@ -785,7 +785,7 @@ bool CMVision::findBlobs(unsigned short * buffer)
   connectComponents(rmap,runs);
   extractRegions(rmap,runs);
   return(true);
-};
+}
 
 /*
 bool CMVision::findBlobsfilter(image_pixel *image, filter data)
@@ -805,7 +805,7 @@ bool CMVision::findBlobsfilter(image_pixel *image, filter data)
 	filterBlobs(BLOB_CIRCULARITY_SMALLER, data.circularity_max);
 	filterBlobs(NEIGHBORS, data.neighbors);
 	return true;
-};
+}
 */
 
 unsigned char CMVision::contour_point(int x, int y, unsigned int nr) //nr labels wokol ktorej szukamy krawedzi
@@ -839,7 +839,7 @@ unsigned char CMVision::contour_point(int x, int y, unsigned int nr) //nr labels
 
 			}
 			return 0;
-		};
+		}
 
 int CMVision::findContour(int blob_nr)
 		{
@@ -938,7 +938,7 @@ int CMVision::findContour(int blob_nr)
 		blobs[blob_nr].contour_length=contour.length;
 		return(contour.length);
 
-		};
+		}
 
 
 void CMVision::znajdz_najdalszy(int p1, int p2, int kwadrat_odl, unsigned char wszystkie)
@@ -1073,7 +1073,7 @@ void CMVision::znajdz_najdalszy(int p1, int p2, int kwadrat_odl, unsigned char w
 					vertices.points[vertices.count-1]=vertices.points[0];
 			}
 
-		};
+		}
 
 void CMVision::findVertices(int dokl)
 		{
@@ -1133,7 +1133,7 @@ void CMVision::findVertices(int dokl)
 					}
 					vertices.points[j] = tmp;
 				}
-			};
+			}
 int CMVision::findVertices(int dokl, int blob_nr)
 {
 
@@ -1148,7 +1148,7 @@ int CMVision::findVertices(int dokl, int blob_nr)
 
 	findVertices(dokl);
 	return(dokl);
-};
+}
 
 void CMVision::findVerticesAll(void)
 {
@@ -1165,7 +1165,7 @@ void CMVision::findVerticesAll(void)
 						blobs[filtered_blobs[i]].vertices[j].y=contour.points[vertices.points[j]].y;
 					}
 				}
-};
+}
 
 
 void CMVision::filterBlobsReset(void)
@@ -1186,7 +1186,7 @@ void CMVision::filterBlobsReset(void)
 	for(unsigned int i=0;i<blobs_count;i++)
 		filtered_blobs[i]=i;
 	filtered_blobs_count=blobs_count;
-};
+}
 bool CMVision::filterBlobs(int filter, double value)
 {
 	/*	Funkcja dokonuje filtracji wektora numerow blobow (ktore nas interesuja) filtered_blobs
@@ -1319,7 +1319,7 @@ bool CMVision::filterBlobs(int filter, double value)
 
 	}
 return true;
-};
+}
 
 
 
@@ -1336,7 +1336,7 @@ void CMVision::setRoi(roi_rubik r, int m){
 	if(roi.y2>height-1) roi.y2=height-1;
 
 
-};
+}
 
 
 bool CMVision::estimPose()
@@ -1349,7 +1349,7 @@ bool CMVision::estimPose()
 
 
 	return 1;
-};
+}
 
 bool CMVision::objectClass()
 {
@@ -1395,7 +1395,7 @@ bool CMVision::objectClass()
 	endeffector_meany/=endeffector_blobs_count;
 
 
-};
+}
 
 bool CMVision::estimPose2(int is_effector, double meanx, double meany, double &matched_Z, int &matched_pattern, point_d &ff1, point_d &ff2, point_d &ff3, point_d &ff4)
 {
@@ -1749,7 +1749,7 @@ cout<<"E_T_G "<<endl<<E_Tx_G<<endl;
 cout<<"E_T_G__O "<<endl<<E_Tx_G__O<<endl;
 */
 
-};
+}
 
 bool CMVision::estimPose4()
 {
@@ -1765,7 +1765,7 @@ bool CMVision::estimPose4()
 
 	estimPose();
 
-};
+}
 
 bool CMVision::estimError()
 {
@@ -1789,4 +1789,4 @@ bool CMVision::estimError()
 	C_eps_EG[0]=880*(error_f1.y+error_f2.y+error_f3.y+error_f4.y)/(4*fc[2]);
 
 	//cout << "XY: " << C_eps_EG[0] <<"  "<< C_eps_EG[1] << endl;
-};
+}

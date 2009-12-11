@@ -38,24 +38,24 @@ Exception* KociembaException::Clone()
 // ERROR TEXTS AND ACCESS TO THEM
 ////////////////////////////////////////////////////////////////////////////////
 
-char* KociembaException::ErrorText[] = 
+const char* KociembaException::ErrorText[] = 
   {  
-	  (char*)"",
-	  (char*)"Phase 2 cube is invalid.",
-	  (char*)"Move is not allowed on phase 2 cube.",
-	  (char*)"Invalid coordinate number for Kociemba Cube move table.",
-	  (char*)"Invalid coordinate numbers for Kociemba Cube prunung table.",
-	  (char*)"Solver accepts only CubieCube or KociembaPhase1Cube as input.",
-	  (char*)"Solver accepts only CubieCube or KociembaPhase2Cube as input.",
-	  (char*)"Solver accepts only CubieCube, KociembaPhase1Cube or KociembaPhase2Cube as input.",
-	  (char*)"Next solution can be found only for not optimal solutions.",
-	  (char*)"Solution parsing failed on invalid string format", 
-	  (char*)"Solution parsing failed on invalid move in phase1", 
-	  (char*)"Solution parsing failed on invalid turn in phase1", 
-	  (char*)"Solution parsing failed on invalid string format in phase1", 
-	  (char*)"Solution parsing failed on invalid move in phase2", 
-	  (char*)"Solution parsing failed on invalid turn in phase2", 
-	  (char*)"Solution parsing failed on invalid string format in phase2", 
+	  "",
+	  "Phase 2 cube is invalid.",
+	  "Move is not allowed on phase 2 cube.",
+	  "Invalid coordinate number for Kociemba Cube move table.",
+	  "Invalid coordinate numbers for Kociemba Cube prunung table.",
+	  "Solver accepts only CubieCube or KociembaPhase1Cube as input.",
+	  "Solver accepts only CubieCube or KociembaPhase2Cube as input.",
+	  "Solver accepts only CubieCube, KociembaPhase1Cube or KociembaPhase2Cube as input.",
+	  "Next solution can be found only for not optimal solutions.",
+	  "Solution parsing failed on invalid string format", 
+	  "Solution parsing failed on invalid move in phase1", 
+	  "Solution parsing failed on invalid turn in phase1", 
+	  "Solution parsing failed on invalid string format in phase1", 
+	  "Solution parsing failed on invalid move in phase2", 
+	  "Solution parsing failed on invalid turn in phase2", 
+	  "Solution parsing failed on invalid string format in phase2", 
   };
 
 const char* KociembaException::GetErrorText()
