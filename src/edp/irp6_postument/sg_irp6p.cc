@@ -77,6 +77,14 @@ uint8_t servo_buffer::Move_a_step (void)
 servo_buffer::servo_buffer ( effector &_master) : common::servo_buffer(_master), master(_master)
 {
 
+
+}
+/*-----------------------------------------------------------------------*/
+
+
+void servo_buffer::load_hardware_interface (void)
+{
+
 	// tablica pradow maksymalnych dla poszczegolnych osi
 	int max_current [IRP6_POSTUMENT_NUM_OF_SERVOS] = {
 			IRP6_POSTUMENT_AXIS_1_MAX_CURRENT, IRP6_POSTUMENT_AXIS_2_MAX_CURRENT,
@@ -85,7 +93,7 @@ servo_buffer::servo_buffer ( effector &_master) : common::servo_buffer(_master),
 			IRP6_POSTUMENT_AXIS_7_MAX_CURRENT
 	};
 
-	hi = new hardware_interface(_master, IRQ_REAL, INT_FREC_DIVIDER, HI_RYDZ_INTR_TIMEOUT_HIGH, FIRST_SERVO_PTR,
+	hi = new hardware_interface(master, IRQ_REAL, INT_FREC_DIVIDER, HI_RYDZ_INTR_TIMEOUT_HIGH, FIRST_SERVO_PTR,
 			INTERRUPT_GENERATOR_SERVO_PTR, ISA_CARD_OFFSET, max_current);
 
 	// utworzenie tablicy regulatorow
@@ -121,8 +129,10 @@ servo_buffer::servo_buffer ( effector &_master) : common::servo_buffer(_master),
 
 		command.parameters.move.abs_position[j]=0.0;
 	}
+
 }
-/*-----------------------------------------------------------------------*/
+
+
 
 /*-----------------------------------------------------------------------*/
 /*

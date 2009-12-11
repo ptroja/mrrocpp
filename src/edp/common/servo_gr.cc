@@ -36,6 +36,8 @@ void * servo_buffer::servo_thread(void* arg)
 	// servo buffer has to be created before servo thread starts
 //	std::auto_ptr<servo_buffer> sb(return_created_servo_buffer()); // bufor do komunikacji z EDP_MASTER
 
+	load_hardware_interface();
+
     lib::set_thread_priority(pthread_self(), MAX_PRIORITY+2);
 
     // signal master thread to continue executing
@@ -142,6 +144,10 @@ uint64_t servo_buffer::compute_all_set_values (void)
 {
     return 0;
 }
+
+void servo_buffer::load_hardware_interface (void)
+{}
+
 
 
 /*-----------------------------------------------------------------------*/

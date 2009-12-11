@@ -262,11 +262,10 @@ public:
     void *servo_thread(void* arg);
 
     manip_and_conv_effector &master;
-
     // input_buffer
     lib::SERVO_COMMAND command_type(void);
     // by Yoyek & 7 -  typ returna na lib::SERVO_COMMAND
-
+    virtual void load_hardware_interface (void);
     // output_buffer
     virtual void get_all_positions (void);
     //servo_buffer ();             // konstruktor
