@@ -60,7 +60,10 @@ ATI3084_force::ATI3084_force(common::irp6s_postument_track_effector &_master) :
   boost::ref(sendBiasController)))),
   getForceReadingClosure_(NewPermanentFunctorCallback(boost::bind(&ATI3084_force::handleGetGenForceReading, this,
   boost::ref(getForceReadingController)))),
-  FORCE_TEST_MODE(true) {
+  FORCE_TEST_MODE(true) {}
+
+void ATI3084_force::connect_to_hardware (void)
+{
 	getForceReadingController.setTimeout(boost::posix_time::milliseconds(1));
 	sendBiasController.setTimeout(boost::posix_time::milliseconds(1));
     std::cout << "ATI3084MS -> Start!" << std::endl;
@@ -74,7 +77,10 @@ ATI3084_force::ATI3084_force(common::irp6s_postument_track_effector &_master) :
 	}
 	master.registerReaderStartedCallback(boost::bind(&ATI3084_force::onReaderStarted, this));
 	master.registerReaderStoppedCallback(boost::bind(&ATI3084_force::onReaderStopped, this));
+
 }
+
+
 
 ATI3084_force::~ATI3084_force(void)
 {

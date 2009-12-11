@@ -263,7 +263,9 @@ void irp6s_postument_track_effector::create_threads()
 	{
 
 		vs = sensor::return_created_edp_force_sensor(*this); //!< czujnik wirtualny
+
 		edp_vsp_obj = new edp_vsp(*this); //!< czujnik wirtualny
+
 
 		// byY - utworzenie watku pomiarow sily
 		if (pthread_create(&force_tid, NULL, &vs->thread_start, (void *) vs))

@@ -99,6 +99,12 @@ const struct sigevent *isr_handler(void *area, int id)
 ATI6284_force::ATI6284_force(common::irp6s_postument_track_effector &_master) :
 	force(_master)
 {
+
+}
+
+
+void ATI6284_force::connect_to_hardware (void)
+{
 	// unsigned  uCount;  //!< Count index
 	// unsigned  uStatus; //!< Flag to indicate FIFO not empty
 	if (!(master.test_mode)) {
@@ -186,7 +192,9 @@ ATI6284_force::ATI6284_force(common::irp6s_postument_track_effector &_master) :
 			perror("Unable to attach szafa interrupt handler: ");
 		}
 	}
+
 }
+
 
 // // // // // // // // // // // // // // /   odlaczenie czujnika // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////
 

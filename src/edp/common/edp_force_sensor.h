@@ -41,6 +41,7 @@ namespace sensor {
         bool first_configure_done;
         int	set_command_execution_finish() ;
         int	check_for_command_execution_finish();
+        virtual void connect_to_hardware (void);
 
         double next_force_tool_position[3];
         double next_force_tool_weight;

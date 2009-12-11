@@ -28,6 +28,7 @@ private:
 	float sBias[6];        //!<  tablica Bias
 
 public:
+	void connect_to_hardware (void);
 	short int id;
 	short int irq_no;
 	short int szafa_id;

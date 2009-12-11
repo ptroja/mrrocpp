@@ -137,124 +137,133 @@ const struct sigevent * schunk_int_handler(void *arg, int sint_id)
 ATI3084_force::ATI3084_force(common::irp6s_postument_track_effector &_master) :
 	force(_master)
 {
-	if (!(master.test_mode)) {
-		// 	printf("Konstruktor VSP!\n");
 
-		ThreadCtl(_NTO_TCTL_IO, NULL); // nadanie odpowiednich uprawnien watkowi
-		// 	printf("KONTRUKTOR EDP_S POCATEK\n");
-
-		// ZMIENNE POMOCNICZE
-		int_timeout=new(uint64_t);
-		*int_timeout=SCHUNK_INTR_TIMEOUT_HIGH;// by Y
-
-		tim_event.sigev_notify = SIGEV_UNBLOCK;// by Y
-
-		// PODLACZENIE DO PCI, INICJACJA KARTY ADVANTECH I OBSLUGI PRZERWANIA
-
-		phdl = pci_attach( 0);
-		if (phdl == -1) {
-			fprintf( stderr, "Unable to initialize PCI\n");
-
-			// 	return EXIT_FAILURE;
-		}
-		// 	printf("po pci_attach_device\n");
-		delay(100);
-		/* Initialize the pci_dev_info structure */
-		memset( &info, 0, sizeof(info ));
-		pidx = 0x0;
-		info.VendorId = 0x13fe;
-		info.DeviceId = 0x1751;
-
-		hdl = pci_attach_device( NULL, PCI_INIT_ALL, pidx, &info);
-		if (hdl == NULL) {
-			fprintf( stderr, "Unable to locate Advantech 1751\n");
-		} else {
-			// 	printf("connected to Advantech 1751\n");
-			delay(100);
-			// printf("Przerwanie numer: %d\n",info.Irq);
-			base_io_adress = mmap_device_io(info.BaseAddressSize[2], PCI_IO_ADDR(info.CpuBaseAddress[2]));
-			// 	printf("base: %d\n",base_io_adress);
-
-			initiate_registers();// konfiguracja karty
-
-			memset(&sevent, 0, sizeof(sevent));// obsluga przerwania
-			sevent.sigev_notify = SIGEV_INTR;
-
-			mds.intr_mode=0; // obsluga przerwania ustawiona na odbior pojedynczych slow
-			mds.byte_counter=0;
-			mds.is_received=0;
-
-			if ( (sint_id =InterruptAttach(info.Irq, schunk_int_handler, (void *) &mds , sizeof(mds), 0)) == -1)
-				printf("Unable to attach interrupt handler: \n");
-		}
-
-		// USTAWIENIE ZLACZA SZEREGOWEGO
-
-		switch (COM_NR) {
-			case 1:
-				LSREG=0x3FD; /* Line Status Register */
-				LCREG=0x3FB; /* Line Control Register */
-				IEREG=0x3F9; /* Interrupt Enable Register */
-				MCREG=0x3FC; /* Modem Control Register */
-				TxBUF=0x3F8; /* Transmit Buffer */
-				RxBUF=0x3F8; /* Receive Buffer */
-				DIVLSB=0x3F8; /* Divisor Least Sign. Byte */
-				DIVMSB=0x3F9; /* Divisor Most Sign. Byte */
-				FCREG=0x3FA; /* FIFO Control Register */
-				INT_NUM=4;
-				NOT_IRQ=0xEF; /* IRQ4 */
-				break;
-			case 2:
-				LSREG=0x2FD;
-				LCREG=0x2FB;
-				IEREG=0x2F9;
-				MCREG=0x2FC;
-				TxBUF=0x2F8;
-				RxBUF=0x2F8;
-				DIVLSB=0x2F8;
-				DIVMSB=0x2F9;
-				FCREG=0x2FA; /* FIFO Control Register */
-				INT_NUM=3;
-				NOT_IRQ=0xF7; /* IRQ3 */
-				break;
-		}
-
-		spinlock=new(intrspin_t);
-		memset(spinlock, 0, sizeof( *spinlock ));
-		InterruptLock(spinlock );
-		//InterruptEnable();
-
-		out8(LCREG, 0x80); /* DLAB=1 */
-		delay( 1);
-		// out8 ( DIVLSB, 12 );	/* divisor=12, speed=9600 bytes/sec */
-		// out8 ( DIVLSB, 6 );	/* divisor=6, speed=18200 bytes/sec */
-		out8(DIVLSB, 3); /* divisor=3, speed=38400 bytes/sec */
-		delay( 1);
-		out8(DIVMSB, 0);
-		delay( 1);
-		out8(LCREG, 3); /* DLAB=0, 8 bits, 1 stop bit, NoParity */
-		delay( 1);
-
-		while ( (in8(LSREG)) & 0x01)
-			(void)in8(RxBUF); /* initial reading from Receiver Buffer */
-
-		delay( 1);
-		out8(IEREG, 0x01); /* enable Data Available Interrupt */
-		delay( 1);
-		out8(MCREG, 0x08); /* enable interrupts */
-		delay( 1);
-		out8( PICMASK, in8 ( PICMASK ) & NOT_IRQ); /* interrupt number INT_NUM is unmasked */
-		delay( 1);
-		out8(FCREG, 0x81); /*program fifo*/
-		delay( 1);
-		InterruptUnlock(spinlock );
-		//y_InterruptUnlock(spinlock);
-		//InterruptDisable();
-		/* interrupts are enabled */
-
-		do_init(); // komunikacja wstepna
-	}
 }
+
+void ATI3084_force::connect_to_hardware (void)
+{
+	if (!(master.test_mode)) {
+			// 	printf("Konstruktor VSP!\n");
+
+			ThreadCtl(_NTO_TCTL_IO, NULL); // nadanie odpowiednich uprawnien watkowi
+			// 	printf("KONTRUKTOR EDP_S POCATEK\n");
+
+			// ZMIENNE POMOCNICZE
+			int_timeout=new(uint64_t);
+			*int_timeout=SCHUNK_INTR_TIMEOUT_HIGH;// by Y
+
+			tim_event.sigev_notify = SIGEV_UNBLOCK;// by Y
+
+			// PODLACZENIE DO PCI, INICJACJA KARTY ADVANTECH I OBSLUGI PRZERWANIA
+
+			phdl = pci_attach( 0);
+			if (phdl == -1) {
+				fprintf( stderr, "Unable to initialize PCI\n");
+
+				// 	return EXIT_FAILURE;
+			}
+			// 	printf("po pci_attach_device\n");
+			delay(100);
+			/* Initialize the pci_dev_info structure */
+			memset( &info, 0, sizeof(info ));
+			pidx = 0x0;
+			info.VendorId = 0x13fe;
+			info.DeviceId = 0x1751;
+
+			hdl = pci_attach_device( NULL, PCI_INIT_ALL, pidx, &info);
+			if (hdl == NULL) {
+				fprintf( stderr, "Unable to locate Advantech 1751\n");
+			} else {
+				// 	printf("connected to Advantech 1751\n");
+				delay(100);
+				// printf("Przerwanie numer: %d\n",info.Irq);
+				base_io_adress = mmap_device_io(info.BaseAddressSize[2], PCI_IO_ADDR(info.CpuBaseAddress[2]));
+				// 	printf("base: %d\n",base_io_adress);
+
+				initiate_registers();// konfiguracja karty
+
+				memset(&sevent, 0, sizeof(sevent));// obsluga przerwania
+				sevent.sigev_notify = SIGEV_INTR;
+
+				mds.intr_mode=0; // obsluga przerwania ustawiona na odbior pojedynczych slow
+				mds.byte_counter=0;
+				mds.is_received=0;
+
+				if ( (sint_id =InterruptAttach(info.Irq, schunk_int_handler, (void *) &mds , sizeof(mds), 0)) == -1)
+					printf("Unable to attach interrupt handler: \n");
+			}
+
+			// USTAWIENIE ZLACZA SZEREGOWEGO
+
+			switch (COM_NR) {
+				case 1:
+					LSREG=0x3FD; /* Line Status Register */
+					LCREG=0x3FB; /* Line Control Register */
+					IEREG=0x3F9; /* Interrupt Enable Register */
+					MCREG=0x3FC; /* Modem Control Register */
+					TxBUF=0x3F8; /* Transmit Buffer */
+					RxBUF=0x3F8; /* Receive Buffer */
+					DIVLSB=0x3F8; /* Divisor Least Sign. Byte */
+					DIVMSB=0x3F9; /* Divisor Most Sign. Byte */
+					FCREG=0x3FA; /* FIFO Control Register */
+					INT_NUM=4;
+					NOT_IRQ=0xEF; /* IRQ4 */
+					break;
+				case 2:
+					LSREG=0x2FD;
+					LCREG=0x2FB;
+					IEREG=0x2F9;
+					MCREG=0x2FC;
+					TxBUF=0x2F8;
+					RxBUF=0x2F8;
+					DIVLSB=0x2F8;
+					DIVMSB=0x2F9;
+					FCREG=0x2FA; /* FIFO Control Register */
+					INT_NUM=3;
+					NOT_IRQ=0xF7; /* IRQ3 */
+					break;
+			}
+
+			spinlock=new(intrspin_t);
+			memset(spinlock, 0, sizeof( *spinlock ));
+			InterruptLock(spinlock );
+			//InterruptEnable();
+
+			out8(LCREG, 0x80); /* DLAB=1 */
+			delay( 1);
+			// out8 ( DIVLSB, 12 );	/* divisor=12, speed=9600 bytes/sec */
+			// out8 ( DIVLSB, 6 );	/* divisor=6, speed=18200 bytes/sec */
+			out8(DIVLSB, 3); /* divisor=3, speed=38400 bytes/sec */
+			delay( 1);
+			out8(DIVMSB, 0);
+			delay( 1);
+			out8(LCREG, 3); /* DLAB=0, 8 bits, 1 stop bit, NoParity */
+			delay( 1);
+
+			while ( (in8(LSREG)) & 0x01)
+				(void)in8(RxBUF); /* initial reading from Receiver Buffer */
+
+			delay( 1);
+			out8(IEREG, 0x01); /* enable Data Available Interrupt */
+			delay( 1);
+			out8(MCREG, 0x08); /* enable interrupts */
+			delay( 1);
+			out8( PICMASK, in8 ( PICMASK ) & NOT_IRQ); /* interrupt number INT_NUM is unmasked */
+			delay( 1);
+			out8(FCREG, 0x81); /*program fifo*/
+			delay( 1);
+			InterruptUnlock(spinlock );
+			//y_InterruptUnlock(spinlock);
+			//InterruptDisable();
+			/* interrupts are enabled */
+
+			do_init(); // komunikacja wstepna
+		}
+
+
+}
+
+
 
 ATI3084_force::~ATI3084_force(void)
 {

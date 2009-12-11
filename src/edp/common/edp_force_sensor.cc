@@ -33,7 +33,7 @@ void * force::thread_main_loop(void *arg)
 #if !defined(USE_MESSIP_SRR)
 	lib::set_thread_priority(pthread_self() , MAX_PRIORITY-1);
 
-
+	connect_to_hardware();
 
 	sem_post(&(master.force_master_sem));
 
@@ -153,7 +153,8 @@ void * force::thread_main_loop(void *arg)
 	return NULL;
 } //!< end MAIN
 
-
+void force::connect_to_hardware (void)
+{}
 
 force::force(common::irp6s_postument_track_effector &_master)
         : new_edp_command(false), master(_master)

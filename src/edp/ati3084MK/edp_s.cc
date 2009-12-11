@@ -73,6 +73,11 @@ struct timespec start[9];
 ATI3084_force::ATI3084_force(common::irp6s_postument_track_effector &_master) :
 	force(_master)
 	{
+
+	}
+
+void ATI3084_force::connect_to_hardware (void)
+{
 	if (!(master.test_mode)) {
 	//	 	printf("Konstruktor VSP!\n");
 
@@ -86,7 +91,8 @@ ATI3084_force::ATI3084_force(common::irp6s_postument_track_effector &_master) :
 
 		sendBias(uart);
 	}
-	}
+
+}
 
 
 ATI3084_force::~ATI3084_force(void)

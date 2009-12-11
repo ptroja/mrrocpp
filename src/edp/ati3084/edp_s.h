@@ -160,6 +160,8 @@ private:
 
 public:
 
+	void connect_to_hardware (void);
+
 	ATI3084_force(common::irp6s_postument_track_effector &_master);
 	virtual ~ATI3084_force();
 
