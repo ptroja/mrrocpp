@@ -8,8 +8,7 @@ BINARIES = 			ecp_jarosz_irp6p\
 				ecp_dung\
 				ecp_irp6p_pouring\
 				ecp_legobrick_irp6p\
-				ecp_test_irp6p\
-				ecp_t_kcz_force
+				ecp_test_irp6p
 
 #-----------------------------------------------------------------------------------------------------------------------#
 # Should be modified only by developers not by users
@@ -46,10 +45,7 @@ ecp_dung: ecp_t_dung.o ecp_g_dung.o $(SHOBJ)
 ecp_irp6p_pouring: ecp_t_pouring_irp6p.o ../common/ecp_st_go.o ../common/ecp_g_smooth.o ../common/ecp_generator_t.o ../common/ecp_g_jarosz.o \
 	../common/ecp_operator_reaction_condition.o $(ECP_MPDIR)/ecp_mp_s_schunk.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
-	
-ecp_t_kcz_force: ecp_t_kcz_force.o ../common/ecp_st_go.o ../common/ecp_g_force.o ../common/ecp_generator_t.o ../common/ecp_g_jarosz.o \
-	../common/ecp_operator_reaction_condition.o $(ECP_MPDIR)/ecp_mp_s_schunk.o $(SHOBJ)
-	$(LD) $(LDFLAGS) -o $@ $^ 	
+		
 
 #-----------------------------------------------------------------------------------------------------------------------#
 # e.g:

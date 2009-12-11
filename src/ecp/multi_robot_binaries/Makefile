@@ -18,7 +18,9 @@ BINARIES = ecp_tran \
 	ecp_visioncoordinates \
 	ecp_eihcalibration \
 	ecp_mam \
-	ecp_fsautomat
+	ecp_fsautomat \
+	ecp_t_kcz_force
+	
 
 #-----------------------------------------------------------------------------------------------------------------------#
 # Should be modified only by developers not by users
@@ -215,6 +217,21 @@ ecp_eihcalibration: \
 		../common/ecp_g_force.o \
 		../common/ecp_operator_reaction_condition.o \
 		$(ECP_MPDIR)/ecp_mp_s_cvfradia.o \
+		$(SHOBJ)
+	$(LD) $(LDFLAGS) -o $@ $^ 
+	
+ecp_t_kcz_force: \
+		../irp6_on_track/ecp_r_irp6ot.o \
+		../irp6_postument/ecp_r_irp6p.o \
+		../common/ecp_t_kcz_force.o \
+		../common/ecp_g_smooth.o \
+		../common/ecp_g_smooth2.o \
+		../common/ecp_g_jarosz.o \
+		../common/ecp_g_force.o \
+		../common/ecp_operator_reaction_condition.o \
+		$(ECP_MPDIR)/ecp_mp_s_cvfradia.o \
+		$(ECP_MPDIR)/birdclient.o \
+		$(ECP_MPDIR)/ecp_mp_s_pcbird.o \
 		$(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 

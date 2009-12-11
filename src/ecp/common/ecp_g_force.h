@@ -315,6 +315,22 @@ public:
 
 }; // end : class ecp_eih_nose_run_generator
 
+// --------------------------------------------------------------------------
+// Generator trajektorii dla zadania kalibracji ukladu eih.
+// Rozni sie od tff_nose_run tym ze zatrzymuje sie po chwili i trzeba go uzywac w petli
+
+class pcbird_nose_run : public tff_nose_run
+{
+	int count;
+
+public:
+    // konstruktor
+	pcbird_nose_run(common::task::task& _ecp_task, int step=0);
+
+    virtual bool first_step ();
+    virtual bool next_step ();
+
+}; // end : class ecp_eih_nose_run_generator
 
 // --------------------------------------------------------------------------
 // Generator trajektorii dla spots_recognition

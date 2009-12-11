@@ -7,13 +7,13 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace irp6p {
+namespace common {
 namespace task {
 
 class kcz_force: public common::task::task {
 
   protected:
-	  common::generator::tff_nose_run* nose_run;
+	  common::generator::pcbird_nose_run* nose_run;
 
   public:
 	  kcz_force(lib::configurator &_config);
@@ -22,7 +22,7 @@ class kcz_force: public common::task::task {
 };
 
 }
-} // namespace irp6p
+} // namespace common
 } // namespace ecp
 } // namespace mrrocpp
 
