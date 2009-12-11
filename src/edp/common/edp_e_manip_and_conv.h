@@ -32,12 +32,16 @@
 
 namespace mrrocpp {
 namespace edp {
+namespace sensor {
+class force;
+}
 namespace common {
 
 class manip_trans_t;
 class in_out_buffer;
 class vis_server;
 class servo_buffer;
+
 
 
 // base class for EDP robots with manipulators and conveyor
@@ -202,6 +206,7 @@ public:
     manip_trans_t *mt_tt_obj;
     servo_buffer* sb;
     vis_server* vis_obj;
+	sensor::force *vs;
 
     manip_and_conv_effector (lib::configurator &_config, lib::robot_name_t l_robot_name);       // konstruktor
     virtual ~manip_and_conv_effector();

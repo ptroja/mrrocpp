@@ -34,8 +34,6 @@ public:
 
     vis_server(manip_and_conv_effector &_master);
     ~vis_server();
-
-
 };
 
 

@@ -58,8 +58,6 @@ protected:
 
 public:
 
-    sensor::force *vs;
-
     static void *edp_vsp_thread_start(void* arg);
     void *edp_vsp_thread(void* arg);
     static void *force_thread_start(void* arg);

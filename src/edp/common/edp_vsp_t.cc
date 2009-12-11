@@ -150,7 +150,7 @@ void * irp6s_postument_track_effector::force_thread(void *arg)
 #if !defined(USE_MESSIP_SRR)
 	lib::set_thread_priority(pthread_self() , MAX_PRIORITY-1);
 
-	vs = sensor::return_created_edp_force_sensor(*this); //!< czujnik wirtualny
+
 
 	sem_post(&force_master_sem);
 
