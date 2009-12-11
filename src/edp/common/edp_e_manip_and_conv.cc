@@ -129,7 +129,7 @@ void manip_and_conv_effector::create_threads ()
 	rb_obj = new reader_buffer(*this);
 	mt_tt_obj = new manip_trans_t(*this);
 	in_out_obj = new in_out_buffer();
-	vs = new vis_server(*this);
+	vis_obj = new vis_server(*this);
 	sb = return_created_servo_buffer();
 
     // Y&W - utworzenie watku serwa
@@ -163,7 +163,7 @@ void manip_and_conv_effector::create_threads ()
     }
 
     // PT - utworzenie watku wizualizacji
-    if (pthread_create (&vis_t_tid, NULL, &vs->thread_start, (void *) vs))
+    if (pthread_create (&vis_t_tid, NULL, &vis_obj->thread_start, (void *) vis_obj))
     {
         msg->message(lib::SYSTEM_ERROR, errno, "EDP: Failed to create VISUALISATION thread");
         throw System_error();

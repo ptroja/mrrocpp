@@ -390,7 +390,7 @@ void effector::create_threads ()
 {
 
 	rb_obj = new common::reader_buffer(*this);
-	vs = new common::vis_server(*this);
+	vis_obj = new common::vis_server(*this);
 
     // Y&W - utworzenie watku readera
     if (pthread_create (&rb_obj->reader_tid, NULL, &rb_obj->reader_thread_start, (void *) rb_obj))
@@ -400,7 +400,7 @@ void effector::create_threads ()
     }
 
     // PT - utworzenie watku wizualizacji
-    if (pthread_create (&vis_t_tid, NULL, &vs->thread_start, (void *) vs))
+    if (pthread_create (&vis_t_tid, NULL, &vis_obj->thread_start, (void *) vis_obj))
     {
         msg->message(lib::SYSTEM_ERROR, errno, "EDP: Failed to create VISUALISATION thread");
         throw common::System_error();
