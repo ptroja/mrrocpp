@@ -21,7 +21,10 @@
 #include "ecp/common/ecp_generator_t.h"
 #include "ecp_mp/ecp_mp_s_cvfradia.h"
 #include "ecp/common/ecp_g_force.h"
+#include "ecp/common/ecp_t_acquisition.h"
 #include "ecp/common/ecp_g_eihcalibration.h"
+#include "gsl/gsl_vector.h"
+#include "gsl/gsl_matrix.h"
 
 #define POSTUMENT 0
 #define TRACK 1
@@ -31,13 +34,32 @@ namespace ecp {
 namespace common {
 namespace task {
 
-/*
+struct objective_function_parameters
+{
+	// rotation matrix (from robot base to tool frame) - received from MRROC
+	gsl_matrix *K;
+	// rotation matrix (from chessboard base to camera frame)
+	gsl_matrix *M;
+	// translation vector (from robot base to tool frame) - received from MRROC
+	gsl_vector *k;
+	// translation vector (from chessboard base to camera frame)
+	gsl_vector *m;
+	// how many measurements were taken
+	int number_of_measures;
+	// coefficient to equalize rotation and translation parts in overall sum (proposed range: 300 - 2000)
+	double magical_c;
+};
+
+
 class eihacquisition: public common::task::acquisition {
-	std::string smooth_path;
-	int delay_ms, robot, M;
-	double A, C, D, E;
+	private:
+		std::string smooth_path;
+		int delay_ms, robot, M;
+		double A, C, D, E;
+		bool calibrated;
 
 	protected:
+		int write_data(void);
 		// generator do wodzenia za nos
 		generator::eih_nose_run* nose;
 		// generator smooth2
@@ -49,8 +71,12 @@ class eihacquisition: public common::task::acquisition {
 		eihacquisition(lib::configurator &_config);
 
 		void main_task_algorithm(void);
+
+		bool store_data(void);
+
+		objective_function_parameters ofp;
 };
-*/
+
 }
 } // namespace common
 } // namespace ecp

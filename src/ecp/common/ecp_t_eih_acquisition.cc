@@ -9,7 +9,7 @@ namespace mrrocpp {
 namespace ecp {
 namespace common {
 namespace task {
-/*
+
 //Constructors
 eihacquisition::eihacquisition(lib::configurator &_config) : acquisition(_config)
 {
@@ -34,6 +34,7 @@ eihacquisition::eihacquisition(lib::configurator &_config) : acquisition(_config
     C = config.return_double_value("C");
     D = config.return_double_value("D");
     E = config.return_double_value("E");
+    calibrated = false;
 
 	smooth2gen = new generator::smooth2(*this, true);
 
@@ -47,6 +48,15 @@ eihacquisition::eihacquisition(lib::configurator &_config) : acquisition(_config
 	generator->sensor_m = sensor_m;
 
 	sr_ecp_msg->message("ECP loaded eihacquisition");
+	ofp.number_of_measures = config.return_int_value("measures_count");
+	// translation vector (from robot base to tool frame) - received from MRROC
+	ofp.k = gsl_vector_calloc (3*ofp.number_of_measures);
+	// rotation matrix (from robot base to tool frame) - received from MRROC
+	ofp.K = gsl_matrix_calloc (3*ofp.number_of_measures, 3);
+	// translation vector (from chessboard base to camera frame)
+	ofp.m = gsl_vector_calloc (3*ofp.number_of_measures);
+	// rotation matrix (from chessboard base to camera frame)
+	ofp.M = gsl_matrix_calloc (3*ofp.number_of_measures, 3);
 }
 
 void eihacquisition::main_task_algorithm(void ){
@@ -76,6 +86,7 @@ void eihacquisition::main_task_algorithm(void ){
 		sensor_m[lib::SENSOR_CVFRADIA]->get_reading();
 		nose->Move();
 		generator->Move();
+		store_data();
 	}
 	nose->Move();
 
@@ -84,17 +95,20 @@ void eihacquisition::main_task_algorithm(void ){
 	// maximum velocity and acceleration of smooth2 generator
 	double vv[MAX_SERVOS_NR]={0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3};
 	double aa[MAX_SERVOS_NR]={1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
-	double coordinates[MAX_SERVOS_NR]={0.0, 0.0, -1.0 * A, 0.0, 0.0, 0.0, 0.0, 0.0};
+	//double coordinates[MAX_SERVOS_NR]={0.0, 0.0, -1.0 * A, 0.0, 0.0, 0.0, 0.0, 0.0};
 	smooth2gen->set_relative();
 
+//	std::cout<<sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.chessboard.found<<std::endl;
+
 	//opusc chwytak az przestanie "widziec" szachownice
-	while(sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.chessboard.found == true){
+	while(sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.chessboard.found == true && !calibrated){
 		//opuszczenie chwytaka o 2.5 cm
 		smooth2gen->load_coordinates(lib::XYZ_ANGLE_AXIS, vv, aa, 0.0, 0.0, -1.0 * A, 0.0, 0.0, 0.0, 0.0, 0.0, true);
 		smooth2gen->Move();
 		nanosleep(&delay, NULL);
 		sensor_m[lib::SENSOR_CVFRADIA]->get_reading();
 		generator->Move();
+		store_data();
 		++i;
 	}
 
@@ -109,7 +123,7 @@ void eihacquisition::main_task_algorithm(void ){
 	bool flaga = true;
 
 	// pomachaj chwytakiem zeby zrobic fajne zdjecia
-	while(i >= 0 && sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.chessboard.calibrated == false)
+	while(i >= 0 && calibrated == false)
 	{
 		for(l = 0; l < 6; l += 1)
 		{
@@ -142,12 +156,13 @@ void eihacquisition::main_task_algorithm(void ){
 			}
 
 			while(((sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.chessboard.found) == true)
-				&& ((sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.chessboard.calibrated) == false) && m < M )
+				&& calibrated == false && m < M )
 			{
 				smooth2gen->load_coordinates(lib::XYZ_ANGLE_AXIS, vv, aa, 0.0, 0.0, 0.0, e, c, d, 0.0, 0.0, true);
 				smooth2gen->Move();
 				nanosleep(&delay, NULL);
 				generator->Move();
+				store_data();
 				++m;
 				sensor_m[lib::SENSOR_CVFRADIA]->get_reading();
 			}
@@ -205,12 +220,13 @@ void eihacquisition::main_task_algorithm(void ){
 			}
 
 			while(sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.chessboard.found == true
-				&& sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.chessboard.calibrated == false && flaga)
+				&& calibrated == false && flaga)
 			{
 				smooth2gen->load_coordinates(lib::XYZ_ANGLE_AXIS, vv, aa, a, b, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, true);
 				smooth2gen->Move();
 				nanosleep(&delay, NULL);
 				generator->Move();
+				store_data();
 				++j;
 				sensor_m[lib::SENSOR_CVFRADIA]->get_reading();
 
@@ -245,16 +261,17 @@ void eihacquisition::main_task_algorithm(void ){
 					}
 
 					// zabezpieczenie przed przekroczeniem obszaru roboczego robota
-start2 b>0 d<0				if (a > 0.0 && m == 0 && c > 0 && ((i == 0 && j == 1) || ( i == 1 && j == 1) || (i == 2 && j == 2) || (i == 3 && j == 3)))
-start1 a>0 c>0 ot i p					flaga = false;
+/*start2 b>0 d<0*/				if (a > 0.0 && m == 0 && c > 0 && ((i == 0 && j == 1) || ( i == 1 && j == 1) || (i == 2 && j == 2) || (i == 3 && j == 3)))
+/*start1 a>0 c>0 ot i p*/					flaga = false;
 
 					while(((sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.chessboard.found) == true)
-						&& ((sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.chessboard.calibrated) == false) && m < M && flaga)
+						&& (calibrated == false) && m < M && flaga)
 					{
 						smooth2gen->load_coordinates(lib::XYZ_ANGLE_AXIS, vv, aa, 0.0, 0.0, 0.0, e, c, d, 0.0, 0.0, true);
 						smooth2gen->Move();
 						nanosleep(&delay, NULL);
 						generator->Move();
+						store_data();
 						++m;
 						sensor_m[lib::SENSOR_CVFRADIA]->get_reading();
 					}
@@ -272,8 +289,8 @@ start1 a>0 c>0 ot i p					flaga = false;
 					}
 				}
 				// zabezpieczenie przed przekroczeniem obszaru roboczego robota
-start2 b>0				if(a > 0.0 && ((i == 1 && j == 1) || (i == 2 && j == 2) || (i == 3 && j == 3) || (i == 0 && j == 1)))
-start1 a>0					flaga = false;
+/*start2 b>0*/				if(a > 0.0 && ((i == 1 && j == 1) || (i == 2 && j == 2) || (i == 3 && j == 3) || (i == 0 && j == 1)))
+/*start1 a>0*/					flaga = false;
 			}
 
 			flaga = true;
@@ -297,14 +314,62 @@ start1 a>0					flaga = false;
 		--i;
 	}
 
+	if(calibrated)
+	{
+		FILE *FP;
+		FP = fopen("../data/eihcalibration/M.txt","w");
+		gsl_matrix_fprintf (FP, ofp.M, "%g");
+		fclose(FP);
+		FP = fopen("../data/eihcalibration/m.txt","w");
+		gsl_vector_fprintf (FP, ofp.m, "%g");
+		fclose(FP);
+		FP = fopen("../data/eihcalibration/k.txt","w");
+		gsl_vector_fprintf (FP, ofp.k, "%g");
+		fclose(FP);
+		FP = fopen("../data/eihcalibration/K.txt","w");
+		gsl_matrix_fprintf (FP, ofp.K, "%g");
+		fclose(FP);
+	}
+
 	ecp_termination_notice();
 	//ecp_wait_for_stop();
+}
+
+bool eihacquisition::store_data(void )
+{
+	int i,j=0;
+	if(sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.chessboard.found == true && !calibrated)
+	{
+		for(i=0; i<12; ++i)
+		{
+			// store translation vector received from robot
+			if(i % 4 == 3)
+			{
+				// translation vector
+				gsl_vector_set (ofp.k, 3 * generator->count + j, generator->tab[i]);
+				gsl_vector_set (ofp.m, 3 * generator->count + j, sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.chessboard.transformation_matrix[i]);
+				++j;
+			}
+			// store rotation matrix received from robot
+			else
+			{
+				// rotation matrix
+				gsl_matrix_set (ofp.K, 3 * generator->count + j, i % 4, generator->tab[i]);
+				gsl_matrix_set (ofp.M, 3 * generator->count + j, i % 4, sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.chessboard.transformation_matrix[i]);
+			}
+		}
+	}
+	if (generator->count == (ofp.number_of_measures - 1))
+		calibrated = true;
+
+	//std::cout<<"pomiar "<<generator->count<<std::endl;
+	return true;
 }
 
 task* return_created_ecp_task(lib::configurator &_config){
 	return new eihacquisition(_config);
 }
-*/
+
 } // namespace task
 } // namespace common
 } // namespace ecp

@@ -1857,16 +1857,6 @@ eih_nose_run::eih_nose_run(common::task::task& _ecp_task,
 		int step) : tff_nose_run(_ecp_task, step)
 {
 	count = 0;
-	// domyslnie wszytkie osie podatne a pulse_check nieaktywne
-	configure_behaviour(lib::CONTACT, lib::CONTACT, lib::CONTACT, lib::CONTACT, lib::CONTACT, lib::CONTACT);
-	configure_pulse_check (false);
-	configure_velocity (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
-	configure_force (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
-	configure_reciprocal_damping (FORCE_RECIPROCAL_DAMPING, FORCE_RECIPROCAL_DAMPING, FORCE_RECIPROCAL_DAMPING,
-		 TORQUE_RECIPROCAL_DAMPING, TORQUE_RECIPROCAL_DAMPING, TORQUE_RECIPROCAL_DAMPING);
-	configure_inertia (FORCE_INERTIA, FORCE_INERTIA, FORCE_INERTIA, TORQUE_INERTIA, TORQUE_INERTIA, TORQUE_INERTIA);
-
-	set_force_meassure (false);
 }
 
 // ----------------------------------------------------------------------------------------------
@@ -1875,12 +1865,6 @@ eih_nose_run::eih_nose_run(common::task::task& _ecp_task,
 
 bool eih_nose_run::next_step()
 {
-	// Generacja trajektorii prostoliniowej o zadany przyrost polozenia i orientacji
-	// Funkcja zwraca false gdy koniec generacji trajektorii
-	// Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
-	// UWAGA: dzialamy na jednoelementowej liscie robotow
-	// cout << "next_step" << endl;
-
 	++count;
 
 	if (count > 25)

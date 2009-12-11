@@ -14,6 +14,10 @@
 
 #include "ecp/common/ecp_generator.h"
 
+#include <cstring>
+#include <iostream>
+#include <unistd.h>
+
 namespace mrrocpp {
 namespace ecp {
 namespace common {
@@ -22,17 +26,16 @@ namespace generator {
 class eihgenerator : public common::generator::generator
 {
 	ecp_mp::sensor::cvfradia * sensor;
-	int count;
 
   public:
+	int count;
 	double tab[12];
 	eihgenerator(common::task::task& _ecp_task);
 	~eihgenerator();
 	bool first_step();
 	bool next_step();
 
-	void get_frame(float[12]);
-
+	void get_frame();
 };
 
 }

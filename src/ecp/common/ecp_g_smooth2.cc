@@ -818,7 +818,7 @@ bool smooth2::first_step() { //wywolywane tylko raz w calej trajektorii
         the_robot->ecp_command.instruction.set_type = ARM_DV;
         the_robot->ecp_command.instruction.set_arm_type = lib::MOTOR;
         the_robot->ecp_command.instruction.get_arm_type = lib::MOTOR;
-    	if (type == 2) {
+    	if (type == lib::RELATIVE) {
     		the_robot->ecp_command.instruction.motion_type = lib::RELATIVE;
     	} else {
     		the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
@@ -831,7 +831,7 @@ bool smooth2::first_step() { //wywolywane tylko raz w calej trajektorii
         the_robot->ecp_command.instruction.set_type = ARM_DV;
         the_robot->ecp_command.instruction.set_arm_type = lib::JOINT;
         the_robot->ecp_command.instruction.get_arm_type = lib::JOINT;
-    	if (type == 2) {
+    	if (type == lib::RELATIVE) {
     		the_robot->ecp_command.instruction.motion_type = lib::RELATIVE;
     	} else {
     		the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
@@ -844,10 +844,10 @@ bool smooth2::first_step() { //wywolywane tylko raz w calej trajektorii
         the_robot->ecp_command.instruction.set_type = ARM_DV;
         the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
         the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_EULER_ZYZ;
-        if (type == 2) {
+        if (type == lib::RELATIVE) {
             the_robot->ecp_command.instruction.motion_type = lib::RELATIVE;
             the_robot->ecp_command.instruction.interpolation_type = lib::TCIM;
-            for (int i=0; i<6; i++)//TODO sprawdzic czy tylko do 6
+            for (int i=0; i<6; i++)
             {
             	the_robot->ecp_command.instruction.arm.pf_def.behaviour[i] = lib::UNGUARDED_MOTION;
             }
@@ -862,7 +862,7 @@ bool smooth2::first_step() { //wywolywane tylko raz w calej trajektorii
         the_robot->ecp_command.instruction.set_type = ARM_DV;
         the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
         the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_ANGLE_AXIS;
-    	if (type == 2) {
+    	if (type == lib::RELATIVE) {
     		the_robot->ecp_command.instruction.motion_type = lib::RELATIVE;
     		the_robot->ecp_command.instruction.interpolation_type = lib::TCIM;
     		for (int i=0; i<6; i++)
@@ -1941,7 +1941,7 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 				throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 		}
 
-		if (debug) {
+		//if (debug) {
 			for (int os = 0; os < MAX_SERVOS_NR; os++) {
 				printf("\n=============== pozycja trajektorii nr %d pos: %d ============== os: %d ====\n", j, pose_list_iterator->pos_num, os);
 				printf("czas ruchu %f\n", pose_list_iterator->t);
@@ -1959,7 +1959,7 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 			printf("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% nowa pozycja %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n");
 			printf("type: %d\n", type);
 			flushall();
-		}
+		//}
     }
     trajectory_calculated = true;
 
