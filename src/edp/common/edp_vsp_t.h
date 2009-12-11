@@ -20,20 +20,20 @@ namespace mrrocpp {
 namespace edp {
 namespace common {
 
-class manip_and_conv_effector;
+class irp6s_postument_track_effector;
 
-class vis_server
+class edp_vsp
 {
 private:
-	manip_and_conv_effector &master;
+	irp6s_postument_track_effector &master;
 
 public:
 	static void *thread_start(void* arg);
     void *thread_main_loop(void* arg);
 
 
-    vis_server(manip_and_conv_effector &_master);
-    ~vis_server();
+    edp_vsp(irp6s_postument_track_effector &_master);
+    ~edp_vsp();
 };
 
 

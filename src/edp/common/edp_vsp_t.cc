@@ -31,6 +31,7 @@
 #include "edp/common/edp.h"
 #include "edp/common/reader.h"
 #include "edp/common/edp_irp6s_postument_track.h"
+#include "edp/common/edp_vsp_t.h"
 
 /********************************* GLOBALS **********************************/
 
@@ -40,12 +41,21 @@ namespace mrrocpp {
 namespace edp {
 namespace common {
 
-void * irp6s_postument_track_effector::edp_vsp_thread_start(void* arg)
+
+edp_vsp::edp_vsp(irp6s_postument_track_effector &_master) :
+	master (_master)
+{}
+
+edp_vsp::~edp_vsp()
+{}
+
+
+void * edp_vsp::thread_start(void* arg)
 {
-	return static_cast<irp6s_postument_track_effector*> (arg)->edp_vsp_thread(arg);
+	return static_cast<edp_vsp*> (arg)->thread_main_loop(arg);
 }
 
-void * irp6s_postument_track_effector::edp_vsp_thread(void *arg)
+void * edp_vsp::thread_main_loop(void *arg)
 {
 #if !defined(USE_MESSIP_SRR)
 	name_attach_t *edp_vsp_attach;
@@ -58,11 +68,11 @@ void * irp6s_postument_track_effector::edp_vsp_thread(void *arg)
 
 	//!< zarejestrowanie nazwy identyfikujacej serwer
 
-	if ((edp_vsp_attach = name_attach(NULL, config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "edp_vsp_attach_point").c_str(),
+	if ((edp_vsp_attach = name_attach(NULL, master.config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "edp_vsp_attach_point").c_str(),
 	NAME_FLAG_ATTACH_GLOBAL)) == NULL) {
 		e = errno;
 		perror("Failed to attach EDP_VSP");
-		vs->sr_msg->message(lib::SYSTEM_ERROR, e, "Failed to attach Effector Control Process");
+		master.vs->sr_msg->message(lib::SYSTEM_ERROR, e, "Failed to attach Effector Control Process");
 	}
 	long counter = 0;
 	while (1) {
@@ -72,7 +82,7 @@ void * irp6s_postument_track_effector::edp_vsp_thread(void *arg)
 		{
 			e = errno;
 			perror("EDP_VSP: Receive from VSP failed");
-			vs->sr_msg->message(lib::SYSTEM_ERROR, e, "EDP: Receive from VSP failed");
+			master.vs->sr_msg->message(lib::SYSTEM_ERROR, e, "EDP: Receive from VSP failed");
 			break;
 		}
 
@@ -100,18 +110,18 @@ void * irp6s_postument_track_effector::edp_vsp_thread(void *arg)
 		 vs->force_sensor_do_configure = true;//!< jesli otrzymano od VSP polecenie konfiguracji czujnika
 		 */
 		//!< oczekiwanie nowego pomiaru
-		sem_wait(&(vs->new_ms));
+		sem_wait(&(master.vs->new_ms));
 		//!< przygotowanie struktury do wyslania
 		double current_force[6];
 
-		lib::Homog_matrix current_frame_wo_offset = return_current_frame(WITHOUT_TRANSLATION);
+		lib::Homog_matrix current_frame_wo_offset = master.return_current_frame(WITHOUT_TRANSLATION);
 		lib::Ft_v_tr ft_tr_inv_current_frame_matrix(!current_frame_wo_offset, lib::Ft_v_tr::FT);
 
-		lib::Homog_matrix current_tool(get_current_kinematic_model()->tool);
+		lib::Homog_matrix current_tool(master.get_current_kinematic_model()->tool);
 		lib::Ft_v_tr ft_tr_inv_tool_matrix(!current_tool, lib::Ft_v_tr::FT);
 
 		// uwaga sila nie przemnozona przez tool'a i current frame orientation
-		force_msr_download(current_force, 0);
+		master.force_msr_download(current_force, 0);
 
 		lib::Ft_v_vector current_force_torque(ft_tr_inv_tool_matrix * ft_tr_inv_current_frame_matrix
 				* lib::Ft_v_vector(current_force));
@@ -119,20 +129,20 @@ void * irp6s_postument_track_effector::edp_vsp_thread(void *arg)
 
 		counter++;
 
-		rb_obj->lock_mutex();
-		edp_vsp_reply.servo_step=rb_obj->step_data.step;
+		master.rb_obj->lock_mutex();
+		edp_vsp_reply.servo_step=master.rb_obj->step_data.step;
 		for (int i=0; i<=5; i++) {
-			edp_vsp_reply.current_present_XYZ_ZYZ_arm_coordinates[i]=rb_obj->step_data.current_cartesian_position[i];
+			edp_vsp_reply.current_present_XYZ_ZYZ_arm_coordinates[i]=master.rb_obj->step_data.current_cartesian_position[i];
 		}
 
-		rb_obj->unlock_mutex();
+		master.rb_obj->unlock_mutex();
 
 		//!< wyslanie danych
 		if (MsgReply(vsp_caller, EOK, &edp_vsp_reply, sizeof(edp_vsp_reply)) ==-1) //!< by Y&W
 		{
 			e = errno;
 			perror("EDP_VSP: Reply to VSP failed");
-			vs->sr_msg->message(lib::SYSTEM_ERROR, e, "EDP: Reply to VSP failed");
+			master.vs->sr_msg->message(lib::SYSTEM_ERROR, e, "EDP: Reply to VSP failed");
 		}
 	} //!< end while
 #endif /* USE_MESSIP_SRR */

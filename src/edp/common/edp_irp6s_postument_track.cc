@@ -35,6 +35,7 @@
 #include "lib/mathtr.h"
 #include "lib/srlib.h"
 #include "edp/common/manip_trans_t.h"
+#include "edp/common/edp_vsp_t.h"
 
 
 namespace mrrocpp {
@@ -262,6 +263,7 @@ void irp6s_postument_track_effector::create_threads()
 	{
 
 		vs = sensor::return_created_edp_force_sensor(*this); //!< czujnik wirtualny
+		edp_vsp_obj = new edp_vsp(*this); //!< czujnik wirtualny
 
 		// byY - utworzenie watku pomiarow sily
 		if (pthread_create(&force_tid, NULL, &vs->thread_start, (void *) vs))
@@ -273,7 +275,7 @@ void irp6s_postument_track_effector::create_threads()
 		sem_wait(&force_master_sem);
 
 		// by Y - utworzenie watku komunikacji miedzy EDP a VSP
-		if (pthread_create(&edp_vsp_tid, NULL, &edp_vsp_thread_start, (void *) this))
+		if (pthread_create(&edp_vsp_tid, NULL, &edp_vsp_obj->thread_start, (void *) edp_vsp_obj))
 		{
 			msg->message(lib::SYSTEM_ERROR, errno, "EDP: Failed to spawn READER");
 			throw System_error();

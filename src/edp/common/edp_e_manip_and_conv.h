@@ -41,6 +41,7 @@ class manip_trans_t;
 class in_out_buffer;
 class vis_server;
 class servo_buffer;
+class edp_vsp;
 
 
 
@@ -207,6 +208,7 @@ public:
     servo_buffer* sb;
     vis_server* vis_obj;
 	sensor::force *vs;
+	edp_vsp* edp_vsp_obj;
 
     manip_and_conv_effector (lib::configurator &_config, lib::robot_name_t l_robot_name);       // konstruktor
     virtual ~manip_and_conv_effector();
