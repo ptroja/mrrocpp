@@ -34,7 +34,8 @@ BINARIES =			ecp_pr \
 			        ecp_wii \
 			        ecp_wii_velocity \
 			        ecp_wii_teach \
-				ecp_t_box_irp6ot
+				ecp_t_box_irp6ot \
+				ecp_t_mboryn
 ifneq ($(BUILD_TARGET), linux)
 BINARIES+=			ecp_fct \
 				ecp_tr \
@@ -212,6 +213,10 @@ ecp_t_calib_axzb: ../common/ecp_t_calib_axzb.o ../common/ecp_t_calibration.o ../
 #-----------------------------------------------------------------------------------------------------------------------#
 ecp_t_calib_axxb: ../common/ecp_t_calib_axxb.o ../common/ecp_t_calibration.o ../common/ecp_g_smooth2.o ../common/ecp_generator_t.o ../common/ecp_g_jarosz.o ../common/ecp_operator_reaction_condition.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
+#-----------------------------------------------------------------------------------------------------------------------#
+ecp_t_mboryn: ecp_t_mboryn.o ecp_g_mboryn.o  $(SHOBJ)
+	$(LD) $(LDFLAGS) -o $@ $^
+#-----------------------------------------------------------------------------------------------------------------------#
 
 #---------------------------------Special object build rules (user made)-------------------------------------#
 # e.g:
