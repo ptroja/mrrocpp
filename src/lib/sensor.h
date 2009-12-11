@@ -440,11 +440,11 @@ public:
 class sensor
 {
 protected:
-	int pid; // pid vsp
+	pid_t pid; // pid vsp
 
 public:
 	// Wielkosc przesylanej unii - dla kazdego obrazu inny.
-	uint32_t union_size;
+	size_t union_size;
 
 	// ponizsze zmienne pozwalaja na odczyty z roznym okresem z czujnikow (mierzonym w krokach generatora)
 	// w szczegolnosci mozliwe jest unikniecie odczytu po first stepie (nalezy base_period ustawic na 0)
