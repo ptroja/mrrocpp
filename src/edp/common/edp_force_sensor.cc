@@ -12,9 +12,149 @@
 
 #include "edp/common/edp.h"
 #include "edp/common/edp_irp6s_postument_track.h"
+#include "lib/mis_fun.h"
+#include "edp/common/reader.h"
 
 namespace mrrocpp {
 namespace edp {
+namespace common {
+
+
+
+
+void * irp6s_postument_track_effector::thread_start(void* arg)
+{
+	return static_cast<irp6s_postument_track_effector*> (arg)->thread_main_loop(arg);
+}
+
+//!< watek do komunikacji ze sprzetem
+void * irp6s_postument_track_effector::thread_main_loop(void *arg)
+{
+#if !defined(USE_MESSIP_SRR)
+	lib::set_thread_priority(pthread_self() , MAX_PRIORITY-1);
+
+
+
+	sem_post(&force_master_sem);
+
+	try
+	{
+		vs->configure_sensor();
+	}
+
+	catch (lib::sensor::sensor_error e)
+	{
+		printf("sensor_error w force thread EDP\n");
+
+		switch(e.error_no)
+		{
+			case SENSOR_NOT_CONFIGURED:
+			vs->from_vsp.vsp_report= lib::VSP_SENSOR_NOT_CONFIGURED;
+			break;
+			case READING_NOT_READY:
+			vs->from_vsp.vsp_report= lib::VSP_READING_NOT_READY;
+			break;
+		}
+		vs->sr_msg->message (lib::FATAL_ERROR, e.error_no);
+
+	} //!< end CATCH
+
+	catch(...)
+	{
+		fprintf(stderr, "unidentified error force thread w EDP\n");
+	}
+
+	while (!vs->TERMINATE) //!< for (;;)
+	{
+		try
+		{
+			if (vs->force_sensor_do_first_configure)
+			{ //!< jesli otrzymano polecenie konfiguracji czujnika
+		//		printf("force_sensor_do_first_configure\n");
+					vs->configure_sensor();
+					vs->force_sensor_do_first_configure = false; //!< ustawienie flagi ze czujnik jest ponownie skonfigurowany
+					vs->first_configure_done = true;
+			}
+			else if (vs->force_sensor_do_configure)
+			{ //!< jesli otrzymano polecenie konfiguracji czujnika
+				if (vs->new_edp_command)
+				{
+					vs->configure_sensor();
+					vs->set_command_execution_finish();
+					vs->force_sensor_do_configure = false; //!< ustawienie flagi ze czujnik jest ponownie skonfigurowany
+				}
+			}
+			else if (vs->force_sensor_set_tool)
+			{
+				if (vs->new_edp_command)
+				{
+					vs->set_force_tool();
+					vs->set_command_execution_finish();
+					vs->force_sensor_set_tool = false;
+				}
+			}
+			else
+			{
+				//!< cout << "przed Wait for event" << endl;
+				vs->wait_for_event();
+				//!< cout << "po Wait for event" << endl;
+
+				vs->initiate_reading();
+				//!< 		cout << "Initiate reading" << endl;
+
+				double current_force[6];
+
+				lib::Homog_matrix current_frame_wo_offset = return_current_frame(WITHOUT_TRANSLATION);
+				lib::Ft_v_tr ft_tr_inv_current_frame_matrix (!current_frame_wo_offset, lib::Ft_v_tr::FT);
+
+				lib::Homog_matrix current_tool(get_current_kinematic_model()->tool);
+				lib::Ft_v_tr ft_tr_inv_tool_matrix (!current_tool, lib::Ft_v_tr::FT);
+
+				// uwaga sila nie przemnozona przez tool'a i current frame orientation
+				force_msr_download(current_force, 0);
+
+				lib::Ft_v_vector current_force_torque (ft_tr_inv_tool_matrix * ft_tr_inv_current_frame_matrix * lib::Ft_v_vector (current_force));
+
+				rb_obj->lock_mutex();
+				for (int i=0;i<=5;i++)
+				{
+					current_force_torque.to_table (rb_obj->step_data.force);
+				}
+				rb_obj->unlock_mutex();
+			}
+			sem_trywait(&(vs->new_ms));
+			sem_post(&(vs->new_ms)); //!< jest gotowy nowy pomiar
+
+		} //!< koniec TRY
+
+		catch (lib::sensor::sensor_error e)
+		{
+			printf("sensor_error w force thread  EDP\n");
+
+			switch(e.error_no)
+			{
+				case SENSOR_NOT_CONFIGURED:
+				vs->from_vsp.vsp_report= lib::VSP_SENSOR_NOT_CONFIGURED;
+				break;
+				case READING_NOT_READY:
+				vs->from_vsp.vsp_report= lib::VSP_READING_NOT_READY;
+				break;
+			}
+			vs->sr_msg->message (lib::FATAL_ERROR, e.error_no);
+		} //!< end CATCH
+
+		catch(...)
+		{
+			printf("unidentified error force thread w EDP\n");
+		}
+
+	} //!< //!< end while(;;)
+#endif /* USE_MESSIP_SRR */
+	return NULL;
+} //!< end MAIN
+
+}
+
 namespace sensor {
 
 force::force(common::irp6s_postument_track_effector &_master)

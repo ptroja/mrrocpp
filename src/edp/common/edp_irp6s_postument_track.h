@@ -60,8 +60,8 @@ public:
 
     static void *edp_vsp_thread_start(void* arg);
     void *edp_vsp_thread(void* arg);
-    static void *force_thread_start(void* arg);
-    void *force_thread(void* arg);
+    static void *thread_start(void* arg);
+    void *thread_main_loop(void* arg);
 
     irp6s_postument_track_effector (lib::configurator &_config, lib::robot_name_t l_robot_name );       // konstruktor
 
