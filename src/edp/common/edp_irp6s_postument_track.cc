@@ -264,7 +264,7 @@ void irp6s_postument_track_effector::create_threads()
 		vs = sensor::return_created_edp_force_sensor(*this); //!< czujnik wirtualny
 
 		// byY - utworzenie watku pomiarow sily
-		if (pthread_create(&force_tid, NULL, &thread_start, (void *) this))
+		if (pthread_create(&force_tid, NULL, &vs->thread_start, (void *) vs))
 		{
 			msg->message(lib::SYSTEM_ERROR, errno, "EDP: Failed to spawn READER");
 			throw System_error();

@@ -26,7 +26,7 @@ class irp6s_postument_track_effector: public manip_effector
 
 protected:
 
-	sem_t force_master_sem; //!< semafor dostepu do nowej wiadomosci dla vsp
+
     // czy chwytak wlaczony ?
     short is_gripper_active;
 
@@ -58,10 +58,9 @@ protected:
 
 public:
 
+	sem_t force_master_sem; //!< semafor dostepu do nowej wiadomosci dla vsp
     static void *edp_vsp_thread_start(void* arg);
     void *edp_vsp_thread(void* arg);
-    static void *thread_start(void* arg);
-    void *thread_main_loop(void* arg);
 
     irp6s_postument_track_effector (lib::configurator &_config, lib::robot_name_t l_robot_name );       // konstruktor
 
