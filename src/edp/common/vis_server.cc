@@ -11,6 +11,7 @@
 
 #include "lib/impconst.h"
 #include "edp/common/edp_e_manip_and_conv.h"
+#include "edp/common/vis_server.h"
 
 #define MAXBUFLEN 100
 
@@ -18,22 +19,31 @@ namespace mrrocpp {
 namespace edp {
 namespace common {
 
-void * manip_and_conv_effector::visualisation_thread_start(void* arg)
+
+vis_server::vis_server(manip_and_conv_effector &_master) :
+	master (_master)
+{}
+
+vis_server::~vis_server()
+{}
+
+
+void * vis_server::thread_start(void* arg)
 {
-	return static_cast<manip_and_conv_effector*> (arg)->visualisation_thread(arg);
+	return static_cast<vis_server*> (arg)->thread_main_loop(arg);
 }
 
-void * manip_and_conv_effector::visualisation_thread(void * arg)
+void * vis_server::thread_main_loop(void * arg)
 {
 	int sockfd;
 	struct sockaddr_in my_addr;	// my address information
 	struct sockaddr_in their_addr; // connector's address information
 	socklen_t addr_len;
 
-	uint16_t port = config.return_int_value("visual_udp_port");
+	uint16_t port = master.config.return_int_value("visual_udp_port");
 	if (port == 0)
 	{
-		msg->message("visualisation_thread: bad or missing <visual_udp_port> config entry");
+		master.msg->message("visualisation_thread: bad or missing <visual_udp_port> config entry");
 		return NULL;
 	}
 
@@ -70,11 +80,11 @@ void * manip_and_conv_effector::visualisation_thread(void * arg)
 
 		//	printf("got %d bytes packet from %s\n", numbytes, inet_ntoa(their_addr.sin_addr));
 
-		double tmp[number_of_servos];
-		master_joints_read(tmp);
+		double tmp[master.number_of_servos];
+		master.master_joints_read(tmp);
 
 		// korekta aby polozenia byly wzgledem poprzedniego czlonu
-		switch (robot_name)
+		switch (master.robot_name)
 		{
 			case lib::ROBOT_IRP6_ON_TRACK:
 				tmp[3] -= tmp[2] +M_PI_2;
@@ -95,9 +105,9 @@ void * manip_and_conv_effector::visualisation_thread(void * arg)
 		}
 		reply;
 
-		reply.synchronised = (is_synchronised()) ? 1 : 0;
+		reply.synchronised = (master.is_synchronised()) ? 1 : 0;
 
-		for (int i = 0; i < number_of_servos; i++)
+		for (int i = 0; i < master.number_of_servos; i++)
 		{
 			reply.joints[i] = static_cast <float> (tmp[i]);
 		}

@@ -36,19 +36,19 @@ namespace common {
 
 class manip_trans_t;
 class in_out_buffer;
+class vis_server;
+class servo_buffer;
 
 
 // base class for EDP robots with manipulators and conveyor
 
 // forward declaration
-class servo_buffer;
+
 
 /************************ edp_irp6s_and_conv_effector ****************************/
 class manip_and_conv_effector : public effector, public kinematic::common::manager
 {
 protected:
-    static void *visualisation_thread_start(void* arg);
-    void *visualisation_thread(void* arg);
 
 #ifdef DOCENT_SENSOR
     void onReaderStarted();
@@ -201,6 +201,7 @@ public:
     reader_buffer *rb_obj;
     manip_trans_t *mt_tt_obj;
     servo_buffer* sb;
+    vis_server* vs;
 
     manip_and_conv_effector (lib::configurator &_config, lib::robot_name_t l_robot_name);       // konstruktor
     virtual ~manip_and_conv_effector();

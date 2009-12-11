@@ -24,6 +24,7 @@
 // Kinematyki.
 #include "kinematics/smb/kinematic_model_smb.h"
 #include "edp/common/manip_trans_t.h"
+#include "edp/common/vis_server.h"
 
 namespace mrrocpp {
 namespace edp {
@@ -388,6 +389,7 @@ void effector::create_threads ()
 {
 
 	rb_obj = new common::reader_buffer(*this);
+	vs = new common::vis_server(*this);
 
     // Y&W - utworzenie watku readera
     if (pthread_create (&rb_obj->reader_tid, NULL, &rb_obj->reader_thread_start, (void *) rb_obj))
@@ -397,7 +399,7 @@ void effector::create_threads ()
     }
 
     // PT - utworzenie watku wizualizacji
-    if (pthread_create (&vis_t_tid, NULL, &visualisation_thread_start, (void *) this))
+    if (pthread_create (&vis_t_tid, NULL, &vs->thread_start, (void *) vs))
     {
         msg->message(lib::SYSTEM_ERROR, errno, "EDP: Failed to create VISUALISATION thread");
         throw common::System_error();
