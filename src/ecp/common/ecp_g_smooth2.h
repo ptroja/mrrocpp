@@ -55,8 +55,8 @@ class smooth2 : public delta {
 		std::list<coordinates> coordinate_list;
 		std::list<coordinates>::iterator coordinate_list_iterator;
 
-		double a_max_motor[MAX_SERVOS_NR], a_max_joint[MAX_SERVOS_NR], a_max_zyz[MAX_SERVOS_NR], a_max_aa[MAX_SERVOS_NR];
-		double v_max_motor[MAX_SERVOS_NR], v_max_joint[MAX_SERVOS_NR], v_max_zyz[MAX_SERVOS_NR], v_max_aa[MAX_SERVOS_NR];
+		//double a_max_motor[MAX_SERVOS_NR], a_max_joint[MAX_SERVOS_NR], a_max_zyz[MAX_SERVOS_NR], a_max_aa[MAX_SERVOS_NR];
+		//double v_max_motor[MAX_SERVOS_NR], v_max_joint[MAX_SERVOS_NR], v_max_zyz[MAX_SERVOS_NR], v_max_aa[MAX_SERVOS_NR];
 		double v_grip_min_zyz, v_grip_min_aa, v_grip_min_motor, v_grip_min_joint;
 
 		int first_interval;
@@ -74,7 +74,7 @@ class smooth2 : public delta {
 		bool trajectory_calculated;
 
 		bool eq(double a, double b);
-		void generate_cords();
+		void generate_coords();
 		//void calculate_absolute_positions();//for (non real) relative type of given coordinates
 		void calculate(void);
 		double generate_next_coords(int node_counter, int interpolation_node_no, double start_position, double v_p, double v_r, double v_k, double a_r, int k, double przysp, double jedn, double s_przysp, double s_jedn);
@@ -97,11 +97,11 @@ class smooth2 : public delta {
 		bool is_last_list_element(void);
 		void create_pose_list_head(lib::POSE_SPECIFICATION ps, double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR]);
 		void insert_pose_list_element(lib::POSE_SPECIFICATION ps, double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR]);
+		int pose_list_length(void);
 
 		//metody zwiazane z coordinate_list
 		void flush_coordinate_list(void);
 		void initiate_coordinate_list(void);
-		int coordinate_list_lenght(void);
 
 	public:
 		smooth2(common::task::task& _ecp_task, bool _is_synchronised);
@@ -126,7 +126,6 @@ class smooth2 : public delta {
 		virtual bool first_step();
 		virtual bool next_step();
 
-		int pose_list_length(void);
 };
 
 } // namespace generator

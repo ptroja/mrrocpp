@@ -1,4 +1,4 @@
- // -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 //                            ecp_g_smooth2.cc
 //            Effector Control Process (lib::ECP) - smooth2 generator
 // Generator powstal na podstawie generatora smooth, glowna zmiana jest
@@ -376,8 +376,6 @@ void smooth2::reset() {
 	first_interval = true;
 	trajectory_generated = false;
 	trajectory_calculated = false;
-	//rec = false;
-	//rec_pos = 0;
 }
 
 void smooth2::flush_pose_list(void) {
@@ -749,7 +747,7 @@ double smooth2::generate_next_coords(int node_counter, int interpolation_node_no
     return next_position;
 }
 
-void smooth2::generate_cords() {
+void smooth2::generate_coords() {
 
 	double coordinate[MAX_SERVOS_NR];
 	int private_node_counter = 1;
@@ -894,7 +892,7 @@ bool smooth2::next_step () {
     	//printf("poczatek next_step\n");
     	//flushall();
     	calculate(); //wypelnienie pozostalych zmiennych w liscie pose_list
-    	generate_cords(); //wypelnienie listy coordinate_list (lista kolejnych pozycji w makrokrokach)
+    	generate_coords(); //wypelnienie listy coordinate_list (lista kolejnych pozycji w makrokrokach)
     	trajectory_generated = true;
     	initiate_pose_list(); //ustawienie iteratora pose_list na poczatek
     	initiate_coordinate_list(); //ustawienie iteratora coordinate_list na poczatek
@@ -1941,7 +1939,7 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 				throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 		}
 
-		//if (debug) {
+		if (debug) {
 			for (int os = 0; os < MAX_SERVOS_NR; os++) {
 				printf("\n=============== pozycja trajektorii nr %d pos: %d ============== os: %d ====\n", j, pose_list_iterator->pos_num, os);
 				printf("czas ruchu %f\n", pose_list_iterator->t);
@@ -1959,7 +1957,7 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 			printf("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% nowa pozycja %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n");
 			printf("type: %d\n", type);
 			flushall();
-		//}
+		}
     }
     trajectory_calculated = true;
 
