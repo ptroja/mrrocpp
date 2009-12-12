@@ -52,10 +52,10 @@ bool ecp_vis_ib_eih_object_tracker_irp6ot::first_step() {
 		v_stop[0] = v_stop[1] = v_stop[2] = 0.0015;
 		v_min[0] = 	v_min[1] = v_min[2] = 0.0015;
 		u_stop[0] = u_stop[1] = 25;
-		u_stop[2] = 2000;
+		u_stop[2] = 5000;
 		u_max[0] = 300;
 		u_max[1] = 250;
-		u_max[2] = -80000;
+		u_max[2] = -60000;
 	//}
 
 	//pierwsze ustawienie flag dotarcia i kierunku

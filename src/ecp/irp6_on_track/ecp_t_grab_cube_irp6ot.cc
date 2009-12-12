@@ -26,6 +26,7 @@ grab_cube::grab_cube(lib::configurator &_config): task(_config)
 	sensor_m[lib::SENSOR_CVFRADIA] = new ecp_mp::sensor::cvfradia(lib::SENSOR_CVFRADIA,"[vsp_cvfradia]", *this,	sizeof(lib::sensor_image_t::sensor_union_t::fradia_t));
 	sensor_m[lib::SENSOR_CVFRADIA]->configure_sensor();
 	tracker->sensor_m = sensor_m;
+	turner->sensor_m = sensor_m;
 };
 
 void grab_cube::main_task_algorithm(void ) {
@@ -33,7 +34,7 @@ void grab_cube::main_task_algorithm(void ) {
 
 	smoothgen2->set_absolute();
 
-	smoothgen2->load_coordinates(lib::JOINT,0,-0.013,-1.442,-0.275,0.01,4.712,-0.070,0.090,true);//grab cube from the track (desk)
+	smoothgen2->load_coordinates(lib::JOINT,0,-0.013,-1.442,-0.275,0.01,4.670,-0.070,0.090,true);//grab cube from the track (desk)
 	//smoothgen2->load_coordinates(lib::JOINT,0,0,-1.57,0,1.56,1.571,-1.570,0.090,true);//grab cube from the operator
 	smoothgen2->Move();
 	smoothgen2->reset();
@@ -59,6 +60,15 @@ void grab_cube::main_task_algorithm(void ) {
 	smoothgen2->load_coordinates(lib::XYZ_ANGLE_AXIS,v,a,0.008,0,0,0,0,0,0,0,true);
 	smoothgen2->Move();
 	smoothgen2->reset();
+
+	vsp_fradia = sensor_m[lib::SENSOR_CVFRADIA];
+
+	vsp_fradia->get_reading();
+	while(vsp_fradia->from_vsp.vsp_report == lib::VSP_SENSOR_NOT_CONFIGURED){
+		vsp_fradia->get_reading();
+	}
+
+	turner->Move();
 
 	befgen->Move();
 
