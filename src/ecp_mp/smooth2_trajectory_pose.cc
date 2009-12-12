@@ -1,3 +1,10 @@
+/**
+ * \file smooth2_trajectory_pose.cc
+ * \brief smooth2_trajectory_pose class and its methods
+ *
+ * Contains bodies of the methods of smooth2_trajectory_pose class.
+ */
+
 #include <string.h>
 
 #include "ecp_mp/smooth2_trajectory_pose.h"
