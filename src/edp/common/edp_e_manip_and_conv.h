@@ -186,10 +186,7 @@ public:
 #endif
 
 #ifdef __QNXNTO__
-protected:
-    int servo_fd;
-public:
-    int servo_to_tt_chid;
+
 #else
     bool servo_command_rdy;
     boost::mutex servo_command_mtx;

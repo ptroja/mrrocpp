@@ -73,7 +73,7 @@ void servo_buffer::send_to_SERVO_GROUP ()
      SignalProcmask( 0,thread_id, SIG_BLOCK, &set, NULL ); // by Y uniemozliwienie jednoczesnego wystawiania spotkania do serwo przez edp_m i readera
      */
 #ifdef __QNXNTO__
-    if (MsgSend(master.servo_fd, &servo_command, sizeof(servo_command), &sg_reply, sizeof(sg_reply)) < 0)
+    if (MsgSend(servo_fd, &servo_command, sizeof(servo_command), &sg_reply, sizeof(sg_reply)) < 0)
     {
         uint64_t e = errno;
         perror ("Send() from EDP to SERVO error");
@@ -254,7 +254,21 @@ void servo_buffer::get_all_positions (void)
 
 servo_buffer::servo_buffer (manip_and_conv_effector &_master)
         : edp_extension_thread(_master), master (_master)
-{}
+{
+#ifdef __QNXNTO__
+    if((servo_to_tt_chid = ChannelCreate(_NTO_CHF_UNBLOCK)) == -1) {
+    	perror("ChannelCreate()");
+    }
+    if ((servo_fd = ConnectAttach(0, 0, servo_to_tt_chid, 0, _NTO_COF_CLOEXEC )) == -1)
+    {
+        perror("ConnectAttach()");
+    }
+    ThreadCtl (_NTO_TCTL_IO, NULL);
+#endif
+
+
+
+}
              // konstruktor
 
 void servo_buffer::synchronise (void)
@@ -281,7 +295,7 @@ bool servo_buffer::get_command (void)
     msg_event.sigev_notify = SIGEV_UNBLOCK;// by Y zamiast creceive
 
     TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_RECEIVE,  &msg_event, NULL, NULL ); // by Y zamiast creceive i flagi z EDP_MASTER
-    if ((edp_caller = MsgReceive_r(master.servo_to_tt_chid, &command, sizeof(command), NULL)) >= 0)
+    if ((edp_caller = MsgReceive_r(servo_to_tt_chid, &command, sizeof(command), NULL)) >= 0)
     	new_command_available = true;
 #else
     {
@@ -588,6 +602,11 @@ void servo_buffer::ppp (void) const
 /*-----------------------------------------------------------------------*/
 servo_buffer::~servo_buffer(void)
 {
+#ifdef __QNXNTO__
+	ConnectDetach_r(servo_fd);
+	ChannelDestroy_r(servo_to_tt_chid);
+#endif
+
     // Destruktor grupy regulatorow
     // Zniszcyc regulatory
     for (int j = 0; j < master.number_of_servos; j++)

@@ -88,13 +88,6 @@ manip_and_conv_effector::manip_and_conv_effector (lib::configurator &_config, li
 #endif
 
 #ifdef __QNXNTO__
-    if((servo_to_tt_chid = ChannelCreate(_NTO_CHF_UNBLOCK)) == -1) {
-    	perror("ChannelCreate()");
-    }
-    if ((servo_fd = ConnectAttach(0, 0, servo_to_tt_chid, 0, _NTO_COF_CLOEXEC )) == -1)
-    {
-        perror("ConnectAttach()");
-    }
     ThreadCtl (_NTO_TCTL_IO, NULL);
 #endif
 
@@ -105,10 +98,7 @@ manip_and_conv_effector::manip_and_conv_effector (lib::configurator &_config, li
 }
 
 manip_and_conv_effector::~manip_and_conv_effector() {
-#ifdef __QNXNTO__
-	ConnectDetach_r(servo_fd);
-	ChannelDestroy_r(servo_to_tt_chid);
-#endif
+
 }
 
 void manip_and_conv_effector::master_joints_read (double* output)

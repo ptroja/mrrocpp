@@ -256,6 +256,23 @@ protected:
 
     void clear_reply_status_tmp ( void );
 
+
+
+#ifdef __QNXNTO__
+protected:
+    int servo_fd;
+public:
+    int servo_to_tt_chid;
+#else
+    bool servo_command_rdy;
+    boost::mutex servo_command_mtx;
+
+    bool sg_reply_rdy;
+    boost::mutex sg_reply_mtx;
+    boost::condition sg_reply_cond;
+#endif
+
+
 public:
     lib::edp_master_command servo_command;    // polecenie z EDP_MASTER dla SERVO_GROUP
     lib::servo_group_reply sg_reply;          // bufor na informacje odbierane z SERVO_GROUP
