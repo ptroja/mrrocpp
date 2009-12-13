@@ -33,14 +33,14 @@ manip_trans_t::~manip_trans_t()
 
 
 
-void * manip_trans_t::trans_thread_start(void* arg)
+void * manip_trans_t::thread_start(void* arg)
 {
-    return static_cast<manip_trans_t*> (arg)->trans_thread(arg);
+    return static_cast<manip_trans_t*> (arg)->thread_main_loop(arg);
 }
 
 
 
-void * manip_trans_t::trans_thread(void *arg)
+void * manip_trans_t::thread_main_loop(void *arg)
 {
 
     lib::set_thread_priority(pthread_self(), MAX_PRIORITY);

@@ -85,10 +85,10 @@ private:
     pthread_mutex_t reader_mutex;
     effector &master;
 public:
-    static void *reader_thread_start(void* arg);
-    void *reader_thread(void* arg);
+    static void *thread_start(void* arg);
+    void *thread_main_loop(void* arg);
 
-    pthread_t reader_tid;
+    pthread_t thread_id;
     reader_data step_data; // dane pomiarowe dla biezacego mikrokroku
     reader_config reader_cnf; //   Struktura z informacja, ktore elementy struktury reader_data maja byc zapisane do pliku
 

@@ -33,15 +33,15 @@ speak_t::~speak_t()
 }
 
 
-void * speak_t::trans_thread_start(void* arg)
+void * speak_t::thread_start(void* arg)
 {
 //	 edp_irp6s_and_conv_effector *master = (edp_irp6s_and_conv_effector *) arg;
 
-	 return static_cast<speak_t*> (arg)->trans_thread(arg);
+	 return static_cast<speak_t*> (arg)->thread_main_loop(arg);
 }
 
 
-void * speak_t::trans_thread(void *arg)
+void * speak_t::thread_main_loop(void *arg)
 {
     lib::set_thread_priority(pthread_self() , MAX_PRIORITY-10);
 

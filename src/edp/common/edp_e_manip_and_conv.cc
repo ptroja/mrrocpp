@@ -133,7 +133,7 @@ void manip_and_conv_effector::create_threads ()
 	sb = return_created_servo_buffer();
 
     // Y&W - utworzenie watku serwa
-    if (pthread_create (&sb->serwo_tid, NULL, &sb->servo_thread_start, (void *) sb))
+    if (pthread_create (&sb->thread_id, NULL, &sb->thread_start, (void *) sb))
     {
         msg->message(lib::SYSTEM_ERROR, errno, "EDP: Failed to create SERVO_GROUP thread");
         throw System_error();
@@ -150,20 +150,20 @@ void manip_and_conv_effector::create_threads ()
     }
 
     // Y&W - utworzenie watku readera
-    if (pthread_create (&rb_obj->reader_tid, NULL, &rb_obj->reader_thread_start, (void *) rb_obj))
+    if (pthread_create (&rb_obj->thread_id, NULL, &rb_obj->thread_start, (void *) rb_obj))
     {
         msg->message(lib::SYSTEM_ERROR, errno, "EDP: Failed to create READER thread");
         throw System_error();
     }
 
-    if (pthread_create (&mt_tt_obj->trans_t_tid, NULL, &mt_tt_obj->trans_thread_start, (void *) mt_tt_obj))
+    if (pthread_create (&mt_tt_obj->thread_id, NULL, &mt_tt_obj->thread_start, (void *) mt_tt_obj))
     {
         msg->message(lib::SYSTEM_ERROR, errno, "EDP: Failed to create TRANSFORMER thread");
         throw System_error();
     }
 
     // PT - utworzenie watku wizualizacji
-    if (pthread_create (&vis_obj->vis_t_tid, NULL, &vis_obj->thread_start, (void *) vis_obj))
+    if (pthread_create (&vis_obj->thread_id, NULL, &vis_obj->thread_start, (void *) vis_obj))
     {
         msg->message(lib::SYSTEM_ERROR, errno, "EDP: Failed to create VISUALISATION thread");
         throw System_error();
@@ -586,7 +586,7 @@ void manip_and_conv_effector::send_to_SERVO_GROUP ()
     /* sigemptyset ( &set);
      sigaddset ( &set, SIGUSR1);
 
-     SignalProcmask( 0,serwo_tid, SIG_BLOCK, &set, NULL ); // by Y uniemozliwienie jednoczesnego wystawiania spotkania do serwo przez edp_m i readera
+     SignalProcmask( 0,thread_id, SIG_BLOCK, &set, NULL ); // by Y uniemozliwienie jednoczesnego wystawiania spotkania do serwo przez edp_m i readera
      */
 #ifdef __QNXNTO__
     if (MsgSend(servo_fd, &servo_command, sizeof(servo_command), &sg_reply, sizeof(sg_reply)) < 0)
@@ -611,7 +611,7 @@ void manip_and_conv_effector::send_to_SERVO_GROUP ()
     }
 #endif
 
-    //   SignalProcmask( 0,serwo_tid, SIG_UNBLOCK, &set, NULL );
+    //   SignalProcmask( 0,thread_id, SIG_UNBLOCK, &set, NULL );
 
     if ( (sg_reply.error.error0 != OK) || (sg_reply.error.error1 != OK) )
     {

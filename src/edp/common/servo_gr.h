@@ -257,9 +257,9 @@ protected:
     void clear_reply_status_tmp ( void );
 
 public:
-    pthread_t serwo_tid;
-    static void *servo_thread_start(void* arg);
-    void *servo_thread(void* arg);
+    pthread_t thread_id;
+    static void *thread_start(void* arg);
+    void *thread_main_loop(void* arg);
 
     manip_and_conv_effector &master;
     // input_buffer

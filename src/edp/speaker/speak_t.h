@@ -30,8 +30,8 @@ private:
 	effector &master;
 
 public:
-    static void *trans_thread_start(void* arg);
-    void *trans_thread(void* arg);
+    static void *thread_start(void* arg);
+    void *thread_main_loop(void* arg);
 
     speak_t(effector& _master);
     ~speak_t();

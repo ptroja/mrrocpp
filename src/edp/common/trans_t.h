@@ -39,12 +39,12 @@ private:
 
 public:
 
-	pthread_t trans_t_tid;
+	pthread_t thread_id;
     MT_ORDER trans_t_task;
     int trans_t_tryb;
     ERROR_TYPE error;
 
-    virtual void *trans_thread(void* arg) = 0;
+    virtual void *thread_main_loop(void* arg) = 0;
 
     // wskaznik na bledy (rzutowany na odpowiedni blad)
     void* error_pointer;

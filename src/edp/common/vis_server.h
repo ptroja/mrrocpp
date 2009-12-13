@@ -28,7 +28,7 @@ private:
 	manip_and_conv_effector &master;
 
 public:
-    pthread_t vis_t_tid;
+    pthread_t thread_id;
 	static void *thread_start(void* arg);
     void *thread_main_loop(void* arg);
 

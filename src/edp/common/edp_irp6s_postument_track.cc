@@ -268,7 +268,7 @@ void irp6s_postument_track_effector::create_threads()
 
 
 		// byY - utworzenie watku pomiarow sily
-		if (pthread_create(&vs->force_tid, NULL, &vs->thread_start, (void *) vs))
+		if (pthread_create(&vs->thread_id, NULL, &vs->thread_start, (void *) vs))
 		{
 			msg->message(lib::SYSTEM_ERROR, errno, "EDP: Failed to spawn READER");
 			throw System_error();
@@ -277,7 +277,7 @@ void irp6s_postument_track_effector::create_threads()
 		sem_wait(&force_master_sem);
 
 		// by Y - utworzenie watku komunikacji miedzy EDP a VSP
-		if (pthread_create(&edp_vsp_obj->edp_vsp_tid, NULL, &edp_vsp_obj->thread_start, (void *) edp_vsp_obj))
+		if (pthread_create(&edp_vsp_obj->thread_id, NULL, &edp_vsp_obj->thread_start, (void *) edp_vsp_obj))
 		{
 			msg->message(lib::SYSTEM_ERROR, errno, "EDP: Failed to spawn READER");
 			throw System_error();

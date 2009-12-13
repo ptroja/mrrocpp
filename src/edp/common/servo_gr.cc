@@ -26,12 +26,12 @@ namespace edp {
 namespace common {
 
 
-void * servo_buffer::servo_thread_start(void* arg)
+void * servo_buffer::thread_start(void* arg)
 {
-    return static_cast<servo_buffer*> (arg)->servo_thread(arg);
+    return static_cast<servo_buffer*> (arg)->thread_main_loop(arg);
 }
 
-void * servo_buffer::servo_thread(void* arg)
+void * servo_buffer::thread_main_loop(void* arg)
 {
 	// servo buffer has to be created before servo thread starts
 //	std::auto_ptr<servo_buffer> sb(return_created_servo_buffer()); // bufor do komunikacji z EDP_MASTER

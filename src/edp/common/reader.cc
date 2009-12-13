@@ -83,12 +83,12 @@ int reader_buffer::unlock_mutex() // zwolnienie mutex'a
 
 
 
-void * reader_buffer::reader_thread_start(void* arg)
+void * reader_buffer::thread_start(void* arg)
 {
-	return static_cast<reader_buffer*> (arg)->reader_thread(arg);
+	return static_cast<reader_buffer*> (arg)->thread_main_loop(arg);
 }
 
-void * reader_buffer::reader_thread(void* arg)
+void * reader_buffer::thread_main_loop(void* arg)
 {
 	uint64_t k;
 	uint64_t nr_of_samples; // maksymalna liczba pomiarow

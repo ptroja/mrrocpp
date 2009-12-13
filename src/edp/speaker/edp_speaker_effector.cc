@@ -209,7 +209,7 @@ void effector::create_threads ()
 
 	mt_tt_obj = new speak_t(*this);
 
-	if (pthread_create (&mt_tt_obj->trans_t_tid, NULL, &mt_tt_obj->trans_thread_start, (void *) mt_tt_obj)!=EOK)
+	if (pthread_create (&mt_tt_obj->thread_id, NULL, &mt_tt_obj->thread_start, (void *) mt_tt_obj)!=EOK)
 	{
 		msg->message(lib::SYSTEM_ERROR, errno, "EDP: Failed to spawn SPEAKER");
 		char buf[20];
