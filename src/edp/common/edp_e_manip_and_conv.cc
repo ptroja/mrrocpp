@@ -163,11 +163,7 @@ void manip_and_conv_effector::create_threads ()
     }
 
     // PT - utworzenie watku wizualizacji
-    if (pthread_create (&vis_obj->thread_id, NULL, &vis_obj->thread_start, (void *) vis_obj))
-    {
-        msg->message(lib::SYSTEM_ERROR, errno, "EDP: Failed to create VISUALISATION thread");
-        throw System_error();
-    }
+    vis_obj->create_thread();
 }
 
 

@@ -28,7 +28,7 @@ vis_server::~vis_server()
 {}
 
 
-void * vis_server::thread_start(void* arg)
+void * edp_extension_thread::thread_start(void* arg)
 {
 	return static_cast<vis_server*> (arg)->thread_main_loop(arg);
 }

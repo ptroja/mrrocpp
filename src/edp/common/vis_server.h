@@ -29,7 +29,7 @@ private:
 	manip_and_conv_effector &master;
 
 public:
-	static void *thread_start(void* arg);
+//	static void *thread_start(void* arg);
     void *thread_main_loop(void* arg);
 
 

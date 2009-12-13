@@ -29,10 +29,10 @@ private:
 
 public:
     pthread_t thread_id;
-//	static void *thread_start(void* arg);
+    static void *thread_start(void* arg);
     virtual void *thread_main_loop(void* arg) = 0;
 
-
+    void create_thread(void);
     edp_extension_thread(effector &_master);
     ~edp_extension_thread();
 };
