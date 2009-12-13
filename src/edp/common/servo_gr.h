@@ -10,6 +10,7 @@
 
 #include "edp/common/edp.h"
 #include "edp/common/hi_rydz.h"
+#include "edp/common/edp_extension_thread.h"
 
 namespace mrrocpp {
 namespace edp {
@@ -211,7 +212,7 @@ public:
 
 
 /*-----------------------------------------------------------------------*/
-class servo_buffer
+class servo_buffer  : public edp_extension_thread
 {
     // Bufor polecen przysylanych z EDP_MASTER dla SERVO
     // Obiekt z algorytmem regulacji
@@ -257,9 +258,10 @@ protected:
     void clear_reply_status_tmp ( void );
 
 public:
-    pthread_t thread_id;
     static void *thread_start(void* arg);
     void *thread_main_loop(void* arg);
+
+    void create_thread(void);
 
     manip_and_conv_effector &master;
     // input_buffer

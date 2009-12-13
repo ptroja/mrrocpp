@@ -27,8 +27,16 @@ vis_server::vis_server(manip_and_conv_effector &_master) :
 vis_server::~vis_server()
 {}
 
+void vis_server::create_thread(void)
+{
+	if (pthread_create (&thread_id, NULL, &thread_start, (void *) this))
+	{
+	    master.msg->message(lib::SYSTEM_ERROR, errno, "EDP: Failed to create vis_server thread");
+	    throw System_error();
+	}
+}
 
-void * edp_extension_thread::thread_start(void* arg)
+void * vis_server::thread_start(void* arg)
 {
 	return static_cast<vis_server*> (arg)->thread_main_loop(arg);
 }

@@ -27,15 +27,6 @@ edp_extension_thread::edp_extension_thread(effector &_master) :
 edp_extension_thread::~edp_extension_thread()
 {}
 
-void edp_extension_thread::create_thread(void)
-{
-	if (pthread_create (&thread_id, NULL, &thread_start, (void *) this))
-	{
-	    master.msg->message(lib::SYSTEM_ERROR, errno, "EDP: Failed to create thread");
-	    throw System_error();
-	}
-}
-
 
 
 

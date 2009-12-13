@@ -29,10 +29,10 @@ private:
 	manip_and_conv_effector &master;
 
 public:
-//	static void *thread_start(void* arg);
+	static void *thread_start(void* arg);
     void *thread_main_loop(void* arg);
 
-
+    void create_thread(void);
     vis_server(manip_and_conv_effector &_master);
     ~vis_server();
 

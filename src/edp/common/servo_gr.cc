@@ -31,6 +31,16 @@ void * servo_buffer::thread_start(void* arg)
     return static_cast<servo_buffer*> (arg)->thread_main_loop(arg);
 }
 
+
+void servo_buffer::create_thread(void)
+{
+	if (pthread_create (&thread_id, NULL, &thread_start, (void *) this))
+	{
+	    master.msg->message(lib::SYSTEM_ERROR, errno, "EDP: Failed to create servo_buffer thread");
+	    throw System_error();
+	}
+}
+
 void * servo_buffer::thread_main_loop(void* arg)
 {
 	// servo buffer has to be created before servo thread starts
@@ -133,7 +143,7 @@ void servo_buffer::get_all_positions (void)
 
 
 servo_buffer::servo_buffer (manip_and_conv_effector &_master)
-        : master(_master)
+        : edp_extension_thread(_master), master (_master)
 {}
              // konstruktor
 
