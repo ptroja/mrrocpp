@@ -447,14 +447,14 @@ void manip_and_conv_effector::synchronise ()
 	flushall();
 #endif
     /* Uformowanie rozkazu synchronizacji dla procesu SERVO_GROUP */
-    servo_command.instruction_code = lib::SYNCHRONISE;
+    sb->servo_command.instruction_code = lib::SYNCHRONISE;
     /* Wyslanie rozkazu synchronizacji do realizacji procesowi SERVO_GROUP */
     send_to_SERVO_GROUP ();
     controller_state_edp_buf.is_synchronised = true; // Ustawienie flagi zsynchronizowania robota
 
     // aktualizacja pozycji robota
     // Uformowanie rozkazu odczytu dla SERVO_GROUP
-    servo_command.instruction_code = lib::READ;
+    sb->servo_command.instruction_code = lib::READ;
     // Wyslanie rozkazu do SERVO_GROUP
     // Pobranie z SERVO_GROUP aktualnej pozycji silnikow
     //	printf("get_arm_position read_hardware\n");
@@ -553,16 +553,16 @@ void manip_and_conv_effector::send_to_SERVO_GROUP ()
     /*
     // by Y - wywalone
     // Obliczenie dugoci rozkazu
-    switch(servo_command.instruction_code) {
+    switch(sb->servo_command.instruction_code) {
       case lib::READ:
       case lib::SYNCHRONISE:
-         command_size = (int) (((uint8_t*) (&servo_command.address_byte)) - ((uint8_t*) (&servo_command.instruction_code)));
+         command_size = (int) (((uint8_t*) (&sb->servo_command.address_byte)) - ((uint8_t*) (&sb->servo_command.instruction_code)));
          break;
       case lib::MOVE:
-         command_size = (int) (((uint8_t*) (&servo_command.parameters.move.address_byte)) - ((uint8_t*) (&servo_command.instruction_code)));
+         command_size = (int) (((uint8_t*) (&sb->servo_command.parameters.move.address_byte)) - ((uint8_t*) (&sb->servo_command.instruction_code)));
          break;
       case lib::SERVO_ALGORITHM_AND_PARAMETERS:
-         command_size = (int) (((uint8_t*) (&servo_command.parameters.servo_alg_par.address_byte)) - ((uint8_t*) (&servo_command.instruction_code)));
+         command_size = (int) (((uint8_t*) (&sb->servo_command.parameters.servo_alg_par.address_byte)) - ((uint8_t*) (&sb->servo_command.instruction_code)));
          break;
 }; // end: switch
     // if (Send(&servo_command, &sg_reply, command_size, sizeof(lib::servo_group_reply)) < 0) {
@@ -574,7 +574,7 @@ void manip_and_conv_effector::send_to_SERVO_GROUP ()
      SignalProcmask( 0,thread_id, SIG_BLOCK, &set, NULL ); // by Y uniemozliwienie jednoczesnego wystawiania spotkania do serwo przez edp_m i readera
      */
 #ifdef __QNXNTO__
-    if (MsgSend(servo_fd, &servo_command, sizeof(servo_command), &sg_reply, sizeof(sg_reply)) < 0)
+    if (MsgSend(servo_fd, &sb->servo_command, sizeof(sb->servo_command), &sb->sg_reply, sizeof(sb->sg_reply)) < 0)
     {
         uint64_t e = errno;
         perror ("Send() from EDP to SERVO error");
@@ -598,11 +598,11 @@ void manip_and_conv_effector::send_to_SERVO_GROUP ()
 
     //   SignalProcmask( 0,thread_id, SIG_UNBLOCK, &set, NULL );
 
-    if ( (sg_reply.error.error0 != OK) || (sg_reply.error.error1 != OK) )
+    if ( (sb->sg_reply.error.error0 != OK) || (sb->sg_reply.error.error1 != OK) )
     {
-        printf("a: %llx, :%llx\n",sg_reply.error.error0,sg_reply.error.error1);
-        throw Fatal_error(sg_reply.error.error0, sg_reply.error.error1);
-    } // end: if((sg_reply.error.error0 != OK) || (sg_reply.error.error1 != OK))
+        printf("a: %llx, :%llx\n",sb->sg_reply.error.error0,sb->sg_reply.error.error1);
+        throw Fatal_error(sb->sg_reply.error.error0, sb->sg_reply.error.error1);
+    } // end: if((sb->sg_reply.error.error0 != OK) || (sb->sg_reply.error.error1 != OK))
 
     // skopiowanie odczytow do transformera
 
@@ -611,19 +611,19 @@ void manip_and_conv_effector::send_to_SERVO_GROUP ()
         /*
         if (i==6)
     {
-             motor_pos_increment_reading[i] = sg_reply.position[i] * 2*M_PI / IRP6_POSTUMENT_AXIS_7_INC_PER_REVOLUTION;
+             motor_pos_increment_reading[i] = sb->sg_reply.position[i] * 2*M_PI / IRP6_POSTUMENT_AXIS_7_INC_PER_REVOLUTION;
     } else if (i==5)
     {
-             motor_pos_increment_reading[i] = sg_reply.position[i] * 2*M_PI / IRP6_POSTUMENT_AXIS_6_INC_PER_REVOLUTION;
+             motor_pos_increment_reading[i] = sb->sg_reply.position[i] * 2*M_PI / IRP6_POSTUMENT_AXIS_6_INC_PER_REVOLUTION;
     } else
     {
-             motor_pos_increment_reading[i] = sg_reply.position[i] * 2*M_PI / IRP6_POSTUMENT_AXIS_0_TO_5_INC_PER_REVOLUTION;
+             motor_pos_increment_reading[i] = sb->sg_reply.position[i] * 2*M_PI / IRP6_POSTUMENT_AXIS_0_TO_5_INC_PER_REVOLUTION;
     }
              // Aktualnie odczytane polozenia walow silnikow (w radianach)
         current_motor_pos[i] +=   motor_pos_increment_reading[i];
         */
 
-        current_motor_pos[i] = sg_reply.abs_position[i];
+        current_motor_pos[i] = sb->sg_reply.abs_position[i];
 
         //	 printf("current motor pos: %d\n", current_motor_pos[0]);
 
@@ -633,17 +633,17 @@ void manip_and_conv_effector::send_to_SERVO_GROUP ()
             current_motor_pos[i] = desired_motor_pos_new[i];
         }
 
-        PWM_value[i] = sg_reply.PWM_value[i];
-        current[i] = sg_reply.current[i];
-        servo_algorithm_sg[i] = sg_reply.algorithm_no[i];
-        servo_parameters_sg[i] = sg_reply.algorithm_parameters_no[i];
+        PWM_value[i] = sb->sg_reply.PWM_value[i];
+        current[i] = sb->sg_reply.current[i];
+        servo_algorithm_sg[i] = sb->sg_reply.algorithm_no[i];
+        servo_parameters_sg[i] = sb->sg_reply.algorithm_parameters_no[i];
 
     }
 
     // przepisanie stanu regulatora chwytaka
-    servo_gripper_reg_state = sg_reply.gripper_reg_state;
+    servo_gripper_reg_state = sb->sg_reply.gripper_reg_state;
 
-    // printf("edp_irp6s_and_conv_effector::send_to_SERVO_GROUP: %f, %f\n", current_motor_pos[4], sg_reply.abs_position[4]);
+    // printf("edp_irp6s_and_conv_effector::send_to_SERVO_GROUP: %f, %f\n", current_motor_pos[4], sb->sg_reply.abs_position[4]);
 
     // 	printf("current motor pos: %f\n", current_motor_pos[0]*IRP6_ON_TRACK_INC_PER_REVOLUTION/2*M_PI );
 
@@ -681,7 +681,7 @@ void manip_and_conv_effector::get_algorithms ()
     // odczytanie numerow algorytmow i ich numerow zestawow parametrow
 
     // Uformowanie rozkazu odczytu dla SERVO_GROUP
-    servo_command.instruction_code = lib::READ;
+    sb->servo_command.instruction_code = lib::READ;
     // Wyslanie rozkazu do SERVO_GROUP
     // Pobranie z SERVO_GROUP aktualnej pozycji silnikow i numerow algorytmow etc.
     send_to_SERVO_GROUP ();
@@ -874,24 +874,24 @@ void manip_and_conv_effector::move_servos ()
     int i;
 
     /* Uformowanie rozkazu ruchu dla SERVO_GROUP */
-    servo_command.instruction_code = lib::MOVE;
-    servo_command.parameters.move.number_of_steps = motion_steps;
-    servo_command.parameters.move.return_value_in_step_no = value_in_step_no;
+    sb->servo_command.instruction_code = lib::MOVE;
+    sb->servo_command.parameters.move.number_of_steps = motion_steps;
+    sb->servo_command.parameters.move.return_value_in_step_no = value_in_step_no;
 
     //		printf("edp_irp6s_and_conv_effector::move_servos: %f, %f\n", desired_motor_pos_new[1], desired_motor_pos_old[1]);
 
     for (i=0; i < number_of_servos; i++)
     {
-        servo_command.parameters.move.macro_step[i] = desired_motor_pos_new[i] - desired_motor_pos_old[i];
-        servo_command.parameters.move.abs_position[i] = desired_motor_pos_new[i]; // by Y
+        sb->servo_command.parameters.move.macro_step[i] = desired_motor_pos_new[i] - desired_motor_pos_old[i];
+        sb->servo_command.parameters.move.abs_position[i] = desired_motor_pos_new[i]; // by Y
         //    nowa wartosc zadana staje sie stara
 
         desired_motor_pos_old[i] = desired_motor_pos_new[i];
     }
 
     /*
-         printf("move_servos_aa: %f, %f, %f, %f, %f, %f, %f, %d\n", servo_command.parameters.move.abs_position[0], servo_command.parameters.move.abs_position[1], servo_command.parameters.move.abs_position[2], servo_command.parameters.move.abs_position[3],
-         		 servo_command.parameters.move.abs_position[4], servo_command.parameters.move.abs_position[5], servo_command.parameters.move.abs_position[6], servo_command.parameters.move.number_of_steps);
+         printf("move_servos_aa: %f, %f, %f, %f, %f, %f, %f, %d\n", sb->servo_command.parameters.move.abs_position[0], sb->servo_command.parameters.move.abs_position[1], sb->servo_command.parameters.move.abs_position[2], sb->servo_command.parameters.move.abs_position[3],
+         		 sb->servo_command.parameters.move.abs_position[4], sb->servo_command.parameters.move.abs_position[5], sb->servo_command.parameters.move.abs_position[6], sb->servo_command.parameters.move.number_of_steps);
     */
     /* Wyslanie makrokroku do realizacji procesowi SERVO_GROUP */
     /* Odebranie od procesu SERVO_GROUP informacji o realizacji pierwszej fazy ruchu */
@@ -926,7 +926,7 @@ void manip_and_conv_effector::get_controller_state(lib::c_buffer &instruction)
 
     // aktualizacja pozycji robota
     // Uformowanie rozkazu odczytu dla SERVO_GROUP
-    servo_command.instruction_code = lib::READ;
+    sb->servo_command.instruction_code = lib::READ;
     // Wyslanie rozkazu do SERVO_GROUP
     // Pobranie z SERVO_GROUP aktualnej pozycji silnikow
     //	printf("get_arm_position read_hardware\n");

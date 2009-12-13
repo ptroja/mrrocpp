@@ -129,7 +129,6 @@ protected:
 
 public:
 
-
     manip_and_conv_effector &master;
     regulator ( uint8_t reg_no, uint8_t reg_par_no,    manip_and_conv_effector &_master ); // konstruktor
 
@@ -258,6 +257,9 @@ protected:
     void clear_reply_status_tmp ( void );
 
 public:
+    lib::edp_master_command servo_command;    // polecenie z EDP_MASTER dla SERVO_GROUP
+    lib::servo_group_reply sg_reply;          // bufor na informacje odbierane z SERVO_GROUP
+
     static void *thread_start(void* arg);
     void *thread_main_loop(void* arg);
 

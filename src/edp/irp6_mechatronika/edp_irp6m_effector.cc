@@ -24,6 +24,7 @@
 // Kinematyki.
 #include "kinematics/irp6_mechatronika/kinematic_model_irp6m_with_wrist.h"
 #include "kinematics/irp6_mechatronika/kinematic_model_irp6m_5dof.h"
+#include "edp/common/servo_gr.h"
 #include "edp/common/manip_trans_t.h"
 
 namespace mrrocpp {
@@ -84,11 +85,11 @@ void effector::set_rmodel (lib::c_buffer &instruction)
         // ustawienie algorytmw serworegulacji oraz ich parametrow
         // zmiana algorytmu regulacji
         /* Uformowanie rozkazu zmiany algorytmw serworegulacji oraz ich parametrow dla procesu SERVO_GROUP */
-        servo_command.instruction_code = lib::SERVO_ALGORITHM_AND_PARAMETERS;
+        sb->servo_command.instruction_code = lib::SERVO_ALGORITHM_AND_PARAMETERS;
         for (int i = 0; i<number_of_servos; i++)
         {
-            servo_command.parameters.servo_alg_par.servo_algorithm_no[i] = servo_algorithm_ecp[i] = instruction.rmodel.servo_algorithm.servo_algorithm_no[i];
-            servo_command.parameters.servo_alg_par.servo_parameters_no[i] = servo_parameters_ecp[i] = instruction.rmodel.servo_algorithm.servo_parameters_no[i];
+            sb->servo_command.parameters.servo_alg_par.servo_algorithm_no[i] = servo_algorithm_ecp[i] = instruction.rmodel.servo_algorithm.servo_algorithm_no[i];
+            sb->servo_command.parameters.servo_alg_par.servo_parameters_no[i] = servo_parameters_ecp[i] = instruction.rmodel.servo_algorithm.servo_parameters_no[i];
         }
         /* Wyslanie rozkazu zmiany algorytmw serworegulacji oraz ich parametrow procesowi SERVO_GROUP */
         send_to_SERVO_GROUP (); //
@@ -346,7 +347,7 @@ void effector::get_arm_position (bool read_hardware, lib::c_buffer &instruction)
     if (read_hardware)
     {
         // Uformowanie rozkazu odczytu dla SERVO_GROUP
-        servo_command.instruction_code = lib::READ;
+        sb->servo_command.instruction_code = lib::READ;
         // Wyslanie rozkazu do SERVO_GROUP
         // Pobranie z SERVO_GROUP aktualnej pozycji silnikow
         //		printf("get_arm_position read_hardware\n");

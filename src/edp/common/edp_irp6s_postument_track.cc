@@ -32,6 +32,7 @@
 #include "lib/mis_fun.h"
 #include "edp/common/reader.h"
 #include "edp/common/edp_irp6s_postument_track.h"
+#include "edp/common/servo_gr.h"
 #include "lib/mathtr.h"
 #include "lib/srlib.h"
 #include "edp/common/manip_trans_t.h"
@@ -84,12 +85,12 @@ void irp6s_postument_track_effector::set_rmodel(lib::c_buffer &instruction)
 		// ustawienie algorytmw serworegulacji oraz ich parametrow
 		// zmiana algorytmu regulacji
 		/* Uformowanie rozkazu zmiany algorytmw serworegulacji oraz ich parametrow dla procesu SERVO_GROUP */
-		servo_command.instruction_code = lib::SERVO_ALGORITHM_AND_PARAMETERS;
+		sb->servo_command.instruction_code = lib::SERVO_ALGORITHM_AND_PARAMETERS;
 		for (int i = 0; i<number_of_servos; i++)
 		{
-			servo_command.parameters.servo_alg_par.servo_algorithm_no[i] = servo_algorithm_ecp[i]
+			sb->servo_command.parameters.servo_alg_par.servo_algorithm_no[i] = servo_algorithm_ecp[i]
 			                                                                                   = instruction.rmodel.servo_algorithm.servo_algorithm_no[i];
-			servo_command.parameters.servo_alg_par.servo_parameters_no[i] = servo_parameters_ecp[i]
+			sb->servo_command.parameters.servo_alg_par.servo_parameters_no[i] = servo_parameters_ecp[i]
 			                                                                                     = instruction.rmodel.servo_algorithm.servo_parameters_no[i];
 		}
 		/* Wyslanie rozkazu zmiany algorytmw serworegulacji oraz ich parametrow procesowi SERVO_GROUP */
@@ -699,7 +700,7 @@ void irp6s_postument_track_effector::get_arm_position(bool read_hardware, lib::c
 	if (read_hardware)
 	{
 		// Uformowanie rozkazu odczytu dla SERVO_GROUP
-		servo_command.instruction_code = lib::READ;
+		sb->servo_command.instruction_code = lib::READ;
 		// Wyslanie rozkazu do SERVO_GROUP
 		// Pobranie z SERVO_GROUP aktualnej pozycji silnikow
 		//		printf("get_arm_position read_hardware\n");

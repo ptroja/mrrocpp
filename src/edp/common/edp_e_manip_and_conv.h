@@ -91,8 +91,7 @@ protected:
 
     friend class servo_buffer;
 
-    lib::edp_master_command servo_command;    // polecenie z EDP_MASTER dla SERVO_GROUP
-    lib::servo_group_reply sg_reply;          // bufor na informacje odbierane z SERVO_GROUP
+
 
     void set_outputs (const lib::c_buffer &instruction);                // ustawienie wyjsc binarnych
 
