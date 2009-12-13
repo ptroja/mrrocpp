@@ -30,6 +30,7 @@ namespace sensor {
         lib::ForceTrans *gravity_transformation; // klasa likwidujaca wplyw grawitacji na czujnik
 
     public:
+        pthread_t force_tid;
         static void *thread_start(void* arg);
         void *thread_main_loop(void* arg);
 

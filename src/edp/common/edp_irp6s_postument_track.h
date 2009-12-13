@@ -30,8 +30,6 @@ protected:
     // czy chwytak wlaczony ?
     short is_gripper_active;
 
-    pthread_t force_tid;
-    pthread_t edp_vsp_tid;
 
     void arm_abs_xyz_eul_zyz_2_frame (const double *p);
     // Przeksztalcenie definicji koncowki z postaci

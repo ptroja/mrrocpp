@@ -257,7 +257,7 @@ protected:
     void clear_reply_status_tmp ( void );
 
 public:
-
+    pthread_t serwo_tid;
     static void *servo_thread_start(void* arg);
     void *servo_thread(void* arg);
 

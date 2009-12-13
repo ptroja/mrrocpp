@@ -79,9 +79,6 @@ protected:
     // numer serwo chwytaka
     short gripper_servo_nr;
 
-    pthread_t serwo_tid;
-
-    pthread_t vis_t_tid;
 
     STATE next_state;    // stan nastepny, do ktorego przejdzie EDP_MASTER
 

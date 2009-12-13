@@ -28,6 +28,7 @@ private:
 	irp6s_postument_track_effector &master;
 
 public:
+    pthread_t edp_vsp_tid;
 	static void *thread_start(void* arg);
     void *thread_main_loop(void* arg);
 

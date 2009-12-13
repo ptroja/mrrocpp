@@ -133,7 +133,7 @@ void manip_and_conv_effector::create_threads ()
 	sb = return_created_servo_buffer();
 
     // Y&W - utworzenie watku serwa
-    if (pthread_create (&serwo_tid, NULL, &sb->servo_thread_start, (void *) sb))
+    if (pthread_create (&sb->serwo_tid, NULL, &sb->servo_thread_start, (void *) sb))
     {
         msg->message(lib::SYSTEM_ERROR, errno, "EDP: Failed to create SERVO_GROUP thread");
         throw System_error();
@@ -163,7 +163,7 @@ void manip_and_conv_effector::create_threads ()
     }
 
     // PT - utworzenie watku wizualizacji
-    if (pthread_create (&vis_t_tid, NULL, &vis_obj->thread_start, (void *) vis_obj))
+    if (pthread_create (&vis_obj->vis_t_tid, NULL, &vis_obj->thread_start, (void *) vis_obj))
     {
         msg->message(lib::SYSTEM_ERROR, errno, "EDP: Failed to create VISUALISATION thread");
         throw System_error();

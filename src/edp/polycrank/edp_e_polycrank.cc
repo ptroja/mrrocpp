@@ -400,7 +400,7 @@ void effector::create_threads ()
     }
 
     // PT - utworzenie watku wizualizacji
-    if (pthread_create (&vis_t_tid, NULL, &vis_obj->thread_start, (void *) vis_obj))
+    if (pthread_create (&vis_obj->vis_t_tid, NULL, &vis_obj->thread_start, (void *) vis_obj))
     {
         msg->message(lib::SYSTEM_ERROR, errno, "EDP: Failed to create VISUALISATION thread");
         throw common::System_error();
