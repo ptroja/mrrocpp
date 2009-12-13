@@ -16,7 +16,7 @@
 #include "lib/com_buf.h"
 #include "edp/common/edp.h"
 #include "edp/common/reader.h"
-#include "edp/common/regulator_irp6p_and_conv.h"
+#include "edp/conveyor/regulator_conv.h"
 
 #include "lib/mathtr.h"
 

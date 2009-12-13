@@ -6,8 +6,8 @@
 // -------------------------------------------------------------------------
 
 
-#ifndef __REGULATOR_IRP6P_AND_CONV_H
-#define __REGULATOR_IRP6P_AND_CONV_H
+#ifndef __REGULATOR_CONV_H
+#define __REGULATOR_CONV_H
 
 //#include "edp/common/servo_gr.h"
 #include "edp/common/regulator.h"
