@@ -21,7 +21,7 @@ namespace common {
 
 
 vis_server::vis_server(manip_and_conv_effector &_master) :
-	master (_master)
+	edp_extension_thread(_master), master (_master)
 {}
 
 vis_server::~vis_server()

@@ -2,8 +2,8 @@
 //                                   reader.h
 // -------------------------------------------------------------------------
 
-#ifndef __VIS_SERVER_H
-#define __VIS_SERVER_H
+#ifndef __EDP_EXTENSION_THREAD_H
+#define __EDP_EXTENSION_THREAD_H
 
 #include <stdint.h>
 #include <semaphore.h>
@@ -14,32 +14,28 @@
 #include "lib/com_buf.h"
 
 #include "kinematics/common/transformer_error.h"
-#include "edp/common/edp_extension_thread.h"
 
 
 namespace mrrocpp {
 namespace edp {
 namespace common {
 
-class manip_and_conv_effector;
+class effector;
 
-class vis_server : public edp_extension_thread
+class edp_extension_thread
 {
 private:
-	manip_and_conv_effector &master;
+	effector &master;
 
 public:
-	static void *thread_start(void* arg);
-    void *thread_main_loop(void* arg);
+    pthread_t thread_id;
+//	static void *thread_start(void* arg);
+    virtual void *thread_main_loop(void* arg) = 0;
 
 
-    vis_server(manip_and_conv_effector &_master);
-    ~vis_server();
-
-
+    edp_extension_thread(effector &_master);
+    ~edp_extension_thread();
 };
-
-
 
 
 } // namespace common
