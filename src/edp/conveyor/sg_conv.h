@@ -11,7 +11,7 @@
 #include <stdint.h>
 
 #include "edp/common/edp.h"
-#include "edp/common/sg_irp6p_and_conv.h"
+#include "edp/common/servo_gr.h"
 
 namespace mrrocpp {
 namespace edp {

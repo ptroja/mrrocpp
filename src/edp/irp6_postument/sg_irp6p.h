@@ -10,7 +10,7 @@
 #define __SG_IRP6P_H
 
 #include "edp/common/edp.h"
-#include "edp/common/sg_irp6p_and_conv.h"
+#include "edp/common/servo_gr.h"
 
 // os od ktorej startuje synchronizacja - numeracja od 0
 #define IRP6P_SYN_INIT_AXE 1

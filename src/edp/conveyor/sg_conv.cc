@@ -13,7 +13,7 @@
 #include "edp/conveyor/hi_conv.h"
 // Klasa servo_buffer.
 #include "edp/conveyor/sg_conv.h"
-
+#include "edp/common/regulator_irp6p_and_conv.h"
 
 
 namespace mrrocpp {
