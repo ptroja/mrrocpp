@@ -42,7 +42,7 @@ class in_out_buffer;
 class vis_server;
 class servo_buffer;
 class edp_vsp;
-
+class reader_buffer;
 
 
 // base class for EDP robots with manipulators and conveyor

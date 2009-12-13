@@ -28,19 +28,15 @@ enum MT_ORDER { MT_GET_CONTROLLER_STATE, MT_SET_RMODEL, MT_GET_ARM_POSITION, MT_
 
 enum ERROR_TYPE { NO_ERROR, Fatal_erroR, NonFatal_erroR_1, NonFatal_erroR_2, NonFatal_erroR_3, NonFatal_erroR_4, System_erroR};
 
-class reader_buffer;
-//class trans_t;
-class in_out_buffer;
-
-class irp6s_postument_track_effector;
 
 enum STATE { GET_STATE, GET_SYNCHRO, SYNCHRO_TERMINATED, GET_INSTRUCTION, EXECUTE_INSTRUCTION, WAIT, WAIT_Q };
 
 enum TRANSLATION_ENUM { WITH_TRANSLATION, WITHOUT_TRANSLATION };
 
+// Klasa bledow systemowych zawiazanych z komunikacja miedzyprocesowa
 class System_error
 {
-    // Klasa bledow systemowych zawiazanych z komunikacja miedzyprocesowa
+
 };
 
 

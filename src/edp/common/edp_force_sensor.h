@@ -19,6 +19,9 @@
 
 namespace mrrocpp {
 namespace edp {
+namespace common {
+class irp6s_postument_track_effector;
+}
 namespace sensor {
 
     /********** klasa czujnikow po stronie EDP **************/
