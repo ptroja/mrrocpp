@@ -208,15 +208,7 @@ void effector::create_threads ()
 {
 
 	mt_tt_obj = new speak_t(*this);
-
-	if (pthread_create (&mt_tt_obj->thread_id, NULL, &mt_tt_obj->thread_start, (void *) mt_tt_obj)!=EOK)
-	{
-		msg->message(lib::SYSTEM_ERROR, errno, "EDP: Failed to spawn SPEAKER");
-		char buf[20];
-		netmgr_ndtostr(ND2S_LOCAL_STR, ND_LOCAL_NODE, buf, sizeof(buf));
-		printf (" Failed to thread SPEAKER on node: %s\n", buf);
-		throw common::System_error();
-	}
+	mt_tt_obj->create_thread();
 };
 
 

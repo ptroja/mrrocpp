@@ -32,6 +32,7 @@ private:
 public:
     static void *thread_start(void* arg);
     void *thread_main_loop(void* arg);
+    void create_thread(void);
 
     speak_t(effector& _master);
     ~speak_t();

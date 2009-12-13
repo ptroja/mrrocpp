@@ -14,6 +14,7 @@
 #include "lib/com_buf.h"
 
 #include "kinematics/common/transformer_error.h"
+#include "edp/common/edp_extension_thread.h"
 
 
 namespace mrrocpp {
@@ -22,13 +23,13 @@ namespace common {
 
 class irp6s_postument_track_effector;
 
-class edp_vsp
+class edp_vsp : public edp_extension_thread
 {
 private:
 	irp6s_postument_track_effector &master;
 
 public:
-    pthread_t thread_id;
+    void create_thread(void);
 	static void *thread_start(void* arg);
     void *thread_main_loop(void* arg);
 

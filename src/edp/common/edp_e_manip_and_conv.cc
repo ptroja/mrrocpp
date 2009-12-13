@@ -146,17 +146,10 @@ void manip_and_conv_effector::create_threads ()
     }
 
     // Y&W - utworzenie watku readera
-    if (pthread_create (&rb_obj->thread_id, NULL, &rb_obj->thread_start, (void *) rb_obj))
-    {
-        msg->message(lib::SYSTEM_ERROR, errno, "EDP: Failed to create READER thread");
-        throw System_error();
-    }
+    rb_obj->create_thread();
 
-    if (pthread_create (&mt_tt_obj->thread_id, NULL, &mt_tt_obj->thread_start, (void *) mt_tt_obj))
-    {
-        msg->message(lib::SYSTEM_ERROR, errno, "EDP: Failed to create TRANSFORMER thread");
-        throw System_error();
-    }
+    mt_tt_obj->create_thread();
+
 
     // PT - utworzenie watku wizualizacji
     vis_obj->create_thread();

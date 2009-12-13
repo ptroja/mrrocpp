@@ -43,12 +43,21 @@ namespace common {
 
 
 edp_vsp::edp_vsp(irp6s_postument_track_effector &_master) :
-	master (_master)
+	edp_extension_thread(_master), master (_master)
 {}
 
 edp_vsp::~edp_vsp()
 {}
 
+
+void edp_vsp::create_thread(void)
+{
+	if (pthread_create (&thread_id, NULL, &thread_start, (void *) this))
+	{
+	    master.msg->message(lib::SYSTEM_ERROR, errno, "EDP: Failed to create edp_vsp thread");
+	    throw System_error();
+	}
+}
 
 void * edp_vsp::thread_start(void* arg)
 {

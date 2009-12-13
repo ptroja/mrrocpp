@@ -15,13 +15,14 @@
 #include "lib/ForceTrans.h"
 #include "lib/sensor.h"				// klasa bazowa sensor
 #include "edp/common/edp.h"				// klasa bazowa sensor
+#include "edp/common/edp_extension_thread.h"
 
 namespace mrrocpp {
 namespace edp {
 namespace sensor {
 
     /********** klasa czujnikow po stronie EDP **************/
-    class force : public lib::sensor
+    class force : public lib::sensor, public common::edp_extension_thread
     {
 
     protected:
@@ -30,7 +31,7 @@ namespace sensor {
         lib::ForceTrans *gravity_transformation; // klasa likwidujaca wplyw grawitacji na czujnik
 
     public:
-        pthread_t thread_id;
+        void create_thread(void);
         static void *thread_start(void* arg);
         void *thread_main_loop(void* arg);
 

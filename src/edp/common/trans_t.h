@@ -19,6 +19,7 @@
 
 #include "kinematics/common/transformer_error.h"
 #include "edp/common/edp.h"
+#include "edp/common/edp_extension_thread.h"
 
 namespace mrrocpp {
 namespace edp {
@@ -30,7 +31,7 @@ class effector;
 
 
 
-class trans_t : public kinematic::common::transformer_error
+class trans_t : public kinematic::common::transformer_error, public edp_extension_thread
 {
 private:
     sem_t master_to_trans_t_sem; // semafor pomiedzy edp_master a edp_trans
@@ -38,8 +39,6 @@ private:
     effector &master;
 
 public:
-
-	pthread_t thread_id;
     MT_ORDER trans_t_task;
     int trans_t_tryb;
     ERROR_TYPE error;

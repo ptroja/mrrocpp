@@ -32,6 +32,14 @@ speak_t::~speak_t()
 {
 }
 
+void speak_t::create_thread(void)
+{
+	if (pthread_create (&thread_id, NULL, &thread_start, (void *) this))
+	{
+	    master.msg->message(lib::SYSTEM_ERROR, errno, "EDP: Failed to create speak_t thread");
+	    throw common::System_error();
+	}
+}
 
 void * speak_t::thread_start(void* arg)
 {

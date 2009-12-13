@@ -41,11 +41,18 @@ namespace mrrocpp {
 namespace edp {
 namespace common {
 
-
+void reader_buffer::create_thread(void)
+{
+	if (pthread_create (&thread_id, NULL, &thread_start, (void *) this))
+	{
+	    master.msg->message(lib::SYSTEM_ERROR, errno, "EDP: Failed to create reader_buffer thread");
+	    throw System_error();
+	}
+}
 
 
 reader_buffer::reader_buffer(effector &_master) :
-	master (_master)
+	edp_extension_thread(_master), master (_master)
 {
 	pthread_mutex_init(&reader_mutex, NULL);
 	sem_init(&reader_sem, 0, 0);

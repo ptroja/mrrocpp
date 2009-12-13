@@ -31,6 +31,14 @@ manip_trans_t::~manip_trans_t()
 {
 }
 
+void manip_trans_t::create_thread(void)
+{
+	if (pthread_create (&thread_id, NULL, &thread_start, (void *) this))
+	{
+	    master.msg->message(lib::SYSTEM_ERROR, errno, "EDP: Failed to create manip_trans_t thread");
+	    throw System_error();
+	}
+}
 
 
 void * manip_trans_t::thread_start(void* arg)

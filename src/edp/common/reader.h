@@ -14,6 +14,7 @@
 #include "lib/com_buf.h"
 
 #include "kinematics/common/transformer_error.h"
+#include "edp/common/edp_extension_thread.h"
 
 class effector;
 
@@ -77,7 +78,7 @@ struct reader_data
 
 /**************************** reader_buffer *****************************/
 
-class reader_buffer
+class reader_buffer : public edp_extension_thread
 {
 private:
 
@@ -88,7 +89,7 @@ public:
     static void *thread_start(void* arg);
     void *thread_main_loop(void* arg);
 
-    pthread_t thread_id;
+    void create_thread(void);
     reader_data step_data; // dane pomiarowe dla biezacego mikrokroku
     reader_config reader_cnf; //   Struktura z informacja, ktore elementy struktury reader_data maja byc zapisane do pliku
 

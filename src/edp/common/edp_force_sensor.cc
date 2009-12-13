@@ -27,6 +27,17 @@ void * force::thread_start(void* arg)
 	return static_cast<force*> (arg)->thread_main_loop(arg);
 }
 
+void force::create_thread(void)
+{
+	if (pthread_create (&thread_id, NULL, &thread_start, (void *) this))
+	{
+	    master.msg->message(lib::SYSTEM_ERROR, errno, "EDP: Failed to create force thread");
+	    throw common::System_error();
+	}
+}
+
+
+
 //!< watek do komunikacji ze sprzetem
 void * force::thread_main_loop(void *arg)
 {
@@ -157,7 +168,7 @@ void force::connect_to_hardware (void)
 {}
 
 force::force(common::irp6s_postument_track_effector &_master)
-        : new_edp_command(false), master(_master)
+        : edp_extension_thread(_master), new_edp_command(false), master(_master)
 {
     gravity_transformation = NULL;
     is_sensor_configured=false;	//!< czujnik niezainicjowany
