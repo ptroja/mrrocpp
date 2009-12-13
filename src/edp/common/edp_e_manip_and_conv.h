@@ -109,7 +109,7 @@ protected:
     // Wyslanie polecenia ruchu do SERVO_GROUP oraz odebranie wyniku
     // realizacji pierwszej fazy ruchu
 
-    void send_to_SERVO_GROUP ();
+
     // Wyslanie polecenia do procesu SERVO_GROUP i odebranie odpowiedzi
 
     void arm_joints_2_joints (void);

@@ -449,7 +449,7 @@ void manip_and_conv_effector::synchronise ()
     /* Uformowanie rozkazu synchronizacji dla procesu SERVO_GROUP */
     sb->servo_command.instruction_code = lib::SYNCHRONISE;
     /* Wyslanie rozkazu synchronizacji do realizacji procesowi SERVO_GROUP */
-    send_to_SERVO_GROUP ();
+    sb->send_to_SERVO_GROUP ();
     controller_state_edp_buf.is_synchronised = true; // Ustawienie flagi zsynchronizowania robota
 
     // aktualizacja pozycji robota
@@ -459,7 +459,7 @@ void manip_and_conv_effector::synchronise ()
     // Pobranie z SERVO_GROUP aktualnej pozycji silnikow
     //	printf("get_arm_position read_hardware\n");
 
-    send_to_SERVO_GROUP ();
+    sb->send_to_SERVO_GROUP ();
 
     // dla pierwszego wypelnienia current_joints i current_end_effector_frame
     get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
@@ -543,112 +543,6 @@ void manip_and_conv_effector::arm_joints_2_joints (void)
 /*--------------------------------------------------------------------------*/
 
 
-/*--------------------------------------------------------------------------*/
-void manip_and_conv_effector::send_to_SERVO_GROUP ()
-{
-    // int command_size; // dulgosci rozkazu
-    // sigset_t set, old_set; // zmienne opisujace sygnaly przysylane do procesu
-    // Wyslanie polecenia do SERVO_GROUP
-
-    /*
-    // by Y - wywalone
-    // Obliczenie dugoci rozkazu
-    switch(sb->servo_command.instruction_code) {
-      case lib::READ:
-      case lib::SYNCHRONISE:
-         command_size = (int) (((uint8_t*) (&sb->servo_command.address_byte)) - ((uint8_t*) (&sb->servo_command.instruction_code)));
-         break;
-      case lib::MOVE:
-         command_size = (int) (((uint8_t*) (&sb->servo_command.parameters.move.address_byte)) - ((uint8_t*) (&sb->servo_command.instruction_code)));
-         break;
-      case lib::SERVO_ALGORITHM_AND_PARAMETERS:
-         command_size = (int) (((uint8_t*) (&sb->servo_command.parameters.servo_alg_par.address_byte)) - ((uint8_t*) (&sb->servo_command.instruction_code)));
-         break;
-}; // end: switch
-    // if (Send(&servo_command, &sg_reply, command_size, sizeof(lib::servo_group_reply)) < 0) {
-    */
-
-    /* sigemptyset ( &set);
-     sigaddset ( &set, SIGUSR1);
-
-     SignalProcmask( 0,thread_id, SIG_BLOCK, &set, NULL ); // by Y uniemozliwienie jednoczesnego wystawiania spotkania do serwo przez edp_m i readera
-     */
-#ifdef __QNXNTO__
-    if (MsgSend(servo_fd, &sb->servo_command, sizeof(sb->servo_command), &sb->sg_reply, sizeof(sb->sg_reply)) < 0)
-    {
-        uint64_t e = errno;
-        perror ("Send() from EDP to SERVO error");
-        msg->message(lib::SYSTEM_ERROR, e, "Send() from EDP to SERVO error");
-        throw System_error();
-    }
-#else
-    {
-    	boost::lock_guard<boost::mutex> lock(servo_command_mtx);
-    	servo_command_rdy = true;
-    }
-
-    {
-    	boost::unique_lock<boost::mutex> lock(sg_reply_mtx);
-    	while(!sg_reply_rdy) {
-    		sg_reply_cond.wait(sg_reply_mtx);
-    	}
-    	sg_reply_rdy = false;
-    }
-#endif
-
-    //   SignalProcmask( 0,thread_id, SIG_UNBLOCK, &set, NULL );
-
-    if ( (sb->sg_reply.error.error0 != OK) || (sb->sg_reply.error.error1 != OK) )
-    {
-        printf("a: %llx, :%llx\n",sb->sg_reply.error.error0,sb->sg_reply.error.error1);
-        throw Fatal_error(sb->sg_reply.error.error0, sb->sg_reply.error.error1);
-    } // end: if((sb->sg_reply.error.error0 != OK) || (sb->sg_reply.error.error1 != OK))
-
-    // skopiowanie odczytow do transformera
-
-    for (int i=0; i<number_of_servos; i++)
-    {
-        /*
-        if (i==6)
-    {
-             motor_pos_increment_reading[i] = sb->sg_reply.position[i] * 2*M_PI / IRP6_POSTUMENT_AXIS_7_INC_PER_REVOLUTION;
-    } else if (i==5)
-    {
-             motor_pos_increment_reading[i] = sb->sg_reply.position[i] * 2*M_PI / IRP6_POSTUMENT_AXIS_6_INC_PER_REVOLUTION;
-    } else
-    {
-             motor_pos_increment_reading[i] = sb->sg_reply.position[i] * 2*M_PI / IRP6_POSTUMENT_AXIS_0_TO_5_INC_PER_REVOLUTION;
-    }
-             // Aktualnie odczytane polozenia walow silnikow (w radianach)
-        current_motor_pos[i] +=   motor_pos_increment_reading[i];
-        */
-
-        current_motor_pos[i] = sb->sg_reply.abs_position[i];
-
-        //	 printf("current motor pos: %d\n", current_motor_pos[0]);
-
-        if(test_mode)
-        {
-            // W.S. Tylko przy testowaniu
-            current_motor_pos[i] = desired_motor_pos_new[i];
-        }
-
-        PWM_value[i] = sb->sg_reply.PWM_value[i];
-        current[i] = sb->sg_reply.current[i];
-        servo_algorithm_sg[i] = sb->sg_reply.algorithm_no[i];
-        servo_parameters_sg[i] = sb->sg_reply.algorithm_parameters_no[i];
-
-    }
-
-    // przepisanie stanu regulatora chwytaka
-    servo_gripper_reg_state = sb->sg_reply.gripper_reg_state;
-
-    // printf("edp_irp6s_and_conv_effector::send_to_SERVO_GROUP: %f, %f\n", current_motor_pos[4], sb->sg_reply.abs_position[4]);
-
-    // 	printf("current motor pos: %f\n", current_motor_pos[0]*IRP6_ON_TRACK_INC_PER_REVOLUTION/2*M_PI );
-
-}
-/*--------------------------------------------------------------------------*/
 
 
 
@@ -684,7 +578,7 @@ void manip_and_conv_effector::get_algorithms ()
     sb->servo_command.instruction_code = lib::READ;
     // Wyslanie rozkazu do SERVO_GROUP
     // Pobranie z SERVO_GROUP aktualnej pozycji silnikow i numerow algorytmow etc.
-    send_to_SERVO_GROUP ();
+    sb->send_to_SERVO_GROUP ();
 
 }
 /*--------------------------------------------------------------------------*/
@@ -895,7 +789,7 @@ void manip_and_conv_effector::move_servos ()
     */
     /* Wyslanie makrokroku do realizacji procesowi SERVO_GROUP */
     /* Odebranie od procesu SERVO_GROUP informacji o realizacji pierwszej fazy ruchu */
-    send_to_SERVO_GROUP ();
+    sb->send_to_SERVO_GROUP ();
 
 }
 /*--------------------------------------------------------------------------*/
@@ -931,7 +825,7 @@ void manip_and_conv_effector::get_controller_state(lib::c_buffer &instruction)
     // Pobranie z SERVO_GROUP aktualnej pozycji silnikow
     //	printf("get_arm_position read_hardware\n");
 
-    send_to_SERVO_GROUP ();
+    sb->send_to_SERVO_GROUP ();
 
     // dla pierwszego wypelnienia current_joints
     get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);

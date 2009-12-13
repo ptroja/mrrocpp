@@ -259,7 +259,7 @@ protected:
 public:
     lib::edp_master_command servo_command;    // polecenie z EDP_MASTER dla SERVO_GROUP
     lib::servo_group_reply sg_reply;          // bufor na informacje odbierane z SERVO_GROUP
-
+    void send_to_SERVO_GROUP ();
     static void *thread_start(void* arg);
     void *thread_main_loop(void* arg);
 
