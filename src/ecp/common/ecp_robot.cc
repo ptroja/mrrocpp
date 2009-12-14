@@ -108,21 +108,20 @@ bool ecp_robot::is_synchronised ( void ) const
 // Kopiowanie bufora przesylanego z MP do bufora wysylanego do EDP
 void ecp_robot::copy_mp_to_edp_buffer(lib::c_buffer& mp_buffer)
 {
-	memcpy( &ecp_command.instruction, &mp_buffer, sizeof(lib::c_buffer));
+	ecp_command.instruction = mp_buffer;
 }
 
 // by Y - o dziwo tego nie bylo !!!
 // Kopiowanie bufora przesylanego z EDP do bufora wysylanego do MP
 void ecp_robot::copy_edp_to_mp_buffer(lib::r_buffer& mp_buffer)
 {
-	memcpy( &mp_buffer, &reply_package, sizeof(lib::r_buffer));
+	mp_buffer = reply_package;
 }
 
 
 // ---------------------------------------------------------------
 void ecp_robot::connect_to_edp(lib::configurator &config)
 {
-
 	EDP_MASTER_Pid = (spawn_and_kill) ? config.process_spawn(edp_section) : -1;
 
 	std::string edp_net_attach_point =
