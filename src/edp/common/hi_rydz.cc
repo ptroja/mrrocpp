@@ -117,8 +117,18 @@ hardware_interface::hardware_interface (manip_and_conv_effector &_master,
 			perror("mmap_device_io");
 		}
 
-		memset(&irq_data.event, 0, sizeof(irq_data.event));// by y&w
-		irq_data.event.sigev_notify = SIGEV_INTR;// by y&w
+		memset(&irq_data.event, 0, sizeof(irq_data.event));
+		irq_data.event.sigev_notify = SIGEV_INTR;
+#elif defined(linux)
+		// grant I/O port permissions to the first card region
+		if (ioperm(SERVO_COMMAND1_ADR + hi_isa_card_offset, 0xC, 1) == -1) {
+			perror("ioperm()");
+		}
+
+		// grant I/O port permissions to the second card region
+		if (ioperm(ADR_OF_SERVO_PTR + hi_isa_card_offset, 1, 1) == -1) {
+			perror("ioperm()");
+		}
 #endif
 
 		irq_data.md.interrupt_mode=INT_EMPTY;
