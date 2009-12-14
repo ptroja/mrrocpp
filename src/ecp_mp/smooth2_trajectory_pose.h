@@ -18,28 +18,28 @@ namespace ecp_mp {
 namespace common {
 
 /**
- * Class is a container used by smooth2 trajectory generator. Detailed information about one trajectory segment are stored in one instance of this class.
+ * Class is a container used by smooth2 trajectory generator. One instance of the class contains information about one segment of the trajectory (single movement in one particular direction).
  */
 class smooth2_trajectory_pose {
 public:
   /**
-   * Representation used in the trajectory segment
+   * Representation used in the trajectory segment.
    */
   lib::POSE_SPECIFICATION arm_type;
   /**
-   * Initial velocity for the pose, for each axis
+   * Initial velocity for the pose, for each axis.
    */
   double v_p[MAX_SERVOS_NR];
   /**
-   * Final velocity for the pose, for each axis
+   * Final velocity for the pose, for each axis.
    */
   double v_k[MAX_SERVOS_NR];
   /**
-   * Maximal velocity for the movement, for each axis
+   * Maximal velocity for the movement, for each axis.
    */
   double v[MAX_SERVOS_NR];
   /**
-   * Maximal acceleration for the movement, for each axis
+   * Maximal acceleration for the movement, for each axis.
    */
   double a[MAX_SERVOS_NR];
   /**
@@ -47,39 +47,39 @@ public:
    */
   double coordinates[MAX_SERVOS_NR];
   /**
-   * Number of the macrostep in which the first part of the movement ends (first out of three)
+   * Number of the macrostep in which the first part of the movement ends (first out of three).
    */
   double przysp[MAX_SERVOS_NR];
   /**
-   * Number of the macrostep in which the seconde part of the movement ends
+   * Number of the macrostep in which the seconde part of the movement ends.
    */
   double jedn[MAX_SERVOS_NR];
   /**
-   * Distance covered in the second part of the movement
+   * Distance covered in the second part of the movement.
    */
   double s_jedn[MAX_SERVOS_NR];
   /**
-   * Distance covered in the first part of the movement
+   * Distance covered in the first part of the movement.
    */
   double s_przysp[MAX_SERVOS_NR];
   /**
-   * Initial position for the pose
+   * Initial position for the pose.
    */
   double start_position[MAX_SERVOS_NR];
   /**
-   * Direction of the movement
+   * Direction of the movement. Either equal to 1 or -1.
    */
   double k[MAX_SERVOS_NR];
   /**
-   * Maximal acceleration for the given segment (pose) (calculated, can be smaller or equal to a)
+   * Maximal acceleration for the given segment (pose) (calculated, can be smaller or equal to a).
    */
   double a_r[MAX_SERVOS_NR];
   /**
-   * Maximal velocity for the given segment (pose) (calculated, can be smaller or equal to v)
+   * Maximal velocity for the given segment (pose) (calculated, can be smaller or equal to v).
    */
   double v_r[MAX_SERVOS_NR];
   /**
-   * Number of macrosteps in pose
+   * Number of macrosteps in pose.
    */
   int interpolation_node_no;
   /**
@@ -87,7 +87,7 @@ public:
    */
   double v_grip;
   /**
-   * Time needed to perform a movement
+   * Time needed to perform a movement.
    */
   double t;
   /**
@@ -95,7 +95,7 @@ public:
    */
   int model[MAX_SERVOS_NR];
   /**
-   * Number of the given position in whole trajectory chain
+   * Number of the given position in whole trajectory chain.
    */
   int pos_num;
 
