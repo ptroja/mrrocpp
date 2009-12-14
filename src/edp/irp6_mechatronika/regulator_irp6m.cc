@@ -19,10 +19,6 @@
 // Klasa servo_buffer.
 #include "edp/irp6_mechatronika/regulator_irp6m.h"
 
-// extern edp_irp6m_effector* master;   // Bufor polecen i odpowiedzi EDP_MASTER
-
-// uint64_t kk;	// numer pomiaru od momentu startu pomiarow
-
 namespace mrrocpp {
 namespace edp {
 namespace irp6m {
