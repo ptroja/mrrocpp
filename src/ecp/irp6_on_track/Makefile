@@ -103,7 +103,7 @@ ecp_spots_recognition: ecp_t_spots_recognition.o ../common/ecp_g_smooth.o ../com
 	$(LD) $(LDFLAGS) -o $@ $^
 #-----------------------------------------------------------------------------------------------------------------------#
 ecp_robot_calibration: ecp_t_robot_calibration.o ecp_g_robot_calibration.o $(ECP_MPDIR)/ecp_mp_s_pcbird.o $(ECP_MPDIR)/birdclient.o $(SHOBJ)
-	$(LD) $(LDFLAGS) -o $@ $^
+	$(LD) $(LDFLAGS) -o $@ -lgsl -lgslcblas $^
 #-----------------------------------------------------------------------------------------------------------------------#
 ecp_kin_test_irp6ot: ecp_t_kin_test_irp6ot.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
@@ -209,10 +209,10 @@ ecp_t_kcz_test: ecp_t_kcz_test.o ../common/ecp_g_smooth2.o ../common/ecp_generat
 	$(LD) $(LDFLAGS) -o $@ $^ 
 #-----------------------------------------------------------------------------------------------------------------------#
 ecp_t_calib_axzb: ../common/ecp_t_calib_axzb.o ../common/ecp_t_calibration.o ../common/ecp_g_smooth2.o ../common/ecp_generator_t.o ../common/ecp_g_jarosz.o ../common/ecp_operator_reaction_condition.o $(SHOBJ)
-	$(LD) $(LDFLAGS) -o $@ $^
+	$(LD) $(LDFLAGS) -o $@ -lgsl -lgslcblas $^
 #-----------------------------------------------------------------------------------------------------------------------#
 ecp_t_calib_axxb: ../common/ecp_t_calib_axxb.o ../common/ecp_t_calibration.o ../common/ecp_g_smooth2.o ../common/ecp_generator_t.o ../common/ecp_g_jarosz.o ../common/ecp_operator_reaction_condition.o $(SHOBJ)
-	$(LD) $(LDFLAGS) -o $@ $^ 
+	$(LD) $(LDFLAGS) -o $@ -lgsl -lgslcblas $^ 
 #-----------------------------------------------------------------------------------------------------------------------#
 ecp_t_mboryn: ecp_t_mboryn.o ecp_g_mboryn.o  $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
