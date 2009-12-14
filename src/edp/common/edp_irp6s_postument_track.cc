@@ -259,6 +259,7 @@ void irp6s_postument_track_effector::pose_force_linear_move(lib::c_buffer &instr
 /*--------------------------------------------------------------------------*/
 void irp6s_postument_track_effector::create_threads()
 {
+#ifdef __QNXNTO__
 	// jesli wlaczono obsluge sily
 	if (force_tryb > 0)
 	{
@@ -266,7 +267,6 @@ void irp6s_postument_track_effector::create_threads()
 		vs = sensor::return_created_edp_force_sensor(*this); //!< czujnik wirtualny
 
 		edp_vsp_obj = new edp_vsp(*this); //!< czujnik wirtualny
-
 
 		// byY - utworzenie watku pomiarow sily
 		vs->create_thread();
@@ -276,7 +276,7 @@ void irp6s_postument_track_effector::create_threads()
 		// by Y - utworzenie watku komunikacji miedzy EDP a VSP
 		edp_vsp_obj->create_thread();
 	}
-
+#endif
 	manip_and_conv_effector::create_threads();
 }
 

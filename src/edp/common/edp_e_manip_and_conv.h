@@ -185,9 +185,7 @@ public:
     void registerReaderStoppedCallback(boost::function<void()> stoppedCallback);
 #endif
 
-#ifdef __QNXNTO__
-
-#else
+#ifndef __QNXNTO__
     bool servo_command_rdy;
     boost::mutex servo_command_mtx;
 

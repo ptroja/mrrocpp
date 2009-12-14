@@ -302,7 +302,7 @@ bool servo_buffer::get_command (void)
     {
     	boost::lock_guard<boost::mutex> lock(master.servo_command_mtx);
     	if(master.servo_command_rdy) {
-    		command = master.servo_command;
+    		command = servo_command;
     		master.servo_command_rdy = false;
     		new_command_available = true;
     	}
@@ -574,7 +574,7 @@ void servo_buffer::reply_to_EDP_MASTER (void)
     {
     	boost::lock_guard<boost::mutex> lock(master.sg_reply_mtx);
 
-    	master.sg_reply = servo_data;
+    	sg_reply = servo_data;
     	master.sg_reply_rdy = true;
     }
 
