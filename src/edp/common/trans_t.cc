@@ -22,7 +22,7 @@ namespace common {
 
 
 trans_t::trans_t(effector& _master) :
-	edp_extension_thread(_master), master (_master)
+	master (_master)
 {
 	// semafory do komunikacji miedzy EDP_MASTER a EDP_TRANS
 	sem_init(&master_to_trans_t_sem, 0, 0);
@@ -88,9 +88,6 @@ int trans_t::trans_t_wait_for_master_order()
 	// oczekiwanie na rozkaz z watku master
 	return sem_wait(&master_to_trans_t_sem);
 }
-
-
-
 
 } // namespace common
 } // namespace edp

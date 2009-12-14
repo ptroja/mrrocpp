@@ -111,9 +111,6 @@ void manip_and_conv_effector::create_threads ()
 	vis_obj = new vis_server(*this);
 	sb = return_created_servo_buffer();
 
-	// create servo thread
-	sb->create_thread();
-
     // wait for initialization of servo thread
     {
     	boost::unique_lock<boost::mutex> lock(thread_started_mutex);
@@ -123,9 +120,6 @@ void manip_and_conv_effector::create_threads ()
             thread_started_cond.wait(thread_started_mutex);
         }
     }
-
-    // create transformer thread
-    mt_tt_obj->create_thread();
 }
 
 

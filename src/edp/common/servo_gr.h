@@ -8,9 +8,10 @@
 #ifndef __SERVO_GR_H
 #define __SERVO_GR_H
 
+#include <boost/utility.hpp>
+
 #include "edp/common/edp.h"
 #include "edp/common/hi_rydz.h"
-#include "edp/common/edp_extension_thread.h"
 #include "edp/common/regulator.h"
 
 #define ERROR_DETECTED     1
@@ -21,7 +22,7 @@ namespace edp {
 namespace common {
 
 /*-----------------------------------------------------------------------*/
-class servo_buffer  : public edp_extension_thread
+class servo_buffer : public boost::noncopyable
 {
     // Bufor polecen przysylanych z EDP_MASTER dla SERVO
     // Obiekt z algorytmem regulacji
@@ -31,6 +32,7 @@ private:
 #endif
 
 protected:
+    boost::thread *thread_id;
 
     hardware_interface* hi;    // obiekt odpowiedzialny za kontakt ze sprzetem
 
@@ -39,7 +41,6 @@ protected:
     regulator* regulator_ptr[MAX_SERVOS_NR];
     // tablica wskaznikow na regulatory bazowe,
     // ktore zostana zastapione regulatorami konkretnymi
-
 
     // input_buffer
     lib::edp_master_command command; // polecenie z EDP_MASTER dla SERVO
@@ -85,10 +86,8 @@ public:
     lib::servo_group_reply sg_reply;          // bufor na informacje odbierane z SERVO_GROUP
 
     void send_to_SERVO_GROUP ();
-    static void *thread_start(void* arg);
-    void *thread_main_loop(void* arg);
 
-    void create_thread(void);
+    void operator()(void);
 
     //! input_buffer
     manip_and_conv_effector &master;

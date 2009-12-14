@@ -26,25 +26,6 @@ namespace mrrocpp {
 namespace edp {
 namespace common {
 
-
-void * servo_buffer::thread_start(void* arg)
-{
-	fprintf(stderr, "debug @ %s:%d\n", __FILE__, __LINE__);
-    return static_cast<servo_buffer*> (arg)->thread_main_loop(arg);
-}
-
-
-void servo_buffer::create_thread(void)
-{
-	fprintf(stderr, "debug @ %s:%d\n", __FILE__, __LINE__);
-	if (pthread_create (&thread_id, NULL, &thread_start, (void *) this))
-	{
-	    master.msg->message(lib::SYSTEM_ERROR, errno, "EDP: Failed to create servo_buffer thread");
-	    throw System_error();
-	}
-}
-
-
 /*--------------------------------------------------------------------------*/
 void servo_buffer::send_to_SERVO_GROUP ()
 {
@@ -154,9 +135,8 @@ void servo_buffer::send_to_SERVO_GROUP ()
 
 
 
-void * servo_buffer::thread_main_loop(void* arg)
+void servo_buffer::operator()()
 {
-	fprintf(stderr, "debug @ %s:%d\n", __FILE__, __LINE__);
 	// servo buffer has to be created before servo thread starts
 //	std::auto_ptr<servo_buffer> sb(return_created_servo_buffer()); // bufor do komunikacji z EDP_MASTER
 
@@ -172,8 +152,6 @@ void * servo_buffer::thread_main_loop(void* arg)
 
     	master.thread_started_cond.notify_one();
     }
-
-    fprintf(stderr, "debug @ %s:%d\n", __FILE__, __LINE__);
 
     /* BEGIN SERVO_GROUP */
 
@@ -224,8 +202,6 @@ void * servo_buffer::thread_main_loop(void* arg)
             }
         } // end: else
     }
-
-    return NULL;
 } // end: main() SERVO_GROUP
 
 
@@ -257,7 +233,7 @@ lib::SERVO_COMMAND servo_buffer::command_type() const
 }
 
 servo_buffer::servo_buffer (manip_and_conv_effector &_master)
-        : edp_extension_thread(_master),
+        :
 #ifndef __QNXNTO__
         servo_command_rdy(false), sg_reply_rdy(false),
 #endif

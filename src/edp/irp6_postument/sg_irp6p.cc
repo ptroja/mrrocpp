@@ -77,8 +77,7 @@ uint8_t servo_buffer::Move_a_step (void)
 /*-----------------------------------------------------------------------*/
 servo_buffer::servo_buffer ( effector &_master) : common::servo_buffer(_master), master(_master)
 {
-
-
+	thread_id = new boost::thread(boost::bind(&servo_buffer::operator(), this));
 }
 /*-----------------------------------------------------------------------*/
 
@@ -528,6 +527,8 @@ servo_buffer::~servo_buffer(void)
 	}
 
 	delete hi;
+
+	delete thread_id;
 }
 /*-----------------------------------------------------------------------*/
 

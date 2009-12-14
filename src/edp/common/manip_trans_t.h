@@ -9,6 +9,8 @@
 #ifndef __MANIP_TRANS_T_H
 #define __MANIP_TRANS_T_H
 
+#include <boost/utility.hpp>
+
 #include "edp/common/trans_t.h"
 
 namespace mrrocpp {
@@ -23,10 +25,10 @@ private:
     manip_and_conv_effector &master;
 
 public:
-    static void *thread_start(void* arg);
-    void *thread_main_loop(void* arg);
-    void create_thread(void);
+    void operator()();
+
     manip_trans_t(manip_and_conv_effector& _master);
+    ~manip_trans_t();
 };
 
 } // namespace common

@@ -206,10 +206,8 @@ effector::~effector ()
 
 void effector::create_threads ()
 {
-
 	mt_tt_obj = new speak_t(*this);
-	mt_tt_obj->create_thread();
-};
+}
 
 
 

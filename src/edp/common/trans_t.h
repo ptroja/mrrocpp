@@ -11,7 +11,6 @@
 
 #include <stdint.h>
 #include <semaphore.h>
-#include <pthread.h>
 
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
@@ -29,21 +28,22 @@ class effector;
 
 /**************************** trans_t *****************************/
 
-
-
-class trans_t : public kinematic::common::transformer_error, public edp_extension_thread
+class trans_t : public kinematic::common::transformer_error, boost::noncopyable
 {
 private:
     sem_t master_to_trans_t_sem; // semafor pomiedzy edp_master a edp_trans
     sem_t trans_t_to_master_sem; // semafor pomiedzy edp_master a edp_trans
     effector &master;
 
+protected:
+    boost::thread *thread_id;
+
 public:
     MT_ORDER trans_t_task;
     int trans_t_tryb;
     ERROR_TYPE error;
 
-    virtual void *thread_main_loop(void* arg) = 0;
+    virtual void operator()() = 0;
 
     // wskaznik na bledy (rzutowany na odpowiedni blad)
     void* error_pointer;

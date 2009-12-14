@@ -25,23 +25,15 @@ namespace common {
 manip_trans_t::manip_trans_t(manip_and_conv_effector& _master):
 	trans_t(_master), master (_master)
 {
+	thread_id = new boost::thread(boost::bind(&manip_trans_t::operator(), this));
 }
 
-void manip_trans_t::create_thread(void)
+manip_trans_t::~manip_trans_t()
 {
-	if (pthread_create (&thread_id, NULL, &thread_start, (void *) this))
-	{
-	    master.msg->message(lib::SYSTEM_ERROR, errno, "EDP: Failed to create manip_trans_t thread");
-	    throw System_error();
-	}
+	delete thread_id;
 }
 
-void * manip_trans_t::thread_start(void* arg)
-{
-    return static_cast<manip_trans_t*> (arg)->thread_main_loop(arg);
-}
-
-void * manip_trans_t::thread_main_loop(void *arg)
+void manip_trans_t::operator()()
 {
     lib::set_thread_priority(pthread_self(), MAX_PRIORITY);
 
@@ -143,8 +135,6 @@ void * manip_trans_t::thread_main_loop(void *arg)
             // printf("zlapane cos");// by Y&W
         }
     }
-
-    return NULL;
 }
 
 } // namespace common

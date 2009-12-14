@@ -26,24 +26,10 @@ namespace speaker {
 speak_t::speak_t(effector& _master):
 	trans_t(_master), master (_master)
 {
+	thread_id = new boost::thread(boost::bind(&speak_t::operator(), this));
 }
 
-void speak_t::create_thread(void)
-{
-	if (pthread_create (&thread_id, NULL, &thread_start, (void *) this))
-	{
-	    master.msg->message(lib::SYSTEM_ERROR, errno, "EDP: Failed to create speak_t thread");
-	    throw common::System_error();
-	}
-}
-
-void * speak_t::thread_start(void* arg)
-{
-	 return static_cast<speak_t*> (arg)->thread_main_loop(arg);
-}
-
-
-void * speak_t::thread_main_loop(void *arg)
+void speak_t::operator()()
 {
     lib::set_thread_priority(pthread_self() , MAX_PRIORITY-10);
 
@@ -148,7 +134,6 @@ void * speak_t::thread_main_loop(void *arg)
         }
 
     } // end while
-    return NULL;
 }
 
 } // namespace common

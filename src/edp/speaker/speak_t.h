@@ -30,11 +30,10 @@ private:
 	effector &master;
 
 public:
-    static void *thread_start(void* arg);
-    void *thread_main_loop(void* arg);
-    void create_thread(void);
+    void operator()();
 
     speak_t(effector& _master);
+    ~speak_t();
 };
 /**************************** trans_t *****************************/
 
