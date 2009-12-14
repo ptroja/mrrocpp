@@ -11,13 +11,15 @@
 #include "edp/common/edp.h"
 #include "edp/common/hi_rydz.h"
 #include "edp/common/edp_extension_thread.h"
-//#include "edp/common/regulator.h"
+
+
 
 namespace mrrocpp {
 namespace edp {
 namespace common {
 
 class regulator;
+
 
 /*-----------------------------------------------------------------------*/
 class servo_buffer  : public edp_extension_thread

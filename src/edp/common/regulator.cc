@@ -19,7 +19,6 @@
 #include "edp/common/edp.h"
 #include "edp/common/reader.h"
 #include "edp/common/hi_rydz.h"
-#include "edp/common/servo_gr.h"
 #include "edp/common/regulator.h"
 
 namespace mrrocpp {
