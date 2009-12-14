@@ -67,8 +67,6 @@ struct status_of_a_dof
     uint16_t adr_offset_plus_2;
     uint16_t adr_offset_plus_4;
     uint16_t adr_offset_plus_6;
-    uint16_t adr_offset_plus_8;
-    uint16_t adr_offset_plus_a;
 };
 
 

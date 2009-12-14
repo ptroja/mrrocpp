@@ -152,7 +152,6 @@ hardware_interface::hardware_interface (manip_and_conv_effector &_master,
 		}
 	}
 
-	// fprintf(stderr, "SETTING SINCHRONIZED TO %d\n", irq_data.md.is_synchronised);
 	master.controller_state_edp_buf.is_synchronised = irq_data.md.is_synchronised;
 
 	for (int i = 0; i < master.number_of_servos; i++ )
@@ -161,8 +160,6 @@ hardware_interface::hardware_interface (manip_and_conv_effector &_master,
 		robot_status[i].adr_offset_plus_2 = 0;
 		robot_status[i].adr_offset_plus_4 = 0;
 		robot_status[i].adr_offset_plus_6 = 0;
-		robot_status[i].adr_offset_plus_8 = 0;
-		robot_status[i].adr_offset_plus_a = 0;
 		meassured_current[i] = 0;
 	}
 
