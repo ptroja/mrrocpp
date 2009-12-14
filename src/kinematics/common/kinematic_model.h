@@ -126,9 +126,10 @@ public:
   virtual void inverse_kinematics_transform(double* local_desired_joints, double* local_current_joints, lib::frame_tab* local_desired_end_effector_frame) = 0;
 
   // Zwraca etykiete modelu kinematycznego.
-  virtual const char* get_kinematic_model_label(void);
+  virtual const char* get_kinematic_model_label(void) const;
+
   // Ustawia pokazywana etykiete modelu kinematycznego.
-  virtual void set_kinematic_model_label(const char*);
+  virtual void set_kinematic_model_label(const std::string &);
 
 };//: kinematic_model
 
