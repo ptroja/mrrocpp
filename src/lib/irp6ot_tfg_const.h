@@ -5,8 +5,8 @@
 // Ostatnia modyfikacja: 16.04.98
 // -------------------------------------------------------------------------
 
-#if !defined(_IRP6OT_TFG_H)
-#define _IRP6OT_TFG_H
+#if !defined(_IRP6OT_TFG_CONST_H)
+#define _IRP6OT_TFG_CONST_H
 
 #include <stdint.h>
 

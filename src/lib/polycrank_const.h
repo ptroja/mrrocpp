@@ -5,8 +5,8 @@
 // Ostatnia modyfikacja: 16.04.98
 // -------------------------------------------------------------------------
 
-#if !defined(_POLYCRANK_H)
-#define _POLYCRANK_H
+#if !defined(_POLYCRANK_CONST_H)
+#define _POLYCRANK_CONST_H
 
 #include <stdint.h>
 

@@ -5,8 +5,8 @@
 // Ostatnia modyfikacja: 16.04.98
 // -------------------------------------------------------------------------
 
-#if !defined(_SPEAKER_H)
-#define _SPEAKER_H
+#if !defined(_SPEAKER_CONST_H)
+#define _SPEAKER_CONST_H
 
 #include <stdint.h>
 

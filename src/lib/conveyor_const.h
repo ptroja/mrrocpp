@@ -5,8 +5,8 @@
 // Ostatnia modyfikacja: 16.04.98
 // -------------------------------------------------------------------------
 
-#if !defined(_CONVEYOR_H)
-#define _CONVEYOR_H
+#if !defined(_CONVEYOR_CONST_H)
+#define _CONVEYOR_CONST_H
 
 #include <stdint.h>
 

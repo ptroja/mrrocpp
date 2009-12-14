@@ -5,8 +5,8 @@
 // Ostatnia modyfikacja: 16.04.98
 // -------------------------------------------------------------------------
 
-#if !defined(_SMB_H)
-#define _SMB_H
+#if !defined(_SMB_CONST_H)
+#define _SMB_CONST_H
 
 #include <stdint.h>
 

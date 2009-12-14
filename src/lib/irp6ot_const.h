@@ -5,8 +5,8 @@
 // Ostatnia modyfikacja: 16.04.98
 // -------------------------------------------------------------------------
 
-#if !defined(_IRP6OT_H)
-#define _IRP6OT_H
+#if !defined(_IRP6OT_CONST_H)
+#define _IRP6OT_CONST_H
 
 #include <stdint.h>
 
