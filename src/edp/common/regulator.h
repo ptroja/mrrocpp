@@ -16,22 +16,16 @@ namespace mrrocpp {
 namespace edp {
 namespace common {
 
-// stale dla automatu w regulatorze chwytka
-#define GRIPPER_BLOCKED_TIME_PERIOD 200
-#define MAX_GRIPPER_SUM_OF_CURRENTS_NR_OF_ELEMENTS 1000
-
 
 #define MAX_INC 80
 // #define MAX_INCR 469
 // #define MAX_INCR2 234
 // #define MAX_INCR3 30 // 15
 
-#define ERROR_DETECTED     1
-#define NO_ERROR_DETECTED  0
-
 #define ALGORITHM_AND_PARAMETERS_OK           0
 #define UNIDENTIFIED_ALGORITHM_NO             1
 #define UNIDENTIFIED_ALGORITHM_PARAMETERS_NO  2
+
 
 // stale ograniczen na predkosc i przyspieszenie w regulatorach
 

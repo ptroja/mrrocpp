@@ -12,7 +12,8 @@
 #include "edp/common/hi_rydz.h"
 #include "edp/common/edp_extension_thread.h"
 
-
+#define ERROR_DETECTED     1
+#define NO_ERROR_DETECTED  0
 
 namespace mrrocpp {
 namespace edp {
