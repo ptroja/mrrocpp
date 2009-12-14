@@ -130,11 +130,8 @@ void * force::thread_main_loop(void *arg)
 		    	{
 		    		boost::mutex::scoped_lock lock(master.rb_obj->reader_mutex);
 
-					for (int i=0;i<=5;i++)
-					{
-						current_force_torque.to_table (master.rb_obj->step_data.force);
-					}
-		    	}
+								current_force_torque.to_table (master.rb_obj->step_data.force);
+				}
 			}
 			sem_trywait(&(new_ms));
 			sem_post(&(new_ms)); //!< jest gotowy nowy pomiar
