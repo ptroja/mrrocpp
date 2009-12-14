@@ -13,18 +13,12 @@
 #include "edp/common/regulator.h"
 
 
-
-
 namespace mrrocpp {
 namespace edp {
 namespace common {
 
 // ograniczenia przyrostu PWM dla CONVEYOR
 #define CONVEYOR_AXE1_MAX_PWM_INCREMENT	1000
-
-
-
-
 
 
 /*-----------------------------------------------------------------------*/

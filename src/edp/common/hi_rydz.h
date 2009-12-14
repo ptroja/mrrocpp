@@ -52,7 +52,7 @@ typedef enum INTERRUPT_MODE {
 #define SERVO_REPLY_POS_LOW_ADR   (0x204)
 #define SERVO_REPLY_POS_HIGH_ADR  (0x206)
 #define SERVO_REPLY_REG_1_ADR     (0x208)
-#define SERVO_REPLY_REG_2_ADR     (0x20A)
+
 
 
 struct control_a_dof
