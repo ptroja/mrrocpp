@@ -147,11 +147,6 @@ protected:
     // wspolrzedne zewnetrzne koncowki manipulatora
     // wzgledem ukladu bazowego (polozenie w mm)
 
-    lib::frame_tab desired_end_effector_frame_tmp_m;      //  XXXXX
-    // Podstawowa postac reprezentujaca zadane
-    // wspolrzedne zewnetrzne koncowki manipulatora
-    // wzgledem ukladu bazowego (polozenie w mm)       przed sprawdzeniem na ograniczenia kinematyczne
-
     lib::frame_tab current_end_effector_frame;
     // Podstawowa postac reprezentujaca ostatnio
     // odczytane wspolrzedne zewnetrzne koncowki
