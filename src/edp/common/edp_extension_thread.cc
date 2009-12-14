@@ -20,6 +20,14 @@ namespace edp {
 namespace common {
 
 
+
+edp_boost_thread::edp_boost_thread(effector &_master) :
+	master (_master)
+{}
+
+edp_boost_thread::~edp_boost_thread()
+{}
+
 edp_extension_thread::edp_extension_thread(effector &_master) :
 	master (_master)
 {}

@@ -14,6 +14,7 @@
 #include "lib/com_buf.h"
 
 #include "kinematics/common/transformer_error.h"
+#include "edp/common/edp_extension_thread.h"
 
 namespace mrrocpp {
 namespace edp {
@@ -22,7 +23,7 @@ namespace common {
 // TODO: remove forward declarations
 class manip_and_conv_effector;
 
-class vis_server
+class vis_server : public edp_boost_thread
 {
 private:
 	manip_and_conv_effector &master;
@@ -30,6 +31,7 @@ private:
 public:
 	//! main loop
 	void operator()();
+	void create_thread(void);
 
     vis_server(manip_and_conv_effector &_master);
 };
