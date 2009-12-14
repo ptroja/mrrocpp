@@ -36,24 +36,8 @@ public:
     virtual void *thread_main_loop(void* arg) = 0;
 
     edp_extension_thread(effector &_master);
-    ~edp_extension_thread();
+    virtual ~edp_extension_thread();
 };
-
-class edp_boost_thread
-{
-private:
-	effector &master;
-
-public:
-	boost::thread* thread_id;
-
-    virtual void operator()() = 0;
-    virtual void create_thread(void) = 0;
-    edp_boost_thread(effector &_master);
-    ~edp_boost_thread();
-};
-
-
 
 } // namespace common
 } // namespace edp

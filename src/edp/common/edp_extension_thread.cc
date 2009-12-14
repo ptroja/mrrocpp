@@ -19,31 +19,12 @@ namespace mrrocpp {
 namespace edp {
 namespace common {
 
-
-
-edp_boost_thread::edp_boost_thread(effector &_master) :
-	master (_master)
-{}
-
-edp_boost_thread::~edp_boost_thread()
-{}
-
 edp_extension_thread::edp_extension_thread(effector &_master) :
 	master (_master)
 {}
 
 edp_extension_thread::~edp_extension_thread()
 {}
-
-
-
-
-/*
-void * edp_extension_thread::thread_start(void* arg)
-{
-	return static_cast<edp_extension_thread*> (arg)->thread_main_loop(arg);
-}
-*/
 
 } // namespace common
 } // namespace edp
