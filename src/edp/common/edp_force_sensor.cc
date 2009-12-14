@@ -126,12 +126,15 @@ void * force::thread_main_loop(void *arg)
 
 				lib::Ft_v_vector current_force_torque (ft_tr_inv_tool_matrix * ft_tr_inv_current_frame_matrix * lib::Ft_v_vector (current_force));
 
-				master.rb_obj->lock_mutex();
-				for (int i=0;i<=5;i++)
-				{
-					current_force_torque.to_table (master.rb_obj->step_data.force);
-				}
-				master.rb_obj->unlock_mutex();
+		    	// scope-locked reader data update
+		    	{
+		    		boost::mutex::scoped_lock lock(master.rb_obj->reader_mutex);
+
+					for (int i=0;i<=5;i++)
+					{
+						current_force_torque.to_table (master.rb_obj->step_data.force);
+					}
+		    	}
 			}
 			sem_trywait(&(new_ms));
 			sem_post(&(new_ms)); //!< jest gotowy nowy pomiar

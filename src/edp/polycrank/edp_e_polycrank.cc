@@ -252,14 +252,15 @@ void effector::move_arm (lib::c_buffer &instruction)
     case lib::XYZ_EULER_ZYZ:
 
         // zapisanie wartosci zadanej dla readera
-        rb_obj->lock_mutex();
+    	// scope-locked reader data update
+    	{
+    		boost::mutex::scoped_lock lock(rb_obj->reader_mutex);
 
-        for (int i=0; i<6;i++)
-        {
-            rb_obj->step_data.current_cartesian_position[i]=instruction.arm.pf_def.arm_coordinates[i];
-        }
-
-        rb_obj->unlock_mutex();
+			for (int i=0; i<6;i++)
+			{
+				rb_obj->step_data.current_cartesian_position[i]=instruction.arm.pf_def.arm_coordinates[i];
+			}
+    	}
 
         compute_xyz_euler_zyz(instruction);
         move_servos ();
@@ -360,10 +361,12 @@ void effector::get_arm_position (bool read_hardware, lib::c_buffer &instruction)
         throw NonFatal_error_2(INVALID_GET_END_EFFECTOR_TYPE);
     }
 
-    rb_obj->lock_mutex();// by Y
-    reply.servo_step=rb_obj->step_data.step;
-    rb_obj->unlock_mutex();
+	// scope-locked reader data update
+	{
+		boost::mutex::scoped_lock lock(rb_obj->reader_mutex);
 
+		reply.servo_step=rb_obj->step_data.step;
+	}
 }
 /*--------------------------------------------------------------------------*/
 

@@ -7,7 +7,8 @@
 
 #include <stdint.h>
 #include <semaphore.h>
-#include <pthread.h>
+
+#include <boost/thread/mutex.hpp>
 
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
@@ -81,11 +82,12 @@ struct reader_data
 class reader_buffer : public edp_extension_thread
 {
 private:
-
     sem_t reader_sem;
-    pthread_mutex_t reader_mutex;
+
     effector &master;
 public:
+	boost::mutex reader_mutex;
+
     static void *thread_start(void* arg);
     void *thread_main_loop(void* arg);
 

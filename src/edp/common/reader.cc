@@ -54,13 +54,11 @@ void reader_buffer::create_thread(void)
 reader_buffer::reader_buffer(effector &_master) :
 	edp_extension_thread(_master), master (_master)
 {
-	pthread_mutex_init(&reader_mutex, NULL);
 	sem_init(&reader_sem, 0, 0);
 }
 
 reader_buffer::~reader_buffer()
 {
-	pthread_mutex_destroy(&reader_mutex);
 	sem_destroy(&reader_sem);
 }
 
@@ -77,18 +75,6 @@ int reader_buffer::reader_wait_for_new_step() // oczekiwanie na semafor
 {
 	return sem_wait(&reader_sem);
 }
-
-int reader_buffer::lock_mutex() // zajecie mutex'a
-{
-	return pthread_mutex_lock( &reader_mutex);
-}
-
-int reader_buffer::unlock_mutex() // zwolnienie mutex'a
-{
-	return pthread_mutex_unlock( &reader_mutex);
-}
-
-
 
 void * reader_buffer::thread_start(void* arg)
 {
@@ -281,15 +267,14 @@ void * reader_buffer::thread_main_loop(void* arg)
 			reader_wait_for_new_step();
 
 			// sekcja krytyczna odczytu danych pomiarowych dla biezacego kroku
-			lock_mutex();
+			{
+				boost::mutex::scoped_lock lock(reader_mutex);
 
-			step_data.ui_trigger = ui_trigger;
+				step_data.ui_trigger = ui_trigger;
 
-			// printf("EDPX: %f\n", step_data.current_cartesian_position[1]);
-			// przepisanie danych dla biezacego kroku do bufora lokalnego reader
-			memcpy(&(r_measptr[msr_nr]), &step_data, sizeof(reader_data));
-
-			unlock_mutex();
+				// przepisanie danych dla biezacego kroku do bufora lokalnego reader
+				r_measptr[msr_nr] = step_data;
+			}
 
 			// wykrycie przepelnienia
 			if ((++msr_nr) >= nr_of_samples) {

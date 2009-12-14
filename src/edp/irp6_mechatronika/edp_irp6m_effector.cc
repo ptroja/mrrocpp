@@ -223,15 +223,15 @@ void effector::move_arm (lib::c_buffer &instruction)
         break;
     case lib::XYZ_EULER_ZYZ:
 
-        // zapisanie wartosci zadanej dla readera
-        rb_obj->lock_mutex();
+    	// scope-locked reader data update
+    	{
+    		boost::mutex::scoped_lock lock(rb_obj->reader_mutex);
 
-        for (int i=0; i<6;i++)
-        {
-            rb_obj->step_data.current_cartesian_position[i]=instruction.arm.pf_def.arm_coordinates[i];
-        }
-
-        rb_obj->unlock_mutex();
+			for (int i=0; i<6;i++)
+			{
+				rb_obj->step_data.current_cartesian_position[i]=instruction.arm.pf_def.arm_coordinates[i];
+			}
+    	}
 
         compute_xyz_euler_zyz(instruction);
         move_servos ();
@@ -274,14 +274,15 @@ void effector::servo_joints_and_frame_actualization_and_upload (void)
     {
         get_current_kinematic_model()->mp2i_transform(servo_current_motor_pos, servo_current_joints);
 
-        rb_obj->lock_mutex();
+    	// scope-locked reader data update
+    	{
+    		boost::mutex::scoped_lock lock(rb_obj->reader_mutex);
 
-        for (int j = 0; j < number_of_servos; j++)
-        {
-            rb_obj->step_data.current_joints[j] = servo_current_joints[j];
-        }
-
-        rb_obj->unlock_mutex();
+    		for (int j = 0; j < number_of_servos; j++)
+			{
+				rb_obj->step_data.current_joints[j] = servo_current_joints[j];
+			}
+    	}
 
         // T.K.: Obecne wywolanie
         // get_current_kinematic_model()->i2e_transform(servo_current_joints, &servo_current_end_effector_frame, NULL);
@@ -293,15 +294,15 @@ void effector::servo_joints_and_frame_actualization_and_upload (void)
         A.get_mech_xyz_euler_zyz(servo_real_kartez_pos);
         //A.get_xyz_euler_zyz(servo_real_kartez_pos);
 
-        // zapisanie wartosci rzeczywistej dla readera
-        rb_obj->lock_mutex();
+    	// scope-locked reader data update
+    	{
+    		boost::mutex::scoped_lock lock(rb_obj->reader_mutex);
 
-        for (int i=0; i<6; i++)
-        {
-            rb_obj->step_data.real_cartesian_position[i] = servo_real_kartez_pos[i];
-        }
-
-        rb_obj->unlock_mutex();
+			for (int i=0; i<6; i++)
+			{
+				rb_obj->step_data.real_cartesian_position[i] = servo_real_kartez_pos[i];
+			}
+    	}
 
         // Jesli obliczenia zwiazane z baza maja byc wykonane.
         if (get_current_kinematic_model()->global_frame_computations)
@@ -412,10 +413,12 @@ void effector::get_arm_position (bool read_hardware, lib::c_buffer &instruction)
         throw NonFatal_error_2(INVALID_GET_END_EFFECTOR_TYPE);
     }
 
-    rb_obj->lock_mutex();// by Y
-    reply.servo_step=rb_obj->step_data.step;
-    rb_obj->unlock_mutex();
+	// scope-locked reader data update
+	{
+		boost::mutex::scoped_lock lock(rb_obj->reader_mutex);
 
+		reply.servo_step=rb_obj->step_data.step;
+	}
 }
 /*--------------------------------------------------------------------------*/
 

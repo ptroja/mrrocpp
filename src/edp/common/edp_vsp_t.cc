@@ -138,13 +138,15 @@ void * edp_vsp::thread_main_loop(void *arg)
 
 		counter++;
 
-		master.rb_obj->lock_mutex();
-		edp_vsp_reply.servo_step=master.rb_obj->step_data.step;
-		for (int i=0; i<=5; i++) {
-			edp_vsp_reply.current_present_XYZ_ZYZ_arm_coordinates[i]=master.rb_obj->step_data.current_cartesian_position[i];
-		}
+    	// scope-locked reader data update
+    	{
+    		boost::mutex::scoped_lock lock(master.rb_obj->reader_mutex);
 
-		master.rb_obj->unlock_mutex();
+			edp_vsp_reply.servo_step=master.rb_obj->step_data.step;
+			for (int i=0; i<=5; i++) {
+				edp_vsp_reply.current_present_XYZ_ZYZ_arm_coordinates[i]=master.rb_obj->step_data.current_cartesian_position[i];
+			}
+    	}
 
 		//!< wyslanie danych
 		if (MsgReply(vsp_caller, EOK, &edp_vsp_reply, sizeof(edp_vsp_reply)) ==-1) //!< by Y&W

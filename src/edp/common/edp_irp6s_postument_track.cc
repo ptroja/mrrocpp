@@ -552,9 +552,12 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buff
 		// wyliczenie nowej pozycji zadanej
 		next_frame = next_frame * rot_frame;
 
-		rb_obj->lock_mutex();
-		next_frame.get_xyz_euler_zyz(rb_obj->step_data.current_cartesian_position);
-		rb_obj->unlock_mutex();
+		// scope-locked reader data update
+		{
+			boost::mutex::scoped_lock lock(rb_obj->reader_mutex);
+
+			next_frame.get_xyz_euler_zyz(rb_obj->step_data.current_cartesian_position);
+		}
 
 		next_frame.get_frame_tab(desired_end_effector_frame);
 
@@ -639,14 +642,16 @@ void irp6s_postument_track_effector::move_arm(lib::c_buffer &instruction)
 		case lib::XYZ_EULER_ZYZ:
 
 			// zapisanie wartosci zadanej dla readera
-			rb_obj->lock_mutex();
-
-			for (int i=0; i<6; i++)
+			// scope-locked reader data update
 			{
-				rb_obj->step_data.current_cartesian_position[i]=instruction.arm.pf_def.arm_coordinates[i];
-			}
+				boost::mutex::scoped_lock lock(rb_obj->reader_mutex);
 
-			rb_obj->unlock_mutex();
+				for (int i=0; i<6; i++)
+				{
+					rb_obj->step_data.current_cartesian_position[i]=instruction.arm.pf_def.arm_coordinates[i];
+				}
+
+			}
 
 			compute_xyz_euler_zyz(instruction);
 			move_servos();
@@ -669,9 +674,7 @@ void irp6s_postument_track_effector::move_arm(lib::c_buffer &instruction)
 	}
 	else if (instruction.interpolation_type == lib::TCIM)
 	{
-
 		pose_force_torque_at_frame_move(instruction);
-
 	}
 
 	// by Y - uwaga na wyjatki, po rzuceniu wyjatku nie zostanie zaktualizowany previous_set_arm_type
@@ -776,10 +779,12 @@ void irp6s_postument_track_effector::get_arm_position(bool read_hardware, lib::c
 		}
 	}
 
-	rb_obj->lock_mutex();// by Y
-	reply.servo_step=rb_obj->step_data.step;
-	rb_obj->unlock_mutex();
+	// scope-locked reader data update
+	{
+		boost::mutex::scoped_lock lock(rb_obj->reader_mutex);
 
+		reply.servo_step=rb_obj->step_data.step;
+	}
 }
 /*--------------------------------------------------------------------------*/
 
@@ -807,14 +812,15 @@ void irp6s_postument_track_effector::servo_joints_and_frame_actualization_and_up
 		}
 
 
-		rb_obj->lock_mutex();
-
-		for (int j = 0; j < number_of_servos; j++)
+		// scope-locked reader data update
 		{
-			rb_obj->step_data.current_joints[j] = servo_current_joints[j];
-		}
+			boost::mutex::scoped_lock lock(rb_obj->reader_mutex);
 
-		rb_obj->unlock_mutex();
+			for (int j = 0; j < number_of_servos; j++)
+			{
+				rb_obj->step_data.current_joints[j] = servo_current_joints[j];
+			}
+		}
 
 		// Obliczenie lokalnej macierzy oraz obliczenie położenia robota we wsp. zewnętrznych.
 		lib::frame_tab local_frame;
@@ -824,14 +830,17 @@ void irp6s_postument_track_effector::servo_joints_and_frame_actualization_and_up
 		local_matrix.get_xyz_euler_zyz(servo_real_kartez_pos);
 
 		// Zapisanie wartosci rzeczywistej dla readera
-		rb_obj->lock_mutex();
-		for (int i=0; i<6; i++)
+		// scope-locked reader data update
 		{
-			rb_obj->step_data.real_cartesian_position[i] = servo_real_kartez_pos[i];
-			rb_obj->step_data.real_cartesian_vel[i] = servo_real_kartez_vel[i];
-			rb_obj->step_data.real_cartesian_acc[i] = servo_real_kartez_acc[i];
+			boost::mutex::scoped_lock lock(rb_obj->reader_mutex);
+
+			for (int i=0; i<6; i++)
+			{
+				rb_obj->step_data.real_cartesian_position[i] = servo_real_kartez_pos[i];
+				rb_obj->step_data.real_cartesian_vel[i] = servo_real_kartez_vel[i];
+				rb_obj->step_data.real_cartesian_acc[i] = servo_real_kartez_acc[i];
+			}
 		}
-		rb_obj->unlock_mutex();
 
 		// Obliczenie polozenia robota we wsp. zewnetrznych bez narzedzia.
 		get_current_kinematic_model()->i2e_wo_tool_transform(servo_current_joints, &servo_current_frame_wo_tool);

@@ -231,14 +231,15 @@ uint8_t NL_regulator_1_irp6p::compute_set_value (void)
         break;
     }
 
-    master.rb_obj->lock_mutex();
+	// scope-locked reader data update
+	{
+		boost::mutex::scoped_lock lock(master.rb_obj->reader_mutex);
 
-    master.rb_obj->step_data.desired_inc[0] = (float) step_new_pulse; // pozycja osi 0
-    master.rb_obj->step_data.current_inc[0] = (short int) position_increment_new;
-    master.rb_obj->step_data.pwm[0] = (float) set_value_new;
-    master.rb_obj->step_data.uchyb[0]=(float) (step_new_pulse - position_increment_new);
-
-    master.rb_obj->unlock_mutex();
+		master.rb_obj->step_data.desired_inc[0] = (float) step_new_pulse; // pozycja osi 0
+		master.rb_obj->step_data.current_inc[0] = (short int) position_increment_new;
+		master.rb_obj->step_data.pwm[0] = (float) set_value_new;
+		master.rb_obj->step_data.uchyb[0]=(float) (step_new_pulse - position_increment_new);
+	}
 
     // ograniczenie na sterowanie
     if (set_value_new > MAX_PWM)

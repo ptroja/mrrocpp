@@ -234,10 +234,12 @@ void effector::get_arm_position (bool read_hardware, lib::c_buffer &instruction)
 		throw NonFatal_error_2(INVALID_GET_END_EFFECTOR_TYPE);
 	}
 
-	rb_obj->lock_mutex();// by Y
-	reply.servo_step=rb_obj->step_data.step;
-	rb_obj->unlock_mutex();
+	// scope-locked reader data update
+	{
+		boost::mutex::scoped_lock lock(rb_obj->reader_mutex);
 
+		reply.servo_step=rb_obj->step_data.step;
+	}
 }
 
 

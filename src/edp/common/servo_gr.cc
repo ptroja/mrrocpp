@@ -182,9 +182,12 @@ void * servo_buffer::thread_main_loop(void* arg)
         // komunikacja z transformation
         if (!get_command())
         {
-            master.rb_obj->lock_mutex();
-            master.rb_obj->step_data.servo_mode = false; // tryb bierny
-            master.rb_obj->unlock_mutex();
+        	// scoped-locked reader data update
+            {
+            	boost::mutex::scoped_lock lock(master.rb_obj->reader_mutex);
+
+            	master.rb_obj->step_data.servo_mode = false; // tryb bierny
+            }
 
             /* Nie otrzymano nowego polecenia */
             /* Krok bierny - zerowy przyrost polozenia */
@@ -194,9 +197,11 @@ void * servo_buffer::thread_main_loop(void* arg)
         else
         {
         	// nowe polecenie
-            master.rb_obj->lock_mutex();
-            master.rb_obj->step_data.servo_mode = true; // tryb czynny
-            master.rb_obj->unlock_mutex();
+            {
+            	boost::mutex::scoped_lock lock(master.rb_obj->reader_mutex);
+
+            	master.rb_obj->step_data.servo_mode = true; // tryb czynny
+            }
 
             switch (command_type())
             {
@@ -357,20 +362,20 @@ uint8_t servo_buffer::Move_1_step (void)
     // odczyt poprzedniego polozenia
     master.step_counter++;
 
-    master.rb_obj->lock_mutex();
-
-    struct timespec step_time;
-
-    if( clock_gettime( CLOCK_REALTIME , &step_time) == -1 )
+    // scoped-locked reader data update
     {
-        perror("clock_gettime()");
+    	boost::mutex::scoped_lock lock(master.rb_obj->reader_mutex);
+
+		struct timespec step_time;
+
+		if( clock_gettime( CLOCK_REALTIME , &step_time) == -1 )
+		{
+			perror("clock_gettime()");
+		}
+
+		master.rb_obj->step_data.step =  master.step_counter;
+		master.rb_obj->step_data.msec=(int)(step_time.tv_nsec/1000000);
     }
-
-    master.rb_obj->step_data.step =  master.step_counter;
-    master.rb_obj->step_data.msec=(int)(step_time.tv_nsec/1000000);
-
-    master.rb_obj->unlock_mutex();
-
 
     if ( reply_status_tmp.error0 || reply_status_tmp.error1 )
     {
