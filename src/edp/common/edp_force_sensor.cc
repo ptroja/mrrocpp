@@ -167,9 +167,6 @@ void * force::thread_main_loop(void *arg)
 	return NULL;
 } //!< end MAIN
 
-void force::connect_to_hardware (void)
-{}
-
 force::force(common::irp6s_postument_track_effector &_master)
         : edp_extension_thread(_master), new_edp_command(false), master(_master)
 {
@@ -189,10 +186,6 @@ force::force(common::irp6s_postument_track_effector &_master)
     sr_msg = new lib::sr_vsp(lib::EDP, master.config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "edp_vsp_attach_point").c_str(),
                                  master.config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", UI_SECTION).c_str());
 }
-
-// oczekiwanie na zdarzenie
-void force::wait_for_event(void)
-{}
 
 void force::set_force_tool(void)
 {
