@@ -20,9 +20,6 @@ namespace mrrocpp {
 namespace edp {
 namespace conveyor {
 
-extern effector* master;
-//extern uint64_t kk;	// numer pomiaru od momentu startu pomiarow
-
 /*-----------------------------------------------------------------------*/
 uint8_t servo_buffer::Move_a_step (void)
 {
@@ -79,10 +76,6 @@ void servo_buffer::load_hardware_interface (void)
 	{
 		command.parameters.move.abs_position[j]=0.0;
 	}
-
-
-
-
 }
 
 
@@ -92,8 +85,6 @@ void servo_buffer::load_hardware_interface (void)
 void servo_buffer::synchronise (void)
 {
 	common::regulator* crp = NULL; // wskaznik aktualnie synchronizowanego napedu
-
-	int j;
 
 	double synchro_step = 0.0;   // zadany przyrost polozenia
 
@@ -106,9 +97,8 @@ void servo_buffer::synchronise (void)
 		return;
 	}
 
-
 	// zerowanie regulatorow
-	for (j = 0; j < CONVEYOR_NUM_OF_SERVOS; j++)
+	for (int j = 0; j < CONVEYOR_NUM_OF_SERVOS; j++)
 	{
 		crp = regulator_ptr[j];
 		crp->clear_regulator();
@@ -117,14 +107,14 @@ void servo_buffer::synchronise (void)
 
 
 	// zatrzymanie na chwile robota
-	for (j = 0; j < CONVEYOR_NUM_OF_SERVOS; j++)
+	for (int j = 0; j < CONVEYOR_NUM_OF_SERVOS; j++)
 	{
 		synchro_step=0.0;
 		crp = regulator_ptr[j];
 		crp->insert_new_step(synchro_step);
 	}
 
-	for (j = 0; j < 25; j++)
+	for (int j = 0; j < 25; j++)
 		Move_1_step();
 
 	//	kk = 0;
