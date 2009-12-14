@@ -4,10 +4,15 @@ HOMEDIR = ../..
 include $(HOMEDIR)/common.mk
 
 ifeq ($(BUILD_TARGET), linux)
-SOURCEDIRS = common irp6_mechatronika irp6_on_track irp6_postument conveyor
+SOURCEDIRS = common \
+	conveyor irp6_on_track irp6_postument irp6_mechatronika \
+	smb spkm
 else
-SOURCEDIRS = common ati3084 ati3084MK ati6284 conveyor irp6_on_track speaker\
-	polycrank irp6_postument irp6_mechatronika smb spkm
+SOURCEDIRS = common \
+	ati3084 ati3084MK ati6284 \
+	conveyor irp6_on_track irp6_postument irp6_mechatronika \
+	speaker polycrank \
+	smb spkm
 endif
 
 ifdef DOCENT_SENSOR

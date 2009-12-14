@@ -33,6 +33,8 @@ namespace smb {
 common::servo_buffer* effector::return_created_servo_buffer(void)
 {
 	// TODO
+	assert(0);
+	return NULL;
 }
 
 void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
