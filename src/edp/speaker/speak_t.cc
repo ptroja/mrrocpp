@@ -28,10 +28,6 @@ speak_t::speak_t(effector& _master):
 {
 }
 
-speak_t::~speak_t()
-{
-}
-
 void speak_t::create_thread(void)
 {
 	if (pthread_create (&thread_id, NULL, &thread_start, (void *) this))
@@ -43,8 +39,6 @@ void speak_t::create_thread(void)
 
 void * speak_t::thread_start(void* arg)
 {
-//	 edp_irp6s_and_conv_effector *master = (edp_irp6s_and_conv_effector *) arg;
-
 	 return static_cast<speak_t*> (arg)->thread_main_loop(arg);
 }
 
@@ -67,7 +61,8 @@ void * speak_t::thread_main_loop(void *arg)
         trans_t_wait_for_master_order();// oczekiwanie na zezwolenie ruchu od edp_master
 
         // przekopiowanie instrukcji z bufora watku komunikacji z ECP (edp_master)
-        memcpy( &(master.current_instruction), &(master.new_instruction), sizeof(master.new_instruction) );
+        master.current_instruction = master.new_instruction;
+
         try
         {
 

@@ -36,7 +36,7 @@ trans_t::~trans_t()
 	sem_destroy(&trans_t_to_master_sem);
 }
 
-int trans_t::master_to_trans_t_order(MT_ORDER nm_task, int nm_tryb)
+void trans_t::master_to_trans_t_order(MT_ORDER nm_task, int nm_tryb)
 { // zlecenie z watku master dla trans_t
 	trans_t_task = nm_task; // force, arm etc.
 	trans_t_tryb = nm_tryb; // tryb dla zadania
@@ -72,15 +72,6 @@ int trans_t::master_to_trans_t_order(MT_ORDER nm_task, int nm_tryb)
 		default:
 			break;
 	}
-
-	return 1;
-}
-
-// oczekiwanie na semafor statusu polecenia z trans_t
-int trans_t::master_wait_for_trans_t_order_status()
-{
-	// oczekiwanie na odpowiedz z watku transformation
-	return sem_wait(&trans_t_to_master_sem);
 }
 
 // oczekiwanie na semafor statusu polecenia z trans_t

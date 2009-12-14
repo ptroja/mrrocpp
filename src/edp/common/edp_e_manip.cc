@@ -35,23 +35,16 @@ namespace edp {
 namespace common {
 
 
-int	manip_effector::master_order(MT_ORDER nm_task, int nm_tryb)
+void manip_effector::master_order(MT_ORDER nm_task, int nm_tryb)
 {
-	return manip_and_conv_effector::master_order(nm_task, nm_tryb);
-}
-
-
-servo_buffer* manip_effector::return_created_servo_buffer ()
-{
-	printf("return_created_servo_buffer: MUSISZ PRZECIAZYC metode w klasie potomnej\n");
-	printf("TA METODA NIE MA PRAWA SIE URUCHOMIC\n");
-	return NULL;
+	manip_and_conv_effector::master_order(nm_task, nm_tryb);
 }
 
 /*--------------------------------------------------------------------------*/
 manip_effector::manip_effector (lib::configurator &_config, lib::robot_name_t l_robot_name) :
         manip_and_conv_effector (_config, l_robot_name)
-{}
+{
+}
 
 /*--------------------------------------------------------------------------*/
 void manip_effector::compute_xyz_euler_zyz (const lib::c_buffer &instruction)

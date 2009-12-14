@@ -11,13 +11,11 @@
 #include "edp/common/edp.h"
 #include "edp/common/hi_rydz.h"
 #include "edp/common/edp_extension_thread.h"
+#include "edp/common/regulator.h"
 
 namespace mrrocpp {
 namespace edp {
 namespace common {
-
-class regulator;
-
 
 // stale dla automatu w regulatorze chwytka
 #define GRIPPER_BLOCKED_TIME_PERIOD 200
@@ -136,9 +134,6 @@ public:
     void ppp (void) const;                 // wydruk - do celow uruchomieniowych !!!
 };
 /*-----------------------------------------------------------------------*/
-
-// Zwrocenie stworzonego obiektu - servo_buffer. Funkcja implementowana w plikach efektorow konkretnych (jadro).
-servo_buffer* return_created_servo_buffer (manip_and_conv_effector &_master);
 
 } // namespace common
 } // namespace edp

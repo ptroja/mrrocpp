@@ -43,15 +43,6 @@ namespace mrrocpp {
 namespace edp {
 namespace common {
 
-
-servo_buffer* irp6s_postument_track_effector::return_created_servo_buffer ()
-{
-	printf("return_created_servo_buffer: MUSISZ PRZECIAZYC metode w klasie potomnej\n");
-	printf("TA METODA NIE MA PRAWA SIE URUCHOMIC\n");
-	return NULL;
-}
-
-
 /*--------------------------------------------------------------------------*/
 void irp6s_postument_track_effector::set_rmodel(lib::c_buffer &instruction)
 {

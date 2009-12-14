@@ -46,20 +46,10 @@ namespace edp {
 namespace common {
 
 
-int	manip_and_conv_effector::master_order(MT_ORDER nm_task, int nm_tryb)
+void manip_and_conv_effector::master_order(MT_ORDER nm_task, int nm_tryb)
 {
-	return mt_tt_obj->master_to_trans_t_order(nm_task, nm_tryb);
+	mt_tt_obj->master_to_trans_t_order(nm_task, nm_tryb);
 }
-
-
-servo_buffer* manip_and_conv_effector::return_created_servo_buffer ()
-{
-	printf("return_created_servo_buffer: MUSISZ PRZECIAZYC metode w klasie potomnej\n");
-	printf("TA METODA NIE MA PRAWA SIE URUCHOMIC\n");
-	return NULL;
-}
-
-
 
 /*--------------------------------------------------------------------------*/
 manip_and_conv_effector::manip_and_conv_effector (lib::configurator &_config, lib::robot_name_t l_robot_name) :

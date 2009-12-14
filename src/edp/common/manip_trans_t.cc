@@ -59,7 +59,7 @@ void * manip_trans_t::thread_main_loop(void *arg)
         trans_t_wait_for_master_order();
 
         // przekopiowanie instrukcji z bufora watku komunikacji z ECP (edp_master)
-        memcpy( &(master.current_instruction), &(master.new_instruction), sizeof(lib::c_buffer) );
+        master.current_instruction = master.new_instruction;
 
         error = NO_ERROR; // wyjsciowo brak bledu (dla rzutowania)
 

@@ -35,8 +35,6 @@ public:
     void create_thread(void);
 
     speak_t(effector& _master);
-    ~speak_t();
-
 };
 /**************************** trans_t *****************************/
 

@@ -51,8 +51,7 @@ public:
     trans_t(effector& _master);
     ~trans_t();
 
-    int	master_to_trans_t_order(MT_ORDER nm_task, int nm_tryb);
-    int	master_wait_for_trans_t_order_status();
+    void master_to_trans_t_order(MT_ORDER nm_task, int nm_tryb);
     int	trans_t_to_master_order_status_ready();
     int	trans_t_wait_for_master_order();
 };

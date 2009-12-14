@@ -257,9 +257,9 @@ public:
     // Czy robot zsynchronizowany? // by Y - wziete z ecp
     bool is_synchronised ( void ) const;
 
-    virtual servo_buffer* return_created_servo_buffer ();
+    virtual servo_buffer* return_created_servo_buffer () = 0;
 
-    virtual int	master_order(MT_ORDER nm_task, int nm_tryb);
+    virtual void master_order(MT_ORDER nm_task, int nm_tryb);
 
 };
 /************************ edp_irp6s_and_conv_effector ****************************/

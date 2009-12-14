@@ -90,8 +90,6 @@ public:
     void get_rmodel (lib::c_buffer &);
     void move_arm (lib::c_buffer &);
     void get_arm_position(bool, lib::c_buffer &);
-
-    virtual servo_buffer* return_created_servo_buffer ();
 };
 /************************ edp_irp6s_effector ****************************/
 

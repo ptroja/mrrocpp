@@ -30,10 +30,15 @@ namespace mrrocpp {
 namespace edp {
 namespace spkm {
 
-int effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
+common::servo_buffer* effector::return_created_servo_buffer(void)
+{
+	// TODO
+}
+
+void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
 {
 	// przekopiowanie instrukcji z bufora watku komunikacji z ECP (edp_master)
-	memcpy( &(current_instruction), &(new_instruction), sizeof(lib::c_buffer) );
+	current_instruction = new_instruction;
 
 	switch (nm_task)
 	{
@@ -58,8 +63,6 @@ int effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
 	default: // blad: z reply_type wynika, e odpowied nie ma zawiera narzedzia
 	break;
 	}
-
-	return 1;
 }
 
 

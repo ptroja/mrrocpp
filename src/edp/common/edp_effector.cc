@@ -238,11 +238,9 @@ lib::INSTRUCTION_TYPE effector::receive_instruction(void)
 		break;
 	}
 
-	//memcpy( &new_instruction, msg_cb, sizeof(*msg_cb) );
 	caller = rcvid;
-//	printf("edp instruction_type: %d\n", new_ecp_command.instruction.instruction_type);
-// flushall();
-	memcpy( &new_instruction, &(new_ecp_command.instruction), sizeof(lib::c_buffer) );
+
+	new_instruction = new_ecp_command.instruction;
 
 	return new_instruction.instruction_type;
 }
