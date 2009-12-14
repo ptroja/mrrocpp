@@ -1903,6 +1903,12 @@ bool eih_nose_run::next_step()
 
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+//
+// pcbird_nose_run generator
+//
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
 pcbird_nose_run::pcbird_nose_run(common::task::task& _ecp_task,
 		int step) : tff_nose_run(_ecp_task, step)
 {
@@ -1910,11 +1916,12 @@ pcbird_nose_run::pcbird_nose_run(common::task::task& _ecp_task,
 }
 
 // ----------------------------------------------------------------------------------------------
-// -----------------------------------  metoda	next_step -----------------------------------
+// ---------------------------------    metoda	first_step --------------------------------------
 // ----------------------------------------------------------------------------------------------
 
 bool pcbird_nose_run::first_step()
 {
+	//bêdziemy pobierali dane o robocie
 	the_robot->ecp_command.instruction.instruction_type = lib::GET;
 	the_robot->ecp_command.instruction.get_type = ARM_DV;
 	the_robot->ecp_command.instruction.get_arm_type = lib::FRAME;
@@ -1922,24 +1929,24 @@ bool pcbird_nose_run::first_step()
 	return tff_nose_run::first_step();
 }
 
+// ----------------------------------------------------------------------------------------------
+// -----------------------------------  metoda	next_step ---------------------------------------
+// ----------------------------------------------------------------------------------------------
+
 bool pcbird_nose_run::next_step()
 {
-	// Generacja trajektorii prostoliniowej o zadany przyrost polozenia i orientacji
-	// Funkcja zwraca false gdy koniec generacji trajektorii
-	// Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
-	// UWAGA: dzialamy na jednoelementowej liscie robotow
-	// cout << "next_step" << endl;
-
 	++count;
 
-	if (count > 50)
-	{// co jakis czas generator sie zatrzymuje
+	//co jakis czas generator sie zatrzymuje
+	if (count > 50){
 		count = 0;
 		return false;
 	}
 
 	return tff_nose_run::next_step();
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 sr_nose_run::sr_nose_run(common::task::task& _ecp_task,
 		int step) :
