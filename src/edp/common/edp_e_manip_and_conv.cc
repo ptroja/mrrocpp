@@ -26,6 +26,10 @@
 #include <sys/neutrino.h>
 #include <sys/netmgr.h>
 #endif
+
+#include <boost/bind.hpp>
+#include <boost/thread/thread.hpp>
+
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
@@ -34,7 +38,6 @@
 #include "edp/common/edp_e_manip_and_conv.h"
 #include "edp/common/manip_trans_t.h"
 #include "edp/common/vis_server.h"
-
 
 #include "lib/mathtr.h"
 
@@ -128,7 +131,7 @@ void manip_and_conv_effector::create_threads ()
     mt_tt_obj->create_thread();
 
     // create visualization server thread
-    vis_obj->create_thread();
+    new boost::thread(*vis_obj);
 }
 
 

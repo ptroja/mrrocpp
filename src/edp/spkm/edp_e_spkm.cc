@@ -33,6 +33,8 @@ namespace spkm {
 common::servo_buffer* effector::return_created_servo_buffer(void)
 {
 	// TODO
+	assert(0);
+	return NULL;
 }
 
 void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
@@ -401,12 +403,7 @@ void effector::create_threads ()
         throw common::System_error();
     }
 
-    // PT - utworzenie watku wizualizacji
-    if (pthread_create (&vis_obj->thread_id, NULL, &vis_obj->thread_start, (void *) vis_obj))
-    {
-        msg->message(lib::SYSTEM_ERROR, errno, "EDP: Failed to create VISUALISATION thread");
-        throw common::System_error();
-    }
+    // TODO: utworzenie watku wizualizacji
 }
 
 

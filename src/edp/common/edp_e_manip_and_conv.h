@@ -37,6 +37,7 @@ class force;
 }
 namespace common {
 
+// TODO: remove forward declarations
 class manip_trans_t;
 class in_out_buffer;
 class vis_server;

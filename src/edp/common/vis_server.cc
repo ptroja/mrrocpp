@@ -22,27 +22,11 @@ namespace common {
 
 
 vis_server::vis_server(manip_and_conv_effector &_master) :
-	edp_extension_thread(_master), master (_master)
-{}
-
-vis_server::~vis_server()
-{}
-
-void vis_server::create_thread(void)
+	master (_master)
 {
-	if (pthread_create (&thread_id, NULL, &thread_start, (void *) this))
-	{
-	    master.msg->message(lib::SYSTEM_ERROR, errno, "EDP: Failed to create vis_server thread");
-	    throw System_error();
-	}
 }
 
-void * vis_server::thread_start(void* arg)
-{
-	return static_cast<vis_server*> (arg)->thread_main_loop(arg);
-}
-
-void * vis_server::thread_main_loop(void * arg)
+void vis_server::operator()()
 {
 	lib::set_thread_name("visualization");
 
@@ -55,13 +39,13 @@ void * vis_server::thread_main_loop(void * arg)
 	if (port == 0)
 	{
 		master.msg->message("visualisation_thread: bad or missing <visual_udp_port> config entry");
-		return NULL;
+		return;
 	}
 
 	if ((sockfd = socket(AF_INET, SOCK_DGRAM, 0)) == -1)
 	{
 		perror("socket()");
-		exit(1);
+		return;
 	}
 
 	my_addr.sin_family = AF_INET;		 // host byte order
@@ -72,7 +56,7 @@ void * vis_server::thread_main_loop(void * arg)
 	if (bind(sockfd, (struct sockaddr *)&my_addr, sizeof my_addr) == -1)
 	{
 		perror("bind()");
-		exit(1);
+		return;
 	}
 
 	addr_len = sizeof their_addr;
@@ -139,8 +123,6 @@ void * vis_server::thread_main_loop(void * arg)
 	}
 
 	close(sockfd);
-
-	return NULL;
 }
 
 } // namespace common
