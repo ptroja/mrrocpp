@@ -55,7 +55,6 @@ public:
     		unsigned int _hi_first_servo_ptr, unsigned int _hi_intr_generator_servo_ptr,
     		unsigned int _hi_isa_card_offset, int* _max_current);    // Konstruktor
 
-
 	uint64_t read_write_hardware(void); // Obsluga sprzetu
 
 	void finish_synchro(int drive_number);

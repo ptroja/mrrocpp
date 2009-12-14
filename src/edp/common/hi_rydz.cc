@@ -203,19 +203,19 @@ void hardware_interface::insert_set_value ( int drive_number, double set_value)
 }
 
 // dla wybranej osi
-int hardware_interface::get_current ( int drive_number )
+int hardware_interface::get_current ( int drive_number ) const
 {       // Pobranie pradu
     return meassured_current[drive_number];
 }
 
 // Pobranie przyrostu polozenia wybranej osi
-double hardware_interface::get_increment ( int drive_number )
+double hardware_interface::get_increment ( int drive_number ) const
 {
     return current_position_inc[drive_number];
 }
 
 // Pobranie polozenia wybranej osi
-long int hardware_interface::get_position ( int drive_number )
+long int hardware_interface::get_position ( int drive_number ) const
 {
     return current_absolute_position[drive_number];
 }

@@ -110,16 +110,16 @@ public:
     		unsigned int _hi_isa_card_offset,
     		int* _max_current);    // Konstruktor
 
-    virtual ~hardware_interface( void );   // Destruktor
-    virtual bool is_hardware_error ( void); // Sprawdzenie czy wystapil blad sprzetowy
+    virtual ~hardware_interface(void );   // Destruktor
+    virtual bool is_hardware_error(void); // Sprawdzenie czy wystapil blad sprzetowy
 
     void insert_set_value ( int drive_number, double set_value);
 
-    int get_current ( int drive_number );
+    int get_current ( int drive_number ) const;
 
-    double get_increment ( int drive_number );
+    double get_increment ( int drive_number ) const;
 
-    long int get_position ( int drive_number ) ;
+    long int get_position ( int drive_number ) const;
 
 
     virtual uint64_t read_write_hardware ( void );    // Obsluga sprzetu
