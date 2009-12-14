@@ -54,9 +54,6 @@ void manip_and_conv_effector::master_order(MT_ORDER nm_task, int nm_tryb)
 /*--------------------------------------------------------------------------*/
 manip_and_conv_effector::manip_and_conv_effector (lib::configurator &_config, lib::robot_name_t l_robot_name) :
         effector (_config, l_robot_name), manager(),
-#ifndef __QNXNTO__
-        servo_command_rdy(false), sg_reply_rdy(false),
-#endif
         step_counter(0),
         number_of_servos(-1)
 {
@@ -87,8 +84,8 @@ manip_and_conv_effector::manip_and_conv_effector (lib::configurator &_config, li
     }
 }
 
-manip_and_conv_effector::~manip_and_conv_effector() {
-
+manip_and_conv_effector::~manip_and_conv_effector()
+{
 }
 
 void manip_and_conv_effector::master_joints_read (double* output)
@@ -105,14 +102,13 @@ void manip_and_conv_effector::master_joints_read (double* output)
 /*--------------------------------------------------------------------------*/
 void manip_and_conv_effector::create_threads ()
 {
-
 	rb_obj = new reader_buffer(*this);
 	mt_tt_obj = new manip_trans_t(*this);
 	in_out_obj = new in_out_buffer();
 	vis_obj = new vis_server(*this);
 	sb = return_created_servo_buffer();
 
-    // Y&W - utworzenie watku serwa
+	// create servo thread
 	sb->create_thread();
 
     // wait for initialization of servo thread
@@ -125,13 +121,13 @@ void manip_and_conv_effector::create_threads ()
         }
     }
 
-    // Y&W - utworzenie watku readera
+    // create reader thread
     rb_obj->create_thread();
 
+    // create transformer thread
     mt_tt_obj->create_thread();
 
-
-    // PT - utworzenie watku wizualizacji
+    // create visualization server thread
     vis_obj->create_thread();
 }
 

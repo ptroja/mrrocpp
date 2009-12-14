@@ -29,12 +29,14 @@ namespace common {
 
 void * servo_buffer::thread_start(void* arg)
 {
+	fprintf(stderr, "debug @ %s:%d\n", __FILE__, __LINE__);
     return static_cast<servo_buffer*> (arg)->thread_main_loop(arg);
 }
 
 
 void servo_buffer::create_thread(void)
 {
+	fprintf(stderr, "debug @ %s:%d\n", __FILE__, __LINE__);
 	if (pthread_create (&thread_id, NULL, &thread_start, (void *) this))
 	{
 	    master.msg->message(lib::SYSTEM_ERROR, errno, "EDP: Failed to create servo_buffer thread");
@@ -154,6 +156,7 @@ void servo_buffer::send_to_SERVO_GROUP ()
 
 void * servo_buffer::thread_main_loop(void* arg)
 {
+	fprintf(stderr, "debug @ %s:%d\n", __FILE__, __LINE__);
 	// servo buffer has to be created before servo thread starts
 //	std::auto_ptr<servo_buffer> sb(return_created_servo_buffer()); // bufor do komunikacji z EDP_MASTER
 
@@ -170,6 +173,8 @@ void * servo_buffer::thread_main_loop(void* arg)
     	master.thread_started_cond.notify_one();
     }
 
+    fprintf(stderr, "debug @ %s:%d\n", __FILE__, __LINE__);
+
     /* BEGIN SERVO_GROUP */
 
     for (;;)
@@ -177,7 +182,6 @@ void * servo_buffer::thread_main_loop(void* arg)
         // komunikacja z transformation
         if (!get_command())
         {
-
             master.rb_obj->lock_mutex();
             master.rb_obj->step_data.servo_mode = false; // tryb bierny
             master.rb_obj->unlock_mutex();
@@ -242,19 +246,17 @@ void servo_buffer::clear_reply_status_tmp ( void )
 }
 
 // input_buffer
-lib::SERVO_COMMAND servo_buffer::command_type()
+lib::SERVO_COMMAND servo_buffer::command_type() const
 {
     return command.instruction_code;
 }
-// by Yoyek & 7 -  typ returna na lib::SERVO_COMMAND
-
-// output_buffer
-void servo_buffer::get_all_positions (void)
-{}
-
 
 servo_buffer::servo_buffer (manip_and_conv_effector &_master)
-        : edp_extension_thread(_master), master (_master)
+        : edp_extension_thread(_master),
+#ifndef __QNXNTO__
+        servo_command_rdy(false), sg_reply_rdy(false),
+#endif
+        master(_master)
 {
 #ifdef __QNXNTO__
     if((servo_to_tt_chid = ChannelCreate(_NTO_CHF_UNBLOCK)) == -1) {
@@ -266,24 +268,7 @@ servo_buffer::servo_buffer (manip_and_conv_effector &_master)
     }
     ThreadCtl (_NTO_TCTL_IO, NULL);
 #endif
-
-
-
 }
-             // konstruktor
-
-void servo_buffer::synchronise (void)
-{}
-         // synchronizacja
-uint64_t servo_buffer::compute_all_set_values (void)
-{
-    return 0;
-}
-
-void servo_buffer::load_hardware_interface (void)
-{}
-
-
 
 /*-----------------------------------------------------------------------*/
 bool servo_buffer::get_command (void)
@@ -300,10 +285,10 @@ bool servo_buffer::get_command (void)
     	new_command_available = true;
 #else
     {
-    	boost::lock_guard<boost::mutex> lock(master.servo_command_mtx);
-    	if(master.servo_command_rdy) {
+    	boost::lock_guard<boost::mutex> lock(servo_command_mtx);
+    	if(servo_command_rdy) {
     		command = servo_command;
-    		master.servo_command_rdy = false;
+    		servo_command_rdy = false;
     		new_command_available = true;
     	}
     }
@@ -343,21 +328,16 @@ bool servo_buffer::get_command (void)
         } // end: switch
     }
     else
-#ifdef __QNXNTO__
     {
+#ifdef __QNXNTO__
     	/* Nie otrzymano nowego polecenia ruchu */
         if (edp_caller != -ETIMEDOUT) {
         	// nastapil blad przy odbieraniu wiadomosci rozny od jej braku
             fprintf(stderr, "SERVO_GROUP: Receive error from EDP_MASTER\n");
         }
+#endif
         return false;
     }
-#else
-	{
-		/* Nie otrzymano nowego polecenia ruchu */
-        return false;
-	}
-#endif
 } // end: servo_buffer::get_command
 /*-----------------------------------------------------------------------*/
 
@@ -572,14 +552,14 @@ void servo_buffer::reply_to_EDP_MASTER (void)
         perror (" Reply to EDP_MASTER error");
 #else
     {
-    	boost::lock_guard<boost::mutex> lock(master.sg_reply_mtx);
+    	boost::lock_guard<boost::mutex> lock(sg_reply_mtx);
 
     	sg_reply = servo_data;
-    	master.sg_reply_rdy = true;
+    	sg_reply_rdy = true;
     }
 
 	// TODO: should not call notify with mutex locked?
-    master.sg_reply_cond.notify_one();
+    sg_reply_cond.notify_one();
 #endif
     // Wyzerowac zmienne sygnalizujace stan procesu
     clear_reply_status();

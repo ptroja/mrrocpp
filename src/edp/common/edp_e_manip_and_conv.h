@@ -185,14 +185,6 @@ public:
     void registerReaderStoppedCallback(boost::function<void()> stoppedCallback);
 #endif
 
-#ifndef __QNXNTO__
-    bool servo_command_rdy;
-    boost::mutex servo_command_mtx;
-
-    bool sg_reply_rdy;
-    boost::mutex sg_reply_mtx;
-    boost::condition sg_reply_cond;
-#endif
     in_out_buffer *in_out_obj; // bufor wejsc wyjsc
     reader_buffer *rb_obj;
     manip_trans_t *mt_tt_obj;

@@ -68,8 +68,6 @@ protected:
 
     void clear_reply_status_tmp ( void );
 
-
-
 #ifdef __QNXNTO__
 protected:
     int servo_fd;
@@ -84,37 +82,54 @@ public:
     boost::condition sg_reply_cond;
 #endif
 
-
 public:
     lib::edp_master_command servo_command;    // polecenie z EDP_MASTER dla SERVO_GROUP
     lib::servo_group_reply sg_reply;          // bufor na informacje odbierane z SERVO_GROUP
+
     void send_to_SERVO_GROUP ();
     static void *thread_start(void* arg);
     void *thread_main_loop(void* arg);
 
     void create_thread(void);
 
+    //! input_buffer
     manip_and_conv_effector &master;
-    // input_buffer
-    lib::SERVO_COMMAND command_type(void);
-    // by Yoyek & 7 -  typ returna na lib::SERVO_COMMAND
-    virtual void load_hardware_interface (void);
-    // output_buffer
-    virtual void get_all_positions (void);
-    //servo_buffer ();             // konstruktor
-    servo_buffer (manip_and_conv_effector &_master);             // konstruktor
-    virtual ~servo_buffer (void);      // destruktor
-    bool get_command (void);      // odczytanie polecenia z EDP_MASTER
-    // o ile zostalo przyslane
-    void Move_passive (void);        // stanie w miejscu
-    void Move (void);                // wykonac makrokrok ruchu
-    void Read (void);                // odczytac aktualne polozenie
-    void Change_algorithm (void);    // zmienic algorytm serworegulacji lub jego parametry
-    virtual void synchronise (void);         // synchronizacja
-    virtual uint64_t compute_all_set_values (void);
-    // obliczenie nastepnej wartosci zadanej dla wszystkich napedow
 
-    void ppp (void) const;                 // wydruk - do celow uruchomieniowych !!!
+    lib::SERVO_COMMAND command_type(void) const;
+
+    virtual void load_hardware_interface (void) = 0;
+
+    virtual void get_all_positions (void) = 0;
+
+    //! konstruktor
+    servo_buffer (manip_and_conv_effector &_master);
+
+    //! destruktor
+    virtual ~servo_buffer (void);
+
+    //! odczytanie polecenia z EDP_MASTER o ile zostalo przyslane
+    bool get_command (void);
+
+    //! stanie w miejscu
+    void Move_passive (void);
+
+    //! wykonac makrokrok ruchu
+    void Move (void);
+
+    //! odczytac aktualne polozenie
+    void Read (void);
+
+    //! zmienic algorytm serworegulacji lub jego parametry
+    void Change_algorithm (void);
+
+    //! synchronizacja
+    virtual void synchronise (void) = 0;
+
+    //! obliczenie nastepnej wartosci zadanej dla wszystkich napedow
+    virtual uint64_t compute_all_set_values (void) = 0;
+
+    //! wydruk - do celow uruchomieniowych !!!
+    void ppp (void) const;
 };
 /*-----------------------------------------------------------------------*/
 
