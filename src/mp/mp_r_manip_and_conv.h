@@ -3,6 +3,8 @@
 
 #include "mp/mp.h"
 #include "mp/mp_robot.h"
+#include "lib/conveyor_const.h"
+
 namespace mrrocpp {
 namespace mp {
 namespace robot {

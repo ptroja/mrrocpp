@@ -14,6 +14,7 @@
 
 #include "edp/conveyor/sg_conv.h"
 #include "edp/common/edp_e_manip_and_conv.h"
+#include "lib/conveyor_const.h"
 
 namespace mrrocpp {
 namespace edp {

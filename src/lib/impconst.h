@@ -10,7 +10,7 @@
 
 #include <stdint.h>
 
-#include "lib/conveyor_const.h"
+
 #include "lib/irp6m_const.h"
 #include "lib/irp6ot_const.h"
 #include "lib/irp6ot_m_const.h"
