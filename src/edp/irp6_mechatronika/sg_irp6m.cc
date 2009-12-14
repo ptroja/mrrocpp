@@ -20,10 +20,6 @@
 #include "edp/irp6_mechatronika/sg_irp6m.h"
 #include "edp/irp6_mechatronika/regulator_irp6m.h"
 
-// extern edp_irp6m_effector* master;   // Bufor polecen i odpowiedzi EDP_MASTER
-
-// uint64_t kk;	// numer pomiaru od momentu startu pomiarow
-
 namespace mrrocpp {
 namespace edp {
 namespace irp6m {
@@ -37,7 +33,7 @@ uint8_t servo_buffer::Move_a_step (void)
 	if (master.is_synchronised())
 	{// by Y aktualizacja transformera am jedynie sens po synchronizacji (kiedy robot zna swoja pozycje)
 		// by Y - do dokonczenia
-		for (int i=0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++)
+		for (int i=0; i < master.number_of_servos; i++)
 		{
 			if (!(master.test_mode))
 			{
@@ -96,7 +92,7 @@ void servo_buffer::load_hardware_interface (void)
 	clear_reply_status();
 	clear_reply_status_tmp();
 
-	for (int j = 0; j < IRP6_MECHATRONIKA_NUM_OF_SERVOS; j++)
+	for (int j = 0; j < master.number_of_servos; j++)
 	{
 		command.parameters.move.abs_position[j]=0.0;
 	}
@@ -358,9 +354,7 @@ void servo_buffer::synchronise (void)
 	// printf("koniec synchro\n");
 	reply_to_EDP_MASTER();
 	return;
-
 }
-; // end: servo_buffer::synchronise()
 
 /*-----------------------------------------------------------------------*/
 

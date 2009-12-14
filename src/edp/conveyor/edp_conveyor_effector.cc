@@ -88,8 +88,6 @@ void effector::set_rmodel (lib::c_buffer &instruction)
 /*--------------------------------------------------------------------------*/
 void effector::get_rmodel (lib::c_buffer &instruction)
 {
-	int i; // licznik obiegow petli
-	//printf(" GET RMODEL: ");
 	switch (instruction.get_rmodel_type)
 	{
 	case lib::ARM_KINEMATIC_MODEL:
@@ -100,7 +98,7 @@ void effector::get_rmodel (lib::c_buffer &instruction)
 	case lib::SERVO_ALGORITHM:
 		reply.rmodel_type = lib::SERVO_ALGORITHM;
 		// ustawienie numeru algorytmu serworegulatora oraz numeru jego zestawu parametrow
-		for (i = 0; i<number_of_servos; i++)
+		for (int i = 0; i<number_of_servos; i++)
 			{
 				reply.rmodel.servo_algorithm.servo_algorithm_no[i] = servo_algorithm_sg[i];
 				reply.rmodel.servo_algorithm.servo_parameters_no[i] = servo_parameters_sg[i];
@@ -187,7 +185,6 @@ void effector::move_arm (lib::c_buffer &instruction)
 // Odczytanie pozycji tasmociagu.
 void effector::get_arm_position (bool read_hardware, lib::c_buffer &instruction)
 {
-
 	if (read_hardware)
 	{
 		// Uformowanie rozkazu odczytu dla SERVO_GROUP
