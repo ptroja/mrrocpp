@@ -144,7 +144,6 @@ void effector::establish_error(uint64_t err0, uint64_t err1)
 	reply.error_no.error1 = err1;
 }
 
-// lib::r_buffer
 lib::REPLY_TYPE effector::is_reply_type(void) const
 {
 	return reply.reply_type;
