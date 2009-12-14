@@ -27,10 +27,6 @@ manip_trans_t::manip_trans_t(manip_and_conv_effector& _master):
 {
 }
 
-manip_trans_t::~manip_trans_t()
-{
-}
-
 void manip_trans_t::create_thread(void)
 {
 	if (pthread_create (&thread_id, NULL, &thread_start, (void *) this))
@@ -40,17 +36,13 @@ void manip_trans_t::create_thread(void)
 	}
 }
 
-
 void * manip_trans_t::thread_start(void* arg)
 {
     return static_cast<manip_trans_t*> (arg)->thread_main_loop(arg);
 }
 
-
-
 void * manip_trans_t::thread_main_loop(void *arg)
 {
-
     lib::set_thread_priority(pthread_self(), MAX_PRIORITY);
 
     while(1)

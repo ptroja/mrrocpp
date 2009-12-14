@@ -394,32 +394,9 @@ void effector::servo_joints_and_frame_actualization_and_upload(void)
 /*--------------------------------------------------------------------------*/
 void effector::create_threads ()
 {
-
 	rb_obj = new common::reader_buffer(*this);
 	vis_obj = new common::vis_server(*this);
-
-    // Y&W - utworzenie watku readera
-    if (pthread_create (&rb_obj->thread_id, NULL, &rb_obj->thread_start, (void *) rb_obj))
-    {
-        msg->message(lib::SYSTEM_ERROR, errno, "EDP: Failed to create READER thread");
-        throw common::System_error();
-    }
-
-    // TODO: utworzenie watku wizualizacji
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }
 // namespace smb

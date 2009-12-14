@@ -20,19 +20,18 @@ namespace mrrocpp {
 namespace edp {
 namespace common {
 
-
 vis_server::vis_server(manip_and_conv_effector &_master) :
-	edp_boost_thread(_master), master (_master)
+	master (_master), thread_id(NULL)
 {
+	thread_id = new boost::thread(boost::bind(&vis_server::operator(), this));
 }
 
-void vis_server::create_thread(void)
+vis_server::~vis_server(void)
 {
-	thread_id = new boost::thread(*this);
+	delete thread_id;
 }
 
-
-void vis_server::operator()()
+void vis_server::operator()(void)
 {
 	lib::set_thread_name("visualization");
 

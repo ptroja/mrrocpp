@@ -5,15 +5,9 @@
 #ifndef __VIS_SERVER_H
 #define __VIS_SERVER_H
 
-#include <stdint.h>
-#include <semaphore.h>
-#include <pthread.h>
+#include <boost/thread/thread.hpp>
+#include <boost/utility.hpp>
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
-
-#include "kinematics/common/transformer_error.h"
 #include "edp/common/edp_extension_thread.h"
 
 namespace mrrocpp {
@@ -23,17 +17,19 @@ namespace common {
 // TODO: remove forward declarations
 class manip_and_conv_effector;
 
-class vis_server : public edp_boost_thread
+class vis_server : boost::noncopyable
 {
 private:
 	manip_and_conv_effector &master;
 
+	boost::thread *thread_id;
+
 public:
 	//! main loop
 	void operator()();
-	void create_thread(void);
 
     vis_server(manip_and_conv_effector &_master);
+    ~vis_server();
 };
 
 } // namespace common

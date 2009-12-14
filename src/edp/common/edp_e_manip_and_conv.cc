@@ -111,8 +111,6 @@ void manip_and_conv_effector::create_threads ()
 	vis_obj = new vis_server(*this);
 	sb = return_created_servo_buffer();
 
-
-
 	// create servo thread
 	sb->create_thread();
 
@@ -126,14 +124,8 @@ void manip_and_conv_effector::create_threads ()
         }
     }
 
-    // create reader thread
-    rb_obj->create_thread();
-
     // create transformer thread
     mt_tt_obj->create_thread();
-
-    // create visualization server thread
-    vis_obj->create_thread();
 }
 
 

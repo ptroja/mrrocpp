@@ -41,20 +41,12 @@ namespace mrrocpp {
 namespace edp {
 namespace common {
 
-void reader_buffer::create_thread(void)
-{
-	if (pthread_create (&thread_id, NULL, &thread_start, (void *) this))
-	{
-	    master.msg->message(lib::SYSTEM_ERROR, errno, "EDP: Failed to create reader_buffer thread");
-	    throw System_error();
-	}
-}
-
-
 reader_buffer::reader_buffer(effector &_master) :
-	edp_extension_thread(_master), master (_master)
+	master (_master)
 {
 	sem_init(&reader_sem, 0, 0);
+
+	thread_id = new boost::thread(boost::bind(&reader_buffer::operator(), this));
 }
 
 reader_buffer::~reader_buffer()
@@ -76,12 +68,7 @@ int reader_buffer::reader_wait_for_new_step() // oczekiwanie na semafor
 	return sem_wait(&reader_sem);
 }
 
-void * reader_buffer::thread_start(void* arg)
-{
-	return static_cast<reader_buffer*> (arg)->thread_main_loop(arg);
-}
-
-void * reader_buffer::thread_main_loop(void* arg)
+void reader_buffer::operator()()
 {
 	uint64_t k;
 	uint64_t nr_of_samples; // maksymalna liczba pomiarow
@@ -463,8 +450,6 @@ void * reader_buffer::thread_main_loop(void* arg)
 		lib::set_thread_priority(pthread_self(), MAX_PRIORITY-10);
 
 	} // end: for (;;)
-
-	return NULL;
 }
 
 } // namespace common

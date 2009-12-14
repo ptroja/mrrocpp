@@ -8,6 +8,7 @@
 #include <stdint.h>
 #include <semaphore.h>
 
+#include <boost/utility.hpp>
 #include <boost/thread/mutex.hpp>
 
 #include "lib/typedefs.h"
@@ -79,19 +80,20 @@ struct reader_data
 
 /**************************** reader_buffer *****************************/
 
-class reader_buffer : public edp_extension_thread
+class reader_buffer : public boost::noncopyable
 {
 private:
     sem_t reader_sem;
 
     effector &master;
+
+    boost::thread *thread_id;
 public:
 	boost::mutex reader_mutex;
 
-    static void *thread_start(void* arg);
-    void *thread_main_loop(void* arg);
+	//! main thread loop
+    void operator()();
 
-    void create_thread(void);
     reader_data step_data; // dane pomiarowe dla biezacego mikrokroku
     reader_config reader_cnf; //   Struktura z informacja, ktore elementy struktury reader_data maja byc zapisane do pliku
 
@@ -100,9 +102,6 @@ public:
 
     int	set_new_step(); // podniesienie semafora
     int	reader_wait_for_new_step(); // oczekiwanie na semafor
-
-    int	lock_mutex(); // zajecie mutex'a
-    int	unlock_mutex(); // zwolnienie mutex'a
 };
 /**************************** end of reader_buffer *****************************/
 
