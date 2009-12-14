@@ -9,6 +9,7 @@
 #define _ECP_R_SPKM_H
 
 #include "ecp/common/ecp_robot.h"
+#include "lib/spkm_const.h"
 
 namespace mrrocpp {
 namespace ecp {

@@ -14,6 +14,7 @@
 #define __EDP_E_SMB_H
 
 #include "edp/common/edp_e_manip.h"
+#include "lib/smb_const.h"
 
 namespace mrrocpp {
 namespace edp {

@@ -31,8 +31,7 @@ extern "C" {
 #define EDP_SPEAKER_SECTION "[edp_speaker]"
 #define ECP_SPEAKER_SECTION "[ecp_speaker]"
 
-#define MAX_TEXT 100 // MAC7
-#define MAX_PROSODY 20 // MAC7
+
 
 
 #ifdef __cplusplus

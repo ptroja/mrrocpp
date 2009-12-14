@@ -16,6 +16,7 @@
 // Klasa edp_irp6s_robot.
 #include "edp/irp6_on_track/sg_irp6ot.h"
 #include "edp/common/edp_irp6s_postument_track.h"
+#include "lib/irp6ot_const.h"
 
 #define IRP6OT_GRIPPER_CATCH_AXE 7
 #define IRP6OT_GRIPPER_TURN_AXE 6

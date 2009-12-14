@@ -4,6 +4,10 @@
 #include "mp/mp.h"
 #include "mp/mp_robot.h"
 #include "lib/conveyor_const.h"
+#include "lib/irp6m_const.h"
+#include "lib/irp6ot_const.h"
+#include "lib/polycrank_const.h"
+#include "lib/irp6p_const.h"
 
 namespace mrrocpp {
 namespace mp {

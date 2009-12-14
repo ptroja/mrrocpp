@@ -3,6 +3,7 @@
 
 
 #include "mp/mp_r_manip_and_conv.h"
+
 namespace mrrocpp {
 namespace mp {
 namespace robot {

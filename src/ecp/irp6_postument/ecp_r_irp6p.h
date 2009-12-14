@@ -9,6 +9,7 @@
 #define _ECP_R_IRP6_POSTUMENT_H
 
 #include "ecp/common/ecp_robot.h"
+#include "lib/irp6p_const.h"
 
 namespace mrrocpp {
 namespace ecp {

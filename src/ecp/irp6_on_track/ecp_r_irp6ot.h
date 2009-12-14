@@ -9,6 +9,7 @@
 #define _ECP_R_IRP6_ON_TRACK_H
 
 #include "ecp/common/ecp_robot.h"
+#include "lib/irp6ot_const.h"
 
 namespace mrrocpp {
 namespace ecp {
