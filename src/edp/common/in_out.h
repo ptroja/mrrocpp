@@ -9,21 +9,15 @@
 #define __IN_OUT_BUFFER_H
 
 #include <stdint.h>
-#include <semaphore.h>
+#ifdef __QNXNTO__
+#include <sys/neutrino.h>
+#else
 #include <pthread.h>
-
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
-
-#include "kinematics/common/transformer_error.h"
-
-
+#endif
 
 namespace mrrocpp {
 namespace edp {
 namespace common {
-
 
 /**************************** IN_OUT_BUFFER *****************************/
 class in_out_buffer
