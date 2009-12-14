@@ -5,8 +5,6 @@
 #ifndef __EDP_EXTENSION_THREAD_H
 #define __EDP_EXTENSION_THREAD_H
 
-#include <stdint.h>
-#include <semaphore.h>
 #include <pthread.h>
 
 #include <boost/bind.hpp>
@@ -30,7 +28,7 @@ class edp_extension_thread
 private:
 	effector &master;
 
-public:
+protected:
     pthread_t thread_id;
 
     virtual void *thread_main_loop(void* arg) = 0;

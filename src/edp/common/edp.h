@@ -8,10 +8,6 @@
 #ifndef __EDP_H
 #define __EDP_H
 
-#include <stdint.h>
-#include <semaphore.h>
-#include <pthread.h>
-
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
