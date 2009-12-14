@@ -54,7 +54,7 @@ else
   CC=qcc ${VERSION}
   CXX=QCC ${VERSION}
   LD=QCC ${VERSION}
-  LDFLAGS=${DEBUG} -lm -lsocket -lcpp -lang-c++ $(RPATHV) -L$(QNX_TARGET)/mrlib/lib -lgsl -lgslcblas -lxml2 -liconv -lboost_thread-mt
+  LDFLAGS=${DEBUG} -lm -lsocket -lcpp -lang-c++ $(RPATHV) -L$(QNX_TARGET)/mrlib/lib -lxml2 -liconv -lboost_thread-mt
   CPPFLAGS=-I$(HOMEDIR)/src -I$(QNX_TARGET)/mrlib/include
   AR=ntox86-ar
   BINDIR=$(HOMEDIR)/bin

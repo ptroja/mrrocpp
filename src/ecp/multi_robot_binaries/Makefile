@@ -233,7 +233,7 @@ ecp_t_kcz_force: \
 		$(ECP_MPDIR)/birdclient.o \
 		$(ECP_MPDIR)/ecp_mp_s_pcbird.o \
 		$(SHOBJ)
-	$(LD) $(LDFLAGS) -o $@ $^ 
+	$(LD) $(LDFLAGS) -lgsl -lgslcblas -o $@ $^ 
 
 #---------------------------------Special object build rules (user made)-------------------------------------#
 # e.g:
