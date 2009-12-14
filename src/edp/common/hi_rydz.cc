@@ -93,7 +93,7 @@ hardware_interface::hardware_interface (manip_and_conv_effector &_master,
 	    /* Start the timer */
 	    struct itimerspec its;
 	    its.it_value.tv_sec = 0;
-	    its.it_value.tv_nsec = 1000000; // 1kHz
+	    its.it_value.tv_nsec = 1000000000*STEP;
 	    its.it_interval.tv_sec = its.it_value.tv_sec;
 	    its.it_interval.tv_nsec = its.it_value.tv_nsec;
 
