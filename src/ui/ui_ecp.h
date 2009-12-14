@@ -1,7 +1,7 @@
 // -------------------------------------------------------------------------
 //                            robot.h
 // Definicje struktur danych i metod do komunikacji UI z EDP
-// 
+//
 // Ostatnia modyfikacja: 16.04.98
 // -------------------------------------------------------------------------
 
@@ -11,6 +11,18 @@
 #include "ui/ui_ecp_r_conveyor.h"
 #include "ui/ui_ecp_r_speaker.h"
 #include "ui/ui_ecp_r_irp6_common.h"
+
+#include "lib/irp6m_const.h"
+#include "lib/irp6ot_const.h"
+#include "lib/irp6ot_m_const.h"
+#include "lib/irp6ot_tfg_const.h"
+#include "lib/irp6p_const.h"
+#include "lib/irp6p_m_const.h"
+#include "lib/irp6p_tfg_const.h"
+#include "lib/polycrank_const.h"
+#include "lib/smb_const.h"
+#include "lib/spkm_const.h"
+#include "lib/speaker_const.h"
 
 typedef struct{
 	//ui_irp6_on_track_robot *irp6_on_track;
