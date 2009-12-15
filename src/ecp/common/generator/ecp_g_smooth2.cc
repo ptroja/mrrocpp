@@ -10,7 +10,7 @@
 // Ostatnia modyfikacja: 2009
 // -------------------------------------------------------------------------
 
-#include "ecp/common/generator/ecp_g_smooth2.h"
+#include "ecp/common/ecp_g_smooth2.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -372,7 +372,7 @@ void smooth2::load_coordinates(lib::POSE_SPECIFICATION ps, double v[MAX_SERVOS_N
 void smooth2::reset() {
 	flush_pose_list();//TODO sprawdzic czy to jest potrzebne
 	flush_coordinate_list();//TODO sprawdzic czy to jest potrzebne
-	first_coordinate = true;
+	//first_coordinate = true;
 	first_interval = true;
 	trajectory_generated = false;
 	trajectory_calculated = false;
@@ -380,7 +380,7 @@ void smooth2::reset() {
 
 void smooth2::flush_pose_list(void) {
    pose_list.clear();
-   first_coordinate=true;
+   //first_coordinate=true;
 }
 
 // -------------------------------------------------------return iterator to beginning of the list
@@ -545,7 +545,7 @@ void smooth2::load_a_v_max (const char* file_name)
 
 smooth2::smooth2 (common::task::task& _ecp_task, bool _is_synchronised)
         :
-        delta (_ecp_task), debug(false),first_coordinate(true)
+        delta (_ecp_task), debug(false)//,first_coordinate(true)
 {
 
     int i;
@@ -567,7 +567,7 @@ smooth2::smooth2 (common::task::task& _ecp_task, bool _is_synchronised)
 	load_a_v_max(max_path.c_str());
 	load_a_v_min(min_path.c_str());
 
-	is_synchronised = _is_synchronised;
+	//is_synchronised = _is_synchronised;
 	type=lib::ABSOLUTE;
 
 } // end : konstruktor
@@ -806,7 +806,7 @@ bool smooth2::first_step() { //wywolywane tylko raz w calej trajektorii
     initiate_pose_list();
     td.arm_type = pose_list_iterator->arm_type;
 
-    first_interval=true;
+    first_interval=true;//to chyba nie jest potrzebne bo ustawianie first_interval jest takze na poczatku calculate()
 
     switch ( td.arm_type ) {
 

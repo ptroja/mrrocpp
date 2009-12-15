@@ -59,15 +59,15 @@ class smooth2 : public delta {
 		//double v_max_motor[MAX_SERVOS_NR], v_max_joint[MAX_SERVOS_NR], v_max_zyz[MAX_SERVOS_NR], v_max_aa[MAX_SERVOS_NR];
 		double v_grip_min_zyz, v_grip_min_aa, v_grip_min_motor, v_grip_min_joint;
 
-		int first_interval;
+		bool first_interval;
 		lib::trajectory_description td;
 
-		bool is_synchronised;
+		//bool is_synchronised;
 		bool debug; //czy maja byc wyswietlane debugi
 
 		lib::MOTION_TYPE type;
 
-		bool first_coordinate;
+		//bool first_coordinate;//do wywalenia
 		float distance_eps;
 
 		bool trajectory_generated;
