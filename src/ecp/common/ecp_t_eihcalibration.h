@@ -18,7 +18,7 @@
 #include "ecp/irp6_postument/ecp_r_irp6p.h"
 #include "ecp/common/ecp_task.h"
 #include "ecp/common/ecp_g_smooth2.h"
-#include "ecp/common/ecp_generator_t.h"
+#include "ecp/common/ecp_g_t.h"
 #include "ecp_mp/sensor/ecp_mp_s_cvfradia.h"
 #include "ecp/common/ecp_g_force.h"
 #include "ecp/common/ecp_g_eihcalibration.h"

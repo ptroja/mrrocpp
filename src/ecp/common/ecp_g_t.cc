@@ -1,4 +1,4 @@
-#include "ecp/common/ecp_generator_t.h"
+#include "ecp/common/ecp_g_t.h"
 
 namespace mrrocpp {
 namespace ecp {

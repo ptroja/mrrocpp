@@ -19,7 +19,7 @@ all: ${BINARIES}
 ecp_speaker: ecp_t_s.o ecp_g_speak.o $(ECP_MPDIR)/sensor/ecp_mp_s_mic.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 
-ecp_speak_rcsc: ecp_t_rcsc_speaker.o ecp_g_speak.o ../common/ecp_generator_t.o $(SHOBJ)
+ecp_speak_rcsc: ecp_t_rcsc_speaker.o ecp_g_speak.o ../common/ecp_g_t.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 
 #-----------------------------------------------------------------------------------------------------------------------#

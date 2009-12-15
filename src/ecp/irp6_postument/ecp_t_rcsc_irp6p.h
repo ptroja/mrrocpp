@@ -2,7 +2,7 @@
 #define _ECP_T_RCSC_IRP6P_H
 
 #include "ecp/common/ecp_task.h"
-#include "ecp/common/ecp_generator_t.h"
+#include "ecp/common/ecp_g_t.h"
 #include "ecp/common/ecp_st_go.h"
 
 namespace mrrocpp {

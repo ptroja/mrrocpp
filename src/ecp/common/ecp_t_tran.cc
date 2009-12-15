@@ -20,7 +20,7 @@
 #include "ecp/polycrank/ecp_r_polycrank.h"
 
 #include "ecp/common/ecp_t_tran.h"
-#include "ecp/common/ecp_generator_t.h"
+#include "ecp/common/ecp_g_t.h"
 
 
 namespace mrrocpp {
