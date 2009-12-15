@@ -3,8 +3,8 @@
 #if !defined(_ECP_T_KCZ_TEST_H)
 #define _ECP_T_KCZ_TEST_H
 
-#include "ecp/common/ecp_task.h"
-#include "ecp/common/ecp_g_smooth2.h"
+#include "ecp/common/task/ecp_task.h"
+#include "ecp/common/generator/ecp_g_smooth2.h"
 
 namespace mrrocpp {
 namespace ecp {

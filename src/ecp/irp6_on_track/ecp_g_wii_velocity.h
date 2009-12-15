@@ -7,7 +7,7 @@
 
 #include <time.h>
 
-#include "ecp/common/ecp_g_force.h"
+#include "ecp/common/generator/ecp_g_force.h"
 
 namespace mrrocpp {
 namespace ecp {

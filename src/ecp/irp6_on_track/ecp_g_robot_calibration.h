@@ -10,10 +10,10 @@
 
 //PCBIRD Virtual Sensors defined here
 #include "ecp_mp/sensor/ecp_mp_s_pcbird.h"
-#include "ecp/common/ecp_t_pcbird.h"
+#include "ecp/common/task/ecp_t_pcbird.h"
 
 // we will write a generator robocalibgen derived from generator namespace 
-#include "ecp/common/ecp_generator.h"	
+#include "ecp/common/generator/ecp_generator.h"	
 
 
 namespace mrrocpp {

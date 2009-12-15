@@ -15,7 +15,7 @@
 #endif /* __gnu_linux__ */
 
 #include "ecp/common/ecp_robot.h"
-#include "ecp/common/ecp_task.h"
+#include "ecp/common/task/ecp_task.h"
 
 #if defined(USE_MESSIP_SRR)
 #include "lib/messip/messip_dataport.h"

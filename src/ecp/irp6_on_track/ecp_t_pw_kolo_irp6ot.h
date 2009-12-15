@@ -1,12 +1,12 @@
 #if !defined(_ECP_T_PW_IRP6OT_H)
 #define _ECP_T_PW_IRP6OT_H
 
-#include "ecp/common/ecp_task.h"
-#include "ecp/common/ecp_g_smooth.h"
-#include "ecp/common/ecp_g_force.h"
+#include "ecp/common/task/ecp_task.h"
+#include "ecp/common/generator/ecp_g_smooth.h"
+#include "ecp/common/generator/ecp_g_force.h"
 #include "lib/com_buf.h"
-#include "ecp/common/ecp_st_go.h"
-#include "ecp/common/ecp_g_sleep.h"
+#include "ecp/common/task/ecp_st_go.h"
+#include "ecp/common/generator/ecp_g_sleep.h"
 
 #include "ecp/irp6_on_track/ecp_g_pw_kolo.h"
 

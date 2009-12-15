@@ -15,9 +15,9 @@
 
 #include "lib/srlib.h"
 #include "lib/mis_fun.h"
-#include "ecp/common/ecp_task.h"
+#include "ecp/common/task/ecp_task.h"
 #include "ecp/common/ECP_main_error.h"
-#include "ecp/common/ecp_generator.h"
+#include "ecp/common/generator/ecp_generator.h"
 
 namespace mrrocpp {
 namespace ecp {

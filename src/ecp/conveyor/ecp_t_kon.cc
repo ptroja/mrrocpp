@@ -8,7 +8,7 @@
 #include "ecp/conveyor/ecp_r_conv.h"
 #include "ecp/conveyor/ecp_t_kon.h"
 #include "ecp_mp/task/ecp_mp_t_rcsc.h"
-#include "ecp/common/ecp_g_jarosz.h"
+#include "ecp/common/generator/ecp_g_jarosz.h"
 
 namespace mrrocpp {
 namespace ecp {

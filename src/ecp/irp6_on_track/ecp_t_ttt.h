@@ -2,7 +2,7 @@
 #define _ECP_T_TTT_H
 
 #include "ecp_mp/task/ecp_mp_task.h"
-#include "ecp/common/ecp_g_smooth.h"
+#include "ecp/common/generator/ecp_g_smooth.h"
 
 namespace mrrocpp {
 namespace ecp {

@@ -13,7 +13,7 @@
 #if !defined(_ECP_T_CONV_KON_H)
 #define _ECP_T_CONV_KON_H
 
-#include "ecp/common/ecp_task.h"
+#include "ecp/common/task/ecp_task.h"
 
 namespace mrrocpp {
 namespace ecp {

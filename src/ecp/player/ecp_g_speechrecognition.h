@@ -1,7 +1,7 @@
 #if !defined(_ECP_GEN_SPEECHRECOGNITION_H)
 #define _ECP_GEN_SPEECHRECOGNITION_H
 
-#include "ecp/common/ecp_generator.h"
+#include "ecp/common/generator/ecp_generator.h"
 #include "player/playerclient.h"
 
 namespace mrrocpp {

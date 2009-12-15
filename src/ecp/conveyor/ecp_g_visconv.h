@@ -10,7 +10,7 @@
 
 #include "lib/com_buf.h"		// lib::trajectory_description
 
-#include "ecp/common/ecp_generator.h"
+#include "ecp/common/generator/ecp_generator.h"
 
 namespace mrrocpp {
 namespace ecp {

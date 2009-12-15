@@ -17,8 +17,8 @@
 #include "ecp_mp/task/ecp_mp_t_pouring.h"
 
 #include "ecp/irp6_on_track/ecp_r_irp6ot.h"
-#include "ecp/common/ecp_g_smooth.h"
-#include "ecp/common/ecp_st_go.h"
+#include "ecp/common/generator/ecp_g_smooth.h"
+#include "ecp/common/task/ecp_st_go.h"
 #include "ecp/irp6_on_track/ecp_t_pouring_irp6ot.h"
 
 namespace mrrocpp {

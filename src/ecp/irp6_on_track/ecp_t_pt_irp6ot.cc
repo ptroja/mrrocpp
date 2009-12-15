@@ -7,7 +7,7 @@
 #include "ecp_mp/sensor/ecp_mp_s_schunk.h"
 
 #include "ecp/irp6_on_track/ecp_r_irp6ot.h"
-#include "ecp/common/ecp_g_jarosz.h"
+#include "ecp/common/generator/ecp_g_jarosz.h"
 #include "ecp/irp6_on_track/ecp_t_pt_irp6ot.h"
 
 

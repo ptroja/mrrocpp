@@ -1,7 +1,7 @@
 #if !defined(_ECP_T_TEST_IRP6P_H)
 #define _ECP_T_TEST_IRP6P_H
 
-#include "ecp/common/ecp_task.h"
+#include "ecp/common/task/ecp_task.h"
 
 namespace mrrocpp {
 namespace ecp {

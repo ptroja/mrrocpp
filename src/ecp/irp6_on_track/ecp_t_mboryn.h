@@ -8,7 +8,7 @@
 #ifndef ECP_T_MBORYN_H_
 #define ECP_T_MBORYN_H_
 
-#include "ecp/common/ecp_task.h"
+#include "ecp/common/task/ecp_task.h"
 #include "ecp/irp6_on_track/ecp_r_irp6ot.h"
 #include "ecp_g_mboryn.h"
 

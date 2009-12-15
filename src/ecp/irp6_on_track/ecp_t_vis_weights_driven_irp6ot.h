@@ -1,7 +1,7 @@
 #if !defined(_ECP_T_WEIGHTS_DRIVEN_IRP6OT_H)
 #define _ECP_T_WEIGHTS_DRIVEN_IRP6OT_H
 
-#include "ecp/common/ecp_task.h"
+#include "ecp/common/task/ecp_task.h"
 #include "ecp/irp6_on_track/ecp_vis_pb_eol_sac_irp6ot.h"
 #include "ecp/irp6_on_track/ecp_vis_pb_eih_irp6ot.h"
 #include "ecp/irp6_on_track/ecp_vis_ib_eih_irp6ot.h"

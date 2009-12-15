@@ -4,7 +4,7 @@
 #include "ecp/conveyor/ecp_r_conv.h"
 #include "ecp/conveyor/ecp_t_test.h"
 #include "ecp_mp/task/ecp_mp_t_rcsc.h"
-#include "ecp/common/ecp_g_jarosz.h"
+#include "ecp/common/generator/ecp_g_jarosz.h"
 #include "ecp/conveyor/ecp_g_test.h"
 
 namespace mrrocpp {

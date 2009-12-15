@@ -4,7 +4,7 @@
 #include <string.h>
 #include <math.h>
 
-#include "ecp/common/ecp_generator.h"
+#include "ecp/common/generator/ecp_generator.h"
 #include "ecp_mp/sensor/ecp_mp_s_wiimote.h"
 
 namespace mrrocpp {

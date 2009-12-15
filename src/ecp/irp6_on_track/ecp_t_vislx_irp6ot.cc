@@ -11,7 +11,7 @@
 
 
 #include "ecp/irp6_on_track/ecp_r_irp6ot.h"
-#include "ecp/common/ecp_g_force.h"
+#include "ecp/common/generator/ecp_g_force.h"
 #include "ecp/irp6_on_track/ecp_g_vis_sac_lx.h"
 #include "ecp_mp/sensor/ecp_mp_s_vis.h"
 #include "ecp/irp6_on_track/ecp_t_vislx_irp6ot.h"

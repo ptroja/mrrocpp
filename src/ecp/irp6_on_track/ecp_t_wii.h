@@ -3,7 +3,7 @@
 
 #include "ecp_mp/task/ecp_mp_task.h"
 #include "ecp/irp6_on_track/ecp_g_wii.h"
-#include "ecp/common/ecp_g_smooth.h"
+#include "ecp/common/generator/ecp_g_smooth.h"
 
 namespace mrrocpp {
 namespace ecp {

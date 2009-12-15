@@ -9,9 +9,9 @@
 #include "ecp_mp/sensor/ecp_mp_s_schunk.h"
 
 #include "ecp/irp6_on_track/ecp_r_irp6ot.h"
-#include "ecp/common/ecp_g_force.h"
-#include "ecp/common/ecp_g_smooth.h"
-#include "ecp/common/ecp_g_smooth2.h"
+#include "ecp/common/generator/ecp_g_force.h"
+#include "ecp/common/generator/ecp_g_smooth.h"
+#include "ecp/common/generator/ecp_g_smooth2.h"
 #include "ecp/irp6_on_track/ecp_t_rcsc_irp6ot.h"
 
 namespace mrrocpp {

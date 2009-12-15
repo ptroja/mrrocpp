@@ -8,7 +8,7 @@
 #ifndef ECP_G_ROTATE_GRIPPER_H_
 #define  ECP_G_ROTATE_GRIPPER_H_
 
-#include "ecp/common/ecp_generator.h"
+#include "ecp/common/generator/ecp_generator.h"
 
 #include <string.h>
 #include <math.h>
@@ -17,7 +17,7 @@
 #include "lib/com_buf.h"
 
 #include "ecp_mp/sensor/ecp_mp_s_cvfradia.h"
-#include "ecp/common/ecp_t_cvfradia.h"
+#include "ecp/common/task/ecp_t_cvfradia.h"
 
 #include <iostream>
 

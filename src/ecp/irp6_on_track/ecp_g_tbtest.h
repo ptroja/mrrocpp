@@ -11,12 +11,12 @@
 #include <string.h>
 #include <math.h>
 
-#include "ecp/common/ecp_generator.h"
+#include "ecp/common/generator/ecp_generator.h"
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 //fradia
 #include "ecp_mp/sensor/ecp_mp_s_cvfradia.h"
-#include "ecp/common/ecp_t_cvfradia.h"
+#include "ecp/common/task/ecp_t_cvfradia.h"
 
 namespace mrrocpp {
 namespace ecp {

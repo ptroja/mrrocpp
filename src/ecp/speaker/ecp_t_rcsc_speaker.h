@@ -1,8 +1,8 @@
 #if !defined(_ECP_T_RCSC_SPEAKER_H)
 #define _ECP_T_RCSC_SPEAKER_H
 
-#include "ecp/common/ecp_task.h"
-#include "ecp/common/ecp_g_t.h"
+#include "ecp/common/task/ecp_task.h"
+#include "ecp/common/generator/ecp_g_t.h"
 #include "ecp/speaker/ecp_g_speak.h"
 
 namespace mrrocpp {

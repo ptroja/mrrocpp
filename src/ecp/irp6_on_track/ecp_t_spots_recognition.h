@@ -10,7 +10,7 @@
 #ifndef _ECP_T_SpotsRecognition_H_
 #define _ECP_T_SpotsRecognition_H_
 
-#include "ecp/common/ecp_task.h"
+#include "ecp/common/task/ecp_task.h"
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
@@ -21,13 +21,13 @@
 
 //fradia
 #include "ecp_mp/sensor/ecp_mp_s_cvfradia.h"
-#include "ecp/common/ecp_t_cvfradia.h"
+#include "ecp/common/task/ecp_t_cvfradia.h"
 
 #include "ecp/irp6_on_track/ecp_r_irp6ot.h"
 #include "ecp/irp6_on_track/ecp_g_spots_recognition.h"
 
-#include "ecp/common/ecp_g_smooth.h"
-#include "ecp/common/ecp_g_force.h"
+#include "ecp/common/generator/ecp_g_smooth.h"
+#include "ecp/common/generator/ecp_g_force.h"
 
 namespace mrrocpp {
 namespace ecp {

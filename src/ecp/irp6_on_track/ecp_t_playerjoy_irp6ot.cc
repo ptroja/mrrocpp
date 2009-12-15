@@ -18,7 +18,7 @@
 #include "ecp_mp/sensor/ecp_mp_s_schunk.h"
 
 #include "ecp/irp6_on_track/ecp_r_irp6ot.h"
-#include "ecp/common/ecp_g_pjg.h"
+#include "ecp/common/generator/ecp_g_pjg.h"
 #include "ecp_mp/transmitter/ecp_mp_tr_player.h"
 #include "ecp/irp6_on_track/ecp_t_playerjoy_irp6ot.h"
 

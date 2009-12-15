@@ -12,10 +12,10 @@
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 
-#include "ecp/common/ecp_task.h"
+#include "ecp/common/task/ecp_task.h"
 #include "ecp/conveyor/ecp_r_conv.h"
 
-#include "ecp/common/ecp_g_smooth.h"
+#include "ecp/common/generator/ecp_g_smooth.h"
 
 namespace mrrocpp {
 namespace ecp {

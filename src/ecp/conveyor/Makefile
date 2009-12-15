@@ -20,16 +20,16 @@ all: ${BINARIES}
 ecp_test_conv: ecp_t_test.o ecp_g_test.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 #-----------------------------------------------------------------------------------------------------------------------#
-ecp_kon: ecp_t_kon.o ../common/ecp_g_jarosz.o ../common/ecp_operator_reaction_condition.o $(SHOBJ)
+ecp_kon: ecp_t_kon.o ../common/generator/ecp_g_jarosz.o ../common/ecp_operator_reaction_condition.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 #-----------------------------------------------------------------------------------------------------------------------#
-ecp_legobrick_conv: ecp_t_legobrick_conv.o ../common/ecp_g_smooth.o ../common/ecp_g_jarosz.o ../common/ecp_operator_reaction_condition.o $(SHOBJ)
+ecp_legobrick_conv: ecp_t_legobrick_conv.o ../common/generator/ecp_g_smooth.o ../common/generator/ecp_g_jarosz.o ../common/ecp_operator_reaction_condition.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 #-----------------------------------------------------------------------------------------------------------------------#
-ecp_visconv: ecp_t_visconv.o ../common/ecp_g_smooth.o ../common/ecp_g_jarosz.o ../common/ecp_operator_reaction_condition.o $(SHOBJ)
+ecp_visconv: ecp_t_visconv.o ../common/generator/ecp_g_smooth.o ../common/generator/ecp_g_jarosz.o ../common/ecp_operator_reaction_condition.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 #-----------------------------------------------------------------------------------------------------------------------#
-ecp_visconvsin: ecp_t_visconvsin.o ecp_g_visconv.o ../common/ecp_g_jarosz.o ../common/ecp_operator_reaction_condition.o $(SHOBJ)
+ecp_visconvsin: ecp_t_visconvsin.o ecp_g_visconv.o ../common/generator/ecp_g_jarosz.o ../common/ecp_operator_reaction_condition.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 #-----------------------------------------------------------------------------------------------------------------------#
 # e.g:

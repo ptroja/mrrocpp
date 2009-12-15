@@ -11,7 +11,7 @@
 #ifndef _ECP_T_RobotCalibration_H_
 #define _ECP_T_RobotCalibration_H_
 
-#include "ecp/common/ecp_task.h"
+#include "ecp/common/task/ecp_task.h"
 
 #include "lib/srlib.h"
 #include "ecp_mp/task/ecp_mp_t_rcsc.h"
@@ -21,8 +21,8 @@
 
 // The generators
 #include "ecp/irp6_on_track/ecp_g_robot_calibration.h"
-#include "ecp/common/ecp_g_smooth.h"
-#include "ecp/common/ecp_g_force.h"
+#include "ecp/common/generator/ecp_g_smooth.h"
+#include "ecp/common/generator/ecp_g_force.h"
 
 namespace mrrocpp {
 namespace ecp {
