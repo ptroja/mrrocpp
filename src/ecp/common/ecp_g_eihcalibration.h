@@ -9,7 +9,7 @@
 #define ECP_G_EIHCALIBRATION_H_
 
 //fradia
-#include "ecp_mp/ecp_mp_s_cvfradia.h"
+#include "ecp_mp/sensor/ecp_mp_s_cvfradia.h"
 #include "ecp/common/ecp_t_cvfradia.h"
 
 #include "ecp/common/ecp_generator.h"

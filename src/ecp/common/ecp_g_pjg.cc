@@ -7,7 +7,7 @@
 
 #include "lib/srlib.h"
 #include "ecp/common/ecp_g_pjg.h"
-#include "ecp_mp/ecp_mp_tr_player.h"
+#include "ecp_mp/transmitter/ecp_mp_tr_player.h"
 
 namespace mrrocpp {
 namespace ecp {

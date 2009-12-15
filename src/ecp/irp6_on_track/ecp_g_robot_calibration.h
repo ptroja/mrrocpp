@@ -9,7 +9,7 @@
 #define ECP_G_ROBOT_CALIBRATION_H_
 
 //PCBIRD Virtual Sensors defined here
-#include "ecp_mp/ecp_mp_s_pcbird.h"
+#include "ecp_mp/sensor/ecp_mp_s_pcbird.h"
 #include "ecp/common/ecp_t_pcbird.h"
 
 // we will write a generator robocalibgen derived from generator namespace 

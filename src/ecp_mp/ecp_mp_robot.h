@@ -4,7 +4,7 @@
 #include <map>
 #include "lib/srlib.h"
 #include "lib/sensor.h"
-#include "ecp_mp/transmitter.h"
+#include "ecp_mp/transmitter/transmitter.h"
 
 namespace mrrocpp {
 namespace ecp_mp {

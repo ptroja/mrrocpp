@@ -7,17 +7,17 @@
 #include "lib/com_buf.h"
 
 #include "lib/srlib.h"
-#include "ecp_mp/ecp_mp_t_rcsc.h"
+#include "ecp_mp/task/ecp_mp_t_rcsc.h"
 
 #include "ecp/irp6_on_track/ecp_r_irp6ot.h"
 #include "ecp/irp6_on_track/ecp_vis_pb_eol_sac_irp6ot.h"
 #include "ecp/irp6_on_track/ecp_vis_pb_eih_irp6ot.h"
 #include "ecp/irp6_on_track/ecp_vis_ib_eih_irp6ot.h"
 #include "ecp/irp6_on_track/ecp_vis_weights_driven_irp6ot.h"
-#include "ecp_mp/ecp_mp_s_vis.h"
+#include "ecp_mp/sensor/ecp_mp_s_vis.h"
 #include "ecp/irp6_on_track/ecp_t_vis_weights_driven_irp6ot.h"
 
-#include "ecp_mp/ecp_mp_s_vis_sac_lx.h"
+#include "ecp_mp/sensor/ecp_mp_s_vis_sac_lx.h"
 
 #include <boost/foreach.hpp>
 

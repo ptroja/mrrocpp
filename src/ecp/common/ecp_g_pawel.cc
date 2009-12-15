@@ -14,7 +14,7 @@
 
 #include "lib/srlib.h"
 #include "ecp/common/ecp_g_pawel.h"
-#include "ecp_mp/ecp_mp_s_pawel.h"
+#include "ecp_mp/sensor/ecp_mp_s_pawel.h"
 
 namespace mrrocpp {
 namespace ecp {

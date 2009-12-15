@@ -16,8 +16,8 @@
 #include "mp/mp.h"
 #include "mp/mp_g_test.h"
 #include "mp/mp_t_vf.h"
-#include "ecp_mp/ecp_mp_s_schunk.h"
-#include "ecp_mp/ecp_mp_s_vis.h"
+#include "ecp_mp/sensor/ecp_mp_s_schunk.h"
+#include "ecp_mp/sensor/ecp_mp_s_vis.h"
 
 #include <boost/foreach.hpp>
 

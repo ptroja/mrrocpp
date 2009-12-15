@@ -7,7 +7,7 @@
 
 #include "ecp/player/ecp_g_speechrecognition.h"
 #include "ecp/player/ecp_t_speechrecognition.h"
-#include "ecp_mp/ecp_mp_t_player.h"
+#include "ecp_mp/task/ecp_mp_t_player.h"
 
 namespace mrrocpp {
 namespace ecp {

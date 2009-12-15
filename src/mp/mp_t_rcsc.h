@@ -9,8 +9,8 @@
 #define __MP_TASK_RCSC_H
 
 #include "mp/mp.h"
-#include "ecp_mp/ecp_mp_t_rcsc.h"
-#include "ecp_mp/ecp_mp_t_festival.h"
+#include "ecp_mp/task/ecp_mp_t_rcsc.h"
+#include "ecp_mp/task/ecp_mp_t_festival.h"
 
 #include <list>
 

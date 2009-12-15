@@ -20,7 +20,7 @@
 #include "lib/com_buf.h"
 
 #include "ecp/common/ecp_generator.h"
-#include "ecp_mp/ecp_mp_s_digital_scales.h"
+#include "ecp_mp/sensor/ecp_mp_s_digital_scales.h"
 
 namespace mrrocpp {
 namespace ecp {

@@ -19,7 +19,7 @@
 #include "lib/mathtr.h"
 
 #include "ecp/common/ecp_g_visioncoordinates.h"
-#include "ecp_mp/ecp_mp_s_cvfradia.h"
+#include "ecp_mp/sensor/ecp_mp_s_cvfradia.h"
 
 namespace mrrocpp {
 namespace ecp {

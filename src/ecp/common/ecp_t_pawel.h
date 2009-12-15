@@ -4,7 +4,7 @@
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 #include "lib/srlib.h"
-#include "ecp_mp/ecp_mp_s_pawel.h"
+#include "ecp_mp/sensor/ecp_mp_s_pawel.h"
 // Konfigurator.
 #include "lib/configurator.h"
 

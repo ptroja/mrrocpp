@@ -16,7 +16,7 @@ SHOBJ = ecp_r_speaker.o ../common/libecp.a $(LIBDIR)/libmrrocpp.a
 all: ${BINARIES}
 #---------------------------------Special object build rules (user made)-------------------------------------#
 
-ecp_speaker: ecp_t_s.o ecp_g_speak.o $(ECP_MPDIR)/ecp_mp_s_mic.o $(SHOBJ)
+ecp_speaker: ecp_t_s.o ecp_g_speak.o $(ECP_MPDIR)/sensor/ecp_mp_s_mic.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 
 ecp_speak_rcsc: ecp_t_rcsc_speaker.o ecp_g_speak.o ../common/ecp_generator_t.o $(SHOBJ)

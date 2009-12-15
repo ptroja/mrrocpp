@@ -10,8 +10,8 @@
 #define __MP_TASK_FSAUTOMAT
 
 #include "mp/mp.h"
-#include "ecp_mp/ecp_mp_task.h"
-//#include "ecp_mp/ecp_mp_t_fsautomat.h"
+#include "ecp_mp/task/ecp_mp_task.h"
+//#include "ecp_mp/task/ecp_mp_t_fsautomat.h"
 #include "mp/State.h"
 #include "mp/CubeState.h"
 #include "mp/SingleManipulation.h"

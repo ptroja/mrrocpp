@@ -21,7 +21,7 @@
 #include "ecp/common/ecp_t_mam.h"
 
 // Czujnik.
-#include "ecp_mp/ecp_mp_s_digital_scales.h"
+#include "ecp_mp/sensor/ecp_mp_s_digital_scales.h"
 
 #include "ecp/common/ECP_main_error.h"
 

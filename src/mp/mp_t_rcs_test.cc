@@ -17,8 +17,8 @@
 #include "lib/srlib.h"
 #include "mp/mp.h"
 #include "mp/mp_t_rcs_test.h"
-#include "ecp_mp/ecp_mp_s_rcs_korf.h"
-#include "ecp_mp/ecp_mp_s_rcs_kociemba.h"
+#include "ecp_mp/sensor/ecp_mp_s_rcs_korf.h"
+#include "ecp_mp/sensor/ecp_mp_s_rcs_kociemba.h"
 
 namespace mrrocpp {
 namespace mp {

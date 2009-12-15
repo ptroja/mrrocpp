@@ -18,9 +18,9 @@
 #include "mp/mp_t_vis_nn.h"
 #include "mp/mp_g_vis_nn.h"
 #include "mp/mp_g_force.h"
-#include "ecp_mp/ecp_mp_s_vis_nn.h"
-#include "ecp_mp/ecp_mp_s_schunk.h"
-#include "ecp_mp/ecp_mp_t_rcsc.h"
+#include "ecp_mp/sensor/ecp_mp_s_vis_nn.h"
+#include "ecp_mp/sensor/ecp_mp_s_schunk.h"
+#include "ecp_mp/task/ecp_mp_t_rcsc.h"
 
 #include <boost/foreach.hpp>
 

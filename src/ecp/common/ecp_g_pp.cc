@@ -5,7 +5,7 @@
 // 			Ostatnia modyfikacja: 01.06.2006r.
 // -------------------------------------------------------------------------
 
-#include "ecp_mp/ecp_mp_s_pp.h"
+#include "ecp_mp/sensor/ecp_mp_s_pp.h"
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
 #include "lib/com_buf.h"

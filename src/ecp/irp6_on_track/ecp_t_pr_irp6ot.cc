@@ -6,17 +6,17 @@
 #include "lib/com_buf.h"
 
 #include "lib/srlib.h"
-#include "ecp_mp/ecp_mp_t_rcsc.h"
-#include "ecp_mp/ecp_mp_s_schunk.h"
+#include "ecp_mp/task/ecp_mp_t_rcsc.h"
+#include "ecp_mp/sensor/ecp_mp_s_schunk.h"
 
 #include "ecp/irp6_on_track/ecp_r_irp6ot.h"
 #include "ecp/common/ecp_g_force.h"
-#include "ecp_mp/ecp_mp_s_schunk.h"
+#include "ecp_mp/sensor/ecp_mp_s_schunk.h"
 #include "ecp/irp6_on_track/ecp_t_pr_irp6ot.h"
 
 #include "ecp/common/ecp_g_jarosz.h"
 
-#include "ecp_mp/ecp_mp_sensor.h"
+#include "ecp_mp/sensor/ecp_mp_sensor.h"
 
 namespace mrrocpp {
 namespace ecp {

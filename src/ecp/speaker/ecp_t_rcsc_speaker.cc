@@ -13,7 +13,7 @@
 #include "lib/srlib.h"
 #include "ecp/speaker/ecp_r_speaker.h"
 #include "ecp/speaker/ecp_t_rcsc_speaker.h"
-#include "ecp_mp/ecp_mp_t_rcsc.h"
+#include "ecp_mp/task/ecp_mp_t_rcsc.h"
 
 namespace mrrocpp {
 namespace ecp {

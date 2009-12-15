@@ -52,7 +52,7 @@ ecp_mam: \
 		../irp6_postument/ecp_r_irp6p.o \
 		../common/ecp_t_mam.o \
 		../common/ecp_g_mam.o \
-		$(ECP_MPDIR)/ecp_mp_s_digital_scales.o \
+		$(ECP_MPDIR)/sensor/ecp_mp_s_digital_scales.o \
 		$(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 
@@ -61,7 +61,7 @@ ecp_sk: \
 		../irp6_postument/ecp_r_irp6p.o \
 		../common/ecp_t_sk.o \
 		../common/ecp_g_force.o \
-		$(ECP_MPDIR)/ecp_mp_s_schunk.o \
+		$(ECP_MPDIR)/sensor/ecp_mp_s_schunk.o \
 		$(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 
@@ -70,7 +70,7 @@ ecp_tw: \
 		../irp6_postument/ecp_r_irp6p.o \
 		../common/ecp_t_tw.o \
 		../common/ecp_g_force.o \
-		$(ECP_MPDIR)/ecp_mp_s_schunk.o \
+		$(ECP_MPDIR)/sensor/ecp_mp_s_schunk.o \
 		$(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 
@@ -95,7 +95,7 @@ ecp_nalewanie: \
 ecp_time: \
 		../irp6_on_track/ecp_r_irp6ot.o \
 		../irp6_postument/ecp_r_irp6p.o \
-		$(ECP_MPDIR)/ecp_mp_s_time.o \
+		$(ECP_MPDIR)/sensor/ecp_mp_s_time.o \
 		../common/ecp_t_time.o \
 		../common/ecp_g_time.o \
 		$(SHOBJ)
@@ -149,7 +149,7 @@ ecp_pawel: \
 		../irp6_postument/ecp_r_irp6p.o \
 		../common/ecp_t_pawel.o \
 		../common/ecp_g_pawel.o \
-		$(ECP_MPDIR)/ecp_mp_s_pawel.o \
+		$(ECP_MPDIR)/sensor/ecp_mp_s_pawel.o \
 		$(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 
@@ -158,7 +158,7 @@ ecp_cvfradia: \
 		../irp6_postument/ecp_r_irp6p.o \
 		../common/ecp_t_cvfradia.o \
 		../common/ecp_g_cvfradia.o \
-		$(ECP_MPDIR)/ecp_mp_s_cvfradia.o \
+		$(ECP_MPDIR)/sensor/ecp_mp_s_cvfradia.o \
 		$(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 
@@ -170,7 +170,7 @@ ecp_visioncoordinates: \
 		../common/ecp_g_smooth.o \
 		../common/ecp_g_jarosz.o \
 		../common/ecp_operator_reaction_condition.o \
-		$(ECP_MPDIR)/ecp_mp_s_cvfradia.o \
+		$(ECP_MPDIR)/sensor/ecp_mp_s_cvfradia.o \
 		$(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 
@@ -202,7 +202,7 @@ ecp_pcbird: \
 		../common/ecp_t_pcbird.o \
 		../common/ecp_g_cvfradia.o \
 		$(ECP_MPDIR)/birdclient.o \
-		$(ECP_MPDIR)/ecp_mp_s_pcbird.o \
+		$(ECP_MPDIR)/sensor/ecp_mp_s_pcbird.o \
 		$(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 	
@@ -216,7 +216,7 @@ ecp_eihcalibration: \
 		../common/ecp_g_jarosz.o \
 		../common/ecp_g_force.o \
 		../common/ecp_operator_reaction_condition.o \
-		$(ECP_MPDIR)/ecp_mp_s_cvfradia.o \
+		$(ECP_MPDIR)/sensor/ecp_mp_s_cvfradia.o \
 		$(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 	
@@ -229,9 +229,9 @@ ecp_t_kcz_force: \
 		../common/ecp_g_jarosz.o \
 		../common/ecp_g_force.o \
 		../common/ecp_operator_reaction_condition.o \
-		$(ECP_MPDIR)/ecp_mp_s_cvfradia.o \
+		$(ECP_MPDIR)/sensor/ecp_mp_s_cvfradia.o \
 		$(ECP_MPDIR)/birdclient.o \
-		$(ECP_MPDIR)/ecp_mp_s_pcbird.o \
+		$(ECP_MPDIR)/sensor/ecp_mp_s_pcbird.o \
 		$(SHOBJ)
 	$(LD) $(LDFLAGS) -lgsl -lgslcblas -o $@ $^ 
 

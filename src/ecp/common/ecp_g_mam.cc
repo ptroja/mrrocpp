@@ -21,7 +21,7 @@
 #include "lib/srlib.h"
 
 #include "ecp/common/ecp_g_mam.h"
-#include "ecp_mp/ecp_mp_s_digital_scales.h"
+#include "ecp_mp/sensor/ecp_mp_s_digital_scales.h"
 #include "ecp/common/ECP_main_error.h"
 
 #if defined(USE_MESSIP_SRR)

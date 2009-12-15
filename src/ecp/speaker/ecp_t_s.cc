@@ -18,7 +18,7 @@
 #include "lib/srlib.h"
 #include "ecp/speaker/ecp_r_speaker.h"
 #include "ecp/speaker/ecp_t_s.h"
-#include "ecp_mp/ecp_mp_s_mic.h"
+#include "ecp_mp/sensor/ecp_mp_s_mic.h"
 
 namespace mrrocpp {
 namespace ecp {

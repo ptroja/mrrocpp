@@ -24,8 +24,8 @@
 #include "ecp/irp6_on_track/ecp_r_irp6ot.h"
 
 #include "ecp/irp6_on_track/ecp_g_rsc.h"
-#include "ecp_mp/ecp_mp_s_force.h"
-#include "ecp_mp/ecp_mp_s_digital_scales.h"
+#include "ecp_mp/sensor/ecp_mp_s_force.h"
+#include "ecp_mp/sensor/ecp_mp_s_digital_scales.h"
 
 namespace mrrocpp {
 namespace ecp {

@@ -1,7 +1,7 @@
 #if !defined(_ECP_T_WII_TEACH_H)
 #define _ECP_T_WII_TEACH_H
 
-#include "ecp_mp/ecp_mp_task.h"
+#include "ecp_mp/task/ecp_mp_task.h"
 #include "ecp/common/ecp_g_smooth2.h"
 #include "ecp/irp6_on_track/ecp_g_wii_teach.h"
 

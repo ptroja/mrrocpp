@@ -14,11 +14,11 @@
 #include "mp/mp_g_vis.h"
 #include "mp/mp_common_generators.h"
 #include "mp/mp_t_rcsc.h"
-#include "ecp_mp/ecp_mp_s_schunk.h"
-#include "ecp_mp/ecp_mp_s_vis.h"
-#include "ecp_mp/ecp_mp_tr_rc_windows.h"
+#include "ecp_mp/sensor/ecp_mp_s_schunk.h"
+#include "ecp_mp/sensor/ecp_mp_s_vis.h"
+#include "ecp_mp/transmitter/ecp_mp_tr_rc_windows.h"
 #include "ecp/festival/ecp_g_festival.h"
-#include "ecp_mp/ecp_mp_t_festival.h"
+#include "ecp_mp/task/ecp_mp_t_festival.h"
 
 #include <boost/foreach.hpp>
 

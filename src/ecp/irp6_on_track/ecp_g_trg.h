@@ -17,8 +17,8 @@
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 
-#include "ecp_mp/ecp_mp_s_digital_scales.h"
-#include "ecp_mp/ecp_mp_s_force.h"
+#include "ecp_mp/sensor/ecp_mp_s_digital_scales.h"
+#include "ecp_mp/sensor/ecp_mp_s_force.h"
 #include "ecp/common/ecp_teach_in_generator.h"
 #include "ecp/common/ECP_main_error.h"
 

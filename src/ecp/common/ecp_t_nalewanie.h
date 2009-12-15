@@ -13,7 +13,7 @@
 #if !defined(_ECP_T_NALEWANIE_H)
 #define _ECP_T_NALEWANIE_H
 
-#include "ecp_mp/ecp_mp_task.h"
+#include "ecp_mp/task/ecp_mp_task.h"
 #include "ecp/common/ecp_g_smooth.h"
 
 namespace mrrocpp {

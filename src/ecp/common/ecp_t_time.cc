@@ -18,7 +18,7 @@
 #include "ecp/irp6_postument/ecp_r_irp6p.h"
 #include "ecp/common/ecp_g_time.h"
 #include "ecp/common/ecp_t_time.h"
-#include "ecp_mp/ecp_mp_s_time.h"
+#include "ecp_mp/sensor/ecp_mp_s_time.h"
 
 namespace mrrocpp {
 namespace ecp {

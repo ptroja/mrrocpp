@@ -14,8 +14,8 @@
 #include "lib/com_buf.h"
 
 #include "lib/srlib.h"
-#include "ecp_mp/ecp_mp_t_rcsc.h"
-#include "ecp_mp/ecp_mp_s_schunk.h"
+#include "ecp_mp/task/ecp_mp_t_rcsc.h"
+#include "ecp_mp/sensor/ecp_mp_s_schunk.h"
 
 #include "ecp/irp6_on_track/ecp_r_irp6ot.h"
 #include "ecp/irp6_on_track/ecp_t_tr_irp6ot.h"
@@ -24,8 +24,8 @@
 // Warunek startu pomiarow.
 #include "ecp/irp6_on_track/ecp_g_rsc.h"
 // Czujniki.
-#include "ecp_mp/ecp_mp_s_digital_scales.h"
-#include "ecp_mp/ecp_mp_s_force.h"
+#include "ecp_mp/sensor/ecp_mp_s_digital_scales.h"
+#include "ecp_mp/sensor/ecp_mp_s_force.h"
 // Konfigurator.
 #include "lib/configurator.h"
 

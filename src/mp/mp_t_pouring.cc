@@ -12,7 +12,7 @@
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
-#include "ecp_mp/ecp_mp_s_schunk.h"
+#include "ecp_mp/sensor/ecp_mp_s_schunk.h"
 
 #include "lib/srlib.h"
 #include "mp/mp.h"
@@ -23,8 +23,8 @@
 
 #include "mp/mp_g_force.h"
 #include "mp/mp_g_vis.h"
-#include "ecp_mp/ecp_mp_s_vis.h"
-#include "ecp_mp/ecp_mp_tr_rc_windows.h"
+#include "ecp_mp/sensor/ecp_mp_s_vis.h"
+#include "ecp_mp/transmitter/ecp_mp_tr_rc_windows.h"
 
 #include <boost/foreach.hpp>
 

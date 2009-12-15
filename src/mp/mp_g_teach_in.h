@@ -15,7 +15,7 @@
 #include <map>
 #include <list>
 
-#include "ecp_mp/ecp_mp_task.h"
+#include "ecp_mp/task/ecp_mp_task.h"
 // Konfigurator.
 #include "lib/configurator.h"
 #include "lib/timer.h"

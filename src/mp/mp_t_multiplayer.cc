@@ -13,9 +13,9 @@
 #include "lib/srlib.h"
 #include "mp/mp.h"
 #include "mp/mp_t_multiplayer.h"
-#include "ecp_mp/ecp_mp_t_festival.h"
-#include "ecp_mp/ecp_mp_t_player.h"
-#include "ecp_mp/ecp_mp_t_multiplayer.h"
+#include "ecp_mp/task/ecp_mp_t_festival.h"
+#include "ecp_mp/task/ecp_mp_t_player.h"
+#include "ecp_mp/task/ecp_mp_t_multiplayer.h"
 #include "ecp/festival/ecp_g_festival.h"
 
 namespace mrrocpp {

@@ -19,7 +19,7 @@
 #include "ecp/irp6_on_track/ecp_r_irp6ot.h"
 #include "ecp/irp6_postument/ecp_r_irp6p.h"
 
-#include "ecp_mp/ecp_mp_s_pcbird.h"
+#include "ecp_mp/sensor/ecp_mp_s_pcbird.h"
 #include "ecp/common/ecp_t_pcbird.h"
 
 

@@ -17,7 +17,7 @@
 #include "ecp/common/ecp_g_smooth.h"
 #include "ecp/common/ecp_g_force.h"
 
-#include "ecp_mp/ecp_mp_s_cvfradia.h"
+#include "ecp_mp/sensor/ecp_mp_s_cvfradia.h"
 
 //#define JAW_PINCHING_0 -0.016//zacisk szczeki dla puszki
 //#define JAW_PINCHING_1 -0.024//zacisk szczeki dla pudelka

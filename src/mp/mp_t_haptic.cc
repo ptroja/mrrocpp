@@ -18,7 +18,7 @@
 #include "mp/mp.h"
 #include "mp/mp_g_force.h"
 #include "mp/mp_t_haptic.h"
-#include "ecp_mp/ecp_mp_s_schunk.h"
+#include "ecp_mp/sensor/ecp_mp_s_schunk.h"
 
 namespace mrrocpp {
 namespace mp {

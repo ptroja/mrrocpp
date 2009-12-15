@@ -17,7 +17,7 @@
 #include "lib/com_buf.h"
 
 // Naglowek zawierajacy klase ecp_mp_force_sensor.
-#include "ecp_mp/ecp_mp_s_force.h"
+#include "ecp_mp/sensor/ecp_mp_s_force.h"
 #include "ecp/common/ecp_teach_in_generator.h"
 
 namespace mrrocpp {

@@ -1,7 +1,7 @@
 #if !defined(_ECP_T_ELLIPSE_H)
 #define _ECP_T_ELLIPSE_H
 
-#include "ecp_mp/ecp_mp_task.h"
+#include "ecp_mp/task/ecp_mp_task.h"
 #include "ecp/irp6_on_track/ecp_g_ellipse.h"
 #include "ecp/common/ecp_g_smooth.h"
 
