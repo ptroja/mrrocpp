@@ -10,7 +10,7 @@
 // Ostatnia modyfikacja: 2009
 // -------------------------------------------------------------------------
 
-#include "ecp/common/ecp_g_smooth2.h"
+#include "ecp/common/generator/ecp_g_smooth2.h"
 
 namespace mrrocpp {
 namespace ecp {

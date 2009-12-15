@@ -73,9 +73,9 @@ class mp_taught_in_pose {
 } // namespace mrrocpp
 
 // to fix forward declaration issues
-#include "mp/mp_generator.h"
-#include "mp/mp_task.h"
-#include "mp/mp_robot.h"
+#include "mp/generator/mp_generator.h"
+#include "mp/task/mp_task.h"
+#include "mp/robot/mp_robot.h"
 #include "lib/com_buf.h"
 
 #endif
