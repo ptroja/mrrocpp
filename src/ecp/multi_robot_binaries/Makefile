@@ -19,7 +19,8 @@ BINARIES = ecp_tran \
 	ecp_eihcalibration \
 	ecp_mam \
 	ecp_fsautomat \
-	ecp_t_kcz_force
+	ecp_t_kcz_force \
+	ecp_t_kcz_test
 	
 
 #-----------------------------------------------------------------------------------------------------------------------#
@@ -224,6 +225,21 @@ ecp_t_kcz_force: \
 		../irp6_on_track/ecp_r_irp6ot.o \
 		../irp6_postument/ecp_r_irp6p.o \
 		../common/task/ecp_t_kcz_force.o \
+		../common/generator/ecp_g_smooth.o \
+		../common/generator/ecp_g_smooth2.o \
+		../common/generator/ecp_g_jarosz.o \
+		../common/generator/ecp_g_force.o \
+		../common/ecp_operator_reaction_condition.o \
+		$(ECP_MPDIR)/sensor/ecp_mp_s_cvfradia.o \
+		$(ECP_MPDIR)/birdclient.o \
+		$(ECP_MPDIR)/sensor/ecp_mp_s_pcbird.o \
+		$(SHOBJ)
+	$(LD) $(LDFLAGS) -lgsl -lgslcblas -o $@ $^ 
+	
+ecp_t_kcz_test: \
+		../irp6_on_track/ecp_r_irp6ot.o \
+		../irp6_postument/ecp_r_irp6p.o \
+		../common/task/ecp_t_kcz_test.o \
 		../common/generator/ecp_g_smooth.o \
 		../common/generator/ecp_g_smooth2.o \
 		../common/generator/ecp_g_jarosz.o \

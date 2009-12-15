@@ -1,5 +1,3 @@
-//Zadanie kt�re realizuje dan� trajektori� u�ywaj�c smooth2 generatora
-
 #if !defined(_ECP_T_KCZ_TEST_H)
 #define _ECP_T_KCZ_TEST_H
 
@@ -8,14 +6,13 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace irp6ot {
+namespace common {
 namespace task {
 
 class kcz_test: public common::task::task {
 
   protected:
 	  common::generator::smooth2* smoothgen2;
-	  double kw_bok;
 
   public:
 	  kcz_test(lib::configurator &_config);
@@ -24,7 +21,7 @@ class kcz_test: public common::task::task {
 };
 
 }
-} // namespace irp6ot
+} // namespace common
 } // namespace ecp
 } // namespace mrrocpp
 

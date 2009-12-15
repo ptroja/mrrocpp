@@ -41,7 +41,6 @@ BINARIES+=			ecp_fct \
 				ecp_tr \
 				ecp_t_smooth2_test \
 				ecp_t_grab_cube_irp6ot \
-				ecp_t_kcz_test \
 				ecp_t_calib_axzb \
 				ecp_t_calib_axxb
 endif
@@ -203,9 +202,6 @@ ecp_t_smooth2_test: ecp_t_smooth2_test.o ../common/generator/ecp_g_smooth2.o ../
 	$(LD) $(LDFLAGS) -o $@ $^ 
 #-----------------------------------------------------------------------------------------------------------------------#
 ecp_t_grab_cube_irp6ot: ecp_vis_ib_eih_object_tracker_irp6ot.o ecp_vis_ib_eih_wrist_turner_irp6ot.o ../common/generator/ecp_g_force.o ecp_t_grab_cube_irp6ot.o ../common/generator/ecp_g_smooth2.o ../common/generator/ecp_g_t.o ../common/generator/ecp_g_jarosz.o $(ECP_MPDIR)/sensor/ecp_mp_s_cvfradia.o ../common/ecp_operator_reaction_condition.o $(SHOBJ)
-	$(LD) $(LDFLAGS) -o $@ $^ 
-#-----------------------------------------------------------------------------------------------------------------------#
-ecp_t_kcz_test: ecp_t_kcz_test.o ../common/generator/ecp_g_smooth2.o ../common/generator/ecp_g_t.o ../common/generator/ecp_g_jarosz.o ../common/ecp_operator_reaction_condition.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 #-----------------------------------------------------------------------------------------------------------------------#
 ecp_t_calib_axzb: ../common/task/ecp_t_calib_axzb.o ../common/task/ecp_t_calibration.o ../common/generator/ecp_g_smooth2.o ../common/generator/ecp_g_t.o ../common/generator/ecp_g_jarosz.o ../common/ecp_operator_reaction_condition.o $(SHOBJ)
