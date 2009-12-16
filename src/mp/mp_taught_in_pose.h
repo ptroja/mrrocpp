@@ -23,9 +23,6 @@
 
 namespace mrrocpp {
 namespace mp {
-namespace robot {
-class robot;
-}
 
 namespace common {
 
