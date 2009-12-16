@@ -16,7 +16,7 @@
 #include "mp/mp.h"
 #include "mp/generator/mp_g_force.h"
 #include "lib/mathtr.h"
-#include "mp/mp_common_generators.h"
+#include "mp/mp_g_common.h"
 
 namespace mrrocpp {
 namespace mp {

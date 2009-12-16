@@ -66,7 +66,7 @@ mp_taught_in_pose::mp_taught_in_pose(lib::POSE_SPECIFICATION at, double mt,
 } // namespace mp
 } // namespace mrrocpp
 
-#include "mp/mp_common_generators.h"
+#include "mp/mp_g_common.h"
 
 
 namespace mrrocpp {

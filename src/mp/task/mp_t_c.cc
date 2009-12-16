@@ -7,7 +7,7 @@
 #include "lib/srlib.h"
 #include "mp/mp.h"
 #include "mp/task/mp_t_c.h"
-#include "mp/mp_common_generators.h"
+#include "mp/mp_g_common.h"
 
 namespace mrrocpp {
 namespace mp {
