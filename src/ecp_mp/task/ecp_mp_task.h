@@ -1,3 +1,4 @@
+
 // -------------------------------------------------------------------------
 //                            ecp_mp_task.h dla QNX6
 // Definicje wspolnych struktur danych i metod dla procesow ECP i MP
@@ -34,7 +35,7 @@ class task {
 
 public:
 
-	typedef std::map<const char*, ecp_mp::common::Trajectory> trajectories_t;
+	typedef std::map<const char*, ecp_mp::common::Trajectory /*, str_cmp */> trajectories_t;
 
 	task(lib::configurator &_config);
 	virtual ~task();
@@ -77,6 +78,12 @@ public:
 	// funkcje do obslugi czujnikow
 	void all_sensors_initiate_reading (sensors_t & _sensor_m);
 	void all_sensors_get_reading (sensors_t & _sensor_m);
+
+	// funkcjonalnosc dodana na potrzeby czytania trajektorii z pliku xml
+	class str_cmp{
+	public:
+		bool operator()(char const *a, char const *b) const;
+	};
 
 	ecp_mp::common::Trajectory * createTrajectory(xmlNodePtr actNode, xmlChar *stateID);
 	trajectories_t * loadTrajectories(const char * fileName, lib::robot_name_t propRobot);
