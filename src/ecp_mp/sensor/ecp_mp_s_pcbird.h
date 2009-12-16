@@ -38,7 +38,7 @@ private:
 	/*!
       * Sensor name as defined in impconst.h
       */
-	const lib::SENSOR_ENUM sensor_name;
+	const lib::SENSOR_t sensor_name;
 
 public:
 

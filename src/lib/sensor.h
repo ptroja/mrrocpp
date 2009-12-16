@@ -391,7 +391,7 @@ typedef union
 
 // by Y - CZUJNIKI
 
-typedef enum SENSOR_ENUM
+typedef enum _SENSOR_ENUM
 {
 	SENSOR_UNDEFINED,
 	SENSOR_FORCE_ON_TRACK,

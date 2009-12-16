@@ -16,7 +16,7 @@ namespace ecp_mp {
 namespace sensor {
 
 /***************************** CONSTRUCTOR ********************************/
-digital_scales::digital_scales(lib::SENSOR_ENUM _sensor_name, const char* _section_name, task::task& _ecp_mp_object) :
+digital_scales::digital_scales(lib::SENSOR_t _sensor_name, const char* _section_name, task::task& _ecp_mp_object) :
 	sensor(_sensor_name, _section_name, _ecp_mp_object)
 {
 	// Ustawienie wielkosci przesylanej unii.

@@ -35,7 +35,7 @@ private:
 	lib::sr_ecp& sr_ecp_msg;
 
 	//sensor name
-	const lib::SENSOR_ENUM sensor_name;
+	const lib::SENSOR_t sensor_name;
 
 public:
 	/**
@@ -48,7 +48,7 @@ public:
 	 *
 	 * @author jedrzej
 	 */
-	wiimote (lib::SENSOR_ENUM _sensor_name, const char* _section_name, task::task& _ecp_mp_object, int _union_size);
+	wiimote (lib::SENSOR_t _sensor_name, const char* _section_name, task::task& _ecp_mp_object, int _union_size);
 
 	/**
 	 * Sends sensor configuration to the Wii-mote server

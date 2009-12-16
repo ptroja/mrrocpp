@@ -29,7 +29,7 @@ namespace ecp_mp {
 namespace sensor {
 
 /***************************** CONSTRUCTOR ********************************/
-rcs_korf::rcs_korf(lib::SENSOR_ENUM _sensor_name, const char* _section_name, task::task& _ecp_mp_object)
+rcs_korf::rcs_korf(lib::SENSOR_t _sensor_name, const char* _section_name, task::task& _ecp_mp_object)
 	: sensor(_sensor_name, _section_name, _ecp_mp_object) {
 	// Ustawienie wielkosci przesylanej unii.
 	union_size = sizeof(image.sensor_union.rcs);

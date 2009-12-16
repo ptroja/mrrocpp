@@ -14,7 +14,7 @@ namespace mrrocpp {
 namespace ecp_mp {
 namespace sensor {
 
-mic::mic(lib::SENSOR_ENUM _sensor_name, const char* _section_name, task::task& _ecp_mp_object) :
+mic::mic(lib::SENSOR_t _sensor_name, const char* _section_name, task::task& _ecp_mp_object) :
 	sensor(_sensor_name, _section_name, _ecp_mp_object)
 {
 	//    printf("ecp_mp_mic_sensor: [vsp_mic_sac]\n");

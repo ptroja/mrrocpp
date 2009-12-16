@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------------
-// Proces: 	EFFECTOR CONTROL PROCESS (lib::ECP) 
+// Proces: 	EFFECTOR CONTROL PROCESS (lib::ECP)
 // Plik:			ecp_mp_s_schunk.h
 // System:	QNX/MRROCPP  v. 6.3
 // Opis:		Ogolna struktura obrazow czujnika
@@ -17,14 +17,13 @@ namespace ecp_mp {
 namespace sensor {
 
 /***************** Klasa czujnikow ********************/
-class schunk: public sensor{
+class schunk: public sensor {
 	public:
 	// Konstruktor czujnika wirtualnego - wywolanie konstruktora klasy bazowej.
- 	schunk (lib::SENSOR_ENUM _sensor_name, const char* _section_name, task::task& _ecp_mp_object);
+ 	schunk (lib::SENSOR_t _sensor_name, const char* _section_name, task::task& _ecp_mp_object);
 											// konstruktor czujnika virtualnego
-
 	void initiate_reading (void);		// zadanie odczytu od VSP
-}; 
+};
 
 } // namespace sensor
 } // namespace ecp_mp

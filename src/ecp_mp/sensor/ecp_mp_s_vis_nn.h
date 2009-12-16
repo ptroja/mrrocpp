@@ -20,7 +20,7 @@ namespace sensor {
 class vis_nn: public sensor{
   public:
 	// Konstruktor czujnika wirtualnego - wywolanie konstruktora klasy bazowej.
- 	vis_nn (lib::SENSOR_ENUM _sensor_name, const char* _section_name, task::task& _ecp_mp_object);
+ 	vis_nn (lib::SENSOR_t _sensor_name, const char* _section_name, task::task& _ecp_mp_object);
 											// konstruktor czujnika virtualnego
 };
 

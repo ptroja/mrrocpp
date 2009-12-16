@@ -387,7 +387,7 @@ void fsautomat::initiateSensorReading(common::State &state)
 	 sensor_m[lib::SENSOR_CAMERA_ON_TRACK]->get_reading();
 	 */
 	/*	char *sensorName = strdup(state.getStringArgument());
-	 SENSOR_ENUM whichSensor;
+	 SENSOR_t whichSensor;
 	 if(!strcmp(sensorName, (const char *)"SENSOR_CAMERA_ON_TRACK"))
 	 whichSensor = SENSOR_CAMERA_ON_TRACK;
 	 else
@@ -400,7 +400,7 @@ void fsautomat::initiateSensorReading(common::State &state)
 void fsautomat::getSensorReading(common::State &state)
 {
 	/*	char *sensorName = strdup(state.getStringArgument());
-	 SENSOR_ENUM whichSensor;
+	 SENSOR_t whichSensor;
 	 if(!strcmp(sensorName, (const char *)"SENSOR_CAMERA_ON_TRACK"))
 	 whichSensor = SENSOR_CAMERA_ON_TRACK;
 	 else

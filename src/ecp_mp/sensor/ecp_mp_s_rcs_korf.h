@@ -23,7 +23,7 @@ class rcs_korf : public sensor{
 
   public:
 	// Konstruktor czujnika wirtualnego - wywolanie konstruktora klasy bazowej.
- 	rcs_korf (lib::SENSOR_ENUM _sensor_name, const char* _section_name, task::task& _ecp_mp_object);
+ 	rcs_korf (lib::SENSOR_t _sensor_name, const char* _section_name, task::task& _ecp_mp_object);
 	// Konfiguracja czujnika.
 	void configure_sensor (void);
 	// Odebranie odczytu od VSP.
