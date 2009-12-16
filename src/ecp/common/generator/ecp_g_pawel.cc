@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------------
-//                            ecp_g_pawel.cc
+//                            generator/ecp_g_pawel.cc
 //            Effector Control Process (lib::ECP) - rysowanie
 // 			Funkcje do tworzenia procesow ECP z rysowaniem
 // 			Ostatnia modyfikacja: 01.06.2006r.

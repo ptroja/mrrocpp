@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------------
-//                            ecp_g_smooth2.cc
+//                            generator/ecp_g_smooth2.cc
 //            Effector Control Process (lib::ECP) - smooth2 generator
 // Generator powstal na podstawie generatora smooth, glowna zmiana jest
 // rezygnacja z podawanie predkosci poczatkowej i koncowej w kazdym ruchu.

@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------------
-//                            ecp_t_fsautomat.h dla QNX6
+//                            task/ecp_t_fsautomat.h dla QNX6
 // Definicje struktur danych i metod dla procesow ECP
 //
 // Ostatnia modyfikacja:	sierpien 2008

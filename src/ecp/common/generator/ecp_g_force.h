@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------------
-//                            ecp_g_force.h dla QNX6
+//                            generator/ecp_g_force.h dla QNX6
 // Deklaracje generatorow dla procesow ECP z wykorzystaniem sily
 //
 // -------------------------------------------------------------------------

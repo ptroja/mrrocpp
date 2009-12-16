@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------------
-//                            ecp_g_smooth2.h dla QNX6
+//                            generator/ecp_g_smooth2.h dla QNX6
 // Deklaracje generatora plynnego ruchu smooth2 dla ECP
 //
 // -------------------------------------------------------------------------

@@ -15,7 +15,7 @@ SHOBJ = ../common/libecp.a $(LIBDIR)/libmrrocpp.a
 all: ${BINARIES}
 #---------------------------------Special object build rules (user made)-------------------------------------#
 
-ecp_festival: ecp_t_festival.o ecp_g_festival.o $(SHOBJ)
+ecp_festival: task/ecp_t_festival.o generator/ecp_g_festival.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 
 #-----------------------------------------------------------------------------------------------------------------------#

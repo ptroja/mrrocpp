@@ -1,4 +1,4 @@
-/// \file ecp_t_visioncoordinates.h
+/// \file task/ecp_t_visioncoordinates.h
 /// \brief definicja zadania podazania w strone zidentyfikowanego obiektu na ekranie
 /// \author 2009 Maciej Jerzy Nowak
 ///////////////////////////////////////////////////////////////////////////////

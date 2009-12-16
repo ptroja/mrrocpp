@@ -1,4 +1,4 @@
-// ecp_g_visioncoordinates.cc - generator odpowiadajacy za obliczanie wspolrzednych dla ruchu w strone
+// generator/ecp_g_visioncoordinates.cc - generator odpowiadajacy za obliczanie wspolrzednych dla ruchu w strone
 //      obiektu zaobserowanego przez system wizyjny (pobiera dane z VSP FraDIA)
 // (c)2009 Maciej Jerzy Nowak
 // Created: 20.02.2009  Last Update: 20.02.2009

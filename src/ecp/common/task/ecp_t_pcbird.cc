@@ -1,5 +1,5 @@
 /*!
- * \file ecp_t_pcbird.cc
+ * \file task/ecp_t_pcbird.cc
  * \brief Class responsible for communication with pcbird (testing purposes).
  * - methods definitions.
  * \author tkornuta

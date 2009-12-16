@@ -1,4 +1,4 @@
-/// \file ecp_t_eih_acquisition.cc
+/// \file task/ecp_t_eih_acquisition.cc
 /// \brief definicja zadania akwizycji danych potrzebnych do kalibracji ukladu oko - reka
 /// \author 2009 Jakub Kosiorek
 ///////////////////////////////////////////////////////////////////////////////

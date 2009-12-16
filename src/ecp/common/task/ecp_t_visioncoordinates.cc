@@ -1,4 +1,4 @@
-/// \file ecp_t_visioncoordinates.cc
+/// \file task/ecp_t_visioncoordinates.cc
 /// \brief definiuje zadanie podazania chwytaka (kamery) robota w strone obiektu zlokalizowanego na ekranie
 /// \author Maciej Jerzy Nowak
 /// \date 2009.07.22

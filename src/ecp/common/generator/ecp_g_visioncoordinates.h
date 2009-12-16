@@ -1,4 +1,4 @@
-/// \file ecp_g_visioncoordinates.cc 
+/// \file generator/ecp_g_visioncoordinates.cc 
 /// \brief generator odpowiadajacy za obliczanie wspolrzednych dla ruchu w strone
 //      obiektu zaobserowanego przez system wizyjny (pobiera dane z VSP FraDIA)
 /// \author Maciej Jerzy Nowak

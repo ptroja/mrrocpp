@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------------
-//                            ecp_g_jarosz.h dla QNX6
+//                            generator/ecp_g_jarosz.h dla QNX6
 //
 // Modyfikacje:
 // 1. metody wirtualne w kla sie bazowej sensor - ok. 160

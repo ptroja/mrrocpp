@@ -1,5 +1,5 @@
 // ------------------------------------------------------------------------
-//   ecp_t_tran.cc - przezroczyste wersja dla dowolnego z robotow
+//   task/ecp_t_tran.cc - przezroczyste wersja dla dowolnego z robotow
 //
 //                     EFFECTOR CONTROL PROCESS (lib::ECP) - main()
 //

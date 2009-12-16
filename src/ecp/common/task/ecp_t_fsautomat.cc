@@ -1,7 +1,7 @@
 // -------------------------------------------------------------------------
-//                            ecp_t_fsautomat.cc
+//                            task/ecp_t_fsautomat.cc
 //
-// Funkcje do obslugi chwytaka, zacytowane z ecp_t_rcsc.cc
+// Funkcje do obslugi chwytaka, zacytowane z task/ecp_t_rcsc.cc
 //
 // Ostatnia modyfikacja: 2008
 // -------------------------------------------------------------------------

@@ -1,5 +1,5 @@
 /*!
- * \file ecp_g_cvfradia.h
+ * \file generator/ecp_g_cvfradia.h
  * \brief Generator responsible for communication with cvFraDIA (testing purposes).
  * - class declaration
  * \author tkornuta

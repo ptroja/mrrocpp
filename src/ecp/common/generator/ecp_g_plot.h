@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------------
-//                            ecp_g_plot.h dla QNX6
+//                            generator/ecp_g_plot.h dla QNX6
 // Deklaracje struktur danych i metod dla procesow ECP 
 // 
 // -------------------------------------------------------------------------

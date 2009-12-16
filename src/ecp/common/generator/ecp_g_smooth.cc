@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------------
-//                            ecp_g_smooth.cc
+//                            generator/ecp_g_smooth.cc
 //            Effector Control Process (lib::ECP) - smooth generator
 // Generator nie wykorzystujacy informacji o czasie ruchu
 // autor: Przemek Pilacinski

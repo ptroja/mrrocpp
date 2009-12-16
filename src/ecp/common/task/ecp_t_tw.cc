@@ -1,5 +1,5 @@
 // ------------------------------------------------------------------------
-//   ecp_t_sk.cc - zadanie eksperymentalne by yoyek
+//   task/ecp_t_sk.cc - zadanie eksperymentalne by yoyek
 //
 // Ostatnia modyfikacja: 2007
 // ------------------------------------------------------------------------

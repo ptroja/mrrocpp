@@ -1,4 +1,4 @@
-/// \file ecp_t_eihcalibration.cc
+/// \file task/ecp_t_eihcalibration.cc
 /// \brief definicja zadania kalibracji ukladu oko - reka
 /// \author 2009 Jakub Kosiorek
 ///////////////////////////////////////////////////////////////////////////////

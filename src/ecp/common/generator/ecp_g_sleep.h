@@ -1,5 +1,5 @@
 /*
- * ecp_g_sleep.h
+ * generator/ecp_g_sleep.h
  *
  *Author: Tomasz Bem
  */

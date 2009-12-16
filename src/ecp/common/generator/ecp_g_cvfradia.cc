@@ -1,5 +1,5 @@
 /**
- * @file ecp_g_cvfradia.cc
+ * @file generator/ecp_g_cvfradia.cc
  * @brief Generator responsible for communication with cvFraDIA (testing purposes).
  * - class definition
  * @author tkornuta

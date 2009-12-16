@@ -1,5 +1,5 @@
 /*
- * ecp_g_eihcalibration.h
+ * generator/ecp_g_eihcalibration.h
  *
  *  Created on: July 28, 2009
  *      Author: jkosiore

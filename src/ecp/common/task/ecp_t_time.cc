@@ -1,5 +1,5 @@
 // ------------------------------------------------------------------------
-//   ecp_t_time.cc - sledzenie konturu wersja dla dowolnego z robotow irp6
+//   task/ecp_t_time.cc - sledzenie konturu wersja dla dowolnego z robotow irp6
 //
 // Ostatnia modyfikacja: 2007
 // ------------------------------------------------------------------------

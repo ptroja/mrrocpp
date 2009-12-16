@@ -1,5 +1,5 @@
 /*!
- * \file ecp_t_cvfradia.cc
+ * \file task/ecp_t_cvfradia.cc
  * \brief Class responsible for communication with cvFraDIA (testing purposes).
  * - methods definitions.
  * \author tkornuta

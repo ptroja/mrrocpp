@@ -15,10 +15,10 @@ SHOBJ = $(LIBDIR)/libecp.a $(LIBDIR)/libmrrocpp.a $(LIBDIR)/libplayerclient.a
 all: ${BINARIES}
 #---------------------------------Special object build rules (user made)-------------------------------------#
 
-ecp_speechrecognition: ecp_t_speechrecognition.o ecp_g_speechrecognition.o $(SHOBJ)
+ecp_speechrecognition: task/ecp_t_speechrecognition.o generator/ecp_g_speechrecognition.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 
-ecp_playerpos: ecp_t_playerpos.o ecp_g_playerpos.o $(SHOBJ)
+ecp_playerpos: task/ecp_t_playerpos.o generator/ecp_g_playerpos.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 
 #-----------------------------------------------------------------------------------------------------------------------#
