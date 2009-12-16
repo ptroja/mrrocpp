@@ -108,8 +108,8 @@ bool countLUT(){
 
 /**************************** metody vsp_pawel ****************************/
 
-sensor* return_created_sensor (lib::configurator &_config){
-
+sensor* return_created_sensor (lib::configurator &_config)
+{
 	return new pawel(_config);
 }
 
@@ -129,7 +129,6 @@ pawel::pawel(lib::configurator &_config) : sensor(_config)
 
 	is_sensor_configured=false;
 	is_reading_ready=false;
-
 }
 
 pawel::~pawel(void)
@@ -147,11 +146,6 @@ void pawel::configure_sensor (void)
 
 	sr_msg->message ("Sensor configured");
 //   	printf("[vsp_pawel]\tconfigure sensor\n");
-}
-
-void pawel::wait_for_event()
-{
-
 }
 
 /*************************** inicjacja odczytu ******************************/

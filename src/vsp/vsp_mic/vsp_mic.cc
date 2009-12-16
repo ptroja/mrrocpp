@@ -9,7 +9,6 @@
 // -------------------------------------------------------------------------
 
 #include <stdio.h>
-#include <sys/neutrino.h>
 #include <string.h>
 #include <sys/select.h>
 #include <iostream>
@@ -219,21 +218,6 @@ void mic::configure_sensor (void){
 	is_sensor_configured=true;
   	 sr_msg->message ("Sensor MIC initiated"); // 7
 }
-
-/*
-void vsp_mic::wait_for_event(){
-
-	if(interatt==0){
-	memset(&event, 0, sizeof(event));//by y&w
-	event.sigev_notify = SIGEV_INTR;//by y&w
-	if ( (id =InterruptAttach (irq_no, int_handler, (void *) &md , sizeof(md), 0)) == -1)
-		  printf( "Unable to attach interrupt handler: \n");
-	interatt=1;
-	}
-	InterruptWait (NULL, NULL);
-
-}
-*/ // useless in no-wait interactive mode
 
 /*************************** inicjacja odczytu ******************************/
 void mic::initiate_reading (void){

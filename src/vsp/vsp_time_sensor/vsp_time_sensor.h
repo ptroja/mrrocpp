@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------------
-// Proces: 	VIRTUAL SENSOR PROCESS (lib::VSP) 
+// Proces: 	VIRTUAL SENSOR PROCESS (lib::VSP)
 // Plik:	vsp_time_sensor.h
 // System:	QNX/MRROCPP  v. 6.3
 // Opis:	Deklaracja klasy vsp_time_sensor - czujnik sily.
@@ -19,7 +19,7 @@ namespace sensor {
 /********** klasa czujnikow po stronie VSP **************/
 class time : public sensor {
 private:
-	
+
     struct timespec ts;
 
 public:
@@ -30,8 +30,6 @@ public:
     void configure_sensor (void);
     // Inicjacja odczytu.
     void initiate_reading (void);
-    // Oczekiwanie na wydarzenie.
-    void wait_for_event(void);
     // Odeslanie odczytu.
     void get_reading (void);
 }; // end: class vsp_ds_sensor

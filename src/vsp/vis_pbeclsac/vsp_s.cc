@@ -9,7 +9,6 @@
 // odrem - prywrocic pry podlaczeniu klasy kamera
 // -------------------------------------------------------------------------
 
-#include <sys/neutrino.h>
 #include <time.h>
 #include <string.h>
 #include <sys/types.h>
@@ -24,15 +23,15 @@
 
 #include "lib/srlib.h"
 #include "vsp/vis_pbeclsac/vsp_vis_pbeclsac.h"
-#include "vsp/cmvision.h"
-#include "vsp/cube.h"
+#include "vsp/vis/cmvision.h"
+#include "vsp/vis/cube.h"
+#include "vsp/vis/global.h"
+#include "vsp/vis/calib.h"
+#include "vsp/vis/macierze_nr.h"
 
 // Konfigurator
 #include "lib/configurator.h"
 
-#include "vsp/global.h"
-#include "vsp/calib.h"
-#include "vsp/macierze_nr.h"
 int alloc_m=0, alloc_v=0; // globalnie widoczne liczby zaalokowanych macierzy i wektorow
 namespace mrrocpp {
 namespace vsp {
@@ -56,7 +55,6 @@ clock_t start_time, end_time;
 int interatt=0;
 int x=0;
 int z=0;
-int irq_no;
 int id;
 int md;
 struct timespec start[9], stop[9], res;
@@ -101,8 +99,6 @@ vis_pbeclsac::vis_pbeclsac(lib::configurator &_config) : sensor(_config){
 
 	is_sensor_configured=false;	// czujnik niezainicjowany
 	is_reading_ready=false;				// nie ma zadnego gotowego odczytu
-	irq_no = 0;
-	ThreadCtl (_NTO_TCTL_IO, NULL);  // by YOYEK & 7 - nadanie odpowiednich uprawnien watkowi
 
 	std::string colors_file(mrrocpp_network_path);
 	colors_file += "data/color_eih.txt";
@@ -143,10 +139,6 @@ void vis_pbeclsac::configure_sensor (void){
 
      sr_msg->message ("Sensor initiated"); // 7
 	}
-
-void vis_pbeclsac::wait_for_event(){
-
-}
 
 /*************************** inicjacja odczytu ******************************/
 void vis_pbeclsac::initiate_reading (void){
@@ -190,7 +182,7 @@ vision.setRoi(k1.roi,1000);
 	is_reading_ready=true;							// odczyt jakikolwiek
 
 
-	} // wait_for_event
+	}
 
 /***************************** odczyt z czujnika *****************************/
 void vis_pbeclsac::get_reading (void){

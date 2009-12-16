@@ -1,14 +1,8 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "vsp/macierze_nr.h"
-#include "vsp/calib.h"
-
-//extern double *cc, *fc, *kc;
-
-
-
-
+#include "vsp/vis/macierze_nr.h"
+#include "vsp/vis/calib.h"
 
 void comp_distortion_oulu(double **xd, double **x, double *kc)
 {
@@ -227,19 +221,19 @@ void rodrigues_v(double *omckk, double **R, double **dRdom)
 
 		double **dRdm1=matrix(9,21);
 		m_zeros(dRdm1);
-		dRdm1[1][1]=1; dRdm1[5][1]=1; dRdm1[9][1]=1; 
-		dRdm1[1][2]=omegav[1][1]; dRdm1[2][2]=omegav[2][1]; dRdm1[3][2]=omegav[3][1]; 
-		dRdm1[4][2]=omegav[1][2]; dRdm1[5][2]=omegav[2][2]; dRdm1[6][2]=omegav[3][2]; 
-		dRdm1[7][2]=omegav[1][3]; dRdm1[8][2]=omegav[2][3]; dRdm1[9][2]=omegav[3][3]; 
+		dRdm1[1][1]=1; dRdm1[5][1]=1; dRdm1[9][1]=1;
+		dRdm1[1][2]=omegav[1][1]; dRdm1[2][2]=omegav[2][1]; dRdm1[3][2]=omegav[3][1];
+		dRdm1[4][2]=omegav[1][2]; dRdm1[5][2]=omegav[2][2]; dRdm1[6][2]=omegav[3][2];
+		dRdm1[7][2]=omegav[1][3]; dRdm1[8][2]=omegav[2][3]; dRdm1[9][2]=omegav[3][3];
 		for(int i=1;i<10;i++)
 		{
 			dRdm1[i][i+3]=beta;
 			dRdm1[i][i+12]=gamma;
 		}
 
-		dRdm1[1][3]=A[1][1]; dRdm1[2][3]=A[2][1]; dRdm1[3][3]=A[3][1]; 
-		dRdm1[4][3]=A[1][2]; dRdm1[5][3]=A[2][2]; dRdm1[6][3]=A[3][2]; 
-		dRdm1[7][3]=A[1][3]; dRdm1[8][3]=A[2][3]; dRdm1[9][3]=A[3][3]; 
+		dRdm1[1][3]=A[1][1]; dRdm1[2][3]=A[2][1]; dRdm1[3][3]=A[3][1];
+		dRdm1[4][3]=A[1][2]; dRdm1[5][3]=A[2][2]; dRdm1[6][3]=A[3][2];
+		dRdm1[7][3]=A[1][3]; dRdm1[8][3]=A[2][3]; dRdm1[9][3]=A[3][3];
 
 		// teraz obliczamy dRdom = dRdm1 *dm1dm2 * dm2dm3 * dm3din;
 		// tworzymy wiec tymczasowe macierze o odpowiednich rozmiarach
@@ -269,8 +263,8 @@ void compute_extrinsic_init(double **x_kk, double **X_kk, double *omckk, double 
 
 	double **x_distort=matrix(2,4);
 	double **xn=matrix(3,4); //w oryginale bylo 2,4 ale potem nastepowalo rozszerzenie
-	
-	
+
+
 
 	for(int j=1;j<=2;j++)
 		for(int i=1;i<=4;i++)
@@ -293,7 +287,7 @@ void compute_extrinsic_init(double **x_kk, double **X_kk, double *omckk, double 
 	m_subvector_c(H,1,U1);
 	m_subvector_c(H,2,U2);
 	double sc=(v_norm(U1)+v_norm(U2))/2;
-	m_multiply_s(H,1/sc); 
+	m_multiply_s(H,1/sc);
 
 	v_multiply_s(U1,1/v_norm(U1));
 	v_copy(U1,U3);
@@ -336,10 +330,10 @@ void compute_extrinsic_refine(double **x_kk, double **X_kk, double *omckk, doubl
 	double **dxdom=matrix(8,3); double **dxdT=matrix(8,3);
 	double **JJ=matrix(8,6), **JJt=matrix(6,8), **JJ2=matrix(6,6), **JJ3=matrix(6,8);
 	double **param_innov=matrix(6,1), **param_up=matrix(6,1), **ex2=matrix(8,1);
-	double *param_innov_v=vvector(6),*param_up_v=vvector(6); //wektorki do obliczenia normy	
+	double *param_innov_v=vvector(6),*param_up_v=vvector(6); //wektorki do obliczenia normy
 	double	change = 1;
 	int iter = 0;
-	
+
 	for(int i=1;i<=3;i++)
 	{
 		param[i][1]=omckk[i];
@@ -462,7 +456,7 @@ void project_points(double **X_kk, double *omckk, double *Tckk, double **x, doub
 						r4[i]=r2[i]*r2[i];
 						r6[i]=r2[i]*r2[i]*r2[i];
 					}
-					double **dr4dom=matrix(4,3), **dr4dT=matrix(4,3), **dr6dom=matrix(4,3), **dr6dT=matrix(4,3); 
+					double **dr4dom=matrix(4,3), **dr4dT=matrix(4,3), **dr6dom=matrix(4,3), **dr6dT=matrix(4,3);
 					for(int i=1;i<=4;i++)
 						for(int j=1;j<=3;j++)
 						{
@@ -537,9 +531,9 @@ void project_points(double **X_kk, double *omckk, double *Tckk, double **x, doub
 								for(int j=1;j<=3;j++)
 								{
 									dxd1dom[i][j]+=coeff[i][j]*dxdomt[i][j];
-								}	
+								}
 
-								
+
 								m_zeros(dxd1dT);
 								for(int i=1;i<=4;i++)
 									for(int j=1;j<=3;j++)
@@ -551,7 +545,7 @@ void project_points(double **X_kk, double *omckk, double *Tckk, double **x, doub
 										for(int j=1;j<=3;j++)
 										{
 											dxd1dT[i][j]+=coeff[i][j]*dxdTt[i][j];
-										}	
+										}
 
 										double **dxd1dk=matrix(8,5);
 										m_zeros(dxd1dk);
@@ -622,7 +616,7 @@ void project_points(double **X_kk, double *omckk, double *Tckk, double **x, doub
 														double **dxd2dom=matrix(8,3), **dxd2dT=matrix(8,3), **dxd2dk=matrix(8,5);
 														m_add_m(dxd1dom,ddelta_xdom,dxd2dom);
 														m_add_m(dxd1dT,ddelta_xdT,dxd2dT);
-														
+
 														m_add_m(dxd1dk,ddelta_xdk,dxd2dk);
 
 														//% Add Skew:
@@ -653,7 +647,7 @@ void project_points(double **X_kk, double *omckk, double *Tckk, double **x, doub
 															{
 																dxdom[i][j]=coeff2[i]*dxd2dom[i][j];
 																dxdT[i][j]=coeff2[i]*dxd2dT[i][j];
-															}	
+															}
 															/*
 															for(int i=1;i<=8;i++)
 															for(int j=1;j<=5;j++)
@@ -692,7 +686,7 @@ void project_points(double **X_kk, double *omckk, double *Tckk, double **x, doub
 															free_matrix(xd1);
 															free_matrix(dxd1dom);
 															free_matrix(coeff);
-															
+
 															free_matrix(dxd1dk);
 															free_matrix(delta_x);
 															free_matrix(ddelta_xdom);

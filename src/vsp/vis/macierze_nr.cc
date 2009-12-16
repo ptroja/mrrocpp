@@ -1,8 +1,8 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "vsp/calib.h"
-#include "vsp/macierze_nr.h"
+#include "vsp/vis/calib.h"
+#include "vsp/vis/macierze_nr.h"
 
 extern int alloc_m, alloc_v;
 
@@ -58,12 +58,12 @@ double **matrix(long m, long n)
 	/* allocate pointers to rows */
 	ma=(double **) malloc((m+1)*sizeof(double*));
 	if (!ma) nrerror((char*)"allocation failure 1 in dmatrix()");
-	
+
 	/*
 	printf("wektor: ");
 	for(i=0; i<m+1; i++)
 		printf("%d ",ma[i]);
-	printf("\n");	
+	printf("\n");
 	*/
 	for(i=0; i<m+1; i++)
 	{
@@ -90,7 +90,7 @@ void free_matrix(double **ma)
 void m_svd(double **a, int m, int n, double *w, double **v)
 {
 	int flag,i,its,j,jj,k,l,nm;
-	double anorm,c,f,g,h,s,scale,x,y,z, *rv1; 
+	double anorm,c,f,g,h,s,scale,x,y,z, *rv1;
 
 	rv1=vvector(n);
 
@@ -200,7 +200,7 @@ void m_svd(double **a, int m, int n, double *w, double **v)
 			if (its == 30) printf("no convergence in 30 svdcmp iterations");
 			x=w[l]; nm=k-1;
 			y=w[nm]; g=rv1[nm];
-			h=rv1[k]; 
+			h=rv1[k];
 			f=((y-z)*(y+z)+(g-h)*(g+h))/(2.0*h*y);
 			g=pythag(f,1.0);
 			f=((x-z)*(x+z)+h*((y/(f+SIGN(g,f)))-h))/x;
@@ -240,9 +240,9 @@ void m_svd(double **a, int m, int n, double *w, double **v)
 
 void m_gaussj(double **a, double **b)
 /*------------------------------------------------------
-* a = coefficient matrix 
-* b = solution	matrix	  
-* Notes:  1) on exit, a contains the inverted matrix 
+* a = coefficient matrix
+* b = solution	matrix
+* Notes:  1) on exit, a contains the inverted matrix
 *		   2) on entry,	b contains the lhs vector, and
 *			  on exit, it contains the solution	vector
 --------------------------------------------------------*/
@@ -358,30 +358,30 @@ void m_inverse(double **a)
 void m_transpose(double **a, double **b)
 {	//transpozycja
 	if (a[0][1]!=b[1][0] || a[1][0]!=b[0][1]) nrerror((char*)"m_transpose: matrices do not mach");
-	for (int i=1; i<=a[1][0]; i++ ) 
-		for (int j=1; j<=a[0][1]; j++ ) 
+	for (int i=1; i<=a[1][0]; i++ )
+		for (int j=1; j<=a[0][1]; j++ )
 			b[j][i] = a[i][j];
 
 }
 
 void m_zeros(double **a)
 {	//zeruje macierz
-	for (int i=1; i<=a[1][0]; i++ ) 
-		for (int j=1; j<=a[0][1]; j++ ) 
+	for (int i=1; i<=a[1][0]; i++ )
+		for (int j=1; j<=a[0][1]; j++ )
 			a[i][j]=0;
 
 }
 
 void v_zeros(double *a)
 {	//zeruje wektor
-	for (int i=1; i<=a[0]; i++ ) 
+	for (int i=1; i<=a[0]; i++ )
 		a[i]=0;
 }
 
 void m_eye(double **a)
 {	//wstawia jedynki na glownej przekatnej, reszta to zera
-	for (int i=1; i<=a[1][0]; i++ ) 
-		for (int j=1; j<=a[0][1]; j++ ) 
+	for (int i=1; i<=a[1][0]; i++ )
+		for (int j=1; j<=a[0][1]; j++ )
 			if(i==j)  a[i][j]=1;
 			else
 				a[i][j]=0;
@@ -413,7 +413,7 @@ void m_qrdecomp(double **a, double **r, double **q)
 		nrm = 0.0;
 		for (i = k; i <= m; i++)
 			nrm = pythag(nrm, a[i][k]);
-		
+
 
 		if (nrm != 0.0)
 		{
@@ -422,7 +422,7 @@ void m_qrdecomp(double **a, double **r, double **q)
 				nrm = - nrm;
 			for (i = k; i <= m; i++)
 				a[i][k] = a[i][k]/nrm;
-			
+
 			a[k][k] = a[k][k]+1.0;
 
 			// Apply transformation to remaining columns.
@@ -449,7 +449,7 @@ void m_qrdecomp(double **a, double **r, double **q)
 			else
 				r[i][j] = 0.0;
 			}
-	
+
 
 	for (int k = m ; k >= 1; k--)
 	{
@@ -465,7 +465,7 @@ void m_qrdecomp(double **a, double **r, double **q)
 				s = (- s) / a[k][k];
 				for (int i = k; i <= m; i++)
 					q[i][j] += s * a[i][k];
-				
+
 			}
 	}
 	free_vector(Rdiag);
@@ -474,11 +474,11 @@ void m_qrdecomp(double **a, double **r, double **q)
 void m_multiply_m(double **a, double **b, double **c)
 {	//mnozy macierze
 
-	
+
 if (a[0][1]!=b[1][0]) nrerror((char*)"m_multiply_m: input matrices do not match");
 //printf("A(%.1fx%.1f)*B(%.1fx%.1f)=C(%.1fx%.1f)\n",a[1][0],a[0][1],b[1][0],b[0][1],c[1][0],c[0][1]);
 if (a[1][0]!=c[1][0] || b[0][1]!=c[0][1]) nrerror((char*)"m_multiply_m: output matrix does not fit");
-	
+
 	int m=(int)a[1][0];
 	int n=(int)b[0][1];
 	//c[1][0]=m;
@@ -496,7 +496,7 @@ if (a[1][0]!=c[1][0] || b[0][1]!=c[0][1]) nrerror((char*)"m_multiply_m: output m
 
 void m_add_m(double **a,double **b, double **c)
 {	//dodaje macierze
-	
+
 	//printf("A(%.1fx%.1f)+B(%.1fx%.1f)=C(%.1fx%.1f)\n",a[1][0],a[0][1],b[1][0],b[0][1],c[1][0],c[0][1]);
 	if (a[1][0]!=b[1][0]&&a[1][0]!=c[1][0] || a[0][1]!=b[0][1]&&a[0][1]!=c[0][1]) nrerror((char*)"m_add_m: matrices do not match");
 
@@ -545,7 +545,7 @@ void m_multiply_v(double **a, double *b, double *c)
 
 void m_copy(double **a, double **b)
 {
-	if (a[0][1]!=b[0][1] &&  a[1][0]!=b[1][0]) nrerror((char*)"nieprawid³owe rozmiary macierzy do kopiowania");
+	if (a[0][1]!=b[0][1] &&  a[1][0]!=b[1][0]) nrerror((char*)"nieprawidï¿½owe rozmiary macierzy do kopiowania");
 
 	for(int i=1;i<=a[1][0];i++)
 		for(int j=1;j<=a[0][1];j++)
@@ -577,7 +577,7 @@ void v_copy(double *a, double *b)
 void m_multiply_s(double **a, double s)
 {
 	/*
-	Funkcja mno¿y w miejscu macierz przez skalar
+	Funkcja mnoï¿½y w miejscu macierz przez skalar
 	*/
 	for(int i=1;i<=a[1][0];i++)
 		for(int j=1;j<=a[0][1];j++)
@@ -587,7 +587,7 @@ void m_multiply_s(double **a, double s)
 void v_multiply_s(double *a, double s)
 {
 	/*
-	Funkcja mno¿y w miejscu wektor przez skalar
+	Funkcja mnoï¿½y w miejscu wektor przez skalar
 	*/
 	for(int i=1;i<=a[0];i++)
 		a[i]=a[i]*s;
@@ -597,7 +597,7 @@ void v_multiply_s(double *a, double s)
 void v_multiply_v_m(double *a, double *b, double **c)
 {
 	/*
-	Funkcja mno¿y dwa wektory traktuj¹c drugi jako transponowany, czyli a*b'
+	Funkcja mnoï¿½y dwa wektory traktujï¿½c drugi jako transponowany, czyli a*b'
 	w wyniku dostajemy macierz
 
 	*/
@@ -610,7 +610,7 @@ void v_multiply_v_m(double *a, double *b, double **c)
 void m_substract_v(double **a,double *b)
 {
 	/*
-	Funkcja odejmuje w miejscu od macierzy wektor w ten sposob, ze od wszystkich elementow 
+	Funkcja odejmuje w miejscu od macierzy wektor w ten sposob, ze od wszystkich elementow
 	wiersza macierzy odejmowany jest jeden element odpowiadajacego mu wiersza wektora
 	*/
 	for(int i=1;i<=a[1][0];i++)
@@ -678,7 +678,7 @@ void m_mean_r(double **a, double *b){
 double m_trace(double **a)
 {
 	/*
-	Œlad macierzy - tylko dla kwadratowej bo ogólna wersja nie jest potrzebna
+	ï¿½lad macierzy - tylko dla kwadratowej bo ogï¿½lna wersja nie jest potrzebna
 	*/
 	double tr=0;
 	for(int i=1;i<=a[1][0];i++)
@@ -689,7 +689,7 @@ double m_trace(double **a)
 double v_mean(double *a)
 {
 	/*
-	Funkcja oblicza œredni¹ elementow wektora
+	Funkcja oblicza ï¿½redniï¿½ elementow wektora
 	*/
 	double s=0;
 	for(int i=1;i<=a[0];i++)
@@ -700,7 +700,7 @@ double v_mean(double *a)
 double v_mean_abs(double *a)
 {
 	/*
-	Funkcja oblicza œredni¹ wartosci bezwzglednych elementow wektora
+	Funkcja oblicza ï¿½redniï¿½ wartosci bezwzglednych elementow wektora
 	*/
 	double s=0;
 	for(int i=1;i<=a[0];i++)
@@ -711,7 +711,7 @@ double v_mean_abs(double *a)
 double v_norm(double *a)
 {
 	/*
-	Funkcja oblicza kwadratowa norme wektora 
+	Funkcja oblicza kwadratowa norme wektora
 	*/
 	double n=0;
 	for(int i=1; i<=a[0];i++)
@@ -733,7 +733,7 @@ double v_dot(double *a, double *b)
 void v_cross(double *a, double *b, double *c)
 {
 	/*
-	Funkcja liczy iloczyn wektorowy dwóch trzyelementowych wektorów
+	Funkcja liczy iloczyn wektorowy dwï¿½ch trzyelementowych wektorï¿½w
 	*/
 	c[1]=a[2]*b[3]-b[2]*a[3];
 	c[2]=a[3]*b[1]-b[3]*a[1];

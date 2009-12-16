@@ -17,7 +17,6 @@
 #include <fcntl.h>
 #include <sys/types.h>
 #include <unistd.h>
-//#include <unistd.h>
 #include <stdlib.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
@@ -30,11 +29,10 @@
 
 #include "lib/srlib.h"
 #include "vsp/vis_sac/vsp_vis_sac.h"
-//#include "vsp/cmvision.h"
-//#include "vsp/cube.h"
 
 // Konfigurator
 #include "lib/configurator.h"
+
 int alloc_m=0, alloc_v=0; // globalnie widoczne liczby zaalokowanych macierzy i wektorow
 namespace mrrocpp {
 namespace vsp {
@@ -190,10 +188,6 @@ void vis_sac::configure_sensor (void){
      sr_msg->message ("Sensor initiated"); // 7
 	}
 
-void vis_sac::wait_for_event(){
-
-}
-
 /*************************** inicjacja odczytu ******************************/
 void vis_sac::initiate_reading (void){
 // printf("7 - initiate reading\n");
@@ -255,7 +249,7 @@ vision.setRoi(k1.roi,1000);
 	is_reading_ready=true;							// odczyt jakikolwiek
 
 
-	} // wait_for_event
+	}
 
 /***************************** odczyt z czujnika *****************************/
 void vis_sac::get_reading (void){

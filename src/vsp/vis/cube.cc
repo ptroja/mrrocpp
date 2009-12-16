@@ -1,4 +1,4 @@
-#include "vsp/cube.h"
+#include "vsp/vis/cube.h"
 #include <stdlib.h>
 #include <malloc.h>
 #include <memory.h>
@@ -19,7 +19,7 @@ inline unsigned int min(unsigned int a,unsigned int b)
 
 void RubiksCube::clear()
 {
-	
+
 	tiles_count=0;
 	tiles_area.min=0;
 	tiles_area.max=0;
@@ -51,7 +51,7 @@ void RubiksCube::clear()
 
 void RubiksCube::close()
 {
-  
+
 }
 
 rubik_compare RubiksCube::compare(RubiksCube *k)
@@ -59,17 +59,17 @@ rubik_compare RubiksCube::compare(RubiksCube *k)
 	rubik_compare compare;
 	compare.tiles_new_count=0;
 	compare.tiles_old_count=0;
-	
+
 	compare.tiles_count_diff=tiles_count-k->tiles_count; //roznica w liczbie kafelkow
 
-	
+
 	// sprawdzenie czy odpowiadajace kafelki sa podobne
 	point_d shift=findShift(k);
 //	int found;
 	for(int i=0;i<tiles_count;i++)
 	{
 		compare.tiles[i]=findTile(i,k);
-		
+
 		if(compare.tiles[i]!=-1)
 		{
 			compare.tiles_old_count++;
@@ -92,13 +92,13 @@ int RubiksCube::findTile(int nr,RubiksCube *k)
 	int x1,x2,y1,y2,a1,a2,c1,c2;
 	int i,j,tmp_count;
 	// point_d t1=tiles[nr].center, t2;
-	int suspected[10]; //tu znajda sie numery kafelkow podejrzanych 
+	int suspected[10]; //tu znajda sie numery kafelkow podejrzanych
 	int min_dist,tmp;
 	int suspected_count=0;
 	//znalezienie wszystkich kafelkow o tym samym kolorze
 	for(i=0;i<k->tiles_count;i++)
 		if(k->tiles[i].color==tiles[nr].color)	suspected[suspected_count++]=i;
-	
+
 	//wsrod podejrzanych szukamy zgodnych co do powierzchni
 	tmp_count=suspected_count;
 	suspected_count=0;
@@ -126,7 +126,7 @@ int RubiksCube::findTile(int nr,RubiksCube *k)
 		min_dist=0xffffffff;
 		for(i=0;i<tmp_count;i++)
 		{
-			
+
 			x1=(int)tiles[nr].center.x;
 			y1=(int)tiles[nr].center.y;
 			a1=tiles[nr].area;
@@ -145,9 +145,9 @@ int RubiksCube::findTile(int nr,RubiksCube *k)
 			a1=a1*1000/tmp; a2=a2*1000/tmp;
 			tmp=max(c1,c2);
 			c1=c1*1000/tmp; c2=c2*1000/tmp;
-			
+
 			tmp=(x1-x2)*(x1-x2)+(y1-y2)*(y1-y2)+(a1-a2)*(a1-a2)+(c1-c2)*(c1-c2);
-			
+
 			if(tmp<min_dist)
 			{
 				suspected[0]=j;
@@ -167,7 +167,7 @@ bool RubiksCube::build(CMVision *vision)
 	int i,j;
 
 	tiles_count=vision->filtered_blobs_count;
-	if(tiles_count>RUBIK_MAX_TILES || tiles_count==0) return false; 
+	if(tiles_count>RUBIK_MAX_TILES || tiles_count==0) return false;
 
 	tiles_area.min=500000;
 	tiles_area.max=0;

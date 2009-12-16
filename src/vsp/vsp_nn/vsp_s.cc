@@ -10,7 +10,6 @@
 // -------------------------------------------------------------------------
 
 #include <stdio.h>
-#include <sys/neutrino.h>
 #include <time.h>
 #include <string.h>
 #include <sys/types.h>
@@ -55,7 +54,6 @@ int size_read;
 // #pragma off(check_stack);
 int interatt=0;
 
-int irq_no;
 int id;
 int md;
 //short tmp[9];
@@ -97,8 +95,6 @@ nn::nn(lib::configurator &_config) : sensor(_config){
 
 	is_sensor_configured=false;	// czujnik niezainicjowany
 	is_reading_ready=false;				// nie ma zadnego gotowego odczytu
-	irq_no = 0;
-	ThreadCtl (_NTO_TCTL_IO, NULL);  // by YOYEK & 7 - nadanie odpowiednich uprawnien watkowi
 
 	portno = PORT;
 	sockfd = socket(AF_INET, SOCK_STREAM, 0);

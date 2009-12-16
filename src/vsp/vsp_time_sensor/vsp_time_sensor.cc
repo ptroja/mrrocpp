@@ -44,10 +44,6 @@ void time::configure_sensor (void){// w obecnej implementacji zeruje poziom odcz
    	is_sensor_configured=true;
 } // end: configure_sensor
 
-// Metoda oczekujaca na dane, otrzymane z czujnika sily (poprzez proces EDP).
-void time::wait_for_event(void){
-} // end: wait_for_event
-
 // Metoda dokonujaca przepisania odczytu do obrazu czujnika.
 void time::initiate_reading (void){
 	// Jesli czujnik nie jest skonfigurowany.

@@ -9,7 +9,6 @@
 // odrem - prywrocic pry podlaczeniu klasy kamera
 // -------------------------------------------------------------------------
 
-#include <sys/neutrino.h>
 #include <time.h>
 #include <string.h>
 #include <sys/types.h>
@@ -22,17 +21,17 @@
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 
+#include "vsp/vis/vsp_vis.h"
+#include "vsp/vis/cmvision.h"
+#include "vsp/vis/cube.h"
+#include "vsp/vis/global.h"
+#include "vsp/vis/calib.h"
+#include "vsp/vis/macierze_nr.h"
+
 #include "lib/srlib.h"
-#include "vsp/vsp_vis.h"
-#include "vsp/cmvision.h"
-#include "vsp/cube.h"
 
 // Konfigurator
 #include "lib/configurator.h"
-
-#include "vsp/global.h"
-#include "vsp/calib.h"
-#include "vsp/macierze_nr.h"
 
 int alloc_m=0, alloc_v=0; // globalnie widoczne liczby zaalokowanych macierzy i wektorow
 
@@ -68,7 +67,6 @@ clock_t start_time, end_time;
 int interatt=0;
 int x=0;
 int z=0;
-int irq_no;
 int id;
 int md;
 struct timespec start[9], stop[9], res;
@@ -153,8 +151,6 @@ vis::vis(lib::configurator &_config) : sensor(_config){
 
 	is_sensor_configured=false;	// czujnik niezainicjowany
 	is_reading_ready=false;				// nie ma zadnego gotowego odczytu
-	irq_no = 0;
-	ThreadCtl (_NTO_TCTL_IO, NULL);  // by YOYEK & 7 - nadanie odpowiednich uprawnien watkowi
 
 	//	printf("Konstruktor VSP_VIS pbeoleih!\n");
 
@@ -248,20 +244,6 @@ void vis::configure_sensor (void){
 	is_sensor_configured=true;
 	//   printf("Sensor initiated\n");
 	sr_msg->message ("Sensor initiated"); // 7
-}
-
-void vis::wait_for_event(){
-// printf("7 - wait_for_event\n");
-/*
-if(interatt==0){
-	memset(&event, 0, sizeof(event));// by y&w
-	event.sigev_notify = SIGEV_INTR;// by y&w
-	if ( (id =InterruptAttach (irq_no, int_handler, (void *) &md , sizeof(md), 0)) == -1)
-		  printf( "Unable to attach interrupt handler: \n");
-	interatt=1;
-	}
-InterruptWait (NULL, NULL);
-*/
 }
 
 /*************************** inicjacja odczytu ******************************/
@@ -516,7 +498,7 @@ clock_gettime( CLOCK_REALTIME , &e_time);
 	is_reading_ready=true;							// odczyt jakikolwiek
 // InterruptEnable();
 //    sr_msg->message ("VSP Reading initiate ok");
-	} // wait_for_event
+	}
 
 /***************************** odczyt z czujnika *****************************/
 void vis::get_reading (void){

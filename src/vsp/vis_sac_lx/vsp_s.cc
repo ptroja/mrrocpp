@@ -1,4 +1,3 @@
-#include <sys/neutrino.h>
 #include <time.h>
 #include <string.h>
 #include <sys/types.h>
@@ -27,14 +26,6 @@
 namespace mrrocpp {
 namespace vsp {
 namespace sensor {
-
-//#include "vsp/cmvision.h"
-//#include "vsp/cube.h"
-
-//#include "vsp/global.h"
-//#include "vsp/calib.h"
-//#include "vsp/macierze_nr.h"
-
 
 #define XMAX 768
 #define YMAX 576
@@ -110,7 +101,6 @@ int C_T_G[16];
 
 
 
-int irq_no;
 int id;
 int md;
 struct timespec start[9], stop[9], res;
@@ -143,8 +133,6 @@ vis_sac_lx::vis_sac_lx(lib::configurator &_config) : sensor(_config){
 
 	is_sensor_configured=false; // czujnik niezainicjowany
 	is_reading_ready=false; // nie ma zadnego gotowego odczytu
-	irq_no = 0;
-	ThreadCtl(_NTO_TCTL_IO, NULL); // by YOYEK & 7 - nadanie odpowiednich uprawnien watkowi
 
 	z=0;
 	x=0;
@@ -216,10 +204,6 @@ void vis_sac_lx::configure_sensor(void)
 	is_sensor_configured=true;
 
 	sr_msg->message("Sensor initiated"); // 7
-}
-
-void vis_sac_lx::wait_for_event(){
-	//delay(10);
 }
 
 /*************************** inicjacja odczytu ******************************/
