@@ -272,7 +272,7 @@ void ecp_vis_pb_eih_irp6ot::entertain_constraints(){
 #endif
 
 bool ecp_vis_pb_eih_irp6ot::first_step(void){
-
+/*
 	vsp_vis_sac = sensor_m[lib::SENSOR_CAMERA_SA];
 
 	idle_step_counter = 1;
@@ -323,6 +323,7 @@ bool ecp_vis_pb_eih_irp6ot::first_step(void){
 	O_eps_EG_norm=10;
 
 	return true;
+	*/
 }
 
 } // namespace irp6ot

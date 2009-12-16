@@ -20,7 +20,7 @@ ecp_vis_ib_eih_object_tracker_irp6ot::ecp_vis_ib_eih_object_tracker_irp6ot(commo
 }
 
 bool ecp_vis_ib_eih_object_tracker_irp6ot::first_step() {
-
+/*
 	printf("first step\n");
 	flushall();
 	vsp_fradia = sensor_m[lib::SENSOR_CVFRADIA];
@@ -66,6 +66,7 @@ bool ecp_vis_ib_eih_object_tracker_irp6ot::first_step() {
 	}
 
 	return true;
+	*/
 }
 
 bool ecp_vis_ib_eih_object_tracker_irp6ot::next_step_without_constraints() {

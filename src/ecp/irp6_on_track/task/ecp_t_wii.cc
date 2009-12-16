@@ -30,6 +30,7 @@ wii::wii(lib::configurator &_config) : task(_config)
 
 void wii::main_task_algorithm(void)
 {
+	/*
 	double* firstPosition;
 
     sg = new common::generator::smooth(*this,true);
@@ -48,6 +49,7 @@ void wii::main_task_algorithm(void)
     }
 
     ecp_termination_notice();
+    */
 }
 
 }

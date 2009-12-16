@@ -120,6 +120,7 @@ bool linear::first_step()
 			the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
 			the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
 			break;
+			/*
 		case lib::XYZ_EULER_ZYZ:
 			the_robot->ecp_command.instruction.instruction_type = lib::GET;
 			the_robot->ecp_command.instruction.get_type = ARM_DV;
@@ -142,6 +143,7 @@ bool linear::first_step()
 			the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
 			the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
 			break;
+			*/
 		default:
 			throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 	} // end : switch (td.arm_type)
@@ -190,7 +192,7 @@ bool linear::next_step()
 								/td.interpolation_node_no;
 			} // end:for
 			break;
-
+/*
 		case lib::XYZ_EULER_ZYZ:
 			the_robot->ecp_command.instruction.instruction_type = lib::SET;
 			the_robot->ecp_command.instruction.set_type = ARM_DV; // ARM
@@ -220,6 +222,7 @@ bool linear::next_step()
 			the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = the_robot->reply_package.arm.pf_def.gripper_coordinate + node_counter
 					*td.coordinate_delta[6]/td.interpolation_node_no;
 			break;
+			*/
 		default:
 			throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 
@@ -351,6 +354,7 @@ bool linear_parabolic::first_step()
 			the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
 			the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
 			break;
+			/*
 		case lib::XYZ_EULER_ZYZ:
 			the_robot->ecp_command.instruction.instruction_type = lib::GET;
 			the_robot->ecp_command.instruction.get_type = ARM_DV;
@@ -373,6 +377,7 @@ bool linear_parabolic::first_step()
 			the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
 			the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
 			break;
+			*/
 		default:
 			throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 	} // end : switch ( td.arm_type )
@@ -409,7 +414,7 @@ bool linear_parabolic::next_step()
 					prev_s[i]= the_robot->reply_package.arm.pf_def.arm_coordinates[i];
 				} // end:for
 				break;
-
+/*
 			case lib::XYZ_EULER_ZYZ:
 				for (int i=0; i<6; i++) {
 					prev_s[i]= the_robot->reply_package.arm.pf_def.arm_coordinates[i];
@@ -422,6 +427,7 @@ bool linear_parabolic::next_step()
 				} // end:for
 				prev_s[7] = the_robot->reply_package.arm.pf_def.gripper_coordinate;
 				break;
+				*/
 			default:
 				throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 		} // end:switch
@@ -509,7 +515,7 @@ bool linear_parabolic::next_step()
 				prev_vel_avg[i] = vel_avg[i];
 			} // end:for
 			break;
-
+/*
 		case lib::XYZ_EULER_ZYZ:
 			the_robot->ecp_command.instruction.instruction_type = lib::SET;
 			the_robot->ecp_command.instruction.set_type = ARM_DV; // ARM
@@ -592,6 +598,7 @@ bool linear_parabolic::next_step()
 				prev_vel_avg[i] = vel_avg[i];
 			} // end:for
 			break;
+			*/
 		default:
 			throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 	}// end:switch
@@ -645,6 +652,7 @@ bool polynomial::first_step()
 			the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
 			the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
 			break;
+			/*
 		case lib::XYZ_EULER_ZYZ:
 			the_robot->ecp_command.instruction.instruction_type = lib::GET;
 			the_robot->ecp_command.instruction.get_type = ARM_DV;
@@ -656,6 +664,7 @@ bool polynomial::first_step()
 			the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
 			the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
 			break;
+
 		case lib::XYZ_ANGLE_AXIS:
 			the_robot->ecp_command.instruction.instruction_type = lib::GET;
 			the_robot->ecp_command.instruction.get_type = ARM_DV;
@@ -667,6 +676,7 @@ bool polynomial::first_step()
 			the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
 			the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
 			break;
+			*/
 		default:
 			throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 	} // end : switch ( td.arm_type )
@@ -757,7 +767,7 @@ bool cubic::next_step()
 					A0[i]= the_robot->reply_package.arm.pf_def.arm_coordinates[i];
 				} // end:for
 				break;
-
+/*
 			case lib::XYZ_EULER_ZYZ:
 				for (int i=0; i<6; i++) {
 					A0[i]= the_robot->reply_package.arm.pf_def.arm_coordinates[i];
@@ -770,6 +780,7 @@ bool cubic::next_step()
 				} // end:for
 				A0[6]= the_robot->reply_package.arm.pf_def.gripper_coordinate;
 				break;
+				*/
 			default:
 				throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 		}// end:switch
@@ -854,7 +865,7 @@ bool cubic::next_step()
 						*node_counter) + A3[i]*(node_counter*node_counter*node_counter);
 			} // end:for
 			break;
-
+/*
 		case lib::XYZ_EULER_ZYZ:
 			the_robot->ecp_command.instruction.instruction_type = lib::SET;
 			the_robot->ecp_command.instruction.set_type = ARM_DV; // ARM
@@ -913,7 +924,7 @@ bool cubic::next_step()
 				}
 			} // end:for
 			break;
-
+*/
 		default:
 			throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 	}// end:switch
@@ -1011,7 +1022,7 @@ bool quintic::next_step()
 					A0[i]= the_robot->reply_package.arm.pf_def.arm_coordinates[i];
 				} // end:for
 				break;
-
+/*
 			case lib::XYZ_EULER_ZYZ:
 				for (int i=0; i<6; i++) {
 					A0[i]= the_robot->reply_package.arm.pf_def.arm_coordinates[i];
@@ -1024,6 +1035,7 @@ bool quintic::next_step()
 				} // end:for
 				A0[6]= the_robot->reply_package.arm.pf_def.gripper_coordinate;
 				break;
+				*/
 			default:
 				throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 		}// end:switch
@@ -1106,7 +1118,7 @@ bool quintic::next_step()
 						*node_counter*node_counter);
 			} // end:for
 			break;
-
+/*
 		case lib::XYZ_EULER_ZYZ:
 			the_robot->ecp_command.instruction.instruction_type = lib::SET;
 			the_robot->ecp_command.instruction.set_type = ARM_DV; // ARM
@@ -1180,12 +1192,12 @@ bool quintic::next_step()
 
 			} // end:for
 			break;
-
+*/
 		default:
 			throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 	}// end:switch
 
-	// skopiowa� przygotowany rozkaz dla EDP do bufora wysylkowego
+	// skopiowac przygotowany rozkaz dla EDP do bufora wysylkowego
 
 
 	return true;
@@ -1280,6 +1292,7 @@ bool parabolic_teach_in::first_step()
 			the_robot->ecp_command.instruction.get_type = ARM_DV; // ARM
 			the_robot->ecp_command.instruction.get_arm_type = lib::JOINT;
 			break;
+			/*
 		case lib::XYZ_EULER_ZYZ:
 			the_robot->ecp_command.instruction.instruction_type = lib::GET;
 			the_robot->ecp_command.instruction.get_type = ARM_DV; // ARM
@@ -1290,6 +1303,7 @@ bool parabolic_teach_in::first_step()
 			the_robot->ecp_command.instruction.get_type = ARM_DV; // ARM
 			the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_ANGLE_AXIS;
 			break;
+			*/
 		default:
 			throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 	} // end: switch
@@ -1357,6 +1371,7 @@ bool parabolic_teach_in::next_step()
 					}
 				}
 				break;
+				/*
 			case lib::XYZ_EULER_ZYZ:
 				the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
 				for (i=0; i < 7; i++) {
@@ -1410,6 +1425,7 @@ bool parabolic_teach_in::next_step()
 					}
 				}
 				break;
+				*/
 			default:
 				throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 		} // end: switch
@@ -1452,6 +1468,7 @@ bool parabolic_teach_in::next_step()
 								* (number_of_intervals*INTERVAL - node_counter*INTERVAL)* (number_of_intervals*INTERVAL
 								- node_counter*INTERVAL);
 				break;
+				/*
 			case lib::XYZ_EULER_ZYZ:
 				for (i = 0; i < 6; i++)
 					if (node_counter < half_number_of_intervals)
@@ -1492,6 +1509,7 @@ bool parabolic_teach_in::next_step()
 							- node_counter*INTERVAL);
 
 				break;
+				*/
 			default:
 				throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 		} // end: switch
@@ -1593,6 +1611,7 @@ bool calibration::first_step()
 			the_robot->ecp_command.instruction.get_type = ARM_DV; // ARM
 			the_robot->ecp_command.instruction.get_arm_type = lib::JOINT;
 			break;
+			/*
 		case lib::XYZ_EULER_ZYZ:
 			the_robot->ecp_command.instruction.instruction_type = lib::GET;
 			the_robot->ecp_command.instruction.get_type = ARM_DV; // ARM
@@ -1603,6 +1622,7 @@ bool calibration::first_step()
 			the_robot->ecp_command.instruction.get_type = ARM_DV; // ARM
 			the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_ANGLE_AXIS;
 			break;
+			*/
 		default:
 			throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 	} // end: switch
@@ -1670,6 +1690,7 @@ bool calibration::next_step()
 					}
 				}
 				break;
+				/*
 			case lib::XYZ_EULER_ZYZ:
 				the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
 				for (i=0; i < 7; i++) {
@@ -1718,6 +1739,7 @@ bool calibration::next_step()
 					}
 				}
 				break;
+				*/
 			default:
 				throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 		} // end: switch
@@ -1761,6 +1783,7 @@ bool calibration::next_step()
 										*number_of_intervals*INTERVAL -0.5*node_counter*INTERVAL*node_counter*INTERVAL
 										-0.25*number_of_intervals*INTERVAL*number_of_intervals*INTERVAL);
 				break;
+				/*
 			case lib::XYZ_EULER_ZYZ:
 				for (i = 0; i < 6; i++)
 					if (node_counter < half_number_of_intervals)
@@ -1807,6 +1830,7 @@ bool calibration::next_step()
 									-0.25*number_of_intervals*INTERVAL*number_of_intervals*INTERVAL);
 
 				break;
+				*/
 			default:
 				throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 		} // end: switch
@@ -1820,12 +1844,14 @@ bool calibration::next_step()
 			case lib::JOINT:
 				memcpy(the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates, tip.coordinates, MAX_SERVOS_NR*sizeof (double));
 				break;
+				/*
 			case lib::XYZ_EULER_ZYZ:
 				memcpy(the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates, tip.coordinates, MAX_SERVOS_NR*sizeof (double));
 				break;
 			case lib::XYZ_ANGLE_AXIS:
 				memcpy(the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates, tip.coordinates, MAX_SERVOS_NR*sizeof (double));
 				break;
+				*/
 			default:
 				throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 		} // end: switch
@@ -1922,6 +1948,7 @@ bool cubic_spline::first_step()
 			the_robot->ecp_command.instruction.get_type = ARM_DV; // ARM
 			the_robot->ecp_command.instruction.get_arm_type = lib::JOINT;
 			break;
+			/*
 		case lib::XYZ_EULER_ZYZ:
 			the_robot->ecp_command.instruction.instruction_type = lib::GET;
 			the_robot->ecp_command.instruction.get_type = ARM_DV; // ARM
@@ -1932,6 +1959,7 @@ bool cubic_spline::first_step()
 			the_robot->ecp_command.instruction.get_type = ARM_DV; // ARM
 			the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_ANGLE_AXIS;
 			break;
+			*/
 		default:
 			throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 	} // end: switch
@@ -1980,7 +2008,7 @@ bool cubic_spline::next_step()
 							/ (number_of_intervals*number_of_intervals*number_of_intervals);
 				} // end:for
 				break;
-
+/*
 			case lib::XYZ_EULER_ZYZ:
 				the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
 				for (int i=0; i<6; i++) {
@@ -2012,6 +2040,7 @@ bool cubic_spline::next_step()
 				A3[6]=(-2.0*(tip.coordinates[6] - the_robot->reply_package.arm.pf_def.gripper_coordinate) )
 						/ (number_of_intervals*number_of_intervals*number_of_intervals);
 				break;
+				*/
 			default:
 				throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 		}// end:switch
@@ -2077,6 +2106,7 @@ bool cubic_spline::next_step()
 							+ A3[i]*(node_counter*node_counter*node_counter);
 				} // end : for
 				break;
+				/*
 				// ---------------------------------------------------------------------------------------------------------
 			case lib::XYZ_EULER_ZYZ:
 				for (int i = 0; i < 7; i++) {
@@ -2125,6 +2155,7 @@ bool cubic_spline::next_step()
 					}
 				} // end : for
 				break;
+				*/
 				// ---------------------------------------------------------------------------------------------------------
 			default:
 				throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
@@ -2270,6 +2301,7 @@ bool smooth_cubic_spline::first_step()
 			the_robot->ecp_command.instruction.get_type = ARM_DV; // ARM
 			the_robot->ecp_command.instruction.get_arm_type = lib::JOINT;
 			break;
+			/*
 		case lib::XYZ_EULER_ZYZ:
 			the_robot->ecp_command.instruction.instruction_type = lib::GET;
 			the_robot->ecp_command.instruction.get_type = ARM_DV; // ARM
@@ -2280,6 +2312,7 @@ bool smooth_cubic_spline::first_step()
 			the_robot->ecp_command.instruction.get_type = ARM_DV; // ARM
 			the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_ANGLE_AXIS;
 			break;
+			*/
 		default:
 			throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 	} // end: switch
@@ -2317,7 +2350,7 @@ bool smooth_cubic_spline::next_step()
 					t(0, i) = (double) 0;
 				} // end:for
 				break;
-
+/*
 			case lib::XYZ_EULER_ZYZ:
 				the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
 				for (int i=0; i<7; i++) {
@@ -2342,7 +2375,7 @@ bool smooth_cubic_spline::next_step()
 					t(0, i) = (double) 0;
 				} // end:for
 				break;
-
+*/
 			default:
 				throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 		}// end:switch
@@ -2368,7 +2401,7 @@ bool smooth_cubic_spline::next_step()
 						t(j, i) = (double) ( t(j-1 ,i) + (tip.motion_time/INTERVAL) );
 					} // end:for
 					break;
-
+/*
 				case lib::XYZ_EULER_ZYZ:
 					the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
 					for (int i=0; i<7; i++) {
@@ -2384,7 +2417,7 @@ bool smooth_cubic_spline::next_step()
 						t(j, i) = (double) ( t(j-1 ,i) + (tip.motion_time/INTERVAL) );
 					} // end:for
 					break;
-
+*/
 				default:
 					throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 			}// end:switch
@@ -2451,7 +2484,7 @@ bool smooth_cubic_spline::next_step()
 			case lib::JOINT:
 				the_robot->ecp_command.instruction.set_arm_type = lib::JOINT;
 				break;
-
+/*
 			case lib::XYZ_EULER_ZYZ:
 				the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
 				break;
@@ -2459,7 +2492,7 @@ bool smooth_cubic_spline::next_step()
 			case lib::XYZ_ANGLE_AXIS:
 				the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
 				break;
-
+*/
 			default:
 				throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 		}// end:switch
@@ -2549,6 +2582,7 @@ bool smooth_cubic_spline::next_step()
 
 				} // end:for
 				break;
+				/*
 				// ---------------------------------------------------------------------------------------------------------
 			case lib::XYZ_EULER_ZYZ:
 				the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
@@ -2613,6 +2647,7 @@ bool smooth_cubic_spline::next_step()
 					}
 				} // end:for
 				break;
+				*/
 			default:
 				break;
 				// ---------------------------------------------------------------------------------------------------------
@@ -2724,6 +2759,7 @@ bool quintic_spline::first_step()
 			the_robot->ecp_command.instruction.get_type = ARM_DV; // ARM
 			the_robot->ecp_command.instruction.get_arm_type = lib::JOINT;
 			break;
+			/*
 		case lib::XYZ_EULER_ZYZ:
 			the_robot->ecp_command.instruction.instruction_type = lib::GET;
 			the_robot->ecp_command.instruction.get_type = ARM_DV; // ARM
@@ -2734,6 +2770,7 @@ bool quintic_spline::first_step()
 			the_robot->ecp_command.instruction.get_type = ARM_DV; // ARM
 			the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_ANGLE_AXIS;
 			break;
+			*/
 		default:
 			throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 	} // end: switch
@@ -2788,7 +2825,7 @@ bool quintic_spline::next_step()
 									*number_of_intervals);
 				} // end:for
 				break;
-
+/*
 			case lib::XYZ_EULER_ZYZ:
 				the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
 				for (int i=0; i<6; i++) {
@@ -2832,6 +2869,7 @@ bool quintic_spline::next_step()
 						/ (number_of_intervals*number_of_intervals*number_of_intervals *number_of_intervals
 								*number_of_intervals);
 				break;
+				*/
 			default:
 				throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 		}// end:switch
@@ -2904,6 +2942,7 @@ bool quintic_spline::next_step()
 							*(node_counter*node_counter*node_counter*node_counter*node_counter);
 				} // end : for
 				break;
+				/*
 				// ---------------------------------------------------------------------------------------------------------
 			case lib::XYZ_EULER_ZYZ:
 				for (int i = 0; i < 7; i++) {
@@ -2962,6 +3001,7 @@ bool quintic_spline::next_step()
 					}
 				} // end : for
 				break;
+				*/
 				// ---------------------------------------------------------------------------------------------------------
 			default:
 				throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
@@ -3065,7 +3105,7 @@ bool elipsoid::first_step()
 	// wyznaczane beda przedzialy interpolacji, czyli makrokroki do realizacji przez EDP.
 	tip.motion_time = 100.0; // TK - czas koncowy elipsy
 	//     tip.motion_time = 50.0; // TK - czas koncowy dla mlynka
-	tip.arm_type = lib::XYZ_EULER_ZYZ;
+	//tip.arm_type = lib::XYZ_EULER_ZYZ;
 
 	// Zaznaczenie, ze bedzie realizowany pierwszy przedzial interpolacji, wiec trzeba
 	// wyznaczyc parametry ruchu
@@ -3081,6 +3121,7 @@ bool elipsoid::first_step()
 			the_robot->ecp_command.instruction.get_type = ARM_DV; // ARM
 			the_robot->ecp_command.instruction.get_arm_type = lib::JOINT;
 			break;
+			/*
 		case lib::XYZ_EULER_ZYZ:
 			the_robot->ecp_command.instruction.instruction_type = lib::GET;
 			the_robot->ecp_command.instruction.get_type = ARM_DV; // ARM
@@ -3091,6 +3132,7 @@ bool elipsoid::first_step()
 			the_robot->ecp_command.instruction.get_type = ARM_DV; // ARM
 			the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_ANGLE_AXIS;
 			break;
+			*/
 		default:
 			throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 	} // end: switch
@@ -3130,12 +3172,14 @@ bool elipsoid::next_step()
 			case lib::JOINT:
 				the_robot->ecp_command.instruction.set_arm_type = lib::JOINT;
 				break;
+				/*
 			case lib::XYZ_EULER_ZYZ:
 				the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
 				break;
 			case lib::XYZ_ANGLE_AXIS:
 				the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
 				break;
+				*/
 			default:
 				throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 		} // end: switch
@@ -3162,6 +3206,7 @@ bool elipsoid::next_step()
 				break;
 			case lib::JOINT:
 				break;
+				/*
 			case lib::XYZ_EULER_ZYZ:
 				// trajektoria zadana
 				// elipsa
@@ -3172,33 +3217,11 @@ bool elipsoid::next_step()
 				the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[4] = M_PI/2.;
 				the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[5] = -M_PI;
 
-				// mlynek w osobliwosci
-				/*
-				 the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[0] = 0.2 *
-				 sin(M_PI/20.*(node_counter*INTERVAL)+1);
-				 the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[1] = 0.9 +0.2 *
-				 cos(M_PI/20.*(node_counter*INTERVAL)+1);
-				 the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[2] = 1;
-				 the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[3] =
-				 M_PI/2. -0.3*sin(M_PI/20.* (node_counter*INTERVAL)+1);
-				 the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[4] = M_PI/2.;
-				 the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[5] = -M_PI;
-				 */
 
-				// mlynek1
-				/* 		the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[0] = 0.7+0.2 *
-				 sin(M_PI/20.*(node_counter*INTERVAL));
-				 the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[1] = 0.5 +0.2 *
-				 cos(M_PI/20.*(node_counter*INTERVAL));
-				 the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[2] = 1;
-				 the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[3] =
-				 0.3*sin(M_PI/20.* (node_counter*INTERVAL));
-				 the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[4] = M_PI/2.;
-				 the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[5] = -M_PI;
-				 */
 				break;
 			case lib::XYZ_ANGLE_AXIS:
 				break;
+				*/
 			default:
 				throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 		} // end: switch

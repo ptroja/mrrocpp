@@ -77,13 +77,14 @@ void visioncoordinates::main_task_algorithm()
 		bool found = false;
 		while (itsVisionGen->getCoordinates(bf))
 		{
+			/*
 			debugmsg("sa nowe wspolrzedne...");
 			// --- po pobraniu wsp�rz�dnych wykonujemy ruch ---
 			//itsSmoothGen->load_coordinates(lib::XYZ_EULER_ZYZ, bf[0], bf[1], bf[2], bf[3], bf[4], bf[5], bf[6], bf[7]);
 			itsSmoothGen->load_coordinates(lib::XYZ_EULER_ZYZ, vp, vp, v, a, bf);
 			itsSmoothGen->Move();
 			itsSmoothGen->reset();
-
+*/
 			// --- czekamy a� chwytak si� ustabilizuje ---
 			sleep(1);
 

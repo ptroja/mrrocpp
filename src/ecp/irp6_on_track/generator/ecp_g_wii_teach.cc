@@ -11,7 +11,7 @@ namespace generator {
 wii_teach::wii_teach (common::task::task& _ecp_task,ecp_mp::sensor::wiimote* _wiimote) : generator (_ecp_task), _wiimote(_wiimote)
 {
     int i;
-    for(i = 0;i<7;++i) 
+    for(i = 0;i<7;++i)
     {
         multipliers[i] = 0.003;
         maxChange[i] = 0.0001;
@@ -20,6 +20,7 @@ wii_teach::wii_teach (common::task::task& _ecp_task,ecp_mp::sensor::wiimote* _wi
 
 bool wii_teach::first_step()
 {
+	/*
     the_robot->ecp_command.instruction.instruction_type = lib::GET;
     the_robot->ecp_command.instruction.get_type = ARM_DV;
     the_robot->ecp_command.instruction.set_type = ARM_DV;
@@ -35,6 +36,7 @@ bool wii_teach::first_step()
     stop = false;
 
     return true;
+    */
 }
 
 void wii_teach::clear_position(void)
@@ -129,7 +131,7 @@ bool wii_teach::next_step()
     double value;
     message.i_code = lib::VSP_CONFIGURE_SENSOR;
     message.wii_command.led_change = false;
-    
+
     try
     {
         if(rumble)
@@ -150,6 +152,7 @@ bool wii_teach::next_step()
     if(!_wiimote->image.sensor_union.wiimote.buttonA) releasedA = true;
 
     ++step_no;
+    /*
     the_robot->ecp_command.instruction.instruction_type = lib::SET;
     the_robot->ecp_command.instruction.get_type = ARM_DV;
     the_robot->ecp_command.instruction.set_type = ARM_DV;
@@ -159,14 +162,14 @@ bool wii_teach::next_step()
     the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
     the_robot->ecp_command.instruction.motion_steps = 8;
     the_robot->ecp_command.instruction.value_in_step_no = 8;
-
+*/
     if(releasedA && _wiimote->image.sensor_union.wiimote.buttonA) stop = true;
 
     //get value and convert to nonlinear when needed
     value = _wiimote->image.sensor_union.wiimote.orientation_x;
     if(value > -1 && value < 1) value = pow(value,3);
 
-    
+
     clear_position();
     axis = get_axis();
     if(!stop && axis >= 0)

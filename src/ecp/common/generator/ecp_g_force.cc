@@ -930,6 +930,7 @@ legobrick_detach_force::legobrick_detach_force(
 //--------------------------------------------------------------------------------------
 bool legobrick_detach_force::first_step()
 {
+	/*
 	for (int i=0; i<6; i++)
 		delta[i]=0.0;
 
@@ -997,6 +998,7 @@ bool legobrick_detach_force::first_step()
 	the_robot->ecp_command.instruction.arm.pf_def.behaviour[5] = lib::UNGUARDED_MOTION;
 
 	return true;
+	*/
 }
 //--------------------------------------------------------------------------------------
 bool legobrick_detach_force::next_step()

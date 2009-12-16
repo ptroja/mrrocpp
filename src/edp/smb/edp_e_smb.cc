@@ -178,41 +178,6 @@ void effector::arm_abs_xyz_eul_zyz_2_frame (const double *p)
 
 
 /*--------------------------------------------------------------------------*/
-void effector::arm_frame_2_xyz_eul_zyz ()
-{
-
-    // Przeksztacenie definicji koncowki z postaci
-    // FRAME do postaci XYZ_EULER_ZYZ
-    // oraz przepisanie wyniku przeksztacenia do
-    // wewntrznych struktur danych REPLY_BUFFER
-    lib::Homog_matrix A(current_end_effector_frame);
-    switch (reply.reply_type)
-    {
-    case lib::ARM:
-    case lib::ARM_INPUTS:
-    case lib::ARM_RMODEL:
-    case lib::ARM_RMODEL_INPUTS:
-        A.get_mech_xyz_euler_zyz(reply.arm.pf_def.arm_coordinates);
-        A.get_mech_xyz_euler_zyz(rb_obj->step_data.current_cartesian_position);
-        //A.get_xyz_euler_zyz(reply.arm.pf_def.arm_coordinates);
-        //A.get_xyz_euler_zyz(rb_obj->step_data.current_cartesian_position);
-        break;
-    default: // blad:
-        throw NonFatal_error_2(STRANGE_GET_ARM_REQUEST);
-    }
-
-    // dla robotow track i postument - oblicz chwytak
-    if ((robot_name == lib::ROBOT_IRP6_ON_TRACK) || (robot_name == lib::ROBOT_IRP6_POSTUMENT))
-    {
-        reply.arm.pf_def.gripper_reg_state = servo_gripper_reg_state;
-        reply.arm.pf_def.gripper_coordinate = current_joints[gripper_servo_nr];
-    }
-
-}
-/*--------------------------------------------------------------------------*/
-
-
-/*--------------------------------------------------------------------------*/
 void effector::move_arm (lib::c_buffer &instruction)
 { // przemieszczenie ramienia
     // Wypenienie struktury danych transformera na podstawie parametrow polecenia
@@ -231,28 +196,8 @@ void effector::move_arm (lib::c_buffer &instruction)
         move_servos ();
         mt_tt_obj->trans_t_to_master_order_status_ready();
         break;
-    case lib::XYZ_EULER_ZYZ:
 
-    	// scope-locked reader data update
-    	{
-    		boost::mutex::scoped_lock lock(rb_obj->reader_mutex);
 
-			for (int i=0; i<6;i++)
-			{
-				rb_obj->step_data.current_cartesian_position[i]=instruction.arm.pf_def.arm_coordinates[i];
-			}
-    	}
-
-        compute_xyz_euler_zyz(instruction);
-        move_servos ();
-        mt_tt_obj->trans_t_to_master_order_status_ready();
-
-        break;
-    case lib::XYZ_ANGLE_AXIS:
-        compute_xyz_angle_axis(instruction);
-        move_servos ();
-        mt_tt_obj->trans_t_to_master_order_status_ready();
-        break;
     case lib::FRAME:
         compute_frame(instruction);
         move_servos ();
@@ -316,19 +261,7 @@ void effector::get_arm_position (bool read_hardware, lib::c_buffer &instruction)
         get_current_kinematic_model()->i2e_transform(current_joints, &current_end_effector_frame);
         arm_frame_2_frame();
         break;
-    case lib::XYZ_ANGLE_AXIS:
-        // przeliczenie wspolrzednych do poziomu, ktory ma byc odczytany
-        get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
-        get_current_kinematic_model()->i2e_transform(current_joints, &current_end_effector_frame);
-        arm_frame_2_xyz_aa();
-        break;
-    case lib::XYZ_EULER_ZYZ:
-        // przeliczenie wspolrzednych do poziomu, ktory ma byc odczytany
-        get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
-        get_current_kinematic_model()->i2e_transform(current_joints, &current_end_effector_frame);
-        arm_frame_2_xyz_eul_zyz();   // dla sterowania pozycyjnego
-        reply.arm_type = lib::XYZ_EULER_ZYZ;
-        break;
+
     case lib::JOINT:
         // przeliczenie wspolrzednych do poziomu, ktory ma byc odczytany
         get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);

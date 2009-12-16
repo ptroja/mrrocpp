@@ -55,11 +55,12 @@ void grab_cube::main_task_algorithm(void ) {
 	smoothgen2->load_coordinates(lib::JOINT,0,0,0,0,0,0,0,-0.017,true);
 	smoothgen2->Move();
 	smoothgen2->reset();
-
+/*
 	smoothgen2->set_relative();
 	smoothgen2->load_coordinates(lib::XYZ_ANGLE_AXIS,v,a,0.008,0,0,0,0,0,0,0,true);
 	smoothgen2->Move();
 	smoothgen2->reset();
+	*/
 
 	vsp_fradia = sensor_m[lib::SENSOR_CVFRADIA];
 
@@ -74,7 +75,7 @@ void grab_cube::main_task_algorithm(void ) {
 
 	gagen->configure(0.01,1500);
 	gagen->Move();
-
+/*
 	smoothgen2->set_relative();
 	smoothgen2->load_coordinates(lib::XYZ_ANGLE_AXIS,v,a,0,0,-0.001,0,0,0,0,0,true);
 	//smoothgen2->load_coordinates(lib::XYZ_ANGLE_AXIS,0,0,0,0,0,0,-0.013,0,false);	//close gripper
@@ -91,7 +92,7 @@ void grab_cube::main_task_algorithm(void ) {
 	smoothgen2->load_coordinates(lib::XYZ_ANGLE_AXIS,v,a,0,0,-0.1,0,0,0,0,0,true);
 	smoothgen2->Move();
 	smoothgen2->reset();
-
+*/
 	ecp_termination_notice();
 };
 

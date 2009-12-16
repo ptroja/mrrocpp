@@ -2,7 +2,7 @@
 //                            ecp.cc
 //            Effector Control Process (lib::ECP) - force methods
 // Funkcje do tworzenia procesow ECP z wykorzsytaniem sily
-// 
+//
 // Ostatnia modyfikacja: 2004r.
 // -------------------------------------------------------------------------
 
@@ -59,7 +59,7 @@ double xz;
 
 int the_second=0;
 
- 
+
 double tablica[6];
 
 double measure[6][5];
@@ -98,8 +98,8 @@ int steps2switch=0;
 
 // double frame1[4][4];
 
-	seven_eye_run_linear::seven_eye_run_linear(common::task::task& _ecp_task, int step): 
-		generator (_ecp_task) { 		step_no = step;          	};  
+	seven_eye_run_linear::seven_eye_run_linear(common::task::task& _ecp_task, int step):
+		generator (_ecp_task) { 		step_no = step;          	};
 
 
 bool seven_eye_run_linear::first_step (  ) {
@@ -126,12 +126,12 @@ measure[i][j]=0;
  (sensor_m.begin())->second->current_period=0;
 
 
-   
+
 
  td.interpolation_node_no = 1;
 		   td.internode_step_no = 40; //40
 		   td.value_in_step_no = td.internode_step_no - 10; // 50
-		   
+
 
 /*
 the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[0][0]=0.706825; the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[1][0]=-0.706825;
@@ -156,7 +156,7 @@ the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[2][2]=1; the
 
 
 
-	
+
 // 	A_B_T_cur.to_table();
 
 xalfa=0;
@@ -174,17 +174,17 @@ xz=0;
   	  	homol_matrix tmp333;
 	  homol_matrix A_B_T_base (0.709, -0.031, 1.026, -0.044, 2.769, -2.404);
 	homol_matrix A_B_T_desire (0.709, -0.031, 1.026, 0.0,  M_PI/2, -M_PI/2);
-	
+
 
 	A_B_TOOL = !A_B_T_base * A_B_T_desire;
 
 	tmp222 = A_B_T_desire; // A_B_T_base * A_B_TOOL;
-	
+
 	tmp333 = !tmp222 * A_B_T_desire;
-	
+
 	std::cout << tmp333 <<std::endl;
-	
-	
+
+
 A_B_T_desire.get_xyz_euler_zyz(tablica);
 for(int i=0; i<6; i++)
 	printf("%f ,",tablica[i]);
@@ -195,7 +195,7 @@ printf("\n");
 	*/
 
 /*
-the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[0][0]=cos(xalfa)*cos(xbeta)*cos(xgamma)-sin(xalfa)*sin(xgamma); 
+the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[0][0]=cos(xalfa)*cos(xbeta)*cos(xgamma)-sin(xalfa)*sin(xgamma);
 the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[1][0]=-cos(xalfa)*cos(xbeta)*sin(xgamma)-sin(xalfa)*cos(xgamma);
 the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[2][0]=cos(xalfa)*sin(xbeta); the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[3][0]=xx;
 
@@ -219,7 +219,7 @@ the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[0][2]=0; the
 the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[2][2]=1; the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[2][3]=0.25;
 
 
-
+/*
 
       the_robot->ecp_command.instruction.instruction_type = lib::SET_GET;
       // the_robot->ecp_command.instruction.get_type =  ARM_DV + RMODEL_DV;
@@ -234,9 +234,9 @@ the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[2][2]=1; the
        the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
       the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
       the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
-   
+   */
 /* } else {
-   
+
 
       the_robot->ecp_command.instruction.instruction_type = lib::GET;
       the_robot->ecp_command.instruction.get_type = 0x04;
@@ -277,20 +277,20 @@ clock_gettime( CLOCK_REALTIME , &s_time);
    }
 
    // Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
- 
+
    if(the_first)
    {
    printf("###################################\n");
    the_robot->ecp_command.instruction.instruction_type = lib::GET; //po sugestii Tomka
    the_robot->ecp_command.instruction.get_type = ARM_DV;
-  
+
    the_first=0;
 the_second=1;
-   
-  
+
+
   nr++;
     return true;
-   
+
    }
    if(!the_first)
    {
@@ -299,12 +299,12 @@ the_second=1;
  the_robot->ecp_command.instruction.instruction_type = lib::SET;
     the_robot->ecp_command.instruction.get_type = NOTHING_DV;
    the_robot->ecp_command.instruction.get_arm_type = lib::INVALID_END_EFFECTOR;
-} 
+}
 if(the_second)
 {
 for (i=0; i<6; i++)
-{	
-		
+{
+
 	pose[i][0]=the_robot->reply_package.arm.pf_def.arm_coordinates[i];
 	pose[i][1]=the_robot->reply_package.arm.pf_def.arm_coordinates[i];
 	pose[i][2]=the_robot->reply_package.arm.pf_def.arm_coordinates[i];
@@ -323,19 +323,19 @@ nr++;
 #ifdef PRINT
 printf("%ld CRR =", nr);
 for (i=0; i<6; i++)
-{	
+{
 
 printf("%f ",the_robot->reply_package.arm.pf_def.arm_coordinates[i]);
-	
+
 }
 printf("\n");
 #endif
 // the_robot->ecp_command.instruction.get_arm_type = lib::INVALID_END_EFFECTOR;
-   
-   
+
+
    // for (int j=0; j<3 ; j++)
    //       	the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[3][j]+=0.001;
-   
+
 // Obliczenie zadanej pozycji posredniej w tym kroku ruchu
    // (okreslenie kolejnego wezla interpolacji)
 
@@ -350,7 +350,7 @@ for(int i=0; i<4; i++)
 
 valid_measure=(int)frame1[3][3];
 
-#ifdef PRINT		
+#ifdef PRINT
 for(int i=0; i<4; i++)
 {
 		for(int j=0; j<4; j++)
@@ -363,7 +363,7 @@ for(int i=0; i<4; i++)
 if(!the_second)
 {
 	//^{0}T_{G}=^{0}T_{C}*^{C}T_{G}
-	measure[0][0]=0.001*frame1[1][3]+0.97-0.007; 
+	measure[0][0]=0.001*frame1[1][3]+0.97-0.007;
 	measure[1][0]=0.001*frame1[0][3]-0.025+0.008;
 	measure[2][0]=-0.001*frame1[2][3]+1.2-0.09;  // -0.1na poz kostki
 	frame1[0][3]=measure[0][0];
@@ -398,7 +398,7 @@ if(phase)
 
 if(x2g>0) x2g=0;
 
-//odjazd 
+//odjazd
 
 if(fabs(measure[0][1]-measure[0][0])>=0.050 || fabs(measure[1][1]-measure[1][0])>=0.050 || fabs(measure[0][1]-measure[0][0])>=0.050)
 {
@@ -413,23 +413,23 @@ beta=atan2(-frame1[2][0],sqrt(frame1[0][0]*frame1[0][0]+frame1[1][0]*frame1[1][0
 alfa=atan2(frame1[1][0],frame1[0][0]);
 
 
-if(alfa>M_PI/2) alfa-=M_PI/2; 
+if(alfa>M_PI/2) alfa-=M_PI/2;
 	alfa*=-1;
 
 
 
 if(gammax>0) gammax=0;
 
-#ifdef PRINT 
+#ifdef PRINT
 std::cout <<"alfa="<<180*alfa/M_PI<<"     " <<alfa<<std::endl;
 std::cout <<"beta="<<180*beta/M_PI<<"     " <<beta<<std::endl;
 std::cout <<"gamma="<<180*gammax/M_PI<<"     " <<gammax<<std::endl;
-#endif 
+#endif
 
 if(beta<0) beta*=-1;
 /*
  if(alfa>M_PI/2) alfa=M_PI/2;
- 
+
  	measure[3][0]=-1*alfa;
 */
 //WYREM2DEBUG
@@ -446,8 +446,8 @@ if(!the_second)
 gammax=atan2(Rckk[3][2],Rckk[3][3]);
  	beta=atan2(-Rckk[3][1],sqrt(Rckk[1][1]*Rckk[1][1]+Rckk[2][1]*Rckk[2][1]));
  	alfa=atan2(Rckk[2][1],Rckk[1][1]);
- */	
- /*	
+ */
+ /*
 	gammax=180*gammax/M_PI;
  	beta=180*beta/M_PI;
  	alfa=180*alfa/M_PI;
@@ -469,68 +469,68 @@ for(int i=0; i<4; i++)
 
 //skladajcy dziubek
 /*
-if(nr==30) 
+if(nr==30)
 measure[1][0]-=0.001;
 
-if(nr==31) 
+if(nr==31)
 measure[1][0]-=0.007;
 
-if(nr>=32) 
+if(nr>=32)
 measure[1][0]+=0.023;
 */
 
-//if(nr==30) 
+//if(nr==30)
 //measure[1][0]-=0.001;
 
 //wystarczy taki dziubek
 /*
-if(nr==31) 
+if(nr==31)
 measure[1][0]-=0.007;
 
-if(nr>=32) 
+if(nr>=32)
 measure[1][0]+=0.002;
 */
 
 /*
-if(nr==30) 
+if(nr==30)
 measure[1][0]-=0.03;
 
-if(nr==31) 
+if(nr==31)
 measure[1][0]-=0.03;
 
-if(nr>=32) 
+if(nr>=32)
 measure[1][0]+=0.03;
 */
 
- 
- 
+
+
  // krancowki
-#ifdef PRINT 
+#ifdef PRINT
 printf("%ld MSR =", nr);
 for (i=0; i<6; i++)
-{	
+{
 
 printf("%f ",measure[i][0]);
-	
+
 }
 printf("\n");
 #endif
 
 for(int i=0; i<6; i++)
  {
- 	 if(measure[i][0]<measure_border_d[i]) 
+ 	 if(measure[i][0]<measure_border_d[i])
  		measure[i][0]=measure_border_d[i];
- 
- 	if(measure[i][0]>measure_border_u[i]) 
+
+ 	if(measure[i][0]>measure_border_u[i])
  		measure[i][0]=measure_border_u[i];
  }
-#ifdef PRINT 
+#ifdef PRINT
 printf("%ld MSQ =", nr);
 for (i=0; i<6; i++)
-{	
+{
 
 printf("%f ",measure[i][0]);
-	
+
 }
 printf("\n");
 #endif
@@ -551,51 +551,51 @@ stearing[5][0]=stearing[5][1] + 0.05*(measure[5][0]-stearing[5][1]);
 
 
 
-#ifdef PRINT 
+#ifdef PRINT
  printf("%ld STR =", nr);
 for (i=0; i<6; i++)
-{	
+{
 
 printf("%f ",stearing[i][0]);
-	
+
 }
 printf("\n");
-#endif 
+#endif
 
 // printf("%f ",stearing[1][0]);
- 
+
  // roznica w kroku -> docelowo predkosc
  for(int i=0; i<6; i++)
  	stearing_d[i][0]=stearing[i][0]-stearing[i][1];
- 	
+
  // roznica w 2 krokach -> docelowo przyspieszenie
  for(int i=0; i<6; i++)
  	stearing_d2[i][0]=stearing_d[i][0]-stearing_d[i][1];
- 
+
 //printf("DEB X %f %f    Y %f %f\n",stearing_d[0][0],stearing_d2[0][0], stearing_d[1][0],stearing_d2[1][0]);
 //printf("%f ",stearing_d[1][0]);
-//printf("%f ",stearing_d2[1][0]); 
- 
+//printf("%f ",stearing_d2[1][0]);
+
  debug=0;
- //ograniczenie przyspieszenia (opoznienie zalatwia regulator proporcjonalny) 
+ //ograniczenie przyspieszenia (opoznienie zalatwia regulator proporcjonalny)
 for(int i=0; i<6; i++)
  {
  	if((fabs(stearing_d2[i][0])>=d2_u_max[i]) && (fabs(stearing_d[i][0])>=fabs(stearing_d[i][1])) )
  	{
  		if(stearing_d[i][0]>=0)
  		{
- 			stearing_d[i][0]=stearing_d[i][1]+d2_u_max[i];	
+ 			stearing_d[i][0]=stearing_d[i][1]+d2_u_max[i];
  			stearing[i][0]=stearing[i][1]+stearing_d[i][0];
  		//	if (i==1) debug+=1;
- 		}	
+ 		}
  		else
 		if(stearing_d[i][0]<0)
  		{
- 			stearing_d[i][0]=stearing_d[i][1]-d2_u_max[i];	
+ 			stearing_d[i][0]=stearing_d[i][1]-d2_u_max[i];
  			stearing[i][0]=stearing[i][1]+stearing_d[i][0];
  		//	if (i==1) debug+=10;
- 		}		
-	} 
+ 		}
+	}
 }
 
 
@@ -616,58 +616,58 @@ for(int i=0; i<6; i++)
  		{
  			stearing[i][0]=stearing[i][1]-d_u_max[i];
  		//	if (i==1) debug+=1000;
- 		}		
+ 		}
 // 	}
  }
- 
+
  //ograniczenie przyspieszenia
 for(int i=0; i<6; i++)
-{ 
+{
 	stearing_d2[i][0]=stearing_d[i][0]-stearing_d[i][1];
 //	if (i==1) debug+=10000;
-} 
+}
 
 
- 
-#ifdef PRINT 
+
+#ifdef PRINT
  printf("%ld STQ =", nr);
 for (i=0; i<6; i++)
-{	
+{
 
 printf("%f ",stearing[i][0]);
-	
+
 }
 printf("\n");
- 
+
 
 #endif
 
 //printf("%f ",stearing[1][0]);
 
-// chuchamy na zimne - krancowki na sterowaniu 
+// chuchamy na zimne - krancowki na sterowaniu
   for(int i=0; i<6; i++)
  {
- 	 if(stearing[i][0]<measure_border_d[i]) 
+ 	 if(stearing[i][0]<measure_border_d[i])
  		stearing[i][0]=measure_border_d[i];
- 
- 	if(stearing[i][0]>measure_border_u[i]) 
+
+ 	if(stearing[i][0]>measure_border_u[i])
  		stearing[i][0]=measure_border_u[i];
  }
- 
+
 
 #ifdef PRINT
  printf("%ld STR0=", nr);
- 	for (int i=0; i<6 ; i++)             
+ 	for (int i=0; i<6 ; i++)
        printf("%f  ",stearing[i][0]);
 	printf("\n");
 #endif
 
 #ifdef PRINTA
 printf("%d STR1=", nr);
-	for (int i=0; i<6 ; i++)             
+	for (int i=0; i<6 ; i++)
        printf("%f  ",stearing[i][1]);
 	printf("\n");
-#endif 
+#endif
 
 //printf("%f %d\n",stearing[1][0],debug);
 
@@ -686,7 +686,7 @@ if(the_second)
 for (i=0; i<6; i++)
 {
 		the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]=stearing[i][0];
-		
+
 		stearing[i][2]=stearing[i][1];
 		stearing[i][1]=stearing[i][0];
 		stearing_d[i][2]=stearing_d[i][1];
@@ -705,13 +705,13 @@ for (i=0; i<6; i++)
       	the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]=the_robot->reply_package.arm.pf_def.arm_coordinates[i];
       }
 	/*******************************************************/
-#ifdef PRINTA		
+#ifdef PRINTA
 printf("%d ARM 2d= ", nr);
- 	for (int i=0; i<6 ; i++)             
+ 	for (int i=0; i<6 ; i++)
        printf("%f  ",the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]);
-      
+
 	printf("\n");
-	
+
 #endif
 
 the_second=0;
@@ -724,7 +724,7 @@ else
       for (i=0; i<6; i++)
       {
       	the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]=stearing[i][0];
-		
+
 		stearing[i][2]=stearing[i][1];
 		stearing[i][1]=stearing[i][0];
 		stearing_d[i][2]=stearing_d[i][1];
@@ -732,9 +732,9 @@ else
 		measure[i][2]=measure[i][1];
 		measure[i][1]=measure[i][0];
 	}
-	
+
 	//beta_old=beta;
-	
+
 	/*CHYCHAMY NA ZIMNE - WYLACZENIE NIESTEROWANYCH OSI*/
 	for (i=0; i<0; i++)
       {
@@ -746,13 +746,13 @@ else
       }
 	/*******************************************************/
 	the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate=the_robot->reply_package.arm.pf_def.gripper_coordinate;
-#ifdef PRINTA	
+#ifdef PRINTA
 	printf("%d ARM= ", nr);
- 	for (int i=0; i<6 ; i++)             
+ 	for (int i=0; i<6 ; i++)
        printf("%f  ",the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]);
 	printf("\n");
-	
-	
+
+
 #endif
 
 }

@@ -29,6 +29,7 @@ ellipse::ellipse(lib::configurator &_config) : task(_config)
 
 void ellipse::main_task_algorithm(void)
 {
+	/*
  	//Polosie elipsy
 	double a,b;
 	double* firstPosition;
@@ -46,6 +47,7 @@ void ellipse::main_task_algorithm(void)
     eg->sensor_m[lib::SENSOR_WIIMOTE] = sensor_m[lib::SENSOR_WIIMOTE];
     eg->Move();
     ecp_termination_notice();
+    */
 }
 
 double ellipse::read_double(char* name,double min,double max)

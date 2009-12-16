@@ -69,7 +69,7 @@ pawel::~pawel()
 
 bool pawel::first_step ( )
 {
-
+/*
     td.internode_step_no = step_no;
     td.value_in_step_no = td.internode_step_no - 4;
     clock_gettime( CLOCK_REALTIME , &time_start);
@@ -91,6 +91,7 @@ bool pawel::first_step ( )
 
 
     return true;
+    */
 }
 // --------------------------------------------------------------------------
 
@@ -101,14 +102,14 @@ bool pawel::next_step ( )
 
     int i;
     double x,y,z,t,vx,vy,v,tmp;
-
+/*
     // Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
     the_robot->ecp_command.instruction.instruction_type = lib::SET;
     the_robot->ecp_command.instruction.set_type = ARM_DV;
     the_robot->ecp_command.instruction.get_type = NOTHING_DV;
     the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_EULER_ZYZ;
 
-
+*/
     x = sensor_m[lib::SENSOR_PAWEL]->image.sensor_union.ball.x;
     y = sensor_m[lib::SENSOR_PAWEL]->image.sensor_union.ball.y;
     z = sensor_m[lib::SENSOR_PAWEL]->image.sensor_union.ball.z;

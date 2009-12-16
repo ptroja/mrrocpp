@@ -156,6 +156,7 @@ vis_sac_lx::vis_sac_lx(common::task::task& _ecp_task, int step) :
 
 bool vis_sac_lx::first_step()
 {
+	/*
 	// Generacja trajektorii prostoliniowej o zadany przyrost polozenia i oreintacji
 	// Funkcja zwraca false gdy koniec generacji trajektorii
 	// Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
@@ -236,7 +237,7 @@ bool vis_sac_lx::first_step()
 		the_robot->ecp_command.instruction.arm.pf_def.reciprocal_damping[i+3]
 				= torque_reciprocal_damping_;
 	}
-
+*/
 	return true;
 }
 ; // end: vis_sac_lx::first_step()

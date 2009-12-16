@@ -27,6 +27,7 @@ namespace task {
 // KONSTRUKTORY
 fr::fr(lib::configurator &_config) : task(_config)
 {
+	/*
     ecp_m_robot = new robot (*this);
 
     tdes_joint.arm_type = lib::JOINT;
@@ -71,6 +72,7 @@ fr::fr(lib::configurator &_config) : task(_config)
 
 
     sr_ecp_msg->message("ECP loaded");
+    */
 }
 
 

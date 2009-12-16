@@ -25,6 +25,7 @@ namespace irp6ot {
 }
 
 bool ecp_vis_ib_eih_follower_irp6ot::first_step() {
+	/*
 	vsp_fradia = sensor_m[lib::SENSOR_CVFRADIA];
 
 	the_robot->ecp_command.instruction.instruction_type = lib::GET;
@@ -57,6 +58,7 @@ bool ecp_vis_ib_eih_follower_irp6ot::first_step() {
 	ecp_t.sr_ecp_msg->message("PIERWSZY");
 
 	return true;
+	*/
 }
 
 bool ecp_vis_ib_eih_follower_irp6ot::next_step_without_constraints() {

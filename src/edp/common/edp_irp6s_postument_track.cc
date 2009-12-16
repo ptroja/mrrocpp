@@ -146,39 +146,6 @@ void irp6s_postument_track_effector::get_rmodel(lib::c_buffer &instruction)
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
-void irp6s_postument_track_effector::arm_frame_2_xyz_eul_zyz()
-{
-
-	// Przeksztacenie definicji koncowki z postaci
-	// FRAME do postaci XYZ_EULER_ZYZ
-	// oraz przepisanie wyniku przeksztacenia do
-	// wewntrznych struktur danych REPLY_BUFFER
-	lib::Homog_matrix A(current_end_effector_frame);
-	switch (reply.reply_type)
-	{
-	case lib::ARM:
-	case lib::ARM_INPUTS:
-	case lib::ARM_RMODEL:
-	case lib::ARM_RMODEL_INPUTS:
-		//A.get_mech_xyz_euler_zyz(reply.arm.pf_def.arm_coordinates);
-		//A.get_mech_xyz_euler_zyz(rb_obj->step_data.current_cartesian_position);
-		A.get_xyz_euler_zyz(reply.arm.pf_def.arm_coordinates);
-		A.get_xyz_euler_zyz(rb_obj->step_data.current_cartesian_position);
-		break;
-	default: // blad:
-		throw NonFatal_error_2(STRANGE_GET_ARM_REQUEST);
-	}
-	// dla robotow track i postument - oblicz chwytak
-	if ((robot_name == lib::ROBOT_IRP6_ON_TRACK) || (robot_name == lib::ROBOT_IRP6_POSTUMENT))
-	{
-		reply.arm.pf_def.gripper_reg_state = servo_gripper_reg_state;
-		reply.arm.pf_def.gripper_coordinate = current_joints[gripper_servo_nr];
-	}
-
-}
-/*--------------------------------------------------------------------------*/
-
-/*--------------------------------------------------------------------------*/
 void irp6s_postument_track_effector::arm_abs_xyz_eul_zyz_2_frame(const double *p)
 {
 	double x, y, z; // wspolrzedne wektora przesuniecia
@@ -337,12 +304,6 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buff
 		case lib::FRAME:
 			goal_frame.set_frame_tab(arm_frame);
 			break;
-		case lib::XYZ_EULER_ZYZ:
-			goal_frame.set_xyz_euler_zyz(arm_coordinates);
-			break;
-		case lib::XYZ_ANGLE_AXIS:
-			goal_frame.set_xyz_angle_axis(arm_coordinates);
-			break;
 		case lib::JOINT:
 			get_current_kinematic_model()->i2e_transform(arm_coordinates, &goal_frame_tab);
 			goal_frame.set_frame_tab(goal_frame_tab);
@@ -361,14 +322,6 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buff
 			{
 			case lib::FRAME:
 				goal_frame.set_frame_tab(arm_frame);
-				goal_frame = begining_end_effector_frame * goal_frame;
-				break;
-			case lib::XYZ_EULER_ZYZ:
-				goal_frame.set_xyz_euler_zyz(arm_coordinates);
-				goal_frame = begining_end_effector_frame * goal_frame;
-				break;
-			case lib::XYZ_ANGLE_AXIS:
-				goal_frame.set_xyz_angle_axis(arm_coordinates); // tutaj goal_frame jako zmienna tymczasowa
 				goal_frame = begining_end_effector_frame * goal_frame;
 				break;
 			case lib::JOINT:
@@ -402,8 +355,6 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buff
 	switch (set_arm_type)
 	{
 	case lib::FRAME:
-	case lib::XYZ_EULER_ZYZ:
-	case lib::XYZ_ANGLE_AXIS:
 	case lib::JOINT:
 	case lib::MOTOR:
 		goal_frame_increment_in_end_effector = ((!begining_end_effector_frame)*goal_frame);
@@ -490,8 +441,6 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buff
 		switch (set_arm_type)
 		{
 		case lib::FRAME:
-		case lib::XYZ_EULER_ZYZ:
-		case lib::XYZ_ANGLE_AXIS:
 		case lib::JOINT:
 		case lib::MOTOR:
 			pos_xyz_rot_xyz_vector = v_tr_inv_modified_beginning_to_desired_end_effector_frame
@@ -619,30 +568,8 @@ void irp6s_postument_track_effector::move_arm(lib::c_buffer &instruction)
 			move_servos();
 			mt_tt_obj->trans_t_to_master_order_status_ready();
 			break;
-		case lib::XYZ_EULER_ZYZ:
 
-			// zapisanie wartosci zadanej dla readera
-			// scope-locked reader data update
-			{
-				boost::mutex::scoped_lock lock(rb_obj->reader_mutex);
 
-				for (int i=0; i<6; i++)
-				{
-					rb_obj->step_data.current_cartesian_position[i]=instruction.arm.pf_def.arm_coordinates[i];
-				}
-
-			}
-
-			compute_xyz_euler_zyz(instruction);
-			move_servos();
-			mt_tt_obj->trans_t_to_master_order_status_ready();
-
-			break;
-		case lib::XYZ_ANGLE_AXIS:
-			compute_xyz_angle_axis(instruction);
-			move_servos();
-			mt_tt_obj->trans_t_to_master_order_status_ready();
-			break;
 		case lib::FRAME:
 			compute_frame(instruction);
 			move_servos();
@@ -715,15 +642,7 @@ void irp6s_postument_track_effector::get_arm_position(bool read_hardware, lib::c
 		// przeliczenie wspolrzednych do poziomu, ktory ma byc odczytany
 		arm_frame_2_frame();
 		break;
-	case lib::XYZ_ANGLE_AXIS:
-		// przeliczenie wspolrzednych do poziomu, ktory ma byc odczytany
-		arm_frame_2_xyz_aa();
-		break;
-	case lib::XYZ_EULER_ZYZ:
-		// przeliczenie wspolrzednych do poziomu, ktory ma byc odczytany
-		arm_frame_2_xyz_eul_zyz(); // dla sterowania pozycyjnego
-		reply.arm_type = lib::XYZ_EULER_ZYZ;
-		break;
+
 	case lib::JOINT:
 		// przeliczenie wspolrzednych do poziomu, ktory ma byc odczytany
 		arm_joints_2_joints();

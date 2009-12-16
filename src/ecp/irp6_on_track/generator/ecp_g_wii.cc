@@ -13,6 +13,7 @@ wii::wii (common::task::task& _ecp_task) : generator (_ecp_task) {}
 
 bool wii::first_step()
 {
+	/*
     the_robot->ecp_command.instruction.instruction_type = lib::GET;
     the_robot->ecp_command.instruction.get_type = ARM_DV;
     the_robot->ecp_command.instruction.set_type = ARM_DV;
@@ -26,6 +27,7 @@ bool wii::first_step()
 	step_no = 0;
     rad = 0;
     return true;
+    */
 }
 
 bool wii::next_step()
@@ -40,6 +42,7 @@ bool wii::next_step()
 	}
 
 	++step_no;
+	/*
     the_robot->ecp_command.instruction.instruction_type = lib::SET;
     the_robot->ecp_command.instruction.get_type = ARM_DV;
     the_robot->ecp_command.instruction.set_type = ARM_DV;
@@ -49,7 +52,7 @@ bool wii::next_step()
     the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
     the_robot->ecp_command.instruction.motion_steps = 8;
     the_robot->ecp_command.instruction.value_in_step_no = 8;
-
+*/
 
 
     the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[0] = 0.85;
@@ -70,7 +73,7 @@ double* wii::getFirstPosition()
 	firstPosition[0] = 0.85;
 	firstPosition[1] = -0.3;
 	firstPosition[2] = 0.3;
-	
+
 	firstPosition[3] = -1.136 + sensor_m[lib::SENSOR_WIIMOTE]->image.sensor_union.wiimote.orientation_x;
 	firstPosition[4] = 1.38 + sensor_m[lib::SENSOR_WIIMOTE]->image.sensor_union.wiimote.orientation_y;
 	firstPosition[5] = 2.3;// + sensor_m[lib::SENSOR_WIIMOTE]->image.sensor_union.wiimote.orientation_z;

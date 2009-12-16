@@ -34,7 +34,7 @@ static FILE *file;
 bool y_simple::first_step ( )
 {
 
-
+/*
     run_counter = 0;
     second_step = false;
     for (int j=0; j<3; j++)
@@ -66,6 +66,7 @@ bool y_simple::first_step ( )
 
 
     return true;
+    */
 }
 // --------------------------------------------------------------------------
 

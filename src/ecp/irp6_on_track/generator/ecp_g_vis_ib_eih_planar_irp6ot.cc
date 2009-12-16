@@ -32,6 +32,7 @@ void ecp_vis_ib_eih_planar_irp6ot::retrieve_parameters() {
 }
 
 bool ecp_vis_ib_eih_planar_irp6ot::first_step() {
+	/*
 	vsp_fradia = sensor_m[lib::SENSOR_CVFRADIA];
 
 	the_robot->ecp_command.instruction.instruction_type = lib::GET;
@@ -51,12 +52,14 @@ bool ecp_vis_ib_eih_planar_irp6ot::first_step() {
 	above_object = false;
 
 	return true;
+	*/
 }
 
 bool ecp_vis_ib_eih_planar_irp6ot::next_step_without_constraints() {
+
 	//Odczytanie pozycji poczatkowej koncowki w reprezentacji os-kat.
 	if (node_counter == 1) {
-
+/*
 		memcpy(next_position,
 	 			the_robot->reply_package.arm.pf_def.arm_coordinates, 6
 						* sizeof(double));
@@ -75,6 +78,7 @@ bool ecp_vis_ib_eih_planar_irp6ot::next_step_without_constraints() {
 		memcpy(the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates, next_position,
 				6 * sizeof(double));
 		the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = next_position[6];
+		*/
 	}
 
 	//Zadawanie ruchu wzgledem aktualnego polozenia koncowki.
@@ -137,7 +141,7 @@ bool ecp_vis_ib_eih_planar_irp6ot::next_step_without_constraints() {
 //		next_position[2] += -0.002;
 			//z++;
 		//}
-
+/*
 		the_robot->ecp_command.instruction.instruction_type = lib::SET_GET;
 		the_robot->ecp_command.instruction.get_type = ARM_DV;
 		the_robot->ecp_command.instruction.set_type = ARM_DV;
@@ -150,7 +154,7 @@ bool ecp_vis_ib_eih_planar_irp6ot::next_step_without_constraints() {
 		memcpy(the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates, next_position,
 				6 * sizeof(double));
 		the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = next_position[6];
-
+*/
 		return true;
 	}
 

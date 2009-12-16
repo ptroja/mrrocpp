@@ -218,14 +218,6 @@ void smooth2::load_file_with_path(const char* file_name) {
     {
         ps = lib::JOINT;
     }
-    else if ( !strcmp(coordinate_type, "XYZ_ANGLE_AXIS") )
-    {
-        ps = lib::XYZ_ANGLE_AXIS;
-    }
-    else if ( !strcmp(coordinate_type, "XYZ_EULER_ZYZ") )
-    {
-        ps = lib::XYZ_EULER_ZYZ;
-    }
 
     else
     {
@@ -836,6 +828,7 @@ bool smooth2::first_step() { //wywolywane tylko raz w calej trajektorii
     	}
         the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
         break;
+        /*
     case lib::XYZ_EULER_ZYZ:
         the_robot->ecp_command.instruction.instruction_type = lib::GET;
         the_robot->ecp_command.instruction.get_type = ARM_DV;
@@ -872,6 +865,7 @@ bool smooth2::first_step() { //wywolywane tylko raz w calej trajektorii
     		the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
     	}
         break;
+        */
     default:
         throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
     } // end : switch ( td.arm_type )
@@ -923,6 +917,7 @@ bool smooth2::next_step () {
     	the_robot->ecp_command.instruction.get_arm_type = lib::INVALID_END_EFFECTOR;
 
     	switch ( td.arm_type ) {
+    	/*
     		case lib::XYZ_EULER_ZYZ:
 
     			the_robot->ecp_command.instruction.instruction_type = lib::SET; //dalsze ustawianie parametrow ruchu w edp
@@ -1020,7 +1015,7 @@ bool smooth2::next_step () {
     			coordinate_list_iterator++;
 
     			break;
-
+*/
     		case lib::JOINT:
 
     			the_robot->ecp_command.instruction.instruction_type = lib::SET;
@@ -1173,7 +1168,7 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 	    	pose_list_iterator->pos_num = j;
 
 			switch (td.arm_type) {
-
+/*
 			case lib::XYZ_EULER_ZYZ:
 				gripp = 6;
 				//printf("euler w first_interval\n");
@@ -1284,7 +1279,7 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 				}
 
 				break;
-
+*/
 			case lib::JOINT:
 				if(the_robot->robot_name == lib::ROBOT_IRP6_ON_TRACK) {
 					gripp=7;
@@ -1416,6 +1411,7 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 
 			switch (td.arm_type) {
 			//tutaj jestesmy jeszcze ciagle w poprzedniej pozycji pose_list
+			/*
 			case lib::XYZ_EULER_ZYZ:
 				gripp = 6;
 				//zapisanie v_p, musi byc tutaj bo wczesniej nie ma v_k poprzedniego ruchu
@@ -1492,7 +1488,7 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 				}
 
 				break;
-
+*/
 			case lib::JOINT:
 
 				if(the_robot->robot_name == lib::ROBOT_IRP6_ON_TRACK) {
@@ -1633,6 +1629,7 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 				}
 
 				switch (td.arm_type) {
+				/*
 					case lib::XYZ_EULER_ZYZ:
 						pose_list_iterator->v_r[i] = v_max_zyz[i] * pose_list_iterator->v[i];
 						pose_list_iterator->a_r[i] = a_max_zyz[i] * pose_list_iterator->a[i];
@@ -1644,7 +1641,7 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 						pose_list_iterator->a_r[i] = a_max_aa[i] * pose_list_iterator->a[i];
 
 						break;
-
+*/
 					case lib::MOTOR:
 						pose_list_iterator->v_r[i] = v_max_motor[i] * pose_list_iterator->v[i];
 						pose_list_iterator->a_r[i] = a_max_motor[i] * pose_list_iterator->a[i];
@@ -1912,6 +1909,7 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 		pose_list_iterator->v_grip = (s[gripp]/pose_list_iterator->t);
 
 		switch (td.arm_type) {
+		/*
 			case lib::XYZ_EULER_ZYZ:
 				if(pose_list_iterator->v_grip < v_grip_min_zyz) {
 					pose_list_iterator->v_grip = v_grip_min_zyz;
@@ -1923,7 +1921,7 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 					pose_list_iterator->v_grip = v_grip_min_aa;
 				}
 				break;
-
+*/
 			case lib::MOTOR:
 				if(pose_list_iterator->v_grip < v_grip_min_motor) {
 					pose_list_iterator->v_grip = v_grip_min_motor;
@@ -2190,6 +2188,7 @@ void smooth2::vp_reduction(std::list<ecp_mp::common::smooth2_trajectory_pose>::i
 	v_r = s/t;
 
 	switch (td.arm_type) {//zapisanie nowej prędkości w liscie pozycji, dla danej pozycji
+	/*
 		case lib::XYZ_EULER_ZYZ:
 			pose_list_iterator->v[i] = v_r/v_max_zyz[i];
 			break;
@@ -2197,7 +2196,7 @@ void smooth2::vp_reduction(std::list<ecp_mp::common::smooth2_trajectory_pose>::i
 		case lib::XYZ_ANGLE_AXIS:
 			pose_list_iterator->v[i] = v_r/v_max_aa[i];
 			break;
-
+*/
 		case lib::MOTOR:
 			pose_list_iterator->v[i] = v_r/v_max_motor[i];
 			break;

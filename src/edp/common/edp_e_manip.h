@@ -33,9 +33,7 @@ class manip_effector: public common::manip_and_conv_effector
 {
 
 protected:
-    void compute_xyz_euler_zyz (const lib::c_buffer &instruction);     // obliczenia dla ruchu ramienia (koncowka: XYZ_EULER_ZYZ)
 
-    void compute_xyz_angle_axis (const lib::c_buffer &instruction); // obliczenia dla ruchu ramienia (koncowka: XYZ_ANGLE_AXIS)
 
     void compute_frame (const lib::c_buffer &instruction);             // obliczenia dla ruchu ramienia (koncowka: FRAME)
 
@@ -48,12 +46,7 @@ protected:
     // Przepisanie definicji narzedzia danej w postaci TOOL_FRAME
     // z wewnetrznych struktur danych TRANSFORMATORa
     // do wewnetrznych struktur danych REPLY_BUFFER
-    void arm_frame_2_xyz_aa (void);
-    // Przeksztalcenie definicji koncowki z postaci
-    // FRAME do postaci XYZ_ANGLE_AXIS
-    // oraz przepisanie wyniku przeksztalcenia do
-    // wewnetrznych struktur danych REPLY_BUFFER
-    virtual void arm_frame_2_xyz_eul_zyz () = 0;
+
 
     void arm_frame_2_frame (void);
     // Przepisanie definicji koncowki danej w postaci

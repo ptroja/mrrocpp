@@ -25,6 +25,7 @@ namespace task {
 
 void pr::short_move_up ()
 {
+	/*
     lib::trajectory_description tdes;
 
     tdes.arm_type = lib::XYZ_EULER_ZYZ;
@@ -42,6 +43,7 @@ void pr::short_move_up ()
     // Generator trajektorii prostoliniowej
     common::generator::linear lg(*this, tdes, 0);
     lg.Move();
+    */
 }
 
 // KONSTRUKTORY

@@ -41,10 +41,12 @@ bool pw_kolo::first_step()
 
 bool pw_kolo::next_step()
 {
+
     double time; //Czas ruchu.
 //    double current_rad; //Aktualne polozenie w radianach.
 
     /* W tym kroku dojezdzam koncowka do srodka okregu.*/
+
     if(step_no==1)
     {
         next_position[0] = 0.899;		//x
@@ -89,7 +91,7 @@ bool pw_kolo::next_step()
     }
     else
         return false;
-
+/*
     printf("przed robotem\n");
     the_robot->ecp_command.instruction.instruction_type = lib::SET;
     the_robot->ecp_command.instruction.set_type = ARM_DV; // ARM
@@ -104,6 +106,7 @@ bool pw_kolo::next_step()
     the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = next_position[6];
     printf("po robocie \n");
     return true;
+    */
 }
 
 }

@@ -13,6 +13,7 @@ ellipse::ellipse (common::task::task& _ecp_task,double major_axis,double minor_a
 
 bool ellipse::first_step()
 {
+	/*
     the_robot->ecp_command.instruction.instruction_type = lib::GET;
     the_robot->ecp_command.instruction.get_type = ARM_DV;
     the_robot->ecp_command.instruction.set_type = ARM_DV;
@@ -26,6 +27,7 @@ bool ellipse::first_step()
 	step_no = 0;
     rad = 0;
     return true;
+    */
 }
 
 bool ellipse::next_step()
@@ -63,6 +65,7 @@ bool ellipse::next_step()
 	{
 	}
 	++step_no;
+	/*
     the_robot->ecp_command.instruction.instruction_type = lib::SET;
     the_robot->ecp_command.instruction.get_type = ARM_DV;
     the_robot->ecp_command.instruction.set_type = ARM_DV;
@@ -72,7 +75,7 @@ bool ellipse::next_step()
     the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
     the_robot->ecp_command.instruction.motion_steps = max_steps;
     the_robot->ecp_command.instruction.value_in_step_no = max_steps;
-
+*/
 
 	if(step_no > max_steps)
 	{

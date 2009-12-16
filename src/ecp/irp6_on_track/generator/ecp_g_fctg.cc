@@ -75,6 +75,7 @@ void force_controlled_trajectory::return_motor_position (double robot_position[8
 /************************* GET CURRENT POSITION *****************************/
 void force_controlled_trajectory::get_current_position (){
     // Sekcja krytyczna.
+
     pthread_mutex_lock(&ROBOT_POSITION_MUTEX);
         // Odczytanie polozenia robota
         // Przygotowanie rozkazu dla EDP.
@@ -92,6 +93,7 @@ void force_controlled_trajectory::get_current_position (){
             memcpy(current_position, the_robot->reply_package.arm.pf_def.arm_coordinates, 8*sizeof(double));
             memcpy(current_motor_position, the_robot->reply_package.arm.pf_def.arm_coordinates, 8*sizeof(double));
             }
+        /*
         else if (current_control == lib::XYZ_EULER_ZYZ){
             memcpy(current_position, the_robot->reply_package.arm.pf_def.arm_coordinates, 6*sizeof(double));
             // Odczytanie polowenia na motorach.
@@ -106,9 +108,12 @@ void force_controlled_trajectory::get_current_position (){
             // Odebranie danych.
 
             memcpy(current_motor_position, the_robot->reply_package.arm.pf_def.arm_coordinates, 8*sizeof(double));
-            } // end: if*/
+            }
+            */
+        // end: if*/
     // Koniec sekcji krytycznej.
     pthread_mutex_unlock(&ROBOT_POSITION_MUTEX);
+
     } // end: get_current_position
 
 
@@ -126,6 +131,7 @@ void force_controlled_trajectory::change_control(lib::POSE_SPECIFICATION ps){
         memcpy(current_delta_increment, motor_delta_increment, 8*sizeof(double));
         memcpy(current_max_delta_increment, motor_max_delta_increment, 8*sizeof(double));
         }
+    /*
     else if (ps == lib::XYZ_EULER_ZYZ){
         // Zmiana na sterowanie we wspolrzednych zewnetrznych.
         current_control = lib::XYZ_EULER_ZYZ;
@@ -134,6 +140,7 @@ void force_controlled_trajectory::change_control(lib::POSE_SPECIFICATION ps){
         memcpy(current_delta_increment, external_delta_increment, 6*sizeof(double));
         memcpy(current_max_delta_increment, external_max_delta_increment, 6*sizeof(double));
         }
+        */
     } // end: change_control
 
 
@@ -141,6 +148,7 @@ void force_controlled_trajectory::change_control(lib::POSE_SPECIFICATION ps){
 force_controlled_trajectory::force_controlled_trajectory (common::task::task& _ecp_task)
 	:teach_in(_ecp_task)
 {
+	/*
 	pthread_mutex_init(&ROBOT_POSITION_MUTEX, NULL);
     // Puste listy.
 //    pose_list_ptr = NULL;
@@ -200,6 +208,7 @@ force_controlled_trajectory::force_controlled_trajectory (common::task::task& _e
     current_control = lib::XYZ_EULER_ZYZ;
     // Ustawienie sterowania na MOTOR.
     change_control(lib::MOTOR);
+    */
     } // end: force_controlled_trajectory_generator
 
 
@@ -296,6 +305,9 @@ bool force_controlled_trajectory::first_step(){
         // Zapamietanie nastepnej pozycji.
         insert_position_list_element(tmp_position);
 	}
+
+
+    /*
     // Ostatnia faza - zwalnianie.
     while(decrement_delta(tmp_delta, dir*current_delta[number], current_delta_increment[number])){
         // Przesuniecie sie o delte.
@@ -338,6 +350,7 @@ bool force_controlled_trajectory::first_step(){
     next_position_list_element();
     // Trajektoria przygotowana.
     return true;
+    */
 }
 
 /******************************** NEXT STEP ***********************************/
@@ -367,10 +380,11 @@ bool force_controlled_trajectory::next_step ( ) {
     if (current_control == lib::MOTOR)
         the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[number] = tmp_position;
     // Przesuniecie robota do danej pozycji - wspolrzedne zewnetrzne.
+    /*
     if (current_control == lib::XYZ_EULER_ZYZ)
         the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[number] = tmp_position;
     // Przepisanie rozkazu do bufora wysylkowego.
-
+*/
     // Przesuniecie na nastepny element z listy.
     next_position_list_element();
     // Nie wykonano jeszcze calego ruchu.

@@ -338,6 +338,7 @@ void smooth::load_file_with_path (const char* file_name)
     {
         ps = lib::JOINT;
     }
+    /*
     else if ( !strcmp(coordinate_type, "XYZ_ANGLE_AXIS") )
     {
         ps = lib::XYZ_ANGLE_AXIS;
@@ -346,6 +347,7 @@ void smooth::load_file_with_path (const char* file_name)
     {
         ps = lib::XYZ_EULER_ZYZ;
     }
+    */
     //	else if ( !strcmp(coordinate_type, "POSE_FORCE_LINEAR") )
     //		ps = POSE_FORCE_LINEAR;
     else
@@ -945,6 +947,7 @@ bool smooth::first_step ()
         the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
         the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
         break;
+        /*
     case lib::XYZ_EULER_ZYZ:
         the_robot->ecp_command.instruction.instruction_type = lib::GET;
         the_robot->ecp_command.instruction.get_type = ARM_DV;
@@ -963,6 +966,7 @@ bool smooth::first_step ()
         the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
         the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
         break;
+        */
     default:
         throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
     } // end : switch ( td.arm_type )
@@ -1012,7 +1016,7 @@ bool smooth::next_step ()
             }
             calculate();
             break;
-
+/*
         case lib::XYZ_EULER_ZYZ:
             for(int i=0;i<6;i++)
                 start_position[i]=the_robot->reply_package.arm.pf_def.arm_coordinates[i];
@@ -1041,6 +1045,7 @@ bool smooth::next_step ()
             }
             calculate();
             break;
+            */
         default:
             throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
         } // end:switch
@@ -1105,7 +1110,7 @@ bool smooth::next_step ()
                 }
                 calculate();
                 break;
-
+/*
             case lib::XYZ_EULER_ZYZ:
                 for(int i=0; i<MAX_SERVOS_NR; i++)
                 {
@@ -1126,6 +1131,7 @@ bool smooth::next_step ()
                 }
                 calculate();
                 break;
+                */
             default:
                 throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
             } // end:switch
@@ -1227,7 +1233,7 @@ bool smooth::next_step ()
                 the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = final_position[i];
         }
         break;
-
+/*
     case lib::XYZ_EULER_ZYZ:
     	the_robot->ecp_command.instruction.instruction_type = lib::SET;
     	the_robot->ecp_command.instruction.set_type = ARM_DV; // ARM
@@ -1288,6 +1294,7 @@ bool smooth::next_step ()
             the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = final_position[6];
         }
         break;
+        */
     default:
             throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
     }// end:switch
@@ -1301,6 +1308,7 @@ bool smooth::next_step ()
 
 bool tool_change::first_step ()
 {
+	/*
     lib::Homog_matrix tool_frame(tool_parameters[0], tool_parameters[1], tool_parameters[2]);
     tool_frame.get_frame_tab(the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame);
 
@@ -1315,6 +1323,7 @@ bool tool_change::first_step ()
     the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
 
     return true;
+    */
 }
 
 bool tool_change::next_step ()

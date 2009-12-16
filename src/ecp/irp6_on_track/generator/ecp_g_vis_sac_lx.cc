@@ -241,7 +241,7 @@ bool vis_sac_lx::first_step()
 	the_robot->ecp_command.instruction.set_type = RMODEL_DV; //ARM_DV;
 	//the_robot->ecp_command.instruction.set_arm_type = lib::FRAME; //XYZ_EULER_ZYZ; //POSE_FORCE_TORQUE_AT_FRAME;
 	//the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
-	the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
+//	the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
 
 	the_robot->ecp_command.instruction.get_arm_type = lib::FRAME;
 	//FRAME; //XYZ_EULER_ZYZ; //POSE_FORCE_TORQUE_AT_FRAME;
@@ -1004,7 +1004,7 @@ CEIH_Tx_G.get_xyz_angle_axis(CEIH_r_G[0]);
 	 the_robot->EDP_data.ECPtoEDP_position_velocity[i] = E_r_Ep[0][i]*
 	 (double) (1/ ( ((double)STEP)*((double)step_no)*1) );//*2*td.internode_step_no;
 	 }
-#endif	
+#endif
 
 	//sterujemy polozeniem
 

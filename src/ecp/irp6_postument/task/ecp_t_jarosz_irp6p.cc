@@ -36,12 +36,12 @@ void jarosz::main_task_algorithm(void)
 	// #####################################################################################
 
 	lib::trajectory_description tdes;
-
+/*
 	// -----------------------------------
 	tdes.arm_type = lib::XYZ_EULER_ZYZ;
 	//	tdes.arm_type = lib::JOINT;
 	// -----------------------------------
-
+*/
 	// // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // //
 	tdes.interpolation_node_no =50;
 	tdes.internode_step_no = 10;
@@ -118,9 +118,9 @@ void jarosz::main_task_algorithm(void)
 	common::generator::parabolic_teach_in	pteach(*this, 0.02);
 
 	motion_time = 2;
-
+/*
 	pteach.create_pose_list_head(lib::XYZ_EULER_ZYZ, motion_time, coordinates);
-
+*/
 	//     the_generator.insert_pose_list_element(ps, motion_time, extra_info, coordinates);
 
 	//	ecp_msg->message("Zaladowano plik");

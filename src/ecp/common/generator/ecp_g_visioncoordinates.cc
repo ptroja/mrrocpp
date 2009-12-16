@@ -57,13 +57,13 @@ bool visioncoordinates::first_step()
 	//ecp_mp::robot_transmission_data& data = the_robot->ecp_command.instruction;
 
 	debugmsg("ecp_g_visioncoordinates: robot_transmission_data ready");
-
+/*
 	the_robot->ecp_command.instruction.instruction_type = lib::GET;
 	the_robot->ecp_command.instruction.get_type = ARM_DV;
 	the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_ANGLE_AXIS;
 	the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
 	the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-
+*/
 	// FraDIA ma znale�� wszystkie obiekty, nawet troch� podobne do poszukiwanego
 	sensor_out->esa.mode = lib::EM_SEARCH;
 	strcpy(sensor_out->esa.object, itsSearchObject.c_str());

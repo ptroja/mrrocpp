@@ -35,7 +35,7 @@ protected:
     // FRAME oraz przepisanie wyniku przeksztalcenia do
     // wewnetrznych struktur danych TRANSFORMATORa
 
-    void arm_frame_2_xyz_eul_zyz ();
+
 
 public:
 

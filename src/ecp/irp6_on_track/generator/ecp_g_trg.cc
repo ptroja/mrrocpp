@@ -87,6 +87,7 @@ void trajectory_reproduce::create_command_for_pose(common::ecp_taught_in_pose& t
         the_robot->ecp_command.instruction.value_in_step_no = the_robot->ecp_command.instruction.motion_steps;
         memcpy (the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates, tip.coordinates, IRP6_ON_TRACK_NUM_OF_SERVOS*sizeof (double));
         break;
+        /*
     case lib::C_XYZ_EULER_ZYZ:
         the_robot->ecp_command.instruction.instruction_type = lib::SET;
         the_robot->ecp_command.instruction.set_type = ARM_DV; // ARM
@@ -107,6 +108,7 @@ void trajectory_reproduce::create_command_for_pose(common::ecp_taught_in_pose& t
         the_robot->ecp_command.instruction.value_in_step_no = the_robot->ecp_command.instruction.motion_steps;
         memcpy (the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates, tip.coordinates, MAX_SERVOS_NR*sizeof (double));
         break;
+        */
     default:
         break;
         } // end: switch

@@ -27,6 +27,7 @@ ecp_sub_task_gripper_opening::ecp_sub_task_gripper_opening(task &_ecp_t) :
 
 void ecp_sub_task_gripper_opening::init()
 {
+	/*
 	tdes.arm_type = lib::XYZ_EULER_ZYZ;
 	tdes.interpolation_node_no = 1;
 	// Wspolrzedne kartezjanskie XYZ i katy Eulera ZYZ
@@ -37,6 +38,7 @@ void ecp_sub_task_gripper_opening::init()
 	tdes.coordinate_delta[4] = 0.0; // przyrost wspolrzednej TETA
 	tdes.coordinate_delta[5] = 0.0; // przyrost wspolrzednej PSI
 	//	tdes.coordinate_delta[6] = 0.0;   // przyrost wspolrzednej PSI
+	 	 */
 }
 
 void ecp_sub_task_gripper_opening::configure(double gripper_increment, int motion_time)

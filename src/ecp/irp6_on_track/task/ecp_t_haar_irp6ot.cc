@@ -69,7 +69,7 @@ haar::haar(lib::configurator &_config) :
 }
 
 void haar::main_task_algorithm(void) {
-
+/*
 	//Dojazd do pozycji nad stolem.
 	smooth_gen->load_file_with_path(smooth_path.c_str());
 	smooth_gen->Move();
@@ -133,7 +133,7 @@ void haar::main_task_algorithm(void) {
 	ecp_termination_notice();
 
 	ecp_wait_for_stop();
-
+*/
 }
 
 

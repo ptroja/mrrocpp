@@ -75,10 +75,6 @@ std::string toString(lib::POSE_SPECIFICATION ps)
 			return std::string("MOTOR");
 		case lib::JOINT:
 			return std::string("JOINT");
-		case lib::XYZ_ANGLE_AXIS:
-			return std::string("XYZ_ANGLE_AXIS");
-		case lib::XYZ_EULER_ZYZ:
-			return std::string("XYZ_EULER_ZYZ");
 		default:
 			return std::string("INVALID_END_EFFECTOR");
 	}
@@ -116,10 +112,6 @@ lib::POSE_SPECIFICATION returnProperPS(const std::string & poseSpecification)
 	{	return lib::MOTOR;	}
 	if (poseSpecification == "JOINT")
 	{	return lib::JOINT;	}
-	if (poseSpecification == "XYZ_ANGLE_AXIS")
-	{	return lib::XYZ_ANGLE_AXIS;	}
-	if (poseSpecification == "XYZ_EULER_ZYZ")
-	{	return lib::XYZ_EULER_ZYZ;	}
 	else
 		return lib::INVALID_END_EFFECTOR;
 }

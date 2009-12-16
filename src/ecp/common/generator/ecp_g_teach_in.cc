@@ -129,12 +129,6 @@ void teach_in::save_file(lib::POSE_SPECIFICATION ps)
     case lib::JOINT:
       strcpy(coordinate_type, "JOINT");
       break;
-    case lib::XYZ_ANGLE_AXIS:
-      strcpy(coordinate_type, "XYZ_ANGLE_AXIS");
-      break;
-    case lib::XYZ_EULER_ZYZ:
-      strcpy(coordinate_type, "XYZ_EULER_ZYZ");
-      break;
     case lib::PF_VELOCITY:
       strcpy(coordinate_type, "POSE_FORCE_TORQUE_AT_FRAME");
       break;
@@ -267,11 +261,7 @@ bool teach_in::load_file_with_path(const char* file_name)
       }
     else if ( !strcmp(coordinate_type, "JOINT") )
       ps = lib::JOINT;
-    else if ( !strcmp(coordinate_type, "XYZ_ANGLE_AXIS") )
-      ps = lib::XYZ_ANGLE_AXIS;
-    else if ( !strcmp(coordinate_type, "XYZ_EULER_ZYZ") )
-      ps = lib::XYZ_EULER_ZYZ;
-    else if ( !strcmp(coordinate_type, "lib::PF_VELOCITY") )
+     else if ( !strcmp(coordinate_type, "lib::PF_VELOCITY") )
       ps = lib::PF_VELOCITY;
     else
       {
@@ -492,30 +482,6 @@ bool teach_in::next_step()
       MAX_SERVOS_NR*sizeof (double));
       // printf("lumpu: %f\n", the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[6]);
       break;
-    case lib::C_XYZ_EULER_ZYZ:
-      the_robot->ecp_command.instruction.instruction_type = lib::SET;
-      the_robot->ecp_command.instruction.set_type = ARM_DV; // ARM
-      the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
-      the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
-      the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-      the_robot->ecp_command.instruction.motion_steps = (uint16_t) ceil(tip.motion_time/STEP);
-      the_robot->ecp_command.instruction.value_in_step_no = the_robot->ecp_command.instruction.motion_steps;
-      memcpy(the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates, tip.coordinates,
-          6*sizeof(double));
-      the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = tip.coordinates[6];
-      break;
-    case lib::C_XYZ_ANGLE_AXIS:
-      the_robot->ecp_command.instruction.instruction_type = lib::SET;
-      the_robot->ecp_command.instruction.set_type = ARM_DV; // ARM
-      the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
-      the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
-      the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-      the_robot->ecp_command.instruction.motion_steps = (uint16_t) ceil(tip.motion_time/STEP);
-      the_robot->ecp_command.instruction.value_in_step_no = the_robot->ecp_command.instruction.motion_steps;
-      memcpy(the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates, tip.coordinates,
-          6*sizeof(double));
-      the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = tip.coordinates[6];
-      break;
     default:
       throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
       } // end: switch
@@ -533,10 +499,6 @@ lib::ECP_TO_UI_COMMAND teach_in::convert(lib::POSE_SPECIFICATION ps) const
       return lib::C_MOTOR;
     case lib::JOINT:
       return lib::C_JOINT;
-    case lib::XYZ_ANGLE_AXIS:
-      return lib::C_XYZ_ANGLE_AXIS;
-    case lib::XYZ_EULER_ZYZ:
-      return lib::C_XYZ_EULER_ZYZ;
     default:
       return lib::C_MOTOR;
       }

@@ -56,7 +56,7 @@ bool wii_teach::get_file_name(void)
         sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ECP: Send() to UI failed");
         throw common::ecp_robot::ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
     }
-    
+
     if (ui_to_ecp_rep.reply == lib::QUIT)
     { // Nie wybrano nazwy pliku lub zrezygnowano z zapisu
         return false;
@@ -129,7 +129,7 @@ void wii_teach::print_trajectory(void)
     char buffer[80];
     node* current = trajectory.head;
     int i = 0;
-    
+
     sr_ecp_msg->message("=== Trajektoria ===");
     while(current)
     {
@@ -142,6 +142,7 @@ void wii_teach::print_trajectory(void)
 
 void wii_teach::move_to_current(void)
 {
+	/*
     char buffer[80];
     if(trajectory.current)
     {
@@ -151,6 +152,7 @@ void wii_teach::move_to_current(void)
         sg->load_coordinates(lib::XYZ_ANGLE_AXIS,trajectory.current->position[0],trajectory.current->position[1],trajectory.current->position[2],trajectory.current->position[3],trajectory.current->position[4],trajectory.current->position[5],0.074,0,true);
         sg->Move();
     }
+    */
 }
 
 void wii_teach::main_task_algorithm(void)

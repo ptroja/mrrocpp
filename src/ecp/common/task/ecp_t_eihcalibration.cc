@@ -83,7 +83,7 @@ void eihcalibration::main_task_algorithm(void ){
 	//smooth2gen->load_coordinates(lib::XYZ_ANGLE_AXIS, vv, aa, 0.0, 0.0, -0.025, 0.0, 0.0, 0.0, 0.0, 0.0, true);
 	//smooth2gen->Move();
 	//nanosleep(&delay, NULL);
-
+/*
 	smooth2gen->load_coordinates(lib::XYZ_ANGLE_AXIS, vv, aa, 0.0, 0.1, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, true);
 	smooth2gen->Move();
 	nanosleep(&delay, NULL);
@@ -91,7 +91,7 @@ void eihcalibration::main_task_algorithm(void ){
 	smooth2gen->load_coordinates(lib::XYZ_ANGLE_AXIS, vv, aa, 0.1, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, true);
 	smooth2gen->Move();
 	nanosleep(&delay, NULL);
-
+*/
 	//opusc chwytak az przestanie "widziec" szachownice
 /*	while(sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.chessboard.found == true){
 		//opuszczenie chwytaka o 2.5 cm

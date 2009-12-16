@@ -187,7 +187,7 @@ void ecp_vis_weights_driven_irp6ot::entertain_constraints(){
 #endif
 
 bool ecp_vis_weights_driven_irp6ot::first_step(void){
-
+/*
 	pbeolsac->vsp_vis_sac = sensor_m[lib::SENSOR_CAMERA_SA];
 	pbeolsac->node_counter = 1;
 	pbeolsac->idle_step_counter = 1;
@@ -248,6 +248,7 @@ bool ecp_vis_weights_driven_irp6ot::first_step(void){
 	O_eps_EG_norm=10;
 
 	return true;
+	*/
 }
 
 /*
