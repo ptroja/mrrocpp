@@ -50,17 +50,13 @@ namespace vsp {
 namespace common {
 
 /********************************* GLOBALS **********************************/
-sensor::sensor *vs;		// czujnik wirtualny
+static sensor::sensor *vs;		// czujnik wirtualny
 
-// lib::sr_vsp *vsp::common::vs->sr_msg;		// komunikacja z SR
-
-sem_t start_sem;
-
-// configurator* config;
+static sem_t start_sem;
 
 static bool TERMINATE=false;											// zakonczenie obu watkow
 
-pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;	// inicjalizacja MUTEXa
+static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;	// inicjalizacja MUTEXa
 
 /********************************** SIGCATCH ********************************/
 void catch_signal(int sig) {

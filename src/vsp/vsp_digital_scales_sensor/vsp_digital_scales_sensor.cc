@@ -10,6 +10,9 @@
 /********************************* INCLUDES *********************************/
 #include <pthread.h>            // pthread_barrier_t
 
+#include <boost/bind.hpp>
+#include <boost/foreach.hpp>
+
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
@@ -24,26 +27,10 @@
 
 namespace mrrocpp {
 namespace vsp {
-namespace common {
-
-// Czujnik wirtualny
-extern sensor::digital_scales *vs;
-
-}
-
 namespace sensor {
-/********************************* GLOBALS **********************************/
-
-
-// Bariera uzywana do zawieszania watkow w oczekiwaniu na polecenie INITIATE_READING.
-static pthread_barrier_t initiate_reading_barrier;
-// Bariera uzywana przez watek koordynatora - oczekiwanie na odczyty GET_READING.
-static pthread_barrier_t reading_ready_barrier;
 
 /*************************** DIGITAL SCALE THREAD ****************************/
-void* digital_scale_thread(void * arg){
-    // Odczytanie numeru linialu.
-    int number = (int) arg;
+void digital_scales::worker_thread(int number) {
     // Ustawienie priorytetu watku.
     lib::set_thread_priority(pthread_self() , MAX_PRIORITY-4);
     // Stworzenie obiektu pomiarowego zwiazanego z danym linialem.
@@ -52,28 +39,27 @@ void* digital_scale_thread(void * arg){
     while(true){
         // Oczekiwanie na polecenie (zawieszenie na barierze).
         pthread_barrier_wait( &initiate_reading_barrier);
+
         // Koniec pracy.
-        pthread_testcancel();
+        boost::this_thread::interruption_point();
 
         try{
             // Pobranie odczytu.
             ds.get_reading();
             // Przeksztalcenie odczytu do postaci zmiennoprzecinkowej.
-            common::vs->image.sensor_union.ds.readings[number-1] = ds.transform_reading_to_double();
+            image.sensor_union.ds.readings[number-1] = ds.transform_reading_to_double();
             } // end: try
         catch(lib::sensor::sensor_error e){
-        	common::vs->sr_msg->message(e.error_class, e.error_no);
-        	common::vs->image.sensor_union.ds.readings[number-1] = 0;
+        	sr_msg->message(e.error_class, e.error_no);
+        	image.sensor_union.ds.readings[number-1] = 0;
             } // end: catch
         // Odczyt gotowy (zawieszenie na barierze).
         pthread_barrier_wait( &reading_ready_barrier);
         }
-
-        return NULL;
-    } // end: digital_scale_thread
+    }
 
 /*****************************  KONSTRUKTOR *********************************/
-digital_scales::digital_scales(lib::configurator &_config)  : sensor(_config) {
+digital_scales::digital_scales(lib::configurator &_config) : sensor(_config) {
 	// Wielkosc unii.
 	union_size = sizeof(image.sensor_union.ds);
 
@@ -83,16 +69,15 @@ digital_scales::digital_scales(lib::configurator &_config)  : sensor(_config) {
     // Jesii za duzo linialow.
     if(number_of_scales > 6)
         number_of_scales = 6;
-    // Jesii za malo linialow.
-    if(number_of_scales < 0)
-        number_of_scales = 0;
+
     // Stworzenie barier uzywanych do synchronizacji watkow.
     pthread_barrier_init(&initiate_reading_barrier, NULL, number_of_scales+1);
     pthread_barrier_init(&reading_ready_barrier, NULL, number_of_scales+1);
 
     // Inicjacja watkow.
     for(int i=1; i<= number_of_scales; i++)
-        pthread_create( NULL, NULL, &digital_scale_thread, (void *)i);
+        threads.push_back(new boost::thread(boost::bind(&digital_scales::worker_thread, this, i)));
+
     // Zerowe polozenia poczatkowe.
     for(int i=0; i<6; i++){
         position_zero[i] = 0;
@@ -104,9 +89,11 @@ digital_scales::digital_scales(lib::configurator &_config)  : sensor(_config) {
     }
 
 
-digital_scales::~digital_scales(void){
-	// TODO: call pthread_cancel() on all created threads
-	// TODO: and then do pthread_join() on them
+digital_scales::~digital_scales(void) {
+	BOOST_FOREACH(boost::thread & t, threads) {
+		t.interrupt();
+		t.join();
+	}
 	pthread_barrier_destroy(&reading_ready_barrier);
 	pthread_barrier_destroy(&initiate_reading_barrier);
 }
@@ -126,7 +113,7 @@ void digital_scales::configure_sensor (void){
         position_zero[i] = image.sensor_union.ds.readings[i];
     // Ustawienie flagi stanu procesu.
     readings_initiated = false;
-    common::vs->sr_msg->message ("Digital Scale sensor calibrated");
+    sr_msg->message ("Digital Scale sensor calibrated");
     }
 
 /**************************** INITIATE READING *******************************/

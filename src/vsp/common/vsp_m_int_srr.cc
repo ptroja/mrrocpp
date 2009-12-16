@@ -33,7 +33,7 @@ namespace vsp {
 namespace common {
 
 /********************************* GLOBALS **********************************/
-sensor::sensor *vs;		// czujnik wirtualny
+static sensor::sensor *vs;		// czujnik wirtualny
 
 static bool TERMINATE = false;									// zakonczenie obu watkow
 

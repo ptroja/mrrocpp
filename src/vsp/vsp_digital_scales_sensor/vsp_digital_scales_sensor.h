@@ -12,6 +12,10 @@
 
 #include "vsp/vsp_sensor.h"
 
+#include <pthread.h>
+#include <boost/thread/thread.hpp>
+#include <boost/ptr_container/ptr_vector.hpp>
+
 namespace mrrocpp {
 namespace vsp {
 namespace sensor {
@@ -22,9 +26,18 @@ private:
     // Odczyty w pozycji konfiguracji czujnika.
     double position_zero[6];
     // Liczba linialow.
-    short number_of_scales;
+    unsigned int number_of_scales;
     // Flagi stanu procesu.
-    short readings_initiated;
+    bool readings_initiated;
+
+    boost::ptr_vector<boost::thread> threads;
+
+    // TODO: the following should be boost::barrier
+
+    // Bariera uzywana do zawieszania watkow w oczekiwaniu na polecenie INITIATE_READING.
+    pthread_barrier_t initiate_reading_barrier;
+    // Bariera uzywana przez watek koordynatora - oczekiwanie na odczyty GET_READING.
+    pthread_barrier_t reading_ready_barrier;
 
 public:
     // Konstruktor czujnika wirtualnego.
@@ -37,6 +50,8 @@ public:
     void initiate_reading (void);
     // Odeslanie odczytu.
     void get_reading (void);
+    // Watek odczytu pojedynczego linialu
+    void worker_thread(int number);
 }; // end: class vsp_ds_sensor
 
 } // namespace sensor

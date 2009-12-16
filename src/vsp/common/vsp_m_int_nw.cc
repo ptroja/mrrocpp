@@ -50,18 +50,14 @@ namespace vsp {
 namespace common {
 
 /********************************* GLOBALS **********************************/
-sensor::sensor *vs;		// czujnik wirtualny
+static sensor::sensor *vs;		// czujnik wirtualny
 
-// lib::sr_vsp *vs->sr_msg;		// komunikacja z SR
 // Zwracane dane.
 lib::VSP_ECP_MSG ret_msg;
 
-// configurator* config;
+static pthread_mutex_t image_mutex = PTHREAD_MUTEX_INITIALIZER;	// inicjalizacja MUTEXa uzywanego przy synchronizacji zapisu i odczytu z obrazu
 
-pthread_mutex_t image_mutex = PTHREAD_MUTEX_INITIALIZER;	// inicjalizacja MUTEXa uzywanego przy synchronizacji zapisu i odczytu z obrazu
-
-
-sem_t new_command_sem;
+static sem_t new_command_sem;
 
 static bool TERMINATE = false;									// zakonczenie obu watkow
 static bool CONFIGURE_FLAG = false;								// czy skonfigurowany czujnik
@@ -135,7 +131,7 @@ void error_handler(ERROR e){
 	} // end error_handler
 
 /****************************** SECOND THREAD ******************************/
-void* realize_command( void*  arg ){
+void* execute_command( void*  arg ){
   // ustawienie priorytetow
   setprio(0, 1);
   while(!TERMINATE){ // for (;;)
@@ -174,7 +170,7 @@ void* realize_command( void*  arg ){
       }
     }	// koniec for(;;)
    return (0);
-}//: realize_command
+}//: execute_command
 
 
 /**************************** WRITE_TO_SENSOR ******************************/
@@ -447,7 +443,7 @@ int main(int argc, char *argv[]) {
 		pthread_attr_init( &tattr );
 		pthread_attr_setdetachstate( &tattr, PTHREAD_CREATE_DETACHED );
 		pthread_attr_setschedpolicy( &tattr, SCHED_RR);
-		pthread_create( NULL, &tattr, &vsp::common::realize_command, NULL );
+		pthread_create( NULL, &tattr, &vsp::common::execute_command, NULL );
 
 	   	// ustawienie priorytetow
 		setprio(0, 15);
