@@ -107,12 +107,6 @@ bool countLUT(){
 }
 
 /**************************** metody vsp_pawel ****************************/
-
-sensor* return_created_sensor (lib::configurator &_config)
-{
-	return new pawel(_config);
-}
-
 pawel::pawel(lib::configurator &_config) : sensor(_config)
 {
 	struct timespec time_start, time_end;
@@ -126,9 +120,6 @@ pawel::pawel(lib::configurator &_config) : sensor(_config)
 	printf( "\n############\n[vsp_pawel] czas countLUT:  %f ms\n############\n\n", ((float)(time_end.tv_nsec - time_start.tv_nsec))/1000000.0 );
 
 	fd = open("/dev/bttvx",O_RDWR);
-
-	is_sensor_configured=false;
-	is_reading_ready=false;
 }
 
 pawel::~pawel(void)
@@ -268,6 +259,8 @@ void pawel::get_reading (void)
 */
      is_reading_ready=false; // 7
 }
+
+VSP_CREATE_SENSOR(pawel)
 
 } // namespace sensor
 } // namespace vsp

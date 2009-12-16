@@ -71,30 +71,10 @@ struct hostent *server;
 
 char buffer[256];
 
-
-// extern pid_t UI_pid;           // identyfikator procesu UI
-
-
-// extern lib::configurator* config;
-
-// Zwrocenie stworzonego obiektu - czujnika. Funkcja implementowana w plikach klas dziedziczacych.
-sensor* return_created_sensor (lib::configurator &_config)
-{
-	return new nn(_config);
-}// : return_created_sensor
-
-
-
-
 // Rejstracja procesu VSP
 nn::nn(lib::configurator &_config) : sensor(_config){
 	// Wielkosc unii.
 	union_size = sizeof(image.sensor_union.camera);
-
-//	uint64_t e;			// kod bledu systemowego
-
-	is_sensor_configured=false;	// czujnik niezainicjowany
-	is_reading_ready=false;				// nie ma zadnego gotowego odczytu
 
 	portno = PORT;
 	sockfd = socket(AF_INET, SOCK_STREAM, 0);
@@ -208,6 +188,9 @@ void nn::get_reading (void){
 */
      is_reading_ready=false; // 7
 	}
+
+VSP_CREATE_SENSOR(nn)
+
 } // namespace sensor
 } // namespace vsp
 } // namespace mrrocpp

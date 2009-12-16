@@ -44,6 +44,12 @@ public:
 // Zwrocenie stworzonego obiektu - czujnika. Funkcja implementowana w plikach klas dziedziczacych.
 sensor* return_created_sensor (lib::configurator &_config);
 
+#define VSP_CREATE_SENSOR(NAME) \
+sensor* return_created_sensor (lib::configurator &_config) \
+{ \
+	return new NAME(_config); \
+}
+
 } // namespace sensor
 } // namespace vsp
 } // namespace mrrocpp

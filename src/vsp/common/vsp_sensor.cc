@@ -21,7 +21,9 @@ namespace vsp {
 namespace sensor {
 
 sensor::sensor (lib::configurator &_config) :
-	config(_config)
+	config(_config),
+	is_sensor_configured(false),
+	is_reading_ready(false)
 {
 	/* Lokalizacja procesu wyswietlania komunikatow SR */
 	sr_msg = new lib::sr_vsp(lib::VSP,

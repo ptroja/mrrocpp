@@ -23,24 +23,9 @@
 #include "lib/configurator.h"
 #include "vsp/vsp_force_sensor.h"
 
-
 namespace mrrocpp {
 namespace vsp {
 namespace sensor {
-
-
-// Zmienne konfiguracyjne.
-// edp_schunk_config* edp_schunk_c;
-// extern ini_configs* ini_con;
-// extern lib::configurator* config;
-
-
-// Zwrocenie stworzonego obiektu - czujnika. Funkcja implementowana w plikach klas dziedziczacych.
-sensor* return_created_sensor (lib::configurator &_config)
-{
-	return new force(_config);
-}// : return_created_sensor
-
 
 // Konstruktor klasy czujnika wirtualnego, odpowiedzialnego za odczyty z czujnika sily.
 force::force(lib::configurator &_config) : sensor(_config){
@@ -53,10 +38,6 @@ force::force(lib::configurator &_config) : sensor(_config){
 
  	ms_nr=0; // numer odczytu z czujnika
 
-	// Czujnik niezainicjowany.
-	is_sensor_configured=false;
-	// Nie ma zadnego gotowego odczytu.
-	is_reading_ready=false;
 	// Wczytanie konfiguracji.
 	// ini_con->create_edp_irp6_on_track  ( ini_con->vsp->edp_section);
 	// Nadanie odpowiednich uprawnien watkowi.
@@ -126,6 +107,8 @@ void force::get_reading (void){
 	// Obacny odczyt nie jest "nowy".
      is_reading_ready=false;
 	} // end: get_reading
+
+VSP_CREATE_SENSOR(force)
 
 } // namespace sensor
 } // namespace vsp

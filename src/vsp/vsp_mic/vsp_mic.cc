@@ -51,22 +51,11 @@ namespace mrrocpp {
 namespace vsp {
 namespace sensor {
 
-// extern pid_t UI_pid;           // identyfikator procesu UI
-// extern lib::configurator* config;
-
-sensor* return_created_sensor (lib::configurator &_config)
-{
-	return new mic(_config);
-}// : return_created_sensor
-
-
 // Rejstracja procesu VSP
 mic::mic(lib::configurator &_config) : sensor(_config){
 
 //	unsigned long int e;			// kod bledu systemowego
 	printf("Konstruktor VSP! - SOUND\n");
-	is_sensor_configured=false;	// czujnik niezainicjowany
-	is_reading_ready=false;				// nie ma zadnego gotowego odczytu
 
 	ThreadCtl (_NTO_TCTL_IO, NULL);  // by YOYEK & 7 - nadanie odpowiednich uprawinien watkowi
 
@@ -88,15 +77,15 @@ mic::mic(lib::configurator &_config) : sensor(_config){
     setvbuf (stdin, NULL, _IONBF, 0);
     if (card == -1)
     {
-        if ((rtn = snd_pcm_open_preferred (&pcm_handle, &card, &dev, SND_PCM_OPEN_CAPTURE)) < 0)
-            ;
-            //return err ("device open");
+        if ((rtn = snd_pcm_open_preferred (&pcm_handle, &card, &dev, SND_PCM_OPEN_CAPTURE)) < 0) {
+           //return err ("device open");
+        }
     }
     else
     {
-        if ((rtn = snd_pcm_open (&pcm_handle, card, dev, SND_PCM_OPEN_CAPTURE)) < 0)
-            ;
+        if ((rtn = snd_pcm_open (&pcm_handle, card, dev, SND_PCM_OPEN_CAPTURE)) < 0) {
             //return err ("device open");
+        }
     }
 
     mSamples = mSampleRate * mSampleChannels * mSampleBits / 8 * mSampleTime;
@@ -384,6 +373,9 @@ void mic::get_reading (void){
 
     // is_reading_ready=false;
 	}
+
+VSP_CREATE_SENSOR(mic)
+
 } // namespace sensor
 } // namespace vsp
 } // namespace mrrocpp

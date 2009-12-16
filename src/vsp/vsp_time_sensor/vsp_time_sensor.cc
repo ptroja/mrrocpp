@@ -21,22 +21,10 @@ namespace mrrocpp {
 namespace vsp {
 namespace sensor {
 
-// Zwrocenie stworzonego obiektu - czujnika. Funkcja implementowana w plikach klas dziedziczacych.
-sensor* return_created_sensor (lib::configurator &_config)
-{
-	return new time(_config);
-}// : return_created_sensor
-
-
 // Konstruktor klasy czujnika wirtualnego, odpowiedzialnego za odczyty z czujnika sily.
 time::time(lib::configurator &_config) : sensor(_config){
 	// Wielkosc unii.
 	union_size = sizeof(image.sensor_union.time);
-
-	// Czujnik niezainicjowany.
-	is_sensor_configured=false;
-	// Nie ma zadnego gotowego odczytu.
-	is_reading_ready=false;
 } // end: vsp_time_sensor
 
 // Metoda sluzaca do konfiguracji czujnika.
@@ -69,6 +57,8 @@ void time::get_reading (void){
 	// Obacny odczyt nie jest "nowy".
 	is_reading_ready=false;
 } // end: get_reading
+
+VSP_CREATE_SENSOR(time)
 
 } // namespace sensor
 } // namespace vsp

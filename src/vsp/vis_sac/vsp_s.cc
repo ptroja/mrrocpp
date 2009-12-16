@@ -83,27 +83,10 @@ int ret=0;
 
 // #pragma on(check_stack);
 
-// extern lib::configurator* config;
-
-// Zwrocenie stworzonego obiektu - czujnika. Funkcja implementowana w plikach klas dziedziczacych.
-sensor* return_created_sensor (lib::configurator &_config)
-{
-	return new vis_sac(_config);
-}// : return_created_sensor
-
-
-
-
 // Rejstracja procesu VSP
 vis_sac::vis_sac(lib::configurator &_config) : sensor(_config){
 	// Wielkosc unii.
 	union_size = sizeof(image.sensor_union.vis_sac);
-
-//	uint64_t e;			// kod bledu systemowego
-
-	is_sensor_configured=false;	// czujnik niezainicjowany
-	is_reading_ready=false;				// nie ma zadnego gotowego odczytu
-
 
 	// Obliczenie dlugosci sciezki do pliku INI.
 /*
@@ -320,6 +303,8 @@ double aux=0;
      // sr_msg->message ("VSP Get reading ok");
      is_reading_ready=false; // 7
 	}
+
+VSP_CREATE_SENSOR(vis_sac)
 
 } // namespace sensor
 } // namespace vsp

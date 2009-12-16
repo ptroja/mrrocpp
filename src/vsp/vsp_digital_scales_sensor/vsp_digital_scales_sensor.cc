@@ -40,12 +40,6 @@ static pthread_barrier_t initiate_reading_barrier;
 // Bariera uzywana przez watek koordynatora - oczekiwanie na odczyty GET_READING.
 static pthread_barrier_t reading_ready_barrier;
 
-// Zwrocenie stworzonego obiektu - czujnika. Funkcja implementowana w plikach klas dziedziczacych.
-sensor* return_created_sensor (lib::configurator &_config)
-{
-	return new digital_scales(_config);
-}// : return_created_sensor
-
 /*************************** DIGITAL SCALE THREAD ****************************/
 void* digital_scale_thread(void * arg){
     // Odczytanie numeru linialu.
@@ -165,6 +159,9 @@ void digital_scales::get_reading (void){
     // Ustawienie flagi stanu procesu.
     readings_initiated = false;
     }
+
+VSP_CREATE_SENSOR(digital_scales)
+
 } // namespace sensor
 } // namespace vsp
 } // namespace mrrocpp

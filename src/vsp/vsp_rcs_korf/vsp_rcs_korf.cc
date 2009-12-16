@@ -32,18 +32,6 @@ namespace mrrocpp {
 namespace vsp {
 namespace sensor {
 
-
-// Zmienne konfiguracyjne.
-// extern lib::configurator* config;
-
-
-
-// Zwrocenie stworzonego obiektu - czujnika. Funkcja implementowana w plikach klas dziedziczacych.
-sensor* return_created_sensor (lib::configurator &_config) {
-	return new rcs_korf(_config);
-} // : return_created_sensor
-
-
 // Konstruktor czujnika wirtualnego.
 rcs_korf::rcs_korf(lib::configurator &_config) : sensor(_config){
     printf("VSP KR construct\n");
@@ -57,12 +45,6 @@ rcs_korf::rcs_korf(lib::configurator &_config) : sensor(_config){
 
 	// Ustawia wielkosc unii.
 	union_size = sizeof(image.sensor_union.rcs);
-
-	// Ustawia czujnik jako niezainicjowany.
-	is_sensor_configured = false;
-
-	// Ustawia brak gotowego odczytu.
-	is_reading_ready = false;
 
 	// Czysci odczyt.
 	image.sensor_union.rcs.cube_solution[0] = '\0';
@@ -201,8 +183,10 @@ void rcs_korf::get_reading (void) {
 	pCube = NULL;
 	delete pSol;
 	pSol = NULL;
-
 }
+
+VSP_CREATE_SENSOR(rcs_korf)
+
 } // namespace sensor
 } // namespace vsp
 } // namespace mrrocpp

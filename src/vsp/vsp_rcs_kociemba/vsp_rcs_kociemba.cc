@@ -35,17 +35,6 @@ namespace mrrocpp {
 namespace vsp {
 namespace sensor {
 
-
-// Zmienne konfiguracyjne.
-// extern lib::configurator* config;
-
-
-// Zwrocenie stworzonego obiektu - czujnika. Funkcja implementowana w plikach klas dziedziczacych.
-sensor* return_created_sensor (lib::configurator &_config) {
-	return new rcs_kociemba(_config);
-} // : return_created_sensor
-
-
 // Konstruktor czujnika wirtualnego.
 rcs_kociemba::rcs_kociemba(lib::configurator &_config) : sensor(_config){
     printf("VSP KC construct\n");
@@ -59,12 +48,6 @@ rcs_kociemba::rcs_kociemba(lib::configurator &_config) : sensor(_config){
 
 	// Ustawia wielkosc unii.
 	union_size = sizeof(image.sensor_union.rcs);
-
-	// Ustawia czujnik jako niezainicjowany.
-	is_sensor_configured = false;
-
-	// Ustawia brak gotowego odczytu.
-	is_reading_ready = false;
 
 	// Czysci odczyt.
 	image.sensor_union.rcs.cube_solution[0] = '\0';
@@ -264,8 +247,10 @@ void rcs_kociemba::get_reading (void) {
 
 	// Ustawia odczyt jako juz odczytany
 	is_reading_ready=false;
-
 }
+
+VSP_CREATE_SENSOR(rcs_kociemba)
+
 } // namespace sensor
 } // namespace vsp
 } // namespace mrrocpp

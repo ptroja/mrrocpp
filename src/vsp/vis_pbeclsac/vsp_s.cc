@@ -78,27 +78,10 @@ RubiksCube k1,k2;
 
 // #pragma on(check_stack);
 
-// extern pid_t UI_pid;           // identyfikator procesu UI
-
-
-// extern lib::configurator* config;
-
-// Zwrocenie stworzonego obiektu - czujnika. Funkcja implementowana w plikach klas dziedziczacych.
-sensor* return_created_sensor (lib::configurator &_config)
-{
-	return new vis_pbeclsac(_config);
-}// : return_created_sensor
-
-
-
-
 // Rejstracja procesu VSP
 vis_pbeclsac::vis_pbeclsac(lib::configurator &_config) : sensor(_config){
 	// Wielkosc unii.
 	union_size = sizeof(image.sensor_union.camera);
-
-	is_sensor_configured=false;	// czujnik niezainicjowany
-	is_reading_ready=false;				// nie ma zadnego gotowego odczytu
 
 	std::string colors_file(mrrocpp_network_path);
 	colors_file += "data/color_eih.txt";
@@ -221,6 +204,8 @@ double aux=0;
      // sr_msg->message ("VSP Get reading ok");
      is_reading_ready=false; // 7
 	}
+
+VSP_CREATE_SENSOR(vis_pbeclsac)
 
 } // namespace sensor
 } // namespace vsp

@@ -46,14 +46,6 @@ namespace mrrocpp {
 namespace vsp {
 namespace sensor {
 
-/********************************* GLOBALS **********************************/
-
-// Zwrocenie stworzonego obiektu - czujnika. Funkcja implementowana w plikach klas dziedziczacych.
-sensor* return_created_sensor (lib::configurator &_config)
-{
-	return new pp(_config);
-}// : return_created_sensor
-
 /*****************************  KONSTRUKTOR *********************************/
 pp::pp(lib::configurator &_config) : sensor(_config){
 	// Wielkosc unii.
@@ -310,6 +302,8 @@ void pp::get_reading (void){
     // Ustawienie flagi stanu procesu.
 	is_reading_ready=false;
     }// end: get_reading
+
+VSP_CREATE_SENSOR(pp)
 
 } // namespace sensor
 } // namespace vsp

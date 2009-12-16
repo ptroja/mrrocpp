@@ -34,12 +34,6 @@ namespace mrrocpp {
 namespace vsp {
 namespace sensor {
 
-// Zwrocenie stworzonego obiektu - czujnika. Funkcja implementowana w plikach klas dziedziczacych.
-sensor* return_created_sensor (lib::configurator &_config)
-{
-	return new schunk(_config);
-}// : return_created_sensor
-
 // Kontruktor procesu VSP
 schunk::schunk(lib::configurator &_config) : sensor(_config)
 {
@@ -51,9 +45,6 @@ schunk::schunk(lib::configurator &_config) : sensor(_config)
 		config.return_string_value("edp_section").c_str());
 
 	ms_nr=0; // numer odczytu z czujnika
-
-	is_sensor_configured=false;	// czujnik niezainicjowany
-	is_reading_ready=false;			// nie ma zadnego gotowego odczytu
 
 	ThreadCtl (_NTO_TCTL_IO, NULL);  // nadanie odpowiednich uprawnien watkowi
 	// nawiazanie komunikacji z edp
@@ -255,6 +246,8 @@ void schunk::get_reading (void)
 	//    sr_msg->message ("VSP Get reading ok");
 	is_reading_ready=false;
 }
+
+VSP_CREATE_SENSOR(schunk)
 
 } // namespace sensor
 } // namespace vsp

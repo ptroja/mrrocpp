@@ -130,27 +130,10 @@ RubiksCube k1,k2;
 
 // #pragma on(check_stack);
 
-// extern pid_t UI_pid;           // identyfikator procesu UI
-
-
-// extern lib::configurator* config;
-
-// Zwrocenie stworzonego obiektu - czujnika. Funkcja implementowana w plikach klas dziedziczacych.
-sensor* return_created_sensor (lib::configurator &_config)
-{
-	return new vis(_config);
-}// : return_created_sensor
-
-
-
-
 // Rejstracja procesu VSP
 vis::vis(lib::configurator &_config) : sensor(_config){
 	// Wielkosc unii.
 	union_size = sizeof(image.sensor_union.cube_face);
-
-	is_sensor_configured=false;	// czujnik niezainicjowany
-	is_reading_ready=false;				// nie ma zadnego gotowego odczytu
 
 	//	printf("Konstruktor VSP_VIS pbeoleih!\n");
 
@@ -539,7 +522,9 @@ void vis::get_reading (void){
 	// 	from_vsp.comm_image.sensor_union.camera.frame[i] = 0.5;
      // sr_msg->message ("VSP Get reading ok");
      is_reading_ready=false; // 7
-	}
+}
+
+VSP_CREATE_SENSOR(vis)
 
 } // namespace sensor
 } // namespace vsp
