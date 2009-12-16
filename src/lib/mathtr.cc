@@ -95,7 +95,7 @@ void K_vector::get_value(int i, double &value) const
 	value = w[i];
 }
 
-// Zwrocenie dligosci wektora.
+// Zwrocenie dlugosci wektora.
 double K_vector::get_length() const
 {
 	return sqrt (w[0]*w[0] + w[1]*w[1] + w[2]*w[2]);
@@ -105,7 +105,7 @@ double K_vector::get_length() const
 // Zwrocenie dligosci wektora.
 void K_vector::normalize()
 {
-	double length = get_length();
+	const double length = get_length();
 	w[0] /= length;
 	w[1] /= length;
 	w[2] /= length;
@@ -260,8 +260,7 @@ Homog_matrix::Homog_matrix()
 			else
 				matrix_m[j][i] = 0;
 		}
-};//: Homog_matrix()
-
+}
 
 Homog_matrix::Homog_matrix(K_vector versor_x, K_vector versor_y, K_vector versor_z, K_vector angles)
 {
@@ -555,8 +554,7 @@ void Homog_matrix::get_xyz_euler_zyz(double t[6]) const
 		gamma = atan2(matrix_m[2][1], -matrix_m[2][0]);
 
 		// Sinus beta.
-
-	};//: else
+	}
 
 	// Przepisanie wyniku do tablicy
 	for(int i = 0;i<3;i++)
@@ -589,20 +587,18 @@ void Homog_matrix::set_xyz_euler_zyz(const double t[6])
 void Homog_matrix::set_xyz_euler_zyz(double x, double y, double z, double alfa, double beta, double gamma)
 {
 	// alfa, beta, gamma - Katy Euler'a Z-Y-Z
-	double c_alfa, s_alfa, c_beta, s_beta, c_gamma, s_gamma;
-
 	// Zredukowanie katow.
 	alfa = reduce(alfa, -M_PI, M_PI, 2*M_PI);
 	beta = reduce(beta, 0, M_PI, M_PI);
 	gamma = reduce(gamma, -M_PI, M_PI, 2*M_PI);
 
 	// Obliczenie sinusow/cosinusow.
-	c_alfa = cos(alfa);
-	s_alfa = sin(alfa);
-	c_beta = cos(beta);
-	s_beta = sin(beta);
-	c_gamma= cos(gamma);
-	s_gamma= sin(gamma);
+	const double c_alfa = cos(alfa);
+	const double s_alfa = sin(alfa);
+	const double c_beta = cos(beta);
+	const double s_beta = sin(beta);
+	const double c_gamma= cos(gamma);
+	const double s_gamma= sin(gamma);
 
 	// Obliczenie macierzy rotacji.
 	matrix_m[0][0] = c_alfa*c_beta*c_gamma-s_alfa*s_gamma;
@@ -628,20 +624,15 @@ void Homog_matrix::set_xyz_euler_zyz(double x, double y, double z, double alfa, 
 void Homog_matrix::set_mech_xyz_euler_zyz(double x, double y, double z, double alfa, double beta, double gamma)
 {
 	// alfa, beta, gamma - Katy Euler'a Z-Y-Z
-	double c_alfa, s_alfa, c_beta, s_beta, c_gamma, s_gamma;
-
 	// Zredukowanie katow.
 	alfa = reduce(alfa, -M_PI, M_PI, 2*M_PI);
 	beta = reduce(beta, 0, M_PI, M_PI);
 	gamma = reduce(gamma, -M_PI, M_PI, 2*M_PI);
 
 	// Obliczenie sinusow/cosinusow.
-	c_alfa = cos(alfa);
-	s_alfa = sin(alfa);
-	c_beta = cos(beta);
-	s_beta = sin(beta);
-	c_gamma= cos(gamma);
-	s_gamma= sin(gamma);
+	const double s_alfa = sin(alfa);
+	const double s_beta = sin(beta);
+	const double s_gamma= sin(gamma);
 
 	// Obliczenie macierzy rotacji.
 	matrix_m[0][0] = s_alfa;
@@ -685,15 +676,12 @@ void Homog_matrix::get_xyz_rpy(double t[6]) const
 void Homog_matrix::set_xyz_rpy(double x, double y, double z, double alfa, double beta, double gamma)
 {
 	// alfa (wokol z) , beta (wokol y), gamma (wokol x)
-	double c_alfa, s_alfa, c_beta, s_beta, c_gamma, s_gamma;
-
-	c_alfa = cos(alfa);
-	s_alfa = sin(alfa);
-	c_beta = cos(beta);
-	s_beta = sin(beta);
-	c_gamma = cos(gamma);
-	s_gamma = sin(gamma);
-
+	const double c_alfa = cos(alfa);
+	const double s_alfa = sin(alfa);
+	const double c_beta = cos(beta);
+	const double s_beta = sin(beta);
+	const double c_gamma = cos(gamma);
+	const double s_gamma = sin(gamma);
 
 	// Obliczenie macierzy rotacji.
 	matrix_m[0][0] = c_alfa*c_beta;
@@ -723,14 +711,14 @@ void Homog_matrix::set_xyz_angle_axis(double kx, double ky, double kz, double al
 	// w formie XYZ_ANGLE_AXIS
 	// Utworznie macierzy jednorodnej na podstawie rozkazu w formie XYZ_ANGLE_AXIS
 
-	double c_alfa, s_alfa, v_alfa;		// c_alfa - kosinus kata alfa
-											// s_alfa - sinus kata alfa
-											// v_alfa = 1 - c_alfa;
+	// c_alfa - kosinus kata alfa
+	// s_alfa - sinus kata alfa
+	// v_alfa = 1 - c_alfa;
 
 	// wartosci poszczegolnych funkcji trygonometrycznych dla kata obrotu
-	c_alfa = cos(alfa);
-	s_alfa = sin(alfa);
-	v_alfa = 1 - c_alfa;
+	const double c_alfa = cos(alfa);
+	const double s_alfa = sin(alfa);
+	const double v_alfa = 1 - c_alfa;
 
 	// macierz rotacji na podstawie wzoru 2.80 ze strony 68
 	// ksiazki: "Wprowadzenie do robotyki" John J. Craig
@@ -762,9 +750,9 @@ void Homog_matrix::set_xyz_angle_axis(double kx, double ky, double kz, double x,
 	// w formie XYZ_ANGLE_AXIS
 	// Utworznie macierzy jednorodnej na podstawie rozkazu w formie XYZ_ANGLE_AXIS
 
-	double alfa =sqrt(kx*kx + ky*ky +kz*kz);
+	const double alfa = sqrt(kx*kx + ky*ky + kz*kz);
 
-	double kx_l,  ky_l, kz_l;
+	double kx_l, ky_l, kz_l;
 
 	if (alfa > ALFA_SENSITIVITY)
 	{
@@ -881,9 +869,7 @@ void Homog_matrix::get_xyz_angle_axis(double t[6]) const
 	// przeksztalcenie macierzy jednorodnej do rozkazu w formie XYZ_ANGLE_AXIS
 	const double EPS = zero_eps;
 	const double delta = delta_m;
-	double alfa;		// kat obrotu
-	double s_alfa;	// sinus kata obrotu alfa
-	int i;				// licznik petli
+
 	double Kd[3];	// Kd - K z "daszkiem" - wersor kierunkowy
 
 	// obliczenia zgodne ze wzorami 2.81 i 2.82 ze strony 68
@@ -897,7 +883,8 @@ void Homog_matrix::get_xyz_angle_axis(double t[6]) const
 	else if (value > 1)
 		value = 1;
 
-	alfa = acos(value);
+	// kat obrotu
+	double alfa = acos(value);
 
 	if((alfa  < M_PI + delta) && (alfa > M_PI - delta))							// kat obrotu 180 stopni = Pi radianow
 	{
@@ -944,7 +931,7 @@ void Homog_matrix::get_xyz_angle_axis(double t[6]) const
 	else if ((alfa < ALFA_SENSITIVITY) && (alfa > -ALFA_SENSITIVITY))									// kat obrotu 0 stopni
 	{
 
-		for(i=0; i<3; i++)
+		for(int i=0; i<3; i++)
 			Kd[i] = 0;
 
 		alfa = 0;
@@ -952,7 +939,8 @@ void Homog_matrix::get_xyz_angle_axis(double t[6]) const
 	}
 	else																				// standardowe obliczenia
 	{
-		s_alfa = sin(alfa);
+		// sinus kata obrotu alfa
+		const double s_alfa = sin(alfa);
 
 		Kd[0] = (1/(2*s_alfa))*(matrix_m[2][1] - matrix_m[1][2]);
 		Kd[1] = (1/(2*s_alfa))*(matrix_m[0][2] - matrix_m[2][0]);
@@ -960,7 +948,7 @@ void Homog_matrix::get_xyz_angle_axis(double t[6]) const
 	}
 
 	// Przepisanie wyniku do tablicy
-	for(i=0;i<3;i++)
+	for(int i=0;i<3;i++)
 	{
 		t[i] = matrix_m[i][3];
 		t[3+i] = Kd[i]*alfa;
@@ -1076,7 +1064,7 @@ Homog_matrix Homog_matrix::operator* (const Homog_matrix & m) const
 		zwracana.matrix_m[j][3] += matrix_m[j][3];
 	}
 
-return zwracana;
+	return zwracana;
 }// end Homog_matrix::operator* (const Homog_matrix & m) const
 
 
@@ -1101,7 +1089,6 @@ void Homog_matrix::operator *= (const Homog_matrix & m)
 					matrix_m[j][i] = tymcz_m[j][a] * m.matrix_m[a][i];
 				else
 					matrix_m[j][i] += tymcz_m[j][a] * m.matrix_m[a][i];
-
 			}
 		}
 
@@ -1138,7 +1125,7 @@ K_vector Homog_matrix::operator*(const K_vector & w) const
 	for(i=0;i<3;i++)
 		zwracany.w[i] +=matrix_m[i][3];
 
-return zwracany;
+	return zwracany;
 
 }// end Homog_matrix::operator*(const K_vector & w) const
 
@@ -1206,7 +1193,7 @@ int Homog_matrix::operator==(const Homog_matrix & comp) const
 	// i - i-ta kolumna
 	// j - j-ty wiersz
 
-	double eps = 1e-5;
+	const double eps = 1e-5;
 	double val = 0;
 
 	if(this->is_valid() != comp.is_valid())
@@ -1248,7 +1235,7 @@ int Homog_matrix::operator!=(const Homog_matrix & comp) const
 	// 1 - macierze rozne
 	// 0 - macierze rowne
 
-	double eps = 1e-5;
+	const double eps = 1e-5;
 	double val = 0;
 
 	if(this->is_valid() != comp.is_valid())
@@ -1761,9 +1748,8 @@ return s;
 double Ft_v_vector::max_element()
 {
 	double MAX=0;
-	int index;
 
- 	for (index=0; index<6; index++)
+ 	for (int index=0; index<6; index++)
 	{	if ( fabs(w[index]) > MAX) 	{
 			MAX=fabs(w[index]); } }
 
@@ -1848,9 +1834,7 @@ Ft_v_tr::Ft_v_tr(const Ft_v_tr &wzor)
 	base_frame = wzor.base_frame;
 
 	set_from_frame(wzor.base_frame);
-};//: Homog_matrix::Homog_matrix(const Homog_matrix &wzor)
-
-
+}
 
 void Ft_v_tr::set_from_frame(const Homog_matrix & p)
 {
@@ -2085,7 +2069,7 @@ Ft_v_vector Jacobian_matrix::operator*(const Ft_v_vector & w) const
 
 void Jacobian_matrix::wypisz()
 {
-for (int i=0l; i<6; i++)
+for (int i=0; i<6; i++)
 	printf("% 7.3f, % 7.3f, % 7.3f, % 7.3f, % 7.3f, % 7.3f\n", matrix[i][0], matrix[i][1], matrix[i][2], matrix[i][3], matrix[i][4], matrix[i][5]);
 }//end Jacobian_matrix::wypisz()
 
@@ -2163,24 +2147,24 @@ return q;
 void Jacobian_matrix::irp6_6dof_equations(const Ft_v_vector & w)
 {
 
-	double s1 = sin(w.w[0]);
-	double c1 = cos(w.w[0]);
-	double s2 = sin(w.w[1]);
-	double c2 = cos(w.w[1]);
-	double s3 = sin(w.w[2]);
-	double c3 = cos(w.w[2]);
-	double s4 = sin(w.w[3]);
-	double c4 = cos(w.w[3]);
-	double s5 = sin(w.w[4]);
-	double c5 = cos(w.w[4]);
-	//double s6 = sin(w.w[5]);
-	//double c6 = cos(w.w[5]);
+	const double s1 = sin(w.w[0]);
+	const double c1 = cos(w.w[0]);
+	const double s2 = sin(w.w[1]);
+	const double c2 = cos(w.w[1]);
+	const double s3 = sin(w.w[2]);
+	const double c3 = cos(w.w[2]);
+	const double s4 = sin(w.w[3]);
+	const double c4 = cos(w.w[3]);
+	const double s5 = sin(w.w[4]);
+	const double c5 = cos(w.w[4]);
+	//const double s6 = sin(w.w[5]);
+	//const double c6 = cos(w.w[5]);
 
-	double a2 = 0.455;
-  	double a3 = 0.67;
-  	double d5 = 0.19;
- 	//double d6 = 0.095;
-  	//double d7 = 0.20;
+	const double a2 = 0.455;
+	const double a3 = 0.67;
+	const double d5 = 0.19;
+ 	//const double d6 = 0.095;
+  	//const double d7 = 0.20;
 
 	//Wyznaczenie wzoru dla jakobianu
 
@@ -2243,28 +2227,26 @@ matrix[5][5]=0;
 
 double Jacobian_matrix::irp6_6dof_determinant(const Ft_v_vector & w)
 {
-	//double s1 = sin(w.w[0]);
-	//double c1 = cos(w.w[0]);
-	double s2 = sin(w.w[1]);
-	double c2 = cos(w.w[1]);
-	double s3 = sin(w.w[2]);
-	double c3 = cos(w.w[2]);
-	//double s4 = sin(w.w[3]);
-	double c4 = cos(w.w[3]);
-	double s5 = sin(w.w[4]);
-	//double c5 = cos(w.w[4]);
-	//double s6 = sin(w.w[5]);
-	//double c6 = cos(w.w[5]);
+	//const double s1 = sin(w.w[0]);
+	//const double c1 = cos(w.w[0]);
+	const double s2 = sin(w.w[1]);
+	const double c2 = cos(w.w[1]);
+	const double s3 = sin(w.w[2]);
+	const double c3 = cos(w.w[2]);
+	//const double s4 = sin(w.w[3]);
+	const double c4 = cos(w.w[3]);
+	const double s5 = sin(w.w[4]);
+	//const double c5 = cos(w.w[4]);
+	//const double s6 = sin(w.w[5]);
+	//const double c6 = cos(w.w[5]);
 
-	double a2 = 0.455;
-  	double a3 = 0.67;
-  	double d5 = 0.19;
- 	//double d6 = 0.095;
-  	//double d7 = 0.20;
+	const double a2 = 0.455;
+	const double a3 = 0.67;
+  	const double d5 = 0.19;
+ 	//const double d6 = 0.095;
+  	//const double d7 = 0.20;
 
-	double det;
-
-	det=s5*a2*a3*(a2*c2+d5*c4+a3*c3)*(s2*c3-s3*c2);
+  	const double det = s5*a2*a3*(a2*c2+d5*c4+a3*c3)*(s2*c3-s3*c2);
 
 	return det;
 
@@ -2284,25 +2266,24 @@ double Jacobian_matrix::irp6_6dof_determinant(const Ft_v_vector & w)
 
 void Jacobian_matrix::irp6_6dof_inverse_equations(const Ft_v_vector & w)
 {
+	const double s1 = sin(w.w[0]);
+	const double c1 = cos(w.w[0]);
+	const double s2 = sin(w.w[1]);
+	const double c2 = cos(w.w[1]);
+	const double s3 = sin(w.w[2]);
+	const double c3 = cos(w.w[2]);
+	const double s4 = sin(w.w[3]);
+	const double c4 = cos(w.w[3]);
+	const double s5 = sin(w.w[4]);
+	const double c5 = cos(w.w[4]);
+	//const double s6 = sin(w.w[5]);
+	//const double c6 = cos(w.w[5]);
 
-	double s1 = sin(w.w[0]);
-	double c1 = cos(w.w[0]);
-	double s2 = sin(w.w[1]);
-	double c2 = cos(w.w[1]);
-	double s3 = sin(w.w[2]);
-	double c3 = cos(w.w[2]);
-	double s4 = sin(w.w[3]);
-	double c4 = cos(w.w[3]);
-	double s5 = sin(w.w[4]);
-	double c5 = cos(w.w[4]);
-	//double s6 = sin(w.w[5]);
-	//double c6 = cos(w.w[5]);
-
-	double a2 = 0.455;
-  	double a3 = 0.67;
-  	double d5 = 0.19;
- 	//double d6 = 0.095;
-  	//double d7 = 0.20;
+	const double a2 = 0.455;
+	const double a3 = 0.67;
+	const double d5 = 0.19;
+ 	//const double d6 = 0.095;
+  	//const double d7 = 0.20;
 
 	//Wyznaczenie wzoru na odwrotnosc jakobianu
 
