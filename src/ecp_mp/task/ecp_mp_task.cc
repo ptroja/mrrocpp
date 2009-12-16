@@ -249,12 +249,6 @@ void task::all_sensors_get_reading (sensors_t & _sensor_m)
 	}
 }
 
-bool task::str_cmp::operator()(char const *a, char const *b) const
-{
-	return strcmp(a, b)<0;
-}
-
-
 ecp_mp::common::Trajectory * task::createTrajectory(xmlNodePtr actNode, xmlChar *stateID)
 {
 	xmlChar * coordinateType = xmlGetProp(actNode, (const xmlChar *)"coordinateType");
