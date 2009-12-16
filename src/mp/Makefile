@@ -13,7 +13,7 @@ MP_ROBOTS_OBJECTS = \
 	robot/mp_r_manip_and_conv.o
 	
 MP_MAIN_OBJECTS = mp.o task/mp_task.o robot/mp_robot.o mp_m.o \
-	generator/mp_generator.o mp_delay_ms_condition.o
+	generator/mp_generator.o mp_delay_ms_condition.o mp_g_common.o
 	
 LIBMPROBOTS = libmprobots.a
 LIBMPMAIN = libmpmain.a
