@@ -24,7 +24,7 @@ namespace generator {
 // ########################################################################################################
 
 
-class hermite_spline: public ecp_teach_in_generator {
+class hermite_spline: public teach_in {
 protected:
   ecp_taught_in_pose starting_pose;   // stores coordinates of the starting pose of the robot
   double INTERVAL;								// time of interpolation of one macro step (in seconds)
@@ -55,7 +55,7 @@ public:
 };// end: irp6ot_hermite_spline_generator
 
 
-class natural_spline: public ecp_teach_in_generator {
+class natural_spline: public teach_in {
 protected:
   ecp_taught_in_pose starting_pose;			// stores coordinates of the starting pose of the robot
   double INTERVAL;										// time of interpolation of one macro step (in seconds)

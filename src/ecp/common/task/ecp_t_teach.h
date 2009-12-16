@@ -23,7 +23,7 @@ namespace task {
 
 class teach: public common::task::task  {
 protected:
-	ecp_teach_in_generator* tig;
+	teach_in* tig;
 
 public:
 	// KONSTRUKTORY

@@ -1197,7 +1197,7 @@ bool quintic::next_step()
 
 
 spline::spline(common::task::task& _ecp_task) :
-	ecp_teach_in_generator(_ecp_task)
+	teach_in(_ecp_task)
 {
 }
 
@@ -3003,7 +3003,7 @@ bool quintic_spline::next_step()
 // Konstruktor generatora elipsy
 
 elipsoid::elipsoid(common::task::task& _ecp_task) :
-	ecp_teach_in_generator(_ecp_task)
+	teach_in(_ecp_task)
 {
 	INTERVAL = 0.006; // Dlugosc okresu interpolacji w [sek]
 

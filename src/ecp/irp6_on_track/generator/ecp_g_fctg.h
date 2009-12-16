@@ -29,7 +29,7 @@ namespace generator {
 // ###########  KLASA do ruszania robotem, ruch kontrolowany za  pomoca czujnika sily    #########
 // ####################################################################
 
-class force_controlled_trajectory : public common::ecp_teach_in_generator
+class force_controlled_trajectory : public common::teach_in
 {
 	private:
 		// Lista pozycji dla danego makrokroku - ruch jedna osia/wspolrzedna.

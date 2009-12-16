@@ -220,7 +220,7 @@ public:
 // ################################     KLASA BAZOWA dla SPLAJNOW     #################################
 // ####################################################################################################
 
-class spline : public ecp_teach_in_generator
+class spline : public teach_in
 {
 protected:
   ecp_taught_in_pose tip;			// Kolejna pozycja.
@@ -376,7 +376,7 @@ public:
 // Generator odtwarzajacy trajektorie zadana analitycznie - elipsa
 // ####################################################################################################
 
-class elipsoid : public ecp_teach_in_generator {
+class elipsoid : public teach_in {
 
 protected:
   ecp_taught_in_pose tip;			// Kolejna z listy nauczonych pozycji.

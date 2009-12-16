@@ -24,7 +24,7 @@ namespace common {
 // ecp_teach_in_generator - klasa bazowa
 // ####################################################################################################
 
-ecp_teach_in_generator::ecp_teach_in_generator(common::task::task& _ecp_task) :
+teach_in::teach_in(common::task::task& _ecp_task) :
 	generator(_ecp_task)
   {
     pose_list.clear();
@@ -33,13 +33,13 @@ ecp_teach_in_generator::ecp_teach_in_generator(common::task::task& _ecp_task) :
 
 // -------------------------------------------------------
 // destruktor
-ecp_teach_in_generator::~ecp_teach_in_generator(void)
+teach_in::~teach_in(void)
   {
     flush_pose_list();
   }
 
 // --------------------------------------------------------------------------
-void ecp_teach_in_generator::teach(lib::POSE_SPECIFICATION ps, const char *msg)
+void teach_in::teach(lib::POSE_SPECIFICATION ps, const char *msg)
   { // Uczenie robota
     lib::ECP_message ecp_to_ui_msg; // Przesylka z ECP do UI
     lib::UI_reply ui_to_ecp_rep; // Odpowiedz UI do ECP
@@ -90,7 +90,7 @@ void ecp_teach_in_generator::teach(lib::POSE_SPECIFICATION ps, const char *msg)
 
 // --------------------------------------------------------------------------
 // Zapis trajektorii do pliku
-void ecp_teach_in_generator::save_file(lib::POSE_SPECIFICATION ps)
+void teach_in::save_file(lib::POSE_SPECIFICATION ps)
   {
     lib::ECP_message ecp_to_ui_msg; // Przesylka z ECP do UI
     lib::UI_reply ui_to_ecp_rep; // Odpowiedz UI do ECP
@@ -182,7 +182,7 @@ void ecp_teach_in_generator::save_file(lib::POSE_SPECIFICATION ps)
 
 // --------------------------------------------------------------------------
 // Wczytanie trajektorii z pliku
-bool ecp_teach_in_generator::load_file_from_ui()
+bool teach_in::load_file_from_ui()
   {
     // Funkcja zwraca true jesli wczytanie trajektorii powiodlo sie,
     // false w przeciwnym razie
@@ -219,7 +219,7 @@ bool ecp_teach_in_generator::load_file_from_ui()
   // --------------------------------------------------------------------------
 
 
-bool ecp_teach_in_generator::load_file_with_path(const char* file_name)
+bool teach_in::load_file_with_path(const char* file_name)
   {
     // Funkcja zwraca true jesli wczytanie trajektorii powiodlo sie,
 
@@ -335,34 +335,34 @@ bool ecp_teach_in_generator::load_file_with_path(const char* file_name)
 
 
 // -------------------------------------------------------
-void ecp_teach_in_generator::flush_pose_list(void)
+void teach_in::flush_pose_list(void)
   {
     pose_list.clear();
   } // end: flush_pose_list
   // -------------------------------------------------------
-void ecp_teach_in_generator::initiate_pose_list(void)
+void teach_in::initiate_pose_list(void)
   {
     pose_list_iterator = pose_list.begin();
   }
 // -------------------------------------------------------
-void ecp_teach_in_generator::next_pose_list_ptr(void)
+void teach_in::next_pose_list_ptr(void)
   {
     if (pose_list_iterator != pose_list.end())
       pose_list_iterator++;
   }
 // -------------------------------------------------------
-void ecp_teach_in_generator::get_pose(ecp_taught_in_pose& tip)
+void teach_in::get_pose(ecp_taught_in_pose& tip)
   { // by Y
     tip = *pose_list_iterator;
   }
 // -------------------------------------------------------
 // Pobierz nastepna pozycje z listy
-void ecp_teach_in_generator::get_next_pose(double next_pose[MAX_SERVOS_NR])
+void teach_in::get_next_pose(double next_pose[MAX_SERVOS_NR])
   {
     memcpy(next_pose, pose_list_iterator->coordinates, MAX_SERVOS_NR*sizeof(double));
   }
 // -------------------------------------------------------
-void ecp_teach_in_generator::set_pose(lib::POSE_SPECIFICATION ps,
+void teach_in::set_pose(lib::POSE_SPECIFICATION ps,
     double motion_time, double coordinates[MAX_SERVOS_NR], int extra_info)
   {
     pose_list_iterator->arm_type = ps;
@@ -371,7 +371,7 @@ void ecp_teach_in_generator::set_pose(lib::POSE_SPECIFICATION ps,
     memcpy(pose_list_iterator->coordinates, coordinates, MAX_SERVOS_NR*sizeof(double));
   }
 // -------------------------------------------------------
-bool ecp_teach_in_generator::is_pose_list_element(void)
+bool teach_in::is_pose_list_element(void)
   {
     // sprawdza czy aktualnie wskazywany jest element listy, czy lista sie skonczyla
     if (pose_list_iterator != pose_list.end())
@@ -380,7 +380,7 @@ bool ecp_teach_in_generator::is_pose_list_element(void)
       return false;
   }
 // -------------------------------------------------------
-bool ecp_teach_in_generator::is_last_list_element(void)
+bool teach_in::is_last_list_element(void)
   {
     // sprawdza czy aktualnie wskazywany element listy ma nastepnik
     // jesli <> nulla
@@ -401,14 +401,14 @@ bool ecp_teach_in_generator::is_last_list_element(void)
   }
 // -------------------------------------------------------
 
-void ecp_teach_in_generator::create_pose_list_head(lib::POSE_SPECIFICATION ps,
+void teach_in::create_pose_list_head(lib::POSE_SPECIFICATION ps,
     double motion_time, const double coordinates[MAX_SERVOS_NR], int extra_info)
 {
 	pose_list.push_back(ecp_taught_in_pose(ps, motion_time, coordinates, extra_info));
 	pose_list_iterator = pose_list.begin();
 }
 
-void ecp_teach_in_generator::insert_pose_list_element(lib::POSE_SPECIFICATION ps,
+void teach_in::insert_pose_list_element(lib::POSE_SPECIFICATION ps,
     double motion_time, const double coordinates[MAX_SERVOS_NR], int extra_info)
   {
     pose_list.push_back(ecp_taught_in_pose(ps, motion_time,
@@ -417,7 +417,7 @@ void ecp_teach_in_generator::insert_pose_list_element(lib::POSE_SPECIFICATION ps
   }
 
 // -------------------------------------------------------
-int ecp_teach_in_generator::pose_list_length(void)
+int teach_in::pose_list_length(void)
   {
     return pose_list.size();
   }
@@ -426,7 +426,7 @@ int ecp_teach_in_generator::pose_list_length(void)
 // ----------------------  metoda    first_step -------------------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool ecp_teach_in_generator::first_step()
+bool teach_in::first_step()
   {
     //	 printf("w irp6ot_teach_in_generator::first_step\n");
     initiate_pose_list();
@@ -451,7 +451,7 @@ bool ecp_teach_in_generator::first_step()
 // ----------------------  metoda    next_step --------------------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool ecp_teach_in_generator::next_step()
+bool teach_in::next_step()
   {
     ecp_taught_in_pose tip; // Nauczona pozycja
 
@@ -525,7 +525,7 @@ bool ecp_teach_in_generator::next_step()
 
   }
 
-lib::ECP_TO_UI_COMMAND ecp_teach_in_generator::convert(lib::POSE_SPECIFICATION ps) const
+lib::ECP_TO_UI_COMMAND teach_in::convert(lib::POSE_SPECIFICATION ps) const
   {
     switch (ps)
       {

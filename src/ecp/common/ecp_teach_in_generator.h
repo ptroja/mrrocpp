@@ -14,7 +14,7 @@ namespace mrrocpp {
 namespace ecp {
 namespace common {
 
-class ecp_teach_in_generator : public common::generator::generator {
+class teach_in : public common::generator::generator {
 
 protected:
     std::list<ecp_taught_in_pose> pose_list;
@@ -23,11 +23,11 @@ protected:
 public:
   // -------------------------------------------------------
   // konstruktor
-  ecp_teach_in_generator (common::task::task& _ecp_task);
+  teach_in (common::task::task& _ecp_task);
 
   // -------------------------------------------------------
   // destruktor
-  virtual ~ecp_teach_in_generator (void);
+  virtual ~teach_in (void);
 
   	// Uczenie robota
 	void teach (lib::POSE_SPECIFICATION ps, const char* msg);

@@ -136,7 +136,7 @@ public:
 
 // po osiagnieciu powierzhcni zaczyna od MAX_SILA_DOCISKUEDP i osiaga SILA_DOCISKUEDP
 
-class y_drawing_teach_in_force : public ecp_teach_in_generator
+class y_drawing_teach_in_force : public teach_in
 {
 protected:
     lib::POSE_SPECIFICATION emptyps;
@@ -176,7 +176,7 @@ public:
 };
 
 
-class y_edge_follow_force : public ecp_teach_in_generator
+class y_edge_follow_force : public teach_in
 {
 protected:
 
@@ -200,7 +200,7 @@ public:
 }; // end:
 ///
 // --------------------------------------------------------------------------
-class legobrick_attach_force : public ecp_teach_in_generator
+class legobrick_attach_force : public teach_in
 {
 
 protected:
@@ -226,7 +226,7 @@ public:
 // --------------------------------------------------------------------------
 
 //
-class legobrick_detach_force : public ecp_teach_in_generator
+class legobrick_detach_force : public teach_in
 {
 
 protected:

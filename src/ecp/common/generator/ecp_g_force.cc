@@ -624,7 +624,7 @@ bool bias_edp_force::next_step()
 
 y_edge_follow_force::y_edge_follow_force(
 		common::task::task& _ecp_task, int step) :
-	ecp_teach_in_generator(_ecp_task),
+	teach_in(_ecp_task),
 	step_no(step),
 	tool_frame(0.0, 0.0, 0.25)
 {
@@ -797,7 +797,7 @@ bool y_edge_follow_force::next_step()
 //////////////////////////////////////////////////////////////////////////////////////////////////
 legobrick_attach_force::legobrick_attach_force(
 		common::task::task& _ecp_task, int step) :
-	ecp_teach_in_generator(_ecp_task),
+	teach_in(_ecp_task),
 	step_no(step)//, tool_frame(0.026551, -0.011313, 0.25 + 0.028)
 {
 	//macierz jednorodna przejscia na uklad narzedzia do przemieszczania klockow
@@ -916,7 +916,7 @@ bool legobrick_attach_force::next_step()
 //////////////////////////////////////////////////////////////////////////////////////////////////
 legobrick_detach_force::legobrick_detach_force(
 		common::task::task& _ecp_task, int step) :
-	ecp_teach_in_generator(_ecp_task),
+	teach_in(_ecp_task),
 	step_no(step)//, tool_frame(0.026551, -0.011313, 0.25 + 0.028)
 {
 	//macierz jednorodna przejscia na uklad narzedzia do przemieszczania klockow
@@ -1043,7 +1043,7 @@ bool legobrick_detach_force::next_step()
 
 y_drawing_teach_in_force::y_drawing_teach_in_force(
 		common::task::task& _ecp_task, int step) :
-	ecp_teach_in_generator(_ecp_task),
+	teach_in(_ecp_task),
 	step_no(step)
 {
 }

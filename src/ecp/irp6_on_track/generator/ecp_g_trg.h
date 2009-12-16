@@ -31,7 +31,7 @@ namespace generator {
 // #############    KLASA do odtwarzania listy pozycji i odczytywania linialow    ###############
 // ####################################################################
 
-class trajectory_reproduce : public common::ecp_teach_in_generator {
+class trajectory_reproduce : public common::teach_in {
 	private:
 		// Lista pozycji dla danego makrokroku - pozycje posrednie.
 	    std::list<common::ecp_taught_in_pose> interpose_list;

@@ -33,7 +33,7 @@ class fsautomat: public task
 		common::generator::tff_rubik_grab* rgg;
 		common::generator::tff_gripper_approach* gag;
 		common::generator::tff_rubik_face_rotate* rfrg;
-		common::ecp_teach_in_generator* tig;
+		common::teach_in* tig;
 		common::generator::bias_edp_force* befg;
 		common::generator::weight_meassure* wmg;
 		//podzadania

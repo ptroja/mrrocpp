@@ -23,7 +23,7 @@ namespace generator {
 // ---------------------irp6ot_hermite_spline_generator - constuctor ---------------------------
 // ----------------------------------------------------------------------------------------------
 hermite_spline::hermite_spline (common::task::task& _ecp_task,
-        double interval,double ts ) : ecp_teach_in_generator (_ecp_task)
+        double interval,double ts ) : teach_in (_ecp_task)
 {
     TSTEP=interval;
     INTERVAL=interval;
@@ -343,7 +343,7 @@ bool hermite_spline::next_step (  )
 // ----------------------------------------------------------------------------------------------
 natural_spline::natural_spline(common::task::task& _ecp_task,
         double interval, double ts):
-ecp_teach_in_generator (_ecp_task)
+teach_in (_ecp_task)
 {
     TSTEP=interval;
     INTERVAL=interval;

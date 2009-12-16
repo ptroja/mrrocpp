@@ -169,7 +169,7 @@ fsautomat::fsautomat(lib::configurator &_config) : task(_config),
 									{
 										xmlChar *argument = xmlNodeGetContent(child_node->children);
 										if(argument && xmlStrcmp(argument, (const xmlChar *)""));
-										tig = new common::ecp_teach_in_generator(*this);
+										tig = new common::teach_in(*this);
 										xmlFree(argument);
 									}
 									else if(!xmlStrcmp(child_node->children->name, (const xmlChar *)"bias_edp_force_gen"))
