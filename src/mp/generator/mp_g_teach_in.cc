@@ -97,12 +97,14 @@ void teach_in::save_file (lib::POSE_SPECIFICATION ps) {
 		case lib::JOINT:
 			strcpy (coordinate_type, "JOINT");
 			break;
+			/*
 		case lib::XYZ_ANGLE_AXIS:
 			strcpy (coordinate_type, "XYZ_ANGLE_AXIS");
 			break;
 		case lib::XYZ_EULER_ZYZ:
 			strcpy (coordinate_type, "XYZ_EULER_ZYZ");
 			break;
+			*/
 		case lib::PF_VELOCITY:
 			strcpy (coordinate_type, "lib::PF_VELOCITY");
 			break;
@@ -188,10 +190,12 @@ bool teach_in::load_file_with_path (const char* file_name, short robot_number) {
 		ps = lib::MOTOR;
 	} else if ( !strcmp(coordinate_type, "JOINT") )
 		ps = lib::JOINT;
+	/*
 	else if ( !strcmp(coordinate_type, "XYZ_ANGLE_AXIS") )
 		ps = lib::XYZ_ANGLE_AXIS;
 	else if ( !strcmp(coordinate_type, "XYZ_EULER_ZYZ") )
 		ps = lib::XYZ_EULER_ZYZ;
+		*/
 	else if ( !strcmp(coordinate_type, "lib::PF_VELOCITY") )
 		ps = lib::PF_VELOCITY;
 	else {
@@ -313,10 +317,12 @@ bool teach_in::load_file () {
 		ps = lib::MOTOR;
 	} else if ( !strcmp(coordinate_type, "JOINT") )
 		ps = lib::JOINT;
+	/*
 	else if ( !strcmp(coordinate_type, "XYZ_ANGLE_AXIS") )
 		ps = lib::XYZ_ANGLE_AXIS;
 	else if ( !strcmp(coordinate_type, "XYZ_EULER_ZYZ") )
 		ps = lib::XYZ_EULER_ZYZ;
+		*/
 	else if ( !strcmp(coordinate_type, "lib::PF_VELOCITY") )
 		ps = lib::PF_VELOCITY;
 	else {
@@ -563,6 +569,7 @@ bool teach_in::next_step () {
 				robot_m_iterator->second->mp_command.instruction.value_in_step_no = robot_m_iterator->second->mp_command.instruction.motion_steps;
 				memcpy (robot_m_iterator->second->mp_command.instruction.arm.pf_def.arm_coordinates, tip.coordinates, MAX_SERVOS_NR*sizeof (double));
 				break;
+				/*
 			case lib::C_XYZ_EULER_ZYZ:
 				robot_m_iterator->second->mp_command.instruction.instruction_type = lib::SET;
 				robot_m_iterator->second->mp_command.instruction.set_type = ARM_DV; // ARM
@@ -585,6 +592,7 @@ bool teach_in::next_step () {
 				memcpy (robot_m_iterator->second->mp_command.instruction.arm.pf_def.arm_coordinates, tip.coordinates, 6*sizeof (double));
 				robot_m_iterator->second->mp_command.instruction.arm.pf_def.gripper_coordinate = tip.coordinates[6];
 				break;
+				*/
 			default:
 				throw MP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 		} // end: switch
@@ -614,6 +622,7 @@ bool teach_in::next_step () {
 				robot_m_iterator->second->mp_command.instruction.value_in_step_no = robot_m_iterator->second->mp_command.instruction.motion_steps;
 				memcpy (robot_m_iterator->second->mp_command.instruction.arm.pf_def.arm_coordinates, tip.irp6p_coordinates, MAX_SERVOS_NR*sizeof (double));
 				break;
+				/*
 			case lib::C_XYZ_EULER_ZYZ:
 				robot_m_iterator->second->mp_command.instruction.instruction_type = lib::SET;
 				robot_m_iterator->second->mp_command.instruction.set_type = ARM_DV; // ARM
@@ -636,6 +645,7 @@ bool teach_in::next_step () {
 				memcpy (robot_m_iterator->second->mp_command.instruction.arm.pf_def.arm_coordinates, tip.irp6p_coordinates, 6*sizeof (double));
 				robot_m_iterator->second->mp_command.instruction.arm.pf_def.gripper_coordinate = tip.irp6p_coordinates[6];
 				break;
+				*/
 			default:
 				throw MP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 		} // end: switch

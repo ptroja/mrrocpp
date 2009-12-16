@@ -1099,7 +1099,7 @@ void rubik_cube_solver::departure_op()
 
 void rubik_cube_solver::gripper_opening(double track_increment, double postument_increment, int motion_time)
 {
-
+/*
 	lib::trajectory_description tdes;
 
 	tdes.arm_type = lib::XYZ_EULER_ZYZ;
@@ -1137,6 +1137,7 @@ void rubik_cube_solver::gripper_opening(double track_increment, double postument
 	tcg.robot_m = robot_m;
 
 	tcg.Move();
+	*/
 }
 
 

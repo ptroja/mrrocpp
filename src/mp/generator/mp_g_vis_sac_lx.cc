@@ -28,27 +28,27 @@ namespace generator {
 double alfa;
 double beta;
 double gammax;
- 
+
 double measure[6][5];
 double measure_v[6][5];
 double measure_a[6][5];
 double measure_d[6][5];
 double measure_d2[6][5];
- 
+
 double stearing[6][5];
 double stearing_v[6][5];
 double stearing_a[6][5];
 double stearing_d[6][5];
 double stearing_d2[6][5];
- 
+
 double pose[6][5];
- 
+
 double frame1[4][4];
 double vec1[6];
 double lasty;
- 
+
 double lastframe[4][4];
- 
+
 double measure_aux[6];
 */
 //double measure_border_u[]={0.840, 0.150, 0.305, 0.606, 1.57, 3.12}; //Zmienic ogranicz Z
@@ -82,11 +82,11 @@ int steps2switch=0;
 
 /*
 int valid_measure;
- 
- 
- 
- 
- 
+
+
+
+
+
 double aux=0;
 double aux2=0;
 */
@@ -154,8 +154,9 @@ bool vis_sac_lx::first_step ()
     irp6ot->mp_command.instruction.set_type = RMODEL_DV; //ARM_DV;
     //irp6ot->mp_command.instruction.set_arm_type = lib::FRAME; //XYZ_EULER_ZYZ; //POSE_FORCE_TORQUE_AT_FRAME;
     //irp6ot->mp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
+    /*
     irp6ot->mp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
-
+*/
     irp6ot->mp_command.instruction.get_arm_type = lib::FRAME;
     //FRAME; //XYZ_EULER_ZYZ; //POSE_FORCE_TORQUE_AT_FRAME;
     irp6ot->mp_command.instruction.set_rmodel_type = lib::TOOL_FRAME;
@@ -670,10 +671,10 @@ bool vis_sac_lx::next_step ()
     for(int i=0;i<6;i++) {
     		 irp6ot->ecp_td.MPtoECP_force_xyz_torque_xyz[i] = -E_r_Ep[0][i]*5000;
     		  irp6ot->ecp_td.MPtoECP_force_xyz_torque_xyz[i] = -E_r_Ep[0][i]*100;
-     
-     
+
+
 }
-     
+
     */
     //	if(irp6ot_con) irp6p->ecp_td.MPselection_vector[i] = FORCE_SV_AX;
     //	else

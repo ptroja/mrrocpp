@@ -31,7 +31,7 @@ task* return_created_mp_task (lib::configurator &_config)
 
 void pr::mp_short_move_up(void)
 {
-
+/*
 	lib::trajectory_description tdes;
 
 	tdes.arm_type = lib::XYZ_EULER_ZYZ;
@@ -51,6 +51,7 @@ void pr::mp_short_move_up(void)
 	generator::tight_coop tcg(*this, tdes, tdes);
 	tcg.robot_m = robot_m;
 	tcg.Move();
+	*/
 }
 
 

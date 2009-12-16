@@ -354,7 +354,7 @@ bool haptic::first_step()
 
 	lib::Homog_matrix tool_frame(0.0, 0.0, 0.25);
 	tool_frame.get_frame_tab(irp6ot->mp_command.instruction.rmodel.tool_frame_def.tool_frame);
-
+/*
 	irp6p->mp_command.command = lib::NEXT_POSE;
 	irp6p->mp_command.instruction.instruction_type = lib::GET;
 	irp6p->mp_command.instruction.get_type = ARM_DV;
@@ -367,7 +367,7 @@ bool haptic::first_step()
 	irp6p->mp_command.instruction.interpolation_type = lib::TCIM;
 	irp6p->mp_command.instruction.motion_steps = td.internode_step_no;
 	irp6p->mp_command.instruction.value_in_step_no = td.value_in_step_no;
-
+*/
 	tool_frame.get_frame_tab(irp6p->mp_command.instruction.rmodel.tool_frame_def.tool_frame);
 
 	for (int i=0; i<3; i++) {

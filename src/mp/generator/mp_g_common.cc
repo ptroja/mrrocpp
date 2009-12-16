@@ -252,6 +252,7 @@ tight_coop::tight_coop(task::task& _mp_task, lib::trajectory_description irp6ot_
 
 bool tight_coop::first_step ()
 {
+	/*
     // Generacja trajektorii prostoliniowej o zadany przyrost polozenia i orientacji
     // Funkcja zwraca false gdy koniec generacji trajektorii
     // Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
@@ -274,6 +275,7 @@ bool tight_coop::first_step ()
     }
 
     return true;
+    */
 }
 
 // ----------------------------------------------------------------------------------------------

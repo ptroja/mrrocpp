@@ -36,6 +36,7 @@ two_robots_measures::two_robots_measures(task::task& _mp_task)
 // Pierwszy krok generatora.
 bool two_robots_measures::first_step()
 {
+	/*
 	idle_step_counter = 2;
 	// Ustawienie polecen dla robota na torze.
 	irp6ot = robot_m[lib::ROBOT_IRP6_ON_TRACK];
@@ -63,6 +64,7 @@ bool two_robots_measures::first_step()
 	for(int i=0; i<6; i++)
 		last_measure.irp6p[i] = 0.0;
 	return true;
+	*/
 }
 
 
