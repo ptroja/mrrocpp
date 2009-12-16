@@ -12,7 +12,7 @@ namespace task {
 class progpanel: public common::task::task  {
 protected:
 	common::generator::progpanel* ppg;
-//	ecp_teach_in_generator* tig;
+//	ecp_g_teach_in* tig;
 
 public:
 	// KONSTRUKTORY

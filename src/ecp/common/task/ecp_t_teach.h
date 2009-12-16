@@ -14,7 +14,7 @@
 #define _ECP_T_TEACH_IRP6OT_H
 
 #include "ecp/common/task/ecp_task.h"
-#include "ecp/common/ecp_teach_in_generator.h"
+#include "ecp/common/ecp_g_teach_in.h"
 
 namespace mrrocpp {
 namespace ecp {

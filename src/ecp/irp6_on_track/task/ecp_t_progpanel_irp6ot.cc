@@ -33,7 +33,7 @@ namespace task {
 	return 0;
 }
 
-int create_grab_path(double *object_coordinates, ecp_teach_in_generator generator)
+int create_grab_path(double *object_coordinates, ecp_g_teach_in generator)
 {
 	int i;
 	double okolica[7], chwyt[7];

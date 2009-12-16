@@ -28,7 +28,7 @@ lego_brick::lego_brick(lib::configurator &_config) : task(_config)
 	//rgg = new ecp_tff_rubik_grab_generator (*this, 8);
 	//gag = new ecp_tff_gripper_approach_generator (*this, 8);
 	//rfrg = new ecp_tff_rubik_face_rotate_generator (*this, 8);
-	//tig = new ecp_teach_in_generator (*this);
+	//tig = new ecp_g_teach_in (*this);
 	//befg = new bias_edp_force_generator (*this);
 	sg = new common::generator::smooth (*this, true);
 	//wmg = new weight_meassure_generator(*this, 1);

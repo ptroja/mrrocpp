@@ -18,7 +18,7 @@
 
 // Naglowek zawierajacy klase ecp_mp_force_sensor.
 #include "ecp_mp/sensor/ecp_mp_s_force.h"
-#include "ecp/common/ecp_teach_in_generator.h"
+#include "ecp/common/ecp_g_teach_in.h"
 
 namespace mrrocpp {
 namespace ecp {

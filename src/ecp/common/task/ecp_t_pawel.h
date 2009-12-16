@@ -16,7 +16,7 @@ namespace task {
 class pawel: public common::task::task  {
 	protected:
 		//	ecp_tff_nose_run_generator* nrg;
-		//	ecp_teach_in_generator* tig;
+		//	ecp_g_teach_in* tig;
 		generator::pawel* pg;
 		double x,y,z;
 

@@ -67,7 +67,7 @@ task* return_created_ecp_task (lib::configurator &_config)
 	//	nrg = new ecp_tff_nose_run_generator(*this, 8);
 	//	nrg->sensor_m = sensor_m;
 	//	nrg->configure (true, true, true, true, true, true, true);  // wszystkie podatne
-	//	tig = new ecp_teach_in_generator (*this);
+	//	tig = new ecp_g_teach_in (*this);
 	//	pg = new pawel_generator (*this);
 	//	nrg->sensor_m = sensor_m;
 

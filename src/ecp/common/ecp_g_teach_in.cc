@@ -6,7 +6,7 @@
 #include <fstream>
 #include <unistd.h>
 
-#include "ecp/common/ecp_teach_in_generator.h"
+#include "ecp/common/ecp_g_teach_in.h"
 
 #if defined(USE_MESSIP_SRR)
 #include "lib/messip/messip_dataport.h"
@@ -21,7 +21,7 @@ namespace common {
 // ####################################################################################################
 
 // ####################################################################################################
-// ecp_teach_in_generator - klasa bazowa
+// ecp_g_teach_in - klasa bazowa
 // ####################################################################################################
 
 teach_in::teach_in(common::task::task& _ecp_task) :

@@ -8,7 +8,7 @@
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 
-#include "ecp/common/ecp_teach_in_generator.h"
+#include "ecp/common/ecp_g_teach_in.h"
 
 namespace mrrocpp {
 namespace ecp {
