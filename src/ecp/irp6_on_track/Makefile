@@ -20,10 +20,10 @@ BINARIES =			ecp_pr \
 				ecp_irp6ot_pouring \
 				ecp_irp6ot_multiplayer \
 				ecp_irp6ot_legobrick \
-				generator/ecp_g_vis_pb_eol_sac_irp6ot \
-				generator/ecp_g_vis_pb_eih_irp6ot \
-				generator/ecp_g_vis_ib_eih_irp6ot \
-				generator/ecp_g_vis_weights_driven_irp6ot \
+				ecp_vis_pb_eol_sac_irp6ot \
+				ecp_vis_pb_eih_irp6ot \
+				ecp_vis_ib_eih_irp6ot \
+				ecp_vis_weights_driven_irp6ot \
 				ecp_draughts \
 				ecp_spots_recognition \
 				ecp_pw_kolo\
@@ -178,20 +178,20 @@ ecp_irp6ot_multiplayer: task/ecp_t_multiplayer_irp6ot.o ../common/task/ecp_st_go
 						../common/generator/ecp_g_jarosz.o ../common/generator/ecp_g_operator_reaction_condition.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 #-----------------------------------------------------------------------------------------------------------------------#
-generator/ecp_g_vis_pb_eol_sac_irp6ot: task/ecp_t_vis_pb_eol_sac_irp6ot.o generator/ecp_g_vis_pb_eol_sac_irp6ot.o \
+ecp_vis_pb_eol_sac_irp6ot: task/ecp_t_vis_pb_eol_sac_irp6ot.o generator/ecp_g_vis_pb_eol_sac_irp6ot.o \
 						$(ECP_MPDIR)/sensor/ecp_mp_s_vis_sac_lx.o $(SHOBJ) 
 	$(LD) $(LDFLAGS) -o $@ $^
 #-----------------------------------------------------------------------------------------------------------------------#
-generator/ecp_g_vis_pb_eih_irp6ot: task/ecp_t_vis_pb_eih_irp6ot.o generator/ecp_g_vis_pb_eih_irp6ot.o \
+ecp_vis_pb_eih_irp6ot: task/ecp_t_vis_pb_eih_irp6ot.o generator/ecp_g_vis_pb_eih_irp6ot.o \
 						$(ECP_MPDIR)/sensor/ecp_mp_s_vis_sac_lx.o $(SHOBJ) 
 	$(LD) $(LDFLAGS) -o $@ $^
 #-----------------------------------------------------------------------------------------------------------------------#
-generator/ecp_g_vis_weights_driven_irp6ot: task/ecp_t_vis_weights_driven_irp6ot.o generator/ecp_g_vis_weights_driven_irp6ot.o generator/ecp_g_vis_pb_eol_sac_irp6ot.o \
+ecp_vis_weights_driven_irp6ot: task/ecp_t_vis_weights_driven_irp6ot.o generator/ecp_g_vis_weights_driven_irp6ot.o generator/ecp_g_vis_pb_eol_sac_irp6ot.o \
 						generator/ecp_g_vis_pb_eih_irp6ot.o generator/ecp_g_vis_ib_eih_irp6ot.o $(ECP_MPDIR)/sensor/ecp_mp_s_vis_sac_lx.o $(SHOBJ) 
 	$(LD) $(LDFLAGS) -o $@ $^
 
 #-----------------------------------------------------------------------------------------------------------------------#
-generator/ecp_g_vis_ib_eih_irp6ot: task/ecp_t_vis_ib_eih_irp6ot.o generator/ecp_g_vis_ib_eih_irp6ot.o \
+ecp_vis_ib_eih_irp6ot: task/ecp_t_vis_ib_eih_irp6ot.o generator/ecp_g_vis_ib_eih_irp6ot.o \
 						$(ECP_MPDIR)/sensor/ecp_mp_s_vis_sac_lx.o $(SHOBJ) 
 	$(LD) $(LDFLAGS) -o $@ $^
 #-----------------------------------------------------------------------------------------------------------------------#
