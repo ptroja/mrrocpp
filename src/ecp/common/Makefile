@@ -50,7 +50,7 @@ libecp.so: $(ECPOBJ_SHARED)
 #	${INSTALL} ${BINARIES} $(BINDIR)
 #-----------------------------------------------------------------------------------------------------------------------#
 clean:
-	@rm -f *.a *.o *.so *.err ${BINARIES} ./.deps/*.P
+	@rm -f *.a *.o *.so *.err ${BINARIES} ./.deps/*.P ./task/*.o ./task/*.err ./generator/*.o ./generator/*.err
 #-----------------------------------------------------------------------------------------------------------------------#
 
 include $(HOMEDIR)/depend.mk
