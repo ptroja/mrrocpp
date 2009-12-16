@@ -1921,7 +1921,7 @@ pcbird_nose_run::pcbird_nose_run(common::task::task& _ecp_task,
 
 bool pcbird_nose_run::first_step()
 {
-	//b�dziemy pobierali dane o robocie
+	//bedziemy pobierali dane o robocie
 	the_robot->ecp_command.instruction.instruction_type = lib::GET;
 	the_robot->ecp_command.instruction.get_type = ARM_DV;
 	the_robot->ecp_command.instruction.get_arm_type = lib::FRAME;
@@ -1938,7 +1938,7 @@ bool pcbird_nose_run::next_step()
 	++count;
 
 	//co jakis czas generator sie zatrzymuje
-	if (count > 50){
+	if (count > 10){
 		count = 0;
 		return false;
 	}

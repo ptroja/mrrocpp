@@ -26,7 +26,7 @@ void calibration::main_task_algorithm(void)
 	fdf.params = (void*)&ofp;
 
 //TODO: START -> acq_task -> write_data(ofp)
-	ofp.number_of_measures = 400;
+	ofp.number_of_measures = 1000;
 	// translation vector (from robot base to tool frame) - received from MRROC
 	ofp.k = gsl_vector_calloc (3*ofp.number_of_measures);
 	// rotation matrix (from robot base to tool frame) - received from MRROC
@@ -37,16 +37,16 @@ void calibration::main_task_algorithm(void)
 	ofp.M = gsl_matrix_calloc (3*ofp.number_of_measures, 3);
 
 	FILE *FP;
-	FP = fopen("../trj/acquire/Mp27.txt", "r");
+	FP = fopen("../data/calibration/M_pcbird.txt", "r");
 	gsl_matrix_fscanf(FP,ofp.M);
 	fclose(FP);
-	FP = fopen("../trj/acquire/mp27.txt","r");
+	FP = fopen("../data/calibration/m_pcbird.txt","r");
 	gsl_vector_fscanf(FP,ofp.m);
 	fclose(FP);
-	FP = fopen("../trj/acquire/kp27.txt","r");
+	FP = fopen("../data/calibration/k_pcbird.txt","r");
 	gsl_vector_fscanf(FP,ofp.k);
 	fclose(FP);
-	FP = fopen("../trj/acquire/Kp27.txt","r");
+	FP = fopen("../data/calibration/K_pcbird.txt","r");
 	gsl_matrix_fscanf(FP,ofp.K);
 	fclose(FP);
 //TODO: STOP -> acq_task -> write_data(ofp)

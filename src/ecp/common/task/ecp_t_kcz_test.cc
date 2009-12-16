@@ -39,15 +39,14 @@ void kcz_test::main_task_algorithm(void ) {
 
 	smoothgen2->set_absolute();
 
-	smoothgen2->load_coordinates(lib::XYZ_ANGLE_AXIS, 0.816, 2.075, 0.186, 0.008*3.127, 0.999*3.127, 0.009*3.127, 0.074, 0.000, false);
+	smoothgen2->load_coordinates(lib::XYZ_ANGLE_AXIS, -0.289, 1.08, -0.2, 0.762*3.11, 0.648*3.11, -0.019*3.11, 0.074, 0.000, false);
 	smoothgen2->Move();
 
-	double vv[MAX_SERVOS_NR]={0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2};
+	double vv[MAX_SERVOS_NR]={0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3};
 	double aa[MAX_SERVOS_NR]={1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
 
 	do {
-//	smoothgen2->load_coordinates(lib::XYZ_ANGLE_AXIS, 0.763, 2.602, 0.017, 0.008*3.127, 0.999*3.127, 0.009*3.127, 0.074, 0.000, false);
-	smoothgen2->load_coordinates(lib::XYZ_ANGLE_AXIS, vv, aa, sensor_m[lib::SENSOR_PCBIRD]->image.sensor_union.pcbird.x + 0.763, sensor_m[lib::SENSOR_PCBIRD]->image.sensor_union.pcbird.y + 2.57, sensor_m[lib::SENSOR_PCBIRD]->image.sensor_union.pcbird.z - 0.02, 0.008*3.127, 0.999*3.127, 0.009*3.127, 0.074, 0.000, false);
+	smoothgen2->load_coordinates(lib::XYZ_ANGLE_AXIS, vv, aa, sensor_m[lib::SENSOR_PCBIRD]->image.sensor_union.pcbird.x - 0.315, -1.0 * sensor_m[lib::SENSOR_PCBIRD]->image.sensor_union.pcbird.y + 1.216, -1.0 * sensor_m[lib::SENSOR_PCBIRD]->image.sensor_union.pcbird.z - 0.081 + 0.1, 0.762*3.11, 0.648*3.11, -0.019*3.11, 0.074, 0.000, false);
 	smoothgen2->Move();
 	} while(true);
 
