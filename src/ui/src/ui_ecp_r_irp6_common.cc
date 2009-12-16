@@ -241,10 +241,13 @@ void ui_common_robot::set_tool_xyz_angle_axis ( double tool_vector[6] )
 
     ecp->ecp_command.instruction.instruction_type = lib::SET;
     ecp->ecp_command.instruction.set_type = RMODEL_DV; // RMODEL
-    ecp->ecp_command.instruction.set_rmodel_type = lib::TOOL_XYZ_ANGLE_AXIS;
-    ecp->ecp_command.instruction.get_rmodel_type = lib::TOOL_XYZ_ANGLE_AXIS;
+    ecp->ecp_command.instruction.set_rmodel_type = lib::TOOL_FRAME;
+    ecp->ecp_command.instruction.get_rmodel_type = lib::TOOL_FRAME;
 
-    memcpy (ecp->ecp_command.instruction.rmodel.tool_coordinate_def.tool_coordinates, tool_vector, 6*sizeof(double) );
+    lib::Homog_matrix tmp;
+    tmp.set_xyz_angle_axis(tool_vector);
+    tmp.get_frame_tab(ecp->ecp_command.instruction.rmodel.tool_frame_def.tool_frame);
+
     execute_motion();
 }
 // ---------------------------------------------------------------
@@ -257,10 +260,13 @@ void ui_common_robot::set_tool_xyz_euler_zyz ( double tool_vector[6] )
 
     ecp->ecp_command.instruction.instruction_type = lib::SET;
     ecp->ecp_command.instruction.set_type = RMODEL_DV; // RMODEL
-    ecp->ecp_command.instruction.set_rmodel_type = lib::TOOL_XYZ_EULER_ZYZ;
-    ecp->ecp_command.instruction.get_rmodel_type = lib::TOOL_XYZ_EULER_ZYZ;
+    ecp->ecp_command.instruction.set_rmodel_type = lib::TOOL_FRAME;
+    ecp->ecp_command.instruction.get_rmodel_type = lib::TOOL_FRAME;
 
-    memcpy (ecp->ecp_command.instruction.rmodel.tool_coordinate_def.tool_coordinates, tool_vector, 6*sizeof(double) );
+    lib::Homog_matrix tmp;
+    tmp.set_xyz_euler_zyz(tool_vector);
+    tmp.get_frame_tab(ecp->ecp_command.instruction.rmodel.tool_frame_def.tool_frame);
+
     execute_motion();
 }
 // ---------------------------------------------------------------
@@ -275,12 +281,15 @@ void ui_common_robot::read_tool_xyz_angle_axis ( double tool_vector[6] )
     // Zlecenie odczytu numeru modelu i korektora kinematyki
     ecp->ecp_command.instruction.instruction_type = lib::GET;
     ecp->ecp_command.instruction.get_type = RMODEL_DV; // RMODEL
-    ecp->ecp_command.instruction.set_rmodel_type = lib::TOOL_XYZ_ANGLE_AXIS;
-    ecp->ecp_command.instruction.get_rmodel_type = lib::TOOL_XYZ_ANGLE_AXIS;
+    ecp->ecp_command.instruction.set_rmodel_type = lib::TOOL_FRAME;
+    ecp->ecp_command.instruction.get_rmodel_type = lib::TOOL_FRAME;
 
     execute_motion();
 
-    memcpy (tool_vector, ecp->reply_package.rmodel.tool_coordinate_def.tool_coordinates, 6*sizeof(double) );
+    lib::Homog_matrix tmp;
+    tmp.set_frame_tab(ecp->reply_package.rmodel.tool_frame_def.tool_frame);
+    tmp.get_xyz_angle_axis(tool_vector);
+
 }
 // ---------------------------------------------------------------
 
@@ -293,12 +302,14 @@ void ui_common_robot::read_tool_xyz_euler_zyz ( double tool_vector[6] )
     // Zlecenie odczytu numeru modelu i korektora kinematyki
     ecp->ecp_command.instruction.instruction_type = lib::GET;
     ecp->ecp_command.instruction.get_type = RMODEL_DV; // RMODEL
-    ecp->ecp_command.instruction.set_rmodel_type = lib::TOOL_XYZ_EULER_ZYZ;
-    ecp->ecp_command.instruction.get_rmodel_type = lib::TOOL_XYZ_EULER_ZYZ;
+    ecp->ecp_command.instruction.set_rmodel_type = lib::TOOL_FRAME;
+    ecp->ecp_command.instruction.get_rmodel_type = lib::TOOL_FRAME;
 
     execute_motion();
+    lib::Homog_matrix tmp;
+    tmp.set_frame_tab(ecp->reply_package.rmodel.tool_frame_def.tool_frame);
+    tmp.get_xyz_euler_zyz(tool_vector);
 
-    memcpy (tool_vector, ecp->reply_package.rmodel.tool_coordinate_def.tool_coordinates, 6*sizeof(double) );
 }
 // ---------------------------------------------------------------
 

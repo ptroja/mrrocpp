@@ -504,7 +504,7 @@ enum INSTRUCTION_TYPE {
 //------------------------------------------------------------------------------
 enum RMODEL_SPECIFICATION {
 	INVALID_RMODEL,
-	TOOL_FRAME, TOOL_XYZ_ANGLE_AXIS, TOOL_XYZ_EULER_ZYZ, TOOL_AS_XYZ_EULER_ZY,
+	TOOL_FRAME,
 	ARM_KINEMATIC_MODEL,
 	SERVO_ALGORITHM,
 	FORCE_TOOL,
@@ -659,13 +659,6 @@ typedef union c_buffer_rmodel
 		frame_tab tool_frame;
 	}
 	tool_frame_def;
-	//----------------------------------------------------------
-	struct
-	{
-		/*! XYZ + tool orientation relative to the collar. */
-		double tool_coordinates[6];
-	}
-	tool_coordinate_def;
 	//----------------------------------------------------------
 	struct
 	{
@@ -867,18 +860,6 @@ typedef union r_buffer_rmodel
 		// 	uint8_t address_byte;
 	}
 	tool_frame_def;
-	//----------------------------------------------------------
-	struct
-	{
-		/*!
-		 *  XYZ + orientacja narzedzia wzgledem kolnierza.
-		 *  @todo Translate to English.
-		 */
-		double tool_coordinates[6];
-		//*! Byte for calculating the command's length. */
-		// 	uint8_t address_byte;
-	}
-	tool_coordinate_def;
 	//----------------------------------------------------------
 	struct
 	{

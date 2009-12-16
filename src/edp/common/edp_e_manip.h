@@ -43,23 +43,7 @@ protected:
 
     // lib::r_buffer
 
-    void tool_frame_2_xyz_aa (void);
-    // Przeksztalcenie definicji narzedzia z postaci
-    // TOOL_FRAME do postaci TOOL_XYZ_ANGLE_AXIS oraz przepisanie wyniku
-    // przeksztalcenia do wewnetrznych struktur danych
-    // REPLY_BUFFER
 
-    ////////////////////////////K
-
-    void tool_axially_symmetrical_frame_2_xyz_eul_zy (void);
-
-    //////////////////////////K
-
-    void tool_frame_2_xyz_eul_zyz (void);
-    // Przeksztalcenie definicji narzedzia z postaci
-    // TOOL_FRAME do postaci TOOL_XYZ_EULER_ZYZ oraz przepisanie wyniku
-    // przeksztalcenia do wewnetrznych struktur danych
-    // REPLY_BUFFER
     void tool_frame_2_frame_rep (void);
     // Przepisanie definicji narzedzia danej w postaci TOOL_FRAME
     // z wewnetrznych struktur danych TRANSFORMATORa
@@ -77,23 +61,6 @@ protected:
     // do wewnetrznych struktur danych REPLY_BUFFER
 
 
-    void tool_xyz_aa_2_frame (lib::c_buffer &instruction);
-    // Przeksztalcenie definicji narzedzia z postaci
-    // TOOL_XYZ_ANGLE_AXIS do postaci TOOL_FRAME oraz przepisanie wyniku
-    // przeksztalcenia do wewnetrznych struktur danych
-    // TRANSFORMATORa
-
-    ////////////////////////////K
-
-    void tool_axially_symmetrical_xyz_eul_zy_2_frame(lib::c_buffer *instruction);
-
-
-    ///////////////////////////K
-    void tool_xyz_eul_zyz_2_frame (lib::c_buffer &instruction);
-    // Przeksztalcenie definicji narzedzia z postaci
-    // TOOL_XYZ_EULER_ZYZ do postaci TOOL_FRAME oraz przepisanie wyniku
-    // przeksztalcenia do wewnetrznych struktur danych
-    // TRANSFORMATORa
     void tool_frame_2_frame (lib::c_buffer &instruction);
     // Przepisanie definicji narzedzia danej w postaci TOOL_FRAME
     // do wewnetrznych struktur danych TRANSFORMATORa

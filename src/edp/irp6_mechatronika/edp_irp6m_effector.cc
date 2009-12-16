@@ -65,16 +65,6 @@ void effector::set_rmodel (lib::c_buffer &instruction)
         // przepisa specyfikacj do TRANSFORMATORa
         tool_frame_2_frame(instruction);
         break;
-    case lib::TOOL_XYZ_ANGLE_AXIS:
-        //printf("TOOL_XYZ_ANGLE_AXIS\n");
-        // przeksztaci i przepisa specyfikacj do TRANSFORMATORa
-        tool_xyz_aa_2_frame(instruction);
-        break;
-    case lib::TOOL_XYZ_EULER_ZYZ:
-        //printf("TOOL_XYZ_EULER_ZYZ\n");
-        // przeksztaci i przepisa specyfikacj do TRANSFORMATORa
-        tool_xyz_eul_zyz_2_frame(instruction);
-        break;
     case lib::ARM_KINEMATIC_MODEL:
         //printf("ARM_KINEMATIC_MODEL\n");
         // Ustawienie modelu kinematyki.
@@ -114,16 +104,6 @@ void effector::get_rmodel (lib::c_buffer &instruction)
         //printf("TOOL_FRAME\n");
         // przepisac specyfikacje z TRANSFORMATORa do bufora wysylkowego
         tool_frame_2_frame_rep();
-        break;
-    case lib::TOOL_XYZ_ANGLE_AXIS:
-        //printf("TOOL_XYZ_ANGLE_AXIS\n");
-        // przeksztacic i przepisac specyfikacje z TRANSFORMATORa do bufora wysylkowego
-        tool_frame_2_xyz_aa();
-        break;
-    case lib::TOOL_XYZ_EULER_ZYZ:
-        //printf("TOOL_XYZ_EULER_ZYZ\n");
-        // przeksztacic i przepisac specyfikacje z TRANSFORMATORa do bufora wysylkowego
-        tool_frame_2_xyz_eul_zyz();
         break;
     case lib::ARM_KINEMATIC_MODEL:
         reply.rmodel_type = lib::ARM_KINEMATIC_MODEL;
