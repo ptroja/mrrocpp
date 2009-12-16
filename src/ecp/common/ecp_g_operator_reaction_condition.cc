@@ -2,7 +2,7 @@
 
 
 
-#include "ecp/common/ecp_operator_reaction_condition.h"
+#include "ecp/common/ecp_g_operator_reaction_condition.h"
 
 namespace mrrocpp {
 namespace ecp {
