@@ -16,7 +16,7 @@
 #include "lib/com_buf.h"
 
 #include "lib/srlib.h"
-#include "mp/mp.h"
+#include "mp/mp_taught_in_pose.h"
 
 #include "ecp_mp/task/ecp_mp_t_player.h"
 

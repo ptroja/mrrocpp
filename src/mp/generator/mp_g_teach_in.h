@@ -19,6 +19,8 @@
 // Konfigurator.
 #include "lib/configurator.h"
 #include "lib/timer.h"
+#include "mp/mp_taught_in_pose.h"
+
 
 namespace mrrocpp {
 namespace mp {
