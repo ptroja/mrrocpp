@@ -19,7 +19,7 @@
 
 #include "ecp_mp/sensor/ecp_mp_s_digital_scales.h"
 #include "ecp_mp/sensor/ecp_mp_s_force.h"
-#include "ecp/common/ecp_g_teach_in.h"
+#include "ecp/common/generator/ecp_g_teach_in.h"
 #include "ecp/common/ECP_main_error.h"
 
 namespace mrrocpp {

@@ -15,7 +15,7 @@
 #include "lib/impconst.h"
 
 #include "lib/matrix.h"
-#include "ecp/common/ecp_g_teach_in.h"
+#include "ecp/common/generator/ecp_g_teach_in.h"
 #include "ecp/common/ecp_operator_reaction_condition.h"
 
 namespace mrrocpp {

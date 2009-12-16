@@ -6,7 +6,7 @@
 #include <fstream>
 #include <unistd.h>
 
-#include "ecp/common/ecp_g_teach_in.h"
+#include "ecp/common/generator/ecp_g_teach_in.h"
 
 #if defined(USE_MESSIP_SRR)
 #include "lib/messip/messip_dataport.h"

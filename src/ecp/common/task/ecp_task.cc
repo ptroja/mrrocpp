@@ -7,7 +7,7 @@
 #include "lib/mis_fun.h"
 #include "ecp/common/task/ecp_task.h"
 #include "ecp/common/ECP_main_error.h"
-#include "ecp/common/ecp_g_teach_in.h"
+#include "ecp/common/generator/ecp_generator.h"
 
 #if defined(USE_MESSIP_SRR)
 #include "lib/messip/messip_dataport.h"
