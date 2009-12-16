@@ -332,14 +332,17 @@ int FCbtnChangeExternalMotorControl( PtWidget_t *widget, ApInfo_t *apinfo, PtCal
 	// Polecenie dla ECP.
 	ui_ecp_msg.command = lib::FC_CHANGE_CONTROL;
 	// Zmiana sterowania.
+	/*
 	if (ps == lib::MOTOR)
 		ui_ecp_msg.ps = lib::XYZ_EULER_ZYZ;
 	if (ps == lib::XYZ_EULER_ZYZ)
 		ui_ecp_msg.ps = lib::MOTOR;
+
 	if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(lib::UI_ECP_message), NULL, 0) == -1) {
 		 perror("FCbtnChangeExternalMotorControl: Send to ECP failed");
 	}else{
 		// Sterowanie przyrostami na walach silnikow.
+
 		if (ps == lib::MOTOR){
 			ps = lib::XYZ_EULER_ZYZ;
 			// Wypisanie na etykiecie  - czym sterujemy.
@@ -384,6 +387,7 @@ int FCbtnChangeExternalMotorControl( PtWidget_t *widget, ApInfo_t *apinfo, PtCal
 		// Odswiezenie okna.
 		PtDamageWidget(ABW_wndForceControl);
 		}; // end: else
+		*/
 	return( Pt_CONTINUE );
 	}; // end: FCbtnChangeExternalMotorControl
 
