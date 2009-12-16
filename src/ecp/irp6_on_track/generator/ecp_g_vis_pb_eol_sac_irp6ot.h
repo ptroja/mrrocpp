@@ -1,12 +1,12 @@
 ///////////////////////////////////////////////////////////
-//  ecp_vis_pb_eol_sac_irp6ot.h
-//  Implementation of the Class ecp_vis_pb_eol_sac_irp6ot
+//  generator/ecp_g_vis_pb_eol_sac_irp6ot.h
+//  Implementation of the Class generator/ecp_g_vis_pb_eol_sac_irp6ot
 //  Created on:      04-sie-2008 14:25:57
 //  Original author: tkornuta
 ///////////////////////////////////////////////////////////
 
 /*!
- * \file ecp_vis_pb_eol_sac_irp6ot.h
+ * \file generator/ecp_g_vis_pb_eol_sac_irp6ot.h
  * \brief Class implementing PB-EOL-SAC algorithm.
  * - class declaration
  * \author Maciej Staniak
@@ -16,7 +16,7 @@
 #if !defined(EA_B10EA6BB_2E03_4f87_8E50_B6482560D9BB__INCLUDED_)
 #define EA_B10EA6BB_2E03_4f87_8E50_B6482560D9BB__INCLUDED_
 
-#include "ecp/common/ecp_visual_servo.h"
+#include "ecp/common/generator/ecp_g_visual_servo.h"
 
 namespace mrrocpp {
 namespace ecp {

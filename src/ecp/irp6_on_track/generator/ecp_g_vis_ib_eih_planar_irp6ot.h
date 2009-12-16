@@ -1,5 +1,5 @@
 /*
- * ecp_vis_ib_eih_planar_irp6ot.h
+ * generator/ecp_g_vis_ib_eih_planar_irp6ot.h
  *
  *  Created on: Dec 9, 2008
  *      Author: pwilkows
@@ -8,7 +8,7 @@
 #ifndef ECP_VIS_IB_EIH_PLANAR_IRP6OT_H_
 #define ECP_VIS_IB_EIH_PLANAR_IRP6OT_H_
 
-#include "ecp/common/ecp_visual_servo.h"
+#include "ecp/common/generator/ecp_g_visual_servo.h"
 
 #include <string.h>
 #include <math.h>

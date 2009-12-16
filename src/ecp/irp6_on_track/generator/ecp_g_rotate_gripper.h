@@ -1,5 +1,5 @@
 /*
- * ecp_vis_ib_eih_planar_irp6ot.h
+ * generator/ecp_g_vis_ib_eih_planar_irp6ot.h
  *
  *  Created on: Dec 9, 2008
  *      Author: pwilkows

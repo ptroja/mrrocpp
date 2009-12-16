@@ -143,7 +143,7 @@ void ecp_task_vislx_irp6ot::main_task_algorithm(void)
 {
 	sr_ecp_msg->message("ECP - vislx for rover - press start button");
 	ecp_wait_for_start();
-	ecp_vis_sac_lx_generator ynrlg(*this, 4);
+	generator/ecp_g_vis_sac_lx_generator ynrlg(*this, 4);
 	ynrlg.sensor_m = sensor_m;
 
 	   for(;;) { // Wewnetrzna petla nieskoczona

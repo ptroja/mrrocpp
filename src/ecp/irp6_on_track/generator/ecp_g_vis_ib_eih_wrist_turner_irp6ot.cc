@@ -1,11 +1,11 @@
 /*
- * ecp_vis_ib_eih_wrist_turner_irp6ot.cc
+ * generator/ecp_g_vis_ib_eih_wrist_turner_irp6ot.cc
  *
  *  Created on: DEC 10, 2009
  *      Author: rtulwin
  */
 
-#include "ecp/irp6_on_track/ecp_vis_ib_eih_wrist_turner_irp6ot.h"
+#include "ecp/irp6_on_track/generator/ecp_g_vis_ib_eih_wrist_turner_irp6ot.h"
 #include <math.h>
 
 
@@ -13,7 +13,7 @@ namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
 
-ecp_vis_ib_eih_wrist_turner_irp6ot::ecp_vis_ib_eih_wrist_turner_irp6ot(common::task::task& _ecp_task) :
+	ecp_vis_ib_eih_wrist_turner_irp6ot::ecp_vis_ib_eih_wrist_turner_irp6ot(common::task::task& _ecp_task) :
 	common::ecp_visual_servo(_ecp_task) {
 
 }

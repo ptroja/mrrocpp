@@ -10,10 +10,10 @@
 #include "ecp_mp/task/ecp_mp_t_rcsc.h"
 
 #include "ecp/irp6_on_track/ecp_r_irp6ot.h"
-#include "ecp/irp6_on_track/ecp_vis_pb_eol_sac_irp6ot.h"
-#include "ecp/irp6_on_track/ecp_vis_pb_eih_irp6ot.h"
-#include "ecp/irp6_on_track/ecp_vis_ib_eih_irp6ot.h"
-#include "ecp/irp6_on_track/ecp_vis_weights_driven_irp6ot.h"
+#include "ecp/irp6_on_track/generator/ecp_g_vis_pb_eol_sac_irp6ot.h"
+#include "ecp/irp6_on_track/generator/ecp_g_vis_pb_eih_irp6ot.h"
+#include "ecp/irp6_on_track/generator/ecp_g_vis_ib_eih_irp6ot.h"
+#include "ecp/irp6_on_track/generator/ecp_g_vis_weights_driven_irp6ot.h"
 #include "ecp_mp/sensor/ecp_mp_s_vis.h"
 #include "ecp/irp6_on_track/task/ecp_t_vis_weights_driven_irp6ot.h"
 

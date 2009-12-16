@@ -1,12 +1,12 @@
 ///////////////////////////////////////////////////////////
-//  ecp_vis_weights_driven_irp6ot.cpp
-//  Implementation of the Class ecp_vis_weights_driven_irp6ot
+//  generator/ecp_g_vis_weights_driven_irp6ot.cpp
+//  Implementation of the Class generator/ecp_g_vis_weights_driven_irp6ot
 //  Created on:      04-sie-2008 14:25:49
 //  Original author: tkornuta
 ///////////////////////////////////////////////////////////
 
 /*!
- * \file ecp_vis_weight_driven_irp6ot.h
+ * \file generator/ecp_g_vis_weight_driven_irp6ot.h
  * \brief Class implementing switching algorithm.
  * - methods definiotion
  * \author Maciej Staniak
@@ -24,10 +24,10 @@
 #include "lib/srlib.h"
 
 #include "ecp/irp6_on_track/ecp_r_irp6ot.h"
-#include "ecp/irp6_on_track/ecp_vis_weights_driven_irp6ot.h"
+#include "ecp/irp6_on_track/generator/ecp_g_vis_weights_driven_irp6ot.h"
 
-#include "ecp/irp6_on_track/ecp_vis_pb_eol_sac_irp6ot.h"
-#include "ecp/irp6_on_track/ecp_vis_pb_eih_irp6ot.h"
+#include "ecp/irp6_on_track/generator/ecp_g_vis_pb_eol_sac_irp6ot.h"
+#include "ecp/irp6_on_track/generator/ecp_g_vis_pb_eih_irp6ot.h"
 
 #include "ecp_mp/sensor/ecp_mp_s_vis.h"
 #include "ecp/irp6_on_track/task/ecp_t_vis_weights_driven_irp6ot.h"
@@ -36,7 +36,7 @@ namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
 
-ecp_vis_weights_driven_irp6ot::ecp_vis_weights_driven_irp6ot(common::task::task& _ecp_task, int step) : common::ecp_visual_servo_manager(_ecp_task){
+	ecp_vis_weights_driven_irp6ot::ecp_vis_weights_driven_irp6ot(common::task::task& _ecp_task, int step) : common::ecp_visual_servo_manager(_ecp_task){
 
 	measure_border_u[0]=ecp_t.config.return_double_value("measure_border_u0");
 	measure_border_u[1]=ecp_t.config.return_double_value("measure_border_u1");
@@ -78,9 +78,9 @@ void ecp_vis_weights_driven_irp6ot::initalize_switching_parameters(){
 
 bool ecp_vis_weights_driven_irp6ot::next_step_without_constraints(){
 
-	//ecp_vis_pb_eol_sac_irp6ot pbeolsac(*_ecp_taskw, 4);
-	//ecp_vis_pb_eol_sac_irp6ot pbeolsac();
-//		ecp_vis_weights_driven_irp6ot ynrlg(*this, 4);
+	//generator/ecp_g_vis_pb_eol_sac_irp6ot pbeolsac(*_ecp_taskw, 4);
+	//generator/ecp_g_vis_pb_eol_sac_irp6ot pbeolsac();
+//		generator/ecp_g_vis_weights_driven_irp6ot ynrlg(*this, 4);
 std::cout << "N: " << node_counter << " " << pbeolsac->node_counter << std::endl;
 	//pbeolsac->next_step_without_constraints();
 	pbeih->next_step_without_constraints();

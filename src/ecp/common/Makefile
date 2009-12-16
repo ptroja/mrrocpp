@@ -14,7 +14,7 @@ ECPOBJ_SHARED = ECP_main_error.o $(ECP_MPDIR)/ecp_mp_generator.o \
 ECPOBJ = $(ECPOBJ_SHARED) \
 		ecp_m.o task/ecp_task.o $(ECP_MPDIR)/task/ecp_mp_task.o \
 		generator/ecp_generator.o generator/ecp_g_teach_in.o \
-		ecp_visual_servo_manager.o ecp_visual_servo.o \
+		generator/ecp_g_visual_servo_manager.o generator/ecp_g_visual_servo.o \
 		ecp_taught_in_pose.o \
 		$(ECP_MPDIR)/smooth_trajectory_pose.o $(ECP_MPDIR)/smooth2_trajectory_pose.o \
 		generator/ecp_g_smooth2.o \

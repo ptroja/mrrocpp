@@ -1,11 +1,11 @@
 /*
- * ecp_vis_ib_eih_object_tracker_irp6ot.cc
+ * generator/ecp_g_vis_ib_eih_object_tracker_irp6ot.cc
  *
  *  Created on: Sept 29, 2009
  *      Author: rtulwin
  */
 
-#include "ecp/irp6_on_track/ecp_vis_ib_eih_object_tracker_irp6ot.h"
+#include "ecp/irp6_on_track/generator/ecp_g_vis_ib_eih_object_tracker_irp6ot.h"
 #include <math.h>
 
 

@@ -1,12 +1,12 @@
 ///////////////////////////////////////////////////////////
-//  ecp_vis_weights_driven_irp6ot.h
-//  Implementation of the Class ecp_vis_weights_driven_irp6ot
+//  generator/ecp_g_vis_weights_driven_irp6ot.h
+//  Implementation of the Class generator/ecp_g_vis_weights_driven_irp6ot
 //  Created on:      04-sie-2008 14:25:49
 //  Original author: tkornuta
 ///////////////////////////////////////////////////////////
 
 /*!
- * \file ecp_vis_weight_driven_irp6ot.h
+ * \file generator/ecp_g_vis_weight_driven_irp6ot.h
  * \brief Class implementing switching algorithm.
  * - class declaration
  * \author Maciej Staniak
@@ -16,10 +16,10 @@
 #if !defined(EA_0ECAB625_4FB6_4695_B581_8BCA0028CF30__INCLUDED_)
 #define EA_0ECAB625_4FB6_4695_B581_8BCA0028CF30__INCLUDED_
 
-#include "ecp/common/ecp_visual_servo_manager.h"
-#include "ecp/irp6_on_track/ecp_vis_pb_eol_sac_irp6ot.h"
-#include "ecp/irp6_on_track/ecp_vis_pb_eih_irp6ot.h"
-#include "ecp/irp6_on_track/ecp_vis_ib_eih_irp6ot.h"
+#include "ecp/common/generator/ecp_g_visual_servo_manager.h"
+#include "ecp/irp6_on_track/generator/ecp_g_vis_pb_eol_sac_irp6ot.h"
+#include "ecp/irp6_on_track/generator/ecp_g_vis_pb_eih_irp6ot.h"
+#include "ecp/irp6_on_track/generator/ecp_g_vis_ib_eih_irp6ot.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -44,7 +44,7 @@ public:
 	double delta[6];
 	ecp_vis_pb_eol_sac_irp6ot* pbeolsac;
 	ecp_vis_pb_eih_irp6ot* pbeih;
-     ecp_vis_ib_eih_irp6ot* ibeih;
+    ecp_vis_ib_eih_irp6ot* ibeih;
 
 	/*!
 	 * Entities:
