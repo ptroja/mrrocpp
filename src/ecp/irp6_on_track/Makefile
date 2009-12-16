@@ -57,47 +57,47 @@ SHOBJ = ecp_r_irp6ot.o ../common/libecp.a $(LIBDIR)/libmrrocpp.a
 all: ${BINARIES}
 #-----------------------------------------------------------------------------------------------------------------------#
 ecp_haar: task/ecp_t_haar_irp6ot.o generator/ecp_g_rotate_gripper.o ../common/generator/ecp_g_force.o ../common/generator/ecp_g_t.o ../common/generator/ecp_g_smooth.o ../common/generator/ecp_g_jarosz.o\
-		../common/ecp_g_operator_reaction_condition.o ecp_vis_ib_eih_planar_irp6ot.o  $(ECP_MPDIR)/sensor/ecp_mp_s_cvfradia.o   $(SHOBJ)
+		../common/generator/ecp_g_operator_reaction_condition.o ecp_vis_ib_eih_planar_irp6ot.o  $(ECP_MPDIR)/sensor/ecp_mp_s_cvfradia.o   $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 
 #-----------------------------------------------------------------------------------------------------------------------#
 ecp_ttt: task/ecp_t_ttt.o ../common/generator/ecp_g_smooth.o ../common/generator/ecp_g_t.o ../common/generator/ecp_g_jarosz.o \
-                ../common/ecp_g_operator_reaction_condition.o ../common/generator/ecp_g_sleep.o $(SHOBJ)
+                ../common/generator/ecp_g_operator_reaction_condition.o ../common/generator/ecp_g_sleep.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 
 #-----------------------------------------------------------------------------------------------------------------------#
 ecp_ellipse: task/ecp_t_ellipse.o generator/ecp_g_ellipse.o ../common/generator/ecp_g_smooth.o ../common/generator/ecp_g_t.o ../common/generator/ecp_g_jarosz.o $(ECP_MPDIR)/sensor/ecp_mp_s_wiimote.o \
-                ../common/ecp_g_operator_reaction_condition.o ../common/generator/ecp_g_sleep.o $(SHOBJ)
+                ../common/generator/ecp_g_operator_reaction_condition.o ../common/generator/ecp_g_sleep.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 
 #-----------------------------------------------------------------------------------------------------------------------#
 ecp_wii: task/ecp_t_wii.o generator/ecp_g_wii.o ../common/generator/ecp_g_smooth.o ../common/generator/ecp_g_t.o ../common/generator/ecp_g_jarosz.o $(ECP_MPDIR)/sensor/ecp_mp_s_wiimote.o \
-                ../common/ecp_g_operator_reaction_condition.o ../common/generator/ecp_g_sleep.o $(SHOBJ)
+                ../common/generator/ecp_g_operator_reaction_condition.o ../common/generator/ecp_g_sleep.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 
 #-----------------------------------------------------------------------------------------------------------------------#
 ecp_wii_velocity: task/ecp_t_wii_velocity.o generator/ecp_g_wii_velocity.o ../common/generator/ecp_g_force.o ../common/generator/ecp_g_smooth.o ../common/generator/ecp_g_t.o ../common/generator/ecp_g_jarosz.o $(ECP_MPDIR)/sensor/ecp_mp_s_wiimote.o \
-                ../common/ecp_g_operator_reaction_condition.o ../common/generator/ecp_g_sleep.o $(SHOBJ)
+                ../common/generator/ecp_g_operator_reaction_condition.o ../common/generator/ecp_g_sleep.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 
 #-----------------------------------------------------------------------------------------------------------------------#
 ecp_wii_teach: task/ecp_t_wii_teach.o ../common/generator/ecp_g_force.o ../irp6_on_track/generator/ecp_g_wii_teach.o ../common/generator/ecp_g_smooth2.o ../common/generator/ecp_g_t.o ../common/generator/ecp_g_jarosz.o $(ECP_MPDIR)/sensor/ecp_mp_s_wiimote.o \
-                ../common/ecp_g_operator_reaction_condition.o ../common/generator/ecp_g_sleep.o $(SHOBJ)
+                ../common/generator/ecp_g_operator_reaction_condition.o ../common/generator/ecp_g_sleep.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 
 #-----------------------------------------------------------------------------------------------------------------------#
 ecp_pw_kolo: generator/ecp_g_pw_kolo.o task/ecp_t_pw_kolo_irp6ot.o ../common/generator/ecp_g_force.o ../common/task/ecp_st_go.o ../common/generator/ecp_g_smooth.o ../common/generator/ecp_g_t.o ../common/generator/ecp_g_jarosz.o\
-		../common/ecp_g_operator_reaction_condition.o ../common/generator/ecp_g_sleep.o generator/ecp_g_pw_kolo.o  $(SHOBJ)
+		../common/generator/ecp_g_operator_reaction_condition.o ../common/generator/ecp_g_sleep.o generator/ecp_g_pw_kolo.o  $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 #-----------------------------------------------------------------------------------------------------------------------#
 ecp_draughts: task/ecp_t_draughts.o ../common/generator/ecp_g_force.o ../common/task/ecp_st_go.o ../common/generator/ecp_g_smooth.o ../common/generator/ecp_g_t.o ../common/generator/ecp_g_jarosz.o\
-		 ../common/ecp_g_operator_reaction_condition.o $(ECP_MPDIR)/sensor/ecp_mp_s_cvfradia.o ../common/generator/ecp_g_sleep.o ecp_vis_ib_eih_planar_irp6ot.o\
+		 ../common/generator/ecp_g_operator_reaction_condition.o $(ECP_MPDIR)/sensor/ecp_mp_s_cvfradia.o ../common/generator/ecp_g_sleep.o ecp_vis_ib_eih_planar_irp6ot.o\
 		 $(ECP_MPDIR)/transmitter/ecp_mp_tr_draughtsAI.o ecp_vis_ib_eih_follower_irp6ot.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 
 #-----------------------------------------------------------------------------------------------------------------------#
 ecp_spots_recognition: task/ecp_t_spots_recognition.o ../common/generator/ecp_g_smooth.o ../common/generator/ecp_g_t.o ../common/generator/ecp_g_jarosz.o\
-		../common/generator/ecp_g_cvfradia.o $(ECP_MPDIR)/sensor/ecp_mp_s_cvfradia.o ../common/ecp_g_operator_reaction_condition.o $(ECP_MPDIR)/sensor/ecp_mp_s_schunk.o \
+		../common/generator/ecp_g_cvfradia.o $(ECP_MPDIR)/sensor/ecp_mp_s_cvfradia.o ../common/generator/ecp_g_operator_reaction_condition.o $(ECP_MPDIR)/sensor/ecp_mp_s_schunk.o \
 		../common/generator/ecp_g_force.o ../common/ecp_matrix4x4.o ecp_camera_to_tool.o generator/ecp_g_spots_recognition.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 #-----------------------------------------------------------------------------------------------------------------------#
@@ -108,14 +108,14 @@ ecp_kin_test_irp6ot: task/ecp_t_kin_test_irp6ot.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 #-----------------------------------------------------------------------------------------------------------------------#
 ecp_pr: ../common/generator/ecp_g_force.o task/ecp_t_pr_irp6ot.o $(ECP_MPDIR)/sensor/ecp_mp_s_schunk.o \
-		../common/generator/ecp_g_jarosz.o ../common/ecp_g_operator_reaction_condition.o $(SHOBJ)
+		../common/generator/ecp_g_jarosz.o ../common/generator/ecp_g_operator_reaction_condition.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 #-----------------------------------------------------------------------------------------------------------------------#
 ecp_irp6ot_rcsc: task/ecp_t_rcsc_irp6ot.o ../common/generator/ecp_g_force.o ../common/task/ecp_st_go.o ../common/generator/ecp_g_smooth.o ../common/generator/ecp_g_smooth2.o ../common/generator/ecp_g_t.o \
-		../common/generator/ecp_g_jarosz.o ../common/ecp_g_operator_reaction_condition.o ecp_vis_ib_eih_object_tracker_irp6ot.o $(SHOBJ)
+		../common/generator/ecp_g_jarosz.o ../common/generator/ecp_g_operator_reaction_condition.o ecp_vis_ib_eih_object_tracker_irp6ot.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 #-----------------------------------------------------------------------------------------------------------------------#
-ecp_jarosz_irp6ot: task/ecp_t_jarosz_irp6ot.o ../common/generator/ecp_g_jarosz.o ../common/ecp_g_operator_reaction_condition.o $(SHOBJ)
+ecp_jarosz_irp6ot: task/ecp_t_jarosz_irp6ot.o ../common/generator/ecp_g_jarosz.o ../common/generator/ecp_g_operator_reaction_condition.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@  $^
 #-----------------------------------------------------------------------------------------------------------------------#
 ecp_kbochnia: task/ecp_t_kbochnia_irp6ot.o ../common/generator/ecp_g_space.o $(SHOBJ)
@@ -142,7 +142,7 @@ ecp_fct: task/ecp_t_fct_irp6ot.o generator/ecp_g_fctg.o $(ECP_MPDIR)/sensor/ecp_
 ecp_tr: task/ecp_t_tr_irp6ot.o generator/ecp_g_trg.o generator/ecp_g_rsc.o $(ECP_MPDIR)/sensor/ecp_mp_s_force.o $(ECP_MPDIR)/sensor/ecp_mp_s_digital_scales.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 #-----------------------------------------------------------------------------------------------------------------------#
-ecp_pt: task/ecp_t_pt_irp6ot.o ../common/generator/ecp_g_jarosz.o ../common/ecp_g_operator_reaction_condition.o $(SHOBJ)
+ecp_pt: task/ecp_t_pt_irp6ot.o ../common/generator/ecp_g_jarosz.o ../common/generator/ecp_g_operator_reaction_condition.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 #-----------------------------------------------------------------------------------------------------------------------#
 ecp_playerjoy: task/ecp_t_playerjoy_irp6ot.o ../common/generator/ecp_g_pjg.o $(ECP_MPDIR)/transmitter/ecp_mp_tr_player.o $(LIBDIR)/libplayerc.a $(SHOBJ)
@@ -151,15 +151,15 @@ ecp_playerjoy: task/ecp_t_playerjoy_irp6ot.o ../common/generator/ecp_g_pjg.o $(E
 ecp_progpanel: task/ecp_t_progpanel_irp6ot.o ../common/generator/ecp_g_pp.o $(ECP_MPDIR)/sensor/ecp_mp_s_pp.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 #-----------------------------------------------------------------------------------------------------------------------#
-ecp_fr: task/ecp_t_fr_irp6ot.o ../common/generator/ecp_g_jarosz.o ../common/ecp_g_operator_reaction_condition.o $(SHOBJ)
+ecp_fr: task/ecp_t_fr_irp6ot.o ../common/generator/ecp_g_jarosz.o ../common/generator/ecp_g_operator_reaction_condition.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 #-----------------------------------------------------------------------------------------------------------------------#
 ecp_irp6ot_pouring: task/ecp_t_pouring_irp6ot.o ../common/task/ecp_st_go.o ../common/generator/ecp_g_smooth.o ../common/generator/ecp_g_t.o ../common/generator/ecp_g_jarosz.o \
-	../common/ecp_g_operator_reaction_condition.o $(SHOBJ)
+	../common/generator/ecp_g_operator_reaction_condition.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 #-----------------------------------------------------------------------------------------------------------------------#
 ecp_irp6ot_fsautomat: ../common/task/ecp_t_fsautomat.o ../../ecp_mp/Trajectory.o ../common/generator/ecp_g_force.o ../common/task/ecp_st_go.o ../common/generator/ecp_g_smooth.o \
-	../common/generator/ecp_g_t.o ../common/generator/ecp_g_jarosz.o ../common/ecp_g_operator_reaction_condition.o $(SHOBJ)
+	../common/generator/ecp_g_t.o ../common/generator/ecp_g_jarosz.o ../common/generator/ecp_g_operator_reaction_condition.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 #-----------------------------------------------------------------------------------------------------------------------#
 ecp_plot: task/ecp_t_plot_irp6ot.o ../common/generator/ecp_g_plot.o $(SHOBJ)
@@ -169,13 +169,13 @@ ecp_plot: task/ecp_t_plot_irp6ot.o ../common/generator/ecp_g_plot.o $(SHOBJ)
 #	$(LD) $(LDFLAGS) -o $@ $^ 
 #-----------------------------------------------------------------------------------------------------------------------#
 ecp_irp6ot_legobrick: task/ecp_t_legobrick_irp6ot.o ../common/generator/ecp_g_smooth.o ../common/generator/ecp_g_jarosz.o ../common/generator/ecp_g_force.o \
-						../common/ecp_g_operator_reaction_condition.o ../common/generator/ecp_g_t.o $(SHOBJ)
+						../common/generator/ecp_g_operator_reaction_condition.o ../common/generator/ecp_g_t.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 #-----------------------------------------------------------------------------------------------------------------------#
 ecp_irp6ot_multiplayer: task/ecp_t_multiplayer_irp6ot.o ../common/task/ecp_st_go.o $(ECP_MPDIR)/sensor/ecp_mp_s_schunk.o ../common/generator/ecp_g_smooth.o ../common/generator/ecp_g_force.o \
 						../common/generator/ecp_g_t.o \
 						generator/ecp_g_rover.o $(ECP_MPDIR)/sensor/ecp_mp_s_vis_sac_lx.o \
-						../common/generator/ecp_g_jarosz.o ../common/ecp_g_operator_reaction_condition.o $(SHOBJ)
+						../common/generator/ecp_g_jarosz.o ../common/generator/ecp_g_operator_reaction_condition.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 #-----------------------------------------------------------------------------------------------------------------------#
 ecp_vis_pb_eol_sac_irp6ot: task/ecp_t_vis_pb_eol_sac_irp6ot.o ecp_vis_pb_eol_sac_irp6ot.o \
@@ -195,19 +195,19 @@ ecp_vis_ib_eih_irp6ot: task/ecp_t_vis_ib_eih_irp6ot.o ecp_vis_ib_eih_irp6ot.o \
 						$(ECP_MPDIR)/sensor/ecp_mp_s_vis_sac_lx.o $(SHOBJ) 
 	$(LD) $(LDFLAGS) -o $@ $^
 #-----------------------------------------------------------------------------------------------------------------------#
-ecp_t_box_irp6ot: task/ecp_t_box_irp6ot.o ../common/generator/ecp_g_smooth.o ../common/generator/ecp_g_t.o ../common/generator/ecp_g_jarosz.o ../common/ecp_g_operator_reaction_condition.o $(SHOBJ)
+ecp_t_box_irp6ot: task/ecp_t_box_irp6ot.o ../common/generator/ecp_g_smooth.o ../common/generator/ecp_g_t.o ../common/generator/ecp_g_jarosz.o ../common/generator/ecp_g_operator_reaction_condition.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 #-----------------------------------------------------------------------------------------------------------------------#
-ecp_t_smooth2_test: task/ecp_t_smooth2_test.o ../common/generator/ecp_g_smooth2.o ../common/generator/ecp_g_t.o ../common/generator/ecp_g_jarosz.o ../common/ecp_g_operator_reaction_condition.o $(SHOBJ)
+ecp_t_smooth2_test: task/ecp_t_smooth2_test.o ../common/generator/ecp_g_smooth2.o ../common/generator/ecp_g_t.o ../common/generator/ecp_g_jarosz.o ../common/generator/ecp_g_operator_reaction_condition.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 #-----------------------------------------------------------------------------------------------------------------------#
-ecp_t_grab_cube_irp6ot: ecp_vis_ib_eih_object_tracker_irp6ot.o ecp_vis_ib_eih_wrist_turner_irp6ot.o ../common/generator/ecp_g_force.o task/ecp_t_grab_cube_irp6ot.o ../common/generator/ecp_g_smooth2.o ../common/generator/ecp_g_t.o ../common/generator/ecp_g_jarosz.o $(ECP_MPDIR)/sensor/ecp_mp_s_cvfradia.o ../common/ecp_g_operator_reaction_condition.o $(SHOBJ)
+ecp_t_grab_cube_irp6ot: ecp_vis_ib_eih_object_tracker_irp6ot.o ecp_vis_ib_eih_wrist_turner_irp6ot.o ../common/generator/ecp_g_force.o task/ecp_t_grab_cube_irp6ot.o ../common/generator/ecp_g_smooth2.o ../common/generator/ecp_g_t.o ../common/generator/ecp_g_jarosz.o $(ECP_MPDIR)/sensor/ecp_mp_s_cvfradia.o ../common/generator/ecp_g_operator_reaction_condition.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 #-----------------------------------------------------------------------------------------------------------------------#
-ecp_t_calib_axzb: ../common/task/ecp_t_calib_axzb.o ../common/task/ecp_t_calibration.o ../common/generator/ecp_g_smooth2.o ../common/generator/ecp_g_t.o ../common/generator/ecp_g_jarosz.o ../common/ecp_g_operator_reaction_condition.o $(SHOBJ)
+ecp_t_calib_axzb: ../common/task/ecp_t_calib_axzb.o ../common/task/ecp_t_calibration.o ../common/generator/ecp_g_smooth2.o ../common/generator/ecp_g_t.o ../common/generator/ecp_g_jarosz.o ../common/generator/ecp_g_operator_reaction_condition.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ -lgsl -lgslcblas $^
 #-----------------------------------------------------------------------------------------------------------------------#
-ecp_t_calib_axxb: ../common/task/ecp_t_calib_axxb.o ../common/task/ecp_t_calibration.o ../common/generator/ecp_g_smooth2.o ../common/generator/ecp_g_t.o ../common/generator/ecp_g_jarosz.o ../common/ecp_g_operator_reaction_condition.o $(SHOBJ)
+ecp_t_calib_axxb: ../common/task/ecp_t_calib_axxb.o ../common/task/ecp_t_calibration.o ../common/generator/ecp_g_smooth2.o ../common/generator/ecp_g_t.o ../common/generator/ecp_g_jarosz.o ../common/generator/ecp_g_operator_reaction_condition.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ -lgsl -lgslcblas $^ 
 #-----------------------------------------------------------------------------------------------------------------------#
 ecp_t_mboryn: task/ecp_t_mboryn.o generator/ecp_g_mboryn.o  $(SHOBJ)

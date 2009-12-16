@@ -89,7 +89,7 @@ ecp_nalewanie: \
 		../common/task/ecp_t_nalewanie.o \
 		../common/generator/ecp_g_smooth.o \
 		../common/generator/ecp_g_jarosz.o \
-		../common/ecp_g_operator_reaction_condition.o \
+		../common/generator/ecp_g_operator_reaction_condition.o \
 		$(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 
@@ -107,7 +107,7 @@ ecp_ttt: \
 		../common/task/ecp_t_ttt.o \
 		../common/generator/ecp_g_smooth.o \
 		../common/generator/ecp_g_jarosz.o \
-		../common/ecp_g_operator_reaction_condition.o \
+		../common/generator/ecp_g_operator_reaction_condition.o \
 		$(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 
@@ -117,7 +117,7 @@ ecp_ellipse: \
 		../common/generator/ecp_g_smooth.o \
 		../common/generator/ecp_g_ellipse.o \		
 		../common/generator/ecp_g_jarosz.o \
-		../common/ecp_g_operator_reaction_condition.o \
+		../common/generator/ecp_g_operator_reaction_condition.o \
 		$(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 
@@ -127,7 +127,7 @@ ecp_wii: \
 		../common/generator/ecp_g_smooth.o \
 		../common/generator/ecp_g_wii.o \
 		../common/generator/ecp_g_jarosz.o \
-		../common/ecp_g_operator_reaction_condition.o \
+		../common/generator/ecp_g_operator_reaction_condition.o \
 		$(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 
@@ -141,7 +141,7 @@ ecp_fsautomat: \
 		../common/generator/ecp_g_smooth.o \
 		../common/generator/ecp_g_t.o \
 		../common/generator/ecp_g_jarosz.o \
-		../common/ecp_g_operator_reaction_condition.o \
+		../common/generator/ecp_g_operator_reaction_condition.o \
 		$(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 	
@@ -170,7 +170,7 @@ ecp_visioncoordinates: \
 		../common/generator/ecp_g_visioncoordinates.o \
 		../common/generator/ecp_g_smooth.o \
 		../common/generator/ecp_g_jarosz.o \
-		../common/ecp_g_operator_reaction_condition.o \
+		../common/generator/ecp_g_operator_reaction_condition.o \
 		$(ECP_MPDIR)/sensor/ecp_mp_s_cvfradia.o \
 		$(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
@@ -182,7 +182,7 @@ ecp_tzu: \
 		../common/generator/ecp_g_force.o \
 		../common/generator/ecp_g_smooth.o \
 		../common/generator/ecp_g_jarosz.o \
-		../common/ecp_g_operator_reaction_condition.o \
+		../common/generator/ecp_g_operator_reaction_condition.o \
 		$(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 
@@ -193,7 +193,7 @@ ecp_tzu_test: \
 		../common/generator/ecp_g_force.o \
 		../common/generator/ecp_g_smooth.o \
 		../common/generator/ecp_g_jarosz.o \
-		../common/ecp_g_operator_reaction_condition.o \
+		../common/generator/ecp_g_operator_reaction_condition.o \
 		$(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^  
 
@@ -216,7 +216,7 @@ ecp_eihcalibration: \
 		../common/generator/ecp_g_smooth2.o \
 		../common/generator/ecp_g_jarosz.o \
 		../common/generator/ecp_g_force.o \
-		../common/ecp_g_operator_reaction_condition.o \
+		../common/generator/ecp_g_operator_reaction_condition.o \
 		$(ECP_MPDIR)/sensor/ecp_mp_s_cvfradia.o \
 		$(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
@@ -229,7 +229,7 @@ ecp_t_kcz_force: \
 		../common/generator/ecp_g_smooth2.o \
 		../common/generator/ecp_g_jarosz.o \
 		../common/generator/ecp_g_force.o \
-		../common/ecp_g_operator_reaction_condition.o \
+		../common/generator/ecp_g_operator_reaction_condition.o \
 		$(ECP_MPDIR)/sensor/ecp_mp_s_cvfradia.o \
 		$(ECP_MPDIR)/birdclient.o \
 		$(ECP_MPDIR)/sensor/ecp_mp_s_pcbird.o \
@@ -244,7 +244,7 @@ ecp_t_kcz_test: \
 		../common/generator/ecp_g_smooth2.o \
 		../common/generator/ecp_g_jarosz.o \
 		../common/generator/ecp_g_force.o \
-		../common/ecp_g_operator_reaction_condition.o \
+		../common/generator/ecp_g_operator_reaction_condition.o \
 		$(ECP_MPDIR)/sensor/ecp_mp_s_cvfradia.o \
 		$(ECP_MPDIR)/birdclient.o \
 		$(ECP_MPDIR)/sensor/ecp_mp_s_pcbird.o \
