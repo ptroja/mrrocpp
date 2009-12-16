@@ -133,7 +133,7 @@ install: ${BINARIES}
 	${INSTALL} ${BINARIES} $(BINDIR)
 #-----------------------------------------------------------------------------------------------------------------------#
 clean:
-	@rm -f *.o *.err ${BINARIES} ${LIBMPROBOTS} ${LIBMPMAIN}
+	@rm -f *.o *.err ${BINARIES} ./.deps/*.P ${LIBMPROBOTS} ${LIBMPMAIN}
 #-----------------------------------------------------------------------------------------------------------------------#
 
 include $(HOMEDIR)/depend.mk
