@@ -16,7 +16,7 @@
 #include "mp/generator/mp_g_force.h"
 #include "ecp_mp/sensor/ecp_mp_s_schunk.h"
 #include "mp/task/mp_t_pr.h"
-#include "mp/mp_g_common.h"
+#include "mp/generator/mp_g_common.h"
 
 #include <boost/foreach.hpp>
 

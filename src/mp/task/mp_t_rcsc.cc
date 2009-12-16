@@ -12,7 +12,7 @@
 #include "mp/mp.h"
 #include "mp/generator/mp_g_force.h"
 #include "mp/generator/mp_g_vis.h"
-#include "mp/mp_g_common.h"
+#include "mp/generator/mp_g_common.h"
 #include "mp/task/mp_t_rcsc.h"
 #include "ecp_mp/sensor/ecp_mp_s_schunk.h"
 #include "ecp_mp/sensor/ecp_mp_s_vis.h"
