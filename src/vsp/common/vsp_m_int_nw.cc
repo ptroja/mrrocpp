@@ -205,10 +205,10 @@ void write_to_sensor( lib::VSP_COMMAND i_code){
 						throw lib::VSP_main_error(lib::NON_FATAL_ERROR, READING_NOT_READY);
 					// SEKCJA KRYTYCZNA - nie moze byc naraz odczyt z urzadzenia i zapis nowego odczytu
 					pthread_mutex_lock( &image_mutex );
-						vs->from_vsp.vsp_report= lib::VSP_REPLY_OK;
+						vs->from_vsp.vsp_report = lib::VSP_REPLY_OK;
 						vs->get_reading();
 						// Przepisanie obrazu z czujnika do wiadomosci zwrotnej.
-						memcpy(&ret_msg, &(vs->from_vsp), sizeof(lib::VSP_ECP_MSG));
+						ret_msg = vs->from_vsp;
 					pthread_mutex_unlock( &image_mutex );
 					INITIATE_FLAG = false;
 				} // end TRY
@@ -249,7 +249,7 @@ int io_read (resmgr_context_t *ctp, io_read_t *msg, RESMGR_OCB_T *ocb){
 			vs->from_vsp.vsp_report= lib::VSP_REPLY_OK;
 			vs->get_reading();
 			// Przepisanie obrazu z czujnika do wiadomosci zwrotnej.
-			memcpy(&ret_msg, &(vs->from_vsp), sizeof(lib::VSP_ECP_MSG));
+			ret_msg = vs->from_vsp;
 		pthread_mutex_unlock( &image_mutex );
 		// Koniec sekcji krytycznej.
 		} // end TRY
@@ -311,7 +311,7 @@ int io_devctl(resmgr_context_t *ctp, io_devctl_t *msg, RESMGR_OCB_T *ocb) {
 				vs->from_vsp.vsp_report= lib::VSP_REPLY_OK;
 				vs->get_reading();
 				// Przepisanie obrazu z czujnika do wiadomosci zwrotnej.
-				memcpy(&ret_msg, &(vs->from_vsp), sizeof(lib::VSP_ECP_MSG));
+				ret_msg = vs->from_vsp;
 				INITIATE_FLAG = false;
 			pthread_mutex_unlock( &image_mutex );
 			// Koniec sekcji krytycznej.
