@@ -57,30 +57,14 @@ protected:
     void tool_frame_2_frame (lib::c_buffer &instruction);
     // Przepisanie definicji narzedzia danej w postaci TOOL_FRAME
     // do wewnetrznych struktur danych TRANSFORMATORa
-    void arm_abs_xyz_aa_2_frame (const double *p);
-    // Przeksztalcenie definicji koncowki z postaci
-    // XYZ_ANGLE_AXIS wyrazonej bezwzglednie do postaci
-    // FRAME oraz przepisanie wyniku przeksztalcenia do
-    // wewnetrznych struktur danych TRANSFORMATORa
-    virtual void arm_abs_xyz_eul_zyz_2_frame (const double *p) = 0;
-    // Przeksztalcenie definicji koncowki z postaci
-    // XYZ_EULER_ZYZ wyrazonej bezwzglednie do postaci
-    // FRAME oraz przepisanie wyniku przeksztalcenia do
-    // wewnetrznych struktur danych TRANSFORMATORa
+
+
     void arm_abs_frame_2_frame (lib::frame_tab p_m);
     // Przepisanie definicji koncowki danej
     // w postaci FRAME wyrazonej bezwzglednie
     // do wewnetrznych struktur danych TRANSFORMATORa
-    void arm_rel_xyz_aa_2_frame (const double*);
-    // Przeksztalcenie definicji koncowki z postaci
-    // XYZ_ANGLE_AXIS wyrazonej wzglednie do postaci
-    // FRAME oraz przepisanie wyniku przeksztalcenia do
-    // wewnetrznych struktur danych TRANSFORMATORa
-    void arm_rel_xyz_eul_zyz_2_frame (const double*);
-    // Przeksztalcenie definicji koncowki z postaci
-    // XYZ_EULER_ZYZ wyrazonej wzglednie do postaci
-    // FRAME oraz przepisanie wyniku przeksztalcenia do
-    // wewnetrznych struktur danych TRANSFORMATORa
+
+
     void arm_rel_frame_2_frame (lib::frame_tab p_m);
     // Przepisanie definicji koncowki danej
     // w postaci FRAME wyrazonej wzglednie

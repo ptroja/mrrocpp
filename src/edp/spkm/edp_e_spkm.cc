@@ -154,28 +154,6 @@ void effector::get_rmodel (lib::c_buffer &instruction)
 }
 /*--------------------------------------------------------------------------*/
 
-/*--------------------------------------------------------------------------*/
-void effector::arm_abs_xyz_eul_zyz_2_frame (const double *p)
-{
-
-    double x, y, z;					// wspolrzedne wektora przesuniecia
-    double alfa, beta, gamma;	// Katy Eulera
-
-    // przepisanie z tablicy pakietu komunikacyjnego
-    x = p[0];
-    y = p[1];
-    z = p[2];
-
-    alfa = p[3];
-    beta = p[4];
-    gamma = p[5];
-    lib::Homog_matrix A_B_T (lib::Homog_matrix::MTR_MECH_XYZ_EULER_ZYZ, x, y, z, alfa, beta, gamma);
-    //lib::Homog_matrix A_B_T (lib::XYZ_EULER_ZYZ, x, y, z, alfa, beta, gamma);
-    A_B_T.get_frame_tab(desired_end_effector_frame);
-
-}
-/*--------------------------------------------------------------------------*/
-
 
 
 /*--------------------------------------------------------------------------*/

@@ -153,115 +153,12 @@ void manip_effector::tool_frame_2_frame (lib::c_buffer &instruction)
 
 
 /*--------------------------------------------------------------------------*/
-void manip_effector::arm_abs_xyz_aa_2_frame (const double *p)
-{
-    double alfa;				// kat obrotu
-    double x, y, z;			// wspolrzedne wektora przesuniecia
-    double kx, ky, kz;		// specyfikacja wektora, wokol ktorego obracany jest uklad
-
-    // przepisanie z tablicy pakietu komunikacyjnego
-    x = p[0];
-    y = p[1];
-    z = p[2];
-
-    // przepisane wartosci pomnozone sa przez kat alfa
-    kx = p[3];
-    ky = p[4];
-    kz = p[5];
-
-    // obliczenie kata obrotu alfa i wartosci funkcji trygonometrycznych
-    alfa = sqrt(kx*kx + ky*ky + kz*kz);
-
-    // korekta wartosci x, y, z
-    if((alfa   < ALFA_SENSITIVITY) && (alfa > -ALFA_SENSITIVITY))
-    {
-        lib::Homog_matrix A_B_T(x, y, z);
-        A_B_T.get_frame_tab(desired_end_effector_frame); 		// przepisanie uzyskanego wyniku do transformera
-    }
-    else
-    {
-        kx = kx/alfa;
-        ky = ky/alfa;
-        kz = kz/alfa;
-        lib::Homog_matrix A_B_T(kx, ky, kz, alfa, x, y, z);
-        A_B_T.get_frame_tab(desired_end_effector_frame); 		// przepisanie uzyskanego wyniku do transformera
-    }
-}
-/*--------------------------------------------------------------------------*/
-
-
-/*--------------------------------------------------------------------------*/
 void manip_effector::arm_abs_frame_2_frame (lib::frame_tab p_m)
 {
     // Przepisanie definicji koncowki danej
     // w postaci TRANS wyraonej bezwzgldnie
     // do wewntrznych struktur danych TRANSFORMATORa
     lib::copy_frame(desired_end_effector_frame, p_m);
-}
-/*--------------------------------------------------------------------------*/
-
-
-/*--------------------------------------------------------------------------*/
-void manip_effector::arm_rel_xyz_aa_2_frame (const double* p)
-{
-    double alfa;			// kat obrotu
-
-    double x, y, z;			// wspolrzedne wektora przesuniecia
-    double kx, ky, kz;		// specyfikacja wektora, wokol ktorego obracany jest uklad
-
-    lib::Homog_matrix G_R_T;
-
-    // pobranie aktualnej macierzy przeksztalcenia
-    lib::Homog_matrix G_K_T(current_end_effector_frame);
-
-    // przepisanie z tablicy pakietu komunikacyjnego
-    x = p[0];
-    y = p[1];
-    z = p[2];
-
-    // przepisane wartosci pomnozone sa przez kat alfa
-    kx = p[3];
-    ky = p[4];
-    kz = p[5];
-
-    // obliczenie kata obrotu alfa i wartosci funkcji trygonometrycznych
-    alfa = sqrt(kx*kx + ky*ky + kz*kz);
-    // korekta wartosci x, y, z
-    if((alfa   < ALFA_SENSITIVITY) && (alfa > -ALFA_SENSITIVITY))
-    {
-        lib::Homog_matrix K_R_T(x, y, z);
-        G_R_T = G_K_T * K_R_T;			// obliczenie macierzy przeksztalcenia
-    }
-    else
-    {
-        kx /=alfa;
-        ky /=alfa;
-        kz /=alfa;
-        lib::Homog_matrix K_R_T(kx, ky, kz, alfa, x, y, z);
-        G_R_T = G_K_T * K_R_T;			// obliczenie macierzy przeksztalcenia
-    }
-    G_R_T.get_frame_tab(desired_end_effector_frame);
-}
-/*--------------------------------------------------------------------------*/
-
-
-/*--------------------------------------------------------------------------*/
-void manip_effector::arm_rel_xyz_eul_zyz_2_frame (const double* p)
-{
-    double x, y, z;			// wspolrzedne wektora przesuniecia
-    double alfa, beta, gamma;	// Katy Eulera
-
-    // przepisanie z tablicy pakietu komunikacyjnego
-    x = p[0];
-    y = p[1];
-    z = p[2];
-    alfa = p[3];
-    beta = p[4];
-    gamma = p[5];
-    lib::Homog_matrix K_R_T (lib::Homog_matrix::MTR_XYZ_EULER_ZYZ, x, y, z, alfa, beta, gamma);
-    lib::Homog_matrix G_K_T(current_end_effector_frame);	// pobranie aktualnej macierzy przeksztalcenia
-    lib::Homog_matrix G_R_T = G_K_T * K_R_T;
-    G_R_T.get_frame_tab(desired_end_effector_frame);			// przepisanie uzyskanego wyniku do transformera
 }
 /*--------------------------------------------------------------------------*/
 

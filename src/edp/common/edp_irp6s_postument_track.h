@@ -31,11 +31,7 @@ protected:
     short is_gripper_active;
 
 
-    void arm_abs_xyz_eul_zyz_2_frame (const double *p);
-    // Przeksztalcenie definicji koncowki z postaci
-    // XYZ_EULER_ZYZ wyrazonej bezwzglednie do postaci
-    // FRAME oraz przepisanie wyniku przeksztalcenia do
-    // wewnetrznych struktur danych TRANSFORMATORa
+
 
 
 
@@ -61,9 +57,6 @@ public:
     irp6s_postument_track_effector (lib::configurator &_config, lib::robot_name_t l_robot_name );       // konstruktor
 
     int force_tryb;
-
-    // TODO: rename ruch pozycyjno silowo dla staqlej orientacji i kierukow liniowych
-    virtual void pose_force_linear_move (lib::c_buffer &instruction);
 
     void pose_force_torque_at_frame_move (lib::c_buffer &instruction);
 

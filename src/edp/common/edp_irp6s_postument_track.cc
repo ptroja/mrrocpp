@@ -146,27 +146,6 @@ void irp6s_postument_track_effector::get_rmodel(lib::c_buffer &instruction)
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
-void irp6s_postument_track_effector::arm_abs_xyz_eul_zyz_2_frame(const double *p)
-{
-	double x, y, z; // wspolrzedne wektora przesuniecia
-	double alfa, beta, gamma; // Katy Eulera
-
-	// przepisanie z tablicy pakietu komunikacyjnego
-	x = p[0];
-	y = p[1];
-	z = p[2];
-
-	alfa = p[3];
-	beta = p[4];
-	gamma = p[5];
-	//lib::Homog_matrix A_B_T (lib::Homog_matrix::MTR_MECH_XYZ_EULER_ZYZ, x, y, z, alfa, beta, gamma);
-	lib::Homog_matrix A_B_T(lib::Homog_matrix::MTR_XYZ_EULER_ZYZ, x, y, z, alfa, beta, gamma);
-	A_B_T.get_frame_tab(desired_end_effector_frame);
-
-}
-/*--------------------------------------------------------------------------*/
-
-/*--------------------------------------------------------------------------*/
 irp6s_postument_track_effector::irp6s_postument_track_effector(lib::configurator &_config, lib::robot_name_t l_robot_name) :
 	manip_effector(_config, l_robot_name)
 	{
@@ -191,8 +170,6 @@ irp6s_postument_track_effector::irp6s_postument_track_effector(lib::configurator
 
 	}
 
-void irp6s_postument_track_effector::pose_force_linear_move(lib::c_buffer &instruction)
-{}
 
 /*--------------------------------------------------------------------------*/
 void irp6s_postument_track_effector::create_threads()
@@ -568,8 +545,6 @@ void irp6s_postument_track_effector::move_arm(lib::c_buffer &instruction)
 			move_servos();
 			mt_tt_obj->trans_t_to_master_order_status_ready();
 			break;
-
-
 		case lib::FRAME:
 			compute_frame(instruction);
 			move_servos();

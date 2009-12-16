@@ -27,11 +27,7 @@ protected:
     // Metoda tworzy modele kinematyczne dla robota IRp-6 na postumencie.
     virtual void create_kinematic_models_for_given_robot(void);
 
-    void arm_abs_xyz_eul_zyz_2_frame (const double *p);
-    // Przeksztalcenie definicji koncowki z postaci
-    // XYZ_EULER_ZYZ wyrazonej bezwzglednie do postaci
-    // FRAME oraz przepisanie wyniku przeksztalcenia do
-    // wewnetrznych struktur danych TRANSFORMATORa
+
 
 
 
