@@ -17,7 +17,7 @@
 
 namespace mrrocpp {
 namespace edp {
-namespace common {
+namespace irp6p {
 
 // ograniczenia przyrostu PWM dla CONVEYOR
 #define CONVEYOR_AXE1_MAX_PWM_INCREMENT	1000

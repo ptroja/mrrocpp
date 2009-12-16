@@ -15,20 +15,20 @@
 
 namespace mrrocpp {
 namespace edp {
-namespace common {
+namespace conveyor {
 
 // ograniczenia przyrostu PWM dla CONVEYOR
 #define CONVEYOR_AXE1_MAX_PWM_INCREMENT	1000
 
 
 /*-----------------------------------------------------------------------*/
-class NL_regulator_1_irp6p: public common::NL_regulator
+class NL_regulator_1_conv: public common::NL_regulator
 {
     /* Klasa regulatorow konkretnych */
     // Obiekt z algorytmem regulacji
 
 public:
-    NL_regulator_1_irp6p (uint8_t reg_no, uint8_t reg_par_no,
+	NL_regulator_1_conv (uint8_t reg_no, uint8_t reg_par_no,
                           double aa, double bb0, double bb1, double k_ff, common::manip_and_conv_effector &_master); // konstruktor
 
     virtual uint8_t compute_set_value ( void );

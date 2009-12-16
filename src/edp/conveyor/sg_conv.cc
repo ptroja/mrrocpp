@@ -66,7 +66,7 @@ void servo_buffer::load_hardware_interface (void)
 	// utworzenie tablicy regulatorow
 
 	// Serwomechanizm 1
-	regulator_ptr[0] = new common::NL_regulator_1_irp6p (0, 0, 0.333, 6.2, 5.933, 0.35, master); // tasmociag dla irp6 postument
+	regulator_ptr[0] = new NL_regulator_1_conv (0, 0, 0.333, 6.2, 5.933, 0.35, master); // tasmociag dla irp6 postument
 
 	send_after_last_step = false;
 	clear_reply_status();

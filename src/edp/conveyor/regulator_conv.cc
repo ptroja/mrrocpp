@@ -22,13 +22,13 @@
 
 namespace mrrocpp {
 namespace edp {
-namespace common {
+namespace conveyor {
 
 // uint64_t kk;	// numer pomiaru od momentu startu pomiarow
 
 
 /*-----------------------------------------------------------------------*/
-NL_regulator_1_irp6p::NL_regulator_1_irp6p (uint8_t reg_no, uint8_t reg_par_no, double aa, double bb0, double bb1, double k_ff, common::manip_and_conv_effector &_master)
+NL_regulator_1_conv::NL_regulator_1_conv (uint8_t reg_no, uint8_t reg_par_no, double aa, double bb0, double bb1, double k_ff, common::manip_and_conv_effector &_master)
         : NL_regulator(reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master)
 {
     // Konstruktor regulatora konkretnego
@@ -42,7 +42,7 @@ NL_regulator_1_irp6p::NL_regulator_1_irp6p (uint8_t reg_no, uint8_t reg_par_no, 
 
 
 /*-----------------------------------------------------------------------*/
-uint8_t NL_regulator_1_irp6p::compute_set_value (void)
+uint8_t NL_regulator_1_conv::compute_set_value (void)
 {
     // algorytm regulacji dla serwomechanizmu
     // position_increment_old - przedostatnio odczytany przyrost polozenie
