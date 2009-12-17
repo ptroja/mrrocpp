@@ -2,7 +2,7 @@
 HOMEDIR = ../..
 include $(HOMEDIR)/common.mk
 
-SOURCEDIRS = wii_teach wii_velocity wii_ellipse haptic
+SOURCEDIRS = wii_teach wii_velocity wii_ellipse haptic sk
 INSTALLDIRS = ${SOURCEDIRS}
 CLEANDIRS = ${SOURCEDIRS}
 #======================================================#

@@ -7,7 +7,6 @@ OBJECTS = ${patsubst %.cc,%.o,${SOURCES}}
 BINARIES = ecp_tran \
 	ecp_t \
 	#ecp_nalewanie \
-	ecp_sk \
 	ecp_tw \
 	ecp_time \
 	ecp_pawel \
@@ -57,14 +56,6 @@ ecp_mam: \
 		$(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 
-ecp_sk: \
-		../irp6_on_track/ecp_r_irp6ot.o \
-		../irp6_postument/ecp_r_irp6p.o \
-		../common/task/ecp_t_sk.o \
-		../common/generator/ecp_g_force.o \
-		$(ECP_MPDIR)/sensor/ecp_mp_s_schunk.o \
-		$(SHOBJ)
-	$(LD) $(LDFLAGS) -o $@ $^ 
 
 ecp_tw: \
 		../irp6_on_track/ecp_r_irp6ot.o \
