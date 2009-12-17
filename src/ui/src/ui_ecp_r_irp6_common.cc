@@ -490,26 +490,26 @@ void ui_common_robot::move_xyz_euler_zyz ( double final_position[7] )
 
     nr_of_steps = (nr_ang > nr_lin) ? nr_ang : nr_lin;
     nr_of_steps = (nr_of_steps > nr_grip) ? nr_of_steps : nr_grip;
-/*
+
     // Parametry zlecenia ruchu i odczytu polozenia
     ecp->ecp_command.instruction.instruction_type = lib::SET_GET;
-    ecp->ecp_command.instruction.get_arm_type = lib::XYZ_EULER_ZYZ;
+    ecp->ecp_command.instruction.get_arm_type = lib::FRAME;
     ecp->ecp_command.instruction.set_type = ARM_DV; // ARM
-    ecp->ecp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
+    ecp->ecp_command.instruction.set_arm_type = lib::FRAME;
     ecp->ecp_command.instruction.motion_type = lib::ABSOLUTE;
     ecp->ecp_command.instruction.interpolation_type = lib::MIM;
     ecp->ecp_command.instruction.motion_steps = nr_of_steps;
     ecp->ecp_command.instruction.value_in_step_no = nr_of_steps;
-*/
+
     // cprintf("eNOS=%u\n",ecp->ecp_command.instruction.motion_steps);
     if (nr_of_steps < 1) // Nie wykowywac bo zadano ruch do aktualnej pozycji
         return;
 
+    lib::Homog_matrix tmp;
+     tmp.set_xyz_euler_zyz(final_position);
+     tmp.get_frame_tab(ecp->ecp_command.instruction.arm.pf_def.arm_frame);
 
-    for (int j = 0; j < 6; j++)
-    {
-        ecp->ecp_command.instruction.arm.pf_def.arm_coordinates[j] = final_position[j];
-    }
+
     ecp->ecp_command.instruction.arm.pf_def.gripper_coordinate = final_position[6];
 
     execute_motion();
@@ -577,20 +577,21 @@ void ui_common_robot::move_xyz_angle_axis ( double final_position[7] )
     // Zadano ruch do aktualnej pozycji
     if (nr_of_steps < 1)
         return;
-/*
+
     ecp->ecp_command.instruction.instruction_type = lib::SET_GET;
-    ecp->ecp_command.instruction.get_arm_type = lib::XYZ_ANGLE_AXIS;
+    ecp->ecp_command.instruction.get_arm_type = lib::FRAME;
     ecp->ecp_command.instruction.set_type = ARM_DV; // ARM
-    ecp->ecp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
+    ecp->ecp_command.instruction.set_arm_type = lib::FRAME;
     ecp->ecp_command.instruction.motion_type = lib::ABSOLUTE;
     ecp->ecp_command.instruction.interpolation_type = lib::MIM;
     ecp->ecp_command.instruction.motion_steps = nr_of_steps;
     ecp->ecp_command.instruction.value_in_step_no = nr_of_steps;
-*/
-    for (int j = 0; j < 6; j++)
-    {
-        ecp->ecp_command.instruction.arm.pf_def.arm_coordinates[j] = final_position[j];
-    }
+
+
+    lib::Homog_matrix tmp;
+     tmp.set_xyz_angle_axis(final_position);
+     tmp.get_frame_tab(ecp->ecp_command.instruction.arm.pf_def.arm_frame);
+
 
     ecp->ecp_command.instruction.arm.pf_def.gripper_coordinate = final_position[6];
     execute_motion();
@@ -633,20 +634,20 @@ void ui_common_robot::move_xyz_angle_axis_relative ( double position_increment[7
 	// Zadano ruch do aktualnej pozycji
 	if (nr_of_steps < 1)
 		return;
-/*
+
 	ecp->ecp_command.instruction.instruction_type = lib::SET_GET;
-	ecp->ecp_command.instruction.get_arm_type = lib::XYZ_ANGLE_AXIS;
+	ecp->ecp_command.instruction.get_arm_type = lib::FRAME;
 	ecp->ecp_command.instruction.set_type = ARM_DV; // ARM
-	ecp->ecp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
+	ecp->ecp_command.instruction.set_arm_type = lib::FRAME;
 	ecp->ecp_command.instruction.motion_type = lib::RELATIVE;
 	ecp->ecp_command.instruction.interpolation_type = lib::MIM;
 	ecp->ecp_command.instruction.motion_steps = nr_of_steps;
 	ecp->ecp_command.instruction.value_in_step_no = nr_of_steps;
-*/
-	for (int j = 0; j < 6; j++)
-	{
-		ecp->ecp_command.instruction.arm.pf_def.arm_coordinates[j] = position_increment[j];
-	}
+
+
+    lib::Homog_matrix tmp;
+    tmp.set_xyz_angle_axis(position_increment);
+    tmp.get_frame_tab(ecp->ecp_command.instruction.arm.pf_def.arm_frame);
 
 	ecp->ecp_command.instruction.arm.pf_def.gripper_coordinate = position_increment[6];
 	execute_motion();
@@ -701,17 +702,20 @@ void ui_common_robot::read_joints ( double current_position[] )
 void ui_common_robot::read_xyz_euler_zyz (double current_position[])
 {
     // Zlecenie odczytu polozenia
-/*
+
     // Parametry zlecenia ruchu i odczytu polozenia
     ecp->ecp_command.instruction.get_type = ARM_DV;
     ecp->ecp_command.instruction.instruction_type = lib::GET;
-    ecp->ecp_command.instruction.get_arm_type = lib::XYZ_EULER_ZYZ;
+    ecp->ecp_command.instruction.get_arm_type = lib::FRAME;
     ecp->ecp_command.instruction.interpolation_type = lib::MIM;
-*/
+
     execute_motion();
 
-    for (int i = 0; i < 6; i++) // Przepisanie aktualnych polozen
-        current_position[i] = ecp->reply_package.arm.pf_def.arm_coordinates[i];
+    lib::Homog_matrix tmp;
+    tmp.set_frame_tab(ecp->reply_package.arm.pf_def.arm_frame);
+    tmp.get_xyz_euler_zyz(current_position);
+
+
     current_position[6] = ecp->reply_package.arm.pf_def.gripper_coordinate;
 }
 // ---------------------------------------------------------------
@@ -720,16 +724,16 @@ void ui_common_robot::read_xyz_euler_zyz (double current_position[])
 void ui_common_robot::read_xyz_angle_axis (double current_position[])
 {
     // Pobranie aktualnego polozenia ramienia robota
-/*
-    // Parametry zlecenia ruchu i odczytu polozenia
+
     ecp->ecp_command.instruction.get_type = ARM_DV;
     ecp->ecp_command.instruction.instruction_type = lib::GET;
-    ecp->ecp_command.instruction.get_arm_type = lib::XYZ_ANGLE_AXIS;
+    ecp->ecp_command.instruction.get_arm_type = lib::FRAME;
     ecp->ecp_command.instruction.interpolation_type = lib::MIM;
-*/
     execute_motion();
 
-    for(int i=0; i<6; i++)
-        current_position[i] = ecp->reply_package.arm.pf_def.arm_coordinates[i];
+    lib::Homog_matrix tmp;
+    tmp.set_frame_tab(ecp->reply_package.arm.pf_def.arm_frame);
+    tmp.get_xyz_angle_axis(current_position);
+
     current_position[6] = ecp->reply_package.arm.pf_def.gripper_coordinate;
 }
