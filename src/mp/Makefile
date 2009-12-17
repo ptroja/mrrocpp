@@ -32,7 +32,6 @@ BINARIES = \
 	mp_vis_sac_lx \
 	mp_rcs_test \
 	mp_rcs \
-	mp_haptic \
 	mp_pouring \
 	mp_fsautomat \
 	mp_multiplayer
@@ -70,9 +69,6 @@ mp_rc: task/mp_t_rc.o generator/mp_g_teach_in.o $(ECP_MPDIR)/transmitter/ecp_mp_
 	$(LD) $(LDFLAGS) -o $@ $^
 
 mp_rcsc: task/mp_t_rcsc.o $(ECP_MPDIR)/transmitter/ecp_mp_tr_rc_windows.o generator/mp_g_teach_in.o generator/mp_g_vis.o generator/mp_g_force.o $(ECP_MPDIR)/sensor/ecp_mp_s_vis.o $(ECP_MPDIR)/sensor/ecp_mp_s_schunk.o CubeState.o SingleManipulation.o $(SHOBJ)
-	$(LD) $(LDFLAGS) -o $@ $^
-
-mp_haptic: task/mp_t_haptic.o generator/mp_g_teach_in.o generator/mp_g_force.o $(ECP_MPDIR)/sensor/ecp_mp_s_schunk.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 
 mp_vis: task/mp_t_vis.o generator/mp_g_vis.o generator/mp_g_teach_in.o generator/mp_g_force.o $(ECP_MPDIR)/sensor/ecp_mp_s_vis.o $(ECP_MPDIR)/sensor/ecp_mp_s_schunk.o $(SHOBJ)

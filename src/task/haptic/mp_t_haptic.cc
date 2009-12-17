@@ -16,9 +16,9 @@
 
 #include "lib/srlib.h"
 #include "mp/mp.h"
-#include "mp/generator/mp_g_force.h"
-#include "mp/task/mp_t_haptic.h"
-#include "ecp_mp/sensor/ecp_mp_s_schunk.h"
+#include "task/haptic/mp_g_force.h"
+#include "task/haptic/mp_t_haptic.h"
+#include "ecp_mp/task/ecp_mp_t_rcsc.h"
 
 namespace mrrocpp {
 namespace mp {
