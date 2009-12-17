@@ -95,13 +95,13 @@ void kcz_force::main_task_algorithm(void ) {
 		FP = fopen("../data/calibration/M_pcbird.txt","a");
 		gsl_matrix_fprintf (FP, M, "%g");
 		fclose(FP);
-		FP = fopen("../data/calibration/m_pcbird.txt","a");
+		FP = fopen("../data/calibration/mm_pcbird.txt","a");
 		gsl_vector_fprintf (FP, m, "%g");
 		fclose(FP);
 		FP = fopen("../data/calibration/K_pcbird.txt","a");
 		gsl_matrix_fprintf (FP, K, "%g");
 		fclose(FP);
-		FP = fopen("../data/calibration/k_pcbird.txt","a");
+		FP = fopen("../data/calibration/kk_pcbird.txt","a");
 		gsl_vector_fprintf (FP, k, "%g");
 		fclose(FP);
 

@@ -40,10 +40,10 @@ void calibration::main_task_algorithm(void)
 	FP = fopen("../data/calibration/M_pcbird.txt", "r");
 	gsl_matrix_fscanf(FP,ofp.M);
 	fclose(FP);
-	FP = fopen("../data/calibration/m_pcbird.txt","r");
+	FP = fopen("../data/calibration/mm_pcbird.txt","r");
 	gsl_vector_fscanf(FP,ofp.m);
 	fclose(FP);
-	FP = fopen("../data/calibration/k_pcbird.txt","r");
+	FP = fopen("../data/calibration/kk_pcbird.txt","r");
 	gsl_vector_fscanf(FP,ofp.k);
 	fclose(FP);
 	FP = fopen("../data/calibration/K_pcbird.txt","r");
