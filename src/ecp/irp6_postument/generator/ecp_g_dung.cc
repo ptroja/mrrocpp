@@ -17,7 +17,7 @@
 #include "ecp/irp6_postument/ecp_r_irp6p.h"
 #include "ecp/irp6_postument/generator/ecp_g_dung.h"
 
-#include "lib/mathtr/mathtr.h"
+#include "lib/mathtr/mrmath.h"
 #include "math.h"
 
 namespace mrrocpp {

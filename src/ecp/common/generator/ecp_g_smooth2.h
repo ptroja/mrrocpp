@@ -29,7 +29,7 @@
 #include "lib/com_buf.h"
 #include "lib/datastr.h"
 #include "lib/srlib.h"
-#include "lib/mathtr/mathtr.h"
+#include "lib/mathtr/mrmath.h"
 
 #include "ecp_mp/smooth2_trajectory_pose.h"
 

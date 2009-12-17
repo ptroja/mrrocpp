@@ -15,7 +15,7 @@
 #include "lib/srlib.h"
 #include "mp/mp.h"
 #include "application/haptic/mp_g_haptic.h"
-#include "lib/mathtr/mathtr.h"
+#include "lib/mathtr/mrmath.h"
 #include "mp/generator/mp_g_common.h"
 
 namespace mrrocpp {

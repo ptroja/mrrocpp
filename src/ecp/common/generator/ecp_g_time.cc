@@ -14,7 +14,7 @@
 #include "lib/srlib.h"
 #include "ecp/common/generator/ecp_g_time.h"
 
-#include "lib/mathtr/mathtr.h"
+#include "lib/mathtr/mrmath.h"
 
 namespace mrrocpp {
 namespace ecp {

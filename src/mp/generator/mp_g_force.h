@@ -7,7 +7,7 @@
 #if !defined(__MP_GEN_FORCE_H)
 #define __MP_GEN_FORCE_H
 
-#include "lib/mathtr/mathtr.h"
+#include "lib/mathtr/mrmath.h"
 
 #include "mp/generator/mp_g_teach_in.h"
 

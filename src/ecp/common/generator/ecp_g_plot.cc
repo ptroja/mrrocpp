@@ -16,7 +16,7 @@
 #include "lib/srlib.h"
 #include "ecp/common/generator/ecp_g_plot.h"
 
-#include "lib/mathtr/mathtr.h"
+#include "lib/mathtr/mrmath.h"
 
 namespace mrrocpp {
 namespace ecp {

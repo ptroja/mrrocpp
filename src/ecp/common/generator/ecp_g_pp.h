@@ -10,7 +10,7 @@
 
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
-#include "lib/mathtr/mathtr.h"
+#include "lib/mathtr/mrmath.h"
 #include "ecp/common/generator/ecp_generator.h"
 
 

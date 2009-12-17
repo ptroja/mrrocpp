@@ -24,7 +24,7 @@
 #include "ui/ui_ecp_r_conveyor.h"
 
 #include <math.h>
-#include "lib/mathtr/mathtr.h"
+#include "lib/mathtr/mrmath.h"
 
 // ---------------------------------------------------------------
 ui_conveyor_robot::ui_conveyor_robot (lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg)

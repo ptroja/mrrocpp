@@ -31,7 +31,7 @@
 #include <string>
 
 // Klasa lib::Homog_matrix.
-#include "lib/mathtr/mathtr.h"
+#include "lib/mathtr/mrmath.h"
 // Klasa lib::frame_tab.
 #include "lib/impconst.h"
 

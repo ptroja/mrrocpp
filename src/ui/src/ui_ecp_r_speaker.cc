@@ -24,7 +24,7 @@
 #include "ui/ui_ecp_r_speaker.h"
 
 #include <math.h>
-#include "lib/mathtr/mathtr.h"
+#include "lib/mathtr/mrmath.h"
 
 // ---------------------------------------------------------------
 ui_speaker_robot::ui_speaker_robot(edp_state_def* _edp_state, lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg) :

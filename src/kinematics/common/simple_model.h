@@ -10,7 +10,7 @@
 #define SIMPLE_MODEL_H_
 
 #include <string>
-#include "lib/mathtr/mathtr.h"
+#include "lib/mathtr/mrmath.h"
 
 namespace mrrocpp {
 namespace kinematic {

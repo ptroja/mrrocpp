@@ -11,7 +11,7 @@
 #include <vector>
 #include "ecp/common/task/ecp_task.h"
 #include "ecp/common/generator/ecp_generator.h"
-#include "lib/mathtr/mathtr.h"
+#include "lib/mathtr/mrmath.h"
 
 namespace mrrocpp {
 namespace ecp {

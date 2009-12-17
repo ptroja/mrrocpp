@@ -18,7 +18,7 @@
 #include "edp/common/reader.h"
 #include "edp/irp6_postument/regulator_irp6p.h"
 
-#include "lib/mathtr/mathtr.h"
+#include "lib/mathtr/mrmath.h"
 
 namespace mrrocpp {
 namespace edp {

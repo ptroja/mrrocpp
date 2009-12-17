@@ -1,7 +1,7 @@
 #if !defined(__MP_GEN_VIS_SAC_LX_H)
 #define __MP_GEN_VIS_SAC_LX_H
 
-#include "lib/mathtr/mathtr.h"
+#include "lib/mathtr/mrmath.h"
 
 namespace mrrocpp {
 namespace mp {

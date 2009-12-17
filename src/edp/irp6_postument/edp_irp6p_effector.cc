@@ -13,7 +13,7 @@
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
-#include "lib/mathtr/mathtr.h"
+#include "lib/mathtr/mrmath.h"
 
 // Klasa edp_irp6ot_effector.
 #include "edp/irp6_postument/edp_irp6p_effector.h"
