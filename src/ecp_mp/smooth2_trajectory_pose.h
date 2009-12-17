@@ -25,7 +25,7 @@ public:
   /**
    * Representation used in the trajectory segment.
    */
-  lib::POSE_SPECIFICATION arm_type;
+  lib::ECP_POSE_SPECIFICATION arm_type;
   /**
    * Initial velocity for the pose, for each axis.
    */
@@ -111,7 +111,7 @@ public:
    * \param vv maximal velocities for the trajectory segment for all of the axes
    * \param aa maximal accelerations for the trajectory segment for all of the axes
    */
-  smooth2_trajectory_pose (lib::POSE_SPECIFICATION at,
+  smooth2_trajectory_pose (lib::ECP_POSE_SPECIFICATION at,
 		  const double* coordinates,
 		  const double* vv,
 		  const double* aa);

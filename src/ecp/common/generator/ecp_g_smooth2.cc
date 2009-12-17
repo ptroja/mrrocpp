@@ -34,7 +34,7 @@ bool smooth2::eq(double a, double b) {
 void smooth2::load_trajectory_from_xml(ecp_mp::common::Trajectory &trajectory) {
 	bool first_time = true;
 	int numOfPoses = trajectory.getNumberOfPoses();
-	trajectory.showTime();
+	trajectory.showTime2();
 
 	flush_pose_list(); // Usuniecie listy pozycji, o ile istnieje
 	pose_list = trajectory.getPoses2();
@@ -44,7 +44,7 @@ void smooth2::load_trajectory_from_xml(ecp_mp::common::Trajectory &trajectory) {
 void smooth2::set_pose_from_xml(xmlNode *stateNode, bool &first_time) {
 	char *dataLine, *value;
 	uint64_t number_of_poses; // Liczba zapamietanych pozycji
-	lib::POSE_SPECIFICATION ps;     // Rodzaj wspolrzednych
+	lib::ECP_POSE_SPECIFICATION ps;     // Rodzaj wspolrzednych
 	double v[MAX_SERVOS_NR];
 	double a[MAX_SERVOS_NR];	// Wczytane wspolrzedne
 	double coordinates[MAX_SERVOS_NR];     // Wczytane wspolrzedne
@@ -173,7 +173,7 @@ void smooth2::load_file_with_path(const char* file_name) {
 	//printf("load file with path\n");
 	//flushall();
     char coordinate_type[80];  // Opis wspolrzednych: "MOTOR", "JOINT", ...
-    lib::POSE_SPECIFICATION ps;     // Rodzaj wspolrzednych
+    lib::ECP_POSE_SPECIFICATION ps;     // Rodzaj wspolrzednych
     uint64_t e;       // Kod bledu systemowego
     uint64_t number_of_poses; // Liczba zapamietanych pozycji
     uint64_t i, j;    // Liczniki petli
@@ -212,11 +212,11 @@ void smooth2::load_file_with_path(const char* file_name) {
 
     if ( !strcmp(coordinate_type, "MOTOR") )
     {
-        ps = lib::MOTOR;
+        ps = lib::ECP_MOTOR;
     }
     else if ( !strcmp(coordinate_type, "JOINT") )
     {
-        ps = lib::JOINT;
+        ps = lib::ECP_JOINT;
     }
 
     else
@@ -282,7 +282,7 @@ void smooth2::load_file_with_path(const char* file_name) {
 } // end: load_file_with_path()
 
 //jesli w ponizszych metodach podamy reset jako true lista pozycji zostanie wyczyszczona, jesli jako false pozycja zostanie dodana do listy bez jej czyszczenia
-void smooth2::load_coordinates(lib::POSE_SPECIFICATION ps, double coordinates[MAX_SERVOS_NR], bool reset) {
+void smooth2::load_coordinates(lib::ECP_POSE_SPECIFICATION ps, double coordinates[MAX_SERVOS_NR], bool reset) {
 
 	double v[MAX_SERVOS_NR]={0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.5};
 	double a[MAX_SERVOS_NR]={0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.5};
@@ -298,7 +298,7 @@ void smooth2::load_coordinates(lib::POSE_SPECIFICATION ps, double coordinates[MA
 	}
 }
 
-void smooth2::load_coordinates(lib::POSE_SPECIFICATION ps, double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR], bool reset){
+void smooth2::load_coordinates(lib::ECP_POSE_SPECIFICATION ps, double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR], bool reset){
 
 	if (reset == true) {
 		flush_pose_list();
@@ -311,7 +311,7 @@ void smooth2::load_coordinates(lib::POSE_SPECIFICATION ps, double v[MAX_SERVOS_N
 	}
 }
 
-void smooth2::load_coordinates(lib::POSE_SPECIFICATION ps, double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset) {
+void smooth2::load_coordinates(lib::ECP_POSE_SPECIFICATION ps, double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset) {
 
 	double v[MAX_SERVOS_NR]={0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1};
 	double a[MAX_SERVOS_NR]={0.03, 0.03, 0.03, 0.03, 0.03, 0.03, 0.03, 0.02};
@@ -337,7 +337,7 @@ void smooth2::load_coordinates(lib::POSE_SPECIFICATION ps, double cor0, double c
 	}
 }
 
-void smooth2::load_coordinates(lib::POSE_SPECIFICATION ps, double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset) {
+void smooth2::load_coordinates(lib::ECP_POSE_SPECIFICATION ps, double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset) {
 
 	double coordinates[MAX_SERVOS_NR];
 
@@ -411,12 +411,12 @@ bool smooth2::is_last_list_element(void) {
     return false;
 }
 
-void smooth2::create_pose_list_head (lib::POSE_SPECIFICATION ps, double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR]) {
+void smooth2::create_pose_list_head (lib::ECP_POSE_SPECIFICATION ps, double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR]) {
     pose_list.push_back(ecp_mp::common::smooth2_trajectory_pose(ps, coordinates, v, a));
     pose_list_iterator = pose_list.begin();
 }
 
-void smooth2::insert_pose_list_element (lib::POSE_SPECIFICATION ps, double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR]) {
+void smooth2::insert_pose_list_element (lib::ECP_POSE_SPECIFICATION ps, double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR]) {
     pose_list.push_back(ecp_mp::common::smooth2_trajectory_pose(ps, coordinates, v, a));
     pose_list_iterator++;
 }
@@ -802,7 +802,7 @@ bool smooth2::first_step() { //wywolywane tylko raz w calej trajektorii
 
     switch ( td.arm_type ) {
 
-    case lib::MOTOR:
+    case lib::ECP_MOTOR:
         the_robot->ecp_command.instruction.instruction_type = lib::GET;
         the_robot->ecp_command.instruction.get_type = ARM_DV;
         the_robot->ecp_command.instruction.set_type = ARM_DV;
@@ -815,7 +815,7 @@ bool smooth2::first_step() { //wywolywane tylko raz w calej trajektorii
     	}
         the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
         break;
-    case lib::JOINT:
+    case lib::ECP_JOINT:
         the_robot->ecp_command.instruction.instruction_type = lib::GET;
         the_robot->ecp_command.instruction.get_type = ARM_DV;
         the_robot->ecp_command.instruction.set_type = ARM_DV;
@@ -828,13 +828,13 @@ bool smooth2::first_step() { //wywolywane tylko raz w calej trajektorii
     	}
         the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
         break;
-        /*
-    case lib::XYZ_EULER_ZYZ:
+
+    case lib::ECP_XYZ_EULER_ZYZ:
         the_robot->ecp_command.instruction.instruction_type = lib::GET;
         the_robot->ecp_command.instruction.get_type = ARM_DV;
         the_robot->ecp_command.instruction.set_type = ARM_DV;
-        the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
-        the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_EULER_ZYZ;
+        the_robot->ecp_command.instruction.set_arm_type = lib::FRAME;
+        the_robot->ecp_command.instruction.get_arm_type = lib::FRAME;
         if (type == lib::RELATIVE) {
             the_robot->ecp_command.instruction.motion_type = lib::RELATIVE;
             the_robot->ecp_command.instruction.interpolation_type = lib::TCIM;
@@ -847,12 +847,12 @@ bool smooth2::first_step() { //wywolywane tylko raz w calej trajektorii
             the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
         }
         break;
-    case lib::XYZ_ANGLE_AXIS:
+    case lib::ECP_XYZ_ANGLE_AXIS:
         the_robot->ecp_command.instruction.instruction_type = lib::GET;
         the_robot->ecp_command.instruction.get_type = ARM_DV;
         the_robot->ecp_command.instruction.set_type = ARM_DV;
-        the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
-        the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_ANGLE_AXIS;
+        the_robot->ecp_command.instruction.set_arm_type = lib::FRAME;
+        the_robot->ecp_command.instruction.get_arm_type = lib::FRAME;
     	if (type == lib::RELATIVE) {
     		the_robot->ecp_command.instruction.motion_type = lib::RELATIVE;
     		the_robot->ecp_command.instruction.interpolation_type = lib::TCIM;
@@ -865,7 +865,7 @@ bool smooth2::first_step() { //wywolywane tylko raz w calej trajektorii
     		the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
     	}
         break;
-        */
+
     default:
         throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
     } // end : switch ( td.arm_type )
@@ -917,12 +917,12 @@ bool smooth2::next_step () {
     	the_robot->ecp_command.instruction.get_arm_type = lib::INVALID_END_EFFECTOR;
 
     	switch ( td.arm_type ) {
-    	/*
-    		case lib::XYZ_EULER_ZYZ:
+
+    		case lib::ECP_XYZ_EULER_ZYZ:
 
     			the_robot->ecp_command.instruction.instruction_type = lib::SET; //dalsze ustawianie parametrow ruchu w edp
     			the_robot->ecp_command.instruction.set_type = ARM_DV; // ARM
-    			the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
+    			the_robot->ecp_command.instruction.set_arm_type = lib::FRAME;
     	    	if (type == lib::RELATIVE) {
     	    		the_robot->ecp_command.instruction.motion_type = lib::RELATIVE;
     	    		the_robot->ecp_command.instruction.interpolation_type = lib::TCIM;
@@ -967,11 +967,11 @@ bool smooth2::next_step () {
 
     			break;
 
-    		case lib::XYZ_ANGLE_AXIS:
+    		case lib::ECP_XYZ_ANGLE_AXIS:
 
     			the_robot->ecp_command.instruction.instruction_type = lib::SET; //dalsze ustawianie parametrow ruchu w edp
     			the_robot->ecp_command.instruction.set_type = ARM_DV; // ARM
-    			the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
+    			the_robot->ecp_command.instruction.set_arm_type = lib::FRAME;
     	    	if (type == lib::RELATIVE) {
     	    		the_robot->ecp_command.instruction.motion_type = lib::RELATIVE;
     	    		the_robot->ecp_command.instruction.interpolation_type = lib::TCIM;
@@ -1015,8 +1015,8 @@ bool smooth2::next_step () {
     			coordinate_list_iterator++;
 
     			break;
-*/
-    		case lib::JOINT:
+
+    		case lib::ECP_JOINT:
 
     			the_robot->ecp_command.instruction.instruction_type = lib::SET;
     		    the_robot->ecp_command.instruction.set_type = ARM_DV; // ARM
@@ -1070,7 +1070,7 @@ bool smooth2::next_step () {
 
     		    break;
 
-    		case lib::MOTOR:
+    		case lib::ECP_MOTOR:
 
     			the_robot->ecp_command.instruction.instruction_type = lib::SET;
     		    the_robot->ecp_command.instruction.set_type = ARM_DV; // ARM
@@ -1168,8 +1168,8 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 	    	pose_list_iterator->pos_num = j;
 
 			switch (td.arm_type) {
-/*
-			case lib::XYZ_EULER_ZYZ:
+
+			case lib::ECP_XYZ_EULER_ZYZ:
 				gripp = 6;
 				//printf("euler w first_interval\n");
 				for (i = 0; i < gripp; i++) {
@@ -1225,7 +1225,7 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 
 				break;
 
-			case lib::XYZ_ANGLE_AXIS:
+			case lib::ECP_XYZ_ANGLE_AXIS:
 				gripp = 6;
 
 				for (i = 0; i < gripp; i++) {
@@ -1279,8 +1279,8 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 				}
 
 				break;
-*/
-			case lib::JOINT:
+
+			case lib::ECP_JOINT:
 				if(the_robot->robot_name == lib::ROBOT_IRP6_ON_TRACK) {
 					gripp=7;
 				} else if(the_robot->robot_name == lib::ROBOT_IRP6_POSTUMENT) {
@@ -1341,7 +1341,7 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 
 				break;
 
-			case lib::MOTOR:
+			case lib::ECP_MOTOR:
 				if(the_robot->robot_name == lib::ROBOT_IRP6_ON_TRACK) {
 					gripp=7;
 				} else if(the_robot->robot_name == lib::ROBOT_IRP6_POSTUMENT) {
@@ -1411,8 +1411,8 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 
 			switch (td.arm_type) {
 			//tutaj jestesmy jeszcze ciagle w poprzedniej pozycji pose_list
-			/*
-			case lib::XYZ_EULER_ZYZ:
+
+			case lib::ECP_XYZ_EULER_ZYZ:
 				gripp = 6;
 				//zapisanie v_p, musi byc tutaj bo wczesniej nie ma v_k poprzedniego ruchu
 				for (i = 0; i < MAX_SERVOS_NR; i++) {
@@ -1450,7 +1450,7 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 
 				break;
 
-			case lib::XYZ_ANGLE_AXIS:
+			case lib::ECP_XYZ_ANGLE_AXIS:
 				gripp = 6;
 				//zapisanie v_p, musi byc tutaj bo wczesniej nie ma v_k poprzedniego ruchu
 				for (i = 0; i < MAX_SERVOS_NR; i++) {
@@ -1488,8 +1488,8 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 				}
 
 				break;
-*/
-			case lib::JOINT:
+
+			case lib::ECP_JOINT:
 
 				if(the_robot->robot_name == lib::ROBOT_IRP6_ON_TRACK) {
 					gripp=7;
@@ -1536,7 +1536,7 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 
 				break;
 
-			case lib::MOTOR:
+			case lib::ECP_MOTOR:
 
 				if(the_robot->robot_name == lib::ROBOT_IRP6_ON_TRACK) {
 					gripp=7;
@@ -1629,26 +1629,26 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 				}
 
 				switch (td.arm_type) {
-				/*
-					case lib::XYZ_EULER_ZYZ:
+
+					case lib::ECP_XYZ_EULER_ZYZ:
 						pose_list_iterator->v_r[i] = v_max_zyz[i] * pose_list_iterator->v[i];
 						pose_list_iterator->a_r[i] = a_max_zyz[i] * pose_list_iterator->a[i];
 
 						break;
 
-					case lib::XYZ_ANGLE_AXIS:
+					case lib::ECP_XYZ_ANGLE_AXIS:
 						pose_list_iterator->v_r[i] = v_max_aa[i] * pose_list_iterator->v[i];
 						pose_list_iterator->a_r[i] = a_max_aa[i] * pose_list_iterator->a[i];
 
 						break;
-*/
-					case lib::MOTOR:
+
+					case lib::ECP_MOTOR:
 						pose_list_iterator->v_r[i] = v_max_motor[i] * pose_list_iterator->v[i];
 						pose_list_iterator->a_r[i] = a_max_motor[i] * pose_list_iterator->a[i];
 
 						break;
 
-					case lib::JOINT:
+					case lib::ECP_JOINT:
 						pose_list_iterator->v_r[i] = v_max_joint[i] * pose_list_iterator->v[i];
 						pose_list_iterator->a_r[i] = a_max_joint[i] * pose_list_iterator->a[i];
 
@@ -1909,26 +1909,26 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 		pose_list_iterator->v_grip = (s[gripp]/pose_list_iterator->t);
 
 		switch (td.arm_type) {
-		/*
-			case lib::XYZ_EULER_ZYZ:
+
+			case lib::ECP_XYZ_EULER_ZYZ:
 				if(pose_list_iterator->v_grip < v_grip_min_zyz) {
 					pose_list_iterator->v_grip = v_grip_min_zyz;
 				}
 				break;
 
-			case lib::XYZ_ANGLE_AXIS:
+			case lib::ECP_XYZ_ANGLE_AXIS:
 				if(pose_list_iterator->v_grip < v_grip_min_aa) {
 					pose_list_iterator->v_grip = v_grip_min_aa;
 				}
 				break;
-*/
-			case lib::MOTOR:
+
+			case lib::ECP_MOTOR:
 				if(pose_list_iterator->v_grip < v_grip_min_motor) {
 					pose_list_iterator->v_grip = v_grip_min_motor;
 				}
 				break;
 
-			case lib::JOINT:
+			case lib::ECP_JOINT:
 				if(pose_list_iterator->v_grip < v_grip_min_joint) {
 					pose_list_iterator->v_grip = v_grip_min_joint;
 				}
@@ -2188,20 +2188,20 @@ void smooth2::vp_reduction(std::list<ecp_mp::common::smooth2_trajectory_pose>::i
 	v_r = s/t;
 
 	switch (td.arm_type) {//zapisanie nowej prędkości w liscie pozycji, dla danej pozycji
-	/*
-		case lib::XYZ_EULER_ZYZ:
+
+		case lib::ECP_XYZ_EULER_ZYZ:
 			pose_list_iterator->v[i] = v_r/v_max_zyz[i];
 			break;
 
-		case lib::XYZ_ANGLE_AXIS:
+		case lib::ECP_XYZ_ANGLE_AXIS:
 			pose_list_iterator->v[i] = v_r/v_max_aa[i];
 			break;
-*/
-		case lib::MOTOR:
+
+		case lib::ECP_MOTOR:
 			pose_list_iterator->v[i] = v_r/v_max_motor[i];
 			break;
 
-		case lib::JOINT:
+		case lib::ECP_JOINT:
 			pose_list_iterator->v[i] = v_r/v_max_zyz[i];
 			break;
 		default:

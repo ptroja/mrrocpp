@@ -34,7 +34,7 @@ void grab_cube::main_task_algorithm(void ) {
 
 	smoothgen2->set_absolute();
 
-	smoothgen2->load_coordinates(lib::JOINT,0,-0.013,-1.442,-0.275,0.01,4.670,-0.070,0.090,true);//grab cube from the track (desk)
+	smoothgen2->load_coordinates(lib::ECP_JOINT,0,-0.013,-1.442,-0.275,0.01,4.670,-0.070,0.090,true);//grab cube from the track (desk)
 	//smoothgen2->load_coordinates(lib::JOINT,0,0,-1.57,0,1.56,1.571,-1.570,0.090,true);//grab cube from the operator
 	smoothgen2->Move();
 	smoothgen2->reset();
@@ -52,7 +52,7 @@ void grab_cube::main_task_algorithm(void ) {
 	double a[MAX_SERVOS_NR]={0.15, 0.15, 0.5, 0.15, 0.15, 0.15, 0.15, 0.15};
 
 	smoothgen2->set_relative();
-	smoothgen2->load_coordinates(lib::JOINT,0,0,0,0,0,0,0,-0.017,true);
+	smoothgen2->load_coordinates(lib::ECP_JOINT,0,0,0,0,0,0,0,-0.017,true);
 	smoothgen2->Move();
 	smoothgen2->reset();
 /*

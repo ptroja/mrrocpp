@@ -18,7 +18,7 @@ smooth2_trajectory_pose::smooth2_trajectory_pose (void)
 {
 }
 
-smooth2_trajectory_pose::smooth2_trajectory_pose (lib::POSE_SPECIFICATION at,
+smooth2_trajectory_pose::smooth2_trajectory_pose (lib::ECP_POSE_SPECIFICATION at,
 		const double* c,
 		const double* vv,
 		const double* aa)

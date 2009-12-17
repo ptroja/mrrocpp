@@ -2,7 +2,11 @@
 
 SOURCES = ${wildcard *.cc}
 OBJECTS = ${patsubst %.cc,%.o,${SOURCES}}
-BINARIES = 	ecp_test_conv ecp_kon ecp_legobrick_conv ecp_visconv ecp_visconvsin
+BINARIES = 	ecp_test_conv \
+			ecp_kon \
+			#ecp_legobrick_conv \
+			ecp_visconv \
+			ecp_visconvsin
 				
 #-----------------------------------------------------------------------------------------------------------------------#
 # Should be modified only by developers not by users
@@ -23,8 +27,8 @@ ecp_test_conv: task/ecp_t_test.o generator/ecp_g_test.o $(SHOBJ)
 ecp_kon: task/ecp_t_kon.o ../common/generator/ecp_g_jarosz.o ../common/generator/ecp_g_operator_reaction_condition.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 #-----------------------------------------------------------------------------------------------------------------------#
-ecp_legobrick_conv: task/ecp_t_legobrick_conv.o ../common/generator/ecp_g_smooth.o ../common/generator/ecp_g_jarosz.o ../common/generator/ecp_g_operator_reaction_condition.o $(SHOBJ)
-	$(LD) $(LDFLAGS) -o $@ $^ 
+#ecp_legobrick_conv: task/ecp_t_legobrick_conv.o ../common/generator/ecp_g_smooth.o ../common/generator/ecp_g_jarosz.o ../common/generator/ecp_g_operator_reaction_condition.o $(SHOBJ)
+#	$(LD) $(LDFLAGS) -o $@ $^ 
 #-----------------------------------------------------------------------------------------------------------------------#
 ecp_visconv: task/ecp_t_visconv.o ../common/generator/ecp_g_smooth.o ../common/generator/ecp_g_jarosz.o ../common/generator/ecp_g_operator_reaction_condition.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 

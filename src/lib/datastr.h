@@ -1,10 +1,10 @@
-/*
- * datastr.h
+/**
+ * \file datastr.h
  *
- *  Created on: Oct 21, 2009
- *      Author: ptroja
+ * \date Oct 21, 2009
+ * \author ptrojane
  *
- *  methods for MRROC++ data types / string conversion
+ * \brief Methods for MRROC++ data types/string conversion.
  */
 
 #ifndef DATASTR_H_
@@ -20,11 +20,11 @@ namespace lib {
 
 std::string toString(double valArr[], int length);
 std::string toString(int numberOfPoses);
-std::string toString(lib::POSE_SPECIFICATION ps);
+std::string toString(lib::ECP_POSE_SPECIFICATION ps);
 std::string toString(lib::robot_name_t robot);
 
 lib::robot_name_t returnProperRobot(const std::string & robotName);
-lib::POSE_SPECIFICATION returnProperPS(const std::string & poseSpecification);
+lib::ECP_POSE_SPECIFICATION returnProperPS(const std::string & poseSpecification);
 
 int setValuesInArray(double arrayToFill[], const char *dataString);
 

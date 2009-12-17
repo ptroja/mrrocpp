@@ -1,8 +1,8 @@
-/*
- * datastr.cc
+/**
+ * \file datastr.cc
  *
- *  Created on: Oct 21, 2009
- *      Author: ptroja
+ * \date Oct 21, 2009
+ * \author ptrojane
  *
  */
 
@@ -67,13 +67,17 @@ std::string toString(lib::robot_name_t robot)
 	}
 }
 
-std::string toString(lib::POSE_SPECIFICATION ps)
+std::string toString(lib::ECP_POSE_SPECIFICATION ps)
 {
 	switch (ps)
 	{
-		case lib::MOTOR:
+		case lib::ECP_XYZ_ANGLE_AXIS:
+			return std::string("ECP_XYZ_ANGLE_AXIS");
+		case lib::ECP_XYZ_EULER_ZYZ:
+			return std::string("ECP_XYZ_EULER_ZYZ");
+		case lib::ECP_MOTOR:
 			return std::string("MOTOR");
-		case lib::JOINT:
+		case lib::ECP_JOINT:
 			return std::string("JOINT");
 		default:
 			return std::string("INVALID_END_EFFECTOR");
@@ -106,14 +110,18 @@ lib::robot_name_t returnProperRobot(const std::string & robotName)
 		return lib::ROBOT_UNDEFINED;
 }
 
-lib::POSE_SPECIFICATION returnProperPS(const std::string & poseSpecification)
+lib::ECP_POSE_SPECIFICATION returnProperPS(const std::string & poseSpecification)
 {
+	if (poseSpecification == "ECP_XYZ_ANGLE_AXIS")
+	{	return lib::ECP_XYZ_ANGLE_AXIS;	}
+	if (poseSpecification == "ECP_XYZ_EULER_ZYZ")
+	{	return lib::ECP_XYZ_EULER_ZYZ;	}
 	if (poseSpecification == "MOTOR")
-	{	return lib::MOTOR;	}
+	{	return lib::ECP_MOTOR;	}
 	if (poseSpecification == "JOINT")
-	{	return lib::JOINT;	}
+	{	return lib::ECP_JOINT;	}
 	else
-		return lib::INVALID_END_EFFECTOR;
+		return lib::ECP_INVALID_END_EFFECTOR;
 }
 
 

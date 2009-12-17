@@ -20,7 +20,7 @@ protected:
 	common::generator::tff_gripper_approach* gag;
 	common::generator::tff_rubik_face_rotate* rfrg;
 	common::teach_in* tig;
-	common::generator::smooth* sg;
+	//common::generator::smooth* sg;
 	common::generator::smooth2* sg2;
 	common::generator::bias_edp_force* befg;
 	common::generator::weight_meassure* wmg;

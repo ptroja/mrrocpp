@@ -6,7 +6,7 @@ OBJECTS = ${patsubst %.cc,%.o,${SOURCES}}
 
 BINARIES = ecp_tran \
 	ecp_t \
-	ecp_nalewanie \
+	#ecp_nalewanie \
 	ecp_sk \
 	ecp_tw \
 	ecp_time \
@@ -83,15 +83,15 @@ ecp_t: \
 		$(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 
-ecp_nalewanie: \
-		../irp6_on_track/ecp_r_irp6ot.o \
-		../irp6_postument/ecp_r_irp6p.o \
-		../common/task/ecp_t_nalewanie.o \
-		../common/generator/ecp_g_smooth.o \
-		../common/generator/ecp_g_jarosz.o \
-		../common/generator/ecp_g_operator_reaction_condition.o \
-		$(SHOBJ)
-	$(LD) $(LDFLAGS) -o $@ $^ 
+#ecp_nalewanie: \
+#		../irp6_on_track/ecp_r_irp6ot.o \
+#		../irp6_postument/ecp_r_irp6p.o \
+#		../common/task/ecp_t_nalewanie.o \
+#		../common/generator/ecp_g_smooth.o \
+#		../common/generator/ecp_g_jarosz.o \
+#		../common/generator/ecp_g_operator_reaction_condition.o \
+#		$(SHOBJ)
+#	$(LD) $(LDFLAGS) -o $@ $^ 
 
 ecp_time: \
 		../irp6_on_track/ecp_r_irp6ot.o \

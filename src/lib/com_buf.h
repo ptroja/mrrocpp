@@ -71,6 +71,18 @@ enum POSE_SPECIFICATION {
 
 //------------------------------------------------------------------------------
 /*!
+ *  Type of arm position definition on the ECP level.
+ */
+enum ECP_POSE_SPECIFICATION {
+	ECP_INVALID_END_EFFECTOR,
+	ECP_XYZ_ANGLE_AXIS,
+	ECP_XYZ_EULER_ZYZ,
+	ECP_JOINT,
+	ECP_MOTOR
+};
+
+//------------------------------------------------------------------------------
+/*!
  *  Reply types from UI to ECP and commands from UI (pressing a button).
  */
 enum UI_TO_ECP_COMMAND {
@@ -256,7 +268,7 @@ struct UI_ECP_message
 struct trajectory_description
 {
 	/*! Robot arm representation. */
-	POSE_SPECIFICATION arm_type;
+	ECP_POSE_SPECIFICATION arm_type;
 	/*! Number of interpolation nodes. */
 	unsigned int interpolation_node_no;
 	/*! Number of steps for a single internode. */

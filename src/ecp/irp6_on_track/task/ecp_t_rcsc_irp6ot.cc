@@ -10,7 +10,7 @@
 
 #include "ecp/irp6_on_track/ecp_r_irp6ot.h"
 #include "ecp/common/generator/ecp_g_force.h"
-#include "ecp/common/generator/ecp_g_smooth.h"
+//#include "ecp/common/generator/ecp_g_smooth.h"
 #include "ecp/common/generator/ecp_g_smooth2.h"
 #include "ecp/irp6_on_track/task/ecp_t_rcsc_irp6ot.h"
 
@@ -32,7 +32,7 @@ rcsc::rcsc(lib::configurator &_config) :
 	rfrg = new common::generator::tff_rubik_face_rotate(*this, 8);
 	tig = new common::teach_in(*this);
 	befg = new common::generator::bias_edp_force(*this);
-	sg = new common::generator::smooth(*this, true);
+	//sg = new common::generator::smooth(*this, true);
 	sg2 = new common::generator::smooth2(*this, true);
 	wmg = new common::generator::weight_meassure(*this, 1);
 
@@ -50,7 +50,7 @@ rcsc::~rcsc()
 	delete rfrg;
 	delete tig;
 	delete befg;
-	delete sg;
+	//delete sg;
 	delete sg2;
 	delete wmg;
 	delete go_st;
@@ -170,7 +170,7 @@ void rcsc::main_task_algorithm(void)
 				sg2->Move();
 				break;
 			}
-			case ecp_mp::task::ECP_GEN_SMOOTH: {
+/*			case ecp_mp::task::ECP_GEN_SMOOTH: {
 				std::string path(mrrocpp_network_path);
 				path += mp_command.ecp_next_state.mp_2_ecp_next_state_string;
 
@@ -178,7 +178,7 @@ void rcsc::main_task_algorithm(void)
 				//				printf("\nTRACK ECP_GEN_SMOOTH :%s\n\n", path1);
 				sg->Move();
 				break;
-			}
+			}*/
 			default:
 				break;
 		}

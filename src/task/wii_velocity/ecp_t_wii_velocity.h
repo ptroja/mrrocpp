@@ -3,7 +3,7 @@
 
 #include "ecp_mp/task/ecp_mp_task.h"
 #include "task/wii_velocity/generator/ecp_g_wii_velocity.h"
-#include "ecp/common/generator/ecp_g_smooth.h"
+#include "ecp/common/generator/ecp_g_smooth2.h"
 
 
 namespace mrrocpp {

@@ -85,7 +85,8 @@ public:
 		bool operator()(char const *a, char const *b) const;
 	};
 
-	ecp_mp::common::Trajectory * createTrajectory(xmlNodePtr actNode, xmlChar *stateID);
+	//ecp_mp::common::Trajectory * createTrajectory(xmlNodePtr actNode, xmlChar *stateID);
+	ecp_mp::common::Trajectory * createTrajectory2(xmlNodePtr actNode, xmlChar *stateID);
 	trajectories_t * loadTrajectories(const char * fileName, lib::robot_name_t propRobot);
 };
 
