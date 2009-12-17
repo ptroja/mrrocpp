@@ -223,6 +223,8 @@ public:
 	int operator==(const Homog_matrix &) const;
 	int operator!=(const Homog_matrix &) const;
 
+	double* operator[](const int i) const;
+
 	// operator wypisania
 	friend std::ostream& operator<<(std::ostream &, Homog_matrix &);
 

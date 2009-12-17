@@ -100,9 +100,9 @@ robot::~robot() {
 void robot::start_ecp ( void ) {
 
 	mp_command.command = lib::START_TASK;
-	mp_command.hdr.type = 0;
 
 #if !defined(USE_MESSIP_SRR)
+	mp_command.hdr.type = 0;
 	if ( MsgSend ( ECP_fd, &mp_command, sizeof(mp_command), &ecp_reply_package, sizeof(ecp_reply_package)) == -1) {// by Y&W
 #else
 	int status;
@@ -129,9 +129,9 @@ void robot::start_ecp ( void ) {
 // -------------------------------------------------------------------
 void robot::execute_motion(void) { // zlecenie wykonania ruchu
 
-	mp_command.hdr.type = 0;
 
 #if !defined(USE_MESSIP_SRR)
+        mp_command.hdr.type = 0;
 	if ( MsgSend ( ECP_fd, &mp_command, sizeof(mp_command), &ecp_reply_package, sizeof(ecp_reply_package)) == -1) {// by Y&W
 #else
 	int status;
@@ -159,9 +159,10 @@ void robot::execute_motion(void) { // zlecenie wykonania ruchu
 // -------------------------------------------------------------------
 void robot::terminate_ecp(void) { // zlecenie STOP zakonczenia ruchu
 	mp_command.command = lib::STOP;
-	mp_command.hdr.type = 0;
+
 
 #if !defined(USE_MESSIP_SRR)
+	mp_command.hdr.type = 0;
 	if (MsgSend(ECP_fd, &mp_command, sizeof(mp_command), &ecp_reply_package, sizeof(ecp_reply_package)) == -1) {// by Y&W
 #else
 	int status;
