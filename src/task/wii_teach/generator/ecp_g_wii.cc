@@ -1,62 +1,23 @@
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 #include "math.h"
-#include "task/wii_teach/generator/ecp_g_wii_teach.h"
+#include "task/wii_teach/generator/ecp_g_wii.h"
 
 namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
 namespace generator {
 
-wii_teach::wii_teach (common::task::task& _ecp_task,ecp_mp::sensor::wiimote* _wiimote) : generator (_ecp_task), _wiimote(_wiimote)
+wii::wii (common::task::task& _ecp_task,ecp_mp::sensor::wiimote* _wiimote) : generator(_ecp_task), _wiimote(_wiimote)
 {
     int i;
-    for(i = 0;i<7;++i)
+    for(i  = 0;i < 7;++i)
     {
-        multipliers[i] = 0.003;
-        maxChange[i] = 0.0001;
+        nextChange[i] = 0;
     }
 }
 
-bool wii_teach::first_step()
-{
-	/*
-    the_robot->ecp_command.instruction.instruction_type = lib::GET;
-    the_robot->ecp_command.instruction.get_type = ARM_DV;
-    the_robot->ecp_command.instruction.set_type = ARM_DV;
-    the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
-    the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_ANGLE_AXIS;
-    the_robot->ecp_command.instruction.motion_type = lib::RELATIVE;
-    the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-    the_robot->ecp_command.instruction.motion_steps = 8;
-    the_robot->ecp_command.instruction.value_in_step_no = 8;
-
-    step_no = 0;
-    releasedA = false;
-    stop = false;
-
-    return true;
-    */
-}
-
-void wii_teach::clear_position(void)
-{
-    the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[0] = 0;
-    the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[1] = 0;
-    the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[2] = 0;
-    the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[3] = 0;
-    the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[4] = 0;
-    the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[5] = 0;
-    the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = 0;
-
-    int i;
-    for(i = 0;i < 7;++i)
-    {
-        requestedChange[i] = 0;
-    }
-}
-
-bool wii_teach::calculate_position(void)
+bool wii::calculate_change(void)
 {
     int i;
     bool changed = false;
@@ -77,7 +38,7 @@ bool wii_teach::calculate_position(void)
     return changed;
 }
 
-int wii_teach::get_axis(void)
+int wii::get_axis(void)
 {
     int axis = -1;
     if(!_wiimote->image.sensor_union.wiimote.buttonB && _wiimote->image.sensor_union.wiimote.left)
@@ -112,18 +73,18 @@ int wii_teach::get_axis(void)
     return axis;
 }
 
-void wii_teach::set_position(void)
+void wii::set_position(void)
 {
-    the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[0] = nextChange[0];
-    the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[1] = nextChange[1];
-    the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[2] = nextChange[2];
-    the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[3] = nextChange[3];
-    the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[4] = nextChange[4];
-    the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[5] = nextChange[5];
-    the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = nextChange[6];
+    the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[0] = currentValue[0] + nextChange[0];
+    the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[1] = currentValue[1] + nextChange[1];
+    the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[2] = currentValue[2] + nextChange[2];
+    the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[3] = currentValue[3] + nextChange[3];
+    the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[4] = currentValue[4] + nextChange[4];
+    the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[5] = currentValue[5] + nextChange[5];
+    the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = currentValue[6] + nextChange[6];
 }
 
-bool wii_teach::next_step()
+bool wii::next_step()
 {
     char buffer[200];
     struct lib::ECP_VSP_MSG message;
@@ -152,17 +113,7 @@ bool wii_teach::next_step()
     if(!_wiimote->image.sensor_union.wiimote.buttonA) releasedA = true;
 
     ++step_no;
-    /*
-    the_robot->ecp_command.instruction.instruction_type = lib::SET;
-    the_robot->ecp_command.instruction.get_type = ARM_DV;
-    the_robot->ecp_command.instruction.set_type = ARM_DV;
-    the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
-    the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_ANGLE_AXIS;
-    the_robot->ecp_command.instruction.motion_type = lib::RELATIVE;
-    the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-    the_robot->ecp_command.instruction.motion_steps = 8;
-    the_robot->ecp_command.instruction.value_in_step_no = 8;
-*/
+ 
     if(releasedA && _wiimote->image.sensor_union.wiimote.buttonA) stop = true;
 
     //get value and convert to nonlinear when needed
@@ -170,13 +121,20 @@ bool wii_teach::next_step()
     if(value > -1 && value < 1) value = pow(value,3);
 
 
-    clear_position();
+    preset_position();
+
+    int i;
+    for(i = 0;i < 7;++i)
+    {
+        requestedChange[i] = 0;
+    }
+
     axis = get_axis();
     if(!stop && axis >= 0)
     {
         requestedChange[axis] = value * multipliers[axis];
     }
-    if(!calculate_position() && stop) return false;
+    if(!calculate_change() && stop) return false;
     set_position();
 
     sprintf(buffer,"Moving to: %.5f %.5f %.5f %.5f %.5f %.5f %.5f",
@@ -193,7 +151,7 @@ bool wii_teach::next_step()
     return true;
 }
 
-void wii_teach::execute_motion(void)
+void wii::execute_motion(void)
 {
     // komunikacja wlasciwa
     the_robot->send();

@@ -1,5 +1,5 @@
-#ifndef ECP_WII_TEACH_GENERATOR_H
-#define ECP_WII_TEACH_GENERATOR_H
+#ifndef ECP_WII_GENERATOR_H
+#define ECP_WII_GENERATOR_H
 
 #include <string.h>
 #include <math.h>
@@ -12,7 +12,7 @@ namespace ecp {
 namespace irp6ot {
 namespace generator {
 
-class wii_teach : public common::generator::generator
+class wii : public common::generator::generator
 {
     private:
         //ilosc krokow
@@ -25,7 +25,8 @@ class wii_teach : public common::generator::generator
         bool rumble;
         bool stop;
 
-        double currentChange[7];
+    protected:
+        double currentValue[7];
         double requestedChange[7];
         double nextChange[7];
         double maxChange[7];
@@ -39,13 +40,13 @@ class wii_teach : public common::generator::generator
 	 * @param minor_axis wartosc mniejszej polosi
 	 * @author jedrzej
 	 */
-        wii_teach (common::task::task& _ecp_task,ecp_mp::sensor::wiimote* _wiimote);
+        wii (common::task::task& _ecp_task,ecp_mp::sensor::wiimote* _wiimote);
 
         /**
          * Generuje pierwszy krok
          * @author jedrzej
          */
-        virtual bool first_step();
+        virtual bool first_step() = 0;
 
         /**
          * Generuje kolejne punkty wynikajace z aktualnej orientacji kontrolera
@@ -55,11 +56,11 @@ class wii_teach : public common::generator::generator
 
         void execute_motion(void);
 
-        void clear_position(void);
+        virtual void preset_position(void) = 0;
 
         void set_position(void);
 
-        bool calculate_position(void);
+        bool calculate_change(void);
 
         int get_axis(void);
 };
