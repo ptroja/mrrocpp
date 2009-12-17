@@ -1,4 +1,4 @@
-#include "task/wii_ellipse/generator/ecp_g_wii_ellipse.h"
+#include "application/wii_ellipse/generator/ecp_g_wii_ellipse.h"
 
 #include "lib/impconst.h"
 #include "lib/com_buf.h"

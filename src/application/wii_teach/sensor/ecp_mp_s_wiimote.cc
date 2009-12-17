@@ -5,7 +5,7 @@
 #include <iostream>
 #include <string.h>
 
-#include "task/wii_teach/sensor/ecp_mp_s_wiimote.h"
+#include "application/wii_teach/sensor/ecp_mp_s_wiimote.h"
 #include "ecp_mp/task/ecp_mp_task.h"
 
 using namespace std;

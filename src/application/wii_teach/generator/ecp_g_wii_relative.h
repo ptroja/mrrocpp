@@ -5,8 +5,8 @@
 #include <math.h>
 
 #include "ecp/common/generator/ecp_generator.h"
-#include "task/wii_teach/sensor/ecp_mp_s_wiimote.h"
-#include "task/wii_teach/generator/ecp_g_wii.h"
+#include "application/wii_teach/sensor/ecp_mp_s_wiimote.h"
+#include "application/wii_teach/generator/ecp_g_wii.h"
 
 namespace mrrocpp {
 namespace ecp {

@@ -2,7 +2,7 @@
 #define ECP_T_WII_ELLIPSE_H
 
 #include "ecp_mp/task/ecp_mp_task.h"
-#include "task/wii_ellipse/generator/ecp_g_wii_ellipse.h"
+#include "application/wii_ellipse/generator/ecp_g_wii_ellipse.h"
 #include "ecp/common/generator/ecp_g_smooth2.h"
 
 namespace mrrocpp {

@@ -1,7 +1,7 @@
 #--------------------- src catalog makefile of the MRROC++ frame system ----------------------------#
 # Should be modified only by developers not by users
 HOMEDIR = ..
-SOURCEDIRS = lib kinematics edp ecp ecp_mp mp ui task
+SOURCEDIRS = lib kinematics edp ecp ecp_mp mp ui application
 ifneq ($(BUILD_TARGET), linux)
 SOURCEDIRS+= bt848 vsp ui_server
 endif
