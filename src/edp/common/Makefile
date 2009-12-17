@@ -13,7 +13,7 @@ EDPOBJ = edp_m.o edp_effector.o\
 	edp_force_sensor.o edp_vsp_t.o \
 	servo_gr.o regulator.o in_out.o\
 	trans_t.o manip_trans_t.o vis_server.o edp_extension_thread.o reader.o \
-	${KINEMATDIR}/common/transformer_error.o ${KINEMATDIR}/common/kinematic_model.o ${KINEMATDIR}/common/kinematics_manager.o \
+	${KINEMATDIR}/common/transformer_error.o ${KINEMATDIR}/common/kinematic_model.o ${KINEMATDIR}/common/simple_model.o ${KINEMATDIR}/common/kinematics_manager.o \
 	hi_rydz.o edp_irp6s_postument_track.o
 
 #======================================================#	

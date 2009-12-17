@@ -187,15 +187,12 @@ void effector::servo_joints_and_frame_actualization_and_upload (void)
 			}
     	}
 
-        // T.K.: Obecne wywolanie
-        // get_current_kinematic_model()->i2e_transform(servo_current_joints, &servo_current_end_effector_frame, NULL);
-        // zastepuje wywolaniem metody, direct_kinematics_transform(), ktora rozwiazuje proste zagadnienie kinematyki
-        // bez uwzglednienia narzedzia, czyli robi to, co poprzednio i2e z TOOL = null.
-        //Uwaga: w edp_conveyor_effector jest podobnie.
-        get_current_kinematic_model()->direct_kinematics_transform(servo_current_joints, &servo_current_frame_wo_tool);
-        lib::Homog_matrix A(servo_current_frame_wo_tool);
-        A.get_mech_xyz_euler_zyz(servo_real_kartez_pos);
-        //A.get_xyz_euler_zyz(servo_real_kartez_pos);
+		// Obliczenie lokalnej macierzy oraz obliczenie położenia robota we wsp. zewnętrznych.
+		lib::frame_tab local_frame;
+		get_current_kinematic_model()->i2e_transform(servo_current_joints, &local_frame);
+		// Pobranie wsp. zewnętrznych w układzie
+		lib::Homog_matrix local_matrix(local_frame);
+		local_matrix.get_mech_xyz_euler_zyz(servo_real_kartez_pos);
 
     	// scope-locked reader data update
     	{
@@ -207,14 +204,8 @@ void effector::servo_joints_and_frame_actualization_and_upload (void)
 			}
     	}
 
-        // Jesli obliczenia zwiazane z baza maja byc wykonane.
-        if (get_current_kinematic_model()->global_frame_computations)
-        {
-            lib::Homog_matrix tmp_eem(servo_current_frame_wo_tool);
-            get_current_kinematic_model()->global_frame_transform(tmp_eem);
-            tmp_eem.get_frame_tab(servo_current_frame_wo_tool);
-        }//: if
-
+		// Obliczenie polozenia robota we wsp. zewnetrznych bez narzedzia.
+		get_current_kinematic_model()->i2e_wo_tool_transform(servo_current_joints, &servo_current_frame_wo_tool);
 
         catch_nr=0;
     }//: try

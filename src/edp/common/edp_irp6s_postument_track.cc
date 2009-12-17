@@ -667,17 +667,7 @@ void irp6s_postument_track_effector::get_arm_position(bool read_hardware, lib::c
 void irp6s_postument_track_effector::servo_joints_and_frame_actualization_and_upload(void)
 {
 	static int catch_nr=0;
-
-	//	static double rkpminusone[6] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
-	//	static double rkpminustwo[6] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
-
-	//	lib::frame_tab tmp;
-
-
-	//	lib::Homog_matrix step_increment_frame;
-	//	lib::Homog_matrix servo_current_end_effector_frame_with_tool_and_base_wo_offset;
-
-	// wyznaczenie nowych wartosci joints and frame dla obliczen w servo
+	// Wyznaczenie nowych wartosci joints and frame dla obliczen w servo.
 	try
 	{
 		{
@@ -718,7 +708,6 @@ void irp6s_postument_track_effector::servo_joints_and_frame_actualization_and_up
 
 		// Obliczenie polozenia robota we wsp. zewnetrznych bez narzedzia.
 		get_current_kinematic_model()->i2e_wo_tool_transform(servo_current_joints, &servo_current_frame_wo_tool);
-
 
 		if ( (force_tryb> 0)&&(is_synchronised())&&(!(vs->first_configure_done))&&(!(vs->force_sensor_do_first_configure)))
 		{

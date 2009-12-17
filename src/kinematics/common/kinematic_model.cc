@@ -274,21 +274,6 @@ void model::e2i_wo_tool_transform(double* local_desired_joints, double* local_cu
 }
 
 
-/* ------------------------------------------------------------------------
-  Zwraca etykiete modelu kinematycznego.
- ------------------------------------------------------------------------ */
-const char* model::get_kinematic_model_label(void) const
-{
-    return kinematic_model_label.c_str();
-}
-
-/* ------------------------------------------------------------------------
-  Ustawia etykiete modelu kinematycznego.
- ------------------------------------------------------------------------ */
-void model::set_kinematic_model_label(const std::string & _label)
-{
-	kinematic_model_label = _label;
-}
 
 } // namespace common
 } // namespace kinematic

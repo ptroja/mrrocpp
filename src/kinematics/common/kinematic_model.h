@@ -35,24 +35,15 @@
 // Klasa lib::frame_tab.
 #include "lib/impconst.h"
 
+#include "simple_model.h"
+
 namespace mrrocpp {
 namespace kinematic {
 namespace common {
 
-class model
+class model : public mrrocpp::kinematic::common::simple_model
 {
 protected:
-  // Etykieta kinematyki.
-  std::string kinematic_model_label;
-
-  // Ustawienie parametrow kinematycznych.
-  virtual void set_kinematic_parameters(void) = 0;
-
-  // Sprawdzenie ograniczen na polozenia katowe walow silnikow
-  virtual void check_motor_position(const double motor_position[]) = 0;
-
-  // Sprawdzenie ograniczen na wspolrzedne wewnetrzne
-  virtual void check_joints(const double q[]) = 0;
 
   // Wspolczynnik kalibracji.
   double h;
@@ -77,23 +68,17 @@ public:
   // Macierz reprezentujaca pozycje bazy robota w globalnym ukladzie odniesienia.
   lib::Homog_matrix global_base;
 
-  // Konstruktor.
-  model(void);
+	//! Class constructor - empty.
+	model();
 
-  // Destruktor wirtualny, wskazany przy klasach abstrakcyjnych
-  virtual ~model();
+	//! Class virtual destructor - empty.
+	virtual ~model();
 
-  // Przeliczenie polozenia walow silnikow na wspolrzedne wewnetrzne.
-  virtual void mp2i_transform(const double* local_current_motor_pos, double* local_current_joints) = 0;
+	//! Computes external coordinates on the base of internal coordinates (i2e - internal to external).
+	virtual void i2e_transform(const double* local_current_joints, lib::frame_tab* local_current_end_effector_frame);
 
-  // Przeliczenie wspolrzednych wewnetrznych na polozenia walow silnikow.
-  virtual void i2mp_transform(double* local_desired_motor_pos_new, double* local_desired_joints) = 0;
-
-  // Przeliczenie polozenia ze wspolrzednych wewnetrznych na wspolrzedne zewnetrzne.
-  virtual void i2e_transform(const double* local_current_joints, lib::frame_tab* local_current_end_effector_frame);
-
-  // Przeliczenie polozenia ze wspolrzednych wewnetrznych na wspolrzedne zewnetrzne - bez obliczen zwiazanych z narzedziem
-  virtual void i2e_wo_tool_transform(const double* local_current_joints, lib::frame_tab* local_current_end_effector_frame);
+	//! Computes external coordinates on the base of internal coordinates, without the computations related with the attached tool.
+	virtual void i2e_wo_tool_transform(const double* local_current_joints, lib::frame_tab* local_current_end_effector_frame);
 
   // Przeliczenie polozenia ze wspolrzednych zewnetrznych na wspolrzedne wewnetrzne.
   virtual void e2i_transform(double* local_desired_joints, double* local_current_joints, lib::frame_tab* local_desired_end_effector_frame);
@@ -118,18 +103,6 @@ public:
 
   // Przeliczenie polozenia koncowki zwiazane z dolaczonym narzedziem - transformacja odwrotna.
   virtual void attached_tool_inverse_transform(lib::Homog_matrix&);
-
-  // Rozwiazanie prostego zagadnienia kinematyki.
-  virtual void direct_kinematics_transform(const double* local_current_joints, lib::frame_tab* local_current_end_effector_frame) = 0;
-
-  // Rozwiazanie odwrotnego zagadnienia kinematyki.
-  virtual void inverse_kinematics_transform(double* local_desired_joints, double* local_current_joints, lib::frame_tab* local_desired_end_effector_frame) = 0;
-
-  // Zwraca etykiete modelu kinematycznego.
-  virtual const char* get_kinematic_model_label(void) const;
-
-  // Ustawia pokazywana etykiete modelu kinematycznego.
-  virtual void set_kinematic_model_label(const std::string &);
 
 };//: kinematic_model
 
