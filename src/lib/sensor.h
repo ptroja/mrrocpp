@@ -100,14 +100,6 @@ typedef struct sensor_image_t
 		} force;
 		struct
 		{
-			short reading;
-		} rotation;
-		struct
-		{
-			double readings[6];
-		} ds;
-		struct
-		{
 			double frame[16];
 		} camera;
 		struct
@@ -141,13 +133,6 @@ typedef struct sensor_image_t
 			RCS_READING reading_mode;
 			char cube_solution[200];
 		} rcs;
-
-		//spots recognition
-		struct sp_r_t
-		{
-			double x[4], y[4], z[4], dz, x_sr, y_sr;
-			int pic_count;
-		} sp_r;
 
 		// tlemanipulacja - vsp_pawel
 		struct

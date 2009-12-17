@@ -25,7 +25,6 @@ BINARIES = \
 	mp_rc \
 	mp_rcsc \
 	mp_vis \
-	mp_trm \
 	mp_vis_nn \
 	mp_vis_pbeclsac \
 	mp_vis_sac \
@@ -75,9 +74,6 @@ mp_vis: task/mp_t_vis.o generator/mp_g_vis.o generator/mp_g_teach_in.o generator
 	$(LD) $(LDFLAGS) -o $@ $^
 
 mp_kd: task/mp_t_kd.o generator/mp_g_teach_in.o generator/mp_g_force_kd.o $(ECP_MPDIR)/sensor/ecp_mp_s_schunk.o $(SHOBJ)
-	$(LD) $(LDFLAGS) -o $@ $^
-
-mp_trm: task/mp_t_two_robots_measures.o generator/mp_g_two_robots_measures.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 
 mp_vis_nn: task/mp_t_vis_nn.o generator/mp_g_teach_in.o generator/mp_g_vis_nn.o generator/mp_g_force.o $(ECP_MPDIR)/sensor/ecp_mp_s_vis_nn.o $(ECP_MPDIR)/sensor/ecp_mp_s_schunk.o $(SHOBJ)

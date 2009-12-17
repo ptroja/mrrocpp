@@ -25,17 +25,13 @@ BINARIES =			ecp_pr \
 				ecp_vis_ib_eih_irp6ot \
 				ecp_vis_weights_driven_irp6ot \
 				ecp_draughts \
-				#ecp_spots_recognition \
 				#ecp_pw_kolo\
 				#ecp_haar \
 				#ecp_ttt \
-				ecp_robot_calibration \
 				#ecp_t_box_irp6ot \
 				ecp_t_mboryn
 ifneq ($(BUILD_TARGET), linux)
-BINARIES+=			ecp_fct \
-				ecp_tr \
-				ecp_t_smooth2_test \
+BINARIES+=		ecp_t_smooth2_test \
 				ecp_t_grab_cube_irp6ot \
 				ecp_t_calib_axzb \
 				ecp_t_calib_axxb
@@ -72,14 +68,6 @@ ecp_draughts: task/ecp_t_draughts.o ../common/generator/ecp_g_force.o ../common/
 	$(LD) $(LDFLAGS) -o $@ $^
 
 #-----------------------------------------------------------------------------------------------------------------------#
-#ecp_spots_recognition: task/ecp_t_spots_recognition.o ../common/generator/ecp_g_smooth.o ../common/generator/ecp_g_t.o ../common/generator/ecp_g_jarosz.o\
-#		../common/generator/ecp_g_cvfradia.o $(ECP_MPDIR)/sensor/ecp_mp_s_cvfradia.o ../common/generator/ecp_g_operator_reaction_condition.o $(ECP_MPDIR)/sensor/ecp_mp_s_schunk.o \
-#		../common/generator/ecp_g_force.o ../common/ecp_matrix4x4.o ecp_camera_to_tool.o generator/ecp_g_spots_recognition.o $(SHOBJ)
-#	$(LD) $(LDFLAGS) -o $@ $^
-#-----------------------------------------------------------------------------------------------------------------------#
-ecp_robot_calibration: task/ecp_t_robot_calibration.o generator/ecp_g_robot_calibration.o $(ECP_MPDIR)/sensor/ecp_mp_s_pcbird.o $(ECP_MPDIR)/birdclient.o $(SHOBJ)
-	$(LD) $(LDFLAGS) -o $@ -lgsl -lgslcblas $^
-#-----------------------------------------------------------------------------------------------------------------------#
 ecp_kin_test_irp6ot: task/ecp_t_kin_test_irp6ot.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 #-----------------------------------------------------------------------------------------------------------------------#
@@ -111,12 +99,6 @@ ecp_rover: task/ecp_t_rover_irp6ot.o generator/ecp_g_rover.o ../common/generator
 #-----------------------------------------------------------------------------------------------------------------------#
 #ecp_nurbs: task/ecp_t_ts_irp6ot.o generator/ecp_g_nurbs.o $(SHOBJ) 
 #	$(LD) $(LDFLAGS) -o $@ $^ 
-#-----------------------------------------------------------------------------------------------------------------------#
-ecp_fct: task/ecp_t_fct_irp6ot.o generator/ecp_g_fctg.o $(ECP_MPDIR)/sensor/ecp_mp_s_force.o $(SHOBJ)
-	$(LD) $(LDFLAGS) -o $@ $^ 
-#-----------------------------------------------------------------------------------------------------------------------#
-ecp_tr: task/ecp_t_tr_irp6ot.o generator/ecp_g_trg.o generator/ecp_g_rsc.o $(ECP_MPDIR)/sensor/ecp_mp_s_force.o $(ECP_MPDIR)/sensor/ecp_mp_s_digital_scales.o $(SHOBJ)
-	$(LD) $(LDFLAGS) -o $@ $^ 
 #-----------------------------------------------------------------------------------------------------------------------#
 ecp_pt: task/ecp_t_pt_irp6ot.o ../common/generator/ecp_g_jarosz.o ../common/generator/ecp_g_operator_reaction_condition.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
