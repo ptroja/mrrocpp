@@ -6,12 +6,11 @@
 #include <fstream>
 
 #include "lib/srlib.h"
-#include "ecp_mp/sensor/ecp_mp_s_wiimote.h"
+#include "task/wii_teach/sensor/ecp_mp_s_wiimote.h"
 
 #include "ecp/irp6_on_track/ecp_r_irp6ot.h"
-#include "ecp/irp6_on_track/task/ecp_t_wii_teach.h"
+#include "task/wii_teach/ecp_t_wii_teach.h"
 #include "lib/mathtr.h"
-#include "ecp_t_wii_teach.h"
 
 #if defined(USE_MESSIP_SRR)
 #include "lib/messip/messip_dataport.h"

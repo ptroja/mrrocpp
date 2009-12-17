@@ -1,5 +1,5 @@
-#if !defined_ecp_wii_velocity_generator_H
-# define _ecp_wii_velocity_generator_H
+#ifndef ECP_WII_VELOCITY_GENERATOR_H
+#define ECP_WII_VELOCITY_GENERATOR_H
 
 #include <string.h>
 #include <math.h>
@@ -34,4 +34,4 @@ class wii_velocity : public common::generator::tff_nose_run
 } // namespace ecp
 } // namespace mrrocpp
 
-#endif
+#endif //ECP_WII_VELOCITY_GENERATOR_H

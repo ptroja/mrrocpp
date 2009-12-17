@@ -1,4 +1,4 @@
-#include "ecp/irp6_on_track/generator/ecp_g_ellipse.h"
+#include "task/wii_ellipse/generator/ecp_g_wii_ellipse.h"
 
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
@@ -9,9 +9,9 @@ namespace ecp {
 namespace irp6ot {
 namespace generator {
 
-ellipse::ellipse (common::task::task& _ecp_task,double major_axis,double minor_axis,int max_steps) : common::generator::generator (_ecp_task),major_axis(major_axis),minor_axis(minor_axis),max_steps(max_steps),d_rad(2*M_PI/max_steps) {}
+wii_ellipse::wii_ellipse (common::task::task& _ecp_task,double major_axis,double minor_axis,int max_steps) : common::generator::generator (_ecp_task),major_axis(major_axis),minor_axis(minor_axis),max_steps(max_steps),d_rad(2*M_PI/max_steps) {}
 
-bool ellipse::first_step()
+bool wii_ellipse::first_step()
 {
 	/*
     the_robot->ecp_command.instruction.instruction_type = lib::GET;
@@ -30,7 +30,7 @@ bool ellipse::first_step()
     */
 }
 
-bool ellipse::next_step()
+bool wii_ellipse::next_step()
 {
 	try
 	{
@@ -95,7 +95,7 @@ bool ellipse::next_step()
 	return true;
 }
 
-double* ellipse::getFirstPosition()
+double* wii_ellipse::getFirstPosition()
 {
 	double* firstPosition = new double[8];
 	firstPosition[0] = 1;

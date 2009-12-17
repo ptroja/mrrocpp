@@ -6,10 +6,10 @@
 #include <fstream>
 
 #include "lib/srlib.h"
-#include "ecp_mp/sensor/ecp_mp_s_wiimote.h"
+#include "task/wii_teach/sensor/ecp_mp_s_wiimote.h"
 
 #include "ecp/irp6_on_track/ecp_r_irp6ot.h"
-#include "ecp/irp6_on_track/task/ecp_t_wii_velocity.h"
+#include "task/wii_velocity/ecp_t_wii_velocity.h"
 #include "lib/mathtr.h"
 
 namespace mrrocpp {

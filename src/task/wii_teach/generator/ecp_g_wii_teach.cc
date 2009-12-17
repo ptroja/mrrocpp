@@ -1,7 +1,7 @@
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 #include "math.h"
-#include "ecp_g_wii_teach.h"
+#include "task/wii_teach/generator/ecp_g_wii_teach.h"
 
 namespace mrrocpp {
 namespace ecp {

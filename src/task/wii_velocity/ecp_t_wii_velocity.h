@@ -1,8 +1,8 @@
-#if !defined(_ECP_T_WII_VELOCITY_H)
-#define _ECP_T_WII_VELOCITY_H
+#ifndef ECP_T_WII_VELOCITY_H
+#define ECP_T_WII_VELOCITY_H
 
 #include "ecp_mp/task/ecp_mp_task.h"
-#include "ecp/irp6_on_track/generator/ecp_g_wii_velocity.h"
+#include "task/wii_velocity/generator/ecp_g_wii_velocity.h"
 #include "ecp/common/generator/ecp_g_smooth.h"
 
 
@@ -40,4 +40,4 @@ public:
 } // namespace ecp
 } // namespace mrrocpp
 
-#endif
+#endif //ECP_T_WII_VELOCITY_H

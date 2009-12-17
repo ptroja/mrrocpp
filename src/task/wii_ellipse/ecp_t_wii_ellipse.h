@@ -1,8 +1,8 @@
-#if !defined(_ECP_T_ELLIPSE_H)
-#define _ECP_T_ELLIPSE_H
+#ifndef ECP_T_WII_ELLIPSE_H
+#define ECP_T_WII_ELLIPSE_H
 
 #include "ecp_mp/task/ecp_mp_task.h"
-#include "ecp/irp6_on_track/generator/ecp_g_ellipse.h"
+#include "task/wii_ellipse/generator/ecp_g_wii_ellipse.h"
 #include "ecp/common/generator/ecp_g_smooth.h"
 
 namespace mrrocpp {
@@ -18,11 +18,11 @@ namespace task {
  * Kresli w powietrzu elipse o zadanych polosiach
  * @author jkurylo
  */
-class ellipse: public common::task::task
+class wii_ellipse: public common::task::task
 {
 protected:
 	//Generator ruchu
-	generator::ellipse* eg;
+	generator::wii_ellipse* eg;
 	common::generator::smooth* sg;
 
 	/**
@@ -41,7 +41,7 @@ public:
 	 * @param _config konfigurator
 	 * @author jedrzej
 	 */
-	ellipse(lib::configurator &_config);
+	wii_ellipse(lib::configurator &_config);
 
 	/**
 	 * Realizuje zadanie
@@ -56,4 +56,4 @@ public:
 } // namespace mrrocpp
 
 
-#endif
+#endif //ECP_T_WII_ELLIPSE_H

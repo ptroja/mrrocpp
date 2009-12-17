@@ -1,4 +1,4 @@
-#include "ecp/irp6_on_track/generator/ecp_g_wii_velocity.h"
+#include "task/wii_velocity/generator/ecp_g_wii_velocity.h"
 
 #include "lib/impconst.h"
 #include "lib/com_buf.h"

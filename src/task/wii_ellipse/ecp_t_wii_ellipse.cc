@@ -6,10 +6,10 @@
 #include <fstream>
 
 #include "lib/srlib.h"
-#include "ecp_mp/sensor/ecp_mp_s_wiimote.h"
+#include "task/wii_teach/sensor/ecp_mp_s_wiimote.h"
 
 #include "ecp/irp6_on_track/ecp_r_irp6ot.h"
-#include "ecp/irp6_on_track/task/ecp_t_ellipse.h"
+#include "task/wii_ellipse/ecp_t_wii_ellipse.h"
 #include "lib/mathtr.h"
 
 namespace mrrocpp {
@@ -17,7 +17,7 @@ namespace ecp {
 namespace irp6ot {
 namespace task {
 
-ellipse::ellipse(lib::configurator &_config) : task(_config)
+wii_ellipse::wii_ellipse(lib::configurator &_config) : task(_config)
 {
 	ecp_m_robot = new robot (*this);
 
@@ -27,7 +27,7 @@ ellipse::ellipse(lib::configurator &_config) : task(_config)
 	sensor_m[lib::SENSOR_WIIMOTE]->configure_sensor();
 }
 
-void ellipse::main_task_algorithm(void)
+void wii_ellipse::main_task_algorithm(void)
 {
 	/*
  	//Polosie elipsy
@@ -37,7 +37,7 @@ void ellipse::main_task_algorithm(void)
 	a = read_double((char*)"a",0,MAX_MAJOR);
 	b = read_double((char*)"b",0,MAX_MINOR);
     sg = new common::generator::smooth(*this,true);
-    eg = new generator::ellipse(*this,a,b,100);
+    eg = new generator::wii_ellipse(*this,a,b,100);
     firstPosition = eg->getFirstPosition();
 
 	sg->reset();
@@ -50,7 +50,7 @@ void ellipse::main_task_algorithm(void)
     */
 }
 
-double ellipse::read_double(char* name,double min,double max)
+double wii_ellipse::read_double(char* name,double min,double max)
 {
 	double value;
 	int cnt = 0;
@@ -94,7 +94,7 @@ namespace task {
 
 task* return_created_ecp_task (lib::configurator &_config)
 {
-	return new irp6ot::task::ellipse(_config);
+	return new irp6ot::task::wii_ellipse(_config);
 }
 
 }

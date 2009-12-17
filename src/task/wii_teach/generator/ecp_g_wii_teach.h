@@ -1,11 +1,11 @@
-#if !defined_ecp_wii_teach_generator_H
-# define _ecp_wii_teach_generator_H
+#ifndef ECP_WII_TEACH_GENERATOR_H
+#define ECP_WII_TEACH_GENERATOR_H
 
 #include <string.h>
 #include <math.h>
 
 #include "ecp/common/generator/ecp_generator.h"
-#include "ecp_mp/sensor/ecp_mp_s_wiimote.h"
+#include "task/wii_teach/sensor/ecp_mp_s_wiimote.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -69,4 +69,4 @@ class wii_teach : public common::generator::generator
 } // namespace ecp
 } // namespace mrrocpp
 
-#endif
+#endif //ECP_WII_TEACH_GENERATOR_H

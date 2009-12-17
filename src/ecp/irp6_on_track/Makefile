@@ -29,11 +29,7 @@ BINARIES =			ecp_pr \
 				ecp_pw_kolo\
 				ecp_haar \
 				ecp_ttt \
-				ecp_ellipse \
 				ecp_robot_calibration \
-			        ecp_wii \
-			        ecp_wii_velocity \
-			        ecp_wii_teach \
 				ecp_t_box_irp6ot \
 				ecp_t_mboryn
 ifneq ($(BUILD_TARGET), linux)
@@ -62,26 +58,6 @@ ecp_haar: task/ecp_t_haar_irp6ot.o generator/ecp_g_rotate_gripper.o ../common/ge
 
 #-----------------------------------------------------------------------------------------------------------------------#
 ecp_ttt: task/ecp_t_ttt.o ../common/generator/ecp_g_smooth.o ../common/generator/ecp_g_t.o ../common/generator/ecp_g_jarosz.o \
-                ../common/generator/ecp_g_operator_reaction_condition.o ../common/generator/ecp_g_sleep.o $(SHOBJ)
-	$(LD) $(LDFLAGS) -o $@ $^
-
-#-----------------------------------------------------------------------------------------------------------------------#
-ecp_ellipse: task/ecp_t_ellipse.o generator/ecp_g_ellipse.o ../common/generator/ecp_g_smooth.o ../common/generator/ecp_g_t.o ../common/generator/ecp_g_jarosz.o $(ECP_MPDIR)/sensor/ecp_mp_s_wiimote.o \
-                ../common/generator/ecp_g_operator_reaction_condition.o ../common/generator/ecp_g_sleep.o $(SHOBJ)
-	$(LD) $(LDFLAGS) -o $@ $^
-
-#-----------------------------------------------------------------------------------------------------------------------#
-ecp_wii: task/ecp_t_wii.o generator/ecp_g_wii.o ../common/generator/ecp_g_smooth.o ../common/generator/ecp_g_t.o ../common/generator/ecp_g_jarosz.o $(ECP_MPDIR)/sensor/ecp_mp_s_wiimote.o \
-                ../common/generator/ecp_g_operator_reaction_condition.o ../common/generator/ecp_g_sleep.o $(SHOBJ)
-	$(LD) $(LDFLAGS) -o $@ $^
-
-#-----------------------------------------------------------------------------------------------------------------------#
-ecp_wii_velocity: task/ecp_t_wii_velocity.o generator/ecp_g_wii_velocity.o ../common/generator/ecp_g_force.o ../common/generator/ecp_g_smooth.o ../common/generator/ecp_g_t.o ../common/generator/ecp_g_jarosz.o $(ECP_MPDIR)/sensor/ecp_mp_s_wiimote.o \
-                ../common/generator/ecp_g_operator_reaction_condition.o ../common/generator/ecp_g_sleep.o $(SHOBJ)
-	$(LD) $(LDFLAGS) -o $@ $^
-
-#-----------------------------------------------------------------------------------------------------------------------#
-ecp_wii_teach: task/ecp_t_wii_teach.o ../common/generator/ecp_g_force.o ../irp6_on_track/generator/ecp_g_wii_teach.o ../common/generator/ecp_g_smooth2.o ../common/generator/ecp_g_t.o ../common/generator/ecp_g_jarosz.o $(ECP_MPDIR)/sensor/ecp_mp_s_wiimote.o \
                 ../common/generator/ecp_g_operator_reaction_condition.o ../common/generator/ecp_g_sleep.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 
