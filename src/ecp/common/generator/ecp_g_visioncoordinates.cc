@@ -16,7 +16,7 @@
 #include "lib/com_buf.h"
 
 #include "lib/srlib.h"
-#include "lib/mathtr/mrmath.h"
+#include "lib/mrmath/mrmath.h"
 
 #include "ecp/common/generator/ecp_g_visioncoordinates.h"
 #include "ecp_mp/sensor/ecp_mp_s_cvfradia.h"

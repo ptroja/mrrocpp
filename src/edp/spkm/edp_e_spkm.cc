@@ -16,7 +16,7 @@
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 #include "lib/mis_fun.h"
-#include "lib/mathtr/mrmath.h"
+#include "lib/mrmath/mrmath.h"
 
 // Klasa edp_irp6ot_effector.
 #include "edp/spkm/edp_e_spkm.h"

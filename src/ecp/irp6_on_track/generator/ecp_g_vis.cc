@@ -18,7 +18,7 @@
 #include "ecp/irp6_on_track/ecp_r_irp6ot.h"
 #include "ecp/irp6_on_track/generator/ecp_g_vis.h"
 
-#include "lib/mathtr/mrmath.h"
+#include "lib/mrmath/mrmath.h"
 
 namespace mrrocpp {
 namespace ecp {

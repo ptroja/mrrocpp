@@ -10,7 +10,7 @@
 
 #include "ecp/irp6_on_track/ecp_r_irp6ot.h"
 #include "application/wii_ellipse/ecp_t_wii_ellipse.h"
-#include "lib/mathtr/mrmath.h"
+#include "lib/mrmath/mrmath.h"
 
 namespace mrrocpp {
 namespace ecp {

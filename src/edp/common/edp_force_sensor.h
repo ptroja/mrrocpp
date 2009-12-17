@@ -12,7 +12,7 @@
 
 #include <semaphore.h>
 
-#include "lib/mathtr/ForceTrans.h"
+#include "lib/mrmath/ForceTrans.h"
 #include "lib/sensor.h"				// klasa bazowa sensor
 #include "edp/common/edp.h"				// klasa bazowa sensor
 #include "edp/common/edp_extension_thread.h"

@@ -18,7 +18,7 @@
 #include "edp/common/reader.h"
 #include "edp/conveyor/regulator_conv.h"
 
-#include "lib/mathtr/mrmath.h"
+#include "lib/mrmath/mrmath.h"
 
 namespace mrrocpp {
 namespace edp {

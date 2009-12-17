@@ -33,7 +33,7 @@
 #include "edp/common/reader.h"
 #include "edp/common/edp_irp6s_postument_track.h"
 #include "edp/common/servo_gr.h"
-#include "lib/mathtr/mrmath.h"
+#include "lib/mrmath/mrmath.h"
 #include "lib/srlib.h"
 #include "edp/common/manip_trans_t.h"
 #include "edp/common/edp_vsp_t.h"

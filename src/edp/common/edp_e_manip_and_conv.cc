@@ -39,7 +39,7 @@
 #include "edp/common/manip_trans_t.h"
 #include "edp/common/vis_server.h"
 
-#include "lib/mathtr/mrmath.h"
+#include "lib/mrmath/mrmath.h"
 
 #include "kinematics/common/kinematic_model.h"
 #include "edp/common/in_out.h"

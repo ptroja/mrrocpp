@@ -13,7 +13,7 @@
 #ifndef __MRMATH_H
 #define __MRMATH_H
 
-#include "lib/mathtr/mathtr.h"
-#include <lib/mathtr/ForceTrans.h>
+#include "lib/mrmath/mathtr.h"
+#include <lib/mrmath/ForceTrans.h>
 
 #endif

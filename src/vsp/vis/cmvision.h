@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include "lib/mathtr/mrmath.h"
+#include "lib/mrmath/mrmath.h"
 
 #define CMV_COLOR_LEVELS  256
 #define CMV_MAX_COLORS     32

@@ -15,7 +15,7 @@
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
-#include "lib/mathtr/mrmath.h"
+#include "lib/mrmath/mrmath.h"
 #include "edp/common/reader.h"
 
 // Klasa edp_conveyor_effector.

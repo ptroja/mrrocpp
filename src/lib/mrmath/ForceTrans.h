@@ -1,7 +1,7 @@
 #ifndef __FORCETRANS_H
 #define __FORCETRANS_H
 
-#include "lib/mathtr/mrmath.h"
+#include "lib/mrmath/mrmath.h"
 
 
 namespace mrrocpp {
