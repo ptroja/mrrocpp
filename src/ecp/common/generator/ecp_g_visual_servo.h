@@ -11,7 +11,7 @@
 #define EA_8CD1135B_079F_4b66_82F9_362F9BC528CE__INCLUDED_
 
 #include "sys/time.h"
-#include "lib/mathtr.h"
+#include "lib/mathtr/mathtr.h"
 #include "ecp/common/generator/ecp_generator.h"
 
 namespace mrrocpp {

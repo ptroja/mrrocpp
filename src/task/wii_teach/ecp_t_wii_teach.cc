@@ -10,7 +10,7 @@
 
 #include "ecp/irp6_on_track/ecp_r_irp6ot.h"
 #include "task/wii_teach/ecp_t_wii_teach.h"
-#include "lib/mathtr.h"
+#include "lib/mathtr/mathtr.h"
 
 #if defined(USE_MESSIP_SRR)
 #include "lib/messip/messip_dataport.h"

@@ -1,7 +1,7 @@
 #ifndef __FORCETRANS_H
 #define __FORCETRANS_H
 
-#include "lib/mathtr.h"
+#include "lib/mathtr/mathtr.h"
 
 
 namespace mrrocpp {
@@ -26,27 +26,27 @@ const short force_sensor_name;
 	lib::Ft_v_vector gravity_force_torque_in_base;
 	lib::Ft_v_vector reaction_force_torque_in_sensor;
 	lib::K_vector gravity_arm_in_wrist;
-	
+
 	//	lib::K_vector reaction_force_in_sensor;
 	//	lib::K_vector reaction_torque_in_sensor;
 	//	lib::Homog_matrix initialisation_frame;
 		lib::Homog_matrix sensor_frame;
 //		lib::Homog_matrix sensor_frame_translation;
 //		lib::Homog_matrix sensor_frame_rotation;
-	
+
 	lib::Ft_v_tr ft_tool_mass_center_translation;
-	
+
 	lib::Ft_v_tr ft_tr_sensor_in_wrist;
 
-	
+
 //	lib::Ft_v_tr ft_tr_sensor_translation_matrix;
 //	lib::Ft_v_tr ft_tr_inv_sensor_translation_matrix;
 //	lib::Ft_v_tr ft_tr_sensor_rotation_matrix;
 //	lib::Ft_v_tr ft_tr_inv_sensor_rotation_matrix;
-	
+
 public:
 	//	ForceTrans(const lib::Homog_matrix & init_frame, const lib::Homog_matrix & s_frame);										// standardowy tool
-	ForceTrans(const short l_force_sensor_name, const lib::Homog_matrix & init_frame, const lib::Homog_matrix & s_frame	, 
+	ForceTrans(const short l_force_sensor_name, const lib::Homog_matrix & init_frame, const lib::Homog_matrix & s_frame	,
 		const double weight, const lib::K_vector & point_of_gravity);
 	void defineTool(const lib::Homog_matrix & init_frame, const double weight, const lib::K_vector & point_of_gravity);
 	void synchro(const lib::Homog_matrix & init_frame);

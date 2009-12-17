@@ -14,7 +14,7 @@
 #include <iostream>
 
 #include "lib/mis_fun.h"
-#include "lib/mathtr.h"
+#include "lib/mathtr/mathtr.h"
 
 namespace mrrocpp {
 namespace lib {

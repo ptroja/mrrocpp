@@ -27,11 +27,11 @@ MESSIP_OBJECTS = messip/logg_messip.o messip/messip_lib.o messip/messip_utils.o 
 MESSIP_OBJECTS: messip
 
 LIBMRROCPP_OBJECTS = \
-	ForceTrans.o \
+	mathtr/ForceTrans.o \
 	cfgopts.o \
 	configurator.o \
 	c_buffer.o r_buffer.o \
-	mathtr.o \
+	mathtr/mathtr.o \
 	matrix.o \
 	mis_fun.o \
 	timer.o \

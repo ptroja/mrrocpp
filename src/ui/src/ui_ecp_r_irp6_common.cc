@@ -31,7 +31,7 @@
 #include "ui/ui_ecp_r_irp6_common.h"
 
 #include <math.h>
-#include "lib/mathtr.h"
+#include "lib/mathtr/mathtr.h"
 
 // ---------------------------------------------------------------
 ui_common_robot::ui_common_robot (lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg, lib::robot_name_t _robot_name)

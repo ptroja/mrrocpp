@@ -15,7 +15,7 @@
 #include "lib/srlib.h"
 #include "mp/mp.h"
 #include "mp/generator/mp_g_force.h"
-#include "lib/mathtr.h"
+#include "lib/mathtr/mathtr.h"
 #include "mp/generator/mp_g_common.h"
 
 namespace mrrocpp {

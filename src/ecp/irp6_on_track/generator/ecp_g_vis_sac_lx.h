@@ -7,7 +7,7 @@
 #define _ECP_GEN_VIS_SAC_LX_H
 
 
-#include "lib/mathtr.h"
+#include "lib/mathtr/mathtr.h"
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 

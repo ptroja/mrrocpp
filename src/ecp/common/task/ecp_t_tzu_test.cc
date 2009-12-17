@@ -15,7 +15,7 @@
 #include "ecp/irp6_on_track/ecp_r_irp6ot.h"
 #include "ecp/irp6_postument/ecp_r_irp6p.h"
 #include "ecp/common/task/ecp_t_tzu_test.h"
-#include "lib/mathtr.h"
+#include "lib/mathtr/mathtr.h"
 #include "ecp/common/generator/ecp_g_smooth.h"
 
 namespace mrrocpp {

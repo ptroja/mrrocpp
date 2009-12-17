@@ -22,7 +22,7 @@
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 #include "lib/mis_fun.h"
-#include "lib/mathtr.h"
+#include "lib/mathtr/mathtr.h"
 
 #include "edp/common/reader.h"
 #include "edp/common/edp_e_manip.h"

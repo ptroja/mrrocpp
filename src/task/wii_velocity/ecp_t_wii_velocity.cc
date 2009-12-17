@@ -10,7 +10,7 @@
 
 #include "ecp/irp6_on_track/ecp_r_irp6ot.h"
 #include "task/wii_velocity/ecp_t_wii_velocity.h"
-#include "lib/mathtr.h"
+#include "lib/mathtr/mathtr.h"
 
 namespace mrrocpp {
 namespace ecp {
