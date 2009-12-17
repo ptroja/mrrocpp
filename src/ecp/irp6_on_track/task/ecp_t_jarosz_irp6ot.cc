@@ -39,7 +39,7 @@ void jarosz::main_task_algorithm(void)
 
 	// -----------------------------------
 	// 	tdes.arm_type = lib::XYZ_EULER_ZYZ;
-	tdes.arm_type = lib::JOINT;
+	tdes.arm_type = lib::ECP_JOINT;
 	// -----------------------------------
 
 	// // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // //
