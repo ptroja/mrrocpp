@@ -218,6 +218,14 @@ void smooth2::load_file_with_path(const char* file_name) {
     {
         ps = lib::ECP_JOINT;
     }
+    else if ( !strcmp(coordinate_type, "XYZ_EULER_ZYZ") )
+    {
+        ps = lib::ECP_XYZ_EULER_ZYZ;
+    }
+    else if ( !strcmp(coordinate_type, "XYZ_ANGLE_AXIS") )
+    {
+        ps = lib::ECP_XYZ_ANGLE_AXIS;
+    }
 
     else
     {
@@ -933,9 +941,13 @@ bool smooth2::next_step () {
     			the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
     			the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
 
-    			for (i = 0; i < 6; i++) {//zapisanie nastepnego polazenia (makrokroku) do robota
-    			    the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = coordinate_list_iterator->coordinate[i];
-    			}
+    			homog_matrix.set_xyz_euler_zyz(coordinate_list_iterator->coordinate);
+
+    			//for (i = 0; i < 6; i++) {//zapisanie nastepnego polozenia (makrokroku) do robota
+
+					//TODO przetestowac
+    			homog_matrix.get_frame_tab(the_robot->ecp_command.instruction.arm.pf_def.arm_frame);
+    			//}
 
     			if (type == lib::RELATIVE) {
 					gripper_position = pose_list_iterator->k[6]*((tk)*pose_list_iterator->v_grip);
@@ -982,9 +994,12 @@ bool smooth2::next_step () {
     			the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
     			the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
 
-    			for (i = 0; i < 6; i++) {//zapisanie nastepnego polazenia (makrokroku) do robota
-    			    the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = coordinate_list_iterator->coordinate[i];
-    			}
+    			//for (i = 0; i < 6; i++) {//zapisanie nastepnego polozenia (makrokroku) do robota
+    			homog_matrix.set_xyz_angle_axis(coordinate_list_iterator->coordinate);
+    				//TODO przetestowac
+    			    //the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = coordinate_list_iterator->coordinate[i];
+    			homog_matrix.get_frame_tab(the_robot->ecp_command.instruction.arm.pf_def.arm_frame);
+    			//}
 
     			//gripper
     			if (type == lib::RELATIVE) {
@@ -1172,10 +1187,11 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 			case lib::ECP_XYZ_EULER_ZYZ:
 				gripp = 6;
 				//printf("euler w first_interval\n");
+				homog_matrix.set_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame);
+				homog_matrix.get_xyz_euler_zyz(pose_list_iterator->start_position);
+
 				for (i = 0; i < gripp; i++) {
 					temp = pose_list_iterator->coordinates[i];
-					pose_list_iterator->start_position[i] = the_robot->reply_package.arm.pf_def.arm_coordinates[i];//pierwsze przypisanie start_position
-
 
 					if (!is_last_list_element()) {		   //musi byc zrobione tutaj zeby zadzialalo przypisanie kierunkow dla drugiego ruchu
 						next_pose_list_ptr();
@@ -1191,7 +1207,7 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 					pose_list_iterator->start_position[gripp] = temp;//przypisanie pozycji koncowej poprzedniego ruchu jako
 					prev_pose_list_ptr();							//pozycje startowa nowego ruchu
 				}
-				pose_list_iterator->start_position[7] = 0.0;
+				pose_list_iterator->start_position[gripp+1] = 0.0;
 
 				for (i = 0; i < MAX_SERVOS_NR; i++) {
 
@@ -1228,9 +1244,11 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 			case lib::ECP_XYZ_ANGLE_AXIS:
 				gripp = 6;
 
+				homog_matrix.set_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame);
+				homog_matrix.get_xyz_angle_axis(pose_list_iterator->start_position);
+
 				for (i = 0; i < gripp; i++) {
 					temp = pose_list_iterator->coordinates[i];
-					pose_list_iterator->start_position[i] = the_robot->reply_package.arm.pf_def.arm_coordinates[i];//pierwsze przypisanie start_position
 					if (!is_last_list_element()) {		   //musi byc zrobione tutaj zeby zadzialalo przypisanie kierunkow dla drugiego ruchu
 						next_pose_list_ptr();
 						pose_list_iterator->start_position[i] = temp;//przypisanie pozycji koncowej poprzedniego ruchu jako
@@ -1244,7 +1262,7 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 					pose_list_iterator->start_position[gripp] = temp;//przypisanie pozycji koncowej poprzedniego ruchu jako
 					prev_pose_list_ptr();							//pozycje startowa nowego ruchu
 				}
-				pose_list_iterator->start_position[7] = 0.0;
+				pose_list_iterator->start_position[gripp+1] = 0.0;
 
 				for (i = 0; i < MAX_SERVOS_NR; i++) {
 
