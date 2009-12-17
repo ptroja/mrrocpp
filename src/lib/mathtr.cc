@@ -1267,7 +1267,7 @@ int Homog_matrix::operator!=(const Homog_matrix & comp) const
 return(0);
 }// end int Homog_matrix::operator!=(const Homog_matrix & comp) const
 
-double Homog_matrix::operator[](const int i) const
+double* Homog_matrix::operator[](const int i)
 {
         //    printf("RHS a[%2d]\n", i );
         return matrix_m[i];
