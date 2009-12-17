@@ -354,20 +354,20 @@ bool haptic::first_step()
 
 	lib::Homog_matrix tool_frame(0.0, 0.0, 0.25);
 	tool_frame.get_frame_tab(irp6ot->mp_command.instruction.rmodel.tool_frame_def.tool_frame);
-/*
+
 	irp6p->mp_command.command = lib::NEXT_POSE;
 	irp6p->mp_command.instruction.instruction_type = lib::GET;
 	irp6p->mp_command.instruction.get_type = ARM_DV;
 	irp6p->mp_command.instruction.set_type = ARM_DV | RMODEL_DV;
 	irp6p->mp_command.instruction.set_rmodel_type = lib::TOOL_FRAME;
 	irp6p->mp_command.instruction.get_rmodel_type = lib::TOOL_FRAME;
-	irp6p->mp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
+	irp6p->mp_command.instruction.set_arm_type = lib::FRAME;
 	irp6p->mp_command.instruction.get_arm_type = lib::FRAME;
 	irp6p->mp_command.instruction.motion_type = lib::ABSOLUTE;
 	irp6p->mp_command.instruction.interpolation_type = lib::TCIM;
 	irp6p->mp_command.instruction.motion_steps = td.internode_step_no;
 	irp6p->mp_command.instruction.value_in_step_no = td.value_in_step_no;
-*/
+
 	tool_frame.get_frame_tab(irp6p->mp_command.instruction.rmodel.tool_frame_def.tool_frame);
 
 	for (int i=0; i<3; i++) {
@@ -443,7 +443,7 @@ bool haptic::next_step()
 	lib::Homog_matrix irp6p_current_arm_frame(irp6p->ecp_reply_package.reply_package.arm.pf_def.arm_frame);
 
 	lib::Homog_matrix irp6p_goal_frame(global_base*irp6ot_current_arm_frame);
-	irp6p_goal_frame.get_xyz_angle_axis(irp6p->mp_command.instruction.arm.pf_def.arm_coordinates);
+	irp6p_goal_frame.get_frame_tab(irp6p->mp_command.instruction.arm.pf_def.arm_frame);
 
 	/*
 	 lib::Homog_matrix irp6p_goal_frame_increment_in_end_effector ((!irp6p_current_arm_frame)*irp6p_goal_frame);
