@@ -81,6 +81,7 @@ void manip_effector::compute_frame (const lib::c_buffer &instruction)
             desired_joints_tmp[gripper_servo_nr] = instruction.arm.pf_def.gripper_coordinate;
         }
         arm_abs_frame_2_frame(p_m);
+  //      fprintf(stderr, "debug@%s:%d\n", __FILE__, __LINE__);
         break;
     case lib::RELATIVE:   // ruch wzgledny
         // dla robotow track i postument - oblicz chwytak
@@ -88,6 +89,7 @@ void manip_effector::compute_frame (const lib::c_buffer &instruction)
          {
              desired_joints_tmp[gripper_servo_nr] = instruction.arm.pf_def.gripper_coordinate + current_joints[gripper_servo_nr];
          }
+   //      fprintf(stderr, "debug@%s:%d\n", __FILE__, __LINE__);
         arm_rel_frame_2_frame(p_m);
         break;
     default:
@@ -171,7 +173,8 @@ void manip_effector::arm_rel_frame_2_frame (lib::frame_tab p_m)
     // do wewntrznych struktur danych TRANSFORMATORa
     // Przepisanie z przemnozeniem
     lib::Homog_matrix A_B_T_arg(p_m);
-    lib::Homog_matrix A_B_T_des (desired_end_effector_frame);
+    lib::Homog_matrix A_B_T_des (current_end_effector_frame);
+    //cout << A_B_T_des;
     A_B_T_des *= A_B_T_arg;
     A_B_T_des.get_frame_tab(desired_end_effector_frame);
 
