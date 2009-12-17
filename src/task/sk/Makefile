@@ -22,7 +22,7 @@ SHOBJ = ../../ecp_mp/libecp_mp.a ../../ecp_mp/ecp_mp_robot.o ../../ecp/irp6_on_t
 #------------------------------------------------- Build rules -------------------------------------------------------#
 all: ${BINARIES}
 #-----------------------------------------------------------------------------------------------------------------------#
-ecp_sk: ecp_t_sk.o ecp_g_force.o ../../ecp/common/generator/ecp_g_force.o $(SHOBJ)
+ecp_sk: ecp_t_sk.o ecp_g_sk.o ../../ecp/common/generator/ecp_g_force.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 
 #---------------------------------Special object build rules (user made)-------------------------------------#

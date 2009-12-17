@@ -34,7 +34,7 @@
 #include "lib/com_buf.h"
 
 #include "lib/srlib.h"
-#include "task/sk/ecp_g_force.h"
+#include "task/sk/ecp_g_sk.h"
 
 namespace mrrocpp {
 namespace ecp {

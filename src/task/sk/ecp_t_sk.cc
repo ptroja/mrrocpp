@@ -19,7 +19,7 @@
 #include "ecp/irp6_on_track/ecp_r_irp6ot.h"
 #include "ecp/irp6_postument/ecp_r_irp6p.h"
 #include "ecp/common/generator/ecp_g_force.h"
-#include "task/sk/ecp_g_force.h"
+#include "task/sk/ecp_g_sk.h"
 #include "ecp_mp/sensor/ecp_mp_s_schunk.h"
 #include "task/sk/ecp_t_sk.h"
 
