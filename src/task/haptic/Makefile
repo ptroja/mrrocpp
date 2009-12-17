@@ -22,7 +22,7 @@ SHOBJ = ../../ecp_mp/libecp_mp.a ../../ecp_mp/ecp_mp_robot.o ../../mp/libmpmain.
 #------------------------------------------------- Build rules -------------------------------------------------------#
 all: ${BINARIES}
 #-----------------------------------------------------------------------------------------------------------------------#
-mp_haptic: mp_t_haptic.o mp_g_force.o $(SHOBJ)
+mp_haptic: mp_t_haptic.o mp_g_haptic.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 
 #---------------------------------Special object build rules (user made)-------------------------------------#

@@ -16,7 +16,7 @@
 
 #include "lib/srlib.h"
 #include "mp/mp.h"
-#include "task/haptic/mp_g_force.h"
+#include "task/haptic/mp_g_haptic.h"
 #include "task/haptic/mp_t_haptic.h"
 #include "ecp_mp/task/ecp_mp_t_rcsc.h"
 
