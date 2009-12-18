@@ -65,7 +65,7 @@ pr::pr(lib::configurator &_config) : task(_config)
 
     usleep(1000*100);
 
-    ecp_tryb = config.return_int_value("tryb");
+    ecp_tryb = config.value<int>("tryb");
 
     ynrlg = new common::generator::y_nose_run_force (*this, 8);
     ynrlg->sensor_m = sensor_m;

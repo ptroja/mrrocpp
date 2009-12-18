@@ -39,7 +39,7 @@ rubik_cube_solver::rubik_cube_solver(lib::configurator &_config)
 	cube_state(NULL)
 {
 	// Powolanie czujnikow
-	vis_servoing = config.return_int_value("vis_servoing");
+	vis_servoing = config.value<int>("vis_servoing");
 
 	if (vis_servoing)
 	{
@@ -47,7 +47,7 @@ rubik_cube_solver::rubik_cube_solver(lib::configurator &_config)
 	sensor_m[lib::SENSOR_CAMERA_ON_TRACK] =
 		new ecp_mp::sensor::vis (lib::SENSOR_CAMERA_ON_TRACK, "[vsp_vis_eih]", *this);
 
-	if (config.return_int_value("vis_servoing"))
+	if (config.value<int>("vis_servoing"))
 	{
 
 		sensor_m[lib::SENSOR_CAMERA_SA] =
@@ -805,7 +805,7 @@ void rubik_cube_solver::approach_op(int mode)
 	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 			(1, 1, lib::ROBOT_FESTIVAL, lib::ROBOT_FESTIVAL);
 
-	if ((config.exists("irp6p_compliant")) && ((bool) config.return_int_value("irp6p_compliant")))
+	if ((config.exists("irp6p_compliant")) && ((bool) config.value<int>("irp6p_compliant")))
 	{
 
 		// wlaczenie genrator tff_nose_run_generator w postumencie
@@ -1014,7 +1014,7 @@ void rubik_cube_solver::gripper_opening(double track_increment, double postument
 
 void rubik_cube_solver::main_task_algorithm(void)
 {
-	std::string cube_initial_state_string = config.return_string_value("cube_initial_state");
+	std::string cube_initial_state_string = config.value<std::string>("cube_initial_state");
 
 	const char * cube_initial_state = cube_initial_state_string.c_str();
 

@@ -40,7 +40,7 @@ void vis_server::operator()(void)
 	struct sockaddr_in their_addr; // connector's address information
 	socklen_t addr_len;
 
-	uint16_t port = master.config.return_int_value("visual_udp_port");
+	uint16_t port = master.config.value<int>("visual_udp_port");
 	if (port == 0)
 	{
 		master.msg->message("visualisation_thread: bad or missing <visual_udp_port> config entry");

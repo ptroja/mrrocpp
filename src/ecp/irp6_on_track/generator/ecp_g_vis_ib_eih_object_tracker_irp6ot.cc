@@ -173,24 +173,24 @@ bool ecp_vis_ib_eih_object_tracker_irp6ot::next_step_without_constraints() {
 
 bool ecp_vis_ib_eih_object_tracker_irp6ot::read_parametres() {//metoda wczytujaca predkosci, przyspieszenia etc z pliku konfiguracyjnego
 															//przykladowe wartosci podane sa w first stepie
-	v_max[0] = ecp_t.config.return_double_value("v_max_x");//TODO dorobić łapanie wyjątku gdy w pliku konfiguracyjnym nie ma odpowiednich zmiennych
-	v_max[1] = ecp_t.config.return_double_value("v_max_y");
-	v_max[2] = ecp_t.config.return_double_value("v_max_z");
-	a_max[0] = ecp_t.config.return_double_value("a_max_x");
-	a_max[1] = ecp_t.config.return_double_value("a_max_y");
-	a_max[2] = ecp_t.config.return_double_value("a_max_z");
-	v_stop[0] = ecp_t.config.return_double_value("v_stop_x");
-	v_stop[1] = ecp_t.config.return_double_value("v_stop_y");
-	v_stop[2] = ecp_t.config.return_double_value("v_stop_z");
-	v_min[0] = ecp_t.config.return_double_value("v_min_x");
-	v_min[1] = ecp_t.config.return_double_value("v_min_y");
-	v_min[2] = ecp_t.config.return_double_value("v_min_z");
-	u_stop[0] = ecp_t.config.return_double_value("u_stop_x");
-	u_stop[1] = ecp_t.config.return_double_value("u_stop_y");
-	u_stop[2] = ecp_t.config.return_double_value("u_stop_z");
-	u_max[0] = ecp_t.config.return_double_value("u_max_x");
-	u_max[1] = ecp_t.config.return_double_value("u_max_y");
-	u_max[2] = ecp_t.config.return_double_value("u_max_z");
+	v_max[0] = ecp_t.config.value<double>("v_max_x");//TODO dorobić łapanie wyjątku gdy w pliku konfiguracyjnym nie ma odpowiednich zmiennych
+	v_max[1] = ecp_t.config.value<double>("v_max_y");
+	v_max[2] = ecp_t.config.value<double>("v_max_z");
+	a_max[0] = ecp_t.config.value<double>("a_max_x");
+	a_max[1] = ecp_t.config.value<double>("a_max_y");
+	a_max[2] = ecp_t.config.value<double>("a_max_z");
+	v_stop[0] = ecp_t.config.value<double>("v_stop_x");
+	v_stop[1] = ecp_t.config.value<double>("v_stop_y");
+	v_stop[2] = ecp_t.config.value<double>("v_stop_z");
+	v_min[0] = ecp_t.config.value<double>("v_min_x");
+	v_min[1] = ecp_t.config.value<double>("v_min_y");
+	v_min[2] = ecp_t.config.value<double>("v_min_z");
+	u_stop[0] = ecp_t.config.value<double>("u_stop_x");
+	u_stop[1] = ecp_t.config.value<double>("u_stop_y");
+	u_stop[2] = ecp_t.config.value<double>("u_stop_z");
+	u_max[0] = ecp_t.config.value<double>("u_max_x");
+	u_max[1] = ecp_t.config.value<double>("u_max_y");
+	u_max[2] = ecp_t.config.value<double>("u_max_z");
 
 	return true;
 }

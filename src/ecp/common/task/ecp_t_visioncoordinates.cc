@@ -139,7 +139,7 @@ void visioncoordinates::setStartPosition()
 	double bf[MAX_SERVOS_NR];
 	memset(bf, 0, sizeof(bf));
 
-	std::string position = config.return_string_value("start_joint_position", SETTINGS_SECTION_NAME);
+	std::string position = config.value<std::string>("start_joint_position", SETTINGS_SECTION_NAME);
 
 
 	std::istringstream iss(position.c_str());

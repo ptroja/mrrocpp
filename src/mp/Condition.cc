@@ -30,7 +30,7 @@ Condition::Condition(const char *condDesc, lib::configurator &_config)
 	strcpy(this->condition, condDesc);
 	operationType = splitCondExpr();
 //	checkContext(condition);
-//	char *fileName = config.return_string_value("xml_file", "[xml_settings]");
+//	char *fileName = config.value<std::string>("xml_file", "[xml_settings]");
 //	printf("from config: %s\n", fileName);
 }
 
@@ -133,7 +133,7 @@ bool Condition::checkContext(const char *toCheck)
 		if(!strcmp(iniFile, (*it)))
 		{
 			if(config.exists(*(++it)))
-				return (bool)config.return_int_value(*it);
+				return (bool)config.value<int>(*it);
 			return false;
 		}
 		//for(std::list<char *>::iterator it = args->begin(); it != args->end(); ++it)

@@ -11,10 +11,10 @@ namespace generator {
 speechrecognition::speechrecognition(common::task::task& _ecp_task)
 	: generator (_ecp_task)
 {
-	std::string hostname = ecp_t.config.return_string_value("player_hostname");
+	std::string hostname = ecp_t.config.value<std::string>("player_hostname");
 	client = new PlayerClient(hostname.c_str(), PLAYER_PORTNUM);
 	
-	int device_index = ecp_t.config.return_int_value("device_index");
+	int device_index = ecp_t.config.value<int>("device_index");
 	device = new SpeechRecognitionProxy(client, device_index, 'r');		
 }
 

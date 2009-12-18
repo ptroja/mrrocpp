@@ -48,7 +48,7 @@ void kcz_force::main_task_algorithm(void ) {
 	gsl_vector *m = gsl_vector_alloc(3);
 	gsl_vector *k = gsl_vector_alloc(3);
 
-	for(i=0; i<config.return_int_value("measures_count"); i++){
+	for(i=0; i<config.value<int>("measures_count"); i++){
 		//move the robot + get the data
 		nose_run->Move();
 

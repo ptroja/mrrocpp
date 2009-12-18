@@ -17,6 +17,7 @@
 #include <string>
 
 #include <boost/thread/mutex.hpp>
+#include <boost/lexical_cast.hpp>
 
 // Typy zmiennych odczytywanych z pliku INI.
 #include "lib/cfgopts.h"
@@ -58,6 +59,9 @@ private:
 
 #endif /* USE_MESSIP_SRR */
 
+	// Zwraca wartosc (char*) dla klucza.
+	std::string return_string_value(const char* _key, const char* __section_name = NULL);
+
 public:
 	std::string return_mrrocpp_network_path();
 	std::string return_default_reader_measures_path();
@@ -94,22 +98,14 @@ public:
 		return return_attach_point_name(_type, _key.c_str(), __section_name.c_str());
 	};
 
-	// Zwraca wartosc (int) dla klucza.
-	int return_int_value(const char* _key, const char* __section_name = NULL);
-	int return_int_value(const std::string & _key, const std::string & __section_name) {
-		return return_int_value(_key.c_str(), __section_name.c_str());
+	template<class Type>
+	Type value(const std::string & _key, const std::string & __section_name) {
+		return boost::lexical_cast<Type>(return_string_value(_key.c_str(), __section_name.c_str()));
 	};
 
-	// Zwraca wartosc (double) dla klucza.
-	double return_double_value(const char* _key, const char* __section_name = NULL);
-	double return_double_value(const std::string & _key, const std::string & __section_name) {
-		return return_double_value(_key.c_str(), __section_name.c_str());
-	};
-
-	// Zwraca wartosc (char*) dla klucza.
-	std::string return_string_value(const char* _key, const char* __section_name = NULL);
-	std::string return_string_value(const std::string & _key, const std::string & __section_name) {
-		return return_string_value(_key.c_str(), __section_name.c_str());
+	template<class Type>
+	Type value(const std::string & _key) {
+		return boost::lexical_cast<Type>(return_string_value(_key.c_str()));
 	};
 
 	// Zwraca czy dany klucz istnieje

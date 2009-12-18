@@ -38,11 +38,11 @@ effector::effector(lib::configurator &_config, lib::robot_name_t l_robot_name) :
 {
 
 	/* Lokalizacja procesu wywietlania komunikatow SR */
-	msg = new lib::sr_edp(lib::EDP, config.return_string_value("resourceman_attach_point").c_str(),
+	msg = new lib::sr_edp(lib::EDP, config.value<std::string>("resourceman_attach_point").c_str(),
 			config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", UI_SECTION).c_str());
 
 	if (config.exists("test_mode"))
-		test_mode = config.return_int_value("test_mode");
+		test_mode = config.value<int>("test_mode");
 	else
 		test_mode = 0;
 
@@ -55,7 +55,7 @@ effector::~effector() {
 
 bool effector::check_config(const std::string & s)
 {
-	return (config.exists(s.c_str()) && config.return_int_value(s.c_str()));
+	return (config.exists(s.c_str()) && config.value<int>(s.c_str()));
 }
 
 /*--------------------------------------------------------------------------*/
@@ -68,7 +68,7 @@ bool effector::initialize_communication()
 	// obsluga mechanizmu sygnalizacji zajetosci sprzetu
 	if (!(test_mode)) {
 
-		std::string hardware_busy_attach_point = config.return_string_value("hardware_busy_attach_point");
+		std::string hardware_busy_attach_point = config.value<std::string>("hardware_busy_attach_point");
 
 		std::string full_path_to_hardware_busy_attach_point("/dev/name/global/");
 		full_path_to_hardware_busy_attach_point += hardware_busy_attach_point;

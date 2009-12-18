@@ -113,20 +113,20 @@ std::string configurator::return_attach_point_name (config_path_type_t _type, co
 	if (_type == CONFIG_RESOURCEMAN_LOCAL)
 	{
 		name = "/dev/";
-		name += return_string_value(_key, _section_name);
+		name += value<std::string>(_key, _section_name);
 		name += session_name;
 
 	} else if (_type == CONFIG_RESOURCEMAN_GLOBAL)
 	{
 		name = "/net/";
-		name += return_string_value("node_name", _section_name);
+		name += value<std::string>("node_name", _section_name);
 		name += "/dev/";
-		name += return_string_value(_key, _section_name);
+		name += value<std::string>(_key, _section_name);
 		name += session_name;
 
 	} else if (_type == CONFIG_SERVER)
 	{
-		name = return_string_value(_key, _section_name);
+		name = value<std::string>(_key, _section_name);
 		name += session_name;
 
 	} else {
@@ -217,101 +217,6 @@ bool configurator::exists(const char* _key, const char* __section_name)
 #endif /* USE_MESSIP_SRR */
 }
 
-// Zwraca wartosc (int) dla klucza.
-int configurator::return_int_value(const char* _key, const char* __section_name)
-{
-#ifdef USE_MESSIP_SRR
-	const char *_section_name = (__section_name) ? __section_name : section_name.c_str();
-
-	query_t query;
-	snprintf(query.key, sizeof(query.key), "%s", _key);
-	snprintf(query.section, sizeof(query.section), "%s", _section_name);
-
-	int value = 0;
-
-	boost::mutex::scoped_lock l(file_mutex);
-
-	messip::port_send(this->ch,
-			CONFIG_RETURN_INT_VALUE, 0,
-			query, value);
-
-	return value;
-#else
-	const char *_section_name = (__section_name) ? __section_name : section_name.c_str();
-	// Zwracana zmienna.
-	int value = 0;
-	struct Config_Tag configs[] = {
-			// Pobierane pole.
-			{ (char *) _key, Int_Tag, &value},
-			// Pole konczace.
-			{ NULL , Error_Tag, NULL }
-	};
-
-	// Odczytanie zmiennej.
-	boost::mutex::scoped_lock l(file_mutex);
-
-	if (input_config(file_location, configs, _section_name)<1) {
-		if (input_config(common_file_location, configs, _section_name)<1) {
-			fprintf(stderr, "Blad input_config() w return_int_value file_location:%s, _section_name:%s, _key:%s\n", file_location.c_str(), _section_name, _key);
-		}
-	}
-
-	// 	throw ERROR
-
-	// Zwrocenie wartosci.
-
-	return value;
-#endif /* USE_MESSIP_SRR */
-}// : return_int_value
-
-
-// Zwraca wartosc (double) dla klucza.
-double configurator::return_double_value(const char* _key, const char*__section_name)
-{
-#ifdef USE_MESSIP_SRR
-	const char *_section_name = (__section_name) ? __section_name : section_name.c_str();
-
-	query_t query;
-	snprintf(query.key, sizeof(query.key), "%s", _key);
-	snprintf(query.section, sizeof(query.section), "%s", _section_name);
-
-	double value = 0;
-
-	boost::mutex::scoped_lock l(file_mutex);
-
-	messip::port_send(this->ch,
-			CONFIG_RETURN_INT_VALUE, 0,
-			query, value);
-
-	return value;
-#else
-	const char *_section_name = (__section_name) ? __section_name : section_name.c_str();
-	// Zwracana zmienna.
-	double value;
-	struct Config_Tag configs[] = {
-			// Pobierane pole.
-			{ (char *) _key, Double_Tag, &value},
-			// Pole konczace.
-			{ NULL , Error_Tag, NULL }
-	};
-
-	// Odczytanie zmiennej.
-	boost::mutex::scoped_lock l(file_mutex);
-	if (input_config(file_location, configs, _section_name)<1) {
-		if (input_config(common_file_location, configs, _section_name)<1) {
-			fprintf(stderr, "Blad input_config() w return_double_value file_location:%s, _section_name:%s, _key:%s\n",
-					file_location.c_str(), _section_name, _key);
-		}
-	}
-
-	// 	throw ERROR
-
-	// Zwrocenie wartosci.
-	return value;
-#endif /* USE_MESSIP_SRR */
-}// : return_int_value
-
-
 // Zwraca wartosc (char*) dla klucza.
 std::string configurator::return_string_value(const char* _key, const char*__section_name)
 {
@@ -347,7 +252,7 @@ std::string configurator::return_string_value(const char* _key, const char*__sec
 	boost::mutex::scoped_lock l(file_mutex);
 	if (input_config(file_location, configs, _section_name)<1) {
 		if (input_config(common_file_location, configs, _section_name)<1) {
-			fprintf(stderr, "Blad input_config() w return_string_value file_location:%s, _section_name:%s, _key:%s\n",
+			fprintf(stderr, "Blad input_config() w value<std::string> file_location:%s, _section_name:%s, _key:%s\n",
 					file_location.c_str(), _section_name, _key);
 		}
 	}
@@ -357,7 +262,7 @@ std::string configurator::return_string_value(const char* _key, const char*__sec
 	// Zwrocenie wartosci.
 	return std::string(tmp);
 #endif /* USE_MESSIP_SRR */
-}// : return_string_value
+}// : value<std::string>
 
 
 pid_t configurator::process_spawn(const std::string & _section_name) {
@@ -366,8 +271,8 @@ pid_t configurator::process_spawn(const std::string & _section_name) {
 
 	if (child_pid == 0) {
 
-		std::string spawned_program_name = return_string_value("program_name", _section_name);
-		std::string spawned_node_name = return_string_value("node_name", _section_name);
+		std::string spawned_program_name = value<std::string>("program_name", _section_name);
+		std::string spawned_node_name = value<std::string>("node_name", _section_name);
 
 		std::string rsh_spawn_node;
 
@@ -381,7 +286,7 @@ pid_t configurator::process_spawn(const std::string & _section_name) {
 		// Sciezka do binariow.
 		char bin_path[PATH_MAX];
 		if (exists("binpath", _section_name)) {
-			std::string _bin_path = return_string_value("binpath", _section_name);
+			std::string _bin_path = value<std::string>("binpath", _section_name);
 			strcpy(bin_path, _bin_path.c_str());
 			if(strlen(bin_path) && bin_path[strlen(bin_path)-1] != '/') {
 				strcat(bin_path, "/");
@@ -395,7 +300,7 @@ pid_t configurator::process_spawn(const std::string & _section_name) {
 		//ewentualne dodatkowe argumenty wywolania np. przekierowanie na konsole
 		std::string asa;
 		if (exists("additional_spawn_argument", UI_SECTION)) {
-			asa = return_string_value("additional_spawn_argument", UI_SECTION);
+			asa = value<std::string>("additional_spawn_argument", UI_SECTION);
 		}
 
 		char process_path[PATH_MAX];
@@ -415,7 +320,7 @@ pid_t configurator::process_spawn(const std::string & _section_name) {
 		*/
 
 		if (exists("username", _section_name)) {
-			std::string username = return_string_value("username", _section_name);
+			std::string username = value<std::string>("username", _section_name);
 
 //			fprintf(stderr, "rsh -l %s %s \"%s\"\n", username.c_str(), rsh_spawn_node.c_str(), process_path);
 
@@ -522,8 +427,8 @@ pid_t configurator::process_spawn(const std::string & _section_name) {
 		input.hdr.type=0;
 		input.msg_type=1;
 		// Odczytanie nazwy odpalanego pliku.
-		char * spawned_program_name = return_string_value("program_name", _section_name);
-		char * spawned_node_name = return_string_value("node_name", _section_name);
+		char * spawned_program_name = value<std::string>("program_name", _section_name);
+		char * spawned_node_name = value<std::string>("node_name", _section_name);
 
 		// printf("spawned_node_name:%s\n", spawned_node_name);
 

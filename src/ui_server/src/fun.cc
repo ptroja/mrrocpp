@@ -1025,7 +1025,7 @@ reload_whole_configuration() {
 
 		config->change_ini_file (ui_state.config_file.c_str());
 
-		ui_state.is_mp_and_ecps_active = config->return_int_value("is_mp_and_ecps_active");
+		ui_state.is_mp_and_ecps_active = config->value<int>("is_mp_and_ecps_active");
 
 		switch (ui_state.all_edps)
 		{
@@ -1095,7 +1095,7 @@ reload_whole_configuration() {
 
 			ui_state.mp.network_pulse_attach_point = config->return_attach_point_name (lib::configurator::CONFIG_SERVER, "mp_pulse_attach_point", MP_SECTION);
 
-			ui_state.mp.node_name = config->return_string_value ("node_name", MP_SECTION);
+			ui_state.mp.node_name = config->value<std::string> ("node_name", MP_SECTION);
 
 			ui_state.mp.pid = -1;
 		}
@@ -1216,7 +1216,7 @@ int fill_node_list()
 	{
 		if (config->exists("node_name", *section_list_iterator))
 		{
-			std::string tmp = config->return_string_value("node_name", *section_list_iterator);
+			std::string tmp = config->value<std::string>("node_name", *section_list_iterator);
 
 			std::list<ui_state_def::list_t>::iterator node_list_iterator;
 
@@ -1252,13 +1252,13 @@ int fill_program_node_list()
 
 		if ((config->exists("program_name", *section_list_iterator) && config->exists("node_name", *section_list_iterator)))
 		{
-			//	char* tmp_p = config->return_string_value("program_name", *section_list_iterator);
-			//	char* tmp_n = config->return_string_value("node_name", *section_list_iterator);
+			//	char* tmp_p = config->value<std::string>("program_name", *section_list_iterator);
+			//	char* tmp_n = config->value<std::string>("node_name", *section_list_iterator);
 
 			program_node_def tmp_s;
 
-			tmp_s.program_name = config->return_string_value("program_name", *section_list_iterator);
-			tmp_s.node_name = config->return_string_value("node_name", *section_list_iterator);
+			tmp_s.program_name = config->value<std::string>("program_name", *section_list_iterator);
+			tmp_s.node_name = config->value<std::string>("node_name", *section_list_iterator);
 
 			ui_state.program_node_list.push_back(tmp_s);
 		}

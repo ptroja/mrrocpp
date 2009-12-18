@@ -146,55 +146,55 @@ void task::create_robots()
 	robot::robot* created_robot;
 
 	// ROBOT IRP6_ON_TRACK
-	if (config.return_int_value("is_irp6_on_track_active", UI_SECTION)) {
+	if (config.value<int>("is_irp6_on_track_active", UI_SECTION)) {
 		created_robot = new robot::irp6_on_track (*this);
 		robot_m[lib::ROBOT_IRP6_ON_TRACK] = created_robot;
 	}
 
 	// ROBOT IRP6_POSTUMENT
-	if (config.return_int_value("is_irp6_postument_active", UI_SECTION)) {
+	if (config.value<int>("is_irp6_postument_active", UI_SECTION)) {
 		created_robot = new robot::irp6_postument (*this);
 		robot_m[lib::ROBOT_IRP6_POSTUMENT] = created_robot;
 	}
 
 	// ROBOT CONVEYOR
-	if (config.return_int_value("is_conveyor_active", UI_SECTION)) {
+	if (config.value<int>("is_conveyor_active", UI_SECTION)) {
 		created_robot = new robot::conveyor (*this);
 		robot_m[lib::ROBOT_CONVEYOR] = created_robot;
 	}
 
 	// ROBOT SPEAKER
-	if (config.return_int_value("is_speaker_active", UI_SECTION)) {
+	if (config.value<int>("is_speaker_active", UI_SECTION)) {
 		created_robot = new robot::speaker (*this);
 		robot_m[lib::ROBOT_SPEAKER] = created_robot;
 	}
 
 	// ROBOT IRP6_MECHATRONIKA
-	if (config.return_int_value("is_irp6_mechatronika_active", UI_SECTION)) {
+	if (config.value<int>("is_irp6_mechatronika_active", UI_SECTION)) {
 		created_robot = new robot::irp6_mechatronika (*this);
 		robot_m[lib::ROBOT_IRP6_MECHATRONIKA] = created_robot;
 	}
 
 	// ROBOT POLYCRANK
-	if (config.return_int_value("is_polycrank_active", UI_SECTION)) {
+	if (config.value<int>("is_polycrank_active", UI_SECTION)) {
 		created_robot = new robot::polycrank (*this);
 		robot_m[lib::ROBOT_POLYCRANK] = created_robot;
 	}
 
 	// ROBOT_ELECTRON
-	if (config.return_int_value("is_electron_robot_active", UI_SECTION)) {
+	if (config.value<int>("is_electron_robot_active", UI_SECTION)) {
 		created_robot = new robot::robot (lib::ROBOT_ELECTRON, "[ecp_electron]", *this);
 		robot_m[lib::ROBOT_ELECTRON] = created_robot;
 	}
 
 	// ROBOT_SPEECHRECOGNITION
-	if (config.return_int_value("is_speechrecognition_active", UI_SECTION)) {
+	if (config.value<int>("is_speechrecognition_active", UI_SECTION)) {
 		created_robot = new robot::robot (lib::ROBOT_SPEECHRECOGNITION, "[ecp_speechrecognition]", *this);
 		robot_m[lib::ROBOT_SPEECHRECOGNITION] = created_robot;
 	}
 
 	// ROBOT_FESTIVAL
-	if (config.return_int_value("is_festival_active", UI_SECTION)) {
+	if (config.value<int>("is_festival_active", UI_SECTION)) {
 		created_robot = new robot::robot (lib::ROBOT_FESTIVAL, "[ecp_festival]", *this);
 		robot_m[lib::ROBOT_FESTIVAL] = created_robot;
 	}

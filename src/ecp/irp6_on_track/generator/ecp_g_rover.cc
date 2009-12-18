@@ -50,92 +50,92 @@ vis_sac_lx::vis_sac_lx(common::task::task& _ecp_task, int step) :
 
 
 
-	measure_border_u[0]=ecp_t.config.return_double_value("measure_border_u0");
-	measure_border_u[1]=ecp_t.config.return_double_value("measure_border_u1");
-	measure_border_u[2]=ecp_t.config.return_double_value("measure_border_u2");
-	measure_border_u[3]=ecp_t.config.return_double_value("measure_border_u3");
-	measure_border_u[4]=ecp_t.config.return_double_value("measure_border_u4");
-	measure_border_u[5]=ecp_t.config.return_double_value("measure_border_u5");
+	measure_border_u[0]=ecp_t.config.value<double>("measure_border_u0");
+	measure_border_u[1]=ecp_t.config.value<double>("measure_border_u1");
+	measure_border_u[2]=ecp_t.config.value<double>("measure_border_u2");
+	measure_border_u[3]=ecp_t.config.value<double>("measure_border_u3");
+	measure_border_u[4]=ecp_t.config.value<double>("measure_border_u4");
+	measure_border_u[5]=ecp_t.config.value<double>("measure_border_u5");
 
-	measure_border_d[0]=ecp_t.config.return_double_value("measure_border_d0");
-	measure_border_d[1]=ecp_t.config.return_double_value("measure_border_d1");
-	measure_border_d[2]=ecp_t.config.return_double_value("measure_border_d2");
-	measure_border_d[3]=ecp_t.config.return_double_value("measure_border_d3");
-	measure_border_d[4]=ecp_t.config.return_double_value("measure_border_d4");
-	measure_border_d[5]=ecp_t.config.return_double_value("measure_border_d5");
+	measure_border_d[0]=ecp_t.config.value<double>("measure_border_d0");
+	measure_border_d[1]=ecp_t.config.value<double>("measure_border_d1");
+	measure_border_d[2]=ecp_t.config.value<double>("measure_border_d2");
+	measure_border_d[3]=ecp_t.config.value<double>("measure_border_d3");
+	measure_border_d[4]=ecp_t.config.value<double>("measure_border_d4");
+	measure_border_d[5]=ecp_t.config.value<double>("measure_border_d5");
 
-	d_u_max[0]=ecp_t.config.return_double_value("d_u_max0");
-	d_u_max[1]=ecp_t.config.return_double_value("d_u_max1");
-	d_u_max[2]=ecp_t.config.return_double_value("d_u_max2");
-	d_u_max[3]=ecp_t.config.return_double_value("d_u_max3");
-	d_u_max[4]=ecp_t.config.return_double_value("d_u_max4");
-	d_u_max[5]=ecp_t.config.return_double_value("d_u_max5");
+	d_u_max[0]=ecp_t.config.value<double>("d_u_max0");
+	d_u_max[1]=ecp_t.config.value<double>("d_u_max1");
+	d_u_max[2]=ecp_t.config.value<double>("d_u_max2");
+	d_u_max[3]=ecp_t.config.value<double>("d_u_max3");
+	d_u_max[4]=ecp_t.config.value<double>("d_u_max4");
+	d_u_max[5]=ecp_t.config.value<double>("d_u_max5");
 
-	d2_u_max[0]=ecp_t.config.return_double_value("d2_u_max0");
-	d2_u_max[1]=ecp_t.config.return_double_value("d2_u_max1");
-	d2_u_max[2]=ecp_t.config.return_double_value("d2_u_max2");
-	d2_u_max[3]=ecp_t.config.return_double_value("d2_u_max3");
-	d2_u_max[4]=ecp_t.config.return_double_value("d2_u_max4");
-	d2_u_max[5]=ecp_t.config.return_double_value("d2_u_max5");
+	d2_u_max[0]=ecp_t.config.value<double>("d2_u_max0");
+	d2_u_max[1]=ecp_t.config.value<double>("d2_u_max1");
+	d2_u_max[2]=ecp_t.config.value<double>("d2_u_max2");
+	d2_u_max[3]=ecp_t.config.value<double>("d2_u_max3");
+	d2_u_max[4]=ecp_t.config.value<double>("d2_u_max4");
+	d2_u_max[5]=ecp_t.config.value<double>("d2_u_max5");
 
-	gain[0]=ecp_t.config.return_double_value("gain0");
-	gain[1]=ecp_t.config.return_double_value("gain1");
-	gain[2]=ecp_t.config.return_double_value("gain2");
-	gain[3]=ecp_t.config.return_double_value("gain3");
-	gain[4]=ecp_t.config.return_double_value("gain4");
-	gain[5]=ecp_t.config.return_double_value("gain5");
+	gain[0]=ecp_t.config.value<double>("gain0");
+	gain[1]=ecp_t.config.value<double>("gain1");
+	gain[2]=ecp_t.config.value<double>("gain2");
+	gain[3]=ecp_t.config.value<double>("gain3");
+	gain[4]=ecp_t.config.value<double>("gain4");
+	gain[5]=ecp_t.config.value<double>("gain5");
 
 	//SAC
-	O_weight__SAC=ecp_t.config.return_double_value("O_weight__SAC");
-	O_gain__SAC[0]=ecp_t.config.return_double_value("O_gain0__SAC");
-	O_gain__SAC[1]=ecp_t.config.return_double_value("O_gain1__SAC");
-	O_gain__SAC[2]=ecp_t.config.return_double_value("O_gain2__SAC");
-	O_gain__SAC[3]=ecp_t.config.return_double_value("O_gain3__SAC");
-	O_gain__SAC[4]=ecp_t.config.return_double_value("O_gain4__SAC");
-	O_gain__SAC[5]=ecp_t.config.return_double_value("O_gain5__SAC");
+	O_weight__SAC=ecp_t.config.value<double>("O_weight__SAC");
+	O_gain__SAC[0]=ecp_t.config.value<double>("O_gain0__SAC");
+	O_gain__SAC[1]=ecp_t.config.value<double>("O_gain1__SAC");
+	O_gain__SAC[2]=ecp_t.config.value<double>("O_gain2__SAC");
+	O_gain__SAC[3]=ecp_t.config.value<double>("O_gain3__SAC");
+	O_gain__SAC[4]=ecp_t.config.value<double>("O_gain4__SAC");
+	O_gain__SAC[5]=ecp_t.config.value<double>("O_gain5__SAC");
 
-	C_weight__SAC=ecp_t.config.return_double_value("C_weight__SAC");
-	C_gain__SAC[0]=ecp_t.config.return_double_value("C_gain0__SAC");
-	C_gain__SAC[1]=ecp_t.config.return_double_value("C_gain1__SAC");
-	C_gain__SAC[2]=ecp_t.config.return_double_value("C_gain2__SAC");
-	C_gain__SAC[3]=ecp_t.config.return_double_value("C_gain3__SAC");
-	C_gain__SAC[4]=ecp_t.config.return_double_value("C_gain4__SAC");
-	C_gain__SAC[5]=ecp_t.config.return_double_value("C_gain5__SAC");
+	C_weight__SAC=ecp_t.config.value<double>("C_weight__SAC");
+	C_gain__SAC[0]=ecp_t.config.value<double>("C_gain0__SAC");
+	C_gain__SAC[1]=ecp_t.config.value<double>("C_gain1__SAC");
+	C_gain__SAC[2]=ecp_t.config.value<double>("C_gain2__SAC");
+	C_gain__SAC[3]=ecp_t.config.value<double>("C_gain3__SAC");
+	C_gain__SAC[4]=ecp_t.config.value<double>("C_gain4__SAC");
+	C_gain__SAC[5]=ecp_t.config.value<double>("C_gain5__SAC");
 
-	f_weight__SAC=ecp_t.config.return_double_value("f_weight__SAC");
-	f_gain__SAC[0]=ecp_t.config.return_double_value("f_gain0__SAC");
-	f_gain__SAC[1]=ecp_t.config.return_double_value("f_gain1__SAC");
-	f_gain__SAC[2]=ecp_t.config.return_double_value("f_gain2__SAC");
-	f_gain__SAC[3]=ecp_t.config.return_double_value("f_gain3__SAC");
-	f_gain__SAC[4]=ecp_t.config.return_double_value("f_gain4__SAC");
-	f_gain__SAC[5]=ecp_t.config.return_double_value("f_gain5__SAC");
+	f_weight__SAC=ecp_t.config.value<double>("f_weight__SAC");
+	f_gain__SAC[0]=ecp_t.config.value<double>("f_gain0__SAC");
+	f_gain__SAC[1]=ecp_t.config.value<double>("f_gain1__SAC");
+	f_gain__SAC[2]=ecp_t.config.value<double>("f_gain2__SAC");
+	f_gain__SAC[3]=ecp_t.config.value<double>("f_gain3__SAC");
+	f_gain__SAC[4]=ecp_t.config.value<double>("f_gain4__SAC");
+	f_gain__SAC[5]=ecp_t.config.value<double>("f_gain5__SAC");
 
 	//EIH
-	C_weight__EIH=ecp_t.config.return_double_value("C_weight__EIH");
-	C_gain__EIH[0]=ecp_t.config.return_double_value("C_gain0__EIH");
-	C_gain__EIH[1]=ecp_t.config.return_double_value("C_gain1__EIH");
-	C_gain__EIH[2]=ecp_t.config.return_double_value("C_gain2__EIH");
-	C_gain__EIH[3]=ecp_t.config.return_double_value("C_gain3__EIH");
-	C_gain__EIH[4]=ecp_t.config.return_double_value("C_gain4__EIH");
-	C_gain__EIH[5]=ecp_t.config.return_double_value("C_gain5__EIH");
+	C_weight__EIH=ecp_t.config.value<double>("C_weight__EIH");
+	C_gain__EIH[0]=ecp_t.config.value<double>("C_gain0__EIH");
+	C_gain__EIH[1]=ecp_t.config.value<double>("C_gain1__EIH");
+	C_gain__EIH[2]=ecp_t.config.value<double>("C_gain2__EIH");
+	C_gain__EIH[3]=ecp_t.config.value<double>("C_gain3__EIH");
+	C_gain__EIH[4]=ecp_t.config.value<double>("C_gain4__EIH");
+	C_gain__EIH[5]=ecp_t.config.value<double>("C_gain5__EIH");
 
-	f_weight__EIH=ecp_t.config.return_double_value("f_weight__EIH");
-	f_gain__EIH[0]=ecp_t.config.return_double_value("f_gain0__EIH");
-	f_gain__EIH[1]=ecp_t.config.return_double_value("f_gain1__EIH");
-	f_gain__EIH[2]=ecp_t.config.return_double_value("f_gain2__EIH");
-	f_gain__EIH[3]=ecp_t.config.return_double_value("f_gain3__EIH");
-	f_gain__EIH[4]=ecp_t.config.return_double_value("f_gain4__EIH");
-	f_gain__EIH[5]=ecp_t.config.return_double_value("f_gain5__EIH");
+	f_weight__EIH=ecp_t.config.value<double>("f_weight__EIH");
+	f_gain__EIH[0]=ecp_t.config.value<double>("f_gain0__EIH");
+	f_gain__EIH[1]=ecp_t.config.value<double>("f_gain1__EIH");
+	f_gain__EIH[2]=ecp_t.config.value<double>("f_gain2__EIH");
+	f_gain__EIH[3]=ecp_t.config.value<double>("f_gain3__EIH");
+	f_gain__EIH[4]=ecp_t.config.value<double>("f_gain4__EIH");
+	f_gain__EIH[5]=ecp_t.config.value<double>("f_gain5__EIH");
 
 
-	force_inertia_=ecp_t.config.return_double_value("force_inertia_");
-	torque_inertia_=ecp_t.config.return_double_value("torque_inertia_");
+	force_inertia_=ecp_t.config.value<double>("force_inertia_");
+	torque_inertia_=ecp_t.config.value<double>("torque_inertia_");
 	force_reciprocal_damping_
-			=ecp_t.config.return_double_value("force_reciprocal_damping_");
+			=ecp_t.config.value<double>("force_reciprocal_damping_");
 	torque_reciprocal_damping_
-			=ecp_t.config.return_double_value("torque_reciprocal_damping_");
+			=ecp_t.config.value<double>("torque_reciprocal_damping_");
 
-	x2g=ecp_t.config.return_double_value("x2g"); //x nibytoola
+	x2g=ecp_t.config.value<double>("x2g"); //x nibytoola
 
 	x2g_begin=x2g;
 

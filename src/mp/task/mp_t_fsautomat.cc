@@ -51,7 +51,7 @@ fsautomat::fsautomat(lib::configurator &_config) :
 {
 	/*	int size, conArg;
 	 char *filePath;
-	 char *fileName = config.return_string_value("xml_file", "[xml_settings]");
+	 char *fileName = config.value<std::string>("xml_file", "[xml_settings]");
 	 xmlNode *cur_node, *child_node;
 	 xmlChar *stateType, *argument;
 
@@ -131,7 +131,7 @@ fsautomat::fsautomat(lib::configurator &_config) :
 	 */
 	sensor_m[lib::SENSOR_CAMERA_ON_TRACK] = new ecp_mp::sensor::vis(lib::SENSOR_CAMERA_ON_TRACK, "[vsp_vis_eih]", *this);
 
-	if (config.return_int_value("vis_servoing")) {
+	if (config.value<int>("vis_servoing")) {
 		sensor_m[lib::SENSOR_CAMERA_SA] = new ecp_mp::sensor::vis(lib::SENSOR_CAMERA_SA, "[vsp_vis_sac]", *this);
 	}
 
@@ -239,7 +239,7 @@ std::map<const char *, common::State, ecp_mp::task::task::str_cmp> * fsautomat::
 {
 	std::map<const char *, common::State, ecp_mp::task::task::str_cmp> * statesMap = new std::map<const char *, common::State, ecp_mp::task::task::str_cmp>();
 
-	std::string fileName(config.return_string_value("xml_file", "[xml_settings]"));
+	std::string fileName(config.value<std::string>("xml_file", "[xml_settings]"));
 	std::string filePath(mrrocpp_network_path);
 	filePath += fileName;
 
@@ -287,7 +287,7 @@ void fsautomat::configureProperSensor(const char *propSensor)
 	// Powolanie czujnikow
 	sensor_m[lib::SENSOR_CAMERA_ON_TRACK] = new ecp_mp::sensor::vis(lib::SENSOR_CAMERA_ON_TRACK, "[vsp_vis_eih]", *this);
 
-	if (config.return_int_value("vis_servoing")) {
+	if (config.value<int>("vis_servoing")) {
 		sensor_m[lib::SENSOR_CAMERA_SA] = new ecp_mp::sensor::vis(lib::SENSOR_CAMERA_SA, "[vsp_vis_sac]", *this);
 	}
 
@@ -331,7 +331,7 @@ void fsautomat::runEmptyGenForSet(common::State &state)
 
 void fsautomat::executeMotion(common::State &state)
 {
-	int trjConf = config.return_int_value("trajectory_from_xml", "[xml_settings]");
+	int trjConf = config.value<int>("trajectory_from_xml", "[xml_settings]");
 	if (trjConf && state.getGeneratorType() == ecp_mp::task::ECP_GEN_SMOOTH) {
 		set_next_ecps_state((int) state.getGeneratorType(), state.getNumArgument(), state.getStateID(), 1,
 				state.getRobot());

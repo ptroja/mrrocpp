@@ -20,7 +20,7 @@ task::task(lib::configurator &_config) :
 
 void task::main_task_algorithm(void)
 {
-	int isTest = config.return_int_value("test_mode");
+	int isTest = config.value<int>("test_mode");
 
 	for (;;) {
 		sr_ecp_msg->message("Waiting for MP order");

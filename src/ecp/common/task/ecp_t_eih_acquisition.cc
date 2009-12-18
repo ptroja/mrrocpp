@@ -27,13 +27,13 @@ eihacquisition::eihacquisition(lib::configurator &_config) : acquisition(_config
         robot = POSTUMENT;
     }
 
-    smooth_path = config.return_string_value("smooth_path");
-    delay_ms = config.return_int_value("delay");
-    M = config.return_int_value("M");
-    A = config.return_double_value("A");
-    C = config.return_double_value("C");
-    D = config.return_double_value("D");
-    E = config.return_double_value("E");
+    smooth_path = config.value<std::string>("smooth_path");
+    delay_ms = config.value<int>("delay");
+    M = config.value<int>("M");
+    A = config.value<double>("A");
+    C = config.value<double>("C");
+    D = config.value<double>("D");
+    E = config.value<double>("E");
     calibrated = false;
 
 	smooth2gen = new generator::smooth2(*this, true);
@@ -48,7 +48,7 @@ eihacquisition::eihacquisition(lib::configurator &_config) : acquisition(_config
 	generator->sensor_m = sensor_m;
 
 	sr_ecp_msg->message("ECP loaded eihacquisition");
-	ofp.number_of_measures = config.return_int_value("measures_count");
+	ofp.number_of_measures = config.value<int>("measures_count");
 	// translation vector (from robot base to tool frame) - received from MRROC
 	ofp.k = gsl_vector_calloc (3*ofp.number_of_measures);
 	// rotation matrix (from robot base to tool frame) - received from MRROC

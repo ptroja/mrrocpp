@@ -846,7 +846,7 @@ reload_conveyor_configuration ()
 
 
 	// jesli conveyor ma byc aktywny
-	if ((ui_state.conveyor.is_active = config->return_int_value("is_conveyor_active")) == 1)
+	if ((ui_state.conveyor.is_active = config->value<int>("is_conveyor_active")) == 1)
 	{
 
 		//ui_state.is_any_edp_active = true;
@@ -870,18 +870,18 @@ reload_conveyor_configuration ()
 				ui_state.conveyor.edp.state = 0;
 
 				if (config->exists("preset_position_0", ui_state.conveyor.edp.section_name))
-					ui_state.conveyor.edp.preset_position[0][0] = config->return_double_value ("preset_position_0", ui_state.conveyor.edp.section_name);
+					ui_state.conveyor.edp.preset_position[0][0] = config->value<double> ("preset_position_0", ui_state.conveyor.edp.section_name);
 				if (config->exists("preset_position_1", ui_state.conveyor.edp.section_name))
-					ui_state.conveyor.edp.preset_position[1][0] = config->return_double_value ("preset_position_1", ui_state.conveyor.edp.section_name);
+					ui_state.conveyor.edp.preset_position[1][0] = config->value<double> ("preset_position_1", ui_state.conveyor.edp.section_name);
 				if (config->exists("preset_position_2", ui_state.conveyor.edp.section_name))
-					ui_state.conveyor.edp.preset_position[2][0] = config->return_double_value ("preset_position_2", ui_state.conveyor.edp.section_name);
+					ui_state.conveyor.edp.preset_position[2][0] = config->value<double> ("preset_position_2", ui_state.conveyor.edp.section_name);
 
 				if (config->exists("test_mode", ui_state.conveyor.edp.section_name))
-					ui_state.conveyor.edp.test_mode = config->return_int_value("test_mode", ui_state.conveyor.edp.section_name);
+					ui_state.conveyor.edp.test_mode = config->value<int>("test_mode", ui_state.conveyor.edp.section_name);
 				else
 					ui_state.conveyor.edp.test_mode = 0;
 
-				ui_state.conveyor.edp.hardware_busy_attach_point = config->return_string_value
+				ui_state.conveyor.edp.hardware_busy_attach_point = config->value<std::string>
 					("hardware_busy_attach_point", ui_state.conveyor.edp.section_name);
 
 				ui_state.conveyor.edp.network_resourceman_attach_point = config->return_attach_point_name
@@ -890,7 +890,7 @@ reload_conveyor_configuration ()
 				ui_state.conveyor.edp.network_reader_attach_point = config->return_attach_point_name
 					(lib::configurator::CONFIG_SERVER, "reader_attach_point", ui_state.conveyor.edp.section_name.c_str());
 
-				ui_state.conveyor.edp.node_name = config->return_string_value ("node_name", ui_state.conveyor.edp.section_name.c_str());
+				ui_state.conveyor.edp.node_name = config->value<std::string> ("node_name", ui_state.conveyor.edp.section_name.c_str());
 
 			break;
 			case 1:

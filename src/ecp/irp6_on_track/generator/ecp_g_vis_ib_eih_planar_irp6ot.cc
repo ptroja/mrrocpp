@@ -18,16 +18,16 @@ namespace irp6ot {
 
 void ecp_vis_ib_eih_planar_irp6ot::retrieve_parameters() {
 	//Maksymalna wartosc  predkosci.
-	v_max = ecp_t.config.return_double_value("v_max");
+	v_max = ecp_t.config.value<double>("v_max");
 
 	//Wartosc przyspieszenia z jakim osiagana jest maksymalna predkosc.
-	a = ecp_t.config.return_double_value("a");
+	a = ecp_t.config.value<double>("a");
 
 	//Minimalna  wartosc predkosci do jakiej schodzimy przy hamowaniu.
-	v_min = ecp_t.config.return_double_value("v_min");
+	v_min = ecp_t.config.value<double>("v_min");
 
 	//Dystans wyrazony w pikselach, przy ktorym powinnismy hamowac.
-	breaking_dist = ecp_t.config.return_double_value("breaking_dist");
+	breaking_dist = ecp_t.config.value<double>("breaking_dist");
 
 }
 

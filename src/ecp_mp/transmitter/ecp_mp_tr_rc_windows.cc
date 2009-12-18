@@ -45,8 +45,8 @@ rc_windows::rc_windows  (
 
 	sem_init(&(rc_win_buf->sem), 0, 1);
 
-	rc_win_buf->solver_hostname = _ecp_mp_object.config.return_string_value("solver_hostname", _section_name).c_str();
-	rc_win_buf->solver_port = _ecp_mp_object.config.return_int_value("solver_port", _section_name);
+	rc_win_buf->solver_hostname = _ecp_mp_object.config.value<std::string>("solver_hostname", _section_name).c_str();
+	rc_win_buf->solver_port = _ecp_mp_object.config.value<int>("solver_port", _section_name);
 }
 
 

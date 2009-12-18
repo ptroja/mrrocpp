@@ -66,7 +66,7 @@ sk::sk(lib::configurator &_config) : task(_config)
 	// sprawdzenie dodatkowej opcji w konfiguracji dotyczacej uruchomienie zapamietywania trajektorii do pliku
 	if (config.exists("save_activated"))
 	{
-		save_activated = (bool) config.return_int_value("save_activated");
+		save_activated = (bool) config.value<int>("save_activated");
 	}
 	else
 	{

@@ -39,7 +39,7 @@ bool incremental_move::first_step ( )
 			the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
 
 			first=1;
-			stepno=ecp_t.config.return_int_value("steps");//100;
+			stepno=ecp_t.config.value<int>("steps");//100;
 
 	return true;
 }

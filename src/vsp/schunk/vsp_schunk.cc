@@ -42,7 +42,7 @@ schunk::schunk(lib::configurator &_config) : sensor(_config)
 
 	std::string network_edp_vsp_attach_point =
 		config.return_attach_point_name (lib::configurator::CONFIG_SERVER, "edp_vsp_attach_point",
-		config.return_string_value("edp_section").c_str());
+		config.value<std::string>("edp_section").c_str());
 
 	ms_nr=0; // numer odczytu z czujnika
 

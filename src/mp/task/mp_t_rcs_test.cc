@@ -93,7 +93,7 @@ void rcs_test::main_task_algorithm(void)
 	while (!kociemba_found && sol_possible && sol_needed) {
 
 		time_t t1, t2;
-		int timeout = config.return_int_value("korf_timeout");
+		int timeout = config.value<int>("korf_timeout");
 		t1 = time(NULL);
 		time_elapsed = false;
 		while (!korf_found && !time_elapsed && sol_possible && sol_needed) {

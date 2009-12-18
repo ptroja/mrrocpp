@@ -788,7 +788,7 @@ task* return_created_mp_task (lib::configurator &_config)
 
 void rubik_cube_solver::main_task_algorithm(void)
 {
-	std::string cube_initial_state_string(config.return_string_value("cube_initial_state"));
+	std::string cube_initial_state_string(config.value<std::string>("cube_initial_state"));
 
 	const char * cube_initial_state = cube_initial_state_string.c_str();
 
@@ -812,7 +812,7 @@ void rubik_cube_solver::main_task_algorithm(void)
 
 
 			// przechwycenie kostki
-			approach_op( config.return_int_value("vis_servoing"));
+			approach_op( config.value<int>("vis_servoing"));
 
 			// IDENTIFY COLORS
 			identify_colors();
@@ -827,7 +827,7 @@ void rubik_cube_solver::main_task_algorithm(void)
 			face_turn_op(common::CL_0);
 
 			/*
-            	char* manipulation_sequence = config->return_string_value("manipulation_sequence");
+            	char* manipulation_sequence = config->value<std::string>("manipulation_sequence");
             	for (int char_i=0; char_i < strlen(manipulation_sequence)-1; char_i += 2)
         {
             single_manipulation.set_state(read_cube_color(manipulation_sequence[char_i]),

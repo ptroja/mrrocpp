@@ -11,16 +11,16 @@ namespace generator {
 playerpos::playerpos(common::task::task& _ecp_task)
 	: generator (_ecp_task)
 {
-	std::string hostname = ecp_t.config.return_string_value("player_hostname");
+	std::string hostname = ecp_t.config.value<std::string>("player_hostname");
 	client = new PlayerClient(hostname.c_str(), PLAYER_PORTNUM);
 	
 	client->SetDataMode(PLAYER_DATAMODE_PULL_NEW);
 	
-	int device_index = ecp_t.config.return_int_value("device_index");
+	int device_index = ecp_t.config.value<int>("device_index");
 	device = new PositionProxy(client, device_index, 'a');
 	device->SelectPositionMode(1);
 	
-	test_mode = ecp_t.config.return_int_value("test_mode");
+	test_mode = ecp_t.config.value<int>("test_mode");
 }
 
 playerpos::~playerpos()

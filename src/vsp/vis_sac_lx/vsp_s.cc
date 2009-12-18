@@ -134,8 +134,8 @@ vis_sac_lx::vis_sac_lx(lib::configurator &_config) : sensor(_config){
 	z=0;
 	x=0;
 
-	strcpy(SAC_node_name, config.return_string_value("SAC_node_name").c_str());
-	strcpy(EIH_node_name, config.return_string_value("EIH_node_name").c_str());
+	strcpy(SAC_node_name, config.value<std::string>("SAC_node_name").c_str());
+	strcpy(EIH_node_name, config.value<std::string>("EIH_node_name").c_str());
 
 	//SAC
 	if(strcmp( SAC_node_name, "NULL" )!=0)

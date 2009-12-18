@@ -36,8 +36,8 @@ pcbird::pcbird(const char* _section_name, task::task& _ecp_mp_object)
 	base_period=current_period=1;
 
 	// Retrieve pcbird node name and port from configuration file.
-	int pcbird_port = _ecp_mp_object.config.return_int_value("pcbird_port", _section_name);
-	std::string pcbird_node_name = _ecp_mp_object.config.return_string_value("pcbird_node_name", _section_name);
+	int pcbird_port = _ecp_mp_object.config.value<int>("pcbird_port", _section_name);
+	std::string pcbird_node_name = _ecp_mp_object.config.value<std::string>("pcbird_node_name", _section_name);
 
   // Try to connect to pcbird.
   if ((sockfd = pcbird_connect(pcbird_node_name.c_str(), pcbird_port)) == -1)

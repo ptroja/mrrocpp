@@ -85,7 +85,7 @@ void rcs_kociemba::configure_sensor (void){
 	if (to_vsp.rcs.configure_mode == lib::RCS_BUILD_TABLES) {
 
 		// Pobiera dane z pliku konfiguracyjnego.
-		const char* path = config.return_string_value("tables_path").c_str();
+		const char* path = config.value<std::string>("tables_path").c_str();
 		printf("VSP KC PATH = %s\n", path);
 
 		// Konfiguruje

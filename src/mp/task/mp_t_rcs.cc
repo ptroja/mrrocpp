@@ -400,7 +400,7 @@ bool rubik_cube_solver::find_rcs()
 			lib::ROBOT_SPEAKER);
 
 	// Pobiera metoda znajdywania rozwiazania z pliku konfiguracyjnego.
-	std::string solver(config.return_string_value("solver"));
+	std::string solver(config.value<std::string>("solver"));
 
 	// znalezienie rozwiazania zadana metoda
 	int sol_status;
@@ -500,7 +500,7 @@ int rubik_cube_solver::find_rcs_with_VSP(char* cube_state, char* cube_solution)
 	while (!kociemba_found && sol_possible && sol_needed) {
 
 		time_t t1, t2;
-		int timeout = config.return_int_value("korf_timeout");
+		int timeout = config.value<int>("korf_timeout");
 		t1 = time(NULL);
 		time_elapsed = false;
 		while (!korf_found && !time_elapsed && sol_possible && sol_needed) {
@@ -1149,7 +1149,7 @@ task* return_created_mp_task (lib::configurator &_config)
 
 void rubik_cube_solver::main_task_algorithm(void)
 {
-	std::string cube_initial_state_string(config.return_string_value("cube_initial_state"));
+	std::string cube_initial_state_string(config.value<std::string>("cube_initial_state"));
 
 	const char * cube_initial_state = cube_initial_state_string.c_str();
 
@@ -1179,7 +1179,7 @@ void rubik_cube_solver::main_task_algorithm(void)
 			 */
 
 			// przechwycenie kostki
-			approach_op( config.return_int_value("vis_servoing"));
+			approach_op( config.value<int>("vis_servoing"));
 
 			// IDENTIFY COLORS
 			identify_colors();
@@ -1195,7 +1195,7 @@ void rubik_cube_solver::main_task_algorithm(void)
 			face_turn_op(common::CL_0);
 
 			/*
-		    	char* manipulation_sequence = config->return_string_value("manipulation_sequence");
+		    	char* manipulation_sequence = config->value<std::string>("manipulation_sequence");
 		    	for (int char_i=0; char_i < strlen(manipulation_sequence)-1; char_i += 2)
 			{
 				single_manipulation.set_state(common::read_cube_color(manipulation_sequence[char_i]),

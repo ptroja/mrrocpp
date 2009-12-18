@@ -37,7 +37,7 @@ void ttt::main_task_algorithm(void)
 			case lib::OPTION_ONE:
 			{
 				std::string path(mrrocpp_network_path);
-				path += config.return_string_value("trajektoria_euler");
+				path += config.value<std::string>("trajektoria_euler");
 
 				sg->load_file_with_path(path.c_str());
 			    pathLoaded = 1;
@@ -48,7 +48,7 @@ void ttt::main_task_algorithm(void)
 			case lib::OPTION_TWO:
 			{
 				std::string path(mrrocpp_network_path);
-				path += config.return_string_value("trajektoria_joint");
+				path += config.value<std::string>("trajektoria_joint");
 
 			    sg->load_file_with_path(path.c_str());
 			    pathLoaded = 1;

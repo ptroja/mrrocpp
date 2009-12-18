@@ -23,9 +23,9 @@ haar::haar(lib::configurator &_config) :
 	task(_config)
 {
 	//Wczytanie parametrow konfiguracyjnych.
-	rotation    = config.return_int_value("rotation"); //Czy bedzie wyznaczana rotacja?
-	smooth_path = config.return_string_value("smooth_path");//Sciezka z opisem punktu startowego podawanego smooth_generatorowi
-	object_type = config.return_int_value("object_type");
+	rotation    = config.value<int>("rotation"); //Czy bedzie wyznaczana rotacja?
+	smooth_path = config.value<std::string>("smooth_path");//Sciezka z opisem punktu startowego podawanego smooth_generatorowi
+	object_type = config.value<int>("object_type");
 
 	if (object_type == 0)//Ustawiamy zadanie dla puszki.
 	{

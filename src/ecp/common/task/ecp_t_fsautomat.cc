@@ -89,7 +89,7 @@ fsautomat::fsautomat(lib::configurator &_config) : task(_config),
 	const std::string whichECP = lib::toString(ecp_m_robot->robot_name);
 
 	std::string filePath(mrrocpp_network_path);
-	std::string fileName = config.return_string_value("xml_file", "[xml_settings]");
+	std::string fileName = config.value<std::string>("xml_file", "[xml_settings]");
 	filePath += fileName;
 
 	// open xml document
@@ -223,9 +223,9 @@ fsautomat::fsautomat(lib::configurator &_config) : task(_config),
 
 void fsautomat::main_task_algorithm(void)
 {
-	std::string fileName = config.return_string_value("xml_file", "[xml_settings]");
-	int trjConf = config.return_int_value("trajectory_from_xml", "[xml_settings]");
-	int ecpLevel = config.return_int_value("trajectory_on_ecp_level", "[xml_settings]");
+	std::string fileName = config.value<std::string>("xml_file", "[xml_settings]");
+	int trjConf = config.value<int>("trajectory_from_xml", "[xml_settings]");
+	int ecpLevel = config.value<int>("trajectory_on_ecp_level", "[xml_settings]");
 
 	if(trjConf && ecpLevel)
 	{

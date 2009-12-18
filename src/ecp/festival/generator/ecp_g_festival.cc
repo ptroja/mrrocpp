@@ -22,9 +22,9 @@ namespace generator {
 generator::generator(common::task::task& _ecp_task) :
 		common::generator::generator (_ecp_task)
 {
-	host = ecp_t.config.return_string_value("server_host");
-	portnum = ecp_t.config.return_int_value("server_port");
-	test_mode = ecp_t.config.return_int_value("test_mode");
+	host = ecp_t.config.value<std::string>("server_host");
+	portnum = ecp_t.config.value<int>("server_port");
+	test_mode = ecp_t.config.value<int>("test_mode");
 	voice = "";
 	sock = -1;
 }

@@ -28,7 +28,7 @@ sensor::sensor(lib::SENSOR_t _sensor_name, const char* _section_name, task::task
 	// Ustawienie domyslnego okresu pracy czujnika.
 	base_period=current_period=1;
 
-	node_name = _ecp_mp_object.config.return_string_value("node_name", _section_name);
+	node_name = _ecp_mp_object.config.value<std::string>("node_name", _section_name);
 
 #if !defined(USE_MESSIP_SRR)
 	VSP_NAME = _ecp_mp_object.config.return_attach_point_name(lib::configurator::CONFIG_RESOURCEMAN_GLOBAL, "resourceman_attach_point", _section_name);

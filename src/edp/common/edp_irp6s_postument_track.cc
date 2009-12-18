@@ -156,13 +156,13 @@ irp6s_postument_track_effector::irp6s_postument_track_effector(lib::configurator
 
 
 	if (config.exists("force_tryb"))
-		force_tryb = config.return_int_value("force_tryb");
+		force_tryb = config.value<int>("force_tryb");
 	else
 		force_tryb = 0;
 
 	// ustalenie ilosci stopni swobody dla funkcji obslugi przerwania i synchronizacji w zaleznosci od aktywnosci chwytaka
 	if (config.exists("is_gripper_active"))
-		is_gripper_active = config.return_int_value("is_gripper_active");
+		is_gripper_active = config.value<int>("is_gripper_active");
 	else
 		is_gripper_active = 1;
 

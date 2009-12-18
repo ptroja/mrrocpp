@@ -78,7 +78,7 @@ progpanel::progpanel(lib::configurator &_config) : task(_config)
 void progpanel::main_task_algorithm(void)
 {
 	//	ecp_load_file_from_ui(*tig);
-	//	ecp_load_file_with_path(*tig, config->return_string_value("trajektoria"));
+	//	ecp_load_file_with_path(*tig, config->value<std::string>("trajektoria"));
 
 	//	 Move (*tig);
 	ppg->Move();

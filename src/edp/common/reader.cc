@@ -91,15 +91,15 @@ void reader_buffer::operator()()
 	std::string reader_meassures_dir;
 
 	if (master.config.exists("reader_meassures_dir")) {
-		reader_meassures_dir = master.config.return_string_value("reader_meassures_dir", UI_SECTION);
+		reader_meassures_dir = master.config.value<std::string>("reader_meassures_dir", UI_SECTION);
 	} else {
 		reader_meassures_dir = master.config.return_default_reader_measures_path();
 	}
 
-	std::string robot_filename = master.config.return_string_value("reader_attach_point");
+	std::string robot_filename = master.config.value<std::string>("reader_attach_point");
 
 	if (master.config.exists("reader_samples"))
-		nr_of_samples = master.config.return_int_value("reader_samples");
+		nr_of_samples = master.config.value<int>("reader_samples");
 	else
 		nr_of_samples = 1000;
 

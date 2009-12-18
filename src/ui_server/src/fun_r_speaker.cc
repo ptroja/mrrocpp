@@ -319,7 +319,7 @@ reload_speaker_configuration ()
 
 
 	// jesli speaker ma byc aktywny
-	if ((ui_state.speaker.is_active = config->return_int_value("is_speaker_active")) == 1)
+	if ((ui_state.speaker.is_active = config->value<int>("is_speaker_active")) == 1)
 	{
 
 		//ui_state.is_any_edp_active = true;
@@ -344,11 +344,11 @@ reload_speaker_configuration ()
 
 
 				if (config->exists("test_mode", ui_state.speaker.edp.section_name))
-					ui_state.speaker.edp.test_mode = config->return_int_value("test_mode", ui_state.speaker.edp.section_name);
+					ui_state.speaker.edp.test_mode = config->value<int>("test_mode", ui_state.speaker.edp.section_name);
 				else
 					ui_state.speaker.edp.test_mode = 0;
 
-				ui_state.speaker.edp.hardware_busy_attach_point = config->return_string_value
+				ui_state.speaker.edp.hardware_busy_attach_point = config->value<std::string>
 					("hardware_busy_attach_point", ui_state.speaker.edp.section_name);
 
 
@@ -359,11 +359,11 @@ reload_speaker_configuration ()
 				ui_state.speaker.edp.network_reader_attach_point = config->return_attach_point_name
 					(lib::configurator::CONFIG_SERVER, "reader_attach_point", ui_state.speaker.edp.section_name);
 
-				ui_state.speaker.edp.node_name = config->return_string_value ("node_name", ui_state.speaker.edp.section_name);
+				ui_state.speaker.edp.node_name = config->value<std::string> ("node_name", ui_state.speaker.edp.section_name);
 
-				ui_state.speaker.edp.preset_sound_0 = config->return_string_value("preset_sound_0", ui_state.speaker.edp.section_name);
-				ui_state.speaker.edp.preset_sound_1 = config->return_string_value("preset_sound_1", ui_state.speaker.edp.section_name);
-				ui_state.speaker.edp.preset_sound_2 = config->return_string_value("preset_sound_2", ui_state.speaker.edp.section_name);
+				ui_state.speaker.edp.preset_sound_0 = config->value<std::string>("preset_sound_0", ui_state.speaker.edp.section_name);
+				ui_state.speaker.edp.preset_sound_1 = config->value<std::string>("preset_sound_1", ui_state.speaker.edp.section_name);
+				ui_state.speaker.edp.preset_sound_2 = config->value<std::string>("preset_sound_2", ui_state.speaker.edp.section_name);
 
 			break;
 			case 1:

@@ -2438,7 +2438,7 @@ int
 reload_irp6m_configuration ()
 {
 	// jesli IRP6 mechatronika ma byc aktywne
-	if ((ui_state.irp6_mechatronika.is_active = config->return_int_value("is_irp6_mechatronika_active")) == 1)
+	if ((ui_state.irp6_mechatronika.is_active = config->value<int>("is_irp6_mechatronika_active")) == 1)
 	{
 
 		// ui_state.is_any_edp_active = true;
@@ -2470,7 +2470,7 @@ reload_irp6m_configuration ()
 					if (config->exists(tmp_string, ui_state.irp6_mechatronika.edp.section_name))
 					{
 						char* tmp, *tmp1;
-						tmp1 = tmp = strdup(config->return_string_value(tmp_string, ui_state.irp6_mechatronika.edp.section_name).c_str());
+						tmp1 = tmp = strdup(config->value<std::string>(tmp_string, ui_state.irp6_mechatronika.edp.section_name).c_str());
 						char* toDel = tmp;
 						for (int j=0; j<8; j++)
 						{
@@ -2486,11 +2486,11 @@ reload_irp6m_configuration ()
 				}
 
 				if (config->exists("test_mode", ui_state.irp6_mechatronika.edp.section_name))
-					ui_state.irp6_mechatronika.edp.test_mode = config->return_int_value("test_mode", ui_state.irp6_mechatronika.edp.section_name);
+					ui_state.irp6_mechatronika.edp.test_mode = config->value<int>("test_mode", ui_state.irp6_mechatronika.edp.section_name);
 				else
 					ui_state.irp6_mechatronika.edp.test_mode = 0;
 
-				ui_state.irp6_mechatronika.edp.hardware_busy_attach_point = config->return_string_value
+				ui_state.irp6_mechatronika.edp.hardware_busy_attach_point = config->value<std::string>
 					("hardware_busy_attach_point", ui_state.irp6_mechatronika.edp.section_name);
 
 				ui_state.irp6_mechatronika.edp.network_resourceman_attach_point = config->return_attach_point_name
@@ -2499,7 +2499,7 @@ reload_irp6m_configuration ()
 				ui_state.irp6_mechatronika.edp.network_reader_attach_point = config->return_attach_point_name
 					(lib::configurator::CONFIG_SERVER, "reader_attach_point", ui_state.irp6_mechatronika.edp.section_name.c_str());
 
-				ui_state.irp6_mechatronika.edp.node_name = config->return_string_value ("node_name", ui_state.irp6_mechatronika.edp.section_name.c_str());
+				ui_state.irp6_mechatronika.edp.node_name = config->value<std::string> ("node_name", ui_state.irp6_mechatronika.edp.section_name.c_str());
 
 			break;
 			case 1:

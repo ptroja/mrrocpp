@@ -152,8 +152,8 @@ void Draughts::getAIMove(int player){
 			vsp_fradia->get_reading();
 	}
 
-	int port=config.return_int_value("ai_port","[AI]");
-	std::string node_name=config.return_string_value("ai_node_name","[AI]");
+	int port=config.value<int>("ai_port","[AI]");
+	std::string node_name=config.value<std::string>("ai_node_name","[AI]");
 
 	aitrans->AIconnect(node_name.c_str(),port);
 

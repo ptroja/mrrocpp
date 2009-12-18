@@ -37,7 +37,7 @@ robot::robot( lib::robot_name_t l_robot_name, const char* _section_name, task::t
 	new_pulse(false),
 	new_pulse_checked(false)
 {
-	std::string node_name(mp_object.config.return_string_value("node_name", _section_name));
+	std::string node_name(mp_object.config.value<std::string>("node_name", _section_name));
 	nd = mp_object.config.return_node_number(node_name.c_str());
 
 	std::string ecp_attach_point(mp_object.config.return_attach_point_name

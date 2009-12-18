@@ -27,13 +27,13 @@ eihcalibration::eihcalibration(lib::configurator &_config) : task(_config)
         robot = POSTUMENT;
     }
 
-    smooth_path = config.return_string_value("smooth_path");
-    delay_ms = config.return_int_value("delay");
-    M = config.return_int_value("M");
-    A = config.return_double_value("A");
-    C = config.return_double_value("C");
-    D = config.return_double_value("D");
-    E = config.return_double_value("E");
+    smooth_path = config.value<std::string>("smooth_path");
+    delay_ms = config.value<int>("delay");
+    M = config.value<int>("M");
+    A = config.value<double>("A");
+    C = config.value<double>("C");
+    D = config.value<double>("D");
+    E = config.value<double>("E");
 
 	smooth2gen = new generator::smooth2(*this, true);
 
