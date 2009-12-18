@@ -12,7 +12,7 @@
 #include "lib/srlib.h"
 #include "lib/configurator.h"
 #include "ecp/common/task/ecp_task.h"
-#include "ecp/common/task/ecp_t_acquisition.h"
+#include "application/kalibracja/ecp_t_acquisition.h"
 #include "gsl/gsl_vector.h"
 #include "gsl/gsl_matrix.h"
 #include "gsl/gsl_multimin.h"

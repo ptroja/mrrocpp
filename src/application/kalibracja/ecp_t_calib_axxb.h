@@ -1,20 +1,20 @@
-#if !defined(_ECP_T_CALIB_AXZB_H)
-#define _ECP_T_CALIB_AXZB_H
+#if !defined(_ECP_T_CALIB_AXXB_H)
+#define _ECP_T_CALIB_AXXB_H
 
 #include <string.h>
 #include <unistd.h>
-#include "ecp/common/task/ecp_t_calibration.h"
-#include "ecp/common/task/ecp_t_calib_axzb.h"
+#include "ecp_t_calibration.h"
+#include "ecp_t_calib_axxb.h"
 
 namespace mrrocpp {
 namespace ecp {
 namespace common {
 namespace task {
 
-class calib_axzb: public common::task::calibration  {
+class calib_axxb: public common::task::calibration  {
 	public:
 		// KONSTRUKTORY
-		calib_axzb(lib::configurator &_config);
+		calib_axxb(lib::configurator &_config);
 
 		void main_task_algorithm(void);
 

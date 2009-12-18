@@ -21,7 +21,7 @@
 #include "ecp/common/generator/ecp_g_t.h"
 #include "ecp_mp/sensor/ecp_mp_s_cvfradia.h"
 #include "ecp/common/generator/ecp_g_force.h"
-#include "ecp/common/generator/ecp_g_eihcalibration.h"
+#include "application/kalibracja/ecp_g_eihcalibration.h"
 
 #include "ecp/irp6_on_track/ecp_r_irp6ot.h"
 #include "ecp/irp6_postument/ecp_r_irp6p.h"
