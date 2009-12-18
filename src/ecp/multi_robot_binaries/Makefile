@@ -6,6 +6,9 @@ OBJECTS = ${patsubst %.cc,%.o,${SOURCES}}
 
 BINARIES = ecp_tran \
 	ecp_t \
+	ecp_t_kcz_force \
+	ecp_t_kcz_test \
+	ecp_eihcalibration\
 	#ecp_nalewanie \
 	ecp_tw \
 	ecp_time \
@@ -15,11 +18,9 @@ BINARIES = ecp_tran \
 	ecp_tzu_test \
 	ecp_pcbird \
 	ecp_visioncoordinates \
-	ecp_eihcalibration \
 	ecp_mam \
-	ecp_fsautomat \
-	ecp_t_kcz_force \
-	ecp_t_kcz_test
+	ecp_fsautomat
+
 	
 
 #-----------------------------------------------------------------------------------------------------------------------#
@@ -203,7 +204,6 @@ ecp_eihcalibration: \
 		../irp6_postument/ecp_r_irp6p.o \
 		../common/task/ecp_t_eihcalibration.o \
 		../common/generator/ecp_g_eihcalibration.o \
-		../common/generator/ecp_g_smooth.o \
 		../common/generator/ecp_g_smooth2.o \
 		../common/generator/ecp_g_jarosz.o \
 		../common/generator/ecp_g_force.o \
@@ -216,7 +216,6 @@ ecp_t_kcz_force: \
 		../irp6_on_track/ecp_r_irp6ot.o \
 		../irp6_postument/ecp_r_irp6p.o \
 		../common/task/ecp_t_kcz_force.o \
-		../common/generator/ecp_g_smooth.o \
 		../common/generator/ecp_g_smooth2.o \
 		../common/generator/ecp_g_jarosz.o \
 		../common/generator/ecp_g_force.o \
@@ -231,7 +230,6 @@ ecp_t_kcz_test: \
 		../irp6_on_track/ecp_r_irp6ot.o \
 		../irp6_postument/ecp_r_irp6p.o \
 		../common/task/ecp_t_kcz_test.o \
-		../common/generator/ecp_g_smooth.o \
 		../common/generator/ecp_g_smooth2.o \
 		../common/generator/ecp_g_jarosz.o \
 		../common/generator/ecp_g_force.o \

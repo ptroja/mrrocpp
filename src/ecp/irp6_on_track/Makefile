@@ -17,6 +17,7 @@ BINARIES =			ecp_pr \
 				ecp_fr \
 				ecp_kin_test_irp6ot \
 				ecp_irp6ot_rcsc \
+				ecp_t_mboryn \
 				#ecp_irp6ot_pouring \
 				#ecp_irp6ot_multiplayer \
 				#ecp_irp6ot_legobrick \
@@ -28,8 +29,8 @@ BINARIES =			ecp_pr \
 				#ecp_pw_kolo\
 				#ecp_haar \
 				#ecp_ttt \
-				#ecp_t_box_irp6ot \
-				ecp_t_mboryn
+				#ecp_t_box_irp6ot
+				
 ifneq ($(BUILD_TARGET), linux)
 BINARIES+=		ecp_t_smooth2_test \
 				ecp_t_grab_cube_irp6ot \
