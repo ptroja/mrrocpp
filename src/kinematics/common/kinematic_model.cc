@@ -110,7 +110,7 @@ void model::local_corrector_transform(lib::Homog_matrix& current_end_effector_ma
     d[4] = z[4] / h;
     d[5] = z[5] / h;
     // Zapamietanie poprawionego polozenia.
-    current_end_effector_matrix.set_xyz_euler_zyz(d[0], d[1], d[2], d[3], d[4], d[5]);
+    current_end_effector_matrix.set_from_xyz_euler_zyz(d[0], d[1], d[2], d[3], d[4], d[5]);
     //  	std::cout<<" local_corrector_transform: poprawione \n"<<current_end_effector_matrix<<std::endl;
 }
 
@@ -153,7 +153,7 @@ void model::local_corrector_inverse_transform(lib::Homog_matrix& desired_end_eff
     d[4] = x[4] / h;
     d[5] = x[5] / h;
     // Zapamietanie polozenia.
-    desired_end_effector_matrix.set_xyz_euler_zyz(d[0], d[1], d[2], d[3], d[4], d[5]);
+    desired_end_effector_matrix.set_from_xyz_euler_zyz(d[0], d[1], d[2], d[3], d[4], d[5]);
     //  	std::cout<<" local_corrector_inverse_transform: oryginalne \n"<<desired_end_effector_matrix<<std::endl;
 }
 

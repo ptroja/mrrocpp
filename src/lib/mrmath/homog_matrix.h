@@ -78,22 +78,22 @@ public:
 	// Zwrocenie tablicy zawierajacej dane macierzy jednorodnej.
 	void get_frame_tab(frame_tab frame) const;
 	// Ustawienie tablicy zawierajacej dane macierzy jednorodnej.
-	void set_frame_tab(const frame_tab frame);
+	void set_from_frame_tab(const frame_tab frame);
 
      // Przeksztalcenie do formy XYZ_EULER_ZYZ i zwrocenie w tablicy.
 	void get_xyz_euler_zyz(double t[6]) const;
 	// Przeksztalcenie do formy XYZ_EULER_ZYZ dla robota IRP-6_MECHATRONIKA i zwrocenie w tablicy.
 	void get_mech_xyz_euler_zyz(double t[6]) const;
 	// Wypelnienie wspolczynnikow macierzy na podstawie danych w formie XYZ_EULER_ZYZ.
-	void set_xyz_euler_zyz(double x, double y, double z, double alfa, double beta, double gamma);
-	void set_xyz_euler_zyz(const double t[6]);
+	void set_from_xyz_euler_zyz(double x, double y, double z, double alfa, double beta, double gamma);
+	void set_from_xyz_euler_zyz(const double t[6]);
 	// Wypelnienie wspolczynnikow macierzy na podstawie danych w formie XYZ_EULER_ZYZ dla robota IRP-6_MECHATRONIKA
-	void set_mech_xyz_euler_zyz(double x, double y, double z, double alfa, double beta, double gamma);
+	void set_from_mech_xyz_euler_zyz(double x, double y, double z, double alfa, double beta, double gamma);
 
      // Przeksztalcenie do formy XYZ_RPY (rool pitch yaw) i zwrocenie w tablicy.
 	void get_xyz_rpy(double t[6]) const;
 	// Wypelnienie wspolczynnikow macierzy na podstawie danych w formie XYZ_RPY.
-	void set_xyz_rpy(double x, double y, double z, double alfa, double beta, double gamma);
+	void set_from_xyz_rpy(double x, double y, double z, double alfa, double beta, double gamma);
 
 
 	// Przeksztalcenie do formy XYZ_ANGLE_AXIS i zwrocenie w tablicy.
@@ -102,14 +102,14 @@ public:
 	void get_xyz_angle_axis(Ft_v_vector& translation_and_axis_with_angle) const;
 
 	// Wypelnienie wspolczynnikow macierzy na podstawie danych w formie XYZ_ANGLE_AXIS.
-	void set_xyz_angle_axis(double kx, double ky, double kz, double alfa, double x, double y, double z);
-	void set_xyz_angle_axis(double kx, double ky, double kz, double x, double y, double z); // kat wliczony w os
-	void set_xyz_angle_axis(const K_vector axis_with_angle, const K_vector translation);  // kat wliczony w os
-	void set_xyz_angle_axis(const Ft_v_vector translation_and_axis_with_angle);  // kat wliczony w os
-	void set_xyz_angle_axis(const double t[6]);  // kat wliczony w os
+	void set_from_xyz_angle_axis(double kx, double ky, double kz, double alfa, double x, double y, double z);
+	void set_from_xyz_angle_axis(double kx, double ky, double kz, double x, double y, double z); // kat wliczony w os
+	void set_from_xyz_angle_axis(const K_vector axis_with_angle, const K_vector translation);  // kat wliczony w os
+	void set_from_xyz_angle_axis(const Ft_v_vector translation_and_axis_with_angle);  // kat wliczony w os
+	void set_from_xyz_angle_axis(const double t[6]);  // kat wliczony w os
 
 	// Operacje na kwaternionach
-	void set_xyz_quaternion(double eta, double eps1, double eps2, double eps3, double x, double y, double z);
+	void set_from_xyz_quaternion(double eta, double eps1, double eps2, double eps3, double x, double y, double z);
 	void get_xyz_quaternion(double t[7]) const;
 
 

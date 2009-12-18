@@ -279,16 +279,16 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buff
 		switch (set_arm_type)
 		{
 		case lib::FRAME:
-			goal_frame.set_frame_tab(arm_frame);
+			goal_frame.set_from_frame_tab(arm_frame);
 			break;
 		case lib::JOINT:
 			get_current_kinematic_model()->i2e_transform(arm_coordinates, &goal_frame_tab);
-			goal_frame.set_frame_tab(goal_frame_tab);
+			goal_frame.set_from_frame_tab(goal_frame_tab);
 			break;
 		case lib::MOTOR:
 			get_current_kinematic_model()->mp2i_transform(arm_coordinates, tmp_joints);
 			get_current_kinematic_model()->i2e_transform(tmp_joints, &goal_frame_tab);
-			goal_frame.set_frame_tab(goal_frame_tab);
+			goal_frame.set_from_frame_tab(goal_frame_tab);
 			break;
 		default:
 			break;
@@ -298,7 +298,7 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buff
 			switch (set_arm_type)
 			{
 			case lib::FRAME:
-				goal_frame.set_frame_tab(arm_frame);
+				goal_frame.set_from_frame_tab(arm_frame);
 				goal_frame = begining_end_effector_frame * goal_frame;
 				break;
 			case lib::JOINT:
@@ -307,7 +307,7 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buff
 					tmp_joints[i] = begining_joints[i] + arm_coordinates[i];
 				}
 				get_current_kinematic_model()->i2e_transform(tmp_joints, &goal_frame_tab);
-				goal_frame.set_frame_tab(goal_frame_tab);
+				goal_frame.set_from_frame_tab(goal_frame_tab);
 				break;
 			case lib::MOTOR:
 				for (int i = 0; i < MAX_SERVOS_NR; i++)
@@ -316,7 +316,7 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buff
 				}
 				get_current_kinematic_model()->mp2i_transform(tmp_motor_pos, tmp_joints);
 				get_current_kinematic_model()->i2e_transform(tmp_joints, &goal_frame_tab);
-				goal_frame.set_frame_tab(goal_frame_tab);
+				goal_frame.set_from_frame_tab(goal_frame_tab);
 				break;
 			default:
 				break;

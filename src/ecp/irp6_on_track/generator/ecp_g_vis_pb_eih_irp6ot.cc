@@ -77,8 +77,8 @@ bool ecp_vis_pb_eih_irp6ot::next_step_without_constraints(){
 	the_robot->ecp_command.instruction.set_type = ARM_DV;
 	the_robot->ecp_command.instruction.instruction_type = lib::SET_GET;
 
-	//G_Tx_G2.set_xyz_euler_zyz( 0,0,0, 0.002, 1.481+0.03, 2.341);	//jesli chwytamy po przekatnej
-	G_Tx_G2.set_xyz_euler_zyz( 0,0,0, 0.00, 1.57, 3.141); // jesli chwytak na plasko
+	//G_Tx_G2.set_from_xyz_euler_zyz( 0,0,0, 0.002, 1.481+0.03, 2.341);	//jesli chwytamy po przekatnej
+	G_Tx_G2.set_from_xyz_euler_zyz( 0,0,0, 0.00, 1.57, 3.141); // jesli chwytak na plasko
 
 
 
@@ -93,7 +93,7 @@ bool ecp_vis_pb_eih_irp6ot::next_step_without_constraints(){
 		std::cout << std::endl << std::endl << std::endl << std::endl
 				<< std::endl;
 
-		O_Tx_E.set_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame); // zarem
+		O_Tx_E.set_from_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame); // zarem
 		std::cout << "YYY " << O_Tx_E << std::endl;
 
 		O_Tx_E.get_xyz_angle_axis(O_r_E1);
@@ -122,18 +122,18 @@ bool ecp_vis_pb_eih_irp6ot::next_step_without_constraints(){
 
 	if (node_counter==2)
 	{
-		O_Tx_E.set_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame);
+		O_Tx_E.set_from_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame);
 		O_Tx_E.get_xyz_angle_axis(O_r_E1);
 	}
 	//EIH
-	C_Tx_G.set_xyz_rpy(vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__f[0],
+	C_Tx_G.set_from_xyz_rpy(vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__f[0],
 			vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__f[1],
 			-vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__f[2], // kalib Y w O
 			-vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__f[3], 0, 0);
 
-	G_Tx_S.set_xyz_rpy(x2g, 0, 0, 0, 0, 0);
+	G_Tx_S.set_from_xyz_rpy(x2g, 0, 0, 0, 0, 0);
 
-	O_Tx_E.set_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame);
+	O_Tx_E.set_from_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame);
 
 	/*
 	O_Tx_E.get_xyz_angle_axis(O_r_E[0]);
@@ -229,7 +229,7 @@ void ecp_vis_pb_eih_irp6ot::entertain_constraints(){
 		}
 	}
 
-	O_Tx_Ep.set_xyz_angle_axis(O_r_Ep[0]);
+	O_Tx_Ep.set_from_xyz_angle_axis(O_r_Ep[0]);
 
 	// ------------przepisanie wartosci-----
 	for (int i=0; i<6; i++)

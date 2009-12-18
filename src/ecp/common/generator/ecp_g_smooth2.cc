@@ -941,7 +941,7 @@ bool smooth2::next_step () {
     			the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
     			the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
 
-    			homog_matrix.set_xyz_euler_zyz(coordinate_list_iterator->coordinate);
+    			homog_matrix.set_from_xyz_euler_zyz(coordinate_list_iterator->coordinate);
 
     			//for (i = 0; i < 6; i++) {//zapisanie nastepnego polozenia (makrokroku) do robota
 
@@ -995,7 +995,7 @@ bool smooth2::next_step () {
     			the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
 
     			//for (i = 0; i < 6; i++) {//zapisanie nastepnego polozenia (makrokroku) do robota
-    			homog_matrix.set_xyz_angle_axis(coordinate_list_iterator->coordinate);
+    			homog_matrix.set_from_xyz_angle_axis(coordinate_list_iterator->coordinate);
     				//TODO przetestowac
     			    //the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = coordinate_list_iterator->coordinate[i];
     			homog_matrix.get_frame_tab(the_robot->ecp_command.instruction.arm.pf_def.arm_frame);
@@ -1187,7 +1187,7 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 			case lib::ECP_XYZ_EULER_ZYZ:
 				gripp = 6;
 				//printf("euler w first_interval\n");
-				homog_matrix.set_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame);
+				homog_matrix.set_from_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame);
 				homog_matrix.get_xyz_euler_zyz(pose_list_iterator->start_position);
 
 				for (i = 0; i < gripp; i++) {
@@ -1244,7 +1244,7 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 			case lib::ECP_XYZ_ANGLE_AXIS:
 				gripp = 6;
 
-				homog_matrix.set_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame);
+				homog_matrix.set_from_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame);
 				homog_matrix.get_xyz_angle_axis(pose_list_iterator->start_position);
 
 				for (i = 0; i < gripp; i++) {

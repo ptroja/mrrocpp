@@ -77,8 +77,8 @@ bool ecp_vis_pb_eol_sac_irp6ot::next_step_without_constraints(){
 	 the_robot->ecp_command.instruction.set_type = ARM_DV;
 	the_robot->ecp_command.instruction.instruction_type = lib::SET_GET;
 
-	//G_Tx_G2.set_xyz_euler_zyz( 0,0,0, 0.002, 1.481+0.03, 2.341);	//jesli chwytamy po przekatnej
-	G_Tx_G2.set_xyz_euler_zyz( 0,0,0, 0.00, 1.57, 3.141); // jesli chwytak na plasko
+	//G_Tx_G2.set_from_xyz_euler_zyz( 0,0,0, 0.002, 1.481+0.03, 2.341);	//jesli chwytamy po przekatnej
+	G_Tx_G2.set_from_xyz_euler_zyz( 0,0,0, 0.00, 1.57, 3.141); // jesli chwytak na plasko
 
 
 
@@ -93,7 +93,7 @@ bool ecp_vis_pb_eol_sac_irp6ot::next_step_without_constraints(){
 		std::cout << std::endl << std::endl << std::endl << std::endl
 				<< std::endl;
 
-		O_Tx_E.set_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame); // zarem
+		O_Tx_E.set_from_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame); // zarem
 		std::cout << "YYY " << O_Tx_E << std::endl;
 
 		O_Tx_E.get_xyz_angle_axis(O_r_E[0]);
@@ -120,7 +120,7 @@ bool ecp_vis_pb_eol_sac_irp6ot::next_step_without_constraints(){
 	}
 
 	//SAC
-	C_Tx_G.set_xyz_rpy(vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G[0],
+	C_Tx_G.set_from_xyz_rpy(vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G[0],
 			vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G[1],
 			-vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G[2],
 			vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G[5], 0, 0);
@@ -157,15 +157,15 @@ bool ecp_vis_pb_eol_sac_irp6ot::next_step_without_constraints(){
 #endif
 
 
-	G_Tx_S.set_xyz_rpy(x2g, 0, 0, 0, 0, 0);
-	O_Tx_E.set_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame);
+	G_Tx_S.set_from_xyz_rpy(x2g, 0, 0, 0, 0, 0);
+	O_Tx_E.set_from_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame);
 
 	O_Tx_E=O_Tx_E*!G_Tx_G2; //zmiana orientacji (teraz tool)
 
 	O_Tx_E.get_xyz_angle_axis(O_r_E[0]);
 
 	//SAC
-	O_Tx_C.set_xyz_rpy( 0.950+0.058, //-0.09,
+	O_Tx_C.set_from_xyz_rpy( 0.950+0.058, //-0.09,
 			0.000-0.06, 0.265+0.900+0.075-0.105, 0, 0, 0);
 	O_Tx_G=O_Tx_C*C_Tx_G;
 	O_Tx_G=O_Tx_G*G_Tx_S; //skrot myslowy
@@ -225,7 +225,7 @@ void ecp_vis_pb_eol_sac_irp6ot::entertain_constraints(){
 		}
 	}
 
-	O_Tx_Ep.set_xyz_angle_axis(O_r_Ep[0]);
+	O_Tx_Ep.set_from_xyz_angle_axis(O_r_Ep[0]);
 
 	// ------------przepisanie wartosci-----
 	for (int i=0; i<6; i++)

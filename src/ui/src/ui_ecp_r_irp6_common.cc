@@ -245,7 +245,7 @@ void ui_common_robot::set_tool_xyz_angle_axis ( double tool_vector[6] )
     ecp->ecp_command.instruction.get_rmodel_type = lib::TOOL_FRAME;
 
     lib::Homog_matrix tmp;
-    tmp.set_xyz_angle_axis(tool_vector);
+    tmp.set_from_xyz_angle_axis(tool_vector);
     tmp.get_frame_tab(ecp->ecp_command.instruction.rmodel.tool_frame_def.tool_frame);
 
     execute_motion();
@@ -264,7 +264,7 @@ void ui_common_robot::set_tool_xyz_euler_zyz ( double tool_vector[6] )
     ecp->ecp_command.instruction.get_rmodel_type = lib::TOOL_FRAME;
 
     lib::Homog_matrix tmp;
-    tmp.set_xyz_euler_zyz(tool_vector);
+    tmp.set_from_xyz_euler_zyz(tool_vector);
     tmp.get_frame_tab(ecp->ecp_command.instruction.rmodel.tool_frame_def.tool_frame);
 
     execute_motion();
@@ -287,7 +287,7 @@ void ui_common_robot::read_tool_xyz_angle_axis ( double tool_vector[6] )
     execute_motion();
 
     lib::Homog_matrix tmp;
-    tmp.set_frame_tab(ecp->reply_package.rmodel.tool_frame_def.tool_frame);
+    tmp.set_from_frame_tab(ecp->reply_package.rmodel.tool_frame_def.tool_frame);
     tmp.get_xyz_angle_axis(tool_vector);
 
 }
@@ -307,7 +307,7 @@ void ui_common_robot::read_tool_xyz_euler_zyz ( double tool_vector[6] )
 
     execute_motion();
     lib::Homog_matrix tmp;
-    tmp.set_frame_tab(ecp->reply_package.rmodel.tool_frame_def.tool_frame);
+    tmp.set_from_frame_tab(ecp->reply_package.rmodel.tool_frame_def.tool_frame);
     tmp.get_xyz_euler_zyz(tool_vector);
 
 }
@@ -506,7 +506,7 @@ void ui_common_robot::move_xyz_euler_zyz ( double final_position[7] )
         return;
 
     lib::Homog_matrix tmp;
-     tmp.set_xyz_euler_zyz(final_position);
+     tmp.set_from_xyz_euler_zyz(final_position);
      tmp.get_frame_tab(ecp->ecp_command.instruction.arm.pf_def.arm_frame);
 
 
@@ -589,7 +589,7 @@ void ui_common_robot::move_xyz_angle_axis ( double final_position[7] )
 
 
     lib::Homog_matrix tmp;
-     tmp.set_xyz_angle_axis(final_position);
+     tmp.set_from_xyz_angle_axis(final_position);
      tmp.get_frame_tab(ecp->ecp_command.instruction.arm.pf_def.arm_frame);
 
 
@@ -646,7 +646,7 @@ void ui_common_robot::move_xyz_angle_axis_relative ( double position_increment[7
 
 
     lib::Homog_matrix tmp;
-    tmp.set_xyz_angle_axis(position_increment);
+    tmp.set_from_xyz_angle_axis(position_increment);
     tmp.get_frame_tab(ecp->ecp_command.instruction.arm.pf_def.arm_frame);
 
 	ecp->ecp_command.instruction.arm.pf_def.gripper_coordinate = position_increment[6];
@@ -712,7 +712,7 @@ void ui_common_robot::read_xyz_euler_zyz (double current_position[])
     execute_motion();
 
     lib::Homog_matrix tmp;
-    tmp.set_frame_tab(ecp->reply_package.arm.pf_def.arm_frame);
+    tmp.set_from_frame_tab(ecp->reply_package.arm.pf_def.arm_frame);
     tmp.get_xyz_euler_zyz(current_position);
 
 
@@ -732,7 +732,7 @@ void ui_common_robot::read_xyz_angle_axis (double current_position[])
     execute_motion();
 
     lib::Homog_matrix tmp;
-    tmp.set_frame_tab(ecp->reply_package.arm.pf_def.arm_frame);
+    tmp.set_from_frame_tab(ecp->reply_package.arm.pf_def.arm_frame);
     tmp.get_xyz_angle_axis(current_position);
 
     current_position[6] = ecp->reply_package.arm.pf_def.gripper_coordinate;

@@ -143,7 +143,7 @@ void ecp_vis_weights_driven_irp6ot::entertain_constraints(){
 		}
 	}
 
-	O_Tx_Ep.set_xyz_angle_axis(O_r_Ep[0]);
+	O_Tx_Ep.set_from_xyz_angle_axis(O_r_Ep[0]);
 
 	// ------------przepisanie wartosci-----
 	for (int i=0; i<6; i++)

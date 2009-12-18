@@ -236,7 +236,7 @@ void wii_teach::main_task_algorithm(void)
                     node* current = new node;
                     current->id = ++cnt;
 
-                    homog_matrix.set_frame_tab(ecp_m_robot->reply_package.arm.pf_def.arm_frame);
+                    homog_matrix.set_from_frame_tab(ecp_m_robot->reply_package.arm.pf_def.arm_frame);
                     homog_matrix.get_xyz_angle_axis(current->position);
                     current->gripper = ecp_m_robot->reply_package.arm.pf_def.gripper_coordinate;
 
@@ -305,7 +305,7 @@ void wii_teach::main_task_algorithm(void)
                         int old = trajectory.current->id;
                         trajectory.current->id = ++cnt;
 
-                        homog_matrix.set_frame_tab(ecp_m_robot->reply_package.arm.pf_def.arm_frame);
+                        homog_matrix.set_from_frame_tab(ecp_m_robot->reply_package.arm.pf_def.arm_frame);
                         homog_matrix.get_xyz_angle_axis(trajectory.current->position);
                         trajectory.current->gripper = ecp_m_robot->reply_package.arm.pf_def.gripper_coordinate;
 

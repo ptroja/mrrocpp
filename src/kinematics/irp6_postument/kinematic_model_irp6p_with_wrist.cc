@@ -93,7 +93,7 @@ Ustawienie pozycji ukladu bazowego w globalnym ukladzie odniesienia [m].
  tmp_global_base_m[1][3] =  2.106338769845522;
  tmp_global_base_m[2][3] = -0.030202915816185;
  // Ustawienie macierzy.
- global_base.set_frame_tab(tmp_global_base_m);
+ global_base.set_from_frame_tab(tmp_global_base_m);
 
 /* -----------------------------------------------------------------------
 Obliczanie wspolczynnika - przelozenie przekladni kata obrotu walu silnika napedowego kolumny.

@@ -297,13 +297,13 @@ bool vis_sac_lx::next_step()
 	 	//the_robot->ecp_command.instruction.get_arm_type = lib::INVALID_END_EFFECTOR;
 	 	//the_robot->ecp_command.instruction.get_arm_type = lib::INVALID_END_EFFECTOR;
 
-		//G_Tx_G2.set_xyz_euler_zyz( 0,0,0, 0.002, 1.481+0.03, 2.341);	//jesli chwytamy po przekatnej
-	//G_Tx_G2.set_xyz_euler_zyz( 0,0,0, 0.002, 1.481+0.03, 3.141); // jesli chwytak na plasko oryginal
-	G_Tx_G2.set_xyz_euler_zyz( 0,0,0, 0.00, 1.57, 3.141); // jesli chwytak na plasko
+		//G_Tx_G2.set_from_xyz_euler_zyz( 0,0,0, 0.002, 1.481+0.03, 2.341);	//jesli chwytamy po przekatnej
+	//G_Tx_G2.set_from_xyz_euler_zyz( 0,0,0, 0.002, 1.481+0.03, 3.141); // jesli chwytak na plasko oryginal
+	G_Tx_G2.set_from_xyz_euler_zyz( 0,0,0, 0.00, 1.57, 3.141); // jesli chwytak na plasko
 
 
-	//G_Tx_G2.set_xyz_euler_zyz( 0,0,0, 1.564, 0.0, 0.000); //rover
-	//G_Tx_G2.set_xyz_euler_zyz( 0,0,0,1.569070, M_PI, 0.000000);
+	//G_Tx_G2.set_from_xyz_euler_zyz( 0,0,0, 1.564, 0.0, 0.000); //rover
+	//G_Tx_G2.set_from_xyz_euler_zyz( 0,0,0,1.569070, M_PI, 0.000000);
 
 
 	if (node_counter==1)
@@ -318,10 +318,10 @@ bool vis_sac_lx::next_step()
 		std::cout << std::endl << std::endl << std::endl << std::endl
 				<< std::endl;
 
-		O_Tx_E.set_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame); // zarem
+		O_Tx_E.set_from_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame); // zarem
 		std::cout << "YYY " << O_Tx_E << std::endl;
 
-		//O_Tx_E.set_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame); // zarem
+		//O_Tx_E.set_from_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame); // zarem
 		O_Tx_E.get_xyz_angle_axis(O_r_E[0]);
 		O_Tx_E=O_Tx_E*!G_Tx_G2;
 
@@ -371,7 +371,7 @@ bool vis_sac_lx::next_step()
 	 my_goal_frame[0][1]=0.717735; my_goal_frame[1][1]=-0.696316; my_goal_frame[2][1]=0.000834; my_goal_frame[3][1]=0.000053;
 	 my_goal_frame[0][2]=0.696315; my_goal_frame[1][2]=0.717735; my_goal_frame[2][2]=0.000973; my_goal_frame[3][2]=0.264818;
 	 */
-	//	O_Tx_G.set_frame_tab(my_goal_frame);
+	//	O_Tx_G.set_from_frame_tab(my_goal_frame);
 
 	/*
 	 std::cout << "C_T_G" << std::endl;
@@ -397,7 +397,7 @@ bool vis_sac_lx::next_step()
 
 
 
-	CSAC_Tx_G.set_xyz_rpy(vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G[0],
+	CSAC_Tx_G.set_from_xyz_rpy(vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G[0],
 			vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G[1],
 			-vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G[2],
 
@@ -410,7 +410,7 @@ bool vis_sac_lx::next_step()
 	//EIH
 	//rover
 /*
-	CEIH_Tx_G.set_xyz_rpy(vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__f[0]-0.015, //-0.05
+	CEIH_Tx_G.set_from_xyz_rpy(vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__f[0]-0.015, //-0.05
 			vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__f[1]+0.03, //0.04
 			-vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__f[2]+0.01, // kalib Y w O //+0.02
 		//	-vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__f[3], 0, 0); //nomalnie
@@ -421,7 +421,7 @@ bool vis_sac_lx::next_step()
 
 //kostka
 
-	CEIH_Tx_G.set_xyz_rpy(vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__f[0],
+	CEIH_Tx_G.set_from_xyz_rpy(vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__f[0],
 			vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__f[1],
 			-vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__f[2], // kalib Y w O
 			-vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__f[3], 0, 0);
@@ -451,7 +451,7 @@ bool vis_sac_lx::next_step()
 
 	}
 */
-	CEIH_Tx_G__f.set_xyz_rpy(vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__CEIH[0],
+	CEIH_Tx_G__f.set_from_xyz_rpy(vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__CEIH[0],
 			vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__CEIH[1],
 			-vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__CEIH[2],
 			-vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__CEIH[3], 0, 0); //-1
@@ -499,14 +499,14 @@ bool vis_sac_lx::next_step()
 
 	//x2g=-0.07;
 
-	G_Tx_S.set_xyz_rpy(x2g, 0, 0, 0, 0, 0);
+	G_Tx_S.set_from_xyz_rpy(x2g, 0, 0, 0, 0, 0);
 
-	O_Tx_E.set_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame);
+	O_Tx_E.set_from_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame);
 	O_Tx_E=O_Tx_E*!G_Tx_G2;
 	O_Tx_E.get_xyz_angle_axis(O_r_E[0]);
 
 	//SAC
-	O_Tx_CSAC.set_xyz_rpy( 0.950+0.058, //-0.09,
+	O_Tx_CSAC.set_from_xyz_rpy( 0.950+0.058, //-0.09,
 			0.000-0.06, 0.265+0.900+0.075-0.105, 0, 0, 0);
 	O_Tx_G__CSAC=O_Tx_CSAC*CSAC_Tx_G;
 	O_Tx_G__CSAC=O_Tx_G__CSAC*G_Tx_S; //skrot myslowy
@@ -726,7 +726,7 @@ CEIH_Tx_G.get_xyz_angle_axis(CEIH_r_G[0]);
 	if(phaseD)
 	{
 
-	G_Tx_D.set_xyz_rpy(x2d, 0, 0, 0, 0, 0);
+	G_Tx_D.set_from_xyz_rpy(x2d, 0, 0, 0, 0, 0);
 
 	O_Tx_G__D=O_Tx_G__BLOCK*G_Tx_D; //skrot myslowy
 	O_Tx_G__D.get_xyz_angle_axis(O_r_G__D[0]);
@@ -894,7 +894,7 @@ CEIH_Tx_G.get_xyz_angle_axis(CEIH_r_G[0]);
 
 	//O_r_Ep[0][1]=0.05;
 
-	O_Tx_Ep.set_xyz_angle_axis(O_r_Ep[0]);
+	O_Tx_Ep.set_from_xyz_angle_axis(O_r_Ep[0]);
 	/*
 	 O_Tx_Ep.get_xyz_euler_zyz(O_reul_Ep[0]);
 
@@ -908,7 +908,7 @@ CEIH_Tx_G.get_xyz_angle_axis(CEIH_r_G[0]);
 	 O_reul_Ep[i][0]=measure_border_u[i];
 	 }
 
-	 O_Tx_Ep.set_xyz_euler_zyz(O_reul_Ep[0][0],O_reul_Ep[1][0],O_reul_Ep[2][0],O_reul_Ep[3][0],O_reul_Ep[4][0],O_reul_Ep[5][0]);
+	 O_Tx_Ep.set_from_xyz_euler_zyz(O_reul_Ep[0][0],O_reul_Ep[1][0],O_reul_Ep[2][0],O_reul_Ep[3][0],O_reul_Ep[4][0],O_reul_Ep[5][0]);
 	 O_Tx_Ep.get_xyz_angle_axis(O_r_Ep[0]);
 	 */
 

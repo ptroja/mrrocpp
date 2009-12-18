@@ -128,7 +128,7 @@ bool y_edge_follow_force::next_step()
 	for (int i=0; i<6; i++)
 		inc_delta[i] = -inc_delta[i];
 
-	tmp_matrix.set_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame);
+	tmp_matrix.set_from_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame);
 	tmp_matrix.get_xyz_euler_zyz(tmp_delta);
 
 	for (int i=0; i<6; i++)

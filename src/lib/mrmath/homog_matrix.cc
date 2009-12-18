@@ -110,7 +110,7 @@ Homog_matrix::Homog_matrix(double r[3][3], double t[3])
 // Utworzenie macierzy jednorodnej na podstawie zawartosci tablicy podanej jako argument.
 Homog_matrix::Homog_matrix(const frame_tab frame)
 {
-	set_frame_tab(frame);
+	set_from_frame_tab(frame);
 }//: Homog_matrix::Homog_matrix(frame_tab frame)
 
 
@@ -118,7 +118,7 @@ Homog_matrix::Homog_matrix(const frame_tab frame)
 // jest on uzywany podczas inicjalizacji obiektu w momencie jego tworzenia (np. Homog_matrix B = A;)
 Homog_matrix::Homog_matrix(const Homog_matrix &wzor)
 {
-	set_frame_tab(wzor.matrix_m);
+	set_from_frame_tab(wzor.matrix_m);
 }//: Homog_matrix::Homog_matrix(const Homog_matrix &wzor)
 
 Homog_matrix::Homog_matrix(double x, double y, double z)
@@ -151,7 +151,7 @@ Homog_matrix::Homog_matrix (double r11, double r12, double r13, double t1, doubl
 Homog_matrix::Homog_matrix(double kx, double ky, double kz, double alfa, double x, double y, double z)
 {
 	// Wywolanie metody, ktora odpowiednio wypelni macierz matrix.
-	set_xyz_angle_axis(kx, ky, kz, alfa, x, y, z);
+	set_from_xyz_angle_axis(kx, ky, kz, alfa, x, y, z);
 }//: Homog_matrix::Homog_matrix(double kx, double ky, double kz, double alfa, double x, double y, double z)
 
 
@@ -161,7 +161,7 @@ Homog_matrix::Homog_matrix (POSE_SPECIFICATION mtr_ps, const K_vector axis_with_
 	switch (mtr_ps)
 	{
 		case MTR_XYZ_ANGLE_AXIS:
-			set_xyz_angle_axis (axis_with_angle, translation);
+			set_from_xyz_angle_axis (axis_with_angle, translation);
 		break;
 		default:
 		break;
@@ -175,7 +175,7 @@ Homog_matrix::Homog_matrix(POSE_SPECIFICATION mtr_ps, const Ft_v_vector translat
 	switch (mtr_ps)
 	{
 		case MTR_XYZ_ANGLE_AXIS:
-			set_xyz_angle_axis (translation_and_axis_with_angle);
+			set_from_xyz_angle_axis (translation_and_axis_with_angle);
 		break;
 		default:
 		break;
@@ -187,7 +187,7 @@ Homog_matrix::Homog_matrix(POSE_SPECIFICATION mtr_ps, const double t[6])
 	switch (mtr_ps)
 	{
 		case MTR_XYZ_ANGLE_AXIS:
-			set_xyz_angle_axis (t);
+			set_from_xyz_angle_axis (t);
 			break;
 		default:
 			break;
@@ -202,17 +202,17 @@ Homog_matrix::Homog_matrix(POSE_SPECIFICATION mtr_ps, double x, double y, double
 	switch (mtr_ps)
 	{
 		case MTR_XYZ_EULER_ZYZ:
-			set_xyz_euler_zyz (x, y, z, alfa, beta, gamma);
+			set_from_xyz_euler_zyz (x, y, z, alfa, beta, gamma);
 			break;
 		case MTR_MECH_XYZ_EULER_ZYZ:
-			set_mech_xyz_euler_zyz (x, y, z, alfa, beta, gamma);
+			set_from_mech_xyz_euler_zyz (x, y, z, alfa, beta, gamma);
 			break;
 
 		case MTR_XYZ_RPY:
-			set_xyz_rpy (x, y, z, alfa, beta, gamma);
+			set_from_xyz_rpy (x, y, z, alfa, beta, gamma);
 			break;
 		case MTR_XYZ_ANGLE_AXIS:
-			set_xyz_angle_axis (alfa, beta, gamma, x, y, z);
+			set_from_xyz_angle_axis (alfa, beta, gamma, x, y, z);
 			break;
 		default:
 			break;
@@ -229,10 +229,10 @@ void Homog_matrix::get_frame_tab(frame_tab frame) const
 
 
 // Ustawienie tablicy, ktora zawiera dane macierzy jednorodnej.
-void Homog_matrix::set_frame_tab(const frame_tab frame)
+void Homog_matrix::set_from_frame_tab(const frame_tab frame)
 {
 	copy_frame(matrix_m, frame);
-}//: set_frame_tab
+}//: set_from_frame_tab
 
 
 
@@ -359,15 +359,15 @@ void Homog_matrix::get_mech_xyz_euler_zyz(double t[6]) const
 	t[5] = matrix_m[0][2];
 }//: get_mech_xyz_euler_zyz
 
-void Homog_matrix::set_xyz_euler_zyz(const double t[6])
+void Homog_matrix::set_from_xyz_euler_zyz(const double t[6])
 {
-	set_xyz_euler_zyz(t[0], t[1], t[2], t[3], t[4], t[5]);
+	set_from_xyz_euler_zyz(t[0], t[1], t[2], t[3], t[4], t[5]);
 }
 
 
 
 // Wypelnienie wspolczynnikow macierzy na podstawie danych w formie XYZ_EULER_ZYZ.
-void Homog_matrix::set_xyz_euler_zyz(double x, double y, double z, double alfa, double beta, double gamma)
+void Homog_matrix::set_from_xyz_euler_zyz(double x, double y, double z, double alfa, double beta, double gamma)
 {
 	// alfa, beta, gamma - Katy Euler'a Z-Y-Z
 	// Zredukowanie katow.
@@ -401,10 +401,10 @@ void Homog_matrix::set_xyz_euler_zyz(double x, double y, double z, double alfa, 
 	matrix_m[1][3] = y;
 	matrix_m[2][3] = z;
 
-}//: set_xyz_euler_zyz
+}//: set_from_xyz_euler_zyz
 
 // Wypelnienie wspolczynnikow macierzy na podstawie danych w formie XYZ_EULER_ZYZ dla robota IRP-6_MECHATRONIKA.
-void Homog_matrix::set_mech_xyz_euler_zyz(double x, double y, double z, double alfa, double beta, double gamma)
+void Homog_matrix::set_from_mech_xyz_euler_zyz(double x, double y, double z, double alfa, double beta, double gamma)
 {
 	// alfa, beta, gamma - Katy Euler'a Z-Y-Z
 	// Zredukowanie katow.
@@ -434,7 +434,7 @@ void Homog_matrix::set_mech_xyz_euler_zyz(double x, double y, double z, double a
 	matrix_m[0][3] = x;
 	matrix_m[1][3] = y;
 	matrix_m[2][3] = z;
-}//: set_mech_xyz_euler_zyz
+}//: set_from_mech_xyz_euler_zyz
 
 
 // notacja i wzory z Craiga - wydanie angielskie str. 41
@@ -456,7 +456,7 @@ void Homog_matrix::get_xyz_rpy(double t[6]) const
 
 
 // Wypelnienie wspolczynnikow macierzy na podstawie danych w formie XYZ_RPY.
-void Homog_matrix::set_xyz_rpy(double x, double y, double z, double alfa, double beta, double gamma)
+void Homog_matrix::set_from_xyz_rpy(double x, double y, double z, double alfa, double beta, double gamma)
 {
 	// alfa (wokol z) , beta (wokol y), gamma (wokol x)
 	const double c_alfa = cos(alfa);
@@ -488,7 +488,7 @@ void Homog_matrix::set_xyz_rpy(double x, double y, double z, double alfa, double
 
 
 // Wypelnienie wspolczynnikow macierzy na podstawie danych w formie XYZ_ANGLE_AXIS.
-void Homog_matrix::set_xyz_angle_axis(double kx, double ky, double kz, double alfa, double x, double y, double z)
+void Homog_matrix::set_from_xyz_angle_axis(double kx, double ky, double kz, double alfa, double x, double y, double z)
 {
 	// funkcja ta dokonuje zmiany macierzy jednorodnej na macierz okresona poleceniem
 	// w formie XYZ_ANGLE_AXIS
@@ -523,11 +523,11 @@ void Homog_matrix::set_xyz_angle_axis(double kx, double ky, double kz, double al
 	matrix_m[1][3] = y;
 	matrix_m[2][3] = z;
 
-}//: set_xyz_angle_axis
+}//: set_from_xyz_angle_axis
 
 
 // Wypelnienie wspolczynnikow macierzy na podstawie danych w formie XYZ_ANGLE_AXIS - kat wliczony w dlugos osi.
-void Homog_matrix::set_xyz_angle_axis(double kx, double ky, double kz, double x, double y, double z)
+void Homog_matrix::set_from_xyz_angle_axis(double kx, double ky, double kz, double x, double y, double z)
 {
 	// funkcja ta dokonuje zmiany macierzy jednorodnej na macierz okreslona poleceniem
 	// w formie XYZ_ANGLE_AXIS
@@ -548,49 +548,49 @@ void Homog_matrix::set_xyz_angle_axis(double kx, double ky, double kz, double x,
 		kx_l = ky_l =  kz_l = 0.0;
 	}
 
-	set_xyz_angle_axis (kx_l, ky_l, kz_l, alfa, x, y, z);
+	set_from_xyz_angle_axis (kx_l, ky_l, kz_l, alfa, x, y, z);
 
-}//: set_xyz_angle_axis
+}//: set_from_xyz_angle_axis
 
 
 // Wypelnienie wspolczynnikow macierzy na podstawie danych w formie XYZ_ANGLE_AXIS.
-void Homog_matrix::set_xyz_angle_axis(const K_vector axis_with_angle, const K_vector translation)
+void Homog_matrix::set_from_xyz_angle_axis(const K_vector axis_with_angle, const K_vector translation)
 {
 	// funkcja ta dokonuje zmiany macierzy jednorodnej na macierz okresona poleceniem
 	// w formie XYZ_ANGLE_AXIS
 	// Utworznie macierzy jednorodnej na podstawie rozkazu w formie XYZ_ANGLE_AXIS
 
-	set_xyz_angle_axis (axis_with_angle[0], axis_with_angle[1], axis_with_angle[2], translation[0], translation[1], translation[2]);
+	set_from_xyz_angle_axis (axis_with_angle[0], axis_with_angle[1], axis_with_angle[2], translation[0], translation[1], translation[2]);
 
-}//: set_xyz_angle_axis
+}//: set_from_xyz_angle_axis
 
 
 // Wypelnienie wspolczynnikow macierzy na podstawie danych w formie XYZ_ANGLE_AXIS.
-void Homog_matrix::set_xyz_angle_axis(const Ft_v_vector translation_and_axis_with_angle)  // kat wliczony w os
+void Homog_matrix::set_from_xyz_angle_axis(const Ft_v_vector translation_and_axis_with_angle)  // kat wliczony w os
 {
 	// funkcja ta dokonuje zmiany macierzy jednorodnej na macierz okresona poleceniem
 	// w formie XYZ_ANGLE_AXIS
 	// Utworznie macierzy jednorodnej na podstawie rozkazu w formie XYZ_ANGLE_AXIS
 
-	set_xyz_angle_axis (translation_and_axis_with_angle[3], translation_and_axis_with_angle[4], translation_and_axis_with_angle[5],
+	set_from_xyz_angle_axis (translation_and_axis_with_angle[3], translation_and_axis_with_angle[4], translation_and_axis_with_angle[5],
 		 translation_and_axis_with_angle[0], translation_and_axis_with_angle[1], translation_and_axis_with_angle[2]);
 
-}//: set_xyz_angle_axis
+}//: set_from_xyz_angle_axis
 
 
 // Wypelnienie wspolczynnikow macierzy na podstawie danych w formie XYZ_ANGLE_AXIS.
-void Homog_matrix::set_xyz_angle_axis(const double t[6])  // kat wliczony w os
+void Homog_matrix::set_from_xyz_angle_axis(const double t[6])  // kat wliczony w os
 {
 	// funkcja ta dokonuje zmiany macierzy jednorodnej na macierz okresona poleceniem
 	// w formie XYZ_ANGLE_AXIS
 	// Utworznie macierzy jednorodnej na podstawie rozkazu w formie XYZ_ANGLE_AXIS
 
-	set_xyz_angle_axis (t[3], t[4], t[5], t[0], t[1], t[2]);
+	set_from_xyz_angle_axis (t[3], t[4], t[5], t[0], t[1], t[2]);
 
-}//: set_xyz_angle_axis
+}//: set_from_xyz_angle_axis
 
 //Wypelnienie macierzy na podstawie parametrow  wejsciowych w postaci kwaternionu
-void Homog_matrix::set_xyz_quaternion(double eta, double eps1, double eps2, double eps3, double x, double y, double z)
+void Homog_matrix::set_from_xyz_quaternion(double eta, double eps1, double eps2, double eps3, double x, double y, double z)
 {
 	// Macierz rotacji
 
@@ -613,7 +613,7 @@ void Homog_matrix::set_xyz_quaternion(double eta, double eps1, double eps2, doub
 	matrix_m[1][3] = y;
 	matrix_m[2][3] = z;
 
-}// Homog_matrix::set_xyz_quaternion(double eta, K_vector eps, double x, double y, double z)
+}// Homog_matrix::set_from_xyz_quaternion(double eta, K_vector eps, double x, double y, double z)
 
 
 void Homog_matrix::get_xyz_angle_axis(K_vector& axis_with_angle, K_vector& translation) const
@@ -809,7 +809,7 @@ double Homog_matrix::get_value(int i, int j) const
 Homog_matrix & Homog_matrix::operator=(const Homog_matrix & wzor)
 {
 	if(this == &wzor) return *this;
-	set_frame_tab(wzor.matrix_m);
+	set_from_frame_tab(wzor.matrix_m);
 	return *this;
 }// end Homog_matrix::operator=(const Homog_matrix & wzor)
 
