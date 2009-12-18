@@ -19,6 +19,8 @@ class wii : public common::generator::generator
     private:
         //ilosc krokow
 	int max_steps;
+
+	int step_no;
         //kontroler
         ecp_mp::sensor::wiimote* _wiimote;
     

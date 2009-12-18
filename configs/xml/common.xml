@@ -50,24 +50,34 @@
         </effector>
 
         <effector name="irp6_postument">
-            <ecp>
-                <trigger_attach_point>ECP_TRIGGER_P</trigger_attach_point>
-                <ecp_attach_point>ECP_P</ecp_attach_point>
-            </ecp>
-            <edp>
-                <program_name>edp_irp6_postument</program_name>
-                <resourceman_attach_point>irp6_postument</resourceman_attach_point>
-                <hardware_busy_attach_point>HARDWARE_BUSY_EDP_IRP6_P</hardware_busy_attach_point>
-                <reader_attach_point>READER_P</reader_attach_point>
-                <edp_vsp_attach_point>EDP_FORCE_P</edp_vsp_attach_point>
-                <reader_samples>100000</reader_samples>
-                <is_gripper_active>1</is_gripper_active>
-                <force_tryb>0</force_tryb>
-                <default_mass_center_in_wrist>0.004 0.0 0.156</default_mass_center_in_wrist>
-                <weight>10.8</weight>
-                <visual_udp_port>50001</visual_udp_port>
-                <sensor_in_wrist>0.0 0.0 0.09 0.0 0.0 3.14159</sensor_in_wrist>
-            </edp>
+        	<ecp>
+        		<trigger_attach_point>
+        			ECP_TRIGGER_P
+        		</trigger_attach_point>
+        		<ecp_attach_point>ECP_P</ecp_attach_point>
+        	</ecp>
+        	<edp>
+        		<program_name>edp_irp6_postument</program_name>
+        		<resourceman_attach_point>
+        			irp6_postument
+        		</resourceman_attach_point>
+        		<hardware_busy_attach_point>
+        			HARDWARE_BUSY_EDP_IRP6_P
+        		</hardware_busy_attach_point>
+        		<reader_attach_point>READER_P</reader_attach_point>
+        		<edp_vsp_attach_point>EDP_FORCE_P</edp_vsp_attach_point>
+        		<reader_samples>100000</reader_samples>
+        		<is_gripper_active>1</is_gripper_active>
+        		<force_tryb>0</force_tryb>
+        		<default_mass_center_in_wrist>
+        			0.004 0.0 0.156
+        		</default_mass_center_in_wrist>
+        		<weight>10.8</weight>
+        		<visual_udp_port>50001</visual_udp_port>
+        		<sensor_in_wrist>
+        			0.0 0.0 0.09 0.0 0.0 3.14159
+        		</sensor_in_wrist>
+        	</edp>
         </effector>
 
         <effector name="conveyor">

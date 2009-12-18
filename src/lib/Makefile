@@ -2,7 +2,9 @@
 #======================================================#
 SOURCES = ${wildcard *.cc}
 OBJECTS = ${patsubst %.cc,%.o,${SOURCES}}
+ifeq ($(BUILD_TARGET), linux)
 BINARIES = configsrv #y_spawn_process
+endif
 #-----------------------------------------------------------------------------------------------------------------------#
 # Should be modified only by developers not by users
 
@@ -11,7 +13,7 @@ include $(HOMEDIR)/common.mk
 #======================================================#	
 .PHONY: all clean install libplayerc libplayerclient
 #------------------------------------------------- Build rules -------------------------------------------------------#
-all: libplayerc libplayerclient libmrrocpp.a libmrrocpp.so ${OBJECTS} ${BINARIES}
+all: libplayerc libplayerclient libmrrocpp.a libmrrocpp.so ${BINARIES}
 #-----------------------------------------------------------------------------------------------------------------------#
 libplayerc:
 	@$(MAKE) -C $@

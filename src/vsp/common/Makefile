@@ -3,7 +3,7 @@
 ifeq ($(BUILD_TARGET), linux)
   SOURCES = vsp_sensor.cc vsp_m_int_srr.cc
 else
-  SOURCES = ${wildcard *.cc}
+  SOURCES = vsp_sensor.cc vsp_m_int_nw.cc vsp_m_int.cc vsp_m_nint.cc
 endif
 OBJECTS = ${patsubst %.cc,%.o,${SOURCES}}
 #BINARIES = 

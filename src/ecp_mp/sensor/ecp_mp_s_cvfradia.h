@@ -10,7 +10,7 @@
 #define __ECP_CVFRADIA_H
 
 #include <netdb.h>
-
+#include <netinet/in.h>
 #include "ecp_mp/sensor/ecp_mp_sensor.h"
 
 namespace mrrocpp {

@@ -288,10 +288,15 @@ int ui_model::set_tree_view(void)
 }
 
 void ui_model::loadEdps(void) {
+        using namespace std;
+
 	ui_config_entry::childrens_t edps = ui_model::instance().getRootNode().getChildByType(ui_config_entry::EDP);
 
 	BOOST_FOREACH(ui_config_entry * entry, edps) {
-		std::cout << entry->program_name << "@" << entry->node_name << std::endl;
+	  std::cout << entry->program_name << "@" << entry->node_name << std::endl;
+	  string cmd = entry->program_name + " soplica" + " /home/konradb3/mrrocpp/" + " xml/rcsc.xml"+ " [" + entry->program_name + "]" + " ";
+	  system(cmd.c_str());
+
 	}
 }
 
@@ -312,22 +317,22 @@ void ui_model::slayAll(void)
 	ui_config_entry::childrens_t mp(ui_model::instance().getRootNode().getChildByType(ui_config_entry::MP));
 
 	BOOST_FOREACH(ui_config_entry * entry, edps) {
-		string command = RSHcommand + entry->node_name + slayCommand + entry->program_name;
+		string command = slayCommand + entry->program_name;
 		cout << command << endl;
-//		system(command.c_str());
+		system(command.c_str());
 	}
 
 	BOOST_FOREACH(ui_config_entry * entry, ecps) {
-		string command = RSHcommand + entry->node_name + slayCommand + entry->program_name;
+		string command = slayCommand + entry->program_name;
 		cout << command << endl;
-//		system(command.c_str());
+		system(command.c_str());
 	}
 
 	BOOST_FOREACH(ui_config_entry * entry, mp) {
-		string command = RSHcommand + entry->node_name + slayCommand + entry->program_name;
+		string command = slayCommand + entry->program_name;
 		cout << command << endl;
 //		system(command.c_str());
 	}
 
-//	this->clear();
+	this->clear();
 }
