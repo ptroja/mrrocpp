@@ -10,12 +10,19 @@
 // ------------------------------------------------------------------------
 
 
-#ifndef __MRMATH_H
-#define __MRMATH_H
+#ifndef __MRMATH_FORWARD_DECLARATIONS_H
+#define __MRMATH_FORWARD_DECLARATIONS_H
 
-#include "lib/mrmath/mrmath_forward_declarations.h"
-#include "lib/mrmath/homog_matrix.h"
-#include "lib/mrmath/mathtr.h"
-#include <lib/mrmath/ForceTrans.h>
+namespace mrrocpp {
+namespace lib {
+
+
+// deklaracje zapowiadajace
+class Homog_matrix;
+class Ft_v_vector;
+class Ft_v_tr;
+
+} // namespace lib
+} // namespace mrrocpp
 
 #endif

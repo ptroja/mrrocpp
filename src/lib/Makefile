@@ -28,6 +28,7 @@ MESSIP_OBJECTS: messip
 
 LIBMRROCPP_OBJECTS = \
 	mrmath/ForceTrans.o \
+	mrmath/homog_matrix.o \
 	cfgopts.o \
 	configurator.o \
 	c_buffer.o r_buffer.o \
@@ -64,7 +65,7 @@ install: ${BINARIES}
 	@$(MAKE) -C messip install
 #-----------------------------------------------------------------------------------------------------------------------#
 clean:
-	@rm -f *.o *.err *.a *.so ${BINARIES}
+	@rm -f *.o *.err *.a *.so ${BINARIES} ./.deps/*.P ./mrmath/*.o ./mrmath/*.err
 	@$(MAKE) -C libplayerc clean
 	@$(MAKE) -C libplayerclient clean
 	@$(MAKE) -C messip clean
