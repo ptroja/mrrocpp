@@ -42,7 +42,7 @@ class K_vector
 {
 private:
 	double w[3];
-	Homog_matrix base_frame;										// bazowy trojscian z konstruktora
+
 
 public:
 	friend class Homog_matrix;						// klasa Homog_matrix musi miec dostep do prywatnych
@@ -151,7 +151,7 @@ public:
 
 
 // klasa reprezentujaca macierz transformacji odczytow sily do innego ukladu odniesienia
-class Homog_matrix;
+
 class Ft_v_tr
 {
 public:

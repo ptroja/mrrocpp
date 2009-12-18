@@ -22,9 +22,6 @@
 namespace mrrocpp {
 namespace lib {
 
-class K_vector;
-class Ft_v_vector;
-
 
 #define delta_m (M_PI - 3.14154)
 #define DEGREES_TO_RADIANS 57.295780

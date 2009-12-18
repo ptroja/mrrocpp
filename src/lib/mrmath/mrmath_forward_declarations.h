@@ -21,6 +21,7 @@ namespace lib {
 class Homog_matrix;
 class Ft_v_vector;
 class Ft_v_tr;
+class K_vector;
 
 } // namespace lib
 } // namespace mrrocpp
