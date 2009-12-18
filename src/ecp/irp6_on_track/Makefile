@@ -5,7 +5,6 @@ SOURCES = ${wildcard *.cc}
 OBJECTS = ${patsubst %.cc,%.o,${SOURCES}}
 BINARIES =		ecp_playerjoy \
 				ecp_irp6ot_rcsc \
-				ecp_t_mboryn \
 				ecp_draughts \
 				#ecp_irp6ot_pouring \
 				#ecp_irp6ot_multiplayer \
@@ -113,9 +112,6 @@ ecp_t_calib_axzb: ../common/task/ecp_t_calib_axzb.o ../common/task/ecp_t_calibra
 #-----------------------------------------------------------------------------------------------------------------------#
 ecp_t_calib_axxb: ../common/task/ecp_t_calib_axxb.o ../common/task/ecp_t_calibration.o ../common/generator/ecp_g_smooth2.o ../common/generator/ecp_g_t.o ../common/generator/ecp_g_jarosz.o ../common/generator/ecp_g_operator_reaction_condition.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ -lgsl -lgslcblas $^ 
-#-----------------------------------------------------------------------------------------------------------------------#
-ecp_t_mboryn: task/ecp_t_mboryn.o generator/ecp_g_mboryn.o  $(SHOBJ)
-	$(LD) $(LDFLAGS) -o $@ $^
 #-----------------------------------------------------------------------------------------------------------------------#
 
 #---------------------------------Special object build rules (user made)-------------------------------------#

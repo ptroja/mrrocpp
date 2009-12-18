@@ -10,7 +10,7 @@
 
 #include "ecp/common/task/ecp_task.h"
 #include "ecp/irp6_on_track/ecp_r_irp6ot.h"
-#include "ecp/irp6_on_track/generator/ecp_g_mboryn.h"
+#include "ecp_g_mboryn.h"
 
 namespace mrrocpp {
 

@@ -16,7 +16,8 @@ namespace irp6ot {
 namespace task {
 
 ecp_t_mboryn::ecp_t_mboryn(mrrocpp::lib::configurator& _configurator)
-: task(_configurator)
+//: mrrocpp::ecp::common::task::task(_configurator)
+:task(_configurator)
 {
 	ecp_m_robot = new ecp::irp6ot::robot(*this);
 	ecp_g_mboryn_ = new generator::ecp_g_mboryn(*this);
@@ -24,9 +25,7 @@ ecp_t_mboryn::ecp_t_mboryn(mrrocpp::lib::configurator& _configurator)
 	sr_ecp_msg->message("ecp_t_mboryn::ecp_t_mboryn() finished.");
 }
 
-ecp_t_mboryn::~ecp_t_mboryn() {
-	// TODO Auto-generated destructor stub
-}
+ecp_t_mboryn::~ecp_t_mboryn() {}
 
 void ecp_t_mboryn::main_task_algorithm(void)
 {

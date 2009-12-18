@@ -20,10 +20,17 @@ namespace generator {
 
 class ecp_g_mboryn: public mrrocpp::ecp::common::generator::generator {
 public:
-	ecp_g_mboryn(common::task::task & _ecp_task);
+	ecp_g_mboryn(mrrocpp::ecp::common::task::task & _ecp_task);
 	virtual ~ecp_g_mboryn();
 	virtual bool first_step();
 	virtual bool next_step();
+
+	void set_target(double xyz[3]);
+private:
+	double target_xyz[3];
+	int number_of_steps;
+	double step_size;
+	bool is_calculated;
 };
 
 } // namespace generator
