@@ -10,8 +10,6 @@
 
 #include "lib/srlib.h"
 #include "mp/mp.h"
-#include "mp/generator/mp_g_force.h"
-#include "mp/generator/mp_g_vis.h"
 #include "mp/generator/mp_g_common.h"
 #include "mp/task/mp_t_rcsc.h"
 #include "ecp_mp/sensor/ecp_mp_s_schunk.h"
@@ -887,11 +885,11 @@ void rubik_cube_solver::approach_op(int mode)
 	// opcjonalne serwo wizyjne
 	if (mode)
 	{
-		generator::seven_eye eyegen(*this, 4);
-		eyegen.robot_m[lib::ROBOT_IRP6_ON_TRACK] = robot_m[lib::ROBOT_IRP6_ON_TRACK];
-		eyegen.sensor_m[lib::SENSOR_CAMERA_SA] = sensor_m[lib::SENSOR_CAMERA_SA];
+//		generator::seven_eye eyegen(*this, 4);
+//		eyegen.robot_m[lib::ROBOT_IRP6_ON_TRACK] = robot_m[lib::ROBOT_IRP6_ON_TRACK];
+	//	eyegen.sensor_m[lib::SENSOR_CAMERA_SA] = sensor_m[lib::SENSOR_CAMERA_SA];
 
-		eyegen.Move();
+	//	eyegen.Move();
 	}
 
 	send_end_motion_to_ecps (2, lib::ROBOT_IRP6_ON_TRACK, lib::ROBOT_IRP6_POSTUMENT);

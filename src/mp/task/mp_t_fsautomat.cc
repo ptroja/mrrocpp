@@ -28,8 +28,6 @@
 #include "mp/mp.h"
 #include "mp/task/mp_t_fsautomat.h"
 
-#include "mp/generator/mp_g_force.h"
-#include "mp/generator/mp_g_vis.h"
 #include "ecp_mp/sensor/ecp_mp_s_vis.h"
 #include "ecp_mp/transmitter/ecp_mp_tr_rc_windows.h"
 #include "mp/State.h"
