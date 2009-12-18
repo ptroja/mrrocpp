@@ -26,13 +26,18 @@ messip:
 MESSIP_OBJECTS = messip/logg_messip.o messip/messip_lib.o messip/messip_utils.o messip/messip_dataport.o
 MESSIP_OBJECTS: messip
 
+
 LIBMRROCPP_OBJECTS = \
 	mrmath/ForceTrans.o \
 	mrmath/homog_matrix.o \
+	mrmath/mathtr.o \
+	mrmath/k_vector.o \
+	mrmath/ft_v_vector.o \
+	mrmath/ft_v_tr.o \
+	mrmath/jacobian_matrix.o \
 	cfgopts.o \
 	configurator.o \
 	c_buffer.o r_buffer.o \
-	mrmath/mathtr.o \
 	matrix.o \
 	mis_fun.o \
 	timer.o \
