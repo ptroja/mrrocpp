@@ -6,7 +6,10 @@
 #include "lib/configurator.h"
 #include "ecp_mp/ecp_mp_robot.h"
 
+#if defined(USE_MESSIP_SRR)
 #include <messip.h>
+#endif
+
 class ui_common_robot;
 
 namespace mrrocpp {

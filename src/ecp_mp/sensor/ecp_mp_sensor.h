@@ -2,7 +2,10 @@
 #define _ECP_MP_SENSOR_H
 
 #include "lib/sensor.h"
+
+#if defined(USE_MESSIP_SRR)
 #include <messip.h>
+#endif
 
 #include <map>
 

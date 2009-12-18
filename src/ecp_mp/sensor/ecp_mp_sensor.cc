@@ -8,7 +8,9 @@
 #include "ecp_mp/sensor/ecp_mp_sensor.h"
 #include "ecp_mp/task/ecp_mp_task.h"
 
+#if defined(USE_MESSIP_SRR)
 #include <messip_dataport.h>
+#endif
 
 #include <iostream>
 #include <sys/types.h>

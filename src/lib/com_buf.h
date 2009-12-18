@@ -26,7 +26,9 @@
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
 
-#include <messip.h>
+#if defined(USE_MESSIP_SRR)
+  #include <messip.h>
+#endif
 
 #include <boost/serialization/serialization.hpp>
 

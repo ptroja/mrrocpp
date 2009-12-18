@@ -11,7 +11,9 @@
 #include <string>
 #include <boost/thread/mutex.hpp>
 
+#if defined(USE_MESSIP_SRR)
 #include <messip.h>
+#endif
 
 #include "lib/typedefs.h"
 #include "lib/com_buf.h"
