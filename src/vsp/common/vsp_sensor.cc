@@ -14,7 +14,7 @@
 
 #include "lib/srlib.h"
 
-#include "vsp/vsp_sensor.h"				// zawiera deklaracje klasy vsp_sensor + struktury komunikacyjne
+#include "vsp/common/vsp_sensor.h"				// zawiera deklaracje klasy vsp_sensor + struktury komunikacyjne
 
 namespace mrrocpp {
 namespace vsp {

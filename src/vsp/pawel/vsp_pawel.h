@@ -10,7 +10,7 @@
 #if !defined(_VSP_PAWEL_H)
 #define _VSP_PAWEL_H
 
-#include "vsp/vsp_sensor.h"
+#include "vsp/common/vsp_sensor.h"
 #include "lib/sensor.h"
 
 namespace mrrocpp {

@@ -10,7 +10,7 @@
 #if !defined(_VSP_VIS_SAC_LX_H)
 #define _VSP_VIS_SAC_LX_H
 
-#include "vsp/vsp_sensor.h"
+#include "vsp/common/vsp_sensor.h"
 
 namespace mrrocpp {
 namespace vsp {

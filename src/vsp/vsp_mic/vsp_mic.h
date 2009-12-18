@@ -10,7 +10,7 @@
 #if !defined(_VSP_MIC_H)
 #define _VSP_MIC_H
 
-#include "vsp/vsp_sensor.h"
+#include "vsp/common/vsp_sensor.h"
 
 namespace mrrocpp {
 namespace vsp {

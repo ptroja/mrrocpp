@@ -10,7 +10,7 @@
 #if !defined(_VSP_SCHUNK_H)
 #define _VSP_SCHUNK_H
 
-#include "vsp/vsp_sensor.h"
+#include "vsp/common/vsp_sensor.h"
 #include "vsp/vsp_force_sensor.h"
 
 namespace mrrocpp {

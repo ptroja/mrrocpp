@@ -10,7 +10,7 @@
 #if !defined(_VSP_RCS_KOCIEMBA_H)
 #define _VSP_RCS_KOCIEMBA_H
 
-#include "vsp/vsp_sensor.h"
+#include "vsp/common/vsp_sensor.h"
 
 class CubieCube;
 class CubeSolution;
