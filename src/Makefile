@@ -3,7 +3,7 @@
 HOMEDIR = ..
 SOURCEDIRS = lib kinematics edp ecp ecp_mp mp ui application
 ifneq ($(BUILD_TARGET), linux)
-SOURCEDIRS+= bt848 vsp ui_server
+SOURCEDIRS+= vsp
 endif
 
 CLEANDIRS = $(SOURCEDIRS)

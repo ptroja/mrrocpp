@@ -6,7 +6,7 @@ include $(HOMEDIR)/common.mk
 
 SOURCEDIRS = common vsp_time_sensor
 ifneq ($(BUILD_TARGET), linux)
-  SOURCEDIRS+=  vsp_force_sensor vsp_mic vsp_nn vsp_pp
+  SOURCEDIRS+=  vsp_force_sensor vsp_mic vsp_pp
 endif
 
 CLEANDIRS = ${SOURCEDIRS}
