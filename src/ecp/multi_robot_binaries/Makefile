@@ -9,13 +9,8 @@ BINARIES = ecp_tran \
 	ecp_t_kcz_force \
 	ecp_t_kcz_test \
 	ecp_eihcalibration\
-	#ecp_nalewanie \
-	ecp_tw \
-	ecp_time \
-	ecp_pawel \
+	#ecp_time \
 	ecp_cvfradia \
-	ecp_tzu \
-	ecp_tzu_test \
 	ecp_pcbird \
 	ecp_visioncoordinates \
 	ecp_mam \
@@ -58,15 +53,6 @@ ecp_mam: \
 	$(LD) $(LDFLAGS) -o $@ $^ 
 
 
-ecp_tw: \
-		../irp6_on_track/ecp_r_irp6ot.o \
-		../irp6_postument/ecp_r_irp6p.o \
-		../common/task/ecp_t_tw.o \
-		../common/generator/ecp_g_force.o \
-		$(ECP_MPDIR)/sensor/ecp_mp_s_schunk.o \
-		$(SHOBJ)
-	$(LD) $(LDFLAGS) -o $@ $^ 
-
 ecp_t: \
 		../irp6_on_track/ecp_r_irp6ot.o \
 		../irp6_postument/ecp_r_irp6p.o \
@@ -75,15 +61,6 @@ ecp_t: \
 		$(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 
-#ecp_nalewanie: \
-#		../irp6_on_track/ecp_r_irp6ot.o \
-#		../irp6_postument/ecp_r_irp6p.o \
-#		../common/task/ecp_t_nalewanie.o \
-#		../common/generator/ecp_g_smooth.o \
-#		../common/generator/ecp_g_jarosz.o \
-#		../common/generator/ecp_g_operator_reaction_condition.o \
-#		$(SHOBJ)
-#	$(LD) $(LDFLAGS) -o $@ $^ 
 
 ecp_time: \
 		../irp6_on_track/ecp_r_irp6ot.o \
@@ -137,14 +114,6 @@ ecp_fsautomat: \
 		$(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 	
-ecp_pawel: \
-		../irp6_on_track/ecp_r_irp6ot.o \
-		../irp6_postument/ecp_r_irp6p.o \
-		../common/task/ecp_t_pawel.o \
-		../common/generator/ecp_g_pawel.o \
-		$(ECP_MPDIR)/sensor/ecp_mp_s_pawel.o \
-		$(SHOBJ)
-	$(LD) $(LDFLAGS) -o $@ $^ 
 
 ecp_cvfradia: \
 		../irp6_on_track/ecp_r_irp6ot.o \
@@ -166,28 +135,6 @@ ecp_visioncoordinates: \
 		$(ECP_MPDIR)/sensor/ecp_mp_s_cvfradia.o \
 		$(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
-
-ecp_tzu: \
-		../irp6_on_track/ecp_r_irp6ot.o \
-		../irp6_postument/ecp_r_irp6p.o \
-		../common/task/ecp_t_tzu_fs.o \
-		../common/generator/ecp_g_force.o \
-		../common/generator/ecp_g_smooth.o \
-		../common/generator/ecp_g_jarosz.o \
-		../common/generator/ecp_g_operator_reaction_condition.o \
-		$(SHOBJ)
-	$(LD) $(LDFLAGS) -o $@ $^
-
-ecp_tzu_test: \
-		../irp6_on_track/ecp_r_irp6ot.o \
-		../irp6_postument/ecp_r_irp6p.o \
-		../common/task/ecp_t_tzu_test.o \
-		../common/generator/ecp_g_force.o \
-		../common/generator/ecp_g_smooth.o \
-		../common/generator/ecp_g_jarosz.o \
-		../common/generator/ecp_g_operator_reaction_condition.o \
-		$(SHOBJ)
-	$(LD) $(LDFLAGS) -o $@ $^  
 
 ecp_pcbird: \
 		../irp6_on_track/ecp_r_irp6ot.o \
