@@ -22,8 +22,9 @@
 #include <stdlib.h>
 
 #include <string>
-
-#include <messip_dataport.h>
+#if defined(USE_MESSIP_SRR)
+  #include <messip_dataport.h>
+#endif
 
 #if defined(__QNXNTO__)
 #include <process.h>
@@ -271,7 +272,6 @@ pid_t configurator::process_spawn(const std::string & _section_name) {
 	pid_t child_pid = vfork();
 
 	if (child_pid == 0) {
-
 		std::string spawned_program_name = value<std::string>("program_name", _section_name);
 		std::string spawned_node_name = value<std::string>("node_name", _section_name);
 

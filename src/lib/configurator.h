@@ -19,8 +19,9 @@
 #include <boost/thread/mutex.hpp>
 #include <boost/lexical_cast.hpp>
 
-#include <messip.h>
-
+#if defined(USE_MESSIP_SRR)
+  #include <messip.h>
+#endif
 // Typy zmiennych odczytywanych z pliku INI.
 #include "lib/cfgopts.h"
 
