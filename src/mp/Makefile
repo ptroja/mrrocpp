@@ -75,8 +75,7 @@ install: ${BINARIES}
 	${INSTALL} ${BINARIES} $(BINDIR)
 #-----------------------------------------------------------------------------------------------------------------------#
 clean:
-	@rm -f *.o *.err ${BINARIES} ./.deps/*.P ${LIBMPROBOTS} ${LIBMPMAIN} \
-	./task/*.o ./task/*.err ./generator/*.o ./generator/*.err ./robot/*.o ./robot/*.err
+	@rm -f *.o *.err ${BINARIES} ./.deps/*.P ${LIBMPROBOTS} ${LIBMPMAIN} ./task/*.o ./task/*.err ./generator/*.o ./generator/*.err ./robot/*.o ./robot/*.err
 #-----------------------------------------------------------------------------------------------------------------------#
 
 include $(HOMEDIR)/depend.mk

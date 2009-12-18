@@ -41,8 +41,7 @@ libecp_mp.so: $(ECP_MPOBJ_SHARED)
 #	${INSTALL} ${BINARIES} $(BINDIR)
 #-----------------------------------------------------------------------------------------------------------------------#
 clean:
-	@rm -f *.a *.o *.so *.err ${BINARIES} ./.deps/*.P \
-	./task/*.o ./task/*.err ./sensor/*.o ./sensor/*.err ./transmitter/*.o ./transmitter/*.err
+	@rm -f *.a *.o *.so *.err ${BINARIES} ./.deps/*.P ./task/*.o ./task/*.err ./sensor/*.o ./sensor/*.err ./transmitter/*.o ./transmitter/*.err
 #-----------------------------------------------------------------------------------------------------------------------#
 
 include $(HOMEDIR)/depend.mk
