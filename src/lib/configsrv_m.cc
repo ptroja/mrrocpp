@@ -51,7 +51,7 @@ main(int argc, char *argv[])
 				break;
 			case CONFIG_RETURN_INT_VALUE:
 				{
-					const int reply = config.return_int_value(
+					const int reply = config.value<int>(
 							config_msg.query.key,
 							config_msg.query.section);
 
@@ -60,7 +60,7 @@ main(int argc, char *argv[])
 				break;
 			case CONFIG_RETURN_DOUBLE_VALUE:
 				{
-					const double reply = config.return_double_value(
+					const double reply = config.value<double>(
 							config_msg.query.key,
 							config_msg.query.section);
 
@@ -69,7 +69,7 @@ main(int argc, char *argv[])
 				break;
 			case CONFIG_RETURN_STRING_VALUE:
 				{
-					const std::string reply = config.return_string_value(
+					const std::string reply = config.value<std::string>(
 							config_msg.query.key,
 							config_msg.query.section);
 

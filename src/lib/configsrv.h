@@ -12,8 +12,7 @@
 #define _CONFIGSRV_H
 
 #include <boost/thread/mutex.hpp>
-// Typy zmiennych odczytywanych z pliku INI.
-#include "lib/cfgopts.h"
+#include <boost/lexical_cast.hpp>
 
 class configsrv
 {
@@ -25,24 +24,23 @@ private:
 	// do ochrony wylacznosci dostepu do pliku miedzy watkami jednego procesu
 	boost::mutex mtx;
 
+	// Zwraca wartosc dla klucza.
+	std::string return_string_value(const std::string & _key, const std::string & _section_name);
+
 public:
-
 	// Konstruktor obiektu - konfiguratora.
-	configsrv(const char* _node, const char* _dir, const char* _ini_file);
+	configsrv(const std::string & _node, const std::string & _dir, const std::string & _ini_file);
 
-	void change_ini_file (const char* _ini_file);
+	void change_ini_file (const std::string & _ini_file);
 
-	// Zwraca wartosc (int) dla klucza.
-	int return_int_value(const char* _key, const char* _section_name);
-
-	// Zwraca wartosc (double) dla klucza.
-	double return_double_value(const char* _key, const char* _section_name);
-
-	// Zwraca wartosc (char*) dla klucza.
-	std::string return_string_value(const char* _key, const char* _section_name);
+	// Zwraca wartosc dla klucza.
+	template <class Type>
+	Type value(const std::string & _key, const std::string & _section_name) {
+		return boost::lexical_cast<Type>(return_string_value(_key, _section_name));
+	}
 
 	// Zwraca czy dany klucz istnieje
-	bool exists(const char* _key, const char* _section_name);
+	bool exists(const std::string & _key, const std::string & _section_name);
 };// : configsrv
 
 #endif /* _CONFIGSRV_H */

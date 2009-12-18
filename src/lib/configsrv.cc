@@ -19,9 +19,10 @@
 #include <boost/thread/locks.hpp>
 
 #include "lib/configsrv.h"
+#include "lib/cfgopts.h"
 
 // Konstruktor obiektu - konfiguratora.
-configsrv::configsrv (const char* _node, const char* _dir, const char* _ini_file)
+configsrv::configsrv (const std::string & _node, const std::string & _dir, const std::string & _ini_file)
 	: node(_node), dir(_dir), ini_file(_ini_file)
 {
 	// Stworzenie sciezki do pliku.
@@ -40,26 +41,25 @@ configsrv::configsrv (const char* _node, const char* _dir, const char* _ini_file
 	common_file_location += "common.ini";
 }// : configsrv
 
-void configsrv::change_ini_file (const char* _ini_file)
+void configsrv::change_ini_file (const std::string & _ini_file)
 {
 	boost::mutex::scoped_lock l(mtx);
 	ini_file = _ini_file;
 }
 
-// Zwraca czy dany klucz istnieje
-bool configsrv::exists(const char* _key, const char* _section_name)
+bool configsrv::exists(const std::string & _key, const std::string & _section_name)
 {
 	int value;
 	struct Config_Tag configs[] = {
 		// Pobierane pole.
-		{ (char *) _key, Int_Tag, &value},
+		{ (char *) _key.c_str(), Int_Tag, &value},
 		// Pole konczace.
 		{ NULL , Error_Tag, NULL }
 	};
 
 	boost::mutex::scoped_lock l(mtx);
-	if (input_config(file_location, configs, _section_name)<1) {
-		if (input_config(common_file_location, configs, _section_name)<1) {
+	if (input_config(file_location, configs, _section_name.c_str())<1) {
+		if (input_config(common_file_location, configs, _section_name.c_str())<1) {
 			return false;
 		}
 	}
@@ -67,83 +67,23 @@ bool configsrv::exists(const char* _key, const char* _section_name)
 	return true;
 }
 
-
-
-// Zwraca wartosc (int) dla klucza.
-int configsrv::return_int_value(const char* _key, const char* _section_name)
-{
-	// Zwracana zmienna.
-	int value = 0;
-	struct Config_Tag configs[] = {
-		// Pobierane pole.
-		{ (char *) _key, Int_Tag, &value},
-		// Pole konczace.
-		{ NULL , Error_Tag, NULL }
-		};
-
-	// Odczytanie zmiennej.
-	boost::mutex::scoped_lock l(mtx);
-	if (input_config(file_location, configs, _section_name)<1) {
-		if (input_config(common_file_location, configs, _section_name)<1) {
-			fprintf(stderr, "Blad input_config() w return_int_value file_location: %s, _section_name:%s, _key:%s\n",
-					file_location.c_str(), _section_name, _key);
-		}
-	}
-
-// 	TODO: throw ERROR
-
-	// Zwrocenie wartosci.
-	return value;
-}// : return_int_value
-
-
-// Zwraca wartosc (double) dla klucza.
-double configsrv::return_double_value(const char* _key, const char*_section_name)
-{
-	// Zwracana zmienna.
-	double value = 0;
-	struct Config_Tag configs[] = {
-		// Pobierane pole.
-		{ (char *) _key, Double_Tag, &value},
-		// Pole konczace.
-		{ NULL , Error_Tag, NULL }
-		};
-
-	// Odczytanie zmiennej.
-	boost::mutex::scoped_lock l(mtx);
-	if (input_config(file_location, configs, _section_name)<1) {
-		if (input_config(common_file_location, configs, _section_name)<1) {
-			printf("Blad input_config() w return_double_value file_location:%s, _section_name:%s, _key:%s\n",
-				file_location.c_str(), _section_name, _key);
-		}
-	}
-
-// 	TODO: throw ERROR
-
-	// Zwrocenie wartosci.
-	return value;
-}// : return_int_value
-
-
-
-// Zwraca wartosc (char*) dla klucza.
-std::string configsrv::return_string_value(const char* _key, const char*_section_name)
+std::string configsrv::return_string_value(const std::string & _key, const std::string &_section_name)
 {
 	// Zwracana zmienna.
 	char tmp[200];
 	struct Config_Tag configs[] = {
 		// Pobierane pole.
-		{ (char *) _key, String_Tag, tmp},
+		{ (char *) _key.c_str(), String_Tag, tmp},
 		// Pole konczace.
 		{ NULL , Error_Tag, NULL }
 		};
 
 	// Odczytanie zmiennej.
 	boost::mutex::scoped_lock l(mtx);
-	if (input_config(file_location, configs, _section_name)<1) {
-		if (input_config(common_file_location, configs, _section_name)<1) {
+	if (input_config(file_location, configs, _section_name.c_str())<1) {
+		if (input_config(common_file_location, configs, _section_name.c_str())<1) {
 			printf("Blad input_config() w return_string_value file_location:{%s,%s}, _section_name:%s, _key:%s\n",
-				 file_location.c_str(), common_file_location.c_str(), _section_name, _key);
+				 file_location.c_str(), common_file_location.c_str(), _section_name.c_str(), _key.c_str());
 		}
 	}
 
