@@ -20,9 +20,8 @@ BINARIES =		ecp_playerjoy \
 				
 ifneq ($(BUILD_TARGET), linux)
 BINARIES+=		ecp_t_smooth2_test \
-				ecp_t_grab_cube_irp6ot \
-				ecp_t_calib_axzb \
-				ecp_t_calib_axxb
+				ecp_t_grab_cube_irp6ot
+
 endif
 
 #-----------------------------------------------------------------------------------------------------------------------#
@@ -106,12 +105,6 @@ ecp_t_smooth2_test: task/ecp_t_smooth2_test.o ../common/generator/ecp_g_smooth2.
 #-----------------------------------------------------------------------------------------------------------------------#
 ecp_t_grab_cube_irp6ot: generator/ecp_g_vis_ib_eih_object_tracker_irp6ot.o generator/ecp_g_vis_ib_eih_wrist_turner_irp6ot.o ../common/generator/ecp_g_force.o task/ecp_t_grab_cube_irp6ot.o ../common/generator/ecp_g_smooth2.o ../common/generator/ecp_g_t.o ../common/generator/ecp_g_jarosz.o $(ECP_MPDIR)/sensor/ecp_mp_s_cvfradia.o ../common/generator/ecp_g_operator_reaction_condition.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
-#-----------------------------------------------------------------------------------------------------------------------#
-ecp_t_calib_axzb: ../common/task/ecp_t_calib_axzb.o ../common/task/ecp_t_calibration.o ../common/generator/ecp_g_smooth2.o ../common/generator/ecp_g_t.o ../common/generator/ecp_g_jarosz.o ../common/generator/ecp_g_operator_reaction_condition.o $(SHOBJ)
-	$(LD) $(LDFLAGS) -o $@ -lgsl -lgslcblas $^
-#-----------------------------------------------------------------------------------------------------------------------#
-ecp_t_calib_axxb: ../common/task/ecp_t_calib_axxb.o ../common/task/ecp_t_calibration.o ../common/generator/ecp_g_smooth2.o ../common/generator/ecp_g_t.o ../common/generator/ecp_g_jarosz.o ../common/generator/ecp_g_operator_reaction_condition.o $(SHOBJ)
-	$(LD) $(LDFLAGS) -o $@ -lgsl -lgslcblas $^ 
 #-----------------------------------------------------------------------------------------------------------------------#
 
 #---------------------------------Special object build rules (user made)-------------------------------------#

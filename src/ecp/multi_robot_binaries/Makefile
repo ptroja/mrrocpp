@@ -6,9 +6,6 @@ OBJECTS = ${patsubst %.cc,%.o,${SOURCES}}
 
 BINARIES = ecp_tran \
 	ecp_t \
-	ecp_t_kcz_force \
-	ecp_t_kcz_test \
-	ecp_eihcalibration\
 	#ecp_time \
 	ecp_cvfradia \
 	ecp_pcbird \
@@ -146,47 +143,6 @@ ecp_pcbird: \
 		$(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 	
-ecp_eihcalibration: \
-		../irp6_on_track/ecp_r_irp6ot.o \
-		../irp6_postument/ecp_r_irp6p.o \
-		../common/task/ecp_t_eihcalibration.o \
-		../common/generator/ecp_g_eihcalibration.o \
-		../common/generator/ecp_g_smooth2.o \
-		../common/generator/ecp_g_jarosz.o \
-		../common/generator/ecp_g_force.o \
-		../common/generator/ecp_g_operator_reaction_condition.o \
-		$(ECP_MPDIR)/sensor/ecp_mp_s_cvfradia.o \
-		$(SHOBJ)
-	$(LD) $(LDFLAGS) -o $@ $^ 
-	
-ecp_t_kcz_force: \
-		../irp6_on_track/ecp_r_irp6ot.o \
-		../irp6_postument/ecp_r_irp6p.o \
-		../common/task/ecp_t_kcz_force.o \
-		../common/generator/ecp_g_smooth2.o \
-		../common/generator/ecp_g_jarosz.o \
-		../common/generator/ecp_g_force.o \
-		../common/generator/ecp_g_operator_reaction_condition.o \
-		$(ECP_MPDIR)/sensor/ecp_mp_s_cvfradia.o \
-		$(ECP_MPDIR)/birdclient.o \
-		$(ECP_MPDIR)/sensor/ecp_mp_s_pcbird.o \
-		$(SHOBJ)
-	$(LD) $(LDFLAGS) -lgsl -lgslcblas -o $@ $^ 
-	
-ecp_t_kcz_test: \
-		../irp6_on_track/ecp_r_irp6ot.o \
-		../irp6_postument/ecp_r_irp6p.o \
-		../common/task/ecp_t_kcz_test.o \
-		../common/generator/ecp_g_smooth2.o \
-		../common/generator/ecp_g_jarosz.o \
-		../common/generator/ecp_g_force.o \
-		../common/generator/ecp_g_operator_reaction_condition.o \
-		$(ECP_MPDIR)/sensor/ecp_mp_s_cvfradia.o \
-		$(ECP_MPDIR)/birdclient.o \
-		$(ECP_MPDIR)/sensor/ecp_mp_s_pcbird.o \
-		$(SHOBJ)
-	$(LD) $(LDFLAGS) -lgsl -lgslcblas -o $@ $^ 
-
 #---------------------------------Special object build rules (user made)-------------------------------------#
 # e.g:
 # plik.o: plik.cc plik1.h plik2.h ... itd
