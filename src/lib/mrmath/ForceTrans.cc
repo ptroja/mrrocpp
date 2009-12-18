@@ -39,7 +39,7 @@ ForceTrans::ForceTrans(const short l_force_sensor_name, const lib::Homog_matrix 
 	// sensor_frame_rotation.remove_translation();
 	// cout << sensor_frame;
 
-	ft_tr_sensor_in_wrist = lib::Ft_v_tr (sensor_frame, lib::Ft_v_tr::FT);
+	ft_tr_sensor_in_wrist = lib::Ft_tr (sensor_frame);
 
 	// ft_tr_inv_sensor_translation_matrix = !ft_tr_sensor_translation_matrix;
 //	ft_tr_sensor_rotation_matrix = lib::Ft_v_tr (sensor_frame_rotation, lib::Ft_v_tr::FT);;
@@ -71,11 +71,11 @@ void ForceTrans::defineTool(const lib::Homog_matrix & init_frame, const double w
 	//	lib::K_vector gravity_force_in_sensor = (!(orientation*sensor_rotation))*gravity_force_in_base;
 	// wyznaczenie sily grawitacji i z jej pomoca sil i momentow
 //	 lib::K_vector gravity_force_in_sensor = (!current_orientation)*gravity_force_in_base;
-	lib::Ft_v_vector gravity_force_torque_in_sensor (lib::Ft_v_tr(!current_orientation, lib::Ft_v_tr::FT)*gravity_force_torque_in_base);
+	lib::Ft_v_vector gravity_force_torque_in_sensor (lib::Ft_tr(!current_orientation)*gravity_force_torque_in_base);
 	//	cout << orientation << endl;
 	// wzynaczenie macierzy transformacji sil dla danego polozenia srodka ciezkosci narzedzia wzgledem czujnika
 	lib::Homog_matrix tool_mass_center_translation (point_of_gravity[0], point_of_gravity[1], point_of_gravity[2]);
-	ft_tool_mass_center_translation = lib::Ft_v_tr(tool_mass_center_translation, lib::Ft_v_tr::FT);
+	ft_tool_mass_center_translation = lib::Ft_tr(tool_mass_center_translation);
 //	cout << tool_mass_center_translation << endl;
 
 //	reaction_torque_in_sensor = lib::K_vector((gravity_force_in_sensor*gravity_arm_in_sensor)*(-1));
@@ -144,7 +144,7 @@ double* ForceTrans::getForce(const double inputForceTorque[6], const lib::Homog_
 		// wyznaczenie sily grawitacji i z jej pomoca sil i momentow w kisci
 
 //		lib::K_vector gravity_force_in_sensor = (!current_orientation)*gravity_force_in_base;
-		lib::Ft_v_vector gravity_force_torque_in_sensor (lib::Ft_v_tr(!current_orientation, lib::Ft_v_tr::FT)*gravity_force_torque_in_base);
+		lib::Ft_v_vector gravity_force_torque_in_sensor (lib::Ft_tr(!current_orientation)*gravity_force_torque_in_base);
 
 		// cout << gravity_force_in_sensor << endl;
 		// uwzglednienie w odczytach sily grawitacji i sily reakcji
@@ -164,7 +164,7 @@ double* ForceTrans::getForce(const double inputForceTorque[6], const lib::Homog_
 		*/
 
 
-		output_force_torque = lib::Ft_v_tr (current_orientation, lib::Ft_v_tr::FT) * (-output_force_torque);
+		output_force_torque = lib::Ft_tr (current_orientation) * (-output_force_torque);
 
 //		lib::Ft_v_vector tmp_force_torque = lib::Ft_v_tr (current_orientation*sensor_frame_translation, FT_VARIANT) * output_force_torque;
 

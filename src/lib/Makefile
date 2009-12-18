@@ -25,12 +25,12 @@ libplayerclient:
 
 
 LIBMRROCPP_OBJECTS = \
+	mrmath/ft_v_tr.o \
 	mrmath/ForceTrans.o \
 	mrmath/homog_matrix.o \
 	mrmath/mathtr.o \
 	mrmath/k_vector.o \
 	mrmath/ft_v_vector.o \
-	mrmath/ft_v_tr.o \
 	mrmath/jacobian_matrix.o \
 	cfgopts.o \
 	configurator.o \

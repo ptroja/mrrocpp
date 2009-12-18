@@ -116,10 +116,10 @@ void * force::thread_main_loop(void *arg)
 				double current_force[6];
 
 				lib::Homog_matrix current_frame_wo_offset = master.return_current_frame(common::WITHOUT_TRANSLATION);
-				lib::Ft_v_tr ft_tr_inv_current_frame_matrix (!current_frame_wo_offset, lib::Ft_v_tr::FT);
+				lib::Ft_tr ft_tr_inv_current_frame_matrix (!current_frame_wo_offset);
 
 				lib::Homog_matrix current_tool(master.get_current_kinematic_model()->tool);
-				lib::Ft_v_tr ft_tr_inv_tool_matrix (!current_tool, lib::Ft_v_tr::FT);
+				lib::Ft_tr ft_tr_inv_tool_matrix (!current_tool);
 
 				// uwaga sila nie przemnozona przez tool'a i current frame orientation
 				master.force_msr_download(current_force, 0);

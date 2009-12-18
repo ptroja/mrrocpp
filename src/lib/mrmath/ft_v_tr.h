@@ -26,34 +26,69 @@ namespace lib {
 
 class Ft_v_tr
 {
-public:
-	enum VARIANT { FT, V, NOT_SET};
 
-private:
+protected:
 	double matrix_m[6][6];												// zmienna przechowujaca parametry macierzy
 	Homog_matrix base_frame;										// bazowy trojscian z konstruktora
-	 VARIANT variant;
 
 public:
 
 	Ft_v_tr ();																	// kostruktor domniemany
-//	Ft_v_tr(VARIANT variant_l);
-	Ft_v_tr (const Homog_matrix &, VARIANT variant_l);
-	Ft_v_tr(const Ft_v_tr &);												// konstruktor kopiujacy
 
-	void set_from_frame(const Homog_matrix & p);		// ustawia na podstawie trojscianu
-
-	// Mnozenie macierzy.
-	Ft_v_tr operator* (const Ft_v_tr & m) const;
-	Ft_v_tr operator!() const;
-
-	Ft_v_tr & operator = (const Ft_v_tr &);									// operator przypisania
-	Ft_v_vector operator*(const Ft_v_vector &) const;					// mnozenie wektora
-
+	virtual void set_from_frame(const Homog_matrix & p) = 0;		// ustawia na podstawie trojscianu
 
 	friend std::ostream&  operator<<(std::ostream & strumien, Ft_v_tr &);		// operator wypisania
 
 };// end class Ft_v_tr
+
+
+
+class Ft_tr : public Ft_v_tr
+{
+
+public:
+
+	Ft_tr ();																	// kostruktor domniemany
+//	Ft_v_tr(VARIANT variant_l);
+	Ft_tr (const Homog_matrix &);
+	Ft_tr(const Ft_tr &);												// konstruktor kopiujacy
+
+	void set_from_frame(const Homog_matrix & p);		// ustawia na podstawie trojscianu
+
+	// Mnozenie macierzy.
+	Ft_tr operator* (const Ft_tr & m) const;
+	Ft_tr operator!() const;
+
+	Ft_tr & operator = (const Ft_tr &);									// operator przypisania
+	Ft_v_vector operator*(const Ft_v_vector &) const;					// mnozenie wektora
+
+
+};// end class Ft_v_tr
+
+
+class V_tr : public Ft_v_tr
+{
+
+public:
+
+	V_tr ();																	// kostruktor domniemany
+//	Ft_v_tr(VARIANT variant_l);
+	V_tr (const Homog_matrix &);
+	V_tr(const V_tr &);												// konstruktor kopiujacy
+
+	void set_from_frame(const Homog_matrix & p);		// ustawia na podstawie trojscianu
+
+	// Mnozenie macierzy.
+	V_tr operator* (const V_tr & m) const;
+	V_tr operator!() const;
+
+	V_tr & operator = (const V_tr &);									// operator przypisania
+	Ft_v_vector operator*(const Ft_v_vector &) const;					// mnozenie wektora
+
+
+};// end class Ft_v_tr
+
+
 
 
 } // namespace lib

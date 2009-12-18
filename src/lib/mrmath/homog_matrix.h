@@ -36,6 +36,8 @@ private:
 public:
 	// Klasa Ft_v_tr musi miec dostep do prywatnych skladnikow klasy Homog_matrix.
 	friend class Ft_v_tr;
+	friend class Ft_tr;
+	friend class V_tr;
 
 	enum POSE_SPECIFICATION { MTR_XYZ_ANGLE_AXIS, MTR_XYZ_EULER_ZYZ, MTR_MECH_XYZ_EULER_ZYZ, MTR_XYZ_RPY};
 

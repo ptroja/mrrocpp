@@ -34,9 +34,9 @@ const short force_sensor_name;
 //		lib::Homog_matrix sensor_frame_translation;
 //		lib::Homog_matrix sensor_frame_rotation;
 
-	lib::Ft_v_tr ft_tool_mass_center_translation;
+	lib::Ft_tr ft_tool_mass_center_translation;
 
-	lib::Ft_v_tr ft_tr_sensor_in_wrist;
+	lib::Ft_tr ft_tr_sensor_in_wrist;
 
 
 //	lib::Ft_v_tr ft_tr_sensor_translation_matrix;

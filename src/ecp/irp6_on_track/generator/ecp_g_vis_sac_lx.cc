@@ -577,7 +577,7 @@ bool vis_sac_lx::next_step()
 	}
 
 	O_rf_G__CEIH.set_values(O_r_G__CEIH[0]);
-	lib::Ft_v_tr Jack(O_Tx_E,lib::Ft_v_tr::V);
+	lib::V_tr Jack(O_Tx_E);
 
 
 	//jak cos przyjdzie glupiego z CEIH

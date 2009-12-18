@@ -31,6 +31,8 @@ private:
 	double w[6];
 public:
 	friend class Ft_v_tr;						// klasa Ft_v_tr musi miec dostep do prywatnych
+	friend class Ft_tr;
+	friend class V_tr;
 												// skladnikow klasy Ft_v_vector
      friend class Jacobian_matrix;			//Klasa Jacobian_matrix ma miec dostep do skladowych - Sibi
 

@@ -361,10 +361,10 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buff
 
 	//	std::cout << current_tool << std::endl;
 
-	lib::Ft_v_tr ft_tr_tool_matrix(current_tool, lib::Ft_v_tr::FT);
-	lib::Ft_v_tr ft_tr_inv_tool_matrix = !ft_tr_tool_matrix;
-	lib::Ft_v_tr v_tr_tool_matrix(current_tool, lib::Ft_v_tr::V);
-	lib::Ft_v_tr v_tr_inv_tool_matrix = !v_tr_tool_matrix;
+	lib::Ft_tr ft_tr_tool_matrix(current_tool);
+	lib::Ft_tr ft_tr_inv_tool_matrix = !ft_tr_tool_matrix;
+	lib::V_tr v_tr_tool_matrix(current_tool);
+	lib::V_tr v_tr_inv_tool_matrix = !v_tr_tool_matrix;
 
 	// poczatek generacji makrokroku
 	for (int step = 1; step <= ECP_motion_steps; step++)
@@ -372,10 +372,10 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buff
 
 		lib::Homog_matrix current_frame_wo_offset = return_current_frame(WITHOUT_TRANSLATION);
 
-		lib::Ft_v_tr ft_tr_current_frame_matrix(current_frame_wo_offset, lib::Ft_v_tr::FT);
-		lib::Ft_v_tr ft_tr_inv_current_frame_matrix = !ft_tr_current_frame_matrix;
-		lib::Ft_v_tr v_tr_current_frame_matrix(current_frame_wo_offset, lib::Ft_v_tr::V);
-		lib::Ft_v_tr v_tr_inv_current_frame_matrix = !v_tr_current_frame_matrix;
+		lib::Ft_tr ft_tr_current_frame_matrix(current_frame_wo_offset);
+		lib::Ft_tr ft_tr_inv_current_frame_matrix = !ft_tr_current_frame_matrix;
+		lib::V_tr v_tr_current_frame_matrix(current_frame_wo_offset);
+		lib::V_tr v_tr_inv_current_frame_matrix = !v_tr_current_frame_matrix;
 
 		force_msr_download(current_force, previous_force);
 		// sprowadzenie sil z ukladu bazowego do ukladu kisci
@@ -388,9 +388,8 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buff
 		lib::Homog_matrix modified_beginning_to_desired_end_effector_frame =
 			!begining_end_effector_frame_with_current_translation * next_frame;
 
-		lib::Ft_v_tr
-		v_tr_modified_beginning_to_desired_end_effector_frame(modified_beginning_to_desired_end_effector_frame, lib::Ft_v_tr::V);
-		lib::Ft_v_tr v_tr_inv_modified_beginning_to_desired_end_effector_frame =
+		lib::V_tr v_tr_modified_beginning_to_desired_end_effector_frame(modified_beginning_to_desired_end_effector_frame);
+		lib::V_tr v_tr_inv_modified_beginning_to_desired_end_effector_frame =
 			!v_tr_modified_beginning_to_desired_end_effector_frame;
 
 
@@ -633,10 +632,10 @@ void irp6s_postument_track_effector::get_arm_position(bool read_hardware, lib::c
 	if (instruction.interpolation_type == lib::TCIM)
 	{
 		lib::Homog_matrix current_frame_wo_offset = return_current_frame(WITHOUT_TRANSLATION);
-		lib::Ft_v_tr ft_tr_inv_current_frame_matrix(!current_frame_wo_offset, lib::Ft_v_tr::FT);
+		lib::Ft_tr ft_tr_inv_current_frame_matrix(!current_frame_wo_offset);
 
 		lib::Homog_matrix current_tool(get_current_kinematic_model()->tool);
-		lib::Ft_v_tr ft_tr_inv_tool_matrix(!current_tool, lib::Ft_v_tr::FT);
+		lib::Ft_tr ft_tr_inv_tool_matrix(!current_tool);
 
 		force_msr_download(current_force, NULL);
 		// sprowadzenie sil z ukladu bazowego do ukladu kisci
