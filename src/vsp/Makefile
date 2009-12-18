@@ -19,10 +19,8 @@ SHOBJ = $(LIBDIR)/libmrrocpp.a vsp_sensor.o
 #------------------------------------------------- Build rules -------------------------------------------------------#
 all: $(SOURCEDIRS)
 
-schunk vsp_digital_scales_sensor vsp_force_sensor vsp_time_sensor vsp_pp: common
-vis_pbeoleih vis_pbeolsac vis_pbeclsac vis_sac vsp_nn vis_sac_lx : common vis
-vsp_mic pawel: common
-vsp_rcs_kociemba vsp_rcs_korf: common rcs
+ vsp_force_sensor vsp_time_sensor vsp_pp vsp_mic: common
+
 
 $(SOURCEDIRS):
 	@$(MAKE) -C $@
