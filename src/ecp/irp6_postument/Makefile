@@ -3,12 +3,12 @@
 
 SOURCES = ${wildcard *.cc}
 OBJECTS = ${patsubst %.cc,%.o,${SOURCES}}
-BINARIES = 			ecp_jarosz_irp6p\
+BINARIES = 		ecp_jarosz_irp6p\
 				ecp_irp6p_rcsc\
 				ecp_dung\
 				#ecp_irp6p_pouring\
 				#ecp_legobrick_irp6p\
-				ecp_test_irp6p
+				#ecp_test_irp6p
 
 #-----------------------------------------------------------------------------------------------------------------------#
 # Should be modified only by developers not by users

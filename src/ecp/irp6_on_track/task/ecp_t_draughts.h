@@ -2,7 +2,6 @@
 #define _ECP_T_TB_IRP6OT_H
 
 #include "ecp/common/task/ecp_task.h"
-#include "ecp/common/generator/ecp_g_smooth.h"
 #include "ecp/common/generator/ecp_g_smooth2.h"
 #include "ecp/common/generator/ecp_g_force.h"
 #include "lib/com_buf.h"
@@ -54,7 +53,7 @@ class Draughts: public common::task::task{
 		lib::BOARD_STATUS getBoardStatus();
 		void goToInitialPos();
 		void goUp();
-		void init_tdes(lib::POSE_SPECIFICATION, int);
+		void init_tdes(lib::ECP_POSE_SPECIFICATION, int);
 		void main_task_algorithm(void);
 		int makeAIMove(int player);
 		void movePawn(int from, int to);

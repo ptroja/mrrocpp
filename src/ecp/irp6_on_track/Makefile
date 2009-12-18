@@ -18,6 +18,7 @@ BINARIES =			ecp_pr \
 				ecp_kin_test_irp6ot \
 				ecp_irp6ot_rcsc \
 				ecp_t_mboryn \
+				ecp_draughts \
 				#ecp_irp6ot_pouring \
 				#ecp_irp6ot_multiplayer \
 				#ecp_irp6ot_legobrick \
@@ -25,7 +26,6 @@ BINARIES =			ecp_pr \
 				ecp_vis_pb_eih_irp6ot \
 				ecp_vis_ib_eih_irp6ot \
 				ecp_vis_weights_driven_irp6ot \
-				ecp_draughts \
 				#ecp_pw_kolo\
 				#ecp_haar \
 				#ecp_ttt \

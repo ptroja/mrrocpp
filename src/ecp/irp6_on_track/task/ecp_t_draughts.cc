@@ -191,7 +191,7 @@ lib::BOARD_STATUS Draughts::getBoardStatus(){
 void Draughts::goToInitialPos(){
 	sgen2->reset();
 	sgen2->set_absolute();
-	sgen2->load_coordinates(lib::JOINT,0,-0.013,-1.442,-0.275,0.01,4.686,-0.070,0.090,true);
+	sgen2->load_coordinates(lib::ECP_JOINT,0,-0.013,-1.442,-0.275,0.01,4.686,-0.070,0.090,true);
 	sgen2->Move();
 }
 
@@ -209,7 +209,7 @@ void Draughts::goUp(){
 
 /*============================init_tdes======================================*/
 //inicjacja struktury tdes - trajectory description
-void Draughts::init_tdes(lib::POSE_SPECIFICATION pspec, int internode_no){
+void Draughts::init_tdes(lib::ECP_POSE_SPECIFICATION pspec, int internode_no){
 	tdes.arm_type=pspec;
 	tdes.interpolation_node_no=1;
 	tdes.internode_step_no=internode_no;	//motion time
@@ -331,10 +331,10 @@ void Draughts::putStaticPawn(int to){
 
 	sgen2->reset();
 	sgen2->set_absolute();
-	sgen2->load_coordinates(lib::JOINT,
+	sgen2->load_coordinates(lib::ECP_JOINT,
 			moves_table[to][0],moves_table[to][1],moves_table[to][2],moves_table[to][3],
 			moves_table[to][4],moves_table[to][5],moves_table[to][6],GRIPPER_CLOSED, true);
-	sgen2->load_coordinates(lib::JOINT,
+	sgen2->load_coordinates(lib::ECP_JOINT,
 				moves_table[to][0],moves_table[to][1],moves_table[to][2],moves_table[to][3],
 				moves_table[to][4],moves_table[to][5],moves_table[to][6],GRIPPER_OPENED, false);
 	sgen2->Move();
@@ -392,15 +392,15 @@ void Draughts::takeStaticPawn(int from,int type){
 	sgen2->set_absolute();
 
 	if(type==PAWN){
-		sgen2->load_coordinates(lib::JOINT,
+		sgen2->load_coordinates(lib::ECP_JOINT,
 			moves_table[from][0],moves_table[from][1],moves_table[from][2],moves_table[from][3],
 			moves_table[from][4],moves_table[from][5],moves_table[from][6],moves_table[from][7],true);
 	}else if(type==WKING){
-		sgen2->load_coordinates(lib::JOINT,
+		sgen2->load_coordinates(lib::ECP_JOINT,
 			wkings_table[from][0],wkings_table[from][1],wkings_table[from][2],wkings_table[from][3],
 			wkings_table[from][4],wkings_table[from][5],wkings_table[from][6],wkings_table[from][7],true);
 	}else if(type==BKING){
-		sgen2->load_coordinates(lib::JOINT,
+		sgen2->load_coordinates(lib::ECP_JOINT,
 			bkings_table[from][0],bkings_table[from][1],bkings_table[from][2],bkings_table[from][3],
 			bkings_table[from][4],bkings_table[from][5],bkings_table[from][6],bkings_table[from][7],true);
 	}
@@ -431,8 +431,8 @@ void Draughts::throwPawn(int from){
 	//takeStaticPawn(from,PAWN);
 	sgen2->reset();
 	sgen2->set_absolute();
-	sgen2->load_coordinates(lib::JOINT,0,-0.366,-1.184,0.180,0.01,4.704,-0.407,GRIPPER_CLOSED,true);		//go beyond board
-	sgen2->load_coordinates(lib::JOINT,0,-0.366,-1.184,0.180,0.01,4.704,-0.407,GRIPPER_OPENED,false);		//throw pawn
+	sgen2->load_coordinates(lib::ECP_JOINT,0,-0.366,-1.184,0.180,0.01,4.704,-0.407,GRIPPER_CLOSED,true);		//go beyond board
+	sgen2->load_coordinates(lib::ECP_JOINT,0,-0.366,-1.184,0.180,0.01,4.704,-0.407,GRIPPER_OPENED,false);		//throw pawn
 	sgen2->Move();
 }
 
