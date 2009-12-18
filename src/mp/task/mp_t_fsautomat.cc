@@ -22,13 +22,13 @@
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
-#include "ecp_mp/sensor/ecp_mp_s_schunk.h"
+
 
 #include "lib/srlib.h"
 #include "mp/mp.h"
 #include "mp/task/mp_t_fsautomat.h"
 
-#include "ecp_mp/sensor/ecp_mp_s_vis.h"
+
 #include "ecp_mp/transmitter/ecp_mp_tr_rc_windows.h"
 #include "mp/State.h"
 #include "mp/StateHeap.h"
@@ -127,10 +127,9 @@ fsautomat::fsautomat(lib::configurator &_config) :
 	 xmlFreeDoc(doc);
 	 xmlCleanupParser();
 	 */
-	sensor_m[lib::SENSOR_CAMERA_ON_TRACK] = new ecp_mp::sensor::vis(lib::SENSOR_CAMERA_ON_TRACK, "[vsp_vis_eih]", *this);
 
 	if (config.value<int>("vis_servoing")) {
-		sensor_m[lib::SENSOR_CAMERA_SA] = new ecp_mp::sensor::vis(lib::SENSOR_CAMERA_SA, "[vsp_vis_sac]", *this);
+
 	}
 
 	// Konfiguracja wszystkich czujnikow
@@ -283,10 +282,9 @@ std::map<const char *, common::State, ecp_mp::task::task::str_cmp> * fsautomat::
 void fsautomat::configureProperSensor(const char *propSensor)
 {
 	// Powolanie czujnikow
-	sensor_m[lib::SENSOR_CAMERA_ON_TRACK] = new ecp_mp::sensor::vis(lib::SENSOR_CAMERA_ON_TRACK, "[vsp_vis_eih]", *this);
 
 	if (config.value<int>("vis_servoing")) {
-		sensor_m[lib::SENSOR_CAMERA_SA] = new ecp_mp::sensor::vis(lib::SENSOR_CAMERA_SA, "[vsp_vis_sac]", *this);
+
 	}
 
 	// Konfiguracja wszystkich czujnikow

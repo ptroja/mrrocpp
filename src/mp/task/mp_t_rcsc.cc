@@ -12,8 +12,6 @@
 #include "mp/mp.h"
 #include "mp/generator/mp_g_common.h"
 #include "mp/task/mp_t_rcsc.h"
-#include "ecp_mp/sensor/ecp_mp_s_schunk.h"
-#include "ecp_mp/sensor/ecp_mp_s_vis.h"
 #include "ecp_mp/transmitter/ecp_mp_tr_rc_windows.h"
 #include "ecp/festival/generator/ecp_g_festival.h"
 #include "ecp_mp/task/ecp_mp_t_festival.h"
@@ -42,14 +40,11 @@ rubik_cube_solver::rubik_cube_solver(lib::configurator &_config)
 	if (vis_servoing)
 	{
 
-	sensor_m[lib::SENSOR_CAMERA_ON_TRACK] =
-		new ecp_mp::sensor::vis (lib::SENSOR_CAMERA_ON_TRACK, "[vsp_vis_eih]", *this);
 
 	if (config.value<int>("vis_servoing"))
 	{
 
-		sensor_m[lib::SENSOR_CAMERA_SA] =
-			new ecp_mp::sensor::vis (lib::SENSOR_CAMERA_SA, "[vsp_vis_sac]", *this);
+
 
 	}
 

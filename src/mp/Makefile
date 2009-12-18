@@ -47,16 +47,13 @@ $(LIBMPMAIN): $(MP_MAIN_OBJECTS)
 mp_c: task/mp_t_c.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^  
 
-mp_rcsc: task/mp_t_rcsc.o $(ECP_MPDIR)/transmitter/ecp_mp_tr_rc_windows.o generator/mp_g_teach_in.o  $(ECP_MPDIR)/sensor/ecp_mp_s_vis.o $(ECP_MPDIR)/sensor/ecp_mp_s_schunk.o CubeState.o SingleManipulation.o $(SHOBJ)
+mp_rcsc: task/mp_t_rcsc.o $(ECP_MPDIR)/transmitter/ecp_mp_tr_rc_windows.o generator/mp_g_teach_in.o  CubeState.o SingleManipulation.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 
 mp_fsautomat: task/mp_t_fsautomat.o \
 	StateHeap.o State.o Condition.o Transition.o \
-	$(ECP_MPDIR)/sensor/ecp_mp_s_schunk.o \
-	$(ECP_MPDIR)/sensor/ecp_mp_s_rcs_korf.o $(ECP_MPDIR)/sensor/ecp_mp_s_rcs_kociemba.o \
 	$(ECP_MPDIR)/transmitter/ecp_mp_tr_rc_windows.o \
 	generator/mp_g_teach_in.o \
-	$(ECP_MPDIR)/sensor/ecp_mp_s_vis.o \
 	CubeState.o SingleManipulation.o \
 	$(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
