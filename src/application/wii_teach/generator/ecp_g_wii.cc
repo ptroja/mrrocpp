@@ -73,17 +73,6 @@ int wii::get_axis(void)
     return axis;
 }
 
-void wii::set_position(void)
-{
-    the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[0] = currentValue[0] + nextChange[0];
-    the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[1] = currentValue[1] + nextChange[1];
-    the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[2] = currentValue[2] + nextChange[2];
-    the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[3] = currentValue[3] + nextChange[3];
-    the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[4] = currentValue[4] + nextChange[4];
-    the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[5] = currentValue[5] + nextChange[5];
-    the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = currentValue[6] + nextChange[6];
-}
-
 bool wii::next_step()
 {
     char buffer[200];
@@ -136,17 +125,6 @@ bool wii::next_step()
     }
     if(!calculate_change() && stop) return false;
     set_position();
-
-    sprintf(buffer,"Moving to: %.5f %.5f %.5f %.5f %.5f %.5f %.5f",
-            the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[0],
-            the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[1],
-            the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[2],
-            the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[3],
-            the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[4],
-            the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[5],
-            the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate
-            );
-    if(false) sr_ecp_msg.message(buffer);
 
     return true;
 }

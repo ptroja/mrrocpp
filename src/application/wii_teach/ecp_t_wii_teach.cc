@@ -98,6 +98,7 @@ void wii_teach::save_trajectory(void)
               to_file << current->position[3] << ' ';
               to_file << current->position[4] << ' ';
               to_file << current->position[5] << ' ';
+              to_file << current->gripper << ' ';
               to_file << '\n';
 
               current = current->next;
@@ -132,7 +133,7 @@ void wii_teach::print_trajectory(void)
     sr_ecp_msg->message("=== Trajektoria ===");
     while(current)
     {
-        sprintf(buffer,"Pozycja %d: %.4f %.4f %.4f %.4f %.4f %.4f",++i,current->position[0],current->position[1],current->position[2],current->position[3],current->position[4],current->position[5]);
+        sprintf(buffer,"Pozycja %d: %.4f %.4f %.4f %.4f %.4f %.4f %.4f",++i,current->position[0],current->position[1],current->position[2],current->position[3],current->position[4],current->position[5],current->gripper);
         sr_ecp_msg->message(buffer);
         current = current->next;
     }
@@ -141,17 +142,17 @@ void wii_teach::print_trajectory(void)
 
 void wii_teach::move_to_current(void)
 {
-	/*
+	
     char buffer[80];
     if(trajectory.current)
     {
-        sprintf(buffer,"Move to %d: %.4f %.4f %.4f %.4f %.4f %.4f",trajectory.current->id,trajectory.current->position[0],trajectory.current->position[1],trajectory.current->position[2],trajectory.current->position[3],trajectory.current->position[4],trajectory.current->position[5]);
+        sprintf(buffer,"Move to %d: %.4f %.4f %.4f %.4f %.4f %.4f %.4f",trajectory.current->id,trajectory.current->position[0],trajectory.current->position[1],trajectory.current->position[2],trajectory.current->position[3],trajectory.current->position[4],trajectory.current->position[5],trajectory.current->gripper);
         sr_ecp_msg->message(buffer);
         sg->set_absolute();
-        sg->load_coordinates(lib::XYZ_ANGLE_AXIS,trajectory.current->position[0],trajectory.current->position[1],trajectory.current->position[2],trajectory.current->position[3],trajectory.current->position[4],trajectory.current->position[5],0.074,0,true);
+        sg->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS,trajectory.current->position[0],trajectory.current->position[1],trajectory.current->position[2],trajectory.current->position[3],trajectory.current->position[4],trajectory.current->position[5],trajectory.current->gripper,0,true);
         sg->Move();
     }
-    */
+    
 }
 
 void wii_teach::main_task_algorithm(void)
@@ -234,12 +235,10 @@ void wii_teach::main_task_algorithm(void)
 
                     node* current = new node;
                     current->id = ++cnt;
-                    current->position[0] = ecp_m_robot->reply_package.arm.pf_def.arm_coordinates[0];
-                    current->position[1] = ecp_m_robot->reply_package.arm.pf_def.arm_coordinates[1];
-                    current->position[2] = ecp_m_robot->reply_package.arm.pf_def.arm_coordinates[2];
-                    current->position[3] = ecp_m_robot->reply_package.arm.pf_def.arm_coordinates[3];
-                    current->position[4] = ecp_m_robot->reply_package.arm.pf_def.arm_coordinates[4];
-                    current->position[5] = ecp_m_robot->reply_package.arm.pf_def.arm_coordinates[5];
+
+                    homog_matrix.set_frame_tab(ecp_m_robot->reply_package.arm.pf_def.arm_frame);
+                    homog_matrix.get_xyz_angle_axis(current->position);
+                    current->gripper = ecp_m_robot->reply_package.arm.pf_def.gripper_coordinate;
 
                     if(trajectory.current)
                     {
@@ -257,7 +256,7 @@ void wii_teach::main_task_algorithm(void)
                     ++trajectory.position;
                     ++trajectory.count;
 
-                    sprintf(buffer,"Added %d: %.4f %.4f %.4f %.4f %.4f %.4f",trajectory.current->id,trajectory.current->position[0],trajectory.current->position[1],trajectory.current->position[2],trajectory.current->position[3],trajectory.current->position[4],trajectory.current->position[5]);
+                    sprintf(buffer,"Added %d: %.4f %.4f %.4f %.4f %.4f %.4f %.4f",trajectory.current->id,trajectory.current->position[0],trajectory.current->position[1],trajectory.current->position[2],trajectory.current->position[3],trajectory.current->position[4],trajectory.current->position[5],current->gripper);
                     sr_ecp_msg->message(buffer);
 
                     print_trajectory();
@@ -305,14 +304,12 @@ void wii_teach::main_task_algorithm(void)
                     {
                         int old = trajectory.current->id;
                         trajectory.current->id = ++cnt;
-                        trajectory.current->position[0] = ecp_m_robot->reply_package.arm.pf_def.arm_coordinates[0];
-                        trajectory.current->position[1] = ecp_m_robot->reply_package.arm.pf_def.arm_coordinates[1];
-                        trajectory.current->position[2] = ecp_m_robot->reply_package.arm.pf_def.arm_coordinates[2];
-                        trajectory.current->position[3] = ecp_m_robot->reply_package.arm.pf_def.arm_coordinates[3];
-                        trajectory.current->position[4] = ecp_m_robot->reply_package.arm.pf_def.arm_coordinates[4];
-                        trajectory.current->position[5] = ecp_m_robot->reply_package.arm.pf_def.arm_coordinates[5];
 
-                        sprintf(buffer,"Changed %d: %.4f %.4f %.4f %.4f %.4f %.4f",trajectory.current->id,trajectory.current->position[0],trajectory.current->position[1],trajectory.current->position[2],trajectory.current->position[3],trajectory.current->position[4],trajectory.current->position[5]);
+                        homog_matrix.set_frame_tab(ecp_m_robot->reply_package.arm.pf_def.arm_frame);
+                        homog_matrix.get_xyz_angle_axis(trajectory.current->position);
+                        trajectory.current->gripper = ecp_m_robot->reply_package.arm.pf_def.gripper_coordinate;
+
+                        sprintf(buffer,"Changed %d: %.4f %.4f %.4f %.4f %.4f %.4f %.4f",trajectory.current->id,trajectory.current->position[0],trajectory.current->position[1],trajectory.current->position[2],trajectory.current->position[3],trajectory.current->position[4],trajectory.current->position[5],trajectory.current->gripper);
                         sr_ecp_msg->message(buffer);
                     }
 

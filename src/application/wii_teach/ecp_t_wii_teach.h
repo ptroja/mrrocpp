@@ -24,6 +24,8 @@ class wii_teach: public common::task::task
         char path[80];
         char filename[20];
 
+        lib::Homog_matrix homog_matrix;
+
         class n;
         class n
         {
@@ -32,6 +34,7 @@ class wii_teach: public common::task::task
                 n* prev;
                 int id;
                 double position[6];
+                double gripper;
 
                 n() : next(NULL), prev(NULL) {}
 

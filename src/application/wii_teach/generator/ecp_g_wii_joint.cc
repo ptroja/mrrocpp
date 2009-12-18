@@ -18,25 +18,41 @@ wii_joint::wii_joint (common::task::task& _ecp_task,ecp_mp::sensor::wiimote* _wi
     }
 }
 
+void wii_joint::set_position(void)
+{
+    the_robot->ecp_command.instruction.instruction_type = lib::SET;
+    the_robot->ecp_command.instruction.set_type = ARM_DV;
+    the_robot->ecp_command.instruction.set_arm_type = lib::JOINT;
+    the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
+    the_robot->ecp_command.instruction.interpolation_type = lib::TCIM;
+    the_robot->ecp_command.instruction.motion_steps = 8;
+    the_robot->ecp_command.instruction.value_in_step_no = 8;
+
+    the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[0] = currentValue[0] + nextChange[0];
+    the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[1] = currentValue[1] + nextChange[1];
+    the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[2] = currentValue[2] + nextChange[2];
+    the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[3] = currentValue[3] + nextChange[3];
+    the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[4] = currentValue[4] + nextChange[4];
+    the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[5] = currentValue[5] + nextChange[5];
+    the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = currentValue[6] + nextChange[6];
+}
+
 bool wii_joint::first_step()
 {
-	/*
     the_robot->ecp_command.instruction.instruction_type = lib::GET;
     the_robot->ecp_command.instruction.get_type = ARM_DV;
     the_robot->ecp_command.instruction.set_type = ARM_DV;
     the_robot->ecp_command.instruction.set_arm_type = lib::JOINT;
     the_robot->ecp_command.instruction.get_arm_type = lib::JOINT;
-    the_robot->ecp_command.instruction.motion_type = lib::RELATIVE;
+    the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
     the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
     the_robot->ecp_command.instruction.motion_steps = 8;
     the_robot->ecp_command.instruction.value_in_step_no = 8;
 
-    step_no = 0;
     releasedA = false;
     stop = false;
 
     return true;
-    */
 }
 
 void wii_joint::preset_position(void)

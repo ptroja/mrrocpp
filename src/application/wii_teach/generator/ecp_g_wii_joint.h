@@ -32,6 +32,8 @@ class wii_joint : public irp6ot::generator::wii
         virtual bool first_step();
 
         void preset_position(void);
+
+        virtual void set_position(void);
 };
 
 }

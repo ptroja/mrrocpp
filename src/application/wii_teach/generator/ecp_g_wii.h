@@ -4,6 +4,8 @@
 #include <string.h>
 #include <math.h>
 
+#include "lib/mrmath/mrmath.h"
+
 #include "ecp/common/generator/ecp_generator.h"
 #include "application/wii_teach/sensor/ecp_mp_s_wiimote.h"
 
@@ -17,20 +19,23 @@ class wii : public common::generator::generator
     private:
         //ilosc krokow
 	int max_steps;
-	//numer kroku
-	int step_no;
         //kontroler
         ecp_mp::sensor::wiimote* _wiimote;
-        bool releasedA;
-        bool rumble;
-        bool stop;
-
+    
     protected:
-        double currentValue[7];
+        double currentValue[6];
+        double currentGripperValue;
         double requestedChange[7];
         double nextChange[7];
         double maxChange[7];
         double multipliers[7];
+
+      	//numer kroku
+        bool releasedA;
+        bool rumble;
+        bool stop;
+
+        lib::Homog_matrix homog_matrix;
 
     public:
 	/**
@@ -58,7 +63,7 @@ class wii : public common::generator::generator
 
         virtual void preset_position(void) = 0;
 
-        void set_position(void);
+        virtual void set_position(void) = 0;
 
         bool calculate_change(void);
 
