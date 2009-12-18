@@ -12,6 +12,14 @@
 
 
 
+#define delta_m (M_PI - 3.14154)
+#define DEGREES_TO_RADIANS 57.295780
+
+#define zero_eps 1.0E-4
+
+#define ALFA_SENSITIVITY 0.00001
+
+
 namespace mrrocpp
 {
 
