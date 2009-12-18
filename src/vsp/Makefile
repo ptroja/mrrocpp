@@ -6,7 +6,7 @@ include $(HOMEDIR)/common.mk
 
 SOURCEDIRS = common vsp_time_sensor
 ifneq ($(BUILD_TARGET), linux)
-  SOURCEDIRS+=  vsp_force_sensor vsp_mic vsp_pp
+  SOURCEDIRS+=  vsp_force_sensor vsp_pp
 endif
 
 CLEANDIRS = ${SOURCEDIRS}
@@ -19,7 +19,7 @@ SHOBJ = $(LIBDIR)/libmrrocpp.a vsp_sensor.o
 #------------------------------------------------- Build rules -------------------------------------------------------#
 all: $(SOURCEDIRS)
 
- vsp_force_sensor vsp_time_sensor vsp_pp vsp_mic: common
+ vsp_force_sensor vsp_time_sensor vsp_pp: common
 
 
 $(SOURCEDIRS):
