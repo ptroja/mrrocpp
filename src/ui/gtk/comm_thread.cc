@@ -3,7 +3,7 @@
 
 #include "ui_model.h"
 
-#include "lib/messip/messip_dataport.h"
+#include <messip_dataport.h>
 
 #include "ui/ui.h"
 

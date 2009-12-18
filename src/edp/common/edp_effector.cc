@@ -20,7 +20,7 @@
 #include <sys/iofunc.h>
 #include <sys/dispatch.h>
 #else
-#include "lib/messip/messip_dataport.h"
+#include <messip_dataport.h>
 #endif /* !USE_MESSIP_SRR */
 #include <pthread.h>
 #include <errno.h>

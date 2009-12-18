@@ -23,6 +23,8 @@
 
 #include <string>
 
+#include <messip_dataport.h>
+
 #if defined(__QNXNTO__)
 #include <process.h>
 #include <spawn.h>
@@ -34,7 +36,6 @@
 #if defined(PROCESS_SPAWN_SPAWN)
 #include "lib/y_spawn.h"
 #endif
-#include "lib/messip/messip_dataport.h"
 #include "lib/config_types.h"
 #include "lib/typedefs.h"
 

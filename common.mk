@@ -40,7 +40,7 @@ ifeq ($(BUILD_TARGET), linux)
   #LD=suncc/sunCC
   #GCCDEP=gcc
   # other flags
-  LDFLAGS=-lrt `pkg-config --libs libxml-2.0` -lboost_thread-mt
+  LDFLAGS=-lrt `pkg-config --libs libxml-2.0` -lboost_thread-mt -lmessip
   CPPFLAGS=-I$(HOMEDIR)/src `pkg-config --cflags libxml-2.0` -DUSE_MESSIP_SRR -Wall #-Werror
   # uncomment the following for Solaris OS
   #LDFLAGS+=-L/export/home/ptroja/boost_1_39_0/stage/lib -lboost_thread-gcc34-mt \

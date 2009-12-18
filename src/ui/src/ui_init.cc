@@ -46,7 +46,7 @@
 #include "lib/mis_fun.h"
 #include "ui/ui_ecp.h"
 
-#include "lib/messip/messip.h"
+#include <messip.h>
 
 /* Local headers */
 #include "ablibs.h"

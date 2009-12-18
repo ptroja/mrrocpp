@@ -25,7 +25,8 @@
 
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
-#include "lib/messip/messip.h"
+
+#include <messip.h>
 
 #include <boost/serialization/serialization.hpp>
 

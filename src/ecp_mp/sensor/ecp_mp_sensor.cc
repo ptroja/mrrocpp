@@ -8,7 +8,7 @@
 #include "ecp_mp/sensor/ecp_mp_sensor.h"
 #include "ecp_mp/task/ecp_mp_task.h"
 
-#include "lib/messip/messip_dataport.h"
+#include <messip_dataport.h>
 
 #include <iostream>
 #include <sys/types.h>

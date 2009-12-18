@@ -11,7 +11,8 @@
 #include <string>
 #include <boost/thread/mutex.hpp>
 
-#include "lib/messip/messip.h"
+#include <messip.h>
+
 #include "lib/typedefs.h"
 #include "lib/com_buf.h"
 

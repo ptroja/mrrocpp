@@ -26,7 +26,7 @@
 // Konfigurator
 #include "lib/configurator.h"
 
-#include "lib/messip/messip_dataport.h"
+#include <messip_dataport.h>
 
 namespace mrrocpp {
 namespace vsp {

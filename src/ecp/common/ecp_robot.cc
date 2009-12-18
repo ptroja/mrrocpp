@@ -18,7 +18,7 @@
 #include "ecp/common/task/ecp_task.h"
 
 #if defined(USE_MESSIP_SRR)
-#include "lib/messip/messip_dataport.h"
+#include <messip_dataport.h>
 #endif
 
 #include "lib/mis_fun.h"

@@ -35,7 +35,7 @@
 #include "mp/generator/mp_g_teach_in.h"
 
 #if defined(USE_MESSIP_SRR)
-#include "lib/messip/messip_dataport.h"
+#include <messip_dataport.h>
 #endif
 
 namespace mrrocpp {

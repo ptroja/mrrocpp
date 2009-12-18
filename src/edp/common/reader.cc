@@ -22,7 +22,7 @@
 #include <sys/dispatch.h>
 #include <sys/netmgr.h>
 #else
-#include "lib/messip/messip_dataport.h"
+#include <messip_dataport.h>
 #endif
 #include <errno.h>
 #include <pthread.h>

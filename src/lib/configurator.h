@@ -19,10 +19,10 @@
 #include <boost/thread/mutex.hpp>
 #include <boost/lexical_cast.hpp>
 
+#include <messip.h>
+
 // Typy zmiennych odczytywanych z pliku INI.
 #include "lib/cfgopts.h"
-
-#include "lib/messip/messip.h"
 
 namespace mrrocpp {
 namespace lib {

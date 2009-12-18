@@ -7,7 +7,7 @@
 #include <string>
 
 #include "lib/configsrv.h"
-#include "lib/messip/messip_dataport.h"
+#include <messip_dataport.h>
 #include "lib/config_types.h"
 
 void

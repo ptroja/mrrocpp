@@ -9,9 +9,9 @@ BINARIES = configsrv #y_spawn_process
 HOMEDIR = $(shell pwd)/../..
 include $(HOMEDIR)/common.mk
 #======================================================#	
-.PHONY: all clean install libplayerc libplayerclient messip
+.PHONY: all clean install libplayerc libplayerclient
 #------------------------------------------------- Build rules -------------------------------------------------------#
-all: messip libplayerc libplayerclient libmrrocpp.a libmrrocpp.so ${OBJECTS} ${BINARIES}
+all: libplayerc libplayerclient libmrrocpp.a libmrrocpp.so ${OBJECTS} ${BINARIES}
 #-----------------------------------------------------------------------------------------------------------------------#
 libplayerc:
 	@$(MAKE) -C $@
@@ -19,12 +19,7 @@ libplayerc:
 libplayerclient:
 	@$(MAKE) -C $@
 
-messip:
-	@$(MAKE) -C $@
-
 #-----------------------------------------------------------------------------------------------------------------------#
-MESSIP_OBJECTS = messip/logg_messip.o messip/messip_lib.o messip/messip_utils.o messip/messip_dataport.o
-MESSIP_OBJECTS: messip
 
 
 LIBMRROCPP_OBJECTS = \
@@ -43,8 +38,7 @@ LIBMRROCPP_OBJECTS = \
 	timer.o \
 	srlib.o \
 	playerpos_goal.o \
-	datastr.o \
-	$(MESSIP_OBJECTS)
+	datastr.o 
 
 libmrrocpp.a: $(LIBMRROCPP_OBJECTS)
 	$(AR) $(ARFLAGS) $@ $?
@@ -67,13 +61,11 @@ configsrv: configsrv.o cfgopts.o configsrv_m.o
 #----------------------------------------------- Maintain rules ----------------------------------------------------#
 install: ${BINARIES}
 	${INSTALL} ${BINARIES} $(BINDIR)
-	@$(MAKE) -C messip install
 #-----------------------------------------------------------------------------------------------------------------------#
 clean:
 	@rm -f *.o *.err *.a *.so ${BINARIES} ./.deps/*.P ./mrmath/*.o ./mrmath/*.err
 	@$(MAKE) -C libplayerc clean
 	@$(MAKE) -C libplayerclient clean
-	@$(MAKE) -C messip clean
 #-----------------------------------------------------------------------------------------------------------------------#
 
 include $(HOMEDIR)/depend.mk

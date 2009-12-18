@@ -1,9 +1,9 @@
 #!/bin/sh
 
-./messip_mgr &
+messip_mgr &
 MESSIP_PID=$!
 
-export UI_HOST=`hostname -s` 
+export UI_HOST=`hostname -s`
 
 sleep 0.5
 

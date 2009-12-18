@@ -30,7 +30,7 @@
 #include "ecp/common/ECP_main_error.h"
 
 #if defined(USE_MESSIP_SRR)
-#include "lib/messip/messip_dataport.h"
+#include <messip_dataport.h>
 #endif
 
 #include <libxml/xmlmemory.h>

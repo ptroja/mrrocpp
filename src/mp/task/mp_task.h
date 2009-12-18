@@ -9,7 +9,7 @@
 #include <sys/iofunc.h>
 #include <sys/dispatch.h>
 #else
-#include "lib/messip/messip.h"
+#include <messip.h>
 #endif
 
 namespace mrrocpp {
