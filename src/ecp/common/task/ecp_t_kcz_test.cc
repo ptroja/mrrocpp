@@ -36,24 +36,24 @@ kcz_test::kcz_test(lib::configurator &_config): task(_config)
 
 void kcz_test::main_task_algorithm(void ) {
 	sr_ecp_msg->message("ECP kcz_test ready");
-/*
+
 	smoothgen2->set_absolute();
 
-	smoothgen2->load_coordinates(lib::XYZ_ANGLE_AXIS, -0.289, 1.08, -0.2, 0.762*3.11, 0.648*3.11, -0.019*3.11, 0.074, 0.000, false);
+	smoothgen2->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, -0.289, 1.08, -0.2, 0.762*3.11, 0.648*3.11, -0.019*3.11, 0.074, 0.000, false);
 	smoothgen2->Move();
 
 	double vv[MAX_SERVOS_NR]={0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3};
 	double aa[MAX_SERVOS_NR]={1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
 
 	do {
-	smoothgen2->load_coordinates(lib::XYZ_ANGLE_AXIS, vv, aa, sensor_m[lib::SENSOR_PCBIRD]->image.sensor_union.pcbird.x - 0.315, -1.0 * sensor_m[lib::SENSOR_PCBIRD]->image.sensor_union.pcbird.y + 1.216, -1.0 * sensor_m[lib::SENSOR_PCBIRD]->image.sensor_union.pcbird.z - 0.081 + 0.1, 0.762*3.11, 0.648*3.11, -0.019*3.11, 0.074, 0.000, false);
+	smoothgen2->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, vv, aa, sensor_m[lib::SENSOR_PCBIRD]->image.sensor_union.pcbird.x - 0.315, -1.0 * sensor_m[lib::SENSOR_PCBIRD]->image.sensor_union.pcbird.y + 1.216, -1.0 * sensor_m[lib::SENSOR_PCBIRD]->image.sensor_union.pcbird.z - 0.081 + 0.1, 0.762*3.11, 0.648*3.11, -0.019*3.11, 0.074, 0.000, false);
 	smoothgen2->Move();
 	} while(true);
 
 	smoothgen2->reset();
 
 	ecp_termination_notice();
-	*/
+
 };
 
 }

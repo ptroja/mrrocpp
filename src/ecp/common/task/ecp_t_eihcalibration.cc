@@ -80,22 +80,22 @@ void eihcalibration::main_task_algorithm(void ){
 	smooth2gen->reset();
 	smooth2gen->set_relative();
 
-	//smooth2gen->load_coordinates(lib::XYZ_ANGLE_AXIS, vv, aa, 0.0, 0.0, -0.025, 0.0, 0.0, 0.0, 0.0, 0.0, true);
+	//smooth2gen->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, vv, aa, 0.0, 0.0, -0.025, 0.0, 0.0, 0.0, 0.0, 0.0, true);
 	//smooth2gen->Move();
 	//nanosleep(&delay, NULL);
-/*
-	smooth2gen->load_coordinates(lib::XYZ_ANGLE_AXIS, vv, aa, 0.0, 0.1, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, true);
+
+	smooth2gen->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, vv, aa, 0.0, 0.1, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, true);
 	smooth2gen->Move();
 	nanosleep(&delay, NULL);
 
-	smooth2gen->load_coordinates(lib::XYZ_ANGLE_AXIS, vv, aa, 0.1, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, true);
+	smooth2gen->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, vv, aa, 0.1, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, true);
 	smooth2gen->Move();
 	nanosleep(&delay, NULL);
-*/
+
 	//opusc chwytak az przestanie "widziec" szachownice
-/*	while(sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.chessboard.found == true){
+	while(sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.chessboard.found == true){
 		//opuszczenie chwytaka o 2.5 cm
-		smooth2gen->load_coordinates(lib::XYZ_ANGLE_AXIS, vv, aa, 0.0, 0.0, -1.0 * A, 0.0, 0.0, 0.0, 0.0, 0.0, true);
+		smooth2gen->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, vv, aa, 0.0, 0.0, -1.0 * A, 0.0, 0.0, 0.0, 0.0, 0.0, true);
 		smooth2gen->Move();
 		nanosleep(&delay, NULL);
 		sensor_m[lib::SENSOR_CVFRADIA]->get_reading();
@@ -104,7 +104,7 @@ void eihcalibration::main_task_algorithm(void ){
 	}
 
 	// podnies chwytak do ostatniej pozycji w ktorej wykryto szachownice
-	smooth2gen->load_coordinates(lib::XYZ_ANGLE_AXIS, vv, aa, 0.0, 0.0, A, 0.0, 0.0, 0.0, 0.0, 0.0, true);
+	smooth2gen->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, vv, aa, 0.0, 0.0, A, 0.0, 0.0, 0.0, 0.0, 0.0, true);
 	smooth2gen->Move();
 	nanosleep(&delay, NULL);
 	--i;
@@ -112,7 +112,7 @@ void eihcalibration::main_task_algorithm(void ){
 
 	// zabezpieczenie przed przekroczeniem obszaru roboczego robota
 	bool flaga = true;
-*/
+
 	ecp_termination_notice();
 	//ecp_wait_for_stop();
 }
