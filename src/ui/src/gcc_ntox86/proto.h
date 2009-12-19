@@ -226,6 +226,7 @@ int wnd_irp6ot_motors_copy_current_to_desired ( PtWidget_t *widget , ApInfo_t *a
 int wnd_irp6ot_joints_copy_current_to_desired ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int irp6ot_move_to_preset_position ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int irp6ot_execute_motor_motion ( void );
+int irp6ot_execute_joint_motion ( void );
 int irp6ot_inc_motion ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int init_wnd_irp6_on_track_int ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int irp6ot_int_motion ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
@@ -303,6 +304,7 @@ int init_wnd_irp6_postument_inc ( PtWidget_t *widget , ApInfo_t *apinfo , PtCall
 int wnd_irp6p_motors_copy_current_to_desired ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int irp6p_move_to_preset_position ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int irp6p_execute_motor_motion ( void );
+int irp6p_execute_joint_motion ( void );
 int irp6p_inc_motion ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int init_wnd_irp6_postument_int ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int wnd_irp6p_joints_copy_current_to_desired ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
