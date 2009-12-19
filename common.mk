@@ -13,8 +13,8 @@
 #  */
 #////////////////////////////////////////////////////////////////////////////////
 
-DEBUG=-g
-#OPTIM = -O2
+DEBUG=-g -mtune=i686
+#OPTIM = -O2 -mtune=i686
 #WARN = -w0
 FLAGS=-fPIC ${DEBUG} ${OPTIM} ${WARN}
 CFLAGS=${FLAGS}
@@ -41,7 +41,7 @@ ifeq ($(BUILD_TARGET), linux)
   #GCCDEP=gcc
   # other flags
   LDFLAGS=-lrt `pkg-config --libs libxml-2.0` -lboost_thread-mt -lmessip
-  CPPFLAGS=-I$(HOMEDIR)/src `pkg-config --cflags libxml-2.0` -DUSE_MESSIP_SRR -Wall #-Werror
+  CPPFLAGS=-I$(HOMEDIR)/src `pkg-config --cflags libxml-2.0` -DUSE_MESSIP_SRR -Wall -pipe #-Werror
   # uncomment the following for Solaris OS
   #LDFLAGS+=-L/export/home/ptroja/boost_1_39_0/stage/lib -lboost_thread-gcc34-mt \
   #	-lsocket -lnsl -lpthread
