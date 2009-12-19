@@ -45,7 +45,7 @@ festival.so: festival_uimodule.o
 	$(CXX) ${LDFLAGS} -shared -o $@ $<
 	
 clean:
-	@rm -f *.o *.so
+	@rm -f *.o *.so *.h *.cc
 
 # TODO: ponizsza regule "install" trzeba ladniej przepisac
 install: all
