@@ -68,7 +68,7 @@ bool wii_teach::get_file_name(void)
 
 void wii_teach::save_trajectory(void)
 {
-      char buffer[80];
+      char buffer[200];
       uint64_t e; // Kod bledu systemowego
 
       if (chdir(path) != 0)
@@ -126,7 +126,7 @@ void wii_teach::updateButtonsPressed(void)
 
 void wii_teach::print_trajectory(void)
 {
-    char buffer[80];
+    char buffer[200];
     node* current = trajectory.head;
     int i = 0;
 
@@ -143,7 +143,7 @@ void wii_teach::print_trajectory(void)
 void wii_teach::move_to_current(void)
 {
 	
-    char buffer[80];
+    char buffer[200];
     if(trajectory.current)
     {
         sprintf(buffer,"Move to %d: %.4f %.4f %.4f %.4f %.4f %.4f %.4f",trajectory.current->id,trajectory.current->position[0],trajectory.current->position[1],trajectory.current->position[2],trajectory.current->position[3],trajectory.current->position[4],trajectory.current->position[5],trajectory.current->gripper);
@@ -158,7 +158,7 @@ void wii_teach::move_to_current(void)
 void wii_teach::main_task_algorithm(void)
 {
     int cnt = 0;
-    char buffer[80];
+    char buffer[200];
     struct lib::ECP_VSP_MSG message;
 
     sg = new common::generator::smooth2(*this,true);
@@ -256,7 +256,7 @@ void wii_teach::main_task_algorithm(void)
                     ++trajectory.position;
                     ++trajectory.count;
 
-                    sprintf(buffer,"Added %d: %.4f %.4f %.4f %.4f %.4f %.4f %.4f",trajectory.current->id,trajectory.current->position[0],trajectory.current->position[1],trajectory.current->position[2],trajectory.current->position[3],trajectory.current->position[4],trajectory.current->position[5],current->gripper);
+                    sprintf(buffer,"Added %d: %.4f %.4f %.4f %.4f %.4f %.4f %.4f",current->id,current->position[0],current->position[1],current->position[2],current->position[3],current->position[4],current->position[5],current->gripper);
                     sr_ecp_msg->message(buffer);
 
                     print_trajectory();
