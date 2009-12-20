@@ -17,10 +17,13 @@ wii::wii (common::task::task& _ecp_task,ecp_mp::sensor::wiimote* _wiimote) : gen
     }
 }
 
-bool wii::calculate_change(void)
+bool wii::calculate_change(int axis, double value)
 {
     int i;
     bool changed = false;
+
+    value *= multipliers[axis];
+    
     for(i = 0;i < 7;++i)
     {
         if(fabs(nextChange[i] - requestedChange[i]) < maxChange[i])
@@ -119,11 +122,7 @@ bool wii::next_step()
     }
 
     axis = get_axis();
-    if(!stop && axis >= 0)
-    {
-        requestedChange[axis] = value * multipliers[axis];
-    }
-    if(!calculate_change() && stop) return false;
+    if(!calculate_change(axis,value) && stop) return false;
     set_position();
 
     return true;

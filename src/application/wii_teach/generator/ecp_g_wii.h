@@ -67,7 +67,7 @@ class wii : public common::generator::generator
 
         virtual void set_position(void) = 0;
 
-        bool calculate_change(void);
+        bool calculate_change(int axis, double value);
 
         int get_axis(void);
 };
