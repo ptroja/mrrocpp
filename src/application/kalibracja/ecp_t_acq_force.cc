@@ -6,7 +6,8 @@
 
 #include "ecp/irp6_on_track/ecp_r_irp6ot.h"
 #include "ecp/irp6_postument/ecp_r_irp6p.h"
-#include "application/kalibracja/ecp_t_kcz_force.h"
+#include "application/kalibracja/ecp_t_acq_force.h"
+#include "application/kalibracja/ecp_t_acquisition.h"
 #include "ecp_mp/sensor/ecp_mp_s_pcbird.h"
 #include "gsl/gsl_vector.h"
 #include "gsl/gsl_matrix.h"
@@ -17,7 +18,7 @@ namespace common {
 namespace task {
 
 //Constructors
-kcz_force::kcz_force(lib::configurator &_config): task(_config) {
+acq_force::acq_force(lib::configurator &_config): acquisition(_config) {
     if (config.section_name == ECP_IRP6_ON_TRACK_SECTION)
     {
         ecp_m_robot = new irp6ot::robot (*this);
@@ -37,7 +38,22 @@ kcz_force::kcz_force(lib::configurator &_config): task(_config) {
 	sr_ecp_msg->message("ECP loaded kcz_force");
 };
 
-void kcz_force::main_task_algorithm(void ) {
+
+void acq_force::write_data(std::string _K_fp, std::string _kk_fp, std::string _M_fp, std::string _mm_fp, int _number_of_measures)
+{
+	K_fp = _K_fp;
+	kk_fp = _kk_fp;
+	M_fp = _M_fp;
+	mm_fp = _mm_fp;
+	number_of_measures = _number_of_measures;
+	std::remove(K_fp.c_str());
+	std::remove(kk_fp.c_str());
+	std::remove(M_fp.c_str());
+	std::remove(mm_fp.c_str());
+	acq_force::main_task_algorithm();
+}
+
+void acq_force::main_task_algorithm(void) {
 	sr_ecp_msg->message("ECP kcz_force ready");
 
 	int i, j, t;
@@ -48,7 +64,7 @@ void kcz_force::main_task_algorithm(void ) {
 	gsl_vector *m = gsl_vector_alloc(3);
 	gsl_vector *k = gsl_vector_alloc(3);
 
-	for(i=0; i<config.value<int>("measures_count"); i++){
+	for(i=0; i<number_of_measures; i++){
 		//move the robot + get the data
 		nose_run->Move();
 
@@ -92,16 +108,16 @@ void kcz_force::main_task_algorithm(void ) {
 		gsl_vector_set(m, 1, sensor_m[lib::SENSOR_PCBIRD]->image.sensor_union.pcbird.y);
 		gsl_vector_set(m, 2, sensor_m[lib::SENSOR_PCBIRD]->image.sensor_union.pcbird.z);
 
-		FP = fopen("../data/calibration/M_pcbird.txt","a");
+		FP = fopen(M_fp.c_str(),"a");
 		gsl_matrix_fprintf (FP, M, "%g");
 		fclose(FP);
-		FP = fopen("../data/calibration/mm_pcbird.txt","a");
+		FP = fopen(mm_fp.c_str(),"a");
 		gsl_vector_fprintf (FP, m, "%g");
 		fclose(FP);
-		FP = fopen("../data/calibration/K_pcbird.txt","a");
+		FP = fopen(K_fp.c_str(),"a");
 		gsl_matrix_fprintf (FP, K, "%g");
 		fclose(FP);
-		FP = fopen("../data/calibration/kk_pcbird.txt","a");
+		FP = fopen(kk_fp.c_str(),"a");
 		gsl_vector_fprintf (FP, k, "%g");
 		fclose(FP);
 
@@ -133,8 +149,6 @@ void kcz_force::main_task_algorithm(void ) {
 		sr_ecp_msg->message(buffer);
 		*/
 	}
-
-	ecp_termination_notice();
 };
 
 } // namespace task
@@ -143,9 +157,9 @@ void kcz_force::main_task_algorithm(void ) {
 namespace common {
 namespace task {
 
-task* return_created_ecp_task(lib::configurator &_config){
-	return new common::task::kcz_force(_config);
-}
+//task* return_created_ecp_task(lib::configurator &_config){
+//	return new kcz_force(_config);
+//}
 
 } // namespace task
 } // namespace common

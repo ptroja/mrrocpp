@@ -1,3 +1,5 @@
+#include <string>
+#include <iostream>
 #include "application/kalibracja/ecp_t_acquisition.h"
 
 namespace mrrocpp {
@@ -14,13 +16,9 @@ void acquisition::main_task_algorithm(void)
 {
 }
 
-int acquisition::write_data(void)
-{
-}
-
 //task* return_created_ecp_task (lib::configurator &_config)
 //{
-//	return new calibration(_config);
+//	return new acquisition(_config);
 //}
 
 } // namespace task

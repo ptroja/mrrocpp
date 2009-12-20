@@ -8,12 +8,6 @@ namespace task {
 // KONSTRUKTORY
 calibration::calibration(lib::configurator &_config) : task(_config)
 {
-	dimension = 12;
-}
-
-calibration::calibration(lib::configurator &_config, int _dimension = 12) : task(_config)
-{
-	dimension = _dimension;
 }
 
 void calibration::main_task_algorithm(void)
@@ -21,35 +15,7 @@ void calibration::main_task_algorithm(void)
 	int i,j,k;
 	char buffer[20]; //for sprintf
 
-	objective_function_parameters ofp;
-
 	fdf.params = (void*)&ofp;
-
-//TODO: START -> acq_task -> write_data(ofp)
-	ofp.number_of_measures = 1000;
-	// translation vector (from robot base to tool frame) - received from MRROC
-	ofp.k = gsl_vector_calloc (3*ofp.number_of_measures);
-	// rotation matrix (from robot base to tool frame) - received from MRROC
-	ofp.K = gsl_matrix_calloc (3*ofp.number_of_measures, 3);
-	// translation vector (from chessboard base to camera frame)
-	ofp.m = gsl_vector_calloc (3*ofp.number_of_measures);
-	// rotation matrix (from chessboard base to camera frame)
-	ofp.M = gsl_matrix_calloc (3*ofp.number_of_measures, 3);
-
-	FILE *FP;
-	FP = fopen("../data/calibration/M_pcbird.txt", "r");
-	gsl_matrix_fscanf(FP,ofp.M);
-	fclose(FP);
-	FP = fopen("../data/calibration/mm_pcbird.txt","r");
-	gsl_vector_fscanf(FP,ofp.m);
-	fclose(FP);
-	FP = fopen("../data/calibration/kk_pcbird.txt","r");
-	gsl_vector_fscanf(FP,ofp.k);
-	fclose(FP);
-	FP = fopen("../data/calibration/K_pcbird.txt","r");
-	gsl_matrix_fscanf(FP,ofp.K);
-	fclose(FP);
-//TODO: STOP -> acq_task -> write_data(ofp)
 
 	//calibration
 	gsl_vector *x;
@@ -65,8 +31,6 @@ void calibration::main_task_algorithm(void)
 	T2 = gsl_multimin_fdfminimizer_vector_bfgs2;
 	s2 = gsl_multimin_fdfminimizer_alloc (T2, dimension);
 
-	ofp.magical_c = 0.3;
-
 	sr_ecp_msg->message("");
 
 	count = 0;
@@ -78,8 +42,10 @@ void calibration::main_task_algorithm(void)
 		++count;
 		status = gsl_multimin_fdfminimizer_iterate (s2);
 
-		if (status)  //check if solver is stuck
+		if (status) { //check if solver is stuck
+			sr_ecp_msg->message("Solver is stuck");
 			break;
+		}
 
 		status = gsl_multimin_test_gradient (s2->gradient, 1e-5);
 
