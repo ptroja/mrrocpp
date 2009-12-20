@@ -4,6 +4,7 @@
 #include "ecp_mp/task/ecp_mp_task.h"
 #include "ecp/common/generator/ecp_g_smooth2.h"
 #include "application/wii_teach/generator/ecp_g_wii_relative.h"
+#include "application/wii_teach/generator/ecp_g_wii_joint.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -19,10 +20,14 @@ class wii_teach: public common::task::task
 	//Generator ruchu
         common::generator::smooth2* sg;
         irp6ot::generator::wii_relative* wg;
+        irp6ot::generator::wii_joint* jg;
         lib::sensor_image_t::sensor_union_t::wiimote_t lastButtons;
         lib::sensor_image_t::sensor_union_t::wiimote_t buttonsPressed;
         char path[80];
         char filename[20];
+
+        char gripper_path[80];
+        char gripper_filename[20];
 
         lib::Homog_matrix homog_matrix;
 
@@ -71,7 +76,7 @@ class wii_teach: public common::task::task
 
         void move_to_current(void);
 
-        bool get_file_name(void);
+        bool get_filenames(void);
 
         void save_trajectory(void);
 };

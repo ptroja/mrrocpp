@@ -34,7 +34,7 @@ wii_teach::wii_teach(lib::configurator &_config) : task(_config)
     sensor_m[lib::SENSOR_WIIMOTE]->configure_sensor();
 }
 
-bool wii_teach::get_file_name(void)
+bool wii_teach::get_filenames(void)
 {
     lib::ECP_message ecp_to_ui_msg; // Przesylka z ECP do UI
     lib::UI_reply ui_to_ecp_rep; // Odpowiedz UI do ECP
@@ -63,6 +63,30 @@ bool wii_teach::get_file_name(void)
 
     strncpy(path,ui_to_ecp_rep.path,79);
     strncpy(filename,ui_to_ecp_rep.filename,19);
+
+    ecp_to_ui_msg.ecp_message = lib::SAVE_FILE; // Polecenie wprowadzenia nazwy pliku
+    strcpy(ecp_to_ui_msg.string, "*.trj"); // Wzorzec nazwy pliku
+    // if ( Send (UI_pid, &ecp_to_ui_msg, &ui_to_ecp_rep, sizeof(lib::ECP_message), sizeof(lib::UI_reply)) == -1) {
+#if !defined(USE_MESSIP_SRR)
+    ecp_to_ui_msg.hdr.type=0;
+    if (MsgSend(this->UI_fd, &ecp_to_ui_msg, sizeof(lib::ECP_message), &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0)
+#else
+    if(messip::port_send(this->UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0)
+#endif
+    {// by Y&W
+        e = errno;
+        perror("ECP: Send() to UI failed");
+        sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ECP: Send() to UI failed");
+        throw common::ecp_robot::ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
+    }
+
+    if (ui_to_ecp_rep.reply == lib::QUIT)
+    { // Nie wybrano nazwy pliku lub zrezygnowano z zapisu
+        return false;
+    }
+
+    strncpy(gripper_path,ui_to_ecp_rep.path,79);
+    strncpy(gripper_filename,ui_to_ecp_rep.filename,19);
     return true;
 }
 
@@ -84,25 +108,32 @@ void wii_teach::save_trajectory(void)
         perror(filename);
         throw common::ecp_robot::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
       }
-      else
+      std::ofstream to_file_gripper(gripper_filename); // otworz plik do zapisu
+      e = errno;
+      if (!to_file_gripper)
       {
-          node* current = trajectory.head;
-          to_file << "XYZ_ANGLE_AXIS" << '\n';
-          to_file << trajectory.count << '\n';
+        perror(gripper_filename);
+        throw common::ecp_robot::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
+      }
 
-          while(current)
-          {
-              to_file << current->position[0] << ' ';
-              to_file << current->position[1] << ' ';
-              to_file << current->position[2] << ' ';
-              to_file << current->position[3] << ' ';
-              to_file << current->position[4] << ' ';
-              to_file << current->position[5] << ' ';
-              to_file << current->gripper << ' ';
-              to_file << '\n';
+      node* current = trajectory.head;
+      to_file << "XYZ_ANGLE_AXIS" << '\n';
+      to_file << trajectory.count << '\n';
 
-              current = current->next;
-          }
+      while(current)
+      {
+          to_file << current->position[0] << ' ';
+          to_file << current->position[1] << ' ';
+          to_file << current->position[2] << ' ';
+          to_file << current->position[3] << ' ';
+          to_file << current->position[4] << ' ';
+          to_file << current->position[5] << ' ';
+          to_file_gripper << current->gripper;
+          
+          to_file << '\n';
+          to_file_gripper << '\n';
+
+          current = current->next;
       }
 
       sprintf(buffer,"Trajectory saved to %s/%s",path,filename);
@@ -163,8 +194,9 @@ void wii_teach::main_task_algorithm(void)
 
     sg = new common::generator::smooth2(*this,true);
     wg = new irp6ot::generator::wii_relative(*this,(ecp_mp::sensor::wiimote*)sensor_m[lib::SENSOR_WIIMOTE]);
+    jg = new irp6ot::generator::wii_joint(*this,(ecp_mp::sensor::wiimote*)sensor_m[lib::SENSOR_WIIMOTE]);
 
-    if(1 || get_file_name())
+    if(1 || get_filenames())
     {
         while(1)
         {
