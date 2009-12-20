@@ -5,7 +5,6 @@ SOURCES = ${wildcard *.cc}
 OBJECTS = ${patsubst %.cc,%.o,${SOURCES}}
 
 BINARIES = ecp_tran \
-	ecp_t \
 	#ecp_time \
 	ecp_cvfradia \
 	ecp_pcbird \
@@ -50,15 +49,6 @@ ecp_mam: \
 	$(LD) $(LDFLAGS) -o $@ $^ 
 
 
-ecp_t: \
-		../irp6_on_track/ecp_r_irp6ot.o \
-		../irp6_postument/ecp_r_irp6p.o \
-		../irp6_mechatronika/ecp_r_irp6m.o  \
-		../common/task/ecp_t_teach.o \
-		$(SHOBJ)
-	$(LD) $(LDFLAGS) -o $@ $^ 
-
-
 ecp_time: \
 		../irp6_on_track/ecp_r_irp6ot.o \
 		../irp6_postument/ecp_r_irp6p.o \
@@ -68,34 +58,6 @@ ecp_time: \
 		$(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 
-ecp_ttt: \
-		../irp6_on_track/ecp_r_irp6ot.o \
-		../common/task/ecp_t_ttt.o \
-		../common/generator/ecp_g_smooth.o \
-		../common/generator/ecp_g_jarosz.o \
-		../common/generator/ecp_g_operator_reaction_condition.o \
-		$(SHOBJ)
-	$(LD) $(LDFLAGS) -o $@ $^
-
-ecp_ellipse: \
-		../irp6_on_track/ecp_r_irp6ot.o \
-		../common/task/ecp_t_ellipse.o \
-		../common/generator/ecp_g_smooth.o \
-		../common/generator/ecp_g_ellipse.o \		
-		../common/generator/ecp_g_jarosz.o \
-		../common/generator/ecp_g_operator_reaction_condition.o \
-		$(SHOBJ)
-	$(LD) $(LDFLAGS) -o $@ $^
-
-ecp_wii: \
-		../irp6_on_track/ecp_r_irp6ot.o \
-		../common/task/ecp_t_wii.o \
-		../common/generator/ecp_g_smooth.o \
-		../common/generator/ecp_g_wii.o \
-		../common/generator/ecp_g_jarosz.o \
-		../common/generator/ecp_g_operator_reaction_condition.o \
-		$(SHOBJ)
-	$(LD) $(LDFLAGS) -o $@ $^
 
 ecp_fsautomat: \
 		../irp6_on_track/ecp_r_irp6ot.o \

@@ -16,7 +16,7 @@
 #include "ecp/irp6_postument/ecp_r_irp6p.h"
 #include "ecp/irp6_mechatronika/ecp_r_irp6m.h"
 
-#include "ecp/common/task/ecp_t_teach.h"
+#include "application/teach/ecp_t_teach.h"
 #include "ecp/common/generator/ecp_g_teach_in.h"
 
 #include "ecp/common/ecp_robot.h"
