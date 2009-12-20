@@ -15,6 +15,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace common {
+namespace generator {
 
 // ####################################################################################################
 // ############################     Odtwarzanie listy pozycji    ######################################
@@ -504,6 +505,7 @@ lib::ECP_TO_UI_COMMAND teach_in::convert(lib::POSE_SPECIFICATION ps) const
       }
   }
 
+} // namespace generator
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp

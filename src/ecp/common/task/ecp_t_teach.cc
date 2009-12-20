@@ -46,7 +46,7 @@ teach::teach(lib::configurator &_config) : task(_config)
     	throw(ecp_robot::ECP_main_error(lib::FATAL_ERROR, 0));
     }
 
-    tig = new teach_in (*this);
+    tig = new generator::teach_in (*this);
 
     sr_ecp_msg->message("ECP loaded");
 }

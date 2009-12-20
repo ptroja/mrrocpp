@@ -29,7 +29,7 @@ rcsc::rcsc(lib::configurator &_config) : task(_config)
     rgg = new common::generator::tff_rubik_grab (*this, 8);
     gag = new common::generator::tff_gripper_approach (*this, 8);
     rfrg = new common::generator::tff_rubik_face_rotate (*this, 8);
-    tig = new common::teach_in (*this);
+    tig = new common::generator::teach_in (*this);
     befg = new common::generator::bias_edp_force (*this);
     //sg = new common::generator::smooth (*this, true);
     sg2 = new common::generator::smooth2 (*this, true);

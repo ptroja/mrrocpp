@@ -13,6 +13,8 @@
 namespace mrrocpp {
 namespace ecp {
 namespace common {
+namespace generator {
+
 
 class teach_in : public common::generator::generator {
 
@@ -85,6 +87,7 @@ public:
 
 };
 
+} // namespace generator
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp
