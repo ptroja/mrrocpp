@@ -35,7 +35,7 @@ ecp_tran: \
 		../speaker/ecp_r_speaker.o \
 		../irp6_mechatronika/ecp_r_irp6m.o \
 		../polycrank/ecp_r_polycrank.o \
-		../common/generator/ecp_g_t.o \
+		../common/generator/ecp_g_transparent.o \
 		$(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 
@@ -67,7 +67,7 @@ ecp_fsautomat: \
 		../common/generator/ecp_g_force.o \
 		../common/task/ecp_st_go.o \
 		../common/generator/ecp_g_smooth.o \
-		../common/generator/ecp_g_t.o \
+		../common/generator/ecp_g_transparent.o \
 		../common/generator/ecp_g_jarosz.o \
 		../common/generator/ecp_g_operator_reaction_condition.o \
 		$(SHOBJ)

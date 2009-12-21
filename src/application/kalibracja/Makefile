@@ -33,7 +33,7 @@ ecp_t_axzb_force: \
 		ecp_t_acquisition.o \
 		ecp_t_axzb_force.o \
 		../../ecp/common/generator/ecp_g_smooth2.o \
-		../../ecp/common/generator/ecp_g_t.o \
+		../../ecp/common/generator/ecp_g_transparent.o \
 		../../ecp/common/generator/ecp_g_jarosz.o \
 		../../ecp/common/generator/ecp_g_force.o \
 		../../ecp/common/generator/ecp_g_operator_reaction_condition.o \

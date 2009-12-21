@@ -11,7 +11,7 @@
 
 #include "ecp/common/task/ecp_task.h"
 #include "ecp/common/task/ecp_st_go.h"
-#include "ecp/common/generator/ecp_g_t.h"
+#include "ecp/common/generator/ecp_g_transparent.h"
 
 #include "ecp_mp/Trajectory.h"
 

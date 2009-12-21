@@ -19,7 +19,7 @@ all: ${BINARIES}
 #---------------------------------Special object build rules (user made)-------------------------------------#
 
 #-----------------------------------------------------------------------------------------------------------------------#
-ecp_irp6p_rcsc: task/ecp_t_rcsc_irp6p.o ../common/generator/ecp_g_smooth2.o ../common/generator/ecp_g_force.o ../common/task/ecp_st_go.o ../common/generator/ecp_g_t.o \
+ecp_irp6p_rcsc: task/ecp_t_rcsc_irp6p.o ../common/generator/ecp_g_smooth2.o ../common/generator/ecp_g_force.o ../common/task/ecp_st_go.o ../common/generator/ecp_g_transparent.o \
 		../common/generator/ecp_g_jarosz.o ../common/generator/ecp_g_operator_reaction_condition.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 	

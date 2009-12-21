@@ -20,7 +20,7 @@
 #include "ecp/polycrank/ecp_r_polycrank.h"
 
 #include "ecp/common/task/ecp_t_tran.h"
-#include "ecp/common/generator/ecp_g_t.h"
+#include "ecp/common/generator/ecp_g_transparent.h"
 
 
 namespace mrrocpp {

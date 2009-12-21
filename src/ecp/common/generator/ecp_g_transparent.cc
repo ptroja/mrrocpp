@@ -1,4 +1,4 @@
-#include "ecp/common/generator/ecp_g_t.h"
+#include "ecp/common/generator/ecp_g_transparent.h"
 
 namespace mrrocpp {
 namespace ecp {

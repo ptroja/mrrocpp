@@ -2,7 +2,7 @@
 #define _ECP_T_RCSC_SPEAKER_H
 
 #include "ecp/common/task/ecp_task.h"
-#include "ecp/common/generator/ecp_g_t.h"
+#include "ecp/common/generator/ecp_g_transparent.h"
 #include "ecp/speaker/generator/ecp_g_speak.h"
 
 namespace mrrocpp {
