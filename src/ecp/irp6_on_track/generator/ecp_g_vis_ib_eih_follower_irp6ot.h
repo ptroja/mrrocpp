@@ -1,8 +1,8 @@
-/*
- * generator/ecp_g_vis_ib_eih_follower_irp6ot.h
+/**
+ * \file ecp_g_vis_ib_eih_follower_irp6ot.h
  *
- *  Created on: Dec 9, 2008
- *      Author: rtulwin
+ * \date 15-08-2009
+ * \author rtulwin
  */
 
 #ifndef ECP_VIS_IB_EIH_FOLLOWER_IRP6OT_H_
@@ -57,6 +57,8 @@ public:
     bool reached[2]; // flaga dotarcia do celu dla x i y
 
 	bool first_move; //flaga pierwszego makrokroku
+
+	lib::Homog_matrix homog_matrix;
 
 	ecp_vis_ib_eih_follower_irp6ot(common::task::task& _ecp_task);
 	virtual bool first_step(void);
