@@ -10,7 +10,7 @@ namespace common {
 
 class ecp_taught_in_pose {
 public:
-  lib::POSE_SPECIFICATION arm_type;
+  lib::ECP_POSE_SPECIFICATION arm_type;
   double motion_time;
   double coordinates[MAX_SERVOS_NR];
 
@@ -18,7 +18,7 @@ public:
 
   ecp_taught_in_pose (void);
 
-  ecp_taught_in_pose (lib::POSE_SPECIFICATION at,
+  ecp_taught_in_pose (lib::ECP_POSE_SPECIFICATION at,
 		  double mt,
 		  const double c[MAX_SERVOS_NR],
 		  int e_info = 0);

@@ -81,7 +81,8 @@ enum ECP_POSE_SPECIFICATION {
 	ECP_XYZ_ANGLE_AXIS,
 	ECP_XYZ_EULER_ZYZ,
 	ECP_JOINT,
-	ECP_MOTOR
+	ECP_MOTOR,
+	ECP_PF_VELOCITY
 };
 
 //------------------------------------------------------------------------------

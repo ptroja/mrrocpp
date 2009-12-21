@@ -26,7 +26,7 @@ class y_edge_follow_force : public teach_in
 {
 protected:
 
-    lib::POSE_SPECIFICATION emptyps;
+    lib::ECP_POSE_SPECIFICATION emptyps;
     lib::trajectory_description td;
     const int step_no;
     double delta[6];

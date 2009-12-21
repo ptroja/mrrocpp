@@ -46,7 +46,7 @@ void operator_reaction_condition::get_supplementary (ecp_taught_in_pose& tip)
 	memcpy(tip.coordinates, pose_list_iterator->coordinates, MAX_SERVOS_NR*sizeof(double));
 }
 
-void operator_reaction_condition::set_supplementary (lib::POSE_SPECIFICATION ps, double motion_time, const double coordinates[MAX_SERVOS_NR], int extra_info)
+void operator_reaction_condition::set_supplementary (lib::ECP_POSE_SPECIFICATION ps, double motion_time, const double coordinates[MAX_SERVOS_NR], int extra_info)
 {
 	pose_list_iterator->arm_type = ps;
 	pose_list_iterator->motion_time = motion_time;
@@ -54,13 +54,13 @@ void operator_reaction_condition::set_supplementary (lib::POSE_SPECIFICATION ps,
 	memcpy(pose_list_iterator->coordinates, coordinates, MAX_SERVOS_NR*sizeof(double));
 }
 
-void operator_reaction_condition::create_supplementary_list_head (lib::POSE_SPECIFICATION ps, double motion_time, const double coordinates[MAX_SERVOS_NR], int extra_info)
+void operator_reaction_condition::create_supplementary_list_head (lib::ECP_POSE_SPECIFICATION ps, double motion_time, const double coordinates[MAX_SERVOS_NR], int extra_info)
 {
 	pose_list.push_back(ecp_taught_in_pose(ps, motion_time, coordinates, extra_info));
 	pose_list_iterator = pose_list.begin();
 }
 
-void operator_reaction_condition::insert_supplementary_list_element (lib::POSE_SPECIFICATION ps, double motion_time, const double coordinates[MAX_SERVOS_NR], int extra_info)
+void operator_reaction_condition::insert_supplementary_list_element (lib::ECP_POSE_SPECIFICATION ps, double motion_time, const double coordinates[MAX_SERVOS_NR], int extra_info)
 {
 	pose_list.push_back(ecp_taught_in_pose(ps, motion_time, coordinates, extra_info));
 	pose_list_iterator++;
@@ -135,11 +135,11 @@ bool operator_reaction_condition::next_step ()
 		if (!is_supplementary_list_head()) { // Czy wskaznik na glowe listy jest NULL
 			// Tworzymy glowe listy
 //      create_supplementary_list_head(lib::XYZ_EULER_ZYZ, 0.0, the_robot->reply_package.arm.pf_def.arm_coordinates); // W.S.
-			create_supplementary_list_head(lib::MOTOR, 0.0, the_robot->reply_package.arm.pf_def.arm_coordinates);
+			create_supplementary_list_head(lib::ECP_MOTOR, 0.0, the_robot->reply_package.arm.pf_def.arm_coordinates);
 		} else {
 			// Wstaw do listy nowa pozycje
 //      insert_supplementary_list_element(lib::XYZ_EULER_ZYZ, 0.0, the_robot->reply_package.arm.pf_def.arm_coordinates);
-			insert_supplementary_list_element(lib::MOTOR, 0.0, the_robot->reply_package.arm.pf_def.arm_coordinates);
+			insert_supplementary_list_element(lib::ECP_MOTOR, 0.0, the_robot->reply_package.arm.pf_def.arm_coordinates);
 		}
 		return false;
 	} else {

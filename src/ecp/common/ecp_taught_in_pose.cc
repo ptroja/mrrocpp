@@ -11,7 +11,7 @@ ecp_taught_in_pose::ecp_taught_in_pose (void)
 {
 }
 
-ecp_taught_in_pose::ecp_taught_in_pose (lib::POSE_SPECIFICATION at, double mt, const double c[MAX_SERVOS_NR], int e_info) // by Y
+ecp_taught_in_pose::ecp_taught_in_pose (lib::ECP_POSE_SPECIFICATION at, double mt, const double c[MAX_SERVOS_NR], int e_info) // by Y
 		:
 		arm_type(at),
 		motion_time(mt),

@@ -40,7 +40,7 @@ teach_in::~teach_in(void)
   }
 
 // --------------------------------------------------------------------------
-void teach_in::teach(lib::POSE_SPECIFICATION ps, const char *msg)
+void teach_in::teach(lib::ECP_POSE_SPECIFICATION ps, const char *msg)
   { // Uczenie robota
     lib::ECP_message ecp_to_ui_msg; // Przesylka z ECP do UI
     lib::UI_reply ui_to_ecp_rep; // Odpowiedz UI do ECP
@@ -91,7 +91,7 @@ void teach_in::teach(lib::POSE_SPECIFICATION ps, const char *msg)
 
 // --------------------------------------------------------------------------
 // Zapis trajektorii do pliku
-void teach_in::save_file(lib::POSE_SPECIFICATION ps)
+void teach_in::save_file(lib::ECP_POSE_SPECIFICATION ps)
   {
     lib::ECP_message ecp_to_ui_msg; // Przesylka z ECP do UI
     lib::UI_reply ui_to_ecp_rep; // Odpowiedz UI do ECP
@@ -162,7 +162,7 @@ void teach_in::save_file(lib::POSE_SPECIFICATION ps)
             to_file << tip.motion_time << ' ';
             for (j = 0; j < MAX_SERVOS_NR; j++)
               to_file << tip.coordinates[j] << ' ';
-            if (ps == lib::PF_VELOCITY)
+            if (ps == lib::ECP_PF_VELOCITY)
               { // by Y
                 to_file << tip.extra_info << ' ';
               }
@@ -219,7 +219,7 @@ bool teach_in::load_file_with_path(const char* file_name)
     // Funkcja zwraca true jesli wczytanie trajektorii powiodlo sie,
 
     char coordinate_type[80]; // Opis wspolrzednych: "MOTOR", "JOINT", ...
-    lib::POSE_SPECIFICATION ps; // Rodzaj wspolrzednych
+    lib::ECP_POSE_SPECIFICATION ps; // Rodzaj wspolrzednych
 
     uint64_t number_of_poses; // Liczba zapamietanych pozycji
     uint64_t i, j; // Liczniki petli
@@ -258,12 +258,12 @@ bool teach_in::load_file_with_path(const char* file_name)
 
     if ( !strcmp(coordinate_type, "MOTOR") )
       {
-        ps = lib::MOTOR;
+        ps = lib::ECP_MOTOR;
       }
     else if ( !strcmp(coordinate_type, "JOINT") )
-      ps = lib::JOINT;
+      ps = lib::ECP_JOINT;
      else if ( !strcmp(coordinate_type, "lib::PF_VELOCITY") )
-      ps = lib::PF_VELOCITY;
+      ps = lib::ECP_PF_VELOCITY;
     else
       {
         throw generator::ECP_error(lib::NON_FATAL_ERROR, NON_TRAJECTORY_FILE);
@@ -287,7 +287,7 @@ bool teach_in::load_file_with_path(const char* file_name)
               }
           }
 
-        if (ps == lib::PF_VELOCITY)
+        if (ps == lib::ECP_PF_VELOCITY)
           { // by Y
             if ( !(from_file >> extra_info))
               { // Zabezpieczenie przed danymi nienumerycznymi
@@ -353,7 +353,7 @@ void teach_in::get_next_pose(double next_pose[MAX_SERVOS_NR])
     memcpy(next_pose, pose_list_iterator->coordinates, MAX_SERVOS_NR*sizeof(double));
   }
 // -------------------------------------------------------
-void teach_in::set_pose(lib::POSE_SPECIFICATION ps,
+void teach_in::set_pose(lib::ECP_POSE_SPECIFICATION ps,
     double motion_time, double coordinates[MAX_SERVOS_NR], int extra_info)
   {
     pose_list_iterator->arm_type = ps;
@@ -392,14 +392,14 @@ bool teach_in::is_last_list_element(void)
   }
 // -------------------------------------------------------
 
-void teach_in::create_pose_list_head(lib::POSE_SPECIFICATION ps,
+void teach_in::create_pose_list_head(lib::ECP_POSE_SPECIFICATION ps,
     double motion_time, const double coordinates[MAX_SERVOS_NR], int extra_info)
 {
 	pose_list.push_back(ecp_taught_in_pose(ps, motion_time, coordinates, extra_info));
 	pose_list_iterator = pose_list.begin();
 }
 
-void teach_in::insert_pose_list_element(lib::POSE_SPECIFICATION ps,
+void teach_in::insert_pose_list_element(lib::ECP_POSE_SPECIFICATION ps,
     double motion_time, const double coordinates[MAX_SERVOS_NR], int extra_info)
   {
     pose_list.push_back(ecp_taught_in_pose(ps, motion_time,
@@ -492,7 +492,7 @@ bool teach_in::next_step()
 
   }
 
-lib::ECP_TO_UI_COMMAND teach_in::convert(lib::POSE_SPECIFICATION ps) const
+lib::ECP_TO_UI_COMMAND teach_in::convert(lib::ECP_POSE_SPECIFICATION ps) const
   {
     switch (ps)
       {

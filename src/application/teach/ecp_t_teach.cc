@@ -69,12 +69,12 @@ void teach::main_task_algorithm(void)
     if ( operator_reaction ("Teach in? ") )
     {
         tig->flush_pose_list(); // Usuniecie listy pozycji, o ile istnieje
-        tig->teach (lib::MOTOR, "Teach-in the trajectory\n");
+        tig->teach (lib::ECP_MOTOR, "Teach-in the trajectory\n");
     }
 
     if ( operator_reaction ("Save trajectory? ") )
     {
-        tig->save_file (lib::MOTOR);
+        tig->save_file (lib::ECP_MOTOR);
     }
 
     if ( operator_reaction ("Load trajectory? ") )
