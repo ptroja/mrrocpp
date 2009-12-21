@@ -124,13 +124,13 @@ void teach_in::save_file(lib::ECP_POSE_SPECIFICATION ps)
 
     switch (ps)
       {
-    case lib::MOTOR:
+    case lib::ECP_MOTOR:
       strcpy(coordinate_type, "MOTOR");
       break;
-    case lib::JOINT:
+    case lib::ECP_JOINT:
       strcpy(coordinate_type, "JOINT");
       break;
-    case lib::PF_VELOCITY:
+    case lib::ECP_PF_VELOCITY:
       strcpy(coordinate_type, "POSE_FORCE_TORQUE_AT_FRAME");
       break;
 
@@ -258,6 +258,7 @@ bool teach_in::load_file_with_path(const char* file_name)
 
     if ( !strcmp(coordinate_type, "MOTOR") )
       {
+    	fprintf(stderr, "STRANGE_GET_ARM_REQUEST@%s:%d\n", __FILE__, __LINE__);
         ps = lib::ECP_MOTOR;
       }
     else if ( !strcmp(coordinate_type, "JOINT") )
@@ -420,6 +421,7 @@ int teach_in::pose_list_length(void)
 bool teach_in::first_step()
   {
     //	 printf("w irp6ot_teach_in_generator::first_step\n");
+ //printf(stderr, "DEBUG@%s:%d\n", __FILE__, __LINE__);
     initiate_pose_list();
     the_robot->ecp_command.instruction.get_type = ARM_DV; // ARM
 
@@ -460,7 +462,8 @@ bool teach_in::next_step()
     // Przepisanie pozycji z listy
     switch (tip.arm_type)
       {
-    case lib::C_MOTOR:
+    case lib::ECP_MOTOR:
+  //  	fprintf(stderr, "DEBUG@%s:%d\n", __FILE__, __LINE__);
       the_robot->ecp_command.instruction.instruction_type = lib::SET;
       the_robot->ecp_command.instruction.set_type = ARM_DV; // ARM
       the_robot->ecp_command.instruction.set_arm_type = lib::MOTOR;
@@ -471,7 +474,8 @@ bool teach_in::next_step()
       memcpy(the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates, tip.coordinates,
       MAX_SERVOS_NR*sizeof (double));
       break;
-    case lib::C_JOINT:
+    case lib::ECP_JOINT:
+  //   	fprintf(stderr, "DEBUG@%s:%d\n", __FILE__, __LINE__);
       the_robot->ecp_command.instruction.instruction_type = lib::SET;
       the_robot->ecp_command.instruction.set_type = ARM_DV; // ARM
       the_robot->ecp_command.instruction.set_arm_type = lib::JOINT;
@@ -496,9 +500,9 @@ lib::ECP_TO_UI_COMMAND teach_in::convert(lib::ECP_POSE_SPECIFICATION ps) const
   {
     switch (ps)
       {
-    case lib::MOTOR:
+    case lib::ECP_MOTOR:
       return lib::C_MOTOR;
-    case lib::JOINT:
+    case lib::ECP_JOINT:
       return lib::C_JOINT;
     default:
       return lib::C_MOTOR;
