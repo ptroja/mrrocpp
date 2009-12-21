@@ -263,7 +263,7 @@ int init( PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo 
 	ui_state.teach_filesel_fullpath = "/net/";
 	ui_state.teach_filesel_fullpath += ui_state.ui_node_name;
 	ui_state.teach_filesel_fullpath += ui_state.mrrocpp_local_path;
-	ui_state.teach_filesel_fullpath += "trj";
+//	ui_state.teach_filesel_fullpath += "trj";
 	// 	printf("abba: %s\n", ui_state.teach_filesel_fullpath);
 
 	// sciezka dla okna z wyborem pliku z trajektoria podczas wyboru pliku konfiguracyjnego
