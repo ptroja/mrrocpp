@@ -6,17 +6,9 @@ OBJECTS = ${patsubst %.cc,%.o,${SOURCES}}
 BINARIES =		ecp_playerjoy \
 				ecp_irp6ot_rcsc \
 				ecp_draughts \
-				#ecp_irp6ot_pouring \
 				#ecp_irp6ot_multiplayer \
-				#ecp_irp6ot_legobrick \
-				ecp_vis_pb_eol_sac_irp6ot \
-				ecp_vis_pb_eih_irp6ot \
-				ecp_vis_ib_eih_irp6ot \
-				ecp_vis_weights_driven_irp6ot \
-				#ecp_pw_kolo\
 				#ecp_haar \
-				#ecp_ttt \
-				#ecp_t_box_irp6ot
+
 				
 ifneq ($(BUILD_TARGET), linux)
 BINARIES+=		ecp_t_smooth_test \
