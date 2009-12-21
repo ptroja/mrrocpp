@@ -1,8 +1,9 @@
-/*
- * generator/ecp_g_vis_ib_eih_object_tracker_irp6ot.cc
+/**
+ * \file ecp_g_vis_ib_eih_object_tracker_irp6ot.cc
+ * \date 29-10-2009
+ * \author rtulwin
  *
- *  Created on: Sept 29, 2009
- *      Author: rtulwin
+ * \brief
  */
 
 #include "ecp/irp6_on_track/generator/ecp_g_vis_ib_eih_object_tracker_irp6ot.h"
