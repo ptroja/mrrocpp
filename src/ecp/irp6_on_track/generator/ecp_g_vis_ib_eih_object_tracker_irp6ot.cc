@@ -22,17 +22,17 @@ ecp_vis_ib_eih_object_tracker_irp6ot::ecp_vis_ib_eih_object_tracker_irp6ot(commo
 }
 
 bool ecp_vis_ib_eih_object_tracker_irp6ot::first_step() {
-/*
-	printf("first step\n");
+
+	//printf("first step\n");
 	flushall();
 	vsp_fradia = sensor_m[lib::SENSOR_CVFRADIA];
 
 	the_robot->ecp_command.instruction.instruction_type = lib::GET;
 	the_robot->ecp_command.instruction.get_type = ARM_DV;
-	the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_ANGLE_AXIS;
+	the_robot->ecp_command.instruction.get_arm_type = lib::FRAME;
 	the_robot->ecp_command.instruction.motion_type = lib::RELATIVE;
 	the_robot->ecp_command.instruction.set_type = ARM_DV;
-	the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
+	the_robot->ecp_command.instruction.set_arm_type = lib::FRAME;
 	the_robot->ecp_command.instruction.interpolation_type = lib::TCIM;
 	the_robot->ecp_command.instruction.motion_steps = MOTION_STEPS;
 	the_robot->ecp_command.instruction.value_in_step_no = MOTION_STEPS - 1;
@@ -68,7 +68,7 @@ bool ecp_vis_ib_eih_object_tracker_irp6ot::first_step() {
 	}
 
 	return true;
-	*/
+
 }
 
 bool ecp_vis_ib_eih_object_tracker_irp6ot::next_step_without_constraints() {
@@ -150,8 +150,11 @@ bool ecp_vis_ib_eih_object_tracker_irp6ot::next_step_without_constraints() {
 		}
 	}
 
-	memcpy(the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates, next_position,
-			6 * sizeof(double)); //zapisanie pozycji w angle axes
+	homog_matrix.set_from_xyz_angle_axis(next_position);
+	homog_matrix.get_frame_tab(the_robot->ecp_command.instruction.arm.pf_def.arm_frame);
+
+	//memcpy(the_robot->ecp_command.instruction.arm.pf_def.arm_frame, next_position,
+	//		6 * sizeof(double)); //zapisanie pozycji w angle axes
 
 	the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = next_position[6]; //zapisanie pozycji grippera
 

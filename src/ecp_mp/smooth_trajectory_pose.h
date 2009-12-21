@@ -83,7 +83,7 @@ public:
    */
   int interpolation_node_no;
   /**
-   * Gripper velocity
+   * Gripper velocity.
    */
   double v_grip;
   /**
@@ -91,7 +91,7 @@ public:
    */
   double t;
   /**
-   * Movement model
+   * Motion model.
    */
   int model[MAX_SERVOS_NR];
   /**
