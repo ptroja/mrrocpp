@@ -23,7 +23,7 @@ class wii_ellipse: public common::task::task
 protected:
 	//Generator ruchu
 	generator::wii_ellipse* eg;
-	common::generator::smooth2* sg;
+	common::generator::smooth* sg;
 
 	/**
 	 * Pobiera od uzytkownika wartosc typu double

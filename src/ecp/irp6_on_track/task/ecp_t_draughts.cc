@@ -87,7 +87,7 @@ Draughts::Draughts(lib::configurator &_config): task(_config){
 	ecp_m_robot=new robot(*this);				//initialization of robot
 
 	//sgen=new common::generator::smooth(*this, true);
-	sgen2 = new common::generator::smooth2(*this, true);
+	sgen2 = new common::generator::smooth(*this, true);
 	befgen=new common::generator::bias_edp_force(*this);
 	gagen=new common::generator::tff_gripper_approach (*this, 8);	//gripper approach constructor (task&, no_of_steps)
 	sleepgen=new common::generator::sleep(*this);

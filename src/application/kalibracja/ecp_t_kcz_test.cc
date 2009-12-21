@@ -28,7 +28,7 @@ kcz_test::kcz_test(lib::configurator &_config): task(_config)
 	sensor_m[lib::SENSOR_PCBIRD] = new ecp_mp::sensor::pcbird("[vsp_pcbird]", *this);
 	sensor_m[lib::SENSOR_PCBIRD]->configure_sensor();
 
-	smoothgen2 = new common::generator::smooth2(*this, true);
+	smoothgen2 = new common::generator::smooth(*this, true);
 	smoothgen2->sensor_m = sensor_m;
 
 	sr_ecp_msg->message("ECP loaded kcz_test");

@@ -43,7 +43,7 @@ class eihcalibration: public common::task::task {
 		// generator do wodzenia za nos
 		generator::eih_nose_run* nose;
 		// generator smooth2
-		generator::smooth2* smooth2gen;
+		generator::smooth* smooth2gen;
 		// generator do wysylania danych do fradii
 		generator::eihgenerator* generator;
 

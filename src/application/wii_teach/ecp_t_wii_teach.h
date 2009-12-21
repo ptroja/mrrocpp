@@ -18,7 +18,7 @@ class wii_teach: public common::task::task
 {
     protected:
 	//Generator ruchu
-        common::generator::smooth2* sg;
+        common::generator::smooth* sg;
         irp6ot::generator::wii_relative* wg;
         irp6ot::generator::wii_joint* jg;
         lib::sensor_image_t::sensor_union_t::wiimote_t lastButtons;

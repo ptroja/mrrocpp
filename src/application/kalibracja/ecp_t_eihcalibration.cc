@@ -35,7 +35,7 @@ eihcalibration::eihcalibration(lib::configurator &_config) : task(_config)
     D = config.value<double>("D");
     E = config.value<double>("E");
 
-	smooth2gen = new generator::smooth2(*this, true);
+	smooth2gen = new generator::smooth(*this, true);
 
 	nose = new generator::eih_nose_run(*this, 8);
 	nose->eih_nose_run::configure_pulse_check (true);

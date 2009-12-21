@@ -1,5 +1,5 @@
 /**
-* \file	ecp_g_smooth2.h
+* \file	ecp_g_smooth.h
 * \brief Smooth class and its methods.
 * \author rtulwin
 * \date	2009
@@ -7,8 +7,8 @@
 * Smooth trajectory generator having an ability to calculate every trajectory.
 */
 
-#if !defined(_ECP_GEN_SMOOTH2_H)
-# define _ECP_GEN_SMOOTH2_H
+#if !defined(_ECP_GEN_SMOOTH_H)
+# define _ECP_GEN_SMOOTH_H
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -44,7 +44,7 @@ namespace generator {
 /**
  *
  */
-class smooth2 : public delta {
+class smooth : public delta {
 
 	protected:
 		/**
@@ -217,11 +217,11 @@ class smooth2 : public delta {
 		/**
 		 *
 		 */
-		smooth2(common::task::task& _ecp_task, bool _is_synchronised);
+		smooth(common::task::task& _ecp_task, bool _is_synchronised);
 		/**
 		 *
 		 */
-		smooth2(common::task::task& _ecp_task, bool _is_synchronised, bool _debug);
+		smooth(common::task::task& _ecp_task, bool _is_synchronised, bool _debug);
 		/**
 		 *
 		 */

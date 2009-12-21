@@ -12,7 +12,7 @@ namespace task {
 class kcz_test: public common::task::task {
 
   protected:
-	  common::generator::smooth2* smoothgen2;
+	  common::generator::smooth* smoothgen2;
 
   public:
 	  kcz_test(lib::configurator &_config);

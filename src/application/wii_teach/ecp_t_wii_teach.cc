@@ -275,7 +275,7 @@ void wii_teach::main_task_algorithm(void)
     char buffer[200];
     struct lib::ECP_VSP_MSG message;
 
-    sg = new common::generator::smooth2(*this,true);
+    sg = new common::generator::smooth(*this,true);
     wg = new irp6ot::generator::wii_relative(*this,(ecp_mp::sensor::wiimote*)sensor_m[lib::SENSOR_WIIMOTE]);
     jg = new irp6ot::generator::wii_joint(*this,(ecp_mp::sensor::wiimote*)sensor_m[lib::SENSOR_WIIMOTE]);
 

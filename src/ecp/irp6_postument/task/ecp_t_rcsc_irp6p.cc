@@ -32,7 +32,7 @@ rcsc::rcsc(lib::configurator &_config) : task(_config)
     tig = new common::generator::teach_in (*this);
     befg = new common::generator::bias_edp_force (*this);
     //sg = new common::generator::smooth (*this, true);
-    sg2 = new common::generator::smooth2 (*this, true);
+    sg2 = new common::generator::smooth (*this, true);
 
     go_st = new common::task::ecp_sub_task_gripper_opening(*this);
 

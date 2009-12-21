@@ -17,21 +17,21 @@ namespace ecp {
 namespace common {
 namespace generator {
 
-void smooth2::set_relative(void) {
+void smooth::set_relative(void) {
 	type=lib::RELATIVE;
 }
 
-void smooth2::set_absolute(void) {
+void smooth::set_absolute(void) {
 	type=lib::ABSOLUTE;
 }
 
-bool smooth2::eq(double a, double b) {
+bool smooth::eq(double a, double b) {
 	const double EPS = 0.0001;
 	const double& diff = a - b;
 	return diff < EPS && diff > -EPS;
 }
 
-void smooth2::load_trajectory_from_xml(ecp_mp::common::Trajectory &trajectory) {
+void smooth::load_trajectory_from_xml(ecp_mp::common::Trajectory &trajectory) {
 	bool first_time = true;
 	int numOfPoses = trajectory.getNumberOfPoses();
 	trajectory.showTime2();
@@ -41,7 +41,7 @@ void smooth2::load_trajectory_from_xml(ecp_mp::common::Trajectory &trajectory) {
 	pose_list_iterator = pose_list.end();
 }
 
-void smooth2::set_pose_from_xml(xmlNode *stateNode, bool &first_time) {
+void smooth::set_pose_from_xml(xmlNode *stateNode, bool &first_time) {
 	char *dataLine, *value;
 	uint64_t number_of_poses; // Liczba zapamietanych pozycji
 	lib::ECP_POSE_SPECIFICATION ps;     // Rodzaj wspolrzednych
@@ -100,7 +100,7 @@ void smooth2::set_pose_from_xml(xmlNode *stateNode, bool &first_time) {
 	xmlFree(numOfPoses);
 }
 
-void smooth2::load_trajectory_from_xml(const char* fileName, const char* nodeName) {
+void smooth::load_trajectory_from_xml(const char* fileName, const char* nodeName) {
     // Funkcja zwraca true jesli wczytanie trajektorii powiodlo sie,
 
 	 bool first_time = true; // Znacznik
@@ -164,7 +164,7 @@ void smooth2::load_trajectory_from_xml(const char* fileName, const char* nodeNam
 	xmlCleanupParser();
 }
 
-void smooth2::load_file_with_path(const char* file_name) {
+void smooth::load_file_with_path(const char* file_name) {
 
 	reset();
 
@@ -290,7 +290,7 @@ void smooth2::load_file_with_path(const char* file_name) {
 } // end: load_file_with_path()
 
 //jesli w ponizszych metodach podamy reset jako true lista pozycji zostanie wyczyszczona, jesli jako false pozycja zostanie dodana do listy bez jej czyszczenia
-void smooth2::load_coordinates(lib::ECP_POSE_SPECIFICATION ps, double coordinates[MAX_SERVOS_NR], bool reset) {
+void smooth::load_coordinates(lib::ECP_POSE_SPECIFICATION ps, double coordinates[MAX_SERVOS_NR], bool reset) {
 
 	double v[MAX_SERVOS_NR]={0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.5};
 	double a[MAX_SERVOS_NR]={0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.5};
@@ -306,7 +306,7 @@ void smooth2::load_coordinates(lib::ECP_POSE_SPECIFICATION ps, double coordinate
 	}
 }
 
-void smooth2::load_coordinates(lib::ECP_POSE_SPECIFICATION ps, double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR], bool reset){
+void smooth::load_coordinates(lib::ECP_POSE_SPECIFICATION ps, double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR], bool reset){
 
 	if (reset == true) {
 		flush_pose_list();
@@ -319,7 +319,7 @@ void smooth2::load_coordinates(lib::ECP_POSE_SPECIFICATION ps, double v[MAX_SERV
 	}
 }
 
-void smooth2::load_coordinates(lib::ECP_POSE_SPECIFICATION ps, double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset) {
+void smooth::load_coordinates(lib::ECP_POSE_SPECIFICATION ps, double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset) {
 
 	double v[MAX_SERVOS_NR]={0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1};
 	double a[MAX_SERVOS_NR]={0.03, 0.03, 0.03, 0.03, 0.03, 0.03, 0.03, 0.02};
@@ -345,7 +345,7 @@ void smooth2::load_coordinates(lib::ECP_POSE_SPECIFICATION ps, double cor0, doub
 	}
 }
 
-void smooth2::load_coordinates(lib::ECP_POSE_SPECIFICATION ps, double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset) {
+void smooth::load_coordinates(lib::ECP_POSE_SPECIFICATION ps, double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset) {
 
 	double coordinates[MAX_SERVOS_NR];
 
@@ -369,59 +369,59 @@ void smooth2::load_coordinates(lib::ECP_POSE_SPECIFICATION ps, double v[MAX_SERV
 	}
 }
 
-void smooth2::load_xyz_angle_axis(double coordinates[MAX_SERVOS_NR], bool reset) {
+void smooth::load_xyz_angle_axis(double coordinates[MAX_SERVOS_NR], bool reset) {
 	load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, coordinates, reset);
 }
-void smooth2::load_xyz_angle_axis(double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR], bool reset) {
+void smooth::load_xyz_angle_axis(double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR], bool reset) {
 	load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, v, a, coordinates, reset);
 }
-void smooth2::load_xyz_angle_axis(double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset) {
+void smooth::load_xyz_angle_axis(double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset) {
 	load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, cor0, cor1, cor2, cor3, cor4, cor5, cor6, cor7, reset);
 }
-void smooth2::load_xyz_angle_axis(double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset) {
+void smooth::load_xyz_angle_axis(double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset) {
 	load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, v, a, cor0, cor1, cor2, cor3, cor4, cor5, cor6, cor7, reset);
 }
 
-void smooth2::load_xyz_euler_zyz(double coordinates[MAX_SERVOS_NR], bool reset) {
+void smooth::load_xyz_euler_zyz(double coordinates[MAX_SERVOS_NR], bool reset) {
 	load_coordinates(lib::ECP_XYZ_EULER_ZYZ, coordinates, reset);
 }
-void smooth2::load_xyz_euler_zyz(double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR], bool reset) {
+void smooth::load_xyz_euler_zyz(double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR], bool reset) {
 	load_coordinates(lib::ECP_XYZ_EULER_ZYZ, v, a, coordinates, reset);
 }
-void smooth2::load_xyz_euler_zyz(double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset) {
+void smooth::load_xyz_euler_zyz(double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset) {
 	load_coordinates(lib::ECP_XYZ_EULER_ZYZ, cor0, cor1, cor2, cor3, cor4, cor5, cor6, cor7, reset);
 }
-void smooth2::load_xyz_euler_zyz(double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset) {
+void smooth::load_xyz_euler_zyz(double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset) {
 	load_coordinates(lib::ECP_XYZ_EULER_ZYZ, v, a, cor0, cor1, cor2, cor3, cor4, cor5, cor6, cor7, reset);
 }
 
-void smooth2::load_joint(double coordinates[MAX_SERVOS_NR], bool reset) {
+void smooth::load_joint(double coordinates[MAX_SERVOS_NR], bool reset) {
 	load_coordinates(lib::ECP_JOINT, coordinates, reset);
 }
-void smooth2::load_joint(double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR], bool reset) {
+void smooth::load_joint(double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR], bool reset) {
 	load_coordinates(lib::ECP_JOINT, v, a, coordinates, reset);
 }
-void smooth2::load_joint(double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset) {
+void smooth::load_joint(double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset) {
 	load_coordinates(lib::ECP_JOINT, cor0, cor1, cor2, cor3, cor4, cor5, cor6, cor7, reset);
 }
-void smooth2::load_joint(double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset) {
+void smooth::load_joint(double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset) {
 	load_coordinates(lib::ECP_JOINT, v, a, cor0, cor1, cor2, cor3, cor4, cor5, cor6, cor7, reset);
 }
 
-void smooth2::load_motor(double coordinates[MAX_SERVOS_NR], bool reset) {
+void smooth::load_motor(double coordinates[MAX_SERVOS_NR], bool reset) {
 	load_coordinates(lib::ECP_MOTOR, coordinates, reset);
 }
-void smooth2::load_motor(double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR], bool reset) {
+void smooth::load_motor(double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR], bool reset) {
 	load_coordinates(lib::ECP_MOTOR, v, a, coordinates, reset);
 }
-void smooth2::load_motor(double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset) {
+void smooth::load_motor(double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset) {
 	load_coordinates(lib::ECP_MOTOR, cor0, cor1, cor2, cor3, cor4, cor5, cor6, cor7, reset);
 }
-void smooth2::load_motor(double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset) {
+void smooth::load_motor(double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset) {
 	load_coordinates(lib::ECP_MOTOR, v, a, cor0, cor1, cor2, cor3, cor4, cor5, cor6, cor7, reset);
 }
 
-void smooth2::reset() {
+void smooth::reset() {
 	flush_pose_list();//TODO sprawdzic czy to jest potrzebne
 	flush_coordinate_list();//TODO sprawdzic czy to jest potrzebne
 	//first_coordinate = true;
@@ -430,29 +430,29 @@ void smooth2::reset() {
 	trajectory_calculated = false;
 }
 
-void smooth2::flush_pose_list(void) {
+void smooth::flush_pose_list(void) {
    pose_list.clear();
    //first_coordinate=true;
 }
 
 // -------------------------------------------------------return iterator to beginning of the list
-void smooth2::initiate_pose_list(void) {
+void smooth::initiate_pose_list(void) {
     pose_list_iterator = pose_list.begin();
 }
 // -------------------------------------------------------move pose_list iterator to the next position
-void smooth2::next_pose_list_ptr(void) {
+void smooth::next_pose_list_ptr(void) {
     if (pose_list_iterator != pose_list.end()) {
         pose_list_iterator++;
     }
 }
 
-void smooth2::prev_pose_list_ptr(void) {
+void smooth::prev_pose_list_ptr(void) {
 	if (pose_list_iterator != pose_list.begin()) {
 		pose_list_iterator--;
 	}
 }
 
-bool smooth2::is_last_list_element(void) {
+bool smooth::is_last_list_element(void) {
     // sprawdza czy aktualnie wskazywany element listy ma nastepnik
     // jesli <> nulla
     if ( pose_list_iterator != pose_list.end() )
@@ -471,29 +471,29 @@ bool smooth2::is_last_list_element(void) {
     return false;
 }
 
-void smooth2::create_pose_list_head (lib::ECP_POSE_SPECIFICATION ps, double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR]) {
+void smooth::create_pose_list_head (lib::ECP_POSE_SPECIFICATION ps, double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR]) {
     pose_list.push_back(ecp_mp::common::smooth2_trajectory_pose(ps, coordinates, v, a));
     pose_list_iterator = pose_list.begin();
 }
 
-void smooth2::insert_pose_list_element (lib::ECP_POSE_SPECIFICATION ps, double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR]) {
+void smooth::insert_pose_list_element (lib::ECP_POSE_SPECIFICATION ps, double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR]) {
     pose_list.push_back(ecp_mp::common::smooth2_trajectory_pose(ps, coordinates, v, a));
     pose_list_iterator++;
 }
 
-int smooth2::pose_list_length(void) {
+int smooth::pose_list_length(void) {
     return pose_list.size();
 }
 
-void smooth2::initiate_coordinate_list(void) {
+void smooth::initiate_coordinate_list(void) {
 	coordinate_list_iterator = coordinate_list.begin();
 }
 
-void smooth2::flush_coordinate_list(void) {
+void smooth::flush_coordinate_list(void) {
 	coordinate_list.clear();
 }
 
-void smooth2::load_a_v_min (const char* file_name)
+void smooth::load_a_v_min (const char* file_name)
 {
     std::ifstream from_file(file_name); // otworz plik do odczytu
 
@@ -524,7 +524,7 @@ void smooth2::load_a_v_min (const char* file_name)
     }
 } // end: bool load_a_v_min()
 
-void smooth2::load_a_v_max (const char* file_name)
+void smooth::load_a_v_max (const char* file_name)
 {
     std::ifstream from_file(file_name); // otworz plik do odczytu
 
@@ -595,7 +595,7 @@ void smooth2::load_a_v_max (const char* file_name)
     }
 } // end: bool load_a_v_max()
 
-smooth2::smooth2 (common::task::task& _ecp_task, bool _is_synchronised)
+smooth::smooth (common::task::task& _ecp_task, bool _is_synchronised)
         :
         delta (_ecp_task), debug(false)//,first_coordinate(true)
 {
@@ -726,7 +726,7 @@ smooth2::smooth2 (common::task::task& _ecp_task, bool _is_synchronised)
 	}
 }*/
 
-double smooth2::generate_next_coords(int node_counter, int interpolation_node_no, double start_position, double v_p, double v_r,
+double smooth::generate_next_coords(int node_counter, int interpolation_node_no, double start_position, double v_p, double v_r,
 									double v_k, double a_r, int k, double przysp, double jedn, double s_przysp, double s_jedn) {
 
     //funkcja obliczajaca polozenie w danym makrokroku
@@ -799,7 +799,7 @@ double smooth2::generate_next_coords(int node_counter, int interpolation_node_no
     return next_position;
 }
 
-void smooth2::generate_coords() {
+void smooth::generate_coords() {
 
 	double coordinate[MAX_SERVOS_NR];
 	int private_node_counter = 1;
@@ -852,7 +852,7 @@ void smooth2::generate_coords() {
 }
 
 //set necessary instructions, and other data for preparing the robot
-bool smooth2::first_step() { //wywolywane tylko raz w calej trajektorii
+bool smooth::first_step() { //wywolywane tylko raz w calej trajektorii
 
 	//flush_coordinate_list();
     initiate_pose_list();
@@ -933,7 +933,7 @@ bool smooth2::first_step() { //wywolywane tylko raz w calej trajektorii
     return true;
 } // end: bool ecp_smooth2_generator::first_step ( )
 
-bool smooth2::next_step () {
+bool smooth::next_step () {
 
     int i; //licznik petli
     double gripper_position;
@@ -1198,7 +1198,7 @@ bool smooth2::next_step () {
 
 } // end: bool ecp_smooth2_generator::next_step ( )
 
-void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy stad usunac wszystkie warunki na type i zostawic opcje dla type = 1
+void smooth::calculate(void) { //zeby wrocic do starego trybu relative nalezy stad usunac wszystkie warunki na type i zostawic opcje dla type = 1
 
 	double s[MAX_SERVOS_NR];//droga w danych stopniach swobody w jednym ruchu
 	double s_temp1[MAX_SERVOS_NR], s_temp2[MAX_SERVOS_NR];
@@ -2031,7 +2031,7 @@ void smooth2::calculate(void) { //zeby wrocic do starego trybu relative nalezy s
 
 }//end - calculate
 
-void smooth2::reduction_model_1(std::list<ecp_mp::common::smooth2_trajectory_pose>::iterator pose_list_iterator, int i, double s) {
+void smooth::reduction_model_1(std::list<ecp_mp::common::smooth2_trajectory_pose>::iterator pose_list_iterator, int i, double s) {
 	//printf("redukcja model 1 w osi: %d\n", i);
 	if (pose_list_iterator->v_p[i] < pose_list_iterator->v_k[i] && (pose_list_iterator->v_k[i] * pose_list_iterator->t
 			- 0.5 * ((pose_list_iterator->v_k[i] - pose_list_iterator->v_p[i]) *
@@ -2081,7 +2081,7 @@ void smooth2::reduction_model_1(std::list<ecp_mp::common::smooth2_trajectory_pos
 	}
 }
 
-void smooth2::reduction_model_2(std::list<ecp_mp::common::smooth2_trajectory_pose>::iterator pose_list_iterator, int i, double s) {
+void smooth::reduction_model_2(std::list<ecp_mp::common::smooth2_trajectory_pose>::iterator pose_list_iterator, int i, double s) {
 	//printf("redukcja model 2 w osi: %d\n", i);
 	//pierwszy stopien redukcji
 	double a;
@@ -2155,7 +2155,7 @@ void smooth2::reduction_model_2(std::list<ecp_mp::common::smooth2_trajectory_pos
 	pose_list_iterator->s_jedn[i] = pose_list_iterator->v_r[i] * (pose_list_iterator->t - (pose_list_iterator->v_k[i] - pose_list_iterator->v_p[i]) / pose_list_iterator->a_r[i]);
 }
 
-void smooth2::reduction_model_3(std::list<ecp_mp::common::smooth2_trajectory_pose>::iterator pose_list_iterator, int i, double s) {
+void smooth::reduction_model_3(std::list<ecp_mp::common::smooth2_trajectory_pose>::iterator pose_list_iterator, int i, double s) {
 	//printf("redukcja model 3 w osi: %d\n", i);
 	double t1; //czas konca opoznienia
 
@@ -2181,7 +2181,7 @@ void smooth2::reduction_model_3(std::list<ecp_mp::common::smooth2_trajectory_pos
 }
 
 
-void smooth2::reduction_model_4(std::list<ecp_mp::common::smooth2_trajectory_pose>::iterator pose_list_iterator, int i, double s) {
+void smooth::reduction_model_4(std::list<ecp_mp::common::smooth2_trajectory_pose>::iterator pose_list_iterator, int i, double s) {
 	//printf("redukcja model 4 w osi: %d\n", i);
 	//pierwszy stopien redukcji
 	double a;
@@ -2251,7 +2251,7 @@ void smooth2::reduction_model_4(std::list<ecp_mp::common::smooth2_trajectory_pos
 	pose_list_iterator->s_jedn[i] = pose_list_iterator->v_p[i] * (pose_list_iterator->t - (pose_list_iterator->v_p[i] - pose_list_iterator->v_k[i]) / pose_list_iterator->a_r[i]);
 }
 
-void smooth2::vp_reduction(std::list<ecp_mp::common::smooth2_trajectory_pose>::iterator pose_list_iterator, int i, double s, double t) {
+void smooth::vp_reduction(std::list<ecp_mp::common::smooth2_trajectory_pose>::iterator pose_list_iterator, int i, double s, double t) {
 	//printf("v_p redukcja w osi: %d\n", i);
 	double v_r; //zmiana ruchu na jednostajny
 
@@ -2281,7 +2281,7 @@ void smooth2::vp_reduction(std::list<ecp_mp::common::smooth2_trajectory_pose>::i
 	calculate();
 }
 
-void smooth2::vk_reduction(std::list<ecp_mp::common::smooth2_trajectory_pose>::iterator pose_list_iterator, int i, double s, double t) {
+void smooth::vk_reduction(std::list<ecp_mp::common::smooth2_trajectory_pose>::iterator pose_list_iterator, int i, double s, double t) {
 	//printf("v_k redukcja w osi: %d\n", i);
 	double a;
 	double v_k;
@@ -2317,7 +2317,7 @@ void smooth2::vk_reduction(std::list<ecp_mp::common::smooth2_trajectory_pose>::i
 	pose_list_iterator->s_jedn[i] = 0;
 }
 
-void smooth2::optimize_time1(std::list<ecp_mp::common::smooth2_trajectory_pose>::iterator pose_list_iterator, int i, double s) {
+void smooth::optimize_time1(std::list<ecp_mp::common::smooth2_trajectory_pose>::iterator pose_list_iterator, int i, double s) {
 	printf("\noptymalizacja czasu os: %d\n", i);
 	double v_r;
 	double t;

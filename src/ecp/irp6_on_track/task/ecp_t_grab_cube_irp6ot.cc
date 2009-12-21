@@ -17,7 +17,7 @@ grab_cube::grab_cube(lib::configurator &_config): task(_config)
 {
 	ecp_m_robot = new robot(*this);
 
-	smoothgen2 = new common::generator::smooth2(*this, true);
+	smoothgen2 = new common::generator::smooth(*this, true);
 	befgen=new common::generator::bias_edp_force(*this);
 	gagen=new common::generator::tff_gripper_approach (*this, 8);	//gripper approach constructor (task&, no_of_steps)
 	tracker = new generator::ecp_vis_ib_eih_object_tracker_irp6ot(*this);

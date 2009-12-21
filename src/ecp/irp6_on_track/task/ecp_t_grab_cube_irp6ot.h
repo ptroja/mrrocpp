@@ -20,7 +20,7 @@ class grab_cube: public common::task::task {
 
   protected:
 	  lib::sensor *vsp_fradia;		//Virtual sensor
-	  common::generator::smooth2* smoothgen2;
+	  common::generator::smooth* smoothgen2;
 	  generator::ecp_vis_ib_eih_object_tracker_irp6ot* tracker;
 	  generator::ecp_vis_ib_eih_wrist_turner_irp6ot* turner;
 	  common::generator::tff_gripper_approach* gagen;

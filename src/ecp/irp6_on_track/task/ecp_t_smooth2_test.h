@@ -14,7 +14,7 @@ namespace task {
 class smooth2_test: public common::task::task {
 
   protected:
-	  common::generator::smooth2* smoothgen2;
+	  common::generator::smooth* smoothgen2;
 
 	public:
 		smooth2_test(lib::configurator &_config);

@@ -18,7 +18,7 @@ smooth2_test::smooth2_test(lib::configurator &_config): task(_config)
 	ecp_m_robot = new robot(*this);
 
 	//delay(20000);
-	smoothgen2 = new common::generator::smooth2(*this, true);
+	smoothgen2 = new common::generator::smooth(*this, true);
 	sr_ecp_msg->message("ECP loaded smooth2_test");
 };
 
