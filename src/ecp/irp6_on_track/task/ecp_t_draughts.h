@@ -36,7 +36,7 @@ class Draughts: public common::task::task{
 		lib::trajectory_description tdes;				//trajectory description from com_buf.h
 		common::generator::sleep* sleepgen;				//sleep generator
 		ecp_mp::transmitter::TRDraughtsAI *aitrans;		//AI transmiter
-		ecp_vis_ib_eih_follower_irp6ot* follower_vis; //Follower servomechanism
+		generator::ecp_vis_ib_eih_follower_irp6ot* follower_vis; //Follower servomechanism
 
 		static const double moves_table[32][8];
 		static const double bkings_table[8][8];

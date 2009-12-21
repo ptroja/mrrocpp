@@ -17,6 +17,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace common {
+namespace generator {
 
 #if 0
 
@@ -253,9 +254,9 @@ public:
 	* max acceleration
 	*/
 	double d2_u_max[6];
-	
+
 	struct timeval acctime;
-	
+
 	/*!
 	 * Constructor.
 	 */
@@ -288,6 +289,8 @@ public:
 
 
 };
+
+} // namespace generator
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp

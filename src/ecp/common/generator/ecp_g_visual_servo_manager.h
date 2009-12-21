@@ -21,6 +21,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace common {
+namespace generator {
 
 /*!
  * \class ecp_visual_servo_manager
@@ -48,6 +49,8 @@ private:
 	ecp_visual_servo* ecp_visual_servo_list;
 
 };
+
+}
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp

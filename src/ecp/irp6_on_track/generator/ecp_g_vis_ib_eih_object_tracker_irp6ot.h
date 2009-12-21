@@ -24,11 +24,12 @@
 namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
+namespace generator {
 
 #define MOTION_STEPS 25
 #define MAX_AXES_NUM 3
 
-class ecp_vis_ib_eih_object_tracker_irp6ot: public common::ecp_visual_servo {
+class ecp_vis_ib_eih_object_tracker_irp6ot: public common::generator::ecp_visual_servo {
 
 public:
 
@@ -64,6 +65,7 @@ private:
 	bool read_parametres();
 };
 
+} // namespace generator
 } // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp

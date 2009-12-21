@@ -20,8 +20,8 @@ grab_cube::grab_cube(lib::configurator &_config): task(_config)
 	smoothgen2 = new common::generator::smooth2(*this, true);
 	befgen=new common::generator::bias_edp_force(*this);
 	gagen=new common::generator::tff_gripper_approach (*this, 8);	//gripper approach constructor (task&, no_of_steps)
-	tracker = new ecp_vis_ib_eih_object_tracker_irp6ot(*this);
-	turner = new ecp_vis_ib_eih_wrist_turner_irp6ot(*this);
+	tracker = new generator::ecp_vis_ib_eih_object_tracker_irp6ot(*this);
+	turner = new generator::ecp_vis_ib_eih_wrist_turner_irp6ot(*this);
 
 	sensor_m[lib::SENSOR_CVFRADIA] = new ecp_mp::sensor::cvfradia(lib::SENSOR_CVFRADIA,"[vsp_cvfradia]", *this,	sizeof(lib::sensor_image_t::sensor_union_t::fradia_t));
 	sensor_m[lib::SENSOR_CVFRADIA]->configure_sensor();

@@ -12,9 +12,10 @@
 namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
+namespace generator {
 
 	ecp_vis_ib_eih_wrist_turner_irp6ot::ecp_vis_ib_eih_wrist_turner_irp6ot(common::task::task& _ecp_task) :
-	common::ecp_visual_servo(_ecp_task) {
+	common::generator::ecp_visual_servo(_ecp_task) {
 
 }
 
@@ -87,6 +88,7 @@ void ecp_vis_ib_eih_wrist_turner_irp6ot::entertain_constraints() {
 
 }
 
+} // namespace generator
 } // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp

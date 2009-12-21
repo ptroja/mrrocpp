@@ -24,11 +24,12 @@
 namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
+namespace generator {
 
 #define MOTION_STEPS 25
 
 
-class ecp_vis_ib_eih_follower_irp6ot: public common::ecp_visual_servo {
+class ecp_vis_ib_eih_follower_irp6ot: public common::generator::ecp_visual_servo {
 
 public:
 
@@ -64,6 +65,7 @@ public:
 	void reduce_velocity(double a, double t, double s, int i);
 };
 
+} // namespace generator
 } // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp

@@ -21,6 +21,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
+namespace generator {
 
 /*!
  * \class ecp_vis_pb_eol_sac_irp6ot
@@ -28,7 +29,7 @@ namespace irp6ot {
  * \author Maciej Staniak
  */
 
-class ecp_vis_pb_eol_sac_irp6ot : public common::ecp_visual_servo
+class ecp_vis_pb_eol_sac_irp6ot : public common::generator::ecp_visual_servo
 {
 //protected:
 //sensor *vsp_force_irp6ot, *vsp_force_irp6p, *vsp_vis_sac;
@@ -140,6 +141,8 @@ public:
 	virtual bool first_step(void);
 
 };
+
+} // namespace generator
 } // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp

@@ -93,7 +93,7 @@ Draughts::Draughts(lib::configurator &_config): task(_config){
 	sleepgen=new common::generator::sleep(*this);
 	aitrans=new ecp_mp::transmitter::TRDraughtsAI(ecp_mp::transmitter::TRANSMITTER_DRAUGHTSAI,"[transmitter_draughts_ai]",*this);
 
-	follower_vis = new ecp_vis_ib_eih_follower_irp6ot(*this);	//follower servomechanism generator
+	follower_vis = new generator::ecp_vis_ib_eih_follower_irp6ot(*this);	//follower servomechanism generator
 	follower_vis->sensor_m = sensor_m;
 };
 

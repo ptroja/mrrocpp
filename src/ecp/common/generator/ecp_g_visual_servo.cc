@@ -18,6 +18,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace common {
+namespace generator {
 
 ecp_visual_servo::ecp_visual_servo(common::task::task& _ecp_task, int step) : generator(_ecp_task){
 
@@ -131,7 +132,7 @@ void ecp_visual_servo::entertain_constraints(){
 	}
 /*
 	std::cout << std::endl;
-	
+
 	std::cout << "ECP E: ";
 	for (int i=0; i<6; i++)
 		{
@@ -144,12 +145,12 @@ void ecp_visual_servo::entertain_constraints(){
 	{
 			the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = O_r_E1[i];
 	}
-	
+
 	for (int i=2; i<6; i++)
 	{
 		the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = O_r_E1[i];
 	}
-	
+
 
 
 		the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate
@@ -158,6 +159,9 @@ void ecp_visual_servo::entertain_constraints(){
 }
 #endif
 
+
+
+}
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp
