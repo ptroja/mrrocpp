@@ -34,10 +34,10 @@ bool smooth::eq(double a, double b) {
 void smooth::load_trajectory_from_xml(ecp_mp::common::Trajectory &trajectory) {
 	bool first_time = true;
 	int numOfPoses = trajectory.getNumberOfPoses();
-	trajectory.showTime2();
+	trajectory.showTime();
 
 	flush_pose_list(); // Usuniecie listy pozycji, o ile istnieje
-	pose_list = trajectory.getPoses2();
+	pose_list = trajectory.getPoses();
 	pose_list_iterator = pose_list.end();
 }
 

@@ -266,7 +266,7 @@ ecp_mp::common::Trajectory * task::createTrajectory2(xmlNodePtr actNode, xmlChar
 	{
 		if ( cchild_node->type == XML_ELEMENT_NODE && !xmlStrcmp(cchild_node->name, (const xmlChar *)"Pose") )
 		{
-			actTrajectory->createNewPose2();
+			actTrajectory->createNewPose();
 			for(xmlNodePtr ccchild_node = cchild_node->children; ccchild_node!=NULL; ccchild_node = ccchild_node->next)
 			{
 				if ( ccchild_node->type == XML_ELEMENT_NODE ) {
@@ -285,24 +285,24 @@ ecp_mp::common::Trajectory * task::createTrajectory2(xmlNodePtr actNode, xmlChar
 					else*/ if ( !xmlStrcmp(ccchild_node->name, (const xmlChar *)"Velocity") )
 					{
 						xmlChar *xmlDataLine = xmlNodeGetContent(ccchild_node);
-						actTrajectory->setVelocities2((char *)xmlDataLine);
+						actTrajectory->setVelocities((char *)xmlDataLine);
 						xmlFree(xmlDataLine);
 					}
 					else if ( !xmlStrcmp(ccchild_node->name, (const xmlChar *)"Accelerations") )
 					{
 						xmlChar *xmlDataLine = xmlNodeGetContent(ccchild_node);
-						actTrajectory->setAccelerations2((char *)xmlDataLine);
+						actTrajectory->setAccelerations((char *)xmlDataLine);
 						xmlFree(xmlDataLine);
 					}
 					else if ( !xmlStrcmp(ccchild_node->name, (const xmlChar *)"Coordinates") )
 					{
 						xmlChar *xmlDataLine = xmlNodeGetContent(ccchild_node);
-						actTrajectory->setCoordinates2((char *)xmlDataLine);
+						actTrajectory->setCoordinates((char *)xmlDataLine);
 						xmlFree(xmlDataLine);
 					}
 				}
 			}
-			actTrajectory->addPoseToTrajectory2();
+			actTrajectory->addPoseToTrajectory();
 		}
 
 	}

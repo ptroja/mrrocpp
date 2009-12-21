@@ -7,7 +7,6 @@
 
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
-//#include "ecp_mp/smooth_trajectory_pose.h"
 #include "ecp_mp/smooth_trajectory_pose.h"
 
 #include <boost/serialization/utility.hpp>
@@ -25,11 +24,11 @@ class Trajectory
 		Trajectory(const Trajectory &trajectory);
 
 		//static void writeTrajectoryToXmlFile(const char *fileName, lib::POSE_SPECIFICATION ps, std::list<ecp_mp::common::smooth_trajectory_pose> &poses);
-		static void writeTrajectoryToXmlFile2(const char *fileName, lib::POSE_SPECIFICATION ps, std::list<ecp_mp::common::smooth_trajectory_pose> &poses);//for smooth
+		static void writeTrajectoryToXmlFile(const char *fileName, lib::POSE_SPECIFICATION ps, std::list<ecp_mp::common::smooth_trajectory_pose> &poses);//for smooth
 		//void createNewPose();
-		void createNewPose2();//for smooth
+		void createNewPose();//for smooth
 		//void addPoseToTrajectory();
-		void addPoseToTrajectory2();//for smooth
+		void addPoseToTrajectory();//for smooth
 
 		void setTrjID(const char *trjID);
 		const char * getTrjID() const;
@@ -52,23 +51,23 @@ class Trajectory
 		//void setAccelerations(const char *accelerations);
 		//double *getAccelerations() const;
 
-		void setVelocities2(const char *Velocities);//for smooth
-		double *getVelocities2() const;//for smooth
+		void setVelocities(const char *Velocities);//for smooth
+		double *getVelocities() const;//for smooth
 
-		void setAccelerations2(const char *accelerations);//for smooth
-		double *getAccelerations2() const;//for smooth
+		void setAccelerations(const char *accelerations);//for smooth
+		double *getAccelerations() const;//for smooth
 
 		//void setCoordinates(const char *cCoordinates);//for smooth
 		//double *getCoordinates() const;//for smooth
 
-		void setCoordinates2(const char *cCoordinates);//for smooth
-		double *getCoordinates2() const;//for smooth
+		void setCoordinates(const char *cCoordinates);//for smooth
+		double *getCoordinates() const;//for smooth
 
 		//void showTime();
-		void showTime2();//for smooth
+		void showTime();//for smooth
 
 		//std::list<ecp_mp::common::smooth_trajectory_pose> & getPoses();
-		std::list<ecp_mp::common::smooth_trajectory_pose> & getPoses2();//for smooth
+		std::list<ecp_mp::common::smooth_trajectory_pose> & getPoses();//for smooth
 
 	private:
 		std::string trjID;
