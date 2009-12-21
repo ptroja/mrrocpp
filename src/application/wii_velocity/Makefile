@@ -21,7 +21,7 @@ SHOBJ = ../../ecp/irp6_on_track/ecp_r_irp6ot.o ../../ecp/common/libecp.a $(LIBDI
 #------------------------------------------------- Build rules -------------------------------------------------------#
 all: ${BINARIES}
 #-----------------------------------------------------------------------------------------------------------------------#
-ecp_wii_velocity:  ecp_t_wii_velocity.o ../../ecp/common/generator/ecp_g_force.o generator/ecp_g_wii_velocity.o ../../ecp/common/generator/ecp_g_smooth2.o \
+ecp_wii_velocity:  ecp_t_wii_velocity.o ../../ecp/common/generator/ecp_g_force.o generator/ecp_g_wii_velocity.o ../../ecp/common/generator/ecp_g_smooth.o \
 		../../ecp/common/generator/ecp_g_transparent.o ../../ecp/common/generator/ecp_g_jarosz.o ../wii_teach/sensor/ecp_mp_s_wiimote.o \
                 ../../ecp/common/generator/ecp_g_operator_reaction_condition.o ../../ecp/common/generator/ecp_g_sleep.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^

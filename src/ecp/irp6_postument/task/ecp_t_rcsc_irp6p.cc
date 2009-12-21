@@ -10,7 +10,7 @@
 #include "ecp/irp6_postument/ecp_r_irp6p.h"
 #include "ecp/common/generator/ecp_g_force.h"
 //#include "ecp/common/generator/ecp_g_smooth.h"
-#include "ecp/common/generator/ecp_g_smooth2.h"
+#include "ecp/common/generator/ecp_g_smooth.h"
 #include "ecp/irp6_postument/task/ecp_t_rcsc_irp6p.h"
 
 namespace mrrocpp {
@@ -152,12 +152,12 @@ void rcsc::main_task_algorithm(void)
 										sg->Move();
 										break;
 									}*/
-									case ecp_mp::task::ECP_GEN_SMOOTH2:
+									case ecp_mp::task::ECP_GEN_smooth:
 									{
 										std::string path(mrrocpp_network_path);
 										path += mp_command.ecp_next_state.mp_2_ecp_next_state_string;
 										sg2->load_file_with_path (path.c_str());
-										//	printf("\nPOSTUMENT ECP_GEN_SMOOTH2 :%s\n\n", path1);
+										//	printf("\nPOSTUMENT ECP_GEN_smooth :%s\n\n", path1);
 										sg2->Move();
 										break;
 									}

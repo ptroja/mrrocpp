@@ -1,4 +1,4 @@
-//Zadanie kt�re realizuje dan� trajektori� u�ywaj�c smooth2 generatora
+//Zadanie kt�re realizuje dan� trajektori� u�ywaj�c smooth generatora
 
 #if !defined(_ECP_T_GRAB_CUBE_IRP6OT_H)
 #define _ECP_T_GRAB_CUBE_IRP6OT_H

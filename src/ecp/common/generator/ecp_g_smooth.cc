@@ -1,16 +1,16 @@
 // -------------------------------------------------------------------------
-//                            generator/ecp_g_smooth2.cc
-//            Effector Control Process (lib::ECP) - smooth2 generator
+//                            generator/ecp_g_smooth.cc
+//            Effector Control Process (lib::ECP) - smooth generator
 // Generator powstal na podstawie generatora smooth, glowna zmiana jest
 // rezygnacja z podawanie predkosci poczatkowej i koncowej w kazdym ruchu.
-// W przeciwienstwie do smootha generator smooth2 nie dopuszcza nigdy do przekroczenia
+// W przeciwienstwie do smootha generator smooth nie dopuszcza nigdy do przekroczenia
 // maksymalnej podanej predkosci ruchu i przyspieszenia dla danej osi.
 // Generator z zalozenia jest w stanie policzyc kazda trajektorie.
 // autor: Rafal Tulwin
 // Ostatnia modyfikacja: 2009
 // -------------------------------------------------------------------------
 
-#include "ecp/common/generator/ecp_g_smooth2.h"
+#include "ecp/common/generator/ecp_g_smooth.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -472,12 +472,12 @@ bool smooth::is_last_list_element(void) {
 }
 
 void smooth::create_pose_list_head (lib::ECP_POSE_SPECIFICATION ps, double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR]) {
-    pose_list.push_back(ecp_mp::common::smooth2_trajectory_pose(ps, coordinates, v, a));
+    pose_list.push_back(ecp_mp::common::smooth_trajectory_pose(ps, coordinates, v, a));
     pose_list_iterator = pose_list.begin();
 }
 
 void smooth::insert_pose_list_element (lib::ECP_POSE_SPECIFICATION ps, double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR]) {
-    pose_list.push_back(ecp_mp::common::smooth2_trajectory_pose(ps, coordinates, v, a));
+    pose_list.push_back(ecp_mp::common::smooth_trajectory_pose(ps, coordinates, v, a));
     pose_list_iterator++;
 }
 
@@ -602,7 +602,7 @@ smooth::smooth (common::task::task& _ecp_task, bool _is_synchronised)
 
     int i;
 
-	pose_list = std::list<ecp_mp::common::smooth2_trajectory_pose>();
+	pose_list = std::list<ecp_mp::common::smooth_trajectory_pose>();
 	coordinate_list = std::list<coordinates>();
 
 	trajectory_generated = false;
@@ -624,7 +624,7 @@ smooth::smooth (common::task::task& _ecp_task, bool _is_synchronised)
 
 } // end : konstruktor
 
-/*void smooth2::calculate_absolute_positions() {
+/*void smooth::calculate_absolute_positions() {
 	if (type == lib::ABSOLUTE) {//dodatkowe zabezpieczenie
 		return;
 	}
@@ -931,7 +931,7 @@ bool smooth::first_step() { //wywolywane tylko raz w calej trajektorii
     } // end : switch ( td.arm_type )
 
     return true;
-} // end: bool ecp_smooth2_generator::first_step ( )
+} // end: bool ecp_smooth_generator::first_step ( )
 
 bool smooth::next_step () {
 
@@ -1196,7 +1196,7 @@ bool smooth::next_step () {
     }// end: if
     return true;
 
-} // end: bool ecp_smooth2_generator::next_step ( )
+} // end: bool ecp_smooth_generator::next_step ( )
 
 void smooth::calculate(void) { //zeby wrocic do starego trybu relative nalezy stad usunac wszystkie warunki na type i zostawic opcje dla type = 1
 
@@ -2031,7 +2031,7 @@ void smooth::calculate(void) { //zeby wrocic do starego trybu relative nalezy st
 
 }//end - calculate
 
-void smooth::reduction_model_1(std::list<ecp_mp::common::smooth2_trajectory_pose>::iterator pose_list_iterator, int i, double s) {
+void smooth::reduction_model_1(std::list<ecp_mp::common::smooth_trajectory_pose>::iterator pose_list_iterator, int i, double s) {
 	//printf("redukcja model 1 w osi: %d\n", i);
 	if (pose_list_iterator->v_p[i] < pose_list_iterator->v_k[i] && (pose_list_iterator->v_k[i] * pose_list_iterator->t
 			- 0.5 * ((pose_list_iterator->v_k[i] - pose_list_iterator->v_p[i]) *
@@ -2081,7 +2081,7 @@ void smooth::reduction_model_1(std::list<ecp_mp::common::smooth2_trajectory_pose
 	}
 }
 
-void smooth::reduction_model_2(std::list<ecp_mp::common::smooth2_trajectory_pose>::iterator pose_list_iterator, int i, double s) {
+void smooth::reduction_model_2(std::list<ecp_mp::common::smooth_trajectory_pose>::iterator pose_list_iterator, int i, double s) {
 	//printf("redukcja model 2 w osi: %d\n", i);
 	//pierwszy stopien redukcji
 	double a;
@@ -2155,7 +2155,7 @@ void smooth::reduction_model_2(std::list<ecp_mp::common::smooth2_trajectory_pose
 	pose_list_iterator->s_jedn[i] = pose_list_iterator->v_r[i] * (pose_list_iterator->t - (pose_list_iterator->v_k[i] - pose_list_iterator->v_p[i]) / pose_list_iterator->a_r[i]);
 }
 
-void smooth::reduction_model_3(std::list<ecp_mp::common::smooth2_trajectory_pose>::iterator pose_list_iterator, int i, double s) {
+void smooth::reduction_model_3(std::list<ecp_mp::common::smooth_trajectory_pose>::iterator pose_list_iterator, int i, double s) {
 	//printf("redukcja model 3 w osi: %d\n", i);
 	double t1; //czas konca opoznienia
 
@@ -2181,7 +2181,7 @@ void smooth::reduction_model_3(std::list<ecp_mp::common::smooth2_trajectory_pose
 }
 
 
-void smooth::reduction_model_4(std::list<ecp_mp::common::smooth2_trajectory_pose>::iterator pose_list_iterator, int i, double s) {
+void smooth::reduction_model_4(std::list<ecp_mp::common::smooth_trajectory_pose>::iterator pose_list_iterator, int i, double s) {
 	//printf("redukcja model 4 w osi: %d\n", i);
 	//pierwszy stopien redukcji
 	double a;
@@ -2251,7 +2251,7 @@ void smooth::reduction_model_4(std::list<ecp_mp::common::smooth2_trajectory_pose
 	pose_list_iterator->s_jedn[i] = pose_list_iterator->v_p[i] * (pose_list_iterator->t - (pose_list_iterator->v_p[i] - pose_list_iterator->v_k[i]) / pose_list_iterator->a_r[i]);
 }
 
-void smooth::vp_reduction(std::list<ecp_mp::common::smooth2_trajectory_pose>::iterator pose_list_iterator, int i, double s, double t) {
+void smooth::vp_reduction(std::list<ecp_mp::common::smooth_trajectory_pose>::iterator pose_list_iterator, int i, double s, double t) {
 	//printf("v_p redukcja w osi: %d\n", i);
 	double v_r; //zmiana ruchu na jednostajny
 
@@ -2281,7 +2281,7 @@ void smooth::vp_reduction(std::list<ecp_mp::common::smooth2_trajectory_pose>::it
 	calculate();
 }
 
-void smooth::vk_reduction(std::list<ecp_mp::common::smooth2_trajectory_pose>::iterator pose_list_iterator, int i, double s, double t) {
+void smooth::vk_reduction(std::list<ecp_mp::common::smooth_trajectory_pose>::iterator pose_list_iterator, int i, double s, double t) {
 	//printf("v_k redukcja w osi: %d\n", i);
 	double a;
 	double v_k;
@@ -2317,7 +2317,7 @@ void smooth::vk_reduction(std::list<ecp_mp::common::smooth2_trajectory_pose>::it
 	pose_list_iterator->s_jedn[i] = 0;
 }
 
-void smooth::optimize_time1(std::list<ecp_mp::common::smooth2_trajectory_pose>::iterator pose_list_iterator, int i, double s) {
+void smooth::optimize_time1(std::list<ecp_mp::common::smooth_trajectory_pose>::iterator pose_list_iterator, int i, double s) {
 	printf("\noptymalizacja czasu os: %d\n", i);
 	double v_r;
 	double t;

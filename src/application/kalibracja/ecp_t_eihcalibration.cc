@@ -35,7 +35,7 @@ eihcalibration::eihcalibration(lib::configurator &_config) : task(_config)
     D = config.value<double>("D");
     E = config.value<double>("E");
 
-	smooth2gen = new generator::smooth(*this, true);
+	smoothgen = new generator::smooth(*this, true);
 
 	nose = new generator::eih_nose_run(*this, 8);
 	nose->eih_nose_run::configure_pulse_check (true);
@@ -65,38 +65,38 @@ void eihcalibration::main_task_algorithm(void ){
 		sensor_m[lib::SENSOR_CVFRADIA]->get_reading();
 	}
 
-	smooth2gen->set_absolute();
+	smoothgen->set_absolute();
 
 	// wczytanie pozycji poczatkowej i przejscie do niej za pomoca smooth
-	smooth2gen->load_file_with_path(smooth_path.c_str());
-	smooth2gen->Move();
+	smoothgen->load_file_with_path(smooth_path.c_str());
+	smoothgen->Move();
 
 	sr_ecp_msg->message("Data collection\n");
 
-	// maximum velocity and acceleration of smooth2 generator
+	// maximum velocity and acceleration of smooth generator
 	double vv[MAX_SERVOS_NR]={0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3};
 	double aa[MAX_SERVOS_NR]={1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
 	double coordinates[MAX_SERVOS_NR]={0.0, 0.0, -1.0 * A, 0.0, 0.0, 0.0, 0.0, 0.0};
-	smooth2gen->reset();
-	smooth2gen->set_relative();
+	smoothgen->reset();
+	smoothgen->set_relative();
 
-	//smooth2gen->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, vv, aa, 0.0, 0.0, -0.025, 0.0, 0.0, 0.0, 0.0, 0.0, true);
-	//smooth2gen->Move();
+	//smoothgen->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, vv, aa, 0.0, 0.0, -0.025, 0.0, 0.0, 0.0, 0.0, 0.0, true);
+	//smoothgen->Move();
 	//nanosleep(&delay, NULL);
 
-	smooth2gen->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, vv, aa, 0.0, 0.1, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, true);
-	smooth2gen->Move();
+	smoothgen->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, vv, aa, 0.0, 0.1, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, true);
+	smoothgen->Move();
 	nanosleep(&delay, NULL);
 
-	smooth2gen->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, vv, aa, 0.1, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, true);
-	smooth2gen->Move();
+	smoothgen->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, vv, aa, 0.1, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, true);
+	smoothgen->Move();
 	nanosleep(&delay, NULL);
 
 	//opusc chwytak az przestanie "widziec" szachownice
 	while(sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.chessboard.found == true){
 		//opuszczenie chwytaka o 2.5 cm
-		smooth2gen->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, vv, aa, 0.0, 0.0, -1.0 * A, 0.0, 0.0, 0.0, 0.0, 0.0, true);
-		smooth2gen->Move();
+		smoothgen->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, vv, aa, 0.0, 0.0, -1.0 * A, 0.0, 0.0, 0.0, 0.0, 0.0, true);
+		smoothgen->Move();
 		nanosleep(&delay, NULL);
 		sensor_m[lib::SENSOR_CVFRADIA]->get_reading();
 		generator->Move();
@@ -104,8 +104,8 @@ void eihcalibration::main_task_algorithm(void ){
 	}
 
 	// podnies chwytak do ostatniej pozycji w ktorej wykryto szachownice
-	smooth2gen->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, vv, aa, 0.0, 0.0, A, 0.0, 0.0, 0.0, 0.0, 0.0, true);
-	smooth2gen->Move();
+	smoothgen->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, vv, aa, 0.0, 0.0, A, 0.0, 0.0, 0.0, 0.0, 0.0, true);
+	smoothgen->Move();
 	nanosleep(&delay, NULL);
 	--i;
 	sensor_m[lib::SENSOR_CVFRADIA]->get_reading();

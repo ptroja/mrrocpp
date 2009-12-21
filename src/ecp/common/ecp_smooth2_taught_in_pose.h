@@ -1,5 +1,5 @@
-#if !defined(_ECP_SMOOTH2_TAUGHT_IN_POSE_H)
-#define  _ECP_SMOOTH2_TAUGHT_IN_POSE_H
+#if !defined(_ECP_smooth_TAUGHT_IN_POSE_H)
+#define  _ECP_smooth_TAUGHT_IN_POSE_H
 
 #include "lib/com_buf.h"		// lib::POSE_SPECIFICATION
 #include "lib/impconst.h"	// MAX_SERVOS_NR
@@ -8,7 +8,7 @@ namespace mrrocpp {
 namespace ecp {
 namespace common {
 
-class ecp_smooth2_taught_in_pose {
+class ecp_smooth_taught_in_pose {
 public:
   lib::POSE_SPECIFICATION arm_type;
   double v_p[MAX_SERVOS_NR];
@@ -33,16 +33,16 @@ public:
   int model[MAX_SERVOS_NR]; //model ruchu
   int pos_num;
 
-  ecp_smooth2_taught_in_pose (void);
-  ecp_smooth2_taught_in_pose (lib::POSE_SPECIFICATION at,
+  ecp_smooth_taught_in_pose (void);
+  ecp_smooth_taught_in_pose (lib::POSE_SPECIFICATION at,
 		  const double* vv,
 		  const double* aa,
 		  const double* coordinates);
 
-}; // end:class ecp_smooth2_taught_in_pose
+}; // end:class ecp_smooth_taught_in_pose
 
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp
 
-#endif /* _ECP_SMOOTH2_TAUGHT_IN_POSE_H */
+#endif /* _ECP_smooth_TAUGHT_IN_POSE_H */

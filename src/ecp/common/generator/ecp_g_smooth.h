@@ -31,7 +31,7 @@
 #include "lib/srlib.h"
 #include "lib/mrmath/mrmath.h"
 
-#include "ecp_mp/smooth2_trajectory_pose.h"
+#include "ecp_mp/smooth_trajectory_pose.h"
 
 #include "ecp/common/generator/ecp_g_jarosz.h"
 #include "ecp_mp/Trajectory.h"
@@ -66,11 +66,11 @@ class smooth : public delta {
 		/**
 		 *
 		 */
-		std::list<ecp_mp::common::smooth2_trajectory_pose> pose_list;
+		std::list<ecp_mp::common::smooth_trajectory_pose> pose_list;
 		/**
 		 *
 		 */
-		std::list<ecp_mp::common::smooth2_trajectory_pose>::iterator pose_list_iterator;
+		std::list<ecp_mp::common::smooth_trajectory_pose>::iterator pose_list_iterator;
 		/**
 		 *
 		 */
@@ -147,31 +147,31 @@ class smooth : public delta {
 		/**
 		 *
 		 */
-		void reduction_model_1(std::list<ecp_mp::common::smooth2_trajectory_pose>::iterator pose_list_iterator, int i, double s);
+		void reduction_model_1(std::list<ecp_mp::common::smooth_trajectory_pose>::iterator pose_list_iterator, int i, double s);
 		/**
 		 *
 		 */
-		void reduction_model_2(std::list<ecp_mp::common::smooth2_trajectory_pose>::iterator pose_list_iterator, int i, double s);
+		void reduction_model_2(std::list<ecp_mp::common::smooth_trajectory_pose>::iterator pose_list_iterator, int i, double s);
 		/**
 		 *
 		 */
-		void reduction_model_3(std::list<ecp_mp::common::smooth2_trajectory_pose>::iterator pose_list_iterator, int i, double s);
+		void reduction_model_3(std::list<ecp_mp::common::smooth_trajectory_pose>::iterator pose_list_iterator, int i, double s);
 		/**
 		 *
 		 */
-		void reduction_model_4(std::list<ecp_mp::common::smooth2_trajectory_pose>::iterator pose_list_iterator, int i, double s);
+		void reduction_model_4(std::list<ecp_mp::common::smooth_trajectory_pose>::iterator pose_list_iterator, int i, double s);
 		/**
 		 *
 		 */
-		void vk_reduction(std::list<ecp_mp::common::smooth2_trajectory_pose>::iterator pose_list_iterator, int i, double s, double t);
+		void vk_reduction(std::list<ecp_mp::common::smooth_trajectory_pose>::iterator pose_list_iterator, int i, double s, double t);
 		/**
 		 *
 		 */
-		void vp_reduction(std::list<ecp_mp::common::smooth2_trajectory_pose>::iterator pose_list_iterator, int i, double s, double t);
+		void vp_reduction(std::list<ecp_mp::common::smooth_trajectory_pose>::iterator pose_list_iterator, int i, double s, double t);
 		/**
 		 *
 		 */
-		void optimize_time1(std::list<ecp_mp::common::smooth2_trajectory_pose>::iterator pose_list_iterator, int i, double s);
+		void optimize_time1(std::list<ecp_mp::common::smooth_trajectory_pose>::iterator pose_list_iterator, int i, double s);
 		/**
 		 *
 		 */

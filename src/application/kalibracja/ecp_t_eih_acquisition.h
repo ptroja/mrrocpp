@@ -17,7 +17,7 @@
 #include "ecp/irp6_on_track/ecp_r_irp6ot.h"
 #include "ecp/irp6_postument/ecp_r_irp6p.h"
 #include "ecp/common/task/ecp_task.h"
-#include "ecp/common/generator/ecp_g_smooth2.h"
+#include "ecp/common/generator/ecp_g_smooth.h"
 #include "ecp/common/generator/ecp_g_transparent.h"
 #include "ecp_mp/sensor/ecp_mp_s_cvfradia.h"
 #include "ecp/common/generator/ecp_g_force.h"
@@ -62,8 +62,8 @@ class eihacquisition: public common::task::acquisition {
 		int write_data(void);
 		// generator do wodzenia za nos
 		generator::eih_nose_run* nose;
-		// generator smooth2
-		generator::smooth* smooth2gen;
+		// generator smooth
+		generator::smooth* smoothgen;
 		// generator do wysylania danych do fradii
 		generator::eihgenerator* generator;
 

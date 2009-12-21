@@ -16,8 +16,8 @@ ECPOBJ = $(ECPOBJ_SHARED) \
 		generator/ecp_generator.o generator/ecp_g_teach_in.o \
 		generator/ecp_g_visual_servo_manager.o generator/ecp_g_visual_servo.o \
 		ecp_taught_in_pose.o \
-		$(ECP_MPDIR)/smooth_trajectory_pose.o $(ECP_MPDIR)/smooth2_trajectory_pose.o \
-		generator/ecp_g_smooth2.o \
+		$(ECP_MPDIR)/smooth_trajectory_pose.o $(ECP_MPDIR)/smooth_trajectory_pose.o \
+		generator/ecp_g_smooth.o \
 		$(ECP_MPDIR)/sensor/ecp_mp_sensor.o $(ECP_MPDIR)/transmitter/transmitter.o \
 		$(ECP_MPDIR)/Trajectory.o
 		
