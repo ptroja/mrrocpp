@@ -265,6 +265,70 @@ class smooth2 : public delta {
 		/**
 		 *
 		 */
+		void load_xyz_angle_axis(double coordinates[MAX_SERVOS_NR], bool reset);
+		/**
+		 *
+		 */
+		void load_xyz_angle_axis(double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR], bool reset);
+		/**
+		 *
+		 */
+		void load_xyz_angle_axis(double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset);
+		/**
+		 *
+		 */
+		void load_xyz_angle_axis(double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset);
+		/**
+		 *
+		 */
+		void load_xyz_euler_zyz(double coordinates[MAX_SERVOS_NR], bool reset);
+		/**
+		 *
+		 */
+		void load_xyz_euler_zyz(double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR], bool reset);
+		/**
+		 *
+		 */
+		void load_xyz_euler_zyz(double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset);
+		/**
+		 *
+		 */
+		void load_xyz_euler_zyz(double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset);
+		/**
+		 *
+		 */
+		void load_joint(double coordinates[MAX_SERVOS_NR], bool reset);
+		/**
+		 *
+		 */
+		void load_joint(double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR], bool reset);
+		/**
+		 *
+		 */
+		void load_joint(double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset);
+		/**
+		 *
+		 */
+		void load_joint(double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset);
+		/**
+		 *
+		 */
+		void load_motor(double coordinates[MAX_SERVOS_NR], bool reset);
+		/**
+		 *
+		 */
+		void load_motor(double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR], bool reset);
+		/**
+		 *
+		 */
+		void load_motor(double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset);
+		/**
+		 *
+		 */
+		void load_motor(double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset);
+		/**
+		 *
+		 */
 		void load_trajectory_from_xml(const char* fileName, const char* nodeName);
 		/**
 		 *

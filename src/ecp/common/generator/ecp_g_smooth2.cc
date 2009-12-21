@@ -369,6 +369,58 @@ void smooth2::load_coordinates(lib::ECP_POSE_SPECIFICATION ps, double v[MAX_SERV
 	}
 }
 
+void smooth2::load_xyz_angle_axis(double coordinates[MAX_SERVOS_NR], bool reset) {
+	load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, coordinates, reset);
+}
+void smooth2::load_xyz_angle_axis(double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR], bool reset) {
+	load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, v, a, coordinates, reset);
+}
+void smooth2::load_xyz_angle_axis(double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset) {
+	load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, cor0, cor1, cor2, cor3, cor4, cor5, cor6, cor7, reset);
+}
+void smooth2::load_xyz_angle_axis(double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset) {
+	load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, v, a, cor0, cor1, cor2, cor3, cor4, cor5, cor6, cor7, reset);
+}
+
+void smooth2::load_xyz_euler_zyz(double coordinates[MAX_SERVOS_NR], bool reset) {
+	load_coordinates(lib::ECP_XYZ_EULER_ZYZ, coordinates, reset);
+}
+void smooth2::load_xyz_euler_zyz(double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR], bool reset) {
+	load_coordinates(lib::ECP_XYZ_EULER_ZYZ, v, a, coordinates, reset);
+}
+void smooth2::load_xyz_euler_zyz(double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset) {
+	load_coordinates(lib::ECP_XYZ_EULER_ZYZ, cor0, cor1, cor2, cor3, cor4, cor5, cor6, cor7, reset);
+}
+void smooth2::load_xyz_euler_zyz(double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset) {
+	load_coordinates(lib::ECP_XYZ_EULER_ZYZ, v, a, cor0, cor1, cor2, cor3, cor4, cor5, cor6, cor7, reset);
+}
+
+void smooth2::load_joint(double coordinates[MAX_SERVOS_NR], bool reset) {
+	load_coordinates(lib::ECP_JOINT, coordinates, reset);
+}
+void smooth2::load_joint(double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR], bool reset) {
+	load_coordinates(lib::ECP_JOINT, v, a, coordinates, reset);
+}
+void smooth2::load_joint(double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset) {
+	load_coordinates(lib::ECP_JOINT, cor0, cor1, cor2, cor3, cor4, cor5, cor6, cor7, reset);
+}
+void smooth2::load_joint(double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset) {
+	load_coordinates(lib::ECP_JOINT, v, a, cor0, cor1, cor2, cor3, cor4, cor5, cor6, cor7, reset);
+}
+
+void smooth2::load_motor(double coordinates[MAX_SERVOS_NR], bool reset) {
+	load_coordinates(lib::ECP_MOTOR, coordinates, reset);
+}
+void smooth2::load_motor(double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR], bool reset) {
+	load_coordinates(lib::ECP_MOTOR, v, a, coordinates, reset);
+}
+void smooth2::load_motor(double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset) {
+	load_coordinates(lib::ECP_MOTOR, cor0, cor1, cor2, cor3, cor4, cor5, cor6, cor7, reset);
+}
+void smooth2::load_motor(double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset) {
+	load_coordinates(lib::ECP_MOTOR, v, a, cor0, cor1, cor2, cor3, cor4, cor5, cor6, cor7, reset);
+}
+
 void smooth2::reset() {
 	flush_pose_list();//TODO sprawdzic czy to jest potrzebne
 	flush_coordinate_list();//TODO sprawdzic czy to jest potrzebne
@@ -2205,7 +2257,7 @@ void smooth2::vp_reduction(std::list<ecp_mp::common::smooth2_trajectory_pose>::i
 
 	v_r = s/t;
 
-	switch (td.arm_type) {//zapisanie nowej prędkości w liscie pozycji, dla danej pozycji
+	switch (td.arm_type) {//zapisanie nowej pr��dko��ci w liscie pozycji, dla danej pozycji
 
 		case lib::ECP_XYZ_EULER_ZYZ:
 			pose_list_iterator->v[i] = v_r/v_max_zyz[i];
