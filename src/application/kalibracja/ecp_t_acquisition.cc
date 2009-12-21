@@ -8,7 +8,7 @@ namespace common {
 namespace task {
 
 // KONSTRUKTORY
-acquisition::acquisition(lib::configurator &_config) : task(_config)
+acquisition::acquisition(task &_ecp_t) : ecp_sub_task(_ecp_t)
 {
 }
 

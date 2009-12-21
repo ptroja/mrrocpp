@@ -15,10 +15,10 @@ namespace ecp {
 namespace common {
 namespace task {
 
-class acquisition: public common::task::task  {
+class acquisition: public ecp_sub_task {
 	public:
 		// KONSTRUKTORY
-		acquisition(lib::configurator &_config);
+		acquisition(task &_ecp_t);
 
 		// methods for ECP template to redefine in concrete classes
 		void main_task_algorithm(void);
