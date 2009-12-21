@@ -110,16 +110,7 @@ class smooth : public delta {
 		/**
 		 *
 		 */
-		lib::MOTION_TYPE type;				VSP_ECP_MSG msg;
-
-		msg.vsp_report = VSP_REPLY_OK;
-		msg.comm_image.object_tracker.x = centreX-image->width/2;
-		msg.comm_image.object_tracker.y = centreY-image->height/2;
-		msg.comm_image.object_tracker.z = -(60000 - area);
-		msg.comm_image.object_tracker.tracking = tracking;
-		msg.comm_image.object_tracker.reached = reached;
-
-		ds->setVSPResponse(msg);
+		lib::MOTION_TYPE type;
 		/**
 		 *
 		 */
