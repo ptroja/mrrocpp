@@ -34,6 +34,11 @@ wii_teach::wii_teach(lib::configurator &_config) : task(_config)
     sensor_m[lib::SENSOR_WIIMOTE]->configure_sensor();
 }
 
+int wii_teach::load_trajectory()
+{
+    return 0;
+}
+
 bool wii_teach::get_filenames(void)
 {
     lib::ECP_message ecp_to_ui_msg; // Przesylka z ECP do UI
@@ -196,8 +201,10 @@ void wii_teach::main_task_algorithm(void)
     wg = new irp6ot::generator::wii_relative(*this,(ecp_mp::sensor::wiimote*)sensor_m[lib::SENSOR_WIIMOTE]);
     jg = new irp6ot::generator::wii_joint(*this,(ecp_mp::sensor::wiimote*)sensor_m[lib::SENSOR_WIIMOTE]);
 
-    if(1 || get_filenames())
+    bool has_filenames = 1 || get_filenames();
+    if(has_filenames)
     {
+        load_trajectory();
         while(1)
         {
             sensor_m[lib::SENSOR_WIIMOTE]->get_reading();
@@ -212,7 +219,7 @@ void wii_teach::main_task_algorithm(void)
                 message.wii_command.led_status = 0xF;
                 message.wii_command.rumble = false;
                 ((ecp_mp::sensor::wiimote*)sensor_m[lib::SENSOR_WIIMOTE])->send_reading(message);
-                jg->Move();
+                wg->Move();
                 message.wii_command.led_change = true;
                 message.wii_command.led_status = 0x0;
                 message.wii_command.rumble = false;
@@ -350,7 +357,10 @@ void wii_teach::main_task_algorithm(void)
                 else if(buttonsPressed.buttonB)
                 {
                     buttonsPressed.buttonB = 0;
-                    save_trajectory();
+                    if(has_filenames)
+                    {
+                        save_trajectory();
+                    }
                 }
             }
         }

@@ -21,6 +21,8 @@ wii_relative::wii_relative (common::task::task& _ecp_task,ecp_mp::sensor::wiimot
 
 void wii_relative::set_position(void)
 {
+    char buffer[200];
+
     the_robot->ecp_command.instruction.instruction_type = lib::SET_GET;
     the_robot->ecp_command.instruction.set_type = ARM_DV;
     the_robot->ecp_command.instruction.set_arm_type = lib::FRAME;
@@ -32,12 +34,12 @@ void wii_relative::set_position(void)
     the_robot->ecp_command.instruction.value_in_step_no = 8;
 
     homog_matrix.set_from_xyz_angle_axis(
-        nextChange[0],
-        nextChange[1],
-        nextChange[2],
         nextChange[3],
         nextChange[4],
-        nextChange[5]
+        nextChange[5],
+        nextChange[0],
+        nextChange[1],
+        nextChange[2]
     );
     homog_matrix.get_frame_tab(the_robot->ecp_command.instruction.arm.pf_def.arm_frame);
 
@@ -47,9 +49,7 @@ void wii_relative::set_position(void)
 
 bool wii_relative::first_step()
 {
-    the_robot->ecp_command.instruction.instruction_type = lib::SET_GET;
-    the_robot->ecp_command.instruction.set_type = ARM_DV;
-    the_robot->ecp_command.instruction.set_arm_type = lib::FRAME;
+    the_robot->ecp_command.instruction.instruction_type = lib::GET;
     the_robot->ecp_command.instruction.get_type = ARM_DV;
     the_robot->ecp_command.instruction.get_arm_type = lib::FRAME;
     the_robot->ecp_command.instruction.motion_type = lib::RELATIVE;
@@ -65,6 +65,11 @@ bool wii_relative::first_step()
 
 void wii_relative::preset_position(void)
 {
+    int i;
+    for(i = 0;i < 7;++i)
+    {
+        requestedChange[i] = 0;
+    }
     currentGripperValue = 0;//the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate;
 }
 

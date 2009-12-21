@@ -78,6 +78,8 @@ class wii_teach: public common::task::task
 
         bool get_filenames(void);
 
+        int load_trajectory(void);
+
         void save_trajectory(void);
 };
 
