@@ -24,9 +24,6 @@ bool wii::calculate_change(int axis, double value)
     int i;
     bool changed = false;
 
-    sprintf(buffer,"Calculate axis %d %f",axis,value);
-    sr_ecp_msg.message(buffer);
-
     value *= multipliers[axis];
     requestedChange[axis] = value;
     
@@ -43,9 +40,6 @@ bool wii::calculate_change(int axis, double value)
         }
         if(nextChange[i] != 0) changed = true;
     }
-
-    sprintf(buffer,"Moving by %d: %.4f %.4f %.4f %.4f %.4f %.4f %.4f",0,nextChange[0],nextChange[1],nextChange[2],nextChange[3],nextChange[4],nextChange[5],0);
-    sr_ecp_msg.message(buffer);
 
     return changed;
 }
