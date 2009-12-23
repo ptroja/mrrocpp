@@ -62,7 +62,9 @@ configsrv: configsrv.o cfgopts.o configsrv_m.o
 #======================================================#	
 #----------------------------------------------- Maintain rules ----------------------------------------------------#
 install: ${BINARIES}
+ifeq ($(BUILD_TARGET), linux)
 	${INSTALL} ${BINARIES} $(BINDIR)
+endif
 #-----------------------------------------------------------------------------------------------------------------------#
 clean:
 	@rm -f *.o *.err *.a *.so ${BINARIES} ./.deps/*.P ./mrmath/*.o ./mrmath/*.err
