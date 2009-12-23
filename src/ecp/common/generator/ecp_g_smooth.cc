@@ -860,12 +860,13 @@ bool smooth::first_step() { //wywolywane tylko raz w calej trajektorii
 
     first_interval=true;//to chyba nie jest potrzebne bo ustawianie first_interval jest takze na poczatku calculate()
 
+    the_robot->ecp_command.instruction.get_type = ARM_DV;
+    the_robot->ecp_command.instruction.set_type = ARM_DV;
+    the_robot->ecp_command.instruction.instruction_type = lib::GET;
+
     switch ( td.arm_type ) {
 
     case lib::ECP_MOTOR:
-        the_robot->ecp_command.instruction.instruction_type = lib::GET;
-        the_robot->ecp_command.instruction.get_type = ARM_DV;
-        the_robot->ecp_command.instruction.set_type = ARM_DV;
         the_robot->ecp_command.instruction.set_arm_type = lib::MOTOR;
         the_robot->ecp_command.instruction.get_arm_type = lib::MOTOR;
     	if (type == lib::RELATIVE) {
@@ -876,9 +877,6 @@ bool smooth::first_step() { //wywolywane tylko raz w calej trajektorii
         the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
         break;
     case lib::ECP_JOINT:
-        the_robot->ecp_command.instruction.instruction_type = lib::GET;
-        the_robot->ecp_command.instruction.get_type = ARM_DV;
-        the_robot->ecp_command.instruction.set_type = ARM_DV;
         the_robot->ecp_command.instruction.set_arm_type = lib::JOINT;
         the_robot->ecp_command.instruction.get_arm_type = lib::JOINT;
     	if (type == lib::RELATIVE) {
@@ -890,9 +888,6 @@ bool smooth::first_step() { //wywolywane tylko raz w calej trajektorii
         break;
 
     case lib::ECP_XYZ_EULER_ZYZ:
-        the_robot->ecp_command.instruction.instruction_type = lib::GET;
-        the_robot->ecp_command.instruction.get_type = ARM_DV;
-        the_robot->ecp_command.instruction.set_type = ARM_DV;
         the_robot->ecp_command.instruction.set_arm_type = lib::FRAME;
         the_robot->ecp_command.instruction.get_arm_type = lib::FRAME;
         if (type == lib::RELATIVE) {
@@ -908,9 +903,6 @@ bool smooth::first_step() { //wywolywane tylko raz w calej trajektorii
         }
         break;
     case lib::ECP_XYZ_ANGLE_AXIS:
-        the_robot->ecp_command.instruction.instruction_type = lib::GET;
-        the_robot->ecp_command.instruction.get_type = ARM_DV;
-        the_robot->ecp_command.instruction.set_type = ARM_DV;
         the_robot->ecp_command.instruction.set_arm_type = lib::FRAME;
         the_robot->ecp_command.instruction.get_arm_type = lib::FRAME;
     	if (type == lib::RELATIVE) {
@@ -975,23 +967,25 @@ bool smooth::next_step () {
     	the_robot->ecp_command.instruction.instruction_type = lib::SET; //ustawienie parametrow ruchu w edp_data
     	the_robot->ecp_command.instruction.get_type = NOTHING_DV; //ponizej w caseach jest dalsze ustawianie
     	the_robot->ecp_command.instruction.get_arm_type = lib::INVALID_END_EFFECTOR;
+    	the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
+    	the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
 
     	switch ( td.arm_type ) {
 
     		case lib::ECP_XYZ_EULER_ZYZ:
 
-    			the_robot->ecp_command.instruction.instruction_type = lib::SET; //dalsze ustawianie parametrow ruchu w edp
-    			the_robot->ecp_command.instruction.set_type = ARM_DV; // ARM
-    			the_robot->ecp_command.instruction.set_arm_type = lib::FRAME;
-    	    	if (type == lib::RELATIVE) {
+    			//the_robot->ecp_command.instruction.instruction_type = lib::SET; //dalsze ustawianie parametrow ruchu w edp
+    			//the_robot->ecp_command.instruction.set_type = ARM_DV; // ARM
+    			//the_robot->ecp_command.instruction.set_arm_type = lib::FRAME;
+    	    	/*if (type == lib::RELATIVE) {
     	    		the_robot->ecp_command.instruction.motion_type = lib::RELATIVE;
     	    		the_robot->ecp_command.instruction.interpolation_type = lib::TCIM;
     	    	} else {
     	    		the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
     	    		the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-    	    	}
-    			the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
-    			the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
+    	    	}*/
+    			//the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
+    			//the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
 
     			homog_matrix.set_from_xyz_euler_zyz(coordinate_list_iterator->coordinate);
 
@@ -1033,18 +1027,18 @@ bool smooth::next_step () {
 
     		case lib::ECP_XYZ_ANGLE_AXIS:
 
-    			the_robot->ecp_command.instruction.instruction_type = lib::SET; //dalsze ustawianie parametrow ruchu w edp
-    			the_robot->ecp_command.instruction.set_type = ARM_DV; // ARM
-    			the_robot->ecp_command.instruction.set_arm_type = lib::FRAME;
-    	    	if (type == lib::RELATIVE) {
+    			//the_robot->ecp_command.instruction.instruction_type = lib::SET; //dalsze ustawianie parametrow ruchu w edp
+    			//the_robot->ecp_command.instruction.set_type = ARM_DV; // ARM
+    			//the_robot->ecp_command.instruction.set_arm_type = lib::FRAME;
+    	    	/*if (type == lib::RELATIVE) {
     	    		the_robot->ecp_command.instruction.motion_type = lib::RELATIVE;
     	    		the_robot->ecp_command.instruction.interpolation_type = lib::TCIM;
     	    	} else {
     	    		the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
     	    		the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-    	    	}
-    			the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
-    			the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
+    	    	}*/
+    			//the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
+    			//the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
 
     			//for (i = 0; i < 6; i++) {//zapisanie nastepnego polozenia (makrokroku) do robota
     			homog_matrix.set_from_xyz_angle_axis(coordinate_list_iterator->coordinate);
@@ -1085,17 +1079,17 @@ bool smooth::next_step () {
 
     		case lib::ECP_JOINT:
 
-    			the_robot->ecp_command.instruction.instruction_type = lib::SET;
-    		    the_robot->ecp_command.instruction.set_type = ARM_DV; // ARM
-    		    the_robot->ecp_command.instruction.set_arm_type = lib::JOINT;
-    	    	if (type == lib::RELATIVE) {
+    			//the_robot->ecp_command.instruction.instruction_type = lib::SET;
+    		    //the_robot->ecp_command.instruction.set_type = ARM_DV; // ARM
+    		    //the_robot->ecp_command.instruction.set_arm_type = lib::JOINT;
+    	    	/*if (type == lib::RELATIVE) {
     	    		the_robot->ecp_command.instruction.motion_type = lib::RELATIVE;
     	    	} else {
     	    		the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
-    	    	}
-    		    the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-    		    the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
-    		    the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
+    	    	}*/
+    		    //the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
+    		    //the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
+    		    //the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
 
     		    for (i = 0; i < MAX_SERVOS_NR; i++) {
     		        the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = coordinate_list_iterator->coordinate[i];
@@ -1139,17 +1133,17 @@ bool smooth::next_step () {
 
     		case lib::ECP_MOTOR:
 
-    			the_robot->ecp_command.instruction.instruction_type = lib::SET;
-    		    the_robot->ecp_command.instruction.set_type = ARM_DV; // ARM
-    		    the_robot->ecp_command.instruction.set_arm_type = lib::MOTOR;
-    	    	if (type == lib::RELATIVE) {
+    			//the_robot->ecp_command.instruction.instruction_type = lib::SET;
+    		    //the_robot->ecp_command.instruction.set_type = ARM_DV; // ARM
+    		    //the_robot->ecp_command.instruction.set_arm_type = lib::MOTOR;
+    	    	/*if (type == lib::RELATIVE) {
     	    		the_robot->ecp_command.instruction.motion_type = lib::RELATIVE;
     	    	} else {
     	    		the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
-    	    	}
-    		    the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-    		    the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
-    		    the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
+    	    	}*/
+    		    //the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
+    		    //the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
+    		    //the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
 
     		    for (i=0; i < MAX_SERVOS_NR; i++) {
     		        the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = coordinate_list_iterator->coordinate[i];
