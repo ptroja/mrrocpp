@@ -1,6 +1,6 @@
 #include <string>
 #include <iostream>
-#include "application/kalibracja/ecp_t_acquisition.h"
+#include "ecp_t_acquisition.h"
 
 namespace mrrocpp {
 namespace ecp {

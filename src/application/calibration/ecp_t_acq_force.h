@@ -3,8 +3,8 @@
 #define _ECP_T_KCZ_FORCE_H
 
 #include "ecp/common/task/ecp_task.h"
-#include "ecp/common/generator/ecp_g_force.h"
-#include "application/kalibracja/ecp_t_acquisition.h"
+#include "ecp_g_pcbird_nose_run.h"
+#include "ecp_t_acquisition.h"
 
 namespace mrrocpp {
 namespace ecp {

@@ -36,6 +36,7 @@ ecp_t_axzb_force: \
 		../../ecp/common/generator/ecp_g_transparent.o \
 		../../ecp/common/generator/ecp_g_jarosz.o \
 		../../ecp/common/generator/ecp_g_force.o \
+		ecp_g_pcbird_nose_run.o \
 		../../ecp/common/generator/ecp_g_operator_reaction_condition.o \
 		$(ECP_MPDIR)/sensor/ecp_mp_s_cvfradia.o \
 		$(ECP_MPDIR)/birdclient.o \

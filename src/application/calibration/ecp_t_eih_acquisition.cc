@@ -3,7 +3,7 @@
 /// \author 2009 Jakub Kosiorek
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "application/kalibracja/ecp_t_eih_acquisition.h"
+#include "ecp_t_eih_acquisition.h"
 
 namespace mrrocpp {
 namespace ecp {

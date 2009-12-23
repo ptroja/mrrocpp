@@ -5,7 +5,7 @@
  *      Author: jkosiore
  */
 
-#include "application/kalibracja/ecp_g_eihcalibration.h"
+#include "ecp_g_eihcalibration.h"
 
 namespace mrrocpp {
 namespace ecp {
