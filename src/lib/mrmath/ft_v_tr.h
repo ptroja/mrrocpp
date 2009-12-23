@@ -60,7 +60,7 @@ public:
 	Ft_tr operator!() const;
 
 	Ft_tr & operator = (const Ft_tr &);									// operator przypisania
-	Ft_v_vector operator*(const Ft_v_vector &) const;					// mnozenie wektora
+	Ft_vector operator*(const Ft_vector &) const;					// mnozenie wektora
 
 
 };// end class Ft_v_tr
@@ -83,7 +83,7 @@ public:
 	V_tr operator!() const;
 
 	V_tr & operator = (const V_tr &);									// operator przypisania
-	Ft_v_vector operator*(const Ft_v_vector &) const;					// mnozenie wektora
+	V_vector operator*(const V_vector &) const;					// mnozenie wektora
 
 
 };// end class Ft_v_tr

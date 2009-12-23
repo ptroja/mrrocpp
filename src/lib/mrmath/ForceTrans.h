@@ -23,8 +23,8 @@ const short force_sensor_name;
 	bool initialized;
 	double tool_weight;
 	//	lib::K_vector gravity_force_in_base;
-	lib::Ft_v_vector gravity_force_torque_in_base;
-	lib::Ft_v_vector reaction_force_torque_in_sensor;
+	lib::Ft_vector gravity_force_torque_in_base;
+	lib::Ft_vector reaction_force_torque_in_sensor;
 	lib::K_vector gravity_arm_in_wrist;
 
 	//	lib::K_vector reaction_force_in_sensor;

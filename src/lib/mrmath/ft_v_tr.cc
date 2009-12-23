@@ -135,9 +135,9 @@ return zwracana;
 }// end Homog_matrix::operator* (const Homog_matrix & m) const
 
 
-Ft_v_vector Ft_tr::operator*(const Ft_v_vector & w) const
+Ft_vector Ft_tr::operator*(const Ft_vector & w) const
 {
-	Ft_v_vector zwracany;
+	Ft_vector zwracany;
 	int i;
 	int j;
 	// i - i-ta kolumna
@@ -328,9 +328,9 @@ return zwracana;
 }// end Homog_matrix::operator* (const Homog_matrix & m) const
 
 
-Ft_v_vector V_tr::operator*(const Ft_v_vector & w) const
+V_vector V_tr::operator*(const V_vector & w) const
 {
-	Ft_v_vector zwracany;
+	V_vector zwracany;
 	int i;
 	int j;
 	// i - i-ta kolumna

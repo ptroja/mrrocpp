@@ -247,14 +247,14 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buff
 	static double ending_gripper_coordinate;
 	static lib::frame_tab local_force_end_effector_frame;
 	const unsigned long PREVIOUS_MOVE_VECTOR_NULL_STEP_VALUE = 10;
-	lib::Ft_v_vector base_pos_xyz_rot_xyz_vector; // wartosci ruchu pozycyjnego
+	lib::V_vector base_pos_xyz_rot_xyz_vector; // wartosci ruchu pozycyjnego
 
 
 	static unsigned long last_force_step_counter = step_counter;
 
-	lib::Ft_v_vector move_rot_vector;
-	lib::Ft_v_vector pos_xyz_rot_xyz_vector;
-	static lib::Ft_v_vector previous_move_rot_vector;
+	lib::V_vector move_rot_vector;
+	lib::V_vector pos_xyz_rot_xyz_vector;
+	static lib::V_vector previous_move_rot_vector;
 
 	// WYLICZENIE POZYCJI POCZATKOWEJ
 	double begining_joints[MAX_SERVOS_NR], tmp_joints[MAX_SERVOS_NR], tmp_motor_pos[MAX_SERVOS_NR];
@@ -394,10 +394,10 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buff
 
 
 		lib::Ft_v_vector current_force_torque(ft_tr_inv_tool_matrix * ft_tr_inv_current_frame_matrix
-				* lib::Ft_v_vector(current_force));
+				* lib::Ft_vector(current_force));
 		//		lib::Ft_v_vector tmp_force_torque (lib::Ft_v_tr((!current_tool) * (!current_frame_wo_offset), lib::Ft_v_tr::FT) * lib::Ft_v_vector (current_force));
 		lib::Ft_v_vector previous_force_torque(ft_tr_inv_tool_matrix * ft_tr_inv_current_frame_matrix
-				* lib::Ft_v_vector(previous_force));
+				* lib::Ft_vector(previous_force));
 
 
 		//wyzerowanie historii dla dlugiej przerwy w sterowaniu silowym
@@ -642,7 +642,7 @@ void irp6s_postument_track_effector::get_arm_position(bool read_hardware, lib::c
 		// modyfikacja pobranych sil w ukladzie czujnika - do ukladu wyznaczonego przez force_tool_frame i reference_frame
 
 		lib::Ft_v_vector current_force_torque(ft_tr_inv_tool_matrix * ft_tr_inv_current_frame_matrix
-				* lib::Ft_v_vector(current_force));
+				* lib::Ft_vector(current_force));
 		current_force_torque.to_table(reply.arm.pf_def.force_xyz_torque_xyz);
 
 		if ((robot_name == lib::ROBOT_IRP6_ON_TRACK) || (robot_name == lib::ROBOT_IRP6_POSTUMENT))

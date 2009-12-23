@@ -20,6 +20,8 @@ namespace lib {
 // deklaracje zapowiadajace
 class Homog_matrix;
 class Ft_v_vector;
+class Ft_tr;
+class V_tr;
 class Ft_v_tr;
 class Ft_tr;
 class V_tr;

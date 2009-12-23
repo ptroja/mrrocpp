@@ -133,7 +133,7 @@ void * edp_vsp::thread_main_loop(void *arg)
 		master.force_msr_download(current_force, 0);
 
 		lib::Ft_v_vector current_force_torque(ft_tr_inv_tool_matrix * ft_tr_inv_current_frame_matrix
-				* lib::Ft_v_vector(current_force));
+				* lib::Ft_vector(current_force));
 		current_force_torque.to_table(edp_vsp_reply.force);
 
 		counter++;

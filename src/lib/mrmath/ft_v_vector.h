@@ -31,6 +31,9 @@ protected:
 	double w[6];
 public:
 	friend class Ft_v_tr;						// klasa Ft_v_tr musi miec dostep do prywatnych
+	friend class Ft_tr;
+	friend class V_tr;
+    friend class Jacobian_matrix;			//Klasa Jacobian_matrix ma miec dostep do skladowych - Sibi
 
 
 	Ft_v_vector();													// konstruktor domniemany [0, 0, 0, 0, 0, 0]
@@ -86,7 +89,6 @@ class Ft_vector : public Ft_v_vector
 {
 
 public:
-	friend class Ft_tr;
 
 												// skladnikow klasy Ft_v_vector
 
@@ -111,12 +113,6 @@ class V_vector : public Ft_v_vector
 {
 
 public:
-
-	friend class V_tr;
-												// skladnikow klasy Ft_v_vector
-     friend class Jacobian_matrix;			//Klasa Jacobian_matrix ma miec dostep do skladowych - Sibi
-
-											// skladnikow klasy Ft_v_vector
 
 	V_vector();													// konstruktor domniemany [0, 0, 0, 0, 0, 0]
 	V_vector(const double t[6]);										// utworzenie wektora na podstawie podanej tablicy

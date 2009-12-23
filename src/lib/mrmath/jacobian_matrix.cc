@@ -60,9 +60,9 @@ void Jacobian_matrix::jacobian_transpose()
 Przedefiniowanie operatora mnozenia dla macierz * wektor
 ------------------------------------------------------------------------ */
 
-Ft_v_vector Jacobian_matrix::operator*(const Ft_v_vector & w) const
+V_vector Jacobian_matrix::operator*(const V_vector & w) const
 {
-	Ft_v_vector zwracany;
+	V_vector zwracany;
 	int i;
 	int j;
 	for(j=0;j<6;j++)
@@ -88,7 +88,7 @@ void Jacobian_matrix::to_table(double tablica[6][6]) const
 }// end Ft_v_vector::to_table(double tablica[6]) const
 
 //Rozwiazanie ukladu rowanan Ax=y dla zadanych A i y, metoda eliminacji Gaussa
-Ft_v_vector Jacobian_matrix::jacobian_inverse_gauss(const Ft_v_vector & dist)
+V_vector Jacobian_matrix::jacobian_inverse_gauss(const V_vector & dist)
 {
 //zmienne pomocnicze w eliminacji Gaussa
 double L, a;
@@ -96,7 +96,7 @@ int p[6], k, d, i, j, s, tmp;
 const double eps=1e-10;
 double w[6];
 
-Ft_v_vector q;
+V_vector q;
 
 //Metoda Eliminacji Gaussa - rozklad LU jakobianu
 //Wektor permutacji - czesciowy wybor elementu podstawowego
@@ -149,7 +149,7 @@ return q;
   * jacobian - macierz jakobianowa
  ------------------------------------------------------------------------ */
 
-void Jacobian_matrix::irp6_6dof_equations(const Ft_v_vector & w)
+void Jacobian_matrix::irp6_6dof_equations(const V_vector & w)
 {
 
 	const double s1 = sin(w.w[0]);
@@ -230,7 +230,7 @@ matrix[5][5]=0;
   * det - wartosc wyznacznika macierzy jakobianowej
  ------------------------------------------------------------------------ */
 
-double Jacobian_matrix::irp6_6dof_determinant(const Ft_v_vector & w)
+double Jacobian_matrix::irp6_6dof_determinant(const V_vector & w)
 {
 	//const double s1 = sin(w.w[0]);
 	//const double c1 = cos(w.w[0]);
@@ -269,7 +269,7 @@ double Jacobian_matrix::irp6_6dof_determinant(const Ft_v_vector & w)
   * jacobian_inverse - odwrotnosc macierzy jakobianowej
  ------------------------------------------------------------------------ */
 
-void Jacobian_matrix::irp6_6dof_inverse_equations(const Ft_v_vector & w)
+void Jacobian_matrix::irp6_6dof_inverse_equations(const V_vector & w)
 {
 	const double s1 = sin(w.w[0]);
 	const double c1 = cos(w.w[0]);
