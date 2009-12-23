@@ -48,7 +48,7 @@ Ft_v_vector::Ft_v_vector(double fx, double fy, double fz, double tx, double ty, 
 
 }// end Ft_v_vector::Ft_v_vector(double t[6])
 
-
+/*
 Ft_v_vector::Ft_v_vector(const K_vector force, const K_vector torque)
 {
 	for(int i=0; i<3; i++)
@@ -57,6 +57,8 @@ Ft_v_vector::Ft_v_vector(const K_vector force, const K_vector torque)
 		w[i+3] = torque[i];
 	}
 }
+*/
+
 
 /* ------------------------------------------------------------------------
 Wyznaczenie uchybu pozycji tzn. r�znicy pozycji aktualnej i zadanej
@@ -118,19 +120,6 @@ w[3]=(*local_desired_end_effector_frame)[0][3]-(*local_current_end_effector_fram
 w[4]=(*local_desired_end_effector_frame)[1][3]-(*local_current_end_effector_frame)[1][3];
 w[5]=(*local_desired_end_effector_frame)[2][3]-(*local_current_end_effector_frame)[2][3];
 }// end Ft_v_vector::position_distance(frame_tab*, frame_tab* )
-
-K_vector Ft_v_vector::get_force_K_vector() const
-{
-	K_vector tmp(w[0], w[1], w[2]);
-	return tmp;
-}
-
-
-K_vector Ft_v_vector::get_torque_K_vector() const
-{
-	K_vector tmp(w[3], w[4], w[5]);
-	return tmp;
-}
 
 
 Ft_v_vector::Ft_v_vector(const Ft_v_vector & wzor)
