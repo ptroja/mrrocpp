@@ -653,12 +653,18 @@ file_selection_window_send_location( PtWidget_t *widget, ApInfo_t *apinfo, PtCal
 		{
 			if ((item->type) == Pt_FS_FILE)
 			{
+				// To sie pozniej sprawdzi, czy wogule jest wzorzec znaleziony
+				std::string str_fullpath(item->fullpath);
+				std::string str_tail = str_fullpath.substr(str_fullpath.rfind(ui_state.mrrocpp_local_path)+ui_state.mrrocpp_local_path.length());
+				fprintf(stderr, "mrrocpp_local_path: %s\n", ui_state.mrrocpp_local_path.c_str());
+				fprintf(stderr, "fullpath: %s\n", item->fullpath);
+				fprintf(stderr, "tail: %s\n", str_tail.c_str());
 				// TODO: what is going on here ?!
-				char buff[PATH_MAX];
-				strncpy(buff,rindex(item->fullpath,'/')+1,strlen(rindex(item->fullpath,'/'))-1);
-				buff[strlen(rindex(item->fullpath,'/'))-1]='\0';
+				// char buff[PATH_MAX];
+				// buff[strlen(rindex(item->fullpath,'/'))-1]='\0';
 
-				ui_state.config_file = buff;
+				// ui_state.config_file = buff;
+				ui_state.config_file = str_tail;
 
 				PtSetResource(ABW_PtText_config_file, Pt_ARG_TEXT_STRING, ui_state.config_file.c_str(), 0);
 		     	PtDamageWidget( ABW_PtText_config_file );

@@ -270,7 +270,7 @@ int init( PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo 
 	ui_state.config_file_fullpath = "/net/";
 	ui_state.config_file_fullpath += ui_state.ui_node_name;
 	ui_state.config_file_fullpath += ui_state.mrrocpp_local_path;
-	ui_state.config_file_fullpath += "configs";
+//	ui_state.config_file_fullpath += "configs";
 
 	// printf ("Remember to create gns server\n");
 

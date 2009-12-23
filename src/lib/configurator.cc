@@ -145,7 +145,7 @@ std::string configurator::return_attach_point_name (config_path_type_t _type, co
 std::string configurator::return_ini_file_path()
 {
 	std::string value(mrrocpp_network_path);
-	value += "configs/";
+	//value += "configs/";
 	value += ini_file;
 
 	return value;
