@@ -1,6 +1,0 @@
-POZYCJA WYJSCIOWA ROBOTA DLA ZADANIA RYSOWANIA
-
-0.000 -0.087 -1.542 0.024 1.219 2.656 -2.664 0.074					// pozycja po synchronizacji
-0.000 -0.087 -1.542 0.024 -0.45 2.656 -2.664 0.074					// obracamy kisc aby nie stwarzac mozliwosci kontaktu z tasma
-0.0 -0.03 -1.606 0.461 -0.557 4.883 -2.499 0.074					// pozycja do ryowania (pamietac jeszcze nalezy o zacisnieciu chwytaka)
-0.0 -0.03 -1.606 0.024 -0.557 4.883 -2.499 0.074					// przed pozycja synchronizacji
