@@ -656,9 +656,9 @@ file_selection_window_send_location( PtWidget_t *widget, ApInfo_t *apinfo, PtCal
 				// To sie pozniej sprawdzi, czy wogule jest wzorzec znaleziony
 				std::string str_fullpath(item->fullpath);
 				std::string str_tail = str_fullpath.substr(str_fullpath.rfind(ui_state.mrrocpp_local_path)+ui_state.mrrocpp_local_path.length());
-				fprintf(stderr, "mrrocpp_local_path: %s\n", ui_state.mrrocpp_local_path.c_str());
-				fprintf(stderr, "fullpath: %s\n", item->fullpath);
-				fprintf(stderr, "tail: %s\n", str_tail.c_str());
+				//fprintf(stderr, "mrrocpp_local_path: %s\n", ui_state.mrrocpp_local_path.c_str());
+				//fprintf(stderr, "fullpath: %s\n", item->fullpath);
+				//fprintf(stderr, "tail: %s\n", str_tail.c_str());
 				// TODO: what is going on here ?!
 				// char buff[PATH_MAX];
 				// buff[strlen(rindex(item->fullpath,'/'))-1]='\0';
@@ -1393,25 +1393,27 @@ get_default_configuration_file_name() {
 	FILE * fp = fopen("../configs/default_file.cfg","r");
 	if (fp != NULL)
 	{
+		//printf("alala\n");
 		char tmp_buf[255];
 		fgets(tmp_buf, 255, fp); // Uwaga na zwracanego NULLa
 		char *tmp_buf1=strtok(tmp_buf,"=\n\r");   // get first token
 		ui_state.config_file = tmp_buf1;
 
-		ui_state.config_file_relativepath = "../configs/";
+		ui_state.config_file_relativepath = "../";
 		ui_state.config_file_relativepath += ui_state.config_file;
 
 		fclose(fp);
 		return 1;
 
 	} else {
+	//	printf("balala\n");
 		// jesli plik z domyslna konfiguracja (default_file.cfg) nie istnieje to utworz go i wpisz do niego common.ini
 		printf ("Utworzono plik default_file.cfg z konfiguracja common.ini\n");
 		fp = fopen("../configs/default_file.cfg","w");
 		fclose(fp);
 
-		ui_state.config_file = "common.ini";
-		ui_state.config_file_relativepath = "../configs/";
+		ui_state.config_file = "configs/common.ini";
+		ui_state.config_file_relativepath = "../";
 		ui_state.config_file_relativepath += ui_state.config_file;
 
 		std::ofstream outfile("../configs/default_file.cfg", std::ios::out);
@@ -1433,7 +1435,7 @@ get_default_configuration_file_name() {
 int
 set_default_configuration_file_name() {
 
-	ui_state.config_file_relativepath = "../configs/";
+	ui_state.config_file_relativepath = "../";
 	ui_state.config_file_relativepath += ui_state.config_file;
 
 	std::ofstream outfile("../configs/default_file.cfg", std::ios::out);
