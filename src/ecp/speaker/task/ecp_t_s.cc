@@ -18,7 +18,6 @@
 #include "lib/srlib.h"
 #include "ecp/speaker/ecp_r_speaker.h"
 #include "ecp/speaker/task/ecp_t_s.h"
-#include "ecp_mp/sensor/ecp_mp_s_mic.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -30,18 +29,6 @@ speaking::speaking(lib::configurator &_config) : task(_config)
 {
     ecp_m_robot = new robot (*this);
 
-    sensor_m[lib::SENSOR_MIC] =
-        new ecp_mp::sensor::mic(lib::SENSOR_MIC, "[vsp_mic]", *this);
-
-    // Konfiguracja wszystkich czujnikow
-    for (ecp_mp::sensors_t::iterator sensor_m_iterator = sensor_m.begin();
-            sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
-    {
-        sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika
-        sensor_m_iterator->second->configure_sensor();
-    }
-
-    usleep(1000*100);
 
     speak = new generator::speaking (*this, 8);
     speak->sensor_m = sensor_m;
