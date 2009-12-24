@@ -4,7 +4,7 @@
 HOMEDIR = ../..
 include $(HOMEDIR)/common.mk
 
-SOURCEDIRS = common vsp_time_sensor
+SOURCEDIRS = common
 ifneq ($(BUILD_TARGET), linux)
   SOURCEDIRS+= 
 endif

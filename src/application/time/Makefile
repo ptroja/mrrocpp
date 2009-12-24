@@ -1,28 +1,32 @@
-#------------------ vsp/schunk catalog makefile of the MRROC++ frame system ---------------------#
+#----------- ecp_mp/irp6_on_track catalog makefile of the MRROC++ frame system --------------#
 #======================================================#
-# Tworzy	: SHUNK VSP for QNX 6.2.1 (nieinteraktywna wspolpraca z czujnikiem sily)
+
 SOURCES = ${wildcard *.cc}
 OBJECTS = ${patsubst %.cc,%.o,${SOURCES}}
-ifeq ($(BUILD_TARGET), linux)
-  VSPOBJS = ../common/vsp_m_int_srr.o
-else
-  VSPOBJS = ../common/vsp_m_int.o
+
+BINARIES =			ecp_wii_teach
+
+ifneq ($(BUILD_TARGET), linux)
+BINARIES+=			
 endif
-VSPOBJS+= $(OBJECTS) $(SHOBJ)
-BINARIES = vsp_time_sensor
+
 #-----------------------------------------------------------------------------------------------------------------------#
 # Should be modified only by developers not by users
 HOMEDIR = ../../..
 include $(HOMEDIR)/common.mk
 
-SHOBJ = $(LIBDIR)/libmrrocpp.a ../common/vsp_sensor.o
+SHOBJ = ../../ecp/irp6_on_track/ecp_r_irp6ot.o ../../ecp/common/libecp.a $(LIBDIR)/libmrrocpp.a
 #======================================================#	
 .PHONY: all clean install
 #------------------------------------------------- Build rules -------------------------------------------------------#
 all: ${BINARIES}
 #-----------------------------------------------------------------------------------------------------------------------#
-vsp_time_sensor: $(VSPOBJS)
-	$(LD) $(LDFLAGS) -o $@  $^
+ecp_wii_teach:  ecp_t_wii_teach.o ../../ecp/common/generator/ecp_g_force.o generator/ecp_g_wii.o generator/ecp_g_wii_relative.o \
+		generator/ecp_g_wii_joint.o ../../ecp/common/generator/ecp_g_smooth.o \
+		../../ecp/common/generator/ecp_g_transparent.o ../../ecp/common/generator/ecp_g_jarosz.o sensor/ecp_mp_s_wiimote.o \
+                ../../ecp/common/generator/ecp_g_operator_reaction_condition.o ../../ecp/common/generator/ecp_g_sleep.o $(SHOBJ)
+	$(LD) $(LDFLAGS) -o $@ $^
+
 #---------------------------------Special object build rules (user made)-------------------------------------#
 # e.g:
 # plik.o: plik.cc plik1.h plik2.h ... itd
@@ -33,7 +37,7 @@ install: ${BINARIES}
 	${INSTALL} ${BINARIES} $(BINDIR)
 #-----------------------------------------------------------------------------------------------------------------------#
 clean:
-	@rm -f *.o *.err ${BINARIES} ./.deps/*.P
+	@rm -f *.o *.err ${BINARIES} ./.deps/*.P ./sensor/*.o ./sensor/*.err ./generator/*.o ./generator/*.err
 #-----------------------------------------------------------------------------------------------------------------------#
 
 include $(HOMEDIR)/depend.mk
