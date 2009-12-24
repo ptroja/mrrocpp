@@ -4,7 +4,14 @@
 SOURCES = ${wildcard *.cc}
 OBJECTS = ${patsubst %.cc,%.o,${SOURCES}}
 
-BINARIES =			ecp_wii_teach
+
+ifeq ($(BUILD_TARGET), linux)
+  VSPOBJS = ../../vsp/common/vsp_m_int_srr.o  $(LIBDIR)/libmrrocpp.a ../../vsp/common/vsp_sensor.o
+else
+  VSPOBJS = ../../vsp/common/vsp_m_int.o  $(LIBDIR)/libmrrocpp.a ../../vsp/common/vsp_sensor.o
+endif
+
+BINARIES =		vsp_time_sensor ecp_time 
 
 ifneq ($(BUILD_TARGET), linux)
 BINARIES+=			
@@ -15,17 +22,18 @@ endif
 HOMEDIR = ../../..
 include $(HOMEDIR)/common.mk
 
-SHOBJ = ../../ecp/irp6_on_track/ecp_r_irp6ot.o ../../ecp/common/libecp.a $(LIBDIR)/libmrrocpp.a
+SHOBJ = ../../ecp/irp6_on_track/ecp_r_irp6ot.o ../../ecp/irp6_postument/ecp_r_irp6p.o ../../ecp/common/libecp.a $(LIBDIR)/libmrrocpp.a
 #======================================================#	
 .PHONY: all clean install
 #------------------------------------------------- Build rules -------------------------------------------------------#
 all: ${BINARIES}
-#-----------------------------------------------------------------------------------------------------------------------#
-ecp_wii_teach:  ecp_t_wii_teach.o ../../ecp/common/generator/ecp_g_force.o generator/ecp_g_wii.o generator/ecp_g_wii_relative.o \
-		generator/ecp_g_wii_joint.o ../../ecp/common/generator/ecp_g_smooth.o \
-		../../ecp/common/generator/ecp_g_transparent.o ../../ecp/common/generator/ecp_g_jarosz.o sensor/ecp_mp_s_wiimote.o \
-                ../../ecp/common/generator/ecp_g_operator_reaction_condition.o ../../ecp/common/generator/ecp_g_sleep.o $(SHOBJ)
-	$(LD) $(LDFLAGS) -o $@ $^
+
+vsp_time_sensor: $(VSPOBJS) vsp_time_sensor.o
+	$(LD) $(LDFLAGS) -o $@  $^
+	
+ecp_time: ecp_mp_s_time.o ecp_t_time.o ecp_g_time.o $(SHOBJ)
+	$(LD) $(LDFLAGS) -o $@ $^ 
+
 
 #---------------------------------Special object build rules (user made)-------------------------------------#
 # e.g:

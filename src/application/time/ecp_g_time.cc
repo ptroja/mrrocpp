@@ -12,7 +12,7 @@
 #include "lib/com_buf.h"
 
 #include "lib/srlib.h"
-#include "ecp/common/generator/ecp_g_time.h"
+#include "ecp_g_time.h"
 
 #include "lib/mrmath/mrmath.h"
 
@@ -68,7 +68,7 @@ bool time::next_step ( )
     the_robot->ecp_command.instruction.set_type = ARM_DV;
     the_robot->ecp_command.instruction.get_type = NOTHING_DV;
     the_robot->ecp_command.instruction.get_arm_type = lib::INVALID_END_EFFECTOR;
-    
+
 
     //transmitter_m[TRANSMITTER_PLAYER]->t_read(0);
 

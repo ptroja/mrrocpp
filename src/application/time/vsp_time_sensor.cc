@@ -15,7 +15,7 @@
 
 #include "lib/srlib.h"
 
-#include "vsp/vsp_time_sensor/vsp_time_sensor.h"
+#include "vsp_time_sensor.h"
 
 namespace mrrocpp {
 namespace vsp {

@@ -5,11 +5,9 @@ SOURCES = ${wildcard *.cc}
 OBJECTS = ${patsubst %.cc,%.o,${SOURCES}}
 
 BINARIES = ecp_tran \
-	#ecp_time \
-	ecp_cvfradia \
+	#ecp_cvfradia \
 	ecp_pcbird \
 	ecp_visioncoordinates \
-	ecp_mam \
 	ecp_fsautomat
 
 	
@@ -36,25 +34,6 @@ ecp_tran: \
 		../irp6_mechatronika/ecp_r_irp6m.o \
 		../polycrank/ecp_r_polycrank.o \
 		../common/generator/ecp_g_transparent.o \
-		$(SHOBJ)
-	$(LD) $(LDFLAGS) -o $@ $^ 
-
-ecp_mam: \
-		../irp6_on_track/ecp_r_irp6ot.o \
-		../irp6_postument/ecp_r_irp6p.o \
-		../common/task/ecp_t_mam.o \
-		../common/generator/ecp_g_mam.o \
-		$(ECP_MPDIR)/sensor/ecp_mp_s_digital_scales.o \
-		$(SHOBJ)
-	$(LD) $(LDFLAGS) -o $@ $^ 
-
-
-ecp_time: \
-		../irp6_on_track/ecp_r_irp6ot.o \
-		../irp6_postument/ecp_r_irp6p.o \
-		$(ECP_MPDIR)/sensor/ecp_mp_s_time.o \
-		../common/task/ecp_t_time.o \
-		../common/generator/ecp_g_time.o \
 		$(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 

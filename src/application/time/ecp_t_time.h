@@ -2,7 +2,7 @@
 #define _ECP_T_SK_H
 
 #include "ecp/common/task/ecp_task.h"
-#include "ecp/common/generator/ecp_g_time.h"
+#include "ecp_g_time.h"
 
 namespace mrrocpp {
 namespace ecp {

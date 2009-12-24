@@ -14,7 +14,7 @@
 // Zawiera klase bazowa ecp_mp_sensor.
 #include "ecp_mp/sensor/ecp_mp_sensor.h"
 // Zawiera klase ecp_mp_time_sensor.
-#include "ecp_mp/sensor/ecp_mp_s_time.h"
+#include "ecp_mp_s_time.h"
 
 namespace mrrocpp {
 namespace ecp_mp {
