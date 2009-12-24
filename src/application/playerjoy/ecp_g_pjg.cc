@@ -6,8 +6,8 @@
 #include "lib/com_buf.h"
 
 #include "lib/srlib.h"
-#include "ecp/common/generator/ecp_g_pjg.h"
-#include "ecp_mp/transmitter/ecp_mp_tr_player.h"
+#include "application/playerjoy/ecp_g_pjg.h"
+#include "application/playerjoy/ecp_mp_tr_player.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -57,7 +57,7 @@ bool playerjoy::next_step ( )
     the_robot->ecp_command.instruction.set_type = ARM_DV;
     the_robot->ecp_command.instruction.get_type = NOTHING_DV;
     the_robot->ecp_command.instruction.get_arm_type = lib::INVALID_END_EFFECTOR;
-    
+
 
     transmitter_m[ecp_mp::transmitter::TRANSMITTER_PLAYER]->t_read(0);
     /*

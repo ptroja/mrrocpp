@@ -4,7 +4,7 @@
 SOURCES = ${wildcard *.cc}
 OBJECTS = ${patsubst %.cc,%.o,${SOURCES}}
 
-BINARIES =			ecp_teach
+BINARIES =			ecp_playerjoy
 
 ifneq ($(BUILD_TARGET), linux)
 BINARIES+=			
@@ -16,15 +16,17 @@ endif
 HOMEDIR = ../../..
 include $(HOMEDIR)/common.mk
 
-SHOBJ = ../../ecp_mp/libecp_mp.a ../../ecp_mp/ecp_mp_robot.o ../../ecp/irp6_on_track/ecp_r_irp6ot.o ../../ecp/irp6_postument/ecp_r_irp6p.o\
- ../../ecp/irp6_mechatronika/ecp_r_irp6m.o ../../ecp/common/libecp.a $(LIBDIR)/libmrrocpp.a
+SHOBJ = ../../ecp_mp/libecp_mp.a ../../ecp_mp/ecp_mp_robot.o ../../ecp/irp6_on_track/ecp_r_irp6ot.o\
+../../ecp/common/libecp.a $(LIBDIR)/libmrrocpp.a
 #======================================================#	
 .PHONY: all clean install
 #------------------------------------------------- Build rules -------------------------------------------------------#
 all: ${BINARIES}
+
 #-----------------------------------------------------------------------------------------------------------------------#
-ecp_teach: ecp_t_teach.o ../../ecp/common/generator/ecp_g_teach_in.o $(SHOBJ)
-	$(LD) $(LDFLAGS) -o $@ $^ 
+ecp_playerjoy: ecp_t_playerjoy_irp6ot.o ecp_g_pjg.o ecp_mp_tr_player.o $(LIBDIR)/libplayerc.a $(SHOBJ)
+	$(LD) $(LDFLAGS) -o $@ $^
+	
 	
 
 #---------------------------------Special object build rules (user made)-------------------------------------#

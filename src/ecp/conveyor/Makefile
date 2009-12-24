@@ -27,7 +27,9 @@ ecp_visconvsin: task/ecp_t_visconvsin.o generator/ecp_g_visconv.o ../common/gene
 #======================================================#	
 #----------------------------------------------- Maintain rules ----------------------------------------------------#
 install: ${BINARIES}
+#ifdef NOT_DEFINED
 	${INSTALL} ${BINARIES} $(BINDIR)
+	#endif
 #-----------------------------------------------------------------------------------------------------------------------#
 clean:
 	@rm -f *.o *.err ${BINARIES} ./.deps/*.P ./task/*.o ./task/*.err ./generator/*.o ./generator/*.err

@@ -7,7 +7,7 @@
 #include "lib/impconst.h"
 #include "lib/com_buf.h"				// numery bledow
 #include "lib/srlib.h"					// klasy bledow
-#include "ecp_mp/transmitter/ecp_mp_tr_player.h"
+#include "application/playerjoy/ecp_mp_tr_player.h"
 #include "player/playerc.h"
 
 namespace mrrocpp {

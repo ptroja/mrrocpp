@@ -3,8 +3,7 @@
 
 SOURCES = ${wildcard *.cc}
 OBJECTS = ${patsubst %.cc,%.o,${SOURCES}}
-BINARIES =		ecp_playerjoy \
-				ecp_irp6ot_rcsc \
+BINARIES =		ecp_irp6ot_rcsc \
 				ecp_draughts \
 				#ecp_irp6ot_multiplayer \
 				#ecp_haar \
@@ -36,17 +35,9 @@ ecp_draughts: task/ecp_t_draughts.o ../common/generator/ecp_g_force.o ../common/
 		 $(ECP_MPDIR)/transmitter/ecp_mp_tr_draughtsAI.o generator/ecp_g_vis_ib_eih_follower_irp6ot.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 
-
-
 #-----------------------------------------------------------------------------------------------------------------------#
 ecp_irp6ot_rcsc: task/ecp_t_rcsc_irp6ot.o ../common/generator/ecp_g_force.o ../common/task/ecp_st_go.o ../common/generator/ecp_g_smooth.o ../common/generator/ecp_g_transparent.o \
 		../common/generator/ecp_g_jarosz.o ../common/generator/ecp_g_operator_reaction_condition.o generator/ecp_g_vis_ib_eih_object_tracker_irp6ot.o $(SHOBJ)
-	$(LD) $(LDFLAGS) -o $@ $^
-
-
-
-#-----------------------------------------------------------------------------------------------------------------------#
-ecp_playerjoy: task/ecp_t_playerjoy_irp6ot.o ../common/generator/ecp_g_pjg.o $(ECP_MPDIR)/transmitter/ecp_mp_tr_player.o $(LIBDIR)/libplayerc.a $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 
 

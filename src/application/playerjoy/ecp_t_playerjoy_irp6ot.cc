@@ -17,9 +17,9 @@
 #include "ecp_mp/task/ecp_mp_t_rcsc.h"
 
 #include "ecp/irp6_on_track/ecp_r_irp6ot.h"
-#include "ecp/common/generator/ecp_g_pjg.h"
-#include "ecp_mp/transmitter/ecp_mp_tr_player.h"
-#include "ecp/irp6_on_track/task/ecp_t_playerjoy_irp6ot.h"
+#include "application/playerjoy/ecp_g_pjg.h"
+#include "application/playerjoy/ecp_mp_tr_player.h"
+#include "application/playerjoy/ecp_t_playerjoy_irp6ot.h"
 
 namespace mrrocpp {
 namespace ecp {
