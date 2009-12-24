@@ -8,8 +8,8 @@
 #include "ecp/common/task/ecp_st_go.h"
 #include "ecp/common/generator/ecp_g_sleep.h"
 #include "ecp_mp/sensor/ecp_mp_s_cvfradia.h"
-#include "ecp_mp/transmitter/ecp_mp_tr_draughtsAI.h"
-#include "ecp/irp6_on_track/generator/ecp_g_vis_ib_eih_follower_irp6ot.h"
+#include "ecp_mp_tr_draughtsAI.h"
+#include "ecp_g_vis_ib_eih_follower_irp6ot.h"
 
 namespace mrrocpp {
 namespace ecp {

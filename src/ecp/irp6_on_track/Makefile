@@ -4,7 +4,6 @@
 SOURCES = ${wildcard *.cc}
 OBJECTS = ${patsubst %.cc,%.o,${SOURCES}}
 BINARIES =		ecp_irp6ot_rcsc \
-				ecp_draughts \
 				#ecp_irp6ot_multiplayer \
 				#ecp_haar \
 
@@ -29,10 +28,7 @@ all: ${BINARIES}
 #		../common/generator/ecp_g_operator_reaction_condition.o generator/ecp_g_vis_ib_eih_planar_irp6ot.o  $(ECP_MPDIR)/sensor/ecp_mp_s_cvfradia.o   $(SHOBJ)
 #	$(LD) $(LDFLAGS) -o $@ $^
 #-----------------------------------------------------------------------------------------------------------------------#
-ecp_draughts: task/ecp_t_draughts.o ../common/generator/ecp_g_force.o ../common/task/ecp_st_go.o ../common/generator/ecp_g_transparent.o ../common/generator/ecp_g_jarosz.o\
-		 ../common/generator/ecp_g_operator_reaction_condition.o $(ECP_MPDIR)/sensor/ecp_mp_s_cvfradia.o ../common/generator/ecp_g_sleep.o generator/ecp_g_vis_ib_eih_planar_irp6ot.o\
-		 $(ECP_MPDIR)/transmitter/ecp_mp_tr_draughtsAI.o generator/ecp_g_vis_ib_eih_follower_irp6ot.o $(SHOBJ)
-	$(LD) $(LDFLAGS) -o $@ $^
+
 
 #-----------------------------------------------------------------------------------------------------------------------#
 ecp_irp6ot_rcsc: task/ecp_t_rcsc_irp6ot.o ../common/generator/ecp_g_force.o ../common/task/ecp_st_go.o ../common/generator/ecp_g_smooth.o ../common/generator/ecp_g_transparent.o \

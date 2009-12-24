@@ -6,7 +6,7 @@
 #include <string.h>
 
 
-#include "ecp_mp/transmitter/ecp_mp_tr_draughtsAI.h"
+#include "ecp_mp_tr_draughtsAI.h"
 
 using namespace std;
 

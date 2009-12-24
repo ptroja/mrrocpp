@@ -1,6 +1,6 @@
 //#include "ecp/irp6_on_track/ecp_local.h"
 #include "ecp/irp6_on_track/ecp_r_irp6ot.h"
-#include "ecp/irp6_on_track/task/ecp_t_draughts.h"
+#include "ecp_t_draughts.h"
 #include <stdio.h>
 #include <unistd.h>
 //#include <netdb.h>
