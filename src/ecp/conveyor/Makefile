@@ -26,10 +26,10 @@ ecp_visconvsin: task/ecp_t_visconvsin.o generator/ecp_g_visconv.o ../common/gene
 #	$(CXX) -c user_flags -I$(HOMEDIR)/include -o $@ $<
 #======================================================#	
 #----------------------------------------------- Maintain rules ----------------------------------------------------#
-install: ${BINARIES}
-#ifdef NOT_DEFINED
-	${INSTALL} ${BINARIES} $(BINDIR)
-	#endif
+install:#
+#install: ${BINARIES}
+#	${INSTALL} ${BINARIES} $(BINDIR)
+
 #-----------------------------------------------------------------------------------------------------------------------#
 clean:
 	@rm -f *.o *.err ${BINARIES} ./.deps/*.P ./task/*.o ./task/*.err ./generator/*.o ./generator/*.err
