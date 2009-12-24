@@ -10,8 +10,7 @@ BINARIES =		ecp_irp6ot_rcsc \
 
 				
 ifneq ($(BUILD_TARGET), linux)
-BINARIES+=		ecp_t_smooth_test \
-				ecp_t_grab_cube_irp6ot
+BINARIES+=		ecp_t_grab_cube_irp6ot
 
 endif
 
@@ -55,8 +54,8 @@ ecp_irp6ot_rcsc: task/ecp_t_rcsc_irp6ot.o ../common/generator/ecp_g_force.o ../c
 #						../common/generator/ecp_g_jarosz.o ../common/generator/ecp_g_operator_reaction_condition.o $(SHOBJ)
 #	$(LD) $(LDFLAGS) -o $@ $^
 #-----------------------------------------------------------------------------------------------------------------------#
-ecp_t_smooth_test: task/ecp_t_smooth_test.o ../common/generator/ecp_g_smooth.o ../common/generator/ecp_g_transparent.o ../common/generator/ecp_g_jarosz.o ../common/generator/ecp_g_operator_reaction_condition.o $(SHOBJ)
-	$(LD) $(LDFLAGS) -o $@ $^ 
+#ecp_t_smooth_test: task/ecp_t_smooth_test.o ../common/generator/ecp_g_smooth.o ../common/generator/ecp_g_transparent.o ../common/generator/ecp_g_jarosz.o ../common/generator/ecp_g_operator_reaction_condition.o $(SHOBJ)
+#	$(LD) $(LDFLAGS) -o $@ $^ 
 #-----------------------------------------------------------------------------------------------------------------------#
 ecp_t_grab_cube_irp6ot: generator/ecp_g_vis_ib_eih_object_tracker_irp6ot.o generator/ecp_g_vis_ib_eih_wrist_turner_irp6ot.o ../common/generator/ecp_g_force.o task/ecp_t_grab_cube_irp6ot.o ../common/generator/ecp_g_smooth.o ../common/generator/ecp_g_transparent.o ../common/generator/ecp_g_jarosz.o $(ECP_MPDIR)/sensor/ecp_mp_s_cvfradia.o ../common/generator/ecp_g_operator_reaction_condition.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 

@@ -143,6 +143,10 @@ class smooth : public delta {
 		/**
 		 *
 		 */
+		void send_coordinates(void);
+		/**
+		 *
+		 */
 		double generate_next_coords(int node_counter, int interpolation_node_no, double start_position, double v_p, double v_r, double v_k, double a_r, int k, double przysp, double jedn, double s_przysp, double s_jedn);
 		/**
 		 *

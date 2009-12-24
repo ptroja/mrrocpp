@@ -851,10 +851,111 @@ void smooth::generate_coords() {
 	//printf("\ngenerate_cords\n");
 }
 
+void smooth::send_coordinates() {
+
+    double gripper_position;
+    double tk=10*STEP;
+	int i; //licznik petli
+	int gripp; //os grippera
+
+	the_robot->ecp_command.instruction.instruction_type = lib::SET; //ustawienie parametrow ruchu w edp_data
+	the_robot->ecp_command.instruction.get_type = NOTHING_DV; //ponizej w caseach jest dalsze ustawianie
+	the_robot->ecp_command.instruction.get_arm_type = lib::INVALID_END_EFFECTOR;
+	the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
+	the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
+
+	switch ( td.arm_type ) {
+
+		case lib::ECP_XYZ_EULER_ZYZ:
+
+			homog_matrix.set_from_xyz_euler_zyz(coordinate_list_iterator->coordinate);
+			homog_matrix.get_frame_tab(the_robot->ecp_command.instruction.arm.pf_def.arm_frame);
+
+			gripp = 6;
+
+			coordinate_list_iterator++;
+
+			break;
+
+		case lib::ECP_XYZ_ANGLE_AXIS:
+
+			homog_matrix.set_from_xyz_angle_axis(coordinate_list_iterator->coordinate);
+			homog_matrix.get_frame_tab(the_robot->ecp_command.instruction.arm.pf_def.arm_frame);
+
+			gripp = 6;
+
+			coordinate_list_iterator++;
+
+			break;
+
+		case lib::ECP_JOINT:
+
+			for (i = 0; i < MAX_SERVOS_NR; i++) {
+				the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = coordinate_list_iterator->coordinate[i];
+			}
+
+			if(the_robot->robot_name == lib::ROBOT_IRP6_ON_TRACK) {
+				gripp = 7;
+			} else if(the_robot->robot_name == lib::ROBOT_IRP6_POSTUMENT) {
+				gripp = 6;
+			}
+
+			coordinate_list_iterator++;
+
+			break;
+
+		case lib::ECP_MOTOR:
+
+			for (i=0; i < MAX_SERVOS_NR; i++) {
+				the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = coordinate_list_iterator->coordinate[i];
+			}
+
+			if(the_robot->robot_name == lib::ROBOT_IRP6_ON_TRACK) {
+				gripp = 7;
+			} else if(the_robot->robot_name == lib::ROBOT_IRP6_POSTUMENT) {
+				gripp = 6;
+			}
+
+			coordinate_list_iterator++;
+
+			break;
+
+		default:
+			throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+	}// end:switch
+
+	//gripper
+	if (type == lib::RELATIVE) {
+		gripper_position = pose_list_iterator->k[gripp]*((tk)*pose_list_iterator->v_grip);
+
+		//printf(" %f \t", gripper_position);
+		if((node_counter * gripper_position > pose_list_iterator->coordinates[gripp] && pose_list_iterator->k[gripp] == -1) ||
+		(node_counter * gripper_position < pose_list_iterator->coordinates[gripp] && pose_list_iterator->k[gripp] == 1)) {
+		//printf("git");
+			the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = gripper_position;
+		} else {
+			the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = 0;
+		}
+	} else {
+
+		gripper_position = pose_list_iterator->start_position[gripp] +
+										   pose_list_iterator->k[gripp]*((node_counter*tk)*pose_list_iterator->v_grip);
+		//printf(" %f ", gripper_position);
+		if((gripper_position > pose_list_iterator->coordinates[gripp] && pose_list_iterator->k[gripp] == -1) ||
+				(gripper_position < pose_list_iterator->coordinates[gripp] && pose_list_iterator->k[gripp] == 1)) {
+			//printf("git");
+			the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = gripper_position;
+		} else {
+			the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = pose_list_iterator->coordinates[gripp];
+		}
+	}
+}
+
 //set necessary instructions, and other data for preparing the robot
 bool smooth::first_step() { //wywolywane tylko raz w calej trajektorii
 
 	//flush_coordinate_list();
+	int gripp; //licznik petli
     initiate_pose_list();
     td.arm_type = pose_list_iterator->arm_type;
 
@@ -927,10 +1028,6 @@ bool smooth::first_step() { //wywolywane tylko raz w calej trajektorii
 
 bool smooth::next_step () {
 
-    int i; //licznik petli
-    double gripper_position;
-    double tk=10*STEP;
-
     if (!trajectory_generated && !trajectory_calculated) {
     	//if (type == 2) {
     		//calculate_absolute_positions();
@@ -961,232 +1058,12 @@ bool smooth::next_step () {
 			node_counter = 0; //ustawienie makrokroku na 1 (jest za chwile inkrementowany przez move())
 		    next_pose_list_ptr();
 		    td.interpolation_node_no = pose_list_iterator->interpolation_node_no;
+		    send_coordinates();
 		}
     } else {
 
-    	the_robot->ecp_command.instruction.instruction_type = lib::SET; //ustawienie parametrow ruchu w edp_data
-    	the_robot->ecp_command.instruction.get_type = NOTHING_DV; //ponizej w caseach jest dalsze ustawianie
-    	the_robot->ecp_command.instruction.get_arm_type = lib::INVALID_END_EFFECTOR;
-    	the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
-    	the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
+    	send_coordinates();
 
-    	switch ( td.arm_type ) {
-
-    		case lib::ECP_XYZ_EULER_ZYZ:
-
-    			//the_robot->ecp_command.instruction.instruction_type = lib::SET; //dalsze ustawianie parametrow ruchu w edp
-    			//the_robot->ecp_command.instruction.set_type = ARM_DV; // ARM
-    			//the_robot->ecp_command.instruction.set_arm_type = lib::FRAME;
-    	    	/*if (type == lib::RELATIVE) {
-    	    		the_robot->ecp_command.instruction.motion_type = lib::RELATIVE;
-    	    		the_robot->ecp_command.instruction.interpolation_type = lib::TCIM;
-    	    	} else {
-    	    		the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
-    	    		the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-    	    	}*/
-    			//the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
-    			//the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
-
-    			homog_matrix.set_from_xyz_euler_zyz(coordinate_list_iterator->coordinate);
-
-    			//for (i = 0; i < 6; i++) {//zapisanie nastepnego polozenia (makrokroku) do robota
-
-					//TODO przetestowac
-    			homog_matrix.get_frame_tab(the_robot->ecp_command.instruction.arm.pf_def.arm_frame);
-    			//}
-
-    			if (type == lib::RELATIVE) {
-					gripper_position = pose_list_iterator->k[6]*((tk)*pose_list_iterator->v_grip);
-
-					//printf(" %f \t", gripper_position);
-					if((node_counter * gripper_position > pose_list_iterator->coordinates[6] && pose_list_iterator->k[6] == -1) ||
-					(node_counter * gripper_position < pose_list_iterator->coordinates[6] && pose_list_iterator->k[6] == 1)) {
-					//printf("git");
-						the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = gripper_position;
-					} else {
-						the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = 0;
-					}
-
-				} else {
-    			//gripper
-    			gripper_position = pose_list_iterator->start_position[6] +
-    			                                   pose_list_iterator->k[6]*((node_counter*tk)*pose_list_iterator->v_grip);
-					//printf(" %f ", gripper_position);
-					if((gripper_position > pose_list_iterator->coordinates[6] && pose_list_iterator->k[6] == -1) ||
-							(gripper_position < pose_list_iterator->coordinates[6] && pose_list_iterator->k[6] == 1)) {
-						//printf("git");
-						the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = gripper_position;
-					} else {
-						the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = pose_list_iterator->coordinates[6];
-					}
-				}
-
-    			coordinate_list_iterator++;
-
-    			break;
-
-    		case lib::ECP_XYZ_ANGLE_AXIS:
-
-    			//the_robot->ecp_command.instruction.instruction_type = lib::SET; //dalsze ustawianie parametrow ruchu w edp
-    			//the_robot->ecp_command.instruction.set_type = ARM_DV; // ARM
-    			//the_robot->ecp_command.instruction.set_arm_type = lib::FRAME;
-    	    	/*if (type == lib::RELATIVE) {
-    	    		the_robot->ecp_command.instruction.motion_type = lib::RELATIVE;
-    	    		the_robot->ecp_command.instruction.interpolation_type = lib::TCIM;
-    	    	} else {
-    	    		the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
-    	    		the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-    	    	}*/
-    			//the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
-    			//the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
-
-    			//for (i = 0; i < 6; i++) {//zapisanie nastepnego polozenia (makrokroku) do robota
-    			homog_matrix.set_from_xyz_angle_axis(coordinate_list_iterator->coordinate);
-    				//TODO przetestowac
-    			    //the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = coordinate_list_iterator->coordinate[i];
-    			homog_matrix.get_frame_tab(the_robot->ecp_command.instruction.arm.pf_def.arm_frame);
-    			//}
-
-    			//gripper
-    			if (type == lib::RELATIVE) {
-    				gripper_position = pose_list_iterator->k[6]*((tk)*pose_list_iterator->v_grip);
-
-        			//printf(" %f \t", gripper_position);
-                    if((node_counter * gripper_position > pose_list_iterator->coordinates[6] && pose_list_iterator->k[6] == -1) ||
-                    		(node_counter * gripper_position < pose_list_iterator->coordinates[6] && pose_list_iterator->k[6] == 1)) {
-                    	//printf("git");
-                    	the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = gripper_position;
-                    } else {
-                    	the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = 0;
-                    }
-
-    			} else {
-    				gripper_position = pose_list_iterator->start_position[6] +
-    			                                   pose_list_iterator->k[6]*((node_counter*tk)*pose_list_iterator->v_grip);
-        			//printf(" %f ", gripper_position);
-                    if((gripper_position > pose_list_iterator->coordinates[6] && pose_list_iterator->k[6] == -1) ||
-                    		(gripper_position < pose_list_iterator->coordinates[6] && pose_list_iterator->k[6] == 1)) {
-                    	//printf("git");
-                    	the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = gripper_position;
-                    } else {
-                    	the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = pose_list_iterator->coordinates[6];
-                    }
-    			}
-
-    			coordinate_list_iterator++;
-
-    			break;
-
-    		case lib::ECP_JOINT:
-
-    			//the_robot->ecp_command.instruction.instruction_type = lib::SET;
-    		    //the_robot->ecp_command.instruction.set_type = ARM_DV; // ARM
-    		    //the_robot->ecp_command.instruction.set_arm_type = lib::JOINT;
-    	    	/*if (type == lib::RELATIVE) {
-    	    		the_robot->ecp_command.instruction.motion_type = lib::RELATIVE;
-    	    	} else {
-    	    		the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
-    	    	}*/
-    		    //the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-    		    //the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
-    		    //the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
-
-    		    for (i = 0; i < MAX_SERVOS_NR; i++) {
-    		        the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = coordinate_list_iterator->coordinate[i];
-    		    }
-
-    		    //gripper
-    		    if(the_robot->robot_name == lib::ROBOT_IRP6_ON_TRACK) {
-    		        i=7;
-    		    } else if(the_robot->robot_name == lib::ROBOT_IRP6_POSTUMENT) {
-    		        i=6;
-				}
-
-    		    if (type == lib::RELATIVE) {
-					gripper_position = pose_list_iterator->k[i]*((tk)*pose_list_iterator->v_grip);
-
-					//printf(" %f \t", gripper_position);
-					if((node_counter * gripper_position > pose_list_iterator->coordinates[i] && pose_list_iterator->k[i] == -1) ||
-					(node_counter * gripper_position < pose_list_iterator->coordinates[i] && pose_list_iterator->k[i] == 1)) {
-					//printf("git");
-						the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = gripper_position;
-					} else {
-						the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = 0;
-					}
-				} else {
-
-					gripper_position = pose_list_iterator->start_position[i] +
-													   pose_list_iterator->k[i]*((node_counter*tk)*pose_list_iterator->v_grip);
-					//printf(" %f ", gripper_position);
-					if((gripper_position > pose_list_iterator->coordinates[i] && pose_list_iterator->k[i] == -1) ||
-							(gripper_position < pose_list_iterator->coordinates[i] && pose_list_iterator->k[i] == 1)) {
-						//printf("git");
-						the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = gripper_position;
-					} else {
-						the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = pose_list_iterator->coordinates[i];
-					}
-				}
-
-    		    coordinate_list_iterator++;
-
-    		    break;
-
-    		case lib::ECP_MOTOR:
-
-    			//the_robot->ecp_command.instruction.instruction_type = lib::SET;
-    		    //the_robot->ecp_command.instruction.set_type = ARM_DV; // ARM
-    		    //the_robot->ecp_command.instruction.set_arm_type = lib::MOTOR;
-    	    	/*if (type == lib::RELATIVE) {
-    	    		the_robot->ecp_command.instruction.motion_type = lib::RELATIVE;
-    	    	} else {
-    	    		the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
-    	    	}*/
-    		    //the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-    		    //the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
-    		    //the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
-
-    		    for (i=0; i < MAX_SERVOS_NR; i++) {
-    		        the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = coordinate_list_iterator->coordinate[i];
-    		    }
-
-    		    //gripper
-    		    if(the_robot->robot_name == lib::ROBOT_IRP6_ON_TRACK) {
-    		        i=7;
-    		    } else if(the_robot->robot_name == lib::ROBOT_IRP6_POSTUMENT) {
-    		        i=6;
-				}
-    		    if (type == lib::RELATIVE) {
-					gripper_position = pose_list_iterator->k[i]*((tk)*pose_list_iterator->v_grip);
-
-					//printf(" %f \t", gripper_position);
-					if((node_counter * gripper_position > pose_list_iterator->coordinates[i] && pose_list_iterator->k[i] == -1) ||
-					(node_counter * gripper_position < pose_list_iterator->coordinates[i] && pose_list_iterator->k[i] == 1)) {
-					//printf("git");
-						the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = gripper_position;
-					} else {
-						the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = 0;
-					}
-				} else {
-
-					gripper_position = pose_list_iterator->start_position[i] +
-													   pose_list_iterator->k[i]*((node_counter*tk)*pose_list_iterator->v_grip);
-					//printf(" %f ", gripper_position);
-					if((gripper_position > pose_list_iterator->coordinates[i] && pose_list_iterator->k[i] == -1) ||
-							(gripper_position < pose_list_iterator->coordinates[i] && pose_list_iterator->k[i] == 1)) {
-						//printf("git");
-						the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = gripper_position;
-					} else {
-						the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = pose_list_iterator->coordinates[i];
-					}
-				}
-
-    		    coordinate_list_iterator++;
-
-    		    break;
-
-    		default:
-    			throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
-    	}// end:switch
     }// end: if
     return true;
 
