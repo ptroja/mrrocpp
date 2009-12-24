@@ -5,7 +5,7 @@
  *      Author: rtulwin
  */
 
-#include "ecp/irp6_on_track/generator/ecp_g_vis_ib_eih_wrist_turner_irp6ot.h"
+#include "ecp_g_vis_ib_eih_wrist_turner_irp6ot.h"
 #include <math.h>
 
 

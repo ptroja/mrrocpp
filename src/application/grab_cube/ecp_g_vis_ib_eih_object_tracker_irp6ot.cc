@@ -6,7 +6,7 @@
  * \brief
  */
 
-#include "ecp/irp6_on_track/generator/ecp_g_vis_ib_eih_object_tracker_irp6ot.h"
+#include "ecp_g_vis_ib_eih_object_tracker_irp6ot.h"
 #include <math.h>
 
 
