@@ -9,7 +9,7 @@ BINARIES =		ecp_irp6ot_rcsc \
 
 				
 ifneq ($(BUILD_TARGET), linux)
-BINARIES+=		ecp_t_grab_cube_irp6ot
+BINARIES+=	
 
 endif
 
