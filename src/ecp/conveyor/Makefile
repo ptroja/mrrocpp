@@ -26,8 +26,7 @@ ecp_visconvsin: task/ecp_t_visconvsin.o generator/ecp_g_visconv.o ../common/gene
 #	$(CXX) -c user_flags -I$(HOMEDIR)/include -o $@ $<
 #======================================================#	
 #----------------------------------------------- Maintain rules ----------------------------------------------------#
-install:#
-#install: ${BINARIES}
+install: ${BINARIES}
 #	${INSTALL} ${BINARIES} $(BINDIR)
 
 #-----------------------------------------------------------------------------------------------------------------------#
