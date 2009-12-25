@@ -5,8 +5,7 @@ SOURCES = ${wildcard *.cc}
 OBJECTS = ${patsubst %.cc,%.o,${SOURCES}}
 
 BINARIES = ecp_tran \
-#	ecp_visioncoordinates \
-	ecp_fsautomat
+	#ecp_fsautomat
 
 	
 
@@ -50,19 +49,6 @@ ecp_fsautomat: \
 		$(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 	
-
-ecp_visioncoordinates: \
-		../irp6_on_track/ecp_r_irp6ot.o \
-		../irp6_postument/ecp_r_irp6p.o \
-		../common/task/ecp_t_visioncoordinates.o \
-		../common/generator/ecp_g_visioncoordinates.o \
-		../common/generator/ecp_g_smooth.o \
-		../common/generator/ecp_g_jarosz.o \
-		../common/generator/ecp_g_operator_reaction_condition.o \
-		$(ECP_MPDIR)/sensor/ecp_mp_s_cvfradia.o \
-		$(SHOBJ)
-	$(LD) $(LDFLAGS) -o $@ $^ 
-
 	
 #---------------------------------Special object build rules (user made)-------------------------------------#
 # e.g:
