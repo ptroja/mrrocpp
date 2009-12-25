@@ -282,6 +282,8 @@ protected:
 
 public:
   calibration (common::task::task& _ecp_task, double interval);
+	// Zapis danych z kalibracji do pliku
+	void ecp_save_extended_file (operator_reaction_condition& the_condition);
 
    virtual bool first_step ();
    virtual bool next_step ();
@@ -302,6 +304,8 @@ protected:
    double A3[MAX_SERVOS_NR];
 
 public:
+
+
 	  cubic_spline();
 	  cubic_spline (common::task::task& _ecp_task, double interval);
 
@@ -409,6 +413,9 @@ public:
 	  elipsoid (common::task::task& _ecp_task);
 
 
+	  // Zapis rzeczywistej trajektorii do pliku
+	  void ecp_save_trajectory ();
+
   virtual bool first_step ();
       // generuje pierwszy krok ruchu -
       // pierwszy krok czesto rozni sie od pozostalych,
@@ -430,13 +437,10 @@ public:
 // ########################################################################################################
 
 
-// Zapis rzeczywistej trajektorii do pliku
-void ecp_save_trajectory (elipsoid& the_generator, common::task::task& _ecp_task);
+
 
 // --------------------------------------------------------------------------
-// Zapis danych z kalibracji do pliku
-void ecp_save_extended_file (calibration& the_generator,
-	 operator_reaction_condition& the_condition, common::task::task& _ecp_task);
+
 
 } // namespace generator
 } // namespace common

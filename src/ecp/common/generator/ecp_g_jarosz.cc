@@ -1577,6 +1577,82 @@ calibration::calibration(common::task::task& _ecp_task, double interval) :
 	v_max_aa[6] = 0.0;
 }
 
+
+
+// --------------------------------------------------------------------------
+// Zapis danych z kalibracji do pliku
+void calibration::ecp_save_extended_file(operator_reaction_condition& the_condition)
+{
+	lib::ECP_message ecp_to_ui_msg; // Przesylka z ECP do UI
+	lib::UI_reply ui_to_ecp_rep; // Odpowiedz UI do ECP
+	ecp_taught_in_pose tip; // Nauczona pozycja
+	ecp_taught_in_pose etip; // Odczytana pozycja
+	char *cwd; // Wsk. na nazwe biezacego katalogu
+	uint64_t e; // Kod bledu systemowego
+	uint64_t number_of_poses; // Liczba pozycji z listy pozycji
+	uint64_t number_of_sup; // Liczba pozycji z listy odczytow
+	uint64_t i, j; // Liczniki petli
+
+	ecp_to_ui_msg.ecp_message = lib::SAVE_FILE; // Polecenie wprowadzenia nazwy pliku
+	strcpy(ecp_to_ui_msg.string, "*.cdt"); // Wzorzec nazwy pliku
+	// if ( Send (UI_pid, &ecp_to_ui_msg, &ui_to_ecp_rep, sizeof(lib::ECP_message), sizeof(lib::UI_reply)) == -1) {
+#if !defined(USE_MESSIP_SRR)
+	ecp_to_ui_msg.hdr.type=0;
+
+	if (MsgSend(ecp_t.UI_fd, &ecp_to_ui_msg, sizeof(lib::ECP_message), &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0) {// by Y&W
+#else
+	if (messip::port_send(_ecp_task.UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0) {
+#endif
+		e = errno;
+		perror("ECP: Send() to UI failed");
+		ecp_t.sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ECP: Send() to UI failed");
+		throw generator::ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
+	}
+	if (ui_to_ecp_rep.reply == lib::QUIT) // Nie wybrano nazwy pliku lub zrezygnowano z zapisu
+		return;
+
+	// Ustawienie sciezki dostepu do pliku
+	cwd = getcwd(NULL, 0);
+	if (chdir(ui_to_ecp_rep.path) != 0) {
+		perror(ui_to_ecp_rep.path);
+		throw generator::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_DIRECTORY);
+	}
+	std::ofstream to_file(ui_to_ecp_rep.filename); // otworz plik do zapisu
+	e = errno;
+	if (!to_file) {
+		perror(ui_to_ecp_rep.filename);
+		throw generator::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
+	} else {
+		initiate_pose_list(); // inicjacja listy nauczonych pozycji
+		the_condition.initiate_supplementary_list(); // inicjacja listy odczytanych pozycji
+		number_of_sup = the_condition.supplementary_list_length();
+		number_of_poses = pose_list_length(); // liczba pozycji
+		if (number_of_poses != number_of_sup)
+			throw generator::ECP_error(lib::NON_FATAL_ERROR, NON_COMPATIBLE_LISTS);
+
+		to_file << number_of_poses << '\n'; // ???
+		for (i = 0; i < number_of_poses; i++) {
+			to_file << i << ' ';
+			get_pose(tip);
+			for (j = 0; j <MAX_SERVOS_NR; j++)
+				to_file << tip.coordinates[j] << ' ';
+			to_file << "    ";
+			the_condition.get_supplementary(etip);
+			for (j = 0; j <MAX_SERVOS_NR; j++)
+				to_file << etip.coordinates[j] << ' ';
+			to_file << '\n';
+			next_pose_list_ptr();
+			the_condition.next_supplementary_list_ptr();
+		} // end: for
+		initiate_pose_list(); // inicjacja listy nauczonych pozycji
+		the_condition.initiate_supplementary_list(); // inicjacja listy odczytanych pozycji
+	}
+}
+// --------------------------------------------------------------------------
+
+
+
+
 // ----------------------------------------------------------------------------------------------
 // ----------------------  metoda	first_step -------------------------------------------------
 // ----------------------------------------------------------------------------------------------
@@ -3081,6 +3157,64 @@ elipsoid::elipsoid(common::task::task& _ecp_task) :
 }
 
 
+
+// --------------------------------------------------------------------------
+// Zapis rzeczywistej trajektorii do pliku
+void elipsoid::ecp_save_trajectory()
+{
+	lib::ECP_message ecp_to_ui_msg; // Przesylka z ECP do UI
+	lib::UI_reply ui_to_ecp_rep; // Odpowiedz UI do ECP
+
+	uint64_t e; // Kod bledu systemowego
+	uint64_t number_of_poses; // Liczba pozycji do zapamietania
+	uint64_t i, j; // Liczniki petli
+	one_sample cp; // Pojedynczy pomiar
+
+	ecp_to_ui_msg.ecp_message = lib::SAVE_FILE; // Polecenie wprowadzenia nazwy pliku
+	strcpy(ecp_to_ui_msg.string, "*.dat"); // Wzorzec nazwy pliku
+	// if ( Send (UI_pid, &ecp_to_ui_msg, &ui_to_ecp_rep, sizeof(lib::ECP_message), sizeof(lib::UI_reply)) == -1) {
+#if !defined(USE_MESSIP_SRR)
+	ecp_to_ui_msg.hdr.type=0;
+
+	if (MsgSend(ecp_t.UI_fd, &ecp_to_ui_msg, sizeof(lib::ECP_message), &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0) {// by Y&W
+#else
+	if (messip::port_send(_ecp_task.UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0) {
+#endif
+		e = errno;
+		perror("ECP: Send() to UI failed");
+		ecp_t.sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ECP: Send() to UI failed");
+		throw generator::ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
+	}
+
+	if (ui_to_ecp_rep.reply == lib::QUIT) // Nie wybrano nazwy pliku lub zrezygnowano z zapisu
+		return;
+
+	if (chdir(ui_to_ecp_rep.path) != 0) {
+		perror(ui_to_ecp_rep.path);
+		throw generator::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_DIRECTORY);
+	}
+	std::ofstream to_file(ui_to_ecp_rep.filename); // otworz plik do zapisu
+	e = errno;
+	if (!to_file.good()) {
+		perror(ui_to_ecp_rep.filename);
+		throw generator::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
+	} else {
+		number_of_poses = get_number_of_intervals();
+		printf("OK=%lld   fn=%s\n", number_of_poses, ui_to_ecp_rep.filename);
+		for (i = 0; i < number_of_poses; i++) {
+			get_sample(cp, i);
+			to_file << cp.ctime << ' ';
+			for (j = 0; j <MAX_SERVOS_NR; j++)
+				to_file << cp.coordinates[j] << ' ';
+			to_file << '\n';
+		}
+	}
+
+	clear_buffer();
+} // end: irp6_postument_save_trajectory()
+// --------------------------------------------------------------------------
+
+
 void elipsoid::get_sample(one_sample& cp, int sn)
 {
 	cp.ctime = trj_ptr[sn].ctime;
@@ -3241,133 +3375,6 @@ bool elipsoid::next_step()
 		//   next_pose_list_ptr ();
 		// Ruch do kolejnej pozycji na liscie zakonczono - informacja dla Move()
 		return false;
-	}
-}
-// --------------------------------------------------------------------------
-
-// --------------------------------------------------------------------------
-// Zapis rzeczywistej trajektorii do pliku
-void ecp_save_trajectory(elipsoid& the_generator, common::task::task& _ecp_task)
-{
-	lib::ECP_message ecp_to_ui_msg; // Przesylka z ECP do UI
-	lib::UI_reply ui_to_ecp_rep; // Odpowiedz UI do ECP
-
-	uint64_t e; // Kod bledu systemowego
-	uint64_t number_of_poses; // Liczba pozycji do zapamietania
-	uint64_t i, j; // Liczniki petli
-	one_sample cp; // Pojedynczy pomiar
-
-	ecp_to_ui_msg.ecp_message = lib::SAVE_FILE; // Polecenie wprowadzenia nazwy pliku
-	strcpy(ecp_to_ui_msg.string, "*.dat"); // Wzorzec nazwy pliku
-	// if ( Send (UI_pid, &ecp_to_ui_msg, &ui_to_ecp_rep, sizeof(lib::ECP_message), sizeof(lib::UI_reply)) == -1) {
-#if !defined(USE_MESSIP_SRR)
-	ecp_to_ui_msg.hdr.type=0;
-
-	if (MsgSend(_ecp_task.UI_fd, &ecp_to_ui_msg, sizeof(lib::ECP_message), &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0) {// by Y&W
-#else
-	if (messip::port_send(_ecp_task.UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0) {
-#endif
-		e = errno;
-		perror("ECP: Send() to UI failed");
-		_ecp_task.sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ECP: Send() to UI failed");
-		throw generator::ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
-	}
-
-	if (ui_to_ecp_rep.reply == lib::QUIT) // Nie wybrano nazwy pliku lub zrezygnowano z zapisu
-		return;
-
-	if (chdir(ui_to_ecp_rep.path) != 0) {
-		perror(ui_to_ecp_rep.path);
-		throw generator::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_DIRECTORY);
-	}
-	std::ofstream to_file(ui_to_ecp_rep.filename); // otworz plik do zapisu
-	e = errno;
-	if (!to_file.good()) {
-		perror(ui_to_ecp_rep.filename);
-		throw generator::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
-	} else {
-		number_of_poses = the_generator.get_number_of_intervals();
-		printf("OK=%lld   fn=%s\n", number_of_poses, ui_to_ecp_rep.filename);
-		for (i = 0; i < number_of_poses; i++) {
-			the_generator.get_sample(cp, i);
-			to_file << cp.ctime << ' ';
-			for (j = 0; j <MAX_SERVOS_NR; j++)
-				to_file << cp.coordinates[j] << ' ';
-			to_file << '\n';
-		}
-	}
-
-	the_generator.clear_buffer();
-} // end: irp6_postument_save_trajectory()
-// --------------------------------------------------------------------------
-
-// --------------------------------------------------------------------------
-// Zapis danych z kalibracji do pliku
-void ecp_save_extended_file(calibration& the_generator, operator_reaction_condition& the_condition, common::task::task& _ecp_task)
-{
-	lib::ECP_message ecp_to_ui_msg; // Przesylka z ECP do UI
-	lib::UI_reply ui_to_ecp_rep; // Odpowiedz UI do ECP
-	ecp_taught_in_pose tip; // Nauczona pozycja
-	ecp_taught_in_pose etip; // Odczytana pozycja
-	char *cwd; // Wsk. na nazwe biezacego katalogu
-	uint64_t e; // Kod bledu systemowego
-	uint64_t number_of_poses; // Liczba pozycji z listy pozycji
-	uint64_t number_of_sup; // Liczba pozycji z listy odczytow
-	uint64_t i, j; // Liczniki petli
-
-	ecp_to_ui_msg.ecp_message = lib::SAVE_FILE; // Polecenie wprowadzenia nazwy pliku
-	strcpy(ecp_to_ui_msg.string, "*.cdt"); // Wzorzec nazwy pliku
-	// if ( Send (UI_pid, &ecp_to_ui_msg, &ui_to_ecp_rep, sizeof(lib::ECP_message), sizeof(lib::UI_reply)) == -1) {
-#if !defined(USE_MESSIP_SRR)
-	ecp_to_ui_msg.hdr.type=0;
-
-	if (MsgSend(_ecp_task.UI_fd, &ecp_to_ui_msg, sizeof(lib::ECP_message), &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0) {// by Y&W
-#else
-	if (messip::port_send(_ecp_task.UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0) {
-#endif
-		e = errno;
-		perror("ECP: Send() to UI failed");
-		_ecp_task.sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ECP: Send() to UI failed");
-		throw generator::ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
-	}
-	if (ui_to_ecp_rep.reply == lib::QUIT) // Nie wybrano nazwy pliku lub zrezygnowano z zapisu
-		return;
-
-	// Ustawienie sciezki dostepu do pliku
-	cwd = getcwd(NULL, 0);
-	if (chdir(ui_to_ecp_rep.path) != 0) {
-		perror(ui_to_ecp_rep.path);
-		throw generator::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_DIRECTORY);
-	}
-	std::ofstream to_file(ui_to_ecp_rep.filename); // otworz plik do zapisu
-	e = errno;
-	if (!to_file) {
-		perror(ui_to_ecp_rep.filename);
-		throw generator::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
-	} else {
-		the_generator.initiate_pose_list(); // inicjacja listy nauczonych pozycji
-		the_condition.initiate_supplementary_list(); // inicjacja listy odczytanych pozycji
-		number_of_sup = the_condition.supplementary_list_length();
-		number_of_poses = the_generator.pose_list_length(); // liczba pozycji
-		if (number_of_poses != number_of_sup)
-			throw generator::ECP_error(lib::NON_FATAL_ERROR, NON_COMPATIBLE_LISTS);
-
-		to_file << number_of_poses << '\n'; // ???
-		for (i = 0; i < number_of_poses; i++) {
-			to_file << i << ' ';
-			the_generator.get_pose(tip);
-			for (j = 0; j <MAX_SERVOS_NR; j++)
-				to_file << tip.coordinates[j] << ' ';
-			to_file << "    ";
-			the_condition.get_supplementary(etip);
-			for (j = 0; j <MAX_SERVOS_NR; j++)
-				to_file << etip.coordinates[j] << ' ';
-			to_file << '\n';
-			the_generator.next_pose_list_ptr();
-			the_condition.next_supplementary_list_ptr();
-		} // end: for
-		the_generator.initiate_pose_list(); // inicjacja listy nauczonych pozycji
-		the_condition.initiate_supplementary_list(); // inicjacja listy odczytanych pozycji
 	}
 }
 // --------------------------------------------------------------------------
