@@ -17,9 +17,8 @@ all: $(SOURCEDIRS) $(UIDIR)
 kinematics edp ecp_mp vsp: lib
 edp ecp_mp vsp: kinematics
 mp ecp task: ecp_mp
-application: ecp mp vsp
+application: ecp mp vsp edp
 ui: ecp
-ui_server: ui
 
 $(SOURCEDIRS):
 	@$(MAKE) -C $@
