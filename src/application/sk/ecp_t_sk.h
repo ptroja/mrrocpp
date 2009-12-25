@@ -8,6 +8,13 @@ namespace ecp {
 namespace common {
 namespace task {
 
+/** @edge_following group1
+ *
+ *  lalala
+ *  @{
+ */
+
+
 class sk: public common::task::task  {
 protected:
 	generator::tff_nose_run* nrg;
@@ -22,6 +29,8 @@ public:
 	// methods for ECP template to redefine in concrete classes
 	void main_task_algorithm(void);
 };
+
+/** @} */ // end of edge_following
 
 } // namespace task
 } // namespace common

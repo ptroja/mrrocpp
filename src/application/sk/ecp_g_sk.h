@@ -20,6 +20,10 @@ namespace ecp {
 namespace common {
 namespace generator {
 
+/** @defgroup edge_following Edge following application
+ *  Single robot application of IRp6 manipulator following of an uknown contour
+ *  @{
+ */
 
 
 class y_edge_follow_force : public teach_in
@@ -46,6 +50,7 @@ public:
 }; // end:
 ///
 
+/** @} */ // end of edge_following
 
 
 } // namespace generator
