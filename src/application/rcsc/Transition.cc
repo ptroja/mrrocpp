@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "mp/Transition.h"
+#include "Transition.h"
 
 namespace mrrocpp {
 namespace mp {

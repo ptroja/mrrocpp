@@ -14,8 +14,8 @@
 
 #include <list>
 
-#include "mp/CubeState.h"
-#include "mp/SingleManipulation.h"
+#include "CubeState.h"
+#include "SingleManipulation.h"
 
 namespace mrrocpp {
 namespace mp {

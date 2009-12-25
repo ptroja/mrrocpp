@@ -11,7 +11,7 @@
 #include "ecp/common/generator/ecp_g_force.h"
 //#include "ecp/common/generator/ecp_g_smooth.h"
 #include "ecp/common/generator/ecp_g_smooth.h"
-#include "ecp/irp6_postument/task/ecp_t_rcsc_irp6p.h"
+#include "ecp_t_rcsc_irp6p.h"
 
 namespace mrrocpp {
 namespace ecp {

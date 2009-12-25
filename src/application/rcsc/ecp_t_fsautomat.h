@@ -27,7 +27,6 @@ class fsautomat: public task
 	protected:
 		// generatory
 		common::generator::smooth* sg;
-		common::generator::tool_change* tcg;
 		common::generator::transparent* gt;
 		common::generator::tff_nose_run* nrg;
 		common::generator::tff_rubik_grab* rgg;

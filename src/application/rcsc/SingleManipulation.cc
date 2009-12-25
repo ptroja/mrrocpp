@@ -1,4 +1,4 @@
-#include "mp/SingleManipulation.h"
+#include "SingleManipulation.h"
 
 namespace mrrocpp {
 namespace mp {

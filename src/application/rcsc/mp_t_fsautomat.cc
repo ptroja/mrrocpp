@@ -26,12 +26,12 @@
 
 #include "lib/srlib.h"
 #include "mp/mp.h"
-#include "mp/task/mp_t_fsautomat.h"
+#include "mp_t_fsautomat.h"
 
 
-#include "ecp_mp/transmitter/ecp_mp_tr_rc_windows.h"
-#include "mp/State.h"
-#include "mp/StateHeap.h"
+#include "ecp_mp_tr_rc_windows.h"
+#include "State.h"
+#include "StateHeap.h"
 
 #include "lib/datastr.h"
 

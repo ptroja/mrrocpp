@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "mp/StateHeap.h"
+#include "StateHeap.h"
 
 namespace mrrocpp {
 namespace mp {
@@ -37,7 +37,7 @@ const char * StateHeap::popTargetName()
 	// showing content
 	printf("poping..\n");
 	showHeapContent();
-	if(targetsHeap == NULL || 
+	if(targetsHeap == NULL ||
 			targetsHeap->empty())
 		return "_STOP_";
 	else

@@ -15,7 +15,7 @@ MP_ROBOTS_OBJECTS = \
 	../../mp/robot/mp_r_manip_and_conv.o
 
 
-BINARIES =		mp_multiplayer ecp_irp6ot_multiplayer 
+BINARIES = mp_rcsc mp_fsautomat ecp_irp6ot_rcsc ecp_irp6p_rcsc ecp_speak_rcsc ecp_fsautomat
 
 ifneq ($(BUILD_TARGET), linux)
 BINARIES+=			
@@ -32,51 +32,44 @@ SHOBJ = $(LIBDIR)/libmrrocpp.a
 #------------------------------------------------- Build rules -------------------------------------------------------#
 all: ${BINARIES}
 
-mp_multiplayer: mp_t_multiplayer.o ../../mp/libmprobots.a ../../mp/libmpmain.a ../../ecp_mp/libecp_mp.a $(MP_ROBOTS_OBJECTS) $(SHOBJ)
+mp_rcsc: mp_t_rcsc.o ecp_mp_tr_rc_windows.o CubeState.o SingleManipulation.o \
+	../../mp/libmprobots.a ../../mp/libmpmain.a ../../ecp_mp/libecp_mp.a $(MP_ROBOTS_OBJECTS) $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
-
-
-mp_rcsc: task/mp_t_rcsc.o $(ECP_MPDIR)/transmitter/ecp_mp_tr_rc_windows.o CubeState.o SingleManipulation.o $(SHOBJ)
-	$(LD) $(LDFLAGS) -o $@ $^
-
-mp_fsautomat: task/mp_t_fsautomat.o \
+	
+mp_fsautomat: mp_t_fsautomat.o ecp_mp_tr_rc_windows.o CubeState.o SingleManipulation.o \
 	StateHeap.o State.o Condition.o Transition.o \
-	$(ECP_MPDIR)/transmitter/ecp_mp_tr_rc_windows.o \
-	CubeState.o SingleManipulation.o \
-	$(SHOBJ)
+	../../mp/libmprobots.a ../../mp/libmpmain.a ../../ecp_mp/libecp_mp.a $(MP_ROBOTS_OBJECTS) $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 
-ecp_irp6ot_multiplayer: ecp_t_multiplayer_irp6ot.o ../../ecp/common/task/ecp_st_go.o ../../ecp/common/generator/ecp_g_smooth.o \
+
+ecp_irp6ot_rcsc: ecp_t_rcsc_irp6ot.o ../../ecp/common/task/ecp_st_go.o ../../ecp/common/generator/ecp_g_smooth.o \
 	../../ecp/common/generator/ecp_g_force.o  ../../ecp/common/generator/ecp_g_transparent.o \
 	../../ecp/common/generator/ecp_g_jarosz.o ../../ecp/common/generator/ecp_g_operator_reaction_condition.o \
+	../../ecp/irp6_on_track/generator/ecp_g_vis_ib_eih_object_tracker_irp6ot.o \
+	../../ecp/irp6_on_track/ecp_r_irp6ot.o ../../ecp/common/libecp.a $(SHOBJ)
+	$(LD) $(LDFLAGS) -o $@ $^
+
+
+ecp_irp6p_rcsc: ecp_t_rcsc_irp6p.o ../../ecp/common/task/ecp_st_go.o ../../ecp/common/generator/ecp_g_smooth.o \
+	../../ecp/common/generator/ecp_g_force.o  ../../ecp/common/generator/ecp_g_transparent.o \
+	../../ecp/common/generator/ecp_g_jarosz.o ../../ecp/common/generator/ecp_g_operator_reaction_condition.o \
+	../../ecp/irp6_postument/ecp_r_irp6p.o ../../ecp/common/libecp.a $(SHOBJ)
+	$(LD) $(LDFLAGS) -o $@ $^
+	
+	
+ecp_speak_rcsc: ecp_t_rcsc_speaker.o ../../ecp/common/generator/ecp_g_transparent.o \
+	../../ecp/speaker/generator/ecp_g_speak.o \
+	../../ecp/speaker/ecp_r_speaker.o ../../ecp/common/libecp.a $(SHOBJ)
+	$(LD) $(LDFLAGS) -o $@ $^
+
+
+ecp_fsautomat: ecp_t_fsautomat.o ../../ecp/common/task/ecp_st_go.o ../../ecp/common/generator/ecp_g_smooth.o \
+	../../ecp/common/generator/ecp_g_force.o  ../../ecp/common/generator/ecp_g_transparent.o \
+	../../ecp/common/generator/ecp_g_jarosz.o ../../ecp/common/generator/ecp_g_operator_reaction_condition.o \
+	../../ecp_mp/Trajectory.o \
 	../../ecp/irp6_on_track/ecp_r_irp6ot.o ../../ecp/irp6_postument/ecp_r_irp6p.o ../../ecp/common/libecp.a $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 
-
-ecp_irp6ot_rcsc: task/ecp_t_rcsc_irp6ot.o ../common/generator/ecp_g_force.o ../common/task/ecp_st_go.o ../common/generator/ecp_g_smooth.o ../common/generator/ecp_g_transparent.o \
-		../common/generator/ecp_g_jarosz.o ../common/generator/ecp_g_operator_reaction_condition.o generator/ecp_g_vis_ib_eih_object_tracker_irp6ot.o $(SHOBJ)
-	$(LD) $(LDFLAGS) -o $@ $^
-
-ecp_irp6p_rcsc: task/ecp_t_rcsc_irp6p.o ../common/generator/ecp_g_smooth.o ../common/generator/ecp_g_force.o ../common/task/ecp_st_go.o ../common/generator/ecp_g_transparent.o \
-		../common/generator/ecp_g_jarosz.o ../common/generator/ecp_g_operator_reaction_condition.o $(SHOBJ)
-	$(LD) $(LDFLAGS) -o $@ $^ 
-
-ecp_speak_rcsc: task/ecp_t_rcsc_speaker.o generator/ecp_g_speak.o ../common/generator/ecp_g_transparent.o $(SHOBJ)
-	$(LD) $(LDFLAGS) -o $@ $^
-
-ecp_fsautomat: \
-		../irp6_on_track/ecp_r_irp6ot.o \
-		../irp6_postument/ecp_r_irp6p.o \
-		../common/task/ecp_t_fsautomat.o \
-		../../ecp_mp/Trajectory.o \
-		../common/generator/ecp_g_force.o \
-		../common/task/ecp_st_go.o \
-		../common/generator/ecp_g_smooth.o \
-		../common/generator/ecp_g_transparent.o \
-		../common/generator/ecp_g_jarosz.o \
-		../common/generator/ecp_g_operator_reaction_condition.o \
-		$(SHOBJ)
-	$(LD) $(LDFLAGS) -o $@ $^
 
 #---------------------------------Special object build rules (user made)-------------------------------------#
 # e.g:

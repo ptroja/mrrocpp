@@ -11,8 +11,8 @@
 #include "lib/srlib.h"
 #include "mp/mp.h"
 #include "mp/generator/mp_g_common.h"
-#include "mp/task/mp_t_rcsc.h"
-#include "ecp_mp/transmitter/ecp_mp_tr_rc_windows.h"
+#include "mp_t_rcsc.h"
+#include "ecp_mp_tr_rc_windows.h"
 #include "ecp/festival/generator/ecp_g_festival.h"
 #include "ecp_mp/task/ecp_mp_t_festival.h"
 

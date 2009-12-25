@@ -2,8 +2,8 @@
 #if !defined(_TRANSITION_H_)
 #define _TRANSITION_H_
 
-#include "mp/Condition.h"
-#include "mp/StateHeap.h"
+#include "Condition.h"
+#include "StateHeap.h"
 
 namespace mrrocpp {
 namespace mp {

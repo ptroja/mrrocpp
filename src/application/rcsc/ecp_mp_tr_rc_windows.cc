@@ -23,7 +23,7 @@
 #include "ecp_mp/transmitter/transmitter.h"
 #include "ecp_mp/task/ecp_mp_task.h"
 #include "lib/srlib.h"					// klasy bledow
-#include "ecp_mp/transmitter/ecp_mp_tr_rc_windows.h"
+#include "ecp_mp_tr_rc_windows.h"
 
 namespace mrrocpp {
 namespace ecp_mp {

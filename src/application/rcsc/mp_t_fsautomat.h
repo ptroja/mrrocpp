@@ -12,9 +12,9 @@
 #include "mp/mp.h"
 #include "ecp_mp/task/ecp_mp_task.h"
 //#include "ecp_mp/task/ecp_mp_t_fsautomat.h"
-#include "mp/State.h"
-#include "mp/CubeState.h"
-#include "mp/SingleManipulation.h"
+#include "State.h"
+#include "CubeState.h"
+#include "SingleManipulation.h"
 
 namespace mrrocpp {
 namespace mp {

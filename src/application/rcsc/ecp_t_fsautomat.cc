@@ -20,14 +20,14 @@
 #include "ecp_mp/Trajectory.h"
 
 #include "lib/srlib.h"
-#include "ecp_mp/task/ecp_mp_t_fsautomat.h"
+#include "ecp_mp_t_fsautomat.h"
 
 #include "ecp/irp6_on_track/ecp_r_irp6ot.h"
 #include "ecp/irp6_postument/ecp_r_irp6p.h"
 #include "ecp/common/generator/ecp_g_jarosz.h"
 #include "ecp/common/generator/ecp_g_smooth.h"
 #include "ecp/common/generator/ecp_g_force.h"
-#include "ecp/common/task/ecp_t_fsautomat.h"
+#include "ecp_t_fsautomat.h"
 
 #include "lib/datastr.h"
 
@@ -65,7 +65,6 @@ void ecp_gripper_opening (task& _ecp_task, double gripper_increment, int motion_
 // KONSTRUKTORY
 fsautomat::fsautomat(lib::configurator &_config) : task(_config),
 	sg(NULL),
-	tcg(NULL),
 	gt(NULL),
 	nrg(NULL),
 	rgg(NULL),
@@ -179,13 +178,6 @@ fsautomat::fsautomat(lib::configurator &_config) : task(_config),
 										befg = new common::generator::bias_edp_force(*this);
 										xmlFree(argument);
 									}
-									else if(!xmlStrcmp(child_node->children->name, (const xmlChar *)"ecp_tool_change_gen"))
-									{
-										xmlChar *argument = xmlNodeGetContent(child_node->children);
-										if(argument && xmlStrcmp(argument, (const xmlChar *)""))
-											tcg = new common::generator::tool_change(*this, atoi((char *)argument));
-										xmlFree(argument);
-									}
 									else if(!xmlStrcmp(child_node->children->name, (const xmlChar *)"ecp_smooth_gen"))
 									{
 										xmlChar *argument = xmlNodeGetContent(child_node->children);
@@ -251,9 +243,9 @@ void fsautomat::main_task_algorithm(void)
 				tig->flush_pose_list();
 				//tig->load_file_with_path (path.c_str());
 				//tig->initiate_pose_list();
-				tig->teach(lib::MOTOR, "asdasdkjasdj");
+				tig->teach(lib::ECP_MOTOR, "asdasdkjasdj");
 				if(operator_reaction("Save?"))
-					tig->save_file(lib::MOTOR);
+					tig->save_file(lib::ECP_MOTOR);
 				//tig->Move();
 				break;
 			}
@@ -262,7 +254,7 @@ void fsautomat::main_task_algorithm(void)
 				{
 					if(ecpLevel)
 					{
-						sg->set_trajectory((*trjMap)[mp_command.ecp_next_state.mp_2_ecp_next_state_string]);
+						sg->load_trajectory_from_xml((*trjMap)[mp_command.ecp_next_state.mp_2_ecp_next_state_string]);
 					}
 					else
 					{
@@ -316,14 +308,6 @@ void fsautomat::main_task_algorithm(void)
 				lib::setValuesInArray(gen_args, mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 				gag->configure(gen_args[0] , (unsigned int)gen_args[1]);
 				gag->Move();
-				break;
-			}
-			case ecp_mp::task::ECP_TOOL_CHANGE_GENERATOR:
-			{
-				double gen_args[3];
-				lib::setValuesInArray(gen_args, mp_command.ecp_next_state.mp_2_ecp_next_state_string);
-				tcg->set_tool_parameters(gen_args[0], gen_args[1], gen_args[2]);
-				tcg->Move();
 				break;
 			}
 			case ecp_mp::task::RCSC_GRIPPER_OPENING:
