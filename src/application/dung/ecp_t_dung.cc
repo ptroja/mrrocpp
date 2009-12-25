@@ -18,8 +18,8 @@
 #include "lib/srlib.h"
 
 #include "ecp/irp6_postument/ecp_r_irp6p.h"
-#include "ecp/irp6_postument/task/ecp_t_dung.h"
-#include "ecp/irp6_postument/generator/ecp_g_dung.h"
+#include "ecp_t_dung.h"
+#include "ecp_g_dung.h"
 
 namespace mrrocpp {
 namespace ecp {

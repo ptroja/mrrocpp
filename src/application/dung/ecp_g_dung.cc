@@ -15,7 +15,7 @@
 
 #include "lib/srlib.h"
 #include "ecp/irp6_postument/ecp_r_irp6p.h"
-#include "ecp/irp6_postument/generator/ecp_g_dung.h"
+#include "ecp_g_dung.h"
 
 #include "lib/mrmath/mrmath.h"
 #include "math.h"

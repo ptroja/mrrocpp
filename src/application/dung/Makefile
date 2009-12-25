@@ -4,7 +4,7 @@
 SOURCES = ${wildcard *.cc}
 OBJECTS = ${patsubst %.cc,%.o,${SOURCES}}
 
-BINARIES =			ecp_teach
+BINARIES = ecp_dung
 
 ifneq ($(BUILD_TARGET), linux)
 BINARIES+=			
@@ -23,16 +23,9 @@ SHOBJ = ../../ecp_mp/libecp_mp.a ../../ecp_mp/ecp_mp_robot.o ../../ecp/irp6_on_t
 #------------------------------------------------- Build rules -------------------------------------------------------#
 all: ${BINARIES}
 #-----------------------------------------------------------------------------------------------------------------------#
-ecp_teach: ecp_t_teach.o ../../ecp/common/generator/ecp_g_teach_in.o $(SHOBJ)
+ecp_dung: ecp_t_dung.o ecp_g_dung.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 	
-	
-ecp_dung: task/ecp_t_dung.o generator/ecp_g_dung.o $(SHOBJ)
-	$(LD) $(LDFLAGS) -o $@ $^
-
-
-	
-
 #---------------------------------Special object build rules (user made)-------------------------------------#
 # e.g:
 # plik.o: plik.cc plik1.h plik2.h ... itd
