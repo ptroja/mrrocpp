@@ -21,8 +21,7 @@ LIBMPMAIN = libmpmain.a
 BINARIES = \
 	mp_c \
 	mp_rcsc \
-	mp_fsautomat \
-	mp_multiplayer
+	mp_fsautomat
 
 #	mp_pnml \
 #-----------------------------------------------------------------------------------------------------------------------#
@@ -59,9 +58,6 @@ mp_fsautomat: task/mp_t_fsautomat.o \
 
 mp_pnml: task/mp_t_pnml.o generator/mp_g_pnml.o \
 	PNExec/libpnexec.a $(SHOBJ) -lxerces-c
-	$(LD) $(LDFLAGS) -o $@ $^
-
-mp_multiplayer: task/mp_t_multiplayer.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 
 #---------------------------------Special object build rules (user made)-------------------------------------#
