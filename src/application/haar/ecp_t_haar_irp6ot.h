@@ -13,7 +13,7 @@
 
 #include "ecp/irp6_on_track/ecp_r_irp6ot.h"
 #include "ecp/irp6_on_track/generator/ecp_g_vis_ib_eih_planar_irp6ot.h"
-#include "ecp/irp6_on_track/generator/ecp_g_rotate_gripper.h"
+#include "ecp_g_rotate_gripper.h"
 #include "ecp/common/generator/ecp_g_smooth.h"
 #include "ecp/common/generator/ecp_g_force.h"
 
@@ -44,7 +44,7 @@ class haar: public common::task::task  {
 	//Linear generator
 	common::generator::linear* linear_gen;
 	//Planar servoing.
-	ecp_vis_ib_eih_planar_irp6ot* planar_vis;
+	irp6ot::generator::ecp_vis_ib_eih_planar_irp6ot* planar_vis;
 	//Trajectory description.
 	lib::trajectory_description td;
 	//Rotation generator.
@@ -63,7 +63,7 @@ public:
 
 	//Metods modifing td.
 	void set_td_coordinates(double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6);
-	void init_td(lib::POSE_SPECIFICATION ps, int internode_no);
+	void init_td(lib::ECP_POSE_SPECIFICATION ps, int internode_no);
 };
 
 }

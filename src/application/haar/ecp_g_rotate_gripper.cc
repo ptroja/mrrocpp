@@ -5,7 +5,7 @@
  *      Author: pwilkows
  */
 
-#include "ecp/irp6_on_track/generator/ecp_g_rotate_gripper.h"
+#include "ecp_g_rotate_gripper.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -17,7 +17,7 @@ ecp_g_rotate_gripper::ecp_g_rotate_gripper(common::task::task& _ecp_task, double
 
 	td.internode_step_no = 30;
 	td.value_in_step_no = 29;
-	td.arm_type = lib::JOINT;
+	td.arm_type = lib::ECP_JOINT;
 
 	lastStep = false;
 }
@@ -35,7 +35,7 @@ bool ecp_g_rotate_gripper::first_step() {
 
     the_robot->ecp_command.instruction.instruction_type = lib::GET;
     the_robot->ecp_command.instruction.get_type = ARM_DV;
-    the_robot->ecp_command.instruction.get_arm_type = td.arm_type;
+    the_robot->ecp_command.instruction.get_arm_type = lib::JOINT;
     the_robot->ecp_command.instruction.motion_type = lib::RELATIVE;
     the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
     the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
@@ -97,7 +97,7 @@ bool ecp_g_rotate_gripper::next_step() {
     the_robot->ecp_command.instruction.set_type = ARM_DV;
     the_robot->ecp_command.instruction.get_type = NOTHING_DV;
     the_robot->ecp_command.instruction.motion_type = lib::RELATIVE;
-    the_robot->ecp_command.instruction.get_arm_type = td.arm_type;
+    the_robot->ecp_command.instruction.get_arm_type = lib::JOINT;
   //  td.internode_step_no = (2000*angle)/0.55;
     the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
     the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no-1;

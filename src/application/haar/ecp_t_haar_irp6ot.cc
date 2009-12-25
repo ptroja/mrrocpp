@@ -1,4 +1,4 @@
-#include "ecp/irp6_on_track/task/ecp_t_haar_irp6ot.h"
+#include "ecp_t_haar_irp6ot.h"
 
 #include <iostream>
 #include <stdio.h>
@@ -54,7 +54,7 @@ haar::haar(lib::configurator &_config) :
 
 	ecp_m_robot = new robot(*this);
 
-	planar_vis = new ecp_vis_ib_eih_planar_irp6ot(*this);
+	planar_vis = new irp6ot::generator::ecp_vis_ib_eih_planar_irp6ot(*this);
 	planar_vis->sensor_m = sensor_m;
 
 	//Smooth generator
@@ -150,7 +150,7 @@ void haar::set_td_coordinates(double cor0, double cor1, double cor2, double cor3
 }
 
 //inicjacja struktury td - trajectory description
-void haar::init_td(lib::POSE_SPECIFICATION pspec, int internode_no){
+void haar::init_td(lib::ECP_POSE_SPECIFICATION pspec, int internode_no){
 	td.arm_type=pspec;
 	td.interpolation_node_no=1;
 	td.internode_step_no=internode_no;	//motion time

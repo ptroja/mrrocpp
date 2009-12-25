@@ -2,7 +2,7 @@
 HOMEDIR = ../..
 include $(HOMEDIR)/common.mk
 
-SOURCEDIRS = grab_cube draughts time wii_teach wii_velocity wii_ellipse haptic sk servovision calibration teach playerjoy smooth-tester
+SOURCEDIRS = haar grab_cube draughts time wii_teach wii_velocity wii_ellipse haptic sk servovision calibration teach playerjoy smooth-tester
 INSTALLDIRS = ${SOURCEDIRS}
 CLEANDIRS = ${SOURCEDIRS}
 #======================================================#
