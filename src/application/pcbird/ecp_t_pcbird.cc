@@ -20,7 +20,7 @@
 #include "ecp/irp6_postument/ecp_r_irp6p.h"
 
 #include "ecp_mp/sensor/ecp_mp_s_pcbird.h"
-#include "ecp/common/task/ecp_t_pcbird.h"
+#include "ecp_t_pcbird.h"
 
 
 namespace mrrocpp {

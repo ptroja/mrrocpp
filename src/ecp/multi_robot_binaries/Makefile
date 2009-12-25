@@ -5,8 +5,7 @@ SOURCES = ${wildcard *.cc}
 OBJECTS = ${patsubst %.cc,%.o,${SOURCES}}
 
 BINARIES = ecp_tran \
-	#ecp_pcbird \
-	ecp_visioncoordinates \
+#	ecp_visioncoordinates \
 	ecp_fsautomat
 
 	
@@ -64,15 +63,6 @@ ecp_visioncoordinates: \
 		$(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 
-ecp_pcbird: \
-		../irp6_on_track/ecp_r_irp6ot.o \
-		../irp6_postument/ecp_r_irp6p.o \
-		../common/task/ecp_t_pcbird.o \
-		../common/generator/ecp_g_cvfradia.o \
-		$(ECP_MPDIR)/birdclient.o \
-		$(ECP_MPDIR)/sensor/ecp_mp_s_pcbird.o \
-		$(SHOBJ)
-	$(LD) $(LDFLAGS) -o $@ $^ 
 	
 #---------------------------------Special object build rules (user made)-------------------------------------#
 # e.g:
