@@ -5,8 +5,7 @@ SOURCES = ${wildcard *.cc}
 OBJECTS = ${patsubst %.cc,%.o,${SOURCES}}
 
 BINARIES = ecp_tran \
-	#ecp_cvfradia \
-	ecp_pcbird \
+	#ecp_pcbird \
 	ecp_visioncoordinates \
 	ecp_fsautomat
 
@@ -52,15 +51,6 @@ ecp_fsautomat: \
 		$(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 	
-
-ecp_cvfradia: \
-		../irp6_on_track/ecp_r_irp6ot.o \
-		../irp6_postument/ecp_r_irp6p.o \
-		../common/task/ecp_t_cvfradia.o \
-		../common/generator/ecp_g_cvfradia.o \
-		$(ECP_MPDIR)/sensor/ecp_mp_s_cvfradia.o \
-		$(SHOBJ)
-	$(LD) $(LDFLAGS) -o $@ $^ 
 
 ecp_visioncoordinates: \
 		../irp6_on_track/ecp_r_irp6ot.o \
