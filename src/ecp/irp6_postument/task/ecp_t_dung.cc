@@ -16,7 +16,6 @@
 #include "lib/com_buf.h"
 
 #include "lib/srlib.h"
-#include "ecp_mp/task/ecp_mp_t_rcsc.h"
 
 #include "ecp/irp6_postument/ecp_r_irp6p.h"
 #include "ecp/irp6_postument/task/ecp_t_dung.h"

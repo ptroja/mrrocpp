@@ -19,9 +19,7 @@ LIBMPROBOTS = libmprobots.a
 LIBMPMAIN = libmpmain.a
 	
 BINARIES = \
-	mp_c \
-	mp_rcsc \
-	mp_fsautomat
+	mp_c 
 
 #	mp_pnml \
 #-----------------------------------------------------------------------------------------------------------------------#
@@ -45,16 +43,6 @@ $(LIBMPMAIN): $(MP_MAIN_OBJECTS)
 #-----------------------------------------------------------------------------------------------------------------------#
 mp_c: task/mp_t_c.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^  
-
-mp_rcsc: task/mp_t_rcsc.o $(ECP_MPDIR)/transmitter/ecp_mp_tr_rc_windows.o CubeState.o SingleManipulation.o $(SHOBJ)
-	$(LD) $(LDFLAGS) -o $@ $^
-
-mp_fsautomat: task/mp_t_fsautomat.o \
-	StateHeap.o State.o Condition.o Transition.o \
-	$(ECP_MPDIR)/transmitter/ecp_mp_tr_rc_windows.o \
-	CubeState.o SingleManipulation.o \
-	$(SHOBJ)
-	$(LD) $(LDFLAGS) -o $@ $^
 
 mp_pnml: task/mp_t_pnml.o generator/mp_g_pnml.o \
 	PNExec/libpnexec.a $(SHOBJ) -lxerces-c

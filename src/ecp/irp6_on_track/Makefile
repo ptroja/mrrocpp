@@ -3,8 +3,7 @@
 
 SOURCES = ${wildcard *.cc}
 OBJECTS = ${patsubst %.cc,%.o,${SOURCES}}
-BINARIES =		ecp_irp6ot_rcsc 
-
+BINARIES =		
 				
 ifneq ($(BUILD_TARGET), linux)
 BINARIES+=	
@@ -22,9 +21,7 @@ SHOBJ = ecp_r_irp6ot.o ../common/libecp.a $(LIBDIR)/libmrrocpp.a
 #------------------------------------------------- Build rules -------------------------------------------------------#
 all: ${BINARIES}
 #-----------------------------------------------------------------------------------------------------------------------#
-ecp_irp6ot_rcsc: task/ecp_t_rcsc_irp6ot.o ../common/generator/ecp_g_force.o ../common/task/ecp_st_go.o ../common/generator/ecp_g_smooth.o ../common/generator/ecp_g_transparent.o \
-		../common/generator/ecp_g_jarosz.o ../common/generator/ecp_g_operator_reaction_condition.o generator/ecp_g_vis_ib_eih_object_tracker_irp6ot.o $(SHOBJ)
-	$(LD) $(LDFLAGS) -o $@ $^
+
 
 #---------------------------------Special object build rules (user made)-------------------------------------#
 # e.g:
@@ -33,7 +30,7 @@ ecp_irp6ot_rcsc: task/ecp_t_rcsc_irp6ot.o ../common/generator/ecp_g_force.o ../c
 #======================================================#	
 #----------------------------------------------- Maintain rules ----------------------------------------------------#
 install: ${BINARIES}
-	${INSTALL} ${BINARIES} $(BINDIR)
+#	${INSTALL} ${BINARIES} $(BINDIR)
 #-----------------------------------------------------------------------------------------------------------------------#
 clean:
 	@rm -f *.o *.err ${BINARIES} ./.deps/*.P ./task/*.o ./task/*.err ./generator/*.o ./generator/*.err

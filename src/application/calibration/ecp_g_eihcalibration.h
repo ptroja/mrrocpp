@@ -10,7 +10,6 @@
 
 //fradia
 #include "ecp_mp/sensor/ecp_mp_s_cvfradia.h"
-#include "ecp/common/task/ecp_t_cvfradia.h"
 
 #include "ecp/common/generator/ecp_generator.h"
 

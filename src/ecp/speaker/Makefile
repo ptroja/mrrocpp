@@ -3,7 +3,7 @@
 
 SOURCES = ${wildcard *.cc}
 OBJECTS = ${patsubst %.cc,%.o,${SOURCES}}
-BINARIES = ecp_speaker ecp_speak_rcsc
+BINARIES = ecp_speaker
 #-----------------------------------------------------------------------------------------------------------------------#
 # Should be modified only by developers not by users
 HOMEDIR = ../../..
@@ -19,8 +19,7 @@ all: ${BINARIES}
 ecp_speaker: task/ecp_t_s.o generator/ecp_g_speak.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 
-ecp_speak_rcsc: task/ecp_t_rcsc_speaker.o generator/ecp_g_speak.o ../common/generator/ecp_g_transparent.o $(SHOBJ)
-	$(LD) $(LDFLAGS) -o $@ $^
+
 
 #-----------------------------------------------------------------------------------------------------------------------#
 # e.g:

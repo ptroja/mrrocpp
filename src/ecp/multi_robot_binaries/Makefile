@@ -4,9 +4,7 @@
 SOURCES = ${wildcard *.cc}
 OBJECTS = ${patsubst %.cc,%.o,${SOURCES}}
 
-BINARIES = ecp_tran \
-	#ecp_fsautomat
-
+BINARIES = ecp_tran 
 	
 
 #-----------------------------------------------------------------------------------------------------------------------#
@@ -35,20 +33,7 @@ ecp_tran: \
 	$(LD) $(LDFLAGS) -o $@ $^ 
 
 
-ecp_fsautomat: \
-		../irp6_on_track/ecp_r_irp6ot.o \
-		../irp6_postument/ecp_r_irp6p.o \
-		../common/task/ecp_t_fsautomat.o \
-		../../ecp_mp/Trajectory.o \
-		../common/generator/ecp_g_force.o \
-		../common/task/ecp_st_go.o \
-		../common/generator/ecp_g_smooth.o \
-		../common/generator/ecp_g_transparent.o \
-		../common/generator/ecp_g_jarosz.o \
-		../common/generator/ecp_g_operator_reaction_condition.o \
-		$(SHOBJ)
-	$(LD) $(LDFLAGS) -o $@ $^
-	
+
 	
 #---------------------------------Special object build rules (user made)-------------------------------------#
 # e.g:
