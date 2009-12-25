@@ -8,9 +8,8 @@ namespace ecp {
 namespace common {
 namespace task {
 
-/** @edge_following group1
+/** @addtogroup edge_following
  *
- *  lalala
  *  @{
  */
 

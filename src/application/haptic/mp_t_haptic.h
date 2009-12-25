@@ -15,6 +15,10 @@ namespace mrrocpp {
 namespace mp {
 namespace task {
 
+/** @defgroup haptic Haptic coupling application
+ *  A two robot application of IRp6 manipulator's in haptic coupling
+ *  @{
+ */
 
 class haptic : public task
 {
@@ -31,6 +35,7 @@ public:
 
 };
 
+/** @} */ // end of edge_following
 
 } // namespace task
 } // namespace mp

@@ -15,7 +15,10 @@ namespace mrrocpp {
 namespace mp {
 namespace generator {
 
-
+/** @addtogroup haptic
+ *
+ *  @{
+ */
 
 // --------------------------------------------------------------------------
 // Generator trajektorii dla zadan z wodzeniem za nos w tff ze zmiana orientacji
@@ -49,7 +52,7 @@ public:
 
 }; // end : class haptic
 
-
+/** @} */ // end of edge_following
 
 } // namespace generator
 } // namespace mp
