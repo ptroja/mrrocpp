@@ -611,10 +611,10 @@ smooth::smooth (common::task::task& _ecp_task, bool _is_synchronised)
 	distance_eps = 0.00001;
 
 	std::string max_path(ecp_t.mrrocpp_network_path);
-	max_path += "data/a_v_max.txt";
+	max_path += "src/ecp_mp/a_v_max.txt";
 
 	std::string min_path(ecp_t.mrrocpp_network_path);
-	min_path += "data/v_min_gripp.txt";
+	min_path += "src/ecp_mp/v_min_gripp.txt";
 
 	load_a_v_max(max_path.c_str());
 	load_a_v_min(min_path.c_str());
