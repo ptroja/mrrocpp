@@ -1,6 +1,6 @@
 #include <string>
 #include <iostream>
-#include "ecp_t_acquisition.h"
+#include "ecp_st_acquisition.h"
 
 namespace mrrocpp {
 namespace ecp {

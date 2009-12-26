@@ -1,10 +1,10 @@
 
-#if !defined(_ECP_T_KCZ_FORCE_H)
-#define _ECP_T_KCZ_FORCE_H
+#if !defined(_ECP_ST_KCZ_FORCE_H)
+#define _ECP_ST_KCZ_FORCE_H
 
 #include "ecp/common/task/ecp_task.h"
 #include "ecp_g_pcbird_nose_run.h"
-#include "ecp_t_acquisition.h"
+#include "ecp_st_acquisition.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -20,12 +20,12 @@ class acq_force: public acquisition {
 	  std::string mm_fp;
 	  int number_of_measures;
 
-  public:
-	  acq_force(task &_ecp_t);
-	  common::generator::pcbird_nose_run* nose_run;
 	  void main_task_algorithm(void);
 
-	  void write_data(std::string K_fp, std::string k_fp, std::string M_fp, std::string m_fp, int number_of_measures);
+  public:
+	  common::generator::pcbird_nose_run* nose_run;
+	  acq_force(task &_ecp_t);
+	  void write_data(std::string _K_fp, std::string _kk_fp, std::string _M_fp, std::string _mm_fp, int _number_of_measures);
 };
 
 }

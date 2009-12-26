@@ -1,8 +1,8 @@
 #include "ecp/irp6_on_track/ecp_r_irp6ot.h"
 #include "ecp/irp6_postument/ecp_r_irp6p.h"
 
-#include "ecp_t_axzb_force.h"
-#include "ecp_st_acq_force.h"
+#include "ecp_t_axzb_eih.h"
+#include "ecp_st_acq_eih.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -10,11 +10,11 @@ namespace common {
 namespace task {
 
 // KONSTRUKTORY
-axzb_force::axzb_force(lib::configurator &_config) : calib_axzb(_config)
+axzb_eih::axzb_eih(lib::configurator &_config) : calib_axzb(_config)
 {
 }
 
-void axzb_force::main_task_algorithm(void)
+void axzb_eih::main_task_algorithm(void)
 {
 	ofp.number_of_measures = config.value<int>("measures_count");
 	ofp.magical_c = config.value<double>("magical_c");
@@ -25,7 +25,7 @@ void axzb_force::main_task_algorithm(void)
 
 	//run a subtask to get the data if needed
 	if (config.value<int>("acquire")) {
-	    acq_force* acq_task = new acq_force(*this);
+	    acq_eih* acq_task = new acq_eih(*this);
 	    acq_task->write_data(K_file_path, kk_file_path, M_file_path, mm_file_path, ofp.number_of_measures);
 	    delete acq_task;
 	}
@@ -59,7 +59,7 @@ void axzb_force::main_task_algorithm(void)
 
 task* return_created_ecp_task (lib::configurator &_config)
 {
-	return new axzb_force(_config);
+	return new axzb_eih(_config);
 }
 
 } // namespace task

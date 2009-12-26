@@ -6,9 +6,9 @@ namespace common {
 namespace task {
 
 // KONSTRUKTORY
-calib_axxb::calib_axxb(lib::configurator &_config) : calibration(_config, 6)
+calib_axxb::calib_axxb(lib::configurator &_config) : calibration(_config)
 {
-	fdf.n = 6;  // number of function components
+	fdf.n = dimension = 6;  // number of function components
 	fdf.f = &objective_function;
 	fdf.df = &objective_function_df;
 	fdf.fdf = &objective_function_fdf;
@@ -17,7 +17,6 @@ calib_axxb::calib_axxb(lib::configurator &_config) : calibration(_config, 6)
 void calib_axxb::main_task_algorithm(void)
 {
 	calibration::main_task_algorithm();
-	ecp_termination_notice();
 }
 
 /*!
@@ -765,10 +764,10 @@ void calib_axxb::objective_function_fdf(const gsl_vector *v, void *params, doubl
 	objective_function_df(v, params, df);
 }
 
-task* return_created_ecp_task (lib::configurator &_config)
-{
-	return new calib_axxb(_config);
-}
+//task* return_created_ecp_task (lib::configurator &_config)
+//{
+//	return new calib_axxb(_config);
+//}
 
 } // namespace task
 } // namespace common

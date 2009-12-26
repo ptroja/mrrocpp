@@ -5,8 +5,8 @@
 // -------------------------------------------------------------------------
 
 
-#if !defined(_ECP_GEN_FORCE_H)
-#define _ECP_GEN_FORCE_H
+#if !defined(_ECP_GEN_EIH_H)
+#define _ECP_GEN_EIH_H
 
 #include "lib/impconst.h"
 #include "lib/com_buf.h"

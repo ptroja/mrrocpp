@@ -6,8 +6,8 @@
 
 #include "ecp/irp6_on_track/ecp_r_irp6ot.h"
 #include "ecp/irp6_postument/ecp_r_irp6p.h"
-#include "ecp_t_acq_force.h"
-#include "ecp_t_acquisition.h"
+#include "ecp_st_acq_force.h"
+#include "ecp_st_acquisition.h"
 #include "ecp_mp/sensor/ecp_mp_s_pcbird.h"
 #include "gsl/gsl_vector.h"
 #include "gsl/gsl_matrix.h"
@@ -20,9 +20,26 @@ namespace task {
 //Constructors
 acq_force::acq_force(task &_ecp_t): acquisition(_ecp_t)
 {
+    if (ecp_sub_task::ecp_t.config.section_name == ECP_IRP6_ON_TRACK_SECTION)
+    {
+    	ecp_sub_task::ecp_t.ecp_m_robot = new irp6ot::robot (_ecp_t);
+    	ecp_sub_task::ecp_t.sr_ecp_msg->message("IRp6ot loaded");
+    }
+    else if (ecp_sub_task::ecp_t.config.section_name == ECP_IRP6_POSTUMENT_SECTION)
+    {
+    	ecp_sub_task::ecp_t.ecp_m_robot = new irp6p::robot (_ecp_t);
+    	ecp_sub_task::ecp_t.sr_ecp_msg->message("IRp6p loaded");
+    }
+
+    ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_PCBIRD] = new ecp_mp::sensor::pcbird("[vsp_pcbird]", _ecp_t);
+    ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_PCBIRD]->configure_sensor();
+
+    nose_run = new common::generator::pcbird_nose_run(_ecp_t, 8);
+    nose_run->configure_pulse_check (true);
+    nose_run->sensor_m = ecp_sub_task::ecp_t.sensor_m;
+
 	ecp_sub_task::ecp_t.sr_ecp_msg->message("ECP loaded kcz_force");
 };
-
 
 void acq_force::write_data(std::string _K_fp, std::string _kk_fp, std::string _M_fp, std::string _mm_fp, int _number_of_measures)
 {

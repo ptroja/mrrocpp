@@ -3,8 +3,8 @@
 /// \author 2009 Jakub Kosiorek
 ///////////////////////////////////////////////////////////////////////////////
 
-#if !defined(_ECP_T_EIH_ACQUISITION_H)
-#define _ECP_T_EIH_ACQUISITION_H
+#if !defined(_ECP_ST_ACQ_EIH_H)
+#define _ECP_ST_ACQ_EIH_H
 
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
@@ -21,7 +21,8 @@
 #include "ecp/common/generator/ecp_g_transparent.h"
 #include "ecp_mp/sensor/ecp_mp_s_cvfradia.h"
 #include "ecp/common/generator/ecp_g_force.h"
-#include "ecp_t_acquisition.h"
+#include "ecp_g_eih_nose_run.h"
+#include "ecp_st_acquisition.h"
 #include "ecp_g_eihcalibration.h"
 #include "gsl/gsl_vector.h"
 #include "gsl/gsl_matrix.h"
@@ -34,47 +35,44 @@ namespace ecp {
 namespace common {
 namespace task {
 
-struct objective_function_parameters
-{
-	// rotation matrix (from robot base to tool frame) - received from MRROC
-	gsl_matrix *K;
-	// rotation matrix (from chessboard base to camera frame)
-	gsl_matrix *M;
-	// translation vector (from robot base to tool frame) - received from MRROC
-	gsl_vector *k;
-	// translation vector (from chessboard base to camera frame)
-	gsl_vector *m;
-	// how many measurements were taken
-	int number_of_measures;
-	// coefficient to equalize rotation and translation parts in overall sum (proposed range: 300 - 2000)
-	double magical_c;
-};
-
-
-class eihacquisition: public common::task::acquisition {
+class acq_eih: public acquisition {
 	private:
 		std::string smooth_path;
 		int delay_ms, robot, M;
 		double A, C, D, E;
 		bool calibrated;
+		struct objective_function_parameters
+		{
+			// rotation matrix (from robot base to tool frame) - received from MRROC
+			gsl_matrix *K;
+			// rotation matrix (from chessboard base to camera frame)
+			gsl_matrix *M;
+			// translation vector (from robot base to tool frame) - received from MRROC
+			gsl_vector *k;
+			// translation vector (from chessboard base to camera frame)
+			gsl_vector *m;
+			// how many measurements were taken
+			int number_of_measures;
+		} ofp;
 
 	protected:
-		int write_data(void);
+		std::string K_fp;
+		std::string kk_fp;
+		std::string M_fp;
+		std::string mm_fp;
+
 		// generator do wodzenia za nos
 		generator::eih_nose_run* nose;
 		// generator smooth
 		generator::smooth* smoothgen;
 		// generator do wysylania danych do fradii
 		generator::eihgenerator* generator;
-
-	public:
-		eihacquisition(lib::configurator &_config);
-
+		bool store_data(void);
 		void main_task_algorithm(void);
 
-		bool store_data(void);
-
-		objective_function_parameters ofp;
+	public:
+		acq_eih(task &_ecp_t);
+		void write_data(std::string _K_fp, std::string _k_fp, std::string _M_fp, std::string _m_fp, int _number_of_measures);
 };
 
 }
