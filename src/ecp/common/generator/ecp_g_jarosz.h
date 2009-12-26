@@ -16,45 +16,13 @@
 
 #include "lib/matrix.h"
 #include "ecp/common/generator/ecp_g_teach_in.h"
+#include "ecp/common/generator/ecp_g_delta.h"
 #include "ecp/common/generator/ecp_g_operator_reaction_condition.h"
 
 namespace mrrocpp {
 namespace ecp {
 namespace common {
 namespace generator {
-
-// ########################################################################################################
-// ########################################################################################################
-// ########################### GENERATORY RUCHU DLA ECP (opracowane by Jarosz) ############################
-// ########################################################################################################
-// ########################################################################################################
-
-// ####################################################################################################
-// KLASA BAZOWA dla generatorow o zadany przyrost polozenia/orientacji
-// ####################################################################################################
-
-class delta : public common::generator::generator
-{
-protected:
-
-  double a_max_motor[MAX_SERVOS_NR];		// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
-  double v_max_motor[MAX_SERVOS_NR];		// tablica dopuszczalnych predkosci dla kolejnych osi/wspolrzednych
-  double a_max_joint[MAX_SERVOS_NR];		// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
-  double v_max_joint[MAX_SERVOS_NR];		// tablica dopuszczalnych predkosci dla kolejnych osi/wspolrzednych
-  double a_max_zyz[MAX_SERVOS_NR];		// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
-  double v_max_zyz[MAX_SERVOS_NR];		// tablica dopuszczalnych predkosci dla kolejnych osi/wspolrzednych
-  double a_max_aa[MAX_SERVOS_NR];			// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
-  double v_max_aa[MAX_SERVOS_NR];			// tablica dopuszczalnych predkosci dla kolejnych osi/wspolrzednych
-
-public:
-	delta(common::task::task& _ecp_task);
-
-   lib::trajectory_description td;
-
-   virtual bool first_step () = 0;
-   virtual bool next_step () = 0;
-
-}; // end : class irp6p_ECP_delta_generator
 
 // ####################################################################################################
 // Generator prostoliniowy o zadany przyrost polozenia/orientacji

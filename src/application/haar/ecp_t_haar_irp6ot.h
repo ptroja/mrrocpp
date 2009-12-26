@@ -15,6 +15,7 @@
 #include "ecp/irp6_on_track/generator/ecp_g_vis_ib_eih_planar_irp6ot.h"
 #include "ecp_g_rotate_gripper.h"
 #include "ecp/common/generator/ecp_g_smooth.h"
+#include "ecp/common/generator/ecp_g_jarosz.h"
 #include "ecp/common/generator/ecp_g_force.h"
 
 #include "ecp_mp/sensor/ecp_mp_s_cvfradia.h"

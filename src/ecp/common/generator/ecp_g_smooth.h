@@ -33,7 +33,7 @@
 
 #include "ecp_mp/smooth_trajectory_pose.h"
 
-#include "ecp/common/generator/ecp_g_jarosz.h"
+#include "ecp/common/generator/ecp_g_delta.h"
 #include "ecp_mp/Trajectory.h"
 
 namespace mrrocpp {

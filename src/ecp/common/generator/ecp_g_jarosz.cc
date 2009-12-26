@@ -35,10 +35,6 @@ namespace ecp {
 namespace common {
 namespace generator {
 
-delta::delta(common::task::task& _ecp_task) :
-	generator(_ecp_task)
-{
-}
 
 // ####################################################################################################
 // Generator prostoliniowy o zadany przyrost polozenia/orientacji
