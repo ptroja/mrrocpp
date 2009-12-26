@@ -31,11 +31,8 @@ ecp_t_axzb_eih: \
 		ecp_st_acq_eih.o \
 		ecp_st_acquisition.o \
         ecp_t_axzb_eih.o \
-        ../../ecp/common/generator/ecp_g_smooth.o \
         ecp_g_eihcalibration.o \
         ecp_g_eih_nose_run.o \
-        ../../ecp/common/generator/ecp_g_force.o \
-        ../../ecp/common/generator/ecp_g_operator_reaction_condition.o \
         $(ECP_MPDIR)/sensor/ecp_mp_s_cvfradia.o \
         $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ -lgsl -lgslcblas $^
