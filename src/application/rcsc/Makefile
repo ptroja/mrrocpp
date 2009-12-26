@@ -44,7 +44,6 @@ mp_fsautomat: mp_t_fsautomat.o ecp_mp_tr_rc_windows.o CubeState.o SingleManipula
 
 ecp_irp6ot_rcsc: ecp_t_rcsc_irp6ot.o ../../ecp/common/task/ecp_st_go.o ../../ecp/common/generator/ecp_g_smooth.o \
 	../../ecp/common/generator/ecp_g_force.o  ../../ecp/common/generator/ecp_g_transparent.o \
-	../../ecp/common/generator/ecp_g_jarosz.o ../../ecp/common/generator/ecp_g_operator_reaction_condition.o \
 	../../ecp/irp6_on_track/generator/ecp_g_vis_ib_eih_object_tracker_irp6ot.o \
 	../../ecp/irp6_on_track/ecp_r_irp6ot.o ../../ecp/common/libecp.a $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^

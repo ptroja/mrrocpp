@@ -25,7 +25,7 @@ all: ${BINARIES}
 ecp_t_grab_cube_irp6ot: ecp_g_vis_ib_eih_wrist_turner_irp6ot.o ecp_t_grab_cube_irp6ot.o \
 ../../ecp/irp6_on_track/generator/ecp_g_vis_ib_eih_object_tracker_irp6ot.o\
 ../../ecp/common/generator/ecp_g_force.o ../../ecp/common/generator/ecp_g_smooth.o ../../ecp/common/generator/ecp_g_transparent.o \
-../../ecp/common/generator/ecp_g_jarosz.o ../../ecp/common/generator/ecp_g_operator_reaction_condition.o ../../ecp_mp/sensor/ecp_mp_s_cvfradia.o  $(SHOBJ) 
+../../ecp_mp/sensor/ecp_mp_s_cvfradia.o  $(SHOBJ) 
 	$(LD) $(LDFLAGS) -o $@ $^ 
 
 

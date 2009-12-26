@@ -32,7 +32,6 @@ ecp_t_axzb_eih: \
 		ecp_st_acquisition.o \
         ecp_t_axzb_eih.o \
         ../../ecp/common/generator/ecp_g_smooth.o \
-        ../../ecp/common/generator/ecp_g_jarosz.o \
         ecp_g_eihcalibration.o \
         ecp_g_eih_nose_run.o \
         ../../ecp/common/generator/ecp_g_force.o \
@@ -48,10 +47,8 @@ ecp_t_axzb_force: \
 		ecp_st_acquisition.o \
 		ecp_t_axzb_force.o \
 		../../ecp/common/generator/ecp_g_smooth.o \
-		../../ecp/common/generator/ecp_g_jarosz.o \
 		ecp_g_pcbird_nose_run.o \
 		../../ecp/common/generator/ecp_g_force.o \
-		../../ecp/common/generator/ecp_g_operator_reaction_condition.o \
 		$(ECP_MPDIR)/birdclient.o \
 		$(ECP_MPDIR)/sensor/ecp_mp_s_pcbird.o \
 		$(SHOBJ)
@@ -60,8 +57,6 @@ ecp_t_axzb_force: \
 ecp_t_kcz_test: \
 		ecp_t_kcz_test.o \
 		../../ecp/common/generator/ecp_g_smooth.o \
-		../../ecp/common/generator/ecp_g_jarosz.o \
-		../../ecp/common/generator/ecp_g_operator_reaction_condition.o \
 		$(ECP_MPDIR)/birdclient.o \
 		$(ECP_MPDIR)/sensor/ecp_mp_s_pcbird.o \
 		$(SHOBJ)

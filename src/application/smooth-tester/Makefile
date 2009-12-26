@@ -24,7 +24,7 @@ SHOBJ = ../../ecp_mp/libecp_mp.a ../../ecp_mp/ecp_mp_robot.o ../../ecp/irp6_on_t
 #------------------------------------------------- Build rules -------------------------------------------------------#
 all: ${BINARIES}
 #-----------------------------------------------------------------------------------------------------------------------#
-ecp_smooth_test: ecp_t_smooth_test.o ../../ecp/common/generator/ecp_g_smooth.o ../../ecp/common/generator/ecp_g_jarosz.o ../../ecp/common/generator/ecp_g_operator_reaction_condition.o $(SHOBJ)
+ecp_smooth_test: ecp_t_smooth_test.o ../../ecp/common/generator/ecp_g_smooth.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 
 #---------------------------------Special object build rules (user made)-------------------------------------#

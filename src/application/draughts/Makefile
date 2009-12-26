@@ -26,7 +26,7 @@ all: ${BINARIES}
 
 ecp_draughts: ecp_t_draughts.o ecp_mp_tr_draughtsAI.o ecp_g_vis_ib_eih_follower_irp6ot.o ../../ecp/irp6_on_track/generator/ecp_g_vis_ib_eih_planar_irp6ot.o \
 ../../ecp/common/generator/ecp_g_force.o ../../ecp/common/generator/ecp_g_transparent.o ../../ecp/common/task/ecp_st_go.o \
-../../ecp/common/generator/ecp_g_jarosz.o ../../ecp/common/generator/ecp_g_operator_reaction_condition.o ../../ecp/common/generator/ecp_g_sleep.o \
+../../ecp/common/generator/ecp_g_sleep.o \
 ../../ecp_mp/sensor/ecp_mp_s_cvfradia.o  $(SHOBJ) 
 	$(LD) $(LDFLAGS) -o $@ $^
 

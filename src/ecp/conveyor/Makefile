@@ -2,7 +2,7 @@
 
 SOURCES = ${wildcard *.cc}
 OBJECTS = ${patsubst %.cc,%.o,${SOURCES}}
-BINARIES = 	#ecp_visconvsin
+BINARIES = 	
 				
 #-----------------------------------------------------------------------------------------------------------------------#
 # Should be modified only by developers not by users
@@ -18,8 +18,7 @@ all: ${BINARIES}
 #---------------------------------Special object build rules (user made)-------------------------------------#
 
 #-----------------------------------------------------------------------------------------------------------------------#
-ecp_visconvsin: task/ecp_t_visconvsin.o generator/ecp_g_visconv.o ../common/generator/ecp_g_jarosz.o ../common/generator/ecp_g_operator_reaction_condition.o $(SHOBJ)
-	$(LD) $(LDFLAGS) -o $@ $^ 
+
 #-----------------------------------------------------------------------------------------------------------------------#
 # e.g:
 # plik.o: plik.cc plik1.h plik2.h ... itd
