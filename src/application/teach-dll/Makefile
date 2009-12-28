@@ -29,7 +29,7 @@ ecp_teach-dll: ecp_t_teach.o ecp_g_teach.o $(SHOBJ)
 hello.so: hello.o
 	$(CXX) $^ $(LDFLAGS) -shared -o $@
 	
-generator.so: ecp_g_teach.o
+generator.so: ecp_g_teach.o $(SHOBJ)
 	$(CXX) $^ $(LDFLAGS) -shared -o $@
 
 #---------------------------------Special object build rules (user made)-------------------------------------#

@@ -115,15 +115,13 @@ void teach::main_task_algorithm(void)
 	     // create an instance of the class
 	     generator::teach_tmp* teach_gen = create_gener(*this);
 
-	     // use the class
-         teach_gen->flush_pose_list();
-
+	     /*
 	     // destroy the class
          destroy_gener(teach_gen);
 
 	     // unload the triangle library
 	     dlclose(gener);
-
+*/
 
 
 
@@ -145,25 +143,25 @@ void teach::main_task_algorithm(void)
 
     if ( operator_reaction ("Teach in? ") )
     {
-        tig->flush_pose_list(); // Usuniecie listy pozycji, o ile istnieje
-        tig->teach (lib::ECP_MOTOR, "Teach-in the trajectory\n");
+    	teach_gen->flush_pose_list(); // Usuniecie listy pozycji, o ile istnieje
+    	teach_gen->teach (lib::ECP_MOTOR, "Teach-in the trajectory\n");
     }
 
     if ( operator_reaction ("Save trajectory? ") )
     {
-        tig->save_file (lib::ECP_MOTOR);
+    	teach_gen->save_file (lib::ECP_MOTOR);
     }
 
     if ( operator_reaction ("Load trajectory? ") )
     {
-        tig->load_file_from_ui ();
+    	teach_gen->load_file_from_ui ();
     }
 
     // Aktualnie petla wykonuje sie jednokrotnie, gdyby MP przejal sterowanie
     // to petle mozna przerwac przez STOP lub przez polecenie lib::END_MOTION wydane
     // przez MP
     //  printf("w ecp for\n");
-    tig->Move();
+    teach_gen->Move();
     // 	 printf("w ecp for za move\n");
     // Oczekiwanie na STOP
     ecp_termination_notice();
