@@ -87,6 +87,11 @@ public:
 
 };
 
+typedef teach_tmp* create_t(common::task::task& _ecp_task);
+typedef void destroy_t(teach_tmp*);
+
+
+
 } // namespace generator
 } // namespace common
 } // namespace ecp

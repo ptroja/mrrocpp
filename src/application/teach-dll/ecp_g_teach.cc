@@ -509,6 +509,15 @@ lib::ECP_TO_UI_COMMAND teach_tmp::convert(lib::ECP_POSE_SPECIFICATION ps) const
       }
   }
 
+extern "C" teach_tmp* create(common::task::task& _ecp_task) {
+    return new teach_tmp(_ecp_task);
+}
+
+extern "C" void destroy(teach_tmp* p) {
+    delete p;
+}
+
+
 } // namespace generator
 } // namespace common
 } // namespace ecp

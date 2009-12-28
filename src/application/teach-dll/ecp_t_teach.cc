@@ -62,7 +62,7 @@ void teach::main_task_algorithm(void)
 	    using std::cerr;
 
 	    cout << "C++ dlopen demo\n\n";
-
+/*
 	    // open the library
 	    cout << "Opening hello.so...\n";
 	    void* handle = dlopen("./hello.so", RTLD_LAZY);
@@ -96,38 +96,37 @@ void teach::main_task_algorithm(void)
 
 	    flushall();
 
-/*
+*/
 	     // load the triangle library
 	     void* gener = dlopen("./generator.so", RTLD_LAZY);
 	     if (!gener) {
 	         cerr << "Cannot load library: " << dlerror() << '\n';
-	         return 1;
+	   //      return 1;
 	     }
 
 	     // load the symbols
-	     create_t* create_gener = (create_t*) dlsym(gener, "create");
-	     destroy_t* destroy_gener = (destroy_t*) dlsym(gener, "destroy");
+	     generator::create_t* create_gener = (generator::create_t*) dlsym(gener, "create");
+	     generator::destroy_t* destroy_gener = (generator::destroy_t*) dlsym(gener, "destroy");
 	     if (!create_gener || !destroy_gener) {
 	         cerr << "Cannot load symbols: " << dlerror() << '\n';
-	         return 1;
+	 //        return 1;
 	     }
 
 	     // create an instance of the class
-	     polygon* poly = create_gener();
+	     generator::teach_tmp* teach_gen = create_gener(*this);
 
 	     // use the class
-	     poly->set_side_length(7);
-	         cout << "The area is: " << poly->area() << '\n';
+         teach_gen->flush_pose_list();
 
 	     // destroy the class
-	     destroy_triangle(poly);
+         destroy_gener(teach_gen);
 
 	     // unload the triangle library
-	     dlclose(triangle);
+	     dlclose(gener);
 
 
 
-*/
+
 
 
 
