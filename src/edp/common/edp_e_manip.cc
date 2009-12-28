@@ -191,9 +191,11 @@ void manip_effector::set_tool_frame_in_kinematic_model(const lib::Homog_matrix& 
 	}
 	// Ustawienie macierzy reprezentujacej narzedzie.
 	get_current_kinematic_model()->tool = hm;
+	/*
 	// odswierzanie
 	get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
 	get_current_kinematic_model()->i2e_transform(current_joints, &current_end_effector_frame);
+	*/
 }
 
 
