@@ -4,7 +4,7 @@
 SOURCES = ${wildcard *.cc}
 OBJECTS = ${patsubst %.cc,%.o,${SOURCES}}
 
-BINARIES = hello.so ecp_teach-dll
+BINARIES = hello.so generator.so ecp_teach-dll
 
 ifneq ($(BUILD_TARGET), linux)
 BINARIES+=			
@@ -27,6 +27,9 @@ ecp_teach-dll: ecp_t_teach.o ecp_g_teach.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 	
 hello.so: hello.o
+	$(CXX) $^ $(LDFLAGS) -shared -o $@
+	
+generator.so: ecp_g_teach.o
 	$(CXX) $^ $(LDFLAGS) -shared -o $@
 
 #---------------------------------Special object build rules (user made)-------------------------------------#
