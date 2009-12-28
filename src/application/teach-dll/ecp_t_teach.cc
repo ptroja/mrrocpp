@@ -94,12 +94,40 @@ void teach::main_task_algorithm(void)
 
 
 
+	    flushall();
+
+/*
+	     // load the triangle library
+	     void* gener = dlopen("./generator.so", RTLD_LAZY);
+	     if (!gener) {
+	         cerr << "Cannot load library: " << dlerror() << '\n';
+	         return 1;
+	     }
+
+	     // load the symbols
+	     create_t* create_gener = (create_t*) dlsym(gener, "create");
+	     destroy_t* destroy_gener = (destroy_t*) dlsym(gener, "destroy");
+	     if (!create_gener || !destroy_gener) {
+	         cerr << "Cannot load symbols: " << dlerror() << '\n';
+	         return 1;
+	     }
+
+	     // create an instance of the class
+	     polygon* poly = create_gener();
+
+	     // use the class
+	     poly->set_side_length(7);
+	         cout << "The area is: " << poly->area() << '\n';
+
+	     // destroy the class
+	     destroy_triangle(poly);
+
+	     // unload the triangle library
+	     dlclose(triangle);
 
 
 
-
-
-
+*/
 
 
 
