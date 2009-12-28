@@ -7,6 +7,9 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <iostream>
+#include <dlfcn.h>
+
 
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
@@ -54,6 +57,53 @@ teach::teach(lib::configurator &_config) : task(_config)
 
 void teach::main_task_algorithm(void)
 {
+
+	 using std::cout;
+	    using std::cerr;
+
+	    cout << "C++ dlopen demo\n\n";
+
+	    // open the library
+	    cout << "Opening hello.so...\n";
+	    void* handle = dlopen("./hello.so", RTLD_LAZY);
+
+	    if (!handle) {
+	        cerr << "Cannot open library: " << dlerror() << '\n';
+	    //    return 1;
+	    }
+
+	    // load the symbol
+	    cout << "Loading symbol hello...\n";
+	    typedef void (*hello_t)();
+	    hello_t hello = (hello_t) dlsym(handle, "hello");
+	    if (!hello) {
+	        cerr << "Cannot load symbol 'hello': " << dlerror() <<
+	            '\n';
+	        dlclose(handle);
+	     //   return 1;
+	    }
+
+	    // use it to do the calculation
+	    cout << "Calling hello...\n";
+	    hello();
+
+	    // close the library
+	    cout << "Closing library...\n";
+	    dlclose(handle);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     switch (ecp_m_robot->robot_name)
     {
     case lib::ROBOT_IRP6_ON_TRACK:
