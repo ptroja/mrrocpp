@@ -29,6 +29,10 @@ namespace ecp {
 namespace common {
 namespace task {
 
+using std::cout;
+using std::cerr;
+
+
 // KONSTRUKTORY
 teach::teach(lib::configurator &_config) : task(_config)
 {
@@ -49,7 +53,32 @@ teach::teach(lib::configurator &_config) : task(_config)
     	throw(ecp_robot::ECP_main_error(lib::FATAL_ERROR, 0));
     }
 
-    tig = new generator::teach_tmp (*this);
+    cout << "C++ dlopen demo\n\n";
+     // load the triangle library
+     void* gener = dlopen("./generator.so", RTLD_LAZY);
+     if (!gener) {
+         cerr << "Cannot load library: " << dlerror() << '\n';
+   //      return 1;
+     }
+
+     // load the symbols
+     generator::create_t* create_gener = (generator::create_t*) dlsym(gener, "create");
+     generator::destroy_t* destroy_gener = (generator::destroy_t*) dlsym(gener, "destroy");
+     if (!create_gener || !destroy_gener) {
+         cerr << "Cannot load symbols: " << dlerror() << '\n';
+ //        return 1;
+     }
+
+     // create an instance of the class
+     tig = create_gener(*this);
+
+     /*
+     // destroy the class
+     destroy_gener(teach_gen);
+
+     // unload the triangle library
+     dlclose(gener);
+*/
 
     sr_ecp_msg->message("ECP loaded");
 }
@@ -57,76 +86,6 @@ teach::teach(lib::configurator &_config) : task(_config)
 
 void teach::main_task_algorithm(void)
 {
-
-	 using std::cout;
-	    using std::cerr;
-
-	    cout << "C++ dlopen demo\n\n";
-/*
-	    // open the library
-	    cout << "Opening hello.so...\n";
-	    void* handle = dlopen("./hello.so", RTLD_LAZY);
-
-	    if (!handle) {
-	        cerr << "Cannot open library: " << dlerror() << '\n';
-	    //    return 1;
-	    }
-
-	    // load the symbol
-	    cout << "Loading symbol hello...\n";
-	    typedef void (*hello_t)();
-	    hello_t hello = (hello_t) dlsym(handle, "hello");
-	    if (!hello) {
-	        cerr << "Cannot load symbol 'hello': " << dlerror() <<
-	            '\n';
-	        dlclose(handle);
-	     //   return 1;
-	    }
-
-	    // use it to do the calculation
-	    cout << "Calling hello...\n";
-	    hello();
-
-	    // close the library
-	    cout << "Closing library...\n";
-	    dlclose(handle);
-
-
-
-
-	    flushall();
-
-*/
-	     // load the triangle library
-	     void* gener = dlopen("./generator.so", RTLD_LAZY);
-	     if (!gener) {
-	         cerr << "Cannot load library: " << dlerror() << '\n';
-	   //      return 1;
-	     }
-
-	     // load the symbols
-	     generator::create_t* create_gener = (generator::create_t*) dlsym(gener, "create");
-	     generator::destroy_t* destroy_gener = (generator::destroy_t*) dlsym(gener, "destroy");
-	     if (!create_gener || !destroy_gener) {
-	         cerr << "Cannot load symbols: " << dlerror() << '\n';
-	 //        return 1;
-	     }
-
-	     // create an instance of the class
-	     generator::teach_tmp* teach_gen = create_gener(*this);
-
-	     /*
-	     // destroy the class
-         destroy_gener(teach_gen);
-
-	     // unload the triangle library
-	     dlclose(gener);
-*/
-
-
-
-
-
 
 
     switch (ecp_m_robot->robot_name)
@@ -143,25 +102,25 @@ void teach::main_task_algorithm(void)
 
     if ( operator_reaction ("Teach in? ") )
     {
-    	teach_gen->flush_pose_list(); // Usuniecie listy pozycji, o ile istnieje
-    	teach_gen->teach (lib::ECP_MOTOR, "Teach-in the trajectory\n");
+    	tig->flush_pose_list(); // Usuniecie listy pozycji, o ile istnieje
+    	tig->teach (lib::ECP_MOTOR, "Teach-in the trajectory\n");
     }
 
     if ( operator_reaction ("Save trajectory? ") )
     {
-    	teach_gen->save_file (lib::ECP_MOTOR);
+    	tig->save_file (lib::ECP_MOTOR);
     }
 
     if ( operator_reaction ("Load trajectory? ") )
     {
-    	teach_gen->load_file_from_ui ();
+    	tig->load_file_from_ui ();
     }
 
     // Aktualnie petla wykonuje sie jednokrotnie, gdyby MP przejal sterowanie
     // to petle mozna przerwac przez STOP lub przez polecenie lib::END_MOTION wydane
     // przez MP
     //  printf("w ecp for\n");
-    teach_gen->Move();
+    tig->Move();
     // 	 printf("w ecp for za move\n");
     // Oczekiwanie na STOP
     ecp_termination_notice();
