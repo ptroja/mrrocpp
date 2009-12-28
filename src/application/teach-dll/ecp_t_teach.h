@@ -14,7 +14,7 @@
 #define _ECP_T_TEACH_H
 
 #include "ecp/common/task/ecp_task.h"
-#include "ecp/common/generator/ecp_g_teach_in.h"
+#include "application/teach-dll/ecp_g_teach.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -23,7 +23,7 @@ namespace task {
 
 class teach: public common::task::task  {
 protected:
-	generator::teach_in* tig;
+	generator::teach_tmp* tig;
 
 public:
 	// KONSTRUKTORY

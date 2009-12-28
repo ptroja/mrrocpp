@@ -23,7 +23,7 @@ SHOBJ = ../../ecp_mp/libecp_mp.a ../../ecp_mp/ecp_mp_robot.o ../../ecp/irp6_on_t
 #------------------------------------------------- Build rules -------------------------------------------------------#
 all: ${BINARIES}
 #-----------------------------------------------------------------------------------------------------------------------#
-ecp_teach-dll: ecp_t_teach.o $(SHOBJ)
+ecp_teach-dll: ecp_t_teach.o ecp_g_teach.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 	
 hello.so: hello.o

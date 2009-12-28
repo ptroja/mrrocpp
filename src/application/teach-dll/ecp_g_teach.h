@@ -1,5 +1,5 @@
-#if !defined(_ECP_TEACH_IN_GENERATOR_H)
-#define  _ECP_TEACH_IN_GENERATOR_H
+#if !defined(_ECP_TEACH_GENERATOR_H)
+#define  _ECP_TEACH_GENERATOR_H
 
 // ####################################################################################################
 // ###############     KLASA glowna dla odtwarzania listy pozycji     #################################
@@ -16,7 +16,7 @@ namespace common {
 namespace generator {
 
 
-class teach_in : public common::generator::generator {
+class teach_tmp : public common::generator::generator {
 
 protected:
     std::list<ecp_taught_in_pose> pose_list;
@@ -25,11 +25,11 @@ protected:
 public:
   // -------------------------------------------------------
   // konstruktor
-  teach_in (common::task::task& _ecp_task);
+	teach_tmp (common::task::task& _ecp_task);
 
   // -------------------------------------------------------
   // destruktor
-  virtual ~teach_in (void);
+  virtual ~teach_tmp (void);
 
   	// Uczenie robota
 	void teach (lib::ECP_POSE_SPECIFICATION ps, const char* msg);

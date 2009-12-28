@@ -6,7 +6,7 @@
 #include <fstream>
 #include <unistd.h>
 
-#include "ecp/common/generator/ecp_g_teach_in.h"
+#include "ecp_g_teach.h"
 
 #if defined(USE_MESSIP_SRR)
 #include <messip_dataport.h>
@@ -25,7 +25,7 @@ namespace generator {
 // ecp_g_teach_in - klasa bazowa
 // ####################################################################################################
 
-teach_in::teach_in(common::task::task& _ecp_task) :
+teach_tmp::teach_tmp(common::task::task& _ecp_task) :
 	generator(_ecp_task)
   {
     pose_list.clear();
@@ -34,13 +34,13 @@ teach_in::teach_in(common::task::task& _ecp_task) :
 
 // -------------------------------------------------------
 // destruktor
-teach_in::~teach_in(void)
+teach_tmp::~teach_tmp(void)
   {
     flush_pose_list();
   }
 
 // --------------------------------------------------------------------------
-void teach_in::teach(lib::ECP_POSE_SPECIFICATION ps, const char *msg)
+void teach_tmp::teach(lib::ECP_POSE_SPECIFICATION ps, const char *msg)
   { // Uczenie robota
     lib::ECP_message ecp_to_ui_msg; // Przesylka z ECP do UI
     lib::UI_reply ui_to_ecp_rep; // Odpowiedz UI do ECP
@@ -91,7 +91,7 @@ void teach_in::teach(lib::ECP_POSE_SPECIFICATION ps, const char *msg)
 
 // --------------------------------------------------------------------------
 // Zapis trajektorii do pliku
-void teach_in::save_file(lib::ECP_POSE_SPECIFICATION ps)
+void teach_tmp::save_file(lib::ECP_POSE_SPECIFICATION ps)
   {
     lib::ECP_message ecp_to_ui_msg; // Przesylka z ECP do UI
     lib::UI_reply ui_to_ecp_rep; // Odpowiedz UI do ECP
@@ -177,7 +177,7 @@ void teach_in::save_file(lib::ECP_POSE_SPECIFICATION ps)
 
 // --------------------------------------------------------------------------
 // Wczytanie trajektorii z pliku
-bool teach_in::load_file_from_ui()
+bool teach_tmp::load_file_from_ui()
   {
     // Funkcja zwraca true jesli wczytanie trajektorii powiodlo sie,
     // false w przeciwnym razie
@@ -214,7 +214,7 @@ bool teach_in::load_file_from_ui()
   // --------------------------------------------------------------------------
 
 
-bool teach_in::load_file_with_path(const char* file_name)
+bool teach_tmp::load_file_with_path(const char* file_name)
   {
     // Funkcja zwraca true jesli wczytanie trajektorii powiodlo sie,
 
@@ -327,34 +327,34 @@ bool teach_in::load_file_with_path(const char* file_name)
 
 
 // -------------------------------------------------------
-void teach_in::flush_pose_list(void)
+void teach_tmp::flush_pose_list(void)
   {
     pose_list.clear();
   } // end: flush_pose_list
   // -------------------------------------------------------
-void teach_in::initiate_pose_list(void)
+void teach_tmp::initiate_pose_list(void)
   {
     pose_list_iterator = pose_list.begin();
   }
 // -------------------------------------------------------
-void teach_in::next_pose_list_ptr(void)
+void teach_tmp::next_pose_list_ptr(void)
   {
     if (pose_list_iterator != pose_list.end())
       pose_list_iterator++;
   }
 // -------------------------------------------------------
-void teach_in::get_pose(ecp_taught_in_pose& tip)
+void teach_tmp::get_pose(ecp_taught_in_pose& tip)
   { // by Y
     tip = *pose_list_iterator;
   }
 // -------------------------------------------------------
 // Pobierz nastepna pozycje z listy
-void teach_in::get_next_pose(double next_pose[MAX_SERVOS_NR])
+void teach_tmp::get_next_pose(double next_pose[MAX_SERVOS_NR])
   {
     memcpy(next_pose, pose_list_iterator->coordinates, MAX_SERVOS_NR*sizeof(double));
   }
 // -------------------------------------------------------
-void teach_in::set_pose(lib::ECP_POSE_SPECIFICATION ps,
+void teach_tmp::set_pose(lib::ECP_POSE_SPECIFICATION ps,
     double motion_time, double coordinates[MAX_SERVOS_NR], int extra_info)
   {
     pose_list_iterator->arm_type = ps;
@@ -363,7 +363,7 @@ void teach_in::set_pose(lib::ECP_POSE_SPECIFICATION ps,
     memcpy(pose_list_iterator->coordinates, coordinates, MAX_SERVOS_NR*sizeof(double));
   }
 // -------------------------------------------------------
-bool teach_in::is_pose_list_element(void)
+bool teach_tmp::is_pose_list_element(void)
   {
     // sprawdza czy aktualnie wskazywany jest element listy, czy lista sie skonczyla
     if (pose_list_iterator != pose_list.end())
@@ -372,7 +372,7 @@ bool teach_in::is_pose_list_element(void)
       return false;
   }
 // -------------------------------------------------------
-bool teach_in::is_last_list_element(void)
+bool teach_tmp::is_last_list_element(void)
   {
     // sprawdza czy aktualnie wskazywany element listy ma nastepnik
     // jesli <> nulla
@@ -393,14 +393,14 @@ bool teach_in::is_last_list_element(void)
   }
 // -------------------------------------------------------
 
-void teach_in::create_pose_list_head(lib::ECP_POSE_SPECIFICATION ps,
+void teach_tmp::create_pose_list_head(lib::ECP_POSE_SPECIFICATION ps,
     double motion_time, const double coordinates[MAX_SERVOS_NR], int extra_info)
 {
 	pose_list.push_back(ecp_taught_in_pose(ps, motion_time, coordinates, extra_info));
 	pose_list_iterator = pose_list.begin();
 }
 
-void teach_in::insert_pose_list_element(lib::ECP_POSE_SPECIFICATION ps,
+void teach_tmp::insert_pose_list_element(lib::ECP_POSE_SPECIFICATION ps,
     double motion_time, const double coordinates[MAX_SERVOS_NR], int extra_info)
   {
     pose_list.push_back(ecp_taught_in_pose(ps, motion_time,
@@ -409,7 +409,7 @@ void teach_in::insert_pose_list_element(lib::ECP_POSE_SPECIFICATION ps,
   }
 
 // -------------------------------------------------------
-int teach_in::pose_list_length(void)
+int teach_tmp::pose_list_length(void)
   {
     return pose_list.size();
   }
@@ -418,7 +418,7 @@ int teach_in::pose_list_length(void)
 // ----------------------  metoda    first_step -------------------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool teach_in::first_step()
+bool teach_tmp::first_step()
   {
     //	 printf("w irp6ot_teach_in_generator::first_step\n");
  //printf(stderr, "DEBUG@%s:%d\n", __FILE__, __LINE__);
@@ -444,7 +444,7 @@ bool teach_in::first_step()
 // ----------------------  metoda    next_step --------------------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool teach_in::next_step()
+bool teach_tmp::next_step()
   {
     ecp_taught_in_pose tip; // Nauczona pozycja
 
@@ -496,7 +496,7 @@ bool teach_in::next_step()
 
   }
 
-lib::ECP_TO_UI_COMMAND teach_in::convert(lib::ECP_POSE_SPECIFICATION ps) const
+lib::ECP_TO_UI_COMMAND teach_tmp::convert(lib::ECP_POSE_SPECIFICATION ps) const
   {
     switch (ps)
       {

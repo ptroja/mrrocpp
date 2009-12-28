@@ -19,8 +19,8 @@
 #include "ecp/irp6_postument/ecp_r_irp6p.h"
 #include "ecp/irp6_mechatronika/ecp_r_irp6m.h"
 
-#include "application/teach/ecp_t_teach.h"
-#include "ecp/common/generator/ecp_g_teach_in.h"
+#include "application/teach-dll/ecp_t_teach.h"
+#include "application/teach-dll/ecp_g_teach.h"
 
 #include "ecp/common/ecp_robot.h"
 
@@ -49,7 +49,7 @@ teach::teach(lib::configurator &_config) : task(_config)
     	throw(ecp_robot::ECP_main_error(lib::FATAL_ERROR, 0));
     }
 
-    tig = new generator::teach_in (*this);
+    tig = new generator::teach_tmp (*this);
 
     sr_ecp_msg->message("ECP loaded");
 }
