@@ -258,7 +258,7 @@ bool teach_in::load_file_with_path(const char* file_name)
 
     if ( !strcmp(coordinate_type, "MOTOR") )
       {
-    	fprintf(stderr, "STRANGE_GET_ARM_REQUEST@%s:%d\n", __FILE__, __LINE__);
+    //	fprintf(stderr, "STRANGE_GET_ARM_REQUEST@%s:%d\n", __FILE__, __LINE__);
         ps = lib::ECP_MOTOR;
       }
     else if ( !strcmp(coordinate_type, "JOINT") )
