@@ -15,7 +15,8 @@ namespace mrrocpp {
 namespace mp {
 namespace task {
 
-/** @defgroup haptic Haptic coupling application
+/** @defgroup haptic Haptic coupling
+ *  @ingroup application
  *  A two robot application of IRp6 manipulator's in haptic coupling
  *  @{
  */
