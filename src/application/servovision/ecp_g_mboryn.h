@@ -9,6 +9,7 @@
 #define ECP_G_MBORYN_H_
 
 #include "ecp/common/generator/ecp_generator.h"
+#include "lib/mrmath/mrmath.h"
 
 namespace mrrocpp {
 
@@ -28,9 +29,13 @@ public:
 	void set_target(double xyz[3]);
 private:
 	double target_xyz[3];
+	double next_position[6];
 	int number_of_steps;
 	double step_size;
 	bool is_calculated;
+	int kkk;
+
+	lib::sensor *vsp_fradia;
 };
 
 } // namespace generator

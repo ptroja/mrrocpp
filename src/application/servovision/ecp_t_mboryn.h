@@ -11,6 +11,7 @@
 #include "ecp/common/task/ecp_task.h"
 #include "ecp/irp6_on_track/ecp_r_irp6ot.h"
 #include "ecp_g_mboryn.h"
+#include "ecp_mp/sensor/ecp_mp_s_cvfradia.h"
 
 namespace mrrocpp {
 
@@ -27,7 +28,7 @@ public:
 	void main_task_algorithm(void);
 protected:
 	generator::ecp_g_mboryn* ecp_g_mboryn_;
-
+	lib::sensor *vsp_fradia;
 };
 
 }
