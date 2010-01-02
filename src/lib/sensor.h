@@ -162,7 +162,7 @@ typedef struct sensor_image_t
 			int y;
 		} tracker;
 
-		struct {//unia do lapania kostki
+		struct object_tracker_t{//unia do lapania kostki
 			bool reached;
 			bool tracking;
 			int x;
