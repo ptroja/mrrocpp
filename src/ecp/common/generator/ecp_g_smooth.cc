@@ -865,7 +865,7 @@ void smooth::send_coordinates() {
 	the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
 	the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
 
-	switch ( td.arm_type ) {
+	switch (td.arm_type) {
 
 		case lib::ECP_XYZ_EULER_ZYZ:
 
@@ -1610,7 +1610,7 @@ void smooth::calculate(void) { //zeby wrocic do starego trybu relative nalezy st
 				if (s_temp1[i] + s_temp2[i] > s[i]) {
 					//printf("redukcja predkosci w osi %d\n", i);
 					//TODO tutaj wstawic optymalizacje czasu
-					//optimize_time1(pose_list_iterator, i, s[i]);//nastepuje zapisanie czasu, mozliwe wywolanie vp_reduction lub vk_reduction wewnatrz
+					//optimize_time1(pose_list_iterator, i, s[i],t[i]);//nastepuje zapisanie czasu, mozliwe wywolanie vp_reduction lub vk_reduction wewnatrz
 					//if (trajectory_calculated == true) {
 					//	return;
 					//}
@@ -1643,6 +1643,7 @@ void smooth::calculate(void) { //zeby wrocic do starego trybu relative nalezy st
 				//printf("t_temp1: %f\n", t_temp1);
 
             	if (s_temp1[i] > s[i]) {
+            		//optimize_time2();
 					t[i] = t_temp1;
 					vk_reduction(pose_list_iterator, i, s[i], t[i]);
 
@@ -1700,6 +1701,7 @@ void smooth::calculate(void) { //zeby wrocic do starego trybu relative nalezy st
 				//printf("t_temp1: %f\n", t_temp1);
 
 				if (s_temp1[i] > s[i]) {
+					//optimize_time4();
 					t[i] = t_temp1;
 					vp_reduction(pose_list_iterator, i, s[i], t[i]);
 					if (trajectory_calculated == true) {
@@ -2133,26 +2135,53 @@ void smooth::vk_reduction(std::list<ecp_mp::common::smooth_trajectory_pose>::ite
 	pose_list_iterator->s_jedn[i] = 0;
 }
 
-void smooth::optimize_time1(std::list<ecp_mp::common::smooth_trajectory_pose>::iterator pose_list_iterator, int i, double s) {
-	printf("\noptymalizacja czasu os: %d\n", i);
+void smooth::optimize_time1(std::list<ecp_mp::common::smooth_trajectory_pose>::iterator pose_list_iterator, int i, double s, double t) {
+	printf("\noptymalizacja czasu 1 os: %d\n", i);
 	double v_r;
-	double t;
+	//double t;
 
 	v_r = sqrt(pose_list_iterator->a_r[i] * s + (pose_list_iterator->v_p[i] * pose_list_iterator->v_p[i])/2 + (pose_list_iterator->v_k[i] * pose_list_iterator->v_k[i])/2);
-	t = ((v_r - pose_list_iterator->v_p[i])/pose_list_iterator->a_r[i] + (v_r - pose_list_iterator->v_k[i])/pose_list_iterator->a_r[i]);
-	pose_list_iterator->t = t;
+	//pose_list_iterator->t = t;
 
 	printf("v_r: %f\t t: %f\n", v_r, t);
 
 	if (pose_list_iterator->v_p[i] >= pose_list_iterator->v_k[i] && v_r < pose_list_iterator->v_p[i]) {
+		t = (pose_list_iterator->v_p[i] - pose_list_iterator->v_k[i])/pose_list_iterator->a_r[i];
 		vp_reduction(pose_list_iterator, i, s, t);
 		return;
 	} else if (pose_list_iterator->v_p[i] < pose_list_iterator->v_k[i] && v_r < pose_list_iterator->v_k[i]) {
+		t = (pose_list_iterator->v_k[i] - pose_list_iterator->v_p[i])/pose_list_iterator->a_r[i];
+		pose_list_iterator->v_r[i] = pose_list_iterator->v_k[i];
 		vk_reduction(pose_list_iterator, i, s, t);
 		return;
 	} else {
+		t = ((v_r - pose_list_iterator->v_p[i])/pose_list_iterator->a_r[i] + (v_r - pose_list_iterator->v_k[i])/pose_list_iterator->a_r[i]);
 		pose_list_iterator->v_r[i] = v_r;
 	}
+}
+
+void smooth::optimize_time2(std::list<ecp_mp::common::smooth_trajectory_pose>::iterator pose_list_iterator, int i, double s, double t) {
+	printf("\noptymalizacja czasu 2 os: %d\n", i);
+	double v_r;
+	//double t;
+
+	v_r = sqrt(2 * pose_list_iterator->a_r[i] * s + pose_list_iterator->v_p[i] * pose_list_iterator->v_p[i]);
+	pose_list_iterator->v_k[i] = v_r;
+	t = (pose_list_iterator->v_k[i] - pose_list_iterator->v_p[i])/pose_list_iterator->a_r[i];
+
+	printf("v_r: %f\t t: %f\n", v_r, t);
+}
+
+void smooth::optimize_time4(std::list<ecp_mp::common::smooth_trajectory_pose>::iterator pose_list_iterator, int i, double s, double t) {
+	printf("\noptymalizacja czasu 4 os: %d\n", i);
+	double v_r;
+	//double t;
+
+	v_r = sqrt(2 * pose_list_iterator->a_r[i] * s + pose_list_iterator->v_k[i] * pose_list_iterator->v_k[i]);
+	pose_list_iterator->v_p[i] = v_r; //to jest tylko taki bajer... nie ma znaczeina bo za chwile nastepuje rekurencja
+	t = (pose_list_iterator->v_p[i] - pose_list_iterator->v_k[i])/pose_list_iterator->a_r[i];
+
+	printf("v_r: %f\t t: %f\n", v_r, t);
 }
 
 } // namespace generator
