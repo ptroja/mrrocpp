@@ -98,6 +98,11 @@ bool ecp_g_mboryn::next_step()
 		printf("uy: %d\t", u[1]);
 		printf("uz: %d\n", u[2]);
 		fflush(stdout);
+
+
+		if(vsp_fradia->from_vsp.comm_image.sensor_union.object_tracker.tracking){
+
+		}
 	}
 	else{
 		printf("vsp_report != lib::VSP_REPLY_OK\n"); fflush(stdout);
