@@ -153,9 +153,7 @@ protected:
 
     double current_motor_pos[MAX_SERVOS_NR];   // Polozenia walow silnikow -
     // ostatnio odczytane (w radianach)
-    double motor_pos_increment_reading[MAX_SERVOS_NR];
-    // ostatnio odczytany przyrost polozenia
-    // walow silnikow (w radianach)
+
 
     int16_t PWM_value[MAX_SERVOS_NR];             // wartosci zadane wypelnienia PWM
     int16_t current[MAX_SERVOS_NR];                // prad sterujacy

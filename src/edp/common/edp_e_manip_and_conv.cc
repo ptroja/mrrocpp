@@ -143,7 +143,7 @@ void manip_and_conv_effector::reset_variables ()
         desired_motor_pos_new[i] = 0.0;
         desired_motor_pos_old[i] = 0.0;
         current_motor_pos[i] = 0.0;
-        motor_pos_increment_reading[i] = 0.0;
+
         servo_current_motor_pos[i]=0.0;   // Polozenia walow silnikow -// dla watku edp_servo
     }
     // wspolrzedne q2 i q3 mog by zerowe ale powinny byc jak nizej

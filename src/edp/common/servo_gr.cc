@@ -91,20 +91,7 @@ void servo_buffer::send_to_SERVO_GROUP ()
 
     for (int i=0; i<master.number_of_servos; i++)
     {
-        /*
-        if (i==6)
-    {
-             motor_pos_increment_reading[i] = sg_reply.position[i] * 2*M_PI / IRP6_POSTUMENT_AXIS_7_INC_PER_REVOLUTION;
-    } else if (i==5)
-    {
-             motor_pos_increment_reading[i] = sg_reply.position[i] * 2*M_PI / IRP6_POSTUMENT_AXIS_6_INC_PER_REVOLUTION;
-    } else
-    {
-             motor_pos_increment_reading[i] = sg_reply.position[i] * 2*M_PI / IRP6_POSTUMENT_AXIS_0_TO_5_INC_PER_REVOLUTION;
-    }
-             // Aktualnie odczytane polozenia walow silnikow (w radianach)
-        current_motor_pos[i] +=   motor_pos_increment_reading[i];
-        */
+
 
         master.current_motor_pos[i] = sg_reply.abs_position[i];
 
