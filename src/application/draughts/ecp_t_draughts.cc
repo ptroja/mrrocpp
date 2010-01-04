@@ -197,14 +197,14 @@ void Draughts::goToInitialPos(){
 
 /*===============================goUp=======================================*/
 void Draughts::goUp(){
-	/*
+
 	double v[MAX_SERVOS_NR]={0.20, 0.20, 0.20, 0.20, 0.20, 0.20, 0.20, 0.20};
 	double a[MAX_SERVOS_NR]={0.15, 0.15, 0.15, 0.15, 0.15, 0.15, 0.15, 0.15};
 	sgen2->reset();
 	sgen2->set_relative();
-	sgen2->load_coordinates(lib::XYZ_ANGLE_AXIS,v,a,0,0,-0.1,0,0,0,0,0, true);	//move up
+	sgen2->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS,v,a,0,0,-0.1,0,0,0,0,0, true);	//move up
 	sgen2->Move();
-	*/
+
 }
 
 /*============================init_tdes======================================*/
@@ -361,7 +361,7 @@ void Draughts::snooze(double time){
 
 /*==============================takeDynamicPawn===============================*/
 void Draughts::takeDynamicPawn(int from){
-	/*
+
 	printf("taking pawn - servo\n");
 	goToInitialPos();
 	trackPawn(from);
@@ -376,17 +376,17 @@ void Draughts::takeDynamicPawn(int from){
 
 	sgen2->reset();
 	sgen2->set_relative();
-	sgen2->load_coordinates(lib::XYZ_ANGLE_AXIS,v,a,0,0,-0.001,0,0,0,0,0,true);	//go up to not touch board
-	sgen2->load_coordinates(lib::XYZ_ANGLE_AXIS,0,0,0,0,0,0,-0.033,0,false);	//close gripper
+	sgen2->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS,v,a,0,0,-0.001,0,0,0,0,0,true);	//go up to not touch board
+	sgen2->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS,0,0,0,0,0,0,-0.033,0,false);	//close gripper
 	sgen2->Move();
 	goUp();
-	*/
+
 
 }
 
 /*==============================takeStaticPawn===============================*/
 void Draughts::takeStaticPawn(int from,int type){
-/*
+
 	printf("taking pawn\n");
 	sgen2->reset();
 	sgen2->set_absolute();
@@ -418,11 +418,11 @@ void Draughts::takeStaticPawn(int from,int type){
 
 	sgen2->reset();
 	sgen2->set_relative();
-	sgen2->load_coordinates(lib::XYZ_ANGLE_AXIS,v,a,0,0,-0.001,0,0,0,0,0,true);	//go up to not touch board
-	sgen2->load_coordinates(lib::XYZ_ANGLE_AXIS,0,0,0,0,0,0,-0.033,0,false);	//close gripper
+	sgen2->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS,v,a,0,0,-0.001,0,0,0,0,0,true);	//go up to not touch board
+	sgen2->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS,0,0,0,0,0,0,-0.033,0,false);	//close gripper
 	sgen2->Move();
 	goUp();
-	*/
+
 }
 
 /*===============================throwPawn===================================*/
