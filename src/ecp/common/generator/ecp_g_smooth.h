@@ -175,15 +175,15 @@ class smooth : public delta {
 		/**
 		 *
 		 */
-		void optimize_time1(std::list<ecp_mp::common::smooth_trajectory_pose>::iterator pose_list_iterator, int i, double s, double t);
+		void optimize_time1(std::list<ecp_mp::common::smooth_trajectory_pose>::iterator pose_list_iterator, int i, double s);
 		/**
 		 *
 		 */
-		void optimize_time2(std::list<ecp_mp::common::smooth_trajectory_pose>::iterator pose_list_iterator, int i, double s, double t);
+		void optimize_time2(std::list<ecp_mp::common::smooth_trajectory_pose>::iterator pose_list_iterator, int i, double s);
 		/**
 		 *
 		 */
-		void optimize_time4(std::list<ecp_mp::common::smooth_trajectory_pose>::iterator pose_list_iterator, int i, double s, double t);
+		void optimize_time4(std::list<ecp_mp::common::smooth_trajectory_pose>::iterator pose_list_iterator, int i, double s);
 		/**
 		 *
 		 */
