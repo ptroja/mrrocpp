@@ -197,7 +197,7 @@ void effector::move_arm (lib::c_buffer &instruction)
 /*--------------------------------------------------------------------------*/
 void effector::get_arm_position (bool read_hardware, lib::c_buffer &instruction)
 { // odczytanie pozycji ramienia
-
+    double desired_joints_tmp[MAX_SERVOS_NR];       // Wspolrzedne wewnetrzne -
     //   printf(" GET ARM\n");
 
     if (read_hardware)

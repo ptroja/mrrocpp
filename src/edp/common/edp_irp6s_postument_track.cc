@@ -204,6 +204,7 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buff
 	//   debugi++;
 
 	double desired_motor_pos_new_tmp[MAX_SERVOS_NR];
+    double desired_joints_tmp[MAX_SERVOS_NR];       // Wspolrzedne wewnetrzne -
 
 	motion_type = instruction.motion_type;
 
@@ -569,7 +570,7 @@ void irp6s_postument_track_effector::get_arm_position(bool read_hardware, lib::c
 { // odczytanie pozycji ramienia
 
 	//   printf(" GET ARM\n");
-
+    double desired_joints_tmp[MAX_SERVOS_NR];       // Wspolrzedne wewnetrzne -
 	double current_force[6];
 
 	if (read_hardware)

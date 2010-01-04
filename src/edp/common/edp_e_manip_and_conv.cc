@@ -408,7 +408,6 @@ void manip_and_conv_effector::interpret_instruction (lib::c_buffer &instruction)
 void manip_and_conv_effector::synchronise ()
 {
 
-	double desired_motor_pos_new_tmp[MAX_SERVOS_NR];
 
 #ifdef __QNXNTO__
 	flushall();
@@ -434,9 +433,9 @@ void manip_and_conv_effector::synchronise ()
     // Ustawienie poprzedniej wartosci zadanej na obecnie odczytane polozenie walow silnikow
     for( int i = 0; i < number_of_servos; i++)
     {
-        servo_current_motor_pos[i] = desired_motor_pos_new_tmp[i] = desired_motor_pos_new[i] =
+        servo_current_motor_pos[i] = desired_motor_pos_new[i] =
                                          desired_motor_pos_old[i] = current_motor_pos[i];
-        desired_joints_tmp[i] = desired_joints[i] = current_joints[i];
+        desired_joints[i] = current_joints[i];
     }
 }
 
@@ -625,6 +624,7 @@ void manip_and_conv_effector::compute_motors(const lib::c_buffer &instruction)
 {
 
 	double desired_motor_pos_new_tmp[MAX_SERVOS_NR];
+    double desired_joints_tmp[MAX_SERVOS_NR];       // Wspolrzedne wewnetrzne -
 
     // obliczenia dla ruchu ramienia (silnikami)
     /* Wypenienie struktury danych transformera na podstawie parametrow polecenia otrzymanego z ECP */
@@ -685,6 +685,7 @@ void manip_and_conv_effector::compute_motors(const lib::c_buffer &instruction)
 void manip_and_conv_effector::compute_joints (const lib::c_buffer &instruction)
 {
 	double desired_motor_pos_new_tmp[MAX_SERVOS_NR];
+    double desired_joints_tmp[MAX_SERVOS_NR];       // Wspolrzedne wewnetrzne -
 
     // obliczenia dla ruchu ramienia (stawami)
     /* Wypenienie struktury danych transformera na podstawie parametrow polecenia otrzymanego z ECP */
@@ -781,7 +782,7 @@ void manip_and_conv_effector::update_servo_current_motor_pos_abs(double abs_moto
 void manip_and_conv_effector::get_controller_state(lib::c_buffer &instruction)
 {
 
-	double desired_motor_pos_new_tmp[MAX_SERVOS_NR];
+
 	//printf("get_controller_state: %d\n", controller_state_edp_buf.is_synchronised); fflush(stdout);
     reply.controller_state = controller_state_edp_buf;
 
@@ -803,9 +804,9 @@ void manip_and_conv_effector::get_controller_state(lib::c_buffer &instruction)
 		// Ustawienie poprzedniej wartosci zadanej na obecnie odczytane polozenie walow silnikow
 		for( int i = 0; i < number_of_servos; i++)
 		{
-			servo_current_motor_pos[i] = desired_motor_pos_new_tmp[i] = desired_motor_pos_new[i] =
+			servo_current_motor_pos[i] = desired_motor_pos_new[i] =
 										 desired_motor_pos_old[i] = current_motor_pos[i];
-			desired_joints_tmp[i] = desired_joints[i] = current_joints[i];
+			desired_joints[i] = current_joints[i];
 		}
     }
 }

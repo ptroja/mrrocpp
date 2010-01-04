@@ -141,9 +141,6 @@ protected:
     double desired_joints[MAX_SERVOS_NR];       // Wspolrzedne wewnetrzne -
     // ostatnio obliczone (zadane) (w radianach)
 
-    double desired_joints_tmp[MAX_SERVOS_NR];       // Wspolrzedne wewnetrzne -
-    // ostatnio obliczone (zadane) (w radianach) przed sprawdzeniem na ograniczenia kinematyczne
-
     double current_joints[MAX_SERVOS_NR];       // Wspolrzedne wewnetrzne -
     // ostatnio odczytane (w radianach) // by Y dla watku EDP_MASTER
 

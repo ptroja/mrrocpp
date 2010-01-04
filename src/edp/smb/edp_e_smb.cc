@@ -197,7 +197,7 @@ void effector::get_arm_position (bool read_hardware, lib::c_buffer &instruction)
 { // odczytanie pozycji ramienia
 
     //   printf(" GET ARM\n");
-
+    double desired_joints_tmp[MAX_SERVOS_NR];       // Wspolrzedne wewnetrzne -
     if (read_hardware)
     {
         // Uformowanie rozkazu odczytu dla SERVO_GROUP
