@@ -135,7 +135,7 @@ void manip_and_conv_effector::reset_variables ()
         servo_parameters_sg[i] = 0;
 
         desired_joints[i] = 0.0;
-        previous_joints[i]= 0.0;
+
 
         current_joints[i] = 0.0; // ??? wspolrzedne q2 i q3 nie mog by zerowe
         servo_current_joints[i]=0.0;
@@ -721,8 +721,7 @@ void manip_and_conv_effector::compute_joints (const lib::c_buffer &instruction)
         desired_motor_pos_new[i] = desired_motor_pos_new_tmp[i];
     }
 
-    for (int i=0; i<number_of_servos; i++)
-        previous_joints[i] = desired_joints[i];
+
 }
 /*--------------------------------------------------------------------------*/
 

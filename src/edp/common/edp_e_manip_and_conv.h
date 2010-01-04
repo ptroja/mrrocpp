@@ -144,9 +144,6 @@ protected:
     double current_joints[MAX_SERVOS_NR];       // Wspolrzedne wewnetrzne -
     // ostatnio odczytane (w radianach) // by Y dla watku EDP_MASTER
 
-    double previous_joints[MAX_SERVOS_NR];       // Wspolrzedne wewnetrzne -
-    // obliczone (zadane) w poprzednim kroku (w radianach)
-
     double desired_motor_pos_old[MAX_SERVOS_NR];
     // Polozenia walow silnikow -
     // poprzednio obliczone (zadane) (w radianach)
