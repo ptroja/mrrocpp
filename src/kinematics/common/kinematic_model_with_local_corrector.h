@@ -45,16 +45,16 @@ class kinematic_model_with_local_corrector: public mrrocpp::kinematics::common::
 		virtual void local_corrector_inverse_transform(lib::Homog_matrix&);
 
 		//! Computes external coordinates on the base of internal coordinates (i2e - internal to external).
-		virtual void i2e_transform(const double* local_current_joints, lib::frame_tab* local_current_end_effector_frame);
+		virtual void i2e_transform(const double* local_current_joints, lib::Homog_matrix& local_current_end_effector_frame);
 
 		//! Computes external coordinates on the base of internal coordinates, without the computations related with the attached tool.
-		virtual void i2e_wo_tool_transform(const double* local_current_joints, lib::frame_tab* local_current_end_effector_frame);
+		virtual void i2e_wo_tool_transform(const double* local_current_joints, lib::Homog_matrix& local_current_end_effector_frame);
 
 		//! Computes internal coordinates basing on external coordinates (e2i - external to internal).
-		virtual void e2i_transform(double* local_desired_joints, double* local_current_joints, lib::frame_tab* local_desired_end_effector_frame);
+		virtual void e2i_transform(double* local_desired_joints, double* local_current_joints, lib::Homog_matrix& local_desired_end_effector_frame);
 
 		//! Computes internal coordinates basing on external coordinates, without the computations related with the attached tool.
-		virtual void e2i_wo_tool_transform(double* local_desired_joints, double* local_current_joints, lib::frame_tab* local_desired_end_effector_frame);
+		virtual void e2i_wo_tool_transform(double* local_desired_joints, double* local_current_joints, lib::Homog_matrix& local_desired_end_effector_frame);
 
 };
 

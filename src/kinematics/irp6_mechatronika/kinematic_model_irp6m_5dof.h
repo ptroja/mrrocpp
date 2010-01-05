@@ -247,13 +247,13 @@ public:
   model_5dof (void);
 
   // Rozwiazanie prostego zagadnienia kinematyki.
-  virtual void direct_kinematics_transform(const double* local_current_joints, lib::frame_tab* local_current_end_effector_frame);
+  virtual void direct_kinematics_transform(const double* local_current_joints, lib::Homog_matrix& local_current_end_effector_frame);
 
   // Rozwiazanie odwrotnego zagadnienia kinematyki.
-  virtual void inverse_kinematics_transform(double* local_desired_joints, double* local_current_joints, lib::frame_tab* local_desired_end_effector_frame);
+  virtual void inverse_kinematics_transform(double* local_desired_joints, double* local_current_joints, lib::Homog_matrix& local_desired_end_effector_frame);
 
   // Przeliczenie polozenia koncowki zwiazane z dolaczonym narzedziem - transformacja odwrotna.
-//  virtual void attached_tool_inverse_transform(lib::frame_tab*);
+//  virtual void attached_tool_inverse_transform(lib::Homog_matrix&);
 
 };//: kinematic_model_irp6m_5dof;
 

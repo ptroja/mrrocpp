@@ -75,7 +75,7 @@ Ustawienie standardowego narzedzia [m].
 Ustawienie pozycji ukladu bazowego w globalnym ukladzie odniesienia [m].
  ------------------------------------------------------------------------- */
 
-/* lib::frame_tab tmp_global_base;
+/* lib::Homog_matrix tmp_global_base;
 =======
  lib::frame_tab tmp_global_base_m;
 >>>>>>> .r764

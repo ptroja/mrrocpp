@@ -60,13 +60,13 @@ protected:
     // do wewnetrznych struktur danych TRANSFORMATORa
 
 
-    void arm_abs_frame_2_frame (lib::frame_tab p_m);
+    void arm_abs_frame_2_frame (lib::Homog_matrix& p_m);
     // Przepisanie definicji koncowki danej
     // w postaci FRAME wyrazonej bezwzglednie
     // do wewnetrznych struktur danych TRANSFORMATORa
 
 
-    void arm_rel_frame_2_frame (lib::frame_tab p_m);
+    void arm_rel_frame_2_frame (lib::Homog_matrix& p_m);
     // Przepisanie definicji koncowki danej
     // w postaci FRAME wyrazonej wzglednie
     // do wewnetrznych struktur danych TRANSFORMATORa
@@ -87,12 +87,12 @@ protected:
     double servo_real_kartez_vel[6]; // by Y predkosc we wspolrzednych xyz_euler_zyz obliczane co krok servo   XXXXX
     double servo_real_kartez_acc[6]; // by Y predkosc we wspolrzednych xyz_euler_zyz obliczane co krok servo   XXXXX
 
-    lib::frame_tab desired_end_effector_frame;      //  XXXXX
+    lib::Homog_matrix desired_end_effector_frame;      //  XXXXX
     // Podstawowa postac reprezentujaca zadane
     // wspolrzedne zewnetrzne koncowki manipulatora
     // wzgledem ukladu bazowego (polozenie w mm)
 
-    lib::frame_tab current_end_effector_frame;
+    lib::Homog_matrix current_end_effector_frame;
     // Podstawowa postac reprezentujaca ostatnio
     // odczytane wspolrzedne zewnetrzne koncowki
     // manipulatora wzgledem ukladu bazowego (polozenie w mm)

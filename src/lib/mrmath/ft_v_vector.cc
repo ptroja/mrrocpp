@@ -367,7 +367,7 @@ V_vector V_vector::operator-() const
 
 
 
-void V_vector::position_distance(frame_tab* local_current_end_effector_frame, frame_tab* local_desired_end_effector_frame)
+void V_vector::position_distance(Homog_matrix& local_current_end_effector_frame, Homog_matrix& local_desired_end_effector_frame)
 {
 
 double n_t[3], n_d[3], o_t[3], o_d[3], a_t[3], a_d[3];
@@ -375,29 +375,29 @@ double n_t[3], n_d[3], o_t[3], o_d[3], a_t[3], a_d[3];
 //Wyliczenie wektora przesuniecia : w - predkosc katowa
 // n, o, a - wektory normalny, orientacji i zbli�enia
 
-n_t[0]=(*local_current_end_effector_frame)[0][0];
-n_t[1]=(*local_current_end_effector_frame)[1][0];
-n_t[2]=(*local_current_end_effector_frame)[2][0];
+n_t[0]=(local_current_end_effector_frame)[0][0];
+n_t[1]=(local_current_end_effector_frame)[1][0];
+n_t[2]=(local_current_end_effector_frame)[2][0];
 
-n_d[0]=(*local_desired_end_effector_frame)[0][0];
-n_d[1]=(*local_desired_end_effector_frame)[1][0];
-n_d[2]=(*local_desired_end_effector_frame)[2][0];
+n_d[0]=(local_desired_end_effector_frame)[0][0];
+n_d[1]=(local_desired_end_effector_frame)[1][0];
+n_d[2]=(local_desired_end_effector_frame)[2][0];
 
-o_t[0]=(*local_current_end_effector_frame)[0][1];
-o_t[1]=(*local_current_end_effector_frame)[1][1];
-o_t[2]=(*local_current_end_effector_frame)[2][1];
+o_t[0]=(local_current_end_effector_frame)[0][1];
+o_t[1]=(local_current_end_effector_frame)[1][1];
+o_t[2]=(local_current_end_effector_frame)[2][1];
 
-o_d[0]=(*local_desired_end_effector_frame)[0][1];
-o_d[1]=(*local_desired_end_effector_frame)[1][1];
-o_d[2]=(*local_desired_end_effector_frame)[2][1];
+o_d[0]=(local_desired_end_effector_frame)[0][1];
+o_d[1]=(local_desired_end_effector_frame)[1][1];
+o_d[2]=(local_desired_end_effector_frame)[2][1];
 
-a_t[0]=(*local_current_end_effector_frame)[0][2];
-a_t[1]=(*local_current_end_effector_frame)[1][2];
-a_t[2]=(*local_current_end_effector_frame)[2][2];
+a_t[0]=(local_current_end_effector_frame)[0][2];
+a_t[1]=(local_current_end_effector_frame)[1][2];
+a_t[2]=(local_current_end_effector_frame)[2][2];
 
-a_d[0]=(*local_desired_end_effector_frame)[0][2];
-a_d[1]=(*local_desired_end_effector_frame)[1][2];
-a_d[2]=(*local_desired_end_effector_frame)[2][2];
+a_d[0]=(local_desired_end_effector_frame)[0][2];
+a_d[1]=(local_desired_end_effector_frame)[1][2];
+a_d[2]=(local_desired_end_effector_frame)[2][2];
 
 //Wyliczenie wektora przesuniecia : v - predkosc obrotowa
 
@@ -407,9 +407,9 @@ w[2]=(0.5)*((n_t[0]*n_d[1]-n_t[1]*n_d[0])+(o_t[0]*o_d[1]-o_t[1]*o_d[0])+(a_t[0]*
 
 //Wyliczenie wektora przesuniecia : v - predkosc liniowa
 
-w[3]=(*local_desired_end_effector_frame)[0][3]-(*local_current_end_effector_frame)[0][3];
-w[4]=(*local_desired_end_effector_frame)[1][3]-(*local_current_end_effector_frame)[1][3];
-w[5]=(*local_desired_end_effector_frame)[2][3]-(*local_current_end_effector_frame)[2][3];
+w[3]=(local_desired_end_effector_frame)[0][3]-(local_current_end_effector_frame)[0][3];
+w[4]=(local_desired_end_effector_frame)[1][3]-(local_current_end_effector_frame)[1][3];
+w[5]=(local_desired_end_effector_frame)[2][3]-(local_current_end_effector_frame)[2][3];
 }// end V_vector::position_distance(frame_tab*, frame_tab* )
 
 

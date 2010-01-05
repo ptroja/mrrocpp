@@ -61,7 +61,7 @@ void manip_effector::compute_frame (const lib::c_buffer &instruction)
     // obliczenia dla ruchu ramienia (kocwk: FRAME)
     /* Wypenienie struktury danych transformera na podstawie parametrow polecenia otrzymanego z ECP */
     /* Zlecenie transformerowi przeliczenie wspolrzednych */
-    lib::frame_tab p_m;   // wskanik miejsca w strukturze przesanej z ECP, w ktorym znajduj sie wspolrzedne
+    lib::Homog_matrix p_m;   // wskanik miejsca w strukturze przesanej z ECP, w ktorym znajduj sie wspolrzedne
     if ( instruction.is_set_rmodel() || instruction.is_set_arm() )
     {
         // przyslano dane dotyczace narzedzia lub koncowki
@@ -69,7 +69,7 @@ void manip_effector::compute_frame (const lib::c_buffer &instruction)
         motion_steps = instruction.motion_steps;
         value_in_step_no = instruction.value_in_step_no;
 
-        lib::copy_frame(p_m, instruction.arm.pf_def.arm_frame);
+        p_m.set_from_frame_tab(instruction.arm.pf_def.arm_frame);
     }
 
     if ( (value_in_step_no <= 0) || (motion_steps <= 0) || (value_in_step_no   > motion_steps + 1) )
@@ -160,7 +160,7 @@ void manip_effector::tool_frame_2_frame (lib::c_buffer &instruction)
 
 
 /*--------------------------------------------------------------------------*/
-void manip_effector::arm_abs_frame_2_frame (lib::frame_tab p_m)
+void manip_effector::arm_abs_frame_2_frame (lib::Homog_matrix p_m)
 {
     // Przepisanie definicji koncowki danej
     // w postaci TRANS wyraonej bezwzgldnie
@@ -171,7 +171,7 @@ void manip_effector::arm_abs_frame_2_frame (lib::frame_tab p_m)
 
 
 /*--------------------------------------------------------------------------*/
-void manip_effector::arm_rel_frame_2_frame (lib::frame_tab p_m)
+void manip_effector::arm_rel_frame_2_frame (lib::Homog_matrix p_m)
 {
     // Przepisanie definicji koncowki danej
     // w postaci TRANS wyraonej wzgldnie

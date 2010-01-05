@@ -48,13 +48,13 @@ void kinematic_model_with_tool::global_frame_inverse_transform(lib::Homog_matrix
 }
 
 
-void kinematic_model_with_tool::i2e_transform(const double* local_current_joints, lib::frame_tab* local_current_end_effector_frame)
+void kinematic_model_with_tool::i2e_transform(const double* local_current_joints, lib::Homog_matrix& local_current_end_effector_frame)
 {
 	// Solution of the direct kinematics.
 	direct_kinematics_transform(local_current_joints, local_current_end_effector_frame);
 
 	// Create a copy of the end effector frame.
-	lib::Homog_matrix local_current_end_effector_matrix(*local_current_end_effector_frame);
+	lib::Homog_matrix local_current_end_effector_matrix(local_current_end_effector_frame);
 
 	// Computations related to the global reference frame.
 	if (global_frame_computations)
@@ -65,31 +65,31 @@ void kinematic_model_with_tool::i2e_transform(const double* local_current_joints
 		attached_tool_transform(local_current_end_effector_matrix);
 
 	// Retrieve computations result.
-	local_current_end_effector_matrix.get_frame_tab(*local_current_end_effector_frame);
+	local_current_end_effector_frame = local_current_end_effector_matrix;
 }
 
-void kinematic_model_with_tool::i2e_wo_tool_transform(const double* local_current_joints, lib::frame_tab* local_current_end_effector_frame)
+void kinematic_model_with_tool::i2e_wo_tool_transform(const double* local_current_joints, lib::Homog_matrix& local_current_end_effector_frame)
 {
 
 	// Solution of the direct kinematics.
 	direct_kinematics_transform(local_current_joints, local_current_end_effector_frame);
 
 	// Create a copy of the end effector frame.
-	lib::Homog_matrix local_current_end_effector_matrix(*local_current_end_effector_frame);
+	lib::Homog_matrix local_current_end_effector_matrix(local_current_end_effector_frame);
 
 	// Computations related to the global reference frame.
 	if (global_frame_computations)
 		global_frame_transform(local_current_end_effector_matrix);
 
 	// Retrieve computations result.
-	local_current_end_effector_matrix.get_frame_tab(*local_current_end_effector_frame);
+	local_current_end_effector_frame = local_current_end_effector_matrix;
 
 }
 
-void kinematic_model_with_tool::e2i_transform(double* local_desired_joints, double* local_current_joints, lib::frame_tab* local_desired_end_effector_frame)
+void kinematic_model_with_tool::e2i_transform(double* local_desired_joints, double* local_current_joints, lib::Homog_matrix& local_desired_end_effector_frame)
 {
 	// Copy end effector frame.
-	lib::Homog_matrix local_desired_end_effector_matrix(*local_desired_end_effector_frame);
+	lib::Homog_matrix local_desired_end_effector_matrix(local_desired_end_effector_frame);
 
 	// Compute inverse transformation related to the attached tool.
 	if (attached_tool_computations)
@@ -100,24 +100,24 @@ void kinematic_model_with_tool::e2i_transform(double* local_desired_joints, doub
 		global_frame_inverse_transform(local_desired_end_effector_matrix);
 
 	// Retrieve computations result.
-	local_desired_end_effector_matrix.get_frame_tab(*local_desired_end_effector_frame);
+	local_desired_end_effector_frame = local_desired_end_effector_matrix;
 
 	// Compute inverse kinematics transformation.
 	inverse_kinematics_transform(local_desired_joints, local_current_joints, local_desired_end_effector_frame);
 
 }
 
-void kinematic_model_with_tool::e2i_wo_tool_transform(double* local_desired_joints, double* local_current_joints, lib::frame_tab* local_desired_end_effector_frame)
+void kinematic_model_with_tool::e2i_wo_tool_transform(double* local_desired_joints, double* local_current_joints, lib::Homog_matrix& local_desired_end_effector_frame)
 {
 	// Copy end effector frame.
-	lib::Homog_matrix local_desired_end_effector_matrix(*local_desired_end_effector_frame);
+	lib::Homog_matrix local_desired_end_effector_matrix(local_desired_end_effector_frame);
 
 	// Compute transformation related to the global frame - if required.
 	if (global_frame_computations)
 		global_frame_inverse_transform(local_desired_end_effector_matrix);
 
 	// Retrieve computations result.
-	local_desired_end_effector_matrix.get_frame_tab(*local_desired_end_effector_frame);
+	local_desired_end_effector_frame = local_desired_end_effector_matrix;
 
 	// Compute inverse kinematics transformation.
 	inverse_kinematics_transform(local_desired_joints, local_current_joints, local_desired_end_effector_frame);

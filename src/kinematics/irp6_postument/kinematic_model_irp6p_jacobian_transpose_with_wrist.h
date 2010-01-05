@@ -29,7 +29,7 @@ public:
   model_jacobian_transpose_with_wrist (void);
 
   //Rozwiazanie odwrotnego zagadnienia kinematyki.
-  virtual void inverse_kinematics_transform(double* local_desired_joints, double* local_current_joints, lib::frame_tab* local_desired_end_effector_frame);
+  virtual void inverse_kinematics_transform(double* local_desired_joints, double* local_current_joints, lib::Homog_matrix& local_desired_end_effector_frame);
 
 };//: kinematic_model_irp6p_jacobian_transpose_with_wrist
 

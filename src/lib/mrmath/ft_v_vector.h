@@ -130,7 +130,7 @@ public:
 
 	//Sibi
 	 //Wektor predkosci jako odleglosc dwuch pozycji zadanych w postaci ramek
-	void position_distance(frame_tab* local_current_end_effector_frame, frame_tab* local_desired_end_effector_frame);
+	void position_distance(Homog_matrix& local_current_end_effector_frame, Homog_matrix& local_desired_end_effector_frame);
 
 };// end class Ft_vector
 
