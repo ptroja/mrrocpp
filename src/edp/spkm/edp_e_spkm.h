@@ -5,7 +5,7 @@
 // Opis:		Robot IRp-6 na postumencie
 //				- deklaracja klasy edp_irp6p_effector
 //
-// Autor:		tkornuta
+// Autor:
 // Data:		17.01.2007
 // ------------------------------------------------------------------------
 

@@ -6,7 +6,7 @@
 //				- definicja metod klasy edp_irp6m_effector
 //				- definicja funkcji return_created_efector()
 //
-// Autor:		tkornuta
+// Autor:
 // Data:		14.02.2007
 // ------------------------------------------------------------------------
 
@@ -22,7 +22,7 @@
 #include "edp/spkm/edp_e_spkm.h"
 #include "edp/common/reader.h"
 // Kinematyki.
-#include "kinematics/spkm/kinematic_model_spkm.h"
+#include "kinematics/spkm/kinematic_model.h"
 #include "edp/common/manip_trans_t.h"
 #include "edp/common/vis_server.h"
 
@@ -268,7 +268,7 @@ void effector::get_arm_position (bool read_hardware, lib::c_buffer &instruction)
 void effector::create_kinematic_models_for_given_robot(void)
 {
     // Stworzenie wszystkich modeli kinematyki.
-    add_kinematic_model(new kinematics::spkm::model());
+    add_kinematic_model(new kinematics::spkm::kinematic_model());
     // Ustawienie aktywnego modelu.
     set_kinematic_model(0);
 }

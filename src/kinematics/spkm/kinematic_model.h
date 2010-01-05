@@ -19,7 +19,7 @@ namespace mrrocpp {
 namespace kinematics {
 namespace spkm {
 
-class model: public common::kinematic_model
+class kinematic_model: public common::kinematic_model
 {
 	protected:
 		// Ustawienie parametrow kinematycznych.
@@ -33,7 +33,7 @@ class model: public common::kinematic_model
 
 	public:
 		// Konstruktor.
-		model(void);
+		kinematic_model(void);
 
 		// Przeliczenie polozenia walow silnikow na wspolrzedne wewnetrzne.
 		virtual void mp2i_transform(const double* local_current_motor_pos, double* local_current_joints);
