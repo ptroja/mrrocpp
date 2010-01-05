@@ -70,10 +70,10 @@ void irp6s_postument_track_effector::set_rmodel(lib::c_buffer &instruction)
 		sb->servo_command.instruction_code = lib::SERVO_ALGORITHM_AND_PARAMETERS;
 		for (int i = 0; i<number_of_servos; i++)
 		{
-			sb->servo_command.parameters.servo_alg_par.servo_algorithm_no[i] = servo_algorithm_ecp[i]
-			                                                                                   = instruction.rmodel.servo_algorithm.servo_algorithm_no[i];
-			sb->servo_command.parameters.servo_alg_par.servo_parameters_no[i] = servo_parameters_ecp[i]
-			                                                                                     = instruction.rmodel.servo_algorithm.servo_parameters_no[i];
+			sb->servo_command.parameters.servo_alg_par.servo_algorithm_no[i] =
+				instruction.rmodel.servo_algorithm.servo_algorithm_no[i];
+			sb->servo_command.parameters.servo_alg_par.servo_parameters_no[i] =
+				instruction.rmodel.servo_algorithm.servo_parameters_no[i];
 		}
 		/* Wyslanie rozkazu zmiany algorytmw serworegulacji oraz ich parametrow procesowi SERVO_GROUP */
 		sb->send_to_SERVO_GROUP(); //
@@ -125,11 +125,7 @@ void irp6s_postument_track_effector::get_rmodel(lib::c_buffer &instruction)
 	case lib::SERVO_ALGORITHM:
 		reply.rmodel_type = lib::SERVO_ALGORITHM;
 		// ustawienie numeru algorytmu serworegulatora oraz numeru jego zestawu parametrow
-		for (int i = 0; i<number_of_servos; i++)
-		{
-			reply.rmodel.servo_algorithm.servo_algorithm_no[i] = servo_algorithm_sg[i];
-			reply.rmodel.servo_algorithm.servo_parameters_no[i] = servo_parameters_sg[i];
-		}
+
 		break;
 
 	case lib::FORCE_TOOL:
@@ -649,7 +645,6 @@ void irp6s_postument_track_effector::get_arm_position(bool read_hardware, lib::c
 		if ((robot_name == lib::ROBOT_IRP6_ON_TRACK) || (robot_name == lib::ROBOT_IRP6_POSTUMENT))
 		{
 			reply.arm.pf_def.gripper_coordinate = current_joints[gripper_servo_nr];
-			reply.arm.pf_def.gripper_reg_state = servo_gripper_reg_state;
 		}
 	}
 

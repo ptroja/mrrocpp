@@ -156,19 +156,6 @@ protected:
     int16_t current[MAX_SERVOS_NR];                // prad sterujacy
 
 
-    uint8_t servo_algorithm_ecp[MAX_SERVOS_NR];
-    // Tablica numerow algorytmow serworegulacji przyslanych z ECP
-    uint8_t servo_parameters_ecp[MAX_SERVOS_NR];
-    // Tablica numerow zestawow parametrow
-    // algorytmow serworegulacji przyslanych z ECP
-    uint8_t servo_algorithm_sg[MAX_SERVOS_NR];
-    // Tablica numerow algorytmow serworegulacji przyslanych z SERVO_GROUP
-    uint8_t servo_parameters_sg[MAX_SERVOS_NR];
-    // Tablica numerow zestawow parametrow
-    // algorytmow serworegulacji przyslanych z SERVO_GROUP
-
-    // stan regulatora chwytaka
-    short servo_gripper_reg_state;
 
 public:
 

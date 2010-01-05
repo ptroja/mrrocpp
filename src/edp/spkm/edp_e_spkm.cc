@@ -143,11 +143,7 @@ void effector::get_rmodel (lib::c_buffer &instruction)
     case lib::SERVO_ALGORITHM:
         reply.rmodel_type = lib::SERVO_ALGORITHM;
         // ustawienie numeru algorytmu serworegulatora oraz numeru jego zestawu parametrow
-        for (int i = 0; i<number_of_servos; i++)
-            {
-                reply.rmodel.servo_algorithm.servo_algorithm_no[i] = servo_algorithm_sg[i];
-                reply.rmodel.servo_algorithm.servo_parameters_no[i] = servo_parameters_sg[i];
-            }
+
         break;
     default: // blad: nie istniejaca specyfikacja modelu robota
         // ustawie numer bledu

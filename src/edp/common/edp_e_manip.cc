@@ -234,7 +234,6 @@ void manip_effector::arm_frame_2_frame (void)
     // dla robotow track i postument - oblicz chwytak
     if ((robot_name == lib::ROBOT_IRP6_ON_TRACK) || (robot_name == lib::ROBOT_IRP6_POSTUMENT))
     {
-        reply.arm.pf_def.gripper_reg_state = servo_gripper_reg_state;
         reply.arm.pf_def.gripper_coordinate = current_joints[gripper_servo_nr];
     }
 

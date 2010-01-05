@@ -73,8 +73,10 @@ void effector::set_rmodel (lib::c_buffer &instruction)
 		sb->servo_command.instruction_code = lib::SERVO_ALGORITHM_AND_PARAMETERS;
 		for (int i = 0; i<number_of_servos; i++)
 		{
-			sb->servo_command.parameters.servo_alg_par.servo_algorithm_no[i] = servo_algorithm_ecp[i] = instruction.rmodel.servo_algorithm.servo_algorithm_no[i];
-			sb->servo_command.parameters.servo_alg_par.servo_parameters_no[i] = servo_parameters_ecp[i] = instruction.rmodel.servo_algorithm.servo_parameters_no[i];
+			sb->servo_command.parameters.servo_alg_par.servo_algorithm_no[i] =
+				instruction.rmodel.servo_algorithm.servo_algorithm_no[i];
+			sb->servo_command.parameters.servo_alg_par.servo_parameters_no[i] =
+				instruction.rmodel.servo_algorithm.servo_parameters_no[i];
 		}
 		/* Wyslanie rozkazu zmiany algorytmw serworegulacji oraz ich parametrow procesowi SERVO_GROUP */
 		sb->send_to_SERVO_GROUP (); //
@@ -102,12 +104,7 @@ void effector::get_rmodel (lib::c_buffer &instruction)
 	case lib::SERVO_ALGORITHM:
 		reply.rmodel_type = lib::SERVO_ALGORITHM;
 		// ustawienie numeru algorytmu serworegulatora oraz numeru jego zestawu parametrow
-		for (int i = 0; i<number_of_servos; i++)
-			{
-				reply.rmodel.servo_algorithm.servo_algorithm_no[i] = servo_algorithm_sg[i];
-				reply.rmodel.servo_algorithm.servo_parameters_no[i] = servo_parameters_sg[i];
-			}
-		break;
+	break;
 	default: // blad: nie istniejaca specyfikacja modelu robota
 		// ustawie numer bledu
 		throw NonFatal_error_2(INVALID_GET_RMODEL_TYPE);

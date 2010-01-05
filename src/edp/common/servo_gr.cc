@@ -109,13 +109,13 @@ void servo_buffer::send_to_SERVO_GROUP ()
 
         master.PWM_value[i] = sg_reply.PWM_value[i];
         master.current[i] = sg_reply.current[i];
-        master.servo_algorithm_sg[i] = sg_reply.algorithm_no[i];
-        master.servo_parameters_sg[i] = sg_reply.algorithm_parameters_no[i];
+        master.reply.rmodel.servo_algorithm.servo_algorithm_no[i] = sg_reply.algorithm_no[i];
+        master.reply.rmodel.servo_algorithm.servo_parameters_no[i] = sg_reply.algorithm_parameters_no[i];
 
     }
 
     // przepisanie stanu regulatora chwytaka
-    master.servo_gripper_reg_state = sg_reply.gripper_reg_state;
+    master.reply.arm.pf_def.gripper_reg_state = sg_reply.gripper_reg_state;
 
     // printf("edp_irp6s_and_conv_effector::send_to_SERVO_GROUP: %f, %f\n", current_motor_pos[4], sg_reply.abs_position[4]);
 

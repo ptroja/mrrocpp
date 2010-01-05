@@ -129,11 +129,6 @@ void manip_and_conv_effector::reset_variables ()
 {
     for(int i=0; i<number_of_servos; i++)
     {
-    	// Serwomechanizmy
-        servo_algorithm_ecp[i] = 0;
-        servo_parameters_ecp[i] = 0;
-        servo_algorithm_sg[i] = 0;
-        servo_parameters_sg[i] = 0;
 
         desired_joints[i] = 0.0;
 
@@ -468,7 +463,6 @@ void manip_and_conv_effector::arm_motors_2_motors (void)
 
     if ((robot_name == lib::ROBOT_IRP6_ON_TRACK) || (robot_name == lib::ROBOT_IRP6_POSTUMENT))
     {
-        reply.arm.pf_def.gripper_reg_state = servo_gripper_reg_state;
         reply.arm.pf_def.gripper_coordinate = current_joints[gripper_servo_nr];
     }
 
@@ -502,7 +496,6 @@ void manip_and_conv_effector::arm_joints_2_joints (void)
 
     if ((robot_name == lib::ROBOT_IRP6_ON_TRACK) || (robot_name == lib::ROBOT_IRP6_POSTUMENT))
     {
-        reply.arm.pf_def.gripper_reg_state = servo_gripper_reg_state;
         reply.arm.pf_def.gripper_coordinate = current_joints[gripper_servo_nr];
     }
 
