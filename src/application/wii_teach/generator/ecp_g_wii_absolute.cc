@@ -12,10 +12,14 @@ namespace generator {
 wii_absolute::wii_absolute (common::task::task& _ecp_task,ecp_mp::sensor::wiimote* _wiimote) : wii(_ecp_task,_wiimote)
 {
     int i;
+    char buffer[100];
+
     for(i = 0;i<NO_OF_DEGREES;++i)
     {
-        multipliers[i] = 0.003;
-        maxChange[i] = 0.0001;
+        sprintf(buffer,"absolute_multiplier_%d",i);
+        multipliers[i] = ecp_t.config.value<double>(buffer);
+        sprintf(buffer,"absolute_max_change_%d",i);
+        maxChange[i] = ecp_t.config.value<double>(buffer);
     }
 }
 
