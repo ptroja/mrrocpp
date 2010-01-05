@@ -91,7 +91,7 @@ public:
    */
   double t;
   /**
-   * Motion model.
+   * Motion kinematic_model_with_tool.
    */
   int model[MAX_SERVOS_NR];
   /**

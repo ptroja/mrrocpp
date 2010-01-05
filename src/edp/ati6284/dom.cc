@@ -1,6 +1,6 @@
 /*	! \file /src/edp/ati6284/dom.cc
- 	*\brief ATI dom.c - document object model interface
-	* domc document object model library in c
+ 	*\brief ATI dom.c - document object kinematic_model_with_tool interface
+	* domc document object kinematic_model_with_tool library in c
  	* Copyright (c) 2001 Michael B. Allen <mballen@erols.com>
  	*
  	* The MIT License

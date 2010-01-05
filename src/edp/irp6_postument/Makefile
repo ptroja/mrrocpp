@@ -12,7 +12,6 @@ SOURCES = ${wildcard *.cc}
 KIN_OBJECTS = ${KINEMATDIR}/irp6_postument/kinematic_model_irp6p_with_wrist.o \
 	      ${KINEMATDIR}/irp6_postument/kinematic_model_irp6p_5dof.o \
 	      ${KINEMATDIR}/irp6_postument/kinematic_model_calibrated_irp6p_with_wrist.o \
-	      ${KINEMATDIR}/irp6_postument/kinematic_model_calibrated_correction_matrix_irp6p_with_wrist.o \
 	      ${KINEMATDIR}/irp6_postument/kinematic_model_irp6p_jacobian_with_wrist.o \
 	      ${KINEMATDIR}/irp6_postument/kinematic_model_irp6p_jacobian_transpose_with_wrist.o
 	       

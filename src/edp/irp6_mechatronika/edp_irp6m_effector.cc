@@ -26,6 +26,8 @@
 #include "kinematics/irp6_mechatronika/kinematic_model_irp6m_5dof.h"
 #include "edp/common/servo_gr.h"
 #include "edp/common/manip_trans_t.h"
+#include "kinematics/common/kinematic_model_with_tool.h"
+
 
 namespace mrrocpp {
 namespace edp {
@@ -205,7 +207,7 @@ void effector::servo_joints_and_frame_actualization_and_upload (void)
     	}
 
 		// Obliczenie polozenia robota we wsp. zewnetrznych bez narzedzia.
-		get_current_kinematic_model()->i2e_wo_tool_transform(servo_current_joints, &servo_current_frame_wo_tool);
+    	((mrrocpp::kinematics::common::kinematic_model_with_tool*)get_current_kinematic_model())->i2e_wo_tool_transform(servo_current_joints, &servo_current_frame_wo_tool);
 
         catch_nr=0;
     }//: try
@@ -312,8 +314,8 @@ void effector::get_arm_position (bool read_hardware, lib::c_buffer &instruction)
 void effector::create_kinematic_models_for_given_robot(void)
 {
     // Stworzenie wszystkich modeli kinematyki.
-    add_kinematic_model(new kinematic::irp6m::model_with_wrist());
-    add_kinematic_model(new kinematic::irp6m::model_5dof());
+    add_kinematic_model(new kinematics::irp6m::model_with_wrist());
+    add_kinematic_model(new kinematics::irp6m::model_5dof());
     // Ustawienie aktywnego modelu.
     set_kinematic_model(0);
 }

@@ -17,7 +17,7 @@
 #include "kinematics/irp6_mechatronika/kinematic_model_irp6m_with_wrist.h"
 
 namespace mrrocpp {
-namespace kinematic {
+namespace kinematics {
 namespace irp6m {
 
 // Zakresy ruchu poszczegolnych stopni swobody (w radianach lub milimetrach)

@@ -13,7 +13,7 @@
 #include "kinematics/conveyor/kinematic_model_conveyor.h"
 
 namespace mrrocpp {
-namespace kinematic {
+namespace kinematics {
 namespace conveyor {
 
 /* -----------------------------------------------------------------------

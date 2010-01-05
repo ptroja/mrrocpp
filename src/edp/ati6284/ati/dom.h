@@ -1,7 +1,7 @@
 /* ! \file include/edp/ati6284/ati/dom.h
-    * \brief plik nag³ówkowy ATI
+    * \brief plik nagï¿½ï¿½wkowy ATI
     * Ostatnia modyfikacja: 04.2006 
-     * domc document object model library in c
+     * domc document object kinematic_model_with_tool library in c
      * Copyright (c) 2001 Michael B. Allen <mballen@erols.com>
      *
      * The MIT License
@@ -25,7 +25,7 @@
      * OTHER DEALINGS IN THE SOFTWARE.
      */
 
-/*! dom.h - document object model interface
+/*! dom.h - document object kinematic_model_with_tool interface
  */
 
 #ifndef ___DOM_H___

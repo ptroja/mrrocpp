@@ -18,7 +18,7 @@
 #include "kinematics/irp6_postument/kinematic_model_irp6p_with_wrist.h"
 
 namespace mrrocpp {
-namespace kinematic {
+namespace kinematics {
 namespace irp6p {
 
 class model_calibrated_with_wrist: public model_with_wrist

@@ -14,6 +14,7 @@
 #include "edp/common/edp_irp6s_postument_track.h"
 #include "lib/mis_fun.h"
 #include "edp/common/reader.h"
+#include "kinematics/common/kinematic_model_with_tool.h"
 
 namespace mrrocpp {
 namespace edp {
@@ -118,7 +119,7 @@ void * force::thread_main_loop(void *arg)
 				lib::Homog_matrix current_frame_wo_offset = master.return_current_frame(common::WITHOUT_TRANSLATION);
 				lib::Ft_tr ft_tr_inv_current_frame_matrix (!current_frame_wo_offset);
 
-				lib::Homog_matrix current_tool(master.get_current_kinematic_model()->tool);
+				lib::Homog_matrix current_tool(((mrrocpp::kinematics::common::kinematic_model_with_tool*)master.get_current_kinematic_model())->tool);
 				lib::Ft_tr ft_tr_inv_tool_matrix (!current_tool);
 
 				// uwaga sila nie przemnozona przez tool'a i current frame orientation

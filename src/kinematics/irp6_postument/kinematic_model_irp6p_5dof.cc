@@ -19,7 +19,7 @@
 #include "kinematics/irp6_postument/kinematic_model_irp6p_5dof.h"
 
 namespace mrrocpp {
-namespace kinematic {
+namespace kinematics {
 namespace irp6p {
 
 /* -----------------------------------------------------------------------

@@ -676,7 +676,7 @@ typedef union c_buffer_rmodel
 	//----------------------------------------------------------
 	struct
 	{
-		/*! Parameter set number for the kinematic model. */
+		/*! Parameter set number for the kinematic kinematic_model_with_tool. */
 		uint8_t kinematic_model_no;
 	}
 	kinematic_model;

@@ -37,6 +37,7 @@
 #include "lib/srlib.h"
 #include "edp/common/manip_trans_t.h"
 #include "edp/common/edp_vsp_t.h"
+#include "kinematics/common/kinematic_model_with_tool.h"
 
 
 namespace mrrocpp {
@@ -358,7 +359,7 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buff
 
 	beginning_gripper_coordinate = begining_joints[gripper_servo_nr];
 
-	lib::Homog_matrix current_tool(get_current_kinematic_model()->tool);
+	lib::Homog_matrix current_tool(((mrrocpp::kinematics::common::kinematic_model_with_tool*)get_current_kinematic_model())->tool);
 
 	//	std::cout << current_tool << std::endl;
 
@@ -635,7 +636,7 @@ void irp6s_postument_track_effector::get_arm_position(bool read_hardware, lib::c
 		lib::Homog_matrix current_frame_wo_offset = return_current_frame(WITHOUT_TRANSLATION);
 		lib::Ft_tr ft_tr_inv_current_frame_matrix(!current_frame_wo_offset);
 
-		lib::Homog_matrix current_tool(get_current_kinematic_model()->tool);
+		lib::Homog_matrix current_tool(((mrrocpp::kinematics::common::kinematic_model_with_tool*)get_current_kinematic_model())->tool);
 		lib::Ft_tr ft_tr_inv_tool_matrix(!current_tool);
 
 		force_msr_download(current_force, NULL);
@@ -707,7 +708,7 @@ void irp6s_postument_track_effector::servo_joints_and_frame_actualization_and_up
 		}
 
 		// Obliczenie polozenia robota we wsp. zewnetrznych bez narzedzia.
-		get_current_kinematic_model()->i2e_wo_tool_transform(servo_current_joints, &servo_current_frame_wo_tool);
+		((mrrocpp::kinematics::common::kinematic_model_with_tool*)get_current_kinematic_model())->i2e_wo_tool_transform(servo_current_joints, &servo_current_frame_wo_tool);
 
 		if ( (force_tryb> 0)&&(is_synchronised())&&(!(vs->first_configure_done))&&(!(vs->force_sensor_do_first_configure)))
 		{

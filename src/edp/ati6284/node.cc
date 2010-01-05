@@ -1,5 +1,5 @@
 /*	! \file src/edp/ati6284/node.cc
-    * \brief domc document object model library in c
+    * \brief domc document object kinematic_model_with_tool library in c
     * Copyright (c) 2001 Michael B. Allen <mballen@erols.com>
     *
     * The MIT License

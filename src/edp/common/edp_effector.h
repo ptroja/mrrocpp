@@ -36,7 +36,7 @@ namespace common {
 
 
 // Glowna klasa efektora EDP
-class effector : public kinematic::common::transformer_error
+class effector : public kinematics::common::transformer_error
 {
 protected:
 

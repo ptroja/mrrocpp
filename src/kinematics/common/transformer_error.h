@@ -11,7 +11,7 @@
 #include <stdint.h>
 
 namespace mrrocpp {
-namespace kinematic {
+namespace kinematics {
 namespace common {
 
 // by Y - klasa pomocnicza z bledami transformera

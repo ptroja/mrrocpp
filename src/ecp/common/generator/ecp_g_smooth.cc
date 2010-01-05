@@ -1583,7 +1583,7 @@ void smooth::calculate(void) { //zeby wrocic do starego trybu relative nalezy st
 
 			if (s[i] < distance_eps) {//najmniejsza wykrywalna droga
 				//printf("droga 0 %d\n", i);
-				pose_list_iterator->model[i] = 0; //model 0... brak ruchu
+				pose_list_iterator->model[i] = 0; //kinematic_model_with_tool 0... brak ruchu
 				t[i] = 0;
 				pose_list_iterator->s_przysp[i] = 0;
 				pose_list_iterator->s_jedn[i] = 0;
@@ -1591,8 +1591,8 @@ void smooth::calculate(void) { //zeby wrocic do starego trybu relative nalezy st
 				continue;
 			}
 
-			if (pose_list_iterator->v_p[i] < pose_list_iterator->v_r[i] && v_r_next[i] < pose_list_iterator->v_r[i]) { //pierwszy model
-				//printf("pierwszy model w osi %d\n", i);
+			if (pose_list_iterator->v_p[i] < pose_list_iterator->v_r[i] && v_r_next[i] < pose_list_iterator->v_r[i]) { //pierwszy kinematic_model_with_tool
+				//printf("pierwszy kinematic_model_with_tool w osi %d\n", i);
 
 				pose_list_iterator->model[i] = 1;
 
@@ -1631,8 +1631,8 @@ void smooth::calculate(void) { //zeby wrocic do starego trybu relative nalezy st
 					pose_list_iterator->s_jedn[i] = s[i] - s_temp2[i] - s_temp1[i];
 				}
 
-            } else if (pose_list_iterator->v_p[i] < pose_list_iterator->v_r[i] && (v_r_next[i] > pose_list_iterator->v_r[i] || eq(v_r_next[i], pose_list_iterator->v_r[i]))) { // drugi model
-            	//printf("drugi model w osi %d\n", i);
+            } else if (pose_list_iterator->v_p[i] < pose_list_iterator->v_r[i] && (v_r_next[i] > pose_list_iterator->v_r[i] || eq(v_r_next[i], pose_list_iterator->v_r[i]))) { // drugi kinematic_model_with_tool
+            	//printf("drugi kinematic_model_with_tool w osi %d\n", i);
 
             	pose_list_iterator->model[i] = 2;
             	s_temp1[i] = pose_list_iterator->v_p[i] * (pose_list_iterator->v_r[i] - pose_list_iterator->v_p[i])/pose_list_iterator->a_r[i] + (0.5 * pose_list_iterator->a_r[i] * ((pose_list_iterator->v_r[i] - pose_list_iterator->v_p[i])/pose_list_iterator->a_r[i]) * ((pose_list_iterator->v_r[i] - pose_list_iterator->v_p[i])/pose_list_iterator->a_r[i]));
@@ -1660,8 +1660,8 @@ void smooth::calculate(void) { //zeby wrocic do starego trybu relative nalezy st
     				pose_list_iterator->s_jedn[i] = s[i] - s_temp1[i];
             	}
 
-			} else if (eq(pose_list_iterator->v_p[i], pose_list_iterator->v_r[i]) && (v_r_next[i] > pose_list_iterator->v_r[i] || eq(v_r_next[i], pose_list_iterator->v_r[i]))) { //trzeci model
-				//printf("trzeci model w osi %d\n", i);
+			} else if (eq(pose_list_iterator->v_p[i], pose_list_iterator->v_r[i]) && (v_r_next[i] > pose_list_iterator->v_r[i] || eq(v_r_next[i], pose_list_iterator->v_r[i]))) { //trzeci kinematic_model_with_tool
+				//printf("trzeci kinematic_model_with_tool w osi %d\n", i);
 
 				pose_list_iterator->model[i] = 3;
 
@@ -1689,8 +1689,8 @@ void smooth::calculate(void) { //zeby wrocic do starego trybu relative nalezy st
 					pose_list_iterator->s_jedn[i] = s[i];
 					pose_list_iterator->v_k[i] = pose_list_iterator->v_r[i];
 				}
-			} else if (eq(pose_list_iterator->v_p[i], pose_list_iterator->v_r[i]) && v_r_next[i] < pose_list_iterator->v_r[i]) { //czwarty model
-				//printf("czwarty model w osi %d\n", i);
+			} else if (eq(pose_list_iterator->v_p[i], pose_list_iterator->v_r[i]) && v_r_next[i] < pose_list_iterator->v_r[i]) { //czwarty kinematic_model_with_tool
+				//printf("czwarty kinematic_model_with_tool w osi %d\n", i);
 
 				pose_list_iterator->model[i] = 4;
 
@@ -1761,23 +1761,23 @@ void smooth::calculate(void) { //zeby wrocic do starego trybu relative nalezy st
 			}
 
 			if (fabs(t[i] - t_max) > tk) {//redukcja predkosci w danej osi ze wzgledu na zbyt krotki czas ruchu
-				if (pose_list_iterator->model[i] == 1) { //model 1
+				if (pose_list_iterator->model[i] == 1) { //kinematic_model_with_tool 1
 					reduction_model_1(pose_list_iterator, i, s[i]);
 					//printf("2 v_r: %f\n", pose_list_iterator->v_r[i]);
 					if (trajectory_calculated == true) {//wyjscie z rekurencji
 						return;
 					}
-				} else if (pose_list_iterator->model[i] == 2) {//model 2
+				} else if (pose_list_iterator->model[i] == 2) {//kinematic_model_with_tool 2
 					reduction_model_2(pose_list_iterator, i, s[i]);
 					if (trajectory_calculated == true) {
 						return;
 					}
-				} else if (pose_list_iterator->model[i] == 3) {//model 3
+				} else if (pose_list_iterator->model[i] == 3) {//kinematic_model_with_tool 3
 					reduction_model_3(pose_list_iterator, i, s[i]);
 					if (trajectory_calculated == true) {
 						return;
 					}
-				} else if (pose_list_iterator->model[i] == 4) {//model 4
+				} else if (pose_list_iterator->model[i] == 4) {//kinematic_model_with_tool 4
 					reduction_model_4(pose_list_iterator, i, s[i]);
 					if (trajectory_calculated == true) {
 						return;
@@ -1854,13 +1854,13 @@ void smooth::calculate(void) { //zeby wrocic do starego trybu relative nalezy st
 }//end - calculate
 
 void smooth::reduction_model_1(std::list<ecp_mp::common::smooth_trajectory_pose>::iterator pose_list_iterator, int i, double s) {
-	//printf("redukcja model 1 w osi: %d\n", i);
+	//printf("redukcja kinematic_model_with_tool 1 w osi: %d\n", i);
 	if (pose_list_iterator->v_p[i] < pose_list_iterator->v_k[i] && (pose_list_iterator->v_k[i] * pose_list_iterator->t
 			- 0.5 * ((pose_list_iterator->v_k[i] - pose_list_iterator->v_p[i]) *
 					(pose_list_iterator->v_k[i] - pose_list_iterator->v_p[i]))/pose_list_iterator->a_r[i]) > s) {//proba dopasowania do modelu 2
 
 		pose_list_iterator->model[i] = 2;
-		//printf("dopasowanie model 2 w redukcji modelu 1\n");
+		//printf("dopasowanie kinematic_model_with_tool 2 w redukcji modelu 1\n");
 		reduction_model_2(pose_list_iterator, i, s);
 
 	} else if (pose_list_iterator->v_p[i] > pose_list_iterator->v_k[i] && (pose_list_iterator->v_p[i] * pose_list_iterator->t
@@ -1868,15 +1868,15 @@ void smooth::reduction_model_1(std::list<ecp_mp::common::smooth_trajectory_pose>
 					(pose_list_iterator->v_p[i] - pose_list_iterator->v_k[i]))/pose_list_iterator->a_r[i]) > s){ // proba dopasowania do modelu 4
 
 		pose_list_iterator->model[i] = 4;
-		//printf("dopasowanie model 4 w redukcji modelu 1\n");
+		//printf("dopasowanie kinematic_model_with_tool 4 w redukcji modelu 1\n");
 		reduction_model_4(pose_list_iterator, i, s);
 
 	} else if (eq(pose_list_iterator->v_p[i], pose_list_iterator->v_k[i]) && pose_list_iterator->v_k[i] * pose_list_iterator->t > s) {//proba dopasowanie do modelu 3
-		//printf("dopasowanie model 3 w redukcji modelu 1\n");
+		//printf("dopasowanie kinematic_model_with_tool 3 w redukcji modelu 1\n");
 		reduction_model_3(pose_list_iterator, i, s);
 
 	} else { //normalna redukcja dla modelu 1
-		//printf("normalna redukcja model 1\n");
+		//printf("normalna redukcja kinematic_model_with_tool 1\n");
 
 		double t1;//czas przyspieszania
 		double t2;//czas jednostajnego
@@ -1912,7 +1912,7 @@ void smooth::reduction_model_1(std::list<ecp_mp::common::smooth_trajectory_pose>
 }
 
 void smooth::reduction_model_2(std::list<ecp_mp::common::smooth_trajectory_pose>::iterator pose_list_iterator, int i, double s) {
-	//printf("redukcja model 2 w osi: %d\n", i);
+	//printf("redukcja kinematic_model_with_tool 2 w osi: %d\n", i);
 	//pierwszy stopien redukcji
 	double a;
 
@@ -1986,7 +1986,7 @@ void smooth::reduction_model_2(std::list<ecp_mp::common::smooth_trajectory_pose>
 }
 
 void smooth::reduction_model_3(std::list<ecp_mp::common::smooth_trajectory_pose>::iterator pose_list_iterator, int i, double s) {
-	//printf("redukcja model 3 w osi: %d\n", i);
+	//printf("redukcja kinematic_model_with_tool 3 w osi: %d\n", i);
 	double t1; //czas konca opoznienia
 
 	if(pose_list_iterator->a_r[i] * pose_list_iterator->a_r[i] * pose_list_iterator->t * pose_list_iterator->t//liczba pierwiastkowana mniejsza od 0, zabezpieczenie
@@ -2012,7 +2012,7 @@ void smooth::reduction_model_3(std::list<ecp_mp::common::smooth_trajectory_pose>
 
 
 void smooth::reduction_model_4(std::list<ecp_mp::common::smooth_trajectory_pose>::iterator pose_list_iterator, int i, double s) {
-	//printf("redukcja model 4 w osi: %d\n", i);
+	//printf("redukcja kinematic_model_with_tool 4 w osi: %d\n", i);
 	//pierwszy stopien redukcji
 	double a;
 

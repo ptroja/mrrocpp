@@ -21,7 +21,7 @@
 #include "kinematics/polycrank/kinematic_model_polycrank.h"
 
 namespace mrrocpp {
-namespace kinematic {
+namespace kinematics {
 namespace polycrank {
 
 /* -----------------------------------------------------------------------

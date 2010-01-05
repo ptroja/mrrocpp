@@ -21,9 +21,9 @@
 #include "kinematics/irp6_postument/kinematic_model_irp6p_with_wrist.h"
 #include "kinematics/irp6_postument/kinematic_model_irp6p_5dof.h"
 #include "kinematics/irp6_postument/kinematic_model_calibrated_irp6p_with_wrist.h"
-#include "kinematics/irp6_postument/kinematic_model_calibrated_correction_matrix_irp6p_with_wrist.h"
 #include "kinematics/irp6_postument/kinematic_model_irp6p_jacobian_with_wrist.h"
 #include "kinematics/irp6_postument/kinematic_model_irp6p_jacobian_transpose_with_wrist.h"
+#include "kinematics/common/kinematic_model_with_tool.h"
 
 namespace mrrocpp {
 namespace edp {
@@ -55,12 +55,11 @@ effector::effector(lib::configurator &_config) :
 void effector::create_kinematic_models_for_given_robot(void)
 {
 	// Stworzenie wszystkich modeli kinematyki.
-	add_kinematic_model(new kinematic::irp6p::model_with_wrist());
-	add_kinematic_model(new kinematic::irp6p::model_5dof());
-	add_kinematic_model(new kinematic::irp6p::model_calibrated_with_wrist());
-	add_kinematic_model(new kinematic::irp6p::model_calibrated_correction_matrix_with_wrist());
-	add_kinematic_model(new kinematic::irp6p::model_jacobian_with_wrist());
-	add_kinematic_model(new kinematic::irp6p::model_jacobian_transpose_with_wrist());
+	add_kinematic_model(new kinematics::irp6p::model_with_wrist());
+	add_kinematic_model(new kinematics::irp6p::model_5dof());
+	add_kinematic_model(new kinematics::irp6p::model_calibrated_with_wrist());
+	add_kinematic_model(new kinematics::irp6p::model_jacobian_with_wrist());
+	add_kinematic_model(new kinematics::irp6p::model_jacobian_transpose_with_wrist());
 	//add_kinematic_model(new kinematic_model_irp6p_jacobian_with_wrist());
 
 	// Ustawienie aktywnego modelu.

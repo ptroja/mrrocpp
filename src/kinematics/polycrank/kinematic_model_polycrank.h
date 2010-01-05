@@ -14,13 +14,13 @@
 #define _POLYCRANK_KIN_model
 
 // Definicja klasy kinematic_model.
-#include "kinematics/common/kinematic_model.h"
+#include "kinematics/common/kinematic_model_with_tool.h"
 
 namespace mrrocpp {
-namespace kinematic {
+namespace kinematics {
 namespace polycrank {
 
-class model : public common::model
+class model : public common::kinematic_model_with_tool
 {
 protected:
   // Dlugosci czlonow

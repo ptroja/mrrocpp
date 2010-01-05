@@ -75,7 +75,7 @@ ui_model::ui_model() : tabs_visible(0),
 
 	gtk_builder_connect_signals(builder, NULL);
 
-	// create TreeView model
+	// create TreeView kinematic_model_with_tool
 	store = gtk_tree_store_new(N_COLUMNS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN);
 
 	GtkTreeModelFlags flags = gtk_tree_model_get_flags(GTK_TREE_MODEL(store));
@@ -123,10 +123,10 @@ lib::configurator & ui_model::getConfigurator(void) const {
 
 ui_model::~ui_model()
 {
-	// clear the model
+	// clear the kinematic_model_with_tool
 	this->clear();
 
-	// remove reference to GtkTreeView model
+	// remove reference to GtkTreeView kinematic_model_with_tool
 	g_object_unref(store);
 	g_object_unref(G_OBJECT(builder));
 

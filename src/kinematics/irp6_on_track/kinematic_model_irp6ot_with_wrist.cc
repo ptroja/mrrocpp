@@ -23,7 +23,7 @@
 #include "kinematics/irp6_on_track/kinematic_model_irp6ot_with_wrist.h"
 
 namespace mrrocpp {
-namespace kinematic {
+namespace kinematics {
 namespace irp6ot {
 
 /* -----------------------------------------------------------------------

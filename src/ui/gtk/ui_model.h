@@ -88,7 +88,7 @@ class ui_model
 
 		ui_config_entry root_entry;
 
-		// GtkTreeView model
+		// GtkTreeView kinematic_model_with_tool
 		GtkTreeStore *store;
 
 		ui_model(ui_model const&); //not defined, not copyable

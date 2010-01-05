@@ -27,6 +27,8 @@
 #include "edp/common/reader.h"
 #include "edp/common/edp_e_manip.h"
 
+#include "kinematics/common/kinematic_model_with_tool.h"
+
 
 using std::cout;
 
@@ -126,7 +128,8 @@ void manip_effector::tool_frame_2_frame_rep (void)
     case lib::RMODEL_INPUTS:
     case lib::ARM_RMODEL:
     case lib::ARM_RMODEL_INPUTS:
-        get_current_kinematic_model()->tool.get_frame_tab(reply.rmodel.tool_frame_def.tool_frame);
+
+        ((mrrocpp::kinematics::common::kinematic_model_with_tool*)get_current_kinematic_model())->tool.get_frame_tab(reply.rmodel.tool_frame_def.tool_frame);
         break;
     default:
         // Blad: z reply_type wynika, e odpowied nie ma zawiera narzedzia.
@@ -191,7 +194,7 @@ void manip_effector::set_tool_frame_in_kinematic_model(const lib::Homog_matrix& 
 		throw NonFatal_error_2(INVALID_HOMOGENEOUS_MATRIX);
 	}
 	// Ustawienie macierzy reprezentujacej narzedzie.
-	get_current_kinematic_model()->tool = hm;
+	((mrrocpp::kinematics::common::kinematic_model_with_tool*)get_current_kinematic_model())->tool = hm;
 	/*
 	// odswierzanie
 	get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);

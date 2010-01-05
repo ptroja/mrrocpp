@@ -28,7 +28,7 @@ class effector;
 
 /**************************** trans_t *****************************/
 
-class trans_t : public kinematic::common::transformer_error, boost::noncopyable
+class trans_t : public kinematics::common::transformer_error, boost::noncopyable
 {
 private:
     sem_t master_to_trans_t_sem; // semafor pomiedzy edp_master a edp_trans

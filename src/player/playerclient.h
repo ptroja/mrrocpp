@@ -57,7 +57,7 @@ in the server.  It is also the most widely used client library and thus
 the best debugged.  Having said that, this client is not perfect, but
 should be straightforward to use by anyone familiar with C++.
 
-The C++ library is built on a "service proxy" model in which the client
+The C++ library is built on a "service proxy" kinematic_model_with_tool in which the client
 maintains local objects that are proxies for remote services.  There are
 two kinds of proxies: the special server proxy @p PlayerClient and the
 various device-specific proxies.  Each kind of proxy is implemented as a

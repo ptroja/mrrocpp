@@ -14,10 +14,9 @@
 #include "kinematics/common/transformer_error.h"
 
 #include "kinematics/common/kinematics_manager.h"
-#include "kinematics/common/kinematic_model.h"
 
 namespace mrrocpp {
-namespace kinematic {
+namespace kinematics {
 namespace common {
 
 // extern edp_effector* master;   // Bufor polecen i odpowiedzi EDP_MASTER
@@ -44,7 +43,7 @@ void manager::set_kinematic_model (int _desired_kinematic_model_nr)
     {
         throw common::transformer_error::NonFatal_error_2 (INVALID_KINEMATIC_MODEL_NO);
     }
-    current_kinematic_model = (model*) (kinematic_models_list[_desired_kinematic_model_nr]);
+    current_kinematic_model = (simple_kinematic_model*) (kinematic_models_list[_desired_kinematic_model_nr]);
     current_kinematic_model_no = _desired_kinematic_model_nr;
     // Wypisanie nazwy modelu kinematyki.
   //  master->msg->message(current_kinematic_model->get_kinematic_model_label());
@@ -52,14 +51,14 @@ void manager::set_kinematic_model (int _desired_kinematic_model_nr)
 
 
 // Zmiana aktywnego modelu kinematyki.
-void manager::add_kinematic_model (model* _model)
+void manager::add_kinematic_model (simple_kinematic_model* _model)
 {
     // Dodanie nowego modelu na koniec listy.
     kinematic_models_list[kinematic_models_list.size()] = _model;
 }
 
 // Zwraca obecnie wybrany modelu kinematyki.
-model* manager::get_current_kinematic_model (void)
+simple_kinematic_model* manager::get_current_kinematic_model (void)
 {
     return current_kinematic_model;
 }
@@ -71,5 +70,5 @@ int manager::get_current_kinematic_model_no (void)
 }
 
 } // namespace common
-} // namespace kinematic
+} // namespace kinematics
 } // namespace mrrocpp

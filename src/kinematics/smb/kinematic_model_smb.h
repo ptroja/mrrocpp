@@ -14,55 +14,15 @@
 #define _SMB_KIN_model
 
 // Definicja klasy kinematic_model.
-#include "kinematics/common/kinematic_model.h"
+#include "kinematics/common/simple_kinematic_model.h"
 
 namespace mrrocpp {
-namespace kinematic {
+namespace kinematics {
 namespace smb {
 
-class model : public common::model
+class model : public common::simple_kinematic_model
 {
 protected:
-  // Dlugosci czlonow
-  double d1;
-  double a2;
-  double a3;
-  double d5;
-  double d6;
-  double d7;
-
-  // Zmienne opisujace przekladnie dla wszystkich stopni swobody.
-  double gear[7];
-  double theta[7];
-
-  // Zmienne uzywane przy obliczeniach zwiazanych z ramieniami dolnym i gornym.
- double sl123;
- double mi1;
- double ni1;
- double mi2;
- double ni2;
-
-  /* Zmienne zwiazane z obliczeniami zwarcia/rozwarcia chwytaka.
-  double dir_a_6;
-  double dir_b_6;
-  double dir_c_6;
-  double inv_a_6;
-  double inv_b_6;
-  double inv_c_6;
-  double inv_d_6;
-*/
-  // Zakresy ruchu walow silnikow w radianach.
-  double lower_limit_axis[7];
-  double upper_limit_axis[7];
-  // Zakresy ruchu poszczegolnych stopni swobody (w radianach lub milimetrach).
-  double lower_limit_joint[7];
-  double upper_limit_joint[7];
-
-  // Polozenia synchronizacji (polozenia walow silnikow).
-  double synchro_motor_position[7];
-  // Polozenia synchronizacji (polozenia we wspolrzednych wewnetrznych).
-  double synchro_joint_position[7];
-
   // Ustawienie parametrow kinematycznych.
   virtual void set_kinematic_parameters(void);
 

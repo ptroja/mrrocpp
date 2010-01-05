@@ -20,7 +20,7 @@
 #include "kinematics/irp6_on_track/kinematic_model_irp6ot_with_track.h"
 #include "kinematics/irp6_on_track/kinematic_model_irp6ot_with_wrist.h"
 #include "kinematics/irp6_on_track/kinematic_model_calibrated_irp6ot_with_wrist.h"
-#include "kinematics/irp6_on_track/kinematic_model_calibrated_correction_matrix_irp6ot_with_wrist.h"
+#include "kinematics/common/kinematic_model_with_tool.h"
 
 namespace mrrocpp {
 namespace edp {
@@ -53,10 +53,9 @@ effector::effector(lib::configurator &_config) :
 void effector::create_kinematic_models_for_given_robot(void)
 {
 	// Stworzenie wszystkich modeli kinematyki.
-	add_kinematic_model(new kinematic::irp6ot::model_with_wrist());
-	add_kinematic_model(new kinematic::irp6ot::model_with_track());
-	add_kinematic_model(new kinematic::irp6ot::model_calibrated_with_wrist());
-	add_kinematic_model(new kinematic::irp6ot::model_calibrated_correction_matrix_with_wrist());
+	add_kinematic_model(new kinematics::irp6ot::model_with_wrist());
+	add_kinematic_model(new kinematics::irp6ot::model_with_track());
+	add_kinematic_model(new kinematics::irp6ot::model_calibrated_with_wrist());
 	// Ustawienie aktywnego modelu.
 	set_kinematic_model(0);
 }

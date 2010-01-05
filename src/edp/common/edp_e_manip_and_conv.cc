@@ -41,7 +41,7 @@
 
 #include "lib/mrmath/mrmath.h"
 
-#include "kinematics/common/kinematic_model.h"
+//#include "kinematics/common/kinematic_model.h"
 #include "edp/common/in_out.h"
 
 namespace mrrocpp {
@@ -247,7 +247,7 @@ void manip_and_conv_effector::interpret_instruction (lib::c_buffer &instruction)
                 // get_algorithms();
                 master_order(MT_GET_ALGORITHMS, 0);
             }
-            // odczytanie aktualnie uzywanego modelu robota (narzedzie, model kinematyczny,
+            // odczytanie aktualnie uzywanego modelu robota (narzedzie, kinematic_model_with_tool kinematyczny,
             // jego korektor, nr algorytmu regulacji i zestawu jego parametrow)
             get_rmodel (instruction);
             break;
@@ -259,7 +259,7 @@ void manip_and_conv_effector::interpret_instruction (lib::c_buffer &instruction)
             // odczytanie TCP i orientacji koncowki
             // get_arm_position(true);
             master_order(MT_GET_ARM_POSITION, true);
-            // odczytanie aktualnie uzywanego modelu robota (narzedzie, model kinematyczny,
+            // odczytanie aktualnie uzywanego modelu robota (narzedzie, kinematic_model_with_tool kinematyczny,
             // jego korektor, nr algorytmu regulacji i zestawu jego parametrow)
             get_rmodel(instruction);
             break;
@@ -277,7 +277,7 @@ void manip_and_conv_effector::interpret_instruction (lib::c_buffer &instruction)
                 master_order(MT_GET_ALGORITHMS, 0);
             // odczytanie wej
             get_inputs(&reply);
-            // odczytanie aktualnie uzywanego modelu robota (narzedzie, model kinematyczny,
+            // odczytanie aktualnie uzywanego modelu robota (narzedzie, kinematic_model_with_tool kinematyczny,
             // jego korektor, nr algorytmu regulacji i zestawu jego parametrow)
             get_rmodel(instruction);
             break;
@@ -287,7 +287,7 @@ void manip_and_conv_effector::interpret_instruction (lib::c_buffer &instruction)
             // odczytanie TCP i orientacji koncowki
             // get_arm_position(true);
             master_order(MT_GET_ARM_POSITION, true);
-            // odczytanie aktualnie uzywanego modelu robota (narzedzie, model kinematyczny,
+            // odczytanie aktualnie uzywanego modelu robota (narzedzie, kinematic_model_with_tool kinematyczny,
             // jego korektor, nr algorytmu regulacji i zestawu jego parametrow)
             get_rmodel(instruction);
             break;
@@ -303,7 +303,7 @@ void manip_and_conv_effector::interpret_instruction (lib::c_buffer &instruction)
             // ustawienie wyj
             set_outputs(instruction);
         if (instruction.is_set_rmodel())
-            // zmiana aktualnie uzywanego modelu robota (narzedzie, model kinematyczny,
+            // zmiana aktualnie uzywanego modelu robota (narzedzie, kinematic_model_with_tool kinematyczny,
             // jego korektor, nr algorytmu regulacji i zestawu jego parametrow)
             //        set_rmodel();
             master_order(MT_SET_RMODEL, 0);
@@ -334,7 +334,7 @@ void manip_and_conv_effector::interpret_instruction (lib::c_buffer &instruction)
                 if (instruction.get_rmodel_type == lib::SERVO_ALGORITHM)
                     // get_algorithms();
                     master_order(MT_GET_ALGORITHMS, 0);
-            // odczytanie aktualnie uzywanego modelu robota (narzedzie, model kinematyczny,
+            // odczytanie aktualnie uzywanego modelu robota (narzedzie, kinematic_model_with_tool kinematyczny,
             // jego korektor, nr algorytmu regulacji i zestawu jego parametrow)
             get_rmodel(instruction);
             break;
@@ -349,7 +349,7 @@ void manip_and_conv_effector::interpret_instruction (lib::c_buffer &instruction)
             else
                 // get_arm_position(true);
                 master_order(MT_GET_ARM_POSITION, true);
-            // odczytanie aktualnie uzywanego modelu robota (narzedzie, model kinematyczny,
+            // odczytanie aktualnie uzywanego modelu robota (narzedzie, kinematic_model_with_tool kinematyczny,
             // jego korektor, nr algorytmu regulacji i zestawu jego parametrow)
             get_rmodel(instruction);
             break;
@@ -371,7 +371,7 @@ void manip_and_conv_effector::interpret_instruction (lib::c_buffer &instruction)
                     master_order(MT_GET_ALGORITHMS, 0);
             // odczytanie wej
             get_inputs(&reply);
-            // odczytanie aktualnie uzywanego modelu robota (narzedzie, model kinematyczny,
+            // odczytanie aktualnie uzywanego modelu robota (narzedzie, kinematic_model_with_tool kinematyczny,
             // jego korektor, nr algorytmu regulacji i zestawu jego parametrow)
             get_rmodel(instruction);
             break;
@@ -383,7 +383,7 @@ void manip_and_conv_effector::interpret_instruction (lib::c_buffer &instruction)
             else
                 // get_arm_position(true);
                 master_order(MT_GET_ARM_POSITION, true);
-            // odczytanie aktualnie uzywanego modelu robota (narzedzie, model kinematyczny,
+            // odczytanie aktualnie uzywanego modelu robota (narzedzie, kinematic_model_with_tool kinematyczny,
             // jego korektor, nr algorytmu regulacji i zestawu jego parametrow)
             get_rmodel(instruction);
             break;
