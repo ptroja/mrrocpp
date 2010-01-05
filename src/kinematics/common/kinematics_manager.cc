@@ -26,10 +26,11 @@ kinematic_manager::~kinematic_manager(void)
 	// Delete list of kinematics.
 	while (!kinematic_models_list.empty()) {
 		// Free memory from model and erase list element.
-		kinematic_model* km = (kinematic_model*) (kinematic_models_list.begin()->first);
+		kinematic_model* km = (kinematic_model*) (kinematic_models_list.begin()->second);
 		delete(km);
 		kinematic_models_list.erase( kinematic_models_list.begin());
 	}//: while
+
 };//:~manager
 
 
