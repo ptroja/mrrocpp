@@ -187,10 +187,10 @@ void effector::servo_joints_and_frame_actualization_and_upload (void)
     	}
 
 		// Obliczenie lokalnej macierzy oraz obliczenie położenia robota we wsp. zewnętrznych.
-		lib::frame_tab local_frame;
-		get_current_kinematic_model()->i2e_transform(servo_current_joints, &local_frame);
+    	lib::Homog_matrix local_matrix;
+		get_current_kinematic_model()->i2e_transform(servo_current_joints, local_matrix);
 		// Pobranie wsp. zewnętrznych w układzie
-		lib::Homog_matrix local_matrix(local_frame);
+
 		local_matrix.get_mech_xyz_euler_zyz(servo_real_kartez_pos);
 
     	// scope-locked reader data update
@@ -204,7 +204,7 @@ void effector::servo_joints_and_frame_actualization_and_upload (void)
     	}
 
 		// Obliczenie polozenia robota we wsp. zewnetrznych bez narzedzia.
-    	((mrrocpp::kinematics::common::kinematic_model_with_tool*)get_current_kinematic_model())->i2e_wo_tool_transform(servo_current_joints, &servo_current_frame_wo_tool);
+    	((mrrocpp::kinematics::common::kinematic_model_with_tool*)get_current_kinematic_model())->i2e_wo_tool_transform(servo_current_joints, servo_current_frame_wo_tool);
 
         catch_nr=0;
     }//: try
@@ -227,7 +227,7 @@ void effector::servo_joints_and_frame_actualization_and_upload (void)
 
 		// T.K.: Nad tym trzeba pomyslec - co w tym momencie dzieje sie z global_current_end_effector_frame?
 		// Jezeli zmienna ta przechowyje polozenie bez narzedzia, to nazwa jest nie tylko nieadekwatna, a wrecz mylaca.
-		lib::copy_frame(global_current_frame_wo_tool, servo_current_frame_wo_tool);
+		global_current_frame_wo_tool = servo_current_frame_wo_tool;
     }
 }
 
@@ -277,7 +277,7 @@ void effector::get_arm_position (bool read_hardware, lib::c_buffer &instruction)
     case lib::FRAME:
         // przeliczenie wspolrzednych do poziomu, ktory ma byc odczytany
         get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
-        get_current_kinematic_model()->i2e_transform(current_joints, &current_end_effector_frame);
+        get_current_kinematic_model()->i2e_transform(current_joints, current_end_effector_frame);
         arm_frame_2_frame();
         break;
 

@@ -235,7 +235,7 @@ void effector::get_arm_position (bool read_hardware, lib::c_buffer &instruction)
     case lib::FRAME:
         // przeliczenie wspolrzednych do poziomu, ktory ma byc odczytany
         get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
-        get_current_kinematic_model()->i2e_transform(current_joints, &current_end_effector_frame);
+        get_current_kinematic_model()->i2e_transform(current_joints, current_end_effector_frame);
         arm_frame_2_frame();
         break;
 
