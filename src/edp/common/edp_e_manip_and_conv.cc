@@ -60,6 +60,8 @@ manip_and_conv_effector::manip_and_conv_effector (lib::configurator &_config, li
         step_counter(0),
         number_of_servos(-1)
 {
+
+
     controller_state_edp_buf.is_synchronised = false;
     controller_state_edp_buf.is_power_on = true;
     controller_state_edp_buf.is_wardrobe_on = true;
@@ -70,7 +72,6 @@ manip_and_conv_effector::manip_and_conv_effector (lib::configurator &_config, li
     // is_get_arm_read_hardware=false;
     previous_set_arm_type = lib::MOTOR;
 
-    motion_type = lib::ABSOLUTE;
 
 #ifdef DOCENT_SENSOR
     startedCallbackRegistered_ = false;
@@ -626,12 +627,13 @@ void manip_and_conv_effector::compute_motors(const lib::c_buffer &instruction)
 	double desired_motor_pos_new_tmp[MAX_SERVOS_NR];
     double desired_joints_tmp[MAX_SERVOS_NR];       // Wspolrzedne wewnetrzne -
 
+
     // obliczenia dla ruchu ramienia (silnikami)
     /* Wypenienie struktury danych transformera na podstawie parametrow polecenia otrzymanego z ECP */
     /* Zlecenie transformerowi przeliczenie wspolrzednych */
     const double* p;   // wskanik miejsca w strukturze przesanej z ECP, w ktorym znajduj sie wspolrzedne
 
-    motion_type = instruction.motion_type;
+    const lib::MOTION_TYPE &motion_type = instruction.motion_type;
     motion_steps = instruction.motion_steps;
     value_in_step_no = instruction.value_in_step_no;
     p = &instruction.arm.pf_def.arm_coordinates[0];
@@ -692,7 +694,7 @@ void manip_and_conv_effector::compute_joints (const lib::c_buffer &instruction)
     /* Zlecenie transformerowi przeliczenie wspolrzednych */
     const double* p; // wskanik miejsca w strukturze przeslanej z ECP, w ktorym znajduje sie wspolrzedne
 
-    motion_type = instruction.motion_type;
+    const lib::MOTION_TYPE &motion_type = instruction.motion_type;
     motion_steps = instruction.motion_steps;
     value_in_step_no = instruction.value_in_step_no;
     p = &instruction.arm.pf_def.arm_coordinates[0];

@@ -157,7 +157,7 @@ protected:
 
     int16_t PWM_value[MAX_SERVOS_NR];             // wartosci zadane wypelnienia PWM
     int16_t current[MAX_SERVOS_NR];                // prad sterujacy
-    lib::MOTION_TYPE motion_type;        // sposob zadania ruchu: ABSOLUTE/RELATIVE
+
 
     uint8_t servo_algorithm_ecp[MAX_SERVOS_NR];
     // Tablica numerow algorytmow serworegulacji przyslanych z ECP

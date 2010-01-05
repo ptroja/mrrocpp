@@ -206,8 +206,7 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buff
 
 	double desired_motor_pos_new_tmp[MAX_SERVOS_NR];
     double desired_joints_tmp[MAX_SERVOS_NR];       // Wspolrzedne wewnetrzne -
-
-	motion_type = instruction.motion_type;
+    lib::MOTION_TYPE &motion_type = instruction.motion_type;
 
 	// zmienne z bufora wejsciowego
 	const uint16_t &ECP_motion_steps = instruction.motion_steps; // liczba krokow w makrokroku
