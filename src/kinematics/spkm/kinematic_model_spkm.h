@@ -49,10 +49,10 @@ class kinematic_model_spkm: public common::kinematic_model
 		void i2mp_transform(double* local_desired_motor_pos_new, double* local_desired_joints);
 
 		//! Solves direct kinematics - EMPTY!
-		void direct_kinematics_transform(const double* local_current_joints, lib::frame_tab* local_current_end_effector_frame);
+		void direct_kinematics_transform(const double* local_current_joints, lib::Homog_matrix& local_current_end_effector_frame);
 
 		//! Solves inverse kinematics.
-		void inverse_kinematics_transform(double* local_desired_joints, double* local_current_joints, lib::frame_tab* local_desired_end_effector_frame);
+		void inverse_kinematics_transform(double* local_desired_joints, double* local_current_joints, lib::Homog_matrix& local_desired_end_effector_frame);
 
 };
 

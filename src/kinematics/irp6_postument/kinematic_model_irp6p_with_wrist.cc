@@ -74,7 +74,7 @@ Ustawienie standardowego narzedzia [m].
 /* -----------------------------------------------------------------------
 Ustawienie pozycji ukladu bazowego w globalnym ukladzie odniesienia [m].
  ------------------------------------------------------------------------- */
- lib::frame_tab tmp_global_base_m;
+ lib::Homog_matrix tmp_global_base_m;
  // Macierz rotacji.
  tmp_global_base_m[0][0] =  0.999382684525334;
  tmp_global_base_m[1][0] = -0.032112349151151;
@@ -90,7 +90,7 @@ Ustawienie pozycji ukladu bazowego w globalnym ukladzie odniesienia [m].
  tmp_global_base_m[1][3] =  2.106338769845522;
  tmp_global_base_m[2][3] = -0.030202915816185;
  // Ustawienie macierzy.
- global_base.set_from_frame_tab(tmp_global_base_m);
+ global_base = tmp_global_base_m;
 
 /* -----------------------------------------------------------------------
 Obliczanie wspolczynnika - przelozenie przekladni kata obrotu walu silnika napedowego kolumny.
@@ -497,7 +497,7 @@ void model_with_wrist::i2mp_transform(double* local_desired_motor_pos_new, doubl
   * current_end_effector_frame[4][3] - macierz przeksztacenia jednorodnego (MPJ)
 		opisujca aktualne poloenie i orientacje koncowki (narzedzia) w ukladzie bazowym.
  ------------------------------------------------------------------------ */
-void model_with_wrist::direct_kinematics_transform(const double* local_current_joints, lib::frame_tab* local_current_end_effector_frame) {
+void model_with_wrist::direct_kinematics_transform(const double* local_current_joints, lib::Homog_matrix& local_current_end_effector_frame) {
 
   // Sprawdzenie ograniczen na wspolrzedne wewnetrzne.
   check_joints (local_current_joints);
@@ -517,18 +517,18 @@ void model_with_wrist::direct_kinematics_transform(const double* local_current_j
   double c6 = cos(local_current_joints[5]);
 
   // Proste zadanie kinematyki.
-  (*local_current_end_effector_frame)[0][0] = (c1*s4*c5+s1*s5)*c6+c1*c4*s6;		//NX
-  (*local_current_end_effector_frame)[0][1] = -(c1*s4*c5+s1*s5)*s6+c1*c4*c6;	//OX
-  (*local_current_end_effector_frame)[0][2] = c1*s4*s5-s1*c5;							//AX
-  (*local_current_end_effector_frame)[0][3] = c1*(a2*c2+a3*c3+d5*c4);				//PX
-  (*local_current_end_effector_frame)[1][0] = (s1*s4*c5-c1*s5)*c6+s1*c4*s6;		//NY
-  (*local_current_end_effector_frame)[1][1] = -(s1*s4*c5-c1*s5)*s6+s1*c4*c6;		//OY
-  (*local_current_end_effector_frame)[1][2] = s1*s4*s5+c1*c5;							//AY
-  (*local_current_end_effector_frame)[1][3] = s1*(a2*c2+a3*c3+d5*c4);				//PY
-  (*local_current_end_effector_frame)[2][0] = c4*c5*c6-s4*s6;							//NZ
-  (*local_current_end_effector_frame)[2][1] = -c4*c5*s6-s4*c6;							//OZ
-  (*local_current_end_effector_frame)[2][2] = c4*s5;										//AZ
-  (*local_current_end_effector_frame)[2][3] = -a2*s2-a3*s3-d5*s4;						//PZ
+  (local_current_end_effector_frame)[0][0] = (c1*s4*c5+s1*s5)*c6+c1*c4*s6;		//NX
+  (local_current_end_effector_frame)[0][1] = -(c1*s4*c5+s1*s5)*s6+c1*c4*c6;	//OX
+  (local_current_end_effector_frame)[0][2] = c1*s4*s5-s1*c5;							//AX
+  (local_current_end_effector_frame)[0][3] = c1*(a2*c2+a3*c3+d5*c4);				//PX
+  (local_current_end_effector_frame)[1][0] = (s1*s4*c5-c1*s5)*c6+s1*c4*s6;		//NY
+  (local_current_end_effector_frame)[1][1] = -(s1*s4*c5-c1*s5)*s6+s1*c4*c6;		//OY
+  (local_current_end_effector_frame)[1][2] = s1*s4*s5+c1*c5;							//AY
+  (local_current_end_effector_frame)[1][3] = s1*(a2*c2+a3*c3+d5*c4);				//PY
+  (local_current_end_effector_frame)[2][0] = c4*c5*c6-s4*s6;							//NZ
+  (local_current_end_effector_frame)[2][1] = -c4*c5*s6-s4*c6;							//OZ
+  (local_current_end_effector_frame)[2][2] = c4*s5;										//AZ
+  (local_current_end_effector_frame)[2][3] = -a2*s2-a3*s3-d5*s4;						//PZ
 
 } //:: direct_kinematics_transform()
 
@@ -544,7 +544,7 @@ void model_with_wrist::direct_kinematics_transform(const double* local_current_j
   Wyjscie:
   * local_desired_joints - wyliczone wspolrzedne wewnetrzne robota (kolejno q0, q1, q2, ...)
  ------------------------------------------------------------------------ */
-void model_with_wrist::inverse_kinematics_transform(double* local_desired_joints, double* local_current_joints, lib::frame_tab* local_desired_end_effector_frame)
+void model_with_wrist::inverse_kinematics_transform(double* local_desired_joints, double* local_current_joints, lib::Homog_matrix& local_desired_end_effector_frame)
 {
 
   // Stale
@@ -559,18 +559,18 @@ void model_with_wrist::inverse_kinematics_transform(double* local_desired_joints
   double  t5, t_ok;
 
   // Przepisanie zmiennych.
-  Nx= (*local_desired_end_effector_frame)[0][0];
-  Ny= (*local_desired_end_effector_frame)[1][0];
-  Nz= (*local_desired_end_effector_frame)[2][0];
-  Ox= (*local_desired_end_effector_frame)[0][1];
-  Oy= (*local_desired_end_effector_frame)[1][1];
-  Oz= (*local_desired_end_effector_frame)[2][1];
-  Ax= (*local_desired_end_effector_frame)[0][2];
-  Ay= (*local_desired_end_effector_frame)[1][2];
-  Az= (*local_desired_end_effector_frame)[2][2];
-  Px= (*local_desired_end_effector_frame)[0][3];
-  Py= (*local_desired_end_effector_frame)[1][3];
-  Pz= (*local_desired_end_effector_frame)[2][3];
+  Nx= (local_desired_end_effector_frame)[0][0];
+  Ny= (local_desired_end_effector_frame)[1][0];
+  Nz= (local_desired_end_effector_frame)[2][0];
+  Ox= (local_desired_end_effector_frame)[0][1];
+  Oy= (local_desired_end_effector_frame)[1][1];
+  Oz= (local_desired_end_effector_frame)[2][1];
+  Ax= (local_desired_end_effector_frame)[0][2];
+  Ay= (local_desired_end_effector_frame)[1][2];
+  Az= (local_desired_end_effector_frame)[2][2];
+  Px= (local_desired_end_effector_frame)[0][3];
+  Py= (local_desired_end_effector_frame)[1][3];
+  Pz= (local_desired_end_effector_frame)[2][3];
 
   //  Wyliczenie Theta1.
   local_desired_joints[0]=(atan2(Py, Px));

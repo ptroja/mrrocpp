@@ -73,11 +73,11 @@ protected:
 
 
 
-    lib::frame_tab servo_current_frame_wo_tool; // by Y dla watku EDP_SERVO    XXXXX
+    lib::Homog_matrix servo_current_frame_wo_tool; // by Y dla watku EDP_SERVO    XXXXX
     lib::Homog_matrix servo_current_end_effector_frame_with_tool_and_base; // by Y dla watku EDP_SERVO    XXXXX
     lib::Homog_matrix servo_previous_end_effector_frame_with_tool_and_base; // by Y dla watku EDP_SERVO    XXXXX
 
-    lib::frame_tab global_current_frame_wo_tool;// globalne dla procesu EDP    XXXXXX
+    lib::Homog_matrix global_current_frame_wo_tool;// globalne dla procesu EDP    XXXXXX
 
     // dla potrzeb wyznaczenia sztywnosci ukladu mnaipulator - drugi manipulator badz ramie czlowieka badz srodowisko
     lib::K_vector servo_xyz_angle_axis_translation;

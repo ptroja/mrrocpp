@@ -255,15 +255,15 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buff
 
 	// WYLICZENIE POZYCJI POCZATKOWEJ
 	double begining_joints[MAX_SERVOS_NR], tmp_joints[MAX_SERVOS_NR], tmp_motor_pos[MAX_SERVOS_NR];
-	lib::frame_tab begining_frame;
+	lib::Homog_matrix begining_frame;
 
 	get_current_kinematic_model()->mp2i_transform(desired_motor_pos_new, begining_joints);
-	get_current_kinematic_model()->i2e_transform(begining_joints, &begining_frame);
+	get_current_kinematic_model()->i2e_transform(begining_joints, begining_frame);
 	lib::Homog_matrix begining_end_effector_frame(begining_frame);
 	lib::Homog_matrix next_frame = begining_end_effector_frame;
 
 	// WYZNACZENIE goal_frame
-	lib::frame_tab goal_frame_tab;
+
 	lib::Homog_matrix goal_frame;
 
 	lib::Homog_matrix goal_frame_increment_in_end_effector;
@@ -279,13 +279,13 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buff
 			goal_frame.set_from_frame_tab(arm_frame);
 			break;
 		case lib::JOINT:
-			get_current_kinematic_model()->i2e_transform(arm_coordinates, &goal_frame_tab);
-			goal_frame.set_from_frame_tab(goal_frame_tab);
+			get_current_kinematic_model()->i2e_transform(arm_coordinates, goal_frame);
+
 			break;
 		case lib::MOTOR:
 			get_current_kinematic_model()->mp2i_transform(arm_coordinates, tmp_joints);
-			get_current_kinematic_model()->i2e_transform(tmp_joints, &goal_frame_tab);
-			goal_frame.set_from_frame_tab(goal_frame_tab);
+			get_current_kinematic_model()->i2e_transform(tmp_joints, goal_frame);
+
 			break;
 		default:
 			break;
@@ -303,8 +303,7 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buff
 				{
 					tmp_joints[i] = begining_joints[i] + arm_coordinates[i];
 				}
-				get_current_kinematic_model()->i2e_transform(tmp_joints, &goal_frame_tab);
-				goal_frame.set_from_frame_tab(goal_frame_tab);
+				get_current_kinematic_model()->i2e_transform(tmp_joints, goal_frame);
 				break;
 			case lib::MOTOR:
 				for (int i = 0; i < MAX_SERVOS_NR; i++)
@@ -312,8 +311,7 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buff
 					tmp_motor_pos[i] = desired_motor_pos_new[i] + arm_coordinates[i];
 				}
 				get_current_kinematic_model()->mp2i_transform(tmp_motor_pos, tmp_joints);
-				get_current_kinematic_model()->i2e_transform(tmp_joints, &goal_frame_tab);
-				goal_frame.set_from_frame_tab(goal_frame_tab);
+				get_current_kinematic_model()->i2e_transform(tmp_joints, goal_frame);
 				break;
 			default:
 				break;
@@ -461,7 +459,7 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buff
 			next_frame.get_xyz_euler_zyz(rb_obj->step_data.current_cartesian_position);
 		}
 
-		next_frame.get_frame_tab(desired_end_effector_frame);
+		desired_end_effector_frame = next_frame;
 
 
 
@@ -480,7 +478,7 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buff
 		}
 
 		// Przeliczenie wspolrzednych zewnetrznych na wspolrzedne wewnetrzne
-		get_current_kinematic_model()->e2i_transform(desired_joints_tmp, current_joints, &desired_end_effector_frame);
+		get_current_kinematic_model()->e2i_transform(desired_joints_tmp, current_joints, desired_end_effector_frame);
 		// Przeliczenie wspolrzednych wewnetrznych na polozenia walow silnikow
 		get_current_kinematic_model()->i2mp_transform(desired_motor_pos_new_tmp, desired_joints_tmp);
 		// kinematyka nie stwierdzila bledow, przepisanie wartosci
@@ -605,7 +603,7 @@ void irp6s_postument_track_effector::get_arm_position(bool read_hardware, lib::c
 	// oraz adekwatne wypelnienie bufora odpowiedzi
 
 	get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
-	get_current_kinematic_model()->i2e_transform(current_joints, &current_end_effector_frame);
+	get_current_kinematic_model()->i2e_transform(current_joints, current_end_effector_frame);
 
 	switch (instruction.get_arm_type)
 	{
@@ -682,10 +680,11 @@ void irp6s_postument_track_effector::servo_joints_and_frame_actualization_and_up
 		}
 
 		// Obliczenie lokalnej macierzy oraz obliczenie położenia robota we wsp. zewnętrznych.
-		lib::frame_tab local_frame;
-		get_current_kinematic_model()->i2e_transform(servo_current_joints, &local_frame);
+
+		lib::Homog_matrix local_matrix;
+		get_current_kinematic_model()->i2e_transform(servo_current_joints, local_matrix);
 		// Pobranie wsp. zewnętrznych w układzie
-		lib::Homog_matrix local_matrix(local_frame);
+
 		local_matrix.get_xyz_euler_zyz(servo_real_kartez_pos);
 
 		// Zapisanie wartosci rzeczywistej dla readera
@@ -702,7 +701,7 @@ void irp6s_postument_track_effector::servo_joints_and_frame_actualization_and_up
 		}
 
 		// Obliczenie polozenia robota we wsp. zewnetrznych bez narzedzia.
-		((mrrocpp::kinematics::common::kinematic_model_with_tool*)get_current_kinematic_model())->i2e_wo_tool_transform(servo_current_joints, &servo_current_frame_wo_tool);
+		((mrrocpp::kinematics::common::kinematic_model_with_tool*)get_current_kinematic_model())->i2e_wo_tool_transform(servo_current_joints, servo_current_frame_wo_tool);
 
 		if ( (force_tryb> 0)&&(is_synchronised())&&(!(vs->first_configure_done))&&(!(vs->force_sensor_do_first_configure)))
 		{
@@ -728,7 +727,7 @@ void irp6s_postument_track_effector::servo_joints_and_frame_actualization_and_up
 			global_current_joints[i]=servo_current_joints[i];
 		}
 
-		lib::copy_frame(global_current_frame_wo_tool, servo_current_frame_wo_tool);
+		global_current_frame_wo_tool = servo_current_frame_wo_tool;
 	}
 }
 

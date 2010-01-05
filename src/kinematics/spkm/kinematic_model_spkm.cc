@@ -43,11 +43,11 @@ void kinematic_model_spkm::i2mp_transform(double* local_desired_motor_pos_new, d
 {
 }
 
-void kinematic_model_spkm::direct_kinematics_transform(const double* local_current_joints, lib::frame_tab* local_current_end_effector_frame)
+void kinematic_model_spkm::direct_kinematics_transform(const double* local_current_joints, lib::Homog_matrix& local_current_end_effector_frame)
 {
 }
 
-void kinematic_model_spkm::inverse_kinematics_transform(double* local_desired_joints, double* local_current_joints, lib::frame_tab* local_desired_end_effector_frame)
+void kinematic_model_spkm::inverse_kinematics_transform(double* local_desired_joints, double* local_current_joints, lib::Homog_matrix& local_desired_end_effector_frame)
 {
 }
 

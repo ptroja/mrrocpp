@@ -100,7 +100,7 @@ void manip_effector::compute_frame (const lib::c_buffer &instruction)
         throw NonFatal_error_2(INVALID_MOTION_TYPE);
     }
     // Przeliczenie wspolrzednych zewnetrznych na wspolrzedne wewnetrzne
-    get_current_kinematic_model()->e2i_transform(desired_joints_tmp, current_joints, &desired_end_effector_frame);
+    get_current_kinematic_model()->e2i_transform(desired_joints_tmp, current_joints, desired_end_effector_frame);
     // Przeliczenie wspolrzednych wewnetrznych na polozenia walow silnikow
     get_current_kinematic_model()->i2mp_transform(desired_motor_pos_new_tmp, desired_joints_tmp);
 
@@ -160,18 +160,18 @@ void manip_effector::tool_frame_2_frame (lib::c_buffer &instruction)
 
 
 /*--------------------------------------------------------------------------*/
-void manip_effector::arm_abs_frame_2_frame (lib::Homog_matrix p_m)
+void manip_effector::arm_abs_frame_2_frame (lib::Homog_matrix& p_m)
 {
     // Przepisanie definicji koncowki danej
     // w postaci TRANS wyraonej bezwzgldnie
     // do wewntrznych struktur danych TRANSFORMATORa
-    lib::copy_frame(desired_end_effector_frame, p_m);
+    desired_end_effector_frame = p_m;
 }
 /*--------------------------------------------------------------------------*/
 
 
 /*--------------------------------------------------------------------------*/
-void manip_effector::arm_rel_frame_2_frame (lib::Homog_matrix p_m)
+void manip_effector::arm_rel_frame_2_frame (lib::Homog_matrix& p_m)
 {
     // Przepisanie definicji koncowki danej
     // w postaci TRANS wyraonej wzgldnie
@@ -181,7 +181,7 @@ void manip_effector::arm_rel_frame_2_frame (lib::Homog_matrix p_m)
     lib::Homog_matrix A_B_T_des (current_end_effector_frame);
     //cout << A_B_T_des;
     A_B_T_des *= A_B_T_arg;
-    A_B_T_des.get_frame_tab(desired_end_effector_frame);
+    desired_end_effector_frame = A_B_T_des;
 
     // matrix_mult(desired_end_effector_frame, *p);
     // sprawdzi przekroczenie dopuszczalnego zakresu oraz poprawno macierzy jednorodnej
@@ -220,7 +220,7 @@ void manip_effector::arm_frame_2_frame (void)
     case lib::ARM_INPUTS:
     case lib::ARM_RMODEL:
     case lib::ARM_RMODEL_INPUTS:
-        lib::Homog_matrix::copy_frame_tab(reply.arm.pf_def.arm_frame, current_end_effector_frame);
+        current_end_effector_frame.get_frame_tab(reply.arm.pf_def.arm_frame);
     break;
     default: // blad:
         throw NonFatal_error_2(STRANGE_GET_ARM_REQUEST);
@@ -245,7 +245,7 @@ void manip_effector::master_joints_and_frame_download (void)
         current_motor_pos[i]=global_current_motor_pos[i];
         current_joints[i]=global_current_joints[i];
     }
-    lib::copy_frame(servo_current_frame_wo_tool, global_current_frame_wo_tool);
+    servo_current_frame_wo_tool = global_current_frame_wo_tool;
 }
 
 /*--------------------------------------------------------------------------*/
@@ -255,7 +255,7 @@ void manip_effector::master_joints_and_frame_download (void)
 void manip_effector::synchronise()
 {
 	manip_and_conv_effector::synchronise();
-	get_current_kinematic_model()->i2e_transform(current_joints, &current_end_effector_frame);
+	get_current_kinematic_model()->i2e_transform(current_joints, current_end_effector_frame);
 }
 
 //   sprawdza stan robota
@@ -263,7 +263,7 @@ void manip_effector::get_controller_state(lib::c_buffer &instruction)
 {
 	manip_and_conv_effector::get_controller_state(instruction);
 	if (is_synchronised()) {
-		get_current_kinematic_model()->i2e_transform(current_joints, &current_end_effector_frame);
+		get_current_kinematic_model()->i2e_transform(current_joints, current_end_effector_frame);
 	}
 }
 
