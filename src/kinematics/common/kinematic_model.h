@@ -6,8 +6,8 @@
  * \date Nov 26, 2009
  */
 
-#ifndef SIMPLE_MODEL_H_
-#define SIMPLE_MODEL_H_
+#ifndef KINEMATIC_MODEL_H_
+#define KINEMATIC_MODEL_H_
 
 #include <string>
 #include "lib/mrmath/mrmath.h"
@@ -76,4 +76,4 @@ public:
 } // namespace kinematic
 } // namespace mrrocpp
 
-#endif /* SIMPLE_MODEL_H_ */
+#endif /* KINEMATIC_MODEL_H_ */
