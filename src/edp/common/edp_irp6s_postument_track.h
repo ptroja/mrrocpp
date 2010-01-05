@@ -73,7 +73,6 @@ public:
     // przepisanie lokalnego zestawu lokalnego edp_servo na globalny (chronione mutexem)
     void master_joints_and_frame_download(void);// by Y przepisanie z zestawu globalnego na lokalny dla edp_master
 
-    lib::frame_tab force_current_end_effector_frame;// by Y dla watku EDP_FORCE
 
     void force_msr_download(double *new_value, double *old_value);// by Y odczytanie globalnego zestawu danych
 

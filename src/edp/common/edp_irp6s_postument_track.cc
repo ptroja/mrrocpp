@@ -215,7 +215,7 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buff
 	const lib::BEHAVIOUR_SPECIFICATION (&behaviour)[6] = instruction.arm.pf_def.behaviour;
 	const double &desired_gripper_coordinate = instruction.arm.pf_def.gripper_coordinate;
 	const double (&arm_coordinates)[MAX_SERVOS_NR] = instruction.arm.pf_def.arm_coordinates;
-	const lib::frame_tab &arm_frame = instruction.arm.pf_def.arm_frame;
+	lib::Homog_matrix arm_frame(instruction.arm.pf_def.arm_frame);
 
 	// w trybie TCIM interpolujemy w edp_trans stad zadajemy pojedynczy krok do serwo
 	motion_steps = 1;
@@ -242,7 +242,7 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buff
 
 	double beginning_gripper_coordinate;
 	static double ending_gripper_coordinate;
-	static lib::frame_tab local_force_end_effector_frame;
+	static lib::Homog_matrix local_force_end_effector_frame;
 	const unsigned long PREVIOUS_MOVE_VECTOR_NULL_STEP_VALUE = 10;
 	lib::V_vector base_pos_xyz_rot_xyz_vector; // wartosci ruchu pozycyjnego
 
@@ -276,7 +276,7 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buff
 		switch (set_arm_type)
 		{
 		case lib::FRAME:
-			goal_frame.set_from_frame_tab(arm_frame);
+			goal_frame = arm_frame;
 			break;
 		case lib::JOINT:
 			get_current_kinematic_model()->i2e_transform(arm_coordinates, goal_frame);
@@ -295,7 +295,7 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buff
 			switch (set_arm_type)
 			{
 			case lib::FRAME:
-				goal_frame.set_from_frame_tab(arm_frame);
+				goal_frame = arm_frame;
 				goal_frame = begining_end_effector_frame * goal_frame;
 				break;
 			case lib::JOINT:
@@ -512,7 +512,7 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buff
 
 	}
 
-	next_frame.get_frame_tab(local_force_end_effector_frame);
+	local_force_end_effector_frame = next_frame;
 	ending_gripper_coordinate = desired_gripper_coordinate;
 
 }

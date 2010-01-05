@@ -134,10 +134,6 @@ void ATI3084_force::configure_sensor(void)
 		// lib::Homog_matrix frame(master.force_current_end_effector_frame); // pobranie aktualnej ramki
 		if (!gravity_transformation) // nie powolano jeszcze obiektu
 		{
-			// polozenie czujnika wzgledem kisci (bez narzedzia)
-			//lib::frame_tab sensor_rot = {{0, -1, 0}, {1, 0, 0}, {0, 0, 1}, {0, 0, 0}};
-			// polozenie czujnika wzgledem  koncowki lancucha kinematycznego
-			// lib::Homog_matrix sensor_frame = lib::Homog_matrix(0, -1, 0,		1, 0, 0,	0, 0, 1,	0, 0, 0.09);
 
 			double tab[6];
 			lib::Homog_matrix sensor_frame;
