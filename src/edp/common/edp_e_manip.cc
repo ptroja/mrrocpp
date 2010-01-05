@@ -221,12 +221,7 @@ void manip_effector::arm_frame_2_frame (void)
     case lib::ARM_RMODEL:
     case lib::ARM_RMODEL_INPUTS:
         lib::Homog_matrix::copy_frame_tab(reply.arm.pf_def.arm_frame, current_end_effector_frame);
-        for(int i=0; i < 6; i++)
-        {
-            reply.PWM_value[i] = PWM_value[i];
-       //     reply.current[i] = current[i];
-        }
-        break;
+    break;
     default: // blad:
         throw NonFatal_error_2(STRANGE_GET_ARM_REQUEST);
     }

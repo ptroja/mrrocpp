@@ -451,8 +451,6 @@ void manip_and_conv_effector::arm_motors_2_motors (void)
     case lib::ARM_RMODEL_INPUTS:
         for (int i=0; i<number_of_servos; i++)
         {
-            reply.PWM_value[i] = PWM_value[i];
-          //  reply.current[i] = current[i];
             reply.arm.pf_def.arm_coordinates[i] = current_motor_pos[i];
         }
         break;
