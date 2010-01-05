@@ -276,7 +276,8 @@ void wii_teach::main_task_algorithm(void)
     struct lib::ECP_VSP_MSG message;
 
     sg = new common::generator::smooth(*this,true);
-    wg = new irp6ot::generator::wii_relative(*this,(ecp_mp::sensor::wiimote*)sensor_m[lib::SENSOR_WIIMOTE]);
+    ag = new irp6ot::generator::wii_absolute(*this,(ecp_mp::sensor::wiimote*)sensor_m[lib::SENSOR_WIIMOTE]);
+    rg = new irp6ot::generator::wii_relative(*this,(ecp_mp::sensor::wiimote*)sensor_m[lib::SENSOR_WIIMOTE]);
     jg = new irp6ot::generator::wii_joint(*this,(ecp_mp::sensor::wiimote*)sensor_m[lib::SENSOR_WIIMOTE]);
 
     bool has_filenames = get_filenames();
@@ -300,7 +301,7 @@ void wii_teach::main_task_algorithm(void)
             message.wii_command.led_status = 0xF;
             message.wii_command.rumble = false;
             ((ecp_mp::sensor::wiimote*)sensor_m[lib::SENSOR_WIIMOTE])->send_reading(message);
-            jg->Move();
+            ag->Move();
             message.wii_command.led_change = true;
             message.wii_command.led_status = 0x0;
             message.wii_command.rumble = false;

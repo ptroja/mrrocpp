@@ -4,6 +4,7 @@
 #include "ecp_mp/task/ecp_mp_task.h"
 #include "ecp/common/generator/ecp_g_smooth.h"
 #include "application/wii_teach/generator/ecp_g_wii_relative.h"
+#include "application/wii_teach/generator/ecp_g_wii_absolute.h"
 #include "application/wii_teach/generator/ecp_g_wii_joint.h"
 
 namespace mrrocpp {
@@ -19,7 +20,8 @@ class wii_teach: public common::task::task
     protected:
 	//Generator ruchu
         common::generator::smooth* sg;
-        irp6ot::generator::wii_relative* wg;
+        irp6ot::generator::wii_absolute* ag;
+        irp6ot::generator::wii_relative* rg;
         irp6ot::generator::wii_joint* jg;
         lib::sensor_image_t::sensor_union_t::wiimote_t lastButtons;
         lib::sensor_image_t::sensor_union_t::wiimote_t buttonsPressed;

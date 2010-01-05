@@ -12,10 +12,16 @@ namespace generator {
 wii::wii (common::task::task& _ecp_task,ecp_mp::sensor::wiimote* _wiimote) : generator(_ecp_task), _wiimote(_wiimote)
 {
     int i;
-    for(i  = 0;i < 7;++i)
+    for(i  = 0;i < MAX_NO_OF_DEGREES;++i)
     {
+        currentValue[i] = 0;
+        requestedChange[i] = 0;
         nextChange[i] = 0;
+        maxChange[i] = 0;
+        multipliers[i] = 0;
     }
+
+    currentGripperValue = 0;
 }
 
 bool wii::calculate_change(int axis, double value)
@@ -27,7 +33,7 @@ bool wii::calculate_change(int axis, double value)
     value *= multipliers[axis];
     requestedChange[axis] = value;
     
-    for(i = 0;i < 7;++i)
+    for(i = 0;i < MAX_NO_OF_DEGREES;++i)
     {
         if(fabs(nextChange[i] - requestedChange[i]) < maxChange[i])
         {
@@ -71,9 +77,13 @@ int wii::get_axis(void)
     {
         axis = 5;
     }
-    else if(_wiimote->image.sensor_union.wiimote.down)
+    else if(!_wiimote->image.sensor_union.wiimote.buttonB && _wiimote->image.sensor_union.wiimote.up)
     {
         axis = 6;
+    }
+    else if(_wiimote->image.sensor_union.wiimote.down)
+    {
+        axis = 7;
     }
 
     return axis;

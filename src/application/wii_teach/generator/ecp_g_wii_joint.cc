@@ -11,7 +11,7 @@ namespace generator {
 wii_joint::wii_joint (common::task::task& _ecp_task,ecp_mp::sensor::wiimote* _wiimote) : wii(_ecp_task,_wiimote)
 {
     int i;
-    for(i = 0;i<7;++i)
+    for(i = 0;i<8;++i)
     {
         multipliers[i] = 0.003;
         maxChange[i] = 0.0001;
@@ -38,7 +38,7 @@ void wii_joint::set_position(void)
     the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[5] = nextChange[5];
     the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[6] = 0;
     the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[7] = 0;
-    the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = nextChange[6];
+    the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = nextChange[7];
 }
 
 bool wii_joint::first_step()
@@ -60,7 +60,7 @@ bool wii_joint::first_step()
 void wii_joint::preset_position(void)
 {
     int i;
-    for(i = 0;i < 7;++i)
+    for(i = 0;i < 8;++i)
     {
         requestedChange[i] = 0;
     }

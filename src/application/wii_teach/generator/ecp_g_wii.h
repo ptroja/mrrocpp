@@ -14,6 +14,8 @@ namespace ecp {
 namespace irp6ot {
 namespace generator {
 
+#define MAX_NO_OF_DEGREES 10
+
 class wii : public common::generator::generator
 {
     private:
@@ -25,12 +27,12 @@ class wii : public common::generator::generator
         ecp_mp::sensor::wiimote* _wiimote;
     
     protected:
-        double currentValue[6];
+        double currentValue[MAX_NO_OF_DEGREES];
         double currentGripperValue;
-        double requestedChange[7];
-        double nextChange[7];
-        double maxChange[7];
-        double multipliers[7];
+        double requestedChange[MAX_NO_OF_DEGREES];
+        double nextChange[MAX_NO_OF_DEGREES];
+        double maxChange[MAX_NO_OF_DEGREES];
+        double multipliers[MAX_NO_OF_DEGREES];
 
       	//numer kroku
         bool releasedA;

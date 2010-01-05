@@ -1,5 +1,5 @@
-#ifndef ECP_WII_RELATIVE_GENERATOR_H
-#define ECP_WII_RELATIVE_GENERATOR_H
+#ifndef ECP_WII_ABSOLUTE_GENERATOR_H
+#define ECP_WII_ABSOLUTE_GENERATOR_H
 
 #include <string.h>
 #include <math.h>
@@ -19,7 +19,7 @@ namespace generator {
 #error MAX_NO_OF_DEGREES exceeded
 #endif
 
-class wii_relative : public irp6ot::generator::wii
+class wii_absolute : public irp6ot::generator::wii
 {
     public:
 	/**
@@ -29,7 +29,7 @@ class wii_relative : public irp6ot::generator::wii
 	 * @param minor_axis wartosc mniejszej polosi
 	 * @author jedrzej
 	 */
-        wii_relative (common::task::task& _ecp_task,ecp_mp::sensor::wiimote* _wiimote);
+        wii_absolute (common::task::task& _ecp_task,ecp_mp::sensor::wiimote* _wiimote);
 
         /**
          * Generuje pierwszy krok
@@ -47,4 +47,4 @@ class wii_relative : public irp6ot::generator::wii
 } // namespace ecp
 } // namespace mrrocpp
 
-#endif //ECP_WII_RELATIVE_GENERATOR_H
+#endif //ECP_WII_ABSOLUTE_GENERATOR_H
