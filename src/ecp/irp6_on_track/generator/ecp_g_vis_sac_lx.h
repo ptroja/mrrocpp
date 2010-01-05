@@ -41,7 +41,7 @@ int step_no;
   	int idle_step_counter;
 	double delta[6];
 
-     lib::frame_tab my_goal_frame;
+     lib::Homog_matrix my_goal_frame;
 
 	lib::Homog_matrix C_Tx_G;
 	lib::Homog_matrix CSAC_Tx_G;
