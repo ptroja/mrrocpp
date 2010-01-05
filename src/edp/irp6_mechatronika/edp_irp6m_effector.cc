@@ -28,7 +28,6 @@
 #include "edp/common/manip_trans_t.h"
 #include "kinematics/common/kinematic_model_with_tool.h"
 
-
 namespace mrrocpp {
 namespace edp {
 namespace irp6m {

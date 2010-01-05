@@ -21,8 +21,6 @@ namespace edp {
 namespace sensor {
 
 
-
-
 void * force::thread_start(void* arg)
 {
 	return static_cast<force*> (arg)->thread_main_loop(arg);
@@ -33,7 +31,7 @@ void force::create_thread(void)
 	if (pthread_create (&thread_id, NULL, &thread_start, (void *) this))
 	{
 	    master.msg->message(lib::SYSTEM_ERROR, errno, "EDP: Failed to create force thread");
-	    throw common::System_error();
+	    throw System_error();
 	}
 }
 

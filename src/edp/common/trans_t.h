@@ -16,9 +16,11 @@
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 
-#include "kinematics/common/transformer_error.h"
 #include "edp/common/edp.h"
 #include "edp/common/edp_extension_thread.h"
+
+#include "edp/common/exception.h"
+using namespace mrrocpp::edp::common::exception;
 
 namespace mrrocpp {
 namespace edp {
@@ -28,7 +30,7 @@ class effector;
 
 /**************************** trans_t *****************************/
 
-class trans_t : public kinematics::common::transformer_error, boost::noncopyable
+class trans_t : public boost::noncopyable
 {
 private:
     sem_t master_to_trans_t_sem; // semafor pomiedzy edp_master a edp_trans

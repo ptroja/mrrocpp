@@ -13,7 +13,6 @@
 #if !defined(_SPKM_KIN_model)
 #define _SPKM_KIN_model
 
-// Definicja klasy kinematic_model.
 #include "kinematics/common/simple_kinematic_model.h"
 
 namespace mrrocpp {

@@ -84,37 +84,37 @@ void manip_trans_t::operator()()
 
         // sekcja przechwytujaca bledy i przygotowujaca do ich rzucania w watku master
 
-        catch(transformer_error::NonFatal_error_1 nfe)
+        catch(NonFatal_error_1 nfe)
         {
-            error_pointer= new transformer_error::NonFatal_error_1(nfe);
+            error_pointer= new NonFatal_error_1(nfe);
             error = NonFatal_erroR_1;
             trans_t_to_master_order_status_ready();
         }
 
-        catch(transformer_error::NonFatal_error_2 nfe)
+        catch(NonFatal_error_2 nfe)
         {
-            error_pointer= new transformer_error::NonFatal_error_2(nfe);
+            error_pointer= new NonFatal_error_2(nfe);
             error = NonFatal_erroR_2;
             trans_t_to_master_order_status_ready();
         }
 
-        catch(transformer_error::NonFatal_error_3 nfe)
+        catch(NonFatal_error_3 nfe)
         {
-            error_pointer= new transformer_error::NonFatal_error_3(nfe);
+            error_pointer= new NonFatal_error_3(nfe);
             error = NonFatal_erroR_3;
             trans_t_to_master_order_status_ready();
         }
 
-        catch(transformer_error::NonFatal_error_4 nfe)
+        catch(NonFatal_error_4 nfe)
         {
-            error_pointer= new transformer_error::NonFatal_error_4(nfe);
+            error_pointer= new NonFatal_error_4(nfe);
             error = NonFatal_erroR_4;
             trans_t_to_master_order_status_ready();
         }
 
-        catch(transformer_error::Fatal_error fe)
+        catch(Fatal_error fe)
         {
-            error_pointer= new transformer_error::Fatal_error(fe);
+            error_pointer= new Fatal_error(fe);
             error = Fatal_erroR;
             trans_t_to_master_order_status_ready();
         }

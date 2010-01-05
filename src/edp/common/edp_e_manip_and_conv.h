@@ -21,10 +21,7 @@
 #include <messip.h>
 #endif
 
-#include "kinematics/common/transformer_error.h"
-#include "kinematics/common/kinematics_manager.h"
 #include "edp/common/edp_effector.h"
-
 
 // Konfigurator
 #include "lib/configurator.h"

@@ -14,9 +14,6 @@
 
 #include "lib/com_buf.h"
 
-// Klasy bledow, itp.
-#include "kinematics/common/transformer_error.h"
-
 // Klasa kinematic_model_irp6m_with_wrist.
 #include "kinematics/spkm/kinematic_model_spkm.h"
 

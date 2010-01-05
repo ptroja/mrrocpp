@@ -19,6 +19,9 @@
 #include "edp/speaker/edp_speaker_effector.h"
 #include "edp/speaker/speak_t.h"
 
+#include "edp/common/exception.h"
+using namespace mrrocpp::edp::common::exception;
+
 namespace mrrocpp {
 namespace edp {
 namespace speaker {
@@ -73,50 +76,50 @@ void speak_t::operator()()
         // sekcja przechwytujaca bledy i przygotowujaca do ich rzucania w watku master
 
 
-        catch(transformer_error::NonFatal_error_1 nfe)
+        catch(NonFatal_error_1 nfe)
         {
             error_pointer= malloc(sizeof(nfe));
             memcpy(error_pointer, &nfe, sizeof(nfe));
             error_pointer = &nfe;
             error = common::NonFatal_erroR_1;
             trans_t_to_master_order_status_ready();
-        } // end: catch(transformer_error::NonFatal_error_1 nfe)
+        } // end: catch(NonFatal_error_1 nfe)
 
-        catch(transformer_error::NonFatal_error_2 nfe)
+        catch(NonFatal_error_2 nfe)
         {
             error_pointer= malloc(sizeof(nfe));
             memcpy(error_pointer, &nfe, sizeof(nfe));
             error_pointer=&nfe;
             error = common::NonFatal_erroR_2;
             trans_t_to_master_order_status_ready();
-        } // end: catch(transformer_error::NonFatal_error_2 nfe)
+        } // end: catch(NonFatal_error_2 nfe)
 
-        catch(transformer_error::NonFatal_error_3 nfe)
+        catch(NonFatal_error_3 nfe)
         {
             error_pointer= malloc(sizeof(nfe));
             memcpy(error_pointer, &nfe, sizeof(nfe));
             error_pointer=&nfe;
             error = common::NonFatal_erroR_3;
             trans_t_to_master_order_status_ready();
-        } // end: catch(transformer_error::NonFatal_error_3 nfe)
+        } // end: catch(NonFatal_error_3 nfe)
 
-        catch(transformer_error::NonFatal_error_4 nfe)
+        catch(NonFatal_error_4 nfe)
         {
             error_pointer= malloc(sizeof(nfe));
             memcpy(error_pointer, &nfe, sizeof(nfe));
             error = common::NonFatal_erroR_4;
             trans_t_to_master_order_status_ready();
-        } // end: catch(transformer_error::NonFatal_error nfe4)
+        } // end: catch(NonFatal_error nfe4)
 
-        catch(transformer_error::Fatal_error fe)
+        catch(Fatal_error fe)
         {
             error_pointer= malloc(sizeof(fe));
             memcpy(error_pointer, &fe, sizeof(fe));
             error = common::Fatal_erroR;
             trans_t_to_master_order_status_ready();
-        } // end: catch(transformer_error::Fatal_error fe)
+        } // end: catch(Fatal_error fe)
 
-        catch (common::System_error fe)
+        catch (System_error fe)
         {
             error_pointer= malloc(sizeof(fe));
             memcpy(error_pointer, &fe, sizeof(fe));

@@ -26,6 +26,8 @@
 #include "edp/common/manip_trans_t.h"
 #include "lib/conveyor_const.h"
 
+using namespace mrrocpp::edp::common::exception;
+
 namespace mrrocpp {
 namespace edp {
 namespace conveyor {

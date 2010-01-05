@@ -12,6 +12,9 @@
 #include <string>
 #include "lib/mrmath/mrmath.h"
 
+#include "edp/common/exception.h"
+using namespace mrrocpp::edp::common::exception;
+
 namespace mrrocpp {
 namespace kinematics {
 namespace common {

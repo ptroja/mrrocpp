@@ -20,14 +20,14 @@
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 #include "lib/srlib.h"
-
-#include "kinematics/common/transformer_error.h"
-#include "kinematics/common/kinematics_manager.h"
 #include "edp/common/edp.h"
-
+#include "kinematics/common/kinematics_manager.h"
 
 // Konfigurator
 #include "lib/configurator.h"
+
+#include "edp/common/exception.h"
+using namespace mrrocpp::edp::common::exception;
 
 
 namespace mrrocpp {
@@ -35,8 +35,9 @@ namespace edp {
 namespace common {
 
 
+
 // Glowna klasa efektora EDP
-class effector : public kinematics::common::transformer_error
+class effector
 {
 protected:
 

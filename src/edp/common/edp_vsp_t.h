@@ -13,7 +13,6 @@
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 
-#include "kinematics/common/transformer_error.h"
 #include "edp/common/edp_extension_thread.h"
 
 

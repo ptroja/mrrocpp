@@ -22,6 +22,10 @@
 #include "edp/common/servo_gr.h"
 #include "edp/common/regulator.h"
 
+#include "edp/common/exception.h"
+using namespace mrrocpp::edp::common::exception;
+
+
 namespace mrrocpp {
 namespace edp {
 namespace common {
@@ -84,7 +88,7 @@ void servo_buffer::send_to_SERVO_GROUP ()
     if ( (sg_reply.error.error0 != OK) || (sg_reply.error.error1 != OK) )
     {
         printf("a: %llx, :%llx\n",sg_reply.error.error0,sg_reply.error.error1);
-        throw effector::Fatal_error(sg_reply.error.error0, sg_reply.error.error1);
+        throw Fatal_error(sg_reply.error.error0, sg_reply.error.error1);
     } // end: if((sg_reply.error.error0 != OK) || (sg_reply.error.error1 != OK))
 
     // skopiowanie odczytow do transformera

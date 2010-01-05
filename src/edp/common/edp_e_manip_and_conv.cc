@@ -841,16 +841,16 @@ void manip_and_conv_effector::main_loop ()
                     }
                     else
                     {
-                        throw manip_and_conv_effector::NonFatal_error_1 (INVALID_INSTRUCTION_TYPE);
+                        throw NonFatal_error_1 (INVALID_INSTRUCTION_TYPE);
                     }
 
                     break;
                 case lib::QUERY: // blad: nie ma o co pytac - zadne polecenie uprzednio nie zostalo wydane
                     // okreslenie numeru bledu
-                    throw manip_and_conv_effector::NonFatal_error_1 (QUERY_NOT_EXPECTED);
+                    throw NonFatal_error_1 (QUERY_NOT_EXPECTED);
                 default: // blad: nieznana instrukcja
                     // okreslenie numeru bledu
-                    throw manip_and_conv_effector::NonFatal_error_1 (INVALID_INSTRUCTION_TYPE);
+                    throw NonFatal_error_1 (INVALID_INSTRUCTION_TYPE);
                 }
                 next_state = WAIT;
                 break;
@@ -862,7 +862,7 @@ void manip_and_conv_effector::main_loop ()
                 }
                 else
                 { // blad: powinna byla nadejsc instrukcja QUERY
-                    throw manip_and_conv_effector::NonFatal_error_3 ( QUERY_EXPECTED );
+                    throw NonFatal_error_3 ( QUERY_EXPECTED );
                 }
 
                 /*
@@ -890,7 +890,7 @@ void manip_and_conv_effector::main_loop ()
             }
         }
 
-        catch(manip_and_conv_effector::NonFatal_error_1 nfe)
+        catch(NonFatal_error_1 nfe)
         {
             // Obsluga bledow nie fatalnych
             // Konkretny numer bledu znajduje sie w skladowej error obiektu nfe
@@ -904,7 +904,7 @@ void manip_and_conv_effector::main_loop ()
             next_state = GET_STATE;
         } // end: catch(transformer::NonFatal_error_1 nfe)
 
-        catch(manip_and_conv_effector::NonFatal_error_2 nfe)
+        catch(NonFatal_error_2 nfe)
         {
             // Obsluga bledow nie fatalnych
             // Konkretny numer bledu znajduje sie w skladowej error obiektu nfe
@@ -916,7 +916,7 @@ void manip_and_conv_effector::main_loop ()
             next_state = WAIT;
         } // end: catch(transformer::NonFatal_error_2 nfe)
 
-        catch(manip_and_conv_effector::NonFatal_error_3 nfe)
+        catch(NonFatal_error_3 nfe)
         {
             // Obsluga bledow nie fatalnych
             // Konkretny numer bledu znajduje sie w skladowej error obiektu nfe
@@ -941,7 +941,7 @@ void manip_and_conv_effector::main_loop ()
             next_state = GET_STATE;
         } // end: catch(transformer::NonFatal_error_3 nfe)
 
-        catch(manip_and_conv_effector::Fatal_error fe)
+        catch(Fatal_error fe)
         {
             //     printf("ERROR w EDP transformer fe\n");
             // Obsluga bledow fatalnych
@@ -999,13 +999,13 @@ void manip_and_conv_effector::main_loop ()
                         // synchronizacji lub ruchow presynchronizacyjnych
                         // Bez synchronizacji adna inna instrukcja nie moze by wykonana przez EDP
                         /* Informacja o bedzie polegajcym na braku polecenia synchronizacji */
-                        throw manip_and_conv_effector::NonFatal_error_1(NOT_YET_SYNCHRONISED);
+                        throw NonFatal_error_1(NOT_YET_SYNCHRONISED);
                     break;
                 default: // blad: jedyna instrukcja w tym stanie moze by polecenie
                     // synchronizacji lub ruchow presynchronizacyjnych
                     // Bez synchronizacji adna inna instrukcja nie moze by wykonana przez EDP
                     /* Informacja o bedzie polegajcym na braku polecenia synchronizacji */
-                    throw manip_and_conv_effector::NonFatal_error_1(INVALID_INSTRUCTION_TYPE);
+                    throw NonFatal_error_1(INVALID_INSTRUCTION_TYPE);
                 }
                 break;
             case SYNCHRO_TERMINATED:
@@ -1021,7 +1021,7 @@ void manip_and_conv_effector::main_loop ()
                 }
                 else
                 { // blad: powinna byla nadejsc instrukcja QUERY
-                    throw manip_and_conv_effector::NonFatal_error_4(QUERY_EXPECTED);
+                    throw NonFatal_error_4(QUERY_EXPECTED);
                 }
                 break;
             case WAIT_Q:
@@ -1034,7 +1034,7 @@ void manip_and_conv_effector::main_loop ()
                 }
                 else
                 { // blad: powinna byla nadejsc instrukcja QUERY
-                    throw manip_and_conv_effector::NonFatal_error_3(QUERY_EXPECTED);
+                    throw NonFatal_error_3(QUERY_EXPECTED);
                 }
                 break;
             default:
@@ -1044,7 +1044,7 @@ void manip_and_conv_effector::main_loop ()
 
         // printf("debug edp po while\n");		// by Y&W
 
-        catch(manip_and_conv_effector::NonFatal_error_1 nfe1)
+        catch(NonFatal_error_1 nfe1)
         {
             // Obsluga bledow nie fatalnych
             // Konkretny numer bledu znajduje sie w skladowej error obiektu nfe
@@ -1056,7 +1056,7 @@ void manip_and_conv_effector::main_loop ()
             next_state = GET_SYNCHRO;
         } // end: catch(transformer::NonFatal_error_1 nfe1)
 
-        catch(manip_and_conv_effector::NonFatal_error_2 nfe2)
+        catch(NonFatal_error_2 nfe2)
         {
             // Obsluga bledow nie fatalnych
             // Konkretny numer bledu znajduje sie w skladowej error obiektu nfe
@@ -1071,7 +1071,7 @@ void manip_and_conv_effector::main_loop ()
             next_state = WAIT_Q;
         } // end: catch(transformer::NonFatal_error nfe2)
 
-        catch(manip_and_conv_effector::NonFatal_error_3 nfe3)
+        catch(NonFatal_error_3 nfe3)
         {
             // Obsluga bledow nie fatalnych
             // Konkretny numer bledu znajduje sie w skladowej error obiektu nfe
@@ -1091,7 +1091,7 @@ void manip_and_conv_effector::main_loop ()
             next_state = GET_SYNCHRO;
         } // end: catch(transformer::NonFatal_error nfe3)
 
-        catch(manip_and_conv_effector::NonFatal_error_4 nfe4)
+        catch(NonFatal_error_4 nfe4)
         {
             // Obsluga bledow nie fatalnych
             // Konkretny numer bledu znajduje sie w skladowej error obiektu nfe
@@ -1107,7 +1107,7 @@ void manip_and_conv_effector::main_loop ()
             next_state = SYNCHRO_TERMINATED;
         } // end: catch(transformer::NonFatal_error nfe4)
 
-        catch(manip_and_conv_effector::Fatal_error fe)
+        catch(Fatal_error fe)
         {
             // Obsluga bledow fatalnych
             // Konkretny numer bledu znajduje sie w skadowych error0 lub error1 obiektu fe
@@ -1152,13 +1152,13 @@ void manip_and_conv_effector::main_loop ()
                     break;
                 case lib::SYNCHRO: // blad: robot jest juz zsynchronizowany
                     // okreslenie numeru bledu
-                    throw manip_and_conv_effector::NonFatal_error_1(ALREADY_SYNCHRONISED);
+                    throw NonFatal_error_1(ALREADY_SYNCHRONISED);
                 case lib::QUERY: // blad: nie ma o co pytac - zadne polecenie uprzednio nie zostalo wydane
                     // okreslenie numeru bledu
-                    throw manip_and_conv_effector::NonFatal_error_1(QUERY_NOT_EXPECTED);
+                    throw NonFatal_error_1(QUERY_NOT_EXPECTED);
                 default: // blad: nieznana instrukcja
                     // okreslenie numeru bledu
-                    throw manip_and_conv_effector::NonFatal_error_1(UNKNOWN_INSTRUCTION);
+                    throw NonFatal_error_1(UNKNOWN_INSTRUCTION);
                 }
                 next_state = EXECUTE_INSTRUCTION;
                 break;
@@ -1175,7 +1175,7 @@ void manip_and_conv_effector::main_loop ()
                 }
                 else
                 { // blad: powinna byla nadejsc instrukcja QUERY
-                    throw manip_and_conv_effector::NonFatal_error_3(QUERY_EXPECTED);
+                    throw NonFatal_error_3(QUERY_EXPECTED);
                 }
                 next_state = GET_INSTRUCTION;
                 break;
@@ -1184,7 +1184,7 @@ void manip_and_conv_effector::main_loop ()
             }
         }
 
-        catch(manip_and_conv_effector::NonFatal_error_1 nfe)
+        catch(NonFatal_error_1 nfe)
         {
             // Obsluga bledow nie fatalnych
             // Konkretny numer bledu znajduje sie w skladowej error obiektu nfe
@@ -1198,7 +1198,7 @@ void manip_and_conv_effector::main_loop ()
             next_state = GET_INSTRUCTION;
         } // end: catch(transformer::NonFatal_error_1 nfe)
 
-        catch(manip_and_conv_effector::NonFatal_error_2 nfe)
+        catch(NonFatal_error_2 nfe)
         {
             // Obsluga bledow nie fatalnych
             // Konkretny numer bledu znajduje sie w skladowej error obiektu nfe
@@ -1210,7 +1210,7 @@ void manip_and_conv_effector::main_loop ()
             next_state = WAIT;
         } // end: catch(transformer::NonFatal_error_2 nfe)
 
-        catch(manip_and_conv_effector::NonFatal_error_3 nfe)
+        catch(NonFatal_error_3 nfe)
         {
             // Obsluga bledow nie fatalnych
             // Konkretny numer bledu znajduje sie w skladowej error obiektu nfe
@@ -1235,7 +1235,7 @@ void manip_and_conv_effector::main_loop ()
             next_state = GET_INSTRUCTION;
         } // end: catch(transformer::NonFatal_error_3 nfe)
 
-        catch(manip_and_conv_effector::Fatal_error fe)
+        catch(Fatal_error fe)
         {
             // Obsluga bledow fatalnych
             // Konkretny numer bledu znajduje sie w skladowej error obiektu fe
