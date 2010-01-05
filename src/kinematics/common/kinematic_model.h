@@ -21,7 +21,7 @@ namespace common {
 
 /*!
  * \class kinematic_model
- * \brief Base and simplest class of all kinematics models. Its simplicity is related to the fact, that it offers only
+ * \brief Base and simplest class of all kinematic models. Its simplicity is related to the fact, that it offers only
  * basic six kinematic methods: direct, inverse, i2e, e2i, mp2i and i2mp.
  *
  * \author tkornuta
@@ -42,11 +42,9 @@ protected:
 	virtual void check_joints(const double q[]) = 0;
 
 public:
-	//! Class constructor - empty.
-	kinematic_model();
 
 	//! Class virtual destructor - empty.
-	virtual ~kinematic_model();
+	virtual ~kinematic_model() { }
 
 	//! Computes internal coordinates basing on the motor increments (position).
 	virtual void mp2i_transform(const double* local_current_motor_pos, double* local_current_joints) = 0;

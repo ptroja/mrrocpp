@@ -1,46 +1,30 @@
-// *INDENT-OFF*
-///////////////////////////////////////////////////////////////////////////////////////
-/*! \file 		mrrocpp/include/kinematics/common/kinematic_model.h
- *\polish
- *	\brief 		$Header$
- *						Model kinematyki robota - klasa abstrakcyjna.
+/*!
+ * \file kinematic_model_with_tool.h
+ * \brief File containing the declaration of kinematic_model_with_tool class.
  *
- *						<szczegolowy opis>.
- *	\bug			Na razie nie stwierdzono.
- *	\warning	Na razie nie stwierdzono.
- *\endpolish
- *
- *\english
- *	\brief 		$Header$
- *						Robot kinematic kinematic_model_with_tool - abstract class.
- *
- *						<details>.
- *	\bug			None yet revealed.
- *	\warning	None yet revealed.
- *\endenglish
- *
- *	\author 	\~polish	tkornuta.
- *						\~english	N/A.
- *	\version	QNX/MRROC++  v. 6.3
- */////////////////////////////////////////////////////////////////////////////////////
-// *INDENT-ON*
+ * \author tkornuta
+ * \date Jan 04, 2010
+ */
 
 #if !defined(__EDP_KIN_MODEL)
 #define __EDP_KIN_MODEL
 
 #include <string>
-
-// Klasa lib::Homog_matrix.
 #include "lib/mrmath/mrmath.h"
-// Klasa lib::frame_tab.
 #include "lib/impconst.h"
-
 #include "kinematics/common/kinematic_model.h"
 
 namespace mrrocpp {
 namespace kinematics {
 namespace common {
 
+/*!
+ * \class kinematic_model_with_tool
+ * \brief Abstract class with methods for utilization in kinematic models with tools attached to its end-effectors and which contains methods for computations of transformation of robot base to global reference frame.
+ *
+ * \author tkornuta
+ * \date Jan 04, 2010
+ */
 class kinematic_model_with_tool: public mrrocpp::kinematics::common::kinematic_model
 {
 	protected:

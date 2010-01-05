@@ -12,16 +12,6 @@ namespace mrrocpp {
 namespace kinematics {
 namespace common {
 
-kinematic_model::kinematic_model()
-{
-
-}
-
-kinematic_model::~kinematic_model()
-{
-
-}
-
 const char* kinematic_model::get_kinematic_model_label(void)
 {
 	return label.c_str();

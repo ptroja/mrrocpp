@@ -56,7 +56,7 @@ void manip_and_conv_effector::master_order(MT_ORDER nm_task, int nm_tryb)
 
 /*--------------------------------------------------------------------------*/
 manip_and_conv_effector::manip_and_conv_effector (lib::configurator &_config, lib::robot_name_t l_robot_name) :
-        effector (_config, l_robot_name), kinematic_manager(),
+        effector (_config, l_robot_name), kinematics_manager(),
         step_counter(0),
         number_of_servos(-1)
 {

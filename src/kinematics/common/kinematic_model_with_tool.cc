@@ -1,13 +1,10 @@
-// ------------------------------------------------------------------------
-// Proces:		EDP
-// Plik:			kinematic_model.cc
-// System:	QNX/MRROC++  v. 6.3
-// Opis:		Model kinematyki robota - klasa abstrakcyjna.
-//				- definicja czesci metod klasy
-//
-// Autor:		tkornuta
-// Data:		17.03.2007
-// ------------------------------------------------------------------------
+/*!
+ * \file kinematic_model_with_tool.cc
+ * \brief File containing the definition of kinematic_model_with_tool class methods.
+ *
+ * \author tkornuta
+ * \date Jan 04, 2010
+ */
 
 #include "kinematics/common/kinematic_model_with_tool.h"
 

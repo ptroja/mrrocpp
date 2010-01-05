@@ -3,7 +3,7 @@
  * \brief File containing the declaration of kinematic_model_with_local_corrector class.
  *
  * \author tkornuta
- * \date Jan 4, 2010
+ * \date Jan 04, 2010
  */
 
 #ifndef KINEMATIC_MODEL_WITH_LOCAL_CORRECTOR_H_
@@ -15,6 +15,13 @@ namespace mrrocpp {
 namespace kinematics {
 namespace common {
 
+/*!
+ * \class kinematic_model_with_local_corrector
+ * \brief Abstract class with methods for local end-effector position correction with the use of local correction matrices.
+ *
+ * \author tkornuta
+ * \date Jan 04, 2010
+ */
 class kinematic_model_with_local_corrector: public mrrocpp::kinematics::common::kinematic_model_with_tool
 {
 	protected:
@@ -28,11 +35,8 @@ class kinematic_model_with_local_corrector: public mrrocpp::kinematics::common::
 		double inv_U[6][6];
 
 	public:
-		//! Constructor.
-		kinematic_model_with_local_corrector();
-
-		//! Destructor.
-		virtual ~kinematic_model_with_local_corrector();
+		//! Destructor - empty.
+		virtual ~kinematic_model_with_local_corrector() { }
 
 		//! Transformation related to the local correction matrix.
 		virtual void local_corrector_transform(lib::Homog_matrix&);

@@ -3,7 +3,7 @@
  * \brief File containing definitions of kinematic_model_with_local_corrector class methods.
  *
  * \author tkornuta
- * \date Jan 4, 2010
+ * \date Jan 04, 2010
  */
 
 #include "kinematics/common/kinematic_model_with_local_corrector.h"
@@ -13,14 +13,6 @@ namespace mrrocpp {
 namespace kinematics {
 
 namespace common {
-
-kinematic_model_with_local_corrector::kinematic_model_with_local_corrector()
-{
-}
-
-kinematic_model_with_local_corrector::~kinematic_model_with_local_corrector()
-{
-}
 
 void kinematic_model_with_local_corrector::local_corrector_transform(lib::Homog_matrix& current_end_effector_matrix)
 {

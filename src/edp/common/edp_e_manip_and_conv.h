@@ -52,7 +52,7 @@ class reader_buffer;
 
 
 /************************ edp_irp6s_and_conv_effector ****************************/
-class manip_and_conv_effector : public effector, public kinematics::common::kinematic_manager
+class manip_and_conv_effector : public effector, public kinematics::common::kinematics_manager
 {
 protected:
 

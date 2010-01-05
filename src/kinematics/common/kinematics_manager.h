@@ -1,14 +1,10 @@
-//// ------------------------------------------------------------------------
-// Proces:		EDP
-// Plik:			kinematics_manager.cc
-// System:	QNX/MRROC++  v. 6.3
-// Opis:		Klasa zarzadzajaca modelami kinematyki. 
-//				- deklaracja klasy
-//				- wspolna dla wszystkich robotow
-//
-// Autor:		tkornuta
-// Data:		17.01.2007
-// ------------------------------------------------------------------------
+/*!
+ * \file kinematics_manager.h
+ * \brief File containing the declaration of kinematics_manager class.
+ *
+ * \author tkornuta
+ * \date Nov 26, 2009
+ */
 
 #ifndef __EDP_KIN_MAN_H
 #define __EDP_KIN_MAN_H
@@ -24,13 +20,12 @@ namespace common {
 
 /*!
  * \class kinematic_manager
- * \brief Class responsible for
- * basic six kinematic methods: direct, inverse, i2e, e2i, mp2i and i2mp.
+ * \brief Class responsible for management of multiple kinematic models. Base class of all embodied-robot effectors.
  *
  * \author tkornuta
  * \date Nov 26, 2009
  */
-class kinematic_manager
+class kinematics_manager
 {
 	protected:
 		//! List of available kinematic models for given effector.
@@ -46,21 +41,22 @@ class kinematic_manager
 		virtual void create_kinematic_models_for_given_robot(void) = 0;
 
 	public:
-		// Destruktor - niszczy liste kinematyk.
-		virtual ~kinematic_manager(void);
+		//! Destroys kinematics available on the list.
+		virtual ~kinematics_manager(void);
 
-		// Dodaje nowy kinematic_model_with_tool na koniec listy.
+		//! Adds new kinematic model to the list.
 		void add_kinematic_model(kinematic_model* _model);
 
-		// Ustawia kinematic_model_with_tool kinematyki.
+		//! Sets current kinematic model.
 		void set_kinematic_model(int);
-		// Zwraca obecny kinematic_model_with_tool kinematyki.
+
+		//! Returns pointer to current kinematic model.
 		kinematic_model* get_current_kinematic_model(void);
 
-		// Zwraca number obecnie wybranego modelu kinematyki.
+		//! Returns number of given kinematic model.
 		int get_current_kinematic_model_no(void);
 
-};// manager
+};
 
 } // namespace common
 } // namespace kinematics
