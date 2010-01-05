@@ -35,13 +35,13 @@
 // Klasa lib::frame_tab.
 #include "lib/impconst.h"
 
-#include "simple_kinematic_model.h"
+#include "kinematics/common/kinematic_model.h"
 
 namespace mrrocpp {
 namespace kinematics {
 namespace common {
 
-class kinematic_model_with_tool: public mrrocpp::kinematics::common::simple_kinematic_model
+class kinematic_model_with_tool: public mrrocpp::kinematics::common::kinematic_model
 {
 	protected:
 		//! Flag related to the computations to the global reference frame.
@@ -64,16 +64,20 @@ class kinematic_model_with_tool: public mrrocpp::kinematics::common::simple_kine
 		virtual ~kinematic_model_with_tool();
 
 		//! Computes external coordinates on the base of internal coordinates (i2e - internal to external).
-		virtual void i2e_transform(const double* local_current_joints, lib::frame_tab* local_current_end_effector_frame);
+		virtual void
+				i2e_transform(const double* local_current_joints, lib::frame_tab* local_current_end_effector_frame);
 
 		//! Computes external coordinates on the base of internal coordinates, without the computations related with the attached tool.
-		virtual void i2e_wo_tool_transform(const double* local_current_joints, lib::frame_tab* local_current_end_effector_frame);
+		virtual void
+				i2e_wo_tool_transform(const double* local_current_joints, lib::frame_tab* local_current_end_effector_frame);
 
 		//! Computes internal coordinates basing on external coordinates (e2i - external to internal).
-		virtual void e2i_transform(double* local_desired_joints, double* local_current_joints, lib::frame_tab* local_desired_end_effector_frame);
+		virtual void
+				e2i_transform(double* local_desired_joints, double* local_current_joints, lib::frame_tab* local_desired_end_effector_frame);
 
 		//! Computes internal coordinates basing on external coordinates, without the computations related with the attached tool.
-		virtual void e2i_wo_tool_transform(double* local_desired_joints, double* local_current_joints, lib::frame_tab* local_desired_end_effector_frame);
+		virtual void
+				e2i_wo_tool_transform(double* local_desired_joints, double* local_current_joints, lib::frame_tab* local_desired_end_effector_frame);
 
 		//! Computes robot base transformation to global reference frame.
 		inline void global_frame_transform(lib::Homog_matrix&);

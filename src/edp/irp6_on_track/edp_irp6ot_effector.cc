@@ -58,6 +58,22 @@ void effector::create_kinematic_models_for_given_robot(void)
 	add_kinematic_model(new kinematics::irp6ot::model_calibrated_with_wrist());
 	// Ustawienie aktywnego modelu.
 	set_kinematic_model(0);
+
+	// Delete list of kinematics.
+	while (!kinematic_models_list.empty()) {
+		// Free memory from model and erase list element.
+		kinematics::common::kinematic_model* km = (kinematics::common::kinematic_model*) (kinematic_models_list.begin()->first);
+		delete(km);
+		kinematic_models_list.erase( kinematic_models_list.begin());
+	}//: while
+
+	// Stworzenie wszystkich modeli kinematyki.
+	add_kinematic_model(new kinematics::irp6ot::model_with_wrist());
+	add_kinematic_model(new kinematics::irp6ot::model_with_track());
+	add_kinematic_model(new kinematics::irp6ot::model_calibrated_with_wrist());
+	// Ustawienie aktywnego modelu.
+	set_kinematic_model(0);
+
 }
 
 

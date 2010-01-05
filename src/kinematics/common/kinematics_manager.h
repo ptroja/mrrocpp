@@ -14,38 +14,48 @@
 #define __EDP_KIN_MAN_H
 
 #include <map>
-#include "kinematics/common/simple_kinematic_model.h"
+#include "kinematics/common/kinematic_model.h"
+
+using namespace std;
 
 namespace mrrocpp {
 namespace kinematics {
 namespace common {
 
-class manager
+/*!
+ * \class kinematic_manager
+ * \brief Class responsible for
+ * basic six kinematic methods: direct, inverse, i2e, e2i, mp2i and i2mp.
+ *
+ * \author tkornuta
+ * \date Nov 26, 2009
+ */
+class kinematic_manager
 {
 	protected:
-		// Lista kinematyk.
-		std::map<short, simple_kinematic_model*> kinematic_models_list;
-		// Number obecnie wybranego modelu kinematyki.
-		int current_kinematic_model_no;
-		// Obecnie wybrany kinematic_model_with_tool kinematyki.
-		simple_kinematic_model* current_kinematic_model;
+		//! List of available kinematic models for given effector.
+		map<short, kinematic_model*> kinematic_models_list;
 
-		// Tworzy liste modeli kinematyki - metoda abstrakcyjna, implementowana w klasie ROBOT (!).
+		//! Number of currently selected model.
+		int current_kinematic_model_no;
+
+		//! Pointer to currently selected kinematic model.
+		kinematic_model* current_kinematic_model;
+
+		//! Abstract method, implemented in the effector class - creates a list of available kinematic models for given effector.
 		virtual void create_kinematic_models_for_given_robot(void) = 0;
 
 	public:
-		// Konstruktor - tworzy liste kinematyk.
-		manager(void);
 		// Destruktor - niszczy liste kinematyk.
-		virtual ~manager(void);
+		virtual ~kinematic_manager(void);
 
 		// Dodaje nowy kinematic_model_with_tool na koniec listy.
-		void add_kinematic_model(simple_kinematic_model* _model);
+		void add_kinematic_model(kinematic_model* _model);
 
 		// Ustawia kinematic_model_with_tool kinematyki.
 		void set_kinematic_model(int);
 		// Zwraca obecny kinematic_model_with_tool kinematyki.
-		simple_kinematic_model* get_current_kinematic_model(void);
+		kinematic_model* get_current_kinematic_model(void);
 
 		// Zwraca number obecnie wybranego modelu kinematyki.
 		int get_current_kinematic_model_no(void);

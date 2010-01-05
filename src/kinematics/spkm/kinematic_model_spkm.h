@@ -13,13 +13,13 @@
 #if !defined(_SPKM_KIN_model)
 #define _SPKM_KIN_model
 
-#include "kinematics/common/simple_kinematic_model.h"
+#include "kinematics/common/kinematic_model.h"
 
 namespace mrrocpp {
 namespace kinematics {
 namespace spkm {
 
-class model: public common::simple_kinematic_model
+class model: public common::kinematic_model
 {
 	protected:
 		// Ustawienie parametrow kinematycznych.

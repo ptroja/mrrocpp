@@ -12,14 +12,13 @@
 #if !defined(_CONVEYOR_KIN_MODEL)
 #define _CONVEYOR_KIN_MODEL
 
-// Definicja klasy kinematic_model.
-#include "kinematics/common/simple_kinematic_model.h"
+#include "kinematics/common/kinematic_model.h"
 
 namespace mrrocpp {
 namespace kinematics {
 namespace conveyor {
 
-class model : public common::simple_kinematic_model
+class model : public common::kinematic_model
 {
 protected:
   // Polozenie synchronizacji.

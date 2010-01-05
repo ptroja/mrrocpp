@@ -1,6 +1,6 @@
 /*!
- * \file simple_kinematic_model.h
- * \brief File containing the declaration of simple_kinematic_model class.
+ * \file kinematic_model.h
+ * \brief File containing the declaration of kinematic_model class.
  *
  * \author tkornuta
  * \date Nov 26, 2009
@@ -20,14 +20,14 @@ namespace kinematics {
 namespace common {
 
 /*!
- * \class simple_kinematic_model
+ * \class kinematic_model
  * \brief Base and simplest class of all kinematics models. Its simplicity is related to the fact, that it offers only
  * basic six kinematic methods: direct, inverse, i2e, e2i, mp2i and i2mp.
  *
  * \author tkornuta
  * \date Nov 26, 2009
  */
-class simple_kinematic_model {
+class kinematic_model {
 protected:
 	//! Name of given kinematics.
 	std::string label;
@@ -43,10 +43,10 @@ protected:
 
 public:
 	//! Class constructor - empty.
-	simple_kinematic_model();
+	kinematic_model();
 
 	//! Class virtual destructor - empty.
-	virtual ~simple_kinematic_model();
+	virtual ~kinematic_model();
 
 	//! Computes internal coordinates basing on the motor increments (position).
 	virtual void mp2i_transform(const double* local_current_motor_pos, double* local_current_joints) = 0;
