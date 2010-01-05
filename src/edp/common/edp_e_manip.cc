@@ -224,7 +224,7 @@ void manip_effector::arm_frame_2_frame (void)
         for(int i=0; i < 6; i++)
         {
             reply.PWM_value[i] = PWM_value[i];
-            reply.current[i] = current[i];
+       //     reply.current[i] = current[i];
         }
         break;
     default: // blad:

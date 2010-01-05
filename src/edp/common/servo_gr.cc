@@ -108,7 +108,7 @@ void servo_buffer::send_to_SERVO_GROUP ()
         }
 
         master.PWM_value[i] = sg_reply.PWM_value[i];
-        master.current[i] = sg_reply.current[i];
+        master.reply.current[i] = sg_reply.current[i];
         master.reply.rmodel.servo_algorithm.servo_algorithm_no[i] = sg_reply.algorithm_no[i];
         master.reply.rmodel.servo_algorithm.servo_parameters_no[i] = sg_reply.algorithm_parameters_no[i];
 

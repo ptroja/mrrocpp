@@ -153,7 +153,7 @@ protected:
 
 
     int16_t PWM_value[MAX_SERVOS_NR];             // wartosci zadane wypelnienia PWM
-    int16_t current[MAX_SERVOS_NR];                // prad sterujacy
+//    int16_t current[MAX_SERVOS_NR];                // prad sterujacy
 
 
 
