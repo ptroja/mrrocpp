@@ -84,7 +84,7 @@ protected:
     short gripper_servo_nr;
 
 
-    STATE next_state;    // stan nastepny, do ktorego przejdzie EDP_MASTER
+
 
 #ifdef DOCENT_SENSOR
     boost::function<void()> startedCallback_;

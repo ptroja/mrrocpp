@@ -815,7 +815,7 @@ void manip_and_conv_effector::get_controller_state(lib::c_buffer &instruction)
 void manip_and_conv_effector::main_loop ()
 {
     // by Y pierwsza petla while do odpytania o stan EDP przez UI zaraz po starcie EDP
-    next_state = GET_STATE;
+    STATE next_state = GET_STATE;;    // stan nastepny, do ktorego przejdzie EDP_MASTER
 
     while ((next_state != GET_INSTRUCTION) && (next_state != GET_SYNCHRO))
     {

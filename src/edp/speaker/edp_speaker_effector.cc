@@ -306,7 +306,7 @@ int effector::speak (lib::c_buffer *instruction)
 
 void effector::main_loop (void)
 {
-	next_state = common::GET_INSTRUCTION; // MAC7 glosnikow nie trzeba synchronizowac ; )
+    common::STATE next_state = common::GET_INSTRUCTION; // MAC7 glosnikow nie trzeba synchronizowac ; )
 
 	/* Nieskoczona petla wykonujca przejscia w grafie automatu (procesu EDP_MASTER) */
 	for (;;)
