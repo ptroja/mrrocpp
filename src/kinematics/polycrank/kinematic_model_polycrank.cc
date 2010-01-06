@@ -257,7 +257,7 @@ Zakresy ruchu poszczegolnych stopni swobody (w radianach lub milimetrach).
 /* ------------------------------------------------------------------------
   Sprawdzenie ograniczen na polozenia katowe walow silnikow.
  ------------------------------------------------------------------------ */
-void model::check_motor_position(const double motor_position[])
+void model::check_motor_position(const std::vector<double> & motor_position)
 {
 
 if (motor_position[0] < lower_limit_axis[0])   // Kat f1 mniejszy od minimalnego
@@ -292,7 +292,7 @@ else if (motor_position[4] > upper_limit_axis[4])   // Kat f5 wiekszy od maksyma
 /* ------------------------------------------------------------------------
   Sprawdzenie ograniczen na wspolrzedne wewnetrzne.
  ------------------------------------------------------------------------ */
-void model::check_joints(const double q[])
+void model::check_joints(const std::vector<double> & q)
 {
 
 	if (isnan(q[0])) throw  NonFatal_error_2 (NOT_A_NUMBER_JOINT_VALUE_THETA1);
@@ -339,7 +339,7 @@ if (isnan(q[2])) throw  NonFatal_error_2 (NOT_A_NUMBER_JOINT_VALUE_THETA3);
   Przeliczenie polozenia walow silnikow na wspolrzedne wewnetrzne
   (mp2i - motor position to internal)
  ------------------------------------------------------------------------ */
-void model::mp2i_transform(const double* local_current_motor_pos, double* local_current_joints) {
+void model::mp2i_transform(const std::vector<double> & local_current_motor_pos, std::vector<double> & local_current_joints) {
 
   // zmienne pomocnicze
   double c, d, l;
@@ -399,7 +399,7 @@ void model::mp2i_transform(const double* local_current_motor_pos, double* local_
   Przeliczenie wspolrzednych wewnetrznych na polozenia walow silnikow
   (i2mp - internal to motor position)
  ------------------------------------------------------------------------ */
-void model::i2mp_transform(double* local_desired_motor_pos_new, double* local_desired_joints)
+void model::i2mp_transform(std::vector<double> & local_desired_motor_pos_new, std::vector<double> & local_desired_joints)
 {
   // Niejednoznacznosc polozenia dla 3-tej osi (obrot kisci < 180�).
   double joint_3_revolution = M_PI;
@@ -459,7 +459,7 @@ void model::i2mp_transform(double* local_desired_motor_pos_new, double* local_de
   * current_end_effector_frame[4][3] - macierz przeksztacenia jednorodnego (MPJ)
 		opisujca aktualne poloenie i orientacje koncowki (narzedzia) w ukladzie bazowym.
  ------------------------------------------------------------------------ */
-void model::direct_kinematics_transform(const double* local_current_joints, lib::Homog_matrix& local_current_end_effector_frame) {
+void model::direct_kinematics_transform(const std::vector<double> & local_current_joints, lib::Homog_matrix& local_current_end_effector_frame) {
 
   // Sprawdzenie ograniczen na wspolrzedne wewnetrzne.
   check_joints (local_current_joints);
@@ -540,7 +540,7 @@ void model::direct_kinematics_transform(const double* local_current_joints, lib:
   Wyjscie:
   * local_desired_joints - wyliczone wspolrzedne wewnetrzne robota (kolejno q0, q1, q2, ...)
  ------------------------------------------------------------------------ */
-void model::inverse_kinematics_transform(double* local_desired_joints, double* local_current_joints, lib::Homog_matrix& local_desired_end_effector_frame)
+void model::inverse_kinematics_transform(std::vector<double> & local_desired_joints, std::vector<double> & local_current_joints, lib::Homog_matrix& local_desired_end_effector_frame)
 {
 
   // Stale

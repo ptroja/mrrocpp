@@ -125,30 +125,31 @@ protected:
 
     // transformer
 
-    double servo_current_motor_pos[MAX_SERVOS_NR];   // Polozenia walow silnikow -// dla watku edp_servo    XXXX
+    std::vector<double>  servo_current_motor_pos;   // Polozenia walow silnikow -// dla watku edp_servo    XXXX
 
     double global_current_motor_pos[MAX_SERVOS_NR];   // Polozenia walow silnikow -// globalne dla procesu EDP  XXXX
 
     double global_current_joints[MAX_SERVOS_NR];       // Wspolrzedne wewnetrzne -// globalne dla procesu EDP   XXXXX
 
-    double servo_current_joints[MAX_SERVOS_NR];       // Wspolrzedne wewnetrzne -// dla watku EDP_SERVO   XXXXXX
+    std::vector<double> servo_current_joints;       // Wspolrzedne wewnetrzne -// dla watku EDP_SERVO   XXXXXX
 
     boost::mutex edp_irp6s_effector_mutex;	// mutex    XXXXXX
 
-    double desired_joints[MAX_SERVOS_NR];       // Wspolrzedne wewnetrzne -
+    std::vector<double> desired_joints;       // Wspolrzedne wewnetrzne -
     // ostatnio obliczone (zadane) (w radianach)
 
-    double current_joints[MAX_SERVOS_NR];       // Wspolrzedne wewnetrzne -
+    //double current_joints[MAX_SERVOS_NR];       // Wspolrzedne wewnetrzne -
+    std::vector<double> current_joints;
     // ostatnio odczytane (w radianach) // by Y dla watku EDP_MASTER
 
-    double desired_motor_pos_old[MAX_SERVOS_NR];
+    std::vector<double> desired_motor_pos_old;
     // Polozenia walow silnikow -
     // poprzednio obliczone (zadane) (w radianach)
-    double desired_motor_pos_new[MAX_SERVOS_NR];
+    std::vector<double> desired_motor_pos_new;
     // Polozenia walow silnikow -
     // aktualnie obliczone (zadane) (w radianach)
 
-    double current_motor_pos[MAX_SERVOS_NR];   // Polozenia walow silnikow -
+    std::vector<double> current_motor_pos;   // Polozenia walow silnikow -
     // ostatnio odczytane (w radianach)
 
 

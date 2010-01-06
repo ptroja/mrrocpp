@@ -187,7 +187,7 @@ void effector::move_arm (lib::c_buffer &instruction)
 void effector::get_arm_position (bool read_hardware, lib::c_buffer &instruction)
 {
 
-    double desired_joints_tmp[MAX_SERVOS_NR];       // Wspolrzedne wewnetrzne -
+	std::vector<double>  desired_joints_tmp(MAX_SERVOS_NR);       // Wspolrzedne wewnetrzne -
 	if (read_hardware)
 	{
 		// Uformowanie rozkazu odczytu dla SERVO_GROUP

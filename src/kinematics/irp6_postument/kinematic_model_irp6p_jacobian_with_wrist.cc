@@ -45,7 +45,7 @@ model_jacobian_with_wrist::model_jacobian_with_wrist (void)
   * local_desired_joints - wyliczone wspolrzedne wewnetrzne robota (kolejno q0, q1, q2, ...)
  ------------------------------------------------------------------------ */
 
-void model_jacobian_with_wrist::inverse_kinematics_transform(double* local_desired_joints, double* local_current_joints, lib::Homog_matrix& local_desired_end_effector_frame)
+void model_jacobian_with_wrist::inverse_kinematics_transform(std::vector<double> & local_desired_joints, std::vector<double> & local_current_joints, lib::Homog_matrix& local_desired_end_effector_frame)
 {
 
   double K=1; 			//Zadane wzmocnienie
@@ -58,7 +58,7 @@ void model_jacobian_with_wrist::inverse_kinematics_transform(double* local_desir
   lib::V_vector current_joints;							//wartosci aktualnych zmiennych przegubowych reprezentowane jako wektor
   lib::Jacobian_matrix  jacobian_new;					//jakobian
 
-  current_joints.set_values(local_current_joints);
+  current_joints.set_values(&local_current_joints[0]);
   attached_tool_computations = false;
 
   //wyliczenie prostego zadania kinematyki dla aktualnej konfiguracji
@@ -82,7 +82,7 @@ while(fabs(Max)>E){
 	//Wyliczenie przyrostu zmiennych przegubowych
      delta_q= jacobian_new.jacobian_inverse_gauss(desired_distance_new);
 	current_joints=current_joints+delta_q;
-	current_joints.to_table(local_current_joints);
+	current_joints.to_table(&local_current_joints[0]);
 
     //wyliczenie prostego zadania kinematyki dla nowo wyliczonej konfiguracji
 	attached_tool_computations = false;

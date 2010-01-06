@@ -235,7 +235,7 @@ void effector::servo_joints_and_frame_actualization_and_upload (void)
 /*--------------------------------------------------------------------------*/
 void effector::get_arm_position (bool read_hardware, lib::c_buffer &instruction)
 { // odczytanie pozycji ramienia
-    double desired_joints_tmp[MAX_SERVOS_NR];       // Wspolrzedne wewnetrzne -
+	std::vector<double>  desired_joints_tmp(MAX_SERVOS_NR);       // Wspolrzedne wewnetrzne -
     //   printf(" GET ARM\n");
 
     if (read_hardware)

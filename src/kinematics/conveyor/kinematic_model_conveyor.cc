@@ -46,7 +46,7 @@ void model::set_kinematic_parameters(void)
 /* ------------------------------------------------------------------------
   Sprawdzenie ograniczen na polozenia katowe walow silnikow.
  ------------------------------------------------------------------------ */
-void model::check_motor_position(const double motor_position[])
+void model::check_motor_position(const std::vector<double> & motor_position)
 {
 	return;
 } // end: kinematic_model_conveyor::check_motor_position(const )
@@ -55,7 +55,7 @@ void model::check_motor_position(const double motor_position[])
 /* ------------------------------------------------------------------------
   Sprawdzenie ograniczen na wspolrzedne wewnetrzne.
  ------------------------------------------------------------------------ */
-void model::check_joints(const double q[])
+void model::check_joints(const std::vector<double> & q)
 {
 	return;
 } // end: kinematic_model_conveyor::check_joints(const )
@@ -65,7 +65,7 @@ void model::check_joints(const double q[])
   Przeliczenie polozenia walow silnikow na wspolrzedne wewnetrzne
   (mp2i - motor position to internal)
  ------------------------------------------------------------------------ */
-void model::mp2i_transform(const double* local_current_motor_pos, double* local_current_joints)
+void model::mp2i_transform(const std::vector<double> & local_current_motor_pos, std::vector<double> & local_current_joints)
 {
   local_current_joints[0] = local_current_motor_pos[0] / motor_to_intext_ratio;
 }//: mp2i_transform
@@ -76,7 +76,7 @@ void model::mp2i_transform(const double* local_current_motor_pos, double* local_
   Przeliczenie wspolrzednych wewnetrznych na polozenia walow silnikow
   (i2mp - internal to motor position)
  ------------------------------------------------------------------------ */
-void model::i2mp_transform(double* local_desired_motor_pos_new, double* local_desired_joints)
+void model::i2mp_transform(std::vector<double> & local_desired_motor_pos_new, std::vector<double> & local_desired_joints)
 {
   local_desired_motor_pos_new[0] =  local_desired_joints[0] * motor_to_intext_ratio;
 } //: i2mp_transform
@@ -95,7 +95,7 @@ void model::i2mp_transform(double* local_desired_motor_pos_new, double* local_de
   * current_end_effector_frame[4][3] - macierz przeksztacenia jednorodnego (MPJ)
 		opisujca aktualne poloenie i orientacje koncowki (narzedzia) w ukladzie bazowym.
  ------------------------------------------------------------------------ */
-void model::direct_kinematics_transform(const double* local_current_joints, lib::Homog_matrix& local_current_end_effector_frame)
+void model::direct_kinematics_transform(const std::vector<double> & local_current_joints, lib::Homog_matrix& local_current_end_effector_frame)
 {
 
   // Proste zadanie kinematyki.
@@ -131,7 +131,7 @@ void model::direct_kinematics_transform(const double* local_current_joints, lib:
   Wyjscie:
   * local_desired_joints - wyliczone wspolrzedne wewnetrzne robota (kolejno d0, q1, q2, ...)
  ------------------------------------------------------------------------ */
-void model::inverse_kinematics_transform(double* local_desired_joints, double* local_current_joints, lib::Homog_matrix& local_desired_end_effector_frame)
+void model::inverse_kinematics_transform(std::vector<double> & local_desired_joints, std::vector<double> & local_current_joints, lib::Homog_matrix& local_desired_end_effector_frame)
 {
     local_desired_joints[0] = (local_desired_end_effector_frame)[0][3];
 } //: inverse_kinematics_transform()

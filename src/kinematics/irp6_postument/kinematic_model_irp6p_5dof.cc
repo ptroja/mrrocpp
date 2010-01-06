@@ -74,7 +74,7 @@ void model_5dof::set_kinematic_parameters(void)
   * current_end_effector_frame[4][3] - macierz przeksztacenia jednorodnego (MPJ)
 		opisujca aktualne poloenie i orientacje koncowki (narzedzia) w ukladzie bazowym.
  ------------------------------------------------------------------------ */
-void model_5dof::direct_kinematics_transform(const double* local_current_joints, lib::Homog_matrix& local_current_end_effector_frame)
+void model_5dof::direct_kinematics_transform(const std::vector<double> & local_current_joints, lib::Homog_matrix& local_current_end_effector_frame)
 {
 
   // Sprawdzenie ograniczen na wspolrzedne wewnetrzne.
@@ -120,7 +120,7 @@ void model_5dof::direct_kinematics_transform(const double* local_current_joints,
   Wyjscie:
   * local_desired_joints - wyliczone wspolrzedne wewnetrzne robota (kolejno q0, q1, q2, ...)
  ------------------------------------------------------------------------ */
-void model_5dof::inverse_kinematics_transform(double* local_desired_joints, double* local_current_joints, lib::Homog_matrix& local_desired_end_effector_frame)
+void model_5dof::inverse_kinematics_transform(std::vector<double> & local_desired_joints, std::vector<double> & local_current_joints, lib::Homog_matrix& local_desired_end_effector_frame)
 {
   // Stale
  // const double a2_2 = a2*a2;

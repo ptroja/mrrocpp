@@ -10,6 +10,7 @@
 #define KINEMATIC_MODEL_H_
 
 #include <string>
+#include <vector>
 #include "lib/mrmath/mrmath.h"
 
 #include "edp/common/exception.h"
@@ -36,10 +37,10 @@ protected:
 	virtual void set_kinematic_parameters(void) = 0;
 
 	//! Checks whether given motor increments are valid.
-	virtual void check_motor_position(const double motor_position[]) = 0;
+	virtual void check_motor_position(const std::vector<double> & motor_position) = 0;
 
 	//! Checks whether given internal coordinates are valid.
-	virtual void check_joints(const double q[]) = 0;
+	virtual void check_joints(const std::vector<double> & q) = 0;
 
 public:
 
@@ -47,22 +48,22 @@ public:
 	virtual ~kinematic_model() { }
 
 	//! Computes internal coordinates basing on the motor increments (position).
-	virtual void mp2i_transform(const double* local_current_motor_pos, double* local_current_joints) = 0;
+	virtual void mp2i_transform(const std::vector<double> &local_current_motor_pos, std::vector<double> & local_current_joints) = 0;
 
 	//! Computes motor increments from internal coordinates.
-	virtual void i2mp_transform(double* local_desired_motor_pos_new, double* local_desired_joints) = 0;
+	virtual void i2mp_transform(std::vector<double> & local_desired_motor_pos_new, std::vector<double> & local_desired_joints) = 0;
 
 	//! Computes external coordinates on the base of internal coordinates (i2e - internal to external). In this kinematic_model_with_tool calls only one method - direct kinematics.
-	virtual void i2e_transform(const double* local_current_joints, lib::Homog_matrix& local_current_end_effector_frame);
+	virtual void i2e_transform(const std::vector<double> & local_current_joints, lib::Homog_matrix& local_current_end_effector_frame);
 
 	//! Computes internal coordinates basing on external coordinates (e2i - external to internal). Calls only one method - inverse kinematics.
-	virtual void e2i_transform(double* local_desired_joints, double* local_current_joints, lib::Homog_matrix& local_desired_end_effector_frame);
+	virtual void e2i_transform(std::vector<double> & local_desired_joints, std::vector<double> & local_current_joints, lib::Homog_matrix& local_desired_end_effector_frame);
 
 	//! Solves direct kinematics.
-	virtual void direct_kinematics_transform(const double* local_current_joints, lib::Homog_matrix& local_current_end_effector_frame) = 0;
+	virtual void direct_kinematics_transform(const std::vector<double> & local_current_joints, lib::Homog_matrix& local_current_end_effector_frame) = 0;
 
 	//! Solves inverse kinematics.
-	virtual void inverse_kinematics_transform(double* local_desired_joints, double* local_current_joints, lib::Homog_matrix& local_desired_end_effector_frame) = 0;
+	virtual void inverse_kinematics_transform(std::vector<double> & local_desired_joints, std::vector<double> & local_current_joints, lib::Homog_matrix& local_desired_end_effector_frame) = 0;
 
 	//! Sets kinematics description.
 	virtual void set_kinematic_model_label(const std::string);

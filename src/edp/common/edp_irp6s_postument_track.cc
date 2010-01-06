@@ -200,8 +200,8 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buff
 	//	static int debugi=0;
 	//   debugi++;
 
-	double desired_motor_pos_new_tmp[MAX_SERVOS_NR];
-    double desired_joints_tmp[MAX_SERVOS_NR];       // Wspolrzedne wewnetrzne -
+	std::vector<double>  desired_motor_pos_new_tmp(MAX_SERVOS_NR);
+	std::vector<double>  desired_joints_tmp(MAX_SERVOS_NR);       // Wspolrzedne wewnetrzne -
     lib::MOTION_TYPE &motion_type = instruction.motion_type;
 
 	// zmienne z bufora wejsciowego
@@ -216,6 +216,8 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buff
 	const double &desired_gripper_coordinate = instruction.arm.pf_def.gripper_coordinate;
 	const double (&arm_coordinates)[MAX_SERVOS_NR] = instruction.arm.pf_def.arm_coordinates;
 	lib::Homog_matrix arm_frame(instruction.arm.pf_def.arm_frame);
+
+	std::vector<double>  arm_coordinates_vector (instruction.arm.pf_def.arm_coordinates, instruction.arm.pf_def.arm_coordinates+MAX_SERVOS_NR);
 
 	// w trybie TCIM interpolujemy w edp_trans stad zadajemy pojedynczy krok do serwo
 	motion_steps = 1;
@@ -254,7 +256,7 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buff
 	static lib::V_vector previous_move_rot_vector;
 
 	// WYLICZENIE POZYCJI POCZATKOWEJ
-	double begining_joints[MAX_SERVOS_NR], tmp_joints[MAX_SERVOS_NR], tmp_motor_pos[MAX_SERVOS_NR];
+	std::vector<double>  begining_joints(MAX_SERVOS_NR), tmp_joints(MAX_SERVOS_NR), tmp_motor_pos(MAX_SERVOS_NR);
 	lib::Homog_matrix begining_frame;
 
 	get_current_kinematic_model()->mp2i_transform(desired_motor_pos_new, begining_joints);
@@ -279,11 +281,11 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buff
 			goal_frame = arm_frame;
 			break;
 		case lib::JOINT:
-			get_current_kinematic_model()->i2e_transform(arm_coordinates, goal_frame);
+			get_current_kinematic_model()->i2e_transform(arm_coordinates_vector, goal_frame);
 
 			break;
 		case lib::MOTOR:
-			get_current_kinematic_model()->mp2i_transform(arm_coordinates, tmp_joints);
+			get_current_kinematic_model()->mp2i_transform(arm_coordinates_vector, tmp_joints);
 			get_current_kinematic_model()->i2e_transform(tmp_joints, goal_frame);
 
 			break;
@@ -564,7 +566,7 @@ void irp6s_postument_track_effector::get_arm_position(bool read_hardware, lib::c
 { // odczytanie pozycji ramienia
 
 	//   printf(" GET ARM\n");
-    double desired_joints_tmp[MAX_SERVOS_NR];       // Wspolrzedne wewnetrzne -
+	std::vector<double>  desired_joints_tmp(MAX_SERVOS_NR);       // Wspolrzedne wewnetrzne -
 	double current_force[6];
 
 	if (read_hardware)
