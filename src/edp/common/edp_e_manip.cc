@@ -84,7 +84,7 @@ void manip_effector::compute_frame (const lib::c_buffer &instruction)
         {
             desired_joints_tmp[gripper_servo_nr] = instruction.arm.pf_def.gripper_coordinate;
         }
-        arm_abs_frame_2_frame(p_m);
+        desired_end_effector_frame = p_m;
   //      fprintf(stderr, "debug@%s:%d\n", __FILE__, __LINE__);
         break;
     case lib::RELATIVE:   // ruch wzgledny
@@ -158,16 +158,6 @@ void manip_effector::tool_frame_2_frame (lib::c_buffer &instruction)
 }
 /*--------------------------------------------------------------------------*/
 
-
-/*--------------------------------------------------------------------------*/
-void manip_effector::arm_abs_frame_2_frame (lib::Homog_matrix& p_m)
-{
-    // Przepisanie definicji koncowki danej
-    // w postaci TRANS wyraonej bezwzgldnie
-    // do wewntrznych struktur danych TRANSFORMATORa
-    desired_end_effector_frame = p_m;
-}
-/*--------------------------------------------------------------------------*/
 
 
 /*--------------------------------------------------------------------------*/

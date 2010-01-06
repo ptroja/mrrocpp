@@ -60,12 +60,6 @@ protected:
     // do wewnetrznych struktur danych TRANSFORMATORa
 
 
-    void arm_abs_frame_2_frame (lib::Homog_matrix& p_m);
-    // Przepisanie definicji koncowki danej
-    // w postaci FRAME wyrazonej bezwzglednie
-    // do wewnetrznych struktur danych TRANSFORMATORa
-
-
     void arm_rel_frame_2_frame (lib::Homog_matrix& p_m);
     // Przepisanie definicji koncowki danej
     // w postaci FRAME wyrazonej wzglednie
