@@ -127,9 +127,9 @@ protected:
 
     std::vector<double>  servo_current_motor_pos;   // Polozenia walow silnikow -// dla watku edp_servo    XXXX
 
-    double global_current_motor_pos[MAX_SERVOS_NR];   // Polozenia walow silnikow -// globalne dla procesu EDP  XXXX
+    std::vector<double>  global_current_motor_pos;   // Polozenia walow silnikow -// globalne dla procesu EDP  XXXX
 
-    double global_current_joints[MAX_SERVOS_NR];       // Wspolrzedne wewnetrzne -// globalne dla procesu EDP   XXXXX
+    std::vector<double>  global_current_joints;       // Wspolrzedne wewnetrzne -// globalne dla procesu EDP   XXXXX
 
     std::vector<double> servo_current_joints;       // Wspolrzedne wewnetrzne -// dla watku EDP_SERVO   XXXXXX
 

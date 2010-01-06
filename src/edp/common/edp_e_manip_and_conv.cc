@@ -61,6 +61,7 @@ manip_and_conv_effector::manip_and_conv_effector (lib::configurator &_config, li
         number_of_servos(-1), current_joints(MAX_SERVOS_NR, 0.0),
         desired_joints(MAX_SERVOS_NR, 0.0), desired_motor_pos_old(MAX_SERVOS_NR, 0.0),
         desired_motor_pos_new(MAX_SERVOS_NR, 0.0), current_motor_pos(MAX_SERVOS_NR, 0.0),
+        global_current_motor_pos(MAX_SERVOS_NR, 0.0), global_current_joints(MAX_SERVOS_NR, 0.0),
         servo_current_motor_pos(MAX_SERVOS_NR, 0.0), servo_current_joints(MAX_SERVOS_NR, 0.0)
 {
 
