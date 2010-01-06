@@ -21,5 +21,7 @@
 #include "lib/mrmath/ft_v_tr.h"
 #include "lib/mrmath/jacobian_matrix.h"
 #include "lib/mrmath/ForceTrans.h"
+#include "lib/mrmath/JntArray.h"
+#include "lib/mrmath/MotorArray.h"
 
 #endif
