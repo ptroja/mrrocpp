@@ -84,7 +84,7 @@ void kinematic_model_with_local_corrector::local_corrector_inverse_transform(lib
 	// std::cout<<" local_corrector_inverse_transform: original \n"<<desired_end_effector_matrix<<std::endl;
 }
 
-void kinematic_model_with_local_corrector::i2e_transform(const std::vector<double> & local_current_joints, lib::Homog_matrix& local_current_end_effector_frame)
+void kinematic_model_with_local_corrector::i2e_transform(const lib::JointArray& local_current_joints, lib::Homog_matrix& local_current_end_effector_frame)
 {
 	// Solution of the direct kinematics.
 	direct_kinematics_transform(local_current_joints, local_current_end_effector_frame);
@@ -107,7 +107,7 @@ void kinematic_model_with_local_corrector::i2e_transform(const std::vector<doubl
 	local_current_end_effector_frame = local_current_end_effector_matrix;
 }
 
-void kinematic_model_with_local_corrector::i2e_wo_tool_transform(const std::vector<double> & local_current_joints, lib::Homog_matrix& local_current_end_effector_frame)
+void kinematic_model_with_local_corrector::i2e_wo_tool_transform(const lib::JointArray & local_current_joints, lib::Homog_matrix& local_current_end_effector_frame)
 {
 
 	// Solution of the direct kinematics.
@@ -128,7 +128,7 @@ void kinematic_model_with_local_corrector::i2e_wo_tool_transform(const std::vect
 
 }
 
-void kinematic_model_with_local_corrector::e2i_transform(std::vector<double> & local_desired_joints, std::vector<double> & local_current_joints, lib::Homog_matrix& local_desired_end_effector_frame)
+void kinematic_model_with_local_corrector::e2i_transform(lib::JointArray & local_desired_joints, lib::JointArray & local_current_joints, lib::Homog_matrix& local_desired_end_effector_frame)
 {
 	// Copy end effector frame.
 	lib::Homog_matrix local_desired_end_effector_matrix(local_desired_end_effector_frame);
@@ -152,7 +152,7 @@ void kinematic_model_with_local_corrector::e2i_transform(std::vector<double> & l
 
 }
 
-void kinematic_model_with_local_corrector::e2i_wo_tool_transform(std::vector<double> & local_desired_joints, std::vector<double> & local_current_joints, lib::Homog_matrix& local_desired_end_effector_frame)
+void kinematic_model_with_local_corrector::e2i_wo_tool_transform(lib::JointArray& local_desired_joints, lib::JointArray & local_current_joints, lib::Homog_matrix& local_desired_end_effector_frame)
 {
 	// Copy end effector frame.
 	lib::Homog_matrix local_desired_end_effector_matrix(local_desired_end_effector_frame);

@@ -45,7 +45,7 @@ model_jacobian_with_wrist::model_jacobian_with_wrist (void)
   * local_desired_joints - wyliczone wspolrzedne wewnetrzne robota (kolejno q0, q1, q2, ...)
  ------------------------------------------------------------------------ */
 
-void model_jacobian_with_wrist::inverse_kinematics_transform(std::vector<double> & local_desired_joints, std::vector<double> & local_current_joints, lib::Homog_matrix& local_desired_end_effector_frame)
+void model_jacobian_with_wrist::inverse_kinematics_transform(lib::JointArray & local_desired_joints, lib::JointArray & local_current_joints, lib::Homog_matrix& local_desired_end_effector_frame)
 {
 
   double K=1; 			//Zadane wzmocnienie

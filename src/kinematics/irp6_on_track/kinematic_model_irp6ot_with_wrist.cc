@@ -274,7 +274,7 @@ Zakresy ruchu poszczegolnych stopni swobody (w radianach lub milimetrach).
 /* ------------------------------------------------------------------------
   Sprawdzenie ograniczen na polozenia katowe walow silnikow.
  ------------------------------------------------------------------------ */
-void model_with_wrist::check_motor_position(const std::vector<double> & motor_position)
+void model_with_wrist::check_motor_position(const lib::MotorArray & motor_position)
 {
 
 if (motor_position[0] < lower_limit_axis[0])   // Kat f1 mniejszy od minimalnego
@@ -323,7 +323,7 @@ else if (motor_position[7] > upper_limit_axis[7])   // Kat f8 wiekszy od maksyma
 /* ------------------------------------------------------------------------
   Sprawdzenie ograniczen na wspolrzedne wewnetrzne.
  ------------------------------------------------------------------------ */
-void model_with_wrist::check_joints(const std::vector<double> & q)
+void model_with_wrist::check_joints(const lib::JointArray & q)
 {
 
 	if (isnan(q[0])) throw  NonFatal_error_2 (NOT_A_NUMBER_JOINT_VALUE_D0);
@@ -390,7 +390,7 @@ void model_with_wrist::check_joints(const std::vector<double> & q)
   Przeliczenie polozenia walow silnikow na wspolrzedne wewnetrzne
   (mp2i - motor position to internal)
  ------------------------------------------------------------------------ */
-void model_with_wrist::mp2i_transform(const std::vector<double> & local_current_motor_pos, std::vector<double> & local_current_joints) {
+void model_with_wrist::mp2i_transform(const lib::MotorArray & local_current_motor_pos, lib::JointArray & local_current_joints) {
 
   // zmienne pomocnicze
   double c, d, l;
@@ -454,7 +454,7 @@ void model_with_wrist::mp2i_transform(const std::vector<double> & local_current_
   Przeliczenie wspolrzednych wewnetrznych na polozenia walow silnikow
   (i2mp - internal to motor position)
  ------------------------------------------------------------------------ */
-void model_with_wrist::i2mp_transform(std::vector<double> & local_desired_motor_pos_new, std::vector<double> & local_desired_joints)
+void model_with_wrist::i2mp_transform(lib::MotorArray & local_desired_motor_pos_new, lib::JointArray & local_desired_joints)
 {
   // Niejednoznacznosc polozenia dla 4-tej osi (obrot kisci < 180���������������������������������������������������������������������������������).
   double joint_4_revolution = M_PI;
@@ -517,7 +517,7 @@ void model_with_wrist::i2mp_transform(std::vector<double> & local_desired_motor_
   * current_end_effector_frame[4][3] - macierz przeksztacenia jednorodnego (MPJ)
 		opisujca aktualne poloenie i orientacje koncowki (narzedzia) w ukladzie bazowym.
  ------------------------------------------------------------------------ */
-void model_with_wrist::direct_kinematics_transform(const std::vector<double> & local_current_joints, lib::Homog_matrix& local_current_end_effector_frame)
+void model_with_wrist::direct_kinematics_transform(const lib::JointArray & local_current_joints, lib::Homog_matrix& local_current_end_effector_frame)
 {
 
   // Sprawdzenie ograniczen na wspolrzedne wewnetrzne.
@@ -567,7 +567,7 @@ void model_with_wrist::direct_kinematics_transform(const std::vector<double> & l
   Wyjscie:
   * local_desired_joints - wyliczone wspolrzedne wewnetrzne robota (kolejno d0, q1, q2, ...)
  ------------------------------------------------------------------------ */
-void model_with_wrist::inverse_kinematics_transform(std::vector<double> & local_desired_joints, std::vector<double> & local_current_joints, lib::Homog_matrix& local_desired_end_effector_frame)
+void model_with_wrist::inverse_kinematics_transform(lib::JointArray & local_desired_joints, lib::JointArray & local_current_joints, lib::Homog_matrix& local_desired_end_effector_frame)
 {
 
   // Stale

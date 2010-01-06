@@ -58,11 +58,11 @@ void manip_and_conv_effector::master_order(MT_ORDER nm_task, int nm_tryb)
 manip_and_conv_effector::manip_and_conv_effector (lib::configurator &_config, lib::robot_name_t l_robot_name) :
         effector (_config, l_robot_name), kinematics_manager(),
         step_counter(0),
-        number_of_servos(-1), current_joints(MAX_SERVOS_NR, 0.0),
-        desired_joints(MAX_SERVOS_NR, 0.0), desired_motor_pos_old(MAX_SERVOS_NR, 0.0),
-        desired_motor_pos_new(MAX_SERVOS_NR, 0.0), current_motor_pos(MAX_SERVOS_NR, 0.0),
-        global_current_motor_pos(MAX_SERVOS_NR, 0.0), global_current_joints(MAX_SERVOS_NR, 0.0),
-        servo_current_motor_pos(MAX_SERVOS_NR, 0.0), servo_current_joints(MAX_SERVOS_NR, 0.0)
+        number_of_servos(-1), current_joints(MAX_SERVOS_NR),
+        desired_joints(MAX_SERVOS_NR), desired_motor_pos_old(MAX_SERVOS_NR),
+        desired_motor_pos_new(MAX_SERVOS_NR), current_motor_pos(MAX_SERVOS_NR),
+        global_current_motor_pos(MAX_SERVOS_NR), global_current_joints(MAX_SERVOS_NR),
+        servo_current_motor_pos(MAX_SERVOS_NR), servo_current_joints(MAX_SERVOS_NR)
 {
 
 
@@ -619,8 +619,8 @@ lib::REPLY_TYPE manip_and_conv_effector::rep_type (const lib::c_buffer &instruct
 void manip_and_conv_effector::compute_motors(const lib::c_buffer &instruction)
 {
 
-	std::vector<double>  desired_motor_pos_new_tmp(MAX_SERVOS_NR);
-	std::vector<double>  desired_joints_tmp(MAX_SERVOS_NR);       // Wspolrzedne wewnetrzne -
+	lib::MotorArray  desired_motor_pos_new_tmp(MAX_SERVOS_NR);
+	lib::JointArray  desired_joints_tmp(MAX_SERVOS_NR);       // Wspolrzedne wewnetrzne -
 
 
     // obliczenia dla ruchu ramienia (silnikami)
@@ -681,8 +681,8 @@ void manip_and_conv_effector::compute_motors(const lib::c_buffer &instruction)
 /*--------------------------------------------------------------------------*/
 void manip_and_conv_effector::compute_joints (const lib::c_buffer &instruction)
 {
-	std::vector<double>  desired_motor_pos_new_tmp(MAX_SERVOS_NR);
-	std::vector<double>  desired_joints_tmp(MAX_SERVOS_NR);       // Wspolrzedne wewnetrzne -
+	lib::MotorArray  desired_motor_pos_new_tmp(MAX_SERVOS_NR);
+	lib::JointArray  desired_joints_tmp(MAX_SERVOS_NR);       // Wspolrzedne wewnetrzne -
 
     // obliczenia dla ruchu ramienia (stawami)
     /* Wypenienie struktury danych transformera na podstawie parametrow polecenia otrzymanego z ECP */

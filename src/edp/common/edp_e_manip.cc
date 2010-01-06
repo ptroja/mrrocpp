@@ -54,8 +54,8 @@ manip_effector::manip_effector (lib::configurator &_config, lib::robot_name_t l_
 /*--------------------------------------------------------------------------*/
 void manip_effector::compute_frame (const lib::c_buffer &instruction)
 {
-	 std::vector<double> desired_motor_pos_new_tmp(MAX_SERVOS_NR);
-	 std::vector<double> desired_joints_tmp(MAX_SERVOS_NR);       // Wspolrzedne wewnetrzne -
+	 lib::MotorArray desired_motor_pos_new_tmp(MAX_SERVOS_NR);
+	 lib::JointArray desired_joints_tmp(MAX_SERVOS_NR);       // Wspolrzedne wewnetrzne -
     lib::MOTION_TYPE motion_type;
     // obliczenia dla ruchu ramienia (kocwk: FRAME)
     /* Wypenienie struktury danych transformera na podstawie parametrow polecenia otrzymanego z ECP */

@@ -34,27 +34,27 @@ void model::set_kinematic_parameters(void)
 {
 }
 
-void model::check_motor_position(const std::vector<double> & motor_position)
+void model::check_motor_position(const lib::MotorArray & motor_position)
 {
 }
 
-void model::check_joints(const std::vector<double> & q)
+void model::check_joints(const lib::JointArray & q)
 {
 }
 
-void model::mp2i_transform(const std::vector<double> & local_current_motor_pos, std::vector<double> & local_current_joints)
+void model::mp2i_transform(const lib::MotorArray & local_current_motor_pos, lib::JointArray & local_current_joints)
 {
 }
 
-void model::i2mp_transform(std::vector<double> & local_desired_motor_pos_new, std::vector<double> & local_desired_joints)
+void model::i2mp_transform(lib::MotorArray & local_desired_motor_pos_new, lib::JointArray & local_desired_joints)
 {
 }
 
-void model::direct_kinematics_transform(const std::vector<double> & local_current_joints, lib::Homog_matrix& local_current_end_effector_frame)
+void model::direct_kinematics_transform(const lib::JointArray & local_current_joints, lib::Homog_matrix& local_current_end_effector_frame)
 {
 }
 
-void model::inverse_kinematics_transform(std::vector<double> & local_desired_joints, std::vector<double> & local_current_joints, lib::Homog_matrix& local_desired_end_effector_frame)
+void model::inverse_kinematics_transform(lib::JointArray & local_desired_joints, lib::JointArray & local_current_joints, lib::Homog_matrix& local_desired_end_effector_frame)
 {
 }
 

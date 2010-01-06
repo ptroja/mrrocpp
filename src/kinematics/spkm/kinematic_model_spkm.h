@@ -33,26 +33,26 @@ class kinematic_model_spkm: public common::kinematic_model
 		void set_kinematic_parameters(void);
 
 		//! Checks whether given motor increments are valid.
-		void check_motor_position(const std::vector<double> & motor_position);
+		void check_motor_position(const lib::MotorArray & motor_position);
 
 		//! Checks whether given internal coordinates are valid.
-		void check_joints(const std::vector<double> & q);
+		void check_joints(const lib::JointArray & q);
 
 	public:
 		//! Constructor.
 		kinematic_model_spkm(void);
 
 		//! Computes internal coordinates basing on the motor increments (position).
-		void mp2i_transform(const std::vector<double> & local_current_motor_pos, std::vector<double> & local_current_joints);
+		void mp2i_transform(const lib::MotorArray & local_current_motor_pos, lib::JointArray & local_current_joints);
 
 		//! Computes motor increments from internal coordinates.
-		void i2mp_transform(std::vector<double> & local_desired_motor_pos_new, std::vector<double> & local_desired_joints);
+		void i2mp_transform(lib::MotorArray & local_desired_motor_pos_new, lib::JointArray & local_desired_joints);
 
 		//! Solves direct kinematics - EMPTY!
-		void direct_kinematics_transform(const std::vector<double> & local_current_joints, lib::Homog_matrix& local_current_end_effector_frame);
+		void direct_kinematics_transform(const lib::JointArray & local_current_joints, lib::Homog_matrix& local_current_end_effector_frame);
 
 		//! Solves inverse kinematics.
-		void inverse_kinematics_transform(std::vector<double> & local_desired_joints, std::vector<double> & local_current_joints, lib::Homog_matrix& local_desired_end_effector_frame);
+		void inverse_kinematics_transform(lib::JointArray & local_desired_joints, lib::JointArray & local_current_joints, lib::Homog_matrix& local_desired_end_effector_frame);
 
 };
 
