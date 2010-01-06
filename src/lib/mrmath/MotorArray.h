@@ -21,14 +21,6 @@ public:
   MotorArray(double *ptr, size_t n) : std::vector<double> (ptr, ptr+n) {}
 };
 
-class JointArray : public std::vector<double>
-{
-public:
-	JointArray() {}
-	JointArray(int size) : std::vector<double> (size) {}
-	JointArray(double *ptr, size_t n) : std::vector<double> (ptr, ptr+n) {}
-};
-
 
 }
 }

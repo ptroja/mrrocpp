@@ -5,19 +5,20 @@
  *      Author: konradb3
  */
 
-#ifndef JNTARRAY_H_
-#define JNTARRAY_H_
+#ifndef JOINTARRAY_H_
+#define JOINTARRAY_H_
 
 #include <vector>
 
 namespace mrrocpp {
 namespace lib {
-class JntArray : public std::vector<double>
+
+class JointArray : public std::vector<double>
 {
 public:
-  JntArray() {}
-  JntArray(int size) : std::vector<double> (size) {}
-  JntArray(double *ptr, size_t n) : std::vector<double> (ptr, ptr+n) {}
+	JointArray() {}
+	JointArray(int size) : std::vector<double> (size) {}
+	JointArray(double *ptr, size_t n) : std::vector<double> (ptr, ptr+n) {}
 };
 
 }
