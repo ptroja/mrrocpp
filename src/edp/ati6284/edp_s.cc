@@ -111,7 +111,7 @@ void ATI6284_force::connect_to_hardware (void)
 		Total_Number_of_Samples=6;
 		index=1;
 
-		std::string calfilepath(master.mrrocpp_network_path);
+		std::string calfilepath(master.config.return_mrrocpp_network_path());
 		calfilepath += "src/edp/ati6284/ft6284.cal";
 
 		for (int i=0; i<5; i++)

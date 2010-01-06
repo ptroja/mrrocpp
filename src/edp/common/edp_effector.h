@@ -57,7 +57,6 @@ public:
     bool check_config(const std::string & s);
     bool initialize_communication (void);
 
-    std::string mrrocpp_network_path;
 
 #if !defined(USE_MESSIP_SRR)
     name_attach_t *attach;

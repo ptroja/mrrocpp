@@ -46,7 +46,6 @@ effector::effector(lib::configurator &_config, lib::robot_name_t l_robot_name) :
 	else
 		test_mode = 0;
 
-	mrrocpp_network_path = config.return_mrrocpp_network_path();
 }
 
 effector::~effector() {
