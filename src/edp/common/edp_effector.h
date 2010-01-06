@@ -67,8 +67,6 @@ public:
     effector (lib::configurator &_config, lib::robot_name_t l_robot_name);
     virtual ~effector();
 
-    lib::controller_state_t controller_state_edp_buf; // do okreslenia stanu robota
-
     int test_mode;
 
     // oczekuje na polecenie od ECP, wczytuje je,

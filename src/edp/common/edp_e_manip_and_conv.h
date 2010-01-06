@@ -179,6 +179,8 @@ public:
     virtual void set_rmodel (lib::c_buffer &instruction) = 0;                    // zmiana narzedzia
     virtual void get_rmodel (lib::c_buffer &instruction) = 0;                    // odczytanie narzedzia
 
+
+    lib::controller_state_t controller_state_edp_buf; // do okreslenia stanu robota
     unsigned long step_counter;
 
     short number_of_servos; // by Y ilosc serwomechanizmow  XXX
