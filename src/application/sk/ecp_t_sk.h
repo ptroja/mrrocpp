@@ -8,11 +8,12 @@ namespace ecp {
 namespace common {
 namespace task {
 
-/** @addtogroup edge_following
- *
+
+/** @defgroup edge_following Edge following
+ *  @ingroup application
+ *  Single robot application of IRp6 manipulator following of an uknown contour
  *  @{
  */
-
 
 class sk: public common::task::task  {
 protected:

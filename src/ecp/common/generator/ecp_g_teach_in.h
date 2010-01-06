@@ -15,6 +15,10 @@ namespace ecp {
 namespace common {
 namespace generator {
 
+/** @addtogroup teach_in
+ *
+ *  @{
+ */
 
 class teach_in : public common::generator::generator {
 
@@ -86,6 +90,8 @@ public:
   lib::ECP_TO_UI_COMMAND convert(lib::ECP_POSE_SPECIFICATION ps) const;
 
 };
+
+/** @} */ // end of teach_in
 
 } // namespace generator
 } // namespace common

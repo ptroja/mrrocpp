@@ -15,6 +15,10 @@ namespace ecp {
 namespace common {
 namespace generator {
 
+/** @addtogroup teach_in_dll
+ *
+ *  @{
+ */
 
 class teach_tmp : public common::generator::generator {
 
@@ -90,7 +94,7 @@ public:
 typedef teach_tmp* create_t(common::task::task& _ecp_task);
 typedef void destroy_t(teach_tmp*);
 
-
+/** @} */ // end of teach_in_dll
 
 } // namespace generator
 } // namespace common
