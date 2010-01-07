@@ -129,7 +129,14 @@ void effector::get_rmodel(lib::c_buffer &instruction)
 		case lib::TOOL_FRAME:
 			//printf("TOOL_FRAME\n");
 			// przepisa specyfikacj z TRANSFORMATORa do bufora wysykowego
-			tool_frame_2_frame_rep();
+			// Przepisanie definicji narzedzia danej w postaci TOOL_FRAME
+			// z wewntrznych struktur danych TRANSFORMATORa
+			// do wewntrznych struktur danych REPLY_BUFFER
+
+			    reply.rmodel_type = lib::TOOL_FRAME;
+
+			    ((mrrocpp::kinematics::common::kinematic_model_with_tool*)get_current_kinematic_model())->tool.get_frame_tab(reply.rmodel.tool_frame_def.tool_frame);
+
 			break;
 		case lib::ARM_KINEMATIC_MODEL:
 			reply.rmodel_type = lib::ARM_KINEMATIC_MODEL;
