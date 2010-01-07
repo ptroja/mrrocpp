@@ -46,10 +46,6 @@ protected:
 	// do wewnetrznych struktur danych REPLY_BUFFER
 
 
-	void tool_frame_2_frame(lib::c_buffer &instruction);
-	// Przepisanie definicji narzedzia danej w postaci TOOL_FRAME
-	// do wewnetrznych struktur danych TRANSFORMATORa
-
 
 	void arm_rel_frame_2_frame(lib::Homog_matrix& p_m);
 	// Przepisanie definicji koncowki danej

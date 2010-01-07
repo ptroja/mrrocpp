@@ -103,22 +103,7 @@ void manip_effector::compute_frame(const lib::c_buffer &instruction)
 }
 /*--------------------------------------------------------------------------*/
 
-/*--------------------------------------------------------------------------*/
-void manip_effector::tool_frame_2_frame(lib::c_buffer &instruction)
-{
-	// Przepisanie definicji narzedzia danej w postaci TOOL_FRAME
-	// do wewntrznych struktur danych TRANSFORMATORa
-	// Sprawdzenie czy przepisana macierz jest jednorodna
-	// Jezeli nie, to wyzwalany jest wyjatek.
 
-	if (instruction.is_set_rmodel() || instruction.is_set_arm()) {
-		// Przyslano dane dotyczace narzedzia i koncowki.
-		lib::Homog_matrix A_B_T(instruction.rmodel.tool_frame_def.tool_frame);
-		// Sprawdzenie poprawnosci macierzy
-		set_tool_frame_in_kinematic_model(A_B_T);
-	}
-}
-/*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
 void manip_effector::arm_rel_frame_2_frame(lib::Homog_matrix& p_m)

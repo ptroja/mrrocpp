@@ -92,7 +92,15 @@ void effector::set_rmodel(lib::c_buffer &instruction)
 		case lib::TOOL_FRAME:
 			//printf("TOOL_FRAME\n");
 			// przepisa specyfikacj do TRANSFORMATORa
-			tool_frame_2_frame(instruction);
+			// Przepisanie definicji narzedzia danej w postaci TOOL_FRAME
+			// do wewntrznych struktur danych TRANSFORMATORa
+			// Sprawdzenie czy przepisana macierz jest jednorodna
+			// Jezeli nie, to wyzwalany jest wyjatek.
+
+
+				// Przyslano dane dotyczace narzedzia i koncowki.
+				// Sprawdzenie poprawnosci macierzy
+			set_tool_frame_in_kinematic_model(lib::Homog_matrix(instruction.rmodel.tool_frame_def.tool_frame));
 			break;
 		case lib::ARM_KINEMATIC_MODEL:
 			//printf("ARM_KINEMATIC_MODEL\n");
