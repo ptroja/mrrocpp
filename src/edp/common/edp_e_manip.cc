@@ -55,15 +55,11 @@ void manip_effector::compute_frame(const lib::c_buffer &instruction)
 	// obliczenia dla ruchu ramienia (kocwk: FRAME)
 	/* Wypenienie struktury danych transformera na podstawie parametrow polecenia otrzymanego z ECP */
 	/* Zlecenie transformerowi przeliczenie wspolrzednych */
-	lib::Homog_matrix p_m; // wskanik miejsca w strukturze przesanej z ECP, w ktorym znajduj sie wspolrzedne
-	if (instruction.is_set_rmodel() || instruction.is_set_arm()) {
-		// przyslano dane dotyczace narzedzia lub koncowki
-		motion_type = instruction.motion_type;
-		motion_steps = instruction.motion_steps;
-		value_in_step_no = instruction.value_in_step_no;
 
-		p_m.set_from_frame_tab(instruction.arm.pf_def.arm_frame);
-	}
+	motion_type = instruction.motion_type;
+	motion_steps = instruction.motion_steps;
+	value_in_step_no = instruction.value_in_step_no;
+	lib::Homog_matrix p_m(instruction.arm.pf_def.arm_frame);
 
 	if ((value_in_step_no <= 0) || (motion_steps <= 0) || (value_in_step_no > motion_steps + 1)) {
 		throw NonFatal_error_2(INVALID_MOTION_PARAMETERS);
@@ -85,7 +81,7 @@ void manip_effector::compute_frame(const lib::c_buffer &instruction)
 						+ current_joints[gripper_servo_nr];
 			}
 			//      fprintf(stderr, "debug@%s:%d\n", __FILE__, __LINE__);
-			arm_rel_frame_2_frame(p_m);
+			desired_end_effector_frame = current_end_effector_frame * p_m;
 			break;
 		default:
 			throw NonFatal_error_2(INVALID_MOTION_TYPE);
@@ -104,23 +100,6 @@ void manip_effector::compute_frame(const lib::c_buffer &instruction)
 /*--------------------------------------------------------------------------*/
 
 
-
-/*--------------------------------------------------------------------------*/
-void manip_effector::arm_rel_frame_2_frame(lib::Homog_matrix& p_m)
-{
-	// Przepisanie definicji koncowki danej
-	// w postaci TRANS wyraonej wzgldnie
-	// do wewntrznych struktur danych TRANSFORMATORa
-	// Przepisanie z przemnozeniem
-	lib::Homog_matrix A_B_T_arg(p_m);
-	lib::Homog_matrix A_B_T_des(current_end_effector_frame);
-	//cout << A_B_T_des;
-	A_B_T_des *= A_B_T_arg;
-	desired_end_effector_frame = A_B_T_des;
-
-	// matrix_mult(desired_end_effector_frame, *p);
-	// sprawdzi przekroczenie dopuszczalnego zakresu oraz poprawno macierzy jednorodnej
-}
 /*--------------------------------------------------------------------------*/
 
 void manip_effector::set_tool_frame_in_kinematic_model(const lib::Homog_matrix& hm)

@@ -39,13 +39,6 @@ protected:
 
 	// lib::r_buffer
 
-
-	void arm_rel_frame_2_frame(lib::Homog_matrix& p_m);
-	// Przepisanie definicji koncowki danej
-	// w postaci FRAME wyrazonej wzglednie
-	// do wewnetrznych struktur danych TRANSFORMATORa
-
-
 	lib::Homog_matrix servo_current_frame_wo_tool; // by Y dla watku EDP_SERVO    XXXXX
 	lib::Homog_matrix servo_current_end_effector_frame_with_tool_and_base; // by Y dla watku EDP_SERVO    XXXXX
 	lib::Homog_matrix servo_previous_end_effector_frame_with_tool_and_base; // by Y dla watku EDP_SERVO    XXXXX
