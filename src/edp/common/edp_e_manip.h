@@ -66,6 +66,7 @@ public:
 	virtual void get_rmodel(lib::c_buffer &instruction); // odczytanie narzedzia
 
 	void single_thread_move_arm(lib::c_buffer &instruction);
+	void multi_thread_move_arm(lib::c_buffer &instruction);
 	void single_thread_master_order(common::MT_ORDER nm_task, int nm_tryb);
 
 	virtual void create_threads();

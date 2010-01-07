@@ -226,6 +226,29 @@ void manip_effector::single_thread_move_arm(lib::c_buffer &instruction)
 /*--------------------------------------------------------------------------*/
 
 
+/*--------------------------------------------------------------------------*/
+void manip_effector::multi_thread_move_arm(lib::c_buffer &instruction)
+{ // przemieszczenie ramienia
+	// Wypenienie struktury danych transformera na podstawie parametrow polecenia
+	// otrzymanego z ECP. Zlecenie transformerowi przeliczenie wspolrzednych
+
+
+	switch (instruction.set_arm_type)
+	{
+		case lib::FRAME:
+			compute_frame(instruction);
+			move_servos();
+			mt_tt_obj->trans_t_to_master_order_status_ready();
+			// by Y - uwaga na wyjatki, po rzuceniu wyjatku nie zostanie zaktualizowany previous_set_arm_type
+			previous_set_arm_type = instruction.set_arm_type;
+			break;
+		default: // blad: niezdefiniowany sposb specyfikacji pozycji koncowki
+			manip_and_conv_effector::multi_thread_move_arm(instruction);
+	}
+}
+/*--------------------------------------------------------------------------*/
+
+
 void manip_effector::single_thread_master_order(common::MT_ORDER nm_task, int nm_tryb)
 {
 	// przekopiowanie instrukcji z bufora watku komunikacji z ECP (edp_master)

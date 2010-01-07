@@ -527,33 +527,19 @@ void irp6s_postument_track_effector::move_arm(lib::c_buffer &instruction)
 	// Wypenienie struktury danych transformera na podstawie parametrow polecenia
 	// otrzymanego z ECP. Zlecenie transformerowi przeliczenie wspolrzednych
 
-	if (instruction.interpolation_type == lib::MIM) {
-		switch (instruction.set_arm_type)
-		{
-			case lib::MOTOR:
-				compute_motors(instruction);
-				move_servos();
-				mt_tt_obj->trans_t_to_master_order_status_ready();
-				break;
-			case lib::JOINT:
-				compute_joints(instruction);
-				move_servos();
-				mt_tt_obj->trans_t_to_master_order_status_ready();
-				break;
-			case lib::FRAME:
-				compute_frame(instruction);
-				move_servos();
-				mt_tt_obj->trans_t_to_master_order_status_ready();
-				break;
-			default: // blad: niezdefiniowany sposb specyfikacji pozycji koncowki
-				throw NonFatal_error_2(INVALID_SET_END_EFFECTOR_TYPE);
-		}
-	} else if (instruction.interpolation_type == lib::TCIM) {
-		pose_force_torque_at_frame_move(instruction);
+	switch (instruction.interpolation_type)
+	{
+		case lib::MIM:
+			manip_effector::multi_thread_move_arm(instruction);
+			break;
+		case lib::TCIM:
+			pose_force_torque_at_frame_move(instruction);
+			// by Y - uwaga na wyjatki, po rzuceniu wyjatku nie zostanie zaktualizowany previous_set_arm_type
+			previous_set_arm_type = instruction.set_arm_type;
+			break;
+		default:
+			break;
 	}
-
-	// by Y - uwaga na wyjatki, po rzuceniu wyjatku nie zostanie zaktualizowany previous_set_arm_type
-	previous_set_arm_type = instruction.set_arm_type;
 
 }
 /*--------------------------------------------------------------------------*/

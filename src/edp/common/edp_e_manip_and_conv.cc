@@ -48,6 +48,37 @@ namespace mrrocpp {
 namespace edp {
 namespace common {
 
+
+/*--------------------------------------------------------------------------*/
+void manip_and_conv_effector::multi_thread_move_arm(lib::c_buffer &instruction)
+{ // przemieszczenie ramienia
+	// Wypenienie struktury danych transformera na podstawie parametrow polecenia
+	// otrzymanego z ECP. Zlecenie transformerowi przeliczenie wspolrzednych
+
+
+	switch (instruction.set_arm_type)
+	{
+		case lib::MOTOR:
+			compute_motors(instruction);
+			move_servos();
+			mt_tt_obj->trans_t_to_master_order_status_ready();
+			break;
+		case lib::JOINT:
+			compute_joints(instruction);
+			move_servos();
+			mt_tt_obj->trans_t_to_master_order_status_ready();
+			break;
+		default: // blad: niezdefiniowany sposb specyfikacji pozycji koncowki
+			throw NonFatal_error_2(INVALID_SET_END_EFFECTOR_TYPE);
+	}
+
+	// by Y - uwaga na wyjatki, po rzuceniu wyjatku nie zostanie zaktualizowany previous_set_arm_type
+	previous_set_arm_type = instruction.set_arm_type;
+
+}
+/*--------------------------------------------------------------------------*/
+
+
 void manip_and_conv_effector::master_order(MT_ORDER nm_task, int nm_tryb)
 {
 	mt_tt_obj->master_to_trans_t_order(nm_task, nm_tryb);

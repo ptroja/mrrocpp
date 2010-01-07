@@ -165,7 +165,7 @@ public:
 	// w zaleznosci od tego czy chwytak ma byc aktywny czy nie
 
 	virtual void move_arm(lib::c_buffer &instruction) = 0; // przemieszczenie ramienia
-
+	void multi_thread_move_arm(lib::c_buffer &instruction);
 	virtual void get_arm_position(bool read_hardware, lib::c_buffer &instruction) = 0; // odczytanie pozycji ramienia
 
 	virtual void synchronise(); // synchronizacja robota
