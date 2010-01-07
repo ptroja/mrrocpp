@@ -48,23 +48,55 @@ namespace mrrocpp {
 namespace edp {
 namespace common {
 
+/*--------------------------------------------------------------------------*/
+void manip_and_conv_effector::get_arm_position_read_hardware_sb()
+{ // odczytanie pozycji ramienia
 
+	//   printf(" GET ARM\n");
+	lib::JointArray desired_joints_tmp(MAX_SERVOS_NR); // Wspolrzedne wewnetrzne -
+
+	// Uformowanie rozkazu odczytu dla SERVO_GROUP
+	sb->servo_command.instruction_code = lib::READ;
+	// Wyslanie rozkazu do SERVO_GROUP
+	// Pobranie z SERVO_GROUP aktualnej pozycji silnikow
+	//		printf("get_arm_position read_hardware\n");
+
+	sb->send_to_SERVO_GROUP();
+
+	// Ustawienie poprzedniej wartosci zadanej na obecnie odczytane polozenie walow silnikow
+	for (int i = 0; i < number_of_servos; i++) {
+		desired_motor_pos_new[i] = desired_motor_pos_old[i] = current_motor_pos[i];
+	}
+
+	if (is_synchronised()) {
+		//  check_motor_position(desired_motor_pos_new);
+		// dla sprawdzenia ograncizen w joints i motors
+
+		get_current_kinematic_model()->mp2i_transform(desired_motor_pos_new, desired_joints_tmp);
+
+		for (int i = 0; i < number_of_servos; i++) {
+			desired_joints[i] = current_joints[i] = desired_joints_tmp[i];
+		}
+
+	}
+
+}
 
 /*--------------------------------------------------------------------------*/
 void manip_and_conv_effector::set_rmodel_servo_algorithm(lib::c_buffer &instruction)
 {
-			// ustawienie algorytmw serworegulacji oraz ich parametrow
-			// zmiana algorytmu regulacji
-			/* Uformowanie rozkazu zmiany algorytmw serworegulacji oraz ich parametrow dla procesu SERVO_GROUP */
-			sb->servo_command.instruction_code = lib::SERVO_ALGORITHM_AND_PARAMETERS;
-			for (int i = 0; i < number_of_servos; i++) {
-				sb->servo_command.parameters.servo_alg_par.servo_algorithm_no[i]
-						= instruction.rmodel.servo_algorithm.servo_algorithm_no[i];
-				sb->servo_command.parameters.servo_alg_par.servo_parameters_no[i]
-						= instruction.rmodel.servo_algorithm.servo_parameters_no[i];
-			}
-			/* Wyslanie rozkazu zmiany algorytmw serworegulacji oraz ich parametrow procesowi SERVO_GROUP */
-			sb->send_to_SERVO_GROUP(); //
+	// ustawienie algorytmw serworegulacji oraz ich parametrow
+	// zmiana algorytmu regulacji
+	/* Uformowanie rozkazu zmiany algorytmw serworegulacji oraz ich parametrow dla procesu SERVO_GROUP */
+	sb->servo_command.instruction_code = lib::SERVO_ALGORITHM_AND_PARAMETERS;
+	for (int i = 0; i < number_of_servos; i++) {
+		sb->servo_command.parameters.servo_alg_par.servo_algorithm_no[i]
+				= instruction.rmodel.servo_algorithm.servo_algorithm_no[i];
+		sb->servo_command.parameters.servo_alg_par.servo_parameters_no[i]
+				= instruction.rmodel.servo_algorithm.servo_parameters_no[i];
+	}
+	/* Wyslanie rozkazu zmiany algorytmw serworegulacji oraz ich parametrow procesowi SERVO_GROUP */
+	sb->send_to_SERVO_GROUP(); //
 }
 
 /*--------------------------------------------------------------------------*/
@@ -95,7 +127,6 @@ void manip_and_conv_effector::multi_thread_move_arm(lib::c_buffer &instruction)
 
 }
 /*--------------------------------------------------------------------------*/
-
 
 void manip_and_conv_effector::multi_thread_master_order(MT_ORDER nm_task, int nm_tryb)
 {

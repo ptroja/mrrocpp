@@ -72,29 +72,7 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 	//   printf(" GET ARM\n");
 	lib::JointArray desired_joints_tmp(MAX_SERVOS_NR); // Wspolrzedne wewnetrzne -
 	if (read_hardware) {
-		// Uformowanie rozkazu odczytu dla SERVO_GROUP
-		//       servo_command.instruction_code = lib::READ;
-		// Wyslanie rozkazu do SERVO_GROUP
-		// Pobranie z SERVO_GROUP aktualnej pozycji silnikow
-		//		printf("get_arm_position read_hardware\n");
-
-		//      send_to_SERVO_GROUP ();
-
-		// Ustawienie poprzedniej wartosci zadanej na obecnie odczytane polozenie walow silnikow
-		for (int i = 0; i < number_of_servos; i++) {
-			desired_motor_pos_new[i] = desired_motor_pos_old[i] = current_motor_pos[i];
-		}
-
-		if (is_synchronised()) {
-			//  check_motor_position(desired_motor_pos_new);
-			// dla sprawdzenia ograncizen w joints i motors
-
-			get_current_kinematic_model()->mp2i_transform(desired_motor_pos_new, desired_joints_tmp);
-
-			for (int i = 0; i < number_of_servos; i++) {
-				desired_joints[i] = current_joints[i] = desired_joints_tmp[i];
-			}
-		}
+	//	manip_and_conv_effector::get_arm_position_read_hardware_sb();
 	}
 
 	// okreslenie rodzaju wspolrzednych, ktore maja by odczytane
