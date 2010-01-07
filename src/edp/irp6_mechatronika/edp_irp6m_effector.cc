@@ -66,8 +66,8 @@ void effector::set_rmodel(lib::c_buffer &instruction)
 			// Jezeli nie, to wyzwalany jest wyjatek.
 
 
-				// Przyslano dane dotyczace narzedzia i koncowki.
-				// Sprawdzenie poprawnosci macierzy
+			// Przyslano dane dotyczace narzedzia i koncowki.
+			// Sprawdzenie poprawnosci macierzy
 			set_tool_frame_in_kinematic_model(lib::Homog_matrix(instruction.rmodel.tool_frame_def.tool_frame));
 			break;
 		case lib::ARM_KINEMATIC_MODEL:
@@ -111,10 +111,8 @@ void effector::get_rmodel(lib::c_buffer &instruction)
 			// z wewntrznych struktur danych TRANSFORMATORa
 			// do wewntrznych struktur danych REPLY_BUFFER
 
-			    reply.rmodel_type = lib::TOOL_FRAME;
-
-			    ((mrrocpp::kinematics::common::kinematic_model_with_tool*)get_current_kinematic_model())->tool.get_frame_tab(reply.rmodel.tool_frame_def.tool_frame);
-
+			reply.rmodel_type = lib::TOOL_FRAME;
+			((mrrocpp::kinematics::common::kinematic_model_with_tool*) get_current_kinematic_model())->tool.get_frame_tab(reply.rmodel.tool_frame_def.tool_frame);
 			break;
 		case lib::ARM_KINEMATIC_MODEL:
 			reply.rmodel_type = lib::ARM_KINEMATIC_MODEL;

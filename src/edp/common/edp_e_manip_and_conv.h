@@ -76,8 +76,6 @@ protected:
 	//fazy makrokroku.
 	uint16_t value_in_step_no;
 
-	// numer serwo chwytaka
-	short gripper_servo_nr;
 
 #ifdef DOCENT_SENSOR
 	boost::function<void()> startedCallback_;

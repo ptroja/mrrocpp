@@ -30,6 +30,8 @@ protected:
     // czy chwytak wlaczony ?
     short is_gripper_active;
 
+	// numer serwo chwytaka
+	short gripper_servo_nr;
 
     void compute_frame(const lib::c_buffer &instruction); // obliczenia dla ruchu ramienia (koncowka: FRAME)
 
