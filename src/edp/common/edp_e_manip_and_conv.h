@@ -155,6 +155,7 @@ public:
 	virtual ~manip_and_conv_effector();
 
 	virtual void set_rmodel(lib::c_buffer &instruction); // zmiana narzedzia
+	void set_rmodel_servo_algorithm(lib::c_buffer &instruction); // zmiana narzedzia
 	virtual void get_rmodel(lib::c_buffer &instruction); // odczytanie narzedzia
 
 

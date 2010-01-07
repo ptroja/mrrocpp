@@ -63,18 +63,7 @@ void effector::set_rmodel(lib::c_buffer &instruction)
 	switch (instruction.set_rmodel_type)
 	{
 		case lib::SERVO_ALGORITHM:
-			// ustawienie algorytmw serworegulacji oraz ich parametrow
-			// zmiana algorytmu regulacji
-			/* Uformowanie rozkazu zmiany algorytmw serworegulacji oraz ich parametrow dla procesu SERVO_GROUP */
-			sb->servo_command.instruction_code = lib::SERVO_ALGORITHM_AND_PARAMETERS;
-			for (int i = 0; i < number_of_servos; i++) {
-				sb->servo_command.parameters.servo_alg_par.servo_algorithm_no[i]
-						= instruction.rmodel.servo_algorithm.servo_algorithm_no[i];
-				sb->servo_command.parameters.servo_alg_par.servo_parameters_no[i]
-						= instruction.rmodel.servo_algorithm.servo_parameters_no[i];
-			}
-			/* Wyslanie rozkazu zmiany algorytmw serworegulacji oraz ich parametrow procesowi SERVO_GROUP */
-			sb->send_to_SERVO_GROUP(); //
+			set_rmodel_servo_algorithm(instruction);
 			break;
 
 		default: // blad: nie istniejaca specyfikacja modelu robota
