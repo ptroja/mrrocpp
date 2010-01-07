@@ -440,41 +440,6 @@ void manip_and_conv_effector::synchronise ()
 }
 
 
-
-/*--------------------------------------------------------------------------*/
-void manip_and_conv_effector::arm_joints_2_joints (void)
-{
-    // Przepisanie definicji koncowki danej w postaci
-    // JOINTS z wewntrznych struktur danych TRANSFORMATORa
-    // do wewntrznych struktur danych REPLY_BUFFER
-    reply.arm_type = lib::JOINT;
-
-    switch (reply.reply_type)
-    {
-    case lib::ARM:
-    case lib::ARM_INPUTS:
-    case lib::ARM_RMODEL:
-    case lib::ARM_RMODEL_INPUTS:
-        for (int i=0; i<number_of_servos; i++)
-            reply.arm.pf_def.arm_coordinates[i] = current_joints[i];
-        break;
-    default: // blad:
-    	fprintf(stderr, "STRANGE_GET_ARM_REQUEST@%s:%d\n", __FILE__, __LINE__);
-    	throw NonFatal_error_2(STRANGE_GET_ARM_REQUEST);
-    }
-
-    if ((robot_name == lib::ROBOT_IRP6_ON_TRACK) || (robot_name == lib::ROBOT_IRP6_POSTUMENT))
-    {
-        reply.arm.pf_def.gripper_coordinate = current_joints[gripper_servo_nr];
-    }
-
-}
-/*--------------------------------------------------------------------------*/
-
-
-
-
-
 /*--------------------------------------------------------------------------*/
 void manip_and_conv_effector::set_outputs (const lib::c_buffer &instruction)
 {

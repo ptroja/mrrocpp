@@ -208,7 +208,14 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 		case lib::JOINT:
 			// przeliczenie wspolrzednych do poziomu, ktory ma byc odczytany
 			get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
-			arm_joints_2_joints();
+			// przeliczenie wspolrzednych do poziomu, ktory ma byc odczytany
+			// Przepisanie definicji koncowki danej w postaci
+			// JOINTS z wewntrznych struktur danych TRANSFORMATORa
+			// do wewntrznych struktur danych REPLY_BUFFER
+			reply.arm_type = lib::JOINT;
+			for (int i = 0; i < number_of_servos; i++) {
+				reply.arm.pf_def.arm_coordinates[i] = current_joints[i];
+			}
 			break;
 		case lib::MOTOR:
 			reply.arm_type = lib::MOTOR;

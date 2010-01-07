@@ -111,14 +111,6 @@ protected:
     // realizacji pierwszej fazy ruchu
 
 
-    // Wyslanie polecenia do procesu SERVO_GROUP i odebranie odpowiedzi
-
-    void arm_joints_2_joints (void);
-    // Przepisanie definicji koncowki danej w postaci
-    // JOINTS z wewnetrznych struktur danych TRANSFORMATORa
-    // do wewnetrznych struktur danych REPLY_BUFFER
-
-    // transformer
 
     lib::MotorArray servo_current_motor_pos;   // Polozenia walow silnikow -// dla watku edp_servo    XXXX
 
