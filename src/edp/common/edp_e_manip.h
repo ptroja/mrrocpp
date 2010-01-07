@@ -63,6 +63,7 @@ public:
 	void get_controller_state(lib::c_buffer &instruction); // synchronizacja robota
 
 	virtual void set_rmodel(lib::c_buffer &instruction); // zmiana narzedzia
+	virtual void get_rmodel(lib::c_buffer &instruction); // odczytanie narzedzia
 
 	virtual void create_threads();
 

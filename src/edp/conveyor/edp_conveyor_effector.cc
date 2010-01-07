@@ -79,26 +79,6 @@ void effector::set_rmodel(lib::c_buffer &instruction)
 }
 /*--------------------------------------------------------------------------*/
 
-/*--------------------------------------------------------------------------*/
-void effector::get_rmodel(lib::c_buffer &instruction)
-{
-	switch (instruction.get_rmodel_type)
-	{
-		case lib::ARM_KINEMATIC_MODEL:
-			reply.rmodel_type = lib::ARM_KINEMATIC_MODEL;
-			// okreslenie numeru zestawu parametrow przelicznika kinematycznego oraz jego korektora
-			reply.rmodel.kinematic_model.kinematic_model_no = get_current_kinematic_model_no();
-			break;
-		case lib::SERVO_ALGORITHM:
-			reply.rmodel_type = lib::SERVO_ALGORITHM;
-			// ustawienie numeru algorytmu serworegulatora oraz numeru jego zestawu parametrow
-			break;
-		default: // blad: nie istniejaca specyfikacja modelu robota
-			// ustawie numer bledu
-			throw NonFatal_error_2(INVALID_GET_RMODEL_TYPE);
-	}
-}
-/*--------------------------------------------------------------------------*/
 
 // servo_joints_and_frame_actualization_and_upload.
 void effector::servo_joints_and_frame_actualization_and_upload(void)

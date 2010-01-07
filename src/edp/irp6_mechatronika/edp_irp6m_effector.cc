@@ -80,38 +80,6 @@ void effector::set_rmodel(lib::c_buffer &instruction)
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
-void effector::get_rmodel(lib::c_buffer &instruction)
-{
-	//printf(" GET RMODEL: ");
-	switch (instruction.get_rmodel_type)
-	{
-		case lib::TOOL_FRAME:
-			//printf("TOOL_FRAME\n");
-			// przepisac specyfikacje z TRANSFORMATORa do bufora wysylkowego
-			// Przepisanie definicji narzedzia danej w postaci TOOL_FRAME
-			// z wewntrznych struktur danych TRANSFORMATORa
-			// do wewntrznych struktur danych REPLY_BUFFER
-
-			reply.rmodel_type = lib::TOOL_FRAME;
-			((mrrocpp::kinematics::common::kinematic_model_with_tool*) get_current_kinematic_model())->tool.get_frame_tab(reply.rmodel.tool_frame_def.tool_frame);
-			break;
-		case lib::ARM_KINEMATIC_MODEL:
-			reply.rmodel_type = lib::ARM_KINEMATIC_MODEL;
-			// okreslenie numeru zestawu parametrow przelicznika kinematycznego oraz jego korektora
-			reply.rmodel.kinematic_model.kinematic_model_no = get_current_kinematic_model_no();
-			break;
-		case lib::SERVO_ALGORITHM:
-			reply.rmodel_type = lib::SERVO_ALGORITHM;
-			// ustawienie numeru algorytmu serworegulatora oraz numeru jego zestawu parametrow
-
-			break;
-		default: // blad: nie istniejaca specyfikacja modelu robota
-			// ustawie numer bledu
-			throw NonFatal_error_2(INVALID_GET_RMODEL_TYPE);
-	}
-}
-
-/*--------------------------------------------------------------------------*/
 void effector::move_arm(lib::c_buffer &instruction)
 { // przemieszczenie ramienia
 	// Wypenienie struktury danych transformera na podstawie parametrow polecenia

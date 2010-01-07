@@ -34,8 +34,6 @@ protected:
 public:
 
 
-    void get_rmodel (lib::c_buffer &instruction);                    // odczytanie narzedzia
-
     // Konstruktor.
     effector (lib::configurator &_config);
 

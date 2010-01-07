@@ -74,6 +74,30 @@ void manip_effector::set_rmodel(lib::c_buffer &instruction)
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
+void manip_effector::get_rmodel(lib::c_buffer &instruction)
+{
+	//printf(" GET RMODEL: ");
+	switch (instruction.get_rmodel_type)
+	{
+		case lib::TOOL_FRAME:
+			//printf("TOOL_FRAME\n");
+			// przepisac specyfikacje z TRANSFORMATORa do bufora wysylkowego
+			// Przepisanie definicji narzedzia danej w postaci TOOL_FRAME
+			// z wewntrznych struktur danych TRANSFORMATORa
+			// do wewntrznych struktur danych REPLY_BUFFER
+
+			reply.rmodel_type = lib::TOOL_FRAME;
+
+			((mrrocpp::kinematics::common::kinematic_model_with_tool*) get_current_kinematic_model())->tool.get_frame_tab(reply.rmodel.tool_frame_def.tool_frame);
+
+			break;
+		default: // blad: nie istniejaca specyfikacja modelu robota
+			manip_and_conv_effector::get_rmodel(instruction);
+	}
+}
+/*--------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------*/
 void manip_effector::compute_frame(const lib::c_buffer &instruction)
 {
 	lib::MotorArray desired_motor_pos_new_tmp(MAX_SERVOS_NR);

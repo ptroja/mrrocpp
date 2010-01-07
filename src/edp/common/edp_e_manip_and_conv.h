@@ -155,7 +155,7 @@ public:
 	virtual ~manip_and_conv_effector();
 
 	virtual void set_rmodel(lib::c_buffer &instruction); // zmiana narzedzia
-	virtual void get_rmodel(lib::c_buffer &instruction) = 0; // odczytanie narzedzia
+	virtual void get_rmodel(lib::c_buffer &instruction); // odczytanie narzedzia
 
 
 	lib::controller_state_t controller_state_edp_buf; // do okreslenia stanu robota

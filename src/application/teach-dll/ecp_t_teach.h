@@ -21,14 +21,14 @@ namespace ecp {
 namespace common {
 namespace task {
 
-
 /** @defgroup teach_in_dll Teach in dll
  *  @ingroup application
  *  Single robot application of IRp6 manipulator teaching trajectory with user interface usage and dll usage
  *  @{
  */
 
-class teach: public common::task::task  {
+class teach: public common::task::task
+{
 protected:
 	generator::teach_tmp* tig;
 
@@ -41,7 +41,7 @@ public:
 
 };
 
-/** @} */ // end of teach_in
+/** @} */// end of teach_in
 
 } // namespace task
 } // namespace common

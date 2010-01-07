@@ -32,7 +32,6 @@ public:
     effector (lib::configurator &_config);
 
     void set_rmodel (lib::c_buffer &instruction);                    // zmiana narzedzia
-    void get_rmodel (lib::c_buffer &instruction);                    // odczytanie narzedzia
 
     // Przemieszczenie ramienia.
     void move_arm (lib::c_buffer &instruction);
