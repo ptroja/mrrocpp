@@ -103,12 +103,11 @@ void manip_effector::compute_frame(const lib::c_buffer &instruction)
 {
 	lib::MotorArray desired_motor_pos_new_tmp(MAX_SERVOS_NR);
 	lib::JointArray desired_joints_tmp(MAX_SERVOS_NR); // Wspolrzedne wewnetrzne -
-	lib::MOTION_TYPE motion_type;
+	const lib::MOTION_TYPE &motion_type = instruction.motion_type;
 	// obliczenia dla ruchu ramienia (kocwk: FRAME)
 	/* Wypenienie struktury danych transformera na podstawie parametrow polecenia otrzymanego z ECP */
 	/* Zlecenie transformerowi przeliczenie wspolrzednych */
 
-	motion_type = instruction.motion_type;
 	motion_steps = instruction.motion_steps;
 	value_in_step_no = instruction.value_in_step_no;
 	lib::Homog_matrix p_m(instruction.arm.pf_def.arm_frame);
