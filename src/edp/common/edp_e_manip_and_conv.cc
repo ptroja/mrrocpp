@@ -79,7 +79,7 @@ void manip_and_conv_effector::multi_thread_move_arm(lib::c_buffer &instruction)
 /*--------------------------------------------------------------------------*/
 
 
-void manip_and_conv_effector::master_order(MT_ORDER nm_task, int nm_tryb)
+void manip_and_conv_effector::multi_thread_master_order(MT_ORDER nm_task, int nm_tryb)
 {
 	mt_tt_obj->master_to_trans_t_order(nm_task, nm_tryb);
 }

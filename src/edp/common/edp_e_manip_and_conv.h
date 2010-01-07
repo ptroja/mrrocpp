@@ -211,7 +211,8 @@ public:
 
 	virtual servo_buffer* return_created_servo_buffer() = 0;
 
-	virtual void master_order(MT_ORDER nm_task, int nm_tryb);
+	virtual void master_order(MT_ORDER nm_task, int nm_tryb) = 0;
+	void multi_thread_master_order(common::MT_ORDER nm_task, int nm_tryb);
 
 };
 /************************ edp_irp6s_and_conv_effector ****************************/

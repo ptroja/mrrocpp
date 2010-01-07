@@ -36,10 +36,6 @@ namespace mrrocpp {
 namespace edp {
 namespace common {
 
-void manip_effector::master_order(MT_ORDER nm_task, int nm_tryb)
-{
-	manip_and_conv_effector::master_order(nm_task, nm_tryb);
-}
 
 /*--------------------------------------------------------------------------*/
 manip_effector::manip_effector(lib::configurator &_config, lib::robot_name_t l_robot_name) :

@@ -43,6 +43,12 @@ namespace mrrocpp {
 namespace edp {
 namespace common {
 
+void irp6s_postument_track_effector::master_order(MT_ORDER nm_task, int nm_tryb)
+{
+	manip_and_conv_effector::multi_thread_master_order(nm_task, nm_tryb);
+}
+
+
 /*--------------------------------------------------------------------------*/
 void irp6s_postument_track_effector::compute_frame(const lib::c_buffer &instruction)
 {

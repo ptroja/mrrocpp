@@ -19,11 +19,12 @@
 #include "edp/common/reader.h"
 
 // Klasa edp_conveyor_effector.
+#include "edp/common/edp.h"
+#include "edp/common/manip_trans_t.h"
 #include "edp/conveyor/edp_conveyor_effector.h"
 #include "edp/common/servo_gr.h"
 // Model kinematyczny tasmociagu.
 #include "kinematics/conveyor/kinematic_model_conveyor.h"
-#include "edp/common/manip_trans_t.h"
 #include "lib/conveyor_const.h"
 
 using namespace mrrocpp::edp::common::exception;
@@ -36,6 +37,12 @@ common::servo_buffer* effector::return_created_servo_buffer()
 {
 	return new conveyor::servo_buffer(*this);
 }
+
+void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
+{
+	manip_and_conv_effector::multi_thread_master_order(nm_task, nm_tryb);
+}
+
 
 // Konstruktor.
 effector::effector(lib::configurator &_config) :
@@ -110,39 +117,7 @@ void effector::servo_joints_and_frame_actualization_and_upload(void)
 // Przemieszczenie tasmociagu.
 void effector::move_arm(lib::c_buffer &instruction)
 {
-	// Wypenienie struktury danych transformera na podstawie parametrow polecenia
-	// otrzymanego z ECP. Zlecenie transformerowi przeliczenie wspolrzednych
-
-	switch (instruction.set_arm_type)
-	{
-		case lib::MOTOR:
-			compute_motors(instruction);
-			break;
-		case lib::JOINT:
-			compute_joints(instruction);
-			break;
-		default: // blad: niezdefiniowany sposb specyfikacji pozycji koncowki
-			throw NonFatal_error_2(INVALID_SET_END_EFFECTOR_TYPE);
-	}
-
-	// wykonanie ruchu
-	switch (instruction.set_arm_type)
-	{
-		case lib::MOTOR:
-		case lib::JOINT:
-			// Wyslanie makrokroku do realizacji SERVO_GROUP oraz
-			// odebranie informacji o realizacji pierwszej fazy ruchu
-			// aktualizacja transformera
-			move_servos();
-
-			mt_tt_obj->trans_t_to_master_order_status_ready();
-			break;
-		default: // blad: niezdefiniowany sposb specyfikacji pozycji koncowki
-			throw NonFatal_error_2(INVALID_SET_END_EFFECTOR_TYPE);
-	}
-
-	// by Y - uwaga na wyjatki, po rzuceniu wyjatku nie zostanie zaktualizowany previous_set_arm_type
-	previous_set_arm_type = instruction.set_arm_type;
+	manip_and_conv_effector::multi_thread_move_arm(instruction);
 }
 
 // Odczytanie pozycji tasmociagu.

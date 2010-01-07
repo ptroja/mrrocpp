@@ -84,7 +84,9 @@ public:
     void get_rmodel (lib::c_buffer &);
     void move_arm (lib::c_buffer &);
     void get_arm_position(bool, lib::c_buffer &);
+	void master_order(MT_ORDER nm_task, int nm_tryb);
 };
+
 /************************ edp_irp6s_effector ****************************/
 
 } // namespace common

@@ -37,6 +37,11 @@ common::servo_buffer* effector::return_created_servo_buffer()
 	return new irp6m::servo_buffer(*this);
 }
 
+void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
+{
+	manip_and_conv_effector::multi_thread_master_order(nm_task, nm_tryb);
+}
+
 // Konstruktor.
 effector::effector(lib::configurator &_config) :
 	manip_effector(_config, lib::ROBOT_IRP6_MECHATRONIKA)
