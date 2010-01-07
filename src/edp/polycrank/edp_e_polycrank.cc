@@ -39,36 +39,6 @@ common::servo_buffer* effector::return_created_servo_buffer(void)
 	return NULL;
 }
 
-void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
-{
-	// przekopiowanie instrukcji z bufora watku komunikacji z ECP (edp_master)
-	current_instruction = new_instruction;
-
-	switch (nm_task)
-	{
-		case common::MT_GET_CONTROLLER_STATE:
-			get_controller_state(current_instruction);
-			break;
-		case common::MT_SET_RMODEL:
-			set_rmodel(current_instruction);
-			break;
-		case common::MT_GET_ARM_POSITION:
-			get_arm_position(nm_tryb, current_instruction);
-			break;
-		case common::MT_GET_ALGORITHMS:
-			get_algorithms();
-			break;
-		case common::MT_SYNCHRONISE:
-			synchronise();
-			break;
-		case common::MT_MOVE_ARM:
-			move_arm(current_instruction);
-			break;
-		default: // blad: z reply_type wynika, e odpowied nie ma zawiera narzedzia
-			break;
-	}
-}
-
 // Konstruktor.
 effector::effector(lib::configurator &_config) :
 	manip_effector(_config, lib::ROBOT_POLYCRANK)
@@ -81,39 +51,15 @@ effector::effector(lib::configurator &_config) :
 	reset_variables();
 }
 
-
+void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
+{
+	manip_effector::single_thread_master_order(nm_task, nm_tryb);
+}
 
 /*--------------------------------------------------------------------------*/
 void effector::move_arm(lib::c_buffer &instruction)
-{ // przemieszczenie ramienia
-	// Wypenienie struktury danych transformera na podstawie parametrow polecenia
-	// otrzymanego z ECP. Zlecenie transformerowi przeliczenie wspolrzednych
-
-
-	switch (instruction.set_arm_type)
-	{
-		case lib::MOTOR:
-			compute_motors(instruction);
-			move_servos();
-			mt_tt_obj->trans_t_to_master_order_status_ready();
-			break;
-		case lib::JOINT:
-			compute_joints(instruction);
-			move_servos();
-			mt_tt_obj->trans_t_to_master_order_status_ready();
-			break;
-
-		case lib::FRAME:
-			compute_frame(instruction);
-			move_servos();
-			mt_tt_obj->trans_t_to_master_order_status_ready();
-			break;
-		default: // blad: niezdefiniowany sposb specyfikacji pozycji koncowki
-			throw NonFatal_error_2(INVALID_SET_END_EFFECTOR_TYPE);
-	}
-
-	// by Y - uwaga na wyjatki, po rzuceniu wyjatku nie zostanie zaktualizowany previous_set_arm_type
-	previous_set_arm_type = instruction.set_arm_type;
+{
+	manip_effector::single_thread_move_arm(instruction);
 
 }
 /*--------------------------------------------------------------------------*/
