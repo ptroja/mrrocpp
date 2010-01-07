@@ -67,19 +67,10 @@ void manip_effector::compute_frame(const lib::c_buffer &instruction)
 	switch (motion_type)
 	{
 		case lib::ABSOLUTE: // ruch bezwzgledny
-			// dla robotow track i postument - oblicz chwytak
-			if ((robot_name == lib::ROBOT_IRP6_ON_TRACK) || (robot_name == lib::ROBOT_IRP6_POSTUMENT)) {
-				desired_joints_tmp[gripper_servo_nr] = instruction.arm.pf_def.gripper_coordinate;
-			}
 			desired_end_effector_frame = p_m;
 			//      fprintf(stderr, "debug@%s:%d\n", __FILE__, __LINE__);
 			break;
 		case lib::RELATIVE: // ruch wzgledny
-			// dla robotow track i postument - oblicz chwytak
-			if ((robot_name == lib::ROBOT_IRP6_ON_TRACK) || (robot_name == lib::ROBOT_IRP6_POSTUMENT)) {
-				desired_joints_tmp[gripper_servo_nr] = instruction.arm.pf_def.gripper_coordinate
-						+ current_joints[gripper_servo_nr];
-			}
 			//      fprintf(stderr, "debug@%s:%d\n", __FILE__, __LINE__);
 			desired_end_effector_frame = current_end_effector_frame * p_m;
 			break;

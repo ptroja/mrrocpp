@@ -33,7 +33,7 @@ class manip_effector: public common::manip_and_conv_effector
 
 protected:
 
-	void compute_frame(const lib::c_buffer &instruction); // obliczenia dla ruchu ramienia (koncowka: FRAME)
+	virtual void compute_frame(const lib::c_buffer &instruction); // obliczenia dla ruchu ramienia (koncowka: FRAME)
 
 	void set_tool_frame_in_kinematic_model(const lib::Homog_matrix& hm);
 
