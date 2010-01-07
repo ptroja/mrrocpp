@@ -244,7 +244,11 @@ void effector::get_arm_position (bool read_hardware, lib::c_buffer &instruction)
         arm_joints_2_joints();
         break;
     case lib::MOTOR:
-        arm_motors_2_motors();
+ 	   reply.arm_type = lib::MOTOR;
+ 		for (int i=0; i<number_of_servos; i++)
+ 		{
+ 			reply.arm.pf_def.arm_coordinates[i] = current_motor_pos[i];
+ 		}
         break;
     default:   // blad: nieznany sposob zapisu wspolrzednych koncowki
         printf("EFF_TYPE: %d\n", instruction.get_arm_type);

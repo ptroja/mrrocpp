@@ -118,11 +118,6 @@ protected:
     // JOINTS z wewnetrznych struktur danych TRANSFORMATORa
     // do wewnetrznych struktur danych REPLY_BUFFER
 
-    void arm_motors_2_motors (void);
-    // Przepisanie definicji koncowki danej w postaci
-    // MOTORS z wewnetrznych struktur danych TRANSFORMATORa
-    // do wewnetrznych struktur danych REPLY_BUFFER
-
     // transformer
 
     lib::MotorArray servo_current_motor_pos;   // Polozenia walow silnikow -// dla watku edp_servo    XXXX
