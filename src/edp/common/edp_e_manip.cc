@@ -137,31 +137,8 @@ void manip_effector::set_tool_frame_in_kinematic_model(const lib::Homog_matrix& 
 	 */
 }
 
-/*--------------------------------------------------------------------------*/
-void manip_effector::arm_frame_2_frame(void)
-{
-	// Przepisanie definicji koncowki danej w postaci
-	// TRANS z wewntrznych struktur danych TRANSFORMATORa
-	// do wewntrznych struktur danych REPLY_BUFFER
-	reply.arm_type = lib::FRAME;
-	switch (reply.reply_type)
-	{
-		case lib::ARM:
-		case lib::ARM_INPUTS:
-		case lib::ARM_RMODEL:
-		case lib::ARM_RMODEL_INPUTS:
-			current_end_effector_frame.get_frame_tab(reply.arm.pf_def.arm_frame);
-			break;
-		default: // blad:
-			throw NonFatal_error_2(STRANGE_GET_ARM_REQUEST);
-	}
 
-	// dla robotow track i postument - oblicz chwytak
-	if ((robot_name == lib::ROBOT_IRP6_ON_TRACK) || (robot_name == lib::ROBOT_IRP6_POSTUMENT)) {
-		reply.arm.pf_def.gripper_coordinate = current_joints[gripper_servo_nr];
-	}
 
-}
 /*--------------------------------------------------------------------------*/
 
 void manip_effector::master_joints_and_frame_download(void)

@@ -594,7 +594,16 @@ void irp6s_postument_track_effector::get_arm_position(bool read_hardware, lib::c
 	{
 		case lib::FRAME:
 			// przeliczenie wspolrzednych do poziomu, ktory ma byc odczytany
-			arm_frame_2_frame();
+			// Przepisanie definicji koncowki danej w postaci
+			// TRANS z wewntrznych struktur danych TRANSFORMATORa
+			// do wewntrznych struktur danych REPLY_BUFFER
+
+			current_end_effector_frame.get_frame_tab(reply.arm.pf_def.arm_frame);
+
+			// dla robotow track i postument - oblicz chwytak
+
+			reply.arm.pf_def.gripper_coordinate = current_joints[gripper_servo_nr];
+
 			break;
 
 		case lib::JOINT:

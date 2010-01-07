@@ -40,13 +40,6 @@ protected:
 	// lib::r_buffer
 
 
-	void arm_frame_2_frame(void);
-	// Przepisanie definicji koncowki danej w postaci
-	// FRAME z wewnetrznych struktur danych TRANSFORMATORa
-	// do wewnetrznych struktur danych REPLY_BUFFER
-
-
-
 	void arm_rel_frame_2_frame(lib::Homog_matrix& p_m);
 	// Przepisanie definicji koncowki danej
 	// w postaci FRAME wyrazonej wzglednie
