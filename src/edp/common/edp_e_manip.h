@@ -62,6 +62,8 @@ public:
 	void synchronise(); // synchronizacja robota
 	void get_controller_state(lib::c_buffer &instruction); // synchronizacja robota
 
+	virtual void set_rmodel(lib::c_buffer &instruction); // zmiana narzedzia
+
 	virtual void create_threads();
 
 	// wyznaczenie polozenia lokalnego i globalnego transformera

@@ -82,53 +82,6 @@ effector::effector(lib::configurator &_config) :
 }
 
 /*--------------------------------------------------------------------------*/
-void effector::set_rmodel(lib::c_buffer &instruction)
-{
-	// uint8_t previous_model;
-	// uint8_t previous_corrector;
-	//printf(" SET RMODEL: ");
-	switch (instruction.set_rmodel_type)
-	{
-		case lib::TOOL_FRAME:
-			//printf("TOOL_FRAME\n");
-			// przepisa specyfikacj do TRANSFORMATORa
-			// Przepisanie definicji narzedzia danej w postaci TOOL_FRAME
-			// do wewntrznych struktur danych TRANSFORMATORa
-			// Sprawdzenie czy przepisana macierz jest jednorodna
-			// Jezeli nie, to wyzwalany jest wyjatek.
-
-
-				// Przyslano dane dotyczace narzedzia i koncowki.
-				// Sprawdzenie poprawnosci macierzy
-			set_tool_frame_in_kinematic_model(lib::Homog_matrix(instruction.rmodel.tool_frame_def.tool_frame));
-			break;
-		case lib::ARM_KINEMATIC_MODEL:
-			//printf("ARM_KINEMATIC_MODEL\n");
-			// Ustawienie modelu kinematyki.
-			set_kinematic_model(instruction.rmodel.kinematic_model.kinematic_model_no);
-			break;
-
-		case lib::SERVO_ALGORITHM:
-			// ustawienie algorytmw serworegulacji oraz ich parametrow
-			// zmiana algorytmu regulacji
-			/* Uformowanie rozkazu zmiany algorytmw serworegulacji oraz ich parametrow dla procesu SERVO_GROUP */
-			//        servo_command.instruction_code = lib::SERVO_ALGORITHM_AND_PARAMETERS;
-			for (int i = 0; i < number_of_servos; i++) {
-				//            servo_command.parameters.servo_alg_par.servo_algorithm_no[i] = servo_algorithm_ecp[i] = instruction.rmodel.servo_algorithm.servo_algorithm_no[i];
-				//            servo_command.parameters.servo_alg_par.servo_parameters_no[i] = servo_parameters_ecp[i] = instruction.rmodel.servo_algorithm.servo_parameters_no[i];
-			}
-			/* Wyslanie rozkazu zmiany algorytmw serworegulacji oraz ich parametrow procesowi SERVO_GROUP */
-			//       sb->send_to_SERVO_GROUP (); //
-			break;
-
-		default: // blad: nie istniejaca specyfikacja modelu robota
-			// ustawia numer bledu
-			throw NonFatal_error_2(INVALID_SET_RMODEL_TYPE);
-	}
-}
-/*--------------------------------------------------------------------------*/
-
-/*--------------------------------------------------------------------------*/
 void effector::get_rmodel(lib::c_buffer &instruction)
 {
 	//printf(" GET RMODEL: ");

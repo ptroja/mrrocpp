@@ -47,6 +47,33 @@ manip_effector::manip_effector(lib::configurator &_config, lib::robot_name_t l_r
 }
 
 /*--------------------------------------------------------------------------*/
+void manip_effector::set_rmodel(lib::c_buffer &instruction)
+{
+	// uint8_t previous_model;
+	// uint8_t previous_corrector;
+	//printf(" SET RMODEL: ");
+	switch (instruction.set_rmodel_type)
+	{
+		case lib::TOOL_FRAME:
+			//printf("TOOL_FRAME\n");
+			// przepisa specyfikacj do TRANSFORMATORa
+			// Przepisanie definicji narzedzia danej w postaci TOOL_FRAME
+			// do wewntrznych struktur danych TRANSFORMATORa
+			// Sprawdzenie czy przepisana macierz jest jednorodna
+			// Jezeli nie, to wyzwalany jest wyjatek.
+
+
+			// Przyslano dane dotyczace narzedzia i koncowki.
+			// Sprawdzenie poprawnosci macierzy
+			set_tool_frame_in_kinematic_model(lib::Homog_matrix(instruction.rmodel.tool_frame_def.tool_frame));
+			break;
+		default: // blad: nie istniejaca specyfikacja modelu robota
+			manip_and_conv_effector::set_rmodel(instruction);
+	}
+}
+/*--------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------*/
 void manip_effector::compute_frame(const lib::c_buffer &instruction)
 {
 	lib::MotorArray desired_motor_pos_new_tmp(MAX_SERVOS_NR);
@@ -90,7 +117,6 @@ void manip_effector::compute_frame(const lib::c_buffer &instruction)
 }
 /*--------------------------------------------------------------------------*/
 
-
 /*--------------------------------------------------------------------------*/
 
 void manip_effector::set_tool_frame_in_kinematic_model(const lib::Homog_matrix& hm)
@@ -106,8 +132,6 @@ void manip_effector::set_tool_frame_in_kinematic_model(const lib::Homog_matrix& 
 	 get_current_kinematic_model()->i2e_transform(current_joints, &current_end_effector_frame);
 	 */
 }
-
-
 
 /*--------------------------------------------------------------------------*/
 

@@ -574,6 +574,29 @@ void manip_and_conv_effector::compute_motors(const lib::c_buffer &instruction)
 }
 /*--------------------------------------------------------------------------*/
 
+
+
+/*--------------------------------------------------------------------------*/
+void manip_and_conv_effector::set_rmodel(lib::c_buffer &instruction)
+{
+	// uint8_t previous_model;
+	// uint8_t previous_corrector;
+	//printf(" SET RMODEL: ");
+	switch (instruction.set_rmodel_type)
+	{
+		case lib::ARM_KINEMATIC_MODEL:
+			//printf("ARM_KINEMATIC_MODEL\n");
+			// Ustawienie modelu kinematyki.
+			set_kinematic_model(instruction.rmodel.kinematic_model.kinematic_model_no);
+			break;
+		default: // blad: nie istniejaca specyfikacja modelu robota
+			// ustawia numer bledu
+			throw NonFatal_error_2(INVALID_SET_RMODEL_TYPE);
+	}
+}
+/*--------------------------------------------------------------------------*/
+
+
 /*--------------------------------------------------------------------------*/
 void manip_and_conv_effector::compute_joints(const lib::c_buffer &instruction)
 {

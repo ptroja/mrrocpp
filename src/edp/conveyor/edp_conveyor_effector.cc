@@ -57,12 +57,6 @@ void effector::set_rmodel(lib::c_buffer &instruction)
 	//printf(" SET RMODEL: ");
 	switch (instruction.set_rmodel_type)
 	{
-		case lib::ARM_KINEMATIC_MODEL:
-			//printf("ARM_KINEMATIC_MODEL\n");
-			// Ustawienie modelu kinematyki.
-			set_kinematic_model(instruction.rmodel.kinematic_model.kinematic_model_no);
-			break;
-
 		case lib::SERVO_ALGORITHM:
 			// ustawienie algorytmw serworegulacji oraz ich parametrow
 			// zmiana algorytmu regulacji
@@ -80,7 +74,7 @@ void effector::set_rmodel(lib::c_buffer &instruction)
 
 		default: // blad: nie istniejca specyfikacja modelu robota
 			// ustawi numer bledu
-			throw NonFatal_error_2(INVALID_SET_RMODEL_TYPE);
+			manip_and_conv_effector::set_rmodel(instruction);
 	}
 }
 /*--------------------------------------------------------------------------*/

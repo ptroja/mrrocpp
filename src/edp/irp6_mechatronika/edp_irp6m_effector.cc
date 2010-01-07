@@ -57,25 +57,6 @@ void effector::set_rmodel(lib::c_buffer &instruction)
 	//printf(" SET RMODEL: ");
 	switch (instruction.set_rmodel_type)
 	{
-		case lib::TOOL_FRAME:
-			//printf("TOOL_FRAME\n");
-			// przepisa specyfikacj do TRANSFORMATORa
-			// Przepisanie definicji narzedzia danej w postaci TOOL_FRAME
-			// do wewntrznych struktur danych TRANSFORMATORa
-			// Sprawdzenie czy przepisana macierz jest jednorodna
-			// Jezeli nie, to wyzwalany jest wyjatek.
-
-
-			// Przyslano dane dotyczace narzedzia i koncowki.
-			// Sprawdzenie poprawnosci macierzy
-			set_tool_frame_in_kinematic_model(lib::Homog_matrix(instruction.rmodel.tool_frame_def.tool_frame));
-			break;
-		case lib::ARM_KINEMATIC_MODEL:
-			//printf("ARM_KINEMATIC_MODEL\n");
-			// Ustawienie modelu kinematyki.
-			set_kinematic_model(instruction.rmodel.kinematic_model.kinematic_model_no);
-			break;
-
 		case lib::SERVO_ALGORITHM:
 			// ustawienie algorytmw serworegulacji oraz ich parametrow
 			// zmiana algorytmu regulacji
@@ -93,7 +74,7 @@ void effector::set_rmodel(lib::c_buffer &instruction)
 
 		default: // blad: nie istniejaca specyfikacja modelu robota
 			// ustawia numer bledu
-			throw NonFatal_error_2(INVALID_SET_RMODEL_TYPE);
+			manip_effector::set_rmodel(instruction);
 	}
 }
 /*--------------------------------------------------------------------------*/
