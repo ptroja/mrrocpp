@@ -43,8 +43,6 @@ namespace mrrocpp {
 namespace edp {
 namespace common {
 
-
-
 /*--------------------------------------------------------------------------*/
 void irp6s_postument_track_effector::compute_frame(const lib::c_buffer &instruction)
 {
@@ -67,18 +65,18 @@ void irp6s_postument_track_effector::compute_frame(const lib::c_buffer &instruct
 	{
 		case lib::ABSOLUTE: // ruch bezwzgledny
 			// dla robotow track i postument - oblicz chwytak
-			if ((robot_name == lib::ROBOT_IRP6_ON_TRACK) || (robot_name == lib::ROBOT_IRP6_POSTUMENT)) {
-				desired_joints_tmp[gripper_servo_nr] = instruction.arm.pf_def.gripper_coordinate;
-			}
+
+			desired_joints_tmp[gripper_servo_nr] = instruction.arm.pf_def.gripper_coordinate;
+
 			desired_end_effector_frame = p_m;
 			//      fprintf(stderr, "debug@%s:%d\n", __FILE__, __LINE__);
 			break;
 		case lib::RELATIVE: // ruch wzgledny
 			// dla robotow track i postument - oblicz chwytak
-			if ((robot_name == lib::ROBOT_IRP6_ON_TRACK) || (robot_name == lib::ROBOT_IRP6_POSTUMENT)) {
-				desired_joints_tmp[gripper_servo_nr] = instruction.arm.pf_def.gripper_coordinate
-						+ current_joints[gripper_servo_nr];
-			}
+
+			desired_joints_tmp[gripper_servo_nr] = instruction.arm.pf_def.gripper_coordinate
+					+ current_joints[gripper_servo_nr];
+
 			//      fprintf(stderr, "debug@%s:%d\n", __FILE__, __LINE__);
 			desired_end_effector_frame = current_end_effector_frame * p_m;
 			break;
@@ -98,8 +96,6 @@ void irp6s_postument_track_effector::compute_frame(const lib::c_buffer &instruct
 }
 /*--------------------------------------------------------------------------*/
 
-
-
 /*--------------------------------------------------------------------------*/
 void irp6s_postument_track_effector::set_rmodel(lib::c_buffer &instruction)
 {
@@ -118,9 +114,9 @@ void irp6s_postument_track_effector::set_rmodel(lib::c_buffer &instruction)
 			// Jezeli nie, to wyzwalany jest wyjatek.
 
 
-				// Przyslano dane dotyczace narzedzia i koncowki.
-					// Sprawdzenie poprawnosci macierzy
-				set_tool_frame_in_kinematic_model(lib::Homog_matrix(instruction.rmodel.tool_frame_def.tool_frame));
+			// Przyslano dane dotyczace narzedzia i koncowki.
+			// Sprawdzenie poprawnosci macierzy
+			set_tool_frame_in_kinematic_model(lib::Homog_matrix(instruction.rmodel.tool_frame_def.tool_frame));
 			break;
 		case lib::ARM_KINEMATIC_MODEL:
 			//printf("ARM_KINEMATIC_MODEL\n");
@@ -181,9 +177,9 @@ void irp6s_postument_track_effector::get_rmodel(lib::c_buffer &instruction)
 			// z wewntrznych struktur danych TRANSFORMATORa
 			// do wewntrznych struktur danych REPLY_BUFFER
 
-			    reply.rmodel_type = lib::TOOL_FRAME;
+			reply.rmodel_type = lib::TOOL_FRAME;
 
-			    ((mrrocpp::kinematics::common::kinematic_model_with_tool*)get_current_kinematic_model())->tool.get_frame_tab(reply.rmodel.tool_frame_def.tool_frame);
+			((mrrocpp::kinematics::common::kinematic_model_with_tool*) get_current_kinematic_model())->tool.get_frame_tab(reply.rmodel.tool_frame_def.tool_frame);
 
 			break;
 		case lib::ARM_KINEMATIC_MODEL:
