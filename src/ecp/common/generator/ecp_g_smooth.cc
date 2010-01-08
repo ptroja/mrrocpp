@@ -1706,10 +1706,13 @@ void smooth::calculate(void) { //zeby wrocic do starego trybu relative nalezy st
 					optimize_time4(pose_list_iterator, i, s[i]);
 					t[i] = pose_list_iterator->t;
 					//t[i] = t_temp1;
-					vp_reduction(pose_list_iterator, i, s[i], t[i]);
+					/*vp_reduction(pose_list_iterator, i, s[i], t[i]);
 					if (trajectory_calculated == true) {
 						return;
-					}
+					}*/
+					pose_list_iterator->s_przysp[i] = 0;
+					pose_list_iterator->s_jedn[i] = 0;
+
 				} else {
 
 					t[i] = t_temp1 + (s[i] - s_temp1[i])/pose_list_iterator->v_r[i];
