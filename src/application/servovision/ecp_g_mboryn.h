@@ -1,5 +1,5 @@
 /*
- * generator/ecp_g_mboryn.h
+ * $Id$
  *
  *  Created on: Dec 11, 2009
  *      Author: mboryn
@@ -19,24 +19,41 @@ namespace irp6ot {
 
 namespace generator {
 
-class ecp_g_mboryn: public mrrocpp::ecp::common::generator::generator {
+/** @addtogroup servovision
+ *  @{
+ */
+
+class ecp_g_mboryn: public mrrocpp::ecp::common::generator::generator
+{
 public:
 	ecp_g_mboryn(mrrocpp::ecp::common::task::task & _ecp_task);
 	virtual ~ecp_g_mboryn();
 	virtual bool first_step();
 	virtual bool next_step();
 
-	void set_target(double xyz[3]);
+	static const char configSectionName[];
+protected:
+	/**
+	 * Print message to the console.
+	 * @param fmt printf-like format
+	 */
+	void log(char *fmt, ...);
+	/**
+	 * Check if frame is within constraints.
+	 */
+	bool isArmFrameOk(const lib::Homog_matrix& arm_frame);
 private:
-	double target_xyz[3];
-	double next_position[6];
-	int number_of_steps;
-	double step_size;
-	bool is_calculated;
-	int kkk;
-
 	lib::sensor *vsp_fradia;
+
+	lib::Homog_matrix currentFrame;
+	double currentGripperCoordinate;
+	bool currentFrameSaved;
+
+	double Kp;
+	double maxT;
 };
+
+/** @} */// ecp_g_mboryn
 
 } // namespace generator
 

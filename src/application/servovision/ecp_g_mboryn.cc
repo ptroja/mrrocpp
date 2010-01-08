@@ -1,5 +1,5 @@
 /*
- * generator/ecp_g_mboryn.cpp
+ * $Id$
  *
  *  Created on: Dec 11, 2009
  *      Author: mboryn
@@ -11,6 +11,8 @@
 
 using namespace std;
 
+#define MOTION_STEPS 25
+
 namespace mrrocpp {
 
 namespace ecp {
@@ -19,16 +21,37 @@ namespace irp6ot {
 
 namespace generator {
 
+const char ecp_g_mboryn::configSectionName[] = { "[mboryn_servovision]" };
+
 ecp_g_mboryn::ecp_g_mboryn(mrrocpp::ecp::common::task::task & _ecp_task)
 //: mrrocpp::ecp::common::generator::generator(_ecp_task)
-:generator(_ecp_task)
+:
+	generator(_ecp_task)
 {
-	target_xyz[0] = 0;
-	target_xyz[1] = 0;
-	target_xyz[2] = 0;
+	char kp_name[] = { "kp" };
+	char maxt_name[] = { "maxt" };
+
+	if (_ecp_task.config.exists(kp_name, configSectionName)) {
+		Kp = _ecp_task.config.value <double> (kp_name, configSectionName);
+	} else {
+		Kp = 0.002;
+		cout << "Parameter \"" << configSectionName << "\"->\"" << kp_name << "\" not found. Using default value: "
+				<< Kp << endl;
+	}
+
+	if (_ecp_task.config.exists(maxt_name, configSectionName)) {
+		maxT = _ecp_task.config.value <double> (maxt_name, configSectionName);
+	} else {
+		maxT = 0.001;
+		cout << "Parameter \"" << configSectionName << "\"->\"" << maxt_name << "\" not found. Using default value: "
+				<< maxT << endl;
+	}
+
+	printf("\nKp: %g; maxT: %g\n", Kp, maxT); fflush(stdout);
 }
 
-ecp_g_mboryn::~ecp_g_mboryn() {
+ecp_g_mboryn::~ecp_g_mboryn()
+{
 }
 
 bool ecp_g_mboryn::first_step()
@@ -41,88 +64,100 @@ bool ecp_g_mboryn::first_step()
 	the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
 	the_robot->ecp_command.instruction.set_type = ARM_DV;
 	the_robot->ecp_command.instruction.set_arm_type = lib::FRAME;
-	the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-	the_robot->ecp_command.instruction.motion_steps = 25;
-	the_robot->ecp_command.instruction.value_in_step_no = 25 - 1;
+	the_robot->ecp_command.instruction.interpolation_type = lib::TCIM;
+	the_robot->ecp_command.instruction.motion_steps = MOTION_STEPS;
+	the_robot->ecp_command.instruction.value_in_step_no = MOTION_STEPS - 1;
 
-	is_calculated = false;
-	kkk = 0;
-	printf("ecp_g_mboryn::first_step()\n"); fflush(stdout);
+	for (int i = 0; i < 6; i++) {
+		the_robot->ecp_command.instruction.arm.pf_def.behaviour[i] = lib::UNGUARDED_MOTION;
+	}
+
+	currentFrameSaved = false;
 
 	return true;
 }
 
+#if 0
+
+#else
 bool ecp_g_mboryn::next_step()
 {
-	printf("ecp_g_mboryn::next_step() begin: %d\n", kkk); fflush(stdout);
-
-	if(++kkk > 5){
-		printf("ecp_g_mboryn::next_step() end\n"); fflush(stdout);
-		return false;
-	}
-
 	the_robot->ecp_command.instruction.instruction_type = lib::SET_GET;
-	the_robot->ecp_command.instruction.get_type = ARM_DV;
-	the_robot->ecp_command.instruction.get_arm_type = lib::FRAME;
-	the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
-	the_robot->ecp_command.instruction.set_type = ARM_DV;
-	the_robot->ecp_command.instruction.set_arm_type = lib::FRAME;
-	the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-	the_robot->ecp_command.instruction.motion_steps = 25;
-	the_robot->ecp_command.instruction.value_in_step_no = 25 - 1;
 
-	lib::Homog_matrix currentFrame;
-	double gripper_coordinate;
-	currentFrame.set_from_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame);
-	gripper_coordinate = the_robot->reply_package.arm.pf_def.gripper_coordinate;
-	cout<<"\ncurrentFrame:\n"<<currentFrame<<endl;
+	if (!currentFrameSaved) { // save first frame
+		currentFrame.set_from_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame);
+		currentGripperCoordinate = the_robot->reply_package.arm.pf_def.gripper_coordinate;
 
-	for(int i=0; i<MAX_SERVOS_NR; ++i){
-		printf("arm_coordinates[%d]: %g,\t", i, the_robot->reply_package.arm.pf_def.arm_coordinates[i]);
+		currentFrameSaved = true;
 	}
-	printf("\n"); fflush(stdout);
 
-	currentFrame.get_frame_tab(the_robot->ecp_command.instruction.arm.pf_def.arm_frame);
-	the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = gripper_coordinate;
+	// calculate translation
+	lib::K_vector axis_with_angle, translation;
+	currentFrame.get_xyz_angle_axis(axis_with_angle, translation);
 
-	lib::VSP_REPORT vsp_report = vsp_fradia->from_vsp.vsp_report;
-	if (vsp_report == lib::VSP_REPLY_OK) {
-		printf("vsp_report == lib::VSP_REPLY_OK\n"); fflush(stdout);
+	if (vsp_fradia->from_vsp.vsp_report == lib::VSP_REPLY_OK) {
+		//printf("vsp_report == lib::VSP_REPLY_OK\n");		fflush(stdout);
 
-		int u[3];
-		u[0] = vsp_fradia->from_vsp.comm_image.sensor_union.object_tracker.x;
-		u[1] = vsp_fradia->from_vsp.comm_image.sensor_union.object_tracker.y;
-		u[2] = vsp_fradia->from_vsp.comm_image.sensor_union.object_tracker.z;
+		if (vsp_fradia->from_vsp.comm_image.sensor_union.object_tracker.tracking) {
 
-		printf("ux: %d\t", u[0]);
-		printf("uy: %d\t", u[1]);
-		printf("uz: %d\n", u[2]);
-		fflush(stdout);
+			mrrocpp::lib::K_vector
+					e(vsp_fradia->from_vsp.comm_image.sensor_union.object_tracker.x, -vsp_fradia->from_vsp.comm_image.sensor_union.object_tracker.y, vsp_fradia->from_vsp.comm_image.sensor_union.object_tracker.z); // error [pixels]
 
+			mrrocpp::lib::K_vector u;
+			u = e * Kp;
+			u[2] = 0; // Z axis
+			for (int i = 0; i < 3; ++i) {
+				if (u[i] > maxT) {
+					cout << "u[" << i << "] > maxT: u[" << i << "] = " << u[i] << endl;
+					u[i] = maxT;
+				}
+				if (u[i] < -maxT) {
+					cout << "u[" << i << "] < -maxT: u[" << i << "] = " << u[i] << endl;
+					u[i] = -maxT;
+				}
+			}
 
-		if(vsp_fradia->from_vsp.comm_image.sensor_union.object_tracker.tracking){
+			translation += u;
+		} else {
+			//printf("Not tracking.\n");			fflush(stdout);
+		}
+	} else {
+		//printf("vsp_report != lib::VSP_REPLY_OK\n");		fflush(stdout);
+	}
 
+	lib::Homog_matrix nextFrame;
+	nextFrame.set_from_xyz_angle_axis(axis_with_angle, translation);
+
+	// set next frame
+	if (isArmFrameOk(nextFrame)) {
+		nextFrame.get_frame_tab(the_robot->ecp_command.instruction.arm.pf_def.arm_frame);
+	} else {
+		currentFrame.get_frame_tab(the_robot->ecp_command.instruction.arm.pf_def.arm_frame);
+	}
+	the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = currentGripperCoordinate;
+
+	return true;
+} // next_step()
+#endif
+
+bool ecp_g_mboryn::isArmFrameOk(const lib::Homog_matrix& arm_frame)
+{
+	lib::K_vector axis_with_angle, translation, minT(0.590, -0.400, 0.200), maxT(1.000, 0.400, 0.300);
+	arm_frame.get_xyz_angle_axis(axis_with_angle, translation);
+	//cout << "\naxis_with_angle: " << axis_with_angle << "translation: " << translation << endl;
+
+	for (int i = 0; i < 3; ++i) {
+		if (translation[i] < minT[i] || translation[i] > maxT[i]) {
+			return false;
 		}
 	}
-	else{
-		printf("vsp_report != lib::VSP_REPLY_OK\n"); fflush(stdout);
-	}
-
-	/*if(!is_calculated){
-		double distance = 0;
-
-		for(int i=0; i<3; ++i){
-			distance += target_xyz
-		}
-	}*/
 
 	return true;
 }
 
-void ecp_g_mboryn::set_target(double xyz[3]){
-	target_xyz[0] = xyz[0];
-	target_xyz[1] = xyz[1];
-	target_xyz[2] = xyz[2];
+void ecp_g_mboryn::log(char *fmt, ...)
+{
+
 }
 
 } // namespace mrrocpp
