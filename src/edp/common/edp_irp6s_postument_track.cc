@@ -543,7 +543,7 @@ void irp6s_postument_track_effector::get_arm_position(bool read_hardware, lib::c
 { // odczytanie pozycji ramienia
 
 	//   printf(" GET ARM\n");
-	lib::JointArray desired_joints_tmp(MAX_SERVOS_NR); // Wspolrzedne wewnetrzne -
+//	lib::JointArray desired_joints_tmp(MAX_SERVOS_NR); // Wspolrzedne wewnetrzne -
 	double current_force[6];
 
 	if (read_hardware) {
@@ -571,28 +571,8 @@ void irp6s_postument_track_effector::get_arm_position(bool read_hardware, lib::c
 			reply.arm.pf_def.gripper_coordinate = current_joints[gripper_servo_nr];
 
 			break;
-
-		case lib::JOINT:
-			// przeliczenie wspolrzednych do poziomu, ktory ma byc odczytany
-			// Przepisanie definicji koncowki danej w postaci
-			// JOINTS z wewntrznych struktur danych TRANSFORMATORa
-			// do wewntrznych struktur danych REPLY_BUFFER
-			reply.arm_type = lib::JOINT;
-			for (int i = 0; i < number_of_servos; i++) {
-				reply.arm.pf_def.arm_coordinates[i] = current_joints[i];
-			}
-			reply.arm.pf_def.gripper_coordinate = current_joints[gripper_servo_nr];
-			break;
-		case lib::MOTOR:
-			reply.arm_type = lib::MOTOR;
-			for (int i = 0; i < number_of_servos; i++) {
-				reply.arm.pf_def.arm_coordinates[i] = current_motor_pos[i];
-			}
-			reply.arm.pf_def.gripper_coordinate = current_joints[gripper_servo_nr];
-			break;
 		default: // blad: nieznany sposob zapisu wspolrzednych koncowki
-			printf("EFF_TYPE: %d\n", instruction.get_arm_type);
-			throw NonFatal_error_2(INVALID_GET_END_EFFECTOR_TYPE);
+			manip_and_conv_effector::get_arm_position_get_arm_type_switch(instruction);
 	}
 
 	if (instruction.interpolation_type == lib::TCIM) {
@@ -611,9 +591,8 @@ void irp6s_postument_track_effector::get_arm_position(bool read_hardware, lib::c
 				* lib::Ft_vector(current_force));
 		current_force_torque.to_table(reply.arm.pf_def.force_xyz_torque_xyz);
 
-		if ((robot_name == lib::ROBOT_IRP6_ON_TRACK) || (robot_name == lib::ROBOT_IRP6_POSTUMENT)) {
-			reply.arm.pf_def.gripper_coordinate = current_joints[gripper_servo_nr];
-		}
+		reply.arm.pf_def.gripper_coordinate = current_joints[gripper_servo_nr];
+
 	}
 
 	// scope-locked reader data update

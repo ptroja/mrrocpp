@@ -82,6 +82,39 @@ void manip_and_conv_effector::get_arm_position_read_hardware_sb()
 
 }
 
+
+/*--------------------------------------------------------------------------*/
+void manip_and_conv_effector::get_arm_position_get_arm_type_switch(lib::c_buffer &instruction)
+{ // odczytanie pozycji ramienia
+
+	switch (instruction.get_arm_type)
+	{
+		case lib::JOINT:
+			// przeliczenie wspolrzednych do poziomu, ktory ma byc odczytany
+			get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
+			// przeliczenie wspolrzednych do poziomu, ktory ma byc odczytany
+			// Przepisanie definicji koncowki danej w postaci
+			// JOINTS z wewntrznych struktur danych TRANSFORMATORa
+			// do wewntrznych struktur danych REPLY_BUFFER
+			reply.arm_type = lib::JOINT;
+			for (int i = 0; i < number_of_servos; i++) {
+				reply.arm.pf_def.arm_coordinates[i] = current_joints[i];
+			}
+			break;
+		case lib::MOTOR:
+			reply.arm_type = lib::MOTOR;
+			for (int i = 0; i < number_of_servos; i++) {
+				reply.arm.pf_def.arm_coordinates[i] = current_motor_pos[i];
+			}
+			break;
+		default: // blad: nieznany sposob zapisu wspolrzednych koncowki
+			printf("EFF_TYPE: %d\n", instruction.get_arm_type);
+			throw NonFatal_error_2(INVALID_GET_END_EFFECTOR_TYPE);
+	}
+
+
+}
+
 /*--------------------------------------------------------------------------*/
 void manip_and_conv_effector::set_rmodel_servo_algorithm(lib::c_buffer &instruction)
 {

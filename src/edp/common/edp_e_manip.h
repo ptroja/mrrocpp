@@ -65,6 +65,8 @@ public:
 	virtual void set_rmodel(lib::c_buffer &instruction); // zmiana narzedzia
 	virtual void get_rmodel(lib::c_buffer &instruction); // odczytanie narzedzia
 
+	virtual void get_arm_position_get_arm_type_switch(lib::c_buffer &instruction); // odczytanie pozycji ramienia sprzetowo z sb
+
 	void single_thread_move_arm(lib::c_buffer &instruction);
 	void multi_thread_move_arm(lib::c_buffer &instruction);
 	void single_thread_master_order(common::MT_ORDER nm_task, int nm_tryb);

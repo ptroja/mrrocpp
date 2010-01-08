@@ -170,6 +170,7 @@ public:
 	virtual void get_arm_position(bool read_hardware, lib::c_buffer &instruction) = 0; // odczytanie pozycji ramienia
 	void get_arm_position_read_hardware_sb(); // odczytanie pozycji ramienia sprzetowo z sb
 
+	virtual void get_arm_position_get_arm_type_switch(lib::c_buffer &instruction); // odczytanie pozycji ramienia sprzetowo z sb
 
 	virtual void synchronise(); // synchronizacja robota
 	virtual void servo_joints_and_frame_actualization_and_upload(void) = 0; // by Y

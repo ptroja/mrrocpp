@@ -150,7 +150,7 @@ void effector::servo_joints_and_frame_actualization_and_upload(void)
 /*--------------------------------------------------------------------------*/
 void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 { // odczytanie pozycji ramienia
-	lib::JointArray desired_joints_tmp(MAX_SERVOS_NR); // Wspolrzedne wewnetrzne -
+	//lib::JointArray desired_joints_tmp(MAX_SERVOS_NR); // Wspolrzedne wewnetrzne -
 	//   printf(" GET ARM\n");
 
 	if (read_hardware) {
@@ -159,40 +159,7 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 
 	// okreslenie rodzaju wspolrzednych, ktore maja by odczytane
 	// oraz adekwatne wypelnienie bufora odpowiedzi
-	switch (instruction.get_arm_type)
-	{
-		case lib::FRAME:
-			// przeliczenie wspolrzednych do poziomu, ktory ma byc odczytany
-			get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
-			get_current_kinematic_model()->i2e_transform(current_joints, current_end_effector_frame);
-			// TRANS z wewntrznych struktur danych TRANSFORMATORa
-			// do wewntrznych struktur danych REPLY_BUFFER
-
-			current_end_effector_frame.get_frame_tab(reply.arm.pf_def.arm_frame);
-			break;
-
-		case lib::JOINT:
-			// przeliczenie wspolrzednych do poziomu, ktory ma byc odczytany
-			get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
-			// przeliczenie wspolrzednych do poziomu, ktory ma byc odczytany
-			// Przepisanie definicji koncowki danej w postaci
-			// JOINTS z wewntrznych struktur danych TRANSFORMATORa
-			// do wewntrznych struktur danych REPLY_BUFFER
-			reply.arm_type = lib::JOINT;
-			for (int i = 0; i < number_of_servos; i++) {
-				reply.arm.pf_def.arm_coordinates[i] = current_joints[i];
-			}
-			break;
-		case lib::MOTOR:
-			reply.arm_type = lib::MOTOR;
-			for (int i = 0; i < number_of_servos; i++) {
-				reply.arm.pf_def.arm_coordinates[i] = current_motor_pos[i];
-			}
-			break;
-		default: // blad: nieznany sposob zapisu wspolrzednych koncowki
-			printf("EFF_TYPE: %d\n", instruction.get_arm_type);
-			throw NonFatal_error_2(INVALID_GET_END_EFFECTOR_TYPE);
-	}
+	common::manip_effector::get_arm_position_get_arm_type_switch(instruction);
 
 	// scope-locked reader data update
 	{

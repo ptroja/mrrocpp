@@ -36,11 +36,31 @@ namespace mrrocpp {
 namespace edp {
 namespace common {
 
-
 /*--------------------------------------------------------------------------*/
 manip_effector::manip_effector(lib::configurator &_config, lib::robot_name_t l_robot_name) :
 	manip_and_conv_effector(_config, l_robot_name)
 {
+}
+
+/*--------------------------------------------------------------------------*/
+void manip_effector::get_arm_position_get_arm_type_switch(lib::c_buffer &instruction)
+{ // odczytanie pozycji ramienia
+
+	switch (instruction.get_arm_type)
+	{
+		case lib::FRAME:
+			// przeliczenie wspolrzednych do poziomu, ktory ma byc odczytany
+			get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
+			get_current_kinematic_model()->i2e_transform(current_joints, current_end_effector_frame);
+			// TRANS z wewntrznych struktur danych TRANSFORMATORa
+			// do wewntrznych struktur danych REPLY_BUFFER
+
+			current_end_effector_frame.get_frame_tab(reply.arm.pf_def.arm_frame);
+			break;
+		default: // blad: nieznany sposob zapisu wspolrzednych koncowki
+			manip_and_conv_effector::get_arm_position_get_arm_type_switch(instruction);
+	}
+
 }
 
 /*--------------------------------------------------------------------------*/
@@ -189,7 +209,6 @@ void manip_effector::create_threads()
 {
 }
 
-
 /*--------------------------------------------------------------------------*/
 void manip_effector::single_thread_move_arm(lib::c_buffer &instruction)
 { // przemieszczenie ramienia
@@ -221,7 +240,6 @@ void manip_effector::single_thread_move_arm(lib::c_buffer &instruction)
 }
 /*--------------------------------------------------------------------------*/
 
-
 /*--------------------------------------------------------------------------*/
 void manip_effector::multi_thread_move_arm(lib::c_buffer &instruction)
 { // przemieszczenie ramienia
@@ -243,7 +261,6 @@ void manip_effector::multi_thread_move_arm(lib::c_buffer &instruction)
 	}
 }
 /*--------------------------------------------------------------------------*/
-
 
 void manip_effector::single_thread_master_order(common::MT_ORDER nm_task, int nm_tryb)
 {
@@ -274,7 +291,6 @@ void manip_effector::single_thread_master_order(common::MT_ORDER nm_task, int nm
 			break;
 	}
 }
-
 
 } // namespace common
 } // namespace edp
