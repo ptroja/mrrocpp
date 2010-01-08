@@ -224,14 +224,14 @@ Homog_matrix::Homog_matrix(POSE_SPECIFICATION mtr_ps, double x, double y, double
 // Zwrocenie obecnej tablicy, zawierajacej dane macierzy jednorodnej.
 void Homog_matrix::get_frame_tab(frame_tab frame) const
 {
-	copy_frame(frame, matrix_m);
+	copy_frame_tab(frame, matrix_m);
 }//: get_frame_tab
 
 
 // Ustawienie tablicy, ktora zawiera dane macierzy jednorodnej.
 void Homog_matrix::set_from_frame_tab(const frame_tab frame)
 {
-	copy_frame(matrix_m, frame);
+	copy_frame_tab(matrix_m, frame);
 }//: set_from_frame_tab
 
 

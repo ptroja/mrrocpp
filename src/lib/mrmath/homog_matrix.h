@@ -172,22 +172,18 @@ public:
 	int is_valid() const;
 
 	// Kopiowanie macierzy jednorodnej do DEST z SOURCE.
-	inline static void copy_frame_tab(frame_tab destination_frame,   frame_tab source_frame)
+	inline static void copy_frame_tab(frame_tab destination_frame, const  frame_tab source_frame)
 	{
 		memcpy(destination_frame, source_frame, sizeof(frame_tab));
 	};//: copy_frame
 
-	// Kopiowanie macierzy jednorodnej w postaci XYZ_ANGLE_AXIS do DEST z SOURCE.
-	inline static void copy_xyz_angle_axis(double  destination_xyz_angle_axis[6], double source_xyz_angle_axis[6])
+	// Kopiowanie macierzy jednorodnej w postaci klas pochodnych Ft_V_vector
+	inline static void FT_v_vector(double destination_vector[6], double source_vector[6])
 	{
-		memcpy(destination_xyz_angle_axis, source_xyz_angle_axis, 6*sizeof(double));
+		memcpy(destination_vector, source_vector, 6*sizeof(double));
 	};//: copy_xyz_angle_axis
 
-	// Kopiowanie macierzy jednorodnej w postaci XYZ_EULER_ZYZ do DEST_FRAME z SOURCE_FRAME.
-	inline static void copy_xyz_euler_zyz(double destination_xyz_euler_zyz[6],   double source_xyz_euler_zyz[6])
-	{
-		memcpy(destination_xyz_euler_zyz, source_xyz_euler_zyz, 6*sizeof(double));
-	};//: copy_xyz_euler_zyz
+
 
 };// end class Homog_matrix
 
