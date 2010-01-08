@@ -135,8 +135,50 @@ public:
 };// end class Ft_vector
 
 
+// klasa reprezentujaca wektor sila-moment i wektora predkosci
+class Xyz_Angle_Axis_vector : public Ft_v_vector
+{
+
+public:
+
+	Xyz_Angle_Axis_vector();													// konstruktor domniemany [0, 0, 0, 0, 0, 0]
+	Xyz_Angle_Axis_vector(const double t[6]);										// utworzenie wektora na podstawie podanej tablicy
+	Xyz_Angle_Axis_vector(double fx, double fy, double fz, double tx, double ty, double tz);
+
+	Xyz_Angle_Axis_vector(const Xyz_Angle_Axis_vector &);								// konstruktor kopiujacy
+
+	// Odwracanie macierzy.
+	Xyz_Angle_Axis_vector operator!() const;
+	Xyz_Angle_Axis_vector operator-() const;
+	Xyz_Angle_Axis_vector & operator=(const Xyz_Angle_Axis_vector &);			// operator przypisania
+	Xyz_Angle_Axis_vector operator+(const Xyz_Angle_Axis_vector &) const;
+	Xyz_Angle_Axis_vector operator-(const Xyz_Angle_Axis_vector &) const;
+	Xyz_Angle_Axis_vector operator*(double) const;					// skalowanie wektora
+
+};// end class Xyz_Angle_Axis_vector
 
 
+// klasa reprezentujaca wektor sila-moment i wektora predkosci
+class Xyz_Euler_Zyz_vector : public Ft_v_vector
+{
+
+public:
+
+	Xyz_Euler_Zyz_vector();													// konstruktor domniemany [0, 0, 0, 0, 0, 0]
+	Xyz_Euler_Zyz_vector(const double t[6]);										// utworzenie wektora na podstawie podanej tablicy
+	Xyz_Euler_Zyz_vector(double fx, double fy, double fz, double tx, double ty, double tz);
+
+	Xyz_Euler_Zyz_vector(const Xyz_Euler_Zyz_vector &);								// konstruktor kopiujacy
+
+	// Odwracanie macierzy.
+	Xyz_Euler_Zyz_vector operator!() const;
+	Xyz_Euler_Zyz_vector operator-() const;
+	Xyz_Euler_Zyz_vector & operator=(const Xyz_Euler_Zyz_vector &);			// operator przypisania
+	Xyz_Euler_Zyz_vector operator+(const Xyz_Euler_Zyz_vector &) const;
+	Xyz_Euler_Zyz_vector operator-(const Xyz_Euler_Zyz_vector &) const;
+	Xyz_Euler_Zyz_vector operator*(double) const;					// skalowanie wektora
+
+};// end class Xyz_Euler_Zyz_vector
 
 
 

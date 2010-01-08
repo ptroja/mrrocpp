@@ -414,6 +414,193 @@ w[5]=(local_desired_end_effector_frame)[2][3]-(local_current_end_effector_frame)
 
 
 
+/////////////////////////////////////////
+//
+//  Xyz_Angle_Axis_vector
+//
+//////////////////////////////////////////
+
+
+
+
+Xyz_Angle_Axis_vector::Xyz_Angle_Axis_vector() : Ft_v_vector()
+{}
+
+Xyz_Angle_Axis_vector::Xyz_Angle_Axis_vector(const double t[6]) : Ft_v_vector(t)
+{}
+
+Xyz_Angle_Axis_vector::Xyz_Angle_Axis_vector(double fx, double fy, double fz, double tx, double ty, double tz)
+: Ft_v_vector(fx, fy, fz, tx, ty, tz)
+{}
+
+Xyz_Angle_Axis_vector::Xyz_Angle_Axis_vector(const Xyz_Angle_Axis_vector & wzor) : Ft_v_vector(wzor)
+{}
+
+Xyz_Angle_Axis_vector & Xyz_Angle_Axis_vector::operator=(const Xyz_Angle_Axis_vector & p)
+{
+	// operator przypisania
+	// parametry wektora przyjmuja wartosci takie jak parametry wektora podanego jako argument
+
+	if(this == &p) return *this;
+
+	set_values(p.w);
+
+return *this;
+}// end Ft_v_vector::operator=(const Ft_v_vector & p)
+
+Xyz_Angle_Axis_vector Xyz_Angle_Axis_vector::operator+(const Xyz_Angle_Axis_vector & dod) const
+{
+	// operator dodawania
+	// umozliwia zmodyfikowanie parametrow wersora zgodnie z zawartoscia argumentu
+
+	Xyz_Angle_Axis_vector zwracany;
+
+	for(int i=0; i<6; i++)
+		zwracany.w[i] = w[i] + dod.w[i];
+
+return zwracany;
+
+}// end Ft_v_vector::operator+(const Ft_v_vector & dod) const
+
+
+Xyz_Angle_Axis_vector Xyz_Angle_Axis_vector::operator-(const Xyz_Angle_Axis_vector & dod) const
+{
+	// operator dodawania
+	// umozliwia zmodyfikowanie parametrow wersora zgodnie z zawartoscia argumentu
+
+	Xyz_Angle_Axis_vector zwracany;
+
+	for(int i=0; i<6; i++)
+		zwracany.w[i] = w[i] - dod.w[i];
+
+return zwracany;
+
+}// end Ft_v_vector::operator+(const Ft_v_vector & dod) const
+
+
+
+Xyz_Angle_Axis_vector Xyz_Angle_Axis_vector::operator*(const double skalar) const
+{
+	Xyz_Angle_Axis_vector zwracany;
+	for(int i=0;i<6;i++) zwracany.w[i]=w[i]*skalar;
+	return zwracany;
+}
+
+
+Xyz_Angle_Axis_vector Xyz_Angle_Axis_vector::operator!() const
+{
+	// odwrocenie wektora
+
+	Xyz_Angle_Axis_vector zwracany;
+	for(int i=0;i<6;i++) zwracany.w[i]=-w[i];
+	return zwracany;
+}
+
+
+Xyz_Angle_Axis_vector Xyz_Angle_Axis_vector::operator-() const
+{
+	// odwrocenie wektora
+
+	Xyz_Angle_Axis_vector zwracany;
+	for(int i=0;i<6;i++) zwracany.w[i]=-w[i];
+	return zwracany;
+}
+
+
+
+/////////////////////////////////////////
+//
+//  Xyz_Euler_Zyz_vector
+//
+//////////////////////////////////////////
+
+
+
+
+Xyz_Euler_Zyz_vector::Xyz_Euler_Zyz_vector() : Ft_v_vector()
+{}
+
+Xyz_Euler_Zyz_vector::Xyz_Euler_Zyz_vector(const double t[6]) : Ft_v_vector(t)
+{}
+
+Xyz_Euler_Zyz_vector::Xyz_Euler_Zyz_vector(double fx, double fy, double fz, double tx, double ty, double tz)
+: Ft_v_vector(fx, fy, fz, tx, ty, tz)
+{}
+
+Xyz_Euler_Zyz_vector::Xyz_Euler_Zyz_vector(const Xyz_Euler_Zyz_vector & wzor) : Ft_v_vector(wzor)
+{}
+
+Xyz_Euler_Zyz_vector & Xyz_Euler_Zyz_vector::operator=(const Xyz_Euler_Zyz_vector & p)
+{
+	// operator przypisania
+	// parametry wektora przyjmuja wartosci takie jak parametry wektora podanego jako argument
+
+	if(this == &p) return *this;
+
+	set_values(p.w);
+
+return *this;
+}// end Ft_v_vector::operator=(const Ft_v_vector & p)
+
+Xyz_Euler_Zyz_vector Xyz_Euler_Zyz_vector::operator+(const Xyz_Euler_Zyz_vector & dod) const
+{
+	// operator dodawania
+	// umozliwia zmodyfikowanie parametrow wersora zgodnie z zawartoscia argumentu
+
+	Xyz_Euler_Zyz_vector zwracany;
+
+	for(int i=0; i<6; i++)
+		zwracany.w[i] = w[i] + dod.w[i];
+
+return zwracany;
+
+}// end Xyz_Euler_Zyz_vector::operator+(const Xyz_Euler_Zyz_vector & dod) const
+
+
+Xyz_Euler_Zyz_vector Xyz_Euler_Zyz_vector::operator-(const Xyz_Euler_Zyz_vector & dod) const
+{
+	// operator dodawania
+	// umozliwia zmodyfikowanie parametrow wersora zgodnie z zawartoscia argumentu
+
+	Xyz_Euler_Zyz_vector zwracany;
+
+	for(int i=0; i<6; i++)
+		zwracany.w[i] = w[i] - dod.w[i];
+
+return zwracany;
+
+}// end Ft_v_vector::operator+(const Ft_v_vector & dod) const
+
+
+
+Xyz_Euler_Zyz_vector Xyz_Euler_Zyz_vector::operator*(const double skalar) const
+{
+	Xyz_Euler_Zyz_vector zwracany;
+	for(int i=0;i<6;i++) zwracany.w[i]=w[i]*skalar;
+	return zwracany;
+}
+
+
+Xyz_Euler_Zyz_vector Xyz_Euler_Zyz_vector::operator!() const
+{
+	// odwrocenie wektora
+
+	Xyz_Euler_Zyz_vector zwracany;
+	for(int i=0;i<6;i++) zwracany.w[i]=-w[i];
+	return zwracany;
+}
+
+
+Xyz_Euler_Zyz_vector Xyz_Euler_Zyz_vector::operator-() const
+{
+	// odwrocenie wektora
+
+	Xyz_Euler_Zyz_vector zwracany;
+	for(int i=0;i<6;i++) zwracany.w[i]=-w[i];
+	return zwracany;
+}
+
+
 } // namespace lib
 } // namespace mrrocpp
 
