@@ -110,7 +110,7 @@ void irp6s_postument_track_effector::set_rmodel(lib::c_buffer &instruction)
 	switch (instruction.set_rmodel_type)
 	{
 		case lib::SERVO_ALGORITHM:
-			set_rmodel_servo_algorithm(instruction);
+			sb->set_rmodel_servo_algorithm(instruction);
 			break;
 		case lib::FORCE_TOOL:
 			if (vs == NULL) {

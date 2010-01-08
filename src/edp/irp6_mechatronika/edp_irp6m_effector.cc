@@ -63,7 +63,7 @@ void effector::set_rmodel(lib::c_buffer &instruction)
 	switch (instruction.set_rmodel_type)
 	{
 		case lib::SERVO_ALGORITHM:
-			set_rmodel_servo_algorithm(instruction);
+			sb->set_rmodel_servo_algorithm(instruction);
 			break;
 
 		default: // blad: nie istniejaca specyfikacja modelu robota

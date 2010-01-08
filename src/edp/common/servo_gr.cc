@@ -30,6 +30,25 @@ namespace mrrocpp {
 namespace edp {
 namespace common {
 
+
+/*--------------------------------------------------------------------------*/
+void servo_buffer::set_rmodel_servo_algorithm(lib::c_buffer &instruction)
+{
+	// ustawienie algorytmw serworegulacji oraz ich parametrow
+	// zmiana algorytmu regulacji
+	/* Uformowanie rozkazu zmiany algorytmw serworegulacji oraz ich parametrow dla procesu SERVO_GROUP */
+	servo_command.instruction_code = lib::SERVO_ALGORITHM_AND_PARAMETERS;
+	for (int i = 0; i < master.number_of_servos; i++) {
+		servo_command.parameters.servo_alg_par.servo_algorithm_no[i]
+				= instruction.rmodel.servo_algorithm.servo_algorithm_no[i];
+		servo_command.parameters.servo_alg_par.servo_parameters_no[i]
+				= instruction.rmodel.servo_algorithm.servo_parameters_no[i];
+	}
+	/* Wyslanie rozkazu zmiany algorytmw serworegulacji oraz ich parametrow procesowi SERVO_GROUP */
+	send_to_SERVO_GROUP(); //
+}
+
+
 /*--------------------------------------------------------------------------*/
 void servo_buffer::send_to_SERVO_GROUP ()
 {

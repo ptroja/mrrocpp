@@ -85,6 +85,8 @@ public:
     lib::edp_master_command servo_command;    // polecenie z EDP_MASTER dla SERVO_GROUP
     lib::servo_group_reply sg_reply;          // bufor na informacje odbierane z SERVO_GROUP
 
+	void set_rmodel_servo_algorithm(lib::c_buffer &instruction); // zmiana narzedzia
+
     void send_to_SERVO_GROUP ();
 
     void operator()(void);
