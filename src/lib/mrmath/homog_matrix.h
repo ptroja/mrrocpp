@@ -114,6 +114,9 @@ public:
 	void set_from_xyz_angle_axis(const Ft_v_vector translation_and_axis_with_angle);  // kat wliczony w os
 	void set_from_xyz_angle_axis(const double t[6]);  // kat wliczony w os
 
+	void set_from_xyz_angle_axis(const Xyz_Angle_Axis_vector l_vector);  // kat wliczony w os
+	void get_xyz_angle_axis(Xyz_Angle_Axis_vector& l_vector) const;
+
 	// Operacje na kwaternionach
 	void set_from_xyz_quaternion(double eta, double eps1, double eps2, double eps3, double x, double y, double z);
 	void get_xyz_quaternion(double t[7]) const;
