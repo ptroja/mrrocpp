@@ -216,7 +216,7 @@ bool ecp_vis_ib_eih_follower_irp6ot::next_step_without_constraints() {
 	}*/
 	next_position[6] = 0.0;
 
-	homog_matrix.set_from_xyz_angle_axis(next_position);
+	homog_matrix.set_from_xyz_angle_axis(lib::Xyz_Angle_Axis_vector(next_position));
 	homog_matrix.get_frame_tab(the_robot->ecp_command.instruction.arm.pf_def.arm_frame);
 
 	//memcpy(the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates, next_position,

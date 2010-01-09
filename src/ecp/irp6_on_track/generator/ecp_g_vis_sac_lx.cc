@@ -894,7 +894,7 @@ CEIH_Tx_G.get_xyz_angle_axis(CEIH_r_G[0]);
 
 	//O_r_Ep[0][1]=0.05;
 
-	O_Tx_Ep.set_from_xyz_angle_axis(O_r_Ep[0]);
+	O_Tx_Ep.set_from_xyz_angle_axis(lib::Xyz_Angle_Axis_vector(O_r_Ep[0]));
 	/*
 	 O_Tx_Ep.get_xyz_euler_zyz(O_reul_Ep[0]);
 
