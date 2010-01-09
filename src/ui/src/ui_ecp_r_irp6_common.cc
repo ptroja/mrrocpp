@@ -279,7 +279,9 @@ void ui_common_robot::read_tool_xyz_angle_axis(double tool_vector[6])
 	execute_motion();
 
 	lib::Homog_matrix tmp(ecp->reply_package.rmodel.tool_frame_def.tool_frame);
-	tmp.get_xyz_angle_axis(tool_vector);
+	lib::Xyz_Angle_Axis_vector tmp_vector;
+	tmp.get_xyz_angle_axis(tmp_vector);
+	tmp_vector.to_table(tool_vector);
 
 }
 // ---------------------------------------------------------------
@@ -701,7 +703,8 @@ void ui_common_robot::read_xyz_angle_axis(double current_position[])
 
 	lib::Homog_matrix tmp;
 	tmp.set_from_frame_tab(ecp->reply_package.arm.pf_def.arm_frame);
-	tmp.get_xyz_angle_axis(current_position);
-
+	lib::Xyz_Angle_Axis_vector tmp_vector;
+	tmp.get_xyz_angle_axis(tmp_vector);
+	tmp_vector.to_table(current_position);
 	current_position[6] = ecp->reply_package.arm.pf_def.gripper_coordinate;
 }

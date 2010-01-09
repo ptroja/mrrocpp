@@ -39,7 +39,7 @@ int wii_teach::load_trajectory()
 {
     char buffer[200];
     uint64_t e; // Kod bledu systemowego
-    
+
     if (chdir(path) != 0)
     {
       perror(path);
@@ -89,7 +89,7 @@ int wii_teach::load_trajectory()
         {
             current = new node();
         }
-        
+
         if(!trajectory.head)
         {
             trajectory.head = current;
@@ -212,7 +212,7 @@ void wii_teach::save_trajectory(void)
           to_file << current->position[4] << ' ';
           to_file << current->position[5] << ' ';
           to_file_gripper << current->gripper;
-          
+
           to_file << '\n';
           to_file_gripper << '\n';
 
@@ -256,7 +256,7 @@ void wii_teach::print_trajectory(void)
 
 void wii_teach::move_to_current(void)
 {
-	
+
     char buffer[200];
     if(trajectory.current)
     {
@@ -266,7 +266,7 @@ void wii_teach::move_to_current(void)
         sg->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS,trajectory.current->position[0],trajectory.current->position[1],trajectory.current->position[2],trajectory.current->position[3],trajectory.current->position[4],trajectory.current->position[5],trajectory.current->gripper,0,true);
         sg->Move();
     }
-    
+
 }
 
 void wii_teach::main_task_algorithm(void)
@@ -358,7 +358,9 @@ void wii_teach::main_task_algorithm(void)
                 current->id = ++cnt;
 
                 homog_matrix.set_from_frame_tab(ecp_m_robot->reply_package.arm.pf_def.arm_frame);
-                homog_matrix.get_xyz_angle_axis(current->position);
+                lib::Xyz_Angle_Axis_vector tmp_vector;
+                homog_matrix.get_xyz_angle_axis(tmp_vector);
+                tmp_vector.to_table(current->position);
                 current->gripper = ecp_m_robot->reply_package.arm.pf_def.gripper_coordinate;
 
                 if(trajectory.current)
@@ -427,7 +429,9 @@ void wii_teach::main_task_algorithm(void)
                     trajectory.current->id = ++cnt;
 
                     homog_matrix.set_from_frame_tab(ecp_m_robot->reply_package.arm.pf_def.arm_frame);
-                    homog_matrix.get_xyz_angle_axis(trajectory.current->position);
+                	lib::Xyz_Angle_Axis_vector tmp_vector;
+                    homog_matrix.get_xyz_angle_axis(tmp_vector);
+                	tmp_vector.to_table(trajectory.current->position);
                     trajectory.current->gripper = ecp_m_robot->reply_package.arm.pf_def.gripper_coordinate;
 
                     sprintf(buffer,"Changed %d: %.4f %.4f %.4f %.4f %.4f %.4f %.4f",trajectory.current->id,trajectory.current->position[0],trajectory.current->position[1],trajectory.current->position[2],trajectory.current->position[3],trajectory.current->position[4],trajectory.current->position[5],trajectory.current->gripper);

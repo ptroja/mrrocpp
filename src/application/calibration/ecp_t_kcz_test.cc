@@ -76,7 +76,7 @@ void kcz_test::main_task_algorithm(void ) {
 	lastrot[2][1] = -sin(Xang)*cos(Zang)+cos(Xang)*sin(Yang)*sin(Zang);
 	lastrot[2][2] = cos(Xang)*cos(Yang);
 	lib::Homog_matrix matrix;
-	double temp1[6];
+	lib::Xyz_Angle_Axis_vector temp1;
 	matrix.set_rotation_matrix(lastrot);
 	matrix.get_xyz_angle_axis(temp1);
 	float lasta = temp1[3];

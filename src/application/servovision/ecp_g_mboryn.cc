@@ -92,8 +92,8 @@ bool ecp_g_mboryn::next_step()
 	}
 
 	// calculate translation
-	lib::K_vector axis_with_angle, translation;
-	currentFrame.get_xyz_angle_axis(axis_with_angle, translation);
+	lib::Xyz_Angle_Axis_vector l_vector;
+	currentFrame.get_xyz_angle_axis(l_vector);
 
 	if (vsp_fradia->from_vsp.vsp_report == lib::VSP_REPLY_OK) {
 		//printf("vsp_report == lib::VSP_REPLY_OK\n");		fflush(stdout);
@@ -115,9 +115,10 @@ bool ecp_g_mboryn::next_step()
 					cout << "u[" << i << "] < -maxT: u[" << i << "] = " << u[i] << endl;
 					u[i] = -maxT;
 				}
+				l_vector[i]+=u[i];
 			}
 
-			translation += u;
+			//translation += u;
 		} else {
 			//printf("Not tracking.\n");			fflush(stdout);
 		}
@@ -126,7 +127,7 @@ bool ecp_g_mboryn::next_step()
 	}
 
 	lib::Homog_matrix nextFrame;
-	nextFrame.set_from_xyz_angle_axis(axis_with_angle, translation);
+	nextFrame.set_from_xyz_angle_axis(l_vector);
 
 	// set next frame
 	if (isArmFrameOk(nextFrame)) {
@@ -142,12 +143,13 @@ bool ecp_g_mboryn::next_step()
 
 bool ecp_g_mboryn::isArmFrameOk(const lib::Homog_matrix& arm_frame)
 {
-	lib::K_vector axis_with_angle, translation, minT(0.590, -0.400, 0.200), maxT(1.000, 0.400, 0.300);
-	arm_frame.get_xyz_angle_axis(axis_with_angle, translation);
+	lib::K_vector minT(0.590, -0.400, 0.200), maxT(1.000, 0.400, 0.300);
+	lib::Xyz_Angle_Axis_vector l_vector;
+	arm_frame.get_xyz_angle_axis(l_vector);
 	//cout << "\naxis_with_angle: " << axis_with_angle << "translation: " << translation << endl;
 
 	for (int i = 0; i < 3; ++i) {
-		if (translation[i] < minT[i] || translation[i] > maxT[i]) {
+		if (l_vector[i] < minT[i] || l_vector[i] > maxT[i]) {
 			return false;
 		}
 	}

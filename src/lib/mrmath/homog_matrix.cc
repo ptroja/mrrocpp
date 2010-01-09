@@ -592,20 +592,6 @@ void Homog_matrix::set_from_xyz_angle_axis(const Xyz_Angle_Axis_vector l_vector)
 	matrix_m[2][3] = l_vector[2];
 }
 
-void Homog_matrix::get_xyz_angle_axis(K_vector& axis_with_angle, K_vector& translation) const
-{
-
-	double t[6];
-
-	get_xyz_angle_axis (t);
-
-	for(int i=0;i<3;i++)
-	{
-		axis_with_angle[i] = t[3+ i];
-		translation[i] = t[i];
-	}//: for
-
-}
 
 void Homog_matrix::get_xyz_angle_axis(Xyz_Angle_Axis_vector& l_vector) const
 {
@@ -698,98 +684,6 @@ void Homog_matrix::get_xyz_angle_axis(Xyz_Angle_Axis_vector& l_vector) const
 	}//: for
 }
 
-
-// Przeksztalcenie do formy XYZ_ANGLE_AXIS i zwrocenie w tablicy.
-void Homog_matrix::get_xyz_angle_axis(double t[6]) const
-{
-	// przeksztalcenie macierzy jednorodnej do rozkazu w formie XYZ_ANGLE_AXIS
-	const double EPS = zero_eps;
-	const double delta = delta_m;
-
-	double Kd[3];	// Kd - K z "daszkiem" - wersor kierunkowy
-
-	// obliczenia zgodne ze wzorami 2.81 i 2.82 ze strony 68
-	// ksiazki: "Wprowadzenie do robotyki" John J. Craig
-
-	double value = (matrix_m[0][0]+matrix_m[1][1]+	matrix_m[2][2]-1)/2;
-
-	// wyeliminowanie niedokladnosci obliczeniowej lub bledu programisty
-	if(value < -1)
-		value = -1;
-	else if (value > 1)
-		value = 1;
-
-	// kat obrotu
-	double alfa = acos(value);
-
-	if((alfa  < M_PI + delta) && (alfa > M_PI - delta))							// kat obrotu 180 stopni = Pi radianow
-	{
-
-		Kd[0] = sqrt((matrix_m[0][0]+1)/(double)2);
-		Kd[1] = sqrt((matrix_m[1][1]+1)/(double)2);
-		Kd[2] = sqrt((matrix_m[2][2]+1)/(double)2);
-
-		// ustalenie znakow paramertow wersora
-
-		if(((Kd[0] < -EPS)||(Kd[0] > EPS)) && ((Kd[1] < -EPS)||(Kd[1] > EPS))
-			&& ((Kd[2] < -EPS)||(Kd[2] > EPS)))
-		{
-			if((matrix_m[0][1] < 0) && (matrix_m[0][2] < 0))
-			{
-				Kd[1] = Kd[1]*(-1);
-				Kd[2] = Kd[2]*(-1);
-			}
-			else if((matrix_m[0][1] < 0) && (matrix_m[0][2] > 0))
-				Kd[1] = Kd[1]*(-1);
-			else if((matrix_m[0][1] > 0) && (matrix_m[0][2] < 0))
-				Kd[2] = Kd[2]*(-1);
-		}
-		else if (((Kd[0] > -EPS) && (Kd[0] < EPS)) && ((Kd[1] < -EPS)||(Kd[1] > EPS))
-			&& ((Kd[2] < -EPS)||(Kd[2] > EPS)))		// kx==0, ky!=0, kz!=0
-		{
-			if(matrix_m[1][2] < 0)
-				Kd[2] = Kd[2]*(-1);
-		}
-		else if (((Kd[0] < -EPS) || (Kd[0] > EPS)) && ((Kd[1] > -EPS)&&(Kd[1] < EPS))
-			&& ((Kd[2] < -EPS)||(Kd[2] > EPS)))		// kx!=0, ky==0, kz!=0
-		{
-			if(matrix_m[0][2] < 0)
-				Kd[2] = Kd[2]*(-1);
-		}
-		else if(((Kd[0] < -EPS)||(Kd[0] > EPS)) && ((Kd[1] < -EPS)||(Kd[1] > EPS))
-			&& ((Kd[2] > -EPS) && (Kd[2] < EPS)))	// kx!=0 ky!=0 kz==0
-		{
-			if(matrix_m[0][1] < 0)
-				Kd[1] = Kd[1]*(-1);
-		}
-
-	}// end kat obrotu 180 stopni
-	else if ((alfa < ALFA_SENSITIVITY) && (alfa > -ALFA_SENSITIVITY))									// kat obrotu 0 stopni
-	{
-
-		for(int i=0; i<3; i++)
-			Kd[i] = 0;
-
-		alfa = 0;
-
-	}
-	else																				// standardowe obliczenia
-	{
-		// sinus kata obrotu alfa
-		const double s_alfa = sin(alfa);
-
-		Kd[0] = (1/(2*s_alfa))*(matrix_m[2][1] - matrix_m[1][2]);
-		Kd[1] = (1/(2*s_alfa))*(matrix_m[0][2] - matrix_m[2][0]);
-		Kd[2] = (1/(2*s_alfa))*(matrix_m[1][0] - matrix_m[0][1]);
-	}
-
-	// Przepisanie wyniku do tablicy
-	for(int i=0;i<3;i++)
-	{
-		t[i] = matrix_m[i][3];
-		t[3+i] = Kd[i]*alfa;
-	}//: for
-}//: get_xyz_angle_axis
 
 // Obliczenie kwaternionu na podstawie macierzy rotacji
 void Homog_matrix::get_xyz_quaternion(double t[7]) const

@@ -94,8 +94,8 @@ public:
 
 
 	// Przeksztalcenie do formy XYZ_ANGLE_AXIS i zwrocenie w tablicy.
-	void get_xyz_angle_axis(double t[6]) const;
-	void get_xyz_angle_axis(K_vector& axis_with_angle, K_vector& translation) const;
+	void get_xyz_angle_axis(Xyz_Angle_Axis_vector& l_vector) const;
+
 
 	// Wypelnienie wspolczynnikow macierzy na podstawie danych w formie XYZ_ANGLE_AXIS.
 	void set_from_xyz_angle_axis(double kx, double ky, double kz, double alfa, double x, double y, double z);
@@ -103,7 +103,7 @@ public:
 	void set_from_xyz_angle_axis(const K_vector axis_with_angle, const K_vector translation);  // kat wliczony w os
 
 	void set_from_xyz_angle_axis(const Xyz_Angle_Axis_vector l_vector);  // kat wliczony w os
-	void get_xyz_angle_axis(Xyz_Angle_Axis_vector& l_vector) const;
+
 
 	// Operacje na kwaternionach
 	void set_from_xyz_quaternion(double eta, double eps1, double eps2, double eps3, double x, double y, double z);
