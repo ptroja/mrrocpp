@@ -156,22 +156,6 @@ Homog_matrix::Homog_matrix(double r[3][3], double t[3])
 }
 
 
-// Konstruktor, ktory wypelnienia wspolczynniki macierzy na podstawie danych w formie XYZ_ANGLE_AXIS.
-Homog_matrix::Homog_matrix(double kx, double ky, double kz, double alfa, double x, double y, double z)
-{
-	// Wywolanie metody, ktora odpowiednio wypelni macierz matrix.
-	set_from_xyz_angle_axis(kx, ky, kz, alfa, x, y, z);
-}//: Homog_matrix::Homog_matrix(double kx, double ky, double kz, double alfa, double x, double y, double z)
-
-
-
-
-
-
-
-
-
-
 
 // Zwrocenie obecnej tablicy, zawierajacej dane macierzy jednorodnej.
 void Homog_matrix::get_frame_tab(frame_tab frame) const
@@ -430,48 +414,6 @@ void Homog_matrix::set_from_xyz_rpy(const Xyz_Rpy_vector l_vector)
 	matrix_m[1][3] = l_vector[1];
 	matrix_m[2][3] = l_vector[2];
 }
-
-
-
-// Wypelnienie wspolczynnikow macierzy na podstawie danych w formie XYZ_ANGLE_AXIS.
-void Homog_matrix::set_from_xyz_angle_axis(double kx, double ky, double kz, double alfa, double x, double y, double z)
-{
-	// funkcja ta dokonuje zmiany macierzy jednorodnej na macierz okresona poleceniem
-	// w formie XYZ_ANGLE_AXIS
-	// Utworznie macierzy jednorodnej na podstawie rozkazu w formie XYZ_ANGLE_AXIS
-
-	// c_alfa - kosinus kata alfa
-	// s_alfa - sinus kata alfa
-	// v_alfa = 1 - c_alfa;
-
-	// wartosci poszczegolnych funkcji trygonometrycznych dla kata obrotu
-	const double c_alfa = cos(alfa);
-	const double s_alfa = sin(alfa);
-	const double v_alfa = 1 - c_alfa;
-
-	// macierz rotacji na podstawie wzoru 2.80 ze strony 68
-	// ksiazki: "Wprowadzenie do robotyki" John J. Craig
-
-	matrix_m[0][0] = kx*kx*v_alfa + c_alfa;
-	matrix_m[1][0] = kx*ky*v_alfa + kz*s_alfa;
-	matrix_m[2][0] = kx*kz*v_alfa - ky*s_alfa;
-
-	matrix_m[0][1] = kx*ky*v_alfa - kz*s_alfa;
-	matrix_m[1][1] = ky*ky*v_alfa + c_alfa;
-	matrix_m[2][1] = ky*kz*v_alfa + kx*s_alfa;
-
-	matrix_m[0][2] = kx*kz*v_alfa + ky*s_alfa;
-	matrix_m[1][2] = ky*kz*v_alfa - kx*s_alfa;
-	matrix_m[2][2] = kz*kz*v_alfa + c_alfa;
-
-	// uzupelnienie macierzy
-	matrix_m[0][3] = x;
-	matrix_m[1][3] = y;
-	matrix_m[2][3] = z;
-
-}//: set_from_xyz_angle_axis
-
-
 
 
 

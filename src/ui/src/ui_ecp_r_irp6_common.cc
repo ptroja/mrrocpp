@@ -508,7 +508,7 @@ void ui_common_robot::move_xyz_angle_axis(double final_position[7])
 {
 	lib::Xyz_Euler_Zyz_vector aa_eul; // tablica przechowujaca polecenie przetransformowane
 	// do formy XYZ_EULER_ZYZ
-	double x, y, z, alfa, kx, ky, kz;
+/*	double x, y, z, alfa, kx, ky, kz;
 
 	x = final_position[0];
 	y = final_position[1];
@@ -520,8 +520,9 @@ void ui_common_robot::move_xyz_angle_axis(double final_position[7])
 	kx = final_position[3] / alfa;
 	ky = final_position[4] / alfa;
 	kz = final_position[5] / alfa;
-
-	lib::Homog_matrix A(kx, ky, kz, alfa, x, y, z);
+*/
+	lib::Homog_matrix A;
+	A.set_from_xyz_angle_axis(lib::Xyz_Angle_Axis_vector(final_position));
 	A.get_xyz_euler_zyz(aa_eul); // zadane polecenie w formie XYZ_EULER_ZYZ
 
 	// Odczyt aktualnego polozenia we wsp. zewn. xyz i katy Euler'a Z-Y-Z
