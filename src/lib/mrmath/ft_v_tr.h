@@ -83,7 +83,7 @@ public:
 	V_tr operator!() const;
 
 	V_tr & operator = (const V_tr &);									// operator przypisania
-	V_vector operator*(const V_vector &) const;					// mnozenie wektora
+	Xyz_Angle_Axis_vector operator*(const Xyz_Angle_Axis_vector &) const;					// mnozenie wektora
 
 
 };// end class Ft_v_tr

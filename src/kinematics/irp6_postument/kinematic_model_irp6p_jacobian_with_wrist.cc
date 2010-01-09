@@ -53,9 +53,9 @@ void model_jacobian_with_wrist::inverse_kinematics_transform(lib::JointArray & l
   double Max;			//pomocnbicza zmienna - max element wektora
 
   lib::Homog_matrix local_current_end_effector_frame;	//Ramka odpowiadajaca aktualnej pozycji
-  lib::V_vector desired_distance_new;				//odleglosc do pokonania
-  lib::V_vector delta_q;									//przyrost zmieenych przegubowych na jedna iteracje
-  lib::V_vector current_joints;							//wartosci aktualnych zmiennych przegubowych reprezentowane jako wektor
+  lib::Xyz_Angle_Axis_vector desired_distance_new;				//odleglosc do pokonania
+  lib::Xyz_Angle_Axis_vector delta_q;									//przyrost zmieenych przegubowych na jedna iteracje
+  lib::Xyz_Angle_Axis_vector current_joints;							//wartosci aktualnych zmiennych przegubowych reprezentowane jako wektor
   lib::Jacobian_matrix  jacobian_new;					//jakobian
 
   current_joints.set_values(&local_current_joints[0]);

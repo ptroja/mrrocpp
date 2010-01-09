@@ -328,9 +328,9 @@ return zwracana;
 }// end Homog_matrix::operator* (const Homog_matrix & m) const
 
 
-V_vector V_tr::operator*(const V_vector & w) const
+Xyz_Angle_Axis_vector V_tr::operator*(const Xyz_Angle_Axis_vector & w) const
 {
-	V_vector zwracany;
+	Xyz_Angle_Axis_vector zwracany;
 	int i;
 	int j;
 	// i - i-ta kolumna

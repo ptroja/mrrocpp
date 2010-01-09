@@ -107,32 +107,6 @@ public:
 };// end class Ft_vector
 
 
-// klasa reprezentujaca wektor sila-moment i wektora predkosci
-class V_vector : public Ft_v_vector
-{
-
-public:
-
-	V_vector();													// konstruktor domniemany [0, 0, 0, 0, 0, 0]
-	V_vector(const double t[6]);										// utworzenie wektora na podstawie podanej tablicy
-	V_vector(double fx, double fy, double fz, double tx, double ty, double tz);
-
-	V_vector(const V_vector &);								// konstruktor kopiujacy
-
-	// Odwracanie macierzy.
-	V_vector operator!() const;
-	V_vector operator-() const;
-	V_vector & operator=(const V_vector &);			// operator przypisania
-	V_vector operator+(const V_vector &) const;
-	V_vector operator-(const V_vector &) const;
-	V_vector operator*(double) const;					// skalowanie wektora
-
-	//Sibi
-	 //Wektor predkosci jako odleglosc dwuch pozycji zadanych w postaci ramek
-	void position_distance(Homog_matrix& local_current_end_effector_frame, Homog_matrix& local_desired_end_effector_frame);
-
-};// end class Ft_vector
-
 
 // klasa reprezentujaca wektor sila-moment i wektora predkosci
 class Xyz_Angle_Axis_vector : public Ft_v_vector
@@ -153,6 +127,11 @@ public:
 	Xyz_Angle_Axis_vector operator+(const Xyz_Angle_Axis_vector &) const;
 	Xyz_Angle_Axis_vector operator-(const Xyz_Angle_Axis_vector &) const;
 	Xyz_Angle_Axis_vector operator*(double) const;					// skalowanie wektora
+
+	//Sibi
+	 //Wektor predkosci jako odleglosc dwuch pozycji zadanych w postaci ramek
+	void position_distance(Homog_matrix& local_current_end_effector_frame, Homog_matrix& local_desired_end_effector_frame);
+
 
 };// end class Xyz_Angle_Axis_vector
 

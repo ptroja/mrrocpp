@@ -257,14 +257,14 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buff
 	static double ending_gripper_coordinate;
 	static lib::Homog_matrix local_force_end_effector_frame;
 	const unsigned long PREVIOUS_MOVE_VECTOR_NULL_STEP_VALUE = 10;
-	lib::V_vector base_pos_xyz_rot_xyz_vector; // wartosci ruchu pozycyjnego
+	lib::Xyz_Angle_Axis_vector base_pos_xyz_rot_xyz_vector; // wartosci ruchu pozycyjnego
 
 
 	static unsigned long last_force_step_counter = step_counter;
 
-	lib::V_vector move_rot_vector;
-	lib::V_vector pos_xyz_rot_xyz_vector;
-	static lib::V_vector previous_move_rot_vector;
+	lib::Xyz_Angle_Axis_vector move_rot_vector;
+	lib::Xyz_Angle_Axis_vector pos_xyz_rot_xyz_vector;
+	static lib::Xyz_Angle_Axis_vector previous_move_rot_vector;
 
 	// WYLICZENIE POZYCJI POCZATKOWEJ
 	lib::JointArray begining_joints(MAX_SERVOS_NR), tmp_joints(MAX_SERVOS_NR);

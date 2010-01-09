@@ -34,17 +34,17 @@ private:
 public:
 	Jacobian_matrix ();													// kostruktor domniemany
 
-     void irp6_6dof_equations(const V_vector & w);			//Wzory na jakobian dla Irp-6 o 6 stopniach swobody
-     void irp6_6dof_inverse_equations(const V_vector & w);				//Wzory na odwrotnosc jakobianu dla Irp-6 o 6 stopniach swobody
-	 double irp6_6dof_determinant(const V_vector & w);					//Wzory na wyznacznik jaokbianu dla Irp-6 o 6 stopniach swobody
+     void irp6_6dof_equations(const Xyz_Angle_Axis_vector & w);			//Wzory na jakobian dla Irp-6 o 6 stopniach swobody
+     void irp6_6dof_inverse_equations(const Xyz_Angle_Axis_vector & w);				//Wzory na odwrotnosc jakobianu dla Irp-6 o 6 stopniach swobody
+	 double irp6_6dof_determinant(const Xyz_Angle_Axis_vector & w);					//Wzory na wyznacznik jaokbianu dla Irp-6 o 6 stopniach swobody
 
      void jacobian_transpose();										//Wyznaczenie transpozycji jakobianu
      void wypisz();														//Wypisanie zawartosci macierzy na konsole
      void to_table(double tablica[6][6]) const;						// przepisanie elementw jakobianu do tablicy[6][6] podanej jako argument
 
-	V_vector jacobian_inverse_gauss(const V_vector & dist);				//Rozwiazanie ukladu rownan AX=Y (A, Y - zadane)
+     Xyz_Angle_Axis_vector jacobian_inverse_gauss(const Xyz_Angle_Axis_vector & dist);				//Rozwiazanie ukladu rownan AX=Y (A, Y - zadane)
 																								//za pomoca metody eliminacji Gaussa
-	V_vector operator* (const V_vector & w) const;		//Przeciazenie operacji mnozenia dla jakobianu i wektora
+     Xyz_Angle_Axis_vector operator* (const Xyz_Angle_Axis_vector & w) const;		//Przeciazenie operacji mnozenia dla jakobianu i wektora
 
 };// end class Jacobian_matrix
 
