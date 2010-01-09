@@ -13,6 +13,12 @@ namespace ecp {
 namespace irp6ot {
 namespace generator {
 
+/** @addtogroup wii_teach
+ *
+ *  @{
+ */
+
+
 #define NO_OF_DEGREES 7
 
 #if (MAX_NO_OF_DEGREES < NO_OF_DEGREES)
@@ -42,6 +48,8 @@ class wii_joint : public irp6ot::generator::wii
 
         virtual void set_position(void);
 };
+
+/** @} */ // end of wii_teach
 
 }
 } // namespace irp6ot

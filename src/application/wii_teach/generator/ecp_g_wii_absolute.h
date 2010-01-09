@@ -13,6 +13,12 @@ namespace ecp {
 namespace irp6ot {
 namespace generator {
 
+/** @addtogroup wii_teach
+ *
+ *  @{
+ */
+
+
 #define NO_OF_DEGREES 7
 
 #if (MAX_NO_OF_DEGREES < NO_OF_DEGREES)
@@ -44,6 +50,8 @@ class wii_absolute : public irp6ot::generator::wii
     protected:
         lib::Homog_matrix rotation_matrix;
 };
+
+/** @} */ // end of wii_teach
 
 }
 } // namespace irp6ot

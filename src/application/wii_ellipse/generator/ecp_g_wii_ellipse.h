@@ -11,6 +11,11 @@ namespace ecp {
 namespace irp6ot {
 namespace generator {
 
+/** @addtogroup wii_ellipse
+ *
+ *  @{
+ */
+
 class wii_ellipse : public common::generator::generator
 {
 	private:
@@ -54,6 +59,8 @@ public:
 
     double* getFirstPosition();
 };
+
+/** @} */ // end of wii_ellipse
 
 }
 } // namespace irp6ot

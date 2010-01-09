@@ -11,6 +11,15 @@ namespace ecp {
 namespace irp6ot {
 namespace task {
 
+/** @defgroup wii_velocity Wii velocity
+ *  @ingroup application
+ *
+ *  Moves irp6ot by increasing/decreasing joint values
+ *  using input from wii-mote controller and saves
+ *
+ *  @{
+ */
+
 /**
  * Odtwarza orientacje kontrolera
  * @author jkurylo
@@ -34,6 +43,8 @@ public:
 	 */
 	void main_task_algorithm(void);
 };
+
+/** @} */ // end of wii_velocity
 
 }
 } // namespace irp6ot

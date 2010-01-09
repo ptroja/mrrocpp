@@ -9,6 +9,12 @@ namespace mrrocpp {
 namespace ecp_mp {
 namespace sensor {
 
+/** @addtogroup wii_teach
+ *
+ *  @{
+ */
+
+
 #define BUFFER_SIZE 8*256
 
 /**
@@ -86,6 +92,8 @@ public:
 	 */
 	~wiimote();
 };
+
+/** @} */ // end of wii_teach
 
 } // namespace sensor
 } // namespace ecp_mp

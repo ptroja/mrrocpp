@@ -14,6 +14,11 @@ namespace ecp {
 namespace irp6ot {
 namespace generator {
 
+/** @addtogroup wii_teach
+ *
+ *  @{
+ */
+
 #define MAX_NO_OF_DEGREES 10
 
 class wii : public common::generator::generator
@@ -73,6 +78,8 @@ class wii : public common::generator::generator
 
         int get_axis(void);
 };
+
+/** @} */ // end of wii_teach
 
 }
 } // namespace irp6ot

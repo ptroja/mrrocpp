@@ -10,6 +10,15 @@ namespace ecp {
 namespace irp6ot {
 namespace task {
 
+/** @defgroup wii_ellipse Wii ellipsis
+ *  @ingroup application
+ *
+ *  Moves irp6ot on elliptical trajectory
+ *  using input from wii-mote controller and saves
+ *
+ *  @{
+ */
+
 //limity na wartosc polosi w metrach
 #define MAX_MAJOR 0.2
 #define MAX_MINOR 0.1
@@ -49,6 +58,8 @@ public:
 	 */
 	void main_task_algorithm(void);
 };
+
+/** @} */ // end of wii_ellipse
 
 }
 } // namespace irp6ot

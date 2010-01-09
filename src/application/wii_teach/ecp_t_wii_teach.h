@@ -12,6 +12,16 @@ namespace ecp {
 namespace irp6ot {
 namespace task {
 
+
+/** @defgroup wii_teach Wii teach
+ *  @ingroup application
+ *
+ *  Moves irp6ot using input from wii-mote controller and saves
+ *  the generated trajectory
+ *
+ *  @{
+ */
+
 /**
  * @author jkurylo
  */
@@ -84,6 +94,8 @@ class wii_teach: public common::task::task
 
         void save_trajectory(void);
 };
+
+/** @} */ // end of wii_teach
 
 }
 } // namespace irp6ot
