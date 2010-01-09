@@ -39,8 +39,6 @@ public:
 	friend class Ft_tr;
 	friend class V_tr;
 
-	enum POSE_SPECIFICATION { MTR_XYZ_ANGLE_AXIS};
-
 	// Konstruktor domniemany - tworzy macierz jednostkowa.
 	Homog_matrix();
 	// Stworzenie macierzy na podstawie zawartosci tablicy.
@@ -66,13 +64,8 @@ public:
 	// Utworzenie macierzy jednorodnej na podstawie rozkazu w formie XYZ_ANGLE_AXIS.
 	Homog_matrix(double kx, double ky, double kz, double alfa, double x, double y, double z);
 	// Utworzenie macierzy jednorodnej na podstawie rozkazu w formie XYZ_EULER_ZYZ.
-	Homog_matrix (POSE_SPECIFICATION mtr_ps, double x, double y, double z, double alfa, double beta, double gamma);
 
-	// Konstruktor, ktory wypelnienia wspolczynniki macierzy na podstawie danych w formie
-	Homog_matrix(POSE_SPECIFICATION mtr_ps, const K_vector axis_with_angle, const K_vector translation);
 
-	// Konstruktor, ktory wypelnienia wspolczynniki macierzy na podstawie danych w formie
-	Homog_matrix(POSE_SPECIFICATION mtr_ps, const double t[6]);
 
 	Homog_matrix return_with_with_removed_translation() const;
 	Homog_matrix return_with_with_removed_rotation() const;

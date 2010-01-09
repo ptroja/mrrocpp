@@ -164,48 +164,13 @@ Homog_matrix::Homog_matrix(double kx, double ky, double kz, double alfa, double 
 }//: Homog_matrix::Homog_matrix(double kx, double ky, double kz, double alfa, double x, double y, double z)
 
 
-// Konstruktor, ktory wypelnienia wspolczynniki macierzy na podstawie danych w formie XYZ_ANGLE_AXIS.
-Homog_matrix::Homog_matrix (POSE_SPECIFICATION mtr_ps, const K_vector axis_with_angle, const K_vector translation)
-{
-	switch (mtr_ps)
-	{
-		case MTR_XYZ_ANGLE_AXIS:
-			set_from_xyz_angle_axis (axis_with_angle, translation);
-		break;
-		default:
-		break;
-	}
-
-} //: Homog_matrix();
 
 
-Homog_matrix::Homog_matrix(POSE_SPECIFICATION mtr_ps, const double t[6])
-{
-	switch (mtr_ps)
-	{
-		case MTR_XYZ_ANGLE_AXIS:
-			set_from_xyz_angle_axis (t);
-			break;
-		default:
-			break;
-	}
-}
 
 
-// Konstruktor, ktory wypelnienia wspolczynniki macierzy na podstawie danych w formie.
-Homog_matrix::Homog_matrix(POSE_SPECIFICATION mtr_ps, double x, double y, double z, double alfa, double beta, double gamma)
-{
-	// Wywolanie metody, ktora odpowiednio wypelni macierz matrix.
-	switch (mtr_ps)
-	{
-			case MTR_XYZ_ANGLE_AXIS:
-			set_from_xyz_angle_axis (alfa, beta, gamma, x, y, z);
-			break;
-		default:
-			break;
-	}
 
-} //: Homog_matrix();
+
+
 
 
 // Zwrocenie obecnej tablicy, zawierajacej dane macierzy jednorodnej.

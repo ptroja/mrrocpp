@@ -128,7 +128,7 @@ void ATI3084_force::configure_sensor(void)
 		if (!gravity_transformation) // nie powolano jeszcze obiektu
 		{
 
-			double tab[6];
+			lib::Xyz_Angle_Axis_vector tab;
 			lib::Homog_matrix sensor_frame;
 			if (master.config.exists("sensor_in_wrist"))
 			{
@@ -137,7 +137,7 @@ void ATI3084_force::configure_sensor(void)
 				for (int i=0; i<6; i++)
 					tab[i] = strtod( tmp, &tmp );
 				free(toDel);
-				sensor_frame = lib::Homog_matrix(lib::Homog_matrix::MTR_XYZ_ANGLE_AXIS, tab[0], tab[1], tab[2], tab[3], tab[4], tab[5]);
+				sensor_frame = lib::Homog_matrix(tab);
 				// std::cout<<sensor_frame<<std::endl;
 			}
 			else
