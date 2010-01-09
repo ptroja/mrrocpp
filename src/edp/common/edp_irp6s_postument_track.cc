@@ -281,7 +281,7 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buff
 	lib::Homog_matrix goal_frame;
 
 	lib::Homog_matrix goal_frame_increment_in_end_effector;
-	lib::Ft_v_vector goal_xyz_angle_axis_increment_in_end_effector;
+	lib::Xyz_Angle_Axis_vector goal_xyz_angle_axis_increment_in_end_effector;
 
 	switch (motion_type)
 	{
@@ -449,7 +449,7 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buff
 
 		//		if (debugi%10==0) printf("aaa: %f\n", force_xyz_torque_xyz[0] + force_torque[0]);
 
-		lib::Homog_matrix rot_frame(lib::Homog_matrix::MTR_XYZ_ANGLE_AXIS, move_rot_vector);
+		lib::Homog_matrix rot_frame(move_rot_vector);
 
 		// wyliczenie nowej pozycji zadanej
 		next_frame = next_frame * rot_frame;

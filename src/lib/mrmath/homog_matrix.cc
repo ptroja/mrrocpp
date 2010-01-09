@@ -148,7 +148,7 @@ Homog_matrix::Homog_matrix(double r[3][3], double t[3])
 
 		// Utworzenie macierzy jednorodnej na podstawie jej 12 elementow (notacja z Craiga)
 		Homog_matrix::Homog_matrix (double r11, double r12, double r13, double t1, double r21, double r22, double r23,double t2, double r31, double r32,
-	 double r33, double t3)
+ double r33, double t3)
 {
 	matrix_m[0][0] = r11; 	matrix_m[0][1] = r12; 	matrix_m[0][2] = r13; 	matrix_m[0][3] = t1;
 	matrix_m[1][0] = r21; 	matrix_m[1][1] = r22; 	matrix_m[1][2] = r23;	matrix_m[1][3] = t2;
@@ -178,18 +178,6 @@ Homog_matrix::Homog_matrix (POSE_SPECIFICATION mtr_ps, const K_vector axis_with_
 
 } //: Homog_matrix();
 
-
-Homog_matrix::Homog_matrix(POSE_SPECIFICATION mtr_ps, const Ft_v_vector translation_and_axis_with_angle)
-{
-	switch (mtr_ps)
-	{
-		case MTR_XYZ_ANGLE_AXIS:
-			set_from_xyz_angle_axis (translation_and_axis_with_angle);
-		break;
-		default:
-		break;
-	}
-}
 
 Homog_matrix::Homog_matrix(POSE_SPECIFICATION mtr_ps, const double t[6])
 {
@@ -559,19 +547,6 @@ void Homog_matrix::set_from_xyz_angle_axis(const K_vector axis_with_angle, const
 
 
 // Wypelnienie wspolczynnikow macierzy na podstawie danych w formie XYZ_ANGLE_AXIS.
-void Homog_matrix::set_from_xyz_angle_axis(const Ft_v_vector translation_and_axis_with_angle)  // kat wliczony w os
-{
-	// funkcja ta dokonuje zmiany macierzy jednorodnej na macierz okresona poleceniem
-	// w formie XYZ_ANGLE_AXIS
-	// Utworznie macierzy jednorodnej na podstawie rozkazu w formie XYZ_ANGLE_AXIS
-
-	set_from_xyz_angle_axis (translation_and_axis_with_angle[3], translation_and_axis_with_angle[4], translation_and_axis_with_angle[5],
-		 translation_and_axis_with_angle[0], translation_and_axis_with_angle[1], translation_and_axis_with_angle[2]);
-
-}//: set_from_xyz_angle_axis
-
-
-// Wypelnienie wspolczynnikow macierzy na podstawie danych w formie XYZ_ANGLE_AXIS.
 void Homog_matrix::set_from_xyz_angle_axis(const double t[6])  // kat wliczony w os
 {
 	// funkcja ta dokonuje zmiany macierzy jednorodnej na macierz okresona poleceniem
@@ -672,20 +647,6 @@ void Homog_matrix::get_xyz_angle_axis(K_vector& axis_with_angle, K_vector& trans
 	{
 		axis_with_angle[i] = t[3+ i];
 		translation[i] = t[i];
-	}//: for
-
-}
-
-void Homog_matrix::get_xyz_angle_axis(Ft_v_vector& translation_and_axis_with_angle) const
-{
-
-	double t[6];
-
-	get_xyz_angle_axis (t);
-
-	for(int i=0;i<6;i++)
-	{
-		translation_and_axis_with_angle[i] = t[i];
 	}//: for
 
 }
