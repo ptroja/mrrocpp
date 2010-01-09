@@ -101,7 +101,6 @@ public:
 	void set_from_xyz_angle_axis(double kx, double ky, double kz, double alfa, double x, double y, double z);
 	void set_from_xyz_angle_axis(double kx, double ky, double kz, double x, double y, double z); // kat wliczony w os
 	void set_from_xyz_angle_axis(const K_vector axis_with_angle, const K_vector translation);  // kat wliczony w os
-	void set_from_xyz_angle_axis(const double t[6]);  // kat wliczony w os
 
 	void set_from_xyz_angle_axis(const Xyz_Angle_Axis_vector l_vector);  // kat wliczony w os
 	void get_xyz_angle_axis(Xyz_Angle_Axis_vector& l_vector) const;

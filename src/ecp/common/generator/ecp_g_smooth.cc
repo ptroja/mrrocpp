@@ -869,7 +869,7 @@ void smooth::send_coordinates() {
 
 		case lib::ECP_XYZ_EULER_ZYZ:
 
-			homog_matrix.set_from_xyz_euler_zyz(coordinate_list_iterator->coordinate);
+			homog_matrix.set_from_xyz_euler_zyz(lib::Xyz_Euler_Zyz_vector(coordinate_list_iterator->coordinate));
 			homog_matrix.get_frame_tab(the_robot->ecp_command.instruction.arm.pf_def.arm_frame);
 
 			gripp = 6;
@@ -878,7 +878,7 @@ void smooth::send_coordinates() {
 
 		case lib::ECP_XYZ_ANGLE_AXIS:
 
-			homog_matrix.set_from_xyz_angle_axis(coordinate_list_iterator->coordinate);
+			homog_matrix.set_from_xyz_angle_axis(lib::Xyz_Angle_Axis_vector(coordinate_list_iterator->coordinate));
 			homog_matrix.get_frame_tab(the_robot->ecp_command.instruction.arm.pf_def.arm_frame);
 
 			gripp = 6;

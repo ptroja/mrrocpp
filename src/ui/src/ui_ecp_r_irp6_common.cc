@@ -238,7 +238,7 @@ void ui_common_robot::set_tool_xyz_angle_axis(double tool_vector[6])
 	ecp->ecp_command.instruction.get_rmodel_type = lib::TOOL_FRAME;
 
 	lib::Homog_matrix tmp;
-	tmp.set_from_xyz_angle_axis(tool_vector);
+	tmp.set_from_xyz_angle_axis(lib::Xyz_Angle_Axis_vector(tool_vector));
 	tmp.get_frame_tab(ecp->ecp_command.instruction.rmodel.tool_frame_def.tool_frame);
 
 	execute_motion();

@@ -511,16 +511,7 @@ void Homog_matrix::set_from_xyz_angle_axis(const K_vector axis_with_angle, const
 }//: set_from_xyz_angle_axis
 
 
-// Wypelnienie wspolczynnikow macierzy na podstawie danych w formie XYZ_ANGLE_AXIS.
-void Homog_matrix::set_from_xyz_angle_axis(const double t[6])  // kat wliczony w os
-{
-	// funkcja ta dokonuje zmiany macierzy jednorodnej na macierz okresona poleceniem
-	// w formie XYZ_ANGLE_AXIS
-	// Utworznie macierzy jednorodnej na podstawie rozkazu w formie XYZ_ANGLE_AXIS
 
-	set_from_xyz_angle_axis (t[3], t[4], t[5], t[0], t[1], t[2]);
-
-}//: set_from_xyz_angle_axis
 
 //Wypelnienie macierzy na podstawie parametrow  wejsciowych w postaci kwaternionu
 void Homog_matrix::set_from_xyz_quaternion(double eta, double eps1, double eps2, double eps3, double x, double y, double z)

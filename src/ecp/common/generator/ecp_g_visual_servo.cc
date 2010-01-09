@@ -103,8 +103,7 @@ void ecp_visual_servo::entertain_constraints(){
 			}
 		}
 	}
-
-	O_Tx_Ep.set_from_xyz_angle_axis(O_r_Ep[0]);
+	O_Tx_Ep.set_from_xyz_angle_axis(lib::Xyz_Angle_Axis_vector(O_r_Ep[0]));
 
 	// ------------przepisanie wartosci-----
 	for (int i=0; i<6; i++)
