@@ -82,7 +82,6 @@ void manip_and_conv_effector::get_arm_position_read_hardware_sb()
 
 }
 
-
 /*--------------------------------------------------------------------------*/
 void manip_and_conv_effector::get_arm_position_get_arm_type_switch(lib::c_buffer &instruction)
 { // odczytanie pozycji ramienia
@@ -112,10 +111,7 @@ void manip_and_conv_effector::get_arm_position_get_arm_type_switch(lib::c_buffer
 			throw NonFatal_error_2(INVALID_GET_END_EFFECTOR_TYPE);
 	}
 
-
 }
-
-
 
 /*--------------------------------------------------------------------------*/
 void manip_and_conv_effector::multi_thread_move_arm(lib::c_buffer &instruction)
@@ -370,6 +366,24 @@ void manip_and_conv_effector::interpret_instruction(lib::c_buffer &instruction)
 					// odczytanie aktualnie uzywanego modelu robota (narzedzie, kinematic_model_with_tool kinematyczny,
 					// jego korektor, nr algorytmu regulacji i zestawu jego parametrow)
 					get_rmodel(instruction);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 					break;
 				default: // blad
 					// ustawi numer bledu
@@ -393,7 +407,7 @@ void manip_and_conv_effector::interpret_instruction(lib::c_buffer &instruction)
 				master_order(MT_MOVE_ARM, 0);
 			// Cz GET
 			// ustalenie formatu odpowiedzi
-			switch (rep_type(instruction))
+			switch (reply.reply_type)
 			{
 				case lib::CONTROLLER_STATE:
 					// odczytanie TCP i orientacji koncowki
@@ -554,7 +568,6 @@ void manip_and_conv_effector::get_algorithms()
 lib::REPLY_TYPE manip_and_conv_effector::rep_type(const lib::c_buffer &instruction)
 {
 	// ustalenie formatu odpowiedzi
-	// TODO: kurwa, ta funkcja to jeden wielki barok!!! PT
 	reply.reply_type = lib::ACKNOWLEDGE;
 	if (instruction.is_get_inputs()) {
 		reply.reply_type = lib::INPUTS;
@@ -565,28 +578,10 @@ lib::REPLY_TYPE manip_and_conv_effector::rep_type(const lib::c_buffer &instructi
 		else
 			reply.reply_type = lib::RMODEL_INPUTS;
 	}
-	if (instruction.is_get_arm()) {
-		switch (reply.reply_type)
-		{
-			case lib::ACKNOWLEDGE:
-				reply.reply_type = lib::ARM;
-				break;
-			case lib::INPUTS:
-				reply.reply_type = lib::ARM_INPUTS;
-				break;
-			case lib::RMODEL:
-				reply.reply_type = lib::ARM_RMODEL;
-				break;
-			case lib::RMODEL_INPUTS:
-				reply.reply_type = lib::ARM_RMODEL_INPUTS;
-				break;
-			default:
-				break;
-		}
-	}
+
 	real_reply_type = reply.reply_type;
-	if (instruction.is_set_arm()) {// by Y ORIGINAL
-		// if (is_set_arm()||is_set_force()) {// by Y DEBUG
+
+	if ((instruction.is_get_arm()) || (instruction.is_set_arm())) {
 		switch (reply.reply_type)
 		{
 			case lib::ACKNOWLEDGE:
@@ -604,7 +599,12 @@ lib::REPLY_TYPE manip_and_conv_effector::rep_type(const lib::c_buffer &instructi
 			default:
 				break;
 		}
+		// is_set_arm jest obslugiwane w szczegolny sposob
+		if (instruction.is_get_arm()) {
+			real_reply_type = reply.reply_type;
+		}
 	}
+
 	// by Y
 	if (instruction.is_get_controller_state()) {
 		reply.reply_type = lib::CONTROLLER_STATE;
