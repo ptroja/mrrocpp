@@ -17,7 +17,7 @@ namespace common {
 void kinematic_model_with_local_corrector::local_corrector_transform(lib::Homog_matrix& current_end_effector_matrix)
 {
 	// std::cout<<" local_corrector_transform: before \n"<<current_end_effector_matrix<<std::endl;
-	double d[6];
+	lib::Xyz_Euler_Zyz_vector d;
 	current_end_effector_matrix.get_xyz_euler_zyz(d);
 	// Transform the pose from XYZ_Euler_ZYZ to required form.
 	double x[6];
@@ -44,14 +44,14 @@ void kinematic_model_with_local_corrector::local_corrector_transform(lib::Homog_
 	d[4] = z[4] / h;
 	d[5] = z[5] / h;
 	// Set computed corrected pose.
-	current_end_effector_matrix.set_from_xyz_euler_zyz(d[0], d[1], d[2], d[3], d[4], d[5]);
+	current_end_effector_matrix.set_from_xyz_euler_zyz(d);
 	// std::cout<<" local_corrector_transform: corrected \n"<<current_end_effector_matrix<<std::endl;
 }
 
 void kinematic_model_with_local_corrector::local_corrector_inverse_transform(lib::Homog_matrix& desired_end_effector_matrix)
 {
 	// std::cout<<" local_corrector_inverse_transform: before \n"<<desired_end_effector_matrix<<std::endl;
-	double d[6];
+	lib::Xyz_Euler_Zyz_vector d;
 	desired_end_effector_matrix.get_xyz_euler_zyz(d);
 	// Transform corrected pose from the XYZ_Euler_ZYZ to required form.
 	double z[6];
@@ -80,7 +80,7 @@ void kinematic_model_with_local_corrector::local_corrector_inverse_transform(lib
 	d[4] = x[4] / h;
 	d[5] = x[5] / h;
 	// Set computed, original pose.
-	desired_end_effector_matrix.set_from_xyz_euler_zyz(d[0], d[1], d[2], d[3], d[4], d[5]);
+	desired_end_effector_matrix.set_from_xyz_euler_zyz(d);
 	// std::cout<<" local_corrector_inverse_transform: original \n"<<desired_end_effector_matrix<<std::endl;
 }
 

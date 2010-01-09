@@ -31,7 +31,7 @@
 #include "ui/ui_ecp_r_irp6_common.h"
 
 #include <math.h>
-#include "lib/mrmath/mrmath.h"
+
 
 // ---------------------------------------------------------------
 ui_common_robot::ui_common_robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg, lib::robot_name_t _robot_name)
@@ -287,7 +287,7 @@ void ui_common_robot::read_tool_xyz_angle_axis(double tool_vector[6])
 
 // ODCZYT NARZEDZIA
 // ---------------------------------------------------------------
-void ui_common_robot::read_tool_xyz_euler_zyz(double tool_vector[6])
+void ui_common_robot::read_tool_xyz_euler_zyz(lib::Xyz_Euler_Zyz_vector tool_vector)
 {
 
 	// Zlecenie odczytu numeru modelu i korektora kinematyki
@@ -298,6 +298,7 @@ void ui_common_robot::read_tool_xyz_euler_zyz(double tool_vector[6])
 
 	execute_motion();
 	lib::Homog_matrix tmp(ecp->reply_package.rmodel.tool_frame_def.tool_frame);
+
 	tmp.get_xyz_euler_zyz(tool_vector);
 
 }
@@ -503,7 +504,7 @@ void ui_common_robot::move_xyz_euler_zyz(double final_position[7])
 
 void ui_common_robot::move_xyz_angle_axis(double final_position[7])
 {
-	double aa_eul[6]; // tablica przechowujaca polecenie przetransformowane
+	lib::Xyz_Euler_Zyz_vector aa_eul; // tablica przechowujaca polecenie przetransformowane
 	// do formy XYZ_EULER_ZYZ
 	double x, y, z, alfa, kx, ky, kz;
 
@@ -679,7 +680,9 @@ void ui_common_robot::read_xyz_euler_zyz(double current_position[])
 
 	lib::Homog_matrix tmp;
 	tmp.set_from_frame_tab(ecp->reply_package.arm.pf_def.arm_frame);
-	tmp.get_xyz_euler_zyz(current_position);
+	lib::Xyz_Euler_Zyz_vector tmp_vector;
+	tmp.get_xyz_euler_zyz(tmp_vector);
+	tmp_vector.to_table(current_position);
 
 	current_position[6] = ecp->reply_package.arm.pf_def.gripper_coordinate;
 }

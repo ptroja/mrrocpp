@@ -42,9 +42,7 @@ protected:
 	lib::Homog_matrix servo_current_frame_wo_tool; // by Y dla watku EDP_SERVO    XXXXX
 	lib::Homog_matrix global_current_frame_wo_tool;// globalne dla procesu EDP    XXXXXX
 
-	double servo_real_kartez_pos[6]; // by Y polozenie we wspolrzednych xyz_euler_zyz obliczane co krok servo   XXXXX
-	double servo_real_kartez_vel[6]; // by Y predkosc we wspolrzednych xyz_euler_zyz obliczane co krok servo   XXXXX
-	double servo_real_kartez_acc[6]; // by Y predkosc we wspolrzednych xyz_euler_zyz obliczane co krok servo   XXXXX
+	lib::Xyz_Euler_Zyz_vector servo_real_kartez_pos; // by Y polozenie we wspolrzednych xyz_euler_zyz obliczane co krok servo   XXXXX
 
 	lib::Homog_matrix desired_end_effector_frame; //  XXXXX
 	// Podstawowa postac reprezentujaca zadane

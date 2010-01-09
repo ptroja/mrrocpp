@@ -92,6 +92,8 @@ void effector::servo_joints_and_frame_actualization_and_upload(void)
 {
 	static int catch_nr = 0;
 
+
+
 	// wyznaczenie nowych wartosci joints and frame dla obliczen w servo
 	try {
 		get_current_kinematic_model()->mp2i_transform(servo_current_motor_pos, servo_current_joints);
@@ -109,6 +111,7 @@ void effector::servo_joints_and_frame_actualization_and_upload(void)
 		lib::Homog_matrix local_matrix;
 		get_current_kinematic_model()->i2e_transform(servo_current_joints, local_matrix);
 		// Pobranie wsp. zewnętrznych w układzie
+
 
 		local_matrix.get_mech_xyz_euler_zyz(servo_real_kartez_pos);
 

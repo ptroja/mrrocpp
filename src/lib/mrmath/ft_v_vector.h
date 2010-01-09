@@ -27,9 +27,8 @@ namespace lib {
 // klasa reprezentujaca wektor sila-moment i wektora predkosci
 class Ft_v_vector
 {
-protected:
-	double w[6];
 public:
+	double w[6];
 	friend class Ft_v_tr;						// klasa Ft_v_tr musi miec dostep do prywatnych
 	friend class Ft_tr;
 	friend class V_tr;

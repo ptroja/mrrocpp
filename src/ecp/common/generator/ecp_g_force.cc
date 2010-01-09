@@ -665,7 +665,7 @@ bool tff_rubik_face_rotate::next_step()
 		if (turn_angle < -0.1 || 0.1 < turn_angle)
 		{
 			lib::Homog_matrix frame(the_robot->reply_package.arm.pf_def.arm_frame);
-			double xyz_eul_zyz[6];
+			lib::Xyz_Euler_Zyz_vector xyz_eul_zyz;
 			frame.get_xyz_euler_zyz(xyz_eul_zyz);
 			double angle_to_move = (turn_angle / 180.0) * M_PI;
 			if (xyz_eul_zyz[5] + angle_to_move < -M_PI)
@@ -691,7 +691,7 @@ bool tff_rubik_face_rotate::next_step()
 		if (turn_angle < -0.1 || 0.1 < turn_angle)
 		{
 			lib::Homog_matrix current_frame(the_robot->reply_package.arm.pf_def.arm_frame);
-			double xyz_eul_zyz[6];
+			lib::Xyz_Euler_Zyz_vector xyz_eul_zyz;
 			current_frame.get_xyz_euler_zyz(xyz_eul_zyz);
 			double current_gamma = xyz_eul_zyz[5];
 			if (!range_change)

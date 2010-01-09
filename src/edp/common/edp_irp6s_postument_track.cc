@@ -457,8 +457,11 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buff
 		// scope-locked reader data update
 		{
 			boost::mutex::scoped_lock lock(rb_obj->reader_mutex);
-
-			next_frame.get_xyz_euler_zyz(rb_obj->step_data.current_cartesian_position);
+			lib::Xyz_Euler_Zyz_vector tmp_vector;
+		//	next_frame.get_xyz_euler_zyz(lib::Xyz_Euler_Zyz_vector.to_table(rb_obj->step_data.current_cartesian_position));
+		//	next_frame.get_xyz_euler_zyz(lib::Xyz_Euler_Zyz_vector aa);
+			next_frame.get_xyz_euler_zyz(tmp_vector);
+			tmp_vector.to_table(rb_obj->step_data.current_cartesian_position);
 		}
 
 		desired_end_effector_frame = next_frame;
@@ -640,8 +643,6 @@ void irp6s_postument_track_effector::servo_joints_and_frame_actualization_and_up
 
 			for (int i = 0; i < 6; i++) {
 				rb_obj->step_data.real_cartesian_position[i] = servo_real_kartez_pos[i];
-				rb_obj->step_data.real_cartesian_vel[i] = servo_real_kartez_vel[i];
-				rb_obj->step_data.real_cartesian_acc[i] = servo_real_kartez_acc[i];
 			}
 		}
 

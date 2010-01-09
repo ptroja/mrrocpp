@@ -1063,6 +1063,7 @@ void smooth::calculate(void) { //zeby wrocic do starego trybu relative nalezy st
 	double s_temp1[MAX_SERVOS_NR], s_temp2[MAX_SERVOS_NR];
 	double t_temp1, t_temp2;
     double t[MAX_SERVOS_NR];
+    lib::Xyz_Euler_Zyz_vector tmp_euler_vector;
     double t_max; //nadluzszy czas ruchu w jednej osi w jednym ruchu
     int i;
     double tk = 10 * STEP; //czas jednego makrokroku
@@ -1097,7 +1098,13 @@ void smooth::calculate(void) { //zeby wrocic do starego trybu relative nalezy st
 			case lib::ECP_XYZ_EULER_ZYZ:
 				gripp = 6;
 				homog_matrix.set_from_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame);
-				homog_matrix.get_xyz_euler_zyz(pose_list_iterator->start_position);
+
+				//homog_matrix.get_xyz_euler_zyz(pose_list_iterator->start_position);
+
+
+				homog_matrix.get_xyz_euler_zyz(tmp_euler_vector);
+				tmp_euler_vector.to_table(pose_list_iterator->start_position);
+
 
 				for (i = 0; i < gripp; i++) {
 					temp = pose_list_iterator->coordinates[i];

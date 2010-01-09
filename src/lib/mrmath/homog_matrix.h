@@ -39,7 +39,7 @@ public:
 	friend class Ft_tr;
 	friend class V_tr;
 
-	enum POSE_SPECIFICATION { MTR_XYZ_ANGLE_AXIS, MTR_XYZ_EULER_ZYZ, MTR_MECH_XYZ_EULER_ZYZ, MTR_XYZ_RPY};
+	enum POSE_SPECIFICATION { MTR_XYZ_ANGLE_AXIS, MTR_XYZ_RPY};
 
 	// Konstruktor domniemany - tworzy macierz jednostkowa.
 	Homog_matrix();
@@ -53,6 +53,9 @@ public:
 	Homog_matrix(K_vector versor_x, K_vector versor_y, K_vector versor_z, K_vector angles);
 	// Utworzenie macierzy obrotu o male katy
 	Homog_matrix(K_vector angles);
+
+	Homog_matrix(const Xyz_Euler_Zyz_vector l_vector);
+
 	// Utworzenie macierzy jednorodnej na podstawie podanej macierzy obrotu r i wektora przesuniecia t.
 	Homog_matrix(double r[3][3], double t[3]);
 	// Utworzenie macierzy jednorodnej na podstawie jej 12 elementow (notacja z Craiga)
@@ -80,15 +83,17 @@ public:
 	// Ustawienie tablicy zawierajacej dane macierzy jednorodnej.
 	void set_from_frame_tab(const frame_tab frame);
 
-     // Przeksztalcenie do formy XYZ_EULER_ZYZ i zwrocenie w tablicy.
-	void get_xyz_euler_zyz(double t[6]) const;
+
+    // Przeksztalcenie do formy XYZ_EULER_ZYZ i zwrocenie w tablicy.
+	void get_xyz_euler_zyz(Xyz_Euler_Zyz_vector& l_vector) const;
+
+	void set_from_xyz_euler_zyz(const Xyz_Euler_Zyz_vector l_vector);
+
 	// Przeksztalcenie do formy XYZ_EULER_ZYZ dla robota IRP-6_MECHATRONIKA i zwrocenie w tablicy.
-	void get_mech_xyz_euler_zyz(double t[6]) const;
-	// Wypelnienie wspolczynnikow macierzy na podstawie danych w formie XYZ_EULER_ZYZ.
-	void set_from_xyz_euler_zyz(double x, double y, double z, double alfa, double beta, double gamma);
-	void set_from_xyz_euler_zyz(const double t[6]);
+	void get_mech_xyz_euler_zyz(Xyz_Euler_Zyz_vector& l_vector) const;
+
 	// Wypelnienie wspolczynnikow macierzy na podstawie danych w formie XYZ_EULER_ZYZ dla robota IRP-6_MECHATRONIKA
-	void set_from_mech_xyz_euler_zyz(double x, double y, double z, double alfa, double beta, double gamma);
+	void set_from_mech_xyz_euler_zyz(const Xyz_Euler_Zyz_vector l_vector);
 
      // Przeksztalcenie do formy XYZ_RPY (rool pitch yaw) i zwrocenie w tablicy.
 	void get_xyz_rpy(double t[6]) const;

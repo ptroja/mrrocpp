@@ -13,6 +13,7 @@
 #include "ui/ui.h"
 // Konfigurator.
 #include "lib/configurator.h"
+#include "lib/mrmath/mrmath.h"
 
 
 // ---------------------------------------------------------------
@@ -73,7 +74,7 @@ class ui_common_robot {
   void read_xyz_euler_zyz ( double current_position[7] );
   void read_xyz_angle_axis ( double current_position[7] );
   void read_tool_xyz_angle_axis ( double tool_vector[6] );
-  void read_tool_xyz_euler_zyz ( double tool_vector[6] );
+  void read_tool_xyz_euler_zyz ( lib::Xyz_Euler_Zyz_vector tool_vector);
   void get_kinematic (uint8_t* kinematic_model_no);
   void get_servo_algorithm ( uint8_t algorithm_no[MAX_SERVOS_NR],
   uint8_t parameters_no[MAX_SERVOS_NR]);

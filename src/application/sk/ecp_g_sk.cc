@@ -121,7 +121,7 @@ bool y_edge_follow_force::next_step()
 	lib::Homog_matrix tmp_matrix(the_robot->reply_package.arm.pf_def.arm_frame);
 
 	// tablice pomocnicze do utworzenia przyrostowej trajektorii ruchu do zapisu do pliku
-	double inc_delta[6], tmp_delta[6];
+	lib::Xyz_Euler_Zyz_vector inc_delta, tmp_delta;
 
 	tmp_matrix.get_xyz_euler_zyz(inc_delta);
 
@@ -134,7 +134,7 @@ bool y_edge_follow_force::next_step()
 	for (int i=0; i<6; i++)
 		inc_delta[i]+=tmp_delta[i];
 
-	insert_pose_list_element(emptyps, 0.0, inc_delta, 2);
+	insert_pose_list_element(emptyps, 0.0, inc_delta.w, 2);
 
 	// wyznaczenie nowej macierzy referencyjnej i predkosci ruchu
 

@@ -55,7 +55,7 @@ init_wnd_irp6m_xyz_euler_zyz_ts( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbac
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	double tool_vector[6];
+	lib::Xyz_Euler_Zyz_vector tool_vector;
 
 	// wychwytania ew. bledow ECP::robot
 	try
@@ -66,12 +66,12 @@ init_wnd_irp6m_xyz_euler_zyz_ts( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbac
 		{
 			ui_robot.irp6_mechatronika->read_tool_xyz_euler_zyz(tool_vector); // Odczyt polozenia walow silnikow
 
-			PtSetResource(ABW_PtNumericFloat_wind_irp6m_xyz_euler_zyz_ts_read_p1, Pt_ARG_NUMERIC_VALUE, &tool_vector[0] , 0);
-			PtSetResource(ABW_PtNumericFloat_wind_irp6m_xyz_euler_zyz_ts_read_p2, Pt_ARG_NUMERIC_VALUE, &tool_vector[1] , 0);
-			PtSetResource(ABW_PtNumericFloat_wind_irp6m_xyz_euler_zyz_ts_read_p3, Pt_ARG_NUMERIC_VALUE, &tool_vector[2] , 0);
-			PtSetResource(ABW_PtNumericFloat_wind_irp6m_xyz_euler_zyz_ts_read_p4, Pt_ARG_NUMERIC_VALUE, &tool_vector[3] , 0);
-			PtSetResource(ABW_PtNumericFloat_wind_irp6m_xyz_euler_zyz_ts_read_p5, Pt_ARG_NUMERIC_VALUE, &tool_vector[4] , 0);
-			PtSetResource(ABW_PtNumericFloat_wind_irp6m_xyz_euler_zyz_ts_read_p6, Pt_ARG_NUMERIC_VALUE, &tool_vector[5] , 0);
+			PtSetResource(ABW_PtNumericFloat_wind_irp6m_xyz_euler_zyz_ts_read_p1, Pt_ARG_NUMERIC_VALUE, &(tool_vector.w[0]) , 0);
+			PtSetResource(ABW_PtNumericFloat_wind_irp6m_xyz_euler_zyz_ts_read_p2, Pt_ARG_NUMERIC_VALUE, &(tool_vector.w[1]) , 0);
+			PtSetResource(ABW_PtNumericFloat_wind_irp6m_xyz_euler_zyz_ts_read_p3, Pt_ARG_NUMERIC_VALUE, &(tool_vector.w[2]) , 0);
+			PtSetResource(ABW_PtNumericFloat_wind_irp6m_xyz_euler_zyz_ts_read_p4, Pt_ARG_NUMERIC_VALUE, &(tool_vector.w[3]) , 0);
+			PtSetResource(ABW_PtNumericFloat_wind_irp6m_xyz_euler_zyz_ts_read_p5, Pt_ARG_NUMERIC_VALUE, &(tool_vector.w[4]) , 0);
+			PtSetResource(ABW_PtNumericFloat_wind_irp6m_xyz_euler_zyz_ts_read_p6, Pt_ARG_NUMERIC_VALUE, &(tool_vector.w[5]) , 0);
 
 		} else
 		{
