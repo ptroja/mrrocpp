@@ -56,6 +56,7 @@ public:
 
 	Homog_matrix(const Xyz_Euler_Zyz_vector l_vector);
 	Homog_matrix(const Xyz_Rpy_vector l_vector);
+	Homog_matrix(const Xyz_Angle_Axis_vector l_vector);
 
 	// Utworzenie macierzy jednorodnej na podstawie podanej macierzy obrotu r i wektora przesuniecia t.
 	Homog_matrix(double r[3][3], double t[3]);

@@ -72,6 +72,11 @@ Homog_matrix::Homog_matrix(const Xyz_Rpy_vector l_vector) {
 	set_from_xyz_rpy (l_vector);
 }
 
+Homog_matrix::Homog_matrix(const Xyz_Angle_Axis_vector l_vector)
+{
+	set_from_xyz_angle_axis (l_vector);
+}
+
 Homog_matrix::Homog_matrix(K_vector angles)
 {
 	matrix_m[0][0] = 1;
