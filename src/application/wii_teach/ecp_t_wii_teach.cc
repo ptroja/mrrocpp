@@ -280,7 +280,7 @@ void wii_teach::main_task_algorithm(void)
     rg = new irp6ot::generator::wii_relative(*this,(ecp_mp::sensor::wiimote*)sensor_m[lib::SENSOR_WIIMOTE]);
     jg = new irp6ot::generator::wii_joint(*this,(ecp_mp::sensor::wiimote*)sensor_m[lib::SENSOR_WIIMOTE]);
 
-    bool has_filenames = get_filenames();
+    bool has_filenames = false;//get_filenames();
     if(has_filenames)
     {
         load_trajectory();

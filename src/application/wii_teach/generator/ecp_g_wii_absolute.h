@@ -40,6 +40,9 @@ class wii_absolute : public irp6ot::generator::wii
         void preset_position(void);
 
         virtual void set_position(void);
+
+    protected:
+        lib::Homog_matrix rotation_matrix;
 };
 
 }

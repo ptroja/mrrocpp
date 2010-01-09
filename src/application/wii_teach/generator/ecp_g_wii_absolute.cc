@@ -25,62 +25,52 @@ wii_absolute::wii_absolute (common::task::task& _ecp_task,ecp_mp::sensor::wiimot
 
 void wii_absolute::set_position(void)
 {
-    char buffer[200];
+    char buffer[20000];
     double rotation[3][3];
     double translation[3];
+    double old_translation[3];
 
     the_robot->ecp_command.instruction.instruction_type = lib::SET_GET;
     the_robot->ecp_command.instruction.set_type = ARM_DV;
     the_robot->ecp_command.instruction.set_arm_type = lib::FRAME;
     the_robot->ecp_command.instruction.get_type = ARM_DV;
     the_robot->ecp_command.instruction.get_arm_type = lib::FRAME;
-    the_robot->ecp_command.instruction.motion_type = lib::RELATIVE;
+    the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
     the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
     the_robot->ecp_command.instruction.motion_steps = 8;
     the_robot->ecp_command.instruction.value_in_step_no = 8;
 
-    homog_matrix.set_from_xyz_angle_axis(
-        nextChange[3],
-        nextChange[4],
-        nextChange[5],
-        nextChange[0],
-        nextChange[1],
-        nextChange[2]
-    );
-
-    homog_matrix.set_from_frame_tab(the_robot->ecp_command.instruction.arm.pf_def.arm_frame);
-    homog_matrix.get_translation_vector(translation);
-    homog_matrix.get_rotation_matrix(rotation);
-
-    sr_ecp_msg.message("=======");
-    sprintf(buffer,"Rotation:\n%.4f %.4f %.4f\n%.4f %.4f %.4f\n%.4f %.4f %.4f",rotation[0][0],rotation[1][0],rotation[2][0],rotation[0][1],rotation[1][1],rotation[2][1],rotation[0][2],rotation[1][2],rotation[2][2]);
-    sr_ecp_msg.message(buffer);
-
-    sprintf(buffer,"Translation:\n%.4f %.4f %.4f",translation[0],translation[1],translation[2]);
-    sr_ecp_msg.message(buffer);
-
+    homog_matrix.set_from_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame);
     
+    translation[0] = nextChange[0];
+    translation[1] = nextChange[1];
+    translation[2] = nextChange[2];
 
-//    translation[0] += nextChange[0];
-//    translation[1] += nextChange[1];
-//    translation[2] += nextChange[2];
-//
-//    rotation[0][0] += cos(nextChange[3])*cos(nextChange[4]);
-//    rotation[1][0] += sin(nextChange[3])*cos(nextChange[4]);
-//    rotation[2][0] += -sin(nextChange[4]);
-//    rotation[0][1] += cos(nextChange[3])*sin(nextChange[4])*sin(nextChange[5])-sin(nextChange[3])*cos(nextChange[5]);
-//    rotation[1][1] += sin(nextChange[3])*sin(nextChange[4])*sin(nextChange[5])+cos(nextChange[3])*cos(nextChange[5]);
-//    rotation[2][1] += cos(nextChange[4])*sin(nextChange[5]);
-//    rotation[0][2] += cos(nextChange[3])*sin(nextChange[4])*cos(nextChange[5])+sin(nextChange[3])*sin(nextChange[5]);
-//    rotation[1][2] += sin(nextChange[3])*sin(nextChange[4])*cos(nextChange[5])-cos(nextChange[3])*sin(nextChange[5]);
-//    rotation[2][2] += cos(nextChange[4])*cos(nextChange[5]);
+    rotation[0][0] = cos(nextChange[3])*cos(nextChange[4]);
+    rotation[1][0] = sin(nextChange[3])*cos(nextChange[4]);
+    rotation[2][0] = -sin(nextChange[4]);
+    rotation[0][1] = cos(nextChange[3])*sin(nextChange[4])*sin(nextChange[5])-sin(nextChange[3])*cos(nextChange[5]);
+    rotation[1][1] = sin(nextChange[3])*sin(nextChange[4])*sin(nextChange[5])+cos(nextChange[3])*cos(nextChange[5]);
+    rotation[2][1] = cos(nextChange[4])*sin(nextChange[5]);
+    rotation[0][2] = cos(nextChange[3])*sin(nextChange[4])*cos(nextChange[5])+sin(nextChange[3])*sin(nextChange[5]);
+    rotation[1][2] = sin(nextChange[3])*sin(nextChange[4])*cos(nextChange[5])-cos(nextChange[3])*sin(nextChange[5]);
+    rotation[2][2] = cos(nextChange[4])*cos(nextChange[5]);
 
-    homog_matrix.set_translation_vector(translation);
-    homog_matrix.set_rotation_matrix(rotation);
+    rotation_matrix.set_rotation_matrix(rotation);
+    //rotation_matrix.set_translation_vector(translation);
+
+    homog_matrix.get_translation_vector(old_translation);
+
+    homog_matrix = homog_matrix * rotation_matrix;
+    old_translation[0] += translation[0];
+    old_translation[1] += translation[1];
+    old_translation[2] += translation[2];
+
+    homog_matrix.set_translation_vector(old_translation);
 
     homog_matrix.get_frame_tab(the_robot->ecp_command.instruction.arm.pf_def.arm_frame);
 
-    the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = 0;//currentGripperValue + nextChange[6];
+    the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = 0.074;
 }
 
 
@@ -89,7 +79,7 @@ bool wii_absolute::first_step()
     the_robot->ecp_command.instruction.instruction_type = lib::GET;
     the_robot->ecp_command.instruction.get_type = ARM_DV;
     the_robot->ecp_command.instruction.get_arm_type = lib::FRAME;
-    the_robot->ecp_command.instruction.motion_type = lib::RELATIVE;
+    the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
     the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
     the_robot->ecp_command.instruction.motion_steps = 8;
     the_robot->ecp_command.instruction.value_in_step_no = 8;
