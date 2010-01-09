@@ -25,7 +25,6 @@ wii_absolute::wii_absolute (common::task::task& _ecp_task,ecp_mp::sensor::wiimot
 
 void wii_absolute::set_position(void)
 {
-    char buffer[20000];
     double rotation[3][3];
     double translation[3];
     double old_translation[3];
@@ -57,15 +56,11 @@ void wii_absolute::set_position(void)
     rotation[2][2] = cos(nextChange[4])*cos(nextChange[5]);
 
     rotation_matrix.set_rotation_matrix(rotation);
-    //rotation_matrix.set_translation_vector(translation);
 
-    homog_matrix.get_translation_vector(old_translation);
-
-    homog_matrix = homog_matrix * rotation_matrix;
+    homog_matrix = rotation_matrix * homog_matrix;
     old_translation[0] += translation[0];
     old_translation[1] += translation[1];
     old_translation[2] += translation[2];
-
     homog_matrix.set_translation_vector(old_translation);
 
     homog_matrix.get_frame_tab(the_robot->ecp_command.instruction.arm.pf_def.arm_frame);
