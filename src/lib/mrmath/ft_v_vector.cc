@@ -488,6 +488,102 @@ Xyz_Euler_Zyz_vector Xyz_Euler_Zyz_vector::operator-() const
 }
 
 
+
+/////////////////////////////////////////
+//
+//  Xyz_Rpy_vector
+//
+//////////////////////////////////////////
+
+
+
+
+Xyz_Rpy_vector::Xyz_Rpy_vector() : Ft_v_vector()
+{}
+
+Xyz_Rpy_vector::Xyz_Rpy_vector(const double t[6]) : Ft_v_vector(t)
+{}
+
+Xyz_Rpy_vector::Xyz_Rpy_vector(double fx, double fy, double fz, double tx, double ty, double tz)
+: Ft_v_vector(fx, fy, fz, tx, ty, tz)
+{}
+
+Xyz_Rpy_vector::Xyz_Rpy_vector(const Xyz_Rpy_vector & wzor) : Ft_v_vector(wzor)
+{}
+
+Xyz_Rpy_vector & Xyz_Rpy_vector::operator=(const Xyz_Rpy_vector & p)
+{
+	// operator przypisania
+	// parametry wektora przyjmuja wartosci takie jak parametry wektora podanego jako argument
+
+	if(this == &p) return *this;
+
+	set_values(p.w);
+
+return *this;
+}// end Ft_v_vector::operator=(const Ft_v_vector & p)
+
+Xyz_Rpy_vector Xyz_Rpy_vector::operator+(const Xyz_Rpy_vector & dod) const
+{
+	// operator dodawania
+	// umozliwia zmodyfikowanie parametrow wersora zgodnie z zawartoscia argumentu
+
+	Xyz_Rpy_vector zwracany;
+
+	for(int i=0; i<6; i++)
+		zwracany.w[i] = w[i] + dod.w[i];
+
+return zwracany;
+
+}// end Xyz_Euler_Zyz_vector::operator+(const Xyz_Euler_Zyz_vector & dod) const
+
+
+Xyz_Rpy_vector Xyz_Rpy_vector::operator-(const Xyz_Rpy_vector & dod) const
+{
+	// operator dodawania
+	// umozliwia zmodyfikowanie parametrow wersora zgodnie z zawartoscia argumentu
+
+	Xyz_Rpy_vector zwracany;
+
+	for(int i=0; i<6; i++)
+		zwracany.w[i] = w[i] - dod.w[i];
+
+return zwracany;
+
+}// end Ft_v_vector::operator+(const Ft_v_vector & dod) const
+
+
+
+Xyz_Rpy_vector Xyz_Rpy_vector::operator*(const double skalar) const
+{
+	Xyz_Rpy_vector zwracany;
+	for(int i=0;i<6;i++) zwracany.w[i]=w[i]*skalar;
+	return zwracany;
+}
+
+
+Xyz_Rpy_vector Xyz_Rpy_vector::operator!() const
+{
+	// odwrocenie wektora
+
+	Xyz_Rpy_vector zwracany;
+	for(int i=0;i<6;i++) zwracany.w[i]=-w[i];
+	return zwracany;
+}
+
+
+Xyz_Rpy_vector Xyz_Rpy_vector::operator-() const
+{
+	// odwrocenie wektora
+
+	Xyz_Rpy_vector zwracany;
+	for(int i=0;i<6;i++) zwracany.w[i]=-w[i];
+	return zwracany;
+}
+
+
+
+
 } // namespace lib
 } // namespace mrrocpp
 

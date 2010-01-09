@@ -67,6 +67,11 @@ Homog_matrix::Homog_matrix(const Xyz_Euler_Zyz_vector l_vector)
 	set_from_xyz_euler_zyz (l_vector);
 }
 
+Homog_matrix::Homog_matrix(const Xyz_Rpy_vector l_vector){
+
+	set_from_xyz_rpy (l_vector);
+}
+
 Homog_matrix::Homog_matrix(K_vector angles)
 {
 	matrix_m[0][0] = 1;
@@ -200,10 +205,7 @@ Homog_matrix::Homog_matrix(POSE_SPECIFICATION mtr_ps, double x, double y, double
 	// Wywolanie metody, ktora odpowiednio wypelni macierz matrix.
 	switch (mtr_ps)
 	{
-		case MTR_XYZ_RPY:
-			set_from_xyz_rpy (x, y, z, alfa, beta, gamma);
-			break;
-		case MTR_XYZ_ANGLE_AXIS:
+			case MTR_XYZ_ANGLE_AXIS:
 			set_from_xyz_angle_axis (alfa, beta, gamma, x, y, z);
 			break;
 		default:
@@ -427,30 +429,30 @@ void Homog_matrix::set_from_mech_xyz_euler_zyz(const Xyz_Euler_Zyz_vector l_vect
 
 // UWAGA ponizsze dwie funckje nie byly testowane - po pozytywnych  testach usunac komentarz
 // Przeksztalcenie do formy XYZ_RPY (rool pitch yaw) i zwrocenie w tablicy.
-void Homog_matrix::get_xyz_rpy(double t[6]) const
+void Homog_matrix::get_xyz_rpy(Xyz_Rpy_vector& l_vector) const
 {
 	// x, y, z
-	t[0] = matrix_m[0][3];
-	t[1] = matrix_m[1][3];
-	t[2] = matrix_m[2][3];
+	l_vector[0] = matrix_m[0][3];
+	l_vector[1] = matrix_m[1][3];
+	l_vector[2] = matrix_m[2][3];
 
 	// alfa (wokol z) , beta (wokol y), gamma (wokol x)
-	t[3] = atan2 (matrix_m[2][1], matrix_m[2][2]);
-	t[4] = atan2 (matrix_m[2][0], sqrt (matrix_m[0][0]*matrix_m[0][0] + matrix_m[1][0]*matrix_m[1][0]));
-	t[5] = atan2 (matrix_m[1][0], matrix_m[0][0]);
+	l_vector[3] = atan2 (matrix_m[2][1], matrix_m[2][2]);
+	l_vector[4] = atan2 (matrix_m[2][0], sqrt (matrix_m[0][0]*matrix_m[0][0] + matrix_m[1][0]*matrix_m[1][0]));
+	l_vector[5] = atan2 (matrix_m[1][0], matrix_m[0][0]);
 }
 
 
 // Wypelnienie wspolczynnikow macierzy na podstawie danych w formie XYZ_RPY.
-void Homog_matrix::set_from_xyz_rpy(double x, double y, double z, double alfa, double beta, double gamma)
+void Homog_matrix::set_from_xyz_rpy(const Xyz_Rpy_vector l_vector)
 {
 	// alfa (wokol z) , beta (wokol y), gamma (wokol x)
-	const double c_alfa = cos(alfa);
-	const double s_alfa = sin(alfa);
-	const double c_beta = cos(beta);
-	const double s_beta = sin(beta);
-	const double c_gamma = cos(gamma);
-	const double s_gamma = sin(gamma);
+	const double c_alfa = cos(l_vector[4]);
+	const double s_alfa = sin(l_vector[4]);
+	const double c_beta = cos(l_vector[5]);
+	const double s_beta = sin(l_vector[5]);
+	const double c_gamma = cos(l_vector[6]);
+	const double s_gamma = sin(l_vector[6]);
 
 	// Obliczenie macierzy rotacji.
 	matrix_m[0][0] = c_alfa*c_beta;
@@ -466,9 +468,9 @@ void Homog_matrix::set_from_xyz_rpy(double x, double y, double z, double alfa, d
 	matrix_m[2][2] = c_beta*c_gamma;
 
 	// Przepisanie polozenia.
-	matrix_m[0][3] = x;
-	matrix_m[1][3] = y;
-	matrix_m[2][3] = z;
+	matrix_m[0][3] = l_vector[0];
+	matrix_m[1][3] = l_vector[1];
+	matrix_m[2][3] = l_vector[2];
 }
 
 

@@ -158,6 +158,27 @@ public:
 
 };// end class Xyz_Euler_Zyz_vector
 
+// klasa reprezentujaca wektor sila-moment i wektora predkosci
+class Xyz_Rpy_vector : public Ft_v_vector
+{
+
+public:
+
+	Xyz_Rpy_vector();													// konstruktor domniemany [0, 0, 0, 0, 0, 0]
+	Xyz_Rpy_vector(const double t[6]);										// utworzenie wektora na podstawie podanej tablicy
+	Xyz_Rpy_vector(double fx, double fy, double fz, double tx, double ty, double tz);
+
+	Xyz_Rpy_vector(const Xyz_Rpy_vector &);								// konstruktor kopiujacy
+
+	// Odwracanie macierzy.
+	Xyz_Rpy_vector operator!() const;
+	Xyz_Rpy_vector operator-() const;
+	Xyz_Rpy_vector & operator=(const Xyz_Rpy_vector &);			// operator przypisania
+	Xyz_Rpy_vector operator+(const Xyz_Rpy_vector &) const;
+	Xyz_Rpy_vector operator-(const Xyz_Rpy_vector &) const;
+	Xyz_Rpy_vector operator*(double) const;					// skalowanie wektora
+
+};// end class Xyz_Rpy_vector
 
 
 } // namespace lib

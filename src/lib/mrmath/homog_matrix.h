@@ -39,7 +39,7 @@ public:
 	friend class Ft_tr;
 	friend class V_tr;
 
-	enum POSE_SPECIFICATION { MTR_XYZ_ANGLE_AXIS, MTR_XYZ_RPY};
+	enum POSE_SPECIFICATION { MTR_XYZ_ANGLE_AXIS};
 
 	// Konstruktor domniemany - tworzy macierz jednostkowa.
 	Homog_matrix();
@@ -55,6 +55,7 @@ public:
 	Homog_matrix(K_vector angles);
 
 	Homog_matrix(const Xyz_Euler_Zyz_vector l_vector);
+	Homog_matrix(const Xyz_Rpy_vector l_vector);
 
 	// Utworzenie macierzy jednorodnej na podstawie podanej macierzy obrotu r i wektora przesuniecia t.
 	Homog_matrix(double r[3][3], double t[3]);
@@ -96,9 +97,9 @@ public:
 	void set_from_mech_xyz_euler_zyz(const Xyz_Euler_Zyz_vector l_vector);
 
      // Przeksztalcenie do formy XYZ_RPY (rool pitch yaw) i zwrocenie w tablicy.
-	void get_xyz_rpy(double t[6]) const;
+	void get_xyz_rpy(Xyz_Rpy_vector& l_vector) const;
 	// Wypelnienie wspolczynnikow macierzy na podstawie danych w formie XYZ_RPY.
-	void set_from_xyz_rpy(double x, double y, double z, double alfa, double beta, double gamma);
+	void set_from_xyz_rpy(const Xyz_Rpy_vector l_vector);
 
 
 	// Przeksztalcenie do formy XYZ_ANGLE_AXIS i zwrocenie w tablicy.
