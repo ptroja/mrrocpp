@@ -13,7 +13,7 @@ wii_relative::wii_relative (common::task::task& _ecp_task,ecp_mp::sensor::wiimot
 {
     int i;
     char buffer[100];
-    
+
     for(i = 0;i<NO_OF_DEGREES;++i)
     {
         sprintf(buffer,"relative_multiplier_%d",i);
@@ -37,13 +37,13 @@ void wii_relative::set_position(void)
     the_robot->ecp_command.instruction.motion_steps = 8;
     the_robot->ecp_command.instruction.value_in_step_no = 8;
 
-    homog_matrix.set_from_xyz_angle_axis(
+    homog_matrix.set_from_xyz_angle_axis(lib::Xyz_Angle_Axis_vector(
         nextChange[3],
         nextChange[4],
         nextChange[5],
         nextChange[0],
         nextChange[1],
-        nextChange[2]
+        nextChange[2])
     );
 
     homog_matrix.get_frame_tab(the_robot->ecp_command.instruction.arm.pf_def.arm_frame);

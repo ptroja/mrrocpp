@@ -472,31 +472,6 @@ void Homog_matrix::set_from_xyz_angle_axis(double kx, double ky, double kz, doub
 }//: set_from_xyz_angle_axis
 
 
-// Wypelnienie wspolczynnikow macierzy na podstawie danych w formie XYZ_ANGLE_AXIS - kat wliczony w dlugos osi.
-void Homog_matrix::set_from_xyz_angle_axis(double kx, double ky, double kz, double x, double y, double z)
-{
-	// funkcja ta dokonuje zmiany macierzy jednorodnej na macierz okreslona poleceniem
-	// w formie XYZ_ANGLE_AXIS
-	// Utworznie macierzy jednorodnej na podstawie rozkazu w formie XYZ_ANGLE_AXIS
-
-	const double alfa = sqrt(kx*kx + ky*ky + kz*kz);
-
-	double kx_l, ky_l, kz_l;
-
-	if (alfa > ALFA_SENSITIVITY)
-	{
-		kx_l = kx / alfa;
-		ky_l = ky / alfa;
-		kz_l = kz / alfa;
-	}
-	else
-	{
-		kx_l = ky_l =  kz_l = 0.0;
-	}
-
-	set_from_xyz_angle_axis (kx_l, ky_l, kz_l, alfa, x, y, z);
-
-}//: set_from_xyz_angle_axis
 
 
 
