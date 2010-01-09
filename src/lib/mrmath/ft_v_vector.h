@@ -129,7 +129,7 @@ public:
 	Xyz_Angle_Axis_vector operator*(double) const;					// skalowanie wektora
 
 	//Sibi
-	 //Wektor predkosci jako odleglosc dwuch pozycji zadanych w postaci ramek
+	 //Wektor predkosci jako odleglosc dwoch pozycji zadanych w postaci ramek
 	void position_distance(Homog_matrix& local_current_end_effector_frame, Homog_matrix& local_desired_end_effector_frame);
 
 
