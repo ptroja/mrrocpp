@@ -313,77 +313,29 @@ void manip_and_conv_effector::interpret_instruction(lib::c_buffer &instruction)
 					master_order(MT_GET_CONTROLLER_STATE, 0);
 					break;
 				case lib::ARM:
-					// odczytanie TCP i orientacji koncowki
-					// get_arm_position(true);
-					master_order(MT_GET_ARM_POSITION, true);
-					break;
 				case lib::RMODEL:
-					// ewentualna aktualizacja numerow algorytmow i ich zestawow parametrow
-					if (instruction.get_rmodel_type == lib::SERVO_ALGORITHM) {
-						// get_algorithms();
-						master_order(MT_GET_ALGORITHMS, 0);
-					}
-					// odczytanie aktualnie uzywanego modelu robota (narzedzie, kinematic_model_with_tool kinematyczny,
-					// jego korektor, nr algorytmu regulacji i zestawu jego parametrow)
-					get_rmodel(instruction);
-					break;
 				case lib::INPUTS:
-					// odczytanie wejsc
-					get_inputs(&reply);
-					break;
 				case lib::ARM_RMODEL:
-					// odczytanie TCP i orientacji koncowki
-					// get_arm_position(true);
-					master_order(MT_GET_ARM_POSITION, true);
-					// odczytanie aktualnie uzywanego modelu robota (narzedzie, kinematic_model_with_tool kinematyczny,
-					// jego korektor, nr algorytmu regulacji i zestawu jego parametrow)
-					get_rmodel(instruction);
-					break;
 				case lib::ARM_INPUTS:
-					// odczytanie wej
-					get_inputs(&reply);
-					// odczytanie TCP i orientacji koncowki
-					// get_arm_position(true);
-					master_order(MT_GET_ARM_POSITION, true);
-					break;
 				case lib::RMODEL_INPUTS:
-					// ewentualna aktualizacja numerow algorytmow i ich zestawow parametrow
-					if (instruction.get_rmodel_type == lib::SERVO_ALGORITHM)
-						// get_algorithms();
-						master_order(MT_GET_ALGORITHMS, 0);
-					// odczytanie wej
-					get_inputs(&reply);
-					// odczytanie aktualnie uzywanego modelu robota (narzedzie, kinematic_model_with_tool kinematyczny,
-					// jego korektor, nr algorytmu regulacji i zestawu jego parametrow)
-					get_rmodel(instruction);
-					break;
 				case lib::ARM_RMODEL_INPUTS:
-					// odczytanie wejsc
-					get_inputs(&reply);
-					// odczytanie TCP i orientacji koncowki
-					// get_arm_position(true);
-					master_order(MT_GET_ARM_POSITION, true);
-					// odczytanie aktualnie uzywanego modelu robota (narzedzie, kinematic_model_with_tool kinematyczny,
-					// jego korektor, nr algorytmu regulacji i zestawu jego parametrow)
-					get_rmodel(instruction);
+					if (instruction.is_get_inputs()) {
+						get_inputs(&reply);
+					}
 
+					if ((instruction.is_get_arm()) || (instruction.is_set_arm())) {
+						master_order(MT_GET_ARM_POSITION, true);
+					}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+					if (instruction.is_get_rmodel()) {
+						if (!((instruction.is_get_arm()) || (instruction.is_set_arm()))) {
+							if (instruction.get_rmodel_type == lib::SERVO_ALGORITHM) {
+								// get_algorithms();
+								master_order(MT_GET_ALGORITHMS, 0);
+							}
+						}
+						get_rmodel(instruction);
+					}
 					break;
 				default: // blad
 					// ustawi numer bledu
@@ -415,73 +367,35 @@ void manip_and_conv_effector::interpret_instruction(lib::c_buffer &instruction)
 					master_order(MT_GET_CONTROLLER_STATE, 0);
 					break;
 				case lib::ARM:
-					// odczytanie TCP i orientacji koncowki
-					if (instruction.is_set_arm())
-						get_arm_position(false, instruction);
-					else
-						// get_arm_position(true);
-						master_order(MT_GET_ARM_POSITION, true);
-					break;
 				case lib::RMODEL:
-					if (!instruction.is_set_arm())
-						// ewentualna aktualizacja numerow algorytmow i ich zestawow parametrow
-						if (instruction.get_rmodel_type == lib::SERVO_ALGORITHM)
-							// get_algorithms();
-							master_order(MT_GET_ALGORITHMS, 0);
-					// odczytanie aktualnie uzywanego modelu robota (narzedzie, kinematic_model_with_tool kinematyczny,
-					// jego korektor, nr algorytmu regulacji i zestawu jego parametrow)
-					get_rmodel(instruction);
-					break;
 				case lib::INPUTS:
-					// odczytanie wej
-					get_inputs(&reply);
-					break;
 				case lib::ARM_RMODEL:
-					// odczytanie TCP i orientacji koncowki
-					if (instruction.is_set_arm())
-						get_arm_position(false, instruction);
-					else
-						// get_arm_position(true);
-						master_order(MT_GET_ARM_POSITION, true);
-					// odczytanie aktualnie uzywanego modelu robota (narzedzie, kinematic_model_with_tool kinematyczny,
-					// jego korektor, nr algorytmu regulacji i zestawu jego parametrow)
-					get_rmodel(instruction);
-					break;
 				case lib::ARM_INPUTS:
-					// odczytanie wejsc
-					get_inputs(&reply);
-					// odczytanie TCP i orientacji koncowki
-					if (instruction.is_set_arm())
-						get_arm_position(false, instruction);
-					else
-						// get_arm_position(true);
-						master_order(MT_GET_ARM_POSITION, true);
-					break;
 				case lib::RMODEL_INPUTS:
-					if (!instruction.is_set_arm())
-						// ewentualna aktualizacja numerow algorytmow i ich zestawow parametrow
-						if (instruction.get_rmodel_type == lib::SERVO_ALGORITHM)
-							//   get_algorithms();
-							master_order(MT_GET_ALGORITHMS, 0);
-					// odczytanie wej
-					get_inputs(&reply);
-					// odczytanie aktualnie uzywanego modelu robota (narzedzie, kinematic_model_with_tool kinematyczny,
-					// jego korektor, nr algorytmu regulacji i zestawu jego parametrow)
-					get_rmodel(instruction);
-					break;
 				case lib::ARM_RMODEL_INPUTS:
-					// odczytanie wejsc
-					get_inputs(&reply);
-					if (instruction.is_set_arm())
-						get_arm_position(false, instruction);
-					else
-						// get_arm_position(true);
+					if (instruction.is_get_inputs()) {
+						get_inputs(&reply);
+					}
+
+					if (instruction.is_get_arm()) {
 						master_order(MT_GET_ARM_POSITION, true);
-					// odczytanie aktualnie uzywanego modelu robota (narzedzie, kinematic_model_with_tool kinematyczny,
-					// jego korektor, nr algorytmu regulacji i zestawu jego parametrow)
-					get_rmodel(instruction);
-					break;
-					// odczytanie TCP i orientacji koncowki
+					}
+
+					if (instruction.is_set_arm()) {
+						get_arm_position(false, instruction);
+					}
+
+					if (instruction.is_get_rmodel()) {
+						if (!instruction.is_set_arm()) {
+							// ewentualna aktualizacja numerow algorytmow i ich zestawow parametrow
+							if (instruction.get_rmodel_type == lib::SERVO_ALGORITHM)
+								master_order(MT_GET_ALGORITHMS, 0);
+						}
+						// odczytanie aktualnie uzywanego modelu robota (narzedzie, kinematic_model_with_tool kinematyczny,
+						// jego korektor, nr algorytmu regulacji i zestawu jego parametrow)
+						get_rmodel(instruction);
+					}
+
 					break;
 				default: // blad
 					// ustawi numer bledu
