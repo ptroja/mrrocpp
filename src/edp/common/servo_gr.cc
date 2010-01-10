@@ -235,6 +235,25 @@ void servo_buffer::operator()()
 } // end: main() SERVO_GROUP
 
 
+/*-----------------------------------------------------------------------*/
+void servo_buffer::get_all_positions(void)
+{
+	// Przepisanie aktualnych polozen servo do pakietu wysylkowego
+	for (int i = 0; i < master.number_of_servos; i++) {
+
+		servo_data.abs_position[i] = hi->get_position(i) * (2*M_PI) / axe_inc_per_revolution[i];
+
+		// przyrost polozenia w impulsach
+		servo_data.position[i] = regulator_ptr[i]->get_position_inc(1);
+		servo_data.current[i] = regulator_ptr[i]->get_meassured_current();
+		servo_data.PWM_value[i] = regulator_ptr[i]->get_PWM_value();
+		servo_data.algorithm_no[i] = regulator_ptr[i]->get_algorithm_no();
+		servo_data.algorithm_parameters_no[i] = regulator_ptr[i]->get_algorithm_parameters_no();
+	}
+
+}
+/*-----------------------------------------------------------------------*/
+
 
 void servo_buffer::clear_reply_status ( void )
 {

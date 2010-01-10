@@ -101,7 +101,7 @@ public:
 
     virtual void load_hardware_interface (void) = 0;
 
-    virtual void get_all_positions (void) = 0;
+    virtual void get_all_positions (void);
 
     //! konstruktor
     servo_buffer (manip_and_conv_effector &_master);

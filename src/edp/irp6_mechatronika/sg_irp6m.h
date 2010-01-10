@@ -26,7 +26,6 @@ class servo_buffer: public common::servo_buffer
 
 public:
 	// output_buffer
-	void get_all_positions(void);
 	effector &master;
 	void load_hardware_interface(void);
 	servo_buffer(effector &_master); // konstruktor

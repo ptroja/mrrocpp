@@ -98,21 +98,6 @@ void servo_buffer::synchronise(void)
 
 /*-----------------------------------------------------------------------*/
 
-/*-----------------------------------------------------------------------*/
-void servo_buffer::get_all_positions(void)
-{
-	// Przepisanie aktualnych polozen servo do pakietu wysylkowego
-	for (int i = 0; i < CONVEYOR_NUM_OF_SERVOS; i++) {
-		// przyrost polozenia w impulsach
-		servo_data.abs_position[i] = hi->get_position(i) * (2*M_PI) / IRP6_POSTUMENT_AXIS_0_TO_5_INC_PER_REVOLUTION;
-		servo_data.position[i] = regulator_ptr[i]->get_position_inc(1);
-		servo_data.current[i] = regulator_ptr[i]->get_meassured_current();
-		servo_data.PWM_value[i] = regulator_ptr[i]->get_PWM_value();
-		servo_data.algorithm_no[i] = regulator_ptr[i]->get_algorithm_no();
-		servo_data.algorithm_parameters_no[i] = regulator_ptr[i]->get_algorithm_parameters_no();
-	}
-}
-/*-----------------------------------------------------------------------*/
 
 } // namespace conveyor
 
