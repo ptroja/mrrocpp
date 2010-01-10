@@ -21,38 +21,31 @@ namespace edp {
 namespace smb {
 
 // Klasa reprezentujaca robota IRp-6 na postumencie.
-class effector : public common::manip_effector
+class effector: public common::manip_effector
 {
 protected:
-    // Metoda tworzy modele kinematyczne dla robota IRp-6 na postumencie.
-    virtual void create_kinematic_models_for_given_robot(void);
-
-
-
-
+	// Metoda tworzy modele kinematyczne dla robota IRp-6 na postumencie.
+	virtual void create_kinematic_models_for_given_robot(void);
 
 public:
 
+	// Konstruktor.
+	effector(lib::configurator &_config);
 
-    // Konstruktor.
-    effector (lib::configurator &_config);
+	void create_threads();
 
-    void create_threads ();
+	void servo_joints_and_frame_actualization_and_upload(void);// by Y
 
-    void servo_joints_and_frame_actualization_and_upload(void);// by Y
+	void move_arm(lib::c_buffer &instruction); // przemieszczenie ramienia
 
-    void move_arm (lib::c_buffer &instruction);            // przemieszczenie ramienia
-
-    void get_arm_position (bool read_hardware, lib::c_buffer &instruction); // odczytanie pozycji ramienia
-    void master_order(common::MT_ORDER nm_task, int nm_tryb);
-
+	void get_arm_position(bool read_hardware, lib::c_buffer &instruction); // odczytanie pozycji ramienia
+	void master_order(common::MT_ORDER nm_task, int nm_tryb);
 
 };
 
 } // namespace smb
 } // namespace edp
 } // namespace mrrocpp
-
 
 
 #endif

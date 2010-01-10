@@ -33,8 +33,6 @@ namespace mrrocpp {
 namespace edp {
 namespace smb {
 
-
-
 void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
 {
 	manip_effector::single_thread_master_order(nm_task, nm_tryb);
@@ -52,7 +50,6 @@ effector::effector(lib::configurator &_config) :
 	reset_variables();
 }
 
-
 /*--------------------------------------------------------------------------*/
 void effector::move_arm(lib::c_buffer &instruction)
 {
@@ -68,7 +65,7 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 	//   printf(" GET ARM\n");
 	//lib::JointArray desired_joints_tmp(MAX_SERVOS_NR); // Wspolrzedne wewnetrzne -
 	if (read_hardware) {
-	//	manip_and_conv_effector::get_arm_position_read_hardware_sb();
+		//	manip_and_conv_effector::get_arm_position_read_hardware_sb();
 	}
 
 	// okreslenie rodzaju wspolrzednych, ktore maja by odczytane

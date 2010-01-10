@@ -33,7 +33,6 @@ namespace mrrocpp {
 namespace edp {
 namespace polycrank {
 
-
 // Konstruktor.
 effector::effector(lib::configurator &_config) :
 	manip_effector(_config, lib::ROBOT_POLYCRANK)
@@ -67,7 +66,7 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 	//lib::JointArray desired_joints_tmp(MAX_SERVOS_NR); // Wspolrzedne wewnetrzne -
 
 	if (read_hardware) {
-	//	manip_and_conv_effector::get_arm_position_read_hardware_sb();
+		//	manip_and_conv_effector::get_arm_position_read_hardware_sb();
 	}
 
 	// okreslenie rodzaju wspolrzednych, ktore maja by odczytane
