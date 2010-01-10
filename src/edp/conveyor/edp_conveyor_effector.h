@@ -33,6 +33,8 @@ public:
 
     void set_rmodel (lib::c_buffer &instruction);                    // zmiana narzedzia
 
+    void create_threads();
+
     // Przemieszczenie ramienia.
     void move_arm (lib::c_buffer &instruction);
     // Odczytanie pozycji ramienia.

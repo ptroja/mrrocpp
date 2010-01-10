@@ -75,6 +75,7 @@ public:
     // przepisanie lokalnego zestawu lokalnego edp_servo na globalny (chronione mutexem)
     void master_joints_and_frame_download(void);// by Y przepisanie z zestawu globalnego na lokalny dla edp_master
 
+	virtual servo_buffer* return_created_servo_buffer();
 
     void force_msr_download(double *new_value, double *old_value);// by Y odczytanie globalnego zestawu danych
 

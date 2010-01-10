@@ -205,8 +205,9 @@ void manip_effector::get_controller_state(lib::c_buffer &instruction)
 	}
 }
 
-void manip_effector::create_threads()
+servo_buffer* manip_effector::return_created_servo_buffer()
 {
+
 }
 
 /*--------------------------------------------------------------------------*/

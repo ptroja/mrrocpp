@@ -32,6 +32,13 @@ namespace mrrocpp {
 namespace edp {
 namespace irp6m {
 
+/*--------------------------------------------------------------------------*/
+void effector::create_threads()
+{
+	manip_and_conv_effector::hi_create_threads();
+}
+
+
 common::servo_buffer* effector::return_created_servo_buffer()
 {
 	return new irp6m::servo_buffer(*this);

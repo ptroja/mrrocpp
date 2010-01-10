@@ -48,6 +48,11 @@ namespace mrrocpp {
 namespace edp {
 namespace common {
 
+servo_buffer* manip_and_conv_effector::return_created_servo_buffer()
+{
+
+}
+
 /*--------------------------------------------------------------------------*/
 void manip_and_conv_effector::get_arm_position_read_hardware_sb()
 { // odczytanie pozycji ramienia
@@ -195,7 +200,7 @@ void manip_and_conv_effector::master_joints_read(double* output)
 }
 
 /*--------------------------------------------------------------------------*/
-void manip_and_conv_effector::create_threads()
+void manip_and_conv_effector::hi_create_threads()
 {
 	rb_obj = new reader_buffer(*this);
 	mt_tt_obj = new manip_trans_t(*this);

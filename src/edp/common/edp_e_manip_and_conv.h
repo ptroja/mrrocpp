@@ -186,7 +186,8 @@ public:
 	//! thread starting synchronization condition variable
 	boost::condition thread_started_cond;
 
-	virtual void create_threads();
+	virtual void create_threads() = 0;
+	void hi_create_threads();
 
 	void interpret_instruction(lib::c_buffer &instruction);
 	// interpretuje otrzymana z ECP instrukcje;
@@ -213,7 +214,7 @@ public:
 	// Czy robot zsynchronizowany? // by Y - wziete z ecp
 	bool is_synchronised(void) const;
 
-	virtual servo_buffer* return_created_servo_buffer() = 0;
+	virtual servo_buffer* return_created_servo_buffer();
 
 	virtual void master_order(MT_ORDER nm_task, int nm_tryb) = 0;
 	void multi_thread_master_order(common::MT_ORDER nm_task, int nm_tryb);

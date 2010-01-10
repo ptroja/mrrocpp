@@ -36,7 +36,7 @@ protected:
 public:
 
     void set_rmodel (lib::c_buffer &instruction);                    // zmiana narzedzia
-
+    void create_threads();
 
     // Konstruktor.
     effector (lib::configurator &_config);

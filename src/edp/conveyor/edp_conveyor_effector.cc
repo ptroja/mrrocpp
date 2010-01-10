@@ -33,6 +33,14 @@ namespace mrrocpp {
 namespace edp {
 namespace conveyor {
 
+
+/*--------------------------------------------------------------------------*/
+void effector::create_threads()
+{
+	manip_and_conv_effector::hi_create_threads();
+}
+
+
 common::servo_buffer* effector::return_created_servo_buffer()
 {
 	return new conveyor::servo_buffer(*this);

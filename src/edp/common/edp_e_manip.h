@@ -69,7 +69,7 @@ public:
 	void multi_thread_move_arm(lib::c_buffer &instruction);
 	void single_thread_master_order(common::MT_ORDER nm_task, int nm_tryb);
 
-	virtual void create_threads();
+	virtual servo_buffer* return_created_servo_buffer();
 
 	// wyznaczenie polozenia lokalnego i globalnego transformera
 	// przepisanie lokalnego zestawu lokalnego edp_servo na globalny (chronione mutexem)
