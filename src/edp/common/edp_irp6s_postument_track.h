@@ -50,7 +50,7 @@ protected:
     double global_kartez_force_msr[7]; // sila we wspolrzednych kartezjankich    XXXXX
     // 	i	 odczytana bezposrednio z czujnika - zestaw globalny dla procesu EDP
 
-    pthread_mutex_t force_mutex;	// mutex do sily   XXXXXX
+    boost::mutex force_mutex;	// mutex do sily   XXXXXX
 
 public:
 

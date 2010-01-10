@@ -168,7 +168,6 @@ irp6s_postument_track_effector::irp6s_postument_track_effector(lib::configurator
 	manip_effector(_config, l_robot_name)
 {
 
-	pthread_mutex_init(&force_mutex, NULL);
 
 	// czujnik sil nie zostal jeszcze skonfigurowany po synchronizacji robota
 
@@ -682,21 +681,19 @@ void irp6s_postument_track_effector::servo_joints_and_frame_actualization_and_up
 
 void irp6s_postument_track_effector::force_msr_upload(const double *new_value)
 {// by Y wgranie globalnego zestawu danych
-	pthread_mutex_lock(&force_mutex);
+	boost::mutex::scoped_lock lock(force_mutex);
 	for (int i = 0; i <= 5; i++) {
 		global_kartez_force_msr[i] = new_value[i];
 	}
-	pthread_mutex_unlock(&force_mutex);
 }
 
 // by Y odczytanie globalnego zestawu danych
 void irp6s_postument_track_effector::force_msr_download(double *new_value)
 {
-	pthread_mutex_lock(&force_mutex);
+	boost::mutex::scoped_lock lock(force_mutex);
 	for (int i = 0; i <= 5; i++) {
 		new_value[i] = global_kartez_force_msr[i];
 	}
-	pthread_mutex_unlock(&force_mutex);
 }
 
 } // namespace common
