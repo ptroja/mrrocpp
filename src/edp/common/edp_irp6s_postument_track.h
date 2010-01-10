@@ -69,8 +69,6 @@ public:
     // value to 7 elemetnowa tablica short
     // tryb - 0 zestaw kartezjanski, 1 zestaw nieprzetworzony
 
-    lib::Homog_matrix return_current_frame(TRANSLATION_ENUM translation_mode);// by Y przepisanie z zestawu globalnego na lokalny edp_force
-
 	virtual servo_buffer* return_created_servo_buffer();
 
     void force_msr_download(double *new_value, double *old_value);// by Y odczytanie globalnego zestawu danych

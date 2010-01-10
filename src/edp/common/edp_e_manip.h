@@ -57,6 +57,8 @@ protected:
 public:
 	manip_effector(lib::configurator &_config, lib::robot_name_t l_robot_name); // konstruktor
 
+    lib::Homog_matrix return_current_frame(TRANSLATION_ENUM translation_mode);// by Y przepisanie z zestawu globalnego na lokalny edp_force
+
 	void synchronise(); // synchronizacja robota
 	void get_controller_state(lib::c_buffer &instruction); // synchronizacja robota
 

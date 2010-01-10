@@ -175,6 +175,18 @@ void manip_effector::set_tool_frame_in_kinematic_model(const lib::Homog_matrix& 
 
 /*--------------------------------------------------------------------------*/
 
+lib::Homog_matrix manip_effector::return_current_frame(TRANSLATION_ENUM translation_mode)
+{// by Y
+	boost::mutex::scoped_lock lock(edp_irp6s_effector_mutex);
+	// przepisanie danych na zestaw lokalny dla edp_force
+	// lib::copy_frame(force_current_end_effector_frame, global_current_end_effector_frame);
+	lib::Homog_matrix return_frame(global_current_frame_wo_tool);
+
+	if (translation_mode == WITHOUT_TRANSLATION)
+		return_frame.remove_translation();
+	return return_frame;
+}
+
 
 /*--------------------------------------------------------------------------*/
 
