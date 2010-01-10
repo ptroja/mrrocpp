@@ -15,26 +15,23 @@
 #include "edp/conveyor/sg_conv.h"
 #include "edp/conveyor/regulator_conv.h"
 
-
 namespace mrrocpp {
 namespace edp {
 namespace conveyor {
 
 /*-----------------------------------------------------------------------*/
-uint8_t servo_buffer::Move_a_step (void)
+uint8_t servo_buffer::Move_a_step(void)
 {
 	// wykonac ruch o krok nie reagujac na SYNCHRO_SWITCH ora SYNCHRO_ZERO
 
-	Move_1_step ();
-	if (master.is_synchronised())
-	{// by Y aktualizacja transformera am jedynie sens po synchronizacji (kiedy robot zna swoja pozycje)
+	Move_1_step();
+	if (master.is_synchronised()) {// by Y aktualizacja transformera am jedynie sens po synchronizacji (kiedy robot zna swoja pozycje)
 		// by Y - do dokonczenia
-		for (int i=0; i < CONVEYOR_NUM_OF_SERVOS; i++)
-		{
-			if (!(master.test_mode))
-			{
+		for (int i = 0; i < CONVEYOR_NUM_OF_SERVOS; i++) {
+			if (!(master.test_mode)) {
 				//  master.update_servo_current_motor_pos(regulator_ptr[i]->get_position_inc(0)*2*M_PI/IRP6_POSTUMENT_AXIS_0_TO_5_INC_PER_REVOLUTION,  i);
-				master.update_servo_current_motor_pos_abs(hi->get_position(i)*(2*M_PI)/IRP6_POSTUMENT_AXIS_0_TO_5_INC_PER_REVOLUTION, i);
+				master.update_servo_current_motor_pos_abs(hi->get_position(i) * (2*M_PI)
+						/ IRP6_POSTUMENT_AXIS_0_TO_5_INC_PER_REVOLUTION, i);
 			}
 		}
 		master.servo_joints_and_frame_actualization_and_upload(); // by Y - aktualizacja trasformatora
@@ -43,54 +40,51 @@ uint8_t servo_buffer::Move_a_step (void)
 }
 /*-----------------------------------------------------------------------*/
 
-
-
 /*-----------------------------------------------------------------------*/
-servo_buffer::servo_buffer (effector &_master) : common::servo_buffer(_master), master(_master)
+servo_buffer::servo_buffer(effector &_master) :
+	common::servo_buffer(_master), master(_master)
 {
+	for (int j = 0; j < CONVEYOR_NUM_OF_SERVOS; j++) {
+		axe_inc_per_revolution[j] = IRP6_POSTUMENT_AXIS_0_TO_5_INC_PER_REVOLUTION;
+	}
+
 	thread_id = new boost::thread(boost::bind(&servo_buffer::operator(), this));
 }
 
 /*-----------------------------------------------------------------------*/
 
-void servo_buffer::load_hardware_interface (void)
+void servo_buffer::load_hardware_interface(void)
 {
 	// tablica pradow maksymalnych dla poszczegolnych osi
-	int max_current [CONVEYOR_NUM_OF_SERVOS] = {
-			CONVEYOR_AXIS_1_MAX_CURRENT
-	};
+	int max_current[CONVEYOR_NUM_OF_SERVOS] = { CONVEYOR_AXIS_1_MAX_CURRENT };
 
-	hi = new hardware_interface(master, IRQ_REAL, INT_FREC_DIVIDER, HI_RYDZ_INTR_TIMEOUT_HIGH, FIRST_SERVO_PTR,
-			INTERRUPT_GENERATOR_SERVO_PTR, ISA_CARD_OFFSET, max_current);
+	hi
+			= new hardware_interface(master, IRQ_REAL, INT_FREC_DIVIDER, HI_RYDZ_INTR_TIMEOUT_HIGH, FIRST_SERVO_PTR, INTERRUPT_GENERATOR_SERVO_PTR, ISA_CARD_OFFSET, max_current);
 
 	hi->init();
 	// utworzenie tablicy regulatorow
 
 	// Serwomechanizm 1
-	regulator_ptr[0] = new NL_regulator_1_conv (0, 0, 0.333, 6.2, 5.933, 0.35, master); // tasmociag dla irp6 postument
+	regulator_ptr[0] = new NL_regulator_1_conv(0, 0, 0.333, 6.2, 5.933, 0.35, master); // tasmociag dla irp6 postument
 
 	send_after_last_step = false;
 	clear_reply_status();
 	clear_reply_status_tmp();
 
-	for (int j = 0; j < CONVEYOR_NUM_OF_SERVOS; j++)
-	{
-		command.parameters.move.abs_position[j]=0.0;
+	for (int j = 0; j < CONVEYOR_NUM_OF_SERVOS; j++) {
+		command.parameters.move.abs_position[j] = 0.0;
 	}
 }
 
-
-
 /*------------- * ----------------------------------------------------------*/
 
-void servo_buffer::synchronise (void)
+void servo_buffer::synchronise(void)
 {
 	common::regulator* crp = NULL; // wskaznik aktualnie synchronizowanego napedu
 
-	double synchro_step = 0.0;   // zadany przyrost polozenia
+	double synchro_step = 0.0; // zadany przyrost polozenia
 
-	if(master.test_mode)
-	{
+	if (master.test_mode) {
 		// W.S. Tylko przy testowaniu
 		clear_reply_status();
 		clear_reply_status_tmp();
@@ -99,18 +93,15 @@ void servo_buffer::synchronise (void)
 	}
 
 	// zerowanie regulatorow
-	for (int j = 0; j < CONVEYOR_NUM_OF_SERVOS; j++)
-	{
+	for (int j = 0; j < CONVEYOR_NUM_OF_SERVOS; j++) {
 		crp = regulator_ptr[j];
 		crp->clear_regulator();
 		hi->reset_position(j);
 	}
 
-
 	// zatrzymanie na chwile robota
-	for (int j = 0; j < CONVEYOR_NUM_OF_SERVOS; j++)
-	{
-		synchro_step=0.0;
+	for (int j = 0; j < CONVEYOR_NUM_OF_SERVOS; j++) {
+		synchro_step = 0.0;
 		crp = regulator_ptr[j];
 		crp->insert_new_step(synchro_step);
 	}
@@ -128,18 +119,15 @@ void servo_buffer::synchronise (void)
 
 /*-----------------------------------------------------------------------*/
 
-
-
 /*-----------------------------------------------------------------------*/
-void servo_buffer::get_all_positions (void)
+void servo_buffer::get_all_positions(void)
 {
 	// Przepisanie aktualnych polozen servo do pakietu wysylkowego
-	for (int i = 0; i < CONVEYOR_NUM_OF_SERVOS; i++)
-	{
+	for (int i = 0; i < CONVEYOR_NUM_OF_SERVOS; i++) {
 		// przyrost polozenia w impulsach
-		servo_data.abs_position[i]  = hi->get_position(i)*(2*M_PI)/IRP6_POSTUMENT_AXIS_0_TO_5_INC_PER_REVOLUTION;
-		servo_data.position[i]  = regulator_ptr[i]->get_position_inc(1);
-		servo_data.current[i]   = regulator_ptr[i]->get_meassured_current();
+		servo_data.abs_position[i] = hi->get_position(i) * (2*M_PI) / IRP6_POSTUMENT_AXIS_0_TO_5_INC_PER_REVOLUTION;
+		servo_data.position[i] = regulator_ptr[i]->get_position_inc(1);
+		servo_data.current[i] = regulator_ptr[i]->get_meassured_current();
 		servo_data.PWM_value[i] = regulator_ptr[i]->get_PWM_value();
 		servo_data.algorithm_no[i] = regulator_ptr[i]->get_algorithm_no();
 		servo_data.algorithm_parameters_no[i] = regulator_ptr[i]->get_algorithm_parameters_no();
@@ -147,27 +135,22 @@ void servo_buffer::get_all_positions (void)
 }
 /*-----------------------------------------------------------------------*/
 
-
 /*-----------------------------------------------------------------------*/
-uint64_t servo_buffer::compute_all_set_values (void)
+uint64_t servo_buffer::compute_all_set_values(void)
 {
 	// obliczenie nastepnej wartosci zadanej dla wszystkich napedow
 	uint64_t status = OK; // kumuluje numer bledu
 
-	for (int j = 0; j < CONVEYOR_NUM_OF_SERVOS; j++)
-	{
-		if (master.test_mode)
-		{
+	for (int j = 0; j < CONVEYOR_NUM_OF_SERVOS; j++) {
+		if (master.test_mode) {
 			regulator_ptr[j]->insert_new_pos_increment(regulator_ptr[j]->return_new_step()
-					*IRP6_POSTUMENT_AXIS_0_TO_5_INC_PER_REVOLUTION/(2*M_PI));
-		}
-		else
-		{
+					* IRP6_POSTUMENT_AXIS_0_TO_5_INC_PER_REVOLUTION / (2*M_PI));
+		} else {
 			regulator_ptr[j]->insert_meassured_current(hi->get_current(j));
 			regulator_ptr[j]->insert_new_pos_increment(hi->get_increment(j));
 		}
 		// obliczenie nowej wartosci zadanej dla napedu
-		status |= ((uint64_t) regulator_ptr[j]->compute_set_value()) << 2*j;
+		status |= ((uint64_t) regulator_ptr[j]->compute_set_value()) << 2* j ;
 		// przepisanie obliczonej wartosci zadanej do hardware interface
 		hi->insert_set_value(j, regulator_ptr[j]->get_set_value());
 	}
@@ -179,10 +162,9 @@ uint64_t servo_buffer::compute_all_set_values (void)
 
 namespace common {
 
-
-servo_buffer* return_created_servo_buffer (manip_and_conv_effector &_master)
+servo_buffer* return_created_servo_buffer(manip_and_conv_effector &_master)
 {
-	return new conveyor::servo_buffer ((conveyor::effector &)(_master));
+	return new conveyor::servo_buffer((conveyor::effector &) (_master));
 }
 
 } // namespace common

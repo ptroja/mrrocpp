@@ -82,6 +82,9 @@ public:
 #endif
 
 public:
+
+	double axe_inc_per_revolution[MAX_SERVOS_NR];
+
     lib::edp_master_command servo_command;    // polecenie z EDP_MASTER dla SERVO_GROUP
     lib::servo_group_reply sg_reply;          // bufor na informacje odbierane z SERVO_GROUP
 
