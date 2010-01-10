@@ -131,7 +131,7 @@ void * edp_vsp::thread_main_loop(void *arg)
 		lib::Ft_tr ft_tr_inv_tool_matrix(!current_tool);
 
 		// uwaga sila nie przemnozona przez tool'a i current frame orientation
-		master.force_msr_download(current_force, 0);
+		master.force_msr_download(current_force);
 
 		lib::Ft_v_vector current_force_torque(ft_tr_inv_tool_matrix * ft_tr_inv_current_frame_matrix
 				* lib::Ft_vector(current_force));

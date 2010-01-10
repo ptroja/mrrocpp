@@ -386,7 +386,7 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buff
 		lib::V_tr v_tr_current_frame_matrix(current_frame_wo_offset);
 		lib::V_tr v_tr_inv_current_frame_matrix = !v_tr_current_frame_matrix;
 
-		force_msr_download(current_force, previous_force);
+		force_msr_download(current_force);
 		// sprowadzenie sil z ukladu bazowego do ukladu kisci
 		// modyfikacja pobranych sil w ukladzie czujnika - do ukladu wyznaczonego przez force_tool_frame i reference_frame
 
@@ -405,8 +405,7 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buff
 		lib::Ft_v_vector current_force_torque(ft_tr_inv_tool_matrix * ft_tr_inv_current_frame_matrix
 				* lib::Ft_vector(current_force));
 		//		lib::Ft_v_vector tmp_force_torque (lib::Ft_v_tr((!current_tool) * (!current_frame_wo_offset), lib::Ft_v_tr::FT) * lib::Ft_v_vector (current_force));
-		lib::Ft_v_vector previous_force_torque(ft_tr_inv_tool_matrix * ft_tr_inv_current_frame_matrix
-				* lib::Ft_vector(previous_force));
+
 
 		//wyzerowanie historii dla dlugiej przerwy w sterowaniu silowym
 
@@ -592,7 +591,7 @@ void irp6s_postument_track_effector::get_arm_position(bool read_hardware, lib::c
 				current_tool(((mrrocpp::kinematics::common::kinematic_model_with_tool*) get_current_kinematic_model())->tool);
 		lib::Ft_tr ft_tr_inv_tool_matrix(!current_tool);
 
-		force_msr_download(current_force, NULL);
+		force_msr_download(current_force);
 		// sprowadzenie sil z ukladu bazowego do ukladu kisci
 		// modyfikacja pobranych sil w ukladzie czujnika - do ukladu wyznaczonego przez force_tool_frame i reference_frame
 
@@ -685,22 +684,17 @@ void irp6s_postument_track_effector::force_msr_upload(const double *new_value)
 {// by Y wgranie globalnego zestawu danych
 	pthread_mutex_lock(&force_mutex);
 	for (int i = 0; i <= 5; i++) {
-		prevoius_global_kartez_force_msr[i] = global_kartez_force_msr[i];
 		global_kartez_force_msr[i] = new_value[i];
-		// 		printf("ALARM\n");
 	}
 	pthread_mutex_unlock(&force_mutex);
 }
 
 // by Y odczytanie globalnego zestawu danych
-void irp6s_postument_track_effector::force_msr_download(double *new_value, double *old_value)
+void irp6s_postument_track_effector::force_msr_download(double *new_value)
 {
 	pthread_mutex_lock(&force_mutex);
 	for (int i = 0; i <= 5; i++) {
-		if (new_value)
-			new_value[i] = global_kartez_force_msr[i];
-		if (old_value)
-			old_value[i] = prevoius_global_kartez_force_msr[i];
+		new_value[i] = global_kartez_force_msr[i];
 	}
 	pthread_mutex_unlock(&force_mutex);
 }

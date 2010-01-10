@@ -47,7 +47,7 @@ protected:
     // oraz przepisanie wyniku przeksztalcenia do
     // wewnetrznych struktur danych REPLY_BUFFER
 
-    double global_kartez_force_msr[7], prevoius_global_kartez_force_msr[7]; // sila we wspolrzednych kartezjankich    XXXXX
+    double global_kartez_force_msr[7]; // sila we wspolrzednych kartezjankich    XXXXX
     // 	i	 odczytana bezposrednio z czujnika - zestaw globalny dla procesu EDP
 
     pthread_mutex_t force_mutex;	// mutex do sily   XXXXXX
@@ -71,7 +71,7 @@ public:
 
 	virtual servo_buffer* return_created_servo_buffer();
 
-    void force_msr_download(double *new_value, double *old_value);// by Y odczytanie globalnego zestawu danych
+    void force_msr_download(double *new_value);// by Y odczytanie globalnego zestawu danych
 
     void create_threads ();
 
