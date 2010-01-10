@@ -289,7 +289,7 @@ void ui_common_robot::read_tool_xyz_angle_axis(double tool_vector[6])
 
 // ODCZYT NARZEDZIA
 // ---------------------------------------------------------------
-void ui_common_robot::read_tool_xyz_euler_zyz(lib::Xyz_Euler_Zyz_vector tool_vector)
+void ui_common_robot::read_tool_xyz_euler_zyz(lib::Xyz_Euler_Zyz_vector &tool_vector)
 {
 
 	// Zlecenie odczytu numeru modelu i korektora kinematyki
