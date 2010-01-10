@@ -59,7 +59,7 @@ protected:
     // pid_t caller;                    // Identyfikator EDP_MASTER
 
     uint8_t Move_1_step (void);         // wykonac ruch o krok
-    virtual uint8_t Move_a_step (void);         // wykonac ruch o krok nie reagujac na SYNCHRO_SWITCH i SYNCHRO_T
+    uint8_t Move_a_step (void);         // wykonac ruch o krok nie reagujac na SYNCHRO_SWITCH i SYNCHRO_T
     uint8_t convert_error (void);       // kompresja numeru bledu w reply_status.error0
     void reply_to_EDP_MASTER (void); // przeslanie stanu SERVO do EDP_MASTER
 

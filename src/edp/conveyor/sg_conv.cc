@@ -20,27 +20,6 @@ namespace edp {
 namespace conveyor {
 
 /*-----------------------------------------------------------------------*/
-uint8_t servo_buffer::Move_a_step(void)
-{
-	// wykonac ruch o krok nie reagujac na SYNCHRO_SWITCH ora SYNCHRO_ZERO
-
-	Move_1_step();
-	if (master.is_synchronised()) {// by Y aktualizacja transformera am jedynie sens po synchronizacji (kiedy robot zna swoja pozycje)
-		// by Y - do dokonczenia
-		for (int i = 0; i < CONVEYOR_NUM_OF_SERVOS; i++) {
-			if (!(master.test_mode)) {
-				//  master.update_servo_current_motor_pos(regulator_ptr[i]->get_position_inc(0)*2*M_PI/IRP6_POSTUMENT_AXIS_0_TO_5_INC_PER_REVOLUTION,  i);
-				master.update_servo_current_motor_pos_abs(hi->get_position(i) * (2*M_PI)
-						/ IRP6_POSTUMENT_AXIS_0_TO_5_INC_PER_REVOLUTION, i);
-			}
-		}
-		master.servo_joints_and_frame_actualization_and_upload(); // by Y - aktualizacja trasformatora
-	}
-	return convert_error();
-}
-/*-----------------------------------------------------------------------*/
-
-/*-----------------------------------------------------------------------*/
 servo_buffer::servo_buffer(effector &_master) :
 	common::servo_buffer(_master), master(_master)
 {

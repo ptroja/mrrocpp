@@ -30,6 +30,26 @@ namespace mrrocpp {
 namespace edp {
 namespace common {
 
+/*-----------------------------------------------------------------------*/
+uint8_t servo_buffer::Move_a_step(void)
+{
+	// wykonac ruch o krok nie reagujac na SYNCHRO_SWITCH oraz SYNCHRO_ZERO
+
+	Move_1_step();
+	if (master.is_synchronised()) {// by Y aktualizacja transformera am jedynie sens po synchronizacji (kiedy robot zna swoja pozycje)
+		// by Y - do dokonczenia
+		for (int i = 0; i < master.number_of_servos; i++) {
+			if (!(master.test_mode)) {
+				master.update_servo_current_motor_pos_abs(hi->get_position(i) * (2*M_PI) / axe_inc_per_revolution[i], i);
+			}
+		}
+
+		master.servo_joints_and_frame_actualization_and_upload();// by Y - aktualizacja trasformatora
+	}
+	return convert_error();
+}
+/*-----------------------------------------------------------------------*/
+
 
 /*--------------------------------------------------------------------------*/
 void servo_buffer::set_rmodel_servo_algorithm(lib::c_buffer &instruction)
@@ -215,12 +235,6 @@ void servo_buffer::operator()()
 } // end: main() SERVO_GROUP
 
 
-
-
-uint8_t servo_buffer::Move_a_step (void)
-{
-    return 0;
-}
 
 void servo_buffer::clear_reply_status ( void )
 {
