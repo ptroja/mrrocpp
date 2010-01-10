@@ -50,7 +50,7 @@ public:
 		const double weight, const lib::K_vector & point_of_gravity);
 	void defineTool(const lib::Homog_matrix & init_frame, const double weight, const lib::K_vector & point_of_gravity);
 	void synchro(const lib::Homog_matrix & init_frame);
-	double* getForce(const double[6], const lib::Homog_matrix & curr_frame);
+	lib::Ft_vector getForce(const lib::Ft_vector inputForceTorque, const lib::Homog_matrix curr_frame);
 };
 
 

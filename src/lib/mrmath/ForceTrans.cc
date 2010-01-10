@@ -99,7 +99,7 @@ void ForceTrans::defineTool(const lib::Homog_matrix & init_frame, const double w
 
 
 // zeraca sily i momenty sil w w ukladzie z orientacja koncowki manipulatory bez narzedzia
-double* ForceTrans::getForce(const double inputForceTorque[6], const lib::Homog_matrix & orientation)
+lib::Ft_vector ForceTrans::getForce(const lib::Ft_vector inputForceTorque, const lib::Homog_matrix orientation)
 {
 	static long deblicz=0;
 
@@ -113,7 +113,7 @@ double* ForceTrans::getForce(const double inputForceTorque[6], const lib::Homog_
 		lib::K_vector input_torque((double*) inputForceTorque+3);
 */
 		// sprowadzenie sil i momentow sil do ukladu umieszczonego w srodku czujnika ale z orientacja koncowki
-		lib::Ft_vector input_force_torque (ft_tr_sensor_in_wrist * lib::Ft_vector ((double*) inputForceTorque));
+		lib::Ft_vector input_force_torque (ft_tr_sensor_in_wrist * inputForceTorque);
 		/*
 		if ((debugi%10==0)&&(force_sensor_name==lib::FORCE_SENSOR_ATI3084)&&(last_debugi!=debugi))
 		{
@@ -189,9 +189,6 @@ double* ForceTrans::getForce(const double inputForceTorque[6], const lib::Homog_
 		*/
 		 // if ((deblicz%100) == 0) cout << output_force_torque << endl;
 
-		// przygotowania tablicy wynikowej
-		double *outputForceTorque = new double[6];
-		output_force_torque.to_table(outputForceTorque);
 		/*
 		output_force.to_table(outputForceTorque);
 //			if ((deblicz%100) == 0)cout << "of" << output_force << endl;
@@ -215,7 +212,7 @@ double* ForceTrans::getForce(const double inputForceTorque[6], const lib::Homog_
 
 */
 		last_debugi = debugi;
-		return outputForceTorque;
+		return output_force_torque;
 	}
 	return 0;
 }

@@ -122,7 +122,7 @@ void * edp_vsp::thread_main_loop(void *arg)
 		//!< oczekiwanie nowego pomiaru
 		sem_wait(&(master.vs->new_ms));
 		//!< przygotowanie struktury do wyslania
-		double current_force[6];
+		lib::Ft_vector current_force;
 
 		lib::Homog_matrix current_frame_wo_offset = master.return_current_frame(WITHOUT_TRANSLATION);
 		lib::Ft_tr ft_tr_inv_current_frame_matrix(!current_frame_wo_offset);
@@ -134,7 +134,7 @@ void * edp_vsp::thread_main_loop(void *arg)
 		master.force_msr_download(current_force);
 
 		lib::Ft_v_vector current_force_torque(ft_tr_inv_tool_matrix * ft_tr_inv_current_frame_matrix
-				* lib::Ft_vector(current_force));
+				* current_force);
 		current_force_torque.to_table(edp_vsp_reply.force);
 
 		counter++;

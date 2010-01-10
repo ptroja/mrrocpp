@@ -256,7 +256,7 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buff
 		}
 	}
 
-	double current_force[6], previous_force[6];
+	lib::Ft_vector current_force;
 
 	double beginning_gripper_coordinate;
 	static double ending_gripper_coordinate;
@@ -402,7 +402,7 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buff
 				!v_tr_modified_beginning_to_desired_end_effector_frame;
 
 		lib::Ft_v_vector current_force_torque(ft_tr_inv_tool_matrix * ft_tr_inv_current_frame_matrix
-				* lib::Ft_vector(current_force));
+				* current_force);
 		//		lib::Ft_v_vector tmp_force_torque (lib::Ft_v_tr((!current_tool) * (!current_frame_wo_offset), lib::Ft_v_tr::FT) * lib::Ft_v_vector (current_force));
 
 
@@ -551,7 +551,7 @@ void irp6s_postument_track_effector::get_arm_position(bool read_hardware, lib::c
 
 	//   printf(" GET ARM\n");
 //	lib::JointArray desired_joints_tmp(MAX_SERVOS_NR); // Wspolrzedne wewnetrzne -
-	double current_force[6];
+	lib::Ft_vector current_force;
 
 	if (read_hardware) {
 		manip_and_conv_effector::get_arm_position_read_hardware_sb();
@@ -595,7 +595,7 @@ void irp6s_postument_track_effector::get_arm_position(bool read_hardware, lib::c
 		// modyfikacja pobranych sil w ukladzie czujnika - do ukladu wyznaczonego przez force_tool_frame i reference_frame
 
 		lib::Ft_v_vector current_force_torque(ft_tr_inv_tool_matrix * ft_tr_inv_current_frame_matrix
-				* lib::Ft_vector(current_force));
+				* current_force);
 		current_force_torque.to_table(reply.arm.pf_def.force_xyz_torque_xyz);
 
 		reply.arm.pf_def.gripper_coordinate = current_joints[gripper_servo_nr];
@@ -679,21 +679,17 @@ void irp6s_postument_track_effector::servo_joints_and_frame_actualization_and_up
 	}
 }
 
-void irp6s_postument_track_effector::force_msr_upload(const double *new_value)
+void irp6s_postument_track_effector::force_msr_upload(const lib::Ft_vector l_vector)
 {// by Y wgranie globalnego zestawu danych
 	boost::mutex::scoped_lock lock(force_mutex);
-	for (int i = 0; i <= 5; i++) {
-		global_kartez_force_msr[i] = new_value[i];
-	}
+	global_kartez_force_msr = l_vector;
 }
 
 // by Y odczytanie globalnego zestawu danych
-void irp6s_postument_track_effector::force_msr_download(double *new_value)
+void irp6s_postument_track_effector::force_msr_download(lib::Ft_vector& l_vector)
 {
 	boost::mutex::scoped_lock lock(force_mutex);
-	for (int i = 0; i <= 5; i++) {
-		new_value[i] = global_kartez_force_msr[i];
-	}
+	l_vector = global_kartez_force_msr;
 }
 
 } // namespace common

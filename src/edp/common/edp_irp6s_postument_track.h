@@ -47,7 +47,7 @@ protected:
     // oraz przepisanie wyniku przeksztalcenia do
     // wewnetrznych struktur danych REPLY_BUFFER
 
-    double global_kartez_force_msr[7]; // sila we wspolrzednych kartezjankich    XXXXX
+    lib::Ft_vector global_kartez_force_msr; // sila we wspolrzednych kartezjankich    XXXXX
     // 	i	 odczytana bezposrednio z czujnika - zestaw globalny dla procesu EDP
 
     boost::mutex force_mutex;	// mutex do sily   XXXXXX
@@ -64,14 +64,11 @@ public:
 
     void servo_joints_and_frame_actualization_and_upload(void);// by Y
 
-    void force_msr_upload(const double *new_value);// by Y wgranie globalnego zestawu danych
+    void force_msr_upload(const lib::Ft_vector l_vector);// by Y wgranie globalnego zestawu danych
 
-    // value to 7 elemetnowa tablica short
-    // tryb - 0 zestaw kartezjanski, 1 zestaw nieprzetworzony
+    void force_msr_download(lib::Ft_vector& l_vector);// by Y odczytanie globalnego zestawu danych
 
 	virtual servo_buffer* return_created_servo_buffer();
-
-    void force_msr_download(double *new_value);// by Y odczytanie globalnego zestawu danych
 
     void create_threads ();
 

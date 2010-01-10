@@ -571,7 +571,7 @@ void ATI6284_force::initiate_reading(void)
 		printf ("aaa: %f, %f, %f: \n", force_torque[0], force_torque[1], force_torque[2]);
 #endif
 		// // // // // // // // // // // // // // / PRZEPISANIE WYNIKU // // // // // // // // // // // // // // // // // // // // // // // //
-		double kartez_force[6], root_force[6];
+		lib::Ft_vector kartez_force, root_force;
 		if (master.force_tryb == 1) {
 			for (int i = 0; i < 6; i++) {
 				from_vsp.comm_image.sensor_union.force.rez[i] = force_torque[i];
@@ -591,7 +591,7 @@ void ATI6284_force::initiate_reading(void)
 
 			lib::Homog_matrix frame = master.return_current_frame(common::WITH_TRANSLATION);
 			// lib::Homog_matrix frame(master.force_current_end_effector_frame);
-			double* output = gravity_transformation->getForce(root_force, frame);
+			lib::Ft_vector output = gravity_transformation->getForce(root_force, frame);
 
 			//		printf("output: %f, %f, %f, %f, %f, %f\n", output[0], output[1], output[2], output[3], output[4], output[5]);
 			//		printf("output: %f, %f, %f, %f, %f, %f\n", root_force[0], root_force[1], root_force[2], root_force[3], root_force[4], root_force[5]);
@@ -617,10 +617,9 @@ void ATI6284_force::initiate_reading(void)
 			 show=0;
 			 }
 			 */
-			delete[] output;
 		}
 	} else {
-		double kartez_force[6];
+		lib::Ft_vector kartez_force;
 		for (int i = 0; i < 6; i++) {
 			kartez_force[i] = 0.0;
 		}

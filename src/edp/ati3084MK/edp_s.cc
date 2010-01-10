@@ -49,51 +49,43 @@
 // Konfigurator
 #include "lib/configurator.h"
 
-
-void y_InterruptUnlock( intrspin_t* spinlock_local )
+void y_InterruptUnlock(intrspin_t* spinlock_local)
 {
 	InterruptUnlock(spinlock_local );
 }
-
 
 namespace mrrocpp {
 namespace edp {
 namespace sensor {
 
-
-
-
-unsigned int ms_nr=0;// numer odczytu z czujnika
+unsigned int ms_nr = 0;// numer odczytu z czujnika
 
 
 struct timespec start[9];
 
-
 // Rejstracja procesu VSP
 ATI3084_force::ATI3084_force(common::irp6s_postument_track_effector &_master) :
 	force(_master)
-	{
+{
 
-	}
+}
 
-void ATI3084_force::connect_to_hardware (void)
+void ATI3084_force::connect_to_hardware(void)
 {
 	if (!(master.test_mode)) {
-	//	 	printf("Konstruktor VSP!\n");
+		//	 	printf("Konstruktor VSP!\n");
 
 		ThreadCtl(_NTO_TCTL_IO, NULL); // nadanie odpowiednich uprawnien watkowi
 		// 	printf("KONTRUKTOR EDP_S POCATEK\n");
 
-		uart=open_port();
+		uart = open_port();
 		//printf("2\n");
-		tcflush(uart,TCIFLUSH);
-
+		tcflush(uart, TCIFLUSH);
 
 		sendBias(uart);
 	}
 
 }
-
 
 ATI3084_force::~ATI3084_force(void)
 {
@@ -110,12 +102,11 @@ ATI3084_force::~ATI3084_force(void)
 /**************************** inicjacja czujnika ****************************/
 void ATI3084_force::configure_sensor(void)
 {// by Y
-	is_sensor_configured=true;
+	is_sensor_configured = true;
 	//  printf("EDP Sensor configured\n");
 	sr_msg->message("EDP Sensor configured");
 
-	if (!(master.test_mode))
-	{
+	if (!(master.test_mode)) {
 		sendBias(uart);
 	}
 
@@ -130,32 +121,31 @@ void ATI3084_force::configure_sensor(void)
 
 			lib::Xyz_Angle_Axis_vector tab;
 			lib::Homog_matrix sensor_frame;
-			if (master.config.exists("sensor_in_wrist"))
-			{
-				char *tmp = strdup(master.config.value<std::string>("sensor_in_wrist").c_str());
+			if (master.config.exists("sensor_in_wrist")) {
+				char *tmp = strdup(master.config.value <std::string> ("sensor_in_wrist").c_str());
 				char* toDel = tmp;
-				for (int i=0; i<6; i++)
-					tab[i] = strtod( tmp, &tmp );
+				for (int i = 0; i < 6; i++)
+					tab[i] = strtod(tmp, &tmp);
 				free(toDel);
 				sensor_frame = lib::Homog_matrix(tab);
 				// std::cout<<sensor_frame<<std::endl;
-			}
-			else
+			} else
 				sensor_frame = lib::Homog_matrix(0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 1, 0.09);
 			// lib::Homog_matrix sensor_frame = lib::Homog_matrix(0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 1, 0.09);
 
-			double weight = master.config.value<double>("weight");
+			double weight = master.config.value <double> ("weight");
 
 			double point[3];
-			char *tmp = strdup(master.config.value<std::string>("default_mass_center_in_wrist").c_str());
+			char *tmp = strdup(master.config.value <std::string> ("default_mass_center_in_wrist").c_str());
 			char* toDel = tmp;
-			for (int i=0; i<3; i++)
-				point[i] = strtod( tmp, &tmp );
+			for (int i = 0; i < 3; i++)
+				point[i] = strtod(tmp, &tmp);
 			free(toDel);
 			// double point[3] = { master.config.value<double>("x_axis_arm"),
 			//		master.config.value<double>("y_axis_arm"), master.config.return_double_value("z_axis_arm") };
 			lib::K_vector pointofgravity(point);
-			gravity_transformation = new lib::ForceTrans(lib::FORCE_SENSOR_ATI3084, frame, sensor_frame, weight, pointofgravity);
+			gravity_transformation
+					= new lib::ForceTrans(lib::FORCE_SENSOR_ATI3084, frame, sensor_frame, weight, pointofgravity);
 
 		} else {
 			gravity_transformation->synchro(frame);
@@ -164,17 +154,14 @@ void ATI3084_force::configure_sensor(void)
 
 }
 
-
 void ATI3084_force::wait_for_event()
 {
 
-//	sr_msg->message("wait_for_event");
+	//	sr_msg->message("wait_for_event");
 
-	if (!(master.test_mode))
-	{
+	if (!(master.test_mode)) {
 
-		ftxyz=getFT(uart);
-
+		ftxyz = getFT(uart);
 
 	} else {
 		usleep(1000);
@@ -185,60 +172,52 @@ void ATI3084_force::wait_for_event()
 /*************************** inicjacja odczytu ******************************/
 void ATI3084_force::initiate_reading(void)
 {
-	double kartez_force[6];
+	lib::Ft_vector kartez_force;
 	short measure_report;
 
 	if (!is_sensor_configured)
-		throw sensor_error (lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
+		throw sensor_error(lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
 
 	if (master.test_mode) {
 		for (int i = 0; i < 6; ++i) {
 			kartez_force[i] = 0.0;
 		}
 		master.force_msr_upload(kartez_force);
-	} else
-	{
+	} else {
 
-		double ft_table[6];
+		lib::Ft_vector ft_table;
 
-		for (int i=0;i<6;i++)
-		{
-			ft_table[i] = static_cast<double>(ftxyz.ft[i]);
+		for (int i = 0; i < 6; i++) {
+			ft_table[i] = static_cast <double> (ftxyz.ft[i]);
 		}
-/*
-		char aaa[50];
+		/*
+		 char aaa[50];
 
-		sprintf(aaa,"%f",ft_table[0]);
+		 sprintf(aaa,"%f",ft_table[0]);
 
 
 
-			sr_msg->message(aaa);
+		 sr_msg->message(aaa);
 
-*/
-		is_reading_ready=true;
+		 */
+		is_reading_ready = true;
 
 		// jesli ma byc wykorzytstywana biblioteka transformacji sil
-		if (master.force_tryb == 2 && gravity_transformation)
-		{
-			for(int i=0;i<3;i++)
-			{
-				ft_table[i]*=10;
-			ft_table[i]/=115;
+		if (master.force_tryb == 2 && gravity_transformation) {
+			for (int i = 0; i < 3; i++) {
+				ft_table[i] *= 10;
+				ft_table[i] /= 115;
 			}
 			//ft_table[i]*=(10/115);
 			//			for(int i=3;i<6;i++) ft_table[i]/=333;
-			for(int i=3;i<6;i++)
-			{
-				ft_table[i]*=5; // by Y - korekta 5/1000
-				ft_table[i]/=940; // by Y - korekta 5/1000
+			for (int i = 3; i < 6; i++) {
+				ft_table[i] *= 5; // by Y - korekta 5/1000
+				ft_table[i] /= 940; // by Y - korekta 5/1000
 			}
 			lib::Homog_matrix frame = master.return_current_frame(common::WITH_TRANSLATION);
 			// lib::Homog_matrix frame(master.force_current_end_effector_frame);
-			double* output = gravity_transformation->getForce (ft_table, frame);
+			lib::Ft_vector output = gravity_transformation->getForce(ft_table, frame);
 			master.force_msr_upload(output);
-
-			delete[] output;
-
 		}
 	}
 
@@ -259,20 +238,19 @@ void ATI3084_force::solve_transducer_controller_failure(void)
 	usleep(100);
 }
 
-
-
 void ATI3084_force::sendBias(int fd)
 {
-	char bias='b';
-	if (write(fd, &bias, 1) <0) printf("Blad zapisu\n");
+	char bias = 'b';
+	if (write(fd, &bias, 1) < 0)
+		printf("Blad zapisu\n");
 }
 
 forceReadings ATI3084_force::getFT(int fd)
 {
-	char query='q';
-	int i,r;
-	int current_bytes=14;
-	int iter_counter=0; // okresla ile razy pod rzad zostala uruchomiona ta metoda
+	char query = 'q';
+	int i, r;
+	int current_bytes = 14;
+	int iter_counter = 0; // okresla ile razy pod rzad zostala uruchomiona ta metoda
 
 	//	printf("bbb \n");
 	uint8_t reads[14];
@@ -281,43 +259,37 @@ forceReadings ATI3084_force::getFT(int fd)
 	//	base_cycle = ClockCycles();
 
 
-
-	do
-	{
-		r=1;
+	do {
+		r = 1;
 		iter_counter++;
 
-		if (write(fd, &query, 1) <0) printf("Blad zapisu\n");
+		if (write(fd, &query, 1) < 0)
+			printf("Blad zapisu\n");
 		//current_cycle = ClockCycles();
-		while ((current_bytes>0)&&(r!=0))
-		{//printf("aaa: %d\n",r);
-			r=read(fd, &(reads[14-current_bytes]), current_bytes);
+		while ((current_bytes > 0) && (r != 0)) {//printf("aaa: %d\n",r);
+			r = read(fd, &(reads[14 - current_bytes]), current_bytes);
 
-			current_bytes-=r;
+			current_bytes -= r;
 		}
 		//	current_cycle2 = ClockCycles();
 
-		if (r==0) {
-			if (iter_counter==1)
-			{
-				printf("Nie otrzymano oczekiwanej ilosci znakow: %d\n",r);
+		if (r == 0) {
+			if (iter_counter == 1) {
+				printf("Nie otrzymano oczekiwanej ilosci znakow: %d\n", r);
 				sr_msg->message(lib::NON_FATAL_ERROR, "MK Force / Torque read error - check sensor controller");
 			}
 
 			solve_transducer_controller_failure();
-		}else {
-			if (iter_counter>1) {
+		} else {
+			if (iter_counter > 1) {
 				sr_msg->message("MK Force / Torque sensor connection reastablished");
 			}
 		}
-	} while (r==0);
+	} while (r == 0);
 
-
-
-	for (i=0;i<6;i++) {
-		ftxyz.ft[i]=(reads[2*i])<<8 | reads[2*i+1];
+	for (i = 0; i < 6; i++) {
+		ftxyz.ft[i] = (reads[2* i ]) << 8 | reads[2* i + 1];
 	}
-
 
 	return ftxyz;
 }
@@ -328,8 +300,7 @@ int ATI3084_force::open_port(void)
 	struct termios options;
 	struct termios org_port_options;
 	fd = open(PORT, O_RDWR);
-	if(fd == -1)
-	{
+	if (fd == -1) {
 		printf("Can not open the port");
 		return -1;
 	}
@@ -363,8 +334,6 @@ int ATI3084_force::open_port(void)
 	//	printf("4\n");
 	return fd;
 }
-
-
 
 force* return_created_edp_force_sensor(common::irp6s_postument_track_effector &_master)
 {
