@@ -54,10 +54,21 @@ protected:
 	// odczytane wspolrzedne zewnetrzne koncowki
 	// manipulatora wzgledem ukladu bazowego (polozenie w mm)
 
+    lib::Ft_vector global_force_msr; // sila we wspolrzednych kartezjankich    XXXXX
+    // 	i	 odczytana bezposrednio z czujnika - zestaw globalny dla procesu EDP
+
+    boost::mutex force_mutex;	// mutex do sily   XXXXXX
+
+
 public:
 	manip_effector(lib::configurator &_config, lib::robot_name_t l_robot_name); // konstruktor
 
     lib::Homog_matrix return_current_frame(TRANSLATION_ENUM translation_mode);// by Y przepisanie z zestawu globalnego na lokalny edp_force
+
+    void force_msr_upload(const lib::Ft_vector l_vector);// by Y wgranie globalnego zestawu danych
+
+    void force_msr_download(lib::Ft_vector& l_vector);// by Y odczytanie globalnego zestawu danych
+
 
 	void synchronise(); // synchronizacja robota
 	void get_controller_state(lib::c_buffer &instruction); // synchronizacja robota

@@ -188,6 +188,20 @@ lib::Homog_matrix manip_effector::return_current_frame(TRANSLATION_ENUM translat
 }
 
 
+void manip_effector::force_msr_upload(const lib::Ft_vector l_vector)
+{// by Y wgranie globalnego zestawu danych
+	boost::mutex::scoped_lock lock(force_mutex);
+	global_force_msr = l_vector;
+}
+
+// by Y odczytanie globalnego zestawu danych
+void manip_effector::force_msr_download(lib::Ft_vector& l_vector)
+{
+	boost::mutex::scoped_lock lock(force_mutex);
+	l_vector = global_force_msr;
+}
+
+
 /*--------------------------------------------------------------------------*/
 
 // Synchronizacja robota.

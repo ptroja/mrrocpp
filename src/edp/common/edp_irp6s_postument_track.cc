@@ -679,18 +679,7 @@ void irp6s_postument_track_effector::servo_joints_and_frame_actualization_and_up
 	}
 }
 
-void irp6s_postument_track_effector::force_msr_upload(const lib::Ft_vector l_vector)
-{// by Y wgranie globalnego zestawu danych
-	boost::mutex::scoped_lock lock(force_mutex);
-	global_force_msr = l_vector;
-}
 
-// by Y odczytanie globalnego zestawu danych
-void irp6s_postument_track_effector::force_msr_download(lib::Ft_vector& l_vector)
-{
-	boost::mutex::scoped_lock lock(force_mutex);
-	l_vector = global_force_msr;
-}
 
 } // namespace common
 } // namespace edp
