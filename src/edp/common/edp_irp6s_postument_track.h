@@ -47,7 +47,7 @@ protected:
     // oraz przepisanie wyniku przeksztalcenia do
     // wewnetrznych struktur danych REPLY_BUFFER
 
-    lib::Ft_vector global_kartez_force_msr; // sila we wspolrzednych kartezjankich    XXXXX
+    lib::Ft_vector global_force_msr; // sila we wspolrzednych kartezjankich    XXXXX
     // 	i	 odczytana bezposrednio z czujnika - zestaw globalny dla procesu EDP
 
     boost::mutex force_mutex;	// mutex do sily   XXXXXX
