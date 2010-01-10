@@ -583,6 +583,10 @@ servo_buffer::~servo_buffer(void)
     // Zniszcyc regulatory
     for (int j = 0; j < master.number_of_servos; j++)
         delete regulator_ptr[j];
+
+	delete hi;
+
+	delete thread_id;
 }
 /*-----------------------------------------------------------------------*/
 

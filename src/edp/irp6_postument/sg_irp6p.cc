@@ -520,19 +520,6 @@ void servo_buffer::synchronise (void)
 
 
 
-/*-----------------------------------------------------------------------*/
-servo_buffer::~servo_buffer(void)
-{
-	for(int i = 0; i < IRP6_POSTUMENT_NUM_OF_SERVOS; i++) {
-		delete regulator_ptr[i];
-	}
-
-	delete hi;
-
-	delete thread_id;
-}
-/*-----------------------------------------------------------------------*/
-
 
 /*-----------------------------------------------------------------------*/
 void servo_buffer::get_all_positions (void)

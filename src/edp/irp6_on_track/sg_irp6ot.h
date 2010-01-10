@@ -36,7 +36,7 @@ class servo_buffer: public common::servo_buffer
 		void load_hardware_interface (void);
 
 		servo_buffer(effector &_master); // konstruktor
-		~servo_buffer(void); // destruktor
+
 
 		void synchronise(void); // synchronizacja
 		uint64_t compute_all_set_values(void);
