@@ -82,7 +82,24 @@ void manip_effector::set_rmodel(lib::c_buffer &instruction)
 
 			// Przyslano dane dotyczace narzedzia i koncowki.
 			// Sprawdzenie poprawnosci macierzy
-			set_tool_frame_in_kinematic_model(lib::Homog_matrix(instruction.rmodel.tool_frame_def.tool_frame));
+		//	set_tool_frame_in_kinematic_model(lib::Homog_matrix(instruction.rmodel.tool_frame_def.tool_frame));
+		{
+			lib::Homog_matrix hm(instruction.rmodel.tool_frame_def.tool_frame);
+
+			if (!(hm.is_valid())) {
+				throw NonFatal_error_2(INVALID_HOMOGENEOUS_MATRIX);
+			}
+			// Ustawienie macierzy reprezentujacej narzedzie.
+			((mrrocpp::kinematics::common::kinematic_model_with_tool*) get_current_kinematic_model())->tool = hm;
+
+			/*
+			 // odswierzanie
+			 get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
+			 get_current_kinematic_model()->i2e_transform(current_joints, &current_end_effector_frame);
+			 */
+		}
+
+
 			break;
 		default: // blad: nie istniejaca specyfikacja modelu robota
 			manip_and_conv_effector::set_rmodel(instruction);
@@ -156,22 +173,6 @@ void manip_effector::compute_frame(const lib::c_buffer &instruction)
 	}
 }
 /*--------------------------------------------------------------------------*/
-
-/*--------------------------------------------------------------------------*/
-
-void manip_effector::set_tool_frame_in_kinematic_model(const lib::Homog_matrix& hm)
-{
-	if (!(hm.is_valid())) {
-		throw NonFatal_error_2(INVALID_HOMOGENEOUS_MATRIX);
-	}
-	// Ustawienie macierzy reprezentujacej narzedzie.
-	((mrrocpp::kinematics::common::kinematic_model_with_tool*) get_current_kinematic_model())->tool = hm;
-	/*
-	 // odswierzanie
-	 get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
-	 get_current_kinematic_model()->i2e_transform(current_joints, &current_end_effector_frame);
-	 */
-}
 
 /*--------------------------------------------------------------------------*/
 

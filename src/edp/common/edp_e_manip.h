@@ -35,8 +35,6 @@ protected:
 
 	virtual void compute_frame(const lib::c_buffer &instruction); // obliczenia dla ruchu ramienia (koncowka: FRAME)
 
-	void set_tool_frame_in_kinematic_model(const lib::Homog_matrix& hm);
-
 	// lib::r_buffer
 
 	lib::Homog_matrix servo_current_frame_wo_tool; // by Y dla watku EDP_SERVO    XXXXX
