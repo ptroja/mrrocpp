@@ -8,21 +8,20 @@ KINEMATDIR = ${HOMEDIR}/src/kinematics
 include $(HOMEDIR)/common.mk
 
 SOURCES = ${wildcard *.cc}
-#OBJECTS = ${patsubst %.cc,%.o,${SOURCES}}
+OBJECTS = ${patsubst %.cc,%.o,${SOURCES}}
 KIN_OBJECTS = ${KINEMATDIR}/polycrank/kinematic_model_polycrank.o
 
 OBJECTS = edp_e_polycrank.o
-EDPOBJS  = ${OBJECTS} ${KIN_OBJECTS}
 BINARIES  = edp_polycrank
 
 
-SHOBJ = ../common/libedp.a $(LIBDIR)/libmrrocpp.a
+SHOBJ =  ../common/int_hand_suplement.o ../common/libedp.a $(LIBDIR)/libmrrocpp.a 
 #======================================================#	
 .PHONY: all clean install
 #------------------------------------------------- Build rules -------------------------------------------------------#
 all: ${BINARIES}
 #-----------------------------------------------------------------------------------------------------------------------#
-edp_polycrank: $(EDPOBJS) $(SHOBJ)
+edp_polycrank: $(OBJECTS) ${KIN_OBJECTS} $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 
 #---------------------------------Special object build rules (user made)-------------------------------------#

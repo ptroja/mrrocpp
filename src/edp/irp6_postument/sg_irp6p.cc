@@ -518,42 +518,6 @@ void servo_buffer::get_all_positions(void)
 }
 /*-----------------------------------------------------------------------*/
 
-/*-----------------------------------------------------------------------*/
-uint64_t servo_buffer::compute_all_set_values(void)
-{
-	// obliczenie nastepnej wartosci zadanej dla wszystkich napedow
-	uint64_t status = OK; // kumuluje numer bledu
-
-
-	for (int j = 0; j < IRP6_POSTUMENT_NUM_OF_SERVOS; j++) {
-		if (master.test_mode) {
-			switch (j)
-			{
-				case IRP6P_GRIPPER_CATCH_AXE:
-					regulator_ptr[j]->insert_new_pos_increment(regulator_ptr[j]->return_new_step()
-							* IRP6_POSTUMENT_AXIS_7_INC_PER_REVOLUTION / (2*M_PI));
-					break;
-				case IRP6P_GRIPPER_TURN_AXE:
-					regulator_ptr[j]->insert_new_pos_increment(regulator_ptr[j]->return_new_step()
-							* IRP6_POSTUMENT_AXIS_6_INC_PER_REVOLUTION / (2*M_PI));
-					break;
-				default:
-					regulator_ptr[j]->insert_new_pos_increment(regulator_ptr[j]->return_new_step()
-							* IRP6_POSTUMENT_AXIS_0_TO_5_INC_PER_REVOLUTION / (2*M_PI));
-					break;
-			}
-		} else {
-			regulator_ptr[j]->insert_meassured_current(hi->get_current(j));
-			regulator_ptr[j]->insert_new_pos_increment(hi->get_increment(j));
-		}
-		// obliczenie nowej wartosci zadanej dla napedu
-		status |= ((uint64_t) regulator_ptr[j]->compute_set_value()) << 2* j ;
-		// przepisanie obliczonej wartosci zadanej do hardware interface
-		hi->insert_set_value(j, regulator_ptr[j]->get_set_value());
-	}
-	return status;
-}
-/*-----------------------------------------------------------------------*/
 
 } // namespace irp6p
 namespace common {

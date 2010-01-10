@@ -16,6 +16,7 @@ EDPOBJ = edp_m.o edp_effector.o\
 	${KINEMATDIR}/common/kinematic_model.o ${KINEMATDIR}/common/kinematic_model_with_tool.o ${KINEMATDIR}/common/kinematic_model_with_local_corrector.o ${KINEMATDIR}/common/kinematics_manager.o \
 	hi_rydz.o edp_irp6s_postument_track.o
 
+
 #======================================================#	
 .PHONY: all clean install
 #------------------------------------------------- Build rules -------------------------------------------------------#

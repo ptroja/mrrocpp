@@ -35,7 +35,7 @@ public:
 
 
 	void synchronise(void); // synchronizacja
-	uint64_t compute_all_set_values(void);
+
 	// obliczenie nastepnej wartosci zadanej dla wszystkich napedow
 };
 

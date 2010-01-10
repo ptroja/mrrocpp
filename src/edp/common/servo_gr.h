@@ -128,7 +128,7 @@ public:
     virtual void synchronise (void) = 0;
 
     //! obliczenie nastepnej wartosci zadanej dla wszystkich napedow
-    virtual uint64_t compute_all_set_values (void) = 0;
+    uint64_t compute_all_set_values (void);
 
     //! wydruk - do celow uruchomieniowych !!!
     void ppp (void) const;

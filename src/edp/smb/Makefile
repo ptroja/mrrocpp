@@ -16,7 +16,7 @@ EDPOBJS  = ${OBJECTS} ${KIN_OBJECTS}
 BINARIES  = edp_smb
 
 
-SHOBJ = ../common/libedp.a $(LIBDIR)/libmrrocpp.a
+SHOBJ = ../common/int_hand_suplement.o ../common/libedp.a $(LIBDIR)/libmrrocpp.a
 #======================================================#	
 .PHONY: all clean install
 #------------------------------------------------- Build rules -------------------------------------------------------#
