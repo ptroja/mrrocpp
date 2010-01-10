@@ -186,7 +186,7 @@ public:
 	//! thread starting synchronization condition variable
 	boost::condition thread_started_cond;
 
-	virtual void create_threads() = 0;
+
 	void hi_create_threads();
 
 	void interpret_instruction(lib::c_buffer &instruction);

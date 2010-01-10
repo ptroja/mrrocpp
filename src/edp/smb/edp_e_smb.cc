@@ -33,11 +33,7 @@ namespace mrrocpp {
 namespace edp {
 namespace smb {
 
-common::servo_buffer* effector::return_created_servo_buffer(void)
-{
-	assert(0);
-	return NULL;
-}
+
 
 void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
 {

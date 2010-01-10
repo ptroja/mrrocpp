@@ -33,11 +33,6 @@ namespace mrrocpp {
 namespace edp {
 namespace polycrank {
 
-common::servo_buffer* effector::return_created_servo_buffer(void)
-{
-	assert(0);
-	return NULL;
-}
 
 // Konstruktor.
 effector::effector(lib::configurator &_config) :
