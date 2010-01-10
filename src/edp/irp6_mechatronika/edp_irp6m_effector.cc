@@ -119,7 +119,7 @@ void effector::servo_joints_and_frame_actualization_and_upload(void)
 		get_current_kinematic_model()->i2e_transform(servo_current_joints, local_matrix);
 		// Pobranie wsp. zewnętrznych w układzie
 
-
+		lib::Xyz_Euler_Zyz_vector servo_real_kartez_pos; // by Y polozenie we wspolrzednych xyz_euler_zyz obliczane co krok servo   XXXXX
 		local_matrix.get_mech_xyz_euler_zyz(servo_real_kartez_pos);
 
 		// scope-locked reader data update
