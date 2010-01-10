@@ -43,21 +43,8 @@ namespace mrrocpp {
 namespace edp {
 namespace common {
 
-// Konstruktor
-hardware_interface::hardware_interface (manip_and_conv_effector &_master,
-		int _hi_irq_real,
-		unsigned short int _hi_intr_freq_divider,
-		unsigned int _hi_intr_timeout_high,
-		unsigned int _hi_first_servo_ptr,
-		unsigned int _hi_intr_generator_servo_ptr,
-		unsigned int _hi_isa_card_offset, int* _max_current)
-        : master(_master),
-        hi_irq_real(_hi_irq_real),
-        hi_intr_freq_divider(_hi_intr_freq_divider),
-        hi_intr_timeout_high(_hi_intr_timeout_high),
-        hi_first_servo_ptr(_hi_first_servo_ptr),
-        hi_isa_card_offset(_hi_isa_card_offset),
-        hi_intr_generator_servo_ptr(_hi_intr_generator_servo_ptr)
+
+void  hardware_interface::init()
 {
 	// Sledzenie zera rezolwera - wylaczane
 	trace_resolver_zero = false;
@@ -189,7 +176,7 @@ hardware_interface::hardware_interface (manip_and_conv_effector &_master,
 			hi_int_wait(INT_SINGLE_COMMAND, 2);
 			irq_data.md.value=PROHIBIT_MANUAL_MODE;
 			hi_int_wait(INT_SINGLE_COMMAND, 2);
-			irq_data.md.value=_max_current[i];
+			irq_data.md.value=max_current[i];
 			hi_int_wait(INT_SINGLE_COMMAND, 2);
 
 		}
@@ -199,6 +186,32 @@ hardware_interface::hardware_interface (manip_and_conv_effector &_master,
 	}
 
 	first = true; // Pierwszy krok
+
+
+
+}
+
+// Konstruktor
+hardware_interface::hardware_interface (manip_and_conv_effector &_master,
+		int _hi_irq_real,
+		unsigned short int _hi_intr_freq_divider,
+		unsigned int _hi_intr_timeout_high,
+		unsigned int _hi_first_servo_ptr,
+		unsigned int _hi_intr_generator_servo_ptr,
+		unsigned int _hi_isa_card_offset, int* _max_current)
+        : master(_master),
+        hi_irq_real(_hi_irq_real),
+        hi_intr_freq_divider(_hi_intr_freq_divider),
+        hi_intr_timeout_high(_hi_intr_timeout_high),
+        hi_first_servo_ptr(_hi_first_servo_ptr),
+        hi_isa_card_offset(_hi_isa_card_offset),
+        hi_intr_generator_servo_ptr(_hi_intr_generator_servo_ptr)
+{
+	for (int i = 0; i < master.number_of_servos; i++ )
+		{
+		max_current[i] = _max_current[i];
+
+		}
 }
 
 

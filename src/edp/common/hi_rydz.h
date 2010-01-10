@@ -101,6 +101,7 @@ class hardware_interface
 public:
 	manip_and_conv_effector &master;
 
+	int max_current[MAX_SERVOS_NR];
     hardware_interface (manip_and_conv_effector &_master,
     		int _hi_irq_real,
     		unsigned short int _hi_intr_freq_divider,
@@ -112,6 +113,8 @@ public:
 
     virtual ~hardware_interface(void );   // Destruktor
     virtual bool is_hardware_error(void); // Sprawdzenie czy wystapil blad sprzetowy
+
+    void init();
 
     void insert_set_value ( int drive_number, double set_value);
 
