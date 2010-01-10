@@ -241,6 +241,40 @@ void manip_and_conv_effector::reset_variables()
 
 void manip_and_conv_effector::servo_joints_and_frame_actualization_and_upload(void)
 {
+	static int catch_nr = 0;
+	// wyznaczenie nowych wartosci joints and frame dla obliczen w servo
+	try {
+		{
+			boost::mutex::scoped_lock lock(edp_irp6s_effector_mutex);
+			get_current_kinematic_model()->mp2i_transform(servo_current_motor_pos, servo_current_joints);
+		}
+
+		// scope-locked reader data update
+		{
+			boost::mutex::scoped_lock lock(rb_obj->reader_mutex);
+
+			for (int j = 0; j < number_of_servos; j++) {
+				rb_obj->step_data.current_joints[j] = servo_current_joints[j];
+			}
+		}
+		catch_nr = 0;
+	}//: try
+	catch (...) {
+		if ((++catch_nr) == 1)
+			printf("servo thread servo_joints_and_frame_actualization_and_upload throw catch exception\n");
+	}//: catch
+
+	{
+		boost::mutex::scoped_lock lock(edp_irp6s_effector_mutex);
+
+		// przepisnie danych na zestaw globalny
+		for (int i = 0; i < number_of_servos; i++) {
+			global_current_motor_pos[i] = servo_current_motor_pos[i];
+			global_current_joints[i] = servo_current_joints[i];
+		}//: for
+
+	}
+
 }
 
 bool manip_and_conv_effector::is_power_on() const

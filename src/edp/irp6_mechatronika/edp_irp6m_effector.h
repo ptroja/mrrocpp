@@ -41,7 +41,7 @@ public:
     // Konstruktor.
     effector (lib::configurator &_config);
 
-    void servo_joints_and_frame_actualization_and_upload(void);// by Y
+
 
     void move_arm (lib::c_buffer &instruction);            // przemieszczenie ramienia
 

@@ -95,68 +95,6 @@ void effector::move_arm(lib::c_buffer &instruction)
 // sprawdza stan EDP zaraz po jego uruchomieniu
 
 
-void effector::servo_joints_and_frame_actualization_and_upload(void)
-{
-	static int catch_nr = 0;
-
-
-
-	// wyznaczenie nowych wartosci joints and frame dla obliczen w servo
-	try {
-		get_current_kinematic_model()->mp2i_transform(servo_current_motor_pos, servo_current_joints);
-
-		// scope-locked reader data update
-		{
-			boost::mutex::scoped_lock lock(rb_obj->reader_mutex);
-
-			for (int j = 0; j < number_of_servos; j++) {
-				rb_obj->step_data.current_joints[j] = servo_current_joints[j];
-			}
-		}
-
-		// Obliczenie lokalnej macierzy oraz obliczenie położenia robota we wsp. zewnętrznych.
-		lib::Homog_matrix local_matrix;
-		get_current_kinematic_model()->i2e_transform(servo_current_joints, local_matrix);
-		// Pobranie wsp. zewnętrznych w układzie
-
-		lib::Xyz_Euler_Zyz_vector servo_real_kartez_pos; // by Y polozenie we wspolrzednych xyz_euler_zyz obliczane co krok servo   XXXXX
-		local_matrix.get_mech_xyz_euler_zyz(servo_real_kartez_pos);
-
-		// scope-locked reader data update
-		{
-			boost::mutex::scoped_lock lock(rb_obj->reader_mutex);
-
-			for (int i = 0; i < 6; i++) {
-				rb_obj->step_data.real_cartesian_position[i] = servo_real_kartez_pos[i];
-			}
-		}
-
-		// Obliczenie polozenia robota we wsp. zewnetrznych bez narzedzia.
-		((mrrocpp::kinematics::common::kinematic_model_with_tool*) get_current_kinematic_model())->i2e_wo_tool_transform(servo_current_joints, servo_current_frame_wo_tool);
-
-		catch_nr = 0;
-	}//: try
-
-	catch (...) {
-		if ((++catch_nr) == 1)
-			printf("servo thread servo_joints_and_frame_actualization_and_upload throw catch exception\n");
-	}
-
-	{
-		boost::mutex::scoped_lock lock(edp_irp6s_effector_mutex);
-
-		// przepisnie danych na zestaw globalny
-		for (int i = 0; i < number_of_servos; i++) {
-			global_current_motor_pos[i] = servo_current_motor_pos[i];
-			global_current_joints[i] = servo_current_joints[i];
-		}
-
-		// T.K.: Nad tym trzeba pomyslec - co w tym momencie dzieje sie z global_current_end_effector_frame?
-		// Jezeli zmienna ta przechowyje polozenie bez narzedzia, to nazwa jest nie tylko nieadekwatna, a wrecz mylaca.
-		global_current_frame_wo_tool = servo_current_frame_wo_tool;
-	}
-}
-
 /*--------------------------------------------------------------------------*/
 void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 { // odczytanie pozycji ramienia

@@ -43,7 +43,6 @@ namespace mrrocpp {
 namespace edp {
 namespace common {
 
-
 servo_buffer* irp6s_postument_track_effector::return_created_servo_buffer()
 {
 
@@ -167,7 +166,6 @@ void irp6s_postument_track_effector::get_rmodel(lib::c_buffer &instruction)
 irp6s_postument_track_effector::irp6s_postument_track_effector(lib::configurator &_config, lib::robot_name_t l_robot_name) :
 	manip_effector(_config, l_robot_name)
 {
-
 
 	// czujnik sil nie zostal jeszcze skonfigurowany po synchronizacji robota
 
@@ -401,8 +399,7 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buff
 		lib::V_tr v_tr_inv_modified_beginning_to_desired_end_effector_frame =
 				!v_tr_modified_beginning_to_desired_end_effector_frame;
 
-		lib::Ft_v_vector current_force_torque(ft_tr_inv_tool_matrix * ft_tr_inv_current_frame_matrix
-				* current_force);
+		lib::Ft_v_vector current_force_torque(ft_tr_inv_tool_matrix * ft_tr_inv_current_frame_matrix * current_force);
 		//		lib::Ft_v_vector tmp_force_torque (lib::Ft_v_tr((!current_tool) * (!current_frame_wo_offset), lib::Ft_v_tr::FT) * lib::Ft_v_vector (current_force));
 
 
@@ -462,8 +459,8 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buff
 		{
 			boost::mutex::scoped_lock lock(rb_obj->reader_mutex);
 			lib::Xyz_Euler_Zyz_vector tmp_vector;
-		//	next_frame.get_xyz_euler_zyz(lib::Xyz_Euler_Zyz_vector.to_table(rb_obj->step_data.current_cartesian_position));
-		//	next_frame.get_xyz_euler_zyz(lib::Xyz_Euler_Zyz_vector aa);
+			//	next_frame.get_xyz_euler_zyz(lib::Xyz_Euler_Zyz_vector.to_table(rb_obj->step_data.current_cartesian_position));
+			//	next_frame.get_xyz_euler_zyz(lib::Xyz_Euler_Zyz_vector aa);
 			next_frame.get_xyz_euler_zyz(tmp_vector);
 			tmp_vector.to_table(rb_obj->step_data.current_cartesian_position);
 		}
@@ -550,7 +547,7 @@ void irp6s_postument_track_effector::get_arm_position(bool read_hardware, lib::c
 { // odczytanie pozycji ramienia
 
 	//   printf(" GET ARM\n");
-//	lib::JointArray desired_joints_tmp(MAX_SERVOS_NR); // Wspolrzedne wewnetrzne -
+	//	lib::JointArray desired_joints_tmp(MAX_SERVOS_NR); // Wspolrzedne wewnetrzne -
 	lib::Ft_vector current_force;
 
 	if (read_hardware) {
@@ -594,8 +591,7 @@ void irp6s_postument_track_effector::get_arm_position(bool read_hardware, lib::c
 		// sprowadzenie sil z ukladu bazowego do ukladu kisci
 		// modyfikacja pobranych sil w ukladzie czujnika - do ukladu wyznaczonego przez force_tool_frame i reference_frame
 
-		lib::Ft_v_vector current_force_torque(ft_tr_inv_tool_matrix * ft_tr_inv_current_frame_matrix
-				* current_force);
+		lib::Ft_v_vector current_force_torque(ft_tr_inv_tool_matrix * ft_tr_inv_current_frame_matrix * current_force);
 		current_force_torque.to_table(reply.arm.pf_def.force_xyz_torque_xyz);
 
 		reply.arm.pf_def.gripper_coordinate = current_joints[gripper_servo_nr];
@@ -615,72 +611,14 @@ void irp6s_postument_track_effector::get_arm_position(bool read_hardware, lib::c
 
 void irp6s_postument_track_effector::servo_joints_and_frame_actualization_and_upload(void)
 {
-	static int catch_nr = 0;
-	// Wyznaczenie nowych wartosci joints and frame dla obliczen w servo.
-	try {
-		{
-			boost::mutex::scoped_lock lock(edp_irp6s_effector_mutex);
-			get_current_kinematic_model()->mp2i_transform(servo_current_motor_pos, servo_current_joints);
-		}
+	manip_effector::servo_joints_and_frame_actualization_and_upload();
 
-		// scope-locked reader data update
-		{
-			boost::mutex::scoped_lock lock(rb_obj->reader_mutex);
-
-			for (int j = 0; j < number_of_servos; j++) {
-				rb_obj->step_data.current_joints[j] = servo_current_joints[j];
-			}
-		}
-
-		// Obliczenie lokalnej macierzy oraz obliczenie położenia robota we wsp. zewnętrznych.
-
-		lib::Homog_matrix local_matrix;
-		get_current_kinematic_model()->i2e_transform(servo_current_joints, local_matrix);
-		// Pobranie wsp. zewnętrznych w układzie
-
-		lib::Xyz_Euler_Zyz_vector servo_real_kartez_pos; // by Y polozenie we wspolrzednych xyz_euler_zyz obliczane co krok servo   XXXXX
-		local_matrix.get_xyz_euler_zyz(servo_real_kartez_pos);
-
-		// Zapisanie wartosci rzeczywistej dla readera
-		// scope-locked reader data update
-		{
-			boost::mutex::scoped_lock lock(rb_obj->reader_mutex);
-
-			for (int i = 0; i < 6; i++) {
-				rb_obj->step_data.real_cartesian_position[i] = servo_real_kartez_pos[i];
-			}
-		}
-
-		// Obliczenie polozenia robota we wsp. zewnetrznych bez narzedzia.
-		((mrrocpp::kinematics::common::kinematic_model_with_tool*) get_current_kinematic_model())->i2e_wo_tool_transform(servo_current_joints, servo_current_frame_wo_tool);
-
-		if ((force_tryb > 0) && (is_synchronised()) && (!(vs->first_configure_done))
-				&& (!(vs->force_sensor_do_first_configure))) {
-			vs->force_sensor_do_first_configure = true;
-		}
-
-		catch_nr = 0;
+	if ((force_tryb > 0) && (is_synchronised()) && (!(vs->first_configure_done))
+			&& (!(vs->force_sensor_do_first_configure))) {
+		vs->force_sensor_do_first_configure = true;
 	}
 
-	catch (...) {
-		if ((++catch_nr) == 1)
-			printf("servo thread servo_joints_and_frame_actualization_and_upload throw catch exception\n");
-	}
-
-	{
-		boost::mutex::scoped_lock lock(edp_irp6s_effector_mutex);
-
-		// przepisnie danych na zestaw globalny
-		for (int i = 0; i < number_of_servos; i++) {
-			global_current_motor_pos[i] = servo_current_motor_pos[i];
-			global_current_joints[i] = servo_current_joints[i];
-		}
-
-		global_current_frame_wo_tool = servo_current_frame_wo_tool;
-	}
 }
-
-
 
 } // namespace common
 } // namespace edp

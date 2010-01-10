@@ -40,7 +40,7 @@ public:
     // Odczytanie pozycji ramienia.
     void get_arm_position (bool read_hardware, lib::c_buffer &instruction);
     // Aktualizacja polozenia.
-    void servo_joints_and_frame_actualization_and_upload(void);
+
 
     common::servo_buffer *return_created_servo_buffer ();
 	void master_order(common::MT_ORDER nm_task, int nm_tryb);

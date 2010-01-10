@@ -64,7 +64,7 @@ public:
     void force_msr_upload(const lib::Ft_vector l_vector);// by Y wgranie globalnego zestawu danych
 
     void force_msr_download(lib::Ft_vector& l_vector);// by Y odczytanie globalnego zestawu danych
-
+	virtual void servo_joints_and_frame_actualization_and_upload(void); // by Y
 
 	void synchronise(); // synchronizacja robota
 	void get_controller_state(lib::c_buffer &instruction); // synchronizacja robota

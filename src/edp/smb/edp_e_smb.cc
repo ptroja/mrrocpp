@@ -90,10 +90,6 @@ void effector::create_kinematic_models_for_given_robot(void)
 	set_kinematic_model(0);
 }
 
-void effector::servo_joints_and_frame_actualization_and_upload(void)
-{
-
-}
 
 /*--------------------------------------------------------------------------*/
 void effector::create_threads()

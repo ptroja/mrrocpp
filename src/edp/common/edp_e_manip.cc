@@ -36,6 +36,51 @@ namespace mrrocpp {
 namespace edp {
 namespace common {
 
+void manip_effector::servo_joints_and_frame_actualization_and_upload(void)
+{
+	static int catch_nr = 0;
+
+	manip_and_conv_effector::servo_joints_and_frame_actualization_and_upload();
+	// wyznaczenie nowych wartosci joints and frame dla obliczen w servo
+	try {
+		// Obliczenie lokalnej macierzy oraz obliczenie położenia robota we wsp. zewnętrznych.
+		lib::Homog_matrix local_matrix;
+		get_current_kinematic_model()->i2e_transform(servo_current_joints, local_matrix);
+		// Pobranie wsp. zewnętrznych w układzie
+
+		lib::Xyz_Euler_Zyz_vector servo_real_kartez_pos; // by Y polozenie we wspolrzednych xyz_euler_zyz obliczane co krok servo   XXXXX
+		local_matrix.get_mech_xyz_euler_zyz(servo_real_kartez_pos);
+
+		// scope-locked reader data update
+		{
+			boost::mutex::scoped_lock lock(rb_obj->reader_mutex);
+
+			for (int i = 0; i < 6; i++) {
+				rb_obj->step_data.real_cartesian_position[i] = servo_real_kartez_pos[i];
+			}
+		}
+
+		// Obliczenie polozenia robota we wsp. zewnetrznych bez narzedzia.
+		((mrrocpp::kinematics::common::kinematic_model_with_tool*) get_current_kinematic_model())->i2e_wo_tool_transform(servo_current_joints, servo_current_frame_wo_tool);
+
+		catch_nr = 0;
+
+	}//: try
+	catch (...) {
+		if ((++catch_nr) == 1)
+			printf("servo thread servo_joints_and_frame_actualization_and_upload throw catch exception\n");
+	}//: catch
+
+	{
+		boost::mutex::scoped_lock lock(edp_irp6s_effector_mutex);
+
+		// T.K.: Nad tym trzeba pomyslec - co w tym momencie dzieje sie z global_current_end_effector_frame?
+		// Jezeli zmienna ta przechowyje polozenie bez narzedzia, to nazwa jest nie tylko nieadekwatna, a wrecz mylaca.
+		global_current_frame_wo_tool = servo_current_frame_wo_tool;
+	}
+
+}
+
 /*--------------------------------------------------------------------------*/
 manip_effector::manip_effector(lib::configurator &_config, lib::robot_name_t l_robot_name) :
 	manip_and_conv_effector(_config, l_robot_name)
@@ -82,7 +127,7 @@ void manip_effector::set_rmodel(lib::c_buffer &instruction)
 
 			// Przyslano dane dotyczace narzedzia i koncowki.
 			// Sprawdzenie poprawnosci macierzy
-		//	set_tool_frame_in_kinematic_model(lib::Homog_matrix(instruction.rmodel.tool_frame_def.tool_frame));
+			//	set_tool_frame_in_kinematic_model(lib::Homog_matrix(instruction.rmodel.tool_frame_def.tool_frame));
 		{
 			lib::Homog_matrix hm(instruction.rmodel.tool_frame_def.tool_frame);
 
@@ -98,7 +143,6 @@ void manip_effector::set_rmodel(lib::c_buffer &instruction)
 			 get_current_kinematic_model()->i2e_transform(current_joints, &current_end_effector_frame);
 			 */
 		}
-
 
 			break;
 		default: // blad: nie istniejaca specyfikacja modelu robota
@@ -188,7 +232,6 @@ lib::Homog_matrix manip_effector::return_current_frame(TRANSLATION_ENUM translat
 	return return_frame;
 }
 
-
 void manip_effector::force_msr_upload(const lib::Ft_vector l_vector)
 {// by Y wgranie globalnego zestawu danych
 	boost::mutex::scoped_lock lock(force_mutex);
@@ -201,7 +244,6 @@ void manip_effector::force_msr_download(lib::Ft_vector& l_vector)
 	boost::mutex::scoped_lock lock(force_mutex);
 	l_vector = global_force_msr;
 }
-
 
 /*--------------------------------------------------------------------------*/
 

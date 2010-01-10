@@ -82,32 +82,6 @@ void effector::set_rmodel(lib::c_buffer &instruction)
 }
 /*--------------------------------------------------------------------------*/
 
-// servo_joints_and_frame_actualization_and_upload.
-void effector::servo_joints_and_frame_actualization_and_upload(void)
-{
-	static int catch_nr = 0;
-	// wyznaczenie nowych wartosci joints and frame dla obliczen w servo
-	try {
-		get_current_kinematic_model()->mp2i_transform(servo_current_motor_pos, servo_current_joints);
-		catch_nr = 0;
-	}//: try
-	catch (...) {
-		if ((++catch_nr) == 1)
-			printf("servo thread servo_joints_and_frame_actualization_and_upload throw catch exception\n");
-	}//: catch
-
-	{
-		boost::mutex::scoped_lock lock(edp_irp6s_effector_mutex);
-
-		// przepisnie danych na zestaw globalny
-		for (int i = 0; i < number_of_servos; i++) {
-			global_current_motor_pos[i] = servo_current_motor_pos[i];
-			global_current_joints[i] = servo_current_joints[i];
-		}//: for
-
-	}
-}//: servo_joints_and_frame_actualization_and_upload
-
 
 // Przemieszczenie tasmociagu.
 void effector::move_arm(lib::c_buffer &instruction)
