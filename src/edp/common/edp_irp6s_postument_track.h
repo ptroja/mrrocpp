@@ -57,7 +57,7 @@ public:
 
     void pose_force_torque_at_frame_move (lib::c_buffer &instruction);
 
-    void servo_joints_and_frame_actualization_and_upload(void);// by Y
+    bool servo_joints_and_frame_actualization_and_upload(void);// by Y
 
 	virtual servo_buffer* return_created_servo_buffer();
 

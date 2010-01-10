@@ -36,11 +36,16 @@ namespace mrrocpp {
 namespace edp {
 namespace common {
 
-void manip_effector::servo_joints_and_frame_actualization_and_upload(void)
+bool manip_effector::servo_joints_and_frame_actualization_and_upload(void)
 {
 	static int catch_nr = 0;
-
-	manip_and_conv_effector::servo_joints_and_frame_actualization_and_upload();
+	bool ret_val=true;
+	if (!(manip_and_conv_effector::servo_joints_and_frame_actualization_and_upload()))
+	{
+		ret_val= false;
+	}
+	else
+	{
 	// wyznaczenie nowych wartosci joints and frame dla obliczen w servo
 	try {
 		// Obliczenie lokalnej macierzy oraz obliczenie położenia robota we wsp. zewnętrznych.
@@ -69,7 +74,9 @@ void manip_effector::servo_joints_and_frame_actualization_and_upload(void)
 	catch (...) {
 		if ((++catch_nr) == 1)
 			printf("servo thread servo_joints_and_frame_actualization_and_upload throw catch exception\n");
+		ret_val = false;
 	}//: catch
+	}
 
 	{
 		boost::mutex::scoped_lock lock(edp_irp6s_effector_mutex);
@@ -78,7 +85,7 @@ void manip_effector::servo_joints_and_frame_actualization_and_upload(void)
 		// Jezeli zmienna ta przechowyje polozenie bez narzedzia, to nazwa jest nie tylko nieadekwatna, a wrecz mylaca.
 		global_current_frame_wo_tool = servo_current_frame_wo_tool;
 	}
-
+	return ret_val;
 }
 
 /*--------------------------------------------------------------------------*/

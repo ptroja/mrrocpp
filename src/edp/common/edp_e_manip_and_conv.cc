@@ -239,8 +239,9 @@ void manip_and_conv_effector::reset_variables()
 	// desired_joints[2] = LOWER_RIGHT_LIMIT;
 }
 
-void manip_and_conv_effector::servo_joints_and_frame_actualization_and_upload(void)
+bool manip_and_conv_effector::servo_joints_and_frame_actualization_and_upload(void)
 {
+	bool ret_val=true;
 	static int catch_nr = 0;
 	// wyznaczenie nowych wartosci joints and frame dla obliczen w servo
 	try {
@@ -262,6 +263,7 @@ void manip_and_conv_effector::servo_joints_and_frame_actualization_and_upload(vo
 	catch (...) {
 		if ((++catch_nr) == 1)
 			printf("servo thread servo_joints_and_frame_actualization_and_upload throw catch exception\n");
+		ret_val= false;
 	}//: catch
 
 	{
@@ -275,6 +277,7 @@ void manip_and_conv_effector::servo_joints_and_frame_actualization_and_upload(vo
 
 	}
 
+	return ret_val;
 }
 
 bool manip_and_conv_effector::is_power_on() const
