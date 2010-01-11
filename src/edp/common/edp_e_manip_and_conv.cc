@@ -241,7 +241,7 @@ void manip_and_conv_effector::reset_variables()
 
 bool manip_and_conv_effector::servo_joints_and_frame_actualization_and_upload(void)
 {
-	bool ret_val=true;
+	bool ret_val = true;
 	static int catch_nr = 0;
 	// wyznaczenie nowych wartosci joints and frame dla obliczen w servo
 	try {
@@ -263,7 +263,7 @@ bool manip_and_conv_effector::servo_joints_and_frame_actualization_and_upload(vo
 	catch (...) {
 		if ((++catch_nr) == 1)
 			printf("servo thread servo_joints_and_frame_actualization_and_upload throw catch exception\n");
-		ret_val= false;
+		ret_val = false;
 	}//: catch
 
 	{
@@ -419,12 +419,10 @@ void manip_and_conv_effector::interpret_instruction(lib::c_buffer &instruction)
 						get_inputs(&reply);
 					}
 
-					if (instruction.is_get_arm()) {
-						master_order(MT_GET_ARM_POSITION, true);
-					}
-
 					if (instruction.is_set_arm()) {
 						get_arm_position(false, instruction);
+					} else if (instruction.is_get_arm()) {
+						master_order(MT_GET_ARM_POSITION, true);
 					}
 
 					if (instruction.is_get_rmodel()) {
