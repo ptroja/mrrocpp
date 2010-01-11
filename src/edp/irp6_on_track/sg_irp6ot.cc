@@ -35,10 +35,10 @@ servo_buffer::servo_buffer(effector &_master) :
 				axe_inc_per_revolution[j] = IRP6_ON_TRACK_AXIS_7_INC_PER_REVOLUTION;
 				break;
 			case IRP6OT_GRIPPER_TURN_AXE:
-				axe_inc_per_revolution[j] -= IRP6_ON_TRACK_AXIS_6_INC_PER_REVOLUTION;
+				axe_inc_per_revolution[j] = IRP6_ON_TRACK_AXIS_6_INC_PER_REVOLUTION;
 				break;
 			default:
-				axe_inc_per_revolution[j] -= IRP6_ON_TRACK_AXIS_0_TO_5_INC_PER_REVOLUTION;
+				axe_inc_per_revolution[j] = IRP6_ON_TRACK_AXIS_0_TO_5_INC_PER_REVOLUTION;
 				break;
 		}
 	}
