@@ -31,7 +31,6 @@ public:
 	servo_buffer(effector &_master); // konstruktor
 
 
-	void synchronise(void); // synchronizacja
 
 	// obliczenie nastepnej wartosci zadanej dla wszystkich napedow
 };
