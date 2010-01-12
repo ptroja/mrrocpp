@@ -31,7 +31,7 @@ servo_buffer::servo_buffer(effector &_master) :
 	common::servo_buffer(_master), master(_master)
 {
 	for (int j = 0; j < master.number_of_servos; j++) {
-		synchro_axis_order[j] = j;
+		synchro_axis_order[j] = ((j + IRP6M_SYN_INIT_AXE) % (master.number_of_servos));
 		axe_inc_per_revolution[j] = IRP6_MECHATRONIKA_AXIS_0_TO_5_INC_PER_REVOLUTION;
 		synchro_step_coarse[j] = IRP6_MECHATRONIKA_SYNCHRO_STEP_COARSE;
 		synchro_step_fine[j] = IRP6_MECHATRONIKA_SYNCHRO_STEP_FINE;

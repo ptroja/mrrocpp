@@ -128,7 +128,7 @@ public:
     void Change_algorithm (void);
 
     //! synchronizacja
-    virtual void synchronise (void) = 0;
+    virtual void synchronise (void);
 
     //! obliczenie nastepnej wartosci zadanej dla wszystkich napedow
     uint64_t compute_all_set_values (void);
