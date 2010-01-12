@@ -39,20 +39,6 @@ static sensor::sensor *vs;		// czujnik wirtualny
 
 static bool TERMINATE = false;									// zakonczenie obu watkow
 
-/********************************** SIGCATCH ********************************/
-void catch_signal(int sig) {
-  switch(sig) {
-	case SIGTERM :
-	  TERMINATE = true;
-	  delete vs;
-	  _exit(EXIT_SUCCESS);
-	  break;
-	case SIGSEGV:
-	  fprintf(stderr, "Segmentation fault in VSP process\n");
-	  signal(SIGSEGV, SIG_DFL);
-	  break;
-  } // end: switch
-}
 
 /***************************** ERROR_HANDLER ******************************/
 template<class ERROR>
@@ -95,17 +81,11 @@ void error_handler(ERROR e){
 /*********************************** MAIN ***********************************/
 int main(int argc, char *argv[]) {
 
-	// ustawienie priorytetow
-	//setprio(getpid(), MAX_PRIORITY-3);
-	// wylapywanie sygnalow
-	signal(SIGTERM, &vsp::common::catch_signal);
-	signal(SIGSEGV, &vsp::common::catch_signal);
 #if defined(PROCESS_SPAWN_RSH)
 	signal(SIGINT, SIG_IGN);
 #endif
 
 	// liczba argumentow
-
 	if(argc <=6){
 		printf("Za malo argumentow VSP\n");
 		return -1;
@@ -129,6 +109,7 @@ int main(int argc, char *argv[]) {
 
 		/* start the resource manager message loop */
 		vsp::common::vs->sr_msg->message ("Device is waiting for clients...");
+
 		while(!vsp::common::TERMINATE) { // for(;;)
 
 			int32_t type, subtype;
