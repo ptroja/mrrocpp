@@ -38,7 +38,7 @@ model_with_wrist::model_with_wrist (void)
   // Wykonywac przeliczenia zwiazane z narzedziem.
   attached_tool_computations = true;
 
-}; //: set_kinematic_parameters
+} //: set_kinematic_parameters
 
 /* -----------------------------------------------------------------------
   Ustawienia wszystkie parametry modelu kinematycznego danego modelu.
@@ -266,7 +266,7 @@ Zakresy ruchu poszczegolnych stopni swobody (w radianach lub milimetrach).
   upper_limit_joint[5] = 2.93;
   upper_limit_joint[6] = 0.091;
 
-}; // end: set_kinematic_parameters
+} // end: set_kinematic_parameters
 
 
 
@@ -311,7 +311,7 @@ else if (motor_position[5] > upper_limit_axis[5])   // Kat f6 wiekszy od maksyma
 else if (motor_position[6] > upper_limit_axis[6])   // Kat f7 wiekszy od maksymalnego
   throw  NonFatal_error_2 (BEYOND_UPPER_LIMIT_AXIS_6);
 
-}; // end: kinematic_model_irp6p_with_wrist::check_motor_position(const )
+} // end: kinematic_model_irp6p_with_wrist::check_motor_position(const )
 
 
 /* ------------------------------------------------------------------------
@@ -370,7 +370,7 @@ if (isnan(q[5])) throw  NonFatal_error_2 (NOT_A_NUMBER_JOINT_VALUE_THETA6);
  if(q[6] > upper_limit_joint[6])  // 6 st. swobody
    throw  NonFatal_error_2 (BEYOND_UPPER_THETA7_LIMIT);
 
-}; // end: kinematic_model_irp6p_with_wrist::check_joints(const )
+} // end: kinematic_model_irp6p_with_wrist::check_joints(const )
 
 
 /* ------------------------------------------------------------------------
@@ -483,7 +483,7 @@ void model_with_wrist::i2mp_transform(lib::MotorArray & local_desired_motor_pos_
   // Sprawdzenie obliczonych wartosci.
   check_motor_position (local_desired_motor_pos_new);
 
-}; //: i2mp_transform
+} //: i2mp_transform
 
 
 /* ------------------------------------------------------------------------
@@ -503,18 +503,18 @@ void model_with_wrist::direct_kinematics_transform(const lib::JointArray & local
   check_joints (local_current_joints);
 
   // Parametry pomocnicze - przeliczenie zmiennych.
-  double s1 = sin(local_current_joints[0]);
-  double c1 = cos(local_current_joints[0]);
-  double s2 = sin(local_current_joints[1]);
-  double c2 = cos(local_current_joints[1]);
-  double s3 = sin(local_current_joints[2]);
-  double c3 = cos(local_current_joints[2]);
-  double s4 = sin(local_current_joints[3]);
-  double c4 = cos(local_current_joints[3]);
-  double s5 = sin(local_current_joints[4]);
-  double c5 = cos(local_current_joints[4]);
-  double s6 = sin(local_current_joints[5]);
-  double c6 = cos(local_current_joints[5]);
+  const double s1 = sin(local_current_joints[0]);
+  const double c1 = cos(local_current_joints[0]);
+  const double s2 = sin(local_current_joints[1]);
+  const double c2 = cos(local_current_joints[1]);
+  const double s3 = sin(local_current_joints[2]);
+  const double c3 = cos(local_current_joints[2]);
+  const double s4 = sin(local_current_joints[3]);
+  const double c4 = cos(local_current_joints[3]);
+  const double s5 = sin(local_current_joints[4]);
+  const double c5 = cos(local_current_joints[4]);
+  const double s6 = sin(local_current_joints[5]);
+  const double c6 = cos(local_current_joints[5]);
 
   // Proste zadanie kinematyki.
   (local_current_end_effector_frame)[0][0] = (c1*s4*c5+s1*s5)*c6+c1*c4*s6;		//NX
@@ -690,7 +690,7 @@ void model_with_wrist::inverse_kinematics_transform(lib::JointArray & local_desi
   // Sprawdzenie ograniczen na wspolrzedne wewnetrzne.
   check_joints (local_desired_joints);
 
-}; //: inverse_kinematics_transform()
+} //: inverse_kinematics_transform()
 
 } // namespace irp6p
 } // namespace kinematic

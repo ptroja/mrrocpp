@@ -33,7 +33,7 @@ void kinematic_model_with_local_corrector::local_corrector_transform(lib::Homog_
 		z[i] = 0;
 		for (int j = 0; j < 6; j++) {
 			z[i] += U[i][j] * x[j];
-		};//: for
+		}//: for
 		z[i] += V[i];
 	}//: for
 	// Transform corrected pose to the XYZ_Euler_ZYZ form.

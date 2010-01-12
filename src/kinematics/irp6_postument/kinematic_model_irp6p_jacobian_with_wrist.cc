@@ -31,7 +31,7 @@ model_jacobian_with_wrist::model_jacobian_with_wrist (void)
   // Wykonywac przeliczenia zwiazane z narzedziem.
   attached_tool_computations = true;
 
-}; //konstruktor
+} //konstruktor
 
 /* ------------------------------------------------------------------------
   Zadanie odwrotne kinematyki dla robota IRp-6 na postumencie w oparciu o odwrotnosc jakobianu
@@ -102,7 +102,7 @@ while(fabs(Max)>E){
   // Sprawdzenie ograniczen na wspolrzedne wewnetrzne.
  check_joints (local_desired_joints);
 
-}; //: inverse_kinematics_transform()
+} //: inverse_kinematics_transform()
 
 } // namespace irp6p
 } // namespace kinematic

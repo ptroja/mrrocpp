@@ -26,7 +26,7 @@ model_with_track::model_with_track (void)
   set_kinematic_model_label("Switching to kinematic model with active track");
 
   // Ustawienie parametrow kinematycznych - przez konstruktor with_wrist.
-}; // end: kinematic_model::kinematic_model
+} // end: kinematic_model::kinematic_model
 
 
 /* ------------------------------------------------------------------------
@@ -167,7 +167,7 @@ if (!p) {
   // Sprawdzenie ograniczen na wspolrzedne wewnetrzne.
   check_joints (local_desired_joints);
 
-}; //: inverse_kinematics_transform()
+} //: inverse_kinematics_transform()
 
 
 } // namespace irp6ot

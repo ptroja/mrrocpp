@@ -33,7 +33,7 @@ model_5dof::model_5dof (void)
   // Podstawowe parametry ustawione przez sa konstruktor with_wrist.
   set_kinematic_parameters();
 
-}; // end: kinematic_model::kinematic_model
+} // end: kinematic_model::kinematic_model
 
 
 void model_5dof::set_kinematic_parameters(void)

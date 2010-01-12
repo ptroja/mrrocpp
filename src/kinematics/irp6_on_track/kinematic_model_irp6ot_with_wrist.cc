@@ -37,7 +37,7 @@ model_with_wrist::model_with_wrist (void)
   // Wykonywac przeliczenia zwiazane z narzedziami.
   attached_tool_computations = true;
 
-}; //: set_kinematic_parameters
+} //: set_kinematic_parameters
 
 /* -----------------------------------------------------------------------
   Ustawienia wszystkie parametry modelu kinematycznego danego modelu.
@@ -267,7 +267,7 @@ Zakresy ruchu poszczegolnych stopni swobody (w radianach lub milimetrach).
   upper_limit_joint[6] = 2.93;
   upper_limit_joint[7] = 0.091;
 
-}; // end: set_kinematic_parameters
+} // end: set_kinematic_parameters
 
 
 
@@ -317,7 +317,7 @@ else if (motor_position[6] > upper_limit_axis[6])   // Kat f7 wiekszy od maksyma
 else if (motor_position[7] > upper_limit_axis[7])   // Kat f8 wiekszy od maksymalnego
   throw  NonFatal_error_2 (BEYOND_UPPER_LIMIT_AXIS_7);
 
-}; // end: kinematic_model_irp6ot_with_wrist::check_motor_position(const )
+} // end: kinematic_model_irp6ot_with_wrist::check_motor_position(const )
 
 
 /* ------------------------------------------------------------------------
@@ -383,7 +383,7 @@ void model_with_wrist::check_joints(const lib::JointArray & q)
  if(q[7] > upper_limit_joint[7])  // 7 st. swobody
    throw  NonFatal_error_2 (BEYOND_UPPER_THETA7_LIMIT);
 
-}; // end: kinematic_model_irp6ot_with_wrist::check_joints(const )
+} // end: kinematic_model_irp6ot_with_wrist::check_joints(const )
 
 
 /* ------------------------------------------------------------------------
@@ -502,7 +502,7 @@ void model_with_wrist::i2mp_transform(lib::MotorArray & local_desired_motor_pos_
   // Sprawdzenie obliczonych wartosci.
   check_motor_position (local_desired_motor_pos_new);
 
-}; //: i2mp_transform
+} //: i2mp_transform
 
 
 /* ------------------------------------------------------------------------
@@ -716,7 +716,7 @@ void model_with_wrist::inverse_kinematics_transform(lib::JointArray & local_desi
   // Sprawdzenie ograniczen na wspolrzedne wewnetrzne.
   check_joints (local_desired_joints);
 
-}; //: inverse_kinematics_transform()
+} //: inverse_kinematics_transform()
 
 } // namespace irp6ot
 } // namespace kinematic

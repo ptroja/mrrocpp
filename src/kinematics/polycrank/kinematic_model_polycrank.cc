@@ -35,7 +35,7 @@ model::model (void)
   // Wykonywac przeliczenia zwiazane z narzedziem.
   attached_tool_computations = false;
 
-}; //: set_kinematic_parameters
+} //: set_kinematic_parameters
 
 /* -----------------------------------------------------------------------
   Ustawienia wszystkie parametry modelu kinematycznego danego modelu.
@@ -250,7 +250,7 @@ Zakresy ruchu poszczegolnych stopni swobody (w radianach lub milimetrach).
   upper_limit_joint[5] = 2.93;
   upper_limit_joint[6] = 0.091;
 
-}; // end: set_kinematic_parameters
+} // end: set_kinematic_parameters
 
 
 
@@ -286,7 +286,7 @@ else if (motor_position[4] > upper_limit_axis[4])   // Kat f5 wiekszy od maksyma
   throw NonFatal_error_2 (BEYOND_UPPER_LIMIT_AXIS_4);
 
 
-}; // end: kinematic_model_irp6m_with_wrist::check_motor_position(const )
+} // end: kinematic_model_irp6m_with_wrist::check_motor_position(const )
 
 
 /* ------------------------------------------------------------------------
@@ -332,7 +332,7 @@ if (isnan(q[2])) throw  NonFatal_error_2 (NOT_A_NUMBER_JOINT_VALUE_THETA3);
 
 
 
-}; // end: kinematic_model_irp6m_with_wrist::check_joints(const )
+} // end: kinematic_model_irp6m_with_wrist::check_joints(const )
 
 
 /* ------------------------------------------------------------------------
@@ -445,7 +445,7 @@ void model::i2mp_transform(lib::MotorArray & local_desired_motor_pos_new, lib::J
   // Sprawdzenie obliczonych wartosci.
   check_motor_position (local_desired_motor_pos_new);
 
-}; //: i2mp_transform
+} //: i2mp_transform
 
 
 /* ------------------------------------------------------------------------
@@ -601,7 +601,7 @@ void model::inverse_kinematics_transform(lib::JointArray & local_desired_joints,
   // Sprawdzenie ograniczen na wspolrzedne wewnetrzne.
   check_joints (local_desired_joints);
 
-}; //: inverse_kinematics_transform()
+} //: inverse_kinematics_transform()
 
 } // namespace polycrank
 } // namespace kinematic

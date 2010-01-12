@@ -29,7 +29,7 @@ model_calibrated_with_wrist::model_calibrated_with_wrist (void)
   // Ustawienie parametrow kinematycznych.
   set_kinematic_parameters();
 
-}; //: set_kinematic_parameters
+} //: set_kinematic_parameters
 
 /* -----------------------------------------------------------------------
   Ustawienia wszystkie parametry modelu kinematycznego danego modelu.
@@ -93,7 +93,7 @@ Polozenia synchronizacji we wspolrzednych wewnetrznych - obliczone na podstawie 
   synchro_joint_position[5] = synchro_motor_position[5] - gear[5] * theta[5];
   synchro_joint_position[6] = synchro_motor_position[6] - gear[6] * theta[6];
 
-}; // end: set_kinematic_parameters
+} // end: set_kinematic_parameters
 
 } // namespace irp6p
 } // namespace kinematic
