@@ -50,7 +50,7 @@ task::task(lib::configurator &_config)
 	: config(_config),
 	mrrocpp_network_path(config.return_mrrocpp_network_path())
 {
-	std::string sr_net_attach_point = config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", UI_SECTION);
+	// std::string sr_net_attach_point = config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", UI_SECTION);
 
 //	// Obiekt do komuniacji z SR
 //	sr_ecp_msg = new lib::sr_ecp(process_type, process_name, sr_net_attach_point);
