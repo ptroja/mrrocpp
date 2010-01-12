@@ -24,21 +24,29 @@ namespace mrrocpp {
 namespace edp {
 namespace irp6ot {
 
+
 /*-----------------------------------------------------------------------*/
 servo_buffer::servo_buffer(effector &_master) :
 	common::servo_buffer(_master), master(_master)
 {
-	for (int j = 0; j < IRP6_ON_TRACK_NUM_OF_SERVOS; j++) {
+	for (int j = 0; j < master.number_of_servos; j++) {
+		synchro_axis_order[j] = ((j + IRP6OT_SYN_INIT_AXE) % (master.number_of_servos));
 		switch (j)
 		{
 			case IRP6OT_GRIPPER_CATCH_AXE:
 				axe_inc_per_revolution[j] = IRP6_ON_TRACK_AXIS_7_INC_PER_REVOLUTION;
+				synchro_step_coarse[j] = IRP6_ON_TRACK_AXIS_7_SYNCHRO_STEP_COARSE;
+				synchro_step_fine[j] = IRP6_ON_TRACK_AXIS_7_SYNCHRO_STEP_FINE;
 				break;
 			case IRP6OT_GRIPPER_TURN_AXE:
 				axe_inc_per_revolution[j] = IRP6_ON_TRACK_AXIS_6_INC_PER_REVOLUTION;
+				synchro_step_coarse[j] = IRP6_ON_TRACK_AXIS_6_SYNCHRO_STEP_COARSE;
+				synchro_step_fine[j] = IRP6_ON_TRACK_AXIS_6_SYNCHRO_STEP_FINE;
 				break;
 			default:
 				axe_inc_per_revolution[j] = IRP6_ON_TRACK_AXIS_0_TO_5_INC_PER_REVOLUTION;
+				synchro_step_coarse[j] = IRP6_ON_TRACK_AXIS_0_TO_5_SYNCHRO_STEP_COARSE;
+				synchro_step_fine[j] = IRP6_ON_TRACK_AXIS_0_TO_5_SYNCHRO_STEP_FINE;
 				break;
 		}
 	}
