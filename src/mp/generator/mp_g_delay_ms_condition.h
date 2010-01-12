@@ -21,13 +21,11 @@ public:
 
     // konstruktor
     delay_ms_condition(task::task& _mp_task, int _ms_delay);
-    ~delay_ms_condition();
 
 	void configure (int _ms_delay);
 
 	virtual bool first_step ();
 	virtual bool next_step ();
-
 };
 
 } // namespace generator

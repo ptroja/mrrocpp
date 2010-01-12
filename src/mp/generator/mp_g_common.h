@@ -37,7 +37,6 @@ public:
 
 	bool first_step ();
 	bool next_step ();
-
 };
 
 // ####################################################################################################
@@ -79,7 +78,6 @@ class empty : public generator {
   virtual bool next_step ();
      // generuje kazdy nastepny krok ruchu
      // (zadanie realizowane przez klase konkretna)
-
 };
 
 // ####################################################################################################
