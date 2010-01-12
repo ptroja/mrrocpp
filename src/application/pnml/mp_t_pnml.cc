@@ -7,7 +7,7 @@
 
 #include <iostream>
 
-#include "mp/mp_t_pnml.h"
+#include "mp_t_pnml.h"
 
 namespace mrrocpp {
 namespace mp {
@@ -16,7 +16,7 @@ namespace task {
 pnmlAutomat::pnmlAutomat(lib::configurator &_config) :
 	mrrocpp::mp::task::task(_config)
 {
-	std::string pnmlFile = _config.return_string_value("pnml_file", "[mp]");
+	std::string pnmlFile = _config.value<std::string>("pnml_file", "[mp]");
 	std::cerr << "pnmlFile: " << pnmlFile << std::endl;
 
 	try {

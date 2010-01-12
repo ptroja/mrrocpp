@@ -10,8 +10,8 @@
 
 #include <map>
 
-#include "mp/mp_generator.h"
-#include "mp/PNExec/Net.hh"
+#include "mp/generator/mp_generator.h"
+#include "PNExec/Net.hh"
 
 namespace mrrocpp {
 namespace mp {

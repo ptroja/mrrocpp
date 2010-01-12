@@ -7,8 +7,8 @@
 
 #include <boost/foreach.hpp>
 
-#include "mp/PNExec/Net.hh"
-#include "mp/mp_g_pnml.h"
+#include "PNExec/Net.hh"
+#include "mp_g_pnml.h"
 
 namespace mrrocpp {
 namespace mp {

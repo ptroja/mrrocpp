@@ -8,11 +8,11 @@
 #ifndef MP_T_PNML_H_
 #define MP_T_PNML_H_
 
-#include "mp/PNExec/Net.hh"
+#include "PNExec/Net.hh"
 
 #include "mp/mp.h"
-#include "mp/mp_task.h"
-#include "mp/mp_g_pnml.h"
+#include "mp/task/mp_task.h"
+#include "mp_g_pnml.h"
 
 namespace mrrocpp {
 namespace mp {
