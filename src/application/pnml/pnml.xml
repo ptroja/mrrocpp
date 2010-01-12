@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE TaskDescription SYSTEM "fsautomat.dtd">
+<!--	
+	Autor: Piotr Trojanek
+	Data: 2009
+	Zadanie sterowania siecia Petriego: "pnml"
+-->
+<TaskDescription>
+	<State id="INIT" type="systemInitialization">
+		<taskInit>
+			<ecp name="ROBOT_IRP6_ON_TRACK">
+				<ecp_smooth_gen>1</ecp_smooth_gen>
+			</ecp>
+			<ecp name="ROBOT_IRP6_POSTUMENT">
+				<ecp_smooth_gen>1</ecp_smooth_gen>
+			</ecp>
+		</taskInit>	
+	</State>
+</TaskDescription>
