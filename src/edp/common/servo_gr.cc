@@ -654,11 +654,11 @@ void servo_buffer::synchronise(void)
 
 	// szeregowa synchronizacja serwomechanizmow
 	for (int k = 0; k < (master.number_of_servos); k++) {
-		int j = synchro_axis_order[j];
+		int j = synchro_axis_order[k];
 
 		// printf("os synchronizopwana: %d \n",j);
 		for (int l = 0; l < (master.number_of_servos); l++) {
-			int i = synchro_axis_order[i];
+			int i = synchro_axis_order[l];
 			// zerowy przyrost polozenia dla wszystkich napedow procz j-tego
 			if (i == j) {
 				crp = regulator_ptr[i];
@@ -851,7 +851,7 @@ void servo_buffer::synchronise(void)
 
 	// zatrzymanie na chwile robota
 	for (int k = 0; k < (master.number_of_servos); k++) {
-		int j = synchro_axis_order[j];
+		int j = synchro_axis_order[k];
 		synchro_step = 0.0;
 		crp = regulator_ptr[j];
 		crp->insert_new_step(synchro_step);
