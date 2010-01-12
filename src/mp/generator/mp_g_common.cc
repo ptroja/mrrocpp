@@ -273,9 +273,9 @@ bool tight_coop::first_step ()
     	robot_node.second->mp_command.instruction.value_in_step_no = irp6ot_td.value_in_step_no;
     	robot_node.second->communicate = true;
     }
+    */
 
     return true;
-    */
 }
 
 // ----------------------------------------------------------------------------------------------
