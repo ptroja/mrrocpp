@@ -102,7 +102,7 @@ public:
 
     lib::SERVO_COMMAND command_type(void) const;
 
-    virtual void load_hardware_interface (void) = 0;
+    virtual void load_hardware_interface (void);
 
     virtual void get_all_positions (void);
 

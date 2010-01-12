@@ -87,9 +87,7 @@ void servo_buffer::load_hardware_interface(void)
 
 	regulator_ptr[7] = new NL_regulator_8_irp6ot(0, 0, 0.39, 8.62 / 2., 7.89 / 2., 0.35, master);
 
-	send_after_last_step = false;
-	clear_reply_status();
-	clear_reply_status_tmp();
+	common::servo_buffer::load_hardware_interface();
 }
 
 /*-----------------------------------------------------------------------*/

@@ -88,14 +88,7 @@ void servo_buffer::load_hardware_interface(void)
 	// chwytak
 	regulator_ptr[6] = new NL_regulator_8_irp6p(0, 0, 0.39, 8.62 / 2., 7.89 / 2., 0.35, master);
 
-	send_after_last_step = false;
-	clear_reply_status();
-	clear_reply_status_tmp();
-
-	for (int j = 0; j < IRP6_POSTUMENT_NUM_OF_SERVOS; j++) {
-
-		command.parameters.move.abs_position[j] = 0.0;
-	}
+	common::servo_buffer::load_hardware_interface();
 
 }
 

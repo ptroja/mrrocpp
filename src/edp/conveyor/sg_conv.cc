@@ -46,13 +46,7 @@ void servo_buffer::load_hardware_interface(void)
 	// Serwomechanizm 1
 	regulator_ptr[0] = new NL_regulator_1_conv(0, 0, 0.333, 6.2, 5.933, 0.35, master); // tasmociag dla irp6 postument
 
-	send_after_last_step = false;
-	clear_reply_status();
-	clear_reply_status_tmp();
-
-	for (int j = 0; j < CONVEYOR_NUM_OF_SERVOS; j++) {
-		command.parameters.move.abs_position[j] = 0.0;
-	}
+	common::servo_buffer::load_hardware_interface();
 }
 
 /*------------- * ----------------------------------------------------------*/

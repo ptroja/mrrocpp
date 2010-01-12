@@ -29,6 +29,18 @@ namespace mrrocpp {
 namespace edp {
 namespace common {
 
+
+void servo_buffer::load_hardware_interface(void)
+{
+	send_after_last_step = false;
+	clear_reply_status();
+	clear_reply_status_tmp();
+
+	for (int j = 0; j < master.number_of_servos; j++) {
+		command.parameters.move.abs_position[j] = 0.0;
+	}
+}
+
 /*-----------------------------------------------------------------------*/
 uint8_t servo_buffer::Move_a_step(void)
 {

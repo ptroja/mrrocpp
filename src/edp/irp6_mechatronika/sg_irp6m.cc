@@ -71,13 +71,7 @@ void servo_buffer::load_hardware_interface(void)
 	// regulator_ptr[0] = new NL_regulator_1 (0, 0, 0.64, 16.61/5., 15.89/5., 0.35);
 
 
-	send_after_last_step = false;
-	clear_reply_status();
-	clear_reply_status_tmp();
-
-	for (int j = 0; j < master.number_of_servos; j++) {
-		command.parameters.move.abs_position[j] = 0.0;
-	}
+	common::servo_buffer::load_hardware_interface();
 
 }
 
