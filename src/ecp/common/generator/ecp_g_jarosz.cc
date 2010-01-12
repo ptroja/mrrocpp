@@ -1597,7 +1597,7 @@ void calibration::ecp_save_extended_file(operator_reaction_condition& the_condit
 
 	if (MsgSend(ecp_t.UI_fd, &ecp_to_ui_msg, sizeof(lib::ECP_message), &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0) {// by Y&W
 #else
-	if (messip::port_send(_ecp_task.UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0) {
+	if (messip::port_send(ecp_t.UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0) {
 #endif
 		e = errno;
 		perror("ECP: Send() to UI failed");
@@ -3174,7 +3174,7 @@ void elipsoid::ecp_save_trajectory()
 
 	if (MsgSend(ecp_t.UI_fd, &ecp_to_ui_msg, sizeof(lib::ECP_message), &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0) {// by Y&W
 #else
-	if (messip::port_send(_ecp_task.UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0) {
+	if (messip::port_send(ecp_t.UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0) {
 #endif
 		e = errno;
 		perror("ECP: Send() to UI failed");
