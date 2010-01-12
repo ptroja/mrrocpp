@@ -48,8 +48,6 @@ static gint model_no_tmp;
 static char buf[32];
 static gchar buffer[500];
 <xsl:choose><xsl:when test="$name = 'conveyor'"></xsl:when><xsl:otherwise>
-static double tool_vector_a[<xsl:value-of select="$xyz_angle_axis_tool" />];
-static double tool_vector_e[<xsl:value-of select="$xyz_euler_zyz_tool" />];
 static double alfa;
 static double wl; 
 static double l_eps = 0;

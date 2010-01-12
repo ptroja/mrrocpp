@@ -229,16 +229,15 @@ void ui_common_robot::set_servo_algorithm(uint8_t algorithm_no[], uint8_t parame
 
 // ZADANIE NARZEDZIA
 // ---------------------------------------------------------------
-void ui_common_robot::set_tool_xyz_angle_axis(double tool_vector[6])
+void ui_common_robot::set_tool_xyz_angle_axis(const lib::Xyz_Angle_Axis_vector &tool_vector)
 {
-
 	ecp->ecp_command.instruction.instruction_type = lib::SET;
 	ecp->ecp_command.instruction.set_type = RMODEL_DV; // RMODEL
 	ecp->ecp_command.instruction.set_rmodel_type = lib::TOOL_FRAME;
 	ecp->ecp_command.instruction.get_rmodel_type = lib::TOOL_FRAME;
 
 	lib::Homog_matrix tmp;
-	tmp.set_from_xyz_angle_axis(lib::Xyz_Angle_Axis_vector(tool_vector));
+	tmp.set_from_xyz_angle_axis(tool_vector);
 	tmp.get_frame_tab(ecp->ecp_command.instruction.rmodel.tool_frame_def.tool_frame);
 
 	execute_motion();
@@ -248,16 +247,15 @@ void ui_common_robot::set_tool_xyz_angle_axis(double tool_vector[6])
 
 // ZADANIE NARZEDZIA
 // ---------------------------------------------------------------
-void ui_common_robot::set_tool_xyz_euler_zyz(double tool_vector[6])
+void ui_common_robot::set_tool_xyz_euler_zyz(const lib::Xyz_Euler_Zyz_vector &tool_vector)
 {
-
 	ecp->ecp_command.instruction.instruction_type = lib::SET;
 	ecp->ecp_command.instruction.set_type = RMODEL_DV; // RMODEL
 	ecp->ecp_command.instruction.set_rmodel_type = lib::TOOL_FRAME;
 	ecp->ecp_command.instruction.get_rmodel_type = lib::TOOL_FRAME;
 
 	lib::Homog_matrix tmp;
-	tmp.set_from_xyz_euler_zyz(lib::Xyz_Euler_Zyz_vector(tool_vector));
+	tmp.set_from_xyz_euler_zyz(tool_vector);
 	tmp.get_frame_tab(ecp->ecp_command.instruction.rmodel.tool_frame_def.tool_frame);
 
 	execute_motion();
@@ -267,9 +265,8 @@ void ui_common_robot::set_tool_xyz_euler_zyz(double tool_vector[6])
 
 // ODCZYT NARZEDZIA
 // ---------------------------------------------------------------
-void ui_common_robot::read_tool_xyz_angle_axis(double tool_vector[6])
+void ui_common_robot::read_tool_xyz_angle_axis(lib::Xyz_Angle_Axis_vector & tool_vector)
 {
-
 	// Zlecenie odczytu numeru modelu i korektora kinematyki
 	ecp->ecp_command.instruction.instruction_type = lib::GET;
 	ecp->ecp_command.instruction.get_type = RMODEL_DV; // RMODEL
@@ -279,10 +276,7 @@ void ui_common_robot::read_tool_xyz_angle_axis(double tool_vector[6])
 	execute_motion();
 
 	lib::Homog_matrix tmp(ecp->reply_package.rmodel.tool_frame_def.tool_frame);
-	lib::Xyz_Angle_Axis_vector tmp_vector;
-	tmp.get_xyz_angle_axis(tmp_vector);
-	tmp_vector.to_table(tool_vector);
-
+	tmp.get_xyz_angle_axis(tool_vector);
 }
 // ---------------------------------------------------------------
 
@@ -291,7 +285,6 @@ void ui_common_robot::read_tool_xyz_angle_axis(double tool_vector[6])
 // ---------------------------------------------------------------
 void ui_common_robot::read_tool_xyz_euler_zyz(lib::Xyz_Euler_Zyz_vector &tool_vector)
 {
-
 	// Zlecenie odczytu numeru modelu i korektora kinematyki
 	ecp->ecp_command.instruction.instruction_type = lib::GET;
 	ecp->ecp_command.instruction.get_type = RMODEL_DV; // RMODEL
@@ -302,7 +295,6 @@ void ui_common_robot::read_tool_xyz_euler_zyz(lib::Xyz_Euler_Zyz_vector &tool_ve
 	lib::Homog_matrix tmp(ecp->reply_package.rmodel.tool_frame_def.tool_frame);
 
 	tmp.get_xyz_euler_zyz(tool_vector);
-
 }
 // ---------------------------------------------------------------
 
@@ -585,7 +577,7 @@ void ui_common_robot::move_xyz_angle_axis_relative(double position_increment[7])
 	int nr_of_steps; // Liczba krokow
 	int nr_ang, nr_lin, nr_grip;
 
-	double max_inc_ang = 0.0, max_inc_lin = 0.0, max_inc_grip = 0.0, temp_lin, temp_ang, temp_grip; // Zmienne pomocnicze
+	double max_inc_ang = 0.0, max_inc_lin = 0.0, max_inc_grip = 0.0, temp_lin, temp_ang; // Zmienne pomocnicze
 
 	max_inc_ang = max_inc_lin = 0.0;
 	for (int i = 0; i < 3; i++) {

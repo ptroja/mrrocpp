@@ -13,7 +13,7 @@ Axis TS window callback signals
 <xsl:variable name="fullName" select="fullName"/>
 <xsl:variable name="xyz_angle_axis_tool" select="xyz_angle_axis_tool"/>
 
-
+static lib::Xyz_Angle_Axis_vector tool_vector_a;
 
 extern "C"
 {

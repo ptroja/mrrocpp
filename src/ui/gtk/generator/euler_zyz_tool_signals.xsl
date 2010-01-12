@@ -12,6 +12,7 @@ xyz_euler_zyz_tool window callback signals
 <xsl:variable name="fullName" select="fullName"/>
 <xsl:variable name="xyz_euler_zyz_tool" select="xyz_euler_zyz_tool"/>
 
+static lib::Xyz_Euler_Zyz_vector tool_vector_e;
 
 extern "C"
 {
