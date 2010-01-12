@@ -270,11 +270,6 @@ void manip_effector::get_controller_state(lib::c_buffer &instruction)
 	}
 }
 
-servo_buffer* manip_effector::return_created_servo_buffer()
-{
-
-}
-
 /*--------------------------------------------------------------------------*/
 void manip_effector::single_thread_move_arm(lib::c_buffer &instruction)
 { // przemieszczenie ramienia

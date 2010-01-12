@@ -48,9 +48,9 @@ namespace mrrocpp {
 namespace edp {
 namespace common {
 
-servo_buffer* manip_and_conv_effector::return_created_servo_buffer()
+servo_buffer * manip_and_conv_effector::return_created_servo_buffer()
 {
-
+	return NULL;
 }
 
 /*--------------------------------------------------------------------------*/

@@ -59,8 +59,6 @@ public:
 
     bool servo_joints_and_frame_actualization_and_upload(void);// by Y
 
-	virtual servo_buffer* return_created_servo_buffer();
-
     void create_threads ();
 
     void set_rmodel (lib::c_buffer &);

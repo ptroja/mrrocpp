@@ -54,7 +54,6 @@ void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
 void effector::move_arm(lib::c_buffer &instruction)
 {
 	manip_effector::single_thread_move_arm(instruction);
-
 }
 /*--------------------------------------------------------------------------*/
 
@@ -90,8 +89,6 @@ void effector::create_kinematic_models_for_given_robot(void)
 	// Ustawienie aktywnego modelu.
 	set_kinematic_model(0);
 }
-
-
 
 /*--------------------------------------------------------------------------*/
 void effector::create_threads()
