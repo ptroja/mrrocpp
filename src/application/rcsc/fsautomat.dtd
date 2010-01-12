@@ -3,8 +3,9 @@
 	<!ELEMENT SubTask (State+)>
 	
 
-	<!ELEMENT State ((ROBOT|SetOfRobots)?,ECPGeneratorType?,(TrajectoryFilePath,Trajectory)?,taskInit?,
-							Speech?,AddArg?,Sensor?,TimeSpan?,GeneratorParameters?,Parameters?,transition+)>
+	<!ELEMENT State ((ROBOT|SetOfRobots)?,ECPGeneratorType?,
+	                        (GeneratorParameters|(TrajectoryFilePath,Trajectory))?,taskInit?,
+							Speech?,AddArg?,Sensor?,TimeSpan?,Parameters?,transition+)>
 		<!ATTLIST State id CDATA #REQUIRED>
 		<!ATTLIST State type CDATA #REQUIRED>
 
