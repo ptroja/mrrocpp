@@ -11,6 +11,8 @@
 #include <time.h>
 #include <iostream>
 #include <fstream>
+#include <boost/circular_buffer.hpp>
+
 
 #include "lib/srlib.h"
 // #include "ecp/common/ecp.h"
@@ -68,14 +70,14 @@ OnTimer( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
 
 
 		snprintf(current_line, 100, "%-10s",
-				ui_sr_obj->message_buffer[ui_sr_obj->reader_buf_position].host_name);
+				ui_sr_obj->cb.front().host_name);
 		strcat(current_line, "  ");
 		strftime( current_line+12, 100, "%H:%M:%S",
-				localtime( &ui_sr_obj->message_buffer[ui_sr_obj->reader_buf_position].ts.tv_sec ));
+				localtime( &ui_sr_obj->cb.front().ts.tv_sec ));
 		sprintf(current_line+20, ".%03d   ",
-				ui_sr_obj->message_buffer[ui_sr_obj->reader_buf_position].ts.tv_nsec/1000000);
+				ui_sr_obj->cb.front().ts.tv_nsec/1000000);
 
-		switch (ui_sr_obj->message_buffer[ui_sr_obj->reader_buf_position].process_type) {
+		switch (ui_sr_obj->cb.front().process_type) {
 			case lib::EDP:
 				strcat(current_line, "EDP: ");
 				break;
@@ -98,15 +100,15 @@ OnTimer( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
 		} // end: switch (message_buffer[reader_buf_position].process_type)
 
 		// FIXME: ?
-		ui_sr_obj->message_buffer[ui_sr_obj->reader_buf_position].process_type = lib::UNKNOWN_PROCESS_TYPE;
+		ui_sr_obj->cb.front().process_type = lib::UNKNOWN_PROCESS_TYPE;
 
 		char process_name_buffer[NAME_LENGTH+1];
 		snprintf(process_name_buffer, sizeof(process_name_buffer), "%-21s",
-				ui_sr_obj->message_buffer[ui_sr_obj->reader_buf_position].process_name);
+				ui_sr_obj->cb.front().process_name);
 
 		strcat(current_line,process_name_buffer);
 
-		switch (ui_sr_obj->message_buffer[ui_sr_obj->reader_buf_position].message_type) {
+		switch (ui_sr_obj->cb.front().message_type) {
 			case lib::FATAL_ERROR:
 				strcat(current_line, "FATAL_ERROR:     ");
 				attr.text_color=Pg_RED;
@@ -130,7 +132,7 @@ OnTimer( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
 				attr.text_color=Pg_YELLOW;
 		}; // end: switch (message.message_type)
 
-		strcat( current_line, ui_sr_obj->message_buffer[ui_sr_obj->reader_buf_position].description);
+		strcat( current_line, ui_sr_obj->cb.front().description);
 		strcat( current_line, "\n" );
 		// 	printf("c_l W ONT: %s\n",current_line);
 		// delay(1000);
@@ -141,7 +143,9 @@ OnTimer( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
 
 	    (*log_file_outfile) << current_line;
 
-	} 	while (ui_sr_obj->writer_buf_position!=ui_sr_obj->reader_buf_position);
+	    ui_sr_obj->cb.pop_front();
+
+	} 	while (!(ui_sr_obj->cb.empty()));
 
 		(*log_file_outfile).flush();
 

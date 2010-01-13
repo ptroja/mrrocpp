@@ -17,7 +17,7 @@
 
 #include "lib/com_buf.h"
 #include "lib/srlib.h"
-
+#include <boost/circular_buffer.hpp>
 
 
 
@@ -261,6 +261,8 @@ public:
 	lib::sr_package_t message_buffer[UI_SR_BUFFER_LENGHT];
 	int writer_buf_position;
 	int reader_buf_position;
+
+	boost::circular_buffer<lib::sr_package_t> cb;
 
 	ui_sr_buffer();
 

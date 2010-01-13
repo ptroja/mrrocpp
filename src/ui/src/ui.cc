@@ -8,7 +8,7 @@
 
 #include "ui/ui.h"
 
-ui_sr_buffer::ui_sr_buffer()
+ui_sr_buffer::ui_sr_buffer() : cb(UI_SR_BUFFER_LENGHT)
 {
 	writer_buf_position=-1;
 	reader_buf_position=-1;
