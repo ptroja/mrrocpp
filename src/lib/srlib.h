@@ -66,6 +66,7 @@ protected:
   uint64_t error_tab[ERROR_TAB_SIZE]; // tablica slow 64-bitowych zawierajacych kody bledow
   sr_package_t sr_message;          // paczka z wiadomoscia dla SR
   int send_package(void);
+  int send_package_to_sr(sr_package_t& sr_mess);
 
 public :
   sr(process_type_t process_type, const std::string & process_name, const std::string & sr_name);

@@ -74,16 +74,22 @@ sr::~sr(void) {
     name_close(fd);
 }
 
-int sr::send_package(void) {
-
+int sr::send_package_to_sr(sr_package_t& sr_mess)
+{
 	if(fd == -1)// by all
 		return -1;
 
 	int16_t status;
-    sr_message.hdr.type=0;
+	sr_mess.hdr.type=0;
 
+	return MsgSend(fd, &sr_mess, sizeof(sr_mess),&status, sizeof(status));
+}
+
+
+int sr::send_package(void) {
 	clock_gettime(CLOCK_REALTIME, &sr_message.ts);
-	return MsgSend(fd, &sr_message, sizeof(sr_message),&status,sizeof(status));
+
+	return send_package_to_sr(sr_message);
 }
 #else /* USE_MESSIP_SRR */
 // Konstruktor
