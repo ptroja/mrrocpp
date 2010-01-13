@@ -15,13 +15,10 @@ bledy aplikacji  + priorytet (1 - 10):
 
 
 wskazane modifykacje  + priorytet (1 - 10):
-	03.06.03 - asynchroniczna komunikacja z sr -p 2 (nie wiadamo czy to sie uda latwo zrobic)
 	04.11.07 - strumieniowa obsluge plikow ini z dynamicznym przydzialem pamieci, listami etc. (ew. XML) - p 1
 	05.08.17 - dopracowac obsluge menu (przejscie miedzy kolejnymi menu etc.) - p 3
 	05.08.21 - dodac obsluge wyjatkow w nowo-implementowanych funkcjach (w szczegolnosci obsluga sily) - p 4
 	07.02.01 - uruchomic krzywe nurbs w euler i angle_axis z chwytakiem a takze w joints i motors - p 8
-	07.02.01 - napisac nowy generator z ograniczonym przyspieszeniem i predkoscia do zastosowania w ukladaniu kostki
-					rubika oraz w UI do plynnych ruchow recznych - p 8
 	07.02.01 - zastapic unie IMAGE w SENSOR.H przez odpowiednia hierarchie polimorficznych klas buforow komunikacyjnych - p 1
 	07.02.07 - wstawic enkodery w robocie Irp6_on_track 
 					uklady rezolwerowe wprowdzaja blad niesystematyczny w pomiarze polozenia !!!! - p 10

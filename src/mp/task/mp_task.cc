@@ -54,6 +54,7 @@ void task::catch_signal_in_mp_task(int sig)
 	case SIGTERM:
 		//case SIGINT:
 		sr_ecp_msg->message("MP terminated");
+		sr_ecp_msg->wait_for_empty_queue();
 		_exit(EXIT_SUCCESS);
 		break;
 	case SIGSEGV:

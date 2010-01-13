@@ -51,6 +51,7 @@ void error_handler(ERROR e){
 			break;
 		case lib::FATAL_ERROR:
 			vs->sr_msg->message (lib::FATAL_ERROR, e.error_no);
+			vs->sr_msg->wait_for_empty_queue();
 			break;
 		case lib::NON_FATAL_ERROR:
 			switch(e.error_no){
@@ -61,12 +62,14 @@ void error_handler(ERROR e){
 			case SENSOR_NOT_CONFIGURED:
 				vs->from_vsp.vsp_report= lib::VSP_SENSOR_NOT_CONFIGURED;
 				vs->sr_msg->message (lib::NON_FATAL_ERROR, e.error_no);
+				vs->sr_msg->wait_for_empty_queue();
 				break;
 			case READING_NOT_READY:
 				vs->from_vsp.vsp_report= lib::VSP_READING_NOT_READY;
 				break;
 			default:
 				vs->sr_msg->message (lib::NON_FATAL_ERROR, VSP_UNIDENTIFIED_ERROR);
+				vs->sr_msg->wait_for_empty_queue();
 			}
 			break;
 		default:
