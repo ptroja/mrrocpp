@@ -83,6 +83,9 @@ extern ui_state_def ui_state;
 
 void *comm_thread(void* arg) {
 
+	lib::set_thread_priority(pthread_self() , MAX_PRIORITY-5);
+
+
 	lib::set_thread_name("comm");
 
 	name_attach_t *attach;
@@ -101,12 +104,14 @@ void *comm_thread(void* arg) {
 	while(1) {
 		// ui_ecp_obj->communication_state = UI_ECP_REPLY_READY;
 		ui_ecp_obj->communication_state = UI_ECP_AFTER_REPLY;
+
 		int rcvid = MsgReceive(attach->chid, &ui_ecp_obj->ecp_to_ui_msg, sizeof(ui_ecp_obj->ecp_to_ui_msg), &info);
+
 		ui_ecp_obj->communication_state = UI_ECP_AFTER_RECEIVE;
 		if (rcvid == -1) {/* Error condition, exit */
 			perror("UI: Receive failed");
 			// 	  throw generator::ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
-			break;
+			continue;
 		}
 
 		if (rcvid == 0) {/* Pulse received */
@@ -403,9 +408,9 @@ void *sr_thread(void* arg)
 	while(1)
 	{
 		lib::sr_package_t sr_msg;
-
+		printf("przed MsgReceive: \n");
 		int rcvid = MsgReceive_r(attach->chid, &sr_msg, sizeof(sr_msg), NULL);
-
+		printf("za MsgReceive: \n");
 		if (rcvid < 0) /* Error condition, exit */
 		{
 			if (rcvid == -EINTR) {
@@ -448,6 +453,8 @@ void *sr_thread(void* arg)
 
 		if (strlen(sr_msg.process_name)>1) // by Y jesli ten string jest pusty to znaczy ze przyszedl smiec
 		{
+			printf("srt: \n");
+			flushall();
 
 			ui_sr_obj->lock_mutex();
 
