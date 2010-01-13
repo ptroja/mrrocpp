@@ -40,7 +40,9 @@ void wii_absolute::set_position(void)
     the_robot->ecp_command.instruction.value_in_step_no = 8;
 
     homog_matrix.set_from_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame);
-    
+
+    homog_matrix.get_translation_vector(old_translation);
+
     translation[0] = nextChange[0];
     translation[1] = nextChange[1];
     translation[2] = nextChange[2];
