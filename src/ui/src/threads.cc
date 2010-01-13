@@ -443,15 +443,15 @@ void *sr_thread(void* arg)
 			// prrintf("srt: \n");
 			flushall();
 
-			ui_sr_obj->lock_mutex();
+			{
+				boost::mutex::scoped_lock lock(ui_sr_obj->sr_mutex);
+				//	ui_sr_obj->writer_buf_position++;
+				//	ui_sr_obj->writer_buf_position %= UI_SR_BUFFER_LENGHT;
 
-			//	ui_sr_obj->writer_buf_position++;
-			//	ui_sr_obj->writer_buf_position %= UI_SR_BUFFER_LENGHT;
-
-			// ui_sr_obj->message_buffer[ui_sr_obj->writer_buf_position] = sr_msg;
-			ui_sr_obj->cb.push_back(sr_msg);
-			ui_sr_obj->set_new_msg();
-			ui_sr_obj->unlock_mutex();
+				// ui_sr_obj->message_buffer[ui_sr_obj->writer_buf_position] = sr_msg;
+				ui_sr_obj->cb.push_back(sr_msg);
+				ui_sr_obj->set_new_msg();
+			}
 
 		} else {
 			printf("SR(%s:%d) unexpected message\n", __FILE__, __LINE__);

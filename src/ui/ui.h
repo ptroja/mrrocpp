@@ -255,22 +255,15 @@ typedef struct {
 class ui_sr_buffer {
 private:
 	sem_t sem;
-	pthread_mutex_t mutex; // = PTHREAD_MUTEX_INITIALIZER ;
 
 public:
-	lib::sr_package_t message_buffer[UI_SR_BUFFER_LENGHT];
-	int writer_buf_position;
-	int reader_buf_position;
-
 	boost::circular_buffer<lib::sr_package_t> cb;
+	boost::mutex sr_mutex; // = PTHREAD_MUTEX_INITIALIZER ;
 
 	ui_sr_buffer();
 
 	int	set_new_msg(); // podniesienie semafora
 	int	check_new_msg(); // oczekiwanie na semafor
-	int	lock_mutex(); // zajecie mutex'a
-	int	unlock_mutex(); // zwolnienie mutex'a
-
 };
 
 
