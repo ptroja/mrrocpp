@@ -55,7 +55,12 @@ int sr::wait_for_new_msg() // oczekiwanie na semafor
 sr::sr(process_type_t process_type, const std::string & process_name, const std::string & sr_name, const bool _multi_thread, const int _thread_priority) :
 	multi_thread(_multi_thread), thread_priority(_thread_priority), cb(SR_BUFFER_LENGHT)
 {
-	sem_init(&sem, 0, 0);
+
+	if (multi_thread) {
+		sem_init(&sem, 0, 0);
+		thread_id = new boost::thread(boost::bind(&sr::operator(), this));
+	}
+
 	// kilka sekund  (~1) na otworzenie urzadzenia
 	int tmp = 0;
 	while ((fd = name_open(sr_name.c_str(), NAME_FLAG_ATTACH_GLOBAL)) < 0) {
@@ -109,6 +114,7 @@ int sr::send_package(void) {
 		boost::mutex::scoped_lock lock(sr_mutex);
 		cb.push_back(sr_message);
 		set_new_msg();
+		return 1;
 	}
 
 }
@@ -545,6 +551,33 @@ void sr_vsp::interpret(void) {
 		default:
 		sprintf(sr_message.description, "UNIDENTIFIED VSP ERROR");
 	}
+}
+
+void sr::operator()()
+{
+
+	sr_package_t local_message;
+
+	while (1) {
+
+		if (wait_for_new_msg() == 0) { // by Y jesli mamy co wypisywac
+
+			while (!cb.empty())
+			{
+				{
+					boost::mutex::scoped_lock lock(sr_mutex);
+
+					local_message = cb.front();
+				}
+
+				send_package_to_sr(local_message);
+
+				cb.pop_front();
+			}
+
+		}
+	}
+
 }
 
 } // namespace lib
