@@ -30,14 +30,6 @@ void wii_absolute::set_position(void)
     double old_translation[3];
 
     the_robot->ecp_command.instruction.instruction_type = lib::SET_GET;
-    the_robot->ecp_command.instruction.set_type = ARM_DV;
-    the_robot->ecp_command.instruction.set_arm_type = lib::FRAME;
-    the_robot->ecp_command.instruction.get_type = ARM_DV;
-    the_robot->ecp_command.instruction.get_arm_type = lib::FRAME;
-    the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
-    the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-    the_robot->ecp_command.instruction.motion_steps = 8;
-    the_robot->ecp_command.instruction.value_in_step_no = 8;
 
     homog_matrix.set_from_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame);
 
@@ -74,12 +66,14 @@ void wii_absolute::set_position(void)
 bool wii_absolute::first_step()
 {
     the_robot->ecp_command.instruction.instruction_type = lib::GET;
+    the_robot->ecp_command.instruction.set_type = ARM_DV;
+    the_robot->ecp_command.instruction.set_arm_type = lib::FRAME;
     the_robot->ecp_command.instruction.get_type = ARM_DV;
     the_robot->ecp_command.instruction.get_arm_type = lib::FRAME;
     the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
     the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
     the_robot->ecp_command.instruction.motion_steps = 8;
-    the_robot->ecp_command.instruction.value_in_step_no = 8;
+    the_robot->ecp_command.instruction.value_in_step_no = 6;
 
     releasedA = false;
     stop = false;
