@@ -40,7 +40,9 @@ sr_package::sr_package()
 
 #if !defined(USE_MESSIP_SRR)
 // Konstruktor
-sr::sr(process_type_t process_type, const std::string & process_name, const std::string & sr_name) {
+sr::sr(process_type_t process_type, const std::string & process_name, const std::string & sr_name, const bool _multi_thread, const int _thread_priority):
+	multi_thread(_multi_thread), thread_priority(_thread_priority)
+{
 
  	// kilka sekund  (~1) na otworzenie urzadzenia
 	int tmp = 0;
@@ -211,8 +213,8 @@ int sr::message(error_class_t message_type, uint64_t error_code0, uint64_t error
 // --------------------------------------------------------------------
 // interpretacja bledu dla EDP robota irp6_on_track
 
-sr_edp::sr_edp(process_type_t process_type, const std::string & process_name, const std::string & sr_name) :
-	sr(process_type, process_name, sr_name)
+sr_edp::sr_edp(process_type_t process_type, const std::string & process_name, const std::string & sr_name, const bool _multi_thread, const int _thread_priority) :
+	sr(process_type, process_name, sr_name, _multi_thread, thread_priority)
 {
 }
 
@@ -368,8 +370,8 @@ void sr_edp::interpret(void) {
 } // end: sr_edp::interpret()
 // ---------------------------------------------------------------------
 
-sr_ecp::sr_ecp(process_type_t process_type, const std::string & process_name, const std::string & sr_name) :
-	sr(process_type, process_name, sr_name)
+sr_ecp::sr_ecp(process_type_t process_type, const std::string & process_name, const std::string & sr_name, const bool _multi_thread, const int _thread_priority) :
+	sr(process_type, process_name, sr_name, _multi_thread, thread_priority)
 {
 }
 
@@ -466,8 +468,8 @@ switch (sr_message.message_type) {
 } // end: sr_ecp::interpret()
 
 // ---------------------------------------------------------------------
-sr_ui::sr_ui(process_type_t process_type, const std::string & process_name, const std::string & sr_name) :
-		  sr(process_type, process_name, sr_name)
+sr_ui::sr_ui(process_type_t process_type, const std::string & process_name, const std::string & sr_name, const bool _multi_thread, const int _thread_priority) :
+		  sr(process_type, process_name, sr_name, _multi_thread, thread_priority)
 {
 }
 
@@ -482,8 +484,8 @@ void sr_ui::interpret(void) {
 	}
 }
 
-sr_vsp::sr_vsp(process_type_t process_type, const std::string & process_name, const std::string & sr_name) :
-              sr(process_type, process_name, sr_name)
+sr_vsp::sr_vsp(process_type_t process_type, const std::string & process_name, const std::string & sr_name, const bool _multi_thread, const int _thread_priority) :
+              sr(process_type, process_name, sr_name, _multi_thread, thread_priority)
 {
 }
 

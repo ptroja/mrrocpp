@@ -1205,7 +1205,7 @@ reload_whole_configuration() {
 			ui_msg.ui = new lib::sr_ui(
 					lib::UI,
 					ui_state.ui_attach_point.c_str(),
-					ui_state.network_sr_attach_point.c_str()
+					ui_state.network_sr_attach_point.c_str(), false, getprio(0)-1
 					);
 		}
 
@@ -1215,7 +1215,7 @@ reload_whole_configuration() {
 			ui_msg.all_ecp = new lib::sr_ecp(
 					lib::ECP,
 					"ui_all_ecp",
-					ui_state.network_sr_attach_point.c_str()
+					ui_state.network_sr_attach_point.c_str(), false, getprio(0)-1
 					);
 		}
 

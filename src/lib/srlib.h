@@ -67,9 +67,11 @@ protected:
   sr_package_t sr_message;          // paczka z wiadomoscia dla SR
   int send_package(void);
   int send_package_to_sr(sr_package_t& sr_mess);
+  bool multi_thread;
+  int thread_priority;
 
 public :
-  sr(process_type_t process_type, const std::string & process_name, const std::string & sr_name);
+  sr(process_type_t process_type, const std::string & process_name, const std::string & sr_name, const bool _multi_thread, const int _thread_priority);
   virtual ~sr(void);
   int message(error_class_t message_type, uint64_t error_code);
   int message(error_class_t message_type, uint64_t error_code0, uint64_t error_code1);
@@ -91,14 +93,14 @@ public :
 
 class sr_edp: public sr {
 public:
-  sr_edp(process_type_t process_type, const std::string & process_name, const std::string & sr_name);
+  sr_edp(process_type_t process_type, const std::string & process_name, const std::string & sr_name, const bool _multi_thread, const int _thread_priority);
 protected:
   virtual void interpret(void);
 };
 
 class sr_ecp: public sr {
 public:
-  sr_ecp(process_type_t process_type, const std::string & process_name, const std::string & sr_name);
+  sr_ecp(process_type_t process_type, const std::string & process_name, const std::string & sr_name, const bool _multi_thread, const int _thread_priority);
 protected:
   virtual void interpret(void);
 };
@@ -106,7 +108,7 @@ protected:
 // obsluga komunikatow generowanych przez VSP
 class sr_vsp: public sr {
 public:
-  sr_vsp(process_type_t process_type, const std::string & process_name, const std::string & sr_name);
+  sr_vsp(process_type_t process_type, const std::string & process_name, const std::string & sr_name, const bool _multi_thread, const int _thread_priority);
 protected:
   virtual void interpret(void);
 };
@@ -114,7 +116,7 @@ protected:
 // obsluga komunikatow generowanych przez UI// by Y
 class sr_ui: public sr {
 public:
-  sr_ui(process_type_t process_type, const std::string & process_name, const std::string & sr_name);
+  sr_ui(process_type_t process_type, const std::string & process_name, const std::string & sr_name, const bool _multi_thread, const int _thread_priority);
 protected:
   virtual void interpret(void);
 };
