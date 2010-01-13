@@ -876,7 +876,7 @@ void task::initialize_communication()
 	std::string sr_net_attach_point = config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", UI_SECTION);
 	std::string mp_attach_point = config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "mp_attach_point");
 
-	if (( sr_ecp_msg = new lib::sr_ecp(lib::MP, mp_attach_point, sr_net_attach_point, false, getprio(0)-1)) == NULL) { // Obiekt do komuniacji z SR
+	if (( sr_ecp_msg = new lib::sr_ecp(lib::MP, mp_attach_point, sr_net_attach_point, true, getprio(0)-1)) == NULL) { // Obiekt do komuniacji z SR
 		perror ("Unable to locate SR");
 		throw common::MP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 	}
