@@ -135,8 +135,13 @@ bool wii::next_step()
     }
 
     axis = get_axis();
-    if(!calculate_change(axis,value) && stop) return false;
-    set_position();
+    bool changed = calculate_change(axis,value);
+    if(!changed && stop) return false;
+
+    if(changed)
+    {
+        set_position();
+    }
 
     return true;
 }
