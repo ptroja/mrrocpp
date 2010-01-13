@@ -33,11 +33,13 @@ public:
 
 	static const char configSectionName[];
 protected:
+	/** Is log enabled*/
+	bool logEnabled;
 	/**
-	 * Print message to the console.
+	 * Print message to the console only if logEnabled is set to true.
 	 * @param fmt printf-like format
 	 */
-	void log(char *fmt, ...);
+	void log(const char *fmt, ...);
 	/**
 	 * Check if frame is within constraints.
 	 */

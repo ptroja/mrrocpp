@@ -26,7 +26,7 @@ const char ecp_g_mboryn::configSectionName[] = { "[mboryn_servovision]" };
 ecp_g_mboryn::ecp_g_mboryn(mrrocpp::ecp::common::task::task & _ecp_task)
 //: mrrocpp::ecp::common::generator::generator(_ecp_task)
 :
-	generator(_ecp_task)
+	generator(_ecp_task), logEnabled(true)
 {
 	char kp_name[] = { "kp" };
 	char maxt_name[] = { "maxt" };
@@ -35,19 +35,17 @@ ecp_g_mboryn::ecp_g_mboryn(mrrocpp::ecp::common::task::task & _ecp_task)
 		Kp = _ecp_task.config.value <double> (kp_name, configSectionName);
 	} else {
 		Kp = 0.002;
-		cout << "Parameter \"" << configSectionName << "\"->\"" << kp_name << "\" not found. Using default value: "
-				<< Kp << endl;
+		log("Parameter %s->%s not found. Using default value: %g\n", configSectionName, kp_name);
 	}
 
 	if (_ecp_task.config.exists(maxt_name, configSectionName)) {
 		maxT = _ecp_task.config.value <double> (maxt_name, configSectionName);
 	} else {
 		maxT = 0.001;
-		cout << "Parameter \"" << configSectionName << "\"->\"" << maxt_name << "\" not found. Using default value: "
-				<< maxT << endl;
+		log("Parameter %s->%s not found. Using default value: %g\n", configSectionName, maxt_name, maxT);
 	}
 
-	printf("\nKp: %g; maxT: %g\n", Kp, maxT); fflush(stdout);
+	log("\nKp: %g; maxT: %g\n", Kp, maxT);
 }
 
 ecp_g_mboryn::~ecp_g_mboryn()
@@ -56,6 +54,7 @@ ecp_g_mboryn::~ecp_g_mboryn()
 
 bool ecp_g_mboryn::first_step()
 {
+	log("ecp_g_mboryn::first_step()");
 	vsp_fradia = sensor_m[lib::SENSOR_CVFRADIA];
 
 	the_robot->ecp_command.instruction.instruction_type = lib::GET;
@@ -77,9 +76,6 @@ bool ecp_g_mboryn::first_step()
 	return true;
 }
 
-#if 0
-
-#else
 bool ecp_g_mboryn::next_step()
 {
 	the_robot->ecp_command.instruction.instruction_type = lib::SET_GET;
@@ -96,8 +92,6 @@ bool ecp_g_mboryn::next_step()
 	currentFrame.get_xyz_angle_axis(l_vector);
 
 	if (vsp_fradia->from_vsp.vsp_report == lib::VSP_REPLY_OK) {
-		//printf("vsp_report == lib::VSP_REPLY_OK\n");		fflush(stdout);
-
 		if (vsp_fradia->from_vsp.comm_image.sensor_union.object_tracker.tracking) {
 
 			mrrocpp::lib::K_vector
@@ -106,24 +100,36 @@ bool ecp_g_mboryn::next_step()
 			mrrocpp::lib::K_vector u;
 			u = e * Kp;
 			u[2] = 0; // Z axis
+
+			//for(int i=0; i<3; ++i){		log("u[%d] = %g\t", i, u[i]);	}		log("\n");
+			bool isConstrained = false;
 			for (int i = 0; i < 3; ++i) {
 				if (u[i] > maxT) {
-					cout << "u[" << i << "] > maxT: u[" << i << "] = " << u[i] << endl;
+					//log("u[%d] = %g > maxT = %g\n", i, u[i], maxT );
 					u[i] = maxT;
+					isConstrained = true;
 				}
 				if (u[i] < -maxT) {
-					cout << "u[" << i << "] < -maxT: u[" << i << "] = " << u[i] << endl;
+					//log("u[%d] = %g < -maxT = %g\n", i, u[i], -maxT );
 					u[i] = -maxT;
+					isConstrained = true;
 				}
-				l_vector[i]+=u[i];
+
+				l_vector[i]+=u[i];	// first 3 elements of l_vector[] are XYZ translation
+			}
+			if(isConstrained){
+				log("u CONSTRAINED.\n");
+			}
+			else{
+				log("u NOT CONSTRAINED.\n");
 			}
 
 			//translation += u;
 		} else {
-			//printf("Not tracking.\n");			fflush(stdout);
+			//log("Not tracking.\n");
 		}
 	} else {
-		//printf("vsp_report != lib::VSP_REPLY_OK\n");		fflush(stdout);
+
 	}
 
 	lib::Homog_matrix nextFrame;
@@ -131,25 +137,26 @@ bool ecp_g_mboryn::next_step()
 
 	// set next frame
 	if (isArmFrameOk(nextFrame)) {
+		currentFrame = nextFrame;
 		nextFrame.get_frame_tab(the_robot->ecp_command.instruction.arm.pf_def.arm_frame);
 	} else {
+		//log("!isArmFrameOk(nextFrame)\n");
 		currentFrame.get_frame_tab(the_robot->ecp_command.instruction.arm.pf_def.arm_frame);
 	}
 	the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = currentGripperCoordinate;
 
 	return true;
 } // next_step()
-#endif
 
 bool ecp_g_mboryn::isArmFrameOk(const lib::Homog_matrix& arm_frame)
 {
-	lib::K_vector minT(0.590, -0.400, 0.200), maxT(1.000, 0.400, 0.300);
+	lib::K_vector minT(0.600, -0.400, 0.200), maxT(0.950, 0.400, 0.300);
 	lib::Xyz_Angle_Axis_vector l_vector;
 	arm_frame.get_xyz_angle_axis(l_vector);
-	//cout << "\naxis_with_angle: " << axis_with_angle << "translation: " << translation << endl;
 
 	for (int i = 0; i < 3; ++i) {
 		if (l_vector[i] < minT[i] || l_vector[i] > maxT[i]) {
+			//log("l_vector[%d] = %g not in range: %g ... %g\n", i, l_vector[i], minT[i], maxT[i]);
 			return false;
 		}
 	}
@@ -157,9 +164,18 @@ bool ecp_g_mboryn::isArmFrameOk(const lib::Homog_matrix& arm_frame)
 	return true;
 }
 
-void ecp_g_mboryn::log(char *fmt, ...)
+void ecp_g_mboryn::log(const char *fmt, ...)
 {
+	va_list ap;
+	va_start(ap, fmt);
 
+	if(!logEnabled){
+		va_end(ap);
+		return;
+	}
+
+	vfprintf(stdout, fmt, ap); fflush(stdout);
+	va_end(ap);
 }
 
 } // namespace mrrocpp
