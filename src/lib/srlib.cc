@@ -52,12 +52,35 @@ int sr::wait_for_new_msg() // oczekiwanie na semafor
 	return sem_wait(&sem);
 }
 
+int sr::wait_for_empty_queue() // oczekiwanie na semafor
+{
+	if (multi_thread) {
+		sem_wait(&queue_empty_sem);
+		return sem_post(&queue_empty_sem);
+	} else {
+		return 1;
+	}
+}
+
+int sr::set_queue_not_empty() // podniesienie semafora
+{
+	return sem_trywait(&queue_empty_sem);
+}
+
+int sr::set_queue_empty() // podniesienie semafora
+{
+	sem_trywait(&queue_empty_sem);
+	return sem_post(&queue_empty_sem);
+}
+
 sr::sr(process_type_t process_type, const std::string & process_name, const std::string & sr_name, const bool _multi_thread, const int _thread_priority) :
 	multi_thread(_multi_thread), thread_priority(_thread_priority), cb(SR_BUFFER_LENGHT)
 {
 
 	if (multi_thread) {
 		sem_init(&sem, 0, 0);
+		sem_init(&queue_empty_sem, 0, 0);
+		set_queue_empty();
 		thread_id = new boost::thread(boost::bind(&sr::operator(), this));
 	}
 
@@ -114,6 +137,7 @@ int sr::send_package(void) {
 		boost::mutex::scoped_lock lock(sr_mutex);
 		cb.push_back(sr_message);
 		set_new_msg();
+		set_queue_not_empty();
 		return 1;
 	}
 
@@ -574,7 +598,7 @@ void sr::operator()()
 
 				cb.pop_front();
 			}
-
+			set_queue_empty();
 		}
 	}
 

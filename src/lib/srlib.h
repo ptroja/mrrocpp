@@ -62,11 +62,19 @@ typedef struct sr_package
 // int global_name_open(const char *name, int flags);// by Y do oblsugi name_open pomiedzy nodami,
 // tymczasowe rozwiazanie porponowane przez ekipe QNX
 
+
+
+
 class sr : public boost::noncopyable
 {
 private:
+	int set_queue_not_empty();
+
+	int set_queue_empty();
+
 	boost::mutex srMutex; //! one-thread a time access mutex
 	sem_t sem;
+	sem_t queue_empty_sem;
 #if !defined(USE_MESSIP_SRR)
 	int fd; // by W
 #else
@@ -82,7 +90,7 @@ protected:
 	boost::thread *thread_id;
 
 public:
-
+	int wait_for_empty_queue();
 	void operator()();
 	int set_new_msg(); // podniesienie semafora
 	int wait_for_new_msg(); // oczekiwanie na semafor
