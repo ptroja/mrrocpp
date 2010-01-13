@@ -72,9 +72,7 @@ void reader_buffer::operator()()
 {
 	uint64_t k;
 	uint64_t nr_of_samples; // maksymalna liczba pomiarow
-	uint64_t msr_nr; // numer pomiaru
-	int przepelniony; // czy bufor byl przepelniony
-	int msr_counter; // liczba pomiarow, ktore maja byc zapisane do pliku
+
 	uint64_t e; // kod bledu systemowego
 	bool start; // shall we start the reader?
 	bool stop; // shall we stop the reader?
@@ -160,7 +158,8 @@ void reader_buffer::operator()()
 
 	// NOTE: readed buffer has to be allocated on heap (using "new" operator) due to huge size
 	// boost::scoped_array takes care of deallocating in case of exception
-	boost::scoped_array<reader_data> r_measptr (new reader_data[nr_of_samples]);
+	boost::circular_buffer<reader_data> reader_buf(nr_of_samples);
+
 //	fprintf(stderr, "reader buffer size %lluKB\n", nr_of_samples*sizeof(reader_data)/1024);
 
 	// by Y komuniakicja pomiedzy ui i reader'em rozwiazalem poprzez pulsy
@@ -184,9 +183,6 @@ void reader_buffer::operator()()
 
 	// GLOWNA PETLA Z OCZEKIWANIEM NA ZLECENIE POMIAROW
 	for (;;) {
-
-		msr_nr = 0; // wyzerowanie liczby pomiarow
-		przepelniony = 0; // bufor narazie nie jest przepelniony
 
 		start = false; // okresla czy odebrano juz puls rozpoczecia pomiarow
 
@@ -260,14 +256,9 @@ void reader_buffer::operator()()
 				step_data.ui_trigger = ui_trigger;
 
 				// przepisanie danych dla biezacego kroku do bufora lokalnego reader
-				r_measptr[msr_nr] = step_data;
+				reader_buf.push_back(step_data);
 			}
 
-			// wykrycie przepelnienia
-			if ((++msr_nr) >= nr_of_samples) {
-				msr_nr = 0;
-				przepelniony = 1;
-			}
 
 			// warunkowy odbior pulsu (o ile przyszedl)
 			stop = false;
@@ -354,94 +345,86 @@ void reader_buffer::operator()()
 		} else { // jesli plik istnieje
 
 			// sprawdzenie czy bufor byl przepelniony i odpowiednie przygotowanie granic bufora przy zapi sie do pliku
-			if (przepelniony) {
-				k = msr_nr;
-				msr_counter = nr_of_samples;
-			} else {
-				k = 0;
-				msr_counter = msr_nr;
-			}
+
 
 			// dla calego horyzontu pomiarow
 
-			for (int i = 0; i < msr_counter; i++) {
+			while (!reader_buf.empty()) {
 
-				if (k == nr_of_samples)
-					k = 0;
 
 				// zapis pomiarow z biezacego kroku do pliku
-				// printf("EDP %f\n", r_measptr[k].current_cartesian_position[1]);
+				// printf("EDP %f\n", reader_buf.front().current_cartesian_position[1]);
 
-				outfile << r_measptr[k].step << " ";
+				outfile << reader_buf.front().step << " ";
 				if (reader_cnf.msec)
-					outfile << r_measptr[k].msec << " ";
+					outfile << reader_buf.front().msec << " ";
 				if (reader_cnf.servo_mode)
-					outfile << (r_measptr[k].servo_mode ? "1" : "0") << " ";
+					outfile << (reader_buf.front().servo_mode ? "1" : "0") << " ";
 
 				for (int j = 0; j < MAX_SERVOS_NR; j++) {
 					if (reader_cnf.desired_inc[j])
-						outfile << r_measptr[k].desired_inc[j] << " ";
+						outfile << reader_buf.front().desired_inc[j] << " ";
 					if (reader_cnf.current_inc[j])
-						outfile << r_measptr[k].current_inc[j] << " ";
+						outfile << reader_buf.front().current_inc[j] << " ";
 					if (reader_cnf.pwm[j])
-						outfile << r_measptr[k].pwm[j] << " ";
+						outfile << reader_buf.front().pwm[j] << " ";
 					if (reader_cnf.uchyb[j])
-						outfile << r_measptr[k].uchyb[j] << " ";
+						outfile << reader_buf.front().uchyb[j] << " ";
 					if (reader_cnf.abs_pos[j])
-						outfile << r_measptr[k].abs_pos[j] << " ";
+						outfile << reader_buf.front().abs_pos[j] << " ";
 				}
 
 				outfile << "j: ";
 
 				for (int j = 0; j < MAX_SERVOS_NR; j++) {
 					if (reader_cnf.current_joints[j])
-						outfile << r_measptr[k].current_joints[j] << " ";
+						outfile << reader_buf.front().current_joints[j] << " ";
 				}
 
 				outfile << "f: ";
 
 				for (int j = 0; j < 6; j++) {
 					if (reader_cnf.force[j])
-						outfile << r_measptr[k].force[j] << " ";
+						outfile << reader_buf.front().force[j] << " ";
 					if (reader_cnf.desired_force[j])
-						outfile << r_measptr[k].desired_force[j] << " ";
+						outfile << reader_buf.front().desired_force[j] << " ";
 					if (reader_cnf.filtered_force[j])
-						outfile << r_measptr[k].filtered_force[j] << " ";
+						outfile << reader_buf.front().filtered_force[j] << " ";
 				}
 
 				outfile << "k: ";
 
 				for (int j = 0; j < 6; j++) {
 					if (reader_cnf.current_cartesian_position[j])
-						outfile << r_measptr[k].current_cartesian_position[j] << " ";
+						outfile << reader_buf.front().current_cartesian_position[j] << " ";
 				}
 
 				outfile << "r: ";
 
 				for (int j = 0; j < 6; j++) {
 					if (reader_cnf.real_cartesian_position[j])
-						outfile << r_measptr[k].real_cartesian_position[j] << " ";
+						outfile << reader_buf.front().real_cartesian_position[j] << " ";
 				}
 
 				outfile << "v: ";
 
 				for (int j = 0; j < 6; j++) {
 					if (reader_cnf.real_cartesian_vel[j])
-						outfile << r_measptr[k].real_cartesian_vel[j] << " ";
+						outfile << reader_buf.front().real_cartesian_vel[j] << " ";
 				}
 
 				outfile << "a: ";
 
 				for (int j = 0; j < 6; j++) {
 					if (reader_cnf.real_cartesian_acc[j])
-						outfile << r_measptr[k].real_cartesian_acc[j] << " ";
+						outfile << reader_buf.front().real_cartesian_acc[j] << " ";
 				}
 
-				outfile << "t: " << r_measptr[k].ui_trigger;
+				outfile << "t: " << reader_buf.front().ui_trigger;
 
 				outfile << '\n';
 
-				k++;
+				reader_buf.pop_front();
 			} // end for(i = 0; i < msr_counter; i++)
 
 			master.msg->message("file writing is finished");

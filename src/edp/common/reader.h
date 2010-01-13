@@ -10,6 +10,7 @@
 
 #include <boost/utility.hpp>
 #include <boost/thread/mutex.hpp>
+#include <boost/circular_buffer.hpp>
 
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
