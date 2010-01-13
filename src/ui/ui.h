@@ -14,10 +14,11 @@
 
 #include <boost/thread/condition_variable.hpp>
 #include <boost/thread/mutex.hpp>
+#include <boost/circular_buffer.hpp>
 
 #include "lib/com_buf.h"
 #include "lib/srlib.h"
-#include <boost/circular_buffer.hpp>
+
 
 
 

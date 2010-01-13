@@ -9,7 +9,11 @@
 
 #include <time.h>
 #include <string>
+#include <semaphore.h>
+
+#include <boost/thread/condition_variable.hpp>
 #include <boost/thread/mutex.hpp>
+#include <boost/circular_buffer.hpp>
 
 #if defined(USE_MESSIP_SRR)
 #include <messip.h>
@@ -30,6 +34,8 @@ namespace lib {
 #define NAME_LENGTH     30   // Dlugosc nazwy
 
 const unsigned int TEXT_LENGTH = 256; // Dlugosc tekstu z wiadomoscia do SR
+
+#define SR_BUFFER_LENGHT 50
 
 /* -------------------------------------------------------------------- */
 /* Paczka danych przesylanych do procesu SR                             */
@@ -57,6 +63,7 @@ typedef struct sr_package {
 class sr {
 private:
   boost::mutex srMutex;		//! one-thread a time access mutex
+	sem_t sem;
 #if !defined(USE_MESSIP_SRR)
   int fd;	// by W
 #else
@@ -71,6 +78,11 @@ protected:
   int thread_priority;
 
 public :
+	int	set_new_msg(); // podniesienie semafora
+	int	wait_for_new_msg(); // oczekiwanie na semafor
+	boost::circular_buffer<lib::sr_package_t> cb;
+	boost::mutex sr_mutex; // = PTHREAD_MUTEX_INITIALIZER ;
+
   sr(process_type_t process_type, const std::string & process_name, const std::string & sr_name, const bool _multi_thread, const int _thread_priority);
   virtual ~sr(void);
   int message(error_class_t message_type, uint64_t error_code);
