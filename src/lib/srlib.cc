@@ -62,7 +62,7 @@ int sr::wait_for_empty_queue() // oczekiwanie na semafor
 	}
 }
 
-int sr::set_queue_not_empty() // podniesienie semafora
+int sr::set_queue_not_empty() // opuszczenie semafora
 {
 	return sem_trywait(&queue_empty_sem);
 }
@@ -113,6 +113,10 @@ sr::sr(process_type_t process_type, const std::string & process_name, const std:
 
 // Destruktor
 sr::~sr(void) {
+	if (multi_thread)
+	{
+		delete thread_id;
+	}
 	name_close(fd);
 }
 
@@ -593,10 +597,17 @@ void sr::operator()()
 
 					local_message = cb.front();
 				}
-
+				try
+				{
 				send_package_to_sr(local_message);
 
 				cb.pop_front();
+				}
+				catch (...)
+				{
+						printf("send_package_to_sr error multi_thread variant\n");
+				}
+
 			}
 			set_queue_empty();
 		}
