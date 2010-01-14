@@ -191,15 +191,15 @@ lib::BOARD_STATUS Draughts::getBoardStatus(){
 void Draughts::goToInitialPos(){
 	sgen2->reset();
 	sgen2->set_absolute();
-	sgen2->load_coordinates(lib::ECP_JOINT,0,-0.013,-1.442,-0.275,0.01,4.686,-0.070,0.090,true);
+	sgen2->load_coordinates(lib::ECP_JOINT,0,-0.013,-1.442,-0.275,0.045,4.720,-0.100,0.090,true);
 	sgen2->Move();
 }
 
 /*===============================goUp=======================================*/
 void Draughts::goUp(){
 
-	double v[MAX_SERVOS_NR]={0.20, 0.20, 0.20, 0.20, 0.20, 0.20, 0.20, 0.20};
-	double a[MAX_SERVOS_NR]={0.15, 0.15, 0.15, 0.15, 0.15, 0.15, 0.15, 0.15};
+	double v[MAX_SERVOS_NR]={0.20, 0.20, 0.01, 0.20, 0.20, 0.20, 0.0001, 0.20};
+	double a[MAX_SERVOS_NR]={0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.01, 0.1};
 	sgen2->reset();
 	sgen2->set_relative();
 	sgen2->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS,v,a,0,0,-0.1,0,0,0,0,0, true);	//move up
@@ -371,8 +371,8 @@ void Draughts::takeDynamicPawn(int from){
 	gagen->configure(0.01,300);
 	gagen->Move();
 
-	double v[MAX_SERVOS_NR]={0.20, 0.20, 0.01, 0.20, 0.20, 0.20, 0.20, 0.20};
-	double a[MAX_SERVOS_NR]={0.15, 0.15, 0.5, 0.15, 0.15, 0.15, 0.15, 0.15};
+	double v[MAX_SERVOS_NR]={0.20, 0.20, 0.01, 0.20, 0.20, 0.20, 0.0001, 0.20};
+	double a[MAX_SERVOS_NR]={0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.0001, 0.1};
 
 	sgen2->reset();
 	sgen2->set_relative();
@@ -413,8 +413,8 @@ void Draughts::takeStaticPawn(int from,int type){
 	gagen->configure(0.01,300);
 	gagen->Move();
 
-	double v[MAX_SERVOS_NR]={0.20, 0.20, 0.01, 0.20, 0.20, 0.20, 0.20, 0.20};
-	double a[MAX_SERVOS_NR]={0.15, 0.15, 0.5, 0.15, 0.15, 0.15, 0.15, 0.15};
+	double v[MAX_SERVOS_NR]={0.20, 0.20, 0.01, 0.20, 0.20, 0.20, 0.0001, 0.20};
+	double a[MAX_SERVOS_NR]={0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.0001, 0.1};
 
 	sgen2->reset();
 	sgen2->set_relative();
