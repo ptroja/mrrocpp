@@ -65,6 +65,7 @@ bool ecp_vis_ib_eih_object_tracker_irp6ot::first_step() {
 		reached[i] = false;
 		dir[i] = 1;
 		v[i] = 0;
+		u[i] = 0;
 	}
 
 	return true;

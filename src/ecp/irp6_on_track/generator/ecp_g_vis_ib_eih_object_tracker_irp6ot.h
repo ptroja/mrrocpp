@@ -93,7 +93,7 @@ public:
 	/**
 	 *
 	 */
-    double u_max[MAX_AXES_NUM];
+    double u_max[MAX_AXES_NUM]; //maximal possible error
 	/**
 	 *
 	 */

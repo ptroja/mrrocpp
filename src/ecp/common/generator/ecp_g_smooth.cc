@@ -321,8 +321,8 @@ void smooth::load_coordinates(lib::ECP_POSE_SPECIFICATION ps, double v[MAX_SERVO
 
 void smooth::load_coordinates(lib::ECP_POSE_SPECIFICATION ps, double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset) {
 
-	double v[MAX_SERVOS_NR]={0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1};
-	double a[MAX_SERVOS_NR]={0.03, 0.03, 0.03, 0.03, 0.03, 0.03, 0.03, 0.02};
+	double v[MAX_SERVOS_NR]={0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2};
+	double a[MAX_SERVOS_NR]={0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05};
 	double coordinates[MAX_SERVOS_NR];
 
 	if (reset == true) {
@@ -1826,6 +1826,7 @@ void smooth::calculate(void) { //zeby wrocic do starego trybu relative nalezy st
 			case lib::ECP_XYZ_ANGLE_AXIS:
 				if(pose_list_iterator->v_grip < v_grip_min_aa) {
 					pose_list_iterator->v_grip = v_grip_min_aa;
+					printf("ustawienie v_gripp na minimum\n");
 				}
 				break;
 
