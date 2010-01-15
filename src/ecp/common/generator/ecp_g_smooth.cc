@@ -921,6 +921,8 @@ void smooth::send_coordinates() {
 	if (type == lib::RELATIVE) {
 		gripper_position = pose_list_iterator->k[gripp]*((tk)*pose_list_iterator->v_grip);
 
+		printf("gripper_position: %f\n ", gripper_position);
+
 		//printf(" %f \t", gripper_position);
 		if((node_counter * gripper_position > pose_list_iterator->coordinates[gripp] && pose_list_iterator->k[gripp] == -1) ||
 		(node_counter * gripper_position < pose_list_iterator->coordinates[gripp] && pose_list_iterator->k[gripp] == 1)) {
