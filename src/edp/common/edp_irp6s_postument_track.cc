@@ -574,6 +574,8 @@ void irp6s_postument_track_effector::get_arm_position(bool read_hardware, lib::c
 			manip_and_conv_effector::get_arm_position_get_arm_type_switch(instruction);
 	}
 
+	manip_and_conv_effector::get_arm_position_set_reply_step();
+
 	if (instruction.interpolation_type == lib::TCIM) {
 		lib::Homog_matrix current_frame_wo_offset = return_current_frame(WITHOUT_TRANSLATION);
 		lib::Ft_tr ft_tr_inv_current_frame_matrix(!current_frame_wo_offset);
@@ -591,13 +593,6 @@ void irp6s_postument_track_effector::get_arm_position(bool read_hardware, lib::c
 
 		reply.arm.pf_def.gripper_coordinate = current_joints[gripper_servo_nr];
 
-	}
-
-	// scope-locked reader data update
-	{
-		boost::mutex::scoped_lock lock(rb_obj->reader_mutex);
-
-		reply.servo_step = rb_obj->step_data.step;
 	}
 }
 /*--------------------------------------------------------------------------*/

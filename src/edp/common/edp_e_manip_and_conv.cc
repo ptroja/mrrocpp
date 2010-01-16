@@ -52,6 +52,12 @@ servo_buffer * manip_and_conv_effector::return_created_servo_buffer()
 {
 	return NULL;
 }
+void manip_and_conv_effector::get_arm_position_set_reply_step()
+{
+	// scope-locked reader data update
+	boost::mutex::scoped_lock lock(rb_obj->reader_mutex);
+	reply.servo_step = rb_obj->step_data.step;
+}
 
 /*--------------------------------------------------------------------------*/
 void manip_and_conv_effector::get_arm_position_read_hardware_sb()

@@ -72,12 +72,7 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 	// oraz adekwatne wypelnienie bufora odpowiedzi
 	common::manip_effector::get_arm_position_get_arm_type_switch(instruction);
 
-	// scope-locked reader data update
-	{
-		boost::mutex::scoped_lock lock(rb_obj->reader_mutex);
-
-		reply.servo_step = rb_obj->step_data.step;
-	}
+	manip_and_conv_effector::get_arm_position_set_reply_step();
 }
 /*--------------------------------------------------------------------------*/
 

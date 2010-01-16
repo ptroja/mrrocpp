@@ -169,6 +169,7 @@ public:
 	void multi_thread_move_arm(lib::c_buffer &instruction);
 	virtual void get_arm_position(bool read_hardware, lib::c_buffer &instruction) = 0; // odczytanie pozycji ramienia
 	void get_arm_position_read_hardware_sb(); // odczytanie pozycji ramienia sprzetowo z sb
+	void get_arm_position_set_reply_step(); // odczytanie pozycji ramienia sprzetowo z sb
 
 	virtual void get_arm_position_get_arm_type_switch(lib::c_buffer &instruction); // odczytanie pozycji ramienia sprzetowo z sb
 
