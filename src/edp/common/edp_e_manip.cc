@@ -23,7 +23,7 @@
 #include "lib/com_buf.h"
 #include "lib/mis_fun.h"
 #include "lib/mrmath/mrmath.h"
-
+#include "edp/common/servo_gr.h"
 #include "edp/common/reader.h"
 #include "edp/common/manip_trans_t.h"
 #include "edp/common/edp_e_manip.h"
@@ -48,21 +48,39 @@ bool manip_effector::servo_joints_and_frame_actualization_and_upload(void)
 	{
 	// wyznaczenie nowych wartosci joints and frame dla obliczen w servo
 	try {
-		// Obliczenie lokalnej macierzy oraz obliczenie położenia robota we wsp. zewnętrznych.
+
 		lib::Homog_matrix local_matrix;
+
+		// Obliczenie lokalnej macierzy oraz obliczenie położenia robota we wsp. zewnętrznych.
 		get_current_kinematic_model()->i2e_transform(servo_current_joints, local_matrix);
 		// Pobranie wsp. zewnętrznych w układzie
 
 		lib::Xyz_Euler_Zyz_vector servo_real_kartez_pos; // by Y polozenie we wspolrzednych xyz_euler_zyz obliczane co krok servo   XXXXX
 		local_matrix.get_xyz_euler_zyz(servo_real_kartez_pos);
 
+		//obliczanie zadanej pozycji koncowki wedlug aktualnego rozkazu przetwarzanego w servo
+
+		lib::MotorArray servo_desired_motor_pos;
+		for (int i = 0; i < number_of_servos; i++) {
+			servo_desired_motor_pos[i] = sb->command.parameters.move.abs_position[i];
+		}
+
+		lib::JointArray servo_desired_joints;
+
+		get_current_kinematic_model()->mp2i_transform(servo_desired_motor_pos, servo_desired_joints);
+		get_current_kinematic_model()->i2e_transform(servo_desired_joints, local_matrix);
+			// Pobranie wsp. zewnętrznych w układzie
+
+		lib::Xyz_Euler_Zyz_vector servo_desired_kartez_pos; // by Y polozenie we wspolrzednych xyz_euler_zyz obliczane co krok servo   XXXXX
+		local_matrix.get_xyz_euler_zyz(servo_desired_kartez_pos);
+
+
 		// scope-locked reader data update
 		{
 			boost::mutex::scoped_lock lock(rb_obj->reader_mutex);
 
-			for (int i = 0; i < 6; i++) {
-				rb_obj->step_data.real_cartesian_position[i] = servo_real_kartez_pos[i];
-			}
+			servo_real_kartez_pos.to_table(rb_obj->step_data.real_cartesian_position);
+			servo_desired_kartez_pos.to_table(rb_obj->step_data.current_cartesian_position);
 		}
 
 		// Obliczenie polozenia robota we wsp. zewnetrznych bez narzedzia.

@@ -29,7 +29,6 @@ namespace mrrocpp {
 namespace edp {
 namespace common {
 
-
 void servo_buffer::load_hardware_interface(void)
 {
 	send_after_last_step = false;
@@ -765,9 +764,9 @@ void servo_buffer::synchronise(void)
 			//	printf("ccc: %d\n", j);
 
 			if (synchro_step < -synchro_step_fine[j]) {
-						synchro_step -= synchro_step_fine[j] / NS;
-						crp->insert_new_step(synchro_step);
-					}
+				synchro_step -= synchro_step_fine[j] / NS;
+				crp->insert_new_step(synchro_step);
+			}
 
 			// W.S. -----------------------------------------------------
 			//    	   printf("bbbb if: %llx\n", ((reply_status_tmp.error0 >> (5*j)) & 0x000000000000001FULL));

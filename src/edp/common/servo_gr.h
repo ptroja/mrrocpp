@@ -43,7 +43,7 @@ protected:
     // ktore zostana zastapione regulatorami konkretnymi
 
     // input_buffer
-    lib::edp_master_command command; // polecenie z EDP_MASTER dla SERVO
+
 
     // output_buffer
     lib::servo_group_reply servo_data;    // informacja przesylana do EDP_MASTER
@@ -82,7 +82,7 @@ public:
 #endif
 
 public:
-
+    lib::edp_master_command command; // polecenie z EDP_MASTER dla SERVO
 	double axe_inc_per_revolution[MAX_SERVOS_NR];
 	double synchro_step_coarse[MAX_SERVOS_NR];
 	double synchro_step_fine[MAX_SERVOS_NR];

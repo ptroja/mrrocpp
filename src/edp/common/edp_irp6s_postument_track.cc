@@ -450,16 +450,18 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buff
 		// wyliczenie nowej pozycji zadanej
 		next_frame = next_frame * rot_frame;
 
+		/*// przeniesione do manip_effector::servo_joints_and_frame_actualization_and_upload(void)
+		lib::Xyz_Euler_Zyz_vector tmp_vector;
+		//	next_frame.get_xyz_euler_zyz(lib::Xyz_Euler_Zyz_vector.to_table(rb_obj->step_data.current_cartesian_position));
+		//	next_frame.get_xyz_euler_zyz(lib::Xyz_Euler_Zyz_vector aa);
+		next_frame.get_xyz_euler_zyz(tmp_vector);
+
 		// scope-locked reader data update
 		{
 			boost::mutex::scoped_lock lock(rb_obj->reader_mutex);
-			lib::Xyz_Euler_Zyz_vector tmp_vector;
-			//	next_frame.get_xyz_euler_zyz(lib::Xyz_Euler_Zyz_vector.to_table(rb_obj->step_data.current_cartesian_position));
-			//	next_frame.get_xyz_euler_zyz(lib::Xyz_Euler_Zyz_vector aa);
-			next_frame.get_xyz_euler_zyz(tmp_vector);
 			tmp_vector.to_table(rb_obj->step_data.current_cartesian_position);
 		}
-
+*/
 		desired_end_effector_frame = next_frame;
 
 		switch (motion_type)
@@ -601,14 +603,11 @@ void irp6s_postument_track_effector::get_arm_position(bool read_hardware, lib::c
 
 bool irp6s_postument_track_effector::servo_joints_and_frame_actualization_and_upload(void)
 {
-	bool ret_val=true;
+	bool ret_val = true;
 
-	if (!(manip_effector::servo_joints_and_frame_actualization_and_upload()))
-	{
-		ret_val=false;
-	}
-	else
-	{
+	if (!(manip_effector::servo_joints_and_frame_actualization_and_upload())) {
+		ret_val = false;
+	} else {
 		if ((force_tryb > 0) && (is_synchronised()) && (!(vs->first_configure_done))
 				&& (!(vs->force_sensor_do_first_configure))) {
 			vs->force_sensor_do_first_configure = true;
