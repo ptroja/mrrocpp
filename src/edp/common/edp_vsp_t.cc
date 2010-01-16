@@ -145,7 +145,7 @@ void * edp_vsp::thread_main_loop(void *arg)
 
 			edp_vsp_reply.servo_step=master.rb_obj->step_data.step;
 			for (int i=0; i<=5; i++) {
-				edp_vsp_reply.current_present_XYZ_ZYZ_arm_coordinates[i]=master.rb_obj->step_data.current_cartesian_position[i];
+				edp_vsp_reply.current_present_XYZ_ZYZ_arm_coordinates[i]=master.rb_obj->step_data.desired_cartesian_position[i];
 			}
     	}
 

@@ -137,8 +137,8 @@ void reader_buffer::operator()()
 			sprintf(tmp_string, "filtered_force_%d", j);
 			reader_cnf.filtered_force[j] = master.check_config(tmp_string);
 
-			sprintf(tmp_string, "current_cartesian_position_%d", j);
-			reader_cnf.current_cartesian_position[j] = master.check_config(tmp_string);
+			sprintf(tmp_string, "desired_cartesian_position_%d", j);
+			reader_cnf.desired_cartesian_position[j] = master.check_config(tmp_string);
 
 			sprintf(tmp_string, "real_cartesian_position_%d", j);
 			reader_cnf.real_cartesian_position[j] = master.check_config(tmp_string);
@@ -353,7 +353,7 @@ void reader_buffer::operator()()
 
 
 				// zapis pomiarow z biezacego kroku do pliku
-				// printf("EDP %f\n", reader_buf.front().current_cartesian_position[1]);
+				// printf("EDP %f\n", reader_buf.front().desired_cartesian_position[1]);
 
 				outfile << reader_buf.front().step << " ";
 				if (reader_cnf.msec)
@@ -395,8 +395,8 @@ void reader_buffer::operator()()
 				outfile << "k: ";
 
 				for (int j = 0; j < 6; j++) {
-					if (reader_cnf.current_cartesian_position[j])
-						outfile << reader_buf.front().current_cartesian_position[j] << " ";
+					if (reader_cnf.desired_cartesian_position[j])
+						outfile << reader_buf.front().desired_cartesian_position[j] << " ";
 				}
 
 				outfile << "r: ";

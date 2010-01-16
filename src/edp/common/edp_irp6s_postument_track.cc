@@ -452,14 +452,14 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buff
 
 		/*// przeniesione do manip_effector::servo_joints_and_frame_actualization_and_upload(void)
 		lib::Xyz_Euler_Zyz_vector tmp_vector;
-		//	next_frame.get_xyz_euler_zyz(lib::Xyz_Euler_Zyz_vector.to_table(rb_obj->step_data.current_cartesian_position));
+		//	next_frame.get_xyz_euler_zyz(lib::Xyz_Euler_Zyz_vector.to_table(rb_obj->step_data.desired_cartesian_position));
 		//	next_frame.get_xyz_euler_zyz(lib::Xyz_Euler_Zyz_vector aa);
 		next_frame.get_xyz_euler_zyz(tmp_vector);
 
 		// scope-locked reader data update
 		{
 			boost::mutex::scoped_lock lock(rb_obj->reader_mutex);
-			tmp_vector.to_table(rb_obj->step_data.current_cartesian_position);
+			tmp_vector.to_table(rb_obj->step_data.desired_cartesian_position);
 		}
 */
 		desired_end_effector_frame = next_frame;

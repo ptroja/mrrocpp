@@ -80,7 +80,7 @@ bool manip_effector::servo_joints_and_frame_actualization_and_upload(void)
 			boost::mutex::scoped_lock lock(rb_obj->reader_mutex);
 
 			servo_real_kartez_pos.to_table(rb_obj->step_data.real_cartesian_position);
-			servo_desired_kartez_pos.to_table(rb_obj->step_data.current_cartesian_position);
+			servo_desired_kartez_pos.to_table(rb_obj->step_data.desired_cartesian_position);
 		}
 
 		// Obliczenie polozenia robota we wsp. zewnetrznych bez narzedzia.
