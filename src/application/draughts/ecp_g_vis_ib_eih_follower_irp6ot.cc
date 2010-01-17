@@ -194,6 +194,9 @@ bool ecp_vis_ib_eih_follower_irp6ot::next_step_without_constraints() {
 				}
 				s[i] = (a_max[i] * t * t)/2 + (v[i] * t);
 				v[i] += a_max[i] * t;
+				if (v[i] > v_max[i]) {
+					v[i] = v_max[i];
+				}
 			} else if(v[i] > 0 && (change[i] == true || reached[i] == true || tracking == false || v[i] > v_max[i])) {//hamowanie
 				s[i] = (a_max[i] * t * t)/2 + (v[i] * t);
 				v[i] -= a_max[i] * t;
