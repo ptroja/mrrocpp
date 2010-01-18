@@ -60,12 +60,16 @@ bool manip_effector::servo_joints_and_frame_actualization_and_upload(void)
 
 		//obliczanie zadanej pozycji koncowki wedlug aktualnego rozkazu przetwarzanego w servo
 
-		lib::MotorArray servo_desired_motor_pos;
+
+
+
+		lib::MotorArray servo_desired_motor_pos(number_of_servos);
 		for (int i = 0; i < number_of_servos; i++) {
+			sb->command.parameters.move.abs_position[i];
 			servo_desired_motor_pos[i] = sb->command.parameters.move.abs_position[i];
 		}
 
-		lib::JointArray servo_desired_joints;
+		lib::JointArray servo_desired_joints(number_of_servos);
 
 		get_current_kinematic_model()->mp2i_transform(servo_desired_motor_pos, servo_desired_joints);
 		get_current_kinematic_model()->i2e_transform(servo_desired_joints, local_matrix);
