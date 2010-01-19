@@ -9,7 +9,7 @@ SOURCEDIRS = common \
 	smb spkm
 else
 SOURCEDIRS = common \
-	ati3084 ati3084MK ati6284 \
+	ati3084 ati3084MK ati6284 ati6284KT\
 	conveyor irp6_on_track irp6_postument irp6_mechatronika \
 	speaker polycrank \
 	smb spkm
@@ -28,6 +28,7 @@ all: $(SOURCEDIRS)
 
 ati3084: common
 ati6284: common
+ati6284KT: common
 conveyor: common
 smb: common
 spkm: common
@@ -41,7 +42,7 @@ irp6_on_track: $(IRP6ONT_DEPS)
 
 speaker: common
 
-IRP6PST_DEPS = common ati3084 ati3084MK ati6284
+IRP6PST_DEPS = common ati3084 ati3084MK ati6284 ati6284KT
 ifdef DOCENT_SENSOR
 	IRP6PST_DEPS:= $(IRP6ONT_DEPS) ati3084MS
 endif
