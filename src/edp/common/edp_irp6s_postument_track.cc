@@ -295,6 +295,16 @@ void irp6s_postument_track_effector::compute_base_pos_xyz_rot_xyz_vector(const l
 	}
 }
 
+
+/*--------------------------------------------------------------------------*/
+void irp6s_postument_track_effector::iterate_macrostep(const lib::JointArray begining_joints,
+		const lib::Homog_matrix begining_end_effector_frame,
+			lib::c_buffer &instruction, const lib::Xyz_Angle_Axis_vector base_pos_xyz_rot_xyz_vector)
+{
+
+
+}
+
 /*--------------------------------------------------------------------------*/
 void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buffer &instruction)
 {
@@ -305,12 +315,13 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buff
 	lib::Homog_matrix begining_end_effector_frame;
 	get_current_kinematic_model()->mp2i_transform(desired_motor_pos_new, begining_joints);
 	get_current_kinematic_model()->i2e_transform(begining_joints, begining_end_effector_frame);
-	lib::Homog_matrix next_frame = begining_end_effector_frame;
+
 	lib::Xyz_Angle_Axis_vector base_pos_xyz_rot_xyz_vector; // wartosci ruchu pozycyjnego
 
 	// WYZNACZENIE base_pos_xyz_rot_xyz_vector
 	compute_base_pos_xyz_rot_xyz_vector(begining_joints, begining_end_effector_frame, instruction, base_pos_xyz_rot_xyz_vector);
 
+	lib::Homog_matrix next_frame = begining_end_effector_frame;
 
 	//	static int debugi=0;
 	//   debugi++;
@@ -353,8 +364,6 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buff
 	lib::Ft_vector current_force;
 
 	double beginning_gripper_coordinate;
-	static double ending_gripper_coordinate;
-	static lib::Homog_matrix local_force_end_effector_frame;
 	const unsigned long PREVIOUS_MOVE_VECTOR_NULL_STEP_VALUE = 10;
 
 
@@ -523,9 +532,6 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buff
 		last_force_step_counter = step_counter;
 
 	}
-
-	local_force_end_effector_frame = next_frame;
-	ending_gripper_coordinate = desired_gripper_coordinate;
 
 }
 /*--------------------------------------------------------------------------*/

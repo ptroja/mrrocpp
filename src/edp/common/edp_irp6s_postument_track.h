@@ -56,6 +56,10 @@ public:
     int force_tryb;
 
     void pose_force_torque_at_frame_move (lib::c_buffer &instruction);
+
+    void iterate_macrostep(const lib::JointArray begining_joints,
+       		const lib::Homog_matrix begining_end_effector_frame,
+       		lib::c_buffer &instruction, const lib::Xyz_Angle_Axis_vector base_pos_xyz_rot_xyz_vector);
     void compute_base_pos_xyz_rot_xyz_vector(const lib::JointArray begining_joints,
     		const lib::Homog_matrix begining_end_effector_frame,
     		lib::c_buffer &instruction, lib::Xyz_Angle_Axis_vector& base_pos_xyz_rot_xyz_vector);
