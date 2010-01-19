@@ -298,6 +298,20 @@ void irp6s_postument_track_effector::compute_base_pos_xyz_rot_xyz_vector(const l
 /*--------------------------------------------------------------------------*/
 void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buffer &instruction)
 {
+
+
+	// WYLICZENIE POZYCJI POCZATKOWEJ
+	lib::JointArray begining_joints(MAX_SERVOS_NR);
+	lib::Homog_matrix begining_end_effector_frame;
+	get_current_kinematic_model()->mp2i_transform(desired_motor_pos_new, begining_joints);
+	get_current_kinematic_model()->i2e_transform(begining_joints, begining_end_effector_frame);
+	lib::Homog_matrix next_frame = begining_end_effector_frame;
+	lib::Xyz_Angle_Axis_vector base_pos_xyz_rot_xyz_vector; // wartosci ruchu pozycyjnego
+
+	// WYZNACZENIE base_pos_xyz_rot_xyz_vector
+	compute_base_pos_xyz_rot_xyz_vector(begining_joints, begining_end_effector_frame, instruction, base_pos_xyz_rot_xyz_vector);
+
+
 	//	static int debugi=0;
 	//   debugi++;
 
@@ -342,7 +356,7 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buff
 	static double ending_gripper_coordinate;
 	static lib::Homog_matrix local_force_end_effector_frame;
 	const unsigned long PREVIOUS_MOVE_VECTOR_NULL_STEP_VALUE = 10;
-	lib::Xyz_Angle_Axis_vector base_pos_xyz_rot_xyz_vector; // wartosci ruchu pozycyjnego
+
 
 
 	static unsigned long last_force_step_counter = step_counter;
@@ -351,15 +365,7 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buff
 	lib::Xyz_Angle_Axis_vector pos_xyz_rot_xyz_vector;
 	static lib::Xyz_Angle_Axis_vector previous_move_rot_vector;
 
-	// WYLICZENIE POZYCJI POCZATKOWEJ
-	lib::JointArray begining_joints(MAX_SERVOS_NR);
-	lib::Homog_matrix begining_end_effector_frame;
-	get_current_kinematic_model()->mp2i_transform(desired_motor_pos_new, begining_joints);
-	get_current_kinematic_model()->i2e_transform(begining_joints, begining_end_effector_frame);
-	lib::Homog_matrix next_frame = begining_end_effector_frame;
 
-	// WYZNACZENIE base_pos_xyz_rot_xyz_vector
-	compute_base_pos_xyz_rot_xyz_vector(begining_joints, begining_end_effector_frame, instruction, base_pos_xyz_rot_xyz_vector);
 
 	beginning_gripper_coordinate = begining_joints[gripper_servo_nr];
 
