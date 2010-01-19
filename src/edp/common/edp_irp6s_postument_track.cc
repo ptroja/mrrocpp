@@ -347,7 +347,7 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buff
 			break;
 		case lib::PF_VELOCITY:
 			for (int i = 0; i < 6; i++) {
-				pos_xyz_rot_xyz_vector[i] = arm_coordinates[i];
+				base_pos_xyz_rot_xyz_vector[i] = arm_coordinates[i];
 			}
 			break;
 		default:
@@ -417,6 +417,9 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buff
 				pos_xyz_rot_xyz_vector = v_tr_inv_modified_beginning_to_desired_end_effector_frame
 						* base_pos_xyz_rot_xyz_vector;
 				break;
+			case lib::PF_VELOCITY:
+				pos_xyz_rot_xyz_vector = base_pos_xyz_rot_xyz_vector;
+				break;
 			default:
 				break;
 		}
@@ -451,17 +454,17 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buff
 		next_frame = next_frame * rot_frame;
 
 		/*// przeniesione do manip_effector::servo_joints_and_frame_actualization_and_upload(void)
-		lib::Xyz_Euler_Zyz_vector tmp_vector;
-		//	next_frame.get_xyz_euler_zyz(lib::Xyz_Euler_Zyz_vector.to_table(rb_obj->step_data.desired_cartesian_position));
-		//	next_frame.get_xyz_euler_zyz(lib::Xyz_Euler_Zyz_vector aa);
-		next_frame.get_xyz_euler_zyz(tmp_vector);
+		 lib::Xyz_Euler_Zyz_vector tmp_vector;
+		 //	next_frame.get_xyz_euler_zyz(lib::Xyz_Euler_Zyz_vector.to_table(rb_obj->step_data.desired_cartesian_position));
+		 //	next_frame.get_xyz_euler_zyz(lib::Xyz_Euler_Zyz_vector aa);
+		 next_frame.get_xyz_euler_zyz(tmp_vector);
 
-		// scope-locked reader data update
-		{
-			boost::mutex::scoped_lock lock(rb_obj->reader_mutex);
-			tmp_vector.to_table(rb_obj->step_data.desired_cartesian_position);
-		}
-*/
+		 // scope-locked reader data update
+		 {
+		 boost::mutex::scoped_lock lock(rb_obj->reader_mutex);
+		 tmp_vector.to_table(rb_obj->step_data.desired_cartesian_position);
+		 }
+		 */
 		desired_end_effector_frame = next_frame;
 
 		switch (motion_type)
