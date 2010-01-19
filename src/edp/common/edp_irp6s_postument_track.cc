@@ -223,7 +223,6 @@ void irp6s_postument_track_effector::compute_base_pos_xyz_rot_xyz_vector(lib::c_
 	get_current_kinematic_model()->mp2i_transform(desired_motor_pos_new, begining_joints);
 	get_current_kinematic_model()->i2e_transform(begining_joints, begining_end_effector_frame);
 
-
 	lib::Homog_matrix goal_frame;
 
 	lib::Homog_matrix goal_frame_increment_in_end_effector;
@@ -380,80 +379,7 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buff
 	lib::Homog_matrix goal_frame_increment_in_end_effector;
 	lib::Xyz_Angle_Axis_vector goal_xyz_angle_axis_increment_in_end_effector;
 
-	switch (motion_type)
-	{
-		case lib::ABSOLUTE:
-			switch (set_arm_type)
-			{
-				case lib::FRAME:
-					goal_frame = arm_frame;
-					break;
-				case lib::JOINT:
-					get_current_kinematic_model()->i2e_transform(joint_arm_coordinates, goal_frame);
-
-					break;
-				case lib::MOTOR:
-					get_current_kinematic_model()->mp2i_transform(motor_arm_coordinates, tmp_joints);
-					get_current_kinematic_model()->i2e_transform(tmp_joints, goal_frame);
-
-					break;
-				default:
-					break;
-			}
-			break;
-		case lib::RELATIVE:
-			switch (set_arm_type)
-			{
-				case lib::FRAME:
-					goal_frame = arm_frame;
-					goal_frame = begining_end_effector_frame * goal_frame;
-					break;
-				case lib::JOINT:
-					for (int i = 0; i < MAX_SERVOS_NR; i++) {
-						tmp_joints[i] = begining_joints[i] + arm_coordinates[i];
-					}
-					get_current_kinematic_model()->i2e_transform(tmp_joints, goal_frame);
-					break;
-				case lib::MOTOR:
-					for (int i = 0; i < MAX_SERVOS_NR; i++) {
-						tmp_motor_pos[i] = desired_motor_pos_new[i] + arm_coordinates[i];
-					}
-					get_current_kinematic_model()->mp2i_transform(tmp_motor_pos, tmp_joints);
-					get_current_kinematic_model()->i2e_transform(tmp_joints, goal_frame);
-					break;
-				default:
-					break;
-			}
-			break;
-		default:
-			break;
-
-	}
-
-	// WYZNACZENIE PREDKOSCI RUCHU
-
-	switch (set_arm_type)
-	{
-		case lib::FRAME:
-		case lib::JOINT:
-		case lib::MOTOR:
-			goal_frame_increment_in_end_effector = ((!begining_end_effector_frame) * goal_frame);
-			goal_frame_increment_in_end_effector.get_xyz_angle_axis(goal_xyz_angle_axis_increment_in_end_effector);
-			for (int i = 0; i < 6; i++) {
-				base_pos_xyz_rot_xyz_vector[i] = goal_xyz_angle_axis_increment_in_end_effector[i] * (double) (1
-						/ (((double) STEP) * ((double) ECP_motion_steps)));
-			}
-			break;
-		case lib::PF_VELOCITY:
-			for (int i = 0; i < 6; i++) {
-				base_pos_xyz_rot_xyz_vector[i] = arm_coordinates[i];
-			}
-			break;
-		default:
-			throw System_error();
-	}
-
-	//   lib::copy_frame (reply.arm.pf_def.beggining_arm_frame, begining_frame);
+	compute_base_pos_xyz_rot_xyz_vector(instruction, base_pos_xyz_rot_xyz_vector);
 
 	beginning_gripper_coordinate = begining_joints[gripper_servo_nr];
 
