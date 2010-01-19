@@ -2291,12 +2291,31 @@ EDP_all_robots_slay( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbi
 int
 MPup( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
 
+	{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+//	EDP_irp6_on_track_create_int(widget, apinfo, cbinfo);
+
+
+	main_eb.command(boost::bind(MPup_int, widget, apinfo, cbinfo));
+
+	return( Pt_CONTINUE );
+
+	}
+
+
+
+int
+MPup_int( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
+
 {
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	//set_ui_state_notification(UI_N_PROCESS_CREATION);
+	set_ui_state_notification(UI_N_PROCESS_CREATION);
 
 	if (ui_state.mp.pid ==-1) {
 
@@ -2339,7 +2358,7 @@ MPup( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
 		}
 	}
 
-	return( Pt_CONTINUE );
+	return 1;
 }
 
 

@@ -251,6 +251,7 @@ int wnd_irp6ot_seralg_copy_current_to_desired ( PtWidget_t *widget , ApInfo_t *a
 int irp6ot_servo_algorithm_set ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int EDP_irp6_on_track_create ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int EDP_irp6_on_track_create_int ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
+int MPup_int ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int EDP_irp6_on_track_slay ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int EDP_irp6_on_track_slay_int ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int close_all_irp6ot_windows ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
