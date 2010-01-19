@@ -295,32 +295,9 @@ void irp6s_postument_track_effector::compute_base_pos_xyz_rot_xyz_vector(const l
 	}
 }
 
-
 /*--------------------------------------------------------------------------*/
-void irp6s_postument_track_effector::iterate_macrostep(const lib::JointArray begining_joints,
-		const lib::Homog_matrix begining_end_effector_frame,
-			lib::c_buffer &instruction, const lib::Xyz_Angle_Axis_vector base_pos_xyz_rot_xyz_vector)
+void irp6s_postument_track_effector::iterate_macrostep(const lib::JointArray begining_joints, const lib::Homog_matrix begining_end_effector_frame, lib::c_buffer &instruction, const lib::Xyz_Angle_Axis_vector base_pos_xyz_rot_xyz_vector)
 {
-
-
-}
-
-/*--------------------------------------------------------------------------*/
-void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buffer &instruction)
-{
-
-
-	// WYLICZENIE POZYCJI POCZATKOWEJ
-	lib::JointArray begining_joints(MAX_SERVOS_NR);
-	lib::Homog_matrix begining_end_effector_frame;
-	get_current_kinematic_model()->mp2i_transform(desired_motor_pos_new, begining_joints);
-	get_current_kinematic_model()->i2e_transform(begining_joints, begining_end_effector_frame);
-
-	lib::Xyz_Angle_Axis_vector base_pos_xyz_rot_xyz_vector; // wartosci ruchu pozycyjnego
-
-	// WYZNACZENIE base_pos_xyz_rot_xyz_vector
-	compute_base_pos_xyz_rot_xyz_vector(begining_joints, begining_end_effector_frame, instruction, base_pos_xyz_rot_xyz_vector);
-
 	lib::Homog_matrix next_frame = begining_end_effector_frame;
 
 	//	static int debugi=0;
@@ -366,15 +343,11 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buff
 	double beginning_gripper_coordinate;
 	const unsigned long PREVIOUS_MOVE_VECTOR_NULL_STEP_VALUE = 10;
 
-
-
 	static unsigned long last_force_step_counter = step_counter;
 
 	lib::Xyz_Angle_Axis_vector move_rot_vector;
 	lib::Xyz_Angle_Axis_vector pos_xyz_rot_xyz_vector;
 	static lib::Xyz_Angle_Axis_vector previous_move_rot_vector;
-
-
 
 	beginning_gripper_coordinate = begining_joints[gripper_servo_nr];
 
@@ -532,6 +505,26 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buff
 		last_force_step_counter = step_counter;
 
 	}
+
+}
+
+/*--------------------------------------------------------------------------*/
+void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buffer &instruction)
+{
+
+	// WYLICZENIE POZYCJI POCZATKOWEJ
+	lib::JointArray begining_joints(MAX_SERVOS_NR);
+	lib::Homog_matrix begining_end_effector_frame;
+	get_current_kinematic_model()->mp2i_transform(desired_motor_pos_new, begining_joints);
+	get_current_kinematic_model()->i2e_transform(begining_joints, begining_end_effector_frame);
+
+	lib::Xyz_Angle_Axis_vector base_pos_xyz_rot_xyz_vector; // wartosci ruchu pozycyjnego
+
+	// WYZNACZENIE base_pos_xyz_rot_xyz_vector
+	compute_base_pos_xyz_rot_xyz_vector(begining_joints, begining_end_effector_frame, instruction, base_pos_xyz_rot_xyz_vector);
+
+	// macrostep iteration
+	iterate_macrostep(begining_joints, begining_end_effector_frame, instruction, base_pos_xyz_rot_xyz_vector);
 
 }
 /*--------------------------------------------------------------------------*/
