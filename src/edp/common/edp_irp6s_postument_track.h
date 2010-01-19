@@ -56,7 +56,9 @@ public:
     int force_tryb;
 
     void pose_force_torque_at_frame_move (lib::c_buffer &instruction);
-    void compute_base_pos_xyz_rot_xyz_vector(lib::c_buffer &instruction, lib::Xyz_Angle_Axis_vector& base_pos_xyz_rot_xyz_vector);
+    void compute_base_pos_xyz_rot_xyz_vector(const lib::JointArray begining_joints,
+    		const lib::Homog_matrix begining_end_effector_frame,
+    		lib::c_buffer &instruction, lib::Xyz_Angle_Axis_vector& base_pos_xyz_rot_xyz_vector);
 
     bool servo_joints_and_frame_actualization_and_upload(void);// by Y
 

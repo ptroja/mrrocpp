@@ -204,7 +204,9 @@ void irp6s_postument_track_effector::create_threads()
 }
 
 /*--------------------------------------------------------------------------*/
-void irp6s_postument_track_effector::compute_base_pos_xyz_rot_xyz_vector(lib::c_buffer &instruction, lib::Xyz_Angle_Axis_vector& base_pos_xyz_rot_xyz_vector)
+void irp6s_postument_track_effector::compute_base_pos_xyz_rot_xyz_vector(const lib::JointArray begining_joints,
+		const lib::Homog_matrix begining_end_effector_frame,
+		lib::c_buffer &instruction, lib::Xyz_Angle_Axis_vector& base_pos_xyz_rot_xyz_vector)
 {
 
 	lib::MOTION_TYPE &motion_type = instruction.motion_type;
@@ -216,12 +218,8 @@ void irp6s_postument_track_effector::compute_base_pos_xyz_rot_xyz_vector(lib::c_
 	const uint16_t &ECP_motion_steps = instruction.motion_steps; // liczba krokow w makrokroku
 
 	// WYLICZENIE POZYCJI POCZATKOWEJ
-	lib::JointArray begining_joints(MAX_SERVOS_NR), tmp_joints(MAX_SERVOS_NR);
+	lib::JointArray tmp_joints(MAX_SERVOS_NR);
 	lib::MotorArray tmp_motor_pos(MAX_SERVOS_NR);
-
-	lib::Homog_matrix begining_end_effector_frame;
-	get_current_kinematic_model()->mp2i_transform(desired_motor_pos_new, begining_joints);
-	get_current_kinematic_model()->i2e_transform(begining_joints, begining_end_effector_frame);
 
 	lib::Homog_matrix goal_frame;
 
@@ -322,11 +320,10 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buff
 	double (&reciprocal_damping)[6] = instruction.arm.pf_def.reciprocal_damping;
 	const lib::BEHAVIOUR_SPECIFICATION (&behaviour)[6] = instruction.arm.pf_def.behaviour;
 	const double &desired_gripper_coordinate = instruction.arm.pf_def.gripper_coordinate;
-	const double (&arm_coordinates)[MAX_SERVOS_NR] = instruction.arm.pf_def.arm_coordinates;
-	lib::Homog_matrix arm_frame(instruction.arm.pf_def.arm_frame);
 
-	lib::JointArray joint_arm_coordinates(instruction.arm.pf_def.arm_coordinates, MAX_SERVOS_NR);
-	lib::MotorArray motor_arm_coordinates(instruction.arm.pf_def.arm_coordinates, MAX_SERVOS_NR);
+
+
+
 
 	// w trybie TCIM interpolujemy w edp_trans stad zadajemy pojedynczy krok do serwo
 	motion_steps = 1;
@@ -364,7 +361,7 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buff
 	static lib::Xyz_Angle_Axis_vector previous_move_rot_vector;
 
 	// WYLICZENIE POZYCJI POCZATKOWEJ
-	lib::JointArray begining_joints(MAX_SERVOS_NR), tmp_joints(MAX_SERVOS_NR);
+	lib::JointArray begining_joints(MAX_SERVOS_NR);
 	lib::MotorArray tmp_motor_pos(MAX_SERVOS_NR);
 	lib::Homog_matrix begining_end_effector_frame;
 
@@ -372,14 +369,11 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buff
 	get_current_kinematic_model()->i2e_transform(begining_joints, begining_end_effector_frame);
 	lib::Homog_matrix next_frame = begining_end_effector_frame;
 
-	// WYZNACZENIE goal_frame
+	// WYZNACZENIE base_pos_xyz_rot_xyz_vector
 
-	lib::Homog_matrix goal_frame;
 
-	lib::Homog_matrix goal_frame_increment_in_end_effector;
-	lib::Xyz_Angle_Axis_vector goal_xyz_angle_axis_increment_in_end_effector;
-
-	compute_base_pos_xyz_rot_xyz_vector(instruction, base_pos_xyz_rot_xyz_vector);
+	compute_base_pos_xyz_rot_xyz_vector(begining_joints, begining_end_effector_frame,
+			instruction, base_pos_xyz_rot_xyz_vector);
 
 	beginning_gripper_coordinate = begining_joints[gripper_servo_nr];
 
