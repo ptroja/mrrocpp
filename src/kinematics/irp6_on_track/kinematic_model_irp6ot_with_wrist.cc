@@ -209,7 +209,7 @@ Polozenia synchronizacji - odczyty z enkoderow silnikow.
   synchro_motor_position[2]= -5.012;		// ramie d. [rad]
   synchro_motor_position[3]= -4.219;		// ramie g. [rad]
   synchro_motor_position[4]= 155.997;		// kisc T [rad]
-  synchro_motor_position[5]= 476.5; 		// kisc V [rad]
+  synchro_motor_position[5]= 476.5; 		// kisc V [rad] poprawne front position w motorach (6 os z kolei oznaczona jako 5) + 320.25
   synchro_motor_position[6]= 769.7;		// kisc N [rad]
   synchro_motor_position[7]= 4830;			// chwytak [-]
 
