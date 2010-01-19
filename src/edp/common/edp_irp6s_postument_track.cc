@@ -204,6 +204,106 @@ void irp6s_postument_track_effector::create_threads()
 }
 
 /*--------------------------------------------------------------------------*/
+void irp6s_postument_track_effector::compute_base_pos_xyz_rot_xyz_vector(lib::c_buffer &instruction, lib::Xyz_Angle_Axis_vector& base_pos_xyz_rot_xyz_vector)
+{
+
+	lib::MOTION_TYPE &motion_type = instruction.motion_type;
+	const lib::POSE_SPECIFICATION &set_arm_type = instruction.set_arm_type;
+	lib::Homog_matrix arm_frame(instruction.arm.pf_def.arm_frame);
+	lib::JointArray joint_arm_coordinates(instruction.arm.pf_def.arm_coordinates, MAX_SERVOS_NR);
+	lib::MotorArray motor_arm_coordinates(instruction.arm.pf_def.arm_coordinates, MAX_SERVOS_NR);
+	const double (&arm_coordinates)[MAX_SERVOS_NR] = instruction.arm.pf_def.arm_coordinates;
+	const uint16_t &ECP_motion_steps = instruction.motion_steps; // liczba krokow w makrokroku
+
+	// WYLICZENIE POZYCJI POCZATKOWEJ
+	lib::JointArray begining_joints(MAX_SERVOS_NR), tmp_joints(MAX_SERVOS_NR);
+	lib::MotorArray tmp_motor_pos(MAX_SERVOS_NR);
+
+	lib::Homog_matrix begining_end_effector_frame;
+	get_current_kinematic_model()->mp2i_transform(desired_motor_pos_new, begining_joints);
+	get_current_kinematic_model()->i2e_transform(begining_joints, begining_end_effector_frame);
+
+
+	lib::Homog_matrix goal_frame;
+
+	lib::Homog_matrix goal_frame_increment_in_end_effector;
+	lib::Xyz_Angle_Axis_vector goal_xyz_angle_axis_increment_in_end_effector;
+
+	switch (motion_type)
+	{
+		case lib::ABSOLUTE:
+			switch (set_arm_type)
+			{
+				case lib::FRAME:
+					goal_frame = arm_frame;
+					break;
+				case lib::JOINT:
+					get_current_kinematic_model()->i2e_transform(joint_arm_coordinates, goal_frame);
+
+					break;
+				case lib::MOTOR:
+					get_current_kinematic_model()->mp2i_transform(motor_arm_coordinates, tmp_joints);
+					get_current_kinematic_model()->i2e_transform(tmp_joints, goal_frame);
+
+					break;
+				default:
+					break;
+			}
+			break;
+		case lib::RELATIVE:
+			switch (set_arm_type)
+			{
+				case lib::FRAME:
+					goal_frame = arm_frame;
+					goal_frame = begining_end_effector_frame * goal_frame;
+					break;
+				case lib::JOINT:
+					for (int i = 0; i < MAX_SERVOS_NR; i++) {
+						tmp_joints[i] = begining_joints[i] + arm_coordinates[i];
+					}
+					get_current_kinematic_model()->i2e_transform(tmp_joints, goal_frame);
+					break;
+				case lib::MOTOR:
+					for (int i = 0; i < MAX_SERVOS_NR; i++) {
+						tmp_motor_pos[i] = desired_motor_pos_new[i] + arm_coordinates[i];
+					}
+					get_current_kinematic_model()->mp2i_transform(tmp_motor_pos, tmp_joints);
+					get_current_kinematic_model()->i2e_transform(tmp_joints, goal_frame);
+					break;
+				default:
+					break;
+			}
+			break;
+		default:
+			break;
+
+	}
+
+	// WYZNACZENIE PREDKOSCI RUCHU
+
+	switch (set_arm_type)
+	{
+		case lib::FRAME:
+		case lib::JOINT:
+		case lib::MOTOR:
+			goal_frame_increment_in_end_effector = ((!begining_end_effector_frame) * goal_frame);
+			goal_frame_increment_in_end_effector.get_xyz_angle_axis(goal_xyz_angle_axis_increment_in_end_effector);
+			for (int i = 0; i < 6; i++) {
+				base_pos_xyz_rot_xyz_vector[i] = goal_xyz_angle_axis_increment_in_end_effector[i] * (double) (1
+						/ (((double) STEP) * ((double) ECP_motion_steps)));
+			}
+			break;
+		case lib::PF_VELOCITY:
+			for (int i = 0; i < 6; i++) {
+				base_pos_xyz_rot_xyz_vector[i] = arm_coordinates[i];
+			}
+			break;
+		default:
+			throw System_error();
+	}
+}
+
+/*--------------------------------------------------------------------------*/
 void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buffer &instruction)
 {
 	//	static int debugi=0;
@@ -267,11 +367,10 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buff
 	// WYLICZENIE POZYCJI POCZATKOWEJ
 	lib::JointArray begining_joints(MAX_SERVOS_NR), tmp_joints(MAX_SERVOS_NR);
 	lib::MotorArray tmp_motor_pos(MAX_SERVOS_NR);
-	lib::Homog_matrix begining_frame;
+	lib::Homog_matrix begining_end_effector_frame;
 
 	get_current_kinematic_model()->mp2i_transform(desired_motor_pos_new, begining_joints);
-	get_current_kinematic_model()->i2e_transform(begining_joints, begining_frame);
-	lib::Homog_matrix begining_end_effector_frame(begining_frame);
+	get_current_kinematic_model()->i2e_transform(begining_joints, begining_end_effector_frame);
 	lib::Homog_matrix next_frame = begining_end_effector_frame;
 
 	// WYZNACZENIE goal_frame

@@ -63,11 +63,8 @@ bool manip_effector::servo_joints_and_frame_actualization_and_upload(void)
 
 
 
-		lib::MotorArray servo_desired_motor_pos(number_of_servos);
-		for (int i = 0; i < number_of_servos; i++) {
-			sb->command.parameters.move.abs_position[i];
-			servo_desired_motor_pos[i] = sb->command.parameters.move.abs_position[i];
-		}
+		lib::MotorArray servo_desired_motor_pos(sb->command.parameters.move.abs_position, number_of_servos);
+
 
 		lib::JointArray servo_desired_joints(number_of_servos);
 
