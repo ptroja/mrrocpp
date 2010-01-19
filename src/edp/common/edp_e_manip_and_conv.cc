@@ -792,12 +792,8 @@ void manip_and_conv_effector::get_controller_state(lib::c_buffer &instruction)
 	}
 }
 
-void manip_and_conv_effector::main_loop()
+void manip_and_conv_effector::pre_synchro_loop(STATE& next_state)
 {
-	// by Y pierwsza petla while do odpytania o stan EDP przez UI zaraz po starcie EDP
-	STATE next_state = GET_STATE;
-	; // stan nastepny, do ktorego przejdzie EDP_MASTER
-
 	while ((next_state != GET_INSTRUCTION) && (next_state != GET_SYNCHRO)) {
 
 		try { // w tym bloku beda wylapywane wyjatki (bledy)
@@ -923,7 +919,10 @@ void manip_and_conv_effector::main_loop()
 		} // end: catch(transformer::Fatal_error fe)
 
 	} // end while
+}
 
+void manip_and_conv_effector::synchro_loop(STATE& next_state)
+{
 
 	while (next_state != GET_INSTRUCTION) {
 
@@ -1081,7 +1080,10 @@ void manip_and_conv_effector::main_loop()
 			next_state = GET_SYNCHRO;
 		} // catch(transformer::Fatal_error fe)
 	}
+}
 
+void manip_and_conv_effector::post_synchro_loop(STATE& next_state)
+{
 	/* Nieskoczona petla wykonujca przejscia w grafie automatu (procesu EDP_MASTER) */
 	for (;;) {
 
@@ -1190,6 +1192,17 @@ void manip_and_conv_effector::main_loop()
 		} // end: catch(transformer::Fatal_error fe)
 
 	} // end: for (;;)
+}
+
+void manip_and_conv_effector::main_loop()
+{
+	// by Y pierwsza petla while do odpytania o stan EDP przez UI zaraz po starcie EDP
+	STATE next_state = GET_STATE;
+	// stan nastepny, do ktorego przejdzie EDP_MASTER
+
+	pre_synchro_loop(next_state);
+	synchro_loop(next_state);
+	post_synchro_loop(next_state);
 
 }
 

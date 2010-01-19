@@ -177,6 +177,10 @@ public:
 	virtual bool servo_joints_and_frame_actualization_and_upload(void); // by Y
 
 	void main_loop(); // main loop
+	void pre_synchro_loop(STATE& next_state);
+	void synchro_loop(STATE& next_state);
+	void post_synchro_loop(STATE& next_state);
+
 
 	//! thread starting synchronization flag
 	bool thread_started;
