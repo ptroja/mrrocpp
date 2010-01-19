@@ -839,7 +839,7 @@ void smooth::generate_coords() {
 
 	trajectory_generated = true;
 	//printowanie listy coordinate
-	initiate_coordinate_list();
+	/*initiate_coordinate_list();
 	for (int m = 0; m < coordinate_list.size(); m++) {
 		printf("makrokrok: %d\t", m);
 		for (int n = 0; n < 8; n++) {
@@ -848,7 +848,7 @@ void smooth::generate_coords() {
 		printf("\n");
 		flushall();
 		coordinate_list_iterator++;
-	}
+	}*/
 	//printf("\ngenerate_cords\n");
 }
 
@@ -941,9 +941,18 @@ void smooth::send_coordinates() {
 			//printf("git");
 			the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = gripper_position;
 		} else {
+			printf("no gripp\t");
 			the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = pose_list_iterator->coordinates[gripp];
 		}
 	}
+
+	for (int n = 0; n < gripp; n++) {
+		printf("%f\t", coordinate_list_iterator->coordinate[n]);
+	}
+
+	printf("%f\n", gripper_position);
+
+	flushall();
 
 	coordinate_list_iterator++;
 }
@@ -1766,7 +1775,8 @@ void smooth::calculate(void) { //zeby wrocic do starego trybu relative nalezy st
 
 			//printf("czas ruchu w osi %d = %f\n", i, t[i]);
 
-			if (s[i] < distance_eps || t[i] == 0) {//jesli droga jest mniejsza od najmniejszej wykrywalnej albo czas jest rowny 0
+			//if (s[i] < distance_eps || t[i] == 0) {//jesli droga jest mniejsza od najmniejszej wykrywalnej albo czas jest rowny 0
+			if (t[i] == 0) {
 				//printf("droga 0 (koncowe obliczenia) w osi %d\n", i);
 				pose_list_iterator->przysp[i] = 0;
 				pose_list_iterator->jedn[i] = 0;
