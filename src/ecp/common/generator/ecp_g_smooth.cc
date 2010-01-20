@@ -853,7 +853,7 @@ void smooth::generate_coords() {
 }
 
 void smooth::send_coordinates() {
-
+	//lib::Xyz_Euler_Zyz_vector tmp_euler_vector;
     double gripper_position;
     double tk=10*STEP;
 	int i; //licznik petli
@@ -868,6 +868,18 @@ void smooth::send_coordinates() {
 	switch (td.arm_type) {
 
 		case lib::ECP_XYZ_EULER_ZYZ:
+
+
+
+
+/*		homog_matrix.set_from_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame);
+			homog_matrix.get_xyz_euler_zyz(tmp_euler_vector);
+
+			tmp_euler_vector.to_table(coordinate_list_iterator->coordinate);
+*/
+
+
+
 
 			homog_matrix.set_from_xyz_euler_zyz(lib::Xyz_Euler_Zyz_vector(coordinate_list_iterator->coordinate));
 			homog_matrix.get_frame_tab(the_robot->ecp_command.instruction.arm.pf_def.arm_frame);

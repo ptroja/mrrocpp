@@ -16,8 +16,10 @@ namespace generator {
 
 	ecp_vis_ib_eih_follower_irp6ot::ecp_vis_ib_eih_follower_irp6ot(common::task::task& _ecp_task) :
 	common::generator::ecp_visual_servo(_ecp_task) {
-	v_max[1] = v_max[0] = 0.020;
-	a_max[1] = a_max[0] = 0.025;
+	//v_max[1] = v_max[0] = 0.020;
+	//a_max[1] = a_max[0] = 0.025;
+	v_max[1] = v_max[0] = 0.1;
+	a_max[1] = a_max[0] = 0.1;
 	v_max[2] = 0.03;
 	a_max[2] = 0.02;
 	v_stop[0] = v_stop[1] = 0.0020;
@@ -37,7 +39,7 @@ bool ecp_vis_ib_eih_follower_irp6ot::first_step() {
 	the_robot->ecp_command.instruction.set_arm_type = lib::FRAME;
 	the_robot->ecp_command.instruction.interpolation_type = lib::TCIM;
 	the_robot->ecp_command.instruction.motion_steps = MOTION_STEPS;
-	the_robot->ecp_command.instruction.value_in_step_no = MOTION_STEPS - 1;
+	the_robot->ecp_command.instruction.value_in_step_no = MOTION_STEPS - 2;
 
 	for (int i=0; i<6; i++)
 	{
@@ -158,14 +160,18 @@ bool ecp_vis_ib_eih_follower_irp6ot::next_step_without_constraints() {
 		for (int i = 0; i < 2; i++) {
 
 			//funkcja zmniejszajaca predkosc w x i y w zaleznosci od odleglosci od przebytej drogi w z
-			double u_param;
+			/*double u_param;
 			if (fabs(u[i]) == 0 || z_stop) {
 				u_param = 10000;//dowolna relatywnie duza liczba daje zredukowanie predkosci do minimalnej przy zakonczonym z
 			} else {
 				u_param = 1/fabs(u[i]);
 			}
 			//im mniejsza liczba przy wspolczynniku tym wieksze znaczenie wspolczynnika
-			v_max[i] = v_max[i] - ((z_s * z_s) * 0.0005 * (u_param * 0.01));//TODO ta funkcje trzeba przerobic... (delikatnie mowiac)
+			v_max[i] = v_max[i] - ((z_s * z_s) * 0.0005 * (u_param * 0.01));//TODO ta funkcje trzeba przerobic... (delikatnie mowiac)*/
+
+
+			v_max[i] = v_max[i] * ((s_z-(z_s*0.001))/s_z);//regulator p
+
 			if (v_max[i] < v_min[i]) {
 				v_max[i] = v_min[i];
 			}
@@ -188,7 +194,7 @@ bool ecp_vis_ib_eih_follower_irp6ot::next_step_without_constraints() {
 				}
 			}
 
-			printf("v_max: %f\n", v_max[i]);
+			printf("v_max: %f\t v: %f\t change: %d\t reached: %d\t tracking: %d\n", v_max[i], v[i], change[i], reached[i], tracking);
 
 			if (tracking == true && (v[i] == 0 || (v[i] > 0 && v[i] < v_max[i] && change[i] == false && reached[i] == false))) {//przyspieszanie
 				if (v[i] == 0 && change[i] == true) {
@@ -199,10 +205,11 @@ bool ecp_vis_ib_eih_follower_irp6ot::next_step_without_constraints() {
 				if (v[i] >= v_max[i]) {
 					v[i] = v_max[i];
 				}
-				printf("przysp\n");
-			} else if(v[i] > 0 && (change[i] == true || reached[i] == true || tracking == false || v[i] > v_max[i])) {//hamowanie
-				s[i] = (a_max[i] * t * t)/2 + (v[i] * t);
+				printf("przysp\n");																						// ta czesc warunku sprawia ze wchodzi w jednostajny przy osiagnieciu maks speeda
+			} else if(v[i] > 0 && (change[i] == true || reached[i] == true || tracking == false || (v[i]-v_max[i]) > 0.0001)){ //|| v[i] > v_max[i]) && !(v[i] == v_max[i] && change[i] == false && reached[i] == false && tracking == true)) {//hamowanie
 				v[i] -= a_max[i] * t;
+				s[i] = (a_max[i] * t * t)/2 + (v[i] * t);
+
 				if (v[i] < 0) {
 					//u[0] = vsp_fradia->from_vsp.comm_image.sensor_union.tracker.x-20;
 					//u[1] = vsp_fradia->from_vsp.comm_image.sensor_union.tracker.y;

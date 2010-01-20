@@ -35,7 +35,7 @@ bool ecp_vis_ib_eih_object_tracker_irp6ot::first_step() {
 	the_robot->ecp_command.instruction.set_arm_type = lib::FRAME;
 	the_robot->ecp_command.instruction.interpolation_type = lib::TCIM;
 	the_robot->ecp_command.instruction.motion_steps = MOTION_STEPS;
-	the_robot->ecp_command.instruction.value_in_step_no = MOTION_STEPS - 1;
+	the_robot->ecp_command.instruction.value_in_step_no = MOTION_STEPS - 2;
 
 	for (int i=0; i<6; i++)
 	{
