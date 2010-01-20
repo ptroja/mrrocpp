@@ -298,7 +298,7 @@ void irp6s_postument_track_effector::compute_base_pos_xyz_rot_xyz_vector(const l
 /*--------------------------------------------------------------------------*/
 void irp6s_postument_track_effector::iterate_macrostep(const lib::JointArray begining_joints, const lib::Homog_matrix begining_end_effector_frame, lib::c_buffer &instruction, const lib::Xyz_Angle_Axis_vector base_pos_xyz_rot_xyz_vector)
 {
-	desired_end_effector_frame = begining_end_effector_frame;
+	lib::Homog_matrix next_frame = begining_end_effector_frame;
 
 	//	static int debugi=0;
 	//   debugi++;
@@ -376,10 +376,10 @@ void irp6s_postument_track_effector::iterate_macrostep(const lib::JointArray beg
 
 
 		lib::Homog_matrix begining_end_effector_frame_with_current_translation = begining_end_effector_frame;
-		begining_end_effector_frame_with_current_translation.set_translation_vector(desired_end_effector_frame);
+		begining_end_effector_frame_with_current_translation.set_translation_vector(next_frame);
 
 		lib::Homog_matrix modified_beginning_to_desired_end_effector_frame =
-				!begining_end_effector_frame_with_current_translation * desired_end_effector_frame;
+				!begining_end_effector_frame_with_current_translation * next_frame;
 
 		lib::V_tr
 				v_tr_modified_beginning_to_desired_end_effector_frame(modified_beginning_to_desired_end_effector_frame);
@@ -443,7 +443,7 @@ void irp6s_postument_track_effector::iterate_macrostep(const lib::JointArray beg
 		lib::Homog_matrix rot_frame(move_rot_vector);
 
 		// wyliczenie nowej pozycji zadanej
-		desired_end_effector_frame = desired_end_effector_frame * rot_frame;
+		next_frame = next_frame * rot_frame;
 
 		/*// przeniesione do manip_effector::servo_joints_and_frame_actualization_and_upload(void)
 		 lib::Xyz_Euler_Zyz_vector tmp_vector;
@@ -472,7 +472,7 @@ void irp6s_postument_track_effector::iterate_macrostep(const lib::JointArray beg
 			default:
 				break;
 		}
-
+		desired_end_effector_frame = next_frame;
 		// Przeliczenie wspolrzednych zewnetrznych na wspolrzedne wewnetrzne
 		get_current_kinematic_model()->e2i_transform(desired_joints_tmp, current_joints, desired_end_effector_frame);
 		// Przeliczenie wspolrzednych wewnetrznych na polozenia walow silnikow
@@ -487,7 +487,7 @@ void irp6s_postument_track_effector::iterate_macrostep(const lib::JointArray beg
 		move_servos();
 		if (step == ECP_value_in_step_no) { // przygotowanie predicted frame dla ECP
 			//  next_frame.get_frame_tab(reply.arm.pf_def.arm_frame);
-			lib::Homog_matrix predicted_frame = desired_end_effector_frame;
+			lib::Homog_matrix predicted_frame = next_frame;
 			for (int i = 0; i < ECP_motion_steps - ECP_value_in_step_no; i++) {
 				predicted_frame = predicted_frame * rot_frame;
 			}
