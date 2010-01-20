@@ -298,7 +298,7 @@ void irp6s_postument_track_effector::compute_base_pos_xyz_rot_xyz_vector(const l
 /*--------------------------------------------------------------------------*/
 void irp6s_postument_track_effector::iterate_macrostep(const lib::JointArray begining_joints, const lib::Homog_matrix begining_end_effector_frame, lib::c_buffer &instruction, const lib::Xyz_Angle_Axis_vector base_pos_xyz_rot_xyz_vector)
 {
-	lib::Homog_matrix next_frame = begining_end_effector_frame;
+	desired_end_effector_frame = begining_end_effector_frame;
 
 	//	static int debugi=0;
 	//   debugi++;
@@ -356,18 +356,17 @@ void irp6s_postument_track_effector::iterate_macrostep(const lib::JointArray beg
 
 	//	std::cout << current_tool << std::endl;
 
-	lib::Ft_tr ft_tr_tool_matrix(current_tool);
-	lib::Ft_tr ft_tr_inv_tool_matrix = !ft_tr_tool_matrix;
+
+	lib::Ft_tr ft_tr_inv_tool_matrix = !(lib::Ft_tr(current_tool));
 	lib::V_tr v_tr_tool_matrix(current_tool);
 	lib::V_tr v_tr_inv_tool_matrix = !v_tr_tool_matrix;
 
-	// poczatek generacji makrokroku
+	// poczatek generacji makrokrokubase_pos_xyz_rot_xyz_vector
 	for (int step = 1; step <= ECP_motion_steps; step++) {
 
 		lib::Homog_matrix current_frame_wo_offset = return_current_frame(WITHOUT_TRANSLATION);
 
-		lib::Ft_tr ft_tr_current_frame_matrix(current_frame_wo_offset);
-		lib::Ft_tr ft_tr_inv_current_frame_matrix = !ft_tr_current_frame_matrix;
+		lib::Ft_tr ft_tr_inv_current_frame_matrix = !(lib::Ft_tr(current_frame_wo_offset));
 		lib::V_tr v_tr_current_frame_matrix(current_frame_wo_offset);
 		lib::V_tr v_tr_inv_current_frame_matrix = !v_tr_current_frame_matrix;
 
@@ -377,10 +376,10 @@ void irp6s_postument_track_effector::iterate_macrostep(const lib::JointArray beg
 
 
 		lib::Homog_matrix begining_end_effector_frame_with_current_translation = begining_end_effector_frame;
-		begining_end_effector_frame_with_current_translation.set_translation_vector(next_frame);
+		begining_end_effector_frame_with_current_translation.set_translation_vector(desired_end_effector_frame);
 
 		lib::Homog_matrix modified_beginning_to_desired_end_effector_frame =
-				!begining_end_effector_frame_with_current_translation * next_frame;
+				!begining_end_effector_frame_with_current_translation * desired_end_effector_frame;
 
 		lib::V_tr
 				v_tr_modified_beginning_to_desired_end_effector_frame(modified_beginning_to_desired_end_effector_frame);
@@ -444,7 +443,7 @@ void irp6s_postument_track_effector::iterate_macrostep(const lib::JointArray beg
 		lib::Homog_matrix rot_frame(move_rot_vector);
 
 		// wyliczenie nowej pozycji zadanej
-		next_frame = next_frame * rot_frame;
+		desired_end_effector_frame = desired_end_effector_frame * rot_frame;
 
 		/*// przeniesione do manip_effector::servo_joints_and_frame_actualization_and_upload(void)
 		 lib::Xyz_Euler_Zyz_vector tmp_vector;
@@ -458,7 +457,7 @@ void irp6s_postument_track_effector::iterate_macrostep(const lib::JointArray beg
 		 tmp_vector.to_table(rb_obj->step_data.desired_cartesian_position);
 		 }
 		 */
-		desired_end_effector_frame = next_frame;
+
 
 		switch (motion_type)
 		{
@@ -488,7 +487,7 @@ void irp6s_postument_track_effector::iterate_macrostep(const lib::JointArray beg
 		move_servos();
 		if (step == ECP_value_in_step_no) { // przygotowanie predicted frame dla ECP
 			//  next_frame.get_frame_tab(reply.arm.pf_def.arm_frame);
-			lib::Homog_matrix predicted_frame = next_frame;
+			lib::Homog_matrix predicted_frame = desired_end_effector_frame;
 			for (int i = 0; i < ECP_motion_steps - ECP_value_in_step_no; i++) {
 				predicted_frame = predicted_frame * rot_frame;
 			}
