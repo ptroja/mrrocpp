@@ -18,7 +18,7 @@ class MotorArray : public std::vector<double>
 public:
   MotorArray() {}
   MotorArray(int size) : std::vector<double> (size) {}
-  MotorArray(double *ptr, size_t n) : std::vector<double> (ptr, ptr+n) {}
+  MotorArray(const double *ptr, size_t n) : std::vector<double> (ptr, ptr+n) {}
 };
 
 

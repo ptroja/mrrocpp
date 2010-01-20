@@ -204,10 +204,10 @@ void irp6s_postument_track_effector::create_threads()
 }
 
 /*--------------------------------------------------------------------------*/
-void irp6s_postument_track_effector::compute_base_pos_xyz_rot_xyz_vector(const lib::JointArray begining_joints, const lib::Homog_matrix begining_end_effector_frame, lib::c_buffer &instruction, lib::Xyz_Angle_Axis_vector& base_pos_xyz_rot_xyz_vector)
+void irp6s_postument_track_effector::compute_base_pos_xyz_rot_xyz_vector(const lib::JointArray begining_joints, const lib::Homog_matrix begining_end_effector_frame, const lib::c_buffer &instruction, lib::Xyz_Angle_Axis_vector& base_pos_xyz_rot_xyz_vector)
 {
 
-	lib::MOTION_TYPE &motion_type = instruction.motion_type;
+	const lib::MOTION_TYPE &motion_type = instruction.motion_type;
 	const lib::POSE_SPECIFICATION &set_arm_type = instruction.set_arm_type;
 	lib::Homog_matrix arm_frame(instruction.arm.pf_def.arm_frame);
 	lib::JointArray joint_arm_coordinates(instruction.arm.pf_def.arm_coordinates, number_of_servos);
@@ -296,7 +296,7 @@ void irp6s_postument_track_effector::compute_base_pos_xyz_rot_xyz_vector(const l
 }
 
 /*--------------------------------------------------------------------------*/
-void irp6s_postument_track_effector::iterate_macrostep(const lib::JointArray begining_joints, const lib::Homog_matrix begining_end_effector_frame, lib::c_buffer &instruction, const lib::Xyz_Angle_Axis_vector base_pos_xyz_rot_xyz_vector)
+void irp6s_postument_track_effector::iterate_macrostep(const lib::JointArray begining_joints, const lib::Homog_matrix begining_end_effector_frame, const lib::c_buffer &instruction, const lib::Xyz_Angle_Axis_vector base_pos_xyz_rot_xyz_vector)
 {
 	desired_end_effector_frame = begining_end_effector_frame;
 
@@ -305,16 +305,17 @@ void irp6s_postument_track_effector::iterate_macrostep(const lib::JointArray beg
 
 	lib::MotorArray desired_motor_pos_new_tmp(MAX_SERVOS_NR);
 	lib::JointArray desired_joints_tmp(MAX_SERVOS_NR); // Wspolrzedne wewnetrzne -
-	lib::MOTION_TYPE &motion_type = instruction.motion_type;
+	const lib::MOTION_TYPE &motion_type = instruction.motion_type;
 
 	// zmienne z bufora wejsciowego
 	const uint16_t &ECP_motion_steps = instruction.motion_steps; // liczba krokow w makrokroku
 	const uint16_t &ECP_value_in_step_no = instruction.value_in_step_no; // liczba krokow po ktorych bedzie wyslana odpowiedz do ECP o przewidywanym zakonczeniu ruchu
 	const lib::POSE_SPECIFICATION &set_arm_type = instruction.set_arm_type;
 
-	double (&force_xyz_torque_xyz)[6] = instruction.arm.pf_def.force_xyz_torque_xyz; // wartosci zadana sily
-	double (&inertia)[6] = instruction.arm.pf_def.inertia;
-	double (&reciprocal_damping)[6] = instruction.arm.pf_def.reciprocal_damping;
+	double force_xyz_torque_xyz[6]; // wartosci zadana sily
+	double inertia[6];
+	double reciprocal_damping[6];
+
 	const lib::BEHAVIOUR_SPECIFICATION (&behaviour)[6] = instruction.arm.pf_def.behaviour;
 	const double &desired_gripper_coordinate = instruction.arm.pf_def.gripper_coordinate;
 
@@ -327,11 +328,20 @@ void irp6s_postument_track_effector::iterate_macrostep(const lib::JointArray beg
 		switch (behaviour[i])
 		{
 			case lib::UNGUARDED_MOTION:
+				inertia[i] = 0.0;
 				reciprocal_damping[i] = 0.0; // the force influence is eliminated
+				force_xyz_torque_xyz[i] = instruction.arm.pf_def.force_xyz_torque_xyz[i];
 				// inertia is not eleliminated
 				break;
 			case lib::GUARDED_MOTION:
+				inertia[i] = instruction.arm.pf_def.inertia[i];
+				reciprocal_damping[i] = instruction.arm.pf_def.reciprocal_damping[i];
 				force_xyz_torque_xyz[i] = 0.0; // the desired force is set to zero
+				break;
+			case lib::CONTACT:
+				inertia[i] = instruction.arm.pf_def.inertia[i];
+				reciprocal_damping[i] = instruction.arm.pf_def.reciprocal_damping[i];
+				force_xyz_torque_xyz[i] = instruction.arm.pf_def.force_xyz_torque_xyz[i];
 				break;
 			default:
 				break;
@@ -500,7 +510,7 @@ void irp6s_postument_track_effector::iterate_macrostep(const lib::JointArray beg
 }
 
 /*--------------------------------------------------------------------------*/
-void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buffer &instruction)
+void irp6s_postument_track_effector::pose_force_torque_at_frame_move(const lib::c_buffer &instruction)
 {
 
 	// WYLICZENIE POZYCJI POCZATKOWEJ
