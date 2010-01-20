@@ -340,7 +340,6 @@ void irp6s_postument_track_effector::iterate_macrostep(const lib::JointArray beg
 
 	lib::Ft_vector current_force;
 
-	double beginning_gripper_coordinate;
 	const unsigned long PREVIOUS_MOVE_VECTOR_NULL_STEP_VALUE = 10;
 
 	static unsigned long last_force_step_counter = step_counter;
@@ -349,7 +348,7 @@ void irp6s_postument_track_effector::iterate_macrostep(const lib::JointArray beg
 	lib::Xyz_Angle_Axis_vector pos_xyz_rot_xyz_vector;
 	static lib::Xyz_Angle_Axis_vector previous_move_rot_vector;
 
-	beginning_gripper_coordinate = begining_joints[gripper_servo_nr];
+	double beginning_gripper_coordinate = begining_joints[gripper_servo_nr];
 
 	lib::Homog_matrix
 			current_tool(((mrrocpp::kinematics::common::kinematic_model_with_tool*) get_current_kinematic_model())->tool);
@@ -366,9 +365,7 @@ void irp6s_postument_track_effector::iterate_macrostep(const lib::JointArray beg
 
 		lib::Homog_matrix current_frame_wo_offset = return_current_frame(WITHOUT_TRANSLATION);
 
-		lib::Ft_tr ft_tr_inv_current_frame_matrix = !(lib::Ft_tr(current_frame_wo_offset));
 		lib::V_tr v_tr_current_frame_matrix(current_frame_wo_offset);
-		lib::V_tr v_tr_inv_current_frame_matrix = !v_tr_current_frame_matrix;
 
 		force_msr_download(current_force);
 		// sprowadzenie sil z ukladu bazowego do ukladu kisci
@@ -378,15 +375,8 @@ void irp6s_postument_track_effector::iterate_macrostep(const lib::JointArray beg
 		lib::Homog_matrix begining_end_effector_frame_with_current_translation = begining_end_effector_frame;
 		begining_end_effector_frame_with_current_translation.set_translation_vector(desired_end_effector_frame);
 
-		lib::Homog_matrix modified_beginning_to_desired_end_effector_frame =
-				!begining_end_effector_frame_with_current_translation * desired_end_effector_frame;
-
-		lib::V_tr
-				v_tr_modified_beginning_to_desired_end_effector_frame(modified_beginning_to_desired_end_effector_frame);
-		lib::V_tr v_tr_inv_modified_beginning_to_desired_end_effector_frame =
-				!v_tr_modified_beginning_to_desired_end_effector_frame;
-
-		lib::Ft_v_vector current_force_torque(ft_tr_inv_tool_matrix * ft_tr_inv_current_frame_matrix * current_force);
+		lib::Ft_v_vector current_force_torque(ft_tr_inv_tool_matrix * !(lib::Ft_tr(current_frame_wo_offset))
+				* current_force);
 		//		lib::Ft_v_vector tmp_force_torque (lib::Ft_v_tr((!current_tool) * (!current_frame_wo_offset), lib::Ft_v_tr::FT) * lib::Ft_v_vector (current_force));
 
 
@@ -399,15 +389,15 @@ void irp6s_postument_track_effector::iterate_macrostep(const lib::JointArray beg
 			//	printf("\n\nPREVIOUS_MOVE_VECTOR_NULL_STEP_VALUE NOT\n\n");
 		}
 
-		previous_move_rot_vector = v_tr_inv_tool_matrix * v_tr_inv_current_frame_matrix * previous_move_rot_vector;
+		previous_move_rot_vector = v_tr_inv_tool_matrix * (!v_tr_current_frame_matrix) * previous_move_rot_vector;
 
 		switch (set_arm_type)
 		{
 			case lib::FRAME:
 			case lib::JOINT:
 			case lib::MOTOR:
-				pos_xyz_rot_xyz_vector = v_tr_inv_modified_beginning_to_desired_end_effector_frame
-						* base_pos_xyz_rot_xyz_vector;
+				pos_xyz_rot_xyz_vector = lib::V_tr(!(lib::V_tr(!begining_end_effector_frame_with_current_translation
+						* desired_end_effector_frame))) * base_pos_xyz_rot_xyz_vector;
 				break;
 			case lib::PF_VELOCITY:
 				pos_xyz_rot_xyz_vector = base_pos_xyz_rot_xyz_vector;
