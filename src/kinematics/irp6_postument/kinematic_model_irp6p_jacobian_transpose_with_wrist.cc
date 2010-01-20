@@ -45,7 +45,7 @@ model_jacobian_transpose_with_wrist::model_jacobian_transpose_with_wrist (void)
   * local_desired_joints - wyliczone wspolrzedne wewnetrzne robota (kolejno q0, q1, q2, ...)
  ------------------------------------------------------------------------ */
 
-void model_jacobian_transpose_with_wrist::inverse_kinematics_transform(lib::JointArray & local_desired_joints, lib::JointArray & local_current_joints, lib::Homog_matrix& local_desired_end_effector_frame)
+void model_jacobian_transpose_with_wrist::inverse_kinematics_transform(lib::JointArray & local_desired_joints, lib::JointArray & local_current_joints, const lib::Homog_matrix& local_desired_end_effector_frame)
 {
   double K=0.1; 		//Zadane wzmocnienie - od (0) do (1), w modelu transponowanym zalecane ponizej jedynki
   double E=0.00001;		//Max, wartosc uchybu dla kt�rego rozwiazanie zaakceptowane

@@ -907,6 +907,14 @@ double* Homog_matrix::operator[](const int i)
         return matrix_m[i];
 }
 
+const double* Homog_matrix::operator[](const int i) const
+{
+        //    printf("RHS a[%2d]\n", i );
+        return matrix_m[i];
+}
+
+
+
 std::ostream&  operator<<(std::ostream & strumien, Homog_matrix & m)
 {
 	// operator wypisania

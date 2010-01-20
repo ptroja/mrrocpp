@@ -567,7 +567,7 @@ void model_with_wrist::direct_kinematics_transform(const lib::JointArray & local
   Wyjscie:
   * local_desired_joints - wyliczone wspolrzedne wewnetrzne robota (kolejno d0, q1, q2, ...)
  ------------------------------------------------------------------------ */
-void model_with_wrist::inverse_kinematics_transform(lib::JointArray & local_desired_joints, lib::JointArray & local_current_joints, lib::Homog_matrix& local_desired_end_effector_frame)
+void model_with_wrist::inverse_kinematics_transform(lib::JointArray & local_desired_joints, lib::JointArray & local_current_joints, const lib::Homog_matrix& local_desired_end_effector_frame)
 {
 
   // Stale

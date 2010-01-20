@@ -52,7 +52,7 @@ class kinematic_model_spkm: public common::kinematic_model
 		void direct_kinematics_transform(const lib::JointArray & local_current_joints, lib::Homog_matrix& local_current_end_effector_frame);
 
 		//! Solves inverse kinematics.
-		void inverse_kinematics_transform(lib::JointArray & local_desired_joints, lib::JointArray & local_current_joints, lib::Homog_matrix& local_desired_end_effector_frame);
+		void inverse_kinematics_transform(lib::JointArray & local_desired_joints, lib::JointArray & local_current_joints, const lib::Homog_matrix& local_desired_end_effector_frame);
 
 };
 

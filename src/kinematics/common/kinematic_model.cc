@@ -30,7 +30,7 @@ void kinematic_model::i2e_transform(const lib::JointArray& local_current_joints,
 }
 
 
-void kinematic_model::e2i_transform(lib::JointArray & local_desired_joints, lib::JointArray & local_current_joints, lib::Homog_matrix& local_desired_end_effector_frame)
+void kinematic_model::e2i_transform(lib::JointArray & local_desired_joints, lib::JointArray & local_current_joints, const lib::Homog_matrix& local_desired_end_effector_frame)
 {
 	// Inverse kinematics solution.
 	inverse_kinematics_transform(local_desired_joints, local_current_joints, local_desired_end_effector_frame);

@@ -348,7 +348,7 @@ Xyz_Angle_Axis_vector Xyz_Angle_Axis_vector::operator-() const
 
 
 
-void Xyz_Angle_Axis_vector::position_distance(Homog_matrix& local_current_end_effector_frame, Homog_matrix& local_desired_end_effector_frame)
+void Xyz_Angle_Axis_vector::position_distance(const Homog_matrix& local_current_end_effector_frame, const Homog_matrix& local_desired_end_effector_frame)
 {
 
 double n_t[3], n_d[3], o_t[3], o_d[3], a_t[3], a_d[3];

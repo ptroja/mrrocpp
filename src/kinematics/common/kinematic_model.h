@@ -57,13 +57,13 @@ public:
 	virtual void i2e_transform(const lib::JointArray & local_current_joints, lib::Homog_matrix& local_current_end_effector_frame);
 
 	//! Computes internal coordinates basing on external coordinates (e2i - external to internal). Calls only one method - inverse kinematics.
-	virtual void e2i_transform(lib::JointArray & local_desired_joints, lib::JointArray & local_current_joints, lib::Homog_matrix& local_desired_end_effector_frame);
+	virtual void e2i_transform(lib::JointArray & local_desired_joints, lib::JointArray & local_current_joints, const lib::Homog_matrix& local_desired_end_effector_frame);
 
 	//! Solves direct kinematics.
 	virtual void direct_kinematics_transform(const lib::JointArray & local_current_joints, lib::Homog_matrix& local_current_end_effector_frame) = 0;
 
 	//! Solves inverse kinematics.
-	virtual void inverse_kinematics_transform(lib::JointArray & local_desired_joints, lib::JointArray & local_current_joints, lib::Homog_matrix& local_desired_end_effector_frame) = 0;
+	virtual void inverse_kinematics_transform(lib::JointArray & local_desired_joints, lib::JointArray & local_current_joints, const lib::Homog_matrix& local_desired_end_effector_frame) = 0;
 
 	//! Sets kinematics description.
 	virtual void set_kinematic_model_label(const std::string);

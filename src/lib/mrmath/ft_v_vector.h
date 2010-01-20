@@ -130,7 +130,7 @@ public:
 
 	//Sibi
 	 //Wektor predkosci jako odleglosc dwoch pozycji zadanych w postaci ramek
-	void position_distance(Homog_matrix& local_current_end_effector_frame, Homog_matrix& local_desired_end_effector_frame);
+	void position_distance(const Homog_matrix& local_current_end_effector_frame, const Homog_matrix& local_desired_end_effector_frame);
 
 
 };// end class Xyz_Angle_Axis_vector

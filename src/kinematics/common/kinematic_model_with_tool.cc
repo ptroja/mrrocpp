@@ -86,7 +86,7 @@ void kinematic_model_with_tool::i2e_wo_tool_transform(const lib::JointArray & lo
 
 }
 
-void kinematic_model_with_tool::e2i_transform(lib::JointArray & local_desired_joints, lib::JointArray & local_current_joints, lib::Homog_matrix& local_desired_end_effector_frame)
+void kinematic_model_with_tool::e2i_transform(lib::JointArray & local_desired_joints, lib::JointArray & local_current_joints, const lib::Homog_matrix& local_desired_end_effector_frame)
 {
 	// Copy end effector frame.
 	lib::Homog_matrix local_desired_end_effector_matrix(local_desired_end_effector_frame);
@@ -99,11 +99,9 @@ void kinematic_model_with_tool::e2i_transform(lib::JointArray & local_desired_jo
 	if (global_frame_computations)
 		global_frame_inverse_transform(local_desired_end_effector_matrix);
 
-	// Retrieve computations result.
-	local_desired_end_effector_frame = local_desired_end_effector_matrix;
 
 	// Compute inverse kinematics transformation.
-	inverse_kinematics_transform(local_desired_joints, local_current_joints, local_desired_end_effector_frame);
+	inverse_kinematics_transform(local_desired_joints, local_current_joints, local_desired_end_effector_matrix);
 
 }
 

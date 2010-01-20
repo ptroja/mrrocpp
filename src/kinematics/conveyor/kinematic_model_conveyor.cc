@@ -131,7 +131,7 @@ void model::direct_kinematics_transform(const lib::JointArray & local_current_jo
   Wyjscie:
   * local_desired_joints - wyliczone wspolrzedne wewnetrzne robota (kolejno d0, q1, q2, ...)
  ------------------------------------------------------------------------ */
-void model::inverse_kinematics_transform(lib::JointArray & local_desired_joints, lib::JointArray & local_current_joints, lib::Homog_matrix& local_desired_end_effector_frame)
+void model::inverse_kinematics_transform(lib::JointArray & local_desired_joints, lib::JointArray & local_current_joints, const lib::Homog_matrix& local_desired_end_effector_frame)
 {
     local_desired_joints[0] = (local_desired_end_effector_frame)[0][3];
 } //: inverse_kinematics_transform()

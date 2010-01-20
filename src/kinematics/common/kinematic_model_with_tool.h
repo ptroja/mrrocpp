@@ -57,7 +57,7 @@ class kinematic_model_with_tool: public mrrocpp::kinematics::common::kinematic_m
 
 		//! Computes internal coordinates basing on external coordinates (e2i - external to internal).
 		virtual void
-				e2i_transform(lib::JointArray & local_desired_joints, lib::JointArray & local_current_joints, lib::Homog_matrix& local_desired_end_effector_frame);
+				e2i_transform(lib::JointArray & local_desired_joints, lib::JointArray & local_current_joints, const lib::Homog_matrix& local_desired_end_effector_frame);
 
 		//! Computes internal coordinates basing on external coordinates, without the computations related with the attached tool.
 		virtual void
