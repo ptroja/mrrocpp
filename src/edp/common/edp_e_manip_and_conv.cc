@@ -73,7 +73,7 @@ void manip_and_conv_effector::get_arm_position_read_hardware_sb()
 	//		printf("get_arm_position read_hardware\n");
 
 	sb->send_to_SERVO_GROUP();
-
+/*
 	// Ustawienie poprzedniej wartosci zadanej na obecnie odczytane polozenie walow silnikow
 	for (int i = 0; i < number_of_servos; i++) {
 		desired_motor_pos_new[i] = desired_motor_pos_old[i] = current_motor_pos[i];
@@ -90,7 +90,7 @@ void manip_and_conv_effector::get_arm_position_read_hardware_sb()
 		}
 
 	}
-
+*/
 }
 
 /*--------------------------------------------------------------------------*/

@@ -560,9 +560,25 @@ void irp6s_postument_track_effector::get_arm_position(bool read_hardware, lib::c
 	//   printf(" GET ARM\n");
 	//	lib::JointArray desired_joints_tmp(MAX_SERVOS_NR); // Wspolrzedne wewnetrzne -
 	lib::Ft_vector current_force;
+	lib::JointArray desired_joints_tmp(number_of_servos); // Wspolrzedne wewnetrzne -
 
 	if (read_hardware) {
 		manip_and_conv_effector::get_arm_position_read_hardware_sb();
+
+		desired_motor_pos_new[gripper_servo_nr] = desired_motor_pos_old[gripper_servo_nr]
+				= current_motor_pos[gripper_servo_nr];
+
+		if (is_synchronised()) {
+			//  check_motor_position(desired_motor_pos_new);
+			// dla sprawdzenia ograncizen w joints i motors
+
+			get_current_kinematic_model()->mp2i_transform(desired_motor_pos_new, desired_joints_tmp);
+
+			for (int i = 0; i < number_of_servos; i++) {
+				desired_joints[i] = current_joints[i] = desired_joints_tmp[i];
+			}
+
+		}
 	}
 
 	// okreslenie rodzaju wspolrzednych, ktore maja by odczytane
