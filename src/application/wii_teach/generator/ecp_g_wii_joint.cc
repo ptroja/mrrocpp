@@ -41,7 +41,9 @@ bool wii_joint::first_step()
 {
     the_robot->ecp_command.instruction.instruction_type = lib::GET;
     the_robot->ecp_command.instruction.get_type = ARM_DV;
-    the_robot->ecp_command.instruction.get_arm_type = lib::JOINT;
+    the_robot->ecp_command.instruction.get_arm_type = lib::FRAME;
+    the_robot->ecp_command.instruction.set_type = ARM_DV;
+    the_robot->ecp_command.instruction.set_arm_type = lib::JOINT;
     the_robot->ecp_command.instruction.motion_type = lib::RELATIVE;
     the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
     the_robot->ecp_command.instruction.motion_steps = 25;
