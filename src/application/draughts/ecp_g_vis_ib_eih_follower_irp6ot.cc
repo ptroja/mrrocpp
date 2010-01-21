@@ -18,11 +18,11 @@ namespace generator {
 	common::generator::ecp_visual_servo(_ecp_task) {
 	//v_max[1] = v_max[0] = 0.020;
 	//a_max[1] = a_max[0] = 0.025;
-	v_max[1] = v_max[0] = 0.1;
-	a_max[1] = a_max[0] = 0.1;
+	v_max[1] = v_max[0] = 0.02;
+	a_max[1] = a_max[0] = 0.09;
 	v_max[2] = 0.03;
 	a_max[2] = 0.02;
-	v_stop[0] = v_stop[1] = 0.0020;
+	v_stop[0] = v_stop[1] = a_max[0] * MOTION_STEPS * 0.002;
 	v_min[0] = 	v_min[1] = 0.0035;
 	s_z = 0.35;
 }
@@ -56,7 +56,7 @@ bool ecp_vis_ib_eih_follower_irp6ot::first_step() {
 	reached[1] = false;
 	dir[0] = 1;
 	dir[1] = 1;
-	v_max[1] = v_max[0] = 0.012;
+	v_max[1] = v_max[0] = 0.02;
 
 	ecp_t.sr_ecp_msg->message("PIERWSZY");
 
@@ -205,19 +205,25 @@ bool ecp_vis_ib_eih_follower_irp6ot::next_step_without_constraints() {
 				if (v[i] >= v_max[i]) {
 					v[i] = v_max[i];
 				}
-				printf("przysp\n");																						// ta czesc warunku sprawia ze wchodzi w jednostajny przy osiagnieciu maks speeda
+				printf("przysp\n");													//porownywanie double jest spieprzone wiec musi byc tak...			// ta czesc warunku sprawia ze wchodzi w jednostajny przy osiagnieciu maks speeda
 			} else if(v[i] > 0 && (change[i] == true || reached[i] == true || tracking == false || (v[i]-v_max[i]) > 0.0001)){ //|| v[i] > v_max[i]) && !(v[i] == v_max[i] && change[i] == false && reached[i] == false && tracking == true)) {//hamowanie
-				v[i] -= a_max[i] * t;
-				s[i] = (a_max[i] * t * t)/2 + (v[i] * t);
+				if (v[i] > v_max[i] && (v[i]-v_max[i])/t < a_max[i] && change[i] == false && reached[i] == false && tracking == true) {
+					v[i] = v_max[i];
+					s[i] = (((v[i]-v_max[i])/t) * t * t)/2 + (v[i] * t);
+				} else {
+					v[i] -= a_max[i] * t;
+					s[i] = (a_max[i] * t * t)/2 + (v[i] * t);
+				}
 
 				if (v[i] < 0) {
-					//u[0] = vsp_fradia->from_vsp.comm_image.sensor_union.tracker.x-20;
-					//u[1] = vsp_fradia->from_vsp.comm_image.sensor_union.tracker.y;
-					//bool tracking = vsp_fradia->from_vsp.comm_image.sensor_union.tracker.tracking;
-					v[i] = 0;
-					s[i] = 0;
+						//u[0] = vsp_fradia->from_vsp.comm_image.sensor_union.tracker.x-20;
+						//u[1] = vsp_fradia->from_vsp.comm_image.sensor_union.tracker.y;
+						//bool tracking = vsp_fradia->from_vsp.comm_image.sensor_union.tracker.tracking;
+						v[i] = 0;
+						s[i] = 0;
 				}
 				printf("ham\n");
+
 			} else { //jednostajny
 				s[i] = v[i] * t;
 				printf("jednostajny\n");
