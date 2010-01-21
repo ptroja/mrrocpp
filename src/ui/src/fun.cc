@@ -208,7 +208,7 @@ int start_process_control_window(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbac
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
 	if (!ui_state.is_process_control_window_open) {
-		ApCreateModule(ABM_wnd_processes_control, ABW_base, cbinfo);
+		ApCreateModule(ABM_wnd_processes_control, ABW_base, NULL);
 		ui_state.is_process_control_window_open = true;
 	} else { // przelacz na okno
 		PtWindowToFront(ABW_wnd_processes_control);
