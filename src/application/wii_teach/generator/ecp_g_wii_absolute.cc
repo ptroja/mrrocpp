@@ -29,9 +29,16 @@ void wii_absolute::set_position(void)
     double translation[3];
     double old_translation[3];
 
-    the_robot->ecp_command.instruction.instruction_type = lib::SET_GET;
+    if(the_robot->ecp_command.instruction.instruction_type == lib::GET)
+    {
+        homog_matrix.set_from_frame_tab(the_robot->ecp_command.instruction.arm.pf_def.arm_frame);
+    }
+    else
+    {
+        homog_matrix.set_from_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame);
+    }
 
-    homog_matrix.set_from_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame);
+    the_robot->ecp_command.instruction.instruction_type = lib::SET_GET;
 
     homog_matrix.get_translation_vector(old_translation);
 

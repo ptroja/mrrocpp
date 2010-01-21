@@ -25,12 +25,6 @@ wii_joint::wii_joint (common::task::task& _ecp_task,ecp_mp::sensor::wiimote* _wi
 void wii_joint::set_position(void)
 {
     the_robot->ecp_command.instruction.instruction_type = lib::SET_GET;
-    the_robot->ecp_command.instruction.set_type = ARM_DV;
-    the_robot->ecp_command.instruction.set_arm_type = lib::JOINT;
-    the_robot->ecp_command.instruction.get_type = ARM_DV;
-    the_robot->ecp_command.instruction.get_arm_type = lib::JOINT;
-    the_robot->ecp_command.instruction.motion_type = lib::RELATIVE;
-    the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
 
     the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[0] = nextChange[0];
     the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[1] = nextChange[1];

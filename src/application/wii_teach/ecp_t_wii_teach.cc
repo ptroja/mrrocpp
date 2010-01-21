@@ -301,7 +301,7 @@ void wii_teach::main_task_algorithm(void)
             message.wii_command.led_status = 0xF;
             message.wii_command.rumble = false;
             ((ecp_mp::sensor::wiimote*)sensor_m[lib::SENSOR_WIIMOTE])->send_reading(message);
-            jg->Move();
+            ag->Move();
             message.wii_command.led_change = true;
             message.wii_command.led_status = 0x0;
             message.wii_command.rumble = false;
