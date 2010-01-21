@@ -72,9 +72,9 @@ bool wii_absolute::first_step()
     the_robot->ecp_command.instruction.get_arm_type = lib::FRAME;
     the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
     the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-    the_robot->ecp_command.instruction.motion_steps = 8;
-    the_robot->ecp_command.instruction.value_in_step_no = 6;
-
+    the_robot->ecp_command.instruction.motion_steps = 25;
+    the_robot->ecp_command.instruction.value_in_step_no = 22;
+    
     releasedA = false;
     stop = false;
 
