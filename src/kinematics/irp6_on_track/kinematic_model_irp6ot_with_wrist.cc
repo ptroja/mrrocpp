@@ -711,7 +711,7 @@ void model_with_wrist::inverse_kinematics_transform(lib::JointArray & local_desi
   local_desired_joints[3]=atan2(F-a2*s2, E-a2*c2);
 
   // Tor. Nie bierze udzialu w tym rozwiazaniu.
-//  local_desired_joints[0] = local_current_joints[0];
+  local_desired_joints[0] = local_current_joints[0];
 
   // Sprawdzenie ograniczen na wspolrzedne wewnetrzne.
   check_joints (local_desired_joints);

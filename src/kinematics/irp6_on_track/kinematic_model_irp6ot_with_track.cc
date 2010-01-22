@@ -86,6 +86,11 @@ void model_with_track::direct_kinematics_transform(const lib::JointArray & local
   Wyjscie:
   * local_desired_joints - wyliczone wspolrzedne wewnetrzne robota (kolejno d0, q1, q2, ...)
  ------------------------------------------------------------------------ */
+// SKANDAL, GRANDA - local_current_joints nie sa brane pod uwage do poprawki
+// SKANDAL, GRANDA - local_current_joints nie sa brane pod uwage do poprawki
+// SKANDAL, GRANDA - local_current_joints nie sa brane pod uwage do poprawki
+// SKANDAL, GRANDA - local_current_joints nie sa brane pod uwage do poprawki
+// SKANDAL, GRANDA - local_current_joints nie sa brane pod uwage do poprawki
 void model_with_track::inverse_kinematics_transform(lib::JointArray & local_desired_joints, lib::JointArray & local_current_joints, const lib::Homog_matrix& local_desired_end_effector_frame)
 {
   // Stale
@@ -123,6 +128,14 @@ bool p=false;
     local_desired_joints[1] = M_PI_2;
     p=true;
   }
+
+  // SKANDAL, GRANDA - local_current_joints nie sa brane pod uwage do poprawki
+  // SKANDAL, GRANDA - local_current_joints nie sa brane pod uwage do poprawki
+  // SKANDAL, GRANDA - local_current_joints nie sa brane pod uwage do poprawki
+  // SKANDAL, GRANDA - local_current_joints nie sa brane pod uwage do poprawki
+  // SKANDAL, GRANDA - local_current_joints nie sa brane pod uwage do poprawki
+
+
 
 // 2b) Ramie robota w osi toru --  theta[1]=-pi/2
   if ( !p && ABS((local_desired_end_effector_frame)[0][3])<=EPS && (local_desired_end_effector_frame)[1][2]<0){
