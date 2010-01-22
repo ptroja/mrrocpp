@@ -200,11 +200,15 @@ bool ecp_vis_ib_eih_follower_irp6ot::next_step_without_constraints() {
 				if (v[i] == 0 && change[i] == true) {
 					change[i] = false;
 				}
+				if ((fabs(u[i]) < 20) && (v[i] <= 0)) {
+					continue;
+				}
 				s[i] = (a_max[i] * t * t)/2 + (v[i] * t);
 				v[i] += a_max[i] * t;
 				if (v[i] >= v_max[i]) {
 					v[i] = v_max[i];
 				}
+
 				printf("przysp\n");													//porownywanie double jest spieprzone wiec musi byc tak...			// ta czesc warunku sprawia ze wchodzi w jednostajny przy osiagnieciu maks speeda
 			} else if(v[i] > 0 && (change[i] == true || reached[i] == true || tracking == false || (v[i]-v_max[i]) > 0.0001)){ //|| v[i] > v_max[i]) && !(v[i] == v_max[i] && change[i] == false && reached[i] == false && tracking == true)) {//hamowanie
 				if (v[i] > v_max[i] && (v[i]-v_max[i])/t < a_max[i] && change[i] == false && reached[i] == false && tracking == true) {

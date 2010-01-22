@@ -31,7 +31,7 @@ void smooth_test::main_task_algorithm(void ) {
 
 	//smoothgen2->set_relative();
 
-	smoothgen2->load_file_with_path("/net/koleszko/mnt/mrroc/src/application/smooth-tester/trj/smooth2test3.trj");
+	smoothgen2->load_file_with_path("/net/koleszko/mnt/mrroc/src/application/smooth-tester/trj/smooth2test2.trj");
 		/*char size[10];
 		double size2 = smoothgen2->pose_list_length();
 		sprintf(size,"%f",size2);

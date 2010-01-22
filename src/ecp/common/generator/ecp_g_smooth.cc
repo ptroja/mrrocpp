@@ -839,7 +839,7 @@ void smooth::generate_coords() {
 
 	trajectory_generated = true;
 	//printowanie listy coordinate
-	/*initiate_coordinate_list();
+	initiate_coordinate_list();
 	for (int m = 0; m < coordinate_list.size(); m++) {
 		printf("makrokrok: %d\t", m);
 		for (int n = 0; n < 8; n++) {
@@ -848,7 +848,7 @@ void smooth::generate_coords() {
 		printf("\n");
 		flushall();
 		coordinate_list_iterator++;
-	}*/
+	}
 	//printf("\ngenerate_cords\n");
 }
 
@@ -1003,7 +1003,12 @@ bool smooth::first_step() { //wywolywane tylko raz w calej trajektorii
     	} else {
     		the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
     	}
-        the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
+        //the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
+        the_robot->ecp_command.instruction.interpolation_type = lib::TCIM;
+        for (int i=0; i<6; i++)
+        {
+        	the_robot->ecp_command.instruction.arm.pf_def.behaviour[i] = lib::UNGUARDED_MOTION;
+        }
         break;
 
     case lib::ECP_XYZ_EULER_ZYZ:
@@ -1067,7 +1072,7 @@ bool smooth::next_step () {
     	} else {//lista pozycji pose_list nie jest skonczona wiec idziemy do nastepnego punktu
 
     		send_coordinates();
-			node_counter = 1; //TODO przestestowac, sprawdzic czy 1 czy 0
+			node_counter = 0; //TODO przestestowac, sprawdzic czy 1 czy 0
 		    next_pose_list_ptr();
 		    td.interpolation_node_no = pose_list_iterator->interpolation_node_no;
 		}
@@ -2234,7 +2239,7 @@ void smooth::optimize_time4(std::list<ecp_mp::common::smooth_trajectory_pose>::i
 	double t;
 
 	v_r = sqrt(2 * pose_list_iterator->a_r[i] * s + pose_list_iterator->v_k[i] * pose_list_iterator->v_k[i]);
-	pose_list_iterator->v_p[i] = v_r; //to jest tylko taki bajer... nie ma znaczeina bo za chwile nastepuje rekurencja
+	pose_list_iterator->v_p[i] = v_r; //niepotrzebne?
 	t = (pose_list_iterator->v_p[i] - pose_list_iterator->v_k[i])/pose_list_iterator->a_r[i];
 
 	pose_list_iterator->t = t;
