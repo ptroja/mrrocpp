@@ -107,7 +107,7 @@ int configurator::return_node_number(const std::string & node_name_l)
 
 
 // Zwraca attach point'a dla serwerow.
-std::string configurator::return_attach_point_name (config_path_type_t _type, const char* _key, const char* __section_name)
+std::string configurator::return_attach_point_name (config_path_type_t _type, const char* _key, const char* __section_name) const
 {
 	const char *_section_name = (__section_name) ? __section_name : section_name.c_str();
 	std::string name;
@@ -142,7 +142,7 @@ std::string configurator::return_attach_point_name (config_path_type_t _type, co
 
 #ifndef USE_MESSIP_SRR
 // Zwraca wartosc (char*) dla sciezki do pliku konfiguracyjnego.
-std::string configurator::return_ini_file_path()
+std::string configurator::return_ini_file_path() const
 {
 	std::string value(mrrocpp_network_path);
 	//value += "configs/";
@@ -152,7 +152,7 @@ std::string configurator::return_ini_file_path()
 }
 
 // Zwraca wartosc (char*) dla sciezki do pliku konfiguracyjnego z konfiguracja domyslna (common.ini)
-std::string configurator::return_common_ini_file_path()
+std::string configurator::return_common_ini_file_path() const
 {
 	std::string value(mrrocpp_network_path);
 	value += "configs/common.ini";
@@ -162,7 +162,7 @@ std::string configurator::return_common_ini_file_path()
 #endif
 
 // Zwraca wartosc (char*) dla sciezki do pliku konfiguracyjnego.
-std::string configurator::return_default_reader_measures_path()
+std::string configurator::return_default_reader_measures_path() const
 {
 	std::string path(mrrocpp_network_path);
 	path += "msr/";
@@ -171,13 +171,13 @@ std::string configurator::return_default_reader_measures_path()
 }
 
 // Zwraca wartosc (char*) dla sciezki do pliku konfiguracyjnego.
-std::string configurator::return_mrrocpp_network_path()
+std::string configurator::return_mrrocpp_network_path() const
 {
 	return mrrocpp_network_path;
 }
 
 // Zwraca czy dany klucz istnieje
-bool configurator::exists(const char* _key, const char* __section_name)
+bool configurator::exists(const char* _key, const char* __section_name) const
 {
 #ifdef USE_MESSIP_SRR
 	const char *_section_name = (__section_name) ? __section_name : section_name.c_str();
@@ -220,7 +220,7 @@ bool configurator::exists(const char* _key, const char* __section_name)
 }
 
 // Zwraca wartosc (char*) dla klucza.
-std::string configurator::return_string_value(const char* _key, const char*__section_name)
+std::string configurator::return_string_value(const char* _key, const char*__section_name) const
 {
 #ifdef USE_MESSIP_SRR
 	const char *_section_name = (__section_name) ? __section_name : section_name.c_str();

@@ -18,6 +18,7 @@
 
 #include <boost/thread/mutex.hpp>
 #include <boost/lexical_cast.hpp>
+#include <boost/tokenizer.hpp>
 
 #if defined(USE_MESSIP_SRR)
   #include <messip.h>
@@ -42,7 +43,7 @@ private:
 	struct utsname sysinfo;
 
 	// do ochrony wylacznosci dostepu do pliku miedzy watkami jednego procesu
-	boost::mutex file_mutex;
+	mutable boost::mutex file_mutex;
 
 	const std::string session_name; // nazwa sesji skojarzona z pojedynczym uruchomieniem aplikacji mroka
 
@@ -53,19 +54,19 @@ private:
 	std::string common_file_location;
 
 	// Zwraca wartosc (char*) dla sciezki do pliku konfiguracyjnego.
-	std::string return_ini_file_path();
+	std::string return_ini_file_path() const;
 
 	// Zwraca wartosc (char*) dla sciezki do pliku konfiguracyjnego.
-	std::string return_common_ini_file_path();
+	std::string return_common_ini_file_path() const;
 
 #endif /* USE_MESSIP_SRR */
 
 	// Zwraca wartosc (char*) dla klucza.
-	std::string return_string_value(const char* _key, const char* __section_name = NULL);
+	std::string return_string_value(const char* _key, const char* __section_name = NULL) const;
 
 public:
-	std::string return_mrrocpp_network_path();
-	std::string return_default_reader_measures_path();
+	std::string return_mrrocpp_network_path() const;
+	std::string return_default_reader_measures_path() const;
 
 	const std::string section_name;
 
@@ -94,24 +95,24 @@ public:
 		CONFIG_SERVER
 	} config_path_type_t;
 
-	std::string return_attach_point_name (config_path_type_t _type, const char* _key, const char* __section_name = NULL);
-	std::string return_attach_point_name (config_path_type_t _type, const std::string & _key, const std::string & __section_name) {
+	std::string return_attach_point_name (config_path_type_t _type, const char* _key, const char* __section_name = NULL) const;
+	std::string return_attach_point_name (config_path_type_t _type, const std::string & _key, const std::string & __section_name) const {
 		return return_attach_point_name(_type, _key.c_str(), __section_name.c_str());
 	};
 
 	template<class Type>
-	Type value(const std::string & _key, const std::string & __section_name) {
+	Type value(const std::string & _key, const std::string & __section_name) const {
 		return boost::lexical_cast<Type>(return_string_value(_key.c_str(), __section_name.c_str()));
 	};
 
 	template<class Type>
-	Type value(const std::string & _key) {
+	Type value(const std::string & _key) const {
 		return boost::lexical_cast<Type>(return_string_value(_key.c_str()));
 	};
 
 	// Zwraca czy dany klucz istnieje
-	bool exists(const char* _key, const char* __section_name = NULL);
-	bool exists(const std::string & _key, const std::string & __section_name) {
+	bool exists(const char* _key, const char* __section_name = NULL) const;
+	bool exists(const std::string & _key, const std::string & __section_name) const {
 		return exists(_key.c_str(), __section_name.c_str());
 	};
 
