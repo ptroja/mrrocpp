@@ -470,7 +470,7 @@ void ATI3084_force::get_reading(void)
 {
 }
 
-int ATI3084_force::parallel_do_send_command(const char* command)
+void ATI3084_force::parallel_do_send_command(const char* command)
 {
 	char a;
 	short value = 0;
@@ -494,17 +494,15 @@ int ATI3084_force::parallel_do_send_command(const char* command)
 			delay(1);
 		set_obf(1);
 	}
-	return 1;
 }
 
 void ATI3084_force::set_char_output(char* znak)
 {
-	short value = 0;
-	value = *znak;
+	short value = *znak;
 	set_output(value);
 }
 
-int ATI3084_force::set_output(short value)
+void ATI3084_force::set_output(short value)
 {
 	short output = 0;
 	unsigned short comp = 0x0001;
@@ -526,22 +524,19 @@ int ATI3084_force::set_output(short value)
 
 	out8(base_io_adress + LOWER_OUTPUT, lower);
 	out8(base_io_adress + UPPER_OUTPUT, upper);
-
-	return 0;
 }
 
 short get_input(void)
 {
 	short input = 0, temp_input;
 	unsigned short comp = 0x0001;
-	unsigned char lower, upper;
 	// wersja z pajaczkiem
 	// 	const unsigned char input_positions[16]={8,10,12,14,7,5,3,1,9,11,13,15,6,4,2,0};
 	// wersja z nowa plytka
 	const unsigned char input_positions[16] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 };
 
-	lower = in8(base_io_adress + LOWER_INPUT);
-	upper = in8(base_io_adress + UPPER_INPUT);
+	uint8_t lower = in8(base_io_adress + LOWER_INPUT);
+	uint8_t upper = in8(base_io_adress + UPPER_INPUT);
 
 	temp_input = lower + 256* upper ;
 
@@ -581,24 +576,24 @@ void set_ibf(unsigned char state)
 	out8(base_io_adress + CONTROL_OUTPUT, temp_register);
 }
 
-unsigned char ATI3084_force::check_ack()
+bool ATI3084_force::check_ack()
 {
-	unsigned char temp_register;
-	temp_register = in8(base_io_adress + ACK_PORT_INPUT);
+	unsigned char temp_register = in8(base_io_adress + ACK_PORT_INPUT);
+
 	if (temp_register & 0x01)
-		return 1;
+		return true;
 	else
-		return 0;
+		return false;
 }
 
-unsigned char check_stb()
+bool check_stb()
 {
 	unsigned char temp_register;
 	temp_register = in8(base_io_adress + STB_PORT_INPUT);
 	if (temp_register & 0x01)
-		return 1;
+		return true;
 	else
-		return 0;
+		return false;
 }
 
 void ATI3084_force::initiate_registers(void)
@@ -611,10 +606,10 @@ void ATI3084_force::initiate_registers(void)
 	set_ibf(0);
 }
 
-unsigned char check_intr(void)
+bool check_intr(void)
 {
-	unsigned char temp_register;
-	temp_register = in8(base_io_adress + INTER_CONFIG);
+	unsigned char temp_register = in8(base_io_adress + INTER_CONFIG);
+
 	if (temp_register & 0x80)
 		return 1;
 	else

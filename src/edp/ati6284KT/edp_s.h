@@ -146,7 +146,7 @@ double conversion_matrix[6][6] = {
 
 
 /********** klasa czujnikow po stronie VSP **************/
-class ATI3084_force : public force{
+class ATI3084_force : public force {
 
 private:
 
@@ -171,14 +171,14 @@ private:
 	int phdl; // pci handle -> fd do servera PCI
 
 	void set_char_output(char* znak);
-	int set_output(short value);
+	void set_output(short value);
 	void set_obf(unsigned char state);
 	unsigned char check_ack(void);
 	void initiate_registers(void);
 	void solve_transducer_controller_failure(void);
-	unsigned char check_intr(void);
+	bool check_intr(void);
 	void check_cs(void);
-	int parallel_do_send_command(const char* command);
+	void parallel_do_send_command(const char* command);
 
 	short do_Wait(const char* command);// by old schunk
 	short do_send_command(const char* command);
@@ -201,8 +201,8 @@ public:
 }; // end: class vsp_sensor
 
 // na zewnatrz klasy gdyz odwoluje sie do nich funkcja obslugi przerwania
-unsigned char check_intr(void);
-unsigned char check_stb(void);
+bool check_intr(void);
+bool check_stb(void);
 void clear_intr(void);
 void set_ibf(unsigned char state);
 short get_input(void);
