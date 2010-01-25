@@ -7,7 +7,7 @@ OBJECTS = ${patsubst %.c,%.o,${SOURCES}}
 HOMEDIR = ../../..
 include $(HOMEDIR)/common.mk
 
-CPPFLAGS += -I$(HOMEDIR)/include -DHAVE_CONFIG_H -I$(HOMEDIR)/src/player
+CPPFLAGS += -DHAVE_CONFIG_H -I$(HOMEDIR)/src/player
 #======================================================#	
 .PHONY: all clean install
 #------------------------------------------------- Build rules -------------------------------------------------------#
