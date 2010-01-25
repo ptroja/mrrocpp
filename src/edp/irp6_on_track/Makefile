@@ -8,9 +8,7 @@ KINEMATDIR = ${HOMEDIR}/src/kinematics
 include $(HOMEDIR)/common.mk
 
 SOURCES = ${wildcard *.cc}
-KIN_OBJECTS = ${KINEMATDIR}/irp6_on_track/kinematic_model_irp6ot_with_track.o \
-	      ${KINEMATDIR}/irp6_on_track/kinematic_model_irp6ot_with_wrist.o \
-	      ${KINEMATDIR}/irp6_on_track/kinematic_model_calibrated_irp6ot_with_wrist.o $(KINEMATDIR)/common/libkinematics.a
+KIN_OBJECTS = ${KINEMATDIR}/irp6_on_track/libkinematicsirp6ot.a $(KINEMATDIR)/common/libkinematics.a
 
 OBJECTS = ../common/edp_vsp_t.o edp_irp6ot_effector.o hi_irp6ot.o\
  int_hand_irp6ot.o sg_irp6ot.o regulator_irp6ot.o ../common/edp_irp6s_postument_track.o
