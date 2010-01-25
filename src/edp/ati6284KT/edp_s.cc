@@ -68,7 +68,7 @@ ATI6284_force::ATI6284_force(common::irp6s_postument_track_effector &_master) :
 	force(_master)
 {
 	frame_counter = 0; //licznik wyslanych pakietow
-	do_bias = 0;
+
 	sendSocket = NULL;
 	recvSocket = NULL;
 
@@ -141,9 +141,16 @@ void ATI6284_force::configure_sensor(void)
 
 		usleep(250); //250us
 
-		if (get_data_from_ethernet(recvBuffer, recvSocket, bias_data) >= 0) { //packet from board
-			//	memcpy(&counter_test, recvBuffer, 8); //64bit unsigned counter
-		}
+
+		wait_for_event();
+		bias_data[0]=force_fresh[0];
+		bias_data[1]=force_fresh[1];
+		bias_data[2]=force_fresh[2];
+		bias_data[3]=force_fresh[3];
+		bias_data[4]=force_fresh[4];
+		bias_data[5]=force_fresh[5];
+		//	memcpy(&counter_test, recvBuffer, 8); //64bit unsigned counter
+
 
 
 		if (!gravity_transformation) // nie powolano jeszcze obiektu
@@ -195,21 +202,15 @@ void ATI6284_force::wait_for_event()
 
 	        send_request(frame_counter, sendSocket);         //send request for data
 
-
 			*int_timeout = ETHERNET_FRAME_TIMEOUT; //250us
 
 			TimerTimeout(CLOCK_REALTIME, ETHERNET_FRAME_TIMEOUT, &tim_event, int_timeout, NULL);
-		//	iw_ret = InterruptWait(NULL, NULL);
-			//if (iw_ret == -1) {
 
 			// kiedy po uplynieciu okreslonego czasu nie zostanie zgloszone przerwanie
 			iw_ret = get_data_from_ethernet(recvBuffer, recvSocket, adc_data);
 			if (iw_ret >= 0){
-
-
-				convert_data(adc_data, bias_data, force_fresh);
-				//break;
-
+				;
+//				convert_data(adc_data, bias_data, force_fresh);
 			} else {
 				//send_request(frame_counter, sendSocket);         //send request for data
 				if (iter_counter > 1) {
@@ -239,36 +240,37 @@ void ATI6284_force::initiate_reading(void)
 		master.force_msr_upload(kartez_force);
 	} else {
 
-		lib::Ft_vector ft_table;
+			lib::Ft_vector ft_table;
 
 	//	 send_request(frame_counter, sendSocket);         //send request for data
 
 
-        if (get_data_from_ethernet(recvBuffer, recvSocket, adc_data) >= 0) { //packet from board
         //	memcpy(&counter_test, recvBuffer, 8); //64bit unsigned counter
 
 	        convert_data(adc_data, bias_data, force_fresh);
 
 			for (int i = 0; i < 6; ++i) {
-				kartez_force[i] = force_fresh[i];
+				ft_table[i] = force_fresh[i];
 			}
-			master.force_msr_upload(kartez_force);
-
-        }
 
 
-
-/*		// jesli pomiar byl poprawny
-		if (measure_report == COMMAND_OK) {
+		// jesli pomiar byl poprawny
+		//if (measure_report == COMMAND_OK)
+		if(true){
 			is_reading_ready = true;
 
 			// jesli ma byc wykorzytstywana biblioteka transformacji sil
 			if (master.force_tryb == 2 && gravity_transformation) {
+
+				//TODO Czy korekta jest OK dla Ethernetu??
+
 				for (int i = 0; i < 3; i++)
 					ft_table[i] /= 20;
 				//			for(int i=3;i<6;i++) ft_table[i]/=333;
 				for (int i = 3; i < 6; i++)
 					ft_table[i] /= 1000; // by Y - korekta
+
+
 				lib::Homog_matrix frame = master.return_current_frame(common::WITH_TRANSLATION);
 				// lib::Homog_matrix frame(master.force_current_end_effector_frame);
 				lib::Ft_vector output = gravity_transformation->getForce(ft_table, frame);
@@ -276,7 +278,7 @@ void ATI6284_force::initiate_reading(void)
 
 			}
 		}
-		*/
+
 	}
 }
 
