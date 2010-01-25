@@ -7,7 +7,7 @@ HOMEDIR = ../../..
 KINEMATDIR = ${HOMEDIR}/src/kinematics
 include $(HOMEDIR)/common.mk
 
-KIN_OBJECTS = ${KINEMATDIR}/conveyor/kinematic_model_conveyor.o $(KINEMATDIR)/common/libkinematics.a
+KIN_OBJECTS = ${KINEMATDIR}/conveyor/libkinematicsconveyor.a $(KINEMATDIR)/common/libkinematics.a
 
 SOURCES = ${wildcard *.cc}
 OBJECTS = ${patsubst %.cc,%.o,${SOURCES}}
