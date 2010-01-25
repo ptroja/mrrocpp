@@ -3,8 +3,9 @@
 //
 // Definicje klasy edp_ATI6284_force_sensor
 //
-// Ostatnia modyfikacja: 2005
-// Autor: yoyek
+// Ostatnia modyfikacja: styczen 2010
+// Autor: labi (Kamil Tarkowski)
+// Autor: Yoyek (Tomek Winiarski)
 // -------------------------------------------------------------------------
 
 #include "RawSocket.h"
@@ -57,22 +58,15 @@ class ATI6284_force : public force{
 
 private:
 
-	short zero;							// polozenie zerowe
-
-	int pidx; // do obslugi karty advantech pci1751
-	void* hdl; // wlasciwy uchwyt do danego urzadzenia
-	int phdl; // pci handle -> fd do servera PCI
-
 	uint64_t                frame_counter;
 	RawSocket              *sendSocket;
 	RawSocket              *recvSocket;
 
 	unsigned char 			recvBuffer[512];
-    int16_t adc_data[6];
-    int16_t bias_data[6];
-    double force_fresh[6];
-
-	short ERROR_CODE;
+	int16_t 				adc_data[6];
+	int16_t 				bias_data[6];
+	double 					force_fresh[6];
+	int						do_bias;
 
 public:
 

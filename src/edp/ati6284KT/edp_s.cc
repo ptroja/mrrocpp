@@ -68,6 +68,7 @@ ATI6284_force::ATI6284_force(common::irp6s_postument_track_effector &_master) :
 	force(_master)
 {
 	frame_counter = 0; //licznik wyslanych pakietow
+	do_bias = 0;
 	sendSocket = NULL;
 	recvSocket = NULL;
 
@@ -123,6 +124,7 @@ void ATI6284_force::configure_sensor(void)
 	//  printf("EDP Sensor configured\n");
 	sr_msg->message("EDP Sensor configured");
 
+
 	if (!(master.test_mode)) {
 
 
@@ -133,6 +135,17 @@ void ATI6284_force::configure_sensor(void)
 		// polozenie kisci bez narzedzia wzgledem bazy
 		lib::Homog_matrix frame = master.return_current_frame(common::WITH_TRANSLATION); // FORCE Transformation by Slawomir Bazant
 		// lib::Homog_matrix frame(master.force_current_end_effector_frame); // pobranie aktualnej ramki
+
+
+		send_request(frame_counter, sendSocket); //send request for data
+
+		usleep(250); //250us
+
+		if (get_data_from_ethernet(recvBuffer, recvSocket, bias_data) >= 0) { //packet from board
+			//	memcpy(&counter_test, recvBuffer, 8); //64bit unsigned counter
+		}
+
+
 		if (!gravity_transformation) // nie powolano jeszcze obiektu
 		{
 
@@ -172,7 +185,6 @@ void ATI6284_force::configure_sensor(void)
 
 void ATI6284_force::wait_for_event()
 {
-
 	int iw_ret;
 	int iter_counter = 0; // okresla ile razy pod rzad zostala uruchomiona ta metoda
 
@@ -220,7 +232,7 @@ void ATI6284_force::initiate_reading(void)
 
 		lib::Ft_vector ft_table;
 
-		 send_request(frame_counter, sendSocket);         //send request for data
+	//	 send_request(frame_counter, sendSocket);         //send request for data
 
 
         if (get_data_from_ethernet(recvBuffer, recvSocket, adc_data) >= 0) { //packet from board
@@ -263,6 +275,13 @@ void ATI6284_force::initiate_reading(void)
 void ATI6284_force::get_reading(void)
 {
 }
+/*******************************************************************/
+force* return_created_edp_force_sensor(common::irp6s_postument_track_effector &_master)
+{
+	return new ATI6284_force(_master);
+}// : return_created_sensor
+
+
 /*******************************************************************/
 void send_request(uint64_t &counter, RawSocket *sock) {
   unsigned char send_buffer[8];
@@ -315,11 +334,6 @@ int get_data_from_ethernet(unsigned char buffer[512], RawSocket *sock,
 }
 
 /*****************************  *****************************/
-
-force* return_created_edp_force_sensor(common::irp6s_postument_track_effector &_master)
-{
-	return new ATI6284_force(_master);
-}// : return_created_sensor
 
 } // namespace sensor
 } // namespace edp
