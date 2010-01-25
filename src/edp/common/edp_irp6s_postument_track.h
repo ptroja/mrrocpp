@@ -35,8 +35,6 @@ protected:
 
     void compute_frame(const lib::c_buffer &instruction); // obliczenia dla ruchu ramienia (koncowka: FRAME)
 
-
-
     // Przeksztalcenie definicji koncowki z postaci
     // FRAME do postaci XYZ_EULER_ZYZ
     // oraz przepisanie wyniku przeksztalcenia do

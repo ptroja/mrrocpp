@@ -16,10 +16,9 @@
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 
-#include "edp/common/edp_extension_thread.h"
+#include <boost/thread/thread.hpp>
 
 class effector;
-
 
 namespace mrrocpp {
 namespace edp {
