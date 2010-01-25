@@ -9,7 +9,8 @@ include $(HOMEDIR)/common.mk
 
 SOURCES = ${wildcard *.cc}
 OBJECTS = ${patsubst %.cc,%.o,${SOURCES}}
-KIN_OBJECTS = ${KINEMATDIR}/polycrank/kinematic_model_polycrank.o
+KIN_OBJECTS = ${KINEMATDIR}/polycrank/kinematic_model_polycrank.o\
+  $(KINEMATDIR)/common/libkinematics.a
 
 OBJECTS = edp_e_polycrank.o
 BINARIES  = edp_polycrank
