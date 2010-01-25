@@ -134,7 +134,7 @@ void rcsc::main_task_algorithm(void)
 				rfrg->Move();
 				break;
 			case ecp_mp::task::RCSC_GRIPPER_OPENING:
-				switch ((ecp_mp::task::RCSC_TURN_ANGLES) mp_command.ecp_next_state.mp_2_ecp_next_state_variant)
+				switch ((ecp_mp::task::RCSC_GRIPPER_OP) mp_command.ecp_next_state.mp_2_ecp_next_state_variant)
 				{
 					case ecp_mp::task::RCSC_GO_VAR_1:
 						go_st->configure(0.002, 1000);
