@@ -10,9 +10,12 @@ BINARIES = ecp_tran
 #-----------------------------------------------------------------------------------------------------------------------#
 # Should be modified only by developers not by users
 HOMEDIR = ../../..
+KINEMATDIR = ${HOMEDIR}/src/kinematics
 include $(HOMEDIR)/common.mk
 
-SHOBJ = ../common/libecp.a $(LIBDIR)/libmrrocpp.a
+
+KIN_OBJECTS = ${KINEMATDIR}/irp6_on_track/libkinematicsirp6ot.a $(KINEMATDIR)/common/libkinematics.a
+SHOBJ = ${KIN_OBJECTS} ../common/libecp.a $(LIBDIR)/libmrrocpp.a 
 #======================================================#	
 .PHONY: all clean install
 #------------------------------------------------- Build rules -------------------------------------------------------#

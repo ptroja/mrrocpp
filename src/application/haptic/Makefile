@@ -15,8 +15,10 @@ endif
 # Should be modified only by developers not by users
 HOMEDIR = ../../..
 include $(HOMEDIR)/common.mk
+KINEMATDIR = ${HOMEDIR}/src/kinematics
+KIN_OBJECTS = ${KINEMATDIR}/irp6_on_track/libkinematicsirp6ot.a $(KINEMATDIR)/common/libkinematics.a
 
-SHOBJ = ../../ecp_mp/libecp_mp.a ../../ecp_mp/ecp_mp_robot.o ../../mp/libmpmain.a ../../mp/libmprobots.a $(LIBDIR)/libmrrocpp.a
+SHOBJ = ${KIN_OBJECTS} ../../ecp_mp/libecp_mp.a ../../ecp_mp/ecp_mp_robot.o ../../mp/libmpmain.a ../../mp/libmprobots.a $(LIBDIR)/libmrrocpp.a
 #======================================================#	
 .PHONY: all clean install
 #------------------------------------------------- Build rules -------------------------------------------------------#

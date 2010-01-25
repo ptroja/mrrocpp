@@ -16,8 +16,11 @@ endif
 HOMEDIR = ../../..
 include $(HOMEDIR)/common.mk
 
+KINEMATDIR = ${HOMEDIR}/src/kinematics
+KIN_OBJECTS = ${KINEMATDIR}/irp6_on_track/libkinematicsirp6ot.a $(KINEMATDIR)/common/libkinematics.a
+
 SHOBJ = ../../ecp_mp/libecp_mp.a ../../ecp_mp/ecp_mp_robot.o ../../ecp/irp6_on_track/ecp_r_irp6ot.o ../../ecp/irp6_postument/ecp_r_irp6p.o\
- ../../ecp/irp6_mechatronika/ecp_r_irp6m.o ../../ecp/common/libecp.a $(LIBDIR)/libmrrocpp.a
+ ../../ecp/irp6_mechatronika/ecp_r_irp6m.o ${KIN_OBJECTS} ../../ecp/common/libecp.a $(LIBDIR)/libmrrocpp.a
 #======================================================#	
 .PHONY: all clean install
 #------------------------------------------------- Build rules -------------------------------------------------------#

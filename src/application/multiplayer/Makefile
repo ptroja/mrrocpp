@@ -26,7 +26,10 @@ endif
 HOMEDIR = ../../..
 include $(HOMEDIR)/common.mk
 
-SHOBJ = $(LIBDIR)/libmrrocpp.a
+KINEMATDIR = ${HOMEDIR}/src/kinematics
+KIN_OBJECTS = ${KINEMATDIR}/irp6_on_track/libkinematicsirp6ot.a $(KINEMATDIR)/common/libkinematics.a
+
+SHOBJ = ${KIN_OBJECTS} $(LIBDIR)/libmrrocpp.a
 #======================================================#	
 .PHONY: all clean install
 #------------------------------------------------- Build rules -------------------------------------------------------#

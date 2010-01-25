@@ -17,6 +17,9 @@ include	../abLfiles
 PHABOPTS= -l socket
 
 HOMEDIR = ../../../..
+KINEMATDIR = ${HOMEDIR}/src/kinematics
+KIN_OBJECTS = ${KINEMATDIR}/irp6_on_track/libkinematicsirp6ot.a $(KINEMATDIR)/common/libkinematics.a
+
 include $(HOMEDIR)/common.mk
 HEADERSDIR = $(HOMEDIR)/src
 
@@ -34,6 +37,7 @@ MRROCOBJ = \
 	$(ECP_DIR)/speaker/ecp_r_speaker.o \
 	$(ECP_DIR)/smb/ecp_r_smb.o \
 	$(ECP_DIR)/spkm/ecp_r_spkm.o \
+	${KIN_OBJECTS}\
 	$(LIBDIR)/libecp.a $(LIBDIR)/libecp_mp.a  $(LIBDIR)/libmrrocpp.a
 
 MYOBJ = ui_ecp_r_conveyor.o ui_ecp_r_speaker.o \
