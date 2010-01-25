@@ -193,16 +193,24 @@ void ATI6284_force::wait_for_event()
 		do {
 			iter_counter++;
 
+	        send_request(frame_counter, sendSocket);         //send request for data
+
+
 			*int_timeout = ETHERNET_FRAME_TIMEOUT; //250us
 
 			TimerTimeout(CLOCK_REALTIME, ETHERNET_FRAME_TIMEOUT, &tim_event, int_timeout, NULL);
-			iw_ret = InterruptWait(NULL, NULL);
-			// kiedy po uplynieciu okreslonego czasu nie zostanie zgloszone przerwanie
-			if (iw_ret == -1) {
+		//	iw_ret = InterruptWait(NULL, NULL);
+			//if (iw_ret == -1) {
 
-		          send_request(frame_counter, sendSocket);         //send request for data
+			// kiedy po uplynieciu okreslonego czasu nie zostanie zgloszone przerwanie
+
+			if (get_data_from_ethernet(recvBuffer, recvSocket, adc_data) >= 0){
+
+
+				convert_data(adc_data, bias_data, force_fresh);
 
 			} else {
+				send_request(frame_counter, sendSocket);         //send request for data
 				if (iter_counter > 1) {
 					sr_msg->message("Force / Torque sensor connection reastablished");
 				}
