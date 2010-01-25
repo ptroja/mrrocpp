@@ -9,9 +9,7 @@ include $(HOMEDIR)/common.mk
 
 SOURCES = ${wildcard *.cc}
 #OBJECTS = ${patsubst %.cc,%.o,${SOURCES}}
-KIN_OBJECTS = ${KINEMATDIR}/irp6_mechatronika/kinematic_model_irp6m_with_wrist.o \
-	      ${KINEMATDIR}/irp6_mechatronika/kinematic_model_irp6m_5dof.o\
-	      $(KINEMATDIR)/common/libkinematics.a
+KIN_OBJECTS = ${KINEMATDIR}/irp6_mechatronika/libkinematicsirp6m.a $(KINEMATDIR)/common/libkinematics.a
 
 OBJECTS = hi_irp6m.o int_hand_irp6m.o sg_irp6m.o regulator_irp6m.o edp_irp6m_effector.o
 EDPOBJS  = ${OBJECTS} ${KIN_OBJECTS}
