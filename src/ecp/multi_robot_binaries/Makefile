@@ -14,7 +14,7 @@ KINEMATDIR = ${HOMEDIR}/src/kinematics
 include $(HOMEDIR)/common.mk
 
 
-KIN_OBJECTS = ${KINEMATDIR}/irp6_on_track/libkinematicsirp6ot.a $(KINEMATDIR)/common/libkinematics.a
+KIN_OBJECTS = ${KINEMATDIR}/irp6_on_track/libkinematicsirp6ot.a ${KINEMATDIR}/irp6_postument/libkinematicsirp6p.a $(KINEMATDIR)/common/libkinematics.a
 SHOBJ = ${KIN_OBJECTS} ../common/libecp.a $(LIBDIR)/libmrrocpp.a 
 #======================================================#	
 .PHONY: all clean install

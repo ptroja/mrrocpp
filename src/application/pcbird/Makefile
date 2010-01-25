@@ -17,7 +17,7 @@ HOMEDIR = ../../..
 include $(HOMEDIR)/common.mk
 
 KINEMATDIR = ${HOMEDIR}/src/kinematics
-KIN_OBJECTS = ${KINEMATDIR}/irp6_on_track/libkinematicsirp6ot.a $(KINEMATDIR)/common/libkinematics.a
+KIN_OBJECTS = ${KINEMATDIR}/irp6_on_track/libkinematicsirp6ot.a ${KINEMATDIR}/irp6_postument/libkinematicsirp6p.a $(KINEMATDIR)/common/libkinematics.a
 
 SHOBJ = ../../ecp/irp6_on_track/ecp_r_irp6ot.o ../../ecp/irp6_postument/ecp_r_irp6p.o ${KIN_OBJECTS} ../../ecp/common/libecp.a $(LIBDIR)/libmrrocpp.a
 #======================================================#	

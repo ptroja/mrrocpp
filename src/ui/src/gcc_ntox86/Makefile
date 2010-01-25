@@ -18,7 +18,7 @@ PHABOPTS= -l socket
 
 HOMEDIR = ../../../..
 KINEMATDIR = ${HOMEDIR}/src/kinematics
-KIN_OBJECTS = ${KINEMATDIR}/irp6_on_track/libkinematicsirp6ot.a $(KINEMATDIR)/common/libkinematics.a
+KIN_OBJECTS = ${KINEMATDIR}/irp6_on_track/libkinematicsirp6ot.a ${KINEMATDIR}/irp6_postument/libkinematicsirp6p.a $(KINEMATDIR)/common/libkinematics.a
 
 include $(HOMEDIR)/common.mk
 HEADERSDIR = $(HOMEDIR)/src
