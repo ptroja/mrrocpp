@@ -13,7 +13,7 @@ namespace mrrocpp {
 namespace edp {
 namespace sensor {
 
-class ATI6284_force : public force{
+class ATI6284_force : public force {
 
 private:
 	unsigned  uCount;      //!<  zmienna indeksuj�ca

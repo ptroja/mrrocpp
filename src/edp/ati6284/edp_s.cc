@@ -35,11 +35,7 @@ namespace sensor {
 #define START_TO_READ_FAILURE 0.002
 
 static struct sigevent hi_event;
-struct sigevent ati6284event;
-intrspin_t* spinlock; //!< ochrona sekcji kytycznych pomiedzy przerwaniem a watkiem
-
-
-short int przerwanie;
+static struct sigevent ati6284event;
 
 iBus* bus;
 tSTC *theSTC;
@@ -115,7 +111,6 @@ void ATI6284_force::connect_to_hardware(void)
 			last_correct[i] = 0;
 		overload = 0;
 		show_no_result = 0;
-		przerwanie = 0;
 
 		//!< create Calibration struct
 		cal = createCalibration(calfilepath.c_str(), index);
@@ -125,7 +120,6 @@ void ATI6284_force::connect_to_hardware(void)
 
 		if (ThreadCtl(_NTO_TCTL_IO, NULL) == -1) //!< dostep do sprzetu
 			printf("Unable to connect to card\n");
-		spinlock = new intrspin_t;
 
 		bus = acquireBoard(0x10932CA0); //!< funkcja uruchamiaj�ca kart�
 

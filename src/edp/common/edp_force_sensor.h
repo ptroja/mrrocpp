@@ -60,6 +60,8 @@ class force: public lib::sensor, public common::edp_extension_thread
 		common::irp6s_postument_track_effector &master;
 		force(common::irp6s_postument_track_effector &_master);
 
+		~force();
+
 		virtual void wait_for_event(void) = 0; // oczekiwanie na zdarzenie
 		void set_force_tool(void);
 

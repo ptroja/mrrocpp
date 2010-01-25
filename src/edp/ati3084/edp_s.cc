@@ -62,16 +62,11 @@ static struct mds_data
 } mds;
 
 static uint64_t int_timeout;// by Y
-struct sigevent tim_event;
-static intrspin_t spinlock;
 
-// short schunk_ms[7];
+static struct pci_dev_info info;// do karty advantech 1751pci
+static uintptr_t base_io_adress; // do obslugi karty advantech pci1751
 
-struct pci_dev_info info;// do karty advantech 1751pci
-uintptr_t base_io_adress; // do obslugi karty advantech pci1751
-
-unsigned int ms_nr = 0;// numer odczytu z czujnika
-unsigned int int_attached = 0;// informacja o tym, czy obsluga przerwanie jestjuz przypisana
+//unsigned int ms_nr = 0;// numer odczytu z czujnika
 
 struct timespec start[9];
 
@@ -79,7 +74,6 @@ struct timespec start[9];
 
 const struct sigevent * schunk_int_handler(void *arg, int sint_id)
 {
-
 	struct timespec rqtp;
 	rqtp.tv_sec = 0;
 	rqtp.tv_nsec = INTR_NS_DELAY;
@@ -125,9 +119,8 @@ const struct sigevent * schunk_int_handler(void *arg, int sint_id)
 
 // Rejstracja procesu VSP
 ATI3084_force::ATI3084_force(common::irp6s_postument_track_effector &_master) :
-	force(_master)
+	force(_master), int_attached(0)
 {
-
 }
 
 void ATI3084_force::connect_to_hardware(void)
@@ -214,7 +207,6 @@ void ATI3084_force::connect_to_hardware(void)
 				break;
 		}
 
-		InterruptLock(&spinlock);
 		//InterruptEnable();
 
 		out8(LCREG, 0x80); /* DLAB=1 */
@@ -240,7 +232,7 @@ void ATI3084_force::connect_to_hardware(void)
 		delay(1);
 		out8(FCREG, 0x81); /*program fifo*/
 		delay(1);
-		InterruptUnlock(&spinlock);
+
 		//InterruptDisable();
 		/* interrupts are enabled */
 

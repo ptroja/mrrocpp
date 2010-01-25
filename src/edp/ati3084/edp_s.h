@@ -118,9 +118,10 @@ namespace sensor {
 
 
 /********** klasa czujnikow po stronie VSP **************/
-class ATI3084_force : public force{
+class ATI3084_force : public force {
 
 private:
+	unsigned int int_attached;// informacja o tym, czy obsluga przerwanie jest juz przypisana
 
 	// Z PLIKU cz_lib.h
 	int LSREG;
@@ -135,8 +136,6 @@ private:
 	int INT_NUM;
 	int NOT_IRQ;
 	// KONIEC Z PLIKU
-
-	short zero;							// polozenie zerowe
 
 	int pidx; // do obslugi karty advantech pci1751
 	void* hdl; // wlasciwy uchwyt do danego urzadzenia
@@ -156,6 +155,8 @@ private:
 	short do_init(void);
 
 	short ERROR_CODE;
+
+	struct sigevent tim_event;
 
 public:
 

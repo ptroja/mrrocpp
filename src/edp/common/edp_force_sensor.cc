@@ -147,7 +147,7 @@ void * force::thread_main_loop(void *arg)
 } //!< end MAIN
 
 force::force(common::irp6s_postument_track_effector &_master) :
-	edp_extension_thread(_master), new_edp_command(false), master(_master)
+	edp_extension_thread(_master), new_edp_command(false), master(_master), gravity_transformation(NULL)
 {
 	gravity_transformation = NULL;
 	is_sensor_configured = false; //!< czujnik niezainicjowany
@@ -162,14 +162,21 @@ force::force(common::irp6s_postument_track_effector &_master) :
 	sem_init(&new_ms_for_edp, 0, 0);
 
 	/*!Lokalizacja procesu wywietlania komunikatow SR */
-	sr_msg
-			= new lib::sr_vsp(lib::EDP, master.config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "edp_vsp_attach_point").c_str(), master.config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", UI_SECTION).c_str(), true, getprio(0)
-					- 1);
+	sr_msg = new lib::sr_vsp(lib::EDP,
+			master.config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "edp_vsp_attach_point"),
+			master.config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", UI_SECTION),
+			true, getprio(0) - 1);
+}
+
+force::~force()
+{
+	delete sr_msg;
+	sem_destroy(&new_ms);
+	sem_destroy(&new_ms_for_edp);
 }
 
 void force::set_force_tool(void)
 {
-
 	lib::K_vector gravity_arm_in_sensor(next_force_tool_position);
 	lib::Homog_matrix frame = master.return_current_frame(common::WITH_TRANSLATION);
 	gravity_transformation->defineTool(frame, next_force_tool_weight, gravity_arm_in_sensor);
