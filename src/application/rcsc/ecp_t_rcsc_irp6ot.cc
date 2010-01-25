@@ -31,8 +31,7 @@ rcsc::rcsc(lib::configurator &_config) :
 	rfrg = new common::generator::tff_rubik_face_rotate(*this, 8);
 	tig = new common::generator::teach_in(*this);
 	befg = new common::generator::bias_edp_force(*this);
-	//sg = new common::generator::smooth(*this, true);
-	sg2 = new common::generator::smooth(*this, true);
+	sg = new common::generator::smooth(*this, true);
 	wmg = new common::generator::weight_meassure(*this, 1);
 
 	go_st = new common::task::ecp_sub_task_gripper_opening(*this);
@@ -50,7 +49,7 @@ rcsc::~rcsc()
 	delete tig;
 	delete befg;
 	//delete sg;
-	delete sg2;
+	delete sg;
 	delete wmg;
 	delete go_st;
 }
@@ -160,24 +159,26 @@ void rcsc::main_task_algorithm(void)
 				tig->Move();
 				break;
 			}
-			case ecp_mp::task::ECP_GEN_smooth: {
+			case ecp_mp::task::ECP_GEN_SMOOTH: {
 				std::string path(mrrocpp_network_path);
 				path += mp_command.ecp_next_state.mp_2_ecp_next_state_string;
 
-				sg2->load_file_with_path(path.c_str());
-				//				printf("\nTRACK ECP_GEN_smooth :%s\n\n", path1);
-				sg2->Move();
-				break;
-			}
-/*			case ecp_mp::task::ECP_GEN_SMOOTH: {
-				std::string path(mrrocpp_network_path);
-				path += mp_command.ecp_next_state.mp_2_ecp_next_state_string;
+				switch ((ecp_mp::task::SMOOTH_MOTION_TYPE) mp_command.ecp_next_state.mp_2_ecp_next_state_variant)
+				{
+					case ecp_mp::task::RELATIVE:
+						sg->set_relative();
+						break;
+					case ecp_mp::task::ABSOLUTE:
+						sg->set_absolute();
+						break;
+					default:
+						break;
+				}
 
 				sg->load_file_with_path(path.c_str());
-				//				printf("\nTRACK ECP_GEN_SMOOTH :%s\n\n", path1);
 				sg->Move();
 				break;
-			}*/
+			}
 			default:
 				break;
 		}

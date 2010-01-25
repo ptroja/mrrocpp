@@ -170,7 +170,7 @@ bool ecp_vis_ib_eih_follower_irp6ot::next_step_without_constraints() {
 			v_max[i] = v_max[i] - ((z_s * z_s) * 0.0005 * (u_param * 0.01));//TODO ta funkcje trzeba przerobic... (delikatnie mowiac)*/
 
 
-			v_max[i] = v_max[i] * ((s_z-(z_s*0.001))/s_z);//regulator p
+			v_max[i] = v_max[i] * ((s_z-(z_s*0.001))/s_z);//regulator
 
 			if (v_max[i] < v_min[i]) {
 				v_max[i] = v_min[i];

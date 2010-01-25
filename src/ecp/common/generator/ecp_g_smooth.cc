@@ -869,18 +869,6 @@ void smooth::send_coordinates() {
 
 		case lib::ECP_XYZ_EULER_ZYZ:
 
-
-
-
-/*		homog_matrix.set_from_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame);
-			homog_matrix.get_xyz_euler_zyz(tmp_euler_vector);
-
-			tmp_euler_vector.to_table(coordinate_list_iterator->coordinate);
-*/
-
-
-
-
 			homog_matrix.set_from_xyz_euler_zyz(lib::Xyz_Euler_Zyz_vector(coordinate_list_iterator->coordinate));
 			homog_matrix.get_frame_tab(the_robot->ecp_command.instruction.arm.pf_def.arm_frame);
 
@@ -1003,12 +991,12 @@ bool smooth::first_step() { //wywolywane tylko raz w calej trajektorii
     	} else {
     		the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
     	}
-        //the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-        the_robot->ecp_command.instruction.interpolation_type = lib::TCIM;
+        the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
+        /*the_robot->ecp_command.instruction.interpolation_type = lib::TCIM;
         for (int i=0; i<6; i++)
         {
         	the_robot->ecp_command.instruction.arm.pf_def.behaviour[i] = lib::UNGUARDED_MOTION;
-        }
+        }*/
         break;
 
     case lib::ECP_XYZ_EULER_ZYZ:
@@ -1065,6 +1053,7 @@ bool smooth::next_step () {
     if (node_counter == pose_list_iterator->interpolation_node_no) {//czy poprzedni makrokrok byl ostatnim
 
     	if(is_last_list_element()) { //ostatni punkt (koniec listy pozycji pose_list)
+    		//if (coordinate_list_itarator)
     		send_coordinates();
     		reset();
     		return false;

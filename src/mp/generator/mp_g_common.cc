@@ -252,7 +252,7 @@ tight_coop::tight_coop(task::task& _mp_task, lib::trajectory_description irp6ot_
 
 bool tight_coop::first_step ()
 {
-	/*
+
     // Generacja trajektorii prostoliniowej o zadany przyrost polozenia i orientacji
     // Funkcja zwraca false gdy koniec generacji trajektorii
     // Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
@@ -265,15 +265,15 @@ bool tight_coop::first_step ()
     	robot_node.second->mp_command.instruction.instruction_type = lib::GET;
     	robot_node.second->mp_command.instruction.get_type = ARM_DV;
     	robot_node.second->mp_command.instruction.set_type = ARM_DV;
-    	robot_node.second->mp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
-    	robot_node.second->mp_command.instruction.get_arm_type = lib::XYZ_EULER_ZYZ;
+    	//robot_node.second->mp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
+    	//robot_node.second->mp_command.instruction.get_arm_type = lib::XYZ_EULER_ZYZ;
     	robot_node.second->mp_command.instruction.motion_type = lib::ABSOLUTE;
     	robot_node.second->mp_command.instruction.interpolation_type = lib::MIM;
     	robot_node.second->mp_command.instruction.motion_steps = irp6ot_td.internode_step_no;
     	robot_node.second->mp_command.instruction.value_in_step_no = irp6ot_td.value_in_step_no;
     	robot_node.second->communicate = true;
     }
-    */
+
 
     return true;
 }
