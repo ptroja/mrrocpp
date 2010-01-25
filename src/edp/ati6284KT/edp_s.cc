@@ -75,7 +75,6 @@ ATI6284_force::ATI6284_force(common::irp6s_postument_track_effector &_master) :
 	for(int i = 0;i<6;++i){
 		adc_data[i]=0;
 		bias_data[i]=0;
-		force_fresh[i] = 0.0f;
 	}
 
 }
@@ -143,14 +142,12 @@ void ATI6284_force::configure_sensor(void)
 
 
 		wait_for_event();
-		bias_data[0]=force_fresh[0];
-		bias_data[1]=force_fresh[1];
-		bias_data[2]=force_fresh[2];
-		bias_data[3]=force_fresh[3];
-		bias_data[4]=force_fresh[4];
-		bias_data[5]=force_fresh[5];
-		//	memcpy(&counter_test, recvBuffer, 8); //64bit unsigned counter
-
+		bias_data[0]=adc_data[0];
+		bias_data[1]=adc_data[1];
+		bias_data[2]=adc_data[2];
+		bias_data[3]=adc_data[3];
+		bias_data[4]=adc_data[4];
+		bias_data[5]=adc_data[5];
 
 
 		if (!gravity_transformation) // nie powolano jeszcze obiektu
@@ -208,11 +205,7 @@ void ATI6284_force::wait_for_event()
 
 			// kiedy po uplynieciu okreslonego czasu nie zostanie zgloszone przerwanie
 			iw_ret = get_data_from_ethernet(recvBuffer, recvSocket, adc_data);
-			if (iw_ret >= 0){
-				;
-//				convert_data(adc_data, bias_data, force_fresh);
-			} else {
-				//send_request(frame_counter, sendSocket);         //send request for data
+			if (iw_ret < 0){ //error
 				if (iter_counter > 1) {
 					sr_msg->message("Force / Torque sensor connection reastablished");
 				}
@@ -228,6 +221,7 @@ void ATI6284_force::wait_for_event()
 void ATI6284_force::initiate_reading(void)
 {
 	lib::Ft_vector kartez_force;
+    double force_fresh[6] = { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f };
 	short measure_report;
 
 	if (!is_sensor_configured)
@@ -242,11 +236,6 @@ void ATI6284_force::initiate_reading(void)
 
 			lib::Ft_vector ft_table;
 
-	//	 send_request(frame_counter, sendSocket);         //send request for data
-
-
-        //	memcpy(&counter_test, recvBuffer, 8); //64bit unsigned counter
-
 	        convert_data(adc_data, bias_data, force_fresh);
 
 			for (int i = 0; i < 6; ++i) {
@@ -254,21 +243,13 @@ void ATI6284_force::initiate_reading(void)
 			}
 
 
-		// jesli pomiar byl poprawny
+		// jesli pomiar byl poprawny?? zawsze jest
 		//if (measure_report == COMMAND_OK)
 		if(true){
 			is_reading_ready = true;
 
 			// jesli ma byc wykorzytstywana biblioteka transformacji sil
 			if (master.force_tryb == 2 && gravity_transformation) {
-
-				//TODO Czy korekta jest OK dla Ethernetu??
-
-				for (int i = 0; i < 3; i++)
-					ft_table[i] /= 20;
-				//			for(int i=3;i<6;i++) ft_table[i]/=333;
-				for (int i = 3; i < 6; i++)
-					ft_table[i] /= 1000; // by Y - korekta
 
 
 				lib::Homog_matrix frame = master.return_current_frame(common::WITH_TRANSLATION);

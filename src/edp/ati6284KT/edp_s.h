@@ -65,7 +65,6 @@ private:
 	unsigned char 			recvBuffer[512];
 	int16_t 				adc_data[6];
 	int16_t 				bias_data[6];
-	double 					force_fresh[6];
 
 public:
 
