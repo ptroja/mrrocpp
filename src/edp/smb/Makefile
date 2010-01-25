@@ -9,8 +9,7 @@ include $(HOMEDIR)/common.mk
 
 SOURCES = ${wildcard *.cc}
 #OBJECTS = ${patsubst %.cc,%.o,${SOURCES}}
-KIN_OBJECTS = ${KINEMATDIR}/smb/kinematic_model_smb.o\
-	$(KINEMATDIR)/common/libkinematics.a
+KIN_OBJECTS = ${KINEMATDIR}/smb/libkinematicssmb.a $(KINEMATDIR)/common/libkinematics.a
 
 OBJECTS = edp_e_smb.o
 EDPOBJS  = ${OBJECTS} ${KIN_OBJECTS}

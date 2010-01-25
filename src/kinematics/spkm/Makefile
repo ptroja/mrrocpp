@@ -8,7 +8,10 @@ HOMEDIR = ../../..
 include $(HOMEDIR)/common.mk
 .PHONY: all clean install
 #------------------------------------------------- Build rules -------------------------------------------------------#
-all: ${OBJECTS}
+all: libkinematicsspkm.a
+
+libkinematicsspkm.a: $(OBJECTS)
+	$(AR) $(ARFLAGS) $@ $?
 
 #-----------------------------------------------------------------------------------------------------------------------#
 
