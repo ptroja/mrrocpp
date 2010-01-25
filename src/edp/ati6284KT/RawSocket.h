@@ -9,6 +9,8 @@
 #include <net/bpf.h>
 
 
+namespace mrrocpp {
+namespace edp {
 namespace sensor {
 
   class RawSocket {
@@ -31,4 +33,6 @@ namespace sensor {
 //    ~RawSocket(){*this = NULL;};
   };
 
-}
+} // namespace sensor
+} // namespace edp
+} // namespace mrrocpp

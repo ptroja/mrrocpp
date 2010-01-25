@@ -15,6 +15,8 @@
 #include <iostream>
 */
 
+namespace mrrocpp {
+namespace edp {
 namespace sensor {
 
   static const uint8_t dummyMac[] = { 0, 0, 0, 0, 0, 0 };
@@ -139,5 +141,6 @@ namespace sensor {
     return size;
   }
 
-
-}
+} // namespace sensor
+} // namespace edp
+} // namespace mrrocpp

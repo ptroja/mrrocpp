@@ -19,8 +19,8 @@ include $(HOMEDIR)/common.mk
 all: ${LIBS}
 #-----------------------------------------------------------------------------------------------------------------------#
 
-ati6284KT.o: RawSocket.o edp_s.cc
-	$(CXX) -c user_flags -l socket -I$(HOMEDIR)/include -o $@ $<
+edp_s.o: edp_s.cc
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lsocket -c -o $@ $<
 
 
 ati6284KT.a: $(EDPOBJS)

@@ -4,7 +4,8 @@
 //            Virtual Sensor Process (lib::VSP) - methods for Schunk force/torgue sensor
 // Metody klasy VSP
 //
-// Ostatnia modyfikacja: grudzie 2004
+// Ostatnia modyfikacja: styczen 2010
+// Autor: labi (Kamil Tarkowski)
 // Autor: Yoyek (Tomek Winiarski)
 // na podstawie szablonu vsp Tomka Kornuty i programu obslugi czujnika Artura Zarzyckiego
 // -------------------------------------------------------------------------
@@ -39,7 +40,7 @@
 #include "lib/com_buf.h"
 
 #include "lib/srlib.h"
-#include "edp/ati3084/edp_s.h"
+#include "edp_s.h"
 
 // Konfigurator
 #include "lib/configurator.h"
@@ -48,249 +49,84 @@ namespace mrrocpp {
 namespace edp {
 namespace sensor {
 
-#define MDS_DATA_RANGE 20
 
 int sint_id;
 struct sigevent sevent;
 
-// aaa = master.config.value<double>("x_axis");
-
-
-struct mds_data
-{
-	int intr_mode;
-	int byte_counter;
-	int is_received;
-	short data[MDS_DATA_RANGE];
-} mds;
-
-static uint64_t int_timeout;// by Y
+uint64_t *int_timeout;// by Y
 struct sigevent tim_event;
-static intrspin_t spinlock;
 
-// short schunk_ms[7];
-
-struct pci_dev_info info;// do karty advantech 1751pci
-uintptr_t base_io_adress; // do obslugi karty advantech pci1751
-
-unsigned int ms_nr = 0;// numer odczytu z czujnika
-unsigned int int_attached = 0;// informacja o tym, czy obsluga przerwanie jestjuz przypisana
 
 struct timespec start[9];
 
 // #pragma off(check_stack);
 
-const struct sigevent * schunk_int_handler(void *arg, int sint_id)
-{
-
-	struct timespec rqtp;
-	rqtp.tv_sec = 0;
-	rqtp.tv_nsec = INTR_NS_DELAY;
-
-	InterruptMask(info.Irq, sint_id);
-
-	if (!check_intr()) {
-		// przyczyna przerwania inna niz sygnal stb z karty advantech
-		InterruptUnmask(info.Irq, sint_id);
-		return NULL;
-	} else {
-		clear_intr();
-		set_ibf(1);
-		if (mds.intr_mode == 0) {
-			if (mds.is_received == 1) {
-				mds.byte_counter = -1;
-				mds.is_received = 0;
-			}
-			if ((mds.byte_counter) < (MDS_DATA_RANGE - 1)) {
-				mds.data[++mds.byte_counter] = get_input();
-			}
-			nanospin(&rqtp);
-
-			set_ibf(0);
-			InterruptUnmask(info.Irq, sint_id);
-			return (&sevent);
-		} else {
-			mds.data[mds.byte_counter] = get_input();
-			nanospin(&rqtp);
-
-			set_ibf(0);
-			InterruptUnmask(info.Irq, sint_id);
-			if (++mds.byte_counter >= 7) {
-				mds.byte_counter = 0;
-				return (&sevent);
-			}
-			return (NULL);
-		}
-	}
-}
-
 // #pragma on(check_stack);
 
 // Rejstracja procesu VSP
-ATI3084_force::ATI3084_force(common::irp6s_postument_track_effector &_master) :
+ATI6284_force::ATI6284_force(common::irp6s_postument_track_effector &_master) :
 	force(_master)
 {
+	frame_counter = 0; //licznik wyslanych pakietow
+	sendSocket = NULL;
+	recvSocket = NULL;
+
+	for(int i = 0;i<6;++i){
+		adc_data[i]=0;
+		bias_data[i]=0;
+		force_fresh[i] = 0.0f;
+	}
 
 }
 
-void ATI3084_force::connect_to_hardware(void)
+void ATI6284_force::connect_to_hardware(void)
 {
 	if (!(master.test_mode)) {
 		// 	printf("Konstruktor VSP!\n");
 
 		ThreadCtl(_NTO_TCTL_IO, NULL); // nadanie odpowiednich uprawnien watkowi
-		// 	printf("KONTRUKTOR EDP_S POCATEK\n");
 
-		// ZMIENNE POMOCNICZE
-		int_timeout = SCHUNK_INTR_TIMEOUT_HIGH;// by Y
+        tim_event.sigev_notify = SIGEV_UNBLOCK;// by Y
+        int_timeout = new (uint64_t);
 
-		tim_event.sigev_notify = SIGEV_UNBLOCK;// by Y
 
-		// PODLACZENIE DO PCI, INICJACJA KARTY ADVANTECH I OBSLUGI PRZERWANIA
-
-		phdl = pci_attach(0);
-		if (phdl == -1) {
-			fprintf(stderr, "Unable to initialize PCI\n");
-
-			// 	return EXIT_FAILURE;
-		}
-		// 	printf("po pci_attach_device\n");
 		delay(100);
-		/* Initialize the pci_dev_info structure */
-		memset(&info, 0, sizeof(info));
-		pidx = 0x0;
-		info.VendorId = 0x13fe;
-		info.DeviceId = 0x1751;
 
-		hdl = pci_attach_device(NULL, PCI_INIT_ALL, pidx, &info);
-		if (hdl == NULL) {
-			fprintf(stderr, "Unable to locate Advantech 1751\n");
-		} else {
-			// 	printf("connected to Advantech 1751\n");
-			delay(100);
-			// printf("Przerwanie numer: %d\n",info.Irq);
-			base_io_adress = mmap_device_io(info.BaseAddressSize[2], PCI_IO_ADDR(info.CpuBaseAddress[2]));
-			// 	printf("base: %d\n",base_io_adress);
+		//inicjalizacja
+		try{
+		    sendSocket = new RawSocket("en1", TARGET_ETHERNET_ADDRESS);
+		    recvSocket = new RawSocket("en1");
 
-			initiate_registers();// konfiguracja karty
+		} catch(std::exception & e) {
+			  throw runtime_error("Could not open device");
+		  }
 
-			memset(&sevent, 0, sizeof(sevent));// obsluga przerwania
-			sevent.sigev_notify = SIGEV_INTR;
-
-			mds.intr_mode = 0; // obsluga przerwania ustawiona na odbior pojedynczych slow
-			mds.byte_counter = 0;
-			mds.is_received = 0;
-
-			if ((sint_id = InterruptAttach(info.Irq, schunk_int_handler, (void *) &mds, sizeof(mds), 0)) == -1)
-				printf("Unable to attach interrupt handler: \n");
-		}
-
-		// USTAWIENIE ZLACZA SZEREGOWEGO
-
-		switch (COM_NR)
-		{
-			case 1:
-				LSREG = 0x3FD; /* Line Status Register */
-				LCREG = 0x3FB; /* Line Control Register */
-				IEREG = 0x3F9; /* Interrupt Enable Register */
-				MCREG = 0x3FC; /* Modem Control Register */
-				TxBUF = 0x3F8; /* Transmit Buffer */
-				RxBUF = 0x3F8; /* Receive Buffer */
-				DIVLSB = 0x3F8; /* Divisor Least Sign. Byte */
-				DIVMSB = 0x3F9; /* Divisor Most Sign. Byte */
-				FCREG = 0x3FA; /* FIFO Control Register */
-				INT_NUM = 4;
-				NOT_IRQ = 0xEF; /* IRQ4 */
-				break;
-			case 2:
-				LSREG = 0x2FD;
-				LCREG = 0x2FB;
-				IEREG = 0x2F9;
-				MCREG = 0x2FC;
-				TxBUF = 0x2F8;
-				RxBUF = 0x2F8;
-				DIVLSB = 0x2F8;
-				DIVMSB = 0x2F9;
-				FCREG = 0x2FA; /* FIFO Control Register */
-				INT_NUM = 3;
-				NOT_IRQ = 0xF7; /* IRQ3 */
-				break;
-		}
-
-		InterruptLock(&spinlock);
-		//InterruptEnable();
-
-		out8(LCREG, 0x80); /* DLAB=1 */
-		delay(1);
-		// out8 ( DIVLSB, 12 );	/* divisor=12, speed=9600 bytes/sec */
-		// out8 ( DIVLSB, 6 );	/* divisor=6, speed=18200 bytes/sec */
-		out8(DIVLSB, 3); /* divisor=3, speed=38400 bytes/sec */
-		delay(1);
-		out8(DIVMSB, 0);
-		delay(1);
-		out8(LCREG, 3); /* DLAB=0, 8 bits, 1 stop bit, NoParity */
-		delay(1);
-
-		while ((in8(LSREG)) & 0x01)
-			(void) in8(RxBUF); /* initial reading from Receiver Buffer */
-
-		delay(1);
-		out8(IEREG, 0x01); /* enable Data Available Interrupt */
-		delay(1);
-		out8(MCREG, 0x08); /* enable interrupts */
-		delay(1);
-		out8(PICMASK, in8(PICMASK) & NOT_IRQ); /* interrupt number INT_NUM is unmasked */
-		delay(1);
-		out8(FCREG, 0x81); /*program fifo*/
-		delay(1);
-		InterruptUnlock(&spinlock);
-		//InterruptDisable();
-		/* interrupts are enabled */
-
-		do_init(); // komunikacja wstepna
 	}
 
 }
 
-ATI3084_force::~ATI3084_force(void)
+ATI6284_force::~ATI6284_force(void)
 {
 	if (!(master.test_mode)) {
-		pci_detach_device(hdl); // odlacza driver od danego urzadzenia na PCI
-		pci_detach(phdl); // Disconnect from the PCI server
+		delete recvSocket;
+		delete sendSocket;
 	}
 	if (gravity_transformation)
 		delete gravity_transformation;
-	printf("Destruktor edp_ATI3084_force_sensor\n");
+	printf("Destruktor edp_ATI6284_force_sensor\n");
 }
 
 /**************************** inicjacja czujnika ****************************/
-void ATI3084_force::configure_sensor(void)
+void ATI6284_force::configure_sensor(void)
 {// by Y
 	is_sensor_configured = true;
 	//  printf("EDP Sensor configured\n");
 	sr_msg->message("EDP Sensor configured");
+
 	if (!(master.test_mode)) {
-		mds.intr_mode = 0;
 
-#ifdef SERIAL
 
-		if (do_send_command(SB) == -1)
-			printf("Blad wyslania polecenia SB\n");
-		do_Wait("SB");
-#endif
-
-#ifdef PARALLEL
-
-		parallel_do_send_command(SB);
-		do_Wait("SB");
-		do_Wait("SB");
-
-#endif
 	}
-	mds.intr_mode = 1; // przywrocenie do 7 bajtowego trybu odbiotu danych
-	mds.byte_counter = 0;
-	// cout << "Przed konf" << endl;
-	// jesli ma byc wykorzytstywana biblioteka transformacji sil
 	if (master.force_tryb == 2) {
 		// synchronize gravity transformation
 		//		printf("master.force_tryb == 2\n");
@@ -326,7 +162,7 @@ void ATI3084_force::configure_sensor(void)
 			//		master.config.value<double>("y_axis_arm"), master.config.return_double_value("z_axis_arm") };
 			lib::K_vector pointofgravity(point);
 			gravity_transformation
-					= new lib::ForceTrans(lib::FORCE_SENSOR_ATI3084, frame, sensor_frame, weight, pointofgravity);
+					= new lib::ForceTrans(lib::FORCE_SENSOR_ATI6284, frame, sensor_frame, weight, pointofgravity);
 
 		} else {
 			gravity_transformation->synchro(frame);
@@ -334,7 +170,7 @@ void ATI3084_force::configure_sensor(void)
 	}
 }
 
-void ATI3084_force::wait_for_event()
+void ATI6284_force::wait_for_event()
 {
 
 	int iw_ret;
@@ -342,49 +178,18 @@ void ATI3084_force::wait_for_event()
 
 	if (!(master.test_mode)) {
 
-		if (!(int_attached)) {
-			int_attached++;
-			mds.intr_mode = 1; // obsluga przerwania ustawiona na odbior 7 slow
-		}
-
 		do {
 			iter_counter++;
 
-			mds.byte_counter = 0;// zabezpieczenie przed niektorymi bledami pomiarow - sprawdzone dziala ;)
+			*int_timeout = ETHERNET_FRAME_TIMEOUT; //250us
 
-#ifdef SERIAL
-
-			if (do_send_command(SGET1) == -1)
-				printf("blad w send_command(sget1)\n");
-#endif
-
-#ifdef PARALLEL
-
-			parallel_do_send_command(SGET1);
-
-#endif
-
-			mds.intr_mode = 1; // przywrocenie do 7 bajtowego trybu odbiotu danych
-			mds.byte_counter = 0;
-			int_timeout = SCHUNK_INTR_TIMEOUT_LOW;// by Y
-			TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_INTR, &tim_event, &int_timeout, NULL);
+			TimerTimeout(CLOCK_REALTIME, ETHERNET_FRAME_TIMEOUT, &tim_event, int_timeout, NULL);
 			iw_ret = InterruptWait(NULL, NULL);
 			// kiedy po uplynieciu okreslonego czasu nie zostanie zgloszone przerwanie
 			if (iw_ret == -1) {
-				if (iter_counter == 1) {
-					sr_msg->message(lib::NON_FATAL_ERROR, "Force / Torque read error - check sensor controller");
-				}
-				if (iter_counter % 10 == 0) // raz na 10
-				{
 
-					solve_transducer_controller_failure(); // na wypadek bledu kontrolera
+		          send_request(frame_counter, sendSocket);         //send request for data
 
-				}
-				usleep(10000); // aby nadmiernie nie obciazac procesora
-				mds.intr_mode = 0; // obsluga przerwania ustawiona na odbior pojedynczych slow
-				mds.byte_counter = 0;
-				mds.is_received = 0;
-				do_init(); // komunikacja wstepna
 			} else {
 				if (iter_counter > 1) {
 					sr_msg->message("Force / Torque sensor connection reastablished");
@@ -398,7 +203,7 @@ void ATI3084_force::wait_for_event()
 }
 
 /*************************** inicjacja odczytu ******************************/
-void ATI3084_force::initiate_reading(void)
+void ATI6284_force::initiate_reading(void)
 {
 	lib::Ft_vector kartez_force;
 	short measure_report;
@@ -414,14 +219,25 @@ void ATI3084_force::initiate_reading(void)
 	} else {
 
 		lib::Ft_vector ft_table;
-		InterruptDisable ();
-		for (int i = 0; i < 6; i++)
-			ft_table[i] = static_cast <double> (mds.data[i + 1]);
-		measure_report = mds.data[0];
 
-		InterruptEnable();
+		 send_request(frame_counter, sendSocket);         //send request for data
 
-		// jesli pomiar byl poprawny
+
+        if (get_data_from_ethernet(recvBuffer, recvSocket, adc_data) >= 0) { //packet from board
+        //	memcpy(&counter_test, recvBuffer, 8); //64bit unsigned counter
+
+	        convert_data(adc_data, bias_data, force_fresh);
+
+			for (int i = 0; i < 6; ++i) {
+				kartez_force[i] = force_fresh[i];
+			}
+			master.force_msr_upload(kartez_force);
+
+        }
+
+
+
+/*		// jesli pomiar byl poprawny
 		if (measure_report == COMMAND_OK) {
 			is_reading_ready = true;
 
@@ -436,420 +252,73 @@ void ATI3084_force::initiate_reading(void)
 				// lib::Homog_matrix frame(master.force_current_end_effector_frame);
 				lib::Ft_vector output = gravity_transformation->getForce(ft_table, frame);
 				master.force_msr_upload(output);
-				/*		if (!((ms_nr++)%1000)) {
-				 cerr << "Output\t";
-				 for(int i=0;i<3;i++) output[i]*=20;
-				 for(int i=3;i<6;i++) output[i]*=333;
-				 for(int i=0;i<6;i++) cerr << ceil(output[i]) << "  ";
-				 cerr << endl;// << "Input\t";
-				 for(int i=6;i<12;i++) cerr << ceil(output[i]) << "  ";
-				 cerr << endl << endl;// << "Gravity\t";
-				 for(int i=12;i<18;i++) cerr << ceil(output[i]) << "  ";
-				 cerr << endl << "Bias\t";
-				 for(int i=18;i<24;i++) cerr << ceil(output[i]) << "  ";
-				 cerr << endl << endl;
-				 cerr << frame << endl;
-				 }
-				 */
+
 			}
 		}
+		*/
 	}
 }
 
 /***************************** odczyt z czujnika *****************************/
-void ATI3084_force::get_reading(void)
+void ATI6284_force::get_reading(void)
 {
 }
+/*******************************************************************/
+void send_request(uint64_t &counter, RawSocket *sock) {
+  unsigned char send_buffer[8];
+  ++counter;
+  memcpy((void *)(send_buffer), (void *)(&(counter)), 8);     //64bit unsigned counter
+  sock->send(send_buffer, 8);                           //64bit counter = 8 bytes
 
-void ATI3084_force::parallel_do_send_command(const char* command)
-{
-	char a;
-	short value = 0;
-	struct timespec rqtp;
+}
+/***************************** konwersja danych z danych binarnych na sile *****************************/
+/* convert data with bias from hex data to force */
+// int16_t result_raw[6] - input data in hex
+// int16_t bias_raw[6] - bias data in hex
+// double force[6] - output data in N, N*m
+void convert_data(int16_t result_raw[6], int16_t bias_raw[6], double force[6]) {
+  int i, j;
+  double result_voltage[6] = { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f };
 
-	rqtp.tv_sec = 0;
-	rqtp.tv_nsec = 100000;
+  for (i = 0; i < 6; ++i) {
+    result_voltage[i] =
+        (double) ((result_raw[i] - bias_raw[i]) * 10.0f / 2048.0f);
+    force[i]=0.0;
+  }
 
-	while ((a = *command++) != 0) {
-		value = short(a);
-		set_output(value);
-		while (!check_ack())
-			;
-		set_obf(0);
-		nanosleep(&rqtp, NULL);
+  for (i = 0; i < 6; ++i) {
+    for (j = 0; j < 6; ++j) {
+      force[i] += (double) (result_voltage[j] * conversion_matrix[i][j]);
+    }
+    force[i] /= conversion_scale[i];
+  }
 
-		if (value != 23)
-			while (check_ack())
-				; // jesli polcecenie rozne od RESET
-		else
-			delay(1);
-		set_obf(1);
-	}
+}
+/*******************************************************************/
+/* gets data from ethernet and store it in int16_t data_raw[6] */
+int get_data_from_ethernet(unsigned char buffer[512], RawSocket *sock,
+                           int16_t data_raw[6]) {
+  std::size_t recvd = sock->recv(buffer, 512);
+  unsigned char *buffer_data = buffer + 8;  //8 bytes for uint64_t
+
+  if (recvd >= 20) {            //12B - ADC data, 8B - counter
+
+    //convert two bytes to one word. &0xFF - take only one byte, not four...
+    for (int i = 0; i < 6; ++i) {
+      data_raw[i] = (((buffer_data[2 * i] & 0xFF) << 8) | (buffer_data[2 * i + 1] & 0xFF));
+
+    }
+    return 0;
+  } else {
+    return -1;
+  }
 }
 
-void ATI3084_force::set_char_output(char* znak)
-{
-	short value = *znak;
-	set_output(value);
-}
-
-void ATI3084_force::set_output(short value)
-{
-	short output = 0;
-	unsigned short comp = 0x0001;
-	// wersja z pajaczkiem
-	// 	const unsigned char output_positions[16]={15,7,14,6,13,5,12,4,0,8,1,9,2,10,3,11};
-	// wersja z nowa plytka
-	const unsigned char output_positions[16] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 };
-
-	for (int i = 0; i < 16; i++) {
-		unsigned short mask = 0x0001;
-		mask <<= output_positions[i];
-		if (value & comp)
-			output |= mask;
-		comp <<= 1;
-	}
-	uintptr_t lower = (unsigned char) (output % 256);
-	uintptr_t upper = (unsigned char) (output >>= 8);
-
-	out8(base_io_adress + LOWER_OUTPUT, lower);
-	out8(base_io_adress + UPPER_OUTPUT, upper);
-}
-
-short get_input(void)
-{
-	short input = 0, temp_input;
-	unsigned short comp = 0x0001;
-	// wersja z pajaczkiem
-	// 	const unsigned char input_positions[16]={8,10,12,14,7,5,3,1,9,11,13,15,6,4,2,0};
-	// wersja z nowa plytka
-	const unsigned char input_positions[16] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 };
-
-	uintptr_t lower = in8(base_io_adress + LOWER_INPUT);
-	uintptr_t upper = in8(base_io_adress + UPPER_INPUT);
-
-	temp_input = lower + 256* upper ;
-
-	for (int i = 0; i < 16; i++) {
-		unsigned short mask = 0x0001;
-		mask <<= input_positions[i];
-		if (temp_input & comp)
-			input |= mask;
-		comp <<= 1;
-	}
-	return input;
-}
-
-void ATI3084_force::set_obf(unsigned char state)
-{
-	unsigned char temp_register = in8(base_io_adress + CONTROL_OUTPUT);
-
-	if (state)
-		temp_register |= 0x10;// dla przejsciowki
-	else
-		temp_register &= 0xef;
-
-	out8(base_io_adress + CONTROL_OUTPUT, temp_register);
-}
-
-void set_ibf(unsigned char state)
-{
-	unsigned char temp_register = in8(base_io_adress + CONTROL_OUTPUT);
-
-	if (state)
-		temp_register |= 0x20;// dla przejsciowki
-	else
-		temp_register &= 0xdf;
-
-	out8(base_io_adress + CONTROL_OUTPUT, temp_register);
-}
-
-bool ATI3084_force::check_ack()
-{
-	unsigned char temp_register = in8(base_io_adress + ACK_PORT_INPUT);
-	if (temp_register & 0x01)
-		return true;
-	else
-		return false;
-}
-
-bool check_stb()
-{
-	unsigned char temp_register = in8(base_io_adress + STB_PORT_INPUT);
-	if (temp_register & 0x01)
-		return true;
-	else
-		return false;
-}
-
-void ATI3084_force::initiate_registers(void)
-{
-	out8(base_io_adress + PORT_0_CONFIG, 0x03);
-	out8(base_io_adress + PORT_1_CONFIG, 0x03);
-	out8(base_io_adress + INTER_CONFIG, 0x10);// przerwanie od !stb, mozna dolaczyc przerwanie od !ack
-	delay(100);
-	set_obf(1);
-	set_ibf(0);
-}
-
-bool check_intr(void)
-{
-	unsigned char temp_register = in8(base_io_adress + INTER_CONFIG);
-	if (temp_register & 0x80)
-		return true;
-	else
-		return false;
-}
-
-void ATI3084_force::check_cs(void)
-{
-	printf("Input int: %d, char: %c,   ", get_input(), get_input());
-	if (check_ack())
-		printf("ACK HIGH,  ");
-	else
-		printf("ACK LOW,   ");
-	if (check_stb())
-		printf("STB HIGH\n");
-	else
-		printf("STB LOW\n");
-}
-
-short ATI3084_force::do_Wait(const char* command)
-{
-	int iw_ret;
-
-	do {
-		TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_INTR, &tim_event, &int_timeout, NULL);
-		iw_ret = InterruptWait(NULL, NULL);
-		InterruptMask(info.Irq, sint_id);
-		if (iw_ret != -1) {
-			mds.is_received = 1;
-		}
-		InterruptUnmask(info.Irq, sint_id);
-
-	} while (iw_ret != -1);
-
-	return OK;
-}
-
-short ATI3084_force::do_send_command(const char* command)
-{
-	// ew. miejce na pzerwanie o pustej kolejce - obecnie while pod spodem
-	// 	while ( ! ( in8 ( LSREG ) & 0x40 ));
-
-	char a;
-
-	while ((a = *command++) != 0) {
-		unsigned int timeout = 65000; /*time for sending 1 char*/
-		while (!(in8(LSREG) & 0x20)) {
-			/*                      delay(20);       */
-			if (!timeout--)
-				return (-1);
-		}
-		out8(TxBUF, a);
-	}
-	return OK;
-}
-
-// metoda na wypadek skasowanie pamiecia nvram
-// uwaga sterownik czujnika wysyla komunikat po zlaczu szeregowym zaraz po jego wlaczeniu
-
-void ATI3084_force::solve_transducer_controller_failure(void)
-{
-
-	unsigned char char_buf[1000];
-	int licznik = 0, i;
-
-	while ((in8(LSREG)) & 0x01) {
-		char_buf[licznik++] = in8(RxBUF);
-		usleep(10); // aby nadmiernie nie obciazac procesora
-	}
-
-	usleep(10); // aby nadmiernie nie obciazac procesora
-
-
-	i = do_send_command(YESCOMM); /* command ^W to FT */
-	if (i == -1) {
-		ERROR_CODE = __ERROR_INIT_SEND;
-		printf("Blad wyslania YESCOMM w solve_transducer_controller_failure\n");
-	}
-
-	usleep(10); // aby nadmiernie nie obciazac procesora
-
-	licznik = 0;
-
-	while ((in8(LSREG)) & 0x01) {
-		char_buf[licznik++] = in8(RxBUF);
-		usleep(10); // aby nadmiernie nie obciazac procesora
-	}
-
-	// 	printf("Input int: %s,   \n",aaac);
-}
-
-short ATI3084_force::do_init(void)
-{
-	short i;
-
-	int_timeout = SCHUNK_INTR_TIMEOUT_HIGH; // by Y
-#ifdef SERIAL
-
-	i = do_send_command(RESET); /* command ^W to FT */
-	if (i == -1)
-		ERROR_CODE = __ERROR_INIT_SEND;
-	delay(20);
-	i = do_send_command(CL_0);
-	if (i == -1)
-		ERROR_CODE = __ERROR_INIT_SEND;
-	delay(20);
-	i = do_send_command(CD_B);
-	if (i == -1)
-		ERROR_CODE = __ERROR_INIT_SEND;
-	delay(20);
-	i = do_send_command(CD_B);
-	if (i == -1)
-		ERROR_CODE = __ERROR_INIT_SEND;
-	delay(20);
-	i = do_send_command(CD_R);
-	if (i == -1)
-		ERROR_CODE = __ERROR_INIT_SEND;
-	delay(20);
-	i = do_send_command(CV_6);
-	if (i == -1)
-		ERROR_CODE = __ERROR_INIT_SEND;
-	delay(20);
-	i = do_send_command(SA);
-	if (i == -1)
-		ERROR_CODE = __ERROR_INIT_SEND;
-	delay(20);
-	i = do_send_command(SM);
-	if (i == -1)
-		ERROR_CODE = __ERROR_INIT_SEND;
-	delay(20);
-	i = do_send_command(SB);
-	if (i == -1)
-		ERROR_CODE = __ERROR_INIT_SEND;
-	delay(20);
-
-	i = do_send_command(CP_P);
-	if (i == -1)
-		ERROR_CODE = __ERROR_INIT_SEND;
-	i = do_Wait("CP_P");
-	i = do_send_command(CL_0);
-	if (i == -1)
-		ERROR_CODE = __ERROR_INIT_SEND;
-	i = do_Wait("CL_0");
-	i = do_send_command(CD_B);
-	if (i == -1)
-		ERROR_CODE = __ERROR_INIT_SEND;
-	i = do_Wait("CD_B");
-	i = do_send_command(CD_B);
-	if (i == -1)
-		ERROR_CODE = __ERROR_INIT_SEND;
-	i = do_Wait("CD_B");
-	i = do_send_command(CD_R);
-	if (i == -1)
-		ERROR_CODE = __ERROR_INIT_SEND;
-	i = do_Wait("CD_R");
-	i = do_send_command(CV_6);
-	if (i == -1)
-		ERROR_CODE = __ERROR_INIT_SEND;
-	i = do_Wait("CV_6");
-	i = do_send_command(SA);
-	if (i == -1)
-		ERROR_CODE = __ERROR_INIT_SEND;
-	i = do_Wait("SA");
-	i = do_send_command(SM);
-	if (i == -1)
-		ERROR_CODE = __ERROR_INIT_SEND;
-	i = do_Wait("SM");
-	i = do_send_command(SZ);
-	if (i == -1)
-		ERROR_CODE = __ERROR_INIT_SEND;
-	i = do_Wait("SZ");
-	i = do_send_command(SB);
-	if (i == -1)
-		ERROR_CODE = __ERROR_INIT_SEND;
-	i = do_Wait("SB");
-
-#endif
-
-#ifdef PARALLEL
-
-	parallel_do_send_command(RESET);
-	delay(20);
-
-	parallel_do_send_command(CD_B);
-	delay(20);
-
-	parallel_do_send_command(CD_B);
-	delay(20);
-
-	parallel_do_send_command(CD_B);
-	delay(20);
-
-	parallel_do_send_command(CD_R);
-	delay(20);
-
-	parallel_do_send_command(CV_6);
-	delay(20);
-
-	parallel_do_send_command(SA);
-	delay(20);
-
-	parallel_do_send_command(SM);
-	delay(20);
-
-	parallel_do_send_command(SB);
-	delay(20);
-
-	parallel_do_send_command(CP_P);
-	i=do_Wait("CP_P");
-
-	parallel_do_send_command(CL_0);
-	i=do_Wait("CL_0");
-
-	parallel_do_send_command(CD_B);
-	i=do_Wait("CD_B");
-
-	parallel_do_send_command(CD_B);
-	i=do_Wait("CD_B");
-
-	parallel_do_send_command(CD_R);
-	i=do_Wait("CD_R");
-
-	parallel_do_send_command(CV_6);
-	i=do_Wait("CV_6");
-
-	parallel_do_send_command(SA);
-	i=do_Wait("SA");
-
-	parallel_do_send_command(SM);
-	i=do_Wait("SM");
-
-	parallel_do_send_command(SZ);
-	i=do_Wait("SZ");
-
-	parallel_do_send_command(SB);
-	i=do_Wait("SB");
-	i=do_Wait("SB");// by Y bez tego nie dziala
-
-#endif
-
-	return OK;
-}
-
-void clear_intr(void)
-{
-	unsigned char temp_register;
-	temp_register = in8(base_io_adress + INTER_CONFIG);
-	temp_register |= 0x80;
-
-	out8(base_io_adress + INTER_CONFIG, temp_register);
-}
+/*****************************  *****************************/
 
 force* return_created_edp_force_sensor(common::irp6s_postument_track_effector &_master)
 {
-	return new ATI3084_force(_master);
+	return new ATI6284_force(_master);
 }// : return_created_sensor
 
 } // namespace sensor
