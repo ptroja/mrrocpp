@@ -44,24 +44,16 @@
 // Konfigurator
 #include "lib/configurator.h"
 
-void y_InterruptUnlock(intrspin_t* spinlock_local)
-{
-	InterruptUnlock(spinlock_local );
-}
-
 namespace mrrocpp {
 namespace edp {
 namespace sensor {
 
 #define MDS_DATA_RANGE 20
 
-int sint_id;
-struct sigevent sevent;
+static int sint_id;
+static struct sigevent sevent;
 
-// aaa = master.config.value<double>("x_axis");
-
-
-struct mds_data
+static struct mds_data
 {
 	int intr_mode;
 	int byte_counter;
@@ -69,9 +61,9 @@ struct mds_data
 	short data[MDS_DATA_RANGE];
 } mds;
 
-uint64_t *int_timeout;// by Y
+static uint64_t int_timeout;// by Y
 struct sigevent tim_event;
-intrspin_t* spinlock;
+static intrspin_t spinlock;
 
 // short schunk_ms[7];
 
@@ -147,8 +139,7 @@ void ATI3084_force::connect_to_hardware(void)
 		// 	printf("KONTRUKTOR EDP_S POCATEK\n");
 
 		// ZMIENNE POMOCNICZE
-		int_timeout = new (uint64_t);
-		*int_timeout = SCHUNK_INTR_TIMEOUT_HIGH;// by Y
+		int_timeout = SCHUNK_INTR_TIMEOUT_HIGH;// by Y
 
 		tim_event.sigev_notify = SIGEV_UNBLOCK;// by Y
 
@@ -223,9 +214,7 @@ void ATI3084_force::connect_to_hardware(void)
 				break;
 		}
 
-		spinlock = new (intrspin_t);
-		memset(spinlock, 0, sizeof(*spinlock));
-		InterruptLock(spinlock );
+		InterruptLock(&spinlock);
 		//InterruptEnable();
 
 		out8(LCREG, 0x80); /* DLAB=1 */
@@ -251,8 +240,7 @@ void ATI3084_force::connect_to_hardware(void)
 		delay(1);
 		out8(FCREG, 0x81); /*program fifo*/
 		delay(1);
-		InterruptUnlock(spinlock );
-		//y_InterruptUnlock(spinlock);
+		InterruptUnlock(&spinlock);
 		//InterruptDisable();
 		/* interrupts are enabled */
 
@@ -375,8 +363,8 @@ void ATI3084_force::wait_for_event()
 
 			mds.intr_mode = 1; // przywrocenie do 7 bajtowego trybu odbiotu danych
 			mds.byte_counter = 0;
-			*int_timeout = SCHUNK_INTR_TIMEOUT_LOW;// by Y
-			TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_INTR, &tim_event, int_timeout, NULL);
+			int_timeout = SCHUNK_INTR_TIMEOUT_LOW;// by Y
+			TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_INTR, &tim_event, &int_timeout, NULL);
 			iw_ret = InterruptWait(NULL, NULL);
 			// kiedy po uplynieciu okreslonego czasu nie zostanie zgloszone przerwanie
 			if (iw_ret == -1) {
@@ -634,7 +622,7 @@ short ATI3084_force::do_Wait(const char* command)
 	int iw_ret;
 
 	do {
-		TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_INTR, &tim_event, int_timeout, NULL);
+		TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_INTR, &tim_event, &int_timeout, NULL);
 		iw_ret = InterruptWait(NULL, NULL);
 		InterruptMask(info.Irq, sint_id);
 		if (iw_ret != -1) {
@@ -649,14 +637,13 @@ short ATI3084_force::do_Wait(const char* command)
 
 short ATI3084_force::do_send_command(const char* command)
 {
-	char a;
-	unsigned int timeout;
-
 	// ew. miejce na pzerwanie o pustej kolejce - obecnie while pod spodem
 	// 	while ( ! ( in8 ( LSREG ) & 0x40 ));
 
+	char a;
+
 	while ((a = *command++) != 0) {
-		timeout = 65000; /*time for sending 1 char*/
+		unsigned int timeout = 65000; /*time for sending 1 char*/
 		while (!(in8(LSREG) & 0x20)) {
 			/*                      delay(20);       */
 			if (!timeout--)
@@ -706,7 +693,7 @@ short ATI3084_force::do_init(void)
 {
 	short i;
 
-	*int_timeout = SCHUNK_INTR_TIMEOUT_HIGH; // by Y
+	int_timeout = SCHUNK_INTR_TIMEOUT_HIGH; // by Y
 #ifdef SERIAL
 
 	i = do_send_command(RESET); /* command ^W to FT */
