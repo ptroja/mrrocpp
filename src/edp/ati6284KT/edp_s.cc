@@ -208,6 +208,7 @@ void ATI6284_force::wait_for_event()
 
 
 				convert_data(adc_data, bias_data, force_fresh);
+				break;
 
 			} else {
 				send_request(frame_counter, sendSocket);         //send request for data
