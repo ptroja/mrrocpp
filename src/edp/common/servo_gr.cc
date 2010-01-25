@@ -22,8 +22,8 @@
 #include "edp/common/servo_gr.h"
 #include "edp/common/regulator.h"
 
-#include "edp/common/exception.h"
-using namespace mrrocpp::edp::common::exception;
+#include "lib/exception.h"
+using namespace mrrocpp::lib::exception;
 
 namespace mrrocpp {
 namespace edp {

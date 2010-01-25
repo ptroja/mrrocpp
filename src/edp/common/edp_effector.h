@@ -26,8 +26,8 @@
 // Konfigurator
 #include "lib/configurator.h"
 
-#include "edp/common/exception.h"
-using namespace mrrocpp::edp::common::exception;
+#include "lib/exception.h"
+using namespace mrrocpp::lib::exception;
 
 
 namespace mrrocpp {

@@ -48,8 +48,8 @@
 #include "edp/speaker/speak_t.h"
 
 
-#include "edp/common/exception.h"
-using namespace mrrocpp::edp::common::exception;
+#include "lib/exception.h"
+using namespace mrrocpp::lib::exception;
 
 namespace mrrocpp {
 namespace edp {

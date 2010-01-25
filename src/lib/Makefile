@@ -39,6 +39,7 @@ LIBMRROCPP_OBJECTS = \
 	mis_fun.o \
 	timer.o \
 	srlib.o \
+	exception.o\
 	playerpos_goal.o \
 	datastr.o 
 

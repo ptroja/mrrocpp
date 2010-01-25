@@ -11,8 +11,7 @@
 #include <stdint.h>
 
 namespace mrrocpp {
-namespace edp {
-namespace common {
+namespace lib {
 namespace exception {
 
 // Klasa bledow systemowych zawiazanych z komunikacja miedzyprocesowa
@@ -65,7 +64,6 @@ class NonFatal_error_4
 
 } // namespace exception
 } // namespace common
-} // namespace kinematic
 } // namespace mrrocpp
 
 #endif

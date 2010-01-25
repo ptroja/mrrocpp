@@ -7,11 +7,10 @@
 
 #include <stdint.h>
 
-#include "edp/common/exception.h"
+#include "lib/exception.h"
 
 namespace mrrocpp {
-namespace edp {
-namespace common {
+namespace lib {
 namespace exception {
 
 Fatal_error::Fatal_error(uint64_t err_no_0, uint64_t err_no_1) :
@@ -41,6 +40,5 @@ NonFatal_error_4::NonFatal_error_4(uint64_t err_no) :
 
 } // namespace exception
 } // namespace common
-} // namespace kinematic
 } // namespace mrrocpp
 

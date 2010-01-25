@@ -27,7 +27,7 @@
 #include "kinematics/conveyor/kinematic_model_conveyor.h"
 #include "lib/conveyor_const.h"
 
-using namespace mrrocpp::edp::common::exception;
+using namespace mrrocpp::lib::exception;
 
 namespace mrrocpp {
 namespace edp {

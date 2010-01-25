@@ -26,7 +26,7 @@
 #include "edp/common/manip_trans_t.h"
 #include "edp/common/vis_server.h"
 
-using namespace mrrocpp::edp::common::exception;
+using namespace mrrocpp::lib::exception;
 
 namespace mrrocpp {
 namespace edp {
