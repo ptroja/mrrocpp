@@ -203,21 +203,21 @@ void ATI6284_force::wait_for_event()
 			//if (iw_ret == -1) {
 
 			// kiedy po uplynieciu okreslonego czasu nie zostanie zgloszone przerwanie
-
-			if (get_data_from_ethernet(recvBuffer, recvSocket, adc_data) >= 0){
+			iw_ret = get_data_from_ethernet(recvBuffer, recvSocket, adc_data);
+			if (iw_ret >= 0){
 
 
 				convert_data(adc_data, bias_data, force_fresh);
-				break;
+				//break;
 
 			} else {
-				send_request(frame_counter, sendSocket);         //send request for data
+				//send_request(frame_counter, sendSocket);         //send request for data
 				if (iter_counter > 1) {
 					sr_msg->message("Force / Torque sensor connection reastablished");
 				}
 			}
 
-		} while (iw_ret == -1); // dopoki nie zostanie odebrana paczka pomiarow
+		} while (iw_ret < 0); // dopoki nie zostanie odebrana paczka pomiarow
 	} else {
 		usleep(1000);
 	}
