@@ -53,7 +53,7 @@ double conversion_matrix[6][6] = {
 
 
 /********** klasa czujnikow po stronie VSP **************/
-class ATI3084_force : public force {
+class ATI6284_force : public force{
 
 private:
 
@@ -71,20 +71,6 @@ private:
     int16_t adc_data[6];
     int16_t bias_data[6];
     double force_fresh[6];
-
-	void set_char_output(char* znak);
-	void set_output(short value);
-	void set_obf(unsigned char state);
-	unsigned char check_ack(void);
-	void initiate_registers(void);
-	void solve_transducer_controller_failure(void);
-	bool check_intr(void);
-	void check_cs(void);
-	void parallel_do_send_command(const char* command);
-
-	short do_Wait(const char* command);// by old schunk
-	short do_send_command(const char* command);
-	short do_init(void);
 
 	short ERROR_CODE;
 
@@ -109,12 +95,6 @@ void convert_data(int16_t result_raw[6], int16_t bias_raw[6], double force[6]);
 int get_data_from_ethernet(unsigned char buffer[512], RawSocket *sock,
                            int16_t data_raw[6]) ;
 
-// na zewnatrz klasy gdyz odwoluje sie do nich funkcja obslugi przerwania
-bool check_intr(void);
-bool check_stb(void);
-void clear_intr(void);
-void set_ibf(unsigned char state);
-short get_input(void);
 
 } // namespace sensor
 } // namespace edp
