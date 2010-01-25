@@ -9,12 +9,7 @@ include $(HOMEDIR)/common.mk
 
 SOURCES = ${wildcard *.cc}
 #OBJECTS = ${patsubst %.cc,%.o,${SOURCES}}
-KIN_OBJECTS = ${KINEMATDIR}/irp6_postument/kinematic_model_irp6p_with_wrist.o \
-	      ${KINEMATDIR}/irp6_postument/kinematic_model_irp6p_5dof.o \
-	      ${KINEMATDIR}/irp6_postument/kinematic_model_calibrated_irp6p_with_wrist.o \
-	      ${KINEMATDIR}/irp6_postument/kinematic_model_irp6p_jacobian_with_wrist.o \
-	      ${KINEMATDIR}/irp6_postument/kinematic_model_irp6p_jacobian_transpose_with_wrist.o\
-	      $(KINEMATDIR)/common/libkinematics.a
+KIN_OBJECTS = ${KINEMATDIR}/irp6_postument/libkinematicsirp6p.a $(KINEMATDIR)/common/libkinematics.a
 	       
 OBJECTS = ../common/edp_vsp_t.o edp_irp6p_effector.o hi_irp6p.o int_hand_irp6p.o\
            regulator_irp6p.o sg_irp6p.o ../common/edp_irp6s_postument_track.o
