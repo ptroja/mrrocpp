@@ -15,7 +15,7 @@ template<class T> bool operator!=(const Slice_iter<T>&, const Slice_iter<T>&);
 template<class T> bool operator< (const Slice_iter<T>&, const Slice_iter<T>&);
 
 template<class T> class Slice_iter {
-	valarray<T>* v; 
+	valarray<T>* v;
 	slice s;
 	size_t curr;	// index of current element
 
@@ -56,7 +56,7 @@ template<class T> bool operator!=(const Cslice_iter<T>&, const Cslice_iter<T>&);
 template<class T> bool operator< (const Cslice_iter<T>&, const Cslice_iter<T>&);
 
 
-template<class T> class Cslice_iter 
+template<class T> class Cslice_iter
 {
 	valarray<T>* v;
 	slice s;
@@ -72,7 +72,7 @@ public:
 	}
 	Cslice_iter& operator++() { curr++; return *this; }
 	Cslice_iter operator++(int) { Cslice_iter t = *this; curr++; return t; }
-	
+
 	const T& operator[](size_t i) const { return ref(i); }
 	const T& operator()(size_t i) const { return ref(i); }
 	const T& operator*() const { return ref(curr); }
@@ -88,24 +88,24 @@ private:
 	valarray<double> *v; // przechowuje elementy kolumnami jak jest opisane w Stroustrup Jezyk C++ 22.4.5
 	size_t r, c; //r - liczba wierszy, c - liczba kolumn
 
-	Matrix operator=( Matrix&); //nie zaimplementowany; deklaracja jest potrzebna, bo w przeciwnym razie 
+	Matrix operator=( Matrix&); //nie zaimplementowany; deklaracja jest potrzebna, bo w przeciwnym razie
 		//automatycznie zostanie wygenerowany bledny operator, ktorego ktos moglby przypadkiem uzyc
-	
+
 public:
 	Matrix(size_t max_row, size_t max_col);
 	Matrix(const Matrix&); //konstruktor kopiujacy
 	Matrix& operator<<(const Matrix&);
 	Matrix& operator=(const Matrix&);
 	~Matrix();
-	
+
 	size_t size() const { return r*c;}
-	
+
 //	size_t size_x() const {return r;}
 //	size_t size_y() const {return c;}
 	size_t rows() const {return r;}
 	size_t cols() const {return c;}
 
-	
+
 	Slice_iter<double> row(size_t i);
 	Cslice_iter<double> row(size_t i) const;
 
@@ -113,18 +113,18 @@ public:
 	Cslice_iter<double> column(size_t i) const;
 
 	Slice_iter<double> operator[] (size_t i) {return row(i);}
-	Cslice_iter<double> operator[] (size_t i) const {return row(i);}	
+	Cslice_iter<double> operator[] (size_t i) const {return row(i);}
 
 	double& operator()(size_t row_nr, size_t col_nr) {
-		if (col_nr>=c) return column(col_nr)[row_nr]; return row(row_nr)[col_nr];}	//z komunikowaniem bledu zakresu		
+		if (col_nr>=c) return column(col_nr)[row_nr]; return row(row_nr)[col_nr];}	//z komunikowaniem bledu zakresu
 	double operator()(size_t row_nr, size_t col_nr) const {
 		if (col_nr>=c) return column(col_nr)[row_nr]; return row(row_nr)[col_nr];}
-	
+
 	Matrix& operator*=(double);
 	Matrix& operator*=(const Matrix&);
-	
+
 	void resize(size_t rows, size_t cols) {(*v).resize(rows*cols); c=cols; r=rows; return;} //nie zachowuje wartoci elementow
-	
+
 	valarray<double>& array(){return *v;}
 };
 
@@ -146,12 +146,12 @@ inline Slice_iter<double> Matrix::column(size_t i) {
 inline Cslice_iter<double> Matrix::column(size_t i) const {
 	if (i>=cols()) cerr<<"Matrix::column: przekroczony zakres "<<i<<">"<<cols()-1<<".\n"<<flush;
 	return Cslice_iter<double>(v, slice(i*r, r, 1)); }
-	
-	
-//--------Mat-------LUMatrix----------------------------------------------------------
-int solve(const Matrix& A, const Matrix& B, Matrix& X); 
 
-class LUMatrix : public Matrix 
+
+//--------Mat-------LUMatrix----------------------------------------------------------
+int solve(const Matrix& AX, const Matrix& BX, Matrix& XX);
+
+class LUMatrix : public Matrix
   {
   private:
     vector<int> pivot_ ;
@@ -161,7 +161,7 @@ class LUMatrix : public Matrix
 
     LUMatrix& decompose(const Matrix &a);
 
-    void resize(const int r, const int c) { Matrix::resize(r,c) ; pivot_.resize(r) ; }  
+    void resize(const int r, const int c) { Matrix::resize(r,c) ; pivot_.resize(r) ; }
     Matrix inverse();
 //    void inverseIn(Matrix&);
     Matrix inverseIn();
@@ -173,23 +173,23 @@ class LUMatrix : public Matrix
 
 // ############################################################################
 // -----------------------------------------------------------------
-// 			 MACIERZ  
+// 			 MACIERZ
 // -----------------------------------------------------------------
 
 class matrix;
 
 class matrix {
-  private:  
+  private:
     double **ptr;
     	int rows;
 		int columns;
-    
+
   public:
     matrix ();
     matrix (int r, int c);
     matrix ( const matrix &  srcMatrix );    // konstruktor kopiujacy
    ~matrix ();					  // destruktor obiektow Matrix
-    
+
    double& operator ()( int, int );
 };
 
