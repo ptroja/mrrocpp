@@ -74,7 +74,7 @@ extern "C"
 		ui_config_entry * ChoseEntry = (ui_config_entry *) userdata;
         GtkBuilder &amp; thisBuilder = ((*ChoseEntry).getBuilder());
         
-	<xsl:call-template name="irp6.xyz_angle_axis.repeat.signals.execute.1">
+		<xsl:call-template name="irp6.xyz_angle_axis.repeat.signals.execute.1">
     		<xsl:with-param name="xyz_angle_axis" select="$xyz_angle_axis"/>
 			<xsl:with-param name="i" select="1"/>
 			<xsl:with-param name="name" select="$name"/>
@@ -82,8 +82,12 @@ extern "C"
 
 		if (robot_<xsl:value-of select="$fullName" />->ecp->get_EDP_pid()!=-1)
 		{
+			const double kx = gtk_spin_button_get_value(spin4_xyz_angle_axis_<xsl:value-of select="$name" />);
+			const double ky = gtk_spin_button_get_value(spin5_xyz_angle_axis_<xsl:value-of select="$name" />);
+			const double kz = gtk_spin_button_get_value(spin6_xyz_angle_axis_<xsl:value-of select="$name" />);
 		
-			wl = sqrt(gtk_spin_button_get_value(spin4_xyz_angle_axis_<xsl:value-of select="$name" />)*gtk_spin_button_get_value(spin4_xyz_angle_axis_<xsl:value-of select="$name" />) + gtk_spin_button_get_value(spin5_xyz_angle_axis_<xsl:value-of select="$name" />)*gtk_spin_button_get_value(spin5_xyz_angle_axis_<xsl:value-of select="$name" />) + gtk_spin_button_get_value(spin6_xyz_angle_axis_<xsl:value-of select="$name" />)*gtk_spin_button_get_value(spin6_xyz_angle_axis_<xsl:value-of select="$name" />));
+			const double wl = sqrt(kx*kx + ky*ky + kz*kz);
+			
 			if((wl &gt; 1 + l_eps) || (wl &lt; 1 - l_eps))
 			{
 				gtk_spin_button_set_value(spin4_xyz_angle_axis_<xsl:value-of select="$name" />, gtk_spin_button_get_value(spin4_xyz_angle_axis_<xsl:value-of select="$name" />) / wl);
@@ -91,11 +95,11 @@ extern "C"
 				gtk_spin_button_set_value(spin6_xyz_angle_axis_<xsl:value-of select="$name" />, gtk_spin_button_get_value(spin6_xyz_angle_axis_<xsl:value-of select="$name" />) / wl);
 			}		
 		
-	<xsl:call-template name="irp6.axis.ts.repeat.signals.cc.execute.2">
-    		<xsl:with-param name="xyz_angle_axis" select="$xyz_angle_axis"/>
-			<xsl:with-param name="name" select="$name"/>
-			<xsl:with-param name="i" select="1"/>
- 		</xsl:call-template>    
+			<xsl:call-template name="irp6.axis.ts.repeat.signals.cc.execute.2">
+	    		<xsl:with-param name="xyz_angle_axis" select="$xyz_angle_axis"/>
+				<xsl:with-param name="name" select="$name"/>
+				<xsl:with-param name="i" select="1"/>
+ 			</xsl:call-template>    
  		
  			// przepisanie parametrow ruchu do postaci rozkazu w formie XYZ_ANGLE_AXIS
 			for(int i=3; i&lt;<xsl:value-of select="$xyz_angle_axis" />; i++)
@@ -266,9 +270,8 @@ extern "C"
 <xsl:param name="name"/>
 <xsl:param name="i"/>
 	<xsl:if test="$i &lt;= $xyz_angle_axis">
-				<xsl:value-of select="$name" />_desired_pos_a[<xsl:value-of select="($i - 1)" />] = gtk_spin_button_get_value(spin<xsl:value-of select="$i" />_xyz_angle_axis_<xsl:value-of select="$name" />);
-	
-       </xsl:if>
+		<xsl:value-of select="$name" />_desired_pos_a[<xsl:value-of select="($i - 1)" />] = gtk_spin_button_get_value(spin<xsl:value-of select="$i" />_xyz_angle_axis_<xsl:value-of select="$name" />);	
+	</xsl:if>
 	<!-- for loop --> 
        <xsl:if test="$i &lt;= $xyz_angle_axis">
           <xsl:call-template name="irp6.axis.ts.repeat.signals.cc.execute.2">
@@ -290,10 +293,8 @@ extern "C"
 <xsl:param name="xyz_angle_axis"/>
 <xsl:param name="name"/>
 <xsl:param name="i"/>
-	<xsl:if test="$i &lt;= $xyz_angle_axis">
-				gtk_spin_button_set_value(spin<xsl:value-of select="$i" />_xyz_angle_axis_<xsl:value-of select="$name" />, <xsl:value-of select="$name" />_desired_pos_a[<xsl:value-of select="($i - 1)" />]);
-	
-       </xsl:if>
+	<xsl:if test="$i &lt;= $xyz_angle_axis">gtk_spin_button_set_value(spin<xsl:value-of select="$i" />_xyz_angle_axis_<xsl:value-of select="$name" />, <xsl:value-of select="$name" />_desired_pos_a[<xsl:value-of select="($i - 1)" />]);
+	</xsl:if>
 	<!-- for loop --> 
        <xsl:if test="$i &lt;= $xyz_angle_axis">
           <xsl:call-template name="irp6.axis.ts.repeat.signals.cc.execute.3">

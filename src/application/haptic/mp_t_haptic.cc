@@ -5,11 +5,6 @@
 //
 // -------------------------------------------------------------------------
 
-#include <stdio.h>
-#include <unistd.h>
-#include <string.h>
-#include <map>
-
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
 #include "lib/com_buf.h"

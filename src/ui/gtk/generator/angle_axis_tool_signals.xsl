@@ -92,13 +92,13 @@ extern "C"
 
 		if (state_<xsl:value-of select="$fullName" />.is_synchronised)
 		{
-	<xsl:call-template name="irp6.xyz_angle_axis_tool.repeat.signals.cc.set.2">
-    		<xsl:with-param name="xyz_angle_axis_tool" select="$xyz_angle_axis_tool"/>
-			<xsl:with-param name="name" select="$name"/>
-			<xsl:with-param name="i" select="1"/>
- 		</xsl:call-template>    
+			<xsl:call-template name="irp6.xyz_angle_axis_tool.repeat.signals.cc.set.2">
+   		 		<xsl:with-param name="xyz_angle_axis_tool" select="$xyz_angle_axis_tool"/>
+				<xsl:with-param name="name" select="$name"/>
+				<xsl:with-param name="i" select="1"/>
+ 			</xsl:call-template>    
  		
-		 		wl = sqrt(tool_vector_a[3]*tool_vector_a[3] + tool_vector_a[4]*tool_vector_a[4] + tool_vector_a[5]*tool_vector_a[5]);
+		 		const double wl = sqrt(tool_vector_a[3]*tool_vector_a[3] + tool_vector_a[4]*tool_vector_a[4] + tool_vector_a[5]*tool_vector_a[5]);
 		
 				if((wl &gt; 1 + l_eps) || (wl &lt; 1 - l_eps))
 				{

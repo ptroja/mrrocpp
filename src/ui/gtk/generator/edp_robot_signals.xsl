@@ -49,7 +49,6 @@ static char buf[32];
 static gchar buffer[500];
 <xsl:choose><xsl:when test="$name = 'conveyor'"></xsl:when><xsl:otherwise>
 static double alfa;
-static double wl; 
 static double l_eps = 0;
 static double <xsl:value-of select="$name" />_current_pos_a[<xsl:value-of select="$xyz_angle_axis" />]; // pozycja biezaca
 static double <xsl:value-of select="$name" />_desired_pos_a[<xsl:value-of select="$xyz_angle_axis" />]; // pozycja zadana

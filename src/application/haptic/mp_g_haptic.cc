@@ -209,7 +209,7 @@ bool haptic::next_step()
 
 	}
 
-	if ((irp6ot->ecp_reply_package.reply == lib::TASK_TERMINATED ) || (irp6ot->ecp_reply_package.reply == lib::TASK_TERMINATED )) {
+	if ((irp6ot->ecp_reply_package.reply == lib::TASK_TERMINATED ) || (irp6p->ecp_reply_package.reply == lib::TASK_TERMINATED )) {
 		sr_ecp_msg.message("w mp task terminated");
 		return false;
 	} else
