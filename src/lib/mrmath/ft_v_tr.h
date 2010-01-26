@@ -34,6 +34,7 @@ protected:
 public:
 
 	Ft_v_tr ();																	// kostruktor domniemany
+	virtual ~Ft_v_tr () {};														// destruktur wirtualny
 
 	virtual void set_from_frame(const Homog_matrix & p) = 0;		// ustawia na podstawie trojscianu
 
@@ -49,6 +50,7 @@ class Ft_tr : public Ft_v_tr
 public:
 
 	Ft_tr ();																	// kostruktor domniemany
+	virtual ~Ft_tr () {};														// destruktor wirtualny
 //	Ft_v_tr(VARIANT variant_l);
 	Ft_tr (const Homog_matrix &);
 	Ft_tr(const Ft_tr &);												// konstruktor kopiujacy

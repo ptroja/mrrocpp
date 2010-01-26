@@ -33,7 +33,6 @@ public:
     void operator()();
 
     speak_t(effector& _master);
-    ~speak_t();
 };
 /**************************** trans_t *****************************/
 

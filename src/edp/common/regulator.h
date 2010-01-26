@@ -121,6 +121,8 @@ public:
     manip_and_conv_effector &master;
     regulator ( uint8_t reg_no, uint8_t reg_par_no,    manip_and_conv_effector &_master ); // konstruktor
 
+	virtual ~regulator() {};
+
     virtual uint8_t compute_set_value ( void ) = 0;
     // obliczenie nastepnej wartosci zadanej dla napedu - metoda abstrakcyjna
 
@@ -191,6 +193,7 @@ public:
     virtual uint8_t compute_set_value ( void ) = 0;
     // obliczenie nastepnej wartosci zadanej dla napedu - metoda abstrakcyjna
 
+	virtual ~NL_regulator() {};
 };
 // ----------------------------------------------------------------------
 
