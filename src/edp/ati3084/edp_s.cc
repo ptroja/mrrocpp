@@ -262,18 +262,15 @@ void ATI3084_force::configure_sensor(void)
 		mds.intr_mode = 0;
 
 #ifdef SERIAL
-
 		if (do_send_command(SB) == -1)
 			printf("Blad wyslania polecenia SB\n");
 		do_Wait("SB");
 #endif
 
 #ifdef PARALLEL
-
 		parallel_do_send_command(SB);
 		do_Wait("SB");
 		do_Wait("SB");
-
 #endif
 	}
 	mds.intr_mode = 1; // przywrocenie do 7 bajtowego trybu odbiotu danych
@@ -288,7 +285,6 @@ void ATI3084_force::configure_sensor(void)
 		// lib::Homog_matrix frame(master.force_current_end_effector_frame); // pobranie aktualnej ramki
 		if (!gravity_transformation) // nie powolano jeszcze obiektu
 		{
-
 			lib::Xyz_Angle_Axis_vector tab;
 			lib::Homog_matrix sensor_frame;
 			if (master.config.exists("sensor_in_wrist")) {
@@ -316,7 +312,6 @@ void ATI3084_force::configure_sensor(void)
 			lib::K_vector pointofgravity(point);
 			gravity_transformation
 					= new lib::ForceTrans(lib::FORCE_SENSOR_ATI3084, frame, sensor_frame, weight, pointofgravity);
-
 		} else {
 			gravity_transformation->synchro(frame);
 		}
