@@ -974,6 +974,7 @@ int initiate_configuration()
 		wyjscie = true;
 
 		DIR* dirp = opendir("/dev/name/global");
+
 		if (dirp != NULL) {
 			for (;;) {
 				struct dirent* direntp = readdir(dirp);
@@ -1636,7 +1637,7 @@ int check_gns()
 		PtExit(EXIT_SUCCESS);
 	}
 
-	DIR* dirp;
+
 	unsigned short number_of_gns_servers = 0;
 	std::string gns_server_node;
 
@@ -1649,10 +1650,10 @@ int check_gns()
 		opendir_path += "/proc/mount/dev/name/gns_server";
 
 		// sprawdzenie czy dziala serwer gns
-		if ((dirp = opendir(opendir_path.c_str())) != NULL) {
+
+		if (access(opendir_path.c_str(), R_OK) == 0) {
 			number_of_gns_servers++;
 			gns_server_node = *node_list_iterator;
-			closedir(dirp);
 		}
 	}
 
@@ -1668,8 +1669,7 @@ int check_gns()
 			opendir_path += "/proc/mount/dev/name/gns_server";
 
 			// sprawdzenie czy dziala serwer gns
-			if ((dirp = opendir(opendir_path.c_str())) != NULL) {
-				closedir(dirp);
+			if (access(opendir_path.c_str(), R_OK) == 0) {
 				printf("There is gns server on %s node\n", (*node_list_iterator).c_str());
 			}
 		}
@@ -1680,8 +1680,8 @@ int check_gns()
 		printf("UI: gns server was not found in the QNX network, it will be automatically run on local node\n");
 
 		// ew. zabicie klienta gns
-		if ((dirp = opendir("/dev/name")) != NULL) {
-			closedir(dirp);
+
+		if (access("/dev/name", R_OK) == 0) {
 			system("slay gns");
 		}
 
@@ -1698,21 +1698,19 @@ int check_gns()
 			//	strcat(opendir_path, "/dev/name/gns_server");
 
 			// sprawdzenie czy dziala serwer gns
-			if ((dirp = opendir(opendir_path.c_str())) != NULL) {
+			if (access(opendir_path.c_str(), R_OK) == 0) {
 				number_of_gns_servers++;
 				gns_server_node = *node_list_iterator;
-				closedir(dirp);
-			}
+				}
 		}
 	}
 
 	// sprawdzanie lokalne
-	if ((dirp = opendir("/proc/mount/dev/name")) == NULL) {
+
+	if (access("/proc/mount/dev/name", R_OK) != 0) {
 		std::string system_command("gns -c ");
 		system_command += gns_server_node;
 		system(system_command.c_str());
-	} else {
-		closedir(dirp);
 	}
 
 	// sprawdzenie czy wezly w konfiuracji sa uruchomione i ew. uruchomienie na nich brakujacych klientow gns
@@ -1723,12 +1721,11 @@ int check_gns()
 		opendir_path += *node_list_iterator;
 
 		// sprawdzenie czy istnieje wezel
-		if ((dirp = opendir(opendir_path.c_str())) != NULL) {
-			closedir(dirp);
-			opendir_path += "/proc/mount/dev/name";
+		if (access(opendir_path.c_str(), R_OK) == 0) {
+				opendir_path += "/proc/mount/dev/name";
 
 			// sprawdzenie czy dziala gns
-			if ((dirp = opendir(opendir_path.c_str())) == NULL) {
+			if (access(opendir_path.c_str(), R_OK) != 0) {
 				std::string system_command("on -f ");
 
 				system_command += *node_list_iterator;
@@ -1736,8 +1733,6 @@ int check_gns()
 				system_command += gns_server_node;
 
 				system(system_command.c_str());
-			} else {
-				closedir(dirp);
 			}
 
 		} else {
