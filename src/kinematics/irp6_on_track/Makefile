@@ -8,10 +8,18 @@ HOMEDIR = ../../..
 include $(HOMEDIR)/common.mk
 .PHONY: all clean install
 #------------------------------------------------- Build rules -------------------------------------------------------#
-all: libkinematicsirp6ot.a
+all: libkinematicsirp6ot.a libkinematicsirp6ot.so
 
 libkinematicsirp6ot.a: $(OBJECTS)
 	$(AR) $(ARFLAGS) $@ $?
+
+ifeq ($(BUILD_TARGET), linux)
+LDFLAGS+=-Wl,-export-dynamic
+endif
+
+libkinematicsirp6ot.so: $(OBJECTS)
+	$(LD) $^ $(LDFLAGS) -shared -o $@
+	${INSTALL} $@ $(LIBDIR)
 
 #-----------------------------------------------------------------------------------------------------------------------#
 

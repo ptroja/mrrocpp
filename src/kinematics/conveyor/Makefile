@@ -8,10 +8,18 @@ HOMEDIR = ../../..
 include $(HOMEDIR)/common.mk
 .PHONY: all clean install
 #------------------------------------------------- Build rules -------------------------------------------------------#
-all: libkinematicsconveyor.a
+all: libkinematicsconveyor.a libkinematicsconveyor.so
 
 libkinematicsconveyor.a: $(OBJECTS)
 	$(AR) $(ARFLAGS) $@ $?
+
+ifeq ($(BUILD_TARGET), linux)
+LDFLAGS+=-Wl,-export-dynamic
+endif
+
+libkinematicsconveyor.so: $(OBJECTS)
+	$(LD) $^ $(LDFLAGS) -shared -o $@
+	${INSTALL} $@ $(LIBDIR)
 
 #-----------------------------------------------------------------------------------------------------------------------#
 

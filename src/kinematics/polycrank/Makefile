@@ -8,10 +8,18 @@ HOMEDIR = ../../..
 include $(HOMEDIR)/common.mk
 .PHONY: all clean install
 #------------------------------------------------- Build rules -------------------------------------------------------#
-all: libkinematicspolycrank.a
+all: libkinematicspolycrank.a libkinematicspolycrank.so
 
 libkinematicspolycrank.a: $(OBJECTS)
 	$(AR) $(ARFLAGS) $@ $?
+
+ifeq ($(BUILD_TARGET), linux)
+LDFLAGS+=-Wl,-export-dynamic
+endif
+
+libkinematicspolycrank.so: $(OBJECTS)
+	$(LD) $^ $(LDFLAGS) -shared -o $@
+	${INSTALL} $@ $(LIBDIR)
 
 #-----------------------------------------------------------------------------------------------------------------------#
 
