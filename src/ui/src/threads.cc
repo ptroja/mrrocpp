@@ -393,7 +393,7 @@ void *sr_thread(void* arg)
 		perror("BLAD SR ATTACH, przypuszczalnie nie uruchomiono gns, albo blad wczytywania konfiguracji");
 		return NULL;
 	}
-
+	ui_state.is_sr_thread_loaded = true;
 	while (1) {
 		lib::sr_package_t sr_msg;
 		//	printf("przed MsgReceive: \n");

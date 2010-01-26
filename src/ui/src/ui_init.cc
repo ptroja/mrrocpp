@@ -57,6 +57,7 @@
 #include <Pt.h>
 #include <Ph.h>
 
+extern ui_msg_def ui_msg;
 
 lib::configurator* config;
 
@@ -154,7 +155,7 @@ int init( PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo 
 	lib::set_thread_priority(pthread_self() , MAX_PRIORITY-6);
 
 	config = NULL;
-
+	ui_msg.ui = NULL;
 	ui_state.ui_state=1;// ui working
 
 	ui_state.irp6_on_track.edp.state=-1; // edp nieaktywne
@@ -249,6 +250,8 @@ int init( PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo 
 	}
 
 	ui_state.ui_node_name = sysinfo.nodename;
+	ui_state.is_sr_thread_loaded = false;
+
 
 	ui_state.binaries_local_path = cwd;
 	ui_state.mrrocpp_local_path = cwd;
@@ -304,7 +307,9 @@ int init( PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo 
 		PtExit( EXIT_SUCCESS );
 	}
 
+
 	// inicjacja pliku z logami sr
+	check_gns();
 
 	time_t time_of_day;
 	char file_date[50];
