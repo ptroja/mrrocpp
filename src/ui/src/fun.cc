@@ -1090,15 +1090,13 @@ int reload_whole_configuration()
 		// inicjacja komunikacji z watkiem sr
 		if (ui_msg.ui == NULL) {
 			ui_msg.ui
-					= new lib::sr_ui(lib::UI, ui_state.ui_attach_point.c_str(), ui_state.network_sr_attach_point.c_str(), false, getprio(0)
-							- 1);
+					= new lib::sr_ui(lib::UI, ui_state.ui_attach_point.c_str(), ui_state.network_sr_attach_point.c_str(), false);
 		}
 
 		// inicjacja komunikacji z watkiem sr
 		if (ui_msg.all_ecp == NULL) {
 			ui_msg.all_ecp
-					= new lib::sr_ecp(lib::ECP, "ui_all_ecp", ui_state.network_sr_attach_point.c_str(), false, getprio(0)
-							- 1);
+					= new lib::sr_ecp(lib::ECP, "ui_all_ecp", ui_state.network_sr_attach_point.c_str(), false);
 		}
 
 		// wypisanie komunikatu o odczytaniu konfiguracji

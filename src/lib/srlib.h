@@ -82,7 +82,6 @@ protected:
 	int send_package(void);
 	int send_package_to_sr(sr_package_t& sr_mess);
 	bool multi_thread;
-	int thread_priority;
 	boost::thread *thread_id;
 
 public:
@@ -93,7 +92,7 @@ public:
 	boost::circular_buffer <lib::sr_package_t> cb;
 	boost::mutex sr_mutex; // = PTHREAD_MUTEX_INITIALIZER ;
 
-	sr(process_type_t process_type, const std::string & process_name, const std::string & sr_name, const bool _multi_thread, const int _thread_priority);
+	sr(process_type_t process_type, const std::string & process_name, const std::string & sr_name, bool _multi_thread);
 	virtual ~sr(void);
 	int message(error_class_t message_type, uint64_t error_code);
 	int message(error_class_t message_type, uint64_t error_code0, uint64_t error_code1);
@@ -119,7 +118,7 @@ public:
 class sr_edp: public sr
 {
 public:
-	sr_edp(process_type_t process_type, const std::string & process_name, const std::string & sr_name, const bool _multi_thread, const int _thread_priority);
+	sr_edp(process_type_t process_type, const std::string & process_name, const std::string & sr_name, bool _multi_thread = false);
 protected:
 	virtual void interpret(void);
 };
@@ -127,7 +126,7 @@ protected:
 class sr_ecp: public sr
 {
 public:
-	sr_ecp(process_type_t process_type, const std::string & process_name, const std::string & sr_name, const bool _multi_thread, const int _thread_priority);
+	sr_ecp(process_type_t process_type, const std::string & process_name, const std::string & sr_name, bool _multi_thread = false);
 protected:
 	virtual void interpret(void);
 };
@@ -136,7 +135,7 @@ protected:
 class sr_vsp: public sr
 {
 public:
-	sr_vsp(process_type_t process_type, const std::string & process_name, const std::string & sr_name, const bool _multi_thread, const int _thread_priority);
+	sr_vsp(process_type_t process_type, const std::string & process_name, const std::string & sr_name, bool _multi_thread = false);
 protected:
 	virtual void interpret(void);
 };
@@ -145,7 +144,7 @@ protected:
 class sr_ui: public sr
 {
 public:
-	sr_ui(process_type_t process_type, const std::string & process_name, const std::string & sr_name, const bool _multi_thread, const int _thread_priority);
+	sr_ui(process_type_t process_type, const std::string & process_name, const std::string & sr_name, bool _multi_thread = false);
 protected:
 	virtual void interpret(void);
 };

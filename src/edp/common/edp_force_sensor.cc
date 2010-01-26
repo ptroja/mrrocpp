@@ -133,7 +133,7 @@ void force::operator()(void)
 } //!< end MAIN
 
 force::force(common::irp6s_postument_track_effector &_master) :
-	new_edp_command(false), master(_master), gravity_transformation(NULL)
+	gravity_transformation(NULL), new_edp_command(false), master(_master)
 {
 	gravity_transformation = NULL;
 	is_sensor_configured = false; //!< czujnik niezainicjowany
@@ -151,7 +151,7 @@ force::force(common::irp6s_postument_track_effector &_master) :
 	sr_msg = new lib::sr_vsp(lib::EDP,
 			master.config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "edp_vsp_attach_point"),
 			master.config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", UI_SECTION),
-			true, getprio(0) - 1);
+			true);
 }
 
 force::~force()

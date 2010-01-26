@@ -40,10 +40,9 @@ namespace lib {
 
 #if !defined(USE_MESSIP_SRR)
 
-sr::sr(process_type_t process_type, const std::string & process_name, const std::string & sr_name, const bool _multi_thread, const int _thread_priority) :
-	multi_thread(_multi_thread), thread_priority(_thread_priority), cb(SR_BUFFER_LENGHT)
+sr::sr(process_type_t process_type, const std::string & process_name, const std::string & sr_name, bool _multi_thread) :
+	multi_thread(_multi_thread), cb(SR_BUFFER_LENGHT)
 {
-
 	if (multi_thread) {
 		sem_init(&sem, 0, 0);
 		sem_init(&queue_empty_sem, 0, 0);
@@ -59,7 +58,7 @@ sr::sr(process_type_t process_type, const std::string & process_name, const std:
 		} else {
 			// TODO: throw
 			perror("SR cannot be located ");
-			throw ;
+			throw;
 		}
 	}
 
@@ -87,36 +86,17 @@ sr::~sr(void) {
 	name_close(fd);
 }
 
-int sr::send_package_to_sr(sr_package_t& sr_mess)
+int sr::send_package_to_sr(sr_package_t & sr_mess)
 {
-	if(fd == -1)// by all
-	return -1;
-
 	int16_t status;
 	sr_mess.hdr.type=0;
 
-	return MsgSend(fd, &sr_mess, sizeof(sr_mess),&status, sizeof(status));
-}
-
-int sr::send_package(void) {
-	clock_gettime(CLOCK_REALTIME, &sr_message.ts);
-	if (!multi_thread)
-	{
-		return send_package_to_sr(sr_message);
-	} else
-	{
-		boost::mutex::scoped_lock lock(sr_mutex);
-		cb.push_back(sr_message);
-		set_new_msg();
-		set_queue_not_empty();
-		return 1;
-	}
-
+	return MsgSend(fd, &sr_mess, sizeof(sr_mess), &status, sizeof(status));
 }
 #else /* USE_MESSIP_SRR */
 // Konstruktor
-sr::sr(process_type_t process_type, const std::string & process_name, const std::string & sr_name, const bool _multi_thread, const int _thread_priority) :
-	multi_thread(_multi_thread), thread_priority(_thread_priority), cb(SR_BUFFER_LENGHT)
+sr::sr(process_type_t process_type, const std::string & process_name, const std::string & sr_name, bool _multi_thread) :
+	multi_thread(_multi_thread), cb(SR_BUFFER_LENGHT)
 {
 	int tmp = 0;
 	while ((ch = messip::port_connect(sr_name)) == NULL) {
@@ -156,14 +136,26 @@ sr::~sr(void) {
 	}
 }
 
-int sr::send_package(void) {
-	if(!ch)
-	return -1;
-
-	clock_gettime(CLOCK_REALTIME, &sr_message.ts);
+int sr::send_package_to_sr(sr_package_t & sr_mess)
+{
 	return messip::port_send_sync(ch, 0, 0, sr_message);
 }
 #endif /* !USE_MESSIP_SRR */
+
+int sr::send_package(void) {
+	clock_gettime(CLOCK_REALTIME, &sr_message.ts);
+	if (!multi_thread)
+	{
+		return send_package_to_sr(sr_message);
+	} else
+	{
+		boost::mutex::scoped_lock lock(sr_mutex);
+		cb.push_back(sr_message);
+		set_new_msg();
+		set_queue_not_empty();
+		return 1;
+	}
+}
 
 int sr::set_new_msg() // podniesienie semafora
 {
@@ -266,8 +258,8 @@ int sr::message(error_class_t message_type, uint64_t error_code0, uint64_t error
 // --------------------------------------------------------------------
 // interpretacja bledu dla EDP robota irp6_on_track
 
-sr_edp::sr_edp(process_type_t process_type, const std::string & process_name, const std::string & sr_name, const bool _multi_thread, const int _thread_priority) :
-sr(process_type, process_name, sr_name, _multi_thread, thread_priority)
+sr_edp::sr_edp(process_type_t process_type, const std::string & process_name, const std::string & sr_name, bool _multi_thread) :
+sr(process_type, process_name, sr_name, _multi_thread)
 {
 }
 
@@ -423,8 +415,8 @@ void sr_edp::interpret(void) {
 } // end: sr_edp::interpret()
 // ---------------------------------------------------------------------
 
-sr_ecp::sr_ecp(process_type_t process_type, const std::string & process_name, const std::string & sr_name, const bool _multi_thread, const int _thread_priority) :
-sr(process_type, process_name, sr_name, _multi_thread, thread_priority)
+sr_ecp::sr_ecp(process_type_t process_type, const std::string & process_name, const std::string & sr_name, bool _multi_thread) :
+sr(process_type, process_name, sr_name, _multi_thread)
 {
 }
 
@@ -521,8 +513,8 @@ void sr_ecp::interpret(void) {
 } // end: sr_ecp::interpret()
 
 // ---------------------------------------------------------------------
-sr_ui::sr_ui(process_type_t process_type, const std::string & process_name, const std::string & sr_name, const bool _multi_thread, const int _thread_priority) :
-sr(process_type, process_name, sr_name, _multi_thread, thread_priority)
+sr_ui::sr_ui(process_type_t process_type, const std::string & process_name, const std::string & sr_name, bool _multi_thread) :
+sr(process_type, process_name, sr_name, _multi_thread)
 {
 }
 
@@ -537,8 +529,8 @@ void sr_ui::interpret(void) {
 	}
 }
 
-sr_vsp::sr_vsp(process_type_t process_type, const std::string & process_name, const std::string & sr_name, const bool _multi_thread, const int _thread_priority) :
-sr(process_type, process_name, sr_name, _multi_thread, thread_priority)
+sr_vsp::sr_vsp(process_type_t process_type, const std::string & process_name, const std::string & sr_name, bool _multi_thread) :
+sr(process_type, process_name, sr_name, _multi_thread)
 {
 }
 

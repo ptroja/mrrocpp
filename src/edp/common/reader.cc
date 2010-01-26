@@ -70,7 +70,6 @@ int reader_buffer::reader_wait_for_new_step() // oczekiwanie na semafor
 
 void reader_buffer::operator()()
 {
-	uint64_t k;
 	uint64_t nr_of_samples; // maksymalna liczba pomiarow
 
 	uint64_t e; // kod bledu systemowego
