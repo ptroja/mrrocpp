@@ -80,7 +80,7 @@ void  hardware_interface::init()
 	    /* Start the timer */
 	    struct itimerspec its;
 	    its.it_value.tv_sec = 0;
-	    its.it_value.tv_nsec = 1000000000*((long) STEP);
+	    its.it_value.tv_nsec = 1000000000*STEP;
 	    its.it_interval.tv_sec = its.it_value.tv_sec;
 	    its.it_interval.tv_nsec = its.it_value.tv_nsec;
 
