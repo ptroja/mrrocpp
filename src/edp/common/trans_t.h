@@ -53,7 +53,7 @@ public:
     void* error_pointer;
 
     trans_t(effector& _master);
-    ~trans_t();
+    virtual ~trans_t();
 
     void master_to_trans_t_order(MT_ORDER nm_task, int nm_tryb);
     int	trans_t_to_master_order_status_ready();
