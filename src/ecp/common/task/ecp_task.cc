@@ -146,7 +146,7 @@ void task::initialize_communication()
 		int e = errno; // kod bledu systemowego
 		perror("Failed to attach Effector Control Process");
 		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "Failed to attach Effector Control Process");
-		throw ECP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
+		throw ECP_main_error(lib::SYSTEM_ERROR, 0);
 	}
 
 	std::string trigger_attach_point = config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "trigger_attach_point");
@@ -160,7 +160,7 @@ void task::initialize_communication()
 		int e = errno; // kod bledu systemowego
 		perror("Failed to attach TRIGGER pulse chanel for ecp");
 		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "Failed  Failed to name attach (trigger pulse)");
-		throw ECP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
+		throw ECP_main_error(lib::SYSTEM_ERROR, 0);
 	}
 }
 // -------------------------------------------------------------------
@@ -225,7 +225,7 @@ void task::ecp_wait_for_stop(void)
 		uint64_t e= errno; // kod bledu systemowego
 		perror("ECP: Reply to MP failed");
 		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ECP: Reply to MP failed");
-		throw common::generator::generator::ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
+		throw common::generator::generator::ECP_error(lib::SYSTEM_ERROR, 0);
 	}
 
 	if (mp_command_type() != lib::STOP) {
@@ -269,7 +269,7 @@ bool task::ecp_wait_for_start(void)
 		uint64_t e= errno; // kod bledu systemowego
 		perror("ECP: Reply to MP failed");
 		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ECP: Reply to MP failed");
-		throw ECP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
+		throw ECP_main_error(lib::SYSTEM_ERROR, 0);
 	}
 	if (ecp_stop)
 		throw common::generator::generator::ECP_error (lib::NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
@@ -368,7 +368,7 @@ bool task::mp_buffer_receive_and_send(void)
 		uint64_t e= errno; // kod bledu systemowego
 		perror("ECP: Reply to MP failed");
 		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ECP: Reply to MP failed");
-		throw ecp_robot::ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
+		throw ecp_robot::ECP_error(lib::SYSTEM_ERROR, 0);
 	}
 
 	if (ecp_stop)
@@ -398,7 +398,7 @@ int task::receive_mp_message(void)
 			uint64_t e= errno; // kod bledu systemowego
 			perror("ECP: Receive from MP failed");
 			sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ECP: Receive from MP failed");
-			throw ecp_robot::ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
+			throw ecp_robot::ECP_error(lib::SYSTEM_ERROR, 0);
 		}
 #if !defined(USE_MESSIP_SRR)
 		if (caller == 0) {/* Pulse received */

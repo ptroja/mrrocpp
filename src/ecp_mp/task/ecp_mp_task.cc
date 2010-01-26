@@ -128,7 +128,7 @@ uint8_t task::choose_option (const char* question, uint8_t nr_of_options_input )
 
 #if !defined(USE_MESSIP_SRR)
 	ecp_to_ui_msg.hdr.type=0;
-	if (MsgSend(UI_fd, &ecp_to_ui_msg,  sizeof(lib::ECP_message),  &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0) {// by Y&W
+	if (MsgSend(UI_fd, &ecp_to_ui_msg, sizeof(lib::ECP_message), &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0) {// by Y&W
 #else
 	if(messip::port_send(UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0) {
 #endif
@@ -182,7 +182,7 @@ double task::input_double (const char* question )
 
 #if !defined(USE_MESSIP_SRR)
 	ecp_to_ui_msg.hdr.type=0;
-	if (MsgSend(UI_fd, &ecp_to_ui_msg,  sizeof(lib::ECP_message),  &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0) {// by Y&W
+	if (MsgSend(UI_fd, &ecp_to_ui_msg, sizeof(lib::ECP_message), &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0) {// by Y&W
 #else
 	if(messip::port_send(UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0) {
 #endif

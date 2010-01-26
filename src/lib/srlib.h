@@ -96,21 +96,9 @@ public:
 	virtual ~sr(void);
 	int message(error_class_t message_type, uint64_t error_code);
 	int message(error_class_t message_type, uint64_t error_code0, uint64_t error_code1);
-	int message(error_class_t message_type, uint64_t error_code, const char *text);
-	int message(error_class_t message_type, uint64_t error_code, const std::string & text)
-	{
-		return message(message_type, error_code, text.c_str());
-	}
-	int message(const char *text);
-	int message(const std::string & text)
-	{
-		return message(text.c_str());
-	}
-	int message(error_class_t message_type, const char *text);
-	int message(error_class_t message_type, const std::string & text)
-	{
-		return message(message_type, text.c_str());
-	}
+	int message(error_class_t message_type, uint64_t error_code, const std::string & text);
+	int message(const std::string & text);
+	int message(error_class_t message_type, const std::string & text);
 
 	virtual void interpret() = 0;
 };

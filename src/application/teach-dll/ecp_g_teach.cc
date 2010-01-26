@@ -67,7 +67,7 @@ void teach_tmp::teach(lib::ECP_POSE_SPECIFICATION ps, const char *msg)
             e = errno;
             perror("ECP teach(): Send() to UI failed");
             sr_ecp_msg.message(lib::SYSTEM_ERROR, e, "ECP: Send() to UI failed");
-            throw generator::ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
+            throw generator::ECP_error(lib::SYSTEM_ERROR, 0);
           }
         if (ui_to_ecp_rep.reply == lib::QUIT) // Koniec uczenia
           break;
@@ -115,7 +115,7 @@ void teach_tmp::save_file(lib::ECP_POSE_SPECIFICATION ps)
         e = errno;
         perror("ECP: Send() to UI failed");
         sr_ecp_msg.message(lib::SYSTEM_ERROR, e, "ECP: Send() to UI failed");
-        throw generator::ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
+        throw generator::ECP_error(lib::SYSTEM_ERROR, 0);
       }
     if (ui_to_ecp_rep.reply == lib::QUIT)
       { // Nie wybrano nazwy pliku lub zrezygnowano z zapisu
@@ -198,7 +198,7 @@ bool teach_tmp::load_file_from_ui()
         e = errno;
         perror("ECP: Send() to UI failed");
         sr_ecp_msg.message(lib::SYSTEM_ERROR, e, "ECP: Send() to UI failed");
-        throw generator::ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
+        throw generator::ECP_error(lib::SYSTEM_ERROR, 0);
       }
     if (ui_to_ecp_rep.reply == lib::QUIT) // Nie wybrano nazwy pliku lub zrezygnowano z zapisu
       return false;

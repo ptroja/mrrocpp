@@ -193,45 +193,41 @@ int sr::set_queue_empty() // podniesienie semafora
 /* Wysylka wiadomosci do procesu SR                                     */
 /* -------------------------------------------------------------------- */
 
-int sr::message(const char *text) {
+int sr::message(const std::string & text) {
 	boost::mutex::scoped_lock lock(srMutex);
 
 	sr_message.message_type = NEW_MESSAGE;
-	if(text == NULL)
-	sr_message.description[0] = '\0';
-	else {
-		strcpy(sr_message.description, text);
-
-		if (strlen(text) >= TEXT_LENGTH)
+	if(text.length()) {
+		strncpy(sr_message.description, text.c_str(), TEXT_LENGTH);
 		sr_message.description[TEXT_LENGTH-1] = '\0';
+	} else {
+		sr_message.description[0] = '\0';
 	}
 	return send_package();
 } // end: sr::message()
 
 
-int sr::message(error_class_t message_type, const char *text) {
+int sr::message(error_class_t message_type, const std::string & text) {
 	boost::mutex::scoped_lock lock(srMutex);
 
 	sr_message.message_type = message_type;
-	if(text == NULL)
-	sr_message.description[0] = '\0';
-	else {
-		strcpy(sr_message.description, text);
-
-		if (strlen(text) >= TEXT_LENGTH)
+	if(text.length()) {
+		strncpy(sr_message.description, text.c_str(), TEXT_LENGTH);
 		sr_message.description[TEXT_LENGTH-1] = '\0';
+	} else {
+		sr_message.description[0] = '\0';
 	}
 	return send_package();
 } // end: sr::message()
 
 
-int sr::message(error_class_t message_type, uint64_t error_code, const char *text) {
+int sr::message(error_class_t message_type, uint64_t error_code, const std::string & text) {
 	boost::mutex::scoped_lock lock(srMutex);
 
 	sr_message.message_type = message_type;
 	error_tab[0] = error_code;
 	interpret();
-	strcat(sr_message.description, text);
+	strcat(sr_message.description, text.c_str());
 	return send_package();
 } // end: sr::message()
 
