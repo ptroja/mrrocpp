@@ -181,9 +181,9 @@ EDP_polycrank_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cb
 			|| (access(resourceman_attach_point.c_str(), R_OK)== 0 )
 		)
 		{
-			ui_msg.ui->message("edp_irp6_mechatronika already exists");
+			ui_msg.ui->message(lib::NON_FATAL_ERROR,"edp_irp6_mechatronika already exists");
 
-		} else {
+		} else if (check_node_existence(ui_state.irp6_mechatronika.edp.node_name, std::string("edp_irp6_mechatronika"))) {
 			ui_state.irp6_mechatronika.edp.node_nr = config->return_node_number(ui_state.irp6_mechatronika.edp.node_name);
 
 			ui_state.irp6_mechatronika.edp.state = 1;

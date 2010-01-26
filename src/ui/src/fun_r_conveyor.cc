@@ -563,8 +563,8 @@ EDP_conveyor_create_int( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t 
 			|| (access(tmp2_string.c_str(), R_OK)== 0 )
 		)
 		{
-			ui_msg.ui->message("edp_conveyor already exists");
-		} else {
+			ui_msg.ui->message(lib::NON_FATAL_ERROR,"edp_conveyor already exists");
+		} else if (check_node_existence(ui_state.conveyor.edp.node_name, std::string("edp_conveyor"))) {
 			ui_state.conveyor.edp.node_nr = config->return_node_number(ui_state.conveyor.edp.node_name.c_str());
 
 			ui_state.conveyor.edp.state = 1;

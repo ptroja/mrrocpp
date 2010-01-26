@@ -422,3 +422,4 @@ int TRbtnDSSCalibrate ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t
 int TRbtnFSCalibrate ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int TRbtnTryAgain ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int TRDangerousForceDetected ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
+bool check_node_existence(const std::string _node, const std::string beginnig_of_message);
