@@ -128,18 +128,26 @@ bool ecp_vis_ib_eih_object_tracker_irp6ot::next_step_without_constraints() {
 				}
 			}
 
-			if (tracking == true && (v[i] == 0 || (v[i] > 0 && v[i] < v_max[i] && change[i] == false && reached[i] == false))) {//przyspieszanie
+			if (tracking == true && (v[i] == 0 || (v[i] > 0 && v[i] < v_max_act[i] && change[i] == false && reached[i] == false))) {//przyspieszanie
 				if (v[i] == 0 && change[i] == true) {
 					change[i] = false;
+				}
+				if ((fabs(u[i]) < 20) && (v[i] <= 0)) {
+					continue;
 				}
 				s[i] = (a_max[i] * t * t)/2 + (v[i] * t);
 				v[i] += a_max[i] * t;
 				if (v[i] > v_max_act[i]) {
 					v[i] = v_max_act[i];
 				}
-			} else if(v[i] > 0 && (change[i] == true || reached[i] == true || tracking == false || v[i] > v_max_act[i])) {//hamowanie
-				s[i] = (a_max[i] * t * t)/2 + (v[i] * t);
-				v[i] -= a_max[i] * t;
+			} else if(v[i] > 0 && (change[i] == true || reached[i] == true || tracking == false || (v[i]-v_max_act[i]) > 0.0001)) {//hamowanie
+				if (v[i] > v_max_act[i] && (v[i]-v_max_act[i])/t < a_max[i] && change[i] == false && reached[i] == false && tracking == true) {
+					v[i] = v_max_act[i];
+					s[i] = (((v[i]-v_max_act[i])/t) * t * t)/2 + (v[i] * t);
+				} else {
+					v[i] -= a_max[i] * t;
+					s[i] = (a_max[i] * t * t)/2 + (v[i] * t);
+				}
 				if (v[i] < 0) {
 					v[i] = 0;
 					s[i] = 0;

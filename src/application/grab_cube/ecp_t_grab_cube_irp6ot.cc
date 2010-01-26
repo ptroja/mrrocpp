@@ -48,13 +48,13 @@ void grab_cube::main_task_algorithm(void ) {
 
 	tracker->Move();
 
-	double v[MAX_SERVOS_NR]={0.20, 0.20, 0.01, 0.20, 0.20, 0.20, 0.20, 0.20};
+	/*double v[MAX_SERVOS_NR]={0.20, 0.20, 0.01, 0.20, 0.20, 0.20, 0.20, 0.20};
 	double a[MAX_SERVOS_NR]={0.15, 0.15, 0.5, 0.15, 0.15, 0.15, 0.15, 0.15};
 
 	smoothgen2->set_relative();
 	smoothgen2->load_coordinates(lib::ECP_JOINT,0,0,0,0,0,0,0,-0.017,true);
 	smoothgen2->Move();
-	smoothgen2->reset();
+	smoothgen2->reset();*/
 /*
 	smoothgen2->set_relative();
 	smoothgen2->load_coordinates(lib::XYZ_ANGLE_AXIS,v,a,0.008,0,0,0,0,0,0,0,true);
@@ -62,19 +62,19 @@ void grab_cube::main_task_algorithm(void ) {
 	smoothgen2->reset();
 	*/
 
-	vsp_fradia = sensor_m[lib::SENSOR_CVFRADIA];
+	//vsp_fradia = sensor_m[lib::SENSOR_CVFRADIA];
 
-	vsp_fradia->get_reading();
-	while(vsp_fradia->from_vsp.vsp_report == lib::VSP_SENSOR_NOT_CONFIGURED){
-		vsp_fradia->get_reading();
-	}
+	//vsp_fradia->get_reading();
+	//while(vsp_fradia->from_vsp.vsp_report == lib::VSP_SENSOR_NOT_CONFIGURED){
+	//	vsp_fradia->get_reading();
+	//}
 
-	turner->Move();
+	//turner->Move();
 
-	befgen->Move();
+	//befgen->Move();
 
-	gagen->configure(0.01,1500);
-	gagen->Move();
+	//gagen->configure(0.01,1500);
+	//gagen->Move();
 /*
 	smoothgen2->set_relative();
 	smoothgen2->load_coordinates(lib::XYZ_ANGLE_AXIS,v,a,0,0,-0.001,0,0,0,0,0,true);
