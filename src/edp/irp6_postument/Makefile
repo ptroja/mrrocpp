@@ -4,12 +4,11 @@
 #-----------------------------------------------------------------------------------------------------------------------#
 # Should be modified only by developers not by users
 HOMEDIR = ../../..
-KINEMATDIR = ${HOMEDIR}/src/kinematics
 include $(HOMEDIR)/common.mk
 
 SOURCES = ${wildcard *.cc}
 #OBJECTS = ${patsubst %.cc,%.o,${SOURCES}}
-KIN_OBJECTS = ${KINEMATDIR}/irp6_postument/libkinematicsirp6p.a $(KINEMATDIR)/common/libkinematics.a
+KIN_OBJECTS = ${KIN_DIR}/irp6_postument/libkinematicsirp6p.a $(KIN_DIR)/common/libkinematics.a
 	       
 OBJECTS = ../common/edp_vsp_t.o edp_irp6p_effector.o hi_irp6p.o int_hand_irp6p.o\
            regulator_irp6p.o sg_irp6p.o ../common/edp_irp6s_postument_track.o

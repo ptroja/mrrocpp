@@ -4,12 +4,11 @@
 #-----------------------------------------------------------------------------------------------------------------------#
 # Should be modified only by developers not by users
 HOMEDIR = ../../..
-KINEMATDIR = ${HOMEDIR}/src/kinematics
 include $(HOMEDIR)/common.mk
 
 SOURCES = ${wildcard *.cc}
 OBJECTS = ${patsubst %.cc,%.o,${SOURCES}}
-KIN_OBJECTS = ${KINEMATDIR}/polycrank/libkinematicspolycrank.a $(KINEMATDIR)/common/libkinematics.a
+KIN_OBJECTS = ${KIN_DIR}/polycrank/libkinematicspolycrank.a $(KIN_DIR)/common/libkinematics.a
 
 OBJECTS = edp_e_polycrank.o
 BINARIES  = edp_polycrank

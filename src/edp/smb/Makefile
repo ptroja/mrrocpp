@@ -4,17 +4,15 @@
 #-----------------------------------------------------------------------------------------------------------------------#
 # Should be modified only by developers not by users
 HOMEDIR = ../../..
-KINEMATDIR = ${HOMEDIR}/src/kinematics
 include $(HOMEDIR)/common.mk
 
 SOURCES = ${wildcard *.cc}
 #OBJECTS = ${patsubst %.cc,%.o,${SOURCES}}
-KIN_OBJECTS = ${KINEMATDIR}/smb/libkinematicssmb.a $(KINEMATDIR)/common/libkinematics.a
+KIN_OBJECTS = ${KIN_DIR}/smb/libkinematicssmb.a $(KIN_DIR)/common/libkinematics.a
 
 OBJECTS = edp_e_smb.o
 EDPOBJS  = ${OBJECTS} ${KIN_OBJECTS}
 BINARIES  = edp_smb
-
 
 SHOBJ = ../common/int_hand_suplement.o ../common/libedp.a $(LIBDIR)/libmrrocpp.a
 #======================================================#	

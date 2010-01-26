@@ -65,6 +65,7 @@ endif
 UI_DIR = $(HOMEDIR)/src/ui/src/gcc_ntox86
 ECP_DIR = $(HOMEDIR)/src/ecp
 ECP_MPDIR=$(HOMEDIR)/src/ecp_mp
+KIN_DIR=$(HOMEDIR)/src/kinematics
 
 #ifeq (,$(findstring "host/qnx/x86",$(QNX_HOST)))
 ifneq (,$(findstring host/qnx6/x86,$(QNX_HOST)))

@@ -4,17 +4,15 @@
 #-----------------------------------------------------------------------------------------------------------------------#
 # Should be modified only by developers not by users
 HOMEDIR = ../../..
-KINEMATDIR = ${HOMEDIR}/src/kinematics
 include $(HOMEDIR)/common.mk
 
 SOURCES = ${wildcard *.cc}
 #OBJECTS = ${patsubst %.cc,%.o,${SOURCES}}
-KIN_OBJECTS = ${KINEMATDIR}/irp6_mechatronika/libkinematicsirp6m.a $(KINEMATDIR)/common/libkinematics.a
+KIN_OBJECTS = ${KIN_DIR}/irp6_mechatronika/libkinematicsirp6m.a $(KIN_DIR)/common/libkinematics.a
 
 OBJECTS = hi_irp6m.o int_hand_irp6m.o sg_irp6m.o regulator_irp6m.o edp_irp6m_effector.o
 EDPOBJS  = ${OBJECTS} ${KIN_OBJECTS}
 BINARIES  = edp_irp6_mechatronika
-
 
 SHOBJ = ../common/libedp.a $(LIBDIR)/libmrrocpp.a
 #======================================================#	

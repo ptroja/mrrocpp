@@ -2,7 +2,6 @@
 #======================================================#
 # Should be modified only by developers not by users
 HOMEDIR = ../../..
-KINEMATDIR = ${HOMEDIR}/src/kinematics
 include $(HOMEDIR)/common.mk
 
 SOURCES = ${wildcard *.cc}
@@ -14,7 +13,6 @@ EDPOBJ = edp_m.o edp_effector.o \
 	servo_gr.o regulator.o in_out.o \
 	trans_t.o manip_trans_t.o vis_server.o reader.o \
 	hi_rydz.o edp_irp6s_postument_track.o
-
 
 #======================================================#	
 .PHONY: all clean install

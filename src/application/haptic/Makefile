@@ -15,8 +15,7 @@ endif
 # Should be modified only by developers not by users
 HOMEDIR = ../../..
 include $(HOMEDIR)/common.mk
-KINEMATDIR = ${HOMEDIR}/src/kinematics
-KIN_OBJECTS = ${KINEMATDIR}/irp6_on_track/libkinematicsirp6ot.a ${KINEMATDIR}/irp6_postument/libkinematicsirp6p.a $(KINEMATDIR)/common/libkinematics.a
+KIN_OBJECTS = ${KIN_DIR}/irp6_on_track/libkinematicsirp6ot.a ${KIN_DIR}/irp6_postument/libkinematicsirp6p.a $(KIN_DIR)/common/libkinematics.a
 
 SHOBJ = ${KIN_OBJECTS} ../../ecp_mp/libecp_mp.a ../../ecp_mp/ecp_mp_robot.o ../../mp/libmpmain.a ../../mp/libmprobots.a $(LIBDIR)/libmrrocpp.a
 #======================================================#	

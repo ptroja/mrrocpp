@@ -4,10 +4,9 @@
 #-----------------------------------------------------------------------------------------------------------------------#
 # Should be modified only by developers not by users
 HOMEDIR = ../../..
-KINEMATDIR = ${HOMEDIR}/src/kinematics
 include $(HOMEDIR)/common.mk
 
-KIN_OBJECTS = ${KINEMATDIR}/conveyor/libkinematicsconveyor.a $(KINEMATDIR)/common/libkinematics.a
+KIN_OBJECTS = ${KIN_DIR}/conveyor/libkinematicsconveyor.a $(KIN_DIR)/common/libkinematics.a
 
 SOURCES = ${wildcard *.cc}
 OBJECTS = ${patsubst %.cc,%.o,${SOURCES}}
