@@ -102,14 +102,13 @@ protected:
 	// Wyslanie polecenia ruchu do SERVO_GROUP oraz odebranie wyniku
 	// realizacji pierwszej fazy ruchu
 
-
 	lib::MotorArray servo_current_motor_pos; // Polozenia walow silnikow -// dla watku edp_servo    XXXX
 
 	lib::MotorArray global_current_motor_pos; // Polozenia walow silnikow -// globalne dla procesu EDP  XXXX
 
-	lib::JointArray global_current_joints; // Wspolrzedne wewnetrzne -// globalne dla procesu EDP   XXXXX
-
 	lib::JointArray servo_current_joints; // Wspolrzedne wewnetrzne -// dla watku EDP_SERVO   XXXXXX
+
+	lib::JointArray global_current_joints; // Wspolrzedne wewnetrzne -// globalne dla procesu EDP   XXXXX
 
 	boost::mutex edp_irp6s_effector_mutex; // mutex    XXXXXX
 
@@ -133,7 +132,6 @@ protected:
 
 	//    int16_t PWM_value[MAX_SERVOS_NR];             // wartosci zadane wypelnienia PWM
 	//    int16_t current[MAX_SERVOS_NR];                // prad sterujacy
-
 
 public:
 
