@@ -77,15 +77,11 @@ public:
 	void wait_for_event(void);		// oczekiwanie na zdarzenie
 	void initiate_reading (void);		// zadanie odczytu od VSP
 	void get_reading (void);			// odebranie odczytu od VSP		// zwraca blad
-
-
-
 }; // end: class vsp_sensor
 
 void send_request(uint64_t &counter, RawSocket *sock);
 void convert_data(int16_t result_raw[6], int16_t bias_raw[6], double force[6]);
-int get_data_from_ethernet(unsigned char buffer[512], RawSocket *sock,
-                           int16_t data_raw[6]) ;
+int get_data_from_ethernet(unsigned char buffer[512], RawSocket *sock, int16_t data_raw[6]) ;
 
 
 } // namespace sensor

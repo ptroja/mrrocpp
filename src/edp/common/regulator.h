@@ -10,7 +10,6 @@
 
 #include "edp/common/edp.h"
 #include "edp/common/hi_rydz.h"
-#include "edp/common/edp_extension_thread.h"
 
 namespace mrrocpp {
 namespace edp {

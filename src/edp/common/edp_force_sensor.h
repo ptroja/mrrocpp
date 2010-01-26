@@ -12,10 +12,12 @@
 
 #include <semaphore.h>
 
+#include <boost/utility.hpp>
+
+
 #include "lib/mrmath/ForceTrans.h"
 #include "lib/sensor.h"				// klasa bazowa sensor
 #include "edp/common/edp.h"				// klasa bazowa sensor
-#include "edp/common/edp_extension_thread.h"
 
 namespace mrrocpp {
 namespace edp {
@@ -25,7 +27,7 @@ class irp6s_postument_track_effector;
 namespace sensor {
 
 /********** klasa czujnikow po stronie EDP **************/
-class force: public lib::sensor, public common::edp_extension_thread
+class force : public lib::sensor, boost::noncopyable
 {
 	protected:
 		bool is_reading_ready; // czy jakikolwiek odczyt jest gotowy?
@@ -33,9 +35,7 @@ class force: public lib::sensor, public common::edp_extension_thread
 		lib::ForceTrans *gravity_transformation; // klasa likwidujaca wplyw grawitacji na czujnik
 
 	public:
-		void create_thread(void);
-		static void *thread_start(void* arg);
-		void *thread_main_loop(void* arg);
+		void operator()(void);
 
 		lib::sr_vsp *sr_msg; //!< komunikacja z SR
 		sem_t new_ms; //!< semafor dostepu do nowej wiadomosci dla vsp
@@ -64,7 +64,6 @@ class force: public lib::sensor, public common::edp_extension_thread
 
 		virtual void wait_for_event(void) = 0; // oczekiwanie na zdarzenie
 		void set_force_tool(void);
-
 }; // end: class edp_force_sensor
 
 

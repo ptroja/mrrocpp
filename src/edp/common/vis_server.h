@@ -8,8 +8,6 @@
 #include <boost/thread/thread.hpp>
 #include <boost/utility.hpp>
 
-#include "edp/common/edp_extension_thread.h"
-
 namespace mrrocpp {
 namespace edp {
 namespace common {

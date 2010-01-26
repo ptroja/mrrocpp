@@ -9,7 +9,6 @@
 #ifndef __TRANS_T_H
 #define __TRANS_T_H
 
-#include <stdint.h>
 #include <semaphore.h>
 
 #include "lib/typedefs.h"
@@ -17,9 +16,12 @@
 #include "lib/com_buf.h"
 
 #include "edp/common/edp.h"
-#include "edp/common/edp_extension_thread.h"
 
 #include "lib/exception.h"
+
+#include <boost/utility.hpp>
+#include <boost/thread/thread.hpp>
+
 using namespace mrrocpp::lib::exception;
 
 namespace mrrocpp {

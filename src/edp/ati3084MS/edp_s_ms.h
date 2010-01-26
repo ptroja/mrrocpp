@@ -33,7 +33,7 @@ int16_t ft[6];
 #define PORT "/dev/ser1"
 
 /********** klasa czujnikow po stronie VSP **************/
-class ATI3084_force : public force{
+class ATI3084_force : public force {
 typedef boost::scoped_ptr<google::protobuf::Closure> ClosurePtr;
 private:
 	kiper::clients::AsioUdpClient rpcClient_;

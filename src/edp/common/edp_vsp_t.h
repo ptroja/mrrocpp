@@ -13,30 +13,22 @@
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 
-#include "edp/common/edp_extension_thread.h"
-
-
 namespace mrrocpp {
 namespace edp {
 namespace common {
 
 class irp6s_postument_track_effector;
 
-class edp_vsp : public edp_extension_thread
+class edp_vsp
 {
 private:
 	irp6s_postument_track_effector &master;
 
 public:
-    void create_thread(void);
-	static void *thread_start(void* arg);
-    void *thread_main_loop(void* arg);
-
+    void operator()(void);
 
     edp_vsp(irp6s_postument_track_effector &_master);
-    ~edp_vsp();
 };
-
 
 
 

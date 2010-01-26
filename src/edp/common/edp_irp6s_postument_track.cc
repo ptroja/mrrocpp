@@ -20,9 +20,9 @@
 #include <sys/wait.h>
 #include <sys/types.h>
 #include <errno.h>
-#include <pthread.h>
 #include <semaphore.h>
 
+#include <boost/thread/thread.hpp>
 #include <boost/thread/mutex.hpp>
 #include <boost/thread/condition.hpp>
 
@@ -161,9 +161,7 @@ void irp6s_postument_track_effector::get_rmodel(lib::c_buffer &instruction)
 irp6s_postument_track_effector::irp6s_postument_track_effector(lib::configurator &_config, lib::robot_name_t l_robot_name) :
 	manip_effector(_config, l_robot_name)
 {
-
 	// czujnik sil nie zostal jeszcze skonfigurowany po synchronizacji robota
-
 
 	if (config.exists("force_tryb"))
 		force_tryb = config.value <int> ("force_tryb");
@@ -177,7 +175,6 @@ irp6s_postument_track_effector::irp6s_postument_track_effector(lib::configurator
 		is_gripper_active = 1;
 
 	sem_init(&force_master_sem, 0, 0);
-
 }
 
 /*--------------------------------------------------------------------------*/
@@ -192,12 +189,12 @@ void irp6s_postument_track_effector::create_threads()
 		edp_vsp_obj = new edp_vsp(*this); //!< czujnik wirtualny
 
 		// byY - utworzenie watku pomiarow sily
-		vs->create_thread();
+		new boost::thread(boost::bind(&sensor::force::operator(), vs));
 
 		sem_wait(&force_master_sem);
 
 		// by Y - utworzenie watku komunikacji miedzy EDP a VSP
-		edp_vsp_obj->create_thread();
+		new boost::thread(*edp_vsp_obj);
 	}
 #endif
 	manip_and_conv_effector::hi_create_threads();
@@ -206,7 +203,6 @@ void irp6s_postument_track_effector::create_threads()
 /*--------------------------------------------------------------------------*/
 void irp6s_postument_track_effector::compute_base_pos_xyz_rot_xyz_vector(const lib::JointArray begining_joints, const lib::Homog_matrix begining_end_effector_frame, const lib::c_buffer &instruction, lib::Xyz_Angle_Axis_vector& base_pos_xyz_rot_xyz_vector)
 {
-
 	const lib::MOTION_TYPE &motion_type = instruction.motion_type;
 	const lib::POSE_SPECIFICATION &set_arm_type = instruction.set_arm_type;
 	lib::Homog_matrix arm_frame(instruction.arm.pf_def.arm_frame);
@@ -371,7 +367,7 @@ void irp6s_postument_track_effector::iterate_macrostep(const lib::JointArray beg
 	lib::V_tr v_tr_inv_tool_matrix = !v_tr_tool_matrix;
 
 	// poczatek generacji makrokrokubase_pos_xyz_rot_xyz_vector
-	for (int step = 1; step <= ECP_motion_steps; step++) {
+	for (int step = 1; step <= ECP_motion_steps; ++step) {
 
 		lib::Homog_matrix current_frame_wo_offset = return_current_frame(WITHOUT_TRANSLATION);
 
@@ -512,7 +508,6 @@ void irp6s_postument_track_effector::iterate_macrostep(const lib::JointArray beg
 /*--------------------------------------------------------------------------*/
 void irp6s_postument_track_effector::pose_force_torque_at_frame_move(const lib::c_buffer &instruction)
 {
-
 	// WYLICZENIE POZYCJI POCZATKOWEJ
 	lib::JointArray begining_joints(MAX_SERVOS_NR);
 	lib::Homog_matrix begining_end_effector_frame;
@@ -526,7 +521,6 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(const lib::
 
 	// macrostep iteration
 	iterate_macrostep(begining_joints, begining_end_effector_frame, instruction, base_pos_xyz_rot_xyz_vector);
-
 }
 /*--------------------------------------------------------------------------*/
 
@@ -549,7 +543,6 @@ void irp6s_postument_track_effector::move_arm(lib::c_buffer &instruction)
 		default:
 			break;
 	}
-
 }
 /*--------------------------------------------------------------------------*/
 

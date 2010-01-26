@@ -1,6 +1,6 @@
 /*	! \file src/edp/irp6s/force.cc
  * \brief WATKI SILOWE
- * Ostatnia modyfikacja: kwiecie� 2006*/
+ * Ostatnia modyfikacja: kwiecie��� 2006*/
 
 /********************************* INCLUDES *********************************/
 #include <stdio.h>
@@ -44,28 +44,11 @@ namespace common {
 
 
 edp_vsp::edp_vsp(irp6s_postument_track_effector &_master) :
-	edp_extension_thread(_master), master (_master)
-{}
-
-edp_vsp::~edp_vsp()
-{}
-
-
-void edp_vsp::create_thread(void)
+	master (_master)
 {
-	if (pthread_create (&thread_id, NULL, &thread_start, (void *) this))
-	{
-	    master.msg->message(lib::SYSTEM_ERROR, errno, "EDP: Failed to create edp_vsp thread");
-	    throw System_error();
-	}
 }
 
-void * edp_vsp::thread_start(void* arg)
-{
-	return static_cast<edp_vsp*> (arg)->thread_main_loop(arg);
-}
-
-void * edp_vsp::thread_main_loop(void *arg)
+void edp_vsp::operator()(void)
 {
 #if !defined(USE_MESSIP_SRR)
 	name_attach_t *edp_vsp_attach;
@@ -110,7 +93,7 @@ void * edp_vsp::thread_main_loop(void *arg)
 			continue;
 		}
 
-		/*!A QNX IO message received, reject */
+		/*! A QNX IO message received, reject */
 		if (vsp_edp_command.hdr.type >= _IO_BASE && vsp_edp_command.hdr.type <= _IO_MAX) {
 			MsgReply(vsp_caller, EOK, 0, 0);
 			continue;
@@ -158,7 +141,6 @@ void * edp_vsp::thread_main_loop(void *arg)
 		}
 	} //!< end while
 #endif /* USE_MESSIP_SRR */
-	return NULL;
 }
 
 } // namespace common
