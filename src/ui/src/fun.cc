@@ -2452,18 +2452,18 @@ int pulse_ecp_all_robots(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t 
 
 bool check_node_existence(const std::string _node, const std::string beginnig_of_message)
 {
-	DIR* dirp;
+
 	std::string opendir_path("/net/");
 	opendir_path += _node;
-	if ((dirp = opendir(opendir_path.c_str())) != NULL) {
-		closedir(dirp);
-		return true;
-	} else {
+
+	if (access(opendir_path.c_str(), R_OK) != 0)
+	{
 		std::string tmp(beginnig_of_message);
 		tmp += std::string(" node: ") + ui_state.irp6_on_track.edp.node_name + std::string(" is unreachable");
 		ui_msg.ui->message(lib::NON_FATAL_ERROR, tmp);
 
 		return false;
 	}
+	return true;
 }
 
