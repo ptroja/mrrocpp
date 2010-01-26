@@ -62,10 +62,7 @@ typedef struct sr_package
 // int global_name_open(const char *name, int flags);// by Y do oblsugi name_open pomiedzy nodami,
 // tymczasowe rozwiazanie porponowane przez ekipe QNX
 
-
-
-
-class sr : public boost::noncopyable
+class sr: public boost::noncopyable
 {
 private:
 	int set_queue_not_empty();
@@ -73,8 +70,7 @@ private:
 	int set_queue_empty();
 
 	boost::mutex srMutex; //! one-thread a time access mutex
-	sem_t sem;
-	sem_t queue_empty_sem;
+	sem_t sem, queue_empty_sem;
 #if !defined(USE_MESSIP_SRR)
 	int fd; // by W
 #else
@@ -97,22 +93,22 @@ public:
 	boost::circular_buffer <lib::sr_package_t> cb;
 	boost::mutex sr_mutex; // = PTHREAD_MUTEX_INITIALIZER ;
 
-			sr(process_type_t process_type, const std::string & process_name, const std::string & sr_name, const bool _multi_thread, const int _thread_priority);
+	sr(process_type_t process_type, const std::string & process_name, const std::string & sr_name, const bool _multi_thread, const int _thread_priority);
 	virtual ~sr(void);
 	int message(error_class_t message_type, uint64_t error_code);
 	int message(error_class_t message_type, uint64_t error_code0, uint64_t error_code1);
 	int message(error_class_t message_type, uint64_t error_code, const char *text);
-	int message(error_class_t message_type, uint64_t error_code, std::string text)
+	int message(error_class_t message_type, uint64_t error_code, const std::string & text)
 	{
 		return message(message_type, error_code, text.c_str());
 	}
 	int message(const char *text);
-	int message(std::string text)
+	int message(const std::string & text)
 	{
 		return message(text.c_str());
 	}
 	int message(error_class_t message_type, const char *text);
-	int message(error_class_t message_type, std::string text)
+	int message(error_class_t message_type, const std::string & text)
 	{
 		return message(message_type, text.c_str());
 	}
@@ -123,7 +119,7 @@ public:
 class sr_edp: public sr
 {
 public:
-			sr_edp(process_type_t process_type, const std::string & process_name, const std::string & sr_name, const bool _multi_thread, const int _thread_priority);
+	sr_edp(process_type_t process_type, const std::string & process_name, const std::string & sr_name, const bool _multi_thread, const int _thread_priority);
 protected:
 	virtual void interpret(void);
 };
@@ -131,7 +127,7 @@ protected:
 class sr_ecp: public sr
 {
 public:
-			sr_ecp(process_type_t process_type, const std::string & process_name, const std::string & sr_name, const bool _multi_thread, const int _thread_priority);
+	sr_ecp(process_type_t process_type, const std::string & process_name, const std::string & sr_name, const bool _multi_thread, const int _thread_priority);
 protected:
 	virtual void interpret(void);
 };
@@ -140,7 +136,7 @@ protected:
 class sr_vsp: public sr
 {
 public:
-			sr_vsp(process_type_t process_type, const std::string & process_name, const std::string & sr_name, const bool _multi_thread, const int _thread_priority);
+	sr_vsp(process_type_t process_type, const std::string & process_name, const std::string & sr_name, const bool _multi_thread, const int _thread_priority);
 protected:
 	virtual void interpret(void);
 };
@@ -149,13 +145,12 @@ protected:
 class sr_ui: public sr
 {
 public:
-			sr_ui(process_type_t process_type, const std::string & process_name, const std::string & sr_name, const bool _multi_thread, const int _thread_priority);
+	sr_ui(process_type_t process_type, const std::string & process_name, const std::string & sr_name, const bool _multi_thread, const int _thread_priority);
 protected:
 	virtual void interpret(void);
 };
 
 } // namespace lib
 } // namespace mrrocpp
-
 
 #endif

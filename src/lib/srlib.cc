@@ -39,39 +39,6 @@ namespace lib {
  */
 
 #if !defined(USE_MESSIP_SRR)
-// Konstruktor
-
-int sr::set_new_msg() // podniesienie semafora
-{
-	sem_trywait(&sem);
-	return sem_post(&sem);// odwieszenie watku edp_master
-}
-
-int sr::wait_for_new_msg() // oczekiwanie na semafor
-{
-	return sem_wait(&sem);
-}
-
-int sr::wait_for_empty_queue() // oczekiwanie na semafor
-{
-	if (multi_thread) {
-		sem_wait(&queue_empty_sem);
-		return sem_post(&queue_empty_sem);
-	} else {
-		return 1;
-	}
-}
-
-int sr::set_queue_not_empty() // opuszczenie semafora
-{
-	return sem_trywait(&queue_empty_sem);
-}
-
-int sr::set_queue_empty() // podniesienie semafora
-{
-	sem_trywait(&queue_empty_sem);
-	return sem_post(&queue_empty_sem);
-}
 
 sr::sr(process_type_t process_type, const std::string & process_name, const std::string & sr_name, const bool _multi_thread, const int _thread_priority) :
 	multi_thread(_multi_thread), thread_priority(_thread_priority), cb(SR_BUFFER_LENGHT)
@@ -148,8 +115,9 @@ int sr::send_package(void) {
 }
 #else /* USE_MESSIP_SRR */
 // Konstruktor
-sr::sr(process_type_t process_type, const std::string & process_name, const std::string & sr_name) {
-
+sr::sr(process_type_t process_type, const std::string & process_name, const std::string & sr_name, const bool _multi_thread, const int _thread_priority) :
+	multi_thread(_multi_thread), thread_priority(_thread_priority), cb(SR_BUFFER_LENGHT)
+{
 	int tmp = 0;
 	while ((ch = messip::port_connect(sr_name)) == NULL) {
 		if (tmp++ < 50) {
@@ -196,6 +164,38 @@ int sr::send_package(void) {
 	return messip::port_send_sync(ch, 0, 0, sr_message);
 }
 #endif /* !USE_MESSIP_SRR */
+
+int sr::set_new_msg() // podniesienie semafora
+{
+	sem_trywait(&sem);
+	return sem_post(&sem);// odwieszenie watku edp_master
+}
+
+int sr::wait_for_new_msg() // oczekiwanie na semafor
+{
+	return sem_wait(&sem);
+}
+
+int sr::wait_for_empty_queue() // oczekiwanie na semafor
+{
+	if (multi_thread) {
+		sem_wait(&queue_empty_sem);
+		return sem_post(&queue_empty_sem);
+	} else {
+		return 1;
+	}
+}
+
+int sr::set_queue_not_empty() // opuszczenie semafora
+{
+	return sem_trywait(&queue_empty_sem);
+}
+
+int sr::set_queue_empty() // podniesienie semafora
+{
+	sem_trywait(&queue_empty_sem);
+	return sem_post(&queue_empty_sem);
+}
 
 /* -------------------------------------------------------------------- */
 /* Wysylka wiadomosci do procesu SR                                     */
