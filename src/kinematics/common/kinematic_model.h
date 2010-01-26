@@ -70,7 +70,6 @@ public:
 
 	//! Returns description of kinematics.
 	virtual const char* get_kinematic_model_label(void);
-
 };
 
 } // namespace common

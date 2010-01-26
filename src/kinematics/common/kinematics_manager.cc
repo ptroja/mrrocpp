@@ -27,9 +27,9 @@ kinematics_manager::~kinematics_manager(void)
 	}//: while
 }
 
-void kinematics_manager::set_kinematic_model(int _desired_kinematic_model_nr)
+void kinematics_manager::set_kinematic_model(unsigned int _desired_kinematic_model_nr)
 {
-	if (_desired_kinematic_model_nr >= kinematic_models_list.size() || _desired_kinematic_model_nr < 0)
+	if (_desired_kinematic_model_nr >= kinematic_models_list.size())
 		throw NonFatal_error_2(INVALID_KINEMATIC_MODEL_NO);
 
 	current_kinematic_model = (kinematic_model*) (kinematic_models_list[_desired_kinematic_model_nr]);
@@ -47,7 +47,7 @@ kinematic_model* kinematics_manager::get_current_kinematic_model(void)
 	return current_kinematic_model;
 }
 
-int kinematics_manager::get_current_kinematic_model_no(void)
+unsigned int kinematics_manager::get_current_kinematic_model_no(void)
 {
 	return current_kinematic_model_no;
 }
