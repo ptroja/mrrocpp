@@ -1612,11 +1612,8 @@ irp6p_xyz_angle_axis_motion( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInf
 		PtSetResource(ABW_PtNumericFloat_wind_irp6p_xyz_angle_axis_p6, Pt_ARG_NUMERIC_VALUE, &wektor[5] , 0);
 		PtSetResource(ABW_PtNumericFloat_wind_irp6p_xyz_angle_axis_p7, Pt_ARG_NUMERIC_VALUE, &wektor[6] , 0);
 		PtSetResource(ABW_PtNumericFloat_wind_irp6p_xyz_angle_axis_p8, Pt_ARG_NUMERIC_VALUE, &wektor[7] , 0);
+	}
 
-	}
-	else
-	{
-	}
 	} // end try
 	CATCH_SECTION_UI
 
