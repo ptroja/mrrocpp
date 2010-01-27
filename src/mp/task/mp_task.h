@@ -85,9 +85,6 @@ class task: public ecp_mp::task::task
 		// Wyslanie rozkazu do wszystkich ECP
 		void execute_all (const common::robots_t & _robot_m);
 
-		// obsluga sygnalu
-		virtual void catch_signal_in_mp_task(int sig);
-
 		/// method redefine in concrete classes
 		virtual void main_task_algorithm(void) = 0;
 

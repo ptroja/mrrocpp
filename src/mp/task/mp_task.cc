@@ -37,65 +37,15 @@
 #include "mp/robot/mp_r_speaker.h"
 #include "mp/robot/mp_r_polycrank.h"
 
+#if defined(USE_MESSIP_SRR)
+#include <messip_dataport.h>
+#endif
+
 namespace mrrocpp {
 namespace mp {
 namespace task {
 
 using namespace std;
-
-// obsluga sygnalu
-void task::catch_signal_in_mp_task(int sig)
-{
-	// print info message
-	fprintf(stderr, "MP: %s\n", strsignal(sig));
-	pid_t child_pid;
-	int status;
-	switch (sig) {
-	case SIGTERM:
-		//case SIGINT:
-		sr_ecp_msg->message("MP terminated");
-		sr_ecp_msg->wait_for_empty_queue();
-		_exit(EXIT_SUCCESS);
-		break;
-	case SIGSEGV:
-		signal(SIGSEGV, SIG_DFL);
-		break;
-	case SIGCHLD:
-		child_pid = waitpid(-1, &status, 0);
-		if (child_pid == -1) {
-			perror("MP: waitpid()");
-		} else if (child_pid == 0) {
-			fprintf(stderr, "MP: no child exited\n");
-		} else {
-			//fprintf(stderr, "UI: child %d...\n", child_pid);
-			if (WIFEXITED(status)) {
-				fprintf(stderr, "MP: child %d exited normally with status %d\n",
-						child_pid, WEXITSTATUS(status));
-			}
-			if (WIFSIGNALED(status)) {
-#ifdef WCOREDUMP
-				if (WCOREDUMP(status)) {
-					fprintf(stderr, "MP: child %d terminated by signal %d (core dumped)\n",
-							child_pid, WTERMSIG(status));
-				}
-				else
-#endif /* WCOREDUMP */
-				{
-					fprintf(stderr, "MP: child %d terminated by signal %d\n",
-							child_pid, WTERMSIG(status));
-				}
-			}
-			if (WIFSTOPPED(status)) {
-				fprintf(stderr, "MP: child %d stopped\n", child_pid);
-			}
-			if (WIFCONTINUED(status)) {
-				fprintf(stderr, "MP: child %d resumed\n", child_pid);
-			}
-		}
-		break;
-	}
-
-}
 
 #if !defined(USE_MESSIP_SRR)
 name_attach_t* task::mp_pulse_attach = NULL;
@@ -121,6 +71,16 @@ task::~task()
 	// Remove (kill) all ECP from the container
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m) {
 		delete robot_node.second;
+	}
+
+	// TODO: check for error
+	if(mp_pulse_attach) {
+#if !defined(USE_MESSIP_SRR)
+		name_detach(mp_pulse_attach, 0);
+#else
+		messip::port_delete(mp_pulse_attach);
+#endif
+		mp_pulse_attach = NULL;
 	}
 }
 
@@ -582,14 +542,11 @@ int task::wait_for_name_open(void)
 #else
    while(1) {
 	   int32_t type, subtype;
-	   int rcvid = messip_receive(mp_pulse_attach,
-			   &type, &subtype,
-			   NULL, 0,
-			   MESSIP_NOTIMEOUT);
+	   int rcvid = messip::port_receive_pulse(mp_pulse_attach, type, subtype);
 
 	   if (rcvid == -1) {
 		   int e = errno;
-		   perror("MP: messip_receive()");
+		   perror("MP: messip::port_receive_pulse()");
 		   throw common::MP_main_error(lib::SYSTEM_ERROR, e);
 	   } else if (rcvid >= 0) {
 		   fprintf(stderr, "MP: unexpected message received\n");
@@ -730,24 +687,21 @@ bool task::check_and_optional_wait_for_new_pulse (WAIT_FOR_NEW_PULSE_MODE proces
 			throw common::MP_main_error(lib::SYSTEM_ERROR, 0);
 		}
 #else
-		/*
 		int32_t type, subtype;
-		int rcvid = messip_receive(mp_pulse_attach,
-				&type, &subtype,
-				NULL, 0,
-				(wait_mode == BLOCK) ? MESSIP_NOTIMEOUT : 0);
+		int rcvid = messip::port_receive_pulse(mp_pulse_attach, type, subtype,
+				(current_wait_mode == BLOCK) ? MESSIP_NOTIMEOUT : 0);
 
 		if (rcvid == -1) {
 			int e = errno;
-			perror("MP: messip_receive()");
+			perror("MP: messip::port_receive_pulse()");
 			throw common::MP_main_error(lib::SYSTEM_ERROR, e);
 		} else if (rcvid == MESSIP_MSG_TIMEOUT) {
-			if (wait_mode == NONBLOCK) {
-				return false;
+			if (desired_wait_mode == BLOCK && !desired_pulse_found) {
+				current_wait_mode = BLOCK;
+			} else {
+				exit_from_while = true;
 			}
-			int e = errno;
-			perror("MP: messip_receive() unexpected timeout");
-			throw common::MP_main_error(lib::SYSTEM_ERROR, e);
+			continue;
 		} else if (rcvid >= 0) {
 			fprintf(stderr, "MP: unexpected message received\n");
 			throw common::MP_main_error(lib::SYSTEM_ERROR, 0);
@@ -756,19 +710,33 @@ bool task::check_and_optional_wait_for_new_pulse (WAIT_FOR_NEW_PULSE_MODE proces
 			if (ui_opened && ui_scoid == mp_pulse_attach->lastmsg_sockfd) {
 				ui_new_pulse = true;
 				ui_pulse_code = type;
+				if ((process_type == NEW_UI_PULSE) || (process_type == NEW_UI_OR_ECP_PULSE)) {
+					desired_pulse_found = true;
+					if (current_wait_mode == BLOCK) {
+						exit_from_while = true;
+					}
+				}
 				fprintf(stderr, "new UI pulse type %d received\n", type);
+				continue;
 			}
 
 			BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m) {
 				if (robot_node.second->opened && robot_node.second->scoid == mp_pulse_attach->lastmsg_sockfd) {
 					robot_node.second->new_pulse = true;
 					robot_node.second->pulse_code = type;
-					fprintf(stderr, "new robot pulse type %d received\n", type);
+					if ((process_type == NEW_ECP_PULSE) || (process_type == NEW_UI_OR_ECP_PULSE)) {
+						if (!(robot_node.second->new_pulse_checked)) {
+							desired_pulse_found = true;
+							if (current_wait_mode == BLOCK) {
+								exit_from_while = true;
+							}
+						}
+					}
+					// can we get out of this loop?
+					fprintf(stderr, "new %s pulse type %d received\n", lib::toString(robot_node.second->robot_name).c_str(), type);
 				}
 			}
-			// continue; ?
 		}
-		*/
 #endif
 	}
 
@@ -877,6 +845,7 @@ void task::initialize_communication()
 	std::string sr_net_attach_point = config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", UI_SECTION);
 	std::string mp_attach_point = config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "mp_attach_point");
 
+	// Obiekt do komuniacji z SR
 	sr_ecp_msg = new lib::sr_ecp(lib::MP, mp_attach_point, sr_net_attach_point, true); // Obiekt do komuniacji z SR
 
 	std::string mp_pulse_attach_point = config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "mp_pulse_attach_point");
@@ -886,7 +855,7 @@ void task::initialize_communication()
 #if !defined(USE_MESSIP_SRR)
 		if ((mp_pulse_attach = name_attach(NULL, mp_pulse_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) == NULL)
 #else
-		if ((mp_pulse_attach = messip_channel_create(NULL, mp_pulse_attach_point.c_str(), MESSIP_NOTIMEOUT, 0)) == NULL)
+		if ((mp_pulse_attach = messip::port_create(mp_pulse_attach_point)) == NULL)
 #endif
 		{
 			uint64_t e = errno; // kod bledu systemowego

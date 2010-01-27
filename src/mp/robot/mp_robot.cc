@@ -7,14 +7,21 @@
 #include <string.h>
 #include <unistd.h>
 #include <errno.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
+#include "lib/datastr.h"
 
 #include "lib/srlib.h"
 #include "mp/mp.h"
 #include "mp/task/mp_task.h"
+
+#if defined(USE_MESSIP_SRR)
+#include <messip_dataport.h>
+#endif
 
 #include <boost/foreach.hpp>
 
@@ -62,7 +69,7 @@ robot::robot( lib::robot_name_t l_robot_name, const char* _section_name, task::t
 #if !defined(USE_MESSIP_SRR)
 	while ((ECP_fd = name_open(ecp_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) < 0)
 #else
-	while ((ECP_fd = messip_channel_connect(NULL, ecp_attach_point.c_str(), MESSIP_NOTIMEOUT)) == NULL)
+	while ((ECP_fd = messip::port_connect(ecp_attach_point)) == NULL)
 #endif
 		if ((tmp++) < CONNECT_RETRY)
 			usleep(1000 * CONNECT_DELAY);
@@ -85,14 +92,21 @@ robot::~robot() {
 	}
 #else /* USE_MESSIP_SRR */
 	if (ECP_fd) {
-		messip_channel_disconnect(ECP_fd, MESSIP_NOTIMEOUT);
+		messip::port_disconnect(ECP_fd);
 	}
 #endif /* USE_MESSIP_SRR */
 
 #if defined(PROCESS_SPAWN_RSH)
-		kill(ECP_pid, SIGTERM);
+	if (kill(ECP_pid, SIGTERM) == -1) {
+		perror("kill()");
+		fprintf(stderr, "kill failed for robot %s pid %d\n", lib::toString(robot_name).c_str(), ECP_pid);
+	} else {
+		if(waitpid(ECP_pid, NULL, 0) == -1) {
+			perror("waitpid()");
+		}
+	}
 #else
-		SignalKill(nd, ECP_pid, 0, SIGTERM, 0, 0);
+	SignalKill(nd, ECP_pid, 0, SIGTERM, 0, 0);
 #endif
 }
 
@@ -105,9 +119,7 @@ void robot::start_ecp ( void ) {
 	mp_command.hdr.type = 0;
 	if ( MsgSend ( ECP_fd, &mp_command, sizeof(mp_command), &ecp_reply_package, sizeof(ecp_reply_package)) == -1) {// by Y&W
 #else
-	int status;
-	if(messip_send(ECP_fd, 0, 0, &mp_command, sizeof(mp_command),
-				&status, &ecp_reply_package, sizeof(ecp_reply_package), MESSIP_NOTIMEOUT) < 0) {
+	if(messip::port_send(ECP_fd, 0, 0, mp_command, ecp_reply_package) < 0) {
 #endif
 		uint64_t e = errno;
 		perror("Send to ECP failed");
@@ -129,14 +141,11 @@ void robot::start_ecp ( void ) {
 // -------------------------------------------------------------------
 void robot::execute_motion(void) { // zlecenie wykonania ruchu
 
-
 #if !defined(USE_MESSIP_SRR)
-        mp_command.hdr.type = 0;
+	mp_command.hdr.type = 0;
 	if ( MsgSend ( ECP_fd, &mp_command, sizeof(mp_command), &ecp_reply_package, sizeof(ecp_reply_package)) == -1) {// by Y&W
 #else
-	int status;
-	if(messip_send(ECP_fd, 0, 0, &mp_command, sizeof(mp_command),
-			&status, &ecp_reply_package, sizeof(ecp_reply_package), MESSIP_NOTIMEOUT) < 0) {
+	if(messip::port_send(ECP_fd, 0, 0, mp_command, ecp_reply_package) < 0) {
 #endif
 		// Blad komunikacji miedzyprocesowej - wyjatek
 		uint64_t e = errno;
@@ -160,14 +169,11 @@ void robot::execute_motion(void) { // zlecenie wykonania ruchu
 void robot::terminate_ecp(void) { // zlecenie STOP zakonczenia ruchu
 	mp_command.command = lib::STOP;
 
-
 #if !defined(USE_MESSIP_SRR)
 	mp_command.hdr.type = 0;
 	if (MsgSend(ECP_fd, &mp_command, sizeof(mp_command), &ecp_reply_package, sizeof(ecp_reply_package)) == -1) {// by Y&W
 #else
-	int status;
-	if(messip_send(ECP_fd, 0, 0, &mp_command, sizeof(mp_command),
-			&status, &ecp_reply_package, sizeof(ecp_reply_package), MESSIP_NOTIMEOUT) < 0) {
+	if(messip::port_send(ECP_fd, 0, 0, mp_command, ecp_reply_package) < 0) {
 #endif
 		// Blad komunikacji miedzyprocesowej - wyjatek
 		uint64_t e = errno;

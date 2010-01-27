@@ -7,6 +7,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <signal.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
@@ -26,16 +28,57 @@ task::task* mp_t;
 
 void catch_signal_in_mp(int sig)
 {
-	mp_t->catch_signal_in_mp_task(sig);
-	delete mp_t;
-	printf("za catch_signal_in_mp\n");
-#if defined(__QNXNTO__)
+	// print info message
+	fprintf(stderr, "MP: %s\n", strsignal(sig));
+	pid_t child_pid;
+	int status;
+	switch (sig) {
+	case SIGTERM:
+		mp_t->sr_ecp_msg->message("MP terminated");
+		// restore default (none) handler for SIGCHLD
+		signal(SIGCHLD, SIG_DFL);
+		delete mp_t;
+		exit(EXIT_SUCCESS);
+		break;
+	case SIGSEGV:
+		signal(SIGSEGV, SIG_DFL);
+		break;
+	case SIGCHLD:
+		child_pid = waitpid(-1, &status, 0);
+		if (child_pid == -1) {
+			perror("MP: waitpid()");
+		} else if (child_pid == 0) {
+			fprintf(stderr, "MP: no child exited\n");
+		} else {
+			//fprintf(stderr, "UI: child %d...\n", child_pid);
+			if (WIFEXITED(status)) {
+				fprintf(stderr, "MP: child %d exited normally with status %d\n",
+						child_pid, WEXITSTATUS(status));
+			}
+			if (WIFSIGNALED(status)) {
+#ifdef WCOREDUMP
+				if (WCOREDUMP(status)) {
+					fprintf(stderr, "MP: child %d terminated by signal %d (core dumped)\n",
+							child_pid, WTERMSIG(status));
+				}
+				else
+#endif /* WCOREDUMP */
+				{
+					fprintf(stderr, "MP: child %d terminated by signal %d\n",
+							child_pid, WTERMSIG(status));
+				}
+			}
+			if (WIFSTOPPED(status)) {
+				fprintf(stderr, "MP: child %d stopped\n", child_pid);
+			}
+			if (WIFCONTINUED(status)) {
+				fprintf(stderr, "MP: child %d resumed\n", child_pid);
+			}
+		}
+		break;
+	}
 	flushall();
-#endif
 }
-
-
-
 
 } // namespace common
 } // namespace mp
@@ -68,6 +111,7 @@ int main (int argc, char *argv[], char **arge)
 			signal(SIGSEGV, &(mp::common::catch_signal_in_mp));
 			signal(SIGCHLD, &(mp::common::catch_signal_in_mp));
 #if defined(PROCESS_SPAWN_RSH)
+			// ignore Ctrl-C signal, which cames from UI console
 			signal(SIGINT, SIG_IGN);
 #endif
 		}
