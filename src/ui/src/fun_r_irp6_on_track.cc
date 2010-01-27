@@ -1272,11 +1272,8 @@ int irp6ot_xyz_euler_zyz_motion(PtWidget_t *widget, ApInfo_t *apinfo, PtCallback
 
 int init_wnd_irp6_on_track_xyz_angle_axis(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 {
-
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
-
-	double alfa, kx, ky, kz;
 
 	// wychwytania ew. bledow ECP::robot
 	try {
@@ -1290,19 +1287,19 @@ int init_wnd_irp6_on_track_xyz_angle_axis(PtWidget_t *widget, ApInfo_t *apinfo, 
 				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_read_p3, Pt_ARG_NUMERIC_VALUE, &irp6ot_current_pos[2] , 0);
 				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_read_p8, Pt_ARG_NUMERIC_VALUE, &irp6ot_current_pos[6] , 0);
 
-				alfa = sqrt(irp6ot_current_pos[3] * irp6ot_current_pos[3] + irp6ot_current_pos[4]
+				const double alfa = sqrt(irp6ot_current_pos[3] * irp6ot_current_pos[3] + irp6ot_current_pos[4]
 						* irp6ot_current_pos[4] + irp6ot_current_pos[5] * irp6ot_current_pos[5]);
 
-				kx = irp6ot_current_pos[3] / alfa;
-				ky = irp6ot_current_pos[4] / alfa;
-				kz = irp6ot_current_pos[5] / alfa;
+				const double kx = irp6ot_current_pos[3] / alfa;
+				const double ky = irp6ot_current_pos[4] / alfa;
+				const double kz = irp6ot_current_pos[5] / alfa;
 
 				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_read_p4, Pt_ARG_NUMERIC_VALUE, &kx , 0);
 				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_read_p5, Pt_ARG_NUMERIC_VALUE, &ky , 0);
 				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_read_p6, Pt_ARG_NUMERIC_VALUE, &kz , 0);
 				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_read_p7, Pt_ARG_NUMERIC_VALUE, &alfa , 0);
 
-				for (int i = 0; i < IRP6_ON_TRACK_NUM_OF_SERVOS; i++)
+				for (int i = 0; i < IRP6_ON_TRACK_NUM_OF_SERVOS; ++i)
 					irp6ot_desired_pos[i] = irp6ot_current_pos[i];
 			} else {
 
