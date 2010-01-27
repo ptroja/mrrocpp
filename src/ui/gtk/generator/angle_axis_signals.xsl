@@ -102,10 +102,11 @@ extern "C"
  			</xsl:call-template>    
  		
  			// przepisanie parametrow ruchu do postaci rozkazu w formie XYZ_ANGLE_AXIS
-			for(int i=3; i&lt;<xsl:value-of select="$xyz_angle_axis" />; i++)
+			for(int i=3; i&lt;6; i++)
 			{
 					<xsl:value-of select="$name" />_desired_pos_a[i] *= <xsl:value-of select="$name" />_desired_pos_a[6];
 			}
+			<xsl:value-of select="$name" />_desired_pos_a[6] = <xsl:value-of select="$name" />_desired_pos_a[7];
 			
 			try {
 				robot_<xsl:value-of select="$fullName" />->move_xyz_angle_axis(<xsl:value-of select="$name" />_desired_pos_a);
@@ -222,18 +223,18 @@ extern "C"
 	<xsl:if test="$i &lt;= $xyz_angle_axis">
 	<xsl:choose>
 		<xsl:when test="$i &lt;= 3">
-						snprintf (buf, sizeof(buf), "%.3f", <xsl:value-of select="$name" />_current_pos_a[<xsl:value-of select="($i - 1)" />]);
+					snprintf (buf, sizeof(buf), "%.3f", <xsl:value-of select="$name" />_current_pos_a[<xsl:value-of select="($i - 1)" />]);
 					gtk_entry_set_text(entry<xsl:value-of select="$i" />_xyz_angle_axis_<xsl:value-of select="$name" />, buf);
 					<xsl:value-of select="$name" />_desired_pos_a[<xsl:value-of select="($i - 1)" />] = <xsl:value-of select="$name" />_current_pos_a[<xsl:value-of select="($i - 1)" />];				
 
  		</xsl:when>
  		<xsl:when test="$i &gt;= 8">
-						snprintf (buf, sizeof(buf), "%.3f", <xsl:value-of select="$name" />_current_pos_a[<xsl:value-of select="($i - 1)" />]);
+					snprintf (buf, sizeof(buf), "%.3f", <xsl:value-of select="$name" />_current_pos_a[<xsl:value-of select="($i - 2)" />]);
 					gtk_entry_set_text(entry<xsl:value-of select="$i" />_xyz_angle_axis_<xsl:value-of select="$name" />, buf);
-					<xsl:value-of select="$name" />_desired_pos_a[<xsl:value-of select="($i - 1)" />] = <xsl:value-of select="$name" />_current_pos_a[<xsl:value-of select="($i - 1)" />];				
+					<xsl:value-of select="$name" />_desired_pos_a[<xsl:value-of select="($i - 2)" />] = <xsl:value-of select="$name" />_current_pos_a[<xsl:value-of select="($i - 2)" />];				
 
  		</xsl:when>
-<xsl:when test="$i = 7">
+		<xsl:when test="$i = 7">
 					snprintf (buf, sizeof(buf), "%.3f", alfa);
 					gtk_entry_set_text(entry<xsl:value-of select="$i" />_xyz_angle_axis_<xsl:value-of select="$name" />, buf);
 					<xsl:value-of select="$name" />_desired_pos_a[<xsl:value-of select="($i - 1)" />] = alfa;							
@@ -246,8 +247,7 @@ extern "C"
 
  		</xsl:otherwise>		
  	</xsl:choose>
-	
-       </xsl:if>
+	</xsl:if>
 	<!-- for loop --> 
        <xsl:if test="$i &lt;= $xyz_angle_axis">
           <xsl:call-template name="irp6.xyz_angle_axis.repeat.signals.read.2">
