@@ -1361,14 +1361,6 @@ int wnd_irp6ot_xyz_aa_copy_current_to_desired(PtWidget_t *widget, ApInfo_t *apin
 int irp6ot_xyz_angle_axis_motion(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
-
-	double *wektor_ptgr[8], wektor[8];
-	double *krok;
-	double wl;
-	double l_eps = 0;
-	double kx, ky, kz;
-	// double alfa;
-
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
@@ -1376,6 +1368,7 @@ int irp6ot_xyz_angle_axis_motion(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbac
 	try {
 		if (ui_state.irp6_on_track.edp.is_synchronised) {
 
+			double *wektor_ptgr[8];
 			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p1, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[0], 0 );
 			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p2, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[1], 0 );
 			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p3, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[2], 0 );
@@ -1385,10 +1378,12 @@ int irp6ot_xyz_angle_axis_motion(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbac
 			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p7, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[6], 0 );
 			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p8, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[7], 0 );
 
+			double wektor[8];
 			for (int i = 0; i < 8; i++) {
 				wektor[i] = *wektor_ptgr[i];
 			}
 
+			double *krok;
 			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_step, Pt_ARG_NUMERIC_VALUE, &krok, 0 );
 
 			// wektor przesuniecia
@@ -1430,11 +1425,13 @@ int irp6ot_xyz_angle_axis_motion(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbac
 			// w przypadku, gdy dlugosc wersora jest inna niz 1
 			// parametry wersora zostaja przeskalowane
 
-			kx = wektor[3];
-			ky = wektor[4];
-			kz = wektor[5];
+			const double kx = wektor[3];
+			const double ky = wektor[4];
+			const double kz = wektor[5];
 
-			wl = sqrt(kx * kx + ky * ky + kz * kz);
+			const double l_eps = 0;
+
+			const double wl = sqrt(kx * kx + ky * ky + kz * kz);
 
 			if ((wl > 1 + l_eps) || (wl < 1 - l_eps)) {
 				wektor[3] = kx / wl;
@@ -1463,7 +1460,6 @@ int irp6ot_xyz_angle_axis_motion(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbac
 			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p7, Pt_ARG_NUMERIC_VALUE, &wektor[6] , 0);
 			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p8, Pt_ARG_NUMERIC_VALUE, &wektor[7] , 0);
 
-		} else {
 		}
 	} // end try
 	CATCH_SECTION_UI
