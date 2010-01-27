@@ -43,13 +43,6 @@ namespace lib {
 sr::sr(process_type_t process_type, const std::string & process_name, const std::string & sr_name, bool _multi_thread) :
 	multi_thread(_multi_thread), cb(SR_BUFFER_LENGHT)
 {
-	if (multi_thread) {
-		sem_init(&sem, 0, 0);
-		sem_init(&queue_empty_sem, 0, 0);
-		set_queue_empty();
-		thread_id = new boost::thread(boost::bind(&sr::operator(), this));
-	}
-
 	// kilka sekund  (~1) na otworzenie urzadzenia
 	int tmp = 0;
 	while ((fd = name_open(sr_name.c_str(), NAME_FLAG_ATTACH_GLOBAL)) < 0) {
@@ -74,6 +67,13 @@ sr::sr(process_type_t process_type, const std::string & process_name, const std:
 	strcpy(sr_message.process_name, process_name.c_str());
 	for (int i=0; i < ERROR_TAB_SIZE; i++) {
 		error_tab[i] = 0;
+	}
+
+	if (multi_thread) {
+		sem_init(&sem, 0, 0);
+		sem_init(&queue_empty_sem, 0, 0);
+		set_queue_empty();
+		thread_id = new boost::thread(boost::bind(&sr::operator(), this));
 	}
 } // end:  sr::sr()
 
@@ -126,10 +126,22 @@ sr::sr(process_type_t process_type, const std::string & process_name, const std:
 	for (int i=0; i < ERROR_TAB_SIZE; i++) {
 		error_tab[i] = 0;
 	}
+
+	if (multi_thread) {
+		sem_init(&sem, 0, 0);
+		sem_init(&queue_empty_sem, 0, 0);
+		set_queue_empty();
+		thread_id = new boost::thread(boost::bind(&sr::operator(), this));
+	}
 } // end:  sr::sr()
 
 // Destruktor
 sr::~sr(void) {
+	if (multi_thread)
+	{
+		delete thread_id;
+	}
+
 	fprintf(stderr, "~sr: messip::port_disconnect(%s)\n", sr_message.process_name);
 	if(messip::port_disconnect(ch) == -1) {
 		perror("messip::port_disconnect()");
