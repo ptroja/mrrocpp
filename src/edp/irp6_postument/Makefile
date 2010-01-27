@@ -24,8 +24,8 @@ all: ${BINARIES}
 #-----------------------------------------------------------------------------------------------------------------------#
 # do wyboru wariant z czujnikiem ATI3084 i ATI6284, ati6284KT
 ifneq ($(BUILD_TARGET), linux)
-edp_irp6_postument: $(EDPOBJS) ../ati6284KT/ati6284KT.a $(SHOBJ)
-#edp_irp6_postument: $(EDPOBJS) ../ati6284/ati6284.a $(SHOBJ)
+#edp_irp6_postument: $(EDPOBJS) ../ati6284KT/ati6284KT.a $(SHOBJ)
+edp_irp6_postument: $(EDPOBJS) ../ati6284/ati6284.a $(SHOBJ)
 #edp_irp6_postument: $(EDPOBJS) ../ati3084/ati3084.a $(SHOBJ)
 else
 edp_irp6_postument: $(EDPOBJS) $(SHOBJ)
