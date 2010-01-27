@@ -60,7 +60,9 @@ xyz_angle_axis window
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="adjustment">0 -999999999999999 999999999999999 1 10 0</property>
-                    <property name="digits">3</property> 
+                    <property name="digits">3</property>
+                    <property name="numeric">True</property>
+                    <property name="overwrite_mode">True</property>
                   </widget>
                   <packing>
                     <property name="left_attach">7</property>
@@ -267,17 +269,20 @@ xyz_angle_axis window
                   <widget class="GtkLabel" id="label5"><xsl:attribute name="id">label<xsl:value-of select="$i"/>_xyz_angle_axis_<xsl:value-of select="$name"/></xsl:attribute> <!-- RI --> 
                     <property name="visible">True</property>
                     <property name="label" translatable="yes">
-			<xsl:if test="$i = 1">X</xsl:if>
-			<xsl:if test="$i = 2">Y</xsl:if>
-			<xsl:if test="$i = 3">Z</xsl:if>
-			<xsl:if test="$i = 4">w1</xsl:if>
-			<xsl:if test="$i = 5">w2</xsl:if>
-			<xsl:if test="$i = 6">w3</xsl:if>
-			<xsl:if test="$i = 7">α</xsl:if>
-			<xsl:if test="$i = 8">G</xsl:if>
-			<xsl:if test="$i = 9">T</xsl:if>
-			<xsl:if test="$i > 9"> Please name me in xsl file </xsl:if>			
+						<xsl:if test="$i = 1">X</xsl:if>
+						<xsl:if test="$i = 2">Y</xsl:if>
+						<xsl:if test="$i = 3">Z</xsl:if>
+						<xsl:if test="$i = 4">w&lt;sub&gt;1&lt;/sub&gt;</xsl:if>
+						<xsl:if test="$i = 5">w&lt;sub&gt;2&lt;/sub&gt;</xsl:if>
+						<xsl:if test="$i = 6">w&lt;sub&gt;3&lt;/sub&gt;</xsl:if>
+						<xsl:if test="$i = 7">α</xsl:if>
+						<xsl:if test="$i = 8">G</xsl:if>
+						<xsl:if test="$i = 9">T</xsl:if>
+						<xsl:if test="$i &gt; 9"> Please name me in xsl file </xsl:if>
              	    </property> <!-- RI --> 
+ 	    			<xsl:if test="$i = 4"><property name="use_markup">True</property></xsl:if>
+ 	    			<xsl:if test="$i = 5"><property name="use_markup">True</property></xsl:if>
+ 	    			<xsl:if test="$i = 6"><property name="use_markup">True</property></xsl:if>
                   </widget>
                   <packing>
                     <property name="top_attach"><xsl:value-of select="$i + 1"/></property> <!-- 1 + RI -->
@@ -306,6 +311,8 @@ xyz_angle_axis window
                     <property name="can_focus">True</property>
                     <property name="adjustment">0 -999999999999999 999999999999999 1 10 0</property>
                     <property name="digits">3</property>
+                    <property name="numeric">True</property>
+                    <property name="overwrite_mode">True</property>
                   </widget>
                   <packing>
                     <property name="left_attach">5</property>

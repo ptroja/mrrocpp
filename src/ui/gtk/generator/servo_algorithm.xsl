@@ -258,6 +258,7 @@ Servo_algorithm window
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="adjustment">0 0 999 1 10 0</property>
+                    <property name="numeric">True</property>
                   </widget>
                   <packing>
                     <property name="left_attach">5</property> <!-- constant value  - second spin button -->
@@ -271,6 +272,7 @@ Servo_algorithm window
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="adjustment">0 0 999 1 10 0</property>
+                    <property name="numeric">True</property>
                   </widget>
                   <packing>
                     <property name="left_attach">6</property> <!-- constant value - first spin button -->

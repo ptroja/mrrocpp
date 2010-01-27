@@ -62,6 +62,8 @@ Int window
                     <property name="can_focus">True</property>
                     <property name="adjustment">0 -999999999999999 999999999999999 0.01 0.1 0</property>
                     <property name="digits">3</property> 
+                    <property name="numeric">True</property>
+                    <property name="overwrite_mode">True</property>
                   </widget>
                   <packing>
                     <property name="left_attach">7</property>
@@ -316,6 +318,8 @@ Int window
                     <property name="can_focus">True</property>
                     <property name="adjustment">0 -999999999999999 999999999999999 0.01 0.1 0</property>
                     <property name="digits">3</property>
+                    <property name="numeric">True</property>
+                    <property name="overwrite_mode">True</property>
                   </widget>
                   <packing>
                     <property name="left_attach">5</property>
