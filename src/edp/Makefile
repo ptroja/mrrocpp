@@ -33,7 +33,7 @@ conveyor: common
 smb: common
 spkm: common
 
-IRP6ONT_DEPS = common ati3084 ati3084MK ati6284
+IRP6ONT_DEPS = common ati3084 ati3084MK ati6284 ati6284KT
 ifdef DOCENT_SENSOR
 	IRP6ONT_DEPS:=$(IRP6ONT_DEPS) ati3084MS
 endif

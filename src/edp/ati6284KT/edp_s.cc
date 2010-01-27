@@ -34,6 +34,7 @@
 #include <hw/pci_devices.h>
 #include <stddef.h>
 #include <sys/mman.h>
+#include <time.h>
 
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
@@ -191,11 +192,17 @@ void ATI6284_force::wait_for_event()
 {
 	int iw_ret;
 	int iter_counter = 0; // okresla ile razy pod rzad zostala uruchomiona ta metoda
-
+	timespec time_counter;
+	/*
+	time_counter.tv_nsec = 100000;
+	time_counter.tv_sec = 0;
+*/
 	if (!(master.test_mode)) {
 
 		do {
 			iter_counter++;
+
+	//		nanosleep(&time_counter, NULL);
 
 	        send_request(frame_counter, sendSocket);         //send request for data
 
