@@ -71,26 +71,35 @@ private:
 
 	boost::mutex srMutex; //! one-thread a time access mutex
 	sem_t sem, queue_empty_sem;
+
+	int set_new_msg(); // podniesienie semafora
+	int wait_for_new_msg(); // oczekiwanie na semafor
+
+	int send_package(void);
+	int send_package_to_sr(sr_package_t& sr_mess);
+
+	const bool multi_thread;
+	boost::thread *thread_id;
+
+	void operator()();
+
+	boost::circular_buffer <lib::sr_package_t> cb;
+	boost::mutex sr_mutex;
+
+	virtual void interpret() = 0;
+
 #if !defined(USE_MESSIP_SRR)
 	int fd; // by W
 #else
 	messip_channel_t *ch;
 #endif /* !USE_MESSIP_SRR */
+
 protected:
 	uint64_t error_tab[ERROR_TAB_SIZE]; // tablica slow 64-bitowych zawierajacych kody bledow
 	sr_package_t sr_message; // paczka z wiadomoscia dla SR
-	int send_package(void);
-	int send_package_to_sr(sr_package_t& sr_mess);
-	bool multi_thread;
-	boost::thread *thread_id;
 
 public:
 	int wait_for_empty_queue();
-	void operator()();
-	int set_new_msg(); // podniesienie semafora
-	int wait_for_new_msg(); // oczekiwanie na semafor
-	boost::circular_buffer <lib::sr_package_t> cb;
-	boost::mutex sr_mutex; // = PTHREAD_MUTEX_INITIALIZER ;
 
 	sr(process_type_t process_type, const std::string & process_name, const std::string & sr_name, bool _multi_thread);
 	virtual ~sr(void);
@@ -99,8 +108,6 @@ public:
 	int message(error_class_t message_type, uint64_t error_code, const std::string & text);
 	int message(const std::string & text);
 	int message(error_class_t message_type, const std::string & text);
-
-	virtual void interpret() = 0;
 };
 
 class sr_edp: public sr

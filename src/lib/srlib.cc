@@ -583,15 +583,14 @@ void sr_vsp::interpret(void) {
 
 void sr::operator()()
 {
-
-	sr_package_t local_message;
-
 	while (1) {
 
 		if (wait_for_new_msg() == 0) { // by Y jesli mamy co wypisywac
 
 			while (!cb.empty())
 			{
+				sr_package_t local_message;
+
 				{
 					boost::mutex::scoped_lock lock(sr_mutex);
 
@@ -599,20 +598,18 @@ void sr::operator()()
 				}
 				try
 				{
-				send_package_to_sr(local_message);
+					send_package_to_sr(local_message);
 
-				cb.pop_front();
+					cb.pop_front();
 				}
 				catch (...)
 				{
-						printf("send_package_to_sr error multi_thread variant\n");
+					printf("send_package_to_sr error multi_thread variant\n");
 				}
-
 			}
 			set_queue_empty();
 		}
 	}
-
 }
 
 } // namespace lib
