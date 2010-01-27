@@ -43,7 +43,7 @@ void catch_signal(int sig) {
 		ClockPeriod(CLOCK_REALTIME, &old_cp, NULL, 0);
 #endif /* __QNXNTO__ */
 		master->msg->message("EDP terminated");
-//		master->msg->wait_for_empty_queue();
+		master->msg->wait_for_empty_queue();
 		_exit(EXIT_SUCCESS);
 		break;
 	case SIGSEGV:
