@@ -11,14 +11,13 @@ transparent::transparent(common::task::task& _ecp_task) :
 	throw_kinematics_exceptions = true;
 }
 
-
 // ----------------------------------------------------------------------------------------------
 // ---------------------------------    metoda	first_step -------------------------------------
 // ----------------------------------------------------------------------------------------------
 
 bool transparent::first_step()
 {
-	communicate_with_edp=false;
+	communicate_with_edp = false;
 	return true;
 }
 
@@ -31,7 +30,7 @@ bool transparent::next_step()
 	// Kopiowanie danych z bufora przyslanego z EDP do
 	// obrazu danych wykorzystywanych przez generator
 	// the_robot->get_reply();
-		communicate_with_edp=true;
+	communicate_with_edp = true;
 
 	// by Y - Przepisanie przyslanej z EDP pozycji do MP
 	the_robot->copy_edp_to_mp_buffer(ecp_t.ecp_reply.reply_package);
@@ -39,7 +38,6 @@ bool transparent::next_step()
 
 	return true;
 }
-
 
 void transparent::execute_motion(void)
 {
@@ -63,7 +61,7 @@ void transparent::execute_motion(void)
 	if (the_robot->reply_package.reply_type == lib::ERROR) {
 
 		the_robot->query();
-		throw ecp_robot::ECP_error (lib::NON_FATAL_ERROR, EDP_ERROR);
+		throw ecp_robot::ECP_error(lib::NON_FATAL_ERROR, EDP_ERROR);
 
 	}
 	the_robot->query();
@@ -80,9 +78,8 @@ void transparent::execute_motion(void)
 	 */
 	if (the_robot->reply_package.reply_type == lib::ERROR) {
 
-
-
-		switch ( the_robot->reply_package.error_no.error0 ) {
+		switch (the_robot->reply_package.error_no.error0)
+		{
 			case BEYOND_UPPER_D0_LIMIT:
 			case BEYOND_UPPER_THETA1_LIMIT:
 			case BEYOND_UPPER_THETA2_LIMIT:
@@ -99,19 +96,16 @@ void transparent::execute_motion(void)
 			case BEYOND_LOWER_THETA5_LIMIT:
 			case BEYOND_LOWER_THETA6_LIMIT:
 			case BEYOND_LOWER_THETA7_LIMIT:
-				if (throw_kinematics_exceptions)
-				{
-					throw ecp_robot::ECP_error (lib::NON_FATAL_ERROR, EDP_ERROR);
+				if (throw_kinematics_exceptions) {
+					throw ecp_robot::ECP_error(lib::NON_FATAL_ERROR, EDP_ERROR);
 				}
 
-			break;
+				break;
 			default:
-				throw ecp_robot::ECP_error (lib::NON_FATAL_ERROR, EDP_ERROR);
-			break;
+				throw ecp_robot::ECP_error(lib::NON_FATAL_ERROR, EDP_ERROR);
+				break;
 
 		} /* end: switch */
-
-
 	}
 }
 

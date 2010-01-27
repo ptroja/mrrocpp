@@ -13,15 +13,13 @@ class transparent : public common::generator::generator {
 
 public:
 	transparent(common::task::task& _ecp_task);
-	
+
 	bool throw_kinematics_exceptions;
-	
-	
+
 	bool first_step ();
 	bool next_step ();
 
 	void execute_motion (void);
-	
 };
 
 } // namespace generator
