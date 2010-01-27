@@ -7,7 +7,7 @@
 	<State id="fto_CL_90_1" type="runGenerator">
 		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
 		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
-		<TrajectoryFilePath>trj/rcsc/irp6ot_sm_fturn_ap_cl_90_phase_1.trj</TrajectoryFilePath>
+		<TrajectoryFilePath>src/application/rcsc/rcsc2/irp6ot_sm_fturn_ap_cl_90_phase_1.trj</TrajectoryFilePath>
 		<Trajectory coordinateType="JOINT" numOfPoses="1">
 			<Pose>
 				<StartVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	</StartVelocity>
@@ -22,7 +22,7 @@
 	<State id="fto_CL_90_2" type="runGenerator">
 		<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>
 		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
-		<TrajectoryFilePath>trj/rcsc/irp6p_sm_fturn_ap_cl_90_phase_1.trj</TrajectoryFilePath>
+		<TrajectoryFilePath>src/application/rcsc/rcsc2/irp6p_sm_fturn_ap_cl_90_phase_1.trj</TrajectoryFilePath>
 		<Trajectory coordinateType="JOINT" numOfPoses="1">
 			<Pose>
 				<StartVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0</StartVelocity>
@@ -51,7 +51,7 @@
 	<State id="fto_CL_90_4" type="runGenerator">
 		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
 		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
-		<TrajectoryFilePath>trj/rcsc/irp6ot_sm_fturn_ap_cl_90_phase_2.trj</TrajectoryFilePath>
+		<TrajectoryFilePath>src/application/rcsc/rcsc2/irp6ot_sm_fturn_ap_cl_90_phase_2.trj</TrajectoryFilePath>
 		<Trajectory coordinateType="JOINT" numOfPoses="2">
 			<Pose>
 				<StartVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	</StartVelocity>
@@ -166,7 +166,7 @@
 	<State id="fto_CL_90_18" type="runGenerator">
 		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
 		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
-		<TrajectoryFilePath>trj/rcsc/irp6ot_sm_fturn_de.trj</TrajectoryFilePath>
+		<TrajectoryFilePath>src/application/rcsc/rcsc2/irp6ot_sm_fturn_de.trj</TrajectoryFilePath>
 		<Trajectory coordinateType="JOINT" numOfPoses="1">
 			<Pose>
 				<StartVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	</StartVelocity>
@@ -190,7 +190,7 @@
 	<State id="fto_CL_0_1" type="runGenerator">
 		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
 		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
-		<TrajectoryFilePath>trj/rcsc/irp6ot_sm_fturn_ap_cl_0_phase_1.trj</TrajectoryFilePath>
+		<TrajectoryFilePath>src/application/rcsc/rcsc2/irp6ot_sm_fturn_ap_cl_0_phase_1.trj</TrajectoryFilePath>
 		<Trajectory coordinateType="JOINT" numOfPoses="1">
 			<Pose>
 				<StartVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	</StartVelocity>
@@ -205,7 +205,7 @@
 	<State id="fto_CL_0_2" type="runGenerator">
 		<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>
 		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
-		<TrajectoryFilePath>trj/rcsc/irp6p_sm_fturn_ap_cl_0_phase_1.trj</TrajectoryFilePath>
+		<TrajectoryFilePath>src/application/rcsc/rcsc2/irp6p_sm_fturn_ap_cl_0_phase_1.trj</TrajectoryFilePath>
 		<Trajectory coordinateType="JOINT" numOfPoses="1">
 			<Pose>
 				<StartVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0</StartVelocity>
@@ -234,7 +234,7 @@
 	<State id="fto_CL_0_4" type="runGenerator">
 		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
 		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
-		<TrajectoryFilePath>trj/rcsc/irp6ot_sm_fturn_ap_cl_0_phase_2.trj</TrajectoryFilePath>
+		<TrajectoryFilePath>src/application/rcsc/rcsc2/irp6ot_sm_fturn_ap_cl_0_phase_2.trj</TrajectoryFilePath>
 		<Trajectory coordinateType="JOINT" numOfPoses="2">
 			<Pose>
 				<StartVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	</StartVelocity>
@@ -324,7 +324,7 @@
 	<State id="fto_CL_0_18" type="runGenerator">
 		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
 		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
-		<TrajectoryFilePath>trj/rcsc/irp6ot_sm_fturn_de.trj</TrajectoryFilePath>
+		<TrajectoryFilePath>src/application/rcsc/rcsc2/irp6ot_sm_fturn_de.trj</TrajectoryFilePath>
 		<Trajectory coordinateType="JOINT" numOfPoses="1">
 			<Pose>
 				<StartVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	</StartVelocity>
@@ -348,7 +348,7 @@
 	<State id="fto_CCL_90_1" type="runGenerator">
 		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
 		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
-		<TrajectoryFilePath>trj/rcsc/irp6ot_sm_fturn_ap_ccl_90_phase_1.trj</TrajectoryFilePath>
+		<TrajectoryFilePath>src/application/rcsc/rcsc2/irp6ot_sm_fturn_ap_ccl_90_phase_1.trj</TrajectoryFilePath>
 		<Trajectory coordinateType="JOINT" numOfPoses="1">
 			<Pose>
 				<StartVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	</StartVelocity>
@@ -363,7 +363,7 @@
 	<State id="fto_CCL_90_2" type="runGenerator">
 		<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>
 		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
-		<TrajectoryFilePath>trj/rcsc/irp6p_sm_fturn_ap_ccl_90_phase_1.trj</TrajectoryFilePath>
+		<TrajectoryFilePath>src/application/rcsc/rcsc2/irp6p_sm_fturn_ap_ccl_90_phase_1.trj</TrajectoryFilePath>
 		<Trajectory coordinateType="JOINT" numOfPoses="1">
 			<Pose>
 				<StartVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0</StartVelocity>
@@ -392,7 +392,7 @@
 	<State id="fto_CCL_90_4" type="runGenerator">
 		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
 		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
-		<TrajectoryFilePath>trj/rcsc/irp6ot_sm_fturn_ap_ccl_90_phase_2.trj</TrajectoryFilePath>
+		<TrajectoryFilePath>src/application/rcsc/rcsc2/irp6ot_sm_fturn_ap_ccl_90_phase_2.trj</TrajectoryFilePath>
 		<Trajectory coordinateType="JOINT" numOfPoses="2">
 			<Pose>
 				<StartVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	</StartVelocity>
@@ -507,7 +507,7 @@
 	<State id="fto_CCL_90_18" type="runGenerator">
 		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
 		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
-		<TrajectoryFilePath>trj/rcsc/irp6ot_sm_fturn_de.trj</TrajectoryFilePath>
+		<TrajectoryFilePath>src/application/rcsc/rcsc2/irp6ot_sm_fturn_de.trj</TrajectoryFilePath>
 		<Trajectory coordinateType="JOINT" numOfPoses="1">
 			<Pose>
 				<StartVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	</StartVelocity>
@@ -532,7 +532,7 @@
 	<State id="fto_CL_180_1" type="runGenerator">
 		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
 		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
-		<TrajectoryFilePath>trj/rcsc/irp6ot_sm_fturn_ap_cl_180_phase_1.trj</TrajectoryFilePath>
+		<TrajectoryFilePath>src/application/rcsc/rcsc2/irp6ot_sm_fturn_ap_cl_180_phase_1.trj</TrajectoryFilePath>
 		<Trajectory coordinateType="JOINT" numOfPoses="1">
 			<Pose>
 				<StartVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	</StartVelocity>
@@ -547,7 +547,7 @@
 	<State id="fto_CL_180_2" type="runGenerator">
 		<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>
 		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
-		<TrajectoryFilePath>trj/rcsc/irp6p_sm_fturn_ap_cl_180_phase_1.trj</TrajectoryFilePath>
+		<TrajectoryFilePath>src/application/rcsc/rcsc2/irp6p_sm_fturn_ap_cl_180_phase_1.trj</TrajectoryFilePath>
 		<Trajectory coordinateType="JOINT" numOfPoses="1">
 			<Pose>
 				<StartVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0</StartVelocity>
@@ -576,7 +576,7 @@
 	<State id="fto_CL_180_4" type="runGenerator">
 		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
 		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
-		<TrajectoryFilePath>trj/rcsc/irp6ot_sm_fturn_ap_cl_180_phase_2.trj</TrajectoryFilePath>
+		<TrajectoryFilePath>src/application/rcsc/rcsc2/irp6ot_sm_fturn_ap_cl_180_phase_2.trj</TrajectoryFilePath>
 		<Trajectory coordinateType="JOINT" numOfPoses="2">
 			<Pose>
 				<StartVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	</StartVelocity>
@@ -691,7 +691,7 @@
 	<State id="fto_CL_180_18" type="runGenerator">
 		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
 		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
-		<TrajectoryFilePath>trj/rcsc/irp6ot_sm_fturn_de.trj</TrajectoryFilePath>
+		<TrajectoryFilePath>src/application/rcsc/rcsc2/irp6ot_sm_fturn_de.trj</TrajectoryFilePath>
 		<Trajectory coordinateType="JOINT" numOfPoses="1">
 			<Pose>
 				<StartVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	</StartVelocity>

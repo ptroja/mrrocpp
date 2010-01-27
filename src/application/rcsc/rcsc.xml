@@ -139,7 +139,7 @@
 	<State id="approach_12" type="runGenerator">
 		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
 		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
-		<TrajectoryFilePath>trj/rcsc/irp6ot_sm_ap_1.trj</TrajectoryFilePath>
+		<TrajectoryFilePath>src/application/rcsc/rcsc2/irp6ot_sm_ap_1.trj</TrajectoryFilePath>
 		<Trajectory coordinateType="JOINT" numOfPoses="1">
 			<Pose>
 				<StartVelocity>0	0	0	0	0	0	0	0</StartVelocity>
@@ -154,7 +154,7 @@
 	<State id="approach_13" type="runGenerator">
 		<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>
 		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
-		<TrajectoryFilePath>trj/rcsc/irp6p_sm_ap_1.trj</TrajectoryFilePath>
+		<TrajectoryFilePath>src/application/rcsc/rcsc2/irp6p_sm_ap_1.trj</TrajectoryFilePath>
 		<Trajectory coordinateType="JOINT" numOfPoses="1">
 			<Pose>
 				<StartVelocity>0	0	0	0	0	0	0	0</StartVelocity>
@@ -190,7 +190,7 @@
 	<State id="approach_16" type="runGenerator">
 		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
 		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
-		<TrajectoryFilePath>trj/rcsc/irp6ot_sm_ap_2.trj</TrajectoryFilePath>
+		<TrajectoryFilePath>src/application/rcsc/rcsc2/irp6ot_sm_ap_2.trj</TrajectoryFilePath>
 		<Trajectory coordinateType="JOINT" numOfPoses="1">
 			<Pose>
 				<StartVelocity>0	0	0	0	0	0	0	0</StartVelocity>
@@ -367,7 +367,7 @@
 	<State id="approach_35" type="runGenerator">
 		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
 		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
-		<TrajectoryFilePath>trj/rcsc/irp6ot_sm_ap_3.trj</TrajectoryFilePath>
+		<TrajectoryFilePath>src/application/rcsc/rcsc2/irp6ot_sm_ap_3.trj</TrajectoryFilePath>
 		<Trajectory coordinateType="JOINT" numOfPoses="4">
 			<Pose>
 				<StartVelocity>0	0	0	0	0	0	0	0</StartVelocity>
@@ -606,7 +606,7 @@
 	<State id="depop_2" type="runGenerator">
 		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
 		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
-		<TrajectoryFilePath>trj/rcsc/irp6ot_sm_de_1.trj</TrajectoryFilePath>
+		<TrajectoryFilePath>src/application/rcsc/rcsc2/irp6ot_sm_de_1.trj</TrajectoryFilePath>
 		<Trajectory coordinateType="JOINT" numOfPoses="2">
 			<Pose>
 				<StartVelocity>0	0	0	0	0	0	0	0</StartVelocity>
@@ -628,7 +628,7 @@
 	<State id="depop_3" type="runGenerator">
 		<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>
 		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
-		<TrajectoryFilePath>trj/rcsc/irp6p_sm_de_1.trj</TrajectoryFilePath>
+		<TrajectoryFilePath>src/application/rcsc/rcsc2/irp6p_sm_de_1.trj</TrajectoryFilePath>
 		<Trajectory coordinateType="JOINT" numOfPoses="1">
 			<Pose>
 				<StartVelocity>0	0	0	0	0	0	0	0</StartVelocity>
