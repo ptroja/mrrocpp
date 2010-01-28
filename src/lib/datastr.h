@@ -18,7 +18,7 @@
 namespace mrrocpp {
 namespace lib {
 
-std::string toString(double valArr[], int length);
+std::string toString(const double valArr[], int length);
 std::string toString(int numberOfPoses);
 std::string toString(lib::ECP_POSE_SPECIFICATION ps);
 std::string toString(lib::robot_name_t robot);

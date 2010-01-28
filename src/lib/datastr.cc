@@ -15,7 +15,7 @@
 namespace mrrocpp {
 namespace lib {
 
-std::string toString(double valArr[], int length)
+std::string toString(const double valArr[], int length)
 {
 	std::ostringstream stm;
 	for(int i=0; i<length; i++)

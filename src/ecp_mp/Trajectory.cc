@@ -21,10 +21,10 @@ Trajectory::Trajectory()
 {
 }
 
-Trajectory::Trajectory(const char *numOfPoses, const std::string & trajectoryID, const char *poseSpecification)
+Trajectory::Trajectory(const std::string & numOfPoses, const std::string & trajectoryID, const std::string & poseSpecification)
 {
 	trjID = trajectoryID;
-	this->numOfPoses = (uint64_t)atoi(numOfPoses);
+	this->numOfPoses = (uint64_t)atoi(numOfPoses.c_str());
 	poseSpec = lib::returnProperPS(poseSpecification);
 }
 
@@ -37,7 +37,7 @@ Trajectory::Trajectory(const Trajectory &trajectory)
 	trjPoses2 = trajectory.trjPoses2;
 }
 
-void Trajectory::setTrjID(const char *trjID)
+void Trajectory::setTrjID(const std::string & trjID)
 {
 	this->trjID = trjID;
 }
@@ -76,22 +76,21 @@ const char * Trajectory::getTrjID() const
 	printf("-->  File \"%s\" was saved to XML file\n", fileName);
 }*/
 
-void Trajectory::writeTrajectoryToXmlFile(const char *fileName, lib::POSE_SPECIFICATION ps, std::list<ecp_mp::common::smooth_trajectory_pose> &poses)
+void Trajectory::writeTrajectoryToXmlFile(const std::string & fileName, lib::POSE_SPECIFICATION ps, const std::list<ecp_mp::common::smooth_trajectory_pose> &poses)
 {
 	int posCount = poses.size();
-	xmlDocPtr doc;
-	xmlNodePtr tree, subtree;
-	std::list<ecp_mp::common::smooth_trajectory_pose>::iterator it;
 
-	doc = xmlNewDoc((const xmlChar *) "1.0");
+	xmlDocPtr doc = xmlNewDoc((const xmlChar *) "1.0");
 
 	doc->children = xmlNewDocNode(doc, NULL, (const xmlChar *) "Trajectory", NULL);
 	xmlSetProp(doc->children, (const xmlChar *) "coordinateType", (const xmlChar *) lib::toString(ps).c_str());
 	xmlSetProp(doc->children, (const xmlChar *) "numOfPoses", (const xmlChar *) lib::toString(posCount).c_str());
+
+	std::list<ecp_mp::common::smooth_trajectory_pose>::const_iterator it;
 	for(it = poses.begin(); it != poses.end(); ++it)
 	{
-		tree = xmlNewChild(doc->children, NULL, (const xmlChar *) "Pose", NULL);
-		subtree = xmlNewChild(tree, NULL, (const xmlChar *)"Velocity", (const xmlChar *)lib::toString((*it).v, MAX_SERVOS_NR).c_str());
+		xmlNodePtr tree = xmlNewChild(doc->children, NULL, (const xmlChar *) "Pose", NULL);
+		xmlNodePtr subtree = xmlNewChild(tree, NULL, (const xmlChar *)"Velocity", (const xmlChar *)lib::toString((*it).v, MAX_SERVOS_NR).c_str());
 		subtree = xmlNewChild(tree, NULL, (const xmlChar *)"Accelerations", (const xmlChar *)lib::toString((*it).a, MAX_SERVOS_NR).c_str());
 		subtree = xmlNewChild(tree, NULL, (const xmlChar *)"Coordinates", (const xmlChar *)lib::toString((*it).coordinates, MAX_SERVOS_NR).c_str());
 	}
@@ -100,7 +99,7 @@ void Trajectory::writeTrajectoryToXmlFile(const char *fileName, lib::POSE_SPECIF
 
 	xmlKeepBlanksDefault(0);
 	xmlSaveFormatFile(file.c_str(), doc, 1);
-	printf("-->  File \"%s\" was saved to XML file\n", fileName);
+	std::cout << "-->  File " << fileName << " was saved to XML file" << std::endl;
 }
 
 /*void Trajectory::createNewPose()
@@ -135,7 +134,7 @@ unsigned int Trajectory::getNumberOfPoses() const
 	return numOfPoses;
 }
 
-void Trajectory::setPoseSpecification(const char *poseSpecification)
+void Trajectory::setPoseSpecification(const std::string & poseSpecification)
 {
 	poseSpec = lib::returnProperPS(poseSpecification);
 }
@@ -185,7 +184,7 @@ double * Trajectory::getVelocities() const
 	return actPose->a;
 }*/
 
-void Trajectory::setVelocities(const char *Velocities)//for smooth
+void Trajectory::setVelocities(const std::string & Velocities)//for smooth
 {
 	lib::setValuesInArray(actPose2->v, Velocities);
 }
@@ -195,7 +194,7 @@ double * Trajectory::getVelocities() const//for smooth
 	return actPose2->v;
 }
 
-void Trajectory::setAccelerations(const char *accelerations)//for smooth
+void Trajectory::setAccelerations(const std::string & accelerations)//for smooth
 {
 	lib::setValuesInArray(actPose2->a, accelerations);
 }
@@ -215,7 +214,7 @@ double * Trajectory::getAccelerations() const//for smooth
 	return actPose->coordinates;
 }*/
 
-void Trajectory::setCoordinates(const char *cCoordinates)//for smooth
+void Trajectory::setCoordinates(const std::string & cCoordinates)//for smooth
 {
 	lib::setValuesInArray(actPose2->coordinates, cCoordinates);
 }

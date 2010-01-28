@@ -20,29 +20,29 @@ class Trajectory
 {
 	public:
 		Trajectory();
-		Trajectory(const char *numOfPoses, const std::string & trajectoryName, const char *poseSpecification);
+		Trajectory(const std::string & numOfPoses, const std::string & trajectoryName, const std::string & poseSpecification);
 		Trajectory(const Trajectory &trajectory);
 
 		//static void writeTrajectoryToXmlFile(const char *fileName, lib::POSE_SPECIFICATION ps, std::list<ecp_mp::common::smooth_trajectory_pose> &poses);
-		static void writeTrajectoryToXmlFile(const char *fileName, lib::POSE_SPECIFICATION ps, std::list<ecp_mp::common::smooth_trajectory_pose> &poses);//for smooth
+		static void writeTrajectoryToXmlFile(const std::string & fileName, lib::POSE_SPECIFICATION ps, const std::list<ecp_mp::common::smooth_trajectory_pose> &poses);//for smooth
 		//void createNewPose();
 		void createNewPose();//for smooth
 		//void addPoseToTrajectory();
 		void addPoseToTrajectory();//for smooth
 
-		void setTrjID(const char *trjID);
+		void setTrjID(const std::string & trjID);
 		const char * getTrjID() const;
 
 		void setNumOfPoses(unsigned int numOfPoses);
 		unsigned int getNumberOfPoses() const;
 
-		void setPoseSpecification(const char *poseSpecification);
+		void setPoseSpecification(const std::string & poseSpecification);
 		lib::ECP_POSE_SPECIFICATION getPoseSpecification() const;
 
-		void setStartVelocities(const char *startVelocities);
+		void setStartVelocities(const std::string & startVelocities);
 		double *getStartVelocities() const;
 
-		void setEndVelocities(const char *endVelocities);
+		void setEndVelocities(const std::string & endVelocities);
 		double *getEndVelocities() const;
 
 		//void setVelocities(const char *Velocities);
@@ -51,16 +51,16 @@ class Trajectory
 		//void setAccelerations(const char *accelerations);
 		//double *getAccelerations() const;
 
-		void setVelocities(const char *Velocities);//for smooth
+		void setVelocities(const std::string & Velocities);//for smooth
 		double *getVelocities() const;//for smooth
 
-		void setAccelerations(const char *accelerations);//for smooth
+		void setAccelerations(const std::string & accelerations);//for smooth
 		double *getAccelerations() const;//for smooth
 
 		//void setCoordinates(const char *cCoordinates);//for smooth
 		//double *getCoordinates() const;//for smooth
 
-		void setCoordinates(const char *cCoordinates);//for smooth
+		void setCoordinates(const std::string & cCoordinates);//for smooth
 		double *getCoordinates() const;//for smooth
 
 		//void showTime();

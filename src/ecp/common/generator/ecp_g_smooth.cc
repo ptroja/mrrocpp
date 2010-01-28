@@ -599,9 +599,6 @@ smooth::smooth (common::task::task& _ecp_task, bool _is_synchronised)
         :
         delta (_ecp_task), debug(false)//,first_coordinate(true)
 {
-
-    int i;
-
 	pose_list = std::list<ecp_mp::common::smooth_trajectory_pose>();
 	coordinate_list = std::list<coordinates>();
 
@@ -621,7 +618,6 @@ smooth::smooth (common::task::task& _ecp_task, bool _is_synchronised)
 
 	//is_synchronised = _is_synchronised;
 	type=lib::ABSOLUTE;
-
 } // end : konstruktor
 
 /*void smooth::calculate_absolute_positions() {
