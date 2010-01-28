@@ -270,19 +270,7 @@ ecp_mp::common::Trajectory * task::createTrajectory2(xmlNodePtr actNode, xmlChar
 			for(xmlNodePtr ccchild_node = cchild_node->children; ccchild_node!=NULL; ccchild_node = ccchild_node->next)
 			{
 				if ( ccchild_node->type == XML_ELEMENT_NODE ) {
-					/*if(!xmlStrcmp(ccchild_node->name, (const xmlChar *)"StartVelocity") )
-					{
-						xmlChar *xmlDataLine = xmlNodeGetContent(ccchild_node);
-						actTrajectory->setStartVelocities2((char *)xmlDataLine);
-						xmlFree(xmlDataLine);
-					}
-					else if ( !xmlStrcmp(ccchild_node->name, (const xmlChar *)"EndVelocity") )
-					{
-						xmlChar *xmlDataLine = xmlNodeGetContent(ccchild_node);
-						actTrajectory->setEndVelocities2((char *)xmlDataLine);
-						xmlFree(xmlDataLine);
-					}
-					else*/ if ( !xmlStrcmp(ccchild_node->name, (const xmlChar *)"Velocity") )
+					if ( !xmlStrcmp(ccchild_node->name, (const xmlChar *)"Velocity") )
 					{
 						xmlChar *xmlDataLine = xmlNodeGetContent(ccchild_node);
 						actTrajectory->setVelocities((char *)xmlDataLine);
@@ -366,7 +354,7 @@ task::trajectories_t * task::loadTrajectories(const char * fileName, lib::robot_
 									!xmlStrcmp(robot, (const xmlChar *)robotName.c_str()))
 							{
 								ecp_mp::common::Trajectory* actTrajectory = createTrajectory2(child_node, stateID);//new Trajectory((char *)numOfPoses, (char *)stateID, (char *)coordinateType);
-								trajectoriesMap->insert(trajectories_t::value_type(actTrajectory->getTrjID(), *actTrajectory));
+								trajectoriesMap->insert(trajectories_t::value_type(actTrajectory->getTrjID().c_str(), *actTrajectory));
 							}
 						}
 						xmlFree(robot);
@@ -388,7 +376,7 @@ task::trajectories_t * task::loadTrajectories(const char * fileName, lib::robot_
 							child_node->name, (const xmlChar *) "Trajectory")
 							&& !xmlStrcmp(robot, (const xmlChar *) robotName.c_str())) {
 						ecp_mp::common::Trajectory* actTrajectory = createTrajectory2(child_node, stateID);
-						trajectoriesMap->insert(trajectories_t::value_type(actTrajectory->getTrjID(), *actTrajectory));
+						trajectoriesMap->insert(trajectories_t::value_type(actTrajectory->getTrjID().c_str(), *actTrajectory));
 					}
 				}
 				xmlFree(robot);

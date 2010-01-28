@@ -35,7 +35,7 @@ class task {
 
 public:
 
-	typedef std::map<const char*, ecp_mp::common::Trajectory /*, str_cmp */> trajectories_t;
+	typedef std::map<const std::string, ecp_mp::common::Trajectory /*, str_cmp */> trajectories_t;
 
 	task(lib::configurator &_config);
 	virtual ~task();
