@@ -7,6 +7,3 @@ aaaa=
 aaaa =bbbbb
 aaaa= bbbbb
 aaaa = bbbb
-
-
-w qnx 641 nie mozna uzywac znaku \ do sklejania linii w makefilach w poleceniach shella bo nie dziala to pod winda
