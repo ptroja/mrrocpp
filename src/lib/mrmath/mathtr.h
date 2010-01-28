@@ -9,24 +9,15 @@
 // Data:		14.02.2007
 // ------------------------------------------------------------------------
 
-
 #ifndef __MATHTR_H
 #define __MATHTR_H
-
-#include <iostream>
-#include <math.h>
-#include <string.h>
-
-#include "lib/impconst.h"	// frame_tab
 
 namespace mrrocpp {
 namespace lib {
 
-
 // Sprowadzenie wartosci kata do przedzialu <-pi,pi>
 double reduce(double angle);
 double reduce(double angle, double min, double max, double offset);
-
 
 } // namespace lib
 } // namespace mrrocpp

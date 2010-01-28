@@ -10,11 +10,8 @@
 // ------------------------------------------------------------------------
 
 #include <math.h>
-#include <stdio.h>
-#include <iostream>
 
-#include "lib/mis_fun.h"
-#include "lib/mrmath/mrmath.h"
+#include "lib/mrmath/mathtr.h"
 
 namespace mrrocpp {
 namespace lib {
@@ -30,7 +27,6 @@ double reduce (double angle)
 
  return(angle);
 }// end reduce
-
 
 // Sprowadzenie wartosci kata do przedzialu (min, max>.
 double reduce(double angle, double min, double max, double offset)
