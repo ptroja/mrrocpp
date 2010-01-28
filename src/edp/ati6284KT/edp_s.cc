@@ -143,12 +143,10 @@ void ATI6284_force::configure_sensor(void)
 
 
 		wait_for_event();
-		bias_data[0]=adc_data[0];
-		bias_data[1]=adc_data[1];
-		bias_data[2]=adc_data[2];
-		bias_data[3]=adc_data[3];
-		bias_data[4]=adc_data[4];
-		bias_data[5]=adc_data[5];
+
+		for (int i = 0; i < 6; ++i) {
+			bias_data[i]=adc_data[i];
+		}
 
 
 		if (!gravity_transformation) // nie powolano jeszcze obiektu
@@ -192,8 +190,9 @@ void ATI6284_force::wait_for_event()
 {
 	int iw_ret;
 	int iter_counter = 0; // okresla ile razy pod rzad zostala uruchomiona ta metoda
-	timespec time_counter;
+
 	/*
+	timespec time_counter;
 	time_counter.tv_nsec = 100000;
 	time_counter.tv_sec = 0;
 */
@@ -310,6 +309,39 @@ void convert_data(int16_t result_raw[6], int16_t bias_raw[6], double force[6]) {
     }
     force[i] /= conversion_scale[i];
   }
+
+/*
+	printf("\n-----------------------------------------------------------------------------------------------\n");
+	printf("%c\t%c\t%c\t%c\t%c\t%c\n",'X','Y','Z','X','Y','Z');
+	printf("\n-----------------------------------------------------------------------------------------------\n");
+	printf("Bias reading:\n");
+	for (i=0;i<6;i++)
+		printf("%9.6f[V] ",bias_voltage[i]);
+	printf("\n\nMeasurement:\n\n");
+	for (i=0;i<6;i++)
+		printf("%9.6f[V] ",voltage[i]);
+	printf("\n\nDifference Measurement - Bias reading :\n\n");
+	for (i=0;i<6;i++)
+		printf("%9.6f[V] ",voltage[i]-bias_voltage[i]);
+	printf("\n\nResult (force/torque):\n\n");
+	for (i=0;i<6;i++){
+		if (i<3)
+			printf("%9.6f[N] ",force[i]);
+		else
+			printf("%9.6f[N-m] ",force[i]);
+	}
+	printf("\n\nResult local (force/torque):\n\n");
+	for (i=0;i<6;i++){
+		if (i<3)
+			printf("%9.6f[N] ",force_local[i]);
+		else
+			printf("%9.6f[N-m] ",force_local[i]);
+	}
+	printf("\n-----------------------------------------------------------------------------------------------\n");
+
+*/
+
+
 
 }
 /*******************************************************************/
