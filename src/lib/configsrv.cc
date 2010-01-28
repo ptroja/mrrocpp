@@ -7,13 +7,6 @@
 // -------------------------------------------------------------------------
 
 #include <stdio.h>
-#include <string.h>
-#include <assert.h>
-#include <errno.h>
-#include <stdlib.h>
-
-#include <unistd.h>
-#include <sys/wait.h>
 
 #include <boost/thread/mutex.hpp>
 #include <boost/thread/locks.hpp>
