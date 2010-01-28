@@ -35,7 +35,6 @@ LIBMRROCPP_OBJECTS = \
 	cfgopts.o \
 	configurator.o \
 	c_buffer.o r_buffer.o \
-	matrix.o \
 	mis_fun.o \
 	timer.o \
 	srlib.o \

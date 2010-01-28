@@ -2274,9 +2274,9 @@ smooth_cubic_spline::smooth_cubic_spline(common::task::task& _ecp_task, double *
 	build_coeff = true;
 
 	// Tworzymy macierze:
-	y(pose_list_length() + 1, 6);
-	t(pose_list_length() + 1, 6);
-	a(pose_list_length() + 1, 6);
+	y.resize(pose_list_length() + 1, 6, false);
+	t.resize(pose_list_length() + 1, 6, false);
+	a.resize(pose_list_length() + 1, 6, false);
 
 	for (int i = 0; i <MAX_SERVOS_NR; i++) {
 		a_max_motor[i] = 100.0;

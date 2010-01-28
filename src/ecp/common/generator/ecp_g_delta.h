@@ -14,7 +14,6 @@
 
 #include "lib/impconst.h"
 
-#include "lib/matrix.h"
 #include "ecp/common/generator/ecp_generator.h"
 
 namespace mrrocpp {

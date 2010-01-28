@@ -24,7 +24,6 @@
 
 #include "ecp/irp6_on_track/ecp_r_irp6ot.h"
 #include "ecp/irp6_postument/ecp_r_irp6p.h"
-#include "ecp/common/generator/ecp_g_jarosz.h"
 #include "ecp/common/generator/ecp_g_smooth.h"
 #include "ecp/common/generator/ecp_g_force.h"
 #include "ecp_t_fsautomat.h"
