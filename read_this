@@ -36,10 +36,6 @@ FLAGS = flagi
 to clean objects, measures and logs do:
 #make clean
 
-to built dependencies do:
-#make depend
-IMPORTANT: XFree86 Binaries package should be installed for running make depend
-
 to build distibution tared and zipped file with MRROC++ sources files:
 #make dist
 #cd ..; ls
@@ -48,9 +44,6 @@ or:
 #make VERSION=bla dist
 #cd ..; ls
 mrrocppbla.tar.gz
-
-to use aplication:
-run "gns -s" on one of qnx network node's
 
 to generate doxygen
 doxygen Doxyfile
