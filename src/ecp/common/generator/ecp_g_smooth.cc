@@ -1874,7 +1874,7 @@ void smooth::calculate(void) { //zeby wrocic do starego trybu relative nalezy st
 				flushall();
 			}
 
-			printf("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% nowa pozycja %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n");
+			printf("************************************************** nowa pozycja **************************************************\n");
 			printf("type: %d\n", type);
 			flushall();
 		//}
