@@ -26,7 +26,7 @@ std::string toString(lib::robot_name_t robot);
 lib::robot_name_t returnProperRobot(const std::string & robotName);
 lib::ECP_POSE_SPECIFICATION returnProperPS(const std::string & poseSpecification);
 
-int setValuesInArray(double arrayToFill[], const char *dataString);
+int setValuesInArray(double arrayToFill[], const std::string & dataString);
 
 }
 }

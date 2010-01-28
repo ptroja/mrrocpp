@@ -7,8 +7,8 @@
  */
 
 #include <sstream>
-#include <string.h>
-#include <stdlib.h>
+#include <boost/lexical_cast.hpp>
+#include <boost/tokenizer.hpp>
 
 #include "lib/datastr.h"
 
@@ -32,11 +32,7 @@ std::string toString(double valArr[], int length)
 
 std::string toString(int numberOfPoses)
 {
-	std::ostringstream stm;
-
-	stm << numberOfPoses;
-
-	return stm.str();
+	return boost::lexical_cast<std::string>(numberOfPoses);
 }
 
 std::string toString(lib::robot_name_t robot)
@@ -124,22 +120,20 @@ lib::ECP_POSE_SPECIFICATION returnProperPS(const std::string & poseSpecification
 		return lib::ECP_INVALID_END_EFFECTOR;
 }
 
-
-int setValuesInArray(double arrayToFill[], const char *dataString)
+int setValuesInArray(double arrayToFill[], const std::string & dataString)
 {
-	int index = 0;
-	char *value;
-	char *toSplit = strdup(dataString);
+    int index = 0;
+    typedef boost::tokenizer<boost::char_separator<char> > tokenizer;
+    boost::char_separator<char> sep(" \t");
+    tokenizer tok(dataString, sep);
 
-	value = strtok(toSplit, " \t");
-	arrayToFill[index++] = atof(value);
-	while((value = strtok(NULL, " \t"))!=NULL)
-		arrayToFill[index++] = atof(value);
+    for(tokenizer::iterator beg=tok.begin(); beg!=tok.end();++beg){
+        arrayToFill[index++] = boost::lexical_cast<double>(std::string(*beg));
+    }
 
-	free(toSplit);
-
-	return index;
+    return index;
 }
+
 
 }
 }
