@@ -158,7 +158,7 @@ int main (int argc, char *argv[], char **arge)
 		catch (...) {  /* Dla zewnetrznej petli try*/
 			/*   Wylapywanie niezdfiniowanych bledow  */
 			/*  Komunikat o bledzie wysylamy do SR */
-			mp::common::mp_t->sr_ecp_msg->message (lib::NON_FATAL_ERROR, (uint64_t) MP_UNIDENTIFIED_ERROR);
+			mp::common::mp_t->sr_ecp_msg->message (lib::NON_FATAL_ERROR, MP_UNIDENTIFIED_ERROR);
 			exit(EXIT_FAILURE);
 		} /*end: catch  */
 

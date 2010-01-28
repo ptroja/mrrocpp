@@ -197,7 +197,7 @@ int main(int argc, char *argv[])
 		catch (...) {  /* Dla zewnetrznej petli try*/
 			/* Wylapywanie niezdefiniowanych bledow*/
 			/*Komunikat o bledzie wysylamy do SR*/
-			ecp::common::ecp_t->sr_ecp_msg->message (lib::NON_FATAL_ERROR, (uint64_t) ECP_UNIDENTIFIED_ERROR);
+			ecp::common::ecp_t->sr_ecp_msg->message (lib::NON_FATAL_ERROR, ECP_UNIDENTIFIED_ERROR);
 			exit(EXIT_FAILURE);
 		} /*end: catch */
 

@@ -869,7 +869,7 @@ void manip_and_conv_effector::pre_synchro_loop(STATE& next_state)
 			//  printf("catch NonFatal_error_1\n");
 			// informacja dla ECP o bledzie
 			reply_to_instruction();
-			msg->message(lib::NON_FATAL_ERROR, nfe.error, (uint64_t) 0);
+			msg->message(lib::NON_FATAL_ERROR, nfe.error, 0);
 			// powrot do stanu: GET_INSTRUCTION
 			next_state = GET_STATE;
 		} // end: catch(transformer::NonFatal_error_1 nfe)
@@ -880,7 +880,7 @@ void manip_and_conv_effector::pre_synchro_loop(STATE& next_state)
 			// Sa to bledy nie zwiazane ze sprzetem i komunikacja miedzyprocesow
 			//  printf ("catch master thread NonFatal_error_2\n");
 			establish_error(nfe.error, OK);
-			msg->message(lib::NON_FATAL_ERROR, nfe.error, (uint64_t) 0);
+			msg->message(lib::NON_FATAL_ERROR, nfe.error, 0);
 			// powrot do stanu: WAIT
 			next_state = WAIT;
 		} // end: catch(transformer::NonFatal_error_2 nfe)
@@ -903,7 +903,7 @@ void manip_and_conv_effector::pre_synchro_loop(STATE& next_state)
 			insert_reply_type(rep_type);
 			establish_error(err_no_0, err_no_1);
 			//     printf("ERROR w EDP 3\n");
-			msg->message(lib::NON_FATAL_ERROR, nfe.error, (uint64_t) 0);
+			msg->message(lib::NON_FATAL_ERROR, nfe.error, 0);
 			// msg->message(lib::NON_FATAL_ERROR, err_no_0, err_no_1); // by Y - oryginalnie
 			// powrot do stanu: GET_INSTRUCTION
 			next_state = GET_STATE;
@@ -1010,7 +1010,7 @@ void manip_and_conv_effector::synchro_loop(STATE& next_state)
 			// Sa to bledy nie zwiazane ze sprzetem i komunikacja miedzyprocesow
 			establish_error(nfe1.error, OK);
 			reply_to_instruction();
-			msg->message(lib::NON_FATAL_ERROR, nfe1.error, (uint64_t) 0);
+			msg->message(lib::NON_FATAL_ERROR, nfe1.error, 0);
 			// powrot do stanu: GET_SYNCHRO
 			next_state = GET_SYNCHRO;
 		} // end: catch(transformer::NonFatal_error_1 nfe1)
@@ -1023,7 +1023,7 @@ void manip_and_conv_effector::synchro_loop(STATE& next_state)
 			lib::REPLY_TYPE rep_type = is_reply_type();
 			establish_error(nfe2.error, OK);
 			reply_to_instruction();
-			msg->message(lib::NON_FATAL_ERROR, nfe2.error, (uint64_t) 0);
+			msg->message(lib::NON_FATAL_ERROR, nfe2.error, 0);
 			// przywrocenie poprzedniej odpowiedzi
 			insert_reply_type(rep_type); // powrot do stanu: WAIT_Q
 			next_state = WAIT_Q;
@@ -1039,7 +1039,7 @@ void manip_and_conv_effector::synchro_loop(STATE& next_state)
 			uint64_t err_no_1 = is_error_no_1();
 			establish_error(nfe3.error, OK);
 			reply_to_instruction();
-			msg->message(lib::NON_FATAL_ERROR, nfe3.error, (uint64_t) 0);
+			msg->message(lib::NON_FATAL_ERROR, nfe3.error, 0);
 			// przywrocenie poprzedniej odpowiedzi
 			insert_reply_type(rep_type);
 			establish_error(err_no_0, err_no_1);
@@ -1056,7 +1056,7 @@ void manip_and_conv_effector::synchro_loop(STATE& next_state)
 			lib::REPLY_TYPE rep_type = is_reply_type();
 			establish_error(nfe4.error, OK);
 			reply_to_instruction();
-			msg->message(lib::NON_FATAL_ERROR, nfe4.error, (uint64_t) 0);
+			msg->message(lib::NON_FATAL_ERROR, nfe4.error, 0);
 			// przywrocenie poprzedniej odpowiedzi
 			insert_reply_type(rep_type);
 			// powrot do stanu: SYNCHRO_TERMINATED
@@ -1143,7 +1143,7 @@ void manip_and_conv_effector::post_synchro_loop(STATE& next_state)
 			// printf("catch NonFatal_error_1\n");
 			// informacja dla ECP o bledzie
 			reply_to_instruction();
-			msg->message(lib::NON_FATAL_ERROR, nfe.error, (uint64_t) 0);
+			msg->message(lib::NON_FATAL_ERROR, nfe.error, 0);
 			// powrot do stanu: GET_INSTRUCTION
 			next_state = GET_INSTRUCTION;
 		} // end: catch(transformer::NonFatal_error_1 nfe)
@@ -1154,7 +1154,7 @@ void manip_and_conv_effector::post_synchro_loop(STATE& next_state)
 			// Sa to bledy nie zwiazane ze sprzetem i komunikacja miedzyprocesow
 			// printf ("catch master thread NonFatal_error_2\n");
 			establish_error(nfe.error, OK);
-			msg->message(lib::NON_FATAL_ERROR, nfe.error, (uint64_t) 0);
+			msg->message(lib::NON_FATAL_ERROR, nfe.error, 0);
 			// powrot do stanu: WAIT
 			next_state = WAIT;
 		} // end: catch(transformer::NonFatal_error_2 nfe)
@@ -1177,7 +1177,7 @@ void manip_and_conv_effector::post_synchro_loop(STATE& next_state)
 			insert_reply_type(rep_type);
 			establish_error(err_no_0, err_no_1);
 			// printf("ERROR w EDP 3\n");
-			msg->message(lib::NON_FATAL_ERROR, nfe.error, (uint64_t) 0);
+			msg->message(lib::NON_FATAL_ERROR, nfe.error, 0);
 			// msg->message(lib::NON_FATAL_ERROR, err_no_0, err_no_1); // by Y - oryginalnie
 			// powrot do stanu: GET_INSTRUCTION
 			next_state = GET_INSTRUCTION;
