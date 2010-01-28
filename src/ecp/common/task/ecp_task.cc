@@ -96,7 +96,7 @@ bool task::pulse_check()
 #else
 	int32_t type, subtype;
 	int recvid;
-	if ((recvid = messip::port_receive_pulse(trigger_attach, type, subtype)) == -1) {
+	if ((recvid = messip::port_receive_pulse(trigger_attach, type, subtype, 0)) == -1) {
 		perror("messip::port_receive()");
 		return false;
 	}
