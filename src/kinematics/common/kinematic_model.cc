@@ -12,12 +12,12 @@ namespace mrrocpp {
 namespace kinematics {
 namespace common {
 
-const char* kinematic_model::get_kinematic_model_label(void)
+std::string kinematic_model::get_kinematic_model_label(void)
 {
-	return label.c_str();
+	return label;
 }
 
-void kinematic_model::set_kinematic_model_label(const std::string  _label)
+void kinematic_model::set_kinematic_model_label(const std::string & _label)
 {
 	label = _label;
 }

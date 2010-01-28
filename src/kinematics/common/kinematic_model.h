@@ -66,10 +66,10 @@ public:
 	virtual void inverse_kinematics_transform(lib::JointArray & local_desired_joints, lib::JointArray & local_current_joints, const lib::Homog_matrix& local_desired_end_effector_frame) = 0;
 
 	//! Sets kinematics description.
-	virtual void set_kinematic_model_label(const std::string);
+	virtual void set_kinematic_model_label(const std::string &);
 
 	//! Returns description of kinematics.
-	virtual const char* get_kinematic_model_label(void);
+	virtual std::string get_kinematic_model_label(void);
 };
 
 } // namespace common
