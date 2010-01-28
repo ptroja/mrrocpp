@@ -600,6 +600,7 @@ void sr::operator()()
 				{
 					send_package_to_sr(local_message);
 
+					boost::mutex::scoped_lock lock(sr_mutex);
 					cb.pop_front();
 				}
 				catch (...)
