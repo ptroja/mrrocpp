@@ -278,7 +278,7 @@ public:
 	/*!
 	* Method aplying contrains -- AV()
 	*/
-	virtual void entertain_constraints();
+	virtual void limit_step();
 	void set_constraints();
 	void get_constraints();
 	void set_entities();

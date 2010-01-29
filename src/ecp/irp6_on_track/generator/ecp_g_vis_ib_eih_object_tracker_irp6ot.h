@@ -125,7 +125,7 @@ public:
 	/**
 	 *
 	 */
-	virtual void entertain_constraints();
+	virtual void limit_step();
 
 private:
 	/**

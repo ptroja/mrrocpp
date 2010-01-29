@@ -209,7 +209,7 @@ bool ecp_vis_ib_eih_object_tracker_irp6ot::read_parametres() {//metoda wczytujac
 	return true;
 }
 
-void ecp_vis_ib_eih_object_tracker_irp6ot::entertain_constraints() {
+void ecp_vis_ib_eih_object_tracker_irp6ot::limit_step() {
 
 }
 

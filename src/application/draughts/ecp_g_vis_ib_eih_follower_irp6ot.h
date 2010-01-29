@@ -63,7 +63,7 @@ public:
 	ecp_vis_ib_eih_follower_irp6ot(common::task::task& _ecp_task);
 	virtual bool first_step(void);
 	virtual bool next_step_without_constraints();
-	virtual void entertain_constraints();
+	virtual void limit_step();
 	void reduce_velocity(double a, double t, double s, int i);
 };
 

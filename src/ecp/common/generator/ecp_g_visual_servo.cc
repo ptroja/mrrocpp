@@ -38,7 +38,7 @@ void ecp_visual_servo::retrieve_parameters(){
 
 bool ecp_visual_servo::next_step(void){
 	if (next_step_without_constraints()) {
-		entertain_constraints();
+		limit_step();
 		return true;
 	}//: if
 	return false;
@@ -76,7 +76,7 @@ void ecp_visual_servo::get_operations(){
 }
 
 #if 1
-void ecp_visual_servo::entertain_constraints(){
+void ecp_visual_servo::limit_step(){
 	// roznica w kroku -> docelowo predkosc
 	for (int i=0; i<6; i++)
 		O_r_Ep_d[0][i]=O_r_Ep[0][i]-O_r_E[0][i];

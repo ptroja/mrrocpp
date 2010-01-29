@@ -150,7 +150,7 @@ bool ecp_vis_ib_eih_irp6ot::next_step_without_constraints(){
 }
 
 #if 0
-void ecp_vis_ib_eih_irp6ot::entertain_constraints(){
+void ecp_vis_ib_eih_irp6ot::limit_step(){
 	// roznica w kroku -> docelowo predkosc
 	for (int i=0; i<6; i++)
 		O_r_Ep_d[0][i]=O_r_Ep[0][i]-O_r_E[0][i];

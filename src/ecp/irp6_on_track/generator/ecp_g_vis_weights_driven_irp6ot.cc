@@ -116,7 +116,7 @@ std::cout << "N: " << node_counter << " " << pbeolsac->node_counter << std::endl
 }
 
 #if 0
-void ecp_vis_weights_driven_irp6ot::entertain_constraints(){
+void ecp_vis_weights_driven_irp6ot::limit_step(){
 	// roznica w kroku -> docelowo predkosc
 	for (int i=0; i<6; i++)
 		O_r_Ep_d[0][i]=O_r_Ep[0][i]-O_r_E[0][i];

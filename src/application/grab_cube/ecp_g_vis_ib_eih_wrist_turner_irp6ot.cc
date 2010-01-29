@@ -84,7 +84,7 @@ bool ecp_vis_ib_eih_wrist_turner_irp6ot::next_step_without_constraints() {
 	return true;
 }
 
-void ecp_vis_ib_eih_wrist_turner_irp6ot::entertain_constraints() {
+void ecp_vis_ib_eih_wrist_turner_irp6ot::limit_step() {
 
 }
 

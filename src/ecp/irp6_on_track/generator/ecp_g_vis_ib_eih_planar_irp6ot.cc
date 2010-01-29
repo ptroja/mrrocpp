@@ -191,7 +191,7 @@ bool ecp_vis_ib_eih_planar_irp6ot::check_if_followed(){
 
 }
 
-void ecp_vis_ib_eih_planar_irp6ot::entertain_constraints() {
+void ecp_vis_ib_eih_planar_irp6ot::limit_step() {
 
 }
 

@@ -72,7 +72,7 @@ public:
 
 	virtual bool first_step(void);
 	virtual bool next_step_without_constraints();
-	virtual void entertain_constraints();
+	virtual void limit_step();
 	virtual void retrieve_parameters();
 };
 

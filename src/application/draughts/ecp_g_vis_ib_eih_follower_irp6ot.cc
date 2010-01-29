@@ -282,7 +282,7 @@ void ecp_vis_ib_eih_follower_irp6ot::reduce_velocity(double a, double t, double 
 	v_max[i] = (-(2 * a * t) + sqrt(delta)) / (-4);
 }
 
-void ecp_vis_ib_eih_follower_irp6ot::entertain_constraints() {
+void ecp_vis_ib_eih_follower_irp6ot::limit_step() {
 
 }
 
