@@ -19,9 +19,6 @@
 #include "lib/com_buf.h"
 #include "lib/srlib.h"
 
-
-
-
 #define CATCH_SECTION_UI catch (ecp::common::ecp_robot::ECP_main_error e) { \
 	/* Obsluga bledow ECP */ \
 	if (e.error_class == lib::SYSTEM_ERROR) \
@@ -60,46 +57,49 @@ catch (...) {  /* Dla zewnetrznej petli try*/ \
 } /*end: catch */\
 
 
-enum TEACHING_STATE_ENUM
-{
+enum TEACHING_STATE_ENUM {
 	FSTRAJECTORY, FSCONFIG
 };
 
-enum UI_NOTIFICATION_STATE_ENUM
-{
-	UI_N_STARTING, UI_N_READY, UI_N_BUSY, UI_N_EXITING, 	UI_N_COMMUNICATION, UI_N_PROCESS_CREATION,
+enum UI_NOTIFICATION_STATE_ENUM {
+	UI_N_STARTING,
+	UI_N_READY,
+	UI_N_BUSY,
+	UI_N_EXITING,
+	UI_N_COMMUNICATION,
+	UI_N_PROCESS_CREATION,
 	UI_N_SYNCHRONISATION
 };
 
 // FIXME: moved from proto.h for linux compatibility
-int set_ui_state_notification ( UI_NOTIFICATION_STATE_ENUM new_notifacion );
+int set_ui_state_notification(UI_NOTIFICATION_STATE_ENUM new_notifacion);
 
-enum UI_ECP_COMMUNICATION_STATE
-{
+enum UI_ECP_COMMUNICATION_STATE {
 	UI_ECP_AFTER_RECEIVE, UI_ECP_REPLY_READY, UI_ECP_AFTER_REPLY
 };
 
-enum UI_MP_STATE
-{
-	UI_MP_NOT_PERMITED_TO_RUN, UI_MP_PERMITED_TO_RUN, UI_MP_WAITING_FOR_START_PULSE, UI_MP_TASK_RUNNING,
+enum UI_MP_STATE {
+	UI_MP_NOT_PERMITED_TO_RUN,
+	UI_MP_PERMITED_TO_RUN,
+	UI_MP_WAITING_FOR_START_PULSE,
+	UI_MP_TASK_RUNNING,
 	UI_MP_TASK_PAUSED
 };
 
-enum UI_ALL_EDPS_STATE
-{
-	UI_ALL_EDPS_NONE_EDP_ACTIVATED, UI_ALL_EDPS_NONE_EDP_LOADED,
-		UI_ALL_EDPS_THERE_IS_EDP_LOADED_BUT_NOT_ALL_ARE_LOADED,
-		UI_ALL_EDPS_LOADED_BUT_NOT_SYNCHRONISED, UI_ALL_EDPS_LOADED_AND_SYNCHRONISED
+enum UI_ALL_EDPS_STATE {
+	UI_ALL_EDPS_NONE_EDP_ACTIVATED,
+	UI_ALL_EDPS_NONE_EDP_LOADED,
+	UI_ALL_EDPS_THERE_IS_EDP_LOADED_BUT_NOT_ALL_ARE_LOADED,
+	UI_ALL_EDPS_LOADED_BUT_NOT_SYNCHRONISED,
+	UI_ALL_EDPS_LOADED_AND_SYNCHRONISED
 };
 
-
- // -1 mp jest wylaczone i nie moze zostac wlaczone , 0 - mp wylaczone ale wszystkie edp gotowe,  1- wlaczone czeka na start
-				// 2 - wlaczone czeka na stop 3 -wlaczone czeka na resume
+// -1 mp jest wylaczone i nie moze zostac wlaczone , 0 - mp wylaczone ale wszystkie edp gotowe,  1- wlaczone czeka na start
+// 2 - wlaczone czeka na stop 3 -wlaczone czeka na resume
 
 
 // czas jaki uplywa przed wyslaniem sygnalu w funkcji ualarm w mikrosekundach
 #define SIGALRM_TIMEOUT 1000000
-
 
 typedef struct {
 	pid_t pid;
@@ -153,7 +153,6 @@ typedef struct {
 	std::string node_name;
 } program_node_def;
 
-
 typedef struct {
 
 	UI_ALL_EDPS_STATE all_edps;
@@ -179,7 +178,7 @@ typedef struct {
 	std::list<program_node_def> program_node_list;
 
 	std::string ui_node_name; // nazwa wezla na ktorym jest uruchamiany UI
-	int	ui_node_nr; // numer wezla na ktorym jest uruchamiany UI
+	int ui_node_nr; // numer wezla na ktorym jest uruchamiany UI
 	pid_t ui_pid; // pid UI
 	short ui_state; // 1 working, 2 exiting started, 3-5 exiting in progress - mrrocpp processes closing, 6 - exit imeditily
 
@@ -209,39 +208,39 @@ typedef struct {
 	bool is_wind_polycrank_int_open; // informacja czy okno ruchow w radianach stawow jest otwarte
 
 	bool is_wind_irp6ot_inc_open; // informacja czy okno ruchow w radianach na wale silnika jest otwarte
-	bool is_wind_irp6p_inc_open;  // informacja czy okno ruchow w radianach na wale silnika jest otwarte
-	bool is_wind_irp6m_inc_open;  // informacja czy okno ruchow w radianach na wale silnika jest otwarte
-	bool is_wind_polycrank_inc_open;  // informacja czy okno ruchow w radianach na wale silnika jest otwarte
+	bool is_wind_irp6p_inc_open; // informacja czy okno ruchow w radianach na wale silnika jest otwarte
+	bool is_wind_irp6m_inc_open; // informacja czy okno ruchow w radianach na wale silnika jest otwarte
+	bool is_wind_polycrank_inc_open; // informacja czy okno ruchow w radianach na wale silnika jest otwarte
 
-	bool is_wind_irp6ot_xyz_euler_zyz_open;  // informacja czy okno ruchow we wspolrzednych zewnetrznych jest otwarte
-	bool is_wind_irp6p_xyz_euler_zyz_open;  // informacja czy okno ruchow we wspolrzednych zewnetrznych jest otwarte
-	bool is_wind_irp6m_xyz_euler_zyz_open;  // informacja czy okno ruchow we wspolrzednych zewnetrznych jest otwarte
+	bool is_wind_irp6ot_xyz_euler_zyz_open; // informacja czy okno ruchow we wspolrzednych zewnetrznych jest otwarte
+	bool is_wind_irp6p_xyz_euler_zyz_open; // informacja czy okno ruchow we wspolrzednych zewnetrznych jest otwarte
+	bool is_wind_irp6m_xyz_euler_zyz_open; // informacja czy okno ruchow we wspolrzednych zewnetrznych jest otwarte
 
-	bool is_wind_irp6ot_xyz_angle_axis_open;  // informacja czy okno ruchow we wspolrzednych zewnetrznych jest otwarte
-	bool is_wind_irp6p_xyz_angle_axis_open;  // informacja czy okno ruchow we wspolrzednych zewnetrznych jest otwarte
-	bool is_wind_irp6m_xyz_angle_axis_open;  // informacja czy okno ruchow we wspolrzednych zewnetrznych jest otwarte
+	bool is_wind_irp6ot_xyz_angle_axis_open; // informacja czy okno ruchow we wspolrzednych zewnetrznych jest otwarte
+	bool is_wind_irp6p_xyz_angle_axis_open; // informacja czy okno ruchow we wspolrzednych zewnetrznych jest otwarte
+	bool is_wind_irp6m_xyz_angle_axis_open; // informacja czy okno ruchow we wspolrzednych zewnetrznych jest otwarte
 
-	bool is_wind_irp6ot_xyz_aa_relative_open;  // informacja czy okno ruchow we wspolrzednych zewnetrznych jest otwarte
-	bool is_wind_irp6p_xyz_aa_relative_open;  // informacja czy okno ruchow we wspolrzednych zewnetrznych jest otwarte
+	bool is_wind_irp6ot_xyz_aa_relative_open; // informacja czy okno ruchow we wspolrzednych zewnetrznych jest otwarte
+	bool is_wind_irp6p_xyz_aa_relative_open; // informacja czy okno ruchow we wspolrzednych zewnetrznych jest otwarte
 
-	bool is_wind_irp6ot_xyz_angle_axis_ts_open;  // informacja czy okno definicji narzedzia we wspolrzednych zewnetrznych jest otwarte
-	bool is_wind_irp6p_xyz_angle_axis_ts_open;  // informacja czy okno definicji narzedzia we wspolrzednych zewnetrznych jest otwarte
-	bool is_wind_irp6m_xyz_angle_axis_ts_open;  // informacja czy okno definicji narzedzia we wspolrzednych zewnetrznych jest otwarte
+	bool is_wind_irp6ot_xyz_angle_axis_ts_open; // informacja czy okno definicji narzedzia we wspolrzednych zewnetrznych jest otwarte
+	bool is_wind_irp6p_xyz_angle_axis_ts_open; // informacja czy okno definicji narzedzia we wspolrzednych zewnetrznych jest otwarte
+	bool is_wind_irp6m_xyz_angle_axis_ts_open; // informacja czy okno definicji narzedzia we wspolrzednych zewnetrznych jest otwarte
 
-	bool is_wind_irp6ot_xyz_euler_zyz_ts_open;  // informacja czy okno definicji narzedzia we wspolrzednych zewnetrznych jest otwarte
-	bool is_wind_irp6p_xyz_euler_zyz_ts_open;  // informacja czy okno definicji narzedzia we wspolrzednych zewnetrznych jest otwarte
-	bool is_wind_irp6m_xyz_euler_zyz_ts_open;  // informacja czy okno definicji narzedzia we wspolrzednych zewnetrznych jest otwarte
+	bool is_wind_irp6ot_xyz_euler_zyz_ts_open; // informacja czy okno definicji narzedzia we wspolrzednych zewnetrznych jest otwarte
+	bool is_wind_irp6p_xyz_euler_zyz_ts_open; // informacja czy okno definicji narzedzia we wspolrzednych zewnetrznych jest otwarte
+	bool is_wind_irp6m_xyz_euler_zyz_ts_open; // informacja czy okno definicji narzedzia we wspolrzednych zewnetrznych jest otwarte
 
-	bool is_wind_irp6ot_kinematic_open;  // informacja czy okno definicji kinematyki jest otwarte
-	bool is_wind_irp6p_kinematic_open;  // informacja czy okno definicji kinematyki jest otwarte
-	bool is_wind_irp6m_kinematic_open;  // informacja czy okno definicji kinematyki jest otwarte
+	bool is_wind_irp6ot_kinematic_open; // informacja czy okno definicji kinematyki jest otwarte
+	bool is_wind_irp6p_kinematic_open; // informacja czy okno definicji kinematyki jest otwarte
+	bool is_wind_irp6m_kinematic_open; // informacja czy okno definicji kinematyki jest otwarte
 
-	bool is_wind_irp6ot_servo_algorithm_open;  // informacja czy okno definicji kinematyki jest otwarte
-	bool is_wind_irp6p_servo_algorithm_open;  // informacja czy okno definicji kinematyki jest otwarte
-	bool is_wind_irp6m_servo_algorithm_open;  // informacja czy okno definicji kinematyki jest otwarte
-	bool is_wind_conv_servo_algorithm_open;  // informacja czy okno definicji kinematyki jest otwarte
+	bool is_wind_irp6ot_servo_algorithm_open; // informacja czy okno definicji kinematyki jest otwarte
+	bool is_wind_irp6p_servo_algorithm_open; // informacja czy okno definicji kinematyki jest otwarte
+	bool is_wind_irp6m_servo_algorithm_open; // informacja czy okno definicji kinematyki jest otwarte
+	bool is_wind_conv_servo_algorithm_open; // informacja czy okno definicji kinematyki jest otwarte
 
-	bool is_wind_conveyor_moves_open;  // informacja czy okno ruchow dla robota conveyor
+	bool is_wind_conveyor_moves_open; // informacja czy okno ruchow dla robota conveyor
 
 	bool is_wind_speaker_play_open; // informacja czy okno odtwarzania dzwiekow jest otwarte
 
@@ -249,32 +248,29 @@ typedef struct {
 	bool is_file_selection_window_open; // informacja czy okno z wyborem pliku jest otwarte
 } ui_state_def;
 
-
 /**************************** ui_sr_buffer *****************************/
 
 #define UI_SR_BUFFER_LENGHT 50
 
 class ui_sr_buffer {
 private:
-	sem_t sem;
+	boost::circular_buffer<lib::sr_package_t> cb;
+	boost::mutex mtx; // = PTHREAD_MUTEX_INITIALIZER ;
 
 public:
-	boost::circular_buffer<lib::sr_package_t> cb;
-	boost::mutex sr_mutex; // = PTHREAD_MUTEX_INITIALIZER ;
 
 	ui_sr_buffer();
 
-	int	set_new_msg(); // podniesienie semafora
-	int	check_new_msg(); // oczekiwanie na semafor
+	void put_one_msg(const lib::sr_package_t& new_msg); // podniesienie semafora
+	void get_one_msg(lib::sr_package_t& new_msg); // podniesienie semafora
+	bool buffer_empty(); // czy bufor cykliczny jest pusty
 };
-
 
 /**************************** ui_sr_buffer *****************************/
 
 #define UI_SR_BUFFER_LENGHT 50
 
-class ui_ecp_buffer
-{
+class ui_ecp_buffer {
 private:
 	sem_t sem;
 
@@ -284,85 +280,78 @@ public:
 	lib::UI_reply ui_rep;
 
 	ui_ecp_buffer();
-	int	post_sem(); // podniesienie semafora
-	int	take_sem(); // oczekiwanie na semafor
-	int	trywait_sem(); // oczekiwanie na semafor
+	int post_sem(); // podniesienie semafora
+	int take_sem(); // oczekiwanie na semafor
+	int trywait_sem(); // oczekiwanie na semafor
 };
 
-
-typedef struct
-{
-	lib::sr_ecp* all_ecp;        // Wskaznik na obiekt do komunikacji z SR z fukcja ECP dla wszystkich robotow
-	lib::sr_ui* ui;              // Wskaznik na obiekt do komunikacji z SR
+typedef struct {
+	lib::sr_ecp* all_ecp; // Wskaznik na obiekt do komunikacji z SR z fukcja ECP dla wszystkich robotow
+	lib::sr_ui* ui; // Wskaznik na obiekt do komunikacji z SR
 } ui_msg_def;
 
 void UI_close(void);
 
-
-class function_execution_buffer
-{
+class function_execution_buffer {
 public:
 	typedef boost::function<int()> command_function_t;
 
-    int	wait_and_execute();
-    void command(command_function_t _com_fun);
+	int wait_and_execute();
+	void command(command_function_t _com_fun);
 
 private:
-    boost::condition_variable cond; //! active command condition
-    boost::mutex mtx; //! mutex related to condition variable
+	boost::condition_variable cond; //! active command condition
+	boost::mutex mtx; //! mutex related to condition variable
 
-    bool has_command;	//! flag indicating active command to execute
+	bool has_command; //! flag indicating active command to execute
 
-    command_function_t com_fun; //! command functor
+	command_function_t com_fun; //! command functor
 };
 
 // forward declaration
 class busy_flag;
 
 class busy_flagger {
-	private:
-		//! flag object to decrement in destructor
-		busy_flag & flag;
+private:
+	//! flag object to decrement in destructor
+	busy_flag & flag;
 
-	public:
-		//! increment busy flag for in a  scoped manner
-		busy_flagger(busy_flag & _flag);
+public:
+	//! increment busy flag for in a  scoped manner
+	busy_flagger(busy_flag & _flag);
 
-		//! desctructor makes flag unbusy
-		~busy_flagger();
+	//! desctructor makes flag unbusy
+	~busy_flagger();
 };
 
 class busy_flag {
 	friend class busy_flagger;
 
-	private:
-		//! count busy flagging
-		int counter;
+private:
+	//! count busy flagging
+	int counter;
 
-		//! guard counter variable
-		mutable boost::mutex m_mutex;
+	//! guard counter variable
+	mutable boost::mutex m_mutex;
 
-		//! increment counter
-		void increment();
+	//! increment counter
+	void increment();
 
-		//! decrement counter
-		void decrement();
+	//! decrement counter
+	void decrement();
 
-	public:
-		bool is_busy() const;
+public:
+	bool is_busy() const;
 
-		//! constructor
-		busy_flag();
+	//! constructor
+	busy_flag();
 };
 
 // TODO: reimplement this as a singleton
 extern busy_flag communication_flag;
 
-
-
-void create_threads( );
-void abort_threads( );
-
+void create_threads();
+void abort_threads();
 
 #endif
 

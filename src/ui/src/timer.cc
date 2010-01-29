@@ -48,8 +48,8 @@ int OnTimer(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 		}
 	}
 
-	if (ui_sr_obj->check_new_msg() == 0) { // by Y jesli mamy co wypisywac
-		boost::mutex::scoped_lock lock(ui_sr_obj->sr_mutex);
+	if (!(ui_sr_obj->buffer_empty())) { // by Y jesli mamy co wypisywac
+
 		// 	printf("timer\n");
 		int attributes_mask;
 		PtMultiTextAttributes_t attr;
@@ -57,84 +57,86 @@ int OnTimer(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 		// char buffer[ 80 ];
 
 		char current_line[400];
+		lib::sr_package_t sr_msg;
 
-		do { // dopoki mamy co wypisywac
+		while (!(ui_sr_obj->buffer_empty())) { // dopoki mamy co wypisywac
 
-			snprintf(current_line, 100, "%-10s", ui_sr_obj->cb.front().host_name);
+
+			ui_sr_obj->get_one_msg(sr_msg);
+
+			snprintf(current_line, 100, "%-10s", sr_msg.host_name);
 			strcat(current_line, "  ");
-			strftime(current_line + 12, 100, "%H:%M:%S", localtime(&ui_sr_obj->cb.front().ts.tv_sec));
-			sprintf(current_line + 20, ".%03d   ", ui_sr_obj->cb.front().ts.tv_nsec / 1000000);
+			strftime(current_line + 12, 100, "%H:%M:%S", localtime(
+					&sr_msg.ts.tv_sec));
+			sprintf(current_line + 20, ".%03d   ", sr_msg.ts.tv_nsec / 1000000);
 
-			switch (ui_sr_obj->cb.front().process_type)
-			{
-				case lib::EDP:
-					strcat(current_line, "EDP: ");
-					break;
-				case lib::ECP:
-					strcat(current_line, "ECP: ");
-					break;
-				case lib::MP:
-					// printf("MP w ontimer\n");
-					strcat(current_line, "MP:  ");
-					break;
-				case lib::VSP:
-					strcat(current_line, "VSP: ");
-					break;
-				case lib::UI:
-					strcat(current_line, "UI:  ");
-					break;
-				default:
-					strcat(current_line, "???: ");
-					continue;
+			switch (sr_msg.process_type) {
+			case lib::EDP:
+				strcat(current_line, "EDP: ");
+				break;
+			case lib::ECP:
+				strcat(current_line, "ECP: ");
+				break;
+			case lib::MP:
+				// printf("MP w ontimer\n");
+				strcat(current_line, "MP:  ");
+				break;
+			case lib::VSP:
+				strcat(current_line, "VSP: ");
+				break;
+			case lib::UI:
+				strcat(current_line, "UI:  ");
+				break;
+			default:
+				strcat(current_line, "???: ");
+				continue;
 			} // end: switch (message_buffer[reader_buf_position].process_type)
 
 			// FIXME: ?
-			ui_sr_obj->cb.front().process_type = lib::UNKNOWN_PROCESS_TYPE;
+			sr_msg.process_type = lib::UNKNOWN_PROCESS_TYPE;
 
 			char process_name_buffer[NAME_LENGTH + 1];
-			snprintf(process_name_buffer, sizeof(process_name_buffer), "%-21s", ui_sr_obj->cb.front().process_name);
+			snprintf(process_name_buffer, sizeof(process_name_buffer), "%-21s",
+					sr_msg.process_name);
 
 			strcat(current_line, process_name_buffer);
 
-			switch (ui_sr_obj->cb.front().message_type)
-			{
-				case lib::FATAL_ERROR:
-					strcat(current_line, "FATAL_ERROR:     ");
-					attr.text_color = Pg_RED;
-					break;
-				case lib::NON_FATAL_ERROR:
-					strcat(current_line, "NON_FATAL_ERROR: ");
-					attr.text_color = Pg_BLUE;
-					break;
-				case lib::SYSTEM_ERROR:
-					// printf("SYSTEM ERROR W ONTIMER\n");
-					// Informacja do UI o koniecznosci zmiany stanu na INITIAL_STATE
-					strcat(current_line, "SYSTEM_ERROR:    ");
-					attr.text_color = Pg_PURPLE;
-					break;
-				case lib::NEW_MESSAGE:
-					strcat(current_line, "MESSAGE:         ");
-					attr.text_color = Pg_BLACK;
-					break;
-				default:
-					strcat(current_line, "UNKNOWN ERROR:   ");
-					attr.text_color = Pg_YELLOW;
+			switch (sr_msg.message_type) {
+			case lib::FATAL_ERROR:
+				strcat(current_line, "FATAL_ERROR:     ");
+				attr.text_color = Pg_RED;
+				break;
+			case lib::NON_FATAL_ERROR:
+				strcat(current_line, "NON_FATAL_ERROR: ");
+				attr.text_color = Pg_BLUE;
+				break;
+			case lib::SYSTEM_ERROR:
+				// printf("SYSTEM ERROR W ONTIMER\n");
+				// Informacja do UI o koniecznosci zmiany stanu na INITIAL_STATE
+				strcat(current_line, "SYSTEM_ERROR:    ");
+				attr.text_color = Pg_PURPLE;
+				break;
+			case lib::NEW_MESSAGE:
+				strcat(current_line, "MESSAGE:         ");
+				attr.text_color = Pg_BLACK;
+				break;
+			default:
+				strcat(current_line, "UNKNOWN ERROR:   ");
+				attr.text_color = Pg_YELLOW;
 			}; // end: switch (message.message_type)
 
-			strcat(current_line, ui_sr_obj->cb.front().description);
+			strcat(current_line, sr_msg.description);
 			strcat(current_line, "\n");
 			// 	printf("c_l W ONT: %s\n",current_line);
 			// delay(1000);
 			// 	attr.text_color=Pg_DBLUE;
 
 			attributes_mask = Pt_MT_TEXT_COLOR;
-			PtMultiTextModifyText(ABW_PtMultiText_sr_window, NULL, NULL, -1, current_line, strlen(current_line), &attr, attributes_mask);
+			PtMultiTextModifyText(ABW_PtMultiText_sr_window, NULL, NULL, -1,
+					current_line, strlen(current_line), &attr, attributes_mask);
 
 			(*log_file_outfile) << current_line;
-
-			ui_sr_obj->cb.pop_front();
-
-		} while (!(ui_sr_obj->cb.empty()));
+		}
 
 		(*log_file_outfile).flush();
 
