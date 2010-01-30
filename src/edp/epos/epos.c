@@ -158,7 +158,7 @@ static int SegmentRead(epos_t *epos, WORD **ptr);
    WORD *data is a pointer to a 2 WORDs array (== 4 BYTES)
    holding data to transmit
 */
-static int WriteObject(epos_t *epos, WORD index, BYTE subindex, WORD data[2]);
+static int WriteObject(epos_t *epos, WORD index, BYTE subindex, const WORD data[2]);
 
 
 
@@ -168,10 +168,10 @@ static int WriteObject(epos_t *epos, WORD index, BYTE subindex, WORD data[2]);
 
 
 /*! \brief  write a single BYTE to EPOS */
-static int writeBYTE(epos_t *epos, BYTE *c);
+static int writeBYTE(epos_t *epos, const BYTE *c);
 
 /*! \brief  write a single WORD to EPOS */
-static int writeWORD(epos_t *epos, WORD *w);
+static int writeWORD(epos_t *epos, const WORD *w);
 
 /*! \brief  read a single BYTE from EPOS, timeout implemented */
 static int readBYTE(epos_t *epos, BYTE *c);
@@ -191,11 +191,11 @@ static int readAnswer(epos_t *epos, WORD **ptr);
 /*! \brief Checksum calculation;
 copied from EPOS Communication Guide, p.8
  */
-static WORD CalcFieldCRC(WORD *pDataArray, WORD numberOfWords);
+static WORD CalcFieldCRC(const WORD *pDataArray, WORD numberOfWords);
 
 
 /*! \brief exit(-1) if ptr == NULL */
-static void checkPtr(void* ptr);
+static void checkPtr(const void* ptr);
 
 
 /*! \brief compare two 16bit bitmasks, return 1 (true) or 0 (false) */
@@ -3040,7 +3040,7 @@ int checkEPOSerror(epos_t *epos){
 
 
 /*  write a single BYTE to EPOS */
-static int writeBYTE(epos_t *epos, BYTE *c){
+static int writeBYTE(epos_t *epos, const BYTE *c){
 
   if (!epos)
     return -1;
@@ -3058,7 +3058,7 @@ static int writeBYTE(epos_t *epos, BYTE *c){
 
 
 /*  write a single WORD to EPOS */
-static int writeWORD(epos_t *epos, WORD *w){
+static int writeWORD(epos_t *epos, const WORD *w){
 
   if (!epos)
     return -1;
@@ -3161,7 +3161,7 @@ int readWORD(epos_t *epos, WORD *w){
 
 
 /* copied from EPOS Communication Guide, p.8 */
-static WORD CalcFieldCRC(WORD *pDataArray, WORD numberOfWords)
+static WORD CalcFieldCRC(const WORD *pDataArray, WORD numberOfWords)
 {
   WORD shifter, c;
   WORD carry;
@@ -3483,7 +3483,7 @@ firmware documentation for valid values
 \retval 0 success
 \retval -1 error
 */
-int WriteObject(epos_t *epos, WORD index, BYTE subindex, WORD *data) {
+int WriteObject(epos_t *epos, WORD index, BYTE subindex, const WORD *data) {
 
   WORD frame[6];
   WORD *ans = NULL;
@@ -3536,7 +3536,7 @@ static int bitcmp(WORD a, WORD b){
 
 
 
-static void checkPtr(void* ptr){
+static void checkPtr(const void* ptr){
   if (ptr == NULL){
     fprintf(stderr, "malloc failed!\n");
     exit(-1);
