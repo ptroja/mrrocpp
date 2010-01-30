@@ -312,7 +312,8 @@ int openEPOS(epos_t *epos, tcflag_t br) {
 }
 
 int closeEPOS(epos_t *epos){
-  checkEPOS(epos);
+  int n = 0;
+  if ((n = checkEPOS(epos)) < 0) return n;
   close(epos->ep);
   return(0);
 }
@@ -353,7 +354,7 @@ int readStatusword(epos_t *epos, WORD *status){
   if (!epos)
     return -1;
 
-  checkEPOS(epos);
+  if ((n = checkEPOS(epos)) < 0) return n;
 
   if ( (n =  ReadObject(epos, 0x6041, 0x00, &answer)) <0){
 
@@ -774,7 +775,7 @@ int readSWversion(epos_t *epos){
   if (!epos)
     return -1;
 
-  checkEPOS(epos);
+  if ((n = checkEPOS(epos)) < 0) return n;
 
   if ( (n =  ReadObject(epos, 0x2003, 0x01, &answer)) <0){
 
@@ -811,7 +812,7 @@ int readDInputPolarity(epos_t *epos, WORD* w){
   if (!epos)
     return -1;
 
-  checkEPOS(epos);
+  if ((n = checkEPOS(epos)) < 0) return n;
 
   if ( (n =  ReadObject(epos, 0x2071, 0x03, &answer)) <0){
 
@@ -854,7 +855,7 @@ int setHomePolarity(epos_t *epos, int pol){
     return(-1);
   }
 
-  checkEPOS(epos);
+  if ((n = checkEPOS(epos)) < 0) return n;
 
   // read present functionalities polarity mask
   if ( readDInputPolarity(epos, &mask) ) {
@@ -896,7 +897,7 @@ int readControlword(epos_t *epos, WORD *w){
   if (!epos)
     return -1;
 
-  checkEPOS(epos);
+  if ((n = checkEPOS(epos)) < 0) return n;
 
   if ( (n =  ReadObject(epos, 0x6040, 0x00, &answer)) <0){
 
@@ -1055,7 +1056,7 @@ int readDemandPosition(epos_t *epos, long *pos){
   if (!epos)
     return -1;
 
-  checkEPOS(epos);
+  if ((n = checkEPOS(epos)) < 0) return n;
 
 
   if ( (n =  ReadObject(epos, 0x6062, 0x00, &answer)) <0){
@@ -1092,7 +1093,7 @@ int readActualPosition(epos_t *epos, long *pos){
   if (!epos)
     return -1;
 
-  checkEPOS(epos);
+  if ((n = checkEPOS(epos)) < 0) return n;
 
 
   if ( (n =  ReadObject(epos, 0x6064, 0x00, &answer)) <0){
@@ -1125,7 +1126,7 @@ int readPositionWindow(epos_t *epos, unsigned long int *pos){
   if (!epos)
     return -1;
 
-  checkEPOS(epos);
+  if ((n = checkEPOS(epos)) < 0) return n;
 
   if ( (n =  ReadObject(epos, 0x6067, 0x00, &answer)) <0){
 
@@ -1294,7 +1295,7 @@ int readPositionProfileVelocity(epos_t *epos, unsigned long int *val){
 	WORD *answer = NULL;
 	int n = 0;
 
-	checkEPOS(epos);
+	if ((n = checkEPOS(epos)) < 0) return n;
 
 	if ( (n =  ReadObject(epos, 0x6081, 0x00, &answer)) <0){
 
@@ -1321,7 +1322,7 @@ int readPositionProfileAcceleration(epos_t *epos, unsigned long int *val){
 	WORD *answer = NULL;
 	int n = 0;
 
-	checkEPOS(epos);
+	if ((n = checkEPOS(epos)) < 0) return n;
 
 	if ( (n =  ReadObject(epos, 0x6083, 0x00, &answer)) <0){
 
@@ -1348,7 +1349,7 @@ int readPositionProfileDeceleration(epos_t *epos, unsigned long int *val){
 	WORD *answer = NULL;
 	int n = 0;
 
-	checkEPOS(epos);
+	if ((n = checkEPOS(epos)) < 0) return n;
 
 	if ( (n =  ReadObject(epos, 0x6084, 0x00, &answer)) <0){
 
@@ -1375,7 +1376,7 @@ int readPositionProfileQuickStopDeceleration(epos_t *epos, unsigned long int *va
 	WORD *answer = NULL;
 	int n = 0;
 
-	checkEPOS(epos);
+	if ((n = checkEPOS(epos)) < 0) return n;
 
 	if ( (n =  ReadObject(epos, 0x6085, 0x00, &answer)) <0){
 
@@ -1402,7 +1403,7 @@ int readPositionProfileMaxVelocity(epos_t *epos, unsigned long int *val){
 	WORD *answer = NULL;
 	int n = 0;
 
-	checkEPOS(epos);
+	if ((n = checkEPOS(epos)) < 0) return n;
 
 	if ( (n =  ReadObject(epos, 0x607F, 0x00, &answer)) <0){
 
@@ -1429,7 +1430,7 @@ int readPositionProfileType(epos_t *epos, int *val){
 	WORD *answer = NULL;
 	int n = 0;
 
-	checkEPOS(epos);
+	if ((n = checkEPOS(epos)) < 0) return n;
 
 	if ( (n =  ReadObject(epos, 0x6086, 0x00, &answer)) <0){
 
@@ -1461,7 +1462,7 @@ int readVelocityNotationIndex(epos_t *epos, int *index){
 	WORD *answer = NULL;
 	int n = 0;
 
-	checkEPOS(epos);
+	if ((n = checkEPOS(epos)) < 0) return n;
 
 	if ( (n =  ReadObject(epos, 0x608B, 0x00, &answer)) <0){
 
@@ -1513,7 +1514,7 @@ int readSensorPulses(epos_t *epos, unsigned int *pulse){
 	WORD *answer = NULL;
 	int n = 0;
 
-	checkEPOS(epos);
+	if ((n = checkEPOS(epos)) < 0) return n;
 
 	if ( (n =  ReadObject(epos, 0x2210, 0x01, &answer)) <0){
 
@@ -1541,7 +1542,7 @@ int readSensorType(epos_t *epos, unsigned int *type){
 	WORD *answer = NULL;
 	int n = 0;
 
-	checkEPOS(epos);
+	if ((n = checkEPOS(epos)) < 0) return n;
 
 	if ( (n =  ReadObject(epos, 0x2210, 0x02, &answer)) <0){
 
@@ -1569,7 +1570,7 @@ int readSensorPolarity(epos_t *epos, unsigned int *polaritat){
 	WORD *answer = NULL;
 	int n = 0;
 
-	checkEPOS(epos);
+	if ((n = checkEPOS(epos)) < 0) return n;
 
 	if ( (n =  ReadObject(epos, 0x2210, 0x04, &answer)) <0){
 
@@ -1654,7 +1655,7 @@ int readRS232Baudrate(epos_t *epos, unsigned int *type){
 	WORD *answer = NULL;
 	int n = 0;
 
-	checkEPOS(epos);
+	if ((n = checkEPOS(epos)) < 0) return n;
 
 	if ( (n =  ReadObject(epos, 0x2002, 0x00, &answer)) <0){
 
@@ -1703,7 +1704,7 @@ int readP(epos_t *epos, int *val){
 	WORD *answer = NULL;
 	int n = 0;
 
-	checkEPOS(epos);
+	if ((n = checkEPOS(epos)) < 0) return n;
 
 	if ( (n =  ReadObject(epos, 0x60FB, 0x01, &answer)) <0){
 
@@ -1731,7 +1732,7 @@ int readI(epos_t *epos, int *val){
 	WORD *answer = NULL;
 	int n = 0;
 
-	checkEPOS(epos);
+	if ((n = checkEPOS(epos)) < 0) return n;
 
 	if ( (n =  ReadObject(epos, 0x60FB, 0x02, &answer)) <0){
 
@@ -1759,7 +1760,7 @@ int readD(epos_t *epos, int *val){
 	WORD *answer = NULL;
 	int n = 0;
 
-	checkEPOS(epos);
+	if ((n = checkEPOS(epos)) < 0) return n;
 
 	if ( (n =  ReadObject(epos, 0x60FB, 0x03, &answer)) <0){
 
@@ -1787,7 +1788,7 @@ int readVFF(epos_t *epos, unsigned int *val){
 	WORD *answer = NULL;
 	int n = 0;
 
-	checkEPOS(epos);
+	if ((n = checkEPOS(epos)) < 0) return n;
 
 	if ( (n =  ReadObject(epos, 0x60FB, 0x04, &answer)) <0){
 
@@ -1815,7 +1816,7 @@ int readAFF(epos_t *epos, unsigned int *val){
 	WORD *answer = NULL;
 	int n = 0;
 
-	checkEPOS(epos);
+	if ((n = checkEPOS(epos)) < 0) return n;
 
 	if ( (n =  ReadObject(epos, 0x60FB, 0x05, &answer)) <0){
 
@@ -1938,7 +1939,7 @@ int readPcurrent(epos_t *epos, int *val){
 	WORD *answer = NULL;
 	int n = 0;
 
-	checkEPOS(epos);
+	if ((n = checkEPOS(epos)) < 0) return n;
 
 	if ( (n =  ReadObject(epos, 0x60F6, 0x01, &answer)) <0){
 
@@ -1966,7 +1967,7 @@ int readIcurrent(epos_t *epos, int *val){
 	WORD *answer = NULL;
 	int n = 0;
 
-	checkEPOS(epos);
+	if ((n = checkEPOS(epos)) < 0) return n;
 
 	if ( (n =  ReadObject(epos, 0x60F6, 0x02, &answer)) <0){
 
@@ -2055,7 +2056,7 @@ int readHomePosition(epos_t *epos, long int *val){
 	WORD *answer = NULL;
 	int n = 0;
 
-	checkEPOS(epos);
+	if ((n = checkEPOS(epos)) < 0) return n;
 
 	if ( (n =  ReadObject(epos, 0x6081, 0x00, &answer)) <0){
 
@@ -2102,7 +2103,7 @@ int readMotorContinousCurrentLimit(epos_t *epos, unsigned int *cur){
 	WORD *answer = NULL;
 	int n = 0;
 
-	checkEPOS(epos);
+	if ((n = checkEPOS(epos)) < 0) return n;
 
 	if ( (n =  ReadObject(epos, 0x6410, 0x01, &answer)) <0){
 
@@ -2145,7 +2146,7 @@ int readMotorOutputCurrentLimit(epos_t *epos, unsigned int *cur){
 	WORD *answer = NULL;
 	int n = 0;
 
-	checkEPOS(epos);
+	if ((n = checkEPOS(epos)) < 0) return n;
 
 	if ( (n =  ReadObject(epos, 0x6410, 0x02, &answer)) <0){
 
@@ -2188,7 +2189,7 @@ int readMotorPolePair(epos_t *epos, unsigned int *cur){
 	WORD *answer = NULL;
 	int n = 0;
 
-	checkEPOS(epos);
+	if ((n = checkEPOS(epos)) < 0) return n;
 
 	if ( (n =  ReadObject(epos, 0x6410, 0x03, &answer)) <0){
 
@@ -2231,7 +2232,7 @@ int readMotorMaxSpeedCurrent(epos_t *epos, unsigned int *cur){
 	WORD *answer = NULL;
 	int n = 0;
 
-	checkEPOS(epos);
+	if ((n = checkEPOS(epos)) < 0) return n;
 
 	if ( (n =  ReadObject(epos, 0x6410, 0x04, &answer)) <0){
 
@@ -2274,7 +2275,7 @@ int readMotorThermalConstant(epos_t *epos, unsigned int *cur){
 	WORD *answer = NULL;
 	int n = 0;
 
-	checkEPOS(epos);
+	if ((n = checkEPOS(epos)) < 0) return n;
 
 	if ( (n =  ReadObject(epos, 0x6410, 0x05, &answer)) <0){
 
@@ -2329,7 +2330,7 @@ int readDemandVelocity(epos_t *epos, long *val){
   if (!epos)
     return -1;
 
-  checkEPOS(epos);
+  if ((n = checkEPOS(epos)) < 0) return n;
 
 
   if ( (n =  ReadObject(epos, 0x606b, 0x00, &answer)) <0){
@@ -2362,7 +2363,7 @@ int readActualVelocity(epos_t *epos, long *val){
   if (!epos)
     return -1;
 
-  checkEPOS(epos);
+  if ((n = checkEPOS(epos)) < 0) return n;
 
 
   if ( (n =  ReadObject(epos, 0x606c, 0x00, &answer)) <0){
@@ -2407,7 +2408,7 @@ int readActualCurrent(epos_t *epos, short int *val){
   if (!epos)
     return -1;
 
-  checkEPOS(epos);
+  if ((n = checkEPOS(epos)) < 0) return n;
 
 
   if ( (n =  ReadObject(epos, 0x6078, 0x00, &answer)) <0){
@@ -2446,7 +2447,7 @@ int readTargetPosition(epos_t *epos, long *val){
   if (!epos)
     return -1;
 
-  checkEPOS(epos);
+  if ((n = checkEPOS(epos)) < 0) return n;
 
 
   if ( (n =  ReadObject(epos, 0x607a, 0x00, &answer)) <0){
@@ -2491,7 +2492,7 @@ int readDeviceName(epos_t *epos, char *str){
   if (!epos)
     return -1;
 
-  checkEPOS(epos);
+  if ((n = checkEPOS(epos)) < 0) return n;
   memset(&answer, 0, sizeof(answer) );
 
 
@@ -2531,7 +2532,7 @@ int readRS232timeout(epos_t *epos){
   if (!epos)
     return -1;
 
-  checkEPOS(epos);
+  if ((n = checkEPOS(epos)) < 0) return n;
 
   if ( ( n = ReadObject(epos, 0x2005, 0x00, &answer) ) < 0) {
     printf(" *** readObject returned %d at %s, line %d ***\n",
