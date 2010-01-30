@@ -312,7 +312,7 @@ int openEPOS(epos_t *epos, tcflag_t br) {
 }
 
 int closeEPOS(epos_t *epos){
-  int n = 0;
+  int n;
   if ((n = checkEPOS(epos)) < 0) return n;
   close(epos->ep);
   return(0);
@@ -349,7 +349,7 @@ int checkEPOS(epos_t *epos){
 int readStatusword(epos_t *epos, WORD *status){
 
   WORD *answer = NULL;
-  int n = 0;
+  int n;
 
   if (!epos)
     return -1;
@@ -770,7 +770,7 @@ int changeEPOSstate(epos_t *epos, int state){
 /* returns software version as HEX  --  14.1.33*/
 int readSWversion(epos_t *epos){
   WORD *answer = NULL;
-  int n = 0;
+  int n;
 
   if (!epos)
     return -1;
@@ -807,7 +807,7 @@ int readSWversion(epos_t *epos){
 int readDInputPolarity(epos_t *epos, WORD* w){
 
   WORD *answer = NULL;
-  int n = 0;
+  int n;
 
   if (!epos)
     return -1;
@@ -845,7 +845,7 @@ int setHomePolarity(epos_t *epos, int pol){
 
   WORD mask = 0x00;
   WORD dw[2] = {0x0, 0x0};
-  int n = 0;
+  int n;
 
   if (!epos)
     return -1;
@@ -892,7 +892,7 @@ int setHomePolarity(epos_t *epos, int pol){
 int readControlword(epos_t *epos, WORD *w){
 
   WORD *answer = NULL;
-  int n = 0;
+  int n;
 
   if (!epos)
     return -1;
@@ -973,7 +973,7 @@ int printEPOScontrolword(WORD s){
 int setOpMode(epos_t *epos, int m){
 
   WORD dw[2] = {0x0, 0x0};
-  int n = 0;
+  int n;
 
   if (!epos)
     return -1;
@@ -1004,7 +1004,7 @@ int readOpMode(epos_t *epos){
   WORD *answer = NULL;
   //short int *i;
   int8_t aa;
-  int n = 0;
+  int n;
 
   if (!epos)
     return -1;
@@ -1051,7 +1051,7 @@ int readOpMode(epos_t *epos){
 /* read demand position; 14.1.61 */
 int readDemandPosition(epos_t *epos, long *pos){
   WORD *answer = NULL;
-  int n = 0;
+  int n;
 
   if (!epos)
     return -1;
@@ -1088,7 +1088,7 @@ int readDemandPosition(epos_t *epos, long *pos){
 */
 int readActualPosition(epos_t *epos, long *pos){
   WORD *answer = NULL;
-  int n = 0;
+  int n;
 
   if (!epos)
     return -1;
@@ -1121,7 +1121,7 @@ int readActualPosition(epos_t *epos, long *pos){
 /* read position window; 14.1.64 */
 int readPositionWindow(epos_t *epos, unsigned long int *pos){
   WORD *answer = NULL;
-  int n = 0;
+  int n;
 
   if (!epos)
     return -1;
@@ -1154,7 +1154,7 @@ int readPositionWindow(epos_t *epos, unsigned long int *pos){
 int writePositionWindow(epos_t *epos, unsigned long int val){
 
   WORD dw[2];
-  int n = 0;
+  int n;
 
   if (!epos)
     return -1;
@@ -1176,7 +1176,7 @@ int writePositionWindow(epos_t *epos, unsigned long int val){
 
 int writePositionProfileVelocity(epos_t *epos, unsigned long int val){
 	WORD dw[2];
-	int n = 0;
+	int n;
 
   if (!epos)
     return -1;
@@ -1198,7 +1198,7 @@ int writePositionProfileVelocity(epos_t *epos, unsigned long int val){
 
 int writePositionProfileAcceleration(epos_t *epos, unsigned long int val){
 	WORD dw[2];
-	int n = 0;
+	int n;
 	
 	// write intended acceleration
 	dw[0] = (WORD) (val & 0x0000FFFF);
@@ -1217,7 +1217,7 @@ int writePositionProfileAcceleration(epos_t *epos, unsigned long int val){
 
 int writePositionProfileDeceleration(epos_t *epos, unsigned long int val){
 	WORD dw[2];
-	int n = 0;
+	int n;
 	
 	// write intended deceleration
 	dw[0] = (WORD) (val & 0x0000FFFF);
@@ -1236,7 +1236,7 @@ int writePositionProfileDeceleration(epos_t *epos, unsigned long int val){
 
 int writePositionProfileQuickStopDeceleration(epos_t *epos, unsigned long int val){
 	WORD dw[2];
-	int n = 0;
+	int n;
 	
 	// write intended quick stop deceleration
 	dw[0] = (WORD) (val & 0x0000FFFF);
@@ -1255,7 +1255,7 @@ int writePositionProfileQuickStopDeceleration(epos_t *epos, unsigned long int va
 
 int writePositionProfileMaxVelocity(epos_t *epos, unsigned long int val){
 	WORD dw[2];
-	int n = 0;
+	int n;
 	
 	// write intended max profile velocity
 	dw[0] = (WORD) (val & 0x0000FFFF);
@@ -1274,7 +1274,7 @@ int writePositionProfileMaxVelocity(epos_t *epos, unsigned long int val){
 
 int writePositionProfileType(epos_t *epos, int type){
 	WORD dw[2];
-	int n = 0;
+	int n;
 	
 	// write intended type
 	dw[0] = type;
@@ -1293,7 +1293,7 @@ int writePositionProfileType(epos_t *epos, int type){
 
 int readPositionProfileVelocity(epos_t *epos, unsigned long int *val){
 	WORD *answer = NULL;
-	int n = 0;
+	int n;
 
 	if ((n = checkEPOS(epos)) < 0) return n;
 
@@ -1320,7 +1320,7 @@ int readPositionProfileVelocity(epos_t *epos, unsigned long int *val){
 
 int readPositionProfileAcceleration(epos_t *epos, unsigned long int *val){
 	WORD *answer = NULL;
-	int n = 0;
+	int n;
 
 	if ((n = checkEPOS(epos)) < 0) return n;
 
@@ -1347,7 +1347,7 @@ int readPositionProfileAcceleration(epos_t *epos, unsigned long int *val){
 
 int readPositionProfileDeceleration(epos_t *epos, unsigned long int *val){
 	WORD *answer = NULL;
-	int n = 0;
+	int n;
 
 	if ((n = checkEPOS(epos)) < 0) return n;
 
@@ -1374,7 +1374,7 @@ int readPositionProfileDeceleration(epos_t *epos, unsigned long int *val){
 
 int readPositionProfileQuickStopDeceleration(epos_t *epos, unsigned long int *val){
 	WORD *answer = NULL;
-	int n = 0;
+	int n;
 
 	if ((n = checkEPOS(epos)) < 0) return n;
 
@@ -1401,7 +1401,7 @@ int readPositionProfileQuickStopDeceleration(epos_t *epos, unsigned long int *va
 
 int readPositionProfileMaxVelocity(epos_t *epos, unsigned long int *val){
 	WORD *answer = NULL;
-	int n = 0;
+	int n;
 
 	if ((n = checkEPOS(epos)) < 0) return n;
 
@@ -1428,7 +1428,7 @@ int readPositionProfileMaxVelocity(epos_t *epos, unsigned long int *val){
 
 int readPositionProfileType(epos_t *epos, int *val){
 	WORD *answer = NULL;
-	int n = 0;
+	int n;
 
 	if ((n = checkEPOS(epos)) < 0) return n;
 
@@ -1460,7 +1460,7 @@ int readPositionProfileType(epos_t *epos, int *val){
 int readVelocityNotationIndex(epos_t *epos, int *index){
 	
 	WORD *answer = NULL;
-	int n = 0;
+	int n;
 
 	if ((n = checkEPOS(epos)) < 0) return n;
 
@@ -1489,7 +1489,7 @@ int readVelocityNotationIndex(epos_t *epos, int *index){
 /* Velocity Notation index 14.1.83  1=0x01(1), 2=0x02(2).. 0=0x00(0), -1=0xFF(255), -2=0xFE(254) */
 int writeVelocityNotationIndex(epos_t *epos, unsigned int val){
 	WORD dw[2];
-	int n = 0;
+	int n;
 	
   // write
 	dw[0] = val;
@@ -1512,7 +1512,7 @@ int writeVelocityNotationIndex(epos_t *epos, unsigned int val){
 int readSensorPulses(epos_t *epos, unsigned int *pulse){
 	
 	WORD *answer = NULL;
-	int n = 0;
+	int n;
 
 	if ((n = checkEPOS(epos)) < 0) return n;
 
@@ -1540,7 +1540,7 @@ int readSensorPulses(epos_t *epos, unsigned int *pulse){
 int readSensorType(epos_t *epos, unsigned int *type){
 	
 	WORD *answer = NULL;
-	int n = 0;
+	int n;
 
 	if ((n = checkEPOS(epos)) < 0) return n;
 
@@ -1568,7 +1568,7 @@ int readSensorType(epos_t *epos, unsigned int *type){
 int readSensorPolarity(epos_t *epos, unsigned int *polaritat){
 	
 	WORD *answer = NULL;
-	int n = 0;
+	int n;
 
 	if ((n = checkEPOS(epos)) < 0) return n;
 
@@ -1595,7 +1595,7 @@ int readSensorPolarity(epos_t *epos, unsigned int *polaritat){
 /* write sensorConfiguration-sensor Pulses; 14.1.57 */
 int writeSensorPulses(epos_t *epos, unsigned int val){
 	WORD dw[2];
-	int n = 0;
+	int n;
 
   // write sensor pulses
 	dw[0] = val;
@@ -1614,7 +1614,7 @@ int writeSensorPulses(epos_t *epos, unsigned int val){
 /* write sensorConfiguration-sensor Type; 14.1.57 */
 int writeSensorType(epos_t *epos, unsigned int val){
 	WORD dw[2];
-	int n = 0;
+	int n;
 
   // write sensor type
 	dw[0] = val;
@@ -1633,7 +1633,7 @@ int writeSensorType(epos_t *epos, unsigned int val){
 /* write sensorPolarity-sensor Pulses; 14.1.57 */
 int writeSensorPolarity(epos_t *epos, unsigned int val){
 	WORD dw[2];
-	int n = 0;
+	int n;
 
   // write sensor pulses
 	dw[0] = val;
@@ -1653,7 +1653,7 @@ int writeSensorPolarity(epos_t *epos, unsigned int val){
 int readRS232Baudrate(epos_t *epos, unsigned int *type){
 	
 	WORD *answer = NULL;
-	int n = 0;
+	int n;
 
 	if ((n = checkEPOS(epos)) < 0) return n;
 
@@ -1679,7 +1679,7 @@ int readRS232Baudrate(epos_t *epos, unsigned int *type){
 }
 int writeRS232Baudrate(epos_t *epos, unsigned int val){
 	WORD dw[2];
-	int n = 0;
+	int n;
 
   // write sensor type
 	dw[0] = val;
@@ -1702,7 +1702,7 @@ int writeRS232Baudrate(epos_t *epos, unsigned int val){
 int readP(epos_t *epos, int *val){
 	
 	WORD *answer = NULL;
-	int n = 0;
+	int n;
 
 	if ((n = checkEPOS(epos)) < 0) return n;
 
@@ -1730,7 +1730,7 @@ int readP(epos_t *epos, int *val){
 int readI(epos_t *epos, int *val){
 	
 	WORD *answer = NULL;
-	int n = 0;
+	int n;
 
 	if ((n = checkEPOS(epos)) < 0) return n;
 
@@ -1758,7 +1758,7 @@ int readI(epos_t *epos, int *val){
 int readD(epos_t *epos, int *val){
 	
 	WORD *answer = NULL;
-	int n = 0;
+	int n;
 
 	if ((n = checkEPOS(epos)) < 0) return n;
 
@@ -1786,7 +1786,7 @@ int readD(epos_t *epos, int *val){
 int readVFF(epos_t *epos, unsigned int *val){
 	
 	WORD *answer = NULL;
-	int n = 0;
+	int n;
 
 	if ((n = checkEPOS(epos)) < 0) return n;
 
@@ -1814,7 +1814,7 @@ int readVFF(epos_t *epos, unsigned int *val){
 int readAFF(epos_t *epos, unsigned int *val){
 	
 	WORD *answer = NULL;
-	int n = 0;
+	int n;
 
 	if ((n = checkEPOS(epos)) < 0) return n;
 
@@ -1841,7 +1841,7 @@ int readAFF(epos_t *epos, unsigned int *val){
 /* write P; 14.1.92 */
 int writeP(epos_t *epos, int val){
 	WORD dw[2];
-	int n = 0;
+	int n;
 
   // write sensor type
 	dw[0] = val;
@@ -1860,7 +1860,7 @@ int writeP(epos_t *epos, int val){
 /* write I; 14.1.92 */
 int writeI(epos_t *epos, int val){
 	WORD dw[2];
-	int n = 0;
+	int n;
 
   // write sensor type
 	dw[0] = val;
@@ -1879,7 +1879,7 @@ int writeI(epos_t *epos, int val){
 /* write D; 14.1.92 */
 int writeD(epos_t *epos, int val){
 	WORD dw[2];
-	int n = 0;
+	int n;
 
   // write sensor type
 	dw[0] = val;
@@ -1898,7 +1898,7 @@ int writeD(epos_t *epos, int val){
 /* write VFF; 14.1.92 */
 int writeVFF(epos_t *epos, unsigned int val){
 	WORD dw[2];
-	int n = 0;
+	int n;
 
   // write sensor type
 	dw[0] = val;
@@ -1917,7 +1917,7 @@ int writeVFF(epos_t *epos, unsigned int val){
 /* write AFF; 14.1.92 */
 int writeAFF(epos_t *epos, unsigned int val){
 	WORD dw[2];
-	int n = 0;
+	int n;
 
   // write sensor type
 	dw[0] = val;
@@ -1937,7 +1937,7 @@ int writeAFF(epos_t *epos, unsigned int val){
 int readPcurrent(epos_t *epos, int *val){
 	
 	WORD *answer = NULL;
-	int n = 0;
+	int n;
 
 	if ((n = checkEPOS(epos)) < 0) return n;
 
@@ -1965,7 +1965,7 @@ int readPcurrent(epos_t *epos, int *val){
 int readIcurrent(epos_t *epos, int *val){
 	
 	WORD *answer = NULL;
-	int n = 0;
+	int n;
 
 	if ((n = checkEPOS(epos)) < 0) return n;
 
@@ -1992,7 +1992,7 @@ int readIcurrent(epos_t *epos, int *val){
 /* write P current; 14.1.92 */
 int writePcurrent(epos_t *epos, int val){
 	WORD dw[2];
-	int n = 0;
+	int n;
 
   // write sensor type
 	dw[0] = val;
@@ -2011,7 +2011,7 @@ int writePcurrent(epos_t *epos, int val){
 /* write I current; 14.1.92 */
 int writeIcurrent(epos_t *epos, int val){
 	WORD dw[2];
-	int n = 0;
+	int n;
 
   // write sensor type
 	dw[0] = val;
@@ -2032,7 +2032,7 @@ int writeIcurrent(epos_t *epos, int val){
 /* save all parameters home; 14.1.55 */
 int saveParameters(epos_t *epos){
 	WORD dw[2];
-	int n = 0;
+	int n;
 
   // write sensor type
 	dw[0] = (WORD) (0x6173);
@@ -2054,7 +2054,7 @@ int saveParameters(epos_t *epos){
 int readHomePosition(epos_t *epos, long int *val){
 
 	WORD *answer = NULL;
-	int n = 0;
+	int n;
 
 	if ((n = checkEPOS(epos)) < 0) return n;
 
@@ -2076,7 +2076,7 @@ int readHomePosition(epos_t *epos, long int *val){
 }
 int writeHomePosition(epos_t *epos, long int val){
 	WORD dw[2];
-	int n = 0;
+	int n;
 
 
   	// write intended
@@ -2101,7 +2101,7 @@ int writeHomePosition(epos_t *epos, long int val){
 int readMotorContinousCurrentLimit(epos_t *epos, unsigned int *cur){
 	
 	WORD *answer = NULL;
-	int n = 0;
+	int n;
 
 	if ((n = checkEPOS(epos)) < 0) return n;
 
@@ -2123,7 +2123,7 @@ int readMotorContinousCurrentLimit(epos_t *epos, unsigned int *cur){
 }
 int writeMotorContinousCurrentLimit(epos_t *epos, unsigned int cur){
 	WORD dw[2];
-	int n = 0;
+	int n;
 
   // write sensor type
 	dw[0] = cur;
@@ -2144,7 +2144,7 @@ int writeMotorContinousCurrentLimit(epos_t *epos, unsigned int cur){
 int readMotorOutputCurrentLimit(epos_t *epos, unsigned int *cur){
 	
 	WORD *answer = NULL;
-	int n = 0;
+	int n;
 
 	if ((n = checkEPOS(epos)) < 0) return n;
 
@@ -2166,7 +2166,7 @@ int readMotorOutputCurrentLimit(epos_t *epos, unsigned int *cur){
 }
 int writeMotorOutputCurrentLimit(epos_t *epos, unsigned int cur){
 	WORD dw[2];
-	int n = 0;
+	int n;
 
   // write sensor type
 	dw[0] = cur;
@@ -2187,7 +2187,7 @@ int writeMotorOutputCurrentLimit(epos_t *epos, unsigned int cur){
 int readMotorPolePair(epos_t *epos, unsigned int *cur){
 	
 	WORD *answer = NULL;
-	int n = 0;
+	int n;
 
 	if ((n = checkEPOS(epos)) < 0) return n;
 
@@ -2209,7 +2209,7 @@ int readMotorPolePair(epos_t *epos, unsigned int *cur){
 }
 int writeMotorPolePair(epos_t *epos, unsigned int cur){
 	WORD dw[2];
-	int n = 0;
+	int n;
 
   // write sensor type
 	dw[0] = cur;
@@ -2230,7 +2230,7 @@ int writeMotorPolePair(epos_t *epos, unsigned int cur){
 int readMotorMaxSpeedCurrent(epos_t *epos, unsigned int *cur){
 	
 	WORD *answer = NULL;
-	int n = 0;
+	int n;
 
 	if ((n = checkEPOS(epos)) < 0) return n;
 
@@ -2252,7 +2252,7 @@ int readMotorMaxSpeedCurrent(epos_t *epos, unsigned int *cur){
 }
 int writeMotorMaxSpeedCurrent(epos_t *epos, unsigned int cur){
 	WORD dw[2];
-	int n = 0;
+	int n;
 
   // write sensor type
 	dw[0] = cur;
@@ -2273,7 +2273,7 @@ int writeMotorMaxSpeedCurrent(epos_t *epos, unsigned int cur){
 int readMotorThermalConstant(epos_t *epos, unsigned int *cur){
 	
 	WORD *answer = NULL;
-	int n = 0;
+	int n;
 
 	if ((n = checkEPOS(epos)) < 0) return n;
 
@@ -2295,7 +2295,7 @@ int readMotorThermalConstant(epos_t *epos, unsigned int *cur){
 }
 int writeMotorThermalConstant(epos_t *epos, unsigned int cur){
 	WORD dw[2];
-	int n = 0;
+	int n;
 
   // write sensor type
 	dw[0] = cur;
@@ -2325,7 +2325,7 @@ int writeMotorThermalConstant(epos_t *epos, unsigned int cur){
 /* read demand position; 14.1.67 */
 int readDemandVelocity(epos_t *epos, long *val){
   WORD *answer = NULL;
-  int n = 0;
+  int n;
 
   if (!epos)
     return -1;
@@ -2358,7 +2358,7 @@ int readDemandVelocity(epos_t *epos, long *val){
 /* read actual position; 14.1.68 */
 int readActualVelocity(epos_t *epos, long *val){
   WORD *answer = NULL;
-  int n = 0;
+  int n;
 
   if (!epos)
     return -1;
@@ -2403,7 +2403,7 @@ placed.
 */
 int readActualCurrent(epos_t *epos, short int *val){
   WORD *answer = NULL;
-  int n = 0;
+  int n;
 
   if (!epos)
     return -1;
@@ -2442,7 +2442,7 @@ int readActualCurrent(epos_t *epos, short int *val){
 */
 int readTargetPosition(epos_t *epos, long *val){
   WORD *answer = NULL;
-  int n = 0;
+  int n;
 
   if (!epos)
     return -1;
@@ -2487,7 +2487,7 @@ int readTargetPosition(epos_t *epos, long *val){
  */
 int readDeviceName(epos_t *epos, char *str){
   WORD *answer = NULL;
-  int n = 0;
+  int n;
 
   if (!epos)
     return -1;
@@ -2527,7 +2527,7 @@ int readDeviceName(epos_t *epos, char *str){
 int readRS232timeout(epos_t *epos){
 
   WORD *answer = NULL;
-  int n = 0;
+  int n;
 
   if (!epos)
     return -1;
@@ -2668,7 +2668,7 @@ int doHoming(epos_t *epos, int method, long int start){
 int moveRelative(epos_t *epos, long int steps){
 
   WORD dw[2];
-  int n = 0;
+  int n;
 
   if (!epos)
     return -1;
@@ -2718,7 +2718,7 @@ int moveRelative(epos_t *epos, long int steps){
 int moveAbsolute(epos_t *epos, long int steps){
 
   WORD dw[2];
-  int n = 0;
+  int n;
 
   if (!epos)
     return -1;
@@ -3198,7 +3198,7 @@ static int sendCom(epos_t *epos, WORD *frame){
 
   BYTE c = 0x00;
   short i, len;
-  int n = 0;
+  int n;
 
   if (!epos)
     return -1;
@@ -3379,7 +3379,7 @@ static int readAnswer(epos_t *epos, WORD **ptr){
 static int ReadObject(epos_t *epos, WORD index, BYTE subindex, WORD **ptr ){
 
   WORD frame[4];
-  int n = 0;
+  int n;
 
   if (!epos)
     return -1;
@@ -3440,7 +3440,7 @@ static int InitiateSegmentedRead(epos_t *epos, WORD index, BYTE subindex ){
 static int SegmentRead(epos_t *epos, WORD **ptr){
 
   WORD frame[3];
-  int n = 0;
+  int n;
 
   if (!epos)
     return -1;
@@ -3487,7 +3487,7 @@ int WriteObject(epos_t *epos, WORD index, BYTE subindex, WORD *data) {
 
   WORD frame[6];
   WORD *ans = NULL;
-  int n = 0;
+  int n;
 
   if (!epos)
     return -1;
