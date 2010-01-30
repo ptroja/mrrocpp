@@ -354,7 +354,6 @@ int readStatusword(epos_t *epos, WORD *status){
     return -1;
 
   checkEPOS(epos);
-  checkPtr(&answer);
 
   if ( (n =  ReadObject(epos, 0x6041, 0x00, &answer)) <0){
 
@@ -776,7 +775,6 @@ int readSWversion(epos_t *epos){
     return -1;
 
   checkEPOS(epos);
-  checkPtr(&answer);
 
   if ( (n =  ReadObject(epos, 0x2003, 0x01, &answer)) <0){
 
@@ -814,7 +812,6 @@ int readDInputPolarity(epos_t *epos, WORD* w){
     return -1;
 
   checkEPOS(epos);
-  checkPtr(&answer);
 
   if ( (n =  ReadObject(epos, 0x2071, 0x03, &answer)) <0){
 
@@ -844,7 +841,7 @@ int readDInputPolarity(epos_t *epos, WORD* w){
 
 /* set home switch polarity -- firmware spec 14.1.47 */
 int setHomePolarity(epos_t *epos, int pol){
-  WORD* answer = NULL;
+
   WORD mask = 0x00;
   WORD dw[2] = {0x0, 0x0};
   int n = 0;
@@ -858,7 +855,6 @@ int setHomePolarity(epos_t *epos, int pol){
   }
 
   checkEPOS(epos);
-  checkPtr(&answer);
 
   // read present functionalities polarity mask
   if ( readDInputPolarity(epos, &mask) ) {
@@ -901,7 +897,6 @@ int readControlword(epos_t *epos, WORD *w){
     return -1;
 
   checkEPOS(epos);
-  checkPtr(&answer);
 
   if ( (n =  ReadObject(epos, 0x6040, 0x00, &answer)) <0){
 
@@ -1061,7 +1056,6 @@ int readDemandPosition(epos_t *epos, long *pos){
     return -1;
 
   checkEPOS(epos);
-  checkPtr(&answer);
 
 
   if ( (n =  ReadObject(epos, 0x6062, 0x00, &answer)) <0){
@@ -1099,7 +1093,6 @@ int readActualPosition(epos_t *epos, long *pos){
     return -1;
 
   checkEPOS(epos);
-  checkPtr(&answer);
 
 
   if ( (n =  ReadObject(epos, 0x6064, 0x00, &answer)) <0){
@@ -1133,7 +1126,6 @@ int readPositionWindow(epos_t *epos, unsigned long int *pos){
     return -1;
 
   checkEPOS(epos);
-  checkPtr(&answer);
 
   if ( (n =  ReadObject(epos, 0x6067, 0x00, &answer)) <0){
 
@@ -1303,7 +1295,6 @@ int readPositionProfileVelocity(epos_t *epos, unsigned long int *val){
 	int n = 0;
 
 	checkEPOS(epos);
-	checkPtr(&answer);
 
 	if ( (n =  ReadObject(epos, 0x6081, 0x00, &answer)) <0){
 
@@ -1331,7 +1322,6 @@ int readPositionProfileAcceleration(epos_t *epos, unsigned long int *val){
 	int n = 0;
 
 	checkEPOS(epos);
-	checkPtr(&answer);
 
 	if ( (n =  ReadObject(epos, 0x6083, 0x00, &answer)) <0){
 
@@ -1359,7 +1349,6 @@ int readPositionProfileDeceleration(epos_t *epos, unsigned long int *val){
 	int n = 0;
 
 	checkEPOS(epos);
-	checkPtr(&answer);
 
 	if ( (n =  ReadObject(epos, 0x6084, 0x00, &answer)) <0){
 
@@ -1387,7 +1376,6 @@ int readPositionProfileQuickStopDeceleration(epos_t *epos, unsigned long int *va
 	int n = 0;
 
 	checkEPOS(epos);
-	checkPtr(&answer);
 
 	if ( (n =  ReadObject(epos, 0x6085, 0x00, &answer)) <0){
 
@@ -1415,7 +1403,6 @@ int readPositionProfileMaxVelocity(epos_t *epos, unsigned long int *val){
 	int n = 0;
 
 	checkEPOS(epos);
-	checkPtr(&answer);
 
 	if ( (n =  ReadObject(epos, 0x607F, 0x00, &answer)) <0){
 
@@ -1443,7 +1430,6 @@ int readPositionProfileType(epos_t *epos, int *val){
 	int n = 0;
 
 	checkEPOS(epos);
-	checkPtr(&answer);
 
 	if ( (n =  ReadObject(epos, 0x6086, 0x00, &answer)) <0){
 
@@ -1476,7 +1462,6 @@ int readVelocityNotationIndex(epos_t *epos, int *index){
 	int n = 0;
 
 	checkEPOS(epos);
-	checkPtr(&answer);
 
 	if ( (n =  ReadObject(epos, 0x608B, 0x00, &answer)) <0){
 
@@ -1529,7 +1514,6 @@ int readSensorPulses(epos_t *epos, unsigned int *pulse){
 	int n = 0;
 
 	checkEPOS(epos);
-	checkPtr(&answer);
 
 	if ( (n =  ReadObject(epos, 0x2210, 0x01, &answer)) <0){
 
@@ -1558,7 +1542,6 @@ int readSensorType(epos_t *epos, unsigned int *type){
 	int n = 0;
 
 	checkEPOS(epos);
-	checkPtr(&answer);
 
 	if ( (n =  ReadObject(epos, 0x2210, 0x02, &answer)) <0){
 
@@ -1587,7 +1570,6 @@ int readSensorPolarity(epos_t *epos, unsigned int *polaritat){
 	int n = 0;
 
 	checkEPOS(epos);
-	checkPtr(&answer);
 
 	if ( (n =  ReadObject(epos, 0x2210, 0x04, &answer)) <0){
 
@@ -1673,7 +1655,6 @@ int readRS232Baudrate(epos_t *epos, unsigned int *type){
 	int n = 0;
 
 	checkEPOS(epos);
-	checkPtr(&answer);
 
 	if ( (n =  ReadObject(epos, 0x2002, 0x00, &answer)) <0){
 
@@ -1723,7 +1704,6 @@ int readP(epos_t *epos, int *val){
 	int n = 0;
 
 	checkEPOS(epos);
-	checkPtr(&answer);
 
 	if ( (n =  ReadObject(epos, 0x60FB, 0x01, &answer)) <0){
 
@@ -1752,7 +1732,6 @@ int readI(epos_t *epos, int *val){
 	int n = 0;
 
 	checkEPOS(epos);
-	checkPtr(&answer);
 
 	if ( (n =  ReadObject(epos, 0x60FB, 0x02, &answer)) <0){
 
@@ -1781,7 +1760,6 @@ int readD(epos_t *epos, int *val){
 	int n = 0;
 
 	checkEPOS(epos);
-	checkPtr(&answer);
 
 	if ( (n =  ReadObject(epos, 0x60FB, 0x03, &answer)) <0){
 
@@ -1810,7 +1788,6 @@ int readVFF(epos_t *epos, unsigned int *val){
 	int n = 0;
 
 	checkEPOS(epos);
-	checkPtr(&answer);
 
 	if ( (n =  ReadObject(epos, 0x60FB, 0x04, &answer)) <0){
 
@@ -1839,7 +1816,6 @@ int readAFF(epos_t *epos, unsigned int *val){
 	int n = 0;
 
 	checkEPOS(epos);
-	checkPtr(&answer);
 
 	if ( (n =  ReadObject(epos, 0x60FB, 0x05, &answer)) <0){
 
@@ -1963,7 +1939,6 @@ int readPcurrent(epos_t *epos, int *val){
 	int n = 0;
 
 	checkEPOS(epos);
-	checkPtr(&answer);
 
 	if ( (n =  ReadObject(epos, 0x60F6, 0x01, &answer)) <0){
 
@@ -1992,7 +1967,6 @@ int readIcurrent(epos_t *epos, int *val){
 	int n = 0;
 
 	checkEPOS(epos);
-	checkPtr(&answer);
 
 	if ( (n =  ReadObject(epos, 0x60F6, 0x02, &answer)) <0){
 
@@ -2082,7 +2056,6 @@ int readHomePosition(epos_t *epos, long int *val){
 	int n = 0;
 
 	checkEPOS(epos);
-	checkPtr(&answer);
 
 	if ( (n =  ReadObject(epos, 0x6081, 0x00, &answer)) <0){
 
@@ -2130,7 +2103,6 @@ int readMotorContinousCurrentLimit(epos_t *epos, unsigned int *cur){
 	int n = 0;
 
 	checkEPOS(epos);
-	checkPtr(&answer);
 
 	if ( (n =  ReadObject(epos, 0x6410, 0x01, &answer)) <0){
 
@@ -2174,7 +2146,6 @@ int readMotorOutputCurrentLimit(epos_t *epos, unsigned int *cur){
 	int n = 0;
 
 	checkEPOS(epos);
-	checkPtr(&answer);
 
 	if ( (n =  ReadObject(epos, 0x6410, 0x02, &answer)) <0){
 
@@ -2218,7 +2189,6 @@ int readMotorPolePair(epos_t *epos, unsigned int *cur){
 	int n = 0;
 
 	checkEPOS(epos);
-	checkPtr(&answer);
 
 	if ( (n =  ReadObject(epos, 0x6410, 0x03, &answer)) <0){
 
@@ -2262,7 +2232,6 @@ int readMotorMaxSpeedCurrent(epos_t *epos, unsigned int *cur){
 	int n = 0;
 
 	checkEPOS(epos);
-	checkPtr(&answer);
 
 	if ( (n =  ReadObject(epos, 0x6410, 0x04, &answer)) <0){
 
@@ -2306,7 +2275,6 @@ int readMotorThermalConstant(epos_t *epos, unsigned int *cur){
 	int n = 0;
 
 	checkEPOS(epos);
-	checkPtr(&answer);
 
 	if ( (n =  ReadObject(epos, 0x6410, 0x05, &answer)) <0){
 
@@ -2362,7 +2330,6 @@ int readDemandVelocity(epos_t *epos, long *val){
     return -1;
 
   checkEPOS(epos);
-  checkPtr(&answer);
 
 
   if ( (n =  ReadObject(epos, 0x606b, 0x00, &answer)) <0){
@@ -2396,7 +2363,6 @@ int readActualVelocity(epos_t *epos, long *val){
     return -1;
 
   checkEPOS(epos);
-  checkPtr(&answer);
 
 
   if ( (n =  ReadObject(epos, 0x606c, 0x00, &answer)) <0){
@@ -2442,7 +2408,6 @@ int readActualCurrent(epos_t *epos, short int *val){
     return -1;
 
   checkEPOS(epos);
-  checkPtr(&answer);
 
 
   if ( (n =  ReadObject(epos, 0x6078, 0x00, &answer)) <0){
@@ -2482,7 +2447,6 @@ int readTargetPosition(epos_t *epos, long *val){
     return -1;
 
   checkEPOS(epos);
-  checkPtr(&answer);
 
 
   if ( (n =  ReadObject(epos, 0x607a, 0x00, &answer)) <0){
