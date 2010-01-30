@@ -1,5 +1,5 @@
 /*! \file epos.h
-    
+
   header file for libEPOS functions
 
   mh, july 2006
@@ -65,9 +65,7 @@ int deleteEPOS(epos_t *epos);
 
 
 /*! open the connection to EPOS */
-int openEPOS(const char *device);
-/*! open the connection to EPOS via RS232-over-TCP/IP (LSW special) */
-int openTCPEPOS(const char *ip, short unsigned port);
+int openEPOS(epos_t *epos, tcflag_t br);
 /*! close the connection to EPOS */
 int closeEPOS(epos_t *epos);
 /*! check if the connection to EPOS is alive */
@@ -200,7 +198,7 @@ int readPcurrent(epos_t *epos, int *val);
 int readIcurrent(epos_t *epos, int *val);
 int writePcurrent(epos_t *epos, int val);
 int writeIcurrent(epos_t *epos, int val);
-int saveParameters(epos_t *epos, );
+int saveParameters(epos_t *epos);
 
 int readHomePosition(epos_t *epos, long int *val);
 int writeHomePosition(epos_t *epos, long int val);
