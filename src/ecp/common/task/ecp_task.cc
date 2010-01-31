@@ -121,6 +121,7 @@ void task::initialize_communication()
 
 	// Obiekt do komuniacji z SR
 	sr_ecp_msg = new lib::sr_ecp(lib::ECP, ecp_attach_point, sr_net_attach_point, true);
+	sh_msg = new lib::sr_ecp(lib::ECP, ecp_attach_point, sr_net_attach_point, false);
 
 	//	std::cout << "ECP: Opening MP pulses channel at '" << mp_pulse_attach_point << "'" << std::endl;
 

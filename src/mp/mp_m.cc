@@ -34,7 +34,7 @@ void catch_signal_in_mp(int sig)
 	int status;
 	switch (sig) {
 	case SIGTERM:
-		mp_t->sr_ecp_msg->message("MP terminated");
+		mp_t->sh_msg->message("MP terminated");
 		// restore default (none) handler for SIGCHLD
 		signal(SIGCHLD, SIG_DFL);
 		delete mp_t;

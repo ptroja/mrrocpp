@@ -31,8 +31,7 @@ void catch_signal_in_ecp(int sig)
 	switch (sig) {
 		// print info message
 		case SIGTERM:
-			ecp_t->sr_ecp_msg->message("ECP terminated");
-			ecp_t->sr_ecp_msg->wait_for_empty_queue();
+			ecp_t->sh_msg->message("ECP terminated");
 			delete ecp_t;
 			exit(EXIT_SUCCESS);
 			break;
