@@ -65,12 +65,10 @@ typedef struct sr_package
 class sr: public boost::noncopyable
 {
 private:
-	int set_queue_not_empty();
 
-	int set_queue_empty();
 
 	boost::mutex srMutex; //! one-thread a time access mutex
-	sem_t sem, queue_empty_sem;
+	sem_t sem;
 
 	int set_new_msg(); // podniesienie semafora
 	int wait_for_new_msg(); // oczekiwanie na semafor
@@ -99,7 +97,7 @@ protected:
 	sr_package_t sr_message; // paczka z wiadomoscia dla SR
 
 public:
-	int wait_for_empty_queue();
+
 
 	sr(process_type_t process_type, const std::string & process_name, const std::string & sr_name, bool _multi_thread);
 	virtual ~sr(void);
