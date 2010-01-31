@@ -40,9 +40,9 @@ namespace lib {
 
 #if !defined(USE_MESSIP_SRR)
 
-sr::sr(process_type_t process_type, const std::string & process_name, const std::string & sr_name, bool _multi_thread) :
-	multi_thread(_multi_thread), cb(SR_BUFFER_LENGHT)
-{
+sr::sr(process_type_t process_type, const std::string & process_name,
+		const std::string & sr_name, bool _multi_thread) :
+	multi_thread(_multi_thread), cb(SR_BUFFER_LENGHT), has_command(false) {
 	// kilka sekund  (~1) na otworzenie urzadzenia
 	int tmp = 0;
 	while ((fd = name_open(sr_name.c_str(), NAME_FLAG_ATTACH_GLOBAL)) < 0) {
@@ -51,7 +51,7 @@ sr::sr(process_type_t process_type, const std::string & process_name, const std:
 		} else {
 			// TODO: throw
 			perror("SR cannot be located ");
-			throw;
+			throw ;
 		}
 	}
 
@@ -70,7 +70,6 @@ sr::sr(process_type_t process_type, const std::string & process_name, const std:
 	}
 
 	if (multi_thread) {
-		sem_init(&sem, 0, 0);
 		thread_id = new boost::thread(boost::bind(&sr::operator(), this));
 	}
 } // end:  sr::sr()
@@ -94,7 +93,7 @@ int sr::send_package_to_sr(sr_package_t & sr_mess)
 #else /* USE_MESSIP_SRR */
 // Konstruktor
 sr::sr(process_type_t process_type, const std::string & process_name, const std::string & sr_name, bool _multi_thread) :
-	multi_thread(_multi_thread), cb(SR_BUFFER_LENGHT)
+multi_thread(_multi_thread), cb(SR_BUFFER_LENGHT)
 {
 	int tmp = 0;
 	while ((ch = messip::port_connect(sr_name)) == NULL) {
@@ -165,49 +164,42 @@ int sr::send_package(void) {
 	}
 }
 
-
 void sr::put_one_msg(const lib::sr_package_t& new_msg) {
 
-	boost::mutex::scoped_lock lock(mtx);
+	boost::unique_lock<boost::mutex> lock(mtx);
 	cb.push_back(new_msg);
+
+	has_command = true;
+
+	cond.notify_one();
 
 	return;
 }
 
 void sr::get_one_msg(lib::sr_package_t& new_msg) {
-	boost::mutex::scoped_lock lock(mtx);
+	boost::unique_lock<boost::mutex> lock(mtx);
 	new_msg = cb.front();
 	cb.pop_front();
-
+	has_command = false;
 	return;
 }
 
 bool sr::buffer_empty() // sprawdza czy bufor jest pusty
 {
-	boost::mutex::scoped_lock lock(mtx);
+	boost::unique_lock<boost::mutex> lock(mtx);
 	return cb.empty();
 }
 
-
-
-
-
-
-
-
-int sr::set_new_msg() // podniesienie semafora
+void sr::wait_for_new_msg() // oczekiwanie na semafor
 {
-	sem_trywait(&sem);
-	return sem_post(&sem);// odwieszenie watku edp_master
+
+	boost::unique_lock<boost::mutex> lock(mtx);
+
+	while (!has_command) {
+		cond.wait(lock);
+	}
+
 }
-
-int sr::wait_for_new_msg() // oczekiwanie na semafor
-{
-	return sem_wait(&sem);
-}
-
-
-
 
 /* -------------------------------------------------------------------- */
 /* Wysylka wiadomosci do procesu SR                                     */
@@ -590,28 +582,28 @@ void sr_vsp::interpret(void) {
 }
 
 void sr::operator()()
-{
+
+{	sr_package_t local_message;
 	while (1) {
 
-		if (wait_for_new_msg() == 0) { // by Y jesli mamy co wypisywac
+		wait_for_new_msg();
 
-			while (!buffer_empty())
+		while (!buffer_empty())
+		{
+
 			{
-				sr_package_t local_message;
-
-				{
-					get_one_msg(local_message);
-				}
-				try
-				{
-					send_package_to_sr(local_message);
-				}
-				catch (...)
-				{
-					printf("send_package_to_sr error multi_thread variant\n");
-				}
+				get_one_msg(local_message);
+			}
+			try
+			{
+				send_package_to_sr(local_message);
+			}
+			catch (...)
+			{
+				printf("send_package_to_sr error multi_thread variant\n");
 			}
 		}
+
 	}
 }
 

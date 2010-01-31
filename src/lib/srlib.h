@@ -65,16 +65,18 @@ typedef struct sr_package
 class sr: public boost::noncopyable
 {
 private:
+	boost::condition_variable cond; //! active command condition
+	bool has_command; //! flag indicating active command to execute
 
 	void put_one_msg(const lib::sr_package_t& new_msg); // podniesienie semafora
 	void get_one_msg(lib::sr_package_t& new_msg); // podniesienie semafora
 	bool buffer_empty(); // czy bufor cykliczny jest pusty
 
 	boost::mutex srMutex; //! one-thread a time access mutex
-	sem_t sem;
 
-	int set_new_msg(); // podniesienie semafora
-	int wait_for_new_msg(); // oczekiwanie na semafor
+
+
+	void wait_for_new_msg(); // oczekiwanie na semafor
 
 	int send_package(void);
 	int send_package_to_sr(sr_package_t& sr_mess);
