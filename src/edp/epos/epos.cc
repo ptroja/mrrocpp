@@ -145,7 +145,7 @@ epos::~epos()
  \retval -1 failure
 
  */
-int epos::openEPOS(tcflag_t br)
+int epos::openEPOS(speed_t speed)
 {
 	/* EPOS transfer format is:
 	 1 start bit
@@ -175,10 +175,12 @@ int epos::openEPOS(tcflag_t br)
 	memset(&options, 0, sizeof(options));
 
 	//  options.c_cflag |= B9600;
-	options.c_cflag |= br;
+//	options.c_cflag |= br;
 	options.c_cflag |= CS8; //8 bits per byte
-
 	options.c_cflag |= CLOCAL | CREAD;
+
+	cfsetispeed(&options, speed);
+	cfsetospeed(&options, speed);
 
 	tcflush(ep, TCIFLUSH);
 
@@ -186,7 +188,7 @@ int epos::openEPOS(tcflag_t br)
 		perror("tcsetattr");
 	}
 
-	fcntl(ep, F_SETFL, FNDELAY);
+//	fcntl(ep, F_SETFL, FNDELAY);
 
 	return (0);
 }

@@ -59,7 +59,9 @@ typedef uint32_t UNSIGNED32;
 
 /* all high-level methods throws this exception in case of error */
 
-struct epos_error: virtual std::exception, virtual boost::exception { };
+struct epos_error: virtual std::exception, virtual boost::exception {
+	~epos_error() throw() {};
+};
 
 typedef boost::error_info<struct tag_reason,const char *> reason;
 typedef boost::error_info<struct tag_errno_code,int> errno_code;
@@ -170,7 +172,7 @@ class epos
 		~epos();
 
 		/*! open the connection to EPOS */
-		int openEPOS(tcflag_t br);
+		int openEPOS(speed_t br);
 
 		/*! close the connection to EPOS */
 		int closeEPOS();
