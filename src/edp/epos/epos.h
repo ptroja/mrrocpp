@@ -148,6 +148,9 @@ class epos
 		/*! \brief  int readAnswer(WORD **ptr) - read an answer frame from EPOS */
 		answer_t readAnswer();
 
+		/*! \brief check global variable E_error for EPOS error code */
+		int checkEPOSerror();
+
 		/*! \brief Checksum calculation;
 		copied from EPOS Communication Guide, p.8
 		 */
@@ -173,10 +176,7 @@ class epos
 		int closeEPOS();
 
 		/*! check if the connection to EPOS is alive */
-		int checkEPOS();
-
-		/*! \brief check global variable E_error for EPOS error code */
-		int checkEPOSerror();
+//		int checkEPOS();
 
 		/*! \brief check EPOS status, return state according to firmware spec 8.1.1 */
 		int checkEPOSstate();
@@ -269,9 +269,9 @@ class epos
 		/*! \brief read position window time; 14.1.67 */
 
 		/*! \brief read position window time; 14.1.67 */
-		int writePositionWindowTime(unsigned int val);
+//		int writePositionWindowTime(unsigned int val);
 
-		int writePositionSoftwareLimits(long val, long val2);
+//		int writePositionSoftwareLimits(long val, long val2);
 
 		void writePositionProfileVelocity(UNSIGNED32 vel);
 		void writePositionProfileAcceleration(UNSIGNED32 acc);
