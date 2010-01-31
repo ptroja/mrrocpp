@@ -1,4 +1,4 @@
-/*! \file epos.c
+/*! \file c
 
 \brief libEPOS - a library to control an EPOS 24/1
 
@@ -47,7 +47,7 @@ NOT work with other EPOS variants.
 
 
 /* ********************************************* */
-/*    definitions used only internal in epos.c   */
+/*    definitions used only internal in c   */
 /* ********************************************* */
 
 
@@ -131,79 +131,6 @@ NOT work with other EPOS variants.
 #define E_MASTERENCMOD -5 ///< EPOS operation mode:internal
 #define E_STEPDIRECMOD -6 ///< EPOS operation mode:internal
 
-
-
-
-
-/* Implement read functions defined in EPOS Communication Guide, 6.3.1 */
-/* [ one simplification: Node-ID is always 0] */
-
-/*! \brief Read Object from EPOS memory, firmware definition 6.3.1.1*/
-static int ReadObject(epos_t *epos, WORD index, BYTE subindex, WORD **answer );
-
-#if 0
-/*! \brief Read Object from EPOS memory, firmware definition 6.3.1.2 */
-static int InitiateSegmentedRead(epos_t *epos, WORD index, BYTE subindex );
-
-/*! \brief int SegmentRead(WORD **ptr) - read data segment of the object
-   initiated with 'InitiateSegmentedRead()'
-*/
-static int SegmentRead(epos_t *epos, WORD **ptr);
-#endif
-
-/* 6.3.2:  write functions */
-
-/*! 6.3.2.1 WriteObject()
-
-   WORD *data is a pointer to a 2 WORDs array (== 4 BYTES)
-   holding data to transmit
-*/
-static int WriteObject(epos_t *epos, WORD index, BYTE subindex, const WORD data[2]);
-
-
-
-
-
-/* helper functions below */
-
-
-/*! \brief  write a single BYTE to EPOS */
-static int writeBYTE(epos_t *epos, const BYTE *c);
-
-/*! \brief  write a single WORD to EPOS */
-static int writeWORD(epos_t *epos, const WORD *w);
-
-/*! \brief  read a single BYTE from EPOS, timeout implemented */
-static int readBYTE(epos_t *epos, BYTE *c);
-
-/*! \brief  read a single WORD from EPOS, timeout implemented */
-static int readWORD(epos_t *epos, WORD *w);
-
-/*! \brief  send command to EPOS, taking care of all neccessary 'ack' and
-   checksum tests*/
-static int sendCom(epos_t *epos, WORD *frame);
-
-/*! \brief  int readAnswer(WORD **ptr) - read an answer frame from EPOS */
-static int readAnswer(epos_t *epos, WORD **ptr);
-
-
-
-/*! \brief Checksum calculation;
-copied from EPOS Communication Guide, p.8
- */
-static WORD CalcFieldCRC(const WORD *pDataArray, WORD numberOfWords);
-
-
-/*! \brief exit(-1) if ptr == NULL */
-static void checkPtr(const void* ptr);
-
-
-/*! \brief compare two 16bit bitmasks, return 1 (true) or 0 (false) */
-static int bitcmp(WORD a, WORD b);
-
-
-
-
 /************************************************************/
 /*           implementation of functions are following      */
 /************************************************************/
@@ -216,32 +143,13 @@ static int bitcmp(WORD a, WORD b);
 
 
 
-epos_t *newEPOS(const char *device) {
-  epos_t *epos = NULL;
-
-#ifndef __cplusplus
-  if ((epos = malloc(sizeof(epos_t)))) {
-#else
-  if ((epos = (epos_t *)malloc(sizeof(epos_t)))) {
-#endif
-    epos->dev = strdup(device);
-    epos->ep = -1;
-    epos->gMarker = 0;
-  }
-
-  return epos;
+epos::epos(const std::string & _device) :
+	device(_device), ep(-1), gMarker (0) {
 }
 
-int deleteEPOS(epos_t *epos) {
-  if (!epos)
-    return -1;
-
-  if (epos->dev)
-    free (epos->dev);
-
-  free(epos);
-
-  return 0;
+epos::~epos() {
+  if (ep >= 0)
+    closeEPOS();
 }
 
 
@@ -262,7 +170,7 @@ to, e.g. "/dev/ttyS0"
 \retval -1 failure
 
 */
-int openEPOS(epos_t *epos, tcflag_t br) {
+int epos::openEPOS(tcflag_t br) {
  int i;
 
  /* EPOS transfer format is:
@@ -272,57 +180,44 @@ int openEPOS(epos_t *epos, tcflag_t br) {
     1 stop bit
  */
 
-  if (!epos)
-    return -1;
-
-  if(epos->ep >=0) return(-1);
+  if(ep >=0) return(-1);
 
   for(i=0;i<5;i++) {
-    if((epos->ep=open(epos->dev,O_RDWR|O_NOCTTY|O_NDELAY))>=0) break;
+    if((ep=open(device.c_str(),O_RDWR|O_NOCTTY|O_NDELAY))>=0) break;
     sleep(1);
   }
 
-  if(epos->ep==-1) {
+  if(ep==-1) {
     perror("open serial port");
     return(-1);
   }
 
-  if(tcgetattr(epos->ep,&epos->options)<0) {
+  if(tcgetattr(ep,&options)<0) {
     perror("tcgetattr");
   }
 
-  memset(&epos->options,0,sizeof(epos->options));
+  memset(&options,0,sizeof(options));
 
   //  options.c_cflag |= B9600;
-  epos->options.c_cflag |= br;
-  epos->options.c_cflag |= CS8;           //8 bits per byte
+  options.c_cflag |= br;
+  options.c_cflag |= CS8;           //8 bits per byte
 
 
-  epos->options.c_cflag |= CLOCAL|CREAD;
+  options.c_cflag |= CLOCAL|CREAD;
 
-  tcflush(epos->ep,TCIFLUSH);
+  tcflush(ep,TCIFLUSH);
 
-  if(tcsetattr(epos->ep,TCSANOW,&epos->options)<0) {
+  if(tcsetattr(ep,TCSANOW,&options)<0) {
     perror("tcsetattr");
   }
 
-  fcntl(epos->ep,F_SETFL,FNDELAY);
+  fcntl(ep,F_SETFL,FNDELAY);
 
   return(0);
 }
 
-int closeEPOS(epos_t *epos){
-  int n;
-  if ((n = checkEPOS(epos)) < 0) return n;
-  close(epos->ep);
-  return(0);
-}
-
-int checkEPOS(epos_t *epos){
-  if (epos->ep<0) {
-    fprintf(stderr, "ERROR: EPOS device not open!");
-    return(-1);
-  }
+int epos::closeEPOS(){
+  close(ep);
   return(0);
 }
 
@@ -339,24 +234,19 @@ int checkEPOS(epos_t *epos){
 
 /*! read EPOS status word
 
-\param epos pointer on the EPOS object.
+\param pointer on the EPOS object.
 \param status pointer to WORD, the content of EPOS statusword will be placed there
 
 \retval 0 success
 \retval -1 failure
 
 */
-int readStatusword(epos_t *epos, WORD *status){
+int epos::readStatusword(WORD *status){
 
   WORD *answer;
   int n;
 
-  if (!epos)
-    return -1;
-
-  if ((n = checkEPOS(epos)) < 0) return n;
-
-  if ( (n =  ReadObject(epos, 0x6041, 0x00, &answer)) <0){
+  if ( (n =  ReadObject(0x6041, 0x00, &answer)) <0){
 
     fprintf(stderr, " *** %s: ReadObject() returned %d **\n",
             __func__, n);
@@ -365,7 +255,7 @@ int readStatusword(epos_t *epos, WORD *status){
   }
 
   // check error code
-  checkEPOSerror(epos);
+  checkEPOSerror();
 
 #ifdef DEBUG
   printf("==> EPOS status word: %#06x\n", answer[3]);
@@ -381,7 +271,7 @@ int readStatusword(epos_t *epos, WORD *status){
 \param s WORD variable holding the statusword
 
 */
-int printEPOSstatusword(WORD s){
+int epos::printEPOSstatusword(WORD s){
 
   printf("\nmeaning of EPOS statusword %#06x is:\n", s);
 
@@ -458,19 +348,16 @@ int printEPOSstatusword(WORD s){
 
 /*! check EPOS state, firmware spec 8.1.1
 
-\param epos pointer on the EPOS object.
+\param pointer on the EPOS object.
 \return EPOS status as defined in firmware specification 8.1.1
 
 */
-int checkEPOSstate(epos_t *epos){
+int epos::checkEPOSstate(){
 
   WORD w = 0x0;
   int n;
 
-  if (!epos)
-    return -1;
-
-  if ( (n=readStatusword(epos, &w)) < 0) {
+  if ( (n=readStatusword(&w)) < 0) {
     fprintf(stderr, " *** %s: readStatusword() returned %d **\n",
             __func__, n);
     return(-1);
@@ -596,14 +483,11 @@ int checkEPOSstate(epos_t *epos){
 
 
 /* pretty-print EPOS state */
-int printEPOSstate(epos_t *epos){
-
-  if (!epos)
-    return -1;
+int epos::printEPOSstate(){
 
   printf("\nEPOS is in state ");
 
-  switch( checkEPOSstate(epos) )
+  switch( checkEPOSstate() )
     {
     case 0: printf("start\n"); break;
     case 1: printf("Not ready to switch on.\n"); break;
@@ -627,12 +511,9 @@ int printEPOSstate(epos_t *epos){
 
 
 /* change EPOS state according to firmware spec 8.1.3 */
-int changeEPOSstate(epos_t *epos, int state){
+int epos::changeEPOSstate(int state){
   WORD dw[2];
   int n;
-
-  if (!epos)
-    return -1;
 
   dw[1] = 0x0000; // high WORD of DWORD is not used here
 
@@ -650,7 +531,7 @@ int changeEPOSstate(epos_t *epos, int state){
       dw[0] |= E_BIT01;
       dw[0] &= ~E_BIT00;
 
-      n = WriteObject(epos, 0x6040, 0x00, dw );
+      n = WriteObject(0x6040, 0x00, dw );
       if (n<0) {
         fprintf(stderr, "%s: writeObject() returned %d at %s, line %d\n",
                 __func__, n, __FILE__, __LINE__);
@@ -664,7 +545,7 @@ int changeEPOSstate(epos_t *epos, int state){
       dw[0] |= E_BIT01;
       dw[0] |= E_BIT00;
 
-      n = WriteObject(epos, 0x6040, 0x00, dw );
+      n = WriteObject(0x6040, 0x00, dw );
       if (n<0) {
         fprintf(stderr, "%s: writeObject() returned %d at %s, line %d\n",
                 __func__, n, __FILE__, __LINE__);
@@ -676,7 +557,7 @@ int changeEPOSstate(epos_t *epos, int state){
       dw[0] &= ~E_BIT15;
       dw[0] &= ~E_BIT02;
 
-      n = WriteObject(epos, 0x6040, 0x00, dw );
+      n = WriteObject(0x6040, 0x00, dw );
       if (n<0) {
         fprintf(stderr, "%s: writeObject() returned %d at %s, line %d\n",
                 __func__, n, __FILE__, __LINE__);
@@ -689,7 +570,7 @@ int changeEPOSstate(epos_t *epos, int state){
       dw[0] &= ~E_BIT02;
       dw[0] |= E_BIT02;
 
-      n = WriteObject(epos, 0x6040, 0x00, dw );
+      n = WriteObject(0x6040, 0x00, dw );
       if (n<0) {
         fprintf(stderr, "%s: writeObject() returned %d at %s, line %d\n",
                 __func__, n, __FILE__, __LINE__);
@@ -704,7 +585,7 @@ int changeEPOSstate(epos_t *epos, int state){
       dw[0] |= E_BIT01;
       dw[0] |= E_BIT00;
 
-      n = WriteObject(epos, 0x6040, 0x00, dw );
+      n = WriteObject(0x6040, 0x00, dw );
       if (n<0) {
         fprintf(stderr, "%s: writeObject() returned %d at %s, line %d\n",
                 __func__, n, __FILE__, __LINE__);
@@ -720,7 +601,7 @@ int changeEPOSstate(epos_t *epos, int state){
       dw[0] |= E_BIT01;
       dw[0] |= E_BIT00;
 
-      n = WriteObject(epos, 0x6040, 0x00, dw );
+      n = WriteObject(0x6040, 0x00, dw );
       if (n<0) {
         fprintf(stderr, "%s: writeObject() returned %d at %s, line %d\n",
                 __func__, n, __FILE__, __LINE__);
@@ -739,18 +620,18 @@ int changeEPOSstate(epos_t *epos, int state){
 
 
 /*       WORD estatus = 0x0; */
-/*       if ( ( n = readStatusword(&estatus) ) < 0) checkEPOSerror(epos); */
+/*       if ( ( n = readStatusword(&estatus) ) < 0) checkEPOSerror(); */
 /*       printEPOSstatusword(estatus); */
 
 
-      n = WriteObject(epos, 0x6040, 0x00, dw );
+      n = WriteObject(0x6040, 0x00, dw );
       if (n<0) {
         fprintf(stderr, "%s: writeObject() returned %d at %s, line %d\n",
                 __func__, n, __FILE__, __LINE__);
         return(-1);
       }
 
-/*       if ( ( n = readStatusword(&estatus) ) < 0) checkEPOSerror(epos); */
+/*       if ( ( n = readStatusword(&estatus) ) < 0) checkEPOSerror(); */
 /*       printEPOSstatusword(estatus); */
 
       break;
@@ -768,16 +649,11 @@ int changeEPOSstate(epos_t *epos, int state){
 
 
 /* returns software version as HEX  --  14.1.33*/
-int readSWversion(epos_t *epos){
+int epos::readSWversion(){
   WORD *answer;
   int n;
 
-  if (!epos)
-    return -1;
-
-  if ((n = checkEPOS(epos)) < 0) return n;
-
-  if ( (n =  ReadObject(epos, 0x2003, 0x01, &answer)) <0){
+  if ( (n =  ReadObject(0x2003, 0x01, &answer)) <0){
 
     fprintf(stderr, " *** %s: ReadObject() returned %d **\n",
             __func__, n);
@@ -786,7 +662,7 @@ int readSWversion(epos_t *epos){
 
 
   // check error code
-  checkEPOSerror(epos);
+  checkEPOSerror();
 
 #ifdef DEBUG
   printf("=x=> SW-Version: %x\n", answer[3]);
@@ -804,17 +680,12 @@ int readSWversion(epos_t *epos){
 
 
 /* read digital input functionality polarity -- firmware spec 14.1.47 */
-int readDInputPolarity(epos_t *epos, WORD* w){
+int epos::readDInputPolarity(WORD* w){
 
   WORD *answer;
   int n;
 
-  if (!epos)
-    return -1;
-
-  if ((n = checkEPOS(epos)) < 0) return n;
-
-  if ( (n =  ReadObject(epos, 0x2071, 0x03, &answer)) <0){
+  if ( (n =  ReadObject(0x2071, 0x03, &answer)) <0){
 
     fprintf(stderr, " *** %s: ReadObject() returned %d **\n",
             __func__, n);
@@ -823,7 +694,7 @@ int readDInputPolarity(epos_t *epos, WORD* w){
 
 
   // check error code
-  checkEPOSerror(epos);
+  checkEPOSerror();
 
 #ifdef DEBUG
   printf("==> polarity mask: %x\n", answer[3]);
@@ -841,24 +712,19 @@ int readDInputPolarity(epos_t *epos, WORD* w){
 
 
 /* set home switch polarity -- firmware spec 14.1.47 */
-int setHomePolarity(epos_t *epos, int pol){
+int epos::setHomePolarity(int pol){
 
   WORD mask = 0x00;
   WORD dw[2] = {0x0, 0x0};
   int n;
-
-  if (!epos)
-    return -1;
 
   if (pol!=0 && pol!=1) {
     fprintf(stderr, "ERROR: polarity must be 0 (hight active) or 1 (low active)\n");
     return(-1);
   }
 
-  if ((n = checkEPOS(epos)) < 0) return n;
-
   // read present functionalities polarity mask
-  if ( readDInputPolarity(epos, &mask) ) {
+  if ( readDInputPolarity(&mask) ) {
     fprintf(stderr, "\aERROR while reading digital input polarity!\n");
     return(-2);
   }
@@ -873,7 +739,7 @@ int setHomePolarity(epos_t *epos, int pol){
   dw[1] = 0x0000; // high WORD of DWORD is not used here
   dw[0] = mask;
 
-  n = WriteObject(epos, 0x2071, 0x03, dw);
+  n = WriteObject(0x2071, 0x03, dw);
   if (n<0) {
     fprintf(stderr, "%s: writeObject() returned %d at %s, line %d\n",
             __func__, n, __FILE__, __LINE__);
@@ -889,17 +755,12 @@ int setHomePolarity(epos_t *epos, int pol){
 
 
 /* read EPOS control word (firmware spec 14.1.57) */
-int readControlword(epos_t *epos, WORD *w){
+int epos::readControlword(WORD *w){
 
   WORD *answer;
   int n;
 
-  if (!epos)
-    return -1;
-
-  if ((n = checkEPOS(epos)) < 0) return n;
-
-  if ( (n =  ReadObject(epos, 0x6040, 0x00, &answer)) <0){
+  if ( (n =  ReadObject(0x6040, 0x00, &answer)) <0){
 
     fprintf(stderr, " *** %s: ReadObject() returned %d **\n",
             __func__, n);
@@ -908,7 +769,7 @@ int readControlword(epos_t *epos, WORD *w){
   }
 
   // check error code
-  checkEPOSerror(epos);
+  checkEPOSerror();
 
 #ifdef DEBUG
   printf("==> EPOS control word: %#06x\n", answer[3]);
@@ -921,7 +782,7 @@ int readControlword(epos_t *epos, WORD *w){
 
 
 /* pretty-print Controlword */
-int printEPOScontrolword(WORD s){
+int epos::printEPOScontrolword(WORD s){
   printf("\nmeaning of EPOS controlword %#06x is:\n", s);
   // bit 15..11 not in use
   // bit 10, 9 reserved
@@ -970,18 +831,15 @@ int printEPOScontrolword(WORD s){
 
 
 /* set mode of operation --- 14.1.59 */
-int setOpMode(epos_t *epos, int m){
+int epos::setOpMode(int m){
 
   WORD dw[2] = {0x0, 0x0};
   int n;
 
-  if (!epos)
-    return -1;
-
   dw[1] = 0x0000; // high WORD of DWORD is not used here
   dw[0] = m;
 
-  n = WriteObject(epos, 0x6060, 0x00, dw );
+  n = WriteObject(0x6060, 0x00, dw );
   if (n<0) {
     fprintf(stderr, "%s: writeObject() returned %d at %s, line %d\n",
             __func__, n, __FILE__, __LINE__);
@@ -1000,16 +858,13 @@ int setOpMode(epos_t *epos, int m){
 \return RETURN(0) MEANS ERROR! -1 is a valid OpMode, but 0 is not!
 
  */
-int readOpMode(epos_t *epos){
+int epos::readOpMode(){
   WORD *answer;
   //short int *i;
   int8_t aa;
   int n;
 
-  if (!epos)
-    return -1;
-
-  if ( (n =  ReadObject(epos, 0x6061, 0x00, &answer)) <0){
+  if ( (n =  ReadObject(0x6061, 0x00, &answer)) <0){
 
     fprintf(stderr, " *** %s: ReadObject() returned %d **\n",
             __func__, n);
@@ -1022,7 +877,7 @@ int readOpMode(epos_t *epos){
   aa = answer[3];
   free(answer);
   // check error code
-  checkEPOSerror(epos);
+  checkEPOSerror();
 
   /*
   // return value is a 8bit signed integer. To convert it to a 16bit
@@ -1049,17 +904,11 @@ int readOpMode(epos_t *epos){
 
 
 /* read demand position; 14.1.61 */
-int readDemandPosition(epos_t *epos, long *pos){
+int epos::readDemandPosition(long *pos){
   WORD *answer;
   int n;
 
-  if (!epos)
-    return -1;
-
-  if ((n = checkEPOS(epos)) < 0) return n;
-
-
-  if ( (n =  ReadObject(epos, 0x6062, 0x00, &answer)) <0){
+  if ( (n =  ReadObject(0x6062, 0x00, &answer)) <0){
 
     fprintf(stderr, " *** %s: ReadObject() returned %d **\n",
             __func__, n);
@@ -1067,7 +916,7 @@ int readDemandPosition(epos_t *epos, long *pos){
     return(-1);
   }
   // check error code
-  checkEPOSerror(epos);
+  checkEPOSerror();
 
   // return value is a 32bit integer (==long int)
   *pos = answer[3]  | (answer[4] << 16);
@@ -1084,19 +933,13 @@ int readDemandPosition(epos_t *epos, long *pos){
 /*! read actual position; firmware description 14.1.62
 
 \retval 0 success
-\retval <0 some error, check with checkEPOSerror(epos)
+\retval <0 some error, check with checkEPOSerror()
 */
-int readActualPosition(epos_t *epos, long *pos){
+int epos::readActualPosition(long *pos){
   WORD *answer;
   int n;
 
-  if (!epos)
-    return -1;
-
-  if ((n = checkEPOS(epos)) < 0) return n;
-
-
-  if ( (n =  ReadObject(epos, 0x6064, 0x00, &answer)) <0){
+  if ( (n =  ReadObject(0x6064, 0x00, &answer)) <0){
 
     fprintf(stderr, " *** %s: ReadObject() returned %d **\n",
             __func__, n);
@@ -1104,7 +947,7 @@ int readActualPosition(epos_t *epos, long *pos){
     return(-1);
   }
   // check error code
-  checkEPOSerror(epos);
+  checkEPOSerror();
 
   // return value is a 32bit integer (==long int)
   *pos = answer[3]  | (answer[4] << 16);
@@ -1119,16 +962,11 @@ int readActualPosition(epos_t *epos, long *pos){
 
 
 /* read position window; 14.1.64 */
-int readPositionWindow(epos_t *epos, unsigned long int *pos){
+int epos::readPositionWindow(unsigned long int *pos){
   WORD *answer;
   int n;
 
-  if (!epos)
-    return -1;
-
-  if ((n = checkEPOS(epos)) < 0) return n;
-
-  if ( (n =  ReadObject(epos, 0x6067, 0x00, &answer)) <0){
+  if ( (n =  ReadObject(0x6067, 0x00, &answer)) <0){
 
     fprintf(stderr, " *** %s: ReadObject() returned %d **\n",
             __func__, n);
@@ -1136,7 +974,7 @@ int readPositionWindow(epos_t *epos, unsigned long int *pos){
     return(-1);
   }
   // check error code
-  checkEPOSerror(epos);
+  checkEPOSerror();
 
   // return value is a 32bit integer (==long int)
   *pos = answer[3]  | (answer[4] << 16);
@@ -1151,153 +989,145 @@ int readPositionWindow(epos_t *epos, unsigned long int *pos){
 
 
 /* write  position window; 14.1.64 */
-int writePositionWindow(epos_t *epos, unsigned long int val){
+int epos::writePositionWindow(unsigned long int val){
 
   WORD dw[2];
   int n;
-
-  if (!epos)
-    return -1;
 
   // write intended position window
   dw[0] = (WORD) (val & 0x0000FFFF);
   dw[1] = (WORD) (val >> 16) ;
 
-  n = WriteObject(epos, 0x6067, 0x00, dw );
+  n = WriteObject(0x6067, 0x00, dw );
   if (n<0) {
     fprintf(stderr, "%s: writeObject() returned %d at %s, line %d\n",
             __func__, n, __FILE__, __LINE__);
     return(-1);
   }
-  checkEPOSerror(epos);
+  checkEPOSerror();
 
   return(0);
 }
 
-int writePositionProfileVelocity(epos_t *epos, unsigned long int val){
+int epos::writePositionProfileVelocity(unsigned long int val){
 	WORD dw[2];
 	int n;
 
-  if (!epos)
-    return -1;
-	
 	  // write intended velocity
 	dw[0] = (WORD) (val & 0x0000FFFF); //la part de baix
 	dw[1] = (WORD) (val >> 16) ; //la part de dalt
 
-	n = WriteObject(epos, 0x6081, 0x00, dw );
+	n = WriteObject(0x6081, 0x00, dw );
 	if (n<0) {
 		fprintf(stderr, "%s: writeObject() returned %d at %s, line %d\n",
 			__func__, n, __FILE__, __LINE__);
 		return(-1);
 	}
-	checkEPOSerror(epos);
-	
+	checkEPOSerror();
+
 	return(0);
 }
 
-int writePositionProfileAcceleration(epos_t *epos, unsigned long int val){
+int epos::writePositionProfileAcceleration(unsigned long int val){
 	WORD dw[2];
 	int n;
-	
+
 	// write intended acceleration
 	dw[0] = (WORD) (val & 0x0000FFFF);
 	dw[1] = (WORD) (val >> 16) ;
 
-	n = WriteObject(epos, 0x6083, 0x00, dw );
+	n = WriteObject(0x6083, 0x00, dw );
 	if (n<0) {
 		fprintf(stderr, "%s: writeObject() returned %d at %s, line %d\n",
 			__func__, n, __FILE__, __LINE__);
 		return(-1);
 	}
-	checkEPOSerror(epos);
-	
+	checkEPOSerror();
+
 	return(0);
 }
 
-int writePositionProfileDeceleration(epos_t *epos, unsigned long int val){
+int epos::writePositionProfileDeceleration(unsigned long int val){
 	WORD dw[2];
 	int n;
-	
+
 	// write intended deceleration
 	dw[0] = (WORD) (val & 0x0000FFFF);
 	dw[1] = (WORD) (val >> 16) ;
 
-	n = WriteObject(epos, 0x6084, 0x00, dw );
+	n = WriteObject(0x6084, 0x00, dw );
 	if (n<0) {
 		fprintf(stderr, "%s: writeObject() returned %d at %s, line %d\n",
 			__func__, n, __FILE__, __LINE__);
 		return(-1);
 	}
-	checkEPOSerror(epos);
-	
+	checkEPOSerror();
+
 	return(0);
 }
 
-int writePositionProfileQuickStopDeceleration(epos_t *epos, unsigned long int val){
+int epos::writePositionProfileQuickStopDeceleration(unsigned long int val){
 	WORD dw[2];
 	int n;
-	
+
 	// write intended quick stop deceleration
 	dw[0] = (WORD) (val & 0x0000FFFF);
 	dw[1] = (WORD) (val >> 16) ;
 
-	n = WriteObject(epos, 0x6085, 0x00, dw );
+	n = WriteObject(0x6085, 0x00, dw );
 	if (n<0) {
 		fprintf(stderr, "%s: writeObject() returned %d at %s, line %d\n",
 			__func__, n, __FILE__, __LINE__);
 		return(-1);
 	}
-	checkEPOSerror(epos);
-	
+	checkEPOSerror();
+
 	return(0);
 }
 
-int writePositionProfileMaxVelocity(epos_t *epos, unsigned long int val){
+int epos::writePositionProfileMaxVelocity(unsigned long int val){
 	WORD dw[2];
 	int n;
-	
+
 	// write intended max profile velocity
 	dw[0] = (WORD) (val & 0x0000FFFF);
 	dw[1] = (WORD) (val >> 16) ;
 
-	n = WriteObject(epos, 0x607F, 0x00, dw );
+	n = WriteObject(0x607F, 0x00, dw );
 	if (n<0) {
 		fprintf(stderr, "%s: writeObject() returned %d at %s, line %d\n",
 			__func__, n, __FILE__, __LINE__);
 		return(-1);
 	}
-	checkEPOSerror(epos);
-	
-	return(0);
-}		
+	checkEPOSerror();
 
-int writePositionProfileType(epos_t *epos, int type){
+	return(0);
+}
+
+int epos::writePositionProfileType(int type){
 	WORD dw[2];
 	int n;
-	
+
 	// write intended type
 	dw[0] = type;
 	dw[1] = 0x0000 ;
 
-	n = WriteObject(epos, 0x6086, 0x00, dw );
+	n = WriteObject(0x6086, 0x00, dw );
 	if (n<0) {
 		fprintf(stderr, "%s: writeObject() returned %d at %s, line %d\n",
 			__func__, n, __FILE__, __LINE__);
 		return(-1);
 	}
-	checkEPOSerror(epos);
-	
+	checkEPOSerror();
+
 	return(0);
 }
 
-int readPositionProfileVelocity(epos_t *epos, unsigned long int *val){
+int epos::readPositionProfileVelocity(unsigned long int *val){
 	WORD *answer;
 	int n;
 
-	if ((n = checkEPOS(epos)) < 0) return n;
-
-	if ( (n =  ReadObject(epos, 0x6081, 0x00, &answer)) <0){
+	if ( (n =  ReadObject(0x6081, 0x00, &answer)) <0){
 
 		fprintf(stderr, " *** %s: ReadObject() returned %d **\n",
 			__func__, n);
@@ -1305,7 +1135,7 @@ int readPositionProfileVelocity(epos_t *epos, unsigned long int *val){
 		return(-1);
 	}
   // check error code
-	checkEPOSerror(epos);
+	checkEPOSerror();
 
   // return value is a 32bit integer (==long int)
 	*val = answer[3]  | (answer[4] << 16);
@@ -1318,13 +1148,11 @@ int readPositionProfileVelocity(epos_t *epos, unsigned long int *val){
 	return(0);
 }
 
-int readPositionProfileAcceleration(epos_t *epos, unsigned long int *val){
+int epos::readPositionProfileAcceleration(unsigned long int *val){
 	WORD *answer;
 	int n;
 
-	if ((n = checkEPOS(epos)) < 0) return n;
-
-	if ( (n =  ReadObject(epos, 0x6083, 0x00, &answer)) <0){
+	if ( (n =  ReadObject(0x6083, 0x00, &answer)) <0){
 
 		fprintf(stderr, " *** %s: ReadObject() returned %d **\n",
 			__func__, n);
@@ -1332,7 +1160,7 @@ int readPositionProfileAcceleration(epos_t *epos, unsigned long int *val){
 		return(-1);
 	}
   // check error code
-	checkEPOSerror(epos);
+	checkEPOSerror();
 
   // return value is a 32bit integer (==long int)
 	*val = answer[3]  | (answer[4] << 16);
@@ -1345,13 +1173,11 @@ int readPositionProfileAcceleration(epos_t *epos, unsigned long int *val){
 	return(0);
 }
 
-int readPositionProfileDeceleration(epos_t *epos, unsigned long int *val){
+int epos::readPositionProfileDeceleration(unsigned long int *val){
 	WORD *answer;
 	int n;
 
-	if ((n = checkEPOS(epos)) < 0) return n;
-
-	if ( (n =  ReadObject(epos, 0x6084, 0x00, &answer)) <0){
+	if ( (n =  ReadObject(0x6084, 0x00, &answer)) <0){
 
 		fprintf(stderr, " *** %s: ReadObject() returned %d **\n",
 			__func__, n);
@@ -1359,7 +1185,7 @@ int readPositionProfileDeceleration(epos_t *epos, unsigned long int *val){
 		return(-1);
 	}
   // check error code
-	checkEPOSerror(epos);
+	checkEPOSerror();
 
   // return value is a 32bit integer (==long int)
 	*val = answer[3]  | (answer[4] << 16);
@@ -1372,13 +1198,11 @@ int readPositionProfileDeceleration(epos_t *epos, unsigned long int *val){
 	return(0);
 }
 
-int readPositionProfileQuickStopDeceleration(epos_t *epos, unsigned long int *val){
+int epos::readPositionProfileQuickStopDeceleration(unsigned long int *val){
 	WORD *answer;
 	int n;
 
-	if ((n = checkEPOS(epos)) < 0) return n;
-
-	if ( (n =  ReadObject(epos, 0x6085, 0x00, &answer)) <0){
+	if ( (n =  ReadObject(0x6085, 0x00, &answer)) <0){
 
 		fprintf(stderr, " *** %s: ReadObject() returned %d **\n",
 			__func__, n);
@@ -1386,7 +1210,7 @@ int readPositionProfileQuickStopDeceleration(epos_t *epos, unsigned long int *va
 		return(-1);
 	}
   // check error code
-	checkEPOSerror(epos);
+	checkEPOSerror();
 
   // return value is a 32bit integer (==long int)
 	*val = answer[3]  | (answer[4] << 16);
@@ -1399,13 +1223,11 @@ int readPositionProfileQuickStopDeceleration(epos_t *epos, unsigned long int *va
 	return(0);
 }
 
-int readPositionProfileMaxVelocity(epos_t *epos, unsigned long int *val){
+int epos::readPositionProfileMaxVelocity(unsigned long int *val){
 	WORD *answer;
 	int n;
 
-	if ((n = checkEPOS(epos)) < 0) return n;
-
-	if ( (n =  ReadObject(epos, 0x607F, 0x00, &answer)) <0){
+	if ( (n =  ReadObject(0x607F, 0x00, &answer)) <0){
 
 		fprintf(stderr, " *** %s: ReadObject() returned %d **\n",
 			__func__, n);
@@ -1413,7 +1235,7 @@ int readPositionProfileMaxVelocity(epos_t *epos, unsigned long int *val){
 		return(-1);
 	}
   // check error code
-	checkEPOSerror(epos);
+	checkEPOSerror();
 
   // return value is a 32bit integer (==long int)
 	*val = answer[3]  | (answer[4] << 16);
@@ -1426,13 +1248,11 @@ int readPositionProfileMaxVelocity(epos_t *epos, unsigned long int *val){
 	return(0);
 }
 
-int readPositionProfileType(epos_t *epos, int *val){
+int epos::readPositionProfileType(int *val){
 	WORD *answer;
 	int n;
 
-	if ((n = checkEPOS(epos)) < 0) return n;
-
-	if ( (n =  ReadObject(epos, 0x6086, 0x00, &answer)) <0){
+	if ( (n =  ReadObject(0x6086, 0x00, &answer)) <0){
 
 		fprintf(stderr, " *** %s: ReadObject() returned %d **\n",
 			__func__, n);
@@ -1440,7 +1260,7 @@ int readPositionProfileType(epos_t *epos, int *val){
 		return(-1);
 	}
   // check error code
-	checkEPOSerror(epos);
+	checkEPOSerror();
 
   // return value is a 32bit integer (==long int)
 	*val = answer[3];
@@ -1457,14 +1277,12 @@ int readPositionProfileType(epos_t *epos, int *val){
 
 // by Martí Morta
 /* Velocity Notation index 14.1.83 */
-int readVelocityNotationIndex(epos_t *epos, int *index){
-	
+int epos::readVelocityNotationIndex(int *index){
+
 	WORD *answer;
 	int n;
 
-	if ((n = checkEPOS(epos)) < 0) return n;
-
-	if ( (n =  ReadObject(epos, 0x608B, 0x00, &answer)) <0){
+	if ( (n =  ReadObject(0x608B, 0x00, &answer)) <0){
 
 		fprintf(stderr, " *** %s: ReadObject() returned %d **\n",
 			__func__, n);
@@ -1472,13 +1290,13 @@ int readVelocityNotationIndex(epos_t *epos, int *index){
 		return(-1);
 	}
   // check error code
-	checkEPOSerror(epos);
+	checkEPOSerror();
 
   // return value is a 8bit integer ( int)
-	
+
 	*index = answer[3];
 	free(answer);
-	
+
 	#ifdef DEBUG
 	printf("==> %s(): velocity notation index %d \n", __func__, *index);
 	printf("answer: %d %d %d %d",answer[1],answer[2],answer[3],answer[4]);
@@ -1487,21 +1305,21 @@ int readVelocityNotationIndex(epos_t *epos, int *index){
 	return(0);
 }
 /* Velocity Notation index 14.1.83  1=0x01(1), 2=0x02(2).. 0=0x00(0), -1=0xFF(255), -2=0xFE(254) */
-int writeVelocityNotationIndex(epos_t *epos, unsigned int val){
+int epos::writeVelocityNotationIndex(unsigned int val){
 	WORD dw[2];
 	int n;
-	
+
   // write
 	dw[0] = val;
 	dw[1] = 0x0000;
 
-	n = WriteObject(epos, 0x608B, 0x00, dw );
+	n = WriteObject(0x608B, 0x00, dw );
 	if (n<0) {
 		fprintf(stderr, "%s: writeObject() returned %d at %s, line %d\n",
 		__func__, n, __FILE__, __LINE__);
 		return(-1);
 	}
-	checkEPOSerror(epos);
+	checkEPOSerror();
 
 	return(0);
 }
@@ -1509,14 +1327,12 @@ int writeVelocityNotationIndex(epos_t *epos, unsigned int val){
 
 // by Martí Morta
 /* read sensorConfiguration-sensor Pulses; 14.1.57 */
-int readSensorPulses(epos_t *epos, unsigned int *pulse){
-	
+int epos::readSensorPulses(unsigned int *pulse){
+
 	WORD *answer;
 	int n;
 
-	if ((n = checkEPOS(epos)) < 0) return n;
-
-	if ( (n =  ReadObject(epos, 0x2210, 0x01, &answer)) <0){
+	if ( (n =  ReadObject(0x2210, 0x01, &answer)) <0){
 
 		fprintf(stderr, " *** %s: ReadObject() returned %d **\n",
 			__func__, n);
@@ -1524,7 +1340,7 @@ int readSensorPulses(epos_t *epos, unsigned int *pulse){
 		return(-1);
 	}
   // check error code
-	checkEPOSerror(epos);
+	checkEPOSerror();
 
 	// return 16 bits
 	*pulse = answer[3];
@@ -1537,14 +1353,12 @@ int readSensorPulses(epos_t *epos, unsigned int *pulse){
 	return(0);
 }
 /* read sensorConfiguration-sensor Type; 14.1.57 */
-int readSensorType(epos_t *epos, unsigned int *type){
-	
+int epos::readSensorType(unsigned int *type){
+
 	WORD *answer;
 	int n;
 
-	if ((n = checkEPOS(epos)) < 0) return n;
-
-	if ( (n =  ReadObject(epos, 0x2210, 0x02, &answer)) <0){
+	if ( (n =  ReadObject(0x2210, 0x02, &answer)) <0){
 
 		fprintf(stderr, " *** %s: ReadObject() returned %d **\n",
 			__func__, n);
@@ -1552,7 +1366,7 @@ int readSensorType(epos_t *epos, unsigned int *type){
 		return(-1);
 	}
   // check error code
-	checkEPOSerror(epos);
+	checkEPOSerror();
 
   // return value is a 32bit integer (==long int)
 	*type = answer[3];
@@ -1565,14 +1379,12 @@ int readSensorType(epos_t *epos, unsigned int *type){
 	return(0);
 }
 /* read sensorPolarity-sensor Type; 14.1.57 */
-int readSensorPolarity(epos_t *epos, unsigned int *polaritat){
-	
+int epos::readSensorPolarity(unsigned int *polaritat){
+
 	WORD *answer;
 	int n;
 
-	if ((n = checkEPOS(epos)) < 0) return n;
-
-	if ( (n =  ReadObject(epos, 0x2210, 0x04, &answer)) <0){
+	if ( (n =  ReadObject(0x2210, 0x04, &answer)) <0){
 
 		fprintf(stderr, " *** %s: ReadObject() returned %d **\n",
 			__func__, n);
@@ -1580,7 +1392,7 @@ int readSensorPolarity(epos_t *epos, unsigned int *polaritat){
 		return(-1);
 	}
   // check error code
-	checkEPOSerror(epos);
+	checkEPOSerror();
 
   // return value is a 32bit integer (==long int)
 	*polaritat = answer[3];
@@ -1593,7 +1405,7 @@ int readSensorPolarity(epos_t *epos, unsigned int *polaritat){
 	return(0);
 }
 /* write sensorConfiguration-sensor Pulses; 14.1.57 */
-int writeSensorPulses(epos_t *epos, unsigned int val){
+int epos::writeSensorPulses(unsigned int val){
 	WORD dw[2];
 	int n;
 
@@ -1601,18 +1413,18 @@ int writeSensorPulses(epos_t *epos, unsigned int val){
 	dw[0] = val;
 	dw[1] = 0x0000;
 
-	n = WriteObject(epos, 0x2210, 0x01, dw );
+	n = WriteObject(0x2210, 0x01, dw );
 	if (n<0) {
 		fprintf(stderr, "%s: writeObject() returned %d at %s, line %d\n",
 			__func__, n, __FILE__, __LINE__);
 		return(-1);
 	}
-	checkEPOSerror(epos);
+	checkEPOSerror();
 
 	return(0);
 }
 /* write sensorConfiguration-sensor Type; 14.1.57 */
-int writeSensorType(epos_t *epos, unsigned int val){
+int epos::writeSensorType(unsigned int val){
 	WORD dw[2];
 	int n;
 
@@ -1620,18 +1432,18 @@ int writeSensorType(epos_t *epos, unsigned int val){
 	dw[0] = val;
 	dw[1] = 0x0000;
 
-	n = WriteObject(epos, 0x2210, 0x02, dw );
+	n = WriteObject(0x2210, 0x02, dw );
 	if (n<0) {
 		fprintf(stderr, "%s: writeObject() returned %d at %s, line %d\n",
 		__func__, n, __FILE__, __LINE__);
 		return(-1);
 	}
-	checkEPOSerror(epos);
+	checkEPOSerror();
 
 	return(0);
 }
 /* write sensorPolarity-sensor Pulses; 14.1.57 */
-int writeSensorPolarity(epos_t *epos, unsigned int val){
+int epos::writeSensorPolarity(unsigned int val){
 	WORD dw[2];
 	int n;
 
@@ -1639,25 +1451,23 @@ int writeSensorPolarity(epos_t *epos, unsigned int val){
 	dw[0] = val;
 	dw[1] = 0x0000;
 
-	n = WriteObject(epos, 0x2210, 0x04, dw );
+	n = WriteObject(0x2210, 0x04, dw );
 	if (n<0) {
  		fprintf(stderr, "%s: writeObject() returned %d at %s, line %d\n",
 			__func__, n, __FILE__, __LINE__);
 		return(-1);
 	}
-	checkEPOSerror(epos);
+	checkEPOSerror();
 
 	return(0);
 }
 
-int readRS232Baudrate(epos_t *epos, unsigned int *type){
-	
+int epos::readRS232Baudrate(unsigned int *type){
+
 	WORD *answer;
 	int n;
 
-	if ((n = checkEPOS(epos)) < 0) return n;
-
-	if ( (n =  ReadObject(epos, 0x2002, 0x00, &answer)) <0){
+	if ( (n =  ReadObject(0x2002, 0x00, &answer)) <0){
 
 		fprintf(stderr, " *** %s: ReadObject() returned %d **\n",
 			__func__, n);
@@ -1665,7 +1475,7 @@ int readRS232Baudrate(epos_t *epos, unsigned int *type){
 		return(-1);
 	}
   // check error code
-	checkEPOSerror(epos);
+	checkEPOSerror();
 
   // return value is a 32bit integer (==long int)
 	*type = answer[3];
@@ -1677,7 +1487,7 @@ int readRS232Baudrate(epos_t *epos, unsigned int *type){
 
 	return(0);
 }
-int writeRS232Baudrate(epos_t *epos, unsigned int val){
+int epos::writeRS232Baudrate(unsigned int val){
 	WORD dw[2];
 	int n;
 
@@ -1685,13 +1495,13 @@ int writeRS232Baudrate(epos_t *epos, unsigned int val){
 	dw[0] = val;
 	dw[1] = 0x0000;
 
-	n = WriteObject(epos, 0x2002, 0x00, dw );
+	n = WriteObject(0x2002, 0x00, dw );
 	if (n<0) {
 		fprintf(stderr, "%s: writeObject() returned %d at %s, line %d\n",
 			__func__, n, __FILE__, __LINE__);
 		return(-1);
 	}
-	checkEPOSerror(epos);
+	checkEPOSerror();
 
 	return(0);
 }
@@ -1699,14 +1509,12 @@ int writeRS232Baudrate(epos_t *epos, unsigned int val){
 
 // by Martí Morta
 /* read P position; 14.1.92 */
-int readP(epos_t *epos, int *val){
-	
+int epos::readP(int *val){
+
 	WORD *answer;
 	int n;
 
-	if ((n = checkEPOS(epos)) < 0) return n;
-
-	if ( (n =  ReadObject(epos, 0x60FB, 0x01, &answer)) <0){
+	if ( (n =  ReadObject(0x60FB, 0x01, &answer)) <0){
 
 		fprintf(stderr, " *** %s: ReadObject() returned %d **\n",
 			__func__, n);
@@ -1714,7 +1522,7 @@ int readP(epos_t *epos, int *val){
 		return(-1);
 	}
   // check error code
-	checkEPOSerror(epos);
+	checkEPOSerror();
 
 	// return 16 bits
 	*val = answer[3];
@@ -1727,14 +1535,12 @@ int readP(epos_t *epos, int *val){
 	return(0);
 }
 /* read I; 14.1.92 */
-int readI(epos_t *epos, int *val){
-	
+int epos::readI(int *val){
+
 	WORD *answer;
 	int n;
 
-	if ((n = checkEPOS(epos)) < 0) return n;
-
-	if ( (n =  ReadObject(epos, 0x60FB, 0x02, &answer)) <0){
+	if ( (n =  ReadObject(0x60FB, 0x02, &answer)) <0){
 
 		fprintf(stderr, " *** %s: ReadObject() returned %d **\n",
 			__func__, n);
@@ -1742,7 +1548,7 @@ int readI(epos_t *epos, int *val){
 		return(-1);
 	}
   // check error code
-	checkEPOSerror(epos);
+	checkEPOSerror();
 
 	// return 16 bits
 	*val = answer[3];
@@ -1755,14 +1561,12 @@ int readI(epos_t *epos, int *val){
 	return(0);
 }
 /* read D; 14.1.92 */
-int readD(epos_t *epos, int *val){
-	
+int epos::readD(int *val){
+
 	WORD *answer;
 	int n;
 
-	if ((n = checkEPOS(epos)) < 0) return n;
-
-	if ( (n =  ReadObject(epos, 0x60FB, 0x03, &answer)) <0){
+	if ( (n =  ReadObject(0x60FB, 0x03, &answer)) <0){
 
 		fprintf(stderr, " *** %s: ReadObject() returned %d **\n",
 			__func__, n);
@@ -1770,7 +1574,7 @@ int readD(epos_t *epos, int *val){
 		return(-1);
 	}
   // check error code
-	checkEPOSerror(epos);
+	checkEPOSerror();
 
 	// return 16 bits
 	*val = answer[3];
@@ -1783,14 +1587,12 @@ int readD(epos_t *epos, int *val){
 	return(0);
 }
 /* read Velocity Feed Forward; 14.1.92 */
-int readVFF(epos_t *epos, unsigned int *val){
-	
+int epos::readVFF(unsigned int *val){
+
 	WORD *answer;
 	int n;
 
-	if ((n = checkEPOS(epos)) < 0) return n;
-
-	if ( (n =  ReadObject(epos, 0x60FB, 0x04, &answer)) <0){
+	if ( (n =  ReadObject(0x60FB, 0x04, &answer)) <0){
 
 		fprintf(stderr, " *** %s: ReadObject() returned %d **\n",
 			__func__, n);
@@ -1798,7 +1600,7 @@ int readVFF(epos_t *epos, unsigned int *val){
 		return(-1);
 	}
   // check error code
-	checkEPOSerror(epos);
+	checkEPOSerror();
 
 	// return 16 bits
 	*val = answer[3];
@@ -1811,14 +1613,12 @@ int readVFF(epos_t *epos, unsigned int *val){
 	return(0);
 }
 /* read Acceleration feed forward; 14.1.92 */
-int readAFF(epos_t *epos, unsigned int *val){
-	
+int epos::readAFF(unsigned int *val){
+
 	WORD *answer;
 	int n;
 
-	if ((n = checkEPOS(epos)) < 0) return n;
-
-	if ( (n =  ReadObject(epos, 0x60FB, 0x05, &answer)) <0){
+	if ( (n =  ReadObject(0x60FB, 0x05, &answer)) <0){
 
 		fprintf(stderr, " *** %s: ReadObject() returned %d **\n",
 			__func__, n);
@@ -1826,7 +1626,7 @@ int readAFF(epos_t *epos, unsigned int *val){
 		return(-1);
 	}
   // check error code
-	checkEPOSerror(epos);
+	checkEPOSerror();
 
 	// return 16 bits
 	*val = answer[3];
@@ -1839,7 +1639,7 @@ int readAFF(epos_t *epos, unsigned int *val){
 	return(0);
 }
 /* write P; 14.1.92 */
-int writeP(epos_t *epos, int val){
+int epos::writeP(int val){
 	WORD dw[2];
 	int n;
 
@@ -1847,18 +1647,18 @@ int writeP(epos_t *epos, int val){
 	dw[0] = val;
 	dw[1] = 0x0000;
 
-	n = WriteObject(epos, 0x60FB, 0x01, dw );
+	n = WriteObject(0x60FB, 0x01, dw );
 	if (n<0) {
 		fprintf(stderr, "%s: writeObject() returned %d at %s, line %d\n",
 			__func__, n, __FILE__, __LINE__);
 		return(-1);
 	}
-	checkEPOSerror(epos);
+	checkEPOSerror();
 
 	return(0);
 }
 /* write I; 14.1.92 */
-int writeI(epos_t *epos, int val){
+int epos::writeI(int val){
 	WORD dw[2];
 	int n;
 
@@ -1866,18 +1666,18 @@ int writeI(epos_t *epos, int val){
 	dw[0] = val;
 	dw[1] = 0x0000;
 
-	n = WriteObject(epos, 0x60FB, 0x02, dw );
+	n = WriteObject(0x60FB, 0x02, dw );
 	if (n<0) {
 		fprintf(stderr, "%s: writeObject() returned %d at %s, line %d\n",
 			__func__, n, __FILE__, __LINE__);
 		return(-1);
 	}
-	checkEPOSerror(epos);
+	checkEPOSerror();
 
 	return(0);
 }
 /* write D; 14.1.92 */
-int writeD(epos_t *epos, int val){
+int epos::writeD(int val){
 	WORD dw[2];
 	int n;
 
@@ -1885,18 +1685,18 @@ int writeD(epos_t *epos, int val){
 	dw[0] = val;
 	dw[1] = 0x0000;
 
-	n = WriteObject(epos, 0x60FB, 0x03, dw );
+	n = WriteObject(0x60FB, 0x03, dw );
 	if (n<0) {
 		fprintf(stderr, "%s: writeObject() returned %d at %s, line %d\n",
 			__func__, n, __FILE__, __LINE__);
 		return(-1);
 	}
-	checkEPOSerror(epos);
+	checkEPOSerror();
 
 	return(0);
 }
 /* write VFF; 14.1.92 */
-int writeVFF(epos_t *epos, unsigned int val){
+int epos::writeVFF(unsigned int val){
 	WORD dw[2];
 	int n;
 
@@ -1904,18 +1704,18 @@ int writeVFF(epos_t *epos, unsigned int val){
 	dw[0] = val;
 	dw[1] = 0x0000;
 
-	n = WriteObject(epos, 0x60FB, 0x04, dw );
+	n = WriteObject(0x60FB, 0x04, dw );
 	if (n<0) {
 		fprintf(stderr, "%s: writeObject() returned %d at %s, line %d\n",
 			__func__, n, __FILE__, __LINE__);
 		return(-1);
 	}
-	checkEPOSerror(epos);
+	checkEPOSerror();
 
 	return(0);
 }
 /* write AFF; 14.1.92 */
-int writeAFF(epos_t *epos, unsigned int val){
+int epos::writeAFF(unsigned int val){
 	WORD dw[2];
 	int n;
 
@@ -1923,25 +1723,23 @@ int writeAFF(epos_t *epos, unsigned int val){
 	dw[0] = val;
 	dw[1] = 0x0000;
 
-	n = WriteObject(epos, 0x60FB, 0x05, dw );
+	n = WriteObject(0x60FB, 0x05, dw );
 	if (n<0) {
 		fprintf(stderr, "%s: writeObject() returned %d at %s, line %d\n",
 			__func__, n, __FILE__, __LINE__);
 		return(-1);
 	}
-	checkEPOSerror(epos);
+	checkEPOSerror();
 
 	return(0);
 }
 /* read P current; 14.1.92 */
-int readPcurrent(epos_t *epos, int *val){
-	
+int epos::readPcurrent(int *val){
+
 	WORD *answer;
 	int n;
 
-	if ((n = checkEPOS(epos)) < 0) return n;
-
-	if ( (n =  ReadObject(epos, 0x60F6, 0x01, &answer)) <0){
+	if ( (n =  ReadObject(0x60F6, 0x01, &answer)) <0){
 
 		fprintf(stderr, " *** %s: ReadObject() returned %d **\n",
 			__func__, n);
@@ -1949,7 +1747,7 @@ int readPcurrent(epos_t *epos, int *val){
 		return(-1);
 	}
   // check error code
-	checkEPOSerror(epos);
+	checkEPOSerror();
 
 	// return 16 bits
 	*val = answer[3];
@@ -1962,14 +1760,12 @@ int readPcurrent(epos_t *epos, int *val){
 	return(0);
 }
 /* read I current; 14.1.92 */
-int readIcurrent(epos_t *epos, int *val){
-	
+int epos::readIcurrent(int *val){
+
 	WORD *answer;
 	int n;
 
-	if ((n = checkEPOS(epos)) < 0) return n;
-
-	if ( (n =  ReadObject(epos, 0x60F6, 0x02, &answer)) <0){
+	if ( (n =  ReadObject(0x60F6, 0x02, &answer)) <0){
 
 		fprintf(stderr, " *** %s: ReadObject() returned %d **\n",
 			__func__, n);
@@ -1977,7 +1773,7 @@ int readIcurrent(epos_t *epos, int *val){
 		return(-1);
 	}
   // check error code
-	checkEPOSerror(epos);
+	checkEPOSerror();
 
 	// return 16 bits
 	*val = answer[3];
@@ -1990,7 +1786,7 @@ int readIcurrent(epos_t *epos, int *val){
 	return(0);
 }
 /* write P current; 14.1.92 */
-int writePcurrent(epos_t *epos, int val){
+int epos::writePcurrent(int val){
 	WORD dw[2];
 	int n;
 
@@ -1998,18 +1794,18 @@ int writePcurrent(epos_t *epos, int val){
 	dw[0] = val;
 	dw[1] = 0x0000;
 
-	n = WriteObject(epos, 0x60F6, 0x01, dw );
+	n = WriteObject(0x60F6, 0x01, dw );
 	if (n<0) {
 		fprintf(stderr, "%s: writeObject() returned %d at %s, line %d\n",
 			__func__, n, __FILE__, __LINE__);
 		return(-1);
 	}
-	checkEPOSerror(epos);
+	checkEPOSerror();
 
 	return(0);
 }
 /* write I current; 14.1.92 */
-int writeIcurrent(epos_t *epos, int val){
+int epos::writeIcurrent(int val){
 	WORD dw[2];
 	int n;
 
@@ -2017,20 +1813,20 @@ int writeIcurrent(epos_t *epos, int val){
 	dw[0] = val;
 	dw[1] = 0x0000;
 
-	n = WriteObject(epos, 0x60F6, 0x02, dw );
+	n = WriteObject(0x60F6, 0x02, dw );
 	if (n<0) {
 		fprintf(stderr, "%s: writeObject() returned %d at %s, line %d\n",
 			__func__, n, __FILE__, __LINE__);
 		return(-1);
 	}
-	checkEPOSerror(epos);
+	checkEPOSerror();
 
 	return(0);
 }
 
 // by Martí Morta
 /* save all parameters home; 14.1.55 */
-int saveParameters(epos_t *epos){
+int epos::saveParameters(){
 	WORD dw[2];
 	int n;
 
@@ -2038,27 +1834,25 @@ int saveParameters(epos_t *epos){
 	dw[0] = (WORD) (0x6173);
 	dw[1] = (WORD) (0x6576) ;
 
-	n = WriteObject(epos, 0x1010, 0x01, dw );
+	n = WriteObject(0x1010, 0x01, dw );
 	if (n<0) {
 		fprintf(stderr, "%s: writeObject() returned %d at %s, line %d\n",
 			__func__, n, __FILE__, __LINE__);
 		return(-1);
 	}
-	checkEPOSerror(epos);
+	checkEPOSerror();
 
 	return(0);
 }
 
 // by Martí Morta
 /* write home; 14.1.55 */
-int readHomePosition(epos_t *epos, long int *val){
+int epos::readHomePosition(long int *val){
 
 	WORD *answer;
 	int n;
 
-	if ((n = checkEPOS(epos)) < 0) return n;
-
-	if ( (n =  ReadObject(epos, 0x6081, 0x00, &answer)) <0){
+	if ( (n =  ReadObject(0x6081, 0x00, &answer)) <0){
 
 		fprintf(stderr, " *** %s: ReadObject() returned %d **\n",
 			__func__, n);
@@ -2066,15 +1860,15 @@ int readHomePosition(epos_t *epos, long int *val){
 		return(-1);
 	}
   // check error code
-	checkEPOSerror(epos);
+	checkEPOSerror();
 
   // return value is a 32bit integer (==long int)
 	*val = answer[3]  | (answer[4] << 16);
 	free(answer);
-	
+
 	return(0);
 }
-int writeHomePosition(epos_t *epos, long int val){
+int epos::writeHomePosition(long int val){
 	WORD dw[2];
 	int n;
 
@@ -2083,14 +1877,14 @@ int writeHomePosition(epos_t *epos, long int val){
 	dw[0] = (WORD) (val & 0x0000FFFF);
 	dw[1] = (WORD) (val >> 16) ;
 
-	n = WriteObject(epos, 0x2081, 0x00, dw );
+	n = WriteObject(0x2081, 0x00, dw );
 	if (n<0) {
 		fprintf(stderr, "%s: writeObject() returned %d at %s, line %d\n",
 			__func__, n, __FILE__, __LINE__);
 		return(-1);
 	}
-	checkEPOSerror(epos);
-	
+	checkEPOSerror();
+
 	return(0);
 }
 
@@ -2098,14 +1892,12 @@ int writeHomePosition(epos_t *epos, long int val){
 // by Martí Morta
 /* Motor Data 14.95 */
 // Continous Current limit
-int readMotorContinousCurrentLimit(epos_t *epos, unsigned int *cur){
-	
+int epos::readMotorContinousCurrentLimit(unsigned int *cur){
+
 	WORD *answer;
 	int n;
 
-	if ((n = checkEPOS(epos)) < 0) return n;
-
-	if ( (n =  ReadObject(epos, 0x6410, 0x01, &answer)) <0){
+	if ( (n =  ReadObject(0x6410, 0x01, &answer)) <0){
 
 		fprintf(stderr, " *** %s: ReadObject() returned %d **\n",
 			__func__, n);
@@ -2113,7 +1905,7 @@ int readMotorContinousCurrentLimit(epos_t *epos, unsigned int *cur){
 		return(-1);
 	}
  	 // check error code
-	checkEPOSerror(epos);
+	checkEPOSerror();
 
  	 // return value is a 32bit integer (==long int)
 	*cur = answer[3];
@@ -2121,7 +1913,7 @@ int readMotorContinousCurrentLimit(epos_t *epos, unsigned int *cur){
 
 	return(0);
 }
-int writeMotorContinousCurrentLimit(epos_t *epos, unsigned int cur){
+int epos::writeMotorContinousCurrentLimit(unsigned int cur){
 	WORD dw[2];
 	int n;
 
@@ -2129,26 +1921,24 @@ int writeMotorContinousCurrentLimit(epos_t *epos, unsigned int cur){
 	dw[0] = cur;
 	dw[1] = 0x0000;
 
-	n = WriteObject(epos, 0x6410, 0x01, dw );
+	n = WriteObject(0x6410, 0x01, dw );
 	if (n<0) {
 		fprintf(stderr, "%s: writeObject() returned %d at %s, line %d\n",
 			__func__, n, __FILE__, __LINE__);
 		return(-1);
 	}
-	checkEPOSerror(epos);
+	checkEPOSerror();
 
 	return(0);
 }
 
 // Output Current limit
-int readMotorOutputCurrentLimit(epos_t *epos, unsigned int *cur){
-	
+int epos::readMotorOutputCurrentLimit(unsigned int *cur){
+
 	WORD *answer;
 	int n;
 
-	if ((n = checkEPOS(epos)) < 0) return n;
-
-	if ( (n =  ReadObject(epos, 0x6410, 0x02, &answer)) <0){
+	if ( (n =  ReadObject(0x6410, 0x02, &answer)) <0){
 
 		fprintf(stderr, " *** %s: ReadObject() returned %d **\n",
 			__func__, n);
@@ -2156,7 +1946,7 @@ int readMotorOutputCurrentLimit(epos_t *epos, unsigned int *cur){
 		return(-1);
 	}
  	 // check error code
-	checkEPOSerror(epos);
+	checkEPOSerror();
 
  	 // return value is a 32bit integer (==long int)
 	*cur = answer[3];
@@ -2164,7 +1954,7 @@ int readMotorOutputCurrentLimit(epos_t *epos, unsigned int *cur){
 
 	return(0);
 }
-int writeMotorOutputCurrentLimit(epos_t *epos, unsigned int cur){
+int epos::writeMotorOutputCurrentLimit(unsigned int cur){
 	WORD dw[2];
 	int n;
 
@@ -2172,26 +1962,24 @@ int writeMotorOutputCurrentLimit(epos_t *epos, unsigned int cur){
 	dw[0] = cur;
 	dw[1] = 0x0000;
 
-	n = WriteObject(epos, 0x6410, 0x02, dw );
+	n = WriteObject(0x6410, 0x02, dw );
 	if (n<0) {
 		fprintf(stderr, "%s: writeObject() returned %d at %s, line %d\n",
 			__func__, n, __FILE__, __LINE__);
 		return(-1);
 	}
-	checkEPOSerror(epos);
+	checkEPOSerror();
 
 	return(0);
 }
 
 // Pole Pairs -> 8 BITS
-int readMotorPolePair(epos_t *epos, unsigned int *cur){
-	
+int epos::readMotorPolePair(unsigned int *cur){
+
 	WORD *answer;
 	int n;
 
-	if ((n = checkEPOS(epos)) < 0) return n;
-
-	if ( (n =  ReadObject(epos, 0x6410, 0x03, &answer)) <0){
+	if ( (n =  ReadObject(0x6410, 0x03, &answer)) <0){
 
 		fprintf(stderr, " *** %s: ReadObject() returned %d **\n",
 			__func__, n);
@@ -2199,7 +1987,7 @@ int readMotorPolePair(epos_t *epos, unsigned int *cur){
 		return(-1);
 	}
  	 // check error code
-	checkEPOSerror(epos);
+	checkEPOSerror();
 
  	 // return value is a 32bit integer (==long int)
 	*cur = answer[3];
@@ -2207,7 +1995,7 @@ int readMotorPolePair(epos_t *epos, unsigned int *cur){
 
 	return(0);
 }
-int writeMotorPolePair(epos_t *epos, unsigned int cur){
+int epos::writeMotorPolePair(unsigned int cur){
 	WORD dw[2];
 	int n;
 
@@ -2215,26 +2003,24 @@ int writeMotorPolePair(epos_t *epos, unsigned int cur){
 	dw[0] = cur;
 	dw[1] = 0x0000;
 
-	n = WriteObject(epos, 0x6410, 0x03, dw );
+	n = WriteObject(0x6410, 0x03, dw );
 	if (n<0) {
 		fprintf(stderr, "%s: writeObject() returned %d at %s, line %d\n",
 			__func__, n, __FILE__, __LINE__);
 		return(-1);
 	}
-	checkEPOSerror(epos);
+	checkEPOSerror();
 
 	return(0);
 }
 
 // Max Speed in current mode
-int readMotorMaxSpeedCurrent(epos_t *epos, unsigned int *cur){
-	
+int epos::readMotorMaxSpeedCurrent(unsigned int *cur){
+
 	WORD *answer;
 	int n;
 
-	if ((n = checkEPOS(epos)) < 0) return n;
-
-	if ( (n =  ReadObject(epos, 0x6410, 0x04, &answer)) <0){
+	if ( (n =  ReadObject(0x6410, 0x04, &answer)) <0){
 
 		fprintf(stderr, " *** %s: ReadObject() returned %d **\n",
 			__func__, n);
@@ -2242,7 +2028,7 @@ int readMotorMaxSpeedCurrent(epos_t *epos, unsigned int *cur){
 		return(-1);
 	}
  	 // check error code
-	checkEPOSerror(epos);
+	checkEPOSerror();
 
  	 // return value is a 32bit integer (==long int)
 	*cur = answer[3];
@@ -2250,7 +2036,7 @@ int readMotorMaxSpeedCurrent(epos_t *epos, unsigned int *cur){
 
 	return(0);
 }
-int writeMotorMaxSpeedCurrent(epos_t *epos, unsigned int cur){
+int epos::writeMotorMaxSpeedCurrent(unsigned int cur){
 	WORD dw[2];
 	int n;
 
@@ -2258,26 +2044,24 @@ int writeMotorMaxSpeedCurrent(epos_t *epos, unsigned int cur){
 	dw[0] = cur;
 	dw[1] = 0x0000;
 
-	n = WriteObject(epos, 0x6410, 0x04, dw );
+	n = WriteObject(0x6410, 0x04, dw );
 	if (n<0) {
 		fprintf(stderr, "%s: writeObject() returned %d at %s, line %d\n",
 			__func__, n, __FILE__, __LINE__);
 		return(-1);
 	}
-	checkEPOSerror(epos);
+	checkEPOSerror();
 
 	return(0);
 }
 
 // Thermal time constant in winding
-int readMotorThermalConstant(epos_t *epos, unsigned int *cur){
-	
+int epos::readMotorThermalConstant(unsigned int *cur){
+
 	WORD *answer;
 	int n;
 
-	if ((n = checkEPOS(epos)) < 0) return n;
-
-	if ( (n =  ReadObject(epos, 0x6410, 0x05, &answer)) <0){
+	if ( (n =  ReadObject(0x6410, 0x05, &answer)) <0){
 
 		fprintf(stderr, " *** %s: ReadObject() returned %d **\n",
 			__func__, n);
@@ -2285,7 +2069,7 @@ int readMotorThermalConstant(epos_t *epos, unsigned int *cur){
 		return(-1);
 	}
  	 // check error code
-	checkEPOSerror(epos);
+	checkEPOSerror();
 
  	 // return value is a 32bit integer (==long int)
 	*cur = answer[3];
@@ -2293,7 +2077,7 @@ int readMotorThermalConstant(epos_t *epos, unsigned int *cur){
 
 	return(0);
 }
-int writeMotorThermalConstant(epos_t *epos, unsigned int cur){
+int epos::writeMotorThermalConstant(unsigned int cur){
 	WORD dw[2];
 	int n;
 
@@ -2301,13 +2085,13 @@ int writeMotorThermalConstant(epos_t *epos, unsigned int cur){
 	dw[0] = cur;
 	dw[1] = 0x0000;
 
-	n = WriteObject(epos, 0x6410, 0x05, dw );
+	n = WriteObject(0x6410, 0x05, dw );
 	if (n<0) {
 		fprintf(stderr, "%s: writeObject() returned %d at %s, line %d\n",
 			__func__, n, __FILE__, __LINE__);
 		return(-1);
 	}
-	checkEPOSerror(epos);
+	checkEPOSerror();
 
 	return(0);
 }
@@ -2323,17 +2107,11 @@ int writeMotorThermalConstant(epos_t *epos, unsigned int cur){
 
 
 /* read demand position; 14.1.67 */
-int readDemandVelocity(epos_t *epos, long *val){
+int epos::readDemandVelocity(long *val){
   WORD *answer;
   int n;
 
-  if (!epos)
-    return -1;
-
-  if ((n = checkEPOS(epos)) < 0) return n;
-
-
-  if ( (n =  ReadObject(epos, 0x606b, 0x00, &answer)) <0){
+  if ( (n =  ReadObject(0x606b, 0x00, &answer)) <0){
 
     fprintf(stderr, " *** %s: ReadObject() returned %d **\n",
             __func__, n);
@@ -2341,7 +2119,7 @@ int readDemandVelocity(epos_t *epos, long *val){
     return(-1);
   }
   // check error code
-  checkEPOSerror(epos);
+  checkEPOSerror();
 
   // return value is a 32bit integer (==long int)
   *val = answer[3]  | (answer[4] << 16);
@@ -2356,17 +2134,11 @@ int readDemandVelocity(epos_t *epos, long *val){
 
 
 /* read actual position; 14.1.68 */
-int readActualVelocity(epos_t *epos, long *val){
+int epos::readActualVelocity(long *val){
   WORD *answer;
   int n;
 
-  if (!epos)
-    return -1;
-
-  if ((n = checkEPOS(epos)) < 0) return n;
-
-
-  if ( (n =  ReadObject(epos, 0x606c, 0x00, &answer)) <0){
+  if ( (n =  ReadObject(0x606c, 0x00, &answer)) <0){
 
     fprintf(stderr, " *** %s: ReadObject() returned %d **\n",
             __func__, n);
@@ -2374,7 +2146,7 @@ int readActualVelocity(epos_t *epos, long *val){
     return(-1);
   }
   // check error code
-  checkEPOSerror(epos);
+  checkEPOSerror();
 
   // return value is a 32bit integer (==long int)
   *val = answer[3]  | (answer[4] << 16);
@@ -2393,7 +2165,7 @@ int readActualVelocity(epos_t *epos, long *val){
 
 /*! read actual motor current, see firmware description 14.1.69
 
-\param epos pointer on the EPOS object.
+\param pointer on the EPOS object.
 \param val pointer to short int where the actual motor current will be
 placed.
 
@@ -2401,17 +2173,11 @@ placed.
 \retval -1 error
 
 */
-int readActualCurrent(epos_t *epos, short int *val){
+int epos::readActualCurrent(short int *val){
   WORD *answer;
   int n;
 
-  if (!epos)
-    return -1;
-
-  if ((n = checkEPOS(epos)) < 0) return n;
-
-
-  if ( (n =  ReadObject(epos, 0x6078, 0x00, &answer)) <0){
+  if ( (n =  ReadObject(0x6078, 0x00, &answer)) <0){
 
     fprintf(stderr, " *** %s: ReadObject() returned %d **\n",
             __func__, n);
@@ -2419,7 +2185,7 @@ int readActualCurrent(epos_t *epos, short int *val){
     return(-1);
   }
   // check error code
-  checkEPOSerror(epos);
+  checkEPOSerror();
 
   *val = answer[3];
   free(answer);
@@ -2434,23 +2200,17 @@ int readActualCurrent(epos_t *epos, short int *val){
 
 /*!  read EPOS target position; firmware description 14.1.70
 
-\param epos pointer on the EPOS object.
+\param pointer on the EPOS object.
 \param val pointer to long int, will be filled with EPOS target position
 \retval 0 success
 \retval -1 error
 
 */
-int readTargetPosition(epos_t *epos, long *val){
+int epos::readTargetPosition(long *val){
   WORD *answer;
   int n;
 
-  if (!epos)
-    return -1;
-
-  if ((n = checkEPOS(epos)) < 0) return n;
-
-
-  if ( (n =  ReadObject(epos, 0x607a, 0x00, &answer)) <0){
+  if ( (n =  ReadObject(0x607a, 0x00, &answer)) <0){
 
     fprintf(stderr, " *** %s: ReadObject() returned %d **\n",
             __func__, n);
@@ -2458,7 +2218,7 @@ int readTargetPosition(epos_t *epos, long *val){
     return(-1);
   }
   // check error code
-  checkEPOSerror(epos);
+  checkEPOSerror();
 
   // return value is a 32bit integer (==long int)
   *val = (DWORD) answer[3]  | (answer[4] << 16);
@@ -2478,25 +2238,18 @@ int readTargetPosition(epos_t *epos, long *val){
 
 /*! readDeviceName: read manufactor device name string firmware
 
-\param epos pointer on the EPOS object.
+\param pointer on the EPOS object.
 \param str previously allocated string, will be filled with device name
 \retval 0 success
 \retval -1 error
 
 
  */
-int readDeviceName(epos_t *epos, char *str){
+int epos::readDeviceName(char *str){
   WORD *answer;
   int n;
 
-  if (!epos)
-    return -1;
-
-  if ((n = checkEPOS(epos)) < 0) return n;
-  memset(&answer, 0, sizeof(answer) );
-
-
-  if ( ( n = ReadObject(epos, 0x1008, 0x00, &answer) ) < 0) {
+  if ( ( n = ReadObject(0x1008, 0x00, &answer) ) < 0) {
     printf(" *** readObject returned %d at %s, line %d ***\n",
            n, __func__, __LINE__);
   }
@@ -2524,17 +2277,12 @@ int readDeviceName(epos_t *epos, char *str){
 
 
 /* firmware spec 14.1.35 */
-int readRS232timeout(epos_t *epos){
+int epos::readRS232timeout(){
 
   WORD *answer;
   int n;
 
-  if (!epos)
-    return -1;
-
-  if ((n = checkEPOS(epos)) < 0) return n;
-
-  if ( ( n = ReadObject(epos, 0x2005, 0x00, &answer) ) < 0) {
+  if ( ( n = ReadObject(0x2005, 0x00, &answer) ) < 0) {
     printf(" *** readObject returned %d at %s, line %d ***\n",
            n, __func__, __LINE__);
   }
@@ -2557,20 +2305,17 @@ int readRS232timeout(epos_t *epos){
  3: Homing Mode"
 
 */
-int doHoming(epos_t *epos, int method, long int start){
+int epos::doHoming(int method, long int start){
 
   WORD dw[2] = {0x0000, 0x0000};
   WORD w = 0x0000;
   int n, status=0;
 
-  if (!epos)
-    return -1;
-
   //move motor to a pre-defined position before the reference
   //point. This will speed-up things if the coordinates are not too
   //wrong.
 
-  if ( moveAbsolute(epos, start) ) {
+  if ( moveAbsolute(start) ) {
     fprintf(stderr, "ERROR: could not move to homing starting point!\n");
     fprintf(stderr, "       (problem at %s; %s line %d)\n",
             __func__, __FILE__, __LINE__);
@@ -2578,12 +2323,12 @@ int doHoming(epos_t *epos, int method, long int start){
   }
   // wait for positioning to finish, set timeout to approx. 30sec
   // CAUSES BIG PROBLEMS IF WE DO NOT WAIT!
-  waitForTarget(epos, 30);
+  waitForTarget(30);
   //monitorStatus();
 
 
   // switch to homing mode
-  if( setOpMode(epos, E_HOMING) ) {
+  if( setOpMode(E_HOMING) ) {
     fprintf(stderr, "ERROR: problem at %s; %s line %d\n",
             __func__, __FILE__, __LINE__);
     return(-1);
@@ -2596,19 +2341,19 @@ int doHoming(epos_t *epos, int method, long int start){
   // set homing method
   dw[0] = method; // NO hex number here!
   dw[1] = 0x0000; // high WORD of DWORD is not used here
-  n = WriteObject(epos, 0x6098, 0x00, dw );
+  n = WriteObject(0x6098, 0x00, dw );
   if (n<0) {
     fprintf(stderr, "%s: writeObject() returned %d at %s, line %d\n",
             __func__, n, __FILE__, __LINE__);
     return(-1);
   }
-  checkEPOSerror(epos);
+  checkEPOSerror();
 
 
   // switch on
   dw[0] = 0x000f;
   dw[1] = 0x0000; // high WORD of DWORD is not used here
-  n = WriteObject(epos, 0x6040, 0x00, dw );
+  n = WriteObject(0x6040, 0x00, dw );
   if (n<0) {
     fprintf(stderr, "%s: writeObject() returned %d at %s, line %d\n",
             __func__, n, __FILE__, __LINE__);
@@ -2617,7 +2362,7 @@ int doHoming(epos_t *epos, int method, long int start){
   // start homing mode
   dw[0] = 0x001f;
   dw[1] = 0x0000; // high WORD of DWORD is not used here
-  n = WriteObject(epos, 0x6040, 0x00, dw );
+  n = WriteObject(0x6040, 0x00, dw );
   if (n<0) {
     fprintf(stderr, "%s: writeObject() returned %d at %s, line %d\n",
             __func__, n, __FILE__, __LINE__);
@@ -2625,11 +2370,11 @@ int doHoming(epos_t *epos, int method, long int start){
   }
 
 
-  checkEPOSerror(epos);
+  checkEPOSerror();
 
 
   //read/print status
-  status = monitorHomingStatus(epos);
+  status = monitorHomingStatus();
   if ( status ) {
     // something was wrong during homing...
     if (status == 1) {
@@ -2644,7 +2389,7 @@ int doHoming(epos_t *epos, int method, long int start){
     }
   }
 
-  readStatusword(epos, &w);
+  readStatusword(&w);
   if ( (w & E_BIT13) == E_BIT13) {
     fprintf(stderr, "\a *** got a HomingError! ***\n");
     return(-1);
@@ -2665,17 +2410,14 @@ int doHoming(epos_t *epos, int method, long int start){
 
 
 
-int moveRelative(epos_t *epos, long int steps){
+int epos::moveRelative(long int steps){
 
   WORD dw[2];
   int n;
 
-  if (!epos)
-    return -1;
-
   // check, if we are in Profile Position Mode
-  if (readOpMode(epos) != E_PROFPOS) {
-    if( setOpMode(epos, E_PROFPOS) ) {
+  if (readOpMode() != E_PROFPOS) {
+    if( setOpMode(E_PROFPOS) ) {
       fprintf(stderr, "ERROR: problem at %s; %s line %d\n",
               __func__, __FILE__, __LINE__);
       return(-1);
@@ -2688,26 +2430,26 @@ int moveRelative(epos_t *epos, long int steps){
   dw[0] = (WORD) (steps & 0x0000FFFF);
   dw[1] = (WORD) (steps >> 16) ;
 
-  n = WriteObject(epos, 0x607A, 0x00, dw );
+  n = WriteObject(0x607A, 0x00, dw );
   if (n<0) {
     fprintf(stderr, "%s: writeObject() returned %d at %s, line %d\n",
             __func__, n, __FILE__, __LINE__);
     return(-1);
   }
-  checkEPOSerror(epos);
+  checkEPOSerror();
 
   // switch to relative positioning BY WRITING TO CONTROLWORD, finish
   // possible ongoing operation first!  ->maxon applicattion note:
   // device programming 2.1
   dw[0] = 0x005f;
   dw[1] = 0x0000; // high WORD of DWORD is not used here
-  n = WriteObject(epos, 0x6040, 0x00, dw );
+  n = WriteObject(0x6040, 0x00, dw );
   if (n<0) {
     fprintf(stderr, "%s: writeObject() returned %d at %s, line %d\n",
             __func__, n, __FILE__, __LINE__);
     return(-1);
   }
-  checkEPOSerror(epos);
+  checkEPOSerror();
 
 
   return(0);
@@ -2715,21 +2457,18 @@ int moveRelative(epos_t *epos, long int steps){
 
 
 
-int moveAbsolute(epos_t *epos, long int steps){
+int epos::moveAbsolute(long int steps){
 
   WORD dw[2];
   int n;
-
-  if (!epos)
-    return -1;
 
 #ifdef DEBUG
   printf("-> %s(): will move to %ld (%#010lx)\n", __func__, steps, steps);
 #endif
 
   // check, if we are in Profile Position Mode
-  if (readOpMode(epos) != E_PROFPOS) {
-    if( setOpMode(epos, E_PROFPOS) ) {
+  if (readOpMode() != E_PROFPOS) {
+    if( setOpMode(E_PROFPOS) ) {
       fprintf(stderr, "ERROR: problem at %s; %s line %d\n",
               __func__, __FILE__, __LINE__);
       return(-1);
@@ -2749,25 +2488,25 @@ int moveAbsolute(epos_t *epos, long int steps){
   printf("-> %s(): dw[0,1] = %#06x  %#06x\n", __func__, dw[0], dw[1]);
 #endif
 
-  n = WriteObject(epos, 0x607A, 0x00, dw );
+  n = WriteObject(0x607A, 0x00, dw );
   if (n<0) {
     fprintf(stderr, "%s: writeObject() returned %d at %s, line %d\n",
             __func__, n, __FILE__, __LINE__);
     return(-1);
   }
-  checkEPOSerror(epos);
+  checkEPOSerror();
 
   // switch to absolute positioning, cancel possible ongoing operation
   // first!  ->maxon application note: device programming 2.1
   dw[0] = 0x3f;
   dw[1] = 0x0000; // high WORD of DWORD is not used here
-  n = WriteObject(epos, 0x6040, 0x00, dw );
+  n = WriteObject(0x6040, 0x00, dw );
   if (n<0) {
     fprintf(stderr, "%s: writeObject() returned %d at %s, line %d\n",
             __func__, n, __FILE__, __LINE__);
     return(-1);
   }
-  checkEPOSerror(epos);
+  checkEPOSerror();
 
 
   return(0);
@@ -2778,20 +2517,17 @@ int moveAbsolute(epos_t *epos, long int steps){
 
 
 // monitor device status
-int monitorStatus(epos_t *epos){
+int epos::monitorStatus(){
   int  n;
   long int postarget, posactual, veldemand, velactual;
   short curactual;
   WORD status;
 
-  if (!epos)
-    return -1;
-
   printf("\nEPOS operating figures (note: update here is done AS FAST AS POSSIBLE!):\n");
   int i = 0;
   do {
     i++;
-    if  ( (n=readTargetPosition( epos, &postarget ) ) ){
+    if  ( (n=readTargetPosition(  &postarget ) ) ){
       printf("ERROR while readActualPosition() [%d]\n", n);
       break;
     }
@@ -2799,19 +2535,19 @@ int monitorStatus(epos_t *epos){
 /*       printf("ERROR while readDemandPosition() [%d]\n", n); */
 /*       break; */
 /*     } */
-    if  ( (n=readActualPosition( epos, &posactual ) ) ){
+    if  ( (n=readActualPosition(  &posactual ) ) ){
       printf("ERROR while readActualPosition() [%d]\n", n);
       break;
     }
-    if  ( (n=readDemandVelocity( epos, &veldemand ) ) ){
+    if  ( (n=readDemandVelocity(  &veldemand ) ) ){
       printf("ERROR while readDemandVelocity() [%d]\n", n);
       break;
     }
-    if  ( (n=readActualVelocity( epos, &velactual ) ) ){
+    if  ( (n=readActualVelocity(  &velactual ) ) ){
       printf("ERROR while readActualVelicity() [%d]\n", n);
       break;
     }
-    if  ( (n=readActualCurrent( epos, &curactual ) ) ){
+    if  ( (n=readActualCurrent(  &curactual ) ) ){
       printf("ERROR while readActualCurrent() [%d]\n", n);
       break;
     }
@@ -2821,25 +2557,25 @@ int monitorStatus(epos_t *epos){
            veldemand, velactual, curactual);
     fflush(stdout);
 
-    readStatusword(epos, &status);
+    readStatusword(&status);
   } while ( ( status & E_BIT10) != E_BIT10) ; // bit 10 says: target reached!
 
   // update values a last time to get a nicer output:
   i++;
-  if  ( (n=readTargetPosition( epos, &postarget ) ) ){
+  if  ( (n=readTargetPosition(  &postarget ) ) ){
     printf("ERROR while readActualPosition() [%d]\n", n);
 
   }
-  if  ( (n=readActualPosition( epos, &posactual ) ) ){
+  if  ( (n=readActualPosition(  &posactual ) ) ){
     printf("ERROR while readActualPosition() [%d]\n", n);
   }
-  if  ( (n=readDemandVelocity( epos, &veldemand ) ) ){
+  if  ( (n=readDemandVelocity(  &veldemand ) ) ){
     printf("ERROR while readDemandVelocity() [%d]\n", n);
   }
-  if  ( (n=readActualVelocity( epos, &velactual ) ) ){
+  if  ( (n=readActualVelocity(  &velactual ) ) ){
     printf("ERROR while readActualVelicity() [%d]\n", n);
   }
-  if  ( (n=readActualCurrent( epos, &curactual ) ) ){
+  if  ( (n=readActualCurrent(  &curactual ) ) ){
     printf("ERROR while readActualCurrent() [%d]\n", n);
   }
 
@@ -2853,33 +2589,30 @@ int monitorStatus(epos_t *epos){
 
 
 
-int monitorHomingStatus(epos_t *epos){
+int epos::monitorHomingStatus(){
   int  n;
   long int posactual, velactual;
   short curactual;
   WORD status = 0x0;
 
-  if (!epos)
-    return -1;
-
   printf("\nEPOS operating figures (note: update here is done AS FAST AS POSSIBLE!):\n");
   int i = 0;
   do {
     i++;
-    if  ( (n=readActualPosition( epos, &posactual ) ) ){
+    if  ( (n=readActualPosition(  &posactual ) ) ){
       printf("ERROR while readActualPosition() [%d]\n", n);
       break;
     }
-    if  ( (n=readActualVelocity( epos, &velactual ) ) ){
+    if  ( (n=readActualVelocity(  &velactual ) ) ){
       printf("ERROR while readActualVelicity() [%d]\n", n);
       break;
     }
-    if  ( (n=readActualCurrent( epos, &curactual ) ) ){
+    if  ( (n=readActualCurrent(  &curactual ) ) ){
       printf("ERROR while readActualCurrent() [%d]\n", n);
       break;
     }
 
-    readStatusword(epos, &status);
+    readStatusword(&status);
 
 
     printf("\r%d EPOS: pos=%+10ld; v =  %+4ldrpm I=%+3dmA status = %#06x ",
@@ -2887,7 +2620,7 @@ int monitorHomingStatus(epos_t *epos){
 
     fflush(stdout);
 
-    readStatusword(epos, &status);
+    readStatusword(&status);
 
     if ( (status & E_BIT13) == E_BIT13) {
       printf("\aHOMING ERROR!\n");
@@ -2902,17 +2635,17 @@ int monitorHomingStatus(epos_t *epos){
   //printEPOSstatusword(status);
 
   i++;
-  if  ( (n=readActualPosition( epos, &posactual ) ) ){
+  if  ( (n=readActualPosition(  &posactual ) ) ){
     printf("ERROR while readActualPosition() [%d]\n", n);
   }
-  if  ( (n=readActualVelocity( epos, &velactual ) ) ){
+  if  ( (n=readActualVelocity(  &velactual ) ) ){
     printf("ERROR while readActualVelicity() [%d]\n", n);
   }
-  if  ( (n=readActualCurrent( epos, &curactual ) ) ){
+  if  ( (n=readActualCurrent(  &curactual ) ) ){
     printf("ERROR while readActualCurrent() [%d]\n", n);
   }
 
-  readStatusword(epos, &status);
+  readStatusword(&status);
 
 
   printf("\r%d EPOS: pos=%+10ld; v =  %+4ldrpm I=%+3dmA status = %#06x\n",
@@ -2929,20 +2662,17 @@ int monitorHomingStatus(epos_t *epos){
 
 /* waits for positoning to finish, argument is timeout in
    seconds. give timeout==0 to disable timeout */
-int waitForTarget(epos_t *epos, unsigned int t){
+int epos::waitForTarget(unsigned int t){
 
   WORD status;
   unsigned int i = 0, st= (unsigned int)1e4;
-
-  if (!epos)
-    return -1;
 
   do {
     if (t != 0){ // use timeout?
       if(++i > t*1e2) return(1);
     }
     usleep(st);
-    readStatusword(epos, &status);
+    readStatusword(&status);
   } while ( ( status & E_BIT10) != E_BIT10) ; // bit 10 says: target reached!
 
 
@@ -2959,12 +2689,9 @@ int waitForTarget(epos_t *epos, unsigned int t){
 */
 
 /* check the global variable E_error for EPOS error code */
-int checkEPOSerror(epos_t *epos){
+int epos::checkEPOSerror(){
 
-  if (!epos)
-    return -1;
-
-  switch(epos->E_error) {
+  switch(E_error) {
   case E_NOERR:
     return(0);
     break;
@@ -3024,7 +2751,7 @@ int checkEPOSerror(epos_t *epos){
     break;
   default:
     fprintf(stderr, "EPOS responds with error: unknown EPOS error code: %x\n",
-            epos->E_error);
+            E_error);
     break;
   }
   return(-1);
@@ -3040,15 +2767,12 @@ int checkEPOSerror(epos_t *epos){
 
 
 /*  write a single BYTE to EPOS */
-static int writeBYTE(epos_t *epos, const BYTE *c){
-
-  if (!epos)
-    return -1;
+int epos::writeBYTE(const BYTE *c){
 
 #ifdef DDEBUG
     printf("sending %#04x \n", *c);
 #endif
-  if (  write(epos->ep, c, 1) < 0 ) {
+  if (  write(ep, c, 1) < 0 ) {
     perror("write ");
     return(-1);
   }
@@ -3058,16 +2782,13 @@ static int writeBYTE(epos_t *epos, const BYTE *c){
 
 
 /*  write a single WORD to EPOS */
-static int writeWORD(epos_t *epos, const WORD *w){
-
-  if (!epos)
-    return -1;
+int epos::writeWORD(const WORD *w){
 
 #ifdef DDEBUG
   printf("sending %#06x \n", *w);
 #endif
 
-  if (  write(epos->ep, w, 2) < 0  ) {
+  if (  write(ep, w, 2) < 0  ) {
     perror("write ");
     return(-1);
   }
@@ -3077,15 +2798,12 @@ static int writeWORD(epos_t *epos, const WORD *w){
 
 
 /*  read a single BYTE from EPOS, timeout implemented */
-static int readBYTE(epos_t *epos, BYTE *c){
+int epos::readBYTE(BYTE *c){
 
   int i,n;
 
-  if (!epos)
-    return -1;
-
   for( i=0; i< NTRY; i++ ) {
-    n = read(epos->ep, c, 1);
+    n = read(ep, c, 1);
     int errsv = errno;
     if ( n < 0 && errsv != EAGAIN) {
       perror("read ");
@@ -3098,15 +2816,15 @@ static int readBYTE(epos_t *epos, BYTE *c){
       return(0);
     }
     else {
-      if (epos->gMarker==0){
+      if (gMarker==0){
         printf("/\b");
         fflush(stdout);
-        epos->gMarker=1;
+        gMarker=1;
       }
       else {
         printf("\\\b");
         fflush(stdout);
-        epos->gMarker = 0;
+        gMarker = 0;
       }
       usleep(TRYSLEEP); /* sleep 100ms; EPOS gives timeout after 500ms*/
     }
@@ -3119,15 +2837,12 @@ static int readBYTE(epos_t *epos, BYTE *c){
 
 
 /*  read a single WORD from EPOS, timeout implemented */
-int readWORD(epos_t *epos, WORD *w){
+int epos::readWORD(WORD *w){
 
   int i,n;
 
-  if (!epos)
-    return -1;
-
   for( i=0; i< NTRY; i++ ) {
-    n = read(epos->ep, w, sizeof(WORD) );
+    n = read(ep, w, sizeof(WORD) );
     int errsv = errno;
     if ( n < 0 && errsv != EAGAIN) {
       perror("read ");
@@ -3140,15 +2855,15 @@ int readWORD(epos_t *epos, WORD *w){
       return(0);
     }
     else {
-      if (epos->gMarker==0){
+      if (gMarker==0){
         printf("/\b");
         fflush(stdout);
-        epos->gMarker = 1;
+        gMarker = 1;
       }
       else {
         printf("\\\b");
         fflush(stdout);
-        epos->gMarker = 0;
+        gMarker = 0;
       }
       usleep(TRYSLEEP); /* sleep 100ms; EPOS gives timeout after 500ms*/
     }
@@ -3161,7 +2876,7 @@ int readWORD(epos_t *epos, WORD *w){
 
 
 /* copied from EPOS Communication Guide, p.8 */
-static WORD CalcFieldCRC(const WORD *pDataArray, WORD numberOfWords)
+WORD epos::CalcFieldCRC(const WORD *pDataArray, WORD numberOfWords)
 {
   WORD shifter, c;
   WORD carry;
@@ -3194,14 +2909,11 @@ static WORD CalcFieldCRC(const WORD *pDataArray, WORD numberOfWords)
 
 /*  send command to EPOS, taking care of all neccessary 'ack' and
    checksum tests*/
-static int sendCom(epos_t *epos, WORD *frame){
+int epos::sendCom(WORD *frame){
 
   BYTE c = 0x00;
   short i, len;
   int n;
-
-  if (!epos)
-    return -1;
 
   // need LSB of header WORD, contains (len-1). Complete Frame is
   // (len-1) +3 WORDS long
@@ -3225,11 +2937,11 @@ static int sendCom(epos_t *epos, WORD *frame){
   /* sending to EPOS */
   //send header:
   c = (frame[0] & 0xFF00) >> 8 ;  //LSB
-  if ( writeBYTE(epos, &c) ) perror("writeByte");
+  if ( writeBYTE(&c) ) perror("writeByte");
 
   c = 0x77; // 0x77 is not used by EPOS
   // wait for "Ready Ack 'O'"
-  if ( (n=readBYTE(epos, &c))  < 0  ) fprintf(stderr, "readBYTE() returnd %d at %s, line %d\n", n, __func__, __LINE__);
+  if ( (n=readBYTE(&c))  < 0  ) fprintf(stderr, "readBYTE() returnd %d at %s, line %d\n", n, __func__, __LINE__);
 
   if (c != E_OK) {
     if (c == 0x77) {
@@ -3242,15 +2954,15 @@ static int sendCom(epos_t *epos, WORD *frame){
   }
 
   c = (frame[0] & 0x00FF)  ;  //MSB
-  if ( writeBYTE(epos, &c) ) perror("writeBYTE");
+  if ( writeBYTE(&c) ) perror("writeBYTE");
 
   // header done, data + CRC will follow
   for (i=1; i<len; i++) {
-    if ( writeWORD(epos, frame+i) ) perror("writeWORD");
+    if ( writeWORD(frame+i) ) perror("writeWORD");
   }
 
   // wait for "End Ack 'O'"
-  if ( readBYTE(epos, &c)  < 0  ) perror("readBYTE");
+  if ( readBYTE(&c)  < 0  ) perror("readBYTE");
   if (c != E_OK) {
     printf("EPOS says: CRCerror!\n");
     return(-1);
@@ -3264,7 +2976,7 @@ static int sendCom(epos_t *epos, WORD *frame){
 
 /*!  int readAnswer(WORD **ptr) - read an answer frame from EPOS
 
-\param epos pointer on the EPOS object.
+\param pointer on the EPOS object.
 \param ptr WORD **ptr; pointer address where answer frame is placed.
 
 \retval >0 number of WORDs recieved from EPOS. ptr points now to
@@ -3273,24 +2985,21 @@ static int sendCom(epos_t *epos, WORD *frame){
      returnd EPOS ErrorCode
 
   */
-static int readAnswer(epos_t *epos, WORD **ptr){
+int epos::readAnswer(WORD **ptr){
 
   int i;
   BYTE c;
   WORD first=0x00 , w,  crc, framelen;
   static WORD *ans;
 
-  if (!epos)
-    return -1;
-
-  epos->E_error = 0x00;
+  E_error = 0x00;
 
   /*
   printf("******** sub: ptr= %p  &ptr = %p\n", ptr, &ptr);
   printf("******** sub: ans   = %p  &ans = %p\n", ans, &ans);
   */
 
-  readBYTE(epos, &c);
+  readBYTE(&c);
   first = (0xFF00 & c) << 8;
   //printf("first answer: %#04x; first: %#06x\n", c, first);
 
@@ -3301,10 +3010,10 @@ static int readAnswer(epos_t *epos, WORD **ptr){
     return(-1);
   }
   c = E_OK;
-  writeBYTE(epos, &c);
+  writeBYTE(&c);
 
   // here is the (len-1) value coming
-  readBYTE(epos, &c);
+  readBYTE(&c);
 
   first = (0x00FF & c) ;
   //printf("second answer: %#04x; first: %#06x\n", c, first);
@@ -3316,7 +3025,7 @@ static int readAnswer(epos_t *epos, WORD **ptr){
   ans[0] = first;
 
   for(i=1; i<framelen; i++){
-    readWORD(epos, &w);
+    readWORD(&w);
     ans[i] = w;
   }
 #ifdef DEBUG
@@ -3339,14 +3048,14 @@ static int readAnswer(epos_t *epos, WORD **ptr){
 
   if (crc == ans[framelen-1]) {
     c = E_OK;
-    writeBYTE(epos, &c);
+    writeBYTE(&c);
 #ifdef DEBUG
     printf("CRC test OK!\n");
 #endif
   }
   else {
     c = E_FAIL;
-    writeBYTE(epos, &c);
+    writeBYTE(&c);
     fprintf(stderr, "CRC test FAILED!\n");
     ptr = NULL;
     return(-1);
@@ -3357,7 +3066,7 @@ static int readAnswer(epos_t *epos, WORD **ptr){
 
   /* just to get the bit's at the right place...*/
   //ans[1] = 0x1234; ans[2] = 0xABCD;
-  epos->E_error = ans[1] | (ans[2] << 16) ;
+  E_error = ans[1] | (ans[2] << 16) ;
   //printf(" xxxxxxx ->%#010x<-\n", E_error);
 
 
@@ -3376,13 +3085,10 @@ static int readAnswer(epos_t *epos, WORD **ptr){
 
 
 
-static int ReadObject(epos_t *epos, WORD index, BYTE subindex, WORD **ptr ){
+int epos::ReadObject(WORD index, BYTE subindex, WORD **ptr ){
 
   WORD frame[4];
   int n;
-
-  if (!epos)
-    return -1;
 
   frame[0] = 0x1001; // fixed, ReadObject, (len-1) == 1
   frame[1] = index;
@@ -3390,26 +3096,23 @@ static int ReadObject(epos_t *epos, WORD index, BYTE subindex, WORD **ptr ){
                                       low BYTE: subindex */
   frame[3] = 0x000; // ZERO word, will be filled with checksum
 
-  if( (n = sendCom(epos, frame)) < 0){
+  if( (n = sendCom(frame)) < 0){
     fprintf(stderr, " *** %s: problems with sendCom(), return value was %d ***\n ",  __func__, n);
     return(-1);
   }
 
   // read response
-  return( readAnswer(epos, ptr) );
+  return( readAnswer(ptr) );
 
 }
 
 #if 0
 /*! NOT USED IN libEPOS so far -> untested!
  */
-static int InitiateSegmentedRead(epos_t *epos, WORD index, BYTE subindex ){
+static int InitiateSegmentedRead(WORD index, BYTE subindex ){
 
   WORD frame[4], **ptr;
   int n=0;
-
-  if (!epos)
-    return -1;
 
   frame[0] = 0x1201; // fixed, opCode==0x12, (len-1) == 1
   frame[1] = index;
@@ -3417,13 +3120,13 @@ static int InitiateSegmentedRead(epos_t *epos, WORD index, BYTE subindex ){
                                     low BYTE: subindex */
   frame[3] = 0x000; // ZERO word, will be filled with checksum
 
-  if( (n = sendCom(epos, frame)) < 0){
+  if( (n = sendCom(frame)) < 0){
     fprintf(stderr, " *** %s: problems with sendCom(), return value was %d ***\n ",  __func__, n);
     return(-1);
   }
 
   // read response
-  return( readAnswer(epos, ptr) );  // answer contains only DWORD ErrorCode
+  return( readAnswer(ptr) );  // answer contains only DWORD ErrorCode
                               // here...
 }
 
@@ -3437,25 +3140,22 @@ static int InitiateSegmentedRead(epos_t *epos, WORD index, BYTE subindex ){
 \retval <0 means failure: (*ptr) points to NULL
 
 */
-static int SegmentRead(epos_t *epos, WORD **ptr){
+static int SegmentRead(WORD **ptr){
 
   WORD frame[3];
   int n;
-
-  if (!epos)
-    return -1;
 
   frame[0] = 0x1400; // fixed, opCode==0x14, (len-1) == 0
   frame[1] = 0x0000; // WHAT IS THE 'TOGGLE' BIT????
   frame[2] = 0x0000;  // ZERO word, will be filled with checksum
 
-  if( (n = sendCom(epos, frame)) < 0){
+  if( (n = sendCom(frame)) < 0){
     fprintf(stderr, " *** %s: problems with sendCom(), return value was %d ***\n ",  __func__, n);
     return(-1);
   }
 
 
-  if ( (n = readAnswer(epos, ptr)) < 0){
+  if ( (n = readAnswer(ptr)) < 0){
     fprintf(stderr, " *** %s: problems with readAns(), return value was %d ***\n ",  __func__, n);
     return(-1);
   }
@@ -3470,7 +3170,7 @@ static int SegmentRead(epos_t *epos, WORD **ptr){
 /*! Low-level function to write an object to EPOS memory. Is called by
  writing libEPOS functions.
 
-\param epos pointer on the EPOS object.
+\param pointer on the EPOS object.
 
 \param index WORD describing EPOS memory index for writing. See
 firmware documentation for valid values
@@ -3483,14 +3183,11 @@ firmware documentation for valid values
 \retval 0 success
 \retval -1 error
 */
-int WriteObject(epos_t *epos, WORD index, BYTE subindex, const WORD *data) {
+int epos::WriteObject(WORD index, BYTE subindex, const WORD *data) {
 
   WORD frame[6];
   WORD *ans = NULL;
   int n;
-
-  if (!epos)
-    return -1;
 
   frame[0] = 0x1103; // fixed, WriteObject, (len-1) == 3
   frame[1] = index;
@@ -3502,7 +3199,7 @@ int WriteObject(epos_t *epos, WORD index, BYTE subindex, const WORD *data) {
 
   frame[5] = 0x00; // ZERO word, will be filled with checksum
 
-  if( (n = sendCom(epos, frame)) < 0){
+  if( (n = sendCom(frame)) < 0){
     fprintf(stderr, " *** %s: problems with sendCom(), return value was %d ***\n ",  __func__, n);
     return(-1);
   }
@@ -3511,13 +3208,13 @@ int WriteObject(epos_t *epos, WORD index, BYTE subindex, const WORD *data) {
   // read response
   checkPtr( ans = (WORD*)calloc(3, sizeof(WORD) ) );
 
-  if ( (n = readAnswer(epos, &ans) )  <0 ){
+  if ( (n = readAnswer(&ans) )  <0 ){
     fprintf(stderr, " *** %s: problems with readAnswer(), return value was %d ***\n ",  __func__, n);
     free(ans);
     return(-1);
   }
 
-  return( checkEPOSerror(epos) );
+  return( checkEPOSerror() );
 
 }
 
@@ -3527,7 +3224,7 @@ int WriteObject(epos_t *epos, WORD index, BYTE subindex, const WORD *data) {
 
 
 /* compare WORD a with WORD b bitwise */
-static int bitcmp(WORD a, WORD b){
+int epos::bitcmp(WORD a, WORD b){
   if ( (a & b) == b ) return(1);
   else return(0);
 }
@@ -3536,7 +3233,7 @@ static int bitcmp(WORD a, WORD b){
 
 
 
-static void checkPtr(const void* ptr){
+void epos::checkPtr(const void* ptr){
   if (ptr == NULL){
     fprintf(stderr, "malloc failed!\n");
     exit(-1);

@@ -1,10 +1,10 @@
 /*! \file epos.h
 
-  header file for libEPOS functions
+ header file for libEPOS functions
 
-  mh, july 2006
+ mh, july 2006
 
-*/
+ */
 
 #ifndef _EPOS_H
 #define _EPOS_H
@@ -19,236 +19,276 @@
 #include <stdint.h>  /* int types with given size */
 #include <math.h>
 
+#include <string>
+
 /* added oct06 for openTCPEPOS() */
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
-
-
 //#include "eposlib.h" -> moved to epos.c
 
 /* all EPOS data exchange is based on 16bit words, but other types are
-   also used...*/
-typedef uint32_t DWORD ; ///< \brief 32bit type for EPOS data exchange
-typedef uint16_t WORD ; ///< \brief 16bit type for EPOS data exchange
+ also used...*/
+typedef uint32_t DWORD; ///< \brief 32bit type for EPOS data exchange
+typedef uint16_t WORD; ///< \brief 16bit type for EPOS data exchange
 #ifndef CPP
-typedef char BYTE ; ///< \brief 8bit type for EPOS data exchange
+typedef char BYTE; ///< \brief 8bit type for EPOS data exchange
 #endif
-
-typedef struct epos_s {
-  char *dev;
-  struct termios options;
-  int sp;           ///< serial port file descriptor
-  DWORD E_error;    ///< EPOS global error status
-  int ep;           ///< (-1) EPOS file descriptor
-  char gMarker;     ///< (0) for internal handling
-} epos_t;
 
 /* EPOS will reset communication after 500ms of inactivity */
 
 /*! \brief try NTRY times to read one byte from EPOS, the give up */
 #define NTRY      5
 /*! \brief sleep TRYSLEEP usec between read() from EPOS, if no data available */
-#define TRYSLEEP  (unsigned int)1e5 
-
-
-
+#define TRYSLEEP  (unsigned int)1e5
 
 /* all high-level functions return <0 in case of error */
 
-/*! create new EPOS object */
-epos_t *newEPOS(const char *device);
-/*! delete EPOS object */
-int deleteEPOS(epos_t *epos);
+class epos
+{
+	private:
+		/* Implement read functions defined in EPOS Communication Guide, 6.3.1 */
+		/* [ one simplification: Node-ID is always 0] */
+
+		const std::string device;
+		struct termios options;
+		DWORD E_error; ///< EPOS global error status
+		int ep; ///< (-1) EPOS file descriptor
+		char gMarker; ///< (0) for internal handling
+
+		/*! \brief Read Object from EPOS memory, firmware definition 6.3.1.1*/
+		int ReadObject(WORD index, BYTE subindex, WORD **answer );
+
+		#if 0
+		/*! \brief Read Object from EPOS memory, firmware definition 6.3.1.2 */
+		int InitiateSegmentedRead(WORD index, BYTE subindex );
+
+		/*! \brief int SegmentRead(WORD **ptr) - read data segment of the object
+		   initiated with 'InitiateSegmentedRead()'
+		*/
+		int SegmentRead(WORD **ptr);
+		#endif
+
+		/* 6.3.2:  write functions */
+
+		/*! 6.3.2.1 WriteObject()
+
+		   WORD *data is a pointer to a 2 WORDs array (== 4 BYTES)
+		   holding data to transmit
+		*/
+		int WriteObject(WORD index, BYTE subindex, const WORD data[2]);
+
+		/* helper functions below */
+
+		/*! \brief  write a single BYTE to EPOS */
+		int writeBYTE(const BYTE *c);
+
+		/*! \brief  write a single WORD to EPOS */
+		int writeWORD(const WORD *w);
+
+		/*! \brief  read a single BYTE from EPOS, timeout implemented */
+		int readBYTE(BYTE *c);
+
+		/*! \brief  read a single WORD from EPOS, timeout implemented */
+		int readWORD(WORD *w);
+
+		/*! \brief  send command to EPOS, taking care of all neccessary 'ack' and
+		   checksum tests*/
+		int sendCom(WORD *frame);
+
+		/*! \brief  int readAnswer(WORD **ptr) - read an answer frame from EPOS */
+		int readAnswer(WORD **ptr);
+
+		/*! \brief Checksum calculation;
+		copied from EPOS Communication Guide, p.8
+		 */
+		WORD CalcFieldCRC(const WORD *pDataArray, WORD numberOfWords);
+
+		/*! \brief exit(-1) if ptr == NULL */
+		void checkPtr(const void* ptr);
+
+		/*! \brief compare two 16bit bitmasks, return 1 (true) or 0 (false) */
+		int bitcmp(WORD a, WORD b);
+
+	public:
+		/*! create new EPOS object */
+		epos(const std::string & _device);
+
+		/*! delete EPOS object */
+		~epos();
+
+		/*! open the connection to EPOS */
+		int openEPOS(tcflag_t br);
+
+		/*! close the connection to EPOS */
+		int closeEPOS();
+		/*! check if the connection to EPOS is alive */
+		int checkEPOS();
+
+		/*! \brief check global variable E_error for EPOS error code */
+		int checkEPOSerror();
+
+		/*! \brief check EPOS status, return state according to firmware spec 8.1.1 */
+		int checkEPOSstate();
+		/*! \brief pretty-print EPOS state */
+		int printEPOSstate();
+		/*! \brief change EPOS state   ==> firmware spec 8.1.3 */
+		int changeEPOSstate(int state);
+
+		/*! \brief example from EPOS com. guide: ask EPOS for software version
+
+		 firmware spec 14.1.33
+		 ** returns software version as HEX **
+
+		 */
+		int readSWversion();
+
+		/*! \brief ask for device name,
+		 device name is placed in 'name' (string must be big enough, NO CHECKING!!)
+		 */
+		int readDeviceName(char *name);
+
+		/*! \brief ask for RS232 timeout; firmware spec 14.1.35 */
+		int readRS232timeout();
+
+		/*! \brief read digital input polarity mask */
+		int readDInputPolarity(WORD* w);
+
+		/*! \brief set home switch polarity -- firmware spec 14.1.47 */
+		int setHomePolarity(int pol);
+
+		/*! \brief read Statusword; 14.1.58 */
+		int readStatusword(WORD *eposStatus);
+		/*! \brief pretty-print Statusword */
+		int printEPOSstatusword(WORD statusword);
+
+		/*! \brief read EPOS control word (firmware spec 14.1.57) */
+		int readControlword(WORD *w);
+		/*! \brief pretty-print Controlword */
+		int printEPOScontrolword(WORD controlword);
+
+		/*! \brief set EPOS mode of operation -- 14.1.59 */
+		int setOpMode(int OpMode);
+
+		/*! \brief read and returns  EPOS mode of operation -- 14.1.60
+		 here, RETURN(0) MEANS ERROR!
+		 '-1' is a valid OpMode, but 0 is not!
+		 */
+		int readOpMode();
+
+		/*! \brief read actual position; 14.1.61 */
+		int readDemandPosition(long *val);
+		/*! \brief read actual position; 14.1.62 */
+		int readActualPosition(long *val);
+
+		/*! \brief read position window; 14.1.64 */
+		int readPositionWindow(unsigned long int *value);
+		/*! \brief write position window; 14.1.64 */
+		int writePositionWindow(unsigned long int value);
+
+		/*! < by Martí Morta (mmorta@iri.upc.edu) > */
+
+		/*! \brief read position window time; 14.1.67 */
+		int readPositionWindowTime(unsigned int *time);
+		/*! \brief read position window time; 14.1.67 */
+		int writePositionWindowTime(unsigned int val);
+
+		int readPositionSoftwareLimits(long *val, long *val2);
+		int writePositionSoftwareLimits(long val, long val2);
+
+		int writePositionProfileVelocity(unsigned long int vel);
+		int writePositionProfileAcceleration(unsigned long int acc);
+		int writePositionProfileDeceleration(unsigned long int dec);
+		int writePositionProfileQuickStopDeceleration(unsigned long int qsdec);
+		int writePositionProfileMaxVelocity(unsigned long int maxvel);
+		int writePositionProfileType(int type);
+
+		int readPositionProfileVelocity(unsigned long int *val);
+		int readPositionProfileAcceleration(unsigned long int *val);
+		int readPositionProfileDeceleration(unsigned long int *val);
+		int readPositionProfileQuickStopDeceleration(unsigned long int *val);
+		int readPositionProfileMaxVelocity(unsigned long int *val);
+		int readPositionProfileType(int *val);
+
+		int readVelocityNotationIndex(int *index);
+		int writeVelocityNotationIndex(unsigned int val);
+
+		int readSensorPulses(unsigned int *pulse);
+		int readSensorType(unsigned int *type);
+		int readSensorPolarity(unsigned int *polaritat);
+		int writeSensorType(unsigned int val);
+		int writeSensorPulses(unsigned int val);
+		int writeSensorPolarity(unsigned int val);
+
+		int readRS232Baudrate(unsigned int *type);
+		int writeRS232Baudrate(unsigned int val);
+
+		int readP(int *val);
+		int readI(int *val);
+		int readD(int *val);
+		int readVFF(unsigned int *val);
+		int readAFF(unsigned int *val);
+		int writeP(int val);
+		int writeI(int val);
+		int writeD(int val);
+		int writeVFF(unsigned int val);
+		int writeAFF(unsigned int val);
+
+		int readPcurrent(int *val);
+		int readIcurrent(int *val);
+		int writePcurrent(int val);
+		int writeIcurrent(int val);
+		int saveParameters();
+
+		int readHomePosition(long int *val);
+		int writeHomePosition(long int val);
+
+		int readMotorContinousCurrentLimit(unsigned int *cur);
+		int writeMotorContinousCurrentLimit(unsigned int cur);
+		int readMotorOutputCurrentLimit(unsigned int *cur);
+		int writeMotorOutputCurrentLimit(unsigned int cur);
+		int readMotorPolePair(unsigned int *cur);
+		int writeMotorPolePair(unsigned int cur);
+		int readMotorMaxSpeedCurrent(unsigned int *cur);
+		int writeMotorMaxSpeedCurrent(unsigned int cur);
+		int readMotorThermalConstant(unsigned int *cur);
+		int writeMotorThermalConstant(unsigned int cur);
+
+		/*! < by Martí Morta /> */
+
+		/*! \brief read actual position; 14.1.67 */
+		int readDemandVelocity(long *val);
+		/*! \brief read actual position; 14.1.68 */
+		int readActualVelocity(long *val);
+
+		/*! \brief read actual current; 14.1.69 */
+		int readActualCurrent(short *val);
+
+		/*! \brief read target position; 14.1.70 */
+		int readTargetPosition(long *val);
+
+		/*! \brief does a homing move. Give homing mode (see firmware 9.3) and start
+		 position */
+		int doHoming(int method, long int start);
+
+		/*! \brief set OpMode to ProfilePosition and make relative movement */
+		int moveRelative(long int steps);
+		/*! \brief set OpMode to ProfilePosition and make absolute movement */
+		int moveAbsolute(long int steps);
+
+		/*! \brief reads position, velocity and current and displays them in an
+		 endless loop. Returns after target position has been reached */
+		int monitorStatus();
+		/*! \brief as monitorStatus(), but also waits for Homing Attained' signal */
+		int monitorHomingStatus();
+
+		/*! \brief waits for positoning to finish, argument is timeout in
+		 seconds. give timeout==0 to disable timeout */
+		int waitForTarget(unsigned int t);
 
 
-/*! open the connection to EPOS */
-int openEPOS(epos_t *epos, tcflag_t br);
-/*! close the connection to EPOS */
-int closeEPOS(epos_t *epos);
-/*! check if the connection to EPOS is alive */
-int checkEPOS(epos_t *epos);
-
-
-/*! \brief check global variable E_error for EPOS error code */
-int checkEPOSerror(epos_t *epos);
-
-/*! \brief check EPOS status, return state according to firmware spec 8.1.1 */
-int checkEPOSstate(epos_t *epos);
-/*! \brief pretty-print EPOS state */
-int printEPOSstate(epos_t *epos);
-/*! \brief change EPOS state   ==> firmware spec 8.1.3 */
-int changeEPOSstate(epos_t *epos, int state);
-
-
-
-/*! \brief example from EPOS com. guide: ask EPOS for software version 
-
-firmware spec 14.1.33
-** returns software version as HEX **
-
-*/
-int readSWversion(epos_t *epos);
-
-
-/*! \brief ask for device name,  
-   device name is placed in 'name' (string must be big enough, NO CHECKING!!)
-*/
-int readDeviceName(epos_t *epos, char *name);
-
-
-/*! \brief ask for RS232 timeout; firmware spec 14.1.35 */
-int readRS232timeout(epos_t *epos);
-
-/*! \brief read digital input polarity mask */
-int readDInputPolarity(epos_t *epos, WORD* w);
-
-/*! \brief set home switch polarity -- firmware spec 14.1.47 */
-int setHomePolarity(epos_t *epos, int pol);
-
-
-
-/*! \brief read Statusword; 14.1.58 */
-int readStatusword(epos_t *epos, WORD *eposStatus);
-/*! \brief pretty-print Statusword */
-int printEPOSstatusword(WORD statusword);
-
-
-
-/*! \brief read EPOS control word (firmware spec 14.1.57) */
-int readControlword(epos_t *epos, WORD *w);
-/*! \brief pretty-print Controlword */
-int printEPOScontrolword(WORD controlword);
-
-
-/*! \brief set EPOS mode of operation -- 14.1.59 */
-int setOpMode(epos_t *epos, int OpMode);
-
-/*! \brief read and returns  EPOS mode of operation -- 14.1.60 
-here, RETURN(0) MEANS ERROR! 
-'-1' is a valid OpMode, but 0 is not!
-*/
-int readOpMode(epos_t *epos);
-
-
-/*! \brief read actual position; 14.1.61 */
-int readDemandPosition(epos_t *epos, long *val);
-/*! \brief read actual position; 14.1.62 */
-int readActualPosition(epos_t *epos, long *val);
-
-/*! \brief read position window; 14.1.64 */
-int readPositionWindow(epos_t *epos, unsigned long int *value);
-/*! \brief write position window; 14.1.64 */
-int writePositionWindow(epos_t *epos, unsigned long int value);
-
-
-
-/*! < by Martí Morta (mmorta@iri.upc.edu) > */
-
-
-/*! \brief read position window time; 14.1.67 */
-int readPositionWindowTime(epos_t *epos, unsigned int *time);
-/*! \brief read position window time; 14.1.67 */
-int writePositionWindowTime(epos_t *epos, unsigned int val);
-
-int readPositionSoftwareLimits(epos_t *epos, long *val,long *val2);
-int writePositionSoftwareLimits(epos_t *epos, long val,long val2);
-
-int writePositionProfileVelocity(epos_t *epos, unsigned long int vel);
-int writePositionProfileAcceleration(epos_t *epos, unsigned long int acc);
-int writePositionProfileDeceleration(epos_t *epos, unsigned long int dec);
-int writePositionProfileQuickStopDeceleration(epos_t *epos, unsigned long int qsdec);
-int writePositionProfileMaxVelocity(epos_t *epos, unsigned long int maxvel);
-int writePositionProfileType(epos_t *epos, int type);
-
-int readPositionProfileVelocity(epos_t *epos, unsigned long int *val);
-int readPositionProfileAcceleration(epos_t *epos, unsigned long int *val);
-int readPositionProfileDeceleration(epos_t *epos, unsigned long int *val);
-int readPositionProfileQuickStopDeceleration(epos_t *epos, unsigned long int *val);
-int readPositionProfileMaxVelocity(epos_t *epos, unsigned long int *val);
-int readPositionProfileType(epos_t *epos, int *val);
-
-int readVelocityNotationIndex(epos_t *epos, int *index);
-int writeVelocityNotationIndex(epos_t *epos, unsigned int val);
-
-int readSensorPulses(epos_t *epos, unsigned int *pulse);
-int readSensorType(epos_t *epos, unsigned int *type);
-int readSensorPolarity(epos_t *epos, unsigned int *polaritat);
-int writeSensorType(epos_t *epos, unsigned int val);
-int writeSensorPulses(epos_t *epos, unsigned int val);
-int writeSensorPolarity(epos_t *epos, unsigned int val);
-
-int readRS232Baudrate(epos_t *epos, unsigned int *type);
-int writeRS232Baudrate(epos_t *epos, unsigned int val);
-
-int readP(epos_t *epos, int *val);
-int readI(epos_t *epos, int *val);
-int readD(epos_t *epos, int *val);
-int readVFF(epos_t *epos, unsigned int *val);
-int readAFF(epos_t *epos, unsigned int *val);
-int writeP(epos_t *epos, int val);
-int writeI(epos_t *epos, int val);
-int writeD(epos_t *epos, int val);
-int writeVFF(epos_t *epos, unsigned int val);
-int writeAFF(epos_t *epos, unsigned int val);
-
-int readPcurrent(epos_t *epos, int *val);
-int readIcurrent(epos_t *epos, int *val);
-int writePcurrent(epos_t *epos, int val);
-int writeIcurrent(epos_t *epos, int val);
-int saveParameters(epos_t *epos);
-
-int readHomePosition(epos_t *epos, long int *val);
-int writeHomePosition(epos_t *epos, long int val);
-
-int readMotorContinousCurrentLimit(epos_t *epos, unsigned int *cur);
-int writeMotorContinousCurrentLimit(epos_t *epos, unsigned int cur);
-int readMotorOutputCurrentLimit(epos_t *epos, unsigned int *cur);
-int writeMotorOutputCurrentLimit(epos_t *epos, unsigned int cur);
-int readMotorPolePair(epos_t *epos, unsigned int *cur);
-int writeMotorPolePair(epos_t *epos, unsigned int cur);
-int readMotorMaxSpeedCurrent(epos_t *epos, unsigned int *cur);
-int writeMotorMaxSpeedCurrent(epos_t *epos, unsigned int cur);
-int readMotorThermalConstant(epos_t *epos, unsigned int *cur);
-int writeMotorThermalConstant(epos_t *epos, unsigned int cur);
-
-/*! < by Martí Morta /> */
-
-
-/*! \brief read actual position; 14.1.67 */
-int readDemandVelocity(epos_t *epos, long *val);
-/*! \brief read actual position; 14.1.68 */
-int readActualVelocity(epos_t *epos, long *val);
-
-/*! \brief read actual current; 14.1.69 */
-int readActualCurrent(epos_t *epos, short *val);
-
-/*! \brief read target position; 14.1.70 */
-int readTargetPosition(epos_t *epos, long *val);
-
-
-
-/*! \brief does a homing move. Give homing mode (see firmware 9.3) and start
-   position */
-int doHoming(epos_t *epos, int method, long int start);
-
-
-/*! \brief set OpMode to ProfilePosition and make relative movement */
-int moveRelative(epos_t *epos, long int steps);
-/*! \brief set OpMode to ProfilePosition and make absolute movement */
-int moveAbsolute(epos_t *epos, long int steps);
-
-/*! \brief reads position, velocity and current and displays them in an
-   endless loop. Returns after target position has been reached */
-int monitorStatus(epos_t *epos);
-/*! \brief as monitorStatus(), but also waits for Homing Attained' signal */
-int monitorHomingStatus(epos_t *epos);
-
-/*! \brief waits for positoning to finish, argument is timeout in
-   seconds. give timeout==0 to disable timeout */
-int waitForTarget(epos_t *epos, unsigned int t);
-
+};
 
 #endif
