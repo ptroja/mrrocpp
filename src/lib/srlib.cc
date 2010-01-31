@@ -159,13 +159,41 @@ int sr::send_package(void) {
 		return send_package_to_sr(sr_message);
 	} else
 	{
-		boost::mutex::scoped_lock lock(sr_mutex);
-		cb.push_back(sr_message);
-		set_new_msg();
+		put_one_msg(sr_message);
 
 		return 1;
 	}
 }
+
+
+void sr::put_one_msg(const lib::sr_package_t& new_msg) {
+
+	boost::mutex::scoped_lock lock(mtx);
+	cb.push_back(new_msg);
+
+	return;
+}
+
+void sr::get_one_msg(lib::sr_package_t& new_msg) {
+	boost::mutex::scoped_lock lock(mtx);
+	new_msg = cb.front();
+	cb.pop_front();
+
+	return;
+}
+
+bool sr::buffer_empty() // sprawdza czy bufor jest pusty
+{
+	boost::mutex::scoped_lock lock(mtx);
+	return cb.empty();
+}
+
+
+
+
+
+
+
 
 int sr::set_new_msg() // podniesienie semafora
 {
@@ -567,15 +595,12 @@ void sr::operator()()
 
 		if (wait_for_new_msg() == 0) { // by Y jesli mamy co wypisywac
 
-			while (!cb.empty())
+			while (!buffer_empty())
 			{
 				sr_package_t local_message;
 
 				{
-					boost::mutex::scoped_lock lock(sr_mutex);
-
-					local_message = cb.front();
-					cb.pop_front();
+					get_one_msg(local_message);
 				}
 				try
 				{

@@ -66,6 +66,9 @@ class sr: public boost::noncopyable
 {
 private:
 
+	void put_one_msg(const lib::sr_package_t& new_msg); // podniesienie semafora
+	void get_one_msg(lib::sr_package_t& new_msg); // podniesienie semafora
+	bool buffer_empty(); // czy bufor cykliczny jest pusty
 
 	boost::mutex srMutex; //! one-thread a time access mutex
 	sem_t sem;
@@ -82,7 +85,7 @@ private:
 	void operator()();
 
 	boost::circular_buffer <lib::sr_package_t> cb;
-	boost::mutex sr_mutex;
+	boost::mutex mtx;
 
 	virtual void interpret() = 0;
 
