@@ -41,6 +41,7 @@
 #include <stdlib.h>
 #include <stdint.h>  /* int types with given size */
 #include <math.h>
+#include <sys/select.h>
 
 #include "epos.h"
 
@@ -1431,6 +1432,32 @@ void epos::writeWORD(WORD w)
 BYTE epos::readBYTE()
 {
 	for (int i = 0; i < NTRY; i++) {
+
+		// read-ready file descriptor set
+		fd_set rfds;
+
+		// zero the set
+		FD_ZERO(&rfds);
+
+		// add ep to the set
+		FD_SET(ep, &rfds);
+
+		// EPOS gives timeout after 500ms timeout 500ms
+		struct timeval tv;
+		tv.tv_sec = 0;
+		tv.tv_usec = TRYSLEEP;
+
+		int s = select(ep+1, &rfds, NULL, NULL, &tv);
+		if(s < 0) {
+			throw epos_error() << errno_call("select") << errno_code(errno);
+		} else if (s == 0) {
+			continue;
+		}
+
+		if(!FD_ISSET(ep, &rfds)) {
+			throw epos_error() << reason("EPOS filedescriptor not in read-ready set");
+		}
+
 		BYTE c;
 		int n = read(ep, &c, 1);
 		int errsv = errno;
@@ -1452,7 +1479,6 @@ BYTE epos::readBYTE()
 				fflush(stdout);
 				gMarker = 0;
 			}
-			usleep(TRYSLEEP); /* sleep 100ms; EPOS gives timeout after 500ms*/
 		}
 	}
 
@@ -1463,8 +1489,33 @@ BYTE epos::readBYTE()
 /*  read a single WORD from EPOS, timeout implemented */
 WORD epos::readWORD()
 {
-
 	for (int i = 0; i < NTRY; i++) {
+
+		// read-ready file descriptor set
+		fd_set rfds;
+
+		// zero the set
+		FD_ZERO(&rfds);
+
+		// add ep to the set
+		FD_SET(ep, &rfds);
+
+		// EPOS gives timeout after 500ms timeout 500ms
+		struct timeval tv;
+		tv.tv_sec = 0;
+		tv.tv_usec = TRYSLEEP;
+
+		int s = select(ep+1, &rfds, NULL, NULL, &tv);
+		if(s < 0) {
+			throw epos_error() << errno_call("select") << errno_code(errno);
+		} else if (s == 0) {
+			continue;
+		}
+
+		if(!FD_ISSET(ep, &rfds)) {
+			throw epos_error() << reason("EPOS filedescriptor not in read-ready set");
+		}
+
 		WORD w;
 		int n = read(ep, &w, sizeof(WORD));
 		int errsv = errno;
@@ -1486,7 +1537,6 @@ WORD epos::readWORD()
 				fflush(stdout);
 				gMarker = 0;
 			}
-			usleep(TRYSLEEP); /* sleep 100ms; EPOS gives timeout after 500ms*/
 		}
 	}
 
