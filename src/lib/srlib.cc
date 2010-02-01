@@ -125,9 +125,6 @@ multi_thread(_multi_thread), cb(SR_BUFFER_LENGHT)
 	}
 
 	if (multi_thread) {
-		sem_init(&sem, 0, 0);
-		sem_init(&queue_empty_sem, 0, 0);
-		set_queue_empty();
 		thread_id = new boost::thread(boost::bind(&sr::operator(), this));
 	}
 } // end:  sr::sr()
