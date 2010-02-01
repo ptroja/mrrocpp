@@ -18,7 +18,7 @@
 # Should be modified only by developers not by users
 HOMEDIR = .
 CLEANDIRS = src lib lib.linux
-CLEANEDFILES = ./bin/* ./bin.linux/* ./msr/* ./logs/* ./html/*
+CLEANEDFILES = ./bin/* ./bin.linux/* ./msr/* ./logs/* ./html/* ./latex/*
 INSTALLDIRS = src
 #======================================================#	
 .PHONY: all distclean clean install dist
