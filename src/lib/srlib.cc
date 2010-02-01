@@ -161,8 +161,8 @@ int sr::send_package(void) {
 	}
 }
 
-void sr::put_one_msg(const lib::sr_package_t& new_msg) {
-
+void sr::put_one_msg(const lib::sr_package_t& new_msg)
+{
 	boost::unique_lock<boost::mutex> lock(mtx);
 	cb.push_back(new_msg);
 
@@ -189,13 +189,11 @@ bool sr::buffer_empty() // sprawdza czy bufor jest pusty
 
 void sr::wait_for_new_msg() // oczekiwanie na semafor
 {
-
 	boost::unique_lock<boost::mutex> lock(mtx);
 
 	while (!has_command) {
 		cond.wait(lock);
 	}
-
 }
 
 /* -------------------------------------------------------------------- */
