@@ -82,59 +82,7 @@ void model::i2mp_transform(lib::MotorArray & local_desired_motor_pos_new, lib::J
 } //: i2mp_transform
 
 
-/* ------------------------------------------------------------------------
-  Zadanie proste kinematyki dla tasmociagu.
-  Przeliczenie wspolrzednych wewnetrznych na wspolrzedne zewnetrzne.
 
-  Wejscie:
-  * current_joints[6] - wspolrzedne wewnetrzne robota (kolejno d0, q1, q2, ...)
-  * local_tool[4][3] - macierz przeksztacenia jednorodnego (MPJ)
-		opisujca przeksztalcenie zwiazane z narzedziem.
-
-  Wyjscie:
-  * current_end_effector_frame[4][3] - macierz przeksztacenia jednorodnego (MPJ)
-		opisujca aktualne poloenie i orientacje koncowki (narzedzia) w ukladzie bazowym.
- ------------------------------------------------------------------------ */
-void model::direct_kinematics_transform(const lib::JointArray & local_current_joints, lib::Homog_matrix& local_current_end_effector_frame)
-{
-
-  // Proste zadanie kinematyki.
-  (local_current_end_effector_frame)[0][0] = 0.0;
-  (local_current_end_effector_frame)[0][1] = 0.0;
-  (local_current_end_effector_frame)[0][2] = 0.0;
-  (local_current_end_effector_frame)[0][3] = local_current_joints[0];
-  (local_current_end_effector_frame)[1][0] = 0.0;
-  (local_current_end_effector_frame)[1][1] = 0.0;
-  (local_current_end_effector_frame)[1][2] = 0.0;
-  (local_current_end_effector_frame)[1][3] = 0.0;
-  (local_current_end_effector_frame)[2][0] = 0.0;
-  (local_current_end_effector_frame)[2][1] = 0.0;
-  (local_current_end_effector_frame)[2][2] = 0.0;
-  (local_current_end_effector_frame)[2][3] = 0.0;
-
-  // Obliczenia zwiazane z przeksztalceniami do globalnego ukladu odniesienia.
-
-} //:: direct_kinematics_transform()
-
-
-/* ------------------------------------------------------------------------
-  Zadanie odwrotne kinematyki dla tasmociagu.
-  Przeliczenie wspolrzednych zewnetrznych na wspolrzedne wewnetrzne.
-
-  Wejscie:
-  * local_current_joints - obecne (w rzeczywistosci poprzednie) wspolrzedne wewnetrzne robota (kolejno d0, q1, q2, ...)
-  * local_desired_end_effector_frame - macierz przeksztacenia jednorodnego (MPJ)
-		opisujca zadane poloenie i orientacje koncowki (narzedzia) w ukladzie bazowym.
-  * local_tool[4][3] - macierz przeksztacenia jednorodnego (MPJ)
-		opisujca przeksztalcenie zwiazane z narzedziem.
-
-  Wyjscie:
-  * local_desired_joints - wyliczone wspolrzedne wewnetrzne robota (kolejno d0, q1, q2, ...)
- ------------------------------------------------------------------------ */
-void model::inverse_kinematics_transform(lib::JointArray & local_desired_joints, lib::JointArray & local_current_joints, const lib::Homog_matrix& local_desired_end_effector_frame)
-{
-    local_desired_joints[0] = (local_desired_end_effector_frame)[0][3];
-} //: inverse_kinematics_transform()
 
 } // namespace conveyor
 } // namespace kinematic

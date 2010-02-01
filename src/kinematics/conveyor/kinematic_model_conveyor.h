@@ -44,12 +44,6 @@ public:
   // Przeliczenie wspolrzednych wewnetrznych na polozenia walow silnikow.
   virtual void i2mp_transform(lib::MotorArray & local_desired_motor_pos_new, lib::JointArray & local_desired_joints);
 
-  // Rozwiazanie prostego zagadnienia kinematyki.
-  virtual void direct_kinematics_transform(const lib::JointArray & local_current_joints, lib::Homog_matrix& local_current_end_effector_frame);
-
-  // Rozwiazanie odwrotnego zagadnienia kinematyki.
-  virtual void inverse_kinematics_transform(lib::JointArray & local_desired_joints, lib::JointArray & local_current_joints, const lib::Homog_matrix& local_desired_end_effector_frame);
-
 
 };//: kinematic_model_conveyor;
 

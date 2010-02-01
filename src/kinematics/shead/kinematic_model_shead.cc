@@ -15,11 +15,11 @@
 #include "lib/com_buf.h"
 
 // Klasa kinematic_model_irp6m_with_wrist.
-#include "kinematics/smb/kinematic_model_smb.h"
+#include "kinematics/smb/kinematic_model_shead.h"
 
 namespace mrrocpp {
 namespace kinematics {
-namespace smb {
+namespace shead {
 
 model::model(void)
 {
