@@ -32,7 +32,8 @@ all: ${BINARIES}
 SENSOR_OBJ=
 ifneq ($(BUILD_TARGET), linux)
 ifdef DOCENT_SENSOR
-	SENSOR_OBJ := ../ati3084MS/ati3084MS.a
+	SENSOR_OBJ := ../ati3084/ati3084.a
+	#SENSOR_OBJ := ../ati3084MS/ati3084MS.a
 else
 	SENSOR_OBJ := ../ati3084/ati3084.a
 endif

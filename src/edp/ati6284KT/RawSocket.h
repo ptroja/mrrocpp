@@ -1,7 +1,7 @@
 #include <string>
 #include <cstdlib>
 #include <cstring>
-#include <cstdint>
+#include <stdint.h>
 
 #include <signal.h>
 #include <net/if_dl.h>

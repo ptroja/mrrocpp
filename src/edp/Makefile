@@ -16,7 +16,7 @@ SOURCEDIRS = common \
 endif
 
 ifdef DOCENT_SENSOR
-	SOURCEDIRS += ati3084MS
+	# SOURCEDIRS += ati3084MS
 endif
 
 CLEANDIRS = ${SOURCEDIRS}
@@ -35,7 +35,7 @@ spkm: common
 
 IRP6ONT_DEPS = common ati3084 ati3084MK ati6284 ati6284KT
 ifdef DOCENT_SENSOR
-	IRP6ONT_DEPS:=$(IRP6ONT_DEPS) ati3084MS
+	# IRP6ONT_DEPS:=$(IRP6ONT_DEPS) ati3084MS
 endif
 
 irp6_on_track: $(IRP6ONT_DEPS)
@@ -44,7 +44,7 @@ speaker: common
 
 IRP6PST_DEPS = common ati3084 ati3084MK ati6284 ati6284KT
 ifdef DOCENT_SENSOR
-	IRP6PST_DEPS:= $(IRP6ONT_DEPS) ati3084MS
+	# IRP6PST_DEPS:= $(IRP6ONT_DEPS) ati3084MS
 endif
 
 irp6_postument: $(IRP6ONT_DEPS)
