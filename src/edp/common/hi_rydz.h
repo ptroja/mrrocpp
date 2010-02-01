@@ -99,10 +99,10 @@ typedef struct _irq_data {
 class hardware_interface
 {
 public:
-	manip_and_conv_effector &master;
+	motor_driven_effector &master;
 
 	int max_current[MAX_SERVOS_NR];
-    hardware_interface (manip_and_conv_effector &_master,
+    hardware_interface (motor_driven_effector &_master,
     		int _hi_irq_real,
     		unsigned short int _hi_intr_freq_divider,
     		unsigned int _hi_intr_timeout_high,

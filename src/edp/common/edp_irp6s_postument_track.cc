@@ -45,7 +45,7 @@ namespace common {
 
 void irp6s_postument_track_effector::master_order(MT_ORDER nm_task, int nm_tryb)
 {
-	manip_and_conv_effector::multi_thread_master_order(nm_task, nm_tryb);
+	motor_driven_effector::multi_thread_master_order(nm_task, nm_tryb);
 }
 
 /*--------------------------------------------------------------------------*/
@@ -197,7 +197,7 @@ void irp6s_postument_track_effector::create_threads()
 		new boost::thread(*edp_vsp_obj);
 	}
 #endif
-	manip_and_conv_effector::hi_create_threads();
+	motor_driven_effector::hi_create_threads();
 }
 
 /*--------------------------------------------------------------------------*/
@@ -556,7 +556,7 @@ void irp6s_postument_track_effector::get_arm_position(bool read_hardware, lib::c
 	lib::JointArray desired_joints_tmp(number_of_servos); // Wspolrzedne wewnetrzne -
 
 	if (read_hardware) {
-		manip_and_conv_effector::get_arm_position_read_hardware_sb();
+		motor_driven_effector::get_arm_position_read_hardware_sb();
 
 		desired_motor_pos_new[gripper_servo_nr] = desired_motor_pos_old[gripper_servo_nr]
 				= current_motor_pos[gripper_servo_nr];
@@ -596,10 +596,10 @@ void irp6s_postument_track_effector::get_arm_position(bool read_hardware, lib::c
 
 			break;
 		default: // blad: nieznany sposob zapisu wspolrzednych koncowki
-			manip_and_conv_effector::get_arm_position_get_arm_type_switch(instruction);
+			motor_driven_effector::get_arm_position_get_arm_type_switch(instruction);
 	}
 
-	manip_and_conv_effector::get_arm_position_set_reply_step();
+	motor_driven_effector::get_arm_position_set_reply_step();
 
 	if (instruction.interpolation_type == lib::TCIM) {
 		lib::Homog_matrix current_frame_wo_offset = return_current_frame(WITHOUT_TRANSLATION);

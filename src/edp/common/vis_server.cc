@@ -20,7 +20,7 @@ namespace mrrocpp {
 namespace edp {
 namespace common {
 
-vis_server::vis_server(manip_and_conv_effector &_master) :
+vis_server::vis_server(motor_driven_effector &_master) :
 	master (_master), thread_id(NULL)
 {
 	thread_id = new boost::thread(boost::bind(&vis_server::operator(), this));

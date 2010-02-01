@@ -106,7 +106,7 @@ void servo_buffer::get_all_positions(void)
 } // namespace irp6p
 namespace common {
 
-servo_buffer* return_created_servo_buffer(manip_and_conv_effector &_master)
+servo_buffer* return_created_servo_buffer(motor_driven_effector &_master)
 {
 	return new irp6p::servo_buffer((irp6p::effector &) (_master));
 }

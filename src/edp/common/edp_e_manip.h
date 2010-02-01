@@ -28,7 +28,7 @@ namespace edp {
 namespace common {
 
 // base class for EDP robots with manipulators
-class manip_effector: public common::manip_and_conv_effector
+class manip_effector: public common::motor_driven_effector
 {
 
 protected:

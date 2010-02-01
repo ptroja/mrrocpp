@@ -192,7 +192,7 @@ void  hardware_interface::init()
 }
 
 // Konstruktor
-hardware_interface::hardware_interface (manip_and_conv_effector &_master,
+hardware_interface::hardware_interface (motor_driven_effector &_master,
 		int _hi_irq_real,
 		unsigned short int _hi_intr_freq_divider,
 		unsigned int _hi_intr_timeout_high,

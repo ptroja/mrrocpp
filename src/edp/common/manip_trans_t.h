@@ -17,17 +17,17 @@ namespace mrrocpp {
 namespace edp {
 namespace common {
 
-class manip_and_conv_effector;
+class motor_driven_effector;
 
 class manip_trans_t : public trans_t
 {
 private:
-    manip_and_conv_effector &master;
+    motor_driven_effector &master;
 
 public:
     void operator()();
 
-    manip_trans_t(manip_and_conv_effector& _master);
+    manip_trans_t(motor_driven_effector& _master);
     ~manip_trans_t();
 };
 

@@ -35,7 +35,7 @@ namespace irp6m {
 /*--------------------------------------------------------------------------*/
 void effector::create_threads()
 {
-	manip_and_conv_effector::hi_create_threads();
+	motor_driven_effector::hi_create_threads();
 }
 
 
@@ -46,7 +46,7 @@ common::servo_buffer* effector::return_created_servo_buffer()
 
 void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
 {
-	manip_and_conv_effector::multi_thread_master_order(nm_task, nm_tryb);
+	motor_driven_effector::multi_thread_master_order(nm_task, nm_tryb);
 }
 
 // Konstruktor.
@@ -102,14 +102,14 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 	//   printf(" GET ARM\n");
 
 	if (read_hardware) {
-		manip_and_conv_effector::get_arm_position_read_hardware_sb();
+		motor_driven_effector::get_arm_position_read_hardware_sb();
 	}
 
 	// okreslenie rodzaju wspolrzednych, ktore maja by odczytane
 	// oraz adekwatne wypelnienie bufora odpowiedzi
 	common::manip_effector::get_arm_position_get_arm_type_switch(instruction);
 
-	manip_and_conv_effector::get_arm_position_set_reply_step();
+	motor_driven_effector::get_arm_position_set_reply_step();
 }
 /*--------------------------------------------------------------------------*/
 

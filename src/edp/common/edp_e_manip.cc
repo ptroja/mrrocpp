@@ -40,7 +40,7 @@ bool manip_effector::servo_joints_and_frame_actualization_and_upload(void)
 {
 	static int catch_nr = 0;
 	bool ret_val=true;
-	if (!(manip_and_conv_effector::servo_joints_and_frame_actualization_and_upload()))
+	if (!(motor_driven_effector::servo_joints_and_frame_actualization_and_upload()))
 	{
 		ret_val= false;
 	}
@@ -109,7 +109,7 @@ bool manip_effector::servo_joints_and_frame_actualization_and_upload(void)
 
 /*--------------------------------------------------------------------------*/
 manip_effector::manip_effector(lib::configurator &_config, lib::robot_name_t l_robot_name) :
-	manip_and_conv_effector(_config, l_robot_name)
+	motor_driven_effector(_config, l_robot_name)
 {
 }
 
@@ -129,7 +129,7 @@ void manip_effector::get_arm_position_get_arm_type_switch(lib::c_buffer &instruc
 			current_end_effector_frame.get_frame_tab(reply.arm.pf_def.arm_frame);
 			break;
 		default: // blad: nieznany sposob zapisu wspolrzednych koncowki
-			manip_and_conv_effector::get_arm_position_get_arm_type_switch(instruction);
+			motor_driven_effector::get_arm_position_get_arm_type_switch(instruction);
 	}
 
 }
@@ -172,7 +172,7 @@ void manip_effector::set_rmodel(lib::c_buffer &instruction)
 
 			break;
 		default: // blad: nie istniejaca specyfikacja modelu robota
-			manip_and_conv_effector::set_rmodel(instruction);
+			motor_driven_effector::set_rmodel(instruction);
 	}
 }
 /*--------------------------------------------------------------------------*/
@@ -196,7 +196,7 @@ void manip_effector::get_rmodel(lib::c_buffer &instruction)
 
 			break;
 		default: // blad: nie istniejaca specyfikacja modelu robota
-			manip_and_conv_effector::get_rmodel(instruction);
+			motor_driven_effector::get_rmodel(instruction);
 	}
 }
 /*--------------------------------------------------------------------------*/
@@ -276,14 +276,14 @@ void manip_effector::force_msr_download(lib::Ft_vector& l_vector)
 // Synchronizacja robota.
 void manip_effector::synchronise()
 {
-	manip_and_conv_effector::synchronise();
+	motor_driven_effector::synchronise();
 	get_current_kinematic_model()->i2e_transform(current_joints, current_end_effector_frame);
 }
 
 //   sprawdza stan robota
 void manip_effector::get_controller_state(lib::c_buffer &instruction)
 {
-	manip_and_conv_effector::get_controller_state(instruction);
+	motor_driven_effector::get_controller_state(instruction);
 	if (is_synchronised()) {
 		get_current_kinematic_model()->i2e_transform(current_joints, current_end_effector_frame);
 	}
@@ -337,7 +337,7 @@ void manip_effector::multi_thread_move_arm(lib::c_buffer &instruction)
 			previous_set_arm_type = instruction.set_arm_type;
 			break;
 		default: // blad: niezdefiniowany sposb specyfikacji pozycji koncowki
-			manip_and_conv_effector::multi_thread_move_arm(instruction);
+			motor_driven_effector::multi_thread_move_arm(instruction);
 	}
 }
 /*--------------------------------------------------------------------------*/

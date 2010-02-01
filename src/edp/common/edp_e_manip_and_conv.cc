@@ -48,11 +48,11 @@ namespace mrrocpp {
 namespace edp {
 namespace common {
 
-servo_buffer * manip_and_conv_effector::return_created_servo_buffer()
+servo_buffer * motor_driven_effector::return_created_servo_buffer()
 {
 	return NULL;
 }
-void manip_and_conv_effector::get_arm_position_set_reply_step()
+void motor_driven_effector::get_arm_position_set_reply_step()
 {
 	// scope-locked reader data update
 	boost::mutex::scoped_lock lock(rb_obj->reader_mutex);
@@ -60,7 +60,7 @@ void manip_and_conv_effector::get_arm_position_set_reply_step()
 }
 
 /*--------------------------------------------------------------------------*/
-void manip_and_conv_effector::get_arm_position_read_hardware_sb()
+void motor_driven_effector::get_arm_position_read_hardware_sb()
 { // odczytanie pozycji ramienia
 
 	//   printf(" GET ARM\n");
@@ -94,7 +94,7 @@ void manip_and_conv_effector::get_arm_position_read_hardware_sb()
 }
 
 /*--------------------------------------------------------------------------*/
-void manip_and_conv_effector::get_arm_position_get_arm_type_switch(lib::c_buffer &instruction)
+void motor_driven_effector::get_arm_position_get_arm_type_switch(lib::c_buffer &instruction)
 { // odczytanie pozycji ramienia
 
 	switch (instruction.get_arm_type)
@@ -125,7 +125,7 @@ void manip_and_conv_effector::get_arm_position_get_arm_type_switch(lib::c_buffer
 }
 
 /*--------------------------------------------------------------------------*/
-void manip_and_conv_effector::multi_thread_move_arm(lib::c_buffer &instruction)
+void motor_driven_effector::multi_thread_move_arm(lib::c_buffer &instruction)
 { // przemieszczenie ramienia
 	// Wypenienie struktury danych transformera na podstawie parametrow polecenia
 	// otrzymanego z ECP. Zlecenie transformerowi przeliczenie wspolrzednych
@@ -153,13 +153,13 @@ void manip_and_conv_effector::multi_thread_move_arm(lib::c_buffer &instruction)
 }
 /*--------------------------------------------------------------------------*/
 
-void manip_and_conv_effector::multi_thread_master_order(MT_ORDER nm_task, int nm_tryb)
+void motor_driven_effector::multi_thread_master_order(MT_ORDER nm_task, int nm_tryb)
 {
 	mt_tt_obj->master_to_trans_t_order(nm_task, nm_tryb);
 }
 
 /*--------------------------------------------------------------------------*/
-manip_and_conv_effector::manip_and_conv_effector(lib::configurator &_config, lib::robot_name_t l_robot_name) :
+motor_driven_effector::motor_driven_effector(lib::configurator &_config, lib::robot_name_t l_robot_name) :
 	effector(_config, l_robot_name), kinematics_manager(),
 	servo_current_motor_pos(MAX_SERVOS_NR), global_current_motor_pos(MAX_SERVOS_NR),
 	servo_current_joints(MAX_SERVOS_NR), global_current_joints(MAX_SERVOS_NR),
@@ -193,11 +193,11 @@ manip_and_conv_effector::manip_and_conv_effector(lib::configurator &_config, lib
 	}
 }
 
-manip_and_conv_effector::~manip_and_conv_effector()
+motor_driven_effector::~motor_driven_effector()
 {
 }
 
-void manip_and_conv_effector::master_joints_read(double* output)
+void motor_driven_effector::master_joints_read(double* output)
 {
 	boost::mutex::scoped_lock lock(edp_irp6s_effector_mutex);
 
@@ -208,7 +208,7 @@ void manip_and_conv_effector::master_joints_read(double* output)
 }
 
 /*--------------------------------------------------------------------------*/
-void manip_and_conv_effector::hi_create_threads()
+void motor_driven_effector::hi_create_threads()
 {
 	rb_obj = new reader_buffer(*this);
 	mt_tt_obj = new manip_trans_t(*this);
@@ -227,7 +227,7 @@ void manip_and_conv_effector::hi_create_threads()
 }
 
 // kasuje zmienne - uwaga najpierw nalezy ustawic number_of_servos
-void manip_and_conv_effector::reset_variables()
+void motor_driven_effector::reset_variables()
 {
 	for (int i = 0; i < number_of_servos; i++) {
 
@@ -247,7 +247,7 @@ void manip_and_conv_effector::reset_variables()
 	// desired_joints[2] = LOWER_RIGHT_LIMIT;
 }
 
-bool manip_and_conv_effector::servo_joints_and_frame_actualization_and_upload(void)
+bool motor_driven_effector::servo_joints_and_frame_actualization_and_upload(void)
 {
 	bool ret_val = true;
 	static int catch_nr = 0;
@@ -288,12 +288,12 @@ bool manip_and_conv_effector::servo_joints_and_frame_actualization_and_upload(vo
 	return ret_val;
 }
 
-bool manip_and_conv_effector::is_power_on() const
+bool motor_driven_effector::is_power_on() const
 {
 	return controller_state_edp_buf.is_power_on;
 }
 
-bool manip_and_conv_effector::pre_synchro_motion(lib::c_buffer &instruction) const
+bool motor_driven_effector::pre_synchro_motion(lib::c_buffer &instruction) const
 // sprawdzenie czy jest to dopuszczalny rozkaz ruchu
 // przed wykonaniem synchronizacji robota
 {
@@ -304,13 +304,13 @@ bool manip_and_conv_effector::pre_synchro_motion(lib::c_buffer &instruction) con
 		return false;
 }
 
-bool manip_and_conv_effector::is_synchronised(void) const
+bool motor_driven_effector::is_synchronised(void) const
 {
 	return controller_state_edp_buf.is_synchronised;
 }
 
 /*--------------------------------------------------------------------------*/
-void manip_and_conv_effector::interpret_instruction(lib::c_buffer &instruction)
+void motor_driven_effector::interpret_instruction(lib::c_buffer &instruction)
 {
 	//	fprintf(stderr, "instruction:\n");
 	//	fprintf(stderr, "\tinstruction_type: %d\n", instruction.instruction_type);
@@ -461,7 +461,7 @@ void manip_and_conv_effector::interpret_instruction(lib::c_buffer &instruction)
 /*--------------------------------------------------------------------------*/
 
 // Synchronizacja robota.
-void manip_and_conv_effector::synchronise()
+void motor_driven_effector::synchronise()
 {
 
 #ifdef __QNXNTO__
@@ -493,7 +493,7 @@ void manip_and_conv_effector::synchronise()
 }
 
 /*--------------------------------------------------------------------------*/
-void manip_and_conv_effector::set_outputs(const lib::c_buffer &instruction)
+void motor_driven_effector::set_outputs(const lib::c_buffer &instruction)
 {
 	// ustawienie wyjsc binarnych
 	in_out_obj->set_output(&instruction.output_values);
@@ -503,7 +503,7 @@ void manip_and_conv_effector::set_outputs(const lib::c_buffer &instruction)
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
-void manip_and_conv_effector::get_inputs(lib::r_buffer *local_reply)
+void motor_driven_effector::get_inputs(lib::r_buffer *local_reply)
 {
 	// odczytanie wejsc binarnych
 	in_out_obj->get_input(&((*local_reply).input_values), ((*local_reply).analog_input));
@@ -513,7 +513,7 @@ void manip_and_conv_effector::get_inputs(lib::r_buffer *local_reply)
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
-void manip_and_conv_effector::get_algorithms()
+void motor_driven_effector::get_algorithms()
 {
 	// odczytanie numerow algorytmow i ich numerow zestawow parametrow
 
@@ -527,7 +527,7 @@ void manip_and_conv_effector::get_algorithms()
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
-lib::REPLY_TYPE manip_and_conv_effector::rep_type(const lib::c_buffer &instruction)
+lib::REPLY_TYPE motor_driven_effector::rep_type(const lib::c_buffer &instruction)
 {
 	// ustalenie formatu odpowiedzi
 	reply.reply_type = lib::ACKNOWLEDGE;
@@ -577,7 +577,7 @@ lib::REPLY_TYPE manip_and_conv_effector::rep_type(const lib::c_buffer &instructi
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
-void manip_and_conv_effector::compute_motors(const lib::c_buffer &instruction)
+void motor_driven_effector::compute_motors(const lib::c_buffer &instruction)
 {
 
 	lib::MotorArray desired_motor_pos_new_tmp(MAX_SERVOS_NR);
@@ -635,7 +635,7 @@ void manip_and_conv_effector::compute_motors(const lib::c_buffer &instruction)
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
-void manip_and_conv_effector::set_rmodel(lib::c_buffer &instruction)
+void motor_driven_effector::set_rmodel(lib::c_buffer &instruction)
 {
 	// uint8_t previous_model;
 	// uint8_t previous_corrector;
@@ -655,7 +655,7 @@ void manip_and_conv_effector::set_rmodel(lib::c_buffer &instruction)
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
-void manip_and_conv_effector::get_rmodel(lib::c_buffer &instruction)
+void motor_driven_effector::get_rmodel(lib::c_buffer &instruction)
 {
 	//printf(" GET RMODEL: ");
 	switch (instruction.get_rmodel_type)
@@ -678,7 +678,7 @@ void manip_and_conv_effector::get_rmodel(lib::c_buffer &instruction)
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
-void manip_and_conv_effector::compute_joints(const lib::c_buffer &instruction)
+void motor_driven_effector::compute_joints(const lib::c_buffer &instruction)
 {
 	lib::MotorArray desired_motor_pos_new_tmp(MAX_SERVOS_NR);
 	lib::JointArray desired_joints_tmp(MAX_SERVOS_NR); // Wspolrzedne wewnetrzne -
@@ -720,7 +720,7 @@ void manip_and_conv_effector::compute_joints(const lib::c_buffer &instruction)
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
-void manip_and_conv_effector::move_servos()
+void motor_driven_effector::move_servos()
 {
 	/* Wyslanie polecenia ruchu do procesu SERVO_GROUP oraz odebranie wyniku
 	 realizacji pierwszej fazy ruchu */
@@ -752,12 +752,12 @@ void manip_and_conv_effector::move_servos()
 }
 /*--------------------------------------------------------------------------*/
 
-void manip_and_conv_effector::update_servo_current_motor_pos(double motor_position_increment, int i)
+void motor_driven_effector::update_servo_current_motor_pos(double motor_position_increment, int i)
 {
 	servo_current_motor_pos[i] += motor_position_increment;
 }
 
-void manip_and_conv_effector::update_servo_current_motor_pos_abs(double abs_motor_position, int i)
+void motor_driven_effector::update_servo_current_motor_pos_abs(double abs_motor_position, int i)
 {
 	servo_current_motor_pos[i] = abs_motor_position;
 }
@@ -765,7 +765,7 @@ void manip_and_conv_effector::update_servo_current_motor_pos_abs(double abs_moto
 // sprawdza stan EDP zaraz po jego uruchomieniu
 
 
-void manip_and_conv_effector::get_controller_state(lib::c_buffer &instruction)
+void motor_driven_effector::get_controller_state(lib::c_buffer &instruction)
 {
 
 	//printf("get_controller_state: %d\n", controller_state_edp_buf.is_synchronised); fflush(stdout);
@@ -794,7 +794,7 @@ void manip_and_conv_effector::get_controller_state(lib::c_buffer &instruction)
 	}
 }
 
-void manip_and_conv_effector::pre_synchro_loop(STATE& next_state)
+void motor_driven_effector::pre_synchro_loop(STATE& next_state)
 {
 	while ((next_state != GET_INSTRUCTION) && (next_state != GET_SYNCHRO)) {
 
@@ -923,7 +923,7 @@ void manip_and_conv_effector::pre_synchro_loop(STATE& next_state)
 	} // end while
 }
 
-void manip_and_conv_effector::synchro_loop(STATE& next_state)
+void motor_driven_effector::synchro_loop(STATE& next_state)
 {
 
 	while (next_state != GET_INSTRUCTION) {
@@ -1084,7 +1084,7 @@ void manip_and_conv_effector::synchro_loop(STATE& next_state)
 	}
 }
 
-void manip_and_conv_effector::post_synchro_loop(STATE& next_state)
+void motor_driven_effector::post_synchro_loop(STATE& next_state)
 {
 	/* Nieskoczona petla wykonujca przejscia w grafie automatu (procesu EDP_MASTER) */
 	for (;;) {
@@ -1196,7 +1196,7 @@ void manip_and_conv_effector::post_synchro_loop(STATE& next_state)
 	} // end: for (;;)
 }
 
-void manip_and_conv_effector::main_loop()
+void motor_driven_effector::main_loop()
 {
 	// by Y pierwsza petla while do odpytania o stan EDP przez UI zaraz po starcie EDP
 	STATE next_state = GET_STATE;

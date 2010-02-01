@@ -51,7 +51,7 @@ class reader_buffer;
 
 
 /************************ edp_irp6s_and_conv_effector ****************************/
-class manip_and_conv_effector: public effector, public kinematics::common::kinematics_manager
+class motor_driven_effector: public effector, public kinematics::common::kinematics_manager
 {
 protected:
 
@@ -149,8 +149,8 @@ public:
 	sensor::force *vs;
 	edp_vsp* edp_vsp_obj;
 
-	manip_and_conv_effector(lib::configurator &_config, lib::robot_name_t l_robot_name); // konstruktor
-	virtual ~manip_and_conv_effector();
+	motor_driven_effector(lib::configurator &_config, lib::robot_name_t l_robot_name); // konstruktor
+	virtual ~motor_driven_effector();
 
 	virtual void set_rmodel(lib::c_buffer &instruction); // zmiana narzedzia
 

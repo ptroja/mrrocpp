@@ -29,7 +29,7 @@ class NL_regulator_1_conv: public common::NL_regulator
 
 public:
 	NL_regulator_1_conv (uint8_t reg_no, uint8_t reg_par_no,
-                          double aa, double bb0, double bb1, double k_ff, common::manip_and_conv_effector &_master); // konstruktor
+                          double aa, double bb0, double bb1, double k_ff, common::motor_driven_effector &_master); // konstruktor
 
     virtual uint8_t compute_set_value ( void );
     // obliczenie nastepnej wartosci zadanej dla napedu - metoda konkretna

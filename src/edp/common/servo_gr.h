@@ -98,7 +98,7 @@ public:
     void operator()(void);
 
     //! input_buffer
-    manip_and_conv_effector &master;
+    motor_driven_effector &master;
 
     lib::SERVO_COMMAND command_type(void) const;
 
@@ -107,7 +107,7 @@ public:
     virtual void get_all_positions (void);
 
     //! konstruktor
-    servo_buffer (manip_and_conv_effector &_master);
+    servo_buffer (motor_driven_effector &_master);
 
     //! destruktor
     virtual ~servo_buffer (void);

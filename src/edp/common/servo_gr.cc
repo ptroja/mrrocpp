@@ -271,7 +271,7 @@ lib::SERVO_COMMAND servo_buffer::command_type() const
 	return command.instruction_code;
 }
 
-servo_buffer::servo_buffer(manip_and_conv_effector &_master) :
+servo_buffer::servo_buffer(motor_driven_effector &_master) :
 #ifndef __QNXNTO__
 			servo_command_rdy(false), sg_reply_rdy(false),
 #endif

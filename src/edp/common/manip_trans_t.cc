@@ -22,7 +22,7 @@ namespace edp {
 namespace common {
 
 
-manip_trans_t::manip_trans_t(manip_and_conv_effector& _master):
+manip_trans_t::manip_trans_t(motor_driven_effector& _master):
 	trans_t(_master), master (_master)
 {
 	thread_id = new boost::thread(boost::bind(&manip_trans_t::operator(), this));

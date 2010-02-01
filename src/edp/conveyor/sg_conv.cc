@@ -97,7 +97,7 @@ void servo_buffer::synchronise(void)
 
 namespace common {
 
-servo_buffer* return_created_servo_buffer(manip_and_conv_effector &_master)
+servo_buffer* return_created_servo_buffer(motor_driven_effector &_master)
 {
 	return new conveyor::servo_buffer((conveyor::effector &) (_master));
 }

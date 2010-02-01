@@ -37,7 +37,7 @@ namespace conveyor {
 /*--------------------------------------------------------------------------*/
 void effector::create_threads()
 {
-	manip_and_conv_effector::hi_create_threads();
+	motor_driven_effector::hi_create_threads();
 }
 
 
@@ -48,12 +48,12 @@ common::servo_buffer* effector::return_created_servo_buffer()
 
 void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
 {
-	manip_and_conv_effector::multi_thread_master_order(nm_task, nm_tryb);
+	motor_driven_effector::multi_thread_master_order(nm_task, nm_tryb);
 }
 
 // Konstruktor.
 effector::effector(lib::configurator &_config) :
-	manip_and_conv_effector(_config, lib::ROBOT_CONVEYOR)
+	motor_driven_effector(_config, lib::ROBOT_CONVEYOR)
 {
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();
@@ -77,7 +77,7 @@ void effector::set_rmodel(lib::c_buffer &instruction)
 
 		default: // blad: nie istniejca specyfikacja modelu robota
 			// ustawi numer bledu
-			manip_and_conv_effector::set_rmodel(instruction);
+			motor_driven_effector::set_rmodel(instruction);
 	}
 }
 /*--------------------------------------------------------------------------*/
@@ -86,7 +86,7 @@ void effector::set_rmodel(lib::c_buffer &instruction)
 // Przemieszczenie tasmociagu.
 void effector::move_arm(lib::c_buffer &instruction)
 {
-	manip_and_conv_effector::multi_thread_move_arm(instruction);
+	motor_driven_effector::multi_thread_move_arm(instruction);
 }
 
 // Odczytanie pozycji tasmociagu.
@@ -95,14 +95,14 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 
 	//lib::JointArray desired_joints_tmp(MAX_SERVOS_NR); // Wspolrzedne wewnetrzne -
 	if (read_hardware) {
-		manip_and_conv_effector::get_arm_position_read_hardware_sb();
+		motor_driven_effector::get_arm_position_read_hardware_sb();
 	}
 
 	// okreslenie rodzaju wspolrzednych, ktore maja by odczytane
 	// oraz adekwatne wypelnienie bufora odpowiedzi
-	common::manip_and_conv_effector::get_arm_position_get_arm_type_switch(instruction);
+	common::motor_driven_effector::get_arm_position_get_arm_type_switch(instruction);
 
-	manip_and_conv_effector::get_arm_position_set_reply_step();
+	motor_driven_effector::get_arm_position_set_reply_step();
 }
 
 // Stworzenie modeli kinematyki dla tasmociagu.

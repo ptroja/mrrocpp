@@ -180,22 +180,22 @@ void in_out_buffer::get_input (uint16_t *binary_in_value, uint8_t *analog_in_tab
 
 #ifdef DOCENT_SENSOR
 
-void manip_and_conv_effector::registerReaderStartedCallback(boost::function<void()> startedCallback) {
+void motor_driven_effector::registerReaderStartedCallback(boost::function<void()> startedCallback) {
 	startedCallback_ = startedCallback;
 	startedCallbackRegistered_ = true;
 }
 
-void manip_and_conv_effector::registerReaderStoppedCallback(boost::function<void()> stoppedCallback) {
+void motor_driven_effector::registerReaderStoppedCallback(boost::function<void()> stoppedCallback) {
 	stoppedCallback_ = stoppedCallback;
 	stoppedCallbackRegistered_ = true;
 }
 
-void manip_and_conv_effector::onReaderStarted() {
+void motor_driven_effector::onReaderStarted() {
 	if (startedCallbackRegistered_) {
 		startedCallback_();
 	}
 }
-void manip_and_conv_effector::onReaderStopped() {
+void motor_driven_effector::onReaderStopped() {
 	if (stoppedCallbackRegistered_) {
 		stoppedCallback_();
 	}

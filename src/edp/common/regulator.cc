@@ -30,7 +30,7 @@ namespace common {
 
 
 /*-----------------------------------------------------------------------*/
-regulator::regulator(uint8_t reg_no, uint8_t reg_par_no, common::manip_and_conv_effector &_master)
+regulator::regulator(uint8_t reg_no, uint8_t reg_par_no, common::motor_driven_effector &_master)
         : master(_master)
 {
     // Konstruktor abstrakcyjnego regulatora
@@ -327,7 +327,7 @@ void regulator::clear_regulator ()
 
 
 /*-----------------------------------------------------------------------*/
-NL_regulator::NL_regulator (uint8_t reg_no, uint8_t reg_par_no, double aa, double bb0, double bb1, double k_ff, common::manip_and_conv_effector &_master)
+NL_regulator::NL_regulator (uint8_t reg_no, uint8_t reg_par_no, double aa, double bb0, double bb1, double k_ff, common::motor_driven_effector &_master)
         : regulator(reg_no, reg_par_no, _master)
 {
     // Konstruktor regulatora konkretnego

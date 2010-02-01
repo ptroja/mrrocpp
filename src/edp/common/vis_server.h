@@ -13,12 +13,12 @@ namespace edp {
 namespace common {
 
 // TODO: remove forward declarations
-class manip_and_conv_effector;
+class motor_driven_effector;
 
 class vis_server : boost::noncopyable
 {
 private:
-	manip_and_conv_effector &master;
+	motor_driven_effector &master;
 
 	boost::thread *thread_id;
 
@@ -26,7 +26,7 @@ public:
 	//! main loop
 	void operator()();
 
-    vis_server(manip_and_conv_effector &_master);
+    vis_server(motor_driven_effector &_master);
     ~vis_server();
 };
 

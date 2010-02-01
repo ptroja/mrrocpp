@@ -64,14 +64,14 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 	//   printf(" GET ARM\n");
 
 	if (read_hardware) {
-		//	manip_and_conv_effector::get_arm_position_read_hardware_sb();
+		//	motor_driven_effector::get_arm_position_read_hardware_sb();
 	}
 
 	// okreslenie rodzaju wspolrzednych, ktore maja by odczytane
 	// oraz adekwatne wypelnienie bufora odpowiedzi
 	common::manip_effector::get_arm_position_get_arm_type_switch(instruction);
 
-	manip_and_conv_effector::get_arm_position_set_reply_step();
+	motor_driven_effector::get_arm_position_set_reply_step();
 }
 /*--------------------------------------------------------------------------*/
 
