@@ -1,9 +1,35 @@
 /*! \file epos.h
- *
- * \author Martí Morta <mmorta@iri.upc.edu>, Piotr Trojanek <piotr.trojanek@gmail.com>, Marcus Hauser
 
- header file for libEPOS functions
+ \brief libEPOS - a library to control an EPOS; definition
 
+ \b libEPOS is a GNU/Linux C library to control an EPOS motor control
+ unit by maxon motor. Since maxon does not offer linux software for
+ their products, I wrote this library from scratch.
+
+ It based on the following maxon motor documents:
+ - EPOS Positioning Controller - Firmware specification (Edition April 2006)
+ - EPOS Positioning Controller - Communication Guide (Edition January 2005)
+ - EPOS Positioning Controller - Application Note "Device Programming" (Edition February 2006)
+
+
+ The only fully implemented and tested "Operation Mode" is "Profile
+ Position Mode", but adding support for other OpModes should be fairly
+ easy, since the main work was implementing the data exchange with
+ EPOS.
+
+ I have only checked the library to work with an EPOS 24/1 (firmware
+ v2024). Since I have no access to other hardware, I have no chance to
+ check other EPOS versions. But there is no hint at all that it should
+ NOT work with other EPOS variants.
+
+ \date July 2006
+ \author Marcus Hauser, LSW Heidelberg
+ \author Martí Morta <mmorta@iri.upc.edu>
+ \author Piotr Trojanek <piotr.trojanek@gmail.com>, Warsaw University of Technology
+
+ \defgroup libEPOS
+
+  @{
  */
 
 #ifndef _EPOS_H
@@ -85,6 +111,7 @@ typedef boost::error_info<struct tag_errno_code,int> errno_code;
 //! failed system call
 typedef boost::error_info<struct tag_errno_code,const char *> errno_call;
 
+//! \brief interface to EPOS MAXON controller
 class epos
 {
 	private:
@@ -575,5 +602,7 @@ class epos
 
 } /* namespace edp */
 } /* namespace mrrocpp */
+
+//! @}
 
 #endif

@@ -1,36 +1,10 @@
 /*! \file epos.cc
 
- \brief libEPOS - a library to control an EPOS 24/1
+ \brief libEPOS - a library to control an EPOS; implementation
 
- */
+ \addtogroup libEPOS Library to control an EPOS motor control unit
 
-/*! \mainpage libEPOS - a library to control an EPOS motor control unit
-
- \b libEPOS is a GNU/Linux C library to control an EPOS motor control
- unit by maxon motor. Since maxon does not offer linux software for
- their products, I wrote this library from scratch.
-
- It based on the following maxon motor documents:
- - EPOS Positioning Controller - Firmware specification (Edition April 2006)
- - EPOS Positioning Controller - Communication Guide (Edition January 2005)
- - EPOS Positioning Controller - Application Note "Device Programming" (Edition February 2006)
-
-
- The only fully implemented and tested "Operation Mode" is "Profile
- Position Mode", but adding support for other OpModes should be fairly
- easy, since the main work was implementing the data exchange with
- EPOS.
-
- I have only checked the library to work with an EPOS 24/1 (firmware
- v2024). Since I have no access to other hardware, I have no chance to
- check other EPOS versions. But there is no hint at all that it should
- NOT work with other EPOS variants.
-
- \author Marcus Hauser, LSW Heidelberg
- \date July 2006
-
-
-
+ @{
  */
 
 #include <stdio.h>   /* Standard input/output definitions */
@@ -1755,6 +1729,8 @@ bool epos::bitcmp(WORD a, WORD b) const
 {
 	return ((a & b) == b) ? true : false;
 }
+
+//! @}
 
 } /* namespace edp */
 } /* namespace mrrocpp */
