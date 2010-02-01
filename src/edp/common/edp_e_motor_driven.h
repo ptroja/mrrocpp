@@ -165,6 +165,7 @@ public:
 
 	virtual void move_arm(lib::c_buffer &instruction) = 0; // przemieszczenie ramienia
 	void multi_thread_move_arm(lib::c_buffer &instruction);
+	void single_thread_move_arm(lib::c_buffer &instruction);
 	virtual void get_arm_position(bool read_hardware, lib::c_buffer &instruction) = 0; // odczytanie pozycji ramienia
 	void get_arm_position_read_hardware_sb(); // odczytanie pozycji ramienia sprzetowo z sb
 	void get_arm_position_set_reply_step(); // odczytanie pozycji ramienia sprzetowo z sb
@@ -221,7 +222,7 @@ public:
 
 	virtual void master_order(MT_ORDER nm_task, int nm_tryb) = 0;
 	void multi_thread_master_order(common::MT_ORDER nm_task, int nm_tryb);
-
+	void single_thread_master_order(common::MT_ORDER nm_task, int nm_tryb);
 };
 /************************ edp_irp6s_and_conv_effector ****************************/
 

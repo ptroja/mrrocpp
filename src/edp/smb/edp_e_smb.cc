@@ -35,12 +35,12 @@ namespace smb {
 
 void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
 {
-	manip_effector::single_thread_master_order(nm_task, nm_tryb);
+	motor_driven_effector::single_thread_master_order(nm_task, nm_tryb);
 }
 
 // Konstruktor.
 effector::effector(lib::configurator &_config) :
-	manip_effector(_config, lib::ROBOT_SMB)
+	motor_driven_effector(_config, lib::ROBOT_SMB)
 {
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();
@@ -53,7 +53,7 @@ effector::effector(lib::configurator &_config) :
 /*--------------------------------------------------------------------------*/
 void effector::move_arm(lib::c_buffer &instruction)
 {
-	manip_effector::single_thread_move_arm(instruction);
+	motor_driven_effector::single_thread_move_arm(instruction);
 
 }
 /*--------------------------------------------------------------------------*/
@@ -70,7 +70,7 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 
 	// okreslenie rodzaju wspolrzednych, ktore maja by odczytane
 	// oraz adekwatne wypelnienie bufora odpowiedzi
-	common::manip_effector::get_arm_position_get_arm_type_switch(instruction);
+	common::motor_driven_effector::get_arm_position_get_arm_type_switch(instruction);
 
 	motor_driven_effector::get_arm_position_set_reply_step();
 }

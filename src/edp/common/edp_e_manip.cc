@@ -39,62 +39,55 @@ namespace common {
 bool manip_effector::servo_joints_and_frame_actualization_and_upload(void)
 {
 	static int catch_nr = 0;
-	bool ret_val=true;
-	if (!(motor_driven_effector::servo_joints_and_frame_actualization_and_upload()))
-	{
-		ret_val= false;
-	}
-	else
-	{
-	// wyznaczenie nowych wartosci joints and frame dla obliczen w servo
-	try {
+	bool ret_val = true;
+	if (!(motor_driven_effector::servo_joints_and_frame_actualization_and_upload())) {
+		ret_val = false;
+	} else {
+		// wyznaczenie nowych wartosci joints and frame dla obliczen w servo
+		try {
 
-		lib::Homog_matrix local_matrix;
+			lib::Homog_matrix local_matrix;
 
-		// Obliczenie lokalnej macierzy oraz obliczenie położenia robota we wsp. zewnętrznych.
-		get_current_kinematic_model()->i2e_transform(servo_current_joints, local_matrix);
-		// Pobranie wsp. zewnętrznych w układzie
-
-		lib::Xyz_Euler_Zyz_vector servo_real_kartez_pos; // by Y polozenie we wspolrzednych xyz_euler_zyz obliczane co krok servo   XXXXX
-		local_matrix.get_xyz_euler_zyz(servo_real_kartez_pos);
-
-		//obliczanie zadanej pozycji koncowki wedlug aktualnego rozkazu przetwarzanego w servo
-
-
-
-
-		lib::MotorArray servo_desired_motor_pos(sb->command.parameters.move.abs_position, number_of_servos);
-
-
-		lib::JointArray servo_desired_joints(number_of_servos);
-
-		get_current_kinematic_model()->mp2i_transform(servo_desired_motor_pos, servo_desired_joints);
-		get_current_kinematic_model()->i2e_transform(servo_desired_joints, local_matrix);
+			// Obliczenie lokalnej macierzy oraz obliczenie położenia robota we wsp. zewnętrznych.
+			get_current_kinematic_model()->i2e_transform(servo_current_joints, local_matrix);
 			// Pobranie wsp. zewnętrznych w układzie
 
-		lib::Xyz_Euler_Zyz_vector servo_desired_kartez_pos; // by Y polozenie we wspolrzednych xyz_euler_zyz obliczane co krok servo   XXXXX
-		local_matrix.get_xyz_euler_zyz(servo_desired_kartez_pos);
+			lib::Xyz_Euler_Zyz_vector servo_real_kartez_pos; // by Y polozenie we wspolrzednych xyz_euler_zyz obliczane co krok servo   XXXXX
+			local_matrix.get_xyz_euler_zyz(servo_real_kartez_pos);
+
+			//obliczanie zadanej pozycji koncowki wedlug aktualnego rozkazu przetwarzanego w servo
 
 
-		// scope-locked reader data update
-		{
-			boost::mutex::scoped_lock lock(rb_obj->reader_mutex);
+			lib::MotorArray servo_desired_motor_pos(sb->command.parameters.move.abs_position, number_of_servos);
 
-			servo_real_kartez_pos.to_table(rb_obj->step_data.real_cartesian_position);
-			servo_desired_kartez_pos.to_table(rb_obj->step_data.desired_cartesian_position);
-		}
+			lib::JointArray servo_desired_joints(number_of_servos);
 
-		// Obliczenie polozenia robota we wsp. zewnetrznych bez narzedzia.
-		((mrrocpp::kinematics::common::kinematic_model_with_tool*) get_current_kinematic_model())->i2e_wo_tool_transform(servo_current_joints, servo_current_frame_wo_tool);
+			get_current_kinematic_model()->mp2i_transform(servo_desired_motor_pos, servo_desired_joints);
+			get_current_kinematic_model()->i2e_transform(servo_desired_joints, local_matrix);
+			// Pobranie wsp. zewnętrznych w układzie
 
-		catch_nr = 0;
+			lib::Xyz_Euler_Zyz_vector servo_desired_kartez_pos; // by Y polozenie we wspolrzednych xyz_euler_zyz obliczane co krok servo   XXXXX
+			local_matrix.get_xyz_euler_zyz(servo_desired_kartez_pos);
 
-	}//: try
-	catch (...) {
-		if ((++catch_nr) == 1)
-			printf("servo thread servo_joints_and_frame_actualization_and_upload throw catch exception\n");
-		ret_val = false;
-	}//: catch
+			// scope-locked reader data update
+			{
+				boost::mutex::scoped_lock lock(rb_obj->reader_mutex);
+
+				servo_real_kartez_pos.to_table(rb_obj->step_data.real_cartesian_position);
+				servo_desired_kartez_pos.to_table(rb_obj->step_data.desired_cartesian_position);
+			}
+
+			// Obliczenie polozenia robota we wsp. zewnetrznych bez narzedzia.
+			((mrrocpp::kinematics::common::kinematic_model_with_tool*) get_current_kinematic_model())->i2e_wo_tool_transform(servo_current_joints, servo_current_frame_wo_tool);
+
+			catch_nr = 0;
+
+		}//: try
+		catch (...) {
+			if ((++catch_nr) == 1)
+				printf("servo thread servo_joints_and_frame_actualization_and_upload throw catch exception\n");
+			ret_val = false;
+		}//: catch
 	}
 
 	{
@@ -298,24 +291,17 @@ void manip_effector::single_thread_move_arm(lib::c_buffer &instruction)
 
 	switch (instruction.set_arm_type)
 	{
-		case lib::MOTOR:
-			compute_motors(instruction);
-			move_servos();
-			break;
-		case lib::JOINT:
-			compute_joints(instruction);
-			move_servos();
-			break;
 		case lib::FRAME:
 			compute_frame(instruction);
 			move_servos();
+			previous_set_arm_type = instruction.set_arm_type;
 			break;
 		default: // blad: niezdefiniowany sposb specyfikacji pozycji koncowki
-			throw NonFatal_error_2(INVALID_SET_END_EFFECTOR_TYPE);
+			motor_driven_effector::single_thread_move_arm(instruction);
 	}
 
 	// by Y - uwaga na wyjatki, po rzuceniu wyjatku nie zostanie zaktualizowany previous_set_arm_type
-	previous_set_arm_type = instruction.set_arm_type;
+
 
 }
 /*--------------------------------------------------------------------------*/
@@ -325,7 +311,6 @@ void manip_effector::multi_thread_move_arm(lib::c_buffer &instruction)
 { // przemieszczenie ramienia
 	// Wypenienie struktury danych transformera na podstawie parametrow polecenia
 	// otrzymanego z ECP. Zlecenie transformerowi przeliczenie wspolrzednych
-
 
 	switch (instruction.set_arm_type)
 	{
@@ -341,36 +326,6 @@ void manip_effector::multi_thread_move_arm(lib::c_buffer &instruction)
 	}
 }
 /*--------------------------------------------------------------------------*/
-
-void manip_effector::single_thread_master_order(common::MT_ORDER nm_task, int nm_tryb)
-{
-	// przekopiowanie instrukcji z bufora watku komunikacji z ECP (edp_master)
-	current_instruction = new_instruction;
-
-	switch (nm_task)
-	{
-		case common::MT_GET_CONTROLLER_STATE:
-			get_controller_state(current_instruction);
-			break;
-		case common::MT_SET_RMODEL:
-			set_rmodel(current_instruction);
-			break;
-		case common::MT_GET_ARM_POSITION:
-			get_arm_position(nm_tryb, current_instruction);
-			break;
-		case common::MT_GET_ALGORITHMS:
-			get_algorithms();
-			break;
-		case common::MT_SYNCHRONISE:
-			synchronise();
-			break;
-		case common::MT_MOVE_ARM:
-			move_arm(current_instruction);
-			break;
-		default: // blad: z reply_type wynika, e odpowied nie ma zawiera narzedzia
-			break;
-	}
-}
 
 } // namespace common
 } // namespace edp

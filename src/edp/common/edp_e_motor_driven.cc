@@ -125,6 +125,34 @@ void motor_driven_effector::get_arm_position_get_arm_type_switch(lib::c_buffer &
 }
 
 /*--------------------------------------------------------------------------*/
+void motor_driven_effector::single_thread_move_arm(lib::c_buffer &instruction)
+{ // przemieszczenie ramienia
+	// Wypenienie struktury danych transformera na podstawie parametrow polecenia
+	// otrzymanego z ECP. Zlecenie transformerowi przeliczenie wspolrzednych
+
+
+	switch (instruction.set_arm_type)
+	{
+		case lib::MOTOR:
+			compute_motors(instruction);
+			move_servos();
+			break;
+		case lib::JOINT:
+			compute_joints(instruction);
+			move_servos();
+			break;
+		default: // blad: niezdefiniowany sposb specyfikacji pozycji koncowki
+			throw NonFatal_error_2(INVALID_SET_END_EFFECTOR_TYPE);
+	}
+
+	// by Y - uwaga na wyjatki, po rzuceniu wyjatku nie zostanie zaktualizowany previous_set_arm_type
+	previous_set_arm_type = instruction.set_arm_type;
+
+}
+/*--------------------------------------------------------------------------*/
+
+
+/*--------------------------------------------------------------------------*/
 void motor_driven_effector::multi_thread_move_arm(lib::c_buffer &instruction)
 { // przemieszczenie ramienia
 	// Wypenienie struktury danych transformera na podstawie parametrow polecenia
@@ -152,6 +180,37 @@ void motor_driven_effector::multi_thread_move_arm(lib::c_buffer &instruction)
 
 }
 /*--------------------------------------------------------------------------*/
+
+
+void motor_driven_effector::single_thread_master_order(common::MT_ORDER nm_task, int nm_tryb)
+{
+	// przekopiowanie instrukcji z bufora watku komunikacji z ECP (edp_master)
+	current_instruction = new_instruction;
+
+	switch (nm_task)
+	{
+		case common::MT_GET_CONTROLLER_STATE:
+			get_controller_state(current_instruction);
+			break;
+		case common::MT_SET_RMODEL:
+			set_rmodel(current_instruction);
+			break;
+		case common::MT_GET_ARM_POSITION:
+			get_arm_position(nm_tryb, current_instruction);
+			break;
+		case common::MT_GET_ALGORITHMS:
+			get_algorithms();
+			break;
+		case common::MT_SYNCHRONISE:
+			synchronise();
+			break;
+		case common::MT_MOVE_ARM:
+			move_arm(current_instruction);
+			break;
+		default: // blad: z reply_type wynika, e odpowied nie ma zawiera narzedzia
+			break;
+	}
+}
 
 void motor_driven_effector::multi_thread_master_order(MT_ORDER nm_task, int nm_tryb)
 {

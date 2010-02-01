@@ -13,7 +13,7 @@
 #ifndef __EDP_E_SMB_H
 #define __EDP_E_SMB_H
 
-#include "edp/common/edp_e_manip.h"
+#include "edp/common/edp_e_motor_driven.h"
 #include "lib/smb_const.h"
 
 namespace mrrocpp {
@@ -21,7 +21,7 @@ namespace edp {
 namespace smb {
 
 // Klasa reprezentujaca robota IRp-6 na postumencie.
-class effector: public common::manip_effector
+class effector: public common::motor_driven_effector
 {
 protected:
 	// Metoda tworzy modele kinematyczne dla robota IRp-6 na postumencie.

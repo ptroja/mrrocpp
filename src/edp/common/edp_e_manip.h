@@ -57,7 +57,7 @@ protected:
 
 	void single_thread_move_arm(lib::c_buffer &instruction);
 	void multi_thread_move_arm(lib::c_buffer &instruction);
-	void single_thread_master_order(common::MT_ORDER nm_task, int nm_tryb);
+
 
 public:
 	manip_effector(lib::configurator &_config, lib::robot_name_t l_robot_name); // konstruktor
