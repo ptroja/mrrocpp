@@ -12,7 +12,7 @@
 #include "lib/com_buf.h"
 
 #include "lib/mis_fun.h"
-#include "edp/common/edp_e_manip_and_conv.h"
+#include "edp/common/edp_e_motor_driven.h"
 #include "edp/common/manip_trans_t.h"
 
 /********************************* GLOBALS **********************************/

@@ -35,7 +35,7 @@
 #include "lib/com_buf.h"
 #include "edp/common/servo_gr.h"
 #include "edp/common/reader.h"
-#include "edp/common/edp_e_manip_and_conv.h"
+#include "edp/common/edp_e_motor_driven.h"
 #include "edp/common/manip_trans_t.h"
 #include "edp/common/vis_server.h"
 

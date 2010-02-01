@@ -578,7 +578,7 @@ INPUT                  = \
 			 src/edp/common/edp_e_manip.cc \
 			 src/edp/common/edp_e_manip.h \
 			 src/edp/common/edp_e_manip_and_conv.cc \
-			 src/edp/common/edp_e_manip_and_conv.h \
+			 src/edp/common/edp_e_motor_driven.h \
 			 src/edp/common/edp_effector.cc \
 			 src/edp/common/edp_effector.h \
 			 src/edp/common/edp_m.cc \

@@ -18,7 +18,7 @@
 #endif
 
 #include "kinematics/common/kinematics_manager.h"
-#include "edp/common/edp_e_manip_and_conv.h"
+#include "edp/common/edp_e_motor_driven.h"
 
 // Konfigurator
 #include "lib/configurator.h"

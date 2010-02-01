@@ -8,7 +8,7 @@ SOURCES = ${wildcard *.cc}
 OBJECTS = ${patsubst %.cc,%.o,${SOURCES}}
 
 EDPOBJ = edp_m.o edp_effector.o \
-	edp_e_manip.o edp_e_manip_and_conv.o \
+	edp_e_manip.o edp_e_motor_driven.o \
 	edp_force_sensor.o edp_vsp_t.o \
 	servo_gr.o regulator.o in_out.o \
 	trans_t.o manip_trans_t.o vis_server.o reader.o \

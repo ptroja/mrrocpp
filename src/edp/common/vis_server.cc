@@ -10,7 +10,7 @@
 #include <assert.h>
 
 #include "lib/impconst.h"
-#include "edp/common/edp_e_manip_and_conv.h"
+#include "edp/common/edp_e_motor_driven.h"
 #include "edp/common/vis_server.h"
 #include "lib/mis_fun.h"
 
