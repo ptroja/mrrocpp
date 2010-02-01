@@ -1,8 +1,8 @@
 /*! \file epos.h
+ *
+ * \author Martí Morta <mmorta@iri.upc.edu>, Piotr Trojanek <piotr.trojanek@gmail.com>, Marcus Hauser
 
  header file for libEPOS functions
-
- mh, july 2006
 
  */
 
@@ -27,12 +27,15 @@
 #include <vector>
 
 /* added oct06 for openTCPEPOS() */
+/*
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+*/
 
-//#include "eposlib.h" -> moved to epos.c
+namespace mrrocpp {
+namespace edp {
 
 /* all EPOS data exchange is based on 16bit words, but other types are
  also used...*/
@@ -42,32 +45,45 @@ typedef uint16_t WORD; ///< \brief 16bit type for EPOS data exchange
 typedef char BYTE; ///< \brief 8bit type for EPOS data exchange
 #endif
 
+//! signed 8-bit integer
 typedef int8_t INTEGER8;
+
+//! signed 16-bit integer
 typedef int16_t INTEGER16;
+
+//! signed 32-bit integer
 typedef int32_t INTEGER32;
 
+//! unsigned 8-bit integer
 typedef uint8_t UNSIGNED8;
+
+//! unsigned 16-bit integer
 typedef uint16_t UNSIGNED16;
+
+//! unsigned 32-bit integer
 typedef uint32_t UNSIGNED32;
 
 /* EPOS will reset communication after 500ms of inactivity */
 
 /*! \brief try NTRY times to read one byte from EPOS, the give up */
 #define NTRY      5
-/*! \brief sleep TRYSLEEP usec between read() from EPOS, if no data available */
+
+/*! \brief wait TRYSLEEP usec between read() from EPOS, if no data available */
 #define TRYSLEEP  (unsigned int)1e5
 
-/* all high-level methods throws this exception in case of error */
-
+//! all high-level methods throws this exception in case of error
 struct epos_error: virtual std::exception, virtual boost::exception {
 	~epos_error() throw() {};
 };
 
+//! reason of an exception
 typedef boost::error_info<struct tag_reason,const char *> reason;
-typedef boost::error_info<struct tag_errno_code,int> errno_code;
-typedef boost::error_info<struct tag_errno_code,const char *> errno_call;
 
-typedef std::vector<WORD> answer_t;
+//! errno code of a failed system call
+typedef boost::error_info<struct tag_errno_code,int> errno_code;
+
+//! failed system call
+typedef boost::error_info<struct tag_errno_code,const char *> errno_call;
 
 class epos
 {
@@ -75,15 +91,38 @@ class epos
 		/* Implement read functions defined in EPOS Communication Guide, 6.3.1 */
 		/* [ one simplification: Node-ID is always 0] */
 
+		//! device name of EPOS port
 		const std::string device;
+
+		//! serial port settings
 		struct termios options;
-		DWORD E_error; ///< EPOS global error status
-		int ep; ///< (-1) EPOS file descriptor
-		char gMarker; ///< (0) for internal handling
 
-		/*! \brief Read Object from EPOS memory, firmware definition 6.3.1.1*/
-		std::vector<WORD> ReadObject(WORD index, BYTE subindex);
+		//! EPOS global error status
+		DWORD E_error;
 
+		//! EPOS file descriptor
+		int ep;
+
+		//! for internal progress character handling
+		char gMarker;
+
+		//! \brief array with WORDs representing reply from the controller
+		typedef std::vector<WORD> answer_t;
+
+		/*! \brief Read Object from EPOS memory, firmware definition 6.3.1.1
+		 *
+		 * @param index object entry index in a dictionary
+		 * @param subindex object entry subindex of in a dictionary
+		 * @return answer array from the controller
+		 */
+		answer_t ReadObject(WORD index, BYTE subindex);
+
+		/*! \brief Read Object Value from EPOS memory, firmware definition 6.3.1.1
+		 *
+		 * @param index object entry index in a dictionary
+		 * @param subindex object entry subindex of in a dictionary
+		 * @return object value
+		 */
 		template <class T>
 		T ReadObjectValue(WORD index, BYTE subindex) {
 			answer_t answer = ReadObject(index, subindex);
@@ -109,84 +148,131 @@ class epos
 		}
 
 		#if 0
-		/*! \brief Read Object from EPOS memory, firmware definition 6.3.1.2 */
+		/*! \brief Read Object from EPOS memory, firmware definition 6.3.1.2
+		 *
+		 * @param index object entry index in a dictionary
+		 * @param subindex object entry subindex of in a dictionary
+		 */
 		int InitiateSegmentedRead(WORD index, BYTE subindex );
 
-		/*! \brief int SegmentRead(WORD **ptr) - read data segment of the object
-		   initiated with 'InitiateSegmentedRead()'
-		*/
+		/*! \brief read data segment of the object initiated with 'InitiateSegmentedRead()'
+		 *
+		 * @param ptr pointer to data to be filled
+		 */
 		int SegmentRead(WORD **ptr);
 		#endif
 
-		/* 6.3.2:  write functions */
-
-		/*! 6.3.2.1 WriteObject()
-
-		   WORD *data is a pointer to a 2 WORDs array (== 4 BYTES)
-		   holding data to transmit
-		*/
+		/*! \brief write obect to EPOS
+		 *
+		 * @param index object entry index in a dictionary
+		 * @param subindex object entry subindex of in a dictionary
+		 * @param data pointer to a 2 WORDs array (== 4 BYTES) holding data to transmit
+		 */
 		void WriteObject(WORD index, BYTE subindex, const WORD data[2]);
 
+		/*! \brief write object value to EPOS
+		 *
+		 * @param index object entry index in a dictionary
+		 * @param subindex object entry subindex of in a dictionary
+		 * @param data0 first WORD of the object
+		 * @param data1 second WORD of the object
+		 */
 		void WriteObjectValue(WORD index, BYTE subindex, WORD data0, WORD data1 = 0x0000);
 
 		/* helper functions below */
 
-		/*! \brief  write a single BYTE to EPOS */
+		/*! \brief write a single BYTE to EPOS
+		 *
+		 * @param c BYTE to write
+		 */
 		void writeBYTE(BYTE c);
 
-		/*! \brief  write a single WORD to EPOS */
+		/*! \brief  write a single WORD to EPOS
+		 *
+		 * @param w WORD to write
+		 */
 		void writeWORD(WORD w);
 
-		/*! \brief  read a single BYTE from EPOS, timeout implemented */
+		/*! \brief  read a single BYTE from EPOS, timeout implemented
+		 *
+		 * @return readed data BYTE
+		 */
 		BYTE readBYTE();
 
-		/*! \brief  read a single WORD from EPOS, timeout implemented */
+		/*! \brief  read a single WORD from EPOS, timeout implemented
+		 *
+		 * @return readed data BYTE
+		 */
 		WORD readWORD();
 
-		/*! \brief  send command to EPOS, taking care of all neccessary 'ack' and
-		   checksum tests*/
+		/*! \brief  send command to EPOS, taking care of all neccessary 'ack' and checksum tests
+		 *
+		 * @param frame array of WORDs to write
+		 */
 		void sendCom(WORD *frame);
 
-		/*! \brief  int readAnswer(WORD **ptr) - read an answer frame from EPOS */
+		/*! \brief  read an answer frame from EPOS
+		 *
+		 * @return answer array from the controller
+		 */
 		answer_t readAnswer();
 
 		/*! \brief check global variable E_error for EPOS error code */
 		int checkEPOSerror();
 
-		/*! \brief Checksum calculation;
-		copied from EPOS Communication Guide, p.8
+		/*! \brief Checksum calculation
+		 *
+		 * Copied from EPOS Communication Guide, p.8
+		 *
+		 * @param pDataArray pointer to data for checksum calculcation
+		 * @param numberOfWords lenght of the data
 		 */
 		WORD CalcFieldCRC(const WORD *pDataArray, WORD numberOfWords) const;
 
-		/*! \brief exit(-1) if ptr == NULL */
-		void checkPtr(const void* ptr) const;
-
-		/*! \brief compare two 16bit bitmasks, return 1 (true) or 0 (false) */
+		/*! \brief compare two 16bit bitmasks
+		 *
+		 * @return result of comparision */
 		bool bitcmp(WORD a, WORD b) const;
 
 	public:
-		/*! create new EPOS object */
+		/*! \brief create new EPOS object
+		 *
+		 * @param _device device string describing the device on which the EPOS is connected to, e.g. "/dev/ttyS0"
+		 */
 		epos(const std::string & _device);
 
-		/*! delete EPOS object */
+		/*! \brief delete EPOS object */
 		~epos();
 
-		/*! open the connection to EPOS */
-		int openEPOS(speed_t br);
+		/*! \brief establish the connection to EPOS
+		 *
+		 * \retval 0 success
+		 * \retval -1 failure
+		 */
+		int openEPOS(speed_t speed);
 
-		/*! close the connection to EPOS */
+		/*! \brief close the connection to EPOS
+		 *
+		 * @return operation status; (0) for non-error
+		 */
 		int closeEPOS();
 
-		/*! check if the connection to EPOS is alive */
+		/*! \brief check if the connection to EPOS is alive */
 //		int checkEPOS();
 
-		/*! \brief check EPOS status, return state according to firmware spec 8.1.1 */
+		/*! \brief check EPOS status
+		 *
+		 * @return state according to firmware spec */
 		int checkEPOSstate();
 
-		/*! \brief pretty-print EPOS state */
+		/*! \brief pretty-print EPOS state
+		 *
+		 * @retval 0 status is OK
+		 * @retval -1 status is unknown
+		 */
 		int printEPOSstate();
 
-		//States
+		//! \brief States of the EPOS controller
 		typedef enum _state {
 			ST_DISABLED = 0,
 			ST_ENABLED = 1,
@@ -197,17 +283,10 @@ class epos
 		/*! \brief change EPOS state   ==> firmware spec 8.1.3 */
 		void changeEPOSstate(state_t state);
 
-		/*! \brief example from EPOS com. guide: ask EPOS for software version
-
-		 firmware spec 14.1.33
-		 ** returns software version as HEX **
-
-		 */
+		/*! \brief ask EPOS for software version */
 		UNSIGNED16 readSWversion();
 
-		/*! \brief ask for device name,
-		 device name is placed in 'name' (string must be big enough, NO CHECKING!!)
-		 */
+		/*! \brief read manufactor device name string firmware */
 		std::string readDeviceName();
 
 		/*! \brief ask for RS232 timeout; firmware spec 14.1.35 */
@@ -222,16 +301,19 @@ class epos
 		/*! \brief read Statusword; 14.1.58 */
 		UNSIGNED16 readStatusWord();
 
-		/*! \brief pretty-print Statusword */
-		int printEPOSstatusword(WORD statusword);
+		/*! \brief pretty-print statusword to stdout
+		 *
+		 * \param statusword WORD variable holding the statusword
+		 */
+		void printEPOSstatusword(WORD statusword);
 
 		/*! \brief read EPOS control word (firmware spec 14.1.57) */
 		UNSIGNED16 readControlword();
 
-		/*! \brief pretty-print Controlword */
+		/*! \brief pretty-print controlword */
 		void printEPOScontrolword(WORD controlword);
 
-		//Operational mode
+		//! \brief EPOS Operational mode
 		typedef enum _operational_mode {
 			OMD_PROFILE_POSITION_MODE = 1,		//! profile position mode
 			OMD_PROFILE_VELOCITY_MODE = 3,		//! profile velocity mode
@@ -249,8 +331,8 @@ class epos
 		void setOpMode(operational_mode_t);
 
 		/*! \brief read and returns  EPOS mode of operation -- 14.1.60
-		 here, RETURN(0) MEANS ERROR!
-		 '-1' is a valid OpMode, but 0 is not!
+		 *
+		 * @return 0 MEANS ERROR; '-1' is a valid OpMode, but 0 is not!
 		 */
 		INTEGER8 readOpMode();
 
@@ -266,30 +348,51 @@ class epos
 		/*! \brief write position window; 14.1.64 */
 		void writePositionWindow(UNSIGNED32 value);
 
-		/*! < by Martí Morta (mmorta@iri.upc.edu) > */
-
-		/*! \brief read position window time; 14.1.67 */
-
 		/*! \brief read position window time; 14.1.67 */
 //		int writePositionWindowTime(unsigned int val);
 
 //		int writePositionSoftwareLimits(long val, long val2);
 
+		//! write position profile velocity
 		void writePositionProfileVelocity(UNSIGNED32 vel);
+
+		//! write position profile acceleration
 		void writePositionProfileAcceleration(UNSIGNED32 acc);
+
+		//! write position profile deceleration
 		void writePositionProfileDeceleration(UNSIGNED32 dec);
+
+		//! write position profile quict stop deceleration
 		void writePositionProfileQuickStopDeceleration(UNSIGNED32 qsdec);
+
+		//! write position profile max velocity
 		void writePositionProfileMaxVelocity(UNSIGNED32 maxvel);
+
+		/*! \brief write position profile type
+		 *
+		 * @param type 0: linear ramp (trapezoidal profile), 1: sin^2 ramp (sinusoidal profile)
+		 */
 		void writePositionProfileType(INTEGER16 type);
 
+		//! \brief read position profile velocity
 		UNSIGNED32 readPositionProfileVelocity();
+
+		//! \brief read position profile acceleration
 		UNSIGNED32 readPositionProfileAcceleration();
+
+		//! \brief read position profile deceleration
 		UNSIGNED32 readPositionProfileDeceleration();
+
+		//! \brief read position profile quick stop decelration
 		UNSIGNED32 readPositionProfileQuickStopDeceleration();
+
+		//! \brief read position profile max velocity
 		UNSIGNED32 readPositionProfileMaxVelocity();
+
+		//! \brief read position profile type
 		INTEGER16 readPositionProfileType();
 
-		//VelocityNotation
+		//! \brief velocity notation
 		typedef enum _velocity_notation {
 		    VN_STANDARD                                          = 0,
 		    VN_DECI                                              = -1,
@@ -297,10 +400,13 @@ class epos
 		    VN_MILLI                                             = -3
 		} velocity_notation_t;
 
+		//! \brief read velocity notation
 		velocity_notation_t readVelocityNotationIndex();
+
+		//! \brief read velocity notation index
 		void writeVelocityNotationIndex(velocity_notation_t val);
 
-	    //SensorType
+	    //! sensor type
 		typedef enum _sensor_type {
 			ST_UNKNOWN                                           = 0,
 			ST_INC_ENCODER_3CHANNEL                              = 1,
@@ -310,54 +416,110 @@ class epos
 			ST_SSI_ABS_ENCODER_GREY                              = 5
 		} sensor_type_t;
 
+		//! \brief read sensor pulses
 		UNSIGNED32 readSensorPulses();
+
+		//! \brief read sensor type
 		sensor_type_t readSensorType();
+
+		//! \brief read sensor polarity
 		UNSIGNED16 readSensorPolarity();
 
+		//! \brief write sensor type
 		void writeSensorType(sensor_type_t val);
+
+		//! \brief write sensor pulses
 		void writeSensorPulses(UNSIGNED32 val);
+
+		//! \brief write sensor polarity
 		void writeSensorPolarity(UNSIGNED16 val);
 
+		//! \brief read RS232 baudrate
 		UNSIGNED16 readRS232Baudrate();
+
+		//! \brief write RS232 baudrate
 		void writeRS232Baudrate(UNSIGNED16 val);
 
+		//! \brief read P value of the PID regularor
 		INTEGER16 readP();
+
+		//! \brief read I value of the PID regularor
 		INTEGER16 readI();
+
+		//! \brief read V value of the PID regularor
 		INTEGER16 readD();
+
+		//! \brief read Velocity Feed Forward value of the PID regularor
 		UNSIGNED16 readVFF();
+
+		//! \brief read Acceleration Feed Forward value of the PID regulator
 		UNSIGNED16 readAFF();
+
+		//! \brief write P value of the PID regularor
 		void writeP(INTEGER16 val);
+
+		//! \brief write I value of the PID regularor
 		void writeI(INTEGER16 val);
+
+		//! \brief write D value of the PID regularor
 		void writeD(INTEGER16 val);
+
+		//! \brief write Velocity Feed Forward value of the PID regularor
 		void writeVFF(UNSIGNED16 val);
+
+		//! \brief write Acceleration Feed Forward value of the PID regularor
 		void writeAFF(UNSIGNED16 val);
 
+		//! \brief read P value of the PI current regularor
 		INTEGER16 readPcurrent();
+
+		//! \brief read I value of the PI current regularor
 		INTEGER16 readIcurrent();
+
+		//! \brief write P value of the PI current regularor
 		void writePcurrent(INTEGER16 val);
+
+		//! \brief write I value of the PI current regularor
 		void writeIcurrent(INTEGER16 val);
 
+		//! \brief save actual parameters in non-volatile memory
 		void saveParameters();
 
+		//! \brief read home position
 		INTEGER32 readHomePosition();
+
+		//! \brief write home position
 		void writeHomePosition(INTEGER32 val);
 
+		//! \brief read motor continous current limit
 		UNSIGNED16 readMotorContinousCurrentLimit();
+
+		//! \brief write motor continous current limit
 		void writeMotorContinousCurrentLimit(UNSIGNED16 cur);
 
+		//! \brief read motor output current limit
 		UNSIGNED16 readMotorOutputCurrentLimit();
+
+		//! \brief write motor output current limit
 		void writeMotorOutputCurrentLimit(UNSIGNED16 cur);
 
+		//! \brief read motor pole pair number
 		UNSIGNED8 readMotorPolePair();
+
+		//! \brief write motor pole pair number
 		void writeMotorPolePair(UNSIGNED8 cur);
 
+		//! \brief read motor max speed current
 		UNSIGNED32 readMotorMaxSpeedCurrent();
+
+		//! \brief write motor max speed current
 		void writeMotorMaxSpeedCurrent(UNSIGNED32 cur);
 
+		//! \brief read motor thermal constant
 		UNSIGNED16 readMotorThermalConstant();
-		void writeMotorThermalConstant(UNSIGNED16 cur);
 
-		/*! < by Martí Morta /> */
+		//! \brief write motor thermal constant
+		void writeMotorThermalConstant(UNSIGNED16 cur);
 
 		/*! \brief read actual position; 14.1.67 */
 		INTEGER32 readDemandVelocity();
@@ -410,5 +572,8 @@ class epos
 		 seconds. give timeout==0 to disable timeout */
 		int waitForTarget(unsigned int t);
 };
+
+} /* namespace edp */
+} /* namespace mrrocpp */
 
 #endif

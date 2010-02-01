@@ -1,4 +1,4 @@
-/*! \file c
+/*! \file epos.cc
 
  \brief libEPOS - a library to control an EPOS 24/1
 
@@ -44,6 +44,9 @@
 #include <sys/select.h>
 
 #include "epos.h"
+
+namespace mrrocpp {
+namespace edp {
 
 /* ********************************************* */
 /*    definitions used only internal in c   */
@@ -134,17 +137,6 @@ epos::~epos()
 /*            open/close device                             */
 /************************************************************/
 
-// von hans (atomsps.c, opensps() )
-/*! establish the connection to EPOS
-
- \param dev string describing the device on which the EPOS is connected
- to, e.g. "/dev/ttyS0"
- \param br baudrate for the transmission.
-
- \retval 0 success
- \retval -1 failure
-
- */
 int epos::openEPOS(speed_t speed)
 {
 	/* EPOS transfer format is:
@@ -195,30 +187,20 @@ int epos::openEPOS(speed_t speed)
 
 int epos::closeEPOS()
 {
-	close(ep);
-	return (0);
+	return close(ep);
 }
 
 /************************************************************/
 /*          high-level read functions */
 /************************************************************/
 
-/*! read EPOS status word
-
- \retval EPOS statusword
-
- */
+/* read EPOS status word */
 UNSIGNED16 epos::readStatusWord()
 {
 	return ReadObjectValue<UNSIGNED16>(0x6041, 0x00);
 }
 
-/*! pretty-print Statusword to stdout
-
- \param s WORD variable holding the statusword
-
- */
-int epos::printEPOSstatusword(WORD s)
+void epos::printEPOSstatusword(WORD s)
 {
 	printf("\nmeaning of EPOS statusword %#06x is:\n", s);
 
@@ -317,8 +299,6 @@ int epos::printEPOSstatusword(WORD s)
 		printf("true\n");
 	else
 		printf("false\n");
-
-	return (0);
 }
 
 /*! check EPOS state, firmware spec 8.1.1
@@ -671,11 +651,7 @@ void epos::setOpMode(operational_mode_t m)
 	WriteObject(0x6060, 0x00, dw);
 }
 
-/** read mode of operation --- 14.1.60
-
- \return RETURN(0) MEANS ERROR! -1 is a valid OpMode, but 0 is not!
-
- */
+/* read mode of operation --- 14.1.60 */
 INTEGER8 epos::readOpMode()
 {
 	return ReadObjectValue<INTEGER8>(0x6061, 0x00);
@@ -687,7 +663,7 @@ INTEGER32 epos::readDemandPosition()
 	return ReadObjectValue<INTEGER32> (0x6062, 0x00);
 }
 
-/*! read actual position; firmware description 14.1.62 */
+/* read actual position; firmware description 14.1.62 */
 INTEGER32 epos::readActualPosition()
 {
 	return ReadObjectValue<INTEGER32> (0x6064, 0x00);
@@ -1061,33 +1037,19 @@ INTEGER32 epos::readActualVelocity()
 	return ReadObjectValue<INTEGER32>(0x606c, 0x00);
 }
 
-/*! read actual motor current, see firmware description 14.1.69
-
- \param val pointer to short int where the actual motor current will be
- placed.
-
- */
+/* read actual motor current, see firmware description 14.1.69 */
 INTEGER16 epos::readActualCurrent()
 {
 	return ReadObjectValue<INTEGER16> (0x6078, 0x00);
 }
 
-/*!  read EPOS target position; firmware description 14.1.70
-
- \param val pointer to long int, will be filled with EPOS target position
-
- */
+/* read EPOS target position; firmware description 14.1.70 */
 INTEGER32 epos::readTargetPosition()
 {
 	return ReadObjectValue<INTEGER32> (0x607a, 0x00);
 }
 
-/*! readDeviceName: read manufactor device name string firmware
-
- \param str previously allocated string, will be filled with device name
- \retval 0 success
- \retval -1 error
- */
+/* read manufactor device name string firmware */
 std::string epos::readDeviceName()
 {
 	answer_t answer = ReadObject(0x1008, 0x00);
@@ -1573,8 +1535,6 @@ WORD epos::CalcFieldCRC(const WORD *pDataArray, WORD numberOfWords) const
 	return CRC;
 }
 
-/*  send command to EPOS, taking care of all neccessary 'ack' and
- checksum tests*/
 void epos::sendCom(WORD *frame)
 {
 
@@ -1626,17 +1586,7 @@ void epos::sendCom(WORD *frame)
 	}
 }
 
-/*!  int readAnswer(WORD **ptr) - read an answer frame from EPOS
-
- \param ptr WORD **ptr; pointer address where answer frame is placed.
-
- \retval >0 number of WORDs recieved from EPOS. ptr points now to
- answer frame.
- \retval <0 failure; ptr points to NULL. Global E_error is also set to
- returnd EPOS ErrorCode
-
- */
-answer_t epos::readAnswer()
+epos::answer_t epos::readAnswer()
 {
 	E_error = 0x00;
 
@@ -1714,7 +1664,7 @@ answer_t epos::readAnswer()
 	return (ans);
 }
 
-answer_t epos::ReadObject(WORD index, BYTE subindex)
+epos::answer_t epos::ReadObject(WORD index, BYTE subindex)
 {
 	WORD frame[4];
 
@@ -1750,16 +1700,7 @@ static int InitiateSegmentedRead(WORD index, BYTE subindex ) {
 	// here...
 }
 
-/*! NOT USED IN libEPOS so far -> untested!
-
-
-
- \retval >0  means sucess. Number of WORDs recieved from EPOS will be returned
- (*ptr) points to answer frame
-
- \retval <0 means failure: (*ptr) points to NULL
-
- */
+/*! NOT USED IN libEPOS so far -> untested! */
 static int SegmentRead(WORD **ptr) {
 
 	WORD frame[3];
@@ -1777,20 +1718,8 @@ static int SegmentRead(WORD **ptr) {
 }
 #endif
 
-/*! Low-level function to write an object to EPOS memory. Is called by
- writing libEPOS functions.
-
- \param index WORD describing EPOS memory index for writing. See
- firmware documentation for valid values
-
- \param subindex BYTE describing EPOS memory subindex for writing. See
- firmware documentation for valid values
-
- \param data pointer to WORD array holding the data to be written to EPOS memory
-
- \retval 0 success
- \retval -1 error
- */
+/* Low-level function to write an object to EPOS memory. Is called by
+ writing libEPOS functions. */
 void epos::WriteObject(WORD index, BYTE subindex, const WORD data[2])
 {
 	WORD frame[6];
@@ -1827,11 +1756,5 @@ bool epos::bitcmp(WORD a, WORD b) const
 	return ((a & b) == b) ? true : false;
 }
 
-void epos::checkPtr(const void* ptr) const
-{
-	if (ptr == NULL) {
-		fprintf(stderr, "malloc failed!\n");
-		exit(-1);
-	}
-}
-
+} /* namespace edp */
+} /* namespace mrrocpp */
