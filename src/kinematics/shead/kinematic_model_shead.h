@@ -17,7 +17,7 @@
 
 namespace mrrocpp {
 namespace kinematics {
-namespace smb {
+namespace shead {
 
 class model : public common::kinematic_model
 {

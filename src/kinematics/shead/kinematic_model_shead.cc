@@ -15,7 +15,7 @@
 #include "lib/com_buf.h"
 
 // Klasa kinematic_model_irp6m_with_wrist.
-#include "kinematics/smb/kinematic_model_shead.h"
+#include "kinematics/shead/kinematic_model_shead.h"
 
 namespace mrrocpp {
 namespace kinematics {
