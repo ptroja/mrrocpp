@@ -337,7 +337,7 @@ void effector::main_loop (void)
 					// okreslenie numeru bledu
 					throw NonFatal_error_1(UNKNOWN_INSTRUCTION);
 				}
-				if (is_reply_type_ERROR())
+				if (reply.reply_type==lib::ERROR)
 					printf("ERROR GET_INSTRUCTION 2 aaa\n");
 				next_state = common::EXECUTE_INSTRUCTION;
 				break;
@@ -402,9 +402,9 @@ void effector::main_loop (void)
 			// zapamietanie poprzedniej odpowiedzi
 			// Oczekiwano na QUERY a otrzymano co innego, wiec sygnalizacja bledu i
 			// dalsze oczekiwanie na QUERY
-			lib::REPLY_TYPE rep_type = is_reply_type();
-			uint64_t err_no_0 = is_error_no_0();
-			uint64_t err_no_1 = is_error_no_1();
+			lib::REPLY_TYPE rep_type = reply.reply_type;
+			uint64_t err_no_0 = reply.error_no.error0;
+			uint64_t err_no_1 = reply.error_no.error1;
 
 			establish_error(nfe.error,OK);
 			// informacja dla ECP o bledzie

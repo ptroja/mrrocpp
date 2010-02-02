@@ -952,9 +952,9 @@ void motor_driven_effector::pre_synchro_loop(STATE& next_state)
 			// zapamietanie poprzedniej odpowiedzi
 			// Oczekiwano na QUERY a otrzymano co innego, wiec sygnalizacja bledu i
 			// dalsze oczekiwanie na QUERY
-			lib::REPLY_TYPE rep_type = is_reply_type();
-			uint64_t err_no_0 = is_error_no_0();
-			uint64_t err_no_1 = is_error_no_1();
+			lib::REPLY_TYPE rep_type = reply.reply_type;
+			uint64_t err_no_0 = reply.error_no.error0;
+			uint64_t err_no_1 = reply.error_no.error1;
 
 			establish_error(nfe.error, OK);
 			// informacja dla ECP o bledzie
@@ -1080,7 +1080,7 @@ void motor_driven_effector::synchro_loop(STATE& next_state)
 			// Konkretny numer bledu znajduje sie w skladowej error obiektu nfe
 			// Sa to bledy nie zwiazane ze sprzetem i komunikacja miedzyprocesow
 			// zapamietanie poprzedniej odpowiedzi
-			lib::REPLY_TYPE rep_type = is_reply_type();
+			lib::REPLY_TYPE rep_type = reply.reply_type;
 			establish_error(nfe2.error, OK);
 			reply_to_instruction();
 			msg->message(lib::NON_FATAL_ERROR, nfe2.error, 0);
@@ -1094,9 +1094,9 @@ void motor_driven_effector::synchro_loop(STATE& next_state)
 			// Konkretny numer bledu znajduje sie w skladowej error obiektu nfe
 			// Sa to bledy nie zwiazane ze sprzetem i komunikacja miedzyprocesow
 			// zapamietanie poprzedniej odpowiedzi
-			lib::REPLY_TYPE rep_type = is_reply_type();
-			uint64_t err_no_0 = is_error_no_0();
-			uint64_t err_no_1 = is_error_no_1();
+			lib::REPLY_TYPE rep_type = reply.reply_type;
+			uint64_t err_no_0 = reply.error_no.error0;
+			uint64_t err_no_1 = reply.error_no.error1;
 			establish_error(nfe3.error, OK);
 			reply_to_instruction();
 			msg->message(lib::NON_FATAL_ERROR, nfe3.error, 0);
@@ -1113,7 +1113,7 @@ void motor_driven_effector::synchro_loop(STATE& next_state)
 			// Konkretny numer bledu znajduje sie w skladowej error obiektu nfe
 			// Sa to bledy nie zwiazane ze sprzetem i komunikacja miedzyprocesow
 			// zapamietanie poprzedniej odpowiedzi
-			lib::REPLY_TYPE rep_type = is_reply_type();
+			lib::REPLY_TYPE rep_type = reply.reply_type;
 			establish_error(nfe4.error, OK);
 			reply_to_instruction();
 			msg->message(lib::NON_FATAL_ERROR, nfe4.error, 0);
@@ -1226,9 +1226,9 @@ void motor_driven_effector::post_synchro_loop(STATE& next_state)
 			// zapamietanie poprzedniej odpowiedzi
 			// Oczekiwano na QUERY a otrzymano co innego, wiec sygnalizacja bledu i
 			// dalsze oczekiwanie na QUERY
-			lib::REPLY_TYPE rep_type = is_reply_type();
-			uint64_t err_no_0 = is_error_no_0();
-			uint64_t err_no_1 = is_error_no_1();
+			lib::REPLY_TYPE rep_type = reply.reply_type;
+			uint64_t err_no_0 = reply.error_no.error0;
+			uint64_t err_no_1 = reply.error_no.error1;
 
 			establish_error(nfe.error, OK);
 			// informacja dla ECP o bledzie
