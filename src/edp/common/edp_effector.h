@@ -98,27 +98,31 @@ protected:
 	 */
 	void reply_to_instruction(void);
 
-
+	/*!
+	 * \brief method to establish error sent to ECP.
+	 *
+	 * The error is stored in reply_buffer.
+	 */
 	void establish_error(uint64_t err0, uint64_t err1);
 
 public:
+
+	const lib::robot_name_t robot_name;
 	lib::configurator &config;
 	lib::sr_edp *msg;
 	lib::sr_edp *sh_msg;
+
+	int test_mode;
 
 	bool initialize_communication(void);
 
 	effector(lib::configurator &_config, lib::robot_name_t l_robot_name);
 	virtual ~effector();
 
-	int test_mode;
-
 	lib::c_buffer new_instruction, current_instruction;
 
 	virtual void main_loop() = 0; // main loop
 	virtual void create_threads() = 0;
-
-	const lib::robot_name_t robot_name;
 
 };
 /************************ EDP_EFFECTOR ****************************/

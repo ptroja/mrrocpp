@@ -183,18 +183,17 @@ void motor_driven_effector::multi_thread_move_arm(lib::c_buffer &instruction)
 void motor_driven_effector::single_thread_master_order(common::MT_ORDER nm_task, int nm_tryb)
 {
 	// przekopiowanie instrukcji z bufora watku komunikacji z ECP (edp_master)
-	current_instruction = new_instruction;
 
 	switch (nm_task)
 	{
 		case common::MT_GET_CONTROLLER_STATE:
-			get_controller_state(current_instruction);
+			get_controller_state(new_instruction);
 			break;
 		case common::MT_SET_RMODEL:
-			set_rmodel(current_instruction);
+			set_rmodel(new_instruction);
 			break;
 		case common::MT_GET_ARM_POSITION:
-			get_arm_position(nm_tryb, current_instruction);
+			get_arm_position(nm_tryb, new_instruction);
 			break;
 		case common::MT_GET_ALGORITHMS:
 			get_algorithms();
@@ -203,7 +202,7 @@ void motor_driven_effector::single_thread_master_order(common::MT_ORDER nm_task,
 			synchronise();
 			break;
 		case common::MT_MOVE_ARM:
-			move_arm(current_instruction);
+			move_arm(new_instruction);
 			break;
 		default: // blad: z reply_type wynika, e odpowied nie ma zawiera narzedzia
 			break;
