@@ -95,6 +95,12 @@ void configurator::change_ini_file (const std::string & _ini_file)
 #endif /* USE_MESSIP_SRR */
 }
 
+bool configurator::check_config(const std::string & s)
+{
+	return (exists(s.c_str()) && value<int>(s.c_str()));
+}
+
+
 // Zwraca numer wezla.
 int configurator::return_node_number(const std::string & node_name_l)
 {

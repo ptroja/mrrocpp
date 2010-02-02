@@ -82,7 +82,6 @@ public:
     lib::sr_edp *msg;
     lib::sr_edp *sh_msg;
 
-    bool check_config(const std::string & s);
     bool initialize_communication (void);
 
 

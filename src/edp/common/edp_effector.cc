@@ -56,10 +56,6 @@ effector::~effector() {
 	delete msg;
 }
 
-bool effector::check_config(const std::string & s)
-{
-	return (config.exists(s.c_str()) && config.value<int>(s.c_str()));
-}
 
 /*--------------------------------------------------------------------------*/
 bool effector::initialize_communication()

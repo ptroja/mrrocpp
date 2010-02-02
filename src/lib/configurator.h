@@ -70,6 +70,8 @@ public:
 
 	const std::string section_name;
 
+    bool check_config(const std::string & s);
+
 	// Konstruktor obiektu - konfiguratora.
 	configurator(
 			const std::string & _node,

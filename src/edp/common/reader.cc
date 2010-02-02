@@ -101,52 +101,52 @@ void reader_buffer::operator()()
 		nr_of_samples = 1000;
 
 	reader_cnf.step = 1;
-	reader_cnf.servo_mode = master.check_config("servo_tryb");
-	reader_cnf.msec = master.check_config("msec");
+	reader_cnf.servo_mode = master.config.check_config("servo_tryb");
+	reader_cnf.msec = master.config.check_config("msec");
 
 	char tmp_string[50];
 
 	for (int j = 0; j < MAX_SERVOS_NR; j++) {
 
 		sprintf(tmp_string, "desired_inc_%d", j);
-		reader_cnf.desired_inc[j] = master.check_config(tmp_string);
+		reader_cnf.desired_inc[j] = master.config.check_config(tmp_string);
 
 		sprintf(tmp_string, "current_inc_%d", j);
-		reader_cnf.current_inc[j] = master.check_config(tmp_string);
+		reader_cnf.current_inc[j] = master.config.check_config(tmp_string);
 
 		sprintf(tmp_string, "pwm_%d", j);
-		reader_cnf.pwm[j] = master.check_config(tmp_string);
+		reader_cnf.pwm[j] = master.config.check_config(tmp_string);
 
 		sprintf(tmp_string, "uchyb_%d", j);
-		reader_cnf.uchyb[j] = master.check_config(tmp_string);
+		reader_cnf.uchyb[j] = master.config.check_config(tmp_string);
 
 		sprintf(tmp_string, "abs_pos_%d", j);
-		reader_cnf.abs_pos[j] = master.check_config(tmp_string);
+		reader_cnf.abs_pos[j] = master.config.check_config(tmp_string);
 
 		sprintf(tmp_string, "current_joints_%d", j);
-		reader_cnf.current_joints[j] = master.check_config(tmp_string);
+		reader_cnf.current_joints[j] = master.config.check_config(tmp_string);
 
 		if (j < 6) {
 			sprintf(tmp_string, "force_%d", j);
-			reader_cnf.force[j] = master.check_config(tmp_string);
+			reader_cnf.force[j] = master.config.check_config(tmp_string);
 
 			sprintf(tmp_string, "desired_force_%d", j);
-			reader_cnf.desired_force[j] = master.check_config(tmp_string);
+			reader_cnf.desired_force[j] = master.config.check_config(tmp_string);
 
 			sprintf(tmp_string, "filtered_force_%d", j);
-			reader_cnf.filtered_force[j] = master.check_config(tmp_string);
+			reader_cnf.filtered_force[j] = master.config.check_config(tmp_string);
 
 			sprintf(tmp_string, "desired_cartesian_position_%d", j);
-			reader_cnf.desired_cartesian_position[j] = master.check_config(tmp_string);
+			reader_cnf.desired_cartesian_position[j] = master.config.check_config(tmp_string);
 
 			sprintf(tmp_string, "real_cartesian_position_%d", j);
-			reader_cnf.real_cartesian_position[j] = master.check_config(tmp_string);
+			reader_cnf.real_cartesian_position[j] = master.config.check_config(tmp_string);
 
 			sprintf(tmp_string, "real_cartesian_vel_%d", j);
-			reader_cnf.real_cartesian_vel[j] = master.check_config(tmp_string);
+			reader_cnf.real_cartesian_vel[j] = master.config.check_config(tmp_string);
 
 			sprintf(tmp_string, "real_cartesian_acc_%d", j);
-			reader_cnf.real_cartesian_acc[j] = master.check_config(tmp_string);
+			reader_cnf.real_cartesian_acc[j] = master.config.check_config(tmp_string);
 		}
 	}
 
