@@ -43,7 +43,7 @@ void manip_trans_t::operator()()
         trans_t_wait_for_master_order();
 
         // przekopiowanie instrukcji z bufora watku komunikacji z ECP (edp_master)
-        master.current_instruction = master.new_instruction;
+//        master.current_instruction = master.instruction;
 
         error = NO_ERROR; // wyjsciowo brak bledu (dla rzutowania)
 
@@ -55,15 +55,15 @@ void manip_trans_t::operator()()
             switch (trans_t_task)
             {
             case MT_GET_CONTROLLER_STATE:
-            	master.get_controller_state(master.current_instruction);
+            	master.get_controller_state(instruction);
                 trans_t_to_master_order_status_ready();
                 break;
             case MT_SET_RMODEL:
-            	master.set_rmodel(master.current_instruction);
+            	master.set_rmodel(instruction);
                 trans_t_to_master_order_status_ready();
                 break;
             case MT_GET_ARM_POSITION:
-            	master.get_arm_position(trans_t_tryb, master.current_instruction);
+            	master.get_arm_position(trans_t_tryb, instruction);
                 trans_t_to_master_order_status_ready();
                 break;
             case MT_GET_ALGORITHMS:
@@ -75,7 +75,7 @@ void manip_trans_t::operator()()
                 trans_t_to_master_order_status_ready();
                 break;
             case MT_MOVE_ARM:
-            	master.move_arm(master.current_instruction); 	 // wariant dla watku edp_trans_t
+            	master.move_arm(instruction); 	 // wariant dla watku edp_trans_t
                 break;
             default: // blad: z reply_type wynika, e odpowied nie ma zawiera narzedzia
                 break;

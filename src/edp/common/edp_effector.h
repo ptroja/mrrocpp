@@ -119,7 +119,7 @@ public:
 	effector(lib::configurator &_config, lib::robot_name_t l_robot_name);
 	virtual ~effector();
 
-	lib::c_buffer new_instruction, current_instruction;
+	lib::c_buffer instruction;
 
 	virtual void main_loop() = 0; // main loop
 	virtual void create_threads() = 0;

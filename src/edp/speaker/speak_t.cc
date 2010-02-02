@@ -50,7 +50,7 @@ void speak_t::operator()()
         trans_t_wait_for_master_order();// oczekiwanie na zezwolenie ruchu od edp_master
 
         // przekopiowanie instrukcji z bufora watku komunikacji z ECP (edp_master)
-        master.current_instruction = master.new_instruction;
+  //      master.current_instruction = master.instruction;
 
         try
         {
@@ -59,13 +59,13 @@ void speak_t::operator()()
             {
             case common::MT_GET_ARM_POSITION:
                 // master.get_arm_position(trans_t_tryb, &(master.current_instruction));
-            	master.get_spoken(trans_t_tryb, &(master.current_instruction)); // MAC7
+            	master.get_spoken(trans_t_tryb, &(instruction)); // MAC7
                 trans_t_to_master_order_status_ready();
                 break;
             case common::MT_MOVE_ARM:
                 // master.move_arm(&(master.current_instruction)); 	 // wariant dla watku edp_trans_t
                 trans_t_to_master_order_status_ready();
-                master.speak(&(master.current_instruction)); // MAC7
+                master.speak(&(instruction)); // MAC7
                 break;
             default: // blad: z reply_type wynika, e odpowied nie ma zawiera narzedzia
                 break;

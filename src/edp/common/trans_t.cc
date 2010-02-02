@@ -36,10 +36,11 @@ trans_t::~trans_t()
 	sem_destroy(&trans_t_to_master_sem);
 }
 
-void trans_t::master_to_trans_t_order(MT_ORDER nm_task, int nm_tryb)
+void trans_t::master_to_trans_t_order(MT_ORDER nm_task, int nm_tryb, const lib::c_buffer& _instruction)
 { // zlecenie z watku master dla trans_t
 	trans_t_task = nm_task; // force, arm etc.
 	trans_t_tryb = nm_tryb; // tryb dla zadania
+	instruction = _instruction;
 
 	// odwieszenie watku transformation
 	sem_trywait(&master_to_trans_t_sem);

@@ -187,13 +187,13 @@ void motor_driven_effector::single_thread_master_order(common::MT_ORDER nm_task,
 	switch (nm_task)
 	{
 		case common::MT_GET_CONTROLLER_STATE:
-			get_controller_state(new_instruction);
+			get_controller_state(instruction);
 			break;
 		case common::MT_SET_RMODEL:
-			set_rmodel(new_instruction);
+			set_rmodel(instruction);
 			break;
 		case common::MT_GET_ARM_POSITION:
-			get_arm_position(nm_tryb, new_instruction);
+			get_arm_position(nm_tryb, instruction);
 			break;
 		case common::MT_GET_ALGORITHMS:
 			get_algorithms();
@@ -202,7 +202,7 @@ void motor_driven_effector::single_thread_master_order(common::MT_ORDER nm_task,
 			synchronise();
 			break;
 		case common::MT_MOVE_ARM:
-			move_arm(new_instruction);
+			move_arm(instruction);
 			break;
 		default: // blad: z reply_type wynika, e odpowied nie ma zawiera narzedzia
 			break;
@@ -211,7 +211,7 @@ void motor_driven_effector::single_thread_master_order(common::MT_ORDER nm_task,
 
 void motor_driven_effector::multi_thread_master_order(MT_ORDER nm_task, int nm_tryb)
 {
-	mt_tt_obj->master_to_trans_t_order(nm_task, nm_tryb);
+	mt_tt_obj->master_to_trans_t_order(nm_task, nm_tryb, instruction);
 }
 
 /*--------------------------------------------------------------------------*/
@@ -868,9 +868,9 @@ void motor_driven_effector::pre_synchro_loop(STATE& next_state)
 							reply.reply_type = lib::ACKNOWLEDGE;
 							reply_to_instruction();
 
-							if ((rep_type(new_instruction)) == lib::CONTROLLER_STATE) {
+							if ((rep_type(instruction)) == lib::CONTROLLER_STATE) {
 								// master_order(MT_GET_CONTROLLER_STATE, 0);
-								interpret_instruction(new_instruction);
+								interpret_instruction(instruction);
 							} else {
 								throw NonFatal_error_1(INVALID_INSTRUCTION_TYPE);
 							}
@@ -1006,12 +1006,12 @@ void motor_driven_effector::synchro_loop(STATE& next_state)
 							break;
 						case lib::SET:
 							// instrukcja wlasciwa => zle jej wykonanie
-							if (pre_synchro_motion(new_instruction)) {
+							if (pre_synchro_motion(instruction)) {
 								/* Potwierdzenie przyjecia instrukcji ruchow presynchronizacyjnych do wykonania */
 								reply.reply_type = lib::ACKNOWLEDGE;
 								reply_to_instruction();
 								/* Zlecenie wykonania ruchow presynchronizacyjnych */
-								interpret_instruction(new_instruction);
+								interpret_instruction(instruction);
 								// Jezeli wystapil blad w trakcie realizacji ruchow presynchronizacyjnych,
 								// to zostanie zgloszony wyjatek:
 
@@ -1175,7 +1175,7 @@ void motor_driven_effector::post_synchro_loop(STATE& next_state)
 					break;
 				case EXECUTE_INSTRUCTION:
 					// wykonanie instrukcji - wszelkie bledy powoduja zgloszenie wyjtku NonFatal_error_2 lub Fatal_error
-					interpret_instruction(new_instruction);
+					interpret_instruction(instruction);
 					next_state = WAIT;
 					break;
 				case WAIT:

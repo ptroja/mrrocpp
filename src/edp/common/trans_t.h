@@ -35,12 +35,14 @@ class effector;
 class trans_t : public boost::noncopyable
 {
 private:
+
     sem_t master_to_trans_t_sem; // semafor pomiedzy edp_master a edp_trans
     sem_t trans_t_to_master_sem; // semafor pomiedzy edp_master a edp_trans
     effector &master;
 
 protected:
     boost::thread *thread_id;
+	lib::c_buffer instruction;
 
 public:
     MT_ORDER trans_t_task;
@@ -55,7 +57,7 @@ public:
     trans_t(effector& _master);
     virtual ~trans_t();
 
-    void master_to_trans_t_order(MT_ORDER nm_task, int nm_tryb);
+    void master_to_trans_t_order(MT_ORDER nm_task, int nm_tryb, const lib::c_buffer& _instruction);
     int	trans_t_to_master_order_status_ready();
     int	trans_t_wait_for_master_order();
 };

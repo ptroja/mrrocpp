@@ -228,7 +228,7 @@ void effector::interpret_instruction (lib::c_buffer &instruction)
 		reply.arm.text_def.speaking=speaking;
 		if(!speaking)
 		{
-			mt_tt_obj->master_to_trans_t_order(common::MT_MOVE_ARM, 0);
+			mt_tt_obj->master_to_trans_t_order(common::MT_MOVE_ARM, 0, instruction);
 		}
 		break;
 	case lib::GET:
@@ -237,7 +237,7 @@ void effector::interpret_instruction (lib::c_buffer &instruction)
 		break;
 	case lib::SET_GET:
 		reply.arm.text_def.speaking=speaking;
-		mt_tt_obj->master_to_trans_t_order(common::MT_MOVE_ARM, 0);
+		mt_tt_obj->master_to_trans_t_order(common::MT_MOVE_ARM, 0, instruction);
 		// mt_tt_obj->master_to_trans_t_order(MT_GET_ARM_POSITION, true);
 		break;
 	default: // blad
@@ -344,7 +344,7 @@ void effector::main_loop (void)
 				case common::EXECUTE_INSTRUCTION:
 					// printf("jestesmy w execute instruction\n"); // MAC7
 					// wykonanie instrukcji - wszelkie bledy powoduja zgloszenie wyjtku NonFatal_error_2 lub Fatal_error
-					interpret_instruction (new_instruction);
+					interpret_instruction (instruction);
 					//      printf("w execute po interpret\n");
 					next_state = common::WAIT;
 					break;

@@ -212,9 +212,9 @@ lib::INSTRUCTION_TYPE effector::receive_instruction(void)
 
 	caller = rcvid;
 
-	new_instruction = new_ecp_command.instruction;
+	instruction = new_ecp_command.instruction;
 
-	return new_instruction.instruction_type;
+	return instruction.instruction_type;
 }
 
 void effector::reply_to_instruction(void)
