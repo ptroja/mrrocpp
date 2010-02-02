@@ -10,15 +10,15 @@
 // ------------------------------------------------------------------------
 
 
-#ifndef __EDP_E_SMB_H
-#define __EDP_E_SMB_H
+#ifndef __EDP_E_SHEAD_H
+#define __EDP_E_SHEAD_H
 
 #include "edp/common/edp_e_motor_driven.h"
-#include "lib/smb_const.h"
+#include "lib/shead_const.h"
 
 namespace mrrocpp {
 namespace edp {
-namespace smb {
+namespace shead {
 
 // Klasa reprezentujaca robota IRp-6 na postumencie.
 class effector: public common::motor_driven_effector

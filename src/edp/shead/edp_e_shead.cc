@@ -19,7 +19,7 @@
 #include "lib/mrmath/mrmath.h"
 
 // Klasa edp_irp6ot_effector.
-#include "edp/smb/edp_e_smb.h"
+#include "edp/shead/edp_e_shead.h"
 #include "edp/common/reader.h"
 // Kinematyki.
 #include "kinematics/shead/kinematic_model_shead.h"
@@ -31,7 +31,7 @@ using namespace mrrocpp::lib::exception;
 
 namespace mrrocpp {
 namespace edp {
-namespace smb {
+namespace shead {
 
 void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
 {
@@ -102,7 +102,7 @@ namespace common {
 // Stworzenie obiektu edp_irp6m_effector.
 effector* return_created_efector(lib::configurator &_config)
 {
-	return new smb::effector(_config);
+	return new shead::effector(_config);
 }
 
 } // namespace common

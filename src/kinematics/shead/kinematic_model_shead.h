@@ -10,8 +10,8 @@
 // Data:		31.01.2007
 // ------------------------------------------------------------------------
 
-#if !defined(_SMB_KIN_model)
-#define _SMB_KIN_model
+#if !defined(_SHEAD_KIN_MODEL)
+#define _SHEAD_KIN_MODEL
 
 #include "kinematics/common/kinematic_model.h"
 

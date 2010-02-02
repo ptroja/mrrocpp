@@ -9,7 +9,7 @@
 #define _ECP_R_SHEAD_H
 
 #include "ecp/common/ecp_robot.h"
-#include "lib/smb_const.h"
+#include "lib/shead_const.h"
 
 namespace mrrocpp {
 namespace ecp {

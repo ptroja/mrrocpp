@@ -591,9 +591,11 @@ INPUT                  = \
 			 src/edp/common/trans_t.cc \
 			 src/edp/common/trans_t.h \
 			 src/edp/smb/ \
+			 src/edp/shead/ \
 			 src/edp/spkm/ \
 			 src/edp/epos/ \
 			 src/kinematics/smb/ \
+			 src/kinematics/shead/ \
 			 src/kinematics/spkm/
 			 #src/edp/common/edp_force_sensor.cc \
 			 #src/edp/common/edp_force_sensor.h \
