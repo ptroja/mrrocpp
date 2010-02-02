@@ -496,7 +496,7 @@ void irp6s_postument_track_effector::iterate_macrostep(const lib::JointArray beg
 			 reply.arm.pf_def.force_xyz_torque_xyz[i] = current_force_torque[i];
 			 }
 			 */
-			mt_tt_obj->trans_t_to_master_order_status_ready();
+			mt_tt_obj->trans_t_to_master_synchroniser.command();
 		}
 
 		last_force_step_counter = step_counter;

@@ -47,7 +47,7 @@ void speak_t::operator()()
 
     while(1)
     {
-        trans_t_wait_for_master_order();// oczekiwanie na zezwolenie ruchu od edp_master
+    	master_to_trans_synchroniser.wait();
 
         // przekopiowanie instrukcji z bufora watku komunikacji z ECP (edp_master)
   //      master.current_instruction = master.instruction;
@@ -60,11 +60,11 @@ void speak_t::operator()()
             case common::MT_GET_ARM_POSITION:
                 // master.get_arm_position(trans_t_tryb, &(master.current_instruction));
             	master.get_spoken(trans_t_tryb, &(instruction)); // MAC7
-                trans_t_to_master_order_status_ready();
+                trans_t_to_master_synchroniser.command();
                 break;
             case common::MT_MOVE_ARM:
                 // master.move_arm(&(master.current_instruction)); 	 // wariant dla watku edp_trans_t
-                trans_t_to_master_order_status_ready();
+                trans_t_to_master_synchroniser.command();
                 master.speak(&(instruction)); // MAC7
                 break;
             default: // blad: z reply_type wynika, e odpowied nie ma zawiera narzedzia
@@ -82,7 +82,7 @@ void speak_t::operator()()
             memcpy(error_pointer, &nfe, sizeof(nfe));
             error_pointer = &nfe;
             error = common::NonFatal_erroR_1;
-            trans_t_to_master_order_status_ready();
+            trans_t_to_master_synchroniser.command();
         } // end: catch(NonFatal_error_1 nfe)
 
         catch(NonFatal_error_2 nfe)
@@ -91,7 +91,7 @@ void speak_t::operator()()
             memcpy(error_pointer, &nfe, sizeof(nfe));
             error_pointer=&nfe;
             error = common::NonFatal_erroR_2;
-            trans_t_to_master_order_status_ready();
+            trans_t_to_master_synchroniser.command();
         } // end: catch(NonFatal_error_2 nfe)
 
         catch(NonFatal_error_3 nfe)
@@ -100,7 +100,7 @@ void speak_t::operator()()
             memcpy(error_pointer, &nfe, sizeof(nfe));
             error_pointer=&nfe;
             error = common::NonFatal_erroR_3;
-            trans_t_to_master_order_status_ready();
+            trans_t_to_master_synchroniser.command();
         } // end: catch(NonFatal_error_3 nfe)
 
         catch(NonFatal_error_4 nfe)
@@ -108,7 +108,7 @@ void speak_t::operator()()
             error_pointer= malloc(sizeof(nfe));
             memcpy(error_pointer, &nfe, sizeof(nfe));
             error = common::NonFatal_erroR_4;
-            trans_t_to_master_order_status_ready();
+            trans_t_to_master_synchroniser.command();
         } // end: catch(NonFatal_error nfe4)
 
         catch(Fatal_error fe)
@@ -116,7 +116,7 @@ void speak_t::operator()()
             error_pointer= malloc(sizeof(fe));
             memcpy(error_pointer, &fe, sizeof(fe));
             error = common::Fatal_erroR;
-            trans_t_to_master_order_status_ready();
+            trans_t_to_master_synchroniser.command();
         } // end: catch(Fatal_error fe)
 
         catch (System_error fe)
@@ -124,14 +124,14 @@ void speak_t::operator()()
             error_pointer= malloc(sizeof(fe));
             memcpy(error_pointer, &fe, sizeof(fe));
             error = common::System_erroR;
-            trans_t_to_master_order_status_ready();
+            trans_t_to_master_synchroniser.command();
         } // end: catch(System_error fe)
 
         catch (...)
         {  // Dla zewnetrznej petli try
             printf("transformation thread uneidentified_error\n");
 
-            trans_t_to_master_order_status_ready();
+            trans_t_to_master_synchroniser.command();
             // Wylapywanie niezdefiniowanych bledow
             // printf("zlapane cos");// by Y&W
         }

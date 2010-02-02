@@ -40,7 +40,7 @@ void manip_trans_t::operator()()
     while(1)
     {
         // oczekiwanie na zezwolenie ruchu od edp_master
-        trans_t_wait_for_master_order();
+    	master_to_trans_synchroniser.wait();
 
         // przekopiowanie instrukcji z bufora watku komunikacji z ECP (edp_master)
 //        master.current_instruction = master.instruction;
@@ -56,23 +56,23 @@ void manip_trans_t::operator()()
             {
             case MT_GET_CONTROLLER_STATE:
             	master.get_controller_state(instruction);
-                trans_t_to_master_order_status_ready();
+                trans_t_to_master_synchroniser.command();
                 break;
             case MT_SET_RMODEL:
             	master.set_rmodel(instruction);
-                trans_t_to_master_order_status_ready();
+                trans_t_to_master_synchroniser.command();
                 break;
             case MT_GET_ARM_POSITION:
             	master.get_arm_position(trans_t_tryb, instruction);
-                trans_t_to_master_order_status_ready();
+                trans_t_to_master_synchroniser.command();
                 break;
             case MT_GET_ALGORITHMS:
             	master.get_algorithms();
-                trans_t_to_master_order_status_ready();
+                trans_t_to_master_synchroniser.command();
                 break;
             case MT_SYNCHRONISE:
             	master.synchronise();
-                trans_t_to_master_order_status_ready();
+                trans_t_to_master_synchroniser.command();
                 break;
             case MT_MOVE_ARM:
             	master.move_arm(instruction); 	 // wariant dla watku edp_trans_t
@@ -88,49 +88,49 @@ void manip_trans_t::operator()()
         {
             error_pointer= new NonFatal_error_1(nfe);
             error = NonFatal_erroR_1;
-            trans_t_to_master_order_status_ready();
+            trans_t_to_master_synchroniser.command();
         }
 
         catch(NonFatal_error_2 nfe)
         {
             error_pointer= new NonFatal_error_2(nfe);
             error = NonFatal_erroR_2;
-            trans_t_to_master_order_status_ready();
+            trans_t_to_master_synchroniser.command();
         }
 
         catch(NonFatal_error_3 nfe)
         {
             error_pointer= new NonFatal_error_3(nfe);
             error = NonFatal_erroR_3;
-            trans_t_to_master_order_status_ready();
+            trans_t_to_master_synchroniser.command();
         }
 
         catch(NonFatal_error_4 nfe)
         {
             error_pointer= new NonFatal_error_4(nfe);
             error = NonFatal_erroR_4;
-            trans_t_to_master_order_status_ready();
+            trans_t_to_master_synchroniser.command();
         }
 
         catch(Fatal_error fe)
         {
             error_pointer= new Fatal_error(fe);
             error = Fatal_erroR;
-            trans_t_to_master_order_status_ready();
+            trans_t_to_master_synchroniser.command();
         }
 
         catch (System_error fe)
         {
             error_pointer= new System_error(fe);
             error = System_erroR;
-            trans_t_to_master_order_status_ready();
+            trans_t_to_master_synchroniser.command();
         }
 
         catch (...)
         {
             printf("transformation thread unidentified_error\n");
 
-            trans_t_to_master_order_status_ready();
+            trans_t_to_master_synchroniser.command();
             // Wylapywanie niezdefiniowanych bledow
             // printf("zlapane cos");// by Y&W
         }

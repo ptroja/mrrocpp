@@ -14,6 +14,7 @@
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
+#include "lib/mis_fun.h"
 
 #include "edp/common/edp.h"
 
@@ -36,8 +37,6 @@ class trans_t : public boost::noncopyable
 {
 private:
 
-    sem_t master_to_trans_t_sem; // semafor pomiedzy edp_master a edp_trans
-    sem_t trans_t_to_master_sem; // semafor pomiedzy edp_master a edp_trans
     effector &master;
 
 protected:
@@ -45,6 +44,9 @@ protected:
 	lib::c_buffer instruction;
 
 public:
+	lib::boost_condition_synchroniser master_to_trans_synchroniser;
+	lib::boost_condition_synchroniser trans_t_to_master_synchroniser;
+
     MT_ORDER trans_t_task;
     int trans_t_tryb;
     ERROR_TYPE error;
@@ -58,8 +60,7 @@ public:
     virtual ~trans_t();
 
     void master_to_trans_t_order(MT_ORDER nm_task, int nm_tryb, const lib::c_buffer& _instruction);
-    int	trans_t_to_master_order_status_ready();
-    int	trans_t_wait_for_master_order();
+
 };
 /**************************** trans_t *****************************/
 

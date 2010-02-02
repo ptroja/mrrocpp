@@ -313,7 +313,7 @@ void manip_effector::multi_thread_move_arm(lib::c_buffer &instruction)
 		case lib::FRAME:
 			compute_frame(instruction);
 			move_servos();
-			mt_tt_obj->trans_t_to_master_order_status_ready();
+			mt_tt_obj->trans_t_to_master_synchroniser.command();
 
 			break;
 		default: // blad: niezdefiniowany sposb specyfikacji pozycji koncowki

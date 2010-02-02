@@ -20,20 +20,15 @@ namespace mrrocpp {
 namespace edp {
 namespace common {
 
-
 trans_t::trans_t(effector& _master) :
-	master (_master)
+	master(_master), master_to_trans_synchroniser(), trans_t_to_master_synchroniser()
 {
-	// semafory do komunikacji miedzy EDP_MASTER a EDP_TRANS
-	sem_init(&master_to_trans_t_sem, 0, 0);
-	sem_init(&trans_t_to_master_sem, 0, 0);
+
 }
 
 trans_t::~trans_t()
 {
-	// semafory do komunikacji miedzy EDP_MASTER a EDP_TRANS
-	sem_destroy(&master_to_trans_t_sem);
-	sem_destroy(&trans_t_to_master_sem);
+
 }
 
 void trans_t::master_to_trans_t_order(MT_ORDER nm_task, int nm_tryb, const lib::c_buffer& _instruction)
@@ -43,51 +38,36 @@ void trans_t::master_to_trans_t_order(MT_ORDER nm_task, int nm_tryb, const lib::
 	instruction = _instruction;
 
 	// odwieszenie watku transformation
-	sem_trywait(&master_to_trans_t_sem);
-	sem_post(&master_to_trans_t_sem);
+	master_to_trans_synchroniser.command();
 
 	// oczekiwanie na zwolniene samafora przez watek trans_t
-	sem_wait(&trans_t_to_master_sem); // oczekiwanie na zezwolenie ruchu od edp_master
+	trans_t_to_master_synchroniser.wait();
 
 	// sekcja sprawdzajaca czy byl blad w watku transforamation i ew. rzucajaca go w watku master
 
-	switch (error) {
+	switch (error)
+	{
 		case NonFatal_erroR_1:
-			throw *(NonFatal_error_1*)(error_pointer);
+			throw *(NonFatal_error_1*) (error_pointer);
 			break;
 		case NonFatal_erroR_2:
-			throw *(NonFatal_error_2*)(error_pointer);
+			throw *(NonFatal_error_2*) (error_pointer);
 			break;
 		case NonFatal_erroR_3:
-			throw *(NonFatal_error_3*)(error_pointer);
+			throw *(NonFatal_error_3*) (error_pointer);
 			break;
 		case NonFatal_erroR_4:
-			throw *(NonFatal_error_4*)(error_pointer);
+			throw *(NonFatal_error_4*) (error_pointer);
 			break;
 		case Fatal_erroR:
-			throw *(Fatal_error*)(error_pointer);
+			throw *(Fatal_error*) (error_pointer);
 			break;
 		case System_erroR:
-			throw *(System_error*)(error_pointer);
+			throw *(System_error*) (error_pointer);
 			break;
 		default:
 			break;
 	}
-}
-
-// oczekiwanie na semafor statusu polecenia z trans_t
-int trans_t::trans_t_to_master_order_status_ready()
-{
-	// odwieszenie watku new master
-	sem_trywait(&trans_t_to_master_sem);
-	return sem_post(&trans_t_to_master_sem);// odwieszenie watku edp_master
-}
-
-// oczekiwanie na semafor statusu polecenia z trans_t
-int trans_t::trans_t_wait_for_master_order()
-{
-	// oczekiwanie na rozkaz z watku master
-	return sem_wait(&master_to_trans_t_sem);
 }
 
 } // namespace common

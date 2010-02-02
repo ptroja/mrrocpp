@@ -12,11 +12,30 @@
 
 #include <pthread.h>
 #include <string.h>
+#include <boost/thread/condition_variable.hpp>
+#include <boost/thread/mutex.hpp>
+#include <boost/circular_buffer.hpp>
 
 #include "lib/impconst.h"
 
 namespace mrrocpp {
 namespace lib {
+
+
+class boost_condition_synchroniser {
+public:
+
+	void wait();
+	void command();
+	boost_condition_synchroniser();
+
+private:
+	boost::condition_variable cond; //! active command condition
+	boost::mutex mtx; //! mutex related to condition variable
+
+	bool has_command; //! flag indicating active command to execute
+
+};
 
 // setting of thread priority
 void set_thread_priority(pthread_t thread, int sched_priority_l);

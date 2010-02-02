@@ -106,28 +106,92 @@ protected:
 	void establish_error(uint64_t err0, uint64_t err1);
 
 public:
-
+	/*!
+	 * \brief Name of the robot
+	 *
+	 * TFor the identification purpose
+	 */
 	const lib::robot_name_t robot_name;
+
+	/*!
+	 * \brief Referecnce to configuration object
+	 *
+	 * It stores data read from ini file.
+	 */
 	lib::configurator &config;
+
+	/*!
+	 * \brief Pointer to object to communicate with UI SR thread outside the signal handlers.
+	 *
+	 * For the usage in asynchronous communication.
+	 */
 	lib::sr_edp *msg;
+
+	/*!
+	 * \brief Pointer to object to communicate with UI SR thread in signal handlers.
+	 *
+	 * For the usage in synchronous communication.
+	 */
 	lib::sr_edp *sh_msg;
 
+	/*!
+	 * \brief Info if the test mode is active.
+	 *
+	 * It is taken from configaration data.
+	 */
 	int test_mode;
 
+	/*!
+	 * \brief Method to initiate communication.
+	 *
+	 * It opens the communication channels of EDP server.
+	 */
 	bool initialize_communication(void);
 
+	/*!
+	 * \brief Constructor.
+	 *
+	 * It connects to the existing channels of UI SR.
+	 */
 	effector(lib::configurator &_config, lib::robot_name_t l_robot_name);
+
+	/*!
+	 * \brief Destructor.
+	 *
+	 * It destroyes the objects to communicate with UI SR.
+	 */
 	virtual ~effector();
 
+
+	/*!
+	 * \brief ECP command union.
+	 *
+	 * Command sent by ECP.
+	 */
 	lib::c_buffer instruction;
 
+	/*!
+	 * \brief Pure virtual method (main loop of the the process) to be implemented in child classes.
+	 *
+	 * Typically it is finite state automaton.
+	 */
 	virtual void main_loop() = 0; // main loop
+
+	/*!
+	 * \brief Pure virtual method to create effector specific threads.
+	 *
+	 * For the purpose of visualisation, measurement registration, force control, etc..
+	 */
 	virtual void create_threads() = 0;
 
 };
 /************************ EDP_EFFECTOR ****************************/
 
-// Zwrocenie stworzonego obiektu - efektora. Funkcja implementowana w plikach efektorow konkretnych (jadro).
+/*!
+ * \brief Method to return object of specific effector type.
+ *
+ * It is implemented in specific effector file.
+ */
 effector* return_created_efector(lib::configurator &_config);
 
 } // namespace common
