@@ -37,6 +37,7 @@
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
+#include "lib/mis_fun.h"
 
 #include "lib/srlib.h"
 #include "vsp/common/vsp_sensor.h"				// zawiera deklaracje klasy vsp_sensor + struktury komunikacyjne
@@ -52,7 +53,7 @@ namespace common {
 /********************************* GLOBALS **********************************/
 static sensor::sensor *vs;		// czujnik wirtualny
 
-static sem_t start_sem;
+static 	lib::boost_condition_synchroniser vsp_synchroniser;
 
 static bool TERMINATE=false;											// zakonczenie obu watkow
 
@@ -124,7 +125,7 @@ void* cyclic_read( void*  arg ){
 	setprio(0, MAX_PRIORITY-5);
 
 	// aktywne oczekiwanie na zainicjowanie czujnika
-	sem_wait( &(start_sem));
+	vsp_synchroniser.wait();
 
 	while(!TERMINATE) { // for (;;)
 		try{
@@ -153,8 +154,7 @@ void write_to_sensor( lib::VSP_COMMAND i_code){
 	switch(i_code){
 		case lib::VSP_CONFIGURE_SENSOR :
 			vsp::common::vs->configure_sensor();
-			while (sem_trywait ( &(start_sem)) == 0);
-			sem_post( &(start_sem));
+			vsp_synchroniser.command();
 			break;
 		case lib::VSP_GET_READING :
 			vsp::common::vs->get_reading();
@@ -312,8 +312,6 @@ int main(int argc, char *argv[]) {
     	static resmgr_connect_funcs_t   connect_funcs;
 	static resmgr_io_funcs_t        io_funcs;
 	static iofunc_attr_t            attr;
-
-    sem_init( &(vsp::common::start_sem), 0, 0);
 
 	// ustawienie priorytetow
 	setprio(0, MAX_PRIORITY-1);
