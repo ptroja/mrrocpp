@@ -103,7 +103,7 @@ void edp_vsp::operator()(void)
 		 vs->force_sensor_do_configure = true;//!< jesli otrzymano od VSP polecenie konfiguracji czujnika
 		 */
 		//!< oczekiwanie nowego pomiaru
-		sem_wait(&(master.vs->new_ms));
+		master.vs->edp_vsp_synchroniser.wait();
 		//!< przygotowanie struktury do wyslania
 		lib::Ft_vector current_force;
 

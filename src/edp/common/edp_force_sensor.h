@@ -18,6 +18,7 @@
 #include "lib/mrmath/ForceTrans.h"
 #include "lib/sensor.h"				// klasa bazowa sensor
 #include "edp/common/edp.h"				// klasa bazowa sensor
+#include "lib/mis_fun.h"
 
 namespace mrrocpp {
 namespace edp {
@@ -38,7 +39,10 @@ class force : public lib::sensor, boost::noncopyable
 		void operator()(void);
 
 		lib::sr_vsp *sr_msg; //!< komunikacja z SR
-		sem_t new_ms; //!< semafor dostepu do nowej wiadomosci dla vsp
+		lib::boost_condition_synchroniser edp_vsp_synchroniser;//!< dostep do nowej wiadomosci dla vsp
+
+
+
 		sem_t new_ms_for_edp; //!< semafor dostepu do nowej wiadomosci dla edp
 		bool TERMINATE; //!< zakonczenie obydwu watkow
 		bool is_sensor_configured; // czy czujnik skonfigurowany?

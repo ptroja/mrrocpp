@@ -104,8 +104,7 @@ void force::operator()(void)
 					current_force_torque.to_table(master.rb_obj->step_data.force);
 				}
 			}
-			sem_trywait(&(new_ms));
-			sem_post(&(new_ms)); //!< jest gotowy nowy pomiar
+			edp_vsp_synchroniser.command();
 
 		} //!< koniec TRY
 
@@ -133,7 +132,7 @@ void force::operator()(void)
 } //!< end MAIN
 
 force::force(common::irp6s_postument_track_effector &_master) :
-	gravity_transformation(NULL), new_edp_command(false), master(_master)
+	gravity_transformation(NULL), new_edp_command(false), master(_master), edp_vsp_synchroniser()
 {
 	gravity_transformation = NULL;
 	is_sensor_configured = false; //!< czujnik niezainicjowany
@@ -144,7 +143,7 @@ force::force(common::irp6s_postument_track_effector &_master) :
 	force_sensor_set_tool = false;
 	TERMINATE = false;
 
-	sem_init(&new_ms, 0, 0);
+
 	sem_init(&new_ms_for_edp, 0, 0);
 
 	/*!Lokalizacja procesu wywietlania komunikatow SR */
@@ -157,7 +156,6 @@ force::force(common::irp6s_postument_track_effector &_master) :
 force::~force()
 {
 	delete sr_msg;
-	sem_destroy(&new_ms);
 	sem_destroy(&new_ms_for_edp);
 }
 
