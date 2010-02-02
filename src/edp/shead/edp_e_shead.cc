@@ -22,7 +22,7 @@
 #include "edp/smb/edp_e_smb.h"
 #include "edp/common/reader.h"
 // Kinematyki.
-#include "kinematics/smb/kinematic_model_smb.h"
+#include "kinematics/shead/kinematic_model_shead.h"
 #include "edp/common/manip_trans_t.h"
 #include "edp/common/vis_server.h"
 
@@ -80,7 +80,7 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 void effector::create_kinematic_models_for_given_robot(void)
 {
 	// Stworzenie wszystkich modeli kinematyki.
-	add_kinematic_model(new kinematics::smb::model());
+	add_kinematic_model(new kinematics::shead::model());
 	// Ustawienie aktywnego modelu.
 	set_kinematic_model(0);
 }

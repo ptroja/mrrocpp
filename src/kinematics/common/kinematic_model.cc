@@ -37,6 +37,18 @@ void kinematic_model::e2i_transform(lib::JointArray & local_desired_joints, lib:
 
 }
 
+//! Solves direct kinematics.
+void kinematic_model::direct_kinematics_transform(const lib::JointArray & local_current_joints, lib::Homog_matrix& local_current_end_effector_frame)
+{
+
+}
+
+//! Solves inverse kinematics.
+void kinematic_model::inverse_kinematics_transform(lib::JointArray & local_desired_joints, lib::JointArray & local_current_joints, const lib::Homog_matrix& local_desired_end_effector_frame)
+{
+
+}
+
 
 } // namespace common
 } // namespace kinematic

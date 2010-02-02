@@ -12,7 +12,7 @@ SOURCEDIRS = common \
 	ati3084 ati3084MK ati6284 ati6284KT\
 	conveyor irp6_on_track irp6_postument irp6_mechatronika \
 	speaker polycrank \
-	smb spkm
+	smb spkm shead
 endif
 
 ifdef DOCENT_SENSOR
@@ -32,6 +32,7 @@ ati6284KT: common
 conveyor: common
 smb: common
 spkm: common
+shead: common
 
 IRP6ONT_DEPS = common ati3084 ati3084MK ati6284 ati6284KT
 ifdef DOCENT_SENSOR

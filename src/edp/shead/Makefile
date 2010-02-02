@@ -8,11 +8,11 @@ include $(HOMEDIR)/common.mk
 
 SOURCES = ${wildcard *.cc}
 #OBJECTS = ${patsubst %.cc,%.o,${SOURCES}}
-
+KIN_OBJECTS = ${KIN_DIR}/shead/libkinematicssmb.a $(KIN_DIR)/common/libkinematics.a
 
 OBJECTS = edp_e_shead.o
-EDPOBJS  = ${OBJECTS}
-BINARIES  = edp_smb
+EDPOBJS  = ${OBJECTS} ${KIN_OBJECTS}
+BINARIES  = edp_shead
 
 SHOBJ = ../common/int_hand_suplement.o ../common/libedp.a $(LIBDIR)/libmrrocpp.a
 #======================================================#	
