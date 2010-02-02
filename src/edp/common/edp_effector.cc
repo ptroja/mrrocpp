@@ -54,6 +54,7 @@ effector::effector(lib::configurator &_config, lib::robot_name_t l_robot_name) :
 
 effector::~effector() {
 	delete msg;
+	delete sh_msg;
 }
 
 
@@ -121,11 +122,6 @@ bool effector::initialize_communication()
 	return true;
 }
 
-
-void effector::insert_reply_type(lib::REPLY_TYPE rt)
-{
-	reply.reply_type = rt;
-}
 
 bool effector::is_reply_type_ERROR() const
 {

@@ -867,7 +867,8 @@ void motor_driven_effector::pre_synchro_loop(STATE& next_state)
 						case lib::GET:
 							// potwierdzenie przyjecia polecenia (dla ECP)
 							//            printf("SET_GET\n");
-							insert_reply_type(lib::ACKNOWLEDGE);
+							reply.reply_type = lib::ACKNOWLEDGE;
+							reply.reply_type = lib::ACKNOWLEDGE;
 							reply_to_instruction();
 
 							if ((rep_type(new_instruction)) == lib::CONTROLLER_STATE) {
@@ -959,7 +960,7 @@ void motor_driven_effector::pre_synchro_loop(STATE& next_state)
 			// informacja dla ECP o bledzie
 			reply_to_instruction();
 			// przywrocenie poprzedniej odpowiedzi
-			insert_reply_type(rep_type);
+			reply.reply_type = rep_type;
 			establish_error(err_no_0, err_no_1);
 			//     printf("ERROR w EDP 3\n");
 			msg->message(lib::NON_FATAL_ERROR, nfe.error, 0);
@@ -997,7 +998,7 @@ void motor_driven_effector::synchro_loop(STATE& next_state)
 						case lib::SYNCHRO:
 							// instrukcja wlasciwa => zle jej wykonanie
 							/* Potwierdzenie przyjecia instrukcji synchronizacji do wykonania */
-							insert_reply_type(lib::ACKNOWLEDGE);
+							reply.reply_type = lib::ACKNOWLEDGE;
 							reply_to_instruction();
 							/* Zlecenie wykonania synchronizacji */
 							master_order(MT_SYNCHRONISE, 0); // by Y przejscie przez watek transfor w celu ujednolicenia
@@ -1010,7 +1011,7 @@ void motor_driven_effector::synchro_loop(STATE& next_state)
 							// instrukcja wlasciwa => zle jej wykonanie
 							if (pre_synchro_motion(new_instruction)) {
 								/* Potwierdzenie przyjecia instrukcji ruchow presynchronizacyjnych do wykonania */
-								insert_reply_type(lib::ACKNOWLEDGE);
+								reply.reply_type = lib::ACKNOWLEDGE;
 								reply_to_instruction();
 								/* Zlecenie wykonania ruchow presynchronizacyjnych */
 								interpret_instruction(new_instruction);
@@ -1037,7 +1038,7 @@ void motor_driven_effector::synchro_loop(STATE& next_state)
 					/* Oczekiwanie na zapytanie od ECP o status zakonczenia synchronizacji (QUERY) */
 					if (receive_instruction() == lib::QUERY) { // instrukcja wlasciwa => zle jej wykonanie
 						// Budowa adekwatnej odpowiedzi
-						insert_reply_type(lib::SYNCHRO_OK);
+						reply.reply_type = lib::SYNCHRO_OK;
 						reply_to_instruction();
 						next_state = GET_INSTRUCTION;
 						if (msg->message("Robot is synchronised"))
@@ -1084,7 +1085,7 @@ void motor_driven_effector::synchro_loop(STATE& next_state)
 			reply_to_instruction();
 			msg->message(lib::NON_FATAL_ERROR, nfe2.error, 0);
 			// przywrocenie poprzedniej odpowiedzi
-			insert_reply_type(rep_type); // powrot do stanu: WAIT_Q
+			reply.reply_type = rep_type; // powrot do stanu: WAIT_Q
 			next_state = WAIT_Q;
 		} // end: catch(transformer::NonFatal_error nfe2)
 
@@ -1100,7 +1101,7 @@ void motor_driven_effector::synchro_loop(STATE& next_state)
 			reply_to_instruction();
 			msg->message(lib::NON_FATAL_ERROR, nfe3.error, 0);
 			// przywrocenie poprzedniej odpowiedzi
-			insert_reply_type(rep_type);
+			reply.reply_type = rep_type;
 			establish_error(err_no_0, err_no_1);
 			msg->message(lib::NON_FATAL_ERROR, err_no_0, err_no_1);
 			// powrot do stanu: GET_SYNCHRO
@@ -1117,7 +1118,7 @@ void motor_driven_effector::synchro_loop(STATE& next_state)
 			reply_to_instruction();
 			msg->message(lib::NON_FATAL_ERROR, nfe4.error, 0);
 			// przywrocenie poprzedniej odpowiedzi
-			insert_reply_type(rep_type);
+			reply.reply_type = rep_type;
 			// powrot do stanu: SYNCHRO_TERMINATED
 			next_state = SYNCHRO_TERMINATED;
 		} // end: catch(transformer::NonFatal_error nfe4)
@@ -1133,7 +1134,7 @@ void motor_driven_effector::synchro_loop(STATE& next_state)
 				printf("QQQ\n");
 				receive_instruction();
 			}
-			insert_reply_type(lib::ERROR);
+			reply.reply_type = lib::ERROR;
 			establish_error(fe.error0, fe.error1);
 			reply_to_instruction();
 			msg->message(lib::FATAL_ERROR, fe.error0, fe.error1);
@@ -1160,7 +1161,7 @@ void motor_driven_effector::post_synchro_loop(STATE& next_state)
 						case lib::SET_GET:
 							// potwierdzenie przyjecia polecenia (dla ECP)
 							// printf("SET_GET\n");
-							insert_reply_type(lib::ACKNOWLEDGE);
+							reply.reply_type = lib::ACKNOWLEDGE;
 							reply_to_instruction();
 							break;
 						case lib::SYNCHRO: // blad: robot jest juz zsynchronizowany
@@ -1233,7 +1234,7 @@ void motor_driven_effector::post_synchro_loop(STATE& next_state)
 			// informacja dla ECP o bledzie
 			reply_to_instruction();
 			// przywrocenie poprzedniej odpowiedzi
-			insert_reply_type(rep_type);
+			reply.reply_type = rep_type;
 			establish_error(err_no_0, err_no_1);
 			// printf("ERROR w EDP 3\n");
 			msg->message(lib::NON_FATAL_ERROR, nfe.error, 0);

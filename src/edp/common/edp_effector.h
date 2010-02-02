@@ -103,7 +103,7 @@ public:
     // wyslanie adekwatnej odpowiedzi do ECP
     void reply_to_instruction (void);
 
-    void insert_reply_type (lib::REPLY_TYPE rt);
+
 
     virtual void main_loop(); // main loop
     virtual void create_threads () = 0;

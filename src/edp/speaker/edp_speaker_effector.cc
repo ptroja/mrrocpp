@@ -255,7 +255,7 @@ void effector::interpret_instruction (lib::c_buffer &instruction)
 lib::REPLY_TYPE effector::rep_type (lib::c_buffer & instruction)
 {
 	// ustalenie formatu odpowiedzi
-	insert_reply_type(lib::ACKNOWLEDGE);
+	reply.reply_type = lib::ACKNOWLEDGE;
 
 	return reply.reply_type;
 }
@@ -324,7 +324,7 @@ void effector::main_loop (void)
 				case lib::SET_GET:
 					// printf("jestesmy w set_get\n");
 					// potwierdzenie przyjecia polecenia (dla ECP)
-					insert_reply_type(lib::ACKNOWLEDGE);
+					reply.reply_type = lib::ACKNOWLEDGE;
 					reply_to_instruction();
 					break;
 				case lib::SYNCHRO: // blad: robot jest juz zsynchronizowany
@@ -410,7 +410,7 @@ void effector::main_loop (void)
 			// informacja dla ECP o bledzie
 			reply_to_instruction();
 			// przywrocenie poprzedniej odpowiedzi
-			insert_reply_type(rep_type);
+			reply.reply_type = rep_type;
 			establish_error(err_no_0,err_no_1);
 			// printf("ERROR w EDP 3\n");
 			msg->message(lib::NON_FATAL_ERROR, nfe.error, 0);
