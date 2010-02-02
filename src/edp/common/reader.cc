@@ -42,31 +42,17 @@ namespace edp {
 namespace common {
 
 reader_buffer::reader_buffer(effector &_master) :
-	master (_master)
+	master (_master), synchroniser()
 {
-	sem_init(&reader_sem, 0, 0);
-
 	thread_id = new boost::thread(boost::bind(&reader_buffer::operator(), this));
 }
 
 reader_buffer::~reader_buffer()
 {
-	sem_destroy(&reader_sem);
+
 }
 
-int reader_buffer::set_new_step() // podniesienie semafora
-{
-	if(sem_trywait(&reader_sem) == -1) {
-		if(errno != EAGAIN)
-			perror("reader_buffer::sem_wait()");
-	}
-	return sem_post(&reader_sem);// odwieszenie watku edp_master
-}
 
-int reader_buffer::reader_wait_for_new_step() // oczekiwanie na semafor
-{
-	return sem_wait(&reader_sem);
-}
 
 void reader_buffer::operator()()
 {
@@ -242,11 +228,11 @@ void reader_buffer::operator()()
 
 		lib::set_thread_priority(pthread_self(), MAX_PRIORITY+1);
 
-		reader_wait_for_new_step();
+
 		// dopoki nie przyjdzie puls stopu
 		do {
 			// czekamy na opuszcenie semafora przez watek EDP_SERVO (co mikrokrok)
-			reader_wait_for_new_step();
+			synchroniser.wait();
 
 			// sekcja krytyczna odczytu danych pomiarowych dla biezacego kroku
 			{

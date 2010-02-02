@@ -15,6 +15,7 @@
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
+#include "lib/mis_fun.h"
 
 #include <boost/thread/thread.hpp>
 
@@ -90,6 +91,7 @@ private:
 public:
 	boost::mutex reader_mutex;
 
+	lib::boost_condition_synchroniser synchroniser;
 	//! main thread loop
     void operator()();
 
@@ -99,8 +101,7 @@ public:
     reader_buffer(effector &_master);
     ~reader_buffer();
 
-    int	set_new_step(); // podniesienie semafora
-    int	reader_wait_for_new_step(); // oczekiwanie na semafor
+
 };
 /**************************** end of reader_buffer *****************************/
 

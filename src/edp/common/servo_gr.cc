@@ -363,7 +363,7 @@ uint8_t servo_buffer::Move_1_step(void)
 	// Obliczenie nowej wartosci zadanej
 	// Wyslanie wartosci zadanej do hardware'u
 
-	master.rb_obj->set_new_step();// odwieszenie watku edp_reader - teraz moze odczytac dane pomiarowe
+	master.rb_obj->synchroniser.command();// odwieszenie watku edp_reader - teraz moze odczytac dane pomiarowe
 
 	reply_status_tmp.error1 = compute_all_set_values(); // obliczenie nowej wartosci zadanej dla regulatorow
 	reply_status_tmp.error0 = hi->read_write_hardware(); // realizacja kroku przez wszystkie napedy oraz
