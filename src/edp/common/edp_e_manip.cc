@@ -294,14 +294,10 @@ void manip_effector::single_thread_move_arm(lib::c_buffer &instruction)
 		case lib::FRAME:
 			compute_frame(instruction);
 			move_servos();
-			previous_set_arm_type = instruction.set_arm_type;
 			break;
 		default: // blad: niezdefiniowany sposb specyfikacji pozycji koncowki
 			motor_driven_effector::single_thread_move_arm(instruction);
 	}
-
-	// by Y - uwaga na wyjatki, po rzuceniu wyjatku nie zostanie zaktualizowany previous_set_arm_type
-
 
 }
 /*--------------------------------------------------------------------------*/
@@ -318,8 +314,7 @@ void manip_effector::multi_thread_move_arm(lib::c_buffer &instruction)
 			compute_frame(instruction);
 			move_servos();
 			mt_tt_obj->trans_t_to_master_order_status_ready();
-			// by Y - uwaga na wyjatki, po rzuceniu wyjatku nie zostanie zaktualizowany previous_set_arm_type
-			previous_set_arm_type = instruction.set_arm_type;
+
 			break;
 		default: // blad: niezdefiniowany sposb specyfikacji pozycji koncowki
 			motor_driven_effector::multi_thread_move_arm(instruction);

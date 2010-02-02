@@ -537,8 +537,7 @@ void irp6s_postument_track_effector::move_arm(lib::c_buffer &instruction)
 			break;
 		case lib::TCIM:
 			pose_force_torque_at_frame_move(instruction);
-			// by Y - uwaga na wyjatki, po rzuceniu wyjatku nie zostanie zaktualizowany previous_set_arm_type
-			previous_set_arm_type = instruction.set_arm_type;
+
 			break;
 		default:
 			break;

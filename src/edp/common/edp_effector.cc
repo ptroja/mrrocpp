@@ -103,14 +103,14 @@ bool effector::initialize_communication()
 
 	lib::set_thread_priority(pthread_self(), MAX_PRIORITY - 2);
 
-	attach =
+	server_attach =
 #if !defined(USE_MESSIP_SRR)
 			name_attach(NULL, server_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL);
 #else /* USE_MESSIP_SRR */
 	messip::port_create(server_attach_point);
 #endif /* USE_MESSIP_SRR */
 
-	if (attach == NULL) {
+	if (server_attach == NULL) {
 		msg->message(lib::SYSTEM_ERROR, errno, "EDP: resmg failed to attach");
 		fprintf(stderr, "name_attach() failed: %s\n", strerror(errno));
 		return false;
@@ -142,7 +142,7 @@ lib::INSTRUCTION_TYPE effector::receive_instruction(void)
 	/* Do your MsgReceive's here now with the chid */
 	while (1) {
 #if !defined(USE_MESSIP_SRR)
-		rcvid = MsgReceive(attach->chid, &new_ecp_command, sizeof(lib::ecp_command_buffer), NULL);
+		rcvid = MsgReceive(server_attach->chid, &new_ecp_command, sizeof(lib::ecp_command_buffer), NULL);
 
 		if (rcvid == -1) {/* Error condition, exit */
 			perror("MsgReceive()");
@@ -192,7 +192,7 @@ lib::INSTRUCTION_TYPE effector::receive_instruction(void)
 		}
 #else /* USE_MESSIP_SRR */
 		int32_t type, subtype;
-		rcvid = messip::port_receive(attach, type, subtype, new_ecp_command);
+		rcvid = messip::port_receive(server_attach, type, subtype, new_ecp_command);
 
 		if (rcvid == -1)
 		{/* Error condition, exit */

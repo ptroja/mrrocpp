@@ -67,26 +67,37 @@ protected:
 	lib::r_buffer reply;
 
 	/*!
-	 * \brief descriptor of ECP process sending a command.
+	 * \brief indentificator of ECP process sending a command.
 	 *
 	 * It is stored for a further reply purpose.
 	 */
 	int caller; // by 7&Y
 
 #if !defined(USE_MESSIP_SRR)
-	name_attach_t *attach;
+	/*!
+	 * \brief indentificator of EDP server attach point
+	 *
+	 * It is stored for a communication with ECP purpose.
+	 */
+	name_attach_t *server_attach;
 #else /* USE_MESSIP_SRR */
-	messip_channel_t *attach;
+	messip_channel_t *server_attach;
 #endif /* USE_MESSIP_SRR */
 
-	// oczekuje na polecenie od ECP, wczytuje je,
-	// okresla typ nadeslanej instrukcji
+	/*!
+	 * \brief method to receive instruction from ECP
+	 *
+	 * IT also makes initial ECP command interpretation..
+	 */
 	lib::INSTRUCTION_TYPE receive_instruction(void); // by YW
 
-	// wyslanie adekwatnej odpowiedzi do ECP
+	/*!
+	 * \brief method to reply to ECP
+	 *
+	 * Basing on the previous computation..
+	 */
 	void reply_to_instruction(void);
 
-	lib::POSE_SPECIFICATION previous_set_arm_type; // by Y poprzedni sposob zadawania pozycji
 
 	void establish_error(uint64_t err0, uint64_t err1);
 

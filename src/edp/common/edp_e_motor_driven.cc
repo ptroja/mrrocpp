@@ -145,8 +145,7 @@ void motor_driven_effector::single_thread_move_arm(lib::c_buffer &instruction)
 			throw NonFatal_error_2(INVALID_SET_END_EFFECTOR_TYPE);
 	}
 
-	// by Y - uwaga na wyjatki, po rzuceniu wyjatku nie zostanie zaktualizowany previous_set_arm_type
-	previous_set_arm_type = instruction.set_arm_type;
+
 
 }
 /*--------------------------------------------------------------------------*/
@@ -175,8 +174,7 @@ void motor_driven_effector::multi_thread_move_arm(lib::c_buffer &instruction)
 			throw NonFatal_error_2(INVALID_SET_END_EFFECTOR_TYPE);
 	}
 
-	// by Y - uwaga na wyjatki, po rzuceniu wyjatku nie zostanie zaktualizowany previous_set_arm_type
-	previous_set_arm_type = instruction.set_arm_type;
+
 
 }
 /*--------------------------------------------------------------------------*/
@@ -236,7 +234,7 @@ motor_driven_effector::motor_driven_effector(lib::configurator &_config, lib::ro
 	real_reply_type = lib::ACKNOWLEDGE;
 
 	// is_get_arm_read_hardware=false;
-	previous_set_arm_type = lib::MOTOR;
+
 
 #ifdef DOCENT_SENSOR
 	startedCallbackRegistered_ = false;
