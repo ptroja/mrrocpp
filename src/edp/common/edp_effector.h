@@ -1,9 +1,16 @@
-// -------------------------------------------------------------------------
-//                                   edp.h
-// Definicje struktur danych i metod dla procesu EDP
-//
-// Ostatnia modyfikacja: 16.04.98
-// -------------------------------------------------------------------------
+/*!
+ * \file edp_effector.h
+ * \brief File containing the declaration of edp::common::effector class.
+ *
+ * \author yoyek
+ * \date 2009
+ *
+ *
+ *  $LastChangedRevision: $
+ *  $LastChangedDate:  $
+ *  $LastChangedBy:  $
+ *
+ */
 
 #ifndef __EDP_EFFECTOR_H
 #define __EDP_EFFECTOR_H
@@ -36,18 +43,38 @@ namespace common {
 
 
 
-// Glowna klasa efektora EDP
+/*!
+ * \class effector
+ * \brief Base class of all EDP effectors.
+ *
+ * It implements mainly inter process communication and EDP configuration managment
+ *
+ * \author yoyek
+ */
 class effector
 {
 protected:
 
-    // faktyczny typ odpowiedzi dla ECP
-    // (przechowuje typ odpowiedzi, gdy reply_type jest chwilowo zmienione)
+
+	/*!
+	 * \brief real reply type of EDP process send to ECP process.
+	 *
+	 * It is used because reply_type can be temporarily changed while ECP command is interpreted
+	 */
     lib::REPLY_TYPE real_reply_type;
 
-    // bufor odpowiedzi wysylanych do ECP/MP
+    /*!
+	 * \brief structure of reply of EDP process send to ECP process.
+	 *
+	 * It is used a union of structures for all EDP's
+	 */
     lib::r_buffer reply;
 
+    /*!
+	 * \brief descriptor of ECP process sending a command.
+	 *
+	 * It is stored for a further reply purpose.
+	 */
     int caller;				// by 7&Y
 
 public:

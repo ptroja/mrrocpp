@@ -594,6 +594,7 @@ INPUT                  = \
 			 src/edp/shead/ \
 			 src/edp/spkm/ \
 			 src/edp/epos/ \
+			 src/kinematics/common/ \
 			 src/kinematics/smb/ \
 			 src/kinematics/shead/ \
 			 src/kinematics/spkm/
