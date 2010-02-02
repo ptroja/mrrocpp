@@ -4,7 +4,7 @@
 HOMEDIR = ../..
 include $(HOMEDIR)/common.mk
 
-SOURCEDIRS = irp6_on_track conveyor irp6_postument speaker irp6_mechatronika polycrank festival player smb spkm multi_robot_binaries common 
+SOURCEDIRS = irp6_on_track conveyor irp6_postument speaker irp6_mechatronika polycrank festival player smb spkm shead multi_robot_binaries common 
 INSTALLDIRS = ${SOURCEDIRS}
 CLEANDIRS = ${SOURCEDIRS}
 #======================================================#
@@ -23,6 +23,7 @@ festival: common
 player: common
 smb: common
 spkm: common
+shead: common
 multi_robot_binaries: irp6_on_track conveyor irp6_postument speaker irp6_mechatronika smb spkm
 
 $(SOURCEDIRS):

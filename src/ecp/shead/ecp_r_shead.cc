@@ -10,16 +10,16 @@
 #include "lib/com_buf.h"
 #include "lib/mis_fun.h"
 
-#include "ecp/smb/ecp_r_smb.h"
+#include "ecp/shead/ecp_r_shead.h"
 
 namespace mrrocpp {
 namespace ecp {
-namespace smb {
+namespace shead {
 
 robot::robot (lib::configurator &_config, lib::sr_ecp &_sr_ecp):
-	ecp_robot (lib::ROBOT_SMB, SMB_NUM_OF_SERVOS, EDP_SMB_SECTION, _config, _sr_ecp){};
+	ecp_robot (lib::ROBOT_SHEAD, SMB_NUM_OF_SERVOS, EDP_SMB_SECTION, _config, _sr_ecp){};
 robot::robot (common::task::task& _ecp_object):
-	ecp_robot (lib::ROBOT_SMB, SMB_NUM_OF_SERVOS, EDP_SMB_SECTION, _ecp_object){};
+	ecp_robot (lib::ROBOT_SHEAD, SMB_NUM_OF_SERVOS, EDP_SMB_SECTION, _ecp_object){};
 
 
 } // namespace smb

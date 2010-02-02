@@ -5,15 +5,15 @@
 //
 // -------------------------------------------------------------------------
 
-#if !defined(_ECP_R_SMB_H)
-#define _ECP_R_SMB_H
+#if !defined(_ECP_R_SHEAD_H)
+#define _ECP_R_SHEAD_H
 
 #include "ecp/common/ecp_robot.h"
 #include "lib/smb_const.h"
 
 namespace mrrocpp {
 namespace ecp {
-namespace smb {
+namespace shead {
 
 // ---------------------------------------------------------------
 class robot: public common::ecp_robot
