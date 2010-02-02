@@ -134,6 +134,11 @@ lib::INSTRUCTION_TYPE effector::receive_instruction(void)
 	int rcvid;
 	/* Oczekiwanie na polecenie od ECP */
 
+	// bufory:
+	// - polecen przysylanych z ECP
+	// - polecen przysylanych z ECP dla watku trans_t
+	lib::ecp_command_buffer new_ecp_command;
+
 	/* Do your MsgReceive's here now with the chid */
 	while (1) {
 #if !defined(USE_MESSIP_SRR)

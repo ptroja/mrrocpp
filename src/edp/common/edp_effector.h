@@ -73,23 +73,11 @@ protected:
 	 */
 	int caller; // by 7&Y
 
-public:
-	lib::configurator &config;
-	lib::sr_edp *msg;
-	lib::sr_edp *sh_msg;
-
-	bool initialize_communication(void);
-
 #if !defined(USE_MESSIP_SRR)
 	name_attach_t *attach;
 #else /* USE_MESSIP_SRR */
 	messip_channel_t *attach;
 #endif /* USE_MESSIP_SRR */
-
-	effector(lib::configurator &_config, lib::robot_name_t l_robot_name);
-	virtual ~effector();
-
-	int test_mode;
 
 	// oczekuje na polecenie od ECP, wczytuje je,
 	// okresla typ nadeslanej instrukcji
@@ -98,20 +86,29 @@ public:
 	// wyslanie adekwatnej odpowiedzi do ECP
 	void reply_to_instruction(void);
 
-	virtual void main_loop() = 0; // main loop
-	virtual void create_threads() = 0;
+	lib::POSE_SPECIFICATION previous_set_arm_type; // by Y poprzedni sposob zadawania pozycji
 
 	void establish_error(uint64_t err0, uint64_t err1);
 
-	// bufory:
-	// - polecen przysylanych z ECP
-	// - polecen przysylanych z ECP dla watku trans_t
-	lib::ecp_command_buffer new_ecp_command;
+public:
+	lib::configurator &config;
+	lib::sr_edp *msg;
+	lib::sr_edp *sh_msg;
+
+	bool initialize_communication(void);
+
+	effector(lib::configurator &_config, lib::robot_name_t l_robot_name);
+	virtual ~effector();
+
+	int test_mode;
+
 	lib::c_buffer new_instruction, current_instruction;
+
+	virtual void main_loop() = 0; // main loop
+	virtual void create_threads() = 0;
 
 	const lib::robot_name_t robot_name;
 
-	lib::POSE_SPECIFICATION previous_set_arm_type; // by Y poprzedni sposob zadawania pozycji
 };
 /************************ EDP_EFFECTOR ****************************/
 
