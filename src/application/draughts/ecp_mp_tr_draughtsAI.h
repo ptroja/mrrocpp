@@ -41,7 +41,7 @@ class TRDraughtsAI: public transmitter{
 		~TRDraughtsAI(); 	// destruktor czujnika virtualnego
 		void AIconnect(const char *host,unsigned short int serverPort);
 		void AIdisconnect();
-		virtual bool t_read (bool wait);	// odczyt z zawieszaniem lub bez
+		virtual bool t_read ();	// odczyt z zawieszaniem lub bez
 		virtual bool t_write (void);		// zapis
 };
 

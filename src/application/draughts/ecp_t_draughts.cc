@@ -167,7 +167,7 @@ void Draughts::getAIMove(int player){
 	aitrans->to_va.draughts_ai.player=player;
 	printf("\n");
 	aitrans->t_write();
-	aitrans->t_read(false);
+	aitrans->t_read();
 	//printf("result %s ,%d\n",aitrans->from_va.draughts_ai.move,aitrans->from_va.draughts_ai.status);
 	//strcpy(result,aitrans->from_va.draughts_ai.move);
 
