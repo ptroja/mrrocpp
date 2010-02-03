@@ -222,7 +222,7 @@ motor_driven_effector::motor_driven_effector(lib::configurator &_config, lib::ro
 	desired_joints(MAX_SERVOS_NR), current_joints(MAX_SERVOS_NR),
 	desired_motor_pos_old(MAX_SERVOS_NR), desired_motor_pos_new(MAX_SERVOS_NR),
 	current_motor_pos(MAX_SERVOS_NR),
-	step_counter(0), number_of_servos(-1)
+	step_counter(0), number_of_servos(-1), servo_thread_started()
 {
 
 	controller_state_edp_buf.is_synchronised = false;
@@ -273,13 +273,7 @@ void motor_driven_effector::hi_create_threads()
 	sb = return_created_servo_buffer();
 
 	// wait for initialization of servo thread
-	{
-		boost::unique_lock <boost::mutex> lock(thread_started_mutex);
-
-		while (!thread_started) {
-			thread_started_cond.wait(thread_started_mutex);
-		}
-	}
+	servo_thread_started.wait();
 }
 
 // kasuje zmienne - uwaga najpierw nalezy ustawic number_of_servos

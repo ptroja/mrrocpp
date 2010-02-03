@@ -16,6 +16,7 @@
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 #include "lib/srlib.h"
+#include "lib/mis_fun.h"
 
 #if defined(USE_MESSIP_SRR)
 #include <messip.h>
@@ -181,14 +182,7 @@ public:
 	void post_synchro_loop(STATE& next_state);
 
 
-	//! thread starting synchronization flag
-	bool thread_started;
-
-	//! thread starting synchronization mutex
-	boost::mutex thread_started_mutex;
-
-	//! thread starting synchronization condition variable
-	boost::condition thread_started_cond;
+	lib::boost_condition_synchroniser servo_thread_started;
 
 
 	void hi_create_threads();

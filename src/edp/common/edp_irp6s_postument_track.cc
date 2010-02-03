@@ -184,7 +184,6 @@ irp6s_postument_track_effector::irp6s_postument_track_effector(lib::configurator
 	else
 		is_gripper_active = 1;
 
-	sem_init(&force_master_sem, 0, 0);
 }
 
 /*--------------------------------------------------------------------------*/
@@ -201,7 +200,7 @@ void irp6s_postument_track_effector::create_threads()
 		// byY - utworzenie watku pomiarow sily
 		new boost::thread(boost::bind(&sensor::force::operator(), vs));
 
-		sem_wait(&force_master_sem);
+		force_thread_started.wait();
 
 		// by Y - utworzenie watku komunikacji miedzy EDP a VSP
 		new boost::thread(*edp_vsp_obj);

@@ -176,13 +176,7 @@ void servo_buffer::operator()()
 	lib::set_thread_priority(pthread_self(), MAX_PRIORITY + 2);
 
 	// signal master thread to continue executing
-	{
-		boost::mutex::scoped_lock lock(master.thread_started_mutex);
-
-		master.thread_started = true;
-
-		master.thread_started_cond.notify_one();
-	}
+	master.servo_thread_started.command();
 
 	/* BEGIN SERVO_GROUP */
 

@@ -28,7 +28,7 @@ void force::operator()(void)
 
 	connect_to_hardware();
 
-	sem_post(&(master.force_master_sem));
+	master.force_thread_started.command();
 
 	try {
 		configure_sensor();
