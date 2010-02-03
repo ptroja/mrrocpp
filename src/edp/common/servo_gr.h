@@ -71,6 +71,9 @@ protected:
 protected:
     int servo_fd;
 public:
+
+	lib::boost_condition_synchroniser thread_started;
+
     int servo_to_tt_chid;
 #else
     bool servo_command_rdy;

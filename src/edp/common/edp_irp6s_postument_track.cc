@@ -200,7 +200,7 @@ void irp6s_postument_track_effector::create_threads()
 		// byY - utworzenie watku pomiarow sily
 		new boost::thread(boost::bind(&sensor::force::operator(), vs));
 
-		force_thread_started.wait();
+		vs->thread_started.wait();
 
 		// by Y - utworzenie watku komunikacji miedzy EDP a VSP
 		new boost::thread(*edp_vsp_obj);

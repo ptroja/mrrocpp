@@ -77,7 +77,6 @@ protected:
 	//fazy makrokroku.
 	uint16_t value_in_step_no;
 
-
 #ifdef DOCENT_SENSOR
 	boost::function<void()> startedCallback_;
 	bool startedCallbackRegistered_;
@@ -180,10 +179,6 @@ public:
 	void pre_synchro_loop(STATE& next_state);
 	void synchro_loop(STATE& next_state);
 	void post_synchro_loop(STATE& next_state);
-
-
-	lib::boost_condition_synchroniser servo_thread_started;
-
 
 	void hi_create_threads();
 

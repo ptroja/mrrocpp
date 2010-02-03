@@ -47,9 +47,7 @@ protected:
 
 public:
 
-	lib::boost_condition_synchroniser force_thread_started;
-
-    irp6s_postument_track_effector (lib::configurator &_config, lib::robot_name_t l_robot_name );       // konstruktor
+	irp6s_postument_track_effector (lib::configurator &_config, lib::robot_name_t l_robot_name );       // konstruktor
 
     int force_tryb;
 

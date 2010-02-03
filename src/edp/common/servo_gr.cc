@@ -176,7 +176,7 @@ void servo_buffer::operator()()
 	lib::set_thread_priority(pthread_self(), MAX_PRIORITY + 2);
 
 	// signal master thread to continue executing
-	master.servo_thread_started.command();
+	thread_started.command();
 
 	/* BEGIN SERVO_GROUP */
 
@@ -269,7 +269,7 @@ servo_buffer::servo_buffer(motor_driven_effector &_master) :
 #ifndef __QNXNTO__
 			servo_command_rdy(false), sg_reply_rdy(false),
 #endif
-			master(_master)
+			master(_master), thread_started()
 {
 #ifdef __QNXNTO__
 	if ((servo_to_tt_chid = ChannelCreate(_NTO_CHF_UNBLOCK)) == -1) {

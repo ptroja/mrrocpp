@@ -28,7 +28,7 @@ void force::operator()(void)
 
 	connect_to_hardware();
 
-	master.force_thread_started.command();
+	thread_started.command();
 
 	try {
 		configure_sensor();
@@ -130,7 +130,7 @@ void force::operator()(void)
 
 force::force(common::irp6s_postument_track_effector &_master) :
 	gravity_transformation(NULL), new_edp_command(false), master(_master), edp_vsp_synchroniser(),
-			new_command_synchroniser()
+			new_command_synchroniser(), thread_started()
 {
 	gravity_transformation = NULL;
 	is_sensor_configured = false; //!< czujnik niezainicjowany
