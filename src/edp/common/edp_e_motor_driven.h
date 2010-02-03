@@ -140,78 +140,78 @@ protected:
 	void move_servos();
 
 	/*!
-	 * \brief
+	 * \brief motor position  currenetly computed in the servo
 	 *
-	 *
+	 * for the single step of servo control
 	 */
 	lib::MotorArray servo_current_motor_pos; // Polozenia walow silnikow -// dla watku edp_servo    XXXX
 
 	/*!
-	 * \brief
+	 * \brief motor position stored in the effector class
 	 *
-	 *
+	 * for the single step of servo control
 	 */
 	lib::MotorArray global_current_motor_pos; // Polozenia walow silnikow -// globalne dla procesu EDP  XXXX
 
 	/*!
-	 * \brief
+	 * \brief joint position currenetly computed in the servo
 	 *
-	 *
+	 * for the single step of servo control
 	 */
 	lib::JointArray servo_current_joints; // Wspolrzedne wewnetrzne -// dla watku EDP_SERVO   XXXXXX
 
 	/*!
-	 * \brief
+	 * \brief joint position stored in the effector class
 	 *
-	 *
+	 * for the single step of servo control
 	 */
 	lib::JointArray global_current_joints; // Wspolrzedne wewnetrzne -// globalne dla procesu EDP   XXXXX
 
 	/*!
-	 * \brief
+	 * \brief mutex to handle data set and get of the motor and joint position
 	 *
-	 *
+	 * It is also used for the frame in chil manip_effector_class
 	 */
 	boost::mutex edp_irp6s_effector_mutex; // mutex    XXXXXX
 
 	/*!
-	 * \brief
+	 * \brief desired joints position
 	 *
-	 *
+	 * for the whole macrostep
 	 */
 	lib::JointArray desired_joints; // Wspolrzedne wewnetrzne -
 	// ostatnio obliczone (zadane) (w radianach)
 
 	/*!
-	 * \brief
+	 * \brief current joints position
 	 *
-	 *
+	 * for the whole macrostep
 	 */
 	lib::JointArray current_joints;
 	// ostatnio odczytane (w radianach) // by Y dla watku EDP_MASTER
 
 	/*!
-	 * \brief
+	 * \brief desired motor position for the previous macrostep
 	 *
-	 *
+	 * for the whole macrostep
 	 */
 	lib::MotorArray desired_motor_pos_old;
 	// Polozenia walow silnikow -
 	// poprzednio obliczone (zadane) (w radianach)
 
 	/*!
-	 * \brief
+	 * \brief desired motor position for the next macrostep
 	 *
-	 *
+	 * for the whole macrostep
 	 */
 	lib::MotorArray desired_motor_pos_new;
 	// Polozenia walow silnikow -
 	// aktualnie obliczone (zadane) (w radianach)
 
 	/*!
-	 * \brief
+	 * \brief current motor position
 	 *
-	 *
+	 * for the whole macrostep
 	 */
 	lib::MotorArray current_motor_pos; // Polozenia walow silnikow -
 	// ostatnio odczytane (w radianach)
@@ -220,9 +220,9 @@ protected:
 public:
 
 	/*!
-	 * \brief
+	 * \brief method to read current joint position stored in global_current_joints
 	 *
-	 *
+	 * It is used for the purpose of the visualisation thread
 	 */
 	void master_joints_read(double*);
 #ifdef DOCENT_SENSOR
@@ -231,91 +231,92 @@ public:
 #endif
 
 	/*!
-	 * \brief
+	 * \brief object to store output and input data
 	 *
-	 *
+	 * It is used for the purpose of govering of input data form the hardware
+	 * and transmision of output data to the hardware
 	 */
 	in_out_buffer *in_out_obj; // bufor wejsc wyjsc
 
 	/*!
-	 * \brief
+	 * \brief object to handle mesurements
 	 *
-	 *
+	 * It is implemented as the thread that collects the measuremen in cyclic buffer and then saving it to the text file.
 	 */
 	reader_buffer *rb_obj;
 
 	/*!
-	 * \brief
+	 * \brief object that interpolates the motion in dedicated thread
 	 *
-	 *
+	 * It is used for the purpose of interpolation in the external coordinates (in manipulators) e.g. for the purpose of position-force control
 	 */
 	manip_trans_t *mt_tt_obj;
 
 	/*!
-	 * \brief
+	 * \brief object of servo buffer
 	 *
-	 *
+	 * With motor controllers in dedicated thread.
 	 */
 	servo_buffer* sb;
 
 	/*!
-	 * \brief
+	 * \brief Object of visualisation
 	 *
-	 *
+	 * This is dedicated thread that transmits joints postions to visualisation process.
 	 */
 	vis_server* vis_obj;
 
 	/*!
-	 * \brief
+	 * \brief force object to collect force measurements.
 	 *
-	 *
+	 * The force measurements are collected in dedicated thread. Then the influence of gravitational force is removed in the same thread.
 	 */
 	sensor::force *vs;
 
 	/*!
-	 * \brief
+	 * \brief Thread to share data with VSP process
 	 *
-	 *
+	 * Sometimes the sensors (e.g. foce sensors) are used both as the prioceptors and exteroceptors. Then some data is transmitted both to the ECP and VSP.
 	 */
 	edp_vsp* edp_vsp_obj;
 
 	/*!
-	 * \brief
+	 * \brief class contructor
 	 *
-	 *
+	 * The attributes are initialized here.
 	 */
 	motor_driven_effector(lib::configurator &_config, lib::robot_name_t l_robot_name); // konstruktor
 
 	/*!
-	 * \brief
+	 * \brief class destructor
 	 *
-	 *
+	 * The dynamic objects are deleted here.
 	 */
 	virtual ~motor_driven_effector();
 
 	/*!
-	 * \brief
+	 * \brief method to set the robot model commanded by ECP
 	 *
-	 *
+	 * The model consists of servo algorithms and kinematic models
 	 */
 	virtual void set_rmodel(lib::c_buffer &instruction); // zmiana narzedzia
 
 	/*!
-	 * \brief
+	 * \brief method to get (read) the robot model
 	 *
-	 *
+	 * The model consists of servo algorithms and kinematic models. Then it is sent to the ECP
 	 */
 	virtual void get_rmodel(lib::c_buffer &instruction); // odczytanie narzedzia
 
 	/*!
-	 * \brief
+	 * \brief structure with attributes describing the initial state of the effector
 	 *
-	 *
+	 * If it is synchronised, power is on etc.
 	 */
 	lib::controller_state_t controller_state_edp_buf; // do okreslenia stanu robota
 
 	/*!
-	 * \brief thye current number of step
+	 * \brief the current step number
 	 *
 	 * The step counter depends on the number of steps executed in controllers starting from the beginning of the EDP execution.
 	 */
