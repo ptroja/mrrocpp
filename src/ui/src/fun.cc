@@ -412,8 +412,7 @@ int close_file_selection_window(PtWidget_t *widget, ApInfo_t *apinfo, PtCallback
 	if ((ui_state.file_window_mode == FSTRAJECTORY) && (ui_ecp_obj->communication_state != UI_ECP_REPLY_READY)) {
 		ui_ecp_obj->ui_rep.reply = lib::QUIT;
 	}
-	ui_ecp_obj->trywait_sem();
-	ui_ecp_obj->post_sem();
+	ui_ecp_obj->synchroniser.command();
 
 	PtDestroyWidget(ABW_file_selection_window);
 
@@ -432,8 +431,7 @@ int close_teaching_window(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t
 	if (ui_ecp_obj->communication_state != UI_ECP_REPLY_READY) {
 		ui_ecp_obj->ui_rep.reply = lib::QUIT;
 	}
-	ui_ecp_obj->trywait_sem();
-	ui_ecp_obj->post_sem();
+	ui_ecp_obj->synchroniser.command();
 
 	PtDestroyWidget(ABW_teaching_window);
 
@@ -1872,8 +1870,7 @@ int close_yes_no_window(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *
 	if (ui_ecp_obj->communication_state != UI_ECP_REPLY_READY) {
 		ui_ecp_obj->ui_rep.reply = lib::QUIT;
 	}
-	ui_ecp_obj->trywait_sem();
-	ui_ecp_obj->post_sem();
+	ui_ecp_obj->synchroniser.command();
 	return (Pt_CONTINUE);
 
 }
@@ -1888,8 +1885,7 @@ int close_input_integer_window(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackI
 	if (ui_ecp_obj->communication_state != UI_ECP_REPLY_READY) {
 		ui_ecp_obj->ui_rep.reply = lib::QUIT;
 	}
-	ui_ecp_obj->trywait_sem();
-	ui_ecp_obj->post_sem();
+	ui_ecp_obj->synchroniser.command();
 	return (Pt_CONTINUE);
 
 }
@@ -1904,8 +1900,7 @@ int close_input_double_window(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackIn
 	if (ui_ecp_obj->communication_state != UI_ECP_REPLY_READY) {
 		ui_ecp_obj->ui_rep.reply = lib::QUIT;
 	}
-	ui_ecp_obj->trywait_sem();
-	ui_ecp_obj->post_sem();
+	ui_ecp_obj->synchroniser.command();
 	return (Pt_CONTINUE);
 
 }
@@ -1920,8 +1915,7 @@ int close_choose_option_window(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackI
 	if (ui_ecp_obj->communication_state != UI_ECP_REPLY_READY) {
 		ui_ecp_obj->ui_rep.reply = lib::QUIT;
 	}
-	ui_ecp_obj->trywait_sem();
-	ui_ecp_obj->post_sem();
+	ui_ecp_obj->synchroniser.command();
 	return (Pt_CONTINUE);
 
 }
@@ -1973,8 +1967,7 @@ int teaching_window_send_move(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackIn
 	ui_ecp_obj->ui_rep.double_number = *motion_time;
 	ui_ecp_obj->ui_rep.reply = lib::NEXT;
 	ui_ecp_obj->communication_state = UI_ECP_REPLY_READY;
-	ui_ecp_obj->trywait_sem();
-	ui_ecp_obj->post_sem();
+	ui_ecp_obj->synchroniser.command();
 
 	return (Pt_CONTINUE);
 }

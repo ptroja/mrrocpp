@@ -148,7 +148,7 @@ void *comm_thread(void* arg) {
 		case lib::C_JOINT:
 		case lib::C_MOTOR:
 			//  printf("C_MOTOR\n");
-			ui_ecp_obj->trywait_sem();
+			ui_ecp_obj->synchroniser.null_command();
 			if (ui_state.teachingstate == MP_RUNNING) {
 				ui_state.teachingstate = ECP_TEACHING;
 			}
@@ -160,7 +160,7 @@ void *comm_thread(void* arg) {
 				PtWindowToFront(ABW_teaching_window);
 			}
 			PtLeave(0);
-			ui_ecp_obj->take_sem();
+			ui_ecp_obj->synchroniser.wait();
 
 			if (MsgReply(rcvid, EOK, &ui_ecp_obj->ui_rep,
 					sizeof(ui_ecp_obj->ui_rep)) < 0) {
@@ -168,12 +168,12 @@ void *comm_thread(void* arg) {
 			}
 			break;
 		case lib::YES_NO:
-			ui_ecp_obj->trywait_sem();
+			ui_ecp_obj->synchroniser.null_command();
 			PtEnter(0);
 			ApCreateModule(ABM_yes_no_window, ABW_base, NULL);
 			PtSetResource(ABW_PtLabel_pytanie, Pt_ARG_TEXT_STRING, ui_ecp_obj->ecp_to_ui_msg.string , 0);
 			PtLeave(0);
-			ui_ecp_obj->take_sem();
+			ui_ecp_obj->synchroniser.wait();
 
 			if (MsgReply(rcvid, EOK, &ui_ecp_obj->ui_rep,
 					sizeof(ui_ecp_obj->ui_rep)) < 0) {
@@ -195,12 +195,12 @@ void *comm_thread(void* arg) {
 			}
 			break;
 		case lib::DOUBLE_NUMBER:
-			ui_ecp_obj->trywait_sem();
+			ui_ecp_obj->synchroniser.null_command();
 			PtEnter(0);
 			ApCreateModule(ABM_wnd_input_double, ABW_base, NULL);
 			PtSetResource(ABW_PtLabel_wind_input_double, Pt_ARG_TEXT_STRING, ui_ecp_obj->ecp_to_ui_msg.string , 0);
 			PtLeave(0);
-			ui_ecp_obj->take_sem();
+			ui_ecp_obj->synchroniser.wait();
 
 			if (MsgReply(rcvid, EOK, &ui_ecp_obj->ui_rep,
 					sizeof(ui_ecp_obj->ui_rep)) < 0) {
@@ -208,12 +208,12 @@ void *comm_thread(void* arg) {
 			}
 			break;
 		case lib::INTEGER_NUMBER:
-			ui_ecp_obj->trywait_sem();
+			ui_ecp_obj->synchroniser.null_command();
 			PtEnter(0);
 			ApCreateModule(ABM_wnd_input_integer, ABW_base, NULL);
 			PtSetResource(ABW_PtLabel_wind_input_integer, Pt_ARG_TEXT_STRING, ui_ecp_obj->ecp_to_ui_msg.string , 0);
 			PtLeave(0);
-			ui_ecp_obj->take_sem();
+			ui_ecp_obj->synchroniser.wait();
 
 			if (MsgReply(rcvid, EOK, &ui_ecp_obj->ui_rep,
 					sizeof(ui_ecp_obj->ui_rep)) < 0) {
@@ -221,7 +221,7 @@ void *comm_thread(void* arg) {
 			}
 			break;
 		case lib::CHOOSE_OPTION:
-			ui_ecp_obj->trywait_sem();
+			ui_ecp_obj->synchroniser.null_command();
 			PtEnter(0);
 			ApCreateModule(ABM_wnd_choose_option, ABW_base, NULL);
 			PtSetResource(ABW_PtLabel_wind_choose_option, Pt_ARG_TEXT_STRING, ui_ecp_obj->ecp_to_ui_msg.string , 0);
@@ -240,7 +240,7 @@ void *comm_thread(void* arg) {
 			}
 
 			PtLeave(0);
-			ui_ecp_obj->take_sem();
+			ui_ecp_obj->synchroniser.wait();
 
 			if (MsgReply(rcvid, EOK, &ui_ecp_obj->ui_rep,
 					sizeof(ui_ecp_obj->ui_rep)) < 0) {
@@ -251,7 +251,7 @@ void *comm_thread(void* arg) {
 		case lib::LOAD_FILE: // Zaladowanie pliku - do ECP przekazywana jest nazwa pliku ze sciezka
 			//    printf("lib::LOAD_FILE\n");
 			if (ui_state.teachingstate == MP_RUNNING) {
-				ui_ecp_obj->trywait_sem();
+				ui_ecp_obj->synchroniser.null_command();
 				wyjscie = false;
 				while (!wyjscie) {
 					if (!ui_state.is_file_selection_window_open) {
@@ -269,7 +269,7 @@ void *comm_thread(void* arg) {
 				}
 
 				ui_ecp_obj->ui_rep.reply = lib::FILE_LOADED;
-				ui_ecp_obj->take_sem();
+				ui_ecp_obj->synchroniser.wait();
 
 				if (MsgReply(rcvid, EOK, &ui_ecp_obj->ui_rep,
 						sizeof(ui_ecp_obj->ui_rep)) < 0) {
@@ -281,7 +281,7 @@ void *comm_thread(void* arg) {
 		case lib::SAVE_FILE: // Zapisanie do pliku - do ECP przekazywana jest nazwa pliku ze sciezka
 			//    printf("lib::SAVE_FILE\n");
 			if (ui_state.teachingstate == MP_RUNNING) {
-				ui_ecp_obj->trywait_sem();
+				ui_ecp_obj->synchroniser.null_command();
 				wyjscie = false;
 				while (!wyjscie) {
 					if (!ui_state.is_file_selection_window_open) {
@@ -298,7 +298,7 @@ void *comm_thread(void* arg) {
 				}
 
 				ui_ecp_obj->ui_rep.reply = lib::FILE_SAVED;
-				ui_ecp_obj->take_sem();
+				ui_ecp_obj->synchroniser.wait();
 
 				if (MsgReply(rcvid, EOK, &ui_ecp_obj->ui_rep,
 						sizeof(ui_ecp_obj->ui_rep)) < 0) {

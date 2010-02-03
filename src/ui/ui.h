@@ -18,6 +18,7 @@
 
 #include "lib/com_buf.h"
 #include "lib/srlib.h"
+#include "lib/mis_fun.h"
 
 #define CATCH_SECTION_UI catch (ecp::common::ecp_robot::ECP_main_error e) { \
 	/* Obsluga bledow ECP */ \
@@ -272,17 +273,16 @@ public:
 
 class ui_ecp_buffer {
 private:
-	sem_t sem;
+
 
 public:
 	UI_ECP_COMMUNICATION_STATE communication_state;
 	lib::ECP_message ecp_to_ui_msg;
 	lib::UI_reply ui_rep;
 
+	lib::boost_condition_synchroniser synchroniser;
 	ui_ecp_buffer();
-	int post_sem(); // podniesienie semafora
-	int take_sem(); // oczekiwanie na semafor
-	int trywait_sem(); // oczekiwanie na semafor
+
 };
 
 typedef struct {
@@ -298,7 +298,7 @@ public:
 
 	int wait_and_execute();
 	void command(command_function_t _com_fun);
-
+	function_execution_buffer();
 private:
 	boost::condition_variable cond; //! active command condition
 	boost::mutex mtx; //! mutex related to condition variable

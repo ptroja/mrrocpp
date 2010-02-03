@@ -24,9 +24,12 @@ namespace lib {
 
 class boost_condition_synchroniser {
 public:
-
+	// wait for condition and new_command;
 	void wait();
+	// set new_command;
 	void command();
+	// set has_command=0;
+	void null_command();
 	boost_condition_synchroniser();
 
 private:

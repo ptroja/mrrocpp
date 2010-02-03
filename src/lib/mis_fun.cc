@@ -25,9 +25,15 @@ void boost_condition_synchroniser::command()
 	has_command = true;
 
 	cond.notify_one();
-
-	return;
 }
+
+void boost_condition_synchroniser::null_command()
+{
+	boost::unique_lock <boost::mutex> lock(mtx);
+
+	has_command = false;
+}
+
 
 void boost_condition_synchroniser::wait()
 {
