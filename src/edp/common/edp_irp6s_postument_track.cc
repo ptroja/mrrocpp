@@ -607,7 +607,7 @@ void irp6s_postument_track_effector::get_arm_position(bool read_hardware, lib::c
 			motor_driven_effector::get_arm_position_get_arm_type_switch(instruction);
 	}
 
-	motor_driven_effector::get_arm_position_set_reply_step();
+	reply.servo_step = step_counter;
 
 	if (instruction.interpolation_type == lib::TCIM) {
 		lib::Homog_matrix current_frame_wo_offset = return_current_frame(WITHOUT_TRANSLATION);
