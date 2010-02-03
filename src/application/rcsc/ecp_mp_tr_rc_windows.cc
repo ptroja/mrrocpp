@@ -31,141 +31,132 @@ namespace transmitter {
 
 rc_win_buf_typedef *rc_windows::rc_win_buf = NULL;
 
-rc_windows::rc_windows  (
-		TRANSMITTER_ENUM _transmitter_name,
-		const char* _section_name,
-		task::task& _ecp_mp_object)  :
-			transmitter (_transmitter_name, _section_name, _ecp_mp_object) {
+rc_windows::rc_windows(TRANSMITTER_ENUM _transmitter_name, const char* _section_name, task::task& _ecp_mp_object) :
+	transmitter(_transmitter_name, _section_name, _ecp_mp_object)
+{
 
-	if(!rc_win_buf) {
+	if (!rc_win_buf) {
 		rc_win_buf = new rc_win_buf_typedef;
 	} else {
-		printf ("powolano juz obiekt klasy transmitter\n");
+		printf("powolano juz obiekt klasy transmitter\n");
 	}
 
-	sem_init(&(rc_win_buf->sem), 0, 1);
-
-	rc_win_buf->solver_hostname = _ecp_mp_object.config.value<std::string>("solver_hostname", _section_name).c_str();
-	rc_win_buf->solver_port = _ecp_mp_object.config.value<int>("solver_port", _section_name);
+	rc_win_buf->solver_hostname = _ecp_mp_object.config.value <std::string> ("solver_hostname", _section_name).c_str();
+	rc_win_buf->solver_port = _ecp_mp_object.config.value <int> ("solver_port", _section_name);
 }
 
+rc_windows::~rc_windows()
+{
 
-rc_windows::~rc_windows  (){
-	sem_destroy(&(rc_win_buf->sem));
 	delete[] rc_win_buf->solver_hostname;
 	delete rc_win_buf;
 }
 
+void * rc_windows::do_query(void * arg)
+{
 
-void * rc_windows::do_query(void * arg) {
+	boost::mutex::scoped_lock lock(rc_win_buf->mtx);
 
-  sem_wait(&(rc_win_buf->sem));
+	int sock;
+	fd_set fds;
+	struct timeval timeout;
+	int retval;
 
-  int sock;
-  fd_set fds;
-  struct timeval timeout;
-  int retval;
+	/*
+	 switch (to_va.rc_windows.rc_state[i]) {
+	 case 'Y':
+	 case 'y':
+	 pattern[i] = 'y'; break;
+	 case 'W':
+	 case 'w':
+	 pattern[i] = 'w'; break;
+	 case 'R':
+	 case 'r':
+	 pattern[i] = 'r'; break;
+	 case 'O':
+	 case 'o':
+	 pattern[i] = 'o'; break;
+	 case 'B':
+	 case 'b':
+	 pattern[i] = 'b'; break;
+	 case 'G':
+	 case 'g':
+	 pattern[i] = 'g'; break;
+	 }
+	 */
 
+	sock = make_socket(rc_win_buf->solver_hostname, rc_win_buf->solver_port);
 
-  /*
-  	switch (to_va.rc_windows.rc_state[i]) {
-  		case 'Y':
-  		case 'y':
-  			pattern[i] = 'y'; break;
-  		case 'W':
-  		case 'w':
-  			pattern[i] = 'w'; break;
-  		case 'R':
-  		case 'r':
-  			pattern[i] = 'r'; break;
-  		case 'O':
-  		case 'o':
-  			pattern[i] = 'o'; break;
-  		case 'B':
-  		case 'b':
-  			pattern[i] = 'b'; break;
-  		case 'G':
-  		case 'g':
-  			pattern[i] = 'g'; break;
-  	}
-  */
+	//  int l = strlen(rc_win_buf->request);
+	if (write(sock, rc_win_buf->request, strlen(rc_win_buf->request)) != (ssize_t) strlen(rc_win_buf->request)) {
+		perror("write()");
+		close(sock);
+		return NULL;
+	}
 
-  sock = make_socket(rc_win_buf->solver_hostname, rc_win_buf->solver_port);
+	/* Initialize the file descriptor set. */
+	FD_ZERO (&fds);
+	FD_SET (sock, &fds);
 
-//  int l = strlen(rc_win_buf->request);
-  if (write(sock, rc_win_buf->request, strlen(rc_win_buf->request)) != (ssize_t) strlen(rc_win_buf->request)) {
-    perror("write()");
-    close(sock);
-    return NULL;
-  }
+	/* Initialize the timeout data structure. */
+	timeout.tv_sec = 60* 2 ;timeout.tv_usec = 0;
 
+	/* `select' returns 0 if timeout, 1 if input available, -1 if error. */
+	retval = select (FD_SETSIZE, &fds, NULL, NULL, &timeout);
+	if (retval == -1) {
+		perror("select()");
+		close(sock);
+		return NULL;
+	} else if (retval == 0) {
+		fprintf(stderr, "socket timeout\n");
+		close(sock);
+		return NULL;
+	}
 
-  /* Initialize the file descriptor set. */
-  FD_ZERO (&fds);
-  FD_SET (sock, &fds);
+	retval = read(sock, rc_win_buf->response, 1024);
+	if (retval < 0) {
+		perror("read()");
+		close(sock);
+		return NULL;
+	}
 
-  /* Initialize the timeout data structure. */
-  timeout.tv_sec = 60*2;
-  timeout.tv_usec = 0;
+	rc_win_buf->response[retval] = '\0';
 
-  /* `select' returns 0 if timeout, 1 if input available, -1 if error. */
-  retval = select (FD_SETSIZE, &fds, NULL, NULL, &timeout);
-  if (retval == -1) {
-	perror("select()");
+	printf("%s", rc_win_buf->response);
+
 	close(sock);
+
 	return NULL;
-  } else if (retval == 0) {
-	fprintf(stderr, "socket timeout\n");
-	close(sock);
-	return NULL;
-  }
-
-  retval = read(sock, rc_win_buf->response, 1024);
-  if (retval < 0) {
-	perror("read()");
-	close(sock);
-	return NULL;
-  }
-
-  rc_win_buf->response[retval] = '\0';
-
-  printf("%s", rc_win_buf->response);
-
-  close(sock);
-  sem_post(&(rc_win_buf->sem));
-
-  return NULL;
 }
-
 
 int rc_windows::make_socket (const char *hostname, uint16_t port)
 {
-  int sock;
-  struct sockaddr_in server;
-  struct hostent *hostinfo;
+	int sock;
+	struct sockaddr_in server;
+	struct hostent *hostinfo;
 
-  /* Create the socket. */
-  sock = socket (PF_INET, SOCK_STREAM, 0);
-  if (sock < 0) {
-    perror ("socket");
-    return -1;
-  }
+	/* Create the socket. */
+	sock = socket (PF_INET, SOCK_STREAM, 0);
+	if (sock < 0) {
+		perror ("socket");
+		return -1;
+	}
 
-  server.sin_family = AF_INET;
-  server.sin_port = htons (port);
-  hostinfo = gethostbyname (hostname);
-  if (hostinfo == NULL) {
-    fprintf (stderr, "Unknown host %s.\n", hostname);
-    return -1;
-  }
-  server.sin_addr = *(struct in_addr *) hostinfo->h_addr;
+	server.sin_family = AF_INET;
+	server.sin_port = htons (port);
+	hostinfo = gethostbyname (hostname);
+	if (hostinfo == NULL) {
+		fprintf (stderr, "Unknown host %s.\n", hostname);
+		return -1;
+	}
+	server.sin_addr = *(struct in_addr *) hostinfo->h_addr;
 
-  if(connect(sock, (struct sockaddr*) &server, sizeof(server)) == -1) {
-    perror("connect");
-    return -1;
-  }
+	if(connect(sock, (struct sockaddr*) &server, sizeof(server)) == -1) {
+		perror("connect");
+		return -1;
+	}
 
-  return sock;
+	return sock;
 }
 
 bool rc_windows::t_write() {
@@ -182,7 +173,8 @@ bool rc_windows::t_read(bool wait) {
 	int l=0;
 
 	if (wait) {
-		sem_wait(&(rc_win_buf->sem));
+
+		boost::mutex::scoped_lock lock(rc_win_buf->mtx);
 
 		printf("W SEMAFORZE 1 %d\n", strlen(rc_win_buf->response)-33);
 
@@ -192,25 +184,16 @@ bool rc_windows::t_read(bool wait) {
 		strncpy(from_va.rc_windows.sequence, rc_win_buf->response+33, l);
 		from_va.rc_windows.sequence[l]='\0';
 
-		sem_post(&(rc_win_buf->sem));
-
-		return true;
 	} else {
-		if (sem_trywait(&(rc_win_buf->sem)) == 0) {
 
-			printf("W SEMAFORZE2 %d\n", strlen(rc_win_buf->response)-33);
-			l=strlen(rc_win_buf->response)-33-16;
-			if(l<0) l=0;
-			strncpy(from_va.rc_windows.sequence, rc_win_buf->response+33, l);
-			from_va.rc_windows.sequence[l]='\0';
+		printf("W SEMAFORZE2 %d\n", strlen(rc_win_buf->response)-33);
+		l=strlen(rc_win_buf->response)-33-16;
+		if(l<0) l=0;
+		strncpy(from_va.rc_windows.sequence, rc_win_buf->response+33, l);
+		from_va.rc_windows.sequence[l]='\0';
 
-			sem_post(&(rc_win_buf->sem));
-
-			return true;
-		} else {
-			return false;
-		}
 	}
+	return true;
 }
 
 } // namespace transmitter

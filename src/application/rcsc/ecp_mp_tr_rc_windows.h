@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------------
-// Proces: 	
+// Proces:
 // Plik:			ecp_mp_t_rc_windows.h
 // System:	QNX/MRROCPP  v. 6.3
 // Opis:		Ogolna struktura obrazow czujnika
@@ -12,9 +12,11 @@
 #define __ECP_MP_TR_RC_WINDOWS_H
 
 #include <pthread.h>
-#include <semaphore.h>
 
 #include "ecp_mp/transmitter/transmitter.h"				// klasa bazowa transmitter
+#include <boost/thread/condition_variable.hpp>
+#include <boost/thread/mutex.hpp>
+#include <boost/circular_buffer.hpp>
 
 namespace mrrocpp {
 namespace ecp_mp {
@@ -25,7 +27,7 @@ typedef struct {
 	char request[255];
 	const char* solver_hostname;
 	uint16_t solver_port;
-	sem_t sem;
+	boost::mutex mtx;
 } rc_win_buf_typedef;
 
 /***************** Klasa czujnikow ********************/
@@ -37,7 +39,7 @@ class rc_windows: public transmitter{
 	static void * do_query(void *);
 
   	static rc_win_buf_typedef *rc_win_buf;
-  	
+
   public:
 	// Konstruktor
  	rc_windows (TRANSMITTER_ENUM _transmitter_name, const char* _section_name, task::task& _ecp_mp_object);
@@ -48,7 +50,7 @@ class rc_windows: public transmitter{
 	virtual bool t_read (bool wait);
 	// zapis
 	virtual bool t_write (void);
-}; 
+};
 
 } // namespace transmitter
 } // namespace ecp_mp
