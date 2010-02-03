@@ -37,19 +37,19 @@ class Trajectory
 		lib::ECP_POSE_SPECIFICATION getPoseSpecification() const;
 
 		void setStartVelocities(const std::string & startVelocities);
-		double *getStartVelocities() const;
+		double getStartVelocities() const;
 
 		void setEndVelocities(const std::string & endVelocities);
-		double *getEndVelocities() const;
+		double getEndVelocities() const;
 
 		void setVelocities(const std::string & Velocities);
-		double *getVelocities() const;
+		const double*  getVelocities() const;
 
 		void setAccelerations(const std::string & accelerations);
-		double *getAccelerations() const;
+		const double*  getAccelerations() const;
 
 		void setCoordinates(const std::string & cCoordinates);
-		double *getCoordinates() const;
+		const double* getCoordinates() const;
 
 		void showTime();
 
@@ -59,8 +59,8 @@ class Trajectory
 		std::string trjID;
 		unsigned int numOfPoses;
 		lib::ECP_POSE_SPECIFICATION poseSpec;
-		ecp_mp::common::smooth_trajectory_pose *actPose2;
-		std::list<ecp_mp::common::smooth_trajectory_pose> trjPoses2;
+		ecp_mp::common::smooth_trajectory_pose actPose;
+		std::list<ecp_mp::common::smooth_trajectory_pose> trjPoses;
 
 		// boost serialization methods
 		friend class boost::serialization::access;
@@ -70,7 +70,7 @@ class Trajectory
 			ar & BOOST_SERIALIZATION_NVP(trjID);
 			ar & BOOST_SERIALIZATION_NVP(numOfPoses);
 			ar & BOOST_SERIALIZATION_NVP(poseSpec);
-			ar & BOOST_SERIALIZATION_NVP(trjPoses2);
+			ar & BOOST_SERIALIZATION_NVP(trjPoses);
 		}
 };
 
