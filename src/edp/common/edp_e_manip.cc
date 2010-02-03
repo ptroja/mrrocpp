@@ -197,8 +197,8 @@ void manip_effector::get_rmodel(lib::c_buffer &instruction)
 /*--------------------------------------------------------------------------*/
 void manip_effector::compute_frame(const lib::c_buffer &instruction)
 {
-	lib::MotorArray desired_motor_pos_new_tmp(MAX_SERVOS_NR);
-	lib::JointArray desired_joints_tmp(MAX_SERVOS_NR); // Wspolrzedne wewnetrzne -
+	lib::MotorArray desired_motor_pos_new_tmp(number_of_servos);
+	lib::JointArray desired_joints_tmp(number_of_servos); // Wspolrzedne wewnetrzne -
 	const lib::MOTION_TYPE &motion_type = instruction.motion_type;
 	// obliczenia dla ruchu ramienia (kocwk: FRAME)
 	/* Wypenienie struktury danych transformera na podstawie parametrow polecenia otrzymanego z ECP */

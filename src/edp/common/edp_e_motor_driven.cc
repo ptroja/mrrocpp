@@ -64,7 +64,7 @@ void motor_driven_effector::get_arm_position_read_hardware_sb()
 { // odczytanie pozycji ramienia
 
 	//   printf(" GET ARM\n");
-	lib::JointArray desired_joints_tmp(MAX_SERVOS_NR); // Wspolrzedne wewnetrzne -
+	lib::JointArray desired_joints_tmp(number_of_servos); // Wspolrzedne wewnetrzne -
 
 	// Uformowanie rozkazu odczytu dla SERVO_GROUP
 	sb->servo_command.instruction_code = lib::READ;
@@ -630,8 +630,8 @@ lib::REPLY_TYPE motor_driven_effector::rep_type(const lib::c_buffer &instruction
 void motor_driven_effector::compute_motors(const lib::c_buffer &instruction)
 {
 
-	lib::MotorArray desired_motor_pos_new_tmp(MAX_SERVOS_NR);
-	lib::JointArray desired_joints_tmp(MAX_SERVOS_NR); // Wspolrzedne wewnetrzne -
+	lib::MotorArray desired_motor_pos_new_tmp(number_of_servos);
+	lib::JointArray desired_joints_tmp(number_of_servos); // Wspolrzedne wewnetrzne -
 
 
 	// obliczenia dla ruchu ramienia (silnikami)
@@ -730,8 +730,8 @@ void motor_driven_effector::get_rmodel(lib::c_buffer &instruction)
 /*--------------------------------------------------------------------------*/
 void motor_driven_effector::compute_joints(const lib::c_buffer &instruction)
 {
-	lib::MotorArray desired_motor_pos_new_tmp(MAX_SERVOS_NR);
-	lib::JointArray desired_joints_tmp(MAX_SERVOS_NR); // Wspolrzedne wewnetrzne -
+	lib::MotorArray desired_motor_pos_new_tmp(number_of_servos);
+	lib::JointArray desired_joints_tmp(number_of_servos); // Wspolrzedne wewnetrzne -
 
 	// obliczenia dla ruchu ramienia (stawami)
 	/* Wypenienie struktury danych transformera na podstawie parametrow polecenia otrzymanego z ECP */

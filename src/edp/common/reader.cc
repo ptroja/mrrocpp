@@ -41,7 +41,7 @@ namespace mrrocpp {
 namespace edp {
 namespace common {
 
-reader_buffer::reader_buffer(effector &_master) :
+reader_buffer::reader_buffer(motor_driven_effector &_master) :
 	master (_master), synchroniser()
 {
 	thread_id = new boost::thread(boost::bind(&reader_buffer::operator(), this));
@@ -92,7 +92,7 @@ void reader_buffer::operator()()
 
 	char tmp_string[50];
 
-	for (int j = 0; j < MAX_SERVOS_NR; j++) {
+	for (int j = 0; j < master.number_of_servos; j++) {
 
 		sprintf(tmp_string, "desired_inc_%d", j);
 		reader_cnf.desired_inc[j] = master.config.check_config(tmp_string);
@@ -346,7 +346,7 @@ void reader_buffer::operator()()
 				if (reader_cnf.servo_mode)
 					outfile << (reader_buf.front().servo_mode ? "1" : "0") << " ";
 
-				for (int j = 0; j < MAX_SERVOS_NR; j++) {
+				for (int j = 0; j < master.number_of_servos; j++) {
 					if (reader_cnf.desired_inc[j])
 						outfile << reader_buf.front().desired_inc[j] << " ";
 					if (reader_cnf.current_inc[j])
@@ -361,7 +361,7 @@ void reader_buffer::operator()()
 
 				outfile << "j: ";
 
-				for (int j = 0; j < MAX_SERVOS_NR; j++) {
+				for (int j = 0; j < master.number_of_servos; j++) {
 					if (reader_cnf.current_joints[j])
 						outfile << reader_buf.front().current_joints[j] << " ";
 				}

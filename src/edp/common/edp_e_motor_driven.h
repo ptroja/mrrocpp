@@ -5,8 +5,8 @@
 // Ostatnia modyfikacja: 16.04.98
 // -------------------------------------------------------------------------
 
-#ifndef __EDP_E_MANIP_AND_CONV_H
-#define __EDP_E_MANIP_AND_CONV_H
+#ifndef __EDP_E_MOTOR_DRIVEN_H
+#define __EDP_E_MOTOR_DRIVEN_H
 
 #include <stdint.h>
 #include <boost/thread/mutex.hpp>
@@ -46,12 +46,18 @@ class servo_buffer;
 class edp_vsp;
 class reader_buffer;
 
-// base class for EDP robots with manipulators and conveyor
-
-// forward declaration
-
-
-/************************ edp_irp6s_and_conv_effector ****************************/
+/*!
+ * \class motor_driven_effector
+ * \brief Base class of all EDP effectors using motors (e.g. robots)
+ *
+ * The class can be treated as multi variant shield. The derrived classes can optionally use servo_buffer (dedicated servo thread)
+ * reader_buffer - dedicated reader thread, mt_tt_obj - dedicated thread to interpolate in task coordinates, e.g. force control in manipulators
+ * vis_server - dedicated thread to sent joint position e.g. to visualisation processes,
+ * sensor::force -- dedicated thread to measure force for the purpose of position force control of robotics manipulator
+ * edp_vsp_obj - thread to sent data to VSP process (when the force sensor is used both as the prioceptor and exteroceptor)
+ * *
+ * \author yoyek
+ */
 class motor_driven_effector: public effector, public kinematics::common::kinematics_manager
 {
 protected:
@@ -61,20 +67,18 @@ protected:
 	void onReaderStopped();
 #endif
 
-	uint16_t motion_steps; // liczba krokow ruchu zadanego (makrokroku)
+	/*!
+	 * \brief The number of steps in the macrostep.
+	 *
+	 * Each step takes typically 1 to 2ms.
+	 */
+	uint16_t motion_steps;
 
-	//Liczba krokow pierwszej fazy ruchu, czyli krok, w ktorym ma zostac
-	//przekazana informacja o realizacji pierwszej fazy ruchu:
-	//0 < value_in_step_no <= motion_steps + 1
-	//Dla value_in_step_no = motion_steps wiadomosc dotrze po zrealizowaniu
-	//makrokroku, ale informacja o polozeniu bedzie dotyczyc realizacji
-	//przedostatniego kroku makrokroku.
-	//Dla value_in_step_no = motion_steps + 1 wiadomosc dotrze po zrealizowaniu
-	//jednego kroku obiegu petli ruchu jalowego po zakonczeniu makrokroku,
-	//ale informacja o polozeniu bedzie dotyczyc realizacji calego makrokroku.
-	//Dla value_in_step_no < motion_steps wiadomosc dotrze przed zrealizowaniem
-	//makrokroku i informacja o polozeniu bedzie dotyczyc realizacji srodkowej
-	//fazy makrokroku.
+	/*!
+	 * \brief The number of steps between the SET and QUERY command.
+	 *
+	 * This number should be lower then motion_steps while the manipulator is moving to receive new command before the execution of the previous is finished.
+	 */
 	uint16_t value_in_step_no;
 
 #ifdef DOCENT_SENSOR
@@ -84,23 +88,54 @@ protected:
 	bool stoppedCallbackRegistered_;
 #endif
 
+	/*!
+	 * \brief friend class of servo thread to handle the motion controllers
+	 *
+	 * It is used when the controllers loop is implemented in the EDP.
+	 */
 	friend class servo_buffer;
 
+	/*!
+	 * \brief method to set the outputs in the hardware commanded by the ECP
+	 *
+	 * It is done with usage of in_out_object, processed in interrupt handler.
+	 */
 	void set_outputs(const lib::c_buffer &instruction); // ustawienie wyjsc binarnych
 
+	/*!
+	 * \brief method to get the inputs from the hardware commanded by the ECP and then reply it to the ECP.
+	 *
+	 * It is done with usage of in_out_object, processed in interrupt handler.
+	 */
 	void get_inputs(lib::r_buffer *local_reply); // odczytanie wejsc binarnych
 
-	// kasuje zmienne - uwaga najpierw nalezy ustawic number_of_servos
+	/*!
+	 * \brief method reset to zero the vectors of motor and joint position.
+	 *
+	 * number_of_servos should be previously set
+	 */
 	void reset_variables();
 
+	/*!
+	 * \brief method to extract desired_motor_position basing on the ECP instruction with motor desired motor position in absolute or relative variant.
+	 *
+	 * It also checks kinematic constrains of motor and equivalent joint position.
+	 */
 	void compute_motors(const lib::c_buffer &instruction); // obliczenia dla ruchu ramienia (silnikami)
 
+	/*!
+	 * \brief method to compute desired_motor_position basing on the ECP instruction with motor desired joint position in absolute or relative variant.
+	 *
+	 * It also checks kinematic constrains of motor and equivalent joint position.
+	 */
 	void compute_joints(const lib::c_buffer &instruction); // obliczenia dla ruchu ramienia (stawami)
 
+	/*!
+	 * \brief method to prepare command for servos (typically servo_buffer thread)
+	 *
+	 * It bases on desired_motor_position.
+	 */
 	void move_servos();
-
-	// Wyslanie polecenia ruchu do SERVO_GROUP oraz odebranie wyniku
-	// realizacji pierwszej fazy ruchu
 
 	lib::MotorArray servo_current_motor_pos; // Polozenia walow silnikow -// dla watku edp_servo    XXXX
 
@@ -115,7 +150,7 @@ protected:
 	lib::JointArray desired_joints; // Wspolrzedne wewnetrzne -
 	// ostatnio obliczone (zadane) (w radianach)
 
-	//double current_joints[MAX_SERVOS_NR];       // Wspolrzedne wewnetrzne -
+
 	lib::JointArray current_joints;
 	// ostatnio odczytane (w radianach) // by Y dla watku EDP_MASTER
 
@@ -129,9 +164,6 @@ protected:
 	lib::MotorArray current_motor_pos; // Polozenia walow silnikow -
 	// ostatnio odczytane (w radianach)
 
-
-	//    int16_t PWM_value[MAX_SERVOS_NR];             // wartosci zadane wypelnienia PWM
-	//    int16_t current[MAX_SERVOS_NR];                // prad sterujacy
 
 public:
 

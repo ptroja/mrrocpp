@@ -51,8 +51,8 @@ void irp6s_postument_track_effector::master_order(MT_ORDER nm_task, int nm_tryb)
 /*--------------------------------------------------------------------------*/
 void irp6s_postument_track_effector::compute_frame(const lib::c_buffer &instruction)
 {
-	lib::MotorArray desired_motor_pos_new_tmp(MAX_SERVOS_NR);
-	lib::JointArray desired_joints_tmp(MAX_SERVOS_NR); // Wspolrzedne wewnetrzne -
+	lib::MotorArray desired_motor_pos_new_tmp(number_of_servos);
+	lib::JointArray desired_joints_tmp(number_of_servos); // Wspolrzedne wewnetrzne -
 	const lib::MOTION_TYPE &motion_type = instruction.motion_type;
 	// obliczenia dla ruchu ramienia (kocwk: FRAME)
 	/* Wypenienie struktury danych transformera na podstawie parametrow polecenia otrzymanego z ECP */
@@ -220,8 +220,8 @@ void irp6s_postument_track_effector::compute_base_pos_xyz_rot_xyz_vector(const l
 	const uint16_t &ECP_motion_steps = instruction.motion_steps; // liczba krokow w makrokroku
 
 	// WYLICZENIE POZYCJI POCZATKOWEJ
-	lib::JointArray tmp_joints(MAX_SERVOS_NR);
-	lib::MotorArray tmp_motor_pos(MAX_SERVOS_NR);
+	lib::JointArray tmp_joints(number_of_servos);
+	lib::MotorArray tmp_motor_pos(number_of_servos);
 
 	lib::Homog_matrix goal_frame;
 
@@ -308,8 +308,8 @@ void irp6s_postument_track_effector::iterate_macrostep(const lib::JointArray beg
 	//	static int debugi=0;
 	//   debugi++;
 
-	lib::MotorArray desired_motor_pos_new_tmp(MAX_SERVOS_NR);
-	lib::JointArray desired_joints_tmp(MAX_SERVOS_NR); // Wspolrzedne wewnetrzne -
+	lib::MotorArray desired_motor_pos_new_tmp(number_of_servos);
+	lib::JointArray desired_joints_tmp(number_of_servos); // Wspolrzedne wewnetrzne -
 	const lib::MOTION_TYPE &motion_type = instruction.motion_type;
 
 	// zmienne z bufora wejsciowego
@@ -518,7 +518,7 @@ void irp6s_postument_track_effector::iterate_macrostep(const lib::JointArray beg
 void irp6s_postument_track_effector::pose_force_torque_at_frame_move(const lib::c_buffer &instruction)
 {
 	// WYLICZENIE POZYCJI POCZATKOWEJ
-	lib::JointArray begining_joints(MAX_SERVOS_NR);
+	lib::JointArray begining_joints(number_of_servos);
 	lib::Homog_matrix begining_end_effector_frame;
 	get_current_kinematic_model()->mp2i_transform(desired_motor_pos_new, begining_joints);
 	get_current_kinematic_model()->i2e_transform(begining_joints, begining_end_effector_frame);

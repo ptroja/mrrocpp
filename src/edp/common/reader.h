@@ -19,7 +19,7 @@
 
 #include <boost/thread/thread.hpp>
 
-class effector;
+class motor_driven_effector;
 
 namespace mrrocpp {
 namespace edp {
@@ -85,7 +85,7 @@ class reader_buffer : public boost::noncopyable
 private:
     sem_t reader_sem;
 
-    effector &master;
+    motor_driven_effector &master;
 
     boost::thread *thread_id;
 public:
@@ -98,7 +98,7 @@ public:
     reader_data step_data; // dane pomiarowe dla biezacego mikrokroku
     reader_config reader_cnf; //   Struktura z informacja, ktore elementy struktury reader_data maja byc zapisane do pliku
 
-    reader_buffer(effector &_master);
+    reader_buffer(motor_driven_effector &_master);
     ~reader_buffer();
 
 
