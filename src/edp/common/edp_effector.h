@@ -5,11 +5,6 @@
  * \author yoyek
  * \date 2009
  *
- *
- *  $LastChangedRevision: $
- *  $LastChangedDate:  $
- *  $LastChangedBy:  $
- *
  */
 
 #ifndef __EDP_EFFECTOR_H
