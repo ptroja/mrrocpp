@@ -315,89 +315,84 @@ public:
 	lib::controller_state_t controller_state_edp_buf; // do okreslenia stanu robota
 
 	/*!
-	 * \brief
+	 * \brief thye current number of step
 	 *
-	 *
+	 * The step counter depends on the number of steps executed in controllers starting from the beginning of the EDP execution.
 	 */
 	unsigned long step_counter;
 
 	/*!
-	 * \brief
+	 * \brief the number of servos
 	 *
-	 *
+	 * It is set by the specific robots.
 	 */
-	short number_of_servos; // by Y ilosc serwomechanizmow  XXX
-	// w zaleznosci od tego czy chwytak ma byc aktywny czy nie
+	short number_of_servos;
+
 
 	/*!
-	 * \brief
+	 * \brief pure virtual method of move arm to be implemented in specific robot.
 	 *
-	 *
+	 * The child robot should decide which of the two following variants will be used.
 	 */
 	virtual void move_arm(lib::c_buffer &instruction) = 0; // przemieszczenie ramienia
 
 	/*!
-	 * \brief
+	 * \brief move arm in two thread version
 	 *
-	 *
+	 * This variant does uses extra thread for motion interpolation purpose. Two representation are handled here: joints and motors
 	 */
 	void multi_thread_move_arm(lib::c_buffer &instruction);
 
 	/*!
-	 * \brief
+	 * \brief move arm in single thread version
 	 *
-	 *
+	 * This variant does not use extra thread for motion interpolation purpose. Two representation are handled here: joints and motors
 	 */
 	void single_thread_move_arm(lib::c_buffer &instruction);
 
 	/*!
-	 * \brief
+	 * \brief method to get position of the arm in the one of the representation commandenf by the ECP
 	 *
-	 *
+	 * Here this method is pure virtual because it is not s specific robot method and the common parts are defined in other methods.
 	 */
-	virtual void get_arm_position(bool read_hardware, lib::c_buffer &instruction) = 0; // odczytanie pozycji ramienia
+	virtual void get_arm_position(bool read_hardware, lib::c_buffer &instruction) = 0;
 
 	/*!
-	 * \brief
+	 * \brief common part of get_arm method that get current arm position from hardware
 	 *
-	 *
+	 * Typically it is taken from servo_buffer
 	 */
-	void get_arm_position_read_hardware_sb(); // odczytanie pozycji ramienia sprzetowo z sb
+	void get_arm_position_read_hardware_sb();
 
 	/*!
-	 * \brief
+	 * \brief commonly used part of the get_arm_position method
 	 *
-	 *
+	 * it defines the execution for the joint and motor coordinates.
 	 */
-	void get_arm_position_set_reply_step(); // odczytanie pozycji ramienia sprzetowo z sb
+	virtual void get_arm_position_get_arm_type_switch(lib::c_buffer &instruction);
 
 	/*!
-	 * \brief
+	 * \brief method to synchronise robot
 	 *
-	 *
+	 * it is impossible to move robot in absolute coordinates before synchronisation.
 	 */
-	virtual void get_arm_position_get_arm_type_switch(lib::c_buffer &instruction); // odczytanie pozycji ramienia sprzetowo z sb
+	virtual void synchronise();
 
 	/*!
-	 * \brief
+	 * \brief method to compute servo_current_motor_pos, servo_cuurent_joints_pos and surve_current_frame in child classes
 	 *
-	 *
-	 */
-	virtual void synchronise(); // synchronizacja robota
-
-	/*!
-	 * \brief
-	 *
+	 * It is commanded in every step of motor control.
+	 * The computer servo_frame is used e.g. for the purpose of removal of gravity force from the raw force measurement.
 	 *
 	 */
-	virtual bool servo_joints_and_frame_actualization_and_upload(void); // by Y
+	virtual bool servo_joints_and_frame_actualization_and_upload(void);
 
 	/*!
 	 * \brief main loop of the EDP master thread.
 	 *
 	 * It is a sewuence of the three following small loops.
 	 */
-	void main_loop(); // main loop
+	void main_loop();
 
 	/*!
 	 * \brief loop of the system before EDP is beeing synchronised.

@@ -52,12 +52,7 @@ servo_buffer * motor_driven_effector::return_created_servo_buffer()
 {
 	return NULL;
 }
-void motor_driven_effector::get_arm_position_set_reply_step()
-{
-	// scope-locked reader data update
-	boost::mutex::scoped_lock lock(rb_obj->reader_mutex);
-	reply.servo_step = rb_obj->step_data.step;
-}
+
 
 /*--------------------------------------------------------------------------*/
 void motor_driven_effector::get_arm_position_read_hardware_sb()

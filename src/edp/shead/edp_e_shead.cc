@@ -72,7 +72,7 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 	// oraz adekwatne wypelnienie bufora odpowiedzi
 	common::motor_driven_effector::get_arm_position_get_arm_type_switch(instruction);
 
-	motor_driven_effector::get_arm_position_set_reply_step();
+	reply.servo_step = step_counter;
 }
 /*--------------------------------------------------------------------------*/
 
