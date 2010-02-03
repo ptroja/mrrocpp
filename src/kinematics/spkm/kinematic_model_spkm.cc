@@ -68,7 +68,6 @@ void kinematic_model_spkm::inverse_kinematics_transform(lib::JointArray & local_
 	local_current_joints[3] = SW_joints[0];
 	local_current_joints[4] = SW_joints[1];
 	local_current_joints[5] = SW_joints[2];
-
 }
 
 Vector5d kinematic_model_spkm::PKM_S_to_e(Vector3d _O_S_P)
@@ -87,37 +86,6 @@ Vector5d kinematic_model_spkm::PKM_S_to_e(Vector3d _O_S_P)
 	double s_beta = -params.delta_B2 * _O_S_P.y() / sqrt(t6 * t6 + _O_S_P.y() * _O_S_P.y());
 	double c_beta = params.delta_B2 * t6 / sqrt(t6 * t6 + _O_S_P.y() * _O_S_P.y());
 
-	/*
-	 double P1Btd_O;
-	 double P_O[3];
-	 double Px;
-	 double Py;
-	 double Pz;
-	 double e_h[3];
-	 double k2A[3];
-	 double k2C[3];
-	 double k5B[3];
-	 double l;
-	 k2A[0] = s_alpha;
-	 k2A[1] = 0.0;
-	 k2A[2] = c_alpha;
-	 k2C[0] = s_alpha;
-	 k2C[1] = 0.0;
-	 k2C[2] = c_alpha;
-	 k5B[0] = -c_alpha*s_beta;
-	 k5B[1] = c_beta;
-	 k5B[2] = s_beta*s_alpha;
-	 e_h[0] = -c_alpha*c_beta;
-	 e_h[1] = -s_beta;
-	 e_h[2] = s_alpha*c_beta;
-	 Px = _O_S_P.x()+params.S_P_P.z()*c_beta*c_alpha-params.S_P_P.x()*s_alpha;
-	 Py = _O_S_P.y()+params.S_P_P.z()*s_beta;
-	 Pz = _O_S_P.z()-params.S_P_P.z()*c_beta*s_alpha-params.S_P_P.x()*c_alpha;
-	 P_O[0] = Px;
-	 P_O[1] = Py;
-	 P_O[2] = Pz;
-	 l = s_beta*(-c_alpha*_O_S_P.x()+s_alpha*_O_S_P.z())+c_beta*_O_S_P.y();
-	 */
 	// Compute h.
 	double h = params.delta_B2 * (_O_S_P.y() * _O_S_P.y() + params.delta_B1 * t6 * sqrt(t0_sq - hx_sq)) / sqrt(t6 * t6
 			+ _O_S_P.y() * _O_S_P.y()) - params.S_P_P.z();
@@ -136,51 +104,6 @@ Vector3d kinematic_model_spkm::PKM_inverse_from_e(Vector5d _e)
 	double s_beta = _e[2];
 	double c_beta = _e[3];
 	double h = _e[4];
-
-	/*	double P2A_O[3];
-	 double P2C_O[3];
-	 double P5A_O[3];
-	 double P5B_O[3];
-	 double P5C_O[3];
-	 double P_O;
-	 double S;
-	 double e_h;
-	 int k1A[3];
-	 int k1C[3];
-	 double k2A;
-	 double k2C;
-	 double k5B;
-	 double l;
-	 double n12A[3];
-	 double qA;
-	 double qB;
-	 double qC;
-	 double t5;
-	 double t6;
-	 k1A[0] = 0;
-	 k1A[1] = 1;
-	 k1A[2] = 0;
-	 k1C[0] = 0;
-	 k1C[1] = 1;
-	 k1C[2] = 0;
-	 n12A[0] = -c_alpha;
-	 n12A[1] = 0.0;
-	 n12A[2] = s_alpha;*/
-	/*	P5A_O[0] = c_alpha*(t3-params.pB*s_beta-params.hA*c_beta);
-	 P5A_O[1] = params.pB*c_beta-params.hA*s_beta-t2*s_beta;
-	 P5A_O[2] = -s_alpha*(t3-params.pB*s_beta-params.hA*c_beta);
-	 P5B_O[0] = -t1*s_alpha+params.dB-t2*c_alpha*c_beta;
-	 P5B_O[1] = -t2*s_beta;
-	 P5B_O[2] = t2*s_alpha*c_beta-t1*c_alpha;
-	 P5C_O[0] = c_alpha*(t3-params.pC*s_beta-params.hC*c_beta);
-	 P5C_O[1] = params.pC*c_beta-params.hC*s_beta-t2*s_beta;
-	 P5C_O[2] = -s_alpha*(t3-params.pC*s_beta-params.hC*c_beta);
-	 P2A_O[0] = -params.delta_A*params.l12A*c_alpha;
-	 P2A_O[1] = params.dA;
-	 P2A_O[2] = params.delta_A*params.l12A*s_alpha;
-	 P2C_O[0] = -params.delta_C*params.l12C*c_alpha;
-	 P2C_O[1] = params.dC;
-	 P2C_O[2] = params.delta_C*params.l12C*s_alpha;*/
 
 	// Compute temporary variables.
 	double t1 = params.dB * s_alpha - params.pB;
