@@ -18,8 +18,7 @@ kinematic_parameters_spkm::kinematic_parameters_spkm()
 	// TODO Set W_S_P;
 
 	// Construct W_S_T on the base of W_S_P.
-	Matrix3d W_S_T;
-	W_S_T << Matrix3d::Identity(), W_S_P.transpose(), 0,0,0, 1;
+	W_S_T.matrix() << Matrix3d::Identity(), W_S_P.transpose(), 0,0,0, 1;
 }
 
 

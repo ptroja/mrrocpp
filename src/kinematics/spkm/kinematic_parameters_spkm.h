@@ -13,12 +13,21 @@
 #include <stddef.h>
 #include <stdlib.h>
 #include <eigen2/Eigen/Core>
+ #include <eigen2/Eigen/Geometry>
 
 using namespace Eigen;
 
 namespace mrrocpp {
 namespace kinematics {
 namespace spkm {
+
+
+//! Type used for representation of e = <s_alpha,c_alpha,s_beta,c_beta, h>.
+typedef Matrix<double, 5, 1> Vector5d;
+
+//! Type used for representation of 3-dimensional homogeneous matrices (4x4 doubles).
+typedef Transform<double, 3> Homog4d;
+
 
 /*!
  * \struct kinematic_parameters_spkm
@@ -37,7 +46,7 @@ struct kinematic_parameters_spkm
 		Vector3d W_S_P;
 
 		//! Matrix computed on the base of W_S_P (with identity rotation matrix) - a transformation from end of SW (W) to its middle (S).
-		Matrix4d W_S_T;
+		Homog4d W_S_T;
 
 		//! Vector representing a translation from P (middle of upper PM platform) to S (middle of the spherical wrist). An equivalent of <Hx,0,Hz>.
 		Vector3d S_P_P;

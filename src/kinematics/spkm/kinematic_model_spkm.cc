@@ -36,27 +36,27 @@ void kinematic_model_spkm::i2mp_transform(lib::MotorArray & local_desired_motor_
 void kinematic_model_spkm::inverse_kinematics_transform(lib::JointArray & local_desired_joints, lib::JointArray & local_current_joints, const lib::Homog_matrix& local_desired_end_effector_frame)
 {
 	// Transform Homog_matrix to Matrix4d.
-	Matrix4d O_W_T;
-	O_W_T << local_desired_end_effector_frame[0][0],  local_desired_end_effector_frame[0][1], local_desired_end_effector_frame[0][2], local_desired_end_effector_frame[0][3],
+	Homog4d O_W_T;
+	O_W_T.matrix() << local_desired_end_effector_frame[0][0],  local_desired_end_effector_frame[0][1], local_desired_end_effector_frame[0][2], local_desired_end_effector_frame[0][3],
 			local_desired_end_effector_frame[1][0],  local_desired_end_effector_frame[1][1], local_desired_end_effector_frame[1][2], local_desired_end_effector_frame[1][3],
 			local_desired_end_effector_frame[2][0],  local_desired_end_effector_frame[2][1], local_desired_end_effector_frame[2][2], local_desired_end_effector_frame[2][3],
 			0, 0, 0, 1;
 
 	// Compute O_S_T.
-	Matrix4d O_S_T = O_W_T*params.W_S_T;
+	Homog4d O_S_T = O_W_T*params.W_S_T;
 	// Extract translation O_S_P.
-	Vector3d O_S_P;
-	O_S_P << O_S_T(3,0), O_S_T(3,1), O_S_T(3,2);
+	Vector3d O_S_P = O_S_T.translation();
 
-	// Compute e.
+	// Compute e basing only on translation O_S_P from O_S_T.
 	Vector5d e = PKM_S_to_e(O_S_P);
 	// Compute inverse PKM kinematics basing on e.
 	Vector3d PKM_joints = PKM_inverse_from_e(e);
 
 	// Compute upper platform pose.
-	Matrix4d O_P_T = PKM_O_P_T_from_e(e);
+	Homog4d O_P_T = PKM_O_P_T_from_e(e);
 	// Compute location of wrist end-effector in relation to its base (upper PKM platform).
-	Matrix4d P_W_T = O_P_T.transpose() * O_W_T;
+	Homog4d P_W_T;
+	P_W_T.matrix() = O_P_T.inverse() * O_W_T;
 
 	// Compute spherical wrist inverse kinematics.
 	Vector3d SW_joints = SW_inverse(P_W_T);
@@ -122,7 +122,7 @@ Vector3d kinematic_model_spkm::PKM_inverse_from_e(Vector5d _e)
 	return joints;
 }
 
-Matrix4d kinematic_model_spkm::PKM_O_P_T_from_e(Vector5d _e)
+Homog4d kinematic_model_spkm::PKM_O_P_T_from_e(Vector5d _e)
 {
 	Matrix4d O_P_T;
 
@@ -152,10 +152,10 @@ Matrix4d kinematic_model_spkm::PKM_O_P_T_from_e(Vector5d _e)
 	O_P_T(3,3) = 1.0;
 
 	// Return matrix.
-	return O_P_T;
+	return Homog4d(O_P_T);
 }
 
-Vector3d kinematic_model_spkm::SW_inverse(Matrix4d _P_W_T) {
+Vector3d kinematic_model_spkm::SW_inverse(Homog4d _P_W_T) {
 	// TODO Inverse kinematics of the spherical wrist.
 
 	// Return vector with joints.
