@@ -114,23 +114,33 @@ void irp6s_postument_track_effector::set_rmodel(lib::c_buffer &instruction)
 			break;
 		case lib::FORCE_TOOL:
 			if (vs == NULL) {
-				printf("Nie w�aczono force_tryb=2 w pliku ini\n");
+				printf("Nie wlaczono force_tryb=2 w pliku ini\n");
 				break;
 			}
-			vs->force_sensor_set_tool = true;
-			for (int i = 0; i < 3; i++) {
-				vs->next_force_tool_position[i] = instruction.rmodel.force_tool.position[i];
+			{
+				boost::mutex::scoped_lock lock(vs->mtx);
+				vs->new_command_synchroniser.null_command();
+				vs->command = FORCE_SET_TOOL;
+				for (int i = 0; i < 3; i++) {
+					vs->next_force_tool_position[i] = instruction.rmodel.force_tool.position[i];
+				}
+				vs->next_force_tool_weight = instruction.rmodel.force_tool.weight;
+				vs->new_edp_command = true;
 			}
-			vs->next_force_tool_weight = instruction.rmodel.force_tool.weight;
-			vs->check_for_command_execution_finish();
+			vs->new_command_synchroniser.wait();
 			break;
 		case lib::FORCE_BIAS:
 			if (vs == NULL) {
-				printf("Nie w�aczono force_tryb=2 w pliku ini\n");
+				printf("Nie wlaczono force_tryb=2 w pliku ini\n");
 				break;
 			}
-			vs->force_sensor_do_configure = true;
-			vs->check_for_command_execution_finish();
+			{
+				boost::mutex::scoped_lock lock(vs->mtx);
+				vs->new_command_synchroniser.null_command();
+				vs->command = FORCE_CONFIGURE;
+				vs->new_edp_command = true;
+			}
+			vs->new_command_synchroniser.wait();
 			break;
 		default: // blad: nie istniejca specyfikacja modelu robota
 			// ustawi numer bledu
@@ -630,9 +640,10 @@ bool irp6s_postument_track_effector::servo_joints_and_frame_actualization_and_up
 	if (!(manip_effector::servo_joints_and_frame_actualization_and_upload())) {
 		ret_val = false;
 	} else {
-		if ((force_tryb > 0) && (is_synchronised()) && (!(vs->first_configure_done))
-				&& (!(vs->force_sensor_do_first_configure))) {
-			vs->force_sensor_do_first_configure = true;
+		boost::mutex::scoped_lock lock(vs->mtx);
+		if ((force_tryb > 0) && (is_synchronised()) && (!(vs->is_sensor_configured))) {
+			vs->new_edp_command = true;
+			vs->command = FORCE_CONFIGURE;
 		}
 	}
 	return ret_val;

@@ -57,23 +57,20 @@ void force::operator()(void)
 	while (!TERMINATE) //!< for (;;)
 	{
 		try {
-			if (force_sensor_do_first_configure) { //!< jesli otrzymano polecenie konfiguracji czujnika
-				//		printf("force_sensor_do_first_configure\n");
-				configure_sensor();
-				force_sensor_do_first_configure = false; //!< ustawienie flagi ze czujnik jest ponownie skonfigurowany
-				first_configure_done = true;
-			} else if (force_sensor_do_configure) { //!< jesli otrzymano polecenie konfiguracji czujnika
-				if (new_edp_command) {
-					configure_sensor();
-					set_command_execution_finish();
-					force_sensor_do_configure = false; //!< ustawienie flagi ze czujnik jest ponownie skonfigurowany
+			if (new_edp_command) {
+				boost::mutex::scoped_lock lock(mtx);
+				switch (command)
+				{
+					case (common::FORCE_SET_TOOL):
+						set_force_tool();
+						break;
+					case (common::FORCE_CONFIGURE):
+						configure_sensor();
+						break;
+					default:
+						break;
 				}
-			} else if (force_sensor_set_tool) {
-				if (new_edp_command) {
-					set_force_tool();
-					set_command_execution_finish();
-					force_sensor_set_tool = false;
-				}
+				set_command_execution_finish();
 			} else {
 				//!< cout << "przed Wait for event" << endl;
 				wait_for_event();
@@ -132,31 +129,23 @@ void force::operator()(void)
 } //!< end MAIN
 
 force::force(common::irp6s_postument_track_effector &_master) :
-	gravity_transformation(NULL), new_edp_command(false), master(_master), edp_vsp_synchroniser()
+	gravity_transformation(NULL), new_edp_command(false), master(_master), edp_vsp_synchroniser(),
+			new_command_synchroniser()
 {
 	gravity_transformation = NULL;
 	is_sensor_configured = false; //!< czujnik niezainicjowany
-	first_configure_done = false;
 	is_reading_ready = false; //!< nie ma zadnego gotowego odczytu
-	force_sensor_do_first_configure = false;
-	force_sensor_do_configure = false;
-	force_sensor_set_tool = false;
 	TERMINATE = false;
 
-
-	sem_init(&new_ms_for_edp, 0, 0);
-
 	/*!Lokalizacja procesu wywietlania komunikatow SR */
-	sr_msg = new lib::sr_vsp(lib::EDP,
-			master.config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "edp_vsp_attach_point"),
-			master.config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", UI_SECTION),
-			true);
+	sr_msg
+			= new lib::sr_vsp(lib::EDP, master.config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "edp_vsp_attach_point"), master.config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", UI_SECTION), true);
 }
 
 force::~force()
 {
 	delete sr_msg;
-	sem_destroy(&new_ms_for_edp);
+
 }
 
 void force::set_force_tool(void)
@@ -173,19 +162,11 @@ void force::set_force_tool(void)
 
 int force::set_command_execution_finish() // podniesienie semafora
 {
-	if (new_edp_command) {
-		new_edp_command = false;
-		sem_trywait(&(new_ms_for_edp));
-		return sem_post(&new_ms_for_edp);// odwieszenie watku edp_master
-	}
+
+	new_edp_command = false;
+	new_command_synchroniser.command();
 
 	return 0; // TODO: check for return or throw in future object-oriented version
-}
-
-int force::check_for_command_execution_finish() // oczekiwanie na semafor
-{
-	new_edp_command = true;
-	return sem_wait(&new_ms_for_edp);
 }
 
 } // namespace sensor
