@@ -212,8 +212,7 @@ void motor_driven_effector::multi_thread_master_order(MT_ORDER nm_task, int nm_t
 /*--------------------------------------------------------------------------*/
 motor_driven_effector::motor_driven_effector(lib::configurator &_config, lib::robot_name_t l_robot_name) :
 	effector(_config, l_robot_name), kinematics_manager(),
-	servo_current_motor_pos(MAX_SERVOS_NR), global_current_motor_pos(MAX_SERVOS_NR),
-	servo_current_joints(MAX_SERVOS_NR), global_current_joints(MAX_SERVOS_NR),
+	servo_current_motor_pos(MAX_SERVOS_NR),	servo_current_joints(MAX_SERVOS_NR),
 	desired_joints(MAX_SERVOS_NR), current_joints(MAX_SERVOS_NR),
 	desired_motor_pos_old(MAX_SERVOS_NR), desired_motor_pos_new(MAX_SERVOS_NR),
 	current_motor_pos(MAX_SERVOS_NR),
@@ -254,7 +253,7 @@ void motor_driven_effector::master_joints_read(double* output)
 
 	// przepisanie danych na zestaw lokalny dla edp_master
 	for (int i = 0; i < number_of_servos; i++) {
-		output[i] = global_current_joints[i];
+		output[i] = servo_current_joints[i];
 	}
 }
 
@@ -324,8 +323,8 @@ bool motor_driven_effector::servo_joints_and_frame_actualization_and_upload(void
 
 		// przepisnie danych na zestaw globalny
 		for (int i = 0; i < number_of_servos; i++) {
-			global_current_motor_pos[i] = servo_current_motor_pos[i];
-			global_current_joints[i] = servo_current_joints[i];
+			servo_current_motor_pos[i];
+			servo_current_joints[i];
 		}//: for
 
 	}

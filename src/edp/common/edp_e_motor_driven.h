@@ -140,32 +140,18 @@ protected:
 	void move_servos();
 
 	/*!
-	 * \brief motor position  currenetly computed in the servo
+	 * \brief motor position  currently computed in the servo
 	 *
 	 * for the single step of servo control
 	 */
 	lib::MotorArray servo_current_motor_pos; // Polozenia walow silnikow -// dla watku edp_servo    XXXX
 
 	/*!
-	 * \brief motor position stored in the effector class
-	 *
-	 * for the single step of servo control
-	 */
-	lib::MotorArray global_current_motor_pos; // Polozenia walow silnikow -// globalne dla procesu EDP  XXXX
-
-	/*!
-	 * \brief joint position currenetly computed in the servo
+	 * \brief joint position currently computed in the servo
 	 *
 	 * for the single step of servo control
 	 */
 	lib::JointArray servo_current_joints; // Wspolrzedne wewnetrzne -// dla watku EDP_SERVO   XXXXXX
-
-	/*!
-	 * \brief joint position stored in the effector class
-	 *
-	 * for the single step of servo control
-	 */
-	lib::JointArray global_current_joints; // Wspolrzedne wewnetrzne -// globalne dla procesu EDP   XXXXX
 
 	/*!
 	 * \brief mutex to handle data set and get of the motor and joint position

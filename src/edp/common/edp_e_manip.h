@@ -42,23 +42,23 @@ class manip_effector: public common::motor_driven_effector
 protected:
 
 	/*!
-	 * \brief
+	 * \brief method that computes desired_motor_pos_new basing on the end-eefector frame commanded by the ECP
 	 *
-	 *
+	 * It can be reimplemented in the inherited classes
 	 */
 	virtual void compute_frame(const lib::c_buffer &instruction); // obliczenia dla ruchu ramienia (koncowka: FRAME)
 
 	/*!
-	 * \brief
+	 * \brief the matrix of the end effector frame without tool for the servo buffer (pose of the WRIST).
 	 *
-	 *
+	 * It is computed for every single step of the motion.
 	 */
 	lib::Homog_matrix servo_current_frame_wo_tool; // by Y dla watku EDP_SERVO    XXXXX
 
 	/*!
-	 * \brief
+	 * \brief the matrix of the end effector frame without tool stored in tjhe effector class (pose of the WRIST).
 	 *
-	 *
+	 * It is computed for every single step of the motion.
 	 */
 	lib::Homog_matrix global_current_frame_wo_tool;// globalne dla procesu EDP    XXXXXX
 
