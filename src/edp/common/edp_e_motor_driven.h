@@ -375,7 +375,7 @@ public:
 	void main_loop();
 
 	/*!
-	 * \brief loop of the system before EDP is beeing synchronised.
+	 * \brief loop of the system before EDP is being synchronised.
 	 *
 	 * It waits for the command to gover initial system state.
 	 */
@@ -448,12 +448,12 @@ public:
 	/*!
 	 * \brief method that generates type of reply commanded by the ECP.
 	 *
-	 * It takes into account instruction commanded by the ECP. The rep_type is also used durning ECP command interpretation and execution to gother valid information to be replied to ECP.
+	 * It takes into account instruction commanded by the ECP. The rep_type is also used during ECP command interpretation and execution to gother valid information to be replied to ECP.
 	 */
 	lib::REPLY_TYPE rep_type(const lib::c_buffer &instruction);
 
 	/*!
-	 * \brief method that check if the ECP command is valid for the robot before it is synchronied.
+	 * \brief method that check if the ECP command is valid for the robot before it is synchronised.
 	 *
 	 * The valid methods are specific motion instruction (in motor coordinates) and synchronisation command.
 	 */
@@ -470,7 +470,7 @@ public:
 	/*!
 	 * \brief method that returns pointer to object of servo_buffer thread. It is used in some robots.
 	 *
-	 * when the servo_buffer thread is used it have to be implemented in spoecific robot. Otherwise it is not needed.
+	 * when the servo_buffer thread is used it have to be implemented in specific robot. Otherwise it is not needed.
 	 */
 	virtual servo_buffer* return_created_servo_buffer();
 
