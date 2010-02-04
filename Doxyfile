@@ -574,29 +574,14 @@ WARN_LOGFILE           =
 # with spaces.
 
 INPUT                  = \
-			 src/edp/common/edp.h \
-			 src/edp/common/edp_e_manip.cc \
 			 src/edp/common/edp_e_manip.h \
-			 src/edp/common/edp_e_manip_and_conv.cc \
 			 src/edp/common/edp_e_motor_driven.h \
-			 src/edp/common/edp_effector.cc \
 			 src/edp/common/edp_effector.h \
-			 src/edp/common/edp_m.cc \
-			 src/edp/common/manip_trans_t.cc \
-			 src/edp/common/manip_trans_t.h \
-			 src/edp/common/reader.cc \
-			 src/edp/common/reader.h \
-			 src/edp/common/servo_gr.cc \
-			 src/edp/common/servo_gr.h \
-			 src/edp/common/trans_t.cc \
-			 src/edp/common/trans_t.h \
 			 src/edp/smb/ \
 			 src/edp/shead/ \
 			 src/edp/spkm/ \
 			 src/edp/epos/ \
 			 src/kinematics/common/ \
-			 src/kinematics/smb/ \
-			 src/kinematics/shead/ \
 			 src/kinematics/spkm/
 			 #src/edp/common/edp_force_sensor.cc \
 			 #src/edp/common/edp_force_sensor.h \
