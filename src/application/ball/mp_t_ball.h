@@ -33,7 +33,6 @@ public:
 
 	// methods for mp template
 	void main_task_algorithm(void);
-
 };
 
 /** @} */ // end of edge_following

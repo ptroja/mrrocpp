@@ -1,6 +1,6 @@
 // -------------------------------------------------------------------------
 //
-// MP Master Process - methods�for force generators
+// MP Master Process - methods for force generators
 //
 // -------------------------------------------------------------------------
 // Funkcje do konstruowania procesow MP
@@ -24,12 +24,12 @@ namespace generator {
 
 
 ball::ball(task::task& _mp_task, int step) :
-	generator(_mp_task), irp6ot_con(1), irp6p_con(1), global_base(1, 0, 0, -0.08, 0, 1, 0, 2.08, 0, 0, 1, -0.015)
+	generator(_mp_task), irp6ot_con(true), irp6p_con(true), global_base(1, 0, 0, -0.08, 0, 1, 0, 2.08, 0, 0, 1, -0.015)
 {
 	step_no = step;
 }
 
-void ball::configure(unsigned short l_irp6ot_con, unsigned short l_irp6p_con)
+void ball::configure(bool l_irp6ot_con, bool l_irp6p_con)
 {
 	irp6ot_con = l_irp6ot_con;
 	irp6p_con = l_irp6p_con;
@@ -73,22 +73,10 @@ bool ball::first_step()
 		irp6ot->mp_command.instruction.arm.pf_def.force_xyz_torque_xyz[i+3] = 0;
 		irp6ot->mp_command.instruction.arm.pf_def.reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
 		irp6ot->mp_command.instruction.arm.pf_def.reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING;
-//		irp6ot->mp_command.instruction.arm.pf_def.reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING / 40;
-//		irp6ot->mp_command.instruction.arm.pf_def.reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING / 40;
 		irp6ot->mp_command.instruction.arm.pf_def.behaviour[i] = lib::CONTACT;
 		irp6ot->mp_command.instruction.arm.pf_def.behaviour[i+3] = lib::CONTACT;
-		/*
-		 if(irp6ot_con) irp6ot->ecp_td.MPtoECP_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
-		 else irp6ot->ecp_td.MPtoECP_reciprocal_damping[i] = 0.0;
-		 if(irp6ot_con) irp6ot->ecp_td.MPtoECP_reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING;
-		 else irp6ot->ecp_td.MPtoECP_reciprocal_damping[i+3] = 0.0;
-		 */
 		irp6ot->mp_command.instruction.arm.pf_def.inertia[i] = FORCE_INERTIA;
 		irp6ot->mp_command.instruction.arm.pf_def.inertia[i+3] = TORQUE_INERTIA;
-
-//		irp6ot->mp_command.instruction.arm.pf_def.inertia[i] = 0;
-//		irp6ot->mp_command.instruction.arm.pf_def.inertia[i+3] = 0;
-
 	}
 
 	lib::Homog_matrix tool_frame(0.0, 0.0, 0.25);
@@ -116,30 +104,13 @@ bool ball::first_step()
 		irp6p->mp_command.instruction.arm.pf_def.force_xyz_torque_xyz[i+3] = 0;
 		irp6p->mp_command.instruction.arm.pf_def.reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
 		irp6p->mp_command.instruction.arm.pf_def.reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING;
-//		irp6p->mp_command.instruction.arm.pf_def.reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING/40;
-//		irp6p->mp_command.instruction.arm.pf_def.reciprocal_damping[i+3] = FORCE_RECIPROCAL_DAMPING/40;
 		irp6p->mp_command.instruction.arm.pf_def.behaviour[i] = lib::GUARDED_MOTION;
 		irp6p->mp_command.instruction.arm.pf_def.behaviour[i+3] = lib::GUARDED_MOTION;
-		/*
-		 if(irp6p_con) irp6p->ecp_td.MPtoECP_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
-		 else irp6p->ecp_td.MPtoECP_reciprocal_damping[i] = 0.0;
-		 if(irp6p_con) irp6p->ecp_td.MPtoECP_reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING;
-		 else irp6p->ecp_td.MPtoECP_reciprocal_damping[i+3] = 0.0;
-		 */
 
 		irp6p->mp_command.instruction.arm.pf_def.inertia[i] = FORCE_INERTIA;
 		irp6p->mp_command.instruction.arm.pf_def.inertia[i+3] = TORQUE_INERTIA;
-
-//		irp6p->mp_command.instruction.arm.pf_def.inertia[i] = 0;
-//		irp6p->mp_command.instruction.arm.pf_def.inertia[i+3] = 0;
-
-		/*
-		 irp6p->ecp_td.MPtoECP_inertia[i] = 0.0;
-		 irp6p->ecp_td.MPtoECP_inertia[i+3] = 0.0;
-		 */
 	}
 
-	//	  cout << "first_step 3" << endl;
 	return true;
 }
 
@@ -158,19 +129,12 @@ bool ball::next_step()
 	if (node_counter<3) { // Oczekiwanie na odczyt aktualnego polozenia koncowki
 		return true;
 	}
-	/*
-	 vsp_force_irp6ot->base_period=1;
-	 vsp_force_irp6p->base_period=1;
-	 */
 
 	if (check_and_null_trigger()) {
-
-		// printf("trigger\n");
 		return false;
 	}
 
 	if (node_counter==3) {
-
 		irp6ot->mp_command.instruction.instruction_type = lib::SET_GET;
 		irp6p->mp_command.instruction.instruction_type = lib::SET_GET;
 

@@ -56,36 +56,34 @@ void ball::configure_edp_force_sensor(bool configure_track, bool configure_postu
                 (2, 2, lib::ROBOT_IRP6_ON_TRACK, lib::ROBOT_IRP6_POSTUMENT,
                 		lib::ROBOT_IRP6_ON_TRACK, lib::ROBOT_IRP6_POSTUMENT );
     }
-
 }
 
 
 void ball::main_task_algorithm(void)
 {
-
 	generator::ball mp_h_gen(*this, 10);
    	mp_h_gen.robot_m = robot_m;
 
+	set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, (int) ecp_mp::task::ABSOLUTE, "src/application/ball/irp6ot_init.trj", 1, lib::ROBOT_IRP6_ON_TRACK);
+	set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, (int) ecp_mp::task::ABSOLUTE, "src/application/ball/irp6p_init.trj", 1, lib::ROBOT_IRP6_POSTUMENT);
+
+	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
+			(2, 2, lib::ROBOT_IRP6_ON_TRACK, lib::ROBOT_IRP6_POSTUMENT,
+					lib::ROBOT_IRP6_ON_TRACK, lib::ROBOT_IRP6_POSTUMENT);
 
    	sr_ecp_msg->message("New series");
-   	//pierwsza konfiguracja czujnikow
    	// wlaczenie generatora do konfiguracji czujnika w EDP w obydwu robotach
    	configure_edp_force_sensor(true, true);
 
-
    	// wlaczenie generatora transparentnego w obu robotach
-   	set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_TRANSPARENT, (int) 0, "", 1, lib::ROBOT_IRP6_ON_TRACK);
-   	set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_TRANSPARENT, (int) 0, "", 1, lib::ROBOT_IRP6_POSTUMENT);
+   	set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_TRANSPARENT, 0, "", 1, lib::ROBOT_IRP6_ON_TRACK);
+   	set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_TRANSPARENT, 0, "", 1, lib::ROBOT_IRP6_POSTUMENT);
 
-   	// mp_h_gen.sensor_m = sensor_m;
    	mp_h_gen.configure(1, 0);
    	sr_ecp_msg->message("Track podatny do czasu wcisniecia mp_trigger");
    	mp_h_gen.Move();
 
-
    	send_end_motion_to_ecps (2, lib::ROBOT_IRP6_ON_TRACK, lib::ROBOT_IRP6_POSTUMENT);
-
-
 }
 
 
