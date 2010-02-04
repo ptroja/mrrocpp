@@ -60,7 +60,7 @@ public:
     		const lib::Homog_matrix begining_end_effector_frame,
     		const lib::c_buffer &instruction, lib::Xyz_Angle_Axis_vector& base_pos_xyz_rot_xyz_vector);
 
-    bool servo_joints_and_frame_actualization_and_upload(void);// by Y
+    bool compute_servo_joints_and_frame(void);// by Y
 
     void create_threads ();
 

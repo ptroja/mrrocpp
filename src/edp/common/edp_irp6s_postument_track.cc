@@ -450,7 +450,7 @@ void irp6s_postument_track_effector::iterate_macrostep(const lib::JointArray beg
 		// wyliczenie nowej pozycji zadanej
 		desired_end_effector_frame = desired_end_effector_frame * rot_frame;
 
-		/*// przeniesione do manip_effector::servo_joints_and_frame_actualization_and_upload(void)
+		/*// przeniesione do manip_effector::compute_servo_joints_and_frame(void)
 		 lib::Xyz_Euler_Zyz_vector tmp_vector;
 		 //	next_frame.get_xyz_euler_zyz(lib::Xyz_Euler_Zyz_vector.to_table(rb_obj->step_data.desired_cartesian_position));
 		 //	next_frame.get_xyz_euler_zyz(lib::Xyz_Euler_Zyz_vector aa);
@@ -632,11 +632,11 @@ void irp6s_postument_track_effector::get_arm_position(bool read_hardware, lib::c
 
 // sprawdza stan EDP zaraz po jego uruchomieniu
 
-bool irp6s_postument_track_effector::servo_joints_and_frame_actualization_and_upload(void)
+bool irp6s_postument_track_effector::compute_servo_joints_and_frame(void)
 {
 	bool ret_val = true;
 
-	if (!(manip_effector::servo_joints_and_frame_actualization_and_upload())) {
+	if (!(manip_effector::compute_servo_joints_and_frame())) {
 		ret_val = false;
 	} else {
 		boost::mutex::scoped_lock lock(vs->mtx);

@@ -123,14 +123,14 @@ protected:
 	 *
 	 * It also checks kinematic constrains of motor and equivalent joint position.
 	 */
-	void compute_motors(const lib::c_buffer &instruction); // obliczenia dla ruchu ramienia (silnikami)
+	void compute_motors(const lib::c_buffer &instruction);
 
 	/*!
 	 * \brief method to compute desired_motor_position basing on the ECP instruction with motor desired joint position in absolute or relative variant.
 	 *
 	 * It also checks kinematic constrains of motor and equivalent joint position.
 	 */
-	void compute_joints(const lib::c_buffer &instruction); // obliczenia dla ruchu ramienia (stawami)
+	void compute_joints(const lib::c_buffer &instruction);
 
 	/*!
 	 * \brief method to prepare command for servos (typically servo_buffer thread)
@@ -144,29 +144,28 @@ protected:
 	 *
 	 * for the single step of servo control
 	 */
-	lib::MotorArray servo_current_motor_pos; // Polozenia walow silnikow -// dla watku edp_servo    XXXX
+	lib::MotorArray servo_current_motor_pos;
 
 	/*!
 	 * \brief joint position currently computed in the servo
 	 *
 	 * for the single step of servo control
 	 */
-	lib::JointArray servo_current_joints; // Wspolrzedne wewnetrzne -// dla watku EDP_SERVO   XXXXXX
+	lib::JointArray servo_current_joints;
 
 	/*!
 	 * \brief mutex to handle data set and get of the motor and joint position
 	 *
 	 * It is also used for the frame in chil manip_effector_class
 	 */
-	boost::mutex edp_irp6s_effector_mutex; // mutex    XXXXXX
+	boost::mutex edp_irp6s_effector_mutex;
 
 	/*!
 	 * \brief desired joints position
 	 *
 	 * for the whole macrostep
 	 */
-	lib::JointArray desired_joints; // Wspolrzedne wewnetrzne -
-	// ostatnio obliczone (zadane) (w radianach)
+	lib::JointArray desired_joints;
 
 	/*!
 	 * \brief current joints position
@@ -174,7 +173,6 @@ protected:
 	 * for the whole macrostep
 	 */
 	lib::JointArray current_joints;
-	// ostatnio odczytane (w radianach) // by Y dla watku EDP_MASTER
 
 	/*!
 	 * \brief desired motor position for the previous macrostep
@@ -182,8 +180,6 @@ protected:
 	 * for the whole macrostep
 	 */
 	lib::MotorArray desired_motor_pos_old;
-	// Polozenia walow silnikow -
-	// poprzednio obliczone (zadane) (w radianach)
 
 	/*!
 	 * \brief desired motor position for the next macrostep
@@ -191,16 +187,13 @@ protected:
 	 * for the whole macrostep
 	 */
 	lib::MotorArray desired_motor_pos_new;
-	// Polozenia walow silnikow -
-	// aktualnie obliczone (zadane) (w radianach)
 
 	/*!
 	 * \brief current motor position
 	 *
 	 * for the whole macrostep
 	 */
-	lib::MotorArray current_motor_pos; // Polozenia walow silnikow -
-	// ostatnio odczytane (w radianach)
+	lib::MotorArray current_motor_pos;
 
 
 public:
@@ -220,14 +213,14 @@ public:
 	 * \brief object to store output and input data
 	 *
 	 * It is used for the purpose of govering of input data form the hardware
-	 * and transmision of output data to the hardware
+	 * and transmission of output data to the hardware
 	 */
-	in_out_buffer *in_out_obj; // bufor wejsc wyjsc
+	in_out_buffer *in_out_obj;
 
 	/*!
-	 * \brief object to handle mesurements
+	 * \brief object to handle measurements
 	 *
-	 * It is implemented as the thread that collects the measuremen in cyclic buffer and then saving it to the text file.
+	 * It is implemented as the thread that collects the measurement in cyclic buffer and then saving it to the text file.
 	 */
 	reader_buffer *rb_obj;
 
@@ -248,7 +241,7 @@ public:
 	/*!
 	 * \brief Object of visualisation
 	 *
-	 * This is dedicated thread that transmits joints postions to visualisation process.
+	 * This is dedicated thread that transmits joints positions to visualisation process.
 	 */
 	vis_server* vis_obj;
 
@@ -267,11 +260,11 @@ public:
 	edp_vsp* edp_vsp_obj;
 
 	/*!
-	 * \brief class contructor
+	 * \brief class constructor
 	 *
 	 * The attributes are initialized here.
 	 */
-	motor_driven_effector(lib::configurator &_config, lib::robot_name_t l_robot_name); // konstruktor
+	motor_driven_effector(lib::configurator &_config, lib::robot_name_t l_robot_name);
 
 	/*!
 	 * \brief class destructor
@@ -285,21 +278,21 @@ public:
 	 *
 	 * The model consists of servo algorithms and kinematic models
 	 */
-	virtual void set_rmodel(lib::c_buffer &instruction); // zmiana narzedzia
+	virtual void set_rmodel(lib::c_buffer &instruction);
 
 	/*!
 	 * \brief method to get (read) the robot model
 	 *
 	 * The model consists of servo algorithms and kinematic models. Then it is sent to the ECP
 	 */
-	virtual void get_rmodel(lib::c_buffer &instruction); // odczytanie narzedzia
+	virtual void get_rmodel(lib::c_buffer &instruction);
 
 	/*!
 	 * \brief structure with attributes describing the initial state of the effector
 	 *
 	 * If it is synchronised, power is on etc.
 	 */
-	lib::controller_state_t controller_state_edp_buf; // do okreslenia stanu robota
+	lib::controller_state_t controller_state_edp_buf;
 
 	/*!
 	 * \brief the current step number
@@ -321,7 +314,7 @@ public:
 	 *
 	 * The child robot should decide which of the two following variants will be used.
 	 */
-	virtual void move_arm(lib::c_buffer &instruction) = 0; // przemieszczenie ramienia
+	virtual void move_arm(lib::c_buffer &instruction) = 0;
 
 	/*!
 	 * \brief move arm in two thread version
@@ -372,7 +365,7 @@ public:
 	 * The computer servo_frame is used e.g. for the purpose of removal of gravity force from the raw force measurement.
 	 *
 	 */
-	virtual bool servo_joints_and_frame_actualization_and_upload(void);
+	virtual bool compute_servo_joints_and_frame(void);
 
 	/*!
 	 * \brief main loop of the EDP master thread.
@@ -427,6 +420,7 @@ public:
 	 * \brief The method checks the initial state of the controller.
 	 *
 	 * This method typically communicates with hardware to check if the robot is synchronised etc.
+	 * It is reimplemented in the inherited classes
 	 */
 	virtual void get_controller_state(lib::c_buffer &instruction); // by Y
 

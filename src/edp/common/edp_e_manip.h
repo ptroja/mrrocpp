@@ -42,72 +42,58 @@ class manip_effector: public common::motor_driven_effector
 protected:
 
 	/*!
-	 * \brief method that computes desired_motor_pos_new basing on the end-eefector frame commanded by the ECP
+	 * \brief method that computes desired_motor_pos_new basing on the end-effector frame commanded by the ECP
 	 *
 	 * It can be reimplemented in the inherited classes
 	 */
-	virtual void compute_frame(const lib::c_buffer &instruction); // obliczenia dla ruchu ramienia (koncowka: FRAME)
+	virtual void compute_frame(const lib::c_buffer &instruction);
 
 	/*!
 	 * \brief the matrix of the end effector frame without tool for the servo buffer (pose of the WRIST).
 	 *
 	 * It is computed for every single step of the motion.
 	 */
-	lib::Homog_matrix servo_current_frame_wo_tool; // by Y dla watku EDP_SERVO    XXXXX
+	lib::Homog_matrix servo_current_frame_wo_tool;
 
 	/*!
-	 * \brief the matrix of the end effector frame without tool stored in tjhe effector class (pose of the WRIST).
+	 * \brief desired end--effector frame
 	 *
-	 * It is computed for every single step of the motion.
+	 * for the whole macrostep
 	 */
-	lib::Homog_matrix global_current_frame_wo_tool;// globalne dla procesu EDP    XXXXXX
+	lib::Homog_matrix desired_end_effector_frame;
 
 	/*!
-	 * \brief
+	 * \brief current end--effector frame
 	 *
-	 *
-	 */
-	lib::Homog_matrix desired_end_effector_frame; //  XXXXX
-	// Podstawowa postac reprezentujaca zadane
-	// wspolrzedne zewnetrzne koncowki manipulatora
-	// wzgledem ukladu bazowego (polozenie w mm)
-
-	/*!
-	 * \brief
-	 *
-	 *
+	 * set once for the macrostep execution
 	 */
 	lib::Homog_matrix current_end_effector_frame;
-	// Podstawowa postac reprezentujaca ostatnio
-	// odczytane wspolrzedne zewnetrzne koncowki
-	// manipulatora wzgledem ukladu bazowego (polozenie w mm)
 
 	/*!
-	 * \brief
+	 * \brief current global force measurement.
 	 *
-	 *
+	 * It is set by the force thread.
 	 */
-    lib::Ft_vector global_force_msr; // sila we wspolrzednych kartezjankich    XXXXX
-    // 	i	 odczytana bezposrednio z czujnika - zestaw globalny dla procesu EDP
+    lib::Ft_vector global_force_msr;
 
 	/*!
-	 * \brief
+	 * \brief mutex for force global_force_msr
 	 *
-	 *
+	 * This measueremnt is set by the force thread and get by the transformation thread.
 	 */
     boost::mutex force_mutex;	// mutex do sily   XXXXXX
 
 	/*!
-	 * \brief
+	 * \brief move arm method for the FRAME command in the single thread variant.
 	 *
-	 *
+	 * It also calls single_thread_move_arm method from the motor_drive_effector
 	 */
 	void single_thread_move_arm(lib::c_buffer &instruction);
 
 	/*!
-	 * \brief
+	 * \brief move arm method for the FRAME command in the two thread variant.
 	 *
-	 *
+	 * It also calls multi_thread_move_arm method from the motor_drive_effector
 	 */
 	void multi_thread_move_arm(lib::c_buffer &instruction);
 
@@ -115,75 +101,78 @@ protected:
 public:
 
 	/*!
-	 * \brief
+	 * \brief manip_effector class constructor
 	 *
-	 *
+	 * The attributes are initialized here.
 	 */
-	manip_effector(lib::configurator &_config, lib::robot_name_t l_robot_name); // konstruktor
+	manip_effector(lib::configurator &_config, lib::robot_name_t l_robot_name);
 
 	/*!
-	 * \brief
+	 * \brief methods returns servo_current_frame_wo_tool
 	 *
-	 *
+	 * there are two variants just the servo_current_frame_wo_tool frame and the same frame with removed translation
 	 */
-    lib::Homog_matrix return_current_frame(TRANSLATION_ENUM translation_mode);// by Y przepisanie z zestawu globalnego na lokalny edp_force
+    lib::Homog_matrix return_current_frame(TRANSLATION_ENUM translation_mode);
 
 	/*!
-	 * \brief
+	 * \brief method to set global_force_msr with mutex protection.
 	 *
-	 *
+	 * It is called in the force sensor thread.
 	 */
-    void force_msr_upload(const lib::Ft_vector l_vector);// by Y wgranie globalnego zestawu danych
+    void force_msr_upload(const lib::Ft_vector l_vector);
 
 	/*!
-	 * \brief
+	 * \brief method to get global_force_msr with mutex protection.
 	 *
-	 *
+	 * It is called in the transformation thread.
 	 */
-    void force_msr_download(lib::Ft_vector& l_vector);// by Y odczytanie globalnego zestawu danych
+    void force_msr_download(lib::Ft_vector& l_vector);
 
 	/*!
-	 * \brief
+	 * \brief method that computes servo_current_frame_wo_tool
 	 *
-	 *
+	 * It also call servo_current_frame_wo_tool method of the motor_driven_effector class
 	 */
-	virtual bool servo_joints_and_frame_actualization_and_upload(void); // by Y
+	virtual bool compute_servo_joints_and_frame(void);
 
 	/*!
-	 * \brief
+	 * \brief motors synchronisation
 	 *
-	 *
+	 * This method synchronises motors of the robots.
 	 */
-	void synchronise(); // synchronizacja robota
+	void synchronise();
 
 	/*!
-	 * \brief
+	 * \brief The method checks the initial state of the controller.
 	 *
-	 *
+	 * This method typically communicates with hardware to check if the robot is synchronised etc.
 	 */
-	void get_controller_state(lib::c_buffer &instruction); // synchronizacja robota
+	void get_controller_state(lib::c_buffer &instruction);
 
 	/*!
-	 * \brief
+	 * \brief method to set the robot model commanded by ECP
 	 *
-	 *
+	 * The model consists of tool_frame and models handled in set_rmodel method of motor_driven_effector called here
 	 */
-	virtual void set_rmodel(lib::c_buffer &instruction); // zmiana narzedzia
+	virtual void set_rmodel(lib::c_buffer &instruction);
 
 	/*!
-	 * \brief
+	 * \brief method to get (read) the robot model
 	 *
-	 *
+	 * The model consists of tool_frame and models handled in set_rmodel method of motor_driven_effector called here.
+	 * Then it is sent to the ECP.
 	 */
-	virtual void get_rmodel(lib::c_buffer &instruction); // odczytanie narzedzia
+
+	virtual void get_rmodel(lib::c_buffer &instruction);
 
 
 	/*!
-	 * \brief
+	 * \brief commonly used part of the get_arm_position method
 	 *
-	 *
+	 * it defines the execution for the frame coordinates and
+	 * calls the get_arm_position_get_arm_type_switch method of the motor_driven_effector class.
 	 */
-	virtual void get_arm_position_get_arm_type_switch(lib::c_buffer &instruction); // odczytanie pozycji ramienia sprzetowo z sb
+	virtual void get_arm_position_get_arm_type_switch(lib::c_buffer &instruction);
 };
 
 } // namespace common

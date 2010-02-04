@@ -36,11 +36,11 @@ namespace mrrocpp {
 namespace edp {
 namespace common {
 
-bool manip_effector::servo_joints_and_frame_actualization_and_upload(void)
+bool manip_effector::compute_servo_joints_and_frame(void)
 {
 	static int catch_nr = 0;
 	bool ret_val = true;
-	if (!(motor_driven_effector::servo_joints_and_frame_actualization_and_upload())) {
+	if (!(motor_driven_effector::compute_servo_joints_and_frame())) {
 		ret_val = false;
 	} else {
 		// wyznaczenie nowych wartosci joints and frame dla obliczen w servo
@@ -85,18 +85,11 @@ bool manip_effector::servo_joints_and_frame_actualization_and_upload(void)
 		}//: try
 		catch (...) {
 			if ((++catch_nr) == 1)
-				printf("servo thread servo_joints_and_frame_actualization_and_upload throw catch exception\n");
+				printf("servo thread compute_servo_joints_and_frame throw catch exception\n");
 			ret_val = false;
 		}//: catch
 	}
 
-	{
-		boost::mutex::scoped_lock lock(edp_irp6s_effector_mutex);
-
-		// T.K.: Nad tym trzeba pomyslec - co w tym momencie dzieje sie z global_current_end_effector_frame?
-		// Jezeli zmienna ta przechowyje polozenie bez narzedzia, to nazwa jest nie tylko nieadekwatna, a wrecz mylaca.
-		global_current_frame_wo_tool = servo_current_frame_wo_tool;
-	}
 	return ret_val;
 }
 
@@ -244,7 +237,7 @@ lib::Homog_matrix manip_effector::return_current_frame(TRANSLATION_ENUM translat
 	boost::mutex::scoped_lock lock(edp_irp6s_effector_mutex);
 	// przepisanie danych na zestaw lokalny dla edp_force
 	// lib::copy_frame(force_current_end_effector_frame, global_current_end_effector_frame);
-	lib::Homog_matrix return_frame(global_current_frame_wo_tool);
+	lib::Homog_matrix return_frame(servo_current_frame_wo_tool);
 
 	if (translation_mode == WITHOUT_TRANSLATION)
 		return_frame.remove_translation();

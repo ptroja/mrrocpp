@@ -54,7 +54,7 @@ uint8_t servo_buffer::Move_a_step(void)
 			}
 		}
 
-		master.servo_joints_and_frame_actualization_and_upload();// by Y - aktualizacja trasformatora
+		master.compute_servo_joints_and_frame();// by Y - aktualizacja trasformatora
 	}
 	return convert_error();
 }

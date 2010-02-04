@@ -291,7 +291,7 @@ void motor_driven_effector::reset_variables()
 	// desired_joints[2] = LOWER_RIGHT_LIMIT;
 }
 
-bool motor_driven_effector::servo_joints_and_frame_actualization_and_upload(void)
+bool motor_driven_effector::compute_servo_joints_and_frame(void)
 {
 	bool ret_val = true;
 	static int catch_nr = 0;
@@ -314,7 +314,7 @@ bool motor_driven_effector::servo_joints_and_frame_actualization_and_upload(void
 	}//: try
 	catch (...) {
 		if ((++catch_nr) == 1)
-			printf("servo thread servo_joints_and_frame_actualization_and_upload throw catch exception\n");
+			printf("servo thread compute_servo_joints_and_frame throw catch exception\n");
 		ret_val = false;
 	}//: catch
 
