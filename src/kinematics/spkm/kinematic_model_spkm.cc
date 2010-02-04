@@ -56,7 +56,7 @@ void kinematic_model_spkm::inverse_kinematics_transform(lib::JointArray & local_
 	Homog4d O_P_T = PKM_O_P_T_from_e(e);
 	// Compute location of wrist end-effector in relation to its base (upper PKM platform).
 	Homog4d P_W_T;
-	P_W_T.matrix() = O_P_T.inverse() * O_W_T;
+	P_W_T.matrix() = O_P_T.inverse(Isometry) * O_W_T;
 
 	// Compute spherical wrist inverse kinematics.
 	Vector3d SW_joints = SW_inverse(P_W_T);
