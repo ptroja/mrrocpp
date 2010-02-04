@@ -29,9 +29,9 @@ protected:
 	// Metoda tworzy modele kinematyczne dla robota IRp-6 na postumencie.
 
 	/*!
-	 * \brief
+	 * \brief method,  creates a list of available kinematic models for smb effector.
 	 *
-	 *
+	 * Here it is  motor to joint transform of two legs and manipulator base rotation motor
 	 */
 	virtual void create_kinematic_models_for_given_robot(void);
 
