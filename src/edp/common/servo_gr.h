@@ -72,8 +72,6 @@ protected:
     int servo_fd;
 public:
 
-	lib::boost_condition_synchroniser thread_started;
-
     int servo_to_tt_chid;
 #else
     bool servo_command_rdy;
@@ -85,6 +83,8 @@ public:
 #endif
 
 public:
+	lib::boost_condition_synchroniser thread_started;
+
     lib::edp_master_command command; // polecenie z EDP_MASTER dla SERVO
 	double axe_inc_per_revolution[MAX_SERVOS_NR];
 	double synchro_step_coarse[MAX_SERVOS_NR];

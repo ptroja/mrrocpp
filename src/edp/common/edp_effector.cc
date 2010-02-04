@@ -105,9 +105,9 @@ bool effector::initialize_communication()
 
 	server_attach =
 #if !defined(USE_MESSIP_SRR)
-			name_attach(NULL, server_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL);
+		name_attach(NULL, server_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL);
 #else /* USE_MESSIP_SRR */
-	messip::port_create(server_attach_point);
+		messip::port_create(server_attach_point);
 #endif /* USE_MESSIP_SRR */
 
 	if (server_attach == NULL) {
@@ -231,7 +231,7 @@ void effector::reply_to_instruction(void)
 #if !defined(USE_MESSIP_SRR)
 	if (MsgReply(caller, 0, &reply, sizeof(reply)) == -1) { // Odpowiedz dla procesu ECP badz UI by Y
 #else /* USE_MESSIP_SRR */
-		if (messip::port_reply(attach, caller, 0, reply) == -1) {
+	if (messip::port_reply(server_attach, caller, 0, reply) == -1) {
 #endif /* USE_MESSIP_SRR */
 		uint64_t e = errno;
 		perror("Reply() to ECP failed");

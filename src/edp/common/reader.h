@@ -83,8 +83,6 @@ struct reader_data
 class reader_buffer : public boost::noncopyable
 {
 private:
-    sem_t reader_sem;
-
     motor_driven_effector &master;
 
     boost::thread *thread_id;

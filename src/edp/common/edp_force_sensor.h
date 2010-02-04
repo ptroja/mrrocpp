@@ -10,8 +10,6 @@
 #if !defined(_EDP_FORCE_SENSOR_H)
 #define _EDP_FORCE_SENSOR_H
 
-#include <semaphore.h>
-
 #include <boost/utility.hpp>
 #include <boost/thread/condition_variable.hpp>
 #include <boost/thread/mutex.hpp>

@@ -10,7 +10,6 @@
 #include <unistd.h>
 #include <sys/wait.h>
 #include <sys/types.h>
-#include <semaphore.h>
 #include <fstream>
 #if !defined(USE_MESSIP_SRR)
 #include <sys/iofunc.h>
