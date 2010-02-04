@@ -37,39 +37,38 @@ protected:
 
 public:
 
-	// Konstruktor.
 	/*!
-	 * \brief
+	 * \brief class constructor
 	 *
-	 *
+	 * The attributes are initialized here.
 	 */
 	effector(lib::configurator &_config);
 
 	/*!
-	 * \brief
+	 * \brief method to create threads other then EDP master thread.
 	 *
-	 *
+	 * Here there is only one extra thread - reader_thread.
 	 */
 	void create_threads();
 
 	/*!
-	 * \brief
+	 * \brief method to move robot motors
 	 *
-	 *
+	 * it chooses the single thread variant from the motor_driven_effector
 	 */
 	void move_arm(lib::c_buffer &instruction); // przemieszczenie ramienia
 
 	/*!
-	 * \brief
+	 * \brief method to get position of the motors or joints
 	 *
-	 *
+	 * Here it calls common::motor_driven_effector::get_arm_position_get_arm_type_switch
 	 */
 	void get_arm_position(bool read_hardware, lib::c_buffer &instruction); // odczytanie pozycji ramienia
 
 	/*!
-	 * \brief
+	 * \brief method to choose master_order variant
 	 *
-	 *
+	 * IHere the single thread variant is chosen
 	 */
 	void master_order(common::MT_ORDER nm_task, int nm_tryb);
 

@@ -33,45 +33,47 @@ protected:
 	/*!
 	 * \brief method,  creates a list of available kinematic models for shead effector.
 	 *
-	 * Here it is  motor to joint transform of two legs and manipulator base rotation motor
+	 * It will be used if any motor will be commanded to move. Then motor to joint transform will be implemented in kinematics.
 	 */
 	virtual void create_kinematic_models_for_given_robot(void);
 
 public:
 
-	// Konstruktor.
 	/*!
-	 * \brief
+	 * \brief class constructor
 	 *
-	 *
+	 * The attributes are initialized here.
 	 */
 	effector(lib::configurator &_config);
 
 	/*!
-	 * \brief
+	 * \brief method to create threads other then EDP master thread.
 	 *
-	 *
+	 * Here there is only one extra thread - reader_thread.
 	 */
 	void create_threads();
 
 	/*!
-	 * \brief
+	 * \brief method to set position of the motors or joints
 	 *
-	 *
+	 * It will be used if there will be any motor used.
 	 */
 	void move_arm(lib::c_buffer &instruction); // przemieszczenie ramienia
 
-	/*!
-	 * \brief
-	 *
-	 *
-	 */
-	void get_arm_position(bool read_hardware, lib::c_buffer &instruction); // odczytanie pozycji ramienia
 
 	/*!
-	 * \brief
+	 * \brief method to get position of the motors or joints
 	 *
+	 * It will be used if there will be any motor used.
+	 */
+
+	void get_arm_position(bool read_hardware, lib::c_buffer &instruction); // odczytanie pozycji ramienia
+
+
+	/*!
+	 * \brief method to choose master_order variant
 	 *
+	 * IHere the single thread variant is chosen
 	 */
 	void master_order(common::MT_ORDER nm_task, int nm_tryb);
 

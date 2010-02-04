@@ -477,7 +477,7 @@ public:
 	/*!
 	 * \brief pure virtual method to be implemented in specific effector.
 	 *
-	 * It decides which variant of master_ordewr is used (single or multi thread)
+	 * It decides which variant of master_order is used (single or multi thread)
 	 */
 	virtual void master_order(MT_ORDER nm_task, int nm_tryb) = 0;
 
