@@ -27,7 +27,12 @@ namespace spkm {
 class effector: public common::manip_effector
 {
 protected:
-	// Metoda tworzy modele kinematyczne dla robota IRp-6 na postumencie.
+
+	/*!
+	 * \brief sa
+	 *
+	 *
+	 */
 	virtual void create_kinematic_models_for_given_robot(void);
 
 public:
