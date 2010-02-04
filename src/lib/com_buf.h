@@ -531,10 +531,10 @@ enum MOTION_TYPE {
 };
 
 //------------------------------------------------------------------------------
-// MOTOR_INTERPOLATED_MOTION TASK_COORDINATES_INTERPOLATED_MOTION
 enum INTERPOLATION_TYPE
 {
-	MIM, TCIM
+	MIM, //! motor interpolated motion
+	TCIM //! task coordinates interpolated motion
 };
 
 //------------------------------------------------------------------------------
@@ -597,8 +597,6 @@ struct edp_master_command
 {
 	/*! Code for the instruction sent to SERVO_GROUP. */
 	SERVO_COMMAND instruction_code;
-	//*! A byte for calculating the length of the command */
-	//uint8_t address_byte;
 	union {
 		//------------------------------------------------------
 		struct
@@ -616,8 +614,6 @@ struct edp_master_command
 			double macro_step[MAX_SERVOS_NR];
 			/*! Given absolute position at the end of a macrostep. */
 			double abs_position [MAX_SERVOS_NR];
-			//*! Byte for calculating the command's length. */
-			// uint8_t address_byte;
 		}
 		move;
 		//------------------------------------------------------
@@ -627,8 +623,6 @@ struct edp_master_command
 			uint8_t servo_algorithm_no[MAX_SERVOS_NR];
 			/*! Numbers fo servo algorithm parameters set. */
 			uint8_t servo_parameters_no[MAX_SERVOS_NR];
-			//*! Byte for calculating the command's length. */
-			// uint8_t address_byte;
 		}
 		servo_alg_par;
 
@@ -870,8 +864,6 @@ typedef union r_buffer_rmodel
 		 *  @todo Translate to English.
 		 */
 		frame_tab tool_frame;
-		//*! Byte for calculating the command's length. */
-		// 	uint8_t address_byte;
 	}
 	tool_frame_def;
 	//----------------------------------------------------------
@@ -882,9 +874,6 @@ typedef union r_buffer_rmodel
 		 *  @todo Translate to English.
 		 */
 		uint8_t kinematic_model_no;
-
-		//*! Byte for calculating the command's length. */
-		// 	uint8_t address_byte;
 	}
 	kinematic_model;
 	//----------------------------------------------------------
@@ -967,9 +956,6 @@ typedef union r_buffer_arm
 		 *  @todo Translate to English.
 		 */
 		double gripper_coordinate;
-		//*! Byte for calculating the command's length. */
-		// 	uint8_t address_byte;
-
 	}
 	pf_def;
 	//----------------------------------------------------------
@@ -980,8 +966,6 @@ typedef union r_buffer_arm
 		 *  @todo Translate to English.
 		 */
 		int speaking;
-		//*! Byte for calculating the command's length. */
-		// 	uint8_t address_byte;
 	}
 	text_def;
 
@@ -1014,8 +998,6 @@ struct r_buffer
 	controller_state_t controller_state;
 	/*! Number of the servo step. */
 	unsigned long servo_step;
-	/*! Byte for calculating the command's length. */
-	uint8_t address_byte;
 	/*! Given values for PWM fill (Phase Wave Modulation) - (usualy unnecessary). */
 	int16_t PWM_value[MAX_SERVOS_NR];
 	/*! Control current - (usualy unnecessary). */
