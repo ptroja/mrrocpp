@@ -62,6 +62,8 @@ sr::sr(process_type_t process_type, const std::string & process_name,
 	}
 	strcpy(sr_message.host_name, sysinfo.nodename);
 
+	sr_messsage.hdr.type=0;
+
 	sr_message.process_type = process_type;
 	sr_message.message_type = NEW_MESSAGE;
 	strcpy(sr_message.process_name, process_name.c_str());
@@ -86,7 +88,6 @@ sr::~sr(void) {
 int sr::send_package_to_sr(const sr_package_t & sr_mess)
 {
 	int16_t status;
-	sr_mess.hdr.type=0;
 
 	return MsgSend(fd, &sr_mess, sizeof(sr_mess), &status, sizeof(status));
 }
