@@ -212,28 +212,28 @@ bool ecp_vis_weights_driven_irp6ot::first_step(void){
 	//TOOL
 
 
-	the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[0][0]=1;
-	the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[1][0]=0;
-	the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[2][0]=0;
-	the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[0][3]=0;
+	the_robot->ecp_command.instruction.robot_model.tool_frame_def.tool_frame[0][0]=1;
+	the_robot->ecp_command.instruction.robot_model.tool_frame_def.tool_frame[1][0]=0;
+	the_robot->ecp_command.instruction.robot_model.tool_frame_def.tool_frame[2][0]=0;
+	the_robot->ecp_command.instruction.robot_model.tool_frame_def.tool_frame[0][3]=0;
 
-	the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[0][1]=0;
-	the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[1][1]=1;
-	the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[2][1]=0;
-	the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[1][3]=0;
+	the_robot->ecp_command.instruction.robot_model.tool_frame_def.tool_frame[0][1]=0;
+	the_robot->ecp_command.instruction.robot_model.tool_frame_def.tool_frame[1][1]=1;
+	the_robot->ecp_command.instruction.robot_model.tool_frame_def.tool_frame[2][1]=0;
+	the_robot->ecp_command.instruction.robot_model.tool_frame_def.tool_frame[1][3]=0;
 
-	the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[0][2]=0;
-	the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[1][2]=0;
-	the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[2][2]=1;
-	the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[2][3]=0.25;
+	the_robot->ecp_command.instruction.robot_model.tool_frame_def.tool_frame[0][2]=0;
+	the_robot->ecp_command.instruction.robot_model.tool_frame_def.tool_frame[1][2]=0;
+	the_robot->ecp_command.instruction.robot_model.tool_frame_def.tool_frame[2][2]=1;
+	the_robot->ecp_command.instruction.robot_model.tool_frame_def.tool_frame[2][3]=0.25;
 
 	the_robot->ecp_command.instruction.instruction_type = lib::SET_GET;
 	the_robot->ecp_command.instruction.get_type = ARM_DEFINITION;
 	the_robot->ecp_command.instruction.set_type = ROBOT_MODEL_DEFINITION;
 	the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
 	the_robot->ecp_command.instruction.get_arm_type = lib::FRAME;
-	the_robot->ecp_command.instruction.set_rmodel_type = lib::TOOL_FRAME;
-	the_robot->ecp_command.instruction.get_rmodel_type = lib::TOOL_FRAME;
+	the_robot->ecp_command.instruction.set_robot_model_type = lib::TOOL_FRAME;
+	the_robot->ecp_command.instruction.get_robot_model_type = lib::TOOL_FRAME;
 	the_robot->ecp_command.instruction.interpolation_type= lib::MIM;
 	the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
 

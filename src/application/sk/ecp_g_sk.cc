@@ -72,8 +72,8 @@ bool y_edge_follow_force::first_step()
 	the_robot->ecp_command.instruction.get_type = ARM_DEFINITION; // arm - ORYGINAL
 	the_robot->ecp_command.instruction.set_type = ARM_DEFINITION | ROBOT_MODEL_DEFINITION;
 	//	the_robot->ecp_command.instruction.set_type = ARM_DEFINITION;
-	the_robot->ecp_command.instruction.set_rmodel_type = lib::TOOL_FRAME;
-	the_robot->ecp_command.instruction.get_rmodel_type = lib::TOOL_FRAME;
+	the_robot->ecp_command.instruction.set_robot_model_type = lib::TOOL_FRAME;
+	the_robot->ecp_command.instruction.get_robot_model_type = lib::TOOL_FRAME;
 	the_robot->ecp_command.instruction.set_arm_type = lib::PF_VELOCITY;
 	the_robot->ecp_command.instruction.get_arm_type = lib::FRAME;
 	the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
@@ -81,7 +81,7 @@ bool y_edge_follow_force::first_step()
 	the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
 	the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
 
-	tool_frame.get_frame_tab(the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame);
+	tool_frame.get_frame_tab(the_robot->ecp_command.instruction.robot_model.tool_frame_def.tool_frame);
 
 	for (int i=0; i<3; i++)
 	{
@@ -195,7 +195,7 @@ bool y_edge_follow_force::next_step()
 		tool_frame = tool_frame * basic_rot_frame;
 		// basic_rot_frame.set_translation_vector(0, 0, 0.25);
 
-		tool_frame.get_frame_tab(the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame);
+		tool_frame.get_frame_tab(the_robot->ecp_command.instruction.robot_model.tool_frame_def.tool_frame);
 
 		//	ECPtoEDP_ref_frame.get_frame_tab(the_robot->EDP_data.ECPtoEDP_reference_frame);
 

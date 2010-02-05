@@ -202,7 +202,7 @@ bool bias_edp_force::first_step()
 {
 	the_robot->ecp_command.instruction.instruction_type = lib::SET;
 	the_robot->ecp_command.instruction.set_type = ROBOT_MODEL_DEFINITION;
-	the_robot->ecp_command.instruction.set_rmodel_type = lib::FORCE_BIAS;
+	the_robot->ecp_command.instruction.set_robot_model_type = lib::FORCE_BIAS;
 
 	return true;
 }
@@ -320,14 +320,14 @@ bool tff_nose_run::first_step()
 	td.value_in_step_no = td.internode_step_no - 2;
 
 	lib::Homog_matrix tool_frame(0.0, 0.0, 0.25);
-	tool_frame.get_frame_tab(the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame);
+	tool_frame.get_frame_tab(the_robot->ecp_command.instruction.robot_model.tool_frame_def.tool_frame);
 
 	the_robot->ecp_command.instruction.instruction_type = lib::GET;
 	the_robot->ecp_command.instruction.get_type = ARM_DEFINITION; // arm - ORYGINAL
 	the_robot->ecp_command.instruction.set_type = ARM_DEFINITION | ROBOT_MODEL_DEFINITION;
 	//	the_robot->ecp_command.instruction.set_type = ARM_DEFINITION;
-	the_robot->ecp_command.instruction.set_rmodel_type = lib::TOOL_FRAME;
-	the_robot->ecp_command.instruction.get_rmodel_type = lib::TOOL_FRAME;
+	the_robot->ecp_command.instruction.set_robot_model_type = lib::TOOL_FRAME;
+	the_robot->ecp_command.instruction.get_robot_model_type = lib::TOOL_FRAME;
 	the_robot->ecp_command.instruction.set_arm_type = lib::PF_VELOCITY;
 	the_robot->ecp_command.instruction.get_arm_type = lib::FRAME;
 	the_robot->ecp_command.instruction.motion_type = lib::RELATIVE;
@@ -471,14 +471,14 @@ bool tff_rubik_grab::first_step()
 	td.value_in_step_no = td.internode_step_no - 2;
 
 	lib::Homog_matrix tool_frame(0.0, 0.0, 0.25);
-	tool_frame.get_frame_tab(the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame);
+	tool_frame.get_frame_tab(the_robot->ecp_command.instruction.robot_model.tool_frame_def.tool_frame);
 
 	the_robot->ecp_command.instruction.instruction_type = lib::GET;
 	the_robot->ecp_command.instruction.get_type = ARM_DEFINITION; // arm - ORYGINAL
 	the_robot->ecp_command.instruction.set_type = ARM_DEFINITION | ROBOT_MODEL_DEFINITION;
 	//	the_robot->ecp_command.instruction.set_type = ARM_DEFINITION;
-	the_robot->ecp_command.instruction.set_rmodel_type = lib::TOOL_FRAME;
-	the_robot->ecp_command.instruction.get_rmodel_type = lib::TOOL_FRAME;
+	the_robot->ecp_command.instruction.set_robot_model_type = lib::TOOL_FRAME;
+	the_robot->ecp_command.instruction.get_robot_model_type = lib::TOOL_FRAME;
 	the_robot->ecp_command.instruction.set_arm_type = lib::PF_VELOCITY;
 	the_robot->ecp_command.instruction.get_arm_type = lib::FRAME;
 	the_robot->ecp_command.instruction.motion_type = lib::RELATIVE;
@@ -587,14 +587,14 @@ bool tff_rubik_face_rotate::first_step()
 	td.value_in_step_no = td.internode_step_no - 2;
 
 	lib::Homog_matrix tool_frame(0.0, 0.0, 0.25);
-	tool_frame.get_frame_tab(the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame);
+	tool_frame.get_frame_tab(the_robot->ecp_command.instruction.robot_model.tool_frame_def.tool_frame);
 
 	the_robot->ecp_command.instruction.instruction_type = lib::GET;
 	the_robot->ecp_command.instruction.get_type = ARM_DEFINITION; // arm - ORYGINAL
 	the_robot->ecp_command.instruction.set_type = ARM_DEFINITION | ROBOT_MODEL_DEFINITION;
 	//	the_robot->ecp_command.instruction.set_type = ARM_DEFINITION;
-	the_robot->ecp_command.instruction.set_rmodel_type = lib::TOOL_FRAME;
-	the_robot->ecp_command.instruction.get_rmodel_type = lib::TOOL_FRAME;
+	the_robot->ecp_command.instruction.set_robot_model_type = lib::TOOL_FRAME;
+	the_robot->ecp_command.instruction.get_robot_model_type = lib::TOOL_FRAME;
 	the_robot->ecp_command.instruction.set_arm_type = lib::PF_VELOCITY;
 	the_robot->ecp_command.instruction.get_arm_type = lib::FRAME;
 	the_robot->ecp_command.instruction.motion_type = lib::RELATIVE;
@@ -742,14 +742,14 @@ bool tff_gripper_approach::first_step()
 	td.value_in_step_no = td.internode_step_no - 2;
 
 	lib::Homog_matrix tool_frame(0.0, 0.0, 0.25);
-	tool_frame.get_frame_tab(the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame);
+	tool_frame.get_frame_tab(the_robot->ecp_command.instruction.robot_model.tool_frame_def.tool_frame);
 
 	the_robot->ecp_command.instruction.instruction_type = lib::GET;
 	the_robot->ecp_command.instruction.get_type = ARM_DEFINITION; // arm - ORYGINAL
 	the_robot->ecp_command.instruction.set_type = ARM_DEFINITION | ROBOT_MODEL_DEFINITION;
 	//	the_robot->ecp_command.instruction.set_type = ARM_DEFINITION;
-	the_robot->ecp_command.instruction.set_rmodel_type = lib::TOOL_FRAME;
-	the_robot->ecp_command.instruction.get_rmodel_type = lib::TOOL_FRAME;
+	the_robot->ecp_command.instruction.set_robot_model_type = lib::TOOL_FRAME;
+	the_robot->ecp_command.instruction.get_robot_model_type = lib::TOOL_FRAME;
 	the_robot->ecp_command.instruction.set_arm_type = lib::PF_VELOCITY;
 	the_robot->ecp_command.instruction.get_arm_type = lib::FRAME;
 	the_robot->ecp_command.instruction.motion_type = lib::RELATIVE;
@@ -824,11 +824,11 @@ bool force_tool_change::first_step ()
 {
 	the_robot->ecp_command.instruction.instruction_type = lib::SET;
 	the_robot->ecp_command.instruction.set_type = ROBOT_MODEL_DEFINITION;
-	the_robot->ecp_command.instruction.set_rmodel_type = lib::FORCE_TOOL;
+	the_robot->ecp_command.instruction.set_robot_model_type = lib::FORCE_TOOL;
 
 	for(int i = 0 ; i < 3 ; i++)
-		the_robot->ecp_command.instruction.rmodel.force_tool.position[i] = tool_parameters[i];
-	the_robot->ecp_command.instruction.rmodel.force_tool.weight = weight;
+		the_robot->ecp_command.instruction.robot_model.force_tool.position[i] = tool_parameters[i];
+	the_robot->ecp_command.instruction.robot_model.force_tool.weight = weight;
 
 	return true;
 }

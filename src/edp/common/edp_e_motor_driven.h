@@ -278,14 +278,14 @@ public:
 	 *
 	 * The model consists of servo algorithms and kinematic models
 	 */
-	virtual void set_rmodel(lib::c_buffer &instruction);
+	virtual void set_robot_model(lib::c_buffer &instruction);
 
 	/*!
 	 * \brief method to get (read) the robot model
 	 *
 	 * The model consists of servo algorithms and kinematic models. Then it is sent to the ECP
 	 */
-	virtual void get_rmodel(lib::c_buffer &instruction);
+	virtual void get_robot_model(lib::c_buffer &instruction);
 
 	/*!
 	 * \brief structure with attributes describing the initial state of the effector

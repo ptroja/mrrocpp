@@ -31,7 +31,7 @@ public:
     // Konstruktor.
     effector (lib::configurator &_config);
 
-    void set_rmodel (lib::c_buffer &instruction);                    // zmiana narzedzia
+    void set_robot_model (lib::c_buffer &instruction);                    // zmiana narzedzia
 
     void create_threads();
 

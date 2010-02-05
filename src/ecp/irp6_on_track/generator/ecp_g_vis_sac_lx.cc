@@ -219,20 +219,20 @@ bool vis_sac_lx::first_step()
 	//TOOL
 
 
-	the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[0][0]=1;
-	the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[1][0]=0;
-	the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[2][0]=0;
-	the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[0][3]=0;
+	the_robot->ecp_command.instruction.robot_model.tool_frame_def.tool_frame[0][0]=1;
+	the_robot->ecp_command.instruction.robot_model.tool_frame_def.tool_frame[1][0]=0;
+	the_robot->ecp_command.instruction.robot_model.tool_frame_def.tool_frame[2][0]=0;
+	the_robot->ecp_command.instruction.robot_model.tool_frame_def.tool_frame[0][3]=0;
 
-	the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[0][1]=0;
-	the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[1][1]=1;
-	the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[2][1]=0;
-	the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[1][3]=0;
+	the_robot->ecp_command.instruction.robot_model.tool_frame_def.tool_frame[0][1]=0;
+	the_robot->ecp_command.instruction.robot_model.tool_frame_def.tool_frame[1][1]=1;
+	the_robot->ecp_command.instruction.robot_model.tool_frame_def.tool_frame[2][1]=0;
+	the_robot->ecp_command.instruction.robot_model.tool_frame_def.tool_frame[1][3]=0;
 
-	the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[0][2]=0;
-	the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[1][2]=0;
-	the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[2][2]=1;
-	the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[2][3]=0.25; //0.25;
+	the_robot->ecp_command.instruction.robot_model.tool_frame_def.tool_frame[0][2]=0;
+	the_robot->ecp_command.instruction.robot_model.tool_frame_def.tool_frame[1][2]=0;
+	the_robot->ecp_command.instruction.robot_model.tool_frame_def.tool_frame[2][2]=1;
+	the_robot->ecp_command.instruction.robot_model.tool_frame_def.tool_frame[2][3]=0.25; //0.25;
 
 
 	//	the_robot->EDP_data.mp_command = lib::NEXT_POSE;
@@ -245,8 +245,8 @@ bool vis_sac_lx::first_step()
 
 	the_robot->ecp_command.instruction.get_arm_type = lib::FRAME;
 	//FRAME; //XYZ_EULER_ZYZ; //POSE_FORCE_TORQUE_AT_FRAME;
-	the_robot->ecp_command.instruction.set_rmodel_type = lib::TOOL_FRAME;
-	the_robot->ecp_command.instruction.get_rmodel_type = lib::TOOL_FRAME;
+	the_robot->ecp_command.instruction.set_robot_model_type = lib::TOOL_FRAME;
+	the_robot->ecp_command.instruction.get_robot_model_type = lib::TOOL_FRAME;
 	//the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE; //RELATIVE;
 	the_robot->ecp_command.instruction.interpolation_type= lib::MIM; //TCIM
 	the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE; //PF_FIXED_FRAME_WITH_DESIRED_FORCE_OR_SPEED;

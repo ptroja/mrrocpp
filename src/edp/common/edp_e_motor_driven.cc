@@ -185,7 +185,7 @@ void motor_driven_effector::single_thread_master_order(common::MT_ORDER nm_task,
 			get_controller_state(instruction);
 			break;
 		case common::MT_SET_ROBOT_MODEL:
-			set_rmodel(instruction);
+			set_robot_model(instruction);
 			break;
 		case common::MT_GET_ARM_POSITION:
 			get_arm_position(nm_tryb, instruction);
@@ -359,9 +359,9 @@ void motor_driven_effector::interpret_instruction(lib::c_buffer &instruction)
 	//	fprintf(stderr, "instruction:\n");
 	//	fprintf(stderr, "\tinstruction_type: %d\n", instruction.instruction_type);
 	//	fprintf(stderr, "\tget_type: %d\n", instruction.get_type);
-	//	fprintf(stderr, "\tget_rmodel_type: %d\n", instruction.get_rmodel_type);
+	//	fprintf(stderr, "\tget_robot_model_type: %d\n", instruction.get_robot_model_type);
 	//	fprintf(stderr, "\tset_type: %d\n", instruction.set_type);
-	//	fprintf(stderr, "\tset_rmodel_type: %d\n", instruction.set_rmodel_type);
+	//	fprintf(stderr, "\tset_robot_model_type: %d\n", instruction.set_robot_model_type);
 
 	// interpretuje otrzymana z ECP instrukcje;
 	// wypelnaia struktury danych TRANSFORMATORa;
@@ -380,9 +380,9 @@ void motor_driven_effector::interpret_instruction(lib::c_buffer &instruction)
 			if (instruction.is_set_outputs())
 				// ustawienie wyjsc
 				set_outputs(instruction);
-			if (instruction.is_set_rmodel())
+			if (instruction.is_set_robot_model())
 				// zmiana modelu robota
-				// set_rmodel();
+				// set_robot_model();
 				master_order(MT_SET_ROBOT_MODEL, 0);
 			if (instruction.is_set_arm()) {
 				// przemieszczenie koncowki
@@ -421,14 +421,14 @@ void motor_driven_effector::interpret_instruction(lib::c_buffer &instruction)
 						master_order(MT_GET_ARM_POSITION, true);
 					}
 
-					if (instruction.is_get_rmodel()) {
+					if (instruction.is_get_robot_model()) {
 						if (!((instruction.is_get_arm()) || (instruction.is_set_arm()))) {
-							if (instruction.get_rmodel_type == lib::SERVO_ALGORITHM) {
+							if (instruction.get_robot_model_type == lib::SERVO_ALGORITHM) {
 								// get_algorithms();
 								master_order(MT_GET_ALGORITHMS, 0);
 							}
 						}
-						get_rmodel(instruction);
+						get_robot_model(instruction);
 					}
 					break;
 				default: // blad
@@ -442,10 +442,10 @@ void motor_driven_effector::interpret_instruction(lib::c_buffer &instruction)
 			if (instruction.is_set_outputs())
 				// ustawienie wyj
 				set_outputs(instruction);
-			if (instruction.is_set_rmodel())
+			if (instruction.is_set_robot_model())
 				// zmiana aktualnie uzywanego modelu robota (narzedzie, kinematic_model_with_tool kinematyczny,
 				// jego korektor, nr algorytmu regulacji i zestawu jego parametrow)
-				//        set_rmodel();
+				//        set_robot_model();
 				master_order(MT_SET_ROBOT_MODEL, 0);
 			if (instruction.is_set_arm())
 				// przemieszczenie koncowki
@@ -477,15 +477,15 @@ void motor_driven_effector::interpret_instruction(lib::c_buffer &instruction)
 						master_order(MT_GET_ARM_POSITION, true);
 					}
 
-					if (instruction.is_get_rmodel()) {
+					if (instruction.is_get_robot_model()) {
 						if (!instruction.is_set_arm()) {
 							// ewentualna aktualizacja numerow algorytmow i ich zestawow parametrow
-							if (instruction.get_rmodel_type == lib::SERVO_ALGORITHM)
+							if (instruction.get_robot_model_type == lib::SERVO_ALGORITHM)
 								master_order(MT_GET_ALGORITHMS, 0);
 						}
 						// odczytanie aktualnie uzywanego modelu robota (narzedzie, kinematic_model_with_tool kinematyczny,
 						// jego korektor, nr algorytmu regulacji i zestawu jego parametrow)
-						get_rmodel(instruction);
+						get_robot_model(instruction);
 					}
 
 					break;
@@ -578,7 +578,7 @@ lib::REPLY_TYPE motor_driven_effector::rep_type(const lib::c_buffer &instruction
 	if (instruction.is_get_inputs()) {
 		reply.reply_type = lib::INPUTS;
 	}
-	if (instruction.is_get_rmodel()) {
+	if (instruction.is_get_robot_model()) {
 		if (reply.reply_type == lib::ACKNOWLEDGE)
 			reply.reply_type = lib::ROBOT_MODEL;
 		else
@@ -679,17 +679,17 @@ void motor_driven_effector::compute_motors(const lib::c_buffer &instruction)
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
-void motor_driven_effector::set_rmodel(lib::c_buffer &instruction)
+void motor_driven_effector::set_robot_model(lib::c_buffer &instruction)
 {
 	// uint8_t previous_model;
 	// uint8_t previous_corrector;
 	//printf(" SET ROBOT_MODEL: ");
-	switch (instruction.set_rmodel_type)
+	switch (instruction.set_robot_model_type)
 	{
 		case lib::ARM_KINEMATIC_MODEL:
 			//printf("ARM_KINEMATIC_MODEL\n");
 			// Ustawienie modelu kinematyki.
-			set_kinematic_model(instruction.rmodel.kinematic_model.kinematic_model_no);
+			set_kinematic_model(instruction.robot_model.kinematic_model.kinematic_model_no);
 			break;
 		default: // blad: nie istniejaca specyfikacja modelu robota
 			// ustawia numer bledu
@@ -699,18 +699,18 @@ void motor_driven_effector::set_rmodel(lib::c_buffer &instruction)
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
-void motor_driven_effector::get_rmodel(lib::c_buffer &instruction)
+void motor_driven_effector::get_robot_model(lib::c_buffer &instruction)
 {
 	//printf(" GET ROBOT_MODEL: ");
-	switch (instruction.get_rmodel_type)
+	switch (instruction.get_robot_model_type)
 	{
 		case lib::ARM_KINEMATIC_MODEL:
-			reply.rmodel_type = lib::ARM_KINEMATIC_MODEL;
+			reply.robot_model_type = lib::ARM_KINEMATIC_MODEL;
 			// okreslenie numeru zestawu parametrow przelicznika kinematycznego oraz jego korektora
-			reply.rmodel.kinematic_model.kinematic_model_no = get_current_kinematic_model_no();
+			reply.robot_model.kinematic_model.kinematic_model_no = get_current_kinematic_model_no();
 			break;
 		case lib::SERVO_ALGORITHM:
-			reply.rmodel_type = lib::SERVO_ALGORITHM;
+			reply.robot_model_type = lib::SERVO_ALGORITHM;
 			// ustawienie numeru algorytmu serworegulatora oraz numeru jego zestawu parametrow
 
 			break;

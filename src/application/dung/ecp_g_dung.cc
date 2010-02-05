@@ -39,7 +39,7 @@ bool dung::first_step()
     td.value_in_step_no = td.internode_step_no - 2;
 
     lib::Homog_matrix tool_frame(0.0, 0.0, 0.25);
-    tool_frame.get_frame_tab(the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame);
+    tool_frame.get_frame_tab(the_robot->ecp_command.instruction.robot_model.tool_frame_def.tool_frame);
 
     the_robot->ecp_command.instruction.instruction_type = lib::GET;
     the_robot->ecp_command.instruction.get_type = ARM_DEFINITION; // arm - ORYGINAL

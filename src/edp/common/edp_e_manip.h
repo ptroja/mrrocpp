@@ -191,17 +191,17 @@ public:
 	/*!
 	 * \brief method to set the robot model commanded by ECP
 	 *
-	 * The model consists of tool_frame and models handled in set_rmodel method of motor_driven_effector called here
+	 * The model consists of tool_frame and models handled in set_robot_model method of motor_driven_effector called here
 	 */
-	virtual void set_rmodel(lib::c_buffer &instruction);
+	virtual void set_robot_model(lib::c_buffer &instruction);
 
 	/*!
 	 * \brief method to get (read) the robot model
 	 *
-	 * The model consists of tool_frame and models handled in set_rmodel method of motor_driven_effector called here.
+	 * The model consists of tool_frame and models handled in set_robot_model method of motor_driven_effector called here.
 	 * Then it is sent to the ECP.
 	 */
-	virtual void get_rmodel(lib::c_buffer &instruction);
+	virtual void get_robot_model(lib::c_buffer &instruction);
 
 	/*!
 	 * \brief commonly used part of the get_arm_position method

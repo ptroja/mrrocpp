@@ -514,12 +514,12 @@ void manip_effector::pose_force_torque_at_frame_move(const lib::c_buffer &instru
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
-void manip_effector::set_rmodel(lib::c_buffer &instruction)
+void manip_effector::set_robot_model(lib::c_buffer &instruction)
 {
 	// uint8_t previous_model;
 	// uint8_t previous_corrector;
 	//printf(" SET ROBOT_MODEL: ");
-	switch (instruction.set_rmodel_type)
+	switch (instruction.set_robot_model_type)
 	{
 		case lib::FORCE_TOOL:
 			if (vs == NULL) {
@@ -531,9 +531,9 @@ void manip_effector::set_rmodel(lib::c_buffer &instruction)
 				vs->new_command_synchroniser.null_command();
 				vs->command = FORCE_SET_TOOL;
 				for (int i = 0; i < 3; i++) {
-					vs->next_force_tool_position[i] = instruction.rmodel.force_tool.position[i];
+					vs->next_force_tool_position[i] = instruction.robot_model.force_tool.position[i];
 				}
-				vs->next_force_tool_weight = instruction.rmodel.force_tool.weight;
+				vs->next_force_tool_weight = instruction.robot_model.force_tool.weight;
 				vs->new_edp_command = true;
 			}
 			vs->new_command_synchroniser.wait();
@@ -562,9 +562,9 @@ void manip_effector::set_rmodel(lib::c_buffer &instruction)
 
 			// Przyslano dane dotyczace narzedzia i koncowki.
 			// Sprawdzenie poprawnosci macierzy
-			//	set_tool_frame_in_kinematic_model(lib::Homog_matrix(instruction.rmodel.tool_frame_def.tool_frame));
+			//	set_tool_frame_in_kinematic_model(lib::Homog_matrix(instruction.robot_model.tool_frame_def.tool_frame));
 		{
-			lib::Homog_matrix hm(instruction.rmodel.tool_frame_def.tool_frame);
+			lib::Homog_matrix hm(instruction.robot_model.tool_frame_def.tool_frame);
 
 			if (!(hm.is_valid())) {
 				throw NonFatal_error_2(INVALID_HOMOGENEOUS_MATRIX);
@@ -581,16 +581,16 @@ void manip_effector::set_rmodel(lib::c_buffer &instruction)
 
 			break;
 		default: // blad: nie istniejaca specyfikacja modelu robota
-			motor_driven_effector::set_rmodel(instruction);
+			motor_driven_effector::set_robot_model(instruction);
 	}
 }
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
-void manip_effector::get_rmodel(lib::c_buffer &instruction)
+void manip_effector::get_robot_model(lib::c_buffer &instruction)
 {
 	//printf(" GET ROBOT_MODEL: ");
-	switch (instruction.get_rmodel_type)
+	switch (instruction.get_robot_model_type)
 	{
 		case lib::FORCE_TOOL:
 			if (vs == NULL) {
@@ -598,9 +598,9 @@ void manip_effector::get_rmodel(lib::c_buffer &instruction)
 				break;
 			}
 			for (int i = 0; i < 3; i++) {
-				reply.rmodel.force_tool.position[i] = vs->current_force_tool_position[i];
+				reply.robot_model.force_tool.position[i] = vs->current_force_tool_position[i];
 			}
-			reply.rmodel.force_tool.weight = vs->current_force_tool_weight;
+			reply.robot_model.force_tool.weight = vs->current_force_tool_weight;
 			break;
 		case lib::TOOL_FRAME:
 			//printf("TOOL_FRAME\n");
@@ -609,13 +609,13 @@ void manip_effector::get_rmodel(lib::c_buffer &instruction)
 			// z wewntrznych struktur danych TRANSFORMATORa
 			// do wewntrznych struktur danych REPLY_BUFFER
 
-			reply.rmodel_type = lib::TOOL_FRAME;
+			reply.robot_model_type = lib::TOOL_FRAME;
 
-			((mrrocpp::kinematics::common::kinematic_model_with_tool*) get_current_kinematic_model())->tool.get_frame_tab(reply.rmodel.tool_frame_def.tool_frame);
+			((mrrocpp::kinematics::common::kinematic_model_with_tool*) get_current_kinematic_model())->tool.get_frame_tab(reply.robot_model.tool_frame_def.tool_frame);
 
 			break;
 		default: // blad: nie istniejaca specyfikacja modelu robota
-			motor_driven_effector::get_rmodel(instruction);
+			motor_driven_effector::get_robot_model(instruction);
 	}
 }
 /*--------------------------------------------------------------------------*/

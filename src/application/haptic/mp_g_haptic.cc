@@ -57,8 +57,8 @@ bool haptic::first_step()
 	irp6ot->mp_command.instruction.instruction_type = lib::GET;
 	irp6ot->mp_command.instruction.get_type = ARM_DEFINITION;
 	irp6ot->mp_command.instruction.set_type = ARM_DEFINITION | ROBOT_MODEL_DEFINITION;
-	irp6ot->mp_command.instruction.set_rmodel_type = lib::TOOL_FRAME;
-	irp6ot->mp_command.instruction.get_rmodel_type = lib::TOOL_FRAME;
+	irp6ot->mp_command.instruction.set_robot_model_type = lib::TOOL_FRAME;
+	irp6ot->mp_command.instruction.get_robot_model_type = lib::TOOL_FRAME;
 	irp6ot->mp_command.instruction.set_arm_type = lib::PF_VELOCITY;
 	irp6ot->mp_command.instruction.get_arm_type = lib::FRAME;
 	irp6ot->mp_command.instruction.motion_type = lib::RELATIVE;
@@ -92,14 +92,14 @@ bool haptic::first_step()
 	}
 
 	lib::Homog_matrix tool_frame(0.0, 0.0, 0.25);
-	tool_frame.get_frame_tab(irp6ot->mp_command.instruction.rmodel.tool_frame_def.tool_frame);
+	tool_frame.get_frame_tab(irp6ot->mp_command.instruction.robot_model.tool_frame_def.tool_frame);
 
 	irp6p->mp_command.command = lib::NEXT_POSE;
 	irp6p->mp_command.instruction.instruction_type = lib::GET;
 	irp6p->mp_command.instruction.get_type = ARM_DEFINITION;
 	irp6p->mp_command.instruction.set_type = ARM_DEFINITION | ROBOT_MODEL_DEFINITION;
-	irp6p->mp_command.instruction.set_rmodel_type = lib::TOOL_FRAME;
-	irp6p->mp_command.instruction.get_rmodel_type = lib::TOOL_FRAME;
+	irp6p->mp_command.instruction.set_robot_model_type = lib::TOOL_FRAME;
+	irp6p->mp_command.instruction.get_robot_model_type = lib::TOOL_FRAME;
 	irp6p->mp_command.instruction.set_arm_type = lib::FRAME;
 	irp6p->mp_command.instruction.get_arm_type = lib::FRAME;
 	irp6p->mp_command.instruction.motion_type = lib::ABSOLUTE;
@@ -107,7 +107,7 @@ bool haptic::first_step()
 	irp6p->mp_command.instruction.motion_steps = td.internode_step_no;
 	irp6p->mp_command.instruction.value_in_step_no = td.value_in_step_no;
 
-	tool_frame.get_frame_tab(irp6p->mp_command.instruction.rmodel.tool_frame_def.tool_frame);
+	tool_frame.get_frame_tab(irp6p->mp_command.instruction.robot_model.tool_frame_def.tool_frame);
 
 	for (int i=0; i<3; i++) {
 		irp6p->mp_command.instruction.arm.pf_def.arm_coordinates[i] = 0;

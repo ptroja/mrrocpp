@@ -21,13 +21,13 @@ bool wii_velocity::first_step()
 	td.value_in_step_no = td.internode_step_no - 3;
 
 	lib::Homog_matrix tool_frame(0.0, 0.0, 0.25);
-	tool_frame.get_frame_tab(the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame);
+	tool_frame.get_frame_tab(the_robot->ecp_command.instruction.robot_model.tool_frame_def.tool_frame);
 
 	the_robot->ecp_command.instruction.instruction_type = lib::GET;
 	the_robot->ecp_command.instruction.get_type = ARM_DEFINITION; // arm - ORYGINAL
 	the_robot->ecp_command.instruction.set_type = ARM_DEFINITION | ROBOT_MODEL_DEFINITION;
-	the_robot->ecp_command.instruction.set_rmodel_type = lib::TOOL_FRAME;
-	the_robot->ecp_command.instruction.get_rmodel_type = lib::TOOL_FRAME;
+	the_robot->ecp_command.instruction.set_robot_model_type = lib::TOOL_FRAME;
+	the_robot->ecp_command.instruction.get_robot_model_type = lib::TOOL_FRAME;
 	the_robot->ecp_command.instruction.set_arm_type = lib::PF_VELOCITY;
 	the_robot->ecp_command.instruction.get_arm_type = lib::JOINT;
 	the_robot->ecp_command.instruction.motion_type = lib::RELATIVE;

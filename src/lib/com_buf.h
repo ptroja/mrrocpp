@@ -657,8 +657,8 @@ struct servo_group_reply
 
 
 //------------------------------------------------------------------------------
-/*! rmodel */
-typedef union c_buffer_rmodel
+/*! robot_model */
+typedef union c_buffer_robot_model
 {
 	//----------------------------------------------------------
 	struct
@@ -691,7 +691,7 @@ typedef union c_buffer_rmodel
 	}
 	force_tool;
 
-} c_buffer_rmodel_t;
+} c_buffer_robot_model_t;
 
 
 //------------------------------------------------------------------------------
@@ -743,9 +743,9 @@ struct c_buffer
 	/*! Type of the GET instruction. */
 	uint8_t get_type;
 	/*! Tool definition type - setting. */
-	ROBOT_MODEL_SPECIFICATION set_rmodel_type;
+	ROBOT_MODEL_SPECIFICATION set_robot_model_type;
 	/*! Tool definition type - reading. */
-	ROBOT_MODEL_SPECIFICATION get_rmodel_type;
+	ROBOT_MODEL_SPECIFICATION get_robot_model_type;
 	/*! Definition type of the end-effector's given position. */
 	POSE_SPECIFICATION set_arm_type;
 	/*! Definition type of the end-effector's read position. */
@@ -784,7 +784,7 @@ struct c_buffer
 	 *  realizacji srodkowej fazy makrokroku.
 	 */
 	uint16_t value_in_step_no;
-	c_buffer_rmodel_t rmodel;
+	c_buffer_robot_model_t robot_model;
 	c_buffer_arm_t arm;
 
 	friend class boost::serialization::access;
@@ -795,8 +795,8 @@ struct c_buffer
 			ar & instruction_type;
 			ar & set_type;
 			ar & get_type;
-			ar & set_rmodel_type;
-			ar & get_rmodel_type;
+			ar & set_robot_model_type;
+			ar & get_robot_model_type;
 			ar & set_arm_type;
 			ar & get_arm_type;
 			ar & output_values;
@@ -823,7 +823,7 @@ struct c_buffer
 	 *  Odczytac narzedzie?
 	 *  @todo Translate to English.
 	 */
-	bool is_get_rmodel() const;
+	bool is_get_robot_model() const;
 	/*!
 	 *  Odczytac polozenie ramienia?
 	 *  @todo Translate to English.
@@ -838,7 +838,7 @@ struct c_buffer
 	 *  Zmienic narzedzie?
 	 *  @todo Translate to English.
 	 */
-	bool is_set_rmodel() const;
+	bool is_set_robot_model() const;
 	/*!
 	 *  Zmienic polozenie ramienia?
 	 *  @todo Translate to English.
@@ -852,8 +852,8 @@ struct c_buffer
 
 
 //------------------------------------------------------------------------------
-/*! rmodel */
-typedef union r_buffer_rmodel
+/*! robot_model */
+typedef union r_buffer_robot_model
 {
 	//----------------------------------------------------------
 	struct
@@ -898,7 +898,7 @@ typedef union r_buffer_rmodel
 	}
 	force_tool;
 
-} r_buffer_rmodel_t;
+} r_buffer_robot_model_t;
 
 
 //------------------------------------------------------------------------------
@@ -981,7 +981,7 @@ struct r_buffer
 	 *  Sposob zdefiniowania narzedzia przy jego odczycie.
 	 *  @todo Translate to English.
 	 */
-	ROBOT_MODEL_SPECIFICATION rmodel_type;
+	ROBOT_MODEL_SPECIFICATION robot_model_type;
 	/*!
 	 *  Sposob  zdefiniowania polozenia zadanego koncowki.
 	 *  @todo Translate to English.
@@ -1001,7 +1001,7 @@ struct r_buffer
 	int16_t PWM_value[MAX_SERVOS_NR];
 	/*! Control current - (usualy unnecessary). */
 	int16_t current[MAX_SERVOS_NR];
-	r_buffer_rmodel_t rmodel;
+	r_buffer_robot_model_t robot_model;
 	r_buffer_arm_t arm;
 
 	//-----------------------------------------------------

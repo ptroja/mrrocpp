@@ -5,7 +5,7 @@ namespace lib {
 
 r_buffer::r_buffer (void) :
   reply_type(lib::ERROR),
-  rmodel_type(TOOL_FRAME),
+  robot_model_type(TOOL_FRAME),
   arm_type(FRAME),
   input_values(0)
 {
@@ -25,11 +25,11 @@ r_buffer::r_buffer (void) :
   for (int i=0; i<4; i++)
     for (int j=0; j<3; j++)
       if (i==j)
-        rmodel.tool_frame_def.tool_frame[j][i] = 1.0;
+        robot_model.tool_frame_def.tool_frame[j][i] = 1.0;
       else
-        rmodel.tool_frame_def.tool_frame[j][i] = 0.0;
+        robot_model.tool_frame_def.tool_frame[j][i] = 0.0;
         */
-//  rmodel.tool_frame_def.address_byte = 0;
+//  robot_model.tool_frame_def.address_byte = 0;
 }
 
 } // namespace lib

@@ -64,20 +64,20 @@ effector::effector(lib::configurator &_config) :
 }
 
 /*--------------------------------------------------------------------------*/
-void effector::set_rmodel(lib::c_buffer &instruction)
+void effector::set_robot_model(lib::c_buffer &instruction)
 {
 	// uint8_t previous_model;
 	// uint8_t previous_corrector;
 	//printf(" SET ROBOT_MODEL: ");
-	switch (instruction.set_rmodel_type)
+	switch (instruction.set_robot_model_type)
 	{
 		case lib::SERVO_ALGORITHM:
-			sb->set_rmodel_servo_algorithm(instruction);
+			sb->set_robot_model_servo_algorithm(instruction);
 			break;
 
 		default: // blad: nie istniejca specyfikacja modelu robota
 			// ustawi numer bledu
-			motor_driven_effector::set_rmodel(instruction);
+			motor_driven_effector::set_robot_model(instruction);
 	}
 }
 /*--------------------------------------------------------------------------*/

@@ -59,7 +59,7 @@ void manip_trans_t::operator()()
                 trans_t_to_master_synchroniser.command();
                 break;
             case MT_SET_ROBOT_MODEL:
-            	master.set_rmodel(instruction);
+            	master.set_robot_model(instruction);
                 trans_t_to_master_synchroniser.command();
                 break;
             case MT_GET_ARM_POSITION:
