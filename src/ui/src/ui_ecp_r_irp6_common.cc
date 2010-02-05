@@ -498,10 +498,6 @@ void ui_common_robot::move_xyz_euler_zyz(const double final_position[7])
 
 void ui_common_robot::move_xyz_angle_axis(const double final_position[7])
 {
-	for(int i = 0; i < 7; ++i) {
-		printf("%f ", final_position[i]);
-	}
-	printf("\n");
 	lib::Xyz_Euler_Zyz_vector aa_eul; // tablica przechowujaca polecenie przetransformowane
 	// do formy XYZ_EULER_ZYZ
 /*	double x, y, z, alfa, kx, ky, kz;
