@@ -110,15 +110,10 @@ extern "C"
 			
 			try {
 				robot_<xsl:value-of select="$fullName" />->move_xyz_angle_axis(<xsl:value-of select="$name" />_desired_pos_a);
-				
-				if (state_<xsl:value-of select="$fullName" />.is_synchronised) {
-					on_read_button_clicked_<xsl:value-of select="$fullName" />_xyz_angle_axis(NULL, userdata);
-				}
 			}
 		<xsl:call-template name="catch" />
 		}
 		on_read_button_clicked_<xsl:value-of select="$fullName" />_xyz_angle_axis (button, userdata);
-
 	}
 	
 
