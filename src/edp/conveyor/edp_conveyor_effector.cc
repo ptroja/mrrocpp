@@ -68,7 +68,7 @@ void effector::set_rmodel(lib::c_buffer &instruction)
 {
 	// uint8_t previous_model;
 	// uint8_t previous_corrector;
-	//printf(" SET RMODEL: ");
+	//printf(" SET ROBOT_MODEL: ");
 	switch (instruction.set_rmodel_type)
 	{
 		case lib::SERVO_ALGORITHM:

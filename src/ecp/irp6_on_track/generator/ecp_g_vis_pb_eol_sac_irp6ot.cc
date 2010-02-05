@@ -300,7 +300,7 @@ bool ecp_vis_pb_eol_sac_irp6ot::first_step(void){
 
 	the_robot->ecp_command.instruction.instruction_type = lib::SET_GET;
 	the_robot->ecp_command.instruction.get_type = ARM_DEFINITION;
-	the_robot->ecp_command.instruction.set_type = RMODEL_DEFINITION;
+	the_robot->ecp_command.instruction.set_type = ROBOT_MODEL_DEFINITION;
 	the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
 	the_robot->ecp_command.instruction.get_arm_type = lib::FRAME;
 	the_robot->ecp_command.instruction.set_rmodel_type = lib::TOOL_FRAME; //TOOL_XYZ_EULER_ZYZ; //TOOL_FRAME;

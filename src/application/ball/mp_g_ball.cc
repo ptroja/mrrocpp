@@ -56,7 +56,7 @@ bool ball::first_step()
 	irp6ot->mp_command.command = lib::NEXT_POSE;
 	irp6ot->mp_command.instruction.instruction_type = lib::GET;
 	irp6ot->mp_command.instruction.get_type = ARM_DEFINITION;
-	irp6ot->mp_command.instruction.set_type = ARM_DEFINITION | RMODEL_DEFINITION;
+	irp6ot->mp_command.instruction.set_type = ARM_DEFINITION | ROBOT_MODEL_DEFINITION;
 	irp6ot->mp_command.instruction.set_rmodel_type = lib::TOOL_FRAME;
 	irp6ot->mp_command.instruction.get_rmodel_type = lib::TOOL_FRAME;
 	irp6ot->mp_command.instruction.set_arm_type = lib::PF_VELOCITY;
@@ -85,7 +85,7 @@ bool ball::first_step()
 	irp6p->mp_command.command = lib::NEXT_POSE;
 	irp6p->mp_command.instruction.instruction_type = lib::GET;
 	irp6p->mp_command.instruction.get_type = ARM_DEFINITION;
-	irp6p->mp_command.instruction.set_type = ARM_DEFINITION | RMODEL_DEFINITION;
+	irp6p->mp_command.instruction.set_type = ARM_DEFINITION | ROBOT_MODEL_DEFINITION;
 	irp6p->mp_command.instruction.set_rmodel_type = lib::TOOL_FRAME;
 	irp6p->mp_command.instruction.get_rmodel_type = lib::TOOL_FRAME;
 	irp6p->mp_command.instruction.set_arm_type = lib::FRAME;

@@ -39,7 +39,7 @@ catch (ecp::common::ecp_robot::ECP_error er) { \
 		case INVALID_COMMAND_TO_EDP: \
 		case EDP_ERROR: \
 		case INVALID_EDP_REPLY: \
-		case INVALID_RMODEL_TYPE: \
+		case INVALID_ROBOT_MODEL_TYPE: \
 			/* Komunikat o bledzie wysylamy do SR */ \
 			ui_msg.all_ecp->message (lib::NON_FATAL_ERROR, er.error_no); \
 		break; \

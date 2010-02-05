@@ -153,8 +153,8 @@ void ui_common_robot::get_kinematic(uint8_t* kinematic_model_no)
 {
 	// Zlecenie odczytu numeru modelu i korektora kinematyki
 	ecp->ecp_command.instruction.instruction_type = lib::GET;
-	ecp->ecp_command.instruction.get_type = RMODEL_DEFINITION; // RMODEL
-	ecp->ecp_command.instruction.get_rmodel_type = lib::ARM_KINEMATIC_MODEL; // RMODEL
+	ecp->ecp_command.instruction.get_type = ROBOT_MODEL_DEFINITION; // ROBOT_MODEL
+	ecp->ecp_command.instruction.get_rmodel_type = lib::ARM_KINEMATIC_MODEL; // ROBOT_MODEL
 	execute_motion();
 
 	*kinematic_model_no = ecp->reply_package.rmodel.kinematic_model.kinematic_model_no;
@@ -165,7 +165,7 @@ void ui_common_robot::get_servo_algorithm(uint8_t algorithm_no[], uint8_t parame
 
 	// Zlecenie odczytu numerow algorytmow i zestawow parametrow
 	ecp->ecp_command.instruction.instruction_type = lib::GET;
-	ecp->ecp_command.instruction.get_type = RMODEL_DEFINITION; // RMODEL
+	ecp->ecp_command.instruction.get_type = ROBOT_MODEL_DEFINITION; // ROBOT_MODEL
 	ecp->ecp_command.instruction.get_rmodel_type = lib::SERVO_ALGORITHM; //
 	execute_motion();
 
@@ -197,9 +197,9 @@ void ui_common_robot::set_kinematic(uint8_t kinematic_model_no)
 
 	// Zlecenie zapisu numeru modelu i korektora kinematyki
 	ecp->ecp_command.instruction.instruction_type = lib::SET;
-	ecp->ecp_command.instruction.set_type = RMODEL_DEFINITION; // RMODEL
-	ecp->ecp_command.instruction.set_rmodel_type = lib::ARM_KINEMATIC_MODEL; // RMODEL
-	ecp->ecp_command.instruction.get_rmodel_type = lib::ARM_KINEMATIC_MODEL; // RMODEL
+	ecp->ecp_command.instruction.set_type = ROBOT_MODEL_DEFINITION; // ROBOT_MODEL
+	ecp->ecp_command.instruction.set_rmodel_type = lib::ARM_KINEMATIC_MODEL; // ROBOT_MODEL
+	ecp->ecp_command.instruction.get_rmodel_type = lib::ARM_KINEMATIC_MODEL; // ROBOT_MODEL
 
 	ecp->ecp_command.instruction.rmodel.kinematic_model.kinematic_model_no = kinematic_model_no;
 
@@ -219,7 +219,7 @@ void ui_common_robot::set_servo_algorithm(uint8_t algorithm_no[], uint8_t parame
 	memcpy(ecp->ecp_command.instruction.rmodel.servo_algorithm.servo_parameters_no, parameters_no, ecp->number_of_servos
 			* sizeof(uint8_t));
 	ecp->ecp_command.instruction.instruction_type = lib::SET;
-	ecp->ecp_command.instruction.set_type = RMODEL_DEFINITION; // RMODEL
+	ecp->ecp_command.instruction.set_type = ROBOT_MODEL_DEFINITION; // ROBOT_MODEL
 	ecp->ecp_command.instruction.set_rmodel_type = lib::SERVO_ALGORITHM; //
 	ecp->ecp_command.instruction.get_rmodel_type = lib::SERVO_ALGORITHM; //
 	execute_motion();
@@ -232,7 +232,7 @@ void ui_common_robot::set_servo_algorithm(uint8_t algorithm_no[], uint8_t parame
 void ui_common_robot::set_tool_xyz_angle_axis(const lib::Xyz_Angle_Axis_vector &tool_vector)
 {
 	ecp->ecp_command.instruction.instruction_type = lib::SET;
-	ecp->ecp_command.instruction.set_type = RMODEL_DEFINITION; // RMODEL
+	ecp->ecp_command.instruction.set_type = ROBOT_MODEL_DEFINITION; // ROBOT_MODEL
 	ecp->ecp_command.instruction.set_rmodel_type = lib::TOOL_FRAME;
 	ecp->ecp_command.instruction.get_rmodel_type = lib::TOOL_FRAME;
 
@@ -250,7 +250,7 @@ void ui_common_robot::set_tool_xyz_angle_axis(const lib::Xyz_Angle_Axis_vector &
 void ui_common_robot::set_tool_xyz_euler_zyz(const lib::Xyz_Euler_Zyz_vector &tool_vector)
 {
 	ecp->ecp_command.instruction.instruction_type = lib::SET;
-	ecp->ecp_command.instruction.set_type = RMODEL_DEFINITION; // RMODEL
+	ecp->ecp_command.instruction.set_type = ROBOT_MODEL_DEFINITION; // ROBOT_MODEL
 	ecp->ecp_command.instruction.set_rmodel_type = lib::TOOL_FRAME;
 	ecp->ecp_command.instruction.get_rmodel_type = lib::TOOL_FRAME;
 
@@ -269,7 +269,7 @@ void ui_common_robot::read_tool_xyz_angle_axis(lib::Xyz_Angle_Axis_vector & tool
 {
 	// Zlecenie odczytu numeru modelu i korektora kinematyki
 	ecp->ecp_command.instruction.instruction_type = lib::GET;
-	ecp->ecp_command.instruction.get_type = RMODEL_DEFINITION; // RMODEL
+	ecp->ecp_command.instruction.get_type = ROBOT_MODEL_DEFINITION; // ROBOT_MODEL
 	ecp->ecp_command.instruction.set_rmodel_type = lib::TOOL_FRAME;
 	ecp->ecp_command.instruction.get_rmodel_type = lib::TOOL_FRAME;
 
@@ -287,7 +287,7 @@ void ui_common_robot::read_tool_xyz_euler_zyz(lib::Xyz_Euler_Zyz_vector &tool_ve
 {
 	// Zlecenie odczytu numeru modelu i korektora kinematyki
 	ecp->ecp_command.instruction.instruction_type = lib::GET;
-	ecp->ecp_command.instruction.get_type = RMODEL_DEFINITION; // RMODEL
+	ecp->ecp_command.instruction.get_type = ROBOT_MODEL_DEFINITION; // ROBOT_MODEL
 	ecp->ecp_command.instruction.set_rmodel_type = lib::TOOL_FRAME;
 	ecp->ecp_command.instruction.get_rmodel_type = lib::TOOL_FRAME;
 

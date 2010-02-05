@@ -324,9 +324,9 @@ void sr_edp::interpret(void) {
 			case OK: break;// OK
 			case INVALID_INSTRUCTION_TYPE: strcat (sr_message.description, "INVALID_INSTRUCTION_TYPE"); break;
 			case INVALID_REPLY_TYPE: strcat (sr_message.description, "INVALID_REPLY_TYPE"); break;
-			case INVALID_SET_RMODEL_TYPE: strcat (sr_message.description, "INVALID_SET_RMODEL_TYPE"); break;
-			case INVALID_GET_RMODEL_TYPE: strcat (sr_message.description, "INVALID_GET_RMODEL_TYPE"); break;
-			case ERROR_IN_RMODEL_REQUEST: strcat (sr_message.description, "ERROR_IN_RMODEL_REQUEST"); break;
+			case INVALID_SET_ROBOT_MODEL_TYPE: strcat (sr_message.description, "INVALID_SET_ROBOT_MODEL_TYPE"); break;
+			case INVALID_GET_ROBOT_MODEL_TYPE: strcat (sr_message.description, "INVALID_GET_ROBOT_MODEL_TYPE"); break;
+			case ERROR_IN_ROBOT_MODEL_REQUEST: strcat (sr_message.description, "ERROR_IN_ROBOT_MODEL_REQUEST"); break;
 			case INVALID_HOMOGENEOUS_MATRIX: strcat (sr_message.description, "INVALID_HOMOGENEOUS_MATRIX"); break;
 			case QUERY_EXPECTED: strcat (sr_message.description, "QUERY_EXPECTED"); break;
 			case QUERY_NOT_EXPECTED: strcat (sr_message.description, "QUERY_NOT_EXPECTED"); break;
@@ -465,8 +465,8 @@ void sr_ecp::interpret(void) {
 			sprintf(sr_message.description, "INVALID MP COMMAND"); break;
 			case INVALID_POSE_SPECIFICATION:
 			sprintf(sr_message.description, "INVALID POSE SPECIFICATION"); break;
-			case INVALID_RMODEL_TYPE:
-			sprintf(sr_message.description, "INVALID RMODEL TYPE"); break;
+			case INVALID_ROBOT_MODEL_TYPE:
+			sprintf(sr_message.description, "INVALID ROBOT_MODEL TYPE"); break;
 			case INVALID_ECP_COMMAND:
 			sprintf(sr_message.description, "INVALID ECP COMMAND"); break;
 			case INVALID_EDP_REPLY:

@@ -70,7 +70,7 @@ bool y_edge_follow_force::first_step()
 
 	the_robot->ecp_command.instruction.instruction_type = lib::GET;
 	the_robot->ecp_command.instruction.get_type = ARM_DEFINITION; // arm - ORYGINAL
-	the_robot->ecp_command.instruction.set_type = ARM_DEFINITION | RMODEL_DEFINITION;
+	the_robot->ecp_command.instruction.set_type = ARM_DEFINITION | ROBOT_MODEL_DEFINITION;
 	//	the_robot->ecp_command.instruction.set_type = ARM_DEFINITION;
 	the_robot->ecp_command.instruction.set_rmodel_type = lib::TOOL_FRAME;
 	the_robot->ecp_command.instruction.get_rmodel_type = lib::TOOL_FRAME;

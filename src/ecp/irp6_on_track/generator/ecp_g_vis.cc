@@ -222,10 +222,10 @@ the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[2][2]=1; the
 /*
 
       the_robot->ecp_command.instruction.instruction_type = lib::SET_GET;
-      // the_robot->ecp_command.instruction.get_type =  ARM_DEFINITION + RMODEL_DEFINITION;
-      // the_robot->ecp_command.instruction.set_type =  ARM_DEFINITION + RMODEL_DEFINITION;
-      the_robot->ecp_command.instruction.get_type =  RMODEL_DEFINITION;
-      the_robot->ecp_command.instruction.set_type =  RMODEL_DEFINITION;
+      // the_robot->ecp_command.instruction.get_type =  ARM_DEFINITION + ROBOT_MODEL_DEFINITION;
+      // the_robot->ecp_command.instruction.set_type =  ARM_DEFINITION + ROBOT_MODEL_DEFINITION;
+      the_robot->ecp_command.instruction.get_type =  ROBOT_MODEL_DEFINITION;
+      the_robot->ecp_command.instruction.set_type =  ROBOT_MODEL_DEFINITION;
       the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
       the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_EULER_ZYZ;
        the_robot->ecp_command.instruction.set_rmodel_type = lib::TOOL_FRAME;

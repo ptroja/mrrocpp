@@ -51,7 +51,7 @@ bool c_buffer::is_get_inputs() const
 // odczytac narzedzie?
 bool c_buffer::is_get_rmodel() const
 {
-	return get_type & RMODEL_DEFINITION;
+	return get_type & ROBOT_MODEL_DEFINITION;
 }
 
 // odczytac polozenie ramienia?
@@ -69,7 +69,7 @@ bool c_buffer::is_set_outputs() const
 // zmienic narzedzie?
 bool c_buffer::is_set_rmodel() const
 {
-	return set_type & RMODEL_DEFINITION;
+	return set_type & ROBOT_MODEL_DEFINITION;
 }
 
 // zmienic polozenie ramienia?

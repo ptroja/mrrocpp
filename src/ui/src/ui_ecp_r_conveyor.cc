@@ -85,8 +85,8 @@ void ui_conveyor_robot::get_kinematic (uint8_t* kinematic_model_no)
 
     // Zlecenie odczytu numeru modelu i korektora kinematyki
     ecp_command.instruction.instruction_type = lib::GET;
-    ecp_command.instruction.get_type = RMODEL_DEFINITION; // RMODEL
-    ecp_command.instruction.get_rmodel_type = lib::ARM_KINEMATIC_MODEL; // RMODEL
+    ecp_command.instruction.get_type = ROBOT_MODEL_DEFINITION; // ROBOT_MODEL
+    ecp_command.instruction.get_rmodel_type = lib::ARM_KINEMATIC_MODEL; // ROBOT_MODEL
     execute_motion();
 
     *kinematic_model_no  = reply_package.rmodel.kinematic_model.kinematic_model_no;
@@ -99,7 +99,7 @@ void ui_conveyor_robot::get_servo_algorithm ( uint8_t algorithm_no[CONVEYOR_NUM_
 
     // Zlecenie odczytu numerow algorytmow i zestawow parametrow
     ecp_command.instruction.instruction_type = lib::GET;
-    ecp_command.instruction.get_type = RMODEL_DEFINITION; // RMODEL
+    ecp_command.instruction.get_type = ROBOT_MODEL_DEFINITION; // ROBOT_MODEL
     ecp_command.instruction.get_rmodel_type = lib::SERVO_ALGORITHM; //
     execute_motion();
 
@@ -134,9 +134,9 @@ void ui_conveyor_robot::set_kinematic (uint8_t kinematic_model_no)
 
     // Zlecenie zapisu numeru modelu i korektora kinematyki
     ecp_command.instruction.instruction_type = lib::SET;
-    ecp_command.instruction.set_type = RMODEL_DEFINITION; // RMODEL
-    ecp_command.instruction.set_rmodel_type = lib::ARM_KINEMATIC_MODEL; // RMODEL
-    ecp_command.instruction.get_rmodel_type = lib::ARM_KINEMATIC_MODEL; // RMODEL
+    ecp_command.instruction.set_type = ROBOT_MODEL_DEFINITION; // ROBOT_MODEL
+    ecp_command.instruction.set_rmodel_type = lib::ARM_KINEMATIC_MODEL; // ROBOT_MODEL
+    ecp_command.instruction.get_rmodel_type = lib::ARM_KINEMATIC_MODEL; // ROBOT_MODEL
 
     ecp_command.instruction.rmodel.kinematic_model.kinematic_model_no = kinematic_model_no;
 
@@ -158,7 +158,7 @@ void ui_conveyor_robot::set_servo_algorithm (uint8_t algorithm_no[CONVEYOR_NUM_O
     memcpy (ecp_command.instruction.rmodel.servo_algorithm.servo_parameters_no, parameters_no,
             CONVEYOR_NUM_OF_SERVOS*sizeof(uint8_t) );
     ecp_command.instruction.instruction_type = lib::SET;
-    ecp_command.instruction.set_type = RMODEL_DEFINITION; // RMODEL
+    ecp_command.instruction.set_type = ROBOT_MODEL_DEFINITION; // ROBOT_MODEL
     ecp_command.instruction.set_rmodel_type = lib::SERVO_ALGORITHM; //
     ecp_command.instruction.get_rmodel_type = lib::SERVO_ALGORITHM; //
     execute_motion();

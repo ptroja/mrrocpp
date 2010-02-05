@@ -140,7 +140,7 @@ int main(int argc, char *argv[])
 				case INVALID_COMMAND_TO_EDP:
 				case EDP_ERROR:
 				case INVALID_EDP_REPLY:
-				case INVALID_RMODEL_TYPE:
+				case INVALID_ROBOT_MODEL_TYPE:
 					/*Komunikat o bledzie wysylamy do SR */
 					ecp::common::ecp_t->sr_ecp_msg->message (lib::NON_FATAL_ERROR, er.error_no);
 					ecp::common::ecp_t->set_ecp_reply (lib::ERROR_IN_ECP);

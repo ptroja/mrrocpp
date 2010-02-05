@@ -184,7 +184,7 @@ void motor_driven_effector::single_thread_master_order(common::MT_ORDER nm_task,
 		case common::MT_GET_CONTROLLER_STATE:
 			get_controller_state(instruction);
 			break;
-		case common::MT_SET_RMODEL:
+		case common::MT_SET_ROBOT_MODEL:
 			set_rmodel(instruction);
 			break;
 		case common::MT_GET_ARM_POSITION:
@@ -383,7 +383,7 @@ void motor_driven_effector::interpret_instruction(lib::c_buffer &instruction)
 			if (instruction.is_set_rmodel())
 				// zmiana modelu robota
 				// set_rmodel();
-				master_order(MT_SET_RMODEL, 0);
+				master_order(MT_SET_ROBOT_MODEL, 0);
 			if (instruction.is_set_arm()) {
 				// przemieszczenie koncowki
 				// move_arm();
@@ -407,12 +407,12 @@ void motor_driven_effector::interpret_instruction(lib::c_buffer &instruction)
 					master_order(MT_GET_CONTROLLER_STATE, 0);
 					break;
 				case lib::ARM:
-				case lib::RMODEL:
+				case lib::ROBOT_MODEL:
 				case lib::INPUTS:
-				case lib::ARM_RMODEL:
+				case lib::ARM_ROBOT_MODEL:
 				case lib::ARM_INPUTS:
-				case lib::RMODEL_INPUTS:
-				case lib::ARM_RMODEL_INPUTS:
+				case lib::ROBOT_MODEL_INPUTS:
+				case lib::ARM_ROBOT_MODEL_INPUTS:
 					if (instruction.is_get_inputs()) {
 						get_inputs(&reply);
 					}
@@ -446,7 +446,7 @@ void motor_driven_effector::interpret_instruction(lib::c_buffer &instruction)
 				// zmiana aktualnie uzywanego modelu robota (narzedzie, kinematic_model_with_tool kinematyczny,
 				// jego korektor, nr algorytmu regulacji i zestawu jego parametrow)
 				//        set_rmodel();
-				master_order(MT_SET_RMODEL, 0);
+				master_order(MT_SET_ROBOT_MODEL, 0);
 			if (instruction.is_set_arm())
 				// przemieszczenie koncowki
 				// move_arm();
@@ -461,12 +461,12 @@ void motor_driven_effector::interpret_instruction(lib::c_buffer &instruction)
 					master_order(MT_GET_CONTROLLER_STATE, 0);
 					break;
 				case lib::ARM:
-				case lib::RMODEL:
+				case lib::ROBOT_MODEL:
 				case lib::INPUTS:
-				case lib::ARM_RMODEL:
+				case lib::ARM_ROBOT_MODEL:
 				case lib::ARM_INPUTS:
-				case lib::RMODEL_INPUTS:
-				case lib::ARM_RMODEL_INPUTS:
+				case lib::ROBOT_MODEL_INPUTS:
+				case lib::ARM_ROBOT_MODEL_INPUTS:
 					if (instruction.is_get_inputs()) {
 						get_inputs(&reply);
 					}
@@ -580,9 +580,9 @@ lib::REPLY_TYPE motor_driven_effector::rep_type(const lib::c_buffer &instruction
 	}
 	if (instruction.is_get_rmodel()) {
 		if (reply.reply_type == lib::ACKNOWLEDGE)
-			reply.reply_type = lib::RMODEL;
+			reply.reply_type = lib::ROBOT_MODEL;
 		else
-			reply.reply_type = lib::RMODEL_INPUTS;
+			reply.reply_type = lib::ROBOT_MODEL_INPUTS;
 	}
 
 	real_reply_type = reply.reply_type;
@@ -596,11 +596,11 @@ lib::REPLY_TYPE motor_driven_effector::rep_type(const lib::c_buffer &instruction
 			case lib::INPUTS:
 				reply.reply_type = lib::ARM_INPUTS;
 				break;
-			case lib::RMODEL:
-				reply.reply_type = lib::ARM_RMODEL;
+			case lib::ROBOT_MODEL:
+				reply.reply_type = lib::ARM_ROBOT_MODEL;
 				break;
-			case lib::RMODEL_INPUTS:
-				reply.reply_type = lib::ARM_RMODEL_INPUTS;
+			case lib::ROBOT_MODEL_INPUTS:
+				reply.reply_type = lib::ARM_ROBOT_MODEL_INPUTS;
 				break;
 			default:
 				break;
@@ -683,7 +683,7 @@ void motor_driven_effector::set_rmodel(lib::c_buffer &instruction)
 {
 	// uint8_t previous_model;
 	// uint8_t previous_corrector;
-	//printf(" SET RMODEL: ");
+	//printf(" SET ROBOT_MODEL: ");
 	switch (instruction.set_rmodel_type)
 	{
 		case lib::ARM_KINEMATIC_MODEL:
@@ -693,7 +693,7 @@ void motor_driven_effector::set_rmodel(lib::c_buffer &instruction)
 			break;
 		default: // blad: nie istniejaca specyfikacja modelu robota
 			// ustawia numer bledu
-			throw NonFatal_error_2(INVALID_SET_RMODEL_TYPE);
+			throw NonFatal_error_2(INVALID_SET_ROBOT_MODEL_TYPE);
 	}
 }
 /*--------------------------------------------------------------------------*/
@@ -701,7 +701,7 @@ void motor_driven_effector::set_rmodel(lib::c_buffer &instruction)
 /*--------------------------------------------------------------------------*/
 void motor_driven_effector::get_rmodel(lib::c_buffer &instruction)
 {
-	//printf(" GET RMODEL: ");
+	//printf(" GET ROBOT_MODEL: ");
 	switch (instruction.get_rmodel_type)
 	{
 		case lib::ARM_KINEMATIC_MODEL:
@@ -716,7 +716,7 @@ void motor_driven_effector::get_rmodel(lib::c_buffer &instruction)
 			break;
 		default: // blad: nie istniejaca specyfikacja modelu robota
 			// ustawie numer bledu
-			throw NonFatal_error_2(INVALID_GET_RMODEL_TYPE);
+			throw NonFatal_error_2(INVALID_GET_ROBOT_MODEL_TYPE);
 	}
 }
 /*--------------------------------------------------------------------------*/

@@ -58,7 +58,7 @@ void manip_trans_t::operator()()
             	master.get_controller_state(instruction);
                 trans_t_to_master_synchroniser.command();
                 break;
-            case MT_SET_RMODEL:
+            case MT_SET_ROBOT_MODEL:
             	master.set_rmodel(instruction);
                 trans_t_to_master_synchroniser.command();
                 break;
