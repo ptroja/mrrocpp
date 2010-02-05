@@ -62,7 +62,7 @@ sr::sr(process_type_t process_type, const std::string & process_name,
 	}
 	strcpy(sr_message.host_name, sysinfo.nodename);
 
-	sr_messsage.hdr.type=0;
+	sr_message.hdr.type=0;
 
 	sr_message.process_type = process_type;
 	sr_message.message_type = NEW_MESSAGE;
