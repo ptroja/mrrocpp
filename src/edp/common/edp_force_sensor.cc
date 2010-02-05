@@ -8,7 +8,6 @@
 // -------------------------------------------------------------------------
 
 #include <stdio.h>
-#include <semaphore.h>
 
 #include "edp/common/edp.h"
 #include "edp/common/edp_irp6s_postument_track.h"

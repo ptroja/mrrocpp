@@ -6,7 +6,6 @@
 #define __READER_H
 
 #include <stdint.h>
-#include <semaphore.h>
 
 #include <boost/utility.hpp>
 #include <boost/thread/mutex.hpp>

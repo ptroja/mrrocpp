@@ -3,7 +3,6 @@
 /*                                         Version 2.01  */
 
 /* Standard headers */
-#include <semaphore.h>
 #include <pthread.h>
 
 #include "ui/ui.h"

@@ -10,7 +10,6 @@
 #define __SPEAK_T_H
 
 #include <stdint.h>
-#include <semaphore.h>
 #include <pthread.h>
 
 #include "edp/common/trans_t.h"

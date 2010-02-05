@@ -23,7 +23,6 @@
 #include <sys/iofunc.h>
 #include <sys/dispatch.h>
 #include <devctl.h>			// do devctl()
-#include <semaphore.h>
 
 #include <string.h>
 #include <signal.h>

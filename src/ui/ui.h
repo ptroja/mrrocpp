@@ -8,7 +8,6 @@
 #ifndef __UI_H
 #define __UI_H
 
-#include <semaphore.h>
 #include <pthread.h>
 #include <list>
 

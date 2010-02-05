@@ -9,8 +9,6 @@
 #ifndef __TRANS_T_H
 #define __TRANS_T_H
 
-#include <semaphore.h>
-
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
 #include "lib/com_buf.h"

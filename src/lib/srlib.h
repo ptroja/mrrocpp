@@ -9,7 +9,6 @@
 
 #include <time.h>
 #include <string>
-#include <semaphore.h>
 
 #include <boost/thread/condition_variable.hpp>
 #include <boost/thread/mutex.hpp>

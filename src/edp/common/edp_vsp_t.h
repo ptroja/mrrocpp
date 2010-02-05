@@ -6,7 +6,6 @@
 #define __EDP_VSP_T_H
 
 #include <stdint.h>
-#include <semaphore.h>
 #include <pthread.h>
 
 #include "lib/typedefs.h"

@@ -8,7 +8,6 @@
 // -------------------------------------------------------------------------
 
 #include <stdio.h>
-#include <semaphore.h>
 #include <string.h>
 #include <unistd.h>
 #include <arpa/inet.h>

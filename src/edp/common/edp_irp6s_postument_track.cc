@@ -20,7 +20,6 @@
 #include <sys/wait.h>
 #include <sys/types.h>
 #include <errno.h>
-#include <semaphore.h>
 
 #include <boost/thread/thread.hpp>
 #include <boost/thread/mutex.hpp>
