@@ -49,7 +49,7 @@ public:
 
     int force_tryb;
 
-    void pose_force_torque_at_frame_move (const lib::c_buffer &instruction);
+
 
     void iterate_macrostep(const lib::JointArray begining_joints,
        		const lib::Homog_matrix begining_end_effector_frame,

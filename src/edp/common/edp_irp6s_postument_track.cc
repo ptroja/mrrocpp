@@ -119,7 +119,6 @@ void irp6s_postument_track_effector::set_rmodel(lib::c_buffer &instruction)
 }
 /*--------------------------------------------------------------------------*/
 
-
 /*--------------------------------------------------------------------------*/
 irp6s_postument_track_effector::irp6s_postument_track_effector(lib::configurator &_config, lib::robot_name_t l_robot_name) :
 	manip_effector(_config, l_robot_name)
@@ -161,7 +160,6 @@ void irp6s_postument_track_effector::create_threads()
 #endif
 	motor_driven_effector::hi_create_threads();
 }
-
 
 /*--------------------------------------------------------------------------*/
 void irp6s_postument_track_effector::iterate_macrostep(const lib::JointArray begining_joints, const lib::Homog_matrix begining_end_effector_frame, const lib::c_buffer &instruction, const lib::Xyz_Angle_Axis_vector base_pos_xyz_rot_xyz_vector)
@@ -375,25 +373,6 @@ void irp6s_postument_track_effector::iterate_macrostep(const lib::JointArray beg
 	}
 
 }
-
-/*--------------------------------------------------------------------------*/
-void irp6s_postument_track_effector::pose_force_torque_at_frame_move(const lib::c_buffer &instruction)
-{
-	// WYLICZENIE POZYCJI POCZATKOWEJ
-	lib::JointArray begining_joints(number_of_servos);
-	lib::Homog_matrix begining_end_effector_frame;
-	get_current_kinematic_model()->mp2i_transform(desired_motor_pos_new, begining_joints);
-	get_current_kinematic_model()->i2e_transform(begining_joints, begining_end_effector_frame);
-
-	lib::Xyz_Angle_Axis_vector base_pos_xyz_rot_xyz_vector; // wartosci ruchu pozycyjnego
-
-	// WYZNACZENIE base_pos_xyz_rot_xyz_vector
-	compute_base_pos_xyz_rot_xyz_vector(begining_joints, begining_end_effector_frame, instruction, base_pos_xyz_rot_xyz_vector);
-
-	// macrostep iteration
-	iterate_macrostep(begining_joints, begining_end_effector_frame, instruction, base_pos_xyz_rot_xyz_vector);
-}
-/*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
 void irp6s_postument_track_effector::move_arm(lib::c_buffer &instruction)

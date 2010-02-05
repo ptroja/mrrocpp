@@ -75,14 +75,14 @@ protected:
 	 *
 	 * It is set by the force thread.
 	 */
-    lib::Ft_vector global_force_msr;
+	lib::Ft_vector global_force_msr;
 
 	/*!
 	 * \brief mutex for force global_force_msr
 	 *
 	 * This measueremnt is set by the force thread and get by the transformation thread.
 	 */
-    boost::mutex force_mutex;	// mutex do sily   XXXXXX
+	boost::mutex force_mutex; // mutex do sily   XXXXXX
 
 	/*!
 	 * \brief move arm method for the FRAME command in the single thread variant.
@@ -98,7 +98,6 @@ protected:
 	 */
 	void multi_thread_move_arm(lib::c_buffer &instruction);
 
-
 public:
 
 	/*!
@@ -113,27 +112,29 @@ public:
 	 *
 	 * there are two variants just the servo_current_frame_wo_tool frame and the same frame with removed translation
 	 */
-    lib::Homog_matrix return_current_frame(TRANSLATION_ENUM translation_mode);
+	lib::Homog_matrix return_current_frame(TRANSLATION_ENUM translation_mode);
 
-    void compute_base_pos_xyz_rot_xyz_vector(const lib::JointArray begining_joints,
-    		const lib::Homog_matrix begining_end_effector_frame,
-    		const lib::c_buffer &instruction, lib::Xyz_Angle_Axis_vector& base_pos_xyz_rot_xyz_vector);
+	void
+			compute_base_pos_xyz_rot_xyz_vector(const lib::JointArray begining_joints, const lib::Homog_matrix begining_end_effector_frame, const lib::c_buffer &instruction, lib::Xyz_Angle_Axis_vector& base_pos_xyz_rot_xyz_vector);
 
+	virtual void
+			iterate_macrostep(const lib::JointArray begining_joints, const lib::Homog_matrix begining_end_effector_frame, const lib::c_buffer &instruction, const lib::Xyz_Angle_Axis_vector base_pos_xyz_rot_xyz_vector);
 
+    void pose_force_torque_at_frame_move (const lib::c_buffer &instruction);
 
 	/*!
 	 * \brief method to set global_force_msr with mutex protection.
 	 *
 	 * It is called in the force sensor thread.
 	 */
-    void force_msr_upload(const lib::Ft_vector l_vector);
+	void force_msr_upload(const lib::Ft_vector l_vector);
 
 	/*!
 	 * \brief method to get global_force_msr with mutex protection.
 	 *
 	 * It is called in the transformation thread.
 	 */
-    void force_msr_download(lib::Ft_vector& l_vector);
+	void force_msr_download(lib::Ft_vector& l_vector);
 
 	/*!
 	 * \brief method that computes servo_current_frame_wo_tool
@@ -171,7 +172,6 @@ public:
 	 */
 
 	virtual void get_rmodel(lib::c_buffer &instruction);
-
 
 	/*!
 	 * \brief commonly used part of the get_arm_position method
