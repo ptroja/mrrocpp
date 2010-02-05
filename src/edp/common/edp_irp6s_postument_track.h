@@ -9,7 +9,7 @@
 #define __EDP_IRP6S_P_T_H
 
 #include "edp/common/edp_e_manip.h"
-#include "edp/common/edp_force_sensor.h"
+
 
 namespace mrrocpp {
 namespace edp {
@@ -63,7 +63,7 @@ public:
     void create_threads ();
 
     void set_rmodel (lib::c_buffer &);
-    void get_rmodel (lib::c_buffer &);
+
     void move_arm (lib::c_buffer &);
     void get_arm_position(bool, lib::c_buffer &);
 	void master_order(MT_ORDER nm_task, int nm_tryb);

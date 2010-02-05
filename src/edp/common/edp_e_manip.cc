@@ -128,6 +128,36 @@ void manip_effector::set_rmodel(lib::c_buffer &instruction)
 	//printf(" SET RMODEL: ");
 	switch (instruction.set_rmodel_type)
 	{
+		case lib::FORCE_TOOL:
+			if (vs == NULL) {
+				printf("Nie wlaczono force_tryb=2 w pliku ini\n");
+				break;
+			}
+			{
+				boost::mutex::scoped_lock lock(vs->mtx);
+				vs->new_command_synchroniser.null_command();
+				vs->command = FORCE_SET_TOOL;
+				for (int i = 0; i < 3; i++) {
+					vs->next_force_tool_position[i] = instruction.rmodel.force_tool.position[i];
+				}
+				vs->next_force_tool_weight = instruction.rmodel.force_tool.weight;
+				vs->new_edp_command = true;
+			}
+			vs->new_command_synchroniser.wait();
+			break;
+		case lib::FORCE_BIAS:
+			if (vs == NULL) {
+				printf("Nie wlaczono force_tryb=2 w pliku ini\n");
+				break;
+			}
+			{
+				boost::mutex::scoped_lock lock(vs->mtx);
+				vs->new_command_synchroniser.null_command();
+				vs->command = FORCE_CONFIGURE;
+				vs->new_edp_command = true;
+			}
+			vs->new_command_synchroniser.wait();
+			break;
 		case lib::TOOL_FRAME:
 			//printf("TOOL_FRAME\n");
 			// przepisa specyfikacj do TRANSFORMATORa
@@ -169,6 +199,16 @@ void manip_effector::get_rmodel(lib::c_buffer &instruction)
 	//printf(" GET RMODEL: ");
 	switch (instruction.get_rmodel_type)
 	{
+		case lib::FORCE_TOOL:
+			if (vs == NULL) {
+				printf("Nie wlaczono force_tryb=2 w pliku ini\n");
+				break;
+			}
+			for (int i = 0; i < 3; i++) {
+				reply.rmodel.force_tool.position[i] = vs->current_force_tool_position[i];
+			}
+			reply.rmodel.force_tool.weight = vs->current_force_tool_weight;
+			break;
 		case lib::TOOL_FRAME:
 			//printf("TOOL_FRAME\n");
 			// przepisac specyfikacje z TRANSFORMATORa do bufora wysylkowego

@@ -112,36 +112,6 @@ void irp6s_postument_track_effector::set_rmodel(lib::c_buffer &instruction)
 		case lib::SERVO_ALGORITHM:
 			sb->set_rmodel_servo_algorithm(instruction);
 			break;
-		case lib::FORCE_TOOL:
-			if (vs == NULL) {
-				printf("Nie wlaczono force_tryb=2 w pliku ini\n");
-				break;
-			}
-			{
-				boost::mutex::scoped_lock lock(vs->mtx);
-				vs->new_command_synchroniser.null_command();
-				vs->command = FORCE_SET_TOOL;
-				for (int i = 0; i < 3; i++) {
-					vs->next_force_tool_position[i] = instruction.rmodel.force_tool.position[i];
-				}
-				vs->next_force_tool_weight = instruction.rmodel.force_tool.weight;
-				vs->new_edp_command = true;
-			}
-			vs->new_command_synchroniser.wait();
-			break;
-		case lib::FORCE_BIAS:
-			if (vs == NULL) {
-				printf("Nie wlaczono force_tryb=2 w pliku ini\n");
-				break;
-			}
-			{
-				boost::mutex::scoped_lock lock(vs->mtx);
-				vs->new_command_synchroniser.null_command();
-				vs->command = FORCE_CONFIGURE;
-				vs->new_edp_command = true;
-			}
-			vs->new_command_synchroniser.wait();
-			break;
 		default: // blad: nie istniejca specyfikacja modelu robota
 			// ustawi numer bledu
 			manip_effector::set_rmodel(instruction);
@@ -149,23 +119,6 @@ void irp6s_postument_track_effector::set_rmodel(lib::c_buffer &instruction)
 }
 /*--------------------------------------------------------------------------*/
 
-/*--------------------------------------------------------------------------*/
-void irp6s_postument_track_effector::get_rmodel(lib::c_buffer &instruction)
-{
-	//printf(" GET RMODEL: ");
-	switch (instruction.get_rmodel_type)
-	{
-		case lib::FORCE_TOOL:
-			for (int i = 0; i < 3; i++) {
-				reply.rmodel.force_tool.position[i] = vs->current_force_tool_position[i];
-			}
-			reply.rmodel.force_tool.weight = vs->current_force_tool_weight;
-			break;
-		default: // blad: nie istniejaca specyfikacja modelu robota
-			manip_effector::get_rmodel(instruction);
-	}
-}
-/*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
 irp6s_postument_track_effector::irp6s_postument_track_effector(lib::configurator &_config, lib::robot_name_t l_robot_name) :
@@ -483,7 +436,6 @@ void irp6s_postument_track_effector::iterate_macrostep(const lib::JointArray beg
 
 		get_current_kinematic_model()->i2mp_transform(desired_motor_pos_new_tmp, desired_joints_tmp);
 		// kinematyka nie stwierdzila bledow, przepisanie wartosci
-
 
 		for (int i = 0; i < number_of_servos; i++) {
 			desired_joints[i] = desired_joints_tmp[i];
