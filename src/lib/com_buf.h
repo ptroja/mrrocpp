@@ -707,12 +707,10 @@ typedef union c_buffer_arm
 	//----------------------------------------------------------
 	struct
 	{
-		union {
-			/*!  End's trihedron ralative to the base system. */
-			frame_tab arm_frame;
-			/*! XYZ + end's orientation relative to the base system. */
-			double arm_coordinates[MAX_SERVOS_NR];
-		};
+		/*!  End's trihedron ralative to the base system. */
+		frame_tab arm_frame;
+		/*! XYZ + end's orientation relative to the base system. */
+		double arm_coordinates[MAX_SERVOS_NR];
 		/*! Given torque. */
 		double desired_torque[MAX_SERVOS_NR];
 		double inertia[6], reciprocal_damping[6];
