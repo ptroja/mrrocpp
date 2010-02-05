@@ -42,11 +42,11 @@ Homog_matrix::Homog_matrix()
 		}
 }
 
-Homog_matrix::Homog_matrix(K_vector versor_x, K_vector versor_y, K_vector versor_z, K_vector angles)
+Homog_matrix::Homog_matrix(const K_vector & versor_x, const K_vector & versor_y, const K_vector & versor_z, const K_vector & angles)
 {
 	matrix_m[0][0] = 1;
 	matrix_m[1][0] = versor_x[2] * angles[0] + versor_y[2] * angles[1] + versor_z[2] * angles[2];
-	matrix_m[2][0] = -1* ( versor_x[1]*angles[0]+versor_y[1]*angles[1]+versor_z[1]*angles[2]);
+	matrix_m[2][0] = -1* (versor_x [1]*angles[0]+versor_y[1]*angles[1]+versor_z[1]*angles[2]);
 
 	matrix_m[0][1] = -1*(versor_x[2]*angles[0]+versor_y[2]*angles[1]+versor_z[2]*angles[2]);
 	matrix_m[1][1] = 1;
@@ -59,25 +59,24 @@ Homog_matrix::Homog_matrix(K_vector versor_x, K_vector versor_y, K_vector versor
 	matrix_m[0][3] = 0.0;
 	matrix_m[1][3] = 0.0;
 	matrix_m[2][3] = 0.0;
-
 }
 
-Homog_matrix::Homog_matrix(const Xyz_Euler_Zyz_vector l_vector)
+Homog_matrix::Homog_matrix(const Xyz_Euler_Zyz_vector & l_vector)
 {
 	set_from_xyz_euler_zyz (l_vector);
 }
 
-Homog_matrix::Homog_matrix(const Xyz_Rpy_vector l_vector) {
+Homog_matrix::Homog_matrix(const Xyz_Rpy_vector & l_vector) {
 
 	set_from_xyz_rpy (l_vector);
 }
 
-Homog_matrix::Homog_matrix(const Xyz_Angle_Axis_vector l_vector)
+Homog_matrix::Homog_matrix(const Xyz_Angle_Axis_vector & l_vector)
 {
 	set_from_xyz_angle_axis (l_vector);
 }
 
-Homog_matrix::Homog_matrix(K_vector angles)
+Homog_matrix::Homog_matrix(const K_vector & angles)
 {
 	matrix_m[0][0] = 1;
 	matrix_m[0][0] = angles[2];
@@ -94,60 +93,59 @@ Homog_matrix::Homog_matrix(K_vector angles)
 	matrix_m[0][3] = 0.0;
 	matrix_m[1][3] = 0.0;
 	matrix_m[2][3] = 0.0;
-
 }
 
 Homog_matrix::Homog_matrix(double r[3][3], double t[3])
 {
 	// utworznie macierzy jednorodnej na podstawie
-			// - macierzy rotacji r
-			// - wektora przesuniecia t
+	// - macierzy rotacji r
+	// - wektora przesuniecia t
 
-			// i - i-ta kolumna
-			// j - j-ty wiersz
+	// i - i-ta kolumna
+	// j - j-ty wiersz
 
-			// uzupelnianie macierzy przeksztalcenia wierszami
-			for(int j=0; j<3; j++)
-			{
-				for(int i=0; i<3; i++)
-				matrix_m[i][j] = r[i][j];
+	// uzupelnianie macierzy przeksztalcenia wierszami
+	for(int j=0; j<3; j++)
+	{
+		for(int i=0; i<3; i++)
+		matrix_m[i][j] = r[i][j];
 
-				matrix_m[j][3] = t[j];
-			}//: for
-		}
+		matrix_m[j][3] = t[j];
+	}//: for
+}
 
-		// Utworzenie macierzy jednorodnej na podstawie zawartosci tablicy podanej jako argument.
-		Homog_matrix::Homog_matrix(const frame_tab frame)
-		{
-			set_from_frame_tab(frame);
-		}//: Homog_matrix::Homog_matrix(frame_tab frame)
-
-
-		// kontruktor kopiujacy
-		// jest on uzywany podczas inicjalizacji obiektu w momencie jego tworzenia (np. Homog_matrix B = A;)
-		Homog_matrix::Homog_matrix(const Homog_matrix &wzor)
-		{
-			set_from_frame_tab(wzor.matrix_m);
-		}//: Homog_matrix::Homog_matrix(const Homog_matrix &wzor)
-
-		Homog_matrix::Homog_matrix(double x, double y, double z)
-		{
-			// Tworzy macierz jednorodna
-			// 			| 1 0 0 x |
-			// 			| 0 1 0 y |
-			// 			| 0 0 1 z |
-
-			remove_rotation();
-
-			matrix_m[0][3] = x;
-			matrix_m[1][3] = y;
-			matrix_m[2][3] = z;
-
-		}//: Homog_matrix::Homog_matrix(double x, double y, double z)
+// Utworzenie macierzy jednorodnej na podstawie zawartosci tablicy podanej jako argument.
+Homog_matrix::Homog_matrix(const frame_tab & frame)
+{
+	set_from_frame_tab(frame);
+}//: Homog_matrix::Homog_matrix(frame_tab frame)
 
 
-		// Utworzenie macierzy jednorodnej na podstawie jej 12 elementow (notacja z Craiga)
-		Homog_matrix::Homog_matrix (double r11, double r12, double r13, double t1, double r21, double r22, double r23,double t2, double r31, double r32,
+// kontruktor kopiujacy
+// jest on uzywany podczas inicjalizacji obiektu w momencie jego tworzenia (np. Homog_matrix B = A;)
+Homog_matrix::Homog_matrix(const Homog_matrix & wzor)
+{
+	set_from_frame_tab(wzor.matrix_m);
+}//: Homog_matrix::Homog_matrix(const Homog_matrix &wzor)
+
+Homog_matrix::Homog_matrix(double x, double y, double z)
+{
+	// Tworzy macierz jednorodna
+	// 			| 1 0 0 x |
+	// 			| 0 1 0 y |
+	// 			| 0 0 1 z |
+
+	remove_rotation();
+
+	matrix_m[0][3] = x;
+	matrix_m[1][3] = y;
+	matrix_m[2][3] = z;
+
+}//: Homog_matrix::Homog_matrix(double x, double y, double z)
+
+
+// Utworzenie macierzy jednorodnej na podstawie jej 12 elementow (notacja z Craiga)
+Homog_matrix::Homog_matrix (double r11, double r12, double r13, double t1, double r21, double r22, double r23,double t2, double r31, double r32,
  double r33, double t3)
 {
 	matrix_m[0][0] = r11; 	matrix_m[0][1] = r12; 	matrix_m[0][2] = r13; 	matrix_m[0][3] = t1;
@@ -165,7 +163,7 @@ void Homog_matrix::get_frame_tab(frame_tab frame) const
 
 
 // Ustawienie tablicy, ktora zawiera dane macierzy jednorodnej.
-void Homog_matrix::set_from_frame_tab(const frame_tab frame)
+void Homog_matrix::set_from_frame_tab(const frame_tab & frame)
 {
 	copy_frame_tab(matrix_m, frame);
 }//: set_from_frame_tab
@@ -286,7 +284,7 @@ void Homog_matrix::get_xyz_euler_zyz(Xyz_Euler_Zyz_vector& l_vector) const
 }//: get_xyz_euler_zyz
 
 // Przeksztalcenie do formy XYZ_EULER_ZYZ dla robota IRP_6 MECHATRONIKAi zwrocenie w tablicy.
-void Homog_matrix::get_mech_xyz_euler_zyz(Xyz_Euler_Zyz_vector& l_vector) const
+void Homog_matrix::get_mech_xyz_euler_zyz(Xyz_Euler_Zyz_vector & l_vector) const
 {
 
 	// Przepisanie wyniku do tablicy
@@ -297,7 +295,7 @@ void Homog_matrix::get_mech_xyz_euler_zyz(Xyz_Euler_Zyz_vector& l_vector) const
 	l_vector[5] = matrix_m[0][2];
 }//: get_mech_xyz_euler_zyz
 
-void Homog_matrix::set_from_xyz_euler_zyz(const Xyz_Euler_Zyz_vector l_vector)
+void Homog_matrix::set_from_xyz_euler_zyz(const Xyz_Euler_Zyz_vector & l_vector)
 {
 	// alfa, beta, gamma - Katy Euler'a Z-Y-Z
 	// Zredukowanie katow.
@@ -330,11 +328,10 @@ void Homog_matrix::set_from_xyz_euler_zyz(const Xyz_Euler_Zyz_vector l_vector)
 	matrix_m[0][3] = l_vector[0];
 	matrix_m[1][3] = l_vector[1];
 	matrix_m[2][3] = l_vector[2];
-
 }//: set_from_xyz_euler_zyz
 
 // Wypelnienie wspolczynnikow macierzy na podstawie danych w formie XYZ_EULER_ZYZ dla robota IRP-6_MECHATRONIKA.
-void Homog_matrix::set_from_mech_xyz_euler_zyz(const Xyz_Euler_Zyz_vector l_vector)
+void Homog_matrix::set_from_mech_xyz_euler_zyz(const Xyz_Euler_Zyz_vector & l_vector)
 {
 	// alfa, beta, gamma - Katy Euler'a Z-Y-Z
 	// Zredukowanie katow.
@@ -371,7 +368,7 @@ void Homog_matrix::set_from_mech_xyz_euler_zyz(const Xyz_Euler_Zyz_vector l_vect
 
 // UWAGA ponizsze dwie funckje nie byly testowane - po pozytywnych  testach usunac komentarz
 // Przeksztalcenie do formy XYZ_RPY (rool pitch yaw) i zwrocenie w tablicy.
-void Homog_matrix::get_xyz_rpy(Xyz_Rpy_vector& l_vector) const
+void Homog_matrix::get_xyz_rpy(Xyz_Rpy_vector & l_vector) const
 {
 	// x, y, z
 	l_vector[0] = matrix_m[0][3];
@@ -386,7 +383,7 @@ void Homog_matrix::get_xyz_rpy(Xyz_Rpy_vector& l_vector) const
 
 
 // Wypelnienie wspolczynnikow macierzy na podstawie danych w formie XYZ_RPY.
-void Homog_matrix::set_from_xyz_rpy(const Xyz_Rpy_vector l_vector)
+void Homog_matrix::set_from_xyz_rpy(const Xyz_Rpy_vector & l_vector)
 {
 	// alfa (wokol z) , beta (wokol y), gamma (wokol x)
 	const double c_alfa = cos(l_vector[4]);
@@ -422,7 +419,6 @@ void Homog_matrix::set_from_xyz_quaternion(double eta, double eps1, double eps2,
 {
 	// Macierz rotacji
 
-
 	matrix_m[0][0] = 2*(eta*eta + eps1*eps1) -1;
 	matrix_m[1][0] = 2*(eps1*eps2 + eta*eps3);
 	matrix_m[2][0] = 2*(eps1*eps3 - eta*eps2);
@@ -440,11 +436,10 @@ void Homog_matrix::set_from_xyz_quaternion(double eta, double eps1, double eps2,
 	matrix_m[0][3] = x;
 	matrix_m[1][3] = y;
 	matrix_m[2][3] = z;
-
 }// Homog_matrix::set_from_xyz_quaternion(double eta, K_vector eps, double x, double y, double z)
 
 
-void Homog_matrix::set_from_xyz_angle_axis(const Xyz_Angle_Axis_vector l_vector)  // kat wliczony w os
+void Homog_matrix::set_from_xyz_angle_axis(const Xyz_Angle_Axis_vector & l_vector)  // kat wliczony w os
 {
 	const double alfa = sqrt(l_vector[3]*l_vector[3] + l_vector[4]*l_vector[4] + l_vector[5]*l_vector[5]);
 
@@ -497,7 +492,7 @@ void Homog_matrix::set_from_xyz_angle_axis(const Xyz_Angle_Axis_vector l_vector)
 }
 
 
-void Homog_matrix::get_xyz_angle_axis(Xyz_Angle_Axis_vector& l_vector) const
+void Homog_matrix::get_xyz_angle_axis(Xyz_Angle_Axis_vector & l_vector) const
 {
 	// przeksztalcenie macierzy jednorodnej do rozkazu w formie XYZ_ANGLE_AXIS
 	const double EPS = zero_eps;
@@ -644,7 +639,7 @@ void Homog_matrix::set_value(int i, int j, const double value)
 }//: set_value
 
 // Zwrocenie elementu macierzy.
-void Homog_matrix::get_value(int i, int j, double &value) const
+void Homog_matrix::get_value(int i, int j, double & value) const
 {
 	value = matrix_m[i][j];
 }//: get_value
@@ -855,8 +850,7 @@ int Homog_matrix::operator==(const Homog_matrix & comp) const
 		return(0);			// przekroczony eps
 							// macierze sa rozne
 
-
-return(1);
+	return(1);
 }// end int Homog_matrix::operator==(const Homog_matrix & comp) const
 
 
@@ -897,20 +891,19 @@ int Homog_matrix::operator!=(const Homog_matrix & comp) const
 		return(1);			// przekroczony eps
 							// macierze sa rozne
 
-
-return(0);
+	return(0);
 }// end int Homog_matrix::operator!=(const Homog_matrix & comp) const
 
 double* Homog_matrix::operator[](const int i)
 {
-        //    printf("RHS a[%2d]\n", i );
-        return matrix_m[i];
+	//    printf("RHS a[%2d]\n", i );
+	return matrix_m[i];
 }
 
 const double* Homog_matrix::operator[](const int i) const
 {
-        //    printf("RHS a[%2d]\n", i );
-        return matrix_m[i];
+	//    printf("RHS a[%2d]\n", i );
+	return matrix_m[i];
 }
 
 
@@ -930,7 +923,7 @@ std::ostream&  operator<<(std::ostream & strumien, Homog_matrix & m)
 	}
 	strumien << "0\t\t0\t\t0\t\t1\t\t\n";
 
-return strumien;
+	return strumien;
 }// end operator<<(std::ostream & strumien, Homog_matrix & m)
 
 
@@ -966,7 +959,7 @@ int Homog_matrix::is_valid() const
           return(0);
     }
 
-return(1);
+    return(1);
 }// end Homog_matrix::is_valid() const
 
 
@@ -980,7 +973,7 @@ void Homog_matrix::set_translation_vector(double x, double y, double z)
 
 
 // Ustawienie wektora translacji. Macierz rotacji pozostaje niezmieniona.
-void Homog_matrix::set_translation_vector(const K_vector xyz)
+void Homog_matrix::set_translation_vector(const K_vector & xyz)
 {
 	matrix_m[0][3] = xyz[0];
 	matrix_m[1][3] = xyz[1];
@@ -1030,7 +1023,6 @@ void Homog_matrix::remove_rotation()
 
 Homog_matrix Homog_matrix::return_with_with_removed_translation() const
 {
-
 	// i - i-ta kolumna
 	// j - j-ty wiersz
 
@@ -1047,12 +1039,10 @@ Homog_matrix Homog_matrix::return_with_with_removed_translation() const
 	zwracana.matrix_m[2][3] = 0;
 
 	return zwracana;
-}// end Homog_matrix::operator!()
-
+}
 
 Homog_matrix Homog_matrix::return_with_with_removed_rotation() const
 {
-
 	// i - i-ta kolumna
 	// j - j-ty wiersz
 
@@ -1074,9 +1064,7 @@ Homog_matrix Homog_matrix::return_with_with_removed_rotation() const
 	zwracana.matrix_m[2][3] = matrix_m[2][3];
 
 	return zwracana;
-
-}// end Homog_matrix::operator!()
-
+}
 
 // Zwraca obecny wektor translacji.
 void Homog_matrix::get_translation_vector(double t[3]) const
@@ -1113,5 +1101,5 @@ void Homog_matrix::get_rotation_matrix(double r[3][3]) const
 
 
 } // namespace lib
-			} // namespace mrrocpp
+} // namespace mrrocpp
 
