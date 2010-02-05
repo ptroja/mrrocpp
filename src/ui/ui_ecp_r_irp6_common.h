@@ -57,11 +57,11 @@ public:
 	void get_controller_state(lib::controller_state_t & robot_controller_initial_state_l);
 
 	// Zlecenie ruchu
-	void move_motors(double final_position[MAX_SERVOS_NR]);
-	void move_joints(double final_position[MAX_SERVOS_NR]);
-	void move_xyz_euler_zyz(double final_position[7]);
-	void move_xyz_angle_axis(double final_position[7]);
-	void move_xyz_angle_axis_relative(double position_increment[7]);
+	void move_motors(const double final_position[MAX_SERVOS_NR]);
+	void move_joints(const double final_position[MAX_SERVOS_NR]);
+	void move_xyz_euler_zyz(const double final_position[7]);
+	void move_xyz_angle_axis(const double final_position[7]);
+	void move_xyz_angle_axis_relative(const double position_increment[7]);
 	void set_tool_xyz_angle_axis(const lib::Xyz_Angle_Axis_vector &tool_vector);
 	void set_tool_xyz_euler_zyz(const lib::Xyz_Euler_Zyz_vector &tool_vector);
 	void set_kinematic(uint8_t kinematic_model_no);

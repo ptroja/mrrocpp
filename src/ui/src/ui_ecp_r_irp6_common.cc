@@ -300,7 +300,7 @@ void ui_common_robot::read_tool_xyz_euler_zyz(lib::Xyz_Euler_Zyz_vector &tool_ve
 
 
 // ---------------------------------------------------------------
-void ui_common_robot::move_motors(double final_position[])
+void ui_common_robot::move_motors(const double final_position[])
 {
 	// Zlecenie wykonania makrokroku ruchu zadanego dla walow silnikow
 	int nr_of_steps, nr_ang, nr_grip; // Liczba krokow
@@ -378,7 +378,7 @@ void ui_common_robot::move_motors(double final_position[])
 // ---------------------------------------------------------------
 
 // ---------------------------------------------------------------
-void ui_common_robot::move_joints(double final_position[])
+void ui_common_robot::move_joints(const double final_position[])
 {
 	// Zlecenie wykonania makrokroku ruchu zadanego dla wspolrzednych wewnetrznych
 	int nr_of_steps; // Liczba krokow
@@ -436,7 +436,7 @@ void ui_common_robot::move_joints(double final_position[])
 // ---------------------------------------------------------------
 
 // ---------------------------------------------------------------
-void ui_common_robot::move_xyz_euler_zyz(double final_position[7])
+void ui_common_robot::move_xyz_euler_zyz(const double final_position[7])
 {
 	// Zlecenie wykonania makrokroku ruchu zadanego we wspolrzednych
 	// zewnetrznych: xyz i katy Euler'a Z-Y-Z
@@ -496,7 +496,7 @@ void ui_common_robot::move_xyz_euler_zyz(double final_position[7])
 // ---------------------------------------------------------------
 
 
-void ui_common_robot::move_xyz_angle_axis(double final_position[7])
+void ui_common_robot::move_xyz_angle_axis(const double final_position[7])
 {
 	for(int i = 0; i < 7; ++i) {
 		printf("%f ", final_position[i]);
@@ -576,7 +576,7 @@ void ui_common_robot::move_xyz_angle_axis(double final_position[7])
 	current_position[6] = ecp->reply_package.arm.pf_def.gripper_coordinate;
 }
 
-void ui_common_robot::move_xyz_angle_axis_relative(double position_increment[7])
+void ui_common_robot::move_xyz_angle_axis_relative(const double position_increment[7])
 {
 	int nr_of_steps; // Liczba krokow
 	int nr_ang, nr_lin, nr_grip;
