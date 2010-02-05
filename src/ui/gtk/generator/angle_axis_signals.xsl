@@ -112,11 +112,7 @@ extern "C"
 				robot_<xsl:value-of select="$fullName" />->move_xyz_angle_axis(<xsl:value-of select="$name" />_desired_pos_a);
 				
 				if (state_<xsl:value-of select="$fullName" />.is_synchronised) {
-		<xsl:call-template name="irp6.axis.ts.repeat.signals.cc.execute.3">
-	    		<xsl:with-param name="xyz_angle_axis" select="$xyz_angle_axis"/>
-				<xsl:with-param name="name" select="$name"/>
-				<xsl:with-param name="i" select="1"/>
-	 		</xsl:call-template>  
+					on_read_button_clicked_<xsl:value-of select="$fullName" />_xyz_angle_axis(NULL, userdata);
 				}
 			}
 		<xsl:call-template name="catch" />
@@ -275,29 +271,6 @@ extern "C"
 	<!-- for loop --> 
        <xsl:if test="$i &lt;= $xyz_angle_axis">
           <xsl:call-template name="irp6.axis.ts.repeat.signals.cc.execute.2">
-              <xsl:with-param name="i">
-                  <xsl:value-of select="$i + 1"/>
-              </xsl:with-param>
-              <xsl:with-param name="xyz_angle_axis">
-                  <xsl:value-of select="$xyz_angle_axis"/>
-              </xsl:with-param>
-              <xsl:with-param name="name">
-                  <xsl:value-of select="$name"/>
-              </xsl:with-param>
-          </xsl:call-template>
-       </xsl:if>
-</xsl:template>
-
-<!-- irp6 servo algorithm repeatable part -->
-<xsl:template name="irp6.axis.ts.repeat.signals.cc.execute.3">
-<xsl:param name="xyz_angle_axis"/>
-<xsl:param name="name"/>
-<xsl:param name="i"/>
-	<xsl:if test="$i &lt;= $xyz_angle_axis">gtk_spin_button_set_value(spin<xsl:value-of select="$i" />_xyz_angle_axis_<xsl:value-of select="$name" />, <xsl:value-of select="$name" />_desired_pos_a[<xsl:value-of select="($i - 1)" />]);
-	</xsl:if>
-	<!-- for loop --> 
-       <xsl:if test="$i &lt;= $xyz_angle_axis">
-          <xsl:call-template name="irp6.axis.ts.repeat.signals.cc.execute.3">
               <xsl:with-param name="i">
                   <xsl:value-of select="$i + 1"/>
               </xsl:with-param>
