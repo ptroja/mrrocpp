@@ -435,7 +435,7 @@ void irp6s_postument_track_effector::get_arm_position(bool read_hardware, lib::c
 
 	reply.servo_step = step_counter;
 
-	if (instruction.interpolation_type == lib::TCIM) {
+	if (force_tryb>0){
 		lib::Homog_matrix current_frame_wo_offset = return_current_frame(WITHOUT_TRANSLATION);
 		lib::Ft_tr ft_tr_inv_current_frame_matrix(!current_frame_wo_offset);
 

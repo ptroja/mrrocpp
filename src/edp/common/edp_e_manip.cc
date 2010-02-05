@@ -164,7 +164,7 @@ void manip_effector::get_arm_position_with_force_and_sb(bool read_hardware, lib:
 
 	reply.servo_step = step_counter;
 
-	if (instruction.interpolation_type == lib::TCIM) {
+	if (force_tryb>0){
 		lib::Homog_matrix current_frame_wo_offset = return_current_frame(WITHOUT_TRANSLATION);
 		lib::Ft_tr ft_tr_inv_current_frame_matrix(!current_frame_wo_offset);
 
