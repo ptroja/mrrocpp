@@ -102,6 +102,10 @@ public:
 
     int force_tryb;
 
+
+
+    void get_arm_position_with_force_and_sb(bool, lib::c_buffer &);
+
 	/*!
 	 * \brief manip_effector class constructor
 	 *
