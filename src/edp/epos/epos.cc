@@ -4,7 +4,7 @@
 
  \addtogroup libEPOS Library to control an EPOS motor control unit
 
- @{
+ \@{
  */
 
 #include <stdio.h>   /* Standard input/output definitions */
@@ -1730,7 +1730,7 @@ bool epos::bitcmp(WORD a, WORD b) const
 	return ((a & b) == b) ? true : false;
 }
 
-//! @}
+//! \@}
 
 } /* namespace edp */
 } /* namespace mrrocpp */
