@@ -100,10 +100,18 @@ protected:
 
 public:
 
+	/*!
+	 * \brief variable to memorize if the force_control is active
+	 *
+	 * It is set from the configuration file
+	 */
     int force_tryb;
 
-
-
+	/*!
+	 * \brief geat_arm_position methos with servo_buffer and force measurement
+	 *
+	 * One of the variant of get_arm_position method commonly choosen in inherited robots.
+	 */
     void get_arm_position_with_force_and_sb(bool, lib::c_buffer &);
 
 	/*!
@@ -120,12 +128,29 @@ public:
 	 */
 	lib::Homog_matrix return_current_frame(TRANSLATION_ENUM translation_mode);
 
+	/*!
+	 * \brief computation of the base_pos_xyz_rot_xyz_vector.
+	 *
+	 * For the purpose of the position-force control. It is called once from the pose_force_torque_at_frame_move.
+	 */
 	void
 			compute_base_pos_xyz_rot_xyz_vector(const lib::JointArray begining_joints, const lib::Homog_matrix begining_end_effector_frame, const lib::c_buffer &instruction, lib::Xyz_Angle_Axis_vector& base_pos_xyz_rot_xyz_vector);
 
+	/*!
+	 * \brief Iteration (interpolation) of the position-force control motion.
+	 *
+	 * It bases on the pose_force_torque_at_frame_move and other ECP command arguments.
+	 */
 	virtual void
 			iterate_macrostep(const lib::JointArray begining_joints, const lib::Homog_matrix begining_end_effector_frame, const lib::c_buffer &instruction, const lib::Xyz_Angle_Axis_vector base_pos_xyz_rot_xyz_vector);
 
+
+	/*!
+	 * \brief pose-force command execution
+	 *
+	 * The main function of the pose-force command execution (interpolation)
+	 * It calls compute_base_pos_xyz_rot_xyz_vector and iterate_macrostep methods.
+	 */
     void pose_force_torque_at_frame_move (const lib::c_buffer &instruction);
 
 	/*!
@@ -176,7 +201,6 @@ public:
 	 * The model consists of tool_frame and models handled in set_rmodel method of motor_driven_effector called here.
 	 * Then it is sent to the ECP.
 	 */
-
 	virtual void get_rmodel(lib::c_buffer &instruction);
 
 	/*!
