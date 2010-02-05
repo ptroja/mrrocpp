@@ -450,23 +450,37 @@ void manip_effector::single_thread_move_arm(lib::c_buffer &instruction)
 }
 /*--------------------------------------------------------------------------*/
 
+
 /*--------------------------------------------------------------------------*/
 void manip_effector::multi_thread_move_arm(lib::c_buffer &instruction)
 { // przemieszczenie ramienia
 	// Wypenienie struktury danych transformera na podstawie parametrow polecenia
 	// otrzymanego z ECP. Zlecenie transformerowi przeliczenie wspolrzednych
 
-	switch (instruction.set_arm_type)
+
+	switch (instruction.interpolation_type)
 	{
-		case lib::FRAME:
-			compute_frame(instruction);
-			move_servos();
-			mt_tt_obj->trans_t_to_master_synchroniser.command();
+		case lib::MIM:
+			switch (instruction.set_arm_type)
+			{
+				case lib::FRAME:
+					compute_frame(instruction);
+					move_servos();
+					mt_tt_obj->trans_t_to_master_synchroniser.command();
+
+					break;
+				default: // blad: niezdefiniowany sposb specyfikacji pozycji koncowki
+					motor_driven_effector::multi_thread_move_arm(instruction);
+			}
+			break;
+		case lib::TCIM:
+			pose_force_torque_at_frame_move(instruction);
 
 			break;
-		default: // blad: niezdefiniowany sposb specyfikacji pozycji koncowki
-			motor_driven_effector::multi_thread_move_arm(instruction);
+		default:
+			break;
 	}
+
 }
 /*--------------------------------------------------------------------------*/
 

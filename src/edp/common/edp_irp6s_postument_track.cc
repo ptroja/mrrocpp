@@ -380,18 +380,8 @@ void irp6s_postument_track_effector::move_arm(lib::c_buffer &instruction)
 	// Wypenienie struktury danych transformera na podstawie parametrow polecenia
 	// otrzymanego z ECP. Zlecenie transformerowi przeliczenie wspolrzednych
 
-	switch (instruction.interpolation_type)
-	{
-		case lib::MIM:
-			manip_effector::multi_thread_move_arm(instruction);
-			break;
-		case lib::TCIM:
-			pose_force_torque_at_frame_move(instruction);
+	manip_effector::multi_thread_move_arm(instruction);
 
-			break;
-		default:
-			break;
-	}
 }
 /*--------------------------------------------------------------------------*/
 
@@ -479,12 +469,14 @@ bool irp6s_postument_track_effector::compute_servo_joints_and_frame(void)
 
 	if (!(manip_effector::compute_servo_joints_and_frame())) {
 		ret_val = false;
-	} else {
+	} else if (vs != NULL) {
+
 		boost::mutex::scoped_lock lock(vs->mtx);
 		if ((force_tryb > 0) && (is_synchronised()) && (!(vs->is_sensor_configured))) {
 			vs->new_edp_command = true;
 			vs->command = FORCE_CONFIGURE;
 		}
+
 	}
 	return ret_val;
 }
