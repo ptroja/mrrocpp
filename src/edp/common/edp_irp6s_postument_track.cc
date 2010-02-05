@@ -125,11 +125,6 @@ irp6s_postument_track_effector::irp6s_postument_track_effector(lib::configurator
 {
 	// czujnik sil nie zostal jeszcze skonfigurowany po synchronizacji robota
 
-	if (config.exists("force_tryb"))
-		force_tryb = config.value <int> ("force_tryb");
-	else
-		force_tryb = 0;
-
 	// ustalenie ilosci stopni swobody dla funkcji obslugi przerwania i synchronizacji w zaleznosci od aktywnosci chwytaka
 	if (config.exists("is_gripper_active"))
 		is_gripper_active = config.value <int> ("is_gripper_active");
@@ -385,6 +380,7 @@ void irp6s_postument_track_effector::move_arm(lib::c_buffer &instruction)
 }
 /*--------------------------------------------------------------------------*/
 
+
 /*--------------------------------------------------------------------------*/
 void irp6s_postument_track_effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 { // odczytanie pozycji ramienia
@@ -461,25 +457,6 @@ void irp6s_postument_track_effector::get_arm_position(bool read_hardware, lib::c
 }
 /*--------------------------------------------------------------------------*/
 
-// sprawdza stan EDP zaraz po jego uruchomieniu
-
-bool irp6s_postument_track_effector::compute_servo_joints_and_frame(void)
-{
-	bool ret_val = true;
-
-	if (!(manip_effector::compute_servo_joints_and_frame())) {
-		ret_val = false;
-	} else if (vs != NULL) {
-
-		boost::mutex::scoped_lock lock(vs->mtx);
-		if ((force_tryb > 0) && (is_synchronised()) && (!(vs->is_sensor_configured))) {
-			vs->new_edp_command = true;
-			vs->command = FORCE_CONFIGURE;
-		}
-
-	}
-	return ret_val;
-}
 
 } // namespace common
 } // namespace edp

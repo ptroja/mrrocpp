@@ -47,7 +47,7 @@ public:
 
 	irp6s_postument_track_effector (lib::configurator &_config, lib::robot_name_t l_robot_name );       // konstruktor
 
-    int force_tryb;
+
 
 
 
@@ -55,8 +55,6 @@ public:
        		const lib::Homog_matrix begining_end_effector_frame,
        		const lib::c_buffer &instruction, const lib::Xyz_Angle_Axis_vector base_pos_xyz_rot_xyz_vector);
 
-
-    bool compute_servo_joints_and_frame(void);// by Y
 
     void create_threads ();
 

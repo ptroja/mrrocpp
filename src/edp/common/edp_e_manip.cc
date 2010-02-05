@@ -80,6 +80,16 @@ bool manip_effector::compute_servo_joints_and_frame(void)
 			// Obliczenie polozenia robota we wsp. zewnetrznych bez narzedzia.
 			((mrrocpp::kinematics::common::kinematic_model_with_tool*) get_current_kinematic_model())->i2e_wo_tool_transform(servo_current_joints, servo_current_frame_wo_tool);
 
+			if (vs != NULL) {
+
+				boost::mutex::scoped_lock lock(vs->mtx);
+				if ((force_tryb > 0) && (is_synchronised()) && (!(vs->is_sensor_configured))) {
+					vs->new_edp_command = true;
+					vs->command = FORCE_CONFIGURE;
+				}
+
+			}
+
 			catch_nr = 0;
 
 		}//: try
@@ -97,6 +107,13 @@ bool manip_effector::compute_servo_joints_and_frame(void)
 manip_effector::manip_effector(lib::configurator &_config, lib::robot_name_t l_robot_name) :
 	motor_driven_effector(_config, l_robot_name)
 {
+
+	if (config.exists("force_tryb"))
+		force_tryb = config.value <int> ("force_tryb");
+	else
+		force_tryb = 0;
+
+
 }
 
 /*--------------------------------------------------------------------------*/
@@ -449,7 +466,6 @@ void manip_effector::single_thread_move_arm(lib::c_buffer &instruction)
 
 }
 /*--------------------------------------------------------------------------*/
-
 
 /*--------------------------------------------------------------------------*/
 void manip_effector::multi_thread_move_arm(lib::c_buffer &instruction)

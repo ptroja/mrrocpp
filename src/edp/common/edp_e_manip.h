@@ -100,6 +100,8 @@ protected:
 
 public:
 
+    int force_tryb;
+
 	/*!
 	 * \brief manip_effector class constructor
 	 *
