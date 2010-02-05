@@ -83,7 +83,7 @@ sr::~sr(void) {
 	name_close(fd);
 }
 
-int sr::send_package_to_sr(sr_package_t & sr_mess)
+int sr::send_package_to_sr(const sr_package_t & sr_mess)
 {
 	int16_t status;
 	sr_mess.hdr.type=0;
@@ -107,7 +107,7 @@ multi_thread(_multi_thread), cb(SR_BUFFER_LENGHT)
 		}
 	}
 
-	assert(ch != NULL);
+	assert(ch);
 
 	memset(&sr_message, 0, sizeof(sr_message));
 
@@ -142,9 +142,9 @@ sr::~sr(void) {
 	}
 }
 
-int sr::send_package_to_sr(sr_package_t & sr_mess)
+int sr::send_package_to_sr(const sr_package_t & sr_mess)
 {
-	return messip::port_send_sync(ch, 0, 0, sr_message);
+	return messip::port_send_sync(ch, 0, 0, sr_mess);
 }
 #endif /* !USE_MESSIP_SRR */
 

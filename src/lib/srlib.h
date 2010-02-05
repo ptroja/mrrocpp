@@ -73,12 +73,10 @@ private:
 
 	boost::mutex srMutex; //! one-thread a time access mutex
 
-
-
 	void wait_for_new_msg(); // oczekiwanie na semafor
 
 	int send_package(void);
-	int send_package_to_sr(sr_package_t& sr_mess);
+	int send_package_to_sr(const sr_package_t& sr_mess);
 
 	const bool multi_thread;
 	boost::thread *thread_id;
