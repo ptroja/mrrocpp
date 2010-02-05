@@ -115,6 +115,12 @@ public:
 	 */
     lib::Homog_matrix return_current_frame(TRANSLATION_ENUM translation_mode);
 
+    void compute_base_pos_xyz_rot_xyz_vector(const lib::JointArray begining_joints,
+    		const lib::Homog_matrix begining_end_effector_frame,
+    		const lib::c_buffer &instruction, lib::Xyz_Angle_Axis_vector& base_pos_xyz_rot_xyz_vector);
+
+
+
 	/*!
 	 * \brief method to set global_force_msr with mutex protection.
 	 *
