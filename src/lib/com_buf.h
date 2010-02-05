@@ -301,11 +301,11 @@ typedef enum _PROCESS_TYPE {
  *  Definitions for available values of set_type i get_type.
  *  @author yoyek
  */
-#define CONTROLLER_STATE_DV                     0x08
-#define ARM_DV                                  0x04
-#define RMODEL_DV                               0x02
-#define OUTPUTS_DV                              0x01
-#define NOTHING_DV                              0x00
+#define CONTROLLER_STATE_DEFINITION                     0x08
+#define ARM_DEFINITION                                  0x04
+#define RMODEL_DEFINITION                               0x02
+#define OUTPUTS_DEFINITION                              0x01
+#define NOTHING_DEFINITION                              0x00
 
 //------------------------------------------------------------------------------
 /*! Error numbers generated in EDP.	*/

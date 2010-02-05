@@ -856,7 +856,7 @@ void smooth::send_coordinates() {
 	int gripp; //os grippera
 
 	the_robot->ecp_command.instruction.instruction_type = lib::SET; //ustawienie parametrow ruchu w edp_data
-	the_robot->ecp_command.instruction.get_type = NOTHING_DV; //ponizej w caseach jest dalsze ustawianie
+	the_robot->ecp_command.instruction.get_type = NOTHING_DEFINITION; //ponizej w caseach jest dalsze ustawianie
 	the_robot->ecp_command.instruction.get_arm_type = lib::INVALID_END_EFFECTOR;
 	the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
 	the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
@@ -963,8 +963,8 @@ bool smooth::first_step() { //wywolywane tylko raz w calej trajektorii
 
     first_interval=true;//to chyba nie jest potrzebne bo ustawianie first_interval jest takze na poczatku calculate()
 
-    the_robot->ecp_command.instruction.get_type = ARM_DV;
-    the_robot->ecp_command.instruction.set_type = ARM_DV;
+    the_robot->ecp_command.instruction.get_type = ARM_DEFINITION;
+    the_robot->ecp_command.instruction.set_type = ARM_DEFINITION;
     the_robot->ecp_command.instruction.instruction_type = lib::GET;
 
     switch ( td.arm_type ) {

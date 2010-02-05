@@ -423,11 +423,11 @@ bool teach_tmp::first_step()
     //	 printf("w irp6ot_teach_in_generator::first_step\n");
  //printf(stderr, "DEBUG@%s:%d\n", __FILE__, __LINE__);
     initiate_pose_list();
-    the_robot->ecp_command.instruction.get_type = ARM_DV; // ARM
+    the_robot->ecp_command.instruction.get_type = ARM_DEFINITION; // ARM
 
     the_robot->ecp_command.instruction.instruction_type = lib::GET;
-    the_robot->ecp_command.instruction.get_type = ARM_DV;
-    the_robot->ecp_command.instruction.set_type = ARM_DV;
+    the_robot->ecp_command.instruction.get_type = ARM_DEFINITION;
+    the_robot->ecp_command.instruction.set_type = ARM_DEFINITION;
     the_robot->ecp_command.instruction.set_arm_type = lib::MOTOR;
     the_robot->ecp_command.instruction.get_arm_type = lib::MOTOR;
     the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
@@ -465,7 +465,7 @@ bool teach_tmp::next_step()
     case lib::ECP_MOTOR:
   //  	fprintf(stderr, "DEBUG@%s:%d\n", __FILE__, __LINE__);
       the_robot->ecp_command.instruction.instruction_type = lib::SET;
-      the_robot->ecp_command.instruction.set_type = ARM_DV; // ARM
+      the_robot->ecp_command.instruction.set_type = ARM_DEFINITION; // ARM
       the_robot->ecp_command.instruction.set_arm_type = lib::MOTOR;
       the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
       the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
@@ -477,7 +477,7 @@ bool teach_tmp::next_step()
     case lib::ECP_JOINT:
   //   	fprintf(stderr, "DEBUG@%s:%d\n", __FILE__, __LINE__);
       the_robot->ecp_command.instruction.instruction_type = lib::SET;
-      the_robot->ecp_command.instruction.set_type = ARM_DV; // ARM
+      the_robot->ecp_command.instruction.set_type = ARM_DEFINITION; // ARM
       the_robot->ecp_command.instruction.set_arm_type = lib::JOINT;
       the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
       the_robot->ecp_command.instruction.interpolation_type = lib::MIM;

@@ -341,7 +341,7 @@ bool motor_driven_effector::pre_synchro_motion(lib::c_buffer &instruction) const
 // sprawdzenie czy jest to dopuszczalny rozkaz ruchu
 // przed wykonaniem synchronizacji robota
 {
-	if ((instruction.instruction_type == lib::SET) && (instruction.set_type == ARM_DV) && (instruction.set_arm_type
+	if ((instruction.instruction_type == lib::SET) && (instruction.set_type == ARM_DEFINITION) && (instruction.set_arm_type
 			== lib::MOTOR) && (instruction.motion_type == lib::RELATIVE))
 		return true;
 	else

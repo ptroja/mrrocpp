@@ -24,8 +24,8 @@ bool wii_velocity::first_step()
 	tool_frame.get_frame_tab(the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame);
 
 	the_robot->ecp_command.instruction.instruction_type = lib::GET;
-	the_robot->ecp_command.instruction.get_type = ARM_DV; // arm - ORYGINAL
-	the_robot->ecp_command.instruction.set_type = ARM_DV | RMODEL_DV;
+	the_robot->ecp_command.instruction.get_type = ARM_DEFINITION; // arm - ORYGINAL
+	the_robot->ecp_command.instruction.set_type = ARM_DEFINITION | RMODEL_DV;
 	the_robot->ecp_command.instruction.set_rmodel_type = lib::TOOL_FRAME;
 	the_robot->ecp_command.instruction.get_rmodel_type = lib::TOOL_FRAME;
 	the_robot->ecp_command.instruction.set_arm_type = lib::PF_VELOCITY;

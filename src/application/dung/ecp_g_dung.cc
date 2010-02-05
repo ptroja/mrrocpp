@@ -42,8 +42,8 @@ bool dung::first_step()
     tool_frame.get_frame_tab(the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame);
 
     the_robot->ecp_command.instruction.instruction_type = lib::GET;
-    the_robot->ecp_command.instruction.get_type = ARM_DV; // arm - ORYGINAL
-    the_robot->ecp_command.instruction.set_type = ARM_DV;
+    the_robot->ecp_command.instruction.get_type = ARM_DEFINITION; // arm - ORYGINAL
+    the_robot->ecp_command.instruction.set_type = ARM_DEFINITION;
     the_robot->ecp_command.instruction.set_arm_type = lib::JOINT;
     the_robot->ecp_command.instruction.get_arm_type = lib::JOINT;
     the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;

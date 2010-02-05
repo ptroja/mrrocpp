@@ -118,7 +118,7 @@ bool operator_reaction_condition::next_step ()
 
 	// Stworzenie rozkazu odczytu wspolrzednych kartezjanskich
 	the_robot->ecp_command.instruction.instruction_type = lib::GET;
-	the_robot->ecp_command.instruction.get_type = ARM_DV; // ARM
+	the_robot->ecp_command.instruction.get_type = ARM_DEFINITION; // ARM
 //  the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_EULER_ZYZ;// W.S.
 	the_robot->ecp_command.instruction.get_arm_type = lib::MOTOR;
 

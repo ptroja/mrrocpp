@@ -73,9 +73,9 @@ void wii_absolute::set_position(void)
 bool wii_absolute::first_step()
 {
     the_robot->ecp_command.instruction.instruction_type = lib::GET;
-    the_robot->ecp_command.instruction.set_type = ARM_DV;
+    the_robot->ecp_command.instruction.set_type = ARM_DEFINITION;
     the_robot->ecp_command.instruction.set_arm_type = lib::FRAME;
-    the_robot->ecp_command.instruction.get_type = ARM_DV;
+    the_robot->ecp_command.instruction.get_type = ARM_DEFINITION;
     the_robot->ecp_command.instruction.get_arm_type = lib::FRAME;
     the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
     the_robot->ecp_command.instruction.interpolation_type = lib::MIM;

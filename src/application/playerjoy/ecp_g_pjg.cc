@@ -26,8 +26,8 @@ bool playerjoy::first_step ( )
     second_step = false;
 
     the_robot->ecp_command.instruction.instruction_type = lib::GET;
-    the_robot->ecp_command.instruction.get_type = ARM_DV; // arm - ORYGINAL
-    the_robot->ecp_command.instruction.set_type = ARM_DV;
+    the_robot->ecp_command.instruction.get_type = ARM_DEFINITION; // arm - ORYGINAL
+    the_robot->ecp_command.instruction.set_type = ARM_DEFINITION;
 
     the_robot->ecp_command.instruction.set_arm_type = lib::JOINT;
     the_robot->ecp_command.instruction.get_arm_type = lib::JOINT;
@@ -54,8 +54,8 @@ bool playerjoy::next_step ( )
 
     // Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
     the_robot->ecp_command.instruction.instruction_type = lib::SET;
-    the_robot->ecp_command.instruction.set_type = ARM_DV;
-    the_robot->ecp_command.instruction.get_type = NOTHING_DV;
+    the_robot->ecp_command.instruction.set_type = ARM_DEFINITION;
+    the_robot->ecp_command.instruction.get_type = NOTHING_DEFINITION;
     the_robot->ecp_command.instruction.get_arm_type = lib::INVALID_END_EFFECTOR;
 
 

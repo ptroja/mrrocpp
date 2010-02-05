@@ -39,43 +39,43 @@ c_buffer::c_buffer (void) :
 // odczytac XXX co?
 bool c_buffer::is_get_controller_state() const
 {
-	return get_type & CONTROLLER_STATE_DV;
+	return get_type & CONTROLLER_STATE_DEFINITION;
 }
 
 // odczytac wejscia?
 bool c_buffer::is_get_inputs() const
 {
-	return get_type & OUTPUTS_DV;
+	return get_type & OUTPUTS_DEFINITION;
 }
 
 // odczytac narzedzie?
 bool c_buffer::is_get_rmodel() const
 {
-	return get_type & RMODEL_DV;
+	return get_type & RMODEL_DEFINITION;
 }
 
 // odczytac polozenie ramienia?
 bool c_buffer::is_get_arm() const
 {
-	return get_type & ARM_DV;
+	return get_type & ARM_DEFINITION;
 }
 
 // ustawic wyjscia?
 bool c_buffer::is_set_outputs() const
 {
-	return set_type & OUTPUTS_DV;
+	return set_type & OUTPUTS_DEFINITION;
 }
 
 // zmienic narzedzie?
 bool c_buffer::is_set_rmodel() const
 {
-	return set_type & RMODEL_DV;
+	return set_type & RMODEL_DEFINITION;
 }
 
 // zmienic polozenie ramienia?
 bool c_buffer::is_set_arm() const
 {
-	return set_type & ARM_DV;
+	return set_type & ARM_DEFINITION;
 }
 
 } // namespace lib

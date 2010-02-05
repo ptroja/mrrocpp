@@ -55,8 +55,8 @@ bool haptic::first_step()
 	td.value_in_step_no = td.internode_step_no - 2;
 	irp6ot->mp_command.command = lib::NEXT_POSE;
 	irp6ot->mp_command.instruction.instruction_type = lib::GET;
-	irp6ot->mp_command.instruction.get_type = ARM_DV;
-	irp6ot->mp_command.instruction.set_type = ARM_DV | RMODEL_DV;
+	irp6ot->mp_command.instruction.get_type = ARM_DEFINITION;
+	irp6ot->mp_command.instruction.set_type = ARM_DEFINITION | RMODEL_DV;
 	irp6ot->mp_command.instruction.set_rmodel_type = lib::TOOL_FRAME;
 	irp6ot->mp_command.instruction.get_rmodel_type = lib::TOOL_FRAME;
 	irp6ot->mp_command.instruction.set_arm_type = lib::PF_VELOCITY;
@@ -96,8 +96,8 @@ bool haptic::first_step()
 
 	irp6p->mp_command.command = lib::NEXT_POSE;
 	irp6p->mp_command.instruction.instruction_type = lib::GET;
-	irp6p->mp_command.instruction.get_type = ARM_DV;
-	irp6p->mp_command.instruction.set_type = ARM_DV | RMODEL_DV;
+	irp6p->mp_command.instruction.get_type = ARM_DEFINITION;
+	irp6p->mp_command.instruction.set_type = ARM_DEFINITION | RMODEL_DV;
 	irp6p->mp_command.instruction.set_rmodel_type = lib::TOOL_FRAME;
 	irp6p->mp_command.instruction.get_rmodel_type = lib::TOOL_FRAME;
 	irp6p->mp_command.instruction.set_arm_type = lib::FRAME;

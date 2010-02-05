@@ -75,7 +75,7 @@ ecp_vis_pb_eih_irp6ot::ecp_vis_pb_eih_irp6ot(common::task::task& _ecp_task, int 
 
 bool ecp_vis_pb_eih_irp6ot::next_step_without_constraints(){
 
-	the_robot->ecp_command.instruction.set_type = ARM_DV;
+	the_robot->ecp_command.instruction.set_type = ARM_DEFINITION;
 	the_robot->ecp_command.instruction.instruction_type = lib::SET_GET;
 
 	//G_Tx_G2.set_from_xyz_euler_zyz( 0,0,0, 0.002, 1.481+0.03, 2.341);	//jesli chwytamy po przekatnej
@@ -303,8 +303,8 @@ bool ecp_vis_pb_eih_irp6ot::first_step(void){
 	the_robot->ecp_command.instruction.rmodel.tool_frame_def.tool_frame[2][3]=0.25;
 
 	the_robot->ecp_command.instruction.instruction_type = lib::SET_GET;
-	the_robot->ecp_command.instruction.get_type = ARM_DV;
-	the_robot->ecp_command.instruction.set_type = RMODEL_DV;
+	the_robot->ecp_command.instruction.get_type = ARM_DEFINITION;
+	the_robot->ecp_command.instruction.set_type = RMODEL_DEFINITION;
 	the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
 	the_robot->ecp_command.instruction.get_arm_type = lib::FRAME;
 	the_robot->ecp_command.instruction.set_rmodel_type = lib::TOOL_FRAME;

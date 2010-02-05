@@ -237,8 +237,8 @@ bool vis_sac_lx::first_step()
 
 	//	the_robot->EDP_data.mp_command = lib::NEXT_POSE;
 	the_robot->ecp_command.instruction.instruction_type = lib::SET_GET; //GET;
-	the_robot->ecp_command.instruction.get_type = ARM_DV;
-	the_robot->ecp_command.instruction.set_type = RMODEL_DV; //ARM_DV;
+	the_robot->ecp_command.instruction.get_type = ARM_DEFINITION;
+	the_robot->ecp_command.instruction.set_type = RMODEL_DEFINITION; //ARM_DV;
 	//the_robot->ecp_command.instruction.set_arm_type = lib::FRAME; //XYZ_EULER_ZYZ; //POSE_FORCE_TORQUE_AT_FRAME;
 	//the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
 //	the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
@@ -291,9 +291,9 @@ bool vis_sac_lx::next_step()
 	// UWAGA: dzialamy na jednoelementowej liscie robotow
 
 
-	 	the_robot->ecp_command.instruction.set_type = ARM_DV;
+	 	the_robot->ecp_command.instruction.set_type = ARM_DEFINITION;
 		the_robot->ecp_command.instruction.instruction_type = lib::SET_GET;
-	  	//the_robot->ecp_command.instruction.get_type = NOTHING_DV;
+	  	//the_robot->ecp_command.instruction.get_type = NOTHING_DEFINITION;
 	 	//the_robot->ecp_command.instruction.get_arm_type = lib::INVALID_END_EFFECTOR;
 	 	//the_robot->ecp_command.instruction.get_arm_type = lib::INVALID_END_EFFECTOR;
 

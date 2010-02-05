@@ -36,7 +36,7 @@ bool cvfradia::first_step()
 {
 	// Set robot parameters.
 /*	the_robot->ecp_command.instruction.instruction_type = lib::GET;
-	the_robot->ecp_command.instruction.get_type = ARM_DV;
+	the_robot->ecp_command.instruction.get_type = ARM_DEFINITION;
 	the_robot->ecp_command.instruction.get_arm_type = lib::FRAME;
 	the_robot->ecp_command.instruction.interpolation_type
 			= EXTERNAL_INTERPOLATION_WITH_FORCE;*/
