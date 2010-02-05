@@ -6,8 +6,8 @@
 // -------------------------------------------------------------------------
 
 
-#ifndef __REGULATOR_IRP6P_H
-#define __REGULATOR_IRP6P_H
+#ifndef __REGULATOR_IRP6P_M_H
+#define __REGULATOR_IRP6P_M_H
 
 //#include "edp/common/servo_gr.h"
 #include "edp/common/regulator.h"
@@ -155,26 +155,6 @@ public:
 // ----------------------------------------------------------------------
 
 
-/*-----------------------------------------------------------------------*/
-class NL_regulator_8_irp6p: public common::NL_regulator
-{
-    /* Klasa regulatorow konkretnych */
-    // Obiekt z algorytmem regulacji
-
-    long gripper_blocked_start_time;
-    int sum_of_currents, current_index;
-    int currents [MAX_GRIPPER_SUM_OF_CURRENTS_NR_OF_ELEMENTS];
-
-
-public:
-    NL_regulator_8_irp6p (uint8_t reg_no, uint8_t reg_par_no,
-                          double aa, double bb0, double bb1, double k_ff, common::motor_driven_effector &_master); // konstruktor
-
-    virtual uint8_t compute_set_value ( void );
-    // obliczenie nastepnej wartosci zadanej dla napedu - metoda konkretna
-
-}; // end: class NL_regulator_8
-// ----------------------------------------------------------------------
 
 } // namespace common
 } // namespace edp

@@ -15,7 +15,8 @@
 #include "edp/irp6_postument/hi_irp6p.h"
 // Klasa servo_buffer.
 #include "edp/irp6_postument/sg_irp6p.h"
-#include "edp/irp6_postument/regulator_irp6p.h"
+#include "edp/irp6_postument/regulator_irp6p_m.h"
+#include "edp/irp6_postument/regulator_irp6p_tfg.h"
 
 namespace mrrocpp {
 namespace edp {
