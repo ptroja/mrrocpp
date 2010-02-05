@@ -23,7 +23,7 @@ void *comm_thread(void* arg)
 		return NULL;
 	}
 
-	ui_ecp_buffer ui_ecp_obj = ui_ecp_buffer();
+	ui_ecp_buffer ui_ecp_obj;
 
 	while (1) {
 		// ui_ecp_obj->communication_state = UI_ECP_REPLY_READY;
