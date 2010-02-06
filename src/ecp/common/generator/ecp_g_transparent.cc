@@ -42,20 +42,7 @@ bool transparent::next_step()
 void transparent::execute_motion(void)
 {
 	// Zlecenie wykonania ruchu przez robota jest to polecenie dla EDP
-	/*
-	 // maskowanie sygnalu SIGTERM
-	 // w celu zapobierzenia przerwania komunikacji ECP z EDP pomiedzy SET a QUERY - usuniete
 
-	 sigset_t set;
-
-	 sigemptyset( &set );
-	 sigaddset( &set, SIGTERM );
-
-	 if  (sigprocmask( SIG_SETMASK, &set, NULL)==-1)
-	 {
-	 printf ("blad w ECP procmask signal\n");
-	 }
-	 */
 	// komunikacja wlasciwa
 	the_robot->send();
 	if (the_robot->reply_package.reply_type == lib::ERROR) {
@@ -66,16 +53,6 @@ void transparent::execute_motion(void)
 	}
 	the_robot->query();
 
-	/*
-	 // odmaskowanie sygnalu SIGTERM
-
-	 sigemptyset( &set );
-
-	 if  (sigprocmask( SIG_SETMASK, &set, NULL)==-1)
-	 {
-	 printf ("blad w ECP procmask signal\n");
-	 }
-	 */
 	if (the_robot->reply_package.reply_type == lib::ERROR) {
 
 		switch (the_robot->reply_package.error_no.error0)
@@ -99,7 +76,6 @@ void transparent::execute_motion(void)
 				if (throw_kinematics_exceptions) {
 					throw ecp_robot::ECP_error(lib::NON_FATAL_ERROR, EDP_ERROR);
 				}
-
 				break;
 			default:
 				throw ecp_robot::ECP_error(lib::NON_FATAL_ERROR, EDP_ERROR);
