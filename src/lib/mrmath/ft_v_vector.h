@@ -52,9 +52,6 @@ public:
 	// Zwrocenie elementu wektora.
 	double get_value(int i) const;
 
-	// Wyspisanie na ekran wektora
-	void wypisz_wartosc_na_konsole() const;
-
 	// in theory, the RHS operator
     double operator[](const int i) const;
       // in theory, the LHS operator
@@ -98,7 +95,6 @@ public:
 	Ft_vector(const Ft_vector &);								// konstruktor kopiujacy
 
 	// Odwracanie macierzy.
-	Ft_vector operator!() const;
 	Ft_vector operator-() const;
 	Ft_vector & operator=(const Ft_vector &);			// operator przypisania
 	Ft_vector operator+(const Ft_vector &) const;
@@ -121,7 +117,6 @@ public:
 	Xyz_Angle_Axis_vector(const Xyz_Angle_Axis_vector &);								// konstruktor kopiujacy
 
 	// Odwracanie macierzy.
-	Xyz_Angle_Axis_vector operator!() const;
 	Xyz_Angle_Axis_vector operator-() const;
 	Xyz_Angle_Axis_vector & operator=(const Xyz_Angle_Axis_vector &);			// operator przypisania
 	Xyz_Angle_Axis_vector operator+(const Xyz_Angle_Axis_vector &) const;
@@ -129,10 +124,8 @@ public:
 	Xyz_Angle_Axis_vector operator*(double) const;					// skalowanie wektora
 
 	//Sibi
-	 //Wektor predkosci jako odleglosc dwoch pozycji zadanych w postaci ramek
+	//Wektor predkosci jako odleglosc dwoch pozycji zadanych w postaci ramek
 	void position_distance(const Homog_matrix& local_current_end_effector_frame, const Homog_matrix& local_desired_end_effector_frame);
-
-
 };// end class Xyz_Angle_Axis_vector
 
 
@@ -149,7 +142,6 @@ public:
 	Xyz_Euler_Zyz_vector(const Xyz_Euler_Zyz_vector &);								// konstruktor kopiujacy
 
 	// Odwracanie macierzy.
-	Xyz_Euler_Zyz_vector operator!() const;
 	Xyz_Euler_Zyz_vector operator-() const;
 	Xyz_Euler_Zyz_vector & operator=(const Xyz_Euler_Zyz_vector &);			// operator przypisania
 	Xyz_Euler_Zyz_vector operator+(const Xyz_Euler_Zyz_vector &) const;
@@ -171,7 +163,6 @@ public:
 	Xyz_Rpy_vector(const Xyz_Rpy_vector &);								// konstruktor kopiujacy
 
 	// Odwracanie macierzy.
-	Xyz_Rpy_vector operator!() const;
 	Xyz_Rpy_vector operator-() const;
 	Xyz_Rpy_vector & operator=(const Xyz_Rpy_vector &);			// operator przypisania
 	Xyz_Rpy_vector operator+(const Xyz_Rpy_vector &) const;
