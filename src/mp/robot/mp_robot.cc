@@ -35,7 +35,7 @@ robot::MP_error::MP_error(lib::error_class_t err0, uint64_t err1) :
 {}
 
 // -------------------------------------------------------------------
-robot::robot( lib::robot_name_t l_robot_name, const char* _section_name, task::task &mp_object_l) :
+robot::robot( lib::robot_name_t l_robot_name, const std::string & _section_name, task::task &mp_object_l) :
 	ecp_mp::robot(l_robot_name),
 	mp_object(mp_object_l),
 	communicate(true), // domyslnie robot jest aktywny
