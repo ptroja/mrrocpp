@@ -927,39 +927,38 @@ std::ostream&  operator<<(std::ostream & strumien, Homog_matrix & m)
 }// end operator<<(std::ostream & strumien, Homog_matrix & m)
 
 
-int Homog_matrix::is_valid() const
+bool Homog_matrix::is_valid() const
 {
 	// funkcja sprawdza czy macierz jest macierza jednorodna
 	// jesli tak jest to funkcja zwraca 1
 	// w przeciwnym wypadku funkcja zwraca 0
 
     const double eps = 1e-5;
-    int i,j,k; double value;
 
     // obliczenia zgodne ze wzorem 6.12 z punktu 6.3.1 pracy:
 	// Biblioteka funkcji matematycznych wspomagajacych sterowanie robotami
-    for(i=0; i<3; i++)
+    for(int i=0; i<3; i++)
     {
-          value = 0;
-          for(k = 0; k<3; k++)
+          double value = 0;
+          for(int k = 0; k<3; k++)
                 value += (matrix_m[i][k] * matrix_m[i][k]);
           if ((value > 1+eps) || (value < 1-eps))
-             return(0);
+             return false;
     }
 
 	// obliczenia zgodne ze wzorem 6.13 z punktu 6.3.1 pracy:
 	// Biblioteka funkcji matematycznych wspomagajacych sterowanie robotami
-    for(i=0;i<3;i++)
+    for(int i=0;i<3;i++)
     {
-       j = ((i+1)%3);
-       value = 0;
-       for(k=0; k<3; k++)
+       int j = ((i+1)%3);
+       double value = 0;
+       for(int k=0; k<3; k++)
                 value += (matrix_m[i][k] * matrix_m[j][k]);
        if ((value < -eps) || (value > eps))
-          return(0);
+          return false;
     }
 
-    return(1);
+    return true;
 }// end Homog_matrix::is_valid() const
 
 

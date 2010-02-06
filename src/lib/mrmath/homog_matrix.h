@@ -147,7 +147,7 @@ public:
 	friend std::ostream& operator<<(std::ostream &, Homog_matrix &);
 
 	// funkcja sprawdzajaca czy macierz jest macierza jednorodna
-	int is_valid() const;
+	bool is_valid() const;
 
 	// Kopiowanie macierzy jednorodnej do DEST z SOURCE.
 	inline static void copy_frame_tab(frame_tab destination_frame, const frame_tab source_frame)
@@ -156,7 +156,7 @@ public:
 	};//: copy_frame
 
 	// Kopiowanie macierzy jednorodnej w postaci klas pochodnych Ft_V_vector
-	inline static void FT_v_vector(double destination_vector[6], double source_vector[6])
+	inline static void FT_v_vector(double destination_vector[6], const double source_vector[6])
 	{
 		memcpy(destination_vector, source_vector, 6* sizeof (double));
 	};//: copy_xyz_angle_axis
