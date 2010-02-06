@@ -27,18 +27,20 @@ namespace lib {
 // klasa reprezentujaca wektor sila-moment i wektora predkosci
 class Ft_v_vector
 {
-public:
-	double w[6];
-	friend class Ft_v_tr;						// klasa Ft_v_tr musi miec dostep do prywatnych
+	friend class Ft_v_tr;
 	friend class Ft_tr;
 	friend class V_tr;
-    friend class Jacobian_matrix;			//Klasa Jacobian_matrix ma miec dostep do skladowych - Sibi
+	friend class Jacobian_matrix;
 
+protected:
+public:
+	double w[6];
+
+public:
 
 	Ft_v_vector();													// konstruktor domniemany [0, 0, 0, 0, 0, 0]
 	Ft_v_vector(const double t[6]);										// utworzenie wektora na podstawie podanej tablicy
 	Ft_v_vector(double fx, double fy, double fz, double tx, double ty, double tz);
-
 
 	Ft_v_vector(const Ft_v_vector &);								// konstruktor kopiujacy
 
@@ -46,16 +48,16 @@ public:
 	void set_values(double fx, double fy, double fz, double tx, double ty, double tz);
 
 	// Ustawienie elementu wektora.
-	void set_value(int i, const double value);
+	void set_value(unsigned int i, const double value);
 	// Zwrocenie elementu wektora.
-	void get_value(int i, double &value) const;
+	void get_value(unsigned int i, double &value) const;
 	// Zwrocenie elementu wektora.
-	double get_value(int i) const;
+	double get_value(unsigned int i) const;
 
 	// in theory, the RHS operator
-    double operator[](const int i) const;
+    double operator[](const unsigned int i) const;
       // in theory, the LHS operator
-    double& operator[](const int i);
+    double& operator[](const unsigned int i);
 
 	void operator+=(const Ft_v_vector &);
 

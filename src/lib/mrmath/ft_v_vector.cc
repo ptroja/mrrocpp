@@ -76,32 +76,32 @@ void Ft_v_vector::set_values(double fx, double fy, double fz, double tx, double 
 }
 
 // Ustawienie elementu wektora.
-void Ft_v_vector::set_value(int i, const double value)
+void Ft_v_vector::set_value(unsigned int i, const double value)
 {
 	w[i] = value;
 }
 
 // Zwrocenie elementu wektora.
-void Ft_v_vector::get_value(int i, double &value) const
+void Ft_v_vector::get_value(unsigned int i, double &value) const
 {
 	value = w[i];
 }
 
 // Zwrocenie elementu wektora.
-double Ft_v_vector::get_value(int i) const
+double Ft_v_vector::get_value(unsigned int i) const
 {
 	return w[i];
 }
 
 // in theory, the RHS operator
-double Ft_v_vector::operator[](const int i) const
+double Ft_v_vector::operator[](const unsigned int i) const
 {
 	//    printf("RHS a[%2d]\n", i );
 	return w[i];
 }
 
 // in theory, the LHS operator
-double& Ft_v_vector::operator[](const int i)
+double& Ft_v_vector::operator[](const unsigned int i)
 {
 	// printf("LHS a[%2d]\n", i );
 	return w[i];
@@ -109,11 +109,9 @@ double& Ft_v_vector::operator[](const int i)
 
 void Ft_v_vector::operator+=(const Ft_v_vector & dod)
 {
-
 	for (int i = 0; i < 6; i++)
 		w[i] += dod.w[i];
-
-}// end Ft_v_vector::operator+=(const Ft_v_vector & dod)
+}
 
 void Ft_v_vector::to_table(double tablica[6]) const
 {
@@ -121,8 +119,7 @@ void Ft_v_vector::to_table(double tablica[6]) const
 
 	for (int i = 0; i < 6; i++)
 		tablica[i] = w[i];
-
-}// end Ft_v_vector::to_table(double tablica[6]) const
+}
 
 std::ostream& operator<<(std::ostream & s, Ft_v_vector & w)
 {
@@ -137,8 +134,7 @@ std::ostream& operator<<(std::ostream & s, Ft_v_vector & w)
 	s << "]";
 	return s;
 
-}// end operator<<(std::ostream & s, Ft_v_vector & w)
-
+}
 
 //Sibi
 // Wyciadgniecie maksymalnego elementu z zadanego wektora
