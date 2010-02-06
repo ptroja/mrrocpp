@@ -14,12 +14,19 @@
 #define __HOMOG_MATRIX_H
 
 #include <iostream>
-#include <math.h>
 #include <string.h>
 
 #include "lib/impconst.h"	// frame_tab
+
+
 namespace mrrocpp {
 namespace lib {
+
+// forward declarations
+class K_vector;
+class Xyz_Angle_Axis_vector;
+class Xyz_Euler_Zyz_vector;
+class Xyz_Rpy_vector;
 
 // Klasa reprezentujaca macierz transformacji.
 class Homog_matrix
@@ -117,11 +124,11 @@ public:
 	void set_rotation_matrix(const Homog_matrix &wzor);
 
 	// Ustawienie elementu macierzy.
-	void set_value(int i, int j, const double value);
+	void set_value(unsigned int i, unsigned int j, const double value);
 	// Zwrocenie elementu macierzy.
-	void get_value(int i, int j, double &value) const;
+	void get_value(unsigned int i, unsigned int j, double &value) const;
 	// Zwrocenie elementu macierzy.
-	double get_value(int i, int j) const;
+	double get_value(unsigned int i, unsigned int j) const;
 
 	// Operator przypisania.
 	Homog_matrix & operator=(const Homog_matrix &);
@@ -140,8 +147,8 @@ public:
 	int operator==(const Homog_matrix &) const;
 	int operator!=(const Homog_matrix &) const;
 
-	double* operator[](const int i);
-	const double* operator[](const int i) const;
+	double* operator[](const unsigned int i);
+	const double* operator[](const unsigned int i) const;
 
 	// operator wypisania
 	friend std::ostream& operator<<(std::ostream &, Homog_matrix &);

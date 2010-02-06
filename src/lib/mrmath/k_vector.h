@@ -14,14 +14,11 @@
 #define __K_VECTOR_H
 
 #include <iostream>
-#include <math.h>
-#include <string.h>
 
 #include "lib/impconst.h"	// frame_tab
 
 namespace mrrocpp {
 namespace lib {
-
 
 // klasa reprezentujaca wektor w kartezjaskim ukaladzie odniesienia
 class K_vector

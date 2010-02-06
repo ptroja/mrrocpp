@@ -633,19 +633,19 @@ void Homog_matrix::get_xyz_quaternion(double t[7]) const
 } //void Homog_matrix::get_xyz_quaternion(double t[7]) const
 
 // Ustawienie elementu macierzy.
-void Homog_matrix::set_value(int i, int j, const double value)
+void Homog_matrix::set_value(unsigned int i, unsigned int j, const double value)
 {
 	matrix_m[i][j] = value;
 }//: set_value
 
 // Zwrocenie elementu macierzy.
-void Homog_matrix::get_value(int i, int j, double & value) const
+void Homog_matrix::get_value(unsigned int i, unsigned int j, double & value) const
 {
 	value = matrix_m[i][j];
 }//: get_value
 
 // Zwrocenie elementu macierzy.
-double Homog_matrix::get_value(int i, int j) const
+double Homog_matrix::get_value(unsigned int i, unsigned int j) const
 {
 	return matrix_m[i][j];
 }//: get_value
@@ -894,13 +894,13 @@ int Homog_matrix::operator!=(const Homog_matrix & comp) const
 	return(0);
 }// end int Homog_matrix::operator!=(const Homog_matrix & comp) const
 
-double* Homog_matrix::operator[](const int i)
+double* Homog_matrix::operator[](const unsigned int i)
 {
 	//    printf("RHS a[%2d]\n", i );
 	return matrix_m[i];
 }
 
-const double* Homog_matrix::operator[](const int i) const
+const double* Homog_matrix::operator[](const unsigned int i) const
 {
 	//    printf("RHS a[%2d]\n", i );
 	return matrix_m[i];
