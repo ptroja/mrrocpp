@@ -303,7 +303,7 @@ typedef enum _PROCESS_TYPE {
  */
 #define CONTROLLER_STATE_DEFINITION                     0x08
 #define ARM_DEFINITION                                  0x04
-#define ROBOT_MODEL_DEFINITION                               0x02
+#define ROBOT_MODEL_DEFINITION                          0x02
 #define OUTPUTS_DEFINITION                              0x01
 #define NOTHING_DEFINITION                              0x00
 
@@ -964,7 +964,7 @@ typedef union r_buffer_arm
 		 *  Czy mowi?
 		 *  @todo Translate to English.
 		 */
-		int speaking;
+		bool speaking;
 	}
 	text_def;
 

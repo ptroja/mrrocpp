@@ -20,7 +20,7 @@ class ui_speaker_robot: public ecp::speaker::robot {
 // Klasa do obslugi robota irp6_on_track (sztywnego) z poziomu UI
 
  public:
-	int speaking_state; // stan EDP
+	bool speaking_state; // stan EDP
 
 	ui_speaker_robot (edp_state_def* edp_state, lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg); // Konstruktor
 
