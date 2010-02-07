@@ -30,7 +30,7 @@ class ui_speaker_robot: public ecp::speaker::robot {
 	bool send_command (const char* local_text, const char* local_prosody);
 
 	// Odczyt stanu EDP
-	bool read_state (bool* local_state);
+	void read_state (bool* local_state);
 
 
 }; // end: class ui_speaker_robot

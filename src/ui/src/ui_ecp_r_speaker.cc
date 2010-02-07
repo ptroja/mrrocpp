@@ -62,7 +62,7 @@ bool ui_speaker_robot::send_command(const char* local_text, const char* local_pr
 	return true;
 }
 
-bool ui_speaker_robot::read_state(bool* local_state)
+void ui_speaker_robot::read_state(bool* local_state)
 {
 
 	ecp_command.instruction.instruction_type = lib::GET;
@@ -73,6 +73,4 @@ bool ui_speaker_robot::read_state(bool* local_state)
 		*local_state = reply_package.arm.text_def.speaking;
 	}
 	// printf("UI SPEAKING: %d\n", reply_package.arm.text_def.speaking);
-
-	return true;
 }
