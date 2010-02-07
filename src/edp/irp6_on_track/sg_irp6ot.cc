@@ -18,8 +18,8 @@
 #include "edp/irp6_on_track/hi_irp6ot.h"
 // Klasa servo_buffer.
 #include "edp/irp6_on_track/sg_irp6ot.h"
-#include "edp/irp6_on_track/regulator_irp6ot_m.h"
-#include "edp/irp6_on_track/regulator_irp6ot_tfg.h"
+#include "edp/common/regulator_irp6ot_m.h"
+#include "edp/common/regulator_irp6ot_tfg.h"
 
 namespace mrrocpp {
 namespace edp {

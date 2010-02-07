@@ -16,7 +16,7 @@
 #include "lib/com_buf.h"
 #include "edp/common/edp.h"
 #include "edp/common/reader.h"
-#include "edp/irp6_postument/regulator_irp6p_m.h"
+#include "edp/common/regulator_irp6p_m.h"
 
 #include "lib/mrmath/mrmath.h"
 
