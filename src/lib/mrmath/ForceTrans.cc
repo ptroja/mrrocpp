@@ -163,8 +163,7 @@ lib::Ft_vector ForceTrans::getForce(const lib::Ft_vector inputForceTorque, const
 				output_force_torque;
 		*/
 
-
-		output_force_torque = lib::Ft_tr (current_orientation) * (-output_force_torque);
+		output_force_torque = lib::Ft_tr (current_orientation) * Ft_vector(-output_force_torque);
 
 //		lib::Ft_v_vector tmp_force_torque = lib::Ft_v_tr (current_orientation*sensor_frame_translation, FT_VARIANT) * output_force_torque;
 

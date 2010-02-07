@@ -272,9 +272,6 @@ V_tr::V_tr(const Homog_matrix & p) : Ft_v_tr()
 	// macierz tworzona jest zgodnie ze wzorem 5.105 ze strony 196 (5.72 str 154 - wydanie angielskie)
 	// ksiazki: "Wprowadzenie do robotyki" John J. Craig
 
-	// i - i-ta kolumna
-	// j - j-ty wiersz
-
 	base_frame = p;
 
 	set_from_frame (base_frame);
@@ -286,7 +283,6 @@ V_tr::V_tr(const Homog_matrix & p) : Ft_v_tr()
 // jest on uzywany podczas inicjalizacji obiektu w momencie jego tworzenia (np. Homog_matrix B = A;)
 V_tr::V_tr(const V_tr &wzor)
 {
-
 	base_frame = wzor.base_frame;
 
 	set_from_frame(wzor.base_frame);

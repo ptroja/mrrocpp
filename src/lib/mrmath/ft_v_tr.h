@@ -49,8 +49,6 @@ class Ft_tr : public Ft_v_tr
 public:
 
 	Ft_tr ();																	// kostruktor domniemany
-	virtual ~Ft_tr () {};														// destruktor wirtualny
-//	Ft_v_tr(VARIANT variant_l);
 	Ft_tr (const Homog_matrix &);
 	Ft_tr(const Ft_tr &);												// konstruktor kopiujacy
 
@@ -62,8 +60,6 @@ public:
 
 	Ft_tr & operator = (const Ft_tr &);									// operator przypisania
 	Ft_vector operator*(const Ft_vector &) const;					// mnozenie wektora
-
-
 };// end class Ft_v_tr
 
 
@@ -73,7 +69,6 @@ class V_tr : public Ft_v_tr
 public:
 
 	V_tr ();																	// kostruktor domniemany
-//	Ft_v_tr(VARIANT variant_l);
 	V_tr (const Homog_matrix &);
 	V_tr(const V_tr &);												// konstruktor kopiujacy
 
@@ -85,8 +80,6 @@ public:
 
 	V_tr & operator = (const V_tr &);									// operator przypisania
 	Xyz_Angle_Axis_vector operator*(const Xyz_Angle_Axis_vector &) const;					// mnozenie wektora
-
-
 };// end class Ft_v_tr
 
 
