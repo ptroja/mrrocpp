@@ -17,6 +17,10 @@ BINARIES  = edp_irp6_postument
 
 
 SHOBJ = ../common/libedp.a $(LIBDIR)/libmrrocpp.a
+
+ifdef DOCENT_SENSOR
+LDFLAGS:=$(LDFLAGS) -lboost_system-mt -lkiper -lprotobuf
+endif
 #======================================================#	
 .PHONY: all clean install
 #------------------------------------------------- Build rules -------------------------------------------------------#
@@ -25,7 +29,11 @@ all: ${BINARIES}
 # do wyboru wariant z czujnikiem ATI3084 i ATI6284, ati6284KT
 ifneq ($(BUILD_TARGET), linux)
 #edp_irp6_postument: $(EDPOBJS) ../ati6284KT/ati6284KT.a $(SHOBJ)
+ifdef DOCENT_SENSOR
+edp_irp6_postument: $(EDPOBJS) ../ati6284MS/ati6284MS.a $(SHOBJ)
+else
 edp_irp6_postument: $(EDPOBJS) ../ati6284/ati6284.a $(SHOBJ)
+endif
 #edp_irp6_postument: $(EDPOBJS) ../ati3084/ati3084.a $(SHOBJ)
 else
 edp_irp6_postument: $(EDPOBJS) $(SHOBJ)
