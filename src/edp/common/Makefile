@@ -12,7 +12,7 @@ EDPOBJ = edp_m.o edp_effector.o \
 	edp_force_sensor.o edp_vsp_t.o \
 	servo_gr.o regulator.o in_out.o \
 	trans_t.o manip_trans_t.o vis_server.o reader.o \
-	hi_rydz.o edp_irp6s_postument_track.o
+	hi_rydz.o
 
 #======================================================#	
 .PHONY: all clean install
