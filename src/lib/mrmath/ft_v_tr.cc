@@ -145,7 +145,7 @@ Ft_vector Ft_tr::operator*(const Ft_vector & w) const
 
 	for(j=0;j<6;j++)
 		for(i=0;i<6;i++)
-			zwracany.w[j] += matrix_m[j][i] * w.w[i];
+			zwracany[j] += matrix_m[j][i] * w[i];
 //	std::cout << "zwracany " << zwracany <<std::endl;
 //	std::cout << "w " << zwracany <<std::endl;
 return zwracany;
@@ -338,7 +338,7 @@ Xyz_Angle_Axis_vector V_tr::operator*(const Xyz_Angle_Axis_vector & w) const
 
 	for(j=0;j<6;j++)
 		for(i=0;i<6;i++)
-			zwracany.w[j] += matrix_m[j][i] * w.w[i];
+			zwracany[j] += matrix_m[j][i] * w[i];
 //	std::cout << "zwracany " << zwracany <<std::endl;
 //	std::cout << "w " << zwracany <<std::endl;
 return zwracany;

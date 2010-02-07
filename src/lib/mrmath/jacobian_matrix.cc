@@ -29,8 +29,8 @@ Konstruktor klasy - zainicjowane wartosciami zerowymi
 
 Jacobian_matrix::Jacobian_matrix()
 {
-	for (int i=0; i<=5; i++)
-		for(int j=0; j<=5; j++)
+	for (int i=0; i<=5; ++i)
+		for(int j=0; j<=5; ++j)
 			matrix[i][j]=0;
 }// end Jacobian_matrix::Jacobian_matrix()
 
@@ -42,15 +42,13 @@ Wyznaczenie transpozycji jakobianu
 void Jacobian_matrix::jacobian_transpose()
 {
 	double tmp[6][6];	//Tymczasowa macierz z wynikami
-	int a;
-	int b;
 
-	for (a=0; a<=5; a++){
-		for (b=0; b<=5; b++){
+	for (int a=0; a<=5; a++){
+		for (int b=0; b<=5; b++){
 			tmp[a][b]=matrix[a][b];}}
 
-	for (a=0; a<=5; a++){
-		for(b=0; b<=5; b++){
+	for (int a=0; a<=5; a++){
+		for(int b=0; b<=5; b++){
 			matrix[a][b]=tmp[b][a];}}
 }//end Jacobian_matrix::jacobian_transpose()
 
@@ -61,11 +59,10 @@ Przedefiniowanie operatora mnozenia dla macierz * wektor
 Xyz_Angle_Axis_vector Jacobian_matrix::operator*(const Xyz_Angle_Axis_vector & w) const
 {
 	Xyz_Angle_Axis_vector zwracany;
-	int i;
-	int j;
-	for(j=0;j<6;j++)
-		for(i=0;i<6;i++)
-			zwracany[j] += matrix[j][i] * w.w[i];
+
+	for(int j=0;j<6;j++)
+		for(int i=0;i<6;i++)
+			zwracany[j] += matrix[j][i] * w[i];
 
 	return zwracany;
 }//end  Jacobian_matrix::operator*(const Ft_v_vector & w) const
@@ -100,7 +97,7 @@ Xyz_Angle_Axis_vector q;
 //Wektor permutacji - czesciowy wybor elementu podstawowego
 for (int i=0; i<6; i++){
 	p[i]=i;
-	w[i]=dist.w[i];}
+	w[i]=dist[i];}
 
 //V=Jq -> J=PLU -> V=PLUq
 
@@ -125,12 +122,12 @@ for (k=0; k<6; k++){
 
 //Rozwiazanie ukladu r�wnan z macierza gorna trojkatna
 
-q.w[5]=(w[p[5]])/matrix[p[5]][5];
-q.w[4]=(w[p[4]]-(q.w[5]*matrix[p[4]][5]))/matrix[p[4]][4];
-q.w[3]=(w[p[3]]-(q.w[5]*matrix[p[3]][5]+q.w[4]*matrix[p[3]][4]))/matrix[p[3]][3];
-q.w[2]=(w[p[2]]-(q.w[5]*matrix[p[2]][5]+q.w[4]*matrix[p[2]][4]+q.w[3]*matrix[p[2]][3]))/matrix[p[2]][2];
-q.w[1]=(w[p[1]]-(q.w[5]*matrix[p[1]][5]+q.w[4]*matrix[p[1]][4]+q.w[3]*matrix[p[1]][3]+q.w[2]*matrix[p[1]][2]))/matrix[p[1]][1];
-q.w[0]=(w[p[0]]-(q.w[5]*matrix[p[0]][5]+q.w[4]*matrix[p[0]][4]+q.w[3]*matrix[p[0]][3]+q.w[2]*matrix[p[0]][2]+q.w[1]*matrix[p[0]][1]))/matrix[p[0]][0];
+q[5]=(w[p[5]])/matrix[p[5]][5];
+q[4]=(w[p[4]]-(q[5]*matrix[p[4]][5]))/matrix[p[4]][4];
+q[3]=(w[p[3]]-(q[5]*matrix[p[3]][5]+q[4]*matrix[p[3]][4]))/matrix[p[3]][3];
+q[2]=(w[p[2]]-(q[5]*matrix[p[2]][5]+q[4]*matrix[p[2]][4]+q[3]*matrix[p[2]][3]))/matrix[p[2]][2];
+q[1]=(w[p[1]]-(q[5]*matrix[p[1]][5]+q[4]*matrix[p[1]][4]+q[3]*matrix[p[1]][3]+q[2]*matrix[p[1]][2]))/matrix[p[1]][1];
+q[0]=(w[p[0]]-(q[5]*matrix[p[0]][5]+q[4]*matrix[p[0]][4]+q[3]*matrix[p[0]][3]+q[2]*matrix[p[0]][2]+q[1]*matrix[p[0]][1]))/matrix[p[0]][0];
 
 return q;
 
@@ -150,18 +147,18 @@ return q;
 void Jacobian_matrix::irp6_6dof_equations(const Xyz_Angle_Axis_vector & w)
 {
 
-	const double s1 = sin(w.w[0]);
-	const double c1 = cos(w.w[0]);
-	const double s2 = sin(w.w[1]);
-	const double c2 = cos(w.w[1]);
-	const double s3 = sin(w.w[2]);
-	const double c3 = cos(w.w[2]);
-	const double s4 = sin(w.w[3]);
-	const double c4 = cos(w.w[3]);
-	const double s5 = sin(w.w[4]);
-	const double c5 = cos(w.w[4]);
-	//const double s6 = sin(w.w[5]);
-	//const double c6 = cos(w.w[5]);
+	const double s1 = sin(w[0]);
+	const double c1 = cos(w[0]);
+	const double s2 = sin(w[1]);
+	const double c2 = cos(w[1]);
+	const double s3 = sin(w[2]);
+	const double c3 = cos(w[2]);
+	const double s4 = sin(w[3]);
+	const double c4 = cos(w[3]);
+	const double s5 = sin(w[4]);
+	const double c5 = cos(w[4]);
+	//const double s6 = sin(w[5]);
+	//const double c6 = cos(w[5]);
 
 	const double a2 = 0.455;
 	const double a3 = 0.67;
@@ -230,18 +227,18 @@ matrix[5][5]=0;
 
 double Jacobian_matrix::irp6_6dof_determinant(const Xyz_Angle_Axis_vector & w)
 {
-	//const double s1 = sin(w.w[0]);
-	//const double c1 = cos(w.w[0]);
-	const double s2 = sin(w.w[1]);
-	const double c2 = cos(w.w[1]);
-	const double s3 = sin(w.w[2]);
-	const double c3 = cos(w.w[2]);
-	//const double s4 = sin(w.w[3]);
-	const double c4 = cos(w.w[3]);
-	const double s5 = sin(w.w[4]);
-	//const double c5 = cos(w.w[4]);
-	//const double s6 = sin(w.w[5]);
-	//const double c6 = cos(w.w[5]);
+	//const double s1 = sin(w[0]);
+	//const double c1 = cos(w[0]);
+	const double s2 = sin(w[1]);
+	const double c2 = cos(w[1]);
+	const double s3 = sin(w[2]);
+	const double c3 = cos(w[2]);
+	//const double s4 = sin(w[3]);
+	const double c4 = cos(w[3]);
+	const double s5 = sin(w[4]);
+	//const double c5 = cos(w[4]);
+	//const double s6 = sin(w[5]);
+	//const double c6 = cos(w[5]);
 
 	const double a2 = 0.455;
 	const double a3 = 0.67;
@@ -269,18 +266,18 @@ double Jacobian_matrix::irp6_6dof_determinant(const Xyz_Angle_Axis_vector & w)
 
 void Jacobian_matrix::irp6_6dof_inverse_equations(const Xyz_Angle_Axis_vector & w)
 {
-	const double s1 = sin(w.w[0]);
-	const double c1 = cos(w.w[0]);
-	const double s2 = sin(w.w[1]);
-	const double c2 = cos(w.w[1]);
-	const double s3 = sin(w.w[2]);
-	const double c3 = cos(w.w[2]);
-	const double s4 = sin(w.w[3]);
-	const double c4 = cos(w.w[3]);
-	const double s5 = sin(w.w[4]);
-	const double c5 = cos(w.w[4]);
-	//const double s6 = sin(w.w[5]);
-	//const double c6 = cos(w.w[5]);
+	const double s1 = sin(w[0]);
+	const double c1 = cos(w[0]);
+	const double s2 = sin(w[1]);
+	const double c2 = cos(w[1]);
+	const double s3 = sin(w[2]);
+	const double c3 = cos(w[2]);
+	const double s4 = sin(w[3]);
+	const double c4 = cos(w[3]);
+	const double s5 = sin(w[4]);
+	const double c5 = cos(w[4]);
+	//const double s6 = sin(w[5]);
+	//const double c6 = cos(w[5]);
 
 	const double a2 = 0.455;
 	const double a3 = 0.67;

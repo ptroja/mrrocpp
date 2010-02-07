@@ -14,7 +14,6 @@
 #define __FT_V_TR_H
 
 #include <iostream>
-#include <math.h>
 #include <string.h>
 
 #include "lib/impconst.h"	// frame_tab
