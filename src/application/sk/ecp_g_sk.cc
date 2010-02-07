@@ -134,7 +134,10 @@ bool y_edge_follow_force::next_step()
 	for (int i=0; i<6; i++)
 		inc_delta[i]+=tmp_delta[i];
 
-	insert_pose_list_element(emptyps, 0.0, inc_delta.w, 2);
+	double inc_delta_vector[6];
+	inc_delta.to_table(inc_delta_vector);
+
+	insert_pose_list_element(emptyps, 0.0, inc_delta_vector, 2);
 
 	// wyznaczenie nowej macierzy referencyjnej i predkosci ruchu
 

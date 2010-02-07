@@ -75,7 +75,7 @@ void model_jacobian_transpose_with_wrist::inverse_kinematics_transform(lib::Join
   Max=desired_distance_new.max_element();
 
   //Wzmocnienie
-  desired_distance_new=desired_distance_new*K;
+  desired_distance_new *= K;
 
 while(fabs(Max)>E){
 
@@ -87,7 +87,7 @@ while(fabs(Max)>E){
 
 	//Wyliczenie przyrostu zmiennych przegubowych
 	delta_q=jacobian_new*desired_distance_new;
-	current_joints=current_joints+delta_q;
+	current_joints += delta_q;
 	current_joints.to_table(&local_current_joints[0]);
 
      //wyliczenie prostego zadania kinematyki dla nowo wyliczonej konfiguracji
@@ -99,7 +99,7 @@ while(fabs(Max)>E){
 	desired_distance_new.position_distance(local_current_end_effector_frame, local_desired_end_effector_frame);
 
 	Max=desired_distance_new.max_element();
-	desired_distance_new=desired_distance_new*K;
+	desired_distance_new *= K;
 }
 
   for (int i=0; i<=5; i++){
