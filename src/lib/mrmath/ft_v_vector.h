@@ -62,6 +62,10 @@ public:
 class Ft_vector : public Ft_v_vector
 {
 public:
+	// Construction and assignment from a uBLAS vector expression or copy assignment
+	template <class R> Ft_vector (const boost::numeric::ublas::vector_expression<R>& r) : Ft_v_vector(r)
+	{}
+
 	Ft_vector();													// konstruktor domniemany [0, 0, 0, 0, 0, 0]
 	Ft_vector(const double t[6]);										// utworzenie wektora na podstawie podanej tablicy
 	Ft_vector(double fx, double fy, double fz, double tx, double ty, double tz);
