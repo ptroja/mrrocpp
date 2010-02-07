@@ -13,57 +13,40 @@
 #ifndef __K_VECTOR_H
 #define __K_VECTOR_H
 
-#include <iostream>
-
-#include "lib/impconst.h"	// frame_tab
+#include <boost/numeric/ublas/vector.hpp>
+#include <boost/numeric/ublas/io.hpp>
 
 namespace mrrocpp {
 namespace lib {
 
 // klasa reprezentujaca wektor w kartezjaskim ukaladzie odniesienia
-class K_vector
+class K_vector : public boost::numeric::ublas::bounded_vector<double, 3>
 {
-private:
-	double w[3];
-
+	typedef boost::numeric::ublas::bounded_vector<double, 3> Base_vector;
 
 public:
-	friend class Homog_matrix;						// klasa Homog_matrix musi miec dostep do prywatnych
-															// skladnikow klasy vector
+	// Construction and assignment from a uBLAS vector expression or copy assignment
+	template <class R> K_vector (const boost::numeric::ublas::vector_expression<R>& r) : Base_vector(r)
+	{}
+
+	template <class R> void operator=(const boost::numeric::ublas::vector_expression<R>& r)
+	{
+		Base_vector::operator=(r);
+	}
+
+	template <class R> void operator=(const Base_vector& r)
+	{
+		Base_vector::operator=(r);
+	}
 
 	K_vector ();												// konstruktor domniemany: [0, 0, 0]
 	K_vector (double t[3]);								// utworzenie wektora na podstawie tablicy
 	K_vector (double x, double y, double z);			// utworzenie wektora na podstawie tablicy
-	K_vector (const K_vector &);							// konstruktor kopiujacy
 
-
-	// Ustawienie elementu wektora.
-	void set_value(int i, const double value);
-	// Zwrocenie elementu wektora.
-	void get_value(int i, double &value) const;
-	// Zwrocenie elementu wektora.
-	double get_value(int i) const;
 	double get_length() const;
 	void normalize();
 
 	void to_table(double tablica[3]) const;			// przepisanie zawartosci do tablicy
-
-	K_vector & operator=(const K_vector &);			// operator przypisania
-	K_vector & operator=(const double[3]);			// przypisanie tablicy na wektor			- by Slawek Bazant
-	K_vector operator+(const K_vector &) const;		// dodawanie wektorow
-	K_vector operator-(const K_vector &) const;		// odejmowanie wektorow					- by Slawek Bazant
-	K_vector operator*(const K_vector &) const;		// iloczyn wektorowy						- by Slawek Bazant
-	K_vector operator*(double) const;					// skalowanie wektora						- by Slawek Bazant
-	void operator+=(const K_vector &);				// dodanie wektora podanego jako agument do aktualnego
-	void operator*=(const double);					// skalowanie wektora						- by Slawek Bazant
-
-	// in theory, the RHS operator
-    double operator[](const int i) const;
-    // in theory, the LHS operator
-    double& operator[](const int i);
-
-	friend std::ostream& operator<<(std::ostream & s, K_vector & w);	// operator wypisania
-
 };// end class vector
 
 

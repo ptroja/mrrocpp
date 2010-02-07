@@ -749,10 +749,10 @@ K_vector Homog_matrix::operator*(const K_vector & w) const
 
 	for(j=0;j<3;j++)
 		for(i=0;i<3;i++)
-			zwracany.w[j] += matrix_m[j][i] * w.w[i];
+			zwracany[j] += matrix_m[j][i] * w[i];
 
 	for(i=0;i<3;i++)
-		zwracany.w[i] +=matrix_m[i][3];
+		zwracany[i] +=matrix_m[i][3];
 
 	return zwracany;
 
@@ -772,10 +772,10 @@ K_vector Homog_matrix::operator*(const double tablica[3]) const
 
 	for(j=0;j<3;j++)
 		for(i=0;i<3;i++)
-			zwracany.w[j] += matrix_m[j][i] * tablica[i];
+			zwracany[j] += matrix_m[j][i] * tablica[i];
 
 	for(i=0;i<3;i++)
-		zwracany.w[i] +=matrix_m[i][3];
+		zwracany[i] +=matrix_m[i][3];
 
 return zwracany;
 
