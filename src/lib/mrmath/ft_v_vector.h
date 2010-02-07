@@ -77,6 +77,9 @@ public:
 class Xyz_Angle_Axis_vector : public Ft_v_vector
 {
 public:
+	// Construction and assignment from a uBLAS vector expression or copy assignment
+	template <class R> Xyz_Angle_Axis_vector (const boost::numeric::ublas::vector_expression<R>& r) : Ft_v_vector(r)
+	{}
 	Xyz_Angle_Axis_vector();													// konstruktor domniemany [0, 0, 0, 0, 0, 0]
 	Xyz_Angle_Axis_vector(const double t[6]);										// utworzenie wektora na podstawie podanej tablicy
 	Xyz_Angle_Axis_vector(double fx, double fy, double fz, double tx, double ty, double tz);
@@ -91,6 +94,9 @@ public:
 class Xyz_Euler_Zyz_vector : public Ft_v_vector
 {
 public:
+	// Construction and assignment from a uBLAS vector expression or copy assignment
+	template <class R> Xyz_Euler_Zyz_vector (const boost::numeric::ublas::vector_expression<R>& r) : Ft_v_vector(r)
+	{}
 	Xyz_Euler_Zyz_vector();													// konstruktor domniemany [0, 0, 0, 0, 0, 0]
 	Xyz_Euler_Zyz_vector(const double t[6]);										// utworzenie wektora na podstawie podanej tablicy
 	Xyz_Euler_Zyz_vector(double fx, double fy, double fz, double tx, double ty, double tz);
@@ -100,6 +106,9 @@ public:
 class Xyz_Rpy_vector : public Ft_v_vector
 {
 public:
+	// Construction and assignment from a uBLAS vector expression or copy assignment
+	template <class R> Xyz_Rpy_vector (const boost::numeric::ublas::vector_expression<R>& r) : Ft_v_vector(r)
+	{}
 	Xyz_Rpy_vector();													// konstruktor domniemany [0, 0, 0, 0, 0, 0]
 	Xyz_Rpy_vector(const double t[6]);										// utworzenie wektora na podstawie podanej tablicy
 	Xyz_Rpy_vector(double fx, double fy, double fz, double tx, double ty, double tz);
