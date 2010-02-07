@@ -62,7 +62,7 @@ bool ui_speaker_robot::send_command(const char* local_text, const char* local_pr
 	return true;
 }
 
-bool ui_speaker_robot::read_state(int* local_state)
+bool ui_speaker_robot::read_state(bool* local_state)
 {
 
 	ecp_command.instruction.instruction_type = lib::GET;
