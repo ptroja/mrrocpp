@@ -42,7 +42,7 @@ namespace edp {
 namespace common {
 
 
-edp_vsp::edp_vsp(irp6s_postument_track_effector &_master) :
+edp_vsp::edp_vsp(manip_effector &_master) :
 	master (_master)
 {
 }

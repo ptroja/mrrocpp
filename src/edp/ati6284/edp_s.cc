@@ -90,7 +90,7 @@ const struct sigevent *isr_handler(void *area, int id)
 
 // // // // // // // // // // // // // // /   konfiguracja czujnika // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////
 
-ATI6284_force::ATI6284_force(common::irp6s_postument_track_effector &_master) :
+ATI6284_force::ATI6284_force(common::manip_effector &_master) :
 	force(_master)
 {
 
@@ -1068,7 +1068,7 @@ void ATI6284_force::AI_Start_The_Acquisition(void)
 	return;
 }
 
-force* return_created_edp_force_sensor(common::irp6s_postument_track_effector &_master)
+force* return_created_edp_force_sensor(common::manip_effector &_master)
 {
 	return new ATI6284_force(_master);
 }//!< : return_created_sensor

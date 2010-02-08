@@ -15,7 +15,7 @@
 
 // Klasa edp_irp6s_robot.
 #include "edp/irp6ot_m/sg_irp6ot_m.h"
-#include "edp/common/edp_irp6s_postument_track.h"
+#include "edp/common/edp_e_manip.h"
 #include "lib/irp6ot_m_const.h"
 
 #define IRP6OT_GRIPPER_CATCH_AXE 7
@@ -26,7 +26,7 @@ namespace edp {
 namespace irp6ot {
 
 // Klasa reprezentujaca robota IRp-6 na torze jezdnym.
-class effector : public common::irp6s_postument_track_effector
+class effector : public common::manip_effector
 {
 protected:
     // Metoda tworzy modele kinematyczne dla robota IRp-6 na postumencie.
@@ -34,7 +34,16 @@ protected:
 
 public:
     effector (lib::configurator &_config);
+
+    void set_robot_model (lib::c_buffer &);
+    void create_threads ();
+    void move_arm (lib::c_buffer &);
+    void get_arm_position(bool, lib::c_buffer &);
+
     common::servo_buffer *return_created_servo_buffer ();
+
+    void master_order(common::MT_ORDER nm_task, int nm_tryb);
+
 };
 
 } // namespace irp6ot

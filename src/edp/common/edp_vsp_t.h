@@ -16,17 +16,17 @@ namespace mrrocpp {
 namespace edp {
 namespace common {
 
-class irp6s_postument_track_effector;
+class manip_effector;
 
 class edp_vsp
 {
 private:
-	irp6s_postument_track_effector &master;
+	manip_effector &master;
 
 public:
     void operator()(void);
 
-    edp_vsp(irp6s_postument_track_effector &_master);
+    edp_vsp(manip_effector &_master);
 };
 
 

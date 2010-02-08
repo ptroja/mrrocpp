@@ -37,7 +37,7 @@ public:
 
 	short ERROR_CODE;
 
-	ATI6284_force(common::irp6s_postument_track_effector &_master);       //!< konstruktor uruchamiaj�cy czujnik i ustawiaj�cuy bias
+	ATI6284_force(common::manip_effector &_master);       //!< konstruktor uruchamiaj�cy czujnik i ustawiaj�cuy bias
 	virtual ~ATI6284_force();    //!< destruktor od��czaj�cy kart� z magistrali PCI
 
 	void configure_sensor (void);           //!<  konfiguracja czujnika

@@ -127,7 +127,7 @@ void force::operator()(void)
 #endif /* USE_MESSIP_SRR */
 } //!< end MAIN
 
-force::force(common::irp6s_postument_track_effector &_master) :
+force::force(common::manip_effector &_master) :
 	gravity_transformation(NULL), new_edp_command(false), master(_master), edp_vsp_synchroniser(),
 			new_command_synchroniser(), thread_started()
 {

@@ -65,7 +65,7 @@ struct timespec start[9];
 // #pragma on(check_stack);
 
 // Rejstracja procesu VSP
-ATI6284_force::ATI6284_force(common::irp6s_postument_track_effector &_master) :
+ATI6284_force::ATI6284_force(common::manip_effector &_master) :
 	force(_master)
 {
 	frame_counter = 0; //licznik wyslanych pakietow
@@ -274,7 +274,7 @@ void ATI6284_force::get_reading(void)
 {
 }
 /*******************************************************************/
-force* return_created_edp_force_sensor(common::irp6s_postument_track_effector &_master)
+force* return_created_edp_force_sensor(common::manip_effector &_master)
 {
 	return new ATI6284_force(_master);
 }// : return_created_sensor

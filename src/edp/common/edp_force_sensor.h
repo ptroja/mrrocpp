@@ -25,7 +25,7 @@
 namespace mrrocpp {
 namespace edp {
 namespace common {
-class irp6s_postument_track_effector;
+class manip_effector;
 }
 namespace sensor {
 
@@ -60,8 +60,8 @@ public:
 
 	bool new_edp_command;
 
-	common::irp6s_postument_track_effector &master;
-	force(common::irp6s_postument_track_effector &_master);
+	common::manip_effector &master;
+	force(common::manip_effector &_master);
 
 	~force();
 
@@ -71,7 +71,7 @@ public:
 
 
 // Zwrocenie stworzonego obiektu - czujnika. Funkcja implementowana w plikach klas dziedziczacych.
-force* return_created_edp_force_sensor(common::irp6s_postument_track_effector &_master);
+force* return_created_edp_force_sensor(common::manip_effector &_master);
 
 } // namespace sensor
 } // namespace edp

@@ -19,7 +19,6 @@
 // Klasa servo_buffer.
 #include "edp/irp6ot_m/sg_irp6ot_m.h"
 #include "edp/common/regulator_irp6ot_m.h"
-#include "edp/common/regulator_irp6ot_tfg.h"
 
 namespace mrrocpp {
 namespace edp {
@@ -34,11 +33,6 @@ servo_buffer::servo_buffer(effector &_master) :
 		synchro_axis_order[j] = ((j + IRP6OT_SYN_INIT_AXE) % (master.number_of_servos));
 		switch (j)
 		{
-			case IRP6OT_GRIPPER_CATCH_AXE:
-				axe_inc_per_revolution[j] = IRP6_ON_TRACK_AXIS_7_INC_PER_REVOLUTION;
-				synchro_step_coarse[j] = IRP6_ON_TRACK_AXIS_7_SYNCHRO_STEP_COARSE;
-				synchro_step_fine[j] = IRP6_ON_TRACK_AXIS_7_SYNCHRO_STEP_FINE;
-				break;
 			case IRP6OT_GRIPPER_TURN_AXE:
 				axe_inc_per_revolution[j] = IRP6_ON_TRACK_AXIS_6_INC_PER_REVOLUTION;
 				synchro_step_coarse[j] = IRP6_ON_TRACK_AXIS_6_SYNCHRO_STEP_COARSE;
@@ -60,7 +54,7 @@ void servo_buffer::load_hardware_interface(void)
 {
 	// tablica pradow maksymalnych d;a poszczegolnych osi
 	int
-			max_current[IRP6_ON_TRACK_NUM_OF_SERVOS] = { IRP6_ON_TRACK_AXIS_1_MAX_CURRENT, IRP6_ON_TRACK_AXIS_2_MAX_CURRENT, IRP6_ON_TRACK_AXIS_3_MAX_CURRENT, IRP6_ON_TRACK_AXIS_4_MAX_CURRENT, IRP6_ON_TRACK_AXIS_5_MAX_CURRENT, IRP6_ON_TRACK_AXIS_6_MAX_CURRENT, IRP6_ON_TRACK_AXIS_7_MAX_CURRENT, IRP6_ON_TRACK_AXIS_8_MAX_CURRENT };
+			max_current[IRP6OT_M_NUM_OF_SERVOS] = { IRP6_ON_TRACK_AXIS_1_MAX_CURRENT, IRP6_ON_TRACK_AXIS_2_MAX_CURRENT, IRP6_ON_TRACK_AXIS_3_MAX_CURRENT, IRP6_ON_TRACK_AXIS_4_MAX_CURRENT, IRP6_ON_TRACK_AXIS_5_MAX_CURRENT, IRP6_ON_TRACK_AXIS_6_MAX_CURRENT, IRP6_ON_TRACK_AXIS_7_MAX_CURRENT };
 
 	hi
 			= new hardware_interface(master, IRQ_REAL, INT_FREC_DIVIDER, HI_RYDZ_INTR_TIMEOUT_HIGH, FIRST_SERVO_PTR, INTERRUPT_GENERATOR_SERVO_PTR, ISA_CARD_OFFSET, max_current);
@@ -85,8 +79,6 @@ void servo_buffer::load_hardware_interface(void)
 	regulator_ptr[5] = new NL_regulator_6_irp6ot(0, 0, 0.39, 8.62 / 2., 7.89 / 2., 0.35, master);
 
 	regulator_ptr[6] = new NL_regulator_7_irp6ot(0, 0, 0.39, 8.62 / 2., 7.89 / 2., 0.35, master);
-
-	regulator_ptr[7] = new NL_regulator_8_irp6ot(0, 0, 0.39, 8.62 / 2., 7.89 / 2., 0.35, master);
 
 	common::servo_buffer::load_hardware_interface();
 }

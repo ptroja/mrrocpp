@@ -73,7 +73,7 @@ static const uint16_t port = 55555;
 // #pragma on(check_stack);
 
 // Rejstracja procesu VSP
-ATI6284_force::ATI6284_force(common::irp6s_postument_track_effector &_master) :
+ATI6284_force::ATI6284_force(common::manip_effector &_master) :
 	force(_master),
 #ifdef USE_RAW
     client(interface, boardMac),
@@ -204,11 +204,11 @@ void ATI6284_force::wait_for_event()
 {
 	int iw_ret;
 	int iter_counter = 0; // okresla ile razy pod rzad zostala uruchomiona ta metoda
-    
+
     //TODO: Jesli test mode, dopuszczac wylaczenie sensora
 
     iter_counter++;
-    
+
     service.GetGenGForceReading(&rpcController, NULL, &response, NULL);
     if (rpcController.expired()) {
         printf("Expired!!!\n");
@@ -244,7 +244,7 @@ void ATI6284_force::initiate_reading(void)
     for (int i = 0; i < 6; ++i) {
         ft_table[i] = force_fresh[i];
     }
-    
+
     is_reading_ready = true;
 
     // jesli ma byc wykorzytstywana biblioteka transformacji sil
@@ -264,7 +264,7 @@ void ATI6284_force::get_reading(void)
 {
 }
 /*******************************************************************/
-force* return_created_edp_force_sensor(common::irp6s_postument_track_effector &_master)
+force* return_created_edp_force_sensor(common:manip_effector &_master)
 {
 	return new ATI6284_force(_master);
 }// : return_created_sensor

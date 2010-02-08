@@ -34,7 +34,7 @@ extern "C" {
 #define EDP_IRP6_ON_TRACK_SECTION "[edp_irp6_on_track]"
 #define ECP_IRP6_ON_TRACK_SECTION "[ecp_irp6_on_track]"
 
-#define IRP6_ON_TRACK_NUM_OF_SERVOS	8
+#define IRP6OT_M_NUM_OF_SERVOS	7
 
 #ifdef __cplusplus
 }

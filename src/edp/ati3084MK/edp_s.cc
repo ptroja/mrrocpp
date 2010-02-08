@@ -64,7 +64,7 @@ unsigned int ms_nr = 0;// numer odczytu z czujnika
 struct timespec start[9];
 
 // Rejstracja procesu VSP
-ATI3084_force::ATI3084_force(common::irp6s_postument_track_effector &_master) :
+ATI3084_force::ATI3084_force(common::manip_effector &_master) :
 	force(_master)
 {
 
@@ -335,7 +335,7 @@ int ATI3084_force::open_port(void)
 	return fd;
 }
 
-force* return_created_edp_force_sensor(common::irp6s_postument_track_effector &_master)
+force* return_created_edp_force_sensor(common::manip_effector &_master)
 {
 	return new ATI3084_force(_master);
 }// : return_created_sensor

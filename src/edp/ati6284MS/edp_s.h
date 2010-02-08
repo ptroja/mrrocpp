@@ -84,7 +84,7 @@ public:
 
 	void connect_to_hardware (void);
 
-	ATI6284_force(common::irp6s_postument_track_effector &_master);
+	ATI6284_force(common::manip_effector &_master);
 	virtual ~ATI6284_force();
 
 	void configure_sensor (void);	// konfiguracja czujnika
