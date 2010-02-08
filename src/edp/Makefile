@@ -9,7 +9,7 @@ SOURCEDIRS = common \
 	smb spkm
 else
 SOURCEDIRS = common \
-	irp6p_m irp6ot_m\
+	irp6ot_tfg irp6p_m irp6ot_m\
 	ati3084 ati3084MK ati6284 ati6284KT\
 	conveyor irp6_on_track irp6_postument irp6_mechatronika \
 	speaker polycrank \
@@ -53,6 +53,7 @@ endif
 irp6_postument: $(IRP6ONT_DEPS)
 
 irp6ot_m: $(IRP6ONT_DEPS)
+irp6ot_tfg: $(IRP6ONT_DEPS)
 irp6p_m: $(IRP6ONT_DEPS)
 
 irp6_mechatronika: common
