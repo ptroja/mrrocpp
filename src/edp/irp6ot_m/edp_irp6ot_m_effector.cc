@@ -15,7 +15,7 @@
 #include "lib/com_buf.h"
 
 // Klasa edp_irp6ot_effector.
-#include "edp/irp6_on_track/edp_irp6ot_effector.h"
+#include "edp/irp6ot_m/edp_irp6ot_m_effector.h"
 // Kinematyki.
 #include "kinematics/irp6_on_track/kinematic_model_irp6ot_with_track.h"
 #include "kinematics/irp6_on_track/kinematic_model_irp6ot_with_wrist.h"

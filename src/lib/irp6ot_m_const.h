@@ -10,37 +10,31 @@
 
 #include <stdint.h>
 
-namespace mrrocpp
-{
+namespace mrrocpp {
 
 }
 
-
 using namespace mrrocpp;
-
 
 namespace mrrocpp {
 namespace lib {
-
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-	// Do podmianki
+// Do podmianki
 /*
-#define EDP_IRP6OT_M_SECTION "[edp_irp6ot_m]"
-#define ECP_IRP6OT_M_SECTION "[ecp_irp6ot_m]"
+ #define EDP_IRP6OT_M_SECTION "[edp_irp6ot_m]"
+ #define ECP_IRP6OT_M_SECTION "[ecp_irp6ot_m]"
 
-#define IRP6OT_M_NUM_OF_SERVOS	7
-*/
+ #define IRP6OT_M_NUM_OF_SERVOS	7
+ */
 
 #define EDP_IRP6_ON_TRACK_SECTION "[edp_irp6_on_track]"
 #define ECP_IRP6_ON_TRACK_SECTION "[ecp_irp6_on_track]"
 
 #define IRP6_ON_TRACK_NUM_OF_SERVOS	8
-
-
 
 #ifdef __cplusplus
 }
