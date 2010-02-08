@@ -5,8 +5,8 @@
 // Ostatnia modyfikacja: 16.04.98
 // -------------------------------------------------------------------------
 
-#ifndef __HI_LOCAL_IRP6P_M_H
-#define __HI_LOCAL_IRP6P_M_H
+#ifndef __HI_LOCAL_IRP6P_TFG_H
+#define __HI_LOCAL_IRP6P_TFG_H
 
 #include <signal.h>
 #include <time.h>
