@@ -18,7 +18,7 @@
 #include "edp/common/edp_e_manip.h"
 #include "lib/irp6ot_m_const.h"
 
-#define IRP6OT_GRIPPER_CATCH_AXE 7
+
 #define IRP6OT_GRIPPER_TURN_AXE 6
 
 namespace mrrocpp {
