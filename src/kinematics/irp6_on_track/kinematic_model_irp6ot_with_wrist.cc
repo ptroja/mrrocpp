@@ -262,7 +262,7 @@ Zakresy ruchu poszczegolnych stopni swobody (w radianach lub milimetrach).
   upper_limit_joint[1] = 170.0*M_PI/180.0; // [rad]
   upper_limit_joint[2] = -50.0*M_PI/180.0;
   upper_limit_joint[3] = 40.0*M_PI/180.0;
-  upper_limit_joint[4] = 90.1*M_PI/180.0;
+  upper_limit_joint[4] = 92*M_PI/180.0;
   upper_limit_joint[5] = 10.0; //M_PI
   upper_limit_joint[6] = 2.93;
   upper_limit_joint[7] = 0.091;
