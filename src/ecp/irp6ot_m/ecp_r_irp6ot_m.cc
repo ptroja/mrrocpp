@@ -10,7 +10,7 @@
 #include "lib/com_buf.h"
 #include "lib/mis_fun.h"
 
-#include "ecp/irp6_on_track/ecp_r_irp6ot.h"
+#include "ecp/irp6ot_m/ecp_r_irp6ot_m.h"
 
 namespace mrrocpp {
 namespace ecp {
