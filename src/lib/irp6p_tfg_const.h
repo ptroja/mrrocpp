@@ -31,7 +31,7 @@ extern "C" {
 #define EDP_IRP6P_TFG_SECTION "[edp_irp6p_tfg]"
 #define ECP_IRP6P_TFG_SECTION "[ecp_irp6p_tfg]"
 
-#define IRP6_POSTUMENT_TFG_NUM_OF_SERVOS	1
+#define IRP6P_TFG_NUM_OF_SERVOS	1
 
 #ifdef __cplusplus
 }

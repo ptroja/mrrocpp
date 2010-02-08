@@ -9,10 +9,11 @@ SOURCEDIRS = common \
 	smb spkm
 else
 SOURCEDIRS = common \
+	irp6ot_m\
 	ati3084 ati3084MK ati6284 ati6284KT\
 	conveyor irp6_on_track irp6_postument irp6_mechatronika \
 	speaker polycrank \
-	smb spkm shead
+	smb spkm shead	
 endif
 
 ifdef DOCENT_SENSOR
@@ -34,6 +35,7 @@ smb: common
 spkm: common
 shead: common
 
+
 IRP6ONT_DEPS = common ati3084 ati3084MK ati6284 ati6284KT
 ifdef DOCENT_SENSOR
 	IRP6ONT_DEPS:=$(IRP6ONT_DEPS) ati6284MS
@@ -49,6 +51,8 @@ ifdef DOCENT_SENSOR
 endif
 
 irp6_postument: $(IRP6ONT_DEPS)
+
+irp6ot_m: $(IRP6ONT_DEPS)
 
 irp6_mechatronika: common
 polycrank: common
