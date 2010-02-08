@@ -17,7 +17,7 @@ namespace ecp {
 namespace irp6ot {
 
 robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
-	ecp_robot(lib::ROBOT_IRP6_ON_TRACK, IRP6_ON_TRACK_NUM_OF_SERVOS, EDP_IRP6_ON_TRACK_SECTION, _config, _sr_ecp),
+	ecp_robot(lib::ROBOT_IRP6_ON_TRACK, IRP6OT_M_NUM_OF_SERVOS, EDP_IRP6_ON_TRACK_SECTION, _config, _sr_ecp),
 	kinematics_manager()
 {
 	//  Stworzenie listy dostepnych kinematyk.
@@ -25,7 +25,7 @@ robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
 }
 
 robot::robot(common::task::task& _ecp_object) :
-	ecp_robot(lib::ROBOT_IRP6_ON_TRACK, IRP6_ON_TRACK_NUM_OF_SERVOS, EDP_IRP6_ON_TRACK_SECTION, _ecp_object),
+	ecp_robot(lib::ROBOT_IRP6_ON_TRACK, IRP6OT_M_NUM_OF_SERVOS, EDP_IRP6_ON_TRACK_SECTION, _ecp_object),
 	kinematics_manager()
 {
 	//  Stworzenie listy dostepnych kinematyk.
