@@ -35,6 +35,14 @@ private:
 
 	lib::trajectory_description td;
 
+	//! initial speed factor of trajectory
+	double speedup;
+
+	//! trajectory speeed up factor
+	const double speedup_factor;
+
+	lib::Homog_matrix irp6ot_start, irp6p_start;
+
 public:
 	int step_no;
 	//     double delta[6];
