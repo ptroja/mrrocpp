@@ -83,16 +83,7 @@ void servo_buffer::load_hardware_interface(void)
 	common::servo_buffer::load_hardware_interface();
 }
 
-/*-----------------------------------------------------------------------*/
-void servo_buffer::get_all_positions(void)
-{
-	common::servo_buffer::get_all_positions();
 
-	// przepisanie stanu regulatora chwytaka do bufora odpowiedzi dla EDP_master
-	servo_data.gripper_reg_state = regulator_ptr[7]->get_reg_state();
-
-}
-/*-----------------------------------------------------------------------*/
 
 } // namespace irp6ot
 
