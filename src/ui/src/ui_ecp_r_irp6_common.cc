@@ -32,7 +32,6 @@
 
 #include <math.h>
 
-
 // ---------------------------------------------------------------
 ui_common_robot::ui_common_robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg, lib::robot_name_t _robot_name)
 {
@@ -41,9 +40,30 @@ ui_common_robot::ui_common_robot(lib::configurator &_config, lib::sr_ecp &_sr_ec
 	{
 		case lib::ROBOT_IRP6_ON_TRACK:
 			ecp = new ecp::irp6ot::robot(_config, _sr_ecp_msg);
+			if ((_config.exists("is_gripper_active", EDP_IRP6_ON_TRACK_SECTION))
+					&& (_config.value <int> ("is_gripper_active", EDP_IRP6_ON_TRACK_SECTION))) {
+				MOTOR_GRIPPER_STEP = 0.5;
+				JOINT_GRIPPER_STEP = 0.000004; // Przyrost liniowy w chwytaku [m]
+				END_EFFECTOR_GRIPPER_STEP = 0.000005; // Przyrost wspolrzednej orientacji koncowki [rad]
+			} else { // eleliminujemy wplyw chaytaka
+				MOTOR_GRIPPER_STEP = DBL_MAX;
+				JOINT_GRIPPER_STEP = DBL_MAX;// Przyrost liniowy w chwytaku [m]
+				END_EFFECTOR_GRIPPER_STEP = DBL_MAX; // Przyrost wspolrzednej orientacji koncowki [rad]
+			}
+
 			break;
 		case lib::ROBOT_IRP6_POSTUMENT:
 			ecp = new ecp::irp6p::robot(_config, _sr_ecp_msg);
+			if ((_config.exists("is_gripper_active", EDP_IRP6_POSTUMENT_SECTION))
+					&& (_config.value <int> ("is_gripper_active", EDP_IRP6_POSTUMENT_SECTION))) {
+				MOTOR_GRIPPER_STEP = 0.5;
+				JOINT_GRIPPER_STEP = 0.000004; // Przyrost liniowy w chwytaku [m]
+				END_EFFECTOR_GRIPPER_STEP = 0.000005; // Przyrost wspolrzednej orientacji koncowki [rad]
+			} else { // eleliminujemy wplyw chaytaka
+				MOTOR_GRIPPER_STEP = DBL_MAX;
+				JOINT_GRIPPER_STEP = DBL_MAX;// Przyrost liniowy w chwytaku [m]
+				END_EFFECTOR_GRIPPER_STEP = DBL_MAX; // Przyrost wspolrzednej orientacji koncowki [rad]
+			}
 			break;
 		case lib::ROBOT_IRP6_MECHATRONIKA:
 			ecp = new ecp::irp6m::robot(_config, _sr_ecp_msg);
@@ -80,13 +100,11 @@ ui_common_robot::ui_common_robot(lib::configurator &_config, lib::sr_ecp &_sr_ec
 	ecp->synchronised = false;
 
 	MOTOR_STEP = 0.1; // Przyrost kata obrotu walu silnika [rad]
-	MOTOR_GRIPPER_STEP = 0.5;
 	JOINT_ANGULAR_STEP = 0.0004; // Przyrost kata obrotu w przegubie obrotowym [rad]
 	JOINT_LINEAR_STEP = 0.00004; // Przyrost liniowy w przegubach posuwistych [m]
-	JOINT_GRIPPER_STEP = 0.000004; // Przyrost liniowy w chwytaku [m]
 	END_EFFECTOR_LINEAR_STEP = 0.00002;// Przyrost wspolrzednej polozenia koncowki [m]
 	END_EFFECTOR_ANGULAR_STEP = 0.0002; // Przyrost wspolrzednej orientacji koncowki [rad]
-	END_EFFECTOR_GRIPPER_STEP = 0.000005; // Przyrost wspolrzednej orientacji koncowki [rad]
+
 
 }
 // ---------------------------------------------------------------
@@ -500,19 +518,19 @@ void ui_common_robot::move_xyz_angle_axis(const double final_position[7])
 {
 	lib::Xyz_Euler_Zyz_vector aa_eul; // tablica przechowujaca polecenie przetransformowane
 	// do formy XYZ_EULER_ZYZ
-/*	double x, y, z, alfa, kx, ky, kz;
+	/*	double x, y, z, alfa, kx, ky, kz;
 
-	x = final_position[0];
-	y = final_position[1];
-	z = final_position[2];
+	 x = final_position[0];
+	 y = final_position[1];
+	 z = final_position[2];
 
-	alfa = sqrt(final_position[3] * final_position[3] + final_position[4] * final_position[4] + final_position[5]
-			* final_position[5]);
+	 alfa = sqrt(final_position[3] * final_position[3] + final_position[4] * final_position[4] + final_position[5]
+	 * final_position[5]);
 
-	kx = final_position[3] / alfa;
-	ky = final_position[4] / alfa;
-	kz = final_position[5] / alfa;
-*/
+	 kx = final_position[3] / alfa;
+	 ky = final_position[4] / alfa;
+	 kz = final_position[5] / alfa;
+	 */
 	lib::Homog_matrix A;
 	A.set_from_xyz_angle_axis(lib::Xyz_Angle_Axis_vector(final_position));
 	A.get_xyz_euler_zyz(aa_eul); // zadane polecenie w formie XYZ_EULER_ZYZ

@@ -2650,10 +2650,7 @@ reload_irp6p_configuration()
 
 				ui_state.irp6_postument.edp.state = 0;
 
-				if (config->exists("is_gripper_active"))
-					ui_state.irp6_on_track.edp.is_gripper_active = config->value <int> ("is_gripper_active", ui_state.irp6_postument.edp.section_name);
-				else
-					ui_state.irp6_on_track.edp.is_gripper_active = 0;
+
 
 				for (int i=0; i<4; i++)
 				{

@@ -160,13 +160,13 @@ int init( PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo 
 
 	ui_state.irp6_on_track.edp.state=-1; // edp nieaktywne
 	ui_state.irp6_on_track.edp.last_state=-1; // edp nieaktywne
-	ui_state.irp6_on_track.edp.is_gripper_active=1; // chwytak aktywny
+
 	ui_state.irp6_on_track.ecp.trigger_fd = -1;
 	ui_state.irp6_on_track.edp.section_name = EDP_IRP6_ON_TRACK_SECTION;
 	ui_state.irp6_on_track.ecp.section_name = ECP_IRP6_ON_TRACK_SECTION;
 	ui_state.irp6_postument.edp.state=-1; // edp nieaktywne
 	ui_state.irp6_postument.edp.last_state=-1; // edp nieaktywne
-	ui_state.irp6_postument.edp.is_gripper_active=1; // chwytak aktywny
+
 	ui_state.irp6_postument.ecp.trigger_fd = -1;
 	ui_state.irp6_postument.edp.section_name = EDP_IRP6_POSTUMENT_SECTION;
 	ui_state.irp6_postument.ecp.section_name = ECP_IRP6_POSTUMENT_SECTION;
@@ -177,13 +177,13 @@ int init( PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo 
 	ui_state.speaker.ecp.section_name = ECP_SPEAKER_SECTION;
 	ui_state.conveyor.edp.state=-1; // edp nieaktywne
 	ui_state.conveyor.edp.last_state=-1; // edp nieaktywne
-	ui_state.conveyor.edp.is_gripper_active=0; // chwytak aktywny
+
 	ui_state.conveyor.ecp.trigger_fd = -1;
 	ui_state.conveyor.edp.section_name = EDP_CONVEYOR_SECTION;
 	ui_state.conveyor.ecp.section_name = ECP_CONVEYOR_SECTION;
 	ui_state.irp6_mechatronika.edp.state=-1; // edp nieaktywne
 	ui_state.irp6_mechatronika.edp.last_state=-1; // edp nieaktywne
-	ui_state.irp6_mechatronika.edp.is_gripper_active=0; // chwytak aktywny
+
 	ui_state.irp6_mechatronika.ecp.trigger_fd = -1;
 	ui_state.irp6_mechatronika.edp.section_name = EDP_IRP6_MECHATRONIKA_SECTION;
 	ui_state.irp6_mechatronika.ecp.section_name = ECP_IRP6_MECHATRONIKA_SECTION;
