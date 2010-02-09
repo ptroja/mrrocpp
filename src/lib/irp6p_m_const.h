@@ -34,7 +34,7 @@ extern "C" {
 #define EDP_IRP6_POSTUMENT_SECTION "[edp_irp6_postument]"
 #define ECP_IRP6_POSTUMENT_SECTION "[ecp_irp6_postument]"
 
-#define IRP6_POSTUMENT_NUM_OF_SERVOS	7
+#define IRP6P_M_NUM_OF_SERVOS	6
 
 #ifdef __cplusplus
 }

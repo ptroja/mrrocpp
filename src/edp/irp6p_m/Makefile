@@ -11,7 +11,7 @@ SOURCES = ${wildcard *.cc}
 KIN_OBJECTS = ${KIN_DIR}/irp6_postument/libkinematicsirp6p.a $(KIN_DIR)/common/libkinematics.a
 	       
 OBJECTS = ../common/edp_vsp_t.o edp_irp6p_m_effector.o hi_irp6p_m.o int_hand_irp6p_m.o\
-           ../common/regulator_irp6p_m.o ../common/regulator_irp6p_tfg.o sg_irp6p_m.o ../common/edp_irp6s_postument_track.o
+           ../common/regulator_irp6p_m.o sg_irp6p_m.o
 EDPOBJS  = ${OBJECTS} ${KIN_OBJECTS}
 BINARIES  = edp_irp6p_m
 

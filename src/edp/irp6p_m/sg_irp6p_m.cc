@@ -16,7 +16,6 @@
 // Klasa servo_buffer.
 #include "edp/irp6p_m/sg_irp6p_m.h"
 #include "edp/common/regulator_irp6p_m.h"
-#include "edp/common/regulator_irp6p_tfg.h"
 
 namespace mrrocpp {
 namespace edp {
@@ -33,11 +32,6 @@ servo_buffer::servo_buffer(effector &_master) :
 		synchro_axis_order[j] = ((j + IRP6P_SYN_INIT_AXE) % (master.number_of_servos));
 		switch (j)
 		{
-			case IRP6P_GRIPPER_CATCH_AXE:
-				axe_inc_per_revolution[j] = IRP6_POSTUMENT_AXIS_7_INC_PER_REVOLUTION;
-				synchro_step_coarse[j] = IRP6_POSTUMENT_AXIS_7_SYNCHRO_STEP_COARSE;
-				synchro_step_fine[j] = IRP6_POSTUMENT_AXIS_7_SYNCHRO_STEP_FINE;
-				break;
 			case IRP6P_GRIPPER_TURN_AXE:
 				axe_inc_per_revolution[j] = IRP6_POSTUMENT_AXIS_6_INC_PER_REVOLUTION;
 				synchro_step_coarse[j] = IRP6_POSTUMENT_AXIS_6_SYNCHRO_STEP_COARSE;
@@ -60,7 +54,7 @@ void servo_buffer::load_hardware_interface(void)
 
 	// tablica pradow maksymalnych dla poszczegolnych osi
 	int
-			max_current[IRP6_POSTUMENT_NUM_OF_SERVOS] = { IRP6_POSTUMENT_AXIS_1_MAX_CURRENT, IRP6_POSTUMENT_AXIS_2_MAX_CURRENT, IRP6_POSTUMENT_AXIS_3_MAX_CURRENT, IRP6_POSTUMENT_AXIS_4_MAX_CURRENT, IRP6_POSTUMENT_AXIS_5_MAX_CURRENT, IRP6_POSTUMENT_AXIS_6_MAX_CURRENT, IRP6_POSTUMENT_AXIS_7_MAX_CURRENT };
+			max_current[IRP6P_M_NUM_OF_SERVOS] = { IRP6_POSTUMENT_AXIS_1_MAX_CURRENT, IRP6_POSTUMENT_AXIS_2_MAX_CURRENT, IRP6_POSTUMENT_AXIS_3_MAX_CURRENT, IRP6_POSTUMENT_AXIS_4_MAX_CURRENT, IRP6_POSTUMENT_AXIS_5_MAX_CURRENT, IRP6_POSTUMENT_AXIS_6_MAX_CURRENT};
 
 	hi
 			= new hardware_interface(master, IRQ_REAL, INT_FREC_DIVIDER, HI_RYDZ_INTR_TIMEOUT_HIGH, FIRST_SERVO_PTR, INTERRUPT_GENERATOR_SERVO_PTR, ISA_CARD_OFFSET, max_current);
@@ -86,23 +80,9 @@ void servo_buffer::load_hardware_interface(void)
 
 	regulator_ptr[5] = new NL_regulator_7_irp6p(0, 0, 0.39, 8.62 / 2., 7.89 / 2., 0.35, master);
 
-	// chwytak
-	regulator_ptr[6] = new NL_regulator_8_irp6p(0, 0, 0.39, 8.62 / 2., 7.89 / 2., 0.35, master);
-
 	common::servo_buffer::load_hardware_interface();
 
 }
-
-/*-----------------------------------------------------------------------*/
-void servo_buffer::get_all_positions(void)
-{
-	common::servo_buffer::get_all_positions();
-
-	// przepisanie stanu regulatora chwytaka do bufora odpowiedzi dla EDP_master
-	servo_data.gripper_reg_state = regulator_ptr[6]->get_reg_state();
-
-}
-/*-----------------------------------------------------------------------*/
 
 } // namespace irp6p
 namespace common {
