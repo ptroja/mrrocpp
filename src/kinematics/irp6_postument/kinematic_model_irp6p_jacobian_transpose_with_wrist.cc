@@ -21,7 +21,8 @@ namespace irp6p {
 /* -----------------------------------------------------------------------
   Konstruktor.
  ------------------------------------------------------------------------- */
-model_jacobian_transpose_with_wrist::model_jacobian_transpose_with_wrist (void)
+model_jacobian_transpose_with_wrist::model_jacobian_transpose_with_wrist (int _number_of_servos):
+	model_with_wrist(_number_of_servos)
 {
   // Ustawienie etykiety modelu kinematycznego.
   set_kinematic_model_label("Switching to kinematic based on transpose jacobian matrix");

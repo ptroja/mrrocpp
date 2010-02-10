@@ -26,7 +26,7 @@ class model_jacobian_with_wrist: public model_with_wrist
 
 public:
   // Konstruktor.
-  model_jacobian_with_wrist (void);
+  model_jacobian_with_wrist (int _number_of_servos);
 
   //Rozwiazanie odwrotnego zagadnienia kinematyki.
   virtual void inverse_kinematics_transform(lib::JointArray & local_desired_joints, lib::JointArray & local_current_joints, const lib::Homog_matrix& local_desired_end_effector_frame);

@@ -55,11 +55,11 @@ effector::effector(lib::configurator &_config) :
 void effector::create_kinematic_models_for_given_robot(void)
 {
 	// Stworzenie wszystkich modeli kinematyki.
-	add_kinematic_model(new kinematics::irp6p::model_with_wrist());
-	add_kinematic_model(new kinematics::irp6p::model_5dof());
-	add_kinematic_model(new kinematics::irp6p::model_calibrated_with_wrist());
-	add_kinematic_model(new kinematics::irp6p::model_jacobian_with_wrist());
-	add_kinematic_model(new kinematics::irp6p::model_jacobian_transpose_with_wrist());
+	add_kinematic_model(new kinematics::irp6p::model_with_wrist(number_of_servos));
+	add_kinematic_model(new kinematics::irp6p::model_5dof(number_of_servos));
+	add_kinematic_model(new kinematics::irp6p::model_calibrated_with_wrist(number_of_servos));
+	add_kinematic_model(new kinematics::irp6p::model_jacobian_with_wrist(number_of_servos));
+	add_kinematic_model(new kinematics::irp6p::model_jacobian_transpose_with_wrist(number_of_servos));
 	//add_kinematic_model(new kinematic_model_irp6p_jacobian_with_wrist());
 
 	// Ustawienie aktywnego modelu.

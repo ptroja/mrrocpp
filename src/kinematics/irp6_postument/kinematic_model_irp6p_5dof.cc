@@ -25,7 +25,8 @@ namespace irp6p {
 /* -----------------------------------------------------------------------
   Konstruktor.
  ------------------------------------------------------------------------- */
-model_5dof::model_5dof (void)
+model_5dof::model_5dof (int _number_of_servos):
+	model_with_wrist(_number_of_servos)
 {
   // Ustawienie etykiety modelu kinematycznego.
   set_kinematic_model_label("Switching to 5 DOF kinematic model");

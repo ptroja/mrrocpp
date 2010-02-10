@@ -244,7 +244,7 @@ void Extract_vect_from_tree(THETA_NODE *root_ptr, double Theta[5],
 
 public:
   // Konstruktor.
-  model_5dof (void);
+  model_5dof (int _number_of_servos);
 
   // Rozwiazanie prostego zagadnienia kinematyki.
   virtual void direct_kinematics_transform(const lib::JointArray & local_current_joints, lib::Homog_matrix& local_current_end_effector_frame);
