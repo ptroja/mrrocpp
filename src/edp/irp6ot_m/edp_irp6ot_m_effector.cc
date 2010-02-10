@@ -96,10 +96,12 @@ void effector::create_threads()
 effector::effector(lib::configurator &_config) :
 	manip_effector(_config, lib::ROBOT_IRP6_ON_TRACK)
 {
+	number_of_servos = IRP6OT_M_NUM_OF_SERVOS;
+
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();
 
-	number_of_servos = IRP6OT_M_NUM_OF_SERVOS;
+
 
 	reset_variables();
 }
@@ -108,9 +110,9 @@ effector::effector(lib::configurator &_config) :
 void effector::create_kinematic_models_for_given_robot(void)
 {
 	// Stworzenie wszystkich modeli kinematyki.
-	add_kinematic_model(new kinematics::irp6ot::model_with_wrist());
-	add_kinematic_model(new kinematics::irp6ot::model_with_track());
-	add_kinematic_model(new kinematics::irp6ot::model_calibrated_with_wrist());
+	add_kinematic_model(new kinematics::irp6ot::model_with_wrist(number_of_servos));
+	add_kinematic_model(new kinematics::irp6ot::model_with_track(number_of_servos));
+	add_kinematic_model(new kinematics::irp6ot::model_calibrated_with_wrist(number_of_servos));
 	// Ustawienie aktywnego modelu.
 	set_kinematic_model(0);
 

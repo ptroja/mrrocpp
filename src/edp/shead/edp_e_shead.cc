@@ -42,10 +42,12 @@ void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
 effector::effector(lib::configurator &_config) :
 	motor_driven_effector(_config, lib::ROBOT_SMB)
 {
+
+	number_of_servos = SMB_NUM_OF_SERVOS;
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();
 
-	number_of_servos = SMB_NUM_OF_SERVOS;
+
 
 	reset_variables();
 }

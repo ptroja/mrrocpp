@@ -29,7 +29,7 @@ class model_calibrated_with_wrist: public model_with_wrist
 
 public:
   // Konstruktor.
-  model_calibrated_with_wrist ( void );
+  model_calibrated_with_wrist (int _number_of_servos );
 
 };//: kinematic_model_calibrated_irp6ot_with_wrist;
 

@@ -20,7 +20,8 @@ namespace irp6ot {
 /* -----------------------------------------------------------------------
   Konstruktor.
  ------------------------------------------------------------------------- */
-model_with_track::model_with_track (void)
+model_with_track::model_with_track (int _number_of_servos):
+	model_with_wrist(_number_of_servos)
 {
   // Ustawienie etykiety modelu kinematycznego.
   set_kinematic_model_label("Switching to kinematic model with active track");

@@ -38,8 +38,7 @@ common::servo_buffer* effector::return_created_servo_buffer ()
 effector::effector(lib::configurator &_config) :
 	irp6s_postument_track_effector(_config, lib::ROBOT_IRP6_POSTUMENT)
 {
-	//  Stworzenie listy dostepnych kinematyk.
-	create_kinematic_models_for_given_robot();
+
 
 	if (is_gripper_active)
 		number_of_servos = IRP6_POSTUMENT_NUM_OF_SERVOS;
@@ -47,6 +46,9 @@ effector::effector(lib::configurator &_config) :
 		number_of_servos = IRP6_POSTUMENT_NUM_OF_SERVOS-1;
 
 	gripper_servo_nr = IRP6P_GRIPPER_CATCH_AXE;
+
+	//  Stworzenie listy dostepnych kinematyk.
+	create_kinematic_models_for_given_robot();
 
 	reset_variables();
 }

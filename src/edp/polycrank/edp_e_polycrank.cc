@@ -37,10 +37,12 @@ namespace polycrank {
 effector::effector(lib::configurator &_config) :
 	manip_effector(_config, lib::ROBOT_POLYCRANK)
 {
-	//  Stworzenie listy dostepnych kinematyk.
-	create_kinematic_models_for_given_robot();
+
 
 	number_of_servos = POLYCRANK_NUM_OF_SERVOS;
+
+	//  Stworzenie listy dostepnych kinematyk.
+	create_kinematic_models_for_given_robot();
 
 	reset_variables();
 }

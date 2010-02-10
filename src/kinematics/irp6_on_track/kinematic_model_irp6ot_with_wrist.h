@@ -74,8 +74,11 @@ protected:
   virtual void check_joints(const lib::JointArray & q);
 
 public:
+
+	int number_of_servos;
+
   // Konstruktor.
-  model_with_wrist ( void );
+  model_with_wrist (int number_of_servos);
 
   // Przeliczenie polozenia walow silnikow na wspolrzedne wewnetrzne.
   virtual void mp2i_transform(const lib::MotorArray & local_current_motor_pos, lib::JointArray & local_current_joints);

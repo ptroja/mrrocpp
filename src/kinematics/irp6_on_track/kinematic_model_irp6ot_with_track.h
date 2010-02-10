@@ -25,7 +25,7 @@ class model_with_track : public model_with_wrist
 
 public:
   // Konstruktor.
-  model_with_track (void);
+  model_with_track (int _number_of_servos);
 
   // Rozwiazanie prostego zagadnienia kinematyki.
   virtual void direct_kinematics_transform(const lib::JointArray & local_current_joints, lib::Homog_matrix& local_current_end_effector_frame);

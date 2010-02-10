@@ -53,10 +53,12 @@ void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
 effector::effector(lib::configurator &_config) :
 	manip_effector(_config, lib::ROBOT_IRP6_MECHATRONIKA)
 {
+	number_of_servos = IRP6_MECHATRONIKA_NUM_OF_SERVOS;
+
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();
 
-	number_of_servos = IRP6_MECHATRONIKA_NUM_OF_SERVOS;
+
 
 	reset_variables();
 }

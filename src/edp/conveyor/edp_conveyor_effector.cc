@@ -56,9 +56,9 @@ effector::effector(lib::configurator &_config) :
 	motor_driven_effector(_config, lib::ROBOT_CONVEYOR)
 {
 	//  Stworzenie listy dostepnych kinematyk.
-	create_kinematic_models_for_given_robot();
-
 	number_of_servos = CONVEYOR_NUM_OF_SERVOS;
+
+	create_kinematic_models_for_given_robot();
 
 	reset_variables();
 }

@@ -37,9 +37,9 @@ robot::robot(common::task::task& _ecp_object) :
 void robot::create_kinematic_models_for_given_robot(void)
 {
 	// Stworzenie wszystkich modeli kinematyki.
-	add_kinematic_model(new kinematics::irp6ot::model_with_wrist());
-	add_kinematic_model(new kinematics::irp6ot::model_with_track());
-	add_kinematic_model(new kinematics::irp6ot::model_calibrated_with_wrist());
+	add_kinematic_model(new kinematics::irp6ot::model_with_wrist(number_of_servos));
+	add_kinematic_model(new kinematics::irp6ot::model_with_track(number_of_servos));
+	add_kinematic_model(new kinematics::irp6ot::model_calibrated_with_wrist(number_of_servos));
 	// Ustawienie aktywnego modelu.
 	set_kinematic_model(0);
 
