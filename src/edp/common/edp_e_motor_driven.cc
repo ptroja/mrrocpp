@@ -215,7 +215,7 @@ motor_driven_effector::motor_driven_effector(lib::configurator &_config, lib::ro
 	servo_current_motor_pos(MAX_SERVOS_NR),	servo_current_joints(MAX_SERVOS_NR),
 	desired_joints(MAX_SERVOS_NR), current_joints(MAX_SERVOS_NR),
 	desired_motor_pos_old(MAX_SERVOS_NR), desired_motor_pos_new(MAX_SERVOS_NR),
-	current_motor_pos(MAX_SERVOS_NR),
+	current_motor_pos(MAX_SERVOS_NR),vs(NULL),
 	step_counter(0), number_of_servos(-1)
 {
 
