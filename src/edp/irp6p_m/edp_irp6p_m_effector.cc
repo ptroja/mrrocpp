@@ -101,6 +101,8 @@ effector::effector(lib::configurator &_config) :
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();
 
+	number_of_servos = IRP6P_M_NUM_OF_SERVOS;
+
 	reset_variables();
 }
 
