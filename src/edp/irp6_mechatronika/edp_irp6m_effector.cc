@@ -66,19 +66,7 @@ effector::effector(lib::configurator &_config) :
 /*--------------------------------------------------------------------------*/
 void effector::set_robot_model(lib::c_buffer &instruction)
 {
-	// uint8_t previous_model;
-	// uint8_t previous_corrector;
-	//printf(" SET ROBOT_MODEL: ");
-	switch (instruction.set_robot_model_type)
-	{
-		case lib::SERVO_ALGORITHM:
-			sb->set_robot_model_servo_algorithm(instruction);
-			break;
-
-		default: // blad: nie istniejaca specyfikacja modelu robota
-			// ustawia numer bledu
-			manip_effector::set_robot_model(instruction);
-	}
+	manip_effector::set_robot_model_with_sb(instruction);
 }
 /*--------------------------------------------------------------------------*/
 

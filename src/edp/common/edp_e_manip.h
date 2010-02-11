@@ -114,6 +114,16 @@ public:
 	 */
     void get_arm_position_with_force_and_sb(bool, lib::c_buffer &);
 
+
+
+	/*!
+	 * \brief method to set the robot model commanded by ECP with usage of ser_buffer
+	 *
+	 * This method extends set_robot_model_method in case of usage of servo_buffer thread
+	 */
+    void set_robot_model_with_sb(lib::c_buffer &instruction);
+
+
 	/*!
 	 * \brief manip_effector class constructor
 	 *

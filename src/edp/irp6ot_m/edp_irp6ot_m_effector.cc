@@ -28,33 +28,18 @@ namespace mrrocpp {
 namespace edp {
 namespace irp6ot {
 
-common::servo_buffer* effector::return_created_servo_buffer ()
+common::servo_buffer* effector::return_created_servo_buffer()
 {
-	return new irp6ot::servo_buffer (*this);
+	return new irp6ot::servo_buffer(*this);
 }
-
-
 
 /*--------------------------------------------------------------------------*/
 void effector::set_robot_model(lib::c_buffer &instruction)
 {
-	// uint8_t previous_model;
-	// uint8_t previous_corrector;
+	manip_effector::set_robot_model_with_sb(instruction);
 
-	//printf(" SET ROBOT_MODEL: ");
-	switch (instruction.set_robot_model_type)
-	{
-		case lib::SERVO_ALGORITHM:
-			sb->set_robot_model_servo_algorithm(instruction);
-			break;
-		default: // blad: nie istniejca specyfikacja modelu robota
-			// ustawi numer bledu
-			manip_effector::set_robot_model(instruction);
-	}
 }
 /*--------------------------------------------------------------------------*/
-
-
 
 /*--------------------------------------------------------------------------*/
 void effector::move_arm(lib::c_buffer &instruction)
@@ -66,7 +51,6 @@ void effector::move_arm(lib::c_buffer &instruction)
 
 }
 /*--------------------------------------------------------------------------*/
-
 
 /*--------------------------------------------------------------------------*/
 void effector::create_threads()
@@ -91,7 +75,6 @@ void effector::create_threads()
 	motor_driven_effector::hi_create_threads();
 }
 
-
 // Konstruktor.
 effector::effector(lib::configurator &_config) :
 	manip_effector(_config, lib::ROBOT_IRP6_ON_TRACK)
@@ -100,8 +83,6 @@ effector::effector(lib::configurator &_config) :
 
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();
-
-
 
 	reset_variables();
 }
@@ -118,15 +99,12 @@ void effector::create_kinematic_models_for_given_robot(void)
 
 }
 
-
-
 /*--------------------------------------------------------------------------*/
 void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 { // odczytanie pozycji ramienia
 	manip_effector::get_arm_position_with_force_and_sb(read_hardware, instruction);
 }
 /*--------------------------------------------------------------------------*/
-
 
 void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
 {
@@ -140,7 +118,7 @@ namespace common {
 // Stworzenie obiektu edp_irp6p_effector.
 effector* return_created_efector(lib::configurator &_config)
 {
-	return new irp6ot::effector (_config);
+	return new irp6ot::effector(_config);
 }
 
 } // namespace common
