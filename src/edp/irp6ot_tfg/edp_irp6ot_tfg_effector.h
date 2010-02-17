@@ -15,27 +15,45 @@
 
 // Klasa edp_irp6s_robot.
 #include "edp/irp6ot_tfg/sg_irp6ot_tfg.h"
-#include "edp/common/edp_irp6s_postument_track.h"
+#include "edp/common/edp_e_motor_driven.h"
 #include "lib/irp6ot_tfg_const.h"
 
 #define IRP6OT_GRIPPER_CATCH_AXE 7
-#define IRP6OT_GRIPPER_TURN_AXE 6
 
 namespace mrrocpp {
 namespace edp {
 namespace irp6ot {
 
-// Klasa reprezentujaca robota IRp-6 na torze jezdnym.
-class effector : public common::irp6s_postument_track_effector
+
+
+
+// Klasa reprezentujaca tasmociag.
+class effector  : public common::motor_driven_effector
 {
 protected:
     // Metoda tworzy modele kinematyczne dla robota IRp-6 na postumencie.
     virtual void create_kinematic_models_for_given_robot(void);
 
 public:
+    // Konstruktor.
     effector (lib::configurator &_config);
+
+    void set_robot_model (lib::c_buffer &instruction);                    // zmiana narzedzia
+
+    void create_threads();
+
+    // Przemieszczenie ramienia.
+    void move_arm (lib::c_buffer &instruction);
+    // Odczytanie pozycji ramienia.
+    void get_arm_position (bool read_hardware, lib::c_buffer &instruction);
+    // Aktualizacja polozenia.
+
+
     common::servo_buffer *return_created_servo_buffer ();
+	void master_order(common::MT_ORDER nm_task, int nm_tryb);
+
 };
+
 
 } // namespace irp6ot
 } // namespace edp

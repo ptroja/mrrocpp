@@ -20,27 +20,20 @@ const unsigned short int INT_FREC_DIVIDER = 4; // Dzielnik czestotliwosci przerw
 
 #define HI_RYDZ_INTR_TIMEOUT_HIGH 10000000 // by Y - timeout przerwania z szafy badz zegara
 
-#define FIRST_SERVO_PTR           0xC0
+#define FIRST_SERVO_PTR           0xC7
 #define INTERRUPT_GENERATOR_SERVO_PTR	 0xC0
-#define IN_OUT_PACKET		0xC8
+
 
 #define ISA_CARD_OFFSET 0x20 // w zaleznosci od ustawienia na karcie isa
 
-#define IRP6_ON_TRACK_AXIS_1_MAX_CURRENT           0x2430 // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
-#define IRP6_ON_TRACK_AXIS_2_MAX_CURRENT           0x2430 // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
-#define IRP6_ON_TRACK_AXIS_3_MAX_CURRENT           0x2430 // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
-#define IRP6_ON_TRACK_AXIS_4_MAX_CURRENT           0x2430 // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
-#define IRP6_ON_TRACK_AXIS_5_MAX_CURRENT           0x2430 // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
-#define IRP6_ON_TRACK_AXIS_6_MAX_CURRENT           0x2430 // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
-#define IRP6_ON_TRACK_AXIS_7_MAX_CURRENT           0x2410 // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
+
 // 13,7 j na amper
 
 #define IRP6_ON_TRACK_AXIS_8_MAX_CURRENT           0x2427 // ustawienie pradu maksymalnego dla zacisku chwytaka
 // by Y - UWAGA nieczulosc nieznana, rozdzielczosc do ustalenia
 // 25,3 j na 100ma, strefa nieczulosci na poziomie 40ma
 
-#define IRP6_ON_TRACK_AXIS_0_TO_5_INC_PER_REVOLUTION   682.0  // Liczba impulsow rezolwera na obrot walu - musi byc float
-#define IRP6_ON_TRACK_AXIS_6_INC_PER_REVOLUTION  2000.0  // Liczba impulsow enkodera na obrot walu - musi byc float
+
 #define IRP6_ON_TRACK_AXIS_7_INC_PER_REVOLUTION  128.0  // Liczba impulsow enkodera na obrot walu - musi byc float
 
 // ------------------------------------------------------------------------
@@ -55,9 +48,6 @@ public:
     		unsigned int _hi_first_servo_ptr, unsigned int _hi_intr_generator_servo_ptr,
     		unsigned int _hi_isa_card_offset, int* _max_current);    // Konstruktor
 
-	uint64_t read_write_hardware(void); // Obsluga sprzetu
-
-	void finish_synchro(int drive_number);
 
 }; // koniec: class hardware_interface
 
