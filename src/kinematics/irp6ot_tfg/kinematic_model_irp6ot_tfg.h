@@ -21,10 +21,31 @@ namespace irp6ot {
 class model : public common::kinematic_model
 {
 protected:
-  // Polozenie synchronizacji.
+
+  // Zmienne opisujace przekladnie dla wszystkich stopni swobody.
+  double gear;
+  double theta;
+
+  // Zakresy ruchu walow silnikow w radianach.
+  double lower_limit_axis;
+  double upper_limit_axis;
+  // Zakresy ruchu poszczegolnych stopni swobody (w radianach lub milimetrach).
+  double lower_limit_joint;
+  double upper_limit_joint;
+
+  // Polozenia synchronizacji (polozenia walow silnikow).
   double synchro_motor_position;
-  // Stosunek polozenia walu silnika do polozenia we wsp. wewn (zewn) w metrach.
-  double motor_to_intext_ratio;
+  // Polozenia synchronizacji (polozenia we wspolrzednych wewnetrznych).
+  double synchro_joint_position;
+
+  // Zmienne zwiazane z obliczeniami zwarcia/rozwarcia chwytaka.
+  double dir_a_7;
+  double dir_b_7;
+  double dir_c_7;
+  double inv_a_7;
+  double inv_b_7;
+  double inv_c_7;
+  double inv_d_7;
 
   // Ustawienie parametrow kinematycznych.
   virtual void set_kinematic_parameters(void);
