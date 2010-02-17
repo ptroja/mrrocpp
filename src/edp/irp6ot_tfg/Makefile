@@ -7,7 +7,7 @@ HOMEDIR = ../../..
 include $(HOMEDIR)/common.mk
 
 SOURCES = ${wildcard *.cc}
-KIN_OBJECTS = ${KIN_DIR}/irp6_on_track/libkinematicsirp6ot.a $(KIN_DIR)/common/libkinematics.a
+KIN_OBJECTS = ${KIN_DIR}/irp6ot_tfg/libkinematicsirp6ot_tfg.a $(KIN_DIR)/common/libkinematics.a
 
 OBJECTS = ../common/edp_vsp_t.o edp_irp6ot_tfg_effector.o hi_irp6ot_tfg.o\
  int_hand_irp6ot_tfg.o sg_irp6ot_tfg.o ../common/regulator_irp6ot_tfg.o

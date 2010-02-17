@@ -17,10 +17,7 @@
 // Klasa edp_irp6ot_effector.
 #include "edp/irp6ot_tfg/edp_irp6ot_tfg_effector.h"
 // Kinematyki.
-#include "kinematics/irp6_on_track/kinematic_model_irp6ot_with_track.h"
-#include "kinematics/irp6_on_track/kinematic_model_irp6ot_with_wrist.h"
-#include "kinematics/irp6_on_track/kinematic_model_calibrated_irp6ot_with_wrist.h"
-#include "kinematics/common/kinematic_model_with_tool.h"
+#include "kinematics/irp6ot_tfg/kinematic_model_irp6ot_tfg.h"
 
 namespace mrrocpp {
 namespace edp {
@@ -101,9 +98,7 @@ common::servo_buffer* effector::return_created_servo_buffer()
 void effector::create_kinematic_models_for_given_robot(void)
 {
 	// Stworzenie wszystkich modeli kinematyki.
-	add_kinematic_model(new kinematics::irp6ot::model_with_wrist(number_of_servos));
-	add_kinematic_model(new kinematics::irp6ot::model_with_track(number_of_servos));
-	add_kinematic_model(new kinematics::irp6ot::model_calibrated_with_wrist(number_of_servos));
+	add_kinematic_model(new kinematics::irp6ot::model());
 	// Ustawienie aktywnego modelu.
 	set_kinematic_model(0);
 

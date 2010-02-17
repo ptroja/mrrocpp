@@ -12,10 +12,7 @@
 #include "lib/irp6ot_tfg_const.h"
 
 #include "kinematics/common/kinematics_manager.h"
-#include "kinematics/irp6_on_track/kinematic_model_irp6ot_with_track.h"
-#include "kinematics/irp6_on_track/kinematic_model_irp6ot_with_wrist.h"
-#include "kinematics/irp6_on_track/kinematic_model_calibrated_irp6ot_with_wrist.h"
-#include "kinematics/common/kinematic_model_with_tool.h"
+#include "kinematics/irp6ot_tfg/kinematic_model_irp6ot_tfg.h"
 
 namespace mrrocpp {
 namespace ecp {
