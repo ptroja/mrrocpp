@@ -9,14 +9,14 @@
 // Data:		31.01.2007
 // ------------------------------------------------------------------------
 
-#if !defined(_IRP6OT_TFG_KIN_MODEL)
-#define _IRP6OT_TFG_KIN_MODEL
+#if !defined(_IRP6P_TFG_KIN_MODEL)
+#define _IRP6P_TFG_KIN_MODEL
 
 #include "kinematics/common/kinematic_model_irp6_tfg.h"
 
 namespace mrrocpp {
 namespace kinematics {
-namespace irp6ot {
+namespace irp6p {
 
 class model: public common::kinematic_model_irp6_tfg
 {

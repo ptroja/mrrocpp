@@ -12,11 +12,11 @@
 #include "lib/com_buf.h"
 
 // Klasa kinematic_model_conveyor.
-#include "kinematics/irp6ot_tfg/kinematic_model_irp6ot_tfg.h"
+#include "kinematics/irp6p_tfg/kinematic_model_irp6p_tfg.h"
 
 namespace mrrocpp {
 namespace kinematics {
-namespace irp6ot {
+namespace irp6p {
 
 /* -----------------------------------------------------------------------
  Konstruktor.
