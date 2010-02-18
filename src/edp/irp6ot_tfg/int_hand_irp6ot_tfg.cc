@@ -148,7 +148,7 @@ int_handler(void *arg, int int_id)
 			}
 		}
 
-		if (robot_status[6].adr_offset_plus_0 & 0x0080) // czy wlaczono moc
+		if (robot_status[0].adr_offset_plus_0 & 0x0080) // czy wlaczono moc
 		{
 			md.is_power_on = true;
 		} else {
