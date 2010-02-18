@@ -14,7 +14,7 @@ wii_absolute::wii_absolute (common::task::task& _ecp_task,ecp_mp::sensor::wiimot
     int i;
     char buffer[100];
 
-    for(i = 0;i<NO_OF_DEGREES;++i)
+    for(i = 0;i<MAX_NO_OF_DEGREES;++i)
     {
         sprintf(buffer,"absolute_multiplier_%d",i);
         multipliers[i] = ecp_t.config.value<double>(buffer);
@@ -42,18 +42,18 @@ void wii_absolute::set_position(void)
 
     homog_matrix.get_translation_vector(old_translation);
 
-    translation[0] = nextChange[0];
-    translation[1] = nextChange[1];
+    translation[0] = -nextChange[1];
+    translation[1] = nextChange[0];
     translation[2] = nextChange[2];
 
-    rotation[0][0] = cos(nextChange[3])*cos(nextChange[4]);
-    rotation[1][0] = sin(nextChange[3])*cos(nextChange[4]);
+    rotation[0][0] = cos(nextChange[6])*cos(nextChange[4]);
+    rotation[1][0] = sin(nextChange[6])*cos(nextChange[4]);
     rotation[2][0] = -sin(nextChange[4]);
-    rotation[0][1] = cos(nextChange[3])*sin(nextChange[4])*sin(nextChange[5])-sin(nextChange[3])*cos(nextChange[5]);
-    rotation[1][1] = sin(nextChange[3])*sin(nextChange[4])*sin(nextChange[5])+cos(nextChange[3])*cos(nextChange[5]);
+    rotation[0][1] = cos(nextChange[6])*sin(nextChange[4])*sin(nextChange[5])-sin(nextChange[6])*cos(nextChange[5]);
+    rotation[1][1] = sin(nextChange[6])*sin(nextChange[4])*sin(nextChange[5])+cos(nextChange[6])*cos(nextChange[5]);
     rotation[2][1] = cos(nextChange[4])*sin(nextChange[5]);
-    rotation[0][2] = cos(nextChange[3])*sin(nextChange[4])*cos(nextChange[5])+sin(nextChange[3])*sin(nextChange[5]);
-    rotation[1][2] = sin(nextChange[3])*sin(nextChange[4])*cos(nextChange[5])-cos(nextChange[3])*sin(nextChange[5]);
+    rotation[0][2] = cos(nextChange[6])*sin(nextChange[4])*cos(nextChange[5])+sin(nextChange[6])*sin(nextChange[5]);
+    rotation[1][2] = sin(nextChange[6])*sin(nextChange[4])*cos(nextChange[5])-cos(nextChange[6])*sin(nextChange[5]);
     rotation[2][2] = cos(nextChange[4])*cos(nextChange[5]);
 
     rotation_matrix.set_rotation_matrix(rotation);
@@ -66,7 +66,7 @@ void wii_absolute::set_position(void)
 
     homog_matrix.get_frame_tab(the_robot->ecp_command.instruction.arm.pf_def.arm_frame);
 
-    the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = 0.074;
+    the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = the_robot->reply_package.arm.pf_def.gripper_coordinate + nextChange[7];
 }
 
 
@@ -91,7 +91,7 @@ bool wii_absolute::first_step()
 void wii_absolute::preset_position(void)
 {
     int i;
-    for(i = 0;i < NO_OF_DEGREES;++i)
+    for(i = 0;i < MAX_NO_OF_DEGREES;++i)
     {
         requestedChange[i] = 0;
     }

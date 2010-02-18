@@ -18,14 +18,6 @@ namespace generator {
  *  @{
  */
 
-
-#define NO_OF_DEGREES 7
-
-#if (MAX_NO_OF_DEGREES < NO_OF_DEGREES)
-#error MAX_NO_OF_DEGREES exceeded
-#endif
-
-
 class wii_joint : public irp6ot::generator::wii
 {
     public:

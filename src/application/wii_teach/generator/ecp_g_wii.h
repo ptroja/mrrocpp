@@ -19,7 +19,14 @@ namespace generator {
  *  @{
  */
 
-#define MAX_NO_OF_DEGREES 10
+#define MAX_NO_OF_DEGREES 8
+
+#define NO_OF_DEGREES 8
+
+#if (MAX_NO_OF_DEGREES < NO_OF_DEGREES)
+#error MAX_NO_OF_DEGREES exceeded
+#endif
+
 
 class wii : public common::generator::generator
 {
