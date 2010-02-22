@@ -366,7 +366,7 @@ ApMenuLink_t all_robots_menu = {
 	982, 8, 10
 	};
 
-static ApItem_t ApItems_robot_menu[ 99 ] = {
+static ApItem_t ApItems_robot_menu[ 125 ] = {
 	{ 1, 2, 0, NULL, 1, "mm_irp6_on_track", "Irp6-on-&Track", NULL },
 	{ 2, 1, 0, NULL, 0, "mm_irp6_on_track_edp_load", "EDP &Load", NULL },
 	{ 2, 1, 0, NULL, 0, "mm_irp6_on_track_edp_unload", "EDP &Unload", NULL },
@@ -393,6 +393,19 @@ static ApItem_t ApItems_robot_menu[ 99 ] = {
 	{ 3, 1, 0, NULL, 0, "mm_irp6_on_track_xyz_angle_axis_ts", "Xyz &Angle Axis", NULL },
 	{ 2, 1, 0, NULL, 0, "mm_irp6_on_track_kinematic", "&Kinematic", NULL },
 	{ 2, 1, 0, NULL, 0, "mm_irp6_on_track_servo_algorithm", "Servo &Algorithm", NULL },
+	{ 1, 2, 0, NULL, 0, "mm_irp6ot_tfg", "Irp6ot-t&Fg", NULL },
+	{ 2, 1, 0, NULL, 0, "mm_irp6ot_tfg_edp_load", "EDP &Load", NULL },
+	{ 2, 1, 0, NULL, 0, "mm_irp6ot_tfg_edp_unload", "EDP &Unload", NULL },
+	{ 2, 16, 0, NULL, 4, "", "", NULL },
+	{ 2, 1, 0, NULL, 0, "mm_irp6ot_tfg_synchronisation", "&Synchronisation", NULL },
+	{ 2, 1, 0, NULL, 0, "mm_irp6ot_tfg_move", "&Move", NULL },
+	{ 2, 2, 0, NULL, 0, "mm_irp6ot_tfg_preset_positions", "&Preset Positions", NULL },
+	{ 3, 1, 0, NULL, 0, "mm_irp6ot_tfg_preset_position_synchro", "&Synchro Position", NULL },
+	{ 3, 1, 0, NULL, 0, "mm_irp6ot_tfg_preset_position_0", "Position &0", NULL },
+	{ 3, 1, 0, NULL, 0, "mm_irp6ot_tfg_preset_position_1", "Position &1", NULL },
+	{ 3, 1, 0, NULL, 0, "mm_irp6ot_tfg_preset_position_2", "Position &2", NULL },
+	{ 2, 16, 0, NULL, 4, "", "", NULL },
+	{ 2, 1, 0, NULL, 0, "mm_irp6ot_tfg_servo_algorithm", "Servo &Algorithm", NULL },
 	{ 1, 2, 0, NULL, 1, "mm_irp6_postument", "Irp6-&Postument", NULL },
 	{ 2, 1, 0, NULL, 0, "mm_irp6_postument_edp_load", "EDP &Load", NULL },
 	{ 2, 1, 0, NULL, 0, "mm_irp6_postument_edp_unload", "EDP &Unload", NULL },
@@ -419,6 +432,19 @@ static ApItem_t ApItems_robot_menu[ 99 ] = {
 	{ 3, 1, 0, NULL, 0, "mm_irp6_postument_xyz_angle_axis_ts", "Xyz &Angle Axis", NULL },
 	{ 2, 1, 0, NULL, 0, "mm_irp6_postument_kinematic", "&Kinematic", NULL },
 	{ 2, 1, 0, NULL, 0, "mm_irp6_postument_servo_algorithm", "Servo &Algorithm", NULL },
+	{ 1, 2, 0, NULL, 0, "mm_irp6p_tfg", "Irp6p-tf&G", NULL },
+	{ 2, 1, 0, NULL, 0, "mm_irp6p_tfg_edp_load", "EDP &Load", NULL },
+	{ 2, 1, 0, NULL, 0, "mm_irp6p_tfg_edp_unload", "EDP &Unload", NULL },
+	{ 2, 16, 0, NULL, 4, "", "", NULL },
+	{ 2, 1, 0, NULL, 0, "mm_irp6p_tfg_synchronisation", "&Synchronisation", NULL },
+	{ 2, 1, 0, NULL, 0, "mm_irp6p_tfg_move", "&Move", NULL },
+	{ 2, 2, 0, NULL, 0, "mm_irp6p_tfg_preset_positions", "&Preset Positions", NULL },
+	{ 3, 1, 0, NULL, 0, "mm_irp6p_tfg_preset_position_synchro", "&Synchro Position", NULL },
+	{ 3, 1, 0, NULL, 0, "mm_irp6p_tfg_preset_position_0", "Position &0", NULL },
+	{ 3, 1, 0, NULL, 0, "mm_irp6p_tfg_preset_position_1", "Position &1", NULL },
+	{ 3, 1, 0, NULL, 0, "mm_irp6p_tfg_preset_position_2", "Position &2", NULL },
+	{ 2, 16, 0, NULL, 4, "", "", NULL },
+	{ 2, 1, 0, NULL, 0, "mm_irp6p_tfg_servo_algorithm", "Servo &Algorithm", NULL },
 	{ 1, 2, 0, NULL, 1, "mm_conveyor", "&Conveyor", NULL },
 	{ 2, 1, 0, NULL, 0, "mm_conveyor_edp_load", "EDP &Load", NULL },
 	{ 2, 1, 0, NULL, 0, "mm_conveyor_edp_unload", "EDP &Unload", NULL },
@@ -432,6 +458,7 @@ static ApItem_t ApItems_robot_menu[ 99 ] = {
 	{ 3, 1, 0, NULL, 0, "mm_conveyor_preset_position_2", "Position &2", NULL },
 	{ 2, 16, 0, NULL, 4, "", "", NULL },
 	{ 2, 1, 0, NULL, 0, "mm_conveyor_servo_algorithm", "Servo &Algorithm", NULL },
+	{ 1, 16, 0, NULL, 4, "", "", NULL },
 	{ 1, 2, 0, NULL, 1, "mm_speaker", "&Speaker", NULL },
 	{ 2, 1, 0, NULL, 0, "mm_speaker_edp_load", "EDP &Load", NULL },
 	{ 2, 1, 0, NULL, 0, "mm_speaker_edp_unload", "EDP &Unload", NULL },
@@ -441,7 +468,6 @@ static ApItem_t ApItems_robot_menu[ 99 ] = {
 	{ 3, 1, 0, NULL, 0, "mm_speaker_preset_sound_0", "Sound &0", NULL },
 	{ 3, 1, 0, NULL, 0, "mm_speaker_preset_sound_1", "Sound &1", NULL },
 	{ 3, 1, 0, NULL, 0, "mm_speaker_preset_sound_2", "Sound &2", NULL },
-	{ 1, 16, 0, NULL, 4, "", "", NULL },
 	{ 1, 2, 0, NULL, 1, "mm_irp6_mechatronika", "Irp6-&Mechatronika", NULL },
 	{ 2, 1, 0, NULL, 0, "mm_irp6_mechatronika_edp_load", "EDP &Load", NULL },
 	{ 2, 1, 0, NULL, 0, "mm_irp6_mechatronika_edp_unload", "EDP &Unload", NULL },
@@ -476,7 +502,7 @@ ApMenuLink_t robot_menu = {
 	ApItems_robot_menu,
 	& AbContext,
 	AbLinks_robot_menu,
-	993, 67, 98
+	993, 85, 124
 	};
 
 

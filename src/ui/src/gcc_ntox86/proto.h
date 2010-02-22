@@ -75,6 +75,7 @@ int all_robots_move_to_preset_position ( PtWidget_t *widget , ApInfo_t *apinfo ,
 int EDP_all_robots_create ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int EDP_all_robots_slay ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int MPup ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
+int MPup_int ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int MPslay ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 bool deactivate_ecp_trigger ( ecp_edp_ui_robot_def &robot_l );
 int pulse_start_mp ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
@@ -89,6 +90,7 @@ int pulse_reader_all_robots_stop ( PtWidget_t *widget , ApInfo_t *apinfo , PtCal
 int pulse_reader_all_robots_trigger ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int pulse_reader_execute ( int coid , int pulse_code , int pulse_value );
 int pulse_ecp_all_robots ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
+bool check_node_existence ( const std ::string _node , const std ::string beginnig_of_message );
 
 /* ../fun_r_conveyor.cc */
 int close_wind_conveyor_moves ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
@@ -251,7 +253,6 @@ int wnd_irp6ot_seralg_copy_current_to_desired ( PtWidget_t *widget , ApInfo_t *a
 int irp6ot_servo_algorithm_set ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int EDP_irp6_on_track_create ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int EDP_irp6_on_track_create_int ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
-int MPup_int ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int EDP_irp6_on_track_slay ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int EDP_irp6_on_track_slay_int ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int close_all_irp6ot_windows ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
@@ -349,6 +350,22 @@ int clear_wnd_irp6p_xyz_aa_relative_flag ( PtWidget_t *widget , ApInfo_t *apinfo
 int close_wnd_irp6_postument_xyz_aa_relative ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int irp6p_xyz_aa_relative_motion ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 
+/* ../fun_r_irp6ot_tfg.cc */
+int EDP_irp6ot_tfg_create ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
+int EDP_irp6ot_tfg_slay ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
+int EDP_irp6ot_tfg_synchronise ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
+int start_wind_irp6ot_tfg_moves ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
+int irp6ot_tfg_move_to_preset_position ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
+int start_wnd_irp6ot_tfg_servo_algorithm ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
+
+/* ../fun_r_irp6p_tfg.cc */
+int EDP_irp6p_tfg_create ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
+int EDP_irp6p_tfg_slay ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
+int EDP_irp6p_tfg_synchronise ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
+int start_wind_irp6p_tfg_moves ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
+int irp6p_tfg_move_to_preset_position ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
+int start_wnd_irp6p_tfg_servo_algorithm ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
+
 /* ../fun_r_speaker.cc */
 int close_wnd_speaker_play ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int start_wind_speaker_play ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
@@ -422,4 +439,3 @@ int TRbtnDSSCalibrate ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t
 int TRbtnFSCalibrate ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int TRbtnTryAgain ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int TRDangerousForceDetected ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
-bool check_node_existence(const std::string _node, const std::string beginnig_of_message);

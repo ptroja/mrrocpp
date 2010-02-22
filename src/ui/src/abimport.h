@@ -355,4 +355,16 @@ int clear_wnd_irp6ot_xyz_aa_relative_flag( PtWidget_t *widget, ApInfo_t *data, P
 int clear_wnd_irp6p_xyz_aa_relative_flag( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 int irp6ot_xyz_aa_relative_motion( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 int irp6p_xyz_aa_relative_motion( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int EDP_irp6p_tfg_create( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int EDP_irp6p_tfg_slay( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int EDP_irp6p_tfg_synchronise( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int start_wind_irp6p_tfg_moves( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int irp6p_tfg_move_to_preset_position( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int start_wnd_irp6p_tfg_servo_algorithm( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int EDP_irp6ot_tfg_create( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int EDP_irp6ot_tfg_slay( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int EDP_irp6ot_tfg_synchronise( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int start_wind_irp6ot_tfg_moves( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int irp6ot_tfg_move_to_preset_position( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int start_wnd_irp6ot_tfg_servo_algorithm( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 #endif
