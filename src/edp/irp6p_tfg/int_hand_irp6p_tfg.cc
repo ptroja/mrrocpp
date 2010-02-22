@@ -52,7 +52,7 @@ int_handler (void *arg, int int_id)
 	common::motor_data & md = irq_data->md;
 	struct sigevent & event = irq_data->event;
 
-	common::status_of_a_dof robot_status[IRP6_POSTUMENT_NUM_OF_SERVOS];
+	common::status_of_a_dof robot_status[IRP6P_TFG_NUM_OF_SERVOS];
 	short int low_word, high_word;
 
 	md.hardware_error = (uint64_t) lib::ALL_RIGHT; // Nie ma bledow sprzetowych

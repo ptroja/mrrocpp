@@ -18,6 +18,12 @@ namespace edp {
 namespace irp6ot {
 class effector;
 
+
+#define IRP6_ON_TRACK_AXE8_MAX_PWM_INCREMENT	1000
+
+#define IRP6_ON_TRACK_AXIS_7_SYNCHRO_STEP_COARSE -0.5
+#define IRP6_ON_TRACK_AXIS_7_SYNCHRO_STEP_FINE   -0.2
+
 // stale dla automatu w regulatorze chwytka
 #define GRIPPER_BLOCKED_TIME_PERIOD 200
 #define MAX_GRIPPER_SUM_OF_CURRENTS_NR_OF_ELEMENTS 1000
@@ -27,7 +33,7 @@ class effector;
 // #define IRP6_ON_TRACK_GRIPPER_SUM_PWM_MIN 80
 
 
-#define IRP6_ON_TRACK_AXE8_MAX_PWM_INCREMENT	1000
+#
 
 
 #define POSTUMENT_TO_TRACK_VOLTAGE_RATIO 0.75

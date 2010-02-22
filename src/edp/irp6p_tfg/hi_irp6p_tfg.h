@@ -23,22 +23,17 @@ const unsigned short int INT_FREC_DIVIDER = 8; // mnoznik czestotliwosci przerwa
 
 #define HI_RYDZ_INTR_TIMEOUT_HIGH 10000000 // by Y - timeout przerwania z szafy badz zegara
 
-#define FIRST_SERVO_PTR           0xC1
+#define FIRST_SERVO_PTR           0xC7
 #define INTERRUPT_GENERATOR_SERVO_PTR	 0xC0
 
 
 #define ISA_CARD_OFFSET 0x20 // w zaleznosci od ustawienia na karcie isa
 
-#define IRP6_POSTUMENT_AXIS_1_MAX_CURRENT           0x24FF // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
-#define IRP6_POSTUMENT_AXIS_2_MAX_CURRENT           0x24FF // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
-#define IRP6_POSTUMENT_AXIS_3_MAX_CURRENT           0x24FF // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
-#define IRP6_POSTUMENT_AXIS_4_MAX_CURRENT           0x24FF // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
-#define IRP6_POSTUMENT_AXIS_5_MAX_CURRENT           0x24FF // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
-#define IRP6_POSTUMENT_AXIS_6_MAX_CURRENT           0x24FF // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
-// 13,7 j na amper
 
 #define IRP6_POSTUMENT_AXIS_7_MAX_CURRENT           0x2430 // ustawienie pradu maksymalnego dla zacisku chwytaka
 // 34,7 j na 100ma, streafa nieczulosci 40ma
+
+#define IRP6_POSTUMENT_AXIS_7_INC_PER_REVOLUTION  128.0  // Liczba impulsow enkodera na obrot walu - musi byc float
 
 class effector;
 

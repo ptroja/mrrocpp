@@ -29,7 +29,7 @@ namespace irp6ot {
 servo_buffer::servo_buffer(effector &_master) :
 	common::servo_buffer(_master), master(_master)
 {
-
+	synchro_axis_order[0] = 0;
 	axe_inc_per_revolution[0] = IRP6_ON_TRACK_AXIS_7_INC_PER_REVOLUTION;
 	synchro_step_coarse[0] = IRP6_ON_TRACK_AXIS_7_SYNCHRO_STEP_COARSE;
 	synchro_step_fine[0] = IRP6_ON_TRACK_AXIS_7_SYNCHRO_STEP_FINE;

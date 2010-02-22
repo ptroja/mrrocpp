@@ -12,12 +12,9 @@
 #include "lib/irp6p_tfg_const.h"
 
 #include "kinematics/common/kinematics_manager.h"
-#include "kinematics/irp6_postument/kinematic_model_irp6p_with_wrist.h"
-#include "kinematics/irp6_postument/kinematic_model_irp6p_5dof.h"
-#include "kinematics/irp6_postument/kinematic_model_calibrated_irp6p_with_wrist.h"
-#include "kinematics/irp6_postument/kinematic_model_irp6p_jacobian_with_wrist.h"
-#include "kinematics/irp6_postument/kinematic_model_irp6p_jacobian_transpose_with_wrist.h"
-#include "kinematics/common/kinematic_model_with_tool.h"
+
+#include "kinematics/irp6p_tfg/kinematic_model_irp6p_tfg.h"
+
 
 namespace mrrocpp {
 namespace ecp {

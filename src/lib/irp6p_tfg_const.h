@@ -23,18 +23,12 @@ namespace lib {
 extern "C" {
 #endif
 
-// do podmianki
-/*
+
  #define EDP_IRP6P_TFG_SECTION "[edp_irp6p_tfg]"
  #define ECP_IRP6P_TFG_SECTION "[ecp_irp6p_tfg]"
 
  #define IRP6P_TFG_NUM_OF_SERVOS	1
- */
 
-#define EDP_IRP6_POSTUMENT_SECTION "[edp_irp6_postument]"
-#define ECP_IRP6_POSTUMENT_SECTION "[ecp_irp6_postument]"
-
-#define IRP6_POSTUMENT_NUM_OF_SERVOS	7
 
 #ifdef __cplusplus
 }

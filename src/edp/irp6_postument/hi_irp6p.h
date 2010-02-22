@@ -40,6 +40,12 @@ const unsigned short int INT_FREC_DIVIDER = 8; // mnoznik czestotliwosci przerwa
 #define IRP6_POSTUMENT_AXIS_7_MAX_CURRENT           0x2430 // ustawienie pradu maksymalnego dla zacisku chwytaka
 // 34,7 j na 100ma, streafa nieczulosci 40ma
 
+
+#define IRP6_POSTUMENT_AXIS_0_TO_5_INC_PER_REVOLUTION  4000.0  // Liczba impulsow enkodera na obrot walu - musi byc float
+#define IRP6_POSTUMENT_AXIS_6_INC_PER_REVOLUTION  2000.0  // Liczba impulsow enkodera na obrot walu - musi byc float
+#define IRP6_POSTUMENT_AXIS_7_INC_PER_REVOLUTION  128.0  // Liczba impulsow enkodera na obrot walu - musi byc float
+
+
 class effector;
 
 // ------------------------------------------------------------------------

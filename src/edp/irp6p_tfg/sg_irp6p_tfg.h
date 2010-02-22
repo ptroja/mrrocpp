@@ -18,6 +18,7 @@
 namespace mrrocpp {
 namespace edp {
 namespace irp6p {
+
 class effector;
 
 class servo_buffer: public common::servo_buffer
@@ -25,14 +26,12 @@ class servo_buffer: public common::servo_buffer
 	// Bufor polecen przysylanych z EDP_MASTER dla SERVO
 	// Obiekt z algorytmem regulacji
 
-
 public:
 	// output_buffer
 	void get_all_positions(void);
 	effector &master;
 	void load_hardware_interface(void);
 	servo_buffer(effector &_master); // konstruktor
-
 	// obliczenie nastepnej wartosci zadanej dla wszystkich napedow
 };
 

@@ -38,8 +38,7 @@ namespace irp6p {
 #define IRP6_POSTUMENT_AXIS_0_TO_5_SYNCHRO_STEP_FINE   -0.007
 #define IRP6_POSTUMENT_AXIS_6_SYNCHRO_STEP_COARSE -0.05
 #define IRP6_POSTUMENT_AXIS_6_SYNCHRO_STEP_FINE   -0.05
-#define IRP6_POSTUMENT_AXIS_7_SYNCHRO_STEP_COARSE -0.5
-#define IRP6_POSTUMENT_AXIS_7_SYNCHRO_STEP_FINE   -0.2
+
 
 
 /*-----------------------------------------------------------------------*/

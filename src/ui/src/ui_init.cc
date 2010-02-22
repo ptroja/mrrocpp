@@ -160,27 +160,40 @@ int init( PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo 
 
 	ui_state.irp6_on_track.edp.state=-1; // edp nieaktywne
 	ui_state.irp6_on_track.edp.last_state=-1; // edp nieaktywne
-
 	ui_state.irp6_on_track.ecp.trigger_fd = -1;
 	ui_state.irp6_on_track.edp.section_name = EDP_IRP6_ON_TRACK_SECTION;
 	ui_state.irp6_on_track.ecp.section_name = ECP_IRP6_ON_TRACK_SECTION;
+
+	ui_state.irp6ot_tfg.edp.state=-1; // edp nieaktywne
+	ui_state.irp6ot_tfg.edp.last_state=-1; // edp nieaktywne
+	ui_state.irp6ot_tfg.ecp.trigger_fd = -1;
+	ui_state.irp6ot_tfg.edp.section_name = EDP_IRP6OT_TFG_SECTION;
+	ui_state.irp6ot_tfg.ecp.section_name = ECP_IRP6OT_TFG_SECTION;
+
 	ui_state.irp6_postument.edp.state=-1; // edp nieaktywne
 	ui_state.irp6_postument.edp.last_state=-1; // edp nieaktywne
-
 	ui_state.irp6_postument.ecp.trigger_fd = -1;
 	ui_state.irp6_postument.edp.section_name = EDP_IRP6_POSTUMENT_SECTION;
 	ui_state.irp6_postument.ecp.section_name = ECP_IRP6_POSTUMENT_SECTION;
+
+	ui_state.irp6p_tfg.edp.state=-1; // edp nieaktywne
+	ui_state.irp6p_tfg.edp.last_state=-1; // edp nieaktywne
+	ui_state.irp6p_tfg.ecp.trigger_fd = -1;
+	ui_state.irp6p_tfg.edp.section_name = EDP_IRP6P_TFG_SECTION;
+	ui_state.irp6p_tfg.ecp.section_name = ECP_IRP6P_TFG_SECTION;
+
 	ui_state.speaker.edp.state=-1; // edp nieaktywne
 	ui_state.speaker.edp.last_state=-1; // edp nieaktywne
 	ui_state.speaker.ecp.trigger_fd = -1;
 	ui_state.speaker.edp.section_name = EDP_SPEAKER_SECTION;
 	ui_state.speaker.ecp.section_name = ECP_SPEAKER_SECTION;
+
 	ui_state.conveyor.edp.state=-1; // edp nieaktywne
 	ui_state.conveyor.edp.last_state=-1; // edp nieaktywne
-
 	ui_state.conveyor.ecp.trigger_fd = -1;
 	ui_state.conveyor.edp.section_name = EDP_CONVEYOR_SECTION;
 	ui_state.conveyor.ecp.section_name = ECP_CONVEYOR_SECTION;
+
 	ui_state.irp6_mechatronika.edp.state=-1; // edp nieaktywne
 	ui_state.irp6_mechatronika.edp.last_state=-1; // edp nieaktywne
 
@@ -219,6 +232,8 @@ int init( PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo 
 	ui_state.is_wind_irp6m_xyz_euler_zyz_ts_open=false;
 	ui_state.is_teaching_window_open=false;
 	ui_state.is_wind_conveyor_moves_open=false;
+	ui_state.is_wind_irp6ot_tfg_moves_open=false;
+	ui_state.is_wind_irp6p_tfg_moves_open=false;
 	ui_state.is_wind_irp6ot_kinematic_open=false;
 	ui_state.is_wind_irp6p_kinematic_open=false;
 	ui_state.is_wind_irp6m_kinematic_open=false;
@@ -229,6 +244,8 @@ int init( PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo 
 
 	ui_state.is_wind_irp6ot_servo_algorithm_open=false;
 	ui_state.is_wind_irp6p_servo_algorithm_open=false;
+	ui_state.is_wind_irp6ot_tfg_servo_algorithm_open=false;
+	ui_state.is_wind_irp6p_tfg_servo_algorithm_open=false;
 	ui_state.is_wind_irp6m_servo_algorithm_open=false;
 	ui_state.is_wind_conv_servo_algorithm_open=false;
 
@@ -238,6 +255,8 @@ int init( PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo 
 
 	ui_state.irp6_on_track.edp.is_synchronised = false;
 	ui_state.irp6_postument.edp.is_synchronised = false;
+	ui_state.irp6ot_tfg.edp.is_synchronised = false;
+	ui_state.irp6p_tfg.edp.is_synchronised = false;
 	ui_state.conveyor.edp.is_synchronised = false;
 	ui_state.speaker.edp.is_synchronised = false;
 	ui_state.irp6_mechatronika.edp.is_synchronised = false;

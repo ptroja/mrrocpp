@@ -35,9 +35,6 @@ const unsigned short int INT_FREC_DIVIDER = 4; // Dzielnik czestotliwosci przerw
 #define IRP6_ON_TRACK_AXIS_7_MAX_CURRENT           0x2410 // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
 // 13,7 j na amper
 
-#define IRP6_ON_TRACK_AXIS_0_TO_5_INC_PER_REVOLUTION   682.0  // Liczba impulsow rezolwera na obrot walu - musi byc float
-#define IRP6_ON_TRACK_AXIS_6_INC_PER_REVOLUTION  2000.0  // Liczba impulsow enkodera na obrot walu - musi byc float
-#define IRP6_ON_TRACK_AXIS_7_INC_PER_REVOLUTION  128.0  // Liczba impulsow enkodera na obrot walu - musi byc float
 
 // ------------------------------------------------------------------------
 //                HARDWARE_INTERFACE class

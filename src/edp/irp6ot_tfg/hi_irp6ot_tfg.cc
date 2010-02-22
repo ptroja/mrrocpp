@@ -24,8 +24,6 @@ hardware_interface::hardware_interface(common::motor_driven_effector &_master, i
 // ------------------------------------------------------------------------
 
 
-
-
 } // namespace irp6ot
 } // namespace edp
 } // namespace mrrocpp
