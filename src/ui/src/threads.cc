@@ -49,6 +49,8 @@
 
 pthread_t edp_irp6ot_tid;
 pthread_t edp_irp6p_tid;
+pthread_t edp_irp6ot_tfg_tid;
+pthread_t edp_irp6p_tfg_tid;
 pthread_t edp_conv_tid;
 pthread_t ui_tid;
 pthread_t sr_tid;
@@ -56,6 +58,9 @@ pthread_t meb_tid;
 
 function_execution_buffer edp_irp6ot_eb;
 function_execution_buffer edp_irp6p_eb;
+function_execution_buffer edp_irp6ot_tfg_eb;
+function_execution_buffer edp_irp6p_tfg_eb;
+
 function_execution_buffer edp_conv_eb;
 function_execution_buffer main_eb;
 
@@ -484,6 +489,25 @@ void *edp_irp6p_thread(void* arg) {
 	return NULL;
 }
 
+
+void *edp_irp6ot_tfg_thread(void* arg) {
+
+	while (true) {
+		edp_irp6ot_tfg_eb.wait_and_execute();
+	}
+
+	return NULL;
+}
+
+void *edp_irp6p_tfg_thread(void* arg) {
+
+	while (true) {
+		edp_irp6p_tfg_eb.wait_and_execute();
+	}
+
+	return NULL;
+}
+
 void *edp_conv_thread(void* arg) {
 
 	while (true) {
@@ -531,6 +555,14 @@ void create_threads()
 		printf(" Failed to thread edp_irp6p_tid\n");
 	}
 
+	if (pthread_create(&edp_irp6ot_tfg_tid, NULL, edp_irp6ot_tfg_thread, NULL) != EOK) {// Y&W - utowrzenie watku serwa
+		printf(" Failed to thread edp_irp6ot_tid\n");
+	}
+
+	if (pthread_create(&edp_irp6p_tfg_tid, NULL, edp_irp6p_tfg_thread, NULL) != EOK) {// Y&W - utowrzenie watku serwa
+		printf(" Failed to thread edp_irp6p_tid\n");
+	}
+
 	if (pthread_create(&edp_conv_tid, NULL, edp_conv_thread, NULL) != EOK) {// Y&W - utowrzenie watku serwa
 		printf(" Failed to thread edp_conv_tid\n");
 	}
@@ -556,6 +588,14 @@ void create_threads()
 		perror("SignalProcmask(edp_irp6p_tid)");
 	}
 
+	if (SignalProcmask(0, edp_irp6ot_tfg_tid, SIG_BLOCK, &set, NULL) == -1) {
+		perror("SignalProcmask(edp_irp6ot_tid)");
+	}
+
+	if (SignalProcmask(0, edp_irp6p_tfg_tid, SIG_BLOCK, &set, NULL) == -1) {
+		perror("SignalProcmask(edp_irp6p_tid)");
+	}
+
 	if (SignalProcmask(0, edp_conv_tid, SIG_BLOCK, &set, NULL) == -1) {
 		perror("SignalProcmask(edp_conv_tid)");
 	}
@@ -575,6 +615,8 @@ void abort_threads()
 	pthread_abort(sr_tid);
 	pthread_abort(edp_irp6ot_tid);
 	pthread_abort(edp_irp6p_tid);
+	pthread_abort(edp_irp6ot_tfg_tid);
+	pthread_abort(edp_irp6p_tfg_tid);
 	pthread_abort(edp_conv_tid);
 	pthread_abort(meb_tid);
 #endif
