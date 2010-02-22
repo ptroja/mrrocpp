@@ -270,6 +270,18 @@ ApWindowLink_t wnd_irp6_postument_xyz_angle_axis_relative = {
 	AbLinks_wnd_irp6_postument_xyz_angle_axis_relative, 942, 17
 	};
 
+ApWindowLink_t wnd_irp6ot_tfg_servo_algorithm = {
+	"wnd_irp6ot_tfg_servo_algorithm.wgtw",
+	&AbContext,
+	AbLinks_wnd_irp6ot_tfg_servo_algorithm, 967, 8
+	};
+
+ApWindowLink_t wnd_irp6ot_tfg_moves = {
+	"wnd_irp6ot_tfg_moves.wgtw",
+	&AbContext,
+	AbLinks_wnd_irp6ot_tfg_moves, 974, 19
+	};
+
 static ApItem_t ApItems_file_menu[ 2 ] = {
 	{ 1, 1, 0, NULL, 0, "mm_file_quit", "&Quit", NULL },
 	{ 0, 0, NULL, NULL, 0, NULL, NULL, NULL } };
@@ -283,7 +295,7 @@ ApMenuLink_t file_menu = {
 	ApItems_file_menu,
 	& AbContext,
 	AbLinks_file_menu,
-	967, 1, 1
+	989, 1, 1
 	};
 
 static ApItem_t ApItems_task_menu[ 6 ] = {
@@ -303,7 +315,7 @@ ApMenuLink_t task_menu = {
 	ApItems_task_menu,
 	& AbContext,
 	AbLinks_task_menu,
-	969, 4, 5
+	991, 4, 5
 	};
 
 static ApItem_t ApItems_help_menu[ 2 ] = {
@@ -319,7 +331,7 @@ ApMenuLink_t help_menu = {
 	ApItems_help_menu,
 	& AbContext,
 	AbLinks_help_menu,
-	975, 1, 1
+	997, 1, 1
 	};
 
 static ApItem_t ApItems_special_menu[ 5 ] = {
@@ -338,7 +350,7 @@ ApMenuLink_t special_menu = {
 	ApItems_special_menu,
 	& AbContext,
 	AbLinks_special_menu,
-	977, 3, 4
+	999, 3, 4
 	};
 
 static ApItem_t ApItems_all_robots_menu[ 11 ] = {
@@ -363,7 +375,7 @@ ApMenuLink_t all_robots_menu = {
 	ApItems_all_robots_menu,
 	& AbContext,
 	AbLinks_all_robots_menu,
-	982, 8, 10
+	1004, 8, 10
 	};
 
 static ApItem_t ApItems_robot_menu[ 125 ] = {
@@ -502,7 +514,7 @@ ApMenuLink_t robot_menu = {
 	ApItems_robot_menu,
 	& AbContext,
 	AbLinks_robot_menu,
-	993, 85, 124
+	1015, 85, 124
 	};
 
 
