@@ -54,7 +54,9 @@ extern ApWindowLink_t wnd_irp6_on_track_xyz_angle_axis_relative;
 extern ApWindowLink_t wnd_irp6_postument_xyz_angle_axis_relative;
 extern ApWindowLink_t wnd_irp6ot_tfg_servo_algorithm;
 extern ApWindowLink_t wnd_irp6ot_tfg_moves;
-extern ApWidget_t AbWidgets[ 989 ];
+extern ApWindowLink_t wnd_irp6p_tfg_servo_algorithm;
+extern ApWindowLink_t wnd_irp6p_tfg_moves;
+extern ApWidget_t AbWidgets[ 1011 ];
 
 extern ApMenuLink_t file_menu;
 extern ApMenuLink_t task_menu;
@@ -375,4 +377,10 @@ int irp6ot_tfg_servo_algorithm_set( PtWidget_t *widget, ApInfo_t *data, PtCallba
 int wind_irp6ot_tfg_moves_init( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 int clear_wind_irp6ot_tfg_moves_flag( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 int wind_irp6ot_tfg_moves_move( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int init_wnd_irp6p_tfg_servo_algorithm( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int clear_wnd_irp6p_tfg_servo_algorithm_flag( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int irp6p_tfg_servo_algorithm_set( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int wind_irp6p_tfg_moves_init( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int clear_wind_irp6p_tfg_moves_flag( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int wind_irp6p_tfg_moves_move( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 #endif

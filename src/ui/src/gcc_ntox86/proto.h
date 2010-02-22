@@ -371,6 +371,12 @@ int EDP_irp6p_tfg_synchronise ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallba
 int start_wind_irp6p_tfg_moves ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int irp6p_tfg_move_to_preset_position ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int start_wnd_irp6p_tfg_servo_algorithm ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
+int init_wnd_irp6p_tfg_servo_algorithm ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
+int clear_wnd_irp6p_tfg_servo_algorithm_flag ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
+int irp6p_tfg_servo_algorithm_set ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
+int wind_irp6p_tfg_moves_init ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
+int clear_wind_irp6p_tfg_moves_flag ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
+int wind_irp6p_tfg_moves_move ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 
 /* ../fun_r_speaker.cc */
 int close_wnd_speaker_play ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );

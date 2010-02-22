@@ -92,3 +92,81 @@ start_wnd_irp6p_tfg_servo_algorithm( PtWidget_t *widget, ApInfo_t *apinfo, PtCal
 
 	}
 
+
+int
+init_wnd_irp6p_tfg_servo_algorithm( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
+
+	{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	return( Pt_CONTINUE );
+
+	}
+
+
+int
+clear_wnd_irp6p_tfg_servo_algorithm_flag( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
+
+	{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	return( Pt_CONTINUE );
+
+	}
+
+
+int
+irp6p_tfg_servo_algorithm_set( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
+
+	{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	return( Pt_CONTINUE );
+
+	}
+
+
+int
+wind_irp6p_tfg_moves_init( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
+
+	{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	return( Pt_CONTINUE );
+
+	}
+
+
+int
+clear_wind_irp6p_tfg_moves_flag( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
+
+	{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	return( Pt_CONTINUE );
+
+	}
+
+
+int
+wind_irp6p_tfg_moves_move( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
+
+	{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	return( Pt_CONTINUE );
+
+	}
+
