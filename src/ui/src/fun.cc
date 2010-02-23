@@ -1323,6 +1323,24 @@ int start_file_window(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cb
 }
 
 // ustala stan wszytkich EDP
+bool check_synchronised_or_inactive(ecp_edp_ui_robot_def& robot)
+{
+	return (((robot.is_active) && (robot.edp.is_synchronised)) || (!(robot.is_active)));
+
+}
+
+bool check_loaded_or_inactive(ecp_edp_ui_robot_def& robot)
+{
+	return (((robot.is_active) && (robot.edp.state > 0)) || (!(robot.is_active)));
+
+}
+
+bool check_loaded(ecp_edp_ui_robot_def& robot)
+{
+	return ((robot.is_active) && (robot.edp.state > 0));
+}
+
+// ustala stan wszytkich EDP
 int check_edps_state_and_modify_mp_state()
 {
 
@@ -1334,33 +1352,29 @@ int check_edps_state_and_modify_mp_state()
 			&& (!(ui_state.irp6_mechatronika.is_active))) {
 		ui_state.all_edps = UI_ALL_EDPS_NONE_EDP_ACTIVATED;
 
-		// jesli wszystkie sa zsynchrnizowane
-	} else if ((((ui_state.irp6_postument.is_active) && (ui_state.irp6_postument.edp.is_synchronised))|| (!(ui_state.irp6_postument.is_active)))
-			&& (((ui_state.irp6_on_track.is_active)	&& (ui_state.irp6_on_track.edp.is_synchronised)) || (!(ui_state.irp6_on_track.is_active)))
-			&& (((ui_state.conveyor.is_active) && (ui_state.conveyor.edp.is_synchronised))
-					|| (!(ui_state.conveyor.is_active))) && (((ui_state.speaker.is_active)
-			&& (ui_state.speaker.edp.is_synchronised)) || (!(ui_state.speaker.is_active)))
-			&& (((ui_state.irp6_mechatronika.is_active) && (ui_state.irp6_mechatronika.edp.is_synchronised))
-					|| (!(ui_state.irp6_mechatronika.is_active)))) {
+		// jesli wszystkie sa zsynchronizowane
+	} else if (check_synchronised_or_inactive(ui_state.irp6_postument)
+			&& check_synchronised_or_inactive(ui_state.irp6_on_track)
+			&& check_synchronised_or_inactive(ui_state.conveyor) && check_synchronised_or_inactive(ui_state.speaker)
+			&& check_synchronised_or_inactive(ui_state.irp6_mechatronika)
+			&& check_synchronised_or_inactive(ui_state.irp6ot_tfg)
+			&& check_synchronised_or_inactive(ui_state.irp6p_tfg)) {
 		ui_state.all_edps = UI_ALL_EDPS_LOADED_AND_SYNCHRONISED;
 
 		// jesli wszystkie sa zaladowane
-	} else if ((((ui_state.irp6_postument.is_active) && (ui_state.irp6_postument.edp.state > 0))
-			|| (!(ui_state.irp6_postument.is_active))) && (((ui_state.irp6_on_track.is_active)
-			&& (ui_state.irp6_on_track.edp.state > 0)) || (!(ui_state.irp6_on_track.is_active)))
-			&& (((ui_state.conveyor.is_active) && (ui_state.conveyor.edp.state > 0))
-					|| (!(ui_state.conveyor.is_active))) && (((ui_state.speaker.is_active)
-			&& (ui_state.speaker.edp.state > 0)) || (!(ui_state.speaker.is_active)))
-			&& (((ui_state.irp6_mechatronika.is_active) && (ui_state.irp6_mechatronika.edp.state > 0))
-					|| (!(ui_state.irp6_mechatronika.is_active)))) {
+	} else if (check_loaded_or_inactive(ui_state.irp6_postument) && check_loaded_or_inactive(ui_state.irp6_on_track)
+			&& check_loaded_or_inactive(ui_state.conveyor) && check_loaded_or_inactive(ui_state.speaker)
+			&& check_loaded_or_inactive(ui_state.irp6_mechatronika) && check_loaded_or_inactive(ui_state.irp6ot_tfg)
+			&& check_loaded_or_inactive(ui_state.irp6p_tfg))
+
+	{
 		ui_state.all_edps = UI_ALL_EDPS_LOADED_BUT_NOT_SYNCHRONISED;
 
 		// jesli chociaz jeden jest zaladowany
-	} else if (((ui_state.irp6_postument.is_active) && (ui_state.irp6_postument.edp.state > 0))
-			|| ((ui_state.irp6_on_track.is_active) && (ui_state.irp6_on_track.edp.state > 0))
-			|| ((ui_state.conveyor.is_active) && (ui_state.conveyor.edp.state > 0)) || ((ui_state.speaker.is_active)
-			&& (ui_state.speaker.edp.state > 0)) || ((ui_state.irp6_mechatronika.is_active)
-			&& (ui_state.irp6_mechatronika.edp.state > 0)))
+	} else if (check_loaded(ui_state.irp6_postument) && check_loaded(ui_state.irp6_on_track)
+			&& check_loaded(ui_state.conveyor) && check_loaded(ui_state.speaker)
+			&& check_loaded(ui_state.irp6_mechatronika) && check_loaded(ui_state.irp6ot_tfg)
+			&& check_loaded(ui_state.irp6p_tfg))
 
 	{
 		ui_state.all_edps = UI_ALL_EDPS_THERE_IS_EDP_LOADED_BUT_NOT_ALL_ARE_LOADED;
