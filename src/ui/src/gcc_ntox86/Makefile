@@ -17,7 +17,9 @@ include	../abLfiles
 PHABOPTS= -l socket
 
 HOMEDIR = ../../../..
-KIN_OBJECTS = ${KIN_DIR}/irp6_on_track/libkinematicsirp6ot.a ${KIN_DIR}/irp6_postument/libkinematicsirp6p.a $(KIN_DIR)/common/libkinematics.a
+KIN_OBJECTS = ${KIN_DIR}/irp6_on_track/libkinematicsirp6ot.a ${KIN_DIR}/irp6_postument/libkinematicsirp6p.a\
+${KIN_DIR}/irp6ot_tfg/libkinematicsirp6ot_tfg.a ${KIN_DIR}/irp6p_tfg/libkinematicsirp6p_tfg.a\
+ $(KIN_DIR)/common/libkinematics.a
 
 include $(HOMEDIR)/common.mk
 HEADERSDIR = $(HOMEDIR)/src
@@ -30,6 +32,8 @@ LDFLAGS += -l phexlib $(ABLIB) $(PHABOPTS)
 MRROCOBJ = \
 	$(ECP_DIR)/irp6_on_track/ecp_r_irp6ot.o \
 	$(ECP_DIR)/irp6_postument/ecp_r_irp6p.o \
+	$(ECP_DIR)/irp6ot_tfg/ecp_r_irp6ot_tfg.o \
+	$(ECP_DIR)/irp6p_tfg/ecp_r_irp6p_tfg.o \
 	$(ECP_DIR)/irp6_mechatronika/ecp_r_irp6m.o\
 	$(ECP_DIR)/polycrank/ecp_r_polycrank.o\
 	$(ECP_DIR)/conveyor/ecp_r_conv.o \

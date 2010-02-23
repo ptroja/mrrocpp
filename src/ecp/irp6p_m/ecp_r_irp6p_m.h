@@ -21,7 +21,7 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace irp6p {
+namespace irp6p_m {
 
 // ---------------------------------------------------------------
 class robot: public common::ecp_robot, public kinematics::common::kinematics_manager

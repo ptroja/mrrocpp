@@ -16,7 +16,7 @@
 
 namespace mrrocpp {
 namespace kinematics {
-namespace irp6p {
+namespace irp6p_tfg {
 
 /* -----------------------------------------------------------------------
  Konstruktor.

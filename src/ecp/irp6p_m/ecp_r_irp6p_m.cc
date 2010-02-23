@@ -14,7 +14,7 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace irp6p {
+namespace irp6p_m {
 
 robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
 	ecp_robot(lib::ROBOT_IRP6_POSTUMENT, IRP6P_M_NUM_OF_SERVOS, EDP_IRP6_POSTUMENT_SECTION, _config, _sr_ecp),

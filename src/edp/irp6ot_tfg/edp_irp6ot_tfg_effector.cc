@@ -98,7 +98,7 @@ common::servo_buffer* effector::return_created_servo_buffer()
 void effector::create_kinematic_models_for_given_robot(void)
 {
 	// Stworzenie wszystkich modeli kinematyki.
-	add_kinematic_model(new kinematics::irp6ot::model());
+	add_kinematic_model(new kinematics::irp6ot_tfg::model());
 	// Ustawienie aktywnego modelu.
 	set_kinematic_model(0);
 

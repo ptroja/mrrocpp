@@ -14,7 +14,7 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace irp6p {
+namespace irp6p_tfg {
 
 robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
 	ecp_robot(lib::ROBOT_IRP6P_TFG, IRP6P_TFG_NUM_OF_SERVOS, EDP_IRP6P_TFG_SECTION, _config, _sr_ecp),
@@ -36,7 +36,7 @@ robot::robot(common::task::task& _ecp_object) :
 void robot::create_kinematic_models_for_given_robot(void)
 {
 	// Stworzenie wszystkich modeli kinematyki.
-	add_kinematic_model(new kinematics::irp6p::model());
+	add_kinematic_model(new kinematics::irp6p_tfg::model());
 	// Ustawienie aktywnego modelu.
 	set_kinematic_model(0);
 }

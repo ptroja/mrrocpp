@@ -16,7 +16,7 @@
 
 namespace mrrocpp {
 namespace kinematics {
-namespace irp6ot {
+namespace irp6ot_tfg {
 
 class model: public common::kinematic_model_irp6_tfg
 {
