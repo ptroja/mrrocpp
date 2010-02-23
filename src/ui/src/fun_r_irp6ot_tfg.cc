@@ -137,9 +137,49 @@ int EDP_irp6ot_tfg_slay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
+	edp_irp6ot_tfg_eb.command(boost::bind(EDP_irp6ot_tfg_slay_int, widget, apinfo, cbinfo));
+
 	return (Pt_CONTINUE);
 
 }
+
+
+
+int EDP_irp6ot_tfg_slay_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+
+{
+	int pt_res;
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+	// dla robota irp6ot_tfg
+	if (ui_state.irp6ot_tfg.edp.state > 0) { // jesli istnieje EDP
+		if (ui_state.irp6ot_tfg.edp.reader_fd >= 0) {
+			if (name_close(ui_state.irp6ot_tfg.edp.reader_fd) == -1) {
+				fprintf(stderr, "UI: EDP_irp6ot, %s:%d, name_close(): %s\n", __FILE__, __LINE__, strerror(errno));
+			}
+		}
+		delete ui_robot.irp6ot_tfg;
+		ui_state.irp6ot_tfg.edp.state = 0; // edp wylaczone
+		ui_state.irp6ot_tfg.edp.is_synchronised = false;
+
+		ui_state.irp6ot_tfg.edp.pid = -1;
+		ui_state.irp6ot_tfg.edp.reader_fd = -1;
+		pt_res = PtEnter(0);
+		close_all_irp6ot_windows(NULL, NULL, NULL);
+		if (pt_res >= 0)
+			PtLeave(0);
+	}
+
+	// modyfikacja menu
+
+	manage_interface();
+
+	return (Pt_CONTINUE);
+
+}
+
+
+
 
 int EDP_irp6ot_tfg_synchronise(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
