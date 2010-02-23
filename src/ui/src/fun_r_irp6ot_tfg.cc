@@ -51,12 +51,6 @@ int EDP_irp6ot_tfg_create(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t
 
 }
 
-
-
-
-
-
-
 int EDP_irp6ot_tfg_create_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
@@ -84,7 +78,7 @@ int EDP_irp6ot_tfg_create_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackIn
 			// sprawdzenie czy nie jest juz zarejestrowany zarzadca zasobow
 			if ((!(ui_state.irp6ot_tfg.edp.test_mode)) && (access(tmp_string.c_str(), R_OK) == 0)
 					|| (access(tmp2_string.c_str(), R_OK) == 0)) {
-				ui_msg.ui->message(lib::NON_FATAL_ERROR,"edp_irp6ot_tfg already exists");
+				ui_msg.ui->message(lib::NON_FATAL_ERROR, "edp_irp6ot_tfg already exists");
 			} else if (check_node_existence(ui_state.irp6ot_tfg.edp.node_name, std::string("edp_irp6ot_tfg"))) {
 
 				ui_state.irp6ot_tfg.edp.node_nr = config->return_node_number(ui_state.irp6ot_tfg.edp.node_name);
@@ -135,9 +129,6 @@ int EDP_irp6ot_tfg_create_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackIn
 
 	return 1;
 }
-
-
-
 
 int EDP_irp6ot_tfg_slay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
@@ -258,5 +249,100 @@ int clear_wnd_irp6ot_tfg_servo_algorithm_flag(PtWidget_t *widget, ApInfo_t *apin
 
 	return (Pt_CONTINUE);
 
+}
+
+int reload_irp6ot_tfg_configuration()
+{
+	// jesli IRP6 on_track ma byc aktywne
+	if ((ui_state.irp6ot_tfg.is_active = config->value <int> ("is_irp6ot_tfg_active")) == 1) {
+		// ini_con->create_ecp_irp6ot_tfg (ini_con->ui->ecp_irp6ot_tfg_section);
+		//ui_state.is_any_edp_active = true;
+		if (ui_state.is_mp_and_ecps_active) {
+			ui_state.irp6ot_tfg.ecp.network_trigger_attach_point
+					= config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "trigger_attach_point", ui_state.irp6ot_tfg.ecp.section_name);
+
+			ui_state.irp6ot_tfg.ecp.pid = -1;
+			ui_state.irp6ot_tfg.ecp.trigger_fd = -1;
+		}
+
+		switch (ui_state.irp6ot_tfg.edp.state)
+		{
+			case -1:
+			case 0:
+				// ini_con->create_edp_irp6ot_tfg (ini_con->ui->edp_irp6ot_tfg_section);
+
+				ui_state.irp6ot_tfg.edp.pid = -1;
+				ui_state.irp6ot_tfg.edp.reader_fd = -1;
+				ui_state.irp6ot_tfg.edp.state = 0;
+
+				for (int i = 0; i < 3; i++) {
+					char tmp_string[50];
+					sprintf(tmp_string, "preset_position_%d", i);
+
+					if (config->exists(tmp_string, ui_state.irp6ot_tfg.edp.section_name)) {
+						char* tmp, *tmp1;
+						tmp1
+								= tmp
+										= strdup(config->value <std::string> (tmp_string, ui_state.irp6ot_tfg.edp.section_name).c_str());
+						char* toDel = tmp;
+						for (int j = 0; j < IRP6OT_TFG_NUM_OF_SERVOS; j++) {
+
+							ui_state.irp6ot_tfg.edp.preset_position[i][j] = strtod(tmp1, &tmp1);
+
+						}
+						free(toDel);
+					} else {
+						for (int j = 0; j < IRP6OT_TFG_NUM_OF_SERVOS; j++) {
+
+							ui_state.irp6ot_tfg.edp.preset_position[i][j] = 0.0;
+
+						}
+					}
+				}
+
+				if (config->exists("test_mode", ui_state.irp6ot_tfg.edp.section_name))
+					ui_state.irp6ot_tfg.edp.test_mode
+							= config->value <int> ("test_mode", ui_state.irp6ot_tfg.edp.section_name);
+				else
+					ui_state.irp6ot_tfg.edp.test_mode = 0;
+
+				ui_state.irp6ot_tfg.edp.hardware_busy_attach_point
+						= config->value <std::string> ("hardware_busy_attach_point", ui_state.irp6ot_tfg.edp.section_name);
+
+				ui_state.irp6ot_tfg.edp.network_resourceman_attach_point
+						= config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "resourceman_attach_point", ui_state.irp6ot_tfg.edp.section_name);
+
+				ui_state.irp6ot_tfg.edp.network_reader_attach_point
+						= config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "reader_attach_point", ui_state.irp6ot_tfg.edp.section_name);
+
+				ui_state.irp6ot_tfg.edp.node_name
+						= config->value <std::string> ("node_name", ui_state.irp6ot_tfg.edp.section_name);
+				break;
+			case 1:
+			case 2:
+				// nie robi nic bo EDP pracuje
+				break;
+			default:
+				break;
+		}
+
+	} else // jesli  irp6 on_track ma byc nieaktywne
+	{
+		switch (ui_state.irp6ot_tfg.edp.state)
+		{
+			case -1:
+			case 0:
+				ui_state.irp6ot_tfg.edp.state = -1;
+				break;
+			case 1:
+			case 2:
+				// nie robi nic bo EDP pracuje
+				break;
+			default:
+				break;
+		}
+	} // end irp6ot_tfg
+
+	return 1;
 }
 

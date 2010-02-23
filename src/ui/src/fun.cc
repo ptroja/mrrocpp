@@ -1031,6 +1031,9 @@ int reload_whole_configuration()
 				// dla robota irp6 on_track
 				reload_irp6ot_configuration();
 
+				// dla robota irp6 on_track
+				reload_irp6ot_tfg_configuration();
+
 				// dla robota irp6 postument
 				reload_irp6p_configuration();
 
