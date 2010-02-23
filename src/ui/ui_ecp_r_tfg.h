@@ -15,8 +15,6 @@
 #include "lib/configurator.h"
 #include "lib/mrmath/mrmath.h"
 
-
-
 // ---------------------------------------------------------------
 class ui_tfg_robot
 {
@@ -61,21 +59,14 @@ public:
 	// Zlecenie ruchu
 	void move_motors(const double final_position[MAX_SERVOS_NR]);
 	void move_joints(const double final_position[MAX_SERVOS_NR]);
-	void move_xyz_euler_zyz(const double final_position[7]);
-	void move_xyz_angle_axis(const double final_position[7]);
-	void move_xyz_angle_axis_relative(const double position_increment[7]);
-	void set_tool_xyz_angle_axis(const lib::Xyz_Angle_Axis_vector &tool_vector);
-	void set_tool_xyz_euler_zyz(const lib::Xyz_Euler_Zyz_vector &tool_vector);
+
 	void set_kinematic(uint8_t kinematic_model_no);
 	void set_servo_algorithm(uint8_t algorithm_no[MAX_SERVOS_NR], uint8_t parameters_no[MAX_SERVOS_NR]);
 
 	// Odczyt polozenia
 	void read_motors(double current_position[MAX_SERVOS_NR]);
 	void read_joints(double current_position[MAX_SERVOS_NR]);
-	void read_xyz_euler_zyz(double current_position[7]);
-	void read_xyz_angle_axis(double current_position[7]);
-	void read_tool_xyz_angle_axis(lib::Xyz_Angle_Axis_vector & tool_vector);
-	void read_tool_xyz_euler_zyz(lib::Xyz_Euler_Zyz_vector &tool_vector);
+
 	void get_kinematic(uint8_t* kinematic_model_no);
 	void get_servo_algorithm(uint8_t algorithm_no[MAX_SERVOS_NR], uint8_t parameters_no[MAX_SERVOS_NR]);
 

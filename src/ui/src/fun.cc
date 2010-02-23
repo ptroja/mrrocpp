@@ -1335,9 +1335,8 @@ int check_edps_state_and_modify_mp_state()
 		ui_state.all_edps = UI_ALL_EDPS_NONE_EDP_ACTIVATED;
 
 		// jesli wszystkie sa zsynchrnizowane
-	} else if ((((ui_state.irp6_postument.is_active) && (ui_state.irp6_postument.edp.is_synchronised))
-			|| (!(ui_state.irp6_postument.is_active))) && (((ui_state.irp6_on_track.is_active)
-			&& (ui_state.irp6_on_track.edp.is_synchronised)) || (!(ui_state.irp6_on_track.is_active)))
+	} else if ((((ui_state.irp6_postument.is_active) && (ui_state.irp6_postument.edp.is_synchronised))|| (!(ui_state.irp6_postument.is_active)))
+			&& (((ui_state.irp6_on_track.is_active)	&& (ui_state.irp6_on_track.edp.is_synchronised)) || (!(ui_state.irp6_on_track.is_active)))
 			&& (((ui_state.conveyor.is_active) && (ui_state.conveyor.edp.is_synchronised))
 					|| (!(ui_state.conveyor.is_active))) && (((ui_state.speaker.is_active)
 			&& (ui_state.speaker.edp.is_synchronised)) || (!(ui_state.speaker.is_active)))
@@ -1635,7 +1634,6 @@ int check_gns()
 		PtExit(EXIT_SUCCESS);
 	}
 
-
 	unsigned short number_of_gns_servers = 0;
 	std::string gns_server_node;
 
@@ -1699,7 +1697,7 @@ int check_gns()
 			if (access(opendir_path.c_str(), R_OK) == 0) {
 				number_of_gns_servers++;
 				gns_server_node = *node_list_iterator;
-				}
+			}
 		}
 	}
 
@@ -1720,7 +1718,7 @@ int check_gns()
 
 		// sprawdzenie czy istnieje wezel
 		if (access(opendir_path.c_str(), R_OK) == 0) {
-				opendir_path += "/proc/mount/dev/name";
+			opendir_path += "/proc/mount/dev/name";
 
 			// sprawdzenie czy dziala gns
 			if (access(opendir_path.c_str(), R_OK) != 0) {
@@ -1736,7 +1734,7 @@ int check_gns()
 		} else {
 			fprintf(stderr, "check_gns - Nie wykryto wezla: %s, ktory wystepuje w pliku konfiguracyjnym\n", (*node_list_iterator).c_str());
 
-			if ((ui_state.is_sr_thread_loaded)&&(ui_msg.ui!=NULL)) {
+			if ((ui_state.is_sr_thread_loaded) && (ui_msg.ui != NULL)) {
 				std::string tmp;
 				tmp = std::string("check_gns - Nie wykryto wezla: ") + (*node_list_iterator)
 						+ std::string(", ktory wystepuje w pliku konfiguracyjnym");
@@ -2444,8 +2442,7 @@ bool check_node_existence(const std::string _node, const std::string beginnig_of
 	std::string opendir_path("/net/");
 	opendir_path += _node;
 
-	if (access(opendir_path.c_str(), R_OK) != 0)
-	{
+	if (access(opendir_path.c_str(), R_OK) != 0) {
 		std::string tmp(beginnig_of_message);
 		tmp += std::string(" node: ") + ui_state.irp6_on_track.edp.node_name + std::string(" is unreachable");
 		ui_msg.ui->message(lib::NON_FATAL_ERROR, tmp);
