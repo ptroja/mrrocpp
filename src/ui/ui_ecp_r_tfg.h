@@ -5,8 +5,8 @@
 // Ostatnia modyfikacja: 16.04.98
 // -------------------------------------------------------------------------
 
-#ifndef _UI_ECP_R_MANIP_H
-#define _UI_ECP_R_MANIP_H
+#ifndef _UI_ECP_R_TFG_H
+#define _UI_ECP_R_TFG_H
 
 #include "ecp/common/ecp_robot.h"
 

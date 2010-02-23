@@ -451,3 +451,4 @@ int TRbtnDSSCalibrate ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t
 int TRbtnFSCalibrate ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int TRbtnTryAgain ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int TRDangerousForceDetected ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
+int EDP_irp6ot_tfg_create_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo);
