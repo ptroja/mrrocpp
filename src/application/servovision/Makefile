@@ -4,7 +4,7 @@
 SOURCES = ${wildcard *.cc}
 OBJECTS = ${patsubst %.cc,%.o,${SOURCES}}
 
-BINARIES = ecp_mboryn
+BINARIES = ecp_mboryn ecp_fradia_lag_test ecp_ib_eih_tester
 
 ifneq ($(BUILD_TARGET), linux)
 BINARIES+=			
@@ -17,25 +17,29 @@ HOMEDIR = ../../..
 include $(HOMEDIR)/common.mk
 KIN_OBJECTS = ${KIN_DIR}/irp6_on_track/libkinematicsirp6ot.a ${KIN_DIR}/irp6_postument/libkinematicsirp6p.a $(KIN_DIR)/common/libkinematics.a
 
-#SHOBJ = ../../ecp_mp/libecp_mp.a ../../ecp_mp/ecp_mp_robot.o ../../mp/libmpmain.a ../../mp/libmprobots.a $(LIBDIR)/libmrrocpp.a
-#SHOBJ = #ecp_r_irp6ot.o ../common/libecp.a $(LIBDIR)/libmrrocpp.a
 SHOBJ = ../../ecp_mp/libecp_mp.a \
 		../../ecp_mp/ecp_mp_robot.o \
 		../../ecp/irp6_on_track/ecp_r_irp6ot.o \
 		../../ecp/irp6_postument/ecp_r_irp6p.o \
 		${KIN_OBJECTS}\
 		../../ecp/common/libecp.a \
-		$(LIBDIR)/libmrrocpp.a \
-		../../ecp_mp/sensor/ecp_mp_s_cvfradia.o
+		../../lib/configurator.o \
+		$(LIBDIR)/libmrrocpp.a
+		
 
 #======================================================#	
 .PHONY: all clean install
 #------------------------------------------------- Build rules -------------------------------------------------------#
 all: ${BINARIES}
 #-----------------------------------------------------------------------------------------------------------------------#
-ecp_mboryn: ecp_t_mboryn.o ecp_g_mboryn.o $(SHOBJ)
+ecp_mboryn: 1st_ib_eih_2d/ecp_t_mboryn.o 1st_ib_eih_2d/ecp_g_mboryn.o $(SHOBJ) ../../ecp_mp/sensor/ecp_mp_s_cvfradia.o
+	$(LD) $(LDFLAGS) -o $@ $^
+	
+ecp_fradia_lag_test: fradia_lag_test/ecp_t_fradia_lag_test.o $(SHOBJ) ../../ecp_mp/sensor/ecp_mp_s_cvfradia.o
 	$(LD) $(LDFLAGS) -o $@ $^
 
+ecp_ib_eih_tester: ib_eih/ecp_g_ib_eih.o ib_eih_tester/ecp_t_ib_eih_tester.o $(SHOBJ) ../../ecp_mp/sensor/ecp_mp_s_fradia_sensor.o
+	$(LD) $(LDFLAGS) -o $@ $^
 #---------------------------------Special object build rules (user made)-------------------------------------#
 # e.g:
 # plik.o: plik.cc plik1.h plik2.h ... itd

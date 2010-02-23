@@ -11,7 +11,7 @@
 
 using namespace std;
 
-#define MOTION_STEPS 25
+#define MOTION_STEPS 30
 
 namespace mrrocpp {
 
@@ -31,17 +31,17 @@ ecp_g_mboryn::ecp_g_mboryn(mrrocpp::ecp::common::task::task & _ecp_task)
 	char kp_name[] = { "kp" };
 	char maxt_name[] = { "maxt" };
 
-	if (_ecp_task.config.exists(kp_name, configSectionName)) {
+	if (_ecp_task.config.exists(std::string(kp_name), std::string(configSectionName))) {
 		Kp = _ecp_task.config.value <double> (kp_name, configSectionName);
 	} else {
-		Kp = 0.002;
+		Kp = 0.0001;
 		log("Parameter %s->%s not found. Using default value: %g\n", configSectionName, kp_name);
 	}
 
-	if (_ecp_task.config.exists(maxt_name, configSectionName)) {
+	if (_ecp_task.config.exists(std::string(maxt_name), std::string(configSectionName))) {
 		maxT = _ecp_task.config.value <double> (maxt_name, configSectionName);
 	} else {
-		maxT = 0.001;
+		maxT = 0.01;
 		log("Parameter %s->%s not found. Using default value: %g\n", configSectionName, maxt_name, maxT);
 	}
 
@@ -65,7 +65,7 @@ bool ecp_g_mboryn::first_step()
 	the_robot->ecp_command.instruction.set_arm_type = lib::FRAME;
 	the_robot->ecp_command.instruction.interpolation_type = lib::TCIM;
 	the_robot->ecp_command.instruction.motion_steps = MOTION_STEPS;
-	the_robot->ecp_command.instruction.value_in_step_no = MOTION_STEPS - 1;
+	the_robot->ecp_command.instruction.value_in_step_no = MOTION_STEPS - 3;
 
 	for (int i = 0; i < 6; i++) {
 		the_robot->ecp_command.instruction.arm.pf_def.behaviour[i] = lib::UNGUARDED_MOTION;
