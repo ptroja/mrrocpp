@@ -454,3 +454,4 @@ int TRDangerousForceDetected ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbac
 int EDP_irp6ot_tfg_create_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo);
 int reload_irp6ot_tfg_configuration();
 int EDP_irp6ot_tfg_slay_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo);
+int manage_interface_irp6ot_tfg ();

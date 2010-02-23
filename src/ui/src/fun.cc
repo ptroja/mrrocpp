@@ -1430,6 +1430,9 @@ int manage_interface()
 	// Dla robota IRP6 ON_TRACK
 	manage_interface_irp6ot();
 
+	// Dla robota IRP6 ON_TRACK
+	manage_interface_irp6ot_tfg();
+
 	// Dla robota IRP6 POSTUMENT
 	manage_interface_irp6p();
 
@@ -2036,6 +2039,7 @@ int EDP_all_robots_slay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 	EDP_irp6_on_track_slay(widget, apinfo, cbinfo);
+	EDP_irp6ot_tfg_slay(widget, apinfo, cbinfo);
 	EDP_irp6_postument_slay(widget, apinfo, cbinfo);
 	EDP_conveyor_slay(widget, apinfo, cbinfo);
 	EDP_speaker_slay(widget, apinfo, cbinfo);

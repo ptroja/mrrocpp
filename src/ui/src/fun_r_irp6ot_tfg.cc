@@ -386,3 +386,65 @@ int reload_irp6ot_tfg_configuration()
 	return 1;
 }
 
+
+int
+manage_interface_irp6ot_tfg ()
+{
+	switch (ui_state.irp6ot_tfg.edp.state)
+	{
+		case -1:
+			ApModifyItemState( &robot_menu, AB_ITEM_DIM, ABN_mm_irp6ot_tfg, NULL);
+		break;
+		case 0:
+			ApModifyItemState( &robot_menu, AB_ITEM_DIM, ABN_mm_irp6ot_tfg_edp_unload, ABN_mm_irp6ot_tfg_synchronisation,
+				ABN_mm_irp6ot_tfg_move,  ABN_mm_irp6ot_tfg_preset_positions, ABN_mm_irp6ot_tfg_servo_algorithm, NULL);
+			ApModifyItemState( &robot_menu, AB_ITEM_NORMAL, ABN_mm_irp6ot_tfg, ABN_mm_irp6ot_tfg_edp_load, NULL);
+
+
+		break;
+		case 1:
+		case 2:
+			ApModifyItemState( &robot_menu, AB_ITEM_NORMAL, ABN_mm_irp6ot_tfg, NULL);
+
+
+			// jesli robot jest zsynchronizowany
+			if (	ui_state.irp6ot_tfg.edp.is_synchronised)
+			{
+				ApModifyItemState( &robot_menu, AB_ITEM_DIM, ABN_mm_irp6ot_tfg_synchronisation, NULL);
+				ApModifyItemState( &all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_preset_positions, NULL);
+
+				switch (ui_state.mp.state)
+				{
+					case UI_MP_NOT_PERMITED_TO_RUN:
+					case UI_MP_PERMITED_TO_RUN:
+						ApModifyItemState( &robot_menu, AB_ITEM_NORMAL,  ABN_mm_irp6ot_tfg_edp_unload,
+							ABN_mm_irp6ot_tfg_move, ABN_mm_irp6ot_tfg_preset_positions, ABN_mm_irp6ot_tfg_servo_algorithm, NULL);
+						ApModifyItemState( &robot_menu, AB_ITEM_DIM, ABN_mm_irp6ot_tfg_edp_load, NULL);
+					break;
+					case UI_MP_WAITING_FOR_START_PULSE:
+						ApModifyItemState( &robot_menu, AB_ITEM_NORMAL,
+							ABN_mm_irp6ot_tfg_move, ABN_mm_irp6ot_tfg_preset_positions, ABN_mm_irp6ot_tfg_servo_algorithm, NULL);
+						ApModifyItemState( &robot_menu, AB_ITEM_DIM, ABN_mm_irp6ot_tfg_edp_load, ABN_mm_irp6ot_tfg_edp_unload, NULL);
+					break;
+					case UI_MP_TASK_RUNNING:
+					case UI_MP_TASK_PAUSED:
+						ApModifyItemState( &robot_menu, AB_ITEM_DIM, // modyfikacja menu - ruchy reczne zakazane
+							ABN_mm_irp6ot_tfg_move, ABN_mm_irp6ot_tfg_preset_positions, ABN_mm_irp6ot_tfg_servo_algorithm, NULL);
+					break;
+					default:
+					break;
+				}
+			} else		// jesli robot jest niezsynchronizowany
+			{
+				ApModifyItemState( &robot_menu, AB_ITEM_NORMAL, ABN_mm_irp6ot_tfg_edp_unload,
+					ABN_mm_irp6ot_tfg_synchronisation, ABN_mm_irp6ot_tfg_move, NULL);
+				ApModifyItemState( &robot_menu, AB_ITEM_DIM, ABN_mm_irp6ot_tfg_edp_load, NULL);
+				ApModifyItemState( &all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_synchronisation, NULL);
+			}
+		break;
+		default:
+		break;
+	}
+
+	return 1;
+}
