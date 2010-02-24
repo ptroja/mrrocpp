@@ -110,7 +110,7 @@ bool ecp_g_ib_eih::next_step()
 	the_robot->ecp_command.instruction.instruction_type = lib::SET_GET;
 
 	if (!currentFrameSaved) { // save first frame
-		log("ecp_g_ib_eih::next_step() 1\n");
+		//log("ecp_g_ib_eih::next_step() 1\n");
 		currentFrame.set_from_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame);
 		currentGripperCoordinate = the_robot->reply_package.arm.pf_def.gripper_coordinate;
 
@@ -122,6 +122,7 @@ bool ecp_g_ib_eih::next_step()
 	currentFrame.get_xyz_angle_axis(l_vector);
 
 	if (vsp_fradia->from_vsp.vsp_report == lib::VSP_REPLY_OK) {
+		//log("vsp_fradia->from_vsp.vsp_report == lib::VSP_REPLY_OK, %d, %d\n", vsp_fradia->from_vsp.comm_image.sensor_union.object_tracker.z, (int)vsp_fradia->from_vsp.comm_image.sensor_union.object_tracker.tracking);
 		if (vsp_fradia->from_vsp.comm_image.sensor_union.object_tracker.tracking) {
 
 			mrrocpp::lib::K_vector
@@ -130,7 +131,7 @@ bool ecp_g_ib_eih::next_step()
 			u = e * Kp;
 			u[2] = 0; // Z axis
 
-			for(int i=0; i<3; ++i){		log("e[%d] = %g\t", i, e[i]);	}		log("\n");
+			//for(int i=0; i<3; ++i){		log("e[%d] = %g\t", i, e[i]);	}		log("\n");
 			//for(int i=0; i<3; ++i){		log("u[%d] = %g\t", i, u[i]);	}		log("\n");
 			bool isSpeedConstrained[3] = { false, false, false };
 			bool isAccelConstrained[3] = { false, false, false };
@@ -157,9 +158,8 @@ bool ecp_g_ib_eih::next_step()
 				prev_u[i] = u[i];
 
 				l_vector[i] += u[i]; // first 3 elements of l_vector[] are XYZ translation
-
-				log("isSpeedConstrained[] = {%d, %d}\n", isSpeedConstrained[0], isSpeedConstrained[1]);
 			}
+			//log("isSpeedConstrained[] = {%d, %d}\n", isSpeedConstrained[0], isSpeedConstrained[1]);
 
 			//translation += u;
 		} else {
@@ -177,7 +177,7 @@ bool ecp_g_ib_eih::next_step()
 		currentFrame = nextFrame;
 	}
 	else{
-		log("!isArmFrameOk(nextFrame)\n");
+		//log("!isArmFrameOk(nextFrame)\n");
 	}
 	currentFrame.get_frame_tab(the_robot->ecp_command.instruction.arm.pf_def.arm_frame);
 

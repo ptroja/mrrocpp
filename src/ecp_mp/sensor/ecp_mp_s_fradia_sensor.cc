@@ -93,11 +93,13 @@ void fradia_sensor::configure_sensor()
  */
 void fradia_sensor::initiate_reading()
 {
+	/*
 	// Send adequate command to cvFraDIA.
 	to_vsp.i_code = lib::VSP_INITIATE_READING;
 
 	if (write(sockfd, &to_vsp, sizeof(lib::ECP_VSP_MSG)) == -1)
 		throw sensor_error(lib::SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE);
+	*/
 }
 
 /*!
