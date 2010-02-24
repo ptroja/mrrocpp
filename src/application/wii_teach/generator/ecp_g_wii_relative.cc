@@ -30,8 +30,8 @@ void wii_relative::set_position(void)
     the_robot->ecp_command.instruction.instruction_type = lib::SET_GET;
 
     homog_matrix.set_from_xyz_angle_axis(lib::Xyz_Angle_Axis_vector(
-        nextChange[0],
         nextChange[2],
+        nextChange[0],
         nextChange[1],
         nextChange[4],
         nextChange[6],

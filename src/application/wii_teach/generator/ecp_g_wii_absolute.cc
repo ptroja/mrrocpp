@@ -42,7 +42,7 @@ void wii_absolute::set_position(void)
 
     homog_matrix.get_translation_vector(old_translation);
 
-    translation[0] = -nextChange[1];
+    translation[0] = nextChange[1];
     translation[1] = nextChange[0];
     translation[2] = nextChange[2];
 

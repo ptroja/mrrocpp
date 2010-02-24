@@ -24,7 +24,6 @@ wii_joint::wii_joint (common::task::task& _ecp_task,ecp_mp::sensor::wiimote* _wi
 
 void wii_joint::set_position(void)
 {
-    printf("%f\n",the_robot->reply_package.arm.pf_def.gripper_coordinate);
     the_robot->ecp_command.instruction.instruction_type = lib::SET_GET;
 
     the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[0] = nextChange[0];

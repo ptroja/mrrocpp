@@ -274,6 +274,7 @@ void wii_teach::main_task_algorithm(void)
     int cnt = 0;
     char buffer[200];
     struct lib::ECP_VSP_MSG message;
+    int gen = 0;
 
     sg = new common::generator::smooth(*this,true);
     ag = new irp6ot::generator::wii_absolute(*this,(ecp_mp::sensor::wiimote*)sensor_m[lib::SENSOR_WIIMOTE]);
@@ -287,26 +288,95 @@ void wii_teach::main_task_algorithm(void)
         move_to_current();
     }
 
+    common::generator::generator* g = ag;
+    int i = 0;
+
+    message.i_code = lib::VSP_CONFIGURE_SENSOR;
+    message.wii_command.led_change = true;
+    message.wii_command.rumble = false;
+    switch(gen)
+    {
+        case 0:
+            message.wii_command.led_status = 0x1;
+            break;
+        case 1:
+            message.wii_command.led_status = 0x2;
+            break;
+        case 2:
+            message.wii_command.led_status = 0x4;
+            break;
+    }
+    ((ecp_mp::sensor::wiimote*)sensor_m[lib::SENSOR_WIIMOTE])->send_reading(message);
+
     while(1)
     {
         sensor_m[lib::SENSOR_WIIMOTE]->get_reading();
         updateButtonsPressed();
         lastButtons = sensor_m[lib::SENSOR_WIIMOTE]->image.sensor_union.wiimote;
 
-        if(buttonsPressed.buttonA)
+        if(buttonsPressed.button1 || buttonsPressed.button2)
         {
-            buttonsPressed.buttonA = 0;
+            if(buttonsPressed.button1)
+            {
+                buttonsPressed.button1 = 0;
+                gen = ++gen % 3;
+            }
+            else if(buttonsPressed.button2)
+            {
+                buttonsPressed.button2 = 0;
+                gen = --gen % 3;
+                if(gen < 0) gen = 2;
+            }
+
             message.i_code = lib::VSP_CONFIGURE_SENSOR;
             message.wii_command.led_change = true;
-            message.wii_command.led_status = 0xF;
             message.wii_command.rumble = false;
+            switch(gen)
+            {
+                case 0:
+                    g = ag;
+                    message.wii_command.led_status = 0x1;
+                    break;
+                case 1:
+                    g = rg;
+                    message.wii_command.led_status = 0x2;
+                    break;
+                case 2:
+                    g = jg;
+                    message.wii_command.led_status = 0x4;
+                    break;
+            }
             ((ecp_mp::sensor::wiimote*)sensor_m[lib::SENSOR_WIIMOTE])->send_reading(message);
-            ag->Move();
-            message.wii_command.led_change = true;
-            message.wii_command.led_status = 0x0;
-            message.wii_command.rumble = false;
-            ((ecp_mp::sensor::wiimote*)sensor_m[lib::SENSOR_WIIMOTE])->send_reading(message);
+        }
+        else if(buttonsPressed.buttonA) 
+        {
             buttonsPressed.buttonA = 0;
+
+            message.i_code = lib::VSP_CONFIGURE_SENSOR;
+            message.wii_command.led_change = true;
+            message.wii_command.rumble = false;
+
+            switch(gen)
+            {
+                case 0:
+                    message.wii_command.led_status = 0x1 | 0x8;
+                    break;
+                case 1:
+                    message.wii_command.led_status = 0x2 | 0x8;
+                    break;
+                case 2:
+                    message.wii_command.led_status = 0x4 | 0x8;
+                    break;
+            }
+            ((ecp_mp::sensor::wiimote*)sensor_m[lib::SENSOR_WIIMOTE])->send_reading(message);
+
+            g->Move();
+            
+            message.wii_command.led_change = true;
+            message.wii_command.led_status &= 0x1 | 0x2 | 0x4;
+            message.wii_command.rumble = false;
+            ((ecp_mp::sensor::wiimote*)sensor_m[lib::SENSOR_WIIMOTE])->send_reading(message);
+            
         }
         else
         {
