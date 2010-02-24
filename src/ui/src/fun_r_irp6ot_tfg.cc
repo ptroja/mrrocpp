@@ -188,9 +188,44 @@ int EDP_irp6ot_tfg_synchronise(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackI
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
+	edp_irp6ot_tfg_eb.command(boost::bind(EDP_irp6ot_tfg_synchronise_int, widget, apinfo, cbinfo));
+
 	return (Pt_CONTINUE);
 
 }
+
+
+
+int EDP_irp6ot_tfg_synchronise_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+
+{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	set_ui_state_notification(UI_N_SYNCHRONISATION);
+
+	// wychwytania ew. bledow ECP::robot
+	try {
+		// dla robota irp6ot_tfg_
+
+		if ((ui_state.irp6ot_tfg.edp.state > 0) && (ui_state.irp6ot_tfg.edp.is_synchronised == false)) {
+			ui_robot.irp6ot_tfg->ecp->synchronise();
+			ui_state.irp6ot_tfg.edp.is_synchronised = ui_robot.irp6ot_tfg->ecp->is_synchronised();
+		} else {
+			// 	printf("EDP irp6ot_tfg niepowolane, synchronizacja niedozwolona\n");
+		}
+
+	} // end try
+	CATCH_SECTION_UI
+
+	// modyfikacje menu
+	manage_interface();
+
+	return (Pt_CONTINUE);
+
+}
+
 
 int start_wind_irp6ot_tfg_moves(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
