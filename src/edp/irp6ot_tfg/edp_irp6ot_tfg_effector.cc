@@ -76,10 +76,27 @@ void effector::move_arm(lib::c_buffer &instruction)
 void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 {
 
-	//lib::JointArray desired_joints_tmp(MAX_SERVOS_NR); // Wspolrzedne wewnetrzne -
+	lib::JointArray desired_joints_tmp(number_of_servos); // Wspolrzedne wewnetrzne -
+
 	if (read_hardware) {
 		motor_driven_effector::get_arm_position_read_hardware_sb();
+
+		desired_motor_pos_new[0] = desired_motor_pos_old[0]
+				= current_motor_pos[0];
+
+		if (is_synchronised()) {
+			//  check_motor_position(desired_motor_pos_new);
+			// dla sprawdzenia ograncizen w joints i motors
+
+			get_current_kinematic_model()->mp2i_transform(desired_motor_pos_new, desired_joints_tmp);
+
+			for (int i = 0; i < number_of_servos; i++) {
+				desired_joints[i] = current_joints[i] = desired_joints_tmp[i];
+			}
+
+		}
 	}
+
 
 	// okreslenie rodzaju wspolrzednych, ktore maja by odczytane
 	// oraz adekwatne wypelnienie bufora odpowiedzi
