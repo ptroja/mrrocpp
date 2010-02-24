@@ -53,6 +53,8 @@ private:
 
 	double Kp;
 	double maxT;
+
+	void printInstruction(void);
 };
 
 /** @} */// ecp_g_mboryn

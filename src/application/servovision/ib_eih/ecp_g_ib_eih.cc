@@ -83,7 +83,7 @@ ecp_g_ib_eih::~ecp_g_ib_eih()
 
 bool ecp_g_ib_eih::first_step()
 {
-	log("ecp_g_ib_eih::first_step()");
+	log("ecp_g_ib_eih::first_step()\n");
 	vsp_fradia = sensor_m[lib::SENSOR_CVFRADIA];
 
 	the_robot->ecp_command.instruction.instruction_type = lib::GET;
@@ -110,6 +110,7 @@ bool ecp_g_ib_eih::next_step()
 	the_robot->ecp_command.instruction.instruction_type = lib::SET_GET;
 
 	if (!currentFrameSaved) { // save first frame
+		log("ecp_g_ib_eih::next_step() 1\n");
 		currentFrame.set_from_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame);
 		currentGripperCoordinate = the_robot->reply_package.arm.pf_def.gripper_coordinate;
 
@@ -129,11 +130,12 @@ bool ecp_g_ib_eih::next_step()
 			u = e * Kp;
 			u[2] = 0; // Z axis
 
+			for(int i=0; i<3; ++i){		log("e[%d] = %g\t", i, e[i]);	}		log("\n");
 			//for(int i=0; i<3; ++i){		log("u[%d] = %g\t", i, u[i]);	}		log("\n");
 			bool isSpeedConstrained[3] = { false, false, false };
 			bool isAccelConstrained[3] = { false, false, false };
 			for (int i = 0; i < 3; ++i) {
-				// constraints for speed
+				// speed constraints
 				if (u[i] > max_v[i]) {
 					u[i] = max_v[i];
 					isSpeedConstrained[i] = true;
@@ -143,21 +145,21 @@ bool ecp_g_ib_eih::next_step()
 					isSpeedConstrained[i] = true;
 				}
 
-				// constraints for acceleration
-				if (u[i] - prev_u[i] > max_a[i]) {
-					u[i] = max_a[i];
+				// acceleration constraints
+				/*if (u[i] - prev_u[i] > max_a[i]) {
+					u[i] = prev_u[i] + max_a[i];
 					isAccelConstrained[i] = true;
 				}
 				if (u[i] - prev_u[i] < -max_a[i]) {
-					u[i] = -max_a[i];
+					u[i] = prev_u[i] - max_a[i];
 					isAccelConstrained[i] = true;
-				}
+				}*/
 				prev_u[i] = u[i];
 
 				l_vector[i] += u[i]; // first 3 elements of l_vector[] are XYZ translation
+
+				log("isSpeedConstrained[] = {%d, %d}\n", isSpeedConstrained[0], isSpeedConstrained[1]);
 			}
-			log("isSpeedConstrained: (%d, %d, %d)", (int)isSpeedConstrained[0], (int)isSpeedConstrained[1], (int)isSpeedConstrained[2]);
-			log("isAccelConstrained: (%d, %d, %d)", (int)isAccelConstrained[0], (int)isAccelConstrained[1], (int)isAccelConstrained[2]);
 
 			//translation += u;
 		} else {
@@ -173,12 +175,15 @@ bool ecp_g_ib_eih::next_step()
 	// set next frame
 	if (isArmFrameOk(nextFrame)) {
 		currentFrame = nextFrame;
-		nextFrame.get_frame_tab(the_robot->ecp_command.instruction.arm.pf_def.arm_frame);
-	} else {
-		//log("!isArmFrameOk(nextFrame)\n");
-		currentFrame.get_frame_tab(the_robot->ecp_command.instruction.arm.pf_def.arm_frame);
 	}
+	else{
+		log("!isArmFrameOk(nextFrame)\n");
+	}
+	currentFrame.get_frame_tab(the_robot->ecp_command.instruction.arm.pf_def.arm_frame);
+
 	the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = currentGripperCoordinate;
+
+	//log("ecp_g_ib_eih::next_step() end\n");
 
 	return true;
 } // next_step()

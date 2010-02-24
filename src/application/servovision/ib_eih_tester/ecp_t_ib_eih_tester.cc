@@ -38,7 +38,7 @@ ecp_t_ib_eih_tester::ecp_t_ib_eih_tester(mrrocpp::lib::configurator& _configurat
 	sr_ecp_msg->message("ecp_t_ib_eih_tester::ecp_t_ib_eih_tester() fradia setup...");
 	//ecp_mp::sensor::fradia_sensor<>
 	vsp_fradia
-			= new ecp_mp::sensor::fradia_sensor(lib::SENSOR_CVFRADIA, "[vsp_cvfradia_servovision]", *this);
+			= new ecp_mp::sensor::fradia_sensor("[vsp_cvfradia_servovision]", *this);
 	vsp_fradia->configure_sensor();
 
 	sensor_m[lib::SENSOR_CVFRADIA] = vsp_fradia;

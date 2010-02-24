@@ -54,7 +54,7 @@ ecp_g_mboryn::~ecp_g_mboryn()
 
 bool ecp_g_mboryn::first_step()
 {
-	log("ecp_g_mboryn::first_step()");
+	log("ecp_g_mboryn::first_step()\n");
 	vsp_fradia = sensor_m[lib::SENSOR_CVFRADIA];
 
 	the_robot->ecp_command.instruction.instruction_type = lib::GET;
@@ -72,6 +72,10 @@ bool ecp_g_mboryn::first_step()
 	}
 
 	currentFrameSaved = false;
+
+	log("ecp_g_mboryn::first_step() end\n");
+
+	printInstruction();
 
 	return true;
 }
@@ -97,6 +101,13 @@ bool ecp_g_mboryn::next_step()
 			mrrocpp::lib::K_vector
 					e(vsp_fradia->from_vsp.comm_image.sensor_union.object_tracker.x, -vsp_fradia->from_vsp.comm_image.sensor_union.object_tracker.y, vsp_fradia->from_vsp.comm_image.sensor_union.object_tracker.z); // error [pixels]
 
+			for (int i = 0; i < 3; ++i) {
+				log("e[%d] = %g\t", i, e[i]);
+			}
+			log("\n");
+
+			//printInstruction();
+
 			mrrocpp::lib::K_vector u;
 			u = e * Kp;
 			u[2] = 0; // Z axis
@@ -115,13 +126,12 @@ bool ecp_g_mboryn::next_step()
 					isConstrained = true;
 				}
 
-				l_vector[i]+=u[i];	// first 3 elements of l_vector[] are XYZ translation
+				l_vector[i] += u[i]; // first 3 elements of l_vector[] are XYZ translation
 			}
-			if(isConstrained){
+			if (isConstrained) {
 				log("u CONSTRAINED.\n");
-			}
-			else{
-				log("u NOT CONSTRAINED.\n");
+			} else {
+				//log("u NOT CONSTRAINED.\n");
 			}
 
 			//translation += u;
@@ -140,7 +150,7 @@ bool ecp_g_mboryn::next_step()
 		currentFrame = nextFrame;
 		nextFrame.get_frame_tab(the_robot->ecp_command.instruction.arm.pf_def.arm_frame);
 	} else {
-		//log("!isArmFrameOk(nextFrame)\n");
+		log("!isArmFrameOk(nextFrame)\n");
 		currentFrame.get_frame_tab(the_robot->ecp_command.instruction.arm.pf_def.arm_frame);
 	}
 	the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = currentGripperCoordinate;
@@ -164,17 +174,105 @@ bool ecp_g_mboryn::isArmFrameOk(const lib::Homog_matrix& arm_frame)
 	return true;
 }
 
+void ecp_g_mboryn::printInstruction(void)
+{
+	fflush(stdout);
+
+	cout << "ecp_g_mboryn::printInstruction(void) begin \n";
+	cout << "============================================================================================\n";
+
+	cout << "arm.pf_def.arm_frame: " << the_robot->ecp_command.instruction.arm.pf_def.arm_frame << endl;
+
+	for (int i = 0; i < MAX_SERVOS_NR; ++i) {
+		cout << "arm.pf_def.arm_coordinates[" << i << "]: "
+				<< the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] << endl;
+	}
+
+	for (int i = 0; i < MAX_SERVOS_NR; ++i) {
+		cout << "arm.pf_def.desired_torque[" << i << "]: "
+				<< the_robot->ecp_command.instruction.arm.pf_def.desired_torque[i] << endl;
+	}
+
+	for (int i = 0; i < 6; ++i) {
+		cout << "arm.pf_def.behaviour[" << i << "]: " << the_robot->ecp_command.instruction.arm.pf_def.behaviour[i]
+				<< endl;
+	}
+
+	for (int i = 0; i < 6; ++i) {
+		cout << "arm.pf_def.inertia[" << i << "]: " << the_robot->ecp_command.instruction.arm.pf_def.inertia[i] << endl;
+	}
+
+	for (int i = 0; i < 6; ++i) {
+		cout << "arm.pf_def.reciprocal_damping[" << i << "]: "
+				<< the_robot->ecp_command.instruction.arm.pf_def.reciprocal_damping[i] << endl;
+	}
+
+	for (int i = 0; i < 6; ++i) {
+		cout << "arm.pf_def.force_xyz_torque_xyz[" << i << "]: "
+				<< the_robot->ecp_command.instruction.arm.pf_def.force_xyz_torque_xyz[i] << endl;
+	}
+
+	cout << "" << the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate << endl;
+
+	cout << "get_arm_type " << the_robot->ecp_command.instruction.get_arm_type << endl;
+	cout << "get_robot_model_type " << the_robot->ecp_command.instruction.get_robot_model_type << endl;
+	cout << "get_type" << the_robot->ecp_command.instruction.get_type << endl;
+	cout << "instruction_type" << the_robot->ecp_command.instruction.instruction_type << endl;
+	cout << "interpolation_type " << the_robot->ecp_command.instruction.interpolation_type << endl;
+	cout << "motion_steps " << the_robot->ecp_command.instruction.motion_steps << endl;
+	cout << "motion_type " << the_robot->ecp_command.instruction.motion_type << endl;
+	cout << "output_values " << the_robot->ecp_command.instruction.output_values << endl;
+
+	cout << "robot_model.tool_frame_def.tool_frame "
+			<< the_robot->ecp_command.instruction.robot_model.tool_frame_def.tool_frame << endl;
+	cout << "robot_model.kinematic_model.kinematic_model_no "
+			<< the_robot->ecp_command.instruction.robot_model.kinematic_model.kinematic_model_no << endl;
+
+	for (int i = 0; i < MAX_SERVOS_NR; ++i) {
+		cout << "robot_model.servo_algorithm.servo_algorithm_no [" << i << "]: "
+				<< the_robot->ecp_command.instruction.robot_model.servo_algorithm.servo_algorithm_no[i] << endl;
+	}
+
+	for (int i = 0; i < MAX_SERVOS_NR; ++i) {
+		cout << "robot_model.servo_algorithm.servo_parameters_no [" << i << "]: "
+				<< the_robot->ecp_command.instruction.robot_model.servo_algorithm.servo_parameters_no[i] << endl;
+	}
+
+	for (int i = 0; i < 3; ++i) {
+		cout << "robot_model.force_tool.position[" << i << "] "
+				<< the_robot->ecp_command.instruction.robot_model.force_tool.position[i] << endl;
+	}
+
+	cout << "robot_model.force_tool.weight " << the_robot->ecp_command.instruction.robot_model.force_tool.weight
+			<< endl;
+
+	cout << "set_arm_type " << the_robot->ecp_command.instruction.set_arm_type << endl;
+	cout << "set_robot_model_type " << the_robot->ecp_command.instruction.set_robot_model_type << endl;
+	cout << "set_type " << the_robot->ecp_command.instruction.set_type << endl;
+	cout << "value_in_step_no " << the_robot->ecp_command.instruction.value_in_step_no << endl;
+
+	/*cout << "" << the_robot->ecp_command.instruction. << endl;
+	 cout << "" << the_robot->ecp_command.instruction << endl;
+	 cout << "" << the_robot->ecp_command.instruction << endl;
+	 cout << "" << the_robot->ecp_command.instruction << endl;*/
+
+	cout << "============================================================================================\n";
+	cout << "ecp_g_mboryn::printInstruction(void) end \n";
+	cout << cout.flush();
+}
+
 void ecp_g_mboryn::log(const char *fmt, ...)
 {
 	va_list ap;
 	va_start(ap, fmt);
 
-	if(!logEnabled){
+	if (!logEnabled) {
 		va_end(ap);
 		return;
 	}
 
-	vfprintf(stdout, fmt, ap); fflush(stdout);
+	vfprintf(stdout, fmt, ap);
+	fflush(stdout);
 	va_end(ap);
 }
 

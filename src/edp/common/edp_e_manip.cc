@@ -480,7 +480,7 @@ void manip_effector::iterate_macrostep(const lib::JointArray begining_joints, co
 		 */
 
 		// Przeliczenie wspolrzednych zewnetrznych na wspolrzedne wewnetrzne
-		get_current_kinematic_model()->e2i_transform(desired_joints_tmp, current_joints, desired_end_effector_frame);
+		get_current_kinematic_model()->e2i_transform(desired_joints_tmp, desired_joints, desired_end_effector_frame);
 		// Przeliczenie wspolrzednych wewnetrznych na polozenia walow silnikow
 
 		get_current_kinematic_model()->i2mp_transform(desired_motor_pos_new_tmp, desired_joints_tmp);
@@ -672,7 +672,7 @@ void manip_effector::compute_frame(const lib::c_buffer &instruction)
 			throw NonFatal_error_2(INVALID_MOTION_TYPE);
 	}
 	// Przeliczenie wspolrzednych zewnetrznych na wspolrzedne wewnetrzne
-	get_current_kinematic_model()->e2i_transform(desired_joints_tmp, current_joints, desired_end_effector_frame);
+	get_current_kinematic_model()->e2i_transform(desired_joints_tmp, desired_joints, desired_end_effector_frame);
 	// Przeliczenie wspolrzednych wewnetrznych na polozenia walow silnikow
 	get_current_kinematic_model()->i2mp_transform(desired_motor_pos_new_tmp, desired_joints_tmp);
 

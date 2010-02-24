@@ -34,7 +34,7 @@ public:
 	/*!
       * Constructor. Creates socket connection to cvFraDIA.
       */
-	fradia_sensor (lib::SENSOR_t _sensor_name, const char* _section_name, task::task& _ecp_mp_object);
+	fradia_sensor (const char* _section_name, task::task& _ecp_mp_object);
 
 	/*!
       * Sends sensor configuration to cvFraDIA.
@@ -91,7 +91,7 @@ private:
 	/*!
       * Sensor name.
       */
-	const lib::SENSOR_t sensor_name;
+	//const lib::SENSOR_t sensor_name;
 
 	lib::ECP_VSP_MSG to_vsp_tmp;
 

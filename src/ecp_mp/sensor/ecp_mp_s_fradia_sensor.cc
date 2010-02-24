@@ -24,8 +24,8 @@ using namespace std;
 /*!
  * Constructor. Creates socket connection to cvFraDIA.
  */
-fradia_sensor::fradia_sensor(lib::SENSOR_t _sensor_name, const char* _section_name, task::task& _ecp_mp_object) :
-	sr_ecp_msg(*_ecp_mp_object.sr_ecp_msg), sensor_name(_sensor_name)
+fradia_sensor::fradia_sensor(const char* _section_name, task::task& _ecp_mp_object) :
+	sr_ecp_msg(*_ecp_mp_object.sr_ecp_msg)  /*, sensor_name(lib::SENSOR_CVFRADIA)*/
 {
 	// Set size of passed message/union.
 	union_size = 0;
@@ -119,9 +119,12 @@ void fradia_sensor::get_reading()
 	get_reading_mutex.lock();
 	// copy buffers
 
-	memcpy(&image, &(from_vsp_tmp.comm_image), sizeof(lib::SENSOR_IMAGE));
+	//memcpy(&image, &(from_vsp_tmp.comm_image), sizeof(lib::SENSOR_IMAGE));
+	memcpy(&from_vsp, &from_vsp_tmp, sizeof(lib::VSP_ECP_MSG));
 
 	get_reading_mutex.unlock();
+
+	//printf("fradia_sensor::get_reading()\n");
 }
 
 /*!
@@ -140,29 +143,46 @@ fradia_sensor::~fradia_sensor()
 
 void fradia_sensor::operator()()
 {
+	int result;
 	lib::ECP_VSP_MSG to_vsp_local;
 	lib::VSP_ECP_MSG from_vsp_local;
 
-	cout << "void cvfradia::operator()(){" << endl << cout.flush();
-
 	while (1) {
 		// TODO: make fradia process blocking queries and then remove this usleep
-		usleep(1000);
+		usleep(10000);
 
 		// get reading from fradia
 		// Send adequate command to cvFraDIA.
+		to_vsp_local = to_vsp;
 		to_vsp_local.i_code = lib::VSP_GET_READING;
-		if (write(sockfd, &to_vsp_local, sizeof(lib::ECP_VSP_MSG)) == -1) {
+		result = write(sockfd, &to_vsp_local, sizeof(lib::ECP_VSP_MSG));
+		if (result < 0) {
 			//TODO: exception
+			printf("write() error.\n"); fflush(stdout);
 			continue;
 			//throw sensor_error (lib::SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE);
 		}
+		if(result != sizeof(lib::ECP_VSP_MSG)){
+			printf("result != sizeof(lib::ECP_VSP_MSG)\n"); fflush(stdout);
+			continue;
+		}
 
 		// Read aggregated data from cvFraDIA.
-		if (read(sockfd, &from_vsp_local, sizeof(lib::VSP_ECP_MSG)) == -1) {
+		result = read(sockfd, &from_vsp_local, sizeof(lib::VSP_ECP_MSG));
+		if (result < 0) {
 			//TODO: exception
+			printf("read() error.\n"); fflush(stdout);
 			continue;
 			//throw sensor_error (lib::SYSTEM_ERROR, CANNOT_READ_FROM_DEVICE);
+		}
+		if(result != sizeof(lib::VSP_ECP_MSG)){
+			printf("result != sizeof(lib::VSP_ECP_MSG)\n"); fflush(stdout);
+			continue;
+		}
+
+		if(from_vsp_local.vsp_report != lib::VSP_REPLY_OK){
+			printf("(from_vsp_local.vsp_report != lib::VSP_REPLY_OK\n"); fflush(stdout);
+			continue;
 		}
 
 		get_reading_mutex.lock();
@@ -170,6 +190,8 @@ void fradia_sensor::operator()()
 		memcpy(&from_vsp_tmp, &from_vsp_local, sizeof(lib::VSP_ECP_MSG));
 
 		get_reading_mutex.unlock();
+
+		//printf("fradia_sensor::operator()\n"); fflush(stdout);
 	}
 }
 
