@@ -456,3 +456,8 @@ int reload_irp6ot_tfg_configuration();
 int EDP_irp6ot_tfg_slay_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo);
 int manage_interface_irp6ot_tfg ();
 int EDP_irp6ot_tfg_synchronise_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo);
+int irp6ot_tfg_execute_motor_motion();
+int irp6ot_tfg_execute_joint_motion();
+
+int close_wind_irp6ot_tfg_moves( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo );
+int close_wnd_irp6ot_tfg_servo_algorithm( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo );

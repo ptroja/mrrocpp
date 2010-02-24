@@ -2195,6 +2195,9 @@ int pulse_start_mp(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinf
 		close_wind_conveyor_moves(NULL, NULL, NULL);
 		close_wnd_conveyor_servo_algorithm(NULL, NULL, NULL);
 
+		close_wind_irp6ot_tfg_moves(NULL, NULL, NULL);
+		close_wnd_irp6ot_tfg_servo_algorithm(NULL, NULL, NULL);
+
 		close_wnd_speaker_play(NULL, NULL, NULL);
 
 		execute_mp_pulse(MP_START);

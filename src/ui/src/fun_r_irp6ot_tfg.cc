@@ -38,6 +38,46 @@ extern lib::configurator* config;
 extern ui_msg_def ui_msg;
 extern ui_robot_def ui_robot;
 
+double irp6ot_tfg_current_pos[IRP6OT_TFG_NUM_OF_SERVOS];// pozycja biezaca
+double irp6ot_tfg_desired_pos[IRP6OT_TFG_NUM_OF_SERVOS]; // pozycja zadana
+
+
+
+int
+close_wind_irp6ot_tfg_moves( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
+
+	{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	if (ui_state.is_wind_irp6ot_tfg_moves_open)
+	{
+		PtDestroyWidget( ABW_wnd_irp6ot_tfg_moves );
+	}
+
+	return( Pt_CONTINUE );
+
+	}
+
+int
+close_wnd_irp6ot_tfg_servo_algorithm( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
+
+	{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	if (ui_state.is_wind_irp6ot_tfg_servo_algorithm_open)
+	{
+		PtDestroyWidget ( ABW_wnd_irp6ot_tfg_servo_algorithm );
+	}
+
+	return( Pt_CONTINUE );
+
+	}
+
+
 int EDP_irp6ot_tfg_create(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
@@ -143,8 +183,6 @@ int EDP_irp6ot_tfg_slay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *
 
 }
 
-
-
 int EDP_irp6ot_tfg_slay_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
@@ -178,9 +216,6 @@ int EDP_irp6ot_tfg_slay_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo
 
 }
 
-
-
-
 int EDP_irp6ot_tfg_synchronise(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
@@ -193,8 +228,6 @@ int EDP_irp6ot_tfg_synchronise(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackI
 	return (Pt_CONTINUE);
 
 }
-
-
 
 int EDP_irp6ot_tfg_synchronise_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
@@ -226,13 +259,20 @@ int EDP_irp6ot_tfg_synchronise_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallb
 
 }
 
-
 int start_wind_irp6ot_tfg_moves(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	if (!ui_state.is_wind_irp6ot_tfg_moves_open) // otworz okno
+	{
+		ApCreateModule(ABM_wnd_irp6ot_tfg_moves, widget, cbinfo);
+		ui_state.is_wind_irp6ot_tfg_moves_open = true;
+	} else { // przelacz na okno
+		PtWindowToFront(ABW_wnd_irp6ot_tfg_moves);
+	}
 
 	return (Pt_CONTINUE);
 
@@ -245,8 +285,75 @@ int irp6ot_tfg_move_to_preset_position(PtWidget_t *widget, ApInfo_t *apinfo, PtC
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
+	PhKeyEvent_t *my_data = NULL;
+
+	if (cbinfo->event->type == Ph_EV_KEY) {
+		my_data = (PhKeyEvent_t *) PhGetData(cbinfo->event);
+	}
+
+	if (ui_state.irp6ot_tfg.edp.pid != -1) {
+
+		if ((((ApName(ApWidget(cbinfo)) == ABN_mm_irp6ot_tfg_preset_position_synchro) || (ApName(ApWidget(cbinfo))
+				== ABN_mm_all_robots_preset_position_synchro)) || ((cbinfo->event->type == Ph_EV_KEY)
+				&& (my_data->key_cap == 0x73))) && (ui_state.irp6ot_tfg.edp.is_synchronised)) {// powrot do pozycji synchronizacji
+			for (int i = 0; i < IRP6OT_TFG_NUM_OF_SERVOS; i++) {
+				irp6ot_tfg_desired_pos[i] = 0.0;
+			}
+			edp_irp6ot_tfg_eb.command(boost::bind(irp6ot_tfg_execute_motor_motion));
+		} else if ((((ApName(ApWidget(cbinfo)) == ABN_mm_irp6ot_tfg_preset_position_0) || (ApName(ApWidget(cbinfo))
+				== ABN_mm_all_robots_preset_position_0)) || ((cbinfo->event->type == Ph_EV_KEY) && (my_data->key_cap
+				== 0x30))) && (ui_state.irp6ot_tfg.edp.is_synchronised)) {// ruch do pozycji zadania (wspolrzedne przyjete arbitralnie)
+			for (int i = 0; i < IRP6OT_TFG_NUM_OF_SERVOS; i++) {
+				irp6ot_tfg_desired_pos[i] = ui_state.irp6ot_tfg.edp.preset_position[0][i];
+			}
+			edp_irp6ot_tfg_eb.command(boost::bind(irp6ot_tfg_execute_joint_motion));
+		} else if ((((ApName(ApWidget(cbinfo)) == ABN_mm_irp6ot_tfg_preset_position_1) || (ApName(ApWidget(cbinfo))
+				== ABN_mm_all_robots_preset_position_1)) || ((cbinfo->event->type == Ph_EV_KEY) && (my_data->key_cap
+				== 0x31))) && (ui_state.irp6ot_tfg.edp.is_synchronised)) {// ruch do pozycji zadania (wspolrzedne przyjete arbitralnie)
+			for (int i = 0; i < IRP6OT_TFG_NUM_OF_SERVOS; i++) {
+				irp6ot_tfg_desired_pos[i] = ui_state.irp6ot_tfg.edp.preset_position[1][i];
+			}
+			edp_irp6ot_tfg_eb.command(boost::bind(irp6ot_tfg_execute_joint_motion));
+		} else if ((((ApName(ApWidget(cbinfo)) == ABN_mm_irp6ot_tfg_preset_position_2) || (ApName(ApWidget(cbinfo))
+				== ABN_mm_all_robots_preset_position_2)) || ((cbinfo->event->type == Ph_EV_KEY) && (my_data->key_cap
+				== 0x32))) && (ui_state.irp6ot_tfg.edp.is_synchronised)) {// ruch do pozycji zadania (wspolrzedne przyjete arbitralnie)
+			for (int i = 0; i < IRP6OT_TFG_NUM_OF_SERVOS; i++) {
+				irp6ot_tfg_desired_pos[i] = ui_state.irp6ot_tfg.edp.preset_position[2][i];
+			}
+			edp_irp6ot_tfg_eb.command(boost::bind(irp6ot_tfg_execute_joint_motion));
+		}
+
+		//	ui_robot.irp6ot_tfg->move_motors(irp6ot_tfg_desired_pos);
+
+	} // end if (ui_state.irp6ot_tfg.edp.pid!=-1)
+
+
 	return (Pt_CONTINUE);
 
+}
+
+int irp6ot_tfg_execute_motor_motion()
+{
+	try {
+
+		ui_robot.irp6ot_tfg->move_motors(irp6ot_tfg_desired_pos);
+
+	} // end try
+	CATCH_SECTION_UI
+
+	return 1;
+}
+
+int irp6ot_tfg_execute_joint_motion()
+{
+	try {
+
+		ui_robot.irp6ot_tfg->move_joints(irp6ot_tfg_desired_pos);
+
+	} // end try
+	CATCH_SECTION_UI
+
+	return 1;
 }
 
 int start_wnd_irp6ot_tfg_servo_algorithm(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
@@ -255,6 +362,14 @@ int start_wnd_irp6ot_tfg_servo_algorithm(PtWidget_t *widget, ApInfo_t *apinfo, P
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	if (!ui_state.is_wind_irp6ot_tfg_servo_algorithm_open) // otworz okno
+	{
+		ApCreateModule(ABM_wnd_irp6ot_tfg_servo_algorithm, widget, cbinfo);
+		ui_state.is_wind_irp6ot_tfg_servo_algorithm_open = 1;
+	} else { // przelacz na okno
+		PtWindowToFront(ABW_wnd_irp6ot_tfg_servo_algorithm);
+	}
 
 	return (Pt_CONTINUE);
 
@@ -267,6 +382,27 @@ int init_wnd_irp6ot_tfg_servo_algorithm(PtWidget_t *widget, ApInfo_t *apinfo, Pt
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
+	uint8_t servo_alg_no[CONVEYOR_NUM_OF_SERVOS];
+	uint8_t servo_par_no[CONVEYOR_NUM_OF_SERVOS];
+
+	// wychwytania ew. bledow ECP::robot
+	try {
+		if (ui_state.irp6ot_tfg.edp.pid != -1) {
+			if (ui_state.irp6ot_tfg.edp.is_synchronised) // Czy robot jest zsynchronizowany?
+			{
+				ui_robot.irp6ot_tfg->get_servo_algorithm(servo_alg_no, servo_par_no);
+
+				PtSetResource(ABW_PtNumericInteger_wnd_irp6ot_tfg_servo_algorithm_read_alg_1, Pt_ARG_NUMERIC_VALUE, servo_alg_no[0] , 0);
+
+				PtSetResource(ABW_PtNumericInteger_wnd_irp6ot_tfg_servo_algorithm_read_par_1, Pt_ARG_NUMERIC_VALUE, servo_par_no[0] , 0);
+
+			} else {
+
+			}
+		}
+	} // end try
+	CATCH_SECTION_UI
+
 	return (Pt_CONTINUE);
 
 }
@@ -277,6 +413,32 @@ int irp6ot_tfg_servo_algorithm_set(PtWidget_t *widget, ApInfo_t *apinfo, PtCallb
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	uint8_t *servo_alg_no_tmp[CONVEYOR_NUM_OF_SERVOS];
+	uint8_t servo_alg_no_output[CONVEYOR_NUM_OF_SERVOS];
+	uint8_t *servo_par_no_tmp[CONVEYOR_NUM_OF_SERVOS];
+	uint8_t servo_par_no_output[CONVEYOR_NUM_OF_SERVOS];
+
+	// wychwytania ew. bledow ECP::robot
+	try {
+		if (ui_state.irp6ot_tfg.edp.is_synchronised) {
+
+			PtGetResource(ABW_PtNumericInteger_wnd_irp6ot_tfg_servo_algorithm_alg_1, Pt_ARG_NUMERIC_VALUE, &servo_alg_no_tmp[0], 0 );
+
+			PtGetResource(ABW_PtNumericInteger_wnd_irp6ot_tfg_servo_algorithm_par_1, Pt_ARG_NUMERIC_VALUE, &servo_par_no_tmp[0], 0 );
+
+			for (int i = 0; i < CONVEYOR_NUM_OF_SERVOS; i++) {
+				servo_alg_no_output[i] = *servo_alg_no_tmp[i];
+				servo_par_no_output[i] = *servo_par_no_tmp[i];
+			}
+
+			// zlecenie wykonania ruchu
+			ui_robot.irp6ot_tfg->set_servo_algorithm(servo_alg_no_output, servo_par_no_output);
+
+		} else {
+		}
+	} // end try
+	CATCH_SECTION_UI
 
 	return (Pt_CONTINUE);
 
@@ -289,6 +451,43 @@ int wind_irp6ot_tfg_moves_init(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackI
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
+	// wychwytania ew. bledow ECP::robot
+	try {
+		if ((ui_state.irp6ot_tfg.edp.pid != -1) && (ui_state.is_wind_irp6ot_tfg_moves_open)) {
+			if (ui_state.irp6ot_tfg.edp.is_synchronised) // Czy robot jest zsynchronizowany?
+			{
+				unblock_widget(ABW_PtNumericFloat_wind_irp6ot_tfg_moves_inc_pos);
+				unblock_widget(ABW_PtButton_wind_irp6ot_tfg_moves_inc_exec);
+
+				unblock_widget(ABW_PtButton_wind_irp6ot_tfg_moves_int_left);
+				unblock_widget(ABW_PtButton_wind_irp6ot_tfg_moves_int_right);
+				unblock_widget(ABW_PtNumericFloat_wind_irp6ot_tfg_moves_int_step);
+				unblock_widget(ABW_PtNumericFloat_wind_irp6ot_tfg_moves_int_pos);
+				unblock_widget(ABW_PtButton_wind_irp6ot_tfg_moves_int_exec);
+
+				ui_robot.irp6ot_tfg->read_motors(irp6ot_tfg_current_pos); // Odczyt polozenia walow silnikow
+
+				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_tfg_moves_read_motor_pos, Pt_ARG_NUMERIC_VALUE, &irp6ot_tfg_current_pos[0] , 0);
+
+				ui_robot.irp6ot_tfg->read_joints(irp6ot_tfg_current_pos);
+
+				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_tfg_moves_read_int_pos, Pt_ARG_NUMERIC_VALUE, &irp6ot_tfg_current_pos[0] , 0);
+
+			} else {
+				block_widget(ABW_PtNumericFloat_wind_irp6ot_tfg_moves_inc_pos);
+				block_widget(ABW_PtButton_wind_irp6ot_tfg_moves_inc_exec);
+
+				block_widget(ABW_PtButton_wind_irp6ot_tfg_moves_int_left);
+				block_widget(ABW_PtButton_wind_irp6ot_tfg_moves_int_right);
+				block_widget(ABW_PtNumericFloat_wind_irp6ot_tfg_moves_int_step);
+				block_widget(ABW_PtNumericFloat_wind_irp6ot_tfg_moves_int_pos);
+				block_widget(ABW_PtButton_wind_irp6ot_tfg_moves_int_exec);
+			}
+			PtDamageWidget(ABW_wnd_irp6ot_tfg_moves);
+		}
+	} // end try
+	CATCH_SECTION_UI
+
 	return (Pt_CONTINUE);
 
 }
@@ -300,6 +499,8 @@ int clear_wind_irp6ot_tfg_moves_flag(PtWidget_t *widget, ApInfo_t *apinfo, PtCal
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
+	ui_state.is_wind_irp6ot_tfg_moves_open = false;
+
 	return (Pt_CONTINUE);
 
 }
@@ -308,8 +509,70 @@ int wind_irp6ot_tfg_moves_move(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackI
 
 {
 
+	double *wektor_ptgr, irp6ot_tfg_desired_pos_motors[6], irp6ot_tfg_desired_pos_int[6];
+	double *step1;
+
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	// wychwytania ew. bledow ECP::robot
+	try {
+
+		if (ui_state.irp6ot_tfg.edp.pid != -1) {
+
+			// incremental
+			if ((widget == ABW_PtButton_wind_irp6ot_tfg_moves_inc_left) || (widget
+					== ABW_PtButton_wind_irp6ot_tfg_moves_inc_right) || (widget
+					== ABW_PtButton_wind_irp6ot_tfg_moves_inc_exec)) {
+
+				if (ui_state.irp6ot_tfg.edp.is_synchronised) {
+					PtGetResource(ABW_PtNumericFloat_wind_irp6ot_tfg_moves_inc_pos, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr, 0 );
+					irp6ot_tfg_desired_pos_motors[0] = (*wektor_ptgr);
+				} else {
+					irp6ot_tfg_desired_pos_motors[0] = 0.0;
+				}
+
+				PtGetResource(ABW_PtNumericFloat_wind_irp6ot_tfg_moves_inc_step, Pt_ARG_NUMERIC_VALUE, &step1, 0 );
+
+				if (widget == ABW_PtButton_wind_irp6ot_tfg_moves_inc_left) {
+					irp6ot_tfg_desired_pos_motors[0] -= (*step1);
+				} else if (widget == ABW_PtButton_wind_irp6ot_tfg_moves_inc_right) {
+					irp6ot_tfg_desired_pos_motors[0] += (*step1);
+				}
+
+				ui_robot.irp6ot_tfg->move_motors(irp6ot_tfg_desired_pos_motors);
+
+			}
+
+			// internal
+			if ((widget == ABW_PtButton_wind_irp6ot_tfg_moves_int_left) || (widget
+					== ABW_PtButton_wind_irp6ot_tfg_moves_int_right) || (widget
+					== ABW_PtButton_wind_irp6ot_tfg_moves_int_exec)) {
+				if (ui_state.irp6ot_tfg.edp.is_synchronised) {
+					PtGetResource(ABW_PtNumericFloat_wind_irp6ot_tfg_moves_int_pos, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr, 0 );
+					irp6ot_tfg_desired_pos_int[0] = (*wektor_ptgr);
+				}
+
+				PtGetResource(ABW_PtNumericFloat_wind_irp6ot_tfg_moves_int_step, Pt_ARG_NUMERIC_VALUE, &step1, 0 );
+
+				if (widget == ABW_PtButton_wind_irp6ot_tfg_moves_int_left) {
+					irp6ot_tfg_desired_pos_int[0] -= (*step1);
+				} else if (widget == ABW_PtButton_wind_irp6ot_tfg_moves_int_right) {
+					irp6ot_tfg_desired_pos_int[0] += (*step1);
+				}
+				ui_robot.irp6ot_tfg->move_joints(irp6ot_tfg_desired_pos_int);
+			}
+
+			// odswierzenie pozycji robota
+			if ((ui_state.irp6ot_tfg.edp.is_synchronised) && (ui_state.is_wind_irp6ot_tfg_moves_open)) {
+
+				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_tfg_moves_inc_pos, Pt_ARG_NUMERIC_VALUE, &irp6ot_tfg_desired_pos_motors[0] , 0);
+				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_tfg_moves_int_pos, Pt_ARG_NUMERIC_VALUE, &irp6ot_tfg_desired_pos_int[0] , 0);
+
+			}
+		}
+	} // end try
+	CATCH_SECTION_UI
 
 	return (Pt_CONTINUE);
 
@@ -321,6 +584,8 @@ int clear_wnd_irp6ot_tfg_servo_algorithm_flag(PtWidget_t *widget, ApInfo_t *apin
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	ui_state.is_wind_irp6ot_tfg_servo_algorithm_open = false;
 
 	return (Pt_CONTINUE);
 
@@ -421,64 +686,55 @@ int reload_irp6ot_tfg_configuration()
 	return 1;
 }
 
-
-int
-manage_interface_irp6ot_tfg ()
+int manage_interface_irp6ot_tfg()
 {
 	switch (ui_state.irp6ot_tfg.edp.state)
 	{
 		case -1:
-			ApModifyItemState( &robot_menu, AB_ITEM_DIM, ABN_mm_irp6ot_tfg, NULL);
-		break;
+			ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_irp6ot_tfg, NULL);
+			break;
 		case 0:
-			ApModifyItemState( &robot_menu, AB_ITEM_DIM, ABN_mm_irp6ot_tfg_edp_unload, ABN_mm_irp6ot_tfg_synchronisation,
-				ABN_mm_irp6ot_tfg_move,  ABN_mm_irp6ot_tfg_preset_positions, ABN_mm_irp6ot_tfg_servo_algorithm, NULL);
-			ApModifyItemState( &robot_menu, AB_ITEM_NORMAL, ABN_mm_irp6ot_tfg, ABN_mm_irp6ot_tfg_edp_load, NULL);
+			ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_irp6ot_tfg_edp_unload, ABN_mm_irp6ot_tfg_synchronisation, ABN_mm_irp6ot_tfg_move, ABN_mm_irp6ot_tfg_preset_positions, ABN_mm_irp6ot_tfg_servo_algorithm, NULL);
+			ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_irp6ot_tfg, ABN_mm_irp6ot_tfg_edp_load, NULL);
 
-
-		break;
+			break;
 		case 1:
 		case 2:
-			ApModifyItemState( &robot_menu, AB_ITEM_NORMAL, ABN_mm_irp6ot_tfg, NULL);
-
+			ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_irp6ot_tfg, NULL);
 
 			// jesli robot jest zsynchronizowany
-			if (	ui_state.irp6ot_tfg.edp.is_synchronised)
-			{
-				ApModifyItemState( &robot_menu, AB_ITEM_DIM, ABN_mm_irp6ot_tfg_synchronisation, NULL);
-				ApModifyItemState( &all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_preset_positions, NULL);
+			if (ui_state.irp6ot_tfg.edp.is_synchronised) {
+				ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_irp6ot_tfg_synchronisation, NULL);
+				ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_preset_positions, NULL);
 
 				switch (ui_state.mp.state)
 				{
 					case UI_MP_NOT_PERMITED_TO_RUN:
 					case UI_MP_PERMITED_TO_RUN:
-						ApModifyItemState( &robot_menu, AB_ITEM_NORMAL,  ABN_mm_irp6ot_tfg_edp_unload,
-							ABN_mm_irp6ot_tfg_move, ABN_mm_irp6ot_tfg_preset_positions, ABN_mm_irp6ot_tfg_servo_algorithm, NULL);
-						ApModifyItemState( &robot_menu, AB_ITEM_DIM, ABN_mm_irp6ot_tfg_edp_load, NULL);
-					break;
+						ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_irp6ot_tfg_edp_unload, ABN_mm_irp6ot_tfg_move, ABN_mm_irp6ot_tfg_preset_positions, ABN_mm_irp6ot_tfg_servo_algorithm, NULL);
+						ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_irp6ot_tfg_edp_load, NULL);
+						break;
 					case UI_MP_WAITING_FOR_START_PULSE:
-						ApModifyItemState( &robot_menu, AB_ITEM_NORMAL,
-							ABN_mm_irp6ot_tfg_move, ABN_mm_irp6ot_tfg_preset_positions, ABN_mm_irp6ot_tfg_servo_algorithm, NULL);
-						ApModifyItemState( &robot_menu, AB_ITEM_DIM, ABN_mm_irp6ot_tfg_edp_load, ABN_mm_irp6ot_tfg_edp_unload, NULL);
-					break;
+						ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_irp6ot_tfg_move, ABN_mm_irp6ot_tfg_preset_positions, ABN_mm_irp6ot_tfg_servo_algorithm, NULL);
+						ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_irp6ot_tfg_edp_load, ABN_mm_irp6ot_tfg_edp_unload, NULL);
+						break;
 					case UI_MP_TASK_RUNNING:
 					case UI_MP_TASK_PAUSED:
-						ApModifyItemState( &robot_menu, AB_ITEM_DIM, // modyfikacja menu - ruchy reczne zakazane
-							ABN_mm_irp6ot_tfg_move, ABN_mm_irp6ot_tfg_preset_positions, ABN_mm_irp6ot_tfg_servo_algorithm, NULL);
-					break;
+						ApModifyItemState(&robot_menu, AB_ITEM_DIM, // modyfikacja menu - ruchy reczne zakazane
+						ABN_mm_irp6ot_tfg_move, ABN_mm_irp6ot_tfg_preset_positions, ABN_mm_irp6ot_tfg_servo_algorithm, NULL);
+						break;
 					default:
-					break;
+						break;
 				}
-			} else		// jesli robot jest niezsynchronizowany
+			} else // jesli robot jest niezsynchronizowany
 			{
-				ApModifyItemState( &robot_menu, AB_ITEM_NORMAL, ABN_mm_irp6ot_tfg_edp_unload,
-					ABN_mm_irp6ot_tfg_synchronisation, ABN_mm_irp6ot_tfg_move, NULL);
-				ApModifyItemState( &robot_menu, AB_ITEM_DIM, ABN_mm_irp6ot_tfg_edp_load, NULL);
-				ApModifyItemState( &all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_synchronisation, NULL);
+				ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_irp6ot_tfg_edp_unload, ABN_mm_irp6ot_tfg_synchronisation, ABN_mm_irp6ot_tfg_move, NULL);
+				ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_irp6ot_tfg_edp_load, NULL);
+				ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_synchronisation, NULL);
 			}
-		break;
+			break;
 		default:
-		break;
+			break;
 	}
 
 	return 1;
