@@ -44,7 +44,7 @@ MRROCOBJ = \
 	$(LIBDIR)/libecp.a $(LIBDIR)/libecp_mp.a  $(LIBDIR)/libmrrocpp.a
 
 MYOBJ = ui_ecp_r_speaker.o ui_ecp_r_common.o\
- ui_ecp_r_irp6_common ui_ecp_r_tfg_and_conv.o ui.o threads.o
+ ui_ecp_r_irp6_common.o ui_ecp_r_tfg_and_conv.o ui.o threads.o
 
 VPATH = ..
 
