@@ -20,6 +20,7 @@
 // ---------------------------------------------------------------
 class ui_common_robot
 {
+	protected:
 	// Klasa do obslugi robotow irp6 z poziomu UI
 
 	// Dopuszczalne przyrosty polozenia w pojedynczym kroku [2ms] przy ruchach
