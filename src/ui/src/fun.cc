@@ -1334,6 +1334,12 @@ bool check_synchronised_or_inactive(ecp_edp_ui_robot_def& robot)
 
 }
 
+bool check_synchronised_and_loaded(ecp_edp_ui_robot_def& robot)
+{
+	return (((robot.edp.state > 0) && (robot.edp.is_synchronised)));
+
+}
+
 bool check_loaded_or_inactive(ecp_edp_ui_robot_def& robot)
 {
 	return (((robot.is_active) && (robot.edp.state > 0)) || (!(robot.is_active)));
@@ -1353,6 +1359,7 @@ int check_edps_state_and_modify_mp_state()
 
 	// jesli wszytkie sa nieaktywne
 	if ((!(ui_state.irp6_postument.is_active)) && (!(ui_state.irp6_on_track.is_active))
+			&& (!(ui_state.irp6ot_tfg.is_active)) && (!(ui_state.irp6p_tfg.is_active))
 			&& (!(ui_state.conveyor.is_active)) && (!(ui_state.speaker.is_active))
 			&& (!(ui_state.irp6_mechatronika.is_active))) {
 		ui_state.all_edps = UI_ALL_EDPS_NONE_EDP_ACTIVATED;
@@ -1951,6 +1958,8 @@ int EDP_all_robots_synchronise(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackI
 
 	EDP_conveyor_synchronise(widget, apinfo, cbinfo);
 	EDP_irp6_on_track_synchronise(widget, apinfo, cbinfo);
+	EDP_irp6ot_tfg_synchronise(widget, apinfo, cbinfo);
+	EDP_irp6p_tfg_synchronise(widget, apinfo, cbinfo);
 	EDP_irp6_postument_synchronise(widget, apinfo, cbinfo);
 	EDP_irp6_mechatronika_synchronise(widget, apinfo, cbinfo);
 
@@ -2005,13 +2014,17 @@ int all_robots_move_to_preset_position(PtWidget_t *widget, ApInfo_t *apinfo, PtC
 	if ((ui_state.mp.state == UI_MP_NOT_PERMITED_TO_RUN) || (ui_state.mp.state == UI_MP_PERMITED_TO_RUN)
 			|| (ui_state.mp.state == UI_MP_WAITING_FOR_START_PULSE)) {
 		// ruch do pozcyji synchronizacji dla Irp6_on_track i dla dalszych analogicznie
-		if ((ui_state.irp6_on_track.edp.state > 0) && (ui_state.irp6_on_track.edp.is_synchronised))
+		if (check_synchronised_and_loaded(ui_state.irp6_on_track))
 			irp6ot_move_to_preset_position(widget, apinfo, cbinfo);
-		if ((ui_state.irp6_postument.edp.state > 0) && (ui_state.irp6_postument.edp.is_synchronised))
+		if (check_synchronised_and_loaded(ui_state.irp6ot_tfg))
+			irp6ot_tfg_move_to_preset_position(widget, apinfo, cbinfo);
+		if (check_synchronised_and_loaded(ui_state.irp6_postument))
 			irp6p_move_to_preset_position(widget, apinfo, cbinfo);
-		if ((ui_state.conveyor.edp.state > 0) && (ui_state.conveyor.edp.is_synchronised))
+		if (check_synchronised_and_loaded(ui_state.irp6p_tfg))
+			irp6p_tfg_move_to_preset_position(widget, apinfo, cbinfo);
+		if (check_synchronised_and_loaded(ui_state.conveyor))
 			conveyor_move_to_preset_position(widget, apinfo, cbinfo);
-		if ((ui_state.irp6_mechatronika.edp.state > 0) && (ui_state.irp6_mechatronika.edp.is_synchronised))
+		if (check_synchronised_and_loaded(ui_state.irp6_mechatronika))
 			irp6m_move_to_preset_position(widget, apinfo, cbinfo);
 	}
 
@@ -2478,7 +2491,7 @@ bool check_node_existence(const std::string _node, const std::string beginnig_of
 
 	if (access(opendir_path.c_str(), R_OK) != 0) {
 		std::string tmp(beginnig_of_message);
-		tmp += std::string(" node: ") + ui_state.irp6_on_track.edp.node_name + std::string(" is unreachable");
+		tmp += std::string(" node: ") + _node + std::string(" is unreachable");
 		ui_msg.ui->message(lib::NON_FATAL_ERROR, tmp);
 
 		return false;

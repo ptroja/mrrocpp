@@ -470,3 +470,4 @@ int close_wind_irp6p_tfg_moves( PtWidget_t *widget, ApInfo_t *apinfo, PtCallback
 int close_wnd_irp6p_tfg_servo_algorithm( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo );
 int reload_irp6p_tfg_configuration();
 int manage_interface_irp6p_tfg();
+bool check_synchronised_and_loaded(ecp_edp_ui_robot_def& robot);
