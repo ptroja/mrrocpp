@@ -30,7 +30,7 @@
 #include <math.h>
 
 // ---------------------------------------------------------------
-ui_tfg_and_conv_robot::ui_tfg_and_conv_robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg, lib::robot_name_t _robot_name):
+ui_tfg_and_conv_robot::ui_tfg_and_conv_robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg, lib::robot_name_t _robot_name) :
 	ui_common_robot(_config, _sr_ecp_msg, _robot_name)
 {
 
@@ -39,21 +39,15 @@ ui_tfg_and_conv_robot::ui_tfg_and_conv_robot(lib::configurator &_config, lib::sr
 		case lib::ROBOT_IRP6OT_TFG:
 			ecp = new ecp::irp6ot_tfg::robot(_config, _sr_ecp_msg);
 
-			MOTOR_STEP = 0.1; // Przyrost kata obrotu walu silnika [rad]
-			JOINT_ANGULAR_STEP = 0.0004; // Przyrost kata obrotu w przegubie obrotowym [rad]
-			JOINT_LINEAR_STEP = 0.00004; // Przyrost liniowy w przegubach posuwistych [m]
-			END_EFFECTOR_LINEAR_STEP = 0.00002;// Przyrost wspolrzednej polozenia koncowki [m]
-			END_EFFECTOR_ANGULAR_STEP = 0.0002; // Przyrost wspolrzednej orientacji koncowki [rad]
+			MOTOR_STEP = 0.4; // Przyrost kata obrotu walu silnika [rad]
+			JOINT_LINEAR_STEP = 0.00001; // Przyrost liniowy w przegubach posuwistych [m]
 
 			break;
 		case lib::ROBOT_IRP6P_TFG:
 			ecp = new ecp::irp6p_tfg::robot(_config, _sr_ecp_msg);
 
-			MOTOR_STEP = 0.1; // Przyrost kata obrotu walu silnika [rad]
-			JOINT_ANGULAR_STEP = 0.0004; // Przyrost kata obrotu w przegubie obrotowym [rad]
-			JOINT_LINEAR_STEP = 0.00004; // Przyrost liniowy w przegubach posuwistych [m]
-			END_EFFECTOR_LINEAR_STEP = 0.00002;// Przyrost wspolrzednej polozenia koncowki [m]
-			END_EFFECTOR_ANGULAR_STEP = 0.0002; // Przyrost wspolrzednej orientacji koncowki [rad]
+			MOTOR_STEP = 0.4; // Przyrost kata obrotu walu silnika [rad]
+			JOINT_LINEAR_STEP = 0.00001; // Przyrost liniowy w przegubach posuwistych [m]
 
 			break;
 		case lib::ROBOT_CONVEYOR:
