@@ -79,6 +79,9 @@ void kinematic_model_irp6_tfg::i2mp_transform(lib::MotorArray & local_desired_mo
 	// Obliczenie kata obrotu walu silnika napedowego chwytaka.
 	local_desired_motor_pos_new[0] = inv_a_7 * sqrt(inv_b_7 + inv_c_7 * local_desired_joints[0]) + inv_d_7;
 
+	// Sprawdzenie obliczonych wartosci wspolrzednych wewnetrznych.
+	check_joints(local_desired_joints);
+
 	// Sprawdzenie obliczonych wartosci.
 	check_motor_position(local_desired_motor_pos_new);
 
