@@ -224,7 +224,7 @@ void ui_tfg_robot::move_motors(const double final_position[])
 		//   	printf("is synchronised przed read motors\n");
 		read_motors(current_position);
 
-		for (int j = 0; j < IRP6OT_TFG_NUM_OF_SERVOS; j++) {
+		for (int j = 0; j < ecp->number_of_servos; j++) {
 			temp = fabs(final_position[j] - current_position[j]);
 			max_inc = (max_inc > temp) ? max_inc : temp;
 		}
@@ -238,7 +238,7 @@ void ui_tfg_robot::move_motors(const double final_position[])
 	} else {
 		// printf("!is_synchronised: %f \n",MOTOR_STEP);
 		// Robot niezsynchroniozowany
-		for (int j = 0; j < IRP6OT_TFG_NUM_OF_SERVOS; j++) {
+		for (int j = 0; j < ecp->number_of_servos; j++) {
 			temp = fabs(final_position[j]);
 			max_inc = (max_inc > temp) ? max_inc : temp;
 		}
@@ -257,7 +257,7 @@ void ui_tfg_robot::move_motors(const double final_position[])
 
 	if (nr_of_steps < 1) // Nie wykowywac bo zadano ruch do aktualnej pozycji
 		return;
-	for (int j = 0; j < IRP6OT_TFG_NUM_OF_SERVOS; j++)
+	for (int j = 0; j < ecp->number_of_servos; j++)
 		ecp->ecp_command.instruction.arm.pf_def.arm_coordinates[j] = final_position[j];
 
 	// printf("\n ilosc krokow: %d, po ilu komun: %d, odleglosc 1: %f\n",ecp_command.instruction.motion_steps, ecp_command.instruction.value_in_step_no, ecp_command.instruction.arm.pf_def.arm_coordinates[1]);
@@ -265,7 +265,7 @@ void ui_tfg_robot::move_motors(const double final_position[])
 	execute_motion();
 
 	if (ecp->is_synchronised())
-		for (int j = 0; j < IRP6OT_TFG_NUM_OF_SERVOS; j++) // Przepisanie aktualnych polozen
+		for (int j = 0; j < ecp->number_of_servos; j++) // Przepisanie aktualnych polozen
 			current_position[j] = ecp->reply_package.arm.pf_def.arm_coordinates[j];
 
 }
@@ -284,7 +284,7 @@ void ui_tfg_robot::move_joints(const double final_position[])
     // Odczyt aktualnego polozenia
     read_joints(current_position);
 
-    for (int j = 0; j < IRP6OT_TFG_NUM_OF_SERVOS; j++)
+    for (int j = 0; j < ecp->number_of_servos; j++)
     {
         temp = fabs(final_position[j] - current_position[j]);
         max_inc_lin = (max_inc_lin > temp) ? max_inc_lin : temp;
@@ -308,12 +308,12 @@ void ui_tfg_robot::move_joints(const double final_position[])
     if (nr_of_steps < 1) // Nie wykowywac bo zadano ruch do aktualnej pozycji
         return;
 
-    for (int j = 0; j < IRP6OT_TFG_NUM_OF_SERVOS; j++)
+    for (int j = 0; j < ecp->number_of_servos; j++)
     	ecp->ecp_command.instruction.arm.pf_def.arm_coordinates[j] = final_position[j];
 
     execute_motion();
 
-    for (int j = 0; j < IRP6OT_TFG_NUM_OF_SERVOS; j++) // Przepisanie aktualnych polozen
+    for (int j = 0; j < ecp->number_of_servos; j++) // Przepisanie aktualnych polozen
         current_position[j] = ecp->reply_package.arm.pf_def.arm_coordinates[j];
 }
 // ---------------------------------------------------------------

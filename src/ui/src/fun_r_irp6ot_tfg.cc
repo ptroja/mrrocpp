@@ -634,7 +634,7 @@ int reload_irp6ot_tfg_configuration()
 					} else {
 						for (int j = 0; j < IRP6OT_TFG_NUM_OF_SERVOS; j++) {
 
-							ui_state.irp6ot_tfg.edp.preset_position[i][j] = 0.0;
+							ui_state.irp6ot_tfg.edp.preset_position[i][j] = 0.074;
 
 						}
 					}
