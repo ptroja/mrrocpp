@@ -1,3 +1,4 @@
+
 // -------------------------------------------------------------------------
 //                            robot.h
 // Definicje struktur danych i metod do komunikacji UI z EDP
