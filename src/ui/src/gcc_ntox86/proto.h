@@ -461,3 +461,12 @@ int irp6ot_tfg_execute_joint_motion();
 
 int close_wind_irp6ot_tfg_moves( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo );
 int close_wnd_irp6ot_tfg_servo_algorithm( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo );
+int EDP_irp6p_tfg_create_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo);
+int EDP_irp6p_tfg_slay_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo);
+int EDP_irp6p_tfg_synchronise_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo);
+int irp6p_tfg_execute_motor_motion();
+int irp6p_tfg_execute_joint_motion();
+int close_wind_irp6p_tfg_moves( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo );
+int close_wnd_irp6p_tfg_servo_algorithm( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo );
+int reload_irp6p_tfg_configuration();
+int manage_interface_irp6p_tfg();

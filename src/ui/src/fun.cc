@@ -1034,6 +1034,8 @@ int reload_whole_configuration()
 				// dla robota irp6 on_track
 				reload_irp6ot_tfg_configuration();
 
+				reload_irp6p_tfg_configuration();
+
 				// dla robota irp6 postument
 				reload_irp6p_configuration();
 
@@ -1432,6 +1434,8 @@ int manage_interface()
 
 	// Dla robota IRP6 ON_TRACK
 	manage_interface_irp6ot_tfg();
+
+	manage_interface_irp6p_tfg();
 
 	// Dla robota IRP6 POSTUMENT
 	manage_interface_irp6p();
@@ -2023,7 +2027,9 @@ int EDP_all_robots_create(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
 	EDP_irp6_on_track_create(widget, apinfo, cbinfo);
+	EDP_irp6ot_tfg_create(widget, apinfo, cbinfo);
 	EDP_irp6_postument_create(widget, apinfo, cbinfo);
+	EDP_irp6p_tfg_create(widget, apinfo, cbinfo);
 	EDP_conveyor_create(widget, apinfo, cbinfo);
 	EDP_speaker_create(widget, apinfo, cbinfo);
 	EDP_irp6_mechatronika_create(widget, apinfo, cbinfo);
@@ -2041,6 +2047,7 @@ int EDP_all_robots_slay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *
 	EDP_irp6_on_track_slay(widget, apinfo, cbinfo);
 	EDP_irp6ot_tfg_slay(widget, apinfo, cbinfo);
 	EDP_irp6_postument_slay(widget, apinfo, cbinfo);
+	EDP_irp6p_tfg_slay(widget, apinfo, cbinfo);
 	EDP_conveyor_slay(widget, apinfo, cbinfo);
 	EDP_speaker_slay(widget, apinfo, cbinfo);
 	EDP_irp6_mechatronika_slay(widget, apinfo, cbinfo);
@@ -2197,6 +2204,9 @@ int pulse_start_mp(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinf
 
 		close_wind_irp6ot_tfg_moves(NULL, NULL, NULL);
 		close_wnd_irp6ot_tfg_servo_algorithm(NULL, NULL, NULL);
+
+		close_wind_irp6p_tfg_moves(NULL, NULL, NULL);
+		close_wnd_irp6p_tfg_servo_algorithm(NULL, NULL, NULL);
 
 		close_wnd_speaker_play(NULL, NULL, NULL);
 
