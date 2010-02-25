@@ -188,7 +188,7 @@ EDP_polycrank_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cb
 
 			ui_state.irp6_mechatronika.edp.state = 1;
 
-			ui_robot.irp6_mechatronika = new ui_common_robot(
+			ui_robot.irp6_mechatronika = new ui_irp6_common_robot(
 					*config, *ui_msg.all_ecp,
 					lib::ROBOT_IRP6_MECHATRONIKA);
 

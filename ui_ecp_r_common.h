@@ -18,7 +18,7 @@
 
 
 // ---------------------------------------------------------------
-class ui_irp6_common_robot
+class ui_common_robot
 {
 	// Klasa do obslugi robotow irp6 z poziomu UI
 
@@ -40,9 +40,9 @@ public:
 	ecp::common::ecp_robot *ecp;
 
 	// ecp_buffer ui_edp_package; // by Y
-	ui_irp6_common_robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg, lib::robot_name_t _robot_name); // Konstruktor
+	ui_common_robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg, lib::robot_name_t _robot_name); // Konstruktor
 
-	virtual ~ui_irp6_common_robot();
+	virtual ~ui_common_robot();
 
 	virtual void execute_motion(void);
 	// virtual void set_edp_master_pid ( pid_t edppid ) {EDP_Pid = edppid;};
