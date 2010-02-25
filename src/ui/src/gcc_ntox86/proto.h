@@ -52,6 +52,10 @@ int manage_configuration_file ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallba
 int get_default_configuration_file_name ( void );
 int set_default_configuration_file_name ( void );
 int start_file_window ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
+bool check_synchronised_or_inactive ( ecp_edp_ui_robot_def &robot );
+bool check_synchronised_and_loaded ( ecp_edp_ui_robot_def &robot );
+bool check_loaded_or_inactive ( ecp_edp_ui_robot_def &robot );
+bool check_loaded ( ecp_edp_ui_robot_def &robot );
 int check_edps_state_and_modify_mp_state ( void );
 int manage_interface ( void );
 int clear_console ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
@@ -351,11 +355,18 @@ int close_wnd_irp6_postument_xyz_aa_relative ( PtWidget_t *widget , ApInfo_t *ap
 int irp6p_xyz_aa_relative_motion ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 
 /* ../fun_r_irp6ot_tfg.cc */
+int close_wind_irp6ot_tfg_moves ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
+int close_wnd_irp6ot_tfg_servo_algorithm ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int EDP_irp6ot_tfg_create ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
+int EDP_irp6ot_tfg_create_int ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int EDP_irp6ot_tfg_slay ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
+int EDP_irp6ot_tfg_slay_int ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int EDP_irp6ot_tfg_synchronise ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
+int EDP_irp6ot_tfg_synchronise_int ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int start_wind_irp6ot_tfg_moves ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int irp6ot_tfg_move_to_preset_position ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
+int irp6ot_tfg_execute_motor_motion ( void );
+int irp6ot_tfg_execute_joint_motion ( void );
 int start_wnd_irp6ot_tfg_servo_algorithm ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int init_wnd_irp6ot_tfg_servo_algorithm ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int irp6ot_tfg_servo_algorithm_set ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
@@ -363,20 +374,31 @@ int wind_irp6ot_tfg_moves_init ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallb
 int clear_wind_irp6ot_tfg_moves_flag ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int wind_irp6ot_tfg_moves_move ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int clear_wnd_irp6ot_tfg_servo_algorithm_flag ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
+int reload_irp6ot_tfg_configuration ( void );
+int manage_interface_irp6ot_tfg ( void );
 
 /* ../fun_r_irp6p_tfg.cc */
+int close_wind_irp6p_tfg_moves ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
+int close_wnd_irp6p_tfg_servo_algorithm ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int EDP_irp6p_tfg_create ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
+int EDP_irp6p_tfg_create_int ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int EDP_irp6p_tfg_slay ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
+int EDP_irp6p_tfg_slay_int ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int EDP_irp6p_tfg_synchronise ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
+int EDP_irp6p_tfg_synchronise_int ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int start_wind_irp6p_tfg_moves ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int irp6p_tfg_move_to_preset_position ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
+int irp6p_tfg_execute_motor_motion ( void );
+int irp6p_tfg_execute_joint_motion ( void );
 int start_wnd_irp6p_tfg_servo_algorithm ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int init_wnd_irp6p_tfg_servo_algorithm ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
-int clear_wnd_irp6p_tfg_servo_algorithm_flag ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int irp6p_tfg_servo_algorithm_set ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int wind_irp6p_tfg_moves_init ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int clear_wind_irp6p_tfg_moves_flag ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int wind_irp6p_tfg_moves_move ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
+int clear_wnd_irp6p_tfg_servo_algorithm_flag ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
+int reload_irp6p_tfg_configuration ( void );
+int manage_interface_irp6p_tfg ( void );
 
 /* ../fun_r_speaker.cc */
 int close_wnd_speaker_play ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
@@ -451,23 +473,3 @@ int TRbtnDSSCalibrate ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t
 int TRbtnFSCalibrate ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int TRbtnTryAgain ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int TRDangerousForceDetected ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
-int EDP_irp6ot_tfg_create_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo);
-int reload_irp6ot_tfg_configuration();
-int EDP_irp6ot_tfg_slay_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo);
-int manage_interface_irp6ot_tfg ();
-int EDP_irp6ot_tfg_synchronise_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo);
-int irp6ot_tfg_execute_motor_motion();
-int irp6ot_tfg_execute_joint_motion();
-
-int close_wind_irp6ot_tfg_moves( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo );
-int close_wnd_irp6ot_tfg_servo_algorithm( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo );
-int EDP_irp6p_tfg_create_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo);
-int EDP_irp6p_tfg_slay_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo);
-int EDP_irp6p_tfg_synchronise_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo);
-int irp6p_tfg_execute_motor_motion();
-int irp6p_tfg_execute_joint_motion();
-int close_wind_irp6p_tfg_moves( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo );
-int close_wnd_irp6p_tfg_servo_algorithm( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo );
-int reload_irp6p_tfg_configuration();
-int manage_interface_irp6p_tfg();
-bool check_synchronised_and_loaded(ecp_edp_ui_robot_def& robot);
