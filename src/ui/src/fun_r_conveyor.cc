@@ -26,7 +26,7 @@
 // Konfigurator.
 // #include "lib/configurator.h"
 #include "ui/ui_ecp.h"
-
+#include "lib/conveyor_const.h"
 
 /* Local headers */
 #include "ablibs.h"
@@ -417,8 +417,8 @@ EDP_conveyor_synchronise_int( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackIn
 		if ((ui_state.conveyor.edp.state > 0) &&
 			(ui_state.conveyor.edp.is_synchronised == false))
 		{
-			ui_robot.conveyor->synchronise();
-			ui_state.conveyor.edp.is_synchronised = ui_robot.conveyor->is_synchronised();
+			ui_robot.conveyor->ecp->synchronise();
+			ui_state.conveyor.edp.is_synchronised = ui_robot.conveyor->ecp->is_synchronised();
 		} else {
 			// 	printf("EDP conveyor niepowolane, synchronizacja niedozwolona\n");
 		}
@@ -569,8 +569,8 @@ EDP_conveyor_create_int( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t 
 
 			ui_state.conveyor.edp.state = 1;
 
-			ui_robot.conveyor = new ui_conveyor_robot(*config, *ui_msg.all_ecp);
-			ui_state.conveyor.edp.pid = ui_robot.conveyor->ecp_robot::get_EDP_pid();
+			ui_robot.conveyor = new ui_tfg_and_conv_robot(*config, *ui_msg.all_ecp, lib::ROBOT_CONVEYOR);
+			ui_state.conveyor.edp.pid = ui_robot.conveyor->ecp->get_EDP_pid();
 
 			if (ui_state.conveyor.edp.pid<0)
 			{

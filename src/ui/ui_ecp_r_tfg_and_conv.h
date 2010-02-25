@@ -16,7 +16,7 @@
 #include "lib/mrmath/mrmath.h"
 
 // ---------------------------------------------------------------
-class ui_tfg_robot
+class ui_tfg_and_conv_robot
 {
 	// Klasa do obslugi robotow irp6 z poziomu UI
 
@@ -38,9 +38,9 @@ public:
 	ecp::common::ecp_robot *ecp;
 
 	// ecp_buffer ui_edp_package; // by Y
-	ui_tfg_robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg, lib::robot_name_t _robot_name); // Konstruktor
+	ui_tfg_and_conv_robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg, lib::robot_name_t _robot_name); // Konstruktor
 
-	virtual ~ui_tfg_robot();
+	virtual ~ui_tfg_and_conv_robot();
 
 	virtual void execute_motion(void);
 	// virtual void set_edp_master_pid ( pid_t edppid ) {EDP_Pid = edppid;};

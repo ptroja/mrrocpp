@@ -125,7 +125,7 @@ int EDP_irp6ot_tfg_create_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackIn
 
 				ui_state.irp6ot_tfg.edp.state = 1;
 
-				ui_robot.irp6ot_tfg = new ui_tfg_robot(*config, *ui_msg.all_ecp, lib::ROBOT_IRP6OT_TFG);
+				ui_robot.irp6ot_tfg = new ui_tfg_and_conv_robot(*config, *ui_msg.all_ecp, lib::ROBOT_IRP6OT_TFG);
 
 				ui_state.irp6ot_tfg.edp.pid = ui_robot.irp6ot_tfg->ecp->get_EDP_pid();
 
@@ -382,8 +382,8 @@ int init_wnd_irp6ot_tfg_servo_algorithm(PtWidget_t *widget, ApInfo_t *apinfo, Pt
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	uint8_t servo_alg_no[CONVEYOR_NUM_OF_SERVOS];
-	uint8_t servo_par_no[CONVEYOR_NUM_OF_SERVOS];
+	uint8_t servo_alg_no[IRP6OT_TFG_NUM_OF_SERVOS];
+	uint8_t servo_par_no[IRP6OT_TFG_NUM_OF_SERVOS];
 
 	// wychwytania ew. bledow ECP::robot
 	try {
@@ -414,10 +414,10 @@ int irp6ot_tfg_servo_algorithm_set(PtWidget_t *widget, ApInfo_t *apinfo, PtCallb
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	uint8_t *servo_alg_no_tmp[CONVEYOR_NUM_OF_SERVOS];
-	uint8_t servo_alg_no_output[CONVEYOR_NUM_OF_SERVOS];
-	uint8_t *servo_par_no_tmp[CONVEYOR_NUM_OF_SERVOS];
-	uint8_t servo_par_no_output[CONVEYOR_NUM_OF_SERVOS];
+	uint8_t *servo_alg_no_tmp[IRP6OT_TFG_NUM_OF_SERVOS];
+	uint8_t servo_alg_no_output[IRP6OT_TFG_NUM_OF_SERVOS];
+	uint8_t *servo_par_no_tmp[IRP6OT_TFG_NUM_OF_SERVOS];
+	uint8_t servo_par_no_output[IRP6OT_TFG_NUM_OF_SERVOS];
 
 	// wychwytania ew. bledow ECP::robot
 	try {
@@ -427,7 +427,7 @@ int irp6ot_tfg_servo_algorithm_set(PtWidget_t *widget, ApInfo_t *apinfo, PtCallb
 
 			PtGetResource(ABW_PtNumericInteger_wnd_irp6ot_tfg_servo_algorithm_par_1, Pt_ARG_NUMERIC_VALUE, &servo_par_no_tmp[0], 0 );
 
-			for (int i = 0; i < CONVEYOR_NUM_OF_SERVOS; i++) {
+			for (int i = 0; i < IRP6OT_TFG_NUM_OF_SERVOS; i++) {
 				servo_alg_no_output[i] = *servo_alg_no_tmp[i];
 				servo_par_no_output[i] = *servo_par_no_tmp[i];
 			}
