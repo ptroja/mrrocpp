@@ -52,6 +52,8 @@
 #include <exception>
 #include <vector>
 
+#include <ftdi.hpp>
+
 /* added oct06 for openTCPEPOS() */
 /*
 #include <sys/types.h>
@@ -103,13 +105,13 @@ struct epos_error: virtual std::exception, virtual boost::exception {
 };
 
 //! reason of an exception
-typedef boost::error_info<struct tag_reason,const char *> reason;
+typedef boost::error_info<struct tag_reason,std::string> reason;
 
 //! errno code of a failed system call
 typedef boost::error_info<struct tag_errno_code,int> errno_code;
 
 //! failed system call
-typedef boost::error_info<struct tag_errno_code,const char *> errno_call;
+typedef boost::error_info<struct tag_errno_code,std::string> errno_call;
 
 //! \brief interface to EPOS MAXON controller
 class epos
@@ -123,6 +125,11 @@ class epos
 
 		//! serial port settings
 		struct termios options;
+
+		//! USB FTDI context
+		struct ftdi_context ftdic;
+
+		bool device_opened;
 
 		//! EPOS global error status
 		DWORD E_error;
@@ -142,7 +149,7 @@ class epos
 		 * @param subindex object entry subindex of in a dictionary
 		 * @return answer array from the controller
 		 */
-		answer_t ReadObject(WORD index, BYTE subindex);
+		answer_t ReadObject(WORD index, BYTE subindex, uint8_t nodeId = 1);
 
 		/*! \brief Read Object Value from EPOS memory, firmware definition 6.3.1.1
 		 *
@@ -195,7 +202,7 @@ class epos
 		 * @param subindex object entry subindex of in a dictionary
 		 * @param data pointer to a 2 WORDs array (== 4 BYTES) holding data to transmit
 		 */
-		void WriteObject(WORD index, BYTE subindex, const WORD data[2]);
+		void WriteObject(WORD index, BYTE subindex, const WORD data[2], uint8_t nodeId = 1);
 
 		/*! \brief write object value to EPOS
 		 *
@@ -236,7 +243,7 @@ class epos
 		 *
 		 * @param frame array of WORDs to write
 		 */
-		void sendCom(WORD *frame);
+		void sendCommand(WORD *frame);
 
 		/*! \brief  read an answer frame from EPOS
 		 *
@@ -261,6 +268,9 @@ class epos
 		 * @return result of comparision */
 		bool bitcmp(WORD a, WORD b) const;
 
+		//! USB device indentifiers
+		const int vendor, product, index;
+
 	public:
 		/*! \brief create new EPOS object
 		 *
@@ -268,21 +278,28 @@ class epos
 		 */
 		epos(const std::string & _device);
 
+		/*! \brief create new USB EPOS object
+		 *
+		 * @param vendor USB device vendor ID
+		 * @param product USB device vendor ID
+		 * @param index USB device vendor ID
+		 */
+		epos(int _vendor = 0x0403, int _product = 0xa8b0, unsigned int index = 0);
+
 		/*! \brief delete EPOS object */
 		~epos();
 
-		/*! \brief establish the connection to EPOS
-		 *
-		 * \retval 0 success
-		 * \retval -1 failure
+		/*! \brief establish serial connection to EPOS
 		 */
-		int openEPOS(speed_t speed);
+		void openEPOS(speed_t speed);
+
+		/*! \brief establish USB connection to EPOS2
+		 */
+		void openEPOS();
 
 		/*! \brief close the connection to EPOS
-		 *
-		 * @return operation status; (0) for non-error
 		 */
-		int closeEPOS();
+		void closeEPOS();
 
 		/*! \brief check if the connection to EPOS is alive */
 //		int checkEPOS();

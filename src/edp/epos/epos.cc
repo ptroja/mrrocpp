@@ -97,21 +97,74 @@ namespace edp {
 /************************************************************/
 
 epos::epos(const std::string & _device) :
-	device(_device), ep(-1), gMarker(0)
+	device(_device),
+	device_opened(false),
+	ep(-1), gMarker(0),
+	vendor(-1), product(-1), index(-1)
 {
+}
+
+epos::epos(int _vendor, int _product, unsigned int _index) :
+	device_opened(false),
+	ep(-1), gMarker(0),
+	vendor(_vendor), product(_product), index(_index)
+{
+	if (ftdi_init(&ftdic) < 0) {
+		fprintf(stderr, "ftdi_init failed\n");
+	}
 }
 
 epos::~epos()
 {
-	if (ep >= 0)
+	if (device_opened) {
 		closeEPOS();
+	}
+
+	ftdi_deinit(&ftdic);
 }
 
 /************************************************************/
 /*            open/close device                             */
 /************************************************************/
 
-int epos::openEPOS(speed_t speed)
+void epos::openEPOS()
+{
+	//! FTDI calls return code
+	int ret;
+
+	if ((ret = ftdi_usb_open(&ftdic, vendor, product)) < 0) {
+		fprintf(stderr, "unable to open ftdi device: %d (%s)\n", ret, ftdi_get_error_string(&ftdic));
+		throw epos_error() << reason(ftdi_get_error_string(&ftdic));
+	}
+
+	//! set baud rate
+	if ((ret = ftdi_set_baudrate(&ftdic, 1000000)) < 0) {
+		fprintf(stderr, "unable to set ftdi baudrate: %d (%s)\n", ret, ftdi_get_error_string(&ftdic));
+		throw epos_error() << reason(ftdi_get_error_string(&ftdic));
+	}
+#if 0
+	//! set write data chunk size
+	if ((ret = ftdi_write_data_set_chunksize(&ftdic, 512)) < 0) {
+		fprintf(stderr, "unable to set ftdi write chunksize: %d (%s)\n", ret, ftdi_get_error_string(&ftdic));
+		throw epos_error() << reason(ftdi_get_error_string(&ftdic));
+	}
+
+	//! set read data chunk size
+	if ((ret = ftdi_read_data_set_chunksize(&ftdic, 512)) < 0) {
+		fprintf(stderr, "unable to set ftdi read chunksize: %d (%s)\n", ret, ftdi_get_error_string(&ftdic));
+		throw epos_error() << reason(ftdi_get_error_string(&ftdic));
+	}
+#endif
+	//! set latency timer
+	if ((ret = ftdi_set_latency_timer(&ftdic, 1)) < 0) {
+		fprintf(stderr, "unable to set ftdi latency timer: %d (%s)\n", ret, ftdi_get_error_string(&ftdic));
+		throw epos_error() << reason(ftdi_get_error_string(&ftdic));
+	}
+
+	device_opened = true;
+}
+
+void epos::openEPOS(speed_t speed)
 {
 	/* EPOS transfer format is:
 	 1 start bit
@@ -121,7 +174,7 @@ int epos::openEPOS(speed_t speed)
 	 */
 
 	if (ep >= 0)
-		return (-1);
+		throw epos_error() << reason("serial port already opened");
 
 	for (int i = 0; i < 5; i++) {
 		if ((ep = open(device.c_str(), O_RDWR | O_NOCTTY | O_NDELAY)) >= 0)
@@ -156,12 +209,23 @@ int epos::openEPOS(speed_t speed)
 
 //	fcntl(ep, F_SETFL, FNDELAY);
 
-	return (0);
+	device_opened = true;
 }
 
-int epos::closeEPOS()
+void epos::closeEPOS()
 {
-	return close(ep);
+	if(ep >= 0) {
+		if (close(ep) != 0) {
+			perror("close()");
+			throw epos_error() << reason("serial port already opened");
+		}
+	} else {
+		if(ftdi_usb_close(&ftdic)) {
+			throw epos_error() << reason(ftdi_get_error_string(&ftdic));
+		}
+	}
+
+	device_opened = false;
 }
 
 /************************************************************/
@@ -1509,146 +1573,322 @@ WORD epos::CalcFieldCRC(const WORD *pDataArray, WORD numberOfWords) const
 	return CRC;
 }
 
-void epos::sendCom(WORD *frame)
+#define DLE	(0x90)	// Data Link Escape
+#define STX	(0x02)	// Start of Text
+
+void epos::sendCommand(WORD *frame)
 {
+	// RS232 connection version
+	if (ep >=0) {
+#if 0
+		// need LSB of header WORD, contains (len-1). Complete Frame is
+		// (len-1) +3 WORDS long
+		unsigned short len = ((frame[0] & 0x00FF)) + 3;
+		/*
+		 printf("frame[0] = %#x; shifted = %#x; framelength = %d\n",
+		 frame[0], (frame[0] & 0x00FF),  len);
+		 */
 
-	// need LSB of header WORD, contains (len-1). Complete Frame is
-	// (len-1) +3 WORDS long
-	unsigned short len = ((frame[0] & 0x00FF)) + 3;
-	/*
-	 printf("frame[0] = %#x; shifted = %#x; framelength = %d\n",
-	 frame[0], (frame[0] & 0x00FF),  len);
-	 */
+		// add checksum to frame
+		frame[len - 1] = CalcFieldCRC(frame, len);
 
-	// add checksum to frame
-	frame[len - 1] = CalcFieldCRC(frame, len);
+	#ifdef DEBUG
+		printf(">> ");
+		for (int i=0; i<len; ++i) {
+			printf( "%#06x ", frame[i] );
+		}
+		printf("\n");
+	#endif
 
-#ifdef DEBUG
-	printf(">> ");
-	for (int i=0; i<len; ++i) {
-		printf( "%#06x ", frame[i] );
-	}
-	printf("\n");
+		/* sending to EPOS */
+		BYTE c;
+
+		//send header:
+		c = (frame[0] & 0xFF00) >> 8; //LSB
+		writeBYTE(c);
+
+		// wait for "Ready Ack 'O'"
+		c = readBYTE();
+
+		if (c != E_OK) {
+			throw epos_error() << reason("EPOS not ready"); //TODO: reply was: %#04x, c;
+		}
+
+		c = (frame[0] & 0x00FF); //MSB
+		writeBYTE(c);
+
+		// header done, data + CRC will follow
+		for (int i = 1; i < len; i++) {
+			writeWORD(frame[i]);
+		}
+
+		// wait for "End Ack 'O'"
+		c = readBYTE();
+		if (c != E_OK) {
+			throw epos_error() << reason("EPOS says: CRCerror!");
+		}
 #endif
+	} else {
+		// USB connection version
 
-	/* sending to EPOS */
-	BYTE c;
+		// need LSB of header WORD, contains (len-1). Complete Frame is
+		// (len-1) + 3 WORDS long
+		unsigned short len = (frame[0] >> 8) + 2;
 
-	//send header:
-	c = (frame[0] & 0xFF00) >> 8; //LSB
-	writeBYTE(c);
+		// add checksum to frame
+		frame[len - 1] = CalcFieldCRC(frame, len);
 
-	// wait for "Ready Ack 'O'"
-	c = readBYTE();
+		// calculate number of 'DLE' characters
+		unsigned int stuffed = 0;
+		for(int i = 1; i < len-1; i++) {
+			if ((frame[i] & 0x00FF) == 0x90) {
+				stuffed++;
+			}
+			if (((frame[i] & 0xFF00) >> 8) == 0x90) {
+				stuffed++;
+			}
+		}
 
-	if (c != E_OK) {
-		throw epos_error() << reason("EPOS not ready"); //TODO: reply was: %#04x, c;
-	}
+		// message datagram to write
+		uint8_t datagram[2+2+len*2+stuffed+2]; // DLE,STX,OpCode,Len,len*2+stuffed,CRC
+		unsigned int idx = 0; // current datagram byte index
 
-	c = (frame[0] & 0x00FF); //MSB
-	writeBYTE(c);
+		datagram[idx++] = 0x90;	// DLE: Data Link Escape
+		datagram[idx++] = 0x02; // STX: Start of Text
 
-	// header done, data + CRC will follow
-	for (int i = 1; i < len; i++) {
-		writeWORD(frame[i]);
-	}
+		for(int i = 0; i < len; ++i) {
+			// characeter to write
+			uint8_t c;
 
-	// wait for "End Ack 'O'"
-	c = readBYTE();
-	if (c != E_OK) {
-		throw epos_error() << reason("EPOS says: CRCerror!");
+			// LSB
+			c = frame[i] & 0x00FF;
+			if (c == DLE) {
+				datagram[idx++] = DLE;
+			}
+			datagram[idx++] = c;
+
+			// MSB
+			c = (frame[i] >> 8);
+			if (c == DLE) {
+				datagram[idx++] = DLE;
+			}
+			datagram[idx++] = c;
+		}
+
+	#if 0
+		printf(">> ");
+		for (unsigned int i=0; i<idx; ++i) {
+			printf( "0x%02x,", datagram[i] );
+		}
+		printf("\n");
+	#endif
+
+		int w = ftdi_write_data(&ftdic, datagram, idx);
+
+		if (w != (int) idx) {
+			fprintf(stderr, "ftdi device write failed (%d/%d chars written): (%s)\n", w, idx, ftdi_get_error_string(&ftdic));
+			throw epos_error() << reason(ftdi_get_error_string(&ftdic));
+		}
 	}
 }
 
 epos::answer_t epos::readAnswer()
 {
-	E_error = 0x00;
+	// RS232 connection version
+	if (ep >=0) {
+		E_error = 0x00;
 
-	WORD first;
+		BYTE c = readBYTE(); // this is op-code, discard.
+	//	first = (0xFF00 & c) << 8;
+		//printf("first answer: %#04x; first: %#06x\n", c, first);
 
-	BYTE c = readBYTE(); // this is op-code, discard.
-//	first = (0xFF00 & c) << 8;
-	//printf("first answer: %#04x; first: %#06x\n", c, first);
-
-	if (c != E_ANS) {
-		throw epos_error() << reason("EPOS says: this is no answer frame!"); // TODO: , c);
-	}
-	c = E_OK;
-	writeBYTE(c);
-
-	// here is the (len-1) value coming
-	c = readBYTE();
-
-	first = (0x00FF & c);
-	//printf("second answer: %#04x; first: %#06x\n", c, first);
-
-	WORD framelen = c + 3;
-
-	answer_t ans(framelen);
-
-	ans[0] = first;
-
-	for (int i = 1; i < framelen; i++) {
-		ans[i] = readWORD();
-	}
-#ifdef DEBUG
-	printf("\n<< ");
-	for(i=0; i<(framelen); i++) {
-		printf("%#06x ", ans[i]);
-	}
-	printf("\n"); fflush(stdout);
-#endif
-
-	// compute checksum
-	WORD crc = ans[framelen - 1];
-#ifdef DDEBUG
-	printf("got this CRC: %#06x\n", crc);
-#endif
-	ans[framelen - 1] = 0x0000;
-	{
-		WORD anstab[framelen];
-		for (int i = 0; i < framelen; i++) {
-			anstab[i] = ans[i];
+		if (c != E_ANS) {
+			throw epos_error() << reason("EPOS says: this is no answer frame!"); // TODO: , c);
 		}
-		ans[framelen - 1] = CalcFieldCRC(anstab, framelen);
-	}
-
-	if (crc == ans[framelen - 1]) {
 		c = E_OK;
 		writeBYTE(c);
-#ifdef DEBUG
-		printf("CRC test OK!\n");
-#endif
+
+		// here is the (len-1) value coming
+		c = readBYTE();
+
+		WORD first = (0x00FF & c);
+		//printf("second answer: %#04x; first: %#06x\n", c, first);
+
+		WORD framelen = c + 3;
+
+		answer_t ans(framelen);
+
+		ans[0] = first;
+
+		for (int i = 1; i < framelen; i++) {
+			ans[i] = readWORD();
+		}
+	#ifdef DEBUG
+		printf("\n<< ");
+		for(i=0; i<(framelen); i++) {
+			printf("%#06x ", ans[i]);
+		}
+		printf("\n"); fflush(stdout);
+	#endif
+
+		// compute checksum
+		WORD crc = ans[framelen - 1];
+	#ifdef DDEBUG
+		printf("got this CRC: %#06x\n", crc);
+	#endif
+		ans[framelen - 1] = 0x0000;
+		{
+			WORD anstab[framelen];
+			for (int i = 0; i < framelen; i++) {
+				anstab[i] = ans[i];
+			}
+			ans[framelen - 1] = CalcFieldCRC(anstab, framelen);
+		}
+
+		if (crc == ans[framelen - 1]) {
+			c = E_OK;
+			writeBYTE(c);
+	#ifdef DEBUG
+			printf("CRC test OK!\n");
+	#endif
+		} else {
+			writeBYTE(E_FAIL);
+			throw epos_error() << reason("CRC test FAILED");
+		}
+
+		/* check for error code */
+
+		/* just to get the bit's at the right place...*/
+		//ans[1] = 0x1234; ans[2] = 0xABCD;
+		E_error = ans[1] | (ans[2] << 16);
+		//printf(" xxxxxxx ->%#010x<-\n", E_error);
+
+		/*
+		 printf("******** sub: ptr= %p  &ptr = %p\n", ptr, &ptr);
+		 printf("******** sub: ans   = %p  &ans = %p\n", ans, &ans);
+		 */
+		return (ans);
 	} else {
-		writeBYTE(E_FAIL);
-		throw epos_error() << reason("CRC test FAILED");
+		// USB connection version
+		while(true) {
+			// reply buffer
+			uint8_t buf[512];
+
+			E_error = 0x00;
+
+			// FTDI return code
+			int ret = ftdi_read_data(&ftdic, buf, sizeof(buf));
+
+			if (ret < 0) {
+				fprintf(stderr, "ftdi device read failed (%d): (%s)\n", ret, ftdi_get_error_string(&ftdic));
+				throw epos_error() << reason(ftdi_get_error_string(&ftdic));
+			} else if (ret == 0) {
+				throw epos_error() << reason("no data returned");
+			}
+
+		#if 0
+			printf("<< ");
+			for(int i=0; i<ret; i++) {
+				printf("0x%02x,", buf[i]);
+			}
+			printf("\n");
+		#endif
+
+			// check DLE
+			if (buf[0] != DLE) {
+				throw epos_error() << reason("Datagram error (DLE expected)");
+			}
+
+			// check STX
+			if (buf[1] != STX) {
+				throw epos_error() << reason("Datagram error (STX expected)");
+			}
+
+			// read OpCode
+			if (buf[2] != 0x00) {
+				throw epos_error() << reason("Datagram error (0x00 Answer OpCode expected)");
+			}
+
+			// frame length
+			WORD framelen = buf[3];
+
+			// datagram buffer for datagram and CRC
+			answer_t ans(framelen+2);
+
+			ans[0] = (framelen << 8);
+
+			int idx = 4; // data buffer index
+
+			for (int i = 1; i <= framelen+1; ++i) {
+				// LSB
+				if (buf[idx] == DLE) idx++;
+				ans[i] = buf[idx++];
+
+				// MSB
+				if (buf[idx] == DLE) idx++;
+				ans[i] |= (buf[idx++] << 8);
+			}
+		#ifdef DEBUG
+			printf("<< ");
+			for(int i=0; i<= framelen+1; i++) {
+				printf("%04x ", ans[i]);
+			}
+			printf("\n"); fflush(stdout);
+		#endif
+
+			// compute checksum
+			WORD crc = ans[framelen+1];
+		#ifdef DDEBUG
+			printf("got this CRC: 0x%04x\n", crc);
+		#endif
+			ans[framelen + 1] = 0x0000;
+			{
+				WORD anstab[framelen+2];
+				for (int i = 0; i < framelen+2; i++) {
+					anstab[i] = ans[i];
+				}
+				ans[framelen + 1] = CalcFieldCRC(anstab, framelen+2);
+			}
+
+			if (crc == ans[framelen + 1]) {
+		#ifdef DEBUG
+				printf("CRC test OK!\n");
+		#endif
+			} else {
+				fprintf(stderr, "CRC: %04x != %04x\n", crc, ans[framelen + 1]);
+				throw epos_error() << reason("CRC test FAILED");
+			}
+
+			/* check for error code */
+
+			/* just to get the bit's at the right place...*/
+			//ans[1] = 0x1234; ans[2] = 0xABCD;
+			E_error = ans[1] | (ans[2] << 16);
+			//printf(" xxxxxxx ->%#010x<-\n", E_error);
+
+			/*
+			 printf("******** sub: ptr= %p  &ptr = %p\n", ptr, &ptr);
+			 printf("******** sub: ans   = %p  &ans = %p\n", ans, &ans);
+			 */
+			return (ans);
+		}
 	}
-
-	/* check for error code */
-
-	/* just to get the bit's at the right place...*/
-	//ans[1] = 0x1234; ans[2] = 0xABCD;
-	E_error = ans[1] | (ans[2] << 16);
-	//printf(" xxxxxxx ->%#010x<-\n", E_error);
-
-	/*
-	 printf("******** sub: ptr= %p  &ptr = %p\n", ptr, &ptr);
-	 printf("******** sub: ans   = %p  &ans = %p\n", ans, &ans);
-	 */
-	return (ans);
 }
 
-epos::answer_t epos::ReadObject(WORD index, BYTE subindex)
+epos::answer_t epos::ReadObject(WORD index, BYTE subindex, uint8_t nodeId)
 {
 	WORD frame[4];
 
-	frame[0] = 0x1001; // fixed, ReadObject, (len-1) == 1
+	frame[0] = 0x0210;
 	frame[1] = index;
-	frame[2] = (0x0000 | subindex); /* high BYTE: 0x00(Node-ID == 0)
-	 low BYTE: subindex */
-	frame[3] = 0x000; // ZERO word, will be filled with checksum
+	/*
+	 * high BYTE: 0x00(Node-ID == 0)
+	 * low BYTE: subindex
+	 */
+	frame[2] = ((nodeId << 8 ) | subindex);
+	frame[3] = 0x0000;
 
-	sendCom(frame);
+	sendCommand(frame);
 
 	// read response
 	return (readAnswer());
@@ -1667,7 +1907,7 @@ static int InitiateSegmentedRead(WORD index, BYTE subindex ) {
 	 low BYTE: subindex */
 	frame[3] = 0x000; // ZERO word, will be filled with checksum
 
-	sendCom(frame);
+	sendCommand(frame);
 
 	// read response
 	return( readAnswer(ptr) ); // answer contains only DWORD ErrorCode
@@ -1684,7 +1924,7 @@ static int SegmentRead(WORD **ptr) {
 	frame[1] = 0x0000; // WHAT IS THE 'TOGGLE' BIT????
 	frame[2] = 0x0000; // ZERO word, will be filled with checksum
 
-	sendCom(frame);
+	sendCommand(frame);
 
 	readAnswer(ptr);
 
@@ -1694,11 +1934,11 @@ static int SegmentRead(WORD **ptr) {
 
 /* Low-level function to write an object to EPOS memory. Is called by
  writing libEPOS functions. */
-void epos::WriteObject(WORD index, BYTE subindex, const WORD data[2])
+void epos::WriteObject(WORD index, BYTE subindex, const WORD data[2], uint8_t nodeId)
 {
 	WORD frame[6];
 
-	frame[0] = 0x1103; // fixed, WriteObject, (len-1) == 3
+	frame[0] = 0x0411; // fixed: (len-1) == 3, WriteObject
 	frame[1] = index;
 	frame[2] = (0x0000 | subindex); /* high BYTE: 0x00(Node-ID == 0), low BYTE: subindex */
 	// data to transmit
@@ -1706,7 +1946,7 @@ void epos::WriteObject(WORD index, BYTE subindex, const WORD data[2])
 	frame[4] = data[1];
 	frame[5] = 0x00; // ZERO word, will be filled with checksum
 
-	sendCom(frame);
+	sendCommand(frame);
 
 	// read response
 	answer_t answer = readAnswer();
