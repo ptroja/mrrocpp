@@ -716,68 +716,32 @@ UNSIGNED32 epos::readPositionWindow()
 /* write  position window; 14.1.64 */
 void epos::writePositionWindow(UNSIGNED32 val)
 {
-	WORD dw[2];
-
-	// write intended position window
-	dw[0] = (WORD) (val & 0x0000FFFF);
-	dw[1] = (WORD) (val >> 16);
-
-	WriteObject(0x6067, 0x00, dw);
+	WriteObjectValue(0x6067, 0x00, val);
 }
 
 void epos::writePositionProfileVelocity(UNSIGNED32 val)
 {
-	WORD dw[2];
-
-	// write intended velocity
-	dw[0] = (WORD) (val & 0x0000FFFF); //la part de baix
-	dw[1] = (WORD) (val >> 16); //la part de dalt
-
-	WriteObject(0x6081, 0x00, dw);
+	WriteObjectValue(0x6081, 0x00, val);
 }
 
 void epos::writePositionProfileAcceleration(UNSIGNED32 val)
 {
-	WORD dw[2];
-
-	// write intended acceleration
-	dw[0] = (WORD) (val & 0x0000FFFF);
-	dw[1] = (WORD) (val >> 16);
-
-	WriteObject(0x6083, 0x00, dw);
+	WriteObjectValue(0x6083, 0x00, val);
 }
 
 void epos::writePositionProfileDeceleration(UNSIGNED32 val)
 {
-	WORD dw[2];
-
-	// write intended deceleration
-	dw[0] = (WORD) (val & 0x0000FFFF);
-	dw[1] = (WORD) (val >> 16);
-
-	WriteObject(0x6084, 0x00, dw);
+	WriteObjectValue(0x6084, 0x00, val);
 }
 
 void epos::writePositionProfileQuickStopDeceleration(UNSIGNED32 val)
 {
-	WORD dw[2];
-
-	// write intended quick stop deceleration
-	dw[0] = (WORD) (val & 0x0000FFFF);
-	dw[1] = (WORD) (val >> 16);
-
-	WriteObject(0x6085, 0x00, dw);
+	WriteObjectValue(0x6085, 0x00, val);
 }
 
 void epos::writePositionProfileMaxVelocity(UNSIGNED32 val)
 {
-	WORD dw[2];
-
-	// write intended max profile velocity
-	dw[0] = (WORD) (val & 0x0000FFFF);
-	dw[1] = (WORD) (val >> 16);
-
-	WriteObject(0x607F, 0x00, dw);
+	WriteObjectValue(0x607F, 0x00, val);
 }
 
 void epos::writePositionProfileType(INTEGER16 type)
@@ -825,13 +789,7 @@ epos::velocity_notation_t epos::readVelocityNotationIndex()
 /* Velocity Notation index 14.1.83  1=0x01(1), 2=0x02(2).. 0=0x00(0), -1=0xFF(255), -2=0xFE(254) */
 void epos::writeVelocityNotationIndex(velocity_notation_t val)
 {
-	WORD dw[2];
-
-	// write
-	dw[0] = val;
-	dw[1] = 0x0000;
-
-	WriteObject(0x608B, 0x00, dw);
+	WriteObjectValue(0x608B, 0x00, val);
 }
 
 // by Martí Morta
@@ -988,13 +946,7 @@ INTEGER32 epos::readHomePosition()
 
 void epos::writeHomePosition(INTEGER32 val)
 {
-	WORD dw[2];
-
-	// write intended
-	dw[0] = (WORD) (val & 0x0000FFFF);
-	dw[1] = (WORD) (val >> 16);
-
-	WriteObject(0x2081, 0x00, dw);
+	WriteObjectValue(0x2081, 0x00, val);
 }
 
 // by Martí Morta
@@ -1038,15 +990,9 @@ UNSIGNED32 epos::readMotorMaxSpeedCurrent()
 	return ReadObjectValue<UNSIGNED32>(0x6410, 0x04);
 }
 
-void epos::writeMotorMaxSpeedCurrent(UNSIGNED32 cur)
+void epos::writeMotorMaxSpeedCurrent(UNSIGNED32 val)
 {
-	WORD dw[2];
-
-	// write intended
-	dw[0] = (WORD) (cur & 0x0000FFFF);
-	dw[1] = (WORD) (cur >> 16);
-
-	WriteObject(0x2081, 0x00, dw);
+	WriteObjectValue(0x2081, 0x00, val);
 }
 
 // Thermal time constant in winding
@@ -1055,9 +1001,9 @@ UNSIGNED16 epos::readMotorThermalConstant()
 	return ReadObjectValue<UNSIGNED16>(0x6410, 0x05);
 }
 
-void epos::writeMotorThermalConstant(UNSIGNED16 cur)
+void epos::writeMotorThermalConstant(UNSIGNED16 val)
 {
-	WriteObjectValue(0x6410, 0x05, cur);
+	WriteObjectValue(0x6410, 0x05, val);
 }
 
 //------------- fi martí
@@ -1177,18 +1123,12 @@ void epos::moveRelative(INTEGER32 steps)
 
 	// write intended target position
 	// firmware 14.1.70
-	WORD dw[2];
-	dw[0] = (WORD) (steps & 0x0000FFFF);
-	dw[1] = (WORD) (steps >> 16);
-
-	WriteObject(0x607A, 0x00, dw);
+	WriteObjectValue(0x607A, 0x00, steps);
 
 	// switch to relative positioning BY WRITING TO CONTROLWORD, finish
 	// possible ongoing operation first!  ->maxon applicattion note:
 	// device programming 2.1
-	dw[0] = 0x005f;
-	dw[1] = 0x0000; // high WORD of DWORD is not used here
-	WriteObject(0x6040, 0x00, dw);
+	WriteObjectValue(0x6040, 0x00, 0x005f);
 }
 
 void epos::moveAbsolute(INTEGER32 steps)
@@ -1207,22 +1147,11 @@ void epos::moveAbsolute(INTEGER32 steps)
 
 	// write intended target position, is signed 32bit int
 	// firmware 14.1.70
-	WORD dw[2];
-	dw[0] = (WORD) (steps & 0x0000FFFF);
-	dw[1] = (WORD) (steps >> 16);
-
-#ifdef DEBUG
-	printf("-> %s(): dw[0,1] = %#06x  %#06x\n", __func__, dw[0], dw[1]);
-#endif
-
-	WriteObject(0x607A, 0x00, dw);
+	WriteObjectValue(0x607A, 0x00, steps);
 
 	// switch to absolute positioning, cancel possible ongoing operation
 	// first!  ->maxon application note: device programming 2.1
-	dw[0] = 0x3f;
-	dw[1] = 0x0000; // high WORD of DWORD is not used here
-
-	WriteObject(0x6040, 0x00, dw);
+	WriteObjectValue(0x6040, 0x00, 0x3f);
 }
 
 // monitor device status
@@ -1940,7 +1869,7 @@ void epos::WriteObject(WORD index, BYTE subindex, const WORD data[2], uint8_t no
 
 	frame[0] = 0x0411; // fixed: (len-1) == 3, WriteObject
 	frame[1] = index;
-	frame[2] = (0x0000 | subindex); /* high BYTE: 0x00(Node-ID == 0), low BYTE: subindex */
+	frame[2] = ((nodeId << 8 ) | subindex); /* high BYTE: 0x00(Node-ID == 0), low BYTE: subindex */
 	// data to transmit
 	frame[3] = data[0];
 	frame[4] = data[1];
@@ -1954,12 +1883,13 @@ void epos::WriteObject(WORD index, BYTE subindex, const WORD data[2], uint8_t no
 	checkEPOSerror();
 }
 
-void epos::WriteObjectValue(WORD index, BYTE subindex, WORD data0, WORD data1)
+void epos::WriteObjectValue(WORD index, BYTE subindex, uint32_t data)
 {
 	WORD dw[2];
 
-	dw[0] = data0;
-	dw[1] = data1;
+	// write data
+	dw[0] = (WORD) (data & 0x0000FFFF);
+	dw[1] = (WORD) (data >> 16);
 
 	WriteObject(index, subindex, dw);
 }

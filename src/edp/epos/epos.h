@@ -211,7 +211,7 @@ class epos
 		 * @param data0 first WORD of the object
 		 * @param data1 second WORD of the object
 		 */
-		void WriteObjectValue(WORD index, BYTE subindex, WORD data0, WORD data1 = 0x0000);
+		void WriteObjectValue(WORD index, BYTE subindex, uint32_t data);
 
 		/* helper functions below */
 
@@ -557,13 +557,13 @@ class epos
 		UNSIGNED32 readMotorMaxSpeedCurrent();
 
 		//! \brief write motor max speed current
-		void writeMotorMaxSpeedCurrent(UNSIGNED32 cur);
+		void writeMotorMaxSpeedCurrent(UNSIGNED32 val);
 
 		//! \brief read motor thermal constant
 		UNSIGNED16 readMotorThermalConstant();
 
 		//! \brief write motor thermal constant
-		void writeMotorThermalConstant(UNSIGNED16 cur);
+		void writeMotorThermalConstant(UNSIGNED16 val);
 
 		/*! \brief read actual position; 14.1.67 */
 		INTEGER32 readDemandVelocity();
