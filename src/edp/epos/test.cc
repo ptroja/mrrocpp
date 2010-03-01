@@ -14,7 +14,7 @@ main(int argc, char *argv[])
 	try {
 	e.openEPOS();
 
-	for(int i = 0; i < 100; ++i) {
+	for(int i = 0; i < 1000; ++i) {
 		struct timeval tv1, tv2;
 
 		gettimeofday(&tv1, NULL);

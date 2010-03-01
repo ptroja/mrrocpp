@@ -137,6 +137,30 @@ void epos::openEPOS()
 		throw epos_error() << reason(ftdi_get_error_string(&ftdic));
 	}
 
+	//! reset FTDI device
+	if ((ret = ftdi_usb_reset(&ftdic)) < 0) {
+		fprintf(stderr, "unable to reset ftdi device: %d (%s)\n", ret, ftdi_get_error_string(&ftdic));
+		throw epos_error() << reason(ftdi_get_error_string(&ftdic));
+	}
+
+	if ((ret = ftdi_set_line_property(&ftdic, BITS_8, STOP_BIT_1, NONE)) < 0) {
+		fprintf(stderr, "unable to set ftdi line property: %d (%s)\n", ret, ftdi_get_error_string(&ftdic));
+        throw epos_error() << reason(ftdi_get_error_string(&ftdic));
+    }
+
+	//! set flow control
+	if ((ret = ftdi_setflowctrl(&ftdic, SIO_DISABLE_FLOW_CTRL)) < 0) {
+	//if ((ret = ftdi_setflowctrl(&ftdic, SIO_RTS_CTS_HS)) < 0) {
+		fprintf(stderr, "unable to set ftdi flow control: %d (%s)\n", ret, ftdi_get_error_string(&ftdic));
+        throw epos_error() << reason(ftdi_get_error_string(&ftdic));
+    }
+
+	//! set latency timer
+	if ((ret = ftdi_set_latency_timer(&ftdic, 1)) < 0) {
+		fprintf(stderr, "unable to set ftdi latency timer: %d (%s)\n", ret, ftdi_get_error_string(&ftdic));
+		throw epos_error() << reason(ftdi_get_error_string(&ftdic));
+	}
+
 	//! set baud rate
 	if ((ret = ftdi_set_baudrate(&ftdic, 1000000)) < 0) {
 		fprintf(stderr, "unable to set ftdi baudrate: %d (%s)\n", ret, ftdi_get_error_string(&ftdic));
@@ -155,11 +179,6 @@ void epos::openEPOS()
 		throw epos_error() << reason(ftdi_get_error_string(&ftdic));
 	}
 #endif
-	//! set latency timer
-	if ((ret = ftdi_set_latency_timer(&ftdic, 1)) < 0) {
-		fprintf(stderr, "unable to set ftdi latency timer: %d (%s)\n", ret, ftdi_get_error_string(&ftdic));
-		throw epos_error() << reason(ftdi_get_error_string(&ftdic));
-	}
 
 	device_opened = true;
 }
@@ -1699,108 +1718,112 @@ epos::answer_t epos::readAnswer()
 		return (ans);
 	} else {
 		// USB connection version
-		while(true) {
-			// reply buffer
-			uint8_t buf[512];
+		// reply buffer
+		uint8_t buf[512];
 
-			E_error = 0x00;
+		E_error = 0x00;
 
-			// FTDI return code
-			int ret = ftdi_read_data(&ftdic, buf, sizeof(buf));
-
-			if (ret < 0) {
-				fprintf(stderr, "ftdi device read failed (%d): (%s)\n", ret, ftdi_get_error_string(&ftdic));
-				throw epos_error() << reason(ftdi_get_error_string(&ftdic));
-			} else if (ret == 0) {
-				throw epos_error() << reason("no data returned");
-			}
-
-		#if 0
-			printf("<< ");
-			for(int i=0; i<ret; i++) {
-				printf("0x%02x,", buf[i]);
-			}
-			printf("\n");
-		#endif
-
-			// check DLE
-			if (buf[0] != DLE) {
-				throw epos_error() << reason("Datagram error (DLE expected)");
-			}
-
-			// check STX
-			if (buf[1] != STX) {
-				throw epos_error() << reason("Datagram error (STX expected)");
-			}
-
-			// read OpCode
-			if (buf[2] != 0x00) {
-				throw epos_error() << reason("Datagram error (0x00 Answer OpCode expected)");
-			}
-
-			// frame length
-			WORD framelen = buf[3];
-
-			// datagram buffer for datagram and CRC
-			answer_t ans(framelen+2);
-
-			ans[0] = (framelen << 8);
-
-			int idx = 4; // data buffer index
-
-			for (int i = 1; i <= framelen+1; ++i) {
-				// LSB
-				if (buf[idx] == DLE) idx++;
-				ans[i] = buf[idx++];
-
-				// MSB
-				if (buf[idx] == DLE) idx++;
-				ans[i] |= (buf[idx++] << 8);
-			}
-		#ifdef DEBUG
-			printf("<< ");
-			for(int i=0; i<= framelen+1; i++) {
-				printf("%04x ", ans[i]);
-			}
-			printf("\n"); fflush(stdout);
-		#endif
-
-			// compute checksum
-			WORD crc = ans[framelen+1];
-		#ifdef DDEBUG
-			printf("got this CRC: 0x%04x\n", crc);
-		#endif
-			ans[framelen + 1] = 0x0000;
-			{
-				WORD anstab[framelen+2];
-				for (int i = 0; i < framelen+2; i++) {
-					anstab[i] = ans[i];
-				}
-				ans[framelen + 1] = CalcFieldCRC(anstab, framelen+2);
-			}
-
-			if (crc == ans[framelen + 1]) {
-		#ifdef DEBUG
-				printf("CRC test OK!\n");
-		#endif
-			} else {
-				fprintf(stderr, "CRC: %04x != %04x\n", crc, ans[framelen + 1]);
-				throw epos_error() << reason("CRC test FAILED");
-			}
-
-			/* check for error code */
-
-			/* just to get the bit's at the right place...*/
-			//ans[1] = 0x1234; ans[2] = 0xABCD;
-			E_error = ans[1] | (ans[2] << 16);
-			//printf(" xxxxxxx ->%#010x<-\n", E_error);
-
-			/*
-			 printf("******** sub: ptr= %p  &ptr = %p\n", ptr, &ptr);
-			 printf("******** sub: ans   = %p  &ans = %p\n", ans, &ans);
-			 */
-			return (ans);
+		// FTDI return code
+		int wait_cnt = 20;
+		int ret = 0;
+		
+		while ((ret == 0) && (wait_cnt > 0)) {
+			ret = ftdi_read_data(&ftdic, buf, sizeof(buf));
+			wait_cnt--;
 		}
+
+		if (ret < 0) {
+			fprintf(stderr, "ftdi device read failed (%d): (%s)\n", ret, ftdi_get_error_string(&ftdic));
+			throw epos_error() << reason(ftdi_get_error_string(&ftdic));
+		} else if (ret == 0) {
+			throw epos_error() << reason("no data returned");
+		}
+
+	#if 0
+		printf("<< ");
+		for(int i=0; i<ret; i++) {
+			printf("0x%02x,", buf[i]);
+		}
+		printf("\n");
+	#endif
+
+		// check DLE
+		if (buf[0] != DLE) {
+			throw epos_error() << reason("Datagram error (DLE expected)");
+		}
+
+		// check STX
+		if (buf[1] != STX) {
+			throw epos_error() << reason("Datagram error (STX expected)");
+		}
+
+		// read OpCode
+		if (buf[2] != 0x00) {
+			throw epos_error() << reason("Datagram error (0x00 Answer OpCode expected)");
+		}
+
+		// frame length
+		WORD framelen = buf[3];
+
+		// datagram buffer for datagram and CRC
+		answer_t ans(framelen+2);
+
+		ans[0] = (framelen << 8);
+
+		int idx = 4; // data buffer index
+
+		for (int i = 1; i <= framelen+1; ++i) {
+			// LSB
+			if (buf[idx] == DLE) idx++;
+			ans[i] = buf[idx++];
+
+			// MSB
+			if (buf[idx] == DLE) idx++;
+			ans[i] |= (buf[idx++] << 8);
+		}
+	#ifdef DEBUG
+		printf("<< ");
+		for(int i=0; i<= framelen+1; i++) {
+			printf("%04x ", ans[i]);
+		}
+		printf("\n"); fflush(stdout);
+	#endif
+
+		// compute checksum
+		WORD crc = ans[framelen+1];
+	#ifdef DDEBUG
+		printf("got this CRC: 0x%04x\n", crc);
+	#endif
+		ans[framelen + 1] = 0x0000;
+		{
+			WORD anstab[framelen+2];
+			for (int i = 0; i < framelen+2; i++) {
+				anstab[i] = ans[i];
+			}
+			ans[framelen + 1] = CalcFieldCRC(anstab, framelen+2);
+		}
+
+		if (crc == ans[framelen + 1]) {
+	#ifdef DEBUG
+			printf("CRC test OK!\n");
+	#endif
+		} else {
+			fprintf(stderr, "CRC: %04x != %04x\n", crc, ans[framelen + 1]);
+			throw epos_error() << reason("CRC test FAILED");
+		}
+
+		/* check for error code */
+
+		/* just to get the bit's at the right place...*/
+		//ans[1] = 0x1234; ans[2] = 0xABCD;
+		E_error = ans[1] | (ans[2] << 16);
+		//printf(" xxxxxxx ->%#010x<-\n", E_error);
+
+		/*
+		 printf("******** sub: ptr= %p  &ptr = %p\n", ptr, &ptr);
+		 printf("******** sub: ans   = %p  &ans = %p\n", ans, &ans);
+		 */
+		return (ans);
 	}
 }
 
