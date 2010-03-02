@@ -14,6 +14,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <assert.h>
+#include <cfloat>
 
 #include <fcntl.h>
 #include <errno.h>

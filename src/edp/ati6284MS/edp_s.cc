@@ -61,7 +61,7 @@ struct sigevent tim_event;
 
 struct timespec start[9];
 
-static const char* interface = "en1";
+static const char* interface = "en0";
 static uint8_t boardMac[6] = {0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
 
 static const char* host = "192.168.18.200";
@@ -80,7 +80,8 @@ ATI6284_force::ATI6284_force(common::manip_effector &_master) :
 #else
     client(host, port),
 #endif
-    service(&client)
+    service(&client),
+    rpcController(boost::posix_time::microseconds(1000))
 {
 	frame_counter = 0; //licznik wyslanych pakietow
     printf("Initialized docent sensor\n");
@@ -157,6 +158,9 @@ void ATI6284_force::configure_sensor(void)
 
 
 		wait_for_event();
+		wait_for_event();
+		wait_for_event();
+		wait_for_event();
 
 		for (int i = 0; i < 6; ++i) {
 			bias_data[i]=adc_data[i];
@@ -208,21 +212,19 @@ void ATI6284_force::wait_for_event()
     //TODO: Jesli test mode, dopuszczac wylaczenie sensora
 
     iter_counter++;
-
+    usleep(200);
     service.GetGenGForceReading(&rpcController, NULL, &response, NULL);
     if (rpcController.expired()) {
         printf("Expired!!!\n");
     } else {
-        printf("%d, %d, %d, %d, %d, %d\n", response.fx(), response.fy(), response.fz(),
-          response.tx(), response.ty(), response.tz());
-
+			adc_data[0] = response.fx();
+            adc_data[1] = response.fy();
+            adc_data[2] = response.fz();
+            adc_data[3] = response.tx();
+            adc_data[4] = response.ty();
+            adc_data[5] = response.tz();
     }
-    adc_data[0] = response.fx();
-    adc_data[1] = response.fy();
-    adc_data[2] = response.fz();
-    adc_data[3] = response.tx();
-    adc_data[4] = response.ty();
-    adc_data[5] = response.tz();
+
     rpcController.reset();
 }
 
@@ -264,7 +266,7 @@ void ATI6284_force::get_reading(void)
 {
 }
 /*******************************************************************/
-force* return_created_edp_force_sensor(common:manip_effector &_master)
+force* return_created_edp_force_sensor(common::manip_effector &_master)
 {
 	return new ATI6284_force(_master);
 }// : return_created_sensor

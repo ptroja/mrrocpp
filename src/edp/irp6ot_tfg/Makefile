@@ -18,7 +18,7 @@ SHOBJ = ../common/libedp.a $(LIBDIR)/libmrrocpp.a
 
 # add required libs
 ifdef DOCENT_SENSOR
-LDFLAGS:=$(LDFLAGS) -lboost_system-mt -lkiper -lprotobuf
+LDFLAGS:=$(LDFLAGS) -lboost_system-mt-1_39 -lkiper -lprotobuf
 endif
 
 #======================================================#	
@@ -31,12 +31,7 @@ all: ${BINARIES}
 
 SENSOR_OBJ=
 ifneq ($(BUILD_TARGET), linux)
-ifdef DOCENT_SENSOR
 	SENSOR_OBJ := ../ati3084/ati3084.a
-	#SENSOR_OBJ := ../ati3084MS/ati3084MS.a
-else
-	SENSOR_OBJ := ../ati3084/ati3084.a
-endif
 endif
 edp_irp6ot_tfg: $(EDPOBJS) $(SENSOR_OBJ) $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^

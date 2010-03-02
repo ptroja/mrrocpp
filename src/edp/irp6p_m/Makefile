@@ -19,7 +19,7 @@ BINARIES  = edp_irp6p_m
 SHOBJ = ../common/libedp.a $(LIBDIR)/libmrrocpp.a
 
 ifdef DOCENT_SENSOR
-LDFLAGS:=$(LDFLAGS) -lboost_system-mt -lkiper -lprotobuf
+LDFLAGS:=$(LDFLAGS) -lboost_system-mt-1_39 -lkiper -lprotobuf
 endif
 #======================================================#	
 .PHONY: all clean install

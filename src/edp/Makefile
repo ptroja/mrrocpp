@@ -30,6 +30,9 @@ all: $(SOURCEDIRS)
 ati3084: common
 ati6284: common
 ati6284KT: common
+ifdef DOCENT_SENSOR
+	ati6284MS: common
+endif
 conveyor: common
 smb: common
 spkm: common

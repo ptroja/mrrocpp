@@ -18,7 +18,7 @@ SHOBJ = ../common/libedp.a $(LIBDIR)/libmrrocpp.a
 
 # add required libs
 ifdef DOCENT_SENSOR
-LDFLAGS:=$(LDFLAGS) -lboost_system-mt -lkiper -lprotobuf
+LDFLAGS:=$(LDFLAGS) -lboost_system-mt-1_39 -lkiper -lprotobuf
 endif
 
 #======================================================#	
