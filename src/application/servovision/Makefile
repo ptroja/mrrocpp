@@ -38,7 +38,7 @@ ecp_mboryn: 1st_ib_eih_2d/ecp_t_mboryn.o 1st_ib_eih_2d/ecp_g_mboryn.o $(SHOBJ) .
 ecp_fradia_lag_test: fradia_lag_test/ecp_t_fradia_lag_test.o $(SHOBJ) ../../ecp_mp/sensor/ecp_mp_s_cvfradia.o
 	$(LD) $(LDFLAGS) -o $@ $^
 
-ecp_ib_eih_tester: ib_eih/ecp_g_ib_eih.o ib_eih_tester/ecp_t_ib_eih_tester.o $(SHOBJ) ../../ecp_mp/sensor/ecp_mp_s_fradia_sensor.o
+ecp_ib_eih_tester: ib_eih/ecp_g_ib_eih.o ib_eih_tester/ecp_t_ib_eih_tester.o $(SHOBJ) #../../ecp_mp/sensor/ecp_mp_s_fradia_sensor.o
 	$(LD) $(LDFLAGS) -o $@ $^
 #---------------------------------Special object build rules (user made)-------------------------------------#
 # e.g:

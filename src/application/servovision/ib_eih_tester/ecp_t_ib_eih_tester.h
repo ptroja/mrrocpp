@@ -38,7 +38,7 @@ public:
 	virtual ~ecp_t_ib_eih_tester();
 	void main_task_algorithm(void);
 protected:
-	lib::sensor *vsp_fradia;
+	ecp_mp::sensor::fradia_sensor <ecp::irp6ot::generator::object_tracker> *vsp_fradia;
 	mrrocpp::ecp::common::generator::smooth* smooth_gen;
 	mrrocpp::ecp::irp6ot::generator::ecp_g_ib_eih *g_ib_eih;
 

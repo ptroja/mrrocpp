@@ -23,11 +23,11 @@ namespace generator {
 
 const char ecp_g_ib_eih::configSectionName[] = { "[servovision_ib_eih]" };
 
-ecp_g_ib_eih::ecp_g_ib_eih(mrrocpp::ecp::common::task::task & _ecp_task)
-//: mrrocpp::ecp::common::generator::generator(_ecp_task)
-:
-	generator(_ecp_task), logEnabled(true)
+ecp_g_ib_eih::ecp_g_ib_eih(mrrocpp::ecp::common::task::task & _ecp_task, ecp_mp::sensor::fradia_sensor<object_tracker> *vsp_fradia)
+:generator(_ecp_task), logEnabled(true), vsp_fradia(vsp_fradia)
 {
+	sensor_m[lib::SENSOR_CVFRADIA] = vsp_fradia;
+
 	char kp_name[] = { "kp" };
 	char max_v_x_name[] = { "max_v_x" };
 	char max_v_y_name[] = { "max_v_y" };
@@ -43,14 +43,6 @@ ecp_g_ib_eih::ecp_g_ib_eih(mrrocpp::ecp::common::task::task & _ecp_task)
 		log("Parameter %s->%s not found. Using default value: %g\n", configSectionName, kp_name);
 	}
 
-	/*if (_ecp_task.config.exists(maxt_name, configSectionName)) {
-	 maxT = _ecp_task.config.value <double> (maxt_name, configSectionName);
-	 } else {
-	 maxT = 0.01;
-	 log("Parameter %s->%s not found. Using default value: %g\n", configSectionName, maxt_name, maxT);
-	 }
-
-	 log("\nKp: %g; maxT: %g\n", Kp, maxT);*/
 	log("\nKp: %g\n", Kp);
 
 	max_v[0]
@@ -84,7 +76,6 @@ ecp_g_ib_eih::~ecp_g_ib_eih()
 bool ecp_g_ib_eih::first_step()
 {
 	log("ecp_g_ib_eih::first_step()\n");
-	vsp_fradia = sensor_m[lib::SENSOR_CVFRADIA];
 
 	the_robot->ecp_command.instruction.instruction_type = lib::GET;
 	the_robot->ecp_command.instruction.get_type = ARM_DEFINITION;
@@ -107,6 +98,7 @@ bool ecp_g_ib_eih::first_step()
 
 bool ecp_g_ib_eih::next_step()
 {
+	//log("ecp_g_ib_eih::next_step() begin\n"); fflush(stdout);
 	the_robot->ecp_command.instruction.instruction_type = lib::SET_GET;
 
 	if (!currentFrameSaved) { // save first frame
@@ -121,52 +113,49 @@ bool ecp_g_ib_eih::next_step()
 	lib::Xyz_Angle_Axis_vector l_vector;
 	currentFrame.get_xyz_angle_axis(l_vector);
 
-	if (vsp_fradia->from_vsp.vsp_report == lib::VSP_REPLY_OK) {
-		//log("vsp_fradia->from_vsp.vsp_report == lib::VSP_REPLY_OK, %d, %d\n", vsp_fradia->from_vsp.comm_image.sensor_union.object_tracker.z, (int)vsp_fradia->from_vsp.comm_image.sensor_union.object_tracker.tracking);
-		if (vsp_fradia->from_vsp.comm_image.sensor_union.object_tracker.tracking) {
+	if (vsp_fradia->received_object.tracking) {
 
-			mrrocpp::lib::K_vector
-					e(vsp_fradia->from_vsp.comm_image.sensor_union.object_tracker.x, -vsp_fradia->from_vsp.comm_image.sensor_union.object_tracker.y, vsp_fradia->from_vsp.comm_image.sensor_union.object_tracker.z); // error [pixels]
+		mrrocpp::lib::K_vector
+				e(vsp_fradia->received_object.x, -vsp_fradia->received_object.y, vsp_fradia->received_object.z); // error [pixels]
 
-			u = e * Kp;
-			u[2] = 0; // Z axis
+		u = e * Kp;
+		u[2] = 0; // Z axis
 
-			//for(int i=0; i<3; ++i){		log("e[%d] = %g\t", i, e[i]);	}		log("\n");
-			//for(int i=0; i<3; ++i){		log("u[%d] = %g\t", i, u[i]);	}		log("\n");
-			bool isSpeedConstrained[3] = { false, false, false };
-			bool isAccelConstrained[3] = { false, false, false };
-			for (int i = 0; i < 3; ++i) {
-				// speed constraints
-				if (u[i] > max_v[i]) {
-					u[i] = max_v[i];
-					isSpeedConstrained[i] = true;
-				}
-				if (u[i] < -max_v[i]) {
-					u[i] = -max_v[i];
-					isSpeedConstrained[i] = true;
-				}
-
-				// acceleration constraints
-				/*if (u[i] - prev_u[i] > max_a[i]) {
-					u[i] = prev_u[i] + max_a[i];
-					isAccelConstrained[i] = true;
-				}
-				if (u[i] - prev_u[i] < -max_a[i]) {
-					u[i] = prev_u[i] - max_a[i];
-					isAccelConstrained[i] = true;
-				}*/
-				prev_u[i] = u[i];
-
-				l_vector[i] += u[i]; // first 3 elements of l_vector[] are XYZ translation
+		//for(int i=0; i<3; ++i){		log("e[%d] = %g\t", i, e[i]);	}		log("\n");
+		//for(int i=0; i<3; ++i){		log("u[%d] = %g\t", i, u[i]);	}		log("\n");
+		bool isSpeedConstrained[3] = { false, false, false };
+		bool isAccelConstrained[3] = { false, false, false };
+		for (int i = 0; i < 3; ++i) {
+			// speed constraints
+			if (u[i] > max_v[i]) {
+				u[i] = max_v[i];
+				isSpeedConstrained[i] = true;
 			}
-			//log("isSpeedConstrained[] = {%d, %d}\n", isSpeedConstrained[0], isSpeedConstrained[1]);
+			if (u[i] < -max_v[i]) {
+				u[i] = -max_v[i];
+				isSpeedConstrained[i] = true;
+			}
 
-			//translation += u;
-		} else {
-			//log("Not tracking.\n");
+			// acceleration constraints
+			//if (u[i] - prev_u[i] > max_a[i]) {
+			//	u[i] = prev_u[i] + max_a[i];
+			//	isAccelConstrained[i] = true;
+			//}
+			//if (u[i] - prev_u[i] < -max_a[i]) {
+			//	u[i] = prev_u[i] - max_a[i];
+			//	isAccelConstrained[i] = true;
+			//}
+			prev_u[i] = u[i];
+
+			l_vector[i] += u[i]; // first 3 elements of l_vector[] are XYZ translation
 		}
-	} else {
+		//log("isSpeedConstrained[] = {%d, %d}\n", isSpeedConstrained[0], isSpeedConstrained[1]);
 
+		//translation += u;
+
+		//log("Tracking.\n");
+	} else {
+		//log("Not tracking.\n");
 	}
 
 	lib::Homog_matrix nextFrame;
@@ -183,7 +172,7 @@ bool ecp_g_ib_eih::next_step()
 
 	the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = currentGripperCoordinate;
 
-	//log("ecp_g_ib_eih::next_step() end\n");
+	//log("ecp_g_ib_eih::next_step() end\n"); fflush(stdout);
 
 	return true;
 } // next_step()

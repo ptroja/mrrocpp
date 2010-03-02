@@ -17,7 +17,7 @@ namespace irp6ot {
 namespace task {
 
 const double
-		ecp_t_ib_eih_tester::initialPositionJoints[MAX_SERVOS_NR] = { 0, -0.010, -1.693, -0.075, 0.011, 4.680, -1.577, 0.090 };
+		ecp_t_ib_eih_tester::initialPositionJoints[MAX_SERVOS_NR] = { 0, -0.010, -1.693, -0.075, 0.011, 4.680, -1.577, 0.065 };
 
 /*
  * IRP6 On Track:
@@ -32,17 +32,20 @@ ecp_t_ib_eih_tester::ecp_t_ib_eih_tester(mrrocpp::lib::configurator& _configurat
 	task(_configurator)
 {
 	ecp_m_robot = new ecp::irp6ot::robot(*this);
-	g_ib_eih = new generator::ecp_g_ib_eih(*this);
+
 	smooth_gen = new mrrocpp::ecp::common::generator::smooth(*this, true);
 
 	sr_ecp_msg->message("ecp_t_ib_eih_tester::ecp_t_ib_eih_tester() fradia setup...");
-	//ecp_mp::sensor::fradia_sensor<>
-	vsp_fradia
-			= new ecp_mp::sensor::fradia_sensor("[vsp_cvfradia_servovision]", *this);
+
+	vsp_fradia =
+		new ecp_mp::sensor::fradia_sensor <ecp::irp6ot::generator::object_tracker>("[vsp_cvfradia_servovision]", *this);
+
 	vsp_fradia->configure_sensor();
 
+	g_ib_eih = new generator::ecp_g_ib_eih(*this, vsp_fradia);
+
 	sensor_m[lib::SENSOR_CVFRADIA] = vsp_fradia;
-	g_ib_eih->sensor_m = sensor_m;
+	//g_ib_eih->sensor_m = sensor_m;
 	sr_ecp_msg->message("ecp_t_ib_eih_tester::ecp_t_ib_eih_tester() finished.");
 }
 
@@ -55,20 +58,18 @@ ecp_t_ib_eih_tester::~ecp_t_ib_eih_tester()
 
 void ecp_t_ib_eih_tester::main_task_algorithm(void)
 {
-	printf("ecp_t_ib_eih_tester::main_task_algorithm() begin\n");	fflush(stdout);
-
-	vsp_fradia->get_reading();
-	while (vsp_fradia->from_vsp.vsp_report == lib::VSP_SENSOR_NOT_CONFIGURED) {
-		vsp_fradia->get_reading();
-	}
+	printf("ecp_t_ib_eih_tester::main_task_algorithm() begin\n");
+	fflush(stdout);
 
 	moveToInitialPosition();
 
-	printf("ecp_t_ib_eih_tester::main_task_algorithm() 1\n");	fflush(stdout);
+	printf("ecp_t_ib_eih_tester::main_task_algorithm() 1\n");
+	fflush(stdout);
 
 	g_ib_eih->Move();
 
-	printf("ecp_t_ib_eih_tester::main_task_algorithm() 2\n");	fflush(stdout);
+	printf("ecp_t_ib_eih_tester::main_task_algorithm() 2\n");
+	fflush(stdout);
 
 	ecp_termination_notice();
 }

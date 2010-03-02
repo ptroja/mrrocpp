@@ -10,6 +10,7 @@
 
 #include "ecp/common/generator/ecp_generator.h"
 #include "lib/mrmath/mrmath.h"
+#include "ecp_mp/sensor/ecp_mp_s_fradia_sensor.h"
 
 namespace mrrocpp {
 
@@ -23,10 +24,19 @@ namespace generator {
  *  @{
  */
 
+typedef struct object_tracker_t
+{
+	bool reached;
+	bool tracking;
+	int x;
+	int y;
+	int z;
+} object_tracker;
+
 class ecp_g_ib_eih: public mrrocpp::ecp::common::generator::generator
 {
 public:
-	ecp_g_ib_eih(mrrocpp::ecp::common::task::task & _ecp_task);
+	ecp_g_ib_eih(mrrocpp::ecp::common::task::task & _ecp_task, ecp_mp::sensor::fradia_sensor<object_tracker> *vsp_fradia);
 	virtual ~ecp_g_ib_eih();
 	virtual bool first_step();
 	virtual bool next_step();
@@ -45,7 +55,7 @@ protected:
 	 */
 	bool isArmFrameOk(const lib::Homog_matrix& arm_frame);
 private:
-	lib::sensor *vsp_fradia;
+	ecp_mp::sensor::fradia_sensor<object_tracker> *vsp_fradia;
 
 	lib::Homog_matrix currentFrame;
 	double currentGripperCoordinate;
