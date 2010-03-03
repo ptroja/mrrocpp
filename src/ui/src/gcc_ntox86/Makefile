@@ -57,9 +57,10 @@ ifeq ($(BUILD_TARGET), linux)
 shr: \
 	ui.o \
 	threads.o \
-	ui_ecp_r_conveyor.o \
+	ui_ecp_r_common.o \
 	ui_ecp_r_irp6_common.o \
-	ui_ecp_r_speaker.o
+	ui_ecp_r_speaker.o \
+	ui_ecp_r_tfg_and_conv.o
 else
 shr: ui
 

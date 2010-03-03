@@ -38,7 +38,7 @@ edp_irp6p.so: edp_irp6p_uimodule.o \
 
 edp_conveyor.so: edp_conveyor_uimodule.o \
 	$(ECP_DIR)/conveyor/ecp_r_conv.o \
-	$(UI_DIR)/ui_ecp_r_conveyor.o
+	$(UI_DIR)/ui_ecp_r_tfg_and_conv.o
 	$(CXX) ${LDFLAGS} -shared -o $@ $(LIBS) $^
 	
 festival.so: festival_uimodule.o

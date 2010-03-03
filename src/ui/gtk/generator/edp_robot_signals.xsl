@@ -60,15 +60,15 @@ static double <xsl:value-of select="$name" />_desired_pos[<xsl:value-of select="
 
 
 
-<xsl:choose><xsl:when test="$name = 'conveyor'">#include "ui/ui_ecp_r_conveyor.h"</xsl:when><xsl:otherwise>#include "ui/ui_ecp_r_irp6_common.h"</xsl:otherwise></xsl:choose>
+<xsl:choose><xsl:when test="$name = 'conveyor'">#include "ui/ui_ecp_r_tfg_and_conv.h"</xsl:when><xsl:otherwise>#include "ui/ui_ecp_r_irp6_common.h"</xsl:otherwise></xsl:choose>
 
-ui_<xsl:choose><xsl:when test="$name = 'conveyor'">conveyor</xsl:when><xsl:otherwise>common</xsl:otherwise></xsl:choose>_robot * robot_<xsl:value-of select="$fullName" />;
+ui_<xsl:choose><xsl:when test="$name = 'conveyor'">tfg_and_conv</xsl:when><xsl:otherwise>irp6_common</xsl:otherwise></xsl:choose>_robot * robot_<xsl:value-of select="$fullName" />;
 mrrocpp::lib::controller_state_t state_<xsl:value-of select="$fullName" />;
 
 //UI robot constructor
 edp_<xsl:value-of select="$name" />::edp_<xsl:value-of select="$name" />()
 {
-				robot_<xsl:value-of select="$fullName" /> = new <xsl:choose><xsl:when test="$name = 'conveyor'">ui_conveyor_robot</xsl:when><xsl:otherwise>ui_common_robot</xsl:otherwise></xsl:choose>(
+				robot_<xsl:value-of select="$fullName" /> = new <xsl:choose><xsl:when test="$name = 'conveyor'">ui_tfg_and_conv_robot</xsl:when><xsl:otherwise>ui_irp6_common_robot</xsl:otherwise></xsl:choose>(
 				ui_model::instance().getConfigurator(),
 				ui_model::instance().getEcpSr()
 				<xsl:if test="$robotType != ''">,mrrocpp::lib::</xsl:if><xsl:value-of select="$robotType" />
@@ -314,8 +314,7 @@ void *ui_synchronize_<xsl:value-of select="$fullName" /> (gpointer userdata)
 #include &lt;gtk/gtkbuilder.h&gt;
 #include &lt;gtk/gtk.h&gt;
 
-#include "ui/ui_ecp_r_irp6_common.h"
-#include "ui/ui_ecp_r_conveyor.h"
+<xsl:choose><xsl:when test="$name = 'conveyor'">#include "ui/ui_ecp_r_tfg_and_conv.h"</xsl:when><xsl:otherwise>#include "ui/ui_ecp_r_irp6_common.h"</xsl:otherwise></xsl:choose>
 
 class edp_<xsl:value-of select="$name" />
 {
