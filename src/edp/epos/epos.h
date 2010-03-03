@@ -140,16 +140,15 @@ class epos
 		//! for internal progress character handling
 		char gMarker;
 
-		//! \brief array with WORDs representing reply from the controller
-		typedef std::vector<WORD> answer_t;
-
 		/*! \brief Read Object from EPOS memory, firmware definition 6.3.1.1
 		 *
+		 * @param ans answer buffer
+		 * @param lenght of answer buffer
 		 * @param index object entry index in a dictionary
 		 * @param subindex object entry subindex of in a dictionary
 		 * @return answer array from the controller
 		 */
-		answer_t ReadObject(WORD index, BYTE subindex, uint8_t nodeId = 1);
+		unsigned int ReadObject(WORD *ans, unsigned int ans_len, WORD index, BYTE subindex, uint8_t nodeId = 1);
 
 		/*! \brief Read Object Value from EPOS memory, firmware definition 6.3.1.1
 		 *
@@ -158,8 +157,9 @@ class epos
 		 * @return object value
 		 */
 		template <class T>
-		T ReadObjectValue(WORD index, BYTE subindex) {
-			answer_t answer = ReadObject(index, subindex);
+		T ReadObjectValue(WORD index, BYTE subindex, uint8_t nodeId = 0) {
+			WORD answer[8];
+			ReadObject(answer, 8, index, subindex, nodeId);
 
 			// check error code
 			checkEPOSerror();
@@ -249,7 +249,7 @@ class epos
 		 *
 		 * @return answer array from the controller
 		 */
-		answer_t readAnswer();
+		unsigned int readAnswer(WORD *ans, unsigned int ans_len);
 
 		/*! \brief check global variable E_error for EPOS error code */
 		int checkEPOSerror();

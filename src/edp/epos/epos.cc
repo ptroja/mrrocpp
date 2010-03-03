@@ -1055,7 +1055,8 @@ INTEGER32 epos::readTargetPosition()
 /* read manufactor device name string firmware */
 std::string epos::readDeviceName()
 {
-	answer_t answer = ReadObject(0x1008, 0x00);
+	WORD answer[8];
+	ReadObject(answer, 8, 0x1008, 0x00);
 
 	std::string str;
 
@@ -1640,7 +1641,7 @@ void epos::sendCommand(WORD *frame)
 	}
 }
 
-epos::answer_t epos::readAnswer()
+unsigned int epos::readAnswer(WORD *ans, unsigned int ans_len)
 {
 	// RS232 connection version
 	if (ep >=0) {
@@ -1664,7 +1665,9 @@ epos::answer_t epos::readAnswer()
 
 		WORD framelen = c + 3;
 
-		answer_t ans(framelen);
+		if (ans_len < framelen) {
+			throw epos_error() << reason("output buffer to short for a message");
+		}
 
 		ans[0] = first;
 
@@ -1715,7 +1718,7 @@ epos::answer_t epos::readAnswer()
 		 printf("******** sub: ptr= %p  &ptr = %p\n", ptr, &ptr);
 		 printf("******** sub: ans   = %p  &ans = %p\n", ans, &ans);
 		 */
-		return (ans);
+		return framelen;
 	} else {
 		// USB connection version
 		// reply buffer
@@ -1765,8 +1768,9 @@ epos::answer_t epos::readAnswer()
 		// frame length
 		WORD framelen = buf[3];
 
-		// datagram buffer for datagram and CRC
-		answer_t ans(framelen+2);
+		if (ans_len < framelen) {
+			throw epos_error() << reason("output buffer to short for a message");
+		}
 
 		ans[0] = (framelen << 8);
 
@@ -1794,14 +1798,7 @@ epos::answer_t epos::readAnswer()
 	#ifdef DDEBUG
 		printf("got this CRC: 0x%04x\n", crc);
 	#endif
-		ans[framelen + 1] = 0x0000;
-		{
-			WORD anstab[framelen+2];
-			for (int i = 0; i < framelen+2; i++) {
-				anstab[i] = ans[i];
-			}
-			ans[framelen + 1] = CalcFieldCRC(anstab, framelen+2);
-		}
+		ans[framelen + 1] = CalcFieldCRC(ans, framelen+2);
 
 		if (crc == ans[framelen + 1]) {
 	#ifdef DEBUG
@@ -1823,11 +1820,12 @@ epos::answer_t epos::readAnswer()
 		 printf("******** sub: ptr= %p  &ptr = %p\n", ptr, &ptr);
 		 printf("******** sub: ans   = %p  &ans = %p\n", ans, &ans);
 		 */
-		return (ans);
+		return framelen;
 	}
 }
 
-epos::answer_t epos::ReadObject(WORD index, BYTE subindex, uint8_t nodeId)
+unsigned int epos::ReadObject(WORD *ans, unsigned int ans_len,
+		WORD index, BYTE subindex, uint8_t nodeId)
 {
 	WORD frame[4];
 
@@ -1843,7 +1841,7 @@ epos::answer_t epos::ReadObject(WORD index, BYTE subindex, uint8_t nodeId)
 	sendCommand(frame);
 
 	// read response
-	return (readAnswer());
+	return (readAnswer(ans, ans_len));
 }
 
 #if 0
@@ -1901,7 +1899,8 @@ void epos::WriteObject(WORD index, BYTE subindex, const WORD data[2], uint8_t no
 	sendCommand(frame);
 
 	// read response
-	answer_t answer = readAnswer();
+	WORD answer[8];
+	readAnswer(answer, 8);
 
 	checkEPOSerror();
 }
