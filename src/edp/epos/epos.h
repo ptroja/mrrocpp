@@ -100,7 +100,7 @@ typedef uint32_t UNSIGNED32;
 #define TRYSLEEP  (unsigned int)1e5
 
 //! all high-level methods throws this exception in case of error
-struct epos_error: virtual std::exception, virtual boost::exception {
+struct epos_error: virtual public std::exception, virtual public boost::exception {
 	~epos_error() throw() {};
 };
 
@@ -170,11 +170,11 @@ class epos
 
 			if ((boost::is_same<T, uint8_t>::value) || (boost::is_same<T, int8_t>::value) ||
 				(boost::is_same<T, uint16_t>::value) || (boost::is_same<T, int16_t>::value)) {
-				T val = answer[3];
+				T val = (T) answer[3];
 				return val;
 			}
 			else if ((boost::is_same<T, uint32_t>::value) || (boost::is_same<T, int32_t>::value)) {
-				T val = (answer[3] | (answer[4] << 16));
+				T val = (T) (answer[3] | (answer[4] << 16));
 				return val;
 			} else {
 				throw epos_error() << reason("Unsupported ReadObjectValue conversion");

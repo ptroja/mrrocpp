@@ -28,16 +28,16 @@ main(int argc, char *argv[])
 	}
 
 	e.closeEPOS();
-	} catch (epos_error & e) {
+	} catch (epos_error & error) {
 		std::cerr << "EPOS Error." << std::endl;
 
-		if( std::string const * r = boost::get_error_info<reason>(e) )
+		if( std::string const * r = boost::get_error_info<reason>(error) )
 			std::cerr << " Reason: " << *r << std::endl;
 
-		if( std::string const * call = boost::get_error_info<errno_call>(e) )
+		if( std::string const * call = boost::get_error_info<errno_call>(error) )
 			std::cerr << " Errno call: " << *call << std::endl;
 
-		if( int const * errno_value = boost::get_error_info<errno_code>(e) )
+		if( int const * errno_value = boost::get_error_info<errno_code>(error) )
 			std::cerr << "Errno value: " << *errno_value << std::endl;
 	}
 
