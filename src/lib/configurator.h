@@ -19,9 +19,13 @@
 #include <boost/thread/mutex.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/tokenizer.hpp>
+#include <boost/numeric/ublas/vector.hpp>
+#include <boost/numeric/ublas/matrix.hpp>
+#include <boost/numeric/ublas/io.hpp>
+
 
 #if defined(USE_MESSIP_SRR)
-  #include <messip.h>
+#include <messip.h>
 #endif
 // Typy zmiennych odczytywanych z pliku INI.
 #include "lib/cfgopts.h"
@@ -70,56 +74,84 @@ public:
 
 	const std::string section_name;
 
-    bool check_config(const std::string & s);
+	bool check_config(const std::string & s);
 
 	// Konstruktor obiektu - konfiguratora.
-	configurator(
-			const std::string & _node,
-			const std::string & _dir,
-			const std::string & _ini_file,
-			const std::string & _section_name,
-			const std::string & _session_name);
+			configurator(const std::string & _node, const std::string & _dir, const std::string & _ini_file, const std::string & _section_name, const std::string & _session_name);
 
 	// zmiana nazwy sesji z modyfikacja pliku konfiguracyjnego
-	void change_ini_file (const std::string & _ini_file);
+	void change_ini_file(const std::string & _ini_file);
 
 	// Odpalenie procesu zapisanego w danej sekcji INI.
 	pid_t process_spawn(const std::string & _section_name);
 
 	// Zwraca numer wezla.
-	static int return_node_number (const std::string & node_name_l);
+	static int return_node_number(const std::string & node_name_l);
 
 	// Zwraca attach point'a serwerow w zaleznosci od typu
 
-	typedef enum _config_path_type {
-		CONFIG_RESOURCEMAN_LOCAL,
-		CONFIG_RESOURCEMAN_GLOBAL,
-		CONFIG_SERVER
+	typedef enum _config_path_type
+	{
+		CONFIG_RESOURCEMAN_LOCAL, CONFIG_RESOURCEMAN_GLOBAL, CONFIG_SERVER
 	} config_path_type_t;
 
-	std::string return_attach_point_name (config_path_type_t _type, const char* _key, const char* __section_name = NULL) const;
-	std::string return_attach_point_name (config_path_type_t _type, const std::string & _key, const std::string & __section_name) const {
+	std::string
+			return_attach_point_name(config_path_type_t _type, const char* _key, const char* __section_name = NULL) const;
+	std::string return_attach_point_name(config_path_type_t _type, const std::string & _key, const std::string & __section_name) const
+	{
 		return return_attach_point_name(_type, _key.c_str(), __section_name.c_str());
-	};
+	}
+	;
 
-	template<class Type>
-	Type value(const std::string & _key, const std::string & __section_name) const {
-		return boost::lexical_cast<Type>(return_string_value(_key.c_str(), __section_name.c_str()));
-	};
+	template <class Type>
+	Type value(const std::string & _key, const std::string & __section_name) const
+	{
+		return boost::lexical_cast <Type>(return_string_value(_key.c_str(), __section_name.c_str()));
+	}
+	;
 
-	template<class Type>
-	Type value(const std::string & _key) const {
-		return boost::lexical_cast<Type>(return_string_value(_key.c_str()));
-	};
+	template <class Type>
+	Type value(const std::string & _key) const
+	{
+		return boost::lexical_cast <Type>(return_string_value(_key.c_str()));
+	}
+	;
+
+	/**
+	 * Read vector from config. Vector has format similar to MatLAB, for example: [ x y z ].
+	 * @param name
+	 * @param n vector size
+	 * @return vector read
+	 * @throws exception if vector has not been read
+	 */
+	boost::numeric::ublas::vector <double> value(const std::string & key, const std::string & section_name, int n) const;
+
+	/**
+	 * Read matrix from config. Matrix has format similar to MatLAB, for example: [ a b c d; e f g h ].
+	 * @param name
+	 * @param n matrix size - rows
+	 * @param m matrix size - columns
+	 * @return vector read
+	 * @throws exception if vector has not been read
+	 */
+	boost::numeric::ublas::matrix <double>
+			value(const std::string & key, const std::string & section_name, int n, int m) const;
 
 	// Zwraca czy dany klucz istnieje
 	bool exists(const char* _key, const char* __section_name = NULL) const;
-	bool exists(const std::string & _key, const std::string & __section_name) const {
+	bool exists(const std::string & _key, const std::string & __section_name) const
+	{
 		return exists(_key.c_str(), __section_name.c_str());
-	};
+	}
+	;
 
 	~configurator();
 
+protected:
+	/**
+	 * Extract elements from vector or matrix row. For example: " 1   2 3   4 "
+	 */
+	boost::numeric::ublas::vector <double> get_vector_elements(std::string text_value, int n) const;
 };// : configurator
 
 } // namespace lib

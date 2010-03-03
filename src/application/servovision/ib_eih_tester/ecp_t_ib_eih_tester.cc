@@ -6,7 +6,11 @@
  *      Author: mboryn
  */
 
+#include <stdexcept>
+
 #include "ecp_t_ib_eih_tester.h"
+
+
 
 namespace mrrocpp {
 
@@ -31,6 +35,7 @@ ecp_t_ib_eih_tester::ecp_t_ib_eih_tester(mrrocpp::lib::configurator& _configurat
 :
 	task(_configurator)
 {
+	try{
 	ecp_m_robot = new ecp::irp6ot::robot(*this);
 
 	smooth_gen = new mrrocpp::ecp::common::generator::smooth(*this, true);
@@ -38,15 +43,22 @@ ecp_t_ib_eih_tester::ecp_t_ib_eih_tester(mrrocpp::lib::configurator& _configurat
 	sr_ecp_msg->message("ecp_t_ib_eih_tester::ecp_t_ib_eih_tester() fradia setup...");
 
 	vsp_fradia =
-		new ecp_mp::sensor::fradia_sensor <ecp::irp6ot::generator::object_tracker>("[vsp_cvfradia_servovision]", *this);
+		new ecp_mp::sensor::fradia_sensor <ecp::common::generator::object_tracker>("[vsp_cvfradia_servovision]", *this);
 
 	vsp_fradia->configure_sensor();
 
-	g_ib_eih = new generator::ecp_g_ib_eih(*this, vsp_fradia);
+	regulator = new ecp::common::generator::regulator_p(_configurator, "[regulator_p]", 3, 3);
+
+	g_ib_eih = new ecp::common::generator::ecp_g_ib_eih(*this, vsp_fradia, regulator);
 
 	sensor_m[lib::SENSOR_CVFRADIA] = vsp_fradia;
 	//g_ib_eih->sensor_m = sensor_m;
 	sr_ecp_msg->message("ecp_t_ib_eih_tester::ecp_t_ib_eih_tester() finished.");
+	}
+	catch(const std::exception & e){
+		sr_ecp_msg->message(e.what());
+		throw e;
+	}
 }
 
 ecp_t_ib_eih_tester::~ecp_t_ib_eih_tester()
@@ -61,7 +73,7 @@ void ecp_t_ib_eih_tester::main_task_algorithm(void)
 	printf("ecp_t_ib_eih_tester::main_task_algorithm() begin\n");
 	fflush(stdout);
 
-	moveToInitialPosition();
+	//moveToInitialPosition();
 
 	printf("ecp_t_ib_eih_tester::main_task_algorithm() 1\n");
 	fflush(stdout);

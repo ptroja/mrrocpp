@@ -12,7 +12,8 @@
 #include "ecp/irp6_on_track/ecp_r_irp6ot.h"
 #include "ecp_mp/sensor/ecp_mp_s_fradia_sensor.h"
 #include "ecp/common/generator/ecp_g_smooth.h"
-#include "../ib_eih/ecp_g_ib_eih.h"
+#include "../ecp_g_ib_eih.h"
+#include "../visual_servo_regulator_p.h"
 
 namespace mrrocpp {
 
@@ -38,9 +39,10 @@ public:
 	virtual ~ecp_t_ib_eih_tester();
 	void main_task_algorithm(void);
 protected:
-	ecp_mp::sensor::fradia_sensor <ecp::irp6ot::generator::object_tracker> *vsp_fradia;
-	mrrocpp::ecp::common::generator::smooth* smooth_gen;
-	mrrocpp::ecp::irp6ot::generator::ecp_g_ib_eih *g_ib_eih;
+	ecp_mp::sensor::fradia_sensor <ecp::common::generator::object_tracker> *vsp_fradia;
+	mrrocpp::ecp::common::generator::smooth * smooth_gen;
+	mrrocpp::ecp::common::generator::ecp_g_ib_eih * g_ib_eih;
+	mrrocpp::ecp::common::generator::visual_servo_regulator * regulator;
 
 	/** Moves (using smooth generator) to initial position. */
 	void moveToInitialPosition();
