@@ -23,6 +23,7 @@ IRP6_COMMON_OBJS = \
 	$(ECP_DIR)/irp6_postument/ecp_r_irp6p.o \
 	$(ECP_DIR)/irp6_mechatronika/ecp_r_irp6m.o \
 	$(ECP_DIR)/polycrank/ecp_r_polycrank.o \
+	$(UI_DIR)/ui_ecp_r_common.o
 
 edp_irp6m.so: edp_irp6m_uimodule.o \
 	$(IRP6_COMMON_OBJS) $(UI_DIR)/ui_ecp_r_irp6_common.o
