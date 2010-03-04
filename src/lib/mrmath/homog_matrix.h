@@ -37,6 +37,11 @@ private:
 	frame_tab matrix_m;
 
 public:
+	// Klasa Ft_v_tr musi miec dostep do prywatnych skladnikow klasy Homog_matrix.
+	friend class Ft_v_tr;
+	friend class Ft_tr;
+	friend class V_tr;
+
 	// Konstruktor domniemany - tworzy macierz jednostkowa.
 	Homog_matrix();
 	// Stworzenie macierzy na podstawie zawartosci tablicy.
