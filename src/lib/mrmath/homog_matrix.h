@@ -37,11 +37,6 @@ private:
 	frame_tab matrix_m;
 
 public:
-	// Klasa Ft_v_tr musi miec dostep do prywatnych skladnikow klasy Homog_matrix.
-	friend class Ft_v_tr;
-	friend class Ft_tr;
-	friend class V_tr;
-
 	// Konstruktor domniemany - tworzy macierz jednostkowa.
 	Homog_matrix();
 	// Stworzenie macierzy na podstawie zawartosci tablicy.
@@ -60,7 +55,7 @@ public:
 	Homog_matrix(const Xyz_Angle_Axis_vector & l_vector);
 
 	// Utworzenie macierzy jednorodnej na podstawie podanej macierzy obrotu r i wektora przesuniecia t.
-	Homog_matrix(double r[3][3], double t[3]);
+	Homog_matrix(const double r[3][3], const double t[3]);
 	// Utworzenie macierzy jednorodnej na podstawie jej 12 elementow (notacja z Craiga)
 	Homog_matrix(double r11, double r12, double r13, double t1, double r21, double r22, double r23, double t2, double r31, double r32, double r33, double t3);
 
@@ -108,7 +103,7 @@ public:
 	void remove_rotation();
 
 	// Ustawienie wektora translacji. Macierz rotacji pozostaje niezmieniona.
-	void set_translation_vector(double t[3]);
+	void set_translation_vector(const double t[3]);
 
 	void set_translation_vector(double x, double y, double z);
 
@@ -119,7 +114,7 @@ public:
 	// Zwrocenie macierzy rotacji.
 	void get_rotation_matrix(double r[3][3]) const;
 	// Ustawienie macierzy rotacji. Wektor translacji pozostaje niezmieniony.
-	void set_rotation_matrix(double r[3][3]);
+	void set_rotation_matrix(const double r[3][3]);
 
 	void set_rotation_matrix(const Homog_matrix &wzor);
 

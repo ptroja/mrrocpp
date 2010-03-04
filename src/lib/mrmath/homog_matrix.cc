@@ -95,7 +95,7 @@ Homog_matrix::Homog_matrix(const K_vector & angles)
 	matrix_m[2][3] = 0.0;
 }
 
-Homog_matrix::Homog_matrix(double r[3][3], double t[3])
+Homog_matrix::Homog_matrix(const double r[3][3], const double t[3])
 {
 	// utworznie macierzy jednorodnej na podstawie
 	// - macierzy rotacji r
@@ -235,7 +235,7 @@ void Homog_matrix::get_xyz_euler_zyz(double t[6]) const
 	t[5] = gamma;
 };//: get_xyz_euler_zyz
 */
-void Homog_matrix::get_xyz_euler_zyz(Xyz_Euler_Zyz_vector& l_vector) const
+void Homog_matrix::get_xyz_euler_zyz(Xyz_Euler_Zyz_vector & l_vector) const
 {
 	double alfa, beta, gamma; // Katy Euler'a Z-Y-Z
 	//const double EPS=1.0E-10;
@@ -436,7 +436,7 @@ void Homog_matrix::set_from_xyz_quaternion(double eta, double eps1, double eps2,
 	matrix_m[0][3] = x;
 	matrix_m[1][3] = y;
 	matrix_m[2][3] = z;
-}// Homog_matrix::set_from_xyz_quaternion(double eta, K_vector eps, double x, double y, double z)
+}
 
 
 void Homog_matrix::set_from_xyz_angle_axis(const Xyz_Angle_Axis_vector & l_vector)  // kat wliczony w os
@@ -980,7 +980,7 @@ void Homog_matrix::set_translation_vector(const K_vector & xyz)
 }//: set_translation_vector
 
 // Ustawienie wektora translacji. Macierz rotacji pozostaje niezmieniona.
-void Homog_matrix::set_translation_vector(double t[3])
+void Homog_matrix::set_translation_vector(const double t[3])
 {
 	matrix_m[0][3] = t[0];
 	matrix_m[1][3] = t[1];
@@ -1075,7 +1075,7 @@ void Homog_matrix::get_translation_vector(double t[3]) const
 
 
 // Ustawienie macierzy rotacji. Wektor translacji pozostaje niezmieniony.
-void Homog_matrix::set_rotation_matrix(double r[3][3])
+void Homog_matrix::set_rotation_matrix(const double r[3][3])
 {
 	for(int j=0; j<3; j++)
 		for(int i=0; i<3; i++)
@@ -1083,7 +1083,7 @@ void Homog_matrix::set_rotation_matrix(double r[3][3])
 }//: set_rotation_matrix
 
 
-void Homog_matrix::set_rotation_matrix(const Homog_matrix &wzor)
+void Homog_matrix::set_rotation_matrix(const Homog_matrix & wzor)
 {
 	for(int j=0; j<3; j++)
 		for(int i=0; i<3; i++)
