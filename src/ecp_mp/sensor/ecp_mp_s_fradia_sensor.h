@@ -14,6 +14,8 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <unistd.h>
+#include <cstring>
+#include <strings.h>
 
 #include <boost/thread/mutex.hpp>
 #include <boost/bind.hpp>
@@ -154,11 +156,11 @@ fradia_sensor<VSP_ECP_T>::fradia_sensor(const char* _section_name, task::task& _
 	}
 
 	// Retrieve task name.
-	std::string task = _ecp_mp_object.config.value <std::string> ("cvfradia_task", _section_name).c_str();
+	const std::string task(_ecp_mp_object.config.value <std::string> ("cvfradia_task", _section_name));
 	strcpy(to_vsp.cvfradia_task_name, task.c_str());
 
-	memset(&received_object, 0, sizeof(VSP_ECP_T));
-	memset(&received_object_tmp, 0, sizeof(VSP_ECP_T));
+	std::memset(&received_object, 0, sizeof(VSP_ECP_T));
+	std::memset(&received_object_tmp, 0, sizeof(VSP_ECP_T));
 
 	//reader_thread = new boost::thread(boost::bind(&fradia_sensor<VSP_ECP_T>::operator(), this));
 	reader_thread = NULL;
