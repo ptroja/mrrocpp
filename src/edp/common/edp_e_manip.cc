@@ -226,7 +226,7 @@ void manip_effector::get_arm_position_get_arm_type_switch(lib::c_buffer &instruc
 }
 
 /*--------------------------------------------------------------------------*/
-void manip_effector::compute_base_pos_xyz_rot_xyz_vector(const lib::JointArray begining_joints, const lib::Homog_matrix begining_end_effector_frame, const lib::c_buffer &instruction, lib::Xyz_Angle_Axis_vector& base_pos_xyz_rot_xyz_vector)
+void manip_effector::compute_base_pos_xyz_rot_xyz_vector(const lib::JointArray & begining_joints, const lib::Homog_matrix & begining_end_effector_frame, const lib::c_buffer & instruction, lib::Xyz_Angle_Axis_vector & base_pos_xyz_rot_xyz_vector)
 {
 	const lib::MOTION_TYPE &motion_type = instruction.motion_type;
 	const lib::POSE_SPECIFICATION &set_arm_type = instruction.set_arm_type;
@@ -319,7 +319,7 @@ void manip_effector::compute_base_pos_xyz_rot_xyz_vector(const lib::JointArray b
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
-void manip_effector::iterate_macrostep(const lib::JointArray begining_joints, const lib::Homog_matrix begining_end_effector_frame, const lib::c_buffer &instruction, const lib::Xyz_Angle_Axis_vector base_pos_xyz_rot_xyz_vector)
+void manip_effector::iterate_macrostep(const lib::JointArray & begining_joints, const lib::Homog_matrix & begining_end_effector_frame, const lib::c_buffer &instruction, const lib::Xyz_Angle_Axis_vector & base_pos_xyz_rot_xyz_vector)
 {
 	desired_end_effector_frame = begining_end_effector_frame;
 

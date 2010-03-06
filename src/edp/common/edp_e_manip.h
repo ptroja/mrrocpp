@@ -144,7 +144,7 @@ public:
 	 * For the purpose of the position-force control. It is called once from the pose_force_torque_at_frame_move.
 	 */
 	void
-			compute_base_pos_xyz_rot_xyz_vector(const lib::JointArray begining_joints, const lib::Homog_matrix begining_end_effector_frame, const lib::c_buffer &instruction, lib::Xyz_Angle_Axis_vector& base_pos_xyz_rot_xyz_vector);
+			compute_base_pos_xyz_rot_xyz_vector(const lib::JointArray & begining_joints, const lib::Homog_matrix & begining_end_effector_frame, const lib::c_buffer & instruction, lib::Xyz_Angle_Axis_vector & base_pos_xyz_rot_xyz_vector);
 
 	/*!
 	 * \brief Iteration (interpolation) of the position-force control motion.
@@ -152,7 +152,7 @@ public:
 	 * It bases on the pose_force_torque_at_frame_move and other ECP command arguments.
 	 */
 	virtual void
-			iterate_macrostep(const lib::JointArray begining_joints, const lib::Homog_matrix begining_end_effector_frame, const lib::c_buffer &instruction, const lib::Xyz_Angle_Axis_vector base_pos_xyz_rot_xyz_vector);
+			iterate_macrostep(const lib::JointArray & begining_joints, const lib::Homog_matrix & begining_end_effector_frame, const lib::c_buffer & instruction, const lib::Xyz_Angle_Axis_vector & base_pos_xyz_rot_xyz_vector);
 
 
 	/*!
