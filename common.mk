@@ -40,8 +40,8 @@ ifeq ($(BUILD_TARGET), linux)
   #LD=suncc/sunCC
   #GCCDEP=gcc
   # other flags
-  LDFLAGS=-lrt `pkg-config --libs libxml-2.0` -lboost_thread-mt -lmessip
-  CPPFLAGS=-I$(HOMEDIR)/src `pkg-config --cflags libxml-2.0` -DUSE_MESSIP_SRR -Wall -pipe #-Werror
+  LDFLAGS=$(DEBUG) -lrt `pkg-config --libs libxml-2.0` -lboost_thread-mt -lmessip
+  CPPFLAGS=-I$(HOMEDIR)/src `pkg-config --cflags libxml-2.0` -I/usr/include/eigen2 -DUSE_MESSIP_SRR -Wall -pipe #-Werror
   # uncomment the following for Solaris OS
   #LDFLAGS+=-L/export/home/ptroja/boost_1_39_0/stage/lib -lboost_thread-gcc34-mt \
   #	-lsocket -lnsl -lpthread
@@ -55,7 +55,7 @@ else
   CXX=QCC ${VERSION}
   LD=QCC ${VERSION}
   LDFLAGS=${DEBUG} -lm -lsocket -lcpp -lang-c++ $(RPATHV) -L$(QNX_TARGET)/mrlib/lib -lxml2 -liconv -lboost_thread-mt
-  CPPFLAGS=-I$(HOMEDIR)/src -I$(QNX_TARGET)/mrlib/include
+  CPPFLAGS=-I$(HOMEDIR)/src -I$(QNX_TARGET)/mrlib/include -I$(QNX_TARGET)/mrlib/include/eigen2 -DEIGEN_DONT_ALIGN
   AR=ntox86-ar
   BINDIR=$(HOMEDIR)/bin
   LIBDIR=$(HOMEDIR)/lib

@@ -40,6 +40,9 @@ public:
 	virtual bool next_step();
 
 	static const char configSectionName[];
+
+	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+
 protected:
 	/**
 	 * Check if frame is within constraints.

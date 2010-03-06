@@ -13,31 +13,25 @@
 #ifndef __FT_V_VECTOR_H
 #define __FT_V_VECTOR_H
 
-#include <boost/numeric/ublas/vector.hpp>
-#include <boost/numeric/ublas/io.hpp>
+#include <Eigen/Core>
 
 namespace mrrocpp {
 namespace lib {
 
 // klasa reprezentujaca wektor sila-moment i wektora predkosci
-class Ft_v_vector : public boost::numeric::ublas::bounded_vector<double, 6>
+class Ft_v_vector : public Eigen::Matrix<double, 6, 1>
 {
-	typedef boost::numeric::ublas::bounded_vector<double, 6> Base_vector;
+	typedef Eigen::Matrix<double, 6, 1> BaseClass;
 
 public:
-	// Construction and assignment from a uBLAS vector expression or copy assignment
-	template <class R> Ft_v_vector (const boost::numeric::ublas::vector_expression<R>& r) : Base_vector(r)
+	// Copy constructor from any Eigen matrix type
+	template<typename OtherDerived>
+	Ft_v_vector(const Eigen::MatrixBase<OtherDerived>& other)
+		: BaseClass(other)
 	{}
 
-	template <class R> void operator=(const boost::numeric::ublas::vector_expression<R>& r)
-	{
-		Base_vector::operator=(r);
-	}
-
-	template <class R> void operator=(const Base_vector& r)
-	{
-		Base_vector::operator=(r);
-	}
+	// Reuse assignment operators from base class
+	using BaseClass::operator=;
 
 	// Default construction
 	Ft_v_vector();
@@ -54,6 +48,9 @@ public:
 	//Sibi
 	//Wyciagniecie max elementu z wektora
 	double max_element ();	//wyciagniecie maksymalnego elementu wektora
+
+public:
+	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };// end class Ft_v_vector
 
 
@@ -62,8 +59,9 @@ public:
 class Ft_vector : public Ft_v_vector
 {
 public:
-	// Construction and assignment from a uBLAS vector expression or copy assignment
-	template <class R> Ft_vector (const boost::numeric::ublas::vector_expression<R>& r) : Ft_v_vector(r)
+	template<typename OtherDerived>
+	Ft_vector(const Eigen::MatrixBase<OtherDerived>& other)
+		: Ft_v_vector(other)
 	{}
 
 	Ft_vector();													// konstruktor domniemany [0, 0, 0, 0, 0, 0]
@@ -77,9 +75,11 @@ public:
 class Xyz_Angle_Axis_vector : public Ft_v_vector
 {
 public:
-	// Construction and assignment from a uBLAS vector expression or copy assignment
-	template <class R> Xyz_Angle_Axis_vector (const boost::numeric::ublas::vector_expression<R>& r) : Ft_v_vector(r)
+	template<typename OtherDerived>
+	Xyz_Angle_Axis_vector(const Eigen::MatrixBase<OtherDerived>& other)
+		: Ft_v_vector(other)
 	{}
+
 	Xyz_Angle_Axis_vector();													// konstruktor domniemany [0, 0, 0, 0, 0, 0]
 	Xyz_Angle_Axis_vector(const double t[6]);										// utworzenie wektora na podstawie podanej tablicy
 	Xyz_Angle_Axis_vector(double fx, double fy, double fz, double tx, double ty, double tz);
@@ -94,21 +94,31 @@ public:
 class Xyz_Euler_Zyz_vector : public Ft_v_vector
 {
 public:
-	// Construction and assignment from a uBLAS vector expression or copy assignment
-	template <class R> Xyz_Euler_Zyz_vector (const boost::numeric::ublas::vector_expression<R>& r) : Ft_v_vector(r)
+	template<typename OtherDerived>
+	Xyz_Euler_Zyz_vector(const Eigen::MatrixBase<OtherDerived>& other)
+		: Ft_v_vector(other)
 	{}
+
+	// Reuse assignment operators from base class
+	using Ft_v_vector::operator=;
+
 	Xyz_Euler_Zyz_vector();													// konstruktor domniemany [0, 0, 0, 0, 0, 0]
 	Xyz_Euler_Zyz_vector(const double t[6]);										// utworzenie wektora na podstawie podanej tablicy
 	Xyz_Euler_Zyz_vector(double fx, double fy, double fz, double tx, double ty, double tz);
+
+public:
+	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };// end class Xyz_Euler_Zyz_vector
 
 // klasa reprezentujaca wektor sila-moment i wektora predkosci
 class Xyz_Rpy_vector : public Ft_v_vector
 {
 public:
-	// Construction and assignment from a uBLAS vector expression or copy assignment
-	template <class R> Xyz_Rpy_vector (const boost::numeric::ublas::vector_expression<R>& r) : Ft_v_vector(r)
+	template<typename OtherDerived>
+	Xyz_Rpy_vector(const Eigen::MatrixBase<OtherDerived>& other)
+		: Ft_v_vector(other)
 	{}
+
 	Xyz_Rpy_vector();													// konstruktor domniemany [0, 0, 0, 0, 0, 0]
 	Xyz_Rpy_vector(const double t[6]);										// utworzenie wektora na podstawie podanej tablicy
 	Xyz_Rpy_vector(double fx, double fy, double fz, double tx, double ty, double tz);

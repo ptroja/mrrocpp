@@ -25,7 +25,7 @@ namespace lib {
 // ******************************************************************************************
 
 Ft_v_vector::Ft_v_vector()
-	: Base_vector(boost::numeric::ublas::zero_vector<double>(6))
+	: BaseClass(BaseClass::Zero())
 {
 }
 
@@ -44,7 +44,7 @@ Ft_v_vector::Ft_v_vector(double fx, double fy, double fz, double tx, double ty, 
 // Ustawienie elementu wektora.
 void Ft_v_vector::set_values(const double t[6])
 {
-	for(unsigned int i = 0; i < this->size(); ++i) {
+	for(int i = 0; i < this->size(); ++i) {
 		this->operator[](i) = t[i];
 	}
 }
@@ -64,7 +64,7 @@ void Ft_v_vector::to_table(double tablica[6]) const
 {
 	// przepisanie parametrow wektora do szescioelementowej tablicy podanej jako argument
 
-	for (unsigned int i = 0; i < this->size(); ++i)
+	for (int i = 0; i < this->size(); ++i)
 		tablica[i] = this->operator[](i);
 }
 
@@ -74,7 +74,7 @@ double Ft_v_vector::max_element()
 {
 	double MAX = 0;
 
-	for (unsigned int i = 0; i < this->size(); ++i) {
+	for (int i = 0; i < this->size(); ++i) {
 		if (fabs(operator[](i)) > MAX) {
 			MAX = fabs(operator[](i));
 		}

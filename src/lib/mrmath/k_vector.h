@@ -13,31 +13,25 @@
 #ifndef __K_VECTOR_H
 #define __K_VECTOR_H
 
-#include <boost/numeric/ublas/vector.hpp>
-#include <boost/numeric/ublas/io.hpp>
+#include <Eigen/Core>
 
 namespace mrrocpp {
 namespace lib {
 
 // klasa reprezentujaca wektor w kartezjaskim ukaladzie odniesienia
-class K_vector : public boost::numeric::ublas::bounded_vector<double, 3>
+class K_vector : public Eigen::Matrix<double, 3, 1>
 {
-	typedef boost::numeric::ublas::bounded_vector<double, 3> Base_vector;
+	typedef Eigen::Matrix<double, 3, 1> BaseClass;
 
 public:
-	// Construction and assignment from a uBLAS vector expression or copy assignment
-	template <class R> K_vector (const boost::numeric::ublas::vector_expression<R>& r) : Base_vector(r)
+	// Copy constructor from any Eigen matrix type
+	template<typename OtherDerived>
+	K_vector(const Eigen::MatrixBase<OtherDerived>& other)
+		: BaseClass(other)
 	{}
 
-	template <class R> void operator=(const boost::numeric::ublas::vector_expression<R>& r)
-	{
-		Base_vector::operator=(r);
-	}
-
-	template <class R> void operator=(const Base_vector& r)
-	{
-		Base_vector::operator=(r);
-	}
+	// Reuse assignment operators from base class
+	using BaseClass::operator=;
 
 	K_vector ();												// konstruktor domniemany: [0, 0, 0]
 	K_vector (double t[3]);								// utworzenie wektora na podstawie tablicy

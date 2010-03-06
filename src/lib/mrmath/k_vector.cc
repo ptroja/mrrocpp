@@ -20,7 +20,7 @@ namespace lib {
 //                                               definicje skladowych klasy VECTOR
 // ******************************************************************************************
 K_vector::K_vector()
-	: Base_vector(boost::numeric::ublas::zero_vector<double>(3))
+	: BaseClass(BaseClass::Zero())
 {
 }
 
@@ -28,7 +28,7 @@ K_vector::K_vector(double t[3])
 {
 	// utworzenie wektora o wspolrzednych okreslonych przez podana jako argument tablice
 
-	for(unsigned int i = 0; i < this->size(); ++i) {
+	for(int i = 0; i < this->size(); ++i) {
 		this->operator[](i) = t[i];
 	}
 }// end K_vector::K_vector(double t[3])
@@ -62,7 +62,7 @@ void K_vector::to_table(double tablica[3]) const
 {
 	// przepisanie wespolrzednych wektora do tablicy trzyelementowej
 
-	for (unsigned int i = 0; i < this->size(); ++i)
+	for (int i = 0; i < this->size(); ++i)
 		tablica[i] = this->operator[](i);
 }
 
