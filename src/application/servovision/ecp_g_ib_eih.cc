@@ -105,14 +105,16 @@ bool ecp_g_ib_eih::next_step()
 	}
 
 	// speed constraints
-	double ds = boost::numeric::ublas::norm_2(u_translation);
+
+	double ds = u_translation.squaredNorm();
 	if (ds > (max_v * delta_t)) {
 		u_translation = u_translation * ((max_v * delta_t) / ds);
 		//log("Speed constrained (%g > %g).\n", ds, (max_v * delta_t));
 	}
 
 	// acceleration constraints
-	double d2s = boost::numeric::ublas::norm_2(u_translation - prev_u);
+	Eigen::Matrix<double, 3, 1> du = u_translation - prev_u;
+	double d2s = du.squaredNorm();
 	if (d2s > (max_a * delta_t * delta_t)) {
 		u_translation = prev_u + (u_translation - prev_u) * ((max_a * delta_t * delta_t) / d2s);
 		//log("Acceleration constrained (%g > %g).\n", d2s, (max_a * delta_t * delta_t));

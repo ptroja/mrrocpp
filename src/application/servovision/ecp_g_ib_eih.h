@@ -8,6 +8,8 @@
 #ifndef ECP_G_IB_EIH_H_
 #define ECP_G_IB_EIH_H_
 
+#include <Eigen/Core>
+
 #include "ecp_g_visual_servo.h"
 
 namespace mrrocpp {
@@ -61,7 +63,7 @@ private:
 
 	double max_v, max_a;
 
-	boost::numeric::ublas::vector<double> prev_u;
+	Eigen::Matrix<double, 3, 1> prev_u;
 	double delta_t;
 };
 
