@@ -51,9 +51,9 @@ public:
 
 
 
-    void iterate_macrostep(const lib::JointArray begining_joints,
-       		const lib::Homog_matrix begining_end_effector_frame,
-       		const lib::c_buffer &instruction, const lib::Xyz_Angle_Axis_vector base_pos_xyz_rot_xyz_vector);
+    void iterate_macrostep(const lib::JointArray & begining_joints,
+       		const lib::Homog_matrix & begining_end_effector_frame,
+       		const lib::c_buffer &instruction, const lib::Xyz_Angle_Axis_vector & base_pos_xyz_rot_xyz_vector);
 
 
     void create_threads ();
