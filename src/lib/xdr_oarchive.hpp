@@ -1,106 +1,182 @@
 #ifndef XDR_OARCHIVE_HPP
 #define XDR_OARCHIVE_HPP
 
-#include <boost/archive/detail/common_oarchive.hpp>
+#include <boost/serialization/serialization.hpp>
+#include <boost/serialization/is_bitwise_serializable.hpp>
+#include <boost/archive/detail/oserializer.hpp>
+#include <boost/archive/archive_exception.hpp>
+#include <boost/archive/detail/register_archive.hpp>
+#include <boost/config.hpp>
+#include <boost/utility/enable_if.hpp>
+#include <boost/type_traits/is_enum.hpp>
+#include <boost/type_traits/is_pointer.hpp>
+#include <boost/mpl/bool.hpp>
 
 #include <rpc/rpc.h>
+
+#define THROW_SAVE_EXCEPTION \
+	boost::serialization::throw_exception( \
+			boost::archive::archive_exception( \
+				boost::archive::archive_exception::stream_error))
+
+#define SAVE_A_TYPE(T, P) \
+    /** conversion for T */ \
+    xdr_oarchive &save_a_type(T const &t,boost::mpl::true_) { \
+        if(!P(&xdrs, (T *) &t)) THROW_SAVE_EXCEPTION; \
+        return *this; \
+    } \
+    \
+    /** conversion for T[] */ \
+    template<int N> \
+    xdr_oarchive &save_a_type(T const (&t)[N],boost::mpl::false_) { \
+        if(!xdr_vector(&xdrs, (char *)t, N, sizeof(T), (xdrproc_t) P)) THROW_SAVE_EXCEPTION; \
+        return *this; \
+    }
 
 /////////////////////////////////////////////////////////////////////////
 // class trivial_oarchive - read serialized objects from a input text stream
 template <std::size_t size=4096>
-class xdr_oarchive : 
-    public boost::archive::detail::common_oarchive<xdr_oarchive<size> >
+class xdr_oarchive
 {
-    typedef xdr_oarchive derived_t;
-    typedef boost::archive::detail::common_oarchive<xdr_oarchive<size> > base_t;
-
-    // permit serialization system privileged access to permit
-    // implementation of inline templates for maximum speed.
-    friend class boost::archive::save_access;
-
-    // member template for saveing primitive types.
-    // Override for any types/templates that special treatment
-    //template<class T>
-    //void save(T t);
-
-    void save(const bool t) {
-        if(!xdr_bool(&xdrs, (bool_t *) &t)) throw;
-    }
-
-    void save(const char t) {
-        if(!xdr_char(&xdrs, (char *)&t)) throw;
-    }
-
-    void save(const double t) {
-        if(!xdr_double(&xdrs, (double *)&t)) throw;
-    }
-
-    void save(const float t) {
-        if(!xdr_float(&xdrs, (float *)&t)) throw;
-    }
-
-    void save(const int t) {
-        if(!xdr_int(&xdrs, (int *)&t)) throw;
-    }
-
-    void save(const long t) {
-        if(!xdr_long(&xdrs, (long *)&t)) throw;
-    }
-
-    void save(const short t) {
-        if(!xdr_short(&xdrs, (short *)&t)) throw;
-    }
-
-    void save(const unsigned char t) {
-        if(!xdr_u_char(&xdrs, (unsigned char *)&t)) throw;
-    }
-
-    void save(const unsigned int t) {
-        if(!xdr_u_int(&xdrs, (unsigned int *)&t)) throw;
-    }
-
-    void save(const unsigned long t) {
-        if(!xdr_u_long(&xdrs, (unsigned long *)&t)) throw;
-    }
-
-    void save(const unsigned short t) {
-        if(!xdr_u_short(&xdrs, (unsigned short *)&t)) throw;
-    }
-
-    void save(const boost::archive::class_name_type & t){
-        // TODO
-    }
-
-    void save(const std::string & t) {
-    	char * p = (char *) t.c_str();
-    	if(!xdr_wrapstring(&xdrs, &p)) throw;
-    }
-
 private:
+
     char buffer[size];
     XDR xdrs;
 
 public:
-    //////////////////////////////////////////////////////////
-    // public interface used by programs that use the
-    // serialization library
-
-    // archives are expected to support this function
-    void save_binary(const void *address, std::size_t count) {
-    	if(!xdr_opaque(&xdrs, address, count)) throw;
+    //! conversion for bool, special since bool != bool_t
+    xdr_oarchive &save_a_type(bool const &t,boost::mpl::true_) {
+        if(!xdr_bool(&xdrs, (bool_t *) &t)) THROW_SAVE_EXCEPTION;
+        return *this;
     }
 
-    xdr_oarchive(unsigned int flags = 0) :
-        base_t(flags)
+    //! conversion for bool[], special since bool != bool_t
+    template<int N>
+    xdr_oarchive &save_a_type(bool const (&t)[N],boost::mpl::false_) {
+        if(!xdr_vector(&xdrs, (char *)t, N, sizeof(bool), (xdrproc_t) xdr_bool)) THROW_SAVE_EXCEPTION;
+        return *this;
+    }
+
+    //! conversion for an enum
+    template <class T>
+    typename boost::enable_if<boost::is_enum<T>, xdr_oarchive &>::type
+    save_a_type(T const &t,boost::mpl::true_) {
+        if(!xdr_enum(&xdrs, (enum_t *) &t)) THROW_SAVE_EXCEPTION;
+        return *this;
+    }
+
+    //! conversion for std::string
+    xdr_oarchive &save_a_type(std::string const &t,boost::mpl::true_) {
+    	char * p = (char *) t.c_str();
+    	if(!xdr_wrapstring(&xdrs, &p)) THROW_SAVE_EXCEPTION;
+        return *this;
+    }
+
+    SAVE_A_TYPE(char, xdr_char)
+    SAVE_A_TYPE(double, xdr_double)
+    SAVE_A_TYPE(float, xdr_float)
+    SAVE_A_TYPE(int, xdr_int)
+    SAVE_A_TYPE(long, xdr_long)
+    SAVE_A_TYPE(short, xdr_short)
+    SAVE_A_TYPE(unsigned char, xdr_u_char)
+    SAVE_A_TYPE(unsigned int, xdr_u_int)
+    SAVE_A_TYPE(unsigned long, xdr_u_long)
+    SAVE_A_TYPE(unsigned short, xdr_u_short)
+
+    /**
+     * We provide an optimized load for all fundamental types
+     * typedef serialization::is_bitwise_serializable<mpl::_1> use_array_optimization;
+     */
+    struct use_array_optimization {
+        template <class T>
+        #if defined(BOOST_NO_DEPENDENT_NESTED_DERIVATIONS)
+            struct apply {
+                typedef BOOST_DEDUCED_TYPENAME boost::serialization::is_bitwise_serializable<T>::type type;
+            };
+        #else
+            struct apply : public boost::serialization::is_bitwise_serializable<T> {};
+        #endif
+    };
+
+    /**
+     * Saving Archive Concept::is_loading
+     */
+    typedef boost::mpl::bool_<false> is_loading;
+
+    /**
+     * Saving Archive Concept::is_saving
+     */
+    typedef boost::mpl::bool_<true> is_saving;
+
+    /**
+     * Constructor
+     * @param flags
+     */
+    xdr_oarchive(unsigned int flags = 0)
     {
         xdrmem_create(&xdrs, buffer, sizeof(buffer), XDR_ENCODE);
     }
 
+    /**
+     * Destructor
+     * Destroy XDR data structure
+     */
     ~xdr_oarchive() {
         xdr_destroy(&xdrs);
     }
 
-    std::size_t get_size(void) const {
+    /**
+     * Saving Archive Concept::get_library_version()
+     * @return This library's version.
+     */
+    unsigned int get_library_version() { return 0; }
+
+    /**
+     * Saving Archive Concept::register_type<T>() and ::register_type(u)
+     * @param The data type to register in this archive.
+     * @return
+     */
+    template<class T>
+    const boost::archive::detail::basic_pointer_oserializer *
+    register_type(T * = NULL) {return NULL;}
+
+    /**
+     * Saving Archive Concept::operator<<
+     * @param t The type to save.
+     * @return *this
+     */
+    template<class T>
+    xdr_oarchive &operator<<(T const &t){
+		return save_a_type(t,boost::mpl::bool_< boost::serialization::implementation_level<T>::value == boost::serialization::primitive_type>() );
+    }
+
+    /**
+     * Saving Archive Concept::operator&
+     * @param t The type to save.
+     * @return *this
+     */
+    template<class T>
+    xdr_oarchive &operator&(T const &t){
+            return this->operator<<(t);
+    }
+
+    // archives are expected to support this function
+    void save_binary(const void *address, std::size_t count) {
+    	if(!xdr_opaque(&xdrs, address, count)) THROW_SAVE_EXCEPTION;
+    }
+
+    /**
+     * Specialisation for writing out composite types (objects).
+     * @param t a serializable class or struct.
+     * @return *this
+     */
+    template<class T>
+    xdr_oarchive &save_a_type(T const &t,boost::mpl::false_){
+    	boost::archive::detail::save_non_pointer_type<xdr_oarchive<>,T>::save_only::invoke(*this,t);
+    	return *this;
+    }
+
+    std::size_t getArchiveSize(void) const {
     	return ((std::size_t) xdr_getpos(&xdrs));
     }
 
