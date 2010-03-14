@@ -153,8 +153,22 @@ public:
      * @return *this
      */
     template<class T>
-    xdr_oarchive &save_a_type(T const &t,boost::mpl::false_){
+    typename boost::disable_if<boost::is_array<T>, xdr_oarchive &>::type
+    save_a_type(T const &t,boost::mpl::false_){
     	boost::archive::detail::save_non_pointer_type<xdr_oarchive<>,T>::save_only::invoke(*this,t);
+    	return *this;
+    }
+
+    /**
+     * Specialisation for writing out composite types (C-style arrays).
+     * @param t a serializable array
+     * @return *this
+     */
+    template<class T, int N>
+    xdr_oarchive &save_a_type(T const (&t)[N],boost::mpl::false_){
+    	for(int i = 0; i < N; ++i) {
+    		*this << t[i];
+    	}
     	return *this;
     }
 

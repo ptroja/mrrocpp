@@ -9,6 +9,7 @@
 #include <boost/config.hpp>
 #include <boost/utility/enable_if.hpp>
 #include <boost/type_traits/is_enum.hpp>
+#include <boost/type_traits/is_array.hpp>
 #include <boost/mpl/bool.hpp>
 
 #include <cstring>
@@ -150,14 +151,28 @@ public:
     }
 
     /**
-     * Specialisation for writing out composite types (objects).
+     * Specialisation for reading in composite types (objects).
      * @param t a serializable class or struct.
      * @return *this
      */
     template<class T>
-    xdr_iarchive &load_a_type(T &t,boost::mpl::false_){
+    typename boost::disable_if<boost::is_array<T>, xdr_iarchive &>::type
+    load_a_type(T &t,boost::mpl::false_){
     	boost::archive::detail::load_non_pointer_type<xdr_iarchive<>,T>::load_only::invoke(*this,t);
         return *this;
+    }
+
+    /**
+     * Specialisation for reading in composite types (C-style arrays).
+     * @param t a serializable array
+     * @return *this
+     */
+    template<class T, int N>
+    xdr_iarchive &load_a_type(T (&t)[N],boost::mpl::false_){
+    	for(int i = 0; i < N; ++i) {
+    		*this >> t[i];
+    	}
+    	return *this;
     }
 
     /**
