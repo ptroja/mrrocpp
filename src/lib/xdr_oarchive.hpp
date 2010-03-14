@@ -9,6 +9,7 @@
 #include <boost/config.hpp>
 #include <boost/utility/enable_if.hpp>
 #include <boost/type_traits/is_enum.hpp>
+#include <boost/type_traits/is_array.hpp>
 #include <boost/mpl/bool.hpp>
 
 #include <rpc/rpc.h>
