@@ -9,7 +9,6 @@
 #include <boost/config.hpp>
 #include <boost/utility/enable_if.hpp>
 #include <boost/type_traits/is_enum.hpp>
-#include <boost/type_traits/is_pointer.hpp>
 #include <boost/mpl/bool.hpp>
 
 #include <rpc/rpc.h>
@@ -33,8 +32,6 @@
         return *this; \
     }
 
-/////////////////////////////////////////////////////////////////////////
-// class trivial_oarchive - read serialized objects from a input text stream
 template <std::size_t size=4096>
 class xdr_oarchive
 {
@@ -82,21 +79,6 @@ public:
     SAVE_A_TYPE(unsigned int, xdr_u_int)
     SAVE_A_TYPE(unsigned long, xdr_u_long)
     SAVE_A_TYPE(unsigned short, xdr_u_short)
-
-    /**
-     * We provide an optimized load for all fundamental types
-     * typedef serialization::is_bitwise_serializable<mpl::_1> use_array_optimization;
-     */
-    struct use_array_optimization {
-        template <class T>
-        #if defined(BOOST_NO_DEPENDENT_NESTED_DERIVATIONS)
-            struct apply {
-                typedef BOOST_DEDUCED_TYPENAME boost::serialization::is_bitwise_serializable<T>::type type;
-            };
-        #else
-            struct apply : public boost::serialization::is_bitwise_serializable<T> {};
-        #endif
-    };
 
     /**
      * Saving Archive Concept::is_loading
@@ -157,7 +139,7 @@ public:
      */
     template<class T>
     xdr_oarchive &operator&(T const &t){
-            return this->operator<<(t);
+		return this->operator<<(t);
     }
 
     // archives are expected to support this function
@@ -176,10 +158,18 @@ public:
     	return *this;
     }
 
+    /**
+     * Get the size of XDR representation
+     * @return size of XDR representation
+     */
     std::size_t getArchiveSize(void) const {
     	return ((std::size_t) xdr_getpos(&xdrs));
     }
 
+    /**
+     * Get the XDR buffer
+     * @return pointer to XDR buffer
+     */
     const char * get_buffer(void) const {
     	return buffer;
     }
