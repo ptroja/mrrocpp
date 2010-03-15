@@ -116,15 +116,15 @@ double ppm(
 	std::cout << "maxTime: " << maxTime << std::endl;
 	std::cout << "(maxTime.col(2)-maxTime.col(1): " << (maxTime.col(2)-maxTime.col(1)) << std::endl;
 
+	// total time
+	double tt = maxTime.col(2).maxCoeff();
 	// acceleration iterval
 	const double ta = maxTime.col(0).maxCoeff();
 	// deceleration interval
-	const double td = (maxTime.col(2)-maxTime.col(1)).maxCoeff();
-	// total time
-	double tt = maxTime.col(2).maxCoeff();
+	const double td = tt - (maxTime.col(2)-maxTime.col(1)).maxCoeff();
 
-	if (ta + td > tt) {
-		tt = ta + td;
+	if (ta > td) {
+		tt += (ta - td);
 	}
 
 	std::cout
@@ -136,7 +136,7 @@ double ppm(
 	for(unsigned int l = 0; l < N; ++l) {
 		const double delta = Delta(l,0);
 
-		Anew(l,0) = 2*delta/ta*(tt+td-ta);
+		Anew(l,0) = 2*delta/(ta*(tt+td-ta));
 		Dnew(l,0) = -2*delta/((tt+td-ta)*(tt-td));
 		Vnew(l,0) = Anew(l,0)*ta;
 
