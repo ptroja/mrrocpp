@@ -405,12 +405,12 @@ bool hardware_interface::is_hardware_error ( void)
 
 int hardware_interface::hi_int_wait (interrupt_mode_t _interrupt_mode, int lag)
 {
-//	int sig;
-//	int s = sigwait(&mask, &sig);
-//	if (s != 0) {
-//		perror("sigwait()");
-//		return -1;
-//	}
+	int sig;
+	int s = sigwait(&mask, &sig);
+	if (s != 0) {
+		perror("sigwait()");
+		return -1;
+	}
 
 	if(master.test_mode == 0) {
 #ifdef __QNXNTO__
