@@ -56,7 +56,8 @@ void  hardware_interface::init()
 	if(master.test_mode) {
 		// domyslnie robot jest zsynchronizowany
 		irq_data.md.is_synchronised = true;
-
+	}
+	{
 		// Initliaze mask to waiting for a signal
 	    //fprintf(stderr, "Blocking signal %d\n", SIGRTMIN);
 	    if (sigemptyset (&mask) == -1) {
@@ -87,7 +88,9 @@ void  hardware_interface::init()
 	    if (timer_settime (timerid, 0, &its, NULL) == -1) {
 	    	perror("timer_settime()");
 	    }
-	} else {
+	}
+
+	if(!master.test_mode) {
 		// domyslnie robot nie jest zsynchronizowany
 		irq_data.md.is_synchronised = false;
 
@@ -125,6 +128,23 @@ void  hardware_interface::init()
 		in16((SERVO_REPLY_STATUS_ADR + hi_isa_card_offset)); // Odczyt stanu wylacznikow
 		in16((SERVO_REPLY_INT_ADR + hi_isa_card_offset));
 
+		delay(20);
+
+		{
+			// inicjacja wystawiania przerwan
+			if(master.test_mode==0)
+			{
+				// Ustawienie czestotliwosci przerwan
+				fprintf(stderr, "2INT_FREQ_DIVIDER = %d\n", hi_intr_freq_divider);
+				uint16_t int_freq = SET_INT_FREQUENCY | hi_intr_freq_divider;
+				out8((ADR_OF_SERVO_PTR + hi_isa_card_offset), hi_intr_generator_servo_ptr);
+				out16((SERVO_COMMAND1_ADR + hi_isa_card_offset), int_freq);
+				delay(10);
+				out16((SERVO_COMMAND1_ADR + hi_isa_card_offset), START_CLOCK_INTERRUPTS);
+			}
+		}
+
+
 #ifdef __QNXNTO__
 		int irq_no = hi_irq_real;   // Numer przerwania sprzetowego od karty ISA
 		if ((int_id = InterruptAttach (irq_no, int_handler, (void *) &irq_data, sizeof(irq_data), 0)) == -1)
@@ -134,20 +154,12 @@ void  hardware_interface::init()
 #endif
 	}
 
+	fprintf(stderr, "1INT_FREQ_DIVIDER = %d\n", hi_intr_freq_divider);
+
 	// oczekiwanie na przerwanie
-	if (hi_int_wait(INT_EMPTY, 0)==-1) // jesli nie przyjdzie na czas
-	{
-		// inicjacja wystawiania przerwan
-		if(master.test_mode==0)
-		{
-			// Ustawienie czestotliwosci przerwan
-			uint16_t int_freq = SET_INT_FREQUENCY | hi_intr_freq_divider;
-			out8((ADR_OF_SERVO_PTR + hi_isa_card_offset), hi_intr_generator_servo_ptr);
-			out16((SERVO_COMMAND1_ADR + hi_isa_card_offset), int_freq);
-			delay(10);
-			out16((SERVO_COMMAND1_ADR + hi_isa_card_offset), START_CLOCK_INTERRUPTS);
-		}
-	}
+	hi_int_wait(INT_EMPTY, 0);
+//	if (hi_int_wait(INT_EMPTY, 0)==-1) // jesli nie przyjdzie na czas
+
 
 	master.controller_state_edp_buf.is_synchronised = irq_data.md.is_synchronised;
 
@@ -393,6 +405,13 @@ bool hardware_interface::is_hardware_error ( void)
 
 int hardware_interface::hi_int_wait (interrupt_mode_t _interrupt_mode, int lag)
 {
+//	int sig;
+//	int s = sigwait(&mask, &sig);
+//	if (s != 0) {
+//		perror("sigwait()");
+//		return -1;
+//	}
+
 	if(master.test_mode == 0) {
 #ifdef __QNXNTO__
 	const uint64_t int_timeout = hi_intr_timeout_high;
@@ -433,12 +452,6 @@ int hardware_interface::hi_int_wait (interrupt_mode_t _interrupt_mode, int lag)
 	return -1;
 #endif
 	} else {
-		int sig;
-		int s = sigwait(&mask, &sig);
-		if (s != 0) {
-			perror("sigwait()");
-			return -1;
-		}
 		return 0;
 	}
 }
