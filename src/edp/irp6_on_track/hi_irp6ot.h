@@ -10,6 +10,20 @@
 
 #include "edp/common/hi_rydz.h"
 
+#if defined(__QNXNTO__)
+#include <process.h>
+#include <sys/neutrino.h>
+#include <sys/sched.h>
+#include <hw/inout.h>
+#include <sys/iofunc.h>
+#include <sys/dispatch.h>
+#include <sys/mman.h>
+#elif defined(linux)
+#include <sys/io.h>
+#elif defined(__FreeBSD__)
+#include <machine/cpufunc.h>
+#endif
+
 namespace mrrocpp {
 namespace edp {
 namespace irp6ot {
@@ -56,6 +70,8 @@ public:
 	uint64_t read_write_hardware(void); // Obsluga sprzetu
 
 	void finish_synchro(int drive_number);
+
+	void init_inside();
 
 }; // koniec: class hardware_interface
 

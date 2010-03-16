@@ -47,7 +47,7 @@ public:
     		unsigned short int _hi_intr_freq_divider, unsigned int _hi_intr_timeout_high,
     		unsigned int _hi_first_servo_ptr, unsigned int _hi_intr_generator_servo_ptr,
     		unsigned int _hi_isa_card_offset, int* _max_current);    // Konstruktor
-
+    void init_inside();
 
 }; // koniec: class hardware_interface
 

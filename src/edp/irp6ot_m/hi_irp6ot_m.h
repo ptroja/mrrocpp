@@ -50,6 +50,7 @@ public:
 
 	uint64_t read_write_hardware(void); // Obsluga sprzetu
 
+	void init_inside();
 	void finish_synchro(int drive_number);
 
 }; // koniec: class hardware_interface
