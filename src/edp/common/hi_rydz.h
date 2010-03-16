@@ -116,9 +116,6 @@ public:
 
     void init();
 
-    virtual void init_inside();
-    void init_inside_irp6ot();
-
     void insert_set_value ( int drive_number, double set_value);
 
     int get_current ( int drive_number ) const;
@@ -149,7 +146,12 @@ private:
 
     bool first; // true jesli pierwszy krok
 
-
+    const int hi_irq_real;
+    const unsigned short int hi_intr_freq_divider;
+    const unsigned int hi_intr_timeout_high;
+    const unsigned int hi_first_servo_ptr;
+    const unsigned int hi_isa_card_offset;
+    const unsigned int hi_intr_generator_servo_ptr;
 
 	//! periodic timer
 	timer_t timerid;
@@ -159,13 +161,6 @@ private:
 
 protected:
     irq_data_t irq_data;
-    const int hi_irq_real;
-    const unsigned short int hi_intr_freq_divider;
-    const unsigned int hi_intr_timeout_high;
-    const unsigned int hi_first_servo_ptr;
-    const unsigned int hi_isa_card_offset;
-    const unsigned int hi_intr_generator_servo_ptr;
-
 
     int meassured_current[MAX_SERVOS_NR]; // by Y - zmierzona wartosc pradu
     long int current_absolute_position[MAX_SERVOS_NR];  // aktualne polozenia osi

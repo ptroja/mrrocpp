@@ -10,27 +10,13 @@
 
 #include "edp/common/hi_rydz.h"
 
-#if defined(__QNXNTO__)
-#include <process.h>
-#include <sys/neutrino.h>
-#include <sys/sched.h>
-#include <hw/inout.h>
-#include <sys/iofunc.h>
-#include <sys/dispatch.h>
-#include <sys/mman.h>
-#elif defined(linux)
-#include <sys/io.h>
-#elif defined(__FreeBSD__)
-#include <machine/cpufunc.h>
-#endif
-
 namespace mrrocpp {
 namespace edp {
 namespace irp6ot {
 
 // Struktury danych wykorzystywane w hardware_interface
 const int IRQ_REAL = 10; // Numer przerwania sprzetowego
-const unsigned short int INT_FREC_DIVIDER = 2; // Dzielnik czestotliwosci przerwan
+const unsigned short int INT_FREC_DIVIDER = 4; // Dzielnik czestotliwosci przerwan
 
 #define HI_RYDZ_INTR_TIMEOUT_HIGH 10000000 // by Y - timeout przerwania z szafy badz zegara
 
@@ -70,8 +56,6 @@ public:
 	uint64_t read_write_hardware(void); // Obsluga sprzetu
 
 	void finish_synchro(int drive_number);
-
-	void init_inside();
 
 }; // koniec: class hardware_interface
 

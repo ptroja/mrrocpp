@@ -16,7 +16,7 @@ namespace irp6ot {
 
 // Struktury danych wykorzystywane w hardware_interface
 const int IRQ_REAL = 10; // Numer przerwania sprzetowego
-const unsigned short int INT_FREC_DIVIDER = 2; // Dzielnik czestotliwosci przerwan
+const unsigned short int INT_FREC_DIVIDER = 4; // Dzielnik czestotliwosci przerwan
 
 #define HI_RYDZ_INTR_TIMEOUT_HIGH 10000000 // by Y - timeout przerwania z szafy badz zegara
 
@@ -47,7 +47,7 @@ public:
     		unsigned short int _hi_intr_freq_divider, unsigned int _hi_intr_timeout_high,
     		unsigned int _hi_first_servo_ptr, unsigned int _hi_intr_generator_servo_ptr,
     		unsigned int _hi_isa_card_offset, int* _max_current);    // Konstruktor
-    void init_inside();
+
 
 }; // koniec: class hardware_interface
 

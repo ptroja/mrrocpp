@@ -19,7 +19,7 @@ namespace irp6m {
 
 // Struktury danych wykorzystywane w hardware_interface
 const int IRQ_REAL = 10; // Numer przerwania sprzetowego
-const unsigned short int INT_FREC_DIVIDER = 4; // mnoznik czestotliwosci przerwan (odpowiada 2ms)
+const unsigned short int INT_FREC_DIVIDER = 8; // mnoznik czestotliwosci przerwan (odpowiada 2ms)
 
 #define HI_RYDZ_INTR_TIMEOUT_HIGH 10000000 // by Y - timeout przerwania z szafy badz zegara
 

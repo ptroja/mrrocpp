@@ -424,7 +424,7 @@ void ATI6284_force::wait_for_event()
 
 		do {
 			//!< odczekaj
-			delay(2);
+			InterruptWait(NULL, NULL);
 
 			local_timer.timer_stop();
 			local_timer.get_time(&sec);
