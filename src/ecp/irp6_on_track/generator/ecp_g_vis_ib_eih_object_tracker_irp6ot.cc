@@ -47,9 +47,9 @@ bool ecp_vis_ib_eih_object_tracker_irp6ot::first_step() {
 	}
 
 	//if (read_parametres() == false) {//czytanie predkosci maksymalnych i przyspieszen z pliku konfiguracyjnego zadania, jesli sie nie powiodlo to przypisz domyslne
-		v_max[1] = v_max[0] = 0.05;
+		v_max[1] = v_max[0] = 0.2;
 		a_max[1] = a_max[0] = 0.06;
-		v_max[2] = 0.05;
+		v_max[2] = 0.08;
 		a_max[2] = 0.06;
 		v_stop[0] = v_stop[1] = v_stop[2] = 0.0015;
 		v_min[0] = 	v_min[1] = v_min[2] = 0.0015;
