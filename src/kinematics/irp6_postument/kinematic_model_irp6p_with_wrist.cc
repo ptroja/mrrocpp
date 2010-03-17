@@ -262,7 +262,7 @@ void model_with_wrist::set_kinematic_parameters(void)
 	upper_limit_joint[0] = 170.0 * M_PI / 180.0; // [rad]
 	upper_limit_joint[1] = -50.0 * M_PI / 180.0;
 	upper_limit_joint[2] = 40.0 * M_PI / 180.0;
-	upper_limit_joint[3] = 90.1 * M_PI / 180.0;
+	upper_limit_joint[3] = 92 * M_PI / 180.0;
 	upper_limit_joint[4] = 10.0; //M_PI
 	upper_limit_joint[5] = 2.93;
 	upper_limit_joint[6] = 0.091;

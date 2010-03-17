@@ -71,9 +71,9 @@ bool haptic::first_step() {
 		irp6ot->mp_command.instruction.arm.pf_def.force_xyz_torque_xyz[i + 3]
 				= 0;
 		irp6ot->mp_command.instruction.arm.pf_def.reciprocal_damping[i]
-				= FORCE_RECIPROCAL_DAMPING;
+				= FORCE_RECIPROCAL_DAMPING/2;
 		irp6ot->mp_command.instruction.arm.pf_def.reciprocal_damping[i + 3]
-				= TORQUE_RECIPROCAL_DAMPING;
+				= TORQUE_RECIPROCAL_DAMPING/2;
 		//		irp6ot->mp_command.instruction.arm.pf_def.reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING / 40;
 		//		irp6ot->mp_command.instruction.arm.pf_def.reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING / 40;
 		irp6ot->mp_command.instruction.arm.pf_def.behaviour[i] = lib::CONTACT;
@@ -122,9 +122,9 @@ bool haptic::first_step() {
 		irp6p->mp_command.instruction.arm.pf_def.force_xyz_torque_xyz[i + 3]
 				= 0;
 		irp6p->mp_command.instruction.arm.pf_def.reciprocal_damping[i]
-				= FORCE_RECIPROCAL_DAMPING;
+				= FORCE_RECIPROCAL_DAMPING/2;
 		irp6p->mp_command.instruction.arm.pf_def.reciprocal_damping[i + 3]
-				= TORQUE_RECIPROCAL_DAMPING;
+				= TORQUE_RECIPROCAL_DAMPING/2;
 		//		irp6p->mp_command.instruction.arm.pf_def.reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING/40;
 		//		irp6p->mp_command.instruction.arm.pf_def.reciprocal_damping[i+3] = FORCE_RECIPROCAL_DAMPING/40;
 		irp6p->mp_command.instruction.arm.pf_def.behaviour[i]
@@ -180,11 +180,6 @@ bool haptic::next_step() {
 
 	;
 
-	float time_interval = (irp6ot->pulse_receive_time.tv_sec
-			+ irp6ot->pulse_receive_time.tv_nsec / 1e9)
-			- (irp6p->pulse_receive_time.tv_sec
-					+ irp6p->pulse_receive_time.tv_nsec / 1e9);
-
 	if (node_counter == 3) {
 
 		irp6ot->mp_command.instruction.instruction_type = lib::SET_GET;
@@ -226,13 +221,16 @@ bool haptic::next_step() {
 				= -irp6p_ECPtoMP_force_xyz_torque_xyz[i];
 	}
 
-	if ((node_counter % 10) == 0) {
-		std::cout << "irp6p_ECPtoMP_force_xyz_torque_xyz\n"
-				<< irp6p_ECPtoMP_force_xyz_torque_xyz << "interval:"
-				<< time_interval << std::endl;
-		//	std::cout << "irp6p_goal_xyz_angle_axis_increment_in_end_effector\n" << irp6p_goal_xyz_angle_axis_increment_in_end_effector << std::endl;
 
-	}
+
+	// modyfikacja dlugosci makrokroku postumenta na podstawie analizy wyprzedzenia pulse z ECP postumenta wzgledem pulsu z ECP traka
+	// sam proces korekty jest konieczny ze wzgledu na to ze przerwanie w EDP traka dochodzi co okolo 2,08 ms zamiast 2ms w postumecie i calosc sie rozjezdza.
+
+	float time_interval = (irp6ot->pulse_receive_time.tv_sec
+			+ irp6ot->pulse_receive_time.tv_nsec / 1e9)
+			- (irp6p->pulse_receive_time.tv_sec
+					+ irp6p->pulse_receive_time.tv_nsec / 1e9);
+
 
 	if (time_interval > 0.002) {
 		irp6p->mp_command.instruction.motion_steps = step_no+1;
@@ -240,6 +238,14 @@ bool haptic::next_step() {
 	} else {
 		irp6p->mp_command.instruction.motion_steps = step_no;
 		irp6p->mp_command.instruction.value_in_step_no = step_no - 4;
+	}
+
+	if ((node_counter % 10) == 0) {
+		std::cout << "irp6p_ECPtoMP_force_xyz_torque_xyz\n"
+				<< irp6p_ECPtoMP_force_xyz_torque_xyz << "interval:"
+				<< time_interval << std::endl;
+		//	std::cout << "irp6p_goal_xyz_angle_axis_increment_in_end_effector\n" << irp6p_goal_xyz_angle_axis_increment_in_end_effector << std::endl;
+
 	}
 
 	if ((irp6ot->ecp_reply_package.reply == lib::TASK_TERMINATED)
