@@ -737,7 +737,7 @@ double smooth::generate_next_coords(int node_counter, int interpolation_node_no,
 		if(v_p <= v_r) { //przyspieszanie w pierwszym etapie
 			//printf("start pos: %f\t node counter: %d\n", start_position, node_counter);
 			//printf(" przysp1 %d ", node_counter);
-			if (type == lib::ABSOLUTE) {
+			if (type == lib::ABSOLUTE) {//tryb absolute
 
 				if (przysp > (node_counter-1) && przysp < (node_counter)) {//przyspieszanie wchodzi na jednostajny
 					if (przysp + jedn < node_counter) {//specjalny przypadek gdy faza jednostajnego zamyka sie w jednym makrokroku
@@ -761,9 +761,28 @@ double smooth::generate_next_coords(int node_counter, int interpolation_node_no,
 					next_position = start_position + k*(node_counter*v_p*tk + node_counter*node_counter*a_r*tk*tk/2);
 				}
 
-			} else if (type == lib::RELATIVE) {
+			} else if (type == lib::RELATIVE) {//tryb relatywny
+				if (przysp > (node_counter-1) && przysp < (node_counter)) {//przyspieszanie wchodzi na jednostajny
+					if (przysp + jedn < node_counter) {//specjalny przypadek gdy faza jednostajnego zamyka sie w jednym makrokroku
 
-				next_position = k * (v_p * tk + (node_counter - 1) * a_r * tk * tk + (a_r * tk * tk)/2);
+						next_position = k * ((1 - node_counter + przysp)*v_r*tk - (1 - node_counter + przysp)*(1 - node_counter + przysp)*a_r*tk*tk/2 + jedn * tk * v_r);
+
+						if (v_r > v_k) {//hamowanie w trzecim etapie
+							//next_position += k * (v_p*tk + a_r*tk*tk/2) * (przysp - (node_counter-1)) + k * tk * v_r * (node_counter - przysp - (node_counter - przysp - jedn)) + k * (v_r*tk - a_r*tk*tk/2) * (node_counter - przysp - jedn);
+							next_position += k* (v_r * (node_counter - przysp - jedn)*tk - tk*tk*(node_counter - jedn - przysp) * (node_counter - jedn - przysp) * a_r / 2);
+						} else {//przyspiesznie w trzecim etapie
+							//next_position += k * (v_p*tk + a_r*tk*tk/2) * (przysp - (node_counter-1)) + k * tk * v_r * (node_counter - przysp - (node_counter - przysp - jedn)) + k * (v_r*tk + a_r*tk*tk/2) * (node_counter - przysp - jedn);
+							next_position += k* (v_r * (node_counter - przysp - jedn)*tk + tk*tk*(node_counter - jedn - przysp) * (node_counter - jedn - przysp) * a_r / 2);
+						}
+					} else {//przyspieszenie + poczatek jednostajnego
+						printf("przyspieszanie wchodzi na jednostajny, macrostep liczony od 1: %d\n", node_counter);
+						//next_position = start_position + k * ((node_counter-1)*v_p*tk + (node_counter-1)*(node_counter-1)*a_r*tk*tk/2);
+						//next_position += k * (v_p*tk + a_r*tk*tk/2 + (v_p+a_r*(node_counter-1) *tk)) * (przysp - (node_counter-1)) + k * tk * v_r * (node_counter - przysp);
+						next_position = k * (v_r * (1 - node_counter + przysp) * tk - (1 - node_counter + przysp) * (1 - node_counter + przysp) * tk * tk * a_r / 2 + v_r * (node_counter - przysp) * tk);
+					}
+				} else {//normalne przyspieszanie
+					next_position = k * (v_p * tk + (node_counter - 1) * a_r * tk * tk + (a_r * tk * tk)/2);
+				}
 			}
 
 		} else { //hamowanie w pierwszym etapie
@@ -792,7 +811,26 @@ double smooth::generate_next_coords(int node_counter, int interpolation_node_no,
 				}
 
 			} else if (type == lib::RELATIVE) {
-				next_position = k * (v_p * tk - ((node_counter - 1) * a_r * tk * tk + (a_r * tk * tk)/2));
+				if (przysp > (node_counter-1) && przysp < (node_counter)) {//hamowanie wchodzi na jednostajny
+					if (przysp + jedn < node_counter) {//specjalny przypadek gdy faza jednostajnego zamyka sie w jednym makrokroku
+							next_position = k * ((1 - node_counter + przysp)*v_r*tk + (1 - node_counter + przysp)*(1 - node_counter + przysp)*a_r*tk*tk/2 + jedn * tk * v_r);
+
+							if (v_r > v_k) {//hamowanie w trzecim etapie
+								//next_position += k * (v_p*tk + a_r*tk*tk/2) * (przysp - (node_counter-1)) + k * tk * v_r * (node_counter - przysp - (node_counter - przysp - jedn)) + k * (v_r*tk - a_r*tk*tk/2) * (node_counter - przysp - jedn);
+								next_position += k* (v_r * (node_counter - przysp - jedn)*tk - tk*tk*(node_counter - jedn - przysp) * (node_counter - jedn - przysp) * a_r / 2);
+							} else {//przyspieszanie w trzecim etapie
+								//next_position += k * (v_p*tk + a_r*tk*tk/2) * (przysp - (node_counter-1)) + k * tk * v_r * (node_counter - przysp - (node_counter - przysp - jedn)) + k * (v_r*tk + a_r*tk*tk/2) * (node_counter - przysp - jedn);
+								next_position += k* (v_r * (node_counter - przysp - jedn)*tk + tk*tk*(node_counter - jedn - przysp) * (node_counter - jedn - przysp) * a_r / 2);
+							}
+					} else {//hamowanie + poczatek jednostajnego
+						printf("przyspieszanie wchodzi na jednostajny, macrostep liczony od 1: %d\n", node_counter);
+						//next_position = start_position + k * ((node_counter-1)*v_p*tk + (node_counter-1)*(node_counter-1)*a_r*tk*tk/2);
+						//next_position += k * (v_p*tk + a_r*tk*tk/2 + (v_p+a_r*(node_counter-1) *tk)) * (przysp - (node_counter-1)) + k * tk * v_r * (node_counter - przysp);
+						next_position = k * (v_r * (1 - node_counter + przysp) * tk + (1 - node_counter + przysp) * (1 - node_counter + przysp) * tk * tk * a_r / 2 + v_r * (node_counter - przysp) * tk);
+					}
+				} else {//normalne hamowanie
+					next_position = k * (v_p * tk - ((node_counter - 1) * a_r * tk * tk + (a_r * tk * tk)/2));
+				}
 			}
 		}
 		//printf("%f\t", next_position);
@@ -814,7 +852,19 @@ double smooth::generate_next_coords(int node_counter, int interpolation_node_no,
 			}
 			//printf("next_pos: %f\n", next_position);
 		} else if (type == lib::RELATIVE) {
-			next_position = k * v_r * tk;
+			if ((przysp+jedn) > (node_counter-1) && (przysp+jedn) < (node_counter)) {//jednostajny wchodzi w faze trzecia
+
+				next_position = v_r * tk * (1 - node_counter + przysp + jedn);
+
+				if (v_r > v_k) {//hamowanie w 3 etapie
+					//printf("wchodzi macrostep: %d\n", node_counter);
+					next_position += k * (v_r * (node_counter - jedn - przysp) * tk - (node_counter - jedn - przysp) * (node_counter - jedn - przysp) * tk * tk * a_r / 2);
+				} else {//przyspieszanie w 3 etapie
+					next_position += k * (v_r * (node_counter - jedn - przysp) * tk + (node_counter - jedn - przysp) * (node_counter - jedn - przysp) * tk * tk * a_r / 2);
+				}
+			} else { //normalny jednostajny
+				next_position = k * v_r * tk;
+			}
 		//printf("%f\t", next_position);
 		}
 
@@ -830,7 +880,7 @@ double smooth::generate_next_coords(int node_counter, int interpolation_node_no,
 										 ((node_counter - jedn - przysp) * tk) * ((node_counter - jedn - przysp) * tk) * a_r / 2);
 				//printf("next_pos hamowanie: %f\n", next_position);
 			} else if (type == lib::RELATIVE) {
-				next_position = k * (v_k * tk + ((interpolation_node_no - node_counter) * a_r * tk * tk + (a_r * tk * tk)/2));
+				next_position = k * ((v_k + (interpolation_node_no - node_counter) * a_r * tk) * tk + (a_r * tk * tk)/2);
 			}
 			//printf("next pos: %f\t node: %d\t", next_position, node_counter);
 		} else { //przyspieszanie w trzecim etapie
@@ -841,7 +891,7 @@ double smooth::generate_next_coords(int node_counter, int interpolation_node_no,
 										 ((node_counter - jedn - przysp) * tk) * v_r +
 										 a_r * ((node_counter - jedn - przysp) * tk) * ((node_counter - jedn - przysp) * tk) / 2);
 			} else if (type == lib::RELATIVE) {
-				next_position = k* (v_k * tk - ((interpolation_node_no - node_counter) * a_r * tk * tk + (a_r * tk * tk)/2));
+				next_position = k* ((v_k - (interpolation_node_no - node_counter) * a_r * tk) * tk - (a_r * tk * tk)/2);
 			}
 		}
 		//printf("%f\t", next_position);
