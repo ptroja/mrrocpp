@@ -666,6 +666,10 @@ bool task::check_and_optional_wait_for_new_pulse (WAIT_FOR_NEW_PULSE_MODE proces
 					if (robot_node.second->opened && robot_node.second->scoid == msg.scoid) {
 						robot_node.second->new_pulse = true;
 						robot_node.second->pulse_code = msg.code;
+								if (clock_gettime(CLOCK_REALTIME, &(robot_node.second->pulse_receive_time)) == -1) {
+										perror("clock_gettime()");
+									}
+
 						if ((process_type == NEW_ECP_PULSE) || (process_type == NEW_UI_OR_ECP_PULSE)) {
 							if (!(robot_node.second->new_pulse_checked)) {
 								desired_pulse_found = true;

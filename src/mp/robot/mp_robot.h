@@ -4,6 +4,8 @@
 #include "mp/task/mp_task.h"
 #include "ecp_mp/ecp_mp_robot.h"
 
+#include <time.h>
+
 namespace mrrocpp {
 namespace mp {
 namespace robot {
@@ -34,6 +36,8 @@ protected:
 public:
 	lib::MP_COMMAND_PACKAGE mp_command; // Bufor z rozkazem dla ECP
 	lib::ECP_REPLY_PACKAGE ecp_reply_package; // Bufor z odpowiedzia z ECP
+
+	struct timespec pulse_receive_time;
 
 	bool communicate; // okresla czy robot ma byc obslugiwany w Move
 
