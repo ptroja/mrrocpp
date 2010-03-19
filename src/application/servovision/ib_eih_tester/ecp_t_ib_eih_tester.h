@@ -39,10 +39,10 @@ public:
 	virtual ~ecp_t_ib_eih_tester();
 	void main_task_algorithm(void);
 protected:
-	ecp_mp::sensor::fradia_sensor <ecp::common::generator::object_tracker> *vsp_fradia;
+	ecp_mp::sensor::fradia_sensor <ecp::common::generator::visual_object_tracker> *vsp_fradia;
 	mrrocpp::ecp::common::generator::smooth * smooth_gen;
 	mrrocpp::ecp::common::generator::ecp_g_ib_eih * g_ib_eih;
-	mrrocpp::ecp::common::generator::visual_servo_regulator * regulator;
+	mrrocpp::ecp::common::generator::visual_servo_regulator<4,4> * regulator;
 
 	/** Moves (using smooth generator) to initial position. */
 	void moveToInitialPosition();

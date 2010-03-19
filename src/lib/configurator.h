@@ -19,10 +19,13 @@
 #include <boost/thread/mutex.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/tokenizer.hpp>
-#include <boost/numeric/ublas/vector.hpp>
-#include <boost/numeric/ublas/matrix.hpp>
-#include <boost/numeric/ublas/io.hpp>
+#include <boost/algorithm/string/trim.hpp>
+#include <boost/algorithm/string/classification.hpp>
+//#include <boost/numeric/ublas/vector.hpp>
+//#include <boost/numeric/ublas/matrix.hpp>
+//#include <boost/numeric/ublas/io.hpp>
 
+#include <Eigen/Core>
 
 #if defined(USE_MESSIP_SRR)
 #include <messip.h>
@@ -117,25 +120,28 @@ public:
 	}
 	;
 
-	/**
-	 * Read vector from config. Vector has format similar to MatLAB, for example: [ x y z ].
-	 * @param name
-	 * @param n vector size
-	 * @return vector read
-	 * @throws exception if vector has not been read
-	 */
-	boost::numeric::ublas::vector <double> value(const std::string & key, const std::string & section_name, int n) const;
+	//	/**
+	//	 * Read vector from config. Vector has format similar to MatLAB, for example: [ x y z ].
+	//	 * @param name
+	//	 * @param n vector size
+	//	 * @return vector read
+	//	 * @throws exception if vector has not been read
+	//	 */
+	//	boost::numeric::ublas::vector <double> value(const std::string & key, const std::string & section_name, int n) const;
+	//
+	//	/**
+	//	 * Read matrix from config. Matrix has format similar to MatLAB, for example: [ a b c d; e f g h ].
+	//	 * @param name
+	//	 * @param n matrix size - rows
+	//	 * @param m matrix size - columns
+	//	 * @return vector read
+	//	 * @throws exception if vector has not been read
+	//	 */
+	//	boost::numeric::ublas::matrix <double>
+	//			value(const std::string & key, const std::string & section_name, int n, int m) const;
 
-	/**
-	 * Read matrix from config. Matrix has format similar to MatLAB, for example: [ a b c d; e f g h ].
-	 * @param name
-	 * @param n matrix size - rows
-	 * @param m matrix size - columns
-	 * @return vector read
-	 * @throws exception if vector has not been read
-	 */
-	boost::numeric::ublas::matrix <double>
-			value(const std::string & key, const std::string & section_name, int n, int m) const;
+	template <int ROWS, int COLS>
+	Eigen::Matrix <double, ROWS, COLS> value(const std::string & key, const std::string & section_name) const;
 
 	// Zwraca czy dany klucz istnieje
 	bool exists(const char* _key, const char* __section_name = NULL) const;
@@ -148,11 +154,90 @@ public:
 	~configurator();
 
 protected:
+	//	/**
+	//	 * Extract elements from vector or matrix row. For example: " 1   2 3   4 "
+	//	 */
+	//	boost::numeric::ublas::vector <double> get_vector_elements(std::string text_value, int n) const;
+
 	/**
-	 * Extract elements from vector or matrix row. For example: " 1   2 3   4 "
+	 * Extract elements from matrix row. For example: string " 1   2 3   4 " will be interpreted as a vector {1,2,3,4}
 	 */
-	boost::numeric::ublas::vector <double> get_vector_elements(std::string text_value, int n) const;
+	template <int COLS>
+	Eigen::Matrix <double, 1, COLS> get_vector_elements(std::string text_value) const;
+
 };// : configurator
+
+template <int COLS>
+Eigen::Matrix <double, 1, COLS> configurator::get_vector_elements(std::string text_value) const
+{
+	std::cout << "configurator::get_vector_elements() begin\n";
+	Eigen::Matrix <double, 1, COLS> value;
+	const char * blank_chars = { " \t\n\r" };
+	boost::algorithm::trim_if(text_value, boost::algorithm::is_any_of(blank_chars));
+
+	// split it into elements
+	boost::char_separator <char> space_separator(blank_chars);
+	boost::tokenizer <boost::char_separator <char> > tok(text_value, space_separator);
+
+	int element_no = 0;
+	for (boost::tokenizer <boost::char_separator <char> >::iterator it = tok.begin(); it != tok.end(); ++it, ++element_no) {
+		//std::cout << " " << *it << ", ";
+		if (element_no >= COLS) {
+			throw std::logic_error("configurator::get_vector_elements(): vector has more elements than expected.");
+		}
+		std::string element = *it;
+		boost::algorithm::trim(element);
+		double element_value = boost::lexical_cast <double>(element);
+		value(0, element_no) = element_value;
+	}
+
+	if (element_no != COLS) {
+		throw std::logic_error("configurator::get_vector_elements(): vector has less elements than expected.");
+	}
+	std::cout << "configurator::get_vector_elements() end\n";
+	return value;
+}
+
+template <int ROWS, int COLS>
+Eigen::Matrix <double, ROWS, COLS> configurator::value(const std::string & key, const std::string & section_name) const
+{
+	std::cout << "configurator::get_matrix_value() begin\n";
+	Eigen::Matrix <double, ROWS, COLS> value;
+
+	// get string value and remove leading and trailing spaces
+	std::string text_value = return_string_value(key.c_str(), section_name.c_str());
+	boost::algorithm::trim(text_value);
+
+	//std::cout << "visual_servo_regulator::get_matrix_value() Processing value: "<<text_value<<"\n";
+
+	// check for [ and ], and then remove it
+	if (text_value.size() < 3 || text_value[0] != '[' || text_value[text_value.size() - 1] != ']') {
+		throw std::logic_error("configurator::value(): leading or trailing chars [] not found or no value supplied.");
+	}
+	boost::algorithm::trim_if(text_value, boost::algorithm::is_any_of("[]"));
+
+	boost::char_separator <char> semicolon_separator(";");
+	boost::tokenizer <boost::char_separator <char> > tok(text_value, semicolon_separator);
+
+	int row_no = 0;
+	for (boost::tokenizer <boost::char_separator <char> >::iterator it = tok.begin(); it != tok.end(); ++it, ++row_no) {
+		if (row_no >= ROWS) {
+			throw std::logic_error("configurator::value(): matrix has more rows than expected.");
+		}
+//		Eigen::Matrix <double, 1, COLS> row = get_vector_elements<COLS>(*it);
+//		for (int i = 0; i < m; ++i) {
+//			value(row_no, i) = row(i);
+//		}
+		value.row(row_no) = get_vector_elements<COLS>(*it);
+	}
+	if (row_no != ROWS) {
+		throw std::logic_error("configurator::value(): matrix has more rows than expected.");
+	}
+
+	std::cout << "configurator::get_matrix_value() end\n";
+
+	return value;
+}
 
 } // namespace lib
 } // namespace mrrocpp

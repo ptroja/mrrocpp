@@ -10,6 +10,8 @@
 
 #include <Eigen/Core>
 
+#include "kinematics/irp6_on_track/kinematic_model_irp6ot_with_wrist.h"
+
 #include "ecp_g_visual_servo.h"
 
 namespace mrrocpp {
@@ -24,19 +26,21 @@ namespace generator {
  *  @{
  */
 
-typedef struct object_tracker_t
+
+typedef struct visual_object_tracker_t
 {
-	bool reached;
+	size_t size;
 	bool tracking;
 	int x;
 	int y;
 	int z;
-} object_tracker;
+	double alpha;
+} visual_object_tracker;
 
-class ecp_g_ib_eih: public visual_servo
+class ecp_g_ib_eih: public visual_servo<4, 4>
 {
 public:
-	ecp_g_ib_eih(mrrocpp::ecp::common::task::task & _ecp_task, ecp_mp::sensor::fradia_sensor<object_tracker> *vsp_fradia, visual_servo_regulator * regulator);
+	ecp_g_ib_eih(mrrocpp::ecp::common::task::task & _ecp_task, ecp_mp::sensor::fradia_sensor<visual_object_tracker> *vsp_fradia, visual_servo_regulator<4, 4> * regulator);
 	virtual ~ecp_g_ib_eih();
 	virtual bool first_step();
 	virtual bool next_step();
@@ -51,7 +55,7 @@ protected:
 	 */
 	bool isArmFrameOk(const lib::Homog_matrix& arm_frame);
 private:
-	ecp_mp::sensor::fradia_sensor<object_tracker> *vsp_fradia;
+	ecp_mp::sensor::fradia_sensor<visual_object_tracker> *vsp_fradia;
 
 	/** Current effector frame*/
 	lib::Homog_matrix currentFrame;
@@ -65,6 +69,9 @@ private:
 
 	Eigen::Matrix<double, 3, 1> prev_u;
 	double delta_t;
+
+	mrrocpp::kinematics::common::kinematic_model *kinematic;
+	lib::JointArray local_desired_joints, local_current_joints;
 };
 
 /** @} */// ecp_g_ib_eih

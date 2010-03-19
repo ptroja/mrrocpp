@@ -22,22 +22,63 @@ namespace common {
 
 namespace generator {
 
+template <int ERROR_SIZE, int CONTROL_SIZE>
 class visual_servo: public mrrocpp::ecp::common::generator::generator
 {
 public:
 
-	virtual ~visual_servo();
+	virtual ~visual_servo()
+	{
+	}
+	;
 protected:
-	visual_servo(mrrocpp::ecp::common::task::task & _ecp_task, visual_servo_regulator * regulator);
-	visual_servo_regulator * regulator;
+	visual_servo(mrrocpp::ecp::common::task::task & _ecp_task, visual_servo_regulator <ERROR_SIZE, CONTROL_SIZE> * regulator) :
+		generator(_ecp_task), regulator(regulator), logEnabled(true), logDbgEnabled(false)
+	{
+	}
+
+	visual_servo_regulator <ERROR_SIZE, CONTROL_SIZE> * regulator;
 
 	/** Is log enabled*/
-	bool logEnabled;
+	bool logEnabled, logDbgEnabled;
+
 	/**
 	 * Print message to the console only if logEnabled is set to true.
 	 * @param fmt printf-like format
 	 */
-	void log(const char *fmt, ...);
+	void log(const char *fmt, ...)
+	{
+		va_list ap;
+		va_start(ap, fmt);
+
+		if (!logEnabled) {
+			va_end(ap);
+			return;
+		}
+
+		vfprintf(stdout, fmt, ap);
+		fflush(stdout);
+		va_end(ap);
+	}
+
+	/**
+	 * Print message to the console only if logDbgEnabled is set to true.
+	 * @param fmt printf-like format
+	 */
+	void logDbg(const char *fmt, ...)
+	{
+		va_list ap;
+		va_start(ap, fmt);
+
+		if (!logDbgEnabled) {
+			va_end(ap);
+			return;
+		}
+
+		vfprintf(stdout, fmt, ap);
+		fflush(stdout);
+		va_end(ap);
+	}
 private:
 
 }; // class visual_servo

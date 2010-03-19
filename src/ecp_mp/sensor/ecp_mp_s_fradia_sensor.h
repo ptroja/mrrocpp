@@ -28,8 +28,11 @@ namespace mrrocpp {
 namespace ecp_mp {
 namespace sensor {
 
-//#define BUFFER_SIZE 8*256
-
+/*!
+ * Class for communication with FraDIA. Parametrized by received structure.
+ * make fradia process blocking queries: in FraDIA ImageProcessor's constructor make sure you call
+ * DataSynchronizer::getInstance()->setWaitForVSPResponse(true);
+ */
 template <typename VSP_ECP_T>
 class fradia_sensor : public lib::sensor
 {
@@ -65,6 +68,11 @@ public:
       */
 	~fradia_sensor();
 
+	/*!
+	 * MRROC++ <-> FraDIA communication thread method. Implements loop which queries FraDIA for new reading.
+	 * make fradia process blocking queries: in FraDIA ImageProcessor's constructor make sure you call
+	 * DataSynchronizer::getInstance()->setWaitForVSPResponse(true);
+	 */
 	void operator()();
 
 
@@ -86,19 +94,9 @@ private:
 	hostent* server;
 
 	/*!
-      * Buffer used by sockets during communication.
-      */
-	//char buffer[BUFFER_SIZE];
-
-	/*!
       * Link to the SRP communication object.
       */
 	lib::sr_ecp& sr_ecp_msg;
-
-	/*!
-      * Sensor name.
-      */
-	//const lib::SENSOR_t sensor_name;
 
 	lib::ECP_VSP_MSG to_vsp_tmp;
 
@@ -225,11 +223,13 @@ void fradia_sensor<VSP_ECP_T>::operator()()
 	lib::ECP_VSP_MSG to_vsp_local;
 	lib::VSP_ECP_MSG from_vsp_local;
 
+//	int iter = 0;
+
 	//printf("fradia_sensor::operator() begin\n"); fflush(stdout);
 
 	while (1) {
-		// TODO: make fradia process blocking queries and then remove this usleep
-		usleep(10000);
+		// make fradia process blocking queries: in FraDIA ImageProcessor's constructor make sure you call
+		// DataSynchronizer::getInstance()->setWaitForVSPResponse(true);
 
 		// get reading from fradia
 		// Send adequate command to cvFraDIA.
@@ -271,7 +271,7 @@ void fradia_sensor<VSP_ECP_T>::operator()()
 
 		get_reading_mutex.unlock();
 
-		//printf("fradia_sensor::operator()\n"); fflush(stdout);
+//		printf("fradia_sensor::operator(): loop %d\n", ++iter); fflush(stdout);
 	}
 }
 

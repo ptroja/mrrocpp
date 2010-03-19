@@ -43,11 +43,11 @@ ecp_t_ib_eih_tester::ecp_t_ib_eih_tester(mrrocpp::lib::configurator& _configurat
 	sr_ecp_msg->message("ecp_t_ib_eih_tester::ecp_t_ib_eih_tester() fradia setup...");
 
 	vsp_fradia =
-		new ecp_mp::sensor::fradia_sensor <ecp::common::generator::object_tracker>("[vsp_cvfradia_servovision]", *this);
+		new ecp_mp::sensor::fradia_sensor <ecp::common::generator::visual_object_tracker>("[vsp_cvfradia_servovision]", *this);
 
 	vsp_fradia->configure_sensor();
 
-	regulator = new ecp::common::generator::regulator_p(_configurator, "[regulator_p]", 3, 3);
+	regulator = new ecp::common::generator::regulator_p<4,4>(_configurator, "[regulator_p]");
 
 	g_ib_eih = new ecp::common::generator::ecp_g_ib_eih(*this, vsp_fradia, regulator);
 
@@ -73,7 +73,7 @@ void ecp_t_ib_eih_tester::main_task_algorithm(void)
 	printf("ecp_t_ib_eih_tester::main_task_algorithm() begin\n");
 	fflush(stdout);
 
-	//moveToInitialPosition();
+	moveToInitialPosition();
 
 	printf("ecp_t_ib_eih_tester::main_task_algorithm() 1\n");
 	fflush(stdout);

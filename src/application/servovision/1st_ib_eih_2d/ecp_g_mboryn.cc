@@ -99,7 +99,7 @@ bool ecp_g_mboryn::next_step()
 		if (vsp_fradia->from_vsp.comm_image.sensor_union.object_tracker.tracking) {
 
 			mrrocpp::lib::K_vector
-					e(vsp_fradia->from_vsp.comm_image.sensor_union.object_tracker.x, -vsp_fradia->from_vsp.comm_image.sensor_union.object_tracker.y, vsp_fradia->from_vsp.comm_image.sensor_union.object_tracker.z); // error [pixels]
+					e(-vsp_fradia->from_vsp.comm_image.sensor_union.object_tracker.y, -vsp_fradia->from_vsp.comm_image.sensor_union.object_tracker.x, vsp_fradia->from_vsp.comm_image.sensor_union.object_tracker.z); // error [pixels]
 
 			for (int i = 0; i < 3; ++i) {
 				log("e[%d] = %g\t", i, e[i]);
@@ -110,23 +110,23 @@ bool ecp_g_mboryn::next_step()
 
 			mrrocpp::lib::K_vector u;
 			u = e * Kp;
-			u[2] = 0; // Z axis
+			u(2, 0) = 0; // Z axis
 
 			//for(int i=0; i<3; ++i){		log("u[%d] = %g\t", i, u[i]);	}		log("\n");
 			bool isConstrained = false;
 			for (int i = 0; i < 3; ++i) {
-				if (u[i] > maxT) {
+				if (u(i, 0) > maxT) {
 					//log("u[%d] = %g > maxT = %g\n", i, u[i], maxT );
-					u[i] = maxT;
+					u(i, 0) = maxT;
 					isConstrained = true;
 				}
-				if (u[i] < -maxT) {
+				if (u(i, 0) < -maxT) {
 					//log("u[%d] = %g < -maxT = %g\n", i, u[i], -maxT );
-					u[i] = -maxT;
+					u(i, 0) = -maxT;
 					isConstrained = true;
 				}
 
-				l_vector[i] += u[i]; // first 3 elements of l_vector[] are XYZ translation
+				l_vector(i, 0) += u(i, 0); // first 3 elements of l_vector[] are XYZ translation
 			}
 			if (isConstrained) {
 				log("u CONSTRAINED.\n");
@@ -165,7 +165,7 @@ bool ecp_g_mboryn::isArmFrameOk(const lib::Homog_matrix& arm_frame)
 	arm_frame.get_xyz_angle_axis(l_vector);
 
 	for (int i = 0; i < 3; ++i) {
-		if (l_vector[i] < minT[i] || l_vector[i] > maxT[i]) {
+		if (l_vector(i, 0) < minT(i, 0) || l_vector(i, 0) > maxT(i, 0)) {
 			//log("l_vector[%d] = %g not in range: %g ... %g\n", i, l_vector[i], minT[i], maxT[i]);
 			return false;
 		}

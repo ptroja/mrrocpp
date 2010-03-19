@@ -4,7 +4,7 @@
 SOURCES = ${wildcard *.cc}
 OBJECTS = ${patsubst %.cc,%.o,${SOURCES}}
 
-BINARIES = ecp_mboryn ecp_fradia_lag_test ecp_ib_eih_tester
+BINARIES = ecp_mboryn ecp_fradia_lag_test ecp_ib_eih_tester #ecp_pb_eih_tester
 
 ifneq ($(BUILD_TARGET), linux)
 BINARIES+=			
@@ -38,7 +38,10 @@ ecp_mboryn: 1st_ib_eih_2d/ecp_t_mboryn.o 1st_ib_eih_2d/ecp_g_mboryn.o $(SHOBJ) .
 ecp_fradia_lag_test: fradia_lag_test/ecp_t_fradia_lag_test.o $(SHOBJ) ../../ecp_mp/sensor/ecp_mp_s_cvfradia.o
 	$(LD) $(LDFLAGS) -o $@ $^
 
-ecp_ib_eih_tester: ecp_g_ib_eih.o ecp_g_visual_servo.o visual_servo_regulator.o visual_servo_regulator_p.o ib_eih_tester/ecp_t_ib_eih_tester.o $(SHOBJ)
+ecp_ib_eih_tester: ecp_g_ib_eih.o ecp_g_visual_servo.o ib_eih_tester/ecp_t_ib_eih_tester.o $(SHOBJ)
+	$(LD) $(LDFLAGS) -o $@ $^
+	
+ecp_pb_eih_tester: ecp_g_pb_eih.o ecp_g_visual_servo.o pb_eih_tester/ecp_t_pb_eih_tester.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 #---------------------------------Special object build rules (user made)-------------------------------------#
 # e.g:
