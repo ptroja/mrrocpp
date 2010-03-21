@@ -29,6 +29,9 @@ private:
 	messip_channel_t* ECP_fd;
 #endif
 
+	// Wysyla puls do Mp przed oczekiwaniem na spotkanie
+	void send_pulse_to_ecp(int pulse_code, int pulse_value = 1);
+
 protected:
 
 	task::task &mp_object;

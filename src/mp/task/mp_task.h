@@ -31,6 +31,10 @@ class task: public ecp_mp::task::task
 		/// utworzenie robotow
 		virtual void create_robots(void);
 
+
+
+
+
 	public:
 #if !defined(USE_MESSIP_SRR)
 		static name_attach_t *mp_pulse_attach;

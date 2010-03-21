@@ -338,6 +338,8 @@ bool task::mp_buffer_receive_and_send(void)
 
 	int caller = receive_mp_message();
 
+	printf("mp_buffer_receive_and_send caller: %d\n", caller);
+
 	bool returned_value = true;
 	bool ecp_stop = false;
 

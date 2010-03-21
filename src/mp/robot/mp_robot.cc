@@ -110,6 +110,20 @@ robot::~robot() {
 #endif
 }
 
+
+// Wysyla puls do Mp przed oczekiwaniem na spotkanie
+void robot::send_pulse_to_ecp(int pulse_code, int pulse_value)
+{
+#if !defined(USE_MESSIP_SRR)
+	if (MsgSendPulse(ECP_fd, sched_get_priority_min(SCHED_FIFO), pulse_code, pulse_value) == -1)
+#else
+	if (messip::port_send_pulse(ECP_fd, pulse_code, pulse_value) < 0)
+#endif
+	{
+		perror("MsgSendPulse()");
+	}
+}
+
 // ------------------------------------------------------------------------
 void robot::start_ecp ( void ) {
 

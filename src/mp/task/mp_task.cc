@@ -53,6 +53,10 @@ name_attach_t* task::mp_pulse_attach = NULL;
 messip_channel_t* task::mp_pulse_attach = NULL;
 #endif
 
+
+
+
+
 // KONSTRUKTORY
 task::task(lib::configurator &_config)
 	: ecp_mp::task::task(_config),
