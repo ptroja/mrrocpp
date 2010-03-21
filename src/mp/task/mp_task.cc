@@ -975,6 +975,7 @@ void task::execute_all (const common::robots_t & _robot_m)
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, _robot_m) {
 		if (robot_node.second->communicate) {
 			robots_m_tmp.insert(robot_node);
+			robot_node.second->send_pulse_to_ecp(MP_TO_ECP_COMMUNICATION_REQUEST);
 		}
 	}
 

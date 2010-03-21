@@ -347,9 +347,16 @@ bool task::mp_buffer_receive_and_send(void) {
 	// Wyslanie pulsu do MP
 	send_pulse_to_mp(ECP_WAIT_FOR_COMMAND);
 
-	int caller = receive_mp_message(true);
+	int caller = -2;
+	while (caller <=0)
+	{
+	 caller = receive_mp_message(true);
+		printf("mp_buffer_receive_and_send caller: %d\n", caller);
+	}
+	printf("mp_buffer_receive_and_send caller za: %d\n", caller);
 
-	printf("mp_buffer_receive_and_send caller: %d\n", caller);
+
+
 
 	bool returned_value = true;
 	bool ecp_stop = false;
@@ -446,7 +453,7 @@ int task::receive_mp_message(bool block) {
 				 */
 				break;
 			case MP_TO_ECP_COMMUNICATION_REQUEST:
-				return true;
+				return caller;
 				break;
 			default:
 				/*
