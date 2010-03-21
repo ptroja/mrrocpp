@@ -23,7 +23,7 @@ class task : public ecp_mp::task::task
 		void send_pulse_to_mp(int pulse_code, int pulse_value = 1);
 
 		// Receive of mp message
-		int receive_mp_message(void);
+		int receive_mp_message(bool block);
 
 		// Badanie typu polecenia z MP
 		lib::MP_COMMAND mp_command_type(void) const;
