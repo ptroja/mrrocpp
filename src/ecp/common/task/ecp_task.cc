@@ -420,14 +420,20 @@ int task::receive_mp_message(bool block) {
 			TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_RECEIVE, &msg_event,
 					NULL, NULL); // by Y zamiast creceive i flagi z EDP_MASTER
 		}
-		int caller = MsgReceive(ecp_attach->chid, &mp_command,
+		int caller = MsgReceive_r(ecp_attach->chid, &mp_command,
 				sizeof(mp_command), NULL);
 #else
 		int32_t type, subtype;
 		int caller = messip::port_receive(ecp_attach, type, subtype, mp_command);
 #endif
 
-		if (caller == -1) {/* Error condition, exit */
+		if (caller < 0) {/* Error condition, exit */
+
+			if (caller == -ETIMEDOUT)
+			{
+				return caller;
+			}
+
 			uint64_t e = errno; // kod bledu systemowego
 			perror("ECP: Receive from MP failed");
 			sr_ecp_msg->message(lib::SYSTEM_ERROR, e,
