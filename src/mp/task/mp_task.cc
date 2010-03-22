@@ -1012,6 +1012,14 @@ void task::terminate_all (const common::robots_t & _robot_m)
 	// Zatrzymanie wszystkich ECP
 
 	// przepisanie mapy robotow do skomunikowania na wersje tymczasowa
+	BOOST_FOREACH(const common::robot_pair_t & robot_node, _robot_m) {
+
+			robot_node.second->send_pulse_to_ecp(MP_TO_ECP_COMMUNICATION_REQUEST);
+
+	}
+
+
+	// przepisanie mapy robotow do skomunikowania na wersje tymczasowa
 	common::robots_t robots_m_tmp = _robot_m;
 
 	while (1) {
