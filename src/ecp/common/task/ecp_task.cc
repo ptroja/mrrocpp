@@ -440,7 +440,7 @@ bool task::mp_buffer_receive_and_send(void) {
 
 		// ew. odebranie pulsu z MP
 		// 1 zastapic sprawdzeniem czy MP wyslalo puls przed spotkaniem z ECP
-		if ((!mp_pulse_received) && (1))
+		if ((!mp_pulse_received) && (mp_command.pulse_to_ecp_sent))
 		{
 			caller = receive_mp_message(true);
 

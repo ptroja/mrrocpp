@@ -1067,6 +1067,7 @@ struct MP_COMMAND_PACKAGE
 	MP_COMMAND command;
 	ecp_next_state_t ecp_next_state;
 	c_buffer instruction;
+	bool pulse_to_ecp_sent;
 };
 
 //------------------------------------------------------------------------------
