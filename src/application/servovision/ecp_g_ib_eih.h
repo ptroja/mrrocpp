@@ -66,6 +66,8 @@ private:
 	bool currentFrameSaved;
 
 	double max_v, max_a;
+	double stop_v, stop_a;
+	double stop_e_translation, stop_e_rotation;
 
 	Eigen::Matrix<double, 3, 1> prev_u;
 	double delta_t;

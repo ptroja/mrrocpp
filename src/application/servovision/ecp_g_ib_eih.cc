@@ -50,6 +50,8 @@ ecp_g_ib_eih::ecp_g_ib_eih(mrrocpp::ecp::common::task::task & _ecp_task, ecp_mp:
 
 	e_T_cFrame.set_rotation_matrix(rot);
 
+	logEnabled = 1;
+	logDbgEnabled = 1;
 	if (logEnabled) {
 		cout << "e_T_cFrame: \n" << e_T_cFrame << "\n\n";
 	}
@@ -61,6 +63,16 @@ ecp_g_ib_eih::ecp_g_ib_eih(mrrocpp::ecp::common::task::task & _ecp_task, ecp_mp:
 	//		local_desired_joints[i] = 0;
 	//		local_current_joints[i] = 0;
 	//	}
+
+	stop_v = 1e-2;
+	stop_a = 1e-3;
+	stop_e_translation = 10;
+	stop_e_rotation = M_PI/10;
+
+	for(int i=0; i<3; ++i){
+		prev_u(i, 0) = 0;
+	}
+
 }
 
 ecp_g_ib_eih::~ecp_g_ib_eih()
@@ -107,19 +119,25 @@ bool ecp_g_ib_eih::next_step()
 
 	lib::Homog_matrix nextFrame, deltaFrame;
 
-	lib::K_vector u_translation;
+	lib::K_vector u_translation(0, 0, 0);
 	lib::Homog_matrix u_rotation;
+	Eigen::Matrix <double, 4, 1> e;
+	Eigen::Matrix <double, 3, 1> e_translation;
 
 	logDbg("ecp_g_ib_eih::next_step() 2\n");
 
 	if (vsp_fradia->received_object.size == sizeof(visual_object_tracker_t) && vsp_fradia->received_object.tracking) {
 		logDbg("ecp_g_ib_eih::next_step() 3\n");
-		Eigen::Matrix <double, 4, 1> e;
+
 		e(0, 0) = vsp_fradia->received_object.x;
 		e(1, 0) = vsp_fradia->received_object.y;
 		e(2, 0) = vsp_fradia->received_object.z;
 		//e(2, 0) = 0;
 		e(3, 0) = vsp_fradia->received_object.alpha;
+
+		e_translation(0,0) = e(0,0);
+		e_translation(1,0) = e(1,0);
+		e_translation(2,0) = e(2,0);
 
 //		log("ecp_g_ib_eih::next_step() vsp_fradia->received_object.x: %g\n", (double) vsp_fradia->received_object.x);
 //		log("ecp_g_ib_eih::next_step() vsp_fradia->received_object.y: %g\n", (double) vsp_fradia->received_object.y);
@@ -186,6 +204,11 @@ bool ecp_g_ib_eih::next_step()
 		//logDbg("Acceleration constrained (%g > %g).\n", d2s, (max_a * delta_t * delta_t));
 	}
 
+	if(vsp_fradia->received_object.tracking && e_translation.squaredNorm() < stop_e_translation &&
+			fabs(e(3, 0)) < stop_e_rotation && ds < (stop_v * delta_t) && d2s < (stop_a * delta_t * delta_t)){
+		return false;
+	}
+
 	logDbg("ecp_g_ib_eih::next_step() 12\n");
 
 	deltaFrame.set_rotation_matrix(u_rotation);
@@ -193,10 +216,10 @@ bool ecp_g_ib_eih::next_step()
 
 	nextFrame = currentFrame * deltaFrame;
 
-//	cout << "nextFrame:\n" << nextFrame << "\n\n";
-//	cout << "currentFrame:\n" << currentFrame << "\n\n";
-//	cout << "e_T_cFrame:\n" << e_T_cFrame << "\n\n";
-//	cout << "deltaFrame:\n" << deltaFrame << "\n\n";
+	cout << "nextFrame:\n" << nextFrame << "\n\n";
+	cout << "currentFrame:\n" << currentFrame << "\n\n";
+	cout << "e_T_cFrame:\n" << e_T_cFrame << "\n\n";
+	cout << "deltaFrame:\n" << deltaFrame << "\n\n";
 
 	// set next frame
 
@@ -223,17 +246,17 @@ bool ecp_g_ib_eih::next_step()
 
 bool ecp_g_ib_eih::isArmFrameOk(const lib::Homog_matrix& arm_frame)
 {
-	double minT[] = { 0.600, -0.400, 0.100 };
-	double maxT[] = { 0.950, 0.400, 0.300 };
-	lib::Xyz_Angle_Axis_vector l_vector;
-	arm_frame.get_xyz_angle_axis(l_vector);
-
-	for (int i = 0; i < 3; ++i) {
-		if (l_vector[i] < minT[i] || l_vector[i] > maxT[i]) {
-			//log("l_vector[%d] = %g not in range: %g ... %g\n", i, l_vector[i], minT[i], maxT[i]);
-			return false;
-		}
-	}
+//	double minT[] = { 0.600, -0.400, 0.0 };
+//	double maxT[] = { 0.950, 0.400, 0.300 };
+//	lib::Xyz_Angle_Axis_vector l_vector;
+//	arm_frame.get_xyz_angle_axis(l_vector);
+//
+//	for (int i = 0; i < 3; ++i) {
+//		if (l_vector[i] < minT[i] || l_vector[i] > maxT[i]) {
+//			//log("l_vector[%d] = %g not in range: %g ... %g\n", i, l_vector[i], minT[i], maxT[i]);
+//			return false;
+//		}
+//	}
 
 	//	try {
 	//		//kinematic->e2i_transform(local_desired_joints, local_current_joints, arm_frame);

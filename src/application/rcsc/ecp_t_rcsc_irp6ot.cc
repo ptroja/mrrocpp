@@ -34,6 +34,15 @@ rcsc::rcsc(lib::configurator &_config) :
 	sg = new common::generator::smooth(*this, true);
 	wmg = new common::generator::weight_meassure(*this, 1);
 
+	vsp_fradia
+			= new ecp_mp::sensor::fradia_sensor <ecp::common::generator::visual_object_tracker>("[vsp_cvfradia_servovision]", *this);
+
+	vsp_fradia->configure_sensor();
+
+	regulator = new ecp::common::generator::regulator_p <4, 4>(_config, "[regulator_p]");
+
+	ib_eih = new ecp::common::generator::ecp_g_ib_eih(*this, vsp_fradia, regulator);
+
 	go_st = new common::task::ecp_sub_task_gripper_opening(*this);
 
 	sr_ecp_msg->message("ECP loaded");
@@ -109,7 +118,7 @@ void rcsc::main_task_algorithm(void)
 				rgg->Move();
 				break;
 			case ecp_mp::task::ECP_GEN_TFF_GRIPPER_APPROACH:
-				gag->configure(0.01, 150);
+				gag->configure(0.01, 1000);
 				gag->Move();
 				break;
 			case ecp_mp::task::ECP_GEN_TFF_RUBIK_FACE_ROTATE:
@@ -179,6 +188,12 @@ void rcsc::main_task_algorithm(void)
 				sg->Move();
 				break;
 			}
+			case ecp_mp::task::ECP_GEN_IB_EIH: {
+
+				ib_eih->Move();
+				break;
+			}
+
 			default:
 				break;
 		}

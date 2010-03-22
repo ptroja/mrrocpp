@@ -4,6 +4,9 @@
 #include "ecp/common/task/ecp_task.h"
 #include "ecp/common/generator/ecp_g_transparent.h"
 #include "ecp/common/task/ecp_st_go.h"
+#include "ecp_mp/sensor/ecp_mp_s_fradia_sensor.h"
+#include "../servovision/ecp_g_ib_eih.h"
+#include "../servovision/visual_servo_regulator_p.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -21,10 +24,14 @@ protected:
 	common::generator::tff_rubik_face_rotate* rfrg;
 	common::generator::teach_in* tig;
 	common::generator::smooth* sg;
+	common::generator::ecp_g_ib_eih* ib_eih;
 	common::generator::bias_edp_force* befg;
 	common::generator::weight_meassure* wmg;
     //podzadania
 	common::task::ecp_sub_task_gripper_opening* go_st;
+
+	ecp_mp::sensor::fradia_sensor <ecp::common::generator::visual_object_tracker>* vsp_fradia;
+	ecp::common::generator::regulator_p <4, 4>* regulator;
 
 public:
     rcsc(lib::configurator &_config);
