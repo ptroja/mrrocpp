@@ -793,6 +793,7 @@ while (!(ui_exit_from_while && ecp_exit_from_while)) {
 				throw common::MP_main_error(lib::NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
 				case MP_PAUSE:
 				mp_state = MP_STATE_PAUSED;
+				request_communication_with_robots(_robot_m);
 				ui_exit_from_while = false;
 				continue;
 				default:
