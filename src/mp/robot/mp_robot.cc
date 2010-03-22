@@ -148,7 +148,7 @@ void robot::start_ecp(void) {
 		sr_ecp_msg.message(lib::SYSTEM_ERROR, e, "MP: Send to ECP failed");
 		throw common::MP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 	}
-
+		mp_command.pulse_to_ecp_sent = false;
 	// by Y - ECP_ACKNOWLEDGE zamienione na lib::TASK_TERMINATED
 	// w celu uproszczenia programowania zadan wielorobotowych
 	if (ecp_reply_package.reply != lib::TASK_TERMINATED) {
@@ -205,7 +205,7 @@ void robot::terminate_ecp(void) { // zlecenie STOP zakonczenia ruchu
 		sr_ecp_msg.message(lib::SYSTEM_ERROR, e, "MP: Send() to ECP failed");
 		throw MP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 	}
-
+		mp_command.pulse_to_ecp_sent = false;
 	if (ecp_reply_package.reply == lib::ERROR_IN_ECP) {
 		// Odebrano od ECP informacje o bledzie
 		throw MP_error(lib::NON_FATAL_ERROR, ECP_ERRORS);

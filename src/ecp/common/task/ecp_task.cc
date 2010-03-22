@@ -436,18 +436,14 @@ bool task::mp_buffer_receive_and_send(void) {
 			throw ecp_robot::ECP_error(lib::SYSTEM_ERROR, 0);
 		}
 
-
-
 		// ew. odebranie pulsu z MP
 		// 1 zastapic sprawdzeniem czy MP wyslalo puls przed spotkaniem z ECP
-		if ((!mp_pulse_received) && (mp_command.pulse_to_ecp_sent))
-		{
+		if ((!mp_pulse_received) && (mp_command.pulse_to_ecp_sent)) {
 			caller = receive_mp_message(true);
 
 			printf("mial przyjsc puls a przyszlo cos: %d\n", caller);
 
 		}
-
 
 		if (ecp_stop)
 			throw common::generator::generator::ECP_error(lib::NON_FATAL_ERROR,
