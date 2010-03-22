@@ -86,6 +86,9 @@ class task: public ecp_mp::task::task
 		// Zatrzymanie wszystkich ECP
 		void terminate_all (const common::robots_t & _robot_m );
 
+		// warunkowe wyslanie pulsu zadania komunikacji do ECP
+		void request_communication_with_robots (const common::robots_t & _robot_m);
+
 		// Wyslanie rozkazu do wszystkich ECP
 		void execute_all (const common::robots_t & _robot_m);
 

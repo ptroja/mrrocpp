@@ -968,12 +968,10 @@ BOOST_FOREACH(const common::robot_pair_t & robot_node, _robot_m) {
 		{
 			robots_m_tmp.insert(robot_node);
 			// wysylamy zadanie komunikacji do ECP o ile ECP jeszcze sie nie zglosilo
-			if (!(robot_node.second->new_pulse))
-			{
-				robot_node.second->send_pulse_to_ecp(MP_TO_ECP_COMMUNICATION_REQUEST);
-			}
+			robot_node.second->send_pulse_to_ecp(MP_TO_ECP_COMMUNICATION_REQUEST);
 		}
 	}
+
 }
 
 while (1) {
@@ -1004,19 +1002,25 @@ while (1) {
 
 
 // ------------------------------------------------------------------------
-void task::terminate_all (const common::robots_t & _robot_m)
+void task::request_communication_with_robots (const common::robots_t & _robot_m)
 {
 // Zatrzymanie wszystkich ECP
 
 // przepisanie mapy robotow do skomunikowania na wersje tymczasowa
 BOOST_FOREACH(const common::robot_pair_t & robot_node, _robot_m) {
 	// wysylamy zadanie komunikacji do ECP o ile ECP jeszcze sie nie zglosilo
-		if (!(robot_node.second->new_pulse))
-		{
-			robot_node.second->send_pulse_to_ecp(MP_TO_ECP_COMMUNICATION_REQUEST);
-		}
+	robot_node.second->send_pulse_to_ecp(MP_TO_ECP_COMMUNICATION_REQUEST);
 
 }
+}
+
+// ------------------------------------------------------------------------
+void task::terminate_all (const common::robots_t & _robot_m)
+{
+// Zatrzymanie wszystkich ECP
+
+
+request_communication_with_robots(_robot_m);
 
 // przepisanie mapy robotow do skomunikowania na wersje tymczasowa
 common::robots_t robots_m_tmp = _robot_m;
