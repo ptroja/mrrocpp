@@ -965,7 +965,8 @@ common::robots_t robots_m_tmp;
 // przepisanie mapy robotow do skomunikowania na wersje tymczasowa
 BOOST_FOREACH(const common::robot_pair_t & robot_node, _robot_m) {
 	if (robot_node.second->communicate) {
-		if ((robot_node.second->mp_command.command == lib::STOP) || (robot_node.second->mp_command.command == lib::END_MOTION) || (robot_node.second->new_pulse))
+		if ((robot_node.second->mp_command.command == lib::STOP) || (robot_node.second->mp_command.command == lib::END_MOTION) ||
+				(robot_node.second->continuous_coordination) || (robot_node.second->new_pulse))
 		{
 			robots_m_tmp.insert(robot_node);
 			// wysylamy zadanie komunikacji do ECP o ile ECP jeszcze sie nie zglosilo

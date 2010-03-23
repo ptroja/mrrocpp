@@ -41,8 +41,10 @@ class task : public ecp_mp::task::task
 		// Polecenie od MP dla TASKa
 		lib::MP_COMMAND_PACKAGE mp_command;
 
-	public:
 		ecp_robot* ecp_m_robot;
+
+		//ew. koordynacja ciagla domyslnie wylaczona ma wplyw na instrukcje move
+			bool continuous_coordination;
 
 		// sprawdza czy przeszedl puls do ECP lub MP
 		bool pulse_check();

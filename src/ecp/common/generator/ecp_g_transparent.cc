@@ -18,6 +18,7 @@ transparent::transparent(common::task::task& _ecp_task) :
 bool transparent::first_step()
 {
 	communicate_with_edp = false;
+	ecp_t.continuous_coordination=true;
 	return true;
 }
 
@@ -31,6 +32,7 @@ bool transparent::next_step()
 	// obrazu danych wykorzystywanych przez generator
 	// the_robot->get_reply();
 	communicate_with_edp = true;
+
 
 	// by Y - Przepisanie przyslanej z EDP pozycji do MP
 	the_robot->copy_edp_to_mp_buffer(ecp_t.ecp_reply.reply_package);

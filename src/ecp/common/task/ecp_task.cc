@@ -19,7 +19,7 @@ namespace common {
 namespace task {
 
 task::task(lib::configurator &_config) :
-	ecp_mp::task::task(_config), ecp_m_robot(NULL) {
+	ecp_mp::task::task(_config), ecp_m_robot(NULL), continuous_coordination(false) {
 	initialize_communication();
 }
 
@@ -353,7 +353,7 @@ bool task::mp_buffer_receive_and_send(void) {
 	bool mp_ecp_randevouz = false;
 
 	if ((ecp_reply.reply == lib::TASK_TERMINATED) || (ecp_reply.reply
-			== lib::ERROR_IN_ECP)) {
+			== lib::ERROR_IN_ECP) || (continuous_coordination)) {
 		// wariant pierwszy ECP chce sie skomunikowac
 		ecp_communication_request = true;
 

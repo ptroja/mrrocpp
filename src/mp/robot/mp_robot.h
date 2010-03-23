@@ -36,6 +36,9 @@ protected:
 
 public:
 
+	//ew. koordynacja ciagla domyslnie wylaczona ma wplyw na instrukcje move
+		bool continuous_coordination;
+
 	// Wysyla puls do Mp przed oczekiwaniem na spotkanie
 	void send_pulse_to_ecp(int pulse_code, int pulse_value = 1);
 

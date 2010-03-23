@@ -38,7 +38,7 @@ robot::robot(lib::robot_name_t l_robot_name, const std::string & _section_name,
 		task::task &mp_object_l) :
 	ecp_mp::robot(l_robot_name), mp_object(mp_object_l), communicate(true), // domyslnie robot jest aktywny
 			sr_ecp_msg(*(mp_object_l.sr_ecp_msg)), opened(false), new_pulse(
-					false), new_pulse_checked(false) {
+					false), new_pulse_checked(false), continuous_coordination(false) {
 	mp_command.pulse_to_ecp_sent = false;
 
 	std::string node_name(mp_object.config.value<std::string> ("node_name",
@@ -116,7 +116,7 @@ robot::~robot() {
 // Wysyla puls do Mp przed oczekiwaniem na spotkanie
 void robot::send_pulse_to_ecp(int pulse_code, int pulse_value) {
 
-	if ((!(mp_command.pulse_to_ecp_sent))&&(!new_pulse)) {
+	if ((!(mp_command.pulse_to_ecp_sent))&&(!new_pulse)&&(!continuous_coordination)) {
 
 #if !defined(USE_MESSIP_SRR)
 		if (MsgSendPulse(ECP_fd, sched_get_priority_min(SCHED_FIFO),
