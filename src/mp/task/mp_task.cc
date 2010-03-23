@@ -809,6 +809,9 @@ while (!(ui_exit_from_while && ecp_exit_from_while)) {
 				if (ui_pulse_code == MP_TRIGGER) { // odebrano trigger
 					ui_exit_from_while = true;
 					the_generator.trigger = true;
+					// 2 ponizsze linie po dodaniu prawdziwej sporadycznej synchrnozniacji
+					ui_exit_from_while = true;
+					ecp_exit_from_while = true;
 				}
 			}
 			continue;
