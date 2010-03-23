@@ -48,9 +48,6 @@ protected:
 	/** Moves (using smooth generator) to initial position. */
 	void moveToInitialPosition();
 
-	/*static const double initialPositionJoints[MAX_SERVOS_NR] = {
-	 0, -0.013, -1.442, -0.275, 0.01, 4.686, -0.070, 0.090
-	 };*/
 	static const double initialPositionJoints[MAX_SERVOS_NR];
 
 	common::generator::tff_gripper_approach* gagen;

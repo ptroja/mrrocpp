@@ -19,7 +19,7 @@ namespace irp6ot {
 namespace task {
 
 const double
-		ecp_t_ib_eih_tester::initialPositionJoints[MAX_SERVOS_NR] = { 0,-0.013,-1.442,-0.275,0.035,4.720,-0.100,0.075};
+		ecp_t_ib_eih_tester::initialPositionJoints[MAX_SERVOS_NR] = { 0, -0.010, -1.510, -0.113, 0.023, 4.716, -0.096, 0.075};
 
 /*
  * IRP6 On Track:
@@ -80,7 +80,9 @@ void ecp_t_ib_eih_tester::main_task_algorithm(void)
 	printf("ecp_t_ib_eih_tester::main_task_algorithm() 1\n");
 	fflush(stdout);
 
-	g_ib_eih->Move();
+//	while(1){
+		g_ib_eih->Move();
+//	}
 
 	printf("ecp_t_ib_eih_tester::main_task_algorithm() 2\n");
 	fflush(stdout);
@@ -96,7 +98,7 @@ void ecp_t_ib_eih_tester::main_task_algorithm(void)
 	double a[MAX_SERVOS_NR] = { 0.15, 0.15, 0.5, 0.15, 0.15, 0.15, 0.001, 0.001 };
 
 	smooth_gen->set_relative();
-	smooth_gen->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, v, a, 0, 0, -0.001, 0, 0, 0, 0, 0, true);
+	smooth_gen->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, v, a, 0, 0, -0.005, 0, 0, 0, 0, 0, true);
 	smooth_gen->Move();
 	smooth_gen->reset();
 
