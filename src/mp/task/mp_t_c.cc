@@ -34,7 +34,7 @@ void cxx::main_task_algorithm(void)
 
 	}
 
-	generator::empty empty_gen (*this); // "Pusty" generator
+	generator::extended_empty empty_gen (*this); // "Pusty" generator
 	empty_gen.robot_m = robot_m;
 
 	// Zlecenie wykonania kolejnego makrokroku
