@@ -229,10 +229,10 @@ motor_driven_effector::motor_driven_effector(lib::configurator &_config, lib::ro
 	// is_get_arm_read_hardware=false;
 
 
-#ifdef DOCENT_SENSOR
+//#ifdef DOCENT_SENSOR
 	startedCallbackRegistered_ = false;
 	stoppedCallbackRegistered_ = false;
-#endif
+//#endif
 
 #ifdef __QNXNTO__
 	ThreadCtl(_NTO_TCTL_IO, NULL);
@@ -1252,6 +1252,31 @@ void motor_driven_effector::main_loop()
 	post_synchro_loop(next_state);
 
 }
+
+//#ifdef DOCENT_SENSOR
+
+void motor_driven_effector::registerReaderStartedCallback(boost::function<void()> startedCallback) {
+	startedCallback_ = startedCallback;
+	startedCallbackRegistered_ = true;
+}
+
+void motor_driven_effector::registerReaderStoppedCallback(boost::function<void()> stoppedCallback) {
+	stoppedCallback_ = stoppedCallback;
+	stoppedCallbackRegistered_ = true;
+}
+
+void motor_driven_effector::onReaderStarted() {
+	if (startedCallbackRegistered_) {
+		startedCallback_();
+	}
+}
+void motor_driven_effector::onReaderStopped() {
+	if (stoppedCallbackRegistered_) {
+		stoppedCallback_();
+	}
+}
+//#endif
+
 
 } // namespace common
 } // namespace edp

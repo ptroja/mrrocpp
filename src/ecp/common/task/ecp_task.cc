@@ -376,7 +376,7 @@ bool task::mp_buffer_receive_and_send(void) {
 				// przyszedl puls
 
 			}
-			printf("mp_buffer_receive_and_send caller: %d\n", caller);
+			//printf("mp_buffer_receive_and_send caller: %d\n", caller);
 		}
 
 		mp_ecp_randevouz = true;
@@ -396,7 +396,7 @@ bool task::mp_buffer_receive_and_send(void) {
 
 	}
 
-	printf("mp_buffer_receive_and_send caller za: %d\n", caller);
+	//printf("mp_buffer_receive_and_send caller za: %d\n", caller);
 
 	bool returned_value = true;
 	bool ecp_stop = false;

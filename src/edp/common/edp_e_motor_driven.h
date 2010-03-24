@@ -29,9 +29,9 @@
 // Konfigurator
 #include "lib/configurator.h"
 
-#ifdef DOCENT_SENSOR
+//#ifdef DOCENT_SENSOR
 #include <boost/function.hpp>
-#endif
+//#endif
 
 namespace mrrocpp {
 namespace edp {
@@ -64,10 +64,7 @@ class motor_driven_effector: public effector, public kinematics::common::kinemat
 {
 protected:
 
-#ifdef DOCENT_SENSOR
-	void onReaderStarted();
-	void onReaderStopped();
-#endif
+
 
 	/*!
 	 * \brief The number of steps in the macrostep.
@@ -83,12 +80,12 @@ protected:
 	 */
 	uint16_t value_in_step_no;
 
-#ifdef DOCENT_SENSOR
+//#ifdef DOCENT_SENSOR
 	boost::function<void()> startedCallback_;
 	bool startedCallbackRegistered_;
 	boost::function<void()> stoppedCallback_;
 	bool stoppedCallbackRegistered_;
-#endif
+//#endif
 
 	/*!
 	 * \brief friend class of servo thread to handle the motion controllers
@@ -204,10 +201,12 @@ public:
 	 * It is used for the purpose of the visualisation thread
 	 */
 	void master_joints_read(double*);
-#ifdef DOCENT_SENSOR
+//#ifdef DOCENT_SENSOR
 	void registerReaderStartedCallback(boost::function<void()> startedCallback);
 	void registerReaderStoppedCallback(boost::function<void()> stoppedCallback);
-#endif
+		void onReaderStarted();
+		void onReaderStopped();
+	//#endif
 
 	/*!
 	 * \brief object to store output and input data

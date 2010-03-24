@@ -194,9 +194,9 @@ void reader_buffer::operator()()
 					default:
 					if (ui_msg.hdr.code==READER_START) { // odebrano puls start
 						start = true;
-#ifdef DOCENT_SENSOR
-						onReaderStarted();
-#endif
+//#ifdef DOCENT_SENSOR
+						master.onReaderStarted();
+//#endif
 					}
 				}
 				continue;
@@ -273,11 +273,11 @@ void reader_buffer::operator()()
 					default:
 					if (ui_msg.hdr.code==READER_STOP) {
 						stop = true; // dostalismy puls STOP
-#ifdef DOCENT_SENSOR
-						onReaderStopped();
-#endif
+//#ifdef DOCENT_SENSOR
+						master.onReaderStopped();
+//#endif
 					} else if (ui_msg.hdr.code==READER_TRIGGER) {
-						ui_trigger = true; // dostaliśmy puls TRIGGER
+						ui_trigger = true; // dostalismy puls TRIGGER
 					}
 
 				}

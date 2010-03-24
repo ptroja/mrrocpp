@@ -360,7 +360,7 @@ bool tff_nose_run::next_step()
 	// Funkcja zwraca false gdy koniec generacji trajektorii
 	// Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
 	// UWAGA: dzialamy na jednoelementowej liscie robotow
-	 std::cout << "next_step" << std::endl;
+	 //std::cout << "next_step" << std::endl;
 
 	if (pulse_check_activated && check_and_null_trigger())
 	{ // Koniec odcinka

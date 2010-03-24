@@ -37,7 +37,7 @@
 #include <time.h>
 #include <fstream>
 
-#include <boost/date_time/posix_time/posix_time.hpp>>
+#include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/bind.hpp>
 
 #include "lib/typedefs.h"
@@ -227,7 +227,7 @@ void ATI6284_force::configure_sensor(void)
 
 void ATI6284_force::wait_for_event()
 {
-	static boost::posix_time::time_duration timeout = boost::posix_time::microseconds(1000);
+	static boost::posix_time::time_duration timeout = boost::posix_time::microseconds(1500);
 	int iw_ret;
 	static int iter_counter = 0; // okresla ile razy pod rzad zostala uruchomiona ta metoda
 
@@ -235,7 +235,7 @@ void ATI6284_force::wait_for_event()
 
     iter_counter++;
     if (iter_counter % 2000 == 0) {
-    	printf("Measures per sec = %d\n", timeUtil.mps());
+    	//printf("Measures per sec = %d\n", timeUtil.mps());
     }
 
     timeUtil.wait(1000);

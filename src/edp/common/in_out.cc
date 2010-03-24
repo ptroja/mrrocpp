@@ -178,29 +178,6 @@ void in_out_buffer::get_input (uint16_t *binary_in_value, uint8_t *analog_in_tab
     // printf("%x\n", 0x00FF&(~odczyt));
 }
 
-#ifdef DOCENT_SENSOR
-
-void motor_driven_effector::registerReaderStartedCallback(boost::function<void()> startedCallback) {
-	startedCallback_ = startedCallback;
-	startedCallbackRegistered_ = true;
-}
-
-void motor_driven_effector::registerReaderStoppedCallback(boost::function<void()> stoppedCallback) {
-	stoppedCallback_ = stoppedCallback;
-	stoppedCallbackRegistered_ = true;
-}
-
-void motor_driven_effector::onReaderStarted() {
-	if (startedCallbackRegistered_) {
-		startedCallback_();
-	}
-}
-void motor_driven_effector::onReaderStopped() {
-	if (stoppedCallbackRegistered_) {
-		stoppedCallback_();
-	}
-}
-#endif
 
 /**************************** IN_OUT_BUFFER *****************************/
 
