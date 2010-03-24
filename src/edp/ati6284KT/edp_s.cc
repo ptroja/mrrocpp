@@ -37,6 +37,7 @@
 #include <time.h>
 #include <fstream>
 
+#include <boost/date_time/posix_time/posix_time.hpp>>
 #include <boost/bind.hpp>
 
 #include "lib/typedefs.h"
@@ -83,13 +84,9 @@ static const unsigned int DESIRED_MEASUREMENT_FREQUENCY = 500;
 // Rejstracja procesu VSP
 ATI6284_force::ATI6284_force(common::manip_effector &_master) :
 	force(_master),
-#ifdef USE_RAW
-    client(interface, boardMac),
-#else
-    client(host, port),
-#endif
-    service(&client),
-    rpcController(boost::posix_time::microseconds(20000))
+	socket_(interface, boardMac),
+	sensor_(&socket_)
+
 {
 	frame_counter = 0; //licznik wyslanych pakietow
     printf("Initialized docent sensor\n");
@@ -230,6 +227,7 @@ void ATI6284_force::configure_sensor(void)
 
 void ATI6284_force::wait_for_event()
 {
+	static boost::posix_time::time_duration timeout = boost::posix_time::microseconds(1000);
 	int iw_ret;
 	static int iter_counter = 0; // okresla ile razy pod rzad zostala uruchomiona ta metoda
 
@@ -245,22 +243,22 @@ void ATI6284_force::wait_for_event()
     if (measuring) {
     	timeUtil.startMeasurement();
     }
-    service.GetGenGForceReading(&rpcController, NULL, &response, NULL);
+
+    AdcReadings readings = sensor_.getAdcReadings(timeout);
     if (measuring) {
     	timeUtil.stopMeasurement();
     }
-    if (rpcController.expired()) {
+    if (readings.timeout) {
         printf("Expired!!!\n");
     } else {
-			adc_data[0] = response.fx();
-            adc_data[1] = response.fy();
-            adc_data[2] = response.fz();
-            adc_data[3] = response.tx();
-            adc_data[4] = response.ty();
-            adc_data[5] = response.tz();
+		adc_data[0] = readings.readings[0];
+        adc_data[1] = readings.readings[1];
+        adc_data[2] = readings.readings[2];
+        adc_data[3] = readings.readings[3];
+        adc_data[4] = readings.readings[4];
+        adc_data[5] = readings.readings[5];
     }
 
-    rpcController.reset();
 }
 
 /*************************** inicjacja odczytu ******************************/

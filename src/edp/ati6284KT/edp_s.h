@@ -13,7 +13,9 @@
 #define _EDP_S_ATI6284_MS_H
 
 #include "edp/common/edp_irp6s_postument_track.h"
-#include "edp/ati6284MS/TimeUtil.h"
+#include "edp/ati6284KT/TimeUtil.h"
+#include "edp/ati6284KT/RawSocket.h"
+#include "edp/ati6284KT/ForceSensor.h"
 
 namespace mrrocpp {
 namespace edp {

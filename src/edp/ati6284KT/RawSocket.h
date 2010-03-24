@@ -1,3 +1,6 @@
+#ifndef __RAW_SOCKET__H
+#define __RAW_SOCKET__H
+
 #include <string>
 #include <cstdlib>
 #include <cstring>
@@ -36,3 +39,5 @@ namespace sensor {
 } // namespace sensor
 } // namespace edp
 } // namespace mrrocpp
+
+#endif
