@@ -969,15 +969,15 @@ common::robots_t robots_m_tmp;
 BOOST_FOREACH(const common::robot_pair_t & robot_node, _robot_m) {
 	if (robot_node.second->communicate) {
 		if ((robot_node.second->mp_command.command == lib::STOP) || (robot_node.second->mp_command.command == lib::END_MOTION) ||
-				(robot_node.second->continuous_coordination) || (robot_node.second->new_pulse))
+				(robot_node.second->mp_command.command == lib::NEXT_STATE) || (robot_node.second->continuous_coordination) || (robot_node.second->new_pulse))
 		{
 			robots_m_tmp.insert(robot_node);
-			// wysylamy zadanie komunikacji do ECP o ile ECP jeszcze sie nie zglosilo
-			robot_node.second->send_pulse_to_ecp(MP_TO_ECP_COMMUNICATION_REQUEST);
 		}
 	}
 
 }
+
+request_communication_with_robots(robots_m_tmp);
 
 while (1) {
 

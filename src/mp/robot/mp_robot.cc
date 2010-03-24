@@ -116,7 +116,7 @@ robot::~robot() {
 // Wysyla puls do Mp przed oczekiwaniem na spotkanie
 void robot::send_pulse_to_ecp(int pulse_code, int pulse_value) {
 
-	if ((!(mp_command.pulse_to_ecp_sent))&&(!new_pulse)&&(!continuous_coordination)) {
+	if ((!(mp_command.pulse_to_ecp_sent))&&(!new_pulse)&&(!continuous_coordination)&&(!(mp_command.command == lib::NEXT_STATE))) {
 
 #if !defined(USE_MESSIP_SRR)
 		if (MsgSendPulse(ECP_fd, sched_get_priority_min(SCHED_FIFO),

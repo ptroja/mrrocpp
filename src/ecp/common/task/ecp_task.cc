@@ -19,7 +19,8 @@ namespace common {
 namespace task {
 
 task::task(lib::configurator &_config) :
-	ecp_mp::task::task(_config), ecp_m_robot(NULL), continuous_coordination(false) {
+	ecp_mp::task::task(_config), ecp_m_robot(NULL), continuous_coordination(
+			false) {
 	initialize_communication();
 }
 
@@ -208,13 +209,28 @@ void task::send_pulse_to_mp(int pulse_code, int pulse_value) {
 // Petla odbierania wiadomosci.
 void task::ecp_wait_for_stop(void) {
 	// Wyslanie pulsu do MP
+
+	bool mp_pulse_received = false;
+
 	send_pulse_to_mp(ECP_WAIT_FOR_STOP);
 
 	// Oczekiwanie na wiadomosc.
-	int caller = receive_mp_message(true);
+	int caller = -2;
 
+	while (caller <= 0) {
+
+		caller = receive_mp_message(true);
+		if (caller == 0) {
+			mp_pulse_received = true;
+			// przyszedl puls
+
+		}
+		//printf("mp_buffer_receive_and_send caller: %d\n", caller);
+	}
+	bool ecp_stop = false;
 	if (mp_command_type() == lib::STOP) {
 		set_ecp_reply(lib::ECP_ACKNOWLEDGE);
+		ecp_stop = true;
 	} else {
 		set_ecp_reply(lib::ERROR_IN_ECP);
 	}
@@ -232,7 +248,13 @@ void task::ecp_wait_for_stop(void) {
 		throw common::generator::generator::ECP_error(lib::SYSTEM_ERROR, 0);
 	}
 
-	if (mp_command_type() != lib::STOP) {
+	// ew. odebranie pulsu z MP
+	// sprawdzeniem czy MP wyslalo puls przed spotkaniem z ECP
+	if ((!mp_pulse_received) && (mp_command.pulse_to_ecp_sent)) {
+		caller = receive_mp_message(true);
+	}
+
+	if (!ecp_stop) {
 		fprintf(
 				stderr,
 				"ecp_generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND) @ %s:%d\n",
@@ -245,11 +267,22 @@ void task::ecp_wait_for_stop(void) {
 // Oczekiwanie na polecenie START od MP
 bool task::ecp_wait_for_start(void) {
 	bool ecp_stop = false;
-
+	bool mp_pulse_received = false;
 	// Wyslanie pulsu do MP
 	send_pulse_to_mp(ECP_WAIT_FOR_START);
 
-	int caller = receive_mp_message(true);
+	int caller = -2;
+
+	while (caller <= 0) {
+
+		caller = receive_mp_message(true);
+		if (caller == 0) {
+			mp_pulse_received = true;
+			// przyszedl puls
+
+		}
+		//printf("mp_buffer_receive_and_send caller: %d\n", caller);
+	}
 
 	switch (mp_command_type()) {
 	case lib::START_TASK:
@@ -277,6 +310,14 @@ bool task::ecp_wait_for_start(void) {
 		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ECP: Reply to MP failed");
 		throw ECP_main_error(lib::SYSTEM_ERROR, 0);
 	}
+
+	// ew. odebranie pulsu z MP
+	// sprawdzeniem czy MP wyslalo puls przed spotkaniem z ECP
+	if ((!mp_pulse_received) && (mp_command.pulse_to_ecp_sent)) {
+		caller = receive_mp_message(true);
+	}
+
+
 	if (ecp_stop)
 		throw common::generator::generator::ECP_error(lib::NON_FATAL_ERROR,
 				ECP_STOP_ACCEPTED);
@@ -296,10 +337,23 @@ bool task::ecp_wait_for_start(void) {
 
 // Oczekiwanie na kolejne zlecenie od MP
 void task::get_next_state(void) {
+
+	bool mp_pulse_received = false;
 	// Wyslanie pulsu do MP
 	send_pulse_to_mp(ECP_WAIT_FOR_NEXT_STATE);
 
-	int caller = receive_mp_message(true);
+	int caller = -2;
+
+	while (caller <= 0) {
+
+		caller = receive_mp_message(true);
+		if (caller == 0) {
+			mp_pulse_received = true;
+			// przyszedl puls
+
+		}
+		//printf("mp_buffer_receive_and_send caller: %d\n", caller);
+	}
 
 	bool ecp_stop = false;
 
@@ -327,6 +381,13 @@ void task::get_next_state(void) {
 		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ECP: Reply to MP failed");
 		throw ECP_main_error(lib::SYSTEM_ERROR, 0);
 	}
+
+	// ew. odebranie pulsu z MP
+	// sprawdzeniem czy MP wyslalo puls przed spotkaniem z ECP
+	if ((!mp_pulse_received) && (mp_command.pulse_to_ecp_sent)) {
+		caller = receive_mp_message(true);
+	}
+
 
 	if (ecp_stop)
 		throw common::generator::generator::ECP_error(lib::NON_FATAL_ERROR,
@@ -437,12 +498,9 @@ bool task::mp_buffer_receive_and_send(void) {
 		}
 
 		// ew. odebranie pulsu z MP
-		// 1 zastapic sprawdzeniem czy MP wyslalo puls przed spotkaniem z ECP
+		// sprawdzeniem czy MP wyslalo puls przed spotkaniem z ECP
 		if ((!mp_pulse_received) && (mp_command.pulse_to_ecp_sent)) {
 			caller = receive_mp_message(true);
-
-			printf("mial przyjsc puls a przyszlo cos: %d\n", caller);
-
 		}
 
 		if (ecp_stop)
