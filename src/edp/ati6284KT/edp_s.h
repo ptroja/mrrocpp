@@ -8,12 +8,25 @@
 // Autor: Yoyek (Tomek Winiarski)
 // -------------------------------------------------------------------------
 
-#include "RawSocket.h"
 
-#if !defined(_EDP_S_ATI6284_H)
-#define _EDP_S_ATI6284_H
+#if !defined(_EDP_S_ATI6284_MS_H)
+#define _EDP_S_ATI6284_MS_H
 
 #include "edp/common/edp_irp6s_postument_track.h"
+#include "edp/ati6284MS/TimeUtil.h"
+
+#define USE_RAW
+
+#ifdef USE_RAW
+#include <kiper/clients/RawEthernetClient.hpp>
+#else
+#include <kiper/clients/AsioUdpClient.hpp>
+#endif
+
+#include <kiper/ClientRpcController.hpp>
+
+#include "ati3084.pb.h"
+
 
 namespace mrrocpp {
 namespace edp {
@@ -26,10 +39,6 @@ namespace sensor {
 
 static const uint8_t TARGET_ETHERNET_ADDRESS[] = { 0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0xFF };        //board mac address
 
-//static const uint8_t TARGET_ETHERNET_ADDRESS[] = {0x00, 0xE0, 0x7D, 0xDD, 0x7C, 0x94};
-//static const uint8_t TARGET_ETHERNET_ADDRESS[] = {0x00, 0x1F, 0x1F, 0x4D, 0x5B, 0xB0}; //koleszko
-//static const uint8_t LOCAL_ETHERNET_ADDRESS[] = {0x00, 0x02, 0x44, 0x9F, 0xBD, 0x24}; //lenin eth0
-static const uint8_t LOCAL_ETHERNET_ADDRESS[] = { 0x00, 0x1F, 0x1F, 0x0D, 0x99, 0x4C }; //lenin eth1, p2p
 
 
 /* macierz konwersji napiecia z czujnika na sile i momenty sil */
@@ -59,12 +68,21 @@ class ATI6284_force : public force{
 private:
 
 	uint64_t                frame_counter;
-	RawSocket              *sendSocket;
-	RawSocket              *recvSocket;
+#ifdef USE_RAW
+    kiper::clients::RawEthernetClient       client;
+#else
+    kiper::clients::AsioUdpClient           client;
+#endif
+    Ati3084_Stub            service;
 
+    kiper::ClientRpcController     rpcController;
+    GenForceReading         response;
 	unsigned char 			recvBuffer[512];
 	int16_t 				adc_data[6];
 	int16_t 				bias_data[6];
+
+	mrrocpp::edp::sensor::TimeUtil timeUtil;
+	bool measuring;
 
 public:
 
@@ -77,11 +95,13 @@ public:
 	void wait_for_event(void);		// oczekiwanie na zdarzenie
 	void initiate_reading (void);		// zadanie odczytu od VSP
 	void get_reading (void);			// odebranie odczytu od VSP		// zwraca blad
+	void startMeasurements();
+	void stopMeasurements();
 }; // end: class vsp_sensor
 
-void send_request(uint64_t &counter, RawSocket *sock);
+void send_request(uint64_t &counter);
 void convert_data(int16_t result_raw[6], int16_t bias_raw[6], double force[6]);
-int get_data_from_ethernet(unsigned char buffer[512], RawSocket *sock, int16_t data_raw[6]) ;
+int get_data_from_ethernet(unsigned char buffer[512], int16_t data_raw[6]) ;
 
 
 } // namespace sensor

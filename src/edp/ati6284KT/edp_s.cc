@@ -35,6 +35,9 @@
 #include <stddef.h>
 #include <sys/mman.h>
 #include <time.h>
+#include <fstream>
+
+#include <boost/bind.hpp>
 
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
@@ -42,6 +45,10 @@
 
 #include "lib/srlib.h"
 #include "edp_s.h"
+
+#include <sys/syspage.h>
+#include <sys/neutrino.h>
+
 
 // Konfigurator
 #include "lib/configurator.h"
@@ -60,24 +67,54 @@ struct sigevent tim_event;
 
 struct timespec start[9];
 
+static const char* interface = "en1";
+static uint8_t boardMac[6] = {0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
+
+static const char* host = "192.168.18.200";
+static const uint16_t port = 55555;
+
+static const unsigned int DESIRED_MEASUREMENT_FREQUENCY = 500;
+
+
 // #pragma off(check_stack);
 
 // #pragma on(check_stack);
 
 // Rejstracja procesu VSP
 ATI6284_force::ATI6284_force(common::manip_effector &_master) :
-	force(_master)
+	force(_master),
+#ifdef USE_RAW
+    client(interface, boardMac),
+#else
+    client(host, port),
+#endif
+    service(&client),
+    rpcController(boost::posix_time::microseconds(20000))
 {
 	frame_counter = 0; //licznik wyslanych pakietow
-
-	sendSocket = NULL;
-	recvSocket = NULL;
+    printf("Initialized docent sensor\n");
+	//sendSocket = NULL;
+	//recvSocket = NULL;
 
 	for(int i = 0;i<6;++i){
 		adc_data[i]=0;
 		bias_data[i]=0;
 	}
 
+	measuring = false;
+	_master.registerReaderStartedCallback(boost::bind(&ATI6284_force::startMeasurements, this));
+	_master.registerReaderStoppedCallback(boost::bind(&ATI6284_force::stopMeasurements, this));
+
+}
+
+void ATI6284_force::startMeasurements() {
+	timeUtil.reset();
+	measuring = true;
+}
+
+void ATI6284_force::stopMeasurements() {
+	measuring = false;
+	timeUtil.dump("/tmp/measures2.txt");
 }
 
 void ATI6284_force::connect_to_hardware(void)
@@ -95,8 +132,8 @@ void ATI6284_force::connect_to_hardware(void)
 
 		//inicjalizacja
 		try{
-		    sendSocket = new RawSocket("en1", TARGET_ETHERNET_ADDRESS);
-		    recvSocket = new RawSocket("en1");
+		    //sendSocket = new RawSocket("en1", TARGET_ETHERNET_ADDRESS);
+		    //recvSocket = new RawSockeib -t("en1");
 
 		} catch(std::exception & e) {
 			  throw runtime_error("Could not open device");
@@ -109,12 +146,14 @@ void ATI6284_force::connect_to_hardware(void)
 ATI6284_force::~ATI6284_force(void)
 {
 	if (!(master.test_mode)) {
-		delete recvSocket;
-		delete sendSocket;
+		//delete recvSocket;
+		//delete sendSocket;
 	}
 	if (gravity_transformation)
 		delete gravity_transformation;
 	printf("Destruktor edp_ATI6284_force_sensor\n");
+
+
 }
 
 /**************************** inicjacja czujnika ****************************/
@@ -137,11 +176,14 @@ void ATI6284_force::configure_sensor(void)
 		// lib::Homog_matrix frame(master.force_current_end_effector_frame); // pobranie aktualnej ramki
 
 
-		send_request(frame_counter, sendSocket); //send request for data
+		//send_request(frame_counter, sendSocket); //send request for data
 
 		usleep(250); //250us
 
 
+		wait_for_event();
+		wait_for_event();
+		wait_for_event();
 		wait_for_event();
 
 		for (int i = 0; i < 6; ++i) {
@@ -189,38 +231,36 @@ void ATI6284_force::configure_sensor(void)
 void ATI6284_force::wait_for_event()
 {
 	int iw_ret;
-	int iter_counter = 0; // okresla ile razy pod rzad zostala uruchomiona ta metoda
+	static int iter_counter = 0; // okresla ile razy pod rzad zostala uruchomiona ta metoda
 
-	/*
-	timespec time_counter;
-	time_counter.tv_nsec = 100000;
-	time_counter.tv_sec = 0;
-*/
-	if (!(master.test_mode)) {
+    //TODO: Jesli test mode, dopuszczac wylaczenie sensora
 
-		do {
-			iter_counter++;
+    iter_counter++;
+    if (iter_counter % 2000 == 0) {
+    	printf("Measures per sec = %d\n", timeUtil.mps());
+    }
 
-	//		nanosleep(&time_counter, NULL);
+    timeUtil.wait(1000);
+    timeUtil.probeDelayCycle();
+    if (measuring) {
+    	timeUtil.startMeasurement();
+    }
+    service.GetGenGForceReading(&rpcController, NULL, &response, NULL);
+    if (measuring) {
+    	timeUtil.stopMeasurement();
+    }
+    if (rpcController.expired()) {
+        printf("Expired!!!\n");
+    } else {
+			adc_data[0] = response.fx();
+            adc_data[1] = response.fy();
+            adc_data[2] = response.fz();
+            adc_data[3] = response.tx();
+            adc_data[4] = response.ty();
+            adc_data[5] = response.tz();
+    }
 
-	        send_request(frame_counter, sendSocket);         //send request for data
-
-			*int_timeout = ETHERNET_FRAME_TIMEOUT; //250us
-
-			TimerTimeout(CLOCK_REALTIME, ETHERNET_FRAME_TIMEOUT, &tim_event, int_timeout, NULL);
-
-			// kiedy po uplynieciu okreslonego czasu nie zostanie zgloszone przerwanie
-			iw_ret = get_data_from_ethernet(recvBuffer, recvSocket, adc_data);
-			if (iw_ret < 0){ //error
-				if (iter_counter > 1) {
-					sr_msg->message("Force / Torque sensor connection reastablished");
-				}
-			}
-
-		} while (iw_ret < 0); // dopoki nie zostanie odebrana paczka pomiarow
-	} else {
-		usleep(1000);
-	}
+    rpcController.reset();
 }
 
 /*************************** inicjacja odczytu ******************************/
@@ -230,43 +270,30 @@ void ATI6284_force::initiate_reading(void)
     double force_fresh[6] = { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f };
 	short measure_report;
 
-	if (!is_sensor_configured)
+	if (!is_sensor_configured) {
 		throw sensor_error(lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
+    }
 
-	if (master.test_mode) {
-		for (int i = 0; i < 6; ++i) {
-			kartez_force[i] = 0.0;
-		}
-		master.force_msr_upload(kartez_force);
-	} else {
+    lib::Ft_vector ft_table;
 
-			lib::Ft_vector ft_table;
+    convert_data(adc_data, bias_data, force_fresh);
 
-	        convert_data(adc_data, bias_data, force_fresh);
+    for (int i = 0; i < 6; ++i) {
+        ft_table[i] = force_fresh[i];
+    }
 
-			for (int i = 0; i < 6; ++i) {
-				ft_table[i] = force_fresh[i];
-			}
+    is_reading_ready = true;
 
-
-		// jesli pomiar byl poprawny?? zawsze jest
-		//if (measure_report == COMMAND_OK)
-		if(true){
-			is_reading_ready = true;
-
-			// jesli ma byc wykorzytstywana biblioteka transformacji sil
-			if (master.force_tryb == 2 && gravity_transformation) {
+    // jesli ma byc wykorzytstywana biblioteka transformacji sil
+    if (master.force_tryb == 2 && gravity_transformation) {
 
 
-				lib::Homog_matrix frame = master.return_current_frame(common::WITH_TRANSLATION);
-				// lib::Homog_matrix frame(master.force_current_end_effector_frame);
-				lib::Ft_vector output = gravity_transformation->getForce(ft_table, frame);
-				master.force_msr_upload(output);
+        lib::Homog_matrix frame = master.return_current_frame(common::WITH_TRANSLATION);
+        // lib::Homog_matrix frame(master.force_current_end_effector_frame);
+        lib::Ft_vector output = gravity_transformation->getForce(ft_table, frame);
+        master.force_msr_upload(output);
 
-			}
-		}
-
-	}
+    }
 }
 
 /***************************** odczyt z czujnika *****************************/
@@ -281,11 +308,11 @@ force* return_created_edp_force_sensor(common::manip_effector &_master)
 
 
 /*******************************************************************/
-void send_request(uint64_t &counter, RawSocket *sock) {
+void send_request(uint64_t &counter) {
   unsigned char send_buffer[8];
   ++counter;
   memcpy((void *)(send_buffer), (void *)(&(counter)), 8);     //64bit unsigned counter
-  sock->send(send_buffer, 8);                           //64bit counter = 8 bytes
+  //sock->send(send_buffer, 8);                           //64bit counter = 8 bytes
 
 }
 /***************************** konwersja danych z danych binarnych na sile *****************************/
@@ -346,9 +373,9 @@ void convert_data(int16_t result_raw[6], int16_t bias_raw[6], double force[6]) {
 }
 /*******************************************************************/
 /* gets data from ethernet and store it in int16_t data_raw[6] */
-int get_data_from_ethernet(unsigned char buffer[512], RawSocket *sock,
+int get_data_from_ethernet(unsigned char buffer[512],
                            int16_t data_raw[6]) {
-  std::size_t recvd = sock->recv(buffer, 512);
+  std::size_t recvd = 0;//sock->recv(buffer, 512);
   unsigned char *buffer_data = buffer + 8;  //8 bytes for uint64_t
 
   if (recvd >= 20) {            //12B - ADC data, 8B - counter
