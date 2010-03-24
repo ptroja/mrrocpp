@@ -15,24 +15,9 @@
 #include "edp/common/edp_irp6s_postument_track.h"
 #include "edp/ati6284MS/TimeUtil.h"
 
-#define USE_RAW
-
-#ifdef USE_RAW
-#include <kiper/clients/RawEthernetClient.hpp>
-#else
-#include <kiper/clients/AsioUdpClient.hpp>
-#endif
-
-#include <kiper/ClientRpcController.hpp>
-
-#include "ati3084.pb.h"
-
-
 namespace mrrocpp {
 namespace edp {
 namespace sensor {
-
-
 
 //250us
 #define ETHERNET_FRAME_TIMEOUT 250000
@@ -66,17 +51,9 @@ double conversion_matrix[6][6] = {
 class ATI6284_force : public force{
 
 private:
-
+	RawSocket socket_;
+	ForceSensor6284 sensor_;
 	uint64_t                frame_counter;
-#ifdef USE_RAW
-    kiper::clients::RawEthernetClient       client;
-#else
-    kiper::clients::AsioUdpClient           client;
-#endif
-    Ati3084_Stub            service;
-
-    kiper::ClientRpcController     rpcController;
-    GenForceReading         response;
 	unsigned char 			recvBuffer[512];
 	int16_t 				adc_data[6];
 	int16_t 				bias_data[6];
