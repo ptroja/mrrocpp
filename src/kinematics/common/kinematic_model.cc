@@ -44,7 +44,7 @@ void kinematic_model::direct_kinematics_transform(const lib::JointArray & local_
 }
 
 //! Solves inverse kinematics.
-void kinematic_model::inverse_kinematics_transform(lib::JointArray & local_desired_joints, lib::JointArray & local_current_joints, const lib::Homog_matrix& local_desired_end_effector_frame)
+void kinematic_model::inverse_kinematics_transform(lib::JointArray & local_desired_joints, const lib::JointArray & local_current_joints, const lib::Homog_matrix& local_desired_end_effector_frame)
 {
 
 }
