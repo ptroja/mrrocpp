@@ -1798,6 +1798,7 @@ unsigned int epos::readAnswer(WORD *ans, unsigned int ans_len)
 	#ifdef DDEBUG
 		printf("got this CRC: 0x%04x\n", crc);
 	#endif
+		ans[framelen + 1] = 0x0000;
 		ans[framelen + 1] = CalcFieldCRC(ans, framelen+2);
 
 		if (crc == ans[framelen + 1]) {
