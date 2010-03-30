@@ -383,4 +383,9 @@ int irp6p_tfg_servo_algorithm_set( PtWidget_t *widget, ApInfo_t *data, PtCallbac
 int wind_irp6p_tfg_moves_init( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 int clear_wind_irp6p_tfg_moves_flag( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 int wind_irp6p_tfg_moves_move( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int EDP_spkm_create( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int EDP_smb_create( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int EDP_sh_create( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int EDP_spkm_slay( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int EDP_sh_slay( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 #endif

@@ -400,6 +400,13 @@ int clear_wnd_irp6p_tfg_servo_algorithm_flag ( PtWidget_t *widget , ApInfo_t *ap
 int reload_irp6p_tfg_configuration ( void );
 int manage_interface_irp6p_tfg ( void );
 
+/* ../fun_r_sh.cc */
+int EDP_sh_create ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
+int EDP_sh_slay ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
+
+/* ../fun_r_smb.cc */
+int EDP_smb_create ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
+
 /* ../fun_r_speaker.cc */
 int close_wnd_speaker_play ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int start_wind_speaker_play ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
@@ -419,6 +426,10 @@ bool pulse_reader_speaker_trigger_exec_pulse ( void );
 int pulse_ecp_speaker ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int reload_speaker_configuration ( void );
 int manage_interface_speaker ( void );
+
+/* ../fun_r_spkm.cc */
+int EDP_spkm_create ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
+int EDP_spkm_slay ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 
 /* ../timer.cc */
 int OnTimer ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
