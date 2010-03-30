@@ -280,6 +280,9 @@ int init( PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo 
 	ui_state.irp6ot_tfg.edp.is_synchronised = false;
 	ui_state.irp6p_tfg.edp.is_synchronised = false;
 	ui_state.conveyor.edp.is_synchronised = false;
+	ui_state.spkm.edp.is_synchronised = false;
+	ui_state.smb.edp.is_synchronised = false;
+	ui_state.shead.edp.is_synchronised = false;
 	ui_state.speaker.edp.is_synchronised = false;
 	ui_state.irp6_mechatronika.edp.is_synchronised = false;
 

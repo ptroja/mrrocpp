@@ -25,6 +25,9 @@
 #include "ecp/irp6ot_tfg/ecp_r_irp6ot_tfg.h"
 #include "ecp/irp6p_tfg/ecp_r_irp6p_tfg.h"
 #include "ecp/conveyor/ecp_r_conv.h"
+#include "ecp/spkm/ecp_r_spkm.h"
+#include "ecp/smb/ecp_r_smb.h"
+#include "ecp/shead/ecp_r_shead.h"
 #include "ui/ui_ecp_r_tfg_and_conv.h"
 
 #include <math.h>
@@ -52,6 +55,27 @@ ui_tfg_and_conv_robot::ui_tfg_and_conv_robot(lib::configurator &_config, lib::sr
 			break;
 		case lib::ROBOT_CONVEYOR:
 			ecp = new ecp::conveyor::robot(_config, _sr_ecp_msg);
+
+			MOTOR_STEP = 0.1; // Przyrost kata obrotu walu silnika [rad]
+			JOINT_LINEAR_STEP = 0.00004; // Przyrost liniowy w przegubach posuwistych [m]
+
+			break;
+		case lib::ROBOT_SPKM:
+			ecp = new ecp::spkm::robot(_config, _sr_ecp_msg);
+
+			MOTOR_STEP = 0.1; // Przyrost kata obrotu walu silnika [rad]
+			JOINT_LINEAR_STEP = 0.00004; // Przyrost liniowy w przegubach posuwistych [m]
+
+			break;
+		case lib::ROBOT_SMB:
+			ecp = new ecp::smb::robot(_config, _sr_ecp_msg);
+
+			MOTOR_STEP = 0.1; // Przyrost kata obrotu walu silnika [rad]
+			JOINT_LINEAR_STEP = 0.00004; // Przyrost liniowy w przegubach posuwistych [m]
+
+			break;
+		case lib::ROBOT_SHEAD:
+			ecp = new ecp::shead::robot(_config, _sr_ecp_msg);
 
 			MOTOR_STEP = 0.1; // Przyrost kata obrotu walu silnika [rad]
 			JOINT_LINEAR_STEP = 0.00004; // Przyrost liniowy w przegubach posuwistych [m]

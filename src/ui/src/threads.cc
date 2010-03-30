@@ -685,6 +685,9 @@ void abort_threads()
 	pthread_abort(edp_irp6ot_tfg_tid);
 	pthread_abort(edp_irp6p_tfg_tid);
 	pthread_abort(edp_conv_tid);
+	pthread_abort(edp_spkm_tid);
+	pthread_abort(edp_smb_tid);
+	pthread_abort(edp_shead_tid);
 	pthread_abort(meb_tid);
 #endif
 }
