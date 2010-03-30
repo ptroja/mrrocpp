@@ -52,6 +52,11 @@ pthread_t edp_irp6p_tid;
 pthread_t edp_irp6ot_tfg_tid;
 pthread_t edp_irp6p_tfg_tid;
 pthread_t edp_conv_tid;
+
+pthread_t edp_spkm_tid;
+pthread_t edp_smb_tid;
+pthread_t edp_shead_tid;
+
 pthread_t ui_tid;
 pthread_t sr_tid;
 pthread_t meb_tid;
@@ -60,6 +65,11 @@ function_execution_buffer edp_irp6ot_eb;
 function_execution_buffer edp_irp6p_eb;
 function_execution_buffer edp_irp6ot_tfg_eb;
 function_execution_buffer edp_irp6p_tfg_eb;
+
+function_execution_buffer edp_spkm_eb;
+function_execution_buffer edp_smb_eb;
+function_execution_buffer edp_shead_eb;
+
 
 function_execution_buffer edp_conv_eb;
 function_execution_buffer main_eb;
@@ -517,6 +527,38 @@ void *edp_conv_thread(void* arg) {
 	return NULL;
 }
 
+
+void *edp_spkm_thread(void* arg) {
+
+	while (true) {
+		edp_spkm_eb.wait_and_execute();
+	}
+
+	return NULL;
+}
+
+
+void *edp_smb_thread(void* arg) {
+
+	while (true) {
+		edp_smb_eb.wait_and_execute();
+	}
+
+	return NULL;
+}
+
+
+void *edp_shead_thread(void* arg) {
+
+	while (true) {
+		edp_shead_eb.wait_and_execute();
+	}
+
+	return NULL;
+}
+
+
+
 void *meb_thread(void* arg) {
 
 	while (true) {
@@ -567,6 +609,19 @@ void create_threads()
 		printf(" Failed to thread edp_conv_tid\n");
 	}
 
+
+	if (pthread_create(&edp_spkm_tid, NULL, edp_spkm_thread, NULL) != EOK) {// Y&W - utowrzenie watku serwa
+		printf(" Failed to thread edp_spkm_tid\n");
+	}
+
+	if (pthread_create(&edp_smb_tid, NULL, edp_smb_thread, NULL) != EOK) {// Y&W - utowrzenie watku serwa
+		printf(" Failed to thread edp_smb_tid\n");
+	}
+
+	if (pthread_create(&edp_shead_tid, NULL, edp_shead_thread, NULL) != EOK) {// Y&W - utowrzenie watku serwa
+		printf(" Failed to thread edp_shead_tid\n");
+	}
+
 	if (pthread_create(&meb_tid, NULL, meb_thread, NULL) != EOK) {// Y&W - utowrzenie watku serwa
 		printf(" Failed to thread meb_tid\n");
 	}
@@ -598,6 +653,18 @@ void create_threads()
 
 	if (SignalProcmask(0, edp_conv_tid, SIG_BLOCK, &set, NULL) == -1) {
 		perror("SignalProcmask(edp_conv_tid)");
+	}
+
+	if (SignalProcmask(0, edp_spkm_tid, SIG_BLOCK, &set, NULL) == -1) {
+		perror("SignalProcmask(edp_spkm_tid)");
+	}
+
+	if (SignalProcmask(0, edp_smb_tid, SIG_BLOCK, &set, NULL) == -1) {
+		perror("SignalProcmask(edp_smb_tid)");
+	}
+
+	if (SignalProcmask(0, edp_shead_tid, SIG_BLOCK, &set, NULL) == -1) {
+		perror("SignalProcmask(edp_shead_tid)");
 	}
 
 	if (SignalProcmask(0, meb_tid, SIG_BLOCK, &set, NULL) == -1) {
