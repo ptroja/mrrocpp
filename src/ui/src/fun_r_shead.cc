@@ -16,7 +16,7 @@
 
 
 int
-EDP_sh_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
+EDP_shead_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
 
 	{
 
@@ -29,7 +29,7 @@ EDP_sh_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
 
 
 int
-EDP_sh_slay( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
+EDP_shead_slay( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
 
 	{
 

@@ -385,7 +385,8 @@ int clear_wind_irp6p_tfg_moves_flag( PtWidget_t *widget, ApInfo_t *data, PtCallb
 int wind_irp6p_tfg_moves_move( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 int EDP_spkm_create( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 int EDP_smb_create( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
-int EDP_sh_create( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int EDP_shead_create( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 int EDP_spkm_slay( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
-int EDP_sh_slay( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int EDP_smb_slay( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int EDP_shead_slay( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 #endif

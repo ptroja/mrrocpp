@@ -400,12 +400,13 @@ int clear_wnd_irp6p_tfg_servo_algorithm_flag ( PtWidget_t *widget , ApInfo_t *ap
 int reload_irp6p_tfg_configuration ( void );
 int manage_interface_irp6p_tfg ( void );
 
-/* ../fun_r_sh.cc */
-int EDP_sh_create ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
-int EDP_sh_slay ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
+/* ../fun_r_shead.cc */
+int EDP_shead_create ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
+int EDP_shead_slay ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 
 /* ../fun_r_smb.cc */
 int EDP_smb_create ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
+int EDP_smb_slay ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 
 /* ../fun_r_speaker.cc */
 int close_wnd_speaker_play ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );

@@ -27,3 +27,16 @@ EDP_smb_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
 
 	}
 
+
+int
+EDP_smb_slay( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
+
+	{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	return( Pt_CONTINUE );
+
+	}
+
