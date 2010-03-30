@@ -86,7 +86,7 @@ int EDP_spkm_create_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *
 
 				ui_state.spkm.edp.state = 1;
 
-				ui_robot.spkm = new ui_tfg_and_conv_robot(*config, *ui_msg.all_ecp, lib::ROBOT_IRP6OT_TFG);
+				ui_robot.spkm = new ui_tfg_and_conv_robot(*config, *ui_msg.all_ecp, lib::ROBOT_SPKM);
 
 				ui_state.spkm.edp.pid = ui_robot.spkm->ecp->get_EDP_pid();
 

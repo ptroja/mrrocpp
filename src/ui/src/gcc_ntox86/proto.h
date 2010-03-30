@@ -402,11 +402,19 @@ int manage_interface_irp6p_tfg ( void );
 
 /* ../fun_r_shead.cc */
 int EDP_shead_create ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
+int EDP_shead_create_int ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int EDP_shead_slay ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
+int EDP_shead_slay_int ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
+int reload_shead_configuration ( void );
+int manage_interface_shead ( void );
 
 /* ../fun_r_smb.cc */
 int EDP_smb_create ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
+int EDP_smb_create_int ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int EDP_smb_slay ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
+int EDP_smb_slay_int ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
+int reload_smb_configuration ( void );
+int manage_interface_smb ( void );
 
 /* ../fun_r_speaker.cc */
 int close_wnd_speaker_play ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );

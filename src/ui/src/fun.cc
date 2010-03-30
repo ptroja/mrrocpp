@@ -1102,6 +1102,11 @@ int reload_whole_configuration() {
 			// dla robota conveyor
 			reload_conveyor_configuration();
 
+			reload_spkm_configuration();
+			reload_smb_configuration();
+			reload_shead_configuration();
+
+
 			// dla robota speaker
 			reload_speaker_configuration();
 
@@ -1535,6 +1540,10 @@ int manage_interface() {
 
 	// Dla robota CONVEYOR
 	manage_interface_conveyor();
+
+	manage_interface_spkm();
+	manage_interface_smb();
+	manage_interface_shead();
 
 	// Dla robota SPEAKER
 	manage_interface_speaker();
@@ -2166,6 +2175,9 @@ int EDP_all_robots_create(PtWidget_t *widget, ApInfo_t *apinfo,
 	EDP_irp6_postument_create(widget, apinfo, cbinfo);
 	EDP_irp6p_tfg_create(widget, apinfo, cbinfo);
 	EDP_conveyor_create(widget, apinfo, cbinfo);
+	EDP_spkm_create(widget, apinfo, cbinfo);
+	EDP_smb_create(widget, apinfo, cbinfo);
+	EDP_shead_create(widget, apinfo, cbinfo);
 	EDP_speaker_create(widget, apinfo, cbinfo);
 	EDP_irp6_mechatronika_create(widget, apinfo, cbinfo);
 
@@ -2185,6 +2197,9 @@ int EDP_all_robots_slay(PtWidget_t *widget, ApInfo_t *apinfo,
 	EDP_irp6_postument_slay(widget, apinfo, cbinfo);
 	EDP_irp6p_tfg_slay(widget, apinfo, cbinfo);
 	EDP_conveyor_slay(widget, apinfo, cbinfo);
+	EDP_spkm_slay(widget, apinfo, cbinfo);
+	EDP_smb_slay(widget, apinfo, cbinfo);
+	EDP_shead_slay(widget, apinfo, cbinfo);
 	EDP_speaker_slay(widget, apinfo, cbinfo);
 	EDP_irp6_mechatronika_slay(widget, apinfo, cbinfo);
 
