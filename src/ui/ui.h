@@ -196,6 +196,9 @@ typedef struct
 	ecp_edp_ui_robot_def polycrank;
 	ecp_edp_ui_robot_def conveyor;
 	ecp_edp_ui_robot_def speaker;
+	ecp_edp_ui_robot_def spkm;
+	ecp_edp_ui_robot_def smb;
+	ecp_edp_ui_robot_def shead;
 
 	mp_state_def mp;
 	// bool is_any_edp_active;

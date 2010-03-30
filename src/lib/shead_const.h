@@ -30,10 +30,10 @@ extern "C" {
 
 
 
-#define EDP_SMB_SECTION "[edp_shead]"
-#define ECP_SMB_SECTION "[ecp_shead]"
+#define EDP_SHEAD_SECTION "[edp_shead]"
+#define ECP_SHEAD_SECTION "[ecp_shead]"
 
-#define SMB_NUM_OF_SERVOS	1
+#define SHEAD_NUM_OF_SERVOS	1
 
 #ifdef __cplusplus
 }

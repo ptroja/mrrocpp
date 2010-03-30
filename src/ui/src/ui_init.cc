@@ -182,6 +182,7 @@ int init( PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo 
 	ui_state.irp6p_tfg.edp.section_name = EDP_IRP6P_TFG_SECTION;
 	ui_state.irp6p_tfg.ecp.section_name = ECP_IRP6P_TFG_SECTION;
 
+
 	ui_state.speaker.edp.state=-1; // edp nieaktywne
 	ui_state.speaker.edp.last_state=-1; // edp nieaktywne
 	ui_state.speaker.ecp.trigger_fd = -1;
@@ -196,10 +197,31 @@ int init( PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo 
 
 	ui_state.irp6_mechatronika.edp.state=-1; // edp nieaktywne
 	ui_state.irp6_mechatronika.edp.last_state=-1; // edp nieaktywne
-
 	ui_state.irp6_mechatronika.ecp.trigger_fd = -1;
 	ui_state.irp6_mechatronika.edp.section_name = EDP_IRP6_MECHATRONIKA_SECTION;
 	ui_state.irp6_mechatronika.ecp.section_name = ECP_IRP6_MECHATRONIKA_SECTION;
+
+	ui_state.spkm.edp.state=-1; // edp nieaktywne
+	ui_state.spkm.edp.last_state=-1; // edp nieaktywne
+	ui_state.spkm.ecp.trigger_fd = -1;
+	ui_state.spkm.edp.section_name = EDP_SPKM_SECTION;
+	ui_state.spkm.ecp.section_name = ECP_SPKM_SECTION;
+
+
+	ui_state.smb.edp.state=-1; // edp nieaktywne
+	ui_state.smb.edp.last_state=-1; // edp nieaktywne
+	ui_state.smb.ecp.trigger_fd = -1;
+	ui_state.smb.edp.section_name = EDP_SMB_SECTION;
+	ui_state.smb.ecp.section_name = ECP_SMB_SECTION;
+
+
+
+	ui_state.shead.edp.state=-1; // edp nieaktywne
+	ui_state.shead.edp.last_state=-1; // edp nieaktywne
+	ui_state.shead.ecp.trigger_fd = -1;
+	ui_state.shead.edp.section_name = EDP_SHEAD_SECTION;
+	ui_state.shead.ecp.section_name = ECP_SHEAD_SECTION;
+
 
 	ui_state.file_window_mode=FSTRAJECTORY; // uczenie
 	ui_state.all_edps = UI_ALL_EDPS_NONE_EDP_LOADED;

@@ -22,6 +22,7 @@
 #include "lib/polycrank_const.h"
 #include "lib/smb_const.h"
 #include "lib/spkm_const.h"
+#include "lib/shead_const.h"
 #include "lib/speaker_const.h"
 
 typedef struct{
