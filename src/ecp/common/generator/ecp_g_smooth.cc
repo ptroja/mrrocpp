@@ -752,7 +752,7 @@ double smooth::generate_next_coords(int node_counter, int interpolation_node_no,
 							next_position += k* (v_r * (node_counter - przysp - jedn)*tk + tk*tk*(node_counter - jedn - przysp) * (node_counter - jedn - przysp) * a_r / 2);
 						}
 					} else {//przyspieszenie + poczatek jednostajnego
-						printf("przyspieszanie wchodzi na jednostajny, macrostep liczony od 1: %d\n", node_counter);
+						//printf("przyspieszanie wchodzi na jednostajny, macrostep liczony od 1: %d\n", node_counter);
 						//next_position = start_position + k * ((node_counter-1)*v_p*tk + (node_counter-1)*(node_counter-1)*a_r*tk*tk/2);
 						//next_position += k * (v_p*tk + a_r*tk*tk/2 + (v_p+a_r*(node_counter-1) *tk)) * (przysp - (node_counter-1)) + k * tk * v_r * (node_counter - przysp);
 						next_position = start_position + k * (v_p * node_counter * tk + przysp * przysp * tk * tk * a_r / 2 + v_r * (node_counter - przysp) * tk);
@@ -775,7 +775,7 @@ double smooth::generate_next_coords(int node_counter, int interpolation_node_no,
 							next_position += k* (v_r * (node_counter - przysp - jedn)*tk + tk*tk*(node_counter - jedn - przysp) * (node_counter - jedn - przysp) * a_r / 2);
 						}
 					} else {//przyspieszenie + poczatek jednostajnego
-						printf("przyspieszanie wchodzi na jednostajny, macrostep liczony od 1: %d\n", node_counter);
+						//printf("przyspieszanie wchodzi na jednostajny, macrostep liczony od 1: %d\n", node_counter);
 						//next_position = start_position + k * ((node_counter-1)*v_p*tk + (node_counter-1)*(node_counter-1)*a_r*tk*tk/2);
 						//next_position += k * (v_p*tk + a_r*tk*tk/2 + (v_p+a_r*(node_counter-1) *tk)) * (przysp - (node_counter-1)) + k * tk * v_r * (node_counter - przysp);
 						next_position = k * (v_r * (1 - node_counter + przysp) * tk - (1 - node_counter + przysp) * (1 - node_counter + przysp) * tk * tk * a_r / 2 + v_r * (node_counter - przysp) * tk);
@@ -823,7 +823,7 @@ double smooth::generate_next_coords(int node_counter, int interpolation_node_no,
 								next_position += k* (v_r * (node_counter - przysp - jedn)*tk + tk*tk*(node_counter - jedn - przysp) * (node_counter - jedn - przysp) * a_r / 2);
 							}
 					} else {//hamowanie + poczatek jednostajnego
-						printf("przyspieszanie wchodzi na jednostajny, macrostep liczony od 1: %d\n", node_counter);
+						//printf("przyspieszanie wchodzi na jednostajny, macrostep liczony od 1: %d\n", node_counter);
 						//next_position = start_position + k * ((node_counter-1)*v_p*tk + (node_counter-1)*(node_counter-1)*a_r*tk*tk/2);
 						//next_position += k * (v_p*tk + a_r*tk*tk/2 + (v_p+a_r*(node_counter-1) *tk)) * (przysp - (node_counter-1)) + k * tk * v_r * (node_counter - przysp);
 						next_position = k * (v_r * (1 - node_counter + przysp) * tk + (1 - node_counter + przysp) * (1 - node_counter + przysp) * tk * tk * a_r / 2 + v_r * (node_counter - przysp) * tk);
@@ -1740,7 +1740,7 @@ void smooth::calculate(void) { //zeby wrocic do starego trybu relative nalezy st
 				//printf("t_temp1: %f\tt_temp2: %f\n", t_temp1, t_temp2);
 
 				if (s_temp1[i] + s_temp2[i] > s[i]) {
-					//printf("redukcja predkosci w osi %d\n", i);
+					printf("redukcja predkosci w osi %d\n", i);
 					//TODO tutaj wstawic optymalizacje czasu
 					optimize_time1(pose_list_iterator, i, s[i]);//nastepuje zapisanie czasu, mozliwe wywolanie vp_reduction lub vk_reduction wewnatrz
 					if (trajectory_calculated == true) {
@@ -2285,7 +2285,7 @@ void smooth::vk_reduction(std::list<ecp_mp::common::smooth_trajectory_pose>::ite
 }
 
 void smooth::optimize_time1(std::list<ecp_mp::common::smooth_trajectory_pose>::iterator pose_list_iterator, int i, double s) {
-	//printf("\noptymalizacja czasu 1 os: %d\n", i);
+	printf("\noptymalizacja czasu 1 os: %d\n", i);
 	double v_r;
 	double t;
 
@@ -2294,17 +2294,17 @@ void smooth::optimize_time1(std::list<ecp_mp::common::smooth_trajectory_pose>::i
 
 	if (pose_list_iterator->v_p[i] >= pose_list_iterator->v_k[i] && v_r < pose_list_iterator->v_p[i]) {
 		t = (pose_list_iterator->v_p[i] - pose_list_iterator->v_k[i])/pose_list_iterator->a_r[i];
-		//printf("vp reduction\n");
+		printf("vp reduction\n");
 		vp_reduction(pose_list_iterator, i, s, t);
 		return;
 	} else if (pose_list_iterator->v_p[i] < pose_list_iterator->v_k[i] && v_r < pose_list_iterator->v_k[i]) {
 		t = (pose_list_iterator->v_k[i] - pose_list_iterator->v_p[i])/pose_list_iterator->a_r[i];
 		pose_list_iterator->v_r[i] = pose_list_iterator->v_k[i];
-	   // printf("vk reduction\n");
+	    printf("vk reduction\n");
 		vk_reduction(pose_list_iterator, i, s, t);
 		return;
 	} else {
-		//printf("normal\n");
+		printf("normal\n");
 		t = ((v_r - pose_list_iterator->v_p[i])/pose_list_iterator->a_r[i] + (v_r - pose_list_iterator->v_k[i])/pose_list_iterator->a_r[i]);
 		pose_list_iterator->v_r[i] = v_r;
 	}

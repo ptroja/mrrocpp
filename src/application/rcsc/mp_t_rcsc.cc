@@ -35,33 +35,27 @@ rubik_cube_solver::rubik_cube_solver(lib::configurator &_config)
 	cube_state(NULL)
 {
 	// Powolanie czujnikow
+
+	//odczyt z configa
 	vis_servoing = config.value<int>("vis_servoing");
 
 	if (vis_servoing)
 	{
 
-
-	if (config.value<int>("vis_servoing"))
-	{
-
-
-
+		// Konfiguracja wszystkich czujnikow
+		BOOST_FOREACH(ecp_mp::sensor_item_t & sensor_item, sensor_m) {
+			sensor_item.second->to_vsp.parameters=1; // biasowanie czujnika
+			sensor_item.second->configure_sensor();
+		}
 	}
 
-	// Konfiguracja wszystkich czujnikow
-	BOOST_FOREACH(ecp_mp::sensor_item_t & sensor_item, sensor_m) {
-		sensor_item.second->to_vsp.parameters=1; // biasowanie czujnika
-		sensor_item.second->configure_sensor();
-	}
-
-	}
 	if (vis_servoing)
-		{
-	// dodanie transmitter'a
-	transmitter_m[ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS] =
+	{
+		// dodanie transmitter'a
+		transmitter_m[ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS] =
 		new ecp_mp::transmitter::rc_windows (ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS, "[transmitter_rc_windows]", *this);
 
-		}
+	}
 }
 
 
@@ -422,8 +416,6 @@ void rubik_cube_solver::manipulate(common::CUBE_COLOR face_to_turn, common::CUBE
 	}
 }
 
-
-
 // obrot sciany
 void rubik_cube_solver::face_turn_op(common::CUBE_TURN_ANGLE turn_angle)
 {
@@ -480,15 +472,12 @@ void rubik_cube_solver::face_turn_op(common::CUBE_TURN_ANGLE turn_angle)
 		break;
 	}
 
-
 	// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie obydwu generatorow ECP
 	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 			(2, 1, lib::ROBOT_IRP6_ON_TRACK, lib::ROBOT_FESTIVAL,
 					lib::ROBOT_IRP6_ON_TRACK);
 
-
 	// zacisniecie postumenta na kostce
-
 
 	// wlaczenie generatora do konfiguracji czujnika w EDP w obydwu robotach
 	configure_edp_force_sensor(true, true);
@@ -507,8 +496,6 @@ void rubik_cube_solver::face_turn_op(common::CUBE_TURN_ANGLE turn_angle)
 	run_extended_empty_gen (false, 1, lib::ROBOT_IRP6_POSTUMENT);
 
 	// obrot kostki
-
-
 	switch (turn_angle)
 	{
 	case common::CL_90:
@@ -542,17 +529,12 @@ void rubik_cube_solver::face_turn_op(common::CUBE_TURN_ANGLE turn_angle)
 	// rozwarcie chwytaka tracka
 
 	// wlaczenie generatora zacisku na kostce w robocie irp6ot
-	//set_next_ecps_state ((int) ecp_mp::task::RCSC_GRIPPER_OPENING, (int) ecp_mp::task::RCSC_GO_VAR_2, "", 1, lib::ROBOT_IRP6_ON_TRACK);
 	set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, (int) ecp_mp::task::RELATIVE, "src/application/rcsc/trj/gripper_opening2.trj", 1, lib::ROBOT_IRP6_ON_TRACK);
 
 	// uruchomienie generatora empty_gen
 	run_extended_empty_gen (false, 1, lib::ROBOT_IRP6_ON_TRACK);
-	// wlaczenie generatora zacisku na kostce w robocie irp6ot
 
 	// odejscie tracka od postumenta
-
-	// wlaczenie generatora uczacego  robocie irp6ot
-	//	if (set_next_ecps_state ((int) ECP_GEN_TEACH_IN, 0, "trj/rcsc/irp6ot_fturn_de.trj", 1, lib::ROBOT_IRP6_ON_TRACK)) {  return true;  }
 	set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, (int) ecp_mp::task::ABSOLUTE, "src/application/rcsc/trj/irp6ot_sm_fturn_de.trj", 1, lib::ROBOT_IRP6_ON_TRACK);
 	// uruchomienie generatora empty_gen
 	run_extended_empty_gen (false, 1, lib::ROBOT_IRP6_ON_TRACK);
@@ -604,10 +586,6 @@ void rubik_cube_solver::face_change_op(common::CUBE_TURN_ANGLE turn_angle)
 			(3, 2, lib::ROBOT_IRP6_ON_TRACK, lib::ROBOT_IRP6_POSTUMENT, lib::ROBOT_FESTIVAL,
 					lib::ROBOT_IRP6_ON_TRACK, lib::ROBOT_IRP6_POSTUMENT);
 
-
-
-
-
 	switch (turn_angle)
 	{
 	case common::CL_90:
@@ -625,8 +603,6 @@ void rubik_cube_solver::face_change_op(common::CUBE_TURN_ANGLE turn_angle)
 	default:
 		break;
 	}
-
-
 	// TODO: wstawic generator VS + zblizanie silowe
 
 	// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie obydwu generatorow ECP
@@ -634,15 +610,10 @@ void rubik_cube_solver::face_change_op(common::CUBE_TURN_ANGLE turn_angle)
 			(2, 1, lib::ROBOT_IRP6_ON_TRACK, lib::ROBOT_FESTIVAL,
 					lib::ROBOT_IRP6_ON_TRACK);
 
-
-
-
 	// zacisniecie tracka na kostce
 
 	// wlaczenie generatora do konfiguracji czujnika w EDP w obydwu robotach
 	configure_edp_force_sensor(true, true);
-
-
 
 	// wlaczenie generatora zacisku na kostce w robocie irp6ot
 	set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_TFF_RUBIK_GRAB, (int) ecp_mp::task::RCSC_RG_FCHANGE_PHASE_1, "", 1, lib::ROBOT_IRP6_ON_TRACK);
@@ -679,7 +650,6 @@ void rubik_cube_solver::face_change_op(common::CUBE_TURN_ANGLE turn_angle)
 
 
 	// ostateczne zacisniecie tracka na kostce
-
 	// wlaczenie generatora zacisku na kostce w robocie irp6ot
 	set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_TFF_RUBIK_GRAB, (int) ecp_mp::task::RCSC_RG_FCHANGE_PHASE_4, "", 1, lib::ROBOT_IRP6_ON_TRACK);
 	// uruchomienie generatora empty_gen
@@ -687,16 +657,12 @@ void rubik_cube_solver::face_change_op(common::CUBE_TURN_ANGLE turn_angle)
 
 
 	// dalsze rozwarcie chwytaka postumenta
-
-	//set_next_ecps_state ((int) ecp_mp::task::RCSC_GRIPPER_OPENING, (int) ecp_mp::task::RCSC_GO_VAR_2, "", 1, lib::ROBOT_IRP6_POSTUMENT);
 	set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, (int) ecp_mp::task::RELATIVE, "src/application/rcsc/trj/gripper_opening2.trj", 1, lib::ROBOT_IRP6_POSTUMENT);
 	// uruchomienie generatora empty_gen
 	run_extended_empty_gen (false, 1, lib::ROBOT_IRP6_POSTUMENT);
 
 
 	// odejscie tracka od postumenta
-
-	// wlaczenie generatora uczacego w obu robotach
 	switch (turn_angle)
 	{
 	case common::CL_90:
@@ -790,7 +756,7 @@ void rubik_cube_solver::approach_op(int mode)
 {
 
 	//pierwsza konfiguracja czujnikow
-	// wlaczenie generatora do konfiguracji czujnika w EDP w obydwu robotach
+	//wlaczenie generatora do konfiguracji czujnika w EDP w obydwu robotach
 	configure_edp_force_sensor(true, true);
 
 	set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_FESTIVAL, ecp::festival::generator::generator::POLISH_VOICE, "jestem podatny", 1, lib::ROBOT_FESTIVAL);
@@ -801,7 +767,6 @@ void rubik_cube_solver::approach_op(int mode)
 
 	if ((config.exists("irp6p_compliant")) && ((bool) config.value<int>("irp6p_compliant")))
 	{
-
 		// wlaczenie genrator tff_nose_run_generator w postumencie
 		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_TFF_NOSE_RUN, (int) 0, "", 1, lib::ROBOT_IRP6_POSTUMENT);
 
@@ -811,11 +776,9 @@ void rubik_cube_solver::approach_op(int mode)
 
 		// przerwanie pracy generatora w ECP
 		send_end_motion_to_ecps (1, lib::ROBOT_IRP6_POSTUMENT);
-
 	}
 	else
 	{
-
 		// wlaczenie genrator tff_nose_run_generator w tracku
 		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_TFF_NOSE_RUN, (int) 0, "", 1, lib::ROBOT_IRP6_ON_TRACK);
 
@@ -825,18 +788,10 @@ void rubik_cube_solver::approach_op(int mode)
 
 		// przerwanie pracy generatora w ECP
 		send_end_motion_to_ecps (1, lib::ROBOT_IRP6_ON_TRACK);
-
 	}
 
-	// wlaczenie generatora uczacego w obu robotach
-	//	if (set_next_ecps_state ((int) ECP_GEN_TEACH_IN, 0, "trj/rcsc/irp6ot_ap_1.trj", 1, lib::ROBOT_IRP6_ON_TRACK)) {  return true;  }
 	set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, (int) ecp_mp::task::ABSOLUTE, "src/application/rcsc/trj/irp6ot_sm_ap_1.trj", 1, lib::ROBOT_IRP6_ON_TRACK);
-	//	if (set_next_ecps_state ((int) ECP_GEN_TEACH_IN, 0, "trj/rcsc/irp6p_ap_1.trj", 1, lib::ROBOT_IRP6_POSTUMENT)) {  return true;  }
 	set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, (int) ecp_mp::task::ABSOLUTE, "src/application/rcsc/trj/irp6p_sm_ap_1.trj", 1, lib::ROBOT_IRP6_POSTUMENT);
-
-	// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie obydwu generatorow ECP
-
-	//	(1, 1, lib::ROBOT_IRP6_ON_TRACK, lib::ROBOT_IRP6_POSTUMENT)) {  return true;  }
 
 	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 			(3, 2, lib::ROBOT_IRP6_ON_TRACK, lib::ROBOT_IRP6_POSTUMENT, lib::ROBOT_FESTIVAL,
@@ -844,22 +799,15 @@ void rubik_cube_solver::approach_op(int mode)
 
 
 	set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_FESTIVAL, 0, "jestem robotem usl/ugowym", 1, lib::ROBOT_FESTIVAL);
-	// wlaczenie generatora uczacego  robocie irp6ot
 
-	//Podmiana na zadanie chwytania
-	// 	if (set_next_ecps_state ((int) ECP_GEN_TEACH_IN, 0, "trj/rcsc/irp6ot_ap_2.trj", 1, lib::ROBOT_IRP6_ON_TRACK)) {  return true;  }
+	//zadanie chwytania kostki
 	set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, (int) ecp_mp::task::ABSOLUTE, "src/application/rcsc/trj/irp6ot_sm_ap_2.trj", 1, lib::ROBOT_IRP6_ON_TRACK);
-	/*
-       	if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
-     		(3, 1, lib::ROBOT_IRP6_ON_TRACK, lib::ROBOT_IRP6_POSTUMENT, lib::ROBOT_FESTIVAL,
-    		ROBOT_FESTIVAL)) {  return true;  }
-	 */
 
 	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 			(3, 2, lib::ROBOT_IRP6_ON_TRACK, lib::ROBOT_IRP6_POSTUMENT, lib::ROBOT_FESTIVAL,
 					lib::ROBOT_FESTIVAL, lib::ROBOT_IRP6_ON_TRACK);
 
-
+	//generator sledzacy kostke
 	set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_IB_EIH, (int) 1, "", 1, lib::ROBOT_IRP6_ON_TRACK);
 
 	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
@@ -867,14 +815,12 @@ void rubik_cube_solver::approach_op(int mode)
 						lib::ROBOT_IRP6_ON_TRACK);
 
 	// docisniecie chwytaka tracka do kostki
-
 	set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_TFF_GRIPPER_APPROACH, (int) 0, "", 1, lib::ROBOT_IRP6_ON_TRACK);
-	// uruchomienie generatora empty_gen
-	//run_extended_empty_gen (false, 1, lib::ROBOT_IRP6_ON_TRACK);
 
 	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 			(3, 1, lib::ROBOT_IRP6_ON_TRACK, lib::ROBOT_IRP6_POSTUMENT, lib::ROBOT_FESTIVAL,
 						lib::ROBOT_IRP6_ON_TRACK);
+
 
 	//podnoszenie o 2 milimetry nad kostkę
 	set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, (int) ecp_mp::task::RELATIVE, "src/application/rcsc/trj/irp6ot_sm_raising_up.trj", 1, lib::ROBOT_IRP6_ON_TRACK);
@@ -883,6 +829,7 @@ void rubik_cube_solver::approach_op(int mode)
 				(3, 1, lib::ROBOT_IRP6_ON_TRACK, lib::ROBOT_IRP6_POSTUMENT, lib::ROBOT_FESTIVAL,
 							lib::ROBOT_IRP6_ON_TRACK);
 
+
 	//zaciskanie na kostce
 	set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, (int) ecp_mp::task::RELATIVE, "src/application/rcsc/trj/irp6ot_sm_gripper_closing.trj", 1, lib::ROBOT_IRP6_ON_TRACK);
 
@@ -890,151 +837,34 @@ void rubik_cube_solver::approach_op(int mode)
 					(3, 1, lib::ROBOT_IRP6_ON_TRACK, lib::ROBOT_IRP6_POSTUMENT, lib::ROBOT_FESTIVAL,
 								lib::ROBOT_IRP6_ON_TRACK);
 
+	//zadanie chwytania kostki (koniec)
 
-	//	if (set_next_ecps_state ((int) ECP_GEN_TEACH_IN, 0, "trj/rcsc/irp6ot_ap_2.trj", 1, lib::ROBOT_IRP6_ON_TRACK)) {  return true;  }
-	/*set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_FESTIVAL, 0, "ul/oz*e~ kostke~ rubika", 1, lib::ROBOT_FESTIVAL);
-
-	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
-			(3, 1, lib::ROBOT_IRP6_ON_TRACK, lib::ROBOT_IRP6_POSTUMENT, lib::ROBOT_FESTIVAL, lib::ROBOT_FESTIVAL);
-
-	// powiedzenie
-	set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_FESTIVAL, 0, "podaj kostke~", 1, lib::ROBOT_FESTIVAL);
-
-
-	// uruchomienie generatora empty_gen
-	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
-			(2, 2, lib::ROBOT_IRP6_ON_TRACK, lib::ROBOT_FESTIVAL,
-					lib::ROBOT_IRP6_ON_TRACK, lib::ROBOT_FESTIVAL);
-
-
-	// wlaczenie generatora transparentnego w obu robotach
-	set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_TRANSPARENT, (int) 1, "", 1, lib::ROBOT_IRP6_ON_TRACK);
-	set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_TRANSPARENT, (int) 1, "", 1, lib::ROBOT_IRP6_POSTUMENT);
-
-
-	// opcjonalne serwo wizyjne
-	if (mode)
-	{
-//		generator::seven_eye eyegen(*this, 4);
-//		eyegen.robot_m[lib::ROBOT_IRP6_ON_TRACK] = robot_m[lib::ROBOT_IRP6_ON_TRACK];
-	//	eyegen.sensor_m[lib::SENSOR_CAMERA_SA] = sensor_m[lib::SENSOR_CAMERA_SA];
-
-	//	eyegen.Move();
-	}
-
-	send_end_motion_to_ecps (2, lib::ROBOT_IRP6_ON_TRACK, lib::ROBOT_IRP6_POSTUMENT);
-
-	wait_ms(500);
-	// zacisniecie chwytaka na kostce
-
-	// wlaczenie generatora zacisku na kostce w robocie irp6ot
-	set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_TFF_RUBIK_GRAB, (int) ecp_mp::task::RCSC_RG_FACE_TURN_PHASE_0, "", 1, lib::ROBOT_IRP6_ON_TRACK);
-	// uruchomienie generatora empty_gen
-	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
-			(2, 1, lib::ROBOT_IRP6_ON_TRACK, lib::ROBOT_FESTIVAL, lib::ROBOT_IRP6_ON_TRACK);
-	set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_TFF_RUBIK_GRAB, (int) ecp_mp::task::RCSC_RG_FROM_OPEARTOR_PHASE_1, "", 1, lib::ROBOT_IRP6_ON_TRACK);
-	// uruchomienie generatora empty_gen
-	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
-			(2, 1, lib::ROBOT_IRP6_ON_TRACK, lib::ROBOT_FESTIVAL, lib::ROBOT_IRP6_ON_TRACK);
-	// wlaczenie generatora zacisku na kostce w robocie irp6ot
-	set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_TFF_RUBIK_GRAB, (int) ecp_mp::task::RCSC_RG_FROM_OPEARTOR_PHASE_2, "", 1, lib::ROBOT_IRP6_ON_TRACK);
-	// uruchomienie generatora empty_gen
-	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
-			(2, 2, lib::ROBOT_IRP6_ON_TRACK, lib::ROBOT_FESTIVAL,
-					lib::ROBOT_IRP6_ON_TRACK, lib::ROBOT_FESTIVAL);
-
-	set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_FESTIVAL, 0, "pus~c~ kostke~", 1, lib::ROBOT_FESTIVAL);
-
-	// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie obydwu generatorow ECP
-	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
-			(1, 1, lib::ROBOT_FESTIVAL, lib::ROBOT_FESTIVAL);
-
-	wait_ms(1000);*/
-
-	//Podmiana na zadanie chwytania (koniec)
-
-	// wlaczenie generatora uczacego w obu robotach
-	//	if (set_next_ecps_state ((int) ECP_GEN_TEACH_IN, 0, "trj/rcsc/irp6ot_ap_3.trj", 1, lib::ROBOT_IRP6_ON_TRACK)) {  return true;  }
 	set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, (int) ecp_mp::task::ABSOLUTE, "src/application/rcsc/trj/irp6ot_sm_ap_3.trj", 1, lib::ROBOT_IRP6_ON_TRACK);
 	// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie obydwu generatorow ECP
-
-	//	(1, 1, lib::ROBOT_IRP6_ON_TRACK, lib::ROBOT_IRP6_POSTUMENT)) {  return true;  }
 
 	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 			(3, 2, lib::ROBOT_IRP6_ON_TRACK, lib::ROBOT_IRP6_POSTUMENT, lib::ROBOT_FESTIVAL,
 					lib::ROBOT_IRP6_ON_TRACK, lib::ROBOT_IRP6_POSTUMENT);
-
-
 }
-
 
 // odejscie
 void rubik_cube_solver::departure_op()
 {
-
 	set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_FESTIVAL, 0, "skon~czyl/em", 1, lib::ROBOT_FESTIVAL);
 
-	// wlaczenie generatora uczacego w obu robotach
-	//	if (set_next_ecps_state ((int) ECP_GEN_TEACH_IN, 0, "trj/rcsc/irp6ot_de_1.trj", 1, lib::ROBOT_IRP6_ON_TRACK)) {  return true;  }
 	set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, (int) ecp_mp::task::ABSOLUTE, "src/application/rcsc/trj/irp6ot_sm_de_1.trj", 1, lib::ROBOT_IRP6_ON_TRACK);
-	//	if (set_next_ecps_state ((int) ECP_GEN_TEACH_IN, 0, "trj/rcsc/irp6p_de_1.trj", 1, lib::ROBOT_IRP6_POSTUMENT)) {  return true;  }
-	set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, (int) ecp_mp::task::ABSOLUTE, "src/application/rcsc/trj/irp6p_sm_de_1.trj", 1, lib::ROBOT_IRP6_POSTUMENT);
 
+	set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, (int) ecp_mp::task::ABSOLUTE, "src/application/rcsc/trj/irp6p_sm_de_1.trj", 1, lib::ROBOT_IRP6_POSTUMENT);
 
 	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 			(3, 1, lib::ROBOT_IRP6_ON_TRACK, lib::ROBOT_IRP6_POSTUMENT, lib::ROBOT_FESTIVAL, lib::ROBOT_FESTIVAL);
 
 	set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_FESTIVAL, 0, "jade~ pracowac~ do anglii", 1, lib::ROBOT_FESTIVAL);
-	//	if (set_next_ecps_state ((int) ECP_GEN_FESTIVAL, 0, "jak sie paNstwu podobaLo", 1, lib::ROBOT_FESTIVAL)) {  return true;  }
 
 	// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie obydwu generatorow ECP
 	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 			(3, 2, lib::ROBOT_IRP6_ON_TRACK, lib::ROBOT_IRP6_POSTUMENT, lib::ROBOT_FESTIVAL,
 					lib::ROBOT_IRP6_ON_TRACK, lib::ROBOT_IRP6_POSTUMENT);
-}
-
-
-void rubik_cube_solver::gripper_opening(double track_increment, double postument_increment, int motion_time)
-{
-
-	lib::trajectory_description tdes;
-
-	tdes.arm_type = lib::ECP_XYZ_EULER_ZYZ;
-	tdes.interpolation_node_no = 1;
-	tdes.internode_step_no = motion_time;
-	tdes.value_in_step_no = tdes.internode_step_no - 2;
-	// Wspolrzedne kartezjanskie XYZ i katy Eulera ZYZ
-	tdes.coordinate_delta[0] = 0.0; // przyrost wspolrzednej X
-	tdes.coordinate_delta[1] = 0.0;// przyrost wspolrzednej Y
-	tdes.coordinate_delta[2] = 0.0;   // przyrost wspolrzednej Z
-	tdes.coordinate_delta[3] = 0.0;   // przyrost wspolrzednej FI
-	tdes.coordinate_delta[4] = 0.0;   // przyrost wspolrzednej TETA
-	tdes.coordinate_delta[5] = 0.0;   // przyrost wspolrzednej PSI
-	//	tdes.coordinate_delta[6] = 0.0;   // przyrost wspolrzednej PSI
-	tdes.coordinate_delta[6] = track_increment;   // przyrost wspolrzednej PSI
-
-	lib::trajectory_description tdes2;
-
-	tdes2.arm_type = lib::ECP_XYZ_EULER_ZYZ;
-	tdes2.interpolation_node_no = 1;
-	tdes2.internode_step_no = motion_time;
-	tdes2.value_in_step_no = tdes.internode_step_no - 2;
-	// Wspolrzedne kartezjanskie XYZ i katy Eulera ZYZ
-	tdes2.coordinate_delta[0] = 0.0; // przyrost wspolrzednej X
-	tdes2.coordinate_delta[1] = 0.0;// przyrost wspolrzednej Y
-	tdes2.coordinate_delta[2] = 0.0;   // przyrost wspolrzednej Z
-	tdes2.coordinate_delta[3] = 0.0;   // przyrost wspolrzednej FI
-	tdes2.coordinate_delta[4] = 0.0;   // przyrost wspolrzednej TETA
-	tdes2.coordinate_delta[5] = 0.0;   // przyrost wspolrzednej PSI
-	//	tdes2.coordinate_delta[6] = 0.02;   // przyrost wspolrzednej PSI
-	tdes2.coordinate_delta[6] = postument_increment;   // przyrost wspolrzednej PSI
-
-	// Generator trajektorii prostoliniowej
-	generator::tight_coop tcg(*this, tdes, tdes2);
-	tcg.robot_m = robot_m;
-
-	tcg.Move();
-
 }
 
 void rubik_cube_solver::main_task_algorithm(void)
@@ -1051,8 +881,6 @@ void rubik_cube_solver::main_task_algorithm(void)
 			common::read_cube_color(cube_initial_state[1]), common::read_cube_color(cube_initial_state[2]),  common::read_cube_color(cube_initial_state[3]),
 			common::read_cube_color(cube_initial_state[4]), common::read_cube_color(cube_initial_state[5]));
 
-
-
 	// Zlecenie wykonania kolejnego makrokroku
 	// printf("po start all \n");
 	for(;;)
@@ -1062,44 +890,41 @@ void rubik_cube_solver::main_task_algorithm(void)
 		if (vis_servoing)
 		{
 
-		printf("if vis servoing\n");
-		flushall();
-		BOOST_FOREACH(ecp_mp::sensor_item_t & sensor_item, sensor_m) {
-			sensor_item.second->to_vsp.parameters=1; // biasowanie czujnika
-			sensor_item.second->configure_sensor();
-		}
-
+			//printf("if vis servoing\n");
+			flushall();
+			BOOST_FOREACH(ecp_mp::sensor_item_t & sensor_item, sensor_m) {
+				sensor_item.second->to_vsp.parameters=1; // biasowanie czujnika
+				sensor_item.second->configure_sensor();
+			}
 		}
 
 		// przechwycenie kostki
-		approach_op( vis_servoing);
+		approach_op(vis_servoing);
 
 		// IDENTIFY COLORS
 		identify_colors();
 
 		if (vis_servoing)
 		{
-				printf("if vis servoing 2\n");
+				//printf("if vis servoing 2\n");
 				flushall();
 				if (communicate_with_windows_solver())
 				{
 					break;
 				}
-
 		}
 
 		if ((vis_servoing)&&(manipulation_sequence_computed))
 		{
-				printf("trzeci if\n");
-				flushall();
+			//printf("trzeci if\n");
+			flushall();
+
 			// wykonanie sekwencji manipulacji
 			face_turn_op(common::CL_0);
-
 
 			execute_manipulation_sequence();
 
 			// zakonczenie zadania
-
 			face_change_op(common::CL_0);
 		}
 
