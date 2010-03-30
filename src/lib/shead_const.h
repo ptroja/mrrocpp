@@ -33,7 +33,7 @@ extern "C" {
 #define EDP_SMB_SECTION "[edp_shead]"
 #define ECP_SMB_SECTION "[ecp_shead]"
 
-#define SMB_NUM_OF_SERVOS	8
+#define SMB_NUM_OF_SERVOS	1
 
 #ifdef __cplusplus
 }

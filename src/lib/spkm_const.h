@@ -32,7 +32,7 @@ extern "C" {
 #define EDP_SPKM_SECTION "[edp_spkm]"
 #define ECP_SPKM_SECTION "[ecp_spkm]"
 
-#define SPKM_NUM_OF_SERVOS	8
+#define SPKM_NUM_OF_SERVOS	6
 
 #ifdef __cplusplus
 }
