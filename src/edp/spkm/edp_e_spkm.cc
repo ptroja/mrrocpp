@@ -32,15 +32,14 @@ namespace mrrocpp {
 namespace edp {
 namespace spkm {
 
-void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
-{
+void effector::master_order(common::MT_ORDER nm_task, int nm_tryb) {
 	manip_effector::single_thread_master_order(nm_task, nm_tryb);
 }
 
-
-
 void effector::get_controller_state(lib::c_buffer &instruction) {
 
+	if (test_mode)
+		controller_state_edp_buf.is_synchronised = true;
 	//printf("get_controller_state: %d\n", controller_state_edp_buf.is_synchronised); fflush(stdout);
 	reply.controller_state = controller_state_edp_buf;
 
@@ -72,29 +71,24 @@ void effector::get_controller_state(lib::c_buffer &instruction) {
 
 // Konstruktor.
 effector::effector(lib::configurator &_config) :
-	manip_effector(_config, lib::ROBOT_SPKM)
-{
+	manip_effector(_config, lib::ROBOT_SPKM) {
 	number_of_servos = SPKM_NUM_OF_SERVOS;
 
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();
 
-
-
 	reset_variables();
 }
 
 /*--------------------------------------------------------------------------*/
-void effector::move_arm(lib::c_buffer &instruction)
-{
+void effector::move_arm(lib::c_buffer &instruction) {
 	manip_effector::single_thread_move_arm(instruction);
 
 }
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
-void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
-{ // odczytanie pozycji ramienia
+void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction) { // odczytanie pozycji ramienia
 	//lib::JointArray desired_joints_tmp(MAX_SERVOS_NR); // Wspolrzedne wewnetrzne -
 	//   printf(" GET ARM\n");
 
@@ -111,18 +105,15 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 /*--------------------------------------------------------------------------*/
 
 // Stworzenie modeli kinematyki dla robota IRp-6 na postumencie.
-void effector::create_kinematic_models_for_given_robot(void)
-{
+void effector::create_kinematic_models_for_given_robot(void) {
 	// Stworzenie wszystkich modeli kinematyki.
 	add_kinematic_model(new kinematics::spkm::kinematic_model_spkm());
 	// Ustawienie aktywnego modelu.
 	set_kinematic_model(0);
 }
 
-
 /*--------------------------------------------------------------------------*/
-void effector::create_threads()
-{
+void effector::create_threads() {
 	rb_obj = new common::reader_buffer(*this);
 	vis_obj = new common::vis_server(*this);
 }
@@ -134,8 +125,7 @@ void effector::create_threads()
 namespace common {
 
 // Stworzenie obiektu edp_irp6m_effector.
-effector* return_created_efector(lib::configurator &_config)
-{
+effector* return_created_efector(lib::configurator &_config) {
 	return new spkm::effector(_config);
 }
 
