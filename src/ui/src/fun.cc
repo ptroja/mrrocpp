@@ -1106,7 +1106,6 @@ int reload_whole_configuration() {
 			reload_smb_configuration();
 			reload_shead_configuration();
 
-
 			// dla robota speaker
 			reload_speaker_configuration();
 
@@ -1434,8 +1433,7 @@ int check_edps_state_and_modify_mp_state() {
 			&& (!(ui_state.conveyor.is_active))
 			&& (!(ui_state.speaker.is_active))
 			&& (!(ui_state.irp6_mechatronika.is_active))
-			&& (!(ui_state.spkm.is_active))
-			&& (!(ui_state.smb.is_active))
+			&& (!(ui_state.spkm.is_active)) && (!(ui_state.smb.is_active))
 			&& (!(ui_state.shead.is_active))) {
 		ui_state.all_edps = UI_ALL_EDPS_NONE_EDP_ACTIVATED;
 
@@ -1468,13 +1466,12 @@ int check_edps_state_and_modify_mp_state() {
 		ui_state.all_edps = UI_ALL_EDPS_LOADED_BUT_NOT_SYNCHRONISED;
 
 		// jesli chociaz jeden jest zaladowany
-	} else if (check_loaded(ui_state.irp6_postument) && check_loaded(
-			ui_state.irp6_on_track) && check_loaded(ui_state.conveyor)
-			&& check_loaded(ui_state.speaker) && check_loaded(
-			ui_state.irp6_mechatronika) && check_loaded(ui_state.irp6ot_tfg)
-			&& check_loaded(ui_state.irp6p_tfg) && check_loaded(
-			ui_state.spkm) && check_loaded(ui_state.smb)
-			&& check_loaded(ui_state.shead))
+	} else if (check_loaded(ui_state.irp6_postument) || check_loaded(
+			ui_state.irp6_on_track) || check_loaded(ui_state.conveyor)
+			|| check_loaded(ui_state.speaker) || check_loaded(
+			ui_state.irp6_mechatronika) || check_loaded(ui_state.irp6ot_tfg)
+			|| check_loaded(ui_state.irp6p_tfg) || check_loaded(ui_state.spkm)
+			|| check_loaded(ui_state.smb) || check_loaded(ui_state.shead))
 
 	{
 		ui_state.all_edps
@@ -1560,14 +1557,14 @@ int manage_interface() {
 
 	switch (ui_state.all_edps) {
 	case UI_ALL_EDPS_NONE_EDP_ACTIVATED:
-		//			printf("UI_ALL_EDPS_NONE_EDP_ACTIVATED\n");
+		//				printf("UI_ALL_EDPS_NONE_EDP_ACTIVATED\n");
 		block_widget(ABW_base_all_robots);
 		PtSetResource( ABW_base_all_robots, Pt_ARG_COLOR, Pg_GRAY, 0 );
 		block_widget(ABW_base_robot);
 		PtSetResource( ABW_base_robot, Pt_ARG_COLOR, Pg_GRAY, 0 );
 		break;
 	case UI_ALL_EDPS_NONE_EDP_LOADED:
-		//			printf("UI_ALL_EDPS_NONE_EDP_LOADED\n");
+		//				printf("UI_ALL_EDPS_NONE_EDP_LOADED\n");
 		ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL,
 				ABN_mm_all_robots_edp_load, NULL);
 		PtSetResource( ABW_base_all_robots, Pt_ARG_COLOR, Pg_BLACK, 0 );
@@ -1595,7 +1592,7 @@ int manage_interface() {
 		unblock_widget(ABW_base_robot);
 		break;
 	case UI_ALL_EDPS_LOADED_AND_SYNCHRONISED:
-		//			printf("UI_ALL_EDPS_LOADED_AND_SYNCHRONISED\n");
+		//				printf("UI_ALL_EDPS_LOADED_AND_SYNCHRONISED\n");
 		PtSetResource( ABW_base_all_robots, Pt_ARG_COLOR, Pg_BLUE, 0 );
 		unblock_widget(ABW_base_all_robots);
 		unblock_widget(ABW_base_robot);
