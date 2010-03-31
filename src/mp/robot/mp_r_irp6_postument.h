@@ -9,6 +9,7 @@ class irp6_postument: public manip_and_conv {
 
  public:
   irp6_postument (task::task &mp_object_l);
+	bool has_gripper;
 };
 } // namespace robot
 } // namespace mp

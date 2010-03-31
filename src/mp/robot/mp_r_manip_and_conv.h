@@ -12,10 +12,9 @@ class manip_and_conv : public robot
 {
 	private:
 		int servos_number;
-		bool has_gripper;
 
 	public:
-		manip_and_conv (lib::robot_name_t l_robot_name, const char* _section_name, task::task &mp_object_l);
+		manip_and_conv (lib::robot_name_t l_robot_name, const char* _section_name, task::task &mp_object_l, int _number_of_servos);
 
 
 };

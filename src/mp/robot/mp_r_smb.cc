@@ -10,7 +10,7 @@ namespace mp {
 namespace robot {
 
 smb::smb (task::task &mp_object_l) :
-		manip_and_conv (lib::ROBOT_SMB, ECP_SMB_SECTION, mp_object_l)
+		manip_and_conv (lib::ROBOT_SMB, ECP_SMB_SECTION, mp_object_l, SMB_NUM_OF_SERVOS)
 {}
 
 } // namespace robot

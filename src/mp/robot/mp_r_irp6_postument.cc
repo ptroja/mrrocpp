@@ -10,7 +10,7 @@ namespace mp {
 namespace robot {
 
 irp6_postument::irp6_postument (task::task &mp_object_l) :
-		manip_and_conv (lib::ROBOT_IRP6_POSTUMENT, ECP_IRP6_POSTUMENT_SECTION, mp_object_l)
+		manip_and_conv (lib::ROBOT_IRP6_POSTUMENT, ECP_IRP6_POSTUMENT_SECTION, mp_object_l, IRP6_POSTUMENT_NUM_OF_SERVOS), has_gripper(true)
 {}
 
 } // namespace robot
