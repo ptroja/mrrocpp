@@ -38,6 +38,8 @@
 #include "mp/robot/mp_r_polycrank.h"
 #include "mp/robot/mp_r_spkm.h"
 #include "mp/robot/mp_r_smb.h"
+#include "mp/robot/mp_r_irp6ot_tfg.h"
+#include "mp/robot/mp_r_irp6p_tfg.h"
 #include "mp/robot/mp_r_shead.h"
 
 #if defined(USE_MESSIP_SRR)
@@ -157,6 +159,18 @@ if (config.value<int>("is_smb_active", UI_SECTION)) {
 if (config.value<int>("is_shead_active", UI_SECTION)) {
 	created_robot = new robot::shead (*this);
 	robot_m[lib::ROBOT_SHEAD] = created_robot;
+}
+
+// ROBOT IRP6OT_TFG
+if (config.value<int>("is_irp6ot_tfg_active", UI_SECTION)) {
+	created_robot = new robot::irp6ot_tfg (*this);
+	robot_m[lib::ROBOT_IRP6OT_TFG] = created_robot;
+}
+
+// ROBOT IRP6P_TFG
+if (config.value<int>("is_irp6p_tfg_active", UI_SECTION)) {
+	created_robot = new robot::irp6p_tfg (*this);
+	robot_m[lib::ROBOT_IRP6P_TFG] = created_robot;
 }
 
 // ROBOT_ELECTRON

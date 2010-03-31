@@ -15,6 +15,8 @@ MP_ROBOTS_OBJECTS = \
 	../../mp/robot/mp_r_spkm.o \
 	../../mp/robot/mp_r_smb.o \
 	../../mp/robot/mp_r_shead.o \
+	../../mp/robot/mp_r_irp6ot_tfg.o \
+	../../mp/robot/mp_r_irp6p_tfg.o \
 	../../mp/robot/mp_r_manip_and_conv.o
 
 
