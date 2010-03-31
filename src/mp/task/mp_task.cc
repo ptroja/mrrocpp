@@ -144,7 +144,7 @@ if (config.value<int>("is_polycrank_active", UI_SECTION)) {
 }
 
 // ROBOT SPKM
-if (config.value<int>("is_spkmactive", UI_SECTION)) {
+if (config.value<int>("is_spkm_active", UI_SECTION)) {
 	created_robot = new robot::spkm (*this);
 	robot_m[lib::ROBOT_SPKM] = created_robot;
 }
