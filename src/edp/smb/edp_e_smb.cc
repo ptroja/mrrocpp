@@ -38,6 +38,39 @@ void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
 	motor_driven_effector::single_thread_master_order(nm_task, nm_tryb);
 }
 
+
+
+void effector::get_controller_state(lib::c_buffer &instruction) {
+
+	//printf("get_controller_state: %d\n", controller_state_edp_buf.is_synchronised); fflush(stdout);
+	reply.controller_state = controller_state_edp_buf;
+
+	/*
+	 // aktualizacja pozycji robota
+	 // Uformowanie rozkazu odczytu dla SERVO_GROUP
+	 sb->servo_command.instruction_code = lib::READ;
+	 // Wyslanie rozkazu do SERVO_GROUP
+	 // Pobranie z SERVO_GROUP aktualnej pozycji silnikow
+	 //	printf("get_arm_position read_hardware\n");
+
+	 sb->send_to_SERVO_GROUP();
+	 */
+	// dla pierwszego wypelnienia current_joints
+	get_current_kinematic_model()->mp2i_transform(current_motor_pos,
+			current_joints);
+
+	{
+		boost::mutex::scoped_lock lock(edp_irp6s_effector_mutex);
+
+		// Ustawienie poprzedniej wartosci zadanej na obecnie odczytane polozenie walow silnikow
+		for (int i = 0; i < number_of_servos; i++) {
+			servo_current_motor_pos[i] = desired_motor_pos_new[i]
+					= desired_motor_pos_old[i] = current_motor_pos[i];
+			desired_joints[i] = current_joints[i];
+		}
+	}
+}
+
 // Konstruktor.
 effector::effector(lib::configurator &_config) :
 	motor_driven_effector(_config, lib::ROBOT_SMB)

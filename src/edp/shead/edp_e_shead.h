@@ -53,6 +53,8 @@ public:
 	 */
 	void create_threads();
 
+	void get_controller_state(lib::c_buffer &instruction);
+
 	/*!
 	 * \brief method to set position of the motors or joints
 	 *

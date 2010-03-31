@@ -59,6 +59,8 @@ public:
 	 */
 	void move_arm(lib::c_buffer &instruction); // przemieszczenie ramienia
 
+	void get_controller_state(lib::c_buffer &instruction);
+
 	/*!
 	 * \brief method to get position of the arm
 	 *

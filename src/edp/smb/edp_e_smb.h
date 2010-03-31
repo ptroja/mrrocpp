@@ -65,6 +65,8 @@ public:
 	 */
 	void get_arm_position(bool read_hardware, lib::c_buffer &instruction); // odczytanie pozycji ramienia
 
+	void get_controller_state(lib::c_buffer &instruction);
+
 	/*!
 	 * \brief method to choose master_order variant
 	 *
