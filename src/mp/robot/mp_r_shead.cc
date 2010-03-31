@@ -3,14 +3,14 @@
 
 #include "lib/mis_fun.h"
 #include "lib/srlib.h"
-#include "mp/robot/mp_r_polycrank.h"
+#include "mp/robot/mp_r_shead.h"
 
 namespace mrrocpp {
 namespace mp {
 namespace robot {
 
-polycrank::polycrank (task::task &mp_object_l) :
-		manip_and_conv (lib::ROBOT_POLYCRANK, ECP_POLYCRANK_SECTION, mp_object_l)
+shead::shead (task::task &mp_object_l) :
+		manip_and_conv (lib::ROBOT_SHEAD, ECP_SHEAD_SECTION, mp_object_l)
 {}
 
 } // namespace robot

@@ -54,7 +54,7 @@ tran::tran(lib::configurator &_config) :
 	{
 		ecp_m_robot = new irp6m::robot (*this);
 	}
-	else if (config.section_name == ECP_POLYCRACNK_SECTION)
+	else if (config.section_name == ECP_POLYCRANK_SECTION)
 	{
 		ecp_m_robot = new polycrank::robot (*this);
 	}

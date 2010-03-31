@@ -36,6 +36,9 @@
 #include "mp/robot/mp_r_irp6_mechatronika.h"
 #include "mp/robot/mp_r_speaker.h"
 #include "mp/robot/mp_r_polycrank.h"
+#include "mp/robot/mp_r_spkm.h"
+#include "mp/robot/mp_r_smb.h"
+#include "mp/robot/mp_r_shead.h"
 
 #if defined(USE_MESSIP_SRR)
 #include <messip_dataport.h>
@@ -136,6 +139,24 @@ if (config.value<int>("is_irp6_mechatronika_active", UI_SECTION)) {
 if (config.value<int>("is_polycrank_active", UI_SECTION)) {
 	created_robot = new robot::polycrank (*this);
 	robot_m[lib::ROBOT_POLYCRANK] = created_robot;
+}
+
+// ROBOT SPKM
+if (config.value<int>("is_spkmactive", UI_SECTION)) {
+	created_robot = new robot::spkm (*this);
+	robot_m[lib::ROBOT_SPKM] = created_robot;
+}
+
+// ROBOT SMB
+if (config.value<int>("is_smb_active", UI_SECTION)) {
+	created_robot = new robot::smb (*this);
+	robot_m[lib::ROBOT_SMB] = created_robot;
+}
+
+// ROBOT SHEAD
+if (config.value<int>("is_shead_active", UI_SECTION)) {
+	created_robot = new robot::shead (*this);
+	robot_m[lib::ROBOT_SHEAD] = created_robot;
 }
 
 // ROBOT_ELECTRON

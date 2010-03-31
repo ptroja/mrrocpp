@@ -29,8 +29,8 @@ extern "C" {
 
 
 
-#define EDP_POLYCRACNK_SECTION "[edp_polycrank]"
-#define ECP_POLYCRACNK_SECTION "[ecp_polycrank]"
+#define EDP_POLYCRANK_SECTION "[edp_polycrank]"
+#define ECP_POLYCRANK_SECTION "[ecp_polycrank]"
 
 #define POLYCRANK_NUM_OF_SERVOS	8
 
