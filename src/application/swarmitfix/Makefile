@@ -20,7 +20,7 @@ MP_ROBOTS_OBJECTS = \
 	../../mp/robot/mp_r_manip_and_conv.o
 
 
-BINARIES = ecp_smb
+BINARIES = ecp_smb ecp_shead
 
 ifneq ($(BUILD_TARGET), linux)
 BINARIES+=			
@@ -31,7 +31,7 @@ endif
 HOMEDIR = ../../..
 include $(HOMEDIR)/common.mk
 
-KIN_OBJECTS = ${KIN_DIR}/smb/libkinematicssmb.a $(KIN_DIR)/common/libkinematics.a
+KIN_OBJECTS = ${KIN_DIR}/smb/libkinematicssmb.a ${KIN_DIR}/shead/libkinematicsshead.a $(KIN_DIR)/common/libkinematics.a
 
 SHOBJ =  ${KIN_OBJECTS} $(LIBDIR)/libmrrocpp.a
 #======================================================#	
@@ -40,6 +40,9 @@ SHOBJ =  ${KIN_OBJECTS} $(LIBDIR)/libmrrocpp.a
 all: ${BINARIES}
 
 ecp_smb: ecp_t_smb.o ../../ecp/smb/ecp_r_smb.o ../../ecp/common/libecp.a $(SHOBJ)
+	$(LD) $(LDFLAGS) -o $@ $^
+	
+ecp_shead: ecp_t_shead.o ../../ecp/shead/ecp_r_shead.o ../../ecp/common/libecp.a $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 	
 
