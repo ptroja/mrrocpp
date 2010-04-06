@@ -15,7 +15,7 @@ namespace task {
 /**
  * Used generators.
  */
-enum RCSC_ECP_STATES {ECP_GEN_TRANSPARENT=0, ECP_GEN_SMOOTH};
+enum SWARMITFIX_ECP_STATES {ECP_GEN_TRANSPARENT=0, ECP_GEN_SMOOTH, ECP_GEN_SLEEP};
 
 
 /**

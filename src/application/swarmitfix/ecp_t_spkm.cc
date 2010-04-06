@@ -40,7 +40,7 @@ void swarmitfix::main_task_algorithm(void)
 		//printf("postument: %d\n", mp_command.ecp_next_state.mp_2_ecp_next_state);
 		flushall();
 
-		switch ((ecp_mp::task::RCSC_ECP_STATES) mp_command.ecp_next_state.mp_2_ecp_next_state)
+		switch ((ecp_mp::task::SWARMITFIX_ECP_STATES) mp_command.ecp_next_state.mp_2_ecp_next_state)
 		{
 			case ecp_mp::task::ECP_GEN_TRANSPARENT:
 				gt->throw_kinematics_exceptions = (bool) mp_command.ecp_next_state.mp_2_ecp_next_state_variant;
