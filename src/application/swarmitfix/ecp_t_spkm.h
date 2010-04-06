@@ -16,6 +16,8 @@ protected:
     //generatory
 	common::generator::transparent* gt;
 	common::generator::smooth* sg;
+	common::generator::sleep* g_sleep;
+	common::generator::epos* g_epos;
 
 public:
     // KONSTRUKTORY

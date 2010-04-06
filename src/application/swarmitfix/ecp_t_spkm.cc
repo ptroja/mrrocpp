@@ -9,6 +9,7 @@
 
 #include "ecp/spkm/ecp_r_spkm.h"
 #include "ecp/common/generator/ecp_g_smooth.h"
+#include "ecp/common/generator/ecp_g_sleep.h"
 #include "ecp_g_epos.h"
 #include "ecp_t_spkm.h"
 
@@ -26,6 +27,9 @@ swarmitfix::swarmitfix(lib::configurator &_config) :
 
 	gt = new common::generator::transparent(*this);
 	sg = new common::generator::smooth(*this, true);
+	g_sleep = new common::generator::sleep(*this);
+	g_epos = new common::generator::epos(*this);
+
 
 	sr_ecp_msg->message("ECP spkm loaded");
 }
