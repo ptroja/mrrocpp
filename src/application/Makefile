@@ -2,7 +2,7 @@
 HOMEDIR = ../..
 include $(HOMEDIR)/common.mk
 
-SOURCEDIRS = teach-dll rcsc dung multiplayer pcbird cvfradia haar grab_cube draughts time \
+SOURCEDIRS = swarmitfix teach-dll rcsc dung multiplayer pcbird cvfradia haar grab_cube draughts time \
 	servovision wii_teach wii_velocity wii_ellipse \
 	haptic sk calibration teach playerjoy smooth-tester \
 	ball
