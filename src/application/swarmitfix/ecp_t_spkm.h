@@ -1,5 +1,5 @@
-#if !defined(_ECP_T_SMB_SWARMITFIX_H)
-#define _ECP_T_SMB_SWARMITFIX_H
+#if !defined(_ECP_T_SPKM_SWARMITFIX_H)
+#define _ECP_T_SPKM_SWARMITFIX_H
 
 #include "ecp/common/task/ecp_task.h"
 #include "ecp/common/generator/ecp_g_transparent.h"
