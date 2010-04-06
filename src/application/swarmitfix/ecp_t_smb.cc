@@ -5,7 +5,7 @@
 #include "lib/com_buf.h"
 
 #include "lib/srlib.h"
-#include "ecp_mp/task/ecp_mp_t_rcsc.h"
+#include "ecp_mp_t_swarmitfix.h"
 
 #include "ecp/smb/ecp_r_smb.h"
 #include "ecp/common/generator/ecp_g_smooth.h"
