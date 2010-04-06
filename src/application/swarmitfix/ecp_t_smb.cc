@@ -26,7 +26,7 @@ swarmitfix::swarmitfix(lib::configurator &_config) :
 	gt = new common::generator::transparent(*this);
 	sg = new common::generator::smooth(*this, true);
 
-	sr_ecp_msg->message("ECP loaded");
+	sr_ecp_msg->message("ECP smb loaded");
 }
 
 void swarmitfix::main_task_algorithm(void)
