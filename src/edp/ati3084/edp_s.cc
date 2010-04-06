@@ -352,7 +352,7 @@ void ATI3084_force::wait_for_event()
 			mds.byte_counter = 0;
 			int_timeout = SCHUNK_INTR_TIMEOUT_LOW;// by Y
 			TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_INTR, &tim_event, &int_timeout, NULL);
-			iw_ret = InterruptWait(NULL, NULL);
+			iw_ret = InterruptWait(0, NULL);
 			// kiedy po uplynieciu okreslonego czasu nie zostanie zgloszone przerwanie
 			if (iw_ret == -1) {
 				if (iter_counter == 1) {
@@ -481,7 +481,7 @@ void ATI3084_force::set_output(short value)
 {
 	short output = 0;
 	unsigned short comp = 0x0001;
-	unsigned char lower, upper;
+	uint8_t lower, upper;
 	// wersja z pajaczkiem
 	// 	const unsigned char output_positions[16]={15,7,14,6,13,5,12,4,0,8,1,9,2,10,3,11};
 	// wersja z nowa plytka
@@ -527,8 +527,7 @@ short get_input(void)
 
 void ATI3084_force::set_obf(unsigned char state)
 {
-	unsigned char temp_register;
-	temp_register = in8(base_io_adress + CONTROL_OUTPUT);
+	uint8_t temp_register = in8(base_io_adress + CONTROL_OUTPUT);
 
 	if (state)
 		temp_register |= 0x10;// dla przejsciowki
@@ -540,8 +539,7 @@ void ATI3084_force::set_obf(unsigned char state)
 
 void set_ibf(unsigned char state)
 {
-	unsigned char temp_register;
-	temp_register = in8(base_io_adress + CONTROL_OUTPUT);
+	uint8_t temp_register = in8(base_io_adress + CONTROL_OUTPUT);
 
 	if (state)
 		temp_register |= 0x20;// dla przejsciowki
@@ -553,7 +551,7 @@ void set_ibf(unsigned char state)
 
 bool ATI3084_force::check_ack()
 {
-	unsigned char temp_register = in8(base_io_adress + ACK_PORT_INPUT);
+	uint8_t temp_register = in8(base_io_adress + ACK_PORT_INPUT);
 
 	if (temp_register & 0x01)
 		return true;
@@ -563,8 +561,8 @@ bool ATI3084_force::check_ack()
 
 bool check_stb()
 {
-	unsigned char temp_register;
-	temp_register = in8(base_io_adress + STB_PORT_INPUT);
+	uint8_t temp_register = in8(base_io_adress + STB_PORT_INPUT);
+
 	if (temp_register & 0x01)
 		return true;
 	else
@@ -583,7 +581,7 @@ void ATI3084_force::initiate_registers(void)
 
 bool check_intr(void)
 {
-	unsigned char temp_register = in8(base_io_adress + INTER_CONFIG);
+	uint8_t temp_register = in8(base_io_adress + INTER_CONFIG);
 
 	if (temp_register & 0x80)
 		return 1;
@@ -610,7 +608,7 @@ short ATI3084_force::do_Wait(const char* command)
 
 	do {
 		TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_INTR, &tim_event, &int_timeout, NULL);
-		iw_ret = InterruptWait(NULL, NULL);
+		iw_ret = InterruptWait(0, NULL);
 		InterruptMask(info.Irq, sint_id);
 		if (iw_ret != -1) {
 			mds.is_received = 1;
@@ -646,9 +644,8 @@ short ATI3084_force::do_send_command(const char* command)
 
 void ATI3084_force::solve_transducer_controller_failure(void)
 {
-
-	unsigned char char_buf[1000];
-	int licznik = 0, i;
+	uint8_t char_buf[1000];
+	int licznik = 0;
 
 	while ((in8(LSREG)) & 0x01) {
 		char_buf[licznik++] = in8(RxBUF);
@@ -657,8 +654,7 @@ void ATI3084_force::solve_transducer_controller_failure(void)
 
 	usleep(10); // aby nadmiernie nie obciazac procesora
 
-
-	i = do_send_command(YESCOMM); /* command ^W to FT */
+	int i = do_send_command(YESCOMM); /* command ^W to FT */
 	if (i == -1) {
 		ERROR_CODE = __ERROR_INIT_SEND;
 		printf("Blad wyslania YESCOMM w solve_transducer_controller_failure\n");
@@ -830,8 +826,8 @@ short ATI3084_force::do_init(void)
 
 void clear_intr(void)
 {
-	unsigned char temp_register;
-	temp_register = in8(base_io_adress + INTER_CONFIG);
+	uint8_t temp_register = in8(base_io_adress + INTER_CONFIG);
+
 	temp_register |= 0x80;
 
 	out8(base_io_adress + INTER_CONFIG, temp_register);
