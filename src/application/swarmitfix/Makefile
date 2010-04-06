@@ -40,13 +40,13 @@ SHOBJ =  ${KIN_OBJECTS} $(LIBDIR)/libmrrocpp.a
 #------------------------------------------------- Build rules -------------------------------------------------------#
 all: ${BINARIES}
 
-ecp_spkm: ecp_t_spkm.o ../../ecp/spkm/ecp_r_spkm.o ../../ecp/common/libecp.a $(SHOBJ)
+ecp_spkm: ecp_g_epos.o ecp_t_spkm.o ../../ecp/spkm/ecp_r_spkm.o ../../ecp/common/libecp.a $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 
-ecp_smb: ecp_t_smb.o ../../ecp/smb/ecp_r_smb.o ../../ecp/common/libecp.a $(SHOBJ)
+ecp_smb: ecp_g_epos.o ecp_g_smb.o ecp_t_smb.o ../../ecp/smb/ecp_r_smb.o ../../ecp/common/libecp.a $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 	
-ecp_shead: ecp_t_shead.o ../../ecp/shead/ecp_r_shead.o ../../ecp/common/libecp.a $(SHOBJ)
+ecp_shead: ecp_t_shead.o ecp_g_shead.o ../../ecp/shead/ecp_r_shead.o ../../ecp/common/libecp.a $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 	
 	

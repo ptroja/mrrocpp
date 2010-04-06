@@ -9,6 +9,7 @@
 
 #include "ecp/smb/ecp_r_smb.h"
 #include "ecp/common/generator/ecp_g_smooth.h"
+#include "ecp_g_epos.h"
 #include "ecp_t_smb.h"
 
 namespace mrrocpp {
