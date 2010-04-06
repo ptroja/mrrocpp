@@ -16,6 +16,11 @@ protected:
     //generatory
 	common::generator::transparent* gt;
 	common::generator::smooth* sg;
+	common::generator::sleep* g_sleep;
+	generator::head_soldify* g_head_soldify;
+	generator::head_desoldify* g_head_desoldify;
+	generator::head_vacuum_on* g_head_vacuum_on;
+	generator::head_vacuum_off* g_head_vacuum_off;
 
 public:
     // KONSTRUKTORY

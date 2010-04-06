@@ -9,6 +9,8 @@
 
 #include "ecp/shead/ecp_r_shead.h"
 #include "ecp/common/generator/ecp_g_smooth.h"
+#include "ecp/common/generator/ecp_g_sleep.h"
+#include "ecp_g_shead.h"
 #include "ecp_t_shead.h"
 
 namespace mrrocpp {
@@ -25,6 +27,12 @@ swarmitfix::swarmitfix(lib::configurator &_config) :
 
 	gt = new common::generator::transparent(*this);
 	sg = new common::generator::smooth(*this, true);
+	g_sleep = new common::generator::sleep(*this);
+	g_head_soldify = new generator::head_soldify(*this);
+	g_head_desoldify = new generator::head_desoldify(*this);
+	g_head_vacuum_on = new generator::head_vacuum_on(*this);
+	g_head_vacuum_off = new generator::head_vacuum_off(*this);
+
 
 	sr_ecp_msg->message("ECP shead loaded");
 }
