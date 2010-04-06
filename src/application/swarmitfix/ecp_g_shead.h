@@ -31,6 +31,56 @@ class head_soldify : public common::generator::generator
 		void init_time(double=1);	//initialize time
 };
 
+
+class head_desoldify : public common::generator::generator
+{
+	private:
+		double waittime;		//seconds to wait
+		timespec sleeptime;		//structure for nanosleep funciton
+		timespec acttime;
+		timespec prevtime;
+		timespec starttime;
+
+	public:
+		head_desoldify(common::task::task& _ecp_task, double=1);		//constructor
+		bool first_step();		//first step generation
+		bool next_step();			//next step generation
+		void init_time(double=1);	//initialize time
+};
+
+
+class head_vacuum_on : public common::generator::generator
+{
+	private:
+		double waittime;		//seconds to wait
+		timespec sleeptime;		//structure for nanosleep funciton
+		timespec acttime;
+		timespec prevtime;
+		timespec starttime;
+
+	public:
+		head_vacuum_on(common::task::task& _ecp_task, double=1);		//constructor
+		bool first_step();		//first step generation
+		bool next_step();			//next step generation
+		void init_time(double=1);	//initialize time
+};
+
+class head_vacuum_off : public common::generator::generator
+{
+	private:
+		double waittime;		//seconds to wait
+		timespec sleeptime;		//structure for nanosleep funciton
+		timespec acttime;
+		timespec prevtime;
+		timespec starttime;
+
+	public:
+		head_vacuum_off(common::task::task& _ecp_task, double=1);		//constructor
+		bool first_step();		//first step generation
+		bool next_step();			//next step generation
+		void init_time(double=1);	//initialize time
+};
+
 } // namespace generator
 } // namespace shead
 } // namespace ecp
