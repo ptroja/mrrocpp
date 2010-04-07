@@ -75,6 +75,18 @@ void swarmitfix::main_task_algorithm(void) {
 		case ecp_mp::task::ECP_GEN_EPOS:
 			g_epos->Move();
 			break;
+		case ecp_mp::task::ECP_GEN_PIN_LOCK:
+			g_pin_lock->Move();
+			break;
+		case ecp_mp::task::ECP_GEN_PIN_UNLOCK:
+			g_pin_unlock->Move();
+			break;
+		case ecp_mp::task::ECP_GEN_PIN_RISE:
+			g_pin_rise->Move();
+			break;
+		case ecp_mp::task::ECP_GEN_PIN_LOWER:
+			g_pin_lower->Move();
+			break;
 		default:
 			break;
 		} // end switch
