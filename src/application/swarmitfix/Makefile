@@ -20,7 +20,7 @@ MP_ROBOTS_OBJECTS = \
 	../../mp/robot/mp_r_manip_and_conv.o
 
 
-BINARIES = ecp_spkm ecp_smb ecp_shead
+BINARIES = ecp_spkm ecp_smb ecp_shead mp_swarmitfix
 
 ifneq ($(BUILD_TARGET), linux)
 BINARIES+=			
@@ -33,7 +33,7 @@ include $(HOMEDIR)/common.mk
 
 KIN_OBJECTS = ${KIN_DIR}/spkm/libkinematicsspkm.a ${KIN_DIR}/smb/libkinematicssmb.a ${KIN_DIR}/shead/libkinematicsshead.a $(KIN_DIR)/common/libkinematics.a
 
-SHOBJ =  ${KIN_OBJECTS} $(LIBDIR)/libmrrocpp.a
+SHOBJ =  ${KIN_OBJECTS}  $(LIBDIR)/libmrrocpp.a
 
 #======================================================#	
 .PHONY: all clean install
@@ -48,8 +48,9 @@ ecp_smb: ecp_g_epos.o ecp_g_smb.o ecp_t_smb.o ../../ecp/smb/ecp_r_smb.o ../../ec
 	
 ecp_shead: ecp_t_shead.o ecp_g_shead.o ../../ecp/shead/ecp_r_shead.o ../../ecp/common/libecp.a $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
-	
-	
+		
+mp_swarmitfix: mp_t_swarmitfix.o ../../mp/libmprobots.a ../../mp/libmpmain.a ../../ecp_mp/libecp_mp.a $(MP_ROBOTS_OBJECTS) $(SHOBJ)
+	$(LD) $(LDFLAGS) -o $@ $^
 
 #---------------------------------Special object build rules (user made)-------------------------------------#
 # e.g:
