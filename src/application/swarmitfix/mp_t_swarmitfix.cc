@@ -40,6 +40,8 @@ void swarmitfix::main_task_algorithm(void)
    	set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_TRANSPARENT, (int) 0, "", 1, lib::ROBOT_SMB);
    	set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_TRANSPARENT, (int) 0, "", 1, lib::ROBOT_SHEAD);
 
+	sr_ecp_msg->message("przed send_end_motion_to_ecps");
+
    	send_end_motion_to_ecps (3, lib::ROBOT_SPKM, lib::ROBOT_SMB, lib::ROBOT_SHEAD);
 
 
