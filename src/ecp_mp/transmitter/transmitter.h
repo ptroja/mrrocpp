@@ -26,7 +26,8 @@ enum TRANSMITTER_ENUM {
     TRANSMITTER_UNDEFINED,
     TRANSMITTER_RC_WINDOWS,
     TRANSMITTER_PLAYER,
-    TRANSMITTER_DRAUGHTSAI
+    TRANSMITTER_DRAUGHTSAI,
+    TRANSMITTER_GRASPIT
 };
 
 enum VA_UNION_VARIANT {RC_WINDOWS,DRAUGHTSAI};
@@ -45,7 +46,7 @@ typedef struct _TO_VA
 		struct{
 			char board[32];
 			char player;
-		}draughts_ai;
+		} draughts_ai;
 
 	};
 } TO_VA;
@@ -64,7 +65,10 @@ typedef struct _FROM_VA
 		struct {
 			char move[25];
 			char status;
-		}draughts_ai;
+		} draughts_ai;
+		struct {
+			float grasp_joint[7];
+		} graspit;
 		playerc_joystick_t player_joystick;
 		playerc_position_t player_position;
 		playerc_speech_recognition_t player_speech_recognition;

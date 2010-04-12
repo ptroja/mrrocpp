@@ -27,6 +27,7 @@ all: ${BINARIES}
 #-----------------------------------------------------------------------------------------------------------------------#
 ecp_graspit: \
 		ecp_t_graspit.o \
+		ecp_mp_tr_graspit.o \
 		../../ecp/common/generator/ecp_g_smooth.o \
 		$(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ -lgsl -lgslcblas $^ 

@@ -3,19 +3,21 @@
 
 #include "ecp/common/task/ecp_task.h"
 #include "ecp/common/generator/ecp_g_smooth.h"
+#include "ecp_mp_tr_graspit.h"
 
 namespace mrrocpp {
 namespace ecp {
 namespace common {
 namespace task {
 
-class graspit: public common::task::task {
+class Graspit: public common::task::task {
 
-  protected:
+  private:
 	  common::generator::smooth* smoothgen2;
+	  ecp_mp::transmitter::TRGraspit* trgraspit;		//grasp transmiter
 
   public:
-	  graspit(lib::configurator &_config);
+	  Graspit(lib::configurator &_config);
 
 	  void main_task_algorithm(void);
 };
