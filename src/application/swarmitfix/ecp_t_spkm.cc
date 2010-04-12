@@ -68,10 +68,13 @@ void swarmitfix::main_task_algorithm(void) {
 			break;
 		}
 		case ecp_mp::task::ECP_GEN_SLEEP:
+			sr_ecp_msg->message("ECP_GEN_SLEEP");
 			g_sleep->init_time(mp_command.ecp_next_state.mp_2_ecp_next_state_variant);
 			g_sleep->Move();
 			break;
 		case ecp_mp::task::ECP_GEN_EPOS:
+			sr_ecp_msg->message("ECP_GEN_EPOS");
+			g_epos->init_time(mp_command.ecp_next_state.mp_2_ecp_next_state_variant);
 			g_epos->Move();
 			break;
 		default:
