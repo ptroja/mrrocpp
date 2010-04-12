@@ -40,15 +40,26 @@ void swarmitfix::main_task_algorithm(void) {
 
 	sr_ecp_msg->message("1");
 	send_end_motion_to_ecps(1, lib::ROBOT_SPKM);
-	sr_ecp_msg->message("2");
-	set_next_ecps_state((int) ecp_mp::task::ECP_GEN_SLEEP, (int) 5, "", 1,
-			lib::ROBOT_SPKM);
-	sr_ecp_msg->message("3");
-	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(
-			1, 1, lib::ROBOT_SPKM, lib::ROBOT_SPKM);
+	/*
+	 sr_ecp_msg->message("2");
+	 set_next_ecps_state((int) ecp_mp::task::ECP_GEN_SLEEP, (int) 5, "", 1,
+	 lib::ROBOT_SPKM);
+	 sr_ecp_msg->message("3");
+	 run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(
+	 1, 1, lib::ROBOT_SPKM, lib::ROBOT_SPKM);
+	 */
 	sr_ecp_msg->message("4");
-	set_next_ecps_state((int) ecp_mp::task::ECP_GEN_EPOS, (int) 5, "", 1,
-			lib::ROBOT_SPKM);
+
+	char tmp_string[300];
+
+	ecp_mp::task::mp_ecp_epos_gen_parameters epos_params;
+
+	epos_params.dm[4] = 3.7;
+
+	memcpy(tmp_string, &epos_params, sizeof(epos_params));
+
+	set_next_ecps_state_with_string_size((int) ecp_mp::task::ECP_GEN_EPOS,
+			(int) 5, tmp_string, sizeof(epos_params), 1, lib::ROBOT_SPKM);
 	sr_ecp_msg->message("5");
 	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(
 			1, 1, lib::ROBOT_SPKM, lib::ROBOT_SPKM);
