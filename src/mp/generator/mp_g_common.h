@@ -19,7 +19,7 @@ protected:
 public:
     set_next_ecps_state(task::task& _mp_task);
 
-	void configure (int l_mp_2_ecp_next_state, int l_mp_2_ecp_next_state_variant, const char* l_mp_2_ecp_next_state_string, int str_len=0);
+	void configure (int l_mp_2_ecp_next_state, int l_mp_2_ecp_next_state_variant, const char* l_mp_2_ecp_next_state_string, int str_len);
 	void configure (const lib::playerpos_goal_t &_goal);
 
 	bool first_step ();

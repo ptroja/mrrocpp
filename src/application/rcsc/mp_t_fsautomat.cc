@@ -329,10 +329,10 @@ void fsautomat::executeMotion(common::State &state)
 {
 	int trjConf = config.value<int>("trajectory_from_xml", "[xml_settings]");
 	if (trjConf && state.getGeneratorType() == ecp_mp::task::ECP_GEN_SMOOTH) {
-		set_next_ecps_state((int) state.getGeneratorType(), state.getNumArgument(), state.getStateID(), 1,
+		set_next_ecps_state((int) state.getGeneratorType(), state.getNumArgument(), state.getStateID(), 0, 1,
 				state.getRobot());
 	} else {
-		set_next_ecps_state((int) state.getGeneratorType(), state.getNumArgument(), state.getStringArgument(), 1,
+		set_next_ecps_state((int) state.getGeneratorType(), state.getNumArgument(), state.getStringArgument(), 0, 1,
 				state.getRobot());
 	}
 }

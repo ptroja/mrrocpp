@@ -32,12 +32,12 @@ void haptic::configure_edp_force_sensor(bool configure_track, bool configure_pos
 {
     if (configure_track)
     {
-        set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_BIAS_EDP_FORCE, 0, "", 1, lib::ROBOT_IRP6_ON_TRACK);
+        set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_BIAS_EDP_FORCE, 0, "", 0, 1, lib::ROBOT_IRP6_ON_TRACK);
     }
 
     if (configure_postument)
     {
-        set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_BIAS_EDP_FORCE, 0, "", 1, lib::ROBOT_IRP6_POSTUMENT);
+        set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_BIAS_EDP_FORCE, 0, "", 0, 1, lib::ROBOT_IRP6_POSTUMENT);
     }
 
     if ((configure_track)&&(!configure_postument))
@@ -74,8 +74,8 @@ void haptic::main_task_algorithm(void)
 
 
    	// wlaczenie generatora transparentnego w obu robotach
-   	set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_TRANSPARENT, (int) 0, "", 1, lib::ROBOT_IRP6_ON_TRACK);
-   	set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_TRANSPARENT, (int) 0, "", 1, lib::ROBOT_IRP6_POSTUMENT);
+   	set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_TRANSPARENT, (int) 0, "", 0, 1, lib::ROBOT_IRP6_ON_TRACK);
+   	set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_TRANSPARENT, (int) 0, "", 0, 1, lib::ROBOT_IRP6_POSTUMENT);
 
    	// mp_h_gen.sensor_m = sensor_m;
    	mp_h_gen.configure(1, 0);

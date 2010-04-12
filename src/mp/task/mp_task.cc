@@ -205,31 +205,11 @@ mp_snes_gen.configure(goal);
 mp_snes_gen.Move();
 }
 
-// metody do obslugi najczesniej uzywanych generatorow
-void task::set_next_ecps_state (int l_state, int l_variant, const char* l_string, int number_of_robots, ... )
-{
-// setting the next ecps state
-generator::set_next_ecps_state mp_snes_gen (*this);
 
-va_list arguments; // A place to store the list of arguments
-lib::robot_name_t robot_l;
-
-va_start ( arguments, number_of_robots ); // Initializing arguments to store all values after num
-for ( int x = 0; x < number_of_robots; x++ ) // Loop until all numbers are added
-{
-	robot_l = (lib::robot_name_t) (va_arg ( arguments, int )); // Adds the next value in argument list to sum.
-	mp_snes_gen.robot_m[robot_l] = robot_m[robot_l];
-}
-va_end ( arguments ); // Cleans up the list
-
-mp_snes_gen.configure (l_state, l_variant, l_string);
-
-mp_snes_gen.Move();
-}
 
 
 // metody do obslugi najczesniej uzywanych generatorow
-void task::set_next_ecps_state_with_string_size (int l_state, int l_variant, const char* l_string, int str_len, int number_of_robots, ... )
+void task::set_next_ecps_state (int l_state, int l_variant, const char* l_string, int str_len, int number_of_robots, ... )
 {
 // setting the next ecps state
 generator::set_next_ecps_state mp_snes_gen (*this);
