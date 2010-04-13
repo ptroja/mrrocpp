@@ -10,24 +10,33 @@
 
 #include <stdint.h>
 
-namespace mrrocpp
-{
+namespace mrrocpp {
 
 }
 
-
 using namespace mrrocpp;
-
 
 namespace mrrocpp {
 namespace lib {
-
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+struct spkm_cbuffer {
+	double em[6];
+	double emdm[6];
+	double aa[6];
+	double da[6];
+	double av[6];
+	double tt;
+};
 
+struct spkm_rbuffer {
+	double position[6];
+	bool motion_in_progress[6];
+	bool contact;
+};
 
 #define EDP_SPKM_SECTION "[edp_spkm]"
 #define ECP_SPKM_SECTION "[ecp_spkm]"

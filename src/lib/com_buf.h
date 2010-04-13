@@ -27,7 +27,7 @@
 #include "lib/impconst.h"
 
 #if defined(USE_MESSIP_SRR)
-  #include <messip.h>
+#include <messip.h>
 #endif
 
 #include <boost/serialization/serialization.hpp>
@@ -43,12 +43,7 @@ namespace lib {
  *  Type of command sent from MP to ECP.
  */
 enum MP_COMMAND {
-	INVALID_COMMAND,
-	START_TASK,
-	NEXT_POSE,
-	END_MOTION,
-	NEXT_STATE,
-	STOP
+	INVALID_COMMAND, START_TASK, NEXT_POSE, END_MOTION, NEXT_STATE, STOP
 };
 
 //------------------------------------------------------------------------------
@@ -56,10 +51,7 @@ enum MP_COMMAND {
  *  Type of reply from ECP to the MP command.
  */
 enum ECP_REPLY {
-	INCORRECT_MP_COMMAND,
-	ERROR_IN_ECP,
-	ECP_ACKNOWLEDGE,
-	TASK_TERMINATED
+	INCORRECT_MP_COMMAND, ERROR_IN_ECP, ECP_ACKNOWLEDGE, TASK_TERMINATED
 };
 
 //------------------------------------------------------------------------------
@@ -67,11 +59,7 @@ enum ECP_REPLY {
  *  Type of arm position definition.
  */
 enum POSE_SPECIFICATION {
-	INVALID_END_EFFECTOR,
-	FRAME,
-	JOINT,
-	MOTOR,
-	PF_VELOCITY
+	INVALID_END_EFFECTOR, FRAME, JOINT, MOTOR, PF_VELOCITY
 };
 
 //------------------------------------------------------------------------------
@@ -166,7 +154,6 @@ enum ECP_TO_UI_COMMAND {
 	MAM_REFRESH_WINDOW
 };
 
-
 //------------------------------------------------------------------------------
 /*! Length of a message sent from ECP to MP or UI */
 #define MSG_LENGTH 60
@@ -175,8 +162,7 @@ enum ECP_TO_UI_COMMAND {
 /*!
  *  ECP to UI message.
  */
-struct ECP_message
-{
+struct ECP_message {
 #ifndef USE_MESSIP_SRR
 	msg_header_t hdr;
 #endif
@@ -193,16 +179,14 @@ struct ECP_message
 		char string[MSG_LENGTH];
 
 		//------------------------------------------------------
-		struct
-		{
+		struct {
 			double robot_position[MAX_SERVOS_NR];
 			double sensor_reading[MAX_SERVOS_NR];
 		}
 		/*! Robot positions + Sensor readings. */
 		RS;
 		//------------------------------------------------------
-		struct
-		{
+		struct {
 			double robot_position[MAX_SERVOS_NR];
 			double digital_scales_sensor_reading[6];
 			double force_sensor_reading[6];
@@ -210,8 +194,7 @@ struct ECP_message
 		/*! Robot positions + 2 * (Sensor readings). */
 		R2S;
 		//------------------------------------------------------
-		struct
-		{
+		struct {
 			double robot_position[MAX_SERVOS_NR];
 			double sensor_reading[6];
 			int measure_number;
@@ -225,8 +208,7 @@ struct ECP_message
 /*!
  *  UI to ECP reply.
  */
-struct UI_reply
-{
+struct UI_reply {
 #ifndef USE_MESSIP_SRR
 	msg_header_t hdr;
 #endif
@@ -242,8 +224,7 @@ struct UI_reply
 /*!
  *  Message from UI to ECP.
  */
-struct UI_ECP_message
-{
+struct UI_ECP_message {
 #ifndef USE_MESSIP_SRR
 	msg_header_t hdr;
 #endif
@@ -271,8 +252,7 @@ struct UI_ECP_message
  *            Connected with C_MOTOR and C_JOINT etc. - watch out for the indexes.
  *  @see      POSE_SPECIFICATION  C_MOTOR  C_JOINT.
  */
-struct trajectory_description
-{
+struct trajectory_description {
 	/*! Robot arm representation. */
 	ECP_POSE_SPECIFICATION arm_type;
 	/*! Number of interpolation nodes. */
@@ -290,12 +270,7 @@ struct trajectory_description
  *  Types of processes in MRROC++.
  */
 typedef enum _PROCESS_TYPE {
-	UNKNOWN_PROCESS_TYPE,
-	EDP,
-	ECP,
-	MP,
-	VSP,
-	UI
+	UNKNOWN_PROCESS_TYPE, EDP, ECP, MP, VSP, UI
 } process_type_t;
 
 //------------------------------------------------------------------------------
@@ -390,7 +365,6 @@ typedef enum _PROCESS_TYPE {
 #define INVALID_KINEMATIC_CORRECTOR_NO          0x5600000000000000ULL
 #define EDP_UNIDENTIFIED_ERROR                  0x5700000000000000ULL
 
-
 #define NOT_A_NUMBER_JOINT_VALUE_D0             0x6000000000000000ULL
 #define NOT_A_NUMBER_JOINT_VALUE_THETA1         0x6100000000000000ULL
 #define NOT_A_NUMBER_JOINT_VALUE_THETA2         0x6200000000000000ULL
@@ -417,10 +391,7 @@ typedef enum _PROCESS_TYPE {
 //------------------------------------------------------------------------------
 /*! Error classes. */
 typedef enum _ERROR_CLASS {
-	NEW_MESSAGE,
-	SYSTEM_ERROR,
-	FATAL_ERROR,
-	NON_FATAL_ERROR
+	NEW_MESSAGE, SYSTEM_ERROR, FATAL_ERROR, NON_FATAL_ERROR
 } error_class_t;
 
 //------------------------------------------------------------------------------
@@ -509,12 +480,7 @@ enum GRIPPER_STATE_ENUM {
 
 //------------------------------------------------------------------------------
 enum INSTRUCTION_TYPE {
-	INVALID,
-	SET,
-	GET,
-	SET_GET,
-	SYNCHRO,
-	QUERY
+	INVALID, SET, GET, SET_GET, SYNCHRO, QUERY
 };
 
 //------------------------------------------------------------------------------
@@ -533,10 +499,10 @@ enum MOTION_TYPE {
 };
 
 //------------------------------------------------------------------------------
-enum INTERPOLATION_TYPE
-{
+enum INTERPOLATION_TYPE {
 	MIM, //! motor interpolated motion
-	TCIM //! task coordinates interpolated motion
+	TCIM
+//! task coordinates interpolated motion
 };
 
 //------------------------------------------------------------------------------
@@ -554,55 +520,46 @@ enum REPLY_TYPE {
 	CONTROLLER_STATE
 /*
  * TODO: would not be it easier to handle with the following?
-	ERROR = 0,
-	ACKNOWLEDGE = 0x01,
-	SYNCHRO_OK = 0x02,
-	ARM = 0x04,
-	ROBOT_MODEL = 0x08,
-	INPUTS = 0x10,
-	ARM_ROBOT_MODEL = 0x20,
-	ARM_INPUTS = 0x40,
-	ROBOT_MODEL_INPUTS = 0x80,
-	ARM_ROBOT_MODEL_INPUTS = 0x100,
-	CONTROLLER_STATE = 0x200
+ ERROR = 0,
+ ACKNOWLEDGE = 0x01,
+ SYNCHRO_OK = 0x02,
+ ARM = 0x04,
+ ROBOT_MODEL = 0x08,
+ INPUTS = 0x10,
+ ARM_ROBOT_MODEL = 0x20,
+ ARM_INPUTS = 0x40,
+ ROBOT_MODEL_INPUTS = 0x80,
+ ARM_ROBOT_MODEL_INPUTS = 0x100,
+ CONTROLLER_STATE = 0x200
  */
 };
 
 //------------------------------------------------------------------------------
 /*! @todo Rename from "behavior". */
 enum BEHAVIOUR_SPECIFICATION {
-	UNGUARDED_MOTION,
-	GUARDED_MOTION,
-	CONTACT
+	UNGUARDED_MOTION, GUARDED_MOTION, CONTACT
 };
 
 //------------------------------------------------------------------------------
 /*! Structure for error codes. */
-struct edp_error
-{
+struct edp_error {
 	uint64_t error0;
 	uint64_t error1;
 };
 
 //------------------------------------------------------------------------------
 enum SERVO_COMMAND {
-	MOVE,
-	READ,
-	SYNCHRONISE,
-	SERVO_ALGORITHM_AND_PARAMETERS
+	MOVE, READ, SYNCHRONISE, SERVO_ALGORITHM_AND_PARAMETERS
 };
-
 
 //------------------------------------------------------------------------------
 /*! Structure of a command from EDP_MASTER to SERVO_GROUP. */
-struct edp_master_command
-{
+struct edp_master_command {
 	/*! Code for the instruction sent to SERVO_GROUP. */
 	SERVO_COMMAND instruction_code;
 	union {
 		//------------------------------------------------------
-		struct
-		{
+		struct {
 			/*! Number of steps for a macrostep. */
 			uint16_t number_of_steps;
 			/*!
@@ -615,26 +572,22 @@ struct edp_master_command
 			/*! Length of a macrostep (given value of a macrostep - increase). */
 			double macro_step[MAX_SERVOS_NR];
 			/*! Given absolute position at the end of a macrostep. */
-			double abs_position [MAX_SERVOS_NR];
-		}
-		move;
+			double abs_position[MAX_SERVOS_NR];
+		} move;
 		//------------------------------------------------------
-		struct
-		{
+		struct {
 			/*! Servo algorithm numbers. */
 			uint8_t servo_algorithm_no[MAX_SERVOS_NR];
 			/*! Numbers fo servo algorithm parameters set. */
 			uint8_t servo_parameters_no[MAX_SERVOS_NR];
-		}
-		servo_alg_par;
+		} servo_alg_par;
 
 	} parameters;
 };
 
 //------------------------------------------------------------------------------
 /*! Structure of a reply from SERVO_GROUP to EDP_MASTER. */
-struct servo_group_reply
-{
+struct servo_group_reply {
 	/*! Error code. */
 	edp_error error;
 	/*! Position increment of the motor shaft reached since the last reading. */
@@ -652,7 +605,6 @@ struct servo_group_reply
 	short gripper_reg_state;
 };
 
-
 //------------------------------------------------------------------------------
 //                                  c_buffer
 //------------------------------------------------------------------------------
@@ -660,55 +612,41 @@ struct servo_group_reply
 
 //------------------------------------------------------------------------------
 /*! robot_model */
-typedef union c_buffer_robot_model
-{
+typedef union c_buffer_robot_model {
 	//----------------------------------------------------------
-	struct
-	{
+	struct {
 		/*! Tool trihedron ralative to the collar. */
 		frame_tab tool_frame;
-	}
-	tool_frame_def;
+	} tool_frame_def;
 	//----------------------------------------------------------
-	struct
-	{
+	struct {
 		/*! Parameter set number for the kinematic kinematic_model_with_tool. */
 		uint8_t kinematic_model_no;
-	}
-	kinematic_model;
+	} kinematic_model;
 	//----------------------------------------------------------
-	struct
-	{
+	struct {
 		/*! Numbers for the servo-regulation algorithms. */
 		uint8_t servo_algorithm_no[MAX_SERVOS_NR];
 		/*! Parameter set numbers for the servo-regulation algorithms. */
 		uint8_t servo_parameters_no[MAX_SERVOS_NR];
-	}
-	servo_algorithm;
+	} servo_algorithm;
 	//----------------------------------------------------------
-	struct
-	{
+	struct {
 		double position[3];
 		double weight;
-	}
-	force_tool;
+	} force_tool;
 
 } c_buffer_robot_model_t;
 
-
 //------------------------------------------------------------------------------
 /*! arm */
-typedef union c_buffer_arm
-{
-	struct
-	{
+typedef union c_buffer_arm {
+	struct {
 		/*! A get_state command variant. */
 		int command;
-	}
-	get_state_def;
+	} get_state_def;
 	//----------------------------------------------------------
-	struct
-	{
+	struct {
 		/*!  End's trihedron ralative to the base system. */
 		frame_tab arm_frame;
 		/*! XYZ + end's orientation relative to the base system. */
@@ -720,25 +658,20 @@ typedef union c_buffer_arm
 		BEHAVIOUR_SPECIFICATION behaviour[6];
 		/*! Dilation degree of the gripper. */
 		double gripper_coordinate;
-	}
-	pf_def;
+	} pf_def;
 	//----------------------------------------------------------
-	struct
-	{
+	struct {
 		/*! text to speak */
 		char text[MAX_TEXT];
 		/*! prosody of the text to speak */
 		char prosody[MAX_PROSODY];
-	}
-	text_def;
+	} text_def;
 	char serialized_command[ECP_EDP_SERIALIZED_COMMAND_SIZE];
 
 } c_buffer_arm_t;
 
-
 //------------------------------------------------------------------------------
-struct c_buffer
-{
+struct c_buffer {
 	/*! Type of the instruction. */
 	INSTRUCTION_TYPE instruction_type;
 	/*! Type of the SET instruction. */
@@ -793,25 +726,24 @@ struct c_buffer
 	friend class boost::serialization::access;
 
 	template<class Archive>
-		void serialize(Archive & ar, const unsigned int version)
-		{
-			ar & instruction_type;
-			ar & set_type;
-			ar & get_type;
-			ar & set_robot_model_type;
-			ar & get_robot_model_type;
-			ar & set_arm_type;
-			ar & get_arm_type;
-			ar & output_values;
-			ar & interpolation_type;
-			ar & motion_type;
-			ar & motion_steps;
-		}
+	void serialize(Archive & ar, const unsigned int version) {
+		ar & instruction_type;
+		ar & set_type;
+		ar & get_type;
+		ar & set_robot_model_type;
+		ar & get_robot_model_type;
+		ar & set_arm_type;
+		ar & get_arm_type;
+		ar & output_values;
+		ar & interpolation_type;
+		ar & motion_type;
+		ar & motion_steps;
+	}
 
 	//-----------------------------------------------------
 	//                      METHODS
 	//-----------------------------------------------------
-	c_buffer (void);  // by W odkomentowane
+	c_buffer(void); // by W odkomentowane
 	/*!
 	 *  Oczytac wejscia?
 	 *  @todo Translate to English.
@@ -856,31 +788,25 @@ struct c_buffer
 
 //------------------------------------------------------------------------------
 /*! robot_model */
-typedef union r_buffer_robot_model
-{
+typedef union r_buffer_robot_model {
 	//----------------------------------------------------------
-	struct
-	{
+	struct {
 		/*!
 		 *  Macierz reprezentujaca narzedzie wzgledem konca lancucha kinematycznego.
 		 *  @todo Translate to English.
 		 */
 		frame_tab tool_frame;
-	}
-	tool_frame_def;
+	} tool_frame_def;
 	//----------------------------------------------------------
-	struct
-	{
+	struct {
 		/*!
 		 *  Numer modelu kinematyki.
 		 *  @todo Translate to English.
 		 */
 		uint8_t kinematic_model_no;
-	}
-	kinematic_model;
+	} kinematic_model;
 	//----------------------------------------------------------
-	struct
-	{
+	struct {
 		/*!
 		 *  Numery algorytmow serworegulacji.
 		 *  @todo Translate to English.
@@ -891,22 +817,17 @@ typedef union r_buffer_robot_model
 		 *  @todo Translate to English.
 		 */
 		uint8_t servo_parameters_no[MAX_SERVOS_NR];
-	}
-	servo_algorithm;
+	} servo_algorithm;
 	//----------------------------------------------------------
-	struct
-	{
+	struct {
 		double position[3];
 		double weight;
-	}
-	force_tool;
+	} force_tool;
 
 } r_buffer_robot_model_t;
 
-
 //------------------------------------------------------------------------------
-typedef struct _controller_state_t
-{
+typedef struct _controller_state_t {
 	/*! Is robot synchronised? */
 	bool is_synchronised;
 	/*!
@@ -929,10 +850,8 @@ typedef struct _controller_state_t
 
 //------------------------------------------------------------------------------
 /*! arm */
-typedef union r_buffer_arm
-{
-	struct
-	{
+typedef union r_buffer_arm {
+	struct {
 		/*! Given values for PWM fill (Phase Wave Modulation) - (usualy unnecessary). */
 		int16_t PWM_value[MAX_SERVOS_NR];
 		/*! Control current - (usualy unnecessary). */
@@ -958,27 +877,22 @@ typedef union r_buffer_arm
 		 *  @todo Translate to English.
 		 */
 		double gripper_coordinate;
-	}
-	pf_def;
+	} pf_def;
 	//----------------------------------------------------------
-	struct
-	{
+	struct {
 		/*!
 		 *  Czy mowi?
 		 *  @todo Translate to English.
 		 */
 		bool speaking;
-	}
-	text_def;
+	} text_def;
 
 	char serialized_reply[EDP_ECP_SERIALIZED_REPLY_SIZE];
-
 
 } r_buffer_arm_t;
 
 //------------------------------------------------------------------------------
-struct r_buffer
-{
+struct r_buffer {
 	/*! Type of the reply. */
 	REPLY_TYPE reply_type;
 	/*! Number of the error (if it occured). */
@@ -1013,13 +927,12 @@ struct r_buffer
 	//-----------------------------------------------------
 	//                      METHODS
 	//-----------------------------------------------------
-	r_buffer (void); // W odkomentowane
-} __attribute__((__packed__));
+	r_buffer(void); // W odkomentowane
+}__attribute__((__packed__));
 
 //------------------------------------------------------------------------------
 /*! Target position for the mobile robot. */
-class playerpos_goal_t
-{
+class playerpos_goal_t {
 private:
 	double x, y, t;
 
@@ -1041,8 +954,7 @@ public:
  *  Zlecenie zmiany stanu ECP skojarzone z NEXT_STATE.
  *  @todo Translate to English.
  */
-struct ecp_next_state_t
-{
+struct ecp_next_state_t {
 	int mp_2_ecp_next_state;
 	int mp_2_ecp_next_state_variant;
 	char mp_2_ecp_next_state_string[MP_2_ECP_STRING_SIZE];
@@ -1052,8 +964,7 @@ struct ecp_next_state_t
 };
 
 //------------------------------------------------------------------------------
-struct ecp_command_buffer
-{
+struct ecp_command_buffer {
 #ifndef USE_MESSIP_SRR
 	/*! This is a message buffer, so it needs a message header */
 	msg_header_t hdr;
@@ -1061,12 +972,9 @@ struct ecp_command_buffer
 	c_buffer instruction;
 };
 
-
-
 //------------------------------------------------------------------------------
 /*! MP to ECP command. */
-struct MP_COMMAND_PACKAGE
-{
+struct MP_COMMAND_PACKAGE {
 #ifndef USE_MESSIP_SRR
 	msg_header_t hdr;
 #endif
@@ -1083,8 +991,7 @@ struct MP_COMMAND_PACKAGE
 
 //------------------------------------------------------------------------------
 /*! ECP to MP reply. */
-struct ECP_REPLY_PACKAGE
-{
+struct ECP_REPLY_PACKAGE {
 	ECP_REPLY reply;
 
 	// TODO: this should be rather union, but it is not possible to union non-POD objects
@@ -1094,13 +1001,13 @@ struct ECP_REPLY_PACKAGE
 // ------------------------------------------------------------------------
 
 /*
-// by Y
-inline void copy_frame(frame_tab destination_frame, frame_tab source_frame)
-{
-  for (int   column = 0; column < 4; column++)
-    for (int row = 0; row < 3; row++)
-      destination_frame[column][row] = source_frame[column][row];
-}
+ // by Y
+ inline void copy_frame(frame_tab destination_frame, frame_tab source_frame)
+ {
+ for (int   column = 0; column < 4; column++)
+ for (int row = 0; row < 3; row++)
+ destination_frame[column][row] = source_frame[column][row];
+ }
  */
 
 } // namespace lib
