@@ -9,35 +9,31 @@
 #define _SHEAD_CONST_H
 
 #include <stdint.h>
+#include "lib/swarmitfix.h"
 
-namespace mrrocpp
-{
+namespace mrrocpp {
 
 }
 
-
 using namespace mrrocpp;
-
 
 namespace mrrocpp {
 namespace lib {
 
+struct shead_cbuffer {
+	lib::SHEAD_HEAD_SOLIDIFICATION head_solidification;
+	lib::SHEAD_VACUUM_ACTIVATION vacuum_activation;
+};
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-
-
+struct shead_rbuffer {
+	bool head_solfified;
+	bool vacuum_on;
+};
 
 #define EDP_SHEAD_SECTION "[edp_shead]"
 #define ECP_SHEAD_SECTION "[ecp_shead]"
 
 #define SHEAD_NUM_OF_SERVOS	1
-
-#ifdef __cplusplus
-}
-#endif
 
 } // namespace lib
 } // namespace mrrocpp

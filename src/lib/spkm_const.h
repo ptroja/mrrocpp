@@ -9,6 +9,7 @@
 #define _SPKM_CONST_H
 
 #include <stdint.h>
+#include "lib/swarmitfix.h"
 
 namespace mrrocpp {
 
@@ -19,9 +20,6 @@ using namespace mrrocpp;
 namespace mrrocpp {
 namespace lib {
 
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 struct spkm_cbuffer {
 	double em[6];
@@ -30,6 +28,7 @@ struct spkm_cbuffer {
 	double da[6];
 	double av[6];
 	double tt;
+	lib::EPOS_GEN_PROFILE profile_type;
 };
 
 struct spkm_rbuffer {
@@ -43,9 +42,7 @@ struct spkm_rbuffer {
 
 #define SPKM_NUM_OF_SERVOS	6
 
-#ifdef __cplusplus
-}
-#endif
+
 
 } // namespace lib
 } // namespace mrrocpp
