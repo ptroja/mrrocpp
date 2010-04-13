@@ -18,9 +18,8 @@ public:
 
 	bool step() {
 		std::cout << "Writer: " << cnt << std::endl;
-//		boost::thread::sleep(1);
 		buf->Set(cnt++);
-		::sleep(1);
+		boost::this_thread::sleep(boost::posix_time::seconds(1));
 		return true;
 	}
 };
