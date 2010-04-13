@@ -35,6 +35,8 @@
 namespace mrrocpp {
 namespace lib {
 
+#define ECP_EDP_SERIALIZED_COMMAND_SIZE 300
+#define EDP_ECP_SERIALIZED_REPLY_SIZE 300
 
 //------------------------------------------------------------------------------
 /*!
@@ -729,6 +731,7 @@ typedef union c_buffer_arm
 		char prosody[MAX_PROSODY];
 	}
 	text_def;
+	char serialized_command[ECP_EDP_SERIALIZED_COMMAND_SIZE];
 
 } c_buffer_arm_t;
 
@@ -967,6 +970,9 @@ typedef union r_buffer_arm
 		bool speaking;
 	}
 	text_def;
+
+	char serialized_reply[EDP_ECP_SERIALIZED_REPLY_SIZE];
+
 
 } r_buffer_arm_t;
 
