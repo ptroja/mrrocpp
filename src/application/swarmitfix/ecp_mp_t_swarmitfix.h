@@ -12,7 +12,13 @@ namespace mrrocpp {
 namespace ecp_mp {
 namespace task {
 
+enum EPOS_GEN_PROFILE {
+	TRAPEZOIDAL_VELOCITY=0, CUBIC_POSITION
+};
+
+
 struct mp_ecp_epos_gen_parameters {
+	EPOS_GEN_PROFILE profile_type;
 	double dm[6];
 	double aa[6];
 	double da[6];

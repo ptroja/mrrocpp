@@ -27,6 +27,11 @@ class epos : public common::generator::generator
 		ecp_mp::task::mp_ecp_epos_gen_parameters mp_ecp_epos_params;
 
 	public:
+		void create_ecp_mp_reply();
+		void get_mp_ecp_command();
+		void create_ecp_edp_command();
+		void get_edp_ecp_reply();
+
 		epos(common::task::task& _ecp_task, double=1);		//constructor
 		bool first_step();		//first step generation
 		bool next_step();			//next step generation
