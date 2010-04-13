@@ -24,7 +24,8 @@ class robot: public common::ecp_robot
 	robot (lib::configurator &_config, lib::sr_ecp &_sr_ecp);
 	robot (common::task::task& _ecp_object);
 
-
+	void create_ecp_edp_command();
+	void get_edp_ecp_reply();
 
 }; // end: class ecp_irp6_mechatronika_robot
 // ---------------------------------------------------------------

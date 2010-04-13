@@ -16,10 +16,24 @@ namespace mrrocpp {
 namespace ecp {
 namespace spkm {
 
-robot::robot (lib::configurator &_config, lib::sr_ecp &_sr_ecp):
-	ecp_robot (lib::ROBOT_SPKM, SPKM_NUM_OF_SERVOS, EDP_SPKM_SECTION, _config, _sr_ecp){};
-robot::robot (common::task::task& _ecp_object):
-	ecp_robot (lib::ROBOT_SPKM, SPKM_NUM_OF_SERVOS, EDP_SPKM_SECTION, _ecp_object){};
+robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
+	ecp_robot(lib::ROBOT_SPKM, SPKM_NUM_OF_SERVOS, EDP_SPKM_SECTION, _config,
+			_sr_ecp) {
+}
+
+robot::robot(common::task::task& _ecp_object) :
+	ecp_robot(lib::ROBOT_SPKM, SPKM_NUM_OF_SERVOS, EDP_SPKM_SECTION,
+			_ecp_object) {
+}
+
+
+void robot::create_ecp_edp_command() {
+
+}
+
+void robot::get_edp_ecp_reply() {
+
+}
 
 } // namespace spkm
 } // namespace ecp

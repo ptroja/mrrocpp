@@ -37,13 +37,7 @@ void epos::get_mp_ecp_command() {
 	printf("aaaaa: %lf\n", mp_ecp_epos_params.dm[4]);
 }
 
-void epos::create_ecp_edp_command() {
 
-}
-
-void epos::get_edp_ecp_reply() {
-
-}
 
 bool epos::first_step() {
 
