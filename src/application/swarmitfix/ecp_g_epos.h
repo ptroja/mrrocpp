@@ -9,6 +9,7 @@
 
 #include <time.h>
 #include "ecp/common/generator/ecp_generator.h"
+#include "ecp_mp_t_swarmitfix.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -19,10 +20,11 @@ class epos : public common::generator::generator
 {
 	private:
 		double waittime;		//seconds to wait
-		timespec sleeptime;		//structure for nanosleep funciton
+		timespec sleeptime;		//structure for nanosleep function
 		timespec acttime;
 		timespec prevtime;
 		timespec starttime;
+		ecp_mp::task::mp_ecp_epos_gen_parameters mp_ecp_epos_params;
 
 	public:
 		epos(common::task::task& _ecp_task, double=1);		//constructor

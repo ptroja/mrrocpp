@@ -75,14 +75,6 @@ void swarmitfix::main_task_algorithm(void) {
 		case ecp_mp::task::ECP_GEN_EPOS: {
 			sr_ecp_msg->message("ECP_GEN_EPOS");
 
-			ecp_mp::task::mp_ecp_epos_gen_parameters epos_params;
-
-			memcpy(&epos_params,
-					mp_command.ecp_next_state.mp_2_ecp_next_state_string,
-					sizeof(epos_params));
-
-			printf("aaaaa: %lf\n", epos_params.dm[4]);
-
 			g_epos->init_time(
 					mp_command.ecp_next_state.mp_2_ecp_next_state_variant);
 			g_epos->Move();

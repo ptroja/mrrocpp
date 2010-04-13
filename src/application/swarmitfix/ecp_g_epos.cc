@@ -25,6 +25,14 @@ void epos::init_time(double s){
 }
 
 bool epos::first_step(){
+
+	// parameters copying
+	memcpy(&mp_ecp_epos_params,
+						ecp_t.mp_command.ecp_next_state.mp_2_ecp_next_state_string,
+						sizeof(mp_ecp_epos_params));
+
+	printf("cccccc: %lf\n", mp_ecp_epos_params.dm[4]);
+
 	if( clock_gettime( CLOCK_REALTIME , &acttime) == -1 ){	//acquiring actual time
 		printf("sleep generator: first step time measurement error");
 		return false;
