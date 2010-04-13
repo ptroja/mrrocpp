@@ -1,0 +1,5 @@
+searched-lib boost_thread ; 
+exe test
+	: test.cc Agent.cc AgentFactory.cc DataBuffer.cc
+	: <include>boost <threading>multi <library>boost_thread
+	;

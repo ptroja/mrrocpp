@@ -1,16 +1,19 @@
+#ifndef _INT_WRITER_HH
+#define _INT_WRITER_HH
+
 #include "Agent.hh"
 #include "DataBuffer.hh"
 #include <iostream>
 #include <boost/thread/xtime.hpp>
 
-class Writer : public Agent {
+class IntWriter : public Agent {
 private:
 	int cnt;
 	DataBuffer<int> *buf;
 	Agent * reader;
 public:
 
-	Writer(const std::string & name) : Agent(name),	cnt(10)
+	IntWriter(const std::string & name) : Agent(name),	cnt(10)
 	{
 		reader = AgentFactory::getAgent("Reader");
 		buf = reader->getBuffer<int>("integer buffer");
@@ -23,3 +26,5 @@ public:
 		return true;
 	}
 };
+
+#endif /* _INT_WRITER_HH */
