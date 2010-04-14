@@ -23,7 +23,7 @@ public:
 		std::cout << "Writer: " << cnt << std::endl;
 		buf->Set(cnt);
 		cnt += 1.0;
-		boost::this_thread::sleep(boost::posix_time::seconds(1));
+		boost::this_thread::sleep(boost::posix_time::milliseconds(1000));
 		return true;
 	}
 };

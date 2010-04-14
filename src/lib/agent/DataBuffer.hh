@@ -11,10 +11,6 @@ class OrBufferContainer;
 
 //! representation of 'And' buffer condition
 class AndBufferContainer : public std::vector<const DataBufferBase *> {
-private:
-	//! base class typedef
-	typedef std::vector<const DataBufferBase *> base_t;
-
 public:
 	//! assign a single 'Buffer' condition
 	AndBufferContainer & operator=(const DataBufferBase &op);
@@ -58,7 +54,11 @@ public:
 
 class DataBufferBase {
 protected:
+	//! name of the data buffer
 	const std::string name;
+
+	//! flag indicating that the new data has arrived
+	bool fresh;
 
 public:
 	DataBufferBase(const std::string & _name);
@@ -83,12 +83,11 @@ template <class T>
 class DataBuffer : public DataBufferBase {
 private:
 	Agent & owner;
-	bool fresh;
 	T data;
 
 public:
 	DataBuffer(Agent & _owner, const std::string & _name, const T & _default_value = T())
-		: DataBufferBase(_name), owner(_owner), fresh(false), data(_default_value)
+		: DataBufferBase(_name), owner(_owner), data(_default_value)
 	{
 	}
 

@@ -13,8 +13,8 @@ AndBufferContainer & AndBufferContainer::operator=(const DataBufferBase &op)
 
 AndBufferContainer & AndBufferContainer::operator&&(const AndBufferContainer &op)
 {
-	for(base_t::iterator it = this->begin(); it != this->end(); ++it) {
-		this->push_back(*it);
+	BOOST_FOREACH(const DataBufferBase * ptr, op) {
+		this->push_back(ptr);
 	}
 	return *this;
 }
@@ -70,7 +70,7 @@ OrBufferContainer::OrBufferContainer()
 }
 
 DataBufferBase::DataBufferBase(const std::string & _name)
-	: name(_name)
+	: name(_name), fresh(false)
 {
 }
 
