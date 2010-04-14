@@ -37,13 +37,23 @@ OrBufferContainer AndBufferContainer::operator||(const AndBufferContainer &op)
 	return cont;
 }
 
-AndBufferContainer::AndBufferContainer(const DataBufferBase &op)
+AndBufferContainer::AndBufferContainer(const DataBufferBase &op) : fresh(false)
 {
 	this->push_back(&op);
 }
 
-AndBufferContainer::AndBufferContainer()
+AndBufferContainer::AndBufferContainer() : fresh(false)
 {
+}
+
+bool AndBufferContainer::isFresh() const
+{
+	BOOST_FOREACH(const DataBufferBase * ptr, *this) {
+		if (!ptr->isFresh()) {
+			return false;
+		}
+	}
+	return true;
 }
 
 OrBufferContainer & OrBufferContainer::operator=(const DataBufferBase &op)
@@ -77,6 +87,11 @@ DataBufferBase::DataBufferBase(const std::string & _name)
 const std::string & DataBufferBase::getName() const
 {
 	return name;
+}
+
+bool DataBufferBase::isFresh() const
+{
+	return fresh;
 }
 
 AndBufferContainer DataBufferBase::operator&&(DataBufferBase &op) {

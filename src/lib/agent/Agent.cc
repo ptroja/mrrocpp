@@ -28,7 +28,25 @@ const std::string & Agent::getName() const
 	return name;
 }
 
-void Agent::operator ()() {
+void Agent::operator ()()
+{
 	do {
 	} while (step());
+}
+
+bool Agent::checkCondition(const OrBufferContainer &condition)
+{
+	BOOST_FOREACH(const AndBufferContainer & andCondition, condition) {
+		if (andCondition.isFresh())
+			return true;
+	}
+	return false;
+}
+
+void Agent::Wait(OrBufferContainer & condition)
+{
+	boost::unique_lock <boost::mutex> lock(buffers_mutex);
+	while (!checkCondition(condition)) {
+		data_condition_variable.wait(lock);
+	}
 }

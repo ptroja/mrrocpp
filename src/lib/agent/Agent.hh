@@ -11,6 +11,7 @@
 // forward declarations
 class DataBufferBase;
 template <class T> class DataBuffer;
+class OrBufferContainer;
 
 #include "AgentFactory.hh"
 
@@ -21,6 +22,15 @@ class Agent : boost::noncopyable, boost::thread {
 private:
 	//! Agent's name
 	const std::string name;
+
+	//! check if given data availability condition is satisfied
+	bool checkCondition(const OrBufferContainer &condition);
+
+	//! Condition variable for signalling new data in buffers
+	boost::condition_variable data_condition_variable;
+
+	//! Mutex for exclusive access to data buffers
+	boost::mutex buffers_mutex;
 
 protected:
 	//! Datatype of buffers container
@@ -38,23 +48,47 @@ protected:
 	//! List buffers of the agent
 	void listBuffers() const;
 
-	//! Get the pointer to buffer for write access
+	/**
+	 * Get the data from given buffer
+	 * @param name buffer name
+	 * @return the data
+	 */
 	template <class T>
-	DataBuffer<T> * getBuffer(const std::string & name) {
+	T Get(const std::string & name) {
+		boost::mutex::scoped_lock lock(buffers_mutex);
 		buffers_t::iterator result = buffers.find(name);
 		if (result != buffers.end()) {
-			return dynamic_cast<DataBuffer<T> *>(result->second);
+			DataBuffer<T> * buffer = dynamic_cast<DataBuffer<T> *>(result->second);
+			return buffer->Get();
 		}
-		// TODO: or throw an exception?
-		return (DataBuffer<T> *) NULL;
+		// TODO: exception
+		throw;
 	};
 
-public:
-	//! Condition variable for signalling new data in buffers
-	boost::condition_variable data_condition_variable;
+	/**
+	 * Set the data of given buffer
+	 * @param name buffer name
+	 * @param the data
+	 */
+	template <class T>
+	void Set(const std::string & name, const T & item) {
+		boost::mutex::scoped_lock lock(buffers_mutex);
+		buffers_t::iterator result = buffers.find(name);
+		if (result != buffers.end()) {
+			DataBuffer<T> * buffer = dynamic_cast<DataBuffer<T> *>(result->second);
+			data_condition_variable.notify_one();
+			return buffer->Set(item);
+		}
+		// TODO: exception
+		throw;
+	};
 
-	//! Mutex for exclusive access to data buffers
-	boost::mutex data_mutex;
+protected:
+	/**
+	 * Wait for given data availability condition to be satisfied
+	 * @param orCondition condition to wait for
+	 */
+	void Wait(OrBufferContainer & orCondition);
 
 public:
 	//! Constructor

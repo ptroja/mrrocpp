@@ -11,6 +11,9 @@ class OrBufferContainer;
 
 //! representation of 'And' buffer condition
 class AndBufferContainer : public std::vector<const DataBufferBase *> {
+private:
+	bool fresh;
+
 public:
 	//! assign a single 'Buffer' condition
 	AndBufferContainer & operator=(const DataBufferBase &op);
@@ -32,6 +35,9 @@ public:
 
 	//! default constructor
 	AndBufferContainer();
+
+	//! check if this condition was satisfied
+	bool isFresh() const;
 };
 
 class OrBufferContainer : public std::vector<AndBufferContainer> {
@@ -75,6 +81,8 @@ public:
 	//! get name of the buffer
 	const std::string & getName() const;
 
+	bool isFresh(void) const;
+
 	//! This is required to make a class polimorphic
 	virtual ~DataBufferBase();
 };
@@ -82,38 +90,34 @@ public:
 template <class T>
 class DataBuffer : public DataBufferBase {
 private:
-	Agent & owner;
 	T data;
 
+	boost::mutex access_mutex;
+
 public:
-	DataBuffer(Agent & _owner, const std::string & _name, const T & _default_value = T())
-		: DataBufferBase(_name), owner(_owner), data(_default_value)
+	DataBuffer(const std::string & _name, const T & _default_value = T())
+		: DataBufferBase(_name), data(_default_value)
 	{
 	}
 
-	void Get(T & item, const bool wait = true) {
-		boost::unique_lock<boost::mutex> lock(owner.data_mutex);
-		while (wait && !fresh) {
-			owner.data_condition_variable.wait(lock);
-		}
-		fresh = false;
-		item = data;
-	}
-
-	T Get(const bool wait = true) {
-		boost::unique_lock<boost::mutex> lock(owner.data_mutex);
-		while (wait && !fresh) {
-				owner.data_condition_variable.wait(lock);
-		}
+	T Get() {
+		boost::mutex::scoped_lock lock(access_mutex);
 		fresh = false;
 		return data;
 	}
 
+	bool Get(T & item) {
+		boost::mutex::scoped_lock lock(access_mutex);
+		bool fresh_flag = fresh;
+		item = data;
+		fresh = false;
+		return fresh_flag;
+	}
+
 	void Set(const T & item) {
-		boost::unique_lock<boost::mutex> lock(owner.data_mutex);
+		boost::mutex::scoped_lock lock(access_mutex);
 		data = item;
 		fresh = true;
-		owner.data_condition_variable.notify_one();
 	}
 };
 
