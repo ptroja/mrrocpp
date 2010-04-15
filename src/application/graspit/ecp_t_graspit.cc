@@ -43,6 +43,21 @@ void Graspit::main_task_algorithm(void ){
 	trgraspit->t_read();
 	trgraspit->TRdisconnect();
 
+	//mrroc++ kinematics,
+	//1 affects 2
+	//2 affects 3
+	trgraspit->from_va.graspit.grasp_joint[2] += trgraspit->from_va.graspit.grasp_joint[1];
+	trgraspit->from_va.graspit.grasp_joint[3] += trgraspit->from_va.graspit.grasp_joint[2];
+
+	//synchro
+	trgraspit->from_va.graspit.grasp_joint[0] ;
+	trgraspit->from_va.graspit.grasp_joint[1] -= 1.542;
+	trgraspit->from_va.graspit.grasp_joint[2] ;
+	trgraspit->from_va.graspit.grasp_joint[3] ;
+	trgraspit->from_va.graspit.grasp_joint[4] += 4.712;
+	trgraspit->from_va.graspit.grasp_joint[5] -= 2.738;
+	trgraspit->from_va.graspit.grasp_joint[6] = 0.074;
+
 	cout << trgraspit->from_va.graspit.grasp_joint[0] << "\n";
 	cout << trgraspit->from_va.graspit.grasp_joint[1] << "\n";
 	cout << trgraspit->from_va.graspit.grasp_joint[2] << "\n";
@@ -50,6 +65,19 @@ void Graspit::main_task_algorithm(void ){
 	cout << trgraspit->from_va.graspit.grasp_joint[4] << "\n";
 	cout << trgraspit->from_va.graspit.grasp_joint[5] << "\n";
 	cout << trgraspit->from_va.graspit.grasp_joint[6] << "\n";
+
+	smoothgen2->set_absolute();
+	smoothgen2->load_coordinates(lib::ECP_JOINT,
+								trgraspit->from_va.graspit.grasp_joint[0],
+								trgraspit->from_va.graspit.grasp_joint[1],
+								trgraspit->from_va.graspit.grasp_joint[2],
+								trgraspit->from_va.graspit.grasp_joint[3],
+								trgraspit->from_va.graspit.grasp_joint[4],
+								trgraspit->from_va.graspit.grasp_joint[5],
+								trgraspit->from_va.graspit.grasp_joint[6],
+								0.0, true);
+	smoothgen2->Move();
+	smoothgen2->reset();
 
 	ecp_termination_notice();
 };
