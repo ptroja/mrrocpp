@@ -10,6 +10,7 @@
 
 #include "ecp/common/ecp_robot.h"
 #include "lib/robot_consts/spkm_const.h"
+#include "lib/data_port_headers/epos.h"
 
 namespace mrrocpp {
 namespace ecp {

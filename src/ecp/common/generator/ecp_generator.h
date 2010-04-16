@@ -12,6 +12,7 @@
 #include "ecp/common/task/ecp_task.h"
 #include "ecp/common/ecp_robot.h"
 #include "ecp_mp/ecp_mp_generator.h"
+#include "lib/single_thread_port.h"
 
 
 namespace mrrocpp {

@@ -10,6 +10,7 @@
 #include <time.h>
 #include "ecp/common/generator/ecp_generator.h"
 #include "ecp_mp_t_swarmitfix.h"
+#include "lib/data_port_headers/epos.h"
 
 namespace mrrocpp {
 namespace ecp {
