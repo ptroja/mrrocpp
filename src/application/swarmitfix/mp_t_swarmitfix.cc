@@ -13,6 +13,11 @@
 #include "mp/mp.h"
 #include "ecp_mp_t_swarmitfix.h"
 #include "mp_t_swarmitfix.h"
+#include "lib/single_thread_port.h"
+
+#include <iostream>
+#include <string>
+#include <sstream>
 
 namespace mrrocpp {
 namespace mp {
@@ -38,7 +43,41 @@ void swarmitfix::main_task_algorithm(void) {
 	set_next_ecps_state((int) ecp_mp::task::ECP_GEN_TRANSPARENT, (int) 0, "", 0,
 			1, lib::ROBOT_SHEAD);
 
-	sr_ecp_msg->message("1");
+	double a = 2.88;
+
+	std::string astring;
+
+	astring ="11";
+	std::stringstream ss (std::stringstream::in | std::stringstream::out);
+	ss << a;
+	astring = ss.str();
+
+	lib::single_thread_port <int> int_port("int_port_label");
+	lib::single_thread_port <int>* int_port_from_manager;
+
+
+	lib::single_thread_port_manager port_manager;
+
+	port_manager.add_port(&int_port);
+
+	int_port_from_manager = port_manager.get_port <int> ("int_port_label");
+
+	int int_port_data_input=16;
+	int int_port_data_output;
+
+	int_port_from_manager->set(int_port_data_input);
+	int_port_data_output = int_port_from_manager->get();
+
+
+
+
+
+	ss << " " << int_port_data_output;
+
+
+
+	sr_ecp_msg->message(ss.str().c_str());
+
 	send_end_motion_to_ecps(1, lib::ROBOT_SPKM);
 	/*
 	 sr_ecp_msg->message("2");

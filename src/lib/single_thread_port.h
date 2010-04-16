@@ -20,6 +20,8 @@ namespace lib {
 class single_thread_port_interface {
 private:
 	std::string name;
+
+protected:
 	bool new_data;
 
 public:
@@ -79,6 +81,7 @@ public:
 
 	template<class T>
 	single_thread_port<T>* get_port(std::string name) {
+		// TODO: dodac obsluge wyjatku w sytuacji gdy nie ma takiego pola lub typ sie nie zgadza
 		return dynamic_cast<single_thread_port<T>* > (single_thread_port_map[name]);
 	}
 
