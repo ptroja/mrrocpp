@@ -9,7 +9,20 @@
 #define EPOS_DATA_PORT "epos_data_port"
 
 
+struct epos_command {
+	double em[6];
+	double emdm[6];
+	double aa[6];
+	double da[6];
+	double av[6];
+	double tt;
+	lib::EPOS_GEN_PROFILE profile_type;
+};
 
+struct epos_reply {
+	double position[6];
+	bool motion_in_progress[6];
+};
 
 
 #endif
