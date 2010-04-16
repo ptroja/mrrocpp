@@ -6,8 +6,8 @@
 #define __EPOS_DATA_PORT_H
 
 
-#define EPOS_DATA_PORT "epos_data_port"
-
+#define EPOS_COMMAND_DATA_PORT "epos_command_data_port"
+#define EPOS_REPLY_DATA_PORT "epos_reply_data_port"
 
 struct epos_command {
 	double em[6];
