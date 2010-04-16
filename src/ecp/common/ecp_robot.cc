@@ -237,6 +237,13 @@ void ecp_robot::send()
 }
 
 
+void ecp_robot::create_command()
+{}
+
+void ecp_robot::get_reply()
+{}
+
+
 void ecp_robot::query()
 
 {

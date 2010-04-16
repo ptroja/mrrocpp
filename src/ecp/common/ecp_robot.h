@@ -5,6 +5,7 @@
 #include "lib/srlib.h"
 #include "lib/configurator.h"
 #include "ecp_mp/ecp_mp_robot.h"
+#include "lib/single_thread_port.h"
 
 #if defined(USE_MESSIP_SRR)
 #include <messip.h>
@@ -59,6 +60,12 @@ protected:
 	// Funkcja generator.next_step() przygotowuje rozkazy dla EDP wypelniajac
 
 public:
+	// to exchange data with generators
+	lib::single_thread_port_manager port_manager;
+
+	virtual void create_command();
+	virtual void get_reply();
+
 	void send  ();
 	void query ();
 

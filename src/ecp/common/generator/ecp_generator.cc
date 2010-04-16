@@ -54,8 +54,9 @@ void generator::Move() {
 		if ((the_robot) && communicate_with_edp) {
 
 			// zlecenie ruchu SET oraz odczyt stanu robota GET
-
+			the_robot->create_command();
 			execute_motion();
+			the_robot->get_reply();
 
 		}
 
