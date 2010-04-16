@@ -14,7 +14,7 @@
 
 #include "edp/conveyor/sg_conv.h"
 #include "edp/common/edp_e_motor_driven.h"
-#include "lib/conveyor_const.h"
+#include "lib/robot_consts/conveyor_const.h"
 
 namespace mrrocpp {
 namespace edp {

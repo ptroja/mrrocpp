@@ -25,7 +25,7 @@
 #include "edp/common/servo_gr.h"
 // Model kinematyczny tasmociagu.
 #include "kinematics/conveyor/kinematic_model_conveyor.h"
-#include "lib/conveyor_const.h"
+#include "lib/robot_consts/conveyor_const.h"
 
 using namespace mrrocpp::lib::exception;
 

@@ -28,7 +28,7 @@
 #include "edp/conveyor/edp_conveyor_effector.h"
 // Klasa hardware_interface.
 #include "edp/conveyor/hi_conv.h"
-#include "lib/conveyor_const.h"
+#include "lib/robot_consts/conveyor_const.h"
 
 namespace mrrocpp {
 namespace edp {

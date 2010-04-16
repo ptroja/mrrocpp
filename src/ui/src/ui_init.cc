@@ -45,7 +45,7 @@
 #include "lib/configurator.h"
 #include "lib/mis_fun.h"
 #include "ui/ui_ecp.h"
-#include "lib/conveyor_const.h"
+#include "lib/robot_consts/conveyor_const.h"
 #if defined(USE_MESSIP_SRR)
 #include <messip.h>
 #endif

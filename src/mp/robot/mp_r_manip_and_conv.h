@@ -3,7 +3,7 @@
 
 #include "mp/mp.h"
 #include "mp/robot/mp_robot.h"
-#include "lib/all_robots_const.h"
+#include "lib/robot_consts/all_robots_const.h"
 
 namespace mrrocpp {
 namespace mp {

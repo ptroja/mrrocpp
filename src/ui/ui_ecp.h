@@ -12,7 +12,7 @@
 #include "ui/ui_ecp_r_irp6_common.h"
 #include "ui/ui_ecp_r_tfg_and_conv.h"
 
-#include "lib/all_robots_const.h"
+#include "lib/robot_consts/all_robots_const.h"
 
 typedef struct{
 	//ui_irp6_on_track_robot *irp6_on_track;

@@ -9,7 +9,7 @@
 #define _ECP_R_CONVEYOR_H
 
 #include "ecp/common/ecp_robot.h"
-#include "lib/conveyor_const.h"
+#include "lib/robot_consts/conveyor_const.h"
 
 namespace mrrocpp {
 namespace ecp {

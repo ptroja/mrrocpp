@@ -26,7 +26,7 @@
 // Konfigurator.
 // #include "lib/configurator.h"
 #include "ui/ui_ecp.h"
-#include "lib/conveyor_const.h"
+#include "lib/robot_consts/conveyor_const.h"
 
 /* Local headers */
 #include "ablibs.h"

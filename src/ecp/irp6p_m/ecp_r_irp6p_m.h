@@ -9,7 +9,7 @@
 #define _ECP_R_IRP6P_M_H
 
 #include "ecp/common/ecp_robot.h"
-#include "lib/irp6p_m_const.h"
+#include "lib/robot_consts/irp6p_m_const.h"
 
 #include "kinematics/common/kinematics_manager.h"
 #include "kinematics/irp6_postument/kinematic_model_irp6p_with_wrist.h"

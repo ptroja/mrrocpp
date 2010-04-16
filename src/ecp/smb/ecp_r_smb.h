@@ -9,7 +9,7 @@
 #define _ECP_R_SMB_H
 
 #include "ecp/common/ecp_robot.h"
-#include "lib/smb_const.h"
+#include "lib/robot_consts/smb_const.h"
 
 namespace mrrocpp {
 namespace ecp {

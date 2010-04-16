@@ -9,7 +9,7 @@
 #define _ECP_R_IRP6P_TFG_H
 
 #include "ecp/common/ecp_robot.h"
-#include "lib/irp6p_tfg_const.h"
+#include "lib/robot_consts/irp6p_tfg_const.h"
 
 #include "kinematics/common/kinematics_manager.h"
 
