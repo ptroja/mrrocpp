@@ -54,6 +54,10 @@ bool epos::first_step() {
 	the_robot->ecp_command.instruction.set_type = ARM_DEFINITION;
 
 
+	epos_data_port_command_structure.da[3] = 3.13;
+	epos_command_data_port->set(epos_data_port_command_structure);
+
+
 	if (clock_gettime(CLOCK_REALTIME, &acttime) == -1) { //acquiring actual time
 		printf("sleep generator: first step time measurement error");
 		return false;
