@@ -13,8 +13,8 @@ public:
 		IntBuffer("integer buffer"),
 		DoubleBuffer("double buffer")
 	{
-		addBuffer(& IntBuffer);
-		addBuffer(& DoubleBuffer);
+		registerBuffer(IntBuffer);
+		registerBuffer(DoubleBuffer);
 		listBuffers();
 	}
 
@@ -24,9 +24,9 @@ public:
 		AndBufferContainer cont2 = cont1; //DoubleBuffer;
 		AndBufferContainer cont3 = (cont1 && cont2);
 
-		OrBufferContainer or1 = DoubleBuffer && IntBuffer;
-
-		Wait(or1);
+		OrBufferContainer or1(cont1);// = DoubleBuffer || IntBuffer;
+		cont1.print(); std::cout << std::endl;
+		Wait(DoubleBuffer);
 
 //		cont3
 		int i = Get<int>("integer buffer");

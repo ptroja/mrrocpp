@@ -4,7 +4,6 @@
 #include <map>
 #include <string>
 
-#include <boost/noncopyable.hpp>
 #include <boost/thread/thread.hpp>
 #include <boost/thread/condition_variable.hpp>
 
@@ -12,25 +11,29 @@
 class DataBufferBase;
 template <class T> class DataBuffer;
 class OrBufferContainer;
+class AndBufferContainer;
 
-#include "AgentFactory.hh"
+#include "../messip/messip_dataport.h"
+
+#include "AgentBase.hh"
 
 /**
  * Agent base class
  */
-class Agent : boost::noncopyable, boost::thread {
+class Agent : public AgentBase {
 private:
-	//! Agent's name
-	const std::string name;
-
 	//! check if given data availability condition is satisfied
 	bool checkCondition(const OrBufferContainer &condition);
 
-	//! Condition variable for signalling new data in buffers
-	boost::condition_variable data_condition_variable;
+	/**
+	 * Receive data buffer message
+	 * @param block until a message arrive
+	 * @return true if the a message has arrived
+	 */
+	bool ReceiveMessage(bool block);
 
-	//! Mutex for exclusive access to data buffers
-	boost::mutex buffers_mutex;
+	//! messip channel object
+	messip_channel_t * channel;
 
 protected:
 	//! Datatype of buffers container
@@ -43,7 +46,7 @@ protected:
 	buffers_t buffers;
 
 	//! Add a buffer to the agent
-	void addBuffer(DataBufferBase * buf);
+	void registerBuffer(DataBufferBase & buf);
 
 	//! List buffers of the agent
 	void listBuffers() const;
@@ -55,29 +58,10 @@ protected:
 	 */
 	template <class T>
 	T Get(const std::string & name) {
-		boost::mutex::scoped_lock lock(buffers_mutex);
 		buffers_t::iterator result = buffers.find(name);
 		if (result != buffers.end()) {
 			DataBuffer<T> * buffer = dynamic_cast<DataBuffer<T> *>(result->second);
 			return buffer->Get();
-		}
-		// TODO: exception
-		throw;
-	};
-
-	/**
-	 * Set the data of given buffer
-	 * @param name buffer name
-	 * @param the data
-	 */
-	template <class T>
-	void Set(const std::string & name, const T & item) {
-		boost::mutex::scoped_lock lock(buffers_mutex);
-		buffers_t::iterator result = buffers.find(name);
-		if (result != buffers.end()) {
-			DataBuffer<T> * buffer = dynamic_cast<DataBuffer<T> *>(result->second);
-			data_condition_variable.notify_one();
-			return buffer->Set(item);
 		}
 		// TODO: exception
 		throw;
@@ -90,12 +74,16 @@ protected:
 	 */
 	void Wait(OrBufferContainer & orCondition);
 
+	void Wait(AndBufferContainer & orCondition);
+
+	void Wait(DataBufferBase & dataBufferCondition);
+
 public:
 	//! Constructor
 	Agent(const std::string & _name);
 
-	//! Get name of the agent
-	const std::string & getName() const;
+	//! Destructor
+	virtual ~Agent();
 
 	//! Single step of agent's transition function
 	virtual bool step() = 0;

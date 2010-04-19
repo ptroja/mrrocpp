@@ -1,27 +1,31 @@
 #ifndef _DOUBLE_WRITER_HH
 #define _DOUBLE_WRITER_HH
 
-#include "Agent.hh"
-#include "DataBuffer.hh"
 #include <iostream>
+
 #include <boost/thread/xtime.hpp>
 
-class DoubleWriter : public Agent {
+#include "RemoteAgent.hh"
+#include "DataBuffer.hh"
+
+class DoubleWriter : public Agent
+{
 private:
+	RemoteAgent reader;
 	double cnt;
-	Agent * reader;
 public:
 
-	DoubleWriter(const std::string & name) : Agent(name),	cnt(0.1)
+	DoubleWriter(const std::string & name) :
+		Agent(name), reader("Reader"), cnt(0.1)
 	{
-		reader = AgentFactory::getAgent("Reader");
 	}
 
-	bool step() {
+	bool step()
+	{
 		std::cout << "Writer: " << cnt << std::endl;
-		reader->Set("double buffer", cnt);
+		reader.Set("double buffer", cnt);
 		cnt += 1.0;
-		boost::this_thread::sleep(boost::posix_time::milliseconds(1000));
+		boost::this_thread::sleep(boost::posix_time::milliseconds(100));
 		return true;
 	}
 };

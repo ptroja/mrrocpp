@@ -1,5 +1,11 @@
-searched-lib boost_thread ; 
-exe test
-	: test.cc Agent.cc AgentFactory.cc DataBuffer.cc
-	: <include>boost <threading>multi <library>boost_thread
+searched-lib boost_thread ;
+searched-lib messip ;
+exe reader
+	: reader.cc Agent.cc DataBuffer.cc AgentBase.cc
+	: <include>boost <threading>multi <library>boost_thread <library>messip
+	;
+
+exe writers
+	: writers.cc Agent.cc DataBuffer.cc AgentBase.cc
+	: <include>boost <threading>multi <library>boost_thread <library>messip
 	;

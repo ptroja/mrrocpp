@@ -1,8 +1,11 @@
 #ifndef _DATABUFFER_HH
 #define _DATABUFFER_HH
 
-#include "Agent.hh"
 #include <vector>
+
+#include "../xdr_iarchive.hpp"
+
+#include "Agent.hh"
 
 // forward declarations
 class DataBufferBase;
@@ -19,13 +22,10 @@ public:
 	AndBufferContainer & operator=(const DataBufferBase &op);
 
 	//! compose 'And' condition from ('And' && 'Buffer')
-	AndBufferContainer & operator&&(const DataBufferBase &op);
+	AndBufferContainer operator&&(const DataBufferBase &op);
 
 	//! compose 'And' condition from ('And' && 'And')
-	AndBufferContainer & operator&&(const AndBufferContainer &op);
-
-	//! compose 'Or' condition from ('And' || 'Buffer')
-	OrBufferContainer operator||(const DataBufferBase &op);
+	AndBufferContainer operator&&(const AndBufferContainer &op);
 
 	//! compose 'And' condition from ('And' || 'And')
 	OrBufferContainer operator||(const AndBufferContainer &op);
@@ -38,10 +38,16 @@ public:
 
 	//! check if this condition was satisfied
 	bool isFresh() const;
+
+	//! print the condition
+	void print() const;
 };
 
 class OrBufferContainer : public std::vector<AndBufferContainer> {
 public:
+	//! Base container data type
+	typedef std::vector<AndBufferContainer> base_t;
+
 	//! assign a single 'Buffer' condition
 	OrBufferContainer & operator=(const DataBufferBase &op);
 
@@ -56,6 +62,9 @@ public:
 
 	//! default constructor
 	OrBufferContainer();
+
+	//! print the condition
+	void print() const;
 };
 
 class DataBufferBase {
@@ -83,6 +92,8 @@ public:
 
 	bool isFresh(void) const;
 
+	virtual void Set(xdr_iarchive<> & ia) = 0;
+
 	//! This is required to make a class polimorphic
 	virtual ~DataBufferBase();
 };
@@ -92,8 +103,6 @@ class DataBuffer : public DataBufferBase {
 private:
 	T data;
 
-	boost::mutex access_mutex;
-
 public:
 	DataBuffer(const std::string & _name, const T & _default_value = T())
 		: DataBufferBase(_name), data(_default_value)
@@ -101,13 +110,11 @@ public:
 	}
 
 	T Get() {
-		boost::mutex::scoped_lock lock(access_mutex);
 		fresh = false;
 		return data;
 	}
 
 	bool Get(T & item) {
-		boost::mutex::scoped_lock lock(access_mutex);
 		bool fresh_flag = fresh;
 		item = data;
 		fresh = false;
@@ -115,8 +122,12 @@ public:
 	}
 
 	void Set(const T & item) {
-		boost::mutex::scoped_lock lock(access_mutex);
 		data = item;
+		fresh = true;
+	}
+
+	void Set(xdr_iarchive<> & ia) {
+ 		ia >> data;
 		fresh = true;
 	}
 };
