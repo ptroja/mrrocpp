@@ -19,15 +19,22 @@ namespace spkm {
 robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
 	epos_command_data_port(EPOS_COMMAND_DATA_PORT), epos_reply_data_port(
 			EPOS_REPLY_DATA_PORT), ecp_robot(lib::ROBOT_SPKM,
-			SPKM_NUM_OF_SERVOS, EDP_SPKM_SECTION, _config, _sr_ecp) {
+			SPKM_NUM_OF_SERVOS, EDP_SPKM_SECTION, _config, _sr_ecp),
+			kinematics_manager() {
 	add_data_ports();
+	//  Stworzenie listy dostepnych kinematyk.
+	create_kinematic_models_for_given_robot();
+
 }
 
 robot::robot(common::task::task& _ecp_object) :
 	epos_command_data_port(EPOS_COMMAND_DATA_PORT), epos_reply_data_port(
 			EPOS_REPLY_DATA_PORT), ecp_robot(lib::ROBOT_SPKM,
-			SPKM_NUM_OF_SERVOS, EDP_SPKM_SECTION, _ecp_object) {
+			SPKM_NUM_OF_SERVOS, EDP_SPKM_SECTION, _ecp_object),
+			kinematics_manager() {
 	add_data_ports();
+	//  Stworzenie listy dostepnych kinematyk.
+	create_kinematic_models_for_given_robot();
 }
 
 void robot::add_data_ports() {
@@ -72,6 +79,14 @@ void robot::get_reply() {
 				= edp_ecp_rbuffer.motion_in_progress[i];
 	}
 	epos_reply_data_port.set(epos_data_port_reply_structure);
+}
+
+// Stworzenie modeli kinematyki dla robota IRp-6 na postumencie.
+void robot::create_kinematic_models_for_given_robot(void) {
+	// Stworzenie wszystkich modeli kinematyki.
+	add_kinematic_model(new kinematics::spkm::kinematic_model_spkm());
+	// Ustawienie aktywnego modelu.
+	set_kinematic_model(0);
 }
 
 } // namespace spkm

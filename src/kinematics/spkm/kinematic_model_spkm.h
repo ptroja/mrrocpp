@@ -11,6 +11,7 @@
 
 #include "kinematics/common/kinematic_model.h"
 #include "kinematics/spkm/kinematic_parameters_spkm.h"
+#include "kinematics/common/kinematic_model_with_tool.h"
 
 namespace mrrocpp {
 namespace kinematics {

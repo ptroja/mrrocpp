@@ -10,14 +10,18 @@
 
 #include "ecp/common/ecp_robot.h"
 #include "lib/robot_consts/spkm_const.h"
+#include "kinematics/common/kinematics_manager.h"
+#include "kinematics/spkm/kinematic_model_spkm.h"
 #include "lib/data_port_headers/epos.h"
+#include "kinematics/common/kinematic_model_with_tool.h"
 
 namespace mrrocpp {
 namespace ecp {
 namespace spkm {
 
 // ---------------------------------------------------------------
-class robot: public common::ecp_robot {
+class robot: public common::ecp_robot, public kinematics::common::kinematics_manager
+{
 	// Klasa dla robota irp6_postument (sztywnego)
 protected:
 	lib::single_thread_port<epos_command> epos_command_data_port;
@@ -27,6 +31,7 @@ protected:
 	lib::spkm_cbuffer ecp_edp_cbuffer;
 	lib::spkm_rbuffer edp_ecp_rbuffer;
 
+	virtual void create_kinematic_models_for_given_robot(void);
 	void add_data_ports();
 
 public:
