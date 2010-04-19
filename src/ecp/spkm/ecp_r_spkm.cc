@@ -66,12 +66,12 @@ void robot::get_reply() {
 
 	// generator reply generation
 	for (int i = 0; i < 6; i++) {
-		edp_ecp_rbuffer.position[i]
-				= epos_data_port_reply_structure.position[i];
-		edp_ecp_rbuffer.motion_in_progress[i]
-				= epos_data_port_reply_structure.motion_in_progress[i];
+		epos_data_port_reply_structure.position[i]
+				= edp_ecp_rbuffer.position[i];
+		epos_data_port_reply_structure.motion_in_progress[i]
+				= edp_ecp_rbuffer.motion_in_progress[i];
 	}
-
+	epos_reply_data_port.set(epos_data_port_reply_structure);
 }
 
 } // namespace spkm
