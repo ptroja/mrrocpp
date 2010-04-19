@@ -82,8 +82,9 @@ effector::effector(lib::configurator &_config) :
 
 /*--------------------------------------------------------------------------*/
 void effector::move_arm(lib::c_buffer &instruction) {
-	manip_effector::single_thread_move_arm(instruction);
-
+	msg->message("HAHGSAGAGAGAGAG BUHHAHAHAHA 1");
+	//	manip_effector::single_thread_move_arm(instruction);
+	msg->message("HAHGSAGAGAGAGAG BUHHAHAHAHA 2");
 }
 /*--------------------------------------------------------------------------*/
 
