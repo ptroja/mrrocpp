@@ -1,7 +1,7 @@
 /*
- * generator/ecp_g_sleep.cc
+ * generator/ecp_g_epos.cc
  *
- *Author: Tomasz Bem
+ *Author: yoyek
  */
 
 #include "ecp_g_epos.h"
@@ -18,6 +18,11 @@ epos::epos(common::task::task& _ecp_task, double s) :
 	waittime = s * 1000; //wait time[ns] conversting from given seconds to nanoseconds
 	sleeptime.tv_nsec = 20000000; //sleep time[ns]
 	sleeptime.tv_sec = 0;
+
+	epos_command_data_port = the_robot->port_manager.get_port<epos_command> (
+			EPOS_COMMAND_DATA_PORT);
+	epos_reply_data_port = the_robot->port_manager.get_port<epos_reply> (
+			EPOS_REPLY_DATA_PORT);
 }
 
 //allow for later change of a sleep time
@@ -36,8 +41,6 @@ void epos::get_mp_ecp_command() {
 
 	printf("aaaaa: %lf\n", mp_ecp_epos_params.dm[4]);
 }
-
-
 
 bool epos::first_step() {
 
