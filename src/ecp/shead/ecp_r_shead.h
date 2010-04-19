@@ -10,21 +10,24 @@
 
 #include "ecp/common/ecp_robot.h"
 #include "lib/robot_consts/shead_const.h"
+#include "kinematics/common/kinematics_manager.h"
+#include "kinematics/shead/kinematic_model_shead.h"
 
 namespace mrrocpp {
 namespace ecp {
 namespace shead {
 
 // ---------------------------------------------------------------
-class robot: public common::ecp_robot
-{
+class robot: public common::ecp_robot,
+		public kinematics::common::kinematics_manager {
 	// Klasa dla robota irp6_postument (sztywnego)
 
-	public:
-	robot (lib::configurator &_config, lib::sr_ecp &_sr_ecp);
-	robot (common::task::task& _ecp_object);
+protected:
+	void create_kinematic_models_for_given_robot(void);
 
-
+public:
+	robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp);
+	robot(common::task::task& _ecp_object);
 
 }; // end: class ecp_irp6_mechatronika_robot
 // ---------------------------------------------------------------

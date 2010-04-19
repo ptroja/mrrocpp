@@ -13,7 +13,6 @@
 #include "kinematics/common/kinematics_manager.h"
 #include "kinematics/spkm/kinematic_model_spkm.h"
 #include "lib/data_port_headers/epos.h"
-#include "kinematics/common/kinematic_model_with_tool.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -31,7 +30,7 @@ protected:
 	lib::spkm_cbuffer ecp_edp_cbuffer;
 	lib::spkm_rbuffer edp_ecp_rbuffer;
 
-	virtual void create_kinematic_models_for_given_robot(void);
+	void create_kinematic_models_for_given_robot(void);
 	void add_data_ports();
 
 public:
