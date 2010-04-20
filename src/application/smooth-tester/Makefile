@@ -16,10 +16,8 @@ HOMEDIR = ../../..
 include $(HOMEDIR)/common.mk
 KIN_OBJECTS = ${KIN_DIR}/irp6_on_track/libkinematicsirp6ot.a ${KIN_DIR}/irp6_postument/libkinematicsirp6p.a $(KIN_DIR)/common/libkinematics.a
 
-#SHOBJ = ../../ecp_mp/libecp_mp.a ../../ecp_mp/ecp_mp_robot.o ../../mp/libmpmain.a ../../mp/libmprobots.a $(LIBDIR)/libmrrocpp.a
-#SHOBJ = #ecp_r_irp6ot.o ../common/libecp.a $(LIBDIR)/libmrrocpp.a
-SHOBJ = ../../ecp_mp/libecp_mp.a ../../ecp_mp/ecp_mp_robot.o ../../ecp/irp6_on_track/ecp_r_irp6ot.o ../../ecp/irp6_postument/ecp_r_irp6p.o \
-	${KIN_OBJECTS} ../../ecp/common/libecp.a $(LIBDIR)/libmrrocpp.a
+SHOBJ = ../../ecp/irp6_on_track/ecp_r_irp6ot.o ../../ecp/irp6_postument/ecp_r_irp6p.o \
+	${KIN_OBJECTS} ../../ecp/common/libecp.a ../../ecp_mp/libecp_mp.a $(LIBDIR)/libmrrocpp.a
 
 #======================================================#	
 .PHONY: all clean install
