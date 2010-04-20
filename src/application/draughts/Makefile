@@ -4,7 +4,6 @@
 SOURCES = ${wildcard *.cc}
 OBJECTS = ${patsubst %.cc,%.o,${SOURCES}}
 
-
 BINARIES =	 ecp_draughts 
 
 ifneq ($(BUILD_TARGET), linux)

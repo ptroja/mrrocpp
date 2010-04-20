@@ -29,9 +29,9 @@ all: ${BINARIES}
 #-----------------------------------------------------------------------------------------------------------------------#
 ecp_t_axzb_eih: \
         ecp_t_calib_axzb.o \
-		ecp_t_calibration.o \
-		ecp_st_acq_eih.o \
-		ecp_st_acquisition.o \
+	ecp_t_calibration.o \
+	ecp_st_acq_eih.o \
+	ecp_st_acquisition.o \
         ecp_t_axzb_eih.o \
         ecp_g_eihcalibration.o \
         ecp_g_eih_nose_run.o \

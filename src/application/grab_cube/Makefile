@@ -15,7 +15,7 @@ endif
 # Should be modified only by developers not by users
 HOMEDIR = ../../..
 include $(HOMEDIR)/common.mk
-KIN_OBJECTS = ${KIN_DIR}/irp6_on_track/libkinematicsirp6ot.a  ${KIN_DIR}/irp6_postument/libkinematicsirp6p.a $(KIN_DIR)/common/libkinematics.a
+KIN_OBJECTS = ${KIN_DIR}/irp6_on_track/libkinematicsirp6ot.a ${KIN_DIR}/irp6_postument/libkinematicsirp6p.a $(KIN_DIR)/common/libkinematics.a
 
 SHOBJ = ../../ecp/irp6_on_track/ecp_r_irp6ot.o ../../ecp/irp6_postument/ecp_r_irp6p.o ${KIN_OBJECTS} ../../ecp/common/libecp.a $(LIBDIR)/libmrrocpp.a
 #======================================================#	
@@ -24,8 +24,8 @@ SHOBJ = ../../ecp/irp6_on_track/ecp_r_irp6ot.o ../../ecp/irp6_postument/ecp_r_ir
 all: ${BINARIES}
 
 ecp_t_grab_cube_irp6ot: ecp_g_vis_ib_eih_wrist_turner_irp6ot.o ecp_t_grab_cube_irp6ot.o \
-../../ecp/irp6_on_track/generator/ecp_g_vis_ib_eih_object_tracker_irp6ot.o\
-../../ecp_mp/sensor/ecp_mp_s_cvfradia.o  $(SHOBJ) 
+../../ecp/irp6_on_track/generator/ecp_g_vis_ib_eih_object_tracker_irp6ot.o \
+../../ecp_mp/sensor/ecp_mp_s_cvfradia.o $(SHOBJ) 
 	$(LD) $(LDFLAGS) -o $@ $^ 
 
 
