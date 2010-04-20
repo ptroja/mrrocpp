@@ -1,31 +1,9 @@
-// ------------------------------------------------------------------------
-//                            int_hand.cc
-//
-// Funkcja obslugi przerwania -- odczyt i zapis rejestrow sprzetowych dla robota conveyor
-//
-// Ostatnia modyfikacja: 2005
-// ------------------------------------------------------------------------
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <string.h>
-#include <signal.h>
-#include <ctype.h>
-#include <sys/wait.h>
-#include <sys/types.h>
 #ifdef __QNXNTO__
-#include <sys/neutrino.h>
-#include <sys/sched.h>
-#include <hw/inout.h>
+#include <sys/siginfo.h>
 #endif
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
 #include "edp/common/edp_e_motor_driven.h"
 #include "edp/common/hi_rydz.h"
-
 
 namespace mrrocpp {
 namespace edp {

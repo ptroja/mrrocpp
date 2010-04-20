@@ -4,13 +4,11 @@
 SOURCES = ${wildcard *.cc}
 OBJECTS = ${patsubst %.cc,%.o,${SOURCES}}
 
-BINARIES =		\
-				ecp_graspit
+BINARIES = ecp_graspit
 
 ifneq ($(BUILD_TARGET), linux)
 BINARIES+=			
 endif
-
 
 #-----------------------------------------------------------------------------------------------------------------------#
 # Should be modified only by developers not by users
@@ -28,7 +26,6 @@ all: ${BINARIES}
 ecp_graspit: \
 		ecp_t_graspit.o \
 		ecp_mp_tr_graspit.o \
-		../../ecp/common/generator/ecp_g_smooth.o \
 		$(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 

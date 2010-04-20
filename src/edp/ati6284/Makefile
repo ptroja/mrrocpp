@@ -15,7 +15,6 @@ include $(HOMEDIR)/common.mk
 
 CPPFLAGS += -I$(HOMEDIR)/src/edp/ati6284/ati \
 		-I$(HOMEDIR)/src/edp/ati6284/ni \
-		-I$(HOMEDIR)/src/edp/ati6284 \
 		-I$(HOMEDIR)/src/edp/ati6284
 #======================================================#	
 .PHONY: all clean install
