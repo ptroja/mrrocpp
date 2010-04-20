@@ -11,4 +11,4 @@ target_link_libraries(ecp_t_grab_cube_irp6ot
 	ecp ecp_mp ${COMMON_LIBS}
 )
 
-install(TARGETS ecp_t_grab_cube_irp6ot RUNTIME DESTINATION bin)
+install(TARGETS ecp_t_grab_cube_irp6ot DESTINATION bin)

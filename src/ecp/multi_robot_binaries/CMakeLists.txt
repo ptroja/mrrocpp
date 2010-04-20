@@ -12,4 +12,4 @@ target_link_libraries(ecp_tran
 	ecp ecp_mp ${COMMON_LIBS}
 )
 
-install(TARGETS ecp_tran RUNTIME DESTINATION bin)
+install(TARGETS ecp_tran DESTINATION bin)

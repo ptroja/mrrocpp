@@ -8,4 +8,4 @@ add_executable(edp_irp6_mechatronika
 target_link_libraries(edp_irp6_mechatronika kinematicsirp6m kinematics edp mrrocpp
 	${COMMON_LIBS})
 
-install(TARGETS edp_irp6_mechatronika RUNTIME DESTINATION bin)
+install(TARGETS edp_irp6_mechatronika DESTINATION bin)

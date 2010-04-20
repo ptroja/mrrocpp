@@ -9,4 +9,4 @@ target_link_libraries(ecp_graspit
 	ecp ecp_mp ${COMMON_LIBS}
 )
 
-install(TARGETS ecp_graspit RUNTIME DESTINATION bin)
+install(TARGETS ecp_graspit DESTINATION bin)

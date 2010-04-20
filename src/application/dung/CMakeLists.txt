@@ -9,4 +9,4 @@ target_link_libraries(ecp_dung
 	ecp ecp_mp ${COMMON_LIBS}
 )
 
-install(TARGETS ecp_dung RUNTIME DESTINATION bin)
+install(TARGETS ecp_dung DESTINATION bin)

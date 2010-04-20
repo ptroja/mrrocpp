@@ -27,5 +27,5 @@ add_library(mrrocpp
 if(NOT QNXNTO)
 	add_executable(configsrv configsrv.cc cfgopts.cc configsrv_m.cc)
 	target_link_libraries (configsrv messip ${Boost_LIBRARIES})
-	install(TARGETS configsrv RUNTIME DESTINATION bin)
+	install(TARGETS configsrv DESTINATION bin)
 endif(NOT QNXNTO)

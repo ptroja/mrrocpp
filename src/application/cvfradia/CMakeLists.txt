@@ -11,4 +11,4 @@ target_link_libraries(ecp_cvfradia
 	${COMMON_LIBS}
 )
 
-install(TARGETS ecp_cvfradia RUNTIME DESTINATION bin)
+install(TARGETS ecp_cvfradia DESTINATION bin)

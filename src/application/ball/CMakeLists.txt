@@ -9,4 +9,4 @@ target_link_libraries(mp_ball
 	${COMMON_LIBS}
 )
 
-install(TARGETS mp_ball RUNTIME DESTINATION bin)
+install(TARGETS mp_ball DESTINATION bin)

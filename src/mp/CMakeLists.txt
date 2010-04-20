@@ -28,4 +28,4 @@ add_executable(mp_c
 
 target_link_libraries(mp_c mpmain mprobots ecp_mp ${COMMON_LIBS})
 
-install(TARGETS mp_c RUNTIME DESTINATION bin)
+install(TARGETS mp_c DESTINATION bin)

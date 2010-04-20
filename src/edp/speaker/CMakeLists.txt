@@ -9,5 +9,5 @@ if(QNXNTO)
 		$ENV{QNX_TARGET}/x86/lib/libasound.so
 		${COMMON_LIBS})
 	
-	install(TARGETS edp_speaker RUNTIME DESTINATION bin)
+	install(TARGETS edp_speaker DESTINATION bin)
 endif(QNXNTO)

@@ -6,4 +6,4 @@ add_executable(ecp_festival
 target_link_libraries(ecp_festival
 	ecp ecp_mp ${COMMON_LIBS})
 
-install(TARGETS ecp_festival RUNTIME DESTINATION bin)
+install(TARGETS ecp_festival DESTINATION bin)

@@ -12,4 +12,4 @@ target_link_libraries(
 	mrrocpp ${COMMON_LIBS}
 )
 
-install(TARGETS edp_irp6_on_track RUNTIME DESTINATION bin)
+install(TARGETS edp_irp6_on_track DESTINATION bin)

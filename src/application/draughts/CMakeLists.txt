@@ -14,4 +14,4 @@ target_link_libraries(ecp_draughts
 	ecp ecp_mp ${COMMON_LIBS}
 )
 
-install(TARGETS ecp_draughts RUNTIME DESTINATION bin)
+install(TARGETS ecp_draughts DESTINATION bin)

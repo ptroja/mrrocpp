@@ -6,5 +6,5 @@ add_executable(edp_smb
 target_link_libraries(edp_smb kinematicssmb kinematics edp mrrocpp
 	${COMMON_LIBS})
 
-install(TARGETS edp_smb RUNTIME DESTINATION bin)
+install(TARGETS edp_smb DESTINATION bin)
 

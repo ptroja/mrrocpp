@@ -26,9 +26,9 @@ if (QNXNTO)
 	include_directories ($ENV{QNX_TARGET}/mrlib/include/boost/compatibility/cpp_c_headers) 
 
 	# FIXME: define libxml2 libraries to use
-	find_library(LIBXML2_LIBRARIES xml2 $ENV{QNX_TARGET}/mrlib/lib)
-	find_library(LIBICONV_LIBRARIES iconv $ENV{QNX_TARGET}/mrlib/lib)
-	set(LIBXML2_LIBRARIES ${LIBXML2_LIBRARIES} ${LIBICONV_LIBRARIES})
+	find_library(LIBXML2_LIBRARY xml2 $ENV{QNX_TARGET}/mrlib/lib)
+	find_library(LIBICONV_LIBRARY iconv $ENV{QNX_TARGET}/mrlib/lib)
+	set(LIBXML2_LIBRARIES ${LIBXML2_LIBRARY} ${LIBICONV_LIBRARY})
 
 	# QNX provides networking with separate library
 	set (COMPATIBILITY_LIBRARIES socket m)
