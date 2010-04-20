@@ -9,7 +9,7 @@ include $(HOMEDIR)/common.mk
 SOURCES = ${wildcard *.cc}
 KIN_OBJECTS = ${KIN_DIR}/irp6_on_track/libkinematicsirp6ot.a $(KIN_DIR)/common/libkinematics.a
 
-OBJECTS = ../common/edp_vsp_t.o edp_irp6ot_effector.o hi_irp6ot.o\
+OBJECTS = ../common/edp_vsp_t.o edp_irp6ot_effector.o hi_irp6ot.o \
  int_hand_irp6ot.o sg_irp6ot.o ../common/regulator_irp6ot_m.o ../common/regulator_irp6ot_tfg.o ../common/edp_irp6s_postument_track.o
 EDPOBJS = ${OBJECTS} ${KIN_OBJECTS}
 BINARIES = edp_irp6_on_track

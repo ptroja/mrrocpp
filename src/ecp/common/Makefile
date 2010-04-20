@@ -13,12 +13,12 @@ ECPOBJ_SHARED = ECP_main_error.o $(ECP_MPDIR)/ecp_mp_generator.o \
 		$(ECP_MPDIR)/ecp_mp_robot.o
 ECPOBJ = $(ECPOBJ_SHARED) \
 		ecp_m.o task/ecp_task.o $(ECP_MPDIR)/task/ecp_mp_task.o \
-		generator/ecp_generator.o generator/ecp_g_teach_in.o generator/ecp_g_delta.o\
-		generator/ecp_g_operator_reaction_condition.o generator/ecp_g_jarosz.o\
+		generator/ecp_generator.o generator/ecp_g_teach_in.o generator/ecp_g_delta.o \
+		generator/ecp_g_operator_reaction_condition.o generator/ecp_g_jarosz.o \
 		generator/ecp_g_visual_servo_manager.o generator/ecp_g_visual_servo.o \
 		ecp_taught_in_pose.o \
-		$(ECP_MPDIR)/smooth_trajectory_pose.o $(ECP_MPDIR)/smooth_trajectory_pose.o \
-		generator/ecp_g_smooth.o generator/ecp_g_sleep.o generator/ecp_g_force.o generator/ecp_g_transparent.o\
+		$(ECP_MPDIR)/smooth_trajectory_pose.o \
+		generator/ecp_g_smooth.o generator/ecp_g_sleep.o generator/ecp_g_force.o generator/ecp_g_transparent.o \
 		$(ECP_MPDIR)/sensor/ecp_mp_sensor.o $(ECP_MPDIR)/transmitter/transmitter.o \
 		$(ECP_MPDIR)/Trajectory.o
 		

@@ -23,7 +23,6 @@ libplayerclient:
 
 #-----------------------------------------------------------------------------------------------------------------------#
 
-
 LIBMRROCPP_OBJECTS = \
 	mrmath/ft_v_tr.o \
 	mrmath/ForceTrans.o \
@@ -38,7 +37,7 @@ LIBMRROCPP_OBJECTS = \
 	mis_fun.o \
 	timer.o \
 	srlib.o \
-	exception.o\
+	exception.o \
 	playerpos_goal.o \
 	datastr.o 
 

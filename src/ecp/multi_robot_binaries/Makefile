@@ -6,13 +6,15 @@ OBJECTS = ${patsubst %.cc,%.o,${SOURCES}}
 
 BINARIES = ecp_tran 
 	
-
 #-----------------------------------------------------------------------------------------------------------------------#
 # Should be modified only by developers not by users
 HOMEDIR = ../../..
 include $(HOMEDIR)/common.mk
 
-KIN_OBJECTS = ${KIN_DIR}/irp6_on_track/libkinematicsirp6ot.a ${KIN_DIR}/irp6_postument/libkinematicsirp6p.a $(KIN_DIR)/common/libkinematics.a
+KIN_OBJECTS = \
+	${KIN_DIR}/irp6_on_track/libkinematicsirp6ot.a \
+	${KIN_DIR}/irp6_postument/libkinematicsirp6p.a \
+	$(KIN_DIR)/common/libkinematics.a
 SHOBJ = ${KIN_OBJECTS} ../common/libecp.a $(LIBDIR)/libmrrocpp.a 
 #======================================================#	
 .PHONY: all clean install
@@ -33,9 +35,6 @@ ecp_tran: \
 		$(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 
-
-
-	
 #---------------------------------Special object build rules (user made)-------------------------------------#
 # e.g:
 # plik.o: plik.cc plik1.h plik2.h ... itd

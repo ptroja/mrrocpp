@@ -5,9 +5,6 @@ HOMEDIR = ../..
 include $(HOMEDIR)/common.mk
 
 SOURCEDIRS = common
-ifneq ($(BUILD_TARGET), linux)
-  SOURCEDIRS+= 
-endif
 
 CLEANDIRS = ${SOURCEDIRS}
 INSTALLDIRS = ${SOURCEDIRS}
@@ -18,9 +15,6 @@ SHOBJ = $(LIBDIR)/libmrrocpp.a vsp_sensor.o
 .PHONY: all clean install $(SOURCEDIRS) $(CLEANDIRS) $(INSTALLDIRS)
 #------------------------------------------------- Build rules -------------------------------------------------------#
 all: $(SOURCEDIRS)
-
- vsp_force_sensor vsp_time_sensor vsp_pp: common
-
 
 $(SOURCEDIRS):
 	@$(MAKE) -C $@

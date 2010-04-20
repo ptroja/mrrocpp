@@ -19,8 +19,6 @@ all: ${BINARIES}
 ecp_speaker: task/ecp_t_s.o generator/ecp_g_speak.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 
-
-
 #-----------------------------------------------------------------------------------------------------------------------#
 # e.g:
 # plik.o: plik.cc plik1.h plik2.h ... itd
