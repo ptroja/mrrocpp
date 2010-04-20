@@ -1,0 +1,7 @@
+add_library(kinematicsirp6p
+	kinematic_model_calibrated_irp6p_with_wrist.cc
+	kinematic_model_irp6p_5dof.cc
+	kinematic_model_irp6p_jacobian_transpose_with_wrist.cc
+	kinematic_model_irp6p_jacobian_with_wrist.cc
+	kinematic_model_irp6p_with_wrist.cc
+)

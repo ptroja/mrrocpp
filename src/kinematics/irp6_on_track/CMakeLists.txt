@@ -1,0 +1,5 @@
+add_library(kinematicsirp6ot
+	kinematic_model_calibrated_irp6ot_with_wrist.cc
+	kinematic_model_irp6ot_with_track.cc
+	kinematic_model_irp6ot_with_wrist.cc
+)
