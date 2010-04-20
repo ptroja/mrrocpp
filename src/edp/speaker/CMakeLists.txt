@@ -6,6 +6,7 @@ if(QNXNTO)
 	)
 	
 	target_link_libraries(edp_speaker edp mrrocpp
+		$ENV{QNX_TARGET}/x86/lib/libasound.so
 		${COMMON_LIBS})
 	
 	install(TARGETS edp_speaker RUNTIME DESTINATION bin)

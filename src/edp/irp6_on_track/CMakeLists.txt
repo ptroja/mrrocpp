@@ -5,7 +5,11 @@ add_executable(edp_irp6_on_track
 	sg_irp6ot.cc
 )
 
-target_link_libraries(edp_irp6_on_track kinematicsirp6ot kinematics edp mrrocpp
-	${COMMON_LIBS})
+target_link_libraries(
+	edp_irp6_on_track
+	kinematicsirp6ot kinematics
+	edp ati3084
+	mrrocpp ${COMMON_LIBS}
+)
 
 install(TARGETS edp_irp6_on_track RUNTIME DESTINATION bin)

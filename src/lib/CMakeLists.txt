@@ -23,6 +23,9 @@ add_library(mrrocpp
 	datastr.cc
 )
 
-add_executable(configsrv configsrv.cc cfgopts.cc configsrv_m.cc)
-target_link_libraries (configsrv messip ${Boost_LIBRARIES})
-install(TARGETS configsrv RUNTIME DESTINATION bin)
+# configsrv is needed only for non-QNX platforms
+if(NOT QNXNTO)
+	add_executable(configsrv configsrv.cc cfgopts.cc configsrv_m.cc)
+	target_link_libraries (configsrv messip ${Boost_LIBRARIES})
+	install(TARGETS configsrv RUNTIME DESTINATION bin)
+endif(NOT QNXNTO)

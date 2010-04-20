@@ -7,3 +7,5 @@ add_library(ecp_mp
 	Trajectory.cc
 	smooth_trajectory_pose.cc
 )
+
+target_link_libraries(ecp_mp ${LIBXML2_LIBRARIES})
