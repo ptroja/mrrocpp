@@ -30,7 +30,7 @@ ecp_graspit: \
 		ecp_mp_tr_graspit.o \
 		../../ecp/common/generator/ecp_g_smooth.o \
 		$(SHOBJ)
-	$(LD) $(LDFLAGS) -o $@ -lgsl -lgslcblas $^ 
+	$(LD) $(LDFLAGS) -o $@ $^ 
 
 #---------------------------------Special object build rules (user made)-------------------------------------#
 # e.g:
