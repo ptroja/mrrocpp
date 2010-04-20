@@ -45,7 +45,6 @@ ecp_t_axzb_force: \
 		ecp_st_acq_force.o \
 		ecp_st_acquisition.o \
 		ecp_t_axzb_force.o \
-		../../ecp/common/generator/ecp_g_smooth.o \
 		ecp_g_pcbird_nose_run.o \
 		../../ecp/common/generator/ecp_g_force.o \
 		$(ECP_MPDIR)/birdclient.o \
@@ -55,7 +54,6 @@ ecp_t_axzb_force: \
 	
 ecp_t_kcz_test: \
 		ecp_t_kcz_test.o \
-		../../ecp/common/generator/ecp_g_smooth.o \
 		$(ECP_MPDIR)/birdclient.o \
 		$(ECP_MPDIR)/sensor/ecp_mp_s_pcbird.o \
 		$(SHOBJ)
