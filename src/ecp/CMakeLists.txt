@@ -1,0 +1,23 @@
+# Recurse into subdirectories.
+
+MACRO(ADD_ECP_ROBOT NAME)
+  add_library("ecp_r_${NAME}" "ecp_r_${NAME}.cc")
+ENDMACRO(ADD_ECP_ROBOT)
+
+add_subdirectory (common)
+add_subdirectory (conveyor)
+add_subdirectory (festival)
+add_subdirectory (irp6_mechatronika)
+add_subdirectory (irp6_on_track)
+add_subdirectory (irp6_postument)
+add_subdirectory (irp6ot_m)
+add_subdirectory (irp6ot_tfg)
+add_subdirectory (irp6p_m)
+add_subdirectory (irp6p_tfg)
+add_subdirectory (multi_robot_binaries)
+add_subdirectory (player)
+add_subdirectory (polycrank)
+add_subdirectory (shead)
+add_subdirectory (smb)
+add_subdirectory (speaker)
+add_subdirectory (spkm)
