@@ -49,13 +49,6 @@ target_link_libraries(ui
 	${COMMON_LIBRARIES}
 )
 
-ADD_CUSTOM_COMMAND(
-	OUTPUT ui.stage2
-	COMMAND $ENV{QNX_HOST}/usr/bin/usemsg ${CMAKE_CURRENT_BINARY_DIR}/ui ${CMAKE_CURRENT_SOURCE_DIR}/../Usemsg
-	COMMAND cmake -E touch ui.stage2
-	DEPENDS ui ${CMAKE_CURRENT_SOURCE_DIR}/../Usemsg
-)
-
 set(ABMOD Icon.wgti MAM_wnd_manual_moves_automatic_measures.wgtw base.wgtw
 	file_selection_window.wgtw task_config_window.wgtw
 	teaching_window.wgtw wndFileLocation.wgtw wndForceControl.wgtw
@@ -87,14 +80,12 @@ set(ABMOD Icon.wgti MAM_wnd_manual_moves_automatic_measures.wgtw base.wgtw
 	wnd_irp6p_tfg_servo_algorithm.wgtw wnd_message.wgtw
 	wnd_processes_control.wgtw wnd_speaker_play.wgtw yes_no_window.wgtw)
 
-ADD_CUSTOM_COMMAND(
-	OUTPUT ui.stage3
+ADD_CUSTOM_TARGET(ui_photon_application ALL
+	COMMAND $ENV{QNX_HOST}/usr/bin/usemsg ui ${CMAKE_CURRENT_SOURCE_DIR}/../Usemsg
 	COMMAND cmake -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/../../wgt ${CMAKE_CURRENT_BINARY_DIR}/../../wgt
+	COMMAND cmake -E remove -f ui.res
 	COMMAND $ENV{QNX_HOST}/usr/bin/phabbind ui ${ABMOD} 
-	COMMAND cmake -E touch ui.stage3
-	DEPENDS ui.stage2
+	DEPENDS ui ${CMAKE_CURRENT_SOURCE_DIR}/../Usemsg
 )
-
-ADD_CUSTOM_TARGET(ui_photon_application ALL DEPENDS ui.stage3)
 
 install(TARGETS ui DESTINATION bin)

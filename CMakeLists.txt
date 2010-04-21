@@ -13,10 +13,18 @@ set (ECPDIR ${PROJECT_SOURCE_DIR}/src/ecp)
 
 # set default install prefix
 IF(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
-SET(CMAKE_INSTALL_PREFIX
-${PROJECT_SOURCE_DIR} CACHE PATH "${CMAKE_PROJECT_NAME} install prefix" FORCE
-)
+  SET(CMAKE_INSTALL_PREFIX
+      ${PROJECT_SOURCE_DIR} CACHE PATH "${CMAKE_PROJECT_NAME} install prefix" FORCE
+  )
 ENDIF(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+
+# set default build type
+IF(NOT CMAKE_BUILD_TYPE)
+  SET(CMAKE_BUILD_TYPE Debug CACHE STRING
+      "Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel."
+      FORCE
+  )
+ENDIF(NOT CMAKE_BUILD_TYPE)
 
 # QNX is default MRROC++ target
 if (QNXNTO)

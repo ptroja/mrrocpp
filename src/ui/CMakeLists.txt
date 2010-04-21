@@ -1,5 +1,6 @@
 # Recurse into subdirectories.
+if(QNXNTO)
 add_subdirectory (src)
-if(NOT QNXNTO)
+else(QNXNTO)
 add_subdirectory (gtk)
-endif(NOT QNXNTO)
+endif(QNXNTO)
