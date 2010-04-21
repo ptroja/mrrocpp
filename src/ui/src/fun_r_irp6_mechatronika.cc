@@ -2360,29 +2360,64 @@ int manage_interface_irp6m() {
 	return 1;
 }
 
+int import_wnd_irp6m_xyz_angle_axis(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo)
 
-int
-import_wnd_irp6m_xyz_angle_axis( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
-
-	{
-
-	/* eliminate 'unreferenced' warnings */
-	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
-
-	return( Pt_CONTINUE );
-
-	}
-
-
-int
-export_wnd_irp6m_xyz_angle_axis( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
-
-	{
+{
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	return( Pt_CONTINUE );
+	char* tmp_ptgr, *tmp;
+	double val;
 
-	}
+	PtGetResource( ABW_PtText_input_console, Pt_ARG_TEXT_STRING, &tmp_ptgr, 0 );
+	tmp = new char[strlen(tmp_ptgr)];
+	strcpy(tmp, tmp_ptgr);
+
+	val = strtod(tmp, &tmp);
+	PtSetResource(ABW_PtNumericFloat_wind_irp6m_xyz_angle_axis_p1, Pt_ARG_NUMERIC_VALUE, &val , 0);
+	val = strtod(tmp, &tmp);
+	PtSetResource(ABW_PtNumericFloat_wind_irp6m_xyz_angle_axis_p2, Pt_ARG_NUMERIC_VALUE, &val , 0);
+	val = strtod(tmp, &tmp);
+	PtSetResource(ABW_PtNumericFloat_wind_irp6m_xyz_angle_axis_p3, Pt_ARG_NUMERIC_VALUE, &val , 0);
+	val = strtod(tmp, &tmp);
+	PtSetResource(ABW_PtNumericFloat_wind_irp6m_xyz_angle_axis_p4, Pt_ARG_NUMERIC_VALUE, &val , 0);
+	val = strtod(tmp, &tmp);
+	PtSetResource(ABW_PtNumericFloat_wind_irp6m_xyz_angle_axis_p5, Pt_ARG_NUMERIC_VALUE, &val , 0);
+	val = strtod(tmp, &tmp);
+	PtSetResource(ABW_PtNumericFloat_wind_irp6m_xyz_angle_axis_p6, Pt_ARG_NUMERIC_VALUE, &val , 0);
+
+	return (Pt_CONTINUE);
+
+}
+
+int export_wnd_irp6m_xyz_angle_axis(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo)
+
+{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	char buffer[200];
+
+	double *wektor[6];
+
+	PtGetResource(ABW_PtNumericFloat_wind_irp6m_xyz_angle_axis_p1, Pt_ARG_NUMERIC_VALUE, &wektor[0], 0 );
+	PtGetResource(ABW_PtNumericFloat_wind_irp6m_xyz_angle_axis_p2, Pt_ARG_NUMERIC_VALUE, &wektor[1], 0 );
+	PtGetResource(ABW_PtNumericFloat_wind_irp6m_xyz_angle_axis_p3, Pt_ARG_NUMERIC_VALUE, &wektor[2], 0 );
+	PtGetResource(ABW_PtNumericFloat_wind_irp6m_xyz_angle_axis_p4, Pt_ARG_NUMERIC_VALUE, &wektor[3], 0 );
+	PtGetResource(ABW_PtNumericFloat_wind_irp6m_xyz_angle_axis_p5, Pt_ARG_NUMERIC_VALUE, &wektor[4], 0 );
+	PtGetResource(ABW_PtNumericFloat_wind_irp6m_xyz_angle_axis_p6, Pt_ARG_NUMERIC_VALUE, &wektor[5], 0 );
+
+	sprintf(buffer, "EDP_IRP6_M XYZ_ANGLE_AXIS POSITION\n %f %f %f %f %f %f",
+			*wektor[0], *wektor[1], *wektor[2], *wektor[3], *wektor[4],
+			*wektor[5]);
+
+	ui_msg.ui->message(buffer);
+
+	return (Pt_CONTINUE);
+
+}
 
