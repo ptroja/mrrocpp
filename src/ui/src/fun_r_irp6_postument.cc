@@ -2700,3 +2700,29 @@ int irp6p_xyz_aa_relative_motion(PtWidget_t *widget, ApInfo_t *apinfo,
 	return (Pt_CONTINUE);
 
 }
+
+int
+import_wnd_irp6_postument_xyz_angle_axis( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
+
+	{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	return( Pt_CONTINUE );
+
+	}
+
+
+int
+export_wnd_irp6_postument_xyz_angle_axis( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
+
+	{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	return( Pt_CONTINUE );
+
+	}
+

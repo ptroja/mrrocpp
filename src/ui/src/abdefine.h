@@ -445,6 +445,10 @@ extern const int ABN_PtButton_wind_irp6p_xyz_angle_axis_read;
 #define ABW_PtButton_wind_irp6p_xyz_angle_axis_read AbGetABW( ABN_PtButton_wind_irp6p_xyz_angle_axis_read )
 extern const int ABN_PtButton_wind_irp6p_xyz_angle_axis_set_desired_as_current;
 #define ABW_PtButton_wind_irp6p_xyz_angle_axis_set_desired_as_current AbGetABW( ABN_PtButton_wind_irp6p_xyz_angle_axis_set_desired_as_current )
+extern const int ABN_PtButton_wind_irp6p_xyz_angle_axis_import;
+#define ABW_PtButton_wind_irp6p_xyz_angle_axis_import AbGetABW( ABN_PtButton_wind_irp6p_xyz_angle_axis_import )
+extern const int ABN_PtButton_wind_irp6p_xyz_angle_axis_export;
+#define ABW_PtButton_wind_irp6p_xyz_angle_axis_export AbGetABW( ABN_PtButton_wind_irp6p_xyz_angle_axis_export )
 
 /* 'base' Window link */
 extern const int ABN_base;
@@ -1291,6 +1295,10 @@ extern const int ABN_PtButton_wind_irp6ot_xyz_angle_axis_read;
 #define ABW_PtButton_wind_irp6ot_xyz_angle_axis_read AbGetABW( ABN_PtButton_wind_irp6ot_xyz_angle_axis_read )
 extern const int ABN_PtButton_wind_irp6ot_xyz_angle_axis_set_desired_as_current;
 #define ABW_PtButton_wind_irp6ot_xyz_angle_axis_set_desired_as_current AbGetABW( ABN_PtButton_wind_irp6ot_xyz_angle_axis_set_desired_as_current )
+extern const int ABN_PtButton_wind_irp6ot_xyz_angle_axis_import;
+#define ABW_PtButton_wind_irp6ot_xyz_angle_axis_import AbGetABW( ABN_PtButton_wind_irp6ot_xyz_angle_axis_import )
+extern const int ABN_PtButton_wind_irp6ot_xyz_angle_axis_export;
+#define ABW_PtButton_wind_irp6ot_xyz_angle_axis_export AbGetABW( ABN_PtButton_wind_irp6ot_xyz_angle_axis_export )
 
 /* 'wnd_irp6_on_track_int' Window link */
 extern const int ABN_wnd_irp6_on_track_int;
@@ -1821,6 +1829,10 @@ extern const int ABN_PtButton_wind_irp6m_xyz_angle_axis_read;
 #define ABW_PtButton_wind_irp6m_xyz_angle_axis_read AbGetABW( ABN_PtButton_wind_irp6m_xyz_angle_axis_read )
 extern const int ABN_PtButton_wind_irp6m_xyz_angle_axis_set_desired_as_current;
 #define ABW_PtButton_wind_irp6m_xyz_angle_axis_set_desired_as_current AbGetABW( ABN_PtButton_wind_irp6m_xyz_angle_axis_set_desired_as_current )
+extern const int ABN_PtButton_wind_irp6m_xyz_angle_axis_import;
+#define ABW_PtButton_wind_irp6m_xyz_angle_axis_import AbGetABW( ABN_PtButton_wind_irp6m_xyz_angle_axis_import )
+extern const int ABN_PtButton_wind_irp6m_xyz_angle_axis_export;
+#define ABW_PtButton_wind_irp6m_xyz_angle_axis_export AbGetABW( ABN_PtButton_wind_irp6m_xyz_angle_axis_export )
 
 /* 'wnd_irp6_mechatronika_xyz_angle_axis_ts' Window link */
 extern const int ABN_wnd_irp6_mechatronika_xyz_angle_axis_ts;

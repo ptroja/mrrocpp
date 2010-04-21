@@ -224,6 +224,8 @@ static const ApEventLink_t AbLinks_wnd_irp6_postument_xyz_angle_axis[] = {
 	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_irp6p_xyz_angle_axis_exec_move", 2009, init_wnd_irp6_postument_xyz_angle_axis, 0, 0, 0, 0, },
 	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_irp6p_xyz_angle_axis_read", 2009, init_wnd_irp6_postument_xyz_angle_axis, 0, 0, 0, 0, },
 	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_irp6p_xyz_angle_axis_set_desired_as_current", 2009, wnd_irp6p_xyz_aa_copy_current_to_desired, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_irp6p_xyz_angle_axis_import", 2009, import_wnd_irp6_postument_xyz_angle_axis, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_irp6p_xyz_angle_axis_export", 2009, export_wnd_irp6_postument_xyz_angle_axis, 0, 0, 0, 0, },
 	{ 0 }
 	};
 
@@ -561,6 +563,8 @@ static const ApEventLink_t AbLinks_wnd_irp6_on_track_xyz_angle_axis[] = {
 	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_irp6ot_xyz_angle_axis_exec_move", 2009, init_wnd_irp6_on_track_xyz_angle_axis, 0, 0, 0, 0, },
 	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_irp6ot_xyz_angle_axis_read", 2009, init_wnd_irp6_on_track_xyz_angle_axis, 0, 0, 0, 0, },
 	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_irp6ot_xyz_angle_axis_set_desired_as_current", 2009, wnd_irp6ot_xyz_aa_copy_current_to_desired, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_irp6ot_xyz_angle_axis_import", 2009, import_wnd_irp6_on_track_xyz_angle_axis, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_irp6ot_xyz_angle_axis_export", 2009, export_wnd_irp6_on_track_xyz_angle_axis, 0, 0, 0, 0, },
 	{ 0 }
 	};
 
@@ -874,6 +878,8 @@ static const ApEventLink_t AbLinks_wnd_irp6_mechatronika_xyz_angle_axis[] = {
 	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_irp6m_xyz_angle_axis_exec_move", 2009, init_wnd_irp6m_xyz_angle_axis, 0, 0, 0, 0, },
 	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_irp6m_xyz_angle_axis_read", 2009, init_wnd_irp6m_xyz_angle_axis, 0, 0, 0, 0, },
 	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_irp6m_xyz_angle_axis_set_desired_as_current", 2009, wnd_irp6m_xyz_aa_copy_cur_to_des, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_irp6m_xyz_angle_axis_import", 2009, import_wnd_irp6m_xyz_angle_axis, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_irp6m_xyz_angle_axis_export", 2009, export_wnd_irp6m_xyz_angle_axis, 0, 0, 0, 0, },
 	{ 0 }
 	};
 
