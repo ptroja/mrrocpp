@@ -4,7 +4,7 @@
 extern "C" {
 #endif
 
-ApWidget_t AbWidgets[ 1011 ];
+ApWidget_t AbWidgets[ 993 ];
 
 
 #if defined(__cplusplus)

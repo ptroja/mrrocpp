@@ -49,7 +49,8 @@ double irp6ot_desired_pos[IRP6_ON_TRACK_NUM_OF_SERVOS]; // pozycja zadana
 // zamykanie okien ruchow recznych dla robota irp6_on_track
 
 
-int close_wnd_irp6_on_track_inc(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int close_wnd_irp6_on_track_inc(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -63,7 +64,8 @@ int close_wnd_irp6_on_track_inc(PtWidget_t *widget, ApInfo_t *apinfo, PtCallback
 
 }
 
-int close_wnd_irp6_on_track_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int close_wnd_irp6_on_track_int(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -77,7 +79,8 @@ int close_wnd_irp6_on_track_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallback
 
 }
 
-int close_wnd_irp6_on_track_xyz_angle_axis(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int close_wnd_irp6_on_track_xyz_angle_axis(PtWidget_t *widget,
+		ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -92,7 +95,8 @@ int close_wnd_irp6_on_track_xyz_angle_axis(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
-int close_wnd_irp6_on_track_xyz_euler_zyz(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int close_wnd_irp6_on_track_xyz_euler_zyz(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -107,7 +111,8 @@ int close_wnd_irp6_on_track_xyz_euler_zyz(PtWidget_t *widget, ApInfo_t *apinfo, 
 
 }
 
-int close_wnd_irp6_on_track_xyz_angle_axis_ts(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int close_wnd_irp6_on_track_xyz_angle_axis_ts(PtWidget_t *widget,
+		ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -122,7 +127,8 @@ int close_wnd_irp6_on_track_xyz_angle_axis_ts(PtWidget_t *widget, ApInfo_t *apin
 
 }
 
-int clear_wnd_irp6ot_xyz_angle_axis_ts_flag(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int clear_wnd_irp6ot_xyz_angle_axis_ts_flag(PtWidget_t *widget,
+		ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -135,7 +141,8 @@ int clear_wnd_irp6ot_xyz_angle_axis_ts_flag(PtWidget_t *widget, ApInfo_t *apinfo
 
 }
 
-int clear_wnd_irp6ot_kinematic_flag(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int clear_wnd_irp6ot_kinematic_flag(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -148,7 +155,8 @@ int clear_wnd_irp6ot_kinematic_flag(PtWidget_t *widget, ApInfo_t *apinfo, PtCall
 
 }
 
-int start_wnd_irp6ot_xyz_angle_axis_ts(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int start_wnd_irp6ot_xyz_angle_axis_ts(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -167,7 +175,8 @@ int start_wnd_irp6ot_xyz_angle_axis_ts(PtWidget_t *widget, ApInfo_t *apinfo, PtC
 
 }
 
-int start_wnd_irp6_on_track_xyz_euler_zyz_ts(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int start_wnd_irp6_on_track_xyz_euler_zyz_ts(PtWidget_t *widget,
+		ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -186,7 +195,8 @@ int start_wnd_irp6_on_track_xyz_euler_zyz_ts(PtWidget_t *widget, ApInfo_t *apinf
 
 }
 
-int start_wnd_irp6_on_track_kinematic(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int start_wnd_irp6_on_track_kinematic(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -205,7 +215,8 @@ int start_wnd_irp6_on_track_kinematic(PtWidget_t *widget, ApInfo_t *apinfo, PtCa
 
 }
 
-int start_wnd_irp6_on_track_servo_algorithm(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int start_wnd_irp6_on_track_servo_algorithm(PtWidget_t *widget,
+		ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -224,7 +235,8 @@ int start_wnd_irp6_on_track_servo_algorithm(PtWidget_t *widget, ApInfo_t *apinfo
 
 }
 
-int clear_wnd_irp6ot_xyz_euler_zyz_ts_flag(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int clear_wnd_irp6ot_xyz_euler_zyz_ts_flag(PtWidget_t *widget,
+		ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -237,7 +249,8 @@ int clear_wnd_irp6ot_xyz_euler_zyz_ts_flag(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
-int close_wnd_irp6_on_track_xyz_euler_zyz_ts(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int close_wnd_irp6_on_track_xyz_euler_zyz_ts(PtWidget_t *widget,
+		ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -252,7 +265,8 @@ int close_wnd_irp6_on_track_xyz_euler_zyz_ts(PtWidget_t *widget, ApInfo_t *apinf
 
 }
 
-int close_wnd_irp6_on_track_kinematic(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int close_wnd_irp6_on_track_kinematic(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -267,7 +281,8 @@ int close_wnd_irp6_on_track_kinematic(PtWidget_t *widget, ApInfo_t *apinfo, PtCa
 
 }
 
-int close_wnd_irp6_on_track_servo_algorithm(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int close_wnd_irp6_on_track_servo_algorithm(PtWidget_t *widget,
+		ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -282,8 +297,8 @@ int close_wnd_irp6_on_track_servo_algorithm(PtWidget_t *widget, ApInfo_t *apinfo
 
 }
 
-int start_wnd_irp6_on_track_inc(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
-{
+int start_wnd_irp6_on_track_inc(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo) {
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
@@ -299,8 +314,8 @@ int start_wnd_irp6_on_track_inc(PtWidget_t *widget, ApInfo_t *apinfo, PtCallback
 	return (Pt_CONTINUE);
 }
 
-int start_wnd_irp6_on_track_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
-{
+int start_wnd_irp6_on_track_int(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo) {
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
@@ -316,8 +331,8 @@ int start_wnd_irp6_on_track_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallback
 	return (Pt_CONTINUE);
 }
 
-int start_wnd_irp6_on_track_xyz_euler_zyz(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
-{
+int start_wnd_irp6_on_track_xyz_euler_zyz(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo) {
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
@@ -333,8 +348,8 @@ int start_wnd_irp6_on_track_xyz_euler_zyz(PtWidget_t *widget, ApInfo_t *apinfo, 
 	return (Pt_CONTINUE);
 }
 
-int start_wnd_irp6_on_track_xyz_angle_axis(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
-{
+int start_wnd_irp6_on_track_xyz_angle_axis(PtWidget_t *widget,
+		ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo) {
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
@@ -350,7 +365,8 @@ int start_wnd_irp6_on_track_xyz_angle_axis(PtWidget_t *widget, ApInfo_t *apinfo,
 	return (Pt_CONTINUE);
 }
 
-int clear_wnd_irp6_on_track_inc_flag(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int clear_wnd_irp6_on_track_inc_flag(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -362,7 +378,8 @@ int clear_wnd_irp6_on_track_inc_flag(PtWidget_t *widget, ApInfo_t *apinfo, PtCal
 
 }
 
-int clear_wnd_irp6_on_track_int_flag(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int clear_wnd_irp6_on_track_int_flag(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -374,7 +391,8 @@ int clear_wnd_irp6_on_track_int_flag(PtWidget_t *widget, ApInfo_t *apinfo, PtCal
 
 }
 
-int clear_wnd_irp6ot_xyz_euler_zyz_flag(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int clear_wnd_irp6ot_xyz_euler_zyz_flag(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -386,7 +404,8 @@ int clear_wnd_irp6ot_xyz_euler_zyz_flag(PtWidget_t *widget, ApInfo_t *apinfo, Pt
 
 }
 
-int clear_wnd_irp6ot_xyz_angle_axis_flag(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int clear_wnd_irp6ot_xyz_angle_axis_flag(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -398,7 +417,8 @@ int clear_wnd_irp6ot_xyz_angle_axis_flag(PtWidget_t *widget, ApInfo_t *apinfo, P
 
 }
 
-int clear_wnd_irp6ot_servo_algorithm_flag(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int clear_wnd_irp6ot_servo_algorithm_flag(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -411,7 +431,8 @@ int clear_wnd_irp6ot_servo_algorithm_flag(PtWidget_t *widget, ApInfo_t *apinfo, 
 
 }
 
-int import_wnd_irp6_on_track_inc(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int import_wnd_irp6_on_track_inc(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -446,7 +467,8 @@ int import_wnd_irp6_on_track_inc(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbac
 
 }
 
-int export_wnd_irp6_on_track_inc(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int export_wnd_irp6_on_track_inc(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -466,7 +488,10 @@ int export_wnd_irp6_on_track_inc(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbac
 	PtGetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p6, Pt_ARG_NUMERIC_VALUE, &wektor[6], 0 );
 	PtGetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p7, Pt_ARG_NUMERIC_VALUE, &wektor[7], 0 );
 
-	sprintf(buffer, "EDP_IRP6_OT INCREMENTAL POSITION\n %f %f %f %f %f %f %f %f", *wektor[0], *wektor[1], *wektor[2], *wektor[3], *wektor[4], *wektor[5], *wektor[6], *wektor[7]);
+	sprintf(buffer,
+			"EDP_IRP6_OT INCREMENTAL POSITION\n %f %f %f %f %f %f %f %f",
+			*wektor[0], *wektor[1], *wektor[2], *wektor[3], *wektor[4],
+			*wektor[5], *wektor[6], *wektor[7]);
 
 	ui_msg.ui->message(buffer);
 
@@ -474,7 +499,8 @@ int export_wnd_irp6_on_track_inc(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbac
 
 }
 
-int import_wnd_irp6_on_track_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int import_wnd_irp6_on_track_int(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -509,7 +535,8 @@ int import_wnd_irp6_on_track_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbac
 
 }
 
-int export_wnd_irp6_on_track_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int export_wnd_irp6_on_track_int(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -529,7 +556,9 @@ int export_wnd_irp6_on_track_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbac
 	PtGetResource(ABW_PtNumericFloat_wind_irp6ot_int_p7, Pt_ARG_NUMERIC_VALUE, &wektor[6], 0 );
 	PtGetResource(ABW_PtNumericFloat_wind_irp6ot_int_p8, Pt_ARG_NUMERIC_VALUE, &wektor[7], 0 );
 
-	sprintf(buffer, "EDP_IRP6_OT INTERNAL POSITION\n %f %f %f %f %f %f %f %f", *wektor[0], *wektor[1], *wektor[2], *wektor[3], *wektor[4], *wektor[5], *wektor[6], *wektor[7]);
+	sprintf(buffer, "EDP_IRP6_OT INTERNAL POSITION\n %f %f %f %f %f %f %f %f",
+			*wektor[0], *wektor[1], *wektor[2], *wektor[3], *wektor[4],
+			*wektor[5], *wektor[6], *wektor[7]);
 
 	ui_msg.ui->message(buffer);
 
@@ -537,7 +566,8 @@ int export_wnd_irp6_on_track_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbac
 
 }
 
-int import_wnd_irp6_on_track_xyz_euler_zyz(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int import_wnd_irp6_on_track_xyz_euler_zyz(PtWidget_t *widget,
+		ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -570,7 +600,8 @@ int import_wnd_irp6_on_track_xyz_euler_zyz(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
-int export_wnd_irp6_on_track_xyz_euler_zyz(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int export_wnd_irp6_on_track_xyz_euler_zyz(PtWidget_t *widget,
+		ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -589,7 +620,10 @@ int export_wnd_irp6_on_track_xyz_euler_zyz(PtWidget_t *widget, ApInfo_t *apinfo,
 	PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p6, Pt_ARG_NUMERIC_VALUE, &wektor[5], 0 );
 	PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p7, Pt_ARG_NUMERIC_VALUE, &wektor[6], 0 );
 
-	sprintf(buffer, "EDP_IRP6_OT XYZ_EULER_ZYZ POSITION\n %f %f %f %f %f %f %f", *wektor[0], *wektor[1], *wektor[2], *wektor[3], *wektor[4], *wektor[5], *wektor[6]);
+	sprintf(buffer,
+			"EDP_IRP6_OT XYZ_EULER_ZYZ POSITION\n %f %f %f %f %f %f %f",
+			*wektor[0], *wektor[1], *wektor[2], *wektor[3], *wektor[4],
+			*wektor[5], *wektor[6]);
 
 	ui_msg.ui->message(buffer);
 
@@ -597,7 +631,8 @@ int export_wnd_irp6_on_track_xyz_euler_zyz(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
-int start_wnd_irp6_on_track_xyz_angle_axis_ts(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int start_wnd_irp6_on_track_xyz_angle_axis_ts(PtWidget_t *widget,
+		ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -626,8 +661,8 @@ int start_wnd_irp6_on_track_xyz_angle_axis_ts(PtWidget_t *widget, ApInfo_t *apin
 // INCREMENTAL MOVES
 
 
-int init_wnd_irp6_on_track_inc(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
-{
+int init_wnd_irp6_on_track_inc(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo) {
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
@@ -665,14 +700,15 @@ int init_wnd_irp6_on_track_inc(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackI
 
 }
 
-int wnd_irp6ot_motors_copy_current_to_desired(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
-{
+int wnd_irp6ot_motors_copy_current_to_desired(PtWidget_t *widget,
+		ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo) {
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
 	// wychwytania ew. bledow ECP::robot
-	double *wektor_ptgr[IRP6_ON_TRACK_NUM_OF_SERVOS], wektor[IRP6_ON_TRACK_NUM_OF_SERVOS];
+	double *wektor_ptgr[IRP6_ON_TRACK_NUM_OF_SERVOS],
+			wektor[IRP6_ON_TRACK_NUM_OF_SERVOS];
 
 	if (ui_state.irp6_on_track.edp.pid != -1) {
 		if (ui_state.irp6_on_track.edp.is_synchronised) // Czy robot jest zsynchronizowany?
@@ -712,7 +748,8 @@ int wnd_irp6ot_motors_copy_current_to_desired(PtWidget_t *widget, ApInfo_t *apin
 
 }
 
-int wnd_irp6ot_joints_copy_current_to_desired(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int wnd_irp6ot_joints_copy_current_to_desired(PtWidget_t *widget,
+		ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -720,7 +757,8 @@ int wnd_irp6ot_joints_copy_current_to_desired(PtWidget_t *widget, ApInfo_t *apin
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
 	// wychwytania ew. bledow ECP::robot
-	double *wektor_ptgr[IRP6_ON_TRACK_NUM_OF_SERVOS], wektor[IRP6_ON_TRACK_NUM_OF_SERVOS];
+	double *wektor_ptgr[IRP6_ON_TRACK_NUM_OF_SERVOS],
+			wektor[IRP6_ON_TRACK_NUM_OF_SERVOS];
 
 	if (ui_state.irp6_on_track.edp.pid != -1) {
 		if (ui_state.irp6_on_track.edp.is_synchronised) // Czy robot jest zsynchronizowany?
@@ -756,7 +794,8 @@ int wnd_irp6ot_joints_copy_current_to_desired(PtWidget_t *widget, ApInfo_t *apin
 
 }
 
-int irp6ot_move_to_preset_position(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int irp6ot_move_to_preset_position(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -771,39 +810,58 @@ int irp6ot_move_to_preset_position(PtWidget_t *widget, ApInfo_t *apinfo, PtCallb
 
 	if (ui_state.irp6_on_track.edp.pid != -1) {
 
-		if ((((ApName(ApWidget(cbinfo)) == ABN_mm_irp6_on_track_preset_position_synchro) || (ApName(ApWidget(cbinfo))
-				== ABN_mm_all_robots_preset_position_synchro)) || ((cbinfo->event->type == Ph_EV_KEY)
-				&& (my_data->key_cap == 0x73))) && (ui_state.irp6_on_track.edp.is_synchronised)) {// powrot do pozycji synchronizacji
+		if ((((ApName(ApWidget(cbinfo))
+				== ABN_mm_irp6_on_track_preset_position_synchro) || (ApName(
+				ApWidget(cbinfo)) == ABN_mm_all_robots_preset_position_synchro))
+				|| ((cbinfo->event->type == Ph_EV_KEY) && (my_data->key_cap
+						== 0x73)))
+				&& (ui_state.irp6_on_track.edp.is_synchronised)) {// powrot do pozycji synchronizacji
 			for (int i = 0; i < IRP6_ON_TRACK_NUM_OF_SERVOS; i++) {
 				irp6ot_desired_pos[i] = 0.0;
 			}
 			edp_irp6ot_eb.command(boost::bind(irp6ot_execute_motor_motion));
-		} else if ((((ApName(ApWidget(cbinfo)) == ABN_mm_irp6_on_track_preset_position_0) || (ApName(ApWidget(cbinfo))
-				== ABN_mm_all_robots_preset_position_0)) || ((cbinfo->event->type == Ph_EV_KEY) && (my_data->key_cap
-				== 0x30))) && (ui_state.irp6_on_track.edp.is_synchronised)) {// ruch do pozycji zadania (wspolrzedne przyjete arbitralnie)
+		} else if ((((ApName(ApWidget(cbinfo))
+				== ABN_mm_irp6_on_track_preset_position_0) || (ApName(ApWidget(
+				cbinfo)) == ABN_mm_all_robots_preset_position_0))
+				|| ((cbinfo->event->type == Ph_EV_KEY) && (my_data->key_cap
+						== 0x30)))
+				&& (ui_state.irp6_on_track.edp.is_synchronised)) {// ruch do pozycji zadania (wspolrzedne przyjete arbitralnie)
 			for (int i = 0; i < IRP6_ON_TRACK_NUM_OF_SERVOS; i++) {
-				irp6ot_desired_pos[i] = ui_state.irp6_on_track.edp.preset_position[0][i];
+				irp6ot_desired_pos[i]
+						= ui_state.irp6_on_track.edp.preset_position[0][i];
 			}
 			edp_irp6ot_eb.command(boost::bind(irp6ot_execute_joint_motion));
-		} else if ((((ApName(ApWidget(cbinfo)) == ABN_mm_irp6_on_track_preset_position_1) || (ApName(ApWidget(cbinfo))
-				== ABN_mm_all_robots_preset_position_1)) || ((cbinfo->event->type == Ph_EV_KEY) && (my_data->key_cap
-				== 0x31))) && (ui_state.irp6_on_track.edp.is_synchronised)) {// ruch do pozycji zadania (wspolrzedne przyjete arbitralnie)
+		} else if ((((ApName(ApWidget(cbinfo))
+				== ABN_mm_irp6_on_track_preset_position_1) || (ApName(ApWidget(
+				cbinfo)) == ABN_mm_all_robots_preset_position_1))
+				|| ((cbinfo->event->type == Ph_EV_KEY) && (my_data->key_cap
+						== 0x31)))
+				&& (ui_state.irp6_on_track.edp.is_synchronised)) {// ruch do pozycji zadania (wspolrzedne przyjete arbitralnie)
 			for (int i = 0; i < IRP6_ON_TRACK_NUM_OF_SERVOS; i++) {
-				irp6ot_desired_pos[i] = ui_state.irp6_on_track.edp.preset_position[1][i];
+				irp6ot_desired_pos[i]
+						= ui_state.irp6_on_track.edp.preset_position[1][i];
 			}
 			edp_irp6ot_eb.command(boost::bind(irp6ot_execute_joint_motion));
-		} else if ((((ApName(ApWidget(cbinfo)) == ABN_mm_irp6_on_track_preset_position_2) || (ApName(ApWidget(cbinfo))
-				== ABN_mm_all_robots_preset_position_2)) || ((cbinfo->event->type == Ph_EV_KEY) && (my_data->key_cap
-				== 0x32))) && (ui_state.irp6_on_track.edp.is_synchronised)) {// ruch do pozycji zadania (wspolrzedne przyjete arbitralnie)
+		} else if ((((ApName(ApWidget(cbinfo))
+				== ABN_mm_irp6_on_track_preset_position_2) || (ApName(ApWidget(
+				cbinfo)) == ABN_mm_all_robots_preset_position_2))
+				|| ((cbinfo->event->type == Ph_EV_KEY) && (my_data->key_cap
+						== 0x32)))
+				&& (ui_state.irp6_on_track.edp.is_synchronised)) {// ruch do pozycji zadania (wspolrzedne przyjete arbitralnie)
 			for (int i = 0; i < IRP6_ON_TRACK_NUM_OF_SERVOS; i++) {
-				irp6ot_desired_pos[i] = ui_state.irp6_on_track.edp.preset_position[2][i];
+				irp6ot_desired_pos[i]
+						= ui_state.irp6_on_track.edp.preset_position[2][i];
 			}
 			edp_irp6ot_eb.command(boost::bind(irp6ot_execute_joint_motion));
-		} else if ((((ApName(ApWidget(cbinfo)) == ABN_mm_irp6_on_track_preset_position_front)
-				|| (ApName(ApWidget(cbinfo)) == ABN_mm_all_robots_preset_position_front)) || ((cbinfo->event->type
-				== Ph_EV_KEY) && (my_data->key_cap == 0x66))) && (ui_state.irp6_on_track.edp.is_synchronised)) {// ruch do pozycji zadania (wspolrzedne przyjete arbitralnie)
+		} else if ((((ApName(ApWidget(cbinfo))
+				== ABN_mm_irp6_on_track_preset_position_front) || (ApName(
+				ApWidget(cbinfo)) == ABN_mm_all_robots_preset_position_front))
+				|| ((cbinfo->event->type == Ph_EV_KEY) && (my_data->key_cap
+						== 0x66)))
+				&& (ui_state.irp6_on_track.edp.is_synchronised)) {// ruch do pozycji zadania (wspolrzedne przyjete arbitralnie)
 			for (int i = 0; i < IRP6_ON_TRACK_NUM_OF_SERVOS; i++) {
-				irp6ot_desired_pos[i] = ui_state.irp6_on_track.edp.front_position[i];
+				irp6ot_desired_pos[i]
+						= ui_state.irp6_on_track.edp.front_position[i];
 			}
 			edp_irp6ot_eb.command(boost::bind(irp6ot_execute_joint_motion));
 		}
@@ -816,8 +874,7 @@ int irp6ot_move_to_preset_position(PtWidget_t *widget, ApInfo_t *apinfo, PtCallb
 	return (Pt_CONTINUE);
 }
 
-int irp6ot_execute_motor_motion()
-{
+int irp6ot_execute_motor_motion() {
 	try {
 
 		ui_robot.irp6_on_track->move_motors(irp6ot_desired_pos);
@@ -828,8 +885,7 @@ int irp6ot_execute_motor_motion()
 	return 1;
 }
 
-int irp6ot_execute_joint_motion()
-{
+int irp6ot_execute_joint_motion() {
 	try {
 
 		ui_robot.irp6_on_track->move_joints(irp6ot_desired_pos);
@@ -840,7 +896,8 @@ int irp6ot_execute_joint_motion()
 	return 1;
 }
 
-int irp6ot_inc_motion(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int irp6ot_inc_motion(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -944,7 +1001,8 @@ int irp6ot_inc_motion(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cb
 
 			ui_robot.irp6_on_track->move_motors(irp6ot_desired_pos);
 
-			if ((ui_state.irp6_on_track.edp.is_synchronised) && (ui_state.is_wind_irp6ot_inc_open)) { // by Y o dziwo niedziala poprawnie 	 if (ui_state.irp6_on_track.edp.is_synchronised)
+			if ((ui_state.irp6_on_track.edp.is_synchronised)
+					&& (ui_state.is_wind_irp6ot_inc_open)) { // by Y o dziwo niedziala poprawnie 	 if (ui_state.irp6_on_track.edp.is_synchronised)
 
 				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p0, Pt_ARG_NUMERIC_VALUE, &irp6ot_desired_pos[0] , 0);
 				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p1, Pt_ARG_NUMERIC_VALUE, &irp6ot_desired_pos[1] , 0);
@@ -964,8 +1022,8 @@ int irp6ot_inc_motion(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cb
 	return (Pt_CONTINUE);
 }
 
-int init_wnd_irp6_on_track_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
-{
+int init_wnd_irp6_on_track_int(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo) {
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
@@ -999,8 +1057,8 @@ int init_wnd_irp6_on_track_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackI
 	return (Pt_CONTINUE);
 }
 
-int irp6ot_int_motion(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
-{
+int irp6ot_int_motion(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo) {
 
 	double *wektor[IRP6_ON_TRACK_NUM_OF_SERVOS];
 	double *step1;
@@ -1010,7 +1068,8 @@ int irp6ot_int_motion(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cb
 
 	// wychwytania ew. bledow ECP::robot
 	try {
-		if ((ui_state.irp6_on_track.edp.pid != -1) && (ui_state.irp6_on_track.edp.is_synchronised)) {
+		if ((ui_state.irp6_on_track.edp.pid != -1)
+				&& (ui_state.irp6_on_track.edp.is_synchronised)) {
 
 			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_int_p1, Pt_ARG_NUMERIC_VALUE, &wektor[0], 0 );
 			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_int_p2, Pt_ARG_NUMERIC_VALUE, &wektor[1], 0 );
@@ -1029,35 +1088,50 @@ int irp6ot_int_motion(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cb
 
 			if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6ot_int_1l) {
 				irp6ot_desired_pos[0] -= (*step1);
-			} else if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6ot_int_2l) {
+			} else if (ApName(ApWidget(cbinfo))
+					== ABN_PtButton_wind_irp6ot_int_2l) {
 				irp6ot_desired_pos[1] -= (*step1);
-			} else if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6ot_int_3l) {
+			} else if (ApName(ApWidget(cbinfo))
+					== ABN_PtButton_wind_irp6ot_int_3l) {
 				irp6ot_desired_pos[2] -= (*step1);
-			} else if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6ot_int_4l) {
+			} else if (ApName(ApWidget(cbinfo))
+					== ABN_PtButton_wind_irp6ot_int_4l) {
 				irp6ot_desired_pos[3] -= (*step1);
-			} else if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6ot_int_5l) {
+			} else if (ApName(ApWidget(cbinfo))
+					== ABN_PtButton_wind_irp6ot_int_5l) {
 				irp6ot_desired_pos[4] -= (*step1);
-			} else if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6ot_int_6l) {
+			} else if (ApName(ApWidget(cbinfo))
+					== ABN_PtButton_wind_irp6ot_int_6l) {
 				irp6ot_desired_pos[5] -= (*step1);
-			} else if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6ot_int_7l) {
+			} else if (ApName(ApWidget(cbinfo))
+					== ABN_PtButton_wind_irp6ot_int_7l) {
 				irp6ot_desired_pos[6] -= (*step1);
-			} else if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6ot_int_8l) {
+			} else if (ApName(ApWidget(cbinfo))
+					== ABN_PtButton_wind_irp6ot_int_8l) {
 				irp6ot_desired_pos[7] -= (*step1);
-			} else if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6ot_int_1r) {
+			} else if (ApName(ApWidget(cbinfo))
+					== ABN_PtButton_wind_irp6ot_int_1r) {
 				irp6ot_desired_pos[0] += (*step1);
-			} else if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6ot_int_2r) {
+			} else if (ApName(ApWidget(cbinfo))
+					== ABN_PtButton_wind_irp6ot_int_2r) {
 				irp6ot_desired_pos[1] += (*step1);
-			} else if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6ot_int_3r) {
+			} else if (ApName(ApWidget(cbinfo))
+					== ABN_PtButton_wind_irp6ot_int_3r) {
 				irp6ot_desired_pos[2] += (*step1);
-			} else if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6ot_int_4r) {
+			} else if (ApName(ApWidget(cbinfo))
+					== ABN_PtButton_wind_irp6ot_int_4r) {
 				irp6ot_desired_pos[3] += (*step1);
-			} else if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6ot_int_5r) {
+			} else if (ApName(ApWidget(cbinfo))
+					== ABN_PtButton_wind_irp6ot_int_5r) {
 				irp6ot_desired_pos[4] += (*step1);
-			} else if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6ot_int_6r) {
+			} else if (ApName(ApWidget(cbinfo))
+					== ABN_PtButton_wind_irp6ot_int_6r) {
 				irp6ot_desired_pos[5] += (*step1);
-			} else if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6ot_int_7r) {
+			} else if (ApName(ApWidget(cbinfo))
+					== ABN_PtButton_wind_irp6ot_int_7r) {
 				irp6ot_desired_pos[6] += (*step1);
-			} else if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6ot_int_8r) {
+			} else if (ApName(ApWidget(cbinfo))
+					== ABN_PtButton_wind_irp6ot_int_8r) {
 				irp6ot_desired_pos[7] += (*step1);
 			}
 
@@ -1083,8 +1157,8 @@ int irp6ot_int_motion(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cb
 	return (Pt_CONTINUE);
 }
 
-int init_wnd_irp6_on_track_xyz_euler_zyz(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
-{
+int init_wnd_irp6_on_track_xyz_euler_zyz(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo) {
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
@@ -1116,7 +1190,8 @@ int init_wnd_irp6_on_track_xyz_euler_zyz(PtWidget_t *widget, ApInfo_t *apinfo, P
 	return (Pt_CONTINUE);
 }
 
-int wnd_irp6ot_xyz_zyz_copy_cur_to_desired(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int wnd_irp6ot_xyz_zyz_copy_cur_to_desired(PtWidget_t *widget,
+		ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -1157,7 +1232,8 @@ int wnd_irp6ot_xyz_zyz_copy_cur_to_desired(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
-int irp6ot_xyz_euler_zyz_motion(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int irp6ot_xyz_euler_zyz_motion(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -1184,72 +1260,86 @@ int irp6ot_xyz_euler_zyz_motion(PtWidget_t *widget, ApInfo_t *apinfo, PtCallback
 
 			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_step, Pt_ARG_NUMERIC_VALUE, &step1, 0 );
 
-			if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6ot_xyz_euler_zyz_1l) {
+			if (ApName(ApWidget(cbinfo))
+					== ABN_PtButton_wind_irp6ot_xyz_euler_zyz_1l) {
 				// 	PtGetResource(ABW_PtNumericFloat_internal_step,Pt_ARG_NUMERIC_VALUE, &step1, 0 );
 				irp6ot_desired_pos[0] -= (*step1);
 			} else
 
-			if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6ot_xyz_euler_zyz_2l) {
+			if (ApName(ApWidget(cbinfo))
+					== ABN_PtButton_wind_irp6ot_xyz_euler_zyz_2l) {
 				// 	PtGetResource(ABW_PtNumericFloat_internal_step,Pt_ARG_NUMERIC_VALUE, &step1, 0 );
 				irp6ot_desired_pos[1] -= (*step1);
 			} else
 
-			if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6ot_xyz_euler_zyz_3l) {
+			if (ApName(ApWidget(cbinfo))
+					== ABN_PtButton_wind_irp6ot_xyz_euler_zyz_3l) {
 				// 	PtGetResource(ABW_PtNumericFloat_internal_step,Pt_ARG_NUMERIC_VALUE, &step1, 0 );
 				irp6ot_desired_pos[2] -= (*step1);
 			} else
 
-			if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6ot_xyz_euler_zyz_4l) {
+			if (ApName(ApWidget(cbinfo))
+					== ABN_PtButton_wind_irp6ot_xyz_euler_zyz_4l) {
 				// 	PtGetResource(ABW_PtNumericFloat_internal_step,Pt_ARG_NUMERIC_VALUE, &step1, 0 );
 				irp6ot_desired_pos[3] -= (*step1);
 			} else
 
-			if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6ot_xyz_euler_zyz_5l) {
+			if (ApName(ApWidget(cbinfo))
+					== ABN_PtButton_wind_irp6ot_xyz_euler_zyz_5l) {
 				// 	PtGetResource(ABW_PtNumericFloat_internal_step,Pt_ARG_NUMERIC_VALUE, &step1, 0 );
 				irp6ot_desired_pos[4] -= (*step1);
 			} else
 
-			if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6ot_xyz_euler_zyz_6l) {
+			if (ApName(ApWidget(cbinfo))
+					== ABN_PtButton_wind_irp6ot_xyz_euler_zyz_6l) {
 				// 	PtGetResource(ABW_PtNumericFloat_internal_step,Pt_ARG_NUMERIC_VALUE, &step1, 0 );
 				irp6ot_desired_pos[5] -= (*step1);
 			} else
 
-			if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6ot_xyz_euler_zyz_7l) {
+			if (ApName(ApWidget(cbinfo))
+					== ABN_PtButton_wind_irp6ot_xyz_euler_zyz_7l) {
 				// 	PtGetResource(ABW_PtNumericFloat_internal_step,Pt_ARG_NUMERIC_VALUE, &step1, 0 );
 				irp6ot_desired_pos[6] -= (*step1);
 			} else
 
-			if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6ot_xyz_euler_zyz_1r) {
+			if (ApName(ApWidget(cbinfo))
+					== ABN_PtButton_wind_irp6ot_xyz_euler_zyz_1r) {
 				// 	PtGetResource(ABW_PtNumericFloat_internal_step,Pt_ARG_NUMERIC_VALUE, &step1, 0 );
 				irp6ot_desired_pos[0] += *step1;
 			} else
 
-			if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6ot_xyz_euler_zyz_2r) {
+			if (ApName(ApWidget(cbinfo))
+					== ABN_PtButton_wind_irp6ot_xyz_euler_zyz_2r) {
 				// 	PtGetResource(ABW_PtNumericFloat_internal_step,Pt_ARG_NUMERIC_VALUE, &step1, 0 );
 				irp6ot_desired_pos[1] += *step1;
 			} else
 
-			if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6ot_xyz_euler_zyz_3r) {
+			if (ApName(ApWidget(cbinfo))
+					== ABN_PtButton_wind_irp6ot_xyz_euler_zyz_3r) {
 				// 	PtGetResource(ABW_PtNumericFloat_internal_step,Pt_ARG_NUMERIC_VALUE, &step1, 0 );
 				irp6ot_desired_pos[2] += *step1;
 			} else
 
-			if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6ot_xyz_euler_zyz_4r) {
+			if (ApName(ApWidget(cbinfo))
+					== ABN_PtButton_wind_irp6ot_xyz_euler_zyz_4r) {
 				// 	PtGetResource(ABW_PtNumericFloat_internal_step,Pt_ARG_NUMERIC_VALUE, &step1, 0 );
 				irp6ot_desired_pos[3] += *step1;
 			} else
 
-			if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6ot_xyz_euler_zyz_5r) {
+			if (ApName(ApWidget(cbinfo))
+					== ABN_PtButton_wind_irp6ot_xyz_euler_zyz_5r) {
 				// 	PtGetResource(ABW_PtNumericFloat_internal_step,Pt_ARG_NUMERIC_VALUE, &step1, 0 );
 				irp6ot_desired_pos[4] += *step1;
 			} else
 
-			if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6ot_xyz_euler_zyz_6r) {
+			if (ApName(ApWidget(cbinfo))
+					== ABN_PtButton_wind_irp6ot_xyz_euler_zyz_6r) {
 				// 	PtGetResource(ABW_PtNumericFloat_internal_step,Pt_ARG_NUMERIC_VALUE, &step1, 0 );
 				irp6ot_desired_pos[5] += *step1;
 			} else
 
-			if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6ot_xyz_euler_zyz_7r) {
+			if (ApName(ApWidget(cbinfo))
+					== ABN_PtButton_wind_irp6ot_xyz_euler_zyz_7r) {
 				// 	PtGetResource(ABW_PtNumericFloat_internal_step,Pt_ARG_NUMERIC_VALUE, &step1, 0 );
 				irp6ot_desired_pos[6] += *step1;
 			}
@@ -1270,8 +1360,8 @@ int irp6ot_xyz_euler_zyz_motion(PtWidget_t *widget, ApInfo_t *apinfo, PtCallback
 
 }
 
-int init_wnd_irp6_on_track_xyz_angle_axis(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
-{
+int init_wnd_irp6_on_track_xyz_angle_axis(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo) {
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
@@ -1285,21 +1375,13 @@ int init_wnd_irp6_on_track_xyz_angle_axis(PtWidget_t *widget, ApInfo_t *apinfo, 
 				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_read_p1, Pt_ARG_NUMERIC_VALUE, &irp6ot_current_pos[0] , 0);
 				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_read_p2, Pt_ARG_NUMERIC_VALUE, &irp6ot_current_pos[1] , 0);
 				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_read_p3, Pt_ARG_NUMERIC_VALUE, &irp6ot_current_pos[2] , 0);
+				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_read_p4, Pt_ARG_NUMERIC_VALUE, &irp6ot_current_pos[3] , 0);
+				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_read_p5, Pt_ARG_NUMERIC_VALUE, &irp6ot_current_pos[4] , 0);
+				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_read_p6, Pt_ARG_NUMERIC_VALUE, &irp6ot_current_pos[5] , 0);
+
 				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_read_p8, Pt_ARG_NUMERIC_VALUE, &irp6ot_current_pos[6] , 0);
 
-				const double alfa = sqrt(irp6ot_current_pos[3] * irp6ot_current_pos[3] + irp6ot_current_pos[4]
-						* irp6ot_current_pos[4] + irp6ot_current_pos[5] * irp6ot_current_pos[5]);
-
-				const double kx = irp6ot_current_pos[3] / alfa;
-				const double ky = irp6ot_current_pos[4] / alfa;
-				const double kz = irp6ot_current_pos[5] / alfa;
-
-				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_read_p4, Pt_ARG_NUMERIC_VALUE, &kx , 0);
-				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_read_p5, Pt_ARG_NUMERIC_VALUE, &ky , 0);
-				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_read_p6, Pt_ARG_NUMERIC_VALUE, &kz , 0);
-				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_read_p7, Pt_ARG_NUMERIC_VALUE, &alfa , 0);
-
-				for (int i = 0; i < IRP6_ON_TRACK_NUM_OF_SERVOS; ++i)
+				for (int i = 0; i < 7; ++i)
 					irp6ot_desired_pos[i] = irp6ot_current_pos[i];
 			} else {
 
@@ -1311,7 +1393,8 @@ int init_wnd_irp6_on_track_xyz_angle_axis(PtWidget_t *widget, ApInfo_t *apinfo, 
 	return (Pt_CONTINUE);
 }
 
-int wnd_irp6ot_xyz_aa_copy_current_to_desired(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int wnd_irp6ot_xyz_aa_copy_current_to_desired(PtWidget_t *widget,
+		ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -1319,7 +1402,7 @@ int wnd_irp6ot_xyz_aa_copy_current_to_desired(PtWidget_t *widget, ApInfo_t *apin
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
 	// wychwytania ew. bledow ECP::robot
-	double *wektor_ptgr[8], wektor[8];
+	double *wektor_ptgr[7], wektor[7];
 
 	if (ui_state.irp6_on_track.edp.pid != -1) {
 		if (ui_state.irp6_on_track.edp.is_synchronised) // Czy robot jest zsynchronizowany?
@@ -1330,10 +1413,9 @@ int wnd_irp6ot_xyz_aa_copy_current_to_desired(PtWidget_t *widget, ApInfo_t *apin
 			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_read_p4, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[3]) , 0);
 			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_read_p5, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[4]) , 0);
 			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_read_p6, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[5]) , 0);
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_read_p7, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[6]) , 0);
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_read_p8, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[7]) , 0);
+			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_read_p8, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[6]) , 0);
 
-			for (int i = 0; i < 8; i++) {
+			for (int i = 0; i < 7; i++) {
 				wektor[i] = *wektor_ptgr[i];
 			}
 
@@ -1343,8 +1425,7 @@ int wnd_irp6ot_xyz_aa_copy_current_to_desired(PtWidget_t *widget, ApInfo_t *apin
 			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p4, Pt_ARG_NUMERIC_VALUE, &wektor[3], 0 );
 			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p5, Pt_ARG_NUMERIC_VALUE, &wektor[4], 0 );
 			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p6, Pt_ARG_NUMERIC_VALUE, &wektor[5], 0 );
-			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p7, Pt_ARG_NUMERIC_VALUE, &wektor[6], 0 );
-			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p8, Pt_ARG_NUMERIC_VALUE, &wektor[7], 0 );
+			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p8, Pt_ARG_NUMERIC_VALUE, &wektor[6], 0 );
 
 		} else {
 
@@ -1355,7 +1436,8 @@ int wnd_irp6ot_xyz_aa_copy_current_to_desired(PtWidget_t *widget, ApInfo_t *apin
 
 }
 
-int irp6ot_xyz_angle_axis_motion(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int irp6ot_xyz_angle_axis_motion(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo)
 
 {
 	/* eliminate 'unreferenced' warnings */
@@ -1365,18 +1447,17 @@ int irp6ot_xyz_angle_axis_motion(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbac
 	try {
 		if (ui_state.irp6_on_track.edp.is_synchronised) {
 
-			double *wektor_ptgr[8];
+			double *wektor_ptgr[7];
 			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p1, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[0], 0 );
 			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p2, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[1], 0 );
 			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p3, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[2], 0 );
 			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p4, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[3], 0 );
 			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p5, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[4], 0 );
 			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p6, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[5], 0 );
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p7, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[6], 0 );
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p8, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[7], 0 );
+			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p8, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[6], 0 );
 
-			double wektor[8];
-			for (int i = 0; i < 8; i++) {
+			double wektor[7];
+			for (int i = 0; i < 7; i++) {
 				wektor[i] = *wektor_ptgr[i];
 			}
 
@@ -1384,66 +1465,53 @@ int irp6ot_xyz_angle_axis_motion(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbac
 			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_step, Pt_ARG_NUMERIC_VALUE, &krok, 0 );
 
 			// wektor przesuniecia
-			if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6ot_xyz_angle_axis_1l)
+			if (ApName(ApWidget(cbinfo))
+					== ABN_PtButton_wind_irp6ot_xyz_angle_axis_1l)
 				wektor[0] -= (*krok);
 
-			if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6ot_xyz_angle_axis_1r)
+			if (ApName(ApWidget(cbinfo))
+					== ABN_PtButton_wind_irp6ot_xyz_angle_axis_1r)
 				wektor[0] += (*krok);
 
-			if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6ot_xyz_angle_axis_2l)
+			if (ApName(ApWidget(cbinfo))
+					== ABN_PtButton_wind_irp6ot_xyz_angle_axis_2l)
 				wektor[1] -= (*krok);
 
-			if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6ot_xyz_angle_axis_2r)
+			if (ApName(ApWidget(cbinfo))
+					== ABN_PtButton_wind_irp6ot_xyz_angle_axis_2r)
 				wektor[1] += (*krok);
 
-			if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6ot_xyz_angle_axis_3l)
+			if (ApName(ApWidget(cbinfo))
+					== ABN_PtButton_wind_irp6ot_xyz_angle_axis_3l)
 				wektor[2] -= (*krok);
 
-			if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6ot_xyz_angle_axis_3r)
+			if (ApName(ApWidget(cbinfo))
+					== ABN_PtButton_wind_irp6ot_xyz_angle_axis_3r)
 				wektor[2] += (*krok);
 
 			// parametry wersora obrotu
 
 
 			// kat obrotu i chwytak
-			if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6ot_xyz_angle_axis_7l)
+
+			if (ApName(ApWidget(cbinfo))
+					== ABN_PtButton_wind_irp6ot_xyz_angle_axis_8l)
 				wektor[6] -= (*krok);
 
-			if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6ot_xyz_angle_axis_8l)
-				wektor[7] -= (*krok);
-
-			if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6ot_xyz_angle_axis_7r)
+			if (ApName(ApWidget(cbinfo))
+					== ABN_PtButton_wind_irp6ot_xyz_angle_axis_8r)
 				wektor[6] += (*krok);
-
-			if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6ot_xyz_angle_axis_8r)
-				wektor[7] += (*krok);
 
 			// sprawdzenie dlugosci wersora
 			// w przypadku, gdy dlugosc wersora jest inna niz 1
 			// parametry wersora zostaja przeskalowane
 
-			const double kx = wektor[3];
-			const double ky = wektor[4];
-			const double kz = wektor[5];
-
-			const double l_eps = 0;
-
-			const double wl = sqrt(kx * kx + ky * ky + kz * kz);
-
-			if ((wl > 1 + l_eps) || (wl < 1 - l_eps)) {
-				wektor[3] = kx / wl;
-				wektor[4] = ky / wl;
-				wektor[5] = kz / wl;
-
-			}
 
 			// przepisanie parametrow ruchu do postaci rozkazu w formie XYZ_ANGLE_AXIS
-			for (int i = 0; i < 6; i++) {
+			for (int i = 0; i < 7; i++) {
 				irp6ot_desired_pos[i] = wektor[i];
-				if (i > 2)
-					irp6ot_desired_pos[i] *= wektor[6];
+
 			}
-			irp6ot_desired_pos[6] = wektor[7];
 
 			// zlecenie wykonania ruchu
 			ui_robot.irp6_on_track->move_xyz_angle_axis(irp6ot_desired_pos);
@@ -1454,8 +1522,7 @@ int irp6ot_xyz_angle_axis_motion(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbac
 			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p4, Pt_ARG_NUMERIC_VALUE, &wektor[3] , 0);
 			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p5, Pt_ARG_NUMERIC_VALUE, &wektor[4] , 0);
 			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p6, Pt_ARG_NUMERIC_VALUE, &wektor[5] , 0);
-			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p7, Pt_ARG_NUMERIC_VALUE, &wektor[6] , 0);
-			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p8, Pt_ARG_NUMERIC_VALUE, &wektor[7] , 0);
+			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p8, Pt_ARG_NUMERIC_VALUE, &wektor[6] , 0);
 
 		}
 	} // end try
@@ -1464,7 +1531,8 @@ int irp6ot_xyz_angle_axis_motion(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbac
 	return (Pt_CONTINUE);
 }
 
-int EDP_irp6_on_track_synchronise(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int EDP_irp6_on_track_synchronise(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -1473,13 +1541,15 @@ int EDP_irp6_on_track_synchronise(PtWidget_t *widget, ApInfo_t *apinfo, PtCallba
 
 	//	EDP_irp6_postumentcreate_int(widget, apinfo, cbinfo);
 
-	edp_irp6ot_eb.command(boost::bind(EDP_irp6_on_track_synchronise_int, widget, apinfo, cbinfo));
+	edp_irp6ot_eb.command(boost::bind(EDP_irp6_on_track_synchronise_int,
+			widget, apinfo, cbinfo));
 
 	return (Pt_CONTINUE);
 
 }
 
-int EDP_irp6_on_track_synchronise_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int EDP_irp6_on_track_synchronise_int(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -1492,9 +1562,11 @@ int EDP_irp6_on_track_synchronise_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCa
 	try {
 		// dla robota irp6_on_track
 
-		if ((ui_state.irp6_on_track.edp.state > 0) && (ui_state.irp6_on_track.edp.is_synchronised == false)) {
+		if ((ui_state.irp6_on_track.edp.state > 0)
+				&& (ui_state.irp6_on_track.edp.is_synchronised == false)) {
 			ui_robot.irp6_on_track->ecp->synchronise();
-			ui_state.irp6_on_track.edp.is_synchronised = ui_robot.irp6_on_track->ecp->is_synchronised();
+			ui_state.irp6_on_track.edp.is_synchronised
+					= ui_robot.irp6_on_track->ecp->is_synchronised();
 		} else {
 			// 	printf("EDP irp6_on_track niepowolane, synchronizacja niedozwolona\n");
 		}
@@ -1509,7 +1581,8 @@ int EDP_irp6_on_track_synchronise_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCa
 
 }
 
-int init_wnd_irp6_on_track_xyz_angle_axis_ts(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int init_wnd_irp6_on_track_xyz_angle_axis_ts(PtWidget_t *widget,
+		ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -1528,26 +1601,10 @@ int init_wnd_irp6_on_track_xyz_angle_axis_ts(PtWidget_t *widget, ApInfo_t *apinf
 				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_ts_read_p1, Pt_ARG_NUMERIC_VALUE, &tool_vector[0] , 0);
 				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_ts_read_p2, Pt_ARG_NUMERIC_VALUE, &tool_vector[1] , 0);
 				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_ts_read_p3, Pt_ARG_NUMERIC_VALUE, &tool_vector[2] , 0);
+				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_ts_read_p4, Pt_ARG_NUMERIC_VALUE, &tool_vector[3] , 0);
+				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_ts_read_p5, Pt_ARG_NUMERIC_VALUE, &tool_vector[4] , 0);
+				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_ts_read_p6, Pt_ARG_NUMERIC_VALUE, &tool_vector[5] , 0);
 
-				const double alfa = sqrt(tool_vector[3] * tool_vector[3] + tool_vector[4] * tool_vector[4]
-						+ tool_vector[5] * tool_vector[5]);
-
-				double kx, ky, kz;
-
-				if (alfa == 0) {
-					kx = -1;
-					ky = 0;
-					kz = 0;
-				} else {
-					kx = tool_vector[3] / alfa;
-					ky = tool_vector[4] / alfa;
-					kz = tool_vector[5] / alfa;
-				}
-
-				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_ts_read_p4, Pt_ARG_NUMERIC_VALUE, &kx , 0);
-				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_ts_read_p5, Pt_ARG_NUMERIC_VALUE, &ky , 0);
-				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_ts_read_p6, Pt_ARG_NUMERIC_VALUE, &kz , 0);
-				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_ts_read_p7, Pt_ARG_NUMERIC_VALUE, &alfa , 0);
 			} else {
 
 			}
@@ -1559,7 +1616,8 @@ int init_wnd_irp6_on_track_xyz_angle_axis_ts(PtWidget_t *widget, ApInfo_t *apinf
 
 }
 
-int wnd_irp6ot_xyz_aa_ts_copy_cur_to_desired(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int wnd_irp6ot_xyz_aa_ts_copy_cur_to_desired(PtWidget_t *widget,
+		ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -1567,7 +1625,7 @@ int wnd_irp6ot_xyz_aa_ts_copy_cur_to_desired(PtWidget_t *widget, ApInfo_t *apinf
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
 	// wychwytania ew. bledow ECP::robot
-	double *wektor_ptgr[7], wektor[7];
+	double *wektor_ptgr[6], wektor[6];
 
 	if (ui_state.irp6_on_track.edp.pid != -1) {
 		if (ui_state.irp6_on_track.edp.is_synchronised) // Czy robot jest zsynchronizowany?
@@ -1579,9 +1637,8 @@ int wnd_irp6ot_xyz_aa_ts_copy_cur_to_desired(PtWidget_t *widget, ApInfo_t *apinf
 			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_ts_read_p4, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[3]) , 0);
 			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_ts_read_p5, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[4]) , 0);
 			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_ts_read_p6, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[5]) , 0);
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_ts_read_p7, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[6]) , 0);
 
-			for (int i = 0; i < 7; i++) {
+			for (int i = 0; i < 6; i++) {
 				wektor[i] = *wektor_ptgr[i];
 			}
 
@@ -1591,7 +1648,7 @@ int wnd_irp6ot_xyz_aa_ts_copy_cur_to_desired(PtWidget_t *widget, ApInfo_t *apinf
 			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_ts_p4, Pt_ARG_NUMERIC_VALUE, &wektor[3], 0 );
 			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_ts_p5, Pt_ARG_NUMERIC_VALUE, &wektor[4], 0 );
 			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_ts_p6, Pt_ARG_NUMERIC_VALUE, &wektor[5], 0 );
-			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_ts_p7, Pt_ARG_NUMERIC_VALUE, &wektor[6], 0 );
+
 		} else {
 
 		}
@@ -1601,14 +1658,15 @@ int wnd_irp6ot_xyz_aa_ts_copy_cur_to_desired(PtWidget_t *widget, ApInfo_t *apinf
 
 }
 
-int irp6ot_xyz_angle_axis_set_tool(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int irp6ot_xyz_angle_axis_set_tool(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo)
 
 {
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	double *wektor_ptgr[7], wektor[7];
+	double *wektor_ptgr[6], wektor[6];
 	double tool_vector[6];
 	double wl;
 	double l_eps = 0;
@@ -1624,33 +1682,15 @@ int irp6ot_xyz_angle_axis_set_tool(PtWidget_t *widget, ApInfo_t *apinfo, PtCallb
 			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_ts_p4, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[3], 0 );
 			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_ts_p5, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[4], 0 );
 			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_ts_p6, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[5], 0 );
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_ts_p7, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[6], 0 );
 
-			for (int i = 0; i < 7; i++) {
+			for (int i = 0; i < 6; i++) {
 				wektor[i] = *wektor_ptgr[i];
-			}
-
-			// sprawdzenie dlugosci wersora
-			// w przypadku, gdy dlugosc wersora jest inna niz 1
-			// parametry wersora zostaja przeskalowane
-
-			kx = wektor[3];
-			ky = wektor[4];
-			kz = wektor[5];
-
-			wl = sqrt(kx * kx + ky * ky + kz * kz);
-
-			if ((wl > 1 + l_eps) || (wl < 1 - l_eps)) {
-				wektor[3] = kx / wl;
-				wektor[4] = ky / wl;
-				wektor[5] = kz / wl;
 			}
 
 			// przepisanie parametrow ruchu do postaci rozkazu w formie XYZ_ANGLE_AXIS
 			for (int i = 0; i < 6; i++) {
 				tool_vector[i] = wektor[i];
-				if (i > 2)
-					tool_vector[i] *= wektor[6];
+
 			}
 
 			// zlecenie wykonania ruchu
@@ -1665,7 +1705,8 @@ int irp6ot_xyz_angle_axis_set_tool(PtWidget_t *widget, ApInfo_t *apinfo, PtCallb
 
 }
 
-int init_wnd_irp6_on_track_xyz_euler_zyz_ts(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int init_wnd_irp6_on_track_xyz_euler_zyz_ts(PtWidget_t *widget,
+		ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -1706,7 +1747,8 @@ int init_wnd_irp6_on_track_xyz_euler_zyz_ts(PtWidget_t *widget, ApInfo_t *apinfo
 
 }
 
-int wnd_irp6ot_xyz_zyz_ts_copy_cur_to_desired(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int wnd_irp6ot_xyz_zyz_ts_copy_cur_to_desired(PtWidget_t *widget,
+		ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -1745,7 +1787,8 @@ int wnd_irp6ot_xyz_zyz_ts_copy_cur_to_desired(PtWidget_t *widget, ApInfo_t *apin
 
 }
 
-int irp6ot_xyz_euler_zyz_set_tool(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int irp6ot_xyz_euler_zyz_set_tool(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -1781,7 +1824,8 @@ int irp6ot_xyz_euler_zyz_set_tool(PtWidget_t *widget, ApInfo_t *apinfo, PtCallba
 
 }
 
-int init_wnd_irp6_on_track_kinematic(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int init_wnd_irp6_on_track_kinematic(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -1809,7 +1853,8 @@ int init_wnd_irp6_on_track_kinematic(PtWidget_t *widget, ApInfo_t *apinfo, PtCal
 
 }
 
-int irp6ot_kinematic_set(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int irp6ot_kinematic_set(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -1839,7 +1884,8 @@ int irp6ot_kinematic_set(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t 
 
 }
 
-int init_wnd_irp6_on_track_servo_algorithm(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int init_wnd_irp6_on_track_servo_algorithm(PtWidget_t *widget,
+		ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -1854,7 +1900,8 @@ int init_wnd_irp6_on_track_servo_algorithm(PtWidget_t *widget, ApInfo_t *apinfo,
 		if (ui_state.irp6_on_track.edp.pid != -1) {
 			if (ui_state.irp6_on_track.edp.is_synchronised) // Czy robot jest zsynchronizowany?
 			{
-				ui_robot.irp6_on_track->get_servo_algorithm(servo_alg_no, servo_par_no); // Odczyt polozenia walow silnikow
+				ui_robot.irp6_on_track->get_servo_algorithm(servo_alg_no,
+						servo_par_no); // Odczyt polozenia walow silnikow
 
 				PtSetResource(ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_read_alg_1, Pt_ARG_NUMERIC_VALUE, servo_alg_no[0] , 0);
 				PtSetResource(ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_read_alg_2, Pt_ARG_NUMERIC_VALUE, servo_alg_no[1] , 0);
@@ -1885,7 +1932,8 @@ int init_wnd_irp6_on_track_servo_algorithm(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
-int wnd_irp6ot_seralg_copy_current_to_desired(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int wnd_irp6ot_seralg_copy_current_to_desired(PtWidget_t *widget,
+		ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -1893,8 +1941,10 @@ int wnd_irp6ot_seralg_copy_current_to_desired(PtWidget_t *widget, ApInfo_t *apin
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
 	// wychwytania ew. bledow ECP::robot
-	uint8_t *wektor_ptgr[IRP6_ON_TRACK_NUM_OF_SERVOS], *wektor2_ptgr[IRP6_ON_TRACK_NUM_OF_SERVOS],
-			wektor[IRP6_ON_TRACK_NUM_OF_SERVOS], wektor2[IRP6_ON_TRACK_NUM_OF_SERVOS];
+	uint8_t *wektor_ptgr[IRP6_ON_TRACK_NUM_OF_SERVOS],
+			*wektor2_ptgr[IRP6_ON_TRACK_NUM_OF_SERVOS],
+			wektor[IRP6_ON_TRACK_NUM_OF_SERVOS],
+			wektor2[IRP6_ON_TRACK_NUM_OF_SERVOS];
 
 	if (ui_state.irp6_on_track.edp.pid != -1) {
 		if (ui_state.irp6_on_track.edp.is_synchronised) // Czy robot jest zsynchronizowany?
@@ -1955,7 +2005,8 @@ int wnd_irp6ot_seralg_copy_current_to_desired(PtWidget_t *widget, ApInfo_t *apin
 
 }
 
-int irp6ot_servo_algorithm_set(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int irp6ot_servo_algorithm_set(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -1995,7 +2046,8 @@ int irp6ot_servo_algorithm_set(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackI
 			}
 
 			// zlecenie wykonania ruchu
-			ui_robot.irp6_on_track->set_servo_algorithm(servo_alg_no_output, servo_par_no_output);
+			ui_robot.irp6_on_track->set_servo_algorithm(servo_alg_no_output,
+					servo_par_no_output);
 
 		} else {
 		}
@@ -2006,7 +2058,8 @@ int irp6ot_servo_algorithm_set(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackI
 
 }
 
-int EDP_irp6_on_track_create(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int EDP_irp6_on_track_create(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -2016,13 +2069,15 @@ int EDP_irp6_on_track_create(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInf
 	//	EDP_irp6_on_track_create_int(widget, apinfo, cbinfo);
 
 
-	edp_irp6ot_eb.command(boost::bind(EDP_irp6_on_track_create_int, widget, apinfo, cbinfo));
+	edp_irp6ot_eb.command(boost::bind(EDP_irp6_on_track_create_int, widget,
+			apinfo, cbinfo));
 
 	return (Pt_CONTINUE);
 
 }
 
-int EDP_irp6_on_track_create_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int EDP_irp6_on_track_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -2044,21 +2099,30 @@ int EDP_irp6_on_track_create_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbac
 			tmp_string += ui_state.irp6_on_track.edp.hardware_busy_attach_point;
 
 			std::string tmp2_string("/dev/name/global/");
-			tmp2_string += ui_state.irp6_on_track.edp.network_resourceman_attach_point;
+			tmp2_string
+					+= ui_state.irp6_on_track.edp.network_resourceman_attach_point;
 
 			// sprawdzenie czy nie jest juz zarejestrowany zarzadca zasobow
-			if ((!(ui_state.irp6_on_track.edp.test_mode)) && (access(tmp_string.c_str(), R_OK) == 0)
-					|| (access(tmp2_string.c_str(), R_OK) == 0)) {
-				ui_msg.ui->message(lib::NON_FATAL_ERROR,"edp_irp6_on_track already exists");
-			} else if (check_node_existence(ui_state.irp6_on_track.edp.node_name, std::string("edp_irp6_on_track"))) {
+			if ((!(ui_state.irp6_on_track.edp.test_mode)) && (access(
+					tmp_string.c_str(), R_OK) == 0) || (access(
+					tmp2_string.c_str(), R_OK) == 0)) {
+				ui_msg.ui->message(lib::NON_FATAL_ERROR,
+						"edp_irp6_on_track already exists");
+			} else if (check_node_existence(
+					ui_state.irp6_on_track.edp.node_name, std::string(
+							"edp_irp6_on_track"))) {
 
-				ui_state.irp6_on_track.edp.node_nr = config->return_node_number(ui_state.irp6_on_track.edp.node_name);
+				ui_state.irp6_on_track.edp.node_nr
+						= config->return_node_number(
+								ui_state.irp6_on_track.edp.node_name);
 
 				ui_state.irp6_on_track.edp.state = 1;
 
-				ui_robot.irp6_on_track = new ui_irp6_common_robot(*config, *ui_msg.all_ecp, lib::ROBOT_IRP6_ON_TRACK);
+				ui_robot.irp6_on_track = new ui_irp6_common_robot(*config,
+						*ui_msg.all_ecp, lib::ROBOT_IRP6_ON_TRACK);
 
-				ui_state.irp6_on_track.edp.pid = ui_robot.irp6_on_track->ecp->get_EDP_pid();
+				ui_state.irp6_on_track.edp.pid
+						= ui_robot.irp6_on_track->ecp->get_EDP_pid();
 
 				if (ui_state.irp6_on_track.edp.pid < 0) {
 
@@ -2071,8 +2135,9 @@ int EDP_irp6_on_track_create_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbac
 					// kilka sekund  (~1) na otworzenie urzadzenia
 
 					while ((ui_state.irp6_on_track.edp.reader_fd
-							= name_open(ui_state.irp6_on_track.edp.network_reader_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL))
-							< 0)
+							= name_open(
+									ui_state.irp6_on_track.edp.network_reader_attach_point.c_str(),
+									NAME_FLAG_ATTACH_GLOBAL)) < 0)
 						if ((tmp++) < CONNECT_RETRY) {
 							delay(CONNECT_DELAY);
 						} else {
@@ -2083,11 +2148,13 @@ int EDP_irp6_on_track_create_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbac
 					// odczytanie poczatkowego stanu robota (komunikuje sie z EDP)
 					lib::controller_state_t robot_controller_initial_state_tmp;
 
-					ui_robot.irp6_on_track->get_controller_state(robot_controller_initial_state_tmp);
+					ui_robot.irp6_on_track->get_controller_state(
+							robot_controller_initial_state_tmp);
 
 					//ui_state.irp6_on_track.edp.state = 1; // edp wlaczone reader czeka na start
 
-					ui_state.irp6_on_track.edp.is_synchronised = robot_controller_initial_state_tmp.is_synchronised;
+					ui_state.irp6_on_track.edp.is_synchronised
+							= robot_controller_initial_state_tmp.is_synchronised;
 				}
 			}
 		}
@@ -2101,7 +2168,8 @@ int EDP_irp6_on_track_create_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbac
 	return 1;
 }
 
-int EDP_irp6_on_track_slay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int EDP_irp6_on_track_slay(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -2110,13 +2178,15 @@ int EDP_irp6_on_track_slay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_
 
 	//	EDP_irp6_on_track_create_int(widget, apinfo, cbinfo);
 
-	edp_irp6ot_eb.command(boost::bind(EDP_irp6_on_track_slay_int, widget, apinfo, cbinfo));
+	edp_irp6ot_eb.command(boost::bind(EDP_irp6_on_track_slay_int, widget,
+			apinfo, cbinfo));
 
 	return (Pt_CONTINUE);
 
 }
 
-int EDP_irp6_on_track_slay_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int EDP_irp6_on_track_slay_int(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo)
 
 {
 	int pt_res;
@@ -2126,7 +2196,8 @@ int EDP_irp6_on_track_slay_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackI
 	if (ui_state.irp6_on_track.edp.state > 0) { // jesli istnieje EDP
 		if (ui_state.irp6_on_track.edp.reader_fd >= 0) {
 			if (name_close(ui_state.irp6_on_track.edp.reader_fd) == -1) {
-				fprintf(stderr, "UI: EDP_irp6ot, %s:%d, name_close(): %s\n", __FILE__, __LINE__, strerror(errno));
+				fprintf(stderr, "UI: EDP_irp6ot, %s:%d, name_close(): %s\n",
+						__FILE__, __LINE__, strerror(errno));
 			}
 		}
 		delete ui_robot.irp6_on_track;
@@ -2149,7 +2220,8 @@ int EDP_irp6_on_track_slay_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackI
 
 }
 
-int close_all_irp6ot_windows(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int close_all_irp6ot_windows(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -2170,7 +2242,8 @@ int close_all_irp6ot_windows(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInf
 
 }
 
-int pulse_reader_irp6ot_start(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int pulse_reader_irp6ot_start(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -2185,11 +2258,11 @@ int pulse_reader_irp6ot_start(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackIn
 
 }
 
-bool pulse_reader_irp6ot_start_exec_pulse()
-{
+bool pulse_reader_irp6ot_start_exec_pulse() {
 
 	if (ui_state.irp6_on_track.edp.state == 1) {
-		pulse_reader_execute(ui_state.irp6_on_track.edp.reader_fd, READER_START, 0);
+		pulse_reader_execute(ui_state.irp6_on_track.edp.reader_fd,
+				READER_START, 0);
 		ui_state.irp6_on_track.edp.state = 2;
 		return true;
 	}
@@ -2197,7 +2270,8 @@ bool pulse_reader_irp6ot_start_exec_pulse()
 	return false;
 }
 
-int pulse_reader_irp6ot_stop(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int pulse_reader_irp6ot_stop(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -2212,11 +2286,11 @@ int pulse_reader_irp6ot_stop(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInf
 
 }
 
-bool pulse_reader_irp6ot_stop_exec_pulse()
-{
+bool pulse_reader_irp6ot_stop_exec_pulse() {
 
 	if (ui_state.irp6_on_track.edp.state == 2) {
-		pulse_reader_execute(ui_state.irp6_on_track.edp.reader_fd, READER_STOP, 0);
+		pulse_reader_execute(ui_state.irp6_on_track.edp.reader_fd, READER_STOP,
+				0);
 		ui_state.irp6_on_track.edp.state = 1;
 		return true;
 	}
@@ -2224,7 +2298,8 @@ bool pulse_reader_irp6ot_stop_exec_pulse()
 	return false;
 }
 
-int pulse_reader_irp6ot_trigger(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int pulse_reader_irp6ot_trigger(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -2238,11 +2313,11 @@ int pulse_reader_irp6ot_trigger(PtWidget_t *widget, ApInfo_t *apinfo, PtCallback
 
 }
 
-bool pulse_reader_irp6ot_trigger_exec_pulse()
-{
+bool pulse_reader_irp6ot_trigger_exec_pulse() {
 
 	if (ui_state.irp6_on_track.edp.state == 2) {
-		pulse_reader_execute(ui_state.irp6_on_track.edp.reader_fd, READER_TRIGGER, 0);
+		pulse_reader_execute(ui_state.irp6_on_track.edp.reader_fd,
+				READER_TRIGGER, 0);
 
 		return true;
 	}
@@ -2250,7 +2325,8 @@ bool pulse_reader_irp6ot_trigger_exec_pulse()
 	return false;
 }
 
-int pulse_ecp_irp6_on_track(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int pulse_ecp_irp6_on_track(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -2269,8 +2345,9 @@ int pulse_ecp_irp6_on_track(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo
 
 			ualarm((useconds_t) (SIGALRM_TIMEOUT), 0);
 			while ((ui_state.irp6_on_track.ecp.trigger_fd
-					= name_open(ui_state.irp6_on_track.ecp.network_trigger_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL))
-					< 0) {
+					= name_open(
+							ui_state.irp6_on_track.ecp.network_trigger_attach_point.c_str(),
+							NAME_FLAG_ATTACH_GLOBAL)) < 0) {
 				if (errno == EINTR)
 					break;
 				if ((tmp++) < CONNECT_RETRY) {
@@ -2284,10 +2361,12 @@ int pulse_ecp_irp6_on_track(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo
 		}
 
 		if (ui_state.irp6_on_track.ecp.trigger_fd >= 0) {
-			if (MsgSendPulse(ui_state.irp6_on_track.ecp.trigger_fd, sched_get_priority_min(SCHED_FIFO), pulse_code, pulse_value)
+			if (MsgSendPulse(ui_state.irp6_on_track.ecp.trigger_fd,
+					sched_get_priority_min(SCHED_FIFO), pulse_code, pulse_value)
 					== -1) {
 
-				fprintf(stderr, "Blad w wysylaniu pulsu do ecp error: %s \n", strerror(errno));
+				fprintf(stderr, "Blad w wysylaniu pulsu do ecp error: %s \n",
+						strerror(errno));
 				delay(1000);
 			}
 		} else {
@@ -2300,8 +2379,10 @@ int pulse_ecp_irp6_on_track(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo
 }
 
 // aktualizacja ustawien przyciskow
-int process_control_window_irp6ot_section_init(bool &wlacz_PtButton_wnd_processes_control_all_reader_start, bool &wlacz_PtButton_wnd_processes_control_all_reader_stop, bool &wlacz_PtButton_wnd_processes_control_all_reader_trigger)
-{
+int process_control_window_irp6ot_section_init(
+		bool &wlacz_PtButton_wnd_processes_control_all_reader_start,
+		bool &wlacz_PtButton_wnd_processes_control_all_reader_stop,
+		bool &wlacz_PtButton_wnd_processes_control_all_reader_trigger) {
 
 	if (ui_state.irp6_on_track.edp.state <= 0) {// edp wylaczone
 		block_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_start);
@@ -2310,15 +2391,19 @@ int process_control_window_irp6ot_section_init(bool &wlacz_PtButton_wnd_processe
 	} else {
 		if (ui_state.irp6_on_track.edp.state == 1) {// edp wlaczone reader czeka na start
 			wlacz_PtButton_wnd_processes_control_all_reader_start = true;
-			unblock_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_start);
+			unblock_widget(
+					ABW_PtButton_wnd_processes_control_irp6ot_reader_start);
 			block_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_stop);
-			block_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_trigger);
+			block_widget(
+					ABW_PtButton_wnd_processes_control_irp6ot_reader_trigger);
 		} else if (ui_state.irp6_on_track.edp.state == 2) {// edp wlaczone reader czeka na stop
 			wlacz_PtButton_wnd_processes_control_all_reader_stop = true;
 			wlacz_PtButton_wnd_processes_control_all_reader_trigger = true;
 			block_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_start);
-			unblock_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_stop);
-			unblock_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_trigger);
+			unblock_widget(
+					ABW_PtButton_wnd_processes_control_irp6ot_reader_stop);
+			unblock_widget(
+					ABW_PtButton_wnd_processes_control_irp6ot_reader_trigger);
 		}
 	}
 
@@ -2328,172 +2413,220 @@ int process_control_window_irp6ot_section_init(bool &wlacz_PtButton_wnd_processe
 
 }
 
-int reload_irp6ot_configuration()
-{
+int reload_irp6ot_configuration() {
 	// jesli IRP6 on_track ma byc aktywne
-	if ((ui_state.irp6_on_track.is_active = config->value <int> ("is_irp6_on_track_active")) == 1) {
+	if ((ui_state.irp6_on_track.is_active = config->value<int> (
+			"is_irp6_on_track_active")) == 1) {
 		// ini_con->create_ecp_irp6_on_track (ini_con->ui->ecp_irp6_on_track_section);
 		//ui_state.is_any_edp_active = true;
 		if (ui_state.is_mp_and_ecps_active) {
 			ui_state.irp6_on_track.ecp.network_trigger_attach_point
-					= config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "trigger_attach_point", ui_state.irp6_on_track.ecp.section_name);
+					= config->return_attach_point_name(
+							lib::configurator::CONFIG_SERVER,
+							"trigger_attach_point",
+							ui_state.irp6_on_track.ecp.section_name);
 
 			ui_state.irp6_on_track.ecp.pid = -1;
 			ui_state.irp6_on_track.ecp.trigger_fd = -1;
 		}
 
-		switch (ui_state.irp6_on_track.edp.state)
-		{
-			case -1:
-			case 0:
-				// ini_con->create_edp_irp6_on_track (ini_con->ui->edp_irp6_on_track_section);
+		switch (ui_state.irp6_on_track.edp.state) {
+		case -1:
+		case 0:
+			// ini_con->create_edp_irp6_on_track (ini_con->ui->edp_irp6_on_track_section);
 
-				ui_state.irp6_on_track.edp.pid = -1;
-				ui_state.irp6_on_track.edp.reader_fd = -1;
-				ui_state.irp6_on_track.edp.state = 0;
+			ui_state.irp6_on_track.edp.pid = -1;
+			ui_state.irp6_on_track.edp.reader_fd = -1;
+			ui_state.irp6_on_track.edp.state = 0;
 
-
-
-				for (int i = 0; i < 4; i++) {
-					char tmp_string[50];
-					if (i < 3) {
-						sprintf(tmp_string, "preset_position_%d", i);
-					} else {
-						sprintf(tmp_string, "front_position", i);
-					}
-
-					if (config->exists(tmp_string, ui_state.irp6_on_track.edp.section_name)) {
-						char* tmp, *tmp1;
-						tmp1
-								= tmp
-										= strdup(config->value <std::string> (tmp_string, ui_state.irp6_on_track.edp.section_name).c_str());
-						char* toDel = tmp;
-						for (int j = 0; j < IRP6_ON_TRACK_NUM_OF_SERVOS; j++) {
-							if (i < 3) {
-								ui_state.irp6_on_track.edp.preset_position[i][j] = strtod(tmp1, &tmp1);
-							} else {
-								ui_state.irp6_on_track.edp.front_position[j] = strtod(tmp1, &tmp1);
-							}
-						}
-						free(toDel);
-					} else {
-						for (int j = 0; j < IRP6_ON_TRACK_NUM_OF_SERVOS; j++) {
-							if (i < 3) {
-								ui_state.irp6_on_track.edp.preset_position[i][j] = 0.0;
-							} else {
-								ui_state.irp6_on_track.edp.front_position[j] = 0.0;
-								printf("nie zdefiniowano irp6ot front_postion w common.ini\n");
-							}
-
-						}
-					}
+			for (int i = 0; i < 4; i++) {
+				char tmp_string[50];
+				if (i < 3) {
+					sprintf(tmp_string, "preset_position_%d", i);
+				} else {
+					sprintf(tmp_string, "front_position", i);
 				}
 
-				if (config->exists("test_mode", ui_state.irp6_on_track.edp.section_name))
-					ui_state.irp6_on_track.edp.test_mode
-							= config->value <int> ("test_mode", ui_state.irp6_on_track.edp.section_name);
-				else
-					ui_state.irp6_on_track.edp.test_mode = 0;
+				if (config->exists(tmp_string,
+						ui_state.irp6_on_track.edp.section_name)) {
+					char* tmp, *tmp1;
+					tmp1 = tmp = strdup(config->value<std::string> (tmp_string,
+							ui_state.irp6_on_track.edp.section_name).c_str());
+					char* toDel = tmp;
+					for (int j = 0; j < IRP6_ON_TRACK_NUM_OF_SERVOS; j++) {
+						if (i < 3) {
+							ui_state.irp6_on_track.edp.preset_position[i][j]
+									= strtod(tmp1, &tmp1);
+						} else {
+							ui_state.irp6_on_track.edp.front_position[j]
+									= strtod(tmp1, &tmp1);
+						}
+					}
+					free(toDel);
+				} else {
+					for (int j = 0; j < IRP6_ON_TRACK_NUM_OF_SERVOS; j++) {
+						if (i < 3) {
+							ui_state.irp6_on_track.edp.preset_position[i][j]
+									= 0.0;
+						} else {
+							ui_state.irp6_on_track.edp.front_position[j] = 0.0;
+							printf(
+									"nie zdefiniowano irp6ot front_postion w common.ini\n");
+						}
 
-				ui_state.irp6_on_track.edp.hardware_busy_attach_point
-						= config->value <std::string> ("hardware_busy_attach_point", ui_state.irp6_on_track.edp.section_name);
+					}
+				}
+			}
 
-				ui_state.irp6_on_track.edp.network_resourceman_attach_point
-						= config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "resourceman_attach_point", ui_state.irp6_on_track.edp.section_name);
+			if (config->exists("test_mode",
+					ui_state.irp6_on_track.edp.section_name))
+				ui_state.irp6_on_track.edp.test_mode = config->value<int> (
+						"test_mode", ui_state.irp6_on_track.edp.section_name);
+			else
+				ui_state.irp6_on_track.edp.test_mode = 0;
 
-				ui_state.irp6_on_track.edp.network_reader_attach_point
-						= config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "reader_attach_point", ui_state.irp6_on_track.edp.section_name);
+			ui_state.irp6_on_track.edp.hardware_busy_attach_point
+					= config->value<std::string> ("hardware_busy_attach_point",
+							ui_state.irp6_on_track.edp.section_name);
 
-				ui_state.irp6_on_track.edp.node_name
-						= config->value <std::string> ("node_name", ui_state.irp6_on_track.edp.section_name);
-				break;
-			case 1:
-			case 2:
-				// nie robi nic bo EDP pracuje
-				break;
-			default:
-				break;
+			ui_state.irp6_on_track.edp.network_resourceman_attach_point
+					= config->return_attach_point_name(
+							lib::configurator::CONFIG_SERVER,
+							"resourceman_attach_point",
+							ui_state.irp6_on_track.edp.section_name);
+
+			ui_state.irp6_on_track.edp.network_reader_attach_point
+					= config->return_attach_point_name(
+							lib::configurator::CONFIG_SERVER,
+							"reader_attach_point",
+							ui_state.irp6_on_track.edp.section_name);
+
+			ui_state.irp6_on_track.edp.node_name = config->value<std::string> (
+					"node_name", ui_state.irp6_on_track.edp.section_name);
+			break;
+		case 1:
+		case 2:
+			// nie robi nic bo EDP pracuje
+			break;
+		default:
+			break;
 		}
 
 	} else // jesli  irp6 on_track ma byc nieaktywne
 	{
-		switch (ui_state.irp6_on_track.edp.state)
-		{
-			case -1:
-			case 0:
-				ui_state.irp6_on_track.edp.state = -1;
-				break;
-			case 1:
-			case 2:
-				// nie robi nic bo EDP pracuje
-				break;
-			default:
-				break;
+		switch (ui_state.irp6_on_track.edp.state) {
+		case -1:
+		case 0:
+			ui_state.irp6_on_track.edp.state = -1;
+			break;
+		case 1:
+		case 2:
+			// nie robi nic bo EDP pracuje
+			break;
+		default:
+			break;
 		}
 	} // end irp6_on_track
 
 	return 1;
 }
 
-int manage_interface_irp6ot()
-{
+int manage_interface_irp6ot() {
 
-	switch (ui_state.irp6_on_track.edp.state)
-	{
+	switch (ui_state.irp6_on_track.edp.state) {
 
-		case -1:
-			ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_irp6_on_track, NULL);
-			break;
-		case 0:
-			ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_irp6_on_track_edp_unload, ABN_mm_irp6_on_track_pre_synchro_moves, ABN_mm_irp6_on_track_absolute_moves, ABN_mm_irp6_on_track_relative_moves, ABN_mm_irp6_on_track_tool_specification, ABN_mm_irp6_on_track_preset_positions, ABN_mm_irp6_on_track_kinematic, ABN_mm_irp6_on_track_servo_algorithm, NULL);
-			ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_irp6_on_track, ABN_mm_irp6_on_track_edp_load, NULL);
+	case -1:
+		ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_irp6_on_track, NULL);
+		break;
+	case 0:
+		ApModifyItemState(&robot_menu, AB_ITEM_DIM,
+				ABN_mm_irp6_on_track_edp_unload,
+				ABN_mm_irp6_on_track_pre_synchro_moves,
+				ABN_mm_irp6_on_track_absolute_moves,
+				ABN_mm_irp6_on_track_relative_moves,
+				ABN_mm_irp6_on_track_tool_specification,
+				ABN_mm_irp6_on_track_preset_positions,
+				ABN_mm_irp6_on_track_kinematic,
+				ABN_mm_irp6_on_track_servo_algorithm, NULL);
+		ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_irp6_on_track,
+				ABN_mm_irp6_on_track_edp_load, NULL);
 
-			break;
-		case 1:
-		case 2:
-			ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_irp6_on_track, NULL);
-			//ApModifyItemState( &all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_edp_unload, NULL);
-			// jesli robot jest zsynchronizowany
-			if (ui_state.irp6_on_track.edp.is_synchronised) {
-				ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_irp6_on_track_pre_synchro_moves, NULL);
-				ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_preset_positions, NULL);
+		break;
+	case 1:
+	case 2:
+		ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_irp6_on_track,
+				NULL);
+		//ApModifyItemState( &all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_edp_unload, NULL);
+		// jesli robot jest zsynchronizowany
+		if (ui_state.irp6_on_track.edp.is_synchronised) {
+			ApModifyItemState(&robot_menu, AB_ITEM_DIM,
+					ABN_mm_irp6_on_track_pre_synchro_moves, NULL);
+			ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL,
+					ABN_mm_all_robots_preset_positions, NULL);
 
-				switch (ui_state.mp.state)
-				{
-					case UI_MP_NOT_PERMITED_TO_RUN:
-					case UI_MP_PERMITED_TO_RUN:
-						ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_irp6_on_track_edp_unload, ABN_mm_irp6_on_track_absolute_moves, ABN_mm_irp6_on_track_relative_moves, ABN_mm_irp6_on_track_tool_specification, ABN_mm_irp6_on_track_preset_positions, ABN_mm_irp6_on_track_kinematic, ABN_mm_irp6_on_track_servo_algorithm, NULL);
-						ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_irp6_on_track_edp_load, NULL);
-						break;
-					case UI_MP_WAITING_FOR_START_PULSE:
-						ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_irp6_on_track_absolute_moves, ABN_mm_irp6_on_track_relative_moves, ABN_mm_irp6_on_track_tool_specification, ABN_mm_irp6_on_track_preset_positions, ABN_mm_irp6_on_track_kinematic, ABN_mm_irp6_on_track_servo_algorithm, NULL);
-						ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_irp6_on_track_edp_load, ABN_mm_irp6_on_track_edp_unload, NULL);
-						break;
-					case UI_MP_TASK_RUNNING:
-					case UI_MP_TASK_PAUSED:
-						ApModifyItemState(&robot_menu, AB_ITEM_DIM, // modyfikacja menu - ruchy reczne zakazane
-						ABN_mm_irp6_on_track_absolute_moves, ABN_mm_irp6_on_track_relative_moves, ABN_mm_irp6_on_track_preset_positions, ABN_mm_irp6_on_track_tool_specification, ABN_mm_irp6_on_track_kinematic, ABN_mm_irp6_on_track_servo_algorithm, NULL);
-						break;
-					default:
-						break;
-				}
-
-			} else // jesli robot jest niezsynchronizowany
-			{
-				ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_irp6_on_track_edp_unload, ABN_mm_irp6_on_track_pre_synchro_moves, NULL);
-				ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_irp6_on_track_edp_load, NULL);
-				ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_synchronisation, NULL);
+			switch (ui_state.mp.state) {
+			case UI_MP_NOT_PERMITED_TO_RUN:
+			case UI_MP_PERMITED_TO_RUN:
+				ApModifyItemState(&robot_menu, AB_ITEM_NORMAL,
+						ABN_mm_irp6_on_track_edp_unload,
+						ABN_mm_irp6_on_track_absolute_moves,
+						ABN_mm_irp6_on_track_relative_moves,
+						ABN_mm_irp6_on_track_tool_specification,
+						ABN_mm_irp6_on_track_preset_positions,
+						ABN_mm_irp6_on_track_kinematic,
+						ABN_mm_irp6_on_track_servo_algorithm, NULL);
+				ApModifyItemState(&robot_menu, AB_ITEM_DIM,
+						ABN_mm_irp6_on_track_edp_load, NULL);
+				break;
+			case UI_MP_WAITING_FOR_START_PULSE:
+				ApModifyItemState(&robot_menu, AB_ITEM_NORMAL,
+						ABN_mm_irp6_on_track_absolute_moves,
+						ABN_mm_irp6_on_track_relative_moves,
+						ABN_mm_irp6_on_track_tool_specification,
+						ABN_mm_irp6_on_track_preset_positions,
+						ABN_mm_irp6_on_track_kinematic,
+						ABN_mm_irp6_on_track_servo_algorithm, NULL);
+				ApModifyItemState(&robot_menu, AB_ITEM_DIM,
+						ABN_mm_irp6_on_track_edp_load,
+						ABN_mm_irp6_on_track_edp_unload, NULL);
+				break;
+			case UI_MP_TASK_RUNNING:
+			case UI_MP_TASK_PAUSED:
+				ApModifyItemState(
+						&robot_menu,
+						AB_ITEM_DIM, // modyfikacja menu - ruchy reczne zakazane
+						ABN_mm_irp6_on_track_absolute_moves,
+						ABN_mm_irp6_on_track_relative_moves,
+						ABN_mm_irp6_on_track_preset_positions,
+						ABN_mm_irp6_on_track_tool_specification,
+						ABN_mm_irp6_on_track_kinematic,
+						ABN_mm_irp6_on_track_servo_algorithm, NULL);
+				break;
+			default:
+				break;
 			}
-			break;
-		default:
-			break;
+
+		} else // jesli robot jest niezsynchronizowany
+		{
+			ApModifyItemState(&robot_menu, AB_ITEM_NORMAL,
+					ABN_mm_irp6_on_track_edp_unload,
+					ABN_mm_irp6_on_track_pre_synchro_moves, NULL);
+			ApModifyItemState(&robot_menu, AB_ITEM_DIM,
+					ABN_mm_irp6_on_track_edp_load, NULL);
+			ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL,
+					ABN_mm_all_robots_synchronisation, NULL);
+		}
+		break;
+	default:
+		break;
 
 	}
 
 	return 1;
 }
 
-int start_wnd_irp6_on_track_xyz_aa_relative(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int start_wnd_irp6_on_track_xyz_aa_relative(PtWidget_t *widget,
+		ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -2502,7 +2635,8 @@ int start_wnd_irp6_on_track_xyz_aa_relative(PtWidget_t *widget, ApInfo_t *apinfo
 
 	if (!ui_state.is_wind_irp6ot_xyz_aa_relative_open) // otworz okno
 	{
-		ApCreateModule(ABM_wnd_irp6_on_track_xyz_angle_axis_relative, widget, cbinfo);
+		ApCreateModule(ABM_wnd_irp6_on_track_xyz_angle_axis_relative, widget,
+				cbinfo);
 		ui_state.is_wind_irp6ot_xyz_aa_relative_open = true;
 	} else { // przelacz na okno
 		PtWindowToFront(ABW_wnd_irp6_on_track_xyz_angle_axis_relative);
@@ -2512,7 +2646,8 @@ int start_wnd_irp6_on_track_xyz_aa_relative(PtWidget_t *widget, ApInfo_t *apinfo
 
 }
 
-int clear_wnd_irp6ot_xyz_aa_relative_flag(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int clear_wnd_irp6ot_xyz_aa_relative_flag(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -2525,7 +2660,8 @@ int clear_wnd_irp6ot_xyz_aa_relative_flag(PtWidget_t *widget, ApInfo_t *apinfo, 
 
 }
 
-int close_wnd_irp6_on_track_xyz_aa_relative(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int close_wnd_irp6_on_track_xyz_aa_relative(PtWidget_t *widget,
+		ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -2539,7 +2675,8 @@ int close_wnd_irp6_on_track_xyz_aa_relative(PtWidget_t *widget, ApInfo_t *apinfo
 
 }
 
-int irp6ot_xyz_aa_relative_motion(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int irp6ot_xyz_aa_relative_motion(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -2624,7 +2761,8 @@ int irp6ot_xyz_aa_relative_motion(PtWidget_t *widget, ApInfo_t *apinfo, PtCallba
 				}
 
 			// zlecenie wykonania ruchu
-			ui_robot.irp6_on_track->move_xyz_angle_axis_relative(irp6ot_desired_pos);
+			ui_robot.irp6_on_track->move_xyz_angle_axis_relative(
+					irp6ot_desired_pos);
 
 		} else {
 		}

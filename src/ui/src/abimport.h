@@ -56,7 +56,7 @@ extern ApWindowLink_t wnd_irp6ot_tfg_servo_algorithm;
 extern ApWindowLink_t wnd_irp6ot_tfg_moves;
 extern ApWindowLink_t wnd_irp6p_tfg_servo_algorithm;
 extern ApWindowLink_t wnd_irp6p_tfg_moves;
-extern ApWidget_t AbWidgets[ 1011 ];
+extern ApWidget_t AbWidgets[ 993 ];
 
 extern ApMenuLink_t file_menu;
 extern ApMenuLink_t task_menu;
