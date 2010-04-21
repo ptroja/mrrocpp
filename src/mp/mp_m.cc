@@ -92,7 +92,7 @@ int main (int argc, char *argv[], char **arge)
 	try {
 
 		if (argc < 6) {
-			printf(" Usage: mp_m_c <ui_node_name> <mrrocpp_local_path> <config_file> <session_name>\n");
+			printf("Usage: mp_m_c <ui_node_name> <mrrocpp_local_path> <config_file> <session_name>\n");
 			exit(EXIT_FAILURE);
 		}
 
