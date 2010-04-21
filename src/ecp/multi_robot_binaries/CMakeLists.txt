@@ -3,12 +3,15 @@ add_executable(ecp_tran
 	../common/generator/ecp_g_transparent.cc
 )
 
-target_link_libraries(ecp_tran
-	ecp_r_irp6ot ecp_r_irp6p ecp_r_irp6m
-	ecp_r_polycrank ecp_r_conv ecp_r_speaker
-	kinematicsirp6ot
-	kinematicsirp6p
-	ecp ecp_mp ${COMMON_LIBRARIES}
-)
+# enable conditional inclusion to this process
+target_link_library_if(ROBOT_IRP6_ON_TRACK ecp_tran ecp_r_irp6ot)
+target_link_library_if(ROBOT_IRP6_POSTUMENT ecp_tran ecp_r_irp6p)
+target_link_library_if(ROBOT_IRP6_MECHATRONICS ecp_tran ecp_r_irp6m)
+target_link_library_if(ROBOT_POLYCRANK ecp_tran ecp_r_polycrank)
+target_link_library_if(ROBOT_CONVEYOR ecp_tran ecp_r_conv)
+target_link_library_if(ROBOT_SPEAKER ecp_tran ecp_r_speaker)
+
+# this are dependency libraries
+target_link_libraries(ecp_tran ecp ecp_mp ${COMMON_LIBRARIES})
 
 install(TARGETS ecp_tran DESTINATION bin)

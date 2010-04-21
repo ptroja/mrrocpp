@@ -1,3 +1,4 @@
+if(ROBOT_IRP6_POSTUMENT)
 add_library(kinematicsirp6p
 	kinematic_model_calibrated_irp6p_with_wrist.cc
 	kinematic_model_irp6p_5dof.cc
@@ -7,3 +8,4 @@ add_library(kinematicsirp6p
 )
 
 target_link_libraries(kinematicsirp6p kinematics)
+endif(ROBOT_IRP6_POSTUMENT)

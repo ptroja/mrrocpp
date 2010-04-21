@@ -1,3 +1,4 @@
+if(ROBOT_IRP6_ON_TRACK)
 add_library(kinematicsirp6ot
 	kinematic_model_calibrated_irp6ot_with_wrist.cc
 	kinematic_model_irp6ot_with_track.cc
@@ -5,3 +6,4 @@ add_library(kinematicsirp6ot
 )
 
 target_link_libraries(kinematicsirp6ot kinematics)
+endif(ROBOT_IRP6_ON_TRACK)

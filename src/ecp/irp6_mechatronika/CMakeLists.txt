@@ -1,1 +1,3 @@
+if(ROBOT_IRP6_MECHATRONICS)
 add_ecp_robot(irp6m)
+endif(ROBOT_IRP6_MECHATRONICS)

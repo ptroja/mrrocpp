@@ -1,3 +1,4 @@
+if(ROBOT_IRP6_POSTUMENT)
 add_executable(edp_irp6_postument
 	edp_irp6p_effector.cc
 	hi_irp6p.cc
@@ -13,4 +14,4 @@ target_link_libraries(
 )
 
 install(TARGETS edp_irp6_postument DESTINATION bin)
-
+endif(ROBOT_IRP6_POSTUMENT)

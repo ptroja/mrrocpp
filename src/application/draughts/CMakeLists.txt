@@ -1,3 +1,4 @@
+if(ROBOT_IRP6_POSTUMENT)
 add_executable(ecp_draughts
 	ecp_g_vis_ib_eih_follower_irp6ot.cc
 	ecp_mp_tr_draughtsAI.cc
@@ -9,9 +10,9 @@ add_executable(ecp_draughts
 )
 
 target_link_libraries(ecp_draughts
-	ecp_r_irp6ot ecp_r_irp6p
-	kinematicsirp6ot kinematicsirp6p
+	ecp_r_irp6ot
 	ecp ecp_mp ${COMMON_LIBRARIES}
 )
 
 install(TARGETS ecp_draughts DESTINATION bin)
+endif(ROBOT_IRP6_POSTUMENT)

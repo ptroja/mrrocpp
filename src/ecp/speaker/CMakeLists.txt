@@ -1,3 +1,4 @@
+if(ROBOT_SPEAKER)
 add_ecp_robot(speaker)
 
 add_executable(ecp_speaker
@@ -9,3 +10,4 @@ target_link_libraries(ecp_speaker
 	ecp_r_speaker ecp ecp_mp ${COMMON_LIBRARIES})
 
 install(TARGETS ecp_speaker DESTINATION bin)
+endif(ROBOT_SPEAKER)

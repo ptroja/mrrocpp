@@ -1,4 +1,4 @@
-if(QNXNTO)
+if(ROBOT_SPEAKER AND QNXNTO)
 	add_executable(edp_speaker
 		corpus.cc
 		edp_speaker_effector.cc
@@ -10,4 +10,4 @@ if(QNXNTO)
 		${COMMON_LIBRARIES})
 	
 	install(TARGETS edp_speaker DESTINATION bin)
-endif(QNXNTO)
+endif(ROBOT_SPEAKER AND QNXNTO)

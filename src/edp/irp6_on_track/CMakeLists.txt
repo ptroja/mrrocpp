@@ -1,3 +1,4 @@
+if(ROBOT_IRP6_ON_TRACK)
 add_executable(edp_irp6_on_track
 	edp_irp6ot_effector.cc
 	hi_irp6ot.cc
@@ -13,3 +14,4 @@ target_link_libraries(
 )
 
 install(TARGETS edp_irp6_on_track DESTINATION bin)
+endif(ROBOT_IRP6_ON_TRACK)

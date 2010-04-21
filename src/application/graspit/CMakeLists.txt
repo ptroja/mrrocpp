@@ -5,7 +5,6 @@ add_executable(ecp_graspit
 
 target_link_libraries(ecp_graspit
 	ecp_r_irp6ot ecp_r_irp6p
-	kinematicsirp6ot kinematicsirp6p
 	ecp ecp_mp ${COMMON_LIBRARIES}
 )
 

@@ -4,8 +4,15 @@
 cmake_minimum_required (VERSION 2.6)
 project (MRROCPP)
 
+# include module for dependent option
+include(CMakeDependentOption)
+
+# set short names for project directories
 set (ECP_MPDIR ${PROJECT_SOURCE_DIR}/src/ecp_mp)
 set (ECPDIR ${PROJECT_SOURCE_DIR}/src/ecp)
+
+# set default install prefix
+#set (CMAKE_INSTALL_PREFIX ${PROJECT_SOURCE_DIR})
 
 # QNX is default MRROC++ target
 if (QNXNTO)
@@ -49,7 +56,7 @@ else (QNXNTO) # Linux, etc.
 
 	# for non-QNX target messip is the only messaging protocol
 	add_definitions (-DUSE_MESSIP_SRR)
-	set(COMMON_LIBS messip)
+	set(COMMON_LIBRARIES messip)
 endif (QNXNTO)
 
 # Make sure the compiler can find include files
@@ -57,10 +64,9 @@ include_directories (${MRROCPP_SOURCE_DIR}/src)
 include_directories (${LIBXML2_INCLUDE_DIR})
 include_directories (${Boost_INCLUDE_DIR})
 
-set(COMMON_LIBS mrrocpp ${COMMON_LIBS}
-	${COMPATIBILITY_LIBRARIES}
-	#${LIBXML2_LIBRARIES}
+set(COMMON_LIBRARIES mrrocpp ${COMMON_LIBRARIES}
 	${Boost_LIBRARIES}
+	${COMPATIBILITY_LIBRARIES}
 )
 
 # Recurse into the "src" subdirectories.
