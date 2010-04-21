@@ -3,8 +3,8 @@ add_executable(edp_polycrank
 	../common/int_hand_suplement.cc
 )
 
-target_link_libraries(edp_polycrank kinematicspolycrank kinematics edp mrrocpp
-	${COMMON_LIBS})
+target_link_libraries(edp_polycrank kinematicspolycrank edp
+	${COMMON_LIBRARIES})
 
 install(TARGETS edp_polycrank DESTINATION bin)
 

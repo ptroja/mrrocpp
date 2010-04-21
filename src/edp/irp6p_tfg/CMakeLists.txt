@@ -5,8 +5,8 @@ add_executable(edp_irp6p_tfg
 	sg_irp6p_tfg.cc
 )
 
-target_link_libraries(edp_irp6p_tfg kinematicsirp6p_tfg kinematics edp mrrocpp
-	${COMMON_LIBS})
+target_link_libraries(edp_irp6p_tfg kinematicsirp6p_tfg edp
+	${COMMON_LIBRARIES})
 
 install(TARGETS edp_irp6p_tfg DESTINATION bin)
 

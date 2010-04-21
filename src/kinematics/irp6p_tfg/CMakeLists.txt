@@ -1,3 +1,5 @@
 add_library(kinematicsirp6p_tfg
 	kinematic_model_irp6p_tfg.cc
 )
+
+target_link_libraries(kinematicsirp6p_tfg kinematics)

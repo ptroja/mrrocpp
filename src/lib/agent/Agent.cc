@@ -48,9 +48,9 @@ bool Agent::checkCondition(const OrBufferContainer &condition)
 //	BOOST_FOREACH(const AndBufferContainer & andCondition, condition) {
 //		std::cout << "(";
 //		BOOST_FOREACH(const DataBufferBase * ptr, andCondition) {
-//			std::cout << ptr->getName() << " && ";
+//			std::cout << ptr->getName() << " & ";
 //		}
-//		std::cout << ") || ";
+//		std::cout << ") | ";
 //	}
 
 	BOOST_FOREACH(const AndBufferContainer & andCondition, condition) {
@@ -70,7 +70,7 @@ bool Agent::ReceiveMessage(bool block)
 		int32_t type, subtype;
 		int ret = messip_receive(channel, &type, &subtype, msg, sizeof(msg), (block) ? MESSIP_NOTIMEOUT : 0);
 
-		if (!block && ret == MESSIP_MSG_TIMEOUT)
+		if (!block & ret == MESSIP_MSG_TIMEOUT)
 			return false;
 
 		if (ret == -1) {

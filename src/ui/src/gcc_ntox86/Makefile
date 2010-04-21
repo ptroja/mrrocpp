@@ -42,8 +42,8 @@ MRROCOBJ = \
 	$(ECP_DIR)/smb/ecp_r_smb.o \
 	$(ECP_DIR)/spkm/ecp_r_spkm.o \
 	$(ECP_DIR)/shead/ecp_r_shead.o \
-	${KIN_OBJECTS}\
-	$(LIBDIR)/libecp.a $(LIBDIR)/libecp_mp.a  $(LIBDIR)/libmrrocpp.a
+	${KIN_OBJECTS} \
+	$(LIBDIR)/libecp.a $(LIBDIR)/libecp_mp.a $(LIBDIR)/libmrrocpp.a
 
 MYOBJ = ui_ecp_r_speaker.o ui_ecp_r_common.o\
  ui_ecp_r_irp6_common.o ui_ecp_r_tfg_and_conv.o ui.o threads.o

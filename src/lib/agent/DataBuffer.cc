@@ -11,7 +11,7 @@ AndBufferContainer & AndBufferContainer::operator=(const DataBufferBase &op)
 	return *this;
 }
 
-AndBufferContainer AndBufferContainer::operator&&(const AndBufferContainer &op)
+AndBufferContainer AndBufferContainer::operator&(const AndBufferContainer &op)
 {
 	AndBufferContainer cont(*this);
 	BOOST_FOREACH(const DataBufferBase * ptr, op) {
@@ -20,14 +20,14 @@ AndBufferContainer AndBufferContainer::operator&&(const AndBufferContainer &op)
 	return cont;
 }
 
-AndBufferContainer AndBufferContainer::operator&&(const DataBufferBase &op)
+AndBufferContainer AndBufferContainer::operator&(const DataBufferBase &op)
 {
 	AndBufferContainer cont(*this);
 	this->push_back(&op);
 	return cont;
 }
 
-OrBufferContainer AndBufferContainer::operator||(const AndBufferContainer &op)
+OrBufferContainer AndBufferContainer::operator|(const AndBufferContainer &op)
 {
 	OrBufferContainer cont(*this);
 	cont.push_back(op);
@@ -60,7 +60,7 @@ void AndBufferContainer::print() const
 		const DataBufferBase * element = this->operator[](i)	;
 		std::cout << element->getName();
 		if(i < this->size() - 1) {
-			std::cout << " && ";
+			std::cout << " & ";
 		}
 	}
 }
@@ -77,7 +77,7 @@ void OrBufferContainer::print() const
 			element.print();
 		}
 		if(i < this->size() - 1) {
-			std::cout << " || ";
+			std::cout << " | ";
 		}
 	}
 }
@@ -120,23 +120,23 @@ bool DataBufferBase::isFresh() const
 	return fresh;
 }
 
-AndBufferContainer DataBufferBase::operator&&(DataBufferBase &op) {
+AndBufferContainer DataBufferBase::operator&(DataBufferBase &op) {
 	AndBufferContainer container(*this);
 	container.push_back(&op);
 
 	return container;
 }
 
-OrBufferContainer DataBufferBase::operator||(DataBufferBase &op) {
+OrBufferContainer DataBufferBase::operator|(DataBufferBase &op) {
 	AndBufferContainer c1(*this);
 	AndBufferContainer c2(op);
 
-	OrBufferContainer c = c1 || c2;
+	OrBufferContainer c = c1 | c2;
 
 	return c;
 }
 
-OrBufferContainer DataBufferBase::operator||(AndBufferContainer &op) {
+OrBufferContainer DataBufferBase::operator|(AndBufferContainer &op) {
 	OrBufferContainer c(*this);
 	c.push_back(op);
 

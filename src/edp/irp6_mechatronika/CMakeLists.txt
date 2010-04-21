@@ -5,7 +5,7 @@ add_executable(edp_irp6_mechatronika
 	regulator_irp6m.cc
 	sg_irp6m.cc
 )
-target_link_libraries(edp_irp6_mechatronika kinematicsirp6m kinematics edp mrrocpp
-	${COMMON_LIBS})
+target_link_libraries(edp_irp6_mechatronika kinematicsirp6m edp
+	${COMMON_LIBRARIES})
 
 install(TARGETS edp_irp6_mechatronika DESTINATION bin)

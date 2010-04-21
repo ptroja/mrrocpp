@@ -5,9 +5,9 @@ if(QNXNTO)
 		speak_t.cc
 	)
 	
-	target_link_libraries(edp_speaker edp mrrocpp
+	target_link_libraries(edp_speaker edp
 		$ENV{QNX_TARGET}/x86/lib/libasound.so
-		${COMMON_LIBS})
+		${COMMON_LIBRARIES})
 	
 	install(TARGETS edp_speaker DESTINATION bin)
 endif(QNXNTO)

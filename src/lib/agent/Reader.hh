@@ -20,11 +20,11 @@ public:
 
 	bool step() {
 		// Wait() << IntBuffer & DoubleBuffer;
-		AndBufferContainer cont1 = (IntBuffer && DoubleBuffer);
+		AndBufferContainer cont1 = (IntBuffer & DoubleBuffer);
 		AndBufferContainer cont2 = cont1; //DoubleBuffer;
-		AndBufferContainer cont3 = (cont1 && cont2);
+		AndBufferContainer cont3 = (cont1 & cont2);
 
-		OrBufferContainer or1(cont1);// = DoubleBuffer || IntBuffer;
+		OrBufferContainer or1(cont1);// = DoubleBuffer | IntBuffer;
 		cont1.print(); std::cout << std::endl;
 		Wait(DoubleBuffer);
 

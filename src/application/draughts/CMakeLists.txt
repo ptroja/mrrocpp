@@ -10,8 +10,8 @@ add_executable(ecp_draughts
 
 target_link_libraries(ecp_draughts
 	ecp_r_irp6ot ecp_r_irp6p
-	kinematicsirp6ot kinematicsirp6p kinematics
-	ecp ecp_mp ${COMMON_LIBS}
+	kinematicsirp6ot kinematicsirp6p
+	ecp ecp_mp ${COMMON_LIBRARIES}
 )
 
 install(TARGETS ecp_draughts DESTINATION bin)

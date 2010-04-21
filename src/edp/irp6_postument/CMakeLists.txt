@@ -7,9 +7,9 @@ add_executable(edp_irp6_postument
 
 target_link_libraries(
 	edp_irp6_postument
-	kinematicsirp6p kinematics
+	kinematicsirp6p
 	edp ati6284
-	mrrocpp ${COMMON_LIBS}
+	${COMMON_LIBRARIES}
 )
 
 install(TARGETS edp_irp6_postument DESTINATION bin)

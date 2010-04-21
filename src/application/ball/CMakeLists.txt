@@ -4,9 +4,9 @@ add_executable(mp_ball
 )
 
 target_link_libraries(mp_ball
-	kinematicsirp6ot kinematicsirp6p kinematics
+	kinematicsirp6ot kinematicsirp6p
 	mpmain mprobots ecp_mp
-	${COMMON_LIBS}
+	${COMMON_LIBRARIES}
 )
 
 install(TARGETS mp_ball DESTINATION bin)

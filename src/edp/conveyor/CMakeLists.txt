@@ -5,7 +5,9 @@ add_executable(edp_conveyor
 	regulator_conv.cc
 	sg_conv.cc
 )
-target_link_libraries(edp_conveyor kinematicsconveyor kinematics edp mrrocpp
-	${COMMON_LIBS})
+
+target_link_libraries(edp_conveyor kinematicsconveyor edp mrrocpp
+	${COMMON_LIBRARIES}
+	)
 
 install(TARGETS edp_conveyor DESTINATION bin)

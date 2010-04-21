@@ -37,7 +37,7 @@ private:
 
 protected:
 	//! Datatype of buffers container
-	typedef std::map<const std::string, DataBufferBase * > buffers_t;
+	typedef std::map<std::string, DataBufferBase * > buffers_t;
 
 	//! Datatype of buffers container value
 	typedef buffers_t::value_type buffer_item_t;

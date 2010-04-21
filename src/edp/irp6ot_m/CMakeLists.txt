@@ -7,9 +7,9 @@ add_executable(edp_irp6ot_m
 
 target_link_libraries(
 	edp_irp6ot_m
-	kinematicsirp6ot kinematics
+	kinematicsirp6ot
 	edp ati3084
-	mrrocpp ${COMMON_LIBS}
+	${COMMON_LIBRARIES}
 )
 
 install(TARGETS edp_irp6ot_m DESTINATION bin)

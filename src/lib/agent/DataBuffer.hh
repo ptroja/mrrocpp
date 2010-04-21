@@ -21,14 +21,14 @@ public:
 	//! assign a single 'Buffer' condition
 	AndBufferContainer & operator=(const DataBufferBase &op);
 
-	//! compose 'And' condition from ('And' && 'Buffer')
-	AndBufferContainer operator&&(const DataBufferBase &op);
+	//! compose 'And' condition from ('And' & 'Buffer')
+	AndBufferContainer operator&(const DataBufferBase &op);
 
-	//! compose 'And' condition from ('And' && 'And')
-	AndBufferContainer operator&&(const AndBufferContainer &op);
+	//! compose 'And' condition from ('And' & 'And')
+	AndBufferContainer operator&(const AndBufferContainer &op);
 
-	//! compose 'And' condition from ('And' || 'And')
-	OrBufferContainer operator||(const AndBufferContainer &op);
+	//! compose 'And' condition from ('And' | 'And')
+	OrBufferContainer operator|(const AndBufferContainer &op);
 
 	//! constructor from single 'Buffer' condition
 	AndBufferContainer(const DataBufferBase &op);
@@ -78,14 +78,14 @@ protected:
 public:
 	DataBufferBase(const std::string & _name);
 
-	//! compose 'And' condition from ('Buffer' && 'Buffer')
-	AndBufferContainer operator&&(DataBufferBase &op);
+	//! compose 'And' condition from ('Buffer' & 'Buffer')
+	AndBufferContainer operator&(DataBufferBase &op);
 
-	//! compose 'Or' condition from ('Buffer' || 'Buffer')
-	OrBufferContainer operator||(DataBufferBase &op);
+	//! compose 'Or' condition from ('Buffer' | 'Buffer')
+	OrBufferContainer operator|(DataBufferBase &op);
 
-	//! compose 'Or' condition from ('Buffer' || 'And')
-	OrBufferContainer operator||(AndBufferContainer &op);
+	//! compose 'Or' condition from ('Buffer' | 'And')
+	OrBufferContainer operator|(AndBufferContainer &op);
 
 	//! get name of the buffer
 	const std::string & getName() const;

@@ -8,8 +8,7 @@ target_link_libraries(ecp_tran
 	ecp_r_polycrank ecp_r_conv ecp_r_speaker
 	kinematicsirp6ot
 	kinematicsirp6p
-	kinematics
-	ecp ecp_mp ${COMMON_LIBS}
+	ecp ecp_mp ${COMMON_LIBRARIES}
 )
 
 install(TARGETS ecp_tran DESTINATION bin)
