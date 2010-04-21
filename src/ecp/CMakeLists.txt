@@ -4,6 +4,11 @@ MACRO(ADD_ECP_ROBOT NAME)
   add_library("ecp_r_${NAME}" "ecp_r_${NAME}.cc")
 ENDMACRO(ADD_ECP_ROBOT)
 
+MACRO(ADD_ECP_ROBOT_WITH_KINEMATICS NAME)
+  ADD_ECP_ROBOT(${NAME})
+  target_link_libraries(ecp_r_${NAME} kinematics${NAME})
+ENDMACRO(ADD_ECP_ROBOT_WITH_KINEMATICS)
+
 add_subdirectory (common)
 add_subdirectory (conveyor)
 add_subdirectory (festival)

@@ -10,7 +10,6 @@ target_link_libraries(mp_multiplayer
 add_executable(ecp_irp6ot_multiplayer
 	ecp_t_multiplayer_irp6ot.cc
 	${ECPDIR}/common/task/ecp_st_go.cc
-	${ECPDIR}/common/generator/ecp_g_transparent.cc
 )
 
 target_link_libraries(ecp_irp6ot_multiplayer

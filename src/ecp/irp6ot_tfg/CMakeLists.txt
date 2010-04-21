@@ -1,3 +1,3 @@
 if(ROBOT_IRP6_ON_TRACK_TFG)
-add_ecp_robot(irp6ot_tfg)
+add_ecp_robot_with_kinematics(irp6ot_tfg)
 endif(ROBOT_IRP6_ON_TRACK_TFG)

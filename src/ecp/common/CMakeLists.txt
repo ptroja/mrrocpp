@@ -14,6 +14,7 @@ add_library(ecp
 	generator/ecp_g_smooth.cc
 	generator/ecp_g_sleep.cc
 	generator/ecp_g_force.cc
+	generator/ecp_g_transparent.cc
 )
 
 target_link_libraries(ecp ecp_mp)

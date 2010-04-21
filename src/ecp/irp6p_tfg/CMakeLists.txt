@@ -1,3 +1,3 @@
 if(ROBOT_IRP6_POSTUMENT_TFG)
-add_ecp_robot(irp6p_tfg)
+add_ecp_robot_with_kinematics(irp6p_tfg)
 endif(ROBOT_IRP6_POSTUMENT_TFG)
