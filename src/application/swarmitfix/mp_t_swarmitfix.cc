@@ -66,16 +66,17 @@ void swarmitfix::main_task_algorithm(void) {
 			total_increment_vector[2] / 3, total_increment_vector[3] / 3,
 			total_increment_vector[4] / 3, total_increment_vector[5] / 3);
 
-	std::cout << "third_of_total_increment_vector" << third_of_total_increment_vector << std::endl;
+	std::cout << "third_of_total_increment_vector"
+			<< third_of_total_increment_vector << std::endl;
 
 	lib::Homog_matrix third_way_frame = begining_frame * lib::Homog_matrix(
 			third_of_total_increment_vector);
 
 	/*
-	lib::Xyz_Angle_Axis_vector half_way_aa_vector;
-	half_way_frame.get_xyz_angle_axis(half_way_aa_vector);
-	std::cout << "half_way_aa_vector" << half_way_aa_vector << std::endl;
-*/
+	 lib::Xyz_Angle_Axis_vector half_way_aa_vector;
+	 half_way_frame.get_xyz_angle_axis(half_way_aa_vector);
+	 std::cout << "half_way_aa_vector" << half_way_aa_vector << std::endl;
+	 */
 
 	lib::Homog_matrix begining_frame_with_current_translation = begining_frame;
 	begining_frame_with_current_translation.set_translation_vector(
@@ -85,28 +86,31 @@ void swarmitfix::main_task_algorithm(void) {
 			lib::V_tr(!(lib::V_tr(!begining_frame_with_current_translation
 					* third_way_frame))) * third_of_total_increment_vector;
 
-	std::cout << "third_of_total_increment_vector" << third_of_total_increment_vector << std::endl;
+	std::cout << "third_of_total_increment_vector"
+			<< third_of_total_increment_vector << std::endl;
 
-
-	 third_way_frame = third_way_frame * lib::Homog_matrix(
+	third_way_frame = third_way_frame * lib::Homog_matrix(
 			second_step_third_of_total_increment_vector);
 
-	std::cout << std::endl << goal_frame << std::endl << third_way_frame << std::endl;
+	std::cout << std::endl << goal_frame << std::endl << third_way_frame
+			<< std::endl;
 
 	begining_frame_with_current_translation = begining_frame;
-		begining_frame_with_current_translation.set_translation_vector(
-				third_way_frame);
+	begining_frame_with_current_translation.set_translation_vector(
+			third_way_frame);
 
-	second_step_third_of_total_increment_vector =
-				lib::V_tr(!(lib::V_tr(!begining_frame_with_current_translation
-						* third_way_frame))) * third_of_total_increment_vector;
+	second_step_third_of_total_increment_vector = lib::V_tr(!(lib::V_tr(
+			!begining_frame_with_current_translation * third_way_frame)))
+			* third_of_total_increment_vector;
 
-	std::cout << "third_of_total_increment_vector" << third_of_total_increment_vector << std::endl;
+	std::cout << "third_of_total_increment_vector"
+			<< third_of_total_increment_vector << std::endl;
 
 	lib::Homog_matrix tmp_goal_frame = third_way_frame * lib::Homog_matrix(
 			second_step_third_of_total_increment_vector);
 
-	std::cout << std::endl << goal_frame << std::endl << tmp_goal_frame << std::endl;
+	std::cout << std::endl << goal_frame << std::endl << tmp_goal_frame
+			<< std::endl;
 
 	std::string astring;
 
