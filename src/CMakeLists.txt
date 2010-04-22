@@ -51,27 +51,25 @@ option(USE_MESSIP "Use MESSIP TCP messaging protocol" OFF)
 
 # QNX is default MRROC++ target
 if (QNXNTO)
-	# keep this flag until bug in QNX is fixed
-	add_definitions (-DEIGEN_DONT_ALIGN)
-
 	# QNX headers and libraries are kept in 'mrlib' repository
-	include_directories ($ENV{QNX_TARGET}/mrlib/include/eigen2) 
-	set(LIBXML2_INCLUDE_DIR $ENV{QNX_TARGET}/mrlib/include)
-	set(Boost_INCLUDE_DIR $ENV{QNX_TARGET}/mrlib/include)
+	set(MRLIB "$ENV{QNX_TARGET}/mrlib")
 
-	# Eigen2 is not supported by CMake
-	include_directories ($ENV{QNX_TARGET}/mrlib/include/eigen2) 
+	# keep this flag until bug in QNX stack alignment is fixed
+	add_definitions (-DEIGEN_DONT_ALIGN)	
+	set(EIGEN2_INCLUDE_DIR "${MRLIB}/include/eigen2") 
+	set(LIBXML2_INCLUDE_DIR "${MRLIB}/include")
+	set(Boost_INCLUDE_DIR "${MRLIB}/include")
 
 	# FIXME: define boost libraries to use
-	find_library(Boost_LIBRARIES boost_thread-mt $ENV{QNX_TARGET}/mrlib/lib)
+	find_library(Boost_LIBRARIES boost_thread-mt "${MRLIB}/lib")
 	# include boost compatibility layer
-	include_directories ($ENV{QNX_TARGET}/mrlib/include/boost/compatibility/cpp_c_headers) 
+	include_directories ("${MRLIB}/include/boost/compatibility/cpp_c_headers") 
 
 	# FIXME: define libxml2 libraries to use
-	find_library(LIBXML2_LIBRARY xml2 $ENV{QNX_TARGET}/mrlib/lib)
-	find_library(LIBICONV_LIBRARY iconv $ENV{QNX_TARGET}/mrlib/lib)
+	find_library(LIBXML2_LIBRARY xml2 "${MRLIB}/lib")
+	find_library(LIBICONV_LIBRARY iconv "${MRLIB}/lib")
 	set(LIBXML2_LIBRARIES ${LIBXML2_LIBRARY} ${LIBICONV_LIBRARY})
-
+	
 	# QNX provides networking with separate library
 	set (COMPATIBILITY_LIBRARIES socket m)
 else (QNXNTO) # Linux, etc.
@@ -81,7 +79,7 @@ else (QNXNTO) # Linux, etc.
 	find_package(LibXml2 REQUIRED)
 
 	# Eigen2 is not supported by CMake
-	include_directories (/usr/include/eigen2) 
+	set(EIGEN2_INCLUDE_DIR /usr/include/eigen2) 
 
 	# clock_gettime() can be missing in -lc
 	CHECK_LIBRARY_EXISTS (rt clock_gettime "" HAVE_LIBRT)
@@ -97,6 +95,7 @@ endif (QNXNTO)
 include_directories (${MRROCPP_SOURCE_DIR}/src) 
 include_directories (${LIBXML2_INCLUDE_DIR})
 include_directories (${Boost_INCLUDE_DIR})
+include_directories (${EIGEN2_INCLUDE_DIR}) 
 
 if(USE_MESSIP)
 	include_directories (${PROJECT_SOURCE_DIR}/src/lib/messip)
