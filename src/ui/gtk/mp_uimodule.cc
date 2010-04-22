@@ -15,7 +15,7 @@
 #include "ui_model.h"
 
 #if defined(USE_MESSIP_SRR)
-#include <messip_dataport.h>
+#include "messip_dataport.h"
 #endif
 
 using namespace Glib;

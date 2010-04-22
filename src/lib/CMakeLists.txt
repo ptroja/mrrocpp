@@ -1,5 +1,12 @@
-add_subdirectory (messip)
-add_subdirectory (agent)
+if(USE_MESSIP)
+	add_subdirectory (messip)
+	add_subdirectory (agent)
+
+	# configsrv is needed only for non-QNX platforms and then messip is used
+	add_executable(configsrv configsrv.cc cfgopts.cc configsrv_m.cc)
+	target_link_libraries (configsrv messip ${Boost_LIBRARIES})
+	install(TARGETS configsrv DESTINATION bin)
+endif(USE_MESSIP)
 
 # Create a library called "mrrocpp" which includes the source file "hello.cxx".
 # The extension is already found. Any number of sources could be listed here. 
@@ -22,10 +29,3 @@ add_library(mrrocpp
 	playerpos_goal.cc
 	datastr.cc
 )
-
-# configsrv is needed only for non-QNX platforms
-if(NOT QNXNTO)
-	add_executable(configsrv configsrv.cc cfgopts.cc configsrv_m.cc)
-	target_link_libraries (configsrv messip ${Boost_LIBRARIES})
-	install(TARGETS configsrv DESTINATION bin)
-endif(NOT QNXNTO)

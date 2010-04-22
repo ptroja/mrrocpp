@@ -47,6 +47,68 @@ CMAKE_DEPENDENT_OPTION(ROBOT_SPKM
 	"Build support for SwarmItFIX parallel kinematics machine robot"
 	ON "ROBOTS_SWARMITFIX" OFF)
 
+option(USE_MESSIP "Use MESSIP TCP messaging protocol" OFF)
+
+# QNX is default MRROC++ target
+if (QNXNTO)
+	# keep this flag until bug in QNX is fixed
+	add_definitions (-DEIGEN_DONT_ALIGN)
+
+	# QNX headers and libraries are kept in 'mrlib' repository
+	include_directories ($ENV{QNX_TARGET}/mrlib/include/eigen2) 
+	set(LIBXML2_INCLUDE_DIR $ENV{QNX_TARGET}/mrlib/include)
+	set(Boost_INCLUDE_DIR $ENV{QNX_TARGET}/mrlib/include)
+
+	# Eigen2 is not supported by CMake
+	include_directories ($ENV{QNX_TARGET}/mrlib/include/eigen2) 
+
+	# FIXME: define boost libraries to use
+	find_library(Boost_LIBRARIES boost_thread-mt $ENV{QNX_TARGET}/mrlib/lib)
+	# include boost compatibility layer
+	include_directories ($ENV{QNX_TARGET}/mrlib/include/boost/compatibility/cpp_c_headers) 
+
+	# FIXME: define libxml2 libraries to use
+	find_library(LIBXML2_LIBRARY xml2 $ENV{QNX_TARGET}/mrlib/lib)
+	find_library(LIBICONV_LIBRARY iconv $ENV{QNX_TARGET}/mrlib/lib)
+	set(LIBXML2_LIBRARIES ${LIBXML2_LIBRARY} ${LIBICONV_LIBRARY})
+
+	# QNX provides networking with separate library
+	set (COMPATIBILITY_LIBRARIES socket m)
+else (QNXNTO) # Linux, etc.
+	# find dependency packages
+	find_package(Boost 1.39 COMPONENTS thread )
+	find_package(Threads REQUIRED)
+	find_package(LibXml2 REQUIRED)
+
+	# Eigen2 is not supported by CMake
+	include_directories (/usr/include/eigen2) 
+
+	# clock_gettime() can be missing in -lc
+	CHECK_LIBRARY_EXISTS (rt clock_gettime "" HAVE_LIBRT)
+	if(HAVE_LIBRT)
+		set (COMPATIBILITY_LIBRARIES rt)
+	endif(HAVE_LIBRT)
+
+	# for non-QNX target messip is the only messaging protocol
+	set(USE_MESSIP ON)
+endif (QNXNTO)
+
+# Make sure the compiler can find include files
+include_directories (${MRROCPP_SOURCE_DIR}/src) 
+include_directories (${LIBXML2_INCLUDE_DIR})
+include_directories (${Boost_INCLUDE_DIR})
+
+if(USE_MESSIP)
+	include_directories (${PROJECT_SOURCE_DIR}/src/lib/messip)
+	add_definitions (-DUSE_MESSIP_SRR)
+	set(COMMON_LIBRARIES messip)
+endif(USE_MESSIP)
+
+set(COMMON_LIBRARIES mrrocpp ${COMMON_LIBRARIES}
+	${Boost_LIBRARIES}
+	${COMPATIBILITY_LIBRARIES}
+)
+
 # Recurse into subdirectories.
 add_subdirectory (lib)
 add_subdirectory (kinematics)

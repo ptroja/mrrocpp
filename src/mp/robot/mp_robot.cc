@@ -20,7 +20,7 @@
 #include "mp/task/mp_task.h"
 
 #if defined(USE_MESSIP_SRR)
-#include <messip_dataport.h>
+#include "messip_dataport.h"
 #endif
 
 #include <boost/foreach.hpp>

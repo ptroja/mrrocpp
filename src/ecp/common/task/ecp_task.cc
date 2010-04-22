@@ -10,7 +10,7 @@
 #include "ecp/common/generator/ecp_generator.h"
 
 #if defined(USE_MESSIP_SRR)
-#include <messip_dataport.h>
+#include "messip_dataport.h"
 #endif
 
 namespace mrrocpp {

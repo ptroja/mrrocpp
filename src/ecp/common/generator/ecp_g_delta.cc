@@ -24,7 +24,7 @@
 #include "lib/com_buf.h"
 
 #if defined(USE_MESSIP_SRR)
-#include <messip_dataport.h>
+#include "messip_dataport.h"
 #endif
 
 #include "lib/srlib.h"

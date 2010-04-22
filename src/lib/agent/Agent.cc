@@ -4,7 +4,7 @@
 #include <boost/foreach.hpp>
 #include <boost/serialization/string.hpp>
 
-#include "../messip/messip_dataport.h"
+#include "messip_dataport.h"
 #include "../xdr_iarchive.hpp"
 
 #include "DataBuffer.hh"
