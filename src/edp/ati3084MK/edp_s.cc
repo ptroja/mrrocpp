@@ -1,43 +1,12 @@
-// -------------------------------------------------------------------------
-//                            edp_s.cc 		dla QNX6.3.0
-//
-//            Virtual Sensor Process (lib::VSP) - methods for Schunk force/torgue sensor
-// Metody klasy VSP
-//
-// Ostatnia modyfikacja: grudzie 2004
-// Autor: Yoyek (Tomek Winiarski)
-// na podstawie szablonu vsp Tomka Kornuty i programu obslugi czujnika Artura Zarzyckiego
-// -------------------------------------------------------------------------
-#include <stdio.h>
-#include <stdlib.h>
+#include <termios.h>
 #include <unistd.h>
 #include <string.h>
-#include <signal.h>
-#include <process.h>
-#include <math.h>
-#include <sys/wait.h>
-#include <sys/types.h>
-#include <sys/sched.h>
-#include <fstream>
-#include <iomanip>
-#include <ctype.h>
-#include <errno.h>
-#include <sys/iofunc.h>
-#include <sys/dispatch.h>
-#include <iostream>
-#include <sys/neutrino.h>
-#include <hw/inout.h>
-#include <sys/dispatch.h>
-#include <hw/pci.h>
-#include <hw/pci_devices.h>
-#include <stddef.h>
-#include <sys/mman.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <errno.h>
+#include <stdlib.h>
+#include <stdio.h>
 #include <termios.h>
-#include <stdint.h>
-#include <inttypes.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
@@ -49,42 +18,24 @@
 // Konfigurator
 #include "lib/configurator.h"
 
-void y_InterruptUnlock(intrspin_t* spinlock_local)
-{
-	InterruptUnlock(spinlock_local );
-}
-
 namespace mrrocpp {
 namespace edp {
 namespace sensor {
 
-unsigned int ms_nr = 0;// numer odczytu z czujnika
-
-
-struct timespec start[9];
-
-// Rejstracja procesu VSP
 ATI3084_force::ATI3084_force(common::manip_effector &_master) :
 	force(_master)
 {
-
 }
 
 void ATI3084_force::connect_to_hardware(void)
 {
 	if (!(master.test_mode)) {
-		//	 	printf("Konstruktor VSP!\n");
-
-		ThreadCtl(_NTO_TCTL_IO, NULL); // nadanie odpowiednich uprawnien watkowi
-		// 	printf("KONTRUKTOR EDP_S POCATEK\n");
-
 		uart = open_port();
 		//printf("2\n");
 		tcflush(uart, TCIFLUSH);
 
 		sendBias(uart);
 	}
-
 }
 
 ATI3084_force::~ATI3084_force(void)
@@ -97,7 +48,6 @@ ATI3084_force::~ATI3084_force(void)
 		delete gravity_transformation;
 	printf("Destruktor edp_ATI3084_force_sensor\n");
 }
-;
 
 /**************************** inicjacja czujnika ****************************/
 void ATI3084_force::configure_sensor(void)
@@ -151,12 +101,10 @@ void ATI3084_force::configure_sensor(void)
 			gravity_transformation->synchro(frame);
 		}
 	}
-
 }
 
 void ATI3084_force::wait_for_event()
 {
-
 	//	sr_msg->message("wait_for_event");
 
 	if (!(master.test_mode)) {
@@ -167,7 +115,6 @@ void ATI3084_force::wait_for_event()
 		usleep(1000);
 	}
 }
-;
 
 /*************************** inicjacja odczytu ******************************/
 void ATI3084_force::initiate_reading(void)
@@ -245,25 +192,24 @@ void ATI3084_force::sendBias(int fd)
 		printf("Blad zapisu\n");
 }
 
-forceReadings ATI3084_force::getFT(int fd)
+ATI3084_force::forceReadings_t ATI3084_force::getFT(int fd)
 {
 	char query = 'q';
-	int i, r;
+	int r;
 	int current_bytes = 14;
 	int iter_counter = 0; // okresla ile razy pod rzad zostala uruchomiona ta metoda
 
 	//	printf("bbb \n");
 	uint8_t reads[14];
-	forceReadings ftxyz;
+	forceReadings_t ftxyz;
 
 	//	base_cycle = ClockCycles();
-
 
 	do {
 		r = 1;
 		iter_counter++;
 
-		if (write(fd, &query, 1) < 0)
+		if (write(fd, &query, 1) != 1)
 			printf("Blad zapisu\n");
 		//current_cycle = ClockCycles();
 		while ((current_bytes > 0) && (r != 0)) {//printf("aaa: %d\n",r);
@@ -287,7 +233,7 @@ forceReadings ATI3084_force::getFT(int fd)
 		}
 	} while (r == 0);
 
-	for (i = 0; i < 6; i++) {
+	for (int i = 0; i < 6; i++) {
 		ftxyz.ft[i] = (reads[2* i ]) << 8 | reads[2* i + 1];
 	}
 
@@ -296,15 +242,16 @@ forceReadings ATI3084_force::getFT(int fd)
 
 int ATI3084_force::open_port(void)
 {
-	int fd;
-	struct termios options;
-	struct termios org_port_options;
-	fd = open(PORT, O_RDWR);
+	int fd = open(PORT, O_RDWR);
 	if (fd == -1) {
 		printf("Can not open the port");
 		return -1;
 	}
 	//printf("3\n");
+
+	struct termios options;
+	struct termios org_port_options;
+
 	tcgetattr(fd, &org_port_options);
 	options = org_port_options;
 
@@ -338,7 +285,7 @@ int ATI3084_force::open_port(void)
 force* return_created_edp_force_sensor(common::manip_effector &_master)
 {
 	return new ATI3084_force(_master);
-}// : return_created_sensor
+}
 
 } // namespace sensor
 } // namespace edp

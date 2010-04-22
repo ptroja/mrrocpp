@@ -17,33 +17,11 @@ namespace mrrocpp {
 namespace edp {
 namespace sensor {
 
-
-typedef struct {
-int16_t ft[6];
-} forceReadings;
-
 #define SPEED B115200
 #define PORT "/dev/ser1"
 
 /********** klasa czujnikow po stronie VSP **************/
-class ATI3084_force : public force{
-
-private:
-
-
-	int uart, i,r;
-	//int licz=0;
-	forceReadings ftxyz;
-
-
-	void solve_transducer_controller_failure(void);
-
-
-	short do_init(void);
-
-	int open_port(void);
-	forceReadings getFT(int fd);
-	void sendBias(int fd);
+class ATI3084_force : public force {
 
 public:
 	void connect_to_hardware (void);
@@ -55,6 +33,20 @@ public:
 	void initiate_reading (void);		// zadanie odczytu od VSP
 	void get_reading (void);			// odebranie odczytu od VSP		// zwraca blad
 
+private:
+	typedef struct _forceReadings {
+		int16_t ft[6];
+	} forceReadings_t;
+
+	int uart, i,r;
+	//int licz=0;
+	forceReadings_t ftxyz;
+
+	void solve_transducer_controller_failure(void);
+
+	int open_port(void);
+	forceReadings_t getFT(int fd);
+	void sendBias(int fd);
 }; // end: class vsp_sensor
 
 
