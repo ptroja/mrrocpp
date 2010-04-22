@@ -83,7 +83,6 @@ set(ABMOD Icon.wgti MAM_wnd_manual_moves_automatic_measures.wgtw base.wgtw
 ADD_CUSTOM_TARGET(ui_photon_application ALL
 	COMMAND $ENV{QNX_HOST}/usr/bin/usemsg ui ${CMAKE_CURRENT_SOURCE_DIR}/../Usemsg
 	COMMAND cmake -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/../../wgt ${CMAKE_CURRENT_BINARY_DIR}/../../wgt
-	COMMAND cmake -E remove -f ui.res
 	COMMAND $ENV{QNX_HOST}/usr/bin/phabbind ui ${ABMOD} 
 	DEPENDS ui ${CMAKE_CURRENT_SOURCE_DIR}/../Usemsg
 )
