@@ -9,9 +9,15 @@ add_executable(edp_irp6_on_track
 target_link_libraries(
 	edp_irp6_on_track
 	kinematicsirp6ot
-	edp ati3084
-	${COMMON_LIBRARIES}
+	edp ${COMMON_LIBRARIES}
 )
+
+if(QNXNTO)
+target_link_libraries(
+	edp_irp6_on_track
+	ati3084
+)
+endif(QNXNTO)
 
 install(TARGETS edp_irp6_on_track DESTINATION bin)
 endif(ROBOT_IRP6_ON_TRACK)

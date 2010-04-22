@@ -9,9 +9,15 @@ add_executable(edp_irp6p_m
 target_link_libraries(
 	edp_irp6p_m
 	kinematicsirp6p
-	edp ati6284
-	${COMMON_LIBRARIES}
+	edp ${COMMON_LIBRARIES}
 )
+
+if(QNXNTO)
+target_link_libraries(
+	edp_irp6p_m
+	ati6284
+)
+endif(QNXNTO)
 
 install(TARGETS edp_irp6p_m DESTINATION bin)
 endif(ROBOT_IRP6_POSTUMENT_M)

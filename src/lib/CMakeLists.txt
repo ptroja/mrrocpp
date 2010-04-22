@@ -4,7 +4,7 @@ if(USE_MESSIP)
 
 	# configsrv is needed only for non-QNX platforms and then messip is used
 	add_executable(configsrv configsrv.cc cfgopts.cc configsrv_m.cc)
-	target_link_libraries (configsrv messip ${Boost_LIBRARIES})
+	target_link_libraries (configsrv messip ${Boost_THREAD_LIBRARY})
 	install(TARGETS configsrv DESTINATION bin)
 endif(USE_MESSIP)
 
