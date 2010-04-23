@@ -24,10 +24,10 @@ namespace lib {
 // ******************************************************************************************
 
 Ft_v_tr::Ft_v_tr()
-{}
+{
+}
 
-
-std::ostream&  operator<<(std::ostream & strumien, Ft_v_tr & m)
+std::ostream& operator<<(std::ostream & strumien, Ft_v_tr & m)
 {
 	// operator wypisania
 	// przedstawia macierz w przyjaznej dla czlowieka formie
@@ -41,12 +41,8 @@ std::ostream&  operator<<(std::ostream & strumien, Ft_v_tr & m)
 		strumien << std::endl;
 	}
 
-return strumien;
-}// end operator<<(std::ostream & strumien, Ft_v_tr & m)
-
-
-
-
+	return strumien;
+}
 
 // ******************************************************************************************
 //                                           definicje skladowych klasy Ft_tr
@@ -59,8 +55,6 @@ Ft_tr::Ft_tr() : Ft_v_tr()
 
 	// i - i-ta kolumna
 	// j - j-ty wiersz
-
-
 	for(int i=0; i<6; i++)
 		for(int j=0; j<6; j++)
 		{
@@ -69,71 +63,35 @@ Ft_tr::Ft_tr() : Ft_v_tr()
 			else
 				matrix_m[i][j] = 0;
 		}
-
-}// end Ft_v_tr()
-
-
+}
 
 Ft_tr::Ft_tr(const Homog_matrix & p) : Ft_v_tr()
 {
 	// macierz tworzona jest zgodnie ze wzorem 5.105 ze strony 196 (5.72 str 154 - wydanie angielskie)
 	// ksiazki: "Wprowadzenie do robotyki" John J. Craig
 
-	// i - i-ta kolumna
-	// j - j-ty wiersz
-
 	base_frame = p;
 
 	set_from_frame (base_frame);
-
-}// end Ft_v_tr::Ft_v_tr(const Homog_matrix & p)
-
+}
 
 // konstruktor kopiujacy
 // jest on uzywany podczas inicjalizacji obiektu w momencie jego tworzenia (np. Homog_matrix B = A;)
 Ft_tr::Ft_tr(const Ft_tr &wzor)
 {
-
 	base_frame = wzor.base_frame;
 
 	set_from_frame(wzor.base_frame);
 }
 
-
-
-
 Ft_tr Ft_tr::operator* (const Ft_tr & m) const
 {
-// mnozenie macierzy
+	// mnozenie macierzy
 
-//	Ft_v_tr zwracana;
+	Ft_tr zwracana(base_frame * m.base_frame) ;
 
-	// REMOVED BECAUSE IT IS PROBABLY NOT CORRECT TO MULTIPLY IN SUCH A WAY
-	/*
-	int i, j;			// i - i-ta kolumna
-					// j - j-ty wiersz
-	// macierz rotacji
-	for(i=0; i<6; i++)
-	{
-		for(j=0; j<6; j++)
-		{
-			for(int a=0; a<6; a++)
-			{
-				if(a == 0)
-					zwracana.matrix[i][j] = matrix[a][j] * m.matrix[i][a];
-				else
-					zwracana.matrix[i][j] += matrix[a][j] * m.matrix[i][a];
-
-			}
-		}
-	}
-*/
-
-Ft_tr zwracana(base_frame * m.base_frame) ;
-
-return zwracana;
-}// end Homog_matrix::operator* (const Homog_matrix & m) const
-
+	return zwracana;
+}
 
 Ft_vector Ft_tr::operator*(const Ft_vector & w) const
 {
@@ -148,11 +106,8 @@ Ft_vector Ft_tr::operator*(const Ft_vector & w) const
 			zwracany[j] += matrix_m[j][i] * w[i];
 //	std::cout << "zwracany " << zwracany <<std::endl;
 //	std::cout << "w " << zwracany <<std::endl;
-return zwracany;
-}// Ft_v_tr::operator*(const Ft_v_vector & w) const
-
-
-
+	return zwracany;
+}
 
 Ft_tr & Ft_tr::operator=(const Ft_tr & wzor)
 {
@@ -161,20 +116,12 @@ Ft_tr & Ft_tr::operator=(const Ft_tr & wzor)
 
 	if(this == &wzor) return *this;
 
-	// do zamiany na mem_cpy
-
 	memcpy(matrix_m, wzor.matrix_m, sizeof(matrix_m));
-	/*
-	for(int i=0; i<6; i++)
-		for(int j=0; j<6; j++)
-			matrix[i][j] = wzor.matrix[i][j];
-*/
 
 	base_frame = wzor.base_frame;
 
-return *this;
-}// end Ft_v_tr::operator=(const Ft_v_tr & wzor)
-
+	return *this;
+}
 
 Ft_tr Ft_tr::operator!() const
 {
@@ -182,16 +129,12 @@ Ft_tr Ft_tr::operator!() const
 
 	Ft_tr zwracana;
 
-
 	zwracana.base_frame = !base_frame;
 
 	zwracana.set_from_frame(zwracana.base_frame);
 
-return zwracana;
-
-}// end Ft_v_tr::operator!()
-
-
+	return zwracana;
+}
 
 void Ft_tr::set_from_frame(const Homog_matrix & p)
 {
@@ -200,8 +143,6 @@ void Ft_tr::set_from_frame(const Homog_matrix & p)
 
 	// i - i-ta kolumna
 	// j - j-ty wiersz
-
-
 	for(int i=0; i<3; i++)
 		for(int j=0; j<3; j++)
 		{
@@ -233,13 +174,7 @@ void Ft_tr::set_from_frame(const Homog_matrix & p)
 				matrix_m[j+3][i] += Porg[j][a] * p.matrix_m[a][i];
 			}
 		}
-
-}// end Ft_v_tr::Ft_v_tr(const Homog_matrix & p)
-
-
-
-
-
+}
 
 // ******************************************************************************************
 //                                           definicje skladowych klasy V_tr
@@ -252,8 +187,6 @@ V_tr::V_tr() : Ft_v_tr()
 
 	// i - i-ta kolumna
 	// j - j-ty wiersz
-
-
 	for(int i=0; i<6; i++)
 		for(int j=0; j<6; j++)
 		{
@@ -262,10 +195,7 @@ V_tr::V_tr() : Ft_v_tr()
 			else
 				matrix_m[i][j] = 0;
 		}
-
-}// end Ft_v_tr()
-
-
+}
 
 V_tr::V_tr(const Homog_matrix & p) : Ft_v_tr()
 {
@@ -276,8 +206,7 @@ V_tr::V_tr(const Homog_matrix & p) : Ft_v_tr()
 
 	set_from_frame (base_frame);
 
-}// end Ft_v_tr::Ft_v_tr(const Homog_matrix & p)
-
+}
 
 // konstruktor kopiujacy
 // jest on uzywany podczas inicjalizacji obiektu w momencie jego tworzenia (np. Homog_matrix B = A;)
@@ -288,60 +217,28 @@ V_tr::V_tr(const V_tr &wzor)
 	set_from_frame(wzor.base_frame);
 }
 
-
-
-
 V_tr V_tr::operator* (const V_tr & m) const
 {
-// mnozenie macierzy
-
-//	Ft_v_tr zwracana;
-
-	// REMOVED BECAUSE IT IS PROBABLY NOT CORRECT TO MULTIPLY IN SUCH A WAY
-	/*
-	int i, j;			// i - i-ta kolumna
-					// j - j-ty wiersz
-	// macierz rotacji
-	for(i=0; i<6; i++)
-	{
-		for(j=0; j<6; j++)
-		{
-			for(int a=0; a<6; a++)
-			{
-				if(a == 0)
-					zwracana.matrix[i][j] = matrix[a][j] * m.matrix[i][a];
-				else
-					zwracana.matrix[i][j] += matrix[a][j] * m.matrix[i][a];
-
-			}
-		}
-	}
-*/
+	// mnozenie macierzy
 
 	V_tr zwracana(base_frame * m.base_frame) ;
 
-return zwracana;
-}// end Homog_matrix::operator* (const Homog_matrix & m) const
-
+	return zwracana;
+}
 
 Xyz_Angle_Axis_vector V_tr::operator*(const Xyz_Angle_Axis_vector & w) const
 {
 	Xyz_Angle_Axis_vector zwracany;
-	int i;
-	int j;
+
 	// i - i-ta kolumna
 	// j - j-ty wiersz
-
-	for(j=0;j<6;j++)
-		for(i=0;i<6;i++)
+	for(int j=0;j<6;j++)
+		for(int i=0;i<6;i++)
 			zwracany[j] += matrix_m[j][i] * w[i];
 //	std::cout << "zwracany " << zwracany <<std::endl;
 //	std::cout << "w " << zwracany <<std::endl;
-return zwracany;
-}// Ft_v_tr::operator*(const Ft_v_vector & w) const
-
-
-
+	return zwracany;
+}
 
 V_tr & V_tr::operator=(const V_tr & wzor)
 {
@@ -350,37 +247,24 @@ V_tr & V_tr::operator=(const V_tr & wzor)
 
 	if(this == &wzor) return *this;
 
-	// do zamiany na mem_cpy
-
 	memcpy(matrix_m, wzor.matrix_m, sizeof(matrix_m));
-	/*
-	for(int i=0; i<6; i++)
-		for(int j=0; j<6; j++)
-			matrix[i][j] = wzor.matrix[i][j];
-*/
 
 	base_frame = wzor.base_frame;
 
-return *this;
-}// end Ft_v_tr::operator=(const Ft_v_tr & wzor)
-
+	return *this;
+}
 
 V_tr V_tr::operator!() const
 {
 	// przeksztalcenie odwrotne
-
 	V_tr zwracana;
-
 
 	zwracana.base_frame = !base_frame;
 
 	zwracana.set_from_frame(zwracana.base_frame);
 
-return zwracana;
-
-}// end Ft_v_tr::operator!()
-
-
+	return zwracana;
+}
 
 void V_tr::set_from_frame(const Homog_matrix & p)
 {
@@ -389,7 +273,6 @@ void V_tr::set_from_frame(const Homog_matrix & p)
 
 	// i - i-ta kolumna
 	// j - j-ty wiersz
-
 
 	for(int i=0; i<3; i++)
 		for(int j=0; j<3; j++)
@@ -423,12 +306,7 @@ void V_tr::set_from_frame(const Homog_matrix & p)
 			}
 		}
 
-}// end V_tr::V_tr(const Homog_matrix & p)
-
-
-
-
-
+}
 
 } // namespace lib
 } // namespace mrrocpp
