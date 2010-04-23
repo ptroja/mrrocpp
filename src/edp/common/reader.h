@@ -88,7 +88,7 @@ private:
 public:
 	boost::mutex reader_mutex;
 
-	lib::boost_condition_synchroniser synchroniser;
+	lib::condition_synchroniser synchroniser;
 	//! main thread loop
     void operator()();
 

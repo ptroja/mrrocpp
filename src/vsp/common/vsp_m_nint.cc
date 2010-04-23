@@ -52,7 +52,7 @@ namespace common {
 /********************************* GLOBALS **********************************/
 static sensor::sensor *vs;		// czujnik wirtualny
 
-static 	lib::boost_condition_synchroniser vsp_synchroniser;
+static 	lib::condition_synchroniser vsp_synchroniser;
 
 static bool TERMINATE=false;											// zakonczenie obu watkow
 

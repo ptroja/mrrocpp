@@ -83,7 +83,7 @@ public:
 #endif
 
 public:
-	lib::boost_condition_synchroniser thread_started;
+	lib::condition_synchroniser thread_started;
 
     lib::edp_master_command command; // polecenie z EDP_MASTER dla SERVO
 	double axe_inc_per_revolution[MAX_SERVOS_NR];

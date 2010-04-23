@@ -1,54 +1,16 @@
 #include "lib/mis_fun.h"
 
-
 #include <pthread.h>
 #include <stdio.h>
 
-
 #if defined(linux)
 #include <sys/prctl.h>
+#elif defined(__FreeBSD__)
+#include <pthread_np.h>
 #endif
 
 namespace mrrocpp {
 namespace lib {
-
-boost_condition_synchroniser::boost_condition_synchroniser() :
-	has_command(false)
-{
-
-}
-
-void boost_condition_synchroniser::command()
-{
-	boost::unique_lock <boost::mutex> lock(mtx);
-
-	// assign command for execution
-
-	has_command = true;
-
-	cond.notify_one();
-}
-
-void boost_condition_synchroniser::null_command()
-{
-	boost::unique_lock <boost::mutex> lock(mtx);
-
-	has_command = false;
-}
-
-
-void boost_condition_synchroniser::wait()
-{
-
-	boost::unique_lock <boost::mutex> lock(mtx);
-
-	while (!has_command) {
-		cond.wait(lock);
-	}
-
-	has_command = false;
-
-}
 
 void set_thread_priority(pthread_t thread, int sched_priority_l)
 {
@@ -82,10 +44,6 @@ void set_thread_priority(pthread_t thread, int sched_priority_l)
 		}
 	}
 }
-
-#if defined(__FreeBSD__)
-#include <pthread_np.h>
-#endif
 
 //! set the thread name for debugging
 int set_thread_name(const char * newname)

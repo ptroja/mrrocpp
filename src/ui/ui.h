@@ -295,7 +295,7 @@ public:
 	lib::ECP_message ecp_to_ui_msg;
 	lib::UI_reply ui_rep;
 
-	lib::boost_condition_synchroniser synchroniser;
+	lib::condition_synchroniser synchroniser;
 	ui_ecp_buffer();
 
 };

@@ -42,8 +42,8 @@ protected:
 	lib::c_buffer instruction;
 
 public:
-	lib::boost_condition_synchroniser master_to_trans_synchroniser;
-	lib::boost_condition_synchroniser trans_t_to_master_synchroniser;
+	lib::condition_synchroniser master_to_trans_synchroniser;
+	lib::condition_synchroniser trans_t_to_master_synchroniser;
 
     MT_ORDER trans_t_task;
     int trans_t_tryb;

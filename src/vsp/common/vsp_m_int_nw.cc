@@ -55,7 +55,7 @@ lib::VSP_ECP_MSG ret_msg;
 
 static pthread_mutex_t image_mutex = PTHREAD_MUTEX_INITIALIZER; // inicjalizacja MUTEXa uzywanego przy synchronizacji zapisu i odczytu z obrazu
 
-static lib::boost_condition_synchroniser synchroniser;
+static lib::condition_synchroniser synchroniser;
 
 static bool TERMINATE = false; // zakonczenie obu watkow
 static bool CONFIGURE_FLAG = false; // czy skonfigurowany czujnik

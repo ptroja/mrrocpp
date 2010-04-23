@@ -35,11 +35,11 @@ protected:
 public:
 	void operator()(void);
 	boost::mutex mtx;
-	lib::boost_condition_synchroniser thread_started;
+	lib::condition_synchroniser thread_started;
 
 	lib::sr_vsp *sr_msg; //!< komunikacja z SR
-	lib::boost_condition_synchroniser edp_vsp_synchroniser;//!< dostep do nowej wiadomosci dla vsp
-	lib::boost_condition_synchroniser new_command_synchroniser;//!< dostep do nowej wiadomosci dla vsp
+	lib::condition_synchroniser edp_vsp_synchroniser;//!< dostep do nowej wiadomosci dla vsp
+	lib::condition_synchroniser new_command_synchroniser;//!< dostep do nowej wiadomosci dla vsp
 	common::FORCE_ORDER command;
 
 	bool TERMINATE; //!< zakonczenie obydwu watkow
