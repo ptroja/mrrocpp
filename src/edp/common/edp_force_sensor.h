@@ -37,6 +37,8 @@ protected:
 
 	lib::ForceTrans *gravity_transformation; // klasa likwidujaca wplyw grawitacji na czujnik
 
+	common::manip_effector &master;
+
 public:
 	void operator()(void);
 	boost::mutex mtx;
@@ -49,7 +51,7 @@ public:
 
 	bool TERMINATE; //!< zakonczenie obydwu watkow
 	bool is_sensor_configured; // czy czujnik skonfigurowany?
-	int set_command_execution_finish();
+	void set_command_execution_finish();
 
 	virtual void connect_to_hardware(void) = 0;
 
@@ -60,7 +62,6 @@ public:
 
 	bool new_edp_command;
 
-	common::manip_effector &master;
 	force(common::manip_effector &_master);
 
 	~force();

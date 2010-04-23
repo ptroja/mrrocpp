@@ -22,7 +22,6 @@ namespace sensor {
 //!< watek do komunikacji ze sprzetem
 void force::operator()(void)
 {
-#if !defined(USE_MESSIP_SRR)
 	lib::set_thread_priority(pthread_self(), MAX_PRIORITY - 1);
 
 	connect_to_hardware();
@@ -124,27 +123,30 @@ void force::operator()(void)
 		}
 
 	} //!< //!< end while(;;)
-#endif /* USE_MESSIP_SRR */
 } //!< end MAIN
 
 force::force(common::manip_effector &_master) :
-	gravity_transformation(NULL), new_edp_command(false), master(_master), edp_vsp_synchroniser(),
-			new_command_synchroniser(), thread_started()
+	gravity_transformation(NULL),
+	new_edp_command(false),
+	master(_master),
+	edp_vsp_synchroniser(),
+	new_command_synchroniser(),
+	thread_started(),
+	is_sensor_configured(false), //!< czujnik niezainicjowany
+	is_reading_ready(false), //!< nie ma zadnego gotowego odczytu
+	TERMINATE(false)
 {
-	gravity_transformation = NULL;
-	is_sensor_configured = false; //!< czujnik niezainicjowany
-	is_reading_ready = false; //!< nie ma zadnego gotowego odczytu
-	TERMINATE = false;
-
 	/*!Lokalizacja procesu wywietlania komunikatow SR */
-	sr_msg
-			= new lib::sr_vsp(lib::EDP, master.config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "edp_vsp_attach_point"), master.config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", UI_SECTION), true);
+	sr_msg = new lib::sr_vsp(lib::EDP,
+					master.config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "edp_vsp_attach_point"),
+					master.config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point",
+					UI_SECTION),
+					true);
 }
 
 force::~force()
 {
 	delete sr_msg;
-
 }
 
 void force::set_force_tool(void)
@@ -159,13 +161,10 @@ void force::set_force_tool(void)
 	current_force_tool_weight = next_force_tool_weight;
 }
 
-int force::set_command_execution_finish() // podniesienie semafora
+void force::set_command_execution_finish() // podniesienie semafora
 {
-
 	new_edp_command = false;
 	new_command_synchroniser.command();
-
-	return 0; // TODO: check for return or throw in future object-oriented version
 }
 
 } // namespace sensor
