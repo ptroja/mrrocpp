@@ -146,7 +146,6 @@ return q;
 
 void Jacobian_matrix::irp6_6dof_equations(const Xyz_Angle_Axis_vector & w)
 {
-
 	const double s1 = sin(w[0]);
 	const double c1 = cos(w[0]);
 	const double s2 = sin(w[1]);

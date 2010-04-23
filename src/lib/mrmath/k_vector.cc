@@ -24,7 +24,7 @@ K_vector::K_vector()
 {
 }
 
-K_vector::K_vector(double t[3])
+K_vector::K_vector(const double t[3])
 {
 	// utworzenie wektora o wspolrzednych okreslonych przez podana jako argument tablice
 
