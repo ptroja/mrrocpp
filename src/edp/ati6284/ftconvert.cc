@@ -28,9 +28,6 @@
 #include "ftconfig.h"
 #include "display.h"
 
-#include <sys/neutrino.h>
-#include <inttypes.h>
-
 extern short int invalid_value;	
 extern Calibration *cal;				//!<  struct containing calibration information
 extern char *calfilepath;		//!<  sciezka do pliku z kalibracja

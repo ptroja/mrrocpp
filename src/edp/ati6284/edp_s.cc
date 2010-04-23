@@ -659,7 +659,6 @@ void ATI6284_force::InitMite(void)
 
 void ATI6284_force::Input_to_Volts(void)
 {
-
 	unsigned uCount;
 	unsigned licznik = 0;
 	float jednostka = 0.0003051;

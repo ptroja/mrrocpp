@@ -11,7 +11,6 @@
 #include <net/if_ether.h>
 #include <net/bpf.h>
 
-
 namespace mrrocpp {
 namespace edp {
 namespace sensor {
