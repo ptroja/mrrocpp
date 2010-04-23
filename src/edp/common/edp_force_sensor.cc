@@ -1,13 +1,4 @@
-// ------------------------------------------------------------------------
-//                                  edp.cc
-//
-// EDP_MASTER Effector Driver Master Process
-// Driver dla robota IRp-6 na torze - metody: class edp_irp6s_robot
-//
-// Ostatnia modyfikacja: styczen 2005
-// -------------------------------------------------------------------------
-
-#include <stdio.h>
+#include <iostream>
 
 #include "edp/common/edp.h"
 #include "edp/common/edp_irp6s_postument_track.h"
@@ -32,8 +23,8 @@ void force::operator()(void)
 		configure_sensor();
 	}
 
-	catch (lib::sensor::sensor_error e) {
-		printf("sensor_error w force thread EDP\n");
+	catch (lib::sensor::sensor_error & e) {
+		std::cerr << "sensor_error w force thread EDP" << std::endl;
 
 		switch (e.error_no)
 		{
@@ -49,7 +40,7 @@ void force::operator()(void)
 	} //!< end CATCH
 
 	catch (...) {
-		fprintf(stderr, "unidentified error force thread w EDP\n");
+		std::cerr << "unidentified error force thread w EDP" << std::endl;
 	}
 
 	while (!TERMINATE) //!< for (;;)
@@ -104,7 +95,7 @@ void force::operator()(void)
 		} //!< koniec TRY
 
 		catch (lib::sensor::sensor_error e) {
-			printf("sensor_error w force thread  EDP\n");
+			std::cerr << "sensor_error w force thread EDP" << std::endl;
 
 			switch (e.error_no)
 			{
@@ -119,7 +110,7 @@ void force::operator()(void)
 		} //!< end CATCH
 
 		catch (...) {
-			printf("unidentified error force thread w EDP\n");
+			std::cerr << "unidentified error force thread w EDP" << std::endl;
 		}
 
 	} //!< //!< end while(;;)

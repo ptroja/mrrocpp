@@ -1,21 +1,14 @@
 // -------------------------------------------------------------------------
-//                            vsp.h		dla QNX6.2
 //
 // Definicje klasy edp_force_sensor
 //
-// Ostatnia modyfikacja: 2005
 // Autor: yoyek
 // -------------------------------------------------------------------------
 
 #if !defined(_EDP_FORCE_SENSOR_H)
 #define _EDP_FORCE_SENSOR_H
 
-#include <boost/utility.hpp>
-#include <boost/thread/condition_variable.hpp>
 #include <boost/thread/mutex.hpp>
-#include <boost/circular_buffer.hpp>
-#include <boost/bind.hpp>
-#include <boost/thread/thread.hpp>
 
 #include "lib/mrmath/ForceTrans.h"
 #include "lib/sensor.h"				// klasa bazowa sensor
