@@ -42,7 +42,7 @@ static bool TERMINATE = false;									// zakonczenie obu watkow
 
 /***************************** ERROR_HANDLER ******************************/
 template<class ERROR>
-void error_handler(ERROR e){
+void error_handler(ERROR & e){
 	switch(e.error_class){
 		case lib::SYSTEM_ERROR:
 			printf("VSP aborted due to lib::SYSTEM_ERROR\n");
@@ -148,10 +148,10 @@ int main(int argc, char *argv[]) {
 				}
 			}
 
-			catch (lib::VSP_main_error e){
+			catch (lib::VSP_main_error & e){
 				vsp::common::error_handler(e);
 			} // end CATCH
-			catch (lib::sensor::sensor_error e){
+			catch (lib::sensor::sensor_error & e){
 				vsp::common::error_handler(e);
 			} // end CATCH
 
@@ -159,7 +159,7 @@ int main(int argc, char *argv[]) {
  		} // end while()
 		vsp::common::vs->sr_msg->message ("VSP terminated");
 	} // koniec TRY
-	catch (lib::VSP_main_error e) {
+	catch (lib::VSP_main_error & e) {
 		vsp::common::error_handler(e);
 		exit(EXIT_FAILURE);
 	} // end CATCH

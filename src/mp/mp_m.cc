@@ -115,12 +115,12 @@ int main (int argc, char *argv[], char **arge)
 			signal(SIGINT, SIG_IGN);
 #endif
 		}
-		catch (ecp_mp::task::ECP_MP_main_error e) {
+		catch (ecp_mp::task::ECP_MP_main_error & e) {
 			/* Obsluga bledow ECP_MP_main_error */
 			if (e.error_class == lib::SYSTEM_ERROR)
 				exit(EXIT_FAILURE);
 		} /*end: catch */
-		catch (mp::common::MP_main_error e) {
+		catch (mp::common::MP_main_error & e) {
 
 			perror("initialize incorrect");
 			if (e.error_class == lib::SYSTEM_ERROR)
@@ -140,17 +140,17 @@ int main (int argc, char *argv[], char **arge)
 			mp::common::mp_t->sr_ecp_msg->message("To terminate MP click STOP icon");
 		} /*end: catch*/
 
-		catch (lib::sensor::sensor_error e) {
+		catch (lib::sensor::sensor_error & e) {
 			/* Wyswietlenie komunikatu. */
 			mp::common::mp_t->sr_ecp_msg->message (e.error_class, e.error_no);
 			printf("Mam blad czujnika section 1 (@%s:%d)\n", __FILE__, __LINE__);
 		} /* end: catch sensor_error  */
-		catch (mp::generator::generator::MP_error e) {
+		catch (mp::generator::generator::MP_error & e) {
 					/* Wyswietlenie komunikatu. */
 			mp::common::mp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, e.error_no);
 					printf("Mam blad mp_generator section 1 (@%s:%d)\n", __FILE__, __LINE__);
 		} /* end: catch sensor_error  */
-		catch (ecp_mp::transmitter::transmitter::transmitter_error e) {
+		catch (ecp_mp::transmitter::transmitter::transmitter_error & e) {
 			/* Wyswietlenie komunikatu. */
 			mp::common::mp_t->sr_ecp_msg->message (e.error_class, e.error_no);
 			printf("Mam blad trasnmittera section 1 (@%s:%d)\n", __FILE__, __LINE__);
@@ -182,12 +182,12 @@ int main (int argc, char *argv[], char **arge)
 				mp::common::mp_t->terminate_all (mp::common::mp_t->robot_m);
 			}  // end: try
 
-			catch (ecp_mp::task::ECP_MP_main_error e) {
+			catch (ecp_mp::task::ECP_MP_main_error & e) {
 				/* Obsluga bledow ECP_MP_main_error */
 				if (e.error_class == lib::SYSTEM_ERROR)
 					exit(EXIT_FAILURE);
 			} /*end: catch */
-			catch (mp::common::MP_main_error e) {
+			catch (mp::common::MP_main_error & e) {
 
 				if (e.error_class == lib::SYSTEM_ERROR)
 					exit(EXIT_FAILURE);
@@ -212,7 +212,7 @@ int main (int argc, char *argv[], char **arge)
 
 
 			} /*end: catch */
-			catch (mp::robot::robot::MP_error e) {
+			catch (mp::robot::robot::MP_error & e) {
 				if (e.error_class == lib::SYSTEM_ERROR) {
 					exit(EXIT_FAILURE);
 				}
@@ -235,7 +235,7 @@ int main (int argc, char *argv[], char **arge)
 
 			} /*end: catch*/
 
-			catch (mp::generator::generator::MP_error e) {
+			catch (mp::generator::generator::MP_error & e) {
 
 				if (e.error_class == lib::SYSTEM_ERROR)
 					exit(EXIT_FAILURE);
@@ -261,12 +261,12 @@ int main (int argc, char *argv[], char **arge)
 
 			} /*end: catch*/
 
-			catch (lib::sensor::sensor_error e) {
+			catch (lib::sensor::sensor_error & e) {
 				/* Wyswietlenie komunikatu. */
 				mp::common::mp_t->sr_ecp_msg->message (e.error_class, e.error_no);
 				printf("Mam blad czujnika section 2 (@%s:%d)\n", __FILE__, __LINE__);
 			} /* end: catch sensor_error  */
-			catch (ecp_mp::transmitter::transmitter::transmitter_error e) {
+			catch (ecp_mp::transmitter::transmitter::transmitter_error & e) {
 				/* Wyswietlenie komunikatu. */
 				mp::common::mp_t->sr_ecp_msg->message (e.error_class, e.error_no);
 				printf("Mam blad trasnmittera section 2 (@%s:%d)\n", __FILE__, __LINE__);

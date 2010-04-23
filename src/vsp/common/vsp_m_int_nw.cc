@@ -86,7 +86,7 @@ int io_devctl(resmgr_context_t *ctp, io_devctl_t *msg, RESMGR_OCB_T *ocb);
 
 /***************************** ERROR_HANDLER ******************************/
 template <class ERROR>
-void error_handler(ERROR e)
+void error_handler(ERROR & e)
 {
 	switch (e.error_class)
 	{
@@ -150,7 +150,7 @@ void* execute_command(void* arg)
 			try {
 				vs->configure_sensor();
 			} // end TRY
-			catch (lib::sensor::sensor_error e) {
+			catch (lib::sensor::sensor_error & e) {
 				error_handler(e);
 			} // end CATCH
 			pthread_mutex_unlock(&image_mutex);
@@ -165,7 +165,7 @@ void* execute_command(void* arg)
 			try {
 				vs->initiate_reading();
 			} // end TRY
-			catch (lib::sensor::sensor_error e) {
+			catch (lib::sensor::sensor_error & e) {
 				error_handler(e);
 			} // end CATCH
 			pthread_mutex_unlock(&image_mutex);
@@ -196,10 +196,10 @@ void write_to_sensor(lib::VSP_COMMAND i_code)
 				reading_initiation_task = true;
 				synchroniser.command();
 			} // end TRY
-			catch (lib::VSP_main_error e) {
+			catch (lib::VSP_main_error & e) {
 				error_handler(e);
 			} // end CATCH
-			catch (lib::sensor::sensor_error e) {
+			catch (lib::sensor::sensor_error & e) {
 				error_handler(e);
 			} // end CATCH
 			return;
@@ -218,10 +218,10 @@ void write_to_sensor(lib::VSP_COMMAND i_code)
 				pthread_mutex_unlock(&image_mutex);
 				INITIATE_FLAG = false;
 			} // end TRY
-			catch (lib::VSP_main_error e) {
+			catch (lib::VSP_main_error & e) {
 				error_handler(e);
 			} // end CATCH
-			catch (lib::sensor::sensor_error e) {
+			catch (lib::sensor::sensor_error & e) {
 				error_handler(e);
 			} // end CATCH
 			return;
@@ -260,11 +260,11 @@ int io_read(resmgr_context_t *ctp, io_read_t *msg, RESMGR_OCB_T *ocb)
 		pthread_mutex_unlock(&image_mutex);
 		// Koniec sekcji krytycznej.
 	} // end TRY
-	catch (lib::VSP_main_error e) {
+	catch (lib::VSP_main_error & e) {
 		error_handler(e);
 		//		pthread_mutex_unlock( &image_mutex );
 	} // end CATCH
-	catch (lib::sensor::sensor_error e) {
+	catch (lib::sensor::sensor_error & e) {
 		error_handler(e);
 		//		pthread_mutex_unlock( &image_mutex );
 	} // end CATCH
@@ -326,10 +326,10 @@ int io_devctl(resmgr_context_t *ctp, io_devctl_t *msg, RESMGR_OCB_T *ocb)
 				pthread_mutex_unlock(&image_mutex);
 				// Koniec sekcji krytycznej.
 			} // end TRY
-			catch (lib::VSP_main_error e) {
+			catch (lib::VSP_main_error & e) {
 				error_handler(e);
 			} // end CATCH
-			catch (lib::sensor::sensor_error e) {
+			catch (lib::sensor::sensor_error & e) {
 				error_handler(e);
 			} // end CATCH
 			// Count the start address of reply message content.
@@ -468,7 +468,7 @@ int main(int argc, char *argv[])
 		vsp::common::vs->sr_msg->message("VSP terminated");
 		delete vsp::common::vs;
 	} // koniec TRY
-	catch (lib::VSP_main_error e) {
+	catch (lib::VSP_main_error & e) {
 		vsp::common::error_handler(e);
 		exit(EXIT_FAILURE);
 	}

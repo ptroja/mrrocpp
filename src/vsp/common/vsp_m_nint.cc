@@ -78,7 +78,7 @@ int io_devctl(resmgr_context_t *ctp, io_devctl_t *msg, RESMGR_OCB_T *ocb);
 
 /***************************** ERROR_HANDLER ******************************/
 template<class ERROR>
-void error_handler(ERROR e){
+void error_handler(ERROR & e){
 	switch(e.error_class){
 		case lib::SYSTEM_ERROR:
 			if(e.error_no == DISPATCH_ALLOCATION_ERROR)
@@ -135,11 +135,11 @@ void* cyclic_read( void*  arg ){
 			vsp::common::vs->initiate_reading();
 			pthread_mutex_unlock( &mutex );
 			} // koniec TRY
-		catch (lib::VSP_main_error e){
+		catch (lib::VSP_main_error & e){
 			error_handler(e);
 			pthread_mutex_unlock( &mutex );
 			} // end CATCH
-		catch (lib::sensor::sensor_error e){
+		catch (lib::sensor::sensor_error & e){
 			error_handler(e);
 			pthread_mutex_unlock( &mutex );
 			}
@@ -180,10 +180,10 @@ int io_read (resmgr_context_t *ctp, io_read_t *msg, RESMGR_OCB_T *ocb){
 			vsp::common::vs->from_vsp.vsp_report= lib::VSP_REPLY_OK;
 			vsp::common::vs->get_reading();
 			} // end TRY
-		catch (lib::VSP_main_error e){
+		catch (lib::VSP_main_error & e){
 			error_handler(e);
 			} // end CATCH
-		catch (lib::sensor::sensor_error e){
+		catch (lib::sensor::sensor_error & e){
 			error_handler(e);
 			} // end CATCH
        resmgr_msgwrite(ctp, &vsp::common::vs->from_vsp, sizeof(lib::VSP_REPORT) + vsp::common::vs->union_size, 0);
@@ -204,10 +204,10 @@ int io_write (resmgr_context_t *ctp, io_write_t *msg, RESMGR_OCB_T *ocb){
 		try{
 		  write_to_sensor(vsp::common::vs->to_vsp.i_code);
 		  } // end TRY
-		catch (lib::VSP_main_error e){
+		catch (lib::VSP_main_error & e){
 		  error_handler(e);
 		  } // end CATCH
-		catch (lib::sensor::sensor_error e){
+		catch (lib::sensor::sensor_error & e){
 			error_handler(e);
 			} // end CATCH
 	pthread_mutex_unlock( &mutex );
@@ -232,10 +232,10 @@ int io_devctl(resmgr_context_t *ctp, io_devctl_t *msg, RESMGR_OCB_T *ocb) {
 			try{
 			  write_to_sensor(vsp::common::vs->to_vsp.i_code);
 			  } // end TRY
-			catch (lib::VSP_main_error e){
+			catch (lib::VSP_main_error & e){
 			  error_handler(e);
 			  } // end CATCH
-			catch (lib::sensor::sensor_error e){
+			catch (lib::sensor::sensor_error & e){
 				error_handler(e);
 				} // end CATCH
 		pthread_mutex_unlock( &mutex );
@@ -247,10 +247,10 @@ int io_devctl(resmgr_context_t *ctp, io_devctl_t *msg, RESMGR_OCB_T *ocb) {
 				vsp::common::vs->from_vsp.vsp_report= lib::VSP_REPLY_OK;
 				vsp::common::vs->get_reading();
 				} // end TRY
-			catch (lib::VSP_main_error e){
+			catch (lib::VSP_main_error & e){
 				error_handler(e);
 				} // end CATCH
-			catch (lib::sensor::sensor_error e){
+			catch (lib::sensor::sensor_error & e){
 				error_handler(e);
 				} // end CATCH
 		  // Count the start address of reply message content.
@@ -275,10 +275,10 @@ int io_devctl(resmgr_context_t *ctp, io_devctl_t *msg, RESMGR_OCB_T *ocb) {
 			try{
 				write_to_sensor(vsp::common::vs->to_vsp.i_code);
 				} // end TRY
-			catch (lib::VSP_main_error e){
+			catch (lib::VSP_main_error & e){
 				error_handler(e);
 				} // end CATCH
-			catch (lib::sensor::sensor_error e){
+			catch (lib::sensor::sensor_error & e){
 				error_handler(e);
 				} // end CATCH
 		  // Count the start address of reply message content.
@@ -394,7 +394,7 @@ int main(int argc, char *argv[]) {
 	     vsp::common::vs->sr_msg->message ("VSP terminated");
 	     delete vsp::common::vs;
 		} // koniec TRY
-	catch (lib::VSP_main_error e){
+	catch (lib::VSP_main_error & e){
 		vsp::common::error_handler(e);
 		exit(EXIT_FAILURE);
 		} // end CATCH
