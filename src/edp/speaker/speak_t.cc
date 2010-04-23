@@ -76,7 +76,7 @@ void speak_t::operator()()
         // sekcja przechwytujaca bledy i przygotowujaca do ich rzucania w watku master
 
 
-        catch(NonFatal_error_1 nfe)
+        catch(NonFatal_error_1 & nfe)
         {
             error_pointer= malloc(sizeof(nfe));
             memcpy(error_pointer, &nfe, sizeof(nfe));
@@ -85,7 +85,7 @@ void speak_t::operator()()
             trans_t_to_master_synchroniser.command();
         } // end: catch(NonFatal_error_1 nfe)
 
-        catch(NonFatal_error_2 nfe)
+        catch(NonFatal_error_2 & nfe)
         {
             error_pointer= malloc(sizeof(nfe));
             memcpy(error_pointer, &nfe, sizeof(nfe));
@@ -94,7 +94,7 @@ void speak_t::operator()()
             trans_t_to_master_synchroniser.command();
         } // end: catch(NonFatal_error_2 nfe)
 
-        catch(NonFatal_error_3 nfe)
+        catch(NonFatal_error_3 & nfe)
         {
             error_pointer= malloc(sizeof(nfe));
             memcpy(error_pointer, &nfe, sizeof(nfe));
@@ -103,7 +103,7 @@ void speak_t::operator()()
             trans_t_to_master_synchroniser.command();
         } // end: catch(NonFatal_error_3 nfe)
 
-        catch(NonFatal_error_4 nfe)
+        catch(NonFatal_error_4 & nfe)
         {
             error_pointer= malloc(sizeof(nfe));
             memcpy(error_pointer, &nfe, sizeof(nfe));
@@ -111,7 +111,7 @@ void speak_t::operator()()
             trans_t_to_master_synchroniser.command();
         } // end: catch(NonFatal_error nfe4)
 
-        catch(Fatal_error fe)
+        catch(Fatal_error & fe)
         {
             error_pointer= malloc(sizeof(fe));
             memcpy(error_pointer, &fe, sizeof(fe));
@@ -119,7 +119,7 @@ void speak_t::operator()()
             trans_t_to_master_synchroniser.command();
         } // end: catch(Fatal_error fe)
 
-        catch (System_error fe)
+        catch (System_error & fe)
         {
             error_pointer= malloc(sizeof(fe));
             memcpy(error_pointer, &fe, sizeof(fe));

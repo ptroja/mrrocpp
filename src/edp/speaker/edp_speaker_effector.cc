@@ -367,7 +367,7 @@ void effector::main_loop (void)
 			}
 		} // end: try
 
-		catch(NonFatal_error_1 nfe)
+		catch(NonFatal_error_1 & nfe)
 		{
 			// Obsluga bledow nie fatalnych
 			// Konkretny numer bledu znajduje sie w skladowej error obiektu nfe
@@ -379,9 +379,9 @@ void effector::main_loop (void)
 			msg->message(lib::NON_FATAL_ERROR, nfe.error, 0);
 			// powrot do stanu: GET_INSTRUCTION
 			next_state = common::GET_INSTRUCTION;
-		} // end: catch(transformer::NonFatal_error_1 nfe)
+		}
 
-		catch(NonFatal_error_2 nfe)
+		catch(NonFatal_error_2 & nfe)
 		{
 			// Obsluga bledow nie fatalnych
 			// Konkretny numer bledu znajduje sie w skladowej error obiektu nfe
@@ -392,9 +392,9 @@ void effector::main_loop (void)
 			msg->message(lib::NON_FATAL_ERROR, nfe.error, 0);
 			// powrot do stanu: WAIT
 			next_state = common::WAIT;
-		} // end: catch(transformer::NonFatal_error_2 nfe)
+		}
 
-		catch(NonFatal_error_3 nfe)
+		catch(NonFatal_error_3 & nfe)
 		{
 			// Obsluga bledow nie fatalnych
 			// Konkretny numer bledu znajduje sie w skladowej error obiektu nfe
@@ -417,9 +417,9 @@ void effector::main_loop (void)
 			// msg->message(lib::NON_FATAL_ERROR, err_no_0, err_no_1); // by Y - oryginalnie
 			// powrot do stanu: GET_INSTRUCTION
 			next_state = common::GET_INSTRUCTION;
-		} // end: catch(transformer::NonFatal_error_3 nfe)
+		}
 
-		catch(Fatal_error fe)
+		catch(Fatal_error & fe)
 		{
 			// Obsluga bledow fatalnych
 			// Konkretny numer bledu znajduje sie w skladowej error obiektu fe
@@ -428,7 +428,7 @@ void effector::main_loop (void)
 			msg->message(lib::FATAL_ERROR, fe.error0, fe.error1);
 			// powrot do stanu: WAIT
 			next_state = common::WAIT;
-		} // end: catch(transformer::Fatal_error fe)
+		}
 
 
 		// } // end if important_message_flag // by Y juz zbedne
