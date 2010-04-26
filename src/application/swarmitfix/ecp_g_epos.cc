@@ -48,12 +48,6 @@ bool epos::first_step() {
 	get_mp_ecp_command();
 
 
-
-	the_robot->ecp_command.instruction.instruction_type = lib::SET;
-	the_robot->ecp_command.instruction.get_type = ARM_DEFINITION; // arm - ORYGINAL
-	the_robot->ecp_command.instruction.set_type = ARM_DEFINITION;
-
-
 	epos_data_port_command_structure.da[3] = 3.13;
 	epos_command_data_port->set(epos_data_port_command_structure);
 	epos_reply_data_request_port->set_request();

@@ -44,7 +44,24 @@ void robot::add_data_ports() {
 
 void robot::create_command() {
 
+	if (epos_command_data_port.is_new_data()
+			&& epos_reply_data_request_port.is_new_request()) {
+		ecp_command.instruction.instruction_type = lib::SET_GET;
+	} else if (epos_command_data_port.is_new_data()) {
+		ecp_command.instruction.instruction_type = lib::SET;
+	} else if (epos_reply_data_request_port.is_new_request()) {
+		ecp_command.instruction.instruction_type = lib::GET;
+	}
+
+	if (epos_reply_data_request_port.is_new_request()) {
+		ecp_command.instruction.get_type = ARM_DEFINITION; // arm - ORYGINAL
+		}
+
+
+
+
 	if (epos_command_data_port.is_new_data()) {
+		ecp_command.instruction.set_type = ARM_DEFINITION;
 		epos_data_port_command_structure = epos_command_data_port.get();
 		// generator command interpretation
 		// narazie proste przepisanie
