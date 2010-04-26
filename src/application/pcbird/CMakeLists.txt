@@ -7,7 +7,7 @@ add_executable(ecp_pcbird
 
 target_link_libraries(ecp_pcbird
 	ecp_r_irp6p ecp_r_irp6ot
-	ecp ecp_mp ${COMMON_LIBRARIES}
+	ecp
 )
 
 install(TARGETS ecp_pcbird DESTINATION bin)

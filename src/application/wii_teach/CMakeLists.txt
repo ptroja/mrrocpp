@@ -9,7 +9,7 @@ add_executable(ecp_wii_teach
 
 target_link_libraries(ecp_wii_teach
 	ecp_r_irp6ot
-	ecp ${COMMON_LIBRARIES}
+	ecp
 )
 
 install(TARGETS ecp_wii_teach DESTINATION bin)

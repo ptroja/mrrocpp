@@ -5,7 +5,7 @@ add_executable(ecp_smooth_test
 
 target_link_libraries(ecp_smooth_test
 	ecp_r_irp6p ecp_r_irp6ot
-	ecp ecp_mp ${COMMON_LIBRARIES}
+	ecp
 )
 
 install(TARGETS ecp_smooth_test DESTINATION bin)

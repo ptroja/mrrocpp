@@ -8,7 +8,7 @@ add_executable(ecp_t_grab_cube_irp6ot
 
 target_link_libraries(ecp_t_grab_cube_irp6ot
 	ecp_r_irp6ot
-	ecp ecp_mp ${COMMON_LIBRARIES}
+	ecp
 )
 
 install(TARGETS ecp_t_grab_cube_irp6ot DESTINATION bin)

@@ -2,10 +2,7 @@ add_executable(mp_swarmitfix
 	mp_t_swarmitfix.cc
 )
 
-target_link_libraries(mp_swarmitfix
-	mpmain mprobots ecp_mp
-	${COMMON_LIBRARIES}
-)
+target_link_libraries(mp_swarmitfix mpmain)
 
 add_executable(ecp_spkm
 	ecp_g_epos.cc
@@ -14,7 +11,6 @@ add_executable(ecp_spkm
 
 target_link_libraries(ecp_spkm
 	ecp_r_spkm ecp
-	${COMMON_LIBRARIES}
 )
 
 add_executable(ecp_smb
@@ -25,7 +21,6 @@ add_executable(ecp_smb
 
 target_link_libraries(ecp_smb
 	ecp_r_smb ecp
-	${COMMON_LIBRARIES}
 )
 
 add_executable(ecp_shead
@@ -35,7 +30,6 @@ add_executable(ecp_shead
 
 target_link_libraries(ecp_shead
 	ecp_r_shead ecp
-	${COMMON_LIBRARIES}
 )
 
 install(TARGETS ecp_spkm ecp_smb ecp_shead mp_swarmitfix DESTINATION bin)

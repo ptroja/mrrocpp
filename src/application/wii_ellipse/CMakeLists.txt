@@ -6,7 +6,7 @@ add_executable(ecp_wii_ellipse
 
 target_link_libraries(ecp_wii_ellipse
 	ecp_r_irp6ot
-	ecp ${COMMON_LIBRARIES}
+	ecp
 )
 
 install(TARGETS ecp_wii_ellipse DESTINATION bin)

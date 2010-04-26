@@ -6,7 +6,7 @@ add_executable(ecp_dung
 
 target_link_libraries(ecp_dung
 	ecp_r_irp6p
-	ecp ecp_mp ${COMMON_LIBRARIES}
+	ecp
 )
 
 install(TARGETS ecp_dung DESTINATION bin)

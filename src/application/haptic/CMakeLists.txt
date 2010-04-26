@@ -4,11 +4,7 @@ add_executable(mp_haptic
 	mp_g_haptic.cc
 )
 
-target_link_libraries(mp_haptic
-	mpmain mprobots ecp_mp
-	${COMMON_LIBRARIES}
-)
+target_link_libraries(mp_haptic mpmain)
 
 install(TARGETS mp_haptic DESTINATION bin)
 endif(ROBOT_IRP6_ON_TRACK AND ROBOT_IRP6_POSTUMENT)
-
