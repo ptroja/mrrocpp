@@ -53,10 +53,10 @@ catch (ecp::common::ecp_robot::ECP_error er) { \
 } /* end: catch */ \
 \
 catch(const std::exception& e){\
-	std::string tmp_string(" The following error has been detected");\
+	std::string tmp_string(" The following error has been detected: ");\
 	tmp_string += e.what(); \
 	ui_msg.all_ecp->message (lib::NON_FATAL_ERROR, tmp_string.c_str());\
-   std::cerr<<"The following error has been detected :\n\t"<<e.what()<<std::endl;\
+   std::cerr<<"UI: The following error has been detected :\n\t"<<e.what()<<std::endl;\
 }\
 \
 catch (...) {  /* Dla zewnetrznej petli try*/ \

@@ -99,6 +99,13 @@ int main(int argc, char *argv[])
 		printf("ecp_m.cc: Mam blad trasnmittera section 1 (@%s:%d)\n", __FILE__, __LINE__);
 	}
 
+	catch(const std::exception& e){
+		std::string tmp_string(" The following error has been detected: ");
+		tmp_string += e.what();
+		ecp::common::ecp_t->sr_ecp_msg->message (lib::NON_FATAL_ERROR, tmp_string.c_str());
+	   std::cerr<<"ECP: The following error has been detected :\n\t"<<e.what()<<std::endl;
+	}
+
 	catch (...) {  /* Dla zewnetrznej petli try*/
 		/* Wylapywanie niezdefiniowanych bledow*/
 		/*Komunikat o bledzie wysylamy do SR*/
@@ -191,6 +198,13 @@ int main(int argc, char *argv[])
 		catch (ecp_mp::transmitter::transmitter::transmitter_error & e) {
 			ecp::common::ecp_t->sr_ecp_msg->message (e.error_class, e.error_no);
 			printf("Mam blad trasnmittera section 2 (@%s:%d)\n", __FILE__, __LINE__);
+		}
+
+		catch(const std::exception& e){
+			std::string tmp_string(" The following error has been detected: ");
+			tmp_string += e.what();
+			ecp::common::ecp_t->sr_ecp_msg->message (lib::NON_FATAL_ERROR, tmp_string.c_str());
+		   std::cerr<<"ECP: The following error has been detected :\n\t"<<e.what()<<std::endl;
 		}
 
 		catch (...) {  /* Dla zewnetrznej petli try*/

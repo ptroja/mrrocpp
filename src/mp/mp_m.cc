@@ -155,6 +155,15 @@ int main (int argc, char *argv[], char **arge)
 			mp::common::mp_t->sr_ecp_msg->message (e.error_class, e.error_no);
 			printf("Mam blad trasnmittera section 1 (@%s:%d)\n", __FILE__, __LINE__);
 		} /* end: catch sensor_error  */
+
+		catch(const std::exception& e){
+			std::string tmp_string(" The following error has been detected: ");
+			tmp_string += e.what();
+			mp::common::mp_t->sr_ecp_msg->message (lib::NON_FATAL_ERROR, tmp_string.c_str());
+		   std::cerr<<"MP: The following error has been detected :\n\t"<<e.what()<<std::endl;
+		}
+
+
 		catch (...) {  /* Dla zewnetrznej petli try*/
 			/*   Wylapywanie niezdfiniowanych bledow  */
 			/*  Komunikat o bledzie wysylamy do SR */
@@ -271,6 +280,13 @@ int main (int argc, char *argv[], char **arge)
 				mp::common::mp_t->sr_ecp_msg->message (e.error_class, e.error_no);
 				printf("Mam blad trasnmittera section 2 (@%s:%d)\n", __FILE__, __LINE__);
 			} /* end: catch sensor_error  */
+
+			catch(const std::exception& e){
+				std::string tmp_string(" The following error has been detected: ");
+				tmp_string += e.what();
+				mp::common::mp_t->sr_ecp_msg->message (lib::NON_FATAL_ERROR, tmp_string.c_str());
+			   std::cerr<<"MP: The following error has been detected :\n\t"<<e.what()<<std::endl;
+			}
 
 			catch (...) {  /* Dla zewnetrznej petli try*/
 				/*   Wylapywanie niezdfiniowanych bledow  */
