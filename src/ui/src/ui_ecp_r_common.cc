@@ -27,14 +27,14 @@
 #include <math.h>
 
 // ---------------------------------------------------------------
-ui_common_robot::ui_common_robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg, lib::robot_name_t _robot_name)
-{
+ui_common_robot::ui_common_robot(lib::configurator &_config,
+		lib::sr_ecp &_sr_ecp_msg, lib::robot_name_t _robot_name) :
+	ecp(NULL) {
 
 }
 // ---------------------------------------------------------------
 
-ui_common_robot::~ui_common_robot()
-{
+ui_common_robot::~ui_common_robot() {
 	delete ecp;
 }
 
@@ -54,8 +54,7 @@ ui_common_robot::~ui_common_robot()
 // ---------------------------------------------------------------
 // virtual  // by Y - wywalone
 
-void ui_common_robot::execute_motion(void)
-{
+void ui_common_robot::execute_motion(void) {
 
 	// Zlecenie wykonania ruchu przez robota jest to polecenie dla EDP
 
@@ -70,8 +69,7 @@ void ui_common_robot::execute_motion(void)
 // ---------------------------------------------------------------
 
 // ---------------------------------------------------------------
-void ui_common_robot::set_desired_position(double d_position[])
-{
+void ui_common_robot::set_desired_position(double d_position[]) {
 	// Przepisanie polozen zadanych do tablicy desired_position[]
 	for (int j = 0; j < ecp->number_of_servos; j++)
 		desired_position[j] = d_position[j];
@@ -79,8 +77,7 @@ void ui_common_robot::set_desired_position(double d_position[])
 // ---------------------------------------------------------------
 
 // ---------------------------------------------------------------
-void ui_common_robot::get_current_position(double c_position[])
-{
+void ui_common_robot::get_current_position(double c_position[]) {
 	// Pobranie aktualnych polozen
 	for (int j = 0; j < ecp->number_of_servos; j++)
 		c_position[j] = current_position[j];
@@ -91,19 +88,20 @@ void ui_common_robot::get_current_position(double c_position[])
 // zlecenie odczytu numeru modelu kinematyki i korektora oraz numerow
 // algorytmow serwo i numerow zestawow parametrow algorytmow
 
-void ui_common_robot::get_kinematic(uint8_t* kinematic_model_no)
-{
+void ui_common_robot::get_kinematic(uint8_t* kinematic_model_no) {
 	// Zlecenie odczytu numeru modelu i korektora kinematyki
 	ecp->ecp_command.instruction.instruction_type = lib::GET;
 	ecp->ecp_command.instruction.get_type = ROBOT_MODEL_DEFINITION; // ROBOT_MODEL
-	ecp->ecp_command.instruction.get_robot_model_type = lib::ARM_KINEMATIC_MODEL; // ROBOT_MODEL
+	ecp->ecp_command.instruction.get_robot_model_type
+			= lib::ARM_KINEMATIC_MODEL; // ROBOT_MODEL
 	execute_motion();
 
-	*kinematic_model_no = ecp->reply_package.robot_model.kinematic_model.kinematic_model_no;
+	*kinematic_model_no
+			= ecp->reply_package.robot_model.kinematic_model.kinematic_model_no;
 }
 
-void ui_common_robot::get_servo_algorithm(uint8_t algorithm_no[], uint8_t parameters_no[])
-{
+void ui_common_robot::get_servo_algorithm(uint8_t algorithm_no[],
+		uint8_t parameters_no[]) {
 
 	// Zlecenie odczytu numerow algorytmow i zestawow parametrow
 	ecp->ecp_command.instruction.instruction_type = lib::GET;
@@ -112,15 +110,17 @@ void ui_common_robot::get_servo_algorithm(uint8_t algorithm_no[], uint8_t parame
 	execute_motion();
 
 	// Przepisanie aktualnych numerow algorytmow i zestawow parametrow
-	memcpy(algorithm_no, ecp->reply_package.robot_model.servo_algorithm.servo_algorithm_no, ecp->number_of_servos
-			* sizeof(uint8_t));
-	memcpy(parameters_no, ecp->reply_package.robot_model.servo_algorithm.servo_parameters_no, ecp->number_of_servos
-			* sizeof(uint8_t));
+	memcpy(algorithm_no,
+			ecp->reply_package.robot_model.servo_algorithm.servo_algorithm_no,
+			ecp->number_of_servos * sizeof(uint8_t));
+	memcpy(parameters_no,
+			ecp->reply_package.robot_model.servo_algorithm.servo_parameters_no,
+			ecp->number_of_servos * sizeof(uint8_t));
 }
 
 // do odczytu stanu poczatkowego robota
-void ui_common_robot::get_controller_state(lib::controller_state_t & robot_controller_initial_state_l)
-{
+void ui_common_robot::get_controller_state(
+		lib::controller_state_t & robot_controller_initial_state_l) {
 	// Zlecenie odczytu numeru modelu i korektora kinematyki
 	ecp->ecp_command.instruction.instruction_type = lib::GET;
 	ecp->ecp_command.instruction.get_type = CONTROLLER_STATE_DEFINITION;
@@ -132,18 +132,20 @@ void ui_common_robot::get_controller_state(lib::controller_state_t & robot_contr
 }
 
 // ---------------------------------------------------------------
-void ui_common_robot::set_kinematic(uint8_t kinematic_model_no)
-{
+void ui_common_robot::set_kinematic(uint8_t kinematic_model_no) {
 	// zlecenie zapisu numeru modelu kinematyki i korektora oraz numerow
 	// algorytmow serwo i numerow zestawow parametrow algorytmow
 
 	// Zlecenie zapisu numeru modelu i korektora kinematyki
 	ecp->ecp_command.instruction.instruction_type = lib::SET;
 	ecp->ecp_command.instruction.set_type = ROBOT_MODEL_DEFINITION; // ROBOT_MODEL
-	ecp->ecp_command.instruction.set_robot_model_type = lib::ARM_KINEMATIC_MODEL; // ROBOT_MODEL
-	ecp->ecp_command.instruction.get_robot_model_type = lib::ARM_KINEMATIC_MODEL; // ROBOT_MODEL
+	ecp->ecp_command.instruction.set_robot_model_type
+			= lib::ARM_KINEMATIC_MODEL; // ROBOT_MODEL
+	ecp->ecp_command.instruction.get_robot_model_type
+			= lib::ARM_KINEMATIC_MODEL; // ROBOT_MODEL
 
-	ecp->ecp_command.instruction.robot_model.kinematic_model.kinematic_model_no = kinematic_model_no;
+	ecp->ecp_command.instruction.robot_model.kinematic_model.kinematic_model_no
+			= kinematic_model_no;
 
 	execute_motion();
 }
@@ -151,15 +153,17 @@ void ui_common_robot::set_kinematic(uint8_t kinematic_model_no)
 
 
 // ---------------------------------------------------------------
-void ui_common_robot::set_servo_algorithm(uint8_t algorithm_no[], uint8_t parameters_no[])
-{
+void ui_common_robot::set_servo_algorithm(uint8_t algorithm_no[],
+		uint8_t parameters_no[]) {
 
 	// Zlecenie zapisu numerow algorytmow i zestawow parametrow
 	// Przepisanie zadanych numerow algorytmow i zestawow parametrow
-	memcpy(ecp->ecp_command.instruction.robot_model.servo_algorithm.servo_algorithm_no, algorithm_no, ecp->number_of_servos
-			* sizeof(uint8_t));
-	memcpy(ecp->ecp_command.instruction.robot_model.servo_algorithm.servo_parameters_no, parameters_no, ecp->number_of_servos
-			* sizeof(uint8_t));
+	memcpy(
+			ecp->ecp_command.instruction.robot_model.servo_algorithm.servo_algorithm_no,
+			algorithm_no, ecp->number_of_servos * sizeof(uint8_t));
+	memcpy(
+			ecp->ecp_command.instruction.robot_model.servo_algorithm.servo_parameters_no,
+			parameters_no, ecp->number_of_servos * sizeof(uint8_t));
 	ecp->ecp_command.instruction.instruction_type = lib::SET;
 	ecp->ecp_command.instruction.set_type = ROBOT_MODEL_DEFINITION; // ROBOT_MODEL
 	ecp->ecp_command.instruction.set_robot_model_type = lib::SERVO_ALGORITHM; //
@@ -169,8 +173,7 @@ void ui_common_robot::set_servo_algorithm(uint8_t algorithm_no[], uint8_t parame
 // ---------------------------------------------------------------
 
 // ---------------------------------------------------------------
-void ui_common_robot::read_motors(double current_position[])
-{
+void ui_common_robot::read_motors(double current_position[]) {
 	// Zlecenie odczytu polozenia
 
 	// printf("poczatek read motors\n");
@@ -192,8 +195,7 @@ void ui_common_robot::read_motors(double current_position[])
 
 
 // ---------------------------------------------------------------
-void ui_common_robot::read_joints(double current_position[])
-{
+void ui_common_robot::read_joints(double current_position[]) {
 	// Zlecenie odczytu polozenia
 
 	// Parametry zlecenia ruchu i odczytu polozenia
@@ -208,20 +210,5 @@ void ui_common_robot::read_joints(double current_position[])
 		current_position[i] = ecp->reply_package.arm.pf_def.arm_coordinates[i];
 }
 // ---------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

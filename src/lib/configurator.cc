@@ -351,10 +351,9 @@ std::string configurator::return_string_value(const char* _key, const char*__sec
 
 pid_t configurator::process_spawn(const std::string & _section_name) {
 #if defined(PROCESS_SPAWN_RSH)
-	pid_t child_pid = vfork();
 
-	if (child_pid == 0) {
-		std::string spawned_program_name = value<std::string>("program_name", _section_name);
+
+	std::string spawned_program_name = value<std::string>("program_name", _section_name);
 		std::string spawned_node_name = value<std::string>("node_name", _section_name);
 
 		std::string rsh_spawn_node;
@@ -389,6 +388,19 @@ pid_t configurator::process_spawn(const std::string & _section_name) {
 					node.c_str(), dir.c_str());
 		}
 
+
+		std::string opendir_path(bin_path);
+		opendir_path += spawned_program_name;
+
+		if (access(opendir_path.c_str(), R_OK) != 0) {
+			printf("spawned program absent: %s\n", opendir_path.c_str());
+			throw std::logic_error("spawned program absent: "+opendir_path);
+		}
+
+	pid_t child_pid = vfork();
+
+	if (child_pid == 0) {
+
 		//ewentualne dodatkowe argumenty wywolania np. przekierowanie na konsole
 		std::string asa;
 		if (exists("additional_spawn_argument", UI_SECTION)) {
@@ -403,14 +415,6 @@ pid_t configurator::process_spawn(const std::string & _section_name) {
 				node.c_str(), dir.c_str(), ini_file.c_str(), _section_name.c_str(),
 				session_name.length() ? session_name.c_str() : "\"\"", asa.c_str()
 		);
-
-		std::string opendir_path(bin_path);
-		opendir_path += spawned_program_name;
-
-		if (access(opendir_path.c_str(), R_OK) != 0) {
-			printf("spawned program absent: %s\n", opendir_path.c_str());
-			throw std::logic_error("spawned program absent: "+opendir_path);
-		}
 
 		// create new session for separation of signal delivery
 		if(setsid() == (pid_t) -1) {
