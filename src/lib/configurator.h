@@ -239,6 +239,8 @@ Eigen::Matrix <double, ROWS, COLS> configurator::value(const std::string & key, 
 	return value;
 }
 
+
+
 } // namespace lib
 } // namespace mrrocpp
 

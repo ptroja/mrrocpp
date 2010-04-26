@@ -14,6 +14,8 @@
 #include <boost/thread/condition_variable.hpp>
 #include <boost/thread/mutex.hpp>
 #include <boost/circular_buffer.hpp>
+#include <stdexcept>
+#include <iostream>
 
 #include "lib/com_buf.h"
 #include "lib/srlib.h"
@@ -49,6 +51,13 @@ catch (ecp::common::ecp_robot::ECP_error er) { \
 		} /* end: switch */ \
 	} \
 } /* end: catch */ \
+\
+catch(const std::exception& e){\
+	std::string tmp_string("The following error has been detected");\
+	tmp_string += e.what(); \
+	ui_msg.all_ecp->message (lib::NON_FATAL_ERROR, 0, tmp_string.c_str());\
+   std::cerr<<"The following error has been detected :\n\t"<<e.what()<<std::endl;\
+}\
 \
 catch (...) {  /* Dla zewnetrznej petli try*/ \
 	/* Wylapywanie niezdefiniowanych bledow*/ \
