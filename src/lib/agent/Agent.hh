@@ -5,6 +5,7 @@
 #include <string>
 
 #include <boost/thread/thread.hpp>
+#include <boost/thread/mutex.hpp>
 #include <boost/thread/condition_variable.hpp>
 
 // forward declarations
@@ -32,8 +33,21 @@ private:
 	 */
 	bool ReceiveMessage(bool block);
 
-	//! messip channel object
-	messip_channel_t * channel;
+#if !defined(USE_MESSIP_SRR)
+	//! server channel id
+	name_attach_t * channel;
+#endif
+
+	//! thread id of the of the non-blocking receive implementation
+	boost::thread * tid;
+
+	//! condition variable for synchronization wake-up after receiving data
+	boost::condition_variable cond;
+
+	//! mutex for protection data between receiver and readers
+	boost::mutex mtx;
+
+	void ReceiveDataLoop(void);
 
 protected:
 	//! Datatype of buffers container
@@ -58,10 +72,23 @@ protected:
 	 */
 	template <class T>
 	T Get(const std::string & name) {
+		boost::unique_lock<boost::mutex> lock(mtx);
 		buffers_t::iterator result = buffers.find(name);
 		if (result != buffers.end()) {
 			DataBuffer<T> * buffer = dynamic_cast<DataBuffer<T> *>(result->second);
 			return buffer->Get();
+		}
+		// TODO: exception
+		throw;
+	};
+
+	template <class T>
+	bool Get(const std::string & name, T & data) {
+		boost::unique_lock<boost::mutex> lock(mtx);
+		buffers_t::iterator result = buffers.find(name);
+		if (result != buffers.end()) {
+			DataBuffer<T> * buffer = dynamic_cast<DataBuffer<T> *>(result->second);
+			return buffer->Get(data);
 		}
 		// TODO: exception
 		throw;

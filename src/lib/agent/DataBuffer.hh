@@ -2,6 +2,7 @@
 #define _DATABUFFER_HH
 
 #include <vector>
+#include <ostream>
 
 #include "../xdr_iarchive.hpp"
 
@@ -14,7 +15,11 @@ class OrBufferContainer;
 
 //! representation of 'And' buffer condition
 class AndBufferContainer : public std::vector<const DataBufferBase *> {
+	//! overloaded display operator
+	friend std::ostream& operator<<(std::ostream& output, const AndBufferContainer& p);
+
 private:
+	//! flag to indicate that new message has arrived
 	bool fresh;
 
 public:
@@ -38,12 +43,12 @@ public:
 
 	//! check if this condition was satisfied
 	bool isFresh() const;
-
-	//! print the condition
-	void print() const;
 };
 
 class OrBufferContainer : public std::vector<AndBufferContainer> {
+	//! overloaded display operator
+	friend std::ostream& operator<<(std::ostream& output, const AndBufferContainer& p);
+
 public:
 	//! Base container data type
 	typedef std::vector<AndBufferContainer> base_t;
@@ -62,9 +67,6 @@ public:
 
 	//! default constructor
 	OrBufferContainer();
-
-	//! print the condition
-	void print() const;
 };
 
 class DataBufferBase {
@@ -103,11 +105,7 @@ class DataBuffer : public DataBufferBase {
 private:
 	T data;
 
-public:
-	DataBuffer(const std::string & _name, const T & _default_value = T())
-		: DataBufferBase(_name), data(_default_value)
-	{
-	}
+	friend class Agent;
 
 	T Get() {
 		fresh = false;
@@ -129,6 +127,12 @@ public:
 	void Set(xdr_iarchive<> & ia) {
  		ia >> data;
 		fresh = true;
+	}
+
+public:
+	DataBuffer(const std::string & _name, const T & _default_value = T())
+		: DataBufferBase(_name), data(_default_value)
+	{
 	}
 };
 

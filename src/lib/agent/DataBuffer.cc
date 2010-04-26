@@ -54,32 +54,34 @@ bool AndBufferContainer::isFresh() const
 	return true;
 }
 
-void AndBufferContainer::print() const
+std::ostream& operator<<(std::ostream& output, const AndBufferContainer& me)
 {
-	for(std::size_t i = 0; i < this->size(); ++i) {
-		const DataBufferBase * element = this->operator[](i)	;
-		std::cout << element->getName();
-		if(i < this->size() - 1) {
-			std::cout << " & ";
+	for(std::size_t i = 0; i < me.size(); ++i) {
+		const DataBufferBase * element = me.operator[](i)	;
+		output << element->getName();
+		if(i < me.size() - 1) {
+			output << " & ";
 		}
 	}
+
+	return output;
 }
 
-void OrBufferContainer::print() const
+std::ostream& operator<<(std::ostream& output, const OrBufferContainer& me)
 {
-	for(std::size_t i = 0; i < this->size(); ++i) {
-		const AndBufferContainer & element = this->operator[](i);
+	for(std::size_t i = 0; i < me.size(); ++i) {
+		const AndBufferContainer & element = me.operator[](i);
 		if(element.size() > 1) {
-			std::cout << "(";
-			element.print();
-			std::cout << ")";
+			output << "(" << element << ")";
 		} else {
-			element.print();
+			output << element;
 		}
-		if(i < this->size() - 1) {
-			std::cout << " | ";
+		if(i < me.size() - 1) {
+			output << " | ";
 		}
 	}
+
+	return output;
 }
 
 OrBufferContainer & OrBufferContainer::operator=(const DataBufferBase &op)

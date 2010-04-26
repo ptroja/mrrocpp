@@ -25,12 +25,13 @@ public:
 		AndBufferContainer cont3 = (cont1 & cont2);
 
 		OrBufferContainer or1(cont1);// = DoubleBuffer | IntBuffer;
-		cont1.print(); std::cout << std::endl;
-		Wait(DoubleBuffer);
+		std::cout << cont1 << std::endl;
+		Wait(IntBuffer);
 
 //		cont3
 		int i = Get<int>("integer buffer");
-		double d = Get<double>("double buffer");
+		double d;
+		bool double_fresh = Get<double>("double buffer", d);
 		std::cout << "Reader: " << i << "," << d << std::endl;
 		// Send() << IntBuffer & DoubleBuffer; //?
 		return true;

@@ -200,7 +200,7 @@ public:
 	 */
 	std::size_t getArchiveSize(void) const
 	{
-		return ((std::size_t) xdr_getpos(&xdrs));
+		return ((std::size_t) xdr_getpos((XDR *) &xdrs));
 	}
 
 	/**
