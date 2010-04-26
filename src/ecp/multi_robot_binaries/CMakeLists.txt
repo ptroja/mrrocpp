@@ -12,6 +12,6 @@ target_link_library_if(ROBOT_CONVEYOR ecp_tran ecp_r_conv)
 target_link_library_if(ROBOT_SPEAKER ecp_tran ecp_r_speaker)
 
 # this are dependency libraries
-target_link_libraries(ecp_tran ecp ecp_mp ${COMMON_LIBRARIES})
+target_link_libraries(ecp_tran ecp)
 
 install(TARGETS ecp_tran DESTINATION bin)

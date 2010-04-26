@@ -6,8 +6,7 @@ add_executable(ecp_speaker
 	generator/ecp_g_speak.cc
 )
 
-target_link_libraries(ecp_speaker
-	ecp_r_speaker ecp ecp_mp ${COMMON_LIBRARIES})
+target_link_libraries(ecp_speaker ecp_r_speaker ecp)
 
 install(TARGETS ecp_speaker DESTINATION bin)
 endif(ROBOT_SPEAKER)

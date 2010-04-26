@@ -3,7 +3,6 @@ add_executable(ecp_festival
 	generator/ecp_g_festival.cc
 )
 
-target_link_libraries(ecp_festival
-	ecp ecp_mp ${COMMON_LIBRARIES})
+target_link_libraries(ecp_festival ecp)
 
 install(TARGETS ecp_festival DESTINATION bin)
