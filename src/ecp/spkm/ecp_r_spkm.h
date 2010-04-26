@@ -24,7 +24,7 @@ class robot: public common::ecp_robot, public kinematics::common::kinematics_man
 	// Klasa dla robota irp6_postument (sztywnego)
 protected:
 	lib::single_thread_port<epos_command> epos_command_data_port;
-	lib::single_thread_port<epos_reply> epos_reply_data_request_port;
+	lib::single_thread_request_port<epos_reply> epos_reply_data_request_port;
 	epos_command epos_data_port_command_structure;
 	epos_reply epos_data_port_reply_structure;
 	lib::spkm_cbuffer ecp_edp_cbuffer;

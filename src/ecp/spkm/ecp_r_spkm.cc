@@ -17,10 +17,10 @@ namespace ecp {
 namespace spkm {
 
 robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
-	epos_command_data_port(EPOS_COMMAND_DATA_PORT), epos_reply_data_request_port(
-			EPOS_REPLY_DATA_REQUEST_PORT), ecp_robot(lib::ROBOT_SPKM,
-			SPKM_NUM_OF_SERVOS, EDP_SPKM_SECTION, _config, _sr_ecp),
-			kinematics_manager() {
+	epos_command_data_port(EPOS_COMMAND_DATA_PORT),
+			epos_reply_data_request_port(EPOS_REPLY_DATA_REQUEST_PORT),
+			ecp_robot(lib::ROBOT_SPKM, SPKM_NUM_OF_SERVOS, EDP_SPKM_SECTION,
+					_config, _sr_ecp), kinematics_manager() {
 	add_data_ports();
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();
@@ -28,10 +28,10 @@ robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
 }
 
 robot::robot(common::task::task& _ecp_object) :
-	epos_command_data_port(EPOS_COMMAND_DATA_PORT), epos_reply_data_request_port(
-			EPOS_REPLY_DATA_REQUEST_PORT), ecp_robot(lib::ROBOT_SPKM,
-			SPKM_NUM_OF_SERVOS, EDP_SPKM_SECTION, _ecp_object),
-			kinematics_manager() {
+	epos_command_data_port(EPOS_COMMAND_DATA_PORT),
+			epos_reply_data_request_port(EPOS_REPLY_DATA_REQUEST_PORT),
+			ecp_robot(lib::ROBOT_SPKM, SPKM_NUM_OF_SERVOS, EDP_SPKM_SECTION,
+					_ecp_object), kinematics_manager() {
 	add_data_ports();
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();
@@ -78,7 +78,9 @@ void robot::get_reply() {
 		epos_data_port_reply_structure.motion_in_progress[i]
 				= edp_ecp_rbuffer.motion_in_progress[i];
 	}
-	epos_reply_data_request_port.set(epos_data_port_reply_structure);
+	if (epos_reply_data_request_port.is_new_request()) {
+		epos_reply_data_request_port.set(epos_data_port_reply_structure);
+	}
 }
 
 // Stworzenie modeli kinematyki dla robota IRp-6 na postumencie.

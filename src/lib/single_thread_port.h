@@ -47,7 +47,7 @@ public:
 		single_thread_port_interface(_name) {
 	}
 
-	void set(T& _data) {
+	virtual void set(T& _data) {
 		data = _data;
 		new_data = true;
 	}
@@ -74,8 +74,13 @@ public:
 		single_thread_port<T> (_name) {
 	}
 
-	void set_request(T& _data) {
+	void set_request() {
 		new_request = true;
+	}
+
+	void set(T& _data) {
+		new_request = false;
+		single_thread_port<T>::set(_data);
 	}
 
 	bool is_new_request() {
@@ -116,11 +121,7 @@ public:
 		return dynamic_cast<single_thread_request_port<T>*> (single_thread_port_map[name]);
 	}
 
-
-
 };
-
-
 
 }
 }

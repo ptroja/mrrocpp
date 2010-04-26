@@ -56,7 +56,7 @@ bool epos::first_step() {
 
 	epos_data_port_command_structure.da[3] = 3.13;
 	epos_command_data_port->set(epos_data_port_command_structure);
-
+	epos_reply_data_request_port->set_request();
 
 	if (clock_gettime(CLOCK_REALTIME, &acttime) == -1) { //acquiring actual time
 		printf("sleep generator: first step time measurement error");
