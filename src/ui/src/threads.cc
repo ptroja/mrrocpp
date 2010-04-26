@@ -103,8 +103,6 @@ void *comm_thread(void* arg) {
 
 	name_attach_t *attach;
 
-	_msg_info info;
-
 	bool wyjscie;
 
 	if ((attach = name_attach(NULL, ui_state.ui_attach_point.c_str(),
@@ -117,6 +115,8 @@ void *comm_thread(void* arg) {
 	while (1) {
 		// ui_ecp_obj->communication_state = UI_ECP_REPLY_READY;
 		ui_ecp_obj->communication_state = UI_ECP_AFTER_REPLY;
+
+		_msg_info info;
 
 		int rcvid = MsgReceive(attach->chid, &ui_ecp_obj->ecp_to_ui_msg,
 				sizeof(ui_ecp_obj->ecp_to_ui_msg), &info);
