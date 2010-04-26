@@ -53,9 +53,9 @@ catch (ecp::common::ecp_robot::ECP_error er) { \
 } /* end: catch */ \
 \
 catch(const std::exception& e){\
-	std::string tmp_string("The following error has been detected");\
+	std::string tmp_string(" The following error has been detected");\
 	tmp_string += e.what(); \
-	ui_msg.all_ecp->message (lib::NON_FATAL_ERROR, 0, tmp_string.c_str());\
+	ui_msg.all_ecp->message (lib::NON_FATAL_ERROR, tmp_string.c_str());\
    std::cerr<<"The following error has been detected :\n\t"<<e.what()<<std::endl;\
 }\
 \
@@ -66,26 +66,28 @@ catch (...) {  /* Dla zewnetrznej petli try*/ \
 } /*end: catch */\
 
 
-enum TEACHING_STATE_ENUM
-{
+enum TEACHING_STATE_ENUM {
 	FSTRAJECTORY, FSCONFIG
 };
 
-enum UI_NOTIFICATION_STATE_ENUM
-{
-	UI_N_STARTING, UI_N_READY, UI_N_BUSY, UI_N_EXITING, UI_N_COMMUNICATION, UI_N_PROCESS_CREATION, UI_N_SYNCHRONISATION
+enum UI_NOTIFICATION_STATE_ENUM {
+	UI_N_STARTING,
+	UI_N_READY,
+	UI_N_BUSY,
+	UI_N_EXITING,
+	UI_N_COMMUNICATION,
+	UI_N_PROCESS_CREATION,
+	UI_N_SYNCHRONISATION
 };
 
 // FIXME: moved from proto.h for linux compatibility
 int set_ui_state_notification(UI_NOTIFICATION_STATE_ENUM new_notifacion);
 
-enum UI_ECP_COMMUNICATION_STATE
-{
+enum UI_ECP_COMMUNICATION_STATE {
 	UI_ECP_AFTER_RECEIVE, UI_ECP_REPLY_READY, UI_ECP_AFTER_REPLY
 };
 
-enum UI_MP_STATE
-{
+enum UI_MP_STATE {
 	UI_MP_NOT_PERMITED_TO_RUN,
 	UI_MP_PERMITED_TO_RUN,
 	UI_MP_WAITING_FOR_START_PULSE,
@@ -93,8 +95,7 @@ enum UI_MP_STATE
 	UI_MP_TASK_PAUSED
 };
 
-enum UI_ALL_EDPS_STATE
-{
+enum UI_ALL_EDPS_STATE {
 	UI_ALL_EDPS_NONE_EDP_ACTIVATED,
 	UI_ALL_EDPS_NONE_EDP_LOADED,
 	UI_ALL_EDPS_THERE_IS_EDP_LOADED_BUT_NOT_ALL_ARE_LOADED,
@@ -109,8 +110,7 @@ enum UI_ALL_EDPS_STATE
 // czas jaki uplywa przed wyslaniem sygnalu w funkcji ualarm w mikrosekundach
 #define SIGALRM_TIMEOUT 1000000
 
-typedef struct
-{
+typedef struct {
 	pid_t pid;
 	int test_mode;
 	std::string node_name;
@@ -131,8 +131,7 @@ typedef struct
 	double front_position[MAX_SERVOS_NR];
 } edp_state_def;
 
-typedef struct
-{
+typedef struct {
 	pid_t pid;
 	std::string node_name;
 	std::string section_name; // nazwa sekcji, w ktorej zapisana jest konfiguracja
@@ -143,15 +142,13 @@ typedef struct
 	int last_state;
 } ecp_state_def;
 
-typedef struct
-{
+typedef struct {
 	bool is_active;
 	edp_state_def edp;
 	ecp_state_def ecp;
 } ecp_edp_ui_robot_def;
 
-typedef struct
-{
+typedef struct {
 	pid_t pid;
 	std::string node_name;
 	std::string network_pulse_attach_point;
@@ -161,14 +158,12 @@ typedef struct
 	UI_MP_STATE last_state;
 } mp_state_def;
 
-typedef struct
-{
+typedef struct {
 	std::string program_name;
 	std::string node_name;
 } program_node_def;
 
-typedef struct
-{
+typedef struct {
 
 	UI_ALL_EDPS_STATE all_edps;
 	std::string binaries_network_path; // sieciowa sciezka binariow mrrocpp
@@ -188,9 +183,9 @@ typedef struct
 	typedef std::string list_t;
 
 	// listy sekcji i wezlow sieciowych plikow konfiguracyjnych
-	std::list <list_t> section_list, config_node_list, all_node_list;
+	std::list<list_t> section_list, config_node_list, all_node_list;
 	// lista nazw programow i wezlow na ktorych maja byc uruchamiane
-	std::list <program_node_def> program_node_list;
+	std::list<program_node_def> program_node_list;
 
 	std::string ui_node_name; // nazwa wezla na ktorym jest uruchamiany UI
 	int ui_node_nr; // numer wezla na ktorym jest uruchamiany UI
@@ -276,10 +271,9 @@ typedef struct
 
 #define UI_SR_BUFFER_LENGHT 50
 
-class ui_sr_buffer
-{
+class ui_sr_buffer {
 private:
-	boost::circular_buffer <lib::sr_package_t> cb;
+	boost::circular_buffer<lib::sr_package_t> cb;
 	boost::mutex mtx; // = PTHREAD_MUTEX_INITIALIZER ;
 
 public:
@@ -295,8 +289,7 @@ public:
 
 #define UI_SR_BUFFER_LENGHT 50
 
-class ui_ecp_buffer
-{
+class ui_ecp_buffer {
 private:
 
 public:
@@ -309,18 +302,16 @@ public:
 
 };
 
-typedef struct
-{
+typedef struct {
 	lib::sr_ecp* all_ecp; // Wskaznik na obiekt do komunikacji z SR z fukcja ECP dla wszystkich robotow
 	lib::sr_ui* ui; // Wskaznik na obiekt do komunikacji z SR
 } ui_msg_def;
 
 void UI_close(void);
 
-class function_execution_buffer
-{
+class function_execution_buffer {
 public:
-	typedef boost::function <int()> command_function_t;
+	typedef boost::function<int()> command_function_t;
 
 	int wait_and_execute();
 	void command(command_function_t _com_fun);
@@ -337,8 +328,7 @@ private:
 // forward declaration
 class busy_flag;
 
-class busy_flagger
-{
+class busy_flagger {
 private:
 	//! flag object to decrement in destructor
 	busy_flag & flag;
@@ -351,8 +341,7 @@ public:
 	~busy_flagger();
 };
 
-class busy_flag
-{
+class busy_flag {
 	friend class busy_flagger;
 
 private:
