@@ -567,7 +567,6 @@ EDP_conveyor_create_int( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t 
 		} else if (check_node_existence(ui_state.conveyor.edp.node_name, std::string("edp_conveyor"))) {
 			ui_state.conveyor.edp.node_nr = config->return_node_number(ui_state.conveyor.edp.node_name.c_str());
 
-			ui_state.conveyor.edp.state = 1;
 
 			ui_robot.conveyor = new ui_tfg_and_conv_robot(*config, *ui_msg.all_ecp, lib::ROBOT_CONVEYOR);
 			ui_state.conveyor.edp.pid = ui_robot.conveyor->ecp->get_EDP_pid();
@@ -578,7 +577,7 @@ EDP_conveyor_create_int( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t 
 				fprintf( stderr, "EDP spawn failed: %s\n", strerror( errno ));
 				delete ui_robot.conveyor;
 			} else {  // jesli spawn sie powiodl
-
+				ui_state.conveyor.edp.state = 1;
 				short tmp = 0;
 			 	// kilka sekund  (~1) na otworzenie urzadzenia
 				while((ui_state.conveyor.edp.reader_fd = name_open(ui_state.conveyor.edp.network_reader_attach_point.c_str(),

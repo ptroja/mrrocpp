@@ -38,21 +38,23 @@ extern lib::configurator* config;
 extern ui_msg_def ui_msg;
 extern ui_robot_def ui_robot;
 
-
-int EDP_spkm_create(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int EDP_spkm_create(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo)
 
 {
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	edp_spkm_eb.command(boost::bind(EDP_spkm_create_int, widget, apinfo, cbinfo));
+	edp_spkm_eb.command(
+			boost::bind(EDP_spkm_create_int, widget, apinfo, cbinfo));
 
 	return (Pt_CONTINUE);
 
 }
 
-int EDP_spkm_create_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int EDP_spkm_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -77,16 +79,18 @@ int EDP_spkm_create_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *
 			tmp2_string += ui_state.spkm.edp.network_resourceman_attach_point;
 
 			// sprawdzenie czy nie jest juz zarejestrowany zarzadca zasobow
-			if ((!(ui_state.spkm.edp.test_mode)) && (access(tmp_string.c_str(), R_OK) == 0)
-					|| (access(tmp2_string.c_str(), R_OK) == 0)) {
-				ui_msg.ui->message(lib::NON_FATAL_ERROR, "edp_spkm already exists");
-			} else if (check_node_existence(ui_state.spkm.edp.node_name, std::string("edp_spkm"))) {
+			if ((!(ui_state.spkm.edp.test_mode)) && (access(tmp_string.c_str(),
+					R_OK) == 0) || (access(tmp2_string.c_str(), R_OK) == 0)) {
+				ui_msg.ui->message(lib::NON_FATAL_ERROR,
+						"edp_spkm already exists");
+			} else if (check_node_existence(ui_state.spkm.edp.node_name,
+					std::string("edp_spkm"))) {
 
-				ui_state.spkm.edp.node_nr = config->return_node_number(ui_state.spkm.edp.node_name);
+				ui_state.spkm.edp.node_nr = config->return_node_number(
+						ui_state.spkm.edp.node_name);
 
-				ui_state.spkm.edp.state = 1;
-
-				ui_robot.spkm = new ui_tfg_and_conv_robot(*config, *ui_msg.all_ecp, lib::ROBOT_SPKM);
+				ui_robot.spkm = new ui_tfg_and_conv_robot(*config,
+						*ui_msg.all_ecp, lib::ROBOT_SPKM);
 
 				ui_state.spkm.edp.pid = ui_robot.spkm->ecp->get_EDP_pid();
 
@@ -97,12 +101,15 @@ int EDP_spkm_create_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *
 					delete ui_robot.spkm;
 				} else { // jesli spawn sie powiodl
 
+					ui_state.spkm.edp.state = 1;
+
 					short tmp = 0;
 					// kilka sekund  (~1) na otworzenie urzadzenia
 
 					while ((ui_state.spkm.edp.reader_fd
-							= name_open(ui_state.spkm.edp.network_reader_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL))
-							< 0)
+							= name_open(
+									ui_state.spkm.edp.network_reader_attach_point.c_str(),
+									NAME_FLAG_ATTACH_GLOBAL)) < 0)
 						if ((tmp++) < CONNECT_RETRY) {
 							delay(CONNECT_DELAY);
 						} else {
@@ -113,11 +120,13 @@ int EDP_spkm_create_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *
 					// odczytanie poczatkowego stanu robota (komunikuje sie z EDP)
 					lib::controller_state_t robot_controller_initial_state_tmp;
 
-					ui_robot.spkm->get_controller_state(robot_controller_initial_state_tmp);
+					ui_robot.spkm->get_controller_state(
+							robot_controller_initial_state_tmp);
 
 					//ui_state.spkm.edp.state = 1; // edp wlaczone reader czeka na start
 
-					ui_state.spkm.edp.is_synchronised = robot_controller_initial_state_tmp.is_synchronised;
+					ui_state.spkm.edp.is_synchronised
+							= robot_controller_initial_state_tmp.is_synchronised;
 				}
 			}
 		}
@@ -131,7 +140,8 @@ int EDP_spkm_create_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *
 	return 1;
 }
 
-int EDP_spkm_slay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int EDP_spkm_slay(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -144,7 +154,8 @@ int EDP_spkm_slay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo
 
 }
 
-int EDP_spkm_slay_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int EDP_spkm_slay_int(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo)
 
 {
 	int pt_res;
@@ -154,7 +165,8 @@ int EDP_spkm_slay_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cb
 	if (ui_state.spkm.edp.state > 0) { // jesli istnieje EDP
 		if (ui_state.spkm.edp.reader_fd >= 0) {
 			if (name_close(ui_state.spkm.edp.reader_fd) == -1) {
-				fprintf(stderr, "UI: EDP_irp6ot, %s:%d, name_close(): %s\n", __FILE__, __LINE__, strerror(errno));
+				fprintf(stderr, "UI: EDP_irp6ot, %s:%d, name_close(): %s\n",
+						__FILE__, __LINE__, strerror(errno));
 			}
 		}
 		delete ui_robot.spkm;

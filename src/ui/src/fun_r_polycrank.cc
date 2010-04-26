@@ -186,8 +186,6 @@ EDP_polycrank_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cb
 		} else if (check_node_existence(ui_state.irp6_mechatronika.edp.node_name, std::string("edp_irp6_mechatronika"))) {
 			ui_state.irp6_mechatronika.edp.node_nr = config->return_node_number(ui_state.irp6_mechatronika.edp.node_name);
 
-			ui_state.irp6_mechatronika.edp.state = 1;
-
 			ui_robot.irp6_mechatronika = new ui_irp6_common_robot(
 					*config, *ui_msg.all_ecp,
 					lib::ROBOT_IRP6_MECHATRONIKA);
@@ -201,6 +199,7 @@ EDP_polycrank_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cb
 				delete ui_robot.irp6_mechatronika;
 			} else {  // jesli spawn sie powiodl
 
+				ui_state.irp6_mechatronika.edp.state = 1;
 
 				short tmp = 0;
 			 	// kilka sekund  (~1) na otworzenie urzadzenia

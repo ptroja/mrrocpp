@@ -2116,7 +2116,7 @@ int EDP_irp6_on_track_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 						= config->return_node_number(
 								ui_state.irp6_on_track.edp.node_name);
 
-				ui_state.irp6_on_track.edp.state = 1;
+
 
 				ui_robot.irp6_on_track = new ui_irp6_common_robot(*config,
 						*ui_msg.all_ecp, lib::ROBOT_IRP6_ON_TRACK);
@@ -2130,6 +2130,8 @@ int EDP_irp6_on_track_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 					fprintf(stderr, "EDP spawn failed: %s\n", strerror(errno));
 					delete ui_robot.irp6_on_track;
 				} else { // jesli spawn sie powiodl
+
+					ui_state.irp6_on_track.edp.state = 1;
 
 					short tmp = 0;
 					// kilka sekund  (~1) na otworzenie urzadzenia

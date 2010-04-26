@@ -84,8 +84,6 @@ int EDP_shead_create_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t 
 
 				ui_state.shead.edp.node_nr = config->return_node_number(ui_state.shead.edp.node_name);
 
-				ui_state.shead.edp.state = 1;
-
 				ui_robot.shead = new ui_tfg_and_conv_robot(*config, *ui_msg.all_ecp, lib::ROBOT_SHEAD);
 
 				ui_state.shead.edp.pid = ui_robot.shead->ecp->get_EDP_pid();
@@ -96,7 +94,7 @@ int EDP_shead_create_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t 
 					fprintf(stderr, "EDP spawn failed: %s\n", strerror(errno));
 					delete ui_robot.shead;
 				} else { // jesli spawn sie powiodl
-
+					ui_state.shead.edp.state = 1;
 					short tmp = 0;
 					// kilka sekund  (~1) na otworzenie urzadzenia
 

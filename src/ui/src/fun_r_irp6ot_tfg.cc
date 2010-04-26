@@ -123,8 +123,6 @@ int EDP_irp6ot_tfg_create_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackIn
 
 				ui_state.irp6ot_tfg.edp.node_nr = config->return_node_number(ui_state.irp6ot_tfg.edp.node_name);
 
-				ui_state.irp6ot_tfg.edp.state = 1;
-
 				ui_robot.irp6ot_tfg = new ui_tfg_and_conv_robot(*config, *ui_msg.all_ecp, lib::ROBOT_IRP6OT_TFG);
 
 				ui_state.irp6ot_tfg.edp.pid = ui_robot.irp6ot_tfg->ecp->get_EDP_pid();
@@ -135,6 +133,8 @@ int EDP_irp6ot_tfg_create_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackIn
 					fprintf(stderr, "EDP spawn failed: %s\n", strerror(errno));
 					delete ui_robot.irp6ot_tfg;
 				} else { // jesli spawn sie powiodl
+
+					ui_state.irp6ot_tfg.edp.state = 1;
 
 					short tmp = 0;
 					// kilka sekund  (~1) na otworzenie urzadzenia

@@ -280,9 +280,7 @@ EDP_speaker_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbin
 
 			ui_state.speaker.edp.node_nr = config->return_node_number(ui_state.speaker.edp.node_name);
 
-			ui_state.speaker.edp.state = 1;
-
-			ui_robot.speaker = new ui_speaker_robot(&ui_state.speaker.edp, *config, *ui_msg.all_ecp);
+				ui_robot.speaker = new ui_speaker_robot(&ui_state.speaker.edp, *config, *ui_msg.all_ecp);
 			ui_state.speaker.edp.pid = ui_robot.speaker->get_EDP_pid();
 
 			if (ui_state.speaker.edp.pid<0)
@@ -291,6 +289,8 @@ EDP_speaker_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbin
 				fprintf( stderr, "EDP spawn failed: %s\n", strerror( errno ));
 				delete ui_robot.speaker;
 			} else {  // jesli spawn sie powiodl
+
+				ui_state.speaker.edp.state = 1;
 
 				/*
 				 tmp = 0;

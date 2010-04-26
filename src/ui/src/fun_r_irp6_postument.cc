@@ -2043,7 +2043,7 @@ int EDP_irp6_postument_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 						= config->return_node_number(
 								ui_state.irp6_postument.edp.node_name);
 
-				ui_state.irp6_postument.edp.state = 1;
+
 
 				ui_robot.irp6_postument = new ui_irp6_common_robot(*config,
 						*ui_msg.all_ecp, lib::ROBOT_IRP6_POSTUMENT);
@@ -2056,7 +2056,7 @@ int EDP_irp6_postument_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 					fprintf(stderr, "EDP spawn failed: %s\n", strerror(errno));
 					delete ui_robot.irp6_postument;
 				} else { // jesli spawn sie powiodl
-
+					ui_state.irp6_postument.edp.state = 1;
 					short tmp = 0;
 					// kilka sekund  (~1) na otworzenie urzadzenia
 					while ((ui_state.irp6_postument.edp.reader_fd

@@ -178,9 +178,7 @@ int EDP_irp6_mechatronika_create(PtWidget_t *widget, ApInfo_t *apinfo,
 						= config->return_node_number(
 								ui_state.irp6_mechatronika.edp.node_name);
 
-				ui_state.irp6_mechatronika.edp.state = 1;
-
-				ui_robot.irp6_mechatronika = new ui_irp6_common_robot(*config,
+					ui_robot.irp6_mechatronika = new ui_irp6_common_robot(*config,
 						*ui_msg.all_ecp, lib::ROBOT_IRP6_MECHATRONIKA);
 
 				ui_state.irp6_mechatronika.edp.pid
@@ -192,7 +190,7 @@ int EDP_irp6_mechatronika_create(PtWidget_t *widget, ApInfo_t *apinfo,
 					delete ui_robot.irp6_mechatronika;
 				} else { // jesli spawn sie powiodl
 
-
+					ui_state.irp6_mechatronika.edp.state = 1;
 					short tmp = 0;
 					// kilka sekund  (~1) na otworzenie urzadzenia
 					while ((ui_state.irp6_mechatronika.edp.reader_fd

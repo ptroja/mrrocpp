@@ -84,8 +84,6 @@ int EDP_smb_create_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *c
 
 				ui_state.smb.edp.node_nr = config->return_node_number(ui_state.smb.edp.node_name);
 
-				ui_state.smb.edp.state = 1;
-
 				ui_robot.smb = new ui_tfg_and_conv_robot(*config, *ui_msg.all_ecp, lib::ROBOT_SMB);
 
 				ui_state.smb.edp.pid = ui_robot.smb->ecp->get_EDP_pid();
@@ -96,6 +94,8 @@ int EDP_smb_create_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *c
 					fprintf(stderr, "EDP spawn failed: %s\n", strerror(errno));
 					delete ui_robot.smb;
 				} else { // jesli spawn sie powiodl
+
+					ui_state.smb.edp.state = 1;
 
 					short tmp = 0;
 					// kilka sekund  (~1) na otworzenie urzadzenia
