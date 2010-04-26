@@ -16,7 +16,6 @@
 namespace mrrocpp {
 namespace lib {
 
-
 class single_thread_port_interface {
 private:
 	std::string name;
@@ -40,7 +39,7 @@ public:
 template<class T>
 class single_thread_port: public single_thread_port_interface {
 
-private:
+protected:
 	T data;
 
 public:
@@ -53,7 +52,7 @@ public:
 		new_data = true;
 	}
 
-	T get() {
+	virtual T get() {
 		new_data = false;
 		return data;
 	}
@@ -64,6 +63,31 @@ public:
 
 };
 
+template<class T>
+class single_thread_request_port: public single_thread_port<T> {
+
+protected:
+	bool new_request;
+
+public:
+	single_thread_request_port(std::string _name) :
+		single_thread_port<T> (_name) {
+	}
+
+	void set_request(T& _data) {
+		new_request = true;
+	}
+
+	bool is_new_request() {
+		return new_request;
+	}
+
+	T get() {
+		// dodac wyjatek jak nie ma nowych danych
+		return single_thread_port<T>::get();
+	}
+
+};
 
 class single_thread_port_manager {
 private:
@@ -76,16 +100,27 @@ public:
 	}
 
 	void add_port(single_thread_port_interface* single_thread_port_inter) {
-		single_thread_port_map[single_thread_port_inter->get_name()] = single_thread_port_inter;
+		single_thread_port_map[single_thread_port_inter->get_name()]
+				= single_thread_port_inter;
 	}
 
 	template<class T>
 	single_thread_port<T>* get_port(std::string name) {
 		// TODO: dodac obsluge wyjatku w sytuacji gdy nie ma takiego pola lub typ sie nie zgadza
-		return dynamic_cast<single_thread_port<T>* > (single_thread_port_map[name]);
+		return dynamic_cast<single_thread_port<T>*> (single_thread_port_map[name]);
 	}
 
+	template<class T>
+	single_thread_request_port<T>* get_request_port(std::string name) {
+		// TODO: dodac obsluge wyjatku w sytuacji gdy nie ma takiego pola lub typ sie nie zgadza
+		return dynamic_cast<single_thread_request_port<T>*> (single_thread_port_map[name]);
+	}
+
+
+
 };
+
+
 
 }
 }

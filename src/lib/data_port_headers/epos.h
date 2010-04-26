@@ -7,7 +7,7 @@
 
 
 #define EPOS_COMMAND_DATA_PORT "epos_command_data_port"
-#define EPOS_REPLY_DATA_PORT "epos_reply_data_port"
+#define EPOS_REPLY_DATA_REQUEST_PORT "epos_reply_data_request_port"
 
 struct epos_command {
 	double em[6];
