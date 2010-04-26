@@ -26,7 +26,7 @@ add_executable(mp_c
 	task/mp_t_c.cc
 )
 
-target_link_libraries(mp_c mpmain mprobots ecp_mp)
+target_link_libraries(mp_c mpmain)
 
 target_link_libraries(mpmain mprobots ecp_mp)
 
