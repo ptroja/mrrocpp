@@ -8,10 +8,10 @@
 namespace mrrocpp {
 namespace lib {
 
-#define EPOS_COMMAND_DATA_PORT "epos_command_data_port"
+#define EPOS_LOW_LEVEL_COMMAND_DATA_PORT "epos_low_level_command_data_port"
 #define EPOS_REPLY_DATA_REQUEST_PORT "epos_reply_data_request_port"
 
-struct epos_command {
+struct epos_low_level_command {
 	double em[6];
 	double emdm[6];
 	double aa[6];

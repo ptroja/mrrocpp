@@ -19,8 +19,8 @@ epos::epos(common::task::task& _ecp_task, double s) :
 	sleeptime.tv_nsec = 20000000; //sleep time[ns]
 	sleeptime.tv_sec = 0;
 
-	epos_command_data_port = the_robot->port_manager.get_port<lib::epos_command> (
-			EPOS_COMMAND_DATA_PORT);
+	epos_low_level_command_data_port = the_robot->port_manager.get_port<lib::epos_low_level_command> (
+			EPOS_LOW_LEVEL_COMMAND_DATA_PORT);
 	epos_reply_data_request_port = the_robot->port_manager.get_request_port<lib::epos_reply> (
 			EPOS_REPLY_DATA_REQUEST_PORT);
 }
@@ -49,7 +49,7 @@ bool epos::first_step() {
 
 
 	epos_data_port_command_structure.da[3] = 3.13;
-	epos_command_data_port->set(epos_data_port_command_structure);
+	epos_low_level_command_data_port->set(epos_data_port_command_structure);
 	epos_reply_data_request_port->set_request();
 
 	if (clock_gettime(CLOCK_REALTIME, &acttime) == -1) { //acquiring actual time
