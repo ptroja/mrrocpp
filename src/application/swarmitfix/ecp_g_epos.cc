@@ -23,6 +23,10 @@ epos::epos(common::task::task& _ecp_task, double s) :
 			EPOS_LOW_LEVEL_COMMAND_DATA_PORT);
 	epos_reply_data_request_port = the_robot->port_manager.get_request_port<lib::epos_reply> (
 			EPOS_REPLY_DATA_REQUEST_PORT);
+
+	epos_gen_parameters_data_port = the_robot->port_manager.get_port<lib::epos_gen_parameters> (
+			EPOS_GEN_PARAMETERS_DATA_PORT);
+
 }
 
 //allow for later change of a sleep time
@@ -48,8 +52,9 @@ bool epos::first_step() {
 	get_mp_ecp_command();
 
 
-	epos_data_port_command_structure.da[3] = 3.13;
-	epos_low_level_command_data_port->set(epos_data_port_command_structure);
+	//epos_data_port_command_structure.da[3] = 3.13;
+	epos_data_port_gen_parameters_structure = mp_ecp_epos_params;
+	epos_gen_parameters_data_port->set(epos_data_port_gen_parameters_structure);
 	epos_reply_data_request_port->set_request();
 
 	if (clock_gettime(CLOCK_REALTIME, &acttime) == -1) { //acquiring actual time
