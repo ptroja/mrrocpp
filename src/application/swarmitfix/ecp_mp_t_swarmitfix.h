@@ -16,14 +16,6 @@ namespace ecp_mp {
 namespace task {
 
 
-struct mp_ecp_epos_gen_parameters {
-	lib::EPOS_GEN_PROFILE profile_type;
-	double dm[6];
-	double aa[6];
-	double da[6];
-	double mv[6];
-};
-
 /**
  * Used generators.
  */

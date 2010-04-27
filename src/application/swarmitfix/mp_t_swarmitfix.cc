@@ -15,6 +15,7 @@
 #include "mp_t_swarmitfix.h"
 #include "lib/single_thread_port.h"
 #include "lib/mrmath/mrmath.h"
+#include "lib/data_port_headers/epos.h"
 
 #include <iostream>
 #include <string>
@@ -151,7 +152,7 @@ void swarmitfix::main_task_algorithm(void) {
 
 	char tmp_string[300];
 
-	ecp_mp::task::mp_ecp_epos_gen_parameters epos_params;
+	lib::mp_ecp_epos_gen_parameters epos_params;
 
 	epos_params.dm[4] = 3.7;
 

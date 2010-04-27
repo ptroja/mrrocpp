@@ -25,7 +25,7 @@ class epos : public common::generator::generator
 		timespec acttime;
 		timespec prevtime;
 		timespec starttime;
-		ecp_mp::task::mp_ecp_epos_gen_parameters mp_ecp_epos_params;
+		lib::epos_gen_parameters mp_ecp_epos_params;
 
 		lib::single_thread_port<lib::epos_low_level_command>* epos_low_level_command_data_port;
 		lib::single_thread_request_port<lib::epos_reply>* epos_reply_data_request_port;

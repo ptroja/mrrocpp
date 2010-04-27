@@ -8,8 +8,18 @@
 namespace mrrocpp {
 namespace lib {
 
+#define EPOS_GEN_PARAMETERS_DATA_PORT "epos_gen_paramteres_data_port"
 #define EPOS_LOW_LEVEL_COMMAND_DATA_PORT "epos_low_level_command_data_port"
 #define EPOS_REPLY_DATA_REQUEST_PORT "epos_reply_data_request_port"
+
+
+struct epos_gen_parameters {
+	EPOS_GEN_PROFILE profile_type;
+	double dm[6];
+	double aa[6];
+	double da[6];
+	double mv[6];
+};
 
 struct epos_low_level_command {
 	double em[6];
