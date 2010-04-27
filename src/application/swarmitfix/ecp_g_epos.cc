@@ -19,9 +19,9 @@ epos::epos(common::task::task& _ecp_task, double s) :
 	sleeptime.tv_nsec = 20000000; //sleep time[ns]
 	sleeptime.tv_sec = 0;
 
-	epos_command_data_port = the_robot->port_manager.get_port<epos_command> (
+	epos_command_data_port = the_robot->port_manager.get_port<lib::epos_command> (
 			EPOS_COMMAND_DATA_PORT);
-	epos_reply_data_request_port = the_robot->port_manager.get_request_port<epos_reply> (
+	epos_reply_data_request_port = the_robot->port_manager.get_request_port<lib::epos_reply> (
 			EPOS_REPLY_DATA_REQUEST_PORT);
 }
 
