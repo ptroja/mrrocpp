@@ -1,15 +1,3 @@
-// ------------------------------------------------------------------------
-// Proces:		-
-// Plik:			mathtr.h
-// System:	QNX/MRROC++  v. 6.3
-// Opis:		Klasy K_vector, Homog_matrix, Ft_v_vector,  Jacobian_matrix
-//				- definicja klas
-//
-// Autor:		tkornuta
-// Data:		14.02.2007
-// ------------------------------------------------------------------------
-
-
 #ifndef __K_VECTOR_H
 #define __K_VECTOR_H
 
@@ -37,13 +25,8 @@ public:
 	K_vector (const double t[3]);								// utworzenie wektora na podstawie tablicy
 	K_vector (double x, double y, double z);			// utworzenie wektora na podstawie tablicy
 
-	double get_length() const;
-	void normalize();
-
 	void to_table(double tablica[3]) const;			// przepisanie zawartosci do tablicy
 };// end class vector
-
-
 
 } // namespace lib
 } // namespace mrrocpp
