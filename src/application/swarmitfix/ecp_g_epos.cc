@@ -63,7 +63,7 @@ bool epos::first_step() {
 	}
 
 	starttime = acttime;
-	return true;
+	return false;
 }
 
 bool epos::next_step() {
