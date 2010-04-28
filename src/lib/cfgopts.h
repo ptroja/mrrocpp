@@ -48,8 +48,7 @@ struct Config_Tag {
       void        *buf;                 /* Storage location     */
 };
 
-int input_config(std::string, struct Config_Tag *, std::string);
-int update_config(std::string, struct Config_Tag *, std::string);
+int input_config(const std::string &, struct Config_Tag *, const std::string &);
 
 #ifdef __cplusplus
 }
