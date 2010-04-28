@@ -1,14 +1,5 @@
-// -------------------------------------------------------------------------
-//                            impconst.h
-// Typy i stale wykorzystywane w MRROC++
-//
-// Ostatnia modyfikacja: 16.04.98
-// -------------------------------------------------------------------------
-
 #if !defined(_IRP6P_M_CONST_H)
 #define _IRP6P_M_CONST_H
-
-#include <stdint.h>
 
 namespace mrrocpp {
 
@@ -43,4 +34,4 @@ extern "C" {
 } // namespace lib
 } // namespace mrrocpp
 
-#endif /* _IMPCONST_H */
+#endif /* _IRP6P_M_CONST_H */

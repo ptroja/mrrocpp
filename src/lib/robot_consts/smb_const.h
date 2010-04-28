@@ -1,14 +1,6 @@
-// -------------------------------------------------------------------------
-//                            impconst.h
-// Typy i stale wykorzystywane w MRROC++
-//
-// Ostatnia modyfikacja: 16.04.98
-// -------------------------------------------------------------------------
-
 #if !defined(_SMB_CONST_H)
 #define _SMB_CONST_H
 
-#include <stdint.h>
 #include "lib/swarmitfix.h"
 
 namespace mrrocpp {
@@ -47,4 +39,4 @@ struct smb_rbuffer {
 } // namespace lib
 } // namespace mrrocpp
 
-#endif /* _IMPCONST_H */
+#endif /* _SMB_CONST_H */

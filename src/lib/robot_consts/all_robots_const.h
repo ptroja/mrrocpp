@@ -1,10 +1,3 @@
-// -------------------------------------------------------------------------
-//                            impconst.h
-// Typy i stale wykorzystywane w MRROC++
-//
-// Ostatnia modyfikacja: 16.04.98
-// -------------------------------------------------------------------------
-
 #if !defined(_ALL_ROBOTS_CONST_H)
 #define _ALL_ROBOTS_CONST_H
 
@@ -32,4 +25,4 @@ namespace lib {
 } // namespace lib
 } // namespace mrrocpp
 
-#endif /* _IMPCONST_H */
+#endif /* _ALL_ROBOTS_CONST_H */
