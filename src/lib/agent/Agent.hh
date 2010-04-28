@@ -32,13 +32,6 @@ private:
 	//! check if given data availability condition is satisfied
 	bool checkCondition(const OrBufferContainer &condition);
 
-	/**
-	 * Receive data buffer message
-	 * @param block until a message arrive
-	 * @return true if the a message has arrived
-	 */
-	bool ReceiveMessage(bool block);
-
 #if defined(USE_MESSIP_SRR)
 	//! server channel id
 	messip_channel_t * channel;
@@ -64,6 +57,12 @@ private:
 
 	//! Receive single message
 	int ReceiveMessage(void * msg, std::size_t msglen, bool block);
+
+	//! thread id of the of the non-blocking receive implementation
+	boost::thread * loop_tid;
+
+	//! Main loop of the agent
+	void operator ()();
 
 protected:
 	//! Datatype of buffers container
@@ -102,8 +101,11 @@ public:
 	//! Single step of agent's transition function
 	virtual bool step() = 0;
 
-	//! Main loop of the agent
-	void operator ()();
+	//! Start the agent
+	void Start(void);
+
+	//! Join the agent
+	void Join(void);
 };
 
 #endif /* __AGENT_HH */

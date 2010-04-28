@@ -8,8 +8,11 @@ main(int argc, char *argv[])
 {
 	Reader reader("Reader");
 
-	boost::thread t1(boost::bind(&Reader::operator(), &reader));
-	t1.join();
+	reader.Start();
+
+	// ... the reader is executing
+
+	reader.Join();
 
 	return 0;
 }

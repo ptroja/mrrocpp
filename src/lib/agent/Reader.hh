@@ -25,11 +25,6 @@ public:
 	}
 
 	bool step() {
-//		// Wait() << IntBuffer & DoubleBuffer;
-//		AndBufferContainer cont1 = (IntBuffer & DoubleBuffer);
-//		AndBufferContainer cont2 = cont1; //DoubleBuffer;
-//		AndBufferContainer cont3 = (cont1 & cont2);
-
 		Wait(or1);
 
 		double d;
