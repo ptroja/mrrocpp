@@ -1,5 +1,5 @@
-#ifndef __AGENT_HH
-#define __AGENT_HH
+#ifndef __AGENT_H
+#define __AGENT_H
 
 #include <string>
 
@@ -16,13 +16,12 @@
 #endif /* USE_MESSIP_SRR */
 
 #include "lib/xdr_iarchive.hpp"
-#include "AgentBase.hh"
+#include "AgentBase.h"
 
-// forward declarations
-class DataBufferBase;
-template <class T> class DataBuffer;
-class OrBufferContainer;
-class AndBufferContainer;
+#include "DataBufferBase.h"
+#include "DataBuffer.h"
+#include "OrDataCondition.h"
+#include "AndDataCondition.h"
 
 /**
  * Agent base class
@@ -30,7 +29,7 @@ class AndBufferContainer;
 class Agent : public AgentBase {
 private:
 	//! check if given data availability condition is satisfied
-	bool checkCondition(const OrBufferContainer &condition);
+	bool checkCondition(const OrDataCondition &condition);
 
 #if defined(USE_MESSIP_SRR)
 	//! server channel id
@@ -83,13 +82,14 @@ protected:
 protected:
 	/**
 	 * Wait for given data availability condition to be satisfied
-	 * @param orCondition condition to wait for
+	 * @param condition condition to wait for
 	 */
-	void Wait(OrBufferContainer & orCondition);
+	void Wait(DataCondition & condition);
 
-	void Wait(AndBufferContainer & orCondition);
-
-	void Wait(DataBufferBase & dataBufferCondition);
+	/**
+	 * Wait for null data availability condition to be satisfied
+	 */
+	void Wait(void);
 
 public:
 	//! Constructor
@@ -108,4 +108,4 @@ public:
 	void Join(void);
 };
 
-#endif /* __AGENT_HH */
+#endif /* __AGENT_H */

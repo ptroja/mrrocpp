@@ -1,4 +1,4 @@
-#include "AgentBase.hh"
+#include "AgentBase.h"
 
 AgentBase::AgentBase(const std::string & _name) :
 	name(_name)

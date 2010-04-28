@@ -1,5 +1,5 @@
-#ifndef __AGENT_BASE_HH
-#define __AGENT_BASE_HH
+#ifndef __AGENT_BASE_H
+#define __AGENT_BASE_H
 
 #include <string>
 
@@ -17,4 +17,4 @@ public:
 	AgentBase(const std::string & _name);
 };
 
-#endif /* __AGENT_BASE_HH */
+#endif /* __AGENT_BASE_H */

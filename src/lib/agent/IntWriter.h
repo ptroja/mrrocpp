@@ -1,13 +1,13 @@
-#ifndef _INT_WRITER_HH
-#define _INT_WRITER_HH
+#ifndef _INT_WRITER_H
+#define _INT_WRITER_H
 
 #include <iostream>
 
 #include <boost/thread/xtime.hpp>
 
-#include "Agent.hh"
-#include "RemoteAgent.hh"
-#include "DataBuffer.hh"
+#include "Agent.h"
+#include "RemoteAgent.h"
+#include "DataBuffer.h"
 
 class IntWriter : public Agent {
 private:
@@ -33,4 +33,4 @@ public:
 	}
 };
 
-#endif /* _INT_WRITER_HH */
+#endif /* _INT_WRITER_H */

@@ -8,7 +8,7 @@
 #include "lib/messip/messip.h"
 #include "../xdr_iarchive.hpp"
 
-#include "DataBuffer.hh"
+#include "DataBuffer.h"
 
 void Agent::Start(void)
 {
@@ -114,16 +114,6 @@ void Agent::operator ()()
 	do {
 	} while (step());
 }
-
-bool Agent::checkCondition(const OrBufferContainer &condition)
-{
-	BOOST_FOREACH(const AndBufferContainer & andCondition, condition) {
-		if (andCondition.isNewData())
-			return true;
-	}
-	return false;
-}
-
 
 int Agent::ReceiveMessage(void * msg, std::size_t msglen, bool block)
 {
@@ -274,11 +264,11 @@ void Agent::ReceiveDataLoop(void)
 	}
 }
 
-void Agent::Wait(OrBufferContainer & condition)
+void Agent::Wait(DataCondition & condition)
 {
 	boost::unique_lock<boost::mutex> lock(mtx);
 
-	while(!checkCondition(condition))
+	while(!condition.isNewData())
 		cond.wait(lock);
 
 	BOOST_FOREACH(const buffer_item_t item, buffers) {
@@ -286,14 +276,11 @@ void Agent::Wait(OrBufferContainer & condition)
 	}
 }
 
-void Agent::Wait(AndBufferContainer & andCondition)
+void Agent::Wait(void)
 {
-	OrBufferContainer orCondition(andCondition);
-	Wait(orCondition);
-}
+	boost::unique_lock<boost::mutex> lock(mtx);
 
-void Agent::Wait(DataBufferBase & dataBufferCondition)
-{
-	OrBufferContainer orCondition(dataBufferCondition);
-	Wait(orCondition);
+	BOOST_FOREACH(const buffer_item_t item, buffers) {
+		item.second->Update();
+	}
 }

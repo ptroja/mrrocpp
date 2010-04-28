@@ -1,8 +1,8 @@
 #include <boost/thread.hpp>
 #include <boost/bind.hpp>
 
-#include "IntWriter.hh"
-#include "DoubleWriter.hh"
+#include "IntWriter.h"
+#include "DoubleWriter.h"
 
 int
 main(int argc, char *argv[])

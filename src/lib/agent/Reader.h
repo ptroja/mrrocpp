@@ -2,14 +2,14 @@
 
 #include <boost/array.hpp>
 
-#include "Agent.hh"
-#include "DataBuffer.hh"
+#include "Agent.h"
+#include "DataBuffer.h"
 
 class Reader : public Agent {
 private:
 	DataBuffer<int> IntBuffer;
 	DataBuffer<double> DoubleBuffer;
-	OrBufferContainer or1;
+	OrDataCondition or1;
 	int loops;
 public:
 

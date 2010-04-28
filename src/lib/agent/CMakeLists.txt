@@ -1,4 +1,4 @@
-add_library(agent Agent.cc DataBuffer.cc AgentBase.cc)
+add_library(agent DataBufferBase.cc AndDataCondition.cc OrDataCondition.cc AgentBase.cc Agent.cc)
 
 if(USE_MESSIP)
 target_link_libraries(agent messip)

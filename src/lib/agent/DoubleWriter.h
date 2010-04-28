@@ -1,12 +1,12 @@
-#ifndef _DOUBLE_WRITER_HH
-#define _DOUBLE_WRITER_HH
+#ifndef _DOUBLE_WRITER_H
+#define _DOUBLE_WRITER_H
 
 #include <iostream>
 
 #include <boost/thread/xtime.hpp>
 
-#include "RemoteAgent.hh"
-#include "DataBuffer.hh"
+#include "RemoteAgent.h"
+#include "DataBuffer.h"
 
 class DoubleWriter : public Agent
 {
@@ -34,4 +34,4 @@ public:
 	}
 };
 
-#endif /* _DOUBLE_WRITER_HH */
+#endif /* _DOUBLE_WRITER_H */

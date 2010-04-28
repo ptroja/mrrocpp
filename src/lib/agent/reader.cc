@@ -1,7 +1,7 @@
 #include <boost/thread.hpp>
 #include <boost/bind.hpp>
 
-#include "Reader.hh"
+#include "Reader.h"
 
 int
 main(int argc, char *argv[])

@@ -1,11 +1,11 @@
-#ifndef __REMOTE_AGENT_HH
-#define __REMOTE_AGENT_HH
+#ifndef __REMOTE_AGENT_H
+#define __REMOTE_AGENT_H
 
 #include <string>
 
 #include <boost/serialization/string.hpp>
 
-#include "AgentBase.hh"
+#include "AgentBase.h"
 #include "../xdr_oarchive.hpp"
 
 #if defined(USE_MESSIP_SRR)
@@ -110,4 +110,4 @@ public:
 	}
 };
 
-#endif /* __REMOTE_AGENT_HH */
+#endif /* __REMOTE_AGENT_H */
