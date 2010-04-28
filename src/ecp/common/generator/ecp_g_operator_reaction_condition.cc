@@ -100,7 +100,7 @@ bool operator_reaction_condition::first_step ()
 	// Przy spelnieniu warunku wczytuje stan robota w zaleznosci od rozkazu przygotowanego w EDP_data
 
 	// Stworzenie rozkazu odczytu wspolrzednych kartezjanskich
-	communicate_with_edp = false; // wylaczamy robota na jeden krok
+	if (the_robot) the_robot->communicate_with_edp = false; // wylaczamy robota na jeden krok
 
 	return true;
 
@@ -127,9 +127,9 @@ bool operator_reaction_condition::next_step ()
 	if (  ecp_t.operator_reaction ("Next motion?") ) {
 		// Oczekiwanie skonczone
 		// wyslanie rozkazu odczytu
-		communicate_with_edp = true; // wlaczamy robota na jeden krok
+		if (the_robot) the_robot->communicate_with_edp = true; // wlaczamy robota na jeden krok
 		the_robot->execute_motion();
-		communicate_with_edp = false; // wylaczamy robota
+		if (the_robot) the_robot->communicate_with_edp = false; // wylaczamy robota
 		// aktualizacja stanu the_robot na podstawie danych przyslanych z EDP
 
 		if (!is_supplementary_list_head()) { // Czy wskaznik na glowe listy jest NULL

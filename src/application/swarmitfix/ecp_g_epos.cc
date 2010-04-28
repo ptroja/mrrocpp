@@ -14,7 +14,7 @@ namespace generator {
 //constructor with parameters: task and time to sleep [s]
 epos::epos(common::task::task& _ecp_task, double s) :
 	generator(_ecp_task) {
-//	communicate_with_edp = false; //do not communicate with edp
+//	if (the_robot) the_robot->communicate_with_edp = false; //do not communicate with edp
 	waittime = s * 1000; //wait time[ns] conversting from given seconds to nanoseconds
 	sleeptime.tv_nsec = 20000000; //sleep time[ns]
 	sleeptime.tv_sec = 0;

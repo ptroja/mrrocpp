@@ -47,13 +47,27 @@ void robot::add_data_ports() {
 
 void robot::create_command() {
 
+	bool is_new_data;
+	bool is_new_request;
+
 	if (epos_low_level_command_data_port.is_new_data()
-			&& epos_reply_data_request_port.is_new_request()) {
+			&& epos_gen_parameters_data_port.is_new_data()) {
+		throw ecp_robot::ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
+	} else if (epos_low_level_command_data_port.is_new_data()
+			&& epos_gen_parameters_data_port.is_new_data()) {
+		is_new_data = true;
+	}
+	is_new_request = epos_reply_data_request_port.is_new_request();
+
+	communicate_with_edp = true;
+	if (is_new_data && is_new_request) {
 		ecp_command.instruction.instruction_type = lib::SET_GET;
-	} else if (epos_low_level_command_data_port.is_new_data()) {
+	} else if (is_new_data) {
 		ecp_command.instruction.instruction_type = lib::SET;
-	} else if (epos_reply_data_request_port.is_new_request()) {
+	} else if (is_new_request) {
 		ecp_command.instruction.instruction_type = lib::GET;
+	} else {
+		communicate_with_edp = false;
 	}
 
 	if (epos_reply_data_request_port.is_new_request()) {
@@ -69,8 +83,8 @@ void robot::create_command() {
 
 		ecp_edp_cbuffer.variant = lib::SPKM_CBUFFER_EPOS_LOW_LEVEL_COMMAND;
 
-		ecp_edp_cbuffer.epos_data_port_command_structure = epos_data_port_command_structure;
-
+		ecp_edp_cbuffer.epos_data_port_command_structure
+				= epos_data_port_command_structure;
 
 	} else if (epos_gen_parameters_data_port.is_new_data()) {
 		ecp_command.instruction.set_type = ARM_DEFINITION;
@@ -81,11 +95,8 @@ void robot::create_command() {
 
 		ecp_edp_cbuffer.variant = lib::SPKM_CBUFFER_EPOS_GEN_PARAMETERS;
 
-		ecp_edp_cbuffer.epos_data_port_gen_parameters_structure  = epos_data_port_gen_parameters_structure;
-	} else
-
-	{
-		ecp_edp_cbuffer.variant = lib::SPKM_CBUFFER_NO_ACTION;
+		ecp_edp_cbuffer.epos_data_port_gen_parameters_structure
+				= epos_data_port_gen_parameters_structure;
 	}
 	// message serialization
 	memcpy(ecp_command.instruction.arm.serialized_command, &ecp_edp_cbuffer,

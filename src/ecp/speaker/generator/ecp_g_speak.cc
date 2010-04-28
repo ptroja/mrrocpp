@@ -42,7 +42,7 @@ bool speaking::first_step ( ) {
 
 	//(sensor_m.begin())->second->base_period=1;
 	//(sensor_m.begin())->second->current_period=0;
-	communicate_with_edp = true;
+	if (the_robot) the_robot->communicate_with_edp = true;
 
 	last_sg_state = new_sg_state = SG_FIRST_GET;
 
@@ -91,7 +91,7 @@ bool speaking::next_step ( ) {
 		case SG_LAST_GET:
 			if (the_robot->reply_package.arm.text_def.speaking == 0) {
 				new_sg_state = SG_FINISH;
-				communicate_with_edp = false;
+				if (the_robot) the_robot->communicate_with_edp = false;
 			} else {
 				new_sg_state = SG_LAST_GET;
 				usleep(1000 * 20);

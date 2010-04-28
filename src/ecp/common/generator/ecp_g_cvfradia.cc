@@ -41,7 +41,7 @@ bool cvfradia::first_step()
 	the_robot->ecp_command.instruction.interpolation_type
 			= EXTERNAL_INTERPOLATION_WITH_FORCE;*/
 
-	communicate_with_edp=false;
+	if (the_robot) the_robot->communicate_with_edp=false;
 
 	return true;
 }

@@ -14,7 +14,7 @@ namespace generator {
 
 //constructor with parameters: task and time to sleep [s]
 head_soldify::head_soldify (common::task::task& _ecp_task, double s): generator (_ecp_task){
-	communicate_with_edp=false;	//do not communicate with edp
+	if (the_robot) the_robot->communicate_with_edp=false;	//do not communicate with edp
 	waittime=s*1000;			//wait time[ns] conversting from given seconds to nanoseconds
 	sleeptime.tv_nsec=20000000;	//sleep time[ns]
 	sleeptime.tv_sec=0;
@@ -80,7 +80,7 @@ bool head_soldify::next_step(){
 
 //constructor with parameters: task and time to sleep [s]
 head_desoldify::head_desoldify (common::task::task& _ecp_task, double s): generator (_ecp_task){
-	communicate_with_edp=false;	//do not communicate with edp
+	if (the_robot) the_robot->communicate_with_edp=false;	//do not communicate with edp
 	waittime=s*1000;			//wait time[ns] conversting from given seconds to nanoseconds
 	sleeptime.tv_nsec=20000000;	//sleep time[ns]
 	sleeptime.tv_sec=0;
@@ -150,7 +150,7 @@ bool head_desoldify::next_step(){
 
 //constructor with parameters: task and time to sleep [s]
 head_vacuum_on::head_vacuum_on (common::task::task& _ecp_task, double s): generator (_ecp_task){
-	communicate_with_edp=false;	//do not communicate with edp
+	if (the_robot) the_robot->communicate_with_edp=false;	//do not communicate with edp
 	waittime=s*1000;			//wait time[ns] conversting from given seconds to nanoseconds
 	sleeptime.tv_nsec=20000000;	//sleep time[ns]
 	sleeptime.tv_sec=0;
@@ -212,7 +212,7 @@ bool head_vacuum_on::next_step(){
 
 //constructor with parameters: task and time to sleep [s]
 head_vacuum_off::head_vacuum_off (common::task::task& _ecp_task, double s): generator (_ecp_task){
-	communicate_with_edp=false;	//do not communicate with edp
+	if (the_robot) the_robot->communicate_with_edp=false;	//do not communicate with edp
 	waittime=s*1000;			//wait time[ns] conversting from given seconds to nanoseconds
 	sleeptime.tv_nsec=20000000;	//sleep time[ns]
 	sleeptime.tv_sec=0;

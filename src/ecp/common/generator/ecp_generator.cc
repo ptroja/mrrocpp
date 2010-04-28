@@ -7,8 +7,9 @@ namespace generator {
 
 generator::generator(common::task::task& _ecp_task) :
 	ecp_mp::generator::generator(*(ecp_t.sr_ecp_msg)), ecp_t(_ecp_task),
-			communicate_with_mp_in_move(true), communicate_with_edp(true),
+			communicate_with_mp_in_move(true),
 			the_robot(ecp_t.ecp_m_robot) {
+	if (the_robot) the_robot->communicate_with_edp = true;
 }
 
 generator::~generator() {
@@ -50,15 +51,15 @@ void generator::Move() {
 		// zadanie przygotowania danych od czujnikow
 		ecp_t.all_sensors_initiate_reading(sensor_m);
 
+		// zlecenie ruchu SET oraz odczyt stanu robota GET
+		the_robot->create_command();
+
 		// wykonanie kroku ruchu
-		if ((the_robot) && communicate_with_edp) {
-
-			// zlecenie ruchu SET oraz odczyt stanu robota GET
-			the_robot->create_command();
+		if ((the_robot) && the_robot->communicate_with_edp) {
 			execute_motion();
-			the_robot->get_reply();
-
 		}
+
+		the_robot->get_reply();
 
 		// odczytanie danych z wszystkich czujnikow
 		ecp_t.all_sensors_get_reading(sensor_m);

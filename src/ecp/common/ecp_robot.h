@@ -62,7 +62,7 @@ protected:
 public:
 	// to exchange data with generators
 	lib::single_thread_port_manager port_manager;
-
+	bool communicate_with_edp;
 	virtual void create_command();
 	virtual void get_reply();
 
