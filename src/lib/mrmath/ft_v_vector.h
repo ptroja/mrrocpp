@@ -1,14 +1,3 @@
-// ------------------------------------------------------------------------
-// Proces:		-
-// Plik:			mathtr.h
-// System:	QNX/MRROC++  v. 6.3
-// Opis:		Klasy K_vector, Homog_matrix, Ft_v_vector,  Jacobian_matrix
-//				- definicja klas
-//
-// Autor:		tkornuta
-// Data:		14.02.2007
-// ------------------------------------------------------------------------
-
 #ifndef __FT_V_VECTOR_H
 #define __FT_V_VECTOR_H
 
@@ -23,36 +12,34 @@ class Ft_v_vector : public Eigen::Matrix<double, 6, 1>
 	typedef Eigen::Matrix<double, 6, 1> BaseClass;
 
 public:
-	// Copy constructor from any Eigen matrix type
+	//! Copy constructor from any Eigen matrix type
 	template<typename OtherDerived>
 	Ft_v_vector(const Eigen::MatrixBase<OtherDerived>& other)
 		: BaseClass(other)
 	{}
 
-	// Reuse assignment operators from base class
+	//! Reuse assignment operators from base class
 	using BaseClass::operator=;
 
-	// Default construction
+	//! Default constructor
 	Ft_v_vector();
 	Ft_v_vector(const double t[6]);										// utworzenie wektora na podstawie podanej tablicy
 	Ft_v_vector(double fx, double fy, double fz, double tx, double ty, double tz);
 
-	// Ustawienie elementu wektora.
+	//! Ustawienie elementu wektora.
 	void set_values(const double t[6]);										// wypelnienie wektora na podstawie podanej tablicy
 	void set_values(double fx, double fy, double fz, double tx, double ty, double tz);
 
-	// Zwrocenie elementu wektora.
+	//! Zwrocenie elementu wektora.
 	void to_table(double tablica[6]) const;					// przepisanie wektora do tablicy podanej jako argument
 
-	//Sibi
-	//Wyciagniecie max elementu z wektora
+	//! Wyciagniecie max elementu z wektora
+	//! @author Sibi
 	double max_element ();	//wyciagniecie maksymalnego elementu wektora
 
 public:
 	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };// end class Ft_v_vector
-
-
 
 // klasa reprezentujaca wektor sila-moment i wektora predkosci
 class Ft_vector : public Ft_v_vector
@@ -66,9 +53,7 @@ public:
 	Ft_vector();													// konstruktor domniemany [0, 0, 0, 0, 0, 0]
 	Ft_vector(const double t[6]);										// utworzenie wektora na podstawie podanej tablicy
 	Ft_vector(double fx, double fy, double fz, double tx, double ty, double tz);
-};// end class Ft_vector
-
-
+};
 
 // klasa reprezentujaca wektor sila-moment i wektora predkosci
 class Xyz_Angle_Axis_vector : public Ft_v_vector
@@ -83,11 +68,10 @@ public:
 	Xyz_Angle_Axis_vector(const double t[6]);										// utworzenie wektora na podstawie podanej tablicy
 	Xyz_Angle_Axis_vector(double fx, double fy, double fz, double tx, double ty, double tz);
 
-	//Sibi
-	//Wektor predkosci jako odleglosc dwoch pozycji zadanych w postaci ramek
+	//! Wektor predkosci jako odleglosc dwoch pozycji zadanych w postaci ramek
+	//! @author Sibi
 	void position_distance(const Homog_matrix& local_current_end_effector_frame, const Homog_matrix& local_desired_end_effector_frame);
-};// end class Xyz_Angle_Axis_vector
-
+};
 
 // klasa reprezentujaca wektor sila-moment i wektora predkosci
 class Xyz_Euler_Zyz_vector : public Ft_v_vector
@@ -98,7 +82,7 @@ public:
 		: Ft_v_vector(other)
 	{}
 
-	// Reuse assignment operators from base class
+	//! Reuse assignment operators from base class
 	using Ft_v_vector::operator=;
 
 	Xyz_Euler_Zyz_vector();													// konstruktor domniemany [0, 0, 0, 0, 0, 0]
@@ -107,7 +91,7 @@ public:
 
 public:
 	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
-};// end class Xyz_Euler_Zyz_vector
+};
 
 // klasa reprezentujaca wektor sila-moment i wektora predkosci
 class Xyz_Rpy_vector : public Ft_v_vector
@@ -121,8 +105,7 @@ public:
 	Xyz_Rpy_vector();													// konstruktor domniemany [0, 0, 0, 0, 0, 0]
 	Xyz_Rpy_vector(const double t[6]);										// utworzenie wektora na podstawie podanej tablicy
 	Xyz_Rpy_vector(double fx, double fy, double fz, double tx, double ty, double tz);
-};// end class Xyz_Rpy_vector
-
+};
 
 } // namespace lib
 } // namespace mrrocpp
