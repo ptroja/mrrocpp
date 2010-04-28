@@ -7,6 +7,7 @@ class Reader : public Agent {
 private:
 	DataBuffer<int> IntBuffer;
 	DataBuffer<double> DoubleBuffer;
+	OrBufferContainer or1;
 	int loops;
 public:
 
@@ -16,6 +17,7 @@ public:
 	{
 		registerBuffer(IntBuffer);
 		registerBuffer(DoubleBuffer);
+		or1 = DoubleBuffer | IntBuffer;
 		listBuffers();
 		loops = 0;
 	}
@@ -26,11 +28,7 @@ public:
 //		AndBufferContainer cont2 = cont1; //DoubleBuffer;
 //		AndBufferContainer cont3 = (cont1 & cont2);
 
-//		OrBufferContainer or1 = DoubleBuffer | IntBuffer;
-//		std::cout << or1 << std::endl;
-//		Wait(or1);
-
-		boost::this_thread::sleep(boost::posix_time::seconds(1));
+		Wait(or1);
 
 		double d;
 		bool double_fresh = DoubleBuffer.Get(d);
