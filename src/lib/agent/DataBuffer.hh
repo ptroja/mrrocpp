@@ -42,12 +42,12 @@ public:
 	AndBufferContainer();
 
 	//! check if this condition was satisfied
-	bool isFresh() const;
+	bool isNewData() const;
 };
 
 class OrBufferContainer : public std::vector<AndBufferContainer> {
 	//! overloaded display operator
-	friend std::ostream& operator<<(std::ostream& output, const AndBufferContainer& p);
+	friend std::ostream& operator<<(std::ostream& output, const OrBufferContainer& p);
 
 public:
 	//! Base container data type
@@ -70,14 +70,24 @@ public:
 };
 
 class DataBufferBase {
+	//! Agent needs an access to Store/Update methods
+	friend class Agent;
+
 protected:
 	//! name of the data buffer
 	const std::string name;
 
-	//! flag indicating that the new data has arrived
-	bool fresh;
+	//! flag for marking a new data
+	bool new_data_ready;
+
+	//! store new data
+	virtual void Store(xdr_iarchive<> & ia) = 0;
+
+	//! update buffer if new data has arrived
+	virtual void Update(void) = 0;
 
 public:
+	//! Constructor
 	DataBufferBase(const std::string & _name);
 
 	//! compose 'And' condition from ('Buffer' & 'Buffer')
@@ -92,26 +102,73 @@ public:
 	//! get name of the buffer
 	const std::string & getName() const;
 
-	bool isFresh(void) const;
-
-	virtual void Set(xdr_iarchive<> & ia) = 0;
-
 	//! This is required to make a class polimorphic
 	virtual ~DataBufferBase();
+
+	//! check if new data has arrived
+	bool isNewDataReady() const;
 };
 
 template <class T>
 class DataBuffer : public DataBufferBase {
-private:
-	T data;
-
+	//! Agent needs an access to Store/Update methods
 	friend class Agent;
 
+private:
+	//! flag indicating that the new data has not been getted yet
+	bool fresh;
+
+	//! current data
+	T data;
+
+	//! place for keeping new data after arrive
+	T new_data;
+
+	/**
+	 * Store data in the buffer
+	 * @param ia input archive
+	 */
+	void Store(xdr_iarchive<> & ia) {
+ 		ia >> new_data;
+ 		if (new_data_ready) {
+ 			std::cerr << "Warning: data overwrite at buffer '" << getName() << "'" << std::endl;
+ 		}
+		new_data_ready = true;
+	}
+
+	/**
+	 * Update data from the temporary to the current data buffer
+	 */
+	void Update(void) {
+		if(new_data_ready) {
+			data = new_data;
+			new_data_ready = false;
+			fresh = true;
+		}
+	}
+
+public:
+	//! Constructor
+	DataBuffer(const std::string & _name, const T & _default_value = T())
+		: DataBufferBase(_name), data(_default_value),
+		fresh(false)
+	{
+	}
+
+	/**
+	 * Get data from the buffer
+	 * @return current data
+	 */
 	T Get() {
 		fresh = false;
 		return data;
 	}
 
+	/**
+	 * Get data from the buffer
+	 * @param item where the data will be stored
+	 * @return fresh flag indicatig if this data has been already "getted"
+	 */
 	bool Get(T & item) {
 		bool fresh_flag = fresh;
 		item = data;
@@ -119,20 +176,12 @@ private:
 		return fresh_flag;
 	}
 
-	void Set(const T & item) {
-		data = item;
-		fresh = true;
-	}
-
-	void Set(xdr_iarchive<> & ia) {
- 		ia >> data;
-		fresh = true;
-	}
-
-public:
-	DataBuffer(const std::string & _name, const T & _default_value = T())
-		: DataBufferBase(_name), data(_default_value)
-	{
+	/**
+	 * Check if data has ben already "getted"
+	 * @return fresh flag
+	 */
+	bool isFresh(void) const {
+		return fresh;
 	}
 };
 

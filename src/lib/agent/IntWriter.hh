@@ -12,17 +12,22 @@
 class IntWriter : public Agent {
 private:
 	RemoteAgent reader;
+	RemoteBuffer<int> IntBuf;
 	int cnt;
 public:
 
 	IntWriter(const std::string & name) :
-		Agent(name), reader("Reader"), cnt(10)
+		Agent(name),
+		reader("Reader"),
+		IntBuf(reader, "integer buffer"),
+		cnt(10)
 	{
 	}
 
 	bool step() {
 		std::cout << "Writer: " << cnt << std::endl;
-		reader.Set("integer buffer", cnt++);
+		//reader.Set("integer buffer", cnt++);
+		IntBuf.Set(cnt++);
 		boost::this_thread::sleep(boost::posix_time::seconds(1));
 		return true;
 	}

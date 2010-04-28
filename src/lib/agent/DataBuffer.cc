@@ -44,10 +44,10 @@ AndBufferContainer::AndBufferContainer() : fresh(false)
 {
 }
 
-bool AndBufferContainer::isFresh() const
+bool AndBufferContainer::isNewData() const
 {
 	BOOST_FOREACH(const DataBufferBase * ptr, *this) {
-		if (!ptr->isFresh()) {
+		if (!ptr->isNewDataReady()) {
 			return false;
 		}
 	}
@@ -108,7 +108,7 @@ OrBufferContainer::OrBufferContainer()
 }
 
 DataBufferBase::DataBufferBase(const std::string & _name)
-	: name(_name), fresh(false)
+	: name(_name), new_data_ready(false)
 {
 }
 
@@ -117,9 +117,9 @@ const std::string & DataBufferBase::getName() const
 	return name;
 }
 
-bool DataBufferBase::isFresh() const
+bool DataBufferBase::isNewDataReady() const
 {
-	return fresh;
+	return new_data_ready;
 }
 
 AndBufferContainer DataBufferBase::operator&(DataBufferBase &op) {

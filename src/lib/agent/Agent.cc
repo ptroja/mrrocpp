@@ -11,18 +11,29 @@
 
 void Agent::registerBuffer(DataBufferBase & buf)
 {
-	std::pair<buffers_t::iterator, bool> result = buffers.insert(buffer_item_t(buf.getName(), &buf));
+	std::pair<buffers_t::iterator, bool> result;
+
+	{
+		// lock access to the data buffers
+		boost::unique_lock<boost::mutex> lock(mtx);
+
+		result = buffers.insert(buffer_item_t(buf.getName(), &buf));
+	}
 
 	if(!result.second) {
-		std::cerr << "Duplicated name of the buffer ('" << buf.getName() << "')" << std::endl;
+		std::cerr << "Duplicated buffer ('" << buf.getName() << "')" << std::endl;
 		throw;
 	}
 }
 
 void Agent::listBuffers() const
 {
+	// lock access to the data buffers
+	boost::unique_lock<boost::mutex> lock(mtx);
+
 	std::cout << "Buffer list of \"" << getName() << "\"[" << buffers.size() << "]:" << std::endl;
-	BOOST_FOREACH(buffer_item_t item, buffers) {
+
+	BOOST_FOREACH(const buffer_item_t item, buffers) {
 		std::cout << "\t" << item.first << std::endl;
 	}
 }
@@ -47,8 +58,25 @@ Agent::Agent(const std::string & _name) : AgentBase(_name)
 
 Agent::~Agent()
 {
-	// TODO: handle cancelation of the thread?
-	tid->join();
+#if defined(BOOST_THREAD_PLATFORM_PTHREAD)
+	// handle cancelation of the receiver thread
+
+	// cancel the thread
+	if(pthread_cancel(tid->native_handle()) != 0) {
+		fprintf(stderr, "pthread_cancel() failed\n");
+	}
+
+	// wait after finishing
+	void *retval;
+	if(pthread_join(tid->native_handle(), &retval) != 0) {
+		fprintf(stderr, "pthread_join() failed\n");
+	}
+
+	// check if thread was properly cancelled
+	if(retval != PTHREAD_CANCELED) {
+		fprintf(stderr, "retval != PTHREAD_CANCELED\n");
+	}
+#endif
 	delete tid;
 
 #if defined(USE_MESSIP_SRR)
@@ -71,16 +99,8 @@ void Agent::operator ()()
 
 bool Agent::checkCondition(const OrBufferContainer &condition)
 {
-//	BOOST_FOREACH(const AndBufferContainer & andCondition, condition) {
-//		std::cout << "(";
-//		BOOST_FOREACH(const DataBufferBase * ptr, andCondition) {
-//			std::cout << ptr->getName() << " & ";
-//		}
-//		std::cout << ") | ";
-//	}
-
 	BOOST_FOREACH(const AndBufferContainer & andCondition, condition) {
-		if (andCondition.isFresh())
+		if (andCondition.isNewData())
 			return true;
 	}
 	return false;
@@ -104,7 +124,7 @@ void Agent::ReceiveDataLoop(void)
 			throw;
 		}
 		else if (ret != MESSIP_MSG_NOREPLY) {
-			std::cerr << "Unknown message received (" << ret << ")" << std::endl;
+//			std::cerr << "Unknown message received (" << ret << ")" << std::endl;
 			continue;
 		}
 
@@ -184,7 +204,7 @@ void Agent::ReceiveDataLoop(void)
 
 		buffers_t::iterator result = buffers.find(msg_buffer_name);
 		if (result != buffers.end()) {
-			result->second->Set(ia);
+			result->second->Store(ia);
 		} else {
 			// TODO: exception?
 			std::cerr << "Message received for unknown buffer '"
@@ -199,8 +219,13 @@ void Agent::ReceiveDataLoop(void)
 void Agent::Wait(OrBufferContainer & condition)
 {
 	boost::unique_lock<boost::mutex> lock(mtx);
+
 	while(!checkCondition(condition))
 		cond.wait(lock);
+
+	BOOST_FOREACH(const buffer_item_t item, buffers) {
+		item.second->Update();
+	}
 }
 
 void Agent::Wait(AndBufferContainer & andCondition)

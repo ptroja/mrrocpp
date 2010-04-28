@@ -1,22 +1,27 @@
 #ifndef __AGENT_HH
 #define __AGENT_HH
 
-#include <map>
 #include <string>
 
+#include <boost/unordered_map.hpp>
 #include <boost/thread/thread.hpp>
 #include <boost/thread/mutex.hpp>
 #include <boost/thread/condition_variable.hpp>
+
+#if defined(USE_MESSIP_SRR)
+#include "lib/messip/messip.h"
+#else /* USE_MESSIP_SRR */
+#include <sys/iofunc.h>
+#include <sys/dispatch.h>
+#endif /* USE_MESSIP_SRR */
+
+#include "AgentBase.hh"
 
 // forward declarations
 class DataBufferBase;
 template <class T> class DataBuffer;
 class OrBufferContainer;
 class AndBufferContainer;
-
-#include "../messip/messip_dataport.h"
-
-#include "AgentBase.hh"
 
 /**
  * Agent base class
@@ -33,7 +38,10 @@ private:
 	 */
 	bool ReceiveMessage(bool block);
 
-#if !defined(USE_MESSIP_SRR)
+#if defined(USE_MESSIP_SRR)
+	//! server channel id
+	messip_channel_t * channel;
+#else
 	//! server channel id
 	name_attach_t * channel;
 #endif
@@ -45,13 +53,14 @@ private:
 	boost::condition_variable cond;
 
 	//! mutex for protection data between receiver and readers
-	boost::mutex mtx;
+	mutable boost::mutex mtx;
 
+	//! Data receiver thread loop
 	void ReceiveDataLoop(void);
 
 protected:
 	//! Datatype of buffers container
-	typedef std::map<std::string, DataBufferBase * > buffers_t;
+	typedef boost::unordered_map<std::string, DataBufferBase * > buffers_t;
 
 	//! Datatype of buffers container value
 	typedef buffers_t::value_type buffer_item_t;
@@ -64,35 +73,6 @@ protected:
 
 	//! List buffers of the agent
 	void listBuffers() const;
-
-	/**
-	 * Get the data from given buffer
-	 * @param name buffer name
-	 * @return the data
-	 */
-	template <class T>
-	T Get(const std::string & name) {
-		boost::unique_lock<boost::mutex> lock(mtx);
-		buffers_t::iterator result = buffers.find(name);
-		if (result != buffers.end()) {
-			DataBuffer<T> * buffer = dynamic_cast<DataBuffer<T> *>(result->second);
-			return buffer->Get();
-		}
-		// TODO: exception
-		throw;
-	};
-
-	template <class T>
-	bool Get(const std::string & name, T & data) {
-		boost::unique_lock<boost::mutex> lock(mtx);
-		buffers_t::iterator result = buffers.find(name);
-		if (result != buffers.end()) {
-			DataBuffer<T> * buffer = dynamic_cast<DataBuffer<T> *>(result->second);
-			return buffer->Get(data);
-		}
-		// TODO: exception
-		throw;
-	};
 
 protected:
 	/**

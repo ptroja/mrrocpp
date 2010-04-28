@@ -1,7 +1,6 @@
 #include <boost/thread.hpp>
 #include <boost/bind.hpp>
 
-#include "Reader.hh"
 #include "IntWriter.hh"
 #include "DoubleWriter.hh"
 

@@ -7,6 +7,7 @@ class Reader : public Agent {
 private:
 	DataBuffer<int> IntBuffer;
 	DataBuffer<double> DoubleBuffer;
+	int loops;
 public:
 
 	Reader(const std::string & name) : Agent(name),
@@ -16,6 +17,7 @@ public:
 		registerBuffer(IntBuffer);
 		registerBuffer(DoubleBuffer);
 		listBuffers();
+		loops = 0;
 	}
 
 	bool step() {
@@ -24,16 +26,14 @@ public:
 		AndBufferContainer cont2 = cont1; //DoubleBuffer;
 		AndBufferContainer cont3 = (cont1 & cont2);
 
-		OrBufferContainer or1(cont1);// = DoubleBuffer | IntBuffer;
+		OrBufferContainer or1 = DoubleBuffer | IntBuffer;
 		std::cout << cont1 << std::endl;
-		Wait(IntBuffer);
+		Wait(cont1);
 
-//		cont3
-		int i = Get<int>("integer buffer");
 		double d;
-		bool double_fresh = Get<double>("double buffer", d);
-		std::cout << "Reader: " << i << "," << d << std::endl;
-		// Send() << IntBuffer & DoubleBuffer; //?
-		return true;
+		bool double_fresh = DoubleBuffer.Get(d);
+		std::cout << "Reader: " << IntBuffer.Get() << "," << d << std::endl;
+
+		return (loops++ < 10);
 	}
 };

@@ -78,6 +78,14 @@ public:
 		return *this;
 	}
 
+	//! conversion for 'const char *' string
+	xdr_oarchive &save_a_type(const char *t, boost::mpl::false_)
+	{
+		if (!xdr_wrapstring(&xdrs, (char **)&t))
+			THROW_SAVE_EXCEPTION;
+		return *this;
+	}
+
 	SAVE_A_TYPE(char, xdr_char)
 	SAVE_A_TYPE(double, xdr_double)
 	SAVE_A_TYPE(float, xdr_float)

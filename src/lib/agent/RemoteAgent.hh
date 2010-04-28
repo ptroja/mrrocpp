@@ -1,6 +1,8 @@
 #ifndef __REMOTE_AGENT_HH
 #define __REMOTE_AGENT_HH
 
+#include <string>
+
 #include <boost/serialization/string.hpp>
 
 #include "AgentBase.hh"
@@ -16,8 +18,11 @@
 
 class RemoteAgent : public AgentBase {
 private:
-#if !defined(USE_MESSIP_SRR)
-	//! remove server channel id
+#if defined(USE_MESSIP_SRR)
+	//! remote server channel id
+	messip_channel_t * channel;
+#else
+	//! remote server channel id
 	int channel;
 #endif
 public:
@@ -25,13 +30,9 @@ public:
 	 * Set the data of given buffer
 	 * @param name buffer name
 	 * @param the data
+	 * @todo this should not be public method but friending with template RemoteBuffer is tricky
 	 */
-	template <class T>
-	void Set(const std::string & name, const T & item) {
-		xdr_oarchive<4096> oa;
-		oa << name;
-		oa << item;
-
+	void Send(const xdr_oarchive<> & oa) {
 		// do a non-blocking send
 #if defined(USE_MESSIP_SRR)
 		int ret = messip_send(channel, 0, 0,
@@ -82,6 +83,30 @@ public:
 			throw;
 		}
 #endif /* USE_MESSIP_SRR */
+	}
+};
+
+template <class T>
+class RemoteBuffer {
+private:
+	//! name of the buffer
+	const std::string name;
+
+	//! owner of the buffer
+	RemoteAgent &owner;
+
+public:
+	RemoteBuffer(RemoteAgent & _owner, const std::string & _name)
+		: owner(_owner), name(_name)
+	{
+	}
+
+	void Set(const T & data) {
+		xdr_oarchive<4096> oa;
+		oa << name;
+		oa << data;
+
+		owner.Send(oa);
 	}
 };
 
