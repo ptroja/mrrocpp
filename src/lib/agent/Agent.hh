@@ -15,6 +15,7 @@
 #include <sys/dispatch.h>
 #endif /* USE_MESSIP_SRR */
 
+#include "lib/xdr_iarchive.hpp"
 #include "AgentBase.hh"
 
 // forward declarations
@@ -57,6 +58,12 @@ private:
 
 	//! Data receiver thread loop
 	void ReceiveDataLoop(void);
+
+	//! Store data from archive into a buffer
+	void Store(const std::string & buffer_name, xdr_iarchive<> & ia);
+
+	//! Receive single message
+	int ReceiveMessage(void * msg, std::size_t msglen, bool block);
 
 protected:
 	//! Datatype of buffers container

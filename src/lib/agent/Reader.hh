@@ -1,5 +1,7 @@
 #include <iostream>
 
+#include <boost/array.hpp>
+
 #include "Agent.hh"
 #include "DataBuffer.hh"
 
