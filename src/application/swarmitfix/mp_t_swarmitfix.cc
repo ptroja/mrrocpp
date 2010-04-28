@@ -152,7 +152,7 @@ void swarmitfix::main_task_algorithm(void) {
 
 	char tmp_string[300];
 
-	lib::mp_ecp_epos_gen_parameters epos_params;
+	lib::epos_gen_parameters epos_params;
 
 	epos_params.dm[4] = 3.7;
 
