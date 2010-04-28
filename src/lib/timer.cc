@@ -12,13 +12,11 @@ timer::timer(void)
 	timer_stopped = false;
 	timer_started = false;
 	last_status = TIMER_INITIALIZED;
-} // timer_init
+}
 
-
-timer_status_enum timer::timer_start(void)
+timer::timer_status_t timer::timer_start(void)
 {
-	if (timer_initialized)
-	{
+	if (timer_initialized) {
 		if (clock_gettime(CLOCK_REALTIME, &t1) == -1) {
 			perror("clock_gettime()");
 		}
@@ -30,15 +28,12 @@ timer_status_enum timer::timer_start(void)
 		last_status = TIMER_NOT_INITIALIZED;
 		return TIMER_NOT_INITIALIZED;
 	}
-} // timer_start
+}
 
-
-timer_status_enum timer::timer_stop(void)
+timer::timer_status_t timer::timer_stop(void)
 {
-	if (timer_initialized)
-	{
-		if (timer_started)
-		{
+	if (timer_initialized) {
+		if (timer_started) {
 			if (clock_gettime(CLOCK_REALTIME, &t2) == -1) {
 				perror("clock_gettime()");
 			}
@@ -51,19 +46,16 @@ timer_status_enum timer::timer_stop(void)
 			last_status = TIMER_NOT_STARTED;
 			return TIMER_NOT_STARTED;
 		}
-	}
-	else {
+	} else {
 		last_status = TIMER_NOT_INITIALIZED;
 		return TIMER_NOT_INITIALIZED;
 	}
-} // timer_stop
+}
 
-
-timer_status_enum timer::get_time(float *sec)
+timer::timer_status_t timer::get_time(float *sec)
 {
-	if (timer_stopped)
-	{
-		float t = (t2.tv_sec + t2.tv_nsec/1e9) - (t1.tv_sec + t1.tv_nsec/1e9);
+	if (timer_stopped) {
+		float t = (t2.tv_sec + t2.tv_nsec / 1e9) - (t1.tv_sec + t1.tv_nsec / 1e9);
 		if (sec)
 			*sec = t;
 		last_status = TIME_RETRIVED;
@@ -72,7 +64,7 @@ timer_status_enum timer::get_time(float *sec)
 		last_status = TIMER_RUNNING_OR_NOT_STARTED;
 		return TIMER_RUNNING_OR_NOT_STARTED;
 	}
-} // get_time
+}
 
 void timer::print_last_status(void)
 {
@@ -106,7 +98,7 @@ void timer::print_last_status(void)
 			printf("TIMER_RUNNING_OR_NOT_STARTED\n");
 			break;
 	}
-} // print_last_status
+}
 
 } // namespace lib
 } // namespace mrrocpp
