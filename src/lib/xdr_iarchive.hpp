@@ -73,6 +73,14 @@ public:
     	return *this;
     }
 
+	//! conversion for 'char *' string
+	xdr_iarchive &load_a_type(char *t, boost::mpl::false_)
+	{
+		if (!xdr_wrapstring(&xdrs, (char **)&t))
+			THROW_LOAD_EXCEPTION;
+		return *this;
+	}
+
     LOAD_A_TYPE(char, xdr_char)
     LOAD_A_TYPE(double, xdr_double)
 	LOAD_A_TYPE(float, xdr_float)

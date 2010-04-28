@@ -108,6 +108,13 @@ bool Agent::checkCondition(const OrBufferContainer &condition)
 
 void Agent::ReceiveDataLoop(void)
 {
+	// create object for real-time usage in the loop
+	std::string msg_buffer_name;
+
+	// allocate memory
+	// TODO: this size should be #defined for the whole library
+	msg_buffer_name.reserve(100);
+
 	// receive thread loop
 	while(true) {
 #if defined(USE_MESSIP_SRR)
@@ -186,9 +193,6 @@ void Agent::ReceiveDataLoop(void)
 		// initialize the archive with the data received
 		xdr_iarchive<sizeof(msg)> ia((const char *) &msg,(std::size_t) info.msglen);
 #endif
-		// TODO: make this real-time safe
-		std::string msg_buffer_name;
-
 		ia >> msg_buffer_name;
 
 //		std::cout << "Message received for data buffer: "
