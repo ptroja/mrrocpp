@@ -66,18 +66,26 @@ void robot::create_command() {
 				= epos_low_level_command_data_port.get();
 		// generator command interpretation
 		// narazie proste przepisanie
-		for (int i = 0; i < 6; i++) {
-			ecp_edp_cbuffer.em[i] = epos_data_port_command_structure.em[i];
-			ecp_edp_cbuffer.emdm[i] = epos_data_port_command_structure.emdm[i];
-			ecp_edp_cbuffer.aa[i] = epos_data_port_command_structure.aa[i];
-			ecp_edp_cbuffer.da[i] = epos_data_port_command_structure.da[i];
-			ecp_edp_cbuffer.av[i] = epos_data_port_command_structure.av[i];
-		}
-		ecp_edp_cbuffer.tt = epos_data_port_command_structure.tt;
-		ecp_edp_cbuffer.profile_type
-				= epos_data_port_command_structure.profile_type;
-	} else {
-		ecp_edp_cbuffer.profile_type = lib::EPOS_GEN_PROFILE_NO_ACTION;
+
+		ecp_edp_cbuffer.variant = lib::SPKM_CBUFFER_EPOS_LOW_LEVEL_COMMAND;
+
+		ecp_edp_cbuffer.epos_data_port_command_structure = epos_data_port_command_structure;
+
+
+	} else if (epos_gen_parameters_data_port.is_new_data()) {
+		ecp_command.instruction.set_type = ARM_DEFINITION;
+		epos_data_port_gen_parameters_structure
+				= epos_gen_parameters_data_port.get();
+		// generator command interpretation
+		// narazie proste przepisanie
+
+		ecp_edp_cbuffer.variant = lib::SPKM_CBUFFER_EPOS_GEN_PARAMETERS;
+
+		ecp_edp_cbuffer.epos_data_port_gen_parameters_structure  = epos_data_port_gen_parameters_structure;
+	} else
+
+	{
+		ecp_edp_cbuffer.variant = lib::SPKM_CBUFFER_NO_ACTION;
 	}
 	// message serialization
 	memcpy(ecp_command.instruction.arm.serialized_command, &ecp_edp_cbuffer,

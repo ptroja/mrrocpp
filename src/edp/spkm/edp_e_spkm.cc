@@ -88,7 +88,7 @@ void effector::move_arm(lib::c_buffer &instruction) {
 
 
 	std::stringstream ss (std::stringstream::in | std::stringstream::out);
-		ss << ecp_edp_cbuffer.da[3];
+//		ss << ecp_edp_cbuffer.epos_data_port_gen_parameters_structure.;
 
 
 		msg->message(ss.str().c_str());

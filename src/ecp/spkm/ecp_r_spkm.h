@@ -23,6 +23,7 @@ class robot: public common::ecp_robot,
 		public kinematics::common::kinematics_manager {
 	// Klasa dla robota irp6_postument (sztywnego)
 protected:
+	//bufory wejsciowe z generatora
 	lib::single_thread_port<lib::epos_low_level_command>
 			epos_low_level_command_data_port;
 	lib::epos_low_level_command epos_data_port_command_structure;
@@ -31,10 +32,12 @@ protected:
 			epos_gen_parameters_data_port;
 	lib::epos_gen_parameters epos_data_port_gen_parameters_structure;
 
+	// bufor wyjsciowe do generatora
 	lib::single_thread_request_port<lib::epos_reply>
 			epos_reply_data_request_port;
 	lib::epos_reply epos_data_port_reply_structure;
 
+	// bufory do edp
 	lib::spkm_cbuffer ecp_edp_cbuffer;
 	lib::spkm_rbuffer edp_ecp_rbuffer;
 
