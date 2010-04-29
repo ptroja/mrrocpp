@@ -2,6 +2,7 @@
 #define _SMB_CONST_H
 
 #include "lib/swarmitfix.h"
+#include "lib/data_port_headers/epos.h"
 
 namespace mrrocpp {
 

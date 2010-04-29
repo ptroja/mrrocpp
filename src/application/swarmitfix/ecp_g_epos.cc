@@ -63,11 +63,14 @@ bool epos::first_step() {
 	}
 
 	starttime = acttime;
-	return false;
+	return true;
 }
 
 bool epos::next_step() {
 	double diff;
+
+	return false;
+
 
 	prevtime = acttime;
 	if (clock_gettime(CLOCK_REALTIME, &acttime) == -1) {

@@ -4,10 +4,6 @@
 namespace mrrocpp {
 namespace lib {
 
-enum EPOS_GEN_PROFILE {
-	TRAPEZOIDAL_VELOCITY, CUBIC_POSITION, EPOS_GEN_PROFILE_NO_ACTION
-};
-
 enum SMB_PIN_INSERTION {
 	INSERT, WITHDRAWN, SMB_PIN_INSERTION_NO_ACTION
 }; // namespace mrrocpp

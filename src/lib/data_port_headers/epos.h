@@ -8,6 +8,10 @@
 namespace mrrocpp {
 namespace lib {
 
+enum EPOS_GEN_PROFILE {
+	TRAPEZOIDAL_VELOCITY, CUBIC_POSITION, EPOS_GEN_PROFILE_NO_ACTION
+};
+
 #define EPOS_GEN_PARAMETERS_DATA_PORT "epos_gen_paramteres_data_port"
 #define EPOS_LOW_LEVEL_COMMAND_DATA_PORT "epos_low_level_command_data_port"
 #define EPOS_REPLY_DATA_REQUEST_PORT "epos_reply_data_request_port"

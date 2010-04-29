@@ -84,14 +84,16 @@ effector::effector(lib::configurator &_config) :
 void effector::move_arm(lib::c_buffer &instruction) {
 	msg->message("HAHGSAGAGAGAGAG BUHHAHAHAHA 1");
 	lib::spkm_cbuffer ecp_edp_cbuffer;
-	memcpy(&ecp_edp_cbuffer, instruction.arm.serialized_command, sizeof(ecp_edp_cbuffer));
+	memcpy(&ecp_edp_cbuffer, instruction.arm.serialized_command,
+			sizeof(ecp_edp_cbuffer));
 
+	std::stringstream ss(std::stringstream::in | std::stringstream::out);
+	if (ecp_edp_cbuffer.variant == lib::SPKM_CBUFFER_EPOS_GEN_PARAMETERS) {
 
-	std::stringstream ss (std::stringstream::in | std::stringstream::out);
-//		ss << ecp_edp_cbuffer.epos_data_port_gen_parameters_structure.;
-
+		ss << ecp_edp_cbuffer.epos_data_port_gen_parameters_structure.da[4];
 
 		msg->message(ss.str().c_str());
+	}
 	//	manip_effector::single_thread_move_arm(instruction);
 	msg->message("HAHGSAGAGAGAGAG BUHHAHAHAHA 2");
 }
