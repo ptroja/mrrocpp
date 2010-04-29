@@ -13,16 +13,6 @@ generator::generator(common::task::task& _ecp_task) :
 generator::~generator() {
 }
 
-void generator::move_init() {
-
-	// domyslnie komunikumemy sie z robotem o ile on jest
-	if (the_robot)
-		the_robot->communicate_with_edp = true;
-	// domyslny tryb koordynacji
-	ecp_t.continuous_coordination = false;
-
-}
-
 generator::ECP_error::ECP_error(lib::error_class_t err_cl, uint64_t err_no,
 		uint64_t err0, uint64_t err1) :
 	error_class(err_cl), error_no(err_no) {
@@ -42,14 +32,24 @@ bool generator::is_EDP_error(ecp_robot& _robot) const {
 	}
 }
 
-void generator::Move() {
-	// Funkcja ruchu dla ECP
+void generator::move_init() {
 
-	move_init();
+	// domyslnie komunikumemy sie z robotem o ile on jest
+	if (the_robot)
+		the_robot->communicate_with_edp = true;
+	// domyslny tryb koordynacji
+	ecp_t.continuous_coordination = false;
 
 	// generacja pierwszego kroku ruchu
 	node_counter = 0;
 	ecp_t.set_ecp_reply(lib::ECP_ACKNOWLEDGE);
+
+}
+
+void generator::Move() {
+	// Funkcja ruchu dla ECP
+
+	move_init();
 
 	if (!first_step() || (communicate_with_mp_in_move
 			&& !ecp_t.mp_buffer_receive_and_send())) {

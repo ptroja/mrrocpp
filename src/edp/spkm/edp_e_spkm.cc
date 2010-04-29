@@ -90,7 +90,7 @@ void effector::move_arm(lib::c_buffer &instruction) {
 	std::stringstream ss(std::stringstream::in | std::stringstream::out);
 	if (ecp_edp_cbuffer.variant == lib::SPKM_CBUFFER_EPOS_GEN_PARAMETERS) {
 
-		ss << ecp_edp_cbuffer.epos_data_port_gen_parameters_structure.da[4];
+		ss << ecp_edp_cbuffer.epos_data_port_gen_parameters_structure.dm[4];
 
 		msg->message(ss.str().c_str());
 	}
