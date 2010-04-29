@@ -24,17 +24,20 @@ public:
 	//! assign a single 'Buffer' condition
 	AndDataCondition & operator=(const DataBufferBase &op);
 
-	//! compose 'And' condition from ('And' & 'Buffer')
+	//! compose 'And' condition
 	AndDataCondition operator&(const DataBufferBase &op);
 
-	//! compose 'And' condition from ('And' & 'And')
+	//! compose 'And' condition
 	AndDataCondition operator&(const AndDataCondition &op);
 
-	//! compose 'And' condition from ('And' | 'And')
+	//! compose 'Or' condition
 	OrDataCondition operator|(const AndDataCondition &op);
 
+	//! compose 'Or' condition
+	OrDataCondition operator|(const OrDataCondition &op);
+
 	//! constructor from single 'Buffer' condition
-	AndDataCondition(const DataBufferBase &op);
+	explicit AndDataCondition(const DataBufferBase &op);
 
 	//! default constructor
 	AndDataCondition();

@@ -38,6 +38,14 @@ OrDataCondition AndDataCondition::operator|(const AndDataCondition &op)
 	return cont;
 }
 
+OrDataCondition AndDataCondition::operator|(const OrDataCondition &op)
+{
+	OrDataCondition cont(op);
+	cont.push_back(*this);
+
+	return cont;
+}
+
 AndDataCondition AndDataCondition::operator&(const AndDataCondition &op)
 {
 	AndDataCondition cont(*this);

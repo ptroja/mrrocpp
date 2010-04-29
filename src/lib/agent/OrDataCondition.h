@@ -28,6 +28,15 @@ public:
 	//! assign a single 'And' condition
 	//OrDataCondition & operator=(const AndDataCondition &op);
 
+	//! compose 'Or' condition
+	OrDataCondition operator|(const DataBufferBase &op);
+
+	//! compose 'Or' condition
+	OrDataCondition operator|(const AndDataCondition &op);
+
+	//! compose 'Or' condition
+	OrDataCondition operator|(const OrDataCondition &op);
+
 	//! constructor from single 'Buffer' condition
 	OrDataCondition(const DataBufferBase &op);
 

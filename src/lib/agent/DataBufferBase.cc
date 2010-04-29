@@ -31,6 +31,13 @@ AndDataCondition DataBufferBase::operator&(DataBufferBase &op) {
 	return container;
 }
 
+AndDataCondition DataBufferBase::operator&(AndDataCondition &op) {
+	AndDataCondition container(op);
+	container.push_back(this);
+
+	return container;
+}
+
 OrDataCondition DataBufferBase::operator|(DataBufferBase &op) {
 	AndDataCondition c1(*this);
 	AndDataCondition c2(op);
@@ -45,6 +52,14 @@ OrDataCondition DataBufferBase::operator|(AndDataCondition &op) {
 	c.push_back(op);
 
 	return c;
+}
+
+OrDataCondition DataBufferBase::operator|(OrDataCondition &op) {
+	OrDataCondition c1(op);
+	AndDataCondition c2(*this);
+	c1.push_back(c2);
+
+	return c1;
 }
 
 DataBufferBase::~DataBufferBase()

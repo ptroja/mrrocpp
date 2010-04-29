@@ -44,6 +44,31 @@ OrDataCondition & OrDataCondition::operator=(const DataBufferBase &op)
 	return *this;
 }
 
+OrDataCondition OrDataCondition::operator|(const DataBufferBase &op)
+{
+	OrDataCondition c(*this);
+	c.push_back(AndDataCondition(op));
+
+	return c;
+}
+
+OrDataCondition OrDataCondition::operator|(const AndDataCondition &op)
+{
+	OrDataCondition c(*this);
+	c.push_back(op);
+
+	return c;
+}
+
+OrDataCondition OrDataCondition::operator|(const OrDataCondition &op)
+{
+	OrDataCondition c(*this);
+	BOOST_FOREACH(const AndDataCondition & ptr, op) {
+		c.push_back(ptr);
+	}
+	return c;
+}
+
 std::ostream& operator<<(std::ostream& output, const OrDataCondition& me)
 {
 	for(std::size_t i = 0; i < me.size(); ++i) {

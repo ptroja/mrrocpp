@@ -13,3 +13,6 @@ target_link_libraries(reader agent ${COMMON_LIBRARIES})
 
 add_executable(writers writers.cc)
 target_link_libraries(writers agent ${COMMON_LIBRARIES})
+
+add_executable(DataConditionTest DataConditionTest.cc)
+target_link_libraries(DataConditionTest agent ${COMMON_LIBRARIES})

@@ -37,14 +37,20 @@ public:
 	//! Constructor
 	DataBufferBase(const std::string & _name);
 
-	//! compose 'And' condition from ('Buffer' & 'Buffer')
+	//! compose 'And' condition
 	AndDataCondition operator&(DataBufferBase &op);
 
-	//! compose 'Or' condition from ('Buffer' | 'Buffer')
+	//! compose 'And' condition
+	AndDataCondition operator&(AndDataCondition &op);
+
+	//! compose 'Or' condition
 	OrDataCondition operator|(DataBufferBase &op);
 
-	//! compose 'Or' condition from ('Buffer' | 'And')
+	//! compose 'Or' condition
 	OrDataCondition operator|(AndDataCondition &op);
+
+	//! compose 'Or' condition
+	OrDataCondition operator|(OrDataCondition &op);
 
 	//! get name of the buffer
 	const std::string & getName() const;
