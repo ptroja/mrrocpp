@@ -37,22 +37,25 @@ extern ui_state_def ui_state;
 extern lib::configurator* config;
 extern ui_msg_def ui_msg;
 extern ui_robot_def ui_robot;
+extern boost::mutex process_creation_mtx;
 
-
-int EDP_shead_create(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int EDP_shead_create(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo)
 
 {
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	edp_shead_eb.command(boost::bind(EDP_shead_create_int, widget, apinfo, cbinfo));
+	edp_shead_eb.command(boost::bind(EDP_shead_create_int, widget, apinfo,
+			cbinfo));
 
 	return (Pt_CONTINUE);
 
 }
 
-int EDP_shead_create_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int EDP_shead_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -84,8 +87,10 @@ int EDP_shead_create_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t 
 
 				ui_state.shead.edp.node_nr = config->return_node_number(ui_state.shead.edp.node_name);
 
-				ui_robot.shead = new ui_tfg_and_conv_robot(*config, *ui_msg.all_ecp, lib::ROBOT_SHEAD);
-
+				{
+					boost::unique_lock<boost::mutex> lock(process_creation_mtx);
+					ui_robot.shead = new ui_tfg_and_conv_robot(*config, *ui_msg.all_ecp, lib::ROBOT_SHEAD);
+				}
 				ui_state.shead.edp.pid = ui_robot.shead->ecp->get_EDP_pid();
 
 				if (ui_state.shead.edp.pid < 0) {
@@ -99,14 +104,14 @@ int EDP_shead_create_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t 
 					// kilka sekund  (~1) na otworzenie urzadzenia
 
 					while ((ui_state.shead.edp.reader_fd
-							= name_open(ui_state.shead.edp.network_reader_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL))
+									= name_open(ui_state.shead.edp.network_reader_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL))
 							< 0)
-						if ((tmp++) < CONNECT_RETRY) {
-							delay(CONNECT_DELAY);
-						} else {
-							perror("blad odwolania do READER_OT");
-							break;
-						}
+					if ((tmp++) < CONNECT_RETRY) {
+						delay(CONNECT_DELAY);
+					} else {
+						perror("blad odwolania do READER_OT");
+						break;
+					}
 
 					// odczytanie poczatkowego stanu robota (komunikuje sie z EDP)
 					lib::controller_state_t robot_controller_initial_state_tmp;
@@ -129,20 +134,23 @@ int EDP_shead_create_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t 
 	return 1;
 }
 
-int EDP_shead_slay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int EDP_shead_slay(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo)
 
 {
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	edp_shead_eb.command(boost::bind(EDP_shead_slay_int, widget, apinfo, cbinfo));
+	edp_shead_eb.command(
+			boost::bind(EDP_shead_slay_int, widget, apinfo, cbinfo));
 
 	return (Pt_CONTINUE);
 
 }
 
-int EDP_shead_slay_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int EDP_shead_slay_int(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo)
 
 {
 	int pt_res;
@@ -152,7 +160,8 @@ int EDP_shead_slay_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *c
 	if (ui_state.shead.edp.state > 0) { // jesli istnieje EDP
 		if (ui_state.shead.edp.reader_fd >= 0) {
 			if (name_close(ui_state.shead.edp.reader_fd) == -1) {
-				fprintf(stderr, "UI: EDP_irp6ot, %s:%d, name_close(): %s\n", __FILE__, __LINE__, strerror(errno));
+				fprintf(stderr, "UI: EDP_irp6ot, %s:%d, name_close(): %s\n",
+						__FILE__, __LINE__, strerror(errno));
 			}
 		}
 		delete ui_robot.shead;
@@ -177,7 +186,8 @@ int EDP_shead_slay_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *c
 
 int reload_shead_configuration() {
 	// jesli IRP6 on_track ma byc aktywne
-	if ((ui_state.shead.is_active = config->value<int> ("is_shead_active")) == 1) {
+	if ((ui_state.shead.is_active = config->value<int> ("is_shead_active"))
+			== 1) {
 		// ini_con->create_ecp_shead (ini_con->ui->ecp_shead_section);
 		//ui_state.is_any_edp_active = true;
 		if (ui_state.is_mp_and_ecps_active) {

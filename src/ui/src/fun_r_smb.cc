@@ -37,9 +37,10 @@ extern ui_state_def ui_state;
 extern lib::configurator* config;
 extern ui_msg_def ui_msg;
 extern ui_robot_def ui_robot;
+extern boost::mutex process_creation_mtx;
 
-
-int EDP_smb_create(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int EDP_smb_create(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -52,7 +53,8 @@ int EDP_smb_create(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinf
 
 }
 
-int EDP_smb_create_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int EDP_smb_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -84,8 +86,11 @@ int EDP_smb_create_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *c
 
 				ui_state.smb.edp.node_nr = config->return_node_number(ui_state.smb.edp.node_name);
 
-				ui_robot.smb = new ui_tfg_and_conv_robot(*config, *ui_msg.all_ecp, lib::ROBOT_SMB);
+				{
+					boost::unique_lock<boost::mutex> lock(process_creation_mtx);
 
+					ui_robot.smb = new ui_tfg_and_conv_robot(*config, *ui_msg.all_ecp, lib::ROBOT_SMB);
+				}
 				ui_state.smb.edp.pid = ui_robot.smb->ecp->get_EDP_pid();
 
 				if (ui_state.smb.edp.pid < 0) {
@@ -101,14 +106,14 @@ int EDP_smb_create_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *c
 					// kilka sekund  (~1) na otworzenie urzadzenia
 
 					while ((ui_state.smb.edp.reader_fd
-							= name_open(ui_state.smb.edp.network_reader_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL))
+									= name_open(ui_state.smb.edp.network_reader_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL))
 							< 0)
-						if ((tmp++) < CONNECT_RETRY) {
-							delay(CONNECT_DELAY);
-						} else {
-							perror("blad odwolania do READER_OT");
-							break;
-						}
+					if ((tmp++) < CONNECT_RETRY) {
+						delay(CONNECT_DELAY);
+					} else {
+						perror("blad odwolania do READER_OT");
+						break;
+					}
 
 					// odczytanie poczatkowego stanu robota (komunikuje sie z EDP)
 					lib::controller_state_t robot_controller_initial_state_tmp;
@@ -144,7 +149,8 @@ int EDP_smb_slay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 }
 
-int EDP_smb_slay_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int EDP_smb_slay_int(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo)
 
 {
 	int pt_res;
@@ -154,7 +160,8 @@ int EDP_smb_slay_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbi
 	if (ui_state.smb.edp.state > 0) { // jesli istnieje EDP
 		if (ui_state.smb.edp.reader_fd >= 0) {
 			if (name_close(ui_state.smb.edp.reader_fd) == -1) {
-				fprintf(stderr, "UI: EDP_irp6ot, %s:%d, name_close(): %s\n", __FILE__, __LINE__, strerror(errno));
+				fprintf(stderr, "UI: EDP_irp6ot, %s:%d, name_close(): %s\n",
+						__FILE__, __LINE__, strerror(errno));
 			}
 		}
 		delete ui_robot.smb;

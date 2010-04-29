@@ -32,6 +32,8 @@
 #include "abimport.h"
 #include "proto.h"
 
+
+extern boost::mutex process_creation_mtx;
 extern function_execution_buffer edp_spkm_eb;
 extern ui_state_def ui_state;
 extern lib::configurator* config;
@@ -88,9 +90,12 @@ int EDP_spkm_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 
 				ui_state.spkm.edp.node_nr = config->return_node_number(
 						ui_state.spkm.edp.node_name);
-
+				{
+					boost::unique_lock<boost::mutex> lock(process_creation_mtx);
 				ui_robot.spkm = new ui_tfg_and_conv_robot(*config,
 						*ui_msg.all_ecp, lib::ROBOT_SPKM);
+
+				}
 
 				ui_state.spkm.edp.pid = ui_robot.spkm->ecp->get_EDP_pid();
 
