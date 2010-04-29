@@ -8,11 +8,19 @@ namespace generator {
 generator::generator(common::task::task& _ecp_task) :
 	ecp_mp::generator::generator(*(ecp_t.sr_ecp_msg)), ecp_t(_ecp_task),
 			communicate_with_mp_in_move(true), the_robot(ecp_t.ecp_m_robot) {
-	if (the_robot)
-		the_robot->communicate_with_edp = true;
 }
 
 generator::~generator() {
+}
+
+void generator::move_init() {
+
+	// domyslnie komunikumemy sie z robotem o ile on jest
+	if (the_robot)
+		the_robot->communicate_with_edp = true;
+	// domyslny tryb koordynacji
+	ecp_t.continuous_coordination = false;
+
 }
 
 generator::ECP_error::ECP_error(lib::error_class_t err_cl, uint64_t err_no,
@@ -37,6 +45,8 @@ bool generator::is_EDP_error(ecp_robot& _robot) const {
 void generator::Move() {
 	// Funkcja ruchu dla ECP
 
+	move_init();
+
 	// generacja pierwszego kroku ruchu
 	node_counter = 0;
 	ecp_t.set_ecp_reply(lib::ECP_ACKNOWLEDGE);
@@ -52,8 +62,12 @@ void generator::Move() {
 		ecp_t.all_sensors_initiate_reading(sensor_m);
 
 		if (the_robot) {
+
 			// zlecenie ruchu SET oraz odczyt stanu robota GET
-			if (!(ecp_t.continuous_coordination)) the_robot->create_command();
+			if (!(ecp_t.continuous_coordination)) {
+
+				the_robot->create_command();
+			}
 
 			// wykonanie kroku ruchu
 

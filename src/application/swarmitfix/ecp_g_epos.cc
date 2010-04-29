@@ -51,6 +51,7 @@ bool epos::first_step() {
 	// parameters copying
 	get_mp_ecp_command();
 
+	ecp_t.sr_ecp_msg->message("epos first_step");
 
 	//epos_data_port_command_structure.da[3] = 3.13;
 	epos_data_port_gen_parameters_structure = mp_ecp_epos_params;
@@ -68,7 +69,7 @@ bool epos::first_step() {
 
 bool epos::next_step() {
 	double diff;
-
+	ecp_t.sr_ecp_msg->message("epos next_step");
 	return false;
 
 

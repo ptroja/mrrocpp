@@ -31,6 +31,9 @@ class generator : public ecp_mp::generator::generator {
   		void Move(void);
   		virtual void execute_motion (void);
 
+  		void move_init (void);
+
+
 		bool communicate_with_mp_in_move;
 
 		ecp_robot* the_robot;

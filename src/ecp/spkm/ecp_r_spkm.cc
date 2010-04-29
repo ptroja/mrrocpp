@@ -50,6 +50,9 @@ void robot::create_command() {
 	bool is_new_data;
 	bool is_new_request;
 
+	sr_ecp_msg.message("create_command");
+
+
 	if (epos_low_level_command_data_port.is_new_data()
 			&& epos_gen_parameters_data_port.is_new_data()) {
 		throw ecp_robot::ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
