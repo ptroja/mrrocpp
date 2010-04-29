@@ -25,6 +25,7 @@
 #include "kinematics/spkm/kinematic_model_spkm.h"
 #include "edp/common/manip_trans_t.h"
 #include "edp/common/vis_server.h"
+#include "lib/epos_gen.h"
 
 using namespace mrrocpp::lib::exception;
 
@@ -82,7 +83,7 @@ effector::effector(lib::configurator &_config) :
 
 /*--------------------------------------------------------------------------*/
 void effector::move_arm(lib::c_buffer &instruction) {
-	msg->message("HAHGSAGAGAGAGAG BUHHAHAHAHA 1");
+	msg->message("move_arm");
 	lib::spkm_cbuffer ecp_edp_cbuffer;
 	memcpy(&ecp_edp_cbuffer, instruction.arm.serialized_command,
 			sizeof(ecp_edp_cbuffer));
@@ -90,12 +91,31 @@ void effector::move_arm(lib::c_buffer &instruction) {
 	std::stringstream ss(std::stringstream::in | std::stringstream::out);
 	if (ecp_edp_cbuffer.variant == lib::SPKM_CBUFFER_EPOS_GEN_PARAMETERS) {
 
+		// epos parameters computation basing on trajectory parameters
+		lib::epos_gen_parameters epos_gen_parameters_structure;
+		lib::epos_low_level_command epos_low_level_command_structure;
+
+		memcpy(&epos_gen_parameters_structure,
+				&(ecp_edp_cbuffer.epos_data_port_gen_parameters_structure),
+				sizeof(epos_gen_parameters_structure));
+
+		compute_epos_command(epos_gen_parameters_structure,
+				epos_low_level_command_structure);
+
 		ss << ecp_edp_cbuffer.epos_data_port_gen_parameters_structure.dm[4];
 
 		msg->message(ss.str().c_str());
+
+		// previously computed parameters send to epos2 controllers
+
+
+
+
+		// start the trajectory execution
+
 	}
 	//	manip_effector::single_thread_move_arm(instruction);
-	msg->message("HAHGSAGAGAGAGAG BUHHAHAHAHA 2");
+
 }
 /*--------------------------------------------------------------------------*/
 
@@ -103,7 +123,7 @@ void effector::move_arm(lib::c_buffer &instruction) {
 void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction) { // odczytanie pozycji ramienia
 	//lib::JointArray desired_joints_tmp(MAX_SERVOS_NR); // Wspolrzedne wewnetrzne -
 	//   printf(" GET ARM\n");
-
+	msg->message("get_arm_position");
 	if (read_hardware) {
 		//	motor_driven_effector::get_arm_position_read_hardware_sb();
 	}

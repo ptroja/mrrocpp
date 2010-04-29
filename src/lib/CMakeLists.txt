@@ -24,6 +24,7 @@ add_library(mrrocpp
 	configurator.cc
 	c_buffer.cc r_buffer.cc
 	mis_fun.cc
+	epos_gen.cc
 	timer.cc
 	srlib.cc
 	exception.cc
