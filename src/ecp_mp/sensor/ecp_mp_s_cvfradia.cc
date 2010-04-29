@@ -84,6 +84,12 @@ void cvfradia::configure_sensor() {
 
 	if(write(sockfd, &to_vsp, sizeof(lib::ECP_VSP_MSG)) == -1)
 		throw sensor_error (lib::SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE);
+	if(read(sockfd, &from_vsp, sizeof(lib::VSP_ECP_MSG))==-1)
+		throw sensor_error (lib::SYSTEM_ERROR, CANNOT_READ_FROM_DEVICE);
+	if(from_vsp.vsp_report != lib::VSP_FRADIA_TASK_LOADED){
+		printf("void cvfradia::configure_sensor(): Fradia task not found.\n"); fflush(stdout);
+		throw sensor_error (lib::SYSTEM_ERROR, CANNOT_READ_FROM_DEVICE);
+	}
 }
 
 

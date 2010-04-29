@@ -33,17 +33,26 @@ rcsc::rcsc(lib::configurator &_config) :
 	sg = new common::generator::smooth(*this, true);
 	wmg = new common::generator::weight_meassure(*this, 1);
 
-	if (config.exists("cvfradia_task", "[vsp_cvfradia_servovision]")) {
-		vsp_fradia = new ecp_mp::sensor::fradia_sensor<
-				ecp::common::generator::visual_object_tracker>(
-				"[vsp_cvfradia_servovision]", *this);
+	char fradia_config_section_name[] = { "[fradia_object_follower]" };
+	if (config.exists("fradia_task", fradia_config_section_name)) {
+		Eigen::Matrix <double, 3, 1> p1, p2;
+		p1(0, 0) = 0.6;
+		p1(1, 0) = -0.4;
+		p1(2, 0) = 0.1;
 
-		ib_eih = new ecp::common::generator::ecp_g_ib_eih(*this, vsp_fradia,
-				regulator);
+		p2(0, 0) = 0.95;
+		p2(1, 0) = 0.4;
+		p2(2, 0) = 0.3;
 
-		vsp_fradia->configure_sensor();
-		regulator = new ecp::common::generator::regulator_p<4, 4>(_config,
-				"[regulator_p]");
+		shared_ptr <position_constraint> cube(new cubic_constraint(p1, p2));
+
+		reg = shared_ptr <visual_servo_regulator> (new regulator_p(_config, fradia_config_section_name));
+		vs = shared_ptr <visual_servo> (new ib_eih_visual_servo(reg, fradia_config_section_name, _config));
+		term_cond = shared_ptr<termination_condition>(new object_reached_termination_condition(0.005, 0.005, 50));
+		sm = shared_ptr <simple_visual_servo_manager> (new simple_visual_servo_manager(*this, fradia_config_section_name, vs));
+		sm->add_position_constraint(cube);
+		sm->add_termination_condition(term_cond);
+		sm->configure();
 	}
 
 	go_st = new common::task::ecp_sub_task_gripper_opening(*this);
@@ -187,7 +196,7 @@ void rcsc::main_task_algorithm(void) {
 		}
 		case ecp_mp::task::ECP_GEN_IB_EIH: {
 
-			ib_eih->Move();
+			sm->Move();
 			break;
 		}
 

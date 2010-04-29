@@ -19,7 +19,9 @@ namespace irp6ot {
 namespace task {
 
 const double
-		ecp_t_ib_eih_tester::initialPositionJoints[MAX_SERVOS_NR] = { 0, -0.010, -1.510, -0.113, 0.023, 4.716, -0.096, 0.075};
+		ecp_t_ib_eih_tester::initialPositionJoints[MAX_SERVOS_NR] = { 0, -0.010, -1.391, 0.222, 0.0, 4.719, 0.0, 0.075};
+
+//{ 0, -0.010, -1.510, -0.113, 0.0, 4.716, 0.0, 0.075};
 
 /*
  * IRP6 On Track:
@@ -41,7 +43,7 @@ ecp_t_ib_eih_tester::ecp_t_ib_eih_tester(mrrocpp::lib::configurator& _configurat
 		sr_ecp_msg->message("ecp_t_ib_eih_tester::ecp_t_ib_eih_tester() fradia setup...");
 
 		vsp_fradia
-				= new ecp_mp::sensor::fradia_sensor <ecp::common::generator::visual_object_tracker>("[vsp_cvfradia_servovision]", *this);
+				= new ecp_mp::sensor::fradia_sensor <ecp::common::generator::visual_object_tracker, char>("[vsp_cvfradia_servovision]", *this);
 
 		vsp_fradia->configure_sensor();
 

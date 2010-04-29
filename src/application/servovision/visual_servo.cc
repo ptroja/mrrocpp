@@ -5,7 +5,7 @@
  *      Author: mboryn
  */
 
-#include "ecp_g_visual_servo_manager.h"
+#include "visual_servo.h"
 
 namespace mrrocpp {
 
@@ -15,15 +15,14 @@ namespace common {
 
 namespace generator {
 
-visual_servo_manager::visual_servo_manager()
+visual_servo::visual_servo(boost::shared_ptr <visual_servo_regulator> regulator) :
+	regulator(regulator)
 {
-	// TODO Auto-generated constructor stub
 
 }
 
-visual_servo_manager::~visual_servo_manager()
+visual_servo::~visual_servo()
 {
-	// TODO Auto-generated destructor stub
 }
 
 } // namespace generator

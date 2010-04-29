@@ -22,10 +22,13 @@ namespace common {
 
 namespace generator {
 
+/** @addtogroup servovision
+ *  @{
+ */
+
 /**
  * Abstract class for regulators used in servovision. Regulator calculates control supplied to servovision generator
  */
-template <int ERROR_SIZE, int CONTROL_SIZE>
 class visual_servo_regulator
 {
 public:
@@ -34,10 +37,9 @@ public:
 	}
 	;
 
-	virtual const Eigen::Matrix <double, CONTROL_SIZE, 1> & calculate_control(const Eigen::Matrix <double, ERROR_SIZE,
-			1> & error) = 0;
+	virtual const Eigen::Matrix <double, 6, 1> & calculate_control(const Eigen::Matrix <double, 6, 1> & error) = 0;
 
-	const Eigen::Matrix <double, CONTROL_SIZE, 1> & get_control()
+	const Eigen::Matrix <double, 6, 1> & get_control()
 	{
 		return calculated_control;
 	}
@@ -52,10 +54,12 @@ protected:
 
 	const std::string config_section_name;
 
-	Eigen::Matrix <double, CONTROL_SIZE, 1> calculated_control;
+	Eigen::Matrix <double, 6, 1> calculated_control;
 private:
 
 }; // class visual_servo_regulator
+
+/** @} */
 
 } // namespace generator
 

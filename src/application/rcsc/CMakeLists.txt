@@ -18,8 +18,16 @@ add_executable(mp_fsautomat
 add_executable(ecp_irp6ot_rcsc
 	ecp_t_rcsc_irp6ot.cc
 	../../ecp/common/task/ecp_st_go.cc
-	../../ecp/irp6_on_track/generator/ecp_g_vis_ib_eih_object_tracker_irp6ot.cc
-	../servovision/ecp_g_ib_eih.cc
+#	../../ecp/irp6_on_track/generator/ecp_g_vis_ib_eih_object_tracker_irp6ot.cc
+    ../servovision/ib_eih_visual_servo.cc
+    ../servovision/visual_servo.cc
+    ../servovision/visual_servo_manager.cc
+    ../servovision/simple_visual_servo_manager.cc
+    ../servovision/position_constraint.cc
+    ../servovision/cubic_constraint.cc
+    ../servovision/termination_condition.cc
+    ../servovision/object_reached_termination_condition.cc
+    ../servovision/logger.cc
 )
 add_executable(ecp_irp6p_rcsc
 	ecp_t_rcsc_irp6p.cc

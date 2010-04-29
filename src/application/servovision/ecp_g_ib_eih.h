@@ -26,21 +26,10 @@ namespace generator {
  *  @{
  */
 
-
-typedef struct visual_object_tracker_t
-{
-	size_t size;
-	bool tracking;
-	int x;
-	int y;
-	int z;
-	double alpha;
-} visual_object_tracker;
-
 class ecp_g_ib_eih: public visual_servo<4, 4>
 {
 public:
-	ecp_g_ib_eih(mrrocpp::ecp::common::task::task & _ecp_task, ecp_mp::sensor::fradia_sensor<visual_object_tracker> *vsp_fradia, visual_servo_regulator<4, 4> * regulator);
+	ecp_g_ib_eih(mrrocpp::ecp::common::task::task & _ecp_task, ecp_mp::sensor::fradia_sensor<visual_object_tracker, char> *vsp_fradia, visual_servo_regulator<4, 4> * regulator);
 	virtual ~ecp_g_ib_eih();
 	virtual bool first_step();
 	virtual bool next_step();
@@ -55,7 +44,7 @@ protected:
 	 */
 	bool isArmFrameOk(const lib::Homog_matrix& arm_frame);
 private:
-	ecp_mp::sensor::fradia_sensor<visual_object_tracker> *vsp_fradia;
+	ecp_mp::sensor::fradia_sensor<visual_object_tracker, char> *vsp_fradia;
 
 	/** Current effector frame*/
 	lib::Homog_matrix currentFrame;

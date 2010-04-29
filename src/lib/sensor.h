@@ -23,14 +23,16 @@ namespace lib {
 // Polecenie dla VSP
 enum VSP_COMMAND
 {
-	VSP_CONFIGURE_SENSOR, VSP_INITIATE_READING, VSP_GET_READING, VSP_TERMINATE
+	VSP_CONFIGURE_SENSOR, VSP_INITIATE_READING, VSP_GET_READING, VSP_TERMINATE, VSP_NONE, VSP_FRADIA_CONFIGURE_TASK
 };
 enum VSP_REPORT
 {
 	VSP_REPLY_OK,
 	VSP_SENSOR_NOT_CONFIGURED,
 	VSP_READING_NOT_READY,
-	INVALID_VSP_COMMAND
+	INVALID_VSP_COMMAND,
+	VSP_FRADIA_TASK_LOADED,
+	VSP_FRADIA_TASK_CONFIGURED
 };
 
 // Odpowiedz od VSP
@@ -74,6 +76,9 @@ typedef enum{
 	STATE_OK,
 	BOARD_DETECTION_ERROR
 }BOARD_STATUS;
+
+/** Define size of data buffer for FraDIA <-> MRROC++ communication. Used by CommunicationWrapper (FraDIA) and fradia_sensor (MRROC++) */
+#define SENSOR_IMAGE_FRADIA_READING_SIZE 24
 
 /*! \struct sensor_image_t
  * \ Structure used for storing and passing sensors data.
@@ -260,6 +265,7 @@ typedef struct sensor_image_t
 			bool calibrated;
 		} chessboard;
 
+		char fradia_sensor_reading[SENSOR_IMAGE_FRADIA_READING_SIZE];
 	} sensor_union; // koniec unii
 } SENSOR_IMAGE;
 
@@ -288,6 +294,9 @@ enum ESA_MODE
 };
 
 // BUFORY KOMUNIKACYJNE
+/** Define size of data buffer for FraDIA <-> MRROC++ communication. Used by CommunicationWrapper (FraDIA) and fradia_sensor (MRROC++) */
+#define ECP_VSP_MSG_FRADIA_COMMAND_SIZE 160
+
 struct ECP_VSP_MSG
 {
 	VSP_COMMAND i_code;
@@ -349,6 +358,8 @@ struct ECP_VSP_MSG
                   unsigned int led_status;
                   bool rumble;
                 } wii_command;
+
+        char fradia_sensor_command[ECP_VSP_MSG_FRADIA_COMMAND_SIZE];
 	};//: koniec unii
 };
 

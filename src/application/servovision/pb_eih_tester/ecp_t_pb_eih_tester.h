@@ -5,16 +5,15 @@
  *      Author: mboryn
  */
 
-#ifndef ECP_T_IB_EIH_TESTER_H_
-#define ECP_T_IB_EIH_TESTER_H_
+#ifndef ECP_T_PB_EIH_TESTER_H_
+#define ECP_T_PB_EIH_TESTER_H_
 
 #include "ecp/common/task/ecp_task.h"
 #include "ecp/irp6_on_track/ecp_r_irp6ot.h"
 #include "ecp_mp/sensor/ecp_mp_s_fradia_sensor.h"
 #include "ecp/common/generator/ecp_g_smooth.h"
-#include "../ecp_g_ib_eih.h"
+#include "../ecp_g_pb_eih.h"
 #include "../visual_servo_regulator_p.h"
-#include "ecp/common/generator/ecp_g_force.h"
 
 namespace mrrocpp {
 
@@ -33,29 +32,28 @@ namespace task {
 /**
  *
  */
-class ecp_t_ib_eih_tester: public mrrocpp::ecp::common::task::task
+class ecp_t_pb_eih_tester: public mrrocpp::ecp::common::task::task
 {
 public:
-	ecp_t_ib_eih_tester(mrrocpp::lib::configurator& _configurator);
-	virtual ~ecp_t_ib_eih_tester();
+	ecp_t_pb_eih_tester(mrrocpp::lib::configurator& _configurator);
+	virtual ~ecp_t_pb_eih_tester();
 	void main_task_algorithm(void);
 protected:
-	ecp_mp::sensor::fradia_sensor <ecp::common::generator::visual_object_tracker, char> *vsp_fradia;
+	ecp_mp::sensor::fradia_sensor <ecp::common::generator::visual_object_tracker> *vsp_fradia;
 	mrrocpp::ecp::common::generator::smooth * smooth_gen;
 	mrrocpp::ecp::common::generator::ecp_g_ib_eih * g_ib_eih;
-	mrrocpp::ecp::common::generator::visual_servo_regulator <4, 4> * regulator;
+	mrrocpp::ecp::common::generator::visual_servo_regulator<4,4> * regulator;
 
 	/** Moves (using smooth generator) to initial position. */
 	void moveToInitialPosition();
 
+	/*static const double initialPositionJoints[MAX_SERVOS_NR] = {
+	 0, -0.013, -1.442, -0.275, 0.01, 4.686, -0.070, 0.090
+	 };*/
 	static const double initialPositionJoints[MAX_SERVOS_NR];
-
-	common::generator::tff_gripper_approach* gagen;
-	common::generator::bias_edp_force* befgen; //calibration of force
-
 };
 
-/** @} */// ecp_t_ib_eih_tester
+/** @} */// ecp_t_pb_eih_tester
 
 } // namespace task
 
@@ -65,4 +63,4 @@ protected:
 
 } // namespace mrrocpp
 
-#endif /* ECP_T_IB_EIH_TESTER_H_ */
+#endif /* ecp_t_pb_eih_tester_H_ */
