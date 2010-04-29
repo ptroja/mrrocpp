@@ -53,7 +53,7 @@ void generator::Move() {
 
 		if (the_robot) {
 			// zlecenie ruchu SET oraz odczyt stanu robota GET
-			the_robot->create_command();
+			if (!(ecp_t.continuous_coordination)) the_robot->create_command();
 
 			// wykonanie kroku ruchu
 
