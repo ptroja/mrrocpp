@@ -112,7 +112,6 @@ void effector::move_arm(lib::c_buffer &instruction) {
 		// start the trajectory execution
 
 	}
-	//	manip_effector::single_thread_move_arm(instruction);
 
 }
 /*--------------------------------------------------------------------------*/

@@ -1,7 +1,7 @@
 #if !defined(_SMB_CONST_H)
 #define _SMB_CONST_H
 
-#include "lib/swarmitfix.h"
+#include "lib/data_port_headers/smb.h"
 #include "lib/data_port_headers/epos.h"
 
 namespace mrrocpp {
@@ -14,22 +14,20 @@ namespace mrrocpp {
 namespace lib {
 
 struct smb_cbuffer {
-	double em[3];
-	double emdm[3];
-	double aa[3];
-	double da[3];
-	double av[3];
+	double em[4];
+	double emdm[4];
+	double aa[4];
+	double da[4];
+	double av[4];
 	double tt;
 	lib::EPOS_GEN_PROFILE profile_type;
-	lib::SMB_PIN_INSERTION pin_insertion[2];
-	lib::SMB_PIN_LOCKING pin_locking[2];
+	lib::SMB_PIN_INSERTION pin_insertion[3];
+	lib::SMB_PIN_LOCKING pin_locking[3];
 };
 
 struct smb_rbuffer {
-	double position[3];
-	bool motion_in_progress[3];
-	bool pin_inserted[2];
-	bool pin_clamped[2];
+	smb_leg_reply leg[3];
+	single_controller_epos_reply epos_controller[4];
 };
 
 #define EDP_SMB_SECTION "[edp_smb]"
