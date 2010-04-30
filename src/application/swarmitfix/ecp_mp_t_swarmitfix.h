@@ -8,13 +8,9 @@
 #ifndef __ECP_MP_T_SWARMITFIX_H
 #define __ECP_MP_T_SWARMITFIX_H
 
-
-#include "lib/swarmitfix.h"
-
 namespace mrrocpp {
 namespace ecp_mp {
 namespace task {
-
 
 /**
  * Used generators.

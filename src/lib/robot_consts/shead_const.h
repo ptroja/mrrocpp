@@ -1,7 +1,7 @@
 #if !defined(_SHEAD_CONST_H)
 #define _SHEAD_CONST_H
 
-#include "lib/swarmitfix.h"
+#include "lib/data_port_headers/shead.h"
 
 namespace mrrocpp {
 
@@ -20,6 +20,8 @@ struct shead_cbuffer {
 struct shead_rbuffer {
 	bool head_solfified;
 	bool vacuum_on;
+	bool soldification_in_progress;
+	bool vacumization_in_progress;
 };
 
 #define EDP_SHEAD_SECTION "[edp_shead]"

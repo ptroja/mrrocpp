@@ -1,5 +1,9 @@
-#ifndef __SWARMITFIX_H
-#define __SWARMITFIX_H
+/*
+ **  SHEAD.H
+ */
+
+#if !defined(__SHEAD_DATA_PORT_H)
+#define __SHEAD_DATA_PORT_H
 
 namespace mrrocpp {
 namespace lib {
