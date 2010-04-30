@@ -115,10 +115,10 @@ void robot::get_reply() {
 
 	// generator reply generation
 	for (int i = 0; i < 6; i++) {
-		epos_data_port_reply_structure.position[i]
-				= edp_ecp_rbuffer.position[i];
-		epos_data_port_reply_structure.motion_in_progress[i]
-				= edp_ecp_rbuffer.motion_in_progress[i];
+		epos_data_port_reply_structure.epos_controller[i].position
+				= edp_ecp_rbuffer.epos_controller[i].position;
+		epos_data_port_reply_structure.epos_controller[i].motion_in_progress
+				= edp_ecp_rbuffer.epos_controller[i].motion_in_progress;
 	}
 	epos_data_port_reply_structure.contact = edp_ecp_rbuffer.contact;
 	if (epos_reply_data_request_port.is_new_request()) {

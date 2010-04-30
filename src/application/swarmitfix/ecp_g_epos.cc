@@ -78,7 +78,7 @@ bool epos::next_step() {
 		epos_data_port_reply_structure = epos_reply_data_request_port->get();
 
 		std::stringstream ss(std::stringstream::in | std::stringstream::out);
-		ss << epos_data_port_reply_structure.position[3];
+		ss << epos_data_port_reply_structure.epos_controller[3].position;
 
 		ecp_t.sr_ecp_msg->message(ss.str().c_str());
 

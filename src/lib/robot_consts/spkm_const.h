@@ -27,10 +27,10 @@ struct spkm_cbuffer {
 };
 
 struct spkm_rbuffer {
-	double position[6];
-	bool motion_in_progress[6];
+	double lalala;
 	bool contact;
-};
+	single_controller_epos_reply epos_controller[6];
+}__attribute__((__packed__));
 
 #define EDP_SPKM_SECTION "[edp_spkm]"
 #define ECP_SPKM_SECTION "[ecp_spkm]"

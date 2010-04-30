@@ -109,8 +109,6 @@ void effector::move_arm(lib::c_buffer &instruction) {
 		// previously computed parameters send to epos2 controllers
 
 
-
-
 		// start the trajectory execution
 
 	}
@@ -124,20 +122,12 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction) 
 	//lib::JointArray desired_joints_tmp(MAX_SERVOS_NR); // Wspolrzedne wewnetrzne -
 	//   printf(" GET ARM\n");
 	msg->message("get_arm_position");
-	if (read_hardware) {
-		//	motor_driven_effector::get_arm_position_read_hardware_sb();
-	}
 
 	lib::spkm_rbuffer edp_ecp_rbuffer;
-
-	edp_ecp_rbuffer.position[3]=4.9;
+	edp_ecp_rbuffer.epos_controller[3].position = 4.9;
 
 	memcpy(reply.arm.serialized_reply, &edp_ecp_rbuffer,
-				sizeof(edp_ecp_rbuffer));
-
-	// okreslenie rodzaju wspolrzednych, ktore maja by odczytane
-	// oraz adekwatne wypelnienie bufora odpowiedzi
-	common::manip_effector::get_arm_position_get_arm_type_switch(instruction);
+			sizeof(edp_ecp_rbuffer));
 
 	reply.servo_step = step_counter;
 }

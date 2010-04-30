@@ -16,6 +16,10 @@ enum EPOS_GEN_PROFILE {
 #define EPOS_LOW_LEVEL_COMMAND_DATA_PORT "epos_low_level_command_data_port"
 #define EPOS_REPLY_DATA_REQUEST_PORT "epos_reply_data_request_port"
 
+struct single_controller_epos_reply {
+	double position;
+	bool motion_in_progress;
+}__attribute__((__packed__));
 
 struct epos_gen_parameters {
 	EPOS_GEN_PROFILE profile_type;
@@ -36,8 +40,7 @@ struct epos_low_level_command {
 };
 
 struct epos_reply {
-	double position[6];
-	bool motion_in_progress[6];
+	single_controller_epos_reply epos_controller[6];
 	bool contact;
 };
 
