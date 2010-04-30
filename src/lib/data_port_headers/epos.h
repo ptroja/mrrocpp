@@ -38,6 +38,7 @@ struct epos_low_level_command {
 struct epos_reply {
 	double position[6];
 	bool motion_in_progress[6];
+	bool contact;
 };
 
 }

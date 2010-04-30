@@ -128,6 +128,13 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction) 
 		//	motor_driven_effector::get_arm_position_read_hardware_sb();
 	}
 
+	lib::spkm_rbuffer edp_ecp_rbuffer;
+
+	edp_ecp_rbuffer.position[3]=4.9;
+
+	memcpy(reply.arm.serialized_reply, &edp_ecp_rbuffer,
+				sizeof(edp_ecp_rbuffer));
+
 	// okreslenie rodzaju wspolrzednych, ktore maja by odczytane
 	// oraz adekwatne wypelnienie bufora odpowiedzi
 	common::manip_effector::get_arm_position_get_arm_type_switch(instruction);

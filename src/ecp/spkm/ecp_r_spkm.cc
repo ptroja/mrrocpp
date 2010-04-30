@@ -52,7 +52,6 @@ void robot::create_command() {
 
 	sr_ecp_msg.message("create_command");
 
-
 	if (epos_low_level_command_data_port.is_new_data()
 			&& epos_gen_parameters_data_port.is_new_data()) {
 		throw ecp_robot::ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
@@ -110,20 +109,21 @@ void robot::create_command() {
 
 void robot::get_reply() {
 
-		// message deserialization
-		memcpy(&edp_ecp_rbuffer, reply_package.arm.serialized_reply,
-				sizeof(edp_ecp_rbuffer));
+	// message deserialization
+	memcpy(&edp_ecp_rbuffer, reply_package.arm.serialized_reply,
+			sizeof(edp_ecp_rbuffer));
 
-		// generator reply generation
-		for (int i = 0; i < 6; i++) {
-			epos_data_port_reply_structure.position[i]
-					= edp_ecp_rbuffer.position[i];
-			epos_data_port_reply_structure.motion_in_progress[i]
-					= edp_ecp_rbuffer.motion_in_progress[i];
-		}
-		if (epos_reply_data_request_port.is_new_request()) {
-			epos_reply_data_request_port.set(epos_data_port_reply_structure);
-		}
+	// generator reply generation
+	for (int i = 0; i < 6; i++) {
+		epos_data_port_reply_structure.position[i]
+				= edp_ecp_rbuffer.position[i];
+		epos_data_port_reply_structure.motion_in_progress[i]
+				= edp_ecp_rbuffer.motion_in_progress[i];
+	}
+	epos_data_port_reply_structure.contact = edp_ecp_rbuffer.contact;
+	if (epos_reply_data_request_port.is_new_request()) {
+		epos_reply_data_request_port.set(epos_data_port_reply_structure);
+	}
 
 }
 

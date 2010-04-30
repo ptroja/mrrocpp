@@ -14,18 +14,18 @@ namespace generator {
 //constructor with parameters: task and time to sleep [s]
 epos::epos(common::task::task& _ecp_task, double s) :
 	generator(_ecp_task) {
-//	if (the_robot) the_robot->communicate_with_edp = false; //do not communicate with edp
+	//	if (the_robot) the_robot->communicate_with_edp = false; //do not communicate with edp
 	waittime = s * 1000; //wait time[ns] conversting from given seconds to nanoseconds
 	sleeptime.tv_nsec = 20000000; //sleep time[ns]
 	sleeptime.tv_sec = 0;
 
-	epos_low_level_command_data_port = the_robot->port_manager.get_port<lib::epos_low_level_command> (
-			EPOS_LOW_LEVEL_COMMAND_DATA_PORT);
-	epos_reply_data_request_port = the_robot->port_manager.get_request_port<lib::epos_reply> (
-			EPOS_REPLY_DATA_REQUEST_PORT);
+	epos_low_level_command_data_port = the_robot->port_manager.get_port<
+			lib::epos_low_level_command> (EPOS_LOW_LEVEL_COMMAND_DATA_PORT);
+	epos_reply_data_request_port = the_robot->port_manager.get_request_port<
+			lib::epos_reply> (EPOS_REPLY_DATA_REQUEST_PORT);
 
-	epos_gen_parameters_data_port = the_robot->port_manager.get_port<lib::epos_gen_parameters> (
-			EPOS_GEN_PARAMETERS_DATA_PORT);
+	epos_gen_parameters_data_port = the_robot->port_manager.get_port<
+			lib::epos_gen_parameters> (EPOS_GEN_PARAMETERS_DATA_PORT);
 
 }
 
@@ -63,6 +63,8 @@ bool epos::first_step() {
 		return false;
 	}
 
+
+
 	starttime = acttime;
 	return true;
 }
@@ -70,8 +72,19 @@ bool epos::first_step() {
 bool epos::next_step() {
 	double diff;
 	ecp_t.sr_ecp_msg->message("epos next_step");
-	return false;
 
+
+	if (epos_reply_data_request_port->is_new_data()) {
+		epos_data_port_reply_structure = epos_reply_data_request_port->get();
+
+		std::stringstream ss(std::stringstream::in | std::stringstream::out);
+		ss << epos_data_port_reply_structure.position[3];
+
+		ecp_t.sr_ecp_msg->message(ss.str().c_str());
+
+	}
+
+	return false;
 
 	prevtime = acttime;
 	if (clock_gettime(CLOCK_REALTIME, &acttime) == -1) {

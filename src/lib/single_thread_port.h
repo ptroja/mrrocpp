@@ -71,7 +71,7 @@ protected:
 
 public:
 	single_thread_request_port(std::string _name) :
-		single_thread_port<T> (_name) {
+		single_thread_port<T> (_name), new_request(false) {
 	}
 
 	void set_request() {
