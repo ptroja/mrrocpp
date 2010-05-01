@@ -37,9 +37,9 @@ void kinematic_model_spkm::inverse_kinematics_transform(lib::JointArray & local_
 {
 	// Transform Homog_matrix to Matrix4d.
 	Homog4d O_W_T;
-	O_W_T.matrix() << local_desired_end_effector_frame[0][0],  local_desired_end_effector_frame[0][1], local_desired_end_effector_frame[0][2], local_desired_end_effector_frame[0][3],
-			local_desired_end_effector_frame[1][0],  local_desired_end_effector_frame[1][1], local_desired_end_effector_frame[1][2], local_desired_end_effector_frame[1][3],
-			local_desired_end_effector_frame[2][0],  local_desired_end_effector_frame[2][1], local_desired_end_effector_frame[2][2], local_desired_end_effector_frame[2][3],
+	O_W_T.matrix() << local_desired_end_effector_frame(0,0),  local_desired_end_effector_frame(0,1), local_desired_end_effector_frame(0,2), local_desired_end_effector_frame(0,3),
+			local_desired_end_effector_frame(1,0),  local_desired_end_effector_frame(1,1), local_desired_end_effector_frame(1,2), local_desired_end_effector_frame(1,3),
+			local_desired_end_effector_frame(2,0),  local_desired_end_effector_frame(2,1), local_desired_end_effector_frame(2,2), local_desired_end_effector_frame(2,3),
 			0, 0, 0, 1;
 
 	// Compute O_S_T.

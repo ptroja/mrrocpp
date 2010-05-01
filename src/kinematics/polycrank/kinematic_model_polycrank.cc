@@ -509,21 +509,21 @@ void model::direct_kinematics_transform(const lib::JointArray & local_current_jo
 
 
  //Proste zadanie kinematyki.
-  (local_current_end_effector_frame)[0][0] = asin(s4);											//NX
+  local_current_end_effector_frame(0,0) = asin(s4);											//NX
   if(s5>0)
-  (local_current_end_effector_frame)[0][1] = asin(s5);										//OX
+  local_current_end_effector_frame(0,1) = asin(s5);										//OX
   else
-  (local_current_end_effector_frame)[0][1] = -asin(s5);
-  (local_current_end_effector_frame)[0][2] = 0.000;										//AX
-  (local_current_end_effector_frame)[1][0] = 1;												//PX
-  (local_current_end_effector_frame)[1][1] = 1;												//NY
-  (local_current_end_effector_frame)[1][2] = 1;												//OY
-  (local_current_end_effector_frame)[2][0] = 1;												//AY
-  (local_current_end_effector_frame)[2][1] = 1;												//PY
-  (local_current_end_effector_frame)[2][2] = 1;												//NZ
-  (local_current_end_effector_frame)[0][3] = a2*c1*c2+a3*c1*c3+d6*c4*c1 ;		//OZ
-  (local_current_end_effector_frame)[1][3] = a2*s1*c2+a3*s1*c3+d6*c4*s1;		//AZ
-  (local_current_end_effector_frame)[2][3] = d1 - a2*s2-a3*s3-d6*s4;				//PZ
+  local_current_end_effector_frame(0,1) = -asin(s5);
+  local_current_end_effector_frame(0,2) = 0.000;										//AX
+  local_current_end_effector_frame(1,0) = 1;												//PX
+  local_current_end_effector_frame(1,1) = 1;												//NY
+  local_current_end_effector_frame(1,2) = 1;												//OY
+  local_current_end_effector_frame(2,0) = 1;												//AY
+  local_current_end_effector_frame(2,1) = 1;												//PY
+  local_current_end_effector_frame(2,2) = 1;												//NZ
+  local_current_end_effector_frame(0,3) = a2*c1*c2+a3*c1*c3+d6*c4*c1 ;		//OZ
+  local_current_end_effector_frame(1,3) = a2*s1*c2+a3*s1*c3+d6*c4*s1;		//AZ
+  local_current_end_effector_frame(2,3) = d1 - a2*s2-a3*s3-d6*s4;				//PZ
 
 
 } //:: direct_kinematics_transform()
@@ -554,12 +554,12 @@ void model::inverse_kinematics_transform(lib::JointArray & local_desired_joints,
   double delta1, delta2, temp1, temp2, a, b, d;
   delta1=1, delta2=1;
  // Przepisanie zmiennych.
-  Nx= (local_desired_end_effector_frame)[0][0];   // alfa
-  Ny= (local_desired_end_effector_frame)[0][1];   // beta
-  Nz= (local_desired_end_effector_frame)[0][2];   // gamma
-  Px= (local_desired_end_effector_frame)[0][3];   // x
-  Py= (local_desired_end_effector_frame)[1][3];   // y
-  Pz= (local_desired_end_effector_frame)[2][3];   // z
+  Nx= local_desired_end_effector_frame(0,0);   // alfa
+  Ny= local_desired_end_effector_frame(0,1);   // beta
+  Nz= local_desired_end_effector_frame(0,2);   // gamma
+  Px= local_desired_end_effector_frame(0,3);   // x
+  Py= local_desired_end_effector_frame(1,3);   // y
+  Pz= local_desired_end_effector_frame(2,3);   // z
 
 	local_desired_joints[0]=(atan2(Py, Px));
 	s0 = 	sin(local_desired_joints[0]);
