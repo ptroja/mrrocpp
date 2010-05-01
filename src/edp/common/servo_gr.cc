@@ -289,10 +289,10 @@ bool servo_buffer::get_command(void)
 	bool new_command_available = false;
 
 #ifdef __QNXNTO__
-	struct sigevent msg_event;
-	msg_event.sigev_notify = SIGEV_UNBLOCK;// by Y zamiast creceive
-
-	TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_RECEIVE, &msg_event, NULL, NULL); // by Y zamiast creceive i flagi z EDP_MASTER
+	// by Y zamiast creceive
+	if(TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_RECEIVE, NULL, NULL, NULL) == -1) {
+		perror("servo_buffer: TimerTimeout()");
+	}
 	if ((edp_caller = MsgReceive_r(servo_to_tt_chid, &command, sizeof(command), NULL)) >= 0)
 		new_command_available = true;
 #else
@@ -357,7 +357,7 @@ uint8_t servo_buffer::Move_1_step(void)
 	// Obliczenie nowej wartosci zadanej
 	// Wyslanie wartosci zadanej do hardware'u
 
-	master.rb_obj->synchroniser.command();// odwieszenie watku edp_reader - teraz moze odczytac dane pomiarowe
+	master.rb_obj->cond.notify_one();
 
 	reply_status_tmp.error1 = compute_all_set_values(); // obliczenie nowej wartosci zadanej dla regulatorow
 	reply_status_tmp.error0 = hi->read_write_hardware(); // realizacja kroku przez wszystkie napedy oraz
