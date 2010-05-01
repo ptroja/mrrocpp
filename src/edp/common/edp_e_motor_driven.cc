@@ -158,12 +158,12 @@ void motor_driven_effector::multi_thread_move_arm(lib::c_buffer &instruction)
 		case lib::MOTOR:
 			compute_motors(instruction);
 			move_servos();
-			mt_tt_obj->trans_t_to_master_synchroniser.notify();
+			mt_tt_obj->trans_t_to_master_synchroniser.command();
 			break;
 		case lib::JOINT:
 			compute_joints(instruction);
 			move_servos();
-			mt_tt_obj->trans_t_to_master_synchroniser.notify();
+			mt_tt_obj->trans_t_to_master_synchroniser.command();
 			break;
 		default: // blad: niezdefiniowany sposb specyfikacji pozycji koncowki
 			throw NonFatal_error_2(INVALID_SET_END_EFFECTOR_TYPE);
