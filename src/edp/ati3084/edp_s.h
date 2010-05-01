@@ -176,7 +176,12 @@ private:
 	//! // pci handle -> fd do servera PCI
 	int phdl;
 
+<<<<<<< HEAD
 	void set_output(uint16_t value);
+=======
+	void set_char_output(char* znak);
+	void set_output(short value);
+>>>>>>> ati3084 code fixes
 	void set_obf(unsigned char state);
 	bool check_ack(void);
 	void initiate_registers(void);
