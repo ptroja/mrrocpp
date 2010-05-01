@@ -38,7 +38,7 @@ void trans_t::master_to_trans_t_order(MT_ORDER nm_task, int nm_tryb, const lib::
 	instruction = _instruction;
 
 	// odwieszenie watku transformation
-	master_to_trans_synchroniser.command();
+	master_to_trans_synchroniser.notify();
 
 	// oczekiwanie na zwolniene samafora przez watek trans_t
 	trans_t_to_master_synchroniser.wait();
