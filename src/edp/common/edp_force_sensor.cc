@@ -17,7 +17,7 @@ void force::operator()(void)
 
 	connect_to_hardware();
 
-	thread_started.command();
+	thread_started.notify();
 
 	try {
 		configure_sensor();
@@ -91,7 +91,7 @@ void force::operator()(void)
 					current_force_torque.to_table(master.rb_obj->step_data.force);
 				}
 			}
-			edp_vsp_synchroniser.command();
+			edp_vsp_synchroniser.notify();
 
 		} //!< koniec TRY
 
@@ -153,7 +153,7 @@ void force::set_force_tool(void)
 void force::set_command_execution_finish() // podniesienie semafora
 {
 	new_edp_command = false;
-	new_command_synchroniser.command();
+	new_command_synchroniser.notify();
 }
 
 } // namespace sensor
