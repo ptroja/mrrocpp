@@ -176,7 +176,7 @@ void servo_buffer::operator()()
 	lib::set_thread_priority(pthread_self(), MAX_PRIORITY + 2);
 
 	// signal master thread to continue executing
-	thread_started.notify();
+	thread_started.command();
 
 	/* BEGIN SERVO_GROUP */
 

@@ -12,7 +12,7 @@ public:
 	// wait for condition and new_command;
 	void wait();
 	// set new_command;
-	void notify();
+	void command();
 	// set has_command=0;
 	void null_command();
 	condition_synchroniser();
