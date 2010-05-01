@@ -402,7 +402,9 @@ int hardware_interface::hi_int_wait (interrupt_mode_t _interrupt_mode, int lag)
 	static short msg_send = 0;
 
 	tim_event.sigev_notify = SIGEV_UNBLOCK;
-	TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_INTR , &tim_event, &int_timeout, NULL );
+	if(TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_INTR , &tim_event, &int_timeout, NULL ) == -1) {
+		perror("hardware_interface: TimerTimeout()");
+	}
 	irq_data.md.interrupt_mode=_interrupt_mode;  // przypisanie odpowiedniego trybu oprzerwania
 	//	irq_data.md.is_power_on = true;
 	int iw_ret=InterruptWait (0, NULL);
