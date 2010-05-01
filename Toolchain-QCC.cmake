@@ -15,7 +15,6 @@ SET(CMAKE_CXX_COMPILER "$ENV{QNX_HOST}/usr/bin/QCC")
 endif(CMAKE_HOST_WIN32)
 
 # where is the target environment 
-#SET(CMAKE_FIND_ROOT_PATH /opt/qnx641/target/qnx6)
 SET(CMAKE_FIND_ROOT_PATH $ENV{QNX_TARGET})
 
 # search for programs in the build host directories
