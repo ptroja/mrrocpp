@@ -48,9 +48,9 @@ bool manip_effector::compute_servo_joints_and_frame(void)
 
 			lib::Homog_matrix local_matrix;
 
-			// Obliczenie lokalnej macierzy oraz obliczenie położenia robota we wsp. zewnętrznych.
+			// Obliczenie lokalnej macierzy oraz obliczenie po��o��enia robota we wsp. zewn��trznych.
 			get_current_kinematic_model()->i2e_transform(servo_current_joints, local_matrix);
-			// Pobranie wsp. zewnętrznych w układzie
+			// Pobranie wsp. zewn��trznych w uk��adzie
 
 			lib::Xyz_Euler_Zyz_vector servo_real_kartez_pos; // by Y polozenie we wspolrzednych xyz_euler_zyz obliczane co krok servo   XXXXX
 			local_matrix.get_xyz_euler_zyz(servo_real_kartez_pos);
@@ -64,7 +64,7 @@ bool manip_effector::compute_servo_joints_and_frame(void)
 
 			get_current_kinematic_model()->mp2i_transform(servo_desired_motor_pos, servo_desired_joints);
 			get_current_kinematic_model()->i2e_transform(servo_desired_joints, local_matrix);
-			// Pobranie wsp. zewnętrznych w układzie
+			// Pobranie wsp. zewn��trznych w uk��adzie
 
 			lib::Xyz_Euler_Zyz_vector servo_desired_kartez_pos; // by Y polozenie we wspolrzednych xyz_euler_zyz obliczane co krok servo   XXXXX
 			local_matrix.get_xyz_euler_zyz(servo_desired_kartez_pos);
@@ -591,6 +591,7 @@ void manip_effector::set_robot_model(lib::c_buffer &instruction)
 				throw NonFatal_error_2(INVALID_HOMOGENEOUS_MATRIX);
 			}
 			// Ustawienie macierzy reprezentujacej narzedzie.
+			// TODO: dynamic_cast<>
 			((mrrocpp::kinematics::common::kinematic_model_with_tool*) get_current_kinematic_model())->tool = hm;
 
 			/*
