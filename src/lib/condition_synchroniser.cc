@@ -8,7 +8,7 @@ condition_synchroniser::condition_synchroniser() :
 {
 }
 
-void condition_synchroniser::notify()
+void condition_synchroniser::command()
 {
 	boost::unique_lock <boost::mutex> lock(mtx);
 
