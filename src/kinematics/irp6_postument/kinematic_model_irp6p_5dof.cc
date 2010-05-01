@@ -94,18 +94,18 @@ void model_5dof::direct_kinematics_transform(const lib::JointArray & local_curre
   double c5 = cos(local_current_joints[4]);
 
   // Proste zadanie kinematyki.
-  (local_current_end_effector_frame)[0][0] = (c5*s4*c1+s1*s5);
-  (local_current_end_effector_frame)[0][1] = (-s5*s4*c1+s1*c5);
-  (local_current_end_effector_frame)[0][2] = c4*c1;
-  (local_current_end_effector_frame)[0][3] = c1*(d6*c4+a3*c3+a2*c2);
-  (local_current_end_effector_frame)[1][0] = (c5*s4*s1-c1*s5);
-  (local_current_end_effector_frame)[1][1] = (-s5*s4*s1-c1*c5);
-  (local_current_end_effector_frame)[1][2] = c4*s1;
-  (local_current_end_effector_frame)[1][3] = d6*c4*s1 + a3*c3*s1 + a2*s1*c2;
-  (local_current_end_effector_frame)[2][0] = (c4*c5);
-  (local_current_end_effector_frame)[2][1] = (-c4*s5);
-  (local_current_end_effector_frame)[2][2] = -s4;
-  (local_current_end_effector_frame)[2][3] = -d6*s4 - a3*s3 - a2*s2 + d1;
+  local_current_end_effector_frame(0,0) = (c5*s4*c1+s1*s5);
+  local_current_end_effector_frame(0,1) = (-s5*s4*c1+s1*c5);
+  local_current_end_effector_frame(0,2) = c4*c1;
+  local_current_end_effector_frame(0,3) = c1*(d6*c4+a3*c3+a2*c2);
+  local_current_end_effector_frame(1,0) = (c5*s4*s1-c1*s5);
+  local_current_end_effector_frame(1,1) = (-s5*s4*s1-c1*c5);
+  local_current_end_effector_frame(1,2) = c4*s1;
+  local_current_end_effector_frame(1,3) = d6*c4*s1 + a3*c3*s1 + a2*s1*c2;
+  local_current_end_effector_frame(2,0) = (c4*c5);
+  local_current_end_effector_frame(2,1) = (-c4*s5);
+  local_current_end_effector_frame(2,2) = -s4;
+  local_current_end_effector_frame(2,3) = -d6*s4 - a3*s3 - a2*s2 + d1;
 
 } //:: i2e_transform()
 
@@ -148,24 +148,24 @@ void model_5dof::inverse_kinematics_transform(lib::JointArray & local_desired_jo
 	old_theta[i] = local_current_joints[i];
 
 
-  q0[0] = (local_desired_end_effector_frame)[0][3];
-  q0[1] = (local_desired_end_effector_frame)[1][3];
-  q0[2] = (local_desired_end_effector_frame)[2][3];
+  q0[0] = local_desired_end_effector_frame(0,3);
+  q0[1] = local_desired_end_effector_frame(1,3);
+  q0[2] = local_desired_end_effector_frame(2,3);
 
   // Pobranie danych narzedzia.
   lib::Homog_matrix tmp_tool_m = tool;
 
-  q6[0] = tmp_tool_m[0][3];
-  q6[1] = tmp_tool_m[1][3];
-  q6[2] = tmp_tool_m[2][3];
+  q6[0] = tmp_tool_m(0,3);
+  q6[1] = tmp_tool_m(1,3);
+  q6[2] = tmp_tool_m(2,3);
 
-  v0[0] = (local_desired_end_effector_frame)[0][0];
-  v0[1] = (local_desired_end_effector_frame)[1][0];
-  v0[2] = (local_desired_end_effector_frame)[2][0];// tutaj byl minus, ale dlaczego???
+  v0[0] = local_desired_end_effector_frame(0,0);
+  v0[1] = local_desired_end_effector_frame(1,0);
+  v0[2] = local_desired_end_effector_frame(2,0);// tutaj byl minus, ale dlaczego???
 
-  v6[0] = tmp_tool_m[0][0];
-  v6[1] = tmp_tool_m[1][0];
-  v6[2] = tmp_tool_m[2][0];
+  v6[0] = tmp_tool_m(0,0);
+  v6[1] = tmp_tool_m(1,0);
+  v6[2] = tmp_tool_m(2,0);
 
   THETA_NODE *tree_ptr;   /* wskaznik korzenia drzewa rozwiaza`n */
   int16_t res;      /* wynik dzialania Theta_1 - OK lub nie */
