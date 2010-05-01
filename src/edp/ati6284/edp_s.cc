@@ -2,6 +2,10 @@
  * \brief metody sterownika czujnika sily Gamma FT6284 firmy ATI
  * Ostatnia modyfikacja: marzec 2006
  * Autor: Krzysztof Dziubek	*/
+
+#include <unistd.h>
+#include <time.h>
+
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
@@ -18,10 +22,7 @@
 #include "display.h"
 #include "ftconfig.h"
 
-#include <unistd.h>
-
 #include "edp/irp6_postument/hi_irp6p.h"
-#include <time.h>
 
 short int invalid_value;
 Calibration *cal; //!< struct containing calibration information
@@ -35,7 +36,7 @@ namespace sensor {
 #define START_TO_READ_FAILURE 0.002
 
 static struct sigevent hi_event;
-static struct sigevent ati6284event;
+struct sigevent ati6284event;
 
 iBus* bus;
 tSTC *theSTC;
@@ -43,16 +44,11 @@ tESeries *board;
 tAddressSpace Bar1;
 
 // // // // // // // // // // // // // // /   obsluga prerwania // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////
-// #pragma off(check_stack);
 
 const struct sigevent *szafa_handler(void *area, int szafa_id)
 {
 	return (&hi_event);
 }
-
-// #pragma on(check_stack);
-
-// #pragma off(check_stack);
 
 const struct sigevent *isr_handler(void *area, int id)
 {
@@ -86,14 +82,11 @@ const struct sigevent *isr_handler(void *area, int id)
 	return (&ati6284event);
 }
 
-// #pragma on(check_stack);
-
 // // // // // // // // // // // // // // /   konfiguracja czujnika // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////
 
 ATI6284_force::ATI6284_force(common::manip_effector &_master) :
 	force(_master)
 {
-
 }
 
 void ATI6284_force::connect_to_hardware(void)
@@ -196,8 +189,7 @@ ATI6284_force::~ATI6284_force(void)
 
 		bus->destroyAddressSpace(Bar1);
 #if INTERRUPT
-
-		InterruptDetach (id);
+		InterruptDetach (szafa_id);
 #endif
 
 		releaseBoard(bus);
@@ -246,7 +238,7 @@ void ATI6284_force::configure_sensor(void)
 
 				do {
 					//!< odczekaj
-					InterruptWait(NULL, NULL);
+					InterruptWait(0, NULL);
 					local_timer.timer_stop();
 					local_timer.get_time(&sec);
 				} while (sec < START_TO_READ_TIME_INTERVAL);
@@ -303,7 +295,7 @@ void ATI6284_force::configure_sensor(void)
 			printf("Interrupt enabled!!!\n");
 #endif
 
-			InterruptWait (NULL, NULL);
+			InterruptWait (0, NULL);
 			do
 			{
 				uValues[Samples_Acquired] = board->AIFifoData.readRegister();
@@ -424,7 +416,7 @@ void ATI6284_force::wait_for_event()
 
 		do {
 			//!< odczekaj
-			InterruptWait(NULL, NULL);
+			InterruptWait(0, NULL);
 
 			local_timer.timer_stop();
 			local_timer.get_time(&sec);
@@ -503,7 +495,7 @@ void ATI6284_force::initiate_reading(void)
 		printf("Interrupt enabled!!!\n");
 #endif
 
-		InterruptWait (NULL, NULL);
+		InterruptWait (0, NULL);
 		do
 		{
 			uValues[Samples_Acquired] = board->AIFifoData.readRegister();
