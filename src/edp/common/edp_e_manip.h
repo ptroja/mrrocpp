@@ -168,14 +168,14 @@ public:
 	 *
 	 * It is called in the force sensor thread.
 	 */
-	void force_msr_upload(const lib::Ft_vector l_vector);
+	void force_msr_upload(const lib::Ft_vector & l_vector);
 
 	/*!
 	 * \brief method to get global_force_msr with mutex protection.
 	 *
 	 * It is called in the transformation thread.
 	 */
-	void force_msr_download(lib::Ft_vector& l_vector);
+	void force_msr_download(lib::Ft_vector & l_vector);
 
 	/*!
 	 * \brief method that computes servo_current_frame_wo_tool
