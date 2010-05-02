@@ -124,7 +124,7 @@ public:
 		int intr_mode;
 		int byte_counter;
 		int is_received;
-		short data[MDS_DATA_RANGE];
+		uint16_t data[MDS_DATA_RANGE];
 
 		//! spinlock to for disabling interrupts
 		intrspin_t spinlock;
@@ -176,8 +176,7 @@ private:
 	//! // pci handle -> fd do servera PCI
 	int phdl;
 
-	void set_char_output(char* znak);
-	void set_output(short value);
+	void set_output(uint16_t value);
 	void set_obf(unsigned char state);
 	bool check_ack(void);
 	void initiate_registers(void);
@@ -185,11 +184,9 @@ private:
 	void check_cs(void);
 	void parallel_do_send_command(const char* command);
 
-	short do_Wait(const char* command);// by old schunk
-	short do_send_command(const char* command);
-	short do_init(void);
-
-	short ERROR_CODE;
+	void do_Wait(void);// by old schunk
+	int do_send_command(const char* command);
+	void do_init(void);
 
 	struct sigevent tim_event;
 }; // end: class vsp_sensor
@@ -199,7 +196,7 @@ bool check_intr(void);
 bool check_stb(void);
 void clear_intr(void);
 void set_ibf(unsigned char state);
-short get_input(void);
+uint16_t get_input(void);
 
 } // namespace sensor
 } // namespace edp
