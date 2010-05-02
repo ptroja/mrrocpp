@@ -42,7 +42,7 @@ public:
 	const lib::SENSOR_t sensor_name; // nazwa czujnika z define w impconst.h
 
 	// Wlasciwy konstruktor czujnika wirtualnego.
-	sensor(lib::SENSOR_t _sensor_name, const char* _section_name, task::task& _ecp_mp_object);
+	sensor(lib::SENSOR_t _sensor_name, const std::string & _section_name, task::task & _ecp_mp_object);
 
 	// TODO: Destruktor czujnika wirtualnego
 	virtual ~sensor();
@@ -57,7 +57,7 @@ public:
 
 // Kontener zawierajacy wykorzystywane czyjniki
 typedef std::map<lib::SENSOR_t, lib::sensor *> sensors_t;
-typedef std::pair<const lib::SENSOR_t, lib::sensor*> sensor_item_t;
+typedef sensors_t::value_type sensor_item_t;
 
 } // namespace ecp_mp
 } // namespace mrrocpp
