@@ -15,9 +15,7 @@ namespace generator {
 epos::epos(common::task::task& _ecp_task, double s) :
 	generator(_ecp_task) {
 	//	if (the_robot) the_robot->communicate_with_edp = false; //do not communicate with edp
-	waittime = s * 1000; //wait time[ns] conversting from given seconds to nanoseconds
-	sleeptime.tv_nsec = 20000000; //sleep time[ns]
-	sleeptime.tv_sec = 0;
+
 
 	epos_low_level_command_data_port = the_robot->port_manager.get_port<
 			lib::epos_low_level_command> (EPOS_LOW_LEVEL_COMMAND_DATA_PORT);
@@ -27,11 +25,6 @@ epos::epos(common::task::task& _ecp_task, double s) :
 	epos_gen_parameters_data_port = the_robot->port_manager.get_port<
 			lib::epos_gen_parameters> (EPOS_GEN_PARAMETERS_DATA_PORT);
 
-}
-
-//allow for later change of a sleep time
-void epos::init_time(double s) {
-	waittime = s * 1000; //TODO: conversion from seconds to nanoseconds (?!)
 }
 
 void epos::create_ecp_mp_reply() {
@@ -58,12 +51,6 @@ bool epos::first_step() {
 	epos_gen_parameters_data_port->set(epos_data_port_gen_parameters_structure);
 	epos_reply_data_request_port->set_request();
 
-	if (clock_gettime(CLOCK_REALTIME, &acttime) == -1) { //acquiring actual time
-		printf("sleep generator: first step time measurement error");
-		return false;
-	}
-
-	starttime = acttime;
 	return true;
 }
 

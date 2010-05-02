@@ -75,8 +75,6 @@ void swarmitfix::main_task_algorithm(void) {
 		case ecp_mp::task::ECP_GEN_EPOS: {
 			sr_ecp_msg->message("ECP_GEN_EPOS");
 
-			g_epos->init_time(
-					mp_command.ecp_next_state.mp_2_ecp_next_state_variant);
 			g_epos->Move();
 			break;
 		}

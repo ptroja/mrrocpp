@@ -33,7 +33,7 @@ struct smb_rbuffer {
 #define EDP_SMB_SECTION "[edp_smb]"
 #define ECP_SMB_SECTION "[ecp_smb]"
 
-#define SMB_NUM_OF_SERVOS	2
+#define SMB_NUM_OF_SERVOS	4
 
 } // namespace lib
 } // namespace mrrocpp
