@@ -26,10 +26,7 @@ struct shead_cbuffer {
 };
 
 struct shead_rbuffer {
-	bool head_solfified;
-	bool vacuum_on;
-	bool soldification_in_progress;
-	bool vacumization_in_progress;
+	shead_reply reply;
 };
 
 #define EDP_SHEAD_SECTION "[edp_shead]"
