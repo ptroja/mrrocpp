@@ -26,7 +26,6 @@ struct spkm_cbuffer {
 };
 
 struct spkm_rbuffer {
-	double lalala;
 	bool contact;
 	single_controller_epos_reply epos_controller[6];
 }__attribute__((__packed__));

@@ -13,16 +13,21 @@ using namespace mrrocpp;
 namespace mrrocpp {
 namespace lib {
 
+enum SMB_CBUFFER_VARIANT {
+	SMB_CBUFFER_EPOS_LOW_LEVEL_COMMAND,
+	SMB_CBUFFER_EPOS_GEN_PARAMETERS,
+	SMB_CBUFFER_PIN_INSERTION,
+	MB_CBUFFER_PIN_LOCKING
+};
+
 struct smb_cbuffer {
-	double em[4];
-	double emdm[4];
-	double aa[4];
-	double da[4];
-	double av[4];
-	double tt;
-	lib::EPOS_GEN_PROFILE profile_type;
-	lib::SMB_PIN_INSERTION pin_insertion[3];
-	lib::SMB_PIN_LOCKING pin_locking[3];
+	SMB_CBUFFER_VARIANT variant;
+	union {
+		epos_low_level_command epos_data_port_command_structure;
+		epos_gen_parameters epos_data_port_gen_parameters_structure;
+		lib::SMB_PIN_INSERTION pin_insertion[3];
+		lib::SMB_PIN_LOCKING pin_locking[3];
+	};
 };
 
 struct smb_rbuffer {

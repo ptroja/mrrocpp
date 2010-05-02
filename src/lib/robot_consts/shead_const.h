@@ -12,9 +12,17 @@ using namespace mrrocpp;
 namespace mrrocpp {
 namespace lib {
 
+enum SHEAD_CBUFFER_VARIANT {
+	SHEAD_CBUFFER_HEAD_SOLIDIFICATION, SHEAD_CBUFFER_VACUUM_ACTIVATION
+};
+
 struct shead_cbuffer {
-	lib::SHEAD_HEAD_SOLIDIFICATION head_solidification;
-	lib::SHEAD_VACUUM_ACTIVATION vacuum_activation;
+	SHEAD_CBUFFER_VARIANT variant;
+	union {
+		lib::SHEAD_HEAD_SOLIDIFICATION head_solidification;
+		lib::SHEAD_VACUUM_ACTIVATION vacuum_activation;
+	};
+
 };
 
 struct shead_rbuffer {
