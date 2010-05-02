@@ -63,8 +63,6 @@ bool epos::first_step() {
 		return false;
 	}
 
-
-
 	starttime = acttime;
 	return true;
 }
@@ -72,7 +70,6 @@ bool epos::first_step() {
 bool epos::next_step() {
 	double diff;
 	ecp_t.sr_ecp_msg->message("epos next_step");
-
 
 	if (epos_reply_data_request_port->is_new_data()) {
 		epos_data_port_reply_structure = epos_reply_data_request_port->get();
@@ -84,28 +81,13 @@ bool epos::next_step() {
 
 	}
 
-	return false;
-
-	prevtime = acttime;
-	if (clock_gettime(CLOCK_REALTIME, &acttime) == -1) {
-		printf("sleep generator: next step time measurement error");
-	}
-
-	//difference between consecutive next_steeps, check if the pause button was pressed (difference bigger than 100ms)
-	diff = (acttime.tv_sec - prevtime.tv_sec) * 1000 + (acttime.tv_nsec
-			- prevtime.tv_nsec) / 1000000;
-	if (diff > 100)
-		waittime = waittime + diff;
-
-	//difference between start time and actual time, check if wait time already passed
-	diff = (acttime.tv_sec - starttime.tv_sec) * 1000 + (acttime.tv_nsec
-			- starttime.tv_nsec) / 1000000;
-	if (diff > waittime)
-		return false;
-	else {
-		nanosleep(&sleeptime, NULL);
+	if (epos_data_port_reply_structure.epos_controller[3].motion_in_progress) {
+		epos_reply_data_request_port->set_request();
 		return true;
+	} else {
+		return false;
 	}
+
 }
 
 } // namespace generator
