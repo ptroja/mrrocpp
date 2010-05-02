@@ -18,14 +18,14 @@ ForceSensor6284::~ForceSensor6284() {
 }
 
 
-AdcReadings ForceSensor6284::getAdcReadings(boost::posix_time::time_duration timeout) {
+ForceSensor6284::AdcReadings_t ForceSensor6284::getAdcReadings(boost::posix_time::time_duration timeout) {
     responseSize_ = 0;
     socket_->send(sendBuf_, 4);
     boost::system_time currentTime = boost::get_system_time();
     boost::system_time expTime = currentTime + timeout;
 
     boost::unique_lock<boost::mutex> lock(responseReceivedMt_);
-    AdcReadings readings;
+    AdcReadings_t readings;
     readings.timeout = false;
     while (responseSize_ == 0) {
         if (!responseReceivedCv_.timed_wait(lock, expTime)) {
@@ -35,13 +35,11 @@ AdcReadings ForceSensor6284::getAdcReadings(boost::posix_time::time_duration tim
     }
     std::memcpy(readings.readings, recvBuf_ + 2, 12);
     return readings;
-
 }
 
 void ForceSensor6284::receiveThread() {
-    std::size_t bytesReceived;
     while (true) {
-        bytesReceived = socket_->recv(recvBuf_, 1024);
+    	std::size_t bytesReceived = socket_->recv(recvBuf_, 1024);
         if (bytesReceived == 0) {
             break;
         }

@@ -227,8 +227,8 @@ void ATI6284_force::configure_sensor(void)
 
 void ATI6284_force::wait_for_event()
 {
-	static boost::posix_time::time_duration timeout = boost::posix_time::microseconds(1500);
-	int iw_ret;
+	const boost::posix_time::time_duration timeout = boost::posix_time::microseconds(1500);
+
 	static int iter_counter = 0; // okresla ile razy pod rzad zostala uruchomiona ta metoda
 
     //TODO: Jesli test mode, dopuszczac wylaczenie sensora
@@ -244,7 +244,7 @@ void ATI6284_force::wait_for_event()
     	timeUtil.startMeasurement();
     }
 
-    AdcReadings readings = sensor_.getAdcReadings(timeout);
+    ForceSensor6284::AdcReadings_t readings = sensor_.getAdcReadings(timeout);
     if (measuring) {
     	timeUtil.stopMeasurement();
     }
