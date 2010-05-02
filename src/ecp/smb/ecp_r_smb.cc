@@ -152,7 +152,27 @@ void robot::create_command() {
 
 		ecp_edp_cbuffer.epos_data_port_gen_parameters_structure
 				= epos_data_port_gen_parameters_structure;
+	} else if (smb_multi_pin_insertion_data_port.is_new_data()) {
+		ecp_command.instruction.set_type = ARM_DEFINITION;
+		smb_multi_pin_insertion_structure
+				= smb_multi_pin_insertion_data_port.get();
+		// generator command interpretation
+		// narazie proste przepisanie
+
+		ecp_edp_cbuffer.variant = lib::SMB_CBUFFER_PIN_INSERTION;
+
+		ecp_edp_cbuffer.multi_pin_insertion = smb_multi_pin_insertion_structure;
+	} else if (smb_multi_pin_locking_data_port.is_new_data()) {
+		ecp_command.instruction.set_type = ARM_DEFINITION;
+		smb_multi_pin_locking_structure = smb_multi_pin_locking_data_port.get();
+		// generator command interpretation
+		// narazie proste przepisanie
+
+		ecp_edp_cbuffer.variant = lib::SMB_CBUFFER_PIN_LOCKING;
+
+		ecp_edp_cbuffer.multi_pin_locking = smb_multi_pin_locking_structure;
 	}
+
 	// message serialization
 	if (communicate_with_edp) {
 		memcpy(ecp_command.instruction.arm.serialized_command,
@@ -174,8 +194,14 @@ void robot::get_reply() {
 				= edp_ecp_rbuffer.epos_controller[i].motion_in_progress;
 	}
 
+	smb_multi_leg_reply_structure = edp_ecp_rbuffer.multi_leg_reply;
+
 	if (epos_reply_data_request_port.is_new_request()) {
 		epos_reply_data_request_port.set(epos_data_port_reply_structure);
+	}
+
+	if (smb_multi_leg_reply_data_request_port.is_new_request()) {
+		smb_multi_leg_reply_data_request_port.set(smb_multi_leg_reply_structure);
 	}
 
 }

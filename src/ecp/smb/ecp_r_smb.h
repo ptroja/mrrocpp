@@ -51,7 +51,7 @@ protected:
 	//smb.h
 	lib::single_thread_request_port<lib::smb_multi_leg_reply>
 			smb_multi_leg_reply_data_request_port;
-	lib::smb_multi_leg_reply smb_multi_leg_reply_data_request_port_structure;
+	lib::smb_multi_leg_reply smb_multi_leg_reply_structure;
 
 	// bufory do edp
 	lib::smb_cbuffer ecp_edp_cbuffer;
