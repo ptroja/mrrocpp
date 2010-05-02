@@ -119,22 +119,25 @@ void effector::move_arm(lib::c_buffer &instruction) {
 /*--------------------------------------------------------------------------*/
 void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction) { // odczytanie pozycji ramienia
 	//lib::JointArray desired_joints_tmp(MAX_SERVOS_NR); // Wspolrzedne wewnetrzne -
-	//   printf(" GET ARM\n");
+	//	printf(" GET ARM\n");
+	//	flushall();
+	static int licznikaaa = (-11);
 
-	static int licznik = 0;
-
-	msg->message("get_arm_position");
+	std::stringstream ss(std::stringstream::in | std::stringstream::out);
+	ss << "get_arm_position: " << licznikaaa;
+	msg->message(ss.str().c_str());
+	//	printf("%s\n", ss.str().c_str());
 
 	lib::spkm_rbuffer edp_ecp_rbuffer;
-	edp_ecp_rbuffer.epos_controller[3].position = licznik;
+	edp_ecp_rbuffer.epos_controller[3].position = licznikaaa;
 
-	if (licznik < 10) {
+	if (licznikaaa < 10) {
 		edp_ecp_rbuffer.epos_controller[3].motion_in_progress = true;
 
 	} else {
 		edp_ecp_rbuffer.epos_controller[3].motion_in_progress = false;
 	}
-	licznik++;
+	licznikaaa++;
 	memcpy(reply.arm.serialized_reply, &edp_ecp_rbuffer,
 			sizeof(edp_ecp_rbuffer));
 

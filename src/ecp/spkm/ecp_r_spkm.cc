@@ -63,9 +63,12 @@ void robot::create_command() {
 			&& epos_gen_parameters_data_port.is_new_data()) {
 		throw ecp_robot::ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
 	} else if (epos_low_level_command_data_port.is_new_data()
-			&& epos_gen_parameters_data_port.is_new_data()) {
+			|| epos_gen_parameters_data_port.is_new_data()) {
 		is_new_data = true;
+	} else {
+		is_new_data = false;
 	}
+
 	is_new_request = epos_reply_data_request_port.is_new_request();
 
 	communicate_with_edp = true;
