@@ -61,6 +61,10 @@ public:
 		return new_data;
 	}
 
+	void clear_new_data_flag() {
+		new_data = false;
+	}
+
 };
 
 template<class T>
@@ -85,6 +89,10 @@ public:
 
 	bool is_new_request() {
 		return new_request;
+	}
+
+	void clear_new_request_flag() {
+		new_request = false;
 	}
 
 	T get() {

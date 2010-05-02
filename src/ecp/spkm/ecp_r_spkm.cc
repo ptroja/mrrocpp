@@ -45,6 +45,13 @@ void robot::add_data_ports() {
 	port_manager.add_port(&epos_reply_data_request_port);
 }
 
+void robot::clear_data_ports() {
+	epos_low_level_command_data_port.clear_new_data_flag();
+	epos_gen_parameters_data_port.clear_new_data_flag();
+	epos_reply_data_request_port.clear_new_request_flag();
+	epos_reply_data_request_port.clear_new_data_flag();
+}
+
 void robot::create_command() {
 
 	bool is_new_data;

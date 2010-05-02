@@ -36,7 +36,13 @@ void generator::move_init() {
 
 	// domyslnie komunikumemy sie z robotem o ile on jest
 	if (the_robot)
+	{
+		// default communication mode
 		the_robot->communicate_with_edp = true;
+		// clear data ports in case there is old data in it;
+		the_robot->clear_data_ports();
+
+	}
 	// domyslny tryb koordynacji
 	ecp_t.continuous_coordination = false;
 
