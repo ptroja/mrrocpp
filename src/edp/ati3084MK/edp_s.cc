@@ -29,7 +29,7 @@ ATI3084_force::ATI3084_force(common::manip_effector &_master) :
 
 void ATI3084_force::connect_to_hardware(void)
 {
-	if (!(master.test_mode)) {
+	if (!master.test_mode) {
 		uart = open_port();
 		//printf("2\n");
 		tcflush(uart, TCIFLUSH);
@@ -40,13 +40,11 @@ void ATI3084_force::connect_to_hardware(void)
 
 ATI3084_force::~ATI3084_force(void)
 {
-	if (!(master.test_mode)) {
-
+	if (!master.test_mode) {
 		close(uart);
 	}
 	if (gravity_transformation)
 		delete gravity_transformation;
-	printf("Destruktor edp_ATI3084_force_sensor\n");
 }
 
 /**************************** inicjacja czujnika ****************************/
@@ -56,7 +54,7 @@ void ATI3084_force::configure_sensor(void)
 	//  printf("EDP Sensor configured\n");
 	sr_msg->message("EDP Sensor configured");
 
-	if (!(master.test_mode)) {
+	if (!master.test_mode) {
 		sendBias(uart);
 	}
 
@@ -68,7 +66,7 @@ void ATI3084_force::configure_sensor(void)
 		// lib::Homog_matrix frame(master.force_current_end_effector_frame); // pobranie aktualnej ramki
 		if (!gravity_transformation) // nie powolano jeszcze obiektu
 		{
-
+			// TODO: rewrite this code with boost::tokenizer
 			lib::Xyz_Angle_Axis_vector tab;
 			lib::Homog_matrix sensor_frame;
 			if (master.config.exists("sensor_in_wrist")) {
@@ -107,7 +105,7 @@ void ATI3084_force::wait_for_event()
 {
 	//	sr_msg->message("wait_for_event");
 
-	if (!(master.test_mode)) {
+	if (!master.test_mode) {
 
 		ftxyz = getFT(uart);
 
@@ -120,7 +118,6 @@ void ATI3084_force::wait_for_event()
 void ATI3084_force::initiate_reading(void)
 {
 	lib::Ft_vector kartez_force;
-	short measure_report;
 
 	if (!is_sensor_configured)
 		throw sensor_error(lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
@@ -167,7 +164,6 @@ void ATI3084_force::initiate_reading(void)
 			master.force_msr_upload(output);
 		}
 	}
-
 }
 
 /***************************** odczyt z czujnika *****************************/
@@ -187,21 +183,22 @@ void ATI3084_force::solve_transducer_controller_failure(void)
 
 void ATI3084_force::sendBias(int fd)
 {
-	char bias = 'b';
-	if (write(fd, &bias, 1) < 0)
-		printf("Blad zapisu\n");
+	const char bias = 'b';
+	if (write(fd, &bias, 1) != 1) {
+		// TODO: throw
+		perror("write()");
+	}
 }
 
 ATI3084_force::forceReadings_t ATI3084_force::getFT(int fd)
 {
-	char query = 'q';
+	const char query = 'q';
 	int r;
 	int current_bytes = 14;
-	int iter_counter = 0; // okresla ile razy pod rzad zostala uruchomiona ta metoda
+	int iter_counter = 0; // okresla ile razy pod rzad zostala uruchomiona petla
 
 	//	printf("bbb \n");
 	uint8_t reads[14];
-	forceReadings_t ftxyz;
 
 	//	base_cycle = ClockCycles();
 
@@ -209,8 +206,10 @@ ATI3084_force::forceReadings_t ATI3084_force::getFT(int fd)
 		r = 1;
 		iter_counter++;
 
-		if (write(fd, &query, 1) != 1)
-			printf("Blad zapisu\n");
+		if (write(fd, &query, 1) != 1) {
+			// TODO: throw
+			perror("write()");
+		}
 		//current_cycle = ClockCycles();
 		while ((current_bytes > 0) && (r != 0)) {//printf("aaa: %d\n",r);
 			r = read(fd, &(reads[14 - current_bytes]), current_bytes);
@@ -233,6 +232,8 @@ ATI3084_force::forceReadings_t ATI3084_force::getFT(int fd)
 		}
 	} while (r == 0);
 
+	forceReadings_t ftxyz;
+
 	for (int i = 0; i < 6; i++) {
 		ftxyz.ft[i] = (reads[2* i ]) << 8 | reads[2* i + 1];
 	}
@@ -244,7 +245,7 @@ int ATI3084_force::open_port(void)
 {
 	int fd = open(PORT, O_RDWR);
 	if (fd == -1) {
-		printf("Can not open the port");
+		perror("open()");
 		return -1;
 	}
 	//printf("3\n");
