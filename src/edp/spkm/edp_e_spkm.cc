@@ -89,8 +89,9 @@ void effector::move_arm(lib::c_buffer &instruction) {
 			sizeof(ecp_edp_cbuffer));
 
 	std::stringstream ss(std::stringstream::in | std::stringstream::out);
-	if (ecp_edp_cbuffer.variant == lib::SPKM_CBUFFER_EPOS_GEN_PARAMETERS) {
 
+	switch (ecp_edp_cbuffer.variant) {
+	case lib::SPKM_CBUFFER_EPOS_GEN_PARAMETERS: {
 		// epos parameters computation basing on trajectory parameters
 		lib::epos_gen_parameters epos_gen_parameters_structure;
 		lib::epos_low_level_command epos_low_level_command_structure;
@@ -112,15 +113,28 @@ void effector::move_arm(lib::c_buffer &instruction) {
 		// start the trajectory execution
 
 	}
+		break;
+	case lib::SPKM_CBUFFER_EPOS_LOW_LEVEL_COMMAND: {
+
+	}
+		break;
+	default:
+		break;
+
+	}
+
+	if (ecp_edp_cbuffer.variant == lib::SPKM_CBUFFER_EPOS_GEN_PARAMETERS) {
+
+	}
 
 }
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
 void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction) { // odczytanie pozycji ramienia
-	//lib::JointArray desired_joints_tmp(MAX_SERVOS_NR); // Wspolrzedne wewnetrzne -
-	//	printf(" GET ARM\n");
-	//	flushall();
+//lib::JointArray desired_joints_tmp(MAX_SERVOS_NR); // Wspolrzedne wewnetrzne -
+//	printf(" GET ARM\n");
+//	flushall();
 	static int licznikaaa = (-11);
 
 	std::stringstream ss(std::stringstream::in | std::stringstream::out);
