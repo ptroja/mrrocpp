@@ -24,6 +24,9 @@ public:
 	bool first_step(); //first step generation
 	bool next_step(); //next step generation
 
+	void create_ecp_mp_reply();
+	void get_mp_ecp_command();
+
 };
 
 class pin_unlock: public common::generator::generator {
@@ -33,6 +36,9 @@ public:
 	pin_unlock(common::task::task& _ecp_task); //constructor
 	bool first_step(); //first step generation
 	bool next_step(); //next step generation
+
+	void create_ecp_mp_reply();
+	void get_mp_ecp_command();
 
 };
 
@@ -44,6 +50,9 @@ public:
 	bool first_step(); //first step generation
 	bool next_step(); //next step generation
 
+	void create_ecp_mp_reply();
+	void get_mp_ecp_command();
+
 };
 
 class pin_lower: public common::generator::generator {
@@ -53,6 +62,9 @@ public:
 	pin_lower(common::task::task& _ecp_task); //constructor
 	bool first_step(); //first step generation
 	bool next_step(); //next step generation
+
+	void create_ecp_mp_reply();
+	void get_mp_ecp_command();
 
 };
 

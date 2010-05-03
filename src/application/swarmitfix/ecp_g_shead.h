@@ -24,6 +24,9 @@ public:
 	bool first_step(); //first step generation
 	bool next_step(); //next step generation
 
+	void create_ecp_mp_reply();
+	void get_mp_ecp_command();
+
 };
 
 class head_desoldify: public common::generator::generator {
@@ -34,6 +37,9 @@ public:
 	bool first_step(); //first step generation
 	bool next_step(); //next step generation
 
+	void create_ecp_mp_reply();
+	void get_mp_ecp_command();
+
 };
 
 class head_vacuum_on: public common::generator::generator {
@@ -43,6 +49,9 @@ public:
 	head_vacuum_on(common::task::task& _ecp_task); //constructor
 	bool first_step(); //first step generation
 	bool next_step(); //next step generation
+
+	void create_ecp_mp_reply();
+	void get_mp_ecp_command();
 };
 
 class head_vacuum_off: public common::generator::generator {
@@ -52,6 +61,9 @@ public:
 	head_vacuum_off(common::task::task& _ecp_task); //constructor
 	bool first_step(); //first step generation
 	bool next_step(); //next step generation
+
+	void create_ecp_mp_reply();
+	void get_mp_ecp_command();
 
 };
 
