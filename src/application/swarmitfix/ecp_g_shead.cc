@@ -24,6 +24,14 @@ head_soldify::head_soldify(common::task::task& _ecp_task) :
 }
 
 bool head_soldify::first_step() {
+	// parameters copying
+	get_mp_ecp_command();
+
+	ecp_edp_shead_head_soldification_structure
+			= mp_ecp_shead_head_soldification_structure;
+	shead_head_soldification_data_port->set(
+			ecp_edp_shead_head_soldification_structure);
+	shead_reply_data_request_port->set_request();
 
 	return true;
 }
@@ -54,6 +62,14 @@ head_desoldify::head_desoldify(common::task::task& _ecp_task) :
 }
 
 bool head_desoldify::first_step() {
+	// parameters copying
+	get_mp_ecp_command();
+
+	ecp_edp_shead_head_soldification_structure
+			= mp_ecp_shead_head_soldification_structure;
+	shead_head_soldification_data_port->set(
+			ecp_edp_shead_head_soldification_structure);
+	shead_reply_data_request_port->set_request();
 
 	return true;
 }
@@ -82,6 +98,15 @@ head_vacuum_on::head_vacuum_on(common::task::task& _ecp_task) :
 }
 
 bool head_vacuum_on::first_step() {
+	// parameters copying
+	get_mp_ecp_command();
+
+	ecp_edp_shead_vacuum_activation_structure
+			= mp_ecp_shead_vacuum_activation_structure;
+	shead_vacuum_activation_data_port->set(
+			ecp_edp_shead_vacuum_activation_structure);
+	shead_reply_data_request_port->set_request();
+
 	return true;
 }
 
@@ -109,6 +134,14 @@ head_vacuum_off::head_vacuum_off(common::task::task& _ecp_task) :
 }
 
 bool head_vacuum_off::first_step() {
+	// parameters copying
+	get_mp_ecp_command();
+
+	ecp_edp_shead_vacuum_activation_structure
+			= mp_ecp_shead_vacuum_activation_structure;
+	shead_vacuum_activation_data_port->set(
+			ecp_edp_shead_vacuum_activation_structure);
+	shead_reply_data_request_port->set_request();
 
 	return true;
 }

@@ -22,7 +22,7 @@ private:
 
 	lib::single_thread_port<lib::smb_multi_pin_locking>
 			* smb_multi_pin_locking_data_port;
-	lib::smb_multi_pin_locking smb_multi_pin_locking_structure;
+	lib::smb_multi_pin_locking ecp_edp_smb_multi_pin_locking_structure;
 
 	lib::single_thread_request_port<lib::smb_multi_leg_reply>
 			* smb_multi_leg_reply_data_request_port;
@@ -44,7 +44,7 @@ private:
 
 	lib::single_thread_port<lib::smb_multi_pin_locking>
 			* smb_multi_pin_locking_data_port;
-	lib::smb_multi_pin_locking smb_multi_pin_locking_structure;
+	lib::smb_multi_pin_locking ecp_edp_smb_multi_pin_locking_structure;
 
 	lib::single_thread_request_port<lib::smb_multi_leg_reply>
 			* smb_multi_leg_reply_data_request_port;
@@ -66,7 +66,7 @@ private:
 
 	lib::single_thread_port<lib::smb_multi_pin_insertion>
 			* smb_multi_pin_insertion_data_port;
-	lib::smb_multi_pin_insertion smb_multi_pin_insertion_structure;
+	lib::smb_multi_pin_insertion ecp_edp_smb_multi_pin_insertion_structure;
 
 	lib::single_thread_request_port<lib::smb_multi_leg_reply>
 			* smb_multi_leg_reply_data_request_port;
@@ -88,7 +88,7 @@ private:
 
 	lib::single_thread_port<lib::smb_multi_pin_insertion>
 			* smb_multi_pin_insertion_data_port;
-	lib::smb_multi_pin_insertion smb_multi_pin_insertion_structure;
+	lib::smb_multi_pin_insertion ecp_edp_smb_multi_pin_insertion_structure;
 
 	lib::single_thread_request_port<lib::smb_multi_leg_reply>
 			* smb_multi_leg_reply_data_request_port;

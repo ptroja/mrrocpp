@@ -24,6 +24,14 @@ pin_lock::pin_lock(common::task::task& _ecp_task) :
 }
 
 bool pin_lock::first_step() {
+	// parameters copying
+	get_mp_ecp_command();
+
+	ecp_edp_smb_multi_pin_locking_structure
+			= mp_ecp_smb_multi_pin_locking_structure;
+	smb_multi_pin_locking_data_port->set(
+			ecp_edp_smb_multi_pin_locking_structure);
+	smb_multi_leg_reply_data_request_port->set_request();
 
 	return true;
 }
@@ -53,7 +61,13 @@ pin_unlock::pin_unlock(common::task::task& _ecp_task) :
 }
 
 bool pin_unlock::first_step() {
-
+	// parameters copying
+	get_mp_ecp_command();
+	ecp_edp_smb_multi_pin_locking_structure
+			= mp_ecp_smb_multi_pin_locking_structure;
+	smb_multi_pin_locking_data_port->set(
+			ecp_edp_smb_multi_pin_locking_structure);
+	smb_multi_leg_reply_data_request_port->set_request();
 	return true;
 }
 
@@ -83,6 +97,14 @@ pin_rise::pin_rise(common::task::task& _ecp_task) :
 }
 
 bool pin_rise::first_step() {
+	// parameters copying
+	get_mp_ecp_command();
+
+	ecp_edp_smb_multi_pin_insertion_structure
+			= mp_ecp_smb_multi_pin_insertion_structure;
+	smb_multi_pin_insertion_data_port->set(
+			ecp_edp_smb_multi_pin_insertion_structure);
+	smb_multi_leg_reply_data_request_port->set_request();
 
 	return true;
 }
@@ -113,6 +135,14 @@ pin_lower::pin_lower(common::task::task& _ecp_task) :
 }
 
 bool pin_lower::first_step() {
+	// parameters copying
+	get_mp_ecp_command();
+
+	ecp_edp_smb_multi_pin_insertion_structure
+			= mp_ecp_smb_multi_pin_insertion_structure;
+	smb_multi_pin_insertion_data_port->set(
+			ecp_edp_smb_multi_pin_insertion_structure);
+	smb_multi_leg_reply_data_request_port->set_request();
 
 	return true;
 }
