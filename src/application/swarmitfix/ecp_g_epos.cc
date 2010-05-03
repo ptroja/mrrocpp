@@ -32,11 +32,11 @@ void epos::create_ecp_mp_reply() {
 }
 
 void epos::get_mp_ecp_command() {
-	memcpy(&mp_ecp_epos_params,
+	memcpy(&mp_ecp_epos_gen_parameters_structure,
 			ecp_t.mp_command.ecp_next_state.mp_2_ecp_next_state_string,
-			sizeof(mp_ecp_epos_params));
+			sizeof(mp_ecp_epos_gen_parameters_structure));
 
-	printf("aaaaa: %lf\n", mp_ecp_epos_params.dm[4]);
+	printf("aaaaa: %lf\n", mp_ecp_epos_gen_parameters_structure.dm[4]);
 }
 
 bool epos::first_step() {
@@ -47,8 +47,9 @@ bool epos::first_step() {
 	ecp_t.sr_ecp_msg->message("epos first_step");
 
 	//epos_data_port_command_structure.da[3] = 3.13;
-	epos_data_port_gen_parameters_structure = mp_ecp_epos_params;
-	epos_gen_parameters_data_port->set(epos_data_port_gen_parameters_structure);
+	ecp_edp_epos_gen_parameters_structure
+			= mp_ecp_epos_gen_parameters_structure;
+	epos_gen_parameters_data_port->set(ecp_edp_epos_gen_parameters_structure);
 	epos_reply_data_request_port->set_request();
 
 	return true;
@@ -59,17 +60,17 @@ bool epos::next_step() {
 	ecp_t.sr_ecp_msg->message("epos next_step");
 
 	if (epos_reply_data_request_port->is_new_data()) {
-		epos_data_port_reply_structure = epos_reply_data_request_port->get();
+		edp_ecp_epos_reply_structure = epos_reply_data_request_port->get();
 
 		std::stringstream ss(std::stringstream::in | std::stringstream::out);
 		ss << "licznik: "
-				<< epos_data_port_reply_structure.epos_controller[3].position;
+				<< edp_ecp_epos_reply_structure.epos_controller[3].position;
 
 		ecp_t.sr_ecp_msg->message(ss.str().c_str());
 
 	}
 
-	if (epos_data_port_reply_structure.epos_controller[3].motion_in_progress) {
+	if (edp_ecp_epos_reply_structure.epos_controller[3].motion_in_progress) {
 		epos_reply_data_request_port->set_request();
 		return true;
 	} else {

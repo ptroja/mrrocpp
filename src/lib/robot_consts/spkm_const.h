@@ -19,8 +19,8 @@ enum SPKM_CBUFFER_VARIANT {
 struct spkm_cbuffer {
 	SPKM_CBUFFER_VARIANT variant;
 	union {
-		epos_low_level_command epos_data_port_command_structure;
-		epos_gen_parameters epos_data_port_gen_parameters_structure;
+		epos_low_level_command epos_low_level_command_structure;
+		epos_gen_parameters epos_gen_parameters_structure;
 	};
 
 };

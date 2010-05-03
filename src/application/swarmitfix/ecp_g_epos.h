@@ -20,19 +20,19 @@ namespace generator {
 class epos: public common::generator::generator {
 private:
 
-	lib::epos_gen_parameters mp_ecp_epos_params;
+	lib::epos_gen_parameters mp_ecp_epos_gen_parameters_structure;
 
 	lib::single_thread_port<lib::epos_low_level_command>
 			* epos_low_level_command_data_port;
-	lib::epos_low_level_command epos_data_port_command_structure;
+	lib::epos_low_level_command ecp_edp_epos_low_level_command_structure;
 
 	lib::single_thread_port<lib::epos_gen_parameters>
 			* epos_gen_parameters_data_port;
-	lib::epos_gen_parameters epos_data_port_gen_parameters_structure;
+	lib::epos_gen_parameters ecp_edp_epos_gen_parameters_structure;
 
 	lib::single_thread_request_port<lib::epos_reply>
 			* epos_reply_data_request_port;
-	lib::epos_reply epos_data_port_reply_structure;
+	lib::epos_reply edp_ecp_epos_reply_structure;
 
 public:
 	void create_ecp_mp_reply();

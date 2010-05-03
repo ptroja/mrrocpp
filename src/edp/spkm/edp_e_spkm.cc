@@ -96,13 +96,13 @@ void effector::move_arm(lib::c_buffer &instruction) {
 		lib::epos_low_level_command epos_low_level_command_structure;
 
 		memcpy(&epos_gen_parameters_structure,
-				&(ecp_edp_cbuffer.epos_data_port_gen_parameters_structure),
+				&(ecp_edp_cbuffer.epos_gen_parameters_structure),
 				sizeof(epos_gen_parameters_structure));
 
 		compute_epos_command(epos_gen_parameters_structure,
 				epos_low_level_command_structure);
 
-		ss << ecp_edp_cbuffer.epos_data_port_gen_parameters_structure.dm[4];
+		ss << ecp_edp_cbuffer.epos_gen_parameters_structure.dm[4];
 
 		msg->message(ss.str().c_str());
 
