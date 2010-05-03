@@ -146,10 +146,14 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction) 
 	edp_ecp_rbuffer.epos_controller[3].position = licznikaaa;
 
 	if (licznikaaa < 10) {
-		edp_ecp_rbuffer.epos_controller[3].motion_in_progress = true;
+		for (int i = 0; i < 6; i++) {
+			edp_ecp_rbuffer.epos_controller[i].motion_in_progress = true;
+		}
 
 	} else {
-		edp_ecp_rbuffer.epos_controller[3].motion_in_progress = false;
+		for (int i = 0; i < 6; i++) {
+			edp_ecp_rbuffer.epos_controller[i].motion_in_progress = false;
+		}
 	}
 	licznikaaa++;
 	memcpy(reply.arm.serialized_reply, &edp_ecp_rbuffer,

@@ -56,7 +56,6 @@ bool epos::first_step() {
 }
 
 bool epos::next_step() {
-	double diff;
 	ecp_t.sr_ecp_msg->message("epos next_step");
 
 	if (epos_reply_data_request_port->is_new_data()) {
@@ -70,7 +69,17 @@ bool epos::next_step() {
 
 	}
 
-	if (edp_ecp_epos_reply_structure.epos_controller[3].motion_in_progress) {
+	bool motion_in_progress = false;
+
+	for (int i = 0; i < 6; i++) {
+		if (edp_ecp_epos_reply_structure.epos_controller[i].motion_in_progress
+				== true) {
+			motion_in_progress = true;
+			break;
+		}
+	}
+
+	if (motion_in_progress) {
 		epos_reply_data_request_port->set_request();
 		return true;
 	} else {
