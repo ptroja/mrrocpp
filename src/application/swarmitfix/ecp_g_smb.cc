@@ -37,7 +37,28 @@ bool pin_lock::first_step() {
 }
 
 bool pin_lock::next_step() {
-	return true;
+	if (smb_multi_leg_reply_data_request_port->is_new_data()) {
+		edp_ecp_smb_multi_leg_reply_structure
+				= smb_multi_leg_reply_data_request_port->get();
+
+	}
+
+	bool motion_in_progress = false;
+
+	for (int i = 0; i < 3; i++) {
+		if (edp_ecp_smb_multi_leg_reply_structure.leg[i].locking_in_progress
+				== true) {
+			motion_in_progress = true;
+			break;
+		}
+	}
+
+	if (motion_in_progress) {
+		smb_multi_leg_reply_data_request_port->set_request();
+		return true;
+	} else {
+		return false;
+	}
 }
 
 void pin_lock::create_ecp_mp_reply() {
@@ -72,7 +93,28 @@ bool pin_unlock::first_step() {
 }
 
 bool pin_unlock::next_step() {
-	return true;
+	if (smb_multi_leg_reply_data_request_port->is_new_data()) {
+		edp_ecp_smb_multi_leg_reply_structure
+				= smb_multi_leg_reply_data_request_port->get();
+
+	}
+
+	bool motion_in_progress = false;
+
+	for (int i = 0; i < 3; i++) {
+		if (edp_ecp_smb_multi_leg_reply_structure.leg[i].locking_in_progress
+				== true) {
+			motion_in_progress = true;
+			break;
+		}
+	}
+
+	if (motion_in_progress) {
+		smb_multi_leg_reply_data_request_port->set_request();
+		return true;
+	} else {
+		return false;
+	}
 }
 
 void pin_unlock::create_ecp_mp_reply() {
@@ -110,7 +152,28 @@ bool pin_rise::first_step() {
 }
 
 bool pin_rise::next_step() {
-	return true;
+	if (smb_multi_leg_reply_data_request_port->is_new_data()) {
+		edp_ecp_smb_multi_leg_reply_structure
+				= smb_multi_leg_reply_data_request_port->get();
+
+	}
+
+	bool motion_in_progress = false;
+
+	for (int i = 0; i < 3; i++) {
+		if (edp_ecp_smb_multi_leg_reply_structure.leg[i].insertion_in_progress
+				== true) {
+			motion_in_progress = true;
+			break;
+		}
+	}
+
+	if (motion_in_progress) {
+		smb_multi_leg_reply_data_request_port->set_request();
+		return true;
+	} else {
+		return false;
+	}
 }
 
 void pin_rise::create_ecp_mp_reply() {
@@ -148,7 +211,28 @@ bool pin_lower::first_step() {
 }
 
 bool pin_lower::next_step() {
-	return true;
+	if (smb_multi_leg_reply_data_request_port->is_new_data()) {
+		edp_ecp_smb_multi_leg_reply_structure
+				= smb_multi_leg_reply_data_request_port->get();
+
+	}
+
+	bool motion_in_progress = false;
+
+	for (int i = 0; i < 3; i++) {
+		if (edp_ecp_smb_multi_leg_reply_structure.leg[i].insertion_in_progress
+				== true) {
+			motion_in_progress = true;
+			break;
+		}
+	}
+
+	if (motion_in_progress) {
+		smb_multi_leg_reply_data_request_port->set_request();
+		return true;
+	} else {
+		return false;
+	}
 }
 
 void pin_lower::create_ecp_mp_reply() {

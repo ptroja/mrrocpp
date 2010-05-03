@@ -37,7 +37,20 @@ bool head_soldify::first_step() {
 }
 
 bool head_soldify::next_step() {
-	return true;
+	if (shead_reply_data_request_port->is_new_data()) {
+		ecp_edp_shead_reply_structure = shead_reply_data_request_port->get();
+
+	}
+
+	bool motion_in_progress =
+			ecp_edp_shead_reply_structure.soldification_in_progress;
+
+	if (motion_in_progress) {
+		shead_reply_data_request_port->set_request();
+		return true;
+	} else {
+		return false;
+	}
 }
 
 void head_soldify::create_ecp_mp_reply() {
@@ -75,7 +88,20 @@ bool head_desoldify::first_step() {
 }
 
 bool head_desoldify::next_step() {
-	return true;
+	if (shead_reply_data_request_port->is_new_data()) {
+		ecp_edp_shead_reply_structure = shead_reply_data_request_port->get();
+
+	}
+
+	bool motion_in_progress =
+			ecp_edp_shead_reply_structure.soldification_in_progress;
+
+	if (motion_in_progress) {
+		shead_reply_data_request_port->set_request();
+		return true;
+	} else {
+		return false;
+	}
 }
 
 void head_desoldify::create_ecp_mp_reply() {
@@ -111,7 +137,20 @@ bool head_vacuum_on::first_step() {
 }
 
 bool head_vacuum_on::next_step() {
-	return true;
+	if (shead_reply_data_request_port->is_new_data()) {
+		ecp_edp_shead_reply_structure = shead_reply_data_request_port->get();
+
+	}
+
+	bool motion_in_progress =
+			ecp_edp_shead_reply_structure.vacumization_in_progress;
+
+	if (motion_in_progress) {
+		shead_reply_data_request_port->set_request();
+		return true;
+	} else {
+		return false;
+	}
 }
 
 void head_vacuum_on::create_ecp_mp_reply() {
@@ -147,7 +186,20 @@ bool head_vacuum_off::first_step() {
 }
 
 bool head_vacuum_off::next_step() {
-	return true;
+	if (shead_reply_data_request_port->is_new_data()) {
+		ecp_edp_shead_reply_structure = shead_reply_data_request_port->get();
+
+	}
+
+	bool motion_in_progress =
+			ecp_edp_shead_reply_structure.vacumization_in_progress;
+
+	if (motion_in_progress) {
+		shead_reply_data_request_port->set_request();
+		return true;
+	} else {
+		return false;
+	}
 }
 
 void head_vacuum_off::create_ecp_mp_reply() {
