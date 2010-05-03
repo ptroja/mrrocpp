@@ -1,7 +1,7 @@
 /*
- * generator/ecp_g_sleep.cc
+ * generator/ecp_g_shead.cc
  *
- *Author: Tomasz Bem
+ *Author: yoyek
  */
 
 #include "ecp_g_shead.h"
