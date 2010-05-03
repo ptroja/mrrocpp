@@ -37,6 +37,9 @@ void head_soldify::create_ecp_mp_reply() {
 }
 
 void head_soldify::get_mp_ecp_command() {
+	memcpy(&mp_ecp_shead_head_soldification_structure,
+			ecp_t.mp_command.ecp_next_state.mp_2_ecp_next_state_string,
+			sizeof(mp_ecp_shead_head_soldification_structure));
 
 }
 
@@ -64,7 +67,9 @@ void head_desoldify::create_ecp_mp_reply() {
 }
 
 void head_desoldify::get_mp_ecp_command() {
-
+	memcpy(&mp_ecp_shead_head_soldification_structure,
+			ecp_t.mp_command.ecp_next_state.mp_2_ecp_next_state_string,
+			sizeof(mp_ecp_shead_head_soldification_structure));
 }
 
 //constructor with parameters: task and time to sleep [s]
@@ -89,7 +94,9 @@ void head_vacuum_on::create_ecp_mp_reply() {
 }
 
 void head_vacuum_on::get_mp_ecp_command() {
-
+	memcpy(&mp_ecp_shead_vacuum_activation_structure,
+			ecp_t.mp_command.ecp_next_state.mp_2_ecp_next_state_string,
+			sizeof(mp_ecp_shead_vacuum_activation_structure));
 }
 
 //constructor with parameters: task and time to sleep [s]
@@ -115,7 +122,9 @@ void head_vacuum_off::create_ecp_mp_reply() {
 }
 
 void head_vacuum_off::get_mp_ecp_command() {
-
+	memcpy(&mp_ecp_shead_vacuum_activation_structure,
+			ecp_t.mp_command.ecp_next_state.mp_2_ecp_next_state_string,
+			sizeof(mp_ecp_shead_vacuum_activation_structure));
 }
 
 } // namespace generator

@@ -37,7 +37,9 @@ void pin_lock::create_ecp_mp_reply() {
 }
 
 void pin_lock::get_mp_ecp_command() {
-
+	memcpy(&mp_ecp_smb_multi_pin_locking_structure,
+			ecp_t.mp_command.ecp_next_state.mp_2_ecp_next_state_string,
+			sizeof(mp_ecp_smb_multi_pin_locking_structure));
 }
 
 //constructor with parameters: task and time to sleep [s]
@@ -64,7 +66,9 @@ void pin_unlock::create_ecp_mp_reply() {
 }
 
 void pin_unlock::get_mp_ecp_command() {
-
+	memcpy(&mp_ecp_smb_multi_pin_locking_structure,
+			ecp_t.mp_command.ecp_next_state.mp_2_ecp_next_state_string,
+			sizeof(mp_ecp_smb_multi_pin_locking_structure));
 }
 
 //constructor with parameters: task and time to sleep [s]
@@ -92,7 +96,9 @@ void pin_rise::create_ecp_mp_reply() {
 }
 
 void pin_rise::get_mp_ecp_command() {
-
+	memcpy(&mp_ecp_smb_multi_pin_insertion_structure,
+			ecp_t.mp_command.ecp_next_state.mp_2_ecp_next_state_string,
+			sizeof(mp_ecp_smb_multi_pin_insertion_structure));
 }
 
 //constructor with parameters: task and time to sleep [s]
@@ -120,7 +126,9 @@ void pin_lower::create_ecp_mp_reply() {
 }
 
 void pin_lower::get_mp_ecp_command() {
-
+	memcpy(&mp_ecp_smb_multi_pin_insertion_structure,
+			ecp_t.mp_command.ecp_next_state.mp_2_ecp_next_state_string,
+			sizeof(mp_ecp_smb_multi_pin_insertion_structure));
 }
 
 } // namespace generator

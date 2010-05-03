@@ -18,7 +18,7 @@ namespace generator {
 
 class pin_lock: public common::generator::generator {
 private:
-	lib::smb_multi_pin_locking mp_ecp_smb_multi_pin_locking_data_port;
+	lib::smb_multi_pin_locking mp_ecp_smb_multi_pin_locking_structure;
 
 	lib::single_thread_port<lib::smb_multi_pin_locking>
 			* smb_multi_pin_locking_data_port;
@@ -40,7 +40,7 @@ public:
 
 class pin_unlock: public common::generator::generator {
 private:
-	lib::smb_multi_pin_locking mp_ecp_smb_multi_pin_locking_data_port;
+	lib::smb_multi_pin_locking mp_ecp_smb_multi_pin_locking_structure;
 
 	lib::single_thread_port<lib::smb_multi_pin_locking>
 			* smb_multi_pin_locking_data_port;
