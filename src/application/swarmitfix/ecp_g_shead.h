@@ -83,6 +83,15 @@ public:
 
 class head_vacuum_off: public common::generator::generator {
 private:
+	lib::SHEAD_VACUUM_ACTIVATION mp_ecp_shead_vacuum_activation_structure;
+
+	lib::single_thread_port<lib::SHEAD_VACUUM_ACTIVATION>
+			* shead_vacuum_activation_data_port;
+	lib::SHEAD_VACUUM_ACTIVATION shead_vacuum_activation_structure;
+
+	lib::single_thread_request_port<lib::shead_reply>
+			* shead_reply_data_request_port;
+	lib::shead_reply shead_reply_structure;
 
 public:
 	head_vacuum_off(common::task::task& _ecp_task); //constructor
