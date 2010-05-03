@@ -116,15 +116,22 @@ void effector::move_arm(lib::c_buffer &instruction) {
 	}
 		break;
 	case lib::SMB_CBUFFER_EPOS_LOW_LEVEL_COMMAND: {
-
+		lib::epos_low_level_command epos_low_level_command_structure;
+		memcpy(&epos_low_level_command_structure,
+				&(ecp_edp_cbuffer.epos_low_level_command_structure),
+				sizeof(epos_low_level_command_structure));
 	}
 		break;
 	case lib::SMB_CBUFFER_PIN_INSERTION: {
-
+		lib::smb_multi_pin_insertion multi_pin_insertion;
+		memcpy(&multi_pin_insertion, &(ecp_edp_cbuffer.multi_pin_insertion),
+				sizeof(multi_pin_insertion));
 	}
 		break;
 	case lib::SMB_CBUFFER_PIN_LOCKING: {
-
+		lib::smb_multi_pin_locking multi_pin_locking;
+		memcpy(&multi_pin_locking, &(ecp_edp_cbuffer.multi_pin_locking),
+				sizeof(multi_pin_locking));
 	}
 		break;
 	default:
@@ -136,7 +143,7 @@ void effector::move_arm(lib::c_buffer &instruction) {
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
-void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction) { // odczytanie pozycji ramienia
+void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction) {
 	//lib::JointArray desired_joints_tmp(MAX_SERVOS_NR); // Wspolrzedne wewnetrzne -
 	//	printf(" GET ARM\n");
 	//	flushall();

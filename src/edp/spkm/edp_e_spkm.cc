@@ -115,6 +115,10 @@ void effector::move_arm(lib::c_buffer &instruction) {
 	}
 		break;
 	case lib::SPKM_CBUFFER_EPOS_LOW_LEVEL_COMMAND: {
+		lib::epos_low_level_command epos_low_level_command_structure;
+		memcpy(&epos_low_level_command_structure,
+				&(ecp_edp_cbuffer.epos_low_level_command_structure),
+				sizeof(epos_low_level_command_structure));
 
 	}
 		break;
@@ -127,10 +131,10 @@ void effector::move_arm(lib::c_buffer &instruction) {
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
-void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction) { // odczytanie pozycji ramienia
-//lib::JointArray desired_joints_tmp(MAX_SERVOS_NR); // Wspolrzedne wewnetrzne -
-//	printf(" GET ARM\n");
-//	flushall();
+void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction) {
+	//lib::JointArray desired_joints_tmp(MAX_SERVOS_NR); // Wspolrzedne wewnetrzne -
+	//	printf(" GET ARM\n");
+	//	flushall();
 	static int licznikaaa = (-11);
 
 	std::stringstream ss(std::stringstream::in | std::stringstream::out);

@@ -84,24 +84,60 @@ void effector::get_controller_state(lib::c_buffer &instruction) {
 
 /*--------------------------------------------------------------------------*/
 void effector::move_arm(lib::c_buffer &instruction) {
-	motor_driven_effector::single_thread_move_arm(instruction);
+	msg->message("move_arm");
+	lib::shead_cbuffer ecp_edp_cbuffer;
+	memcpy(&ecp_edp_cbuffer, instruction.arm.serialized_command,
+			sizeof(ecp_edp_cbuffer));
+
+	std::stringstream ss(std::stringstream::in | std::stringstream::out);
+
+	switch (ecp_edp_cbuffer.variant) {
+	case lib::SHEAD_CBUFFER_HEAD_SOLIDIFICATION: {
+		lib::SHEAD_HEAD_SOLIDIFICATION head_solidification;
+
+		memcpy(&head_solidification, &(ecp_edp_cbuffer.head_solidification),
+				sizeof(head_solidification));
+
+		msg->message(ss.str().c_str());
+
+		// previously computed parameters send to epos2 controllers
+
+
+		// start the trajectory execution
+
+	}
+		break;
+	case lib::SHEAD_CBUFFER_VACUUM_ACTIVATION: {
+		lib::SHEAD_VACUUM_ACTIVATION vacuum_activation;
+
+		memcpy(&vacuum_activation, &(ecp_edp_cbuffer.vacuum_activation),
+				sizeof(vacuum_activation));
+	}
+		break;
+	default:
+		break;
+
+	}
 
 }
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
-void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction) { // odczytanie pozycji ramienia
-
-	//   printf(" GET ARM\n");
+void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction) {
 	//lib::JointArray desired_joints_tmp(MAX_SERVOS_NR); // Wspolrzedne wewnetrzne -
-	if (read_hardware) {
-		//	motor_driven_effector::get_arm_position_read_hardware_sb();
-	}
+	//	printf(" GET ARM\n");
+	//	flushall();
+	static int licznikaaa = (-11);
 
-	// okreslenie rodzaju wspolrzednych, ktore maja by odczytane
-	// oraz adekwatne wypelnienie bufora odpowiedzi
-	common::motor_driven_effector::get_arm_position_get_arm_type_switch(
-			instruction);
+	std::stringstream ss(std::stringstream::in | std::stringstream::out);
+	ss << "get_arm_position: " << licznikaaa;
+	msg->message(ss.str().c_str());
+	//	printf("%s\n", ss.str().c_str());
+
+	lib::shead_rbuffer edp_ecp_rbuffer;
+
+	memcpy(reply.arm.serialized_reply, &edp_ecp_rbuffer,
+			sizeof(edp_ecp_rbuffer));
 
 	reply.servo_step = step_counter;
 }
