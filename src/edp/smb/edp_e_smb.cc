@@ -25,6 +25,7 @@
 #include "kinematics/smb/kinematic_model_smb.h"
 #include "edp/common/manip_trans_t.h"
 #include "edp/common/vis_server.h"
+#include "lib/epos_gen.h"
 
 #include "lib/exception.h"
 using namespace mrrocpp::lib::exception;
@@ -83,24 +84,81 @@ effector::effector(lib::configurator &_config) :
 
 /*--------------------------------------------------------------------------*/
 void effector::move_arm(lib::c_buffer &instruction) {
-	motor_driven_effector::single_thread_move_arm(instruction);
+	msg->message("move_arm");
+	lib::smb_cbuffer ecp_edp_cbuffer;
+	memcpy(&ecp_edp_cbuffer, instruction.arm.serialized_command,
+			sizeof(ecp_edp_cbuffer));
+
+	std::stringstream ss(std::stringstream::in | std::stringstream::out);
+
+	switch (ecp_edp_cbuffer.variant) {
+	case lib::SMB_CBUFFER_EPOS_GEN_PARAMETERS: {
+		// epos parameters computation basing on trajectory parameters
+		lib::epos_gen_parameters epos_gen_parameters_structure;
+		lib::epos_low_level_command epos_low_level_command_structure;
+
+		memcpy(&epos_gen_parameters_structure,
+				&(ecp_edp_cbuffer.epos_gen_parameters_structure),
+				sizeof(epos_gen_parameters_structure));
+
+		compute_epos_command(epos_gen_parameters_structure,
+				epos_low_level_command_structure);
+
+		ss << ecp_edp_cbuffer.epos_gen_parameters_structure.dm[4];
+
+		msg->message(ss.str().c_str());
+
+		// previously computed parameters send to epos2 controllers
+
+
+		// start the trajectory execution
+
+	}
+		break;
+	case lib::SMB_CBUFFER_EPOS_LOW_LEVEL_COMMAND: {
+
+	}
+		break;
+	case lib::SMB_CBUFFER_PIN_INSERTION: {
+
+	}
+		break;
+	case lib::SMB_CBUFFER_PIN_LOCKING: {
+
+	}
+		break;
+	default:
+		break;
+
+	}
 
 }
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
 void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction) { // odczytanie pozycji ramienia
-
-	//   printf(" GET ARM\n");
 	//lib::JointArray desired_joints_tmp(MAX_SERVOS_NR); // Wspolrzedne wewnetrzne -
-	if (read_hardware) {
-		//	motor_driven_effector::get_arm_position_read_hardware_sb();
-	}
+	//	printf(" GET ARM\n");
+	//	flushall();
+	static int licznikaaa = (-11);
 
-	// okreslenie rodzaju wspolrzednych, ktore maja by odczytane
-	// oraz adekwatne wypelnienie bufora odpowiedzi
-	common::motor_driven_effector::get_arm_position_get_arm_type_switch(
-			instruction);
+	std::stringstream ss(std::stringstream::in | std::stringstream::out);
+	ss << "get_arm_position: " << licznikaaa;
+	msg->message(ss.str().c_str());
+	//	printf("%s\n", ss.str().c_str());
+
+	lib::smb_rbuffer edp_ecp_rbuffer;
+	edp_ecp_rbuffer.epos_controller[3].position = licznikaaa;
+
+	if (licznikaaa < 10) {
+		edp_ecp_rbuffer.epos_controller[3].motion_in_progress = true;
+
+	} else {
+		edp_ecp_rbuffer.epos_controller[3].motion_in_progress = false;
+	}
+	licznikaaa++;
+	memcpy(reply.arm.serialized_reply, &edp_ecp_rbuffer,
+			sizeof(edp_ecp_rbuffer));
 
 	reply.servo_step = step_counter;
 }

@@ -132,27 +132,26 @@ void robot::create_command() {
 
 	if (epos_low_level_command_data_port.is_new_data()) {
 		ecp_command.instruction.set_type = ARM_DEFINITION;
-		epos_data_port_command_structure
+		epos_low_level_command_structure
 				= epos_low_level_command_data_port.get();
 		// generator command interpretation
 		// narazie proste przepisanie
 
 		ecp_edp_cbuffer.variant = lib::SMB_CBUFFER_EPOS_LOW_LEVEL_COMMAND;
 
-		ecp_edp_cbuffer.epos_data_port_command_structure
-				= epos_data_port_command_structure;
+		ecp_edp_cbuffer.epos_low_level_command_structure
+				= epos_low_level_command_structure;
 
 	} else if (epos_gen_parameters_data_port.is_new_data()) {
 		ecp_command.instruction.set_type = ARM_DEFINITION;
-		epos_data_port_gen_parameters_structure
-				= epos_gen_parameters_data_port.get();
+		epos_gen_parameters_structure = epos_gen_parameters_data_port.get();
 		// generator command interpretation
 		// narazie proste przepisanie
 
 		ecp_edp_cbuffer.variant = lib::SMB_CBUFFER_EPOS_GEN_PARAMETERS;
 
-		ecp_edp_cbuffer.epos_data_port_gen_parameters_structure
-				= epos_data_port_gen_parameters_structure;
+		ecp_edp_cbuffer.epos_gen_parameters_structure
+				= epos_gen_parameters_structure;
 	} else if (smb_multi_pin_insertion_data_port.is_new_data()) {
 		ecp_command.instruction.set_type = ARM_DEFINITION;
 		smb_multi_pin_insertion_structure
@@ -189,16 +188,16 @@ void robot::get_reply() {
 
 	// generator reply generation
 	for (int i = 0; i < 6; i++) {
-		epos_data_port_reply_structure.epos_controller[i].position
+		epos_reply_structure.epos_controller[i].position
 				= edp_ecp_rbuffer.epos_controller[i].position;
-		epos_data_port_reply_structure.epos_controller[i].motion_in_progress
+		epos_reply_structure.epos_controller[i].motion_in_progress
 				= edp_ecp_rbuffer.epos_controller[i].motion_in_progress;
 	}
 
 	smb_multi_leg_reply_structure = edp_ecp_rbuffer.multi_leg_reply;
 
 	if (epos_reply_data_request_port.is_new_request()) {
-		epos_reply_data_request_port.set(epos_data_port_reply_structure);
+		epos_reply_data_request_port.set(epos_reply_structure);
 	}
 
 	if (smb_multi_leg_reply_data_request_port.is_new_request()) {

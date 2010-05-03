@@ -123,10 +123,6 @@ void effector::move_arm(lib::c_buffer &instruction) {
 
 	}
 
-	if (ecp_edp_cbuffer.variant == lib::SPKM_CBUFFER_EPOS_GEN_PARAMETERS) {
-
-	}
-
 }
 /*--------------------------------------------------------------------------*/
 

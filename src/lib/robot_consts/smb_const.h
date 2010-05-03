@@ -23,8 +23,8 @@ enum SMB_CBUFFER_VARIANT {
 struct smb_cbuffer {
 	SMB_CBUFFER_VARIANT variant;
 	union {
-		epos_low_level_command epos_data_port_command_structure;
-		epos_gen_parameters epos_data_port_gen_parameters_structure;
+		epos_low_level_command epos_low_level_command_structure;
+		epos_gen_parameters epos_gen_parameters_structure;
 		smb_multi_pin_insertion multi_pin_insertion;
 		smb_multi_pin_locking multi_pin_locking;
 	};
