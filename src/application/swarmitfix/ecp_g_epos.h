@@ -9,7 +9,6 @@
 
 #include <time.h>
 #include "ecp/common/generator/ecp_generator.h"
-#include "ecp_mp_t_swarmitfix.h"
 #include "lib/data_port_headers/epos.h"
 
 namespace mrrocpp {
@@ -38,7 +37,7 @@ public:
 	void create_ecp_mp_reply();
 	void get_mp_ecp_command();
 
-	epos(common::task::task& _ecp_task, double = 1); //constructor
+	epos(common::task::task& _ecp_task); //constructor
 	bool first_step(); //first step generation
 	bool next_step(); //next step generation
 

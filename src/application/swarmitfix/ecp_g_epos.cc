@@ -12,7 +12,7 @@ namespace common {
 namespace generator {
 
 //constructor with parameters: task and time to sleep [s]
-epos::epos(common::task::task& _ecp_task, double s) :
+epos::epos(common::task::task& _ecp_task) :
 	generator(_ecp_task) {
 	//	if (the_robot) the_robot->communicate_with_edp = false; //do not communicate with edp
 

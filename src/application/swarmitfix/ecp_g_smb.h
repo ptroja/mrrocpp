@@ -9,75 +9,51 @@
 
 #include <time.h>
 #include "ecp/common/generator/ecp_generator.h"
+#include "lib/data_port_headers/smb.h"
 
 namespace mrrocpp {
 namespace ecp {
 namespace smb {
 namespace generator {
 
-class pin_lock : public common::generator::generator
-{
-	private:
-		double waittime;		//seconds to wait
-		timespec sleeptime;		//structure for nanosleep funciton
-		timespec acttime;
-		timespec prevtime;
-		timespec starttime;
+class pin_lock: public common::generator::generator {
+private:
 
-	public:
-		pin_lock(common::task::task& _ecp_task, double=1);		//constructor
-		bool first_step();		//first step generation
-		bool next_step();			//next step generation
-		void init_time(double=1);	//initialize time
+public:
+	pin_lock(common::task::task& _ecp_task); //constructor
+	bool first_step(); //first step generation
+	bool next_step(); //next step generation
+
 };
 
-class pin_unlock : public common::generator::generator
-{
-	private:
-		double waittime;		//seconds to wait
-		timespec sleeptime;		//structure for nanosleep funciton
-		timespec acttime;
-		timespec prevtime;
-		timespec starttime;
+class pin_unlock: public common::generator::generator {
+private:
 
-	public:
-		pin_unlock(common::task::task& _ecp_task, double=1);		//constructor
-		bool first_step();		//first step generation
-		bool next_step();			//next step generation
-		void init_time(double=1);	//initialize time
+public:
+	pin_unlock(common::task::task& _ecp_task); //constructor
+	bool first_step(); //first step generation
+	bool next_step(); //next step generation
+
 };
 
+class pin_rise: public common::generator::generator {
+private:
 
-class pin_rise : public common::generator::generator
-{
-	private:
-		double waittime;		//seconds to wait
-		timespec sleeptime;		//structure for nanosleep funciton
-		timespec acttime;
-		timespec prevtime;
-		timespec starttime;
+public:
+	pin_rise(common::task::task& _ecp_task); //constructor
+	bool first_step(); //first step generation
+	bool next_step(); //next step generation
 
-	public:
-		pin_rise(common::task::task& _ecp_task, double=1);		//constructor
-		bool first_step();		//first step generation
-		bool next_step();			//next step generation
-		void init_time(double=1);	//initialize time
 };
 
-class pin_lower : public common::generator::generator
-{
-	private:
-		double waittime;		//seconds to wait
-		timespec sleeptime;		//structure for nanosleep funciton
-		timespec acttime;
-		timespec prevtime;
-		timespec starttime;
+class pin_lower: public common::generator::generator {
+private:
 
-	public:
-		pin_lower(common::task::task& _ecp_task, double=1);		//constructor
-		bool first_step();		//first step generation
-		bool next_step();			//next step generation
-		void init_time(double=1);	//initialize time
+public:
+	pin_lower(common::task::task& _ecp_task); //constructor
+	bool first_step(); //first step generation
+	bool next_step(); //next step generation
+
 };
 
 } // namespace generator
