@@ -1,9 +1,19 @@
+// ------------------------------------------------------------------------
+// Proces:		-
+// Plik:			mathtr.h
+// System:	QNX/MRROC++  v. 6.3
+// Opis:		Klasy K_vector, Homog_matrix, Ft_v_vector,  Jacobian_matrix
+//				- definicja klas
+//
+// Autor:		tkornuta
+// Data:		14.02.2007
+// ------------------------------------------------------------------------
+
 #ifndef __HOMOG_MATRIX_H
 #define __HOMOG_MATRIX_H
 
-#include <ostream>
-#include <cstring>
-#include <cassert>
+#include <iostream>
+#include <string.h>
 
 #include "lib/impconst.h"	// frame_tab
 
@@ -16,15 +26,6 @@ class Xyz_Angle_Axis_vector;
 class Xyz_Euler_Zyz_vector;
 class Xyz_Rpy_vector;
 
-//! turn on or off frames bounds checking. If turned on, assert() can still
-//! be turned off with -DNDEBUG.
-
-#ifdef INDEX_CHECK
-    #define HOMOG_MATRIX_CHECKI(a) assert(a)
-#else
-    #define HOMOG_MATRIX_CHECKI(a)
-#endif
-
 //! Klasa reprezentujaca macierz transformacji.
 class Homog_matrix
 {
@@ -33,6 +34,11 @@ private:
 	frame_tab matrix_m;
 
 public:
+	//! Klasa Ft_v_tr musi miec dostep do prywatnych skladnikow klasy Homog_matrix.
+	friend class Ft_v_tr;
+	friend class Ft_tr;
+	friend class V_tr;
+
 	//! Konstruktor domniemany - tworzy macierz jednostkowa.
 	Homog_matrix();
 	//! Stworzenie macierzy na podstawie zawartosci tablicy.
@@ -69,6 +75,12 @@ public:
 	void get_xyz_euler_zyz(Xyz_Euler_Zyz_vector & l_vector) const;
 
 	void set_from_xyz_euler_zyz(const Xyz_Euler_Zyz_vector & l_vector);
+
+	//! Przeksztalcenie do formy XYZ_EULER_ZYZ dla robota IRP-6_MECHATRONIKA i zwrocenie w tablicy.
+	void get_mech_xyz_euler_zyz(Xyz_Euler_Zyz_vector & l_vector) const;
+
+	//! Wypelnienie wspolczynnikow macierzy na podstawie danych w formie XYZ_EULER_ZYZ dla robota IRP-6_MECHATRONIKA
+	void set_from_mech_xyz_euler_zyz(const Xyz_Euler_Zyz_vector & l_vector);
 
 	//! Przeksztalcenie do formy XYZ_RPY (rool pitch yaw) i zwrocenie w tablicy.
 	void get_xyz_rpy(Xyz_Rpy_vector & l_vector) const;
@@ -109,17 +121,12 @@ public:
 
 	void set_rotation_matrix(const Homog_matrix &wzor);
 
-    //! Access to elements 0..3,0..2, bounds are checked when NDEBUG is not set
-    inline double& operator()(int i,int j) {
-    	HOMOG_MATRIX_CHECKI((0<=i)&&(i<=3)&&(0<=j)&&(j<=2));
-    	return matrix_m[i][j];
-    }
-
-    //! Access to elements 0..3,0..2, bounds are checked when NDEBUG is not set
-    inline double operator() (int i,int j) const {
-    	HOMOG_MATRIX_CHECKI((0<=i)&&(i<=3)&&(0<=j)&&(j<=2));
-    	return matrix_m[i][j];
-    }
+	//! Ustawienie elementu macierzy.
+	void set_value(unsigned int i, unsigned int j, const double value);
+	//! Zwrocenie elementu macierzy.
+	void get_value(unsigned int i, unsigned int j, double &value) const;
+	//! Zwrocenie elementu macierzy.
+	double get_value(unsigned int i, unsigned int j) const;
 
 	//! Operator przypisania.
 	Homog_matrix & operator=(const Homog_matrix &);
@@ -135,8 +142,11 @@ public:
 	K_vector operator*(const double tablica[3]) const;
 
 	//! operatory prownania macierzy jednorodnych
-	bool operator==(const Homog_matrix &) const;
-	bool operator!=(const Homog_matrix &) const;
+	int operator==(const Homog_matrix &) const;
+	int operator!=(const Homog_matrix &) const;
+
+	double* operator[](const unsigned int i);
+	const double* operator[](const unsigned int i) const;
 
 	//! operator wypisania
 	friend std::ostream& operator<<(std::ostream &, Homog_matrix &);
@@ -144,12 +154,18 @@ public:
 	//! funkcja sprawdzajaca czy macierz jest macierza jednorodna
 	bool is_valid() const;
 
-private:
 	//! Kopiowanie macierzy jednorodnej do DEST z SOURCE.
 	inline static void copy_frame_tab(frame_tab destination_frame, const frame_tab source_frame)
 	{
-		std::memcpy(destination_frame, source_frame, sizeof(frame_tab));
+		memcpy(destination_frame, source_frame, sizeof(frame_tab));
 	};//: copy_frame
+
+	//! Kopiowanie macierzy jednorodnej w postaci klas pochodnych Ft_V_vector
+	inline static void FT_v_vector(double destination_vector[6], const double source_vector[6])
+	{
+		memcpy(destination_vector, source_vector, 6* sizeof (double));
+	};//: copy_xyz_angle_axis
+
 };// end class Homog_matrix
 
 

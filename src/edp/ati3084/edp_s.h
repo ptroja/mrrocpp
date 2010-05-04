@@ -1,5 +1,6 @@
 // -------------------------------------------------------------------------
 //
+//
 // Definicje klasy edp_ATI3084_force_sensor
 //
 // Ostatnia modyfikacja: 2005
@@ -14,6 +15,7 @@
 namespace mrrocpp {
 namespace edp {
 namespace sensor {
+
 
 // Z PLIKU cz_defs.h
 
@@ -51,11 +53,14 @@ namespace sensor {
 #define MAX_SVAR_VALUE 0x7F // +127
 #define MIN_SVAR_VALUE 0x80 // -128
 
+// server's process name
+#define __CZ_SERVER_NODE "cz_ser"
+
 // Z PLIKU cz_lib.h
 
-// PARALLEL - wysylynie po zlaczu rownoleglym - dziala slabo,
+#define SERIAL 1 // PARALLEL - wysylynie po zlaczu rownoleglym - dziala slabo,
 // SERIAL - wysylanie po zlaczu szeregowym - dziala dobrze
-#define SERIAL 1
+
 
 #define NUM_SVAR	6
 #define MAX_NUM_MEASURE 1000
@@ -107,51 +112,16 @@ namespace sensor {
 #define PORT_1_CONFIG 7
 #define INTER_CONFIG 32
 
-// opoznienie pomiedzy dwoma stanami wyjscia karty
+#define INTR_LOOP_DELAY 1000 // opoznienie pomiedzy dwoma stanami wyjscia karty w funkcji obslugi przerwania
+#define INTR_NS_DELAY 10000 // opoznienie pomiedzy dwoma stanami wyjscia karty
 // w funkcji obslugi przerwania w nanosekundach
-#define INTR_NS_DELAY 10000
 
-#define MDS_DATA_RANGE 20
 
 /********** klasa czujnikow po stronie VSP **************/
 class ATI3084_force : public force {
 
-public:
-
-	//! data strucutre shared between thread and interrupt handler
-	typedef struct mds_data
-	{
-		int intr_mode;
-		int byte_counter;
-		int is_received;
-		uint16_t data[MDS_DATA_RANGE];
-
-		//! spinlock to for disabling interrupts
-		intrspin_t spinlock;
-	} mds_data_t;
-
-	void connect_to_hardware (void);
-
-	ATI3084_force(common::manip_effector &_master);
-	virtual ~ATI3084_force();
-
-	void configure_sensor (void);	// konfiguracja czujnika
-	void wait_for_event(void);		// oczekiwanie na zdarzenie
-	void initiate_reading (void);		// zadanie odczytu od VSP
-	void get_reading (void);			// odebranie odczytu od VSP		// zwraca blad
-
 private:
-	//! data shared between thread and interrupt handler
-	mds_data_t mds;
-
-	//! interrupt id
-	int interrupt_id;
-
-	//! interrupt timeout
-	uint64_t int_timeout;
-
-	//! informacja o tym, czy obsluga przerwanie jest juz przypisana
-	bool int_attached;
+	unsigned int int_attached;// informacja o tym, czy obsluga przerwanie jest juz przypisana
 
 	// Z PLIKU cz_lib.h
 	int LSREG;
@@ -167,16 +137,12 @@ private:
 	int NOT_IRQ;
 	// KONIEC Z PLIKU
 
-	//! do obslugi karty advantech pci1751
-	int pidx;
+	int pidx; // do obslugi karty advantech pci1751
+	void* hdl; // wlasciwy uchwyt do danego urzadzenia
+	int phdl; // pci handle -> fd do servera PCI
 
-	//! wlasciwy uchwyt do danego urzadzenia
-	void* hdl;
-
-	//! // pci handle -> fd do servera PCI
-	int phdl;
-
-	void set_output(uint16_t value);
+	void set_char_output(char* znak);
+	void set_output(short value);
 	void set_obf(unsigned char state);
 	bool check_ack(void);
 	void initiate_registers(void);
@@ -184,11 +150,26 @@ private:
 	void check_cs(void);
 	void parallel_do_send_command(const char* command);
 
-	void do_Wait(void);// by old schunk
-	int do_send_command(const char* command);
-	void do_init(void);
+	short do_Wait(const char* command);// by old schunk
+	short do_send_command(const char* command);
+	short do_init(void);
+
+	short ERROR_CODE;
 
 	struct sigevent tim_event;
+
+public:
+
+	void connect_to_hardware (void);
+
+	ATI3084_force(common::manip_effector &_master);
+	virtual ~ATI3084_force();
+
+	void configure_sensor (void);	// konfiguracja czujnika
+	void wait_for_event(void);		// oczekiwanie na zdarzenie
+	void initiate_reading (void);		// zadanie odczytu od VSP
+	void get_reading (void);			// odebranie odczytu od VSP		// zwraca blad
+
 }; // end: class vsp_sensor
 
 // na zewnatrz klasy gdyz odwoluje sie do nich funkcja obslugi przerwania
@@ -196,7 +177,7 @@ bool check_intr(void);
 bool check_stb(void);
 void clear_intr(void);
 void set_ibf(unsigned char state);
-uint16_t get_input(void);
+short get_input(void);
 
 } // namespace sensor
 } // namespace edp

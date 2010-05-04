@@ -1,6 +1,0 @@
-.cproject
-.project
-.qnx_internal.mk
-.settings
-build*
-src/lib/messip

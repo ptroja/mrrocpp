@@ -9,7 +9,6 @@
 
 #include <boost/utility.hpp>
 #include <boost/thread/mutex.hpp>
-#include <boost/thread/condition_variable.hpp>
 #include <boost/circular_buffer.hpp>
 
 #include "lib/typedefs.h"
@@ -89,10 +88,7 @@ private:
 public:
 	boost::mutex reader_mutex;
 
-	boost::condition_variable cond;
-
-	bool new_data;
-
+	lib::condition_synchroniser synchroniser;
 	//! main thread loop
     void operator()();
 
