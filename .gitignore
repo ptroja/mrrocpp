@@ -1,2 +1,5 @@
 /bin
 /build
+/logs
+/msr
+/configs/default_file.cfg
