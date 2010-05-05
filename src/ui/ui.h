@@ -325,6 +325,19 @@ private:
 	command_function_t com_fun; //! command functor
 };
 
+class feb_thread: public boost::noncopyable {
+private:
+	function_execution_buffer & feb;
+	boost::thread *thread_id;
+
+public:
+	void operator()();
+
+	feb_thread(function_execution_buffer & _feb);
+	~feb_thread();
+
+};
+
 // forward declaration
 class busy_flag;
 
