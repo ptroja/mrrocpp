@@ -47,19 +47,19 @@
 
 #include "lib/srlib.h"
 
-pthread_t edp_irp6ot_tid;
-pthread_t edp_irp6p_tid;
-pthread_t edp_irp6ot_tfg_tid;
-pthread_t edp_irp6p_tfg_tid;
-pthread_t edp_conv_tid;
+feb_thread* edp_irp6ot_tid;
+feb_thread* edp_irp6p_tid;
+feb_thread* edp_irp6ot_tfg_tid;
+feb_thread* edp_irp6p_tfg_tid;
+feb_thread* edp_conv_tid;
 
-pthread_t edp_spkm_tid;
-pthread_t edp_smb_tid;
-pthread_t edp_shead_tid;
+feb_thread* edp_spkm_tid;
+feb_thread* edp_smb_tid;
+feb_thread* edp_shead_tid;
+feb_thread* meb_tid;
 
 pthread_t ui_tid;
 pthread_t sr_tid;
-pthread_t meb_tid;
 
 function_execution_buffer edp_irp6ot_eb;
 function_execution_buffer edp_irp6p_eb;
@@ -69,7 +69,6 @@ function_execution_buffer edp_irp6p_tfg_eb;
 function_execution_buffer edp_spkm_eb;
 function_execution_buffer edp_smb_eb;
 function_execution_buffer edp_shead_eb;
-
 
 function_execution_buffer edp_conv_eb;
 function_execution_buffer main_eb;
@@ -186,7 +185,8 @@ void *comm_thread(void* arg) {
 			ui_ecp_obj->synchroniser.null_command();
 			PtEnter(0);
 			ApCreateModule(ABM_yes_no_window, ABW_base, NULL);
-			PtSetResource(ABW_PtLabel_pytanie, Pt_ARG_TEXT_STRING, ui_ecp_obj->ecp_to_ui_msg.string , 0);
+			PtSetResource(ABW_PtLabel_pytanie, Pt_ARG_TEXT_STRING,
+					ui_ecp_obj->ecp_to_ui_msg.string, 0);
 			PtLeave(0);
 			ui_ecp_obj->synchroniser.wait();
 
@@ -199,7 +199,8 @@ void *comm_thread(void* arg) {
 		case lib::MESSAGE:
 			PtEnter(0);
 			ApCreateModule(ABM_wnd_message, ABW_base, NULL);
-			PtSetResource(ABW_PtLabel_wind_message, Pt_ARG_TEXT_STRING, ui_ecp_obj->ecp_to_ui_msg.string , 0);
+			PtSetResource(ABW_PtLabel_wind_message, Pt_ARG_TEXT_STRING,
+					ui_ecp_obj->ecp_to_ui_msg.string, 0);
 			PtLeave(0);
 
 			ui_ecp_obj->ui_rep.reply = lib::ANSWER_YES;
@@ -213,7 +214,8 @@ void *comm_thread(void* arg) {
 			ui_ecp_obj->synchroniser.null_command();
 			PtEnter(0);
 			ApCreateModule(ABM_wnd_input_double, ABW_base, NULL);
-			PtSetResource(ABW_PtLabel_wind_input_double, Pt_ARG_TEXT_STRING, ui_ecp_obj->ecp_to_ui_msg.string , 0);
+			PtSetResource(ABW_PtLabel_wind_input_double, Pt_ARG_TEXT_STRING,
+					ui_ecp_obj->ecp_to_ui_msg.string, 0);
 			PtLeave(0);
 			ui_ecp_obj->synchroniser.wait();
 
@@ -226,7 +228,8 @@ void *comm_thread(void* arg) {
 			ui_ecp_obj->synchroniser.null_command();
 			PtEnter(0);
 			ApCreateModule(ABM_wnd_input_integer, ABW_base, NULL);
-			PtSetResource(ABW_PtLabel_wind_input_integer, Pt_ARG_TEXT_STRING, ui_ecp_obj->ecp_to_ui_msg.string , 0);
+			PtSetResource(ABW_PtLabel_wind_input_integer, Pt_ARG_TEXT_STRING,
+					ui_ecp_obj->ecp_to_ui_msg.string, 0);
 			PtLeave(0);
 			ui_ecp_obj->synchroniser.wait();
 
@@ -239,7 +242,8 @@ void *comm_thread(void* arg) {
 			ui_ecp_obj->synchroniser.null_command();
 			PtEnter(0);
 			ApCreateModule(ABM_wnd_choose_option, ABW_base, NULL);
-			PtSetResource(ABW_PtLabel_wind_choose_option, Pt_ARG_TEXT_STRING, ui_ecp_obj->ecp_to_ui_msg.string , 0);
+			PtSetResource(ABW_PtLabel_wind_choose_option, Pt_ARG_TEXT_STRING,
+					ui_ecp_obj->ecp_to_ui_msg.string, 0);
 
 			// wybor ilosci dostepnych opcji w zaleznosci od wartosci ui_ecp_obj->ecp_to_ui_msg.nr_of_options
 
@@ -481,102 +485,9 @@ void *sr_thread(void* arg) {
 }
 #endif /* USE_MESSIP_SRR */
 
-void *edp_irp6ot_thread(void* arg) {
-
-	while (true) {
-		edp_irp6ot_eb.wait_and_execute();
-	}
-
-	return NULL;
-}
-
-void *edp_irp6p_thread(void* arg) {
-
-	while (true) {
-		edp_irp6p_eb.wait_and_execute();
-	}
-
-	return NULL;
-}
-
-
-void *edp_irp6ot_tfg_thread(void* arg) {
-
-	while (true) {
-		edp_irp6ot_tfg_eb.wait_and_execute();
-	}
-
-	return NULL;
-}
-
-void *edp_irp6p_tfg_thread(void* arg) {
-
-	while (true) {
-		edp_irp6p_tfg_eb.wait_and_execute();
-	}
-
-	return NULL;
-}
-
-void *edp_conv_thread(void* arg) {
-
-	while (true) {
-		edp_conv_eb.wait_and_execute();
-	}
-
-	return NULL;
-}
-
-
-void *edp_spkm_thread(void* arg) {
-
-	while (true) {
-		edp_spkm_eb.wait_and_execute();
-	}
-
-	return NULL;
-}
-
-
-void *edp_smb_thread(void* arg) {
-
-	while (true) {
-		edp_smb_eb.wait_and_execute();
-	}
-
-	return NULL;
-}
-
-
-void *edp_shead_thread(void* arg) {
-
-	while (true) {
-		edp_shead_eb.wait_and_execute();
-	}
-
-	return NULL;
-}
-
-
-
-void *meb_thread(void* arg) {
-
-	while (true) {
-		main_eb.wait_and_execute();
-	}
-
-	return NULL;
-}
-
 void create_threads()
 
 {
-
-	sigset_t set;
-
-	sigemptyset(&set);
-	sigaddset(&set, SIGINT);
-	sigaddset(&set, SIGALRM);
 
 	ui_sr_obj = new ui_sr_buffer();
 	ui_ecp_obj = new ui_ecp_buffer();
@@ -589,88 +500,16 @@ void create_threads()
 		printf(" Failed to thread comm_thread\n");
 	}
 #endif
-	if (pthread_create(&edp_irp6ot_tid, NULL, edp_irp6ot_thread, NULL) != EOK) {// Y&W - utowrzenie watku serwa
-		printf(" Failed to thread edp_irp6ot_tid\n");
-	}
 
-	if (pthread_create(&edp_irp6p_tid, NULL, edp_irp6p_thread, NULL) != EOK) {// Y&W - utowrzenie watku serwa
-		printf(" Failed to thread edp_irp6p_tid\n");
-	}
-
-	if (pthread_create(&edp_irp6ot_tfg_tid, NULL, edp_irp6ot_tfg_thread, NULL) != EOK) {// Y&W - utowrzenie watku serwa
-		printf(" Failed to thread edp_irp6ot_tid\n");
-	}
-
-	if (pthread_create(&edp_irp6p_tfg_tid, NULL, edp_irp6p_tfg_thread, NULL) != EOK) {// Y&W - utowrzenie watku serwa
-		printf(" Failed to thread edp_irp6p_tid\n");
-	}
-
-	if (pthread_create(&edp_conv_tid, NULL, edp_conv_thread, NULL) != EOK) {// Y&W - utowrzenie watku serwa
-		printf(" Failed to thread edp_conv_tid\n");
-	}
-
-
-	if (pthread_create(&edp_spkm_tid, NULL, edp_spkm_thread, NULL) != EOK) {// Y&W - utowrzenie watku serwa
-		printf(" Failed to thread edp_spkm_tid\n");
-	}
-
-	if (pthread_create(&edp_smb_tid, NULL, edp_smb_thread, NULL) != EOK) {// Y&W - utowrzenie watku serwa
-		printf(" Failed to thread edp_smb_tid\n");
-	}
-
-	if (pthread_create(&edp_shead_tid, NULL, edp_shead_thread, NULL) != EOK) {// Y&W - utowrzenie watku serwa
-		printf(" Failed to thread edp_shead_tid\n");
-	}
-
-	if (pthread_create(&meb_tid, NULL, meb_thread, NULL) != EOK) {// Y&W - utowrzenie watku serwa
-		printf(" Failed to thread meb_tid\n");
-	}
-
-#if defined(__QNXNTO__)
-	if (SignalProcmask(0, sr_tid, SIG_BLOCK, &set, NULL) == -1) {
-		perror("SignalProcmask(sr_tid)");
-	}
-
-	if (SignalProcmask(0, ui_tid, SIG_BLOCK, &set, NULL) == -1) {
-		perror("SignalProcmask(ui_tid)");
-	}
-
-	if (SignalProcmask(0, edp_irp6ot_tid, SIG_BLOCK, &set, NULL) == -1) {
-		perror("SignalProcmask(edp_irp6ot_tid)");
-	}
-
-	if (SignalProcmask(0, edp_irp6p_tid, SIG_BLOCK, &set, NULL) == -1) {
-		perror("SignalProcmask(edp_irp6p_tid)");
-	}
-
-	if (SignalProcmask(0, edp_irp6ot_tfg_tid, SIG_BLOCK, &set, NULL) == -1) {
-		perror("SignalProcmask(edp_irp6ot_tid)");
-	}
-
-	if (SignalProcmask(0, edp_irp6p_tfg_tid, SIG_BLOCK, &set, NULL) == -1) {
-		perror("SignalProcmask(edp_irp6p_tid)");
-	}
-
-	if (SignalProcmask(0, edp_conv_tid, SIG_BLOCK, &set, NULL) == -1) {
-		perror("SignalProcmask(edp_conv_tid)");
-	}
-
-	if (SignalProcmask(0, edp_spkm_tid, SIG_BLOCK, &set, NULL) == -1) {
-		perror("SignalProcmask(edp_spkm_tid)");
-	}
-
-	if (SignalProcmask(0, edp_smb_tid, SIG_BLOCK, &set, NULL) == -1) {
-		perror("SignalProcmask(edp_smb_tid)");
-	}
-
-	if (SignalProcmask(0, edp_shead_tid, SIG_BLOCK, &set, NULL) == -1) {
-		perror("SignalProcmask(edp_shead_tid)");
-	}
-
-	if (SignalProcmask(0, meb_tid, SIG_BLOCK, &set, NULL) == -1) {
-		perror("SignalProcmask(meb_tid)");
-	}
-#endif
+	edp_irp6ot_tid = new feb_thread(edp_irp6ot_eb);
+	edp_irp6p_tid = new feb_thread(edp_irp6p_eb);
+	edp_irp6ot_tfg_tid = new feb_thread(edp_irp6ot_tfg_eb);
+	edp_irp6p_tfg_tid = new feb_thread(edp_irp6p_tfg_eb);
+	edp_conv_tid = new feb_thread(edp_conv_eb);
+	edp_spkm_tid = new feb_thread(edp_spkm_eb);
+	edp_smb_tid = new feb_thread(edp_smb_eb);
+	edp_shead_tid = new feb_thread(edp_shead_eb);
+	meb_tid = new feb_thread(main_eb);
 
 }
 
@@ -680,15 +519,15 @@ void abort_threads()
 #if defined(__QNXNTO__)
 	pthread_abort(ui_tid);
 	pthread_abort(sr_tid);
-	pthread_abort(edp_irp6ot_tid);
-	pthread_abort(edp_irp6p_tid);
-	pthread_abort(edp_irp6ot_tfg_tid);
-	pthread_abort(edp_irp6p_tfg_tid);
-	pthread_abort(edp_conv_tid);
-	pthread_abort(edp_spkm_tid);
-	pthread_abort(edp_smb_tid);
-	pthread_abort(edp_shead_tid);
-	pthread_abort(meb_tid);
+	delete edp_irp6ot_tid;
+	delete edp_irp6p_tid;
+	delete edp_irp6ot_tfg_tid;
+	delete edp_irp6p_tfg_tid;
+	delete edp_conv_tid;
+	delete edp_spkm_tid;
+	delete edp_smb_tid;
+	delete edp_shead_tid;
+	delete meb_tid;
 #endif
 }
 
