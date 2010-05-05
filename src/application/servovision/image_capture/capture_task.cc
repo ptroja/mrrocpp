@@ -27,7 +27,7 @@ CaptureTask::CaptureTask(mrrocpp::lib::configurator& configurator) :
 	ecp_m_robot = new ecp::irp6ot::robot(*this);
 	smoothGen = new mrrocpp::ecp::common::generator::smooth(*this, true);
 	fradiaSensor
-			= new mrrocpp::ecp_mp::sensor::fradia_sensor <char, effectorTranslation>("[capture_task_fradia_config]", configurator);
+			= new mrrocpp::ecp_mp::sensor::fradia_sensor <char, effectorTranslation>(configurator, "[capture_task_fradia_config]");
 	fradiaSensor->configure_sensor();
 	et.captureNow = false;
 	fradiaSensor->configure_fradia_task(et);
