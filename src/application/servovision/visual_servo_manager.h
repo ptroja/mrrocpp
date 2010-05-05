@@ -65,7 +65,7 @@ public:
 	 */
 	void add_termination_condition(boost::shared_ptr <termination_condition> term_cond);
 
-	void set_speed_accel_constraints(double a_max, double v_max);
+	void set_speed_accel_constraints(double v_max, double a_max);
 protected:
 	visual_servo_manager(mrrocpp::ecp::common::task::task & ecp_task, const char *section_name);
 	/**

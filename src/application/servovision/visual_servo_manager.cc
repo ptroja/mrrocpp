@@ -23,8 +23,8 @@ visual_servo_manager::visual_servo_manager(mrrocpp::ecp::common::task::task & ec
 	// 2 ms per one step
 	dt = motion_steps * 0.002;
 
-	a_max = ecp_task.config.value <double> ("a_max", section_name);
 	v_max = ecp_task.config.value <double> ("v_max", section_name);
+	a_max = ecp_task.config.value <double> ("a_max", section_name);
 
 	//	log("a_max: %lg, v_max: %lg\n", a_max, v_max);
 	//	log("v_max * dt: %lg\n", v_max * dt);
@@ -211,7 +211,7 @@ void visual_servo_manager::add_termination_condition(boost::shared_ptr <terminat
 	termination_conditions.push_back(term_cond);
 }
 
-void visual_servo_manager::set_speed_accel_constraints(double a_max, double v_max)
+void visual_servo_manager::set_speed_accel_constraints(double v_max, double a_max)
 {
 	this->a_max = a_max;
 	this->v_max = v_max;
