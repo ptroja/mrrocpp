@@ -39,6 +39,7 @@ extern lib::configurator* config;
 
 extern ui_robot_def ui_robot;
 extern ui_ecp_buffer* ui_ecp_obj;
+extern boost::mutex process_creation_mtx;
 
 
 double irp6m_current_pos[POLYCRANK_NUM_OF_SERVOS]; // pozycja biezaca
