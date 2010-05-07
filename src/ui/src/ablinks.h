@@ -390,7 +390,7 @@ ApMenuLink_t all_robots_menu = {
 	1014, 8, 10
 	};
 
-static ApItem_t ApItems_robot_menu[ 135 ] = {
+static ApItem_t ApItems_robot_menu[ 139 ] = {
 	{ 1, 2, 0, NULL, 1, "mm_irp6_on_track", "Irp6-on-&Track", NULL },
 	{ 2, 1, 0, NULL, 0, "mm_irp6_on_track_edp_load", "EDP &Load", NULL },
 	{ 2, 1, 0, NULL, 0, "mm_irp6_on_track_edp_unload", "EDP &Unload", NULL },
@@ -456,13 +456,13 @@ static ApItem_t ApItems_robot_menu[ 135 ] = {
 	{ 3, 1, 0, NULL, 0, "mm_irp6_postument_xyz_angle_axis_ts", "Xyz &Angle Axis", NULL },
 	{ 2, 1, 0, NULL, 0, "mm_irp6_postument_kinematic", "&Kinematic", NULL },
 	{ 2, 1, 0, NULL, 0, "mm_irp6_postument_servo_algorithm", "Servo &Algorithm", NULL },
-	{ 1, 2, 0, NULL, 1, "mm_irp6p_tfg", "Irp6p-tf&G", NULL },
+	{ 1, 2, 0, NULL, 0, "mm_irp6p_tfg", "Irp6p-tf&G", NULL },
 	{ 2, 1, 0, NULL, 0, "mm_irp6p_tfg_edp_load", "EDP &Load", NULL },
 	{ 2, 1, 0, NULL, 0, "mm_irp6p_tfg_edp_unload", "EDP &Unload", NULL },
 	{ 2, 16, 0, NULL, 4, "", "", NULL },
 	{ 2, 1, 0, NULL, 0, "mm_irp6p_tfg_synchronisation", "&Synchronisation", NULL },
 	{ 2, 1, 0, NULL, 0, "mm_irp6p_tfg_move", "&Move", NULL },
-	{ 2, 2, 0, NULL, 0, "mm_irp6p_tfg_preset_positions", "&Preset Positions", NULL },
+	{ 2, 2, 0, NULL, 1, "mm_irp6p_tfg_preset_positions", "&Preset Positions", NULL },
 	{ 3, 1, 0, NULL, 0, "mm_irp6p_tfg_preset_position_synchro", "&Synchro Position", NULL },
 	{ 3, 1, 0, NULL, 0, "mm_irp6p_tfg_preset_position_0", "Position &0", NULL },
 	{ 3, 1, 0, NULL, 0, "mm_irp6p_tfg_preset_position_1", "Position &1", NULL },
@@ -486,12 +486,16 @@ static ApItem_t ApItems_robot_menu[ 135 ] = {
 	{ 1, 2, 0, NULL, 0, "mm_spkm", "sp&Km", NULL },
 	{ 2, 1, 0, NULL, 0, "mm_spkm_edp_load", "EDP &Load", NULL },
 	{ 2, 1, 0, NULL, 0, "mm_spkm_edp_unload", "EDP &Unload", NULL },
-	{ 1, 2, 0, NULL, 0, "mm_smb", "sm&B", NULL },
+	{ 1, 2, 0, NULL, 1, "mm_smb", "sm&B", NULL },
 	{ 2, 1, 0, NULL, 0, "mm_smb_edp_load", "EDP &Load", NULL },
 	{ 2, 1, 0, NULL, 0, "mm_smb_edp_unload", "EDP &Unload", NULL },
-	{ 1, 2, 0, NULL, 0, "mm_shead", "s&Head", NULL },
+	{ 1, 2, 0, NULL, 1, "mm_shead", "s&Head", NULL },
 	{ 2, 1, 0, NULL, 0, "mm_shead_edp_load", "EDP &Load", NULL },
 	{ 2, 1, 0, NULL, 0, "mm_shead_edp_unload", "EDP &Unload", NULL },
+	{ 1, 16, 0, NULL, 4, "", "", NULL },
+	{ 1, 2, 0, NULL, 0, "mm_bird_hand", "b&Ird-hand", NULL },
+	{ 2, 1, 0, NULL, 0, "mm_bird_hand_edp_load", "EDP &Load", NULL },
+	{ 2, 1, 0, NULL, 0, "mm_bird_hand_edp_unload", "EDP &Unload", NULL },
 	{ 1, 16, 0, NULL, 4, "", "", NULL },
 	{ 1, 2, 0, NULL, 1, "mm_speaker", "&Speaker", NULL },
 	{ 2, 1, 0, NULL, 0, "mm_speaker_edp_load", "EDP &Load", NULL },
@@ -536,7 +540,7 @@ ApMenuLink_t robot_menu = {
 	ApItems_robot_menu,
 	& AbContext,
 	AbLinks_robot_menu,
-	1025, 91, 134
+	1025, 93, 138
 	};
 
 

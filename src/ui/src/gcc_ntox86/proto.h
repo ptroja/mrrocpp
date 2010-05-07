@@ -450,6 +450,10 @@ int EDP_spkm_slay_int ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t
 int reload_spkm_configuration ( void );
 int manage_interface_spkm ( void );
 
+
+int EDP_bird_hand_create ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
+int EDP_bird_hand_slay ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
+
 /* ../timer.cc */
 int OnTimer ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 
@@ -487,6 +491,8 @@ int FCbtnMove2Right ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *
 int FCbtnMove3Right ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int FCbtnMove4Right ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int FCbtnMove5Right ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
+
+
 
 /* ../wndTrajectoryReproduceEvents.cc */
 void SetButtonState ( PtWidget_t *widget , short active );

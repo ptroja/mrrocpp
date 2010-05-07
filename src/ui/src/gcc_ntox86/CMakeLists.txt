@@ -10,6 +10,7 @@ add_executable(ui
 	../fun_r_irp6_postument.cc
 	../fun_r_irp6ot_tfg.cc
 	../fun_r_irp6p_tfg.cc
+	../fun_r_bird_hand.cc
 	#../fun_r_polycrank.cc
 	../fun_r_shead.cc
 	../fun_r_smb.cc
