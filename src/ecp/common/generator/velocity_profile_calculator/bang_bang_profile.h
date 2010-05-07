@@ -66,7 +66,8 @@ class bang_bang_profile {
 		 */
 		void vk_reduction(std::list<ecp_mp::common::smooth_trajectory_pose>::iterator &pose_list_iterator, int i, double s, double t);
 		/**
-		 * Reduces the initial velocity so that the given distance can be covered in the given time.
+		 * Reduces the initial velocity so that the given distance can be covered in the given time. Calculated initial velocity is the one at which
+		 * the given distance is covered in the given time keeping the velocity constant.
 		 * Can call vp_reduction method.
 		 * @param i number of axis for which the calculations are performed
 		 * @param s distance to be covered in a given axis
