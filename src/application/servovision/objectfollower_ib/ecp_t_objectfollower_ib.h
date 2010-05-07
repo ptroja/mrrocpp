@@ -12,6 +12,7 @@
 #include <boost/shared_ptr.hpp>
 #include "../logger.h"
 #include "ecp/irp6_on_track/ecp_r_irp6ot.h"
+//#include "ecp/irp6ot_m/ecp_r_irp6ot_m.h"
 #include "ecp/common/generator/ecp_g_smooth.h"
 #include "../simple_visual_servo_manager.h"
 #include "../ib_eih_visual_servo.h"

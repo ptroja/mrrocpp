@@ -3,4 +3,6 @@
 .qnx_internal.mk
 .settings
 build*
-src/lib/messip
+configs/default_file.cfg
+logs
+msr

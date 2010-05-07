@@ -20,6 +20,7 @@
 #include <cstdio>
 
 #include <boost/thread/mutex.hpp>
+#include <boost/interprocess/sync/scoped_lock.hpp>
 #include <boost/bind.hpp>
 #include <boost/thread/thread.hpp>
 #include <boost/shared_ptr.hpp>
@@ -42,11 +43,13 @@ template <typename FROM_VSP_T, typename TO_VSP_T>
 class fradia_sensor: public lib::sensor
 {
 public:
-
-	/*!
-	 * Constructor. Creates socket connection to cvFraDIA.
+	/**
+	 * Create FraDIA sensor.
+	 * Specified section must contain following options: fradia_node_name, fradia_port, fradia_task
+	 * @param configurator
+	 * @param section_name
 	 */
-	fradia_sensor(const char* section_name, mrrocpp::lib::configurator& configurator);
+	fradia_sensor(mrrocpp::lib::configurator& configurator, const std::string& section_name);
 
 	/*!
 	 * Closes cvFraDIA socket connection.
@@ -70,8 +73,11 @@ public:
 	 */
 	void get_reading(void);
 
+	/**
+	 * Makes thread send object to fradia.
+	 * @param object_to_send
+	 */
 	void configure_fradia_task(const TO_VSP_T& object_to_send);
-	//FROM_VSP_T getReceivedObject();
 
 	/*!
 	 * MRROC++ <-> FraDIA communication thread method. Implements loop which queries FraDIA for new reading.
@@ -80,6 +86,7 @@ public:
 	 */
 	void operator()();
 
+	/** Object received from fradia, read by get_reading(). */
 	FROM_VSP_T received_object;
 private:
 	std::string fradia_task;
@@ -101,9 +108,6 @@ private:
 	/** Configurator. */
 	mrrocpp::lib::configurator& configurator;
 
-	lib::ECP_VSP_MSG to_vsp_tmp;
-
-	lib::VSP_ECP_MSG from_vsp_tmp;
 	/*!
 	 * Thread which continously read measurments from fradia over TCP/IP socket.
 	 * Measurements are buffered and always available to get_reading().
@@ -111,24 +115,42 @@ private:
 	boost::shared_ptr <boost::thread> reader_thread;
 
 	/**
-	 * Mutex for from_vsp_tmp.
+	 * Mutex for received_object_shared.
 	 */
 	boost::mutex get_reading_mutex;
 
-	boost::mutex object_to_send_mutex;
-
+	/** This object holds data received from fradia.
+	 * Object shared between threads.
+	 */
 	FROM_VSP_T received_object_shared;
-	volatile bool is_object_to_send_set;
-	TO_VSP_T object_to_send_shared;
 
+	/** Set to true, when configure_fradia_task() has been called. */
+	bool configure_fradia_task_now;
+	/** This object will be send to configure fradia task.
+	 * Object shared between threads.
+	 */
+	TO_VSP_T configure_fradia_task_shared;
+	boost::mutex configure_fradia_task_mutex;
+
+	/**
+	 * Send object to fradia.
+	 * @param ecp_vsp_msg
+	 */
 	void send_to_vsp(const lib::ECP_VSP_MSG& ecp_vsp_msg);
+	/**
+	 * Receive object from fradia.
+	 * @return
+	 */
 	lib::VSP_ECP_MSG receive_from_vsp();
-	volatile bool terminate_now;
+
+	/** Set to true by destructor to terminate thread. */
+	bool terminate_now;
+	boost::mutex terminate_now_mutex;
 }; // class fradia_sensor
 
 template <typename FROM_VSP_T, typename TO_VSP_T>
-fradia_sensor <FROM_VSP_T, TO_VSP_T>::fradia_sensor(const char* section_name, mrrocpp::lib::configurator& configurator) :
-	configurator(configurator), is_object_to_send_set(false), terminate_now(false)
+fradia_sensor <FROM_VSP_T, TO_VSP_T>::fradia_sensor(mrrocpp::lib::configurator& configurator, const std::string& section_name) :
+	configurator(configurator), configure_fradia_task_now(false), terminate_now(false)
 {
 	if (sizeof(FROM_VSP_T) > SENSOR_IMAGE_FRADIA_READING_SIZE) {
 		logger::logDbg("sizeof(FROM_VSP_T): %d\n", (int) sizeof(FROM_VSP_T));
@@ -189,7 +211,11 @@ template <typename FROM_VSP_T, typename TO_VSP_T>
 fradia_sensor <FROM_VSP_T, TO_VSP_T>::~fradia_sensor()
 {
 	logger::logDbg("fradia_sensor <FROM_VSP_T, TO_VSP_T>::~fradia_sensor() begin\n");
-	terminate_now = true;
+
+	{
+		boost::interprocess::scoped_lock <boost::mutex> l(terminate_now_mutex);
+		terminate_now = true;
+	}
 	//	lib::ECP_VSP_MSG ecp_vsp_msg;
 	//	ecp_vsp_msg.i_code = lib::VSP_TERMINATE;
 	//	send_to_vsp(ecp_vsp_msg);
@@ -262,11 +288,9 @@ void fradia_sensor <FROM_VSP_T, TO_VSP_T>::configure_sensor()
 template <typename FROM_VSP_T, typename TO_VSP_T>
 void fradia_sensor <FROM_VSP_T, TO_VSP_T>::get_reading()
 {
-	get_reading_mutex.lock();
+	boost::interprocess::scoped_lock <boost::mutex> l(get_reading_mutex);
 
 	received_object = received_object_shared;
-
-	get_reading_mutex.unlock();
 
 	//logger::logDbg("fradia_sensor::get_reading()\n");
 }
@@ -274,23 +298,17 @@ void fradia_sensor <FROM_VSP_T, TO_VSP_T>::get_reading()
 template <typename FROM_VSP_T, typename TO_VSP_T>
 void fradia_sensor <FROM_VSP_T, TO_VSP_T>::configure_fradia_task(const TO_VSP_T& object_to_send)
 {
-	object_to_send_mutex.lock();
+	boost::interprocess::scoped_lock <boost::mutex> l(configure_fradia_task_mutex);
 
 	logger::logDbg("fradia_sensor <FROM_VSP_T, TO_VSP_T>::configure_fradia_task()\n");
-	object_to_send_shared = object_to_send;
+	configure_fradia_task_shared = object_to_send;
 
-	is_object_to_send_set = true;
-
-	object_to_send_mutex.unlock();
+	configure_fradia_task_now = true;
 }
 
 template <typename FROM_VSP_T, typename TO_VSP_T>
 void fradia_sensor <FROM_VSP_T, TO_VSP_T>::operator()()
 {
-	//	int result;
-	//	lib::ECP_VSP_MSG to_vsp_local;
-	//	lib::VSP_ECP_MSG from_vsp_local;
-
 	lib::ECP_VSP_MSG ecp_vsp_msg;
 	lib::VSP_ECP_MSG vsp_ecp_msg;
 	TO_VSP_T object_to_send;
@@ -302,67 +320,27 @@ void fradia_sensor <FROM_VSP_T, TO_VSP_T>::operator()()
 	logger::logDbg("fradia_sensor::operator() begin\n");
 
 	try {
-		while (!terminate_now) {
-			//		// make fradia process blocking queries: in FraDIA ImageProcessor's constructor make sure you call
-			//		// DataSynchronizer::getInstance()->setWaitForVSPResponse(true);
-			//
-			//		// get reading from fradia
-			//		// Send adequate command to cvFraDIA.
-			//		memset(&to_vsp, 0, sizeof(lib::ECP_VSP_MSG));
-			//		to_vsp_local = to_vsp;
-			//		to_vsp_local.i_code = lib::VSP_GET_READING;
-			//
-			//		object_to_send_mutex.lock();
-			//		memcpy(&to_vsp_local.fradia_sensor_command, &object_to_send_shared, sizeof(TO_VSP_T));
-			//		memset(&object_to_send_shared, 0, sizeof(TO_VSP_T));
-			//		object_to_send_mutex.unlock();
-			//
-			//		result = write(sockfd, &to_vsp_local, sizeof(lib::ECP_VSP_MSG));
-			//		if (result < 0) {
-			//			//TODO: exception
-			//			logger::log("write() error.\n");
-			//			continue;
-			//			//throw sensor_error (lib::SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE);
-			//		}
-			//		if (result != sizeof(lib::ECP_VSP_MSG)) {
-			//			logger::log("result != sizeof(lib::ECP_VSP_MSG)\n");
-			//			continue;
-			//		}
-			//
-			//		// Read aggregated data from cvFraDIA.
-			//		result = read(sockfd, &from_vsp_local, sizeof(lib::VSP_ECP_MSG));
-			//		if (result < 0) {
-			//			//TODO: exception
-			//			logger::log("read() error.\n");
-			//			continue;
-			//			//throw sensor_error (lib::SYSTEM_ERROR, CANNOT_READ_FROM_DEVICE);
-			//		}
-			//		if (result != sizeof(lib::VSP_ECP_MSG)) {
-			//			logger::log("result != sizeof(lib::VSP_ECP_MSG)\n");
-			//			continue;
-			//		}
-			//
-			//		if (from_vsp_local.vsp_report != lib::VSP_REPLY_OK) {
-			//			logger::log("(from_vsp_local.vsp_report != lib::VSP_REPLY_OK\n");
-			//			continue;
-			//		}
-			//
-			//		get_reading_mutex.lock();
-			//		// copy buffers
-			//		memcpy(&received_object_shared, &from_vsp_local.comm_image.sensor_union.fradia_sensor_reading, sizeof(FROM_VSP_T));
-			//
-			//		get_reading_mutex.unlock();
-
-
-			// send VSP_FRADIA_CONFIGURE_TASK (if object_to_send is set)
-			bool configure_now = false;
-			object_to_send_mutex.lock();
-			configure_now = is_object_to_send_set;
-			if (configure_now) {
-				object_to_send = object_to_send_shared;
-				is_object_to_send_set = false;
+		while (1) {
+			// make fradia process blocking queries: in FraDIA ImageProcessor's constructor make sure you call
+			// DataSynchronizer::getInstance()->setWaitForVSPResponse(true);
+			// check termination condition
+			{
+				boost::interprocess::scoped_lock <boost::mutex> l(terminate_now_mutex);
+				if (terminate_now) {
+					break;
+				}
 			}
-			object_to_send_mutex.unlock();
+			// send VSP_FRADIA_CONFIGURE_TASK (if configure_fradia_task_shared is set)
+			bool configure_now = false;
+			{
+				boost::interprocess::scoped_lock <boost::mutex> l(configure_fradia_task_mutex);
+				configure_now = configure_fradia_task_now;
+				if (configure_now) {
+					object_to_send = configure_fradia_task_shared;
+					configure_fradia_task_now = false;
+				}
+			}
+
 			if (configure_now) {
 				//logger::logDbg("fradia_sensor::operator() configure now 1\n");
 				// send
@@ -395,11 +373,12 @@ void fradia_sensor <FROM_VSP_T, TO_VSP_T>::operator()()
 
 			//logger::logDbg("fradia_sensor::operator() after receive\n");
 
-			get_reading_mutex.lock();
-			memcpy(&received_object_shared, &vsp_ecp_msg.comm_image.sensor_union.fradia_sensor_reading, sizeof(FROM_VSP_T));
-			get_reading_mutex.unlock();
 
-//			logger::logDbg("fradia_sensor::operator(): loop %d\n", ++iter);
+			{
+				boost::interprocess::scoped_lock <boost::mutex> l(get_reading_mutex);
+				memcpy(&received_object_shared, &vsp_ecp_msg.comm_image.sensor_union.fradia_sensor_reading, sizeof(FROM_VSP_T));
+			}
+			//			logger::logDbg("fradia_sensor::operator(): loop %d\n", ++iter);
 		}
 	} catch (const std::exception &ex) {
 		logger::log("void fradia_sensor <FROM_VSP_T, TO_VSP_T>::operator()(): error %s\n", ex.what());
