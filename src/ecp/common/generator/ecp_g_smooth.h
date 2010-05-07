@@ -374,6 +374,13 @@ class smooth : public delta {
 		/**
 		 *
 		 */
+		void get_type_for_smooth_xml(const char* fileName);
+		void get_type_for_smooth_xml2(const char* fileName, const char* nodeName);
+
+		/**
+		 *
+		 */
+
 		void set_pose_from_xml(xmlNode *stateNode, bool &first_time);
 		/**
 		 *
