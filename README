@@ -1,6 +1,11 @@
-To compile this stuff follow these....
+This project contains sources and utilities for MRROC++, which is
+MultiRobot Research Oriented Controller (implemented in C++).
 
-Authors:
+This software was developed at:
+Institute of Control and Computation Engineering,
+Warsaw University of Technology, Poland
+
+Main authors:
 	Cezary Zielinski
 	Wojciech Szynkiewicz
 	Tomasz Winiarski
