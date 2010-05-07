@@ -437,7 +437,7 @@ void reader_buffer::operator()() {
 				outfile << '\n';
 
 				reader_buf.pop_front();
-			} // end for(i = 0; i < msr_counter; i++)
+			}
 
 			master.msg->message("file writing is finished");
 		}
