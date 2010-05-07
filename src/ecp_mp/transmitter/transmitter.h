@@ -125,7 +125,7 @@ class transmitter
 } // namespace transmitter
 
 typedef std::map<transmitter::TRANSMITTER_ENUM, transmitter::transmitter*> transmitters_t;
-typedef std::pair<const transmitter::TRANSMITTER_ENUM, transmitter::transmitter*> transmitter_item_t;
+typedef transmitters_t::value_type transmitter_item_t;
 
 } // namespace ecp_mp
 } // namespace mrrocpp
