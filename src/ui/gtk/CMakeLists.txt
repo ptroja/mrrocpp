@@ -1,7 +1,15 @@
 # find required GTK dependency
-find_package(GTK)
+find_package(PkgConfig)
 
-include_directories (${GTK_INCLUDE_DIR})
+pkg_check_modules(GTKMM REQUIRED gtkmm-2.4)
+pkg_check_modules(GTK2 gtk+-2.0)
+pkg_check_modules(GTHREAD gthread-2.0)
+message("GTKMM_LIBRARIES: ${GTKMM_LIBRARIES}")
+message("GTK2_LIBRARIES: ${GTK2_LIBRARIES}")
+message("GTHREAD_LIBRARIES: ${GTHREAD_LIBRARIES}")
+
+if(GTKMM_FOUND AND GTK2_FOUND AND GTHREAD_FOUND)
+include_directories(${GTKMM_INCLUDE_DIRS})
 
 # GLADE definitions for UI modules
 set(ui_defs mp.xml)
@@ -25,4 +33,5 @@ add_executable(ui.gtk
 	../src/threads.cc
 )
 
-target_link_libraries(ui.gtk ${GTK_LIBRARIES})
+target_link_libraries(ui.gtk ${GTKMM_LIBRARIES} ${GTK2_LIBRARIES} ${GTHREAD_LIBRARIES} ${COMMON_LIBRARIES})
+endif(GTKMM_FOUND AND GTK2_FOUND AND GTHREAD_FOUND)
