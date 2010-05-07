@@ -26,7 +26,7 @@ protected:
 
 
     // czy chwytak wlaczony ?
-    short is_gripper_active;
+    bool is_gripper_active;
 
 	// numer serwo chwytaka
 	short gripper_servo_nr;
