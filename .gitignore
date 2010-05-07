@@ -3,3 +3,5 @@
 /logs
 /msr
 /configs/default_file.cfg
+.project
+.cproject
