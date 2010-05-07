@@ -679,7 +679,7 @@ void motor_driven_effector::compute_motors(const lib::c_buffer &instruction)
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
-void motor_driven_effector::set_robot_model(lib::c_buffer &instruction)
+void motor_driven_effector::set_robot_model(const lib::c_buffer &instruction)
 {
 	// uint8_t previous_model;
 	// uint8_t previous_corrector;

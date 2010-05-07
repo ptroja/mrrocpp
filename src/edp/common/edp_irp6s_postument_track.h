@@ -58,7 +58,7 @@ public:
 
     void create_threads ();
 
-    void set_robot_model (lib::c_buffer &);
+    void set_robot_model (const lib::c_buffer &);
 
     void move_arm (lib::c_buffer &);
     void get_arm_position(bool, lib::c_buffer &);

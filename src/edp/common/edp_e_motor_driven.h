@@ -277,7 +277,7 @@ public:
 	 *
 	 * The model consists of servo algorithms and kinematic models
 	 */
-	virtual void set_robot_model(lib::c_buffer &instruction);
+	virtual void set_robot_model(const lib::c_buffer &instruction);
 
 	/*!
 	 * \brief method to get (read) the robot model

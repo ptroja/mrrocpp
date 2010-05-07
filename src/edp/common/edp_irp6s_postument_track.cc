@@ -100,7 +100,7 @@ void irp6s_postument_track_effector::compute_frame(const lib::c_buffer &instruct
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
-void irp6s_postument_track_effector::set_robot_model(lib::c_buffer &instruction)
+void irp6s_postument_track_effector::set_robot_model(const lib::c_buffer &instruction)
 {
 	manip_effector::set_robot_model_with_sb(instruction);
 }
