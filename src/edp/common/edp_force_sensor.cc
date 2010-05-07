@@ -94,7 +94,7 @@ void force::operator()(void)
 
 		} //!< koniec TRY
 
-		catch (lib::sensor::sensor_error e) {
+		catch (lib::sensor::sensor_error & e) {
 			std::cerr << "sensor_error w force thread EDP" << std::endl;
 
 			switch (e.error_no)
