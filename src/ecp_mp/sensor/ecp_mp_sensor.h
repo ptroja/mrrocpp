@@ -24,7 +24,10 @@ namespace sensor {
 
 // Klasa bazowa czujnikow po stronie procesu ECP.
 class sensor: public lib::sensor {
-protected:
+private:
+	//! VSP process id
+	pid_t pid; // pid vsp
+
 	//! Sensor manger descriptor
 #if !defined(USE_MESSIP_SRR)
 	int sd;
