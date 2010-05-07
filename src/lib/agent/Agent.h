@@ -40,7 +40,7 @@ private:
 #endif
 
 	//! thread id of the of the non-blocking receive implementation
-	boost::thread * tid;
+	boost::thread tid;
 
 	//! condition variable for synchronization wake-up after receiving data
 	boost::condition_variable cond;
