@@ -31,7 +31,7 @@ cvfradia::cvfradia(lib::SENSOR_t _sensor_name, const char* _section_name, task::
 	union_size = _union_size + sizeof(image.sensor_union.begin);
 
 	// Set period variables.
-	base_period=current_period=1;
+	base_period = current_period = 1;
 
 	// Retrieve cvfradia node name and port from configuration file.
 	int cvfradia_port = _ecp_mp_object.config.value<int>("cvfradia_port", _section_name);
@@ -39,7 +39,7 @@ cvfradia::cvfradia(lib::SENSOR_t _sensor_name, const char* _section_name, task::
 
 	// Try to open socket.
 	sockfd = socket(AF_INET, SOCK_STREAM, 0);
-	if (sockfd < 0) {
+	if (sockfd == -1) {
 		printf("ERROR opening socket");
 		throw sensor_error(lib::SYSTEM_ERROR, CANNOT_LOCATE_DEVICE);
 	}
@@ -52,20 +52,20 @@ cvfradia::cvfradia(lib::SENSOR_t _sensor_name, const char* _section_name, task::
 	}
 
 	// Reset socketaddr data.
-	bzero((char *) &serv_addr, sizeof(serv_addr));
+	memset(&serv_addr, 0, sizeof(serv_addr));
 	// Fill it with data.
 	serv_addr.sin_family = AF_INET;
-	bcopy((char *)server->h_addr, (char *)&serv_addr.sin_addr.s_addr, server->h_length);
+	memcpy(server->h_addr, &serv_addr.sin_addr.s_addr, server->h_length);
 	serv_addr.sin_port = htons(cvfradia_port);
 
 	// Try to establish a connection with cvFraDIA.
-	if (connect(sockfd, (const struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) {
+	if (connect(sockfd, (const struct sockaddr *) &serv_addr, sizeof(serv_addr)) == -1) {
 		printf("ERROR connecting");
 		throw sensor_error(lib::SYSTEM_ERROR, CANNOT_LOCATE_DEVICE);
 	}
 
 	// Retrieve task name.
-	std::string task = _ecp_mp_object.config.value<std::string>("cvfradia_task", _section_name).c_str();
+	std::string task = _ecp_mp_object.config.value<std::string>("cvfradia_task", _section_name);
 	strcpy(to_vsp.cvfradia_task_name, task.c_str());
 
 	sr_ecp_msg.message("Connected to cvFraDIA");
