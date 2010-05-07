@@ -12,12 +12,18 @@
 
 void Agent::Start(void)
 {
-	loop_tid = boost::thread(boost::bind(&Agent::operator(), this));
+	if (!loop_tid) {
+		loop_tid = new boost::thread(boost::bind(&Agent::operator(), this));
+	}
 }
 
 void Agent::Join(void)
 {
-	loop_tid.join();
+	if (loop_tid) {
+		loop_tid->join();
+		delete loop_tid;
+		loop_tid = NULL;
+	}
 }
 
 void Agent::registerBuffer(DataBufferBase & buf)
@@ -50,7 +56,7 @@ void Agent::listBuffers() const
 }
 
 Agent::Agent(const std::string & _name)
-	: AgentBase(_name)
+	: AgentBase(_name), loop_tid(NULL)
 {
 #if defined(USE_MESSIP_SRR)
 	channel = messip_channel_create(NULL, getName().c_str(), MESSIP_NOTIMEOUT, 0);

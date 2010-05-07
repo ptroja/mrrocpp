@@ -1,8 +1,7 @@
-.cproject
+/bin
+/build
+/logs
+/msr
+/configs/default_file.cfg
 .project
-.qnx_internal.mk
-.settings
-build*
-configs/default_file.cfg
-logs
-msr
+.cproject

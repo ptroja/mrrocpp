@@ -85,7 +85,7 @@ static const unsigned int DESIRED_MEASUREMENT_FREQUENCY = 500;
 ATI6284_force::ATI6284_force(common::manip_effector &_master) :
 	force(_master),
 	socket_(interface, boardMac),
-	sensor_(socket_)
+	sensor_(&socket_)
 
 {
 	frame_counter = 0; //licznik wyslanych pakietow
@@ -93,7 +93,7 @@ ATI6284_force::ATI6284_force(common::manip_effector &_master) :
 	//sendSocket = NULL;
 	//recvSocket = NULL;
 
-	for(int i = 0; i<6; ++i){
+	for(int i = 0;i<6;++i){
 		adc_data[i]=0;
 		bias_data[i]=0;
 	}
@@ -227,8 +227,8 @@ void ATI6284_force::configure_sensor(void)
 
 void ATI6284_force::wait_for_event()
 {
-	const boost::posix_time::time_duration timeout = boost::posix_time::microseconds(1500);
-
+	static boost::posix_time::time_duration timeout = boost::posix_time::microseconds(1500);
+	int iw_ret;
 	static int iter_counter = 0; // okresla ile razy pod rzad zostala uruchomiona ta metoda
 
     //TODO: Jesli test mode, dopuszczac wylaczenie sensora
@@ -244,7 +244,7 @@ void ATI6284_force::wait_for_event()
     	timeUtil.startMeasurement();
     }
 
-    ForceSensor6284::AdcReadings_t readings = sensor_.getAdcReadings(timeout);
+    AdcReadings readings = sensor_.getAdcReadings(timeout);
     if (measuring) {
     	timeUtil.stopMeasurement();
     }

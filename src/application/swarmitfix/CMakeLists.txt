@@ -2,7 +2,7 @@ add_executable(mp_swarmitfix
 	mp_t_swarmitfix.cc
 )
 
-target_link_libraries(mp_swarmitfix mp)
+target_link_libraries(mp_swarmitfix mpmain)
 
 add_executable(ecp_spkm
 	ecp_g_epos.cc

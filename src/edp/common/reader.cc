@@ -12,6 +12,7 @@
 #include <iostream>
 #include <fstream>
 #include <signal.h>
+#include <errno.h>
 #include <sys/wait.h>
 #include <sys/types.h>
 #if !defined(USE_MESSIP_SRR)
@@ -41,9 +42,9 @@ namespace edp {
 namespace common {
 
 reader_buffer::reader_buffer(motor_driven_effector &_master) :
-	master (_master), new_data(false)
-{
-	thread_id = new boost::thread(boost::bind(&reader_buffer::operator(), this));
+	master(_master), synchroniser() {
+	thread_id
+			= new boost::thread(boost::bind(&reader_buffer::operator(), this));
 }
 
 reader_buffer::~reader_buffer() {
@@ -53,9 +54,10 @@ reader_buffer::~reader_buffer() {
 	//delete thread_id; // delete a pointer
 }
 
-void reader_buffer::operator()()
-{
+void reader_buffer::operator()() {
 	uint64_t nr_of_samples; // maksymalna liczba pomiarow
+
+	uint64_t e; // kod bledu systemowego
 	bool start; // shall we start the reader?
 	bool stop; // shall we stop the reader?
 
@@ -147,6 +149,11 @@ void reader_buffer::operator()()
 		}
 	}
 
+	// ustawienie priorytetu watku
+	lib::set_thread_priority(pthread_self(), MAX_PRIORITY - 10);
+
+	// alokacja pamieci pod lokalny bufor z pomiarami
+
 	// NOTE: readed buffer has to be allocated on heap (using "new" operator) due to huge size
 	// boost::scoped_array takes care of deallocating in case of exception
 	boost::circular_buffer<reader_data> reader_buf(nr_of_samples);
@@ -168,6 +175,7 @@ void reader_buffer::operator()()
 								master.config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "reader_attach_point")))
 				== NULL) {
 #endif
+		e = errno;
 		perror("Failed to attach pulse chanel for READER");
 		master.msg->message("Failed to attach pulse chanel for READER");
 		//  throw MP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
@@ -175,9 +183,6 @@ void reader_buffer::operator()()
 
 	// GLOWNA PETLA Z OCZEKIWANIEM NA ZLECENIE POMIAROW
 	for (;;) {
-
-		// ustawienie priorytetu watku
-		lib::set_thread_priority(pthread_self(), MAX_PRIORITY-10);
 
 		start = false; // okresla czy odebrano juz puls rozpoczecia pomiarow
 
@@ -243,14 +248,12 @@ void reader_buffer::operator()()
 
 		// dopoki nie przyjdzie puls stopu
 		do {
+			// czekamy na opuszcenie semafora przez watek EDP_SERVO (co mikrokrok)
+			synchroniser.wait();
+
 			// sekcja krytyczna odczytu danych pomiarowych dla biezacego kroku
 			{
 				boost::mutex::scoped_lock lock(reader_mutex);
-
-				while(!new_data) {
-					// czekamy na opuszcenie semafora przez watek EDP_SERVO (co mikrokrok)
-					cond.wait(lock);
-				}
 
 				step_data.ui_trigger = ui_trigger;
 
@@ -265,15 +268,16 @@ void reader_buffer::operator()()
 #if !defined(USE_MESSIP_SRR)
 			_pulse_msg ui_msg;// wiadomosc z ui
 
-			// sprawdzamy pulsu stopu
-			if(TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_RECEIVE, NULL, NULL, NULL) == -1) {
-				perror("TimerTimeout()");
-			}
+			struct sigevent stop_event; // do oblugi pulsu stopu
 
-			int rcvid = MsgReceive(my_attach->chid, &ui_msg, sizeof(ui_msg), NULL);
+			stop_event.sigev_notify = SIGEV_UNBLOCK;
+			TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_RECEIVE, &stop_event,
+					NULL, NULL); // czekamy na odbior pulsu stopu
+			int rcvid = MsgReceive(my_attach->chid, &ui_msg, sizeof(ui_msg),
+					NULL);
 
-			if (rcvid == -1 && errno != ETIMEDOUT) {/* Error condition, exit */
-				perror("reader::MsgReceive()");
+			if (rcvid == -1) {/* Error condition, exit */
+				// perror("blad receive w reader");
 			}
 
 			if (rcvid == 0) {/* Pulse received */
@@ -323,6 +327,7 @@ void reader_buffer::operator()()
 #endif
 		} while (!stop); // dopoki nie przyjdzie puls stopu
 
+
 		lib::set_thread_priority(pthread_self(), 1);// Najnizszy priorytet podczas proby zapisu do pliku
 		master.msg->message("measures stopped");
 
@@ -345,94 +350,101 @@ void reader_buffer::operator()()
 			// TODO: throw
 		} else { // jesli plik istnieje
 
-			// TODO: sprawdzenie czy bufor byl przepelniony i odpowiednie
-			// przygotowanie granic bufora przy zapi sie do pliku
+			// sprawdzenie czy bufor byl przepelniony i odpowiednie przygotowanie granic bufora przy zapi sie do pliku
+
 
 			// dla calego horyzontu pomiarow
 
 			while (!reader_buf.empty()) {
+
 				// zapis pomiarow z biezacego kroku do pliku
 				// printf("EDP %f\n", reader_buf.front().desired_cartesian_position[1]);
 
-				const reader_data & data = reader_buf.front();
-
-				outfile << data.step << " ";
+				outfile << reader_buf.front().step << " ";
 				if (reader_cnf.msec)
-					outfile << data.msec << " ";
+					outfile << reader_buf.front().msec << " ";
 				if (reader_cnf.servo_mode)
-					outfile << (data.servo_mode ? "1" : "0") << " ";
+					outfile << (reader_buf.front().servo_mode ? "1" : "0")
+							<< " ";
 
 				for (int j = 0; j < master.number_of_servos; j++) {
 					if (reader_cnf.desired_inc[j])
-						outfile << data.desired_inc[j] << " ";
+						outfile << reader_buf.front().desired_inc[j] << " ";
 					if (reader_cnf.current_inc[j])
-						outfile << data.current_inc[j] << " ";
+						outfile << reader_buf.front().current_inc[j] << " ";
 					if (reader_cnf.pwm[j])
-						outfile << data.pwm[j] << " ";
+						outfile << reader_buf.front().pwm[j] << " ";
 					if (reader_cnf.uchyb[j])
-						outfile << data.uchyb[j] << " ";
+						outfile << reader_buf.front().uchyb[j] << " ";
 					if (reader_cnf.abs_pos[j])
-						outfile << data.abs_pos[j] << " ";
+						outfile << reader_buf.front().abs_pos[j] << " ";
 				}
 
 				outfile << "j: ";
 
 				for (int j = 0; j < master.number_of_servos; j++) {
 					if (reader_cnf.current_joints[j])
-						outfile << data.current_joints[j] << " ";
+						outfile << reader_buf.front().current_joints[j] << " ";
 				}
 
 				outfile << "f: ";
 
 				for (int j = 0; j < 6; j++) {
 					if (reader_cnf.force[j])
-						outfile << data.force[j] << " ";
+						outfile << reader_buf.front().force[j] << " ";
 					if (reader_cnf.desired_force[j])
-						outfile << data.desired_force[j] << " ";
+						outfile << reader_buf.front().desired_force[j] << " ";
 					if (reader_cnf.filtered_force[j])
-						outfile << data.filtered_force[j] << " ";
+						outfile << reader_buf.front().filtered_force[j] << " ";
 				}
 
 				outfile << "k: ";
 
 				for (int j = 0; j < 6; j++) {
 					if (reader_cnf.desired_cartesian_position[j])
-
-						outfile << data.desired_cartesian_position[j] << " ";
+						outfile
+								<< reader_buf.front().desired_cartesian_position[j]
+								<< " ";
 				}
 
 				outfile << "r: ";
 
 				for (int j = 0; j < 6; j++) {
 					if (reader_cnf.real_cartesian_position[j])
-
-						outfile << data.real_cartesian_position[j] << " ";
+						outfile
+								<< reader_buf.front().real_cartesian_position[j]
+								<< " ";
 				}
 
 				outfile << "v: ";
 
 				for (int j = 0; j < 6; j++) {
 					if (reader_cnf.real_cartesian_vel[j])
-						outfile << data.real_cartesian_vel[j] << " ";
+						outfile << reader_buf.front().real_cartesian_vel[j]
+								<< " ";
 				}
 
 				outfile << "a: ";
 
 				for (int j = 0; j < 6; j++) {
 					if (reader_cnf.real_cartesian_acc[j])
-						outfile << data.real_cartesian_acc[j] << " ";
+						outfile << reader_buf.front().real_cartesian_acc[j]
+								<< " ";
 				}
 
-				outfile << "t: " << data.ui_trigger;
+				outfile << "t: " << reader_buf.front().ui_trigger;
 
 				outfile << '\n';
 
 				reader_buf.pop_front();
-			}
+			} // end for(i = 0; i < msr_counter; i++)
 
 			master.msg->message("file writing is finished");
 		}
-	}
+
+		lib::set_thread_priority(pthread_self(), MAX_PRIORITY - 10);
+
+	} // end: for (;;)
 }
 
 } // namespace common
