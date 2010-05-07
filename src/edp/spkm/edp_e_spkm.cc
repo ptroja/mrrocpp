@@ -82,7 +82,7 @@ effector::effector(lib::configurator &_config) :
 }
 
 /*--------------------------------------------------------------------------*/
-void effector::move_arm(lib::c_buffer &instruction) {
+void effector::move_arm(const lib::c_buffer &instruction) {
 	msg->message("move_arm");
 	lib::spkm_cbuffer ecp_edp_cbuffer;
 	memcpy(&ecp_edp_cbuffer, instruction.arm.serialized_command,
