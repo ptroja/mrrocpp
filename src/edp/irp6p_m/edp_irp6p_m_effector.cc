@@ -38,7 +38,7 @@ common::servo_buffer* effector::return_created_servo_buffer ()
 
 
 /*--------------------------------------------------------------------------*/
-void effector::set_robot_model(lib::c_buffer &instruction)
+void effector::set_robot_model(const lib::c_buffer &instruction)
 {
 	manip_effector::set_robot_model_with_sb(instruction);
 }
@@ -48,7 +48,7 @@ void effector::set_robot_model(lib::c_buffer &instruction)
 
 
 /*--------------------------------------------------------------------------*/
-void effector::move_arm(lib::c_buffer &instruction)
+void effector::move_arm(const lib::c_buffer &instruction)
 { // przemieszczenie ramienia
 	// Wypenienie struktury danych transformera na podstawie parametrow polecenia
 	// otrzymanego z ECP. Zlecenie transformerowi przeliczenie wspolrzednych

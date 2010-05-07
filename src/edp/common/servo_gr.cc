@@ -61,7 +61,7 @@ uint8_t servo_buffer::Move_a_step(void)
 /*-----------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
-void servo_buffer::set_robot_model_servo_algorithm(lib::c_buffer &instruction)
+void servo_buffer::set_robot_model_servo_algorithm(const lib::c_buffer &instruction)
 {
 	// ustawienie algorytmw serworegulacji oraz ich parametrow
 	// zmiana algorytmu regulacji
