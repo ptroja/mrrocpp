@@ -243,7 +243,7 @@ void ATI3084_force::connect_to_hardware(void)
 
 ATI3084_force::~ATI3084_force(void)
 {
-	if (!(master.test_mode)) {
+	if (!master.test_mode) {
 		pci_detach_device(hdl); // odlacza driver od danego urzadzenia na PCI
 		pci_detach(phdl); // Disconnect from the PCI server
 	}
@@ -258,7 +258,7 @@ void ATI3084_force::configure_sensor(void)
 	is_sensor_configured = true;
 	//  printf("EDP Sensor configured\n");
 	sr_msg->message("EDP Sensor configured");
-	if (!(master.test_mode)) {
+	if (!master.test_mode) {
 		mds.intr_mode = 0;
 
 #ifdef SERIAL
@@ -320,13 +320,12 @@ void ATI3084_force::configure_sensor(void)
 
 void ATI3084_force::wait_for_event()
 {
-
 	int iw_ret;
 	int iter_counter = 0; // okresla ile razy pod rzad zostala uruchomiona ta metoda
 
-	if (!(master.test_mode)) {
+	if (!master.test_mode) {
 
-		if (!(int_attached)) {
+		if (!int_attached) {
 			int_attached++;
 			mds.intr_mode = 1; // obsluga przerwania ustawiona na odbior 7 slow
 		}

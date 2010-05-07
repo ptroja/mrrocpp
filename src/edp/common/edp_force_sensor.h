@@ -8,6 +8,7 @@
 #if !defined(_EDP_FORCE_SENSOR_H)
 #define _EDP_FORCE_SENSOR_H
 
+#include <boost/utility.hpp>
 #include <boost/thread/mutex.hpp>
 #include <Eigen/Core>
 
@@ -24,7 +25,7 @@ class manip_effector;
 namespace sensor {
 
 /********** klasa czujnikow po stronie EDP **************/
-class force: public lib::sensor, boost::noncopyable
+class force: public lib::sensor, boost::thread
 {
 protected:
 	bool is_reading_ready; // czy jakikolwiek odczyt jest gotowy?
