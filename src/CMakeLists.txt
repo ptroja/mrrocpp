@@ -74,7 +74,7 @@ if (QNXNTO)
 	set (COMPATIBILITY_LIBRARIES socket m)
 else (QNXNTO) # Linux, etc.
 	# find dependency packages
-	find_package(Boost 1.39 COMPONENTS thread )
+	find_package(Boost 1.39 COMPONENTS thread serialization)
 	find_package(Threads REQUIRED)
 	find_package(LibXml2 REQUIRED)
 
