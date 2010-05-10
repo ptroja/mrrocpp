@@ -61,9 +61,9 @@ const struct sigevent * schunk_int_handler(void *arg, int sint_id)
 	InterruptLock(&mds.spinlock);
 
 	if (mds.intr_mode == 0) {
-		if (mds.is_received == 1) {
+		if (mds.is_received) {
 			mds.byte_counter = -1;
-			mds.is_received = 0;
+			mds.is_received = false;
 		}
 
 		if ((mds.byte_counter) < (MDS_DATA_RANGE - 1)) {
@@ -149,7 +149,7 @@ void ATI3084_force::connect_to_hardware(void)
 
 		mds.intr_mode = 0; // obsluga przerwania ustawiona na odbior pojedynczych slow
 		mds.byte_counter = 0;
-		mds.is_received = 0;
+		mds.is_received = false;
 
 		// calibrate the interrupt handler busy-wait loop with interrupts disabled
 		nanospin_calibrate(1);
@@ -365,7 +365,7 @@ void ATI3084_force::wait_for_event()
 				InterruptLock(&mds.spinlock);
 				mds.intr_mode = 0; // obsluga przerwania ustawiona na odbior pojedynczych slow
 				mds.byte_counter = 0;
-				mds.is_received = 0;
+				mds.is_received = false;
 				InterruptUnlock(&mds.spinlock);
 				do_init(); // komunikacja wstepna
 			} else {
@@ -602,7 +602,7 @@ void ATI3084_force::do_Wait(void)
 
 		if (iw_ret != -1) {
 			InterruptLock(&mds.spinlock);
-			mds.is_received = 1;
+			mds.is_received = true;
 			InterruptUnlock(&mds.spinlock);
 		}
 
