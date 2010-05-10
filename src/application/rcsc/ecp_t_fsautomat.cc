@@ -271,7 +271,7 @@ void fsautomat::main_task_algorithm(void)
 				{
 					std::string path(mrrocpp_network_path);
 					path += mp_command.ecp_next_state.mp_2_ecp_next_state_string;
-					sg->get_type_for_smooth_xml(path.c_str());
+				//	sg->get_type_for_smooth_xml(path.c_str());
 				//
 				//	sg->get_type_for_smooth_xml2(path.c_str(), mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 					sg->load_file_with_path (path.c_str());
