@@ -53,10 +53,9 @@ extern double irp6m_desired_pos[6]; // pozycja zadana
 
 boost::mutex process_creation_mtx;
 
-
 // blokowanie widgetu
 int block_widget(PtWidget_t *widget) {
-	PtSetResource(widget, Pt_ARG_FLAGS, Pt_TRUE, Pt_BLOCKED|Pt_GHOST);
+	PtSetResource(widget, Pt_ARG_FLAGS, Pt_TRUE, Pt_BLOCKED | Pt_GHOST);
 	PtDamageWidget(widget);
 
 	return 1;
@@ -64,7 +63,7 @@ int block_widget(PtWidget_t *widget) {
 
 // odblokowanie widgetu
 int unblock_widget(PtWidget_t *widget) {
-	PtSetResource(widget, Pt_ARG_FLAGS, Pt_FALSE, Pt_BLOCKED|Pt_GHOST);
+	PtSetResource(widget, Pt_ARG_FLAGS, Pt_FALSE, Pt_BLOCKED | Pt_GHOST);
 	PtDamageWidget(widget);
 
 	return 1;
@@ -101,11 +100,13 @@ int set_ui_state_notification(UI_NOTIFICATION_STATE_ENUM new_notifacion) {
 
 		switch (new_notifacion) {
 		case UI_N_STARTING:
-			PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_TEXT_STRING, "STARTING", 0);
+			PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_TEXT_STRING,
+					"STARTING", 0);
 			PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_COLOR, Pg_MAGENTA, 0);
 			break;
 		case UI_N_READY:
-			PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_TEXT_STRING, "READY", 0);
+			PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_TEXT_STRING, "READY",
+					0);
 			PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_COLOR, Pg_BLUE, 0);
 			break;
 		case UI_N_BUSY:
@@ -113,19 +114,23 @@ int set_ui_state_notification(UI_NOTIFICATION_STATE_ENUM new_notifacion) {
 			PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_COLOR, Pg_RED, 0);
 			break;
 		case UI_N_EXITING:
-			PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_TEXT_STRING, "EXITING", 0);
+			PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_TEXT_STRING,
+					"EXITING", 0);
 			PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_COLOR, Pg_MAGENTA, 0);
 			break;
 		case UI_N_COMMUNICATION:
-			PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_TEXT_STRING, "COMMUNICATION", 0);
+			PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_TEXT_STRING,
+					"COMMUNICATION", 0);
 			PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_COLOR, Pg_RED, 0);
 			break;
 		case UI_N_SYNCHRONISATION:
-			PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_TEXT_STRING, "SYNCHRONISATION", 0);
+			PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_TEXT_STRING,
+					"SYNCHRONISATION", 0);
 			PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_COLOR, Pg_RED, 0);
 			break;
 		case UI_N_PROCESS_CREATION:
-			PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_TEXT_STRING, "PROCESS CREATION", 0);
+			PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_TEXT_STRING,
+					"PROCESS CREATION", 0);
 			PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_COLOR, Pg_RED, 0);
 			break;
 		}
@@ -312,7 +317,8 @@ int input_integer_callback(PtWidget_t *widget, ApInfo_t *apinfo,
 					&& (my_data->key_cap == 0x6f))) // O
 	{
 		ui_ecp_obj->ui_rep.reply = lib::ANSWER_YES;
-		PtGetResource(ABW_PtNumericInteger_wind_input_integer_value, Pt_ARG_NUMERIC_VALUE, &(tmp_ptgr), 0 );
+		PtGetResource(ABW_PtNumericInteger_wind_input_integer_value,
+				Pt_ARG_NUMERIC_VALUE, &(tmp_ptgr), 0);
 		ui_ecp_obj->ui_rep.integer_number = *tmp_ptgr;
 	} else if (((cbinfo->event->type == Ph_EV_BUT_RELEASE) && (ApName(ApWidget(
 			cbinfo)) == ABN_PtButton_wind_input_integer_cancel))
@@ -352,7 +358,8 @@ int input_double_callback(PtWidget_t *widget, ApInfo_t *apinfo,
 					&& (my_data->key_cap == 0x6f))) // O
 	{
 		ui_ecp_obj->ui_rep.reply = lib::ANSWER_YES;
-		PtGetResource(ABW_PtNumericFloat_wind_input_double_value, Pt_ARG_NUMERIC_VALUE, &(tmp_ptgr), 0 );
+		PtGetResource(ABW_PtNumericFloat_wind_input_double_value,
+				Pt_ARG_NUMERIC_VALUE, &(tmp_ptgr), 0);
 		ui_ecp_obj->ui_rep.double_number = *tmp_ptgr;
 	} else if (((cbinfo->event->type == Ph_EV_BUT_RELEASE) && (ApName(ApWidget(
 			cbinfo)) == ABN_PtButton_wind_input_double_cancel))
@@ -602,7 +609,8 @@ int file_selection_window_send_location(PtWidget_t *widget, ApInfo_t *apinfo,
 					== Pt_FS_DIR_CL)) {
 
 				strcpy(ui_ecp_obj->ui_rep.path, item->fullpath);
-				PtGetResource(ABW_PtText_file_filename,Pt_ARG_TEXT_STRING, &buffer, 0 );
+				PtGetResource(ABW_PtText_file_filename, Pt_ARG_TEXT_STRING,
+						&buffer, 0);
 				char file_name[strlen(buffer)];
 				strcpy(file_name, buffer);
 				strcpy(ui_ecp_obj->ui_rep.filename, file_name);
@@ -631,7 +639,8 @@ int file_selection_window_send_location(PtWidget_t *widget, ApInfo_t *apinfo,
 				// ui_state.config_file = buff;
 				ui_state.config_file = str_tail;
 
-				PtSetResource(ABW_PtText_config_file, Pt_ARG_TEXT_STRING, ui_state.config_file.c_str(), 0);
+				PtSetResource(ABW_PtText_config_file, Pt_ARG_TEXT_STRING,
+						ui_state.config_file.c_str(), 0);
 				PtDamageWidget(ABW_PtText_config_file);
 			}
 		}
@@ -668,12 +677,13 @@ int file_selection_window_post_realize(PtWidget_t *widget, ApInfo_t *apinfo,
 	case FSCONFIG:
 		// 	printf("aaa:\n");
 		// ustawienie katalogu root
-		PtSetArg(&args[0], Pt_ARG_FS_ROOT_DIR, ui_state.config_file_fullpath.c_str(), 0);
+		PtSetArg(&args[0], Pt_ARG_FS_ROOT_DIR,
+				ui_state.config_file_fullpath.c_str(), 0);
 		PtSetResources(ABW_PtFileSel_sl, 1, args);
 		PtDamageWidget(ABW_PtFileSel_sl);
 
 		// zaznaczenie jednego z elementow
-		item_list = PtFSAllItems( ABW_PtFileSel_sl, NULL );
+		item_list = PtFSAllItems(ABW_PtFileSel_sl, NULL );
 		item = *item_list;
 		PtFSSelect(ABW_PtFileSel_sl, item);
 		break;
@@ -697,7 +707,7 @@ int file_selection_window_post_realize(PtWidget_t *widget, ApInfo_t *apinfo,
 			strcat(current_path, p);
 			// 	     printf( "word: %s\n", current_path );
 
-			item_list = PtFSAllItems( ABW_PtFileSel_sl, NULL );
+			item_list = PtFSAllItems(ABW_PtFileSel_sl, NULL );
 			for (; !(((*item_list) == NULL) || (wyjscie)); item_list++) {
 				item = *item_list;
 				if (strcmp(item->fullpath, current_path) == 0)
@@ -706,7 +716,7 @@ int file_selection_window_post_realize(PtWidget_t *widget, ApInfo_t *apinfo,
 			}
 			if (wyjscie) {
 				PtFSSelect(ABW_PtFileSel_sl, item);
-				PtFSFolderExpand( ABW_PtFileSel_sl, item, NULL );
+				PtFSFolderExpand(ABW_PtFileSel_sl, item, NULL );
 				PtFSGoto(ABW_PtFileSel_sl, item);
 				PtFSDamageItem(ABW_PtFileSel_sl, item);
 			}
@@ -983,8 +993,10 @@ int task_window_param_actualization(PtWidget_t *widget, ApInfo_t *apinfo,
 	/*			printf("aaa: %s\n",ui_state.mp_name);
 	 printf("bbb: %s\n",ui_state.mp_node_name);*/
 
-	PtSetResource(ABW_PtText_config_file,Pt_ARG_TEXT_STRING, ui_state.config_file.c_str(), 0);
-	PtSetResource(ABW_PtLabel_bin_directory, Pt_ARG_TEXT_STRING, ui_state.binaries_network_path.c_str(), 0);
+	PtSetResource(ABW_PtText_config_file, Pt_ARG_TEXT_STRING,
+			ui_state.config_file.c_str(), 0);
+	PtSetResource(ABW_PtLabel_bin_directory, Pt_ARG_TEXT_STRING,
+			ui_state.binaries_network_path.c_str(), 0);
 
 	return (Pt_CONTINUE);
 }
@@ -1107,6 +1119,8 @@ int reload_whole_configuration() {
 			reload_spkm_configuration();
 			reload_smb_configuration();
 			reload_shead_configuration();
+
+			reload_bird_hand_configuration();
 
 			// dla robota speaker
 			reload_speaker_configuration();
@@ -1435,6 +1449,7 @@ int check_edps_state_and_modify_mp_state() {
 			&& (!(ui_state.conveyor.is_active))
 			&& (!(ui_state.speaker.is_active))
 			&& (!(ui_state.irp6_mechatronika.is_active))
+			&& (!(ui_state.bird_hand.is_active))
 			&& (!(ui_state.spkm.is_active)) && (!(ui_state.smb.is_active))
 			&& (!(ui_state.shead.is_active))) {
 		ui_state.all_edps = UI_ALL_EDPS_NONE_EDP_ACTIVATED;
@@ -1447,6 +1462,7 @@ int check_edps_state_and_modify_mp_state() {
 			&& check_synchronised_or_inactive(ui_state.irp6_mechatronika)
 			&& check_synchronised_or_inactive(ui_state.irp6ot_tfg)
 			&& check_synchronised_or_inactive(ui_state.irp6p_tfg)
+			&& check_synchronised_or_inactive(ui_state.bird_hand)
 			&& check_synchronised_or_inactive(ui_state.spkm)
 			&& check_synchronised_or_inactive(ui_state.smb)
 			&& check_synchronised_or_inactive(ui_state.shead)) {
@@ -1460,6 +1476,7 @@ int check_edps_state_and_modify_mp_state() {
 			&& check_loaded_or_inactive(ui_state.irp6_mechatronika)
 			&& check_loaded_or_inactive(ui_state.irp6ot_tfg)
 			&& check_loaded_or_inactive(ui_state.irp6p_tfg)
+			&& check_loaded_or_inactive(ui_state.bird_hand)
 			&& check_loaded_or_inactive(ui_state.spkm)
 			&& check_loaded_or_inactive(ui_state.smb)
 			&& check_loaded_or_inactive(ui_state.shead))
@@ -1472,8 +1489,9 @@ int check_edps_state_and_modify_mp_state() {
 			ui_state.irp6_on_track) || check_loaded(ui_state.conveyor)
 			|| check_loaded(ui_state.speaker) || check_loaded(
 			ui_state.irp6_mechatronika) || check_loaded(ui_state.irp6ot_tfg)
-			|| check_loaded(ui_state.irp6p_tfg) || check_loaded(ui_state.spkm)
-			|| check_loaded(ui_state.smb) || check_loaded(ui_state.shead))
+			|| check_loaded(ui_state.irp6p_tfg) || check_loaded(
+			ui_state.bird_hand) || check_loaded(ui_state.spkm) || check_loaded(
+			ui_state.smb) || check_loaded(ui_state.shead))
 
 	{
 		ui_state.all_edps
@@ -1544,6 +1562,8 @@ int manage_interface() {
 	manage_interface_smb();
 	manage_interface_shead();
 
+	manage_interface_bird_hand();
+
 	// Dla robota SPEAKER
 	manage_interface_speaker();
 
@@ -1561,16 +1581,16 @@ int manage_interface() {
 	case UI_ALL_EDPS_NONE_EDP_ACTIVATED:
 		//				printf("UI_ALL_EDPS_NONE_EDP_ACTIVATED\n");
 		block_widget(ABW_base_all_robots);
-		PtSetResource( ABW_base_all_robots, Pt_ARG_COLOR, Pg_GRAY, 0 );
+		PtSetResource(ABW_base_all_robots, Pt_ARG_COLOR, Pg_GRAY, 0);
 		block_widget(ABW_base_robot);
-		PtSetResource( ABW_base_robot, Pt_ARG_COLOR, Pg_GRAY, 0 );
+		PtSetResource(ABW_base_robot, Pt_ARG_COLOR, Pg_GRAY, 0);
 		break;
 	case UI_ALL_EDPS_NONE_EDP_LOADED:
 		//				printf("UI_ALL_EDPS_NONE_EDP_LOADED\n");
 		ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL,
 				ABN_mm_all_robots_edp_load, NULL);
-		PtSetResource( ABW_base_all_robots, Pt_ARG_COLOR, Pg_BLACK, 0 );
-		PtSetResource( ABW_base_robot, Pt_ARG_COLOR, Pg_BLACK, 0 );
+		PtSetResource(ABW_base_all_robots, Pt_ARG_COLOR, Pg_BLACK, 0);
+		PtSetResource(ABW_base_robot, Pt_ARG_COLOR, Pg_BLACK, 0);
 		unblock_widget(ABW_base_all_robots);
 		unblock_widget(ABW_base_robot);
 		break;
@@ -1580,8 +1600,8 @@ int manage_interface() {
 				ABN_mm_all_robots_edp_unload, NULL);
 		ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL,
 				ABN_mm_all_robots_edp_load, NULL);
-		PtSetResource( ABW_base_all_robots, Pt_ARG_COLOR, Pg_BLACK, 0 );
-		PtSetResource( ABW_base_robot, Pt_ARG_COLOR, Pg_BLACK, 0 );
+		PtSetResource(ABW_base_all_robots, Pt_ARG_COLOR, Pg_BLACK, 0);
+		PtSetResource(ABW_base_robot, Pt_ARG_COLOR, Pg_BLACK, 0);
 		unblock_widget(ABW_base_all_robots);
 		unblock_widget(ABW_base_robot);
 		break;
@@ -1589,13 +1609,13 @@ int manage_interface() {
 		//			printf("UI_ALL_EDPS_LOADED_BUT_NOT_SYNCHRONISED\n");
 		ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL,
 				ABN_mm_all_robots_edp_unload, NULL);
-		PtSetResource( ABW_base_all_robots, Pt_ARG_COLOR, Pg_DBLUE, 0 );
+		PtSetResource(ABW_base_all_robots, Pt_ARG_COLOR, Pg_DBLUE, 0);
 		unblock_widget(ABW_base_all_robots);
 		unblock_widget(ABW_base_robot);
 		break;
 	case UI_ALL_EDPS_LOADED_AND_SYNCHRONISED:
 		//				printf("UI_ALL_EDPS_LOADED_AND_SYNCHRONISED\n");
-		PtSetResource( ABW_base_all_robots, Pt_ARG_COLOR, Pg_BLUE, 0 );
+		PtSetResource(ABW_base_all_robots, Pt_ARG_COLOR, Pg_BLUE, 0);
 		unblock_widget(ABW_base_all_robots);
 		unblock_widget(ABW_base_robot);
 
@@ -1633,24 +1653,24 @@ int manage_interface() {
 	case UI_MP_NOT_PERMITED_TO_RUN:
 		ApModifyItemState(&task_menu, AB_ITEM_DIM, ABN_mm_mp_load,
 				ABN_mm_mp_unload, NULL);
-		PtSetResource( ABW_base_task, Pt_ARG_COLOR, Pg_BLACK, 0 );
+		PtSetResource(ABW_base_task, Pt_ARG_COLOR, Pg_BLACK, 0);
 		break;
 	case UI_MP_PERMITED_TO_RUN:
 		ApModifyItemState(&task_menu, AB_ITEM_DIM, ABN_mm_mp_unload, NULL);
 		ApModifyItemState(&task_menu, AB_ITEM_NORMAL, ABN_mm_mp_load, NULL);
-		PtSetResource( ABW_base_task, Pt_ARG_COLOR, Pg_BLACK, 0 );
+		PtSetResource(ABW_base_task, Pt_ARG_COLOR, Pg_BLACK, 0);
 		break;
 	case UI_MP_WAITING_FOR_START_PULSE:
 		ApModifyItemState(&task_menu, AB_ITEM_NORMAL, ABN_mm_mp_unload, NULL);
 		ApModifyItemState(&task_menu, AB_ITEM_DIM, ABN_mm_mp_load, NULL);
 		//	ApModifyItemState( &all_robots_menu, AB_ITEM_DIM, ABN_mm_all_robots_edp_unload, NULL);
-		PtSetResource( ABW_base_task, Pt_ARG_COLOR, Pg_DBLUE, 0 );
+		PtSetResource(ABW_base_task, Pt_ARG_COLOR, Pg_DBLUE, 0);
 		break;
 	case UI_MP_TASK_RUNNING:
 	case UI_MP_TASK_PAUSED:
 		ApModifyItemState(&task_menu, AB_ITEM_DIM, ABN_mm_mp_unload,
 				ABN_mm_mp_load, NULL);
-		PtSetResource( ABW_base_task, Pt_ARG_COLOR, Pg_BLUE, 0 );
+		PtSetResource(ABW_base_task, Pt_ARG_COLOR, Pg_BLUE, 0);
 		break;
 	default:
 		break;
@@ -2103,7 +2123,8 @@ int teaching_window_send_move(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	PtGetResource(ABW_PtNumericFloat_move_time, Pt_ARG_NUMERIC_VALUE, &motion_time, 0 );
+	PtGetResource(ABW_PtNumericFloat_move_time, Pt_ARG_NUMERIC_VALUE,
+			&motion_time, 0);
 
 	switch (ui_ecp_obj->ecp_to_ui_msg.robot_name) {
 	case lib::ROBOT_IRP6_ON_TRACK:
@@ -2174,6 +2195,7 @@ int EDP_all_robots_create(PtWidget_t *widget, ApInfo_t *apinfo,
 	EDP_irp6_postument_create(widget, apinfo, cbinfo);
 	EDP_irp6p_tfg_create(widget, apinfo, cbinfo);
 	EDP_conveyor_create(widget, apinfo, cbinfo);
+	EDP_bird_hand_create(widget, apinfo, cbinfo);
 	EDP_spkm_create(widget, apinfo, cbinfo);
 	EDP_smb_create(widget, apinfo, cbinfo);
 	EDP_shead_create(widget, apinfo, cbinfo);
@@ -2196,6 +2218,7 @@ int EDP_all_robots_slay(PtWidget_t *widget, ApInfo_t *apinfo,
 	EDP_irp6_postument_slay(widget, apinfo, cbinfo);
 	EDP_irp6p_tfg_slay(widget, apinfo, cbinfo);
 	EDP_conveyor_slay(widget, apinfo, cbinfo);
+	EDP_bird_hand_slay(widget, apinfo, cbinfo);
 	EDP_spkm_slay(widget, apinfo, cbinfo);
 	EDP_smb_slay(widget, apinfo, cbinfo);
 	EDP_shead_slay(widget, apinfo, cbinfo);

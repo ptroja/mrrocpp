@@ -41,6 +41,7 @@ set(ROBOT_LIBRARIES
 	ecp_r_polycrank
 	ecp_r_speaker
 	ecp_r_smb ecp_r_spkm ecp_r_shead
+	ecp_r_bird_hand
 )
 
 target_link_libraries(ui
