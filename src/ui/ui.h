@@ -14,6 +14,7 @@
 #include <boost/thread/condition_variable.hpp>
 #include <boost/thread/mutex.hpp>
 #include <boost/circular_buffer.hpp>
+#include <boost/function.hpp>
 #include <stdexcept>
 #include <iostream>
 
