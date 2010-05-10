@@ -123,7 +123,7 @@ public:
 	{
 		int intr_mode;
 		int byte_counter;
-		int is_received;
+		bool is_received;
 		uint16_t data[MDS_DATA_RANGE];
 
 		//! spinlock to for disabling interrupts
