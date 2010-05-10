@@ -145,7 +145,7 @@ int init(PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 	signal(SIGALRM, &catch_signal);
 	signal(SIGSEGV, &catch_signal);
 #ifdef PROCESS_SPAWN_RSH
-	signal( SIGCHLD, &catch_signal );
+	signal(SIGCHLD, &catch_signal);
 #endif /* PROCESS_SPAWN_RSH */
 
 	lib::set_thread_priority(pthread_self(), MAX_PRIORITY - 6);
@@ -201,6 +201,12 @@ int init(PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 	ui_state.spkm.ecp.trigger_fd = -1;
 	ui_state.spkm.edp.section_name = EDP_SPKM_SECTION;
 	ui_state.spkm.ecp.section_name = ECP_SPKM_SECTION;
+
+	ui_state.bird_hand.edp.state = -1; // edp nieaktywne
+	ui_state.bird_hand.edp.last_state = -1; // edp nieaktywne
+	ui_state.bird_hand.ecp.trigger_fd = -1;
+	ui_state.bird_hand.edp.section_name = EDP_SPKM_SECTION;
+	ui_state.bird_hand.ecp.section_name = ECP_SPKM_SECTION;
 
 	ui_state.smb.edp.state = -1; // edp nieaktywne
 	ui_state.smb.edp.last_state = -1; // edp nieaktywne
