@@ -21,7 +21,7 @@
 #include "lib/srlib.h"
 #include "lib/mis_fun.h"
 
-#define CATCH_SECTION_UI catch (ecp::common::ecp_robot::ECP_main_error e) { \
+#define CATCH_SECTION_UI catch (ecp::common::ecp_robot::ECP_main_error & e) { \
 	/* Obsluga bledow ECP */ \
 	if (e.error_class == lib::SYSTEM_ERROR) \
 		printf("ECP lib::SYSTEM_ERROR error in UI\n"); \
@@ -29,7 +29,7 @@
 	/*  exit(EXIT_FAILURE);*/ \
   } /*end: catch */ \
 \
-catch (ecp::common::ecp_robot::ECP_error er) { \
+catch (ecp::common::ecp_robot::ECP_error & er) { \
 	/* Wylapywanie bledow generowanych przez modul transmisji danych do EDP */ \
 	if ( er.error_class == lib::SYSTEM_ERROR) { /* blad systemowy juz wyslano komunikat do SR */ \
 		perror("ECP lib::SYSTEM_ERROR in UI"); \
@@ -52,7 +52,7 @@ catch (ecp::common::ecp_robot::ECP_error er) { \
 	} \
 } /* end: catch */ \
 \
-catch(const std::exception& e){\
+catch(const std::exception & e){\
 	std::string tmp_string(" The following error has been detected: ");\
 	tmp_string += e.what(); \
 	ui_msg.all_ecp->message (lib::NON_FATAL_ERROR, tmp_string.c_str());\
