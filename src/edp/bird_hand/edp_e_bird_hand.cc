@@ -39,6 +39,11 @@ void effector::master_order(common::MT_ORDER nm_task, int nm_tryb) {
 
 void effector::get_controller_state(lib::c_buffer &instruction) {
 
+
+	// tu wrzucic synchronizacje
+
+
+
 	if (test_mode)
 		controller_state_edp_buf.is_synchronised = true;
 	//printf("get_controller_state: %d\n", controller_state_edp_buf.is_synchronised); fflush(stdout);
