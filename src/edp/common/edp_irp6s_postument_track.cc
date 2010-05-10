@@ -100,7 +100,7 @@ void irp6s_postument_track_effector::compute_frame(const lib::c_buffer &instruct
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
-void irp6s_postument_track_effector::set_robot_model(lib::c_buffer &instruction)
+void irp6s_postument_track_effector::set_robot_model(const lib::c_buffer &instruction)
 {
 	manip_effector::set_robot_model_with_sb(instruction);
 }
@@ -351,19 +351,16 @@ void irp6s_postument_track_effector::iterate_macrostep(const lib::JointArray & b
 		}
 
 		last_force_step_counter = step_counter;
-
 	}
-
 }
 
 /*--------------------------------------------------------------------------*/
-void irp6s_postument_track_effector::move_arm(lib::c_buffer &instruction)
+void irp6s_postument_track_effector::move_arm(const lib::c_buffer &instruction)
 { // przemieszczenie ramienia
 	// Wypenienie struktury danych transformera na podstawie parametrow polecenia
 	// otrzymanego z ECP. Zlecenie transformerowi przeliczenie wspolrzednych
 
 	manip_effector::multi_thread_move_arm(instruction);
-
 }
 /*--------------------------------------------------------------------------*/
 

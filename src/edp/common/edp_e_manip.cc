@@ -116,7 +116,7 @@ manip_effector::manip_effector(lib::configurator &_config, lib::robot_name_t l_r
 
 
 /*--------------------------------------------------------------------------*/
-void manip_effector::set_robot_model_with_sb(lib::c_buffer &instruction)
+void manip_effector::set_robot_model_with_sb(const lib::c_buffer &instruction)
 {
 	// uint8_t previous_model;
 	// uint8_t previous_corrector;
@@ -535,7 +535,7 @@ void manip_effector::pose_force_torque_at_frame_move(const lib::c_buffer &instru
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
-void manip_effector::set_robot_model(lib::c_buffer &instruction)
+void manip_effector::set_robot_model(const lib::c_buffer &instruction)
 {
 	// uint8_t previous_model;
 	// uint8_t previous_corrector;
@@ -730,7 +730,7 @@ void manip_effector::get_controller_state(lib::c_buffer &instruction)
 }
 
 /*--------------------------------------------------------------------------*/
-void manip_effector::single_thread_move_arm(lib::c_buffer &instruction)
+void manip_effector::single_thread_move_arm(const lib::c_buffer &instruction)
 { // przemieszczenie ramienia
 	// Wypenienie struktury danych transformera na podstawie parametrow polecenia
 	// otrzymanego z ECP. Zlecenie transformerowi przeliczenie wspolrzednych
@@ -750,7 +750,7 @@ void manip_effector::single_thread_move_arm(lib::c_buffer &instruction)
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
-void manip_effector::multi_thread_move_arm(lib::c_buffer &instruction)
+void manip_effector::multi_thread_move_arm(const lib::c_buffer &instruction)
 { // przemieszczenie ramienia
 	// Wypenienie struktury danych transformera na podstawie parametrow polecenia
 	// otrzymanego z ECP. Zlecenie transformerowi przeliczenie wspolrzednych

@@ -34,7 +34,7 @@ public:
 
 	void create_threads();
 
-	void move_arm(lib::c_buffer &instruction); // przemieszczenie ramienia
+	void move_arm(const lib::c_buffer &instruction); // przemieszczenie ramienia
 
 	void get_arm_position(bool read_hardware, lib::c_buffer &instruction); // odczytanie pozycji ramienia
 	void master_order(common::MT_ORDER nm_task, int nm_tryb);

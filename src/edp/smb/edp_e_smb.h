@@ -56,7 +56,7 @@ public:
 	 *
 	 * it chooses the single thread variant from the motor_driven_effector
 	 */
-	void move_arm(lib::c_buffer &instruction); // przemieszczenie ramienia
+	void move_arm(const lib::c_buffer &instruction); // przemieszczenie ramienia
 
 	/*!
 	 * \brief method to get position of the motors or joints

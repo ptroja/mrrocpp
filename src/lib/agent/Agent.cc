@@ -12,18 +12,12 @@
 
 void Agent::Start(void)
 {
-	if (!loop_tid) {
-		loop_tid = new boost::thread(boost::bind(&Agent::operator(), this));
-	}
+	loop_tid = boost::thread(&Agent::operator(), this);
 }
 
 void Agent::Join(void)
 {
-	if (loop_tid) {
-		loop_tid->join();
-		delete loop_tid;
-		loop_tid = NULL;
-	}
+	loop_tid.join();
 }
 
 void Agent::registerBuffer(DataBufferBase & buf)
@@ -56,7 +50,7 @@ void Agent::listBuffers() const
 }
 
 Agent::Agent(const std::string & _name)
-	: AgentBase(_name), loop_tid(NULL)
+	: AgentBase(_name)
 {
 #if defined(USE_MESSIP_SRR)
 	channel = messip_channel_create(NULL, getName().c_str(), MESSIP_NOTIMEOUT, 0);
@@ -71,7 +65,7 @@ Agent::Agent(const std::string & _name)
 		throw;
 	}
 
-	tid = new boost::thread(&Agent::ReceiveDataLoop, this);
+	tid = boost::thread(&Agent::ReceiveDataLoop, this);
 }
 
 Agent::~Agent()
@@ -80,13 +74,13 @@ Agent::~Agent()
 	// handle cancelation of the receiver thread
 
 	// cancel the thread
-	if(pthread_cancel(tid->native_handle()) != 0) {
+	if(pthread_cancel(tid.native_handle()) != 0) {
 		fprintf(stderr, "pthread_cancel() failed\n");
 	}
 
 	// wait after finishing
 	void *retval;
-	if(pthread_join(tid->native_handle(), &retval) != 0) {
+	if(pthread_join(tid.native_handle(), &retval) != 0) {
 		fprintf(stderr, "pthread_join() failed\n");
 	}
 
@@ -95,7 +89,6 @@ Agent::~Agent()
 		fprintf(stderr, "retval != PTHREAD_CANCELED\n");
 	}
 #endif
-	delete tid;
 
 #if defined(USE_MESSIP_SRR)
 	if(messip_channel_delete(channel, MESSIP_NOTIMEOUT) == -1)
