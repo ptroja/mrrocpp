@@ -60,10 +60,11 @@ if (QNXNTO)
 	set(LIBXML2_INCLUDE_DIR "${MRLIB}/include")
 	set(Boost_INCLUDE_DIR "${MRLIB}/include")
 
-	# FIXME: define boost libraries to use
-	find_library(Boost_LIBRARIES boost_thread-mt "${MRLIB}/lib")
+	# Boost is provided by mrlib repository
+	set(BOOST_ROOT "${MRLIB}")
+	find_package(Boost 1.39 COMPONENTS thread serialization)
 	# include boost compatibility layer
-	include_directories ("${MRLIB}/include/boost/compatibility/cpp_c_headers") 
+	include_directories ("${Boost_INCLUDE_DIRS}/boost/compatibility/cpp_c_headers") 
 
 	# FIXME: define libxml2 libraries to use
 	find_library(LIBXML2_LIBRARY xml2 "${MRLIB}/lib")
@@ -104,7 +105,7 @@ if(USE_MESSIP)
 endif(USE_MESSIP)
 
 set(COMMON_LIBRARIES mrrocpp ${COMMON_LIBRARIES}
-	${Boost_LIBRARIES}
+	${Boost_THREAD_LIBRARY}
 	${COMPATIBILITY_LIBRARIES}
 )
 
