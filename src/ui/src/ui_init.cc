@@ -205,8 +205,8 @@ int init(PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 	ui_state.bird_hand.edp.state = -1; // edp nieaktywne
 	ui_state.bird_hand.edp.last_state = -1; // edp nieaktywne
 	ui_state.bird_hand.ecp.trigger_fd = -1;
-	ui_state.bird_hand.edp.section_name = EDP_SPKM_SECTION;
-	ui_state.bird_hand.ecp.section_name = ECP_SPKM_SECTION;
+	ui_state.bird_hand.edp.section_name = EDP_BIRD_HAND_SECTION;
+	ui_state.bird_hand.ecp.section_name = ECP_BIRD_HAND_SECTION;
 
 	ui_state.smb.edp.state = -1; // edp nieaktywne
 	ui_state.smb.edp.last_state = -1; // edp nieaktywne
