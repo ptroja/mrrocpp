@@ -1,10 +1,8 @@
 // -------------------------------------------------------------------------
-//                            edp_s.cc 		dla QNX6.3.0
+//                            edp_s.cc
 //
-//            Virtual Sensor Process (lib::VSP) - methods for Schunk force/torgue sensor
-// Metody klasy VSP
+// methods for Schunk force/torgue sensor
 //
-// Ostatnia modyfikacja: grudzie 2004
 // Autor: Yoyek (Tomek Winiarski)
 // na podstawie szablonu vsp Tomka Kornuty i programu obslugi czujnika Artura Zarzyckiego
 // -------------------------------------------------------------------------
@@ -371,10 +369,10 @@ void ATI3084_force::get_reading(void)
 			// jesli ma byc wykorzytstywana biblioteka transformacji sil
 			if (master.force_tryb == 2 && gravity_transformation) {
 				static int ms_nr = 0; // numer odczytu z czujnika
-				for (int i = 0; i < 3; i++)
+				for (int i = 0; i < 3; ++i)
 					ft_table[i] /= 20;
 				//			for(int i=3;i<6;i++) ft_table[i]/=333;
-				for (int i = 3; i < 6; i++)
+				for (int i = 3; i < 6; ++i)
 					ft_table[i] /= 1000; // by Y - korekta
 				lib::Homog_matrix frame = master.return_current_frame(common::WITH_TRANSLATION);
 				// lib::Homog_matrix frame(master.force_current_end_effector_frame);
@@ -412,14 +410,12 @@ void ATI3084_force::parallel_send_command(const char* command)
 	while ((a = *command++) != 0) {
 		value = short(a);
 		set_output(value);
-		while (!check_ack())
-			;
+		while (!check_ack());
 		set_obf(0);
 		nanosleep(&rqtp, NULL);
 
 		if (value != 23)
-			while (check_ack())
-				; // jesli polcecenie rozne od RESET
+			while (check_ack()); // jesli polcecenie rozne od RESET
 		else
 			delay(1);
 		set_obf(1);
@@ -533,9 +529,9 @@ bool check_intr(void)
 	uint8_t temp_register = in8(base_io_adress + INTER_CONFIG);
 
 	if (temp_register & 0x80)
-		return 1;
+		return true;
 	else
-		return 0;
+		return false;
 }
 
 void ATI3084_force::check_cs(void)

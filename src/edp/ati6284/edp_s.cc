@@ -439,14 +439,9 @@ void ATI6284_force::wait_for_event()
 
 void ATI6284_force::initiate_reading(void)
 {
-	lib::timer local_timer;
-	float sec;
-
 	short int no_result = 0; //brak wyniku
 	static short int show = 0; //wyswietl
 	float force_torque[6]; //wektor z si�ami i napi�ciami
-	// unsigned  uCount;  //!< Count index
-	unsigned uStatus; //!< Flag to indicate FIFO not empty
 	short int sensor_status = EDP_FORCE_SENSOR_READING_CORRECT;
 
 	if (!is_sensor_configured)
@@ -458,11 +453,15 @@ void ATI6284_force::initiate_reading(void)
 	if (!(master.test_mode)) {
 #if	 WITHOUT_INTERRUPT
 
+		lib::timer local_timer;
+		float sec;
+
 		local_timer.timer_start();
 
 		do {
 			//!< this is the ISR
-			uStatus = theSTC->AI_Status_1.readRegister();
+			//!< Flag to indicate FIFO not empty
+			uint16_t uStatus = theSTC->AI_Status_1.readRegister();
 			if (!((uStatus & 0x1000) == 0x1000)) {
 				//!< If the FIFO is not empty, call the ISR.
 				Interrupt_Service_Routine();
