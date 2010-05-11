@@ -137,16 +137,15 @@ void manip_effector::set_robot_model_with_sb(const lib::c_buffer &instruction)
 /*--------------------------------------------------------------------------*/
 void manip_effector::get_arm_position_with_force_and_sb(bool read_hardware, lib::c_buffer &instruction)
 {
-	// odczytanie pozycji ramienia
-
-	lib::JointArray desired_joints_tmp(number_of_servos); // Wspolrzedne wewnetrzne -
-
 	if (read_hardware) {
 		motor_driven_effector::get_arm_position_read_hardware_sb();
 
 		if (is_synchronised()) {
 			//  check_motor_position(desired_motor_pos_new);
 			// dla sprawdzenia ograncizen w joints i motors
+
+			// Wspolrzedne wewnetrzne
+			lib::JointArray desired_joints_tmp(number_of_servos);
 
 			get_current_kinematic_model()->mp2i_transform(desired_motor_pos_new, desired_joints_tmp);
 
