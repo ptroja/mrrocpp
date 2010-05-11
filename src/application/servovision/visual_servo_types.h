@@ -35,8 +35,6 @@ struct image_based_position
  */
 struct object_position
 {
-	/** Set to true only if object is found in the image. */
-	bool tracking;
 	/** Translation in meters XYZ with respect to camera. */
 	double translation[3];
 	/** Rotation matrix with respect to camera. */
@@ -80,6 +78,15 @@ struct image_based_reading
 	bool tracking;
 	/** Error calculated by FraDIA task and passed to MRROC++ ECP generator. */
 	image_based_position error;
+};
+
+struct position_based_reading
+{
+	/** Set to true only if object is found in the image. */
+	bool tracking;
+
+	/** Object position with respect to the camera. */
+	object_position position;
 };
 
 } //namespace visual_servo_types

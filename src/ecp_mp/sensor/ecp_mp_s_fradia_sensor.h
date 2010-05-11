@@ -355,7 +355,7 @@ void fradia_sensor <FROM_VSP_T, TO_VSP_T>::operator()()
 					throw std::logic_error("vsp_ecp_msg.vsp_report != lib::VSP_FRADIA_TASK_CONFIGURED");
 				}
 				memset(ecp_vsp_msg.fradia_sensor_command, 0, ECP_VSP_MSG_FRADIA_COMMAND_SIZE);
-				//logger::logDbg("fradia_sensor::operator() configure now 3\n");
+				logger::logDbg("fradia_sensor::operator() FraDIA configured.\n");
 			}
 
 			// send VSP_GET_READING
