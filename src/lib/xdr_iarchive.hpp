@@ -11,6 +11,7 @@
 #include <boost/type_traits/is_enum.hpp>
 #include <boost/type_traits/is_array.hpp>
 #include <boost/mpl/bool.hpp>
+#include <boost/version.hpp>
 
 #include <cstring>
 
@@ -166,7 +167,11 @@ public:
     template<class T>
     typename boost::disable_if<boost::is_array<T>, xdr_iarchive &>::type
     load_a_type(T &t,boost::mpl::false_){
+#if BOOST_VERSION >=104100
+    	boost::archive::detail::load_non_pointer_type<xdr_iarchive<> >::load_only::invoke(*this,t);
+#else
     	boost::archive::detail::load_non_pointer_type<xdr_iarchive<>,T>::load_only::invoke(*this,t);
+#endif
         return *this;
     }
 

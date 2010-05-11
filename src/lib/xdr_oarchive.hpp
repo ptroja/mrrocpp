@@ -184,7 +184,11 @@ public:
 	typename boost::disable_if <boost::is_array <T>, xdr_oarchive &>::type
 	save_a_type(T const &t, boost::mpl::false_)
 	{
-		boost::archive::detail::save_non_pointer_type <xdr_oarchive <> , T>::save_only::invoke(*this, t);
+#if BOOST_VERSION >=104100
+		boost::archive::detail::save_non_pointer_type<xdr_oarchive<> >::save_only::invoke(*this, t);
+#else
+		boost::archive::detail::save_non_pointer_type<xdr_oarchive<>, T>::save_only::invoke(*this, t);
+#endif
 		return *this;
 	}
 
