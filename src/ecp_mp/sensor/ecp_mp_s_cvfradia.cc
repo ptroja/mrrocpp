@@ -108,7 +108,7 @@ void cvfradia::initiate_reading() {
 /*!
  * Sends given reading command to cvFraDIA.
  */
-void cvfradia::send_reading(lib::ECP_VSP_MSG to) {
+void cvfradia::send_reading_command(lib::ECP_VSP_MSG to) {
 	// Send any command to cvFraDIA.
 
 	if(write(sockfd, &to, sizeof(lib::ECP_VSP_MSG)) == -1)
