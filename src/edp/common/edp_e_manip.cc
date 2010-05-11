@@ -367,8 +367,6 @@ void manip_effector::iterate_macrostep(const lib::JointArray & begining_joints, 
 		}
 	}
 
-	lib::Ft_vector current_force;
-
 	const unsigned long PREVIOUS_MOVE_VECTOR_NULL_STEP_VALUE = 10;
 
 	static unsigned long last_force_step_counter = step_counter;
@@ -394,6 +392,7 @@ void manip_effector::iterate_macrostep(const lib::JointArray & begining_joints, 
 
 		lib::V_tr v_tr_current_frame_matrix(current_frame_wo_offset);
 
+		lib::Ft_vector current_force;
 		force_msr_download(current_force);
 		// sprowadzenie sil z ukladu bazowego do ukladu kisci
 		// modyfikacja pobranych sil w ukladzie czujnika - do ukladu wyznaczonego przez force_tool_frame i reference_frame

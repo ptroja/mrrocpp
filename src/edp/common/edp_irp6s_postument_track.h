@@ -21,10 +21,7 @@ namespace common {
 /************************ edp_irp6s_effector ****************************/
 class irp6s_postument_track_effector: public manip_effector
 {
-
 protected:
-
-
     // czy chwytak wlaczony ?
     short is_gripper_active;
 
@@ -47,14 +44,9 @@ public:
 
 	irp6s_postument_track_effector (lib::configurator &_config, lib::robot_name_t l_robot_name );       // konstruktor
 
-
-
-
-
     void iterate_macrostep(const lib::JointArray & begining_joints,
        		const lib::Homog_matrix & begining_end_effector_frame,
        		const lib::c_buffer &instruction, const lib::Xyz_Angle_Axis_vector & base_pos_xyz_rot_xyz_vector);
-
 
     void create_threads ();
 
