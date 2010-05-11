@@ -123,7 +123,7 @@ public:
 	{
 		int intr_mode;
 		int byte_counter;
-		int is_received;
+		bool is_received;
 		uint16_t data[MDS_DATA_RANGE];
 
 		//! spinlock to for disabling interrupts
@@ -182,10 +182,13 @@ private:
 	void initiate_registers(void);
 	void solve_transducer_controller_failure(void);
 	void check_cs(void);
-	void parallel_do_send_command(const char* command);
+
+	int send_command(const char* command);
+	int serial_send_command(const char* command);
+	void parallel_send_command(const char* command);
 
 	void do_Wait(void);// by old schunk
-	int do_send_command(const char* command);
+
 	void do_init(void);
 
 	struct sigevent tim_event;
