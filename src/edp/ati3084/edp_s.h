@@ -51,8 +51,6 @@ namespace sensor {
 #define MAX_SVAR_VALUE 0x7F // +127
 #define MIN_SVAR_VALUE 0x80 // -128
 
-// Z PLIKU cz_lib.h
-
 // PARALLEL - wysylynie po zlaczu rownoleglym - dziala slabo,
 // SERIAL - wysylanie po zlaczu szeregowym - dziala dobrze
 #define SERIAL 1
@@ -153,19 +151,8 @@ private:
 	//! informacja o tym, czy obsluga przerwanie jest juz przypisana
 	bool int_attached;
 
-	// Z PLIKU cz_lib.h
-	int LSREG;
-	int LCREG;	 	/* Line Control Register */
-	int IEREG;	 	/* Interrupt Enable Register */
-	int MCREG;	 	/* Modem Control Register */
-	int FCREG;	 	/* FIFO Control Register */
-	int TxBUF;	 	/* Transmit Buffer */
-	int RxBUF;	 	/* Receive Buffer */
-	int DIVLSB;	 	/* Divisor Least Sign. Byte */
-	int DIVMSB; 	/* Divisor Most Sign. Byte */
-	int INT_NUM;
-	int NOT_IRQ;
-	// KONIEC Z PLIKU
+	//! serial port file descriptor
+	int uart;
 
 	//! do obslugi karty advantech pci1751
 	int pidx;
