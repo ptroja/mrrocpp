@@ -62,12 +62,11 @@ void force::operator()(void)
 				}
 				set_command_execution_finish();
 			} else {
-				//!< cout << "przed Wait for event" << endl;
 				wait_for_event();
-				//!< cout << "po Wait for event" << endl;
 
 				initiate_reading();
-				//!< 		cout << "Initiate reading" << endl;
+
+				get_reading();
 
 				lib::Ft_vector current_force;
 
