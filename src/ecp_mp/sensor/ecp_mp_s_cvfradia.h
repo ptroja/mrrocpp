@@ -77,7 +77,7 @@ public:
 	/*!
       * Sends given reading command to cvFraDIA.
       */
-	void send_reading_command (lib::ECP_VSP_MSG);
+	void send_reading (lib::ECP_VSP_MSG);
 
 	/*!
       * Retrieves aggregated data from cvFraDIA.

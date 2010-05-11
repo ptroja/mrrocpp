@@ -137,7 +137,7 @@ void Draughts::fradiaControl(lib::DRAUGHTS_MODE dmode, char pawn_nr=-1){
 	ecp_mp::sensor::cvfradia* vsp_fr=(ecp_mp::sensor::cvfradia*) sensor_m[lib::SENSOR_CVFRADIA];
 	msg.draughts_control.draughts_mode=dmode;
 	msg.draughts_control.pawn_nr=pawn_nr;
-	vsp_fr->send_reading_command(msg);
+	vsp_fr->send_reading(msg);
 	snooze(0.4);						//wait until signal is read
 }
 
