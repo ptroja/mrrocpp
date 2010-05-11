@@ -78,7 +78,7 @@ typedef enum{
 }BOARD_STATUS;
 
 /** Define size of data buffer for FraDIA <-> MRROC++ communication. Used by CommunicationWrapper (FraDIA) and fradia_sensor (MRROC++) */
-#define SENSOR_IMAGE_FRADIA_READING_SIZE 24
+#define SENSOR_IMAGE_FRADIA_READING_SIZE 100
 
 /*! \struct sensor_image_t
  * \ Structure used for storing and passing sensors data.
