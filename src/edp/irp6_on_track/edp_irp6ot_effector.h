@@ -1,7 +1,6 @@
 // ------------------------------------------------------------------------
 // Proces:		EDP
 // Plik:			edp_irp6ot_effector.h
-// System:	QNX/MRROC++  v. 6.3
 // Opis:		Robot IRp-6 na na torze jezdnym
 //				- deklaracja klasy edp_irp6ot_effector
 //
