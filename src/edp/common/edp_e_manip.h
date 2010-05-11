@@ -89,14 +89,14 @@ protected:
 	 *
 	 * It also calls single_thread_move_arm method from the motor_drive_effector
 	 */
-	void single_thread_move_arm(lib::c_buffer &instruction);
+	void single_thread_move_arm(const lib::c_buffer &instruction);
 
 	/*!
 	 * \brief move arm method for the FRAME command in the two thread variant.
 	 *
 	 * It also calls multi_thread_move_arm method from the motor_drive_effector
 	 */
-	void multi_thread_move_arm(lib::c_buffer &instruction);
+	void multi_thread_move_arm(const lib::c_buffer &instruction);
 
 public:
 

@@ -435,9 +435,6 @@ public:
 // Czujniki konkretne wyprowadzane sa z klasy bazowej
 class sensor
 {
-protected:
-	pid_t pid; // pid vsp
-
 public:
 	// Wielkosc przesylanej unii - dla kazdego obrazu inny.
 	size_t union_size;
@@ -457,8 +454,6 @@ public:
 	VSP_ECP_MSG from_vsp;
 	// Pole do komunikacji za pomoca DEVCTL.
 	DEVCTL_MSG devmsg;
-
-	VSP_REPORT vsp_report_aux; //pomocniczy report dla ECP
 
 	// Odebranie odczytu od VSP.
 	virtual void get_reading(void)=0;

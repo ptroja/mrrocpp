@@ -313,21 +313,21 @@ public:
 	 *
 	 * The child robot should decide which of the two following variants will be used.
 	 */
-	virtual void move_arm(lib::c_buffer &instruction) = 0;
+	virtual void move_arm(const lib::c_buffer &instruction) = 0;
 
 	/*!
 	 * \brief move arm in two thread version
 	 *
 	 * This variant does uses extra thread for motion interpolation purpose. Two representation are handled here: joints and motors
 	 */
-	void multi_thread_move_arm(lib::c_buffer &instruction);
+	void multi_thread_move_arm(const lib::c_buffer &instruction);
 
 	/*!
 	 * \brief move arm in single thread version
 	 *
 	 * This variant does not use extra thread for motion interpolation purpose. Two representation are handled here: joints and motors
 	 */
-	void single_thread_move_arm(lib::c_buffer &instruction);
+	void single_thread_move_arm(const lib::c_buffer &instruction);
 
 	/*!
 	 * \brief method to get position of the arm in the one of the representation commandenf by the ECP

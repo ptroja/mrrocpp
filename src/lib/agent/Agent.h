@@ -40,7 +40,7 @@ private:
 #endif
 
 	//! thread id of the of the non-blocking receive implementation
-	boost::thread * tid;
+	boost::thread tid;
 
 	//! condition variable for synchronization wake-up after receiving data
 	boost::condition_variable cond;
@@ -58,7 +58,7 @@ private:
 	int ReceiveMessage(void * msg, std::size_t msglen, bool block);
 
 	//! thread id of the of the non-blocking receive implementation
-	boost::thread * loop_tid;
+	boost::thread loop_tid;
 
 	//! Main loop of the agent
 	void operator ()();

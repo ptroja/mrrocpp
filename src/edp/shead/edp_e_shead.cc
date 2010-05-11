@@ -83,7 +83,7 @@ void effector::get_controller_state(lib::c_buffer &instruction) {
 }
 
 /*--------------------------------------------------------------------------*/
-void effector::move_arm(lib::c_buffer &instruction) {
+void effector::move_arm(const lib::c_buffer &instruction) {
 	msg->message("move_arm");
 	lib::shead_cbuffer ecp_edp_cbuffer;
 	memcpy(&ecp_edp_cbuffer, instruction.arm.serialized_command,

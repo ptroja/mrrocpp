@@ -60,7 +60,7 @@ public:
 
     void set_robot_model (const lib::c_buffer &);
 
-    void move_arm (lib::c_buffer &);
+    void move_arm (const lib::c_buffer &);
     void get_arm_position(bool, lib::c_buffer &);
 	void master_order(MT_ORDER nm_task, int nm_tryb);
 };

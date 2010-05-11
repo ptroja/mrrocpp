@@ -120,7 +120,7 @@ void motor_driven_effector::get_arm_position_get_arm_type_switch(lib::c_buffer &
 }
 
 /*--------------------------------------------------------------------------*/
-void motor_driven_effector::single_thread_move_arm(lib::c_buffer &instruction)
+void motor_driven_effector::single_thread_move_arm(const lib::c_buffer &instruction)
 { // przemieszczenie ramienia
 	// Wypenienie struktury danych transformera na podstawie parametrow polecenia
 	// otrzymanego z ECP. Zlecenie transformerowi przeliczenie wspolrzednych
@@ -147,7 +147,7 @@ void motor_driven_effector::single_thread_move_arm(lib::c_buffer &instruction)
 
 
 /*--------------------------------------------------------------------------*/
-void motor_driven_effector::multi_thread_move_arm(lib::c_buffer &instruction)
+void motor_driven_effector::multi_thread_move_arm(const lib::c_buffer &instruction)
 { // przemieszczenie ramienia
 	// Wypenienie struktury danych transformera na podstawie parametrow polecenia
 	// otrzymanego z ECP. Zlecenie transformerowi przeliczenie wspolrzednych

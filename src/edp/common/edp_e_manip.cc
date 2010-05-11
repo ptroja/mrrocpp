@@ -730,7 +730,7 @@ void manip_effector::get_controller_state(lib::c_buffer &instruction)
 }
 
 /*--------------------------------------------------------------------------*/
-void manip_effector::single_thread_move_arm(lib::c_buffer &instruction)
+void manip_effector::single_thread_move_arm(const lib::c_buffer &instruction)
 { // przemieszczenie ramienia
 	// Wypenienie struktury danych transformera na podstawie parametrow polecenia
 	// otrzymanego z ECP. Zlecenie transformerowi przeliczenie wspolrzednych
@@ -750,7 +750,7 @@ void manip_effector::single_thread_move_arm(lib::c_buffer &instruction)
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
-void manip_effector::multi_thread_move_arm(lib::c_buffer &instruction)
+void manip_effector::multi_thread_move_arm(const lib::c_buffer &instruction)
 { // przemieszczenie ramienia
 	// Wypenienie struktury danych transformera na podstawie parametrow polecenia
 	// otrzymanego z ECP. Zlecenie transformerowi przeliczenie wspolrzednych
