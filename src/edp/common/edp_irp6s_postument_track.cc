@@ -35,7 +35,6 @@
 #include "lib/mrmath/mrmath.h"
 #include "lib/srlib.h"
 #include "edp/common/manip_trans_t.h"
-#include "edp/common/edp_vsp_t.h"
 #include "kinematics/common/kinematic_model_with_tool.h"
 
 namespace mrrocpp {
@@ -126,18 +125,12 @@ void irp6s_postument_track_effector::create_threads()
 #ifdef __QNXNTO__
 	// jesli wlaczono obsluge sily
 	if (force_tryb > 0) {
-
 		vs = sensor::return_created_edp_force_sensor(*this); //!< czujnik wirtualny
-
-		edp_vsp_obj = new edp_vsp(*this); //!< czujnik wirtualny
 
 		// byY - utworzenie watku pomiarow sily
 		new boost::thread(boost::bind(&sensor::force::operator(), vs));
 
 		vs->thread_started.wait();
-
-		// by Y - utworzenie watku komunikacji miedzy EDP a VSP
-		new boost::thread(*edp_vsp_obj);
 	}
 #endif
 	motor_driven_effector::hi_create_threads();
