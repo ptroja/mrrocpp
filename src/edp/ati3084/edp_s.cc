@@ -66,12 +66,6 @@ static uint64_t int_timeout;// by Y
 static struct pci_dev_info info;// do karty advantech 1751pci
 static uintptr_t base_io_adress; // do obslugi karty advantech pci1751
 
-//unsigned int ms_nr = 0;// numer odczytu z czujnika
-
-struct timespec start[9];
-
-// #pragma off(check_stack);
-
 const struct sigevent * schunk_int_handler(void *arg, int sint_id)
 {
 	struct timespec rqtp;
@@ -115,9 +109,6 @@ const struct sigevent * schunk_int_handler(void *arg, int sint_id)
 	}
 }
 
-// #pragma on(check_stack);
-
-// Rejstracja procesu VSP
 ATI3084_force::ATI3084_force(common::manip_effector &_master) :
 	force(_master), int_attached(0)
 {
@@ -384,11 +375,16 @@ void ATI3084_force::wait_for_event()
 /*************************** inicjacja odczytu ******************************/
 void ATI3084_force::initiate_reading(void)
 {
-	lib::Ft_vector kartez_force;
-	short measure_report;
-
 	if (!is_sensor_configured)
 		throw sensor_error(lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
+}
+
+/***************************** odczyt z czujnika *****************************/
+void ATI3084_force::get_reading(void)
+{
+
+	lib::Ft_vector kartez_force;
+	short measure_report;
 
 	if (master.test_mode) {
 		for (int i = 0; i < 6; ++i) {
@@ -411,6 +407,7 @@ void ATI3084_force::initiate_reading(void)
 
 			// jesli ma byc wykorzytstywana biblioteka transformacji sil
 			if (master.force_tryb == 2 && gravity_transformation) {
+				static int ms_nr = 0; // numer odczytu z czujnika
 				for (int i = 0; i < 3; i++)
 					ft_table[i] /= 20;
 				//			for(int i=3;i<6;i++) ft_table[i]/=333;
@@ -438,11 +435,6 @@ void ATI3084_force::initiate_reading(void)
 			}
 		}
 	}
-}
-
-/***************************** odczyt z czujnika *****************************/
-void ATI3084_force::get_reading(void)
-{
 }
 
 void ATI3084_force::parallel_do_send_command(const char* command)
