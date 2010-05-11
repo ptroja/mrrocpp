@@ -57,7 +57,7 @@ static struct mds_data
 {
 	int intr_mode;
 	int byte_counter;
-	int is_received;
+	bool is_received;
 	short data[MDS_DATA_RANGE];
 } mds;
 
@@ -88,9 +88,9 @@ const struct sigevent * schunk_int_handler(void *arg, int sint_id)
 		clear_intr();
 		set_ibf(1);
 		if (mds.intr_mode == 0) {
-			if (mds.is_received == 1) {
+			if (mds.is_received) {
 				mds.byte_counter = -1;
-				mds.is_received = 0;
+				mds.is_received = false;
 			}
 			if ((mds.byte_counter) < (MDS_DATA_RANGE - 1)) {
 				mds.data[++mds.byte_counter] = get_input();
@@ -169,7 +169,7 @@ void ATI3084_force::connect_to_hardware(void)
 
 			mds.intr_mode = 0; // obsluga przerwania ustawiona na odbior pojedynczych slow
 			mds.byte_counter = 0;
-			mds.is_received = 0;
+			mds.is_received = false;
 
 			if ((sint_id = InterruptAttach(info.Irq, schunk_int_handler, (void *) &mds, sizeof(mds), 0)) == -1)
 				printf("Unable to attach interrupt handler: \n");
@@ -367,7 +367,7 @@ void ATI3084_force::wait_for_event()
 				usleep(10000); // aby nadmiernie nie obciazac procesora
 				mds.intr_mode = 0; // obsluga przerwania ustawiona na odbior pojedynczych slow
 				mds.byte_counter = 0;
-				mds.is_received = 0;
+				mds.is_received = false;
 				do_init(); // komunikacja wstepna
 			} else {
 				if (iter_counter > 1) {
@@ -611,7 +611,7 @@ short ATI3084_force::do_Wait(const char* command)
 		iw_ret = InterruptWait(0, NULL);
 		InterruptMask(info.Irq, sint_id);
 		if (iw_ret != -1) {
-			mds.is_received = 1;
+			mds.is_received = true;
 		}
 		InterruptUnmask(info.Irq, sint_id);
 
