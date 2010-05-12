@@ -18,6 +18,7 @@
 #include "../pb_eih_visual_servo.h"
 #include "../cubic_constraint.h"
 #include "../object_reached_termination_condition.h"
+#include "../visual_servo_regulator_p.h"
 
 using mrrocpp::ecp::common::generator::smooth;
 using mrrocpp::ecp::common::generator::simple_visual_servo_manager;
@@ -48,7 +49,7 @@ public:
 	void main_task_algorithm(void);
 
 protected:
-	shared_ptr<smooth> smooth_gen;
+	shared_ptr<visual_servo_regulator> reg;
 	shared_ptr<simple_visual_servo_manager> sm;
 	shared_ptr<visual_servo> vs;
 	shared_ptr<termination_condition> term_cond;

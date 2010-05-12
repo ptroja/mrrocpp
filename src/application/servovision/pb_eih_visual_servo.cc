@@ -20,8 +20,8 @@ namespace common {
 
 namespace generator {
 
-pb_eih_visual_servo::pb_eih_visual_servo(/*boost::shared_ptr <visual_servo_regulator> regulator,*/const char* section_name, mrrocpp::lib::configurator& configurator) :
-	visual_servo(regulator), object_visible(false)
+pb_eih_visual_servo::pb_eih_visual_servo(boost::shared_ptr <visual_servo_regulator> regulator, const char* section_name, mrrocpp::lib::configurator& configurator) :
+	visual_servo(regulator)
 {
 	try {
 		vsp_fradia
@@ -76,11 +76,22 @@ lib::Homog_matrix pb_eih_visual_servo::get_position_change(const lib::Homog_matr
 
 	object_visible = vsp_fradia->received_object.tracking;
 	if (vsp_fradia->received_object.tracking) {
-		delta_position.set_translation_vector(vsp_fradia->received_object.position.translation);
+		lib::Homog_matrix tmp;
+		tmp.set_from_frame_tab(vsp_fradia->received_object.position);
+		lib::Xyz_Angle_Axis_vector aa_vector;
+		tmp.get_xyz_angle_axis(aa_vector);
+
+		logDbg("aa_vector: %10lg, %10lg, %10lg, %10lg, %10lg, %10lg\n", aa_vector(0, 0), aa_vector(1, 0), aa_vector(2, 0), aa_vector(3, 0), aa_vector(4, 0), aa_vector(5, 0));
+
 		for (int i = 0; i < 3; ++i) {
-			logDbg("error: %8lg, %8lg, %8lg\n", delta_position[0][3], delta_position[1][3], delta_position[2][3]);
-			delta_position[i][3] -= desiredTranslation(i, 0);
+			aa_vector(i, 0) -= desiredTranslation(i, 0);
 		}
+
+		aa_vector = regulator->calculate_control(aa_vector);
+		logDbg("aa_vector after regulation: %10lg, %10lg, %10lg, %10lg, %10lg, %10lg\n", aa_vector(0, 0), aa_vector(1, 0), aa_vector(2, 0), aa_vector(3, 0), aa_vector(4, 0), aa_vector(5, 0));
+
+		delta_position.set_from_xyz_angle_axis(aa_vector);
+
 		delta_position = e_T_c_position * delta_position;
 	}
 
@@ -90,11 +101,6 @@ lib::Homog_matrix pb_eih_visual_servo::get_position_change(const lib::Homog_matr
 boost::shared_ptr <mrrocpp::lib::sensor> pb_eih_visual_servo::get_vsp_fradia()
 {
 	return boost::dynamic_pointer_cast <mrrocpp::lib::sensor>(vsp_fradia);
-}
-
-bool pb_eih_visual_servo::is_object_visible()
-{
-	return object_visible;
 }
 
 } // namespace generator

@@ -23,7 +23,7 @@ namespace common {
 namespace generator {
 
 ib_eih_visual_servo::ib_eih_visual_servo(boost::shared_ptr <visual_servo_regulator> regulator, const char* section_name, mrrocpp::lib::configurator& configurator) :
-	visual_servo(regulator), object_visible(false)
+	visual_servo(regulator)
 {
 	try {
 		vsp_fradia
@@ -168,11 +168,6 @@ lib::Homog_matrix ib_eih_visual_servo::get_position_change(const lib::Homog_matr
 boost::shared_ptr <mrrocpp::lib::sensor> ib_eih_visual_servo::get_vsp_fradia()
 {
 	return boost::dynamic_pointer_cast <mrrocpp::lib::sensor>(vsp_fradia);
-}
-
-bool ib_eih_visual_servo::is_object_visible()
-{
-	return object_visible;
 }
 
 }//namespace generator
