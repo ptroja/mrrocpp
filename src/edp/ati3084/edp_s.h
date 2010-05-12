@@ -123,7 +123,7 @@ public:
 	{
 		int intr_mode;
 		int byte_counter;
-		int is_received;
+		bool is_received;
 		uint16_t data[MDS_DATA_RANGE];
 
 		//! spinlock to for disabling interrupts
@@ -177,15 +177,18 @@ private:
 	int phdl;
 
 	void set_output(uint16_t value);
-	void set_obf(unsigned char state);
+	void set_obf(bool state);
 	bool check_ack(void);
 	void initiate_registers(void);
 	void solve_transducer_controller_failure(void);
 	void check_cs(void);
-	void parallel_do_send_command(const char* command);
+
+	int send_command(const char* command);
+	int serial_send_command(const char* command);
+	void parallel_send_command(const char* command);
 
 	void do_Wait(void);// by old schunk
-	int do_send_command(const char* command);
+
 	void do_init(void);
 
 	struct sigevent tim_event;
@@ -195,7 +198,7 @@ private:
 bool check_intr(void);
 bool check_stb(void);
 void clear_intr(void);
-void set_ibf(unsigned char state);
+void set_ibf(bool state);
 uint16_t get_input(void);
 
 } // namespace sensor
