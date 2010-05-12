@@ -123,20 +123,6 @@ class ATI3084_force : public force {
 private:
 	unsigned int int_attached;// informacja o tym, czy obsluga przerwanie jest juz przypisana
 
-	// Z PLIKU cz_lib.h
-	int LSREG;
-	int LCREG;	 	/* Line Control Register */
-	int IEREG;	 	/* Interrupt Enable Register */
-	int MCREG;	 	/* Modem Control Register */
-	int FCREG;	 	/* FIFO Control Register */
-	int TxBUF;	 	/* Transmit Buffer */
-	int RxBUF;	 	/* Receive Buffer */
-	int DIVLSB;	 	/* Divisor Least Sign. Byte */
-	int DIVMSB; 	/* Divisor Most Sign. Byte */
-	int INT_NUM;
-	int NOT_IRQ;
-	// KONIEC Z PLIKU
-
 	int pidx; // do obslugi karty advantech pci1751
 	void* hdl; // wlasciwy uchwyt do danego urzadzenia
 	int phdl; // pci handle -> fd do servera PCI
@@ -153,6 +139,9 @@ private:
 	short do_Wait(const char* command);// by old schunk
 	short do_send_command(const char* command);
 	short do_init(void);
+
+	//! serial port file descriptor
+	int uart;
 
 	short ERROR_CODE;
 
