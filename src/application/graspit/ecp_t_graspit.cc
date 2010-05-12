@@ -56,7 +56,7 @@ void Graspit::main_task_algorithm(void ){
 	trgraspit->from_va.graspit.grasp_joint[3] ;
 	trgraspit->from_va.graspit.grasp_joint[4] += 4.712;
 	trgraspit->from_va.graspit.grasp_joint[5] -= 2.738;
-	trgraspit->from_va.graspit.grasp_joint[6] = 0.074;
+	trgraspit->from_va.graspit.grasp_joint[6] += 0.074;
 
 	cout << trgraspit->from_va.graspit.grasp_joint[0] << "\n";
 	cout << trgraspit->from_va.graspit.grasp_joint[1] << "\n";
