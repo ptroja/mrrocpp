@@ -33,6 +33,10 @@
 #include <hw/pci_devices.h>
 #include <stddef.h>
 #include <sys/mman.h>
+#include <termios.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
@@ -110,7 +114,7 @@ const struct sigevent * schunk_int_handler(void *arg, int sint_id)
 }
 
 ATI3084_force::ATI3084_force(common::manip_effector &_master) :
-	force(_master), int_attached(false)
+	force(_master), int_attached(0)
 {
 }
 
@@ -166,66 +170,39 @@ void ATI3084_force::connect_to_hardware(void)
 				printf("Unable to attach interrupt handler: \n");
 		}
 
-		// USTAWIENIE ZLACZA SZEREGOWEGO
-
-		switch (COM_NR)
-		{
-			case 1:
-				LSREG = 0x3FD; /* Line Status Register */
-				LCREG = 0x3FB; /* Line Control Register */
-				IEREG = 0x3F9; /* Interrupt Enable Register */
-				MCREG = 0x3FC; /* Modem Control Register */
-				TxBUF = 0x3F8; /* Transmit Buffer */
-				RxBUF = 0x3F8; /* Receive Buffer */
-				DIVLSB = 0x3F8; /* Divisor Least Sign. Byte */
-				DIVMSB = 0x3F9; /* Divisor Most Sign. Byte */
-				FCREG = 0x3FA; /* FIFO Control Register */
-				INT_NUM = 4;
-				NOT_IRQ = 0xEF; /* IRQ4 */
-				break;
-			case 2:
-				LSREG = 0x2FD;
-				LCREG = 0x2FB;
-				IEREG = 0x2F9;
-				MCREG = 0x2FC;
-				TxBUF = 0x2F8;
-				RxBUF = 0x2F8;
-				DIVLSB = 0x2F8;
-				DIVMSB = 0x2F9;
-				FCREG = 0x2FA; /* FIFO Control Register */
-				INT_NUM = 3;
-				NOT_IRQ = 0xF7; /* IRQ3 */
-				break;
+		// setup serial device
+		uart = open("/dev/ser1", O_RDWR);
+		if (uart == -1) {
+			// TODO: throw
+			perror("unable to open serial device for ATI3084 sensor");
 		}
 
-		//InterruptEnable();
+		// serial port settings: 38400, 8-N-1
+		struct termios tattr;
+		if(tcgetattr(uart, &tattr) == -1) {
+			// TODO: throw
+			perror("tcgetattr()");
+		}
 
-		out8(LCREG, 0x80); /* DLAB=1 */
-		delay(1);
-		// out8 ( DIVLSB, 12 );	/* divisor=12, speed=9600 bytes/sec */
-		// out8 ( DIVLSB, 6 );	/* divisor=6, speed=18200 bytes/sec */
-		out8(DIVLSB, 3); /* divisor=3, speed=38400 bytes/sec */
-		delay(1);
-		out8(DIVMSB, 0);
-		delay(1);
-		out8(LCREG, 3); /* DLAB=0, 8 bits, 1 stop bit, NoParity */
-		delay(1);
+		// setup input speed
+		if(cfsetispeed(&tattr, B38400) == -1) {
+			perror("tcgetattr()");
+		}
 
-		while ((in8(LSREG)) & 0x01)
-			(void) in8(RxBUF); /* initial reading from Receiver Buffer */
+		// setup output speed
+		if(cfsetospeed(&tattr, B38400) == -1) {
+			perror("tcgetattr()");
+		}
 
-		delay(1);
-		out8(IEREG, 0x01); /* enable Data Available Interrupt */
-		delay(1);
-		out8(MCREG, 0x08); /* enable interrupts */
-		delay(1);
-		out8(PICMASK, in8(PICMASK) & NOT_IRQ); /* interrupt number INT_NUM is unmasked */
-		delay(1);
-		out8(FCREG, 0x81); /*program fifo*/
-		delay(1);
+		// setup raw mode
+		if(cfmakeraw(&tattr) == -1) {
+			perror("cfmakeraw()");
+		}
 
-		//InterruptDisable();
-		/* interrupts are enabled */
+		// apply settings to serial port
+		if(tcsetattr(uart, TCSANOW, &tattr) == -1) {
+			perror("tcsetattr()");
+		}
 
 		do_init(); // komunikacja wstepna
 	}
@@ -237,10 +214,11 @@ ATI3084_force::~ATI3084_force(void)
 	if (!(master.test_mode)) {
 		pci_detach_device(hdl); // odlacza driver od danego urzadzenia na PCI
 		pci_detach(phdl); // Disconnect from the PCI server
+		close(uart);
 	}
 	if (gravity_transformation)
 		delete gravity_transformation;
-	printf("Destruktor edp_ATI3084_force_sensor\n");
+	printf("ATI3084_force::~ATI3084_force\n");
 }
 
 /**************************** inicjacja czujnika ****************************/
@@ -252,12 +230,16 @@ void ATI3084_force::configure_sensor(void)
 	if (!(master.test_mode)) {
 		mds.intr_mode = 0;
 
-		if (send_command(SB) == -1)
+#ifdef SERIAL
+		if (do_send_command(SB) == -1)
 			printf("Blad wyslania polecenia SB\n");
-		do_Wait();
+		do_Wait("SB");
+#endif
 
 #ifdef PARALLEL
-		do_Wait();
+		parallel_do_send_command(SB);
+		do_Wait("SB");
+		do_Wait("SB");
 #endif
 	}
 	mds.intr_mode = 1; // przywrocenie do 7 bajtowego trybu odbiotu danych
@@ -307,7 +289,6 @@ void ATI3084_force::configure_sensor(void)
 
 void ATI3084_force::wait_for_event()
 {
-
 	int iw_ret;
 	int iter_counter = 0; // okresla ile razy pod rzad zostala uruchomiona ta metoda
 
@@ -323,8 +304,17 @@ void ATI3084_force::wait_for_event()
 
 			mds.byte_counter = 0;// zabezpieczenie przed niektorymi bledami pomiarow - sprawdzone dziala ;)
 
-			if (send_command(SGET1) == -1)
+#ifdef SERIAL
+
+			if (do_send_command(SGET1) == -1)
 				printf("blad w send_command(sget1)\n");
+#endif
+
+#ifdef PARALLEL
+
+			parallel_do_send_command(SGET1);
+
+#endif
 
 			mds.intr_mode = 1; // przywrocenie do 7 bajtowego trybu odbiotu danych
 			mds.byte_counter = 0;
@@ -369,9 +359,7 @@ void ATI3084_force::initiate_reading(void)
 /***************************** odczyt z czujnika *****************************/
 void ATI3084_force::get_reading(void)
 {
-
 	lib::Ft_vector kartez_force;
-	short measure_report;
 
 	if (master.test_mode) {
 		for (int i = 0; i < 6; ++i) {
@@ -379,12 +367,11 @@ void ATI3084_force::get_reading(void)
 		}
 		master.force_msr_upload(kartez_force);
 	} else {
-
 		lib::Ft_vector ft_table;
 		InterruptDisable ();
 		for (int i = 0; i < 6; i++)
 			ft_table[i] = static_cast <double> (mds.data[i + 1]);
-		measure_report = mds.data[0];
+		short measure_report = mds.data[0];
 
 		InterruptEnable();
 
@@ -424,26 +411,23 @@ void ATI3084_force::get_reading(void)
 	}
 }
 
-void ATI3084_force::parallel_send_command(const char* command)
+void ATI3084_force::parallel_do_send_command(const char* command)
 {
 	char a;
-	short value = 0;
 	struct timespec rqtp;
 
 	rqtp.tv_sec = 0;
 	rqtp.tv_nsec = 100000;
 
 	while ((a = *command++) != 0) {
-		value = short(a);
+		uint16_t value = short(a);
 		set_output(value);
-		while (!check_ack())
-			;
+		while (!check_ack());
 		set_obf(0);
 		nanosleep(&rqtp, NULL);
 
 		if (value != 23)
-			while (check_ack())
-				; // jesli polcecenie rozne od RESET
+			while (check_ack()); // jesli polcecenie rozne od RESET
 		else
 			delay(1);
 		set_obf(1);
@@ -461,23 +445,23 @@ void ATI3084_force::set_output(uint16_t value)
 	const unsigned char output_positions[16] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 };
 
 	for (int i = 0; i < 16; i++) {
-		unsigned short mask = 0x0001;
+		uint16_t mask = 0x0001;
 		mask <<= output_positions[i];
 		if (value & comp)
 			output |= mask;
 		comp <<= 1;
 	}
-	lower = (unsigned char) (output % 256);
-	upper = (unsigned char) (output >>= 8);
+	lower = (uint8_t) (output % 256);
+	upper = (uint8_t) (output >>= 8);
 
 	out8(base_io_adress + LOWER_OUTPUT, lower);
 	out8(base_io_adress + UPPER_OUTPUT, upper);
 }
 
-uint16_t get_input(void)
+short get_input(void)
 {
-	uint16_t input = 0, temp_input;
-	uint16_t comp = 0x0001;
+	short input = 0, temp_input;
+	unsigned short comp = 0x0001;
 	// wersja z pajaczkiem
 	// 	const unsigned char input_positions[16]={8,10,12,14,7,5,3,1,9,11,13,15,6,4,2,0};
 	// wersja z nowa plytka
@@ -498,7 +482,7 @@ uint16_t get_input(void)
 	return input;
 }
 
-void ATI3084_force::set_obf(bool state)
+void ATI3084_force::set_obf(unsigned char state)
 {
 	uint8_t temp_register = in8(base_io_adress + CONTROL_OUTPUT);
 
@@ -510,7 +494,7 @@ void ATI3084_force::set_obf(bool state)
 	out8(base_io_adress + CONTROL_OUTPUT, temp_register);
 }
 
-void set_ibf(bool state)
+void set_ibf(unsigned char state)
 {
 	uint8_t temp_register = in8(base_io_adress + CONTROL_OUTPUT);
 
@@ -575,7 +559,7 @@ void ATI3084_force::check_cs(void)
 		printf("STB LOW\n");
 }
 
-void ATI3084_force::do_Wait(void)
+short ATI3084_force::do_Wait(const char* command)
 {
 	int iw_ret;
 
@@ -589,36 +573,15 @@ void ATI3084_force::do_Wait(void)
 		InterruptUnmask(info.Irq, sint_id);
 
 	} while (iw_ret != -1);
-}
 
-int ATI3084_force::serial_send_command(const char* command)
-{
-	// ew. miejce na pzerwanie o pustej kolejce - obecnie while pod spodem
-	// 	while ( ! ( in8 ( LSREG ) & 0x40 ));
-
-	char a;
-
-	while ((a = *command++) != 0) {
-		unsigned int timeout = 65000; /*time for sending 1 char*/
-		while (!(in8(LSREG) & 0x20)) {
-			/*                      delay(20);       */
-			if (!timeout--)
-				return (-1);
-		}
-		out8(TxBUF, a);
-	}
 	return OK;
 }
 
-int ATI3084_force::send_command(const char * command)
+short ATI3084_force::do_send_command(const char* command)
 {
-#ifdef SERIAL
-	return serial_send_command(command);
-#endif
-#ifdef PARALLEL
-	parallel_send_command(command);
-	return 0;
-#endif
+	int data_written = write(uart, command, strlen(command));
+
+	return (data_written == strlen(command)) ? OK : -1;
 }
 
 // metoda na wypadek skasowanie pamiecia nvram
@@ -626,79 +589,167 @@ int ATI3084_force::send_command(const char * command)
 
 void ATI3084_force::solve_transducer_controller_failure(void)
 {
-	uint8_t char_buf[1000];
-	int licznik = 0;
+	tcflush(uart, TCIFLUSH);
 
-	while ((in8(LSREG)) & 0x01) {
-		char_buf[licznik++] = in8(RxBUF);
-		usleep(10); // aby nadmiernie nie obciazac procesora
-	}
-
-	usleep(10); // aby nadmiernie nie obciazac procesora
-
-	int i = send_command(YESCOMM); /* command ^W to FT */
+	int i = do_send_command(YESCOMM); /* command ^W to FT */
 	if (i == -1) {
+		ERROR_CODE = __ERROR_INIT_SEND;
 		printf("Blad wyslania YESCOMM w solve_transducer_controller_failure\n");
 	}
 
-	usleep(10); // aby nadmiernie nie obciazac procesora
-
-	licznik = 0;
-
-	while ((in8(LSREG)) & 0x01) {
-		char_buf[licznik++] = in8(RxBUF);
-		usleep(10); // aby nadmiernie nie obciazac procesora
-	}
-
-	// 	printf("Input int: %s,   \n",aaac);
+	tcflush(uart, TCIFLUSH);
 }
 
-void ATI3084_force::do_init(void)
+short ATI3084_force::do_init(void)
 {
+	short i;
+
 	int_timeout = SCHUNK_INTR_TIMEOUT_HIGH; // by Y
+#ifdef SERIAL
 
-	send_command(RESET); /* command ^W to FT */
+	i = do_send_command(RESET); /* command ^W to FT */
+	if (i == -1)
+		ERROR_CODE = __ERROR_INIT_SEND;
 	delay(20);
-	send_command(CL_0);
+	i = do_send_command(CL_0);
+	if (i == -1)
+		ERROR_CODE = __ERROR_INIT_SEND;
 	delay(20);
-	send_command(CD_B);
+	i = do_send_command(CD_B);
+	if (i == -1)
+		ERROR_CODE = __ERROR_INIT_SEND;
 	delay(20);
-	send_command(CD_B);
+	i = do_send_command(CD_B);
+	if (i == -1)
+		ERROR_CODE = __ERROR_INIT_SEND;
 	delay(20);
-	send_command(CD_R);
+	i = do_send_command(CD_R);
+	if (i == -1)
+		ERROR_CODE = __ERROR_INIT_SEND;
 	delay(20);
-	send_command(CV_6);
+	i = do_send_command(CV_6);
+	if (i == -1)
+		ERROR_CODE = __ERROR_INIT_SEND;
 	delay(20);
-	send_command(SA);
+	i = do_send_command(SA);
+	if (i == -1)
+		ERROR_CODE = __ERROR_INIT_SEND;
 	delay(20);
-	send_command(SM);
+	i = do_send_command(SM);
+	if (i == -1)
+		ERROR_CODE = __ERROR_INIT_SEND;
 	delay(20);
-	send_command(SB);
+	i = do_send_command(SB);
+	if (i == -1)
+		ERROR_CODE = __ERROR_INIT_SEND;
 	delay(20);
 
-	send_command(CP_P);
-	do_Wait();
-	send_command(CL_0);
-	do_Wait();
-	send_command(CD_B);
-	do_Wait();
-	send_command(CD_B);
-	do_Wait();
-	send_command(CD_R);
-	do_Wait();
-	send_command(CV_6);
-	do_Wait();
-	send_command(SA);
-	do_Wait();
-	send_command(SM);
-	do_Wait();
-	send_command(SZ);
-	do_Wait();
-	send_command(SB);
-	do_Wait();
-#if PARALLEL
-	do_Wait();// by Y bez tego nie dziala
+	i = do_send_command(CP_P);
+	if (i == -1)
+		ERROR_CODE = __ERROR_INIT_SEND;
+	i = do_Wait("CP_P");
+	i = do_send_command(CL_0);
+	if (i == -1)
+		ERROR_CODE = __ERROR_INIT_SEND;
+	i = do_Wait("CL_0");
+	i = do_send_command(CD_B);
+	if (i == -1)
+		ERROR_CODE = __ERROR_INIT_SEND;
+	i = do_Wait("CD_B");
+	i = do_send_command(CD_B);
+	if (i == -1)
+		ERROR_CODE = __ERROR_INIT_SEND;
+	i = do_Wait("CD_B");
+	i = do_send_command(CD_R);
+	if (i == -1)
+		ERROR_CODE = __ERROR_INIT_SEND;
+	i = do_Wait("CD_R");
+	i = do_send_command(CV_6);
+	if (i == -1)
+		ERROR_CODE = __ERROR_INIT_SEND;
+	i = do_Wait("CV_6");
+	i = do_send_command(SA);
+	if (i == -1)
+		ERROR_CODE = __ERROR_INIT_SEND;
+	i = do_Wait("SA");
+	i = do_send_command(SM);
+	if (i == -1)
+		ERROR_CODE = __ERROR_INIT_SEND;
+	i = do_Wait("SM");
+	i = do_send_command(SZ);
+	if (i == -1)
+		ERROR_CODE = __ERROR_INIT_SEND;
+	i = do_Wait("SZ");
+	i = do_send_command(SB);
+	if (i == -1)
+		ERROR_CODE = __ERROR_INIT_SEND;
+	i = do_Wait("SB");
+
 #endif
+
+#ifdef PARALLEL
+
+	parallel_do_send_command(RESET);
+	delay(20);
+
+	parallel_do_send_command(CD_B);
+	delay(20);
+
+	parallel_do_send_command(CD_B);
+	delay(20);
+
+	parallel_do_send_command(CD_B);
+	delay(20);
+
+	parallel_do_send_command(CD_R);
+	delay(20);
+
+	parallel_do_send_command(CV_6);
+	delay(20);
+
+	parallel_do_send_command(SA);
+	delay(20);
+
+	parallel_do_send_command(SM);
+	delay(20);
+
+	parallel_do_send_command(SB);
+	delay(20);
+
+	parallel_do_send_command(CP_P);
+	i=do_Wait("CP_P");
+
+	parallel_do_send_command(CL_0);
+	i=do_Wait("CL_0");
+
+	parallel_do_send_command(CD_B);
+	i=do_Wait("CD_B");
+
+	parallel_do_send_command(CD_B);
+	i=do_Wait("CD_B");
+
+	parallel_do_send_command(CD_R);
+	i=do_Wait("CD_R");
+
+	parallel_do_send_command(CV_6);
+	i=do_Wait("CV_6");
+
+	parallel_do_send_command(SA);
+	i=do_Wait("SA");
+
+	parallel_do_send_command(SM);
+	i=do_Wait("SM");
+
+	parallel_do_send_command(SZ);
+	i=do_Wait("SZ");
+
+	parallel_do_send_command(SB);
+	i=do_Wait("SB");
+	i=do_Wait("SB");// by Y bez tego nie dziala
+
+#endif
+
+	return OK;
 }
 
 void clear_intr(void)

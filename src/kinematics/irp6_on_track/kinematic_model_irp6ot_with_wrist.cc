@@ -557,18 +557,18 @@ void model_with_wrist::direct_kinematics_transform(const lib::JointArray & local
 	double c6 = cos(local_current_joints[6]);
 
 	// Proste zadanie kinematyki.
-	(local_current_end_effector_frame)[0][0] = (c1 * s4 * c5 + s1 * s5) * c6 + c1 * c4 * s6; //NX
-	(local_current_end_effector_frame)[0][1] = -(c1 * s4 * c5 + s1 * s5) * s6 + c1 * c4 * c6; //OX
-	(local_current_end_effector_frame)[0][2] = c1 * s4 * s5 - s1 * c5; //AX
-	(local_current_end_effector_frame)[0][3] = c1 * (a2 * c2 + a3 * c3 + d5 * c4); //PX
-	(local_current_end_effector_frame)[1][0] = (s1 * s4 * c5 - c1 * s5) * c6 + s1 * c4 * s6; //NY
-	(local_current_end_effector_frame)[1][1] = -(s1 * s4 * c5 - c1 * s5) * s6 + s1 * c4 * c6; //OY
-	(local_current_end_effector_frame)[1][2] = s1 * s4 * s5 + c1 * c5; //AY
-	(local_current_end_effector_frame)[1][3] = s1 * (a2 * c2 + a3 * c3 + d5 * c4) + d0; //PY
-	(local_current_end_effector_frame)[2][0] = c4 * c5 * c6 - s4 * s6; //NZ
-	(local_current_end_effector_frame)[2][1] = -c4 * c5 * s6 - s4 * c6; //OZ
-	(local_current_end_effector_frame)[2][2] = c4 * s5; //AZ
-	(local_current_end_effector_frame)[2][3] = -a2 * s2 - a3 * s3 - d5 * s4; //PZ
+	local_current_end_effector_frame(0,0) = (c1 * s4 * c5 + s1 * s5) * c6 + c1 * c4 * s6; //NX
+	local_current_end_effector_frame(0,1) = -(c1 * s4 * c5 + s1 * s5) * s6 + c1 * c4 * c6; //OX
+	local_current_end_effector_frame(0,2) = c1 * s4 * s5 - s1 * c5; //AX
+	local_current_end_effector_frame(0,3) = c1 * (a2 * c2 + a3 * c3 + d5 * c4); //PX
+	local_current_end_effector_frame(1,0) = (s1 * s4 * c5 - c1 * s5) * c6 + s1 * c4 * s6; //NY
+	local_current_end_effector_frame(1,1) = -(s1 * s4 * c5 - c1 * s5) * s6 + s1 * c4 * c6; //OY
+	local_current_end_effector_frame(1,2) = s1 * s4 * s5 + c1 * c5; //AY
+	local_current_end_effector_frame(1,3) = s1 * (a2 * c2 + a3 * c3 + d5 * c4) + d0; //PY
+	local_current_end_effector_frame(2,0) = c4 * c5 * c6 - s4 * s6; //NZ
+	local_current_end_effector_frame(2,1) = -c4 * c5 * s6 - s4 * c6; //OZ
+	local_current_end_effector_frame(2,2) = c4 * s5; //AZ
+	local_current_end_effector_frame(2,3) = -a2 * s2 - a3 * s3 - d5 * s4; //PZ
 
 } //:: direct_kinematics_transform()
 
@@ -600,18 +600,18 @@ void model_with_wrist::inverse_kinematics_transform(lib::JointArray & local_desi
 	double t6, t_ok;
 
 	// Przepisanie zmiennych.
-	Nx = (local_desired_end_effector_frame)[0][0];
-	Ny = (local_desired_end_effector_frame)[1][0];
-	Nz = (local_desired_end_effector_frame)[2][0];
-	Ox = (local_desired_end_effector_frame)[0][1];
-	Oy = (local_desired_end_effector_frame)[1][1];
-	Oz = (local_desired_end_effector_frame)[2][1];
-	Ax = (local_desired_end_effector_frame)[0][2];
-	Ay = (local_desired_end_effector_frame)[1][2];
-	Az = (local_desired_end_effector_frame)[2][2];
-	Px = (local_desired_end_effector_frame)[0][3];
-	Py = (local_desired_end_effector_frame)[1][3] - local_current_joints[0];
-	Pz = (local_desired_end_effector_frame)[2][3];
+	Nx = local_desired_end_effector_frame(0,0);
+	Ny = local_desired_end_effector_frame(1,0);
+	Nz = local_desired_end_effector_frame(2,0);
+	Ox = local_desired_end_effector_frame(0,1);
+	Oy = local_desired_end_effector_frame(1,1);
+	Oz = local_desired_end_effector_frame(2,1);
+	Ax = local_desired_end_effector_frame(0,2);
+	Ay = local_desired_end_effector_frame(1,2);
+	Az = local_desired_end_effector_frame(2,2);
+	Px = local_desired_end_effector_frame(0,3);
+	Py = local_desired_end_effector_frame(1,3) - local_current_joints[0];
+	Pz = local_desired_end_effector_frame(2,3);
 
 	//  Wyliczenie Theta1.
 	local_desired_joints[1] = (atan2(Py, Px));

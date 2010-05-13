@@ -39,12 +39,12 @@ task::~task() {
 
 bool task::pulse_check() {
 #if !defined(USE_MESSIP_SRR)
-	struct sigevent stop_event;
-
 	_pulse_msg ui_msg; // wiadomosc z ui
 
-	stop_event.sigev_notify = SIGEV_UNBLOCK;// by Y zamiast creceive
-	TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_RECEIVE, &stop_event, NULL, NULL); // czekamy na odbior pulsu stopu
+	// by Y zamiast creceive
+	if(TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_RECEIVE, NULL, NULL, NULL) == -1) {
+		perror("ecp_task: TimerTimeout()");
+	}
 	int rcvid = MsgReceive(trigger_attach->chid, &ui_msg, sizeof(ui_msg), NULL);
 
 	if (rcvid == -1) {/* Error condition, exit */
@@ -525,11 +525,10 @@ int task::receive_mp_message(bool block) {
 	while (1) {
 #if !defined(USE_MESSIP_SRR)
 		if (!block) {
-			struct sigevent msg_event;
-			msg_event.sigev_notify = SIGEV_UNBLOCK;// by Y zamiast creceive
-
-			TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_RECEIVE, &msg_event,
-					NULL, NULL); // by Y zamiast creceive i flagi z EDP_MASTER
+			// by Y zamiast creceive i flagi z EDP_MASTER
+			if(TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_RECEIVE, NULL, NULL, NULL) == -1) {
+				perror("ecp_task: TimerTimeout()");
+			}
 		}
 		int caller = MsgReceive_r(ecp_attach->chid, &mp_command,
 				sizeof(mp_command), NULL);
