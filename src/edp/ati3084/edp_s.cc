@@ -52,13 +52,8 @@ namespace mrrocpp {
 namespace edp {
 namespace sensor {
 
-static int sint_id;
-static struct sigevent sevent;
-
-static uint64_t int_timeout;// by Y
-
-static struct pci_dev_info info;// do karty advantech 1751pci
-static uintptr_t base_io_adress; // do obslugi karty advantech pci1751
+//! PCI device base IO address
+static uintptr_t base_io_address;
 
 const struct sigevent * schunk_int_handler(void *arg, int sint_id)
 {
@@ -93,7 +88,7 @@ const struct sigevent * schunk_int_handler(void *arg, int sint_id)
 
 		set_ibf(0);
 
-		return (&sevent);
+		return (&mds.sevent);
 	} else {
 		bool return_sevent = false;
 
@@ -110,7 +105,7 @@ const struct sigevent * schunk_int_handler(void *arg, int sint_id)
 
 		set_ibf(0);
 
-		return (return_sevent) ? (&sevent) : NULL;
+		return (return_sevent) ? (&mds.sevent) : NULL;
 	}
 }
 
@@ -155,13 +150,12 @@ void ATI3084_force::connect_to_hardware(void)
 			// 	printf("connected to Advantech 1751\n");
 			delay(100);
 			// printf("Przerwanie numer: %d\n",info.Irq);
-			base_io_adress = mmap_device_io(info.BaseAddressSize[2], PCI_IO_ADDR(info.CpuBaseAddress[2]));
-			// 	printf("base: %d\n",base_io_adress);
+			base_io_address = mmap_device_io(info.BaseAddressSize[2], PCI_IO_ADDR(info.CpuBaseAddress[2]));
+			// 	printf("base: %d\n",base_io_address);
 
 			initiate_registers();// konfiguracja karty
 
-			memset(&sevent, 0, sizeof(sevent));// obsluga przerwania
-			sevent.sigev_notify = SIGEV_INTR;
+			mds.sevent.sigev_notify = SIGEV_INTR;
 
 			// spinlock is not required until interrupt attached
 			mds.intr_mode = 0; // obsluga przerwania ustawiona na odbior pojedynczych slow
@@ -214,6 +208,7 @@ void ATI3084_force::connect_to_hardware(void)
 ATI3084_force::~ATI3084_force(void)
 {
 	if (!(master.test_mode)) {
+		InterruptDetach(sint_id);
 		pci_detach_device(hdl); // odlacza driver od danego urzadzenia na PCI
 		pci_detach(phdl); // Disconnect from the PCI server
 		close(uart);
@@ -432,8 +427,8 @@ void ATI3084_force::set_output(int16_t value)
 	lower = (unsigned char) (output % 256);
 	upper = (unsigned char) (output >>= 8);
 
-	out8(base_io_adress + LOWER_OUTPUT, lower);
-	out8(base_io_adress + UPPER_OUTPUT, upper);
+	out8(base_io_address + LOWER_OUTPUT, lower);
+	out8(base_io_address + UPPER_OUTPUT, upper);
 }
 
 
@@ -446,8 +441,8 @@ int16_t get_input(void)
 	// wersja z nowa plytka
 	const unsigned char input_positions[16] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 };
 
-	uint8_t lower = in8(base_io_adress + LOWER_INPUT);
-	uint8_t upper = in8(base_io_adress + UPPER_INPUT);
+	uint8_t lower = in8(base_io_address + LOWER_INPUT);
+	uint8_t upper = in8(base_io_address + UPPER_INPUT);
 
 	temp_input = lower + 256* upper ;
 
@@ -463,31 +458,31 @@ int16_t get_input(void)
 
 void ATI3084_force::set_obf(unsigned char state)
 {
-	uint8_t temp_register = in8(base_io_adress + CONTROL_OUTPUT);
+	uint8_t temp_register = in8(base_io_address + CONTROL_OUTPUT);
 
 	if (state)
 		temp_register |= 0x10;// dla przejsciowki
 	else
 		temp_register &= 0xef;
 
-	out8(base_io_adress + CONTROL_OUTPUT, temp_register);
+	out8(base_io_address + CONTROL_OUTPUT, temp_register);
 }
 
 void set_ibf(unsigned char state)
 {
-	uint8_t temp_register = in8(base_io_adress + CONTROL_OUTPUT);
+	uint8_t temp_register = in8(base_io_address + CONTROL_OUTPUT);
 
 	if (state)
 		temp_register |= 0x20;// dla przejsciowki
 	else
 		temp_register &= 0xdf;
 
-	out8(base_io_adress + CONTROL_OUTPUT, temp_register);
+	out8(base_io_address + CONTROL_OUTPUT, temp_register);
 }
 
 bool ATI3084_force::check_ack()
 {
-	uint8_t temp_register = in8(base_io_adress + ACK_PORT_INPUT);
+	uint8_t temp_register = in8(base_io_address + ACK_PORT_INPUT);
 
 	if (temp_register & 0x01)
 		return true;
@@ -497,7 +492,7 @@ bool ATI3084_force::check_ack()
 
 bool check_stb()
 {
-	uint8_t temp_register = in8(base_io_adress + STB_PORT_INPUT);
+	uint8_t temp_register = in8(base_io_address + STB_PORT_INPUT);
 
 	if (temp_register & 0x01)
 		return true;
@@ -507,9 +502,9 @@ bool check_stb()
 
 void ATI3084_force::initiate_registers(void)
 {
-	out8(base_io_adress + PORT_0_CONFIG, 0x03);
-	out8(base_io_adress + PORT_1_CONFIG, 0x03);
-	out8(base_io_adress + INTER_CONFIG, 0x10);// przerwanie od !stb, mozna dolaczyc przerwanie od !ack
+	out8(base_io_address + PORT_0_CONFIG, 0x03);
+	out8(base_io_address + PORT_1_CONFIG, 0x03);
+	out8(base_io_address + INTER_CONFIG, 0x10);// przerwanie od !stb, mozna dolaczyc przerwanie od !ack
 	delay(100);
 	set_obf(1);
 	set_ibf(0);
@@ -517,7 +512,7 @@ void ATI3084_force::initiate_registers(void)
 
 bool check_intr(void)
 {
-	uint8_t temp_register = in8(base_io_adress + INTER_CONFIG);
+	uint8_t temp_register = in8(base_io_address + INTER_CONFIG);
 
 	if (temp_register & 0x80)
 		return 1;
@@ -665,11 +660,11 @@ void ATI3084_force::do_init(void)
 
 void clear_intr(void)
 {
-	uint8_t temp_register = in8(base_io_adress + INTER_CONFIG);
+	uint8_t temp_register = in8(base_io_address + INTER_CONFIG);
 
 	temp_register |= 0x80;
 
-	out8(base_io_adress + INTER_CONFIG, temp_register);
+	out8(base_io_address + INTER_CONFIG, temp_register);
 }
 
 force* return_created_edp_force_sensor(common::manip_effector &_master)

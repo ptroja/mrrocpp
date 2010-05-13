@@ -72,6 +72,7 @@ namespace sensor {
 class ATI3084_force : public force {
 
 public:
+	//! Measurement data type shared with interrupt handler
 	typedef struct mds_data
 	{
 		int intr_mode;
@@ -79,11 +80,21 @@ public:
 		bool is_received;
 		int16_t data[MDS_DATA_RANGE];
 		intrspin_t spinlock;
+		struct sigevent sevent;
 	} mds_data_t;
 
 private:
-
+	//! Measurement data
 	mds_data_t mds;
+
+	//! Interrupt timeout
+	uint64_t int_timeout;
+
+	//! PCI device info
+	struct pci_dev_info info;
+
+	//! Interrupt ID
+	int sint_id;
 
 	bool int_attached;// informacja o tym, czy obsluga przerwanie jest juz przypisana
 
