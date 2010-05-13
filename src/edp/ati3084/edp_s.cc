@@ -52,19 +52,8 @@ namespace mrrocpp {
 namespace edp {
 namespace sensor {
 
-#define MDS_DATA_RANGE 20
-
 static int sint_id;
 static struct sigevent sevent;
-
-static struct mds_data
-{
-	int intr_mode;
-	int byte_counter;
-	bool is_received;
-	int16_t data[MDS_DATA_RANGE];
-	intrspin_t spinlock;
-} mds;
 
 static uint64_t int_timeout;// by Y
 
@@ -76,56 +65,59 @@ const struct sigevent * schunk_int_handler(void *arg, int sint_id)
 	if (!check_intr()) {
 		// przyczyna przerwania inna niz sygnal stb z karty advantech
 		return NULL;
-	} else {
-		struct timespec rqtp;
-		rqtp.tv_sec = 0;
-		rqtp.tv_nsec = INTR_NS_DELAY;
+	}
 
-		clear_intr();
-		set_ibf(1);
+	ATI3084_force::mds_data_t & mds = *(ATI3084_force::mds_data_t *) arg;
 
-		InterruptLock(&mds.spinlock);
+	struct timespec rqtp;
+	rqtp.tv_sec = 0;
+	rqtp.tv_nsec = INTR_NS_DELAY;
 
-		if (mds.intr_mode == 0) {
-			if (mds.is_received) {
-				mds.byte_counter = -1;
-				mds.is_received = false;
-			}
-			if ((mds.byte_counter) < (MDS_DATA_RANGE - 1)) {
-				mds.data[++mds.byte_counter] = get_input();
-			}
+	clear_intr();
+	set_ibf(1);
 
-			InterruptUnlock(&mds.spinlock);
+	InterruptLock(&mds.spinlock);
 
-			nanospin(&rqtp);
-
-			set_ibf(0);
-
-			return (&sevent);
-		} else {
-			bool return_sevent = false;
-
-			mds.data[mds.byte_counter] = get_input();
-
-			if (++mds.byte_counter >= 7) {
-				mds.byte_counter = 0;
-				return_sevent = true;
-			}
-
-			InterruptUnlock(&mds.spinlock);
-
-			nanospin(&rqtp);
-
-			set_ibf(0);
-
-			return (return_sevent) ? (&sevent) : NULL;
+	if (mds.intr_mode == 0) {
+		if (mds.is_received) {
+			mds.byte_counter = -1;
+			mds.is_received = false;
 		}
+		if ((mds.byte_counter) < (MDS_DATA_RANGE - 1)) {
+			mds.data[++mds.byte_counter] = get_input();
+		}
+
+		InterruptUnlock(&mds.spinlock);
+
+		nanospin(&rqtp);
+
+		set_ibf(0);
+
+		return (&sevent);
+	} else {
+		bool return_sevent = false;
+
+		mds.data[mds.byte_counter] = get_input();
+
+		if (++mds.byte_counter >= 7) {
+			mds.byte_counter = 0;
+			return_sevent = true;
+		}
+
+		InterruptUnlock(&mds.spinlock);
+
+		nanospin(&rqtp);
+
+		set_ibf(0);
+
+		return (return_sevent) ? (&sevent) : NULL;
 	}
 }
 
 ATI3084_force::ATI3084_force(common::manip_effector &_master) :
 	force(_master), int_attached(false)
 {
+	memset(&mds, 0, sizeof(mds));
 }
 
 void ATI3084_force::connect_to_hardware(void)
@@ -149,8 +141,7 @@ void ATI3084_force::connect_to_hardware(void)
 
 			// 	return EXIT_FAILURE;
 		}
-		// 	printf("po pci_attach_device\n");
-		delay(100);
+
 		/* Initialize the pci_dev_info structure */
 		memset(&info, 0, sizeof(info));
 		pidx = 0x0;
@@ -608,8 +599,6 @@ void ATI3084_force::solve_transducer_controller_failure(void)
 
 void ATI3084_force::do_init(void)
 {
-	short i;
-
 	int_timeout = SCHUNK_INTR_TIMEOUT_HIGH; // by Y
 
 	do_send_command(RESET); /* command ^W to FT */

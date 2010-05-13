@@ -66,11 +66,25 @@ namespace sensor {
 #define INTR_NS_DELAY 10000 // opoznienie pomiedzy dwoma stanami wyjscia karty
 // w funkcji obslugi przerwania w nanosekundach
 
+#define MDS_DATA_RANGE 20
 
 /********** klasa czujnikow po stronie VSP **************/
 class ATI3084_force : public force {
 
+public:
+	typedef struct mds_data
+	{
+		int intr_mode;
+		int byte_counter;
+		bool is_received;
+		int16_t data[MDS_DATA_RANGE];
+		intrspin_t spinlock;
+	} mds_data_t;
+
 private:
+
+	mds_data_t mds;
+
 	bool int_attached;// informacja o tym, czy obsluga przerwanie jest juz przypisana
 
 	int pidx; // do obslugi karty advantech pci1751
