@@ -765,7 +765,9 @@ void Homog_matrix::set_translation_vector(double x, double y, double z)
 // Ustawienie wektora translacji. Macierz rotacji pozostaje niezmieniona.
 void Homog_matrix::set_translation_vector(const K_vector & xyz)
 {
-	set_translation_vector(Homog_matrix(xyz));
+	matrix_m[0][3] = xyz(0,0);
+	matrix_m[1][3] = xyz(1,0);
+	matrix_m[2][3] = xyz(2,0);
 }
 
 // Ustawienie wektora translacji. Macierz rotacji pozostaje niezmieniona.
