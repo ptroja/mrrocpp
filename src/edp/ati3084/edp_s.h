@@ -71,13 +71,13 @@ namespace sensor {
 class ATI3084_force : public force {
 
 private:
-	unsigned int int_attached;// informacja o tym, czy obsluga przerwanie jest juz przypisana
+	bool int_attached;// informacja o tym, czy obsluga przerwanie jest juz przypisana
 
 	int pidx; // do obslugi karty advantech pci1751
 	void* hdl; // wlasciwy uchwyt do danego urzadzenia
 	int phdl; // pci handle -> fd do servera PCI
 
-	void set_output(uint16_t value);
+	void set_output(int16_t value);
 	void set_obf(unsigned char state);
 	bool check_ack(void);
 	void initiate_registers(void);

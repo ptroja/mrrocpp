@@ -62,7 +62,7 @@ static struct mds_data
 	int intr_mode;
 	int byte_counter;
 	bool is_received;
-	short data[MDS_DATA_RANGE];
+	int16_t data[MDS_DATA_RANGE];
 } mds;
 
 static uint64_t int_timeout;// by Y
@@ -114,7 +114,7 @@ const struct sigevent * schunk_int_handler(void *arg, int sint_id)
 }
 
 ATI3084_force::ATI3084_force(common::manip_effector &_master) :
-	force(_master), int_attached(0)
+	force(_master), int_attached(false)
 {
 }
 
@@ -289,8 +289,8 @@ void ATI3084_force::wait_for_event()
 
 	if (!(master.test_mode)) {
 
-		if (!(int_attached)) {
-			int_attached++;
+		if (!int_attached) {
+			int_attached = true;
 			mds.intr_mode = 1; // obsluga przerwania ustawiona na odbior 7 slow
 		}
 
@@ -356,7 +356,7 @@ void ATI3084_force::get_reading(void)
 		InterruptDisable ();
 		for (int i = 0; i < 6; i++)
 			ft_table[i] = static_cast <double> (mds.data[i + 1]);
-		short measure_report = mds.data[0];
+		int16_t measure_report = mds.data[0];
 
 		InterruptEnable();
 
@@ -396,32 +396,9 @@ void ATI3084_force::get_reading(void)
 	}
 }
 
-void ATI3084_force::parallel_do_send_command(const char* command)
+void ATI3084_force::set_output(int16_t value)
 {
-	char a;
-	struct timespec rqtp;
-
-	rqtp.tv_sec = 0;
-	rqtp.tv_nsec = 100000;
-
-	while ((a = *command++) != 0) {
-		uint16_t value = short(a);
-		set_output(value);
-		while (!check_ack());
-		set_obf(0);
-		nanosleep(&rqtp, NULL);
-
-		if (value != 23)
-			while (check_ack()); // jesli polcecenie rozne od RESET
-		else
-			delay(1);
-		set_obf(1);
-	}
-}
-
-void ATI3084_force::set_output(uint16_t value)
-{
-	uint16_t output = 0;
+	int16_t output = 0;
 	uint16_t comp = 0x0001;
 	uint8_t lower, upper;
 	// wersja z pajaczkiem
@@ -436,17 +413,18 @@ void ATI3084_force::set_output(uint16_t value)
 			output |= mask;
 		comp <<= 1;
 	}
-	lower = (uint8_t) (output % 256);
-	upper = (uint8_t) (output >>= 8);
+	lower = (unsigned char) (output % 256);
+	upper = (unsigned char) (output >>= 8);
 
 	out8(base_io_adress + LOWER_OUTPUT, lower);
 	out8(base_io_adress + UPPER_OUTPUT, upper);
 }
 
-short get_input(void)
+
+int16_t get_input(void)
 {
-	short input = 0, temp_input;
-	unsigned short comp = 0x0001;
+	int16_t input = 0, temp_input;
+	uint16_t comp = 0x0001;
 	// wersja z pajaczkiem
 	// 	const unsigned char input_positions[16]={8,10,12,14,7,5,3,1,9,11,13,15,6,4,2,0};
 	// wersja z nowa plytka
@@ -458,7 +436,7 @@ short get_input(void)
 	temp_input = lower + 256* upper ;
 
 	for (int i = 0; i < 16; i++) {
-		unsigned short mask = 0x0001;
+		uint16_t mask = 0x0001;
 		mask <<= input_positions[i];
 		if (temp_input & comp)
 			input |= mask;
@@ -562,11 +540,34 @@ void ATI3084_force::do_Wait(void)
 
 void ATI3084_force::do_send_command(const char* command)
 {
+#if SERIAL
 	int data_written = write(uart, command, strlen(command));
 
 	if (data_written =! strlen(command)) {
 		perror("ATI3084 serial write to sensor failed");
 	}
+#endif
+#if PARALLEL
+	char a;
+	struct timespec rqtp;
+
+	rqtp.tv_sec = 0;
+	rqtp.tv_nsec = 100000;
+
+	while ((a = *command++) != 0) {
+		int16_t value = int16_t(a);
+		set_output(value);
+		while (!check_ack());
+		set_obf(0);
+		nanosleep(&rqtp, NULL);
+
+		if (value != 23)
+			while (check_ack()); // jesli polcecenie rozne od RESET
+		else
+			delay(1);
+		set_obf(1);
+	}
+#endif
 }
 
 // metoda na wypadek skasowanie pamiecia nvram
@@ -643,6 +644,10 @@ void ATI3084_force::do_init(void)
 
 	do_send_command(SB);
 	do_Wait();
+
+#ifdef PARALLEL
+	do_Wait();
+#endif
 }
 
 void clear_intr(void)
