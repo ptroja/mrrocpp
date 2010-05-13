@@ -182,7 +182,11 @@ void ATI3084_force::connect_to_hardware(void)
 		if(tcgetattr(uart, &tattr) == -1) {
 			// TODO: throw
 			perror("tcgetattr()");
-<<<<<<< HEAD
+		}
+
+		// setup raw mode
+		if(cfmakeraw(&tattr) == -1) {
+			perror("cfmakeraw()");
 		}
 
 		// setup input speed
@@ -200,25 +204,6 @@ void ATI3084_force::connect_to_hardware(void)
 			perror("cfmakeraw()");
 		}
 
-=======
-		}
-
-		// setup input speed
-		if(cfsetispeed(&tattr, B38400) == -1) {
-			perror("tcgetattr()");
-		}
-
-		// setup output speed
-		if(cfsetospeed(&tattr, B38400) == -1) {
-			perror("tcgetattr()");
-		}
-
-		// setup raw mode
-		if(cfmakeraw(&tattr) == -1) {
-			perror("cfmakeraw()");
-		}
-
->>>>>>> 0a1e1f2422bb7f475799d5f4b6b41ff1aba38637
 		// apply settings to serial port
 		if(tcsetattr(uart, TCSANOW, &tattr) == -1) {
 			perror("tcsetattr()");
