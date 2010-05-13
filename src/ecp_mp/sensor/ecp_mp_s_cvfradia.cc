@@ -55,7 +55,6 @@ cvfradia::cvfradia(lib::SENSOR_t _sensor_name, const char* _section_name, task::
 	memset(&serv_addr, 0, sizeof(serv_addr));
 	// Fill it with data.
 	serv_addr.sin_family = AF_INET;
-
 	memcpy(server->h_addr, &serv_addr.sin_addr.s_addr, server->h_length);
 	serv_addr.sin_port = htons(cvfradia_port);
 

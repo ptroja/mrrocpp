@@ -47,7 +47,8 @@ reader_buffer::reader_buffer(motor_driven_effector &_master) :
 	thread_id = new boost::thread(boost::bind(&reader_buffer::operator(), this));
 }
 
-reader_buffer::~reader_buffer() {
+reader_buffer::~reader_buffer()
+{
 	// TODO: stop (interrupt?) the thread
 	//thread_id->interrupt();
 	//thread_id->join(); // join it
@@ -77,16 +78,10 @@ void reader_buffer::operator()()
 		reader_meassures_dir = master.config.return_default_reader_measures_path();
 	}
 
-	if (access(reader_meassures_dir.c_str(), R_OK) != 0) {
-		mkdir(reader_meassures_dir.c_str(), S_IRWXU | S_IRGRP | S_IXGRP
-				| S_IROTH | S_IXOTH);
-	}
-
-	std::string robot_filename = master.config.value<std::string> (
-			"reader_attach_point");
+	std::string robot_filename = master.config.value<std::string>("reader_attach_point");
 
 	if (master.config.exists("reader_samples"))
-		nr_of_samples = master.config.value<int> ("reader_samples");
+		nr_of_samples = master.config.value<int>("reader_samples");
 	else
 		nr_of_samples = 1000;
 
@@ -140,15 +135,18 @@ void reader_buffer::operator()()
 		}
 	}
 
+<<<<<<< HEAD
 
 	// ustawienie priorytetu watku
 	lib::set_thread_priority(pthread_self(), MAX_PRIORITY - 10);
 
+=======
+>>>>>>> fd45f7e945b303f43c34fd341e30175fb9ed9ca9
 	// NOTE: readed buffer has to be allocated on heap (using "new" operator) due to huge size
 	// boost::scoped_array takes care of deallocating in case of exception
 	boost::circular_buffer<reader_data> reader_buf(nr_of_samples);
 
-	//	fprintf(stderr, "reader buffer size %lluKB\n", nr_of_samples*sizeof(reader_data)/1024);
+//	fprintf(stderr, "reader buffer size %lluKB\n", nr_of_samples*sizeof(reader_data)/1024);
 
 	// by Y komuniakicja pomiedzy ui i reader'em rozwiazalem poprzez pulsy
 	// powolanie kanalu komunikacyjnego do odbioru pulsow sterujacych
@@ -173,6 +171,9 @@ void reader_buffer::operator()()
 		// ustawienie priorytetu watku
 		lib::set_thread_priority(pthread_self(), MAX_PRIORITY-10);
 
+		// ustawienie priorytetu watku
+		lib::set_thread_priority(pthread_self(), MAX_PRIORITY-10);
+
 		start = false; // okresla czy odebrano juz puls rozpoczecia pomiarow
 
 		// dopoki nie przyjdzie puls startu
@@ -190,17 +191,17 @@ void reader_buffer::operator()()
 			if (rcvid == 0) {/* Pulse received */
 				//  printf("reader puls\n");
 				switch (ui_msg.hdr.code) {
-				case _PULSE_CODE_DISCONNECT:
+					case _PULSE_CODE_DISCONNECT:
 					ConnectDetach(ui_msg.hdr.scoid);
 					break;
-				case _PULSE_CODE_UNBLOCK:
+					case _PULSE_CODE_UNBLOCK:
 					break;
-				default:
-					if (ui_msg.hdr.code == READER_START) { // odebrano puls start
+					default:
+					if (ui_msg.hdr.code==READER_START) { // odebrano puls start
 						start = true;
-						//#ifdef DOCENT_SENSOR
+//#ifdef DOCENT_SENSOR
 						master.onReaderStarted();
-						//#endif
+//#endif
 					}
 				}
 				continue;
@@ -270,33 +271,31 @@ void reader_buffer::operator()()
 			if (rcvid == 0) {/* Pulse received */
 				// printf("reader puls\n");
 				switch (ui_msg.hdr.code) {
-				case _PULSE_CODE_DISCONNECT:
+					case _PULSE_CODE_DISCONNECT:
 					ConnectDetach(ui_msg.hdr.scoid);
 					break;
-				case _PULSE_CODE_UNBLOCK:
+					case _PULSE_CODE_UNBLOCK:
 					break;
-				default:
-					if (ui_msg.hdr.code == READER_STOP) {
+					default:
+					if (ui_msg.hdr.code==READER_STOP) {
 						stop = true; // dostalismy puls STOP
-						//#ifdef DOCENT_SENSOR
+//#ifdef DOCENT_SENSOR
 						master.onReaderStopped();
-						//#endif
-					} else if (ui_msg.hdr.code == READER_TRIGGER) {
+//#endif
+					} else if (ui_msg.hdr.code==READER_TRIGGER) {
 						ui_trigger = true; // dostalismy puls TRIGGER
 					}
 
 				}
 			}
 
-			if (rcvid > 0) {
+			if (rcvid> 0) {
 				/* A QNX IO message received, reject */
 				if (ui_msg.hdr.type >= _IO_BASE && ui_msg.hdr.type <= _IO_MAX) {
 					MsgReply(rcvid, EOK, 0, 0);
 				} else {
 					/* A message (presumable ours) received, handle */
-					printf(
-							"reader server receive strange message of type: %d\n",
-							ui_msg.data);
+					printf("reader server receive strange message of type: %d\n", ui_msg.data);
 					MsgReply(rcvid, EOK, 0, 0);
 				}
 			}
