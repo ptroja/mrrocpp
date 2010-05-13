@@ -1,17 +1,6 @@
-// ------------------------------------------------------------------------
-// Proces:		-
-// Plik:			mathtr.cc
-// System:	QNX/MRROC++  v. 6.3
-// Opis:		Klasy K_vector, Homog_matrix, Ft_v_vector
-//				- deklaracja metod klas
-//
-// Autor:		tkornuta
-// Data:		14.02.2007
-// ------------------------------------------------------------------------
-
 #include <math.h>
 #include <string.h>
-#include <iostream>
+#include <ostream>
 
 #include "lib/mis_fun.h"
 #include "lib/mrmath/mrmath.h"
@@ -96,13 +85,12 @@ Ft_tr Ft_tr::operator* (const Ft_tr & m) const
 Ft_vector Ft_tr::operator*(const Ft_vector & w) const
 {
 	Ft_vector zwracany;
-	int i;
-	int j;
+
 	// i - i-ta kolumna
 	// j - j-ty wiersz
 
-	for(j=0;j<6;j++)
-		for(i=0;i<6;i++)
+	for(int j=0;j<6;j++)
+		for(int i=0;i<6;i++)
 			zwracany[j] += matrix_m[j][i] * w[i];
 //	std::cout << "zwracany " << zwracany <<std::endl;
 //	std::cout << "w " << zwracany <<std::endl;
@@ -146,34 +134,36 @@ void Ft_tr::set_from_frame(const Homog_matrix & p)
 	for(int i=0; i<3; i++)
 		for(int j=0; j<3; j++)
 		{
-			matrix_m[i][j] = p.matrix_m[i][j];
-			matrix_m[i+3][j+3] = p.matrix_m[i][j];
+			matrix_m[i][j] = p(i,j);
+			matrix_m[i+3][j+3] = p(i,j);
 			matrix_m[j][i+3] = 0;
 		}
 
 	double Porg[3][3];
 
 	Porg[0][0] = 0;
-	Porg[0][1] = -p.matrix_m[2][3];
-	Porg[0][2] = p.matrix_m[1][3];
+	Porg[0][1] = -p(2,3);
+	Porg[0][2] = p(1,3);
 
-	Porg[1][0] = p.matrix_m[2][3];
+	Porg[1][0] = p(2,3);
 	Porg[1][1] = 0;
-	Porg[1][2] = -p.matrix_m[0][3];
+	Porg[1][2] = -p(0,3);
 
-	Porg[2][0] = -p.matrix_m[1][3];
-	Porg[2][1] = p.matrix_m[0][3];
+	Porg[2][0] = -p(1,3);
+	Porg[2][1] = p(0,3);
 	Porg[2][2] = 0;
 
 	for(int i=0; i<3; i++)
+	{
 		for(int j=0; j<3; j++)
 		{
 			matrix_m[j+3][i] = 0;
 			for(int a=0; a<3; a++)
 			{
-				matrix_m[j+3][i] += Porg[j][a] * p.matrix_m[a][i];
+				matrix_m[j+3][i] += Porg[j][a] * p(a,i);
 			}
 		}
+	}
 }
 
 // ******************************************************************************************
@@ -188,6 +178,7 @@ V_tr::V_tr() : Ft_v_tr()
 	// i - i-ta kolumna
 	// j - j-ty wiersz
 	for(int i=0; i<6; i++)
+	{
 		for(int j=0; j<6; j++)
 		{
 			if(i == j)
@@ -195,6 +186,7 @@ V_tr::V_tr() : Ft_v_tr()
 			else
 				matrix_m[i][j] = 0;
 		}
+	}
 }
 
 V_tr::V_tr(const Homog_matrix & p) : Ft_v_tr()
@@ -205,7 +197,6 @@ V_tr::V_tr(const Homog_matrix & p) : Ft_v_tr()
 	base_frame = p;
 
 	set_from_frame (base_frame);
-
 }
 
 // konstruktor kopiujacy
@@ -275,37 +266,40 @@ void V_tr::set_from_frame(const Homog_matrix & p)
 	// j - j-ty wiersz
 
 	for(int i=0; i<3; i++)
+	{
 		for(int j=0; j<3; j++)
 		{
-			matrix_m[i][j] = p.matrix_m[i][j];
-			matrix_m[i+3][j+3] = p.matrix_m[i][j];
+			matrix_m[i][j] = p(i,j);
+			matrix_m[i+3][j+3] = p(i,j);
 			matrix_m[j+3][i] = 0;
 		}
+	}
 
 	double Porg[3][3];
 
 	Porg[0][0] = 0;
-	Porg[0][1] = -p.matrix_m[2][3];
-	Porg[0][2] = p.matrix_m[1][3];
+	Porg[0][1] = -p(2,3);
+	Porg[0][2] = p(1,3);
 
-	Porg[1][0] = p.matrix_m[2][3];
+	Porg[1][0] = p(2,3);
 	Porg[1][1] = 0;
-	Porg[1][2] = -p.matrix_m[0][3];
+	Porg[1][2] = -p(0,3);
 
-	Porg[2][0] = -p.matrix_m[1][3];
-	Porg[2][1] = p.matrix_m[0][3];
+	Porg[2][0] = -p(1,3);
+	Porg[2][1] = p(0,3);
 	Porg[2][2] = 0;
 
 	for(int i=0; i<3; i++)
+	{
 		for(int j=0; j<3; j++)
 		{
 			matrix_m[j][i+3] = 0;
 			for(int a=0; a<3; a++)
 			{
-				matrix_m[j][i+3] += Porg[j][a] * p.matrix_m[a][i];
+				matrix_m[j][i+3] += Porg[j][a] * p(a,i);
 			}
 		}
-
+	}
 }
 
 } // namespace lib

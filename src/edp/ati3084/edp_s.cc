@@ -229,8 +229,7 @@ void ATI3084_force::configure_sensor(void)
 	if (!(master.test_mode)) {
 		mds.intr_mode = 0;
 
-		if (send_command(SB) == -1)
-			printf("Blad wyslania polecenia SB\n");
+		send_command(SB);
 		do_Wait();
 
 #ifdef PARALLEL
@@ -284,7 +283,6 @@ void ATI3084_force::configure_sensor(void)
 
 void ATI3084_force::wait_for_event()
 {
-
 	int iw_ret;
 	int iter_counter = 0; // okresla ile razy pod rzad zostala uruchomiona ta metoda
 
@@ -300,8 +298,7 @@ void ATI3084_force::wait_for_event()
 
 			mds.byte_counter = 0;// zabezpieczenie przed niektorymi bledami pomiarow - sprawdzone dziala ;)
 
-			if (send_command(SGET1) == -1)
-				printf("blad w send_command(sget1)\n");
+			send_command(SGET1);
 
 			mds.intr_mode = 1; // przywrocenie do 7 bajtowego trybu odbiotu danych
 			mds.byte_counter = 0;
@@ -358,7 +355,7 @@ void ATI3084_force::get_reading(void)
 		InterruptDisable ();
 		for (int i = 0; i < 6; i++)
 			ft_table[i] = static_cast <double> (mds.data[i + 1]);
-		short measure_report = mds.data[0];
+		uint16_t measure_report = mds.data[0];
 
 		InterruptEnable();
 
@@ -401,14 +398,13 @@ void ATI3084_force::get_reading(void)
 void ATI3084_force::parallel_send_command(const char* command)
 {
 	char a;
-	short value = 0;
 	struct timespec rqtp;
 
 	rqtp.tv_sec = 0;
 	rqtp.tv_nsec = 100000;
 
 	while ((a = *command++) != 0) {
-		value = short(a);
+		uint16_t value = short(a);
 		set_output(value);
 		while (!check_ack());
 		set_obf(0);
@@ -433,14 +429,14 @@ void ATI3084_force::set_output(uint16_t value)
 	const unsigned char output_positions[16] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 };
 
 	for (int i = 0; i < 16; i++) {
-		unsigned short mask = 0x0001;
+		uint16_t mask = 0x0001;
 		mask <<= output_positions[i];
 		if (value & comp)
 			output |= mask;
 		comp <<= 1;
 	}
-	lower = (unsigned char) (output % 256);
-	upper = (unsigned char) (output >>= 8);
+	lower = (uint8_t) (output % 256);
+	upper = (uint8_t) (output >>= 8);
 
 	out8(base_io_adress + LOWER_OUTPUT, lower);
 	out8(base_io_adress + UPPER_OUTPUT, upper);
@@ -461,7 +457,7 @@ uint16_t get_input(void)
 	temp_input = lower + 256* upper ;
 
 	for (int i = 0; i < 16; i++) {
-		unsigned short mask = 0x0001;
+		uint16_t mask = 0x0001;
 		mask <<= input_positions[i];
 		if (temp_input & comp)
 			input |= mask;
@@ -563,24 +559,25 @@ void ATI3084_force::do_Wait(void)
 	} while (iw_ret != -1);
 }
 
-int ATI3084_force::serial_send_command(const char* command)
+void ATI3084_force::serial_send_command(const char* command)
 {
 	// ew. miejce na pzerwanie o pustej kolejce - obecnie while pod spodem
 	// 	while ( ! ( in8 ( LSREG ) & 0x40 ));
 
 	int data_written = write(uart, command, strlen(command));
 
-	return (data_written == strlen(command)) ? 0 : -1;
+	if (data_written != strlen(command)) {
+		perror("ATI3084 serial write to sensor failed\n");
+	}
 }
 
-int ATI3084_force::send_command(const char * command)
+void ATI3084_force::send_command(const char * command)
 {
 #ifdef SERIAL
-	return serial_send_command(command);
+	serial_send_command(command);
 #endif
 #ifdef PARALLEL
 	parallel_send_command(command);
-	return 0;
 #endif
 }
 
@@ -591,10 +588,7 @@ void ATI3084_force::solve_transducer_controller_failure(void)
 {
 	tcflush(uart, TCIFLUSH);
 
-	int i = send_command(YESCOMM); /* command ^W to FT */
-	if (i == -1) {
-		printf("Blad wyslania YESCOMM w solve_transducer_controller_failure\n");
-	}
+	send_command(YESCOMM); /* command ^W to FT */
 
 	tcflush(uart, TCIFLUSH);
 }
@@ -609,7 +603,6 @@ void ATI3084_force::do_init(void)
 	delay(20);
 	send_command(CD_B);
 	delay(20);
-	send_command(CD_B);
 	delay(20);
 	send_command(CD_R);
 	delay(20);

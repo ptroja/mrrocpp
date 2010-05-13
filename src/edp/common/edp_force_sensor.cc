@@ -48,6 +48,7 @@ void force::operator()(void)
 		try {
 			if (new_edp_command) {
 				boost::mutex::scoped_lock lock(mtx);
+				// TODO: this should be handled with boost::bind functor parameter
 				switch (command)
 				{
 					case (common::FORCE_SET_TOOL):
@@ -93,8 +94,8 @@ void force::operator()(void)
 
 		} //!< koniec TRY
 
-		catch (lib::sensor::sensor_error e) {
-			std::cerr << "sensor_error w force thread EDP" << std::endl;
+		catch (lib::sensor::sensor_error & e) {
+			std::cerr << "sensor_error in EDP force thread" << std::endl;
 
 			switch (e.error_no)
 			{
@@ -109,7 +110,7 @@ void force::operator()(void)
 		} //!< end CATCH
 
 		catch (...) {
-			std::cerr << "unidentified error force thread w EDP" << std::endl;
+			std::cerr << "unidentified error in EDP force thread" << std::endl;
 		}
 
 	} //!< //!< end while(;;)
@@ -119,9 +120,6 @@ force::force(common::manip_effector &_master) :
 	gravity_transformation(NULL),
 	new_edp_command(false),
 	master(_master),
-	edp_vsp_synchroniser(),
-	new_command_synchroniser(),
-	thread_started(),
 	is_sensor_configured(false), //!< czujnik niezainicjowany
 	is_reading_ready(false), //!< nie ma zadnego gotowego odczytu
 	TERMINATE(false)
@@ -160,4 +158,3 @@ void force::set_command_execution_finish() // podniesienie semafora
 } // namespace sensor
 } // namespace edp
 } // namespace mrrocpp
-

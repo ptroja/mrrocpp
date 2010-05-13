@@ -15,38 +15,6 @@ namespace mrrocpp {
 namespace edp {
 namespace sensor {
 
-// Z PLIKU cz_defs.h
-
-// user commands
-// #define INIT	0x01
-#define COMGETS1 0x01
-#define COMGET1	0x02
-#define COMGETN	0x03
-#define COMGIVEN	0x04
-#define COMBIAS	0x05
-#define COMUNBIAS 0x06
-#define COMDELBIAS 0x07
-#define COMAVERAGE 0x08
-#define COMRESET 0x09
-
-#define COMSERVER_END 0xFD
-
-// server answers
-#define COMMAND_OK 0x00
-#define COMMAND_ERROR	0xFF
-
-// error types
-#define __ERROR_COM	1
-#define __ERROR_SEND	2
-#define __ERROR_NO_ANSWER	3
-#define __ERROR_MEASURE	4
-#define __ERROR_BAD_COMMAND	5
-#define __ERROR_INIT_SEND 6
-#define __ERROR_INIT_COM	7
-#define __ERROR_BUFFER_MAX	8
-#define __ERROR_BUFFER_ZERO 9
-
-
 // max & min svar values
 #define MAX_SVAR_VALUE 0x7F // +127
 #define MIN_SVAR_VALUE 0x80 // -128
@@ -82,16 +50,10 @@ namespace sensor {
 #define GETN	"QS\r"
 #define YESCOMM	"Y\r"
 
-#define PICMASK 0x21
-#define PICEOI	0x20
-#define EOI	0x20
-
 #define TIMEOUT 500
 #define MAX_BUFFER	3
 
 // by Y dla karty advantech
-
-#define COM_NR 1
 
 #define LOWER_OUTPUT 0
 #define LOWER_INPUT 1
@@ -105,11 +67,10 @@ namespace sensor {
 #define PORT_1_CONFIG 7
 #define INTER_CONFIG 32
 
-// opoznienie pomiedzy dwoma stanami wyjscia karty
+#define INTR_LOOP_DELAY 1000 // opoznienie pomiedzy dwoma stanami wyjscia karty w funkcji obslugi przerwania
+#define INTR_NS_DELAY 10000 // opoznienie pomiedzy dwoma stanami wyjscia karty
 // w funkcji obslugi przerwania w nanosekundach
-#define INTR_NS_DELAY 10000
 
-#define MDS_DATA_RANGE 20
 
 /********** klasa czujnikow po stronie VSP **************/
 class ATI3084_force : public force {

@@ -118,7 +118,7 @@ int main(int argc, char *argv[]) {
 		//	printf("end\n");
 	}
 
-	catch (System_error fe) {
+	catch (System_error & fe) {
 		// Obsluga bledow systemowych
 		/*
 		 // Wystapil blad w komunikacji miedzyprocesowej, oczekiwanie na jawne
