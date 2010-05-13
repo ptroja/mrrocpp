@@ -1,10 +1,8 @@
 // -------------------------------------------------------------------------
-//                            edp_s.cc 		dla QNX6.3.0
+//                            edp_s.cc
 //
-//            Virtual Sensor Process (lib::VSP) - methods for Schunk force/torgue sensor
-// Metody klasy VSP
+// methods for Schunk force/torgue sensor
 //
-// Ostatnia modyfikacja: grudzie 2004
 // Autor: Yoyek (Tomek Winiarski)
 // na podstawie szablonu vsp Tomka Kornuty i programu obslugi czujnika Artura Zarzyckiego
 // -------------------------------------------------------------------------
@@ -62,8 +60,7 @@ static struct mds_data
 	int intr_mode;
 	int byte_counter;
 	bool is_received;
-	int16_t data[MDS_DATA_RANGE];
-	intrspin_t spinlock;
+	short data[MDS_DATA_RANGE];
 } mds;
 
 static uint64_t int_timeout;// by Y
@@ -73,19 +70,19 @@ static uintptr_t base_io_adress; // do obslugi karty advantech pci1751
 
 const struct sigevent * schunk_int_handler(void *arg, int sint_id)
 {
+	struct timespec rqtp;
+	rqtp.tv_sec = 0;
+	rqtp.tv_nsec = INTR_NS_DELAY;
+
+	InterruptMask(info.Irq, sint_id);
+
 	if (!check_intr()) {
 		// przyczyna przerwania inna niz sygnal stb z karty advantech
+		InterruptUnmask(info.Irq, sint_id);
 		return NULL;
 	} else {
-		struct timespec rqtp;
-		rqtp.tv_sec = 0;
-		rqtp.tv_nsec = INTR_NS_DELAY;
-
 		clear_intr();
 		set_ibf(1);
-
-		InterruptLock(&mds.spinlock);
-
 		if (mds.intr_mode == 0) {
 			if (mds.is_received) {
 				mds.byte_counter = -1;
@@ -94,37 +91,28 @@ const struct sigevent * schunk_int_handler(void *arg, int sint_id)
 			if ((mds.byte_counter) < (MDS_DATA_RANGE - 1)) {
 				mds.data[++mds.byte_counter] = get_input();
 			}
-
-			InterruptUnlock(&mds.spinlock);
-
 			nanospin(&rqtp);
 
 			set_ibf(0);
-
+			InterruptUnmask(info.Irq, sint_id);
 			return (&sevent);
 		} else {
-			bool return_sevent = false;
-
 			mds.data[mds.byte_counter] = get_input();
-
-			if (++mds.byte_counter >= 7) {
-				mds.byte_counter = 0;
-				return_sevent = true;
-			}
-
-			InterruptUnlock(&mds.spinlock);
-
 			nanospin(&rqtp);
 
 			set_ibf(0);
-
-			return (return_sevent) ? (&sevent) : NULL;
+			InterruptUnmask(info.Irq, sint_id);
+			if (++mds.byte_counter >= 7) {
+				mds.byte_counter = 0;
+				return (&sevent);
+			}
+			return (NULL);
 		}
 	}
 }
 
 ATI3084_force::ATI3084_force(common::manip_effector &_master) :
-	force(_master), int_attached(false)
+	force(_master), int_attached(0)
 {
 }
 
@@ -172,7 +160,6 @@ void ATI3084_force::connect_to_hardware(void)
 			memset(&sevent, 0, sizeof(sevent));// obsluga przerwania
 			sevent.sigev_notify = SIGEV_INTR;
 
-			// spinlock is not required until interrupt attached
 			mds.intr_mode = 0; // obsluga przerwania ustawiona na odbior pojedynczych slow
 			mds.byte_counter = 0;
 			mds.is_received = false;
@@ -197,12 +184,12 @@ void ATI3084_force::connect_to_hardware(void)
 
 		// setup input speed
 		if(cfsetispeed(&tattr, B38400) == -1) {
-			perror("cfsetispeed()");
+			perror("tcgetattr()");
 		}
 
 		// setup output speed
 		if(cfsetospeed(&tattr, B38400) == -1) {
-			perror("cfsetospeed()");
+			perror("tcgetattr()");
 		}
 
 		// setup raw mode
@@ -222,7 +209,8 @@ void ATI3084_force::connect_to_hardware(void)
 
 ATI3084_force::~ATI3084_force(void)
 {
-	if (!(master.test_mode)) {
+	if (!master.test_mode) {
+		// TODO: check for error codes
 		pci_detach_device(hdl); // odlacza driver od danego urzadzenia na PCI
 		pci_detach(phdl); // Disconnect from the PCI server
 		close(uart);
@@ -238,22 +226,23 @@ void ATI3084_force::configure_sensor(void)
 	is_sensor_configured = true;
 	//  printf("EDP Sensor configured\n");
 	sr_msg->message("EDP Sensor configured");
-	if (!master.test_mode) {
-		InterruptLock(&mds.spinlock);
+	if (!(master.test_mode)) {
 		mds.intr_mode = 0;
-		InterruptUnlock(&mds.spinlock);
 
-		do_send_command(SB);
-		do_Wait();
+#ifdef SERIAL
+		if (do_send_command(SB) == -1)
+			printf("Blad wyslania polecenia SB\n");
+		do_Wait("SB");
+#endif
 
 #ifdef PARALLEL
-		do_Wait();
+		parallel_do_send_command(SB);
+		do_Wait("SB");
+		do_Wait("SB");
 #endif
 	}
-	InterruptLock(&mds.spinlock);
 	mds.intr_mode = 1; // przywrocenie do 7 bajtowego trybu odbiotu danych
 	mds.byte_counter = 0;
-	InterruptUnlock(&mds.spinlock);
 	// cout << "Przed konf" << endl;
 	// jesli ma byc wykorzytstywana biblioteka transformacji sil
 	if (master.force_tryb == 2) {
@@ -302,28 +291,32 @@ void ATI3084_force::wait_for_event()
 	int iw_ret;
 	int iter_counter = 0; // okresla ile razy pod rzad zostala uruchomiona ta metoda
 
-	if (!master.test_mode) {
+	if (!(master.test_mode)) {
 
-		if (!int_attached) {
-			int_attached = true;
-			InterruptLock(&mds.spinlock);
+		if (!(int_attached)) {
+			int_attached++;
 			mds.intr_mode = 1; // obsluga przerwania ustawiona na odbior 7 slow
-			InterruptUnlock(&mds.spinlock);
 		}
 
 		do {
 			iter_counter++;
 
-			InterruptLock(&mds.spinlock);
-
 			mds.byte_counter = 0;// zabezpieczenie przed niektorymi bledami pomiarow - sprawdzone dziala ;)
+
+#ifdef SERIAL
+
+			if (do_send_command(SGET1) == -1)
+				printf("blad w send_command(sget1)\n");
+#endif
+
+#ifdef PARALLEL
+
+			parallel_do_send_command(SGET1);
+
+#endif
+
 			mds.intr_mode = 1; // przywrocenie do 7 bajtowego trybu odbiotu danych
 			mds.byte_counter = 0;
-
-			InterruptUnlock(&mds.spinlock);
-
-			do_send_command(SGET1);
-
 			int_timeout = SCHUNK_INTR_TIMEOUT_LOW;// by Y
 			TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_INTR, &tim_event, &int_timeout, NULL);
 			iw_ret = InterruptWait(0, NULL);
@@ -339,11 +332,9 @@ void ATI3084_force::wait_for_event()
 
 				}
 				usleep(10000); // aby nadmiernie nie obciazac procesora
-				InterruptLock(&mds.spinlock);
 				mds.intr_mode = 0; // obsluga przerwania ustawiona na odbior pojedynczych slow
 				mds.byte_counter = 0;
 				mds.is_received = false;
-				InterruptUnlock(&mds.spinlock);
 				do_init(); // komunikacja wstepna
 			} else {
 				if (iter_counter > 1) {
@@ -376,14 +367,12 @@ void ATI3084_force::get_reading(void)
 		master.force_msr_upload(kartez_force);
 	} else {
 		lib::Ft_vector ft_table;
-
-		InterruptLock(&mds.spinlock);
-
+		InterruptDisable ();
 		for (int i = 0; i < 6; i++)
 			ft_table[i] = static_cast <double> (mds.data[i + 1]);
-		int16_t measure_report = mds.data[0];
+		short measure_report = mds.data[0];
 
-		InterruptUnlock(&mds.spinlock);
+		InterruptEnable();
 
 		// jesli pomiar byl poprawny
 		if (measure_report == COMMAND_OK) {
@@ -392,10 +381,10 @@ void ATI3084_force::get_reading(void)
 			// jesli ma byc wykorzytstywana biblioteka transformacji sil
 			if (master.force_tryb == 2 && gravity_transformation) {
 				static int ms_nr = 0; // numer odczytu z czujnika
-				for (int i = 0; i < 3; i++)
+				for (int i = 0; i < 3; ++i)
 					ft_table[i] /= 20;
 				//			for(int i=3;i<6;i++) ft_table[i]/=333;
-				for (int i = 3; i < 6; i++)
+				for (int i = 3; i < 6; ++i)
 					ft_table[i] /= 1000; // by Y - korekta
 				lib::Homog_matrix frame = master.return_current_frame(common::WITH_TRANSLATION);
 				// lib::Homog_matrix frame(master.force_current_end_effector_frame);
@@ -421,9 +410,32 @@ void ATI3084_force::get_reading(void)
 	}
 }
 
-void ATI3084_force::set_output(int16_t value)
+void ATI3084_force::parallel_do_send_command(const char* command)
 {
-	int16_t output = 0;
+	char a;
+	struct timespec rqtp;
+
+	rqtp.tv_sec = 0;
+	rqtp.tv_nsec = 100000;
+
+	while ((a = *command++) != 0) {
+		uint16_t value = short(a);
+		set_output(value);
+		while (!check_ack());
+		set_obf(0);
+		nanosleep(&rqtp, NULL);
+
+		if (value != 23)
+			while (check_ack()); // jesli polcecenie rozne od RESET
+		else
+			delay(1);
+		set_obf(1);
+	}
+}
+
+void ATI3084_force::set_output(uint16_t value)
+{
+	uint16_t output = 0;
 	uint16_t comp = 0x0001;
 	uint8_t lower, upper;
 	// wersja z pajaczkiem
@@ -438,18 +450,17 @@ void ATI3084_force::set_output(int16_t value)
 			output |= mask;
 		comp <<= 1;
 	}
-	lower = (unsigned char) (output % 256);
-	upper = (unsigned char) (output >>= 8);
+	lower = (uint8_t) (output % 256);
+	upper = (uint8_t) (output >>= 8);
 
 	out8(base_io_adress + LOWER_OUTPUT, lower);
 	out8(base_io_adress + UPPER_OUTPUT, upper);
 }
 
-
-int16_t get_input(void)
+short get_input(void)
 {
-	int16_t input = 0, temp_input;
-	uint16_t comp = 0x0001;
+	short input = 0, temp_input;
+	unsigned short comp = 0x0001;
 	// wersja z pajaczkiem
 	// 	const unsigned char input_positions[16]={8,10,12,14,7,5,3,1,9,11,13,15,6,4,2,0};
 	// wersja z nowa plytka
@@ -461,7 +472,7 @@ int16_t get_input(void)
 	temp_input = lower + 256* upper ;
 
 	for (int i = 0; i < 16; i++) {
-		uint16_t mask = 0x0001;
+		unsigned short mask = 0x0001;
 		mask <<= input_positions[i];
 		if (temp_input & comp)
 			input |= mask;
@@ -529,9 +540,9 @@ bool check_intr(void)
 	uint8_t temp_register = in8(base_io_adress + INTER_CONFIG);
 
 	if (temp_register & 0x80)
-		return 1;
+		return true;
 	else
-		return 0;
+		return false;
 }
 
 void ATI3084_force::check_cs(void)
@@ -547,51 +558,40 @@ void ATI3084_force::check_cs(void)
 		printf("STB LOW\n");
 }
 
-void ATI3084_force::do_Wait(void)
+short ATI3084_force::do_Wait(const char* command)
 {
 	int iw_ret;
 
 	do {
 		TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_INTR, &tim_event, &int_timeout, NULL);
 		iw_ret = InterruptWait(0, NULL);
-		InterruptLock(&mds.spinlock);
+		InterruptMask(info.Irq, sint_id);
 		if (iw_ret != -1) {
 			mds.is_received = true;
 		}
-		InterruptUnlock(&mds.spinlock);
-	} while (iw_ret != -1);
-}
+		InterruptUnmask(info.Irq, sint_id);
 
-void ATI3084_force::do_send_command(const char* command)
+	} while (iw_ret != -1);
+
+<<<<<<< HEAD
+int ATI3084_force::serial_send_command(const char* command)
 {
-#if SERIAL
+	// ew. miejce na pzerwanie o pustej kolejce - obecnie while pod spodem
+	// 	while ( ! ( in8 ( LSREG ) & 0x40 ));
+
 	int data_written = write(uart, command, strlen(command));
 
-	if (data_written =! strlen(command)) {
-		perror("ATI3084 serial write to sensor failed");
-	}
-#endif
-#if PARALLEL
-	char a;
-	struct timespec rqtp;
+	return (data_written == strlen(command)) ? 0 : -1;
+=======
+	return OK;
+>>>>>>> master
+}
 
-	rqtp.tv_sec = 0;
-	rqtp.tv_nsec = 100000;
+short ATI3084_force::do_send_command(const char* command)
+{
+	int data_written = write(uart, command, strlen(command));
 
-	while ((a = *command++) != 0) {
-		int16_t value = int16_t(a);
-		set_output(value);
-		while (!check_ack());
-		set_obf(0);
-		nanosleep(&rqtp, NULL);
-
-		if (value != 23)
-			while (check_ack()); // jesli polcecenie rozne od RESET
-		else
-			delay(1);
-		set_obf(1);
-	}
-#endif
+	return (data_written == strlen(command)) ? OK : -1;
 }
 
 // metoda na wypadek skasowanie pamiecia nvram
@@ -601,77 +601,165 @@ void ATI3084_force::solve_transducer_controller_failure(void)
 {
 	tcflush(uart, TCIFLUSH);
 
-	do_send_command(YESCOMM); /* command ^W to FT */
+	int i = do_send_command(YESCOMM); /* command ^W to FT */
+	if (i == -1) {
+		ERROR_CODE = __ERROR_INIT_SEND;
+		printf("Blad wyslania YESCOMM w solve_transducer_controller_failure\n");
+	}
 
 	tcflush(uart, TCIFLUSH);
 }
 
-void ATI3084_force::do_init(void)
+short ATI3084_force::do_init(void)
 {
 	short i;
 
 	int_timeout = SCHUNK_INTR_TIMEOUT_HIGH; // by Y
+#ifdef SERIAL
 
-	do_send_command(RESET); /* command ^W to FT */
+	i = do_send_command(RESET); /* command ^W to FT */
+	if (i == -1)
+		ERROR_CODE = __ERROR_INIT_SEND;
+	delay(20);
+	i = do_send_command(CL_0);
+	if (i == -1)
+		ERROR_CODE = __ERROR_INIT_SEND;
+	delay(20);
+	i = do_send_command(CD_B);
+	if (i == -1)
+		ERROR_CODE = __ERROR_INIT_SEND;
+	delay(20);
+	i = do_send_command(CD_B);
+	if (i == -1)
+		ERROR_CODE = __ERROR_INIT_SEND;
+	delay(20);
+	i = do_send_command(CD_R);
+	if (i == -1)
+		ERROR_CODE = __ERROR_INIT_SEND;
+	delay(20);
+	i = do_send_command(CV_6);
+	if (i == -1)
+		ERROR_CODE = __ERROR_INIT_SEND;
+	delay(20);
+	i = do_send_command(SA);
+	if (i == -1)
+		ERROR_CODE = __ERROR_INIT_SEND;
+	delay(20);
+	i = do_send_command(SM);
+	if (i == -1)
+		ERROR_CODE = __ERROR_INIT_SEND;
+	delay(20);
+	i = do_send_command(SB);
+	if (i == -1)
+		ERROR_CODE = __ERROR_INIT_SEND;
 	delay(20);
 
-	do_send_command(CL_0);
-	delay(20);
+	i = do_send_command(CP_P);
+	if (i == -1)
+		ERROR_CODE = __ERROR_INIT_SEND;
+	i = do_Wait("CP_P");
+	i = do_send_command(CL_0);
+	if (i == -1)
+		ERROR_CODE = __ERROR_INIT_SEND;
+	i = do_Wait("CL_0");
+	i = do_send_command(CD_B);
+	if (i == -1)
+		ERROR_CODE = __ERROR_INIT_SEND;
+	i = do_Wait("CD_B");
+	i = do_send_command(CD_B);
+	if (i == -1)
+		ERROR_CODE = __ERROR_INIT_SEND;
+	i = do_Wait("CD_B");
+	i = do_send_command(CD_R);
+	if (i == -1)
+		ERROR_CODE = __ERROR_INIT_SEND;
+	i = do_Wait("CD_R");
+	i = do_send_command(CV_6);
+	if (i == -1)
+		ERROR_CODE = __ERROR_INIT_SEND;
+	i = do_Wait("CV_6");
+	i = do_send_command(SA);
+	if (i == -1)
+		ERROR_CODE = __ERROR_INIT_SEND;
+	i = do_Wait("SA");
+	i = do_send_command(SM);
+	if (i == -1)
+		ERROR_CODE = __ERROR_INIT_SEND;
+	i = do_Wait("SM");
+	i = do_send_command(SZ);
+	if (i == -1)
+		ERROR_CODE = __ERROR_INIT_SEND;
+	i = do_Wait("SZ");
+	i = do_send_command(SB);
+	if (i == -1)
+		ERROR_CODE = __ERROR_INIT_SEND;
+	i = do_Wait("SB");
 
-	do_send_command(CD_B);
-	delay(20);
-
-	do_send_command(CD_B);
-	delay(20);
-
-	do_send_command(CD_R);
-	delay(20);
-
-	do_send_command(CV_6);
-	delay(20);
-
-	do_send_command(SA);
-	delay(20);
-
-	do_send_command(SM);
-	delay(20);
-
-	do_send_command(SB);
-	delay(20);
-
-	do_send_command(CP_P);
-	do_Wait();
-
-	do_send_command(CL_0);
-	do_Wait();
-
-	do_send_command(CD_B);
-	do_Wait();
-
-	do_send_command(CD_B);
-	do_Wait();
-
-	do_send_command(CD_R);
-	do_Wait();
-
-	do_send_command(CV_6);
-	do_Wait();
-
-	do_send_command(SA);
-	do_Wait();
-
-	do_send_command(SM);
-	do_Wait();
-
-	do_send_command(SZ);
-	do_Wait();
-
-	do_send_command(SB);
-	do_Wait();
+#endif
 
 #ifdef PARALLEL
-	do_Wait();
+
+	parallel_do_send_command(RESET);
+	delay(20);
+
+	parallel_do_send_command(CD_B);
+	delay(20);
+
+	parallel_do_send_command(CD_B);
+	delay(20);
+
+	parallel_do_send_command(CD_B);
+	delay(20);
+
+	parallel_do_send_command(CD_R);
+	delay(20);
+
+	parallel_do_send_command(CV_6);
+	delay(20);
+
+	parallel_do_send_command(SA);
+	delay(20);
+
+	parallel_do_send_command(SM);
+	delay(20);
+
+	parallel_do_send_command(SB);
+	delay(20);
+
+	parallel_do_send_command(CP_P);
+	i=do_Wait("CP_P");
+
+	parallel_do_send_command(CL_0);
+	i=do_Wait("CL_0");
+
+	parallel_do_send_command(CD_B);
+	i=do_Wait("CD_B");
+
+	parallel_do_send_command(CD_B);
+	i=do_Wait("CD_B");
+
+	parallel_do_send_command(CD_R);
+	i=do_Wait("CD_R");
+
+	parallel_do_send_command(CV_6);
+	i=do_Wait("CV_6");
+
+	parallel_do_send_command(SA);
+	i=do_Wait("SA");
+
+	parallel_do_send_command(SM);
+	i=do_Wait("SM");
+
+	parallel_do_send_command(SZ);
+	i=do_Wait("SZ");
+
+	parallel_do_send_command(SB);
+	i=do_Wait("SB");
+	i=do_Wait("SB");// by Y bez tego nie dziala
+
 #endif
+
+	return OK;
 }
 
 void clear_intr(void)

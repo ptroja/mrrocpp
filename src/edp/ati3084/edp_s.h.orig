@@ -19,6 +19,20 @@ namespace sensor {
 // server answers
 #define COMMAND_OK 0x00
 
+<<<<<<< HEAD
+// error types
+#define __ERROR_COM	1
+#define __ERROR_SEND	2
+#define __ERROR_NO_ANSWER	3
+#define __ERROR_MEASURE	4
+#define __ERROR_BAD_COMMAND	5
+#define __ERROR_INIT_SEND 6
+#define __ERROR_INIT_COM	7
+#define __ERROR_BUFFER_MAX	8
+#define __ERROR_BUFFER_ZERO 9
+
+=======
+>>>>>>> ati3084_termios
 #define SERIAL 1 // PARALLEL - wysylynie po zlaczu rownoleglym - dziala slabo,
 // SERIAL - wysylanie po zlaczu szeregowym - dziala dobrze
 
@@ -91,6 +105,8 @@ private:
 
 	//! serial port file descriptor
 	int uart;
+
+	short ERROR_CODE;
 
 	struct sigevent tim_event;
 

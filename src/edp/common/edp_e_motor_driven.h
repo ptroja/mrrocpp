@@ -252,13 +252,6 @@ public:
 	sensor::force *vs;
 
 	/*!
-	 * \brief Thread to share data with VSP process
-	 *
-	 * Sometimes the sensors (e.g. foce sensors) are used both as the prioceptors and exteroceptors. Then some data is transmitted both to the ECP and VSP.
-	 */
-	edp_vsp* edp_vsp_obj;
-
-	/*!
 	 * \brief class constructor
 	 *
 	 * The attributes are initialized here.
