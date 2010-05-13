@@ -186,12 +186,12 @@ void ATI3084_force::connect_to_hardware(void)
 
 		// setup input speed
 		if(cfsetispeed(&tattr, B38400) == -1) {
-			perror("tcgetattr()");
+			perror("cfsetispeed()");
 		}
 
 		// setup output speed
 		if(cfsetospeed(&tattr, B38400) == -1) {
-			perror("tcgetattr()");
+			perror("cfsetospeed()");
 		}
 
 		// setup raw mode

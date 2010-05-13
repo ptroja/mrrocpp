@@ -16,26 +16,8 @@ namespace mrrocpp {
 namespace edp {
 namespace sensor {
 
-
-// Z PLIKU cz_defs.h
-
-// user commands
-// #define INIT	0x01
-#define COMGETS1 0x01
-#define COMGET1	0x02
-#define COMGETN	0x03
-#define COMGIVEN	0x04
-#define COMBIAS	0x05
-#define COMUNBIAS 0x06
-#define COMDELBIAS 0x07
-#define COMAVERAGE 0x08
-#define COMRESET 0x09
-
-#define COMSERVER_END 0xFD
-
 // server answers
 #define COMMAND_OK 0x00
-#define COMMAND_ERROR	0xFF
 
 // error types
 #define __ERROR_COM	1
@@ -48,22 +30,8 @@ namespace sensor {
 #define __ERROR_BUFFER_MAX	8
 #define __ERROR_BUFFER_ZERO 9
 
-
-// max & min svar values
-#define MAX_SVAR_VALUE 0x7F // +127
-#define MIN_SVAR_VALUE 0x80 // -128
-
-// server's process name
-#define __CZ_SERVER_NODE "cz_ser"
-
-// Z PLIKU cz_lib.h
-
 #define SERIAL 1 // PARALLEL - wysylynie po zlaczu rownoleglym - dziala slabo,
 // SERIAL - wysylanie po zlaczu szeregowym - dziala dobrze
-
-
-#define NUM_SVAR	6
-#define MAX_NUM_MEASURE 1000
 
 #define SCHUNK_INTR_TIMEOUT_HIGH 10000000
 #define SCHUNK_INTR_TIMEOUT_LOW  10000000
@@ -88,13 +56,6 @@ namespace sensor {
 #define GET1	"QR\r"
 #define GETN	"QS\r"
 #define YESCOMM	"Y\r"
-
-#define PICMASK 0x21
-#define PICEOI	0x20
-#define EOI	0x20
-
-#define TIMEOUT 500
-#define MAX_BUFFER	3
 
 // by Y dla karty advantech
 
