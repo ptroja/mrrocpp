@@ -33,10 +33,6 @@
 #include <hw/pci_devices.h>
 #include <stddef.h>
 #include <sys/mman.h>
-#include <termios.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
 
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
@@ -170,39 +166,66 @@ void ATI3084_force::connect_to_hardware(void)
 				printf("Unable to attach interrupt handler: \n");
 		}
 
-		// setup serial device
-		uart = open("/dev/ser1", O_RDWR);
-		if (uart == -1) {
-			// TODO: throw
-			perror("unable to open serial device for ATI3084 sensor");
+		// USTAWIENIE ZLACZA SZEREGOWEGO
+
+		switch (COM_NR)
+		{
+			case 1:
+				LSREG = 0x3FD; /* Line Status Register */
+				LCREG = 0x3FB; /* Line Control Register */
+				IEREG = 0x3F9; /* Interrupt Enable Register */
+				MCREG = 0x3FC; /* Modem Control Register */
+				TxBUF = 0x3F8; /* Transmit Buffer */
+				RxBUF = 0x3F8; /* Receive Buffer */
+				DIVLSB = 0x3F8; /* Divisor Least Sign. Byte */
+				DIVMSB = 0x3F9; /* Divisor Most Sign. Byte */
+				FCREG = 0x3FA; /* FIFO Control Register */
+				INT_NUM = 4;
+				NOT_IRQ = 0xEF; /* IRQ4 */
+				break;
+			case 2:
+				LSREG = 0x2FD;
+				LCREG = 0x2FB;
+				IEREG = 0x2F9;
+				MCREG = 0x2FC;
+				TxBUF = 0x2F8;
+				RxBUF = 0x2F8;
+				DIVLSB = 0x2F8;
+				DIVMSB = 0x2F9;
+				FCREG = 0x2FA; /* FIFO Control Register */
+				INT_NUM = 3;
+				NOT_IRQ = 0xF7; /* IRQ3 */
+				break;
 		}
 
-		// serial port settings: 38400, 8-N-1
-		struct termios tattr;
-		if(tcgetattr(uart, &tattr) == -1) {
-			// TODO: throw
-			perror("tcgetattr()");
-		}
+		//InterruptEnable();
 
-		// setup input speed
-		if(cfsetispeed(&tattr, B38400) == -1) {
-			perror("tcgetattr()");
-		}
+		out8(LCREG, 0x80); /* DLAB=1 */
+		delay(1);
+		// out8 ( DIVLSB, 12 );	/* divisor=12, speed=9600 bytes/sec */
+		// out8 ( DIVLSB, 6 );	/* divisor=6, speed=18200 bytes/sec */
+		out8(DIVLSB, 3); /* divisor=3, speed=38400 bytes/sec */
+		delay(1);
+		out8(DIVMSB, 0);
+		delay(1);
+		out8(LCREG, 3); /* DLAB=0, 8 bits, 1 stop bit, NoParity */
+		delay(1);
 
-		// setup output speed
-		if(cfsetospeed(&tattr, B38400) == -1) {
-			perror("tcgetattr()");
-		}
+		while ((in8(LSREG)) & 0x01)
+			(void) in8(RxBUF); /* initial reading from Receiver Buffer */
 
-		// setup raw mode
-		if(cfmakeraw(&tattr) == -1) {
-			perror("cfmakeraw()");
-		}
+		delay(1);
+		out8(IEREG, 0x01); /* enable Data Available Interrupt */
+		delay(1);
+		out8(MCREG, 0x08); /* enable interrupts */
+		delay(1);
+		out8(PICMASK, in8(PICMASK) & NOT_IRQ); /* interrupt number INT_NUM is unmasked */
+		delay(1);
+		out8(FCREG, 0x81); /*program fifo*/
+		delay(1);
 
-		// apply settings to serial port
-		if(tcsetattr(uart, TCSANOW, &tattr) == -1) {
-			perror("tcsetattr()");
-		}
+		//InterruptDisable();
+		/* interrupts are enabled */
 
 		do_init(); // komunikacja wstepna
 	}
@@ -214,11 +237,10 @@ ATI3084_force::~ATI3084_force(void)
 	if (!(master.test_mode)) {
 		pci_detach_device(hdl); // odlacza driver od danego urzadzenia na PCI
 		pci_detach(phdl); // Disconnect from the PCI server
-		close(uart);
 	}
 	if (gravity_transformation)
 		delete gravity_transformation;
-	printf("ATI3084_force::~ATI3084_force\n");
+	printf("Destruktor edp_ATI3084_force_sensor\n");
 }
 
 /**************************** inicjacja czujnika ****************************/
@@ -289,6 +311,7 @@ void ATI3084_force::configure_sensor(void)
 
 void ATI3084_force::wait_for_event()
 {
+
 	int iw_ret;
 	int iter_counter = 0; // okresla ile razy pod rzad zostala uruchomiona ta metoda
 
@@ -359,7 +382,9 @@ void ATI3084_force::initiate_reading(void)
 /***************************** odczyt z czujnika *****************************/
 void ATI3084_force::get_reading(void)
 {
+
 	lib::Ft_vector kartez_force;
+	short measure_report;
 
 	if (master.test_mode) {
 		for (int i = 0; i < 6; ++i) {
@@ -367,11 +392,12 @@ void ATI3084_force::get_reading(void)
 		}
 		master.force_msr_upload(kartez_force);
 	} else {
+
 		lib::Ft_vector ft_table;
 		InterruptDisable ();
 		for (int i = 0; i < 6; i++)
 			ft_table[i] = static_cast <double> (mds.data[i + 1]);
-		short measure_report = mds.data[0];
+		measure_report = mds.data[0];
 
 		InterruptEnable();
 
@@ -414,30 +440,39 @@ void ATI3084_force::get_reading(void)
 void ATI3084_force::parallel_do_send_command(const char* command)
 {
 	char a;
+	short value = 0;
 	struct timespec rqtp;
 
 	rqtp.tv_sec = 0;
 	rqtp.tv_nsec = 100000;
 
 	while ((a = *command++) != 0) {
-		uint16_t value = short(a);
+		value = short(a);
 		set_output(value);
-		while (!check_ack());
+		while (!check_ack())
+			;
 		set_obf(0);
 		nanosleep(&rqtp, NULL);
 
 		if (value != 23)
-			while (check_ack()); // jesli polcecenie rozne od RESET
+			while (check_ack())
+				; // jesli polcecenie rozne od RESET
 		else
 			delay(1);
 		set_obf(1);
 	}
 }
 
-void ATI3084_force::set_output(uint16_t value)
+void ATI3084_force::set_char_output(char* znak)
 {
-	uint16_t output = 0;
-	uint16_t comp = 0x0001;
+	short value = *znak;
+	set_output(value);
+}
+
+void ATI3084_force::set_output(short value)
+{
+	short output = 0;
+	unsigned short comp = 0x0001;
 	uint8_t lower, upper;
 	// wersja z pajaczkiem
 	// 	const unsigned char output_positions[16]={15,7,14,6,13,5,12,4,0,8,1,9,2,10,3,11};
@@ -445,14 +480,14 @@ void ATI3084_force::set_output(uint16_t value)
 	const unsigned char output_positions[16] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 };
 
 	for (int i = 0; i < 16; i++) {
-		uint16_t mask = 0x0001;
+		unsigned short mask = 0x0001;
 		mask <<= output_positions[i];
 		if (value & comp)
 			output |= mask;
 		comp <<= 1;
 	}
-	lower = (uint8_t) (output % 256);
-	upper = (uint8_t) (output >>= 8);
+	lower = (unsigned char) (output % 256);
+	upper = (unsigned char) (output >>= 8);
 
 	out8(base_io_adress + LOWER_OUTPUT, lower);
 	out8(base_io_adress + UPPER_OUTPUT, upper);
@@ -579,9 +614,21 @@ short ATI3084_force::do_Wait(const char* command)
 
 short ATI3084_force::do_send_command(const char* command)
 {
-	int data_written = write(uart, command, strlen(command));
+	// ew. miejce na pzerwanie o pustej kolejce - obecnie while pod spodem
+	// 	while ( ! ( in8 ( LSREG ) & 0x40 ));
 
-	return (data_written == strlen(command)) ? OK : -1;
+	char a;
+
+	while ((a = *command++) != 0) {
+		unsigned int timeout = 65000; /*time for sending 1 char*/
+		while (!(in8(LSREG) & 0x20)) {
+			/*                      delay(20);       */
+			if (!timeout--)
+				return (-1);
+		}
+		out8(TxBUF, a);
+	}
+	return OK;
 }
 
 // metoda na wypadek skasowanie pamiecia nvram
@@ -589,7 +636,15 @@ short ATI3084_force::do_send_command(const char* command)
 
 void ATI3084_force::solve_transducer_controller_failure(void)
 {
-	tcflush(uart, TCIFLUSH);
+	uint8_t char_buf[1000];
+	int licznik = 0;
+
+	while ((in8(LSREG)) & 0x01) {
+		char_buf[licznik++] = in8(RxBUF);
+		usleep(10); // aby nadmiernie nie obciazac procesora
+	}
+
+	usleep(10); // aby nadmiernie nie obciazac procesora
 
 	int i = do_send_command(YESCOMM); /* command ^W to FT */
 	if (i == -1) {
@@ -597,7 +652,16 @@ void ATI3084_force::solve_transducer_controller_failure(void)
 		printf("Blad wyslania YESCOMM w solve_transducer_controller_failure\n");
 	}
 
-	tcflush(uart, TCIFLUSH);
+	usleep(10); // aby nadmiernie nie obciazac procesora
+
+	licznik = 0;
+
+	while ((in8(LSREG)) & 0x01) {
+		char_buf[licznik++] = in8(RxBUF);
+		usleep(10); // aby nadmiernie nie obciazac procesora
+	}
+
+	// 	printf("Input int: %s,   \n",aaac);
 }
 
 short ATI3084_force::do_init(void)
