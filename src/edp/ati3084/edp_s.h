@@ -19,17 +19,6 @@ namespace sensor {
 // server answers
 #define COMMAND_OK 0x00
 
-// error types
-#define __ERROR_COM	1
-#define __ERROR_SEND	2
-#define __ERROR_NO_ANSWER	3
-#define __ERROR_MEASURE	4
-#define __ERROR_BAD_COMMAND	5
-#define __ERROR_INIT_SEND 6
-#define __ERROR_INIT_COM	7
-#define __ERROR_BUFFER_MAX	8
-#define __ERROR_BUFFER_ZERO 9
-
 #define SERIAL 1 // PARALLEL - wysylynie po zlaczu rownoleglym - dziala slabo,
 // SERIAL - wysylanie po zlaczu szeregowym - dziala dobrze
 
@@ -96,9 +85,9 @@ private:
 	void check_cs(void);
 	void parallel_do_send_command(const char* command);
 
-	short do_Wait(const char* command);// by old schunk
-	short do_send_command(const char* command);
-	short do_init(void);
+	void do_Wait();// by old schunk
+	void do_send_command(const char* command);
+	void do_init(void);
 
 	//! serial port file descriptor
 	int uart;

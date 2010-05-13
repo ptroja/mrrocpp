@@ -230,16 +230,11 @@ void ATI3084_force::configure_sensor(void)
 	if (!(master.test_mode)) {
 		mds.intr_mode = 0;
 
-#ifdef SERIAL
-		if (do_send_command(SB) == -1)
-			printf("Blad wyslania polecenia SB\n");
-		do_Wait("SB");
-#endif
+		do_send_command(SB);
+		do_Wait();
 
 #ifdef PARALLEL
-		parallel_do_send_command(SB);
-		do_Wait("SB");
-		do_Wait("SB");
+		do_Wait();
 #endif
 	}
 	mds.intr_mode = 1; // przywrocenie do 7 bajtowego trybu odbiotu danych
@@ -304,17 +299,7 @@ void ATI3084_force::wait_for_event()
 
 			mds.byte_counter = 0;// zabezpieczenie przed niektorymi bledami pomiarow - sprawdzone dziala ;)
 
-#ifdef SERIAL
-
-			if (do_send_command(SGET1) == -1)
-				printf("blad w send_command(sget1)\n");
-#endif
-
-#ifdef PARALLEL
-
-			parallel_do_send_command(SGET1);
-
-#endif
+			do_send_command(SGET1);
 
 			mds.intr_mode = 1; // przywrocenie do 7 bajtowego trybu odbiotu danych
 			mds.byte_counter = 0;
@@ -559,7 +544,7 @@ void ATI3084_force::check_cs(void)
 		printf("STB LOW\n");
 }
 
-short ATI3084_force::do_Wait(const char* command)
+void ATI3084_force::do_Wait(void)
 {
 	int iw_ret;
 
@@ -573,15 +558,15 @@ short ATI3084_force::do_Wait(const char* command)
 		InterruptUnmask(info.Irq, sint_id);
 
 	} while (iw_ret != -1);
-
-	return OK;
 }
 
-short ATI3084_force::do_send_command(const char* command)
+void ATI3084_force::do_send_command(const char* command)
 {
 	int data_written = write(uart, command, strlen(command));
 
-	return (data_written == strlen(command)) ? OK : -1;
+	if (data_written =! strlen(command)) {
+		perror("ATI3084 serial write to sensor failed");
+	}
 }
 
 // metoda na wypadek skasowanie pamiecia nvram
@@ -591,165 +576,73 @@ void ATI3084_force::solve_transducer_controller_failure(void)
 {
 	tcflush(uart, TCIFLUSH);
 
-	int i = do_send_command(YESCOMM); /* command ^W to FT */
-	if (i == -1) {
-		ERROR_CODE = __ERROR_INIT_SEND;
-		printf("Blad wyslania YESCOMM w solve_transducer_controller_failure\n");
-	}
+	do_send_command(YESCOMM); /* command ^W to FT */
 
 	tcflush(uart, TCIFLUSH);
 }
 
-short ATI3084_force::do_init(void)
+void ATI3084_force::do_init(void)
 {
 	short i;
 
 	int_timeout = SCHUNK_INTR_TIMEOUT_HIGH; // by Y
-#ifdef SERIAL
 
-	i = do_send_command(RESET); /* command ^W to FT */
-	if (i == -1)
-		ERROR_CODE = __ERROR_INIT_SEND;
-	delay(20);
-	i = do_send_command(CL_0);
-	if (i == -1)
-		ERROR_CODE = __ERROR_INIT_SEND;
-	delay(20);
-	i = do_send_command(CD_B);
-	if (i == -1)
-		ERROR_CODE = __ERROR_INIT_SEND;
-	delay(20);
-	i = do_send_command(CD_B);
-	if (i == -1)
-		ERROR_CODE = __ERROR_INIT_SEND;
-	delay(20);
-	i = do_send_command(CD_R);
-	if (i == -1)
-		ERROR_CODE = __ERROR_INIT_SEND;
-	delay(20);
-	i = do_send_command(CV_6);
-	if (i == -1)
-		ERROR_CODE = __ERROR_INIT_SEND;
-	delay(20);
-	i = do_send_command(SA);
-	if (i == -1)
-		ERROR_CODE = __ERROR_INIT_SEND;
-	delay(20);
-	i = do_send_command(SM);
-	if (i == -1)
-		ERROR_CODE = __ERROR_INIT_SEND;
-	delay(20);
-	i = do_send_command(SB);
-	if (i == -1)
-		ERROR_CODE = __ERROR_INIT_SEND;
+	do_send_command(RESET); /* command ^W to FT */
 	delay(20);
 
-	i = do_send_command(CP_P);
-	if (i == -1)
-		ERROR_CODE = __ERROR_INIT_SEND;
-	i = do_Wait("CP_P");
-	i = do_send_command(CL_0);
-	if (i == -1)
-		ERROR_CODE = __ERROR_INIT_SEND;
-	i = do_Wait("CL_0");
-	i = do_send_command(CD_B);
-	if (i == -1)
-		ERROR_CODE = __ERROR_INIT_SEND;
-	i = do_Wait("CD_B");
-	i = do_send_command(CD_B);
-	if (i == -1)
-		ERROR_CODE = __ERROR_INIT_SEND;
-	i = do_Wait("CD_B");
-	i = do_send_command(CD_R);
-	if (i == -1)
-		ERROR_CODE = __ERROR_INIT_SEND;
-	i = do_Wait("CD_R");
-	i = do_send_command(CV_6);
-	if (i == -1)
-		ERROR_CODE = __ERROR_INIT_SEND;
-	i = do_Wait("CV_6");
-	i = do_send_command(SA);
-	if (i == -1)
-		ERROR_CODE = __ERROR_INIT_SEND;
-	i = do_Wait("SA");
-	i = do_send_command(SM);
-	if (i == -1)
-		ERROR_CODE = __ERROR_INIT_SEND;
-	i = do_Wait("SM");
-	i = do_send_command(SZ);
-	if (i == -1)
-		ERROR_CODE = __ERROR_INIT_SEND;
-	i = do_Wait("SZ");
-	i = do_send_command(SB);
-	if (i == -1)
-		ERROR_CODE = __ERROR_INIT_SEND;
-	i = do_Wait("SB");
-
-#endif
-
-#ifdef PARALLEL
-
-	parallel_do_send_command(RESET);
+	do_send_command(CL_0);
 	delay(20);
 
-	parallel_do_send_command(CD_B);
+	do_send_command(CD_B);
 	delay(20);
 
-	parallel_do_send_command(CD_B);
+	do_send_command(CD_B);
 	delay(20);
 
-	parallel_do_send_command(CD_B);
+	do_send_command(CD_R);
 	delay(20);
 
-	parallel_do_send_command(CD_R);
+	do_send_command(CV_6);
 	delay(20);
 
-	parallel_do_send_command(CV_6);
+	do_send_command(SA);
 	delay(20);
 
-	parallel_do_send_command(SA);
+	do_send_command(SM);
 	delay(20);
 
-	parallel_do_send_command(SM);
+	do_send_command(SB);
 	delay(20);
 
-	parallel_do_send_command(SB);
-	delay(20);
+	do_send_command(CP_P);
+	do_Wait();
 
-	parallel_do_send_command(CP_P);
-	i=do_Wait("CP_P");
+	do_send_command(CL_0);
+	do_Wait();
 
-	parallel_do_send_command(CL_0);
-	i=do_Wait("CL_0");
+	do_send_command(CD_B);
+	do_Wait();
 
-	parallel_do_send_command(CD_B);
-	i=do_Wait("CD_B");
+	do_send_command(CD_B);
+	do_Wait();
 
-	parallel_do_send_command(CD_B);
-	i=do_Wait("CD_B");
+	do_send_command(CD_R);
+	do_Wait();
 
-	parallel_do_send_command(CD_R);
-	i=do_Wait("CD_R");
+	do_send_command(CV_6);
+	do_Wait();
 
-	parallel_do_send_command(CV_6);
-	i=do_Wait("CV_6");
+	do_send_command(SA);
+	do_Wait();
 
-	parallel_do_send_command(SA);
-	i=do_Wait("SA");
+	do_send_command(SM);
+	do_Wait();
 
-	parallel_do_send_command(SM);
-	i=do_Wait("SM");
+	do_send_command(SZ);
+	do_Wait();
 
-	parallel_do_send_command(SZ);
-	i=do_Wait("SZ");
-
-	parallel_do_send_command(SB);
-	i=do_Wait("SB");
-	i=do_Wait("SB");// by Y bez tego nie dziala
-
-#endif
-
-	return OK;
+	do_send_command(SB);
+	do_Wait();
 }
 
 void clear_intr(void)
