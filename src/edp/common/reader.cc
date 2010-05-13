@@ -135,13 +135,9 @@ void reader_buffer::operator()()
 		}
 	}
 
-<<<<<<< HEAD
-
 	// ustawienie priorytetu watku
 	lib::set_thread_priority(pthread_self(), MAX_PRIORITY - 10);
 
-=======
->>>>>>> fd45f7e945b303f43c34fd341e30175fb9ed9ca9
 	// NOTE: readed buffer has to be allocated on heap (using "new" operator) due to huge size
 	// boost::scoped_array takes care of deallocating in case of exception
 	boost::circular_buffer<reader_data> reader_buf(nr_of_samples);
