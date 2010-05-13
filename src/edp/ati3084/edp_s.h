@@ -127,8 +127,7 @@ private:
 	void* hdl; // wlasciwy uchwyt do danego urzadzenia
 	int phdl; // pci handle -> fd do servera PCI
 
-	void set_char_output(char* znak);
-	void set_output(short value);
+	void set_output(uint16_t value);
 	void set_obf(unsigned char state);
 	bool check_ack(void);
 	void initiate_registers(void);

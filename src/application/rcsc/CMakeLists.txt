@@ -47,8 +47,8 @@ add_executable(ecp_fsautomat
 	../../ecp/common/generator/ecp_g_operator_reaction_condition.cc
 )
 
-target_link_libraries(mp_rcsc mpmain)
-target_link_libraries(mp_fsautomat mpmain)
+target_link_libraries(mp_rcsc mp)
+target_link_libraries(mp_fsautomat mp)
 
 target_link_libraries(ecp_irp6ot_rcsc ecp_r_irp6ot ecp)
 target_link_libraries(ecp_irp6p_rcsc ecp_r_irp6p ecp)

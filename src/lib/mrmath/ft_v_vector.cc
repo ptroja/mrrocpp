@@ -1,20 +1,5 @@
-// ------------------------------------------------------------------------
-// Proces:		-
-// Plik:			mathtr.cc
-// System:	QNX/MRROC++  v. 6.3
-// Opis:		Klasy K_vector, Homog_matrix, Ft_v_vector
-//				- deklaracja metod klas
-//
-// Autor:		tkornuta
-// Data:		14.02.2007
-// ------------------------------------------------------------------------
-
 #include <math.h>
-#include <string.h>
-#include <iostream>
-#include <iomanip>
 
-#include "lib/mis_fun.h"
 #include "lib/mrmath/mrmath.h"
 
 namespace mrrocpp {
@@ -72,6 +57,8 @@ void Ft_v_vector::to_table(double tablica[6]) const
 // Wyciadgniecie maksymalnego elementu z zadanego wektora
 double Ft_v_vector::max_element()
 {
+	// TODO: Eigen'ize this method, probably:
+	// return BaseClass::cwise().abs().maxCoeff();
 	double MAX = 0;
 
 	for (int i = 0; i < this->size(); ++i) {
@@ -134,29 +121,29 @@ void Xyz_Angle_Axis_vector::position_distance(const Homog_matrix& local_current_
 	//Wyliczenie wektora przesuniecia : w - predkosc katowa
 	// n, o, a - wektory normalny, orientacji i zbli�enia
 
-	n_t[0] = (local_current_end_effector_frame)[0][0];
-	n_t[1] = (local_current_end_effector_frame)[1][0];
-	n_t[2] = (local_current_end_effector_frame)[2][0];
+	n_t[0] = local_current_end_effector_frame(0,0);
+	n_t[1] = local_current_end_effector_frame(1,0);
+	n_t[2] = local_current_end_effector_frame(2,0);
 
-	n_d[0] = (local_desired_end_effector_frame)[0][0];
-	n_d[1] = (local_desired_end_effector_frame)[1][0];
-	n_d[2] = (local_desired_end_effector_frame)[2][0];
+	n_d[0] = local_desired_end_effector_frame(0,0);
+	n_d[1] = local_desired_end_effector_frame(1,0);
+	n_d[2] = local_desired_end_effector_frame(2,0);
 
-	o_t[0] = (local_current_end_effector_frame)[0][1];
-	o_t[1] = (local_current_end_effector_frame)[1][1];
-	o_t[2] = (local_current_end_effector_frame)[2][1];
+	o_t[0] = local_current_end_effector_frame(0,1);
+	o_t[1] = local_current_end_effector_frame(1,1);
+	o_t[2] = local_current_end_effector_frame(2,1);
 
-	o_d[0] = (local_desired_end_effector_frame)[0][1];
-	o_d[1] = (local_desired_end_effector_frame)[1][1];
-	o_d[2] = (local_desired_end_effector_frame)[2][1];
+	o_d[0] = local_desired_end_effector_frame(0,1);
+	o_d[1] = local_desired_end_effector_frame(1,1);
+	o_d[2] = local_desired_end_effector_frame(2,1);
 
-	a_t[0] = (local_current_end_effector_frame)[0][2];
-	a_t[1] = (local_current_end_effector_frame)[1][2];
-	a_t[2] = (local_current_end_effector_frame)[2][2];
+	a_t[0] = local_current_end_effector_frame(0,2);
+	a_t[1] = local_current_end_effector_frame(1,2);
+	a_t[2] = local_current_end_effector_frame(2,2);
 
-	a_d[0] = (local_desired_end_effector_frame)[0][2];
-	a_d[1] = (local_desired_end_effector_frame)[1][2];
-	a_d[2] = (local_desired_end_effector_frame)[2][2];
+	a_d[0] = local_desired_end_effector_frame(0,2);
+	a_d[1] = local_desired_end_effector_frame(1,2);
+	a_d[2] = local_desired_end_effector_frame(2,2);
 
 	//Wyliczenie wektora przesuniecia : v - predkosc obrotowa
 
@@ -169,9 +156,9 @@ void Xyz_Angle_Axis_vector::position_distance(const Homog_matrix& local_current_
 
 	//Wyliczenie wektora przesuniecia : v - predkosc liniowa
 
-	this->operator[](3) = (local_desired_end_effector_frame)[0][3] - (local_current_end_effector_frame)[0][3];
-	this->operator[](4) = (local_desired_end_effector_frame)[1][3] - (local_current_end_effector_frame)[1][3];
-	this->operator[](5) = (local_desired_end_effector_frame)[2][3] - (local_current_end_effector_frame)[2][3];
+	this->operator[](3) = local_desired_end_effector_frame(0,3) - local_current_end_effector_frame(0,3);
+	this->operator[](4) = local_desired_end_effector_frame(1,3) - local_current_end_effector_frame(1,3);
+	this->operator[](5) = local_desired_end_effector_frame(2,3) - local_current_end_effector_frame(2,3);
 }
 
 /////////////////////////////////////////

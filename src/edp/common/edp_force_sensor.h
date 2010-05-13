@@ -32,6 +32,8 @@ protected:
 
 	common::manip_effector &master;
 
+	virtual void connect_to_hardware(void) = 0;
+
 public:
 	void operator()(void);
 	boost::mutex mtx;
@@ -46,8 +48,6 @@ public:
 	bool is_sensor_configured; // czy czujnik skonfigurowany?
 	void set_command_execution_finish();
 
-	virtual void connect_to_hardware(void) = 0;
-
 	double next_force_tool_position[3];
 	double next_force_tool_weight;
 	double current_force_tool_position[3];
@@ -57,7 +57,7 @@ public:
 
 	force(common::manip_effector &_master);
 
-	~force();
+	virtual ~force();
 
 	virtual void wait_for_event(void) = 0; // oczekiwanie na zdarzenie
 	void set_force_tool(void);

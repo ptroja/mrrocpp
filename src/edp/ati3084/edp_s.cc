@@ -414,39 +414,30 @@ void ATI3084_force::get_reading(void)
 void ATI3084_force::parallel_do_send_command(const char* command)
 {
 	char a;
-	short value = 0;
 	struct timespec rqtp;
 
 	rqtp.tv_sec = 0;
 	rqtp.tv_nsec = 100000;
 
 	while ((a = *command++) != 0) {
-		value = short(a);
+		uint16_t value = short(a);
 		set_output(value);
-		while (!check_ack())
-			;
+		while (!check_ack());
 		set_obf(0);
 		nanosleep(&rqtp, NULL);
 
 		if (value != 23)
-			while (check_ack())
-				; // jesli polcecenie rozne od RESET
+			while (check_ack()); // jesli polcecenie rozne od RESET
 		else
 			delay(1);
 		set_obf(1);
 	}
 }
 
-void ATI3084_force::set_char_output(char* znak)
+void ATI3084_force::set_output(uint16_t value)
 {
-	short value = *znak;
-	set_output(value);
-}
-
-void ATI3084_force::set_output(short value)
-{
-	short output = 0;
-	unsigned short comp = 0x0001;
+	uint16_t output = 0;
+	uint16_t comp = 0x0001;
 	uint8_t lower, upper;
 	// wersja z pajaczkiem
 	// 	const unsigned char output_positions[16]={15,7,14,6,13,5,12,4,0,8,1,9,2,10,3,11};
@@ -454,14 +445,14 @@ void ATI3084_force::set_output(short value)
 	const unsigned char output_positions[16] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 };
 
 	for (int i = 0; i < 16; i++) {
-		unsigned short mask = 0x0001;
+		uint16_t mask = 0x0001;
 		mask <<= output_positions[i];
 		if (value & comp)
 			output |= mask;
 		comp <<= 1;
 	}
-	lower = (unsigned char) (output % 256);
-	upper = (unsigned char) (output >>= 8);
+	lower = (uint8_t) (output % 256);
+	upper = (uint8_t) (output >>= 8);
 
 	out8(base_io_adress + LOWER_OUTPUT, lower);
 	out8(base_io_adress + UPPER_OUTPUT, upper);
