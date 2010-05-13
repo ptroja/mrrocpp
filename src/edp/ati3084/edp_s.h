@@ -15,16 +15,9 @@ namespace mrrocpp {
 namespace edp {
 namespace sensor {
 
-// max & min svar values
-#define MAX_SVAR_VALUE 0x7F // +127
-#define MIN_SVAR_VALUE 0x80 // -128
-
 // PARALLEL - wysylynie po zlaczu rownoleglym - dziala slabo,
 // SERIAL - wysylanie po zlaczu szeregowym - dziala dobrze
 #define SERIAL 1
-
-#define NUM_SVAR	6
-#define MAX_NUM_MEASURE 1000
 
 #define SCHUNK_INTR_TIMEOUT_HIGH 10000000
 #define SCHUNK_INTR_TIMEOUT_LOW  10000000
@@ -50,8 +43,8 @@ namespace sensor {
 #define GETN	"QS\r"
 #define YESCOMM	"Y\r"
 
-#define TIMEOUT 500
-#define MAX_BUFFER	3
+// server answers
+#define COMMAND_OK 0x00
 
 // by Y dla karty advantech
 
@@ -71,6 +64,7 @@ namespace sensor {
 #define INTR_NS_DELAY 10000 // opoznienie pomiedzy dwoma stanami wyjscia karty
 // w funkcji obslugi przerwania w nanosekundach
 
+#define MDS_DATA_RANGE 20
 
 /********** klasa czujnikow po stronie VSP **************/
 class ATI3084_force : public force {
@@ -131,8 +125,8 @@ private:
 	void solve_transducer_controller_failure(void);
 	void check_cs(void);
 
-	int send_command(const char* command);
-	int serial_send_command(const char* command);
+	void send_command(const char* command);
+	void serial_send_command(const char* command);
 	void parallel_send_command(const char* command);
 
 	void do_Wait(void);// by old schunk
