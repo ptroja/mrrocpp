@@ -58,27 +58,23 @@ effector::effector(lib::configurator &_config) :
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();
 
-
-
 	reset_variables();
 }
 
 /*--------------------------------------------------------------------------*/
-void effector::set_robot_model(lib::c_buffer &instruction)
+void effector::set_robot_model(const lib::c_buffer &instruction)
 {
 	manip_effector::set_robot_model_with_sb(instruction);
 }
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
-void effector::move_arm(lib::c_buffer &instruction)
+void effector::move_arm(const lib::c_buffer &instruction)
 { // przemieszczenie ramienia
 	// Wypenienie struktury danych transformera na podstawie parametrow polecenia
 	// otrzymanego z ECP. Zlecenie transformerowi przeliczenie wspolrzednych
 
-
 	manip_effector::multi_thread_move_arm(instruction);
-
 }
 /*--------------------------------------------------------------------------*/
 

@@ -1,6 +1,8 @@
-.cproject
+
+/bin
+/build
+/logs
+/msr
+/configs/default_file.cfg
 .project
-.qnx_internal.mk
-.settings
-build*
-src/lib/messip
+.cproject

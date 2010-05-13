@@ -42,6 +42,7 @@ extern lib::configurator* config;
 
 extern ui_robot_def ui_robot;
 extern ui_ecp_buffer* ui_ecp_obj;
+extern boost::mutex process_creation_mtx;
 
 double irp6ot_current_pos[IRP6_ON_TRACK_NUM_OF_SERVOS]; // pozycja biezaca
 double irp6ot_desired_pos[IRP6_ON_TRACK_NUM_OF_SERVOS]; // pozycja zadana
@@ -442,26 +443,34 @@ int import_wnd_irp6_on_track_inc(PtWidget_t *widget, ApInfo_t *apinfo,
 	char *tmp_ptgr, *tmp;
 	double val;
 
-	PtGetResource( ABW_PtText_input_console, Pt_ARG_TEXT_STRING, &tmp_ptgr, 0 );
+	PtGetResource(ABW_PtText_input_console, Pt_ARG_TEXT_STRING, &tmp_ptgr, 0);
 	tmp = new char[strlen(tmp_ptgr)];
 	strcpy(tmp, tmp_ptgr);
 
 	val = strtod(tmp, &tmp);
-	PtSetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p0, Pt_ARG_NUMERIC_VALUE, &val , 0);
+	PtSetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p0, Pt_ARG_NUMERIC_VALUE,
+			&val, 0);
 	val = strtod(tmp, &tmp);
-	PtSetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p1, Pt_ARG_NUMERIC_VALUE, &val , 0);
+	PtSetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p1, Pt_ARG_NUMERIC_VALUE,
+			&val, 0);
 	val = strtod(tmp, &tmp);
-	PtSetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p2, Pt_ARG_NUMERIC_VALUE, &val , 0);
+	PtSetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p2, Pt_ARG_NUMERIC_VALUE,
+			&val, 0);
 	val = strtod(tmp, &tmp);
-	PtSetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p3, Pt_ARG_NUMERIC_VALUE, &val , 0);
+	PtSetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p3, Pt_ARG_NUMERIC_VALUE,
+			&val, 0);
 	val = strtod(tmp, &tmp);
-	PtSetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p4, Pt_ARG_NUMERIC_VALUE, &val , 0);
+	PtSetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p4, Pt_ARG_NUMERIC_VALUE,
+			&val, 0);
 	val = strtod(tmp, &tmp);
-	PtSetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p5, Pt_ARG_NUMERIC_VALUE, &val , 0);
+	PtSetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p5, Pt_ARG_NUMERIC_VALUE,
+			&val, 0);
 	val = strtod(tmp, &tmp);
-	PtSetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p6, Pt_ARG_NUMERIC_VALUE, &val , 0);
+	PtSetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p6, Pt_ARG_NUMERIC_VALUE,
+			&val, 0);
 	val = strtod(tmp, &tmp);
-	PtSetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p7, Pt_ARG_NUMERIC_VALUE, &val , 0);
+	PtSetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p7, Pt_ARG_NUMERIC_VALUE,
+			&val, 0);
 
 	return (Pt_CONTINUE);
 
@@ -479,14 +488,22 @@ int export_wnd_irp6_on_track_inc(PtWidget_t *widget, ApInfo_t *apinfo,
 
 	double *wektor[8];
 
-	PtGetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p0, Pt_ARG_NUMERIC_VALUE, &wektor[0], 0 );
-	PtGetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p1, Pt_ARG_NUMERIC_VALUE, &wektor[1], 0 );
-	PtGetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p2, Pt_ARG_NUMERIC_VALUE, &wektor[2], 0 );
-	PtGetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p3, Pt_ARG_NUMERIC_VALUE, &wektor[3], 0 );
-	PtGetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p4, Pt_ARG_NUMERIC_VALUE, &wektor[4], 0 );
-	PtGetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p5, Pt_ARG_NUMERIC_VALUE, &wektor[5], 0 );
-	PtGetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p6, Pt_ARG_NUMERIC_VALUE, &wektor[6], 0 );
-	PtGetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p7, Pt_ARG_NUMERIC_VALUE, &wektor[7], 0 );
+	PtGetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p0, Pt_ARG_NUMERIC_VALUE,
+			&wektor[0], 0);
+	PtGetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p1, Pt_ARG_NUMERIC_VALUE,
+			&wektor[1], 0);
+	PtGetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p2, Pt_ARG_NUMERIC_VALUE,
+			&wektor[2], 0);
+	PtGetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p3, Pt_ARG_NUMERIC_VALUE,
+			&wektor[3], 0);
+	PtGetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p4, Pt_ARG_NUMERIC_VALUE,
+			&wektor[4], 0);
+	PtGetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p5, Pt_ARG_NUMERIC_VALUE,
+			&wektor[5], 0);
+	PtGetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p6, Pt_ARG_NUMERIC_VALUE,
+			&wektor[6], 0);
+	PtGetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p7, Pt_ARG_NUMERIC_VALUE,
+			&wektor[7], 0);
 
 	sprintf(buffer,
 			"EDP_IRP6_OT INCREMENTAL POSITION\n %f %f %f %f %f %f %f %f",
@@ -510,26 +527,34 @@ int import_wnd_irp6_on_track_int(PtWidget_t *widget, ApInfo_t *apinfo,
 	char* tmp_ptgr, *tmp;
 	double val;
 
-	PtGetResource( ABW_PtText_input_console, Pt_ARG_TEXT_STRING, &tmp_ptgr, 0 );
+	PtGetResource(ABW_PtText_input_console, Pt_ARG_TEXT_STRING, &tmp_ptgr, 0);
 	tmp = new char[strlen(tmp_ptgr)];
 	strcpy(tmp, tmp_ptgr);
 
 	val = strtod(tmp, &tmp);
-	PtSetResource(ABW_PtNumericFloat_wind_irp6ot_int_p1, Pt_ARG_NUMERIC_VALUE, &val , 0);
+	PtSetResource(ABW_PtNumericFloat_wind_irp6ot_int_p1, Pt_ARG_NUMERIC_VALUE,
+			&val, 0);
 	val = strtod(tmp, &tmp);
-	PtSetResource(ABW_PtNumericFloat_wind_irp6ot_int_p2, Pt_ARG_NUMERIC_VALUE, &val , 0);
+	PtSetResource(ABW_PtNumericFloat_wind_irp6ot_int_p2, Pt_ARG_NUMERIC_VALUE,
+			&val, 0);
 	val = strtod(tmp, &tmp);
-	PtSetResource(ABW_PtNumericFloat_wind_irp6ot_int_p3, Pt_ARG_NUMERIC_VALUE, &val , 0);
+	PtSetResource(ABW_PtNumericFloat_wind_irp6ot_int_p3, Pt_ARG_NUMERIC_VALUE,
+			&val, 0);
 	val = strtod(tmp, &tmp);
-	PtSetResource(ABW_PtNumericFloat_wind_irp6ot_int_p4, Pt_ARG_NUMERIC_VALUE, &val , 0);
+	PtSetResource(ABW_PtNumericFloat_wind_irp6ot_int_p4, Pt_ARG_NUMERIC_VALUE,
+			&val, 0);
 	val = strtod(tmp, &tmp);
-	PtSetResource(ABW_PtNumericFloat_wind_irp6ot_int_p5, Pt_ARG_NUMERIC_VALUE, &val , 0);
+	PtSetResource(ABW_PtNumericFloat_wind_irp6ot_int_p5, Pt_ARG_NUMERIC_VALUE,
+			&val, 0);
 	val = strtod(tmp, &tmp);
-	PtSetResource(ABW_PtNumericFloat_wind_irp6ot_int_p6, Pt_ARG_NUMERIC_VALUE, &val , 0);
+	PtSetResource(ABW_PtNumericFloat_wind_irp6ot_int_p6, Pt_ARG_NUMERIC_VALUE,
+			&val, 0);
 	val = strtod(tmp, &tmp);
-	PtSetResource(ABW_PtNumericFloat_wind_irp6ot_int_p7, Pt_ARG_NUMERIC_VALUE, &val , 0);
+	PtSetResource(ABW_PtNumericFloat_wind_irp6ot_int_p7, Pt_ARG_NUMERIC_VALUE,
+			&val, 0);
 	val = strtod(tmp, &tmp);
-	PtSetResource(ABW_PtNumericFloat_wind_irp6ot_int_p8, Pt_ARG_NUMERIC_VALUE, &val , 0);
+	PtSetResource(ABW_PtNumericFloat_wind_irp6ot_int_p8, Pt_ARG_NUMERIC_VALUE,
+			&val, 0);
 
 	return (Pt_CONTINUE);
 
@@ -547,14 +572,22 @@ int export_wnd_irp6_on_track_int(PtWidget_t *widget, ApInfo_t *apinfo,
 
 	double *wektor[8];
 
-	PtGetResource(ABW_PtNumericFloat_wind_irp6ot_int_p1, Pt_ARG_NUMERIC_VALUE, &wektor[0], 0 );
-	PtGetResource(ABW_PtNumericFloat_wind_irp6ot_int_p2, Pt_ARG_NUMERIC_VALUE, &wektor[1], 0 );
-	PtGetResource(ABW_PtNumericFloat_wind_irp6ot_int_p3, Pt_ARG_NUMERIC_VALUE, &wektor[2], 0 );
-	PtGetResource(ABW_PtNumericFloat_wind_irp6ot_int_p4, Pt_ARG_NUMERIC_VALUE, &wektor[3], 0 );
-	PtGetResource(ABW_PtNumericFloat_wind_irp6ot_int_p5, Pt_ARG_NUMERIC_VALUE, &wektor[4], 0 );
-	PtGetResource(ABW_PtNumericFloat_wind_irp6ot_int_p6, Pt_ARG_NUMERIC_VALUE, &wektor[5], 0 );
-	PtGetResource(ABW_PtNumericFloat_wind_irp6ot_int_p7, Pt_ARG_NUMERIC_VALUE, &wektor[6], 0 );
-	PtGetResource(ABW_PtNumericFloat_wind_irp6ot_int_p8, Pt_ARG_NUMERIC_VALUE, &wektor[7], 0 );
+	PtGetResource(ABW_PtNumericFloat_wind_irp6ot_int_p1, Pt_ARG_NUMERIC_VALUE,
+			&wektor[0], 0);
+	PtGetResource(ABW_PtNumericFloat_wind_irp6ot_int_p2, Pt_ARG_NUMERIC_VALUE,
+			&wektor[1], 0);
+	PtGetResource(ABW_PtNumericFloat_wind_irp6ot_int_p3, Pt_ARG_NUMERIC_VALUE,
+			&wektor[2], 0);
+	PtGetResource(ABW_PtNumericFloat_wind_irp6ot_int_p4, Pt_ARG_NUMERIC_VALUE,
+			&wektor[3], 0);
+	PtGetResource(ABW_PtNumericFloat_wind_irp6ot_int_p5, Pt_ARG_NUMERIC_VALUE,
+			&wektor[4], 0);
+	PtGetResource(ABW_PtNumericFloat_wind_irp6ot_int_p6, Pt_ARG_NUMERIC_VALUE,
+			&wektor[5], 0);
+	PtGetResource(ABW_PtNumericFloat_wind_irp6ot_int_p7, Pt_ARG_NUMERIC_VALUE,
+			&wektor[6], 0);
+	PtGetResource(ABW_PtNumericFloat_wind_irp6ot_int_p8, Pt_ARG_NUMERIC_VALUE,
+			&wektor[7], 0);
 
 	sprintf(buffer, "EDP_IRP6_OT INTERNAL POSITION\n %f %f %f %f %f %f %f %f",
 			*wektor[0], *wektor[1], *wektor[2], *wektor[3], *wektor[4],
@@ -577,24 +610,31 @@ int import_wnd_irp6_on_track_xyz_euler_zyz(PtWidget_t *widget,
 	char* tmp_ptgr, *tmp;
 	double val;
 
-	PtGetResource( ABW_PtText_input_console, Pt_ARG_TEXT_STRING, &tmp_ptgr, 0 );
+	PtGetResource(ABW_PtText_input_console, Pt_ARG_TEXT_STRING, &tmp_ptgr, 0);
 	tmp = new char[strlen(tmp_ptgr)];
 	strcpy(tmp, tmp_ptgr);
 
 	val = strtod(tmp, &tmp);
-	PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p1, Pt_ARG_NUMERIC_VALUE, &val , 0);
+	PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p1,
+			Pt_ARG_NUMERIC_VALUE, &val, 0);
 	val = strtod(tmp, &tmp);
-	PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p2, Pt_ARG_NUMERIC_VALUE, &val , 0);
+	PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p2,
+			Pt_ARG_NUMERIC_VALUE, &val, 0);
 	val = strtod(tmp, &tmp);
-	PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p3, Pt_ARG_NUMERIC_VALUE, &val , 0);
+	PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p3,
+			Pt_ARG_NUMERIC_VALUE, &val, 0);
 	val = strtod(tmp, &tmp);
-	PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p4, Pt_ARG_NUMERIC_VALUE, &val , 0);
+	PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p4,
+			Pt_ARG_NUMERIC_VALUE, &val, 0);
 	val = strtod(tmp, &tmp);
-	PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p5, Pt_ARG_NUMERIC_VALUE, &val , 0);
+	PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p5,
+			Pt_ARG_NUMERIC_VALUE, &val, 0);
 	val = strtod(tmp, &tmp);
-	PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p6, Pt_ARG_NUMERIC_VALUE, &val , 0);
+	PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p6,
+			Pt_ARG_NUMERIC_VALUE, &val, 0);
 	val = strtod(tmp, &tmp);
-	PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p7, Pt_ARG_NUMERIC_VALUE, &val , 0);
+	PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p7,
+			Pt_ARG_NUMERIC_VALUE, &val, 0);
 
 	return (Pt_CONTINUE);
 
@@ -612,13 +652,20 @@ int export_wnd_irp6_on_track_xyz_euler_zyz(PtWidget_t *widget,
 
 	double *wektor[7];
 
-	PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p1, Pt_ARG_NUMERIC_VALUE, &wektor[0], 0 );
-	PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p2, Pt_ARG_NUMERIC_VALUE, &wektor[1], 0 );
-	PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p3, Pt_ARG_NUMERIC_VALUE, &wektor[2], 0 );
-	PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p4, Pt_ARG_NUMERIC_VALUE, &wektor[3], 0 );
-	PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p5, Pt_ARG_NUMERIC_VALUE, &wektor[4], 0 );
-	PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p6, Pt_ARG_NUMERIC_VALUE, &wektor[5], 0 );
-	PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p7, Pt_ARG_NUMERIC_VALUE, &wektor[6], 0 );
+	PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p1,
+			Pt_ARG_NUMERIC_VALUE, &wektor[0], 0);
+	PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p2,
+			Pt_ARG_NUMERIC_VALUE, &wektor[1], 0);
+	PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p3,
+			Pt_ARG_NUMERIC_VALUE, &wektor[2], 0);
+	PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p4,
+			Pt_ARG_NUMERIC_VALUE, &wektor[3], 0);
+	PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p5,
+			Pt_ARG_NUMERIC_VALUE, &wektor[4], 0);
+	PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p6,
+			Pt_ARG_NUMERIC_VALUE, &wektor[5], 0);
+	PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p7,
+			Pt_ARG_NUMERIC_VALUE, &wektor[6], 0);
 
 	sprintf(buffer,
 			"EDP_IRP6_OT XYZ_EULER_ZYZ POSITION\n %f %f %f %f %f %f %f",
@@ -676,14 +723,22 @@ int init_wnd_irp6_on_track_inc(PtWidget_t *widget, ApInfo_t *apinfo,
 				unblock_widget(ABW_PtPane_wind_irp6ot_inc_post_synchro_moves);
 				ui_robot.irp6_on_track->read_motors(irp6ot_current_pos); // Odczyt polozenia walow silnikow
 
-				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_motors_cur_p0, Pt_ARG_NUMERIC_VALUE, &irp6ot_current_pos[0] , 0);
-				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_motors_cur_p1, Pt_ARG_NUMERIC_VALUE, &irp6ot_current_pos[1] , 0);
-				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_motors_cur_p2, Pt_ARG_NUMERIC_VALUE, &irp6ot_current_pos[2] , 0);
-				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_motors_cur_p3, Pt_ARG_NUMERIC_VALUE, &irp6ot_current_pos[3] , 0);
-				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_motors_cur_p4, Pt_ARG_NUMERIC_VALUE, &irp6ot_current_pos[4] , 0);
-				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_motors_cur_p5, Pt_ARG_NUMERIC_VALUE, &irp6ot_current_pos[5] , 0);
-				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_motors_cur_p6, Pt_ARG_NUMERIC_VALUE, &irp6ot_current_pos[6] , 0);
-				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_motors_cur_p7, Pt_ARG_NUMERIC_VALUE, &irp6ot_current_pos[7] , 0);
+				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_motors_cur_p0,
+						Pt_ARG_NUMERIC_VALUE, &irp6ot_current_pos[0], 0);
+				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_motors_cur_p1,
+						Pt_ARG_NUMERIC_VALUE, &irp6ot_current_pos[1], 0);
+				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_motors_cur_p2,
+						Pt_ARG_NUMERIC_VALUE, &irp6ot_current_pos[2], 0);
+				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_motors_cur_p3,
+						Pt_ARG_NUMERIC_VALUE, &irp6ot_current_pos[3], 0);
+				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_motors_cur_p4,
+						Pt_ARG_NUMERIC_VALUE, &irp6ot_current_pos[4], 0);
+				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_motors_cur_p5,
+						Pt_ARG_NUMERIC_VALUE, &irp6ot_current_pos[5], 0);
+				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_motors_cur_p6,
+						Pt_ARG_NUMERIC_VALUE, &irp6ot_current_pos[6], 0);
+				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_motors_cur_p7,
+						Pt_ARG_NUMERIC_VALUE, &irp6ot_current_pos[7], 0);
 				/*
 				 for (int i = 0; i < IRP6_ON_TRACK_NUM_OF_SERVOS; i++)
 				 irp6ot_desired_pos[i] = irp6ot_current_pos[i];
@@ -715,27 +770,43 @@ int wnd_irp6ot_motors_copy_current_to_desired(PtWidget_t *widget,
 		{
 			unblock_widget(ABW_PtPane_wind_irp6ot_inc_post_synchro_moves);
 
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_motors_cur_p0, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[0]) , 0);
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_motors_cur_p1, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[1]) , 0);
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_motors_cur_p2, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[2]) , 0);
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_motors_cur_p3, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[3]) , 0);
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_motors_cur_p4, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[4]) , 0);
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_motors_cur_p5, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[5]) , 0);
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_motors_cur_p6, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[6]) , 0);
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_motors_cur_p7, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[7]) , 0);
+			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_motors_cur_p0,
+					Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[0]), 0);
+			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_motors_cur_p1,
+					Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[1]), 0);
+			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_motors_cur_p2,
+					Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[2]), 0);
+			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_motors_cur_p3,
+					Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[3]), 0);
+			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_motors_cur_p4,
+					Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[4]), 0);
+			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_motors_cur_p5,
+					Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[5]), 0);
+			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_motors_cur_p6,
+					Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[6]), 0);
+			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_motors_cur_p7,
+					Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[7]), 0);
 
 			for (int i = 0; i < IRP6_ON_TRACK_NUM_OF_SERVOS; i++) {
 				wektor[i] = *wektor_ptgr[i];
 			}
 
-			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p0, Pt_ARG_NUMERIC_VALUE, &wektor[0], 0 );
-			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p1, Pt_ARG_NUMERIC_VALUE, &wektor[1], 0 );
-			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p2, Pt_ARG_NUMERIC_VALUE, &wektor[2], 0 );
-			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p3, Pt_ARG_NUMERIC_VALUE, &wektor[3], 0 );
-			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p4, Pt_ARG_NUMERIC_VALUE, &wektor[4], 0 );
-			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p5, Pt_ARG_NUMERIC_VALUE, &wektor[5], 0 );
-			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p6, Pt_ARG_NUMERIC_VALUE, &wektor[6], 0 );
-			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p7, Pt_ARG_NUMERIC_VALUE, &wektor[7], 0 );
+			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p0,
+					Pt_ARG_NUMERIC_VALUE, &wektor[0], 0);
+			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p1,
+					Pt_ARG_NUMERIC_VALUE, &wektor[1], 0);
+			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p2,
+					Pt_ARG_NUMERIC_VALUE, &wektor[2], 0);
+			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p3,
+					Pt_ARG_NUMERIC_VALUE, &wektor[3], 0);
+			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p4,
+					Pt_ARG_NUMERIC_VALUE, &wektor[4], 0);
+			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p5,
+					Pt_ARG_NUMERIC_VALUE, &wektor[5], 0);
+			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p6,
+					Pt_ARG_NUMERIC_VALUE, &wektor[6], 0);
+			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p7,
+					Pt_ARG_NUMERIC_VALUE, &wektor[7], 0);
 
 		} else {
 			// Wygaszanie elementow przy niezsynchronizowanym robocie
@@ -764,27 +835,43 @@ int wnd_irp6ot_joints_copy_current_to_desired(PtWidget_t *widget,
 		if (ui_state.irp6_on_track.edp.is_synchronised) // Czy robot jest zsynchronizowany?
 		{
 
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_joints_cur_p1, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[0]) , 0);
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_joints_cur_p2, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[1]) , 0);
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_joints_cur_p3, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[2]) , 0);
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_joints_cur_p4, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[3]) , 0);
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_joints_cur_p5, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[4]) , 0);
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_joints_cur_p6, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[5]) , 0);
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_joints_cur_p7, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[6]) , 0);
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_joints_cur_p8, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[7]) , 0);
+			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_joints_cur_p1,
+					Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[0]), 0);
+			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_joints_cur_p2,
+					Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[1]), 0);
+			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_joints_cur_p3,
+					Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[2]), 0);
+			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_joints_cur_p4,
+					Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[3]), 0);
+			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_joints_cur_p5,
+					Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[4]), 0);
+			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_joints_cur_p6,
+					Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[5]), 0);
+			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_joints_cur_p7,
+					Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[6]), 0);
+			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_joints_cur_p8,
+					Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[7]), 0);
 
 			for (int i = 0; i < IRP6_ON_TRACK_NUM_OF_SERVOS; i++) {
 				wektor[i] = *wektor_ptgr[i];
 			}
 
-			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_int_p1, Pt_ARG_NUMERIC_VALUE, &wektor[0], 0 );
-			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_int_p2, Pt_ARG_NUMERIC_VALUE, &wektor[1], 0 );
-			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_int_p3, Pt_ARG_NUMERIC_VALUE, &wektor[2], 0 );
-			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_int_p4, Pt_ARG_NUMERIC_VALUE, &wektor[3], 0 );
-			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_int_p5, Pt_ARG_NUMERIC_VALUE, &wektor[4], 0 );
-			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_int_p6, Pt_ARG_NUMERIC_VALUE, &wektor[5], 0 );
-			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_int_p7, Pt_ARG_NUMERIC_VALUE, &wektor[6], 0 );
-			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_int_p8, Pt_ARG_NUMERIC_VALUE, &wektor[7], 0 );
+			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_int_p1,
+					Pt_ARG_NUMERIC_VALUE, &wektor[0], 0);
+			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_int_p2,
+					Pt_ARG_NUMERIC_VALUE, &wektor[1], 0);
+			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_int_p3,
+					Pt_ARG_NUMERIC_VALUE, &wektor[2], 0);
+			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_int_p4,
+					Pt_ARG_NUMERIC_VALUE, &wektor[3], 0);
+			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_int_p5,
+					Pt_ARG_NUMERIC_VALUE, &wektor[4], 0);
+			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_int_p6,
+					Pt_ARG_NUMERIC_VALUE, &wektor[5], 0);
+			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_int_p7,
+					Pt_ARG_NUMERIC_VALUE, &wektor[6], 0);
+			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_int_p8,
+					Pt_ARG_NUMERIC_VALUE, &wektor[7], 0);
 		} else {
 
 		}
@@ -914,14 +1001,22 @@ int irp6ot_inc_motion(PtWidget_t *widget, ApInfo_t *apinfo,
 
 			if (ui_state.irp6_on_track.edp.is_synchronised) {
 
-				PtGetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p0, Pt_ARG_NUMERIC_VALUE, &(wektor[0]), 0 );
-				PtGetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p1, Pt_ARG_NUMERIC_VALUE, &(wektor[1]), 0 );
-				PtGetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p2, Pt_ARG_NUMERIC_VALUE, &(wektor[2]), 0 );
-				PtGetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p3, Pt_ARG_NUMERIC_VALUE, &(wektor[3]), 0 );
-				PtGetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p4, Pt_ARG_NUMERIC_VALUE, &(wektor[4]), 0 );
-				PtGetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p5, Pt_ARG_NUMERIC_VALUE, &(wektor[5]), 0 );
-				PtGetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p6, Pt_ARG_NUMERIC_VALUE, &(wektor[6]), 0 );
-				PtGetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p7, Pt_ARG_NUMERIC_VALUE, &(wektor[7]), 0 );
+				PtGetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p0,
+						Pt_ARG_NUMERIC_VALUE, &(wektor[0]), 0);
+				PtGetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p1,
+						Pt_ARG_NUMERIC_VALUE, &(wektor[1]), 0);
+				PtGetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p2,
+						Pt_ARG_NUMERIC_VALUE, &(wektor[2]), 0);
+				PtGetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p3,
+						Pt_ARG_NUMERIC_VALUE, &(wektor[3]), 0);
+				PtGetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p4,
+						Pt_ARG_NUMERIC_VALUE, &(wektor[4]), 0);
+				PtGetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p5,
+						Pt_ARG_NUMERIC_VALUE, &(wektor[5]), 0);
+				PtGetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p6,
+						Pt_ARG_NUMERIC_VALUE, &(wektor[6]), 0);
+				PtGetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p7,
+						Pt_ARG_NUMERIC_VALUE, &(wektor[7]), 0);
 
 				for (int i = 0; i < IRP6_ON_TRACK_NUM_OF_SERVOS; i++) {
 					irp6ot_desired_pos[i] = *wektor[i];
@@ -933,7 +1028,8 @@ int irp6ot_inc_motion(PtWidget_t *widget, ApInfo_t *apinfo,
 				}
 			}
 
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_inc_step, Pt_ARG_NUMERIC_VALUE, &step1, 0 );
+			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_inc_step,
+					Pt_ARG_NUMERIC_VALUE, &step1, 0);
 
 			if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6ot_inc_0l) {
 				irp6ot_desired_pos[0] -= (*step1);
@@ -1004,14 +1100,22 @@ int irp6ot_inc_motion(PtWidget_t *widget, ApInfo_t *apinfo,
 			if ((ui_state.irp6_on_track.edp.is_synchronised)
 					&& (ui_state.is_wind_irp6ot_inc_open)) { // by Y o dziwo niedziala poprawnie 	 if (ui_state.irp6_on_track.edp.is_synchronised)
 
-				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p0, Pt_ARG_NUMERIC_VALUE, &irp6ot_desired_pos[0] , 0);
-				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p1, Pt_ARG_NUMERIC_VALUE, &irp6ot_desired_pos[1] , 0);
-				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p2, Pt_ARG_NUMERIC_VALUE, &irp6ot_desired_pos[2] , 0);
-				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p3, Pt_ARG_NUMERIC_VALUE, &irp6ot_desired_pos[3] , 0);
-				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p4, Pt_ARG_NUMERIC_VALUE, &irp6ot_desired_pos[4] , 0);
-				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p5, Pt_ARG_NUMERIC_VALUE, &irp6ot_desired_pos[5] , 0);
-				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p6, Pt_ARG_NUMERIC_VALUE, &irp6ot_desired_pos[6] , 0);
-				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p7, Pt_ARG_NUMERIC_VALUE, &irp6ot_desired_pos[7] , 0);
+				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p0,
+						Pt_ARG_NUMERIC_VALUE, &irp6ot_desired_pos[0], 0);
+				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p1,
+						Pt_ARG_NUMERIC_VALUE, &irp6ot_desired_pos[1], 0);
+				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p2,
+						Pt_ARG_NUMERIC_VALUE, &irp6ot_desired_pos[2], 0);
+				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p3,
+						Pt_ARG_NUMERIC_VALUE, &irp6ot_desired_pos[3], 0);
+				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p4,
+						Pt_ARG_NUMERIC_VALUE, &irp6ot_desired_pos[4], 0);
+				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p5,
+						Pt_ARG_NUMERIC_VALUE, &irp6ot_desired_pos[5], 0);
+				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p6,
+						Pt_ARG_NUMERIC_VALUE, &irp6ot_desired_pos[6], 0);
+				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p7,
+						Pt_ARG_NUMERIC_VALUE, &irp6ot_desired_pos[7], 0);
 
 			}
 		} // end if (ui_state.irp6_on_track.edp.pid!=-1)
@@ -1036,14 +1140,22 @@ int init_wnd_irp6_on_track_int(PtWidget_t *widget, ApInfo_t *apinfo,
 				ui_robot.irp6_on_track->read_joints(irp6ot_current_pos); // Odczyt polozenia walow silnikow
 
 				// 	unblock_widget(ABW_PtPane_wind_irp6ot_int_post_synchro_moves);
-				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_joints_cur_p1, Pt_ARG_NUMERIC_VALUE, &irp6ot_current_pos[0] , 0);
-				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_joints_cur_p2, Pt_ARG_NUMERIC_VALUE, &irp6ot_current_pos[1] , 0);
-				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_joints_cur_p3, Pt_ARG_NUMERIC_VALUE, &irp6ot_current_pos[2] , 0);
-				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_joints_cur_p4, Pt_ARG_NUMERIC_VALUE, &irp6ot_current_pos[3] , 0);
-				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_joints_cur_p5, Pt_ARG_NUMERIC_VALUE, &irp6ot_current_pos[4] , 0);
-				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_joints_cur_p6, Pt_ARG_NUMERIC_VALUE, &irp6ot_current_pos[5] , 0);
-				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_joints_cur_p7, Pt_ARG_NUMERIC_VALUE, &irp6ot_current_pos[6] , 0);
-				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_joints_cur_p8, Pt_ARG_NUMERIC_VALUE, &irp6ot_current_pos[7] , 0);
+				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_joints_cur_p1,
+						Pt_ARG_NUMERIC_VALUE, &irp6ot_current_pos[0], 0);
+				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_joints_cur_p2,
+						Pt_ARG_NUMERIC_VALUE, &irp6ot_current_pos[1], 0);
+				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_joints_cur_p3,
+						Pt_ARG_NUMERIC_VALUE, &irp6ot_current_pos[2], 0);
+				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_joints_cur_p4,
+						Pt_ARG_NUMERIC_VALUE, &irp6ot_current_pos[3], 0);
+				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_joints_cur_p5,
+						Pt_ARG_NUMERIC_VALUE, &irp6ot_current_pos[4], 0);
+				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_joints_cur_p6,
+						Pt_ARG_NUMERIC_VALUE, &irp6ot_current_pos[5], 0);
+				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_joints_cur_p7,
+						Pt_ARG_NUMERIC_VALUE, &irp6ot_current_pos[6], 0);
+				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_joints_cur_p8,
+						Pt_ARG_NUMERIC_VALUE, &irp6ot_current_pos[7], 0);
 
 				for (int i = 0; i < IRP6_ON_TRACK_NUM_OF_SERVOS; i++)
 					irp6ot_desired_pos[i] = irp6ot_current_pos[i];
@@ -1071,20 +1183,29 @@ int irp6ot_int_motion(PtWidget_t *widget, ApInfo_t *apinfo,
 		if ((ui_state.irp6_on_track.edp.pid != -1)
 				&& (ui_state.irp6_on_track.edp.is_synchronised)) {
 
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_int_p1, Pt_ARG_NUMERIC_VALUE, &wektor[0], 0 );
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_int_p2, Pt_ARG_NUMERIC_VALUE, &wektor[1], 0 );
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_int_p3, Pt_ARG_NUMERIC_VALUE, &wektor[2], 0 );
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_int_p4, Pt_ARG_NUMERIC_VALUE, &wektor[3], 0 );
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_int_p5, Pt_ARG_NUMERIC_VALUE, &wektor[4], 0 );
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_int_p6, Pt_ARG_NUMERIC_VALUE, &wektor[5], 0 );
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_int_p7, Pt_ARG_NUMERIC_VALUE, &wektor[6], 0 );
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_int_p8, Pt_ARG_NUMERIC_VALUE, &wektor[7], 0 );
+			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_int_p1,
+					Pt_ARG_NUMERIC_VALUE, &wektor[0], 0);
+			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_int_p2,
+					Pt_ARG_NUMERIC_VALUE, &wektor[1], 0);
+			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_int_p3,
+					Pt_ARG_NUMERIC_VALUE, &wektor[2], 0);
+			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_int_p4,
+					Pt_ARG_NUMERIC_VALUE, &wektor[3], 0);
+			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_int_p5,
+					Pt_ARG_NUMERIC_VALUE, &wektor[4], 0);
+			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_int_p6,
+					Pt_ARG_NUMERIC_VALUE, &wektor[5], 0);
+			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_int_p7,
+					Pt_ARG_NUMERIC_VALUE, &wektor[6], 0);
+			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_int_p8,
+					Pt_ARG_NUMERIC_VALUE, &wektor[7], 0);
 
 			for (int i = 0; i < IRP6_ON_TRACK_NUM_OF_SERVOS; i++) {
 				irp6ot_desired_pos[i] = *wektor[i];
 			}
 
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_int_step, Pt_ARG_NUMERIC_VALUE, &step1, 0 );
+			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_int_step,
+					Pt_ARG_NUMERIC_VALUE, &step1, 0);
 
 			if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6ot_int_1l) {
 				irp6ot_desired_pos[0] -= (*step1);
@@ -1140,14 +1261,22 @@ int irp6ot_int_motion(PtWidget_t *widget, ApInfo_t *apinfo,
 			if (ui_state.is_wind_irp6ot_int_open) // Czy robot jest zsynchronizowany?
 			{
 
-				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_int_p1, Pt_ARG_NUMERIC_VALUE, &irp6ot_desired_pos[0] , 0);
-				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_int_p2, Pt_ARG_NUMERIC_VALUE, &irp6ot_desired_pos[1] , 0);
-				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_int_p3, Pt_ARG_NUMERIC_VALUE, &irp6ot_desired_pos[2] , 0);
-				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_int_p4, Pt_ARG_NUMERIC_VALUE, &irp6ot_desired_pos[3] , 0);
-				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_int_p5, Pt_ARG_NUMERIC_VALUE, &irp6ot_desired_pos[4] , 0);
-				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_int_p6, Pt_ARG_NUMERIC_VALUE, &irp6ot_desired_pos[5] , 0);
-				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_int_p7, Pt_ARG_NUMERIC_VALUE, &irp6ot_desired_pos[6] , 0);
-				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_int_p8, Pt_ARG_NUMERIC_VALUE, &irp6ot_desired_pos[7] , 0);
+				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_int_p1,
+						Pt_ARG_NUMERIC_VALUE, &irp6ot_desired_pos[0], 0);
+				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_int_p2,
+						Pt_ARG_NUMERIC_VALUE, &irp6ot_desired_pos[1], 0);
+				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_int_p3,
+						Pt_ARG_NUMERIC_VALUE, &irp6ot_desired_pos[2], 0);
+				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_int_p4,
+						Pt_ARG_NUMERIC_VALUE, &irp6ot_desired_pos[3], 0);
+				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_int_p5,
+						Pt_ARG_NUMERIC_VALUE, &irp6ot_desired_pos[4], 0);
+				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_int_p6,
+						Pt_ARG_NUMERIC_VALUE, &irp6ot_desired_pos[5], 0);
+				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_int_p7,
+						Pt_ARG_NUMERIC_VALUE, &irp6ot_desired_pos[6], 0);
+				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_int_p8,
+						Pt_ARG_NUMERIC_VALUE, &irp6ot_desired_pos[7], 0);
 			}
 
 		} // end if (ui_state.irp6_on_track.edp.pid!=-1)
@@ -1170,13 +1299,27 @@ int init_wnd_irp6_on_track_xyz_euler_zyz(PtWidget_t *widget, ApInfo_t *apinfo,
 			{
 				ui_robot.irp6_on_track->read_xyz_euler_zyz(irp6ot_current_pos); // Odczyt polozenia walow silnikow
 
-				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_read_p1, Pt_ARG_NUMERIC_VALUE, &irp6ot_current_pos[0] , 0);
-				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_read_p2, Pt_ARG_NUMERIC_VALUE, &irp6ot_current_pos[1] , 0);
-				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_read_p3, Pt_ARG_NUMERIC_VALUE, &irp6ot_current_pos[2] , 0);
-				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_read_p4, Pt_ARG_NUMERIC_VALUE, &irp6ot_current_pos[3] , 0);
-				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_read_p5, Pt_ARG_NUMERIC_VALUE, &irp6ot_current_pos[4] , 0);
-				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_read_p6, Pt_ARG_NUMERIC_VALUE, &irp6ot_current_pos[5] , 0);
-				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_read_p7, Pt_ARG_NUMERIC_VALUE, &irp6ot_current_pos[6] , 0);
+				PtSetResource(
+						ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_read_p1,
+						Pt_ARG_NUMERIC_VALUE, &irp6ot_current_pos[0], 0);
+				PtSetResource(
+						ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_read_p2,
+						Pt_ARG_NUMERIC_VALUE, &irp6ot_current_pos[1], 0);
+				PtSetResource(
+						ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_read_p3,
+						Pt_ARG_NUMERIC_VALUE, &irp6ot_current_pos[2], 0);
+				PtSetResource(
+						ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_read_p4,
+						Pt_ARG_NUMERIC_VALUE, &irp6ot_current_pos[3], 0);
+				PtSetResource(
+						ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_read_p5,
+						Pt_ARG_NUMERIC_VALUE, &irp6ot_current_pos[4], 0);
+				PtSetResource(
+						ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_read_p6,
+						Pt_ARG_NUMERIC_VALUE, &irp6ot_current_pos[5], 0);
+				PtSetResource(
+						ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_read_p7,
+						Pt_ARG_NUMERIC_VALUE, &irp6ot_current_pos[6], 0);
 
 				for (int i = 0; i < 7; i++)
 					irp6ot_desired_pos[i] = irp6ot_current_pos[i];
@@ -1204,25 +1347,39 @@ int wnd_irp6ot_xyz_zyz_copy_cur_to_desired(PtWidget_t *widget,
 	if (ui_state.irp6_on_track.edp.pid != -1) {
 		if (ui_state.irp6_on_track.edp.is_synchronised) // Czy robot jest zsynchronizowany?
 		{
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_read_p1, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[0]) , 0);
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_read_p2, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[1]) , 0);
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_read_p3, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[2]) , 0);
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_read_p4, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[3]) , 0);
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_read_p5, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[4]) , 0);
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_read_p6, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[5]) , 0);
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_read_p7, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[6]) , 0);
+			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_read_p1,
+					Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[0]), 0);
+			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_read_p2,
+					Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[1]), 0);
+			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_read_p3,
+					Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[2]), 0);
+			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_read_p4,
+					Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[3]), 0);
+			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_read_p5,
+					Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[4]), 0);
+			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_read_p6,
+					Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[5]), 0);
+			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_read_p7,
+					Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[6]), 0);
 
 			for (int i = 0; i < 7; i++) {
 				wektor[i] = *wektor_ptgr[i];
 			}
 
-			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p1, Pt_ARG_NUMERIC_VALUE, &wektor[0], 0 );
-			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p2, Pt_ARG_NUMERIC_VALUE, &wektor[1], 0 );
-			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p3, Pt_ARG_NUMERIC_VALUE, &wektor[2], 0 );
-			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p4, Pt_ARG_NUMERIC_VALUE, &wektor[3], 0 );
-			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p5, Pt_ARG_NUMERIC_VALUE, &wektor[4], 0 );
-			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p6, Pt_ARG_NUMERIC_VALUE, &wektor[5], 0 );
-			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p7, Pt_ARG_NUMERIC_VALUE, &wektor[6], 0 );
+			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p1,
+					Pt_ARG_NUMERIC_VALUE, &wektor[0], 0);
+			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p2,
+					Pt_ARG_NUMERIC_VALUE, &wektor[1], 0);
+			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p3,
+					Pt_ARG_NUMERIC_VALUE, &wektor[2], 0);
+			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p4,
+					Pt_ARG_NUMERIC_VALUE, &wektor[3], 0);
+			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p5,
+					Pt_ARG_NUMERIC_VALUE, &wektor[4], 0);
+			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p6,
+					Pt_ARG_NUMERIC_VALUE, &wektor[5], 0);
+			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p7,
+					Pt_ARG_NUMERIC_VALUE, &wektor[6], 0);
 		} else {
 
 		}
@@ -1247,18 +1404,26 @@ int irp6ot_xyz_euler_zyz_motion(PtWidget_t *widget, ApInfo_t *apinfo,
 	try {
 		if (ui_state.irp6_on_track.edp.is_synchronised) {
 
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p1, Pt_ARG_NUMERIC_VALUE, &wektor[0], 0 );
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p2, Pt_ARG_NUMERIC_VALUE, &wektor[1], 0 );
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p3, Pt_ARG_NUMERIC_VALUE, &wektor[2], 0 );
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p4, Pt_ARG_NUMERIC_VALUE, &wektor[3], 0 );
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p5, Pt_ARG_NUMERIC_VALUE, &wektor[4], 0 );
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p6, Pt_ARG_NUMERIC_VALUE, &wektor[5], 0 );
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p7, Pt_ARG_NUMERIC_VALUE, &wektor[6], 0 );
+			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p1,
+					Pt_ARG_NUMERIC_VALUE, &wektor[0], 0);
+			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p2,
+					Pt_ARG_NUMERIC_VALUE, &wektor[1], 0);
+			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p3,
+					Pt_ARG_NUMERIC_VALUE, &wektor[2], 0);
+			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p4,
+					Pt_ARG_NUMERIC_VALUE, &wektor[3], 0);
+			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p5,
+					Pt_ARG_NUMERIC_VALUE, &wektor[4], 0);
+			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p6,
+					Pt_ARG_NUMERIC_VALUE, &wektor[5], 0);
+			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p7,
+					Pt_ARG_NUMERIC_VALUE, &wektor[6], 0);
 
 			for (int i = 0; i < 7; i++)
 				irp6ot_desired_pos[i] = *wektor[i];
 
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_step, Pt_ARG_NUMERIC_VALUE, &step1, 0 );
+			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_step,
+					Pt_ARG_NUMERIC_VALUE, &step1, 0);
 
 			if (ApName(ApWidget(cbinfo))
 					== ABN_PtButton_wind_irp6ot_xyz_euler_zyz_1l) {
@@ -1345,13 +1510,20 @@ int irp6ot_xyz_euler_zyz_motion(PtWidget_t *widget, ApInfo_t *apinfo,
 			}
 			ui_robot.irp6_on_track->move_xyz_euler_zyz(irp6ot_desired_pos);
 
-			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p1, Pt_ARG_NUMERIC_VALUE, &irp6ot_desired_pos[0] , 0);
-			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p2, Pt_ARG_NUMERIC_VALUE, &irp6ot_desired_pos[1] , 0);
-			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p3, Pt_ARG_NUMERIC_VALUE, &irp6ot_desired_pos[2] , 0);
-			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p4, Pt_ARG_NUMERIC_VALUE, &irp6ot_desired_pos[3] , 0);
-			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p5, Pt_ARG_NUMERIC_VALUE, &irp6ot_desired_pos[4] , 0);
-			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p6, Pt_ARG_NUMERIC_VALUE, &irp6ot_desired_pos[5] , 0);
-			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p7, Pt_ARG_NUMERIC_VALUE, &irp6ot_desired_pos[6] , 0);
+			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p1,
+					Pt_ARG_NUMERIC_VALUE, &irp6ot_desired_pos[0], 0);
+			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p2,
+					Pt_ARG_NUMERIC_VALUE, &irp6ot_desired_pos[1], 0);
+			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p3,
+					Pt_ARG_NUMERIC_VALUE, &irp6ot_desired_pos[2], 0);
+			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p4,
+					Pt_ARG_NUMERIC_VALUE, &irp6ot_desired_pos[3], 0);
+			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p5,
+					Pt_ARG_NUMERIC_VALUE, &irp6ot_desired_pos[4], 0);
+			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p6,
+					Pt_ARG_NUMERIC_VALUE, &irp6ot_desired_pos[5], 0);
+			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p7,
+					Pt_ARG_NUMERIC_VALUE, &irp6ot_desired_pos[6], 0);
 		}
 	} // end try
 	CATCH_SECTION_UI
@@ -1372,14 +1544,28 @@ int init_wnd_irp6_on_track_xyz_angle_axis(PtWidget_t *widget, ApInfo_t *apinfo,
 			{
 				ui_robot.irp6_on_track->read_xyz_angle_axis(irp6ot_current_pos); // Odczyt polozenia walow silnikow
 
-				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_read_p1, Pt_ARG_NUMERIC_VALUE, &irp6ot_current_pos[0] , 0);
-				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_read_p2, Pt_ARG_NUMERIC_VALUE, &irp6ot_current_pos[1] , 0);
-				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_read_p3, Pt_ARG_NUMERIC_VALUE, &irp6ot_current_pos[2] , 0);
-				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_read_p4, Pt_ARG_NUMERIC_VALUE, &irp6ot_current_pos[3] , 0);
-				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_read_p5, Pt_ARG_NUMERIC_VALUE, &irp6ot_current_pos[4] , 0);
-				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_read_p6, Pt_ARG_NUMERIC_VALUE, &irp6ot_current_pos[5] , 0);
+				PtSetResource(
+						ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_read_p1,
+						Pt_ARG_NUMERIC_VALUE, &irp6ot_current_pos[0], 0);
+				PtSetResource(
+						ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_read_p2,
+						Pt_ARG_NUMERIC_VALUE, &irp6ot_current_pos[1], 0);
+				PtSetResource(
+						ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_read_p3,
+						Pt_ARG_NUMERIC_VALUE, &irp6ot_current_pos[2], 0);
+				PtSetResource(
+						ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_read_p4,
+						Pt_ARG_NUMERIC_VALUE, &irp6ot_current_pos[3], 0);
+				PtSetResource(
+						ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_read_p5,
+						Pt_ARG_NUMERIC_VALUE, &irp6ot_current_pos[4], 0);
+				PtSetResource(
+						ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_read_p6,
+						Pt_ARG_NUMERIC_VALUE, &irp6ot_current_pos[5], 0);
 
-				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_read_p8, Pt_ARG_NUMERIC_VALUE, &irp6ot_current_pos[6] , 0);
+				PtSetResource(
+						ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_read_p8,
+						Pt_ARG_NUMERIC_VALUE, &irp6ot_current_pos[6], 0);
 
 				for (int i = 0; i < 7; ++i)
 					irp6ot_desired_pos[i] = irp6ot_current_pos[i];
@@ -1407,25 +1593,46 @@ int wnd_irp6ot_xyz_aa_copy_current_to_desired(PtWidget_t *widget,
 	if (ui_state.irp6_on_track.edp.pid != -1) {
 		if (ui_state.irp6_on_track.edp.is_synchronised) // Czy robot jest zsynchronizowany?
 		{
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_read_p1, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[0]) , 0);
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_read_p2, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[1]) , 0);
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_read_p3, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[2]) , 0);
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_read_p4, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[3]) , 0);
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_read_p5, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[4]) , 0);
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_read_p6, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[5]) , 0);
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_read_p8, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[6]) , 0);
+			PtGetResource(
+					ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_read_p1,
+					Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[0]), 0);
+			PtGetResource(
+					ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_read_p2,
+					Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[1]), 0);
+			PtGetResource(
+					ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_read_p3,
+					Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[2]), 0);
+			PtGetResource(
+					ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_read_p4,
+					Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[3]), 0);
+			PtGetResource(
+					ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_read_p5,
+					Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[4]), 0);
+			PtGetResource(
+					ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_read_p6,
+					Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[5]), 0);
+			PtGetResource(
+					ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_read_p8,
+					Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[6]), 0);
 
 			for (int i = 0; i < 7; i++) {
 				wektor[i] = *wektor_ptgr[i];
 			}
 
-			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p1, Pt_ARG_NUMERIC_VALUE, &wektor[0], 0 );
-			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p2, Pt_ARG_NUMERIC_VALUE, &wektor[1], 0 );
-			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p3, Pt_ARG_NUMERIC_VALUE, &wektor[2], 0 );
-			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p4, Pt_ARG_NUMERIC_VALUE, &wektor[3], 0 );
-			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p5, Pt_ARG_NUMERIC_VALUE, &wektor[4], 0 );
-			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p6, Pt_ARG_NUMERIC_VALUE, &wektor[5], 0 );
-			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p8, Pt_ARG_NUMERIC_VALUE, &wektor[6], 0 );
+			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p1,
+					Pt_ARG_NUMERIC_VALUE, &wektor[0], 0);
+			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p2,
+					Pt_ARG_NUMERIC_VALUE, &wektor[1], 0);
+			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p3,
+					Pt_ARG_NUMERIC_VALUE, &wektor[2], 0);
+			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p4,
+					Pt_ARG_NUMERIC_VALUE, &wektor[3], 0);
+			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p5,
+					Pt_ARG_NUMERIC_VALUE, &wektor[4], 0);
+			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p6,
+					Pt_ARG_NUMERIC_VALUE, &wektor[5], 0);
+			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p8,
+					Pt_ARG_NUMERIC_VALUE, &wektor[6], 0);
 
 		} else {
 
@@ -1448,13 +1655,20 @@ int irp6ot_xyz_angle_axis_motion(PtWidget_t *widget, ApInfo_t *apinfo,
 		if (ui_state.irp6_on_track.edp.is_synchronised) {
 
 			double *wektor_ptgr[7];
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p1, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[0], 0 );
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p2, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[1], 0 );
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p3, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[2], 0 );
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p4, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[3], 0 );
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p5, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[4], 0 );
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p6, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[5], 0 );
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p8, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[6], 0 );
+			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p1,
+					Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[0], 0);
+			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p2,
+					Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[1], 0);
+			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p3,
+					Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[2], 0);
+			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p4,
+					Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[3], 0);
+			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p5,
+					Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[4], 0);
+			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p6,
+					Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[5], 0);
+			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p8,
+					Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[6], 0);
 
 			double wektor[7];
 			for (int i = 0; i < 7; i++) {
@@ -1462,7 +1676,8 @@ int irp6ot_xyz_angle_axis_motion(PtWidget_t *widget, ApInfo_t *apinfo,
 			}
 
 			double *krok;
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_step, Pt_ARG_NUMERIC_VALUE, &krok, 0 );
+			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_step,
+					Pt_ARG_NUMERIC_VALUE, &krok, 0);
 
 			// wektor przesuniecia
 			if (ApName(ApWidget(cbinfo))
@@ -1516,13 +1731,20 @@ int irp6ot_xyz_angle_axis_motion(PtWidget_t *widget, ApInfo_t *apinfo,
 			// zlecenie wykonania ruchu
 			ui_robot.irp6_on_track->move_xyz_angle_axis(irp6ot_desired_pos);
 
-			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p1, Pt_ARG_NUMERIC_VALUE, &wektor[0] , 0);
-			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p2, Pt_ARG_NUMERIC_VALUE, &wektor[1] , 0);
-			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p3, Pt_ARG_NUMERIC_VALUE, &wektor[2] , 0);
-			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p4, Pt_ARG_NUMERIC_VALUE, &wektor[3] , 0);
-			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p5, Pt_ARG_NUMERIC_VALUE, &wektor[4] , 0);
-			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p6, Pt_ARG_NUMERIC_VALUE, &wektor[5] , 0);
-			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p8, Pt_ARG_NUMERIC_VALUE, &wektor[6] , 0);
+			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p1,
+					Pt_ARG_NUMERIC_VALUE, &wektor[0], 0);
+			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p2,
+					Pt_ARG_NUMERIC_VALUE, &wektor[1], 0);
+			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p3,
+					Pt_ARG_NUMERIC_VALUE, &wektor[2], 0);
+			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p4,
+					Pt_ARG_NUMERIC_VALUE, &wektor[3], 0);
+			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p5,
+					Pt_ARG_NUMERIC_VALUE, &wektor[4], 0);
+			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p6,
+					Pt_ARG_NUMERIC_VALUE, &wektor[5], 0);
+			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p8,
+					Pt_ARG_NUMERIC_VALUE, &wektor[6], 0);
 
 		}
 	} // end try
@@ -1598,12 +1820,24 @@ int init_wnd_irp6_on_track_xyz_angle_axis_ts(PtWidget_t *widget,
 
 				ui_robot.irp6_on_track->read_tool_xyz_angle_axis(tool_vector); // Odczyt polozenia walow silnikow
 
-				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_ts_read_p1, Pt_ARG_NUMERIC_VALUE, &tool_vector[0] , 0);
-				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_ts_read_p2, Pt_ARG_NUMERIC_VALUE, &tool_vector[1] , 0);
-				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_ts_read_p3, Pt_ARG_NUMERIC_VALUE, &tool_vector[2] , 0);
-				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_ts_read_p4, Pt_ARG_NUMERIC_VALUE, &tool_vector[3] , 0);
-				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_ts_read_p5, Pt_ARG_NUMERIC_VALUE, &tool_vector[4] , 0);
-				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_ts_read_p6, Pt_ARG_NUMERIC_VALUE, &tool_vector[5] , 0);
+				PtSetResource(
+						ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_ts_read_p1,
+						Pt_ARG_NUMERIC_VALUE, &tool_vector[0], 0);
+				PtSetResource(
+						ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_ts_read_p2,
+						Pt_ARG_NUMERIC_VALUE, &tool_vector[1], 0);
+				PtSetResource(
+						ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_ts_read_p3,
+						Pt_ARG_NUMERIC_VALUE, &tool_vector[2], 0);
+				PtSetResource(
+						ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_ts_read_p4,
+						Pt_ARG_NUMERIC_VALUE, &tool_vector[3], 0);
+				PtSetResource(
+						ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_ts_read_p5,
+						Pt_ARG_NUMERIC_VALUE, &tool_vector[4], 0);
+				PtSetResource(
+						ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_ts_read_p6,
+						Pt_ARG_NUMERIC_VALUE, &tool_vector[5], 0);
 
 			} else {
 
@@ -1631,23 +1865,41 @@ int wnd_irp6ot_xyz_aa_ts_copy_cur_to_desired(PtWidget_t *widget,
 		if (ui_state.irp6_on_track.edp.is_synchronised) // Czy robot jest zsynchronizowany?
 		{
 
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_ts_read_p1, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[0]) , 0);
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_ts_read_p2, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[1]) , 0);
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_ts_read_p3, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[2]) , 0);
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_ts_read_p4, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[3]) , 0);
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_ts_read_p5, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[4]) , 0);
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_ts_read_p6, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[5]) , 0);
+			PtGetResource(
+					ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_ts_read_p1,
+					Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[0]), 0);
+			PtGetResource(
+					ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_ts_read_p2,
+					Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[1]), 0);
+			PtGetResource(
+					ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_ts_read_p3,
+					Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[2]), 0);
+			PtGetResource(
+					ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_ts_read_p4,
+					Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[3]), 0);
+			PtGetResource(
+					ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_ts_read_p5,
+					Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[4]), 0);
+			PtGetResource(
+					ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_ts_read_p6,
+					Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[5]), 0);
 
 			for (int i = 0; i < 6; i++) {
 				wektor[i] = *wektor_ptgr[i];
 			}
 
-			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_ts_p1, Pt_ARG_NUMERIC_VALUE, &wektor[0], 0 );
-			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_ts_p2, Pt_ARG_NUMERIC_VALUE, &wektor[1], 0 );
-			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_ts_p3, Pt_ARG_NUMERIC_VALUE, &wektor[2], 0 );
-			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_ts_p4, Pt_ARG_NUMERIC_VALUE, &wektor[3], 0 );
-			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_ts_p5, Pt_ARG_NUMERIC_VALUE, &wektor[4], 0 );
-			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_ts_p6, Pt_ARG_NUMERIC_VALUE, &wektor[5], 0 );
+			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_ts_p1,
+					Pt_ARG_NUMERIC_VALUE, &wektor[0], 0);
+			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_ts_p2,
+					Pt_ARG_NUMERIC_VALUE, &wektor[1], 0);
+			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_ts_p3,
+					Pt_ARG_NUMERIC_VALUE, &wektor[2], 0);
+			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_ts_p4,
+					Pt_ARG_NUMERIC_VALUE, &wektor[3], 0);
+			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_ts_p5,
+					Pt_ARG_NUMERIC_VALUE, &wektor[4], 0);
+			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_ts_p6,
+					Pt_ARG_NUMERIC_VALUE, &wektor[5], 0);
 
 		} else {
 
@@ -1676,12 +1928,18 @@ int irp6ot_xyz_angle_axis_set_tool(PtWidget_t *widget, ApInfo_t *apinfo,
 	try {
 		if (ui_state.irp6_on_track.edp.is_synchronised) {
 
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_ts_p1, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[0], 0 );
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_ts_p2, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[1], 0 );
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_ts_p3, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[2], 0 );
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_ts_p4, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[3], 0 );
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_ts_p5, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[4], 0 );
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_ts_p6, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[5], 0 );
+			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_ts_p1,
+					Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[0], 0);
+			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_ts_p2,
+					Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[1], 0);
+			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_ts_p3,
+					Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[2], 0);
+			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_ts_p4,
+					Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[3], 0);
+			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_ts_p5,
+					Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[4], 0);
+			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_ts_p6,
+					Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[5], 0);
 
 			for (int i = 0; i < 6; i++) {
 				wektor[i] = *wektor_ptgr[i];
@@ -1724,17 +1982,29 @@ int init_wnd_irp6_on_track_xyz_euler_zyz_ts(PtWidget_t *widget,
 
 				double w;
 				w = tool_vector[0];
-				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_ts_read_p1, Pt_ARG_NUMERIC_VALUE, &w, 0);
+				PtSetResource(
+						ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_ts_read_p1,
+						Pt_ARG_NUMERIC_VALUE, &w, 0);
 				w = tool_vector[1];
-				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_ts_read_p2, Pt_ARG_NUMERIC_VALUE, &w, 0);
+				PtSetResource(
+						ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_ts_read_p2,
+						Pt_ARG_NUMERIC_VALUE, &w, 0);
 				w = tool_vector[2];
-				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_ts_read_p3, Pt_ARG_NUMERIC_VALUE, &w, 0);
+				PtSetResource(
+						ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_ts_read_p3,
+						Pt_ARG_NUMERIC_VALUE, &w, 0);
 				w = tool_vector[3];
-				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_ts_read_p4, Pt_ARG_NUMERIC_VALUE, &w, 0);
+				PtSetResource(
+						ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_ts_read_p4,
+						Pt_ARG_NUMERIC_VALUE, &w, 0);
 				w = tool_vector[4];
-				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_ts_read_p5, Pt_ARG_NUMERIC_VALUE, &w, 0);
+				PtSetResource(
+						ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_ts_read_p5,
+						Pt_ARG_NUMERIC_VALUE, &w, 0);
 				w = tool_vector[5];
-				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_ts_read_p6, Pt_ARG_NUMERIC_VALUE, &w, 0);
+				PtSetResource(
+						ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_ts_read_p6,
+						Pt_ARG_NUMERIC_VALUE, &w, 0);
 
 			} else {
 
@@ -1761,23 +2031,41 @@ int wnd_irp6ot_xyz_zyz_ts_copy_cur_to_desired(PtWidget_t *widget,
 	if (ui_state.irp6_on_track.edp.pid != -1) {
 		if (ui_state.irp6_on_track.edp.is_synchronised) // Czy robot jest zsynchronizowany?
 		{
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_ts_read_p1, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[0]) , 0);
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_ts_read_p2, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[1]) , 0);
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_ts_read_p3, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[2]) , 0);
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_ts_read_p4, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[3]) , 0);
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_ts_read_p5, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[4]) , 0);
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_ts_read_p6, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[5]) , 0);
+			PtGetResource(
+					ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_ts_read_p1,
+					Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[0]), 0);
+			PtGetResource(
+					ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_ts_read_p2,
+					Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[1]), 0);
+			PtGetResource(
+					ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_ts_read_p3,
+					Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[2]), 0);
+			PtGetResource(
+					ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_ts_read_p4,
+					Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[3]), 0);
+			PtGetResource(
+					ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_ts_read_p5,
+					Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[4]), 0);
+			PtGetResource(
+					ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_ts_read_p6,
+					Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[5]), 0);
 
 			for (int i = 0; i < 6; i++) {
 				wektor[i] = *wektor_ptgr[i];
 			}
 
-			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_ts_p1, Pt_ARG_NUMERIC_VALUE, &wektor[0], 0 );
-			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_ts_p2, Pt_ARG_NUMERIC_VALUE, &wektor[1], 0 );
-			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_ts_p3, Pt_ARG_NUMERIC_VALUE, &wektor[2], 0 );
-			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_ts_p4, Pt_ARG_NUMERIC_VALUE, &wektor[3], 0 );
-			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_ts_p5, Pt_ARG_NUMERIC_VALUE, &wektor[4], 0 );
-			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_ts_p6, Pt_ARG_NUMERIC_VALUE, &wektor[5], 0 );
+			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_ts_p1,
+					Pt_ARG_NUMERIC_VALUE, &wektor[0], 0);
+			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_ts_p2,
+					Pt_ARG_NUMERIC_VALUE, &wektor[1], 0);
+			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_ts_p3,
+					Pt_ARG_NUMERIC_VALUE, &wektor[2], 0);
+			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_ts_p4,
+					Pt_ARG_NUMERIC_VALUE, &wektor[3], 0);
+			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_ts_p5,
+					Pt_ARG_NUMERIC_VALUE, &wektor[4], 0);
+			PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_ts_p6,
+					Pt_ARG_NUMERIC_VALUE, &wektor[5], 0);
 		} else {
 
 		}
@@ -1801,12 +2089,18 @@ int irp6ot_xyz_euler_zyz_set_tool(PtWidget_t *widget, ApInfo_t *apinfo,
 	// wychwytania ew. bledow ECP::robot
 	try {
 		if (ui_state.irp6_on_track.edp.is_synchronised) {
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_ts_p1, Pt_ARG_NUMERIC_VALUE, &wektor[0], 0 );
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_ts_p2, Pt_ARG_NUMERIC_VALUE, &wektor[1], 0 );
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_ts_p3, Pt_ARG_NUMERIC_VALUE, &wektor[2], 0 );
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_ts_p4, Pt_ARG_NUMERIC_VALUE, &wektor[3], 0 );
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_ts_p5, Pt_ARG_NUMERIC_VALUE, &wektor[4], 0 );
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_ts_p6, Pt_ARG_NUMERIC_VALUE, &wektor[5], 0 );
+			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_ts_p1,
+					Pt_ARG_NUMERIC_VALUE, &wektor[0], 0);
+			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_ts_p2,
+					Pt_ARG_NUMERIC_VALUE, &wektor[1], 0);
+			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_ts_p3,
+					Pt_ARG_NUMERIC_VALUE, &wektor[2], 0);
+			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_ts_p4,
+					Pt_ARG_NUMERIC_VALUE, &wektor[3], 0);
+			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_ts_p5,
+					Pt_ARG_NUMERIC_VALUE, &wektor[4], 0);
+			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_ts_p6,
+					Pt_ARG_NUMERIC_VALUE, &wektor[5], 0);
 
 			for (int i = 0; i < 6; i++) {
 				tool_vector[i] = *wektor[i];
@@ -1841,7 +2135,9 @@ int init_wnd_irp6_on_track_kinematic(PtWidget_t *widget, ApInfo_t *apinfo,
 			{
 				ui_robot.irp6_on_track->get_kinematic(&model_no); // Odczyt polozenia walow silnikow
 
-				PtSetResource(ABW_PtNumericInteger_wnd_irp6ot_read_kinematic_model_no, Pt_ARG_NUMERIC_VALUE, model_no , 0);
+				PtSetResource(
+						ABW_PtNumericInteger_wnd_irp6ot_read_kinematic_model_no,
+						Pt_ARG_NUMERIC_VALUE, model_no, 0);
 			} else {
 
 			}
@@ -1868,7 +2164,8 @@ int irp6ot_kinematic_set(PtWidget_t *widget, ApInfo_t *apinfo,
 	try {
 		if (ui_state.irp6_on_track.edp.is_synchronised) {
 
-			PtGetResource(ABW_PtNumericInteger_wnd_irp6ot_kinematic_model_no, Pt_ARG_NUMERIC_VALUE, &model_no_tmp, 0 );
+			PtGetResource(ABW_PtNumericInteger_wnd_irp6ot_kinematic_model_no,
+					Pt_ARG_NUMERIC_VALUE, &model_no_tmp, 0);
 
 			model_no_output = *model_no_tmp;
 
@@ -1903,23 +2200,55 @@ int init_wnd_irp6_on_track_servo_algorithm(PtWidget_t *widget,
 				ui_robot.irp6_on_track->get_servo_algorithm(servo_alg_no,
 						servo_par_no); // Odczyt polozenia walow silnikow
 
-				PtSetResource(ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_read_alg_1, Pt_ARG_NUMERIC_VALUE, servo_alg_no[0] , 0);
-				PtSetResource(ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_read_alg_2, Pt_ARG_NUMERIC_VALUE, servo_alg_no[1] , 0);
-				PtSetResource(ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_read_alg_3, Pt_ARG_NUMERIC_VALUE, servo_alg_no[2] , 0);
-				PtSetResource(ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_read_alg_4, Pt_ARG_NUMERIC_VALUE, servo_alg_no[3] , 0);
-				PtSetResource(ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_read_alg_5, Pt_ARG_NUMERIC_VALUE, servo_alg_no[4] , 0);
-				PtSetResource(ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_read_alg_6, Pt_ARG_NUMERIC_VALUE, servo_alg_no[5] , 0);
-				PtSetResource(ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_read_alg_7, Pt_ARG_NUMERIC_VALUE, servo_alg_no[6] , 0);
-				PtSetResource(ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_read_alg_8, Pt_ARG_NUMERIC_VALUE, servo_alg_no[7] , 0);
+				PtSetResource(
+						ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_read_alg_1,
+						Pt_ARG_NUMERIC_VALUE, servo_alg_no[0], 0);
+				PtSetResource(
+						ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_read_alg_2,
+						Pt_ARG_NUMERIC_VALUE, servo_alg_no[1], 0);
+				PtSetResource(
+						ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_read_alg_3,
+						Pt_ARG_NUMERIC_VALUE, servo_alg_no[2], 0);
+				PtSetResource(
+						ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_read_alg_4,
+						Pt_ARG_NUMERIC_VALUE, servo_alg_no[3], 0);
+				PtSetResource(
+						ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_read_alg_5,
+						Pt_ARG_NUMERIC_VALUE, servo_alg_no[4], 0);
+				PtSetResource(
+						ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_read_alg_6,
+						Pt_ARG_NUMERIC_VALUE, servo_alg_no[5], 0);
+				PtSetResource(
+						ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_read_alg_7,
+						Pt_ARG_NUMERIC_VALUE, servo_alg_no[6], 0);
+				PtSetResource(
+						ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_read_alg_8,
+						Pt_ARG_NUMERIC_VALUE, servo_alg_no[7], 0);
 
-				PtSetResource(ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_read_par_1, Pt_ARG_NUMERIC_VALUE, servo_par_no[0] , 0);
-				PtSetResource(ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_read_par_2, Pt_ARG_NUMERIC_VALUE, servo_par_no[1] , 0);
-				PtSetResource(ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_read_par_3, Pt_ARG_NUMERIC_VALUE, servo_par_no[2] , 0);
-				PtSetResource(ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_read_par_4, Pt_ARG_NUMERIC_VALUE, servo_par_no[3] , 0);
-				PtSetResource(ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_read_par_5, Pt_ARG_NUMERIC_VALUE, servo_par_no[4] , 0);
-				PtSetResource(ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_read_par_6, Pt_ARG_NUMERIC_VALUE, servo_par_no[5] , 0);
-				PtSetResource(ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_read_par_7, Pt_ARG_NUMERIC_VALUE, servo_par_no[6] , 0);
-				PtSetResource(ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_read_par_8, Pt_ARG_NUMERIC_VALUE, servo_par_no[7] , 0);
+				PtSetResource(
+						ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_read_par_1,
+						Pt_ARG_NUMERIC_VALUE, servo_par_no[0], 0);
+				PtSetResource(
+						ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_read_par_2,
+						Pt_ARG_NUMERIC_VALUE, servo_par_no[1], 0);
+				PtSetResource(
+						ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_read_par_3,
+						Pt_ARG_NUMERIC_VALUE, servo_par_no[2], 0);
+				PtSetResource(
+						ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_read_par_4,
+						Pt_ARG_NUMERIC_VALUE, servo_par_no[3], 0);
+				PtSetResource(
+						ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_read_par_5,
+						Pt_ARG_NUMERIC_VALUE, servo_par_no[4], 0);
+				PtSetResource(
+						ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_read_par_6,
+						Pt_ARG_NUMERIC_VALUE, servo_par_no[5], 0);
+				PtSetResource(
+						ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_read_par_7,
+						Pt_ARG_NUMERIC_VALUE, servo_par_no[6], 0);
+				PtSetResource(
+						ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_read_par_8,
+						Pt_ARG_NUMERIC_VALUE, servo_par_no[7], 0);
 
 			} else {
 
@@ -1950,49 +2279,113 @@ int wnd_irp6ot_seralg_copy_current_to_desired(PtWidget_t *widget,
 		if (ui_state.irp6_on_track.edp.is_synchronised) // Czy robot jest zsynchronizowany?
 		{
 
-			PtGetResource(ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_read_alg_1, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[0]) , 0);
-			PtGetResource(ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_read_alg_2, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[1]) , 0);
-			PtGetResource(ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_read_alg_3, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[2]) , 0);
-			PtGetResource(ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_read_alg_4, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[3]) , 0);
-			PtGetResource(ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_read_alg_5, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[4]) , 0);
-			PtGetResource(ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_read_alg_6, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[5]) , 0);
-			PtGetResource(ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_read_alg_7, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[6]) , 0);
-			PtGetResource(ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_read_alg_8, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[7]) , 0);
+			PtGetResource(
+					ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_read_alg_1,
+					Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[0]), 0);
+			PtGetResource(
+					ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_read_alg_2,
+					Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[1]), 0);
+			PtGetResource(
+					ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_read_alg_3,
+					Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[2]), 0);
+			PtGetResource(
+					ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_read_alg_4,
+					Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[3]), 0);
+			PtGetResource(
+					ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_read_alg_5,
+					Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[4]), 0);
+			PtGetResource(
+					ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_read_alg_6,
+					Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[5]), 0);
+			PtGetResource(
+					ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_read_alg_7,
+					Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[6]), 0);
+			PtGetResource(
+					ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_read_alg_8,
+					Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[7]), 0);
 
 			for (int i = 0; i < IRP6_ON_TRACK_NUM_OF_SERVOS; i++) {
 				wektor[i] = *wektor_ptgr[i];
 			}
 
-			PtSetResource(ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_alg_1, Pt_ARG_NUMERIC_VALUE, wektor[0], 0 );
-			PtSetResource(ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_alg_2, Pt_ARG_NUMERIC_VALUE, wektor[1], 0 );
-			PtSetResource(ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_alg_3, Pt_ARG_NUMERIC_VALUE, wektor[2], 0 );
-			PtSetResource(ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_alg_4, Pt_ARG_NUMERIC_VALUE, wektor[3], 0 );
-			PtSetResource(ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_alg_5, Pt_ARG_NUMERIC_VALUE, wektor[4], 0 );
-			PtSetResource(ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_alg_6, Pt_ARG_NUMERIC_VALUE, wektor[5], 0 );
-			PtSetResource(ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_alg_7, Pt_ARG_NUMERIC_VALUE, wektor[6], 0 );
-			PtSetResource(ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_alg_8, Pt_ARG_NUMERIC_VALUE, wektor[7], 0 );
+			PtSetResource(
+					ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_alg_1,
+					Pt_ARG_NUMERIC_VALUE, wektor[0], 0);
+			PtSetResource(
+					ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_alg_2,
+					Pt_ARG_NUMERIC_VALUE, wektor[1], 0);
+			PtSetResource(
+					ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_alg_3,
+					Pt_ARG_NUMERIC_VALUE, wektor[2], 0);
+			PtSetResource(
+					ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_alg_4,
+					Pt_ARG_NUMERIC_VALUE, wektor[3], 0);
+			PtSetResource(
+					ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_alg_5,
+					Pt_ARG_NUMERIC_VALUE, wektor[4], 0);
+			PtSetResource(
+					ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_alg_6,
+					Pt_ARG_NUMERIC_VALUE, wektor[5], 0);
+			PtSetResource(
+					ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_alg_7,
+					Pt_ARG_NUMERIC_VALUE, wektor[6], 0);
+			PtSetResource(
+					ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_alg_8,
+					Pt_ARG_NUMERIC_VALUE, wektor[7], 0);
 
-			PtGetResource(ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_read_par_1, Pt_ARG_NUMERIC_VALUE, &(wektor2_ptgr[0]) , 0);
-			PtGetResource(ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_read_par_2, Pt_ARG_NUMERIC_VALUE, &(wektor2_ptgr[1]) , 0);
-			PtGetResource(ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_read_par_3, Pt_ARG_NUMERIC_VALUE, &(wektor2_ptgr[2]) , 0);
-			PtGetResource(ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_read_par_4, Pt_ARG_NUMERIC_VALUE, &(wektor2_ptgr[3]) , 0);
-			PtGetResource(ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_read_par_5, Pt_ARG_NUMERIC_VALUE, &(wektor2_ptgr[4]) , 0);
-			PtGetResource(ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_read_par_6, Pt_ARG_NUMERIC_VALUE, &(wektor2_ptgr[5]) , 0);
-			PtGetResource(ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_read_par_7, Pt_ARG_NUMERIC_VALUE, &(wektor2_ptgr[6]) , 0);
-			PtGetResource(ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_read_par_8, Pt_ARG_NUMERIC_VALUE, &(wektor2_ptgr[7]) , 0);
+			PtGetResource(
+					ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_read_par_1,
+					Pt_ARG_NUMERIC_VALUE, &(wektor2_ptgr[0]), 0);
+			PtGetResource(
+					ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_read_par_2,
+					Pt_ARG_NUMERIC_VALUE, &(wektor2_ptgr[1]), 0);
+			PtGetResource(
+					ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_read_par_3,
+					Pt_ARG_NUMERIC_VALUE, &(wektor2_ptgr[2]), 0);
+			PtGetResource(
+					ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_read_par_4,
+					Pt_ARG_NUMERIC_VALUE, &(wektor2_ptgr[3]), 0);
+			PtGetResource(
+					ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_read_par_5,
+					Pt_ARG_NUMERIC_VALUE, &(wektor2_ptgr[4]), 0);
+			PtGetResource(
+					ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_read_par_6,
+					Pt_ARG_NUMERIC_VALUE, &(wektor2_ptgr[5]), 0);
+			PtGetResource(
+					ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_read_par_7,
+					Pt_ARG_NUMERIC_VALUE, &(wektor2_ptgr[6]), 0);
+			PtGetResource(
+					ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_read_par_8,
+					Pt_ARG_NUMERIC_VALUE, &(wektor2_ptgr[7]), 0);
 
 			for (int i = 0; i < IRP6_ON_TRACK_NUM_OF_SERVOS; i++) {
 				wektor2[i] = *wektor2_ptgr[i];
 			}
 
-			PtSetResource(ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_par_1, Pt_ARG_NUMERIC_VALUE, wektor2[0], 0 );
-			PtSetResource(ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_par_2, Pt_ARG_NUMERIC_VALUE, wektor2[1], 0 );
-			PtSetResource(ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_par_3, Pt_ARG_NUMERIC_VALUE, wektor2[2], 0 );
-			PtSetResource(ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_par_4, Pt_ARG_NUMERIC_VALUE, wektor2[3], 0 );
-			PtSetResource(ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_par_5, Pt_ARG_NUMERIC_VALUE, wektor2[4], 0 );
-			PtSetResource(ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_par_6, Pt_ARG_NUMERIC_VALUE, wektor2[5], 0 );
-			PtSetResource(ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_par_7, Pt_ARG_NUMERIC_VALUE, wektor2[6], 0 );
-			PtSetResource(ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_par_8, Pt_ARG_NUMERIC_VALUE, wektor2[7], 0 );
+			PtSetResource(
+					ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_par_1,
+					Pt_ARG_NUMERIC_VALUE, wektor2[0], 0);
+			PtSetResource(
+					ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_par_2,
+					Pt_ARG_NUMERIC_VALUE, wektor2[1], 0);
+			PtSetResource(
+					ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_par_3,
+					Pt_ARG_NUMERIC_VALUE, wektor2[2], 0);
+			PtSetResource(
+					ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_par_4,
+					Pt_ARG_NUMERIC_VALUE, wektor2[3], 0);
+			PtSetResource(
+					ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_par_5,
+					Pt_ARG_NUMERIC_VALUE, wektor2[4], 0);
+			PtSetResource(
+					ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_par_6,
+					Pt_ARG_NUMERIC_VALUE, wektor2[5], 0);
+			PtSetResource(
+					ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_par_7,
+					Pt_ARG_NUMERIC_VALUE, wektor2[6], 0);
+			PtSetResource(
+					ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_par_8,
+					Pt_ARG_NUMERIC_VALUE, wektor2[7], 0);
 
 		} else {
 			// Wygaszanie elementow przy niezsynchronizowanym robocie
@@ -2022,23 +2415,55 @@ int irp6ot_servo_algorithm_set(PtWidget_t *widget, ApInfo_t *apinfo,
 	try {
 		if (ui_state.irp6_on_track.edp.is_synchronised) {
 
-			PtGetResource(ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_alg_1, Pt_ARG_NUMERIC_VALUE, &servo_alg_no_tmp[0], 0 );
-			PtGetResource(ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_alg_2, Pt_ARG_NUMERIC_VALUE, &servo_alg_no_tmp[1], 0 );
-			PtGetResource(ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_alg_3, Pt_ARG_NUMERIC_VALUE, &servo_alg_no_tmp[2], 0 );
-			PtGetResource(ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_alg_4, Pt_ARG_NUMERIC_VALUE, &servo_alg_no_tmp[3], 0 );
-			PtGetResource(ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_alg_5, Pt_ARG_NUMERIC_VALUE, &servo_alg_no_tmp[4], 0 );
-			PtGetResource(ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_alg_6, Pt_ARG_NUMERIC_VALUE, &servo_alg_no_tmp[5], 0 );
-			PtGetResource(ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_alg_7, Pt_ARG_NUMERIC_VALUE, &servo_alg_no_tmp[6], 0 );
-			PtGetResource(ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_alg_8, Pt_ARG_NUMERIC_VALUE, &servo_alg_no_tmp[7], 0 );
+			PtGetResource(
+					ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_alg_1,
+					Pt_ARG_NUMERIC_VALUE, &servo_alg_no_tmp[0], 0);
+			PtGetResource(
+					ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_alg_2,
+					Pt_ARG_NUMERIC_VALUE, &servo_alg_no_tmp[1], 0);
+			PtGetResource(
+					ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_alg_3,
+					Pt_ARG_NUMERIC_VALUE, &servo_alg_no_tmp[2], 0);
+			PtGetResource(
+					ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_alg_4,
+					Pt_ARG_NUMERIC_VALUE, &servo_alg_no_tmp[3], 0);
+			PtGetResource(
+					ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_alg_5,
+					Pt_ARG_NUMERIC_VALUE, &servo_alg_no_tmp[4], 0);
+			PtGetResource(
+					ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_alg_6,
+					Pt_ARG_NUMERIC_VALUE, &servo_alg_no_tmp[5], 0);
+			PtGetResource(
+					ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_alg_7,
+					Pt_ARG_NUMERIC_VALUE, &servo_alg_no_tmp[6], 0);
+			PtGetResource(
+					ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_alg_8,
+					Pt_ARG_NUMERIC_VALUE, &servo_alg_no_tmp[7], 0);
 
-			PtGetResource(ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_par_1, Pt_ARG_NUMERIC_VALUE, &servo_par_no_tmp[0], 0 );
-			PtGetResource(ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_par_2, Pt_ARG_NUMERIC_VALUE, &servo_par_no_tmp[1], 0 );
-			PtGetResource(ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_par_3, Pt_ARG_NUMERIC_VALUE, &servo_par_no_tmp[2], 0 );
-			PtGetResource(ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_par_4, Pt_ARG_NUMERIC_VALUE, &servo_par_no_tmp[3], 0 );
-			PtGetResource(ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_par_5, Pt_ARG_NUMERIC_VALUE, &servo_par_no_tmp[4], 0 );
-			PtGetResource(ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_par_6, Pt_ARG_NUMERIC_VALUE, &servo_par_no_tmp[5], 0 );
-			PtGetResource(ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_par_7, Pt_ARG_NUMERIC_VALUE, &servo_par_no_tmp[6], 0 );
-			PtGetResource(ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_par_8, Pt_ARG_NUMERIC_VALUE, &servo_par_no_tmp[7], 0 );
+			PtGetResource(
+					ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_par_1,
+					Pt_ARG_NUMERIC_VALUE, &servo_par_no_tmp[0], 0);
+			PtGetResource(
+					ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_par_2,
+					Pt_ARG_NUMERIC_VALUE, &servo_par_no_tmp[1], 0);
+			PtGetResource(
+					ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_par_3,
+					Pt_ARG_NUMERIC_VALUE, &servo_par_no_tmp[2], 0);
+			PtGetResource(
+					ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_par_4,
+					Pt_ARG_NUMERIC_VALUE, &servo_par_no_tmp[3], 0);
+			PtGetResource(
+					ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_par_5,
+					Pt_ARG_NUMERIC_VALUE, &servo_par_no_tmp[4], 0);
+			PtGetResource(
+					ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_par_6,
+					Pt_ARG_NUMERIC_VALUE, &servo_par_no_tmp[5], 0);
+			PtGetResource(
+					ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_par_7,
+					Pt_ARG_NUMERIC_VALUE, &servo_par_no_tmp[6], 0);
+			PtGetResource(
+					ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_par_8,
+					Pt_ARG_NUMERIC_VALUE, &servo_par_no_tmp[7], 0);
 
 			for (int i = 0; i < IRP6_ON_TRACK_NUM_OF_SERVOS; i++) {
 				servo_alg_no_output[i] = *servo_alg_no_tmp[i];
@@ -2116,10 +2541,12 @@ int EDP_irp6_on_track_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 						= config->return_node_number(
 								ui_state.irp6_on_track.edp.node_name);
 
+				{
+					boost::unique_lock<boost::mutex> lock(process_creation_mtx);
 
-
-				ui_robot.irp6_on_track = new ui_irp6_common_robot(*config,
-						*ui_msg.all_ecp, lib::ROBOT_IRP6_ON_TRACK);
+					ui_robot.irp6_on_track = new ui_irp6_common_robot(*config,
+							*ui_msg.all_ecp, lib::ROBOT_IRP6_ON_TRACK);
+				}
 
 				ui_state.irp6_on_track.edp.pid
 						= ui_robot.irp6_on_track->ecp->get_EDP_pid();
@@ -2345,7 +2772,7 @@ int pulse_ecp_irp6_on_track(PtWidget_t *widget, ApInfo_t *apinfo,
 			// kilka sekund  (~1) na otworzenie urzadzenia
 			// zabezpieczenie przed zawieszeniem poprzez wyslanie sygnalu z opoznieniem
 
-			ualarm((useconds_t) (SIGALRM_TIMEOUT), 0);
+			ualarm((useconds_t)(SIGALRM_TIMEOUT), 0);
 			while ((ui_state.irp6_on_track.ecp.trigger_fd
 					= name_open(
 							ui_state.irp6_on_track.ecp.network_trigger_attach_point.c_str(),
@@ -2359,7 +2786,7 @@ int pulse_ecp_irp6_on_track(PtWidget_t *widget, ApInfo_t *apinfo,
 				}
 			}
 			// odwolanie alarmu
-			ualarm((useconds_t) (0), 0);
+			ualarm((useconds_t)(0), 0);
 		}
 
 		if (ui_state.irp6_on_track.ecp.trigger_fd >= 0) {
@@ -2694,13 +3121,20 @@ int irp6ot_xyz_aa_relative_motion(PtWidget_t *widget, ApInfo_t *apinfo,
 	try {
 		if (ui_state.irp6_on_track.edp.is_synchronised) {
 
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_aa_relative_px, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[0], 0 );
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_aa_relative_py, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[1], 0 );
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_aa_relative_pz, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[2], 0 );
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_aa_relative_pox, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[3], 0 );
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_aa_relative_poy, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[4], 0 );
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_aa_relative_poz, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[5], 0 );
-			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_aa_relative_pg, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[6], 0 );
+			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_aa_relative_px,
+					Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[0], 0);
+			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_aa_relative_py,
+					Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[1], 0);
+			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_aa_relative_pz,
+					Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[2], 0);
+			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_aa_relative_pox,
+					Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[3], 0);
+			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_aa_relative_poy,
+					Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[4], 0);
+			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_aa_relative_poz,
+					Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[5], 0);
+			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_aa_relative_pg,
+					Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[6], 0);
 
 			for (int i = 0; i < 7; i++) {
 				wektor[i] = *wektor_ptgr[i];
@@ -2786,24 +3220,31 @@ int import_wnd_irp6_on_track_xyz_angle_axis(PtWidget_t *widget,
 	char* tmp_ptgr, *tmp;
 	double val;
 
-	PtGetResource( ABW_PtText_input_console, Pt_ARG_TEXT_STRING, &tmp_ptgr, 0 );
+	PtGetResource(ABW_PtText_input_console, Pt_ARG_TEXT_STRING, &tmp_ptgr, 0);
 	tmp = new char[strlen(tmp_ptgr)];
 	strcpy(tmp, tmp_ptgr);
 
 	val = strtod(tmp, &tmp);
-	PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p1, Pt_ARG_NUMERIC_VALUE, &val , 0);
+	PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p1,
+			Pt_ARG_NUMERIC_VALUE, &val, 0);
 	val = strtod(tmp, &tmp);
-	PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p2, Pt_ARG_NUMERIC_VALUE, &val , 0);
+	PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p2,
+			Pt_ARG_NUMERIC_VALUE, &val, 0);
 	val = strtod(tmp, &tmp);
-	PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p3, Pt_ARG_NUMERIC_VALUE, &val , 0);
+	PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p3,
+			Pt_ARG_NUMERIC_VALUE, &val, 0);
 	val = strtod(tmp, &tmp);
-	PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p4, Pt_ARG_NUMERIC_VALUE, &val , 0);
+	PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p4,
+			Pt_ARG_NUMERIC_VALUE, &val, 0);
 	val = strtod(tmp, &tmp);
-	PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p5, Pt_ARG_NUMERIC_VALUE, &val , 0);
+	PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p5,
+			Pt_ARG_NUMERIC_VALUE, &val, 0);
 	val = strtod(tmp, &tmp);
-	PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p6, Pt_ARG_NUMERIC_VALUE, &val , 0);
+	PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p6,
+			Pt_ARG_NUMERIC_VALUE, &val, 0);
 	val = strtod(tmp, &tmp);
-	PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p8, Pt_ARG_NUMERIC_VALUE, &val , 0);
+	PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p8,
+			Pt_ARG_NUMERIC_VALUE, &val, 0);
 
 	return (Pt_CONTINUE);
 
@@ -2821,13 +3262,20 @@ int export_wnd_irp6_on_track_xyz_angle_axis(PtWidget_t *widget,
 
 	double *wektor[7];
 
-	PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p1, Pt_ARG_NUMERIC_VALUE, &wektor[0], 0 );
-	PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p2, Pt_ARG_NUMERIC_VALUE, &wektor[1], 0 );
-	PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p3, Pt_ARG_NUMERIC_VALUE, &wektor[2], 0 );
-	PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p4, Pt_ARG_NUMERIC_VALUE, &wektor[3], 0 );
-	PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p5, Pt_ARG_NUMERIC_VALUE, &wektor[4], 0 );
-	PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p6, Pt_ARG_NUMERIC_VALUE, &wektor[5], 0 );
-	PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p8, Pt_ARG_NUMERIC_VALUE, &wektor[6], 0 );
+	PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p1,
+			Pt_ARG_NUMERIC_VALUE, &wektor[0], 0);
+	PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p2,
+			Pt_ARG_NUMERIC_VALUE, &wektor[1], 0);
+	PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p3,
+			Pt_ARG_NUMERIC_VALUE, &wektor[2], 0);
+	PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p4,
+			Pt_ARG_NUMERIC_VALUE, &wektor[3], 0);
+	PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p5,
+			Pt_ARG_NUMERIC_VALUE, &wektor[4], 0);
+	PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p6,
+			Pt_ARG_NUMERIC_VALUE, &wektor[5], 0);
+	PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p8,
+			Pt_ARG_NUMERIC_VALUE, &wektor[6], 0);
 
 	sprintf(buffer,
 			"EDP_IRP6_OT XYZ_ANGLE_AXIS POSITION\n %f %f %f %f %f %f %f",

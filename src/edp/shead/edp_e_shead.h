@@ -60,7 +60,7 @@ public:
 	 *
 	 * It will be used if there will be any motor used.
 	 */
-	void move_arm(lib::c_buffer &instruction); // przemieszczenie ramienia
+	void move_arm(const lib::c_buffer &instruction); // przemieszczenie ramienia
 
 
 	/*!

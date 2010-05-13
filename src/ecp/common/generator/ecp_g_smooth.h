@@ -244,6 +244,17 @@ class smooth : public delta {
 		void initiate_coordinate_list(void);
 
 	public:
+		//nowe metody
+		/**
+		 *
+		 */
+		void set_interpolation_type();
+		/**
+		 *
+		 */
+		void calculate_interpolate();
+		//end: nowe metody
+
 		/**
 		 *
 		 */

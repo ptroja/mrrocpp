@@ -22,7 +22,6 @@ namespace mrrocpp {
 namespace mp {
 namespace common {
 
-
 // obiekt z metodami i polami dla procesu MP (polimorficzny)
 task::task* mp_t;
 

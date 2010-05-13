@@ -28,7 +28,7 @@ ib_eih_visual_servo::ib_eih_visual_servo(boost::shared_ptr <visual_servo_regulat
 	try {
 		vsp_fradia
 				= boost::shared_ptr <fradia_sensor <image_based_reading, image_based_configuration> >(new fradia_sensor <
-						image_based_reading, image_based_configuration> (section_name, configurator));
+						image_based_reading, image_based_configuration> (configurator, section_name));
 
 		Eigen::Matrix <double, 1, 3> desired_translation;
 		Eigen::Matrix <double, 3, 3> intrinsics;

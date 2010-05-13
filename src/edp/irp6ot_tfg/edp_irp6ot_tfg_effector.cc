@@ -48,7 +48,7 @@ effector::effector(lib::configurator &_config) :
 }
 
 /*--------------------------------------------------------------------------*/
-void effector::set_robot_model(lib::c_buffer &instruction)
+void effector::set_robot_model(const lib::c_buffer &instruction)
 {
 	// uint8_t previous_model;
 	// uint8_t previous_corrector;
@@ -67,7 +67,7 @@ void effector::set_robot_model(lib::c_buffer &instruction)
 /*--------------------------------------------------------------------------*/
 
 // Przemieszczenie tasmociagu.
-void effector::move_arm(lib::c_buffer &instruction)
+void effector::move_arm(const lib::c_buffer &instruction)
 {
 	motor_driven_effector::multi_thread_move_arm(instruction);
 }
