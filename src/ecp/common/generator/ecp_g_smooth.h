@@ -14,7 +14,6 @@
 #include <stdlib.h>
 #include <math.h>
 #include <ctype.h>
-#include <iostream>
 
 #include <libxml/xmlmemory.h>
 #include <libxml/parser.h>
@@ -24,8 +23,6 @@
 #include <fstream>
 #include <string.h>
 #include <list>
-
-using namespace std;
 
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
@@ -73,15 +70,7 @@ class smooth : public delta {
 		/**
 		 *
 		 */
-		std::list<ecp_mp::common::smooth_trajectory_pose> pose_list_backup;
-		/**
-		 *
-		 */
 		std::list<ecp_mp::common::smooth_trajectory_pose>::iterator pose_list_iterator;
-		/**
-		 *
-		 */
-		std::list<ecp_mp::common::smooth_trajectory_pose>::iterator pose_list_backup_iterator;
 		/**
 		 *
 		 */
@@ -135,17 +124,9 @@ class smooth : public delta {
 		 */
 		bool trajectory_calculated;
 		/**
-		 * Set to true if external coordinates in absolute mode are used. In such case the special relative mode have to be used. This variable helps distinguish this mode.
-		 */
-		bool external_absolute;
-		/**
 		 *
 		 */
 		lib::Homog_matrix homog_matrix;
-		/**
-		 *
-		 */
-		lib::Homog_matrix homog_matrix2;
 		/**
 		 *
 		 */
@@ -154,6 +135,7 @@ class smooth : public delta {
 		 *
 		 */
 		void generate_coords();
+		//void calculate_absolute_positions();//for (non real) relative type of given coordinates
 		/**
 		 *
 		 */
@@ -244,17 +226,6 @@ class smooth : public delta {
 		void initiate_coordinate_list(void);
 
 	public:
-		//nowe metody
-		/**
-		 *
-		 */
-		void set_interpolation_type();
-		/**
-		 *
-		 */
-		void calculate_interpolate();
-		//end: nowe metody
-
 		/**
 		 *
 		 */
@@ -374,13 +345,6 @@ class smooth : public delta {
 		/**
 		 *
 		 */
-		void get_type_for_smooth_xml(const char* fileName);
-		void get_type_for_smooth_xml2(const char* fileName, const char* nodeName);
-
-		/**
-		 *
-		 */
-
 		void set_pose_from_xml(xmlNode *stateNode, bool &first_time);
 		/**
 		 *
