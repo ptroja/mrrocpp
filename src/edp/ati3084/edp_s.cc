@@ -63,6 +63,7 @@ static struct mds_data
 	int byte_counter;
 	bool is_received;
 	int16_t data[MDS_DATA_RANGE];
+	intrspin_t spinlock;
 } mds;
 
 static uint64_t int_timeout;// by Y
@@ -72,19 +73,19 @@ static uintptr_t base_io_adress; // do obslugi karty advantech pci1751
 
 const struct sigevent * schunk_int_handler(void *arg, int sint_id)
 {
-	struct timespec rqtp;
-	rqtp.tv_sec = 0;
-	rqtp.tv_nsec = INTR_NS_DELAY;
-
-	InterruptMask(info.Irq, sint_id);
-
 	if (!check_intr()) {
 		// przyczyna przerwania inna niz sygnal stb z karty advantech
-		InterruptUnmask(info.Irq, sint_id);
 		return NULL;
 	} else {
+		struct timespec rqtp;
+		rqtp.tv_sec = 0;
+		rqtp.tv_nsec = INTR_NS_DELAY;
+
 		clear_intr();
 		set_ibf(1);
+
+		InterruptLock(&mds.spinlock);
+
 		if (mds.intr_mode == 0) {
 			if (mds.is_received) {
 				mds.byte_counter = -1;
@@ -93,22 +94,31 @@ const struct sigevent * schunk_int_handler(void *arg, int sint_id)
 			if ((mds.byte_counter) < (MDS_DATA_RANGE - 1)) {
 				mds.data[++mds.byte_counter] = get_input();
 			}
+
+			InterruptUnlock(&mds.spinlock);
+
 			nanospin(&rqtp);
 
 			set_ibf(0);
-			InterruptUnmask(info.Irq, sint_id);
+
 			return (&sevent);
 		} else {
+			bool return_sevent = false;
+
 			mds.data[mds.byte_counter] = get_input();
+
+			if (++mds.byte_counter >= 7) {
+				mds.byte_counter = 0;
+				return_sevent = true;
+			}
+
+			InterruptUnlock(&mds.spinlock);
+
 			nanospin(&rqtp);
 
 			set_ibf(0);
-			InterruptUnmask(info.Irq, sint_id);
-			if (++mds.byte_counter >= 7) {
-				mds.byte_counter = 0;
-				return (&sevent);
-			}
-			return (NULL);
+
+			return (return_sevent) ? (&sevent) : NULL;
 		}
 	}
 }
@@ -162,6 +172,7 @@ void ATI3084_force::connect_to_hardware(void)
 			memset(&sevent, 0, sizeof(sevent));// obsluga przerwania
 			sevent.sigev_notify = SIGEV_INTR;
 
+			// spinlock is not required until interrupt attached
 			mds.intr_mode = 0; // obsluga przerwania ustawiona na odbior pojedynczych slow
 			mds.byte_counter = 0;
 			mds.is_received = false;
@@ -227,8 +238,10 @@ void ATI3084_force::configure_sensor(void)
 	is_sensor_configured = true;
 	//  printf("EDP Sensor configured\n");
 	sr_msg->message("EDP Sensor configured");
-	if (!(master.test_mode)) {
+	if (!master.test_mode) {
+		InterruptLock(&mds.spinlock);
 		mds.intr_mode = 0;
+		InterruptUnlock(&mds.spinlock);
 
 		do_send_command(SB);
 		do_Wait();
@@ -237,8 +250,10 @@ void ATI3084_force::configure_sensor(void)
 		do_Wait();
 #endif
 	}
+	InterruptLock(&mds.spinlock);
 	mds.intr_mode = 1; // przywrocenie do 7 bajtowego trybu odbiotu danych
 	mds.byte_counter = 0;
+	InterruptUnlock(&mds.spinlock);
 	// cout << "Przed konf" << endl;
 	// jesli ma byc wykorzytstywana biblioteka transformacji sil
 	if (master.force_tryb == 2) {
@@ -287,22 +302,28 @@ void ATI3084_force::wait_for_event()
 	int iw_ret;
 	int iter_counter = 0; // okresla ile razy pod rzad zostala uruchomiona ta metoda
 
-	if (!(master.test_mode)) {
+	if (!master.test_mode) {
 
 		if (!int_attached) {
 			int_attached = true;
+			InterruptLock(&mds.spinlock);
 			mds.intr_mode = 1; // obsluga przerwania ustawiona na odbior 7 slow
+			InterruptUnlock(&mds.spinlock);
 		}
 
 		do {
 			iter_counter++;
 
+			InterruptLock(&mds.spinlock);
+
 			mds.byte_counter = 0;// zabezpieczenie przed niektorymi bledami pomiarow - sprawdzone dziala ;)
+			mds.intr_mode = 1; // przywrocenie do 7 bajtowego trybu odbiotu danych
+			mds.byte_counter = 0;
+
+			InterruptUnlock(&mds.spinlock);
 
 			do_send_command(SGET1);
 
-			mds.intr_mode = 1; // przywrocenie do 7 bajtowego trybu odbiotu danych
-			mds.byte_counter = 0;
 			int_timeout = SCHUNK_INTR_TIMEOUT_LOW;// by Y
 			TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_INTR, &tim_event, &int_timeout, NULL);
 			iw_ret = InterruptWait(0, NULL);
@@ -318,9 +339,11 @@ void ATI3084_force::wait_for_event()
 
 				}
 				usleep(10000); // aby nadmiernie nie obciazac procesora
+				InterruptLock(&mds.spinlock);
 				mds.intr_mode = 0; // obsluga przerwania ustawiona na odbior pojedynczych slow
 				mds.byte_counter = 0;
 				mds.is_received = false;
+				InterruptUnlock(&mds.spinlock);
 				do_init(); // komunikacja wstepna
 			} else {
 				if (iter_counter > 1) {
@@ -353,12 +376,14 @@ void ATI3084_force::get_reading(void)
 		master.force_msr_upload(kartez_force);
 	} else {
 		lib::Ft_vector ft_table;
-		InterruptDisable ();
+
+		InterruptLock(&mds.spinlock);
+
 		for (int i = 0; i < 6; i++)
 			ft_table[i] = static_cast <double> (mds.data[i + 1]);
 		int16_t measure_report = mds.data[0];
 
-		InterruptEnable();
+		InterruptUnlock(&mds.spinlock);
 
 		// jesli pomiar byl poprawny
 		if (measure_report == COMMAND_OK) {
@@ -529,12 +554,11 @@ void ATI3084_force::do_Wait(void)
 	do {
 		TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_INTR, &tim_event, &int_timeout, NULL);
 		iw_ret = InterruptWait(0, NULL);
-		InterruptMask(info.Irq, sint_id);
+		InterruptLock(&mds.spinlock);
 		if (iw_ret != -1) {
 			mds.is_received = true;
 		}
-		InterruptUnmask(info.Irq, sint_id);
-
+		InterruptUnlock(&mds.spinlock);
 	} while (iw_ret != -1);
 }
 
