@@ -5,4 +5,6 @@ msr
 configs/default_file.cfg
 .project
 .cproject
+.qnx_internal.mk
+.settings/
 *.patch
