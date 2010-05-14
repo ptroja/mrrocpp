@@ -50,8 +50,6 @@ public:
 	bool is_sensor_configured; // czy czujnik skonfigurowany?
 	void set_command_execution_finish();
 
-	virtual void connect_to_hardware(void) = 0;
-
 	Eigen::Vector3d next_force_tool_position, current_force_tool_position;
 	double next_force_tool_weight, current_force_tool_weight;
 
