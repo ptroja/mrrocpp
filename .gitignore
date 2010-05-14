@@ -1,7 +1,8 @@
-/bin
-/build
-/logs
-/msr
-/configs/default_file.cfg
+bin
+build*
+logs
+msr
+configs/default_file.cfg
 .project
 .cproject
+*.patch
