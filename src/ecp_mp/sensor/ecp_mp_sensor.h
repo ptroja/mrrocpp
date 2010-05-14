@@ -45,7 +45,7 @@ public:
 	const lib::SENSOR_t sensor_name; // nazwa czujnika z define w impconst.h
 
 	// Wlasciwy konstruktor czujnika wirtualnego.
-	sensor(lib::SENSOR_t _sensor_name, const char* _section_name, task::task& _ecp_mp_object);
+	sensor(lib::SENSOR_t _sensor_name, const std::string & _section_name, task::task & _ecp_mp_object);
 
 	// TODO: Destruktor czujnika wirtualnego
 	virtual ~sensor();

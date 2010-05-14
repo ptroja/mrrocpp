@@ -630,11 +630,8 @@ bool task::check_and_optional_wait_for_new_pulse (WAIT_FOR_NEW_PULSE_MODE proces
 	while(!exit_from_while) {
 #if !defined(USE_MESSIP_SRR)
 	if (current_wait_mode == NONBLOCK) {
-		struct sigevent event;
-		event.sigev_notify = SIGEV_UNBLOCK;
-
 		// like creceive in QNX4
-		if (TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_RECEIVE, &event, NULL, NULL ) == -1) {
+		if (TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_RECEIVE, NULL, NULL, NULL ) == -1) {
 			int e = errno;
 			perror("MP: TimerTimeout()");
 			throw common::MP_main_error(lib::SYSTEM_ERROR, e);

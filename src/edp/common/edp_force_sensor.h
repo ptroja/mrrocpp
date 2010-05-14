@@ -25,7 +25,7 @@ class manip_effector;
 namespace sensor {
 
 /********** klasa czujnikow po stronie EDP **************/
-class force: public lib::sensor, boost::thread
+class force: public lib::sensor, boost::noncopyable
 {
 protected:
 	bool is_reading_ready; // czy jakikolwiek odczyt jest gotowy?
@@ -33,6 +33,8 @@ protected:
 	lib::ForceTrans *gravity_transformation; // klasa likwidujaca wplyw grawitacji na czujnik
 
 	common::manip_effector &master;
+
+	virtual void connect_to_hardware(void) = 0;
 
 public:
 	void operator()(void);
@@ -57,7 +59,7 @@ public:
 
 	force(common::manip_effector &_master);
 
-	~force();
+	virtual ~force();
 
 	virtual void wait_for_event(void) = 0; // oczekiwanie na zdarzenie
 	void set_force_tool(void);
