@@ -136,13 +136,7 @@ void manip_effector::set_robot_model_with_sb(const lib::c_buffer &instruction)
 
 /*--------------------------------------------------------------------------*/
 void manip_effector::get_arm_position_with_force_and_sb(bool read_hardware, lib::c_buffer &instruction)
-{ // odczytanie pozycji ramienia
-
-	//   printf(" GET ARM\n");
-	//	lib::JointArray desired_joints_tmp(MAX_SERVOS_NR); // Wspolrzedne wewnetrzne -
-	lib::Ft_vector current_force;
-	lib::JointArray desired_joints_tmp(number_of_servos); // Wspolrzedne wewnetrzne -
-
+{
 	if (read_hardware) {
 		motor_driven_effector::get_arm_position_read_hardware_sb();
 
@@ -150,12 +144,14 @@ void manip_effector::get_arm_position_with_force_and_sb(bool read_hardware, lib:
 			//  check_motor_position(desired_motor_pos_new);
 			// dla sprawdzenia ograncizen w joints i motors
 
+			// Wspolrzedne wewnetrzne
+			lib::JointArray desired_joints_tmp(number_of_servos);
+
 			get_current_kinematic_model()->mp2i_transform(desired_motor_pos_new, desired_joints_tmp);
 
 			for (int i = 0; i < number_of_servos; i++) {
 				desired_joints[i] = current_joints[i] = desired_joints_tmp[i];
 			}
-
 		}
 	}
 
@@ -193,13 +189,14 @@ void manip_effector::get_arm_position_with_force_and_sb(bool read_hardware, lib:
 				current_tool(((mrrocpp::kinematics::common::kinematic_model_with_tool*) get_current_kinematic_model())->tool);
 		lib::Ft_tr ft_tr_inv_tool_matrix(!current_tool);
 
+		lib::Ft_vector current_force;
 		force_msr_download(current_force);
+
 		// sprowadzenie sil z ukladu bazowego do ukladu kisci
 		// modyfikacja pobranych sil w ukladzie czujnika - do ukladu wyznaczonego przez force_tool_frame i reference_frame
 
 		lib::Ft_v_vector current_force_torque(ft_tr_inv_tool_matrix * ft_tr_inv_current_frame_matrix * current_force);
 		current_force_torque.to_table(reply.arm.pf_def.force_xyz_torque_xyz);
-
 	}
 }
 /*--------------------------------------------------------------------------*/
@@ -222,7 +219,6 @@ void manip_effector::get_arm_position_get_arm_type_switch(lib::c_buffer &instruc
 		default: // blad: nieznany sposob zapisu wspolrzednych koncowki
 			motor_driven_effector::get_arm_position_get_arm_type_switch(instruction);
 	}
-
 }
 
 /*--------------------------------------------------------------------------*/
@@ -371,8 +367,6 @@ void manip_effector::iterate_macrostep(const lib::JointArray & begining_joints, 
 		}
 	}
 
-	lib::Ft_vector current_force;
-
 	const unsigned long PREVIOUS_MOVE_VECTOR_NULL_STEP_VALUE = 10;
 
 	static unsigned long last_force_step_counter = step_counter;
@@ -398,6 +392,7 @@ void manip_effector::iterate_macrostep(const lib::JointArray & begining_joints, 
 
 		lib::V_tr v_tr_current_frame_matrix(current_frame_wo_offset);
 
+		lib::Ft_vector current_force;
 		force_msr_download(current_force);
 		// sprowadzenie sil z ukladu bazowego do ukladu kisci
 		// modyfikacja pobranych sil w ukladzie czujnika - do ukladu wyznaczonego przez force_tool_frame i reference_frame
@@ -512,7 +507,6 @@ void manip_effector::iterate_macrostep(const lib::JointArray & begining_joints, 
 		last_force_step_counter = step_counter;
 
 	}
-
 }
 
 /*--------------------------------------------------------------------------*/
