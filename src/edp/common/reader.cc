@@ -12,6 +12,7 @@
 #include <iostream>
 #include <fstream>
 #include <signal.h>
+#include <errno.h>
 #include <sys/wait.h>
 #include <sys/types.h>
 #if !defined(USE_MESSIP_SRR)
@@ -46,7 +47,8 @@ reader_buffer::reader_buffer(motor_driven_effector &_master) :
 	thread_id = new boost::thread(boost::bind(&reader_buffer::operator(), this));
 }
 
-reader_buffer::~reader_buffer() {
+reader_buffer::~reader_buffer()
+{
 	// TODO: stop (interrupt?) the thread
 	//thread_id->interrupt();
 	//thread_id->join(); // join it
@@ -71,23 +73,15 @@ void reader_buffer::operator()()
 	std::string reader_meassures_dir;
 
 	if (master.config.exists("reader_meassures_dir")) {
-		reader_meassures_dir = master.config.value<std::string> (
-				"reader_meassures_dir", UI_SECTION);
+		reader_meassures_dir = master.config.value<std::string>("reader_meassures_dir", UI_SECTION);
 	} else {
-		reader_meassures_dir
-				= master.config.return_default_reader_measures_path();
+		reader_meassures_dir = master.config.return_default_reader_measures_path();
 	}
 
-	if (access(reader_meassures_dir.c_str(), R_OK) != 0) {
-		mkdir(reader_meassures_dir.c_str(), S_IRWXU | S_IRGRP | S_IXGRP
-				| S_IROTH | S_IXOTH);
-	}
-
-	std::string robot_filename = master.config.value<std::string> (
-			"reader_attach_point");
+	std::string robot_filename = master.config.value<std::string>("reader_attach_point");
 
 	if (master.config.exists("reader_samples"))
-		nr_of_samples = master.config.value<int> ("reader_samples");
+		nr_of_samples = master.config.value<int>("reader_samples");
 	else
 		nr_of_samples = 1000;
 
@@ -122,51 +116,46 @@ void reader_buffer::operator()()
 			reader_cnf.force[j] = master.config.check_config(tmp_string);
 
 			sprintf(tmp_string, "desired_force_%d", j);
-			reader_cnf.desired_force[j]
-					= master.config.check_config(tmp_string);
+			reader_cnf.desired_force[j] = master.config.check_config(tmp_string);
 
 			sprintf(tmp_string, "filtered_force_%d", j);
-			reader_cnf.filtered_force[j] = master.config.check_config(
-					tmp_string);
+			reader_cnf.filtered_force[j] = master.config.check_config(tmp_string);
 
 			sprintf(tmp_string, "desired_cartesian_position_%d", j);
-			reader_cnf.desired_cartesian_position[j]
-					= master.config.check_config(tmp_string);
+			reader_cnf.desired_cartesian_position[j] = master.config.check_config(tmp_string);
 
 			sprintf(tmp_string, "real_cartesian_position_%d", j);
-			reader_cnf.real_cartesian_position[j] = master.config.check_config(
-					tmp_string);
+			reader_cnf.real_cartesian_position[j] = master.config.check_config(tmp_string);
 
 			sprintf(tmp_string, "real_cartesian_vel_%d", j);
-			reader_cnf.real_cartesian_vel[j] = master.config.check_config(
-					tmp_string);
+			reader_cnf.real_cartesian_vel[j] = master.config.check_config(tmp_string);
 
 			sprintf(tmp_string, "real_cartesian_acc_%d", j);
-			reader_cnf.real_cartesian_acc[j] = master.config.check_config(
-					tmp_string);
+			reader_cnf.real_cartesian_acc[j] = master.config.check_config(tmp_string);
 		}
 	}
+
+	// ustawienie priorytetu watku
+	lib::set_thread_priority(pthread_self(), MAX_PRIORITY - 10);
 
 	// NOTE: readed buffer has to be allocated on heap (using "new" operator) due to huge size
 	// boost::scoped_array takes care of deallocating in case of exception
 	boost::circular_buffer<reader_data> reader_buf(nr_of_samples);
 
-	//	fprintf(stderr, "reader buffer size %lluKB\n", nr_of_samples*sizeof(reader_data)/1024);
+//	fprintf(stderr, "reader buffer size %lluKB\n", nr_of_samples*sizeof(reader_data)/1024);
 
 	// by Y komuniakicja pomiedzy ui i reader'em rozwiazalem poprzez pulsy
 	// powolanie kanalu komunikacyjnego do odbioru pulsow sterujacych
 #if !defined(USE_MESSIP_SRR)
 	name_attach_t *my_attach; // nazwa kanalu komunikacyjnego
 
-	if ((my_attach = name_attach(NULL, master.config.return_attach_point_name(
-			lib::configurator::CONFIG_SERVER, "reader_attach_point").c_str(),
-			NAME_FLAG_ATTACH_GLOBAL)) == NULL) {
+	if ((my_attach = name_attach(NULL, master.config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "reader_attach_point").c_str(), NAME_FLAG_ATTACH_GLOBAL)) == NULL) {
 #else
-		messip_channel_t *my_attach;
+	messip_channel_t *my_attach;
 
-		if ((my_attach = messip::port_create(
-								master.config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "reader_attach_point")))
-				== NULL) {
+	if ((my_attach = messip::port_create(
+			master.config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "reader_attach_point")))
+			== NULL) {
 #endif
 		perror("Failed to attach pulse chanel for READER");
 		master.msg->message("Failed to attach pulse chanel for READER");
@@ -175,6 +164,8 @@ void reader_buffer::operator()()
 
 	// GLOWNA PETLA Z OCZEKIWANIEM NA ZLECENIE POMIAROW
 	for (;;) {
+		// ustawienie priorytetu watku
+		lib::set_thread_priority(pthread_self(), MAX_PRIORITY-10);
 
 		// ustawienie priorytetu watku
 		lib::set_thread_priority(pthread_self(), MAX_PRIORITY-10);
@@ -196,17 +187,17 @@ void reader_buffer::operator()()
 			if (rcvid == 0) {/* Pulse received */
 				//  printf("reader puls\n");
 				switch (ui_msg.hdr.code) {
-				case _PULSE_CODE_DISCONNECT:
+					case _PULSE_CODE_DISCONNECT:
 					ConnectDetach(ui_msg.hdr.scoid);
 					break;
-				case _PULSE_CODE_UNBLOCK:
+					case _PULSE_CODE_UNBLOCK:
 					break;
-				default:
-					if (ui_msg.hdr.code == READER_START) { // odebrano puls start
+					default:
+					if (ui_msg.hdr.code==READER_START) { // odebrano puls start
 						start = true;
-						//#ifdef DOCENT_SENSOR
+//#ifdef DOCENT_SENSOR
 						master.onReaderStarted();
-						//#endif
+//#endif
 					}
 				}
 				continue;
@@ -219,9 +210,7 @@ void reader_buffer::operator()()
 			}
 
 			/* A message (presumable ours) received, handle */
-			fprintf(stderr,
-					"reader server receive strange message of type: %d\n",
-					ui_msg.data);
+			fprintf(stderr, "reader server receive strange message of type: %d\n", ui_msg.data);
 			MsgReply(rcvid, EOK, 0, 0);
 			rcvid = MsgReceive(my_attach->chid, &ui_msg, sizeof(ui_msg), NULL);
 #else
@@ -278,33 +267,31 @@ void reader_buffer::operator()()
 			if (rcvid == 0) {/* Pulse received */
 				// printf("reader puls\n");
 				switch (ui_msg.hdr.code) {
-				case _PULSE_CODE_DISCONNECT:
+					case _PULSE_CODE_DISCONNECT:
 					ConnectDetach(ui_msg.hdr.scoid);
 					break;
-				case _PULSE_CODE_UNBLOCK:
+					case _PULSE_CODE_UNBLOCK:
 					break;
-				default:
-					if (ui_msg.hdr.code == READER_STOP) {
+					default:
+					if (ui_msg.hdr.code==READER_STOP) {
 						stop = true; // dostalismy puls STOP
-						//#ifdef DOCENT_SENSOR
+//#ifdef DOCENT_SENSOR
 						master.onReaderStopped();
-						//#endif
-					} else if (ui_msg.hdr.code == READER_TRIGGER) {
+//#endif
+					} else if (ui_msg.hdr.code==READER_TRIGGER) {
 						ui_trigger = true; // dostalismy puls TRIGGER
 					}
 
 				}
 			}
 
-			if (rcvid > 0) {
+			if (rcvid> 0) {
 				/* A QNX IO message received, reject */
 				if (ui_msg.hdr.type >= _IO_BASE && ui_msg.hdr.type <= _IO_MAX) {
 					MsgReply(rcvid, EOK, 0, 0);
 				} else {
 					/* A message (presumable ours) received, handle */
-					printf(
-							"reader server receive strange message of type: %d\n",
-							ui_msg.data);
+					printf("reader server receive strange message of type: %d\n", ui_msg.data);
 					MsgReply(rcvid, EOK, 0, 0);
 				}
 			}
@@ -329,13 +316,12 @@ void reader_buffer::operator()()
 		time_of_day = time(NULL);
 		strftime(file_date, 40, "%g%m%d_%H-%M-%S", localtime(&time_of_day));
 
-		sprintf(file_name, "/%s_%s_pomiar-%d", file_date,
-				robot_filename.c_str(), ++file_counter);
+		sprintf(file_name, "/%s_%s_pomiar-%d", file_date, robot_filename.c_str(), ++file_counter);
 		strcpy(config_file_with_dir, reader_meassures_dir.c_str());
 
 		strcat(config_file_with_dir, file_name);
 
-		std::ofstream outfile(config_file_with_dir, std::ios::out);
+        std::ofstream outfile(config_file_with_dir, std::ios::out);
 		if (!outfile.good()) // jesli plik nie instnieje
 		{
 			std::cerr << "Cannot open file: " << file_name << '\n';
@@ -360,7 +346,6 @@ void reader_buffer::operator()()
 					outfile << data.msec << " ";
 				if (reader_cnf.servo_mode)
 					outfile << (data.servo_mode ? "1" : "0") << " ";
-
 				for (int j = 0; j < master.number_of_servos; j++) {
 					if (reader_cnf.desired_inc[j])
 						outfile << data.desired_inc[j] << " ";
@@ -425,7 +410,7 @@ void reader_buffer::operator()()
 				outfile << '\n';
 
 				reader_buf.pop_front();
-			} // end for(i = 0; i < msr_counter; i++)
+			}
 
 			master.msg->message("file writing is finished");
 		}

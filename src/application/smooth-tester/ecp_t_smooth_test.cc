@@ -23,33 +23,19 @@ smooth_test::smooth_test(lib::configurator &_config): task(_config)
 };
 
 void smooth_test::main_task_algorithm(void ) {
-	//ecp_m_robot = new ecp_irp6_on_track_robot(*this);
-	//smoothgen2 = new ecp_smooth_generator(*this, true);
-	//sr_ecp_msg->message("ECP loaded smooth_test");
 
 	sr_ecp_msg->message("ECP smooth_test ready");
 
 	//smoothgen2->set_relative();
 	smoothgen2->set_absolute();
 	smoothgen2->load_file_with_path("/net/olin/mnt/mrroc/src/application/smooth-tester/trj/smooth2test2.trj");
-		/*char size[10];
-		double size2 = smoothgen2->pose_list_length();
-		sprintf(size,"%f",size2);
-		sr_ecp_msg->message(size);*/
-
 	smoothgen2->Move();
-
-	//printf("wielkosc listy: %d\n", smoothgen2->pose_list_length());
-	//fflush();
-
-	  //smoothgen2->Move();
-	  //sr_ecp_msg->message("jest git");
 	smoothgen2->reset();
 
 	ecp_termination_notice();
 };
 
-}
+} // namespace task
 } // namespace irp6ot
 
 namespace common {
@@ -59,7 +45,7 @@ task* return_created_ecp_task(lib::configurator &_config){
 	return new irp6ot::task::smooth_test(_config);
 }
 
-}
+} // namespace task
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp
