@@ -540,7 +540,7 @@ void motor_driven_effector::synchronise()
 void motor_driven_effector::set_outputs(const lib::c_buffer &instruction)
 {
 	// ustawienie wyjsc binarnych
-	in_out_obj->set_output(&instruction.output_values);
+	in_out_obj->set_output(instruction.output_values);
 	// throw NonFatal_error_2(NOT_IMPLEMENTED_YET);
 	// printf(" OUTPUTS SET\n");
 }
