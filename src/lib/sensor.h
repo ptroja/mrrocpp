@@ -277,6 +277,22 @@ struct VSP_ECP_MSG
 	SENSOR_IMAGE comm_image;
 };
 
+/*****************************************************/
+// do komunikacji za pomoca devctl()
+typedef union
+{
+	ECP_VSP_MSG to_vsp; // Filled by client on send
+	VSP_ECP_MSG from_vsp; // Filled by server on reply
+} DEVCTL_MSG;
+
+// ROZKAZY uzywane w devctl()
+// odczyt z czujnika
+#define DEVCTL_RD __DIOF(_DCMD_MISC, 1, lib::VSP_ECP_MSG)
+// zapis do czujnika
+#define DEVCTL_WT __DIOT(_DCMD_MISC, 2, lib::ECP_VSP_MSG)
+// zapis i odczyt
+#define DEVCTL_RW __DIOTF(_DCMD_MISC, 3, lib::DEVCTL_MSG)
+
 // by Y - CZUJNIKI
 
 typedef enum _SENSOR_ENUM
