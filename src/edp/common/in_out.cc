@@ -109,7 +109,7 @@ void in_out_buffer::get_output(uint16_t *out_value)
 
 
 // ustawienie wejsc
-void in_out_buffer::set_input (const uint16_t *binary_in_value, const uint8_t *analog_in_table)
+void in_out_buffer::set_input (const uint16_t binary_in_value, const uint8_t analog_in_table[])
 {
 #ifdef __QNXNTO__
     InterruptLock
@@ -118,7 +118,7 @@ void in_out_buffer::set_input (const uint16_t *binary_in_value, const uint8_t *a
 #endif
 		(&input_spinlock);
 
-    binary_input=*binary_in_value;		// wejscie binarne
+    binary_input=binary_in_value;		// wejscie binarne
     for (int i=0; i<8; i++)
     {
         analog_input[i]=analog_in_table[i];
@@ -139,7 +139,7 @@ void in_out_buffer::set_input (const uint16_t *binary_in_value, const uint8_t *a
 
 
 // odczytanie wejsc
-void in_out_buffer::get_input (uint16_t *binary_in_value, uint8_t *analog_in_table)
+void in_out_buffer::get_input (uint16_t *binary_in_value, uint8_t analog_in_table[])
 {
 #ifdef __QNXNTO__
     InterruptLock
