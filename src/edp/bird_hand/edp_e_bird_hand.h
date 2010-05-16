@@ -13,6 +13,10 @@
 #include "edp/common/edp_e_manip.h"
 #include "lib/robot_consts/bird_hand_const.h"
 
+#include "bird_hand.h"
+
+#include <Eigen/Core>
+
 namespace mrrocpp {
 namespace edp {
 namespace bird_hand {
@@ -72,6 +76,11 @@ public:
 	 * IHere the single thread variant is chosen
 	 */
 	void master_order(common::MT_ORDER nm_task, int nm_tryb);
+	
+private:
+	Bird_hand device;
+
+	Eigen::Matrix<int32_t, 8, 1> synchro_position;
 
 };
 

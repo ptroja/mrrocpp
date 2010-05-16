@@ -27,6 +27,8 @@
 #include "edp/common/vis_server.h"
 #include "lib/epos_gen.h"
 
+#define PORT "/dev/ser2"
+
 using namespace mrrocpp::lib::exception;
 
 namespace mrrocpp {
@@ -40,25 +42,41 @@ void effector::master_order(common::MT_ORDER nm_task, int nm_tryb) {
 void effector::get_controller_state(lib::c_buffer &instruction) {
 
 
-	// tu wrzucic synchronizacje
+	for(uint8_t i=0; i<8; i++)
+	{
+		int16_t abspos;
+		if(i<1)
+			device.getSynchroPos(i, abspos);
+		synchro_position[i] = (int32_t)(abspos * 124345.23443); // TODO : tu wspawiæ magiczn¹ sta³¹
+	}
 
+	printf("synchro position readed : %d \n", synchro_position[0]);
 
+	controller_state_edp_buf.is_synchronised = true;
 
-	if (test_mode)
-		controller_state_edp_buf.is_synchronised = true;
-	//printf("get_controller_state: %d\n", controller_state_edp_buf.is_synchronised); fflush(stdout);
 	reply.controller_state = controller_state_edp_buf;
 
-	/*
-	 // aktualizacja pozycji robota
-	 // Uformowanie rozkazu odczytu dla SERVO_GROUP
-	 sb->servo_command.instruction_code = lib::READ;
-	 // Wyslanie rozkazu do SERVO_GROUP
-	 // Pobranie z SERVO_GROUP aktualnej pozycji silnikow
-	 //	printf("get_arm_position read_hardware\n");
+	Eigen::Matrix<int32_t, 8, 1> pos_tmp;
 
-	 sb->send_to_SERVO_GROUP();
-	 */
+	for(uint8_t i=0; i<8; i++)
+	{
+		int32_t pos;
+		int16_t t, c;
+		uint8_t status;
+		if(i<1)
+			device.getStatus(i, status, pos, c, t);
+
+		pos_tmp[i] = pos;
+	}
+
+	pos_tmp += synchro_position;
+
+	printf("position readed : %d \n", pos_tmp[0]);
+
+	fflush(stdout);
+
+	current_motor_pos = pos_tmp.cast<double>();
+
 	// dla pierwszego wypelnienia current_joints
 	get_current_kinematic_model()->mp2i_transform(current_motor_pos,
 			current_joints);
@@ -84,6 +102,8 @@ effector::effector(lib::configurator &_config) :
 	create_kinematic_models_for_given_robot();
 
 	reset_variables();
+
+	device.connect(PORT);
 }
 
 /*--------------------------------------------------------------------------*/
@@ -137,6 +157,25 @@ void effector::move_arm(const lib::c_buffer &instruction) {
 
 /*--------------------------------------------------------------------------*/
 void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction) {
+
+	Eigen::Matrix<int32_t, 8, 1> pos_tmp;
+
+	for(uint8_t i=0; i<8; i++)
+	{
+		int32_t pos;
+		int16_t t, c;
+		uint8_t status;
+
+		device.getStatus(i, status, pos, c, t);
+
+		pos_tmp[i] = pos;
+	}
+
+	pos_tmp -= synchro_position;
+
+
+	//?????????????????????????????????????????????????????????????????????????????//
+
 	//lib::JointArray desired_joints_tmp(MAX_SERVOS_NR); // Wspolrzedne wewnetrzne -
 	//	printf(" GET ARM\n");
 	//	flushall();
@@ -168,7 +207,7 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction) 
 }
 /*--------------------------------------------------------------------------*/
 
-// Stworzenie modeli kinematyki dla robota IRp-6 na postumencie.
+// Stworzenie modeli kinematyki dla robota.
 void effector::create_kinematic_models_for_given_robot(void) {
 	// Stworzenie wszystkich modeli kinematyki.
 	add_kinematic_model(new kinematics::bird_hand::kinematic_model_bird_hand());
@@ -188,7 +227,7 @@ void effector::create_threads() {
 
 namespace common {
 
-// Stworzenie obiektu edp_irp6m_effector.
+// Stworzenie obiektu edp_bird_hand_effector.
 effector* return_created_efector(lib::configurator &_config) {
 	return new bird_hand::effector(_config);
 }
