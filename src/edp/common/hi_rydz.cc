@@ -184,11 +184,6 @@ void  hardware_interface::init()
 		reset_counters();
 		is_hardware_error();
 	}
-
-	first = true; // Pierwszy krok
-
-
-
 }
 
 // Konstruktor
@@ -399,6 +394,7 @@ int hardware_interface::hi_int_wait (interrupt_mode_t _interrupt_mode, int lag)
 	static short interrupt_error = 0;
 	static short msg_send = 0;
 
+	// TODO: this can be done passing timeout to InterruptWait()
 	tim_event.sigev_notify = SIGEV_UNBLOCK;
 	if(TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_INTR , &tim_event, &int_timeout, NULL ) == -1) {
 		perror("hardware_interface: TimerTimeout()");
