@@ -109,7 +109,7 @@ public:
 	const lib::robot_name_t robot_name;
 
 	/*!
-	 * \brief Referecnce to configuration object
+	 * \brief Reference to configuration object
 	 *
 	 * It stores data read from ini file.
 	 */
@@ -132,7 +132,7 @@ public:
 	/*!
 	 * \brief Info if the test mode is active.
 	 *
-	 * It is taken from configaration data.
+	 * It is taken from configuration data.
 	 */
 	int test_mode;
 
@@ -153,7 +153,7 @@ public:
 	/*!
 	 * \brief Destructor.
 	 *
-	 * It destroyes the objects to communicate with UI SR.
+	 * It destroys the objects to communicate with UI SR.
 	 */
 	virtual ~effector();
 
@@ -175,7 +175,7 @@ public:
 	/*!
 	 * \brief Pure virtual method to create effector specific threads.
 	 *
-	 * For the purpose of visualisation, measurement registration, force control, etc..
+	 * For the purpose of visualization, measurement registration, force control, etc..
 	 */
 	virtual void create_threads() = 0;
 
