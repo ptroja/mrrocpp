@@ -85,7 +85,6 @@ void effector::create_kinematic_models_for_given_robot(void)
 	add_kinematic_model(new kinematics::irp6ot::model_calibrated_with_wrist(number_of_servos));
 	// Ustawienie aktywnego modelu.
 	set_kinematic_model(0);
-
 }
 
 /*--------------------------------------------------------------------------*/
