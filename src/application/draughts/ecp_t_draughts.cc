@@ -91,7 +91,7 @@ Draughts::Draughts(lib::configurator &_config): task(_config){
 	befgen=new common::generator::bias_edp_force(*this);
 	gagen=new common::generator::tff_gripper_approach (*this, 8);	//gripper approach constructor (task&, no_of_steps)
 	sleepgen=new common::generator::sleep(*this);
-	aitrans=new ecp_mp::transmitter::TRDraughtsAI(ecp_mp::transmitter::TRANSMITTER_DRAUGHTSAI,"[transmitter_draughts_ai]",*this);
+	aitrans=new ecp_mp::transmitter::TRDraughtsAI(ecp_mp::transmitter::TRANSMITTER_DRAUGHTSAI, "[transmitter_draughts_ai]",*this);
 
 	follower_vis = new generator::ecp_vis_ib_eih_follower_irp6ot(*this);	//follower servomechanism generator
 	follower_vis->sensor_m = sensor_m;
@@ -160,11 +160,11 @@ void Draughts::getAIMove(int player){
 	vsp_fradia->get_reading();
 	printf("dane: \n");
 	for(int i=0;i<32;i++){
-		aitrans->to_va.draughts_ai.board[i]=vsp_fradia->from_vsp.comm_image.sensor_union.board.fields[i];
-		printf("%d ",aitrans->to_va.draughts_ai.board[i]);
+		aitrans->to_va.board[i]=vsp_fradia->from_vsp.comm_image.sensor_union.board.fields[i];
+		printf("%d ",aitrans->to_va.board[i]);
 
 	}
-	aitrans->to_va.draughts_ai.player=player;
+	aitrans->to_va.player=player;
 	printf("\n");
 	aitrans->t_write();
 	aitrans->t_read();
@@ -261,7 +261,7 @@ int Draughts::makeAIMove(int player){
 	getAIMove(player);
 
 	//printf("status: %d \nincoming: ",aitrans->from_va.draughts_ai.status);
-	switch(aitrans->from_va.draughts_ai.status){
+	switch(aitrans->from_va.status){
 		case AI_NORMAL_MOVE:
 			printf("status: normal move\n");
 			break;
@@ -273,8 +273,8 @@ int Draughts::makeAIMove(int player){
 			return AI_HUMAN_WON;
 	}
 
-	move=aitrans->from_va.draughts_ai.move;
-	board=aitrans->to_va.draughts_ai.board;
+	move=aitrans->from_va.move;
+	board=aitrans->to_va.board;
 
 	//count number of jumper fields
 
@@ -311,7 +311,7 @@ int Draughts::makeAIMove(int player){
 	}
 	goToInitialPos();
 
-	if(aitrans->from_va.draughts_ai.status==AI_COMPUTER_WON)
+	if(aitrans->from_va.status==AI_COMPUTER_WON)
 		return AI_COMPUTER_WON;
 
 	return AI_NORMAL_MOVE;

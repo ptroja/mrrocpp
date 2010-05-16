@@ -11,14 +11,23 @@ namespace transmitter {
 
 /*==============================STRUCTURES===================================*/
 
-struct result_grasp{
-        char move[25];
-        char status;
+struct result_grasp
+{
+	char move[25];
+	char status;
 };
+
+typedef struct _from_graspit {
+	double grasp_joint[7];
+} from_graspit_t;
 
 /*===============================CLASS=======================================*/
 
-class TRGraspit: public transmitter{
+static const std::string TRANSMITTER_GRASPIT = "TRANSMITTER_GRASPIT";
+
+typedef transmitter<void *, from_graspit_t> GraspitTransmitter_t;
+
+class TRGraspit: public GraspitTransmitter_t {
 	private:									// pola do komunikacji
 		struct result_grasp result;
 		int socketDescriptor;

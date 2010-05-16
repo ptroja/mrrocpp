@@ -149,9 +149,9 @@ int main (int argc, char *argv[], char **arge)
 			mp::common::mp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, e.error_no);
 					printf("Mam blad mp_generator section 1 (@%s:%d)\n", __FILE__, __LINE__);
 		} /* end: catch sensor_error  */
-		catch (ecp_mp::transmitter::transmitter::transmitter_error & e) {
+		catch (ecp_mp::transmitter::transmitter_base::transmitter_error & e) {
 			/* Wyswietlenie komunikatu. */
-			mp::common::mp_t->sr_ecp_msg->message (e.error_class, e.error_no);
+			mp::common::mp_t->sr_ecp_msg->message (e.error_class, 0);
 			printf("Mam blad trasnmittera section 1 (@%s:%d)\n", __FILE__, __LINE__);
 		} /* end: catch sensor_error  */
 
@@ -274,9 +274,9 @@ int main (int argc, char *argv[], char **arge)
 				mp::common::mp_t->sr_ecp_msg->message (e.error_class, e.error_no);
 				printf("Mam blad czujnika section 2 (@%s:%d)\n", __FILE__, __LINE__);
 			} /* end: catch sensor_error  */
-			catch (ecp_mp::transmitter::transmitter::transmitter_error & e) {
+			catch (ecp_mp::transmitter::transmitter_base::transmitter_error & e) {
 				/* Wyswietlenie komunikatu. */
-				mp::common::mp_t->sr_ecp_msg->message (e.error_class, e.error_no);
+				mp::common::mp_t->sr_ecp_msg->message (e.error_class, 0);
 				printf("Mam blad trasnmittera section 2 (@%s:%d)\n", __FILE__, __LINE__);
 			} /* end: catch sensor_error  */
 
