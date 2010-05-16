@@ -279,15 +279,12 @@ void smooth::load_file_with_path(const char* file_name) {
             // Tworzymy glowe listy
             first_time = false;
             create_pose_list_head(ps, v, a, coordinates);
-            printf("Pose list element (head): %d, %f, %f\n", ps, v[0], a[0]);
-            flushall();
         }
         else
         {
             // Wstaw do listy nowa pozycje
-        	printf("Pose list element: %d, %f, %f\n", ps, v[0], a[0]);
-        	flushall();
             insert_pose_list_element(ps, v, a, coordinates);
+            // printf("Pose list element: %d, %f, %f, %f, %f\n", ps, vp[0], vk[0], v[0], a[0]);
         }
     } // end: for
 } // end: load_file_with_path()
@@ -435,27 +432,23 @@ void smooth::reset() {
 
 void smooth::flush_pose_list(void) {
    pose_list.clear();
-   pose_list_backup.clear();
    //first_coordinate=true;
 }
 
 // -------------------------------------------------------return iterator to beginning of the list
 void smooth::initiate_pose_list(void) {
     pose_list_iterator = pose_list.begin();
-    pose_list_backup_iterator = pose_list_backup.begin();
 }
 // -------------------------------------------------------move pose_list iterator to the next position
 void smooth::next_pose_list_ptr(void) {
     if (pose_list_iterator != pose_list.end()) {
         pose_list_iterator++;
-        pose_list_backup_iterator++;
     }
 }
 
 void smooth::prev_pose_list_ptr(void) {
 	if (pose_list_iterator != pose_list.begin()) {
 		pose_list_iterator--;
-		pose_list_backup_iterator--;
 	}
 }
 
@@ -466,13 +459,11 @@ bool smooth::is_last_list_element(void) {
     {
         if ( (++pose_list_iterator) != pose_list.end() )
         {
-        	//--pose_list_backup_iterator;
             --pose_list_iterator;
             return false;
         }
         else
         {
-        	//--pose_list_backup_iterator;
             --pose_list_iterator;
             return true;
         }
@@ -481,17 +472,13 @@ bool smooth::is_last_list_element(void) {
 }
 
 void smooth::create_pose_list_head (lib::ECP_POSE_SPECIFICATION ps, double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR]) {
-	pose_list.push_back(ecp_mp::common::smooth_trajectory_pose(ps, coordinates, v, a));
+    pose_list.push_back(ecp_mp::common::smooth_trajectory_pose(ps, coordinates, v, a));
     pose_list_iterator = pose_list.begin();
-    pose_list_backup.push_back(ecp_mp::common::smooth_trajectory_pose(ps, coordinates, v, a));
-    pose_list_backup_iterator = pose_list_backup.begin();
 }
 
 void smooth::insert_pose_list_element (lib::ECP_POSE_SPECIFICATION ps, double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR]) {
     pose_list.push_back(ecp_mp::common::smooth_trajectory_pose(ps, coordinates, v, a));
     pose_list_iterator++;
-    pose_list_backup.push_back(ecp_mp::common::smooth_trajectory_pose(ps, coordinates, v, a));
-    pose_list_backup_iterator++;
 }
 
 int smooth::pose_list_length(void) {
@@ -613,7 +600,6 @@ smooth::smooth (common::task::task& _ecp_task, bool _is_synchronised)
         delta (_ecp_task), debug(false)//,first_coordinate(true)
 {
 	pose_list = std::list<ecp_mp::common::smooth_trajectory_pose>();
-	pose_list_backup = std::list<ecp_mp::common::smooth_trajectory_pose>();
 	coordinate_list = std::list<coordinates>();
 
 	trajectory_generated = false;
@@ -632,8 +618,109 @@ smooth::smooth (common::task::task& _ecp_task, bool _is_synchronised)
 
 	//is_synchronised = _is_synchronised;
 	type=lib::ABSOLUTE;
-	external_absolute = false;
 } // end : konstruktor
+
+/*void smooth::calculate_absolute_positions() {
+	if (type == lib::ABSOLUTE) {//dodatkowe zabezpieczenie
+		return;
+	}
+
+	double actual_coordinates[MAX_SERVOS_NR];
+	bool first_coordinate = true;
+	int gripp;
+
+	initiate_pose_list();
+
+	for (int j = 0; j < pose_list_length(); j++) {
+		switch ( td.arm_type ) {
+		    case lib::MOTOR:
+
+    		    if(the_robot->robot_name == lib::ROBOT_IRP6_ON_TRACK) {
+    		        gripp=7;
+    		    } else if(the_robot->robot_name == lib::ROBOT_IRP6_POSTUMENT) {
+    		        gripp=6;
+				}
+
+		    	for (int i = 0; i < gripp; i++) {
+		    		if (first_coordinate == true) {
+		    			actual_coordinates[i] = the_robot->reply_package.arm.pf_def.arm_coordinates[i];
+		    		}
+		    		pose_list_iterator->coordinates[i] += actual_coordinates[i];
+		    		actual_coordinates[i] = pose_list_iterator->coordinates[i];
+		    	}
+
+	    		if (first_coordinate == true) {
+	    			actual_coordinates[gripp] = the_robot->reply_package.arm.pf_def.gripper_coordinate;
+	    		}
+	    		pose_list_iterator->coordinates[gripp] += actual_coordinates[gripp];
+	    		actual_coordinates[gripp] = pose_list_iterator->coordinates[gripp];
+
+		    	first_coordinate = false;
+		        break;
+		    case lib::JOINT:
+
+    		    if(the_robot->robot_name == lib::ROBOT_IRP6_ON_TRACK) {
+    		        gripp=7;
+    		    } else if(the_robot->robot_name == lib::ROBOT_IRP6_POSTUMENT) {
+    		        gripp=6;
+				}
+
+		    	for (int i = 0; i < gripp; i++) {
+		    		if (first_coordinate == true) {
+		    			actual_coordinates[i] = the_robot->reply_package.arm.pf_def.arm_coordinates[i];
+		    		}
+		    		pose_list_iterator->coordinates[i] += actual_coordinates[i];
+		    		actual_coordinates[i] = pose_list_iterator->coordinates[i];
+		    	}
+
+	    		if (first_coordinate == true) {
+	    			actual_coordinates[gripp] = the_robot->reply_package.arm.pf_def.gripper_coordinate;
+	    		}
+	    		pose_list_iterator->coordinates[gripp] += actual_coordinates[gripp];
+	    		actual_coordinates[gripp] = pose_list_iterator->coordinates[gripp];
+
+		    	first_coordinate = false;
+		        break;
+		    case lib::XYZ_EULER_ZYZ:
+		    	for (int i = 0; i < 6; i++) {
+		    		if (first_coordinate == true) {
+		    			actual_coordinates[i] = the_robot->reply_package.arm.pf_def.arm_coordinates[i];
+		    		}
+		    		pose_list_iterator->coordinates[i] += actual_coordinates[i];
+		    		actual_coordinates[i] = pose_list_iterator->coordinates[i];
+		    	}
+
+	    		if (first_coordinate == true) {
+	    			actual_coordinates[6] = the_robot->reply_package.arm.pf_def.gripper_coordinate;
+	    		}
+	    		pose_list_iterator->coordinates[6] += actual_coordinates[6];
+	    		actual_coordinates[6] = pose_list_iterator->coordinates[6];
+
+		    	first_coordinate = false;
+		        break;
+		    case lib::XYZ_ANGLE_AXIS:
+		    	for (int i = 0; i < 6; i++) {
+		    		if (first_coordinate == true) {
+		    			actual_coordinates[i] = the_robot->reply_package.arm.pf_def.arm_coordinates[i];
+		    		}
+		    		pose_list_iterator->coordinates[i] += actual_coordinates[i];
+		    		actual_coordinates[i] = pose_list_iterator->coordinates[i];
+		    	}
+
+	    		if (first_coordinate == true) {
+	    			actual_coordinates[6] = the_robot->reply_package.arm.pf_def.gripper_coordinate;
+	    		}
+	    		pose_list_iterator->coordinates[6] += actual_coordinates[6];
+	    		actual_coordinates[6] = pose_list_iterator->coordinates[6];
+
+		    	first_coordinate = false;
+		        break;
+		    default:
+		        throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+		} // end : switch ( td.arm_type )
+		pose_list_iterator++;
+	}
+}*/
 
 double smooth::generate_next_coords(int node_counter, int interpolation_node_no, double start_position, double v_p, double v_r,
 									double v_k, double a_r, int k, double przysp, double jedn, double s_przysp, double s_jedn) {
@@ -644,8 +731,12 @@ double smooth::generate_next_coords(int node_counter, int interpolation_node_no,
 
     double tk=10*STEP;
 
+    //printf("przysp: %f\t jedn: %f\n", przysp, jedn);
+
 	if(node_counter < przysp+1) { //pierwszy etap
 		if(v_p <= v_r) { //przyspieszanie w pierwszym etapie
+			//printf("start pos: %f\t node counter: %d\n", start_position, node_counter);
+			//printf(" przysp1 %d ", node_counter);
 			if (type == lib::ABSOLUTE) {//tryb absolute
 
 				if (przysp > (node_counter-1) && przysp < (node_counter)) {//przyspieszanie wchodzi na jednostajny
@@ -654,11 +745,16 @@ double smooth::generate_next_coords(int node_counter, int interpolation_node_no,
 						next_position = start_position + k * (przysp*v_p*tk + przysp*przysp*a_r*tk*tk/2 + jedn * tk * v_r);
 
 						if (v_r > v_k) {//hamowanie w trzecim etapie
+							//next_position += k * (v_p*tk + a_r*tk*tk/2) * (przysp - (node_counter-1)) + k * tk * v_r * (node_counter - przysp - (node_counter - przysp - jedn)) + k * (v_r*tk - a_r*tk*tk/2) * (node_counter - przysp - jedn);
 							next_position += k* (v_r * (node_counter - przysp - jedn)*tk - tk*tk*(node_counter - jedn - przysp) * (node_counter - jedn - przysp) * a_r / 2);
 						} else {//przyspiesznie w trzecim etapie
+							//next_position += k * (v_p*tk + a_r*tk*tk/2) * (przysp - (node_counter-1)) + k * tk * v_r * (node_counter - przysp - (node_counter - przysp - jedn)) + k * (v_r*tk + a_r*tk*tk/2) * (node_counter - przysp - jedn);
 							next_position += k* (v_r * (node_counter - przysp - jedn)*tk + tk*tk*(node_counter - jedn - przysp) * (node_counter - jedn - przysp) * a_r / 2);
 						}
 					} else {//przyspieszenie + poczatek jednostajnego
+						//printf("przyspieszanie wchodzi na jednostajny, macrostep liczony od 1: %d\n", node_counter);
+						//next_position = start_position + k * ((node_counter-1)*v_p*tk + (node_counter-1)*(node_counter-1)*a_r*tk*tk/2);
+						//next_position += k * (v_p*tk + a_r*tk*tk/2 + (v_p+a_r*(node_counter-1) *tk)) * (przysp - (node_counter-1)) + k * tk * v_r * (node_counter - przysp);
 						next_position = start_position + k * (v_p * node_counter * tk + przysp * przysp * tk * tk * a_r / 2 + v_r * (node_counter - przysp) * tk);
 					}
 				} else {//normalne przyspieszanie
@@ -672,11 +768,16 @@ double smooth::generate_next_coords(int node_counter, int interpolation_node_no,
 						next_position = k * ((1 - node_counter + przysp)*v_r*tk - (1 - node_counter + przysp)*(1 - node_counter + przysp)*a_r*tk*tk/2 + jedn * tk * v_r);
 
 						if (v_r > v_k) {//hamowanie w trzecim etapie
+							//next_position += k * (v_p*tk + a_r*tk*tk/2) * (przysp - (node_counter-1)) + k * tk * v_r * (node_counter - przysp - (node_counter - przysp - jedn)) + k * (v_r*tk - a_r*tk*tk/2) * (node_counter - przysp - jedn);
 							next_position += k* (v_r * (node_counter - przysp - jedn)*tk - tk*tk*(node_counter - jedn - przysp) * (node_counter - jedn - przysp) * a_r / 2);
 						} else {//przyspiesznie w trzecim etapie
+							//next_position += k * (v_p*tk + a_r*tk*tk/2) * (przysp - (node_counter-1)) + k * tk * v_r * (node_counter - przysp - (node_counter - przysp - jedn)) + k * (v_r*tk + a_r*tk*tk/2) * (node_counter - przysp - jedn);
 							next_position += k* (v_r * (node_counter - przysp - jedn)*tk + tk*tk*(node_counter - jedn - przysp) * (node_counter - jedn - przysp) * a_r / 2);
 						}
 					} else {//przyspieszenie + poczatek jednostajnego
+						//printf("przyspieszanie wchodzi na jednostajny, macrostep liczony od 1: %d\n", node_counter);
+						//next_position = start_position + k * ((node_counter-1)*v_p*tk + (node_counter-1)*(node_counter-1)*a_r*tk*tk/2);
+						//next_position += k * (v_p*tk + a_r*tk*tk/2 + (v_p+a_r*(node_counter-1) *tk)) * (przysp - (node_counter-1)) + k * tk * v_r * (node_counter - przysp);
 						next_position = k * (v_r * (1 - node_counter + przysp) * tk - (1 - node_counter + przysp) * (1 - node_counter + przysp) * tk * tk * a_r / 2 + v_r * (node_counter - przysp) * tk);
 					}
 				} else {//normalne przyspieszanie
@@ -685,6 +786,7 @@ double smooth::generate_next_coords(int node_counter, int interpolation_node_no,
 			}
 
 		} else { //hamowanie w pierwszym etapie
+			//printf(" ham1 %d ", node_counter);
 			if (type == lib::ABSOLUTE) {
 				if ((przysp) > node_counter && (przysp) < (node_counter+1)) {
 
@@ -694,10 +796,14 @@ double smooth::generate_next_coords(int node_counter, int interpolation_node_no,
 
 						if (v_r > v_k) {//hamowanie w trzecim etapie
 							next_position += k* (v_r * (node_counter - przysp - jedn)*tk - tk*tk*(node_counter - jedn - przysp) * (node_counter - jedn - przysp) * a_r / 2);
+							//next_position += k * (v_p*tk - a_r*tk*tk/2) * (przysp - (node_counter-1)) + k * tk * v_r * (node_counter - przysp - (node_counter - przysp - jedn)) + k * (v_r*tk - a_r*tk*tk/2) * (node_counter - przysp - jedn);
 						} else {//przyspieszanie w trzecim etapie
 							next_position += k* (v_r * (node_counter - przysp - jedn)*tk + tk*tk*(node_counter - jedn - przysp) * (node_counter - jedn - przysp) * a_r / 2);
+							//next_position += k * (v_p*tk - a_r*tk*tk/2) * (przysp - (node_counter-1)) + k * tk * v_r * (node_counter - przysp - (node_counter - przysp - jedn)) + k * (v_r*tk + a_r*tk*tk/2) * (node_counter - przysp - jedn);
 						}
 					} else {//hamowanie + poczatek jednostajnego
+						//next_position = start_position + k * ((node_counter-1)*v_p*tk + (node_counter-1)*(node_counter-1)*a_r*tk*tk/2);
+						//next_position += k * (v_p*tk - a_r*tk*tk/2) * (przysp - (node_counter-1)) + k * tk * v_r * (node_counter - przysp);
 						next_position = start_position + k * (v_p * node_counter * tk - przysp * przysp * tk * tk * a_r / 2 + v_r * (node_counter - przysp) * tk);
 					}
 				} else {//normalne hamowanie
@@ -707,14 +813,19 @@ double smooth::generate_next_coords(int node_counter, int interpolation_node_no,
 			} else if (type == lib::RELATIVE) {
 				if (przysp > (node_counter-1) && przysp < (node_counter)) {//hamowanie wchodzi na jednostajny
 					if (przysp + jedn < node_counter) {//specjalny przypadek gdy faza jednostajnego zamyka sie w jednym makrokroku
-						next_position = k * ((1 - node_counter + przysp)*v_r*tk + (1 - node_counter + przysp)*(1 - node_counter + przysp)*a_r*tk*tk/2 + jedn * tk * v_r);
+							next_position = k * ((1 - node_counter + przysp)*v_r*tk + (1 - node_counter + przysp)*(1 - node_counter + przysp)*a_r*tk*tk/2 + jedn * tk * v_r);
 
-						if (v_r > v_k) {//hamowanie w trzecim etapie
-							next_position += k* (v_r * (node_counter - przysp - jedn)*tk - tk*tk*(node_counter - jedn - przysp) * (node_counter - jedn - przysp) * a_r / 2);
-						} else {//przyspieszanie w trzecim etapie
-							next_position += k* (v_r * (node_counter - przysp - jedn)*tk + tk*tk*(node_counter - jedn - przysp) * (node_counter - jedn - przysp) * a_r / 2);
-						}
+							if (v_r > v_k) {//hamowanie w trzecim etapie
+								//next_position += k * (v_p*tk + a_r*tk*tk/2) * (przysp - (node_counter-1)) + k * tk * v_r * (node_counter - przysp - (node_counter - przysp - jedn)) + k * (v_r*tk - a_r*tk*tk/2) * (node_counter - przysp - jedn);
+								next_position += k* (v_r * (node_counter - przysp - jedn)*tk - tk*tk*(node_counter - jedn - przysp) * (node_counter - jedn - przysp) * a_r / 2);
+							} else {//przyspieszanie w trzecim etapie
+								//next_position += k * (v_p*tk + a_r*tk*tk/2) * (przysp - (node_counter-1)) + k * tk * v_r * (node_counter - przysp - (node_counter - przysp - jedn)) + k * (v_r*tk + a_r*tk*tk/2) * (node_counter - przysp - jedn);
+								next_position += k* (v_r * (node_counter - przysp - jedn)*tk + tk*tk*(node_counter - jedn - przysp) * (node_counter - jedn - przysp) * a_r / 2);
+							}
 					} else {//hamowanie + poczatek jednostajnego
+						//printf("przyspieszanie wchodzi na jednostajny, macrostep liczony od 1: %d\n", node_counter);
+						//next_position = start_position + k * ((node_counter-1)*v_p*tk + (node_counter-1)*(node_counter-1)*a_r*tk*tk/2);
+						//next_position += k * (v_p*tk + a_r*tk*tk/2 + (v_p+a_r*(node_counter-1) *tk)) * (przysp - (node_counter-1)) + k * tk * v_r * (node_counter - przysp);
 						next_position = k * (v_r * (1 - node_counter + przysp) * tk + (1 - node_counter + przysp) * (1 - node_counter + przysp) * tk * tk * a_r / 2 + v_r * (node_counter - przysp) * tk);
 					}
 				} else {//normalne hamowanie
@@ -722,13 +833,16 @@ double smooth::generate_next_coords(int node_counter, int interpolation_node_no,
 				}
 			}
 		}
+		//printf("%f\t", next_position);
 	} else if(node_counter <= przysp + jedn + 1) { // drugi etap - ruch jednostajny
+		//printf(" jedn %d ", node_counter);
 		if (type == lib::ABSOLUTE) {
 			if ((przysp+jedn) > (node_counter-1) && (przysp+jedn) < (node_counter)) {//jednostajny wchodzi w faze trzecia
 
 				next_position = start_position + k*(s_przysp + s_jedn);
 
 				if (v_r > v_k) {//hamowanie w 3 etapie
+					//printf("wchodzi macrostep: %d\n", node_counter);
 					next_position += k * (v_r * (node_counter - jedn - przysp) * tk - (node_counter - jedn - przysp) * (node_counter - jedn - przysp) * tk * tk * a_r / 2);
 				} else {//przyspieszanie w 3 etapie
 					next_position += k * (v_r * (node_counter - jedn - przysp) * tk + (node_counter - jedn - przysp) * (node_counter - jedn - przysp) * tk * tk * a_r / 2);
@@ -736,12 +850,14 @@ double smooth::generate_next_coords(int node_counter, int interpolation_node_no,
 			} else { //normalny jednostajny
 				next_position = start_position + k * (s_przysp + ((node_counter - przysp)*tk)*v_r);
 			}
+			//printf("next_pos: %f\n", next_position);
 		} else if (type == lib::RELATIVE) {
 			if ((przysp+jedn) > (node_counter-1) && (przysp+jedn) < (node_counter)) {//jednostajny wchodzi w faze trzecia
 
-				next_position = k* (v_r * tk * (1 - node_counter + przysp + jedn));
+				next_position = v_r * tk * (1 - node_counter + przysp + jedn);
 
 				if (v_r > v_k) {//hamowanie w 3 etapie
+					//printf("wchodzi macrostep: %d\n", node_counter);
 					next_position += k * (v_r * (node_counter - jedn - przysp) * tk - (node_counter - jedn - przysp) * (node_counter - jedn - przysp) * tk * tk * a_r / 2);
 				} else {//przyspieszanie w 3 etapie
 					next_position += k * (v_r * (node_counter - jedn - przysp) * tk + (node_counter - jedn - przysp) * (node_counter - jedn - przysp) * tk * tk * a_r / 2);
@@ -749,19 +865,26 @@ double smooth::generate_next_coords(int node_counter, int interpolation_node_no,
 			} else { //normalny jednostajny
 				next_position = k * v_r * tk;
 			}
+		//printf("%f\t", next_position);
 		}
 
 	} else if(node_counter <= interpolation_node_no) { //trzeci etap
 
 		if(v_k <= v_r) { //hamowanie w trzecim etapie
+			//printf(" ham2 %d ", node_counter);
 			if (type == lib::ABSOLUTE) {
+				//printf("start: %f\t node_counter: %d\t s przysp: %f\t s_jedn: %f\n", start_position, node_counter, s_przysp, s_jedn);
+				//printf("next_pos: %f\n", next_position);
 				next_position = start_position +
 								   k*(s_przysp + s_jedn + ((node_counter - jedn - przysp) * tk ) * v_r -
 										 ((node_counter - jedn - przysp) * tk) * ((node_counter - jedn - przysp) * tk) * a_r / 2);
+				//printf("next_pos hamowanie: %f\n", next_position);
 			} else if (type == lib::RELATIVE) {
 				next_position = k * ((v_k + (interpolation_node_no - node_counter) * a_r * tk) * tk + (a_r * tk * tk)/2);
 			}
+			//printf("next pos: %f\t node: %d\t", next_position, node_counter);
 		} else { //przyspieszanie w trzecim etapie
+			//printf(" przysp2 %d ", node_counter);
 			if (type == lib::ABSOLUTE) {
 				next_position = start_position +
 								   k*(s_przysp + s_jedn +
@@ -771,38 +894,22 @@ double smooth::generate_next_coords(int node_counter, int interpolation_node_no,
 				next_position = k* ((v_k - (interpolation_node_no - node_counter) * a_r * tk) * tk - (a_r * tk * tk)/2);
 			}
 		}
+		//printf("%f\t", next_position);
 	}
 
-
-
+    //printf("next pos: %f\t node: %d\t", next_position, node_counter);
+    //flushall();
     return next_position;
 }
 
 void smooth::generate_coords() {
 
 	double coordinate[MAX_SERVOS_NR];
-
-	double general_temp[MAX_SERVOS_NR];
-	double prev_coordinate[MAX_SERVOS_NR];
-	double coordinate_backup[MAX_SERVOS_NR];
-	lib::Homog_matrix goal_frame;
-	int g;
-	int h;
-	int f;
-
 	int private_node_counter = 1;
 	initiate_pose_list();
 	flush_coordinate_list();
 	for (int j = 0; j < pose_list_length(); j++) {
-		for (h = 0; h < MAX_SERVOS_NR; h++) {
-			prev_coordinate[h] = pose_list_iterator->start_position[h];
-		}
 
-		lib::Homog_matrix begining_frame;
-		begining_frame.set_from_xyz_angle_axis(prev_coordinate);
-		cout << begining_frame << endl;
-
-		goal_frame.set_from_xyz_angle_axis(prev_coordinate);
 		//printf("start pos w generate_cords: %f\t w osi: %d\n",pose_list_iterator->start_position[0], 0);
 
 		for (int z = 0; z < pose_list_iterator->interpolation_node_no; z++) {
@@ -827,35 +934,7 @@ void smooth::generate_coords() {
 				}
 			}
 			private_node_counter++;
-			//coordinate_list.push_back(coordinates(coordinate));
-			for (h = 0; h < MAX_SERVOS_NR; h++) {
-				coordinate_backup[h] = coordinate[h];
-			}
-
-			lib::Homog_matrix begining_frame_with_current_translation = begining_frame;
-			begining_frame_with_current_translation.set_translation_vector(goal_frame);
-
-			lib::Xyz_Angle_Axis_vector step_of_total_increment_vector =
-						lib::V_tr(!(lib::V_tr(!begining_frame_with_current_translation
-								* goal_frame))) * lib::Xyz_Angle_Axis_vector(coordinate_backup);
-
-			goal_frame = goal_frame * lib::Homog_matrix(step_of_total_increment_vector);
-
-			lib::Xyz_Angle_Axis_vector tmp_angle_axis_vector;
-			goal_frame.get_xyz_angle_axis(tmp_angle_axis_vector);
-			tmp_angle_axis_vector.to_table(general_temp);
-
-			coordinate_list.push_back(coordinates(general_temp));
-
-			for(g = 0; g < 6; g++) {
-				printf("%f\t", general_temp[g]);
-			}
-			for(g = 0; g < 3; g++) {
-				printf("%f\t", coordinate[g]);
-			}
-			printf("\n");
-			flushall();
-			//end: testowo
+			coordinate_list.push_back(coordinates(coordinate));
 		}
 		private_node_counter = 1;
 		next_pose_list_ptr();
@@ -865,11 +944,11 @@ void smooth::generate_coords() {
 	//printowanie listy coordinate
 	initiate_coordinate_list();
 	for (int m = 0; m < coordinate_list.size(); m++) {
-		//printf("makrokrok: %d\t", m);
+		printf("makrokrok: %d\t", m);
 		for (int n = 0; n < 8; n++) {
-			//printf("%f\t", coordinate_list_iterator->coordinate[n]);
+			printf("%f\t", coordinate_list_iterator->coordinate[n]);
 		}
-		//printf("\n");
+		printf("\n");
 		flushall();
 		coordinate_list_iterator++;
 	}
@@ -940,12 +1019,12 @@ void smooth::send_coordinates() {
 		default:
 			throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 	}// end:switch
-	the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = the_robot->reply_package.arm.pf_def.gripper_coordinate;
+
 	//gripper
-	/*if (type == lib::RELATIVE && !external_absolute) {
+	if (type == lib::RELATIVE) {
 		gripper_position = pose_list_iterator->k[gripp]*((tk)*pose_list_iterator->v_grip);
 
-		//printf("gripper_position: %f\n ", gripper_position);
+		printf("gripper_position: %f\n ", gripper_position);
 
 		//printf(" %f \t", gripper_position);
 		if((node_counter * gripper_position > pose_list_iterator->coordinates[gripp] && pose_list_iterator->k[gripp] == -1) ||
@@ -968,13 +1047,13 @@ void smooth::send_coordinates() {
 			printf("no gripp\t");
 			the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = pose_list_iterator->coordinates[gripp];
 		}
-	}*/
-
-	for (int n = 0; n < gripp; n++) {
-		//printf("%f\t", coordinate_list_iterator->coordinate[n]);
 	}
 
-	//printf("%f\n", gripper_position);
+	for (int n = 0; n < gripp; n++) {
+		printf("%f\t", coordinate_list_iterator->coordinate[n]);
+	}
+
+	printf("%f\n", gripper_position);
 
 	flushall();
 
@@ -988,12 +1067,6 @@ bool smooth::first_step() { //wywolywane tylko raz w calej trajektorii
 	int gripp; //licznik petli
     initiate_pose_list();
     td.arm_type = pose_list_iterator->arm_type;
-    if (td.arm_type == lib::ECP_XYZ_ANGLE_AXIS && type == lib::ABSOLUTE) {
-    	//set_relative();
-    	external_absolute = true;
-    } else {
-    	external_absolute = false;
-    }
 
     first_interval=true;//to chyba nie jest potrzebne bo ustawianie first_interval jest takze na poczatku calculate()
 
@@ -1022,6 +1095,11 @@ bool smooth::first_step() { //wywolywane tylko raz w calej trajektorii
     		the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
     	}
         the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
+        /*the_robot->ecp_command.instruction.interpolation_type = lib::TCIM;
+        for (int i=0; i<6; i++)
+        {
+        	the_robot->ecp_command.instruction.arm.pf_def.behaviour[i] = lib::UNGUARDED_MOTION;
+        }*/
         break;
 
     case lib::ECP_XYZ_EULER_ZYZ:
@@ -1143,6 +1221,9 @@ void smooth::calculate(void) { //zeby wrocic do starego trybu relative nalezy st
 				gripp = 6;
 				homog_matrix.set_from_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame);
 
+				//homog_matrix.get_xyz_euler_zyz(pose_list_iterator->start_position);
+
+
 				homog_matrix.get_xyz_euler_zyz(tmp_euler_vector);
 				tmp_euler_vector.to_table(pose_list_iterator->start_position);
 
@@ -1156,7 +1237,6 @@ void smooth::calculate(void) { //zeby wrocic do starego trybu relative nalezy st
 						prev_pose_list_ptr();							//pozycje startowa nowego ruchu
 					}
 				}
-
 				temp = pose_list_iterator->coordinates[gripp];
 				pose_list_iterator->start_position[gripp] = the_robot->reply_package.arm.pf_def.gripper_coordinate;
 				if (!is_last_list_element()) {		   //musi byc zrobione tutaj zeby zadzialalo przypisanie kierunkow dla drugiego ruchu
@@ -1164,7 +1244,6 @@ void smooth::calculate(void) { //zeby wrocic do starego trybu relative nalezy st
 					pose_list_iterator->start_position[gripp] = temp;//przypisanie pozycji koncowej poprzedniego ruchu jako
 					prev_pose_list_ptr();							//pozycje startowa nowego ruchu
 				}
-
 				pose_list_iterator->start_position[gripp+1] = 0.0;
 
 				for (i = 0; i < MAX_SERVOS_NR; i++) {
@@ -1201,12 +1280,9 @@ void smooth::calculate(void) { //zeby wrocic do starego trybu relative nalezy st
 
 				homog_matrix.set_from_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame);
 
+
 				homog_matrix.get_xyz_angle_axis(tmp_angle_axis_vector);
 				tmp_angle_axis_vector.to_table(pose_list_iterator->start_position);
-
-				for (int k = 0; k < gripp; k++) {\
-					printf("pozycja startowa %f\n", pose_list_iterator->start_position[k]);
-				}
 
 				for (i = 0; i < gripp; i++) {
 					temp = pose_list_iterator->coordinates[i];
@@ -1216,35 +1292,19 @@ void smooth::calculate(void) { //zeby wrocic do starego trybu relative nalezy st
 						prev_pose_list_ptr();							//pozycje startowa nowego ruchu
 					}
 				}
-
-
-				if (external_absolute == true) {//w obecnej implementacji zawsze spelniony
-					set_relative();
-					homog_matrix.set_from_xyz_angle_axis(pose_list_iterator->start_position);
-					homog_matrix2.set_from_xyz_angle_axis(pose_list_iterator->coordinates);
-
-					((!homog_matrix) * homog_matrix2).get_xyz_angle_axis(tmp_angle_axis_vector);
-					tmp_angle_axis_vector.to_table(pose_list_iterator->coordinates);
-
-				}
-
-				//chwytak
-				pose_list_iterator->start_position[gripp] = the_robot->reply_package.arm.pf_def.gripper_coordinate;
 				temp = pose_list_iterator->coordinates[gripp];
-
+				pose_list_iterator->start_position[gripp] = the_robot->reply_package.arm.pf_def.gripper_coordinate;
 				if (!is_last_list_element()) {		   //musi byc zrobione tutaj zeby zadzialalo przypisanie kierunkow dla drugiego ruchu
 					next_pose_list_ptr();
 					pose_list_iterator->start_position[gripp] = temp;//przypisanie pozycji koncowej poprzedniego ruchu jako
 					prev_pose_list_ptr();							//pozycje startowa nowego ruchu
 				}
-
-				pose_list_iterator->coordinates[gripp] = pose_list_iterator->coordinates[gripp] - pose_list_iterator->start_position[gripp]; //nowa czesc
 				pose_list_iterator->start_position[gripp+1] = 0.0;
 
 				for (i = 0; i < MAX_SERVOS_NR; i++) {
 
-					if (v_max_aa[i] == 0 || a_max_aa[i] == 0 || pose_list_iterator->v[i] == 0 || pose_list_iterator->a[i] == 0) {//sprawdzenie czy zadna z predkosci ani przyspieszen nie jest 0
-						sr_ecp_msg.message("One or more of 'v' or 'a' values is 0"); //TODO przerobic na mniejsze lub rowne
+					if (v_max_aa[i] == 0 || a_max_aa[i] == 0 || pose_list_iterator->v[i] == 0 || pose_list_iterator->a[i] == 0) {
+						sr_ecp_msg.message("One or more of 'v' or 'a' values is 0");
 						throw ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
 					}
 
@@ -1252,13 +1312,12 @@ void smooth::calculate(void) { //zeby wrocic do starego trybu relative nalezy st
 					pose_list_iterator->a_r[i] = a_max_aa[i] * pose_list_iterator->a[i];
 
 					pose_list_iterator->v_p[i] = 0; //zalozenie, ze poczatkowa predkosc jest rowna 0
-				}
 
-				for (i = 0; i < MAX_SERVOS_NR; i++) { //musi byc oddzielna petla bo gripper jest liczony w absolute a inne pozycje w relative
-					if (type == lib::ABSOLUTE) { //ten warunek w nowej implementacji nigdy nie jest spelniony, angle axis i eulery dzialaja zawsze w relative
+					if (type == lib::ABSOLUTE) {
 						if(pose_list_iterator->coordinates[i]-pose_list_iterator->start_position[i] < 0) { //zapisanie kierunku dla pierwszego ruchu
 							pose_list_iterator->k[i] = -1;			//zapisanie kierunku nastepnych ruchow dokonywane jest dalej
-						} else {
+						}
+						else {
 							pose_list_iterator->k[i] = 1;
 						}
 					} else if (type == lib::RELATIVE) {
@@ -1449,27 +1508,13 @@ void smooth::calculate(void) { //zeby wrocic do starego trybu relative nalezy st
 
 		    	pose_list_iterator->pos_num = j;
 				for (i = 0; i < MAX_SERVOS_NR; i++) {
-					temp = pose_list_backup_iterator->coordinates[i];
+					temp = pose_list_iterator->coordinates[i];
 					if (!is_last_list_element()) {
 						next_pose_list_ptr();
 						pose_list_iterator->start_position[i] = temp;//przypisanie pozycji koncowej poprzedniego ruchu jako
 						prev_pose_list_ptr();							//pozycje startowa nowego ruchu
 					}
 				}
-
-//				if (type == lib::RELATIVE) {//w obecnej implementacji zawsze spelniony
-//					//nowa czesc			//TODO tego nie nalezy robic dla zwyklego relative tylko dla absolute zmienionego na relative
-//					homog_matrix.set_from_xyz_angle_axis(pose_list_iterator->start_position);
-//					homog_matrix2.set_from_xyz_angle_axis(pose_list_iterator->coordinates);
-//					((!homog_matrix) * homog_matrix2).get_xyz_angle_axis(tmp_angle_axis_vector);
-//					tmp_angle_axis_vector.to_table(pose_list_iterator->coordinates);
-//
-//					for (int n = 0; n < gripp; n++) {\
-//						printf("pozycja %f\n", pose_list_iterator->coordinates[n]);
-//					}
-//				}
-
-				pose_list_iterator->coordinates[gripp] = pose_list_iterator->coordinates[gripp] - pose_list_iterator->start_position[gripp]; //nowa czesc
 
 				for (i = 0; i < MAX_SERVOS_NR; i++) {
 					if (v_max_aa[i] == 0 || a_max_aa[i] == 0 || pose_list_iterator->v[i] == 0 || pose_list_iterator->a[i] == 0) {
@@ -1584,29 +1629,6 @@ void smooth::calculate(void) { //zeby wrocic do starego trybu relative nalezy st
 				td.coordinate_delta[i] = pose_list_iterator->coordinates[i];
 			}
 		}
-		if (!is_last_list_element()) {
-			next_pose_list_ptr();
-			if (type == lib::RELATIVE && td.arm_type == lib::ECP_XYZ_ANGLE_AXIS && external_absolute == true) {//w obecnej implementacji zawsze spelniony
-				//nowa czesc			//TODO tego nie nalezy robic dla zwyklego relative tylko dla absolute zmienionego na relative
-
-				for (int f = 0; f < gripp; f++) {\
-					printf("pozycja startowa przed przeliczeniem %f\n", pose_list_iterator->start_position[f]);
-				}
-				for (int g = 0; g < gripp; g++) {\
-					printf("pozycja przed przeliczeniem %f\n", pose_list_iterator->coordinates[g]);
-				}
-
-				homog_matrix.set_from_xyz_angle_axis(pose_list_iterator->start_position);
-				homog_matrix2.set_from_xyz_angle_axis(pose_list_iterator->coordinates);
-				((!homog_matrix) * homog_matrix2).get_xyz_angle_axis(tmp_angle_axis_vector);
-				tmp_angle_axis_vector.to_table(pose_list_iterator->coordinates);
-				printf("poprzeliczało na wektor relatywny\n");
-				for (int n = 0; n < gripp; n++) {\
-					printf("pozycja %f\n", pose_list_iterator->coordinates[n]);
-				}
-			}
-			prev_pose_list_ptr();
-		}
 
 		for (i = 0; i < MAX_SERVOS_NR; i++) {//zapisanie v_r_next dla aktualnego ruchu i k dla nastepnego ruchu
 			if (is_last_list_element()) {
@@ -1624,27 +1646,13 @@ void smooth::calculate(void) { //zeby wrocic do starego trybu relative nalezy st
 						pose_list_iterator->k[i] = 1;
 					}
 				} else if (type == lib::RELATIVE) {
-
-//					if (external_absolute) {
-//						printf("wchodzi w external\n");
-//						if (eq(pose_list_iterator->coordinates[i],pose_list_iterator->start_position[i])) {
-//							pose_list_iterator->k[i] = -temp;//jesli droga jest rowna 0 w nastepnym ruchu to kierunek ustawiany jest na przeciwny aby robot zwolnil do 0
-//						} else if(pose_list_iterator->coordinates[i]-pose_list_iterator->start_position[i] < 0) {//nadpisanie k dla nastepnego ruchu
-//							printf("ujemny\n");
-//							pose_list_iterator->k[i] = -1;
-//						} else {
-//							pose_list_iterator->k[i] = 1;
-//						}
-//					} else {
-						if (eq(pose_list_iterator->coordinates[i],0)) {
-							pose_list_iterator->k[i] = -temp;//jesli droga jest rowna 0 w nastepnym ruchu to kierunek ustawiany jest na przeciwny aby robot zwolnil do 0
-						} else if(pose_list_iterator->coordinates[i] < 0) {//nadpisanie k dla nastepnego ruchu
-							printf("ustawia ujemne k\n");
-							pose_list_iterator->k[i] = -1;
-						} else {
-							pose_list_iterator->k[i] = 1;
-						}
-//					}
+					if (eq(pose_list_iterator->coordinates[i],0)) {
+						pose_list_iterator->k[i] = -temp;//jesli droga jest rowna 0 w nastepnym ruchu to kierunek ustawiany jest na przeciwny aby robot zwolnil do 0
+					} else if(pose_list_iterator->coordinates[i] < 0) {//nadpisanie k dla nastepnego ruchu
+						pose_list_iterator->k[i] = -1;
+					} else {
+						pose_list_iterator->k[i] = 1;
+					}
 				}
 
 				switch (td.arm_type) {
@@ -1682,7 +1690,7 @@ void smooth::calculate(void) { //zeby wrocic do starego trybu relative nalezy st
 					v_r_next[i] = pose_list_iterator->v_r[i];
 				}
 
-				prev_pose_list_ptr(); // powrot do aktualnej pozycji
+				prev_pose_list_ptr();
 			}
 		}
 		// ==================================== poczatek oliczen ========================================
@@ -1705,7 +1713,7 @@ void smooth::calculate(void) { //zeby wrocic do starego trybu relative nalezy st
 			printf("v_p: %f\t v_r: %f\t v_r_next: %f\t a_r: %f\t v_k: %f\n", pose_list_iterator->v_p[i], pose_list_iterator->v_r[i], v_r_next[i], pose_list_iterator->a_r[i], pose_list_iterator->v_k[i]);
 			flushall();
 
-			if (s[i] < distance_eps) {//najmniejsza wykrywalna droga - obecnie 0
+			if (s[i] < distance_eps) {//najmniejsza wykrywalna droga
 				//printf("droga 0 %d\n", i);
 				pose_list_iterator->model[i] = 0; //kinematic_model_with_tool 0... brak ruchu
 				t[i] = 0;
@@ -2219,25 +2227,23 @@ void smooth::vp_reduction(std::list<ecp_mp::common::smooth_trajectory_pose>::ite
 	switch (td.arm_type) {//zapisanie nowej pr��dko��ci w liscie pozycji, dla danej pozycji
 
 		case lib::ECP_XYZ_EULER_ZYZ:
-			pose_list_backup_iterator->v[i] = v_r/v_max_zyz[i];
+			pose_list_iterator->v[i] = v_r/v_max_zyz[i];
 			break;
 
 		case lib::ECP_XYZ_ANGLE_AXIS:
-			pose_list_backup_iterator->v[i] = v_r/v_max_aa[i];
+			pose_list_iterator->v[i] = v_r/v_max_aa[i];
 			break;
 
 		case lib::ECP_MOTOR:
-			pose_list_backup_iterator->v[i] = v_r/v_max_motor[i];
+			pose_list_iterator->v[i] = v_r/v_max_motor[i];
 			break;
 
 		case lib::ECP_JOINT:
-			pose_list_backup_iterator->v[i] = v_r/v_max_zyz[i];
+			pose_list_iterator->v[i] = v_r/v_max_zyz[i];
 			break;
 		default:
 			throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 	}
-
-	pose_list = pose_list_backup;
 
 	calculate();
 }

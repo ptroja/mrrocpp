@@ -18,7 +18,7 @@
 #include "ecp/common/generator/ecp_g_delta.h"
 #include "ecp/common/generator/ecp_g_operator_reaction_condition.h"
 
-#include <boost/numeric/ublas/matrix.hpp>
+#include <Eigen/Core>
 
 namespace mrrocpp {
 namespace ecp {
@@ -297,7 +297,7 @@ protected:
    double vp[MAX_SERVOS_NR];					// Tablica predkosci poczatkowych
    double vk[MAX_SERVOS_NR]; 					// Tablica predkosci koncowych
 
-   boost::numeric::ublas::matrix<double> y, t, a;					// Macierze: czasow, polozen i przyspieszen - w punktach wezlowych
+   Eigen::MatrixXd y, t, a;					// Macierze: czasow, polozen i przyspieszen - w punktach wezlowych
 
   void Build_Coeff (double *tt, double *yy, int nn, double vvp, double vvk, double *aa);
 

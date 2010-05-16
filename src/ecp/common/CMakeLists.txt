@@ -16,6 +16,7 @@ add_library(ecp
 	generator/ecp_g_force.cc
 	generator/ecp_g_transparent.cc
 	generator/ecp_g_get_position.cc
+	generator/velocity_profile_calculator/bang_bang_profile.cc
 )
 
 target_link_libraries(ecp ecp_mp)

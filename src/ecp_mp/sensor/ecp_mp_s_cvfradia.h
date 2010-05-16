@@ -88,7 +88,6 @@ public:
       * Closes cvFraDIA socket connection.
       */
 	~cvfradia();
-
 };
 
 } // namespace sensor

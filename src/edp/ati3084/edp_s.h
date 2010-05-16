@@ -1,5 +1,6 @@
 // -------------------------------------------------------------------------
 //
+//
 // Definicje klasy edp_ATI3084_force_sensor
 //
 // Ostatnia modyfikacja: 2005
@@ -15,50 +16,11 @@ namespace mrrocpp {
 namespace edp {
 namespace sensor {
 
-// Z PLIKU cz_defs.h
-
-// user commands
-// #define INIT	0x01
-#define COMGETS1 0x01
-#define COMGET1	0x02
-#define COMGETN	0x03
-#define COMGIVEN	0x04
-#define COMBIAS	0x05
-#define COMUNBIAS 0x06
-#define COMDELBIAS 0x07
-#define COMAVERAGE 0x08
-#define COMRESET 0x09
-
-#define COMSERVER_END 0xFD
-
 // server answers
 #define COMMAND_OK 0x00
-#define COMMAND_ERROR	0xFF
 
-// error types
-#define __ERROR_COM	1
-#define __ERROR_SEND	2
-#define __ERROR_NO_ANSWER	3
-#define __ERROR_MEASURE	4
-#define __ERROR_BAD_COMMAND	5
-#define __ERROR_INIT_SEND 6
-#define __ERROR_INIT_COM	7
-#define __ERROR_BUFFER_MAX	8
-#define __ERROR_BUFFER_ZERO 9
-
-
-// max & min svar values
-#define MAX_SVAR_VALUE 0x7F // +127
-#define MIN_SVAR_VALUE 0x80 // -128
-
-// Z PLIKU cz_lib.h
-
-// PARALLEL - wysylynie po zlaczu rownoleglym - dziala slabo,
+#define SERIAL 1 // PARALLEL - wysylynie po zlaczu rownoleglym - dziala slabo,
 // SERIAL - wysylanie po zlaczu szeregowym - dziala dobrze
-#define SERIAL 1
-
-#define NUM_SVAR	6
-#define MAX_NUM_MEASURE 1000
 
 #define SCHUNK_INTR_TIMEOUT_HIGH 10000000
 #define SCHUNK_INTR_TIMEOUT_LOW  10000000
@@ -84,13 +46,6 @@ namespace sensor {
 #define GETN	"QS\r"
 #define YESCOMM	"Y\r"
 
-#define PICMASK 0x21
-#define PICEOI	0x20
-#define EOI	0x20
-
-#define TIMEOUT 500
-#define MAX_BUFFER	3
-
 // by Y dla karty advantech
 
 #define COM_NR 1
@@ -107,9 +62,9 @@ namespace sensor {
 #define PORT_1_CONFIG 7
 #define INTER_CONFIG 32
 
-// opoznienie pomiedzy dwoma stanami wyjscia karty
+#define INTR_LOOP_DELAY 1000 // opoznienie pomiedzy dwoma stanami wyjscia karty w funkcji obslugi przerwania
+#define INTR_NS_DELAY 10000 // opoznienie pomiedzy dwoma stanami wyjscia karty
 // w funkcji obslugi przerwania w nanosekundach
-#define INTR_NS_DELAY 10000
 
 #define MDS_DATA_RANGE 20
 
@@ -117,18 +72,54 @@ namespace sensor {
 class ATI3084_force : public force {
 
 public:
-
-	//! data strucutre shared between thread and interrupt handler
+	//! Measurement data type shared with interrupt handler
 	typedef struct mds_data
 	{
 		int intr_mode;
 		int byte_counter;
-		int is_received;
-		uint16_t data[MDS_DATA_RANGE];
-
-		//! spinlock to for disabling interrupts
+		bool is_received;
+		int16_t data[MDS_DATA_RANGE];
 		intrspin_t spinlock;
+		struct sigevent sevent;
 	} mds_data_t;
+
+private:
+	//! Measurement data
+	mds_data_t mds;
+
+	//! Interrupt timeout
+	uint64_t int_timeout;
+
+	//! PCI device info
+	struct pci_dev_info info;
+
+	//! Interrupt ID
+	int sint_id;
+
+	bool int_attached;// informacja o tym, czy obsluga przerwanie jest juz przypisana
+
+	int pidx; // do obslugi karty advantech pci1751
+	void* hdl; // wlasciwy uchwyt do danego urzadzenia
+	int phdl; // pci handle -> fd do servera PCI
+
+	void set_output(int16_t value);
+	void set_obf(unsigned char state);
+	bool check_ack(void);
+	void initiate_registers(void);
+	void solve_transducer_controller_failure(void);
+	void check_cs(void);
+	void parallel_do_send_command(const char* command);
+
+	void do_Wait();// by old schunk
+	void do_send_command(const char* command);
+	void do_init(void);
+
+	//! serial port file descriptor
+	int uart;
+
+	struct sigevent tim_event;
+
+public:
 
 	void connect_to_hardware (void);
 
@@ -140,55 +131,6 @@ public:
 	void initiate_reading (void);		// zadanie odczytu od VSP
 	void get_reading (void);			// odebranie odczytu od VSP		// zwraca blad
 
-private:
-	//! data shared between thread and interrupt handler
-	mds_data_t mds;
-
-	//! interrupt id
-	int interrupt_id;
-
-	//! interrupt timeout
-	uint64_t int_timeout;
-
-	//! informacja o tym, czy obsluga przerwanie jest juz przypisana
-	bool int_attached;
-
-	// Z PLIKU cz_lib.h
-	int LSREG;
-	int LCREG;	 	/* Line Control Register */
-	int IEREG;	 	/* Interrupt Enable Register */
-	int MCREG;	 	/* Modem Control Register */
-	int FCREG;	 	/* FIFO Control Register */
-	int TxBUF;	 	/* Transmit Buffer */
-	int RxBUF;	 	/* Receive Buffer */
-	int DIVLSB;	 	/* Divisor Least Sign. Byte */
-	int DIVMSB; 	/* Divisor Most Sign. Byte */
-	int INT_NUM;
-	int NOT_IRQ;
-	// KONIEC Z PLIKU
-
-	//! do obslugi karty advantech pci1751
-	int pidx;
-
-	//! wlasciwy uchwyt do danego urzadzenia
-	void* hdl;
-
-	//! // pci handle -> fd do servera PCI
-	int phdl;
-
-	void set_output(uint16_t value);
-	void set_obf(unsigned char state);
-	bool check_ack(void);
-	void initiate_registers(void);
-	void solve_transducer_controller_failure(void);
-	void check_cs(void);
-	void parallel_do_send_command(const char* command);
-
-	void do_Wait(void);// by old schunk
-	int do_send_command(const char* command);
-	void do_init(void);
-
-	struct sigevent tim_event;
 }; // end: class vsp_sensor
 
 // na zewnatrz klasy gdyz odwoluje sie do nich funkcja obslugi przerwania
@@ -196,7 +138,7 @@ bool check_intr(void);
 bool check_stb(void);
 void clear_intr(void);
 void set_ibf(unsigned char state);
-uint16_t get_input(void);
+short get_input(void);
 
 } // namespace sensor
 } // namespace edp
