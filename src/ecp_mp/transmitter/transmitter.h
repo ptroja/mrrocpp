@@ -1,6 +1,8 @@
 #if !defined(_TRANSMITTER_H)
 #define _TRANSMITTER_H
 
+#include <string>
+
 #include "lib/srlib.h"
 
 namespace mrrocpp {
@@ -30,7 +32,7 @@ class transmitter_base
 		lib::sr_ecp &sr_ecp_msg;
 
 	public:
-		transmitter_base (TRANSMITTER_ENUM _transmitter_name, const char* _section_name, task::task& _ecp_mp_object);
+		transmitter_base (TRANSMITTER_ENUM _transmitter_name, const std::string & _section_name, task::task& _ecp_mp_object);
 
 		virtual ~transmitter_base()
 		{
@@ -69,7 +71,7 @@ public:
 	FROM_VA from_va;
 
 	//! Constructor
-	transmitter(TRANSMITTER_ENUM _transmitter_name, const char* _section_name, task::task& _ecp_mp_object) :
+	transmitter(TRANSMITTER_ENUM _transmitter_name, const std::string & _section_name, task::task& _ecp_mp_object) :
 		transmitter_base(_transmitter_name, _section_name, _ecp_mp_object)
 	{
 	}
