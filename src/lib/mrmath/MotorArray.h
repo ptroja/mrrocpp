@@ -15,6 +15,9 @@ namespace lib {
 
 class MotorArray : public Eigen::VectorXd
 {
+	
+	typedef Eigen::VectorXd BaseClass;
+
 public:
   MotorArray() : Eigen::VectorXd () {}
   MotorArray(int size) : Eigen::VectorXd (size) {}
@@ -22,21 +25,13 @@ public:
   {
 	  for(unsigned int i = 0; i<n; i++)
 	  {
-		m_storage.data()[i] = ptr[i];
+		this->operator[](i) = ptr[i];
 	  }
   }
 
-  typedef Eigen::VectorXd Base;
-  template<typename OtherDerived>
-  MotorArray & operator= (const Eigen::MatrixBase <OtherDerived>& other)
-  {
-	this->Base::operator=(other);
-	return *this;
-  }
+  using BaseClass::operator=;
 
 };
-
-
 }
 }
 #endif /* MOTORARRAY_H_ */
