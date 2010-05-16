@@ -30,7 +30,7 @@ public:
 	lib::configurator &config;
 	lib::sr_vsp *sr_msg;
 
-	std::string mrrocpp_network_path;
+	const std::string mrrocpp_network_path;
 
 	sensor (lib::configurator &_config);
 

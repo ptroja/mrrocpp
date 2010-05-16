@@ -23,16 +23,15 @@ namespace sensor {
 sensor::sensor (lib::configurator &_config) :
 	config(_config),
 	is_sensor_configured(false),
-	is_reading_ready(false)
+	is_reading_ready(false),
+	mrrocpp_network_path(config.return_mrrocpp_network_path())
 {
 	/* Lokalizacja procesu wyswietlania komunikatow SR */
 	sr_msg = new lib::sr_vsp(lib::VSP,
-			config.value<std::string>("resourceman_attach_point").c_str(),
-			config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", UI_SECTION).c_str(), true);
+			config.value<std::string>("resourceman_attach_point"),
+			config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", UI_SECTION), true);
 
 	sr_msg->message ("Communication with SR ready");
-
-	mrrocpp_network_path = config.return_mrrocpp_network_path();
 }
 
 
