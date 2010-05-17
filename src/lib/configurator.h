@@ -15,6 +15,7 @@
 
 #include <iostream>
 #include <string>
+#include <stdexcept>
 
 #include <boost/thread/mutex.hpp>
 #include <boost/lexical_cast.hpp>
@@ -106,14 +107,24 @@ public:
 	template <class Type>
 	Type value(const std::string & _key, const std::string & __section_name) const
 	{
-		return boost::lexical_cast <Type>(return_string_value(_key.c_str(), __section_name.c_str()));
+		std::string str_value = return_string_value(_key.c_str(), __section_name.c_str());;
+		try{
+			return boost::lexical_cast <Type>(str_value);
+		}catch(const std::exception &ex){
+			throw std::runtime_error("lib::configurator::value() section \"" + __section_name + "\", key: \"" + _key + "\", value: \"" + str_value + "\", " + ex.what());
+		}
 	}
 	;
 
 	template <class Type>
 	Type value(const std::string & _key) const
 	{
-		return boost::lexical_cast <Type>(return_string_value(_key.c_str()));
+		std::string str_value =return_string_value(_key.c_str());
+		try{
+			return boost::lexical_cast <Type>(str_value);
+		}catch(const std::exception &ex){
+			throw std::runtime_error("lib::configurator::value() key: \"" + _key + "\", value: \"" + str_value + "\", " + ex.what());
+		}
 	}
 	;
 
