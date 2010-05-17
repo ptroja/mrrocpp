@@ -39,11 +39,8 @@ void bird_hand_test::main_task_algorithm(void) {
 
 	// wlaczenie generatora transparentnego w obu robotach
 	set_next_ecps_state((int) ecp_mp::task::ECP_GEN_TRANSPARENT, (int) 0, "",
-			0, 1, lib::ROBOT_SPKM);
-	set_next_ecps_state((int) ecp_mp::task::ECP_GEN_TRANSPARENT, (int) 0, "",
-			0, 1, lib::ROBOT_SMB);
-	set_next_ecps_state((int) ecp_mp::task::ECP_GEN_TRANSPARENT, (int) 0, "",
-			0, 1, lib::ROBOT_SHEAD);
+			0, 1, lib::ROBOT_BIRD_HAND);
+
 
 	double a = 2.88;
 
@@ -100,7 +97,6 @@ void bird_hand_test::main_task_algorithm(void) {
 
 	sr_ecp_msg->message("END");
 
-	send_end_motion_to_ecps(2, lib::ROBOT_SMB, lib::ROBOT_SHEAD);
 
 }
 
