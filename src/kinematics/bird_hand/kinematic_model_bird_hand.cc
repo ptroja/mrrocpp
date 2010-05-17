@@ -39,7 +39,7 @@ void kinematic_model_bird_hand::inverse_kinematics_transform(
 		const lib::Homog_matrix& local_desired_end_effector_frame) {
 	// Transform Homog_matrix to Matrix4d.
 	Homog4d O_W_T;
-	O_W_T.matrix() << local_desired_end_effector_frame[0][0], local_desired_end_effector_frame[0][1], local_desired_end_effector_frame[0][2], local_desired_end_effector_frame[0][3], local_desired_end_effector_frame[1][0], local_desired_end_effector_frame[1][1], local_desired_end_effector_frame[1][2], local_desired_end_effector_frame[1][3], local_desired_end_effector_frame[2][0], local_desired_end_effector_frame[2][1], local_desired_end_effector_frame[2][2], local_desired_end_effector_frame[2][3], 0, 0, 0, 1;
+	O_W_T.matrix() << local_desired_end_effector_frame(0,0), local_desired_end_effector_frame(0,1), local_desired_end_effector_frame(0,2), local_desired_end_effector_frame(0,3), local_desired_end_effector_frame(1,0), local_desired_end_effector_frame(1,1), local_desired_end_effector_frame(1,2), local_desired_end_effector_frame(1,3), local_desired_end_effector_frame(2,0), local_desired_end_effector_frame(2,1), local_desired_end_effector_frame(2,2), local_desired_end_effector_frame(2,3), 0, 0, 0, 1;
 
 	// Compute O_S_T.
 	Homog4d O_S_T = O_W_T * params.W_S_T;
