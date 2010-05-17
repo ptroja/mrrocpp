@@ -10,6 +10,7 @@ add_executable(ui
 	../fun_r_irp6_postument.cc
 	../fun_r_irp6ot_tfg.cc
 	../fun_r_irp6p_tfg.cc
+	../fun_r_bird_hand.cc
 	#../fun_r_polycrank.cc
 	../fun_r_shead.cc
 	../fun_r_smb.cc
@@ -40,6 +41,7 @@ set(ROBOT_LIBRARIES
 	ecp_r_polycrank
 	ecp_r_speaker
 	ecp_r_smb ecp_r_spkm ecp_r_shead
+	ecp_r_bird_hand
 )
 
 target_link_libraries(ui

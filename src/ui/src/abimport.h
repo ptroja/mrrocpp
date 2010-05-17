@@ -395,4 +395,6 @@ int import_wnd_irp6_postument_xyz_angle_axis( PtWidget_t *widget, ApInfo_t *data
 int export_wnd_irp6_postument_xyz_angle_axis( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 int import_wnd_irp6m_xyz_angle_axis( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 int export_wnd_irp6m_xyz_angle_axis( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int EDP_bird_hand_create( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int EDP_bird_hand_slay( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 #endif
