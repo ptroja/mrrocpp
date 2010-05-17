@@ -434,7 +434,7 @@ void ATI6284_force::initiate_reading(void)
 	short int no_result = 0; //brak wyniku
 	static short int show = 0; //wyswietl
 	float force_torque[6]; //wektor z si�ami i napi�ciami
-	short int sensor_status = EDP_FORCE_SENSOR_READING_CORRECT;
+	force_readring_status_t sensor_status = EDP_FORCE_SENSOR_READING_CORRECT;
 
 	if (!is_sensor_configured)
 		throw lib::sensor::sensor_error(lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
@@ -568,7 +568,7 @@ void ATI6284_force::initiate_reading(void)
 				kartez_force[i] = from_vsp.force.rez[i];
 				root_force[i] = force_torque[i];
 			}
-			from_vsp.force.force_reading_status = sensor_status;
+			from_vsp.force.status = sensor_status;
 			master.force_msr_upload(kartez_force);//!< wpisanie sily do zmiennych globalnych dla calego procesu
 		} else if (master.force_tryb == 2 && gravity_transformation) {
 			for (int i = 0; i < 6; i++)
