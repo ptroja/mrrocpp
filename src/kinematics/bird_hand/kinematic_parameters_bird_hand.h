@@ -1,13 +1,13 @@
 /*!
- * \file kinematic_parameters_spkm.h
+ * \file kinematic_parameters_bird_hand.h
  * \brief File containing the declaration of kinematic_parameters class.
  *
  * \author tkornuta
  * \date Jan 5, 2010
  */
 
-#ifndef KINEMATIC_PARAMETERS_SPKM_H_
-#define KINEMATIC_PARAMETERS_SPKM_H_
+#ifndef KINEMATIC_PARAMETERS_BIRD_HAND_H_
+#define KINEMATIC_PARAMETERS_BIRD_HAND_H_
 
 // Libraries stddef and stdlib are required by Eigen to compile with QCC.
 #include <stddef.h>
@@ -20,7 +20,7 @@ using namespace Eigen;
 
 namespace mrrocpp {
 namespace kinematics {
-namespace spkm {
+namespace bird_hand {
 
 //! Type used for representation of e = <s_alpha,c_alpha,s_beta,c_beta, h>.
 typedef Matrix<double, 5, 1> Vector5d;
@@ -29,16 +29,16 @@ typedef Matrix<double, 5, 1> Vector5d;
 typedef Transform<double, 3> Homog4d;
 
 /*!
- * \struct kinematic_parameters_spkm
+ * \struct kinematic_parameters_bird_hand
  * \brief Class storing parameters for PKM and spherical wrist attached to it.
  *
  * \author tkornuta
  * \date Jan 05, 2010
  */
-struct kinematic_parameters_spkm {
+struct kinematic_parameters_bird_hand {
 public:
-	//! Constructor - sets the values of the SPKM geometric parameters.
-	kinematic_parameters_spkm();
+	//! Constructor - sets the values of the BIRD_HAND geometric parameters.
+	kinematic_parameters_bird_hand();
 
 	//! Vector representing a translation from W (end of the spherical wrist) to S (middle of the spherical wrist). An equivalent of <Sx,Sy,Sz>.
 	Vector3d W_S_P;
@@ -92,7 +92,7 @@ public:
 	double hC;
 };
 
-} // namespace spkm
+} // namespace bird_hand
 } // namespace kinematic
 } // namespace mrrocpp
 
