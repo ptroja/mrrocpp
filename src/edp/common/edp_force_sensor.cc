@@ -143,9 +143,7 @@ void force::set_force_tool(void)
 	lib::Homog_matrix frame = master.return_current_frame(common::WITH_TRANSLATION);
 	gravity_transformation->defineTool(frame, next_force_tool_weight, gravity_arm_in_sensor);
 
-	for (int i = 0; i < 3; i++) {
-		current_force_tool_position[i] = next_force_tool_position[i];
-	}
+	current_force_tool_position = next_force_tool_position;
 	current_force_tool_weight = next_force_tool_weight;
 }
 

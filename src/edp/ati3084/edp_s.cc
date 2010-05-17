@@ -207,7 +207,7 @@ void ATI3084_force::connect_to_hardware(void)
 
 ATI3084_force::~ATI3084_force(void)
 {
-	if (!(master.test_mode)) {
+	if (!master.test_mode) {
 		InterruptDetach(sint_id);
 		pci_detach_device(hdl); // odlacza driver od danego urzadzenia na PCI
 		pci_detach(phdl); // Disconnect from the PCI server

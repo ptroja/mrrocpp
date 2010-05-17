@@ -128,6 +128,7 @@ void irp6s_postument_track_effector::create_threads()
 		vs = sensor::return_created_edp_force_sensor(*this); //!< czujnik wirtualny
 
 		// byY - utworzenie watku pomiarow sily
+		// this has to be done with boost::bind since vs is pointer to object with virtual methods
 		new boost::thread(boost::bind(&sensor::force::operator(), vs));
 
 		vs->thread_started.wait();

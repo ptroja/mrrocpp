@@ -632,7 +632,7 @@ typedef union c_buffer_robot_model {
 	} servo_algorithm;
 	//----------------------------------------------------------
 	struct {
-		double position[3];
+		double position[3];	// TODO: this should be a Eigen::Vector3f
 		double weight;
 	} force_tool;
 

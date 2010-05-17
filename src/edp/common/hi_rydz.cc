@@ -198,7 +198,7 @@ hardware_interface::hardware_interface (motor_driven_effector &_master,
 		unsigned int _hi_intr_timeout_high,
 		unsigned int _hi_first_servo_ptr,
 		unsigned int _hi_intr_generator_servo_ptr,
-		unsigned int _hi_isa_card_offset, int* _max_current)
+		unsigned int _hi_isa_card_offset, const int _max_current[])
         : master(_master),
         hi_irq_real(_hi_irq_real),
         hi_intr_freq_divider(_hi_intr_freq_divider),
@@ -207,11 +207,9 @@ hardware_interface::hardware_interface (motor_driven_effector &_master,
         hi_isa_card_offset(_hi_isa_card_offset),
         hi_intr_generator_servo_ptr(_hi_intr_generator_servo_ptr)
 {
-	for (int i = 0; i < master.number_of_servos; i++ )
-		{
+	for (int i = 0; i < master.number_of_servos; i++ ) {
 		max_current[i] = _max_current[i];
-
-		}
+	}
 }
 
 
@@ -475,7 +473,7 @@ void hardware_interface::finish_synchro (int drive_number)
 
 
 // Sprawdzenie czy pojawilo sie zero  (synchronizacji rezolwera)
-bool hardware_interface::is_impulse_zero ( int drive_number )
+bool hardware_interface::is_impulse_zero ( int drive_number ) const
 {
     if ( robot_status[drive_number].adr_offset_plus_0 & 0x0100 )
         return true;

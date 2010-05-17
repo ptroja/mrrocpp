@@ -34,7 +34,7 @@ void ATI3084_force::connect_to_hardware(void)
 		//printf("2\n");
 		tcflush(uart, TCIFLUSH);
 
-		sendBias(uart);
+		sendBias();
 	}
 }
 
@@ -55,7 +55,7 @@ void ATI3084_force::configure_sensor(void)
 	sr_msg->message("EDP Sensor configured");
 
 	if (!master.test_mode) {
-		sendBias(uart);
+		sendBias();
 	}
 
 	if (master.force_tryb == 2) {
@@ -107,7 +107,7 @@ void ATI3084_force::wait_for_event()
 
 	if (!master.test_mode) {
 
-		ftxyz = getFT(uart);
+		ftxyz = getFT();
 
 	} else {
 		usleep(1000);
@@ -117,10 +117,14 @@ void ATI3084_force::wait_for_event()
 /*************************** inicjacja odczytu ******************************/
 void ATI3084_force::initiate_reading(void)
 {
-	lib::Ft_vector kartez_force;
-
 	if (!is_sensor_configured)
 		throw sensor_error(lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
+}
+
+/***************************** odczyt z czujnika *****************************/
+void ATI3084_force::get_reading(void)
+{
+	lib::Ft_vector kartez_force;
 
 	if (master.test_mode) {
 		for (int i = 0; i < 6; ++i) {
@@ -136,13 +140,8 @@ void ATI3084_force::initiate_reading(void)
 		}
 		/*
 		 char aaa[50];
-
 		 sprintf(aaa,"%f",ft_table[0]);
-
-
-
 		 sr_msg->message(aaa);
-
 		 */
 		is_reading_ready = true;
 
@@ -166,31 +165,26 @@ void ATI3084_force::initiate_reading(void)
 	}
 }
 
-/***************************** odczyt z czujnika *****************************/
-void ATI3084_force::get_reading(void)
-{
-}
-
 // metoda na wypadek skasowanie pamiecia nvram
 // uwaga sterownik czujnika wysyla komunikat po zlaczu szeregowym zaraz po jego wlaczeniu
 
 void ATI3084_force::solve_transducer_controller_failure(void)
 {
 	usleep(10);
-	sendBias(uart);
+	sendBias();
 	usleep(100);
 }
 
-void ATI3084_force::sendBias(int fd)
+void ATI3084_force::sendBias()
 {
 	const char bias = 'b';
-	if (write(fd, &bias, 1) != 1) {
+	if (write(uart, &bias, 1) != 1) {
 		// TODO: throw
 		perror("write()");
 	}
 }
 
-ATI3084_force::forceReadings_t ATI3084_force::getFT(int fd)
+ATI3084_force::forceReadings_t ATI3084_force::getFT()
 {
 	const char query = 'q';
 	int r;
@@ -206,13 +200,13 @@ ATI3084_force::forceReadings_t ATI3084_force::getFT(int fd)
 		r = 1;
 		iter_counter++;
 
-		if (write(fd, &query, 1) != 1) {
+		if (write(uart, &query, 1) != 1) {
 			// TODO: throw
 			perror("write()");
 		}
 		//current_cycle = ClockCycles();
 		while ((current_bytes > 0) && (r != 0)) {//printf("aaa: %d\n",r);
-			r = read(fd, &(reads[14 - current_bytes]), current_bytes);
+			r = read(uart, &(reads[14 - current_bytes]), current_bytes);
 
 			current_bytes -= r;
 		}
