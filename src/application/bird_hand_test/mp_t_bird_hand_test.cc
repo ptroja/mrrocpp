@@ -41,7 +41,6 @@ void bird_hand_test::main_task_algorithm(void) {
 	set_next_ecps_state((int) ecp_mp::task::ECP_GEN_TRANSPARENT, (int) 0, "",
 			0, 1, lib::ROBOT_BIRD_HAND);
 
-
 	double a = 2.88;
 
 	std::string astring;
@@ -70,7 +69,7 @@ void bird_hand_test::main_task_algorithm(void) {
 
 	sr_ecp_msg->message(ss.str().c_str());
 
-	send_end_motion_to_ecps(1, lib::ROBOT_SPKM);
+	send_end_motion_to_ecps(1, lib::ROBOT_BIRD_HAND);
 	/*
 	 sr_ecp_msg->message("2");
 	 set_next_ecps_state((int) ecp_mp::task::ECP_GEN_SLEEP, (int) 5, "",  0,1,
@@ -90,13 +89,12 @@ void bird_hand_test::main_task_algorithm(void) {
 	memcpy(tmp_string, &epos_params, sizeof(epos_params));
 
 	set_next_ecps_state((int) ecp_mp::task::ECP_GEN_EPOS, (int) 5, tmp_string,
-			sizeof(epos_params), 1, lib::ROBOT_SPKM);
+			sizeof(epos_params), 1, lib::ROBOT_BIRD_HAND);
 	sr_ecp_msg->message("5");
 	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(
-			1, 1, lib::ROBOT_SPKM, lib::ROBOT_SPKM);
+			1, 1, lib::ROBOT_BIRD_HAND, lib::ROBOT_BIRD_HAND);
 
 	sr_ecp_msg->message("END");
-
 
 }
 

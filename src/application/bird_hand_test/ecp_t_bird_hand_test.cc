@@ -29,7 +29,7 @@ bird_hand_test::bird_hand_test(lib::configurator &_config) :
 	g_sleep = new common::generator::sleep(*this);
 	g_epos = new common::generator::epos(*this);
 
-	sr_ecp_msg->message("ECP SPKM loaded");
+	sr_ecp_msg->message("ECP BIRD HAND TEST loaded");
 }
 
 void bird_hand_test::main_task_algorithm(void) {
