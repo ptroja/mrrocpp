@@ -181,8 +181,6 @@ bool haptic::next_step() {
 		return false;
 	}
 
-	;
-
 	if (node_counter == 3) {
 
 		irp6ot->mp_command.instruction.instruction_type = lib::SET_GET;

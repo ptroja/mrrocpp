@@ -41,11 +41,8 @@ rubik_cube_solver::rubik_cube_solver(lib::configurator &_config)
 
 	if (vis_servoing)
 	{
-
-		// Konfiguracja wszystkich czujnikow
-		BOOST_FOREACH(ecp_mp::sensor_item_t & sensor_item, sensor_m) {
-			sensor_item.second->to_vsp.parameters=1; // biasowanie czujnika
-			sensor_item.second->configure_sensor();
+		BOOST_FOREACH(ecp_mp::sensor_item_t & s, sensor_m) {
+			s.second->configure_sensor();
 		}
 	}
 
@@ -89,54 +86,58 @@ void rubik_cube_solver::identify_colors() //DO WIZJI (przekladanie i ogladanie s
 
 		if (vis_servoing)
 		{
-		wait_ms(5000);
-		sensor_m[lib::SENSOR_CAMERA_ON_TRACK]->initiate_reading();
-		wait_ms(1000);
-		sensor_m[lib::SENSOR_CAMERA_ON_TRACK]->get_reading();
+			ecp_mp::sensor::sensor<lib::cube_face_t> * cube_recognition = dynamic_cast<ecp_mp::sensor::sensor<lib::cube_face_t> *> (sensor_m[lib::SENSOR_CAMERA_ON_TRACK]);
 
-		for(int i=0; i<3; i++)
-			for(int j=0; j<3; j++)
-				cube_state->cube_tab[k][3*i+j]=(char)sensor_m[lib::SENSOR_CAMERA_ON_TRACK]->image.sensor_union.cube_face.colors[3*i+j];
+			wait_ms(5000);
+			cube_recognition->initiate_reading();
+			wait_ms(1000);
+			cube_recognition->get_reading();
 
-				}
-
+			for(int i=0; i<3; i++)
+				for(int j=0; j<3; j++)
+					cube_state->cube_tab[k][3*i+j]=cube_recognition->image.colors[3*i+j];
+		}
 
 		printf("\nFACE FACE %d:\n",k);
-#if defined(__QNXNTO__)
 		flushall();
-#endif
+
 		for(int i=0; i<9; i++)
 		{
 			switch (cube_state->cube_tab[k][i])
 			{
-			case 1:
-				cube_state->cube_tab[k][i]='r';
-				printf("R");
-				break;
-			case 2:
-				cube_state->cube_tab[k][i]='o';
-				printf("O");
-				break;
-			case 3:
-				cube_state->cube_tab[k][i]='y';
-				printf("Y");
-				break;
-			case 4:
-				cube_state->cube_tab[k][i]='g';
-				printf("G");
-				break;
-			case 5:
-				cube_state->cube_tab[k][i]='b';
-				printf("B");
-				break;
-			case 6:
-				cube_state->cube_tab[k][i]='w';
-				printf("W");
-				break;
-			default:
-				cube_state->cube_tab[k][i]='o';
-				printf("?");
-				break;
+				case 1:
+					cube_state->cube_tab[k][i]='r';
+					printf("R");
+					break;
+				case 2:
+					cube_state->cube_tab[k][i]='o';
+					printf("O");
+					break;
+				case 3:
+					cube_state->cube_tab[k][i]='y';
+					printf("Y");
+					break;
+				case 4:
+					cube_state->cube_tab[k][i]='g';
+					printf("G");
+					break;
+				case 5:
+					cube_state->cube_tab[k][i]='b';
+					printf("B");
+					break;
+				case 6:
+					cube_state->cube_tab[k][i]='w';
+					printf("W");
+					break;
+				default:
+					cube_state->cube_tab[k][i]='o';
+					printf("?");
+					break;
+			}
+			if(cube_state->cube_tab[k][i] != 'o') {
+				putchar(std::toupper(cube_state->cube_tab[k][i]));
+			} else {
+				putchar('?');
 			}
 		}
 		printf("\n");
@@ -887,11 +888,9 @@ void rubik_cube_solver::main_task_algorithm(void)
 
 		if (vis_servoing)
 		{
-
 			//printf("if vis servoing\n");
 			flushall();
 			BOOST_FOREACH(ecp_mp::sensor_item_t & sensor_item, sensor_m) {
-				sensor_item.second->to_vsp.parameters=1; // biasowanie czujnika
 				sensor_item.second->configure_sensor();
 			}
 		}

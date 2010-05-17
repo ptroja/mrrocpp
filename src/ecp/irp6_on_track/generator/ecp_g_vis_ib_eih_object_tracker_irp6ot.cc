@@ -9,7 +9,6 @@
 #include "ecp_g_vis_ib_eih_object_tracker_irp6ot.h"
 #include <math.h>
 
-
 namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
@@ -25,7 +24,7 @@ bool ecp_vis_ib_eih_object_tracker_irp6ot::first_step() {
 
 	//printf("first step\n");
 	flushall();
-	vsp_fradia = sensor_m[lib::SENSOR_CVFRADIA];
+	vsp_fradia = dynamic_cast<cvfradia_tracker *> (sensor_m[lib::SENSOR_CVFRADIA]);
 
 	the_robot->ecp_command.instruction.instruction_type = lib::GET;
 	the_robot->ecp_command.instruction.get_type = ARM_DEFINITION;
@@ -76,13 +75,15 @@ bool ecp_vis_ib_eih_object_tracker_irp6ot::next_step_without_constraints() {
 
 	the_robot->ecp_command.instruction.instruction_type = lib::SET_GET;//TODO sprawdzic czy to moze byc robione tylko raz
 
-	lib::VSP_REPORT vsp_report = vsp_fradia->from_vsp.vsp_report;
+	lib::VSP_REPORT_t vsp_report = vsp_fradia->get_report();
 	if (vsp_report == lib::VSP_REPLY_OK) {
 
-		u[0] = vsp_fradia->from_vsp.comm_image.sensor_union.object_tracker.x;//TODO zapytać czy da sie to zrobic w petli
-		u[1] = vsp_fradia->from_vsp.comm_image.sensor_union.object_tracker.y;
-		u[2] = vsp_fradia->from_vsp.comm_image.sensor_union.object_tracker.z;
-		tracking = vsp_fradia->from_vsp.comm_image.sensor_union.object_tracker.tracking;
+		// TODO: zapytać czy da sie to zrobic w petli
+		// TODO: {x,y,z} mozna raczej zaimplementować jako Eigen::Vector3d i wtedy uzyc operatora =.
+		u[0] = vsp_fradia->image.x;
+		u[1] = vsp_fradia->image.y;
+		u[2] = vsp_fradia->image.z;
+		tracking = vsp_fradia->image.tracking;
 
 		printf("ux: %f\t", u[0]);
 		printf("uy: %f\n", u[1]);

@@ -5,9 +5,9 @@
  *      Author: rtulwin
  */
 
-#include "ecp_g_vis_ib_eih_follower_irp6ot.h"
 #include <math.h>
 
+#include "ecp_g_vis_ib_eih_follower_irp6ot.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -29,7 +29,7 @@ namespace generator {
 
 bool ecp_vis_ib_eih_follower_irp6ot::first_step() {
 
-	vsp_fradia = sensor_m[lib::SENSOR_CVFRADIA];
+	//vsp_fradia = dynamic_cast<ecp_mp::sensor:cvfradia<tracker> *> (sensor_m[lib::SENSOR_CVFRADIA]);
 
 	the_robot->ecp_command.instruction.instruction_type = lib::GET;
 	the_robot->ecp_command.instruction.get_type = ARM_DEFINITION;
@@ -46,9 +46,7 @@ bool ecp_vis_ib_eih_follower_irp6ot::first_step() {
 		the_robot->ecp_command.instruction.arm.pf_def.behaviour[i] = lib::UNGUARDED_MOTION;
 	}
 
-
-
-	vsp_fradia->to_vsp.haar_detect_mode = lib::WITHOUT_ROTATION;
+	vsp_fradia->to_vsp.parameters = ecp_mp::sensor::WITHOUT_ROTATION;
 	first_move =  true;
 	z_s = 0;
 	z_stop = false;
@@ -139,14 +137,14 @@ bool ecp_vis_ib_eih_follower_irp6ot::next_step_without_constraints() {
 
 	//alpha = the_robot->reply_package.arm.pf_def.arm_coordinates[1]- the_robot->reply_package.arm.pf_def.arm_coordinates[6];
 	//Uchyb wyrazony w pikselach.
-	u[0] = vsp_fradia->from_vsp.comm_image.sensor_union.tracker.x-20;
-	u[1] = vsp_fradia->from_vsp.comm_image.sensor_union.tracker.y;
-	bool tracking = vsp_fradia->from_vsp.comm_image.sensor_union.tracker.tracking;
+	u[0] = vsp_fradia->image.x-20;
+	u[1] = vsp_fradia->image.y;
+	bool tracking = vsp_fradia->image.tracking;
 
 	printf("ux: %f\t", u[0]);
 	printf("uy: %f\n", u[1]);
 
-	lib::VSP_REPORT vsp_report = vsp_fradia->from_vsp.vsp_report;
+	lib::VSP_REPORT_t vsp_report = vsp_fradia->get_report();
 	if (vsp_report == lib::VSP_REPLY_OK) {
 
 		if (fabs(u[0]) < 20 && fabs(u[1]) < 20 && v[0] <= v_stop[0] && v[1] <= v_stop[1]) {

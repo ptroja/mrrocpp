@@ -21,7 +21,8 @@
 namespace mrrocpp {
 namespace ecp_mp {
 namespace sensor {
-
+#if 0
+template <typename SENSOR_IMAGE, typename CONFIGURE_DATA = void *>
 sensor::sensor(lib::SENSOR_t _sensor_name, const std::string & _section_name, task::task& _ecp_mp_object)
 	: sr_ecp_msg(*_ecp_mp_object.sr_ecp_msg), sensor_name(_sensor_name)
 {
@@ -94,71 +95,7 @@ sensor::sensor(lib::SENSOR_t _sensor_name, const std::string & _section_name, ta
 #endif /* !USE_MESSIP_SRR */
 }
 
-sensor::~sensor() {
-	to_vsp.i_code= lib::VSP_TERMINATE;
-
-#if !defined(USE_MESSIP_SRR)
-	if(write(sd, &to_vsp, sizeof(lib::ECP_VSP_MSG)) == -1)
-		sr_ecp_msg.message (lib::SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE, VSP_NAME);
-	else
-		close(sd);
-#else /* USE_MESSIP_SRR */
-	if(messip::port_send(sd, 0, 0, to_vsp, from_vsp) < 0)
-		sr_ecp_msg.message (lib::SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE, VSP_NAME);
-	else
-		messip::port_disconnect(sd);
-#endif /* !USE_MESSIP_SRR */
-
-#if defined(PROCESS_SPAWN_RSH)
-	kill(pid, SIGTERM);
-#else
-	SignalKill(lib::configurator::return_node_number(node_name),
-			pid, 0, SIGTERM, 0, 0);
 #endif
-}
-
-void sensor::initiate_reading(void) {
-	to_vsp.i_code= lib::VSP_INITIATE_READING;
-#if !defined(USE_MESSIP_SRR)
-	if(write(sd, &to_vsp, sizeof(lib::ECP_VSP_MSG)) == -1)
-#else /* USE_MESSIP_SRR */
-	if(messip::port_send(sd, 0, 0, to_vsp, from_vsp) < 0)
-#endif /* !USE_MESSIP_SRR */
-		sr_ecp_msg.message (lib::SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE, VSP_NAME);
-}
-
-void sensor::configure_sensor(void) {
-	to_vsp.i_code= lib::VSP_CONFIGURE_SENSOR;
-#if !defined(USE_MESSIP_SRR)
-	if(write(sd, &to_vsp, sizeof(lib::ECP_VSP_MSG)) == -1)
-#else /* USE_MESSIP_SRR */
-	if(messip::port_send(sd, 0, 0, to_vsp, from_vsp) < 0)
-#endif /* !USE_MESSIP_SRR */
-		sr_ecp_msg.message (lib::SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE, VSP_NAME);
-}
-
-
-void sensor::get_reading(void) {
-	get_reading(image);
-}
-
-void sensor::get_reading(lib::SENSOR_IMAGE & sensor_image) {
-	// Sprawdzenie, czy uzyc domyslnego obrazu.
-	to_vsp.i_code= lib::VSP_GET_READING;
-#if !defined(USE_MESSIP_SRR)
- 	if(read(sd, &from_vsp, sizeof(lib::VSP_ECP_MSG))==-1)
-#else /* USE_MESSIP_SRR */
-	if(messip::port_send(sd, 0, 0, to_vsp, from_vsp) < 0)
-#endif /* !USE_MESSIP_SRR */
-		sr_ecp_msg.message (lib::SYSTEM_ERROR, CANNOT_READ_FROM_DEVICE, VSP_NAME);
-
-	// jesli odczyt sie powodl, przepisanie pol obrazu z bufora komunikacyjnego do image;
-	if(from_vsp.vsp_report == lib::VSP_REPLY_OK) {
-		memcpy( &sensor_image.sensor_union.begin, &from_vsp.comm_image.sensor_union.begin, union_size);
-	} else {
-		sr_ecp_msg.message ("Reply from VSP not ok");
-	}
-}
 
 } // namespace sensor
 } // namespace ecp_mp

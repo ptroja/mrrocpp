@@ -20,7 +20,7 @@ namespace mrrocpp {
 namespace vsp {
 namespace sensor {
 
-sensor::sensor (lib::configurator &_config) :
+sensor_interface::sensor_interface (lib::configurator &_config) :
 	config(_config),
 	is_sensor_configured(false),
 	is_reading_ready(false),
@@ -35,11 +35,11 @@ sensor::sensor (lib::configurator &_config) :
 }
 
 
-void sensor::wait_for_event(void)
+void sensor_interface::wait_for_event(void)
 {
 }
 
-sensor::~sensor() {
+sensor_interface::~sensor_interface() {
 	sr_msg->message("VSP terminated");
 	delete sr_msg;
 }

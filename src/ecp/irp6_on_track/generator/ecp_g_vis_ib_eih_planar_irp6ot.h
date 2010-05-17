@@ -8,18 +8,12 @@
 #ifndef ECP_VIS_IB_EIH_PLANAR_IRP6OT_H_
 #define ECP_VIS_IB_EIH_PLANAR_IRP6OT_H_
 
-#include "ecp/common/generator/ecp_g_visual_servo.h"
-
+#include <iostream>
 #include <string.h>
 #include <math.h>
 
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
-
+#include "ecp/common/generator/ecp_g_visual_servo.h"
 #include "ecp_mp/sensor/ecp_mp_s_cvfradia.h"
-
-
-#include <iostream>
 
 namespace mrrocpp {
 namespace ecp {
@@ -28,12 +22,20 @@ namespace generator {
 
 #define MOTION_STEPS 25
 
+// uchyb vsp pwilkows
+typedef struct _deviation {
+	int frame_number;
+	int x;
+	int y;
+} deviation_t;
+
+typedef ecp_mp::sensor::cvfradia<deviation_t, ecp_mp::sensor::hd_mode_t> cvfradia_deviation;
 
 class ecp_vis_ib_eih_planar_irp6ot: public common::generator::ecp_visual_servo {
 	bool check_if_followed();
 public:
 	//Wirtualny sensor
-	lib::sensor *vsp_fradia;
+	cvfradia_deviation *vsp_fradia;
 	//Pozycja w nastepnym kroku.
     double next_position[8];
     //Obliczone sterowanie dla osi x;

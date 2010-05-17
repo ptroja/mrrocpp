@@ -34,15 +34,38 @@ namespace mrrocpp {
 namespace ecp_mp {
 namespace sensor {
 
+/** Define size of data buffer for FraDIA <->MRROC++ communication. Used by CommunicationWrapper (FraDIA) and fradia_sensor (MRROC++) */
+#define SENSOR_IMAGE_FRADIA_READING_SIZE 24
+#define ECP_VSP_MSG_FRADIA_COMMAND_SIZE 160
+// char fradia_sensor_command[ECP_VSP_MSG_FRADIA_COMMAND_SIZE];
+
 /*!
  * Class for communication with FraDIA. Parametrized by received structure.
  * make fradia process blocking queries: in FraDIA ImageProcessor's constructor make sure you call
  * DataSynchronizer::getInstance()->setWaitForVSPResponse(true);
  */
 template <typename FROM_VSP_T, typename TO_VSP_T>
-class fradia_sensor: public lib::sensor
+class fradia_sensor: public ecp_mp::sensor::sensor_interface
 {
 public:
+	/**
+	 * Message to the VSP
+	 */
+	typedef struct _ECP_VSP_MSG
+	{
+		lib::VSP_COMMAND_t i_code;
+		TO_VSP_T parameters;
+	} ECP_VSP_MSG;
+
+	/**
+	 * Message to the VSP
+	 */
+	typedef struct _VSP_ECP_MSG
+	{
+		lib::VSP_REPORT_t vsp_report;
+		FROM_VSP_T data;
+	} VSP_ECP_MSG;
+
 	/**
 	 * Create FraDIA sensor.
 	 * Specified section must contain following options: fradia_node_name, fradia_port, fradia_task
@@ -136,12 +159,26 @@ private:
 	 * Send object to fradia.
 	 * @param ecp_vsp_msg
 	 */
-	void send_to_vsp(const lib::ECP_VSP_MSG& ecp_vsp_msg);
+	void send_to_vsp(const ECP_VSP_MSG& ecp_vsp_msg);
 	/**
+	 * TODO: this should be rewritten out of the class declaration
 	 * Receive object from fradia.
 	 * @return
 	 */
-	lib::VSP_ECP_MSG receive_from_vsp();
+	VSP_ECP_MSG receive_from_vsp() {
+		VSP_ECP_MSG vsp_ecp_msg;
+
+		int result = read(sockfd, &vsp_ecp_msg, sizeof(VSP_ECP_MSG));
+		if (result < 0) {
+			logger::log("void fradia_sensor <FROM_VSP_T, TO_VSP_T>::configure_sensor(): read failed\n");
+			throw lib::sensor::sensor_error(lib::SYSTEM_ERROR, CANNOT_READ_FROM_DEVICE);
+		}
+		if (result != sizeof(VSP_ECP_MSG)) {
+			logger::log("void fradia_sensor <FROM_VSP_T, TO_VSP_T>::configure_sensor(): result != sizeof(VSP_ECP_MSG)\n");
+			throw lib::sensor::sensor_error(lib::SYSTEM_ERROR, CANNOT_READ_FROM_DEVICE);
+		}
+		return vsp_ecp_msg;
+	}
 
 	/** Set to true by destructor to terminate thread. */
 	bool terminate_now;
@@ -163,8 +200,8 @@ fradia_sensor <FROM_VSP_T, TO_VSP_T>::fradia_sensor(mrrocpp::lib::configurator& 
 		throw std::logic_error("sizeof(TO_VSP_T) > ECP_VSP_MSG_FRADIA_SENSOR_COMMAND_SIZE");
 	}
 
-	logger::logDbg("sizeof(lib::VSP_ECP_MSG): %d\n", (int) sizeof(lib::VSP_ECP_MSG));
-	logger::logDbg("sizeof(lib::ECP_VSP_MSG): %d\n", (int) sizeof(lib::ECP_VSP_MSG));
+	logger::logDbg("sizeof(VSP_ECP_MSG): %d\n", (int) sizeof(VSP_ECP_MSG));
+	logger::logDbg("sizeof(ECP_VSP_MSG): %d\n", (int) sizeof(ECP_VSP_MSG));
 
 	// Set period variables.
 	base_period = current_period = 1;
@@ -177,14 +214,14 @@ fradia_sensor <FROM_VSP_T, TO_VSP_T>::fradia_sensor(mrrocpp::lib::configurator& 
 	sockfd = socket(AF_INET, SOCK_STREAM, 0);
 	if (sockfd < 0) {
 		logger::log("ERROR opening socket");
-		throw sensor_error(lib::SYSTEM_ERROR, CANNOT_LOCATE_DEVICE);
+		throw lib::sensor::sensor_error(lib::SYSTEM_ERROR, CANNOT_LOCATE_DEVICE);
 	}
 
 	// Get server hostname.
 	server = gethostbyname(cvfradia_node_name.c_str());
 	if (server == NULL) {
 		logger::log("ERROR, no host '%s'\n", cvfradia_node_name.c_str());
-		throw sensor_error(lib::SYSTEM_ERROR, CANNOT_LOCATE_DEVICE);
+		throw lib::sensor::sensor_error(lib::SYSTEM_ERROR, CANNOT_LOCATE_DEVICE);
 	}
 
 	// Reset socketaddr data.
@@ -197,7 +234,7 @@ fradia_sensor <FROM_VSP_T, TO_VSP_T>::fradia_sensor(mrrocpp::lib::configurator& 
 	// Try to establish a connection with cvFraDIA.
 	if (connect(sockfd, (const struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) {
 		logger::log("ERROR connecting");
-		throw sensor_error(lib::SYSTEM_ERROR, CANNOT_LOCATE_DEVICE);
+		throw lib::sensor::sensor_error(lib::SYSTEM_ERROR, CANNOT_LOCATE_DEVICE);
 	}
 
 	// Retrieve task name.
@@ -216,7 +253,7 @@ fradia_sensor <FROM_VSP_T, TO_VSP_T>::~fradia_sensor()
 		boost::interprocess::scoped_lock <boost::mutex> l(terminate_now_mutex);
 		terminate_now = true;
 	}
-	//	lib::ECP_VSP_MSG ecp_vsp_msg;
+	//	ECP_VSP_MSG ecp_vsp_msg;
 	//	ecp_vsp_msg.i_code = lib::VSP_TERMINATE;
 	//	send_to_vsp(ecp_vsp_msg);
 
@@ -228,48 +265,31 @@ fradia_sensor <FROM_VSP_T, TO_VSP_T>::~fradia_sensor()
 } // end: terminate()
 
 template <typename FROM_VSP_T, typename TO_VSP_T>
-void fradia_sensor <FROM_VSP_T, TO_VSP_T>::send_to_vsp(const lib::ECP_VSP_MSG& ecp_vsp_msg)
+void fradia_sensor <FROM_VSP_T, TO_VSP_T>::send_to_vsp(const ECP_VSP_MSG& ecp_vsp_msg)
 {
 	int result;
-	result = write(sockfd, &ecp_vsp_msg, sizeof(lib::ECP_VSP_MSG));
+	result = write(sockfd, &ecp_vsp_msg, sizeof(ECP_VSP_MSG));
 	if (result < 0) {
 		logger::log("void fradia_sensor <FROM_VSP_T, TO_VSP_T>::configure_sensor(): write failed\n");
-		throw sensor_error(lib::SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE);
+		throw lib::sensor::sensor_error(lib::SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE);
 	}
-	if (result != sizeof(lib::ECP_VSP_MSG)) {
-		logger::log("void fradia_sensor <FROM_VSP_T, TO_VSP_T>::configure_sensor(): result != sizeof(lib::ECP_VSP_MSG)\n");
-		throw sensor_error(lib::SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE);
+	if (result != sizeof(ECP_VSP_MSG)) {
+		logger::log("void fradia_sensor <FROM_VSP_T, TO_VSP_T>::configure_sensor(): result != sizeof(ECP_VSP_MSG)\n");
+		throw lib::sensor::sensor_error(lib::SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE);
 	}
-}
-
-template <typename FROM_VSP_T, typename TO_VSP_T>
-lib::VSP_ECP_MSG fradia_sensor <FROM_VSP_T, TO_VSP_T>::receive_from_vsp()
-{
-	int result;
-	lib::VSP_ECP_MSG vsp_ecp_msg;
-
-	result = read(sockfd, &vsp_ecp_msg, sizeof(lib::VSP_ECP_MSG));
-	if (result < 0) {
-		logger::log("void fradia_sensor <FROM_VSP_T, TO_VSP_T>::configure_sensor(): read failed\n");
-		throw sensor_error(lib::SYSTEM_ERROR, CANNOT_READ_FROM_DEVICE);
-	}
-	if (result != sizeof(lib::VSP_ECP_MSG)) {
-		logger::log("void fradia_sensor <FROM_VSP_T, TO_VSP_T>::configure_sensor(): result != sizeof(lib::VSP_ECP_MSG)\n");
-		throw sensor_error(lib::SYSTEM_ERROR, CANNOT_READ_FROM_DEVICE);
-	}
-	return vsp_ecp_msg;
 }
 
 template <typename FROM_VSP_T, typename TO_VSP_T>
 void fradia_sensor <FROM_VSP_T, TO_VSP_T>::configure_sensor()
 {
-	lib::ECP_VSP_MSG ecp_vsp_msg;
-	lib::VSP_ECP_MSG vsp_ecp_msg;
+	ECP_VSP_MSG ecp_vsp_msg;
+	VSP_ECP_MSG vsp_ecp_msg;
 
 	// Send adequate command to cvFraDIA.
 	ecp_vsp_msg.i_code = lib::VSP_CONFIGURE_SENSOR;
 	// Name of required task is set in constructor.
-	strcpy(ecp_vsp_msg.cvfradia_task_name, fradia_task.c_str());
+	// TODO: check this!
+	// strcpy(ecp_vsp_msg.cvfradia_task_name, fradia_task.c_str());
 
 	send_to_vsp(ecp_vsp_msg);
 	vsp_ecp_msg = receive_from_vsp();
@@ -278,8 +298,8 @@ void fradia_sensor <FROM_VSP_T, TO_VSP_T>::configure_sensor()
 		reader_thread
 				= boost::shared_ptr <boost::thread>(new boost::thread(boost::bind(&fradia_sensor<FROM_VSP_T, TO_VSP_T>::operator(), this)));
 	} else {
-		logger::log("void fradia_sensor <FROM_VSP_T, TO_VSP_T>::configure_sensor(): can not load FraDIA task: %s.\n", vsp_ecp_msg.comm_image.sensor_union.fradia_sensor_reading);
-		throw sensor_error(lib::SYSTEM_ERROR, CANNOT_LOCATE_DEVICE);
+		//logger::log("void fradia_sensor <FROM_VSP_T, TO_VSP_T>::configure_sensor(): can not load FraDIA task: %s.\n", vsp_ecp_msg.comm_image.sensor_union.fradia_sensor_reading);
+		throw lib::sensor::sensor_error(lib::SYSTEM_ERROR, CANNOT_LOCATE_DEVICE);
 	}
 
 	logger::logDbg("fradia_sensor<FROM_VSP_T>::configure_sensor() end\n");
@@ -309,12 +329,10 @@ void fradia_sensor <FROM_VSP_T, TO_VSP_T>::configure_fradia_task(const TO_VSP_T&
 template <typename FROM_VSP_T, typename TO_VSP_T>
 void fradia_sensor <FROM_VSP_T, TO_VSP_T>::operator()()
 {
-	lib::ECP_VSP_MSG ecp_vsp_msg;
-	lib::VSP_ECP_MSG vsp_ecp_msg;
+	ECP_VSP_MSG ecp_vsp_msg;
+	VSP_ECP_MSG vsp_ecp_msg;
 	TO_VSP_T object_to_send;
 	FROM_VSP_T received_object;
-
-	memset(ecp_vsp_msg.fradia_sensor_command, 0, ECP_VSP_MSG_FRADIA_COMMAND_SIZE);
 
 	int iter = 0;
 	logger::logDbg("fradia_sensor::operator() begin\n");
@@ -345,8 +363,8 @@ void fradia_sensor <FROM_VSP_T, TO_VSP_T>::operator()()
 				//logger::logDbg("fradia_sensor::operator() configure now 1\n");
 				// send
 				ecp_vsp_msg.i_code = lib::VSP_FRADIA_CONFIGURE_TASK;
-				memcpy(ecp_vsp_msg.fradia_sensor_command, &object_to_send, sizeof(object_to_send));
 				send_to_vsp(ecp_vsp_msg);
+
 				//logger::logDbg("fradia_sensor::operator() configure now 2\n");
 				// receive
 				vsp_ecp_msg = receive_from_vsp();
@@ -354,7 +372,6 @@ void fradia_sensor <FROM_VSP_T, TO_VSP_T>::operator()()
 					logger::log("void fradia_sensor <FROM_VSP_T, TO_VSP_T>::operator()(): vsp_ecp_msg.vsp_report = %d != VSP_FRADIA_TASK_CONFIGURED\n", vsp_ecp_msg.vsp_report);
 					throw std::logic_error("vsp_ecp_msg.vsp_report != lib::VSP_FRADIA_TASK_CONFIGURED");
 				}
-				memset(ecp_vsp_msg.fradia_sensor_command, 0, ECP_VSP_MSG_FRADIA_COMMAND_SIZE);
 				//logger::logDbg("fradia_sensor::operator() configure now 3\n");
 			}
 
@@ -376,7 +393,7 @@ void fradia_sensor <FROM_VSP_T, TO_VSP_T>::operator()()
 
 			{
 				boost::interprocess::scoped_lock <boost::mutex> l(get_reading_mutex);
-				memcpy(&received_object_shared, &vsp_ecp_msg.comm_image.sensor_union.fradia_sensor_reading, sizeof(FROM_VSP_T));
+				received_object_shared = vsp_ecp_msg.data;
 			}
 			//			logger::logDbg("fradia_sensor::operator(): loop %d\n", ++iter);
 		}

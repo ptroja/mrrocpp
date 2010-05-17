@@ -134,7 +134,6 @@ fsautomat::fsautomat(lib::configurator &_config) :
 
 	// Konfiguracja wszystkich czujnikow
 	BOOST_FOREACH(ecp_mp::sensor_item_t & sensor_item, sensor_m) {
-		sensor_item.second->to_vsp.parameters=1; // biasowanie czujnika
 		sensor_item.second->configure_sensor();
 	}
 
@@ -289,7 +288,6 @@ void fsautomat::configureProperSensor(const char *propSensor)
 
 	// Konfiguracja wszystkich czujnikow
 	BOOST_FOREACH(ecp_mp::sensor_item_t & sensor_item, sensor_m) {
-		sensor_item.second->to_vsp.parameters=1; // biasowanie czujnika
 		sensor_item.second->configure_sensor();
 	}
 }
@@ -341,7 +339,6 @@ void fsautomat::sensorInitialization()
 {
 /*
 	BOOST_FOREACH(ecp_mp::sensor_item_t & sensor_item, sensor_m) {
-		sensor_item.second->to_vsp.parameters=1; // biasowanie czujnika
 		sensor_item.second->configure_sensor();
 	}
 */
@@ -410,14 +407,16 @@ void fsautomat::writeCubeState(common::State &state)
 {
 	int index = state.getNumArgument();
 
-	sensor_m[lib::SENSOR_CAMERA_ON_TRACK]->initiate_reading();
+	ecp_mp::sensor::sensor<lib::cube_face_t> * cube_recognition = dynamic_cast<ecp_mp::sensor::sensor<lib::cube_face_t> *> (sensor_m[lib::SENSOR_CAMERA_ON_TRACK]);
+
+	cube_recognition->initiate_reading();
 	wait_ms(1000);
-	sensor_m[lib::SENSOR_CAMERA_ON_TRACK]->get_reading();
+	cube_recognition->get_reading();
 
 	for (int i = 0; i < 3; i++)
 		for (int j = 0; j < 3; j++)
 			cube_state->cube_tab[index][3 * i + j]
-					= (char) sensor_m[lib::SENSOR_CAMERA_ON_TRACK]->image.sensor_union.cube_face.colors[3 * i + j];
+					= (char) cube_recognition->image.colors[3 * i + j];
 
 	printf("\nFACE FACE %d:\n", index);
 	for (int i = 0; i < 9; i++) {
@@ -727,10 +726,8 @@ void fsautomat::main_task_algorithm(void)
 	//strcmp(nextState, (char *)"INIT");
 	strcpy(nextState, "INIT");
 	// temporary sensor config in this place
-	for (ecp_mp::sensors_t::iterator sensor_m_iterator = sensor_m.begin(); sensor_m_iterator
-			!= sensor_m.end(); sensor_m_iterator++) {
-		sensor_m_iterator->second->to_vsp.parameters = 1; // biasowanie czujnika
-		sensor_m_iterator->second->configure_sensor();
+	BOOST_FOREACH(ecp_mp::sensor_item_t & s, sensor_m) {
+		s.second->configure_sensor();
 	}
 
 	for (; strcmp(nextState, (const char *) "_STOP_"); strcpy(nextState, (*stateMap)[nextState].returnNextStateID(sh))) {

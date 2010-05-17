@@ -18,7 +18,6 @@ add_executable(ecp_t_axzb_eih
         ecp_t_axzb_eih.cc
         ecp_g_eihcalibration.cc
         ecp_g_eih_nose_run.cc
-        ${ECP_MPDIR}/sensor/ecp_mp_s_cvfradia.cc
 )
 
 add_executable(ecp_t_axzb_force

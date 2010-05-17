@@ -46,7 +46,7 @@ public:
 	 * Returns fradia_sensor.
 	 * @return
 	 */
-	virtual boost::shared_ptr <mrrocpp::lib::sensor> get_vsp_fradia() = 0;
+	virtual boost::shared_ptr <ecp_mp::sensor::sensor_interface > get_vsp_fradia() = 0;
 
 	/**
 	 * Returns object visibility.

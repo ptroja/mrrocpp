@@ -41,7 +41,7 @@ acq_eih::acq_eih(task &_ecp_t) : acquisition(_ecp_t)
 	nose = new generator::eih_nose_run(_ecp_t, 8);
 	nose->eih_nose_run::configure_pulse_check (true);
 
-	ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_CVFRADIA] = new ecp_mp::sensor::cvfradia(lib::SENSOR_CVFRADIA, "[vsp_cvfradia]", _ecp_t, sizeof(lib::sensor_image_t::sensor_union_t::chessboard_t));
+	ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_CVFRADIA] = new ecp_mp::sensor::cvfradia<chessboard_t>(lib::SENSOR_CVFRADIA, "[vsp_cvfradia]", *_ecp_t.sr_ecp_msg, _ecp_t.config);
 	ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_CVFRADIA]->configure_sensor();
 
 	generator = new generator::eihgenerator(_ecp_t);
@@ -69,9 +69,10 @@ void acq_eih::main_task_algorithm(void ){
 	ecp_sub_task::ecp_t.sr_ecp_msg->message("ECP eihacquisition ready");
 
 	//Czekam, az czujnik bedzie skonfigurowany.
-	ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_CVFRADIA]->get_reading();
-	while(ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.vsp_report == lib::VSP_SENSOR_NOT_CONFIGURED){
-		ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_CVFRADIA]->get_reading();
+	ecp_mp::sensor::cvfradia<chessboard_t> * fradia = dynamic_cast<ecp_mp::sensor::cvfradia<chessboard_t> *> (ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_CVFRADIA]);
+	fradia->get_reading();
+	while(fradia->get_report() == lib::VSP_SENSOR_NOT_CONFIGURED) {
+		fradia->get_reading();
 	}
 
 	smoothgen->set_absolute();
@@ -81,8 +82,8 @@ void acq_eih::main_task_algorithm(void ){
 	smoothgen->Move();
 
 	// doprowadzenie chwytaka do szachownicy "wodzeniem za nos"
-	while(ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.chessboard.found == false){
-		ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_CVFRADIA]->get_reading();
+	while(fradia->image.found == false){
+		fradia->get_reading();
 		nose->Move();
 		generator->Move();
 		store_data();
@@ -100,7 +101,7 @@ void acq_eih::main_task_algorithm(void ){
 //	std::cout<<sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.chessboard.found<<std::endl;
 
 	//opusc chwytak az przestanie "widziec" szachownice
-	while(ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.chessboard.found == true && !calibrated){
+	while(fradia->image.found == true && !calibrated){
 		//opuszczenie chwytaka o 2.5 cm
 		smoothgen->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, vv, aa, 0.0, 0.0, -1.0 * A, 0.0, 0.0, 0.0, 0.0, 0.0, true);
 		smoothgen->Move();
@@ -154,7 +155,7 @@ void acq_eih::main_task_algorithm(void ){
 				e = -1.0 * E;
 			}
 
-			while(((ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.chessboard.found) == true)
+			while(((fradia->image.found) == true)
 				&& calibrated == false && m < M )
 			{
 				smoothgen->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, vv, aa, 0.0, 0.0, 0.0, e, c, d, 0.0, 0.0, true);
@@ -173,7 +174,7 @@ void acq_eih::main_task_algorithm(void ){
 				smoothgen->Move();
 				m = 0;
 				nanosleep(&delay, NULL);
-				ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_CVFRADIA]->get_reading();
+				fradia->get_reading();
 			}
 		}
 
@@ -218,8 +219,7 @@ void acq_eih::main_task_algorithm(void ){
 				b = -1.0 * A;
 			}
 
-			while(ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.chessboard.found == true
-				&& calibrated == false && flaga)
+			while(fradia->image.found == true && calibrated == false && flaga)
 			{
 				smoothgen->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, vv, aa, a, b, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, true);
 				smoothgen->Move();
@@ -227,7 +227,7 @@ void acq_eih::main_task_algorithm(void ){
 				generator->Move();
 				store_data();
 				++j;
-				ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_CVFRADIA]->get_reading();
+				fradia->get_reading();
 
 				for(l = 0; l < 6; l += 1)
 				{
@@ -263,7 +263,7 @@ void acq_eih::main_task_algorithm(void ){
 /*start2 b>0 d<0*/				if (a > 0.0 && m == 0 && c > 0 && ((i == 0 && j == 1) || ( i == 1 && j == 1) || (i == 2 && j == 2) || (i == 3 && j == 3)))
 /*start1 a>0 c>0 ot i p*/					flaga = false;
 
-					while(((ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.chessboard.found) == true)
+					while(((fradia->image.found) == true)
 						&& (calibrated == false) && m < M && flaga)
 					{
 						smoothgen->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, vv, aa, 0.0, 0.0, 0.0, e, c, d, 0.0, 0.0, true);
@@ -272,7 +272,7 @@ void acq_eih::main_task_algorithm(void ){
 						generator->Move();
 						store_data();
 						++m;
-						ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_CVFRADIA]->get_reading();
+						fradia->get_reading();
 					}
 
 					flaga = true;
@@ -284,7 +284,7 @@ void acq_eih::main_task_algorithm(void ){
 						smoothgen->Move();
 						m = 0;
 						nanosleep(&delay, NULL);
-						ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_CVFRADIA]->get_reading();
+						fradia->get_reading();
 					}
 				}
 				// zabezpieczenie przed przekroczeniem obszaru roboczego robota
@@ -301,7 +301,7 @@ void acq_eih::main_task_algorithm(void ){
 				smoothgen->Move();
 				j = 0;
 				nanosleep(&delay, NULL);
-				ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_CVFRADIA]->get_reading();
+				fradia->get_reading();
 			}
 		}
 
@@ -309,7 +309,7 @@ void acq_eih::main_task_algorithm(void ){
 		smoothgen->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, vv, aa, 0.0, 0.0, A, 0.0, 0.0, 0.0, 0.0, 0.0, true);
 		smoothgen->Move();
 		nanosleep(&delay, NULL);
-		ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_CVFRADIA]->get_reading();
+		fradia->get_reading();
 		--i;
 	}
 
@@ -337,7 +337,10 @@ void acq_eih::main_task_algorithm(void ){
 bool acq_eih::store_data(void )
 {
 	int i,j=0;
-	if(ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.chessboard.found == true && !calibrated)
+
+	ecp_mp::sensor::cvfradia<chessboard_t> * fradia = dynamic_cast<ecp_mp::sensor::cvfradia<chessboard_t> *> (ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_CVFRADIA]);
+
+	if(fradia->image.found == true && !calibrated)
 	{
 		for(i=0; i<12; ++i)
 		{
@@ -346,7 +349,7 @@ bool acq_eih::store_data(void )
 			{
 				// translation vector
 				gsl_vector_set (ofp.k, 3 * generator->count + j, generator->tab[i]);
-				gsl_vector_set (ofp.m, 3 * generator->count + j, ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.chessboard.transformation_matrix[i]);
+				gsl_vector_set (ofp.m, 3 * generator->count + j, fradia->image.transformation_matrix[i]);
 				++j;
 			}
 			// store rotation matrix received from robot
@@ -354,7 +357,7 @@ bool acq_eih::store_data(void )
 			{
 				// rotation matrix
 				gsl_matrix_set (ofp.K, 3 * generator->count + j, i % 4, generator->tab[i]);
-				gsl_matrix_set (ofp.M, 3 * generator->count + j, i % 4, ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.chessboard.transformation_matrix[i]);
+				gsl_matrix_set (ofp.M, 3 * generator->count + j, i % 4, fradia->image.transformation_matrix[i]);
 			}
 		}
 	}

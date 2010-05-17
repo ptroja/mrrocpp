@@ -30,16 +30,17 @@ namespace generator {
 #define MOTION_STEPS 25
 #define MAX_AXES_NUM 3
 
+typedef ecp_mp::sensor::cvfradia<lib::object_tracker_t> cvfradia_tracker;
+
 /**
  *
  */
 class ecp_vis_ib_eih_object_tracker_irp6ot: public common::generator::ecp_visual_servo {
-
 public:
 	/**
 	 *
 	 */
-	lib::sensor *vsp_fradia; //wirtualny sensor
+	cvfradia_tracker *vsp_fradia; //wirtualny sensor
 	/**
 	 *
 	 */

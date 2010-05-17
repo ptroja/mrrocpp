@@ -8,28 +8,34 @@
 #ifndef ECP_G_ROTATE_GRIPPER_H_
 #define  ECP_G_ROTATE_GRIPPER_H_
 
-#include "ecp/common/generator/ecp_generator.h"
-
+#include <iostream>
 #include <string.h>
 #include <math.h>
 
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
-
+#include "ecp/common/generator/ecp_generator.h"
 #include "ecp_mp/sensor/ecp_mp_s_cvfradia.h"
-
-
-#include <iostream>
 
 namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
 
+/*!
+ * \enum HD_READING
+ * \brief Types commands get from PW_HaarDetect task.
+ */
+typedef enum { HD_SOLUTION_NOTFOUND, HD_SOLUTION_FOUND } HD_READING;
 
+//Obraz fradii dla rotate_gripper
+typedef struct _hd_angle {
+	HD_READING reading_state;
+	float angle;
+} hd_angle_t;
+
+typedef ecp_mp::sensor::cvfradia<hd_angle_t, ecp_mp::sensor::hd_mode_t> cvfradia_haar_detect;
 
 class ecp_g_rotate_gripper: public common::generator::generator {
 	//Wirtualny sensor
-	lib::sensor *vsp_fradia;
+	cvfradia_haar_detect *vsp_fradia;
 	double speed;
 	lib::trajectory_description td;
 	bool lastStep;

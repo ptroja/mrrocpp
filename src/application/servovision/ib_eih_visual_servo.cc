@@ -22,7 +22,7 @@ namespace common {
 
 namespace generator {
 
-ib_eih_visual_servo::ib_eih_visual_servo(boost::shared_ptr <visual_servo_regulator> regulator, const char* section_name, mrrocpp::lib::configurator& configurator) :
+ib_eih_visual_servo::ib_eih_visual_servo(boost::shared_ptr <visual_servo_regulator> regulator, const std::string & section_name, mrrocpp::lib::configurator& configurator) :
 	visual_servo(regulator), object_visible(false)
 {
 	try {
@@ -165,9 +165,9 @@ lib::Homog_matrix ib_eih_visual_servo::get_position_change(const lib::Homog_matr
 	return delta_position;
 }
 
-boost::shared_ptr <mrrocpp::lib::sensor> ib_eih_visual_servo::get_vsp_fradia()
+boost::shared_ptr <ecp_mp::sensor::sensor_interface> ib_eih_visual_servo::get_vsp_fradia()
 {
-	return boost::dynamic_pointer_cast <mrrocpp::lib::sensor>(vsp_fradia);
+	return boost::dynamic_pointer_cast <ecp_mp::sensor::sensor_interface>(vsp_fradia);
 }
 
 bool ib_eih_visual_servo::is_object_visible()

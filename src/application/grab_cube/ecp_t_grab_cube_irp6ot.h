@@ -16,20 +16,22 @@ namespace ecp {
 namespace irp6ot {
 namespace task {
 
-class grab_cube: public common::task::task {
+typedef ecp_mp::sensor::cvfradia <lib::object_tracker_t> cvfradia_tracker;
 
-  protected:
-	  lib::sensor *vsp_fradia;		//Virtual sensor
-	  common::generator::smooth* smoothgen2;
-	  generator::ecp_vis_ib_eih_object_tracker_irp6ot* tracker;
-	  generator::ecp_vis_ib_eih_wrist_turner_irp6ot* turner;
-	  common::generator::tff_gripper_approach* gagen;
-	  common::generator::bias_edp_force* befgen;		//calibration of force
+class grab_cube : public common::task::task
+{
+protected:
+	cvfradia_tracker *vsp_fradia; //Virtual sensor
+	common::generator::smooth* smoothgen2;
+	generator::ecp_vis_ib_eih_object_tracker_irp6ot* tracker;
+	generator::ecp_vis_ib_eih_wrist_turner_irp6ot* turner;
+	common::generator::tff_gripper_approach* gagen;
+	common::generator::bias_edp_force* befgen; //calibration of force
 
-	public:
-		grab_cube(lib::configurator &_config);
+public:
+	grab_cube(lib::configurator &_config);
 
-		void main_task_algorithm(void);
+	void main_task_algorithm(void);
 };
 
 }
@@ -38,4 +40,3 @@ class grab_cube: public common::task::task {
 } // namespace mrrocpp
 
 #endif
-

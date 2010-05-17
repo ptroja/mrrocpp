@@ -21,38 +21,36 @@ namespace mrrocpp {
 namespace vsp {
 namespace sensor {
 
-// Konstruktor klasy czujnika wirtualnego, odpowiedzialnego za odczyty z czujnika sily.
-time::time(lib::configurator &_config) : sensor(_config){
-	// Wielkosc unii.
-	union_size = sizeof(image.sensor_union.time);
-} // end: vsp_time_sensor
+time::time(lib::configurator &_config)
+	: vsp::sensor::sensor<struct timespec>(_config)
+{
+}
 
-// Metoda sluzaca do konfiguracji czujnika.
-void time::configure_sensor (void){// w obecnej implementacji zeruje poziom odczytow z czujnika w EDP
+void time::configure_sensor (void){
    	is_sensor_configured=true;
-} // end: configure_sensor
+}
 
-// Metoda dokonujaca przepisania odczytu do obrazu czujnika.
 void time::initiate_reading (void){
 	// Jesli czujnik nie jest skonfigurowany.
 	if(!is_sensor_configured)
-	     throw sensor_error (lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
+	     throw lib::sensor::sensor_error (lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
 	// Odczyt w porzadku.
 	is_reading_ready=true;
-} // end: initiate_reading
+}
 
-// Metoda wysyla przepisuje dane z obrazu czujnika do bufora oraz wysyla bufor do procesu oczekujacego na odczyty.
 void time::get_reading (void){
 	// Jesli czujnik nie jest skonfigurowany.
 	if(!is_sensor_configured)
-	     throw sensor_error (lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
+	     throw lib::sensor::sensor_error (lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
+
 	// Jezeli nie ma nowego odczytu -> wyslanie starego.
 	if(!is_reading_ready)
 		return;
+
 	// Odczyt w porzadku.
 	from_vsp.vsp_report= lib::VSP_REPLY_OK;
 
-	clock_gettime(CLOCK_REALTIME, &from_vsp.comm_image.sensor_union.time.ts);
+	clock_gettime(CLOCK_REALTIME, &from_vsp.comm_image);
 
 	// Obacny odczyt nie jest "nowy".
 	is_reading_ready=false;

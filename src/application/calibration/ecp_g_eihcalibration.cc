@@ -29,7 +29,7 @@ eihgenerator::~eihgenerator ()
 
 bool eihgenerator::first_step()
 {
-	sensor = (ecp_mp::sensor::cvfradia *)sensor_m[lib::SENSOR_CVFRADIA];
+	sensor = dynamic_cast<ecp_mp::sensor::cvfradia<chessboard_t, eihcalibration_t> *> (sensor_m[lib::SENSOR_CVFRADIA]);
 
 	//proste zadanie kinematyki
 	the_robot->ecp_command.instruction.instruction_type = lib::GET;
@@ -44,10 +44,10 @@ bool eihgenerator::first_step()
 bool eihgenerator::next_step()
 {
 	float t[12];
-	if(sensor->from_vsp.comm_image.sensor_union.chessboard.found == true)
+	if(sensor->image.found == true)
 		count++;
 	get_frame();
-	sensor->to_vsp.eihcalibration.frame_number = count;
+	sensor->to_vsp.parameters.frame_number = count;
 	return false;
 }
 
