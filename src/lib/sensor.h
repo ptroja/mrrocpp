@@ -68,10 +68,10 @@ typedef struct _empty {
 
 typedef std::string SENSOR_t;
 
-const std::string SENSOR_CAMERA_SA = "SENSOR_CAMERA_SA";
-const std::string SENSOR_CAMERA_ON_TRACK = "SENSOR_CAMERA_ON_TRACK";
-const std::string SENSOR_CAMERA_POSTUMENT = "SENSOR_CAMERA_POSTUMENT";
-const std::string SENSOR_CVFRADIA = "SENSOR_CVFRADIA";
+const SENSOR_t SENSOR_CAMERA_SA = "SENSOR_CAMERA_SA";
+const SENSOR_t SENSOR_CAMERA_ON_TRACK = "SENSOR_CAMERA_ON_TRACK";
+const SENSOR_t SENSOR_CAMERA_POSTUMENT = "SENSOR_CAMERA_POSTUMENT";
+const SENSOR_t SENSOR_CVFRADIA = "SENSOR_CVFRADIA";
 
 // Klasa bazowa dla czujnikow (klasa abstrakcyjna)
 // Czujniki konkretne wyprowadzane sa z klasy bazowej

@@ -32,7 +32,7 @@ typedef struct _pcbird
 	uint32_t ts_sec, ts_usec; // timestamp
 } pcbird_t;
 
-const std::string SENSOR_PCBIRD = "SENSOR_PCBIRD";
+const lib::SENSOR_t SENSOR_PCBIRD = "SENSOR_PCBIRD";
 
 class pcbird : public sensor_interface
 {

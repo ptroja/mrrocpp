@@ -20,7 +20,7 @@ namespace sensor {
 
 typedef sensor<struct timespec> time_sensor_t;
 
-const std::string SENSOR_TIME = "SENSOR_TIME";
+const lib::SENSOR_t SENSOR_TIME = "SENSOR_TIME";
 
 class time: public time_sensor_t {
   public:

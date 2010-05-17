@@ -40,7 +40,7 @@ typedef struct _wii_command
   bool rumble;
 } wii_command_t;
 
-const std::string SENSOR_WIIMOTE = "SENSOR_WIIMOTE";
+const lib::SENSOR_t SENSOR_WIIMOTE = "SENSOR_WIIMOTE";
 
 /**
  * Virtual sensor that communicates with the Wii-mote
