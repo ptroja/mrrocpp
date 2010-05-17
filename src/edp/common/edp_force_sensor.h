@@ -24,18 +24,18 @@ class manip_effector;
 }
 namespace sensor {
 
-// TODO: this should be enum
-#define EDP_FORCE_SENSOR_READING_CORRECT 0
-#define EDP_FORCE_SENSOR_READING_ERROR 1
-#define EDP_FORCE_SENSOR_OVERLOAD 2
+typedef enum _force_readring_status {
+	EDP_FORCE_SENSOR_READING_CORRECT,
+	EDP_FORCE_SENSOR_READING_ERROR,
+	EDP_FORCE_SENSOR_OVERLOAD
+} force_readring_status_t;
 
 typedef struct _force_data
 {
 	double rez[6]; // by Y pomiar sily
-	short force_reading_status; // informacja o odczycie sil
-	// EDP_FORCE_SENSOR_OVERLOAD lub EDP_FORCE_SENSOR_READING_ERROR
-	// EDP_FORCE_SENSOR_READING_CORRECT
-	// int event_type; // zdarzenie wykryte w VSP
+
+	//! Force reading status
+	force_readring_status_t status;
 } force_data_t;
 
 
