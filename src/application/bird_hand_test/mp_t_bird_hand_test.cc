@@ -15,7 +15,7 @@
 #include "mp_t_bird_hand_test.h"
 #include "lib/single_thread_port.h"
 #include "lib/mrmath/mrmath.h"
-#include "lib/data_port_headers/epos.h"
+#include "lib/data_port_headers/bird_hand.h"
 
 #include <iostream>
 #include <string>
@@ -82,14 +82,14 @@ void bird_hand_test::main_task_algorithm(void) {
 
 	char tmp_string[300];
 
-	lib::epos_gen_parameters epos_params;
+	lib::bird_hand_gen_parameters bird_hand_params;
 
-	epos_params.dm[4] = 3.7;
+	bird_hand_params.dm[4] = 3.7;
 
-	memcpy(tmp_string, &epos_params, sizeof(epos_params));
+	memcpy(tmp_string, &bird_hand_params, sizeof(bird_hand_params));
 
-	set_next_ecps_state((int) ecp_mp::task::ECP_GEN_EPOS, (int) 5, tmp_string,
-			sizeof(epos_params), 1, lib::ROBOT_BIRD_HAND);
+	set_next_ecps_state((int) ecp_mp::task::ECP_GEN_BIRD_HAND, (int) 5,
+			tmp_string, sizeof(bird_hand_params), 1, lib::ROBOT_BIRD_HAND);
 	sr_ecp_msg->message("5");
 	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(
 			1, 1, lib::ROBOT_BIRD_HAND, lib::ROBOT_BIRD_HAND);

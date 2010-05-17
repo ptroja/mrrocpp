@@ -25,7 +25,6 @@
 #include "kinematics/bird_hand/kinematic_model_bird_hand.h"
 #include "edp/common/manip_trans_t.h"
 #include "edp/common/vis_server.h"
-#include "lib/epos_gen.h"
 
 using namespace mrrocpp::lib::exception;
 
@@ -39,9 +38,7 @@ void effector::master_order(common::MT_ORDER nm_task, int nm_tryb) {
 
 void effector::get_controller_state(lib::c_buffer &instruction) {
 
-
 	// tu wrzucic synchronizacje
-
 
 
 	if (test_mode)
@@ -96,34 +93,31 @@ void effector::move_arm(const lib::c_buffer &instruction) {
 	std::stringstream ss(std::stringstream::in | std::stringstream::out);
 
 	switch (ecp_edp_cbuffer.variant) {
-	case lib::BIRD_HAND_CBUFFER_EPOS_GEN_PARAMETERS: {
-		// epos parameters computation basing on trajectory parameters
-		lib::epos_gen_parameters epos_gen_parameters_structure;
-		lib::epos_low_level_command epos_low_level_command_structure;
+	case lib::BIRD_HAND_CBUFFER_BIRD_HAND_GEN_PARAMETERS: {
+		// bird_hand parameters computation basing on trajectory parameters
+		lib::bird_hand_gen_parameters bird_hand_gen_parameters_structure;
+		lib::bird_hand_low_level_command bird_hand_low_level_command_structure;
 
-		memcpy(&epos_gen_parameters_structure,
-				&(ecp_edp_cbuffer.epos_gen_parameters_structure),
-				sizeof(epos_gen_parameters_structure));
+		memcpy(&bird_hand_gen_parameters_structure,
+				&(ecp_edp_cbuffer.bird_hand_gen_parameters_structure),
+				sizeof(bird_hand_gen_parameters_structure));
 
-		compute_epos_command(epos_gen_parameters_structure,
-				epos_low_level_command_structure);
-
-		ss << ecp_edp_cbuffer.epos_gen_parameters_structure.dm[4];
+		ss << ecp_edp_cbuffer.bird_hand_gen_parameters_structure.dm[4];
 
 		msg->message(ss.str().c_str());
 
-		// previously computed parameters send to epos2 controllers
+		// previously computed parameters send to bird_hand2 controllers
 
 
 		// start the trajectory execution
 
 	}
 		break;
-	case lib::BIRD_HAND_CBUFFER_EPOS_LOW_LEVEL_COMMAND: {
-		lib::epos_low_level_command epos_low_level_command_structure;
-		memcpy(&epos_low_level_command_structure,
-				&(ecp_edp_cbuffer.epos_low_level_command_structure),
-				sizeof(epos_low_level_command_structure));
+	case lib::BIRD_HAND_CBUFFER_BIRD_HAND_LOW_LEVEL_COMMAND: {
+		lib::bird_hand_low_level_command bird_hand_low_level_command_structure;
+		memcpy(&bird_hand_low_level_command_structure,
+				&(ecp_edp_cbuffer.bird_hand_low_level_command_structure),
+				sizeof(bird_hand_low_level_command_structure));
 
 	}
 		break;
@@ -148,16 +142,16 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction) 
 	//	printf("%s\n", ss.str().c_str());
 
 	lib::bird_hand_rbuffer edp_ecp_rbuffer;
-	edp_ecp_rbuffer.epos_controller[3].position = licznikaaa;
+	edp_ecp_rbuffer.bird_hand_controller[3].position = licznikaaa;
 
 	if (licznikaaa < 10) {
 		for (int i = 0; i < 6; i++) {
-			edp_ecp_rbuffer.epos_controller[i].motion_in_progress = true;
+			edp_ecp_rbuffer.bird_hand_controller[i].motion_in_progress = true;
 		}
 
 	} else {
 		for (int i = 0; i < 6; i++) {
-			edp_ecp_rbuffer.epos_controller[i].motion_in_progress = false;
+			edp_ecp_rbuffer.bird_hand_controller[i].motion_in_progress = false;
 		}
 	}
 	licznikaaa++;

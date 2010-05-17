@@ -27,7 +27,7 @@ bird_hand_test::bird_hand_test(lib::configurator &_config) :
 	gt = new common::generator::transparent(*this);
 	sg = new common::generator::smooth(*this, true);
 	g_sleep = new common::generator::sleep(*this);
-	g_epos = new common::generator::epos(*this);
+	g_bird_hand = new common::generator::bird_hand(*this);
 
 	sr_ecp_msg->message("ECP BIRD HAND TEST loaded");
 }
@@ -72,10 +72,10 @@ void bird_hand_test::main_task_algorithm(void) {
 					mp_command.ecp_next_state.mp_2_ecp_next_state_variant);
 			g_sleep->Move();
 			break;
-		case ecp_mp::task::ECP_GEN_EPOS: {
-			sr_ecp_msg->message("ECP_GEN_EPOS");
+		case ecp_mp::task::ECP_GEN_BIRD_HAND: {
+			sr_ecp_msg->message("ECP_GEN_BIRD_HAND");
 
-			g_epos->Move();
+			g_bird_hand->Move();
 			break;
 		}
 		default:
