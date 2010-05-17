@@ -45,20 +45,10 @@ pb_eih_visual_servo::pb_eih_visual_servo(boost::shared_ptr <visual_servo_regulat
 
 		vsp_fradia->configure_fradia_task(pb_config);
 
-		Eigen::Matrix <double, 3, 3> e_T_c;
-		e_T_c = configurator.value <3, 3> ("e_t_c_rotation", section_name);
+		E_T_C = configurator.value <3, 4> ("E_T_C", section_name);
 
-		double rot[3][3];
-
-		for (int i = 0; i < 3; ++i) {
-			for (int j = 0; j < 3; ++j) {
-				rot[i][j] = e_T_c(i, j);
-			}
-		}
-
-		e_T_c_position.set_rotation_matrix(rot);
-
-		desiredTranslation = configurator.value <3, 1> ("desired_translation", section_name);
+		lib::Homog_matrix E_T_G_desired = configurator.value <3, 4> ("E_T_G_desired", section_name);
+		G_T_E_desired = !E_T_G_desired;
 	} catch (const exception& e) {
 		printf("pb_eih_visual_servo::pb_eih_visual_servo(): %s\n", e.what());
 		throw e;
@@ -76,23 +66,20 @@ lib::Homog_matrix pb_eih_visual_servo::get_position_change(const lib::Homog_matr
 
 	object_visible = vsp_fradia->received_object.tracking;
 	if (vsp_fradia->received_object.tracking) {
-		lib::Homog_matrix tmp;
-		tmp.set_from_frame_tab(vsp_fradia->received_object.position);
+		lib::Homog_matrix C_T_G(vsp_fradia->received_object.position);
+		lib::Homog_matrix error_matrix;
+
+		error_matrix = G_T_E_desired * E_T_C * C_T_G;
+
 		lib::Xyz_Angle_Axis_vector aa_vector;
-		tmp.get_xyz_angle_axis(aa_vector);
+		error_matrix.get_xyz_angle_axis(aa_vector);
 
 		logDbg("aa_vector: %10lg, %10lg, %10lg, %10lg, %10lg, %10lg\n", aa_vector(0, 0), aa_vector(1, 0), aa_vector(2, 0), aa_vector(3, 0), aa_vector(4, 0), aa_vector(5, 0));
-
-		for (int i = 0; i < 3; ++i) {
-			aa_vector(i, 0) -= desiredTranslation(i, 0);
-		}
 
 		aa_vector = regulator->calculate_control(aa_vector);
 		logDbg("aa_vector after regulation: %10lg, %10lg, %10lg, %10lg, %10lg, %10lg\n", aa_vector(0, 0), aa_vector(1, 0), aa_vector(2, 0), aa_vector(3, 0), aa_vector(4, 0), aa_vector(5, 0));
 
 		delta_position.set_from_xyz_angle_axis(aa_vector);
-
-		delta_position = e_T_c_position * delta_position;
 	}
 
 	return delta_position;

@@ -37,9 +37,11 @@ public:
 protected:
 	boost::shared_ptr <ecp_mp::sensor::fradia_sensor <position_based_reading, position_based_configuration> > vsp_fradia;
 
-	lib::Homog_matrix e_T_c_position;
+	lib::Homog_matrix G_T_E_desired;
+	lib::Homog_matrix E_T_C;
 
-	Eigen::Matrix <double, 3, 1> desiredTranslation;
+	//Eigen::Matrix <double, 3, 1> desiredTranslation;
+
 };
 
 /** @} */
