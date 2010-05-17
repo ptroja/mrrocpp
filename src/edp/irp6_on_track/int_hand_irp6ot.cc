@@ -243,7 +243,7 @@ int_handler (void *arg, int int_id)
         analog_input[6]=0x00ff & tmp_buf;
         analog_input[7]=((0xff00 & tmp_buf)>>8);
 
-        common::master->in_out_obj->set_input(&binary_input, analog_input);
+        common::master->in_out_obj->set_input(binary_input, analog_input);
 
         // ustawienie wyjscia o ile bylo takie zlecenie
         if (common::master->in_out_obj->set_output_flag)

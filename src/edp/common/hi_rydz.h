@@ -139,10 +139,6 @@ public:
 private:
     int int_id;		// Identyfikator obslugi przerwania
 
-    long int tick;// minimalny kwant czasu CPU
-
-    bool first; // true jesli pierwszy krok
-
     const int hi_irq_real;
     const unsigned short int hi_intr_freq_divider;
     const unsigned int hi_intr_timeout_high;
