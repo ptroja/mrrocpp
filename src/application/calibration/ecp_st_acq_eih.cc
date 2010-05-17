@@ -13,6 +13,7 @@ namespace task {
 //Constructors
 acq_eih::acq_eih(task &_ecp_t) : acquisition(_ecp_t)
 {
+	printf("acq_eih::acq_eih() 1\n"); fflush(stdout);
     // Create an adequate robot. - depending on the ini section name.
     if (ecp_sub_task::ecp_t.config.section_name == ECP_IRP6_ON_TRACK_SECTION)
     {
@@ -27,6 +28,8 @@ acq_eih::acq_eih(task &_ecp_t) : acquisition(_ecp_t)
         robot = POSTUMENT;
     }
 
+    printf("acq_eih::acq_eih() 2\n"); fflush(stdout);
+
     smooth_path = ecp_sub_task::ecp_t.config.value<std::string>("smooth_path");
     delay_ms = ecp_sub_task::ecp_t.config.value<int>("delay");
     M = ecp_sub_task::ecp_t.config.value<int>("M");
@@ -36,10 +39,16 @@ acq_eih::acq_eih(task &_ecp_t) : acquisition(_ecp_t)
     E = ecp_sub_task::ecp_t.config.value<double>("E");
     calibrated = false;
 
+    printf("acq_eih::acq_eih() 3\n"); fflush(stdout);
 	smoothgen = new generator::smooth(_ecp_t, true);
+	printf("acq_eih::acq_eih() 4\n"); fflush(stdout);
 
 	nose = new generator::eih_nose_run(_ecp_t, 8);
+
+	printf("acq_eih::acq_eih() 5\n"); fflush(stdout);
 	nose->eih_nose_run::configure_pulse_check (true);
+
+	printf("acq_eih::acq_eih() 6\n"); fflush(stdout);
 
 	ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_CVFRADIA] = new ecp_mp::sensor::cvfradia(lib::SENSOR_CVFRADIA, "[vsp_cvfradia]", _ecp_t, sizeof(lib::sensor_image_t::sensor_union_t::chessboard_t));
 	ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_CVFRADIA]->configure_sensor();
@@ -47,15 +56,29 @@ acq_eih::acq_eih(task &_ecp_t) : acquisition(_ecp_t)
 	generator = new generator::eihgenerator(_ecp_t);
 	generator->sensor_m = ecp_sub_task::ecp_t.sensor_m;
 
+	printf("acq_eih::acq_eih() 7\n"); fflush(stdout);
+
 	ecp_sub_task::ecp_t.sr_ecp_msg->message("ECP loaded eihacquisition");
+
+	printf("acq_eih::acq_eih() 8: %d\n", ofp.number_of_measures); fflush(stdout);
+	// TODO: UWAGA: TU JEST WIELKI BUG: pole ofp nie jest zainicjalizowane
+
 	// translation vector (from robot base to tool frame) - received from MRROC
 	ofp.k = gsl_vector_calloc (3*ofp.number_of_measures);
+
+	printf("acq_eih::acq_eih() 9\n"); fflush(stdout);
 	// rotation matrix (from robot base to tool frame) - received from MRROC
 	ofp.K = gsl_matrix_calloc (3*ofp.number_of_measures, 3);
+
+	printf("acq_eih::acq_eih() 10\n"); fflush(stdout);
 	// translation vector (from chessboard base to camera frame)
 	ofp.m = gsl_vector_calloc (3*ofp.number_of_measures);
+
+	printf("acq_eih::acq_eih() 11\n"); fflush(stdout);
 	// rotation matrix (from chessboard base to camera frame)
 	ofp.M = gsl_matrix_calloc (3*ofp.number_of_measures, 3);
+
+	printf("acq_eih::acq_eih() 12\n"); fflush(stdout);
 }
 
 void acq_eih::main_task_algorithm(void ){
