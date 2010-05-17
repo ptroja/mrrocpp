@@ -32,7 +32,7 @@ public:
 };
 
 // Klasa bazowa czujnikow po stronie procesu ECP.
-template <typename SENSOR_IMAGE, typename CONFIGURE_DATA = void *>
+template <typename SENSOR_IMAGE, typename CONFIGURE_DATA = lib::empty_t>
 class sensor : public sensor_interface {
 private:
 	//! VSP process id

@@ -76,7 +76,7 @@ public:
 
 template <
 	typename VSP_ECP_MSG,
-	typename ECP_VSP_MSG = void *
+	typename ECP_VSP_MSG = lib::empty_t
 >
 class sensor : public sensor_interface {
 protected:
