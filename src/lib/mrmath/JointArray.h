@@ -8,17 +8,28 @@
 #ifndef JOINTARRAY_H_
 #define JOINTARRAY_H_
 
-#include <vector>
+#include <Eigen/Core>
 
 namespace mrrocpp {
 namespace lib {
 
-class JointArray : public std::vector<double>
+class JointArray : public Eigen::VectorXd
 {
+
+	typedef Eigen::VectorXd BaseClass;
+
 public:
-	JointArray() {}
-	JointArray(int size) : std::vector<double> (size) {}
-	JointArray(const double *ptr, size_t n) : std::vector<double> (ptr, ptr+n) {}
+	JointArray() : Eigen::VectorXd () {}
+	JointArray(int size) : Eigen::VectorXd (size) {}
+	JointArray(const double *ptr, size_t n) : Eigen::VectorXd (n)
+	{
+	  for(unsigned int i = 0; i<n; i++)
+	  {
+		this->operator[](i) = ptr[i];
+	  }
+	}
+
+	using BaseClass::operator=;
 };
 
 }

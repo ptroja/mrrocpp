@@ -72,7 +72,7 @@ task::task(lib::configurator &_config)
         {
             int e = errno;
             perror("Connect to UI failed");
-            // WARNING: sr_ecp_msg is not yet inititialized!;
+            // WARNING: sr_ecp_msg is not yet initialized!;
             // it will be created in ecp_task/mp_task constructors
 
             // sr_ecp_msg->message (lib::SYSTEM_ERROR, e, "Connect to UI failed");
@@ -255,7 +255,6 @@ bool task::str_cmp::operator()(char const *a, char const *b) const
 {
 	return strcmp(a, b)<0;
 }
-
 
 ecp_mp::common::Trajectory * task::createTrajectory2(xmlNodePtr actNode, xmlChar *stateID)
 {

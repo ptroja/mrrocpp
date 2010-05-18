@@ -53,7 +53,7 @@ void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
 }
 
 /*--------------------------------------------------------------------------*/
-void effector::move_arm(lib::c_buffer &instruction)
+void effector::move_arm(const lib::c_buffer &instruction)
 {
 	manip_effector::single_thread_move_arm(instruction);
 }

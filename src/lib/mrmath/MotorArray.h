@@ -8,20 +8,30 @@
 #ifndef MOTORARRAY_H_
 #define MOTORARRAY_H_
 
-#include <vector>
+#include <Eigen/Core>
 
 namespace mrrocpp {
 namespace lib {
 
-class MotorArray : public std::vector<double>
+class MotorArray : public Eigen::VectorXd
 {
+	
+	typedef Eigen::VectorXd BaseClass;
+
 public:
-  MotorArray() {}
-  MotorArray(int size) : std::vector<double> (size) {}
-  MotorArray(const double *ptr, size_t n) : std::vector<double> (ptr, ptr+n) {}
+  MotorArray() : Eigen::VectorXd () {}
+  MotorArray(int size) : Eigen::VectorXd (size) {}
+  MotorArray(const double *ptr, size_t n) : Eigen::VectorXd (n) 
+  {
+	  for(unsigned int i = 0; i<n; i++)
+	  {
+		this->operator[](i) = ptr[i];
+	  }
+  }
+
+  using BaseClass::operator=;
+
 };
-
-
 }
 }
 #endif /* MOTORARRAY_H_ */

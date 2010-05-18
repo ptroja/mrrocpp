@@ -36,6 +36,7 @@
 #include "mp/robot/mp_r_irp6_mechatronika.h"
 #include "mp/robot/mp_r_speaker.h"
 #include "mp/robot/mp_r_polycrank.h"
+#include "mp/robot/mp_r_bird_hand.h"
 #include "mp/robot/mp_r_spkm.h"
 #include "mp/robot/mp_r_smb.h"
 #include "mp/robot/mp_r_irp6ot_tfg.h"
@@ -143,6 +144,12 @@ if (config.value<int>("is_polycrank_active", UI_SECTION)) {
 	robot_m[lib::ROBOT_POLYCRANK] = created_robot;
 }
 
+// ROBOT BIRD_HAND
+if (config.value<int>("is_bird_hand_active", UI_SECTION)) {
+	created_robot = new robot::bird_hand (*this);
+	robot_m[lib::ROBOT_BIRD_HAND] = created_robot;
+}
+
 // ROBOT SPKM
 if (config.value<int>("is_spkm_active", UI_SECTION)) {
 	created_robot = new robot::spkm (*this);
@@ -205,9 +212,6 @@ mp_snes_gen.configure(goal);
 mp_snes_gen.Move();
 }
 
-
-
-
 // metody do obslugi najczesniej uzywanych generatorow
 void task::set_next_ecps_state (int l_state, int l_variant, const char* l_string, int str_len, int number_of_robots, ... )
 {
@@ -229,10 +233,6 @@ mp_snes_gen.configure (l_state, l_variant, l_string, str_len);
 
 mp_snes_gen.Move();
 }
-
-
-
-
 
 // delay MP replacement
 void task::wait_ms (int _ms_delay) // zamiast delay
@@ -634,11 +634,8 @@ bool exit_from_while = false;
 while(!exit_from_while) {
 #if !defined(USE_MESSIP_SRR)
 	if (current_wait_mode == NONBLOCK) {
-		struct sigevent event;
-		event.sigev_notify = SIGEV_UNBLOCK;
-
 		// like creceive in QNX4
-		if (TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_RECEIVE, &event, NULL, NULL ) == -1) {
+		if (TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_RECEIVE, NULL, NULL, NULL ) == -1) {
 			int e = errno;
 			perror("MP: TimerTimeout()");
 			throw common::MP_main_error(lib::SYSTEM_ERROR, e);
@@ -887,14 +884,14 @@ while (!(ui_exit_from_while && ecp_exit_from_while)) {
 // -------------------------------------------------------------------
 void task::initialize_communication()
 {
-std::string sr_net_attach_point = config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", UI_SECTION);
-std::string mp_attach_point = config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "mp_attach_point");
+const std::string sr_net_attach_point = config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", UI_SECTION);
+const std::string mp_attach_point = config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "mp_attach_point");
 
 // Obiekt do komuniacji z SR
 sr_ecp_msg = new lib::sr_ecp(lib::MP, mp_attach_point, sr_net_attach_point, true); // Obiekt do komuniacji z SR
 sh_msg = new lib::sr_ecp(lib::MP, mp_attach_point, sr_net_attach_point, false); // Obiekt do komuniacji z SR
 
-std::string mp_pulse_attach_point = config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "mp_pulse_attach_point");
+const std::string mp_pulse_attach_point = config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "mp_pulse_attach_point");
 
 // Rejestracja kanalu dla pulsow z procesu UI
 if(!mp_pulse_attach) {
@@ -1065,7 +1062,6 @@ BOOST_FOREACH(const common::robot_pair_t & robot_node, _robot_m) {
 void task::terminate_all (const common::robots_t & _robot_m)
 {
 // Zatrzymanie wszystkich ECP
-
 
 request_communication_with_robots(_robot_m);
 

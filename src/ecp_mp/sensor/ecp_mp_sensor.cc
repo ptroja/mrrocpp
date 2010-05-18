@@ -22,13 +22,13 @@ namespace mrrocpp {
 namespace ecp_mp {
 namespace sensor {
 
-sensor::sensor(lib::SENSOR_t _sensor_name, const char* _section_name, task::task& _ecp_mp_object)
+sensor::sensor(lib::SENSOR_t _sensor_name, const std::string & _section_name, task::task& _ecp_mp_object)
 	: sr_ecp_msg(*_ecp_mp_object.sr_ecp_msg), sensor_name(_sensor_name)
 {
 	// cout<<"ecp_mp_sensor - konstruktor: "<<_section_name<<endl;
 
 	// Ustawienie domyslnego okresu pracy czujnika.
-	base_period=current_period=1;
+	base_period = current_period = 1;
 
 	node_name = _ecp_mp_object.config.value<std::string>("node_name", _section_name);
 
@@ -151,7 +151,7 @@ void sensor::get_reading(lib::SENSOR_IMAGE & sensor_image) {
 	if(messip::port_send(sd, 0, 0, to_vsp, from_vsp) < 0)
 #endif /* !USE_MESSIP_SRR */
 		sr_ecp_msg.message (lib::SYSTEM_ERROR, CANNOT_READ_FROM_DEVICE, VSP_NAME);
-	vsp_report_aux = from_vsp.vsp_report;
+
 	// jesli odczyt sie powodl, przepisanie pol obrazu z bufora komunikacyjnego do image;
 	if(from_vsp.vsp_report == lib::VSP_REPLY_OK) {
 		memcpy( &sensor_image.sensor_union.begin, &from_vsp.comm_image.sensor_union.begin, union_size);

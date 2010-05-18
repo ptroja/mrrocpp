@@ -58,6 +58,8 @@ feb_thread* edp_smb_tid;
 feb_thread* edp_shead_tid;
 feb_thread* meb_tid;
 
+feb_thread* edp_bird_hand_tid;
+
 pthread_t ui_tid;
 pthread_t sr_tid;
 
@@ -72,6 +74,8 @@ function_execution_buffer edp_shead_eb;
 
 function_execution_buffer edp_conv_eb;
 function_execution_buffer main_eb;
+
+function_execution_buffer edp_bird_hand_eb;
 
 busy_flag communication_flag;
 
@@ -509,6 +513,7 @@ void create_threads()
 	edp_spkm_tid = new feb_thread(edp_spkm_eb);
 	edp_smb_tid = new feb_thread(edp_smb_eb);
 	edp_shead_tid = new feb_thread(edp_shead_eb);
+	edp_bird_hand_tid = new feb_thread(edp_bird_hand_eb);
 	meb_tid = new feb_thread(main_eb);
 
 }
@@ -527,6 +532,7 @@ void abort_threads()
 	delete edp_spkm_tid;
 	delete edp_smb_tid;
 	delete edp_shead_tid;
+	delete edp_bird_hand_tid;
 	delete meb_tid;
 #endif
 }

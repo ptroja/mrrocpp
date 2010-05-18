@@ -155,7 +155,7 @@ void visual_servo_manager::apply_speed_accel_constraints(lib::Homog_matrix& new_
 	Eigen::Matrix <double, 3, 1> ds;
 
 	for (int i = 0; i < 3; ++i) {
-		ds(i, 0) = new_position[i][3] - current_position[i][3];
+		ds(i, 0) = new_position(i,3) - current_position(i,3);
 	}
 
 	double ds_norm = ds.norm();
@@ -178,7 +178,7 @@ void visual_servo_manager::apply_speed_accel_constraints(lib::Homog_matrix& new_
 	//	logDbg("ds = %10lg\n", ds.norm());
 
 	for (int i = 0; i < 3; ++i) {
-		new_position[i][3] = current_position[i][3] + ds(i, 0);
+		new_position(i,3) = current_position(i,3) + ds(i, 0);
 	}
 
 	a = dv / dt;

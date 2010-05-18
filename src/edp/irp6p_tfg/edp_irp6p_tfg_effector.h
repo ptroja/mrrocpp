@@ -35,12 +35,12 @@ public:
 	// Konstruktor.
 	effector(lib::configurator &_config);
 
-	void set_robot_model(lib::c_buffer &instruction); // zmiana narzedzia
+	void set_robot_model(const lib::c_buffer &instruction); // zmiana narzedzia
 
 	void create_threads();
 
 	// Przemieszczenie ramienia.
-	void move_arm(lib::c_buffer &instruction);
+	void move_arm(const lib::c_buffer &instruction);
 	// Odczytanie pozycji ramienia.
 	void get_arm_position(bool read_hardware, lib::c_buffer &instruction);
 	// Aktualizacja polozenia.

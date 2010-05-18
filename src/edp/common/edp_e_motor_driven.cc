@@ -120,7 +120,7 @@ void motor_driven_effector::get_arm_position_get_arm_type_switch(lib::c_buffer &
 }
 
 /*--------------------------------------------------------------------------*/
-void motor_driven_effector::single_thread_move_arm(lib::c_buffer &instruction)
+void motor_driven_effector::single_thread_move_arm(const lib::c_buffer &instruction)
 { // przemieszczenie ramienia
 	// Wypenienie struktury danych transformera na podstawie parametrow polecenia
 	// otrzymanego z ECP. Zlecenie transformerowi przeliczenie wspolrzednych
@@ -147,7 +147,7 @@ void motor_driven_effector::single_thread_move_arm(lib::c_buffer &instruction)
 
 
 /*--------------------------------------------------------------------------*/
-void motor_driven_effector::multi_thread_move_arm(lib::c_buffer &instruction)
+void motor_driven_effector::multi_thread_move_arm(const lib::c_buffer &instruction)
 { // przemieszczenie ramienia
 	// Wypenienie struktury danych transformera na podstawie parametrow polecenia
 	// otrzymanego z ECP. Zlecenie transformerowi przeliczenie wspolrzednych
@@ -247,7 +247,7 @@ motor_driven_effector::~motor_driven_effector()
 {
 }
 
-void motor_driven_effector::master_joints_read(double* output)
+void motor_driven_effector::master_joints_read(double output[])
 {
 	boost::mutex::scoped_lock lock(edp_irp6s_effector_mutex);
 
@@ -414,7 +414,7 @@ void motor_driven_effector::interpret_instruction(lib::c_buffer &instruction)
 				case lib::ROBOT_MODEL_INPUTS:
 				case lib::ARM_ROBOT_MODEL_INPUTS:
 					if (instruction.is_get_inputs()) {
-						get_inputs(&reply);
+						get_inputs(reply);
 					}
 
 					if ((instruction.is_get_arm()) || (instruction.is_set_arm())) {
@@ -468,7 +468,7 @@ void motor_driven_effector::interpret_instruction(lib::c_buffer &instruction)
 				case lib::ROBOT_MODEL_INPUTS:
 				case lib::ARM_ROBOT_MODEL_INPUTS:
 					if (instruction.is_get_inputs()) {
-						get_inputs(&reply);
+						get_inputs(reply);
 					}
 
 					if (instruction.is_set_arm()) {
@@ -540,17 +540,17 @@ void motor_driven_effector::synchronise()
 void motor_driven_effector::set_outputs(const lib::c_buffer &instruction)
 {
 	// ustawienie wyjsc binarnych
-	in_out_obj->set_output(&instruction.output_values);
+	in_out_obj->set_output(instruction.output_values);
 	// throw NonFatal_error_2(NOT_IMPLEMENTED_YET);
 	// printf(" OUTPUTS SET\n");
 }
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
-void motor_driven_effector::get_inputs(lib::r_buffer *local_reply)
+void motor_driven_effector::get_inputs(lib::r_buffer & local_reply)
 {
 	// odczytanie wejsc binarnych
-	in_out_obj->get_input(&((*local_reply).input_values), ((*local_reply).analog_input));
+	in_out_obj->get_input(&local_reply.input_values, local_reply.analog_input);
 	// throw NonFatal_error_2(NOT_IMPLEMENTED_YET);
 	// printf(" INPUTS GET\n");
 }
@@ -679,7 +679,7 @@ void motor_driven_effector::compute_motors(const lib::c_buffer &instruction)
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
-void motor_driven_effector::set_robot_model(lib::c_buffer &instruction)
+void motor_driven_effector::set_robot_model(const lib::c_buffer &instruction)
 {
 	// uint8_t previous_model;
 	// uint8_t previous_corrector;

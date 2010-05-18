@@ -35,7 +35,6 @@
 #include "lib/mrmath/mrmath.h"
 #include "lib/srlib.h"
 #include "edp/common/manip_trans_t.h"
-#include "edp/common/edp_vsp_t.h"
 #include "kinematics/common/kinematic_model_with_tool.h"
 
 namespace mrrocpp {
@@ -100,7 +99,7 @@ void irp6s_postument_track_effector::compute_frame(const lib::c_buffer &instruct
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
-void irp6s_postument_track_effector::set_robot_model(lib::c_buffer &instruction)
+void irp6s_postument_track_effector::set_robot_model(const lib::c_buffer &instruction)
 {
 	manip_effector::set_robot_model_with_sb(instruction);
 }
@@ -126,18 +125,13 @@ void irp6s_postument_track_effector::create_threads()
 #ifdef __QNXNTO__
 	// jesli wlaczono obsluge sily
 	if (force_tryb > 0) {
-
 		vs = sensor::return_created_edp_force_sensor(*this); //!< czujnik wirtualny
 
-		edp_vsp_obj = new edp_vsp(*this); //!< czujnik wirtualny
-
 		// byY - utworzenie watku pomiarow sily
+		// this has to be done with boost::bind since vs is pointer to object with virtual methods
 		new boost::thread(boost::bind(&sensor::force::operator(), vs));
 
 		vs->thread_started.wait();
-
-		// by Y - utworzenie watku komunikacji miedzy EDP a VSP
-		new boost::thread(*edp_vsp_obj);
 	}
 #endif
 	motor_driven_effector::hi_create_threads();
@@ -196,8 +190,6 @@ void irp6s_postument_track_effector::iterate_macrostep(const lib::JointArray & b
 		}
 	}
 
-	lib::Ft_vector current_force;
-
 	const unsigned long PREVIOUS_MOVE_VECTOR_NULL_STEP_VALUE = 10;
 
 	static unsigned long last_force_step_counter = step_counter;
@@ -205,8 +197,6 @@ void irp6s_postument_track_effector::iterate_macrostep(const lib::JointArray & b
 	lib::Xyz_Angle_Axis_vector move_rot_vector;
 	lib::Xyz_Angle_Axis_vector pos_xyz_rot_xyz_vector;
 	static lib::Xyz_Angle_Axis_vector previous_move_rot_vector;
-
-	double beginning_gripper_coordinate = begining_joints[gripper_servo_nr];
 
 	lib::Homog_matrix
 			current_tool(((mrrocpp::kinematics::common::kinematic_model_with_tool*) get_current_kinematic_model())->tool);
@@ -225,10 +215,10 @@ void irp6s_postument_track_effector::iterate_macrostep(const lib::JointArray & b
 
 		lib::V_tr v_tr_current_frame_matrix(current_frame_wo_offset);
 
+		lib::Ft_vector current_force;
 		force_msr_download(current_force);
 		// sprowadzenie sil z ukladu bazowego do ukladu kisci
 		// modyfikacja pobranych sil w ukladzie czujnika - do ukladu wyznaczonego przez force_tool_frame i reference_frame
-
 
 		lib::Homog_matrix begining_end_effector_frame_with_current_translation = begining_end_effector_frame;
 		begining_end_effector_frame_with_current_translation.set_translation_vector(desired_end_effector_frame);
@@ -306,6 +296,8 @@ void irp6s_postument_track_effector::iterate_macrostep(const lib::JointArray & b
 		 }
 		 */
 
+		double beginning_gripper_coordinate = begining_joints[gripper_servo_nr];
+
 		switch (motion_type)
 		{
 			case lib::ABSOLUTE:
@@ -351,32 +343,23 @@ void irp6s_postument_track_effector::iterate_macrostep(const lib::JointArray & b
 		}
 
 		last_force_step_counter = step_counter;
-
 	}
-
 }
 
 /*--------------------------------------------------------------------------*/
-void irp6s_postument_track_effector::move_arm(lib::c_buffer &instruction)
+void irp6s_postument_track_effector::move_arm(const lib::c_buffer &instruction)
 { // przemieszczenie ramienia
 	// Wypenienie struktury danych transformera na podstawie parametrow polecenia
 	// otrzymanego z ECP. Zlecenie transformerowi przeliczenie wspolrzednych
 
 	manip_effector::multi_thread_move_arm(instruction);
-
 }
 /*--------------------------------------------------------------------------*/
 
 
 /*--------------------------------------------------------------------------*/
 void irp6s_postument_track_effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
-{ // odczytanie pozycji ramienia
-
-	//   printf(" GET ARM\n");
-	//	lib::JointArray desired_joints_tmp(MAX_SERVOS_NR); // Wspolrzedne wewnetrzne -
-	lib::Ft_vector current_force;
-	lib::JointArray desired_joints_tmp(number_of_servos); // Wspolrzedne wewnetrzne -
-
+{
 	if (read_hardware) {
 		motor_driven_effector::get_arm_position_read_hardware_sb();
 
@@ -387,12 +370,14 @@ void irp6s_postument_track_effector::get_arm_position(bool read_hardware, lib::c
 			//  check_motor_position(desired_motor_pos_new);
 			// dla sprawdzenia ograncizen w joints i motors
 
+			// Wspolrzedne wewnetrzne -
+			lib::JointArray desired_joints_tmp(number_of_servos);
+
 			get_current_kinematic_model()->mp2i_transform(desired_motor_pos_new, desired_joints_tmp);
 
 			for (int i = 0; i < number_of_servos; i++) {
 				desired_joints[i] = current_joints[i] = desired_joints_tmp[i];
 			}
-
 		}
 	}
 
@@ -431,6 +416,7 @@ void irp6s_postument_track_effector::get_arm_position(bool read_hardware, lib::c
 				current_tool(((mrrocpp::kinematics::common::kinematic_model_with_tool*) get_current_kinematic_model())->tool);
 		lib::Ft_tr ft_tr_inv_tool_matrix(!current_tool);
 
+		lib::Ft_vector current_force;
 		force_msr_download(current_force);
 		// sprowadzenie sil z ukladu bazowego do ukladu kisci
 		// modyfikacja pobranych sil w ukladzie czujnika - do ukladu wyznaczonego przez force_tool_frame i reference_frame
@@ -439,7 +425,6 @@ void irp6s_postument_track_effector::get_arm_position(bool read_hardware, lib::c
 		current_force_torque.to_table(reply.arm.pf_def.force_xyz_torque_xyz);
 
 		reply.arm.pf_def.gripper_coordinate = current_joints[gripper_servo_nr];
-
 	}
 }
 /*--------------------------------------------------------------------------*/

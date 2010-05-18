@@ -89,14 +89,14 @@ protected:
 	 *
 	 * It also calls single_thread_move_arm method from the motor_drive_effector
 	 */
-	void single_thread_move_arm(lib::c_buffer &instruction);
+	void single_thread_move_arm(const lib::c_buffer &instruction);
 
 	/*!
 	 * \brief move arm method for the FRAME command in the two thread variant.
 	 *
 	 * It also calls multi_thread_move_arm method from the motor_drive_effector
 	 */
-	void multi_thread_move_arm(lib::c_buffer &instruction);
+	void multi_thread_move_arm(const lib::c_buffer &instruction);
 
 public:
 
@@ -121,7 +121,7 @@ public:
 	 *
 	 * This method extends set_robot_model_method in case of usage of servo_buffer thread
 	 */
-    void set_robot_model_with_sb(lib::c_buffer &instruction);
+    void set_robot_model_with_sb(const lib::c_buffer &instruction);
 
 
 	/*!
@@ -168,14 +168,14 @@ public:
 	 *
 	 * It is called in the force sensor thread.
 	 */
-	void force_msr_upload(const lib::Ft_vector l_vector);
+	void force_msr_upload(const lib::Ft_vector & l_vector);
 
 	/*!
 	 * \brief method to get global_force_msr with mutex protection.
 	 *
 	 * It is called in the transformation thread.
 	 */
-	void force_msr_download(lib::Ft_vector& l_vector);
+	void force_msr_download(lib::Ft_vector & l_vector);
 
 	/*!
 	 * \brief method that computes servo_current_frame_wo_tool
@@ -203,7 +203,7 @@ public:
 	 *
 	 * The model consists of tool_frame and models handled in set_robot_model method of motor_driven_effector called here
 	 */
-	virtual void set_robot_model(lib::c_buffer &instruction);
+	virtual void set_robot_model(const lib::c_buffer &instruction);
 
 	/*!
 	 * \brief method to get (read) the robot model

@@ -14,9 +14,6 @@
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 
-// Klasa edp_irp6ot_effector.
-#include "edp/common/edp_vsp_t.h"
-
 #include "edp/irp6ot_m/edp_irp6ot_m_effector.h"
 // Kinematyki.
 #include "kinematics/irp6_on_track/kinematic_model_irp6ot_with_track.h"
@@ -34,21 +31,19 @@ common::servo_buffer* effector::return_created_servo_buffer()
 }
 
 /*--------------------------------------------------------------------------*/
-void effector::set_robot_model(lib::c_buffer &instruction)
+void effector::set_robot_model(const lib::c_buffer &instruction)
 {
 	manip_effector::set_robot_model_with_sb(instruction);
-
 }
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
-void effector::move_arm(lib::c_buffer &instruction)
+void effector::move_arm(const lib::c_buffer &instruction)
 { // przemieszczenie ramienia
 	// Wypenienie struktury danych transformera na podstawie parametrow polecenia
 	// otrzymanego z ECP. Zlecenie transformerowi przeliczenie wspolrzednych
 
 	manip_effector::multi_thread_move_arm(instruction);
-
 }
 /*--------------------------------------------------------------------------*/
 
@@ -58,18 +53,12 @@ void effector::create_threads()
 #ifdef __QNXNTO__
 	// jesli wlaczono obsluge sily
 	if (force_tryb > 0) {
-
 		vs = sensor::return_created_edp_force_sensor(*this); //!< czujnik wirtualny
-
-		edp_vsp_obj = new common::edp_vsp(*this); //!< czujnik wirtualny
 
 		// byY - utworzenie watku pomiarow sily
 		new boost::thread(boost::bind(&sensor::force::operator(), vs));
 
 		vs->thread_started.wait();
-
-		// by Y - utworzenie watku komunikacji miedzy EDP a VSP
-		new boost::thread(*edp_vsp_obj);
 	}
 #endif
 	motor_driven_effector::hi_create_threads();
@@ -96,7 +85,6 @@ void effector::create_kinematic_models_for_given_robot(void)
 	add_kinematic_model(new kinematics::irp6ot::model_calibrated_with_wrist(number_of_servos));
 	// Ustawienie aktywnego modelu.
 	set_kinematic_model(0);
-
 }
 
 /*--------------------------------------------------------------------------*/

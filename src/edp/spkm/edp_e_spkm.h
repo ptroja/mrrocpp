@@ -57,7 +57,7 @@ public:
 	 *
 	 * it chooses the single thread variant from the manip_effector
 	 */
-	void move_arm(lib::c_buffer &instruction); // przemieszczenie ramienia
+	void move_arm(const lib::c_buffer &instruction); // przemieszczenie ramienia
 
 	void get_controller_state(lib::c_buffer &instruction);
 
