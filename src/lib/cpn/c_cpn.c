@@ -171,6 +171,7 @@ int CPN_send(const char* data)
 				      PACKET_SIZE - bytes_transmitted);
 			if (s < 0) {
 				//printf("debug: CPN_send() could not write full packet\n");
+				free(packet);
 				return -1;
 			}
 			bytes_transmitted += s;
@@ -190,6 +191,7 @@ int CPN_send(const char* data)
 		int s = write(socketfd, &packet[bytes_transmitted],
 			      bytes_to_transmit - bytes_transmitted);
 		if (s < 0) {
+			free(packet);
 			return -1;
 		}
 		bytes_transmitted += s;
@@ -223,6 +225,7 @@ char* CPN_receive()
 		// read header of incoming packet
 		int s = read(socketfd, &header, sizeof(char));
 		if (s <= 0) {
+			// TODO: memory leak?
 			return NULL;
 		}
 		
@@ -239,6 +242,7 @@ char* CPN_receive()
 				     &current_node->buffer[packet_read],
 				     packet_payload_size - packet_read);
 			if (s <= 0) {
+				// TODO: memory leak?
 				return NULL;
 			}
 		

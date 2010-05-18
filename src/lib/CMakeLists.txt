@@ -8,6 +8,7 @@ if(USE_MESSIP)
 endif(USE_MESSIP)
 
 add_subdirectory (agent)
+add_subdirectory (cpn)
 
 # Create a library. The extension is already found. Any number of sources could
 # be listed here. 
