@@ -23,18 +23,19 @@ struct bird_hand_cbuffer {
 		bird_hand_low_level_command bird_hand_low_level_command_structure;
 		bird_hand_gen_parameters bird_hand_gen_parameters_structure;
 	};
-
+	bird_hand_command cb_bird_hand_command;
+	bird_hand_configuration cb_bird_hand_configuration;
 };
 
 struct bird_hand_rbuffer {
+	bird_hand_status rb_bird_hand_status;
+	bird_hand_configuration rb_bird_hand_configuration;
 	bool contact;
 	single_controller_bird_hand_reply bird_hand_controller[6];
 }__attribute__((__packed__));
 
 #define EDP_BIRD_HAND_SECTION "[edp_bird_hand]"
 #define ECP_BIRD_HAND_SECTION "[ecp_bird_hand]"
-
-#define BIRD_HAND_NUM_OF_SERVOS	6
 
 } // namespace lib
 } // namespace mrrocpp
