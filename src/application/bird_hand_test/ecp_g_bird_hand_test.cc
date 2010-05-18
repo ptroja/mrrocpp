@@ -16,6 +16,8 @@ bird_hand::bird_hand(common::task::task& _ecp_task) :
 	generator(_ecp_task) {
 	//	if (the_robot) the_robot->communicate_with_edp = false; //do not communicate with edp
 
+	// STARE PORTY
+
 
 	bird_hand_low_level_command_data_port = the_robot->port_manager.get_port<
 			lib::bird_hand_low_level_command> (
@@ -26,6 +28,22 @@ bird_hand::bird_hand(common::task::task& _ecp_task) :
 
 	bird_hand_gen_parameters_data_port = the_robot->port_manager.get_port<
 			lib::bird_hand_gen_parameters> (BIRD_HAND_GEN_PARAMETERS_DATA_PORT);
+
+	// NOWE PORTY
+	bird_hand_command_data_port = the_robot->port_manager.get_port<
+			lib::bird_hand_command> (BIRD_HAND_COMMAND_DATA_PORT);
+	bird_hand_configuration_command_data_port
+			= the_robot->port_manager.get_port<lib::bird_hand_configuration> (
+					BIRD_HAND_CONFIGURATION_DATA_PORT);
+
+	bird_hand_status_reply_data_request_port
+			= the_robot->port_manager.get_request_port<lib::bird_hand_status> (
+					BIRD_HAND_STATUS_DATA_REQUEST_PORT);
+
+	bird_hand_configuration_reply_data_request_port
+			= the_robot->port_manager.get_request_port<
+					lib::bird_hand_configuration> (
+					BIRD_HAND_CONFIGURATION_DATA_REQUEST_PORT);
 
 }
 

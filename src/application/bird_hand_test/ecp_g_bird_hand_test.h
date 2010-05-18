@@ -18,6 +18,7 @@ namespace generator {
 
 class bird_hand: public common::generator::generator {
 private:
+	// STARE PORTY
 
 	lib::bird_hand_gen_parameters mp_ecp_bird_hand_gen_parameters_structure;
 
@@ -33,6 +34,28 @@ private:
 	lib::single_thread_request_port<lib::bird_hand_reply>
 			* bird_hand_reply_data_request_port;
 	lib::bird_hand_reply edp_ecp_bird_hand_reply_structure;
+
+	// NOWE PORTY
+
+	// zadawanie nastaw regulatorow
+	lib::single_thread_port<lib::bird_hand_command>
+			*bird_hand_command_data_port;
+	lib::bird_hand_command bird_hand_command_structure;
+
+	// zadawanie parametrow konfiguracji
+	lib::single_thread_port<lib::bird_hand_configuration>
+			*bird_hand_configuration_command_data_port;
+	lib::bird_hand_configuration bird_hand_configuration_command_structure;
+
+	// odbieranie statusu robota
+	lib::single_thread_request_port<lib::bird_hand_status>
+			*bird_hand_status_reply_data_request_port;
+	lib::bird_hand_reply bird_hand_status_reply_structure;
+
+	// odczytanie parametrow konfiguracji
+	lib::single_thread_request_port<lib::bird_hand_configuration>
+			*bird_hand_configuration_reply_data_request_port;
+	lib::bird_hand_reply bird_hand_configuration_reply_structure;
 
 public:
 	void create_ecp_mp_reply();
