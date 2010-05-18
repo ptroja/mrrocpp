@@ -17,12 +17,7 @@ namespace ecp {
 namespace bird_hand {
 
 robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
-			bird_hand_low_level_command_data_port(
-					BIRD_HAND_LOW_LEVEL_COMMAND_DATA_PORT),
-			bird_hand_gen_parameters_data_port(
-					BIRD_HAND_GEN_PARAMETERS_DATA_PORT),
-			bird_hand_reply_data_request_port(BIRD_HAND_REPLY_DATA_REQUEST_PORT),
-			bird_hand_command_data_port(BIRD_HAND_COMMAND_DATA_PORT),
+	bird_hand_command_data_port(BIRD_HAND_COMMAND_DATA_PORT),
 			bird_hand_configuration_command_data_port(
 					BIRD_HAND_CONFIGURATION_DATA_PORT),
 			bird_hand_status_reply_data_request_port(
@@ -39,12 +34,7 @@ robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
 }
 
 robot::robot(common::task::task& _ecp_object) :
-			bird_hand_low_level_command_data_port(
-					BIRD_HAND_LOW_LEVEL_COMMAND_DATA_PORT),
-			bird_hand_gen_parameters_data_port(
-					BIRD_HAND_GEN_PARAMETERS_DATA_PORT),
-			bird_hand_reply_data_request_port(BIRD_HAND_REPLY_DATA_REQUEST_PORT),
-			bird_hand_command_data_port(BIRD_HAND_COMMAND_DATA_PORT),
+	bird_hand_command_data_port(BIRD_HAND_COMMAND_DATA_PORT),
 			bird_hand_configuration_command_data_port(
 					BIRD_HAND_CONFIGURATION_DATA_PORT),
 			bird_hand_status_reply_data_request_port(
@@ -59,12 +49,6 @@ robot::robot(common::task::task& _ecp_object) :
 }
 
 void robot::add_data_ports() {
-	// STARE PORTY
-	port_manager.add_port(&bird_hand_low_level_command_data_port);
-	port_manager.add_port(&bird_hand_gen_parameters_data_port);
-	port_manager.add_port(&bird_hand_reply_data_request_port);
-
-	// NOWE PORTY
 	port_manager.add_port(&bird_hand_command_data_port);
 	port_manager.add_port(&bird_hand_configuration_command_data_port);
 	port_manager.add_port(&bird_hand_status_reply_data_request_port);
@@ -73,13 +57,6 @@ void robot::add_data_ports() {
 }
 
 void robot::clear_data_ports() {
-	// STARE PORTY
-	bird_hand_low_level_command_data_port.clear_new_data_flag();
-	bird_hand_gen_parameters_data_port.clear_new_data_flag();
-	bird_hand_reply_data_request_port.clear_new_request_flag();
-	bird_hand_reply_data_request_port.clear_new_data_flag();
-
-	// NOWE PORTY
 	bird_hand_command_data_port.clear_new_data_flag();
 	bird_hand_configuration_command_data_port.clear_new_data_flag();
 	bird_hand_status_reply_data_request_port.clear_new_data_flag();

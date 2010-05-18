@@ -21,26 +21,8 @@ namespace bird_hand {
 // ---------------------------------------------------------------
 class robot: public common::ecp_robot,
 		public kinematics::common::kinematics_manager {
-	// Klasa dla robota irp6_postument (sztywnego)
+
 protected:
-	//bufory wejsciowe z generatora
-	lib::single_thread_port<lib::bird_hand_low_level_command>
-			bird_hand_low_level_command_data_port;
-	lib::bird_hand_low_level_command bird_hand_low_level_command_structure;
-
-	lib::single_thread_port<lib::bird_hand_gen_parameters>
-			bird_hand_gen_parameters_data_port;
-	lib::bird_hand_gen_parameters bird_hand_gen_parameters_structure;
-
-	// bufor wyjsciowe do generatora
-	lib::single_thread_request_port<lib::bird_hand_reply>
-			bird_hand_reply_data_request_port;
-	lib::bird_hand_reply bird_hand_reply_structure;
-
-	// NOWA WERSJA
-	//
-	//
-
 
 	// zadawanie nastaw regulatorow
 	lib::single_thread_port<lib::bird_hand_command> bird_hand_command_data_port;

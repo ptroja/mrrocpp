@@ -18,25 +18,6 @@ namespace generator {
 
 class bird_hand: public common::generator::generator {
 private:
-	// STARE PORTY
-
-	lib::bird_hand_gen_parameters mp_ecp_bird_hand_gen_parameters_structure;
-
-	lib::single_thread_port<lib::bird_hand_low_level_command>
-			* bird_hand_low_level_command_data_port;
-	lib::bird_hand_low_level_command
-			ecp_edp_bird_hand_low_level_command_structure;
-
-	lib::single_thread_port<lib::bird_hand_gen_parameters>
-			* bird_hand_gen_parameters_data_port;
-	lib::bird_hand_gen_parameters ecp_edp_bird_hand_gen_parameters_structure;
-
-	lib::single_thread_request_port<lib::bird_hand_reply>
-			* bird_hand_reply_data_request_port;
-	lib::bird_hand_reply edp_ecp_bird_hand_reply_structure;
-
-	// NOWE PORTY
-
 	// zadawanie nastaw regulatorow
 	lib::single_thread_port<lib::bird_hand_command>
 			*bird_hand_command_data_port;
