@@ -37,6 +37,30 @@ protected:
 			bird_hand_reply_data_request_port;
 	lib::bird_hand_reply bird_hand_reply_structure;
 
+	// NOWA WERSJA
+	//
+	//
+
+
+	// zadawanie nasteaw regulatorow
+	lib::single_thread_port<lib::bird_hand_command> bird_hand_command_data_port;
+	lib::bird_hand_command bird_hand_command_structure;
+
+	// zadawanie parametrow konfiguracji
+	lib::single_thread_port<lib::bird_hand_configuration>
+			bird_hand_configuration_command_data_port;
+	lib::bird_hand_configuration bird_hand_configuration_command_structure;
+
+	// odbieranie statusu robota
+	lib::single_thread_request_port<lib::bird_hand_status>
+			bird_hand_status_reply_data_request_port;
+	lib::bird_hand_reply bird_hand_status_reply_structure;
+
+	// odczytanie parametrow konfiguracji
+	lib::single_thread_request_port<lib::bird_hand_configuration>
+			bird_hand_configuration_reply_data_request_port;
+	lib::bird_hand_reply bird_hand_configuration_reply_structure;
+
 	// bufory do edp
 	lib::bird_hand_cbuffer ecp_edp_cbuffer;
 	lib::bird_hand_rbuffer edp_ecp_rbuffer;
