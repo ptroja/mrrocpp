@@ -91,41 +91,41 @@ void effector::move_arm(const lib::c_buffer &instruction) {
 			sizeof(ecp_edp_cbuffer));
 
 	std::stringstream ss(std::stringstream::in | std::stringstream::out);
+	/*
+	 switch (ecp_edp_cbuffer.variant) {
+	 case lib::BIRD_HAND_CBUFFER_BIRD_HAND_GEN_PARAMETERS: {
+	 // bird_hand parameters computation basing on trajectory parameters
+	 lib::bird_hand_gen_parameters bird_hand_gen_parameters_structure;
+	 lib::bird_hand_low_level_command bird_hand_low_level_command_structure;
 
-	switch (ecp_edp_cbuffer.variant) {
-	case lib::BIRD_HAND_CBUFFER_BIRD_HAND_GEN_PARAMETERS: {
-		// bird_hand parameters computation basing on trajectory parameters
-		lib::bird_hand_gen_parameters bird_hand_gen_parameters_structure;
-		lib::bird_hand_low_level_command bird_hand_low_level_command_structure;
+	 memcpy(&bird_hand_gen_parameters_structure,
+	 &(ecp_edp_cbuffer.bird_hand_gen_parameters_structure),
+	 sizeof(bird_hand_gen_parameters_structure));
 
-		memcpy(&bird_hand_gen_parameters_structure,
-				&(ecp_edp_cbuffer.bird_hand_gen_parameters_structure),
-				sizeof(bird_hand_gen_parameters_structure));
+	 ss << ecp_edp_cbuffer.bird_hand_gen_parameters_structure.dm[4];
 
-		ss << ecp_edp_cbuffer.bird_hand_gen_parameters_structure.dm[4];
+	 msg->message(ss.str().c_str());
 
-		msg->message(ss.str().c_str());
-
-		// previously computed parameters send to bird_hand2 controllers
+	 // previously computed parameters send to bird_hand2 controllers
 
 
-		// start the trajectory execution
+	 // start the trajectory execution
 
-	}
-		break;
-	case lib::BIRD_HAND_CBUFFER_BIRD_HAND_LOW_LEVEL_COMMAND: {
-		lib::bird_hand_low_level_command bird_hand_low_level_command_structure;
-		memcpy(&bird_hand_low_level_command_structure,
-				&(ecp_edp_cbuffer.bird_hand_low_level_command_structure),
-				sizeof(bird_hand_low_level_command_structure));
+	 }
+	 break;
+	 case lib::BIRD_HAND_CBUFFER_BIRD_HAND_LOW_LEVEL_COMMAND: {
+	 lib::bird_hand_low_level_command bird_hand_low_level_command_structure;
+	 memcpy(&bird_hand_low_level_command_structure,
+	 &(ecp_edp_cbuffer.bird_hand_low_level_command_structure),
+	 sizeof(bird_hand_low_level_command_structure));
 
-	}
-		break;
-	default:
-		break;
+	 }
+	 break;
+	 default:
+	 break;
 
-	}
-
+	 }
+	 */
 }
 /*--------------------------------------------------------------------------*/
 
@@ -140,21 +140,23 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction) 
 	ss << "get_arm_position: " << licznikaaa;
 	msg->message(ss.str().c_str());
 	//	printf("%s\n", ss.str().c_str());
+	/*
+	 lib::bird_hand_rbuffer edp_ecp_rbuffer;
+	 edp_ecp_rbuffer.bird_hand_controller[3].position = licznikaaa;
 
-	lib::bird_hand_rbuffer edp_ecp_rbuffer;
-	edp_ecp_rbuffer.bird_hand_controller[3].position = licznikaaa;
+	 if (licznikaaa < 10) {
+	 for (int i = 0; i < 6; i++) {
+	 edp_ecp_rbuffer.bird_hand_controller[i].motion_in_progress = true;
+	 }
 
-	if (licznikaaa < 10) {
-		for (int i = 0; i < 6; i++) {
-			edp_ecp_rbuffer.bird_hand_controller[i].motion_in_progress = true;
-		}
-
-	} else {
-		for (int i = 0; i < 6; i++) {
-			edp_ecp_rbuffer.bird_hand_controller[i].motion_in_progress = false;
-		}
-	}
+	 } else {
+	 for (int i = 0; i < 6; i++) {
+	 edp_ecp_rbuffer.bird_hand_controller[i].motion_in_progress = false;
+	 }
+	 }
+	 */
 	licznikaaa++;
+	lib::bird_hand_rbuffer edp_ecp_rbuffer;
 	memcpy(reply.arm.serialized_reply, &edp_ecp_rbuffer,
 			sizeof(edp_ecp_rbuffer));
 
