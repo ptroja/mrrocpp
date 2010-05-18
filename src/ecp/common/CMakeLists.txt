@@ -12,10 +12,13 @@ add_library(ecp
 	generator/ecp_g_visual_servo.cc
 	ecp_taught_in_pose.cc
 	generator/ecp_g_smooth.cc
+	generator/ecp_g_newsmooth.cc
 	generator/ecp_g_sleep.cc
 	generator/ecp_g_force.cc
 	generator/ecp_g_transparent.cc
 	generator/ecp_g_get_position.cc
+	generator/ecp_g_constant_velocity.cc
+	generator/velocity_profile_calculator/bang_bang_profile.cc
 )
 
 target_link_libraries(ecp ecp_mp)

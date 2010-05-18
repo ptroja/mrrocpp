@@ -9,8 +9,9 @@
 #define _BANG_BANG_PROFILE_H_
 
 #include <list>
+#include <math.h>
 
-#include "ecp_mp/smooth_trajectory_pose.h"
+#include "ecp_mp/bang_bang_trajectory_pose.h"
 
 using namespace std;
 
@@ -30,72 +31,84 @@ class bang_bang_profile {
 		 */
 		virtual ~bang_bang_profile();
 		/**
+		 *
+		 */
+		bool eq(double a, double b);
+		/**
 		 * Reduces velocity and acceleration of the first motion model velocity profile, so that the given distance is covered in a given time.
 		 * Can call reduction_model_2, reduction_model_3 or reduction_model_4 methods if it is necessary.
 		 * @param i number of axis for which the calculations are performed
 		 * @param s distance to be covered in a given axis
+		 * @return true if the trajectory recalculation is not needed (if initial velocity was not changed)
 		 */
-		void reduction_model_1(std::list<ecp_mp::common::smooth_trajectory_pose>::iterator &pose_list_iterator, int i, double s);
+		bool reduction_model_1(vector<ecp_mp::common::bang_bang_trajectory_pose>::iterator &pose_list_iterator, int i, double s);
 		/**
 		 * Reduces velocity and acceleration of the second motion model velocity profile, so that the given distance is covered in a given time.
 		 * Can call vp_reduction method.
 		 * @param i number of axis for which the calculations are performed
 		 * @param s distance to be covered in a given axis
+		 * @return true if the trajectory recalculation is not needed (if initial velocity was not changed)
 		 */
-		void reduction_model_2(std::list<ecp_mp::common::smooth_trajectory_pose>::iterator &pose_list_iterator, int i, double s);
+		bool reduction_model_2(vector<ecp_mp::common::bang_bang_trajectory_pose>::iterator &pose_list_iterator, int i, double s);
 		/**
 		 * Reduces velocity and acceleration of the third motion model velocity profile, so that the given distance is covered in a given time.
 		 * Can call vp_reduction method.
 		 * @param i number of axis for which the calculations are performed
 		 * @param s distance to be covered in a given axis
+		 * @return true if the trajectory recalculation is not needed (if initial velocity was not changed)
 		 */
-		void reduction_model_3(std::list<ecp_mp::common::smooth_trajectory_pose>::iterator &pose_list_iterator, int i, double s);
+		bool reduction_model_3(vector<ecp_mp::common::bang_bang_trajectory_pose>::iterator &pose_list_iterator, int i, double s);
 		/**
 		 * Reduces velocity and acceleration of the fourth motion model velocity profile, so that the given distance is covered in a given time.
 		 * Can call vp_reduction method.
 		 * @param i number of axis for which the calculations are performed
 		 * @param s distance to be covered in a given axis
+		 * @return true if the trajectory recalculation is not needed (if initial velocity was not changed)
 		 */
-		void reduction_model_4(std::list<ecp_mp::common::smooth_trajectory_pose>::iterator &pose_list_iterator, int i, double s);
+		bool reduction_model_4(vector<ecp_mp::common::bang_bang_trajectory_pose>::iterator &pose_list_iterator, int i, double s);
 		/**
 		 * Reduces the terminal velocity so that the given distance can be covered in the given time.
 		 * Can call vp_reduction method.
 		 * @param i number of axis for which the calculations are performed
 		 * @param s distance to be covered in a given axis
 		 * @param t time of execution of the given trajectory segment
+		 * @return true if the trajectory recalculation is not needed (if initial velocity was not changed)
 		 */
-		void vk_reduction(std::list<ecp_mp::common::smooth_trajectory_pose>::iterator &pose_list_iterator, int i, double s, double t);
+		bool vk_reduction(vector<ecp_mp::common::bang_bang_trajectory_pose>::iterator &pose_list_iterator, int i, double s, double t);
 		/**
 		 * Reduces the initial velocity so that the given distance can be covered in the given time.
 		 * Can call vp_reduction method.
 		 * @param i number of axis for which the calculations are performed
 		 * @param s distance to be covered in a given axis
 		 * @param t time of execution of the given trajectory segment
-		 * @return false if the initial values of the velocities were changed and trajectory needs to be recalculated from the beginning
+		 * @return true if the trajectory recalculation is not needed (if initial velocity was not changed)
 		 */
-		bool vp_reduction(std::list<ecp_mp::common::smooth_trajectory_pose>::iterator &pose_list_iterator, int i, double s, double t);
+		bool vp_reduction(vector<ecp_mp::common::bang_bang_trajectory_pose>::iterator &pose_list_iterator, int i, double s, double t);
 		/**
 		 * Calculates the shortest time for the first motion model velocity profile (2 phase motion), in which the given distance can be covered
 		 * with the given constraints on maximal velocity and acceleration.
 		 * Can call vp_reduction or vk_reduction method.
 		 * @param i number of axis for which the calculations are performed
 		 * @param s distance to be covered in a given axis
+		 * @return true if the trajectory recalculation is not needed (if initial velocity was not changed)
 		 */
-		void optimize_time1(std::list<ecp_mp::common::smooth_trajectory_pose>::iterator &pose_list_iterator, int i, double s);
+		bool optimize_time1(vector<ecp_mp::common::bang_bang_trajectory_pose>::iterator &pose_list_iterator, int i, double s);
 		/**
 		 * Calculates the shortest time for the second motion model velocity profile (1 phase motion, only acceleration), in which the given distance
 		 * can be covered with the given constraints on maximal velocity and acceleration.
 		 * @param i number of axis for which the calculations are performed
 		 * @param s distance to be covered in a given axis
+		 * @return true if the trajectory recalculation is not needed (if initial velocity was not changed)
 		 */
-		void optimize_time2(std::list<ecp_mp::common::smooth_trajectory_pose>::iterator &pose_list_iterator, int i, double s);
+		bool optimize_time2(vector<ecp_mp::common::bang_bang_trajectory_pose>::iterator &pose_list_iterator, int i, double s);
 		/**
 		 * Calculates the shortest time for the fourth motion model velocity profile (1 phase motion, only deceleration), in which the given distance
 		 * can be covered with the given constraints on maximal velocity and acceleration.
 		 * @param i number of axis for which the calculations are performed
 		 * @param s distance to be covered in a given axis
+		 * @return true if the trajectory recalculation is not needed (if initial velocity was not changed)
 		 */
-		void optimize_time4(std::list<ecp_mp::common::smooth_trajectory_pose>::iterator &pose_list_iterator, int i, double s);
+		bool optimize_time4(vector<ecp_mp::common::bang_bang_trajectory_pose>::iterator &pose_list_iterator, int i, double s);
 };
 
 } // namespace generator

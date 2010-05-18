@@ -14,13 +14,13 @@ namespace generator {
 
 get_position::get_position(common::task::task& _ecp_task, bool _is_synchronised, lib::ECP_POSE_SPECIFICATION pose_spec, int axes_num) :
         delta (_ecp_task) {
-	position = new double[axes_num];
+	position = vector<double>();
 	this->axes_num = axes_num;
 	this->pose_spec = pose_spec;
 }
 
 get_position::~get_position() {
-	delete position;
+
 }
 
 bool get_position::first_step() {
@@ -51,25 +51,28 @@ bool get_position::next_step() {
 		if (pose_spec == lib::ECP_XYZ_ANGLE_AXIS) {
 			lib::Xyz_Angle_Axis_vector angle_axis_vector;
 			actual_position.get_xyz_angle_axis(angle_axis_vector);
-			angle_axis_vector.to_table(position);
+			angle_axis_vector.to_vector(position);
 
 		} else if (pose_spec == lib::ECP_XYZ_EULER_ZYZ) {
 			lib::Xyz_Euler_Zyz_vector euler_vector;
 			actual_position.get_xyz_euler_zyz(euler_vector);
-			euler_vector.to_table(position);
+			euler_vector.to_vector(position);
 
 		} else {
 			throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 		}
 
 	} else if (pose_spec == lib::ECP_JOINT || pose_spec == lib::ECP_MOTOR) {
-		memcpy(the_robot->reply_package.arm.pf_def.arm_coordinates, position, axes_num * sizeof(double));
+		//memcpy(the_robot->reply_package.arm.pf_def.arm_coordinates, position, axes_num * sizeof(double));
+		for (int i = 0; i < axes_num; i++) {
+			position.push_back(the_robot->reply_package.arm.pf_def.arm_coordinates[i]);
+		}
 	} else {
 		throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 	}
 }
 
-double * get_position::get_position_array() {
+vector<double> get_position::get_position_vector() {
 	return position;
 }
 

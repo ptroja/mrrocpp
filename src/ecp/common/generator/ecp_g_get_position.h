@@ -11,6 +11,10 @@
 #include "ecp/common/generator/ecp_g_delta.h"
 #include "lib/mrmath/mrmath.h"
 
+#include <vector>
+
+using namespace std;
+
 namespace mrrocpp {
 namespace ecp {
 namespace common {
@@ -42,13 +46,13 @@ class get_position : public delta {
 		/**
 		 * @return array containing actual robot position expressed in representation specified by pose_spec variable
 		 */
-		double * get_position_array();
+		vector<double> get_position_vector();
 
 	private:
 		/**
 		 * Dynamically allocated array filled with coordinates read from the robot.
 		 */
-		double * position;
+		vector<double> position;
 		/**
 		 * Number of axes for a given robot in used representation.
 		 */
