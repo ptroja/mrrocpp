@@ -41,7 +41,7 @@ public:
 	 * @param currentPosition
 	 * @param newPosition
 	 */
-	virtual lib::Homog_matrix get_position_change(const lib::Homog_matrix& current_position) = 0;
+	virtual lib::Homog_matrix get_position_change(const lib::Homog_matrix& current_position, double dt) = 0;
 	/**
 	 * Returns fradia_sensor.
 	 * @return
