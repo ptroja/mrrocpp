@@ -30,7 +30,7 @@
 #include <netinet/in.h>
 #include <netdb.h>
 
-#include "C_CPN.h"
+#include "c_cpn.h"
 
 #define QUEUE_SIZE 10
 // Maximum size of one packet in bytes; used for message's segmentation
@@ -152,7 +152,7 @@ int CPN_send(const char* data)
 {
 	if (socketfd < 0) return -2;
 	
-	char* packet = malloc(PACKET_SIZE);
+	char* packet = (char *) malloc(PACKET_SIZE);
 	int i = 0, total_bytes_sent = 0;
 	int data_length = strlen(data);
 	
@@ -212,7 +212,7 @@ char* CPN_receive()
 {
 	int total_payload_size = 0;
 	
-	bufferlist_node_t* head = malloc(sizeof(bufferlist_node_t));
+	bufferlist_node_t* head = (bufferlist_node_t*) malloc(sizeof(bufferlist_node_t));
 	bufferlist_node_t* current_node = head;
 	
 	/* Read the transmission, maybe consisting of multiple packets	*/
@@ -231,7 +231,7 @@ char* CPN_receive()
 		}
 
 		// read content of incoming packet
-		current_node->buffer = malloc(packet_payload_size);
+		current_node->buffer = (char *) malloc(packet_payload_size);
 		int packet_read = 0;
 		do
 		{
@@ -249,7 +249,7 @@ char* CPN_receive()
 		
 		// we could read the packet, so fill in data into the node of the list
 		current_node->size = packet_payload_size;
-		current_node->next = malloc(sizeof(bufferlist_node_t));
+		current_node->next = (bufferlist_node_t*) malloc(sizeof(bufferlist_node_t));
 		current_node = current_node->next;
 		current_node->next = NULL; // terminate the list, if no element is appended
 		
@@ -258,7 +258,7 @@ char* CPN_receive()
 	/* Build the return-string from the buffers in the linked-list
 	 * and free the list
 	 */
-	char* data = malloc(total_payload_size + 1);
+	char* data = (char *) malloc(total_payload_size + 1);
 	int i = 0;
 	current_node = head;
 	
