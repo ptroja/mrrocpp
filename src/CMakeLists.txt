@@ -46,6 +46,10 @@ CMAKE_DEPENDENT_OPTION(ROBOT_SMB
 CMAKE_DEPENDENT_OPTION(ROBOT_SPKM
 	"Build support for SwarmItFIX parallel kinematics machine robot"
 	ON "ROBOTS_SWARMITFIX" OFF)
+	
+CMAKE_DEPENDENT_OPTION(ROBOT_BIRD_HAND
+	"Build support for three finger robot hand"
+	ON "ROBOTS_SWARMITFIX" OFF)
 
 option(USE_MESSIP "Use MESSIP TCP messaging protocol" OFF)
 

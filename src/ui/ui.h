@@ -202,6 +202,7 @@ typedef struct {
 	ecp_edp_ui_robot_def conveyor;
 	ecp_edp_ui_robot_def speaker;
 	ecp_edp_ui_robot_def spkm;
+	ecp_edp_ui_robot_def bird_hand;
 	ecp_edp_ui_robot_def smb;
 	ecp_edp_ui_robot_def shead;
 

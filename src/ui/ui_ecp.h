@@ -24,6 +24,7 @@ typedef struct{
 	ui_tfg_and_conv_robot *spkm;
 	ui_tfg_and_conv_robot *smb;
 	ui_tfg_and_conv_robot *shead;
+	ui_tfg_and_conv_robot *bird_hand;
 	ui_speaker_robot *speaker;
 	ui_irp6_common_robot *irp6_mechatronika;
 	} ui_robot_def;

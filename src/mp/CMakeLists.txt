@@ -14,6 +14,7 @@ add_library(mprobots
 	robot/mp_r_speaker.cc
 	robot/mp_r_irp6_mechatronika.cc
 	robot/mp_r_polycrank.cc
+	robot/mp_r_bird_hand.cc
 	robot/mp_r_spkm.cc
 	robot/mp_r_smb.cc
 	robot/mp_r_shead.cc
