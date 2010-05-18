@@ -50,12 +50,12 @@ private:
 	// odbieranie statusu robota
 	lib::single_thread_request_port<lib::bird_hand_status>
 			*bird_hand_status_reply_data_request_port;
-	lib::bird_hand_reply bird_hand_status_reply_structure;
+	lib::bird_hand_status bird_hand_status_reply_structure;
 
 	// odczytanie parametrow konfiguracji
 	lib::single_thread_request_port<lib::bird_hand_configuration>
 			*bird_hand_configuration_reply_data_request_port;
-	lib::bird_hand_reply bird_hand_configuration_reply_structure;
+	lib::bird_hand_configuration bird_hand_configuration_reply_structure;
 
 public:
 	void create_ecp_mp_reply();
