@@ -6,7 +6,7 @@
 #include <boost/thread/locks.hpp>
 
 #include "lib/messip/messip.h"
-#include "../xdr_iarchive.hpp"
+#include "lib/xdr/xdr_iarchive.hpp"
 
 #include "DataBuffer.h"
 
