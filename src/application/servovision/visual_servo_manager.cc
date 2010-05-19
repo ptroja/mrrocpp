@@ -17,7 +17,7 @@ namespace common {
 
 namespace generator {
 
-visual_servo_manager::visual_servo_manager(mrrocpp::ecp::common::task::task & ecp_task, const char *section_name) :
+visual_servo_manager::visual_servo_manager(mrrocpp::ecp::common::task::task & ecp_task, const std::string& section_name) :
 	generator(ecp_task), current_position_saved(false), motion_steps(30), a_max(0), v_max(0)
 {
 	// 2 ms per one step

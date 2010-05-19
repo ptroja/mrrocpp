@@ -26,11 +26,14 @@ namespace generator {
  *  @{
  */
 
+/**
+ *
+ */
 class pb_eih_visual_servo : public mrrocpp::ecp::common::generator::visual_servo
 {
 public:
 	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
-	pb_eih_visual_servo( boost::shared_ptr <visual_servo_regulator> regulator, const char* section_name, mrrocpp::lib::configurator& configurator);
+	pb_eih_visual_servo( boost::shared_ptr <visual_servo_regulator> regulator, const std::string& section_name, mrrocpp::lib::configurator& configurator);
 	virtual ~pb_eih_visual_servo();
 	virtual lib::Homog_matrix get_position_change(const lib::Homog_matrix& current_position, double dt);
 	virtual boost::shared_ptr <mrrocpp::lib::sensor> get_vsp_fradia();
@@ -39,9 +42,6 @@ protected:
 
 	lib::Homog_matrix G_T_E_desired;
 	lib::Homog_matrix E_T_C;
-
-	//Eigen::Matrix <double, 3, 1> desiredTranslation;
-
 };
 
 /** @} */

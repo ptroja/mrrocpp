@@ -1,16 +1,11 @@
 /*
- * pb_eih_visual_servo.cc
+ * pb_sac_visual_servo.cc
  *
- *  Created on: May 11, 2010
+ *  Created on: May 19, 2010
  *      Author: mboryn
  */
 
-#include "pb_eih_visual_servo.h"
-
-using ecp_mp::sensor::fradia_sensor;
-using namespace logger;
-using namespace visual_servo_types;
-using namespace std;
+#include "pb_sac_visual_servo.h"
 
 namespace mrrocpp {
 
@@ -20,7 +15,7 @@ namespace common {
 
 namespace generator {
 
-pb_eih_visual_servo::pb_eih_visual_servo(boost::shared_ptr <visual_servo_regulator> regulator, const std::string& section_name, mrrocpp::lib::configurator& configurator) :
+pb_sac_visual_servo::pb_sac_visual_servo(boost::shared_ptr <visual_servo_regulator> regulator, const std::string& section_name, mrrocpp::lib::configurator& configurator) :
 	visual_servo(regulator)
 {
 	try {
@@ -56,11 +51,12 @@ pb_eih_visual_servo::pb_eih_visual_servo(boost::shared_ptr <visual_servo_regulat
 
 }
 
-pb_eih_visual_servo::~pb_eih_visual_servo()
+pb_sac_visual_servo::~pb_sac_visual_servo()
 {
+
 }
 
-lib::Homog_matrix pb_eih_visual_servo::get_position_change(const lib::Homog_matrix& current_position, double dt)
+lib::Homog_matrix pb_sac_visual_servo::get_position_change(const lib::Homog_matrix& current_position, double dt)
 {
 	lib::Homog_matrix delta_position;
 
@@ -85,12 +81,12 @@ lib::Homog_matrix pb_eih_visual_servo::get_position_change(const lib::Homog_matr
 	return delta_position;
 }
 
-boost::shared_ptr <mrrocpp::lib::sensor> pb_eih_visual_servo::get_vsp_fradia()
+boost::shared_ptr <mrrocpp::lib::sensor> pb_sac_visual_servo::get_vsp_fradia()
 {
 	return boost::dynamic_pointer_cast <mrrocpp::lib::sensor>(vsp_fradia);
 }
 
-} // namespace generator
+}//namespace
 
 }
 
