@@ -123,54 +123,31 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction) 
 
 /*--------------------------------------------------------------------------*/
 void effector::set_robot_model(const lib::c_buffer &instruction) {
-	// uint8_t previous_model;
-	// uint8_t previous_corrector;
-	//printf(" SET ROBOT_MODEL: ");
-	switch (instruction.set_robot_model_type) {
-	case lib::TOOL_FRAME:
-		//printf("TOOL_FRAME\n");
-		// przepisa specyfikacj do TRANSFORMATORa
-		// Przepisanie definicji narzedzia danej w postaci TOOL_FRAME
-		// do wewntrznych struktur danych TRANSFORMATORa
-		// Sprawdzenie czy przepisana macierz jest jednorodna
-		// Jezeli nie, to wyzwalany jest wyjatek.
+	msg->message("set_robot_model");
 
+	lib::bird_hand_cbuffer ecp_edp_cbuffer;
+	memcpy(&ecp_edp_cbuffer, instruction.arm.serialized_command,
+			sizeof(ecp_edp_cbuffer));
 
-		// Przyslano dane dotyczace narzedzia i koncowki.
-		// Sprawdzenie poprawnosci macierzy
-		//	set_tool_frame_in_kinematic_model(lib::Homog_matrix(instruction.robot_model.tool_frame_def.tool_frame));
-	{
-		lib::Homog_matrix hm(instruction.robot_model.tool_frame_def.tool_frame);
+	std::stringstream ss(std::stringstream::in | std::stringstream::out);
 
-		if (!(hm.is_valid())) {
-			throw NonFatal_error_2(INVALID_HOMOGENEOUS_MATRIX);
-		}
-		// Ustawienie macierzy reprezentujacej narzedzie.
-		// TODO: dynamic_cast<>
-		((mrrocpp::kinematics::common::kinematic_model_with_tool*) get_current_kinematic_model())->tool
-				= hm;
+	ss << ecp_edp_cbuffer.bird_hand_configuration_command_structure.d_factor[3];
 
-		/*
-		 // odswierzanie
-		 get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
-		 get_current_kinematic_model()->i2e_transform(current_joints, &current_end_effector_frame);
-		 */
-	}
+	msg->message(ss.str().c_str());
 
-		break;
-	default: // blad: nie istniejaca specyfikacja modelu robota
-		motor_driven_effector::set_robot_model(instruction);
-	}
 }
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
 void effector::get_robot_model(lib::c_buffer &instruction) {
 	//printf(" GET ROBOT_MODEL: ");
-	switch (instruction.get_robot_model_type) {
-	default: // blad: nie istniejaca specyfikacja modelu robota
-		motor_driven_effector::get_robot_model(instruction);
-	}
+	msg->message("get_robot_model");
+
+	lib::bird_hand_rbuffer edp_ecp_rbuffer;
+	edp_ecp_rbuffer.bird_hand_configuration_reply_structure.d_factor[2] = 121;
+	memcpy(reply.arm.serialized_reply, &edp_ecp_rbuffer,
+			sizeof(edp_ecp_rbuffer));
+
 }
 /*--------------------------------------------------------------------------*/
 
