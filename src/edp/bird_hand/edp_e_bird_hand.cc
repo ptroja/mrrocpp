@@ -113,6 +113,10 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction) 
 			= 2.17;
 
 	reply.servo_step = step_counter;
+
+	// clock_gettime();
+	// clock_nanosleep();
+
 }
 /*--------------------------------------------------------------------------*/
 
