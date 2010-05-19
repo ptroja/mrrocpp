@@ -54,6 +54,7 @@ protected:
 	visual_servo_regulator(const lib::configurator & config, const std::string& config_section_name) :
 		config(config), config_section_name(config_section_name)
 	{
+		calculated_control.setZero();
 	}
 
 	const lib::configurator & config;

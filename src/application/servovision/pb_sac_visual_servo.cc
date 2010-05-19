@@ -40,7 +40,7 @@ pb_sac_visual_servo::pb_sac_visual_servo(boost::shared_ptr <visual_servo_regulat
 
 		vsp_fradia->configure_fradia_task(pb_config);
 
-		E_T_C = configurator.value <3, 4> ("E_T_C", section_name);
+		O_T_C = configurator.value <3, 4> ("O_T_C", section_name);
 
 		lib::Homog_matrix E_T_G_desired = configurator.value <3, 4> ("E_T_G_desired", section_name);
 		G_T_E_desired = !E_T_G_desired;
@@ -64,8 +64,9 @@ lib::Homog_matrix pb_sac_visual_servo::get_position_change(const lib::Homog_matr
 	if (vsp_fradia->received_object.tracking) {
 		lib::Homog_matrix C_T_G(vsp_fradia->received_object.position);
 		lib::Homog_matrix error_matrix;
+		lib::Homog_matrix E_T_O = !current_position;
 
-		error_matrix = G_T_E_desired * E_T_C * C_T_G;
+		error_matrix = G_T_E_desired * E_T_O * O_T_C * C_T_G;
 
 		lib::Xyz_Angle_Axis_vector aa_vector;
 		error_matrix.get_xyz_angle_axis(aa_vector);
