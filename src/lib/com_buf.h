@@ -35,8 +35,8 @@
 namespace mrrocpp {
 namespace lib {
 
-#define ECP_EDP_SERIALIZED_COMMAND_SIZE 300
-#define EDP_ECP_SERIALIZED_REPLY_SIZE 300
+#define ECP_EDP_SERIALIZED_COMMAND_SIZE 500
+#define EDP_ECP_SERIALIZED_REPLY_SIZE 500
 
 //------------------------------------------------------------------------------
 /*!
@@ -631,7 +631,7 @@ typedef union c_buffer_robot_model {
 	} servo_algorithm;
 	//----------------------------------------------------------
 	struct {
-		double position[3];	// TODO: this should be a Eigen::Vector3f
+		double position[3]; // TODO: this should be a Eigen::Vector3f
 		double weight;
 	} force_tool;
 

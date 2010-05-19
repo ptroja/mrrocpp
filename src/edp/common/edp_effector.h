@@ -43,8 +43,7 @@ namespace common {
  *
  * \author yoyek
  */
-class effector
-{
+class effector {
 protected:
 
 	/*!
@@ -84,14 +83,14 @@ protected:
 	 *
 	 * IT also makes initial ECP command interpretation..
 	 */
-	lib::INSTRUCTION_TYPE receive_instruction(void); // by YW
+	virtual lib::INSTRUCTION_TYPE receive_instruction(void); // by YW
 
 	/*!
 	 * \brief method to reply to ECP
 	 *
 	 * Basing on the previous computation..
 	 */
-	void reply_to_instruction(void);
+	virtual void reply_to_instruction(void);
 
 	/*!
 	 * \brief method to establish error sent to ECP.
@@ -156,7 +155,6 @@ public:
 	 * It destroys the objects to communicate with UI SR.
 	 */
 	virtual ~effector();
-
 
 	/*!
 	 * \brief ECP command union.

@@ -25,6 +25,8 @@ namespace bird_hand {
  */
 class effector: public common::manip_effector {
 protected:
+	lib::bird_hand_cbuffer ecp_edp_cbuffer;
+	lib::bird_hand_rbuffer edp_ecp_rbuffer;
 
 	/*!
 	 * \brief method,  creates a list of available kinematic models for bird_hand effector.
@@ -67,11 +69,40 @@ public:
 	void get_arm_position(bool read_hardware, lib::c_buffer &instruction); // odczytanie pozycji ramienia
 
 	/*!
+	 * \brief method to set the robot model commanded by ECP
+	 *
+	 * The model consists of tool_frame and models handled in set_robot_model method of motor_driven_effector called here
+	 */
+	void set_robot_model(const lib::c_buffer &instruction);
+
+	/*!
+	 * \brief method to get (read) the robot model
+	 *
+	 * The model consists of tool_frame and models handled in set_robot_model method of motor_driven_effector called here.
+	 * Then it is sent to the ECP.
+	 */
+	void get_robot_model(lib::c_buffer &instruction);
+
+	/*!
 	 * \brief method to choose master_order variant
 	 *
 	 * IHere the single thread variant is chosen
 	 */
 	void master_order(common::MT_ORDER nm_task, int nm_tryb);
+
+	/*!
+	 * \brief method to receive instruction from ECP
+	 *
+	 * IT also makes initial ECP command interpretation..
+	 */
+	lib::INSTRUCTION_TYPE receive_instruction(void); // by YW
+
+	/*!
+	 * \brief method to reply to ECP
+	 *
+	 * Basing on the previous computation..
+	 */
+	void reply_to_instruction(void);
 
 };
 
