@@ -65,13 +65,13 @@ bool bird_hand::next_step() {
 		std::stringstream ss(std::stringstream::in | std::stringstream::out);
 		ss << "licznik: "
 				<< bird_hand_status_reply_structure.meassured_current[3]
-				<< "node_counter:  " << node_counter;
+				<< ", node_counter:  " << node_counter;
 
 		ecp_t.sr_ecp_msg->message(ss.str().c_str());
 
 	}
 
-	if (node_counter < 5) {
+	if (node_counter < 3) {
 		bird_hand_status_reply_data_request_port->set_request();
 		return true;
 	} else {

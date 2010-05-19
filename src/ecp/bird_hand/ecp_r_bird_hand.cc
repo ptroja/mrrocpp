@@ -76,8 +76,8 @@ void robot::create_command() {
 	is_new_data = ((bird_hand_command_data_port.is_new_data())
 			|| (bird_hand_configuration_command_data_port.is_new_data()));
 
-	is_new_request = ((bird_hand_status_reply_data_request_port.is_new_data())
-			|| (bird_hand_configuration_reply_data_request_port.is_new_data()));
+	is_new_request = ((bird_hand_status_reply_data_request_port.is_new_request())
+			|| (bird_hand_configuration_reply_data_request_port.is_new_request()));
 
 	communicate_with_edp = true;
 	if (is_new_data && is_new_request) {

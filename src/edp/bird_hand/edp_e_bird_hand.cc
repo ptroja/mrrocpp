@@ -109,24 +109,11 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction) 
 	std::stringstream ss(std::stringstream::in | std::stringstream::out);
 	ss << "get_arm_position: " << licznik;
 	msg->message(ss.str().c_str());
-	//	printf("%s\n", ss.str().c_str());
-	/*
-	 lib::bird_hand_rbuffer edp_ecp_rbuffer;
-	 edp_ecp_rbuffer.bird_hand_controller[3].position = licznikaaa;
 
-	 if (licznikaaa < 10) {
-	 for (int i = 0; i < 6; i++) {
-	 edp_ecp_rbuffer.bird_hand_controller[i].motion_in_progress = true;
-	 }
-
-	 } else {
-	 for (int i = 0; i < 6; i++) {
-	 edp_ecp_rbuffer.bird_hand_controller[i].motion_in_progress = false;
-	 }
-	 }
-	 */
 	licznik++;
 	lib::bird_hand_rbuffer edp_ecp_rbuffer;
+	edp_ecp_rbuffer.bird_hand_status_reply_structure.meassured_current[3]
+			= 2.17;
 	memcpy(reply.arm.serialized_reply, &edp_ecp_rbuffer,
 			sizeof(edp_ecp_rbuffer));
 
