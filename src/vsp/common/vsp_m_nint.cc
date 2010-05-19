@@ -23,7 +23,6 @@
 #include <sys/iofunc.h>
 #include <sys/dispatch.h>
 #include <devctl.h>			// do devctl()
-
 #include <string.h>
 #include <signal.h>
 #include <process.h>
@@ -32,7 +31,6 @@
 #include <sys/sched.h>
 
 #include <fstream>						// do sprawdzenia czy istnieje plik /dev/TWOJSENSOR
-
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
@@ -40,83 +38,86 @@
 
 #include "lib/srlib.h"
 #include "vsp/common/vsp_sensor.h"				// zawiera deklaracje klasy vsp_sensor + struktury komunikacyjne
-
 // Konfigurator
 #include "lib/configurator.h"
-
 
 namespace mrrocpp {
 namespace vsp {
 namespace common {
 
 /********************************* GLOBALS **********************************/
-static sensor::sensor *vs;		// czujnik wirtualny
+static sensor::sensor *vs; // czujnik wirtualny
 
-static 	lib::condition_synchroniser vsp_synchroniser;
+static lib::condition_synchroniser vsp_synchroniser;
 
-static bool TERMINATE=false;											// zakonczenie obu watkow
+static bool TERMINATE = false; // zakonczenie obu watkow
 
-static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;	// inicjalizacja MUTEXa
+static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER; // inicjalizacja MUTEXa
 
 /********************************** SIGCATCH ********************************/
-void catch_signal(int sig) {
-  switch(sig) {
-	case SIGTERM:
-	  TERMINATE = true;
-	  break;
-	case SIGSEGV:
-	  fprintf(stderr, "Segmentation fault in VSP process\n");
-	  signal(SIGSEGV, SIG_DFL);
-	  break;
-  } // end: switch
- }
+void catch_signal(int sig)
+{
+	switch (sig)
+	{
+		case SIGTERM:
+			TERMINATE = true;
+			break;
+		case SIGSEGV:
+			fprintf(stderr, "Segmentation fault in VSP process\n");
+			signal(SIGSEGV, SIG_DFL);
+			break;
+	} // end: switch
+}
 
 /******************************** PROTOTYPES ********************************/
-int io_read (resmgr_context_t *ctp, io_read_t *msg, RESMGR_OCB_T *ocb);
-int io_write (resmgr_context_t *ctp, io_write_t *msg, RESMGR_OCB_T *ocb);
+int io_read(resmgr_context_t *ctp, io_read_t *msg, RESMGR_OCB_T *ocb);
+int io_write(resmgr_context_t *ctp, io_write_t *msg, RESMGR_OCB_T *ocb);
 int io_devctl(resmgr_context_t *ctp, io_devctl_t *msg, RESMGR_OCB_T *ocb);
 
 /***************************** ERROR_HANDLER ******************************/
-template<class ERROR>
-void error_handler(ERROR & e){
-	switch(e.error_class){
+template <class ERROR>
+void error_handler(ERROR & e)
+{
+	switch (e.error_class)
+	{
 		case lib::SYSTEM_ERROR:
-			if(e.error_no == DISPATCH_ALLOCATION_ERROR)
+			if (e.error_no == DISPATCH_ALLOCATION_ERROR)
 				printf("ERROR: Unable to allocate dispatch handle.\n");
-			if(e.error_no == DEVICE_EXISTS)
+			if (e.error_no == DEVICE_EXISTS)
 				printf("ERROR: Device using that name already exists.\n");
-			if(e.error_no == DEVICE_CREATION_ERROR)
+			if (e.error_no == DEVICE_CREATION_ERROR)
 				printf("ERROR: Unable to attach sensor device.\n");
-			if(e.error_no == DISPATCH_LOOP_ERROR)
+			if (e.error_no == DISPATCH_LOOP_ERROR)
 				printf("ERROR: Block error in main dispatch loop.\n");
 			printf("VSP aborted due to lib::SYSTEM_ERROR\n");
-			vsp::common::vs->sr_msg->message (lib::SYSTEM_ERROR, e.error_no);
-			TERMINATE=true;
+			vsp::common::vs->sr_msg->message(lib::SYSTEM_ERROR, e.error_no);
+			TERMINATE = true;
 			break;
 		case lib::FATAL_ERROR:
-			vsp::common::vs->sr_msg->message (lib::FATAL_ERROR, e.error_no);
+			vsp::common::vs->sr_msg->message(lib::FATAL_ERROR, e.error_no);
 			break;
 		case lib::NON_FATAL_ERROR:
-			switch(e.error_no) {
-			case INVALID_COMMAND_TO_VSP:
-				vsp::common::vs->from_vsp.vsp_report= lib::INVALID_VSP_COMMAND;
-				vsp::common::vs->sr_msg->message (lib::NON_FATAL_ERROR, e.error_no);
-			break;
-			case SENSOR_NOT_CONFIGURED:
-				vsp::common::vs->from_vsp.vsp_report= lib::VSP_SENSOR_NOT_CONFIGURED;
-				vsp::common::vs->sr_msg->message (lib::NON_FATAL_ERROR, e.error_no);
-				break;
-			case READING_NOT_READY:
-				vsp::common::vs->from_vsp.vsp_report= lib::VSP_READING_NOT_READY;
-				break;
-			default:
-				vsp::common::vs->sr_msg->message (lib::NON_FATAL_ERROR, VSP_UNIDENTIFIED_ERROR);
+			switch (e.error_no)
+			{
+				case INVALID_COMMAND_TO_VSP:
+					vsp::common::vs->from_vsp.vsp_report = lib::INVALID_VSP_COMMAND;
+					vsp::common::vs->sr_msg->message(lib::NON_FATAL_ERROR, e.error_no);
+					break;
+				case SENSOR_NOT_CONFIGURED:
+					vsp::common::vs->from_vsp.vsp_report = lib::VSP_SENSOR_NOT_CONFIGURED;
+					vsp::common::vs->sr_msg->message(lib::NON_FATAL_ERROR, e.error_no);
+					break;
+				case READING_NOT_READY:
+					vsp::common::vs->from_vsp.vsp_report = lib::VSP_READING_NOT_READY;
+					break;
+				default:
+					vsp::common::vs->sr_msg->message(lib::NON_FATAL_ERROR, VSP_UNIDENTIFIED_ERROR);
 			}
 			break;
 		default:
-			vsp::common::vs->sr_msg->message (lib::NON_FATAL_ERROR, VSP_UNIDENTIFIED_ERROR);
-		} // end switch
-	} // end error_handler
+			vsp::common::vs->sr_msg->message(lib::NON_FATAL_ERROR, VSP_UNIDENTIFIED_ERROR);
+	} // end switch
+} // end error_handler
 
 /****************************** SECOND THREAD ******************************/
 void* cyclic_read( void*  arg ){
@@ -134,18 +135,18 @@ void* cyclic_read( void*  arg ){
 			pthread_mutex_lock( &mutex );
 			vsp::common::vs->initiate_reading();
 			pthread_mutex_unlock( &mutex );
-			} // koniec TRY
+		} // koniec TRY
 		catch (lib::VSP_main_error & e){
 			error_handler(e);
 			pthread_mutex_unlock( &mutex );
-			} // end CATCH
+		} // end CATCH
 		catch (lib::sensor::sensor_error & e){
 			error_handler(e);
 			pthread_mutex_unlock( &mutex );
-			}
-		}	// end for(;;)
+		}
+	}	// end for(;;)
 	return(0);
-	}
+}
 
 /**************************** WRITE_TO_SENSOR ******************************/
 void write_to_sensor( lib::VSP_COMMAND i_code){
@@ -307,8 +308,8 @@ int main(int argc, char *argv[]) {
     dispatch_t           *dpp;
     dispatch_context_t   *ctp;
     int                  id;
-    	std::string resourceman_attach_point;
-    	static resmgr_connect_funcs_t   connect_funcs;
+	std::string resourceman_attach_point;
+	static resmgr_connect_funcs_t   connect_funcs;
 	static resmgr_io_funcs_t        io_funcs;
 	static iofunc_attr_t            attr;
 
@@ -390,14 +391,14 @@ int main(int argc, char *argv[]) {
 			if((ctp = dispatch_block(ctp)) == NULL)
 				throw lib::VSP_main_error(lib::SYSTEM_ERROR, DISPATCH_LOOP_ERROR);	// wyrzucany blad
 			dispatch_handler(ctp);
-	 		} // end for(;;)
+		} // end for(;;)
 	     vsp::common::vs->sr_msg->message ("VSP terminated");
 	     delete vsp::common::vs;
-		} // koniec TRY
+	} // koniec TRY
 	catch (lib::VSP_main_error & e){
 		vsp::common::error_handler(e);
 		exit(EXIT_FAILURE);
-		} // end CATCH
-	}	// end MAIN
+	} // end CATCH
+}	// end MAIN
 
 
