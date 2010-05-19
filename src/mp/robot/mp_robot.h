@@ -17,8 +17,11 @@ class robot : public ecp_mp::robot
 	// musi zawierac pola danych (skladowe) dotyczace
 	// ostatnio zrealizowanej pozycji oraz pozycji zadanej
 private:
+#if !defined(PROCESS_SPAWN_RSH)
 	//! deskryptor wezla na ktorym jest powolane ECP oraz jego PID
 	uint32_t nd;
+#endif
+
 	pid_t ECP_pid;
 
 #if !defined(USE_MESSIP_SRR)
@@ -29,7 +32,6 @@ private:
 	messip_channel_t* ECP_fd;
 #endif
 
-
 protected:
 
 	task::task &mp_object;
@@ -37,7 +39,7 @@ protected:
 public:
 
 	//ew. koordynacja ciagla domyslnie wylaczona ma wplyw na instrukcje move
-		bool continuous_coordination;
+	bool continuous_coordination;
 
 	// Wysyla puls do Mp przed oczekiwaniem na spotkanie
 	void send_pulse_to_ecp(int pulse_code, int pulse_value = 1);
