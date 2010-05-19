@@ -8,7 +8,7 @@
 namespace mrrocpp {
 namespace lib {
 
-#define BIRD_HAND_COMMAND_DATA_PORT "bird_hand_configuration_data_port"
+#define BIRD_HAND_COMMAND_DATA_PORT "bird_hand_command_data_port"
 #define BIRD_HAND_STATUS_DATA_REQUEST_PORT "bird_hand_status_data_request_port"
 
 #define BIRD_HAND_CONFIGURATION_DATA_PORT "bird_hand_configuration_data_port"
@@ -17,7 +17,7 @@ namespace lib {
 #define BIRD_HAND_NUM_OF_SERVOS	8
 
 enum BIRD_HAND_MOTION_VARIANT {
-	BIRD_HAND_SIGLE_STEP_POSTION_INCREMENT,
+	BIRD_HAND_SIGLE_STEP_POSTION_INCREMENT = 0,
 	BIRD_HAND_MACROSTEP_POSITION_INCREMENT,
 	BIRD_HAND_MACROSTEP_ABSOLUTE_POSITION
 };
