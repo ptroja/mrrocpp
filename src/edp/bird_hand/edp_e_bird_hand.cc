@@ -165,6 +165,17 @@ void effector::create_threads() {
 	vis_obj = new common::vis_server(*this);
 }
 
+lib::INSTRUCTION_TYPE effector::receive_instruction(void) {
+
+	lib::INSTRUCTION_TYPE ret_val = common::effector::receive_instruction();
+
+	return ret_val;
+}
+
+void effector::reply_to_instruction(void) {
+	common::effector::reply_to_instruction();
+}
+
 }
 // namespace bird_hand
 
