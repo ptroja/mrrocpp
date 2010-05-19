@@ -17,8 +17,6 @@ bird_hand::bird_hand(common::task::task& _ecp_task) :
 	bird_hand_command_data_port = the_robot->port_manager.get_port<
 			lib::bird_hand_command> (BIRD_HAND_COMMAND_DATA_PORT);
 
-
-
 	bird_hand_configuration_command_data_port
 			= the_robot->port_manager.get_port<lib::bird_hand_configuration> (
 					BIRD_HAND_CONFIGURATION_DATA_PORT);
@@ -48,9 +46,8 @@ bool bird_hand::first_step() {
 
 	ecp_t.sr_ecp_msg->message("bird_hand first_step");
 
-	//bird_hand_data_port_command_structure.da[3] = 3.13;
-	bird_hand_configuration_command_data_port->set(
-			bird_hand_configuration_command_structure);
+	//	bird_hand_configuration_command_data_port->set(	bird_hand_configuration_command_structure);
+	bird_hand_command_structure.desired_position[3] = 3.14;
 	bird_hand_command_data_port->set(bird_hand_command_structure);
 
 	bird_hand_status_reply_data_request_port->set_request();
@@ -74,7 +71,7 @@ bool bird_hand::next_step() {
 
 	}
 
-	if (node_counter < 10) {
+	if (node_counter < 5) {
 		bird_hand_status_reply_data_request_port->set_request();
 		return true;
 	} else {
