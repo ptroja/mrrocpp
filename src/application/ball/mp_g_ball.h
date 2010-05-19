@@ -10,6 +10,7 @@
 #include "lib/mrmath/mrmath.h"
 
 #include "mp/generator/mp_generator.h"
+#include "mp/robot/mp_robot.h"
 
 namespace mrrocpp {
 namespace mp {
@@ -33,15 +34,16 @@ private:
 	bool irp6ot_con, irp6p_con;
 	lib::Homog_matrix global_base;
 
-	lib::trajectory_description td;
-
 	//! initial speed factor of trajectory
 	double speedup;
 
 	//! trajectory speeed up factor
 	const double speedup_factor;
 
+	//! startup positions
 	lib::Homog_matrix irp6ot_start, irp6p_start;
+
+	void setup_command(robot::robot & robot);
 
 public:
 	int step_no;

@@ -6,7 +6,7 @@
 #include <boost/serialization/string.hpp>
 
 #include "AgentBase.h"
-#include "../xdr_oarchive.hpp"
+#include "lib/xdr/xdr_oarchive.hpp"
 
 #if defined(USE_MESSIP_SRR)
 #include "../messip/messip.h"
