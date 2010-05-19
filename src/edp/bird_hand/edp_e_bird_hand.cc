@@ -86,9 +86,6 @@ effector::effector(lib::configurator &_config) :
 /*--------------------------------------------------------------------------*/
 void effector::move_arm(const lib::c_buffer &instruction) {
 	msg->message("move_arm");
-	lib::bird_hand_cbuffer ecp_edp_cbuffer;
-	memcpy(&ecp_edp_cbuffer, instruction.arm.serialized_command,
-			sizeof(ecp_edp_cbuffer));
 
 	std::stringstream ss(std::stringstream::in | std::stringstream::out);
 
@@ -111,11 +108,9 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction) 
 	msg->message(ss.str().c_str());
 
 	licznik++;
-	lib::bird_hand_rbuffer edp_ecp_rbuffer;
+
 	edp_ecp_rbuffer.bird_hand_status_reply_structure.meassured_current[3]
 			= 2.17;
-	memcpy(reply.arm.serialized_reply, &edp_ecp_rbuffer,
-			sizeof(edp_ecp_rbuffer));
 
 	reply.servo_step = step_counter;
 }
@@ -124,10 +119,6 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction) 
 /*--------------------------------------------------------------------------*/
 void effector::set_robot_model(const lib::c_buffer &instruction) {
 	msg->message("set_robot_model");
-
-	lib::bird_hand_cbuffer ecp_edp_cbuffer;
-	memcpy(&ecp_edp_cbuffer, instruction.arm.serialized_command,
-			sizeof(ecp_edp_cbuffer));
 
 	std::stringstream ss(std::stringstream::in | std::stringstream::out);
 
@@ -143,10 +134,7 @@ void effector::get_robot_model(lib::c_buffer &instruction) {
 	//printf(" GET ROBOT_MODEL: ");
 	msg->message("get_robot_model");
 
-	lib::bird_hand_rbuffer edp_ecp_rbuffer;
 	edp_ecp_rbuffer.bird_hand_configuration_reply_structure.d_factor[2] = 121;
-	memcpy(reply.arm.serialized_reply, &edp_ecp_rbuffer,
-			sizeof(edp_ecp_rbuffer));
 
 }
 /*--------------------------------------------------------------------------*/
@@ -168,11 +156,14 @@ void effector::create_threads() {
 lib::INSTRUCTION_TYPE effector::receive_instruction(void) {
 
 	lib::INSTRUCTION_TYPE ret_val = common::effector::receive_instruction();
-
+	memcpy(&ecp_edp_cbuffer, instruction.arm.serialized_command,
+			sizeof(ecp_edp_cbuffer));
 	return ret_val;
 }
 
 void effector::reply_to_instruction(void) {
+	memcpy(reply.arm.serialized_reply, &edp_ecp_rbuffer,
+			sizeof(edp_ecp_rbuffer));
 	common::effector::reply_to_instruction();
 }
 

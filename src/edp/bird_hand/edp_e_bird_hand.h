@@ -25,6 +25,8 @@ namespace bird_hand {
  */
 class effector: public common::manip_effector {
 protected:
+	lib::bird_hand_cbuffer ecp_edp_cbuffer;
+	lib::bird_hand_rbuffer edp_ecp_rbuffer;
 
 	/*!
 	 * \brief method,  creates a list of available kinematic models for bird_hand effector.
