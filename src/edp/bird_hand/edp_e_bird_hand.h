@@ -67,6 +67,22 @@ public:
 	void get_arm_position(bool read_hardware, lib::c_buffer &instruction); // odczytanie pozycji ramienia
 
 	/*!
+	 * \brief method to set the robot model commanded by ECP
+	 *
+	 * The model consists of tool_frame and models handled in set_robot_model method of motor_driven_effector called here
+	 */
+	virtual void set_robot_model(const lib::c_buffer &instruction);
+
+	/*!
+	 * \brief method to get (read) the robot model
+	 *
+	 * The model consists of tool_frame and models handled in set_robot_model method of motor_driven_effector called here.
+	 * Then it is sent to the ECP.
+	 */
+	virtual void get_robot_model(lib::c_buffer &instruction);
+
+
+	/*!
 	 * \brief method to choose master_order variant
 	 *
 	 * IHere the single thread variant is chosen
