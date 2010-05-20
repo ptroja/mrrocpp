@@ -32,6 +32,8 @@ public:
 	void main_task_algorithm(void);
 private:
 	boost::shared_ptr<ecp_g_conveyor_sinus> sinus_gen;
+
+	int bbb;
 };
 
 } //namespace
