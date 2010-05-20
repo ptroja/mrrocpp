@@ -7,7 +7,6 @@
 
 #define BIRD_HAND_STEP_TIME_IN_NS 2000000
 
-
 namespace mrrocpp {
 namespace lib {
 
@@ -28,7 +27,7 @@ enum BIRD_HAND_MOTION_VARIANT {
 struct bird_hand_command {
 	int motion_steps;
 	int ecp_query_step;
-	BIRD_HAND_MOTION_VARIANT profile_type;
+	BIRD_HAND_MOTION_VARIANT profile_type[BIRD_HAND_NUM_OF_SERVOS];
 	double reciprocal_of_damping[BIRD_HAND_NUM_OF_SERVOS];
 	double desired_torque[BIRD_HAND_NUM_OF_SERVOS];
 	double desired_position[BIRD_HAND_NUM_OF_SERVOS];
@@ -38,27 +37,35 @@ struct bird_hand_status {
 	double meassured_position[BIRD_HAND_NUM_OF_SERVOS];
 	double meassured_torque[BIRD_HAND_NUM_OF_SERVOS];
 	double meassured_current[BIRD_HAND_NUM_OF_SERVOS];
-	bool upper_limit_of_absolute_value_of_desired_position_increment;
-	bool upper_limit_of_absolute_value_of_computed_position_increment;
-	bool upper_limit_of_absolute_position;
-	bool lower_limit_of_absolute_position;
-	bool upper_limit_of_absolute_value_of_desired_torque;
-	bool lower_limit_of_absolute_value_of_desired_torque;
-	bool upper_limit_of_absolute_value_of_meassured_torque;
-	bool upper_limit_of_meassured_current;
+	bool
+			upper_limit_of_absolute_value_of_desired_position_increment[BIRD_HAND_NUM_OF_SERVOS];
+	bool
+			upper_limit_of_absolute_value_of_computed_position_increment[BIRD_HAND_NUM_OF_SERVOS];
+	bool upper_limit_of_absolute_position[BIRD_HAND_NUM_OF_SERVOS];
+	bool lower_limit_of_absolute_position[BIRD_HAND_NUM_OF_SERVOS];
+	bool
+			upper_limit_of_absolute_value_of_desired_torque[BIRD_HAND_NUM_OF_SERVOS];
+	bool
+			lower_limit_of_absolute_value_of_desired_torque[BIRD_HAND_NUM_OF_SERVOS];
+	bool
+			upper_limit_of_absolute_value_of_meassured_torque[BIRD_HAND_NUM_OF_SERVOS];
+	bool upper_limit_of_meassured_current[BIRD_HAND_NUM_OF_SERVOS];
 };
 
 struct bird_hand_configuration {
 	int p_factor[BIRD_HAND_NUM_OF_SERVOS];
 	int i_factor[BIRD_HAND_NUM_OF_SERVOS];
 	int d_factor[BIRD_HAND_NUM_OF_SERVOS];
-	int value_of_upper_limit_of_absolute_position;
-	int value_of_lower_limit_of_absolute_position;
-	int value_of_upper_limit_of_meassured_current;
-	int value_of_upper_limit_of_absolute_value_of_torque;
-	int value_of_lower_limit_of_absolute_value_of_torque;
-	int value_of_lower_limit_of_absolute_value_of_meassured_torque;
-	int value_of_upper_limit_of_position_increment;
+	int value_of_upper_limit_of_absolute_position[BIRD_HAND_NUM_OF_SERVOS];
+	int value_of_lower_limit_of_absolute_position[BIRD_HAND_NUM_OF_SERVOS];
+	int value_of_upper_limit_of_meassured_current[BIRD_HAND_NUM_OF_SERVOS];
+	int
+			value_of_upper_limit_of_absolute_value_of_torque[BIRD_HAND_NUM_OF_SERVOS];
+	int
+			value_of_lower_limit_of_absolute_value_of_torque[BIRD_HAND_NUM_OF_SERVOS];
+	int
+			value_of_lower_limit_of_absolute_value_of_meassured_torque[BIRD_HAND_NUM_OF_SERVOS];
+	int value_of_upper_limit_of_position_increment[BIRD_HAND_NUM_OF_SERVOS];
 };
 
 }

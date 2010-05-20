@@ -35,8 +35,8 @@
 namespace mrrocpp {
 namespace lib {
 
-#define ECP_EDP_SERIALIZED_COMMAND_SIZE 500
-#define EDP_ECP_SERIALIZED_REPLY_SIZE 500
+#define ECP_EDP_SERIALIZED_COMMAND_SIZE 1000
+#define EDP_ECP_SERIALIZED_REPLY_SIZE 1000
 
 //------------------------------------------------------------------------------
 /*!
@@ -501,7 +501,8 @@ enum MOTION_TYPE {
 //------------------------------------------------------------------------------
 enum INTERPOLATION_TYPE {
 	MIM, //! motor interpolated motion
-	TCIM //! task coordinates interpolated motion
+	TCIM
+//! task coordinates interpolated motion
 };
 
 //------------------------------------------------------------------------------
