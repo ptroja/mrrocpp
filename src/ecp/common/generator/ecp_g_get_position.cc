@@ -12,6 +12,7 @@ namespace ecp {
 namespace common {
 namespace generator {
 
+
 get_position::get_position(common::task::task& _ecp_task, bool _is_synchronised, lib::ECP_POSE_SPECIFICATION pose_spec, int axes_num) :
         delta (_ecp_task) {
 	position = vector<double>();
