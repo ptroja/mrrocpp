@@ -18,8 +18,8 @@ namespace common {
 
 namespace task {
 
-ecp_t_objectfollower_pb::ecp_t_objectfollower_pb(mrrocpp::lib::configurator& configurator) :
-	task(configurator)
+ecp_t_objectfollower_pb::ecp_t_objectfollower_pb(mrrocpp::lib::configurator& config) :
+	task(config)
 {
 	ecp_m_robot = new ecp::irp6ot::robot(*this);
 	//ecp_m_robot = new ecp::irp6ot_m::robot(*this);
@@ -40,9 +40,9 @@ ecp_t_objectfollower_pb::ecp_t_objectfollower_pb(mrrocpp::lib::configurator& con
 	shared_ptr <position_constraint> cube(new cubic_constraint(p1, p2));
 
 	logDbg("ecp_t_objectfollower_ib::ecp_t_objectfollower_ib(): 1\n");
-	reg = shared_ptr <visual_servo_regulator> (new regulator_p(configurator, config_section_name));
+	reg = shared_ptr <visual_servo_regulator> (new regulator_p(config, config_section_name));
 	logDbg("ecp_t_objectfollower_pb::ecp_t_objectfollower_pb(): 2\n");
-	vs = shared_ptr <visual_servo> (new pb_eih_visual_servo(reg, config_section_name, configurator));
+	vs = shared_ptr <visual_servo> (new pb_eih_visual_servo(reg, config_section_name, config));
 
 	term_cond = shared_ptr<termination_condition>(new object_reached_termination_condition(0.005, 0.005, 50));
 	logDbg("ecp_t_objectfollower_pb::ecp_t_objectfollower_pb(): 3\n");

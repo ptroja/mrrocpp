@@ -13,14 +13,12 @@
 #include "../logger.h"
 #include "ecp/irp6_on_track/ecp_r_irp6ot.h"
 //#include "ecp/irp6ot_m/ecp_r_irp6ot_m.h"
-#include "ecp/common/generator/ecp_g_smooth.h"
 #include "../simple_visual_servo_manager.h"
 #include "../pb_eih_visual_servo.h"
 #include "../cubic_constraint.h"
 #include "../object_reached_termination_condition.h"
 #include "../visual_servo_regulator_p.h"
 
-using mrrocpp::ecp::common::generator::smooth;
 using mrrocpp::ecp::common::generator::simple_visual_servo_manager;
 using mrrocpp::ecp::common::generator::visual_servo_manager;
 using mrrocpp::ecp::common::generator::visual_servo;
@@ -44,7 +42,7 @@ namespace task {
 class ecp_t_objectfollower_pb: public mrrocpp::ecp::common::task::task
 {
 public:
-	ecp_t_objectfollower_pb(mrrocpp::lib::configurator& configurator);
+	ecp_t_objectfollower_pb(mrrocpp::lib::configurator& config);
 	virtual ~ecp_t_objectfollower_pb();
 	void main_task_algorithm(void);
 

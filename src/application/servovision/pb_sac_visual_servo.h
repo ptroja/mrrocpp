@@ -9,6 +9,10 @@
 #define PB_SAC_VISUAL_SERVO_H_
 
 #include "visual_servo.h"
+#include "visual_servo_types.h"
+
+using visual_servo_types::position_based_configuration;
+using visual_servo_types::position_based_reading;
 
 namespace mrrocpp {
 

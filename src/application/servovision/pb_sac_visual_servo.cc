@@ -5,7 +5,14 @@
  *      Author: mboryn
  */
 
+#include <iostream>
+
 #include "pb_sac_visual_servo.h"
+
+using ecp_mp::sensor::fradia_sensor;
+using namespace logger;
+using namespace visual_servo_types;
+using namespace std;
 
 namespace mrrocpp {
 
@@ -66,7 +73,13 @@ lib::Homog_matrix pb_sac_visual_servo::get_position_change(const lib::Homog_matr
 		lib::Homog_matrix error_matrix;
 		lib::Homog_matrix E_T_O = !current_position;
 
+		cout<<"\nC_T_G:\n"<<C_T_G<<endl;
+		cout<<"\nE_T_O:\n"<<E_T_O<<endl;
+
 		error_matrix = G_T_E_desired * E_T_O * O_T_C * C_T_G;
+
+		cout<<"\nerror_matrix:\n"<<error_matrix<<endl;
+		cout.flush();
 
 		lib::Xyz_Angle_Axis_vector aa_vector;
 		error_matrix.get_xyz_angle_axis(aa_vector);
