@@ -10,8 +10,8 @@ namespace mp {
 namespace robot {
 
 bird_hand::bird_hand(task::task &mp_object_l) :
-	manip_and_conv(lib::ROBOT_BIRD_HAND, ECP_BIRD_HAND_SECTION, mp_object_l,
-			BIRD_HAND_NUM_OF_SERVOS) {
+	manip_and_conv(lib::ROBOT_BIRD_HAND, ECP_BIRD_HAND_SECTION, mp_object_l, BIRD_HAND_NUM_OF_SERVOS)
+{
 }
 
 } // namespace robot

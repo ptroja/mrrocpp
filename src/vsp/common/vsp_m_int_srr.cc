@@ -22,7 +22,6 @@
 
 #include "lib/srlib.h"
 #include "vsp/common/vsp_sensor.h"				// zawiera deklaracje klasy vsp_sensor + struktury komunikacyjne
-
 // Konfigurator
 #include "lib/configurator.h"
 
@@ -35,66 +34,71 @@ namespace vsp {
 namespace common {
 
 /********************************* GLOBALS **********************************/
-static sensor::sensor *vs;		// czujnik wirtualny
+static sensor::sensor *vs; // czujnik wirtualny
 
-static bool TERMINATE = false;									// zakonczenie obu watkow
+static bool TERMINATE = false; // zakonczenie obu watkow
 
 
 /***************************** ERROR_HANDLER ******************************/
-template<class ERROR>
-void error_handler(ERROR & e){
-	switch(e.error_class){
+template <class ERROR>
+void error_handler(ERROR & e)
+{
+	switch (e.error_class)
+	{
 		case lib::SYSTEM_ERROR:
 			printf("VSP aborted due to lib::SYSTEM_ERROR\n");
-			vs->sr_msg->message (lib::SYSTEM_ERROR, e.error_no);
-			TERMINATE=true;
+			vs->sr_msg->message(lib::SYSTEM_ERROR, e.error_no);
+			TERMINATE = true;
 			break;
 		case lib::FATAL_ERROR:
-			vs->sr_msg->message (lib::FATAL_ERROR, e.error_no);
+			vs->sr_msg->message(lib::FATAL_ERROR, e.error_no);
 			break;
 		case lib::NON_FATAL_ERROR:
-			switch(e.error_no){
-			case INVALID_COMMAND_TO_VSP:
-				vs->from_vsp.vsp_report= lib::INVALID_VSP_COMMAND;
-				vs->sr_msg->message (lib::NON_FATAL_ERROR, e.error_no);
-			break;
-			case SENSOR_NOT_CONFIGURED:
-				vs->from_vsp.vsp_report= lib::VSP_SENSOR_NOT_CONFIGURED;
-				vs->sr_msg->message (lib::NON_FATAL_ERROR, e.error_no);
-				break;
-			case READING_NOT_READY:
-				vs->from_vsp.vsp_report= lib::VSP_READING_NOT_READY;
-				break;
-			default:
-				vs->sr_msg->message (lib::NON_FATAL_ERROR, VSP_UNIDENTIFIED_ERROR);
+			switch (e.error_no)
+			{
+				case INVALID_COMMAND_TO_VSP:
+					vs->from_vsp.vsp_report = lib::INVALID_VSP_COMMAND;
+					vs->sr_msg->message(lib::NON_FATAL_ERROR, e.error_no);
+					break;
+				case SENSOR_NOT_CONFIGURED:
+					vs->from_vsp.vsp_report = lib::VSP_SENSOR_NOT_CONFIGURED;
+					vs->sr_msg->message(lib::NON_FATAL_ERROR, e.error_no);
+					break;
+				case READING_NOT_READY:
+					vs->from_vsp.vsp_report = lib::VSP_READING_NOT_READY;
+					break;
+				default:
+					vs->sr_msg->message(lib::NON_FATAL_ERROR, VSP_UNIDENTIFIED_ERROR);
 			}
 			break;
 		default:
-			vs->sr_msg->message (lib::NON_FATAL_ERROR, VSP_UNIDENTIFIED_ERROR);
-		} // end switch
-	} // end error_handler
+			vs->sr_msg->message(lib::NON_FATAL_ERROR, VSP_UNIDENTIFIED_ERROR);
+	} // end switch
+} // end error_handler
 
 } // namespace common
 } // namespace vsp
 } // namespace mrrocpp
 
 /*********************************** MAIN ***********************************/
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
 
 #if defined(PROCESS_SPAWN_RSH)
 	signal(SIGINT, SIG_IGN);
 #endif
 
 	// liczba argumentow
-	if(argc <=6){
+	if (argc <= 6) {
 		printf("Za malo argumentow VSP\n");
 		return -1;
 	}
 
-	 // zczytanie konfiguracji calego systemu
+	// zczytanie konfiguracji calego systemu
 	lib::configurator _config(argv[1], argv[2], argv[3], argv[4], argv[5]);
 
-	std::string attach_point = _config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "resourceman_attach_point");
+	const std::string attach_point =
+			_config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "resourceman_attach_point");
 
 	try {
 
@@ -108,9 +112,9 @@ int main(int argc, char *argv[]) {
 		}
 
 		/* start the resource manager message loop */
-		vsp::common::vs->sr_msg->message ("Device is waiting for clients...");
+		vsp::common::vs->sr_msg->message("Device is waiting for clients...");
 
-		while(!vsp::common::TERMINATE) { // for(;;)
+		while (!vsp::common::TERMINATE) { // for(;;)
 
 			int32_t type, subtype;
 
@@ -129,35 +133,36 @@ int main(int argc, char *argv[]) {
 			vsp::common::vs->from_vsp.vsp_report = lib::VSP_REPLY_OK;
 
 			try {
-				switch(vsp::common::vs->to_vsp.i_code) {
-					case lib::VSP_CONFIGURE_SENSOR :
+				switch (vsp::common::vs->to_vsp.i_code)
+				{
+					case lib::VSP_CONFIGURE_SENSOR:
 						vsp::common::vs->configure_sensor();
 						break;
-					case lib::VSP_INITIATE_READING :
+					case lib::VSP_INITIATE_READING:
 						vsp::common::vs->initiate_reading();
 						break;
-					case lib::VSP_GET_READING :
+					case lib::VSP_GET_READING:
 						vsp::common::vs->get_reading();
 						break;
-					case lib::VSP_TERMINATE :
+					case lib::VSP_TERMINATE:
 						delete vsp::common::vs;
-						vsp::common::TERMINATE=true;
+						vsp::common::TERMINATE = true;
 						break;
-					default :
+					default:
 						throw lib::VSP_main_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_VSP);
 				}
 			}
 
-			catch (lib::VSP_main_error & e){
+			catch (lib::VSP_main_error & e) {
 				vsp::common::error_handler(e);
 			} // end CATCH
-			catch (lib::sensor::sensor_error & e){
+			catch (lib::sensor::sensor_error & e) {
 				vsp::common::error_handler(e);
 			} // end CATCH
 
 			messip::port_reply(ch, rcvid, 0, vsp::common::vs->from_vsp);
- 		} // end while()
-		vsp::common::vs->sr_msg->message ("VSP terminated");
+		} // end while()
+		vsp::common::vs->sr_msg->message("VSP terminated");
 	} // koniec TRY
 	catch (lib::VSP_main_error & e) {
 		vsp::common::error_handler(e);

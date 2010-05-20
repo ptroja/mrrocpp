@@ -501,8 +501,7 @@ enum MOTION_TYPE {
 //------------------------------------------------------------------------------
 enum INTERPOLATION_TYPE {
 	MIM, //! motor interpolated motion
-	TCIM
-//! task coordinates interpolated motion
+	TCIM //! task coordinates interpolated motion
 };
 
 //------------------------------------------------------------------------------
@@ -641,10 +640,6 @@ typedef union c_buffer_robot_model {
 //------------------------------------------------------------------------------
 /*! arm */
 typedef union c_buffer_arm {
-	struct {
-		/*! A get_state command variant. */
-		int command;
-	} get_state_def;
 	//----------------------------------------------------------
 	struct {
 		/*!  End's trihedron ralative to the base system. */
@@ -666,8 +661,8 @@ typedef union c_buffer_arm {
 		/*! prosody of the text to speak */
 		char prosody[MAX_PROSODY];
 	} text_def;
+	//----------------------------------------------------------
 	char serialized_command[ECP_EDP_SERIALIZED_COMMAND_SIZE];
-
 } c_buffer_arm_t;
 
 //------------------------------------------------------------------------------
@@ -723,8 +718,14 @@ struct c_buffer {
 	c_buffer_robot_model_t robot_model;
 	c_buffer_arm_t arm;
 
+	//-----------------------------------------------------
+	//                      METHODS
+	//-----------------------------------------------------
+
+	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
+	//! Serialization of the data structure
 	template<class Archive>
 	void serialize(Archive & ar, const unsigned int version) {
 		ar & instruction_type;
@@ -740,9 +741,6 @@ struct c_buffer {
 		ar & motion_steps;
 	}
 
-	//-----------------------------------------------------
-	//                      METHODS
-	//-----------------------------------------------------
 	c_buffer(void); // by W odkomentowane
 	/*!
 	 *  Oczytac wejscia?

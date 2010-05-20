@@ -10,7 +10,7 @@
 
 #include <string>
 
-#include "../xdr_iarchive.hpp"
+#include "lib/xdr/xdr_iarchive.hpp"
 
 // forward declarations
 class AndDataCondition;
