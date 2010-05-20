@@ -119,19 +119,32 @@ void effector::move_arm(const lib::c_buffer &instruction) {
 		perror("clock gettime");
 	}
 
-	_uint64 macrostep_end_time;
+	_uint64 current_time = timespec2nsec(&current_timespec);
 
-	ss.str("");
-	ss << current_timespec.tv_sec << "    " << current_timespec.tv_nsec;
+	if (current_time >= macrostep_end_time) {
+		// stan bierny
+		msg->message("move_arm stan bierny");
+		query_time = current_time
+				+ ecp_edp_cbuffer.bird_hand_command_structure.ecp_query_step
+						* BIRD_HAND_STEP_TIME_IN_NS;
 
-	msg->message(ss.str().c_str());
-	current_timespec.tv_sec += 1;
+		macrostep_end_time = current_time
+				+ ecp_edp_cbuffer.bird_hand_command_structure.motion_steps
+						* BIRD_HAND_STEP_TIME_IN_NS;
 
-	clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &current_timespec, NULL);
-	ss.str("");
-	ss << current_timespec.tv_sec << "    " << current_timespec.tv_nsec;
+	} else {
+		// stan czynny
+		msg->message("move_arm stan czynny");
+		// UWAGA NA KOLEJNOSC OBLICZEN query_time i macrostep_end_time NIE ZAMIENIAC
+		query_time = macrostep_end_time
+				+ ecp_edp_cbuffer.bird_hand_command_structure.ecp_query_step
+						* BIRD_HAND_STEP_TIME_IN_NS;
 
-	msg->message(ss.str().c_str());
+		macrostep_end_time
+				+= ecp_edp_cbuffer.bird_hand_command_structure.motion_steps
+						* BIRD_HAND_STEP_TIME_IN_NS;
+
+	}
 
 	msg->message("move_arm za ");
 
@@ -144,7 +157,15 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction) 
 	//	printf(" GET ARM\n");
 	//	flushall();
 	static int licznik = (-11);
+	msg->message("get_arm_position");
+	struct timespec query_timespec;
 
+	nsec2timespec(&query_timespec, query_time);
+
+	// zawieszenie do query_time
+
+	clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &query_timespec, NULL);
+	msg->message("get_arm_position za ");
 	std::stringstream ss(std::stringstream::in | std::stringstream::out);
 	ss << "get_arm_position: " << licznik;
 	msg->message(ss.str().c_str());
@@ -155,9 +176,6 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction) 
 			= 2.17;
 
 	reply.servo_step = step_counter;
-
-	// clock_gettime();
-	// clock_nanosleep();
 
 }
 /*--------------------------------------------------------------------------*/

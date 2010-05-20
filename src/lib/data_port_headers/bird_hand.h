@@ -5,6 +5,9 @@
 #if !defined(__BIRD_HAND_DATA_PORT_H)
 #define __BIRD_HAND_DATA_PORT_H
 
+#define BIRD_HAND_STEP_TIME_IN_NS 2000000
+
+
 namespace mrrocpp {
 namespace lib {
 

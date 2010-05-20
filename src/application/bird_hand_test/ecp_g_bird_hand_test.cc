@@ -48,6 +48,8 @@ bool bird_hand::first_step() {
 
 	//	bird_hand_configuration_command_data_port->set(	bird_hand_configuration_command_structure);
 	bird_hand_command_structure.desired_position[3] = 3.14;
+	bird_hand_command_structure.motion_steps = 1000;
+	bird_hand_command_structure.ecp_query_step = 950;
 	bird_hand_command_data_port->set(bird_hand_command_structure);
 
 	bird_hand_configuration_command_structure.d_factor[3] = 122;
@@ -89,6 +91,7 @@ bool bird_hand::next_step() {
 	}
 
 	if (node_counter < 3) {
+		bird_hand_command_data_port->set(bird_hand_command_structure);
 		bird_hand_status_reply_data_request_port->set_request();
 		bird_hand_configuration_reply_data_request_port->set_request();
 		return true;
