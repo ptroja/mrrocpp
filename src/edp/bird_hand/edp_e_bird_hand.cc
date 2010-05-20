@@ -160,6 +160,15 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction) 
 	msg->message("get_arm_position");
 	struct timespec query_timespec;
 
+	if (test_mode) {
+		for (int i = 0; i < BIRD_HAND_NUM_OF_SERVOS; i++) {
+			edp_ecp_rbuffer.bird_hand_status_reply_structure.meassured_position[i]
+					= ecp_edp_cbuffer.bird_hand_command_structure.desired_position[i];
+			edp_ecp_rbuffer.bird_hand_status_reply_structure.meassured_torque[i]
+							= ecp_edp_cbuffer.bird_hand_command_structure.desired_torque[i];
+		}
+	}
+
 	nsec2timespec(&query_timespec, query_time);
 
 	// zawieszenie do query_time
