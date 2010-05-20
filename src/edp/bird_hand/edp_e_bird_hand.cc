@@ -70,6 +70,26 @@ void effector::get_controller_state(lib::c_buffer &instruction) {
 			desired_joints[i] = current_joints[i];
 		}
 	}
+
+	// inicjacja czasow
+
+	struct timespec current_timespec;
+
+	if (clock_gettime(CLOCK_MONOTONIC, &current_timespec) == -1) {
+		perror("clock gettime");
+	}
+
+	macrostep_end_time = timespec2nsec(&current_timespec);
+
+	msg->message("get_controller_state");
+
+	std::stringstream ss(std::stringstream::in | std::stringstream::out);
+
+	ss << current_timespec.tv_sec << "    " << current_timespec.tv_nsec;
+
+	msg->message(ss.str().c_str());
+	msg->message("get_controller_state za ");
+
 }
 
 // Konstruktor.
@@ -92,6 +112,28 @@ void effector::move_arm(const lib::c_buffer &instruction) {
 	ss << ecp_edp_cbuffer.bird_hand_command_structure.desired_position[3];
 
 	msg->message(ss.str().c_str());
+
+	struct timespec current_timespec;
+
+	if (clock_gettime(CLOCK_MONOTONIC, &current_timespec) == -1) {
+		perror("clock gettime");
+	}
+
+	_uint64 macrostep_end_time;
+
+	ss.str("");
+	ss << current_timespec.tv_sec << "    " << current_timespec.tv_nsec;
+
+	msg->message(ss.str().c_str());
+	current_timespec.tv_sec += 1;
+
+	clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &current_timespec, NULL);
+	ss.str("");
+	ss << current_timespec.tv_sec << "    " << current_timespec.tv_nsec;
+
+	msg->message(ss.str().c_str());
+
+	msg->message("move_arm za ");
 
 }
 /*--------------------------------------------------------------------------*/

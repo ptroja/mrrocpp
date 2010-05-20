@@ -28,6 +28,9 @@ protected:
 	lib::bird_hand_cbuffer ecp_edp_cbuffer;
 	lib::bird_hand_rbuffer edp_ecp_rbuffer;
 
+	_uint64 macrostep_end_time;
+	_uint64 query_time;
+
 	/*!
 	 * \brief method,  creates a list of available kinematic models for bird_hand effector.
 	 *
