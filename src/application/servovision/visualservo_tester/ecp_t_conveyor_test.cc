@@ -18,11 +18,12 @@ namespace mrrocpp {
 
 namespace ecp {
 
-namespace common {
+namespace conveyor {
 
 namespace task {
 
-ecp_t_conveyor_test::ecp_t_conveyor_test(mrrocpp::lib::configurator& configurator):task(config)
+ecp_t_conveyor_test::ecp_t_conveyor_test(mrrocpp::lib::configurator& config) :
+	task(config)
 {
 	logDbgEnabled = true;
 	logEnabled = true;
@@ -32,7 +33,7 @@ ecp_t_conveyor_test::ecp_t_conveyor_test(mrrocpp::lib::configurator& configurato
 
 	logDbg("ecp_t_conveyor_test::ecp_t_conveyor_test() 2\n");
 
-	sinus_gen =shared_ptr<ecp_g_conveyor_sinus>(new ecp_g_conveyor_sinus(*this, "[sinus_generator]"));
+	sinus_gen = shared_ptr <ecp_g_conveyor_sinus> (new ecp_g_conveyor_sinus(*this, "[sinus_generator]"));
 	logDbg("ecp_t_conveyor_test::ecp_t_conveyor_test() 3\n");
 }
 
@@ -51,15 +52,23 @@ void ecp_t_conveyor_test::main_task_algorithm(void)
 	ecp_termination_notice();
 }
 
+} //namespace task
+
+} //namespace conveyor
+
+namespace common {
+
+namespace task {
+
 task* return_created_ecp_task(lib::configurator &config)
 {
-	return new ecp_t_conveyor_test(config);
+	return new mrrocpp::ecp::conveyor::task::ecp_t_conveyor_test(config);
 }
 
-}//namespace
+} //namespace task
 
-}
+} //namespace common
 
-}
+} //namespace ecp
 
-}
+} //namespace mrrocpp

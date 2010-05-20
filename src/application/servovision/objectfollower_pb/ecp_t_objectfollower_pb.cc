@@ -33,7 +33,7 @@ ecp_t_objectfollower_pb::ecp_t_objectfollower_pb(mrrocpp::lib::configurator& con
 	p1(1, 0) = -0.2;
 	p1(2, 0) = 0.1;
 
-	p2(0, 0) = 0.95;
+	p2(0, 0) = 0.97;
 	p2(1, 0) = 0.2;
 	p2(2, 0) = 0.3;
 

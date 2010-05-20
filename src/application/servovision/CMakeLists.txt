@@ -53,8 +53,8 @@ target_link_libraries(ecp_image_capture
 
 # conveyor test
 add_executable(ecp_conveyor_test
-    visualservo_tester/ecp_g_conveyor_sinus.cpp
-    visualservo_tester/ecp_t_conveyor_test.cpp
+    visualservo_tester/ecp_g_conveyor_sinus.cc
+    visualservo_tester/ecp_t_conveyor_test.cc
     logger.cc
 )
 

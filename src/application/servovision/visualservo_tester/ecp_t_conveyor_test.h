@@ -20,14 +20,14 @@ namespace mrrocpp {
 
 namespace ecp {
 
-namespace common {
+namespace conveyor {
 
 namespace task {
 
 class ecp_t_conveyor_test : public mrrocpp::ecp::common::task::task
 {
 public:
-	ecp_t_conveyor_test(mrrocpp::lib::configurator& configurator);
+	ecp_t_conveyor_test(mrrocpp::lib::configurator& config);
 	virtual ~ecp_t_conveyor_test();
 	void main_task_algorithm(void);
 private:
