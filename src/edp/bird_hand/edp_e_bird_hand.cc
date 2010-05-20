@@ -157,18 +157,17 @@ void effector::create_threads() {
 	vis_obj = new common::vis_server(*this);
 }
 
-lib::INSTRUCTION_TYPE effector::receive_instruction(void) {
+void effector::instruction_deserialization() {
 
-	lib::INSTRUCTION_TYPE ret_val = common::effector::receive_instruction();
 	memcpy(&ecp_edp_cbuffer, instruction.arm.serialized_command,
 			sizeof(ecp_edp_cbuffer));
-	return ret_val;
+
 }
 
-void effector::reply_to_instruction(void) {
+void effector::reply_serialization(void) {
 	memcpy(reply.arm.serialized_reply, &edp_ecp_rbuffer,
 			sizeof(edp_ecp_rbuffer));
-	common::effector::reply_to_instruction();
+
 }
 
 }

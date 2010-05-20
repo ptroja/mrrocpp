@@ -83,14 +83,29 @@ protected:
 	 *
 	 * IT also makes initial ECP command interpretation..
 	 */
-	virtual lib::INSTRUCTION_TYPE receive_instruction(void); // by YW
+	lib::INSTRUCTION_TYPE receive_instruction(void); // by YW
 
 	/*!
 	 * \brief method to reply to ECP
 	 *
 	 * Basing on the previous computation..
 	 */
-	virtual void reply_to_instruction(void);
+	void reply_to_instruction(void);
+
+	/*!
+	 * \brief method to deserialize part of the reply
+	 *
+	 * Currently simple memcpy implementation in derrived classes
+	 */
+	virtual void instruction_deserialization();
+
+
+	/*!
+	 * \brief method to serialize part of the reply
+	 *
+	 * Currently simple memcpy implementation in derrived classes
+	 */
+	virtual void reply_serialization();
 
 	/*!
 	 * \brief method to establish error sent to ECP.

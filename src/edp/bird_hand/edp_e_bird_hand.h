@@ -91,18 +91,18 @@ public:
 	void master_order(common::MT_ORDER nm_task, int nm_tryb);
 
 	/*!
-	 * \brief method to receive instruction from ECP
+	 * \brief method to deserialize part of the reply
 	 *
-	 * IT also makes initial ECP command interpretation..
+	 * Currently simple memcpy implementation
 	 */
-	lib::INSTRUCTION_TYPE receive_instruction(void); // by YW
+	void instruction_deserialization();
 
 	/*!
-	 * \brief method to reply to ECP
+	 * \brief method to serialize part of the reply
 	 *
-	 * Basing on the previous computation..
+	 * Currently simple memcpy implementation
 	 */
-	void reply_to_instruction(void);
+	void reply_serialization();
 
 };
 
