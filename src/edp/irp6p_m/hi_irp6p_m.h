@@ -8,9 +8,6 @@
 #ifndef __HI_LOCAL_IRP6P_M_H
 #define __HI_LOCAL_IRP6P_M_H
 
-#include <signal.h>
-#include <time.h>
-
 #include "edp/common/hi_rydz.h"
 
 namespace mrrocpp {
@@ -40,9 +37,6 @@ const unsigned short int INT_FREC_DIVIDER = 8; // mnoznik czestotliwosci przerwa
 #define IRP6_POSTUMENT_AXIS_0_TO_5_INC_PER_REVOLUTION  4000.0  // Liczba impulsow enkodera na obrot walu - musi byc float
 #define IRP6_POSTUMENT_AXIS_6_INC_PER_REVOLUTION  2000.0  // Liczba impulsow enkodera na obrot walu - musi byc float
 
-
-class effector;
-
 // ------------------------------------------------------------------------
 //                HARDWARE_INTERFACE class
 // ------------------------------------------------------------------------
@@ -52,7 +46,7 @@ public:
     hardware_interface (common::motor_driven_effector &_master, int _hi_irq_real,
     		unsigned short int _hi_intr_freq_divider, unsigned int _hi_intr_timeout_high,
     		unsigned int _hi_first_servo_ptr, unsigned int _hi_intr_generator_servo_ptr,
-    		unsigned int _hi_isa_card_offset, int* _max_current);    // Konstruktor
+    		unsigned int _hi_isa_card_offset, const int _max_current[]);    // Konstruktor
 
 }; // koniec: class hardware_interface
 

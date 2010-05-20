@@ -42,10 +42,11 @@ public:
 
     bool set_output_flag; // flaga czy ustawic wyjcie na robota
 
-    void set_output (const uint16_t *out_value);
+    void set_output (uint16_t out_value);
     void get_output (uint16_t *out_value);
-    void set_input (const uint16_t *binary_in_value, const uint8_t *analog_in_table);
-    void get_input (uint16_t *binary_in_value, uint8_t *analog_in_table);
+
+    void set_input (uint16_t binary_in_value, const uint8_t analog_in_table[]);
+    void get_input (uint16_t *binary_in_value, uint8_t analog_in_table[]);
 };
 /**************************** IN_OUT_BUFFER *****************************/
 

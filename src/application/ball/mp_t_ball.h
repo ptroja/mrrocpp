@@ -10,25 +10,22 @@
 
 #include "mp/mp.h"
 
-
 namespace mrrocpp {
 namespace mp {
 namespace task {
 
-/** @defgroup ball Haptic coupling
+/** @defgroup ball Cooperated object transport
  *  @ingroup application
- *  A two robot application of IRp6 manipulator's in ball coupling
+ *  A two robot application of IRp6 manipulator's in ball transport
  *  @{
  */
 
 class ball : public task
 {
-protected:
-
+private:
 	void configure_edp_force_sensor(bool configure_track, bool configure_postument);
 
 public:
-
 	ball(lib::configurator &_config);
 
 	// methods for mp template

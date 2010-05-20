@@ -7,7 +7,6 @@
  *
  */
 
-
 #ifndef __EDP_E_SPKM_H
 #define __EDP_E_SPKM_H
 
@@ -24,9 +23,11 @@ namespace spkm {
  *
  * It is the base of the head mounted on the mobile base.
  */
-class effector: public common::manip_effector
-{
+class effector: public common::manip_effector {
 protected:
+
+	lib::spkm_cbuffer ecp_edp_cbuffer;
+	lib::spkm_rbuffer edp_ecp_rbuffer;
 
 	/*!
 	 * \brief method,  creates a list of available kinematic models for spkm effector.
@@ -74,6 +75,20 @@ public:
 	 * IHere the single thread variant is chosen
 	 */
 	void master_order(common::MT_ORDER nm_task, int nm_tryb);
+
+	/*!
+	 * \brief method to deserialize part of the reply
+	 *
+	 * Currently simple memcpy implementation
+	 */
+	void instruction_deserialization();
+
+	/*!
+	 * \brief method to serialize part of the reply
+	 *
+	 * Currently simple memcpy implementation
+	 */
+	void reply_serialization();
 
 };
 

@@ -74,7 +74,7 @@ typedef enum _ROBOT_ENUM {
 	ROBOT_SMB,
 	ROBOT_SPKM,
 	ROBOT_SHEAD,
-	ROBOT_BIRD_HAND
+	ROBOT_BIRD_HAND // three finger Krzysztof Mianowski gripper 2010
 } robot_name_t;
 
 enum FORCE_SENSOR_ENUM {
