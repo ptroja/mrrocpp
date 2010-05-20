@@ -25,17 +25,16 @@ namespace task {
 ecp_t_conveyor_test::ecp_t_conveyor_test(mrrocpp::lib::configurator& config) :
 	task(config)
 {
-	int kkk;
 	logDbgEnabled = true;
 	logEnabled = true;
 
-	logDbg("ecp_t_conveyor_test::ecp_t_conveyor_test() 1 %d\n", kkk);
+	logDbg("ecp_t_conveyor_test::ecp_t_conveyor_test() 1\n");
 	ecp_m_robot = new ecp::conveyor::robot(*this);
 
-	logDbg("ecp_t_conveyor_test::ecp_t_conveyor_test() 2 %d\n", bbb);
+	logDbg("ecp_t_conveyor_test::ecp_t_conveyor_test() 2\n");
 
 	sinus_gen = shared_ptr <ecp_g_conveyor_sinus> (new ecp_g_conveyor_sinus(*this, "[sinus_generator]"));
-	logDbg("ecp_t_conveyor_test::ecp_t_conveyor_test() 3 %d\n");
+	logDbg("ecp_t_conveyor_test::ecp_t_conveyor_test() 3\n");
 }
 
 ecp_t_conveyor_test::~ecp_t_conveyor_test()
