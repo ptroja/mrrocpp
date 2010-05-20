@@ -63,13 +63,13 @@ void CaptureTask::main_task_algorithm(void)
 	 smoothGen->load_coordinates(lib::ECP_JOINT, v, a, initialPositionJoints, true);
 	 smoothGen->Move();*/
 
-	double v[MAX_SERVOS_NR] = { 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02 };
-	double a[MAX_SERVOS_NR] = { 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02 };
-
-	smoothGen->reset();
-	smoothGen->set_absolute();
-	smoothGen->load_xyz_angle_axis(v, a, 0.925, 0, 0.05, -2.218, -2.218, 0, 0.075, 0, true);
-	smoothGen->Move();
+//	double v[MAX_SERVOS_NR] = { 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02 };
+//	double a[MAX_SERVOS_NR] = { 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02 };
+//
+//	smoothGen->reset();
+//	smoothGen->set_absolute();
+//	smoothGen->load_xyz_angle_axis(v, a, 0.925, 0, 0.05, -2.218, -2.218, 0, 0.075, 0, true);
+//	smoothGen->Move();
 
 	log("\n");
 	fflush(stdout);
@@ -85,7 +85,8 @@ void CaptureTask::main_task_algorithm(void)
 	et.captureNow = true;
 	et.x = et.y = et.z = 0;
 
-	nextPosition(-deltaX * (int) (xPoints / 2), -deltaY * (int) (yPoints / 2), 0);
+	//nextPosition(-deltaX * (xPoints - 1) / 2.0, -deltaY * (yPoints - 1) / 2.0, -deltaZ * (zPoints - 1) / 2.0);
+	nextPosition(-deltaX * (xPoints - 1) / 2.0, -deltaY * (yPoints - 1) / 2.0, 0);
 
 	for (int k = 0; k < zPoints; ++k) {
 		if (k > 0) {
