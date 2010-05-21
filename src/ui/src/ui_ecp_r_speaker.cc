@@ -6,25 +6,24 @@
 // -------------------------------------------------------------------------
 
 /* Standard headers */
+#include <iostream>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
-
+#include <math.h>
 #include <fcntl.h>
 #include <errno.h>
-#include <string.h>
-#include <iostream>
 
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 
 #include "lib/srlib.h"
-#include "ui/ui_ecp_r_speaker.h"
-
-#include <math.h>
 #include "lib/mrmath/mrmath.h"
+
+#include "ui/ui_ecp_r_speaker.h"
 
 ui_speaker_robot::ui_speaker_robot(edp_state_def* _edp_state, lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg) :
 	robot(_config, sr_ecp_msg)

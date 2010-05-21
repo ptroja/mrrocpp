@@ -24,9 +24,9 @@
 #include "lib/com_buf.h"
 
 
+#include "ui/ui.h"
 #include "ui/ui_ecp.h"
 #include "ui/ui_const.h"
-#include "ui/ui.h"
 // #include "common/y_config.h"
 // Konfigurator.
 #include "lib/configurator.h"

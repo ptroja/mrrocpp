@@ -2,9 +2,6 @@
 /*                            AppBuilder Photon Code Lib */
 /*                                         Version 2.01  */
 
-/* Standard headers */
-#include <pthread.h>
-
 #include "ui/ui.h"
 
 ui_sr_buffer::ui_sr_buffer() :
