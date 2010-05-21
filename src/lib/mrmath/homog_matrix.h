@@ -111,13 +111,13 @@ public:
 
     //! Access to elements 0..3,0..2, bounds are checked when NDEBUG is not set
     inline double& operator()(int i,int j) {
-    	HOMOG_MATRIX_CHECKI((0<=i)&&(i<=3)&&(0<=j)&&(j<=2));
+    	HOMOG_MATRIX_CHECKI((0<=i)&&(i<=2)&&(0<=j)&&(j<=3));
     	return matrix_m[i][j];
     }
 
     //! Access to elements 0..3,0..2, bounds are checked when NDEBUG is not set
     inline double operator() (int i,int j) const {
-    	HOMOG_MATRIX_CHECKI((0<=i)&&(i<=3)&&(0<=j)&&(j<=2));
+    	HOMOG_MATRIX_CHECKI((0<=i)&&(i<=2)&&(0<=j)&&(j<=3));
     	return matrix_m[i][j];
     }
 
