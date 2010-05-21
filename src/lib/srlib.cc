@@ -492,12 +492,8 @@ void sr_ecp::interpret(void) {
 			sprintf(sr_message.description, "MAX ACCELERATION EXCEEDED"); break;
 			case MAX_VELOCITY_EXCEEDED:
 			sprintf(sr_message.description, "MAX VELOCITY EXCEEDED"); break;
-			case INVALID_VSP_REPLY:
-			sprintf(sr_message.description, "INVALID VSP REPLY"); break;
 			case DANGEROUS_FORCE_DETECTED:
 			sprintf(sr_message.description, "DANGEROUS FORCE DETECTED"); break;
-			case BAD_VSP_REPLY:
-			sprintf(sr_message.description, "BAD VSP REPLY"); break;
 			case INVALID_ECP_PULSE_IN_MP_START_ALL:
 			sprintf(sr_message.description, "INVALID ECP PULSE IN MP START ALL"); break;
 			case INVALID_ECP_PULSE_IN_MP_EXECUTE_ALL:
