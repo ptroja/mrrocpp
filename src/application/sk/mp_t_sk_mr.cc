@@ -35,23 +35,36 @@ void sk_mr::main_task_algorithm(void) {
 
 	sr_ecp_msg->message("New sk_mr series");
 
+	// wybor manipulatora do sterowania na podstawie konfiguracji
+
+	lib::robot_name_t manipulator_name;
+
+	// ROBOT IRP6_ON_TRACK
+	if (config.value<int> ("is_irp6_on_track_active", UI_SECTION)) {
+		manipulator_name = lib::ROBOT_IRP6_ON_TRACK;
+	} else if (config.value<int> ("is_irp6_postument_active", UI_SECTION)) {
+		manipulator_name = lib::ROBOT_IRP6_POSTUMENT;
+	}
+
+	// sekwencja generator na wybranym manipulatorze
+
 	set_next_ecps_state((int) ecp_mp::task::ECP_GEN_BIAS_EDP_FORCE, (int) 5,
-			"", 0, 1, lib::ROBOT_IRP6_ON_TRACK);
+			"", 0, 1, manipulator_name);
 
 	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(
-			1, 1, lib::ROBOT_IRP6_ON_TRACK, lib::ROBOT_IRP6_ON_TRACK);
+			1, 1, manipulator_name, manipulator_name);
 
 	set_next_ecps_state((int) ecp_mp::task::ECP_GEN_TFF_NOSE_RUN, (int) 5, "",
-			0, 1, lib::ROBOT_IRP6_ON_TRACK);
+			0, 1, manipulator_name);
 
 	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(
-			1, 1, lib::ROBOT_IRP6_ON_TRACK, lib::ROBOT_IRP6_ON_TRACK);
+			1, 1, manipulator_name, manipulator_name);
 
 	set_next_ecps_state((int) ecp_mp::task::ECP_GEN_EDGE_FOLLOW_FORCE, (int) 5,
-			"", 0, 1, lib::ROBOT_IRP6_ON_TRACK);
+			"", 0, 1, manipulator_name);
 
 	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(
-			1, 1, lib::ROBOT_IRP6_ON_TRACK, lib::ROBOT_IRP6_ON_TRACK);
+			1, 1, manipulator_name, manipulator_name);
 
 	sr_ecp_msg->message("END");
 
