@@ -15,11 +15,22 @@
 #include <sys/socket.h>
 
 #include "ecp_mp/sensor/ecp_mp_sensor.h"
+#include "ecp_mp/sensor/ecp_mp_s_fradia_sensor.h"
 
 namespace mrrocpp {
 namespace ecp_mp {
 namespace sensor {
 
+template<typename FROM_VSP_T, typename TO_VSP_T = lib::empty_t>
+class cvfradia : public fradia_sensor<FROM_VSP_T, TO_VSP_T> {
+public:
+	cvfradia (lib::SENSOR_t _sensor_name, const std::string & _section_name, lib::sr_ecp & _sr_ecp_msg, lib::configurator & config)
+			: fradia_sensor<FROM_VSP_T, TO_VSP_T>(_sensor_name, _section_name, _sr_ecp_msg, config)
+	{
+	}
+};
+
+#if 0
 /*!
  * \brief Types commands sent to PW_HaarDetect task.
  */
@@ -207,7 +218,7 @@ public:
 		sr_ecp_msg.message("Terminate\n");
 	}
 };
-
+#endif
 } // namespace sensor
 } // namespace ecp_mp
 } // namespace mrrocpp
