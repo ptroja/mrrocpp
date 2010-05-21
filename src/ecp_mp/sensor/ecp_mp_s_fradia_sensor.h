@@ -28,7 +28,7 @@
 #include "ecp_mp/sensor/ecp_mp_sensor.h"
 #include "ecp_mp/task/ecp_mp_task.h"
 
-#include "application/servovision/logger.h"
+#include "lib/logger.h"
 
 namespace mrrocpp {
 namespace ecp_mp {
@@ -109,10 +109,17 @@ public:
 	 */
 	void operator()();
 
+	/*!
+	 * Get report of the last data query
+	 * @return status of the last communication with FraDIA
+	 */
+	lib::VSP_REPORT_t get_report(void) const;
+
 	/** Object received from fradia, read by get_reading(). */
 	FROM_VSP_T image;
 private:
 	std::string fradia_task;
+
 	/*!
 	 * Socket file descriptor.
 	 */
@@ -146,6 +153,16 @@ private:
 	 * Object shared between threads.
 	 */
 	FROM_VSP_T received_object_shared;
+
+	/** This object hold last report from FraDIA.
+	 * Object shared between threads.
+	 */
+	lib::VSP_REPORT_t vsp_report_shared;
+
+	/** This object hold report associated with the current image.
+	 */
+	lib::VSP_REPORT_t vsp_report;
+
 
 	/** Set to true, when configure_fradia_task() has been called. */
 	bool configure_fradia_task_now;
@@ -311,8 +328,15 @@ void fradia_sensor <FROM_VSP_T, TO_VSP_T>::get_reading()
 	boost::interprocess::scoped_lock <boost::mutex> l(get_reading_mutex);
 
 	image = received_object_shared;
+	vsp_report = vsp_report_shared;
 
 	//logger::logDbg("fradia_sensor::get_reading()\n");
+}
+
+template <typename FROM_VSP_T, typename TO_VSP_T>
+lib::VSP_REPORT_t fradia_sensor <FROM_VSP_T, TO_VSP_T>::get_report(void) const
+{
+	return vsp_report;
 }
 
 template <typename FROM_VSP_T, typename TO_VSP_T>
@@ -394,6 +418,7 @@ void fradia_sensor <FROM_VSP_T, TO_VSP_T>::operator()()
 			{
 				boost::interprocess::scoped_lock <boost::mutex> l(get_reading_mutex);
 				received_object_shared = vsp_ecp_msg.data;
+				vsp_report_shared = vsp_ecp_msg.vsp_report;
 			}
 			//			logger::logDbg("fradia_sensor::operator(): loop %d\n", ++iter);
 		}

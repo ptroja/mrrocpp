@@ -99,24 +99,24 @@ lib::Homog_matrix ib_eih_visual_servo::get_position_change(const lib::Homog_matr
 	Eigen::Matrix <double, 3, 1> e_translation;
 
 	//	logDbg("ecp_g_ib_eih::next_step() 2\n");
-	object_visible = vsp_fradia->received_object.tracking;
-	if (vsp_fradia->received_object.tracking) {
+	object_visible = vsp_fradia->image.tracking;
+	if (vsp_fradia->image.tracking) {
 		//		logDbg("ecp_g_ib_eih::next_step() 3\n");
 
-		e(0, 0) = vsp_fradia->received_object.error.x;
-		e(1, 0) = vsp_fradia->received_object.error.y;
-		e(2, 0) = vsp_fradia->received_object.error.z;
+		e(0, 0) = vsp_fradia->image.error.x;
+		e(1, 0) = vsp_fradia->image.error.y;
+		e(2, 0) = vsp_fradia->image.error.z;
 		//e(2, 0) = 0;
-		e(3, 0) = vsp_fradia->received_object.error.gamma;
+		e(3, 0) = vsp_fradia->image.error.gamma;
 
 		e_translation(0, 0) = e(0, 0);
 		e_translation(1, 0) = e(1, 0);
 		e_translation(2, 0) = e(2, 0);
 
-		//		log("ecp_g_ib_eih::next_step() vsp_fradia->received_object.error.x: %g\n", (double) vsp_fradia->received_object.error.x);
-		//		log("ecp_g_ib_eih::next_step() vsp_fradia->received_object.error.y: %g\n", (double) vsp_fradia->received_object.error.y);
-		//		log("ecp_g_ib_eih::next_step() vsp_fradia->received_object.error.z: %g\n", (double) vsp_fradia->received_object.error.z);
-		//		log("ecp_g_ib_eih::next_step() vsp_fradia->received_object.error.alpha: %g\n", vsp_fradia->received_object.error.gamma);
+		//		log("ecp_g_ib_eih::next_step() vsp_fradia->image.error.x: %g\n", (double) vsp_fradia->image.error.x);
+		//		log("ecp_g_ib_eih::next_step() vsp_fradia->image.error.y: %g\n", (double) vsp_fradia->image.error.y);
+		//		log("ecp_g_ib_eih::next_step() vsp_fradia->image.error.z: %g\n", (double) vsp_fradia->image.error.z);
+		//		log("ecp_g_ib_eih::next_step() vsp_fradia->image.error.alpha: %g\n", vsp_fradia->image.error.gamma);
 
 		//		logDbg("ecp_g_ib_eih::next_step() 4\n");
 

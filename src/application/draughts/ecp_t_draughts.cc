@@ -138,7 +138,7 @@ void Draughts::fradiaControl(DRAUGHTS_MODE dmode, char pawn_nr=-1){
 	draughts_control msg;
 	msg.draughts_mode=dmode;
 	msg.pawn_nr=pawn_nr;
-	vsp_fr->send_reading(msg);
+	vsp_fr->configure_fradia_task(msg);
 
 	snooze(0.4);						//wait until signal is read
 }

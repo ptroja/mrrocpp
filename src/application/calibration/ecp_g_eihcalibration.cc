@@ -36,7 +36,7 @@ bool eihgenerator::first_step()
 	the_robot->ecp_command.instruction.get_type = ARM_DEFINITION;
 	the_robot->ecp_command.instruction.get_arm_type = lib::FRAME;
 
-	sensor->to_vsp.i_code = lib::VSP_INITIATE_READING;
+	//sensor->to_vsp.i_code = lib::VSP_INITIATE_READING;
 
 	return true;
 }
@@ -47,7 +47,10 @@ bool eihgenerator::next_step()
 	if(sensor->image.found == true)
 		count++;
 	get_frame();
-	sensor->to_vsp.parameters.frame_number = count;
+	eihcalibration_t command;
+	command.frame_number = count;
+	sensor->configure_fradia_task(command);
+	//sensor->to_vsp.parameters.frame_number = count;
 	return false;
 }
 

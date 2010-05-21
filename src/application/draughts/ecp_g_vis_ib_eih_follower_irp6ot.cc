@@ -46,7 +46,8 @@ bool ecp_vis_ib_eih_follower_irp6ot::first_step() {
 		the_robot->ecp_command.instruction.arm.pf_def.behaviour[i] = lib::UNGUARDED_MOTION;
 	}
 
-	vsp_fradia->to_vsp.parameters = ecp_mp::sensor::WITHOUT_ROTATION;
+	vsp_fradia->configure_fradia_task(ecp_mp::sensor::WITHOUT_ROTATION);
+
 	first_move =  true;
 	z_s = 0;
 	z_stop = false;
