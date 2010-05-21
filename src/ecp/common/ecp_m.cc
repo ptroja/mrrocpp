@@ -140,7 +140,6 @@ int main(int argc, char *argv[])
 			switch (er.error_no)
 			{
 				case INVALID_POSE_SPECIFICATION:
-				case INVALID_ECP_COMMAND:
 				case INVALID_COMMAND_TO_EDP:
 				case EDP_ERROR:
 				case INVALID_EDP_REPLY:
