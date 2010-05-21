@@ -97,7 +97,7 @@ bool manip_effector::compute_servo_joints_and_frame(void)
 			if ((++catch_nr) == 1)
 				printf("servo thread compute_servo_joints_and_frame throw catch exception\n");
 			ret_val = false;
-		}//: catch
+		}
 	}
 
 	return ret_val;
