@@ -1,6 +1,6 @@
 /**
- * \file	ecp_mp_t_sk_mr_test.h
- * \brief sk_mr_test
+ * \file	ecp_mp_t_sk_mr.h
+ * \brief sk_mr
  * \author yoyek
  * \date	2010
  */
@@ -15,8 +15,8 @@ namespace task {
 /**
  * Used generators.
  */
-enum SK_MR_TEST_ECP_STATES {
-	ECP_GEN_TRANSPARENT = 0, ECP_GEN_SLEEP, ECP_GEN_EDGE_FOLLOW
+enum SK_MR_ECP_STATES {
+	ECP_GEN_TFF_NOSE_RUN = 0, ECP_GEN_EDGE_FOLLOW_FORCE, ECP_GEN_BIAS_EDP_FORCE
 };
 
 } // namespace task

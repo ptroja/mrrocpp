@@ -5,8 +5,8 @@
 // Ostatnia modyfikacja: 2007
 // -------------------------------------------------------------------------
 
-#if !defined(__MP_T_SK_MR_TEST_H)
-#define __MP_T_SK_MR_TEST_H
+#if !defined(__MP_T_SK_MR_H)
+#define __MP_T_SK_MR_H
 
 #include "mp/mp.h"
 
@@ -14,18 +14,18 @@ namespace mrrocpp {
 namespace mp {
 namespace task {
 
-/** @defgroup sk_mr_test sk_mr_test
+/** @defgroup sk_mr sk_mr
  *  @ingroup application
- *  A sk_mr_test QNX test application
+ *  A sk_mr (with active coordinator) QNX test application
  *  @{
  */
 
-class sk_mr_test: public task {
+class sk_mr: public task {
 protected:
 
 public:
 
-	sk_mr_test(lib::configurator &_config);
+	sk_mr(lib::configurator &_config);
 
 	// methods for mp template
 	void main_task_algorithm(void);

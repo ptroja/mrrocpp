@@ -1,31 +1,33 @@
-#if !defined(_ECP_T_SPKM_SK_MR_TEST_H)
-#define _ECP_T_SPKM_SK_MR_TEST_H
+#if !defined(_ECP_T_SPKM_SK_MR_H)
+#define _ECP_T_SPKM_SK_MR_H
 
 #include "ecp/common/task/ecp_task.h"
-#include "ecp/common/generator/ecp_g_transparent.h"
+#include "ecp/common/generator/ecp_g_force.h"
+#include "application/sk/ecp_g_sk.h"
 
 namespace mrrocpp {
 namespace ecp {
-namespace sk_mr {
+namespace common {
 namespace task {
 
-class sk_mr_test: public common::task::task {
+class sk_mr: public common::task::task {
 protected:
 	//generatory
-	common::generator::transparent* gt;
-	common::generator::sleep* g_sleep;
-	common::generator::sk_mr* g_sk_mr;
+	generator::tff_nose_run* nrg;
+	generator::y_edge_follow_force* yefg;
+	generator::bias_edp_force* befg;
+	bool save_activated;
 
 public:
 	// KONSTRUKTORY
-	sk_mr_test(lib::configurator &_config);
+	sk_mr(lib::configurator &_config);
 
 	// methods for ECP template to redefine in concrete classes
 	void main_task_algorithm(void);
 };
 
 }
-} // namespace sk_mr
+} // namespace common
 } // namespace ecp
 } // namespace mrrocpp
 
