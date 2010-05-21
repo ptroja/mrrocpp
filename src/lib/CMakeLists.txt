@@ -31,4 +31,5 @@ add_library(mrrocpp
 	playerpos_goal.cc
 	datastr.cc
 	condition_synchroniser.cc
+	logger.cc
 )

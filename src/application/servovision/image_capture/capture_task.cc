@@ -6,7 +6,7 @@
  */
 
 #include "capture_task.h"
-#include "../logger.h"
+#include "lib/logger.h"
 #include "ecp/irp6_on_track/ecp_r_irp6ot.h"
 
 using namespace logger;

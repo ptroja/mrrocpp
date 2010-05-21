@@ -9,7 +9,6 @@ add_executable(ecp_objectfollower_ib
     cubic_constraint.cc
     object_reached_termination_condition.cc
     termination_condition.cc
-    logger.cc
 )
 
 target_link_libraries(ecp_objectfollower_ib
@@ -22,7 +21,6 @@ target_link_libraries(ecp_objectfollower_ib
 
 add_executable(ecp_image_capture
     image_capture/capture_task.cc
-    logger.cc
 )
 
 target_link_libraries(ecp_image_capture

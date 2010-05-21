@@ -13,7 +13,6 @@
 #include <boost/shared_ptr.hpp>
 #include "visual_servo_regulator.h"
 
-#include "logger.h"
 #include "ecp_mp/sensor/ecp_mp_sensor.h"
 
 namespace mrrocpp {
