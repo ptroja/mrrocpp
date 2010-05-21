@@ -28,13 +28,13 @@ ecp_t_objectfollower_pb_sac::ecp_t_objectfollower_pb_sac(mrrocpp::lib::configura
 	logDbgEnabled = true;
 
 	Eigen::Matrix <double, 3, 1> p1, p2;
-	p1(0, 0) = 0.6;
+	p1(0, 0) = 0.8;
 	p1(1, 0) = -0.2;
-	p1(2, 0) = 0.1;
+	p1(2, 0) = 0.5;
 
-	p2(0, 0) = 0.97;
+	p2(0, 0) = 0.9;
 	p2(1, 0) = 0.2;
-	p2(2, 0) = 0.4;
+	p2(2, 0) = 0.8;
 
 	shared_ptr <position_constraint> cube(new cubic_constraint(p1, p2));
 	reg = shared_ptr <visual_servo_regulator> (new regulator_p(config, config_section_name));

@@ -48,6 +48,7 @@ pb_sac_visual_servo::pb_sac_visual_servo(boost::shared_ptr <visual_servo_regulat
 		vsp_fradia->configure_fradia_task(pb_config);
 
 		O_T_C = configurator.value <3, 4> ("O_T_C", section_name);
+		cout << "\nO_T_C\n" << O_T_C << endl;
 
 		lib::Homog_matrix E_T_G_desired = configurator.value <3, 4> ("E_T_G_desired", section_name);
 		G_T_E_desired = !E_T_G_desired;
@@ -73,12 +74,23 @@ lib::Homog_matrix pb_sac_visual_servo::get_position_change(const lib::Homog_matr
 		lib::Homog_matrix error_matrix;
 		lib::Homog_matrix E_T_O = !current_position;
 
-		cout<<"\nC_T_G:\n"<<C_T_G<<endl;
-		cout<<"\nE_T_O:\n"<<E_T_O<<endl;
+		{
+			cout << "\nC_T_G:\n" << C_T_G << endl;
+
+			cout << "\ncurrent_position:\n" << current_position << endl;
+			cout << "\nE_T_O:\n" << E_T_O << endl;
+
+			lib::Homog_matrix E_T_C = E_T_O * O_T_C;
+			cout << "\nE_T_O * O_T_C:\n" << E_T_C << endl;
+
+			lib::Homog_matrix E_T_G = E_T_O * O_T_C * C_T_G;
+			cout << "\nE_T_O * O_T_C * C_T_G:\n" << E_T_G << endl;
+
+		}
 
 		error_matrix = G_T_E_desired * E_T_O * O_T_C * C_T_G;
 
-		cout<<"\nerror_matrix:\n"<<error_matrix<<endl;
+		cout << "\nerror_matrix:\n" << error_matrix << endl;
 		cout.flush();
 
 		lib::Xyz_Angle_Axis_vector aa_vector;
