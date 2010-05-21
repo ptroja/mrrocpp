@@ -42,7 +42,10 @@ namespace lib {
 
 sr::sr(process_type_t process_type, const std::string & process_name,
 		const std::string & sr_name, bool _multi_thread) :
-	multi_thread(_multi_thread), cb(SR_BUFFER_LENGHT), has_command(false) {
+	has_command(false),
+	multi_thread(_multi_thread),
+	cb(SR_BUFFER_LENGHT)
+{
 	// kilka sekund  (~1) na otworzenie urzadzenia
 	int tmp = 0;
 	while ((fd = name_open(sr_name.c_str(), NAME_FLAG_ATTACH_GLOBAL)) < 0) {

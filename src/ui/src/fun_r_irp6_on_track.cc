@@ -3246,7 +3246,7 @@ int import_wnd_irp6_on_track_xyz_angle_axis(PtWidget_t *widget,
 	PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p8,
 			Pt_ARG_NUMERIC_VALUE, &val, 0);
 
-	delete tmp;
+	delete [] tmp;
 
 	return (Pt_CONTINUE);
 
