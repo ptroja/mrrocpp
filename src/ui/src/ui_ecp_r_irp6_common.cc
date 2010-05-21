@@ -23,6 +23,8 @@
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 
+#include "ui/ui_ecp_r_irp6_common.h"
+
 #include "lib/srlib.h"
 #include "ecp/irp6_on_track/ecp_r_irp6ot.h"
 #include "ecp/irp6_postument/ecp_r_irp6p.h"
@@ -30,7 +32,6 @@
 #include "ecp/polycrank/ecp_r_polycrank.h"
 #include "ecp/smb/ecp_r_smb.h"
 #include "ecp/spkm/ecp_r_spkm.h"
-#include "ui/ui_ecp_r_irp6_common.h"
 
 #include <math.h>
 
