@@ -6,7 +6,6 @@
 #include <cassert>
 
 #include "lib/impconst.h"	// frame_tab
-
 namespace mrrocpp {
 namespace lib {
 
@@ -19,10 +18,12 @@ class Xyz_Rpy_vector;
 //! turn on or off frames bounds checking. If turned on, assert() can still
 //! be turned off with -DNDEBUG.
 
+#define INDEX_CHECK	1
+
 #ifdef INDEX_CHECK
-    #define HOMOG_MATRIX_CHECKI(a) assert(a)
+#define HOMOG_MATRIX_CHECKI(a) assert(a)
 #else
-    #define HOMOG_MATRIX_CHECKI(a)
+#define HOMOG_MATRIX_CHECKI(a)
 #endif
 
 //! Klasa reprezentujaca macierz transformacji.
@@ -42,7 +43,7 @@ public:
 	//! Utworzenie macierzy przesuniecia o [x, y, z], R - jednostkowa.
 	Homog_matrix(double x, double y, double z);
 	//! Utworzenie macierzy obrotu o male katy wzgledem 3 osi.
-	Homog_matrix(const K_vector & versor_x, const K_vector & versor_y, const K_vector & versor_z, const K_vector & angles);
+			Homog_matrix(const K_vector & versor_x, const K_vector & versor_y, const K_vector & versor_z, const K_vector & angles);
 	//! Utworzenie macierzy obrotu o male katy
 	Homog_matrix(const K_vector & angles);
 
@@ -51,13 +52,13 @@ public:
 	Homog_matrix(const Xyz_Angle_Axis_vector & l_vector);
 
 	//! Utworzenie z Eigen::Matrix<double, 3, 4>
-	Homog_matrix(const Eigen::Matrix<double, 3, 4>& eigen_matrix);
+	Homog_matrix(const Eigen::Matrix <double, 3, 4>& eigen_matrix);
 
 	//! Utworzenie macierzy jednorodnej na podstawie podanej macierzy obrotu r i wektora przesuniecia t.
 	Homog_matrix(const double r[3][3], const double t[3]);
 
 	//! Utworzenie macierzy jednorodnej na podstawie jej 12 elementow (notacja z Craiga)
-	Homog_matrix(double r11, double r12, double r13, double t1, double r21, double r22, double r23, double t2, double r31, double r32, double r33, double t3);
+			Homog_matrix(double r11, double r12, double r13, double t1, double r21, double r22, double r23, double t2, double r31, double r32, double r33, double t3);
 
 	Homog_matrix return_with_with_removed_translation() const;
 	Homog_matrix return_with_with_removed_rotation() const;
@@ -112,17 +113,19 @@ public:
 
 	void set_rotation_matrix(const Homog_matrix &wzor);
 
-    //! Access to elements 0..3,0..2, bounds are checked when NDEBUG is not set
-    inline double& operator()(int i,int j) {
-    	HOMOG_MATRIX_CHECKI((0<=i)&&(i<=2)&&(0<=j)&&(j<=3));
-    	return matrix_m[i][j];
-    }
+	//! Access to elements 0..3,0..2, bounds are checked when NDEBUG is not set
+	inline double& operator()(int i, int j)
+	{
+		HOMOG_MATRIX_CHECKI((0<=i)&&(i<=2)&&(0<=j)&&(j<=3));
+		return matrix_m[i][j];
+	}
 
-    //! Access to elements 0..3,0..2, bounds are checked when NDEBUG is not set
-    inline double operator() (int i,int j) const {
-    	HOMOG_MATRIX_CHECKI((0<=i)&&(i<=2)&&(0<=j)&&(j<=3));
-    	return matrix_m[i][j];
-    }
+	//! Access to elements 0..3,0..2, bounds are checked when NDEBUG is not set
+	inline double operator()(int i, int j) const
+	{
+		HOMOG_MATRIX_CHECKI((0<=i)&&(i<=2)&&(0<=j)&&(j<=3));
+		return matrix_m[i][j];
+	}
 
 	//! Operator przypisania.
 	Homog_matrix & operator=(const Homog_matrix &);
@@ -152,7 +155,7 @@ private:
 	inline static void copy_frame_tab(frame_tab destination_frame, const frame_tab source_frame)
 	{
 		std::memcpy(destination_frame, source_frame, sizeof(frame_tab));
-	};//: copy_frame
+	}
 };// end class Homog_matrix
 
 
