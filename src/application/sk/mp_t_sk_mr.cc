@@ -44,6 +44,8 @@ void sk_mr::main_task_algorithm(void) {
 		manipulator_name = lib::ROBOT_IRP6_ON_TRACK;
 	} else if (config.value<int> ("is_irp6_postument_active", UI_SECTION)) {
 		manipulator_name = lib::ROBOT_IRP6_POSTUMENT;
+	} else {
+		// TODO: throw
 	}
 
 	// sekwencja generator na wybranym manipulatorze
