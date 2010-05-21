@@ -41,7 +41,7 @@ public:
 	 * @param currentPosition
 	 * @param newPosition
 	 */
-	virtual lib::Homog_matrix get_position_change(const lib::Homog_matrix& current_position) = 0;
+	virtual lib::Homog_matrix get_position_change(const lib::Homog_matrix& current_position, double dt) = 0;
 	/**
 	 * Returns fradia_sensor.
 	 * @return
@@ -52,10 +52,11 @@ public:
 	 * Returns object visibility.
 	 * @return
 	 */
-	virtual bool is_object_visible() = 0;
+	virtual bool is_object_visible();
 protected:
 	visual_servo(boost::shared_ptr <visual_servo_regulator> regulator);
 	boost::shared_ptr <visual_servo_regulator> regulator;
+	bool object_visible;
 private:
 
 }; // class visual_servo
