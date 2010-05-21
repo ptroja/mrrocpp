@@ -229,21 +229,26 @@ int_handler (void *arg, int int_id)
 
         // odczyt wejsc analogowych (z przetwornikow) i binarnych
         out8((ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), IN_OUT_PACKET);
-        binary_input = in16((SERVO_REPLY_REG_1_ADR + ISA_CARD_OFFSET));
-        tmp_buf=in16((SERVO_REPLY_STATUS_ADR+ ISA_CARD_OFFSET));
+
+        binary_input = in16(SERVO_REPLY_REG_1_ADR + ISA_CARD_OFFSET);
+
+        tmp_buf=in16(SERVO_REPLY_STATUS_ADR + ISA_CARD_OFFSET);
         analog_input[0]=0x00ff & tmp_buf;
         analog_input[1]=((0xff00 & tmp_buf)>>8);
-        tmp_buf=in16((SERVO_REPLY_INT_ADR + ISA_CARD_OFFSET));
+
+        tmp_buf=in16(SERVO_REPLY_INT_ADR + ISA_CARD_OFFSET);
         analog_input[2]=0x00ff & tmp_buf;
         analog_input[3]=((0xff00 & tmp_buf)>>8);
-        tmp_buf=in16((SERVO_REPLY_POS_LOW_ADR + ISA_CARD_OFFSET));
+
+        tmp_buf=in16(SERVO_REPLY_POS_LOW_ADR + ISA_CARD_OFFSET);
         analog_input[4]=0x00ff & tmp_buf;
         analog_input[5]=((0xff00 & tmp_buf)>>8);
-        tmp_buf=in16((SERVO_REPLY_POS_HIGH_ADR + ISA_CARD_OFFSET));
+
+        tmp_buf=in16(SERVO_REPLY_POS_HIGH_ADR + ISA_CARD_OFFSET);
         analog_input[6]=0x00ff & tmp_buf;
         analog_input[7]=((0xff00 & tmp_buf)>>8);
 
-        common::master->in_out_obj->set_input(&binary_input, analog_input);
+        common::master->in_out_obj->set_input(binary_input, analog_input);
 
         // ustawienie wyjscia o ile bylo takie zlecenie
         if (common::master->in_out_obj->set_output_flag)

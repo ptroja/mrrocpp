@@ -15,7 +15,6 @@ SET(CMAKE_CXX_COMPILER "$ENV{QNX_HOST}/usr/bin/QCC")
 endif(CMAKE_HOST_WIN32)
 
 # where is the target environment 
-#SET(CMAKE_FIND_ROOT_PATH /opt/qnx641/target/qnx6)
 SET(CMAKE_FIND_ROOT_PATH $ENV{QNX_TARGET})
 
 # search for programs in the build host directories
@@ -26,6 +25,13 @@ SET(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 
 SET(_CMAKE_TOOLCHAIN_PREFIX "ntox86-")
 SET(_CMAKE_TOOLCHAIN_LOCATION "$ENV{QNX_HOST}/usr/bin")
+
+# warn about almost everything except:
+# -Wcast-qual
+# -Wshadow
+# -Wsign-compare
+# optimization option -O1 is required for the compiler to find uninitialized local variables.
+set(CMAKE_CXX_FLAGS "-w9 -Wpointer-arith -Wwrite-strings -Wno-sign-compare -O1")
 
 ## GCC is the default compiler on QNX 6.3.
 #INCLUDE(Platform/gcc)

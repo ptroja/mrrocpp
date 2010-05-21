@@ -1,6 +1,3 @@
-
-
-
 // -------------------------------------------------------------------------
 //                            ui_ecp->cc
 // Metody sluzace do komunikacji UI z EDP - zlecenia dla driver'a
@@ -76,15 +73,6 @@ ui_irp6_common_robot::ui_irp6_common_robot(lib::configurator &_config, lib::sr_e
 		case lib::ROBOT_POLYCRANK:
 			ecp = new ecp::polycrank::robot(_config, _sr_ecp_msg);
 			break;
-		case lib::ROBOT_SMB:
-			ecp = new ecp::smb::robot(_config, _sr_ecp_msg);
-			break;
-		case lib::ROBOT_SPKM:
-			ecp = new ecp::spkm::robot(_config, _sr_ecp_msg);
-			break;
-			//    case lib::ROBOT_SPEAKER:
-			//    case lib::ROBOT_CONVEYOR:
-			//        break;
 		default:
 			fprintf(stderr, "ERROR: unknown robot name in ecp_robot ui_irp6_common_robot::ui_irp6_common_robot\n");
 			ecp = NULL;
@@ -109,7 +97,6 @@ ui_irp6_common_robot::ui_irp6_common_robot(lib::configurator &_config, lib::sr_e
 	JOINT_LINEAR_STEP = 0.00004; // Przyrost liniowy w przegubach posuwistych [m]
 	END_EFFECTOR_LINEAR_STEP = 0.00002;// Przyrost wspolrzednej polozenia koncowki [m]
 	END_EFFECTOR_ANGULAR_STEP = 0.0002; // Przyrost wspolrzednej orientacji koncowki [rad]
-
 }
 
 // ZADANIE NARZEDZIA

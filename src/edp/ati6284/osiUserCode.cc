@@ -6,36 +6,38 @@
     *
     *  releaseBoard( ) -- deletes and cleans up the iBus
     *
-    *  There are also assorted helper functions which are also 
+    *  There are also assorted helper functions which are also
     *  platform specific.
     */
 
-
-
 //!< Platform independent headers
 #include <stdint.h>
-#include <hw/pci.h>
 #include <string.h>
+
+#include <hw/pci.h>
 #include <sys/mman.h>
+#include <sys/neutrino.h>
 
 #include "osiBus.h"
 #include "display.h"
 
+static int pidx;
+static void* hdl;			//!< wlasciwy uchwyt do danego urzadzenia
+static int phdl;			//!< pci handle -> fd do servera PCI
+static void *mem0,*mem1;
+static struct pci_dev_info info;
+static int id;				//! Board interrupt id
 
+namespace mrrocpp {
+namespace edp {
+namespace sensor {
 
-int pidx;
-void* hdl;			//!< wlasciwy uchwyt do danego urzadzenia
-int phdl;			//!< pci handle -> fd do servera PCI
-void *mem0,*mem1;
-uint32_t irq;
-struct pci_dev_info info;
+extern const struct sigevent *isr_handler (void *bus, int id);
+extern struct sigevent ati6284event;
 
-extern const struct sigevent *isr_handler (void *bus, int id);	
-extern struct  sigevent ati6284event;
-extern short int id;
-
-using namespace std;
-
+} // namespace sensor
+} // namespace edp
+} // namespace mrrocpp
 
 /*  ! \fn acquireBoard
     * \brief Return iBus of first matching PCI/PXI card.
@@ -49,7 +51,7 @@ iBus* acquireBoard(const u32 devicePCI_ID)
 	
 	memset( &info, 0, sizeof( info ) );//!<  obsluga przerwania
 	
-	//!<  Connect to the PCI server 
+	//!<  Connect to the PCI server
 	phdl = pci_attach( 0 );
 	if( phdl == -1 ) {
 		fprintf( stderr, "Unable to initialize PCI\n" );
@@ -60,18 +62,11 @@ iBus* acquireBoard(const u32 devicePCI_ID)
 #endif
 	
 	//!< Memory map the BARs to get access to the PCI card's memory
-	//!< Initialize the pci_dev_info structure 
+	//!< Initialize the pci_dev_info structure
 
-	
-#if INTERRUPT
-	memset( &ati6284event, 0, sizeof( ati6284event ) );//!<  obsluga przerwania
-	ati6284event.sigev_notify = SIGEV_INTR;
-#endif
-	
 	pidx = 0;
-	info.VendorId = 0x1093;             
-	info.DeviceId = 0x2CA0;           
-	
+	info.VendorId = 0x1093; // National Instruments
+	info.DeviceId = 0x2CA0; // PCI-6034E
 
 	//!< dolaczamy driver do urzadzenia na PCI
 	hdl = pci_attach_device( NULL, PCI_INIT_ALL, pidx, &info );
@@ -79,7 +74,7 @@ iBus* acquireBoard(const u32 devicePCI_ID)
 	if( hdl == NULL ) {
 		fprintf( stderr, "Unable to locate NI-6034E\n" );
 		exit( EXIT_FAILURE ) ;
-	} 
+	}
 	else {
 #if DEBUG
 		printf("connected to NI-6034E\n");
@@ -125,21 +120,25 @@ iBus* acquireBoard(const u32 devicePCI_ID)
 	printf("InterruptAttach\n");
 #endif	
 #if INTERRUPT
-	memset( &ati6284event, 0, sizeof( ati6284event ) );///!< obsluga przerwania
-	SIGEV_INTR_INIT( &ati6284event );
-	if ((	id = InterruptAttach (info.Irq, isr_handler, NULL , NULL , 0))==-1)
-	printf("Error InterruptAttach\n");
+	memset( &mrrocpp::edp::sensor::ati6284event, 0, sizeof( mrrocpp::edp::sensor::ati6284event ) );///!< obsluga przerwania
+	SIGEV_INTR_INIT( &mrrocpp::edp::sensor::ati6284event );
+	if (( id = InterruptAttach (info.Irq, mrrocpp::edp::sensor::isr_handler, NULL , NULL , 0)) == -1)
+		printf("Error InterruptAttach\n");
 #if DEBUG
 	else
-	printf("InterruptAttach OK\n");
+		printf("InterruptAttach OK\n");
 #endif	
-#endif 
+#endif
 
 	return bus;
 }
 
-void  releaseBoard(iBus *&bus)
+void releaseBoard(iBus *&bus)
 {
+#if INTERRUPT
+	InterruptDetach (id);
+#endif
+
 	//!< unmap the memory and close whatever system resources
 
 	if(munmap_device_memory( mem0, info.BaseAddressSize[0])==-1 )
@@ -149,10 +148,6 @@ void  releaseBoard(iBus *&bus)
 		perror( "munmap_device_memory for physical address 1 failed" );
 
 	//!< were used to create the iBus
-
-#if INTERRUPT
-	InterruptDetach (id);
-#endif
 	pci_detach_device( hdl ); //!< odlacza driver od danego urzadzenia na PCI
 	//!< Disconnect from the PCI server
 	pci_detach( phdl );

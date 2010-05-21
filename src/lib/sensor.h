@@ -60,25 +60,25 @@ typedef enum
 typedef enum { HD_SOLUTION_NOTFOUND, HD_SOLUTION_FOUND } HD_READING;
 
 /*commands from mrrocpp used in Draughts task*/
-typedef enum{
+typedef enum {
 	TRACK_PAWN,
 	Z_TRACKER,
 	DETECT_BOARD_STATE,
 	NONE,
 	STORE_BOARD,
 	CHECK_MOVE
-}DRAUGHTS_MODE;
+} DRAUGHTS_MODE;
 
 /*information returned to mrrocpp used in Draughts task*/
-typedef enum{
+typedef enum {
 	STATE_CHANGED,
 	STATE_UNCHANGED,
 	STATE_OK,
 	BOARD_DETECTION_ERROR
-}BOARD_STATUS;
+} BOARD_STATUS;
 
 /** Define size of data buffer for FraDIA <-> MRROC++ communication. Used by CommunicationWrapper (FraDIA) and fradia_sensor (MRROC++) */
-#define SENSOR_IMAGE_FRADIA_READING_SIZE 24
+#define SENSOR_IMAGE_FRADIA_READING_SIZE 100
 
 /*! \struct sensor_image_t
  * \ Structure used for storing and passing sensors data.
@@ -92,11 +92,6 @@ typedef struct sensor_image_t
 		char begin; // pole uzywane jako adres do wlasciwych elementow unii dla memcpy()
 		struct
 		{
-			short reading;
-			char text[10];
-		} pattern;
-		struct
-		{
 			double rez[6]; // by Y pomiar sily
 			short force_reading_status; // informacja o odczycie sil
 			// EDP_FORCE_SENSOR_OVERLOAD lub EDP_FORCE_SENSOR_READING_ERROR
@@ -105,21 +100,8 @@ typedef struct sensor_image_t
 		} force;
 		struct
 		{
-			double frame[16];
-		} camera;
-		struct
-		{
 			char colors[9];
 		} cube_face;
-		struct
-		{
-			double joy[3];
-			char active_motors;
-		} pp;
-		struct
-		{
-			int word_id;
-		} mic;
 
 		struct
 		{
@@ -130,22 +112,6 @@ typedef struct sensor_image_t
 			double frame_E_r_G__f[6];
 			double fEIH_G[8];
 		} vis_sac;
-
-		// rcs - rozwiazanie kostki Rubika
-		struct
-		{
-			RCS_INIT init_mode;
-			RCS_READING reading_mode;
-			char cube_solution[200];
-		} rcs;
-
-		// tlemanipulacja - vsp_pawel
-		struct
-		{
-			double x, y, z;
-			unsigned int nr;
-			struct timespec ts;
-		} ball;
 
 		// testowy VSP (ptrojane)
 		struct
@@ -191,17 +157,6 @@ typedef struct sensor_image_t
 			float angle;
 		} hd_angle;
 
-		/*!
-		 * \struct fradia_t
-		 * Structure for storing data retrieved from cvFraDIA.
-		 * For testing purposes.
-		 * \author tkornuta
-		 */
-		struct fradia_t
-		{
-			int x, y, width, height;
-		} fradia;
-
 		// struktura z pozycja i katami pcbirda
 		struct
 		{
@@ -230,31 +185,16 @@ typedef struct sensor_image_t
 			float orientation_z;
 		} wiimote;
 
-		/// \brief Communication with EdgeShapeAnalyzer (FraDIA)
-		/// \author mnowak
-		union visioncoordinates_union_t
+		/*!
+		 * \struct fradia_t
+		 * Structure for storing data retrieved from cvFraDIA.
+		 * For testing purposes.
+		 * \author tkornuta
+		 */
+		struct fradia_t
 		{
-			/// \brief Array of 8 structures, contains coordinates of found 8 best objects (in SEARCH mode) from FraDIA
-			/// \note if we are used less then 8 structures, first unused structure must have distance == 0
-			struct Search
-			{
-				double rot_z;		///< wokol osi Z, wzgledem osi y, w plaszczyznie obrazu (x0y)
-				double rot_dev;	///< miedzy osia Z, a prosta 'kamera-obiekt'
-				double dist;		///< approximate distance to object
-			} search[8];
-
-			/// Structure for response to mrrocpp "is it that object" (is TEST mode) from FraDIA
-			struct Test
-			{
-				bool found;		///< is object found
-			} test;
-
-			struct List
-			{
-				int count;			 ///< count of known objects in structure
-				char object[8][32]; ///< known objects
-			} list;
-		} visioncoordinates_union;
+			int x, y, width, height;
+		} fradia;
 
 		// struktura z informacja czy znaleziono szachownice
 		struct chessboard_t
@@ -283,16 +223,6 @@ typedef enum
  */
 typedef enum{  WITHOUT_ROTATION, PERFORM_ROTATION } HD_MODE;
 
-/// \brief search or test against choosen object (in FraDIA with EdgeShapeAnalyzer)
-/// \author mnowak
-enum ESA_MODE
-{
-	EM_UNKNOWN = 0,		///< unknown, not used
-	EM_SEARCH = 1,		///< search - we get all ROI's with possible interesting objects
-	EM_TEST = 2,		///< test - we test object on screen against choosed object from list
-	EM_LIST = 3			///< list - we read list of known objects from FraDIA
-};
-
 // BUFORY KOMUNIKACYJNE
 /** Define size of data buffer for FraDIA <-> MRROC++ communication. Used by CommunicationWrapper (FraDIA) and fradia_sensor (MRROC++) */
 #define ECP_VSP_MSG_FRADIA_COMMAND_SIZE 160
@@ -307,6 +237,19 @@ struct ECP_VSP_MSG
 		// Name of the cvFraDIA task.
 		char cvfradia_task_name[80];
 
+		// structure used to send to fradia data needed for eih calibration
+		struct
+		{
+			int frame_number;
+			float transformation_matrix[12];
+		} eihcalibration;
+
+		//structure for controlling fraDIA form mrrocpp
+		struct {
+			DRAUGHTS_MODE draughts_mode;
+			char pawn_nr;
+		} draughts_control;
+
 		// rcs - rozwiazanie kostki Rubika
 		struct
 		{
@@ -314,50 +257,15 @@ struct ECP_VSP_MSG
 			char cube_state[54];
 		} rcs;
 
-		//dane do spots recognition - zadanie wykonania odczytu
-		struct
-		{
-			short command;
-			double plate_pos[3];
-		} ps_response;
-
-		//structure for controlling fraDIA form mrrocpp
-		struct{
-			DRAUGHTS_MODE draughts_mode;
-			char pawn_nr;
-		}draughts_control;
-
-
-		/// \struct esa
-		/// \brief Structure used for choosing mode for FraDIA with EdgeShapeAnalyzer
-		/// \author mnowak
-		struct
-		{
-			ESA_MODE mode;		///< mode for EdgeShapeAnalyzer
-			union
-			{
-				char object[32];///< name of object (must be known)
-				int offset;     ///< i.e. for LIST
-			};
-		} esa;
-
-		// struct eihcalibration
-		// structure used to send to fradia data needed for eih calibration
-		struct
-		{
-			int frame_number;
-			float transformation_matrix[12];
-		}eihcalibration;
-
 		// Tryb HaarDetect
 		HD_MODE haar_detect_mode;
 
-                struct
-                {
-                  bool led_change;
-                  unsigned int led_status;
-                  bool rumble;
-                } wii_command;
+		struct
+		{
+		  bool led_change;
+		  unsigned int led_status;
+		  bool rumble;
+		} wii_command;
 
         char fradia_sensor_command[ECP_VSP_MSG_FRADIA_COMMAND_SIZE];
 	};//: koniec unii
@@ -369,39 +277,14 @@ struct VSP_ECP_MSG
 	SENSOR_IMAGE comm_image;
 };
 
-/*****************************************************/
-// do komunikacji za pomoca devctl()
-typedef union
-{
-	ECP_VSP_MSG to_vsp; // Filled by client on send
-	VSP_ECP_MSG from_vsp; // Filled by server on reply
-} DEVCTL_MSG;
-
-// ROZKAZY uzywane w devctl()
-// odczyt z czujnika
-#define DEVCTL_RD __DIOF(_DCMD_MISC, 1, lib::VSP_ECP_MSG)
-// zapis do czujnika
-#define DEVCTL_WT __DIOT(_DCMD_MISC, 2, lib::ECP_VSP_MSG)
-// zapis i odczyt
-#define DEVCTL_RW __DIOTF(_DCMD_MISC, 3, lib::DEVCTL_MSG)
-
 // by Y - CZUJNIKI
 
 typedef enum _SENSOR_ENUM
 {
 	SENSOR_UNDEFINED,
-	SENSOR_FORCE_ON_TRACK,
-	SENSOR_FORCE_POSTUMENT,
 	SENSOR_CAMERA_SA,
 	SENSOR_CAMERA_ON_TRACK,
 	SENSOR_CAMERA_POSTUMENT,
-	SENSOR_GRIPPER_ON_TRACK,
-	SENSOR_GRIPPER_POSTUMENT,
-	SENSOR_DIGITAL_SCALE_SENSOR,
-	SENSOR_FORCE_SENSOR,
-	SENSOR_PP,
-	SENSOR_MIC,
-	SENSOR_PAWEL,
 	// rcs - VSP znajdujace rozwiazanie dla kostki Rubika
 	SENSOR_RCS_KORF,
 	SENSOR_RCS_KOCIEMBA,
@@ -452,8 +335,6 @@ public:
 	ECP_VSP_MSG to_vsp;
 	// Bufor na odczyty otrzymywane z VSP.
 	VSP_ECP_MSG from_vsp;
-	// Pole do komunikacji za pomoca DEVCTL.
-	DEVCTL_MSG devmsg;
 
 	// Odebranie odczytu od VSP.
 	virtual void get_reading(void)=0;
@@ -483,28 +364,6 @@ public:
 		{
 		}
 	};
-};
-
-// Przesylka z VSP do EDP
-struct VSP_EDP_message
-{
-#ifndef USE_MESSIP_SRR
-	msg_header_t hdr;
-#endif
-	char vsp_name[20];
-	short konfigurowac;
-};
-
-// Odpowiedz EDP do VSP
-struct EDP_VSP_reply
-{
-	unsigned long servo_step; // by Y numer kroku servo
-	double current_present_XYZ_ZYZ_arm_coordinates[6]; // aktualne wspolrzedne XYZ +
-	double force[6];
-	short force_reading_status; // informacja o odczycie sil
-	// EDP_FORCE_SENSOR_OVERLOAD lub EDP_FORCE_SENSOR_READING_ERROR
-	// EDP_FORCE_SENSOR_READING_CORRECT
-
 };
 
 } // namespace lib

@@ -116,5 +116,3 @@ bool ecp_g_rotate_gripper::next_step() {
 } // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp
-
-

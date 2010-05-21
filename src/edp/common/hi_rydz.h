@@ -53,8 +53,6 @@ typedef enum INTERRUPT_MODE {
 #define SERVO_REPLY_POS_HIGH_ADR  (0x206)
 #define SERVO_REPLY_REG_1_ADR     (0x208)
 
-
-
 struct control_a_dof
 {
     uint16_t adr_offset_plus_0;
@@ -109,7 +107,7 @@ public:
     		unsigned int _hi_first_servo_ptr,
     		unsigned int _hi_intr_generator_servo_ptr,
     		unsigned int _hi_isa_card_offset,
-    		int* _max_current);    // Konstruktor
+    		const int _max_current[]);    // Konstruktor
 
     virtual ~hardware_interface(void );   // Destruktor
     virtual bool is_hardware_error(void); // Sprawdzenie czy wystapil blad sprzetowy
@@ -124,7 +122,6 @@ public:
 
     long int get_position ( int drive_number ) const;
 
-
     virtual uint64_t read_write_hardware ( void );    // Obsluga sprzetu
     virtual void reset_counters ( void );  // Zerowanie licznikow polozenia
 
@@ -135,16 +132,12 @@ public:
     // oczekiwanie na przerwanie - tryb obslugi i delay(lag) po odebraniu przerwania
     int hi_int_wait (interrupt_mode_t _interrupt_mode, int lag);
 
-    bool is_impulse_zero ( int drive_number );
+    bool is_impulse_zero ( int drive_number ) const;
 
     void reset_position (int i);
 
 private:
     int int_id;		// Identyfikator obslugi przerwania
-
-    long int tick;// minimalny kwant czasu CPU
-
-    bool first; // true jesli pierwszy krok
 
     const int hi_irq_real;
     const unsigned short int hi_intr_freq_divider;
@@ -171,15 +164,13 @@ protected:
 
     control_a_dof robot_control[MAX_SERVOS_NR];
     status_of_a_dof robot_status[MAX_SERVOS_NR];
-}; // koniec: class hardware_interface
-
+};
 
 #ifdef __cplusplus
 extern "C"
 {
 #endif
-    const struct sigevent *
-                int_handler (void *arg, int id);
+    const struct sigevent * int_handler (void *arg, int id);
 #ifdef __cplusplus
 }
 #endif

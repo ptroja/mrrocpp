@@ -1313,7 +1313,7 @@ bool parabolic_teach_in::first_step()
 
 bool parabolic_teach_in::next_step()
 {
-	double Delta; // roznica polozen aktulanego  i zadanego
+	//double Delta; // roznica polozen aktulanego  i zadanego
 
 	char messg[128]; // komunikat do SR
 	int i; // Licznik
@@ -2274,9 +2274,9 @@ smooth_cubic_spline::smooth_cubic_spline(common::task::task& _ecp_task, double *
 	build_coeff = true;
 
 	// Tworzymy macierze:
-	y.resize(pose_list_length() + 1, 6, false);
-	t.resize(pose_list_length() + 1, 6, false);
-	a.resize(pose_list_length() + 1, 6, false);
+	y.resize(pose_list_length() + 1, 6);
+	t.resize(pose_list_length() + 1, 6);
+	a.resize(pose_list_length() + 1, 6);
 
 	for (int i = 0; i <MAX_SERVOS_NR; i++) {
 		a_max_motor[i] = 100.0;

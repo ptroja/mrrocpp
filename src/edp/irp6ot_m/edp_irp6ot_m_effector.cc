@@ -14,9 +14,6 @@
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 
-// Klasa edp_irp6ot_effector.
-#include "edp/common/edp_vsp_t.h"
-
 #include "edp/irp6ot_m/edp_irp6ot_m_effector.h"
 // Kinematyki.
 #include "kinematics/irp6_on_track/kinematic_model_irp6ot_with_track.h"
@@ -56,18 +53,12 @@ void effector::create_threads()
 #ifdef __QNXNTO__
 	// jesli wlaczono obsluge sily
 	if (force_tryb > 0) {
-
 		vs = sensor::return_created_edp_force_sensor(*this); //!< czujnik wirtualny
-
-		edp_vsp_obj = new common::edp_vsp(*this); //!< czujnik wirtualny
 
 		// byY - utworzenie watku pomiarow sily
 		new boost::thread(boost::bind(&sensor::force::operator(), vs));
 
 		vs->thread_started.wait();
-
-		// by Y - utworzenie watku komunikacji miedzy EDP a VSP
-		new boost::thread(*edp_vsp_obj);
 	}
 #endif
 	motor_driven_effector::hi_create_threads();
@@ -94,7 +85,6 @@ void effector::create_kinematic_models_for_given_robot(void)
 	add_kinematic_model(new kinematics::irp6ot::model_calibrated_with_wrist(number_of_servos));
 	// Ustawienie aktywnego modelu.
 	set_kinematic_model(0);
-
 }
 
 /*--------------------------------------------------------------------------*/

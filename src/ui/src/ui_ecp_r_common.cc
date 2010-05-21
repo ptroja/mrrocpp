@@ -69,7 +69,7 @@ void ui_common_robot::execute_motion(void) {
 // ---------------------------------------------------------------
 
 // ---------------------------------------------------------------
-void ui_common_robot::set_desired_position(double d_position[]) {
+void ui_common_robot::set_desired_position(const double d_position[]) {
 	// Przepisanie polozen zadanych do tablicy desired_position[]
 	for (int j = 0; j < ecp->number_of_servos; j++)
 		desired_position[j] = d_position[j];
