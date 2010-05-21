@@ -84,9 +84,6 @@ effector::effector(lib::configurator &_config) :
 /*--------------------------------------------------------------------------*/
 void effector::move_arm(const lib::c_buffer &instruction) {
 	msg->message("move_arm");
-	lib::spkm_cbuffer ecp_edp_cbuffer;
-	memcpy(&ecp_edp_cbuffer, instruction.arm.serialized_command,
-			sizeof(ecp_edp_cbuffer));
 
 	std::stringstream ss(std::stringstream::in | std::stringstream::out);
 
@@ -142,7 +139,7 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction) 
 	msg->message(ss.str().c_str());
 	//	printf("%s\n", ss.str().c_str());
 
-	lib::spkm_rbuffer edp_ecp_rbuffer;
+
 	edp_ecp_rbuffer.epos_controller[3].position = licznikaaa;
 
 	if (licznikaaa < 10) {
@@ -156,8 +153,6 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction) 
 		}
 	}
 	licznikaaa++;
-	memcpy(reply.arm.serialized_reply, &edp_ecp_rbuffer,
-			sizeof(edp_ecp_rbuffer));
 
 	reply.servo_step = step_counter;
 }
@@ -175,6 +170,19 @@ void effector::create_kinematic_models_for_given_robot(void) {
 void effector::create_threads() {
 	rb_obj = new common::reader_buffer(*this);
 	vis_obj = new common::vis_server(*this);
+}
+
+void effector::instruction_deserialization() {
+
+	memcpy(&ecp_edp_cbuffer, instruction.arm.serialized_command,
+			sizeof(ecp_edp_cbuffer));
+
+}
+
+void effector::reply_serialization(void) {
+	memcpy(reply.arm.serialized_reply, &edp_ecp_rbuffer,
+			sizeof(edp_ecp_rbuffer));
+
 }
 
 }

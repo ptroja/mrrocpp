@@ -25,7 +25,6 @@ bird_hand_test::bird_hand_test(lib::configurator &_config) :
 	ecp_m_robot = new robot(*this);
 
 	gt = new common::generator::transparent(*this);
-	sg = new common::generator::smooth(*this, true);
 	g_sleep = new common::generator::sleep(*this);
 	g_bird_hand = new common::generator::bird_hand(*this);
 
@@ -48,25 +47,6 @@ void bird_hand_test::main_task_algorithm(void) {
 					= (bool) mp_command.ecp_next_state.mp_2_ecp_next_state_variant;
 			gt->Move();
 			break;
-		case ecp_mp::task::ECP_GEN_SMOOTH: {
-			std::string path(mrrocpp_network_path);
-			path += mp_command.ecp_next_state.mp_2_ecp_next_state_string;
-
-			switch ((ecp_mp::task::SMOOTH_MOTION_TYPE) mp_command.ecp_next_state.mp_2_ecp_next_state_variant) {
-			case ecp_mp::task::RELATIVE:
-				sg->set_relative();
-				break;
-			case ecp_mp::task::ABSOLUTE:
-				sg->set_absolute();
-				break;
-			default:
-				break;
-			}
-
-			sg->load_file_with_path(path.c_str());
-			sg->Move();
-			break;
-		}
 		case ecp_mp::task::ECP_GEN_SLEEP:
 			g_sleep->init_time(
 					mp_command.ecp_next_state.mp_2_ecp_next_state_variant);

@@ -43,8 +43,7 @@ namespace common {
  *
  * \author yoyek
  */
-class effector
-{
+class effector {
 protected:
 
 	/*!
@@ -92,6 +91,21 @@ protected:
 	 * Basing on the previous computation..
 	 */
 	void reply_to_instruction(void);
+
+	/*!
+	 * \brief method to deserialize part of the reply
+	 *
+	 * Currently simple memcpy implementation in derrived classes
+	 */
+	virtual void instruction_deserialization();
+
+
+	/*!
+	 * \brief method to serialize part of the reply
+	 *
+	 * Currently simple memcpy implementation in derrived classes
+	 */
+	virtual void reply_serialization();
 
 	/*!
 	 * \brief method to establish error sent to ECP.
@@ -156,7 +170,6 @@ public:
 	 * It destroys the objects to communicate with UI SR.
 	 */
 	virtual ~effector();
-
 
 	/*!
 	 * \brief ECP command union.

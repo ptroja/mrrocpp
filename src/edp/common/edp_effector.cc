@@ -39,14 +39,18 @@ effector::effector(lib::configurator &_config, lib::robot_name_t l_robot_name) :
 {
 
 	/* Lokalizacja procesu wywietlania komunikatow SR */
-	msg
-			= new lib::sr_edp(lib::EDP, config.value <std::string> ("resourceman_attach_point").c_str(), config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", UI_SECTION).c_str(), true);
+	msg = new lib::sr_edp(lib::EDP, config.value<std::string> (
+			"resourceman_attach_point").c_str(),
+			config.return_attach_point_name(lib::configurator::CONFIG_SERVER,
+					"sr_attach_point", UI_SECTION).c_str(), true);
 
-	sh_msg
-			= new lib::sr_edp(lib::EDP, config.value <std::string> ("resourceman_attach_point").c_str(), config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", UI_SECTION).c_str(), false);
+	sh_msg = new lib::sr_edp(lib::EDP, config.value<std::string> (
+			"resourceman_attach_point").c_str(),
+			config.return_attach_point_name(lib::configurator::CONFIG_SERVER,
+					"sr_attach_point", UI_SECTION).c_str(), false);
 
 	if (config.exists("test_mode"))
-		test_mode = config.value <int> ("test_mode");
+		test_mode = config.value<int> ("test_mode");
 	else
 		test_mode = 0;
 
@@ -61,16 +65,18 @@ effector::~effector()
 /*--------------------------------------------------------------------------*/
 bool effector::initialize_communication()
 {
-	std::string
+	const std::string
 			server_attach_point(config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "resourceman_attach_point"));
 
 #if !defined(USE_MESSIP_SRR)
 	// obsluga mechanizmu sygnalizacji zajetosci sprzetu
 	if (!(test_mode)) {
 
-		std::string hardware_busy_attach_point = config.value <std::string> ("hardware_busy_attach_point");
+		const std::string hardware_busy_attach_point = config.value<std::string> (
+				"hardware_busy_attach_point");
 
-		std::string full_path_to_hardware_busy_attach_point("/dev/name/global/");
+		std::string
+				full_path_to_hardware_busy_attach_point("/dev/name/global/");
 		full_path_to_hardware_busy_attach_point += hardware_busy_attach_point;
 
 		// sprawdzenie czy nie jakis proces EDP nie zajmuje juz sprzetu
@@ -79,11 +85,16 @@ bool effector::initialize_communication()
 			return false;
 		}
 
-		name_attach_t * tmp_attach = name_attach(NULL, hardware_busy_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL);
+		name_attach_t * tmp_attach = name_attach(NULL,
+				hardware_busy_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL);
 
 		if (tmp_attach == NULL) {
-			msg->message(lib::SYSTEM_ERROR, errno, "EDP: hardware_busy_attach_point failed to attach");
-			fprintf(stderr, "hardware_busy_attach_point name_attach() to %s failed: %s\n", hardware_busy_attach_point.c_str(), strerror(errno));
+			msg->message(lib::SYSTEM_ERROR, errno,
+					"EDP: hardware_busy_attach_point failed to attach");
+			fprintf(
+					stderr,
+					"hardware_busy_attach_point name_attach() to %s failed: %s\n",
+					hardware_busy_attach_point.c_str(), strerror(errno));
 			// TODO: throw
 			return false;
 		}
@@ -214,24 +225,28 @@ lib::INSTRUCTION_TYPE effector::receive_instruction(void)
 
 	instruction = new_ecp_command.instruction;
 
+	instruction_deserialization();
+
 	return instruction.instruction_type;
 }
 
-void effector::reply_to_instruction(void)
-{
+void effector::reply_to_instruction(void) {
 	// Wyslanie potwierdzenia przyjecia polecenia do wykonania,
 	// adekwatnej odpowiedzi na zapytanie lub
 	// informacji o tym, ze przyslane polecenie nie moze byc przyjte
 	// do wykonania w aktualnym stanie EDP
 	// int reply_size;     // liczba bajtw wysyanej odpowiedzi
 
-	if (!((reply.reply_type == lib::ERROR) || (reply.reply_type == lib::SYNCHRO_OK)))
+	reply_serialization();
+
+	if (!((reply.reply_type == lib::ERROR) || (reply.reply_type
+			== lib::SYNCHRO_OK)))
 		reply.reply_type = real_reply_type;
 
 #if !defined(USE_MESSIP_SRR)
 	if (MsgReply(caller, 0, &reply, sizeof(reply)) == -1) { // Odpowiedz dla procesu ECP badz UI by Y
 #else /* USE_MESSIP_SRR */
-	if (messip::port_reply(server_attach, caller, 0, reply) == -1) {
+		if (messip::port_reply(server_attach, caller, 0, reply) == -1) {
 #endif /* USE_MESSIP_SRR */
 		uint64_t e = errno;
 		perror("Reply() to ECP failed");
@@ -239,6 +254,14 @@ void effector::reply_to_instruction(void)
 		throw System_error();
 	}
 	real_reply_type = lib::ACKNOWLEDGE;
+}
+
+void effector::instruction_deserialization()
+{
+}
+
+void effector::reply_serialization()
+{
 }
 
 } // namespace common

@@ -35,8 +35,8 @@
 namespace mrrocpp {
 namespace lib {
 
-#define ECP_EDP_SERIALIZED_COMMAND_SIZE 300
-#define EDP_ECP_SERIALIZED_REPLY_SIZE 300
+#define ECP_EDP_SERIALIZED_COMMAND_SIZE 1000
+#define EDP_ECP_SERIALIZED_REPLY_SIZE 1000
 
 //------------------------------------------------------------------------------
 /*!
@@ -501,7 +501,8 @@ enum MOTION_TYPE {
 //------------------------------------------------------------------------------
 enum INTERPOLATION_TYPE {
 	MIM, //! motor interpolated motion
-	TCIM //! task coordinates interpolated motion
+	TCIM
+//! task coordinates interpolated motion
 };
 
 //------------------------------------------------------------------------------
@@ -631,7 +632,7 @@ typedef union c_buffer_robot_model {
 	} servo_algorithm;
 	//----------------------------------------------------------
 	struct {
-		double position[3];	// TODO: this should be a Eigen::Vector3f
+		double position[3]; // TODO: this should be a Eigen::Vector3f
 		double weight;
 	} force_tool;
 

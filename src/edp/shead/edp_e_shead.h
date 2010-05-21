@@ -7,7 +7,6 @@
  *
  */
 
-
 #ifndef __EDP_E_SHEAD_H
 #define __EDP_E_SHEAD_H
 
@@ -26,9 +25,12 @@ namespace shead {
  *
  * This head is built on top of the SPKM manipulator
  */
-class effector: public common::motor_driven_effector
-{
+class effector: public common::motor_driven_effector {
 protected:
+
+	lib::shead_cbuffer ecp_edp_cbuffer;
+	lib::shead_rbuffer edp_ecp_rbuffer;
+
 	// Metoda tworzy modele kinematyczne dla robota IRp-6 na postumencie.
 	/*!
 	 * \brief method,  creates a list of available kinematic models for shead effector.
@@ -78,6 +80,20 @@ public:
 	 * IHere the single thread variant is chosen
 	 */
 	void master_order(common::MT_ORDER nm_task, int nm_tryb);
+
+	/*!
+	 * \brief method to deserialize part of the reply
+	 *
+	 * Currently simple memcpy implementation
+	 */
+	void instruction_deserialization();
+
+	/*!
+	 * \brief method to serialize part of the reply
+	 *
+	 * Currently simple memcpy implementation
+	 */
+	void reply_serialization();
 
 };
 

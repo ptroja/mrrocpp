@@ -81,15 +81,15 @@ void bird_hand_test::main_task_algorithm(void) {
 	sr_ecp_msg->message("4");
 
 	char tmp_string[300];
+	/*
+	 lib::bird_hand_gen_parameters bird_hand_params;
 
-	lib::bird_hand_gen_parameters bird_hand_params;
+	 bird_hand_params.dm[4] = 3.7;
 
-	bird_hand_params.dm[4] = 3.7;
-
-	memcpy(tmp_string, &bird_hand_params, sizeof(bird_hand_params));
-
-	set_next_ecps_state((int) ecp_mp::task::ECP_GEN_BIRD_HAND, (int) 5,
-			tmp_string, sizeof(bird_hand_params), 1, lib::ROBOT_BIRD_HAND);
+	 memcpy(tmp_string, &bird_hand_params, sizeof(bird_hand_params));
+	 */
+	set_next_ecps_state((int) ecp_mp::task::ECP_GEN_BIRD_HAND, (int) 5, "", 0,
+			1, lib::ROBOT_BIRD_HAND);
 	sr_ecp_msg->message("5");
 	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(
 			1, 1, lib::ROBOT_BIRD_HAND, lib::ROBOT_BIRD_HAND);
