@@ -26,6 +26,10 @@ SET(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 SET(_CMAKE_TOOLCHAIN_PREFIX "ntox86-")
 SET(_CMAKE_TOOLCHAIN_LOCATION "$ENV{QNX_HOST}/usr/bin")
 
+# warn about everything!
+set(CMAKE_CXX_FLAGS "-w9")
+#set(CMAKE_CXX_FLAGS "-w9 -Wcast-qual -Wpointer-arith -Wwrite-strings")
+
 ## GCC is the default compiler on QNX 6.3.
 #INCLUDE(Platform/gcc)
 #
