@@ -414,7 +414,6 @@ typedef enum _ERROR_CLASS {
 #define ECP_STOP_ACCEPTED                       0x10ULL
 #define MAX_ACCELERATION_EXCEEDED               0x11ULL
 #define MAX_VELOCITY_EXCEEDED                   0x12ULL
-#define NOT_ENOUGH_MEMORY                       0x13ULL
 #define INVALID_TIME_SPECIFICATION              0x14ULL
 #define INVALID_ECP_PULSE_IN_MP_START_ALL       0x16ULL
 #define INVALID_ECP_PULSE_IN_MP_EXECUTE_ALL     0x17ULL

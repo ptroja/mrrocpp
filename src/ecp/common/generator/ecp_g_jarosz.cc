@@ -3287,10 +3287,8 @@ bool elipsoid::next_step()
 			number_of_intervals++;
 
 		// Przydzial pamieci na pomiary
-		if ( (trj_ptr = new one_sample[number_of_intervals]) != NULL)
-			memset(trj_ptr, 0, number_of_intervals*sizeof(one_sample)); // zerowanie
-		else
-			throw ECP_error (lib::NON_FATAL_ERROR, NOT_ENOUGH_MEMORY);
+		trj_ptr = new one_sample[number_of_intervals];
+		memset(trj_ptr, 0, number_of_intervals*sizeof(one_sample)); // zerowanie
 
 		half_number_of_intervals = number_of_intervals / 2;
 		// Wyznaczenie przyspieszen oraz sprawdzenie,

@@ -259,7 +259,6 @@ int main (int argc, char *argv[], char **arge)
 					case NON_COMPATIBLE_LISTS:
 					case MAX_ACCELERATION_EXCEEDED:
 					case MAX_VELOCITY_EXCEEDED:
-					case NOT_ENOUGH_MEMORY:
 						mp::common::mp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, e.error_no);
 						break;
 					default:

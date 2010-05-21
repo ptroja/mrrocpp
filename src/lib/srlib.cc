@@ -496,8 +496,6 @@ void sr_ecp::interpret(void) {
 			sprintf(sr_message.description, "MAX ACCELERATION EXCEEDED"); break;
 			case MAX_VELOCITY_EXCEEDED:
 			sprintf(sr_message.description, "MAX VELOCITY EXCEEDED"); break;
-			case NOT_ENOUGH_MEMORY:
-			sprintf(sr_message.description, "NOT ENOUGH MEMORY"); break;
 			case INVALID_VSP_REPLY:
 			sprintf(sr_message.description, "INVALID VSP REPLY"); break;
 			case DANGEROUS_FORCE_DETECTED:
