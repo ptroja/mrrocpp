@@ -13,7 +13,7 @@
 #include <math.h>
 
 #include "ecp/common/generator/ecp_generator.h"
-#include "ecp_mp/sensor/ecp_mp_s_cvfradia.h"
+#include "ecp_mp/sensor/ecp_mp_s_fradia_sensor.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -31,11 +31,11 @@ typedef struct _hd_angle {
 	float angle;
 } hd_angle_t;
 
-typedef ecp_mp::sensor::cvfradia<hd_angle_t, ecp_mp::sensor::hd_mode_t> cvfradia_haar_detect;
+typedef ecp_mp::sensor::fradia_sensor<hd_angle_t, ecp_mp::sensor::hd_mode_t> fradia_sensor_haar_detect;
 
 class ecp_g_rotate_gripper: public common::generator::generator {
 	//Wirtualny sensor
-	cvfradia_haar_detect *vsp_fradia;
+	fradia_sensor_haar_detect *vsp_fradia;
 	double speed;
 	lib::trajectory_description td;
 	bool lastStep;

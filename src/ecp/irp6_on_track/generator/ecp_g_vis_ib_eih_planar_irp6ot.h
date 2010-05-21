@@ -13,7 +13,7 @@
 #include <math.h>
 
 #include "ecp/common/generator/ecp_g_visual_servo.h"
-#include "ecp_mp/sensor/ecp_mp_s_cvfradia.h"
+#include "ecp_mp/sensor/ecp_mp_s_fradia_sensor.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -29,13 +29,13 @@ typedef struct _deviation {
 	int y;
 } deviation_t;
 
-typedef ecp_mp::sensor::cvfradia<deviation_t, ecp_mp::sensor::hd_mode_t> cvfradia_deviation;
+typedef ecp_mp::sensor::fradia_sensor<deviation_t, ecp_mp::sensor::hd_mode_t> fradia_sensor_deviation;
 
 class ecp_vis_ib_eih_planar_irp6ot: public common::generator::ecp_visual_servo {
 	bool check_if_followed();
 public:
 	//Wirtualny sensor
-	cvfradia_deviation *vsp_fradia;
+	fradia_sensor_deviation *vsp_fradia;
 	//Pozycja w nastepnym kroku.
     double next_position[8];
     //Obliczone sterowanie dla osi x;

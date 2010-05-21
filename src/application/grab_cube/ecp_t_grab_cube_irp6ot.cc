@@ -24,7 +24,7 @@ grab_cube::grab_cube(lib::configurator &_config) :
 	turner = new generator::ecp_vis_ib_eih_wrist_turner_irp6ot(*this);
 
 	sensor_m[lib::SENSOR_CVFRADIA]
-			= new cvfradia_tracker(lib::SENSOR_CVFRADIA, "[vsp_cvfradia]", *this->sr_ecp_msg, this->config);
+			= new fradia_sensor_tracker(this->config, "[vsp_fradia_sensor]");
 	sensor_m[lib::SENSOR_CVFRADIA]->configure_sensor();
 	tracker->sensor_m = sensor_m;
 	turner->sensor_m = sensor_m;
@@ -39,7 +39,7 @@ void grab_cube::main_task_algorithm(void)
 	smoothgen2->Move();
 	smoothgen2->reset();
 
-	vsp_fradia = dynamic_cast<cvfradia_tracker *> (sensor_m[lib::SENSOR_CVFRADIA]);
+	vsp_fradia = dynamic_cast<fradia_sensor_tracker *> (sensor_m[lib::SENSOR_CVFRADIA]);
 
 	vsp_fradia->get_reading();
 	while (vsp_fradia->get_report() == lib::VSP_SENSOR_NOT_CONFIGURED) {

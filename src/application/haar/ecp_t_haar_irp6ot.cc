@@ -46,8 +46,7 @@ haar::haar(lib::configurator &_config) :
 
 
 	//Create cvFraDIA sensor - for testing purposes.
-	sensor_m[lib::SENSOR_CVFRADIA] = new cvfradia_haar_detect(lib::SENSOR_CVFRADIA,
-			"[vsp_cvfradia]", *this->sr_ecp_msg, this->config);
+	sensor_m[lib::SENSOR_CVFRADIA] = new fradia_sensor_haar_detect(this->config, "[vsp_cvfradia]");
 
 	//Configure sensor.
 	sensor_m[lib::SENSOR_CVFRADIA]->configure_sensor();

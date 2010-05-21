@@ -34,6 +34,14 @@ namespace mrrocpp {
 namespace ecp_mp {
 namespace sensor {
 
+/*!
+ * \brief Types commands sent to PW_HaarDetect task.
+ */
+typedef enum _HD_MODE
+{
+	WITHOUT_ROTATION, PERFORM_ROTATION
+} hd_mode_t;
+
 /** Define size of data buffer for FraDIA <->MRROC++ communication. Used by CommunicationWrapper (FraDIA) and fradia_sensor (MRROC++) */
 #define SENSOR_IMAGE_FRADIA_READING_SIZE 24
 #define ECP_VSP_MSG_FRADIA_COMMAND_SIZE 160

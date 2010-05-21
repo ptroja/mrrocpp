@@ -29,7 +29,7 @@ namespace generator {
 
 bool ecp_vis_ib_eih_follower_irp6ot::first_step() {
 
-	//vsp_fradia = dynamic_cast<ecp_mp::sensor:cvfradia<tracker> *> (sensor_m[lib::SENSOR_CVFRADIA]);
+	//vsp_fradia = dynamic_cast<ecp_mp::sensor:fradia_sensor<tracker> *> (sensor_m[lib::SENSOR_CVFRADIA]);
 
 	the_robot->ecp_command.instruction.instruction_type = lib::GET;
 	the_robot->ecp_command.instruction.get_type = ARM_DEFINITION;

@@ -41,7 +41,7 @@ acq_eih::acq_eih(task &_ecp_t) : acquisition(_ecp_t)
 	nose = new generator::eih_nose_run(_ecp_t, 8);
 	nose->eih_nose_run::configure_pulse_check (true);
 
-	ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_CVFRADIA] = new ecp_mp::sensor::cvfradia<chessboard_t>(lib::SENSOR_CVFRADIA, "[vsp_cvfradia]", *_ecp_t.sr_ecp_msg, _ecp_t.config);
+	ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_CVFRADIA] = new ecp_mp::sensor::fradia_sensor<chessboard_t,lib::empty_t>(_ecp_t.config, "[vsp_fradia_sensor]");
 	ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_CVFRADIA]->configure_sensor();
 
 	generator = new generator::eihgenerator(_ecp_t);
@@ -69,7 +69,7 @@ void acq_eih::main_task_algorithm(void ){
 	ecp_sub_task::ecp_t.sr_ecp_msg->message("ECP eihacquisition ready");
 
 	//Czekam, az czujnik bedzie skonfigurowany.
-	ecp_mp::sensor::cvfradia<chessboard_t> * fradia = dynamic_cast<ecp_mp::sensor::cvfradia<chessboard_t> *> (ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_CVFRADIA]);
+	ecp_mp::sensor::fradia_sensor<chessboard_t,lib::empty_t> * fradia = dynamic_cast<ecp_mp::sensor::fradia_sensor<chessboard_t,lib::empty_t> *> (ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_CVFRADIA]);
 	fradia->get_reading();
 	while(fradia->get_report() == lib::VSP_SENSOR_NOT_CONFIGURED) {
 		fradia->get_reading();
@@ -338,7 +338,7 @@ bool acq_eih::store_data(void )
 {
 	int i,j=0;
 
-	ecp_mp::sensor::cvfradia<chessboard_t> * fradia = dynamic_cast<ecp_mp::sensor::cvfradia<chessboard_t> *> (ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_CVFRADIA]);
+	ecp_mp::sensor::fradia_sensor<chessboard_t,lib::empty_t> * fradia = dynamic_cast<ecp_mp::sensor::fradia_sensor<chessboard_t,lib::empty_t> *> (ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_CVFRADIA]);
 
 	if(fradia->image.found == true && !calibrated)
 	{

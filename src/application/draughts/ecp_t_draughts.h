@@ -7,7 +7,7 @@
 #include "lib/com_buf.h"
 #include "ecp/common/task/ecp_st_go.h"
 #include "ecp/common/generator/ecp_g_sleep.h"
-#include "ecp_mp/sensor/ecp_mp_s_cvfradia.h"
+#include "ecp_mp/sensor/ecp_mp_s_fradia_sensor.h"
 #include "ecp_mp_tr_draughtsAI.h"
 #include "ecp_g_vis_ib_eih_follower_irp6ot.h"
 
@@ -59,12 +59,12 @@ const int AI_NORMAL_MOVE=0;
 const int AI_COMPUTER_WON=1;
 const int AI_HUMAN_WON=2;
 
-typedef ecp_mp::sensor::cvfradia<board, draughts_control> cvfradia_board_and_draughts;
+typedef ecp_mp::sensor::fradia_sensor<board, draughts_control> fradia_sensor_board_and_draughts;
 
 class Draughts: public common::task::task {
 
 	private:
-		cvfradia_board_and_draughts *vsp_fradia;		//Virtual sensor
+		fradia_sensor_board_and_draughts *vsp_fradia;		//Virtual sensor
 		//common::generator::smooth* sgen;				//smooth movement generator
 		common::generator::smooth* sgen2;				//smooth movement generator
 		common::generator::bias_edp_force* befgen;		//calibration of force

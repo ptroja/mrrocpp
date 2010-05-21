@@ -7,7 +7,7 @@
 #include "ecp/common/generator/ecp_g_smooth.h"
 #include "ecp/irp6_on_track/generator/ecp_g_vis_ib_eih_object_tracker_irp6ot.h"
 #include "ecp_g_vis_ib_eih_wrist_turner_irp6ot.h"
-#include "ecp_mp/sensor/ecp_mp_s_cvfradia.h"
+#include "ecp_mp/sensor/ecp_mp_s_fradia_sensor.h"
 #include "lib/com_buf.h"
 #include "ecp/common/generator/ecp_g_force.h"
 
@@ -16,12 +16,12 @@ namespace ecp {
 namespace irp6ot {
 namespace task {
 
-typedef ecp_mp::sensor::cvfradia <lib::object_tracker_t> cvfradia_tracker;
+typedef ecp_mp::sensor::fradia_sensor <lib::object_tracker_t, lib::empty_t> fradia_sensor_tracker;
 
 class grab_cube : public common::task::task
 {
 protected:
-	cvfradia_tracker *vsp_fradia; //Virtual sensor
+	fradia_sensor_tracker *vsp_fradia; //Virtual sensor
 	common::generator::smooth* smoothgen2;
 	generator::ecp_vis_ib_eih_object_tracker_irp6ot* tracker;
 	generator::ecp_vis_ib_eih_wrist_turner_irp6ot* turner;
