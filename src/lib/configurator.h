@@ -15,6 +15,7 @@
 
 #include <iostream>
 #include <string>
+#include <stdexcept>
 
 #include <boost/thread/mutex.hpp>
 #include <boost/lexical_cast.hpp>
@@ -106,16 +107,26 @@ public:
 	template <class Type>
 	Type value(const std::string & _key, const std::string & __section_name) const
 	{
-		return boost::lexical_cast <Type>(return_string_value(_key.c_str(), __section_name.c_str()));
+		std::string str_value = return_string_value(_key.c_str(), __section_name.c_str());
+		boost::algorithm::trim(str_value);
+		try{
+			return boost::lexical_cast <Type>(str_value);
+		}catch(const std::exception &ex){
+			throw std::runtime_error("lib::configurator::value() section \"" + __section_name + "\", key: \"" + _key + "\", value: \"" + str_value + "\", " + ex.what());
+		}
 	}
-	;
 
 	template <class Type>
 	Type value(const std::string & _key) const
 	{
-		return boost::lexical_cast <Type>(return_string_value(_key.c_str()));
+		std::string str_value =return_string_value(_key.c_str());
+		boost::algorithm::trim(str_value);
+		try{
+			return boost::lexical_cast <Type>(str_value);
+		}catch(const std::exception &ex){
+			throw std::runtime_error("lib::configurator::value() key: \"" + _key + "\", value: \"" + str_value + "\", " + ex.what());
+		}
 	}
-	;
 
 	//	/**
 	//	 * Read vector from config. Vector has format similar to MatLAB, for example: [ x y z ].
@@ -146,7 +157,6 @@ public:
 	{
 		return exists(_key.c_str(), __section_name.c_str());
 	}
-	;
 
 	~configurator();
 
@@ -168,7 +178,7 @@ template <int COLS>
 Eigen::Matrix <double, 1, COLS> configurator::get_vector_elements(std::string text_value) const
 {
 //	std::cout << "configurator::get_vector_elements() begin\n";
-	Eigen::Matrix <double, 1, COLS> value;
+	Eigen::Matrix <double, 1, COLS> row_value;
 	const char * blank_chars = { " \t\n\r" };
 	boost::algorithm::trim_if(text_value, boost::algorithm::is_any_of(blank_chars));
 
@@ -185,21 +195,21 @@ Eigen::Matrix <double, 1, COLS> configurator::get_vector_elements(std::string te
 		std::string element = *it;
 		boost::algorithm::trim(element);
 		double element_value = boost::lexical_cast <double>(element);
-		value(0, element_no) = element_value;
+		row_value(0, element_no) = element_value;
 	}
 
 	if (element_no != COLS) {
 		throw std::logic_error("configurator::get_vector_elements(): vector has less elements than expected: \"" + text_value + "\".");
 	}
 //	std::cout << "configurator::get_vector_elements() end\n";
-	return value;
+	return row_value;
 }
 
 template <int ROWS, int COLS>
 Eigen::Matrix <double, ROWS, COLS> configurator::value(const std::string & key, const std::string & section_name) const
 {
 //	std::cout << "configurator::get_matrix_value() begin\n";
-	Eigen::Matrix <double, ROWS, COLS> value;
+	Eigen::Matrix <double, ROWS, COLS> matrix_value;
 
 	// get string value and remove leading and trailing spaces
 	std::string text_value = return_string_value(key.c_str(), section_name.c_str());
@@ -221,19 +231,13 @@ Eigen::Matrix <double, ROWS, COLS> configurator::value(const std::string & key, 
 		if (row_no >= ROWS) {
 			throw std::logic_error("configurator::value(): matrix has more rows than expected. Parameter: \"" + key + "\" in section \"" + section_name + "\"");
 		}
-//		Eigen::Matrix <double, 1, COLS> row = get_vector_elements<COLS>(*it);
-//		for (int i = 0; i < m; ++i) {
-//			value(row_no, i) = row(i);
-//		}
-		value.row(row_no) = get_vector_elements<COLS>(*it);
+		matrix_value.row(row_no) = get_vector_elements<COLS>(*it);
 	}
 	if (row_no != ROWS) {
 		throw std::logic_error("configurator::value(): matrix has more rows than expected. Parameter: \"" + key + "\" in section \"" + section_name + "\"");
 	}
 
-//	std::cout << "configurator::get_matrix_value() end\n";
-
-	return value;
+	return matrix_value;
 }
 
 
