@@ -11,6 +11,7 @@ namespace mrrocpp {
 namespace ecp {
 namespace common {
 namespace generator {
+namespace velocity_profile_calculator {
 
 bang_bang_profile::bang_bang_profile() {
 	// TODO Auto-generated constructor stub
@@ -27,7 +28,7 @@ bool bang_bang_profile::eq(double a, double b) {
 	return diff < EPS && diff > -EPS;
 }
 
-bool bang_bang_profile::reduction_model_1(vector<ecp_mp::common::bang_bang_trajectory_pose>::iterator &pose_vector_iterator, int i, double s) {
+bool bang_bang_profile::reduction_model_1(vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator &pose_vector_iterator, int i, double s) {
 
 	//printf("redukcja kinematic_model_with_tool 1 w osi: %d\n", i);
 	if (pose_vector_iterator->v_p[i] < pose_vector_iterator->v_k[i] && (pose_vector_iterator->v_k[i] * pose_vector_iterator->t
@@ -86,7 +87,7 @@ bool bang_bang_profile::reduction_model_1(vector<ecp_mp::common::bang_bang_traje
 	}
 }
 
-bool bang_bang_profile::reduction_model_2(vector<ecp_mp::common::bang_bang_trajectory_pose>::iterator &pose_vector_iterator, int i, double s) {
+bool bang_bang_profile::reduction_model_2(vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator &pose_vector_iterator, int i, double s) {
 	double a;
 
 	a = (0.5 * (pose_vector_iterator->v_k[i] - pose_vector_iterator->v_p[i]) * (pose_vector_iterator->v_k[i] - pose_vector_iterator->v_p[i])
@@ -156,7 +157,7 @@ bool bang_bang_profile::reduction_model_2(vector<ecp_mp::common::bang_bang_traje
 	return true;
 }
 
-bool bang_bang_profile::reduction_model_3(vector<ecp_mp::common::bang_bang_trajectory_pose>::iterator &pose_vector_iterator, int i, double s) {
+bool bang_bang_profile::reduction_model_3(vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator &pose_vector_iterator, int i, double s) {
 	double t1; //czas konca opoznienia
 
 	if(pose_vector_iterator->a_r[i] * pose_vector_iterator->a_r[i] * pose_vector_iterator->t * pose_vector_iterator->t//liczba pierwiastkowana mniejsza od 0, zabezpieczenie
@@ -180,7 +181,7 @@ bool bang_bang_profile::reduction_model_3(vector<ecp_mp::common::bang_bang_traje
 	return true;
 }
 
-bool bang_bang_profile::reduction_model_4(vector<ecp_mp::common::bang_bang_trajectory_pose>::iterator &pose_vector_iterator, int i, double s) {
+bool bang_bang_profile::reduction_model_4(vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator &pose_vector_iterator, int i, double s) {
 	double a;
 
 	a = (pose_vector_iterator->v_p[i] - pose_vector_iterator->v_k[i]) * (pose_vector_iterator->v_p[i] - pose_vector_iterator->v_k[i]) /
@@ -246,7 +247,7 @@ bool bang_bang_profile::reduction_model_4(vector<ecp_mp::common::bang_bang_traje
 	return true;
 }
 
-bool bang_bang_profile::vp_reduction(vector<ecp_mp::common::bang_bang_trajectory_pose>::iterator &pose_vector_iterator, int i, double s, double t) {
+bool bang_bang_profile::vp_reduction(vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator &pose_vector_iterator, int i, double s, double t) {
 	double v_r; //zmiana ruchu na jednostajny
 
 	v_r = s/t;
@@ -280,7 +281,7 @@ bool bang_bang_profile::vp_reduction(vector<ecp_mp::common::bang_bang_trajectory
 	return false;
 }
 
-bool bang_bang_profile::vk_reduction(vector<ecp_mp::common::bang_bang_trajectory_pose>::iterator &pose_vector_iterator, int i, double s, double t) {
+bool bang_bang_profile::vk_reduction(vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator &pose_vector_iterator, int i, double s, double t) {
 	//printf("v_k redukcja w osi: %d\n", i);
 	double a;
 	double v_k;
@@ -317,7 +318,7 @@ bool bang_bang_profile::vk_reduction(vector<ecp_mp::common::bang_bang_trajectory
 	return true;
 }
 
-bool bang_bang_profile::optimize_time1(vector<ecp_mp::common::bang_bang_trajectory_pose>::iterator &pose_vector_iterator, int i, double s) {
+bool bang_bang_profile::optimize_time1(vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator &pose_vector_iterator, int i, double s) {
 	double v_r;
 	double t;
 
@@ -338,7 +339,7 @@ bool bang_bang_profile::optimize_time1(vector<ecp_mp::common::bang_bang_trajecto
 	pose_vector_iterator->t = t;
 }
 
-bool bang_bang_profile::optimize_time2(vector<ecp_mp::common::bang_bang_trajectory_pose>::iterator &pose_vector_iterator, int i, double s) {
+bool bang_bang_profile::optimize_time2(vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator &pose_vector_iterator, int i, double s) {
 	double v_r;
 	double t;
 
@@ -351,7 +352,7 @@ bool bang_bang_profile::optimize_time2(vector<ecp_mp::common::bang_bang_trajecto
 	return true;
 }
 
-bool bang_bang_profile::optimize_time4(vector<ecp_mp::common::bang_bang_trajectory_pose>::iterator &pose_vector_iterator, int i, double s) {
+bool bang_bang_profile::optimize_time4(vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator &pose_vector_iterator, int i, double s) {
 	double v_r;
 	double t;
 
@@ -364,6 +365,7 @@ bool bang_bang_profile::optimize_time4(vector<ecp_mp::common::bang_bang_trajecto
 	return true;
 }
 
+} // namespace velocity_profile_calculator
 } // namespace generator
 } // namespace common
 } // namespace ecp

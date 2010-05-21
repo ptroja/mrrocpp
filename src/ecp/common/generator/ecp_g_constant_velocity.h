@@ -8,7 +8,7 @@
 #ifndef _ECP_G_CONSTANT_VELOCITY_H_
 #define _ECP_G_CONSTANT_VELOCITY_H_
 
-#include "ecp/common/generator/ecp_g_delta.h"
+#include "ecp/common/generator/ecp_g_multiple_position.h"
 #include "lib/mrmath/mrmath.h"
 
 namespace mrrocpp {
@@ -19,7 +19,7 @@ namespace generator {
 /**
  * Generator moves the robot with a constant velocity.
  */
-class constant_velocity : public delta {
+class constant_velocity : public multiple_position {
 	public:
 		/**
 		 * Constructor. Sets the axes_num and pose_spec variables.

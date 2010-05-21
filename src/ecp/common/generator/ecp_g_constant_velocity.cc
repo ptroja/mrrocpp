@@ -13,7 +13,7 @@ namespace common {
 namespace generator {
 
 constant_velocity::constant_velocity(common::task::task& _ecp_task, bool _is_synchronised, lib::ECP_POSE_SPECIFICATION pose_spec, int axes_num) :
-		delta (_ecp_task) {
+		multiple_position (_ecp_task) {
 	// TODO Auto-generated constructor stub
 
 }

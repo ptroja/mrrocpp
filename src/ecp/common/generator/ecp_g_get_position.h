@@ -8,8 +8,8 @@
 #ifndef _ECP_GEN_GET_POSITION_H_
 #define _ECP_GEN_GET_POSITION_H_
 
-#include "ecp/common/generator/ecp_g_delta.h"
 #include "lib/mrmath/mrmath.h"
+#include "ecp/common/generator/ecp_generator.h"
 
 #include <vector>
 
@@ -23,10 +23,10 @@ namespace generator {
 /**
  * Generator used to get the actual position of the robot in the given representation and form.
  */
-class get_position : public delta {
+class get_position : public generator {
 	public:
 		/**
-		 * Constructor. Alocates memory for the position array. Sets the axes_num and pose_spec variables.
+		 * Constructor. Creates a position vector. Sets the axes_num and pose_spec variables.
 		 * @param axes_num number of axes for a given robot and representation
 		 * @param pose_spec representation in which the robot position is expressed
 		 */
@@ -50,7 +50,7 @@ class get_position : public delta {
 
 	private:
 		/**
-		 * Dynamically allocated array filled with coordinates read from the robot.
+		 * Vector filled with coordinates read from the robot.
 		 */
 		vector<double> position;
 		/**
@@ -60,7 +60,7 @@ class get_position : public delta {
 		/**
 		 * Type of the used representation.
 		 */
-		 lib::ECP_POSE_SPECIFICATION pose_spec;
+		lib::ECP_POSE_SPECIFICATION pose_spec;
 };
 
 } // namespace generator

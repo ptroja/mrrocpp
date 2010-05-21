@@ -13,6 +13,7 @@ add_library(ecp
 	ecp_taught_in_pose.cc
 	generator/ecp_g_smooth.cc
 	generator/ecp_g_newsmooth.cc
+	generator/ecp_g_multiple_position.cc
 	generator/ecp_g_sleep.cc
 	generator/ecp_g_force.cc
 	generator/ecp_g_transparent.cc

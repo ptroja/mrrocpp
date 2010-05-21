@@ -29,9 +29,8 @@ using namespace std;
 #include "lib/srlib.h"
 #include "lib/mrmath/mrmath.h"
 
-#include "ecp_mp/bang_bang_trajectory_pose.h"
-
-#include "ecp/common/generator/ecp_g_delta.h"
+#include "ecp/common/generator/ecp_g_multiple_position.h"
+#include "ecp_mp/trajectory_pose/bang_bang_trajectory_pose.h"
 
 using namespace std;
 
@@ -43,79 +42,13 @@ namespace generator {
 /**
  *
  */
-class newsmooth : public delta {
+class newsmooth : public multiple_position {
 
 	protected:
 		/**
 		 *
 		 */
-		class coordinates {
-			public:
-			/**
-			 *
-			 */
-			vector<double> coords;
-			/**
-			 *
-			 */
-			coordinates(const vector<double> & coords) {
-				this->coords = coords;
-			};
-		};
-		/**
-		 *
-		 */
-		vector<ecp_mp::common::bang_bang_trajectory_pose> pose_vector;
-		/**
-		 *
-		 */
-		//vector<ecp_mp::common::bang_bang_trajectory_pose> pose_list_backup;
-		/**
-		 *
-		 */
-		vector<ecp_mp::common::bang_bang_trajectory_pose>::iterator pose_vector_iterator;
-		/**
-		 *
-		 */
-		//vector<ecp_mp::common::bang_bang_trajectory_pose>::iterator pose_list_backup_iterator;
-		/**
-		 *
-		 */
-		vector<coordinates> coordinate_vector;
-		/**
-		 *
-		 */
-		vector<coordinates>::iterator coordinate_vector_iterator;
-		/**
-		 *
-		 */
-		bool first_interval;
-		/**
-		 *
-		 */
-		lib::trajectory_description td;
-		/**
-		 *
-		 */
 		bool debug; //czy maja byc wyswietlane debugi
-		/**
-		 *
-		 */
-		lib::MOTION_TYPE motion_type;
-		/**
-		 * Number of axes in which we want to move in the given representation.
-		 */
-		int axes_num;
-
-		/**
-		 *
-		 */
-		//bool trajectory_generated;
-		/**
-		 *
-		 */
-		//bool trajectory_calculated;
-
 		/**
 		 *
 		 */
@@ -139,39 +72,14 @@ class newsmooth : public delta {
 		/**
 		 *
 		 */
-		void next_pose_list_ptr(void);
-		/**
-		 *
-		 */
-		void prev_pose_list_ptr(void);
-		/**
-		 *
-		 */
-		void insert_pose_list_element(lib::ECP_POSE_SPECIFICATION ps, double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR]);
-		/**
-		 *
-		 */
-		void flush_coordinate_list(void);
-
+		void insert_pose_list_element(lib::ECP_POSE_SPECIFICATION ps, vector<double> v, vector<double> a, vector<double> coordinates);
 	public:
-		/**
-		 *
-		 */
-		void set_interpolation_type();
+
 		/**
 		 *
 		 */
 		void calculate_interpolate();
-		/**
-		 *
-		 */
-		void set_axes_num(int axes_num);
 
-
-		/**
-		 *
-		 */
-		newsmooth(common::task::task& _ecp_task, bool _is_synchronised);
 		/**
 		 *
 		 */
@@ -192,95 +100,6 @@ class newsmooth : public delta {
 		 *
 		 */
 		void load_a_v_max(const char* file_name);
-
-
-		/**
-		 *
-		 */
-		/*void load_file_with_path(const char* file_name);
-		/**
-		 *
-		 */
-		//void load_coordinates(lib::ECP_POSE_SPECIFICATION ps, double coordinates[MAX_SERVOS_NR], bool reset);
-		/**
-		 *
-		 */
-		//void load_coordinates(lib::ECP_POSE_SPECIFICATION ps, double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR], bool reset);
-		/**
-		 *
-		 */
-		//void load_coordinates(lib::ECP_POSE_SPECIFICATION ps, double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset);
-		/**
-		 *
-		 */
-		//void load_coordinates(lib::ECP_POSE_SPECIFICATION ps, double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset);
-		/**
-		 *
-		 */
-		//void load_xyz_angle_axis(double coordinates[MAX_SERVOS_NR], bool reset);
-		/**
-		 *
-		 */
-		//void load_xyz_angle_axis(double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR], bool reset);
-		/**
-		 *
-		 */
-		//void load_xyz_angle_axis(double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset);
-		/**
-		 *
-		 */
-		//void load_xyz_angle_axis(double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset);
-		/**
-		 *
-		 */
-		//void load_xyz_euler_zyz(double coordinates[MAX_SERVOS_NR], bool reset);
-		/**
-		 *
-		 */
-		//void load_xyz_euler_zyz(double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR], bool reset);
-		/**
-		 *
-		 */
-		//void load_xyz_euler_zyz(double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset);
-		/**
-		 *
-		 */
-		//void load_xyz_euler_zyz(double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset);
-		/**
-		 *
-		 */
-		//void load_joint(double coordinates[MAX_SERVOS_NR], bool reset);
-		/**
-		 *
-		 */
-		//void load_joint(double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR], bool reset);
-		/**
-		 *
-		 */
-		//void load_joint(double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset);
-		/**
-		 *
-		 */
-		//void load_joint(double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset);
-		/**
-		 *
-		 */
-		//void load_motor(double coordinates[MAX_SERVOS_NR], bool reset);
-		/**
-		 *
-		 */
-		//void load_motor(double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR], bool reset);
-		/**
-		 *
-		 */
-		//void load_motor(double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset);
-		/**
-		 *
-		 */
-		//void load_motor(double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset);
-
-
-
 		/**
 		 *
 		 */

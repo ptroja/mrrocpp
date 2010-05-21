@@ -53,6 +53,11 @@ class generator : public ecp_mp::generator::generator {
 				ECP_error ( lib::error_class_t err_cl, uint64_t err_no, uint64_t err0 = 0, uint64_t err1 = 0);
 		}; // end: class ECP_error
 
+		lib::trajectory_description td;
+
+		//virtual bool first_step () = 0;
+		//virtual bool next_step () = 0;
+
 };
 
 } // namespace generator

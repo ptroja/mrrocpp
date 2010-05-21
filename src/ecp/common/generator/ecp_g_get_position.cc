@@ -14,7 +14,7 @@ namespace generator {
 
 
 get_position::get_position(common::task::task& _ecp_task, bool _is_synchronised, lib::ECP_POSE_SPECIFICATION pose_spec, int axes_num) :
-        delta (_ecp_task) {
+        generator (_ecp_task) {
 	position = vector<double>();
 	this->axes_num = axes_num;
 	this->pose_spec = pose_spec;
@@ -64,7 +64,6 @@ bool get_position::next_step() {
 		}
 
 	} else if (pose_spec == lib::ECP_JOINT || pose_spec == lib::ECP_MOTOR) {
-		//memcpy(the_robot->reply_package.arm.pf_def.arm_coordinates, position, axes_num * sizeof(double));
 		for (int i = 0; i < axes_num; i++) {
 			position.push_back(the_robot->reply_package.arm.pf_def.arm_coordinates[i]);
 		}
