@@ -37,7 +37,7 @@ sk_mr::sk_mr(lib::configurator &_config) :
 	yefg = new generator::y_edge_follow_force(*this, 8);
 	befg = new generator::bias_edp_force(*this);
 
-	sr_ecp_msg->message("ECP BIRD HAND TEST loaded");
+	sr_ecp_msg->message("ECP SK_MR loaded");
 }
 
 void sk_mr::main_task_algorithm(void) {
