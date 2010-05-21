@@ -110,7 +110,7 @@ public:
 	void operator()();
 
 	/** Object received from fradia, read by get_reading(). */
-	FROM_VSP_T received_object;
+	FROM_VSP_T image;
 private:
 	std::string fradia_task;
 	/*!
@@ -240,7 +240,7 @@ fradia_sensor <FROM_VSP_T, TO_VSP_T>::fradia_sensor(mrrocpp::lib::configurator& 
 	// Retrieve task name.
 	fradia_task = configurator.value <std::string> ("fradia_task", section_name);
 
-	std::memset(&received_object, 0, sizeof(FROM_VSP_T));
+	std::memset(&image, 0, sizeof(FROM_VSP_T));
 	std::memset(&received_object_shared, 0, sizeof(FROM_VSP_T));
 }
 
@@ -310,7 +310,7 @@ void fradia_sensor <FROM_VSP_T, TO_VSP_T>::get_reading()
 {
 	boost::interprocess::scoped_lock <boost::mutex> l(get_reading_mutex);
 
-	received_object = received_object_shared;
+	image = received_object_shared;
 
 	//logger::logDbg("fradia_sensor::get_reading()\n");
 }
