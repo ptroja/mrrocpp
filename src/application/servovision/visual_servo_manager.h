@@ -36,7 +36,7 @@ namespace generator {
  * Servo manager is a generator that takes control calculated in multiple visual_servo objects and aggregates them.
  * It also applies constraints for end effector speed, acceleration and position.
  */
-class visual_servo_manager: public mrrocpp::ecp::common::generator::generator
+class visual_servo_manager : public mrrocpp::ecp::common::generator::generator
 {
 public:
 	virtual ~visual_servo_manager();
@@ -67,7 +67,7 @@ public:
 
 	void set_speed_accel_constraints(double v_max, double a_max);
 protected:
-	visual_servo_manager(mrrocpp::ecp::common::task::task & ecp_task, const char *section_name);
+	visual_servo_manager(mrrocpp::ecp::common::task::task & ecp_task, const std::string& section_name);
 	/**
 	 * Called in next_step() to get aggregated control to pass to EDP.
 	 * @return
@@ -79,12 +79,13 @@ protected:
 	virtual void configure_all_servos() = 0;
 	std::vector <boost::shared_ptr <visual_servo> > servos;
 	const lib::Homog_matrix& get_current_position() const;
+
+	/** Time between next_step() calls */
+	double dt;
 private:
 	lib::Homog_matrix current_position;
 	bool current_position_saved;
 	int motion_steps;
-	/** Time between next_step() calls */
-	double dt;
 	double current_gripper_coordinate;
 
 	std::vector <boost::shared_ptr <position_constraint> > position_constraints;
