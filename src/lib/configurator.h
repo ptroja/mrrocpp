@@ -107,26 +107,26 @@ public:
 	template <class Type>
 	Type value(const std::string & _key, const std::string & __section_name) const
 	{
-		std::string str_value = return_string_value(_key.c_str(), __section_name.c_str());;
+		std::string str_value = return_string_value(_key.c_str(), __section_name.c_str());
+		boost::algorithm::trim(str_value);
 		try{
 			return boost::lexical_cast <Type>(str_value);
 		}catch(const std::exception &ex){
 			throw std::runtime_error("lib::configurator::value() section \"" + __section_name + "\", key: \"" + _key + "\", value: \"" + str_value + "\", " + ex.what());
 		}
 	}
-	;
 
 	template <class Type>
 	Type value(const std::string & _key) const
 	{
 		std::string str_value =return_string_value(_key.c_str());
+		boost::algorithm::trim(str_value);
 		try{
 			return boost::lexical_cast <Type>(str_value);
 		}catch(const std::exception &ex){
 			throw std::runtime_error("lib::configurator::value() key: \"" + _key + "\", value: \"" + str_value + "\", " + ex.what());
 		}
 	}
-	;
 
 	//	/**
 	//	 * Read vector from config. Vector has format similar to MatLAB, for example: [ x y z ].
@@ -157,7 +157,6 @@ public:
 	{
 		return exists(_key.c_str(), __section_name.c_str());
 	}
-	;
 
 	~configurator();
 
