@@ -97,7 +97,7 @@ private:
 
 public:
 	RemoteBuffer(RemoteAgent & _owner, const std::string & _name)
-		: owner(_owner), name(_name)
+		: name(_name), owner(_owner)
 	{
 	}
 

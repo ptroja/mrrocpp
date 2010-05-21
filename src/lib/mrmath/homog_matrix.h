@@ -50,6 +50,9 @@ public:
 	Homog_matrix(const Xyz_Rpy_vector & l_vector);
 	Homog_matrix(const Xyz_Angle_Axis_vector & l_vector);
 
+	//! Utworzenie z Eigen::Matrix<double, 3, 4>
+	Homog_matrix(const Eigen::Matrix<double, 3, 4>& eigen_matrix);
+
 	//! Utworzenie macierzy jednorodnej na podstawie podanej macierzy obrotu r i wektora przesuniecia t.
 	Homog_matrix(const double r[3][3], const double t[3]);
 

@@ -26,8 +26,12 @@ SET(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 SET(_CMAKE_TOOLCHAIN_PREFIX "ntox86-")
 SET(_CMAKE_TOOLCHAIN_LOCATION "$ENV{QNX_HOST}/usr/bin")
 
-# warn about everything!
-set(CMAKE_CXX_FLAGS "-w9 -Wcast-qual -Wpointer-arith -Wwrite-strings")
+# warn about almost everything except:
+# -Wcast-qual
+# -Wshadow
+# -Wsign-compare
+# optimization option -O1 is required for the compiler to find uninitialized local variables.
+set(CMAKE_CXX_FLAGS "-w9 -Wpointer-arith -Wwrite-strings -Wno-sign-compare -O1")
 
 ## GCC is the default compiler on QNX 6.3.
 #INCLUDE(Platform/gcc)

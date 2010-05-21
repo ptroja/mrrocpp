@@ -11,6 +11,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <iostream>
+#include <stdexcept>
 
 #include "ecp_mp/sensor/ecp_mp_s_cvfradia.h"
 #include "ecp_mp/task/ecp_mp_task.h"
@@ -40,28 +41,31 @@ cvfradia::cvfradia(lib::SENSOR_t _sensor_name, const char* _section_name, task::
 	// Try to open socket.
 	sockfd = socket(AF_INET, SOCK_STREAM, 0);
 	if (sockfd == -1) {
-		printf("ERROR opening socket");
-		throw sensor_error(lib::SYSTEM_ERROR, CANNOT_LOCATE_DEVICE);
+		//printf("ERROR opening socket");
+		//throw sensor_error(lib::SYSTEM_ERROR, CANNOT_LOCATE_DEVICE);
+		throw std::runtime_error("cvfradia::cvfradia(): socket() error: " + string(strerror(errno)));
 	}
 
 	// Get server hostname.
 	server = gethostbyname(cvfradia_node_name.c_str());
 	if (server == NULL) {
-		printf("ERROR, no host '%s'\n", cvfradia_node_name.c_str());
-		throw sensor_error(lib::SYSTEM_ERROR, CANNOT_LOCATE_DEVICE);
+		//printf("ERROR, no host '%s'\n", cvfradia_node_name.c_str());
+		//throw sensor_error(lib::SYSTEM_ERROR, CANNOT_LOCATE_DEVICE);
+		throw std::runtime_error("cvfradia::cvfradia(): gethostbyname(" + cvfradia_node_name + "): " + strerror(errno));
 	}
 
 	// Reset socketaddr data.
 	memset(&serv_addr, 0, sizeof(serv_addr));
 	// Fill it with data.
 	serv_addr.sin_family = AF_INET;
-	memcpy(server->h_addr, &serv_addr.sin_addr.s_addr, server->h_length);
+	memcpy(&serv_addr.sin_addr.s_addr, server->h_addr, server->h_length);
 	serv_addr.sin_port = htons(cvfradia_port);
 
 	// Try to establish a connection with cvFraDIA.
 	if (connect(sockfd, (const struct sockaddr *) &serv_addr, sizeof(serv_addr)) == -1) {
-		printf("ERROR connecting");
-		throw sensor_error(lib::SYSTEM_ERROR, CANNOT_LOCATE_DEVICE);
+		//printf("ERROR connecting");
+		//throw sensor_error(lib::SYSTEM_ERROR, CANNOT_LOCATE_DEVICE);
+		throw std::runtime_error("cvfradia::cvfradia(): connect(): " + string(strerror(errno)));
 	}
 
 	// Retrieve task name.
