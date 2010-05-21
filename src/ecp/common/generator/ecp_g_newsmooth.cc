@@ -12,20 +12,6 @@ namespace ecp {
 namespace common {
 namespace generator {
 
-void newsmooth::set_relative(void) {
-	motion_type=lib::RELATIVE;
-}
-
-void newsmooth::set_absolute(void) {
-	motion_type=lib::ABSOLUTE;
-}
-
-bool newsmooth::eq(double a, double b) {
-	const double EPS = 0.000001;
-	const double& diff = a - b;
-	return diff < EPS && diff > -EPS;
-}
-
 void newsmooth::reset() {
 
 }

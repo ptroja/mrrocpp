@@ -67,6 +67,14 @@ public:
 	 * Sets the chosen type of interpolation.
 	 */
 	void set_interpolation_type();
+	/**
+	 * Sets the relative type of motion.
+	 */
+	void set_relative(void); //zmiana na tryb przyrostowy
+	/**
+	 * Sets the absolute type of motion.
+	 */
+	void set_absolute(void); //zmiana na tryb bezwzgledny
 };
 
 } // namespace generator

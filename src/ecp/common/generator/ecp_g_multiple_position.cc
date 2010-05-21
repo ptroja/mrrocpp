@@ -22,6 +22,14 @@ multiple_position::~multiple_position() {
 	// TODO Auto-generated destructor stub
 }
 
+void multiple_position::set_relative(void) {
+	motion_type=lib::RELATIVE;
+}
+
+void multiple_position::set_absolute(void) {
+	motion_type=lib::ABSOLUTE;
+}
+
 } // namespace generator
 } // namespace common
 } // namespace ecp

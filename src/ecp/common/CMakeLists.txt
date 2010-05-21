@@ -20,6 +20,7 @@ add_library(ecp
 	generator/ecp_g_get_position.cc
 	generator/ecp_g_constant_velocity.cc
 	generator/velocity_profile_calculator/bang_bang_profile.cc
+	generator/velocity_profile_calculator/velocity_profile.cc
 )
 
 target_link_libraries(ecp ecp_mp)

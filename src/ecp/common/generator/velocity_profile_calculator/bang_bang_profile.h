@@ -8,10 +8,8 @@
 #ifndef _BANG_BANG_PROFILE_H_
 #define _BANG_BANG_PROFILE_H_
 
-#include <list>
-#include <math.h>
-
 #include "ecp_mp/trajectory_pose/bang_bang_trajectory_pose.h"
+#include "ecp/common/generator/velocity_profile_calculator/velocity_profile.h"
 
 using namespace std;
 
@@ -21,7 +19,7 @@ namespace common {
 namespace generator {
 namespace velocity_profile_calculator {
 
-class bang_bang_profile {
+class bang_bang_profile : public velocity_profile {
 	public:
 		/**
 		 * Constructor.
@@ -31,10 +29,6 @@ class bang_bang_profile {
 		 * Destructor.
 		 */
 		virtual ~bang_bang_profile();
-		/**
-		 *
-		 */
-		bool eq(double a, double b);
 		/**
 		 * Reduces velocity and acceleration of the first motion model velocity profile, so that the given distance is covered in a given time.
 		 * Can call reduction_model_2, reduction_model_3 or reduction_model_4 methods if it is necessary.

@@ -1,5 +1,5 @@
 /*
- * bang_bang_profile.cpp
+ * bang_bang_profile.cc
  *
  *  Created on: May 4, 2010
  *      Author: rtulwin
@@ -20,12 +20,6 @@ bang_bang_profile::bang_bang_profile() {
 
 bang_bang_profile::~bang_bang_profile() {
 	// TODO Auto-generated destructor stub
-}
-
-bool bang_bang_profile::eq(double a, double b) {
-	const double EPS = 0.0001;
-	const double& diff = a - b;
-	return diff < EPS && diff > -EPS;
 }
 
 bool bang_bang_profile::reduction_model_1(vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator &pose_vector_iterator, int i, double s) {

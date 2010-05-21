@@ -52,10 +52,6 @@ class newsmooth : public multiple_position {
 		/**
 		 *
 		 */
-		bool eq(double a, double b);
-		/**
-		 *
-		 */
 		//void generate_coords();
 		/**
 		 *
@@ -74,24 +70,14 @@ class newsmooth : public multiple_position {
 		 */
 		void insert_pose_list_element(lib::ECP_POSE_SPECIFICATION ps, vector<double> v, vector<double> a, vector<double> coordinates);
 	public:
-
 		/**
 		 *
 		 */
 		void calculate_interpolate();
-
 		/**
 		 *
 		 */
 		newsmooth(common::task::task& _ecp_task, bool _is_synchronised, bool _debug);
-		/**
-		 *
-		 */
-		void set_relative(void); //zmiana na tryb przyrostowy
-		/**
-		 *
-		 */
-		void set_absolute(void); //zmiana na tryb bezwzgledny
 		/**
 		 *
 		 */
