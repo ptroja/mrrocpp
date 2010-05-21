@@ -1313,7 +1313,7 @@ bool parabolic_teach_in::first_step()
 
 bool parabolic_teach_in::next_step()
 {
-	double Delta; // roznica polozen aktulanego  i zadanego
+	//double Delta; // roznica polozen aktulanego  i zadanego
 
 	char messg[128]; // komunikat do SR
 	int i; // Licznik
