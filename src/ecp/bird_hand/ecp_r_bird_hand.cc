@@ -70,8 +70,6 @@ void robot::create_command() {
 	bool is_new_data;
 	bool is_new_request;
 
-	sr_ecp_msg.message("create_command");
-
 	// NOWE PORTY
 	is_new_data = ((bird_hand_command_data_port.is_new_data())
 			|| (bird_hand_configuration_command_data_port.is_new_data()));

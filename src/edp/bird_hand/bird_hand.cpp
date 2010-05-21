@@ -4,7 +4,6 @@
 
 #include <exception>
 #include <string.h>
-#include <sys/select.h>
 
 #define BAUD 921600
 
@@ -202,7 +201,7 @@ void Bird_hand::setCMD1(uint8_t id, int16_t t, int16_t b, int16_t Fd, int32_t rd
 	
 	struct cmd_ *x = (struct cmd_ *)&buf[3];
 	x->t = t;
-	x->fd = fd;
+	x->fd = Fd;
 	x->b = b;
 	x->rd = rd;
 	
@@ -217,7 +216,7 @@ void Bird_hand::setCMD2(uint8_t id, int16_t t, int16_t b, int16_t Fd, int32_t rd
 	
 	struct cmd_ *x = (struct cmd_ *)&buf[3];
 	x->t = t;
-	x->fd = fd;
+	x->fd = Fd;
 	x->b = b;
 	x->rd = rd;
 	
@@ -232,9 +231,21 @@ void Bird_hand::setCMD3(uint8_t id, int16_t t, int16_t b, int16_t Fd, int32_t rd
 	
 	struct cmd_ *x = (struct cmd_ *)&buf[3];
 	x->t = t;
-	x->fd = fd;
+	x->fd = Fd;
 	x->b = b;
 	x->rd = rd;
 	
+	write_read(buf, 21, 0);
+}
+
+void Bird_hand::synchronize(uint8_t id, uint16_t step)
+{
+	buf[0] = '#';
+	buf[1] = id;
+	buf[2] = SET_SYNCHRO;
+	
+	struct synchro_ *x = (struct synchro_ *)&buf[3];
+	x->n = step;
+
 	write_read(buf, 21, 0);
 }

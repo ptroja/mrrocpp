@@ -7,6 +7,7 @@
 // commands 
 #define GET_STATUS	0x00
 #define GET_ABSPOS	0x01
+#define SET_SYNCHRO	0x02
 
 #define SET_CMD1	0x30
 #define SET_CMD2	0x31
@@ -56,4 +57,9 @@ struct limit_
 	int16_t l_limit;
 	int16_t cur_limit;
 	int16_t f_limit;
+}	__attribute__((__packed__));
+
+struct synchro_
+{
+	uint16_t n;
 }	__attribute__((__packed__));

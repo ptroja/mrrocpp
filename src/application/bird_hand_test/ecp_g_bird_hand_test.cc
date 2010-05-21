@@ -44,17 +44,19 @@ bool bird_hand::first_step() {
 	// parameters copying
 	get_mp_ecp_command();
 
-	ecp_t.sr_ecp_msg->message("bird_hand first_step");
-
 	//	bird_hand_configuration_command_data_port->set(	bird_hand_configuration_command_structure);
-	bird_hand_command_structure.desired_position[3] = 3.14;
-	bird_hand_command_structure.motion_steps = 1000;
-	bird_hand_command_structure.ecp_query_step = 950;
+
+	bird_hand_command_structure.desired_position[0] = 0;
+	bird_hand_command_structure.profile_type[0] = mrrocpp::lib::BIRD_HAND_MACROSTEP_POSITION_INCREMENT;
+	bird_hand_command_structure.desired_torque[0] = 50;
+	bird_hand_command_structure.reciprocal_of_damping[0] = 50;
+	bird_hand_command_structure.motion_steps = 50;
+	bird_hand_command_structure.ecp_query_step = 40;
 	bird_hand_command_data_port->set(bird_hand_command_structure);
 
-	bird_hand_configuration_command_structure.d_factor[3] = 122;
-	bird_hand_configuration_command_data_port->set(
-			bird_hand_configuration_command_structure);
+	//bird_hand_configuration_command_structure.d_factor[3] = 122;
+	//bird_hand_configuration_command_data_port->set(
+		//	bird_hand_configuration_command_structure);
 
 	bird_hand_status_reply_data_request_port->set_request();
 
@@ -62,7 +64,6 @@ bool bird_hand::first_step() {
 }
 
 bool bird_hand::next_step() {
-	ecp_t.sr_ecp_msg->message("bird_hand next_step");
 
 	if (bird_hand_status_reply_data_request_port->is_new_data()) {
 		bird_hand_status_reply_structure
@@ -70,7 +71,7 @@ bool bird_hand::next_step() {
 
 		std::stringstream ss(std::stringstream::in | std::stringstream::out);
 		ss << "licznik: "
-				<< bird_hand_status_reply_structure.meassured_current[3]
+				<< bird_hand_status_reply_structure.meassured_torque[0]
 				<< ", node_counter:  " << node_counter;
 
 		ecp_t.sr_ecp_msg->message(ss.str().c_str());
@@ -80,24 +81,14 @@ bool bird_hand::next_step() {
 	if (bird_hand_configuration_reply_data_request_port->is_new_data()) {
 		bird_hand_configuration_reply_structure
 				= bird_hand_configuration_reply_data_request_port->get();
-
-		std::stringstream ss(std::stringstream::in | std::stringstream::out);
-		ss << "licznik con: "
-				<< bird_hand_configuration_reply_structure.d_factor[2]
-				<< ", node_counter:  " << node_counter;
-
-		ecp_t.sr_ecp_msg->message(ss.str().c_str());
-
 	}
 
-	if (node_counter < 3) {
-		bird_hand_command_data_port->set(bird_hand_command_structure);
-		bird_hand_status_reply_data_request_port->set_request();
-		bird_hand_configuration_reply_data_request_port->set_request();
-		return true;
-	} else {
-		return false;
-	}
+	
+	bird_hand_command_data_port->set(bird_hand_command_structure);
+	bird_hand_status_reply_data_request_port->set_request();
+	bird_hand_configuration_reply_data_request_port->set_request();
+	return true;
+
 
 }
 

@@ -7,6 +7,7 @@
 #include <fcntl.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <sys/select.h>
 
 #include <string>
 
@@ -33,6 +34,8 @@ class Bird_hand
 	void setCMD2(uint8_t id, int16_t t, int16_t b, int16_t Fd, int32_t rd);
 	void setCMD3(uint8_t id, int16_t t, int16_t b, int16_t Fd, int32_t rd);
 	
+	void synchronize(uint8_t id, uint16_t step);
+
 	protected:
 	private:
 	
