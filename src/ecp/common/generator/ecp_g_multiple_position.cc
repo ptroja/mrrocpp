@@ -14,8 +14,9 @@ namespace generator {
 
 multiple_position::multiple_position(common::task::task& _ecp_task) :
 	generator(_ecp_task) {
-	// TODO Auto-generated constructor stub
 
+	pose_vector = vector<ecp_mp::common::trajectory_pose::trajectory_pose>();
+	coordinate_vector = vector<vector<double> >();
 }
 
 multiple_position::~multiple_position() {
@@ -28,6 +29,10 @@ void multiple_position::set_relative(void) {
 
 void multiple_position::set_absolute(void) {
 	motion_type=lib::ABSOLUTE;
+}
+
+void multiple_position::set_axes_num(int axes_num) {
+	this->axes_num = axes_num;
 }
 
 } // namespace generator

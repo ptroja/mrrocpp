@@ -40,6 +40,10 @@ public:
    */
   double t;
   /**
+   * Direction of the motion. Either equal to 1 or -1.
+   */
+  vector<double> k;
+  /**
    * Number of the given position in whole trajectory chain.
    */
   int pos_num;

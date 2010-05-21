@@ -17,7 +17,7 @@ namespace common {
 namespace generator {
 
 /**
- * Generator moves the robot with a constant velocity.
+ * Generator which moves the robot with a constant velocity.
  */
 class constant_velocity : public multiple_position {
 	public:

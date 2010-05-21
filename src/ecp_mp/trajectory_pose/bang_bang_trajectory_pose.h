@@ -64,10 +64,6 @@ public:
    */
   vector<double> start_position;
   /**
-   * Direction of the movement. Either equal to 1 or -1.
-   */
-  vector<double> k;
-  /**
    * Maximal acceleration for the given segment (pose) (calculated, can be smaller or equal to a).
    */
   vector<double> a_r;

@@ -20,6 +20,9 @@ trajectory_pose::trajectory_pose (lib::ECP_POSE_SPECIFICATION arm_type,
 	this->arm_type=arm_type;
 
 	this->coordinates = coordinates;
+
+	k = vector<double>();
+	s = vector<double>();
 }
 
 trajectory_pose::~trajectory_pose() {

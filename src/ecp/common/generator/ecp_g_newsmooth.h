@@ -75,9 +75,13 @@ class newsmooth : public multiple_position {
 		 */
 		void calculate_interpolate();
 		/**
-		 *
+		 * Constructor.
 		 */
 		newsmooth(common::task::task& _ecp_task, bool _is_synchronised, bool _debug);
+		/**
+		 * Destructor.
+		 */
+		virtual ~newsmooth();
 		/**
 		 *
 		 */
@@ -85,7 +89,7 @@ class newsmooth : public multiple_position {
 		/**
 		 *
 		 */
-		void load_a_v_max(const char* file_name);
+		void load_a_v_max_from_file(const char* file_name);
 		/**
 		 *
 		 */

@@ -21,6 +21,10 @@ namespace common {
 namespace generator {
 namespace velocity_profile_calculator {
 
+/**
+ * Base class for all of the velocity profile calculators. Usually any velocity profile calculator contains methods used to create the description
+ * of the velocity profile f.g. bang bang velocity profile etc.. This information is usually stored in the appropriate trajectory_pose class.
+ */
 class velocity_profile {
 	public:
 		/**

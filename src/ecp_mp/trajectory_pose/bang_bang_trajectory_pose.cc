@@ -35,11 +35,9 @@ bang_bang_trajectory_pose::bang_bang_trajectory_pose (lib::ECP_POSE_SPECIFICATIO
 	s_jedn = vector<double>();
 	s_przysp = vector<double>();
 	start_position = vector<double>();
-	k = vector<double>();
 	a_r = vector<double>();
 	v_r = vector<double>();
 	model = vector<int>();
-	s = vector<double>();
 }
 
 bang_bang_trajectory_pose::~bang_bang_trajectory_pose() {

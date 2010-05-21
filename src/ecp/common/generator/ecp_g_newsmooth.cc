@@ -16,7 +16,7 @@ void newsmooth::reset() {
 
 }
 
-void newsmooth::load_a_v_max (const char* file_name)
+void newsmooth::load_a_v_max_from_file(const char* file_name)
 {
     /*std::ifstream from_file(file_name); // otworz plik do odczytu
 
