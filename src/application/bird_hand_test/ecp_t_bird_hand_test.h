@@ -13,7 +13,6 @@ class bird_hand_test: public common::task::task {
 protected:
 	//generatory
 	common::generator::transparent* gt;
-	common::generator::smooth* sg;
 	common::generator::sleep* g_sleep;
 	common::generator::bird_hand* g_bird_hand;
 

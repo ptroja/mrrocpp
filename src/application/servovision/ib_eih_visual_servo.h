@@ -35,15 +35,13 @@ public:
 	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 	ib_eih_visual_servo(boost::shared_ptr <visual_servo_regulator> regulator, const char* section_name, mrrocpp::lib::configurator& configurator);
 	virtual ~ib_eih_visual_servo();
-	virtual lib::Homog_matrix get_position_change(const lib::Homog_matrix& current_position);
+	virtual lib::Homog_matrix get_position_change(const lib::Homog_matrix& current_position, double dt);
 	virtual boost::shared_ptr <mrrocpp::lib::sensor> get_vsp_fradia();
-	virtual bool is_object_visible();
 protected:
 	boost::shared_ptr <ecp_mp::sensor::fradia_sensor <image_based_reading, image_based_configuration> > vsp_fradia;
 
 	lib::Homog_matrix e_T_c_position;
 private:
-	bool object_visible;
 };
 
 /** @} */
