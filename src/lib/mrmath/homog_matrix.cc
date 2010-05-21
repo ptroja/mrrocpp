@@ -718,15 +718,16 @@ std::ostream & operator<<(std::ostream & stream, const Homog_matrix & m)
 	// operator wypisania
 	// przedstawia macierz jednorodna w przyjaznej dla czlowieka formie
 
+	stream << "[\n";
 	for (int j = 0; j < 3; j++) {
 		for (int i = 0; i < 4; i++) {
 			stream.width(8);
 			stream.setf(ios::showpos | ios::left);
-			stream << m.matrix_m[j][i] << "\t\t";
+			stream << "\t" << m.matrix_m[j][i];
 		}
-		stream << std::endl;
+		stream << ";\n";
 	}
-	stream << 0 << "\t\t" << 0 << "\t\t" << 0 << "\t\t" << 0 << "\t\t" << std::endl;
+	stream << "\t" << 0 << "\t" << 0 << "\t" << 0 << "\t" << 1 << "\n]\n";
 
 	return stream;
 }

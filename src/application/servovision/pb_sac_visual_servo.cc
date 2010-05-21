@@ -88,7 +88,9 @@ lib::Homog_matrix pb_sac_visual_servo::get_position_change(const lib::Homog_matr
 
 		}
 
-		error_matrix = G_T_E_desired * E_T_O * O_T_C * C_T_G;
+//		error_matrix = G_T_E_desired * E_T_O * O_T_C * C_T_G;
+
+		error_matrix = E_T_O * O_T_C * C_T_G;
 
 		cout << "\nerror_matrix:\n" << error_matrix << endl;
 		cout.flush();
