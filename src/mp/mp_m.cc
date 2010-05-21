@@ -231,7 +231,6 @@ int main (int argc, char *argv[], char **arge)
 					case INVALID_POSE_SPECIFICATION:
 					case INVALID_COMMAND_TO_EDP:
 					case EDP_ERROR:
-					case INVALID_EDP_REPLY:
 					case INVALID_ROBOT_MODEL_TYPE:
 						mp::common::mp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, e.error_no);
 						break;

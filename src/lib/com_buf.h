@@ -399,7 +399,6 @@ typedef enum _ERROR_CLASS {
 #define INVALID_MP_COMMAND                       0x1ULL
 #define INVALID_POSE_SPECIFICATION               0x2ULL
 #define INVALID_ROBOT_MODEL_TYPE                 0x3ULL
-#define INVALID_EDP_REPLY                        0x5ULL
 #define ECP_ERRORS                               0x6ULL
 #define INVALID_COMMAND_TO_EDP                   0x7ULL
 #define ECP_UNIDENTIFIED_ERROR                   0x8ULL

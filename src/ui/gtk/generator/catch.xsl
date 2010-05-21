@@ -26,7 +26,6 @@ Inc window
 							case INVALID_POSE_SPECIFICATION:
 							case INVALID_COMMAND_TO_EDP:
 							case EDP_ERROR:
-							case INVALID_EDP_REPLY:
 							case INVALID_ROBOT_MODEL_TYPE:
 								/* Komunikat o bledzie wysylamy do SR */
 								robot_<xsl:value-of select="$fullName" />->ecp->sr_ecp_msg.message(lib::NON_FATAL_ERROR, er.error_no);

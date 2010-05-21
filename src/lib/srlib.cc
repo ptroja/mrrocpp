@@ -470,8 +470,6 @@ void sr_ecp::interpret(void) {
 			sprintf(sr_message.description, "INVALID POSE SPECIFICATION"); break;
 			case INVALID_ROBOT_MODEL_TYPE:
 			sprintf(sr_message.description, "INVALID ROBOT_MODEL TYPE"); break;
-			case INVALID_EDP_REPLY:
-			sprintf(sr_message.description, "INVALID EDP REPLY"); break;
 			case ECP_ERRORS:
 			sprintf(sr_message.description, "ECP ERRORS"); break;
 			case INVALID_COMMAND_TO_EDP:
