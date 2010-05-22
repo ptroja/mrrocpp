@@ -27,7 +27,10 @@
 #include "lib/srlib.h"
 #include "ecp_mp/task/ecp_mp_task.h"
 #include "ecp_mp/sensor/ecp_mp_sensor.h"
-#include "ecp/common/ECP_main_error.h"
+
+#include "lib/exception.h"
+#include <boost/throw_exception.hpp>
+#include <boost/exception/errinfo_errno.hpp>
 
 #if defined(USE_MESSIP_SRR)
 #include "messip_dataport.h"
@@ -70,13 +73,10 @@ task::task(lib::configurator &_config)
             usleep(1000*CONNECT_DELAY);
         else
         {
-            int e = errno;
-            perror("Connect to UI failed");
-            // WARNING: sr_ecp_msg is not yet initialized!;
-            // it will be created in ecp_task/mp_task constructors
-
-            // sr_ecp_msg->message (lib::SYSTEM_ERROR, e, "Connect to UI failed");
-            throw ecp_mp::task::ECP_MP_main_error(lib::SYSTEM_ERROR, e	);
+            BOOST_THROW_EXCEPTION(
+            		lib::exception::System_error() <<
+					boost::errinfo_errno(errno)
+            );
         }
     }
 }
@@ -102,14 +102,15 @@ bool task::operator_reaction (const char* question )
 
 #if !defined(USE_MESSIP_SRR)
 	ecp_to_ui_msg.hdr.type=0;
-	if (MsgSend(UI_fd, &ecp_to_ui_msg, sizeof(lib::ECP_message), &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0) {// by Y&W
+	if(MsgSend(UI_fd, &ecp_to_ui_msg, sizeof(lib::ECP_message), &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0)
 #else
-	if(messip::port_send(UI_fd, 0, 0, &ecp_to_ui_msg, ui_to_ecp_rep) < 0) {
+	if(messip::port_send(UI_fd, 0, 0, &ecp_to_ui_msg, ui_to_ecp_rep) < 0)
 #endif
-		uint64_t e = errno;
-		perror("ECP operator_reaction(): Send() to UI failed");
-		sr_ecp_msg->message (lib::SYSTEM_ERROR, e, "ECP: Send() to UI failed");
-		throw ECP_MP_main_error(lib::SYSTEM_ERROR, 0);
+	{
+        BOOST_THROW_EXCEPTION(
+        		lib::exception::System_error() <<
+				boost::errinfo_errno(errno)
+        );
 	}
 
 	return (ui_to_ecp_rep.reply == lib::ANSWER_YES);
@@ -122,7 +123,7 @@ bool task::operator_reaction (const char* question )
 uint8_t task::choose_option (const char* question, uint8_t nr_of_options_input )
 {
 	lib::ECP_message ecp_to_ui_msg; // Przesylka z ECP do UI
-	lib::UI_reply ui_to_ecp_rep;    // Odpowiedz UI do ECP
+	lib::UI_reply ui_to_ecp_rep; // Odpowiedz UI do ECP
 
 	ecp_to_ui_msg.ecp_message = lib::CHOOSE_OPTION; // Polecenie odpowiedzi na zadane
 	strcpy(ecp_to_ui_msg.string, question); // Komunikat przesylany do UI
@@ -130,14 +131,15 @@ uint8_t task::choose_option (const char* question, uint8_t nr_of_options_input )
 
 #if !defined(USE_MESSIP_SRR)
 	ecp_to_ui_msg.hdr.type=0;
-	if (MsgSend(UI_fd, &ecp_to_ui_msg, sizeof(lib::ECP_message), &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0) {// by Y&W
+	if (MsgSend(UI_fd, &ecp_to_ui_msg, sizeof(lib::ECP_message), &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0)
 #else
-	if(messip::port_send(UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0) {
+	if(messip::port_send(UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0)
 #endif
-		uint64_t e = errno;
-		perror("ECP: Send() to UI failed");
-		sr_ecp_msg->message (lib::SYSTEM_ERROR, e, "ECP: Send() to UI failed");
-		throw ECP_MP_main_error(lib::SYSTEM_ERROR, 0);
+	{
+		BOOST_THROW_EXCEPTION(
+				lib::exception::System_error() <<
+				boost::errinfo_errno(errno)
+		);
 	}
 
 	return ui_to_ecp_rep.reply; // by Y
@@ -157,14 +159,15 @@ int task::input_integer (const char* question )
 
 #if !defined(USE_MESSIP_SRR)
 	ecp_to_ui_msg.hdr.type=0;
-	if (MsgSend(UI_fd, &ecp_to_ui_msg,  sizeof(lib::ECP_message),  &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0) {// by Y&W
+	if (MsgSend(UI_fd, &ecp_to_ui_msg, sizeof(lib::ECP_message), &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0)
 #else
-	if(messip::port_send(UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0) {
+	if(messip::port_send(UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0)
 #endif
-		uint64_t e = errno;
-		perror("ECP: Send() to UI failed");
-		sr_ecp_msg->message (lib::SYSTEM_ERROR, e, "ECP: Send() to UI failed");
-		throw ECP_MP_main_error(lib::SYSTEM_ERROR, 0);
+	{
+        BOOST_THROW_EXCEPTION(
+        		lib::exception::System_error() <<
+				boost::errinfo_errno(errno)
+        );
 	}
 
 	return ui_to_ecp_rep.integer_number;
@@ -184,14 +187,15 @@ double task::input_double (const char* question )
 
 #if !defined(USE_MESSIP_SRR)
 	ecp_to_ui_msg.hdr.type=0;
-	if (MsgSend(UI_fd, &ecp_to_ui_msg, sizeof(lib::ECP_message), &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0) {// by Y&W
+	if (MsgSend(UI_fd, &ecp_to_ui_msg, sizeof(lib::ECP_message), &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0)
 #else
-	if(messip::port_send(UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0) {
+	if(messip::port_send(UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0)
 #endif
-		uint64_t e = errno;
-		perror("ECP: Send() to UI failed");
-		sr_ecp_msg->message (lib::SYSTEM_ERROR, e, "ECP: Send() to UI failed");
-		throw ECP_MP_main_error(lib::SYSTEM_ERROR, 0);
+	{
+        BOOST_THROW_EXCEPTION(
+        		lib::exception::System_error() <<
+				boost::errinfo_errno(errno)
+        );
 	}
 	return ui_to_ecp_rep.double_number; // by Y
 }
@@ -210,14 +214,15 @@ bool task::show_message (const char* message)
 
 #if !defined(USE_MESSIP_SRR)
 	ecp_to_ui_msg.hdr.type=0;
-	if (MsgSend(UI_fd, &ecp_to_ui_msg,  sizeof(lib::ECP_message),  &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0) {// by Y&W
+	if (MsgSend(UI_fd, &ecp_to_ui_msg,  sizeof(lib::ECP_message),  &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0)
 #else
 	if(messip::port_send(UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0) {
 #endif
-		uint64_t e = errno;
-		perror("ECP: Send() to UI failed");
-		sr_ecp_msg->message (lib::SYSTEM_ERROR, e, "ECP: Send() to UI failed");
-		throw ECP_MP_main_error(lib::SYSTEM_ERROR, 0);
+	{
+        BOOST_THROW_EXCEPTION(
+        		lib::exception::System_error() <<
+				boost::errinfo_errno(errno)
+        );
 	}
 
 	return (ui_to_ecp_rep.reply == lib::ANSWER_YES);

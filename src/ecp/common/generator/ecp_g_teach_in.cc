@@ -8,6 +8,11 @@
 
 #include "ecp/common/generator/ecp_g_teach_in.h"
 
+#include "lib/exception.h"
+#include <boost/throw_exception.hpp>
+#include <boost/exception/errinfo_errno.hpp>
+#include <boost/exception/errinfo_api_function.hpp>
+
 #if defined(USE_MESSIP_SRR)
 #include "messip_dataport.h"
 #endif
@@ -44,7 +49,6 @@ void teach_in::teach(lib::ECP_POSE_SPECIFICATION ps, const char *msg)
   { // Uczenie robota
     lib::ECP_message ecp_to_ui_msg; // Przesylka z ECP do UI
     lib::UI_reply ui_to_ecp_rep; // Odpowiedz UI do ECP
-    uint64_t e; // kod bledu systemowego
     bool first_time = true; // Znacznik
 
     // by Y - okreslenie robota
@@ -62,12 +66,11 @@ void teach_in::teach(lib::ECP_POSE_SPECIFICATION ps, const char *msg)
 #else
     	if(messip::port_send(ecp_t.UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0)
 #endif
-          { // Y&W
-
-            e = errno;
-            perror("ECP teach(): Send() to UI failed");
-            sr_ecp_msg.message(lib::SYSTEM_ERROR, e, "ECP: Send() to UI failed");
-            throw generator::ECP_error(lib::SYSTEM_ERROR, 0);
+          {
+    		BOOST_THROW_EXCEPTION(
+    			lib::exception::System_error() <<
+    			boost::errinfo_errno(errno)
+    		);
           }
         if (ui_to_ecp_rep.reply == lib::QUIT) // Koniec uczenia
           break;
@@ -84,7 +87,7 @@ void teach_in::teach(lib::ECP_POSE_SPECIFICATION ps, const char *msg)
             insert_pose_list_element(ps, ui_to_ecp_rep.double_number,
                 ui_to_ecp_rep.coordinates);
           }
-      }; // end: for(;;)
+      }
     initiate_pose_list();
   } // end: teach()
 
@@ -111,11 +114,11 @@ void teach_in::save_file(lib::ECP_POSE_SPECIFICATION ps)
 #else
     if(messip::port_send(ecp_t.UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0)
 #endif
-    {// by Y&W
-        e = errno;
-        perror("ECP: Send() to UI failed");
-        sr_ecp_msg.message(lib::SYSTEM_ERROR, e, "ECP: Send() to UI failed");
-        throw generator::ECP_error(lib::SYSTEM_ERROR, 0);
+    {
+		BOOST_THROW_EXCEPTION(
+			lib::exception::System_error() <<
+			boost::errinfo_errno(errno)
+		);
       }
     if (ui_to_ecp_rep.reply == lib::QUIT)
       { // Nie wybrano nazwy pliku lub zrezygnowano z zapisu
@@ -141,14 +144,24 @@ void teach_in::save_file(lib::ECP_POSE_SPECIFICATION ps)
     if (chdir(ui_to_ecp_rep.path) != 0)
       {
         perror(ui_to_ecp_rep.path);
-        throw generator::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_DIRECTORY);
+        BOOST_THROW_EXCEPTION(
+        	lib::exception::NonFatal_error() <<
+        	lib::exception::error_code(NON_EXISTENT_DIRECTORY) <<
+        	boost::errinfo_errno(errno) <<
+        	boost::errinfo_api_function("chdir")
+        );
       }
     std::ofstream to_file(ui_to_ecp_rep.filename); // otworz plik do zapisu
     e = errno;
     if (!to_file)
       {
         perror(ui_to_ecp_rep.filename);
-        throw generator::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
+        BOOST_THROW_EXCEPTION(
+        	lib::exception::Fatal_error() <<
+        	lib::exception::error_code(NON_EXISTENT_FILE) <<
+        	boost::errinfo_errno(errno) <<
+        	boost::errinfo_api_function("chdir")
+        );
       }
     else
       {
@@ -184,8 +197,6 @@ bool teach_in::load_file_from_ui()
     lib::ECP_message ecp_to_ui_msg; // Przesylka z ECP do UI
     lib::UI_reply ui_to_ecp_rep; // Odpowiedz UI do ECP
 
-    uint64_t e; // Kod bledu systemowego
-
     ecp_to_ui_msg.ecp_message = lib::LOAD_FILE; // Polecenie wprowadzenia nazwy odczytywanego pliku
 
 #if !defined(USE_MESSIP_SRR)
@@ -194,18 +205,23 @@ bool teach_in::load_file_from_ui()
 #else
     if(messip::port_send(ecp_t.UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0)
 #endif
-    {// by Y&W
-        e = errno;
-        perror("ECP: Send() to UI failed");
-        sr_ecp_msg.message(lib::SYSTEM_ERROR, e, "ECP: Send() to UI failed");
-        throw generator::ECP_error(lib::SYSTEM_ERROR, 0);
+    {
+		BOOST_THROW_EXCEPTION(
+			lib::exception::System_error() <<
+			boost::errinfo_errno(errno)
+		);
       }
     if (ui_to_ecp_rep.reply == lib::QUIT) // Nie wybrano nazwy pliku lub zrezygnowano z zapisu
       return false;
     if (chdir(ui_to_ecp_rep.path) != 0)
       {
         perror(ui_to_ecp_rep.path);
-        throw generator::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_DIRECTORY);
+        BOOST_THROW_EXCEPTION(
+        	lib::exception::NonFatal_error() <<
+        	lib::exception::error_code(NON_EXISTENT_DIRECTORY) <<
+        	boost::errinfo_errno(errno) <<
+        	boost::errinfo_api_function("chdir")
+        );
       }
 
     return load_file_with_path(ui_to_ecp_rep.filename);
@@ -233,12 +249,20 @@ bool teach_in::load_file_with_path(const char* file_name)
     if (!from_file.good())
       {
         perror(file_name);
-        throw generator::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
+        BOOST_THROW_EXCEPTION(
+        	lib::exception::NonFatal_error() <<
+        	lib::exception::error_code(NON_EXISTENT_FILE) <<
+        	boost::errinfo_errno(errno)
+        );
       }
 
     if ( !(from_file >> coordinate_type))
       {
-        throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+        BOOST_THROW_EXCEPTION(
+        	lib::exception::NonFatal_error() <<
+        	lib::exception::error_code(READ_FILE_ERROR) <<
+        	boost::errinfo_errno(errno)
+        );
       }
 
     // Usuwanie spacji i tabulacji
@@ -267,24 +291,40 @@ bool teach_in::load_file_with_path(const char* file_name)
       ps = lib::ECP_PF_VELOCITY;
     else
       {
-        throw generator::ECP_error(lib::NON_FATAL_ERROR, NON_TRAJECTORY_FILE);
+        BOOST_THROW_EXCEPTION(
+        	lib::exception::NonFatal_error() <<
+        	lib::exception::error_code(NON_TRAJECTORY_FILE) <<
+        	boost::errinfo_errno(errno)
+        );
       }
     if ( !(from_file >> number_of_poses))
       {
-        throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+        BOOST_THROW_EXCEPTION(
+        	lib::exception::NonFatal_error() <<
+        	lib::exception::error_code(READ_FILE_ERROR) <<
+        	boost::errinfo_errno(errno)
+        );
       }
     flush_pose_list(); // Usuniecie listy pozycji, o ile istnieje
     for (i = 0; i < number_of_poses; i++)
       {
         if (!(from_file >> motion_time))
           {
-            throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+            BOOST_THROW_EXCEPTION(
+            	lib::exception::NonFatal_error() <<
+            	lib::exception::error_code(READ_FILE_ERROR) <<
+            	boost::errinfo_errno(errno)
+            );
           }
         for (j = 0; j < MAX_SERVOS_NR; j++)
           {
             if ( !(from_file >> coordinates[j]))
               { // Zabezpieczenie przed danymi nienumerycznymi
-                throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+                BOOST_THROW_EXCEPTION(
+                	lib::exception::NonFatal_error() <<
+                	lib::exception::error_code(READ_FILE_ERROR) <<
+                	boost::errinfo_errno(errno)
+                );
               }
           }
 
@@ -292,7 +332,11 @@ bool teach_in::load_file_with_path(const char* file_name)
           { // by Y
             if ( !(from_file >> extra_info))
               { // Zabezpieczenie przed danymi nienumerycznymi
-                throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+                BOOST_THROW_EXCEPTION(
+                	lib::exception::NonFatal_error() <<
+                	lib::exception::error_code(READ_FILE_ERROR) <<
+                	boost::errinfo_errno(errno)
+                );
               }
             if (first_time)
               {
@@ -488,7 +532,11 @@ bool teach_in::next_step()
       // printf("lumpu: %f\n", the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[6]);
       break;
     default:
-      throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+        BOOST_THROW_EXCEPTION(
+        	lib::exception::NonFatal_error() <<
+        	lib::exception::error_code(INVALID_POSE_SPECIFICATION) <<
+        	boost::errinfo_errno(errno)
+        );
       } // end: switch
 
     next_pose_list_ptr(); // nastepna pozycja

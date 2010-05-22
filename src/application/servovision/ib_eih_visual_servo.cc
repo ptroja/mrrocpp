@@ -87,10 +87,8 @@ ib_eih_visual_servo::~ib_eih_visual_servo()
 {
 }
 
-lib::Homog_matrix ib_eih_visual_servo::get_position_change(const lib::Homog_matrix& current_position)
+lib::Homog_matrix ib_eih_visual_servo::get_position_change(const lib::Homog_matrix& current_position, double dt)
 {
-	//	logDbg("ecp_g_ib_eih::next_step() begin\n");
-
 	lib::Homog_matrix delta_position;
 
 	lib::K_vector u_translation(0, 0, 0);
@@ -122,45 +120,26 @@ lib::Homog_matrix ib_eih_visual_servo::get_position_change(const lib::Homog_matr
 
 		Eigen::Matrix <double, 6, 1> control;
 
-		//		logDbg("ecp_g_ib_eih::next_step() 4a\n");
-
-		control = regulator->calculate_control(e);
-
-		//		logDbg("ecp_g_ib_eih::next_step() 5\n");
+		control = regulator->calculate_control(e, dt);
+		//logDbg("ib_eih_visual_servo::get_position_change() control: %+07.3lg, %+07.3lg, %+07.3lg\n", control(0, 0), control(1, 0), control(2, 0));
 
 		Eigen::Matrix <double, 3, 1> camera_to_object_translation;
 		camera_to_object_translation(0, 0) = control(0, 0);
 		camera_to_object_translation(1, 0) = control(1, 0);
 		camera_to_object_translation(2, 0) = control(2, 0);
 
-		//		logDbg("ecp_g_ib_eih::next_step() 6\n");
-
 		u_translation = e_T_c_position * camera_to_object_translation;
 
-		//		logDbg("ecp_g_ib_eih::next_step() 7\n");
-
-		//		logDbg("e[3] = %g\t", e(3, 0));
-		//		logDbg("control [3] = %g\n", control(3, 0));
+//		logDbg("ib_eih_visual_servo::get_position_change() u_translation: %+07.3lg, %+07.3lg, %+07.3lg\n", u_translation(0, 0), u_translation(1, 0), u_translation(2, 0));
 
 		u_rotation.set_from_xyz_angle_axis(lib::Xyz_Angle_Axis_vector(0, 0, 0, 0, 0, control(3, 0)));
-
-		//		logDbg("ecp_g_ib_eih::next_step() 9\n");
-		//		for (int i = 0; i < 4; ++i) {
-		//			logDbg("e[%d] = %g\t", i, e(i, 0));
-		//		}
-		//		logDbg("\n");
-		//		for (int i = 0; i < 3; ++i) {
-		//			logDbg("u_translation[%d] = %g\t", i, u_translation(i, 0));
-		//		}
-		//		logDbg("\n");
-
-		//logDbg("Tracking.\n");
 	}
 
-	//	logDbg("ecp_g_ib_eih::next_step() 10\n");
 
 	delta_position.set_rotation_matrix(u_rotation);
 	delta_position.set_translation_vector(u_translation);
+
+//	logDbg("ib_eih_visual_servo::get_position_change() delta_position: %+07.3lg, %+07.3lg, %+07.3lg\n", delta_position(0, 3), delta_position(1, 3), delta_position(2, 3));
 
 	return delta_position;
 }
@@ -168,11 +147,6 @@ lib::Homog_matrix ib_eih_visual_servo::get_position_change(const lib::Homog_matr
 boost::shared_ptr <ecp_mp::sensor::sensor_interface> ib_eih_visual_servo::get_vsp_fradia()
 {
 	return boost::dynamic_pointer_cast <ecp_mp::sensor::sensor_interface>(vsp_fradia);
-}
-
-bool ib_eih_visual_servo::is_object_visible()
-{
-	return object_visible;
 }
 
 }//namespace generator

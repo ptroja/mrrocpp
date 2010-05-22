@@ -7,6 +7,15 @@
 
 #include "ecp_g_get_position.h"
 
+#include "lib/exception.h"
+#include <boost/throw_exception.hpp>
+
+#define THROW_NONFATAL_ERROR(x) \
+	BOOST_THROW_EXCEPTION(\
+		lib::exception::NonFatal_error() << \
+		lib::exception::error_code(x) \
+	)
+
 namespace mrrocpp {
 namespace ecp {
 namespace common {
@@ -38,7 +47,7 @@ bool get_position::first_step() {
 			the_robot->ecp_command.instruction.get_arm_type = lib::JOINT;
 			break;
 		default:
-			throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+			THROW_NONFATAL_ERROR(INVALID_POSE_SPECIFICATION);
 	}
 }
 
@@ -59,13 +68,13 @@ bool get_position::next_step() {
 			euler_vector.to_table(position);
 
 		} else {
-			throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+			THROW_NONFATAL_ERROR(INVALID_POSE_SPECIFICATION);
 		}
 
 	} else if (pose_spec == lib::ECP_JOINT || pose_spec == lib::ECP_MOTOR) {
 		memcpy(the_robot->reply_package.arm.pf_def.arm_coordinates, position, axes_num * sizeof(double));
 	} else {
-		throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+		THROW_NONFATAL_ERROR(INVALID_POSE_SPECIFICATION);
 	}
 }
 

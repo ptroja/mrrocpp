@@ -16,8 +16,10 @@
 #include "lib/srlib.h"
 #include "lib/mis_fun.h"
 #include "ecp/common/task/ecp_task.h"
-#include "ecp/common/ECP_main_error.h"
 #include "ecp/common/generator/ecp_generator.h"
+
+#include "lib/exception.h"
+#include <boost/exception/diagnostic_information.hpp>
 
 namespace mrrocpp {
 namespace ecp {
@@ -28,7 +30,8 @@ common::task::task *ecp_t;
 void catch_signal_in_ecp(int sig)
 {
 	fprintf(stderr, "ECP: %s\n", strsignal(sig));
-	switch (sig) {
+	switch (sig)
+	{
 		// print info message
 		case SIGTERM:
 			ecp_t->sh_msg->message("ECP terminated");
@@ -51,7 +54,7 @@ int main(int argc, char *argv[])
 	try {
 
 		// liczba argumentow
-		if(argc < 6) {
+		if (argc < 6) {
 			printf("Za malo argumentow ECP\n");
 			return -1;
 		}
@@ -62,7 +65,7 @@ int main(int argc, char *argv[])
 
 		ecp::common::ecp_t = ecp::common::task::return_created_ecp_task(*_config);
 
-		lib::set_thread_priority(pthread_self(), MAX_PRIORITY-3);
+		lib::set_thread_priority(pthread_self(), MAX_PRIORITY - 3);
 
 		signal(SIGTERM, &(ecp::common::catch_signal_in_ecp));
 		signal(SIGSEGV, &(ecp::common::catch_signal_in_ecp));
@@ -70,153 +73,76 @@ int main(int argc, char *argv[])
 		// ignore Ctrl-C signal, which cames from UI console
 		signal(SIGINT, SIG_IGN);
 #endif
-	}
-	catch (ecp_mp::task::ECP_MP_main_error & e) {
-		if (e.error_class == lib::SYSTEM_ERROR)
-			exit(EXIT_FAILURE);
-	}
-	catch (ecp::common::ecp_robot::ECP_main_error & e) {
-		switch (e.error_class ) {
-			case lib::SYSTEM_ERROR:
-			case lib::FATAL_ERROR:
-				ecp::common::ecp_t->sr_ecp_msg->message(e.error_class, e.error_no);
-				exit(EXIT_FAILURE);
+
+		for (;;) { // Zewnetrzna petla nieskonczona
+
+			try {
+				ecp::common::ecp_t->sr_ecp_msg->message("Press START");
+				ecp::common::ecp_t->ecp_wait_for_start();
+
+				ecp::common::ecp_t->main_task_algorithm();
+
+				ecp::common::ecp_t->ecp_wait_for_stop();
+				ecp::common::ecp_t->sr_ecp_msg->message("Press STOP");
+			}
+
+	/*
+			case INVALID_POSE_SPECIFICATION:
+			case INVALID_COMMAND_TO_EDP:
+			case EDP_ERROR:
+			case INVALID_ROBOT_MODEL_TYPE:
+				ecp::common::ecp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, er.error_no);
+				ecp::common::ecp_t->set_ecp_reply(lib::ERROR_IN_ECP);
+				ecp::common::ecp_t->mp_buffer_receive_and_send();
+	*/
+
+	/*
+			case INVALID_POSE_SPECIFICATION:
+			case INVALID_MP_COMMAND:
+			case NON_EXISTENT_DIRECTORY:
+			case NON_TRAJECTORY_FILE:
+			case NON_EXISTENT_FILE:
+			case READ_FILE_ERROR:
+			case NON_COMPATIBLE_LISTS:
+			case MAX_ACCELERATION_EXCEEDED:
+			case MAX_VELOCITY_EXCEEDED:
+				Komunikat o bledzie wysylamy do SR
+				ecp::common::ecp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, er.error_no);
+				ecp::common::ecp_t->set_ecp_reply(lib::ERROR_IN_ECP);
+				ecp::common::ecp_t->mp_buffer_receive_and_send();
 				break;
-			default:
+			case ECP_STOP_ACCEPTED:
+				ecp::common::ecp_t->sr_ecp_msg->message("pierwszy catch stop");
 				break;
+	*/
+			catch (lib::exception::NonFatal_error & e) {
+				ecp::common::ecp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, ECP_UNIDENTIFIED_ERROR);
+			}
+
+			ecp::common::ecp_t->sr_ecp_msg->message("ECP user program is finished");
 		}
-	}
-	catch (ecp::common::generator::generator::ECP_error & e) {
-		ecp::common::ecp_t->sr_ecp_msg->message(e.error_class, e.error_no);
-		printf("Mam blad generatora section 1 (@%s:%d)\n", __FILE__, __LINE__);
-	}
-	catch (lib::sensor::sensor_error & e) {
-		ecp::common::ecp_t->sr_ecp_msg->message(e.error_class, e.error_no);
-		printf("Mam blad czujnika section 1 (@%s:%d)\n", __FILE__, __LINE__);
-	}
-	catch (ecp_mp::transmitter::transmitter_base::transmitter_error & e) {
-		ecp::common::ecp_t->sr_ecp_msg->message(e.error_class, 0);
-		printf("ecp_m.cc: Mam blad trasnmittera section 1 (@%s:%d)\n", __FILE__, __LINE__);
+
 	}
 
-	catch(const std::exception& e){
-		std::string tmp_string(" The following error has been detected: ");
-		tmp_string += e.what();
-		ecp::common::ecp_t->sr_ecp_msg->message (lib::NON_FATAL_ERROR, tmp_string.c_str());
-	   std::cerr<<"ECP: The following error has been detected :\n\t"<<e.what()<<std::endl;
+	catch (const boost::exception & e ) {
+		std::cerr << diagnostic_information(e);
+		const std::string message(diagnostic_information(e));
+		ecp::common::ecp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, message);
 	}
 
-	catch (...) {  /* Dla zewnetrznej petli try*/
+	catch (const std::exception & e) {
+		std::string message("The following error has been detected: ");
+		message += e.what();
+		ecp::common::ecp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, message);
+		std::cerr << "ECP: The following error has been detected :\n\t" << e.what() << std::endl;
+	}
+
+	catch (...) {
 		/* Wylapywanie niezdefiniowanych bledow*/
 		/*Komunikat o bledzie wysylamy do SR*/
-		ecp::common::ecp_t->sr_ecp_msg->message (lib::NON_FATAL_ERROR, ECP_UNIDENTIFIED_ERROR);
+		ecp::common::ecp_t->sr_ecp_msg->message(lib::FATAL_ERROR, ECP_UNIDENTIFIED_ERROR);
 		exit(EXIT_FAILURE);
-	} /*end: catch */
+	}
 
-	for (;;) { // Zewnetrzna petla nieskonczona
-
-		try {
-			ecp::common::ecp_t->sr_ecp_msg->message("Press START");
-			ecp::common::ecp_t->ecp_wait_for_start();
-
-			ecp::common::ecp_t->main_task_algorithm();
-
-			ecp::common::ecp_t->ecp_wait_for_stop();
-			ecp::common::ecp_t->sr_ecp_msg->message("Press STOP");
-		}
-
-		catch (ecp_mp::task::ECP_MP_main_error & e) {
-			if (e.error_class == lib::SYSTEM_ERROR)
-				exit(EXIT_FAILURE);
-		}
-		catch (ecp::common::ECP_main_error & e) {
-			if (e.error_class == lib::SYSTEM_ERROR)
-				exit(EXIT_FAILURE);
-		}
-
-		catch (ecp::common::ecp_robot::ECP_error & er) {
-			/* Wylapywanie bledow generowanych przez modul transmisji danych do EDP*/
-			if ( er.error_class == lib::SYSTEM_ERROR) { /*blad systemowy juz wyslano komunukat do SR*/
-				perror("ECP aborted due to lib::SYSTEM_ERRORn");
-				exit(EXIT_FAILURE);
-			}
-
-			switch ( er.error_no ) {
-				case INVALID_POSE_SPECIFICATION:
-				case INVALID_ECP_COMMAND:
-				case INVALID_COMMAND_TO_EDP:
-				case EDP_ERROR:
-				case INVALID_EDP_REPLY:
-				case INVALID_ROBOT_MODEL_TYPE:
-					/*Komunikat o bledzie wysylamy do SR */
-					ecp::common::ecp_t->sr_ecp_msg->message (lib::NON_FATAL_ERROR, er.error_no);
-					ecp::common::ecp_t->set_ecp_reply (lib::ERROR_IN_ECP);
-					ecp::common::ecp_t->mp_buffer_receive_and_send();
-					break;
-				default:
-					ecp::common::ecp_t->sr_ecp_msg->message (lib::NON_FATAL_ERROR, 0, "ECP: Unidentified exception");
-					perror("Unidentified exception");
-					exit(EXIT_FAILURE);
-			} /* end: switch */
-		} /*end: catch*/
-
-		catch (ecp::common::generator::generator::ECP_error & er) {
-			/* Wylapywanie bledow generowanych przez generatory*/
-			if ( er.error_class == lib::SYSTEM_ERROR) { /* blad systemowy juz wyslano komunukat do SR */
-				perror("ECP aborted due to lib::SYSTEM_ERROR");
-				exit(EXIT_FAILURE);
-			}
-			switch ( er.error_no ) {
-				case INVALID_POSE_SPECIFICATION:
-				case INVALID_MP_COMMAND:
-				case NON_EXISTENT_DIRECTORY:
-				case NON_TRAJECTORY_FILE:
-				case NON_EXISTENT_FILE:
-				case READ_FILE_ERROR:
-				case NON_COMPATIBLE_LISTS:
-				case MAX_ACCELERATION_EXCEEDED:
-				case MAX_VELOCITY_EXCEEDED:
-				case NOT_ENOUGH_MEMORY:
-					/*Komunikat o bledzie wysylamy do SR */
-					ecp::common::ecp_t->sr_ecp_msg->message (lib::NON_FATAL_ERROR, er.error_no);
-					ecp::common::ecp_t->set_ecp_reply (lib::ERROR_IN_ECP);
-					ecp::common::ecp_t->mp_buffer_receive_and_send();
-					break;
-				case ECP_STOP_ACCEPTED:
-					ecp::common::ecp_t->sr_ecp_msg->message("pierwszy catch stop");
-					break;
-				default:
-					ecp::common::ecp_t->sr_ecp_msg->message (lib::NON_FATAL_ERROR, 0, "ECP: Unidentified exception");
-					perror("Unidentified exception");
-					exit(EXIT_FAILURE);
-			} /* end: switch*/
-		} /*end: catch */
-		catch (lib::sensor::sensor_error & e) {
-			ecp::common::ecp_t->sr_ecp_msg->message (e.error_class, e.error_no);
-			printf("Mam blad czujnika section 2 (@%s:%d)\n", __FILE__, __LINE__);
-		}
-		catch (ecp_mp::transmitter::transmitter_base::transmitter_error & e) {
-			ecp::common::ecp_t->sr_ecp_msg->message (e.error_class, 0);
-			printf("Mam blad trasnmittera section 2 (@%s:%d)\n", __FILE__, __LINE__);
-		}
-
-		catch(const std::exception& e){
-			std::string tmp_string(" The following error has been detected: ");
-			tmp_string += e.what();
-			ecp::common::ecp_t->sr_ecp_msg->message (lib::NON_FATAL_ERROR, tmp_string.c_str());
-		   std::cerr<<"ECP: The following error has been detected :\n\t"<<e.what()<<std::endl;
-		}
-
-		catch (...) {  /* Dla zewnetrznej petli try*/
-			/* Wylapywanie niezdefiniowanych bledow*/
-			/*Komunikat o bledzie wysylamy do SR*/
-			ecp::common::ecp_t->sr_ecp_msg->message (lib::NON_FATAL_ERROR, ECP_UNIDENTIFIED_ERROR);
-			exit(EXIT_FAILURE);
-		} /*end: catch */
-
-		ecp::common::ecp_t->sr_ecp_msg->message("ECP user program is finished");
-
-	} // end: for (;;) zewnetrznej
-
-} // koniec: main()
-// ------------------------------------------------------------------------
+	return 0;
+}

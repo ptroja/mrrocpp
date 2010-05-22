@@ -42,7 +42,10 @@ namespace lib {
 
 sr::sr(process_type_t process_type, const std::string & process_name,
 		const std::string & sr_name, bool _multi_thread) :
-	multi_thread(_multi_thread), cb(SR_BUFFER_LENGHT), has_command(false) {
+	has_command(false),
+	multi_thread(_multi_thread),
+	cb(SR_BUFFER_LENGHT)
+{
 	// kilka sekund  (~1) na otworzenie urzadzenia
 	int tmp = 0;
 	while ((fd = name_open(sr_name.c_str(), NAME_FLAG_ATTACH_GLOBAL)) < 0) {
@@ -467,10 +470,6 @@ void sr_ecp::interpret(void) {
 			sprintf(sr_message.description, "INVALID POSE SPECIFICATION"); break;
 			case INVALID_ROBOT_MODEL_TYPE:
 			sprintf(sr_message.description, "INVALID ROBOT_MODEL TYPE"); break;
-			case INVALID_ECP_COMMAND:
-			sprintf(sr_message.description, "INVALID ECP COMMAND"); break;
-			case INVALID_EDP_REPLY:
-			sprintf(sr_message.description, "INVALID EDP REPLY"); break;
 			case ECP_ERRORS:
 			sprintf(sr_message.description, "ECP ERRORS"); break;
 			case INVALID_COMMAND_TO_EDP:
@@ -493,20 +492,8 @@ void sr_ecp::interpret(void) {
 			sprintf(sr_message.description, "MAX ACCELERATION EXCEEDED"); break;
 			case MAX_VELOCITY_EXCEEDED:
 			sprintf(sr_message.description, "MAX VELOCITY EXCEEDED"); break;
-			case NOT_ENOUGH_MEMORY:
-			sprintf(sr_message.description, "NOT ENOUGH MEMORY"); break;
-			case INVALID_VSP_REPLY:
-			sprintf(sr_message.description, "INVALID VSP REPLY"); break;
 			case DANGEROUS_FORCE_DETECTED:
 			sprintf(sr_message.description, "DANGEROUS FORCE DETECTED"); break;
-			case BAD_VSP_REPLY:
-			sprintf(sr_message.description, "BAD VSP REPLY"); break;
-			case INVALID_ECP_PULSE_IN_MP_START_ALL:
-			sprintf(sr_message.description, "INVALID ECP PULSE IN MP START ALL"); break;
-			case INVALID_ECP_PULSE_IN_MP_EXECUTE_ALL:
-			sprintf(sr_message.description, "INVALID ECP PULSE IN MP EXECUTE ALL"); break;
-			case INVALID_ECP_PULSE_IN_MP_TERMINATE_ALL:
-			sprintf(sr_message.description, "INVALID ECP PULSE IN MP TERMINATE ALL"); break;
 			default:
 			sprintf(sr_message.description, "UNIDENTIFIED ECP or MP ERROR");
 		} // end: switch (sr_message.error_tab[0])

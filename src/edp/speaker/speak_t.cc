@@ -83,7 +83,7 @@ void speak_t::operator()()
             error_pointer = &nfe;
             error = common::NonFatal_erroR_1;
             trans_t_to_master_synchroniser.command();
-        } // end: catch(NonFatal_error_1 nfe)
+        }
 
         catch(NonFatal_error_2 & nfe)
         {
@@ -92,7 +92,7 @@ void speak_t::operator()()
             error_pointer=&nfe;
             error = common::NonFatal_erroR_2;
             trans_t_to_master_synchroniser.command();
-        } // end: catch(NonFatal_error_2 nfe)
+        }
 
         catch(NonFatal_error_3 & nfe)
         {
@@ -101,7 +101,7 @@ void speak_t::operator()()
             error_pointer=&nfe;
             error = common::NonFatal_erroR_3;
             trans_t_to_master_synchroniser.command();
-        } // end: catch(NonFatal_error_3 nfe)
+        }
 
         catch(NonFatal_error_4 & nfe)
         {
@@ -109,7 +109,7 @@ void speak_t::operator()()
             memcpy(error_pointer, &nfe, sizeof(nfe));
             error = common::NonFatal_erroR_4;
             trans_t_to_master_synchroniser.command();
-        } // end: catch(NonFatal_error nfe4)
+        }
 
         catch(Fatal_error & fe)
         {
@@ -117,7 +117,7 @@ void speak_t::operator()()
             memcpy(error_pointer, &fe, sizeof(fe));
             error = common::Fatal_erroR;
             trans_t_to_master_synchroniser.command();
-        } // end: catch(Fatal_error fe)
+        }
 
         catch (System_error & fe)
         {
@@ -125,7 +125,7 @@ void speak_t::operator()()
             memcpy(error_pointer, &fe, sizeof(fe));
             error = common::System_erroR;
             trans_t_to_master_synchroniser.command();
-        } // end: catch(System_error fe)
+        }
 
         catch (...)
         {  // Dla zewnetrznej petli try

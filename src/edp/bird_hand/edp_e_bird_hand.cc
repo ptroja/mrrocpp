@@ -70,6 +70,26 @@ void effector::get_controller_state(lib::c_buffer &instruction) {
 			desired_joints[i] = current_joints[i];
 		}
 	}
+
+	// inicjacja czasow
+
+	struct timespec current_timespec;
+
+	if (clock_gettime(CLOCK_MONOTONIC, &current_timespec) == -1) {
+		perror("clock gettime");
+	}
+
+	macrostep_end_time = timespec2nsec(&current_timespec);
+
+	msg->message("get_controller_state");
+
+	std::stringstream ss(std::stringstream::in | std::stringstream::out);
+
+	ss << current_timespec.tv_sec << "    " << current_timespec.tv_nsec;
+
+	msg->message(ss.str().c_str());
+	msg->message("get_controller_state za ");
+
 }
 
 // Konstruktor.
@@ -86,45 +106,47 @@ effector::effector(lib::configurator &_config) :
 /*--------------------------------------------------------------------------*/
 void effector::move_arm(const lib::c_buffer &instruction) {
 	msg->message("move_arm");
-	lib::bird_hand_cbuffer ecp_edp_cbuffer;
-	memcpy(&ecp_edp_cbuffer, instruction.arm.serialized_command,
-			sizeof(ecp_edp_cbuffer));
 
 	std::stringstream ss(std::stringstream::in | std::stringstream::out);
 
-	switch (ecp_edp_cbuffer.variant) {
-	case lib::BIRD_HAND_CBUFFER_BIRD_HAND_GEN_PARAMETERS: {
-		// bird_hand parameters computation basing on trajectory parameters
-		lib::bird_hand_gen_parameters bird_hand_gen_parameters_structure;
-		lib::bird_hand_low_level_command bird_hand_low_level_command_structure;
+	ss << ecp_edp_cbuffer.bird_hand_command_structure.desired_position[3];
 
-		memcpy(&bird_hand_gen_parameters_structure,
-				&(ecp_edp_cbuffer.bird_hand_gen_parameters_structure),
-				sizeof(bird_hand_gen_parameters_structure));
+	msg->message(ss.str().c_str());
 
-		ss << ecp_edp_cbuffer.bird_hand_gen_parameters_structure.dm[4];
+	struct timespec current_timespec;
 
-		msg->message(ss.str().c_str());
+	if (clock_gettime(CLOCK_MONOTONIC, &current_timespec) == -1) {
+		perror("clock gettime");
+	}
 
-		// previously computed parameters send to bird_hand2 controllers
+	_uint64 current_time = timespec2nsec(&current_timespec);
 
+	if (current_time >= macrostep_end_time) {
+		// stan bierny
+		msg->message("move_arm stan bierny");
+		query_time = current_time
+				+ ecp_edp_cbuffer.bird_hand_command_structure.ecp_query_step
+						* BIRD_HAND_STEP_TIME_IN_NS;
 
-		// start the trajectory execution
+		macrostep_end_time = current_time
+				+ ecp_edp_cbuffer.bird_hand_command_structure.motion_steps
+						* BIRD_HAND_STEP_TIME_IN_NS;
+
+	} else {
+		// stan czynny
+		msg->message("move_arm stan czynny");
+		// UWAGA NA KOLEJNOSC OBLICZEN query_time i macrostep_end_time NIE ZAMIENIAC
+		query_time = macrostep_end_time
+				+ ecp_edp_cbuffer.bird_hand_command_structure.ecp_query_step
+						* BIRD_HAND_STEP_TIME_IN_NS;
+
+		macrostep_end_time
+				+= ecp_edp_cbuffer.bird_hand_command_structure.motion_steps
+						* BIRD_HAND_STEP_TIME_IN_NS;
 
 	}
-		break;
-	case lib::BIRD_HAND_CBUFFER_BIRD_HAND_LOW_LEVEL_COMMAND: {
-		lib::bird_hand_low_level_command bird_hand_low_level_command_structure;
-		memcpy(&bird_hand_low_level_command_structure,
-				&(ecp_edp_cbuffer.bird_hand_low_level_command_structure),
-				sizeof(bird_hand_low_level_command_structure));
 
-	}
-		break;
-	default:
-		break;
-
-	}
+	msg->message("move_arm za ");
 
 }
 /*--------------------------------------------------------------------------*/
@@ -134,31 +156,59 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction) 
 	//lib::JointArray desired_joints_tmp(MAX_SERVOS_NR); // Wspolrzedne wewnetrzne -
 	//	printf(" GET ARM\n");
 	//	flushall();
-	static int licznikaaa = (-11);
+	static int licznik = (-11);
+	msg->message("get_arm_position");
+	struct timespec query_timespec;
 
-	std::stringstream ss(std::stringstream::in | std::stringstream::out);
-	ss << "get_arm_position: " << licznikaaa;
-	msg->message(ss.str().c_str());
-	//	printf("%s\n", ss.str().c_str());
-
-	lib::bird_hand_rbuffer edp_ecp_rbuffer;
-	edp_ecp_rbuffer.bird_hand_controller[3].position = licznikaaa;
-
-	if (licznikaaa < 10) {
-		for (int i = 0; i < 6; i++) {
-			edp_ecp_rbuffer.bird_hand_controller[i].motion_in_progress = true;
-		}
-
-	} else {
-		for (int i = 0; i < 6; i++) {
-			edp_ecp_rbuffer.bird_hand_controller[i].motion_in_progress = false;
+	if (test_mode) {
+		for (int i = 0; i < BIRD_HAND_NUM_OF_SERVOS; i++) {
+			edp_ecp_rbuffer.bird_hand_status_reply_structure.meassured_position[i]
+					= ecp_edp_cbuffer.bird_hand_command_structure.desired_position[i];
+			edp_ecp_rbuffer.bird_hand_status_reply_structure.meassured_torque[i]
+							= ecp_edp_cbuffer.bird_hand_command_structure.desired_torque[i];
 		}
 	}
-	licznikaaa++;
-	memcpy(reply.arm.serialized_reply, &edp_ecp_rbuffer,
-			sizeof(edp_ecp_rbuffer));
+
+	nsec2timespec(&query_timespec, query_time);
+
+	// zawieszenie do query_time
+
+	clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &query_timespec, NULL);
+	msg->message("get_arm_position za ");
+	std::stringstream ss(std::stringstream::in | std::stringstream::out);
+	ss << "get_arm_position: " << licznik;
+	msg->message(ss.str().c_str());
+
+	licznik++;
+
+	edp_ecp_rbuffer.bird_hand_status_reply_structure.meassured_current[3]
+			= 2.17;
 
 	reply.servo_step = step_counter;
+
+}
+/*--------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------*/
+void effector::set_robot_model(const lib::c_buffer &instruction) {
+	msg->message("set_robot_model");
+
+	std::stringstream ss(std::stringstream::in | std::stringstream::out);
+
+	ss << ecp_edp_cbuffer.bird_hand_configuration_command_structure.d_factor[3];
+
+	msg->message(ss.str().c_str());
+
+}
+/*--------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------*/
+void effector::get_robot_model(lib::c_buffer &instruction) {
+	//printf(" GET ROBOT_MODEL: ");
+	msg->message("get_robot_model");
+
+	edp_ecp_rbuffer.bird_hand_configuration_reply_structure.d_factor[2] = 121;
+
 }
 /*--------------------------------------------------------------------------*/
 
@@ -174,6 +224,19 @@ void effector::create_kinematic_models_for_given_robot(void) {
 void effector::create_threads() {
 	rb_obj = new common::reader_buffer(*this);
 	vis_obj = new common::vis_server(*this);
+}
+
+void effector::instruction_deserialization() {
+
+	memcpy(&ecp_edp_cbuffer, instruction.arm.serialized_command,
+			sizeof(ecp_edp_cbuffer));
+
+}
+
+void effector::reply_serialization(void) {
+	memcpy(reply.arm.serialized_reply, &edp_ecp_rbuffer,
+			sizeof(edp_ecp_rbuffer));
+
 }
 
 }

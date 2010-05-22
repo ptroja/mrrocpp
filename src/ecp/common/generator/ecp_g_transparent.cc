@@ -1,5 +1,8 @@
 #include "ecp/common/generator/ecp_g_transparent.h"
 
+#include "lib/exception.h"
+#include <boost/throw_exception.hpp>
+
 namespace mrrocpp {
 namespace ecp {
 namespace common {
@@ -50,8 +53,11 @@ void transparent::execute_motion(void)
 	if (the_robot->reply_package.reply_type == lib::ERROR) {
 
 		the_robot->query();
-		throw ecp_robot::ECP_error(lib::NON_FATAL_ERROR, EDP_ERROR);
 
+		BOOST_THROW_EXCEPTION(
+				lib::exception::NonFatal_error() <<
+				lib::exception::error_code(EDP_ERROR)
+		);
 	}
 	the_robot->query();
 
@@ -76,11 +82,17 @@ void transparent::execute_motion(void)
 			case BEYOND_LOWER_THETA6_LIMIT:
 			case BEYOND_LOWER_THETA7_LIMIT:
 				if (throw_kinematics_exceptions) {
-					throw ecp_robot::ECP_error(lib::NON_FATAL_ERROR, EDP_ERROR);
+					BOOST_THROW_EXCEPTION(
+							lib::exception::NonFatal_error() <<
+							lib::exception::error_code(EDP_ERROR)
+					);
 				}
 				break;
 			default:
-				throw ecp_robot::ECP_error(lib::NON_FATAL_ERROR, EDP_ERROR);
+				BOOST_THROW_EXCEPTION(
+						lib::exception::NonFatal_error() <<
+						lib::exception::error_code(EDP_ERROR)
+				);
 				break;
 
 		} /* end: switch */

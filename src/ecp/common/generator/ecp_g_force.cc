@@ -19,7 +19,6 @@
 //            Effector Control Process (lib::ECP) - force methods
 // Funkcje do tworzenia procesow ECP z wykorzystaniem sily
 //
-// Ostatnia modyfikacja: 2004r.
 // -------------------------------------------------------------------------
 
 #include <stdio.h>
@@ -34,6 +33,9 @@
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
+
+#include "lib/exception.h"
+#include <boost/throw_exception.hpp>
 
 #include "lib/srlib.h"
 #include "ecp/common/generator/ecp_g_force.h"
@@ -407,8 +409,11 @@ void tff_nose_run::execute_motion(void)
 	if (the_robot->reply_package.reply_type == lib::ERROR) {
 
 		the_robot->query();
-		throw ecp_robot::ECP_error (lib::NON_FATAL_ERROR, EDP_ERROR);
 
+		BOOST_THROW_EXCEPTION(
+				lib::exception::NonFatal_error() <<
+				lib::exception::error_code(EDP_ERROR)
+		);
 	}
 	the_robot->query();
 
@@ -432,9 +437,11 @@ void tff_nose_run::execute_motion(void)
 			case BEYOND_LOWER_THETA7_LIMIT:
 			break;
 			default:
-				throw ecp_robot::ECP_error (lib::NON_FATAL_ERROR, EDP_ERROR);
+				BOOST_THROW_EXCEPTION(
+						lib::exception::NonFatal_error() <<
+						lib::exception::error_code(EDP_ERROR)
+				);
 			break;
-
 		} /* end: switch */
 	}
 }

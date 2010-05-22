@@ -6,8 +6,11 @@
 
 #include "lib/mis_fun.h"
 #include "ecp/common/task/ecp_task.h"
-#include "ecp/common/ECP_main_error.h"
 #include "ecp/common/generator/ecp_generator.h"
+
+#include "lib/exception.h"
+#include <boost/throw_exception.hpp>
+#include <boost/exception/errinfo_errno.hpp>
 
 #if defined(USE_MESSIP_SRR)
 #include "messip_dataport.h"
@@ -133,11 +136,10 @@ void task::initialize_communication() {
 	if ( (MP_fd = messip::port_connect(mp_pulse_attach_point)) == NULL)
 #endif
 	{
-		int e = errno; // kod bledu systemowego
-		fprintf(stderr, "ECP: Unable to locate MP_MASTER process at '%s'\n",
-				mp_pulse_attach_point.c_str());
-		perror("ECP: Unable to locate MP_MASTER process");
-		throw ECP_main_error(lib::SYSTEM_ERROR, e);
+        BOOST_THROW_EXCEPTION(
+        		lib::exception::System_error() <<
+				boost::errinfo_errno(errno)
+        );
 	}
 
 	// Rejstracja procesu ECP
@@ -148,11 +150,10 @@ void task::initialize_communication() {
 	if ((ecp_attach = messip::port_create(ecp_attach_point)) == NULL)
 #endif
 	{
-		int e = errno; // kod bledu systemowego
-		perror("Failed to attach Effector Control Process");
-		sr_ecp_msg->message(lib::SYSTEM_ERROR, e,
-				"Failed to attach Effector Control Process");
-		throw ECP_main_error(lib::SYSTEM_ERROR, 0);
+        BOOST_THROW_EXCEPTION(
+        		lib::exception::System_error() <<
+				boost::errinfo_errno(errno)
+        );
 	}
 
 	std::string trigger_attach_point = config.return_attach_point_name(
@@ -165,11 +166,10 @@ void task::initialize_communication() {
 	if ((trigger_attach = messip::port_create(trigger_attach_point)) == NULL)
 #endif
 	{
-		int e = errno; // kod bledu systemowego
-		perror("Failed to attach TRIGGER pulse chanel for ecp");
-		sr_ecp_msg->message(lib::SYSTEM_ERROR, e,
-				"Failed  Failed to name attach (trigger pulse)");
-		throw ECP_main_error(lib::SYSTEM_ERROR, 0);
+        BOOST_THROW_EXCEPTION(
+        		lib::exception::System_error() <<
+				boost::errinfo_errno(errno)
+        );
 	}
 }
 // -------------------------------------------------------------------
@@ -241,11 +241,11 @@ void task::ecp_wait_for_stop(void) {
 #else
 	if (messip::port_reply(ecp_attach, caller, 0, ecp_reply) < 0)
 #endif
-	{// by Y&W
-		uint64_t e = errno; // kod bledu systemowego
-		perror("ECP: Reply to MP failed");
-		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ECP: Reply to MP failed");
-		throw common::generator::generator::ECP_error(lib::SYSTEM_ERROR, 0);
+	{
+		BOOST_THROW_EXCEPTION(
+			lib::exception::System_error() <<
+			boost::errinfo_errno(errno)
+		);
 	}
 
 	// ew. odebranie pulsu z MP
@@ -255,12 +255,10 @@ void task::ecp_wait_for_stop(void) {
 	}
 
 	if (!ecp_stop) {
-		fprintf(
-				stderr,
-				"ecp_generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND) @ %s:%d\n",
-				__FILE__, __LINE__);
-		throw common::generator::generator::ECP_error(lib::NON_FATAL_ERROR,
-				INVALID_MP_COMMAND);
+		BOOST_THROW_EXCEPTION(
+			lib::exception::NonFatal_error() <<
+			lib::exception::error_code(INVALID_MP_COMMAND)
+		);
 	}
 }
 
@@ -305,10 +303,10 @@ bool task::ecp_wait_for_start(void) {
 	if (messip::port_reply(ecp_attach, caller, 0, ecp_reply) < 0)
 #endif
 	{// by Y&W
-		uint64_t e = errno; // kod bledu systemowego
-		perror("ECP: Reply to MP failed");
-		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ECP: Reply to MP failed");
-		throw ECP_main_error(lib::SYSTEM_ERROR, 0);
+        BOOST_THROW_EXCEPTION(
+        		lib::exception::System_error() <<
+				boost::errinfo_errno(errno)
+        );
 	}
 
 	// ew. odebranie pulsu z MP
@@ -318,17 +316,18 @@ bool task::ecp_wait_for_start(void) {
 	}
 
 
-	if (ecp_stop)
-		throw common::generator::generator::ECP_error(lib::NON_FATAL_ERROR,
-				ECP_STOP_ACCEPTED);
+	if (ecp_stop) {
+		BOOST_THROW_EXCEPTION(
+			lib::exception::NonFatal_error() <<
+			lib::exception::error_code(ECP_STOP_ACCEPTED)
+		);
+	}
 
 	if (ecp_reply.reply == lib::INCORRECT_MP_COMMAND) {
-		fprintf(
-				stderr,
-				"ecp_generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND) @ %s:%d\n",
-				__FILE__, __LINE__);
-		throw common::generator::generator::ECP_error(lib::NON_FATAL_ERROR,
-				INVALID_MP_COMMAND);
+		BOOST_THROW_EXCEPTION(
+			lib::exception::NonFatal_error() <<
+			lib::exception::error_code(INVALID_MP_COMMAND)
+		);
 	}
 
 	sr_ecp_msg->message("ECP user program is running");
@@ -375,11 +374,11 @@ void task::get_next_state(void) {
 #else
 	if (messip::port_reply(ecp_attach, caller, 0, ecp_reply) < 0)
 #endif
-	{// by Y&W{
-		uint64_t e = errno; // kod bledu systemowego
-		perror("ECP: Reply to MP failed");
-		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ECP: Reply to MP failed");
-		throw ECP_main_error(lib::SYSTEM_ERROR, 0);
+	{
+        BOOST_THROW_EXCEPTION(
+        		lib::exception::System_error() <<
+				boost::errinfo_errno(errno)
+        );
 	}
 
 	// ew. odebranie pulsu z MP
@@ -389,17 +388,22 @@ void task::get_next_state(void) {
 	}
 
 
-	if (ecp_stop)
-		throw common::generator::generator::ECP_error(lib::NON_FATAL_ERROR,
-				ECP_STOP_ACCEPTED);
+	if (ecp_stop) {
+		BOOST_THROW_EXCEPTION(
+			lib::exception::NonFatal_error() <<
+			lib::exception::error_code(ECP_STOP_ACCEPTED)
+		);
+	}
 
 	if (ecp_reply.reply == lib::INCORRECT_MP_COMMAND) {
 		fprintf(
 				stderr,
 				"ecp_generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND) @ %s:%d, mp_command_type() = %d\n",
 				__FILE__, __LINE__, mp_command_type());
-		throw common::generator::generator::ECP_error(lib::NON_FATAL_ERROR,
-				INVALID_MP_COMMAND);
+		BOOST_THROW_EXCEPTION(
+			lib::exception::NonFatal_error() <<
+			lib::exception::error_code(INVALID_MP_COMMAND)
+		);
 	}
 }
 
@@ -454,7 +458,6 @@ bool task::mp_buffer_receive_and_send(void) {
 			mp_ecp_randevouz = true;
 			caller = receive_mp_message(true);
 		}
-
 	}
 
 	//printf("mp_buffer_receive_and_send caller za: %d\n", caller);
@@ -490,11 +493,11 @@ bool task::mp_buffer_receive_and_send(void) {
 #else
 		if (messip::port_reply(ecp_attach, caller, 0, ecp_reply) < 0)
 #endif
-		{// by Y&W
-			uint64_t e = errno; // kod bledu systemowego
-			perror("ECP: Reply to MP failed");
-			sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ECP: Reply to MP failed");
-			throw ecp_robot::ECP_error(lib::SYSTEM_ERROR, 0);
+		{
+			BOOST_THROW_EXCEPTION(
+					lib::exception::System_error() <<
+					boost::errinfo_errno(errno)
+			);
 		}
 
 		// ew. odebranie pulsu z MP
@@ -503,17 +506,18 @@ bool task::mp_buffer_receive_and_send(void) {
 			caller = receive_mp_message(true);
 		}
 
-		if (ecp_stop)
-			throw common::generator::generator::ECP_error(lib::NON_FATAL_ERROR,
-					ECP_STOP_ACCEPTED);
+		if (ecp_stop) {
+			BOOST_THROW_EXCEPTION(
+				lib::exception::NonFatal_error() <<
+				lib::exception::error_code(ECP_STOP_ACCEPTED)
+			);
+		}
 
 		if (ecp_reply.reply == lib::INCORRECT_MP_COMMAND) {
-			fprintf(
-					stderr,
-					"ecp_generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND) @ %s:%d\n",
-					__FILE__, __LINE__);
-			throw common::generator::generator::ECP_error(lib::NON_FATAL_ERROR,
-					INVALID_MP_COMMAND);
+			BOOST_THROW_EXCEPTION(
+				lib::exception::NonFatal_error() <<
+				lib::exception::error_code(INVALID_MP_COMMAND)
+			);
 		}
 	}
 
@@ -543,11 +547,10 @@ int task::receive_mp_message(bool block) {
 				return caller;
 			}
 
-			uint64_t e = errno; // kod bledu systemowego
-			perror("ECP: Receive from MP failed");
-			sr_ecp_msg->message(lib::SYSTEM_ERROR, e,
-					"ECP: Receive from MP failed");
-			throw ecp_robot::ECP_error(lib::SYSTEM_ERROR, 0);
+			BOOST_THROW_EXCEPTION(
+					lib::exception::System_error() <<
+					boost::errinfo_errno(errno)
+			);
 		}
 #if !defined(USE_MESSIP_SRR)
 		if (caller == 0) {/* Pulse received */

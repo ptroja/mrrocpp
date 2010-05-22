@@ -38,11 +38,13 @@ bool eihgenerator::first_step()
 
 	//sensor->to_vsp.i_code = lib::VSP_INITIATE_READING;
 
+	printf("bool eihgenerator::first_step()\n"); fflush(stdout);
 	return true;
 }
 
 bool eihgenerator::next_step()
 {
+	printf("bool eihgenerator::next_step()\n"); fflush(stdout);
 	float t[12];
 	if(sensor->image.found == true)
 		count++;

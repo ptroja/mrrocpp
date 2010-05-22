@@ -33,9 +33,9 @@ class TRGraspit: public GraspitTransmitter_t {
 		int socketDescriptor;
 
 	public:
-		TRGraspit(TRANSMITTER_ENUM _transmitter_name, const char* _section_name, task::task& _ecp_mp_object);
+		TRGraspit(TRANSMITTER_ENUM _transmitter_name, const std::string & _section_name, task::task& _ecp_mp_object);
 		~TRGraspit(); 	// destruktor czujnika virtualnego
-		void TRconnect(const char *host,unsigned short int serverPort);
+		void TRconnect(const char *host, uint16_t serverPort);
 		void TRdisconnect();
 		virtual bool t_read ();	// odczyt z zawieszaniem lub bez
 };

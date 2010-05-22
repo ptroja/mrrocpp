@@ -13,7 +13,6 @@ namespace ecp {
 namespace irp6ot {
 namespace task {
 
-
 /** @defgroup wii_teach Wii teach
  *  @ingroup application
  *
@@ -26,9 +25,9 @@ namespace task {
 /**
  * @author jkurylo
  */
-class wii_teach: public common::task::task
+class wii_teach : public common::task::task
 {
-    protected:
+protected:
 	//Generator ruchu
         common::generator::smooth* sg;
         irp6ot::generator::wii_absolute* ag;
@@ -85,18 +84,18 @@ class wii_teach: public common::task::task
 	 */
 	void main_task_algorithm(void);
 
-        void print_trajectory(void);
+	void print_trajectory(void);
 
-        void move_to_current(void);
+	void move_to_current(void);
 
-        bool get_filenames(void);
+	bool get_filenames(void);
 
-        int load_trajectory(void);
+	void load_trajectory(void);
 
-        void save_trajectory(void);
+	void save_trajectory(void);
 };
 
-/** @} */ // end of wii_teach
+/** @} */// end of wii_teach
 
 }
 } // namespace irp6ot

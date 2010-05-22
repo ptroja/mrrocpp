@@ -43,6 +43,13 @@
 #include "lib/com_buf.h"
 
 #include "lib/srlib.h"
+
+#include "lib/exception.h"
+#include <boost/throw_exception.hpp>
+#include <boost/exception/errinfo_errno.hpp>
+#include <boost/exception/errinfo_api_function.hpp>
+#include <boost/exception/errinfo_file_name.hpp>
+
 #include "edp/ati3084/edp_s.h"
 
 // Konfigurator
@@ -132,9 +139,11 @@ void ATI3084_force::connect_to_hardware(void)
 
 		phdl = pci_attach(0);
 		if (phdl == -1) {
-			fprintf(stderr, "Unable to initialize PCI\n");
-
-			// 	return EXIT_FAILURE;
+			BOOST_THROW_EXCEPTION(
+					lib::exception::System_error() <<
+					boost::errinfo_api_function("pci_attach") <<
+					boost::errinfo_errno(errno)
+			);
 		}
 
 		/* Initialize the pci_dev_info structure */
@@ -145,7 +154,11 @@ void ATI3084_force::connect_to_hardware(void)
 
 		hdl = pci_attach_device(NULL, PCI_INIT_ALL, pidx, &info);
 		if (hdl == NULL) {
-			fprintf(stderr, "Unable to locate Advantech 1751\n");
+			BOOST_THROW_EXCEPTION(
+					lib::exception::System_error() <<
+					boost::errinfo_api_function("pci_attach_device") <<
+					boost::errinfo_errno(errno)
+			);
 		} else {
 			// 	printf("connected to Advantech 1751\n");
 			delay(100);
@@ -162,42 +175,71 @@ void ATI3084_force::connect_to_hardware(void)
 			mds.byte_counter = 0;
 			mds.is_received = false;
 
-			if ((sint_id = InterruptAttach(info.Irq, schunk_int_handler, (void *) &mds, sizeof(mds), 0)) == -1)
-				printf("Unable to attach interrupt handler: \n");
+			if ((sint_id = InterruptAttach(info.Irq, schunk_int_handler, (void *) &mds, sizeof(mds), 0)) == -1) {
+				BOOST_THROW_EXCEPTION(
+						lib::exception::System_error() <<
+						boost::errinfo_api_function("InterruptAttach") <<
+						boost::errinfo_errno(errno)
+				);
+			}
 		}
 
 		// setup serial device
-		uart = open("/dev/ser1", O_RDWR);
+		const char * serial = "/dev/ser1";
+		uart = open(serial, O_RDWR);
 		if (uart == -1) {
-			// TODO: throw
-			perror("unable to open serial device for ATI3084 sensor");
+			BOOST_THROW_EXCEPTION(
+					lib::exception::System_error() <<
+					boost::errinfo_api_function("open") <<
+					boost::errinfo_errno(errno) <<
+					boost::errinfo_file_name(serial)
+			);
 		}
 
 		// serial port settings: 38400, 8-N-1
 		struct termios tattr;
 		if(tcgetattr(uart, &tattr) == -1) {
-			// TODO: throw
-			perror("tcgetattr()");
+			BOOST_THROW_EXCEPTION(
+					lib::exception::System_error() <<
+					boost::errinfo_api_function("tcgetattr") <<
+					boost::errinfo_errno(errno)
+			);
 		}
 
 		// setup input speed
 		if(cfsetispeed(&tattr, B38400) == -1) {
-			perror("cfsetispeed()");
+			BOOST_THROW_EXCEPTION(
+					lib::exception::System_error() <<
+					boost::errinfo_api_function("cfsetispeed") <<
+					boost::errinfo_errno(errno)
+			);
 		}
 
 		// setup output speed
 		if(cfsetospeed(&tattr, B38400) == -1) {
-			perror("cfsetospeed()");
+			BOOST_THROW_EXCEPTION(
+					lib::exception::System_error() <<
+					boost::errinfo_api_function("cfsetospeed") <<
+					boost::errinfo_errno(errno)
+			);
 		}
 
 		// setup raw mode
 		if(cfmakeraw(&tattr) == -1) {
-			perror("cfmakeraw()");
+			BOOST_THROW_EXCEPTION(
+					lib::exception::System_error() <<
+					boost::errinfo_api_function("cfmakeraw") <<
+					boost::errinfo_errno(errno)
+			);
 		}
 
 		// apply settings to serial port
 		if(tcsetattr(uart, TCSANOW, &tattr) == -1) {
-			perror("tcsetattr()");
+			BOOST_THROW_EXCEPTION(
+					lib::exception::System_error() <<
+					boost::errinfo_api_function("tcsetattr") <<
+					boost::errinfo_errno(errno)
+			);
 		}
 
 		do_init(); // komunikacja wstepna
@@ -346,8 +388,12 @@ void ATI3084_force::wait_for_event()
 /*************************** inicjacja odczytu ******************************/
 void ATI3084_force::initiate_reading(void)
 {
-	if (!is_sensor_configured)
-		throw lib::sensor::sensor_error(lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
+	if (!is_sensor_configured) {
+		BOOST_THROW_EXCEPTION(
+				lib::exception::Fatal_error() <<
+				lib::exception::error_code(SENSOR_NOT_CONFIGURED)
+		);
+	}
 }
 
 /***************************** odczyt z czujnika *****************************/
@@ -377,7 +423,6 @@ void ATI3084_force::get_reading(void)
 
 			// jesli ma byc wykorzytstywana biblioteka transformacji sil
 			if (master.force_tryb == 2 && gravity_transformation) {
-				static int ms_nr = 0; // numer odczytu z czujnika
 				for (int i = 0; i < 3; i++)
 					ft_table[i] /= 20;
 				//			for(int i=3;i<6;i++) ft_table[i]/=333;
@@ -387,7 +432,9 @@ void ATI3084_force::get_reading(void)
 				// lib::Homog_matrix frame(master.force_current_end_effector_frame);
 				lib::Ft_vector output = gravity_transformation->getForce(ft_table, frame);
 				master.force_msr_upload(output);
-				/*		if (!((ms_nr++)%1000)) {
+#if 0
+				static int ms_nr = 0; // numer odczytu z czujnika
+				if (!((ms_nr++)%1000)) {
 				 cerr << "Output\t";
 				 for(int i=0;i<3;i++) output[i]*=20;
 				 for(int i=3;i<6;i++) output[i]*=333;
@@ -401,7 +448,7 @@ void ATI3084_force::get_reading(void)
 				 cerr << endl << endl;
 				 cerr << frame << endl;
 				 }
-				 */
+#endif
 			}
 		}
 	}
@@ -551,10 +598,14 @@ void ATI3084_force::do_Wait(void)
 void ATI3084_force::do_send_command(const char* command)
 {
 #if SERIAL
-	int data_written = write(uart, command, strlen(command));
+	ssize_t data_written = write(uart, command, strlen(command));
 
-	if (data_written =! strlen(command)) {
-		perror("ATI3084 serial write to sensor failed");
+	if (data_written != (ssize_t) strlen(command)) {
+		BOOST_THROW_EXCEPTION(
+				lib::exception::System_error() <<
+				boost::errinfo_api_function("write") <<
+				boost::errinfo_errno(errno)
+		);
 	}
 #endif
 #if PARALLEL
@@ -585,11 +636,15 @@ void ATI3084_force::do_send_command(const char* command)
 
 void ATI3084_force::solve_transducer_controller_failure(void)
 {
-	tcflush(uart, TCIFLUSH);
+	if(tcflush(uart, TCIFLUSH) == -1) {
+		BOOST_THROW_EXCEPTION(
+				lib::exception::System_error() <<
+				boost::errinfo_api_function("tcflush") <<
+				boost::errinfo_errno(errno)
+		);
+	}
 
 	do_send_command(YESCOMM); /* command ^W to FT */
-
-	tcflush(uart, TCIFLUSH);
 }
 
 void ATI3084_force::do_init(void)
@@ -670,7 +725,7 @@ void clear_intr(void)
 force* return_created_edp_force_sensor(common::manip_effector &_master)
 {
 	return new ATI3084_force(_master);
-}// : return_created_sensor
+}
 
 } // namespace sensor
 } // namespace edp

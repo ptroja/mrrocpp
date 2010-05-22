@@ -12,10 +12,19 @@
 
 #include "ecp/common/generator/ecp_g_smooth.h"
 
+#include "lib/exception.h"
+#include <boost/throw_exception.hpp>
+
 namespace mrrocpp {
 namespace ecp {
 namespace common {
 namespace generator {
+
+#define THROW_NONFATAL_ERROR(x) \
+	BOOST_THROW_EXCEPTION(\
+		lib::exception::NonFatal_error() << \
+		lib::exception::error_code(x) \
+	)
 
 void smooth::set_relative(void) {
 	type=lib::RELATIVE;
@@ -109,14 +118,14 @@ void smooth::load_trajectory_from_xml(const char* fileName, const char* nodeName
 	 xmlXIncludeProcess(doc);
 	 if(doc == NULL)
 	 {
-        throw generator::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
+        THROW_NONFATAL_ERROR(NON_EXISTENT_FILE);
 	 }
 
 	 xmlNodePtr root = xmlDocGetRootElement(doc);
 	 if(!root || !root->name)
 	 {
 		 xmlFreeDoc(doc);
-		 throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+		 THROW_NONFATAL_ERROR(READ_FILE_ERROR);
 	 }
 
 	 flush_pose_list(); // Usuniecie listy pozycji, o ile istnieje
@@ -187,12 +196,12 @@ void smooth::load_file_with_path(const char* file_name) {
     if (!from_file.good())
     {
         perror(file_name);
-        throw generator::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
+        THROW_NONFATAL_ERROR(NON_EXISTENT_FILE);
     }
 
     if ( !(from_file >> coordinate_type) )
     {
-        throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+        THROW_NONFATAL_ERROR(READ_FILE_ERROR);
     }
 
     // Usuwanie spacji i tabulacji
@@ -229,13 +238,13 @@ void smooth::load_file_with_path(const char* file_name) {
 
     else
     {
-        throw generator::ECP_error(lib::NON_FATAL_ERROR, NON_TRAJECTORY_FILE);
+        THROW_NONFATAL_ERROR(NON_TRAJECTORY_FILE);
     }
 
     // printf("po coord type %d\n", ps);
     if ( !(from_file >> number_of_poses) )
     {
-        throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+        THROW_NONFATAL_ERROR(READ_FILE_ERROR);
     }
 
     // printf("po number of poses %d\n", number_of_poses);
@@ -252,7 +261,7 @@ void smooth::load_file_with_path(const char* file_name) {
         {
             if ( !(from_file >> v[j]) )
             { // Zabezpieczenie przed danymi nienumerycznymi
-                throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+                THROW_NONFATAL_ERROR(READ_FILE_ERROR);
             }
         }
 
@@ -261,7 +270,7 @@ void smooth::load_file_with_path(const char* file_name) {
         {
             if ( !(from_file >> a[j]) )
             { // Zabezpieczenie przed danymi nienumerycznymi
-                throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+                THROW_NONFATAL_ERROR(READ_FILE_ERROR);
             }
         }
 
@@ -270,7 +279,7 @@ void smooth::load_file_with_path(const char* file_name) {
         {
             if ( !(from_file >> coordinates[j]) )
             { // Zabezpieczenie przed danymi nienumerycznymi
-                throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+                THROW_NONFATAL_ERROR(READ_FILE_ERROR);
             }
         }
 
@@ -500,27 +509,27 @@ void smooth::load_a_v_min (const char* file_name)
     if (!from_file.good())
     {
         perror(file_name);
-        throw generator::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
+        THROW_NONFATAL_ERROR(NON_EXISTENT_FILE);
     }
 
     if ( !(from_file >> v_grip_min_zyz) )
     { // Zabezpieczenie przed danymi nienumerycznymi
-        throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+        THROW_NONFATAL_ERROR(READ_FILE_ERROR);
     }
 
     if ( !(from_file >> v_grip_min_aa) )
     { // Zabezpieczenie przed danymi nienumerycznymi
-        throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+        THROW_NONFATAL_ERROR(READ_FILE_ERROR);
     }
 
     if ( !(from_file >> v_grip_min_joint) )
     { // Zabezpieczenie przed danymi nienumerycznymi
-        throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+        THROW_NONFATAL_ERROR(READ_FILE_ERROR);
     }
 
     if ( !(from_file >> v_grip_min_motor) )
     { // Zabezpieczenie przed danymi nienumerycznymi
-        throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+        THROW_NONFATAL_ERROR(READ_FILE_ERROR);
     }
 } // end: bool load_a_v_min()
 
@@ -531,21 +540,21 @@ void smooth::load_a_v_max (const char* file_name)
     if (!from_file.good())
     {
         perror(file_name);
-        throw generator::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
+        THROW_NONFATAL_ERROR(NON_EXISTENT_FILE);
     }
 
     for (int j = 0; j < MAX_SERVOS_NR; j++)
     {
         if ( !(from_file >> v_max_motor[j]) )
         { // Zabezpieczenie przed danymi nienumerycznymi
-            throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+            THROW_NONFATAL_ERROR(READ_FILE_ERROR);
         }
     }
     for (int j = 0; j < MAX_SERVOS_NR; j++)
     {
         if ( !(from_file >> a_max_motor[j]) )
         { // Zabezpieczenie przed danymi nienumerycznymi
-            throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+            THROW_NONFATAL_ERROR(READ_FILE_ERROR);
         }
     }
 
@@ -553,14 +562,14 @@ void smooth::load_a_v_max (const char* file_name)
     {
         if ( !(from_file >> v_max_joint[j]) )
         { // Zabezpieczenie przed danymi nienumerycznymi
-            throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+            THROW_NONFATAL_ERROR(READ_FILE_ERROR);
         }
     }
     for (int j = 0; j < MAX_SERVOS_NR; j++)
     {
         if ( !(from_file >> a_max_joint[j]) )
         { // Zabezpieczenie przed danymi nienumerycznymi
-            throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+            THROW_NONFATAL_ERROR(READ_FILE_ERROR);
         }
     }
 
@@ -568,14 +577,14 @@ void smooth::load_a_v_max (const char* file_name)
     {
         if ( !(from_file >> v_max_zyz[j]) )
         { // Zabezpieczenie przed danymi nienumerycznymi
-            throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+            THROW_NONFATAL_ERROR(READ_FILE_ERROR);
         }
     }
     for (int j = 0; j < MAX_SERVOS_NR; j++)
     {
         if ( !(from_file >> a_max_zyz[j]) )
         { // Zabezpieczenie przed danymi nienumerycznymi
-            throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+            THROW_NONFATAL_ERROR(READ_FILE_ERROR);
         }
     }
 
@@ -583,14 +592,14 @@ void smooth::load_a_v_max (const char* file_name)
     {
         if ( !(from_file >> v_max_aa[j]) )
         { // Zabezpieczenie przed danymi nienumerycznymi
-            throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+            THROW_NONFATAL_ERROR(READ_FILE_ERROR);
         }
     }
     for (int j = 0; j < MAX_SERVOS_NR; j++)
     {
         if ( !(from_file >> a_max_aa[j]) )
         { // Zabezpieczenie przed danymi nienumerycznymi
-            throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+            THROW_NONFATAL_ERROR(READ_FILE_ERROR);
         }
     }
 } // end: bool load_a_v_max()
@@ -716,7 +725,7 @@ smooth::smooth (common::task::task& _ecp_task, bool _is_synchronised)
 		    	first_coordinate = false;
 		        break;
 		    default:
-		        throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+		        THROW_NONFATAL_ERROR(INVALID_POSE_SPECIFICATION);
 		} // end : switch ( td.arm_type )
 		pose_list_iterator++;
 	}
@@ -1017,7 +1026,7 @@ void smooth::send_coordinates() {
 			break;
 
 		default:
-			throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+			THROW_NONFATAL_ERROR(INVALID_POSE_SPECIFICATION);
 	}// end:switch
 
 	//gripper
@@ -1134,7 +1143,7 @@ bool smooth::first_step() { //wywolywane tylko raz w calej trajektorii
         break;
 
     default:
-        throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+        THROW_NONFATAL_ERROR(INVALID_POSE_SPECIFICATION);
     } // end : switch ( td.arm_type )
 
     return true;
@@ -1250,7 +1259,7 @@ void smooth::calculate(void) { //zeby wrocic do starego trybu relative nalezy st
 
 					if (v_max_zyz[i] == 0 || a_max_zyz[i] == 0 || pose_list_iterator->v[i] == 0 || pose_list_iterator->a[i] == 0) {
 						sr_ecp_msg.message("One or more of 'v' or 'a' values is 0");
-						throw ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
+						THROW_NONFATAL_ERROR(INVALID_MP_COMMAND);
 					}
 
 					pose_list_iterator->v_r[i] = v_max_zyz[i] * pose_list_iterator->v[i];
@@ -1305,7 +1314,7 @@ void smooth::calculate(void) { //zeby wrocic do starego trybu relative nalezy st
 
 					if (v_max_aa[i] == 0 || a_max_aa[i] == 0 || pose_list_iterator->v[i] == 0 || pose_list_iterator->a[i] == 0) {
 						sr_ecp_msg.message("One or more of 'v' or 'a' values is 0");
-						throw ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
+						THROW_NONFATAL_ERROR(INVALID_MP_COMMAND);
 					}
 
 					pose_list_iterator->v_r[i] = v_max_aa[i] * pose_list_iterator->v[i];
@@ -1362,7 +1371,7 @@ void smooth::calculate(void) { //zeby wrocic do starego trybu relative nalezy st
 					if(!(the_robot->robot_name == lib::ROBOT_IRP6_POSTUMENT && i == (MAX_SERVOS_NR - 1))) {
 						if (v_max_joint[i] == 0 || a_max_joint[i] == 0 || pose_list_iterator->v[i] == 0 || pose_list_iterator->a[i] == 0) {
 							sr_ecp_msg.message("One or more of 'v' or 'a' values is 0");
-							throw ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
+							THROW_NONFATAL_ERROR(INVALID_MP_COMMAND);
 						}
 					}
 
@@ -1419,7 +1428,7 @@ void smooth::calculate(void) { //zeby wrocic do starego trybu relative nalezy st
 				for (i = 0; i < MAX_SERVOS_NR; i++) {
 					if (v_max_motor[i] == 0 || a_max_motor[i] == 0 || pose_list_iterator->v[i] == 0 || pose_list_iterator->a[i] == 0) {
 						sr_ecp_msg.message("One or more of 'v' or 'a' values is 0");
-						throw ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
+						THROW_NONFATAL_ERROR(INVALID_MP_COMMAND);
 					}
 
 					pose_list_iterator->v_r[i] = v_max_motor[i] * pose_list_iterator->v[i];
@@ -1446,7 +1455,7 @@ void smooth::calculate(void) { //zeby wrocic do starego trybu relative nalezy st
 				break;
 
 			default:
-				throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+				THROW_NONFATAL_ERROR(INVALID_POSE_SPECIFICATION);
 
 			} // end: switch
 
@@ -1484,7 +1493,7 @@ void smooth::calculate(void) { //zeby wrocic do starego trybu relative nalezy st
 				for (i = 0; i < MAX_SERVOS_NR; i++) {
 					if (v_max_zyz[i] == 0 || a_max_zyz[i] == 0 || pose_list_iterator->v[i] == 0 || pose_list_iterator->a[i] == 0) {
 						sr_ecp_msg.message("One or more of 'v' or 'a' values is 0");
-						throw ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
+						THROW_NONFATAL_ERROR(INVALID_MP_COMMAND);
 					}
 					pose_list_iterator->v_r[i] = v_max_zyz[i] * pose_list_iterator->v[i];
 					pose_list_iterator->a_r[i] = a_max_zyz[i] * pose_list_iterator->a[i];
@@ -1519,7 +1528,7 @@ void smooth::calculate(void) { //zeby wrocic do starego trybu relative nalezy st
 				for (i = 0; i < MAX_SERVOS_NR; i++) {
 					if (v_max_aa[i] == 0 || a_max_aa[i] == 0 || pose_list_iterator->v[i] == 0 || pose_list_iterator->a[i] == 0) {
 						sr_ecp_msg.message("One or more of 'v' or 'a' values is 0");
-						throw ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
+						THROW_NONFATAL_ERROR(INVALID_MP_COMMAND);
 					}
 					pose_list_iterator->v_r[i] = v_max_aa[i] * pose_list_iterator->v[i];
 					pose_list_iterator->a_r[i] = a_max_aa[i] * pose_list_iterator->a[i];
@@ -1564,7 +1573,7 @@ void smooth::calculate(void) { //zeby wrocic do starego trybu relative nalezy st
 				for (i = 0; i < MAX_SERVOS_NR; i++) {
 					if (v_max_joint[i] == 0 || a_max_joint[i] == 0 || pose_list_iterator->v[i] == 0 || pose_list_iterator->a[i] == 0) {
 						sr_ecp_msg.message("One or more of 'v' or 'a' values is 0");
-						throw ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
+						THROW_NONFATAL_ERROR(INVALID_MP_COMMAND);
 					}
 					pose_list_iterator->v_r[i] = v_max_joint[i] * pose_list_iterator->v[i];
 					pose_list_iterator->a_r[i] = a_max_joint[i] * pose_list_iterator->a[i];
@@ -1609,7 +1618,7 @@ void smooth::calculate(void) { //zeby wrocic do starego trybu relative nalezy st
 				for (i = 0; i < MAX_SERVOS_NR; i++) {
 					if (v_max_motor[i] == 0 || a_max_motor[i] == 0 || pose_list_iterator->v[i] == 0 || pose_list_iterator->a[i] == 0) {
 						sr_ecp_msg.message("One or more of 'v' or 'a' values is 0");
-						throw ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
+						THROW_NONFATAL_ERROR(INVALID_MP_COMMAND);
 					}
 					pose_list_iterator->v_r[i] = v_max_motor[i] * pose_list_iterator->v[i];
 					pose_list_iterator->a_r[i] = a_max_motor[i] * pose_list_iterator->a[i];
@@ -1618,7 +1627,7 @@ void smooth::calculate(void) { //zeby wrocic do starego trybu relative nalezy st
 				break;
 
 			default:
-				throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+				THROW_NONFATAL_ERROR(INVALID_POSE_SPECIFICATION);
 			}
 		} //end else (first interval)
 
@@ -1681,7 +1690,7 @@ void smooth::calculate(void) { //zeby wrocic do starego trybu relative nalezy st
 
 						break;
 					default:
-						throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+						THROW_NONFATAL_ERROR(INVALID_POSE_SPECIFICATION);
 				}
 
 				if (pose_list_iterator->k[i] != temp) {
@@ -1857,7 +1866,7 @@ void smooth::calculate(void) { //zeby wrocic do starego trybu relative nalezy st
 				//printf(" ********************** Error w osi %d *************************\n", i);
 				//flushall();pose_list_iterator->t = t_max;
 				sr_ecp_msg.message("Unexpected calculation error 1. Save your trajectory and report bug");
-				throw ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
+				THROW_NONFATAL_ERROR(INVALID_MP_COMMAND);
 			}
 
 			//printf("t: %f\t t max: %f\n", t[i], t_max);
@@ -1921,7 +1930,7 @@ void smooth::calculate(void) { //zeby wrocic do starego trybu relative nalezy st
 				} else {
 					//printf(" ten przypadek nie moze wystapic (redukcja ze wzgledu na czas)\n");
 					sr_ecp_msg.message("Unexpected calculation error 2. Save your trajectory and report bug");
-					throw ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
+					THROW_NONFATAL_ERROR(INVALID_MP_COMMAND);
 				}
 
 				//printf("redukcja predkosci z powodu czasu w osi %d\n", i);
@@ -1963,7 +1972,7 @@ void smooth::calculate(void) { //zeby wrocic do starego trybu relative nalezy st
 				}
 				break;
 			default:
-				throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+				THROW_NONFATAL_ERROR(INVALID_POSE_SPECIFICATION);
 		}
 
 		//if (debug) {
@@ -2242,7 +2251,7 @@ void smooth::vp_reduction(std::list<ecp_mp::common::smooth_trajectory_pose>::ite
 			pose_list_iterator->v[i] = v_r/v_max_zyz[i];
 			break;
 		default:
-			throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+			THROW_NONFATAL_ERROR(INVALID_POSE_SPECIFICATION);
 	}
 
 	calculate();

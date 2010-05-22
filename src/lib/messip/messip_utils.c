@@ -186,6 +186,7 @@ get_taskname( pid_t pid, char *pname )
 	if ( nitems != 2 )
 	{
 		sprintf( pname, "?%d?", pid );
+		fclose( fp );
 		return pname;
 	}
 

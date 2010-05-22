@@ -49,6 +49,7 @@ class transmitter_base
 		{
 			return true;
 		};
+<<<<<<< HEAD
 
 		class transmitter_error
 		{  // Klasa obslugi bledow czujnikow
@@ -76,6 +77,9 @@ public:
 	{
 	}
 };
+=======
+}; // end: class transmitter
+>>>>>>> exception
 
 } // namespace transmitter
 

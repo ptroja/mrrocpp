@@ -8,51 +8,20 @@
 #ifndef __UI_H
 #define __UI_H
 
-#include <pthread.h>
-#include <list>
-
+#include <boost/function.hpp>
 #include <boost/thread/condition_variable.hpp>
 #include <boost/thread/mutex.hpp>
 #include <boost/circular_buffer.hpp>
-#include <boost/function.hpp>
 #include <stdexcept>
 #include <iostream>
+#include <string>
+#include <list>
 
 #include "lib/com_buf.h"
 #include "lib/srlib.h"
 #include "lib/mis_fun.h"
 
-#define CATCH_SECTION_UI catch (ecp::common::ecp_robot::ECP_main_error & e) { \
-	/* Obsluga bledow ECP */ \
-	if (e.error_class == lib::SYSTEM_ERROR) \
-		printf("ECP lib::SYSTEM_ERROR error in UI\n"); \
-		ui_state.ui_state=2; \
-	/*  exit(EXIT_FAILURE);*/ \
-  } /*end: catch */ \
-\
-catch (ecp::common::ecp_robot::ECP_error & er) { \
-	/* Wylapywanie bledow generowanych przez modul transmisji danych do EDP */ \
-	if ( er.error_class == lib::SYSTEM_ERROR) { /* blad systemowy juz wyslano komunikat do SR */ \
-		perror("ECP lib::SYSTEM_ERROR in UI"); \
-		/* PtExit( EXIT_SUCCESS ); */ \
-	} else { \
-	switch ( er.error_no ) { \
-		case INVALID_POSE_SPECIFICATION: \
-		case INVALID_ECP_COMMAND: \
-		case INVALID_COMMAND_TO_EDP: \
-		case EDP_ERROR: \
-		case INVALID_EDP_REPLY: \
-		case INVALID_ROBOT_MODEL_TYPE: \
-			/* Komunikat o bledzie wysylamy do SR */ \
-			ui_msg.all_ecp->message (lib::NON_FATAL_ERROR, er.error_no); \
-		break; \
-		default: \
-			ui_msg.all_ecp->message (lib::NON_FATAL_ERROR, 0, "ECP: Unidentified exception"); \
-			perror("Unidentified exception"); \
-		} /* end: switch */ \
-	} \
-} /* end: catch */ \
-\
+#define CATCH_SECTION_UI \
 catch(const std::exception & e){\
 	std::string tmp_string(" The following error has been detected: ");\
 	tmp_string += e.what(); \
@@ -65,7 +34,6 @@ catch (...) {  /* Dla zewnetrznej petli try*/ \
 	/* Komunikat o bledzie wysylamy do SR (?) */ \
 	fprintf(stderr, "unidentified error in UI\n"); \
 } /*end: catch */\
-
 
 enum TEACHING_STATE_ENUM {
 	FSTRAJECTORY, FSCONFIG

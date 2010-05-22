@@ -6,6 +6,10 @@
 #include <string.h>
 #include <arpa/inet.h>
 
+#include "lib/exception.h"
+#include <boost/exception/errinfo_api_function.hpp>
+#include <boost/exception/errinfo_errno.hpp>
+
 #include "ecp_mp_tr_draughtsAI.h"
 
 using namespace std;
@@ -23,18 +27,31 @@ TRDraughtsAI::~TRDraughtsAI()
 {
 }
 
-void TRDraughtsAI::AIconnect(const char *host, unsigned short int serverPort)
-{
-	struct hostent * hostInfo = gethostbyname(host);
-	if (hostInfo == NULL) {
-		cout << "problem interpreting host: " << host << "\n";
-		throw ecp_mp::transmitter::transmitter_base::transmitter_error(lib::SYSTEM_ERROR);
+void TRDraughtsAI::AIconnect(const char * host, uint16_t serverPort){
+	int socketDesc;
+	struct sockaddr_in serverAddress;
+	struct hostent *hostInfo;
+	char c;
+
+	hostInfo=gethostbyname(host);
+	if (hostInfo==NULL) {
+		cerr<<"problem interpreting host: "<<host<<"\n";
+		BOOST_THROW_EXCEPTION(
+				lib::exception::System_error() <<
+				lib::exception::h_errno_code(h_errno) <<
+				boost::errinfo_api_function("gethostbyname")
+		);
 	}
 
 	int socketDesc = socket(AF_INET, SOCK_STREAM, 0);
 	if (socketDesc < 0) {
+		int e = errno;
 		cerr << "cannot create socket\n";
-		throw ecp_mp::transmitter::transmitter_base::transmitter_error(lib::SYSTEM_ERROR);
+		BOOST_THROW_EXCEPTION(
+				lib::exception::System_error() <<
+				boost::errinfo_errno(e) <<
+				boost::errinfo_api_function("socket")
+		);
 	}
 
 	struct sockaddr_in serverAddress;
@@ -42,9 +59,15 @@ void TRDraughtsAI::AIconnect(const char *host, unsigned short int serverPort)
 	std::memcpy((char *) &serverAddress.sin_addr.s_addr, hostInfo->h_addr_list[0], hostInfo->h_length);
 	serverAddress.sin_port = htons(serverPort);
 
-	if (connect(socketDesc, (struct sockaddr *) &serverAddress, sizeof(serverAddress)) < 0) {
+	if (connect(socketDesc,(struct sockaddr *) &serverAddress,sizeof(serverAddress)) < 0) {
+		int e = errno;
 		cerr << "cannot connect\n";
-		throw ecp_mp::transmitter::transmitter_base::transmitter_error(lib::SYSTEM_ERROR);
+		close(socketDesc);
+		BOOST_THROW_EXCEPTION(
+				lib::exception::System_error() <<
+				boost::errinfo_errno(e) <<
+				boost::errinfo_api_function("connect")
+		);
 	}
 
 	socketDescriptor = socketDesc;
@@ -55,23 +78,31 @@ void TRDraughtsAI::AIdisconnect()
 	close(socketDescriptor);
 }
 
-bool TRDraughtsAI::t_read()
-{
-	if (recv(socketDescriptor, &from_va, sizeof(from_va), 0) < 0) {
+bool TRDraughtsAI::t_read(){
+	if (recv(socketDescriptor, &from_va.draughts_ai, sizeof(from_va.draughts_ai), 0) < 0) {
+		int e = errno;
 		cerr << "didn't get response from server?";
 		close(socketDescriptor);
-		throw ecp_mp::transmitter::transmitter_base::transmitter_error(lib::SYSTEM_ERROR);
+		BOOST_THROW_EXCEPTION(
+				lib::exception::System_error() <<
+				boost::errinfo_errno(e) <<
+				boost::errinfo_api_function("recv")
+		);
 	}
 
 	return true;
 }
 
-bool TRDraughtsAI::t_write()
-{
-	if (send(socketDescriptor, &to_va, sizeof(to_va), 0) < 0) {
+bool TRDraughtsAI::t_write(){
+	if (send(socketDescriptor, &to_va.draughts_ai, sizeof(to_va.draughts_ai), 0) < 0) {
+		int e = errno;
 		cerr << "cannot send data ";
 		close(socketDescriptor);
-		throw ecp_mp::transmitter::transmitter_base::transmitter_error(lib::SYSTEM_ERROR);
+		BOOST_THROW_EXCEPTION(
+				lib::exception::System_error() <<
+				boost::errinfo_errno(e) <<
+				boost::errinfo_api_function("send")
+		);
 	}
 
 	return true;

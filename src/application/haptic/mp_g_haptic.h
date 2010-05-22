@@ -30,13 +30,13 @@ protected:
 
 	// do konfiguracji pracy generatora
 	unsigned short irp6ot_con, irp6p_con;
-	lib::Homog_matrix global_base;
+
+	const lib::Homog_matrix global_base;
 
 	lib::trajectory_description td;
 
 public:
 	int step_no;
-	//     double delta[6];
 
 	// konstruktor
 	haptic(task::task& _mp_task, int step = 0);

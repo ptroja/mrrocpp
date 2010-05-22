@@ -13,6 +13,12 @@
 #include "lib/mrmath/mrmath.h"
 #include "ecp_t_wii_teach.h"
 
+#include "lib/exception.h"
+#include <boost/throw_exception.hpp>
+#include <boost/exception/errinfo_errno.hpp>
+#include <boost/exception/errinfo_api_function.hpp>
+#include <boost/exception/errinfo_file_name.hpp>
+
 #if defined(USE_MESSIP_SRR)
 #include "messip_dataport.h"
 #endif
@@ -22,204 +28,220 @@ namespace ecp {
 namespace irp6ot {
 namespace task {
 
-wii_teach::wii_teach(lib::configurator &_config) : task(_config)
+wii_teach::wii_teach(lib::configurator &_config) :
+	task(_config)
 {
-    ecp_m_robot = new robot (*this);
-    trajectory.count = trajectory.position = 0;
-    trajectory.head = trajectory.tail = trajectory.current = NULL;
+	ecp_m_robot = new robot(*this);
+	trajectory.count = trajectory.position = 0;
+	trajectory.head = trajectory.tail = trajectory.current = NULL;
 
-    //create Wii-mote virtual sensor object
-    sensor_m[ecp_mp::sensor::SENSOR_WIIMOTE] = new ecp_mp::sensor::wiimote(ecp_mp::sensor::SENSOR_WIIMOTE, "[vsp_wiimote]", *this->sr_ecp_msg, this->config);
-    //configure the sensor
-    sensor_m[ecp_mp::sensor::SENSOR_WIIMOTE]->configure_sensor();
+	//create Wii-mote virtual sensor object
+	sensor_m[lib::SENSOR_WIIMOTE]
+			= new ecp_mp::sensor::wiimote(lib::SENSOR_WIIMOTE, "[vsp_wiimote]", *this, sizeof(lib::sensor_image_t::sensor_union_t::wiimote_t));
+	//configure the sensor
+	sensor_m[lib::SENSOR_WIIMOTE]->configure_sensor();
 }
 
-int wii_teach::load_trajectory()
+void wii_teach::load_trajectory()
 {
-    char buffer[200];
-    uint64_t e; // Kod bledu systemowego
+	uint64_t e; // Kod bledu systemowego
 
-    if (chdir(path) != 0)
-    {
-      perror(path);
-      throw common::ecp_robot::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_DIRECTORY);
-    }
+	if (chdir(path) != 0) {
+		BOOST_THROW_EXCEPTION(
+				lib::exception::System_error() <<
+				lib::exception::error_code(NON_EXISTENT_DIRECTORY) <<
+				boost::errinfo_errno(errno) <<
+				boost::errinfo_file_name(path) <<
+				boost::errinfo_api_function("chdir")
+		);
+	}
 
-    std::ifstream from_file(filename); // otworz plik do zapisu
-    e = errno;
-    if (!from_file)
-    {
-      perror(filename);
-      throw common::ecp_robot::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
-    }
+	std::ifstream from_file(filename); // otworz plik do zapisu
+	e = errno;
+	if (!from_file) {
+		BOOST_THROW_EXCEPTION(
+				lib::exception::System_error() <<
+				lib::exception::error_code(NON_EXISTENT_FILE) <<
+				boost::errinfo_errno(errno) <<
+				boost::errinfo_file_name(filename)
+		);
+	}
 
-    if (chdir(gripper_path) != 0)
-    {
-      perror(gripper_path);
-      throw common::ecp_robot::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_DIRECTORY);
-    }
+	if (chdir(gripper_path) != 0) {
+		BOOST_THROW_EXCEPTION(
+				lib::exception::System_error() <<
+				lib::exception::error_code(NON_EXISTENT_DIRECTORY) <<
+				boost::errinfo_errno(errno) <<
+				boost::errinfo_file_name(gripper_path) <<
+				boost::errinfo_api_function("chdir")
+		);
+	}
 
-    std::ifstream from_file_gripper(gripper_filename); // otworz plik do zapisu
-    e = errno;
-    if (!from_file_gripper)
-    {
-      perror(gripper_filename);
-      throw common::ecp_robot::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
-    }
+	std::ifstream from_file_gripper(gripper_filename); // otworz plik do zapisu
+	e = errno;
+	if (!from_file_gripper) {
+		BOOST_THROW_EXCEPTION(
+				lib::exception::System_error() <<
+				lib::exception::error_code(NON_EXISTENT_FILE) <<
+				boost::errinfo_errno(errno) <<
+				boost::errinfo_file_name(gripper_filename)
+		);
+	}
 
-    node* current = NULL;
-    trajectory.position = 0;
-    trajectory.count = 0;
-    std::string type;
-    int count;
+	node* current = NULL;
+	trajectory.position = 0;
+	trajectory.count = 0;
+	std::string type;
+	int count;
 
-    from_file >> type;
-    from_file >> count;
-    from_file_gripper >> type;
-    from_file_gripper >> count;
-    while(!from_file.eof() && !from_file_gripper.eof())
-    {
-        if(current)
-        {
-            current->next = new node();
-            current->next->prev = current;
-        }
-        else
-        {
-            current = new node();
-        }
+	from_file >> type;
+	from_file >> count;
+	from_file_gripper >> type;
+	from_file_gripper >> count;
+	while (!from_file.eof() && !from_file_gripper.eof()) {
+		if (current) {
+			current->next = new node();
+			current->next->prev = current;
+		} else {
+			current = new node();
+		}
 
-        if(!trajectory.head)
-        {
-            trajectory.head = current;
-        }
-        trajectory.tail = current;
+		if (!trajectory.head) {
+			trajectory.head = current;
+		}
+		trajectory.tail = current;
 
-        from_file >> current->position[0];
-        from_file >> current->position[1];
-        from_file >> current->position[2];
-        from_file >> current->position[3];
-        from_file >> current->position[4];
-        from_file >> current->position[5];
+		from_file >> current->position[0];
+		from_file >> current->position[1];
+		from_file >> current->position[2];
+		from_file >> current->position[3];
+		from_file >> current->position[4];
+		from_file >> current->position[5];
 
-        from_file_gripper >> current->gripper;
+		from_file_gripper >> current->gripper;
 
-        trajectory.position = 1;
-        ++trajectory.count;
+		trajectory.position = 1;
+		++trajectory.count;
 
-        sprintf(buffer,"Loaded %d: %.4f %.4f %.4f %.4f %.4f %.4f %.4f",trajectory.count,current->position[0],current->position[1],current->position[2],current->position[3],current->position[4],current->position[5],current->gripper);
-        sr_ecp_msg->message(buffer);
-    }
+		char buffer[200];
+		sprintf(buffer, "Loaded %d: %.4f %.4f %.4f %.4f %.4f %.4f %.4f", trajectory.count, current->position[0], current->position[1], current->position[2], current->position[3], current->position[4], current->position[5], current->gripper);
+		sr_ecp_msg->message(buffer);
+	}
 
-    trajectory.current = trajectory.head;
-
-    return 0;
+	trajectory.current = trajectory.head;
 }
 
 bool wii_teach::get_filenames(void)
 {
-    lib::ECP_message ecp_to_ui_msg; // Przesylka z ECP do UI
-    lib::UI_reply ui_to_ecp_rep; // Odpowiedz UI do ECP
-    uint64_t e; // Kod bledu systemowego
+	lib::ECP_message ecp_to_ui_msg; // Przesylka z ECP do UI
+	lib::UI_reply ui_to_ecp_rep; // Odpowiedz UI do ECP
+	uint64_t e; // Kod bledu systemowego
 
-    ecp_to_ui_msg.ecp_message = lib::SAVE_FILE; // Polecenie wprowadzenia nazwy pliku
-    strcpy(ecp_to_ui_msg.string, "*.trj"); // Wzorzec nazwy pliku
-    // if ( Send (UI_pid, &ecp_to_ui_msg, &ui_to_ecp_rep, sizeof(lib::ECP_message), sizeof(lib::UI_reply)) == -1) {
+	ecp_to_ui_msg.ecp_message = lib::SAVE_FILE; // Polecenie wprowadzenia nazwy pliku
+	strcpy(ecp_to_ui_msg.string, "*.trj"); // Wzorzec nazwy pliku
+	// if ( Send (UI_pid, &ecp_to_ui_msg, &ui_to_ecp_rep, sizeof(lib::ECP_message), sizeof(lib::UI_reply)) == -1) {
 #if !defined(USE_MESSIP_SRR)
-    ecp_to_ui_msg.hdr.type=0;
-    if (MsgSend(this->UI_fd, &ecp_to_ui_msg, sizeof(lib::ECP_message), &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0)
+	ecp_to_ui_msg.hdr.type = 0;
+	if (MsgSend(this->UI_fd, &ecp_to_ui_msg, sizeof(lib::ECP_message), &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0)
 #else
-    if(messip::port_send(this->UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0)
+	if(messip::port_send(this->UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0)
 #endif
-    {// by Y&W
-        e = errno;
-        perror("ECP: Send() to UI failed");
-        sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ECP: Send() to UI failed");
-        throw common::ecp_robot::ECP_error(lib::SYSTEM_ERROR, 0);
-    }
+	{
+		BOOST_THROW_EXCEPTION(
+				lib::exception::System_error() <<
+				boost::errinfo_errno(errno)
+		);
+	}
 
-    if (ui_to_ecp_rep.reply == lib::QUIT)
-    { // Nie wybrano nazwy pliku lub zrezygnowano z zapisu
-        return false;
-    }
+	if (ui_to_ecp_rep.reply == lib::QUIT) { // Nie wybrano nazwy pliku lub zrezygnowano z zapisu
+		return false;
+	}
 
-    strncpy(path,ui_to_ecp_rep.path,79);
-    strncpy(filename,ui_to_ecp_rep.filename,19);
+	strncpy(path, ui_to_ecp_rep.path, 79);
+	strncpy(filename, ui_to_ecp_rep.filename, 19);
 
-    ecp_to_ui_msg.ecp_message = lib::SAVE_FILE; // Polecenie wprowadzenia nazwy pliku
-    strcpy(ecp_to_ui_msg.string, "*.trj"); // Wzorzec nazwy pliku
-    // if ( Send (UI_pid, &ecp_to_ui_msg, &ui_to_ecp_rep, sizeof(lib::ECP_message), sizeof(lib::UI_reply)) == -1) {
+	ecp_to_ui_msg.ecp_message = lib::SAVE_FILE; // Polecenie wprowadzenia nazwy pliku
+	strcpy(ecp_to_ui_msg.string, "*.trj"); // Wzorzec nazwy pliku
+	// if ( Send (UI_pid, &ecp_to_ui_msg, &ui_to_ecp_rep, sizeof(lib::ECP_message), sizeof(lib::UI_reply)) == -1) {
 #if !defined(USE_MESSIP_SRR)
-    ecp_to_ui_msg.hdr.type=0;
-    if (MsgSend(this->UI_fd, &ecp_to_ui_msg, sizeof(lib::ECP_message), &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0)
+	ecp_to_ui_msg.hdr.type = 0;
+	if (MsgSend(this->UI_fd, &ecp_to_ui_msg, sizeof(lib::ECP_message), &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0)
 #else
-    if(messip::port_send(this->UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0)
+	if(messip::port_send(this->UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0)
 #endif
-    {// by Y&W
-        e = errno;
-        perror("ECP: Send() to UI failed");
-        sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ECP: Send() to UI failed");
-        throw common::ecp_robot::ECP_error(lib::SYSTEM_ERROR, 0);
-    }
+	{
+		BOOST_THROW_EXCEPTION(
+				lib::exception::System_error() <<
+				boost::errinfo_errno(errno)
+		);
+	}
 
-    if (ui_to_ecp_rep.reply == lib::QUIT)
-    { // Nie wybrano nazwy pliku lub zrezygnowano z zapisu
-        return false;
-    }
+	if (ui_to_ecp_rep.reply == lib::QUIT) { // Nie wybrano nazwy pliku lub zrezygnowano z zapisu
+		return false;
+	}
 
-    strncpy(gripper_path,ui_to_ecp_rep.path,79);
-    strncpy(gripper_filename,ui_to_ecp_rep.filename,19);
-    return true;
+	strncpy(gripper_path, ui_to_ecp_rep.path, 79);
+	strncpy(gripper_filename, ui_to_ecp_rep.filename, 19);
+	return true;
 }
 
 void wii_teach::save_trajectory(void)
 {
-      char buffer[200];
-      uint64_t e; // Kod bledu systemowego
+	char buffer[200];
+	uint64_t e; // Kod bledu systemowego
 
-      if (chdir(path) != 0)
-      {
-        perror(path);
-        throw common::ecp_robot::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_DIRECTORY);
-      }
+	if (chdir(path) != 0) {
+		BOOST_THROW_EXCEPTION(
+			lib::exception::System_error() <<
+			lib::exception::error_code(NON_EXISTENT_DIRECTORY) <<
+			boost::errinfo_errno(errno) <<
+			boost::errinfo_file_name(path) <<
+			boost::errinfo_api_function("chdir")
+		);
+	}
 
-      std::ofstream to_file(filename); // otworz plik do zapisu
-      e = errno;
-      if (!to_file)
-      {
-        perror(filename);
-        throw common::ecp_robot::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
-      }
-      std::ofstream to_file_gripper(gripper_filename); // otworz plik do zapisu
-      e = errno;
-      if (!to_file_gripper)
-      {
-        perror(gripper_filename);
-        throw common::ecp_robot::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
-      }
+	std::ofstream to_file(filename); // otworz plik do zapisu
+	e = errno;
+	if (!to_file) {
+		BOOST_THROW_EXCEPTION(
+			lib::exception::System_error() <<
+			lib::exception::error_code(NON_EXISTENT_FILE) <<
+			boost::errinfo_errno(errno) <<
+			boost::errinfo_file_name(filename)
+		);
+	}
+	std::ofstream to_file_gripper(gripper_filename); // otworz plik do zapisu
+	e = errno;
+	if (!to_file_gripper) {
+		BOOST_THROW_EXCEPTION(
+			lib::exception::System_error() <<
+			lib::exception::error_code(NON_EXISTENT_FILE) <<
+			boost::errinfo_errno(errno) <<
+			boost::errinfo_file_name(gripper_filename)
+		);
+	}
 
-      node* current = trajectory.head;
-      to_file << "XYZ_ANGLE_AXIS" << '\n';
-      to_file << trajectory.count << '\n';
+	node* current = trajectory.head;
+	to_file << "XYZ_ANGLE_AXIS" << '\n';
+	to_file << trajectory.count << '\n';
 
-      while(current)
-      {
-          to_file << current->position[0] << ' ';
-          to_file << current->position[1] << ' ';
-          to_file << current->position[2] << ' ';
-          to_file << current->position[3] << ' ';
-          to_file << current->position[4] << ' ';
-          to_file << current->position[5] << ' ';
-          to_file_gripper << current->gripper;
+	while (current) {
+		to_file << current->position[0] << ' ';
+		to_file << current->position[1] << ' ';
+		to_file << current->position[2] << ' ';
+		to_file << current->position[3] << ' ';
+		to_file << current->position[4] << ' ';
+		to_file << current->position[5] << ' ';
+		to_file_gripper << current->gripper;
 
-          to_file << '\n';
-          to_file_gripper << '\n';
+		to_file << '\n';
+		to_file_gripper << '\n';
 
-          current = current->next;
-      }
+		current = current->next;
+	}
 
-      sprintf(buffer,"Trajectory saved to %s/%s",path,filename);
-      sr_ecp_msg->message(buffer);
+	sprintf(buffer, "Trajectory saved to %s/%s", path, filename);
+	sr_ecp_msg->message(buffer);
 }
 
 void wii_teach::updateButtonsPressed(void)
@@ -241,32 +263,29 @@ void wii_teach::updateButtonsPressed(void)
 
 void wii_teach::print_trajectory(void)
 {
-    char buffer[200];
-    node* current = trajectory.head;
-    int i = 0;
+	char buffer[200];
+	node* current = trajectory.head;
+	int i = 0;
 
-    sr_ecp_msg->message("=== Trajektoria ===");
-    while(current)
-    {
-        sprintf(buffer,"Pozycja %d: %.4f %.4f %.4f %.4f %.4f %.4f %.4f",++i,current->position[0],current->position[1],current->position[2],current->position[3],current->position[4],current->position[5],current->gripper);
-        sr_ecp_msg->message(buffer);
-        current = current->next;
-    }
-    sr_ecp_msg->message("=== Trajektoria - koniec ===");
+	sr_ecp_msg->message("=== Trajektoria ===");
+	while (current) {
+		sprintf(buffer, "Pozycja %d: %.4f %.4f %.4f %.4f %.4f %.4f %.4f", ++i, current->position[0], current->position[1], current->position[2], current->position[3], current->position[4], current->position[5], current->gripper);
+		sr_ecp_msg->message(buffer);
+		current = current->next;
+	}
+	sr_ecp_msg->message("=== Trajektoria - koniec ===");
 }
 
 void wii_teach::move_to_current(void)
 {
-
-    char buffer[200];
-    if(trajectory.current)
-    {
-        sprintf(buffer,"Move to %d: %.4f %.4f %.4f %.4f %.4f %.4f %.4f",trajectory.current->id,trajectory.current->position[0],trajectory.current->position[1],trajectory.current->position[2],trajectory.current->position[3],trajectory.current->position[4],trajectory.current->position[5],trajectory.current->gripper);
-        sr_ecp_msg->message(buffer);
-        sg->set_absolute();
-        sg->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS,trajectory.current->position[0],trajectory.current->position[1],trajectory.current->position[2],trajectory.current->position[3],trajectory.current->position[4],trajectory.current->position[5],trajectory.current->gripper,0,true);
-        sg->Move();
-    }
+	char buffer[200];
+	if (trajectory.current) {
+		sprintf(buffer, "Move to %d: %.4f %.4f %.4f %.4f %.4f %.4f %.4f", trajectory.current->id, trajectory.current->position[0], trajectory.current->position[1], trajectory.current->position[2], trajectory.current->position[3], trajectory.current->position[4], trajectory.current->position[5], trajectory.current->gripper);
+		sr_ecp_msg->message(buffer);
+		sg->set_absolute();
+		sg->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, trajectory.current->position[0], trajectory.current->position[1], trajectory.current->position[2], trajectory.current->position[3], trajectory.current->position[4], trajectory.current->position[5], trajectory.current->gripper, 0, true);
+		sg->Move();
+	}
 
 }
 
@@ -531,7 +550,7 @@ void wii_teach::main_task_algorithm(void)
 namespace common {
 namespace task {
 
-task* return_created_ecp_task (lib::configurator &_config)
+task* return_created_ecp_task(lib::configurator &_config)
 {
 	return new irp6ot::task::wii_teach(_config);
 }

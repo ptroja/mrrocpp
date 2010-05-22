@@ -117,8 +117,12 @@ void ATI3084_force::wait_for_event()
 /*************************** inicjacja odczytu ******************************/
 void ATI3084_force::initiate_reading(void)
 {
-	if (!is_sensor_configured)
-		throw lib::sensor::sensor_error(lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
+	if (!is_sensor_configured) {
+		BOOST_THROW_EXCEPTION(
+				lib::exception::Fatal_error() <<
+				lib::exception::error_code(SENSOR_NOT_CONFIGURED)
+		);
+	}
 }
 
 /***************************** odczyt z czujnika *****************************/

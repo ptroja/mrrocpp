@@ -12,18 +12,21 @@
 #include <errno.h>
 #include <time.h>
 
+#include <boost/throw_exception.hpp>
+#include <boost/exception/info.hpp>
+#include <boost/exception/errinfo_errno.hpp>
+#include <boost/exception/errinfo_api_function.hpp>
+
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 #include "lib/mis_fun.h"
+#include "lib/exception.h"
 #include "edp/common/edp.h"
 #include "edp/common/reader.h"
 #include "edp/common/hi_rydz.h"
 #include "edp/common/servo_gr.h"
 #include "edp/common/regulator.h"
-
-#include "lib/exception.h"
-using namespace mrrocpp::lib::exception;
 
 namespace mrrocpp {
 namespace edp {
@@ -112,7 +115,11 @@ void servo_buffer::send_to_SERVO_GROUP()
 		uint64_t e = errno;
 		perror("Send() from EDP to SERVO error");
 		master.msg->message(lib::SYSTEM_ERROR, e, "Send() from EDP to SERVO error");
-		throw System_error();
+		BOOST_THROW_EXCEPTION(
+				System_error() <<
+				boost::errinfo_errno(e) <<
+				boost::errinfo_api_function("MsgSend")
+		);
 	}
 #else
 	{
@@ -133,7 +140,11 @@ void servo_buffer::send_to_SERVO_GROUP()
 
 	if ((sg_reply.error.error0 != OK) || (sg_reply.error.error1 != OK)) {
 		printf("a: %llx, :%llx\n", sg_reply.error.error0, sg_reply.error.error1);
-		throw Fatal_error(sg_reply.error.error0, sg_reply.error.error1);
+		BOOST_THROW_EXCEPTION(
+				lib::exception::Fatal_error() <<
+				lib::exception::err0(sg_reply.error.error0) <<
+				lib::exception::err1(sg_reply.error.error1)
+		);
 	} // end: if((sg_reply.error.error0 != OK) || (sg_reply.error.error1 != OK))
 
 	// skopiowanie odczytow do transformera
@@ -231,7 +242,6 @@ void servo_buffer::get_all_positions(void)
 {
 	// Przepisanie aktualnych polozen servo do pakietu wysylkowego
 	for (int i = 0; i < master.number_of_servos; i++) {
-
 		servo_data.abs_position[i] = hi->get_position(i) * (2*M_PI) / axe_inc_per_revolution[i];
 
 		// przyrost polozenia w impulsach
@@ -241,7 +251,6 @@ void servo_buffer::get_all_positions(void)
 		servo_data.algorithm_no[i] = regulator_ptr[i]->get_algorithm_no();
 		servo_data.algorithm_parameters_no[i] = regulator_ptr[i]->get_algorithm_parameters_no();
 	}
-
 }
 /*-----------------------------------------------------------------------*/
 
@@ -273,10 +282,18 @@ servo_buffer::servo_buffer(motor_driven_effector &_master) :
 {
 #ifdef __QNXNTO__
 	if ((servo_to_tt_chid = ChannelCreate(_NTO_CHF_UNBLOCK)) == -1) {
-		perror("ChannelCreate()");
+		BOOST_THROW_EXCEPTION(
+				System_error() <<
+				boost::errinfo_errno(errno) <<
+				boost::errinfo_api_function("ChannelCreate")
+		);
 	}
 	if ((servo_fd = ConnectAttach(0, 0, servo_to_tt_chid, 0, _NTO_COF_CLOEXEC)) == -1) {
-		perror("ConnectAttach()");
+		BOOST_THROW_EXCEPTION(
+				System_error() <<
+				boost::errinfo_errno(errno) <<
+				boost::errinfo_api_function("ConnectAttach")
+		);
 	}
 	ThreadCtl(_NTO_TCTL_IO, NULL);
 #endif
@@ -291,7 +308,11 @@ bool servo_buffer::get_command(void)
 #ifdef __QNXNTO__
 	// by Y zamiast creceive
 	if(TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_RECEIVE, NULL, NULL, NULL) == -1) {
-		perror("servo_buffer: TimerTimeout()");
+		BOOST_THROW_EXCEPTION(
+				System_error() <<
+				boost::errinfo_errno(errno) <<
+				boost::errinfo_api_function("TimerTimeout")
+		);
 	}
 	if ((edp_caller = MsgReceive_r(servo_to_tt_chid, &command, sizeof(command), NULL)) >= 0)
 		new_command_available = true;
@@ -371,7 +392,11 @@ uint8_t servo_buffer::Move_1_step(void)
 		struct timespec step_time;
 
 		if (clock_gettime(CLOCK_REALTIME, &step_time) == -1) {
-			perror("clock_gettime()");
+			BOOST_THROW_EXCEPTION(
+					System_error() <<
+					boost::errinfo_errno(errno) <<
+					boost::errinfo_api_function("clock_gettime")
+			);
 		}
 
 		master.rb_obj->step_data.step = master.step_counter;
@@ -528,8 +553,13 @@ void servo_buffer::reply_to_EDP_MASTER(void)
 
 	// Wyslac informacje do EDP_MASTER
 #ifdef __QNXNTO__
-	if (MsgReply(edp_caller, EOK, &servo_data, sizeof(lib::servo_group_reply)) < 0)
-		perror(" Reply to EDP_MASTER error");
+	if (MsgReply(edp_caller, EOK, &servo_data, sizeof(lib::servo_group_reply)) < 0) {
+		BOOST_THROW_EXCEPTION(
+				System_error() <<
+				boost::errinfo_errno(errno) <<
+				boost::errinfo_api_function("MsgReply")
+		);
+	}
 #else
 	{
 		boost::lock_guard<boost::mutex> lock(sg_reply_mtx);
@@ -625,7 +655,6 @@ uint64_t servo_buffer::compute_all_set_values(void)
 
 void servo_buffer::synchronise(void)
 {
-
 	const int NS = 10; // liczba krokow rozpedzania/hamowania
 	common::regulator* crp = NULL; // wskaznik aktualnie synchronizowanego napedu
 
@@ -642,8 +671,7 @@ void servo_buffer::synchronise(void)
 	for (int j = 0; j < (master.number_of_servos); j++) {
 
 		command.parameters.move.abs_position[j] = 0.0;
-	}; // end: for
-
+	}
 
 	// szeregowa synchronizacja serwomechanizmow
 	for (int k = 0; k < (master.number_of_servos); k++) {
@@ -662,7 +690,7 @@ void servo_buffer::synchronise(void)
 			} else {
 				regulator_ptr[i]->insert_new_step(0.0);
 			}
-		}; // end: for
+		}
 
 		clear_reply_status();
 		clear_reply_status_tmp();
@@ -704,9 +732,9 @@ void servo_buffer::synchronise(void)
 					clear_reply_status_tmp();
 					reply_to_EDP_MASTER();
 					return;
-			}; // end: switch
+			}
 			break;
-		}; // end: for (;;)
+		}
 
 		//	printf("przed clear_reply_status \n");
 
@@ -734,8 +762,8 @@ void servo_buffer::synchronise(void)
 					clear_reply_status_tmp();
 					reply_to_EDP_MASTER();
 					return;
-			}; // end: switch
-		}; // end: for (i...)
+			}
+		}
 		// cprintf("C=%lx\n", reply_status_tmp.error0);
 
 		clear_reply_status();
@@ -774,9 +802,9 @@ void servo_buffer::synchronise(void)
 				default:
 					//   	printf("baabb: default\n");
 					break;
-			}; // end: switch
+			}
 			break;
-		}; // end: while
+		}
 		//	 printf("D\n ");
 
 		// analiza powstalej sytuacji (czy zjechano z wylacznika synchronizacji)
@@ -808,7 +836,6 @@ void servo_buffer::synchronise(void)
 						break;
 					}
 				}
-				; // end: for (;;)
 				//     if ( ((reply_status_tmp.error0 >> (5*j)) & 0x000000000000001FULL) != lib::SYNCHRO_ZERO) {
 				// by Y - wyciecie SYNCHRO_SWITCH_ON
 				if (((reply_status_tmp.error0 >> (5* j )) & 0x000000000000001DULL) != lib::SYNCHRO_ZERO) {
@@ -838,9 +865,9 @@ void servo_buffer::synchronise(void)
 				// Wypelnic servo_data
 				reply_to_EDP_MASTER();
 				return;
-		}; // end: switch
+		}
 		// zakonczenie synchronizacji danej osi i przejscie do trybu normalnego
-	}; // end: for (int j = 0; j < IRP6_POSTUMENT_NUM_OF_SERVOS)
+	}
 
 	// zatrzymanie na chwile robota
 	for (int k = 0; k < (master.number_of_servos); k++) {
@@ -848,7 +875,7 @@ void servo_buffer::synchronise(void)
 		synchro_step = 0.0;
 		crp = regulator_ptr[j];
 		crp->insert_new_step(synchro_step);
-	};
+	}
 	for (int i = 0; i < 25; i++)
 		Move_1_step();
 
@@ -857,7 +884,6 @@ void servo_buffer::synchronise(void)
 	// printf("koniec synchro\n");
 	reply_to_EDP_MASTER();
 	return;
-
 }
 
 /*-----------------------------------------------------------------------*/

@@ -4,12 +4,16 @@
 #include "application/wii_teach/generator/ecp_g_wii.h"
 #include "ecp_g_wii.h"
 
+#include "lib/exception.h"
+#include <boost/throw_exception.hpp>
+
 namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
 namespace generator {
 
-wii::wii (common::task::task& _ecp_task,ecp_mp::sensor::wiimote* _wiimote) : generator(_ecp_task), _wiimote(_wiimote)
+wii::wii(common::task::task& _ecp_task, ecp_mp::sensor::wiimote* _wiimote) :
+	generator(_ecp_task), _wiimote(_wiimote)
 {
     for(int i  = 0;i < MAX_NO_OF_DEGREES;++i)
     {
@@ -145,61 +149,63 @@ bool wii::next_step()
 
 void wii::execute_motion(void)
 {
-    // komunikacja wlasciwa
-    the_robot->send();
-    if (the_robot->reply_package.reply_type == lib::ERROR)
-    {
+	// komunikacja wlasciwa
+	the_robot->send();
+	if (the_robot->reply_package.reply_type == lib::ERROR) {
+		the_robot->query();
+		BOOST_THROW_EXCEPTION(
+				lib::exception::NonFatal_error() <<
+				lib::exception::error_code(EDP_ERROR)
+		);
+	}
 	the_robot->query();
-    	throw common::ecp_robot::ECP_error (lib::NON_FATAL_ERROR, EDP_ERROR);
-    }
-    the_robot->query();
 
-    if (the_robot->reply_package.reply_type == lib::ERROR)
-    {
-	switch ( the_robot->reply_package.error_no.error0 )
-        {
-            case BEYOND_UPPER_D0_LIMIT:
-            case BEYOND_UPPER_THETA1_LIMIT:
-            case BEYOND_UPPER_THETA2_LIMIT:
-            case BEYOND_UPPER_THETA3_LIMIT:
-            case BEYOND_UPPER_THETA4_LIMIT:
-            case BEYOND_UPPER_THETA5_LIMIT:
-            case BEYOND_UPPER_THETA6_LIMIT:
-            case BEYOND_UPPER_THETA7_LIMIT:
-            case BEYOND_UPPER_LIMIT_AXIS_1:
-            case BEYOND_UPPER_LIMIT_AXIS_2:
-            case BEYOND_UPPER_LIMIT_AXIS_3:
-            case BEYOND_UPPER_LIMIT_AXIS_4:
-            case BEYOND_UPPER_LIMIT_AXIS_5:
-            case BEYOND_UPPER_LIMIT_AXIS_6:
-            case BEYOND_UPPER_LIMIT_AXIS_7:
-            case BEYOND_LOWER_D0_LIMIT:
-            case BEYOND_LOWER_THETA1_LIMIT:
-            case BEYOND_LOWER_THETA2_LIMIT:
-            case BEYOND_LOWER_THETA3_LIMIT:
-            case BEYOND_LOWER_THETA4_LIMIT:
-            case BEYOND_LOWER_THETA5_LIMIT:
-            case BEYOND_LOWER_THETA6_LIMIT:
-            case BEYOND_LOWER_THETA7_LIMIT:
-            case BEYOND_LOWER_LIMIT_AXIS_1:
-            case BEYOND_LOWER_LIMIT_AXIS_2:
-            case BEYOND_LOWER_LIMIT_AXIS_3:
-            case BEYOND_LOWER_LIMIT_AXIS_4:
-            case BEYOND_LOWER_LIMIT_AXIS_5:
-            case BEYOND_LOWER_LIMIT_AXIS_6:
-            case BEYOND_LOWER_LIMIT_AXIS_7:
-                rumble = true;
-                break;
-            default:
-		throw common::ecp_robot::ECP_error (lib::NON_FATAL_ERROR, EDP_ERROR);
-		break;
+	if (the_robot->reply_package.reply_type == lib::ERROR) {
+		switch (the_robot->reply_package.error_no.error0)
+		{
+			case BEYOND_UPPER_D0_LIMIT:
+			case BEYOND_UPPER_THETA1_LIMIT:
+			case BEYOND_UPPER_THETA2_LIMIT:
+			case BEYOND_UPPER_THETA3_LIMIT:
+			case BEYOND_UPPER_THETA4_LIMIT:
+			case BEYOND_UPPER_THETA5_LIMIT:
+			case BEYOND_UPPER_THETA6_LIMIT:
+			case BEYOND_UPPER_THETA7_LIMIT:
+			case BEYOND_UPPER_LIMIT_AXIS_1:
+			case BEYOND_UPPER_LIMIT_AXIS_2:
+			case BEYOND_UPPER_LIMIT_AXIS_3:
+			case BEYOND_UPPER_LIMIT_AXIS_4:
+			case BEYOND_UPPER_LIMIT_AXIS_5:
+			case BEYOND_UPPER_LIMIT_AXIS_6:
+			case BEYOND_UPPER_LIMIT_AXIS_7:
+			case BEYOND_LOWER_D0_LIMIT:
+			case BEYOND_LOWER_THETA1_LIMIT:
+			case BEYOND_LOWER_THETA2_LIMIT:
+			case BEYOND_LOWER_THETA3_LIMIT:
+			case BEYOND_LOWER_THETA4_LIMIT:
+			case BEYOND_LOWER_THETA5_LIMIT:
+			case BEYOND_LOWER_THETA6_LIMIT:
+			case BEYOND_LOWER_THETA7_LIMIT:
+			case BEYOND_LOWER_LIMIT_AXIS_1:
+			case BEYOND_LOWER_LIMIT_AXIS_2:
+			case BEYOND_LOWER_LIMIT_AXIS_3:
+			case BEYOND_LOWER_LIMIT_AXIS_4:
+			case BEYOND_LOWER_LIMIT_AXIS_5:
+			case BEYOND_LOWER_LIMIT_AXIS_6:
+			case BEYOND_LOWER_LIMIT_AXIS_7:
+				rumble = true;
+				break;
+			default:
+				BOOST_THROW_EXCEPTION(
+						lib::exception::NonFatal_error() <<
+						lib::exception::error_code(EDP_ERROR)
+				);
+				break;
 
-	} /* end: switch */
-    }
-    else
-    {
-        rumble = false;
-    }
+		} /* end: switch */
+	} else {
+		rumble = false;
+	}
 }
 
 }

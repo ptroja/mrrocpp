@@ -12,6 +12,9 @@
 
 #include "ecp/shead/ecp_r_shead.h"
 
+#include "lib/exception.h"
+#include <boost/throw_exception.hpp>
+
 namespace mrrocpp {
 namespace ecp {
 namespace shead {
@@ -84,7 +87,10 @@ void robot::create_command() {
 		is_new_data = true;
 	} else if (new_data_counter > 1) {
 		is_new_data = false;
-		throw ecp_robot::ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
+		BOOST_THROW_EXCEPTION(
+				lib::exception::NonFatal_error() <<
+				lib::exception::error_code(INVALID_COMMAND_TO_EDP)
+		);
 	}
 
 	is_new_request = shead_reply_data_request_port.is_new_request();

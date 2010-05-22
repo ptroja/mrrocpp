@@ -128,7 +128,7 @@ int main(int argc, char *argv[]) {
 		 //   printf("\a"); // Sygnal dzwiekowy
 		 }
 		 */
-	} // end: catch(System_error fe)
+	}
 
 	catch (...) { // Dla zewnetrznej petli try
 		perror("Unidentified error in EDP");

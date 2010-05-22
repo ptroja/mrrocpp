@@ -22,23 +22,7 @@ void force::operator()(void)
 	try {
 		configure_sensor();
 	}
-
-	catch (lib::sensor::sensor_error & e) {
-		std::cerr << "sensor_error w force thread EDP" << std::endl;
-
-		switch (e.error_no)
-		{
-			case SENSOR_NOT_CONFIGURED:
-				from_vsp.vsp_report = lib::VSP_SENSOR_NOT_CONFIGURED;
-				break;
-			case READING_NOT_READY:
-				from_vsp.vsp_report = lib::VSP_READING_NOT_READY;
-				break;
-		}
-		sr_msg->message(lib::FATAL_ERROR, e.error_no);
-
-	} //!< end CATCH
-
+	// TODO: transport exception to main thread
 	catch (...) {
 		std::cerr << "unidentified error force thread w EDP" << std::endl;
 	}
@@ -93,22 +77,7 @@ void force::operator()(void)
 			edp_vsp_synchroniser.command();
 
 		} //!< koniec TRY
-
-		catch (lib::sensor::sensor_error & e) {
-			std::cerr << "sensor_error in EDP force thread" << std::endl;
-
-			switch (e.error_no)
-			{
-				case SENSOR_NOT_CONFIGURED:
-					from_vsp.vsp_report = lib::VSP_SENSOR_NOT_CONFIGURED;
-					break;
-				case READING_NOT_READY:
-					from_vsp.vsp_report = lib::VSP_READING_NOT_READY;
-					break;
-			}
-			sr_msg->message(lib::FATAL_ERROR, e.error_no);
-		} //!< end CATCH
-
+		// TODO: transport exception to main thread
 		catch (...) {
 			std::cerr << "unidentified error in EDP force thread" << std::endl;
 		}
@@ -124,7 +93,7 @@ force::force(common::manip_effector &_master) :
 	is_reading_ready(false), //!< nie ma zadnego gotowego odczytu
 	TERMINATE(false)
 {
-	/*!Lokalizacja procesu wywietlania komunikatow SR */
+	//! Lokalizacja procesu wywietlania komunikatow SR
 	sr_msg = new lib::sr_vsp(lib::EDP,
 					master.config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "edp_vsp_attach_point"),
 					master.config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point",
