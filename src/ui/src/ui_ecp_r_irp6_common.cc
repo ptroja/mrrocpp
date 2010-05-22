@@ -6,32 +6,32 @@
 // -------------------------------------------------------------------------
 
 /* Standard headers */
+#include <cfloat>
+#include <iostream>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
 #include <assert.h>
-#include <cfloat>
-
+#include <math.h>
 #include <fcntl.h>
 #include <errno.h>
-#include <string.h>
-#include <iostream>
 
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 
 #include "lib/srlib.h"
+
+#include "ui/ui_ecp_r_irp6_common.h"
+
 #include "ecp/irp6_on_track/ecp_r_irp6ot.h"
 #include "ecp/irp6_postument/ecp_r_irp6p.h"
 #include "ecp/irp6_mechatronika/ecp_r_irp6m.h"
 #include "ecp/polycrank/ecp_r_polycrank.h"
 #include "ecp/smb/ecp_r_smb.h"
 #include "ecp/spkm/ecp_r_spkm.h"
-#include "ui/ui_ecp_r_irp6_common.h"
-
-#include <math.h>
 
 // ---------------------------------------------------------------
 ui_irp6_common_robot::ui_irp6_common_robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg, lib::robot_name_t _robot_name) :

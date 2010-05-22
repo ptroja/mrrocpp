@@ -8,15 +8,14 @@
 #ifndef __UI_H
 #define __UI_H
 
-#include <pthread.h>
-#include <list>
-
+#include <boost/function.hpp>
 #include <boost/thread/condition_variable.hpp>
 #include <boost/thread/mutex.hpp>
 #include <boost/circular_buffer.hpp>
-#include <boost/function.hpp>
 #include <stdexcept>
 #include <iostream>
+#include <string>
+#include <list>
 
 #include "lib/com_buf.h"
 #include "lib/srlib.h"
@@ -38,10 +37,8 @@ catch (ecp::common::ecp_robot::ECP_error & er) { \
 	} else { \
 	switch ( er.error_no ) { \
 		case INVALID_POSE_SPECIFICATION: \
-		case INVALID_ECP_COMMAND: \
 		case INVALID_COMMAND_TO_EDP: \
 		case EDP_ERROR: \
-		case INVALID_EDP_REPLY: \
 		case INVALID_ROBOT_MODEL_TYPE: \
 			/* Komunikat o bledzie wysylamy do SR */ \
 			ui_msg.all_ecp->message (lib::NON_FATAL_ERROR, er.error_no); \

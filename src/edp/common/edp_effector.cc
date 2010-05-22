@@ -37,7 +37,6 @@ namespace common {
 effector::effector(lib::configurator &_config, lib::robot_name_t l_robot_name) :
 	robot_name(l_robot_name), config(_config)
 {
-
 	/* Lokalizacja procesu wywietlania komunikatow SR */
 	msg = new lib::sr_edp(lib::EDP, config.value<std::string> (
 			"resourceman_attach_point").c_str(),
@@ -63,15 +62,15 @@ effector::~effector() {
 
 /*--------------------------------------------------------------------------*/
 bool effector::initialize_communication() {
-	std::string server_attach_point(config.return_attach_point_name(
+	const std::string server_attach_point(config.return_attach_point_name(
 			lib::configurator::CONFIG_SERVER, "resourceman_attach_point"));
 
 #if !defined(USE_MESSIP_SRR)
 	// obsluga mechanizmu sygnalizacji zajetosci sprzetu
 	if (!(test_mode)) {
 
-		std::string hardware_busy_attach_point = config.value<std::string> (
-				"hardware_busy_attach_point");
+		const std::string hardware_busy_attach_point =
+				config.value<std::string> ("hardware_busy_attach_point");
 
 		std::string
 				full_path_to_hardware_busy_attach_point("/dev/name/global/");

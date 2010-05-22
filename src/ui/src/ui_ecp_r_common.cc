@@ -6,25 +6,24 @@
 // -------------------------------------------------------------------------
 
 /* Standard headers */
+#include <iostream>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
 #include <assert.h>
-
 #include <fcntl.h>
 #include <errno.h>
-#include <string.h>
-#include <iostream>
+#include <math.h>
 
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 
 #include "lib/srlib.h"
-#include "ui/ui_ecp_r_common.h"
 
-#include <math.h>
+#include "ui/ui_ecp_r_common.h"
 
 // ---------------------------------------------------------------
 ui_common_robot::ui_common_robot(lib::configurator &_config,
