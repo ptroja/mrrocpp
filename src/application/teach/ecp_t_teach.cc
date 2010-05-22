@@ -21,6 +21,9 @@
 
 #include "ecp/common/ecp_robot.h"
 
+#include "lib/exception.h"
+#include <boost/throw_exception.hpp>
+
 namespace mrrocpp {
 namespace ecp {
 namespace common {
@@ -43,7 +46,9 @@ teach::teach(lib::configurator &_config) : task(_config)
     }
     else {
     	fprintf(stderr, "unknown robot \"%s\" in teach task\n", config.section_name.c_str());
-    	throw(ecp_robot::ECP_main_error(lib::FATAL_ERROR, 0));
+    	BOOST_THROW_EXCEPTION(
+    		lib::exception::Fatal_error()
+    	);
     }
 
     tig = new generator::teach_in (*this);

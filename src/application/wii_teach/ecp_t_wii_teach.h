@@ -12,7 +12,6 @@ namespace ecp {
 namespace irp6ot {
 namespace task {
 
-
 /** @defgroup wii_teach Wii teach
  *  @ingroup application
  *
@@ -25,52 +24,55 @@ namespace task {
 /**
  * @author jkurylo
  */
-class wii_teach: public common::task::task
+class wii_teach : public common::task::task
 {
-    protected:
+protected:
 	//Generator ruchu
-        common::generator::smooth* sg;
-        irp6ot::generator::wii_absolute* ag;
-        irp6ot::generator::wii_relative* rg;
-        irp6ot::generator::wii_joint* jg;
-        lib::sensor_image_t::sensor_union_t::wiimote_t lastButtons;
-        lib::sensor_image_t::sensor_union_t::wiimote_t buttonsPressed;
-        char path[80];
-        char filename[20];
+	common::generator::smooth* sg;
+	irp6ot::generator::wii_absolute* ag;
+	irp6ot::generator::wii_relative* rg;
+	irp6ot::generator::wii_joint* jg;
+	lib::sensor_image_t::sensor_union_t::wiimote_t lastButtons;
+	lib::sensor_image_t::sensor_union_t::wiimote_t buttonsPressed;
+	char path[80];
+	char filename[20];
 
-        char gripper_path[80];
-        char gripper_filename[20];
+	char gripper_path[80];
+	char gripper_filename[20];
 
-        lib::Homog_matrix homog_matrix;
+	lib::Homog_matrix homog_matrix;
 
-        class n;
-        class n
-        {
-            public:
-                n* next;
-                n* prev;
-                int id;
-                double position[6];
-                double gripper;
+	class n;
+	class n
+	{
+	public:
+		n* next;
+		n* prev;
+		int id;
+		double position[6];
+		double gripper;
 
-                n() : next(NULL), prev(NULL) {}
+		n() :
+			next(NULL), prev(NULL)
+		{
+		}
 
-        };
+	};
 
-        typedef n node;
+	typedef n node;
 
-        struct
-        {
-            node* head;
-            node* tail;
-            int count;
-            node* current;
-            int position;
-        } trajectory;
+	struct
+	{
+		node* head;
+		node* tail;
+		int count;
+		node* current;
+		int position;
+	} trajectory;
 
-        void updateButtonsPressed();
+	void updateButtonsPressed();
 
-    public:
+public:
 	/**
 	 * Tworzy obiekt zadania
 	 * @param _config konfigurator
@@ -84,18 +86,18 @@ class wii_teach: public common::task::task
 	 */
 	void main_task_algorithm(void);
 
-        void print_trajectory(void);
+	void print_trajectory(void);
 
-        void move_to_current(void);
+	void move_to_current(void);
 
-        bool get_filenames(void);
+	bool get_filenames(void);
 
-        int load_trajectory(void);
+	void load_trajectory(void);
 
-        void save_trajectory(void);
+	void save_trajectory(void);
 };
 
-/** @} */ // end of wii_teach
+/** @} */// end of wii_teach
 
 }
 } // namespace irp6ot

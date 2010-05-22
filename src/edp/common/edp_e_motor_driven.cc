@@ -29,6 +29,7 @@
 
 #include <boost/bind.hpp>
 #include <boost/thread/thread.hpp>
+#include <boost/exception/get_error_info.hpp>
 
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
@@ -958,9 +959,16 @@ void motor_driven_effector::pre_synchro_loop(STATE& next_state)
 			//     printf("ERROR w EDP transformer fe\n");
 			// Obsluga bledow fatalnych
 			// Konkretny numer bledu znajduje sie w skladowej error obiektu fe
-			// Sa to bledy dotyczace sprzetu oraz QNXa (komunikacji)
-			establish_error(fe.error0, fe.error1);
-			msg->message(lib::FATAL_ERROR, fe.error0, fe.error1);
+			// Sa to bledy dotyczace sprzetu
+			uint64_t error0 = 0, error1 = 0;
+			if(uint64_t const * err0=boost::get_error_info<lib::exception::err0>(fe) ) {
+				error0 = *err0;
+			}
+			if(uint64_t const * err1=boost::get_error_info<lib::exception::err1>(fe) ) {
+				error1 = *err1;
+			}
+			establish_error(error0,error1);
+			msg->message(lib::FATAL_ERROR, error0, error1);
 			// Powrot do stanu: WAIT
 			next_state = WAIT;
 		}
@@ -1120,9 +1128,16 @@ void motor_driven_effector::synchro_loop(STATE& next_state)
 				receive_instruction();
 			}
 			reply.reply_type = lib::ERROR;
-			establish_error(fe.error0, fe.error1);
+			uint64_t error0 = 0, error1 = 0;
+			if(uint64_t const * err0=boost::get_error_info<lib::exception::err0>(fe) ) {
+				error0 = *err0;
+			}
+			if(uint64_t const * err1=boost::get_error_info<lib::exception::err1>(fe) ) {
+				error1 = *err1;
+			}
+			establish_error(error0,error1);
 			reply_to_instruction();
-			msg->message(lib::FATAL_ERROR, fe.error0, fe.error1);
+			msg->message(lib::FATAL_ERROR, error0, error1);
 			// powrot do stanu: GET_SYNCHRO
 			next_state = GET_SYNCHRO;
 		}
@@ -1231,9 +1246,16 @@ void motor_driven_effector::post_synchro_loop(STATE& next_state)
 		catch (Fatal_error & fe) {
 			// Obsluga bledow fatalnych
 			// Konkretny numer bledu znajduje sie w skladowej error obiektu fe
-			// Sa to bledy dotyczace sprzetu oraz QNXa (komunikacji)
-			establish_error(fe.error0, fe.error1);
-			msg->message(lib::FATAL_ERROR, fe.error0, fe.error1);
+			// Sa to bledy dotyczace sprzetu
+			uint64_t error0 = 0, error1 = 0;
+			if(uint64_t const * err0=boost::get_error_info<lib::exception::err0>(fe) ) {
+				error0 = *err0;
+			}
+			if(uint64_t const * err1=boost::get_error_info<lib::exception::err1>(fe) ) {
+				error1 = *err1;
+			}
+			establish_error(error0,error1);
+			msg->message(lib::FATAL_ERROR, error0, error1);
 			// Powrot do stanu: WAIT
 			next_state = WAIT;
 		}

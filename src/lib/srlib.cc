@@ -494,12 +494,6 @@ void sr_ecp::interpret(void) {
 			sprintf(sr_message.description, "MAX VELOCITY EXCEEDED"); break;
 			case DANGEROUS_FORCE_DETECTED:
 			sprintf(sr_message.description, "DANGEROUS FORCE DETECTED"); break;
-			case INVALID_ECP_PULSE_IN_MP_START_ALL:
-			sprintf(sr_message.description, "INVALID ECP PULSE IN MP START ALL"); break;
-			case INVALID_ECP_PULSE_IN_MP_EXECUTE_ALL:
-			sprintf(sr_message.description, "INVALID ECP PULSE IN MP EXECUTE ALL"); break;
-			case INVALID_ECP_PULSE_IN_MP_TERMINATE_ALL:
-			sprintf(sr_message.description, "INVALID ECP PULSE IN MP TERMINATE ALL"); break;
 			default:
 			sprintf(sr_message.description, "UNIDENTIFIED ECP or MP ERROR");
 		} // end: switch (sr_message.error_tab[0])

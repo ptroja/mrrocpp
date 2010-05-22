@@ -31,22 +31,6 @@ namespace common {
 typedef std::map <lib::robot_name_t, robot::robot*> robots_t;
 typedef robots_t::value_type robot_pair_t;
 
-// ---------------------------------------------------------------
-class MP_main_error
-{ // Klasa obslugi bledow poziomie MP
-	public:
-		const lib::error_class_t error_class;
-		const uint64_t error_no;
-
-		MP_main_error(lib::error_class_t err0, uint64_t err1, const char *file, int line) :
-			error_class(err0), error_no(err1)
-		{
-			fprintf(stderr, "ECP_MP_main_error @ %s:%d\n", file, line);
-		}
-#define MP_main_error(e0,e1)	MP_main_error((e0),(e1), __FILE__, __LINE__)
-};
-// ---------------------------------------------------------------
-
 } // namespace common
 
 } // namespace mp

@@ -47,9 +47,9 @@
 #include "edp/speaker/edp_speaker_effector.h"
 #include "edp/speaker/speak_t.h"
 
-
 #include "lib/exception.h"
-using namespace mrrocpp::lib::exception;
+
+#include <boost/exception/get_error_info.hpp>
 
 namespace mrrocpp {
 namespace edp {
@@ -58,7 +58,6 @@ namespace speaker {
 effector::effector (lib::configurator &_config)
 	: common::effector(_config, lib::ROBOT_SPEAKER)
 {
-
 	real_reply_type = lib::ACKNOWLEDGE;
 	// inicjacja deskryptora pliku by 7&Y
 	// servo_fd = name_open(lib::EDP_ATTACH_POINT, 0);
@@ -309,7 +308,6 @@ void effector::main_loop (void)
 	/* Nieskoczona petla wykonujca przejscia w grafie automatu (procesu EDP_MASTER) */
 	for (;;)
 	{
-
 		try
 		{ // w tym bloku beda wylapywane wyjatki (bledy)
 			switch (next_state)
@@ -404,7 +402,7 @@ void effector::main_loop (void)
 			// dalsze oczekiwanie na QUERY
 			lib::REPLY_TYPE rep_type = reply.reply_type;
 			uint64_t err_no_0 = reply.error_no.error0;
-			uint64_t err_no_1 = reply.error_no.error1;
+			using namespace mrrocpp::lib::exception;			uint64_t err_no_1 = reply.error_no.error1;
 
 			establish_error(nfe.error,OK);
 			// informacja dla ECP o bledzie
@@ -423,9 +421,16 @@ void effector::main_loop (void)
 		{
 			// Obsluga bledow fatalnych
 			// Konkretny numer bledu znajduje sie w skladowej error obiektu fe
-			// S to bledy dotyczace sprzetu oraz QNXa (komunikacji)
-			establish_error(fe.error0,fe.error1);
-			msg->message(lib::FATAL_ERROR, fe.error0, fe.error1);
+			// S to bledy dotyczace sprzetu
+			uint64_t error0 = 0, error1 = 0;
+			if(uint64_t const * err0=boost::get_error_info<lib::exception::err0>(fe) ) {
+				error0 = *err0;
+			}
+			if(uint64_t const * err1=boost::get_error_info<lib::exception::err1>(fe) ) {
+				error1 = *err1;
+			}
+			establish_error(error0,error1);
+			msg->message(lib::FATAL_ERROR, error0, error1);
 			// powrot do stanu: WAIT
 			next_state = common::WAIT;
 		}

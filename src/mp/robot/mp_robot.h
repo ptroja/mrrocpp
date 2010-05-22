@@ -37,21 +37,22 @@ protected:
 	task::task &mp_object;
 
 public:
-
-	//ew. koordynacja ciagla domyslnie wylaczona ma wplyw na instrukcje move
-	bool continuous_coordination;
-
 	// Wysyla puls do Mp przed oczekiwaniem na spotkanie
 	void send_pulse_to_ecp(int pulse_code, int pulse_value = 1);
 
-	lib::MP_COMMAND_PACKAGE mp_command; // Bufor z rozkazem dla ECP
-	lib::ECP_REPLY_PACKAGE ecp_reply_package; // Bufor z odpowiedzia z ECP
+	//! Bufor z rozkazem dla ECP
+	lib::MP_COMMAND_PACKAGE mp_command;
+
+	//! Bufor z odpowiedzia z ECP
+	lib::ECP_REPLY_PACKAGE ecp_reply_package;
 
 	struct timespec pulse_receive_time;
 
-	bool communicate; // okresla czy robot ma byc obslugiwany w Move
+	//! okresla czy robot ma byc obslugiwany w Move
+	bool communicate;
 
-	lib::sr_ecp &sr_ecp_msg; // obiekt do komunikacji z SR
+	//! obiekt do komunikacji z SR
+	lib::sr_ecp &sr_ecp_msg;
 
 	//! A server connection ID identifying UI
 	int scoid;
@@ -59,20 +60,21 @@ public:
 	//! flag indicating opened pulse connection from UI
 	bool opened;
 
-	char pulse_code; // kod pulsu ktory zostal wyslany przez ECP w celu zgloszenia gotowosci do komunikacji (wartosci w impconst.h)
-	bool new_pulse; // okresla czy jest nowy puls
-	bool new_pulse_checked; // okresla czy czy nowy puls zostal juz uwzgledniony w generatorze
+	//! kod pulsu ktory zostal wyslany przez ECP w celu zgloszenia gotowosci do komunikacji (wartosci w impconst.h)
+	char pulse_code;
+
+	//! okresla czy jest nowy puls
+	bool new_pulse;
+
+	//! okresla czy czy nowy puls zostal juz uwzgledniony w generatorze
+	bool new_pulse_checked;
+
+	//! ew. koordynacja ciagla domyslnie wylaczona ma wplyw na instrukcje move
+	bool continuous_coordination;
 
 	robot(lib::robot_name_t l_robot_name, const std::string & _section_name, task::task &mp_object_l);
-	virtual ~robot();
 
-	class MP_error
-	{ // Klasa obslugi bledow robotow
-	public:
-		const lib::error_class_t error_class;
-		const uint64_t error_no;
-		MP_error(lib::error_class_t err0, uint64_t err1);
-	};
+	virtual ~robot();
 
 	// Zlecenie wykonania ruchu przez robota
 	// (realizowane przez klase konkretna):
@@ -85,7 +87,6 @@ public:
 	void terminate_ecp(void);
 
 	void start_ecp(void);
-
 };
 
 } // namespace robot

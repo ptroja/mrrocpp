@@ -16,6 +16,11 @@
 #include "ecp_mp/sensor/ecp_mp_s_cvfradia.h"
 #include "ecp_mp/task/ecp_mp_task.h"
 
+#include "lib/exception.h"
+#include <boost/throw_exception.hpp>
+#include <boost/exception/errinfo_errno.hpp>
+#include <boost/exception/errinfo_api_function.hpp>
+
 namespace mrrocpp {
 namespace ecp_mp {
 namespace sensor {
@@ -41,17 +46,22 @@ cvfradia::cvfradia(lib::SENSOR_t _sensor_name, const char* _section_name, task::
 	// Try to open socket.
 	sockfd = socket(AF_INET, SOCK_STREAM, 0);
 	if (sockfd == -1) {
-		//printf("ERROR opening socket");
-		//throw sensor_error(lib::SYSTEM_ERROR, CANNOT_LOCATE_DEVICE);
-		throw std::runtime_error("cvfradia::cvfradia(): socket() error: " + string(strerror(errno)));
+		BOOST_THROW_EXCEPTION(
+			lib::exception::System_error() <<
+			boost::errinfo_errno(errno) <<
+			boost::errinfo_api_function("socket")
+		);
 	}
 
 	// Get server hostname.
 	server = gethostbyname(cvfradia_node_name.c_str());
 	if (server == NULL) {
-		//printf("ERROR, no host '%s'\n", cvfradia_node_name.c_str());
-		//throw sensor_error(lib::SYSTEM_ERROR, CANNOT_LOCATE_DEVICE);
-		throw std::runtime_error("cvfradia::cvfradia(): gethostbyname(" + cvfradia_node_name + "): " + strerror(errno));
+		BOOST_THROW_EXCEPTION(
+			lib::exception::System_error() <<
+			lib::exception::h_errno_code(h_errno) <<
+			lib::exception::error_code(CANNOT_LOCATE_DEVICE) <<
+			boost::errinfo_api_function("gethostbyname")
+		);
 	}
 
 	// Reset socketaddr data.
@@ -63,9 +73,12 @@ cvfradia::cvfradia(lib::SENSOR_t _sensor_name, const char* _section_name, task::
 
 	// Try to establish a connection with cvFraDIA.
 	if (connect(sockfd, (const struct sockaddr *) &serv_addr, sizeof(serv_addr)) == -1) {
-		//printf("ERROR connecting");
-		//throw sensor_error(lib::SYSTEM_ERROR, CANNOT_LOCATE_DEVICE);
-		throw std::runtime_error("cvfradia::cvfradia(): connect(): " + string(strerror(errno)));
+		BOOST_THROW_EXCEPTION(
+			lib::exception::System_error() <<
+			boost::errinfo_errno(errno) <<
+			lib::exception::error_code(CANNOT_LOCATE_DEVICE) <<
+			boost::errinfo_api_function("connect")
+		);
 	}
 
 	// Retrieve task name.
@@ -86,13 +99,28 @@ void cvfradia::configure_sensor() {
 
 	//cout<<to_vsp.cvfradia_task_name;
 
-	if(write(sockfd, &to_vsp, sizeof(lib::ECP_VSP_MSG)) != sizeof(lib::ECP_VSP_MSG))
-		throw sensor_error (lib::SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE);
-	if(read(sockfd, &from_vsp, sizeof(lib::VSP_ECP_MSG))==-1)
-		throw sensor_error (lib::SYSTEM_ERROR, CANNOT_READ_FROM_DEVICE);
-	if(from_vsp.vsp_report != lib::VSP_FRADIA_TASK_LOADED){
-		printf("void cvfradia::configure_sensor(): Fradia task not found.\n"); fflush(stdout);
-		throw sensor_error (lib::SYSTEM_ERROR, CANNOT_READ_FROM_DEVICE);
+	if(write(sockfd, &to_vsp, sizeof(lib::ECP_VSP_MSG)) != sizeof(lib::ECP_VSP_MSG)) {
+		BOOST_THROW_EXCEPTION(
+			lib::exception::System_error() <<
+			lib::exception::error_code(CANNOT_WRITE_TO_DEVICE) <<
+			boost::errinfo_errno(errno) <<
+			boost::errinfo_api_function("write")
+		);
+	}
+
+	if(read(sockfd, &from_vsp, sizeof(lib::VSP_ECP_MSG))==-1) {
+		BOOST_THROW_EXCEPTION(
+			lib::exception::System_error() <<
+			lib::exception::error_code(CANNOT_READ_FROM_DEVICE) <<
+			boost::errinfo_errno(errno) <<
+			boost::errinfo_api_function("read")
+		);
+	}
+
+	if(from_vsp.vsp_report != lib::VSP_FRADIA_TASK_LOADED) {
+		BOOST_THROW_EXCEPTION(
+			lib::exception::Fatal_error()
+		);
 	}
 }
 
@@ -104,8 +132,14 @@ void cvfradia::initiate_reading() {
 	// Send adequate command to cvFraDIA.
 	to_vsp.i_code = lib::VSP_INITIATE_READING;
 
-	if(write(sockfd, &to_vsp, sizeof(lib::ECP_VSP_MSG)) != sizeof(lib::ECP_VSP_MSG))
-		throw sensor_error (lib::SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE);
+	if(write(sockfd, &to_vsp, sizeof(lib::ECP_VSP_MSG)) != sizeof(lib::ECP_VSP_MSG)) {
+		BOOST_THROW_EXCEPTION(
+			lib::exception::System_error() <<
+			lib::exception::error_code(CANNOT_WRITE_TO_DEVICE) <<
+			boost::errinfo_errno(errno) <<
+			boost::errinfo_api_function("write")
+		);
+	}
 }
 
 
@@ -115,8 +149,14 @@ void cvfradia::initiate_reading() {
 void cvfradia::send_reading(lib::ECP_VSP_MSG to) {
 	// Send any command to cvFraDIA.
 
-	if(write(sockfd, &to, sizeof(lib::ECP_VSP_MSG)) != sizeof(lib::ECP_VSP_MSG))
-		throw sensor_error (lib::SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE);
+	if(write(sockfd, &to, sizeof(lib::ECP_VSP_MSG)) != sizeof(lib::ECP_VSP_MSG)) {
+		BOOST_THROW_EXCEPTION(
+			lib::exception::System_error() <<
+			lib::exception::error_code(CANNOT_WRITE_TO_DEVICE) <<
+			boost::errinfo_errno(errno) <<
+			boost::errinfo_api_function("write")
+		);
+	}
 }
 
 
@@ -126,12 +166,24 @@ void cvfradia::send_reading(lib::ECP_VSP_MSG to) {
 void cvfradia::get_reading() {
 	// Send adequate command to cvFraDIA.
 	to_vsp.i_code = lib::VSP_GET_READING;
-	if(write(sockfd, &to_vsp, sizeof(lib::ECP_VSP_MSG)) != sizeof(lib::ECP_VSP_MSG))
-		throw sensor_error (lib::SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE);
+	if(write(sockfd, &to_vsp, sizeof(lib::ECP_VSP_MSG)) != sizeof(lib::ECP_VSP_MSG)) {
+		BOOST_THROW_EXCEPTION(
+			lib::exception::System_error() <<
+			lib::exception::error_code(CANNOT_WRITE_TO_DEVICE) <<
+			boost::errinfo_errno(errno) <<
+			boost::errinfo_api_function("write")
+		);
+	}
 
 	// Read aggregated data from cvFraDIA.
- 	if(read(sockfd, &from_vsp, sizeof(lib::VSP_ECP_MSG))==-1)
-		throw sensor_error (lib::SYSTEM_ERROR, CANNOT_READ_FROM_DEVICE);
+ 	if(read(sockfd, &from_vsp, sizeof(lib::VSP_ECP_MSG))==-1) {
+		BOOST_THROW_EXCEPTION(
+			lib::exception::System_error() <<
+			lib::exception::error_code(CANNOT_READ_FROM_DEVICE) <<
+			boost::errinfo_errno(errno) <<
+			boost::errinfo_api_function("read")
+		);
+	}
 
 	// Check and copy data from buffer to image.
 	if(from_vsp.vsp_report == lib::VSP_REPLY_OK)
@@ -148,8 +200,14 @@ void cvfradia::get_reading() {
 cvfradia::~cvfradia() {
 	// Send adequate command to cvFraDIA.
 	to_vsp.i_code = lib::VSP_TERMINATE;
-	if(write(sockfd, &to_vsp, sizeof(lib::ECP_VSP_MSG)) != sizeof(lib::ECP_VSP_MSG))
-		throw sensor_error (lib::SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE);
+	if(write(sockfd, &to_vsp, sizeof(lib::ECP_VSP_MSG)) != sizeof(lib::ECP_VSP_MSG)) {
+		BOOST_THROW_EXCEPTION(
+			lib::exception::System_error() <<
+			lib::exception::error_code(CANNOT_WRITE_TO_DEVICE) <<
+			boost::errinfo_errno(errno) <<
+			boost::errinfo_api_function("write")
+		);
+	}
 
 	close(sockfd);
 	sr_ecp_msg.message("Terminate\n");

@@ -267,7 +267,10 @@ void ATI6284_force::initiate_reading(void)
     double force_fresh[6] = { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f };
 
 	if (!is_sensor_configured) {
-		throw sensor_error(lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
+		BOOST_THROW_EXCEPTION(
+				lib::exception::Fatal_error() <<
+				lib::exception::error_code(SENSOR_NOT_CONFIGURED)
+		);
     }
 
     lib::Ft_vector ft_table;

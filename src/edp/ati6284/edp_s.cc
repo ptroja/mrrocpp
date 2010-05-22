@@ -388,10 +388,14 @@ void ATI6284_force::configure_sensor(void)
 
 void ATI6284_force::wait_for_event()
 {
-	if (!is_sensor_configured)
-		throw sensor_error(lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
+	if (!is_sensor_configured) {
+		BOOST_THROW_EXCEPTION(
+				lib::exception::Fatal_error() <<
+				lib::exception::error_code(SENSOR_NOT_CONFIGURED)
+		);
+	}
 
-	if (!(master.test_mode)) {
+	if (!master.test_mode) {
 		lib::timer local_timer;
 		float sec;
 
@@ -436,11 +440,20 @@ void ATI6284_force::initiate_reading(void)
 	float force_torque[6]; //wektor z si�ami i napi�ciami
 	short int sensor_status = EDP_FORCE_SENSOR_READING_CORRECT;
 
-	if (!is_sensor_configured)
-		throw sensor_error(lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
+	if (!is_sensor_configured) {
+		BOOST_THROW_EXCEPTION(
+				lib::exception::Fatal_error() <<
+				lib::exception::error_code(SENSOR_NOT_CONFIGURED)
+		);
+	}
+
 	//!< jezeli chcemy jakikolwiek odczyt	-> is_reading_ready
-	if (!is_reading_ready)
-		throw sensor_error(lib::FATAL_ERROR, READING_NOT_READY);
+	if (!is_reading_ready) {
+		BOOST_THROW_EXCEPTION(
+				lib::exception::Fatal_error() <<
+				lib::exception::error_code(READING_NOT_READY)
+		);
+	}
 
 	if (!(master.test_mode)) {
 #if	 WITHOUT_INTERRUPT

@@ -93,33 +93,23 @@ class transmitter
 		lib::sr_ecp &sr_ecp_msg;
 
 	public:
-		transmitter (TRANSMITTER_ENUM _transmitter_name, const char* _section_name, task::task& _ecp_mp_object);
+		transmitter (TRANSMITTER_ENUM _transmitter_name, const std::string & _section_name, task::task& _ecp_mp_object);
 
 		virtual ~transmitter()
-		{};
+		{
+		};
 
 		// odczyt z zawieszaniem lub bez
 		virtual bool t_read (bool wait)
 		{
 			return true;
 		};
+
 		// zapis
 		virtual bool t_write (void)
 		{
 			return true;
 		};
-
-		class transmitter_error
-		{  // Klasa obslugi bledow czujnikow
-			public:
-				const lib::error_class_t error_class;
-				const uint64_t error_no;
-
-				transmitter_error ( lib::error_class_t err_cl, uint64_t err_no) :
-					error_class(err_cl), error_no(err_no)
-				{
-				};
-		}; // end: class transmitter_error
 }; // end: class transmitter
 
 } // namespace transmitter

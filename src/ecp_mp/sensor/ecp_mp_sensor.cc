@@ -13,10 +13,13 @@
 #endif
 
 #include <iostream>
+
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <string.h>
+
+#include <lib/exception.h>
 
 namespace mrrocpp {
 namespace ecp_mp {
@@ -43,11 +46,13 @@ sensor::sensor(lib::SENSOR_t _sensor_name, const std::string & _section_name, ta
 		// by Y - usuniete bo mozna podlaczyc sie do istniejacego czujnika
 		// throw sensor_error(lib::SYSTEM_ERROR, DEVICE_ALREADY_EXISTS);
 		pid = 0; // tymczasowo
-	} else {
+	} else
 	// Stworzenie nowego procesu.
-	if ((pid = _ecp_mp_object.config.process_spawn(_section_name)) == -1)
-		throw sensor_error(lib::SYSTEM_ERROR, CANNOT_SPAWN_VSP);
-		// Proba otworzenie urzadzenia.
+	if ((pid = _ecp_mp_object.config.process_spawn(_section_name)) == -1) {
+		BOOST_THROW_EXCEPTION(
+				lib::exception::System_error() <<
+				lib::exception::error_code(CANNOT_SPAWN_VSP)
+		);
 	}
 
 	short tmp = 0;
@@ -55,10 +60,14 @@ sensor::sensor(lib::SENSOR_t _sensor_name, const std::string & _section_name, ta
 	while( (sd = open(VSP_NAME.c_str(), O_RDWR)) == -1)
 	{
 // 		cout<<tmp<<endl;
-		if((tmp++)<CONNECT_RETRY)
+		if((tmp++)<CONNECT_RETRY) {
 			usleep(1000*CONNECT_DELAY);
-		else
-			throw sensor_error(lib::SYSTEM_ERROR, CANNOT_LOCATE_DEVICE);
+		} else {
+			BOOST_THROW_EXCEPTION(
+					lib::exception::System_error() <<
+					lib::exception::error_code(CANNOT_LOCATE_DEVICE)
+			);
+		}
 	}
 #else /* USE_MESSIP_SRR */
 

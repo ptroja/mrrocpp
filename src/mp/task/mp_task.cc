@@ -18,6 +18,9 @@
 #include <string.h>
 
 #include <boost/foreach.hpp>
+#include <boost/throw_exception.hpp>
+#include <boost/exception/errinfo_errno.hpp>
+#include <boost/exception/errinfo_api_function.hpp>
 
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
@@ -25,6 +28,7 @@
 
 #include "lib/srlib.h"
 #include "lib/datastr.h"
+#include "lib/exception.h"
 
 #include "mp/mp.h"
 #include "mp/generator/mp_g_common.h"
@@ -89,11 +93,7 @@ task::~task() {
 void task::stop_and_terminate()
 {
 	sr_ecp_msg->message("To terminate MP click STOP icon");
-	try {
-		wait_for_stop ();
-	} catch(common::MP_main_error & e) {
-		exit(EXIT_FAILURE);
-	}
+	wait_for_stop ();
 	terminate_all (robot_m);
 }
 
@@ -347,8 +347,10 @@ void task::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_term
 		common::robots_t::iterator robots_map_iter = robots_to_move.find(robot_node.first);
 
 		if (robots_map_iter == robots_to_move.end()) {
-			sr_ecp_msg->message (lib::SYSTEM_ERROR, 0, "run_ext_empty_gen_for_set_of_robots_... wrong execution arguments");
-			throw common::MP_main_error(lib::SYSTEM_ERROR, 0);
+			sr_ecp_msg->message (lib::FATAL_ERROR, 0, "run_ext_empty_gen_for_set_of_robots_... wrong execution arguments");
+			BOOST_THROW_EXCEPTION(
+					lib::exception::Fatal_error()
+			);
 		}
 	}
 
@@ -449,7 +451,9 @@ void task::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_term
 
 		if (robots_map_iter == robots_to_move.end()) {
 			sr_ecp_msg->message (lib::SYSTEM_ERROR, 0, "run_ext_empty_gen_for_set_of_robots_... wrong execution arguments");
-			throw common::MP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
+            BOOST_THROW_EXCEPTION(
+            		lib::exception::Fatal_error()
+            );
 		}
 	}
 
@@ -512,7 +516,11 @@ int task::wait_for_name_open(void)
 		if (rcvid == -1) {/* Error condition, exit */
 			int e = errno;
 			perror("MP: MsgReceivePulse()");
-			throw common::MP_main_error(lib::SYSTEM_ERROR, e);
+            BOOST_THROW_EXCEPTION(
+            		lib::exception::System_error() <<
+    				boost::errinfo_errno(e) <<
+					boost::errinfo_api_function("MsgReceive")
+            );
 		}
 
 		if (rcvid == 0) {/* Pulse received */
@@ -574,7 +582,9 @@ int task::wait_for_name_open(void)
 		fprintf(stderr, "MP: unexpected message received\n");
 		MsgReply(rcvid, ENOSYS, 0, 0);
 
-		throw common::MP_main_error(lib::SYSTEM_ERROR, 0);
+        BOOST_THROW_EXCEPTION(
+        		lib::exception::Fatal_error()
+        );
 	}
 #else
 	while(1) {
@@ -638,7 +648,11 @@ bool task::check_and_optional_wait_for_new_pulse (WAIT_FOR_NEW_PULSE_MODE proces
 			if (TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_RECEIVE, NULL, NULL, NULL ) == -1) {
 				int e = errno;
 				perror("MP: TimerTimeout()");
-				throw common::MP_main_error(lib::SYSTEM_ERROR, e);
+	            BOOST_THROW_EXCEPTION(
+	            		lib::exception::System_error() <<
+	    				boost::errinfo_errno(e) <<
+						boost::errinfo_api_function("TimerTimeout")
+	            );
 			}
 		}
 
@@ -657,9 +671,11 @@ bool task::check_and_optional_wait_for_new_pulse (WAIT_FOR_NEW_PULSE_MODE proces
 				}
 				continue;
 			}
-			int e = errno;
-			perror("MP: MsgReceivePulse()");
-			throw common::MP_main_error(lib::SYSTEM_ERROR, e);
+            BOOST_THROW_EXCEPTION(
+            		lib::exception::System_error() <<
+    				boost::errinfo_errno(errno) <<
+					boost::errinfo_api_function("MsgReceivePulse")
+            );
 		} else if (rcvid == 0) {/* Pulse received */
 			switch (msg.code) {
 				case _PULSE_CODE_DISCONNECT:
@@ -701,7 +717,11 @@ bool task::check_and_optional_wait_for_new_pulse (WAIT_FOR_NEW_PULSE_MODE proces
 							robot_node.second->new_pulse = true;
 							robot_node.second->pulse_code = msg.code;
 							if (clock_gettime(CLOCK_REALTIME, &(robot_node.second->pulse_receive_time)) == -1) {
-								perror("clock_gettime()");
+					            BOOST_THROW_EXCEPTION(
+					            		lib::exception::System_error() <<
+					    				boost::errinfo_errno(errno) <<
+										boost::errinfo_api_function("clock_gettime")
+					            );
 							}
 
 							if ((process_type == NEW_ECP_PULSE) || (process_type == NEW_UI_OR_ECP_PULSE)) {
@@ -721,8 +741,9 @@ bool task::check_and_optional_wait_for_new_pulse (WAIT_FOR_NEW_PULSE_MODE proces
 			 * this should not happend if using MsgReceivePulse, but we want to be sure
 			 */
 			MsgError( rcvid, ENOSYS );
-			fprintf(stderr, "MP: unexpected message received\n");
-			throw common::MP_main_error(lib::SYSTEM_ERROR, 0);
+            BOOST_THROW_EXCEPTION(
+            		lib::exception::Fatal_error()
+            );
 		}
 #else
 		int32_t type, subtype;
@@ -829,7 +850,10 @@ void task::mp_receive_ui_or_ecp_pulse (common::robots_t & _robot_m, generator::g
 				switch (ui_pulse_code) {
 					case MP_STOP:
 						terminate_all (_robot_m);
-						throw common::MP_main_error(lib::NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
+						BOOST_THROW_EXCEPTION(
+							lib::exception::NonFatal_error() <<
+							lib::exception::error_code(ECP_STOP_ACCEPTED)
+						);
 					case MP_PAUSE:
 						mp_state = MP_STATE_PAUSED;
 						request_communication_with_robots(_robot_m);
@@ -905,7 +929,10 @@ void task::initialize_communication()
 				perror("Failed to attach UI Pulse chanel for Master Process");
 				sr_ecp_msg->message (lib::SYSTEM_ERROR, e, "MP: Failed to attach UI Pulse channel");
 
-				throw common::MP_main_error(lib::SYSTEM_ERROR, 0);
+	            BOOST_THROW_EXCEPTION(
+	            		lib::exception::System_error() <<
+	    				boost::errinfo_errno(e)
+	            );
 			}
 	}
 
@@ -973,8 +1000,9 @@ void task::start_all (const common::robots_t & _robot_m)
 					robot_node.second->start_ecp();
 					//					fprintf(stderr, "starting %s robot\n", lib::toString(robot_node.second->robot_name).c_str());
 				} else {
-					printf("phase 2 bledny kod pulsu w start_all\n");
-					throw common::MP_main_error(lib::NON_FATAL_ERROR, INVALID_ECP_PULSE_IN_MP_START_ALL);
+		            BOOST_THROW_EXCEPTION(
+		            		lib::exception::NonFatal_error()
+		            );
 				}
 				robots_m_tmp.erase(robot_node.first);
 			}
@@ -1029,7 +1057,9 @@ void task::execute_all (const common::robots_t & _robot_m)
 					robot_node.second->new_pulse_checked = false;
 					robot_node.second->execute_motion();
 				} else {
-					throw common::MP_main_error(lib::NON_FATAL_ERROR, INVALID_ECP_PULSE_IN_MP_EXECUTE_ALL);
+					BOOST_THROW_EXCEPTION(
+							lib::exception::NonFatal_error()
+					);
 				}
 				robots_m_tmp.erase(robot_node.first);
 			}
@@ -1080,7 +1110,9 @@ void task::terminate_all (const common::robots_t & _robot_m)
 					robot_node.second->terminate_ecp();
 				} else {
 					printf("phase 2 bledny kod pulsu w terminate_all\n");
-					throw common::MP_main_error(lib::NON_FATAL_ERROR, INVALID_ECP_PULSE_IN_MP_TERMINATE_ALL);
+					BOOST_THROW_EXCEPTION(
+							lib::exception::NonFatal_error()
+					);
 				}
 				robots_m_tmp.erase(robot_node.first);
 			}

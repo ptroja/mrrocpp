@@ -8,7 +8,9 @@
 #ifndef __TRANSFORMER_ERROR_H
 #define __TRANSFORMER_ERROR_H
 
+#include <boost/throw_exception.hpp>
 #include <boost/exception/exception.hpp>
+#include <boost/exception/info.hpp>
 #include <stdexcept>
 
 #include <stdint.h>
@@ -17,7 +19,13 @@ namespace mrrocpp {
 namespace lib {
 namespace exception {
 
-class Error_base : public virtual boost::exception, virtual std::exception
+typedef boost::error_info<struct tag_error, uint64_t> error_code;
+typedef boost::error_info<struct tag_h_errno, int> h_errno_code;
+
+typedef boost::error_info<struct tag_err0, uint64_t> err0;
+typedef boost::error_info<struct tag_err1, uint64_t> err1;
+
+class Error_base : public virtual boost::exception, public virtual std::exception
 {
 public:
 	~Error_base() throw ();
@@ -34,9 +42,6 @@ public:
 class Fatal_error : public Error_base
 {
 public:
-	const uint64_t error0; // Blad powstaly w servomechanizmie
-	const uint64_t error1; // Blad powstaly w servomechanizmie
-	Fatal_error(uint64_t err_no_0, uint64_t err_no_1);
 	~Fatal_error() throw ();
 };
 

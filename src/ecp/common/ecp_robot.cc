@@ -8,11 +8,10 @@
 #include <sys/wait.h>
 #include <signal.h>
 
-#ifdef __gnu_linux__
-#include <execinfo.h>
-#include <exception>
-#include <iostream>
-#endif /* __gnu_linux__ */
+#include "lib/exception.h"
+#include <boost/throw_exception.hpp>
+#include <boost/exception/errinfo_errno.hpp>
+#include <boost/exception/errinfo_api_function.hpp>
 
 #include "ecp/common/ecp_robot.h"
 #include "ecp/common/task/ecp_task.h"
@@ -83,30 +82,6 @@ pid_t ecp_robot::get_EDP_pid(void) const {
 	return EDP_MASTER_Pid;
 }
 
-ecp_robot::ECP_error::ECP_error(lib::error_class_t err_cl, uint64_t err_no,
-		uint64_t err0, uint64_t err1) :
-	error_class(err_cl), error_no(err_no) {
-	error.error0 = err0;
-	error.error1 = err1;
-#ifdef __gnu_linux__
-	void * array[25];
-	int nSize = backtrace(array, 25);
-	char ** symbols = backtrace_symbols(array, nSize);
-
-	for (int i = 0; i < nSize; i++)
-	{
-		std::cerr << symbols[i] << std::endl;
-	}
-
-	free(symbols);
-#endif /* __gnu_linux__ */
-}
-
-ecp_robot::ECP_main_error::ECP_main_error(lib::error_class_t err_cl,
-		uint64_t err_no) :
-	error_class(err_cl), error_no(err_no) {
-}
-
 bool ecp_robot::is_synchronised(void) const {
 	// Czy robot zsynchronizowany?
 	return synchronised;
@@ -154,7 +129,9 @@ void ecp_robot::connect_to_edp(lib::configurator &config) {
 					edp_net_attach_point.c_str(), strerror(errno));
 			sr_ecp_msg.message(lib::SYSTEM_ERROR, e,
 					"Unable to locate EDP_MASTER process");
-			throw ecp_robot::ECP_main_error(lib::SYSTEM_ERROR, 0);
+			BOOST_THROW_EXCEPTION(
+					lib::exception::System_error()
+			);
 		}
 	}
 	printf(".done\n");
@@ -175,8 +152,10 @@ void ecp_robot::send()
 {
 	// minimal check for command correctness
 	if (ecp_command.instruction.instruction_type == lib::INVALID) {
-		sr_ecp_msg.message(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
-		throw ecp_robot::ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
+		BOOST_THROW_EXCEPTION(
+				lib::exception::NonFatal_error() <<
+				lib::exception::error_code(INVALID_COMMAND_TO_EDP)
+		);
 	}
 
 #if !defined(USE_MESSIP_SRR)
@@ -185,10 +164,10 @@ void ecp_robot::send()
 	if (messip::port_send(EDP_fd, 0, 0, ecp_command, reply_package) == -1)
 #endif
 	{
-		int e = errno; // kod bledu systemowego
-		perror("ECP: Send to EDP_MASTER error");
-		sr_ecp_msg.message(lib::SYSTEM_ERROR, e, "ECP: Send to EDP_MASTER error");
-		throw ecp_robot::ECP_error(lib::SYSTEM_ERROR, 0);
+		BOOST_THROW_EXCEPTION(
+				lib::exception::System_error() <<
+				boost::errinfo_errno(errno)
+		);
 	}
 
 	// TODO: this is called much too often (?!)
@@ -216,16 +195,21 @@ void ecp_robot::execute_motion(void)
 	send();
 	if (reply_package.reply_type == lib::ERROR) {
 		query();
-		throw ECP_error(lib::NON_FATAL_ERROR, EDP_ERROR);
+		BOOST_THROW_EXCEPTION(
+				lib::exception::NonFatal_error() <<
+				lib::exception::error_code(EDP_ERROR)
+		);
 	}
 
 	query();
 	if (reply_package.reply_type == lib::ERROR) {
-		throw ECP_error(lib::NON_FATAL_ERROR, EDP_ERROR);
+		BOOST_THROW_EXCEPTION(
+				lib::exception::NonFatal_error() <<
+				lib::exception::error_code(EDP_ERROR)
+		);
 	}
 }
 
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp
-

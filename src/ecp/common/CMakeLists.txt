@@ -1,5 +1,4 @@
 add_library(ecp
-	ECP_main_error.cc
 	ecp_robot.cc
 	ecp_m.cc
 	task/ecp_task.cc

@@ -5,17 +5,21 @@
  * \date 15.03.2008
  */
 
+#include <iostream>
+
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <strings.h>
 #include <unistd.h>
-#include <iostream>
 
 #include "ecp_mp/birdclient.h"
 #include "ecp_mp/sensor/ecp_mp_s_pcbird.h"
 #include "ecp_mp/task/ecp_mp_task.h"
 
-
+#include "lib/exception.h"
+#include <boost/throw_exception.hpp>
+#include <boost/exception/errinfo_errno.hpp>
+#include <boost/exception/errinfo_api_function.hpp>
 
 using namespace std;
 
@@ -40,8 +44,13 @@ pcbird::pcbird(const char* _section_name, task::task& _ecp_mp_object)
 	std::string pcbird_node_name = _ecp_mp_object.config.value<std::string>("pcbird_node_name", _section_name);
 
   // Try to connect to pcbird.
-  if ((sockfd = pcbird_connect(pcbird_node_name.c_str(), pcbird_port)) == -1)
-		throw sensor_error(lib::SYSTEM_ERROR, CANNOT_LOCATE_DEVICE);
+  if ((sockfd = pcbird_connect(pcbird_node_name.c_str(), pcbird_port)) == -1) {
+		BOOST_THROW_EXCEPTION(
+			lib::exception::System_error() <<
+			lib::exception::error_code(CANNOT_LOCATE_DEVICE) <<
+			boost::errinfo_errno(errno)
+		);
+  }
 
 	sr_ecp_msg.message("Connected to pcbird");
 }// end: ecp_mp_sensor

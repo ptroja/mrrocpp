@@ -302,18 +302,6 @@ typedef enum _SENSOR_ENUM
 	SENSOR_WIIMOTE
 } SENSOR_t;
 
-// Klasa obslugi bledow procesu VSP.
-class VSP_main_error
-{
-public:
-	const error_class_t error_class;
-	const uint64_t error_no;
-	VSP_main_error(error_class_t err_cl, uint64_t err_no) :
-		error_class(err_cl), error_no(err_no)
-	{
-	}
-};
-
 // Klasa bazowa dla czujnikow (klasa abstrakcyjna)
 // Czujniki konkretne wyprowadzane sa z klasy bazowej
 class sensor
@@ -351,23 +339,9 @@ public:
 	virtual ~sensor()
 	{
 	}
-
-	// Klasa obslugi bledow czujnikow
-	class sensor_error
-	{
-	public:
-		const error_class_t error_class;
-		uint64_t error_no;
-
-		sensor_error(error_class_t err_cl, uint64_t err_no) :
-			error_class(err_cl), error_no(err_no)
-		{
-		}
-	};
 };
 
 } // namespace lib
 } // namespace mrrocpp
 
 #endif /* _SENSOR_H */
-
