@@ -30,7 +30,7 @@
 
 using namespace mrrocpp::lib::exception;
 
-#ifndef QNXNTO
+#ifndef __QNXNTO__
 
 uint64_t timespec2nsec(const timespec *t)
 {
