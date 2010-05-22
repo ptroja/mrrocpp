@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <math.h>
 #include <iostream>
+#include <cstdlib>
 
 #include "ecp/irp6_on_track/ecp_r_irp6ot.h"
 #include "ecp/irp6_postument/ecp_r_irp6p.h"
@@ -48,10 +49,11 @@ void acq_force::write_data(std::string _K_fp, std::string _kk_fp, std::string _M
 	M_fp = _M_fp;
 	mm_fp = _mm_fp;
 	number_of_measures = _number_of_measures;
-	std::remove(K_fp.c_str());
-	std::remove(kk_fp.c_str());
-	std::remove(M_fp.c_str());
-	std::remove(mm_fp.c_str());
+	remove(K_fp.c_str());
+	remove(kk_fp.c_str());
+	remove(M_fp.c_str());
+	remove(mm_fp.c_str());
+
 	acq_force::main_task_algorithm();
 }
 

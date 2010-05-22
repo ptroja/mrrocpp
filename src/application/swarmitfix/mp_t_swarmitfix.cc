@@ -67,7 +67,7 @@ void swarmitfix::main_task_algorithm(void) {
 	int int_port_data_output;
 
 	int_port_from_manager->set(int_port_data_input);
-	int_port_data_output = int_port_from_manager->get();
+	int_port_from_manager->get(int_port_data_output);
 
 	ss << " " << int_port_data_output;
 
