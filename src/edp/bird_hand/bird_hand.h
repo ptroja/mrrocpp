@@ -39,10 +39,10 @@ class Bird_hand
 	protected:
 	private:
 	
-	void write_read(char* buf, unsigned int w_len, unsigned int r_len);
+	void write_read(int fd, char* buf, unsigned int w_len, unsigned int r_len);
 	
-	int fd;
-	struct termios oldtio;
+	int fd[8];
+	struct termios oldtio[8];
 
 	char buf[30];
 
