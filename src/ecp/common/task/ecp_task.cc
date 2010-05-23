@@ -22,8 +22,8 @@ namespace common {
 namespace task {
 
 task::task(lib::configurator &_config) :
-	ecp_mp::task::task(_config), ecp_m_robot(NULL), continuous_coordination(
-			false) {
+	ecp_mp::task::task(_config), ecp_m_robot(NULL), continuous_coordination(false)
+{
 	initialize_communication();
 }
 
@@ -36,7 +36,7 @@ task::~task() {
 #else
 	messip::port_delete(trigger_attach);
 	messip::port_delete(ecp_attach);
-	messip::port_delete(MP_fd);
+	messip::port_disconnect(MP_fd);
 #endif
 }
 
@@ -112,13 +112,13 @@ bool task::pulse_check() {
 
 // ---------------------------------------------------------------
 void task::initialize_communication() {
-	std::string mp_pulse_attach_point = config.return_attach_point_name(
+	const std::string mp_pulse_attach_point = config.return_attach_point_name(
 			lib::configurator::CONFIG_SERVER, "mp_pulse_attach_point",
 			MP_SECTION);
 
-	std::string ecp_attach_point = config.return_attach_point_name(
+	const std::string ecp_attach_point = config.return_attach_point_name(
 			lib::configurator::CONFIG_SERVER, "ecp_attach_point");
-	std::string sr_net_attach_point = config.return_attach_point_name(
+	const std::string sr_net_attach_point = config.return_attach_point_name(
 			lib::configurator::CONFIG_SERVER, "sr_attach_point", UI_SECTION);
 
 	// Obiekt do komuniacji z SR
@@ -130,10 +130,9 @@ void task::initialize_communication() {
 	//	std::cout << "ECP: Opening MP pulses channel at '" << mp_pulse_attach_point << "'" << std::endl;
 
 #if !defined(USE_MESSIP_SRR)
-	if ((MP_fd = name_open(mp_pulse_attach_point.c_str(),
-			NAME_FLAG_ATTACH_GLOBAL)) < 0)
+	if ((MP_fd = name_open(mp_pulse_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) < 0)
 #else
-	if ( (MP_fd = messip::port_connect(mp_pulse_attach_point)) == NULL)
+	if ((MP_fd = messip::port_connect(mp_pulse_attach_point)) == NULL)
 #endif
 	{
         BOOST_THROW_EXCEPTION(
@@ -156,7 +155,7 @@ void task::initialize_communication() {
         );
 	}
 
-	std::string trigger_attach_point = config.return_attach_point_name(
+	const std::string trigger_attach_point = config.return_attach_point_name(
 			lib::configurator::CONFIG_SERVER, "trigger_attach_point");
 
 #if !defined(USE_MESSIP_SRR)
@@ -196,8 +195,7 @@ void task::ecp_termination_notice(void) {
 // Wysyla puls do Mp przed oczekiwaniem na spotkanie
 void task::send_pulse_to_mp(int pulse_code, int pulse_value) {
 #if !defined(USE_MESSIP_SRR)
-	if (MsgSendPulse(MP_fd, sched_get_priority_min(SCHED_FIFO), pulse_code,
-			pulse_value) == -1)
+	if (MsgSendPulse(MP_fd, sched_get_priority_min(SCHED_FIFO), pulse_code, pulse_value) == -1)
 #else
 	if (messip::port_send_pulse(MP_fd, pulse_code, pulse_value) < 0)
 #endif
@@ -396,8 +394,7 @@ void task::get_next_state(void) {
 	}
 
 	if (ecp_reply.reply == lib::INCORRECT_MP_COMMAND) {
-		fprintf(
-				stderr,
+		fprintf(stderr,
 				"ecp_generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND) @ %s:%d, mp_command_type() = %d\n",
 				__FILE__, __LINE__, mp_command_type());
 		BOOST_THROW_EXCEPTION(
@@ -421,11 +418,9 @@ bool task::mp_buffer_receive_and_send(void) {
 			== lib::ERROR_IN_ECP) || (continuous_coordination)) {
 		// wariant pierwszy ECP chce sie skomunikowac
 		ecp_communication_request = true;
-
 	} else {
 		// czy
 		ecp_communication_request = false;
-
 	}
 
 	if (ecp_communication_request) {
