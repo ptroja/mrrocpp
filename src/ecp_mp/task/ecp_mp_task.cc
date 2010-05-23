@@ -61,7 +61,7 @@ task::task(lib::configurator &_config)
 //	// Obiekt do komuniacji z SR
 //	sr_ecp_msg = new lib::sr_ecp(process_type, process_name, sr_net_attach_point);
 
-	std::string ui_net_attach_point = config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "ui_attach_point", UI_SECTION);
+	const std::string ui_net_attach_point = config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "ui_attach_point", UI_SECTION);
 
     // kilka sekund  (~1) na otworzenie urzadzenia
     short tmp = 0;
