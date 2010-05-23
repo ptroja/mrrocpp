@@ -87,9 +87,6 @@ public:
 	// Wyslanie rozkazu do wszystkich ECP
 	void execute_all(const common::robots_t & _robot_m);
 
-	/// method redefine in concrete classes
-	virtual void main_task_algorithm(void) = 0;
-
 	/// mapa wszystkich robotow
 	common::robots_t robot_m;
 

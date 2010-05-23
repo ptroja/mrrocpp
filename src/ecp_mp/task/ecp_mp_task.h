@@ -76,6 +76,9 @@ public:
 	void all_sensors_initiate_reading(sensors_t & _sensor_m);
 	void all_sensors_get_reading(sensors_t & _sensor_m);
 
+	// methods for ECP template to redefine in concrete classes
+	virtual void main_task_algorithm(void) = 0;
+
 	// funkcjonalnosc dodana na potrzeby czytania trajektorii z pliku xml
 	class str_cmp
 	{

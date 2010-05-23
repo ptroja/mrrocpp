@@ -44,7 +44,7 @@ class task : public ecp_mp::task::task
 		ecp_robot* ecp_m_robot;
 
 		//ew. koordynacja ciagla domyslnie wylaczona ma wplyw na instrukcje move
-			bool continuous_coordination;
+		bool continuous_coordination;
 
 		// sprawdza czy przeszedl puls do ECP lub MP
 		bool pulse_check();
@@ -54,9 +54,6 @@ class task : public ecp_mp::task::task
 
 		// dla gcc: `'class Foo' has virtual functions but non-virtual destructor` warning.
 		virtual ~task();
-
-		// methods for ECP template to redefine in concrete classes
-		virtual void main_task_algorithm(void) = 0;
 
 		// Informacja dla MP o zakonczeniu zadania uzytkownika
 		void ecp_termination_notice(void);
