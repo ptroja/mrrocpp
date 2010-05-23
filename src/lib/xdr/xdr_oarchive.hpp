@@ -97,6 +97,13 @@ public:
 	SAVE_A_TYPE(unsigned long, xdr_u_long)
 	SAVE_A_TYPE(unsigned short, xdr_u_short)
 
+//	SAVE_A_TYPE(int16_t, xdr_int16_t)
+//	SAVE_A_TYPE(uint16_t, xdr_u_int16_t)
+//	SAVE_A_TYPE(int32_t, xdr_int32_t)
+//	SAVE_A_TYPE(uint32_t, xdr_u_int32_t)
+	SAVE_A_TYPE(int64_t, xdr_int64_t)
+	SAVE_A_TYPE(uint64_t, xdr_u_int64_t)
+
 	/**
 	 * Saving Archive Concept::is_loading
 	 */
