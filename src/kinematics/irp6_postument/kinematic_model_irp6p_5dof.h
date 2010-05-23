@@ -80,16 +80,6 @@ namespace irp6p {
 #define SINGLE_SOLUTION 0
 #define ALL_SOLUTIONS   1
 
-
-#if defined(X)
-  #undef X
-#endif
-#if defined(Y)
-  #undef Y
-#endif
-#define X 0
-#define Y 1
-#define Z 2
 #define EPS 1.0E-15
 
 /* maksymalne predkosci ruchu poszczegolnych stopni swobody w [rad/s] */
@@ -146,6 +136,8 @@ typedef struct AngleTheta
 
 class model_5dof : public model_with_wrist
 {
+	private:
+		const static int X = 0, Y = 1, Z = 2;
 protected:
   // Wysokosc kolumny.
   double d1;
