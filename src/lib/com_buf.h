@@ -521,6 +521,16 @@ enum BEHAVIOUR_SPECIFICATION {
 struct edp_error {
 	uint64_t error0;
 	uint64_t error1;
+
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template<class Archive>
+	void serialize(Archive & ar, const unsigned int version) {
+		ar & error0;
+		ar & error1;
+	}
 };
 
 //------------------------------------------------------------------------------
@@ -716,6 +726,9 @@ struct c_buffer {
 		ar & interpolation_type;
 		ar & motion_type;
 		ar & motion_steps;
+		ar & value_in_step_no;
+//		c_buffer_robot_model_t robot_model;
+//		c_buffer_arm_t arm;
 	}
 
 	c_buffer(void); // by W odkomentowane
@@ -821,6 +834,18 @@ typedef struct _controller_state_t {
 	 *  @todo Translate to English.
 	 */
 	bool is_robot_blocked;
+
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template<class Archive>
+	void serialize(Archive & ar, const unsigned int version) {
+		ar & is_synchronised;
+		ar & is_power_on;
+		ar & is_wardrobe_on;
+		ar & is_robot_blocked;
+	}
 } controller_state_t;
 
 //------------------------------------------------------------------------------
@@ -903,7 +928,28 @@ struct r_buffer {
 	//                      METHODS
 	//-----------------------------------------------------
 	r_buffer(void); // W odkomentowane
-}__attribute__((__packed__));
+
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template<class Archive>
+	void serialize(Archive & ar, const unsigned int version) {
+		ar & reply_type;
+		ar & error_no;
+		ar & robot_model_type;
+		ar & arm_type;
+		ar & input_values;
+		ar & analog_input;
+		ar & controller_state;
+		ar & servo_step;
+		ar & PWM_value;
+		ar & current;
+		// The following are unions... probably have to handle with boost::variant
+//		ar & robot_model;
+//		ar & arm;
+	}
+}/*__attribute__((__packed__))*/; // Boost serialization can not handle packed values
 
 //------------------------------------------------------------------------------
 /*! Target position for the mobile robot. */
@@ -972,7 +1018,19 @@ struct ECP_REPLY_PACKAGE {
 	// TODO: this should be rather union, but it is not possible to union non-POD objects
 	r_buffer reply_package;
 	char commandRecognized[SPEECH_RECOGNITION_TEXT_LEN];
+
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template<class Archive>
+	void serialize(Archive & ar, const unsigned int version) {
+		ar & reply;
+		ar & reply_package;
+		// ar & commandRecognized; // TODO: this should be handled in better way...
+	}
 };
+
 // ------------------------------------------------------------------------
 
 /*
