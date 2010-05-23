@@ -10,6 +10,8 @@
 #if !defined(_ECP_MP_H)
 #define _ECP_MP_H
 
+#include "lib/agent/Agent.h"
+
 #include <map>
 
 #include <stdint.h>
@@ -30,7 +32,7 @@ namespace ecp_mp {
 namespace task {
 
 // klasa macierzysta dla klas globalnych procesow ECP i MP
-class task
+class task : Agent
 {
 public:
 	typedef std::map <const char *, ecp_mp::common::Trajectory /*, str_cmp */> trajectories_t;
@@ -78,6 +80,11 @@ public:
 
 	// methods for ECP template to redefine in concrete classes
 	virtual void main_task_algorithm(void) = 0;
+
+	bool step(void) {
+		main_task_algorithm();
+		return true;
+	}
 
 	// funkcjonalnosc dodana na potrzeby czytania trajektorii z pliku xml
 	class str_cmp

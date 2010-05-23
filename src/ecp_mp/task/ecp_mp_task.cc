@@ -52,7 +52,8 @@ lib::sr_ecp* task::sh_msg = NULL;
 
 
 task::task(lib::configurator &_config)
-	: config(_config),
+	: Agent(_config.section_name),
+	config(_config),
 	mrrocpp_network_path(config.return_mrrocpp_network_path())
 {
 	// std::string sr_net_attach_point = config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", UI_SECTION);

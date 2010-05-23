@@ -7,4 +7,4 @@ add_library(ecp_mp
 	smooth_trajectory_pose.cc
 )
 
-target_link_libraries(ecp_mp ${LIBXML2_LIBRARIES} ${COMMON_LIBRARIES})
+target_link_libraries(ecp_mp ${LIBXML2_LIBRARIES} ${COMMON_LIBRARIES} agent)
