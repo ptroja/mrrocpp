@@ -91,7 +91,6 @@ public:
 	}
 };
 
-} // namespace sensor
 } // namespace lib
 } // namespace mrrocpp
 

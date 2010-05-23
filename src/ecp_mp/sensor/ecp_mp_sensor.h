@@ -9,6 +9,9 @@
 #include "lib/srlib.h"
 #include "lib/configurator.h"
 
+#include "lib/exception.h"
+#include <boost/throw_exception.hpp>
+
 #if defined(USE_MESSIP_SRR)
 #include <messip.h>
 #endif
@@ -94,9 +97,12 @@ public:
 			pid = 0; // tymczasowo
 		} else {
 		// Stworzenie nowego procesu.
-		if ((pid = config.process_spawn(_section_name)) == -1)
-			throw lib::sensor::sensor_error(lib::SYSTEM_ERROR, CANNOT_SPAWN_VSP);
-			// Proba otworzenie urzadzenia.
+			if ((pid = config.process_spawn(_section_name)) == -1) {
+				BOOST_THROW_EXCEPTION(
+					lib::exception::System_error() <<
+					lib::exception::error_code(CANNOT_SPAWN_VSP)
+				);
+			}
 		}
 
 		short tmp = 0;
@@ -106,8 +112,12 @@ public:
 	// 		cout<<tmp<<endl;
 			if((tmp++)<CONNECT_RETRY)
 				usleep(1000*CONNECT_DELAY);
-			else
-				throw lib::sensor::sensor_error(lib::SYSTEM_ERROR, CANNOT_LOCATE_DEVICE);
+			else {
+				BOOST_THROW_EXCEPTION(
+					lib::exception::System_error() <<
+					lib::exception::error_code(CANNOT_LOCATE_DEVICE)
+				);
+			}
 		}
 	#else /* USE_MESSIP_SRR */
 
@@ -125,8 +135,12 @@ public:
 		}
 
 		// Stworzenie nowego procesu.
-		if ((pid = config.process_spawn(_section_name)) == -1)
-			throw sensor_error(lib::SYSTEM_ERROR, CANNOT_SPAWN_VSP);
+		if ((pid = config.process_spawn(_section_name)) == -1) {
+			BOOST_THROW_EXCEPTION(
+				lib::exception::System_error() <<
+				lib::exception::error_code(CANNOT_SPAWN_VSP)
+			);
+		}
 
 		short tmp = 0;
 	 	// Kilka sekund  (~2) na otworzenie urzadzenia.
@@ -138,6 +152,10 @@ public:
 			else {
 				std::cerr << "ecp_mp_sensor: messip::port_connect(" << VSP_NAME << ") failed" << std::endl;
 				throw sensor_error(lib::SYSTEM_ERROR, CANNOT_LOCATE_DEVICE);
+				BOOST_THROW_EXCEPTION(
+					lib::exception::System_error() <<
+					lib::exception::error_code(CANNOT_LOCATE_DEVICE)
+				);
 			}
 		}// end: while
 	#endif /* !USE_MESSIP_SRR */

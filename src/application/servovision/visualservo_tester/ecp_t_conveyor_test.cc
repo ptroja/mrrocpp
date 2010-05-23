@@ -8,7 +8,7 @@
 #include "ecp_t_conveyor_test.h"
 #include "ecp/conveyor/ecp_r_conv.h"
 
-#include "../logger.h"
+#include "lib/logger.h"
 
 using namespace boost;
 using namespace std;

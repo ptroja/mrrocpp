@@ -29,7 +29,7 @@ ecp_g_rotate_gripper::~ecp_g_rotate_gripper() {
 
 
 bool ecp_g_rotate_gripper::first_step() {
-	vsp_fradia = dynamic_cast<fradia_sensor_haar_detect *> (sensor_m[lib::SENSOR_CVFRADIA]);
+	vsp_fradia = dynamic_cast<fradia_sensor_haar_detect *> (sensor_m[ecp_mp::sensor::SENSOR_CVFRADIA]);
 
 	vsp_fradia->configure_fradia_task(ecp_mp::sensor::PERFORM_ROTATION);
 

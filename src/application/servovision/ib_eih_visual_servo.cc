@@ -23,7 +23,7 @@ namespace common {
 namespace generator {
 
 ib_eih_visual_servo::ib_eih_visual_servo(boost::shared_ptr <visual_servo_regulator> regulator, const std::string & section_name, mrrocpp::lib::configurator& configurator) :
-	visual_servo(regulator), object_visible(false)
+	visual_servo(regulator)
 {
 	try {
 		vsp_fradia

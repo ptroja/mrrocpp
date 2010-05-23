@@ -139,10 +139,10 @@ bool ecp_g_ib_eih::next_step()
 		e_translation(1,0) = e(1,0);
 		e_translation(2,0) = e(2,0);
 
-//		log("ecp_g_ib_eih::next_step() vsp_fradia->received_object.x: %g\n", (double) vsp_fradia->received_object.x);
-//		log("ecp_g_ib_eih::next_step() vsp_fradia->received_object.y: %g\n", (double) vsp_fradia->received_object.y);
-//		log("ecp_g_ib_eih::next_step() vsp_fradia->received_object.z: %g\n", (double) vsp_fradia->received_object.z);
-//		log("ecp_g_ib_eih::next_step() vsp_fradia->received_object.alpha: %g\n", vsp_fradia->received_object.alpha);
+//		log("ecp_g_ib_eih::next_step() vsp_fradia->image.x: %g\n", (double) vsp_fradia->image.x);
+//		log("ecp_g_ib_eih::next_step() vsp_fradia->image.y: %g\n", (double) vsp_fradia->image.y);
+//		log("ecp_g_ib_eih::next_step() vsp_fradia->image.z: %g\n", (double) vsp_fradia->image.z);
+//		log("ecp_g_ib_eih::next_step() vsp_fradia->image.alpha: %g\n", vsp_fradia->image.alpha);
 
 		logDbg("ecp_g_ib_eih::next_step() 4\n");
 

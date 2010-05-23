@@ -50,9 +50,9 @@ acq_eih::acq_eih(task &_ecp_t) : acquisition(_ecp_t)
 
 	printf("acq_eih::acq_eih() 6\n"); fflush(stdout);
 
-	ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_CVFRADIA] = new ecp_mp::sensor::cvfradia(lib::SENSOR_CVFRADIA, "[vsp_cvfradia]", _ecp_t, sizeof(lib::sensor_image_t::sensor_union_t::chessboard_t));
+	ecp_sub_task::ecp_t.sensor_m[ecp_mp::sensor::SENSOR_CVFRADIA] = new ecp_mp::sensor::fradia_sensor<chessboard_t,lib::empty_t>(_ecp_t.config, "[vsp_fradia_sensor]");
 
-	ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_CVFRADIA]->configure_sensor();
+	ecp_sub_task::ecp_t.sensor_m[ecp_mp::sensor::SENSOR_CVFRADIA]->configure_sensor();
 
 	generator = new generator::eihgenerator(_ecp_t);
 	generator->sensor_m = ecp_sub_task::ecp_t.sensor_m;
@@ -93,7 +93,7 @@ void acq_eih::main_task_algorithm(void ){
 	ecp_sub_task::ecp_t.sr_ecp_msg->message("ECP eihacquisition ready");
 
 	//Czekam, az czujnik bedzie skonfigurowany.
-	ecp_mp::sensor::fradia_sensor<chessboard_t,lib::empty_t> * fradia = dynamic_cast<ecp_mp::sensor::fradia_sensor<chessboard_t,lib::empty_t> *> (ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_CVFRADIA]);
+	ecp_mp::sensor::fradia_sensor<chessboard_t,lib::empty_t> * fradia = dynamic_cast<ecp_mp::sensor::fradia_sensor<chessboard_t,lib::empty_t> *> (ecp_sub_task::ecp_t.sensor_m[ecp_mp::sensor::SENSOR_CVFRADIA]);
 	fradia->get_reading();
 	while(fradia->get_report() == lib::VSP_SENSOR_NOT_CONFIGURED) {
 		fradia->get_reading();
@@ -122,7 +122,7 @@ void acq_eih::main_task_algorithm(void ){
 	//double coordinates[MAX_SERVOS_NR]={0.0, 0.0, -1.0 * A, 0.0, 0.0, 0.0, 0.0, 0.0};
 	smoothgen->set_relative();
 
-//	std::cout<<sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.chessboard.found<<std::endl;
+//	std::cout<<sensor_m[ecp_mp::sensor::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.chessboard.found<<std::endl;
 
 	//opusc chwytak az przestanie "widziec" szachownice
 	while(fradia->image.found == true && !calibrated){
@@ -130,7 +130,7 @@ void acq_eih::main_task_algorithm(void ){
 		smoothgen->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, vv, aa, 0.0, 0.0, -1.0 * A, 0.0, 0.0, 0.0, 0.0, 0.0, true);
 		smoothgen->Move();
 		nanosleep(&delay, NULL);
-		ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_CVFRADIA]->get_reading();
+		ecp_sub_task::ecp_t.sensor_m[ecp_mp::sensor::SENSOR_CVFRADIA]->get_reading();
 		generator->Move();
 		store_data();
 		++i;
@@ -141,7 +141,7 @@ void acq_eih::main_task_algorithm(void ){
 	smoothgen->Move();
 	nanosleep(&delay, NULL);
 	--i;
-	ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_CVFRADIA]->get_reading();
+	ecp_sub_task::ecp_t.sensor_m[ecp_mp::sensor::SENSOR_CVFRADIA]->get_reading();
 
 	// zabezpieczenie przed przekroczeniem obszaru roboczego robota
 	bool flaga = true;
@@ -188,7 +188,7 @@ void acq_eih::main_task_algorithm(void ){
 				generator->Move();
 				store_data();
 				++m;
-				ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_CVFRADIA]->get_reading();
+				ecp_sub_task::ecp_t.sensor_m[ecp_mp::sensor::SENSOR_CVFRADIA]->get_reading();
 			}
 
 			if(m != 0)
@@ -362,7 +362,7 @@ bool acq_eih::store_data(void )
 {
 	int i,j=0;
 
-	ecp_mp::sensor::fradia_sensor<chessboard_t,lib::empty_t> * fradia = dynamic_cast<ecp_mp::sensor::fradia_sensor<chessboard_t,lib::empty_t> *> (ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_CVFRADIA]);
+	ecp_mp::sensor::fradia_sensor<chessboard_t,lib::empty_t> * fradia = dynamic_cast<ecp_mp::sensor::fradia_sensor<chessboard_t,lib::empty_t> *> (ecp_sub_task::ecp_t.sensor_m[ecp_mp::sensor::SENSOR_CVFRADIA]);
 
 	if(fradia->image.found == true && !calibrated)
 	{

@@ -8,7 +8,7 @@
 #include "ecp_g_conveyor_sinus.h"
 #include <math.h>
 
-#include "../logger.h"
+#include "lib/logger.h"
 
 using namespace std;
 using namespace logger;

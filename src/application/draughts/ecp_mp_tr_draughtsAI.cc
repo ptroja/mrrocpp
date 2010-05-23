@@ -28,10 +28,7 @@ TRDraughtsAI::~TRDraughtsAI()
 }
 
 void TRDraughtsAI::AIconnect(const char * host, uint16_t serverPort){
-	int socketDesc;
-	struct sockaddr_in serverAddress;
 	struct hostent *hostInfo;
-	char c;
 
 	hostInfo=gethostbyname(host);
 	if (hostInfo==NULL) {
@@ -79,7 +76,7 @@ void TRDraughtsAI::AIdisconnect()
 }
 
 bool TRDraughtsAI::t_read(){
-	if (recv(socketDescriptor, &from_va.draughts_ai, sizeof(from_va.draughts_ai), 0) < 0) {
+	if (recv(socketDescriptor, &from_va, sizeof(from_va), 0) < 0) {
 		int e = errno;
 		cerr << "didn't get response from server?";
 		close(socketDescriptor);
@@ -94,7 +91,7 @@ bool TRDraughtsAI::t_read(){
 }
 
 bool TRDraughtsAI::t_write(){
-	if (send(socketDescriptor, &to_va.draughts_ai, sizeof(to_va.draughts_ai), 0) < 0) {
+	if (send(socketDescriptor, &to_va, sizeof(to_va), 0) < 0) {
 		int e = errno;
 		cerr << "cannot send data ";
 		close(socketDescriptor);

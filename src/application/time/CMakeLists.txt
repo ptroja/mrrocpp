@@ -1,3 +1,4 @@
+if(0)
 add_executable(vsp_time_int
 	vsp_time_sensor.cc
 	../../vsp/common/vsp_m_int.cc ../../vsp/common/vsp_sensor.cc
@@ -32,3 +33,4 @@ add_executable(ecp_time
 target_link_libraries(ecp_time ecp_r_irp6ot ecp_r_irp6p ecp)
 
 install(TARGETS vsp_time_int DESTINATION bin)
+endif(0)

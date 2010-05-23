@@ -105,14 +105,14 @@ bool ecp_g_pb_eih::next_step()
 		Eigen::Matrix <double, 4, 1> e;
 		e(0, 0) = vsp_fradia->image.x;
 		e(1, 0) = vsp_fradia->image.y;
-		//e(2, 0) = vsp_fradia->received_object.z;
+		//e(2, 0) = vsp_fradia->image.z;
 		e(2, 0) = 0;
 		e(3, 0) = vsp_fradia->image.alpha;
 
-		log("ecp_g_ib_eih::next_step() vsp_fradia->received_object.x: %g\n", (double) vsp_fradia->image.x);
-		log("ecp_g_ib_eih::next_step() vsp_fradia->received_object.y: %g\n", (double) vsp_fradia->image.y);
-		log("ecp_g_ib_eih::next_step() vsp_fradia->received_object.z: %g\n", (double) vsp_fradia->image.z);
-		log("ecp_g_ib_eih::next_step() vsp_fradia->received_object.alpha: %g\n", vsp_fradia->image.alpha);
+		log("ecp_g_ib_eih::next_step() vsp_fradia->image.x: %g\n", (double) vsp_fradia->image.x);
+		log("ecp_g_ib_eih::next_step() vsp_fradia->image.y: %g\n", (double) vsp_fradia->image.y);
+		log("ecp_g_ib_eih::next_step() vsp_fradia->image.z: %g\n", (double) vsp_fradia->image.z);
+		log("ecp_g_ib_eih::next_step() vsp_fradia->image.alpha: %g\n", vsp_fradia->image.alpha);
 
 		logDbg("ecp_g_ib_eih::next_step() 4\n");
 

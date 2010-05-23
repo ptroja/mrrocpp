@@ -36,7 +36,7 @@ public:
 	virtual ~ib_eih_visual_servo();
 
 	virtual lib::Homog_matrix get_position_change(const lib::Homog_matrix& current_position, double dt);
-	virtual boost::shared_ptr <mrrocpp::lib::sensor> get_vsp_fradia();
+	virtual boost::shared_ptr <ecp_mp::sensor::sensor_interface >get_vsp_fradia();
 
 protected:
 	boost::shared_ptr <ecp_mp::sensor::fradia_sensor <image_based_reading, image_based_configuration> > vsp_fradia;

@@ -29,7 +29,7 @@ eihgenerator::~eihgenerator ()
 
 bool eihgenerator::first_step()
 {
-	sensor = dynamic_cast<ecp_mp::sensor::fradia_sensor<chessboard_t, eihcalibration_t> *> (sensor_m[lib::SENSOR_CVFRADIA]);
+	sensor = dynamic_cast<ecp_mp::sensor::fradia_sensor<chessboard_t, eihcalibration_t> *> (sensor_m[ecp_mp::sensor::SENSOR_CVFRADIA]);
 
 	//proste zadanie kinematyki
 	the_robot->ecp_command.instruction.instruction_type = lib::GET;

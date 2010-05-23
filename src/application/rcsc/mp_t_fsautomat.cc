@@ -30,6 +30,7 @@
 
 
 #include "ecp_mp_tr_rc_windows.h"
+#include "ecp_mp/sensor/ecp_mp_s_fradia_sensor.h"
 #include "State.h"
 #include "StateHeap.h"
 
@@ -372,12 +373,12 @@ void fsautomat::initializeCubeState(common::State &state)
 
 void fsautomat::initiateSensorReading(common::State &state)
 {
-	/*        sensor_m[lib::SENSOR_CAMERA_ON_TRACK]->initiate_reading();
+	/*        sensor_m[ecp_mp::sensor::SENSOR_CAMERA_ON_TRACK]->initiate_reading();
 	 if (wait_ms(1000))
 	 {
 	 return true;
 	 }
-	 sensor_m[lib::SENSOR_CAMERA_ON_TRACK]->get_reading();
+	 sensor_m[ecp_mp::sensor::SENSOR_CAMERA_ON_TRACK]->get_reading();
 	 */
 	/*	char *sensorName = strdup(state.getStringArgument());
 	 SENSOR_t whichSensor;
@@ -407,7 +408,7 @@ void fsautomat::writeCubeState(common::State &state)
 {
 	int index = state.getNumArgument();
 
-	ecp_mp::sensor::sensor<lib::cube_face_t> * cube_recognition = dynamic_cast<ecp_mp::sensor::sensor<lib::cube_face_t> *> (sensor_m[lib::SENSOR_CAMERA_ON_TRACK]);
+	ecp_mp::sensor::sensor<lib::cube_face_t> * cube_recognition = dynamic_cast<ecp_mp::sensor::sensor<lib::cube_face_t> *> (sensor_m[ecp_mp::sensor::SENSOR_CAMERA_ON_TRACK]);
 
 	cube_recognition->initiate_reading();
 	wait_ms(1000);

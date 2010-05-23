@@ -49,18 +49,6 @@ class transmitter_base
 		{
 			return true;
 		};
-<<<<<<< HEAD
-
-		class transmitter_error
-		{  // Klasa obslugi bledow czujnikow
-			public:
-				const lib::error_class_t error_class;
-
-				transmitter_error ( lib::error_class_t err_cl) :
-					error_class(err_cl)
-				{
-				};
-		}; // end: class transmitter_error
 };
 
 template<typename TO_VA, typename FROM_VA>
@@ -77,9 +65,6 @@ public:
 	{
 	}
 };
-=======
-}; // end: class transmitter
->>>>>>> exception
 
 } // namespace transmitter
 

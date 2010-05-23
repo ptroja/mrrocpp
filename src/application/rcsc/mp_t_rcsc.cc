@@ -15,6 +15,7 @@
 #include "ecp_mp_tr_rc_windows.h"
 #include "ecp/festival/generator/ecp_g_festival.h"
 #include "ecp_mp/task/ecp_mp_t_festival.h"
+#include "ecp_mp/sensor/ecp_mp_s_fradia_sensor.h"
 
 #include <boost/foreach.hpp>
 
@@ -86,7 +87,7 @@ void rubik_cube_solver::identify_colors() //DO WIZJI (przekladanie i ogladanie s
 
 		if (vis_servoing)
 		{
-			ecp_mp::sensor::sensor<lib::cube_face_t> * cube_recognition = dynamic_cast<ecp_mp::sensor::sensor<lib::cube_face_t> *> (sensor_m[lib::SENSOR_CAMERA_ON_TRACK]);
+			ecp_mp::sensor::sensor<lib::cube_face_t> * cube_recognition = dynamic_cast<ecp_mp::sensor::sensor<lib::cube_face_t> *> (sensor_m[ecp_mp::sensor::SENSOR_CAMERA_ON_TRACK]);
 
 			wait_ms(5000);
 			cube_recognition->initiate_reading();

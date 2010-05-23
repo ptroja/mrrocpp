@@ -19,7 +19,7 @@ namespace ecp_mp {
 namespace transmitter {
 
 TRGraspit::TRGraspit(TRANSMITTER_ENUM _transmitter_name, const std::string & _section_name, task::task& _ecp_mp_object):
-	transmitter (_transmitter_name, _section_name, _ecp_mp_object){
+	GraspitTransmitter_t (_transmitter_name, _section_name, _ecp_mp_object){
 }
 
 TRGraspit::~TRGraspit()
@@ -27,8 +27,6 @@ TRGraspit::~TRGraspit()
 }
 
 void TRGraspit::TRconnect(const char *host, uint16_t serverPort){
-	int socketDesc;
-	struct sockaddr_in serverAddress;
 	struct hostent *hostInfo;
 
 	hostInfo=gethostbyname(host);
@@ -43,7 +41,7 @@ void TRGraspit::TRconnect(const char *host, uint16_t serverPort){
 
 	cout << "host ok\n";
 
-	socketDesc = socket(AF_INET, SOCK_STREAM, 0);
+	int socketDesc = socket(AF_INET, SOCK_STREAM, 0);
 	if (socketDesc < 0) {
 		int e = errno;
 		cerr << "cannot create socket\n";
@@ -86,7 +84,7 @@ void TRGraspit::TRdisconnect()
 }
 
 bool TRGraspit::t_read(){
-	if (recv(socketDescriptor, &from_va.graspit, sizeof(from_va.graspit), 0) < 0) {
+	if (recv(socketDescriptor, &from_va, sizeof(from_va), 0) < 0) {
 		int e = errno;
 		cerr << "didn't get response from server?";
 		close(socketDescriptor);
