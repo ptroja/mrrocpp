@@ -17,14 +17,10 @@
 
 #include <rpc/rpc.h>
 
-#if BOOST_VERSION >=104100
-#define THROW_LOAD_EXCEPTION
-#else
 #define THROW_LOAD_EXCEPTION \
 	boost::serialization::throw_exception( \
 			boost::archive::archive_exception( \
 				boost::archive::archive_exception::stream_error))
-#endif
 
 #define LOAD_A_TYPE(T, P) \
     /** conversion for T */ \

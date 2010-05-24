@@ -8,15 +8,14 @@
 #ifndef __UI_H
 #define __UI_H
 
-#include <pthread.h>
-#include <list>
-
+#include <boost/function.hpp>
 #include <boost/thread/condition_variable.hpp>
 #include <boost/thread/mutex.hpp>
 #include <boost/circular_buffer.hpp>
-#include <boost/function.hpp>
 #include <stdexcept>
 #include <iostream>
+#include <string>
+#include <list>
 
 #include "lib/com_buf.h"
 #include "lib/srlib.h"

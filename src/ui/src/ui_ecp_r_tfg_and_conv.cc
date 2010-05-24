@@ -6,22 +6,25 @@
 // -------------------------------------------------------------------------
 
 /* Standard headers */
+#include <iostream>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
 #include <assert.h>
-
 #include <fcntl.h>
 #include <errno.h>
-#include <string.h>
-#include <iostream>
+#include <math.h>
 
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 
 #include "lib/srlib.h"
+
+#include "ui/ui_ecp_r_tfg_and_conv.h"
+
 #include "ecp/irp6ot_tfg/ecp_r_irp6ot_tfg.h"
 #include "ecp/irp6p_tfg/ecp_r_irp6p_tfg.h"
 #include "ecp/conveyor/ecp_r_conv.h"
@@ -29,9 +32,6 @@
 #include "ecp/spkm/ecp_r_spkm.h"
 #include "ecp/smb/ecp_r_smb.h"
 #include "ecp/shead/ecp_r_shead.h"
-#include "ui/ui_ecp_r_tfg_and_conv.h"
-
-#include <math.h>
 
 // ---------------------------------------------------------------
 ui_tfg_and_conv_robot::ui_tfg_and_conv_robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg, lib::robot_name_t _robot_name) :

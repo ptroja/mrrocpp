@@ -1,5 +1,7 @@
 add_library(agent DataBufferBase.cc AndDataCondition.cc OrDataCondition.cc AgentBase.cc Agent.cc)
 
+target_link_libraries(agent ${Boost_SERIALIZATION_LIBRARY})
+
 if(USE_MESSIP)
 target_link_libraries(agent messip)
 endif(USE_MESSIP)

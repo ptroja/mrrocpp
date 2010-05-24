@@ -8,14 +8,12 @@
 #ifndef _UI_ECP_R_COMMON_H
 #define _UI_ECP_R_COMMON_H
 
-#include "ecp/common/ecp_robot.h"
-
 #include "ui/ui.h"
 // Konfigurator.
 #include "lib/configurator.h"
 #include "lib/mrmath/mrmath.h"
 
-
+#include "ecp/common/ecp_robot.h"
 
 // ---------------------------------------------------------------
 class ui_common_robot

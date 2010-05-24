@@ -16,16 +16,18 @@
 #include <unistd.h>
 #include <string.h>
 
+#include "ui/ui.h"
+
 /* MRROC++ headers */
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 
-
 #include "lib/srlib.h"
+/*
 #include "ui/ui_ecp.h"
 #include "ui/ui_const.h"
-#include "ui/ui.h"
+*/
 // Konfigurator.
 #include "lib/configurator.h"
 
@@ -73,7 +75,7 @@ int MAM_btn_start_measures( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo
         SetButtonState( ABW_MAM_btn_exit, false);
         // Odswiezenie okna.
         PtDamageWidget(ABW_MAM_wnd_manual_moves_automatic_measures);
-        };
+        }
     return( Pt_CONTINUE );
 	}//: MAM_btn_start_measures
 
@@ -100,7 +102,7 @@ int MAM_btn_stop_measures( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_
         SetButtonState( ABW_MAM_btn_exit, true);
         // Odswiezenie okna.
         PtDamageWidget(ABW_MAM_wnd_manual_moves_automatic_measures);
-        };
+        }
     return( Pt_CONTINUE );
 	}//: MAM_btn_stop_measures
 
@@ -127,7 +129,7 @@ int MAM_btn_clear_measures( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo
         SetButtonState( ABW_MAM_btn_exit, true);
         // Odswiezenie okna.
         PtDamageWidget(ABW_MAM_wnd_manual_moves_automatic_measures);
-        };
+        }
     return( Pt_CONTINUE );
 	}//: MAM_btn_clear_measures
 
@@ -166,7 +168,7 @@ int MAM_btn_calibrate( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *c
         SetButtonState( ABW_MAM_btn_exit, true);
         // Odswiezenie okna.
         PtDamageWidget(ABW_MAM_wnd_manual_moves_automatic_measures);
-        };
+        }
     return( Pt_CONTINUE );
 	}//: MAM_btn_calibrate
 
@@ -182,7 +184,7 @@ int MAM_btn_exit( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo
     ui_ecp_msg.command = lib::MAM_EXIT;
     if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(lib::UI_ECP_message), NULL, 0) == -1) {
          perror("MAM_btn_exit: Send to ECP failed");
-        };
+        }
     // Zamkniecie polaczenia.
     name_close(ECPfd);
     // Zamkniecie okna.
@@ -265,5 +267,5 @@ int MAM_refresh_window(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *c
     PtSetResource(ABW_MAM_edt_measure_point_number, Pt_ARG_TEXT_STRING ,  tmp_buffer, 0);
     
     return( Pt_CONTINUE );
-    };// end: MAM_refresh_window
+    }
 
