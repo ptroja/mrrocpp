@@ -24,16 +24,10 @@ namespace generator {
  *  @{
  */
 
-class tfg: public teach_in {
+class tfg: public common::generator::generator {
 protected:
 
-	lib::ECP_POSE_SPECIFICATION emptyps;
-	lib::trajectory_description td;
 	const int step_no;
-	double delta[6];
-	lib::Homog_matrix basic_rot_frame;
-	lib::Homog_matrix tool_frame;
-	lib::Homog_matrix ex_rot_frame;
 
 public:
 
