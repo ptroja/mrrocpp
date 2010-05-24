@@ -5,8 +5,8 @@
 // -------------------------------------------------------------------------
 
 
-#if !defined(_ECP_GEN_SK_H)
-#define _ECP_GEN_SK_H
+#if !defined(_ECP_GEN_TFG_H)
+#define _ECP_GEN_TFG_H
 
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
@@ -24,7 +24,7 @@ namespace generator {
  *  @{
  */
 
-class y_edge_follow_force: public teach_in {
+class tfg: public teach_in {
 protected:
 
 	lib::ECP_POSE_SPECIFICATION emptyps;
@@ -38,7 +38,7 @@ protected:
 public:
 
 	// konstruktor
-	y_edge_follow_force(common::task::task& _ecp_task, int step);
+	tfg(common::task::task& _ecp_task, int step);
 
 	virtual bool first_step();
 

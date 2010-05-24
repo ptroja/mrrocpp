@@ -1,5 +1,5 @@
-#if !defined(_ECP_T_SK_MR_H)
-#define _ECP_T_SK_MR_H
+#if !defined(_ECP_T_TFG_H)
+#define _ECP_T_TFG_H
 
 #include "ecp/common/task/ecp_task.h"
 #include "ecp/common/generator/ecp_g_force.h"
@@ -10,17 +10,16 @@ namespace ecp {
 namespace common {
 namespace task {
 
-class sk_mr: public common::task::task {
+class tfg: public common::task::task {
 protected:
 	//generatory
 	generator::tff_nose_run* nrg;
-	generator::y_edge_follow_force* yefg;
 	generator::bias_edp_force* befg;
 	bool save_activated;
 
 public:
 	// KONSTRUKTORY
-	sk_mr(lib::configurator &_config);
+	tfg(lib::configurator &_config);
 
 	// methods for ECP template to redefine in concrete classes
 	void main_task_algorithm(void);
