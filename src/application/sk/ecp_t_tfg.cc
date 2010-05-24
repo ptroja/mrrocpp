@@ -7,9 +7,6 @@
 #include "lib/srlib.h"
 #include "ecp_mp_t_sk_mr.h"
 
-#include "ecp/common/generator/ecp_g_smooth.h"
-#include "ecp/common/generator/ecp_g_sleep.h"
-
 #include "ecp/irp6ot_tfg/ecp_r_irp6ot_tfg.h"
 #include "ecp/irp6p_tfg/ecp_r_irp6p_tfg.h"
 
@@ -32,11 +29,9 @@ tfg::tfg(lib::configurator &_config) :
 		// TODO: throw
 	}
 
-	nrg = new generator::tff_nose_run(*this, 8);
-	nrg->configure_pulse_check(true);
-	befg = new generator::bias_edp_force(*this);
+	tfgg = new generator::tfg(*this, 10);
 
-	sr_ecp_msg->message("ECP SK_MR loaded");
+	sr_ecp_msg->message("ECP TFG loaded");
 }
 
 void tfg::main_task_algorithm(void) {
@@ -50,11 +45,8 @@ void tfg::main_task_algorithm(void) {
 		flushall();
 
 		switch ((ecp_mp::task::SK_MR_ECP_STATES) mp_command.ecp_next_state.mp_2_ecp_next_state) {
-		case ecp_mp::task::ECP_GEN_BIAS_EDP_FORCE:
-			befg->Move();
-			break;
-		case ecp_mp::task::ECP_GEN_TFF_NOSE_RUN:
-			nrg->Move();
+		case ecp_mp::task::ECP_GEN_TFG:
+			tfgg->Move();
 			break;
 		default:
 			break;

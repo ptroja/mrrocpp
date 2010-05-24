@@ -16,7 +16,10 @@ namespace task {
  * Used generators.
  */
 enum SK_MR_ECP_STATES {
-	ECP_GEN_TFF_NOSE_RUN = 0, ECP_GEN_EDGE_FOLLOW_FORCE, ECP_GEN_BIAS_EDP_FORCE
+	ECP_GEN_TFF_NOSE_RUN = 0,
+	ECP_GEN_EDGE_FOLLOW_FORCE,
+	ECP_GEN_BIAS_EDP_FORCE,
+	ECP_GEN_TFG
 };
 
 } // namespace task
