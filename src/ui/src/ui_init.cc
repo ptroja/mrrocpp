@@ -37,10 +37,11 @@
 #include <pthread.h>
 #include <errno.h>
 
+#include "ui/ui.h"
+
 #include "lib/mis_fun.h"
 #include "lib/srlib.h"
 #include "ui/ui_const.h"
-#include "ui/ui.h"
 #include "lib/configurator.h"
 #include "lib/mis_fun.h"
 #include "ui/ui_ecp.h"
