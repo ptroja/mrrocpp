@@ -45,8 +45,8 @@ private:
 	void solve_transducer_controller_failure(void);
 
 	int open_port(void);
-	forceReadings_t getFT(int fd);
-	void sendBias(int fd);
+	forceReadings_t getFT();
+	void sendBias();
 }; // end: class vsp_sensor
 
 

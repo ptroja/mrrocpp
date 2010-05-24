@@ -43,8 +43,7 @@ namespace common {
  *
  * \author yoyek
  */
-class effector
-{
+class effector {
 protected:
 
 	/*!
@@ -94,6 +93,21 @@ protected:
 	void reply_to_instruction(void);
 
 	/*!
+	 * \brief method to deserialize part of the reply
+	 *
+	 * Currently simple memcpy implementation in derrived classes
+	 */
+	virtual void instruction_deserialization();
+
+
+	/*!
+	 * \brief method to serialize part of the reply
+	 *
+	 * Currently simple memcpy implementation in derrived classes
+	 */
+	virtual void reply_serialization();
+
+	/*!
 	 * \brief method to establish error sent to ECP.
 	 *
 	 * The error is stored in reply_buffer.
@@ -109,7 +123,7 @@ public:
 	const lib::robot_name_t robot_name;
 
 	/*!
-	 * \brief Referecnce to configuration object
+	 * \brief Reference to configuration object
 	 *
 	 * It stores data read from ini file.
 	 */
@@ -132,7 +146,7 @@ public:
 	/*!
 	 * \brief Info if the test mode is active.
 	 *
-	 * It is taken from configaration data.
+	 * It is taken from configuration data.
 	 */
 	int test_mode;
 
@@ -153,10 +167,9 @@ public:
 	/*!
 	 * \brief Destructor.
 	 *
-	 * It destroyes the objects to communicate with UI SR.
+	 * It destroys the objects to communicate with UI SR.
 	 */
 	virtual ~effector();
-
 
 	/*!
 	 * \brief ECP command union.
@@ -175,7 +188,7 @@ public:
 	/*!
 	 * \brief Pure virtual method to create effector specific threads.
 	 *
-	 * For the purpose of visualisation, measurement registration, force control, etc..
+	 * For the purpose of visualization, measurement registration, force control, etc..
 	 */
 	virtual void create_threads() = 0;
 

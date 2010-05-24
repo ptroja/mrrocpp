@@ -11,10 +11,10 @@ namespace mrrocpp {
 namespace mp {
 namespace robot {
 
-speaker::speaker (task::task &mp_object_l) :
-		robot (lib::ROBOT_SPEAKER, ECP_SPEAKER_SECTION, mp_object_l)
-{}
-
+speaker::speaker(task::task &mp_object_l) :
+	robot(lib::ROBOT_SPEAKER, ECP_SPEAKER_SECTION, mp_object_l)
+{
+}
 
 } // namespace robot
 } // namespace mp

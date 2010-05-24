@@ -10,7 +10,6 @@
 
 #include "mp/mp.h"
 
-
 namespace mrrocpp {
 namespace mp {
 namespace task {
@@ -36,7 +35,7 @@ public:
 
 };
 
-/** @} */ // end of edge_following
+/** @} */
 
 } // namespace task
 } // namespace mp

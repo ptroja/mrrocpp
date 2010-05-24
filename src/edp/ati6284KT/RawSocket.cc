@@ -114,8 +114,6 @@ namespace sensor {
     std::size_t readBytes;
     std::size_t size;
     if ((readBytes = read(bpf_, bpf_buf, bpfBufLen_)) > 0) {
-      int i = 0;
-
       // read all packets that are included in bpf_buf. BPF_WORDALIGN is used
       // to proceed to the next BPF packet that is available in the buffer.
 

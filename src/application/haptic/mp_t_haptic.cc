@@ -56,13 +56,11 @@ void haptic::configure_edp_force_sensor(bool configure_track, bool configure_pos
                 (2, 2, lib::ROBOT_IRP6_ON_TRACK, lib::ROBOT_IRP6_POSTUMENT,
                 		lib::ROBOT_IRP6_ON_TRACK, lib::ROBOT_IRP6_POSTUMENT );
     }
-
 }
 
 
 void haptic::main_task_algorithm(void)
 {
-
 	generator::haptic mp_h_gen(*this, 10);
    	mp_h_gen.robot_m = robot_m;
 
@@ -84,8 +82,6 @@ void haptic::main_task_algorithm(void)
 
 
    	send_end_motion_to_ecps (2, lib::ROBOT_IRP6_ON_TRACK, lib::ROBOT_IRP6_POSTUMENT);
-
-
 }
 
 

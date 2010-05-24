@@ -1,7 +1,10 @@
-/bin
-/build
-/logs
-/msr
-/configs/default_file.cfg
+bin
+build*
+logs
+msr
+configs/default_file.cfg
 .project
 .cproject
+.qnx_internal.mk
+.settings/
+*.patch

@@ -1,6 +1,3 @@
-
-
-
 // -------------------------------------------------------------------------
 //                            ui_ecp->cc
 // Metody sluzace do komunikacji UI z EDP - zlecenia dla driver'a
@@ -9,32 +6,32 @@
 // -------------------------------------------------------------------------
 
 /* Standard headers */
+#include <cfloat>
+#include <iostream>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
 #include <assert.h>
-#include <cfloat>
-
+#include <math.h>
 #include <fcntl.h>
 #include <errno.h>
-#include <string.h>
-#include <iostream>
 
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 
 #include "lib/srlib.h"
+
+#include "ui/ui_ecp_r_irp6_common.h"
+
 #include "ecp/irp6_on_track/ecp_r_irp6ot.h"
 #include "ecp/irp6_postument/ecp_r_irp6p.h"
 #include "ecp/irp6_mechatronika/ecp_r_irp6m.h"
 #include "ecp/polycrank/ecp_r_polycrank.h"
 #include "ecp/smb/ecp_r_smb.h"
 #include "ecp/spkm/ecp_r_spkm.h"
-#include "ui/ui_ecp_r_irp6_common.h"
-
-#include <math.h>
 
 // ---------------------------------------------------------------
 ui_irp6_common_robot::ui_irp6_common_robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg, lib::robot_name_t _robot_name) :
@@ -76,15 +73,6 @@ ui_irp6_common_robot::ui_irp6_common_robot(lib::configurator &_config, lib::sr_e
 		case lib::ROBOT_POLYCRANK:
 			ecp = new ecp::polycrank::robot(_config, _sr_ecp_msg);
 			break;
-		case lib::ROBOT_SMB:
-			ecp = new ecp::smb::robot(_config, _sr_ecp_msg);
-			break;
-		case lib::ROBOT_SPKM:
-			ecp = new ecp::spkm::robot(_config, _sr_ecp_msg);
-			break;
-			//    case lib::ROBOT_SPEAKER:
-			//    case lib::ROBOT_CONVEYOR:
-			//        break;
 		default:
 			fprintf(stderr, "ERROR: unknown robot name in ecp_robot ui_irp6_common_robot::ui_irp6_common_robot\n");
 			ecp = NULL;
@@ -109,7 +97,6 @@ ui_irp6_common_robot::ui_irp6_common_robot(lib::configurator &_config, lib::sr_e
 	JOINT_LINEAR_STEP = 0.00004; // Przyrost liniowy w przegubach posuwistych [m]
 	END_EFFECTOR_LINEAR_STEP = 0.00002;// Przyrost wspolrzednej polozenia koncowki [m]
 	END_EFFECTOR_ANGULAR_STEP = 0.0002; // Przyrost wspolrzednej orientacji koncowki [rad]
-
 }
 
 // ZADANIE NARZEDZIA

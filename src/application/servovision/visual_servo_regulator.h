@@ -37,7 +37,13 @@ public:
 	}
 	;
 
-	virtual const Eigen::Matrix <double, 6, 1> & calculate_control(const Eigen::Matrix <double, 6, 1> & error) = 0;
+	/**
+	 * Calculate control.
+	 * @param error
+	 * @param dt time between calls (in miliseconds)
+	 * @return control
+	 */
+	virtual const Eigen::Matrix <double, 6, 1> & calculate_control(const Eigen::Matrix <double, 6, 1> & error, double dt) = 0;
 
 	const Eigen::Matrix <double, 6, 1> & get_control()
 	{
@@ -45,9 +51,10 @@ public:
 	}
 
 protected:
-	visual_servo_regulator(const lib::configurator & config, const char * config_section_name) :
+	visual_servo_regulator(const lib::configurator & config, const std::string& config_section_name) :
 		config(config), config_section_name(config_section_name)
 	{
+		calculated_control.setZero();
 	}
 
 	const lib::configurator & config;

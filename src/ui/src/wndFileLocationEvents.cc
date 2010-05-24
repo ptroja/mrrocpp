@@ -21,9 +21,9 @@
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 
+#include "ui/ui.h"
 #include "ui/ui_ecp.h"
 #include "ui/ui_const.h"
-#include "ui/ui.h"
 
 /* Local headers */
 #include "ablibs.h"

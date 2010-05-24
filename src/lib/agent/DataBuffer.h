@@ -4,7 +4,7 @@
 #include <vector>
 #include <ostream>
 
-#include "../xdr_iarchive.hpp"
+#include "lib/xdr/xdr_iarchive.hpp"
 
 #include "Agent.h"
 
@@ -19,14 +19,14 @@ class DataBuffer : public DataBufferBase {
 	friend class Agent;
 
 private:
-	//! flag indicating that the new data has not been getted yet
-	bool fresh;
-
 	//! current data
 	T data;
 
 	//! place for keeping new data after arrive
 	T new_data;
+
+	//! flag indicating that the new data has not been getted yet
+	bool fresh;
 
 	/**
 	 * Store data in the buffer

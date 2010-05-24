@@ -41,12 +41,11 @@ const unsigned short int INT_FREC_DIVIDER = 4; // Dzielnik czestotliwosci przerw
 // ------------------------------------------------------------------------
 
 class hardware_interface: public common::hardware_interface {
-
 public:
     hardware_interface (common::motor_driven_effector &_master, int _hi_irq_real,
     		unsigned short int _hi_intr_freq_divider, unsigned int _hi_intr_timeout_high,
     		unsigned int _hi_first_servo_ptr, unsigned int _hi_intr_generator_servo_ptr,
-    		unsigned int _hi_isa_card_offset, int* _max_current);    // Konstruktor
+    		unsigned int _hi_isa_card_offset, const int _max_current[]);    // Konstruktor
 
 	uint64_t read_write_hardware(void); // Obsluga sprzetu
 

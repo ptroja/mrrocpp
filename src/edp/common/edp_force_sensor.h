@@ -8,7 +8,9 @@
 #if !defined(_EDP_FORCE_SENSOR_H)
 #define _EDP_FORCE_SENSOR_H
 
+#include <boost/utility.hpp>
 #include <boost/thread/mutex.hpp>
+#include <Eigen/Core>
 
 #include "lib/mrmath/ForceTrans.h"
 #include "lib/sensor.h"				// klasa bazowa sensor
@@ -48,10 +50,8 @@ public:
 	bool is_sensor_configured; // czy czujnik skonfigurowany?
 	void set_command_execution_finish();
 
-	double next_force_tool_position[3];
-	double next_force_tool_weight;
-	double current_force_tool_position[3];
-	double current_force_tool_weight;
+	Eigen::Vector3d next_force_tool_position, current_force_tool_position;
+	double next_force_tool_weight, current_force_tool_weight;
 
 	bool new_edp_command;
 
