@@ -3,12 +3,15 @@
 
 #include "ecp/common/task/ecp_task.h"
 #include "ecp/common/generator/ecp_g_force.h"
-#include "application/sk/ecp_g_tfg.h"
+#include "ecp/irp6_tfg/ecp_g_tfg.h"
 
 namespace mrrocpp {
 namespace ecp {
 namespace common {
 namespace task {
+
+
+
 
 class tfg: public common::task::task {
 protected:

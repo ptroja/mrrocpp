@@ -5,12 +5,12 @@
 #include "lib/com_buf.h"
 
 #include "lib/srlib.h"
-#include "ecp_mp_t_sk_mr.h"
+#include "ecp_mp/task/ecp_mp_t_tfg.h"
 
 #include "ecp/irp6ot_tfg/ecp_r_irp6ot_tfg.h"
 #include "ecp/irp6p_tfg/ecp_r_irp6p_tfg.h"
 
-#include "ecp_t_tfg.h"
+#include "ecp/irp6_tfg/ecp_t_tfg.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -44,7 +44,7 @@ void tfg::main_task_algorithm(void) {
 		//printf("postument: %d\n", mp_command.ecp_next_state.mp_2_ecp_next_state);
 		flushall();
 
-		switch ((ecp_mp::task::SK_MR_ECP_STATES) mp_command.ecp_next_state.mp_2_ecp_next_state) {
+		switch ((ecp_mp::task::TFG_ECP_STATES) mp_command.ecp_next_state.mp_2_ecp_next_state) {
 		case ecp_mp::task::ECP_GEN_TFG:
 			tfgg->Move();
 			break;

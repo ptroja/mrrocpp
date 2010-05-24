@@ -14,6 +14,7 @@
 #include "ecp_mp_t_sk_mr.h"
 #include "mp_t_sk_mr.h"
 #include "lib/mrmath/mrmath.h"
+#include "ecp_mp/task/ecp_mp_t_tfg.h"
 
 #include <iostream>
 #include <string>

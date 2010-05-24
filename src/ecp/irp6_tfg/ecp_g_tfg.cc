@@ -31,7 +31,7 @@
 #include "lib/com_buf.h"
 
 #include "lib/srlib.h"
-#include "application/sk/ecp_g_tfg.h"
+#include "ecp/irp6_tfg/ecp_g_tfg.h"
 
 namespace mrrocpp {
 namespace ecp {
