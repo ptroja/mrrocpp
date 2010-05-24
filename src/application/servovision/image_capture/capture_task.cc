@@ -7,7 +7,7 @@
 
 #include "capture_task.h"
 #include "../logger.h"
-#include "ecp/irp6_on_track/ecp_r_irp6ot.h"
+#include "ecp/irp6ot_m/ecp_r_irp6ot_m.h"
 
 using namespace logger;
 
@@ -24,7 +24,7 @@ CaptureTask::CaptureTask(mrrocpp::lib::configurator& configurator) :
 {
 	log("CaptureTask::CaptureTask()\n");
 	logEnabled = logDbgEnabled = true;
-	ecp_m_robot = new ecp::irp6ot::robot(*this);
+	ecp_m_robot = new ecp::irp6ot_m::robot(*this);
 	smoothGen = new mrrocpp::ecp::common::generator::smooth(*this, true);
 	fradiaSensor
 			= new mrrocpp::ecp_mp::sensor::fradia_sensor <char, effectorTranslation>(configurator, "[capture_task_fradia_config]");

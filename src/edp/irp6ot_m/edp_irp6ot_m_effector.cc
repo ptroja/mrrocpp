@@ -25,21 +25,18 @@ namespace mrrocpp {
 namespace edp {
 namespace irp6ot {
 
-common::servo_buffer* effector::return_created_servo_buffer()
-{
+common::servo_buffer* effector::return_created_servo_buffer() {
 	return new irp6ot::servo_buffer(*this);
 }
 
 /*--------------------------------------------------------------------------*/
-void effector::set_robot_model(const lib::c_buffer &instruction)
-{
+void effector::set_robot_model(const lib::c_buffer &instruction) {
 	manip_effector::set_robot_model_with_sb(instruction);
 }
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
-void effector::move_arm(const lib::c_buffer &instruction)
-{ // przemieszczenie ramienia
+void effector::move_arm(const lib::c_buffer &instruction) { // przemieszczenie ramienia
 	// Wypenienie struktury danych transformera na podstawie parametrow polecenia
 	// otrzymanego z ECP. Zlecenie transformerowi przeliczenie wspolrzednych
 
@@ -48,8 +45,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
-void effector::create_threads()
-{
+void effector::create_threads() {
 #ifdef __QNXNTO__
 	// jesli wlaczono obsluge sily
 	if (force_tryb > 0) {
@@ -66,8 +62,7 @@ void effector::create_threads()
 
 // Konstruktor.
 effector::effector(lib::configurator &_config) :
-	manip_effector(_config, lib::ROBOT_IRP6_ON_TRACK)
-{
+	manip_effector(_config, lib::ROBOT_IRP6OT_M) {
 	number_of_servos = IRP6OT_M_NUM_OF_SERVOS;
 
 	//  Stworzenie listy dostepnych kinematyk.
@@ -77,25 +72,26 @@ effector::effector(lib::configurator &_config) :
 }
 
 // Stworzenie modeli kinematyki dla robota IRp-6 na torze.
-void effector::create_kinematic_models_for_given_robot(void)
-{
+void effector::create_kinematic_models_for_given_robot(void) {
 	// Stworzenie wszystkich modeli kinematyki.
-	add_kinematic_model(new kinematics::irp6ot::model_with_wrist(number_of_servos));
-	add_kinematic_model(new kinematics::irp6ot::model_with_track(number_of_servos));
-	add_kinematic_model(new kinematics::irp6ot::model_calibrated_with_wrist(number_of_servos));
+	add_kinematic_model(new kinematics::irp6ot::model_with_wrist(
+			number_of_servos));
+	add_kinematic_model(new kinematics::irp6ot::model_with_track(
+			number_of_servos));
+	add_kinematic_model(new kinematics::irp6ot::model_calibrated_with_wrist(
+			number_of_servos));
 	// Ustawienie aktywnego modelu.
 	set_kinematic_model(0);
 }
 
 /*--------------------------------------------------------------------------*/
-void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
-{ // odczytanie pozycji ramienia
-	manip_effector::get_arm_position_with_force_and_sb(read_hardware, instruction);
+void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction) { // odczytanie pozycji ramienia
+	manip_effector::get_arm_position_with_force_and_sb(read_hardware,
+			instruction);
 }
 /*--------------------------------------------------------------------------*/
 
-void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
-{
+void effector::master_order(common::MT_ORDER nm_task, int nm_tryb) {
 	motor_driven_effector::multi_thread_master_order(nm_task, nm_tryb);
 }
 
@@ -104,8 +100,7 @@ void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
 namespace common {
 
 // Stworzenie obiektu edp_irp6p_effector.
-effector* return_created_efector(lib::configurator &_config)
-{
+effector* return_created_efector(lib::configurator &_config) {
 	return new irp6ot::effector(_config);
 }
 

@@ -84,8 +84,8 @@ bool ball::first_step()
 {
 	std::cout << "first_step" << std::endl;
 
-	irp6ot = robot_m[lib::ROBOT_IRP6_ON_TRACK];
-	irp6p = robot_m[lib::ROBOT_IRP6_POSTUMENT];
+	irp6ot = robot_m[lib::ROBOT_IRP6OT_M];
+	irp6p = robot_m[lib::ROBOT_IRP6P_M];
 
 	irp6ot->communicate = true;
 	irp6p->communicate = true;

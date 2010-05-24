@@ -1,13 +1,13 @@
 ///////////////////////////////////////////////////////////
-//  generator/ecp_g_vis_pb_eol_sac_irp6ot.cpp
-//  Implementation of the Class generator/ecp_g_vis_pb_eol_sac_irp6ot
-//  Created on:      04-sie-2008 14:25:57
+//  generator/ecp_g_vis_pb_eih_irp6ot.cpp
+//  Implementation of the Class generator/ecp_g_vis_pb_eih_irp6ot
+//  Created on:      04-sie-2008 14:26:04
 //  Original author: tkornuta
 ///////////////////////////////////////////////////////////
 
 /*!
- * \file generator/ecp_g_vis_pb_eol_sac_irp6ot.cc
- * \brief Class implementing PB-EOL-SAC algorithm.
+ * \file generator/ecp_g_vis_pb_eih_irp6ot.cc
+ * \brief Class implementing PB-EIH algorithm.
  * - methods definition
  * \author Maciej Staniak
  * \date 20.08.2008
@@ -23,8 +23,8 @@
 
 #include "lib/srlib.h"
 
-#include "ecp/irp6_on_track/ecp_r_irp6ot.h"
-#include "ecp/irp6_on_track/generator/ecp_g_vis_pb_eol_sac_irp6ot.h"
+#include "ecp/irp6ot_m/ecp_r_irp6ot_m.h"
+#include "ecp/irp6_on_track/generator/ecp_g_vis_pb_eih_irp6ot.h"
 
 
 namespace mrrocpp {
@@ -32,7 +32,7 @@ namespace ecp {
 namespace irp6ot {
 namespace generator {
 
-ecp_vis_pb_eol_sac_irp6ot::ecp_vis_pb_eol_sac_irp6ot(common::task::task& _ecp_task, int step) : common::generator::ecp_visual_servo(_ecp_task){
+ecp_vis_pb_eih_irp6ot::ecp_vis_pb_eih_irp6ot(common::task::task& _ecp_task, int step) : common::generator::ecp_visual_servo(_ecp_task){
 
 	measure_border_u[0]=ecp_t.config.value<double>("measure_border_u0");
 	measure_border_u[1]=ecp_t.config.value<double>("measure_border_u1");
@@ -73,9 +73,9 @@ ecp_vis_pb_eol_sac_irp6ot::ecp_vis_pb_eol_sac_irp6ot(common::task::task& _ecp_ta
 
 }
 
-bool ecp_vis_pb_eol_sac_irp6ot::next_step_without_constraints(){
+bool ecp_vis_pb_eih_irp6ot::next_step_without_constraints(){
 
-	 the_robot->ecp_command.instruction.set_type = ARM_DEFINITION;
+	the_robot->ecp_command.instruction.set_type = ARM_DEFINITION;
 	the_robot->ecp_command.instruction.instruction_type = lib::SET_GET;
 
 	//G_Tx_G2.set_from_xyz_euler_zyz( 0,0,0, 0.002, 1.481+0.03, 2.341);	//jesli chwytamy po przekatnej
@@ -97,8 +97,9 @@ bool ecp_vis_pb_eol_sac_irp6ot::next_step_without_constraints(){
 		O_Tx_E.set_from_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame); // zarem
 		std::cout << "YYY " << O_Tx_E << std::endl;
 
+		O_Tx_E.get_xyz_angle_axis(O_r_E1);
 		O_Tx_E.get_xyz_angle_axis(O_r_E[0]);
-		O_Tx_E=O_Tx_E*!G_Tx_G2; //tool zamiast
+		O_Tx_E=O_Tx_E*!G_Tx_G2;
 
 		std::cout << "MMM " << node_counter << std::endl;
 		std::cout << "YYY " << O_Tx_E << std::endl;
@@ -120,57 +121,48 @@ bool ecp_vis_pb_eol_sac_irp6ot::next_step_without_constraints(){
 				<< std::endl;
 	}
 
-	//SAC
-	C_Tx_G.set_from_xyz_rpy(vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G[0],
-			vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G[1],
-			-vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G[2],
-			vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G[5], 0, 0);
-		//	0, 0, -0.1);
-
-#if 0
-	//podjazd gdy sie nie ruszamy
-	if (fabs(O_r_G[1][0]-O_r_G[0][0])<=0.02 && fabs(O_r_G[1][1]-O_r_G[0][1])
-			<=0.02) //0.007
+	if (node_counter==2)
 	{
-		steps2switch++;
-
+		O_Tx_E.set_from_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame);
+		O_Tx_E.get_xyz_angle_axis(O_r_E1);
 	}
-	else
-	{
-		x2g=x2g_begin;
-		steps2switch=0;
-	}
-
-	if (steps2switch>15) // to approach 15
-		vis_phase=1;
-
-	if (vis_phase)
-	{
-		x2g+=0.0; //0.002; //0.001; //NIE PODJEZDZAMY
-	}
-
-	if (x2g>=0.0)
-	{
-		x2g=0.0; //0.02
-		//return true; //to avoid graspin'
-		//return false;	//to grasp
-	}
-#endif
-
+	//EIH
+	C_Tx_G.set_from_xyz_rpy(vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__f[0],
+			vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__f[1],
+			-vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__f[2], // kalib Y w O
+			-vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__f[3], 0, 0);
 
 	G_Tx_S.set_from_xyz_rpy(x2g, 0, 0, 0, 0, 0);
+
 	O_Tx_E.set_from_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame);
 
-	O_Tx_E=O_Tx_E*!G_Tx_G2; //zmiana orientacji (teraz tool)
+	/*
+	O_Tx_E.get_xyz_angle_axis(O_r_E[0]);
+	for (int i=0; i<6; i++)
+		{
+			std::cout << O_r_E[0][i] << " ";
+		}
+	std::cout << std::endl;
+	*/
 
+	O_Tx_E=O_Tx_E*!G_Tx_G2;
 	O_Tx_E.get_xyz_angle_axis(O_r_E[0]);
 
-	//SAC
-	O_Tx_C.set_from_xyz_rpy( 0.950+0.058, //-0.09,
-			0.000-0.06, 0.265+0.900+0.075-0.105, 0, 0, 0);
-	O_Tx_G=O_Tx_C*C_Tx_G;
-	O_Tx_G=O_Tx_G*G_Tx_S; //skrot myslowy
+	//jesli nie widzi kostki bo jest za blisko zostaw stare namiary - ?????
+	C_Tx_G.get_xyz_angle_axis(C_r_G[0]);
+
+	C_Tx_G=C_Tx_G*G_Tx_S;	//CZY NA PEWNO - ??? - czy nie przesunie w X wzlgedem CEIH zamiast oddalic sie od kostki
+	O_Tx_G=O_Tx_E*C_Tx_G; //rota O_Tx_E 0,0,0 //E_Tx_CEIH=1
 	O_Tx_G.get_xyz_angle_axis(O_r_G[0]);
+
+		//jak cos przyjdzie glupiego z CEIH
+	if (O_r_G[0][0]>100 || O_r_G[0][0]<-100)
+	{
+		for (int i=0; i<6; i++)
+		{
+			O_r_G[0][i]=O_r_G[1][i]; //EIH ONLY
+		}
+	}
 
 	O_eps_EG_norm=0.0;
 	for (int i=0; i<6; i++)
@@ -185,6 +177,8 @@ bool ecp_vis_pb_eol_sac_irp6ot::next_step_without_constraints(){
 		O_r_Ep[0][i]=O_r_E[0][i]+O_eps_E[0][i];
 	}
 
+	C_Tx_G.get_xyz_angle_axis(C_r_G[0]);
+
 	if (node_counter==1)
 	{
 		for (int i=0; i<6; i++)
@@ -193,12 +187,22 @@ bool ecp_vis_pb_eol_sac_irp6ot::next_step_without_constraints(){
 		}
 	}
 
+
+	gettimeofday(&acctime,NULL);
+
+	//pomiary
+	//for (int i=0; i<6; i++)
+	//	{
+			std::cout << acctime.tv_sec << " " << acctime.tv_usec << " " << O_r_Ep[0][1] << " ";
+	//	}
+	std::cout << std::endl;
+
 	// TODO: this return was missing
 	return false;
 }
 
 #if 0
-void ecp_vis_pb_eol_sac_irp6ot::limit_step(){
+void ecp_vis_pb_eih_irp6ot::limit_step(){
 	// roznica w kroku -> docelowo predkosc
 	for (int i=0; i<6; i++)
 		O_r_Ep_d[0][i]=O_r_Ep[0][i]-O_r_E[0][i];
@@ -241,7 +245,7 @@ void ecp_vis_pb_eol_sac_irp6ot::limit_step(){
 	}
 
 
-	O_Tx_Ep=O_Tx_Ep*G_Tx_G2; //zmiana orientacji teraz tool
+	O_Tx_Ep=O_Tx_Ep*G_Tx_G2;
 
 	O_Tx_Ep.get_xyz_angle_axis(O_r_Ep[0]);
 
@@ -268,7 +272,7 @@ void ecp_vis_pb_eol_sac_irp6ot::limit_step(){
 }
 #endif
 
-bool ecp_vis_pb_eol_sac_irp6ot::first_step(void){
+bool ecp_vis_pb_eih_irp6ot::first_step(void){
 /*
 	vsp_vis_sac = sensor_m[lib::SENSOR_CAMERA_SA];
 
@@ -281,6 +285,7 @@ bool ecp_vis_pb_eol_sac_irp6ot::first_step(void){
 	td.value_in_step_no = td.internode_step_no - 5; //2 //10
 
 	//TOOL
+
 
 	the_robot->ecp_command.instruction.robot_model.tool_frame_def.tool_frame[0][0]=1;
 	the_robot->ecp_command.instruction.robot_model.tool_frame_def.tool_frame[1][0]=0;
@@ -297,14 +302,13 @@ bool ecp_vis_pb_eol_sac_irp6ot::first_step(void){
 	the_robot->ecp_command.instruction.robot_model.tool_frame_def.tool_frame[2][2]=1;
 	the_robot->ecp_command.instruction.robot_model.tool_frame_def.tool_frame[2][3]=0.25;
 
-
 	the_robot->ecp_command.instruction.instruction_type = lib::SET_GET;
 	the_robot->ecp_command.instruction.get_type = ARM_DEFINITION;
 	the_robot->ecp_command.instruction.set_type = ROBOT_MODEL_DEFINITION;
 	the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
 	the_robot->ecp_command.instruction.get_arm_type = lib::FRAME;
-	the_robot->ecp_command.instruction.set_robot_model_type = lib::TOOL_FRAME; //TOOL_XYZ_EULER_ZYZ; //TOOL_FRAME;
-	the_robot->ecp_command.instruction.get_robot_model_type = lib::TOOL_FRAME; //TOOL_XYZ_EULER_ZYZ;  //TOOL_FRAME;
+	the_robot->ecp_command.instruction.set_robot_model_type = lib::TOOL_FRAME;
+	the_robot->ecp_command.instruction.get_robot_model_type = lib::TOOL_FRAME;
 	the_robot->ecp_command.instruction.interpolation_type= lib::MIM;
 	the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
 
@@ -314,6 +318,7 @@ bool ecp_vis_pb_eol_sac_irp6ot::first_step(void){
 	for (int i=0; i<6; i++)
 	{
 		the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = 0;
+		the_robot->ecp_command.instruction.arm.pf_def.force_xyz_torque_xyz[i] = 0;
 	}
 
 	O_eps_EG_norm=10;
@@ -326,5 +331,4 @@ bool ecp_vis_pb_eol_sac_irp6ot::first_step(void){
 } // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp
-
 

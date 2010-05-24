@@ -17,7 +17,7 @@
 
 #include "lib/srlib.h"
 
-#include "ecp/irp6_on_track/ecp_r_irp6ot.h"
+#include "ecp/irp6ot_m/ecp_r_irp6ot_m.h"
 #include "ecp/irp6_on_track/generator/ecp_g_vis_sac_lx.h"
 #include "lib/configurator.h"
 
@@ -204,7 +204,7 @@ bool vis_sac_lx::first_step()
 	//  		for (int j=0; j<5; j++)
 	//			measure[i][j]=0;
 
-	//	the_robot = robot_m[lib::ROBOT_IRP6_ON_TRACK];
+	//	the_robot = robot_m[lib::ROBOT_IRP6OT_M];
 
 	vsp_vis_sac = sensor_m[lib::SENSOR_CAMERA_SA];
 

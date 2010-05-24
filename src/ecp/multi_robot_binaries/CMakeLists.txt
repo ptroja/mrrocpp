@@ -4,8 +4,10 @@ add_executable(ecp_tran
 )
 
 # enable conditional inclusion to this process
-target_link_library_if(ROBOT_IRP6_ON_TRACK ecp_tran ecp_r_irp6ot)
-target_link_library_if(ROBOT_IRP6_POSTUMENT ecp_tran ecp_r_irp6p)
+target_link_library_if(ROBOT_IRP6_ON_TRACK ecp_tran ecp_r_irp6ot_m)
+target_link_library_if(ROBOT_IRP6_ON_TRACK ecp_tran ecp_r_irp6ot_tfg)
+target_link_library_if(ROBOT_IRP6_POSTUMENT ecp_tran ecp_r_irp6p_m)
+target_link_library_if(ROBOT_IRP6_POSTUMENT ecp_tran ecp_r_irp6p_tfg)
 target_link_library_if(ROBOT_IRP6_MECHATRONICS ecp_tran ecp_r_irp6m)
 target_link_library_if(ROBOT_POLYCRANK ecp_tran ecp_r_polycrank)
 target_link_library_if(ROBOT_CONVEYOR ecp_tran ecp_r_conv)

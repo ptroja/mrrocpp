@@ -42,7 +42,7 @@ add_executable(ecp_t_kcz_test
 SET(EXECUTABLES ecp_t_axzb_eih ecp_t_axzb_force ecp_t_kcz_test)
 FOREACH(executable ${EXECUTABLES})
 	target_link_libraries(${executable}
-		ecp_r_irp6ot ecp_r_irp6p
+		ecp_r_irp6ot_m ecp_r_irp6p_m
 		ecp
 		${GSL_LIBRARIES}
 	)

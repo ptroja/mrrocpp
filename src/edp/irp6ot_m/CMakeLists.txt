@@ -8,7 +8,7 @@ add_executable(edp_irp6ot_m
 
 target_link_libraries(
 	edp_irp6ot_m
-	kinematicsirp6ot
+	kinematicsirp6ot_m
 	edp ${COMMON_LIBRARIES}
 )
 
