@@ -4,6 +4,5 @@ add_library(edp
 	edp_force_sensor.cc
 	servo_gr.cc regulator.cc in_out.cc
 	trans_t.cc manip_trans_t.cc vis_server.cc reader.cc
-	hi_rydz.cc regulator_irp6ot_m.cc regulator_irp6ot_tfg.cc
-	regulator_irp6p_m.cc regulator_irp6p_tfg.cc
+	hi_rydz.cc
 )
