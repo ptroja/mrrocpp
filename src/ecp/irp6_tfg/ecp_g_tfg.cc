@@ -50,6 +50,10 @@ tfg::tfg(common::task::task& _ecp_task, int step) :
 }
 
 bool tfg::first_step() {
+
+	// parameters copying
+	get_mp_ecp_command();
+
 	ecp_t.sr_ecp_msg->message("tfg first step");
 	the_robot->ecp_command.instruction.instruction_type = lib::GET;
 	the_robot->ecp_command.instruction.get_type = ARM_DEFINITION;
@@ -77,7 +81,8 @@ bool tfg::next_step() {
 
 	the_robot->ecp_command.instruction.instruction_type = lib::SET;
 
-	the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[0] = 0.074;
+	the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[0]
+			= mp_ecp_tfg_command.desired_position;
 	the_robot->ecp_command.instruction.motion_steps = 1000;
 	the_robot->ecp_command.instruction.value_in_step_no = 998;
 
@@ -88,7 +93,7 @@ bool tfg::next_step() {
 
 	ecp_t.sr_ecp_msg->message(ss.str().c_str());
 
-	if (node_counter == 5) {
+	if (node_counter == 2) {
 		return false;
 	}
 
@@ -96,6 +101,17 @@ bool tfg::next_step() {
 	lib::Homog_matrix tmp_matrix(the_robot->reply_package.arm.pf_def.arm_frame);
 
 	return true;
+
+}
+
+void tfg::create_ecp_mp_reply() {
+
+}
+
+void tfg::get_mp_ecp_command() {
+	memcpy(&mp_ecp_tfg_command,
+			ecp_t.mp_command.ecp_next_state.mp_2_ecp_next_state_string,
+			sizeof(mp_ecp_tfg_command));
 
 }
 

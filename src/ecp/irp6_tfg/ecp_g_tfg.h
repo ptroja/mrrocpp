@@ -13,6 +13,7 @@
 
 #include "ecp/common/generator/ecp_g_teach_in.h"
 #include "lib/mrmath/mrmath.h"
+#include "lib/data_port_headers/tfg.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -28,8 +29,11 @@ class tfg: public common::generator::generator {
 protected:
 
 	const int step_no;
+	lib::tfg_command mp_ecp_tfg_command;
 
 public:
+	void create_ecp_mp_reply();
+	void get_mp_ecp_command();
 
 	// konstruktor
 	tfg(common::task::task& _ecp_task, int step);

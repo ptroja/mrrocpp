@@ -15,6 +15,7 @@
 #include "mp_t_sk_mr.h"
 #include "lib/mrmath/mrmath.h"
 #include "ecp_mp/task/ecp_mp_t_tfg.h"
+#include "lib/data_port_headers/tfg.h"
 
 #include <iostream>
 #include <string>
@@ -62,8 +63,16 @@ void sk_mr::main_task_algorithm(void) {
 
 	// sekwencja generator na wybranym chwytaku
 
-	set_next_ecps_state((int) ecp_mp::task::ECP_GEN_TFG, (int) 5, "", 0, 1,
-			gripper_name);
+	char tmp_string[MP_2_ECP_STRING_SIZE];
+
+	lib::tfg_command mp_ecp_tfg_command;
+
+	mp_ecp_tfg_command.desired_position = 0.078;
+
+	memcpy(tmp_string, &mp_ecp_tfg_command, sizeof(mp_ecp_tfg_command));
+
+	set_next_ecps_state((int) ecp_mp::task::ECP_GEN_TFG, (int) 5, tmp_string,
+			sizeof(mp_ecp_tfg_command), 1, gripper_name);
 	/*
 	 run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(
 	 1, 1, gripper_name, gripper_name);

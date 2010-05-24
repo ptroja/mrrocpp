@@ -84,7 +84,7 @@ void swarmitfix::main_task_algorithm(void) {
 	 */
 	sr_ecp_msg->message("4");
 
-	char tmp_string[300];
+	char tmp_string[MP_2_ECP_STRING_SIZE];
 
 	lib::epos_gen_parameters epos_params;
 
