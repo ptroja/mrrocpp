@@ -212,7 +212,7 @@ private:
 
 template <typename FROM_VSP_T, typename TO_VSP_T>
 fradia_sensor <FROM_VSP_T, TO_VSP_T>::fradia_sensor(mrrocpp::lib::configurator& configurator, const std::string& section_name) :
-	configurator(configurator), configure_fradia_task_now(false), terminate_now(false)
+	configurator(configurator), vsp_report_shared(lib::VSP_SENSOR_NOT_CONFIGURED), vsp_report(lib::VSP_SENSOR_NOT_CONFIGURED), configure_fradia_task_now(false), terminate_now(false)
 {
 	if (sizeof(FROM_VSP_T) > SENSOR_IMAGE_FRADIA_READING_SIZE) {
 		logger::logDbg("sizeof(FROM_VSP_T): %d\n", (int) sizeof(FROM_VSP_T));
@@ -337,6 +337,8 @@ void fradia_sensor <FROM_VSP_T, TO_VSP_T>::get_reading()
 
 	image = received_object_shared;
 	vsp_report = vsp_report_shared;
+
+	vsp_report_shared = lib::VSP_READING_NOT_READY;
 
 	//logger::logDbg("fradia_sensor::get_reading()\n");
 }
