@@ -13,19 +13,23 @@
 #include "lib/configurator.h"
 #include "lib/mrmath/mrmath.h"
 #include "ecp/common/ecp_robot.h"
-#include "ui/ui_ecp_r_common.h"
+#include "ecp/bird_hand/ecp_r_bird_hand.h"
 
 // ---------------------------------------------------------------
-class ui_bird_hand_robot: public ui_common_robot {
+class ui_bird_hand_robot {
 
 public:
+	ecp::bird_hand::robot *ecp;
+
+	// by Y - do odczytu stanu poczatkowego robota
+	void get_controller_state(
+			lib::controller_state_t & robot_controller_initial_state_l);
+	virtual void execute_motion(void);
 
 	// ecp_buffer ui_edp_package; // by Y
-	ui_bird_hand_robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg,
-			lib::robot_name_t _robot_name); // Konstruktor
+	ui_bird_hand_robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg); // Konstruktor
 
-	void move_motors(const double final_position[MAX_SERVOS_NR]);
-	void move_joints(const double final_position[MAX_SERVOS_NR]);
+	virtual ~ui_bird_hand_robot();
 
 };
 #endif

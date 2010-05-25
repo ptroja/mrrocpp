@@ -94,7 +94,7 @@ int EDP_bird_hand_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 				{
 					boost::unique_lock<boost::mutex> lock(process_creation_mtx);
 					ui_robot.bird_hand = new ui_bird_hand_robot(*config,
-							*ui_msg.all_ecp, lib::ROBOT_BIRD_HAND);
+							*ui_msg.all_ecp);
 
 				}
 
