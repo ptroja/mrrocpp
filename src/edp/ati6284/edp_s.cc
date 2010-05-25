@@ -165,7 +165,7 @@ void ATI6284_force::connect_to_hardware(void) {
 		memset(&hi_event, 0, sizeof(hi_event));
 		hi_event.sigev_notify = SIGEV_INTR;
 
-		irq_no = edp::irp6p::IRQ_REAL; //!< Numer przerwania sprzetowego od karty ISA
+		irq_no = edp::irp6p_m::IRQ_REAL; //!< Numer przerwania sprzetowego od karty ISA
 
 		if ((szafa_id = InterruptAttach(irq_no, szafa_handler, NULL, NULL, 0))
 				== -1) {

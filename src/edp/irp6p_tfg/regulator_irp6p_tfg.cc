@@ -22,7 +22,7 @@
 
 namespace mrrocpp {
 namespace edp {
-namespace irp6p {
+namespace irp6p_tfg {
 
 // uint64_t kk;	// numer pomiaru od momentu startu pomiarow
 

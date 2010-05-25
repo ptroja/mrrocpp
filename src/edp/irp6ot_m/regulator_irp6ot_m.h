@@ -16,7 +16,7 @@
 
 namespace mrrocpp {
 namespace edp {
-namespace irp6ot {
+namespace irp6ot_m {
 class effector;
 
 

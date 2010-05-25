@@ -19,7 +19,7 @@
 
 namespace mrrocpp {
 namespace edp {
-namespace irp6p {
+namespace irp6p_m {
 
 // extern uint64_t kk;				  // numer pomiaru od momentu startu pomiarow
 
@@ -101,7 +101,7 @@ void servo_buffer::load_hardware_interface(void) {
 namespace common {
 
 servo_buffer* return_created_servo_buffer(motor_driven_effector &_master) {
-	return new irp6p::servo_buffer((irp6p::effector &) (_master));
+	return new irp6p_m::servo_buffer((irp6p_m::effector &) (_master));
 }
 
 } // namespace common

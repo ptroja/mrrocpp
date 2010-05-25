@@ -21,7 +21,7 @@
 
 namespace mrrocpp {
 namespace edp {
-namespace irp6ot {
+namespace irp6ot_tfg {
 
 /*-----------------------------------------------------------------------*/
 NL_regulator_8_irp6ot::NL_regulator_8_irp6ot(uint8_t reg_no,

@@ -22,7 +22,7 @@
 
 namespace mrrocpp {
 namespace edp {
-namespace irp6ot {
+namespace irp6ot_m {
 
 /*-----------------------------------------------------------------------*/
 servo_buffer::servo_buffer(effector &_master) :
@@ -99,7 +99,7 @@ void servo_buffer::load_hardware_interface(void) {
 namespace common {
 
 servo_buffer* return_created_servo_buffer(motor_driven_effector &_master) {
-	return new irp6ot::servo_buffer((irp6ot::effector &) (_master));
+	return new irp6ot_m::servo_buffer((irp6ot_m::effector &) (_master));
 }
 
 } // namespace common

@@ -23,10 +23,10 @@
 
 namespace mrrocpp {
 namespace edp {
-namespace irp6ot {
+namespace irp6ot_m {
 
 common::servo_buffer* effector::return_created_servo_buffer() {
-	return new irp6ot::servo_buffer(*this);
+	return new servo_buffer(*this);
 }
 
 /*--------------------------------------------------------------------------*/
@@ -101,7 +101,7 @@ namespace common {
 
 // Stworzenie obiektu edp_irp6p_effector.
 effector* return_created_efector(lib::configurator &_config) {
-	return new irp6ot::effector(_config);
+	return new irp6ot_m::effector(_config);
 }
 
 } // namespace common

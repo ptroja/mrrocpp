@@ -17,7 +17,7 @@
 
 namespace mrrocpp {
 namespace edp {
-namespace irp6p {
+namespace irp6p_tfg {
 
 // stale dla automatu w regulatorze chwytka
 #define GRIPPER_BLOCKED_TIME_PERIOD 200
