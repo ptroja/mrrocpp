@@ -182,9 +182,6 @@ bool haptic::next_step() {
 		irp6ot->mp_command.instruction.instruction_type = lib::SET_GET;
 		irp6p->mp_command.instruction.instruction_type = lib::SET_GET;
 
-		irp6ot->mp_command.instruction.arm.pf_def.gripper_coordinate = 0;
-		irp6p->mp_command.instruction.arm.pf_def.gripper_coordinate
-				= irp6p->ecp_reply_package.reply_package.arm.pf_def.gripper_coordinate;
 	}
 
 	lib::Homog_matrix irp6ot_current_arm_frame(

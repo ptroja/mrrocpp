@@ -1108,11 +1108,15 @@ void smooth::send_coordinates() {
 				* gripper_position < pose_list_iterator->coordinates[gripp]
 				&& pose_list_iterator->k[gripp] == 1)) {
 			//printf("git");
-			the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate
-					= gripper_position;
+			/*
+			 the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate
+			 = gripper_position;
+			 */
 		} else {
-			the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate
-					= 0;
+			/*
+			 the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate
+			 = 0;
+			 */
 		}
 	} else {
 
@@ -1125,12 +1129,16 @@ void smooth::send_coordinates() {
 				< pose_list_iterator->coordinates[gripp]
 				&& pose_list_iterator->k[gripp] == 1)) {
 			//printf("git");
-			the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate
-					= gripper_position;
+			/*
+			 the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate
+			 = gripper_position;
+			 */
 		} else {
 			printf("no gripp\t");
-			the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate
-					= pose_list_iterator->coordinates[gripp];
+			/*
+			 the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate
+			 = pose_list_iterator->coordinates[gripp];
+			 */
 		}
 	}
 
@@ -1324,8 +1332,8 @@ void smooth::calculate(void) { //zeby wrocic do starego trybu relative nalezy st
 					}
 				}
 				temp = pose_list_iterator->coordinates[gripp];
-				pose_list_iterator->start_position[gripp]
-						= the_robot->reply_package.arm.pf_def.gripper_coordinate;
+				/*	pose_list_iterator->start_position[gripp]
+				 = the_robot->reply_package.arm.pf_def.gripper_coordinate;*/
 				if (!is_last_list_element()) { //musi byc zrobione tutaj zeby zadzialalo przypisanie kierunkow dla drugiego ruchu
 					next_pose_list_ptr();
 					pose_list_iterator->start_position[gripp] = temp;//przypisanie pozycji koncowej poprzedniego ruchu jako
@@ -1387,8 +1395,10 @@ void smooth::calculate(void) { //zeby wrocic do starego trybu relative nalezy st
 					}
 				}
 				temp = pose_list_iterator->coordinates[gripp];
-				pose_list_iterator->start_position[gripp]
-						= the_robot->reply_package.arm.pf_def.gripper_coordinate;
+				/*
+				 pose_list_iterator->start_position[gripp]
+				 = the_robot->reply_package.arm.pf_def.gripper_coordinate;
+				 */
 				if (!is_last_list_element()) { //musi byc zrobione tutaj zeby zadzialalo przypisanie kierunkow dla drugiego ruchu
 					next_pose_list_ptr();
 					pose_list_iterator->start_position[gripp] = temp;//przypisanie pozycji koncowej poprzedniego ruchu jako

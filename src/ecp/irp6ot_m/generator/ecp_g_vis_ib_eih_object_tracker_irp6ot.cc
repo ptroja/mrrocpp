@@ -165,7 +165,7 @@ bool ecp_vis_ib_eih_object_tracker_irp6ot::next_step_without_constraints() {
 	//memcpy(the_robot->ecp_command.instruction.arm.pf_def.arm_frame, next_position,
 	//		6 * sizeof(double)); //zapisanie pozycji w angle axes
 
-	the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = next_position[6]; //zapisanie pozycji grippera
+
 
 	printf("s_x: %f\t s_y %f\t s_z: %f\n", next_position[0],next_position[1],next_position[2]);
 

@@ -437,8 +437,10 @@ void wii_teach::main_task_algorithm(void) {
 				lib::Xyz_Angle_Axis_vector tmp_vector;
 				homog_matrix.get_xyz_angle_axis(tmp_vector);
 				tmp_vector.to_table(current->position);
-				current->gripper
-						= ecp_m_robot->reply_package.arm.pf_def.gripper_coordinate;
+				/*
+				 current->gripper
+				 = ecp_m_robot->reply_package.arm.pf_def.gripper_coordinate;
+				 */
 
 				if (trajectory.current) {
 					current->next = trajectory.current->next;
@@ -507,8 +509,10 @@ void wii_teach::main_task_algorithm(void) {
 					lib::Xyz_Angle_Axis_vector tmp_vector;
 					homog_matrix.get_xyz_angle_axis(tmp_vector);
 					tmp_vector.to_table(trajectory.current->position);
-					trajectory.current->gripper
-							= ecp_m_robot->reply_package.arm.pf_def.gripper_coordinate;
+					/*
+					 trajectory.current->gripper
+					 = ecp_m_robot->reply_package.arm.pf_def.gripper_coordinate;
+					 */
 
 					sprintf(buffer,
 							"Changed %d: %.4f %.4f %.4f %.4f %.4f %.4f %.4f",

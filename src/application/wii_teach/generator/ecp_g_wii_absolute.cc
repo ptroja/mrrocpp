@@ -68,10 +68,11 @@ void wii_absolute::set_position(void) {
 
 	homog_matrix.get_frame_tab(
 			the_robot->ecp_command.instruction.arm.pf_def.arm_frame);
-
-	the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate
-			= the_robot->reply_package.arm.pf_def.gripper_coordinate
-					+ nextChange[7];
+	/*
+	 the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate
+	 = the_robot->reply_package.arm.pf_def.gripper_coordinate
+	 + nextChange[7];
+	 */
 }
 
 bool wii_absolute::first_step() {

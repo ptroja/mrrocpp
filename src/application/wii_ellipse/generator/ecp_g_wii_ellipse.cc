@@ -90,7 +90,7 @@ bool wii_ellipse::next_step()
     the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[3] = 0.0;
     the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[4] = 1.57;
     the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[5] = 3.14;
-    the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = 0.08;
+//    the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = 0.08;
 
 	return true;
 }

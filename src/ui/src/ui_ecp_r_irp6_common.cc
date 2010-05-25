@@ -354,15 +354,12 @@ void ui_irp6_common_robot::move_xyz_euler_zyz(const double final_position[7]) {
 	tmp.set_from_xyz_euler_zyz(lib::Xyz_Euler_Zyz_vector(final_position));
 	tmp.get_frame_tab(ecp->ecp_command.instruction.arm.pf_def.arm_frame);
 
-	ecp->ecp_command.instruction.arm.pf_def.gripper_coordinate
-			= final_position[6];
-
 	execute_motion();
 
 	for (int j = 0; j < 6; j++) { // Przepisanie aktualnych polozen
 		current_position[j] = ecp->reply_package.arm.pf_def.arm_coordinates[j];
 	}
-	current_position[6] = ecp->reply_package.arm.pf_def.gripper_coordinate;
+
 }
 // ---------------------------------------------------------------
 
@@ -434,14 +431,12 @@ void ui_irp6_common_robot::move_xyz_angle_axis(const double final_position[7]) {
 	tmp.set_from_xyz_angle_axis(lib::Xyz_Angle_Axis_vector(final_position));
 	tmp.get_frame_tab(ecp->ecp_command.instruction.arm.pf_def.arm_frame);
 
-	ecp->ecp_command.instruction.arm.pf_def.gripper_coordinate
-			= final_position[6];
 	execute_motion();
 
 	for (int j = 0; j < 6; j++) { // Przepisanie aktualnych polozen
 		current_position[j] = ecp->reply_package.arm.pf_def.arm_coordinates[j];
 	}
-	current_position[6] = ecp->reply_package.arm.pf_def.gripper_coordinate;
+
 }
 
 void ui_irp6_common_robot::move_xyz_angle_axis_relative(
@@ -488,8 +483,6 @@ void ui_irp6_common_robot::move_xyz_angle_axis_relative(
 	tmp.set_from_xyz_angle_axis(lib::Xyz_Angle_Axis_vector(position_increment));
 	tmp.get_frame_tab(ecp->ecp_command.instruction.arm.pf_def.arm_frame);
 
-	ecp->ecp_command.instruction.arm.pf_def.gripper_coordinate
-			= position_increment[6];
 	execute_motion();
 }
 
@@ -511,7 +504,6 @@ void ui_irp6_common_robot::read_xyz_euler_zyz(double current_position[]) {
 	tmp.get_xyz_euler_zyz(tmp_vector);
 	tmp_vector.to_table(current_position);
 
-	current_position[6] = ecp->reply_package.arm.pf_def.gripper_coordinate;
 }
 // ---------------------------------------------------------------
 
@@ -530,5 +522,5 @@ void ui_irp6_common_robot::read_xyz_angle_axis(double current_position[]) {
 	lib::Xyz_Angle_Axis_vector tmp_vector;
 	tmp.get_xyz_angle_axis(tmp_vector);
 	tmp_vector.to_table(current_position);
-	current_position[6] = ecp->reply_package.arm.pf_def.gripper_coordinate;
+
 }
