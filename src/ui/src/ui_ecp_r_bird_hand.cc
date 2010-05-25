@@ -23,59 +23,18 @@
 
 #include "lib/srlib.h"
 
-#include "ui/ui_ecp_r_tfg_and_conv.h"
+#include "ui/ui_ecp_r_bird_hand.h"
 
-#include "ecp/irp6ot_tfg/ecp_r_irp6ot_tfg.h"
-#include "ecp/irp6p_tfg/ecp_r_irp6p_tfg.h"
-#include "ecp/conveyor/ecp_r_conv.h"
-#include "ecp/spkm/ecp_r_spkm.h"
-#include "ecp/smb/ecp_r_smb.h"
-#include "ecp/shead/ecp_r_shead.h"
+#include "ecp/bird_hand/ecp_r_bird_hand.h"
 
 // ---------------------------------------------------------------
-ui_tfg_and_conv_robot::ui_tfg_and_conv_robot(lib::configurator &_config,
+ui_bird_hand_robot::ui_bird_hand_robot(lib::configurator &_config,
 		lib::sr_ecp &_sr_ecp_msg, lib::robot_name_t _robot_name) :
 	ui_common_robot(_config, _sr_ecp_msg, _robot_name) {
 
 	switch (_robot_name) {
-	case lib::ROBOT_IRP6OT_TFG:
-		ecp = new ecp::irp6ot_tfg::robot(_config, _sr_ecp_msg);
-
-		MOTOR_STEP = 0.4; // Przyrost kata obrotu walu silnika [rad]
-		JOINT_LINEAR_STEP = 0.00001; // Przyrost liniowy w przegubach posuwistych [m]
-
-		break;
-	case lib::ROBOT_IRP6P_TFG:
-		ecp = new ecp::irp6p_tfg::robot(_config, _sr_ecp_msg);
-
-		MOTOR_STEP = 0.4; // Przyrost kata obrotu walu silnika [rad]
-		JOINT_LINEAR_STEP = 0.00001; // Przyrost liniowy w przegubach posuwistych [m]
-
-		break;
-	case lib::ROBOT_CONVEYOR:
-		ecp = new ecp::conveyor::robot(_config, _sr_ecp_msg);
-
-		MOTOR_STEP = 0.1; // Przyrost kata obrotu walu silnika [rad]
-		JOINT_LINEAR_STEP = 0.00004; // Przyrost liniowy w przegubach posuwistych [m]
-
-		break;
-	case lib::ROBOT_SPKM:
-		ecp = new ecp::spkm::robot(_config, _sr_ecp_msg);
-
-		MOTOR_STEP = 0.1; // Przyrost kata obrotu walu silnika [rad]
-		JOINT_LINEAR_STEP = 0.00004; // Przyrost liniowy w przegubach posuwistych [m]
-
-		break;
-
-	case lib::ROBOT_SMB:
-		ecp = new ecp::smb::robot(_config, _sr_ecp_msg);
-
-		MOTOR_STEP = 0.1; // Przyrost kata obrotu walu silnika [rad]
-		JOINT_LINEAR_STEP = 0.00004; // Przyrost liniowy w przegubach posuwistych [m]
-
-		break;
-	case lib::ROBOT_SHEAD:
-		ecp = new ecp::shead::robot(_config, _sr_ecp_msg);
+	case lib::ROBOT_BIRD_HAND:
+		ecp = new ecp::bird_hand::robot(_config, _sr_ecp_msg);
 
 		MOTOR_STEP = 0.1; // Przyrost kata obrotu walu silnika [rad]
 		JOINT_LINEAR_STEP = 0.00004; // Przyrost liniowy w przegubach posuwistych [m]
@@ -84,7 +43,7 @@ ui_tfg_and_conv_robot::ui_tfg_and_conv_robot(lib::configurator &_config,
 	default:
 		fprintf(
 				stderr,
-				"ERROR: unknown robot name in ecp_robot ui_tfg_and_conv_robot::ui_tfg_and_conv_robot\n");
+				"ERROR: unknown robot name in ecp_robot ui_bird_hand_robot::ui_bird_hand_robot\n");
 		ecp = NULL;
 		break;
 	}
@@ -105,7 +64,7 @@ ui_tfg_and_conv_robot::ui_tfg_and_conv_robot(lib::configurator &_config,
 }
 
 // ---------------------------------------------------------------
-void ui_tfg_and_conv_robot::move_motors(const double final_position[]) {
+void ui_bird_hand_robot::move_motors(const double final_position[]) {
 	// Zlecenie wykonania makrokroku ruchu zadanego dla walow silnikow
 	int nr_of_steps; // Liczba krokow
 	double max_inc = 0.0, temp = 0.0; // Zmienne pomocnicze
@@ -170,7 +129,7 @@ void ui_tfg_and_conv_robot::move_motors(const double final_position[]) {
 // ---------------------------------------------------------------
 
 // ---------------------------------------------------------------
-void ui_tfg_and_conv_robot::move_joints(const double final_position[]) {
+void ui_bird_hand_robot::move_joints(const double final_position[]) {
 	// Zlecenie wykonania makrokroku ruchu zadanego dla wspolrzednych wewnetrznych
 
 	double max_inc_lin = 0.0, temp = 0.0; // Zmienne pomocnicze
