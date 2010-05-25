@@ -11,6 +11,7 @@
 #include <boost/type_traits/is_enum.hpp>
 #include <boost/type_traits/is_array.hpp>
 #include <boost/mpl/bool.hpp>
+#include <boost/version.hpp>
 
 #include <rpc/rpc.h>
 
