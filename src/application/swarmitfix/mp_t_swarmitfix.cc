@@ -67,7 +67,7 @@ void swarmitfix::main_task_algorithm(void) {
 	int int_port_data_output;
 
 	int_port_from_manager->set(int_port_data_input);
-	int_port_data_output = int_port_from_manager->get();
+	int_port_from_manager->get(int_port_data_output);
 
 	ss << " " << int_port_data_output;
 
@@ -84,7 +84,7 @@ void swarmitfix::main_task_algorithm(void) {
 	 */
 	sr_ecp_msg->message("4");
 
-	char tmp_string[300];
+	char tmp_string[MP_2_ECP_STRING_SIZE];
 
 	lib::epos_gen_parameters epos_params;
 

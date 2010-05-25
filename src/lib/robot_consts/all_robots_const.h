@@ -5,10 +5,8 @@ namespace mrrocpp {
 namespace lib {
 
 #include "lib/robot_consts/irp6m_const.h"
-#include "lib/robot_consts/irp6ot_const.h"
 #include "lib/robot_consts/irp6ot_m_const.h"
 #include "lib/robot_consts/irp6ot_tfg_const.h"
-#include "lib/robot_consts/irp6p_const.h"
 #include "lib/robot_consts/irp6p_m_const.h"
 #include "lib/robot_consts/irp6p_tfg_const.h"
 #include "lib/robot_consts/polycrank_const.h"

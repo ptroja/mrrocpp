@@ -158,8 +158,8 @@ int init(PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 	ui_state.irp6_on_track.edp.state = -1; // edp nieaktywne
 	ui_state.irp6_on_track.edp.last_state = -1; // edp nieaktywne
 	ui_state.irp6_on_track.ecp.trigger_fd = -1;
-	ui_state.irp6_on_track.edp.section_name = EDP_IRP6_ON_TRACK_SECTION;
-	ui_state.irp6_on_track.ecp.section_name = ECP_IRP6_ON_TRACK_SECTION;
+	ui_state.irp6_on_track.edp.section_name = EDP_IRP6OT_M_SECTION;
+	ui_state.irp6_on_track.ecp.section_name = ECP_IRP6OT_M_SECTION;
 
 	ui_state.irp6ot_tfg.edp.state = -1; // edp nieaktywne
 	ui_state.irp6ot_tfg.edp.last_state = -1; // edp nieaktywne
@@ -170,8 +170,8 @@ int init(PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 	ui_state.irp6_postument.edp.state = -1; // edp nieaktywne
 	ui_state.irp6_postument.edp.last_state = -1; // edp nieaktywne
 	ui_state.irp6_postument.ecp.trigger_fd = -1;
-	ui_state.irp6_postument.edp.section_name = EDP_IRP6_POSTUMENT_SECTION;
-	ui_state.irp6_postument.ecp.section_name = ECP_IRP6_POSTUMENT_SECTION;
+	ui_state.irp6_postument.edp.section_name = EDP_IRP6P_M_SECTION;
+	ui_state.irp6_postument.ecp.section_name = ECP_IRP6P_M_SECTION;
 
 	ui_state.irp6p_tfg.edp.state = -1; // edp nieaktywne
 	ui_state.irp6p_tfg.edp.last_state = -1; // edp nieaktywne

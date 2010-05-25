@@ -13,6 +13,10 @@
 #include "edp/common/edp_e_manip.h"
 #include "lib/robot_consts/bird_hand_const.h"
 
+#include "bird_hand.h"
+
+#include <Eigen/Core>
+
 namespace mrrocpp {
 namespace edp {
 namespace bird_hand {
@@ -28,8 +32,8 @@ protected:
 	lib::bird_hand_cbuffer ecp_edp_cbuffer;
 	lib::bird_hand_rbuffer edp_ecp_rbuffer;
 
-	_uint64 macrostep_end_time;
-	_uint64 query_time;
+	uint64_t macrostep_end_time;
+	uint64_t query_time;
 
 	/*!
 	 * \brief method,  creates a list of available kinematic models for bird_hand effector.
@@ -92,6 +96,11 @@ public:
 	 * IHere the single thread variant is chosen
 	 */
 	void master_order(common::MT_ORDER nm_task, int nm_tryb);
+	
+private:
+	Bird_hand device;
+
+	Eigen::Matrix<int32_t, 8, 1> synchro_position;
 
 	/*!
 	 * \brief method to deserialize part of the reply

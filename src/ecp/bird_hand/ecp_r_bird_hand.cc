@@ -70,14 +70,36 @@ void robot::create_command() {
 	bool is_new_data;
 	bool is_new_request;
 
-	sr_ecp_msg.message("create_command");
-
 	// NOWE PORTY
-	is_new_data = ((bird_hand_command_data_port.is_new_data())
-			|| (bird_hand_configuration_command_data_port.is_new_data()));
+	ecp_command.instruction.get_type = NOTHING_DEFINITION;
 
-	is_new_request = ((bird_hand_status_reply_data_request_port.is_new_request())
-			|| (bird_hand_configuration_reply_data_request_port.is_new_request()));
+	if (bird_hand_status_reply_data_request_port.is_new_request()) {
+		ecp_command.instruction.get_type |= ARM_DEFINITION;
+		is_new_request = true;
+	}
+
+	if (bird_hand_configuration_reply_data_request_port.is_new_request()) {
+		ecp_command.instruction.get_type |= ROBOT_MODEL_DEFINITION;
+		is_new_request = true;
+	}
+
+	ecp_command.instruction.set_type = NOTHING_DEFINITION;
+
+	if (bird_hand_command_data_port.get(bird_hand_command_structure) == mrrocpp::lib::NewData) {
+		ecp_command.instruction.set_type |= ARM_DEFINITION;
+
+		ecp_edp_cbuffer.bird_hand_command_structure
+				= bird_hand_command_structure;
+		is_new_data = true;
+	}
+
+	if (bird_hand_configuration_command_data_port.get(bird_hand_configuration_command_structure) == mrrocpp::lib::NewData) {
+		ecp_command.instruction.set_type |= ROBOT_MODEL_DEFINITION;
+
+		ecp_edp_cbuffer.bird_hand_configuration_command_structure
+				= bird_hand_configuration_command_structure;
+		is_new_data = true;
+	}
 
 	communicate_with_edp = true;
 	if (is_new_data && is_new_request) {
@@ -88,36 +110,6 @@ void robot::create_command() {
 		ecp_command.instruction.instruction_type = lib::GET;
 	} else {
 		communicate_with_edp = false;
-	}
-
-	ecp_command.instruction.get_type = NOTHING_DEFINITION;
-
-	if (bird_hand_status_reply_data_request_port.is_new_request()) {
-		ecp_command.instruction.get_type |= ARM_DEFINITION;
-	}
-
-	if (bird_hand_configuration_reply_data_request_port.is_new_request()) {
-		ecp_command.instruction.get_type |= ROBOT_MODEL_DEFINITION;
-	}
-
-	ecp_command.instruction.set_type = NOTHING_DEFINITION;
-
-	if (bird_hand_command_data_port.is_new_data()) {
-		ecp_command.instruction.set_type |= ARM_DEFINITION;
-		bird_hand_command_structure = bird_hand_command_data_port.get();
-
-		ecp_edp_cbuffer.bird_hand_command_structure
-				= bird_hand_command_structure;
-	}
-
-	if (bird_hand_configuration_command_data_port.is_new_data()) {
-		ecp_command.instruction.set_type |= ROBOT_MODEL_DEFINITION;
-		bird_hand_configuration_command_structure
-				= bird_hand_configuration_command_data_port.get();
-
-		ecp_edp_cbuffer.bird_hand_configuration_command_structure
-				= bird_hand_configuration_command_structure;
-
 	}
 
 	// message serialization

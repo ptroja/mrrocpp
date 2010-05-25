@@ -3,9 +3,10 @@
 #include <unistd.h>
 #include <math.h>
 #include <iostream>
+#include <cstdlib>
 
-#include "ecp/irp6_on_track/ecp_r_irp6ot.h"
-#include "ecp/irp6_postument/ecp_r_irp6p.h"
+#include "ecp/irp6ot_m/ecp_r_irp6ot_m.h"
+#include "ecp/irp6p_m/ecp_r_irp6p_m.h"
 #include "ecp_st_acq_force.h"
 #include "ecp_st_acquisition.h"
 #include "ecp_mp/sensor/ecp_mp_s_pcbird.h"
@@ -20,14 +21,14 @@ namespace task {
 //Constructors
 acq_force::acq_force(task &_ecp_t): acquisition(_ecp_t)
 {
-    if (ecp_sub_task::ecp_t.config.section_name == ECP_IRP6_ON_TRACK_SECTION)
+    if (ecp_sub_task::ecp_t.config.section_name == ECP_IRP6OT_M_SECTION)
     {
-    	ecp_sub_task::ecp_t.ecp_m_robot = new irp6ot::robot (_ecp_t);
+    	ecp_sub_task::ecp_t.ecp_m_robot = new irp6ot_m::robot (_ecp_t);
     	ecp_sub_task::ecp_t.sr_ecp_msg->message("IRp6ot loaded");
     }
-    else if (ecp_sub_task::ecp_t.config.section_name == ECP_IRP6_POSTUMENT_SECTION)
+    else if (ecp_sub_task::ecp_t.config.section_name == ECP_IRP6P_M_SECTION)
     {
-    	ecp_sub_task::ecp_t.ecp_m_robot = new irp6p::robot (_ecp_t);
+    	ecp_sub_task::ecp_t.ecp_m_robot = new irp6p_m::robot (_ecp_t);
     	ecp_sub_task::ecp_t.sr_ecp_msg->message("IRp6p loaded");
     }
 
@@ -48,10 +49,11 @@ void acq_force::write_data(std::string _K_fp, std::string _kk_fp, std::string _M
 	M_fp = _M_fp;
 	mm_fp = _mm_fp;
 	number_of_measures = _number_of_measures;
-	std::remove(K_fp.c_str());
-	std::remove(kk_fp.c_str());
-	std::remove(M_fp.c_str());
-	std::remove(mm_fp.c_str());
+	remove(K_fp.c_str());
+	remove(kk_fp.c_str());
+	remove(M_fp.c_str());
+	remove(mm_fp.c_str());
+
 	acq_force::main_task_algorithm();
 }
 

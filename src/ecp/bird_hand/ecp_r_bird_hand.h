@@ -24,7 +24,7 @@ class robot: public common::ecp_robot,
 
 protected:
 
-	// zadawanie nastaw regulatorow
+	// zadawanie rozkazu
 	lib::single_thread_port<lib::bird_hand_command> bird_hand_command_data_port;
 	lib::bird_hand_command bird_hand_command_structure;
 

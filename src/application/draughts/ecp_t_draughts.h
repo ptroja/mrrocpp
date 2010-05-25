@@ -13,7 +13,7 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace irp6ot {
+namespace irp6ot_m {
 namespace task {
 
 const int WKING =0, BKING=1;

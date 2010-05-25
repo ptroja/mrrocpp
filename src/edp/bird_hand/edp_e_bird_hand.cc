@@ -26,47 +26,59 @@
 #include "edp/common/manip_trans_t.h"
 #include "edp/common/vis_server.h"
 
+#define PORT "/dev/ser"
+
 using namespace mrrocpp::lib::exception;
+
+#ifndef __QNXNTO__
+
+uint64_t timespec2nsec(const timespec *t)
+{
+	return t->tv_sec * 1000000 + t->tv_nsec;
+}
+
+void nsec2timespec(timespec *t, uint64_t nsec)
+{
+	t->tv_sec = nsec / 1000000;
+	t->tv_nsec = nsec % 1000000;
+}
+
+#endif
 
 namespace mrrocpp {
 namespace edp {
 namespace bird_hand {
 
-void effector::master_order(common::MT_ORDER nm_task, int nm_tryb) {
+void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
+{
 	manip_effector::single_thread_master_order(nm_task, nm_tryb);
 }
 
-void effector::get_controller_state(lib::c_buffer &instruction) {
+void effector::get_controller_state(lib::c_buffer &instruction)
+{
 
-	// tu wrzucic synchronizacje
+	for (uint8_t i = 0; i < BIRD_HAND_NUM_OF_SERVOS; i++) {
+		int16_t abspos;
+		if (i < 2)
+			device.getSynchroPos(i, abspos);
+		synchro_position[i] = (int32_t) (abspos * 124345.23443); // TODO : tu wstawić magiczną stałą
+	}
 
+	controller_state_edp_buf.is_synchronised = true;
 
-	if (test_mode)
-		controller_state_edp_buf.is_synchronised = true;
-	//printf("get_controller_state: %d\n", controller_state_edp_buf.is_synchronised); fflush(stdout);
+	printf("synchro position readed : %d \n", synchro_position[0]);
+
 	reply.controller_state = controller_state_edp_buf;
 
-	/*
-	 // aktualizacja pozycji robota
-	 // Uformowanie rozkazu odczytu dla SERVO_GROUP
-	 sb->servo_command.instruction_code = lib::READ;
-	 // Wyslanie rozkazu do SERVO_GROUP
-	 // Pobranie z SERVO_GROUP aktualnej pozycji silnikow
-	 //	printf("get_arm_position read_hardware\n");
-
-	 sb->send_to_SERVO_GROUP();
-	 */
 	// dla pierwszego wypelnienia current_joints
-	get_current_kinematic_model()->mp2i_transform(current_motor_pos,
-			current_joints);
+	get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
 
 	{
 		boost::mutex::scoped_lock lock(edp_irp6s_effector_mutex);
 
 		// Ustawienie poprzedniej wartosci zadanej na obecnie odczytane polozenie walow silnikow
 		for (int i = 0; i < number_of_servos; i++) {
-			servo_current_motor_pos[i] = desired_motor_pos_new[i]
-					= desired_motor_pos_old[i] = current_motor_pos[i];
+			servo_current_motor_pos[i] = desired_motor_pos_new[i] = desired_motor_pos_old[i] = current_motor_pos[i];
 			desired_joints[i] = current_joints[i];
 		}
 	}
@@ -81,83 +93,76 @@ void effector::get_controller_state(lib::c_buffer &instruction) {
 
 	macrostep_end_time = timespec2nsec(&current_timespec);
 
-	msg->message("get_controller_state");
-
-	std::stringstream ss(std::stringstream::in | std::stringstream::out);
-
-	ss << current_timespec.tv_sec << "    " << current_timespec.tv_nsec;
-
-	msg->message(ss.str().c_str());
-	msg->message("get_controller_state za ");
-
 }
 
 // Konstruktor.
 effector::effector(lib::configurator &_config) :
-	manip_effector(_config, lib::ROBOT_BIRD_HAND) {
+	manip_effector(_config, lib::ROBOT_BIRD_HAND)
+{
 	number_of_servos = BIRD_HAND_NUM_OF_SERVOS;
 
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();
 
 	reset_variables();
+
+	device.connect(PORT);
 }
 
 /*--------------------------------------------------------------------------*/
-void effector::move_arm(const lib::c_buffer &instruction) {
-	msg->message("move_arm");
-
-	std::stringstream ss(std::stringstream::in | std::stringstream::out);
-
-	ss << ecp_edp_cbuffer.bird_hand_command_structure.desired_position[3];
-
-	msg->message(ss.str().c_str());
+void effector::move_arm(const lib::c_buffer &instruction)
+{
 
 	struct timespec current_timespec;
+
+	for (unsigned int i = 0; i < BIRD_HAND_NUM_OF_SERVOS; i++) {
+		switch (ecp_edp_cbuffer.bird_hand_command_structure.profile_type[i])
+		{
+			case 0: //BIRD_HAND_SIGLE_STEP_POSTION_INCREMENT:
+				device.setCMD1((uint16_t) i, (int16_t) ecp_edp_cbuffer.bird_hand_command_structure.motion_steps, (int16_t) ecp_edp_cbuffer.bird_hand_command_structure.reciprocal_of_damping[i], (int16_t) ecp_edp_cbuffer.bird_hand_command_structure.desired_torque[i], (int32_t) ecp_edp_cbuffer.bird_hand_command_structure.desired_position[i]);
+				break;
+			case 1: //BIRD_HAND_MACROSTEP_POSITION_INCREMENT:
+				device.setCMD2((uint16_t) i, (int16_t) ecp_edp_cbuffer.bird_hand_command_structure.motion_steps, (int16_t) ecp_edp_cbuffer.bird_hand_command_structure.reciprocal_of_damping[i], (int16_t) ecp_edp_cbuffer.bird_hand_command_structure.desired_torque[i], (int32_t) ecp_edp_cbuffer.bird_hand_command_structure.desired_position[i]);
+				break;
+			case 2: //BIRD_HAND_MACROSTEP_ABSOLUTE_POSITION:
+				device.setCMD3((uint16_t) i, (int16_t) ecp_edp_cbuffer.bird_hand_command_structure.motion_steps, (int16_t) ecp_edp_cbuffer.bird_hand_command_structure.reciprocal_of_damping[i], (int16_t) ecp_edp_cbuffer.bird_hand_command_structure.desired_torque[i], (int32_t) ecp_edp_cbuffer.bird_hand_command_structure.desired_position[i]);
+				break;
+		}
+	}
 
 	if (clock_gettime(CLOCK_MONOTONIC, &current_timespec) == -1) {
 		perror("clock gettime");
 	}
 
-	_uint64 current_time = timespec2nsec(&current_timespec);
+	uint64_t current_time = timespec2nsec(&current_timespec);
 
 	if (current_time >= macrostep_end_time) {
 		// stan bierny
-		msg->message("move_arm stan bierny");
-		query_time = current_time
-				+ ecp_edp_cbuffer.bird_hand_command_structure.ecp_query_step
-						* BIRD_HAND_STEP_TIME_IN_NS;
+		query_time = current_time + ecp_edp_cbuffer.bird_hand_command_structure.ecp_query_step
+				* BIRD_HAND_STEP_TIME_IN_NS;
 
-		macrostep_end_time = current_time
-				+ ecp_edp_cbuffer.bird_hand_command_structure.motion_steps
-						* BIRD_HAND_STEP_TIME_IN_NS;
+		macrostep_end_time = current_time + ecp_edp_cbuffer.bird_hand_command_structure.motion_steps
+				* BIRD_HAND_STEP_TIME_IN_NS;
 
 	} else {
 		// stan czynny
-		msg->message("move_arm stan czynny");
 		// UWAGA NA KOLEJNOSC OBLICZEN query_time i macrostep_end_time NIE ZAMIENIAC
-		query_time = macrostep_end_time
-				+ ecp_edp_cbuffer.bird_hand_command_structure.ecp_query_step
-						* BIRD_HAND_STEP_TIME_IN_NS;
+		query_time = macrostep_end_time + ecp_edp_cbuffer.bird_hand_command_structure.ecp_query_step
+				* BIRD_HAND_STEP_TIME_IN_NS;
 
-		macrostep_end_time
-				+= ecp_edp_cbuffer.bird_hand_command_structure.motion_steps
-						* BIRD_HAND_STEP_TIME_IN_NS;
+		macrostep_end_time += ecp_edp_cbuffer.bird_hand_command_structure.motion_steps * BIRD_HAND_STEP_TIME_IN_NS;
 
 	}
 
-	msg->message("move_arm za ");
+	device.synchronize(255, 40);
 
 }
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
-void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction) {
-	//lib::JointArray desired_joints_tmp(MAX_SERVOS_NR); // Wspolrzedne wewnetrzne -
-	//	printf(" GET ARM\n");
-	//	flushall();
-	static int licznik = (-11);
-	msg->message("get_arm_position");
+void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
+{
+
 	struct timespec query_timespec;
 
 	if (test_mode) {
@@ -165,7 +170,7 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction) 
 			edp_ecp_rbuffer.bird_hand_status_reply_structure.meassured_position[i]
 					= ecp_edp_cbuffer.bird_hand_command_structure.desired_position[i];
 			edp_ecp_rbuffer.bird_hand_status_reply_structure.meassured_torque[i]
-							= ecp_edp_cbuffer.bird_hand_command_structure.desired_torque[i];
+					= ecp_edp_cbuffer.bird_hand_command_structure.desired_torque[i];
 		}
 	}
 
@@ -174,15 +179,19 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction) 
 	// zawieszenie do query_time
 
 	clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &query_timespec, NULL);
-	msg->message("get_arm_position za ");
-	std::stringstream ss(std::stringstream::in | std::stringstream::out);
-	ss << "get_arm_position: " << licznik;
-	msg->message(ss.str().c_str());
 
-	licznik++;
+	for (uint8_t i = 0; i < BIRD_HAND_NUM_OF_SERVOS; i++) {
+		int32_t pos;
+		int16_t t, c;
+		uint8_t status;
 
-	edp_ecp_rbuffer.bird_hand_status_reply_structure.meassured_current[3]
-			= 2.17;
+		if (i < 2)
+			device.getStatus(i, status, pos, c, t);
+
+		edp_ecp_rbuffer.bird_hand_status_reply_structure.meassured_position[i] = (pos - synchro_position[i]);
+		edp_ecp_rbuffer.bird_hand_status_reply_structure.meassured_current[i] = c;
+		edp_ecp_rbuffer.bird_hand_status_reply_structure.meassured_torque[i] = t;
+	}
 
 	reply.servo_step = step_counter;
 
@@ -190,30 +199,44 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction) 
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
-void effector::set_robot_model(const lib::c_buffer &instruction) {
-	msg->message("set_robot_model");
+void effector::set_robot_model(const lib::c_buffer &instruction)
+{
 
-	std::stringstream ss(std::stringstream::in | std::stringstream::out);
+	for (uint8_t i = 0; i < BIRD_HAND_NUM_OF_SERVOS; i++) {
+		int16_t p, i, d;
+		p = edp_ecp_rbuffer.bird_hand_configuration_reply_structure.p_factor[i];
+		i = edp_ecp_rbuffer.bird_hand_configuration_reply_structure.i_factor[i];
+		d = edp_ecp_rbuffer.bird_hand_configuration_reply_structure.d_factor[i];
+		if (i < 2)
+			device.setPID(i, p, i, d);
 
-	ss << ecp_edp_cbuffer.bird_hand_configuration_command_structure.d_factor[3];
 
-	msg->message(ss.str().c_str());
-
+		//TODO : add limits
+	}
 }
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
-void effector::get_robot_model(lib::c_buffer &instruction) {
-	//printf(" GET ROBOT_MODEL: ");
-	msg->message("get_robot_model");
+void effector::get_robot_model(lib::c_buffer &instruction)
+{
 
-	edp_ecp_rbuffer.bird_hand_configuration_reply_structure.d_factor[2] = 121;
+	for (uint8_t i = 0; i < BIRD_HAND_NUM_OF_SERVOS; i++) {
+		int16_t p, i, d;
 
+		if (i < 2)
+			device.getPID(i, p, i, d);
+		edp_ecp_rbuffer.bird_hand_configuration_reply_structure.p_factor[i] = p;
+		edp_ecp_rbuffer.bird_hand_configuration_reply_structure.i_factor[i] = i;
+		edp_ecp_rbuffer.bird_hand_configuration_reply_structure.d_factor[i] = d;
+
+		//TODO : add limits
+	}
 }
 /*--------------------------------------------------------------------------*/
 
 // Stworzenie modeli kinematyki dla robota IRp-6 na postumencie.
-void effector::create_kinematic_models_for_given_robot(void) {
+void effector::create_kinematic_models_for_given_robot(void)
+{
 	// Stworzenie wszystkich modeli kinematyki.
 	add_kinematic_model(new kinematics::bird_hand::kinematic_model_bird_hand());
 	// Ustawienie aktywnego modelu.
@@ -221,21 +244,22 @@ void effector::create_kinematic_models_for_given_robot(void) {
 }
 
 /*--------------------------------------------------------------------------*/
-void effector::create_threads() {
+void effector::create_threads()
+{
 	rb_obj = new common::reader_buffer(*this);
 	vis_obj = new common::vis_server(*this);
 }
 
-void effector::instruction_deserialization() {
+void effector::instruction_deserialization()
+{
 
-	memcpy(&ecp_edp_cbuffer, instruction.arm.serialized_command,
-			sizeof(ecp_edp_cbuffer));
+	memcpy(&ecp_edp_cbuffer, instruction.arm.serialized_command, sizeof(ecp_edp_cbuffer));
 
 }
 
-void effector::reply_serialization(void) {
-	memcpy(reply.arm.serialized_reply, &edp_ecp_rbuffer,
-			sizeof(edp_ecp_rbuffer));
+void effector::reply_serialization(void)
+{
+	memcpy(reply.arm.serialized_reply, &edp_ecp_rbuffer, sizeof(edp_ecp_rbuffer));
 
 }
 
@@ -245,8 +269,9 @@ void effector::reply_serialization(void) {
 
 namespace common {
 
-// Stworzenie obiektu edp_irp6m_effector.
-effector* return_created_efector(lib::configurator &_config) {
+// Stworzenie obiektu edp_bird_hand_effector.
+effector* return_created_efector(lib::configurator &_config)
+{
 	return new bird_hand::effector(_config);
 }
 

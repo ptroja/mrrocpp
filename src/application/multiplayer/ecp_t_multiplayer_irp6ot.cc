@@ -4,7 +4,7 @@
 #include "lib/srlib.h"
 #include "ecp_mp_t_multiplayer.h"
 
-#include "ecp/irp6_on_track/ecp_r_irp6ot.h"
+#include "ecp/irp6ot_m/ecp_r_irp6ot_m.h"
 #include "ecp/common/generator/ecp_g_smooth.h"
 #include "ecp/common/generator/ecp_g_force.h"
 #include "ecp_t_multiplayer_irp6ot.h"
@@ -18,7 +18,7 @@ namespace task {
 
 multiplayer::multiplayer(lib::configurator &_config) : task(_config)
 {
-	ecp_m_robot = new robot (*this);
+	ecp_m_robot = new irp6ot_m::robot (*this);
 
 
 	//powolanie generatorow

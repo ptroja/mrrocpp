@@ -16,7 +16,7 @@ namespace mrrocpp {
 
 namespace ecp {
 
-namespace irp6ot {
+namespace irp6ot_m {
 
 namespace task {
 
@@ -35,7 +35,7 @@ ecp_t_fradia_lag_test::ecp_t_fradia_lag_test(mrrocpp::lib::configurator& _config
 :
 	task(_configurator)
 {
-	ecp_m_robot = new ecp::irp6ot::robot(*this);
+	ecp_m_robot = new ecp::irp6ot_m::robot(*this);
 	smooth_gen = new mrrocpp::ecp::common::generator::smooth(*this, true);
 
 	//sr_ecp_msg->message("ecp_t_fradia_lag_test::ecp_t_fradia_lag_test() fradia setup...");

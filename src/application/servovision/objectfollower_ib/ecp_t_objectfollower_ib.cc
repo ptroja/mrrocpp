@@ -24,7 +24,7 @@ const double
 ecp_t_objectfollower_ib::ecp_t_objectfollower_ib(mrrocpp::lib::configurator& configurator) :
 	task(configurator)
 {
-	ecp_m_robot = new ecp::irp6ot::robot(*this);
+	ecp_m_robot = new ecp::irp6ot_m::robot(*this);
 	//ecp_m_robot = new ecp::irp6ot_m::robot(*this);
 	smooth_gen = shared_ptr <smooth> (new smooth(*this, true));
 

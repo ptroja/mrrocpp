@@ -4,6 +4,7 @@ add_executable(edp_irp6ot_tfg
 	hi_irp6ot_tfg.cc
 	int_hand_irp6ot_tfg.cc
 	sg_irp6ot_tfg.cc
+	 regulator_irp6ot_tfg.cc
 )
 
 target_link_libraries(edp_irp6ot_tfg kinematicsirp6ot_tfg edp

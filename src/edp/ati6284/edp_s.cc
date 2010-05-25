@@ -12,7 +12,7 @@
 
 #include "lib/srlib.h"
 #include "edp/ati6284/edp_s.h"
-#include "edp/common/edp_irp6s_postument_track.h"
+#include "edp/common/edp_e_manip.h"
 
 #include "lib/configurator.h"
 #include "lib/timer.h"
@@ -22,7 +22,7 @@
 #include "display.h"
 #include "ftconfig.h"
 
-#include "edp/irp6_postument/hi_irp6p.h"
+#include "edp/irp6p_m/hi_irp6p_m.h"
 
 short int invalid_value;
 Calibration *cal; //!< struct containing calibration information
@@ -45,13 +45,11 @@ tAddressSpace Bar1;
 
 // // // // // // // // // // // // // // /   obsluga prerwania // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////
 
-const struct sigevent *szafa_handler(void *area, int szafa_id)
-{
+const struct sigevent *szafa_handler(void *area, int szafa_id) {
 	return (&hi_event);
 }
 
-const struct sigevent *isr_handler(void *area, int id)
-{
+const struct sigevent *isr_handler(void *area, int id) {
 	short int boardInterrupt;
 
 	//!< czy to karta pci wygenerowala przerwanie
@@ -85,12 +83,10 @@ const struct sigevent *isr_handler(void *area, int id)
 // // // // // // // // // // // // // // /   konfiguracja czujnika // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////
 
 ATI6284_force::ATI6284_force(common::manip_effector &_master) :
-	force(_master)
-{
+	force(_master) {
 }
 
-void ATI6284_force::connect_to_hardware(void)
-{
+void ATI6284_force::connect_to_hardware(void) {
 	// unsigned  uCount;  //!< Count index
 	// unsigned  uStatus; //!< Flag to indicate FIFO not empty
 	if (!(master.test_mode)) {
@@ -169,9 +165,10 @@ void ATI6284_force::connect_to_hardware(void)
 		memset(&hi_event, 0, sizeof(hi_event));
 		hi_event.sigev_notify = SIGEV_INTR;
 
-		irq_no = edp::irp6p::IRQ_REAL; //!< Numer przerwania sprzetowego od karty ISA
+		irq_no = edp::irp6p_m::IRQ_REAL; //!< Numer przerwania sprzetowego od karty ISA
 
-		if ((szafa_id = InterruptAttach(irq_no, szafa_handler, NULL, NULL, 0)) == -1) {
+		if ((szafa_id = InterruptAttach(irq_no, szafa_handler, NULL, NULL, 0))
+				== -1) {
 			//!< Obsluga bledu
 			perror("Unable to attach szafa interrupt handler: ");
 		}
@@ -181,8 +178,7 @@ void ATI6284_force::connect_to_hardware(void)
 
 // // // // // // // // // // // // // // /   odlaczenie czujnika // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////
 
-ATI6284_force::~ATI6284_force(void)
-{
+ATI6284_force::~ATI6284_force(void) {
 	if (!(master.test_mode)) {
 		delete theSTC;
 		delete board;
@@ -200,8 +196,7 @@ ATI6284_force::~ATI6284_force(void)
 }
 
 // // // // // // // // // // // // // // /   inicjacja odczytu // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////
-void ATI6284_force::configure_sensor(void)
-{
+void ATI6284_force::configure_sensor(void) {
 	if (!(master.test_mode)) {
 		// double kartez_force[6];
 		// short  measure_report;
@@ -254,17 +249,20 @@ void ATI6284_force::configure_sensor(void)
 					}
 					local_timer.timer_stop();
 					local_timer.get_time(&sec);
-				} while ((Samples_Acquired < Total_Number_of_Samples) && (sec < START_TO_READ_FAILURE));
+				} while ((Samples_Acquired < Total_Number_of_Samples) && (sec
+						< START_TO_READ_FAILURE));
 
 				if (sec >= START_TO_READ_FAILURE) {
 					printf("aa :%f\n", sec);
 					if (show_no_result == 0) {
-						sr_msg->message("EDP Sensor configure_sensor - brak wyniku");
+						sr_msg->message(
+								"EDP Sensor configure_sensor - brak wyniku");
 						show_no_result = 1;
 					}
 				} else {
 					if (show_no_result == 1) {
-						sr_msg->message("EDP Sensor configure_sensor - wynik otrzymany");
+						sr_msg->message(
+								"EDP Sensor configure_sensor - wynik otrzymany");
 						show_no_result = 0;
 					}
 				}
@@ -346,7 +344,8 @@ void ATI6284_force::configure_sensor(void)
 	if (master.force_tryb == 2) {
 		//!< synchronize gravity transformation
 		// polozenie kisci bez narzedzia wzgledem bazy
-		lib::Homog_matrix frame = master.return_current_frame(common::WITH_TRANSLATION); //!< FORCE Transformation by Slawomir Bazant
+		lib::Homog_matrix frame = master.return_current_frame(
+				common::WITH_TRANSLATION); //!< FORCE Transformation by Slawomir Bazant
 		// lib::Homog_matrix frame(master.force_current_end_effector_frame); // pobranie aktualnej pozycji
 		if (!gravity_transformation) // nie powolano jeszcze obiektu
 		{
@@ -354,7 +353,8 @@ void ATI6284_force::configure_sensor(void)
 			lib::Xyz_Angle_Axis_vector tab;
 			lib::Homog_matrix sensor_frame;
 			if (master.config.exists("sensor_in_wrist")) {
-				char *tmp = strdup(master.config.value <std::string> ("sensor_in_wrist").c_str());
+				char *tmp = strdup(master.config.value<std::string> (
+						"sensor_in_wrist").c_str());
 				char* toDel = tmp;
 				for (int i = 0; i < 6; i++)
 					tab[i] = strtod(tmp, &tmp);
@@ -362,13 +362,15 @@ void ATI6284_force::configure_sensor(void)
 				sensor_frame = lib::Homog_matrix(tab);
 
 			} else
-				sensor_frame = lib::Homog_matrix(-1, 0, 0, 0, 0, -1, 0, 0, 0, 0, 1, 0.09);
+				sensor_frame = lib::Homog_matrix(-1, 0, 0, 0, 0, -1, 0, 0, 0,
+						0, 1, 0.09);
 			// lib::Homog_matrix sensor_frame = lib::Homog_matrix(-1, 0, 0, 0,  0, -1, 0, 0,  0, 0, 1, 0.09);
 
-			double weight = master.config.value <double> ("weight");
+			double weight = master.config.value<double> ("weight");
 
 			double point[3];
-			char *tmp = strdup(master.config.value <std::string> ("default_mass_center_in_wrist").c_str());
+			char *tmp = strdup(master.config.value<std::string> (
+					"default_mass_center_in_wrist").c_str());
 			char* toDel = tmp;
 			for (int i = 0; i < 3; i++)
 				point[i] = strtod(tmp, &tmp);
@@ -376,8 +378,9 @@ void ATI6284_force::configure_sensor(void)
 			// double point[3] = { master.config.value<double>("x_axis_arm"),
 			// 		master.config.value<double>("y_axis_arm"), master.config.return_double_value("z_axis_arm") };
 			lib::K_vector pointofgravity(point);
-			gravity_transformation
-					= new lib::ForceTrans(lib::FORCE_SENSOR_ATI3084, frame, sensor_frame, weight, pointofgravity);
+			gravity_transformation = new lib::ForceTrans(
+					lib::FORCE_SENSOR_ATI3084, frame, sensor_frame, weight,
+					pointofgravity);
 		} else {
 			gravity_transformation->synchro(frame);
 		}
@@ -386,8 +389,7 @@ void ATI6284_force::configure_sensor(void)
 
 // // // // // // // // // // // // // // /   inicjalizacja zbierania danych z czujnika, wait_for_event // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////
 
-void ATI6284_force::wait_for_event()
-{
+void ATI6284_force::wait_for_event() {
 	if (!is_sensor_configured)
 		throw sensor_error(lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
 
@@ -429,8 +431,7 @@ void ATI6284_force::wait_for_event()
 }
 // // // // // // // // // // // // // // /   odczyt danych  // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////
 
-void ATI6284_force::initiate_reading(void)
-{
+void ATI6284_force::initiate_reading(void) {
 	short int no_result = 0; //brak wyniku
 	static short int show = 0; //wyswietl
 	float force_torque[6]; //wektor z si�ami i napi�ciami
@@ -461,7 +462,8 @@ void ATI6284_force::initiate_reading(void)
 
 			local_timer.timer_stop();
 			local_timer.get_time(&sec);
-		} while ((Samples_Acquired < Total_Number_of_Samples) && (sec < START_TO_READ_FAILURE));
+		} while ((Samples_Acquired < Total_Number_of_Samples) && (sec
+				< START_TO_READ_FAILURE));
 		if (sec >= START_TO_READ_FAILURE) {
 			no_result = 1;
 			invalid_value = 1;
@@ -539,7 +541,8 @@ void ATI6284_force::initiate_reading(void)
 				show_no_result = 0;
 			} else {
 				if (overload == 1) {
-					sr_msg->message("EDP Sensor initiate_reading - OVERLOAD REMOVED");
+					sr_msg->message(
+							"EDP Sensor initiate_reading - OVERLOAD REMOVED");
 					overload = 0;
 				}
 			}
@@ -561,22 +564,28 @@ void ATI6284_force::initiate_reading(void)
 			for (int i = 0; i < 6; i++) {
 				from_vsp.comm_image.sensor_union.force.rez[i] = force_torque[i];
 			}
-			from_vsp.comm_image.sensor_union.force.rez[0] = force_torque[1] * 20;
-			from_vsp.comm_image.sensor_union.force.rez[1] = force_torque[0] * 20;
-			from_vsp.comm_image.sensor_union.force.rez[2] = -force_torque[2] * 20;
+			from_vsp.comm_image.sensor_union.force.rez[0] = force_torque[1]
+					* 20;
+			from_vsp.comm_image.sensor_union.force.rez[1] = force_torque[0]
+					* 20;
+			from_vsp.comm_image.sensor_union.force.rez[2] = -force_torque[2]
+					* 20;
 			for (int i = 0; i < 6; i++) {
 				kartez_force[i] = from_vsp.comm_image.sensor_union.force.rez[i];
 				root_force[i] = force_torque[i];
 			}
-			from_vsp.comm_image.sensor_union.force.force_reading_status = sensor_status;
+			from_vsp.comm_image.sensor_union.force.force_reading_status
+					= sensor_status;
 			master.force_msr_upload(kartez_force);//!< wpisanie sily do zmiennych globalnych dla calego procesu
 		} else if (master.force_tryb == 2 && gravity_transformation) {
 			for (int i = 0; i < 6; i++)
 				root_force[i] = force_torque[i];
 
-			lib::Homog_matrix frame = master.return_current_frame(common::WITH_TRANSLATION);
+			lib::Homog_matrix frame = master.return_current_frame(
+					common::WITH_TRANSLATION);
 			// lib::Homog_matrix frame(master.force_current_end_effector_frame);
-			lib::Ft_vector output = gravity_transformation->getForce(root_force, frame);
+			lib::Ft_vector output = gravity_transformation->getForce(
+					root_force, frame);
 
 			//		printf("output: %f, %f, %f, %f, %f, %f\n", output[0], output[1], output[2], output[3], output[4], output[5]);
 			//		printf("output: %f, %f, %f, %f, %f, %f\n", root_force[0], root_force[1], root_force[2], root_force[3], root_force[4], root_force[5]);
@@ -615,21 +624,18 @@ void ATI6284_force::initiate_reading(void)
 }
 
 // // // // // // // // // // // // // // /   odczyt z czujnika // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////
-void ATI6284_force::get_reading(void)
-{
+void ATI6284_force::get_reading(void) {
 }
 
 // // // // // // // // // // // // // // /  inne potrzebne funkcje // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////
 
-void ATI6284_force::Interrupt_Service_Routine(void)
-{
+void ATI6284_force::Interrupt_Service_Routine(void) {
 	uValues[Samples_Acquired] = board->AIFifoData.readRegister();
 	Samples_Acquired++;
 	return;
 }
 
-void ATI6284_force::InitMite(void)
-{
+void ATI6284_force::InitMite(void) {
 	tAddressSpace Bar0;
 	u32 physicalBar1;
 
@@ -648,8 +654,7 @@ void ATI6284_force::InitMite(void)
 	bus->destroyAddressSpace(Bar0);
 }
 
-void ATI6284_force::Input_to_Volts(void)
-{
+void ATI6284_force::Input_to_Volts(void) {
 	unsigned uCount;
 	unsigned licznik = 0;
 	float jednostka = 0.0003051;
@@ -703,8 +708,7 @@ void ATI6284_force::Input_to_Volts(void)
 
 
 //!< Call this function to configure board options.
-void ATI6284_force::Configure_Board(void)
-{
+void ATI6284_force::Configure_Board(void) {
 	//!< Clear configuration memory
 	theSTC->Write_Strobe_0.writeRegister(0x0001);
 
@@ -714,7 +718,8 @@ void ATI6284_force::Configure_Board(void)
 	//!< Writing to Config_Memory_High_Register for channel 5 settings
 	board->ConfigFifoHigh.setChannel(5);
 	board->ConfigFifoHigh.setBank(0);
-	board->ConfigFifoHigh.setChannelType(board->ConfigFifoHigh.kChannelTypeDifferential);
+	board->ConfigFifoHigh.setChannelType(
+			board->ConfigFifoHigh.kChannelTypeDifferential);
 	board->ConfigFifoHigh.flush();
 
 	//!< Writing to Config_Memory_Low_Register for following channel 5 settings
@@ -728,7 +733,8 @@ void ATI6284_force::Configure_Board(void)
 	//!< Writing to Config_Memory_High_Register for channel 4 settings
 	board->ConfigFifoHigh.setChannel(4);
 	board->ConfigFifoHigh.setBank(0);
-	board->ConfigFifoHigh.setChannelType(board->ConfigFifoHigh.kChannelTypeDifferential);
+	board->ConfigFifoHigh.setChannelType(
+			board->ConfigFifoHigh.kChannelTypeDifferential);
 	board->ConfigFifoHigh.flush();
 
 	//!< Writing to Config_Memory_Low_Register for following channel 4 settings
@@ -742,7 +748,8 @@ void ATI6284_force::Configure_Board(void)
 	//!< Writing to Config_Memory_High_Register for channel 3 settings
 	board->ConfigFifoHigh.setChannel(3);
 	board->ConfigFifoHigh.setBank(0);
-	board->ConfigFifoHigh.setChannelType(board->ConfigFifoHigh.kChannelTypeDifferential);
+	board->ConfigFifoHigh.setChannelType(
+			board->ConfigFifoHigh.kChannelTypeDifferential);
 	board->ConfigFifoHigh.flush();
 
 	//!< Writing to Config_Memory_Low_Register for following channel 3 settings
@@ -756,7 +763,8 @@ void ATI6284_force::Configure_Board(void)
 	//!< Writing to Config_Memory_High_Register for channel 2 settings
 	board->ConfigFifoHigh.setChannel(2);
 	board->ConfigFifoHigh.setBank(0);
-	board->ConfigFifoHigh.setChannelType(board->ConfigFifoHigh.kChannelTypeDifferential);
+	board->ConfigFifoHigh.setChannelType(
+			board->ConfigFifoHigh.kChannelTypeDifferential);
 	board->ConfigFifoHigh.flush();
 
 	//!< Writing to Config_Memory_Low_Register for following channel 2 settings
@@ -770,7 +778,8 @@ void ATI6284_force::Configure_Board(void)
 	//!< Writing to Config_Memory_High_Register for channel 1 settings
 	board->ConfigFifoHigh.setChannel(1);
 	board->ConfigFifoHigh.setBank(0);
-	board->ConfigFifoHigh.setChannelType(board->ConfigFifoHigh.kChannelTypeDifferential);
+	board->ConfigFifoHigh.setChannelType(
+			board->ConfigFifoHigh.kChannelTypeDifferential);
 	board->ConfigFifoHigh.flush();
 
 	//!< Writing to Config_Memory_Low_Register for following channel 1 settings
@@ -784,7 +793,8 @@ void ATI6284_force::Configure_Board(void)
 	//!< Writing to Config_Memory_High_Register for channel 0 settings
 	board->ConfigFifoHigh.setChannel(0);
 	board->ConfigFifoHigh.setBank(0);
-	board->ConfigFifoHigh.setChannelType(board->ConfigFifoHigh.kChannelTypeDifferential);
+	board->ConfigFifoHigh.setChannelType(
+			board->ConfigFifoHigh.kChannelTypeDifferential);
 	board->ConfigFifoHigh.flush();
 
 	//!< Writing to Config_Memory_Low_Register for following channel 0 settings
@@ -798,8 +808,7 @@ void ATI6284_force::Configure_Board(void)
 }
 
 //!< Call this function to configure the timebase options for DAQ-STC.
-void ATI6284_force::MSC_Clock_Configure(void)
-{
+void ATI6284_force::MSC_Clock_Configure(void) {
 	//!< Select timebase for DAQ-STC
 	theSTC->Clock_and_FOUT.setSlow_Internal_Timebase(1);
 	theSTC->Clock_and_FOUT.setSlow_Internal_Time_Divide_By_2(1);
@@ -810,15 +819,13 @@ void ATI6284_force::MSC_Clock_Configure(void)
 }
 
 //!< Call this function to clear the AI FIFO.
-void ATI6284_force::Clear_FIFO(void)
-{
+void ATI6284_force::Clear_FIFO(void) {
 	theSTC->Write_Strobe_1.writeRegister(0x0001);
 	return;
 }
 
 //!< Call this function to stop any activities in progress.
-void ATI6284_force::AI_Reset_All(void)
-{
+void ATI6284_force::AI_Reset_All(void) {
 	theSTC->Joint_Reset.setAI_Reset(1);//!< Reset important registers
 	theSTC->Joint_Reset.setAI_Configuration_Start(1);//!< Starting AI configuration
 	theSTC->Joint_Reset.flush();
@@ -846,30 +853,43 @@ void ATI6284_force::AI_Reset_All(void)
 }
 
 //!< Call this function to setup the board.
-void ATI6284_force::AI_Board_Personalize(void)
-{
+void ATI6284_force::AI_Board_Personalize(void) {
 	theSTC->Joint_Reset.writeAI_Configuration_Start(1);
 
 	theSTC->Clock_and_FOUT.setAI_Source_Divide_By_2(0);
 	theSTC->Clock_and_FOUT.setAI_Output_Divide_By_2(1);
 	theSTC->Clock_and_FOUT.flush();
 
-	theSTC->AI_Personal.setAI_CONVERT_Pulse_Timebase(theSTC->AI_Personal.kAI_CONVERT_Pulse_TimebasePulse_Width);
-	theSTC->AI_Personal.setAI_CONVERT_Pulse_Width(theSTC->AI_Personal.kAI_CONVERT_Pulse_WidthAbout_1_Clock_Period);
-	theSTC->AI_Personal.setAI_FIFO_Flags_Polarity(theSTC->AI_Personal.kAI_FIFO_Flags_PolarityActive_Low);
-	theSTC->AI_Personal.setAI_LOCALMUX_CLK_Pulse_Width(theSTC->AI_Personal.kAI_LOCALMUX_CLK_Pulse_WidthAbout_1_Clock_Period);
-	theSTC->AI_Personal.setAI_AIFREQ_Polarity(theSTC->AI_Personal.kAI_AIFREQ_PolarityActive_High);
-	theSTC->AI_Personal.setAI_SHIFTIN_Polarity(theSTC->AI_Personal.kAI_SHIFTIN_PolarityActive_Low);
-	theSTC->AI_Personal.setAI_SHIFTIN_Pulse_Width(theSTC->AI_Personal.kAI_SHIFTIN_Pulse_WidthAbout_2_Clock_Periods);
-	theSTC->AI_Personal.setAI_EOC_Polarity(theSTC->AI_Personal.kAI_EOC_PolarityRising_Edge);
-	theSTC->AI_Personal.setAI_SOC_Polarity(theSTC->AI_Personal.kAI_SOC_PolarityFalling_Edge);
-	theSTC->AI_Personal.setAI_Overrun_Mode(theSTC->AI_Personal.kAI_Overrun_ModeSOC_To_SHIFTIN_Trailing_Edge);
+	theSTC->AI_Personal.setAI_CONVERT_Pulse_Timebase(
+			theSTC->AI_Personal.kAI_CONVERT_Pulse_TimebasePulse_Width);
+	theSTC->AI_Personal.setAI_CONVERT_Pulse_Width(
+			theSTC->AI_Personal.kAI_CONVERT_Pulse_WidthAbout_1_Clock_Period);
+	theSTC->AI_Personal.setAI_FIFO_Flags_Polarity(
+			theSTC->AI_Personal.kAI_FIFO_Flags_PolarityActive_Low);
+	theSTC->AI_Personal.setAI_LOCALMUX_CLK_Pulse_Width(
+			theSTC->AI_Personal.kAI_LOCALMUX_CLK_Pulse_WidthAbout_1_Clock_Period);
+	theSTC->AI_Personal.setAI_AIFREQ_Polarity(
+			theSTC->AI_Personal.kAI_AIFREQ_PolarityActive_High);
+	theSTC->AI_Personal.setAI_SHIFTIN_Polarity(
+			theSTC->AI_Personal.kAI_SHIFTIN_PolarityActive_Low);
+	theSTC->AI_Personal.setAI_SHIFTIN_Pulse_Width(
+			theSTC->AI_Personal.kAI_SHIFTIN_Pulse_WidthAbout_2_Clock_Periods);
+	theSTC->AI_Personal.setAI_EOC_Polarity(
+			theSTC->AI_Personal.kAI_EOC_PolarityRising_Edge);
+	theSTC->AI_Personal.setAI_SOC_Polarity(
+			theSTC->AI_Personal.kAI_SOC_PolarityFalling_Edge);
+	theSTC->AI_Personal.setAI_Overrun_Mode(
+			theSTC->AI_Personal.kAI_Overrun_ModeSOC_To_SHIFTIN_Trailing_Edge);
 	theSTC->AI_Personal.flush();
 
-	theSTC->AI_Output_Control.setAI_CONVERT_Output_Select(theSTC->AI_Output_Control.kAI_CONVERT_Output_SelectActive_Low);
-	theSTC->AI_Output_Control.setAI_SC_TC_Output_Select(theSTC->AI_Output_Control.kAI_SC_TC_Output_SelectActive_High);
-	theSTC->AI_Output_Control.setAI_SCAN_IN_PROG_Output_Select(theSTC->AI_Output_Control.kAI_SCAN_IN_PROG_Output_SelectActive_High);
-	theSTC->AI_Output_Control.setAI_LOCALMUX_CLK_Output_Select(theSTC->AI_Output_Control.kAI_LOCALMUX_CLK_Output_SelectActive_Low);
+	theSTC->AI_Output_Control.setAI_CONVERT_Output_Select(
+			theSTC->AI_Output_Control.kAI_CONVERT_Output_SelectActive_Low);
+	theSTC->AI_Output_Control.setAI_SC_TC_Output_Select(
+			theSTC->AI_Output_Control.kAI_SC_TC_Output_SelectActive_High);
+	theSTC->AI_Output_Control.setAI_SCAN_IN_PROG_Output_Select(
+			theSTC->AI_Output_Control.kAI_SCAN_IN_PROG_Output_SelectActive_High);
+	theSTC->AI_Output_Control.setAI_LOCALMUX_CLK_Output_Select(
+			theSTC->AI_Output_Control.kAI_LOCALMUX_CLK_Output_SelectActive_Low);
 	theSTC->AI_Output_Control.flush();
 
 	theSTC->Joint_Reset.setAI_Configuration_Start(0);
@@ -879,18 +899,17 @@ void ATI6284_force::AI_Board_Personalize(void)
 }
 
 //!< Call this function to access the first value in the configuration FIFO.
-void ATI6284_force::AI_Initialize_Configuration_Memory_Output(void)
-{
+void ATI6284_force::AI_Initialize_Configuration_Memory_Output(void) {
 	theSTC->AI_Command_1.writeAI_CONVERT_Pulse(1);
 	return;
 }
 
 //!< Call this function to setup for external multiplexers.
-void ATI6284_force::AI_Board_Environmentalize(void)
-{
+void ATI6284_force::AI_Board_Environmentalize(void) {
 	theSTC->Joint_Reset.writeAI_Configuration_Start(1);
 
-	theSTC->AI_Mode_2.writeAI_External_MUX_Present(theSTC->AI_Mode_2.kAI_External_MUX_PresentEvery_Convert);
+	theSTC->AI_Mode_2.writeAI_External_MUX_Present(
+			theSTC->AI_Mode_2.kAI_External_MUX_PresentEvery_Convert);
 
 	theSTC->Joint_Reset.setAI_Configuration_Start(0);
 	theSTC->Joint_Reset.setAI_Configuration_End(1);
@@ -899,16 +918,17 @@ void ATI6284_force::AI_Board_Environmentalize(void)
 }
 
 //!< Call this function to enable or disable retriggering.
-void ATI6284_force::AI_Trigger_Signals(void)
-{
+void ATI6284_force::AI_Trigger_Signals(void) {
 	theSTC->Joint_Reset.writeAI_Configuration_Start(1);
 
 	//!< Controls the retriggerability of Counters
 	theSTC->AI_Mode_1.writeAI_Trigger_Once(1);
 
 	//!< Selects and configures the functanality of START1 trigger
-	theSTC->AI_Trigger_Select.setAI_START1_Select(theSTC->AI_Trigger_Select.kAI_START1_SelectPulse);
-	theSTC->AI_Trigger_Select.setAI_START1_Polarity(theSTC->AI_Trigger_Select.kAI_START1_PolarityActive_High_Or_Rising_Edge);
+	theSTC->AI_Trigger_Select.setAI_START1_Select(
+			theSTC->AI_Trigger_Select.kAI_START1_SelectPulse);
+	theSTC->AI_Trigger_Select.setAI_START1_Polarity(
+			theSTC->AI_Trigger_Select.kAI_START1_PolarityActive_High_Or_Rising_Edge);
 	theSTC->AI_Trigger_Select.setAI_START1_Edge(1);
 	theSTC->AI_Trigger_Select.setAI_START1_Sync(1);
 	theSTC->AI_Trigger_Select.flush();
@@ -920,8 +940,7 @@ void ATI6284_force::AI_Trigger_Signals(void)
 }
 
 //!< Call this function to select the number of scans.
-void ATI6284_force::Number_of_Scans(void)
-{
+void ATI6284_force::Number_of_Scans(void) {
 	theSTC->Joint_Reset.writeAI_Configuration_Start(1);
 	theSTC->AI_SC_Load_A.writeRegister(0x00000001);//!< Number of Scans(jeden skan to 6 sygnalow)  are 1
 
@@ -934,15 +953,16 @@ void ATI6284_force::Number_of_Scans(void)
 }
 
 //!< Call this function to select the scan start event.
-void ATI6284_force::AI_Scan_Start(void)
-{
+void ATI6284_force::AI_Scan_Start(void) {
 	theSTC->Joint_Reset.writeAI_Configuration_Start(1);
 
 	//!< Setting the bitfields corresponding to START triggers
-	theSTC->AI_START_STOP_Select.setAI_START_Select(theSTC->AI_START_STOP_Select.kAI_START_SelectSI_TC);
+	theSTC->AI_START_STOP_Select.setAI_START_Select(
+			theSTC->AI_START_STOP_Select.kAI_START_SelectSI_TC);
 	theSTC->AI_START_STOP_Select.setAI_START_Edge(1);
 	theSTC->AI_START_STOP_Select.setAI_START_Sync(1);
-	theSTC->AI_START_STOP_Select.setAI_START_Polarity(theSTC->AI_START_STOP_Select.kAI_START_PolarityActive_High_Or_Rising_Edge);
+	theSTC->AI_START_STOP_Select.setAI_START_Polarity(
+			theSTC->AI_START_STOP_Select.kAI_START_PolarityActive_High_Or_Rising_Edge);
 	theSTC->AI_START_STOP_Select.flush();
 
 	theSTC->AI_SI_Load_A.writeRegister(0x00000001);
@@ -958,14 +978,15 @@ void ATI6284_force::AI_Scan_Start(void)
 }
 
 //!< Call this function to select the end of scan event.
-void ATI6284_force::AI_End_of_Scan(void)
-{
+void ATI6284_force::AI_End_of_Scan(void) {
 	theSTC->Joint_Reset.writeAI_Configuration_Start(1);
 
 	//!< Setting the bitfields corresponding to STOP triggers
-	theSTC->AI_START_STOP_Select.setAI_STOP_Select(theSTC->AI_START_STOP_Select.kAI_STOP_SelectIN);
+	theSTC->AI_START_STOP_Select.setAI_STOP_Select(
+			theSTC->AI_START_STOP_Select.kAI_STOP_SelectIN);
 	theSTC->AI_START_STOP_Select.setAI_STOP_Edge(0);
-	theSTC->AI_START_STOP_Select.setAI_STOP_Polarity(theSTC->AI_START_STOP_Select.kAI_STOP_PolarityActive_High_Or_Rising_Edge);
+	theSTC->AI_START_STOP_Select.setAI_STOP_Polarity(
+			theSTC->AI_START_STOP_Select.kAI_STOP_PolarityActive_High_Or_Rising_Edge);
 	theSTC->AI_START_STOP_Select.setAI_STOP_Sync(1);
 	theSTC->AI_START_STOP_Select.flush();
 
@@ -976,19 +997,20 @@ void ATI6284_force::AI_End_of_Scan(void)
 }
 
 //!< Call this function to select the convert signal for the Acquisition
-void ATI6284_force::Convert_Signal(void)
-{
+void ATI6284_force::Convert_Signal(void) {
 	theSTC->Joint_Reset.writeAI_Configuration_Start(1);
 
 	theSTC->AI_SI2_Load_A.writeRegister(0x03E7);
 
 	theSTC->AI_SI2_Load_B.writeRegister(0x03E7);
 
-	theSTC->AI_Mode_2.writeAI_SI2_Reload_Mode(theSTC->AI_Mode_2.kAI_SI2_Reload_ModeAlternate_First_Period_Every_STOP);
+	theSTC->AI_Mode_2.writeAI_SI2_Reload_Mode(
+			theSTC->AI_Mode_2.kAI_SI2_Reload_ModeAlternate_First_Period_Every_STOP);
 
 	theSTC->AI_Command_1.writeAI_SI2_Load(1);
 
-	theSTC->AI_Mode_2.writeAI_SI2_Initial_Load_Source(theSTC->AI_Mode_2.kAI_SI2_Initial_Load_SourceLoad_B);
+	theSTC->AI_Mode_2.writeAI_SI2_Initial_Load_Source(
+			theSTC->AI_Mode_2.kAI_SI2_Initial_Load_SourceLoad_B);
 
 	theSTC->Joint_Reset.setAI_Configuration_Start(0);
 	theSTC->Joint_Reset.setAI_Configuration_End(1);
@@ -997,8 +1019,7 @@ void ATI6284_force::Convert_Signal(void)
 }
 
 //!< Call this function to enable interrupts for the Acquisition
-void ATI6284_force::AI_Interrupt_Enable(void)
-{
+void ATI6284_force::AI_Interrupt_Enable(void) {
 	theSTC->Interrupt_A_Enable.setRegister(0); //!< reset register
 	theSTC->Interrupt_A_Enable.setAI_FIFO_Interrupt_Enable(1); //!< enable interrupts based on the AI FIFO
 	theSTC->Interrupt_A_Enable.setAI_STOP_Interrupt_Enable(0);
@@ -1016,7 +1037,8 @@ void ATI6284_force::AI_Interrupt_Enable(void)
 	theSTC->Interrupt_Control.setRegister(0); //!< reset register
 	//!< IRQ signal is routed from DAQ STC to the MITE chip which sends the interrupt onto the PCI bus
 	//!< The polarity must be Active Low for the signal from the STC to the MITE
-	theSTC->Interrupt_Control.setInterrupt_Output_Polarity(theSTC->Interrupt_Control.kInterrupt_Output_PolarityActive_Low);
+	theSTC->Interrupt_Control.setInterrupt_Output_Polarity(
+			theSTC->Interrupt_Control.kInterrupt_Output_PolarityActive_Low);
 	//!< Only IRQ_Out 0 from the STC is connected to the MITE and will generate actual
 	//!< interrupts. Change the following line to select IRQ_Out 0 to generate interrupts
 	//!< on the PCI bus when you have an Interrupt Service Routine installed, with IRQ_Out 4
@@ -1040,8 +1062,7 @@ void ATI6284_force::AI_Interrupt_Enable(void)
 }
 
 //!< Call this function to arm the analog input counters.
-void ATI6284_force::AI_Arming(void)
-{
+void ATI6284_force::AI_Arming(void) {
 	theSTC->AI_Command_1.setAI_SC_Arm(1);
 	theSTC->AI_Command_1.setAI_SI_Arm(1);
 	theSTC->AI_Command_1.setAI_SI2_Arm(1);
@@ -1051,15 +1072,13 @@ void ATI6284_force::AI_Arming(void)
 }
 
 //!< Call this function to start the acquistion.
-void ATI6284_force::AI_Start_The_Acquisition(void)
-{
+void ATI6284_force::AI_Start_The_Acquisition(void) {
 	theSTC->AI_Command_2.writeAI_START1_Pulse(1);
 	theSTC->AI_Command_2.flush();
 	return;
 }
 
-force* return_created_edp_force_sensor(common::manip_effector &_master)
-{
+force* return_created_edp_force_sensor(common::manip_effector &_master) {
 	return new ATI6284_force(_master);
 }//!< : return_created_sensor
 

@@ -498,10 +498,10 @@ int init_teaching_window(PtWidget_t *widget, ApInfo_t *apinfo,
 	switch (ui_ecp_obj->ecp_to_ui_msg.ecp_message) {
 	case lib::C_XYZ_ANGLE_AXIS:
 		switch (ui_ecp_obj->ecp_to_ui_msg.robot_name) {
-		case lib::ROBOT_IRP6_ON_TRACK:
+		case lib::ROBOT_IRP6OT_M:
 			start_wnd_irp6_on_track_xyz_angle_axis(widget, apinfo, cbinfo);
 			break;
-		case lib::ROBOT_IRP6_POSTUMENT:
+		case lib::ROBOT_IRP6P_M:
 			start_wnd_irp6_postument_xyz_angle_axis(widget, apinfo, cbinfo);
 			break;
 		case lib::ROBOT_IRP6_MECHATRONIKA:
@@ -513,10 +513,10 @@ int init_teaching_window(PtWidget_t *widget, ApInfo_t *apinfo,
 		break;
 	case lib::C_XYZ_EULER_ZYZ:
 		switch (ui_ecp_obj->ecp_to_ui_msg.robot_name) {
-		case lib::ROBOT_IRP6_ON_TRACK:
+		case lib::ROBOT_IRP6OT_M:
 			start_wnd_irp6_on_track_xyz_euler_zyz(widget, apinfo, cbinfo);
 			break;
-		case lib::ROBOT_IRP6_POSTUMENT:
+		case lib::ROBOT_IRP6P_M:
 			start_wnd_irp6_postument_xyz_euler_zyz(widget, apinfo, cbinfo);
 			break;
 		case lib::ROBOT_IRP6_MECHATRONIKA:
@@ -528,10 +528,10 @@ int init_teaching_window(PtWidget_t *widget, ApInfo_t *apinfo,
 		break;
 	case lib::C_JOINT:
 		switch (ui_ecp_obj->ecp_to_ui_msg.robot_name) {
-		case lib::ROBOT_IRP6_ON_TRACK:
+		case lib::ROBOT_IRP6OT_M:
 			start_wnd_irp6_on_track_int(widget, apinfo, cbinfo);
 			break;
-		case lib::ROBOT_IRP6_POSTUMENT:
+		case lib::ROBOT_IRP6P_M:
 			start_wnd_irp6_postument_int(widget, apinfo, cbinfo);
 			break;
 		case lib::ROBOT_IRP6_MECHATRONIKA:
@@ -543,10 +543,10 @@ int init_teaching_window(PtWidget_t *widget, ApInfo_t *apinfo,
 		break;
 	case lib::C_MOTOR:
 		switch (ui_ecp_obj->ecp_to_ui_msg.robot_name) {
-		case lib::ROBOT_IRP6_ON_TRACK:
+		case lib::ROBOT_IRP6OT_M:
 			start_wnd_irp6_on_track_inc(widget, apinfo, cbinfo);
 			break;
-		case lib::ROBOT_IRP6_POSTUMENT:
+		case lib::ROBOT_IRP6P_M:
 			start_wnd_irp6_postument_inc(widget, apinfo, cbinfo);
 			break;
 		case lib::ROBOT_IRP6_MECHATRONIKA:
@@ -2127,12 +2127,12 @@ int teaching_window_send_move(PtWidget_t *widget, ApInfo_t *apinfo,
 			&motion_time, 0);
 
 	switch (ui_ecp_obj->ecp_to_ui_msg.robot_name) {
-	case lib::ROBOT_IRP6_ON_TRACK:
-		for (int i = 0; i < IRP6_ON_TRACK_NUM_OF_SERVOS; i++)
+	case lib::ROBOT_IRP6OT_M:
+		for (int i = 0; i < IRP6OT_M_NUM_OF_SERVOS; i++)
 			ui_ecp_obj->ui_rep.coordinates[i] = irp6ot_current_pos[i];
 		break;
-	case lib::ROBOT_IRP6_POSTUMENT:
-		for (int i = 0; i < IRP6_POSTUMENT_NUM_OF_SERVOS; i++)
+	case lib::ROBOT_IRP6P_M:
+		for (int i = 0; i < IRP6P_M_NUM_OF_SERVOS; i++)
 			ui_ecp_obj->ui_rep.coordinates[i] = irp6p_current_pos[i];
 		break;
 	case lib::ROBOT_IRP6_MECHATRONIKA:

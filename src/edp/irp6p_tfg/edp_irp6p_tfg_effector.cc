@@ -23,7 +23,7 @@
 
 namespace mrrocpp {
 namespace edp {
-namespace irp6p {
+namespace irp6p_tfg {
 
 /*--------------------------------------------------------------------------*/
 void effector::create_threads()
@@ -108,7 +108,7 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 
 common::servo_buffer* effector::return_created_servo_buffer()
 {
-	return new irp6p::servo_buffer(*this);
+	return new servo_buffer(*this);
 }
 
 // Stworzenie modeli kinematyki dla robota IRp-6 na torze.
@@ -128,7 +128,7 @@ namespace common {
 // Stworzenie obiektu edp_irp6p_effector.
 effector* return_created_efector(lib::configurator &_config)
 {
-	return new irp6p::effector(_config);
+	return new irp6p_tfg::effector(_config);
 }
 
 } // namespace common

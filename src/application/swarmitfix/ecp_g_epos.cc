@@ -17,13 +17,10 @@ epos::epos(common::task::task& _ecp_task) :
 	//	if (the_robot) the_robot->communicate_with_edp = false; //do not communicate with edp
 
 
-	epos_low_level_command_data_port = the_robot->port_manager.get_port<
-			lib::epos_low_level_command> (EPOS_LOW_LEVEL_COMMAND_DATA_PORT);
-	epos_reply_data_request_port = the_robot->port_manager.get_request_port<
-			lib::epos_reply> (EPOS_REPLY_DATA_REQUEST_PORT);
+	epos_low_level_command_data_port = the_robot->port_manager.get_port<lib::epos_low_level_command> (EPOS_LOW_LEVEL_COMMAND_DATA_PORT);
+	epos_reply_data_request_port = the_robot->port_manager.get_request_port<lib::epos_reply> (EPOS_REPLY_DATA_REQUEST_PORT);
 
-	epos_gen_parameters_data_port = the_robot->port_manager.get_port<
-			lib::epos_gen_parameters> (EPOS_GEN_PARAMETERS_DATA_PORT);
+	epos_gen_parameters_data_port = the_robot->port_manager.get_port<lib::epos_gen_parameters> (EPOS_GEN_PARAMETERS_DATA_PORT);
 
 }
 
@@ -58,8 +55,7 @@ bool epos::first_step() {
 bool epos::next_step() {
 	ecp_t.sr_ecp_msg->message("epos next_step");
 
-	if (epos_reply_data_request_port->is_new_data()) {
-		edp_ecp_epos_reply_structure = epos_reply_data_request_port->get();
+	if (epos_reply_data_request_port->get(edp_ecp_epos_reply_structure) == mrrocpp::lib::NewData) {
 
 		std::stringstream ss(std::stringstream::in | std::stringstream::out);
 		ss << "licznik: "
