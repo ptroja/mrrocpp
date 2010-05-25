@@ -39,6 +39,12 @@ void Graspit::main_task_algorithm(void ){
 	int port=config.value<int>("graspit_port","[transmitter_graspit]");
 	std::string node_name=config.value<std::string>("graspit_node_name","[transmitter_graspit]");
 
+	double v[8], a[8];
+	for (int i=0; i<8; ++i) {
+		v[i] = 0.1;
+		a[i] = 0.1;
+	}
+
 	trgraspit->TRconnect(node_name.c_str(), port);
 	trgraspit->t_read();
 	trgraspit->TRdisconnect();
@@ -48,6 +54,9 @@ void Graspit::main_task_algorithm(void ){
 	//2 affects 3
 	trgraspit->from_va.graspit.grasp_joint[2] += trgraspit->from_va.graspit.grasp_joint[1];
 	trgraspit->from_va.graspit.grasp_joint[3] += trgraspit->from_va.graspit.grasp_joint[2];
+
+	trgraspit->from_va.graspit.grasp_joint[9] += trgraspit->from_va.graspit.grasp_joint[8];
+	trgraspit->from_va.graspit.grasp_joint[10] += trgraspit->from_va.graspit.grasp_joint[9];
 
 	//synchro TODO: move to GraspIt!
 	trgraspit->from_va.graspit.grasp_joint[0] ;
@@ -59,20 +68,26 @@ void Graspit::main_task_algorithm(void ){
 	trgraspit->from_va.graspit.grasp_joint[6] = (45.5 - trgraspit->from_va.graspit.grasp_joint[6]) * 2;
 	trgraspit->from_va.graspit.grasp_joint[6] /= 1000;
 
-	cout << trgraspit->from_va.graspit.grasp_joint[0] << "\n";
-	cout << trgraspit->from_va.graspit.grasp_joint[1] << "\n";
-	cout << trgraspit->from_va.graspit.grasp_joint[2] << "\n";
-	cout << trgraspit->from_va.graspit.grasp_joint[3] << "\n";
-	cout << trgraspit->from_va.graspit.grasp_joint[4] << "\n";
-	cout << trgraspit->from_va.graspit.grasp_joint[5] << "\n";
-	cout << trgraspit->from_va.graspit.grasp_joint[6] << "\n";
+	trgraspit->from_va.graspit.grasp_joint[7] ;
+	trgraspit->from_va.graspit.grasp_joint[8] -= 1.542;
+	trgraspit->from_va.graspit.grasp_joint[9] ;
+	trgraspit->from_va.graspit.grasp_joint[10] ;
+	trgraspit->from_va.graspit.grasp_joint[11] += 4.712;
+	trgraspit->from_va.graspit.grasp_joint[12] ;
+	trgraspit->from_va.graspit.grasp_joint[13] = (45.5 - trgraspit->from_va.graspit.grasp_joint[13]) * 2;
+	trgraspit->from_va.graspit.grasp_joint[13] /= 1000;
 
-	smoothgen2->set_absolute();
-	double v[8], a[8];
-	for (int i=0; i<8; ++i) {
-		v[i] = 0.2;
-		a[i] = 0.1;
-	}
+	smoothgen2->load_coordinates(lib::ECP_JOINT, v, a,
+								trgraspit->from_va.graspit.grasp_joint[7],
+								trgraspit->from_va.graspit.grasp_joint[8],
+								trgraspit->from_va.graspit.grasp_joint[9],
+								trgraspit->from_va.graspit.grasp_joint[10],
+								trgraspit->from_va.graspit.grasp_joint[11],
+								trgraspit->from_va.graspit.grasp_joint[12],
+								0.08,
+								0.0, false);
+	smoothgen2->Move();
+	smoothgen2->reset();
 	smoothgen2->load_coordinates(lib::ECP_JOINT, v, a,
 								trgraspit->from_va.graspit.grasp_joint[0],
 								trgraspit->from_va.graspit.grasp_joint[1],
@@ -80,8 +95,19 @@ void Graspit::main_task_algorithm(void ){
 								trgraspit->from_va.graspit.grasp_joint[3],
 								trgraspit->from_va.graspit.grasp_joint[4],
 								trgraspit->from_va.graspit.grasp_joint[5],
-								trgraspit->from_va.graspit.grasp_joint[6],
-								0.0, true);
+								0.08,
+								0.0, false);
+	smoothgen2->Move();
+	smoothgen2->reset();
+	smoothgen2->load_coordinates(lib::ECP_JOINT, v, a,
+								trgraspit->from_va.graspit.grasp_joint[0],
+								trgraspit->from_va.graspit.grasp_joint[1],
+								trgraspit->from_va.graspit.grasp_joint[2],
+								trgraspit->from_va.graspit.grasp_joint[3],
+								trgraspit->from_va.graspit.grasp_joint[4],
+								trgraspit->from_va.graspit.grasp_joint[5],
+								trgraspit->from_va.graspit.grasp_joint[6] > 0.08 ? 0.08 : trgraspit->from_va.graspit.grasp_joint[6] < 0.06 ? 0.06 : trgraspit->from_va.graspit.grasp_joint[6],
+								0.0, false);
 	smoothgen2->Move();
 	smoothgen2->reset();
 
