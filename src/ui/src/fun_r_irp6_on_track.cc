@@ -2845,7 +2845,7 @@ int process_control_window_irp6ot_section_init(
 int reload_irp6ot_configuration() {
 	// jesli IRP6 on_track ma byc aktywne
 	if ((ui_state.irp6_on_track.is_active = config->value<int> (
-			"is_irp6_on_track_active")) == 1) {
+			"is_irp6ot_m_active")) == 1) {
 		// ini_con->create_ecp_irp6_on_track (ini_con->ui->ECP_IRP6OT_M_SECTION);
 		//ui_state.is_any_edp_active = true;
 		if (ui_state.is_mp_and_ecps_active) {

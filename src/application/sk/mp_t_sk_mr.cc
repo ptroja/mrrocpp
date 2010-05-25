@@ -43,14 +43,14 @@ void sk_mr::main_task_algorithm(void) {
 	lib::robot_name_t gripper_name;
 
 	// ROBOT IRP6_ON_TRACK
-	if (config.value<int> ("is_irp6_on_track_active", UI_SECTION)) {
+	if (config.value<int> ("is_irp6ot_m_active", UI_SECTION)) {
 		manipulator_name = lib::ROBOT_IRP6OT_M;
 		if (config.value<int> ("is_irp6ot_tfg_active", UI_SECTION)) {
 			gripper_name = lib::ROBOT_IRP6OT_TFG;
 		} else {
 			// TODO: throw
 		}
-	} else if (config.value<int> ("is_irp6_postument_active", UI_SECTION)) {
+	} else if (config.value<int> ("is_irp6p_m_active", UI_SECTION)) {
 		manipulator_name = lib::ROBOT_IRP6P_M;
 		if (config.value<int> ("is_irp6p_tfg_active", UI_SECTION)) {
 			gripper_name = lib::ROBOT_IRP6P_TFG;
