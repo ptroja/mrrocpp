@@ -17,26 +17,25 @@
 
 #include "lib/srlib.h"
 
-#include "ecp/irp6_postument/ecp_r_irp6p.h"
+#include "ecp/irp6p_m/ecp_r_irp6p_m.h"
 #include "ecp_t_dung.h"
 #include "ecp_g_dung.h"
 
 namespace mrrocpp {
 namespace ecp {
-namespace irp6p {
+namespace irp6p_m {
 namespace task {
 
 // KONSTRUKTORY
-dung::dung(lib::configurator &_config) : task(_config)
-{
-	ecp_m_robot = new robot (*this);
+dung::dung(lib::configurator &_config) :
+	task(_config) {
+	ecp_m_robot = new irp6p_m::robot(*this);
 }
 
-void dung::main_task_algorithm(void)
-{
+void dung::main_task_algorithm(void) {
 	generator::dung dg(*this, 4);
 
-	for(;;) {
+	for (;;) {
 		sr_ecp_msg->message("NEW SERIES");
 
 		dg.Move();
@@ -49,9 +48,8 @@ void dung::main_task_algorithm(void)
 namespace common {
 namespace task {
 
-task* return_created_ecp_task (lib::configurator &_config)
-{
-	return new irp6p::task::dung(_config);
+task* return_created_ecp_task(lib::configurator &_config) {
+	return new irp6p_m::task::dung(_config);
 }
 
 }

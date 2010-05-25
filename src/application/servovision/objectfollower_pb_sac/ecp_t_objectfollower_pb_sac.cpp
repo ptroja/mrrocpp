@@ -14,20 +14,20 @@ namespace mrrocpp {
 
 namespace ecp {
 
-namespace irp6ot {
+namespace irp6ot_m {
 
 namespace task {
 
-ecp_t_objectfollower_pb_sac::ecp_t_objectfollower_pb_sac(mrrocpp::lib::configurator& config) :
-	task(config)
-{
-	ecp_m_robot = new ecp::irp6ot::robot(*this);
+ecp_t_objectfollower_pb_sac::ecp_t_objectfollower_pb_sac(
+		mrrocpp::lib::configurator& config) :
+	task(config) {
+	ecp_m_robot = new ecp::irp6ot_m::robot(*this);
 
 	char config_section_name[] = { "[object_follower_sac_1]" };
 
 	logDbgEnabled = true;
 
-	Eigen::Matrix <double, 3, 1> p1, p2;
+	Eigen::Matrix<double, 3, 1> p1, p2;
 	p1(0, 0) = 0.6;
 	p1(1, 0) = -0.2;
 	p1(2, 0) = 0.1;
@@ -36,21 +36,22 @@ ecp_t_objectfollower_pb_sac::ecp_t_objectfollower_pb_sac(mrrocpp::lib::configura
 	p2(1, 0) = 0.2;
 	p2(2, 0) = 0.4;
 
-	shared_ptr <position_constraint> cube(new cubic_constraint(p1, p2));
-	reg = shared_ptr <visual_servo_regulator> (new regulator_p(config, config_section_name));
-	vs = shared_ptr <visual_servo> (new pb_sac_visual_servo(reg, config_section_name, config));
-	sm = shared_ptr <simple_visual_servo_manager> (new simple_visual_servo_manager(*this, config_section_name, vs));
+	shared_ptr<position_constraint> cube(new cubic_constraint(p1, p2));
+	reg = shared_ptr<visual_servo_regulator> (new regulator_p(config,
+			config_section_name));
+	vs = shared_ptr<visual_servo> (new pb_sac_visual_servo(reg,
+			config_section_name, config));
+	sm = shared_ptr<simple_visual_servo_manager> (
+			new simple_visual_servo_manager(*this, config_section_name, vs));
 	sm->add_position_constraint(cube);
 	sm->configure();
 }
 
-ecp_t_objectfollower_pb_sac::~ecp_t_objectfollower_pb_sac()
-{
+ecp_t_objectfollower_pb_sac::~ecp_t_objectfollower_pb_sac() {
 	delete ecp_m_robot;
 }
 
-void ecp_t_objectfollower_pb_sac::main_task_algorithm()
-{
+void ecp_t_objectfollower_pb_sac::main_task_algorithm() {
 	sm->Move();
 	ecp_termination_notice();
 }
@@ -61,9 +62,8 @@ void ecp_t_objectfollower_pb_sac::main_task_algorithm()
 
 namespace common {
 namespace task {
-task* return_created_ecp_task(lib::configurator &config)
-{
-	return new irp6ot::task::ecp_t_objectfollower_pb_sac(config);
+task* return_created_ecp_task(lib::configurator &config) {
+	return new irp6ot_m::task::ecp_t_objectfollower_pb_sac(config);
 }
 } // namespace task
 } // namespace common

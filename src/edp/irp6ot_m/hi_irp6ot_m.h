@@ -12,7 +12,7 @@
 
 namespace mrrocpp {
 namespace edp {
-namespace irp6ot {
+namespace irp6ot_m {
 
 // Struktury danych wykorzystywane w hardware_interface
 const int IRQ_REAL = 10; // Numer przerwania sprzetowego

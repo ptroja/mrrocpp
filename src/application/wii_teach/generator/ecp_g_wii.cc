@@ -6,7 +6,7 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace irp6ot {
+namespace irp6ot_m {
 namespace generator {
 
 wii::wii (common::task::task& _ecp_task,ecp_mp::sensor::wiimote* _wiimote) : generator(_ecp_task), _wiimote(_wiimote)

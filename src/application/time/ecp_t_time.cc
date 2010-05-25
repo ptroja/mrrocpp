@@ -14,8 +14,8 @@
 #include "lib/com_buf.h"
 
 #include "lib/srlib.h"
-#include "ecp/irp6_on_track/ecp_r_irp6ot.h"
-#include "ecp/irp6_postument/ecp_r_irp6p.h"
+#include "ecp/irp6ot_m/ecp_r_irp6ot_m.h"
+#include "ecp/irp6p_m/ecp_r_irp6p_m.h"
 #include "ecp_g_time.h"
 #include "ecp_t_time.h"
 #include "ecp_mp_s_time.h"
@@ -30,10 +30,10 @@ namespace task {
 time::time(lib::configurator &_config) : task(_config)
 {
 	// the robot is choose dependendant on the section of configuration file sent as argv[4]
-	if (config.section_name == ECP_IRP6_ON_TRACK_SECTION)
-		{ ecp_m_robot = new irp6ot::robot (*this); }
-	else if (config.section_name == ECP_IRP6_POSTUMENT_SECTION)
-		{ ecp_m_robot = new irp6p::robot (*this); }
+	if (config.section_name == ECP_IRP6OT_M_SECTION)
+		{ ecp_m_robot = new irp6ot_m::robot (*this); }
+	else if (config.section_name == ECP_IRP6P_M_SECTION)
+		{ ecp_m_robot = new irp6p_m::robot (*this); }
 	else
 		assert(0);
 #if 0

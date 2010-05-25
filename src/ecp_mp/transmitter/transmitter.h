@@ -67,7 +67,7 @@ typedef struct _FROM_VA
 			char status;
 		} draughts_ai;
 		struct {
-			double grasp_joint[7];
+			double grasp_joint[14];
 		} graspit;
 		playerc_joystick_t player_joystick;
 		playerc_position_t player_position;
