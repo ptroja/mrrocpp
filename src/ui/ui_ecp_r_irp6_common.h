@@ -9,24 +9,18 @@
 #ifndef _UI_ECP_R_MANIP_H
 #define _UI_ECP_R_MANIP_H
 
-#include "ecp/common/ecp_robot.h"
-
 #include "ui/ui.h"
 // Konfigurator.
 #include "lib/configurator.h"
 #include "lib/mrmath/mrmath.h"
 #include "ui/ui_ecp_r_common.h"
 
-
+#include "ecp/common/ecp_robot.h"
 
 // ---------------------------------------------------------------
 class ui_irp6_common_robot : public ui_common_robot
 {
-
-
 public:
-
-
 	// ecp_buffer ui_edp_package; // by Y
 	ui_irp6_common_robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg, lib::robot_name_t _robot_name); // Konstruktor
 

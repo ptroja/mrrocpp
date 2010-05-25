@@ -15,7 +15,7 @@
 #include <sys/dispatch.h>
 #endif /* USE_MESSIP_SRR */
 
-#include "lib/xdr_iarchive.hpp"
+#include "lib/xdr/xdr_iarchive.hpp"
 #include "AgentBase.h"
 
 #include "DataBufferBase.h"

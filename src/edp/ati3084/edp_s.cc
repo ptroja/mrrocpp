@@ -377,7 +377,6 @@ void ATI3084_force::get_reading(void)
 
 			// jesli ma byc wykorzytstywana biblioteka transformacji sil
 			if (master.force_tryb == 2 && gravity_transformation) {
-				static int ms_nr = 0; // numer odczytu z czujnika
 				for (int i = 0; i < 3; i++)
 					ft_table[i] /= 20;
 				//			for(int i=3;i<6;i++) ft_table[i]/=333;
@@ -387,7 +386,9 @@ void ATI3084_force::get_reading(void)
 				// lib::Homog_matrix frame(master.force_current_end_effector_frame);
 				lib::Ft_vector output = gravity_transformation->getForce(ft_table, frame);
 				master.force_msr_upload(output);
-				/*		if (!((ms_nr++)%1000)) {
+#if 0
+				static int ms_nr = 0; // numer odczytu z czujnika
+				if (!((ms_nr++)%1000)) {
 				 cerr << "Output\t";
 				 for(int i=0;i<3;i++) output[i]*=20;
 				 for(int i=3;i<6;i++) output[i]*=333;
@@ -401,7 +402,7 @@ void ATI3084_force::get_reading(void)
 				 cerr << endl << endl;
 				 cerr << frame << endl;
 				 }
-				 */
+#endif
 			}
 		}
 	}
@@ -551,9 +552,9 @@ void ATI3084_force::do_Wait(void)
 void ATI3084_force::do_send_command(const char* command)
 {
 #if SERIAL
-	int data_written = write(uart, command, strlen(command));
+	ssize_t data_written = write(uart, command, strlen(command));
 
-	if (data_written =! strlen(command)) {
+	if (data_written != (ssize_t) strlen(command)) {
 		perror("ATI3084 serial write to sensor failed");
 	}
 #endif

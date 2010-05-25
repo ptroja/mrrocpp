@@ -71,7 +71,7 @@ struct timespec start[9];
 static const char* interface = "en1";
 static uint8_t boardMac[6] = {0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
 
-static const char* host = "192.168.18.200";
+//static const char* host = "192.168.18.200";
 static const uint16_t port = 55555;
 
 static const unsigned int DESIRED_MEASUREMENT_FREQUENCY = 500;
@@ -264,9 +264,7 @@ void ATI6284_force::wait_for_event()
 /*************************** inicjacja odczytu ******************************/
 void ATI6284_force::initiate_reading(void)
 {
-	lib::Ft_vector kartez_force;
     double force_fresh[6] = { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f };
-	short measure_report;
 
 	if (!is_sensor_configured) {
 		throw lib::sensor::sensor_error(lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
@@ -284,13 +282,10 @@ void ATI6284_force::initiate_reading(void)
 
     // jesli ma byc wykorzytstywana biblioteka transformacji sil
     if (master.force_tryb == 2 && gravity_transformation) {
-
-
         lib::Homog_matrix frame = master.return_current_frame(common::WITH_TRANSLATION);
         // lib::Homog_matrix frame(master.force_current_end_effector_frame);
         lib::Ft_vector output = gravity_transformation->getForce(ft_table, frame);
         master.force_msr_upload(output);
-
     }
 }
 

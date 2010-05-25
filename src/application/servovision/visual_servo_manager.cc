@@ -17,7 +17,7 @@ namespace common {
 
 namespace generator {
 
-visual_servo_manager::visual_servo_manager(mrrocpp::ecp::common::task::task & ecp_task, const char *section_name) :
+visual_servo_manager::visual_servo_manager(mrrocpp::ecp::common::task::task & ecp_task, const std::string& section_name) :
 	generator(ecp_task), current_position_saved(false), motion_steps(30), a_max(0), v_max(0)
 {
 	// 2 ms per one step
@@ -111,7 +111,11 @@ bool visual_servo_manager::next_step()
 
 	// get readings from all servos and aggregate
 	lib::Homog_matrix position_change = get_aggregated_position_change();
+	//	logDbg("bool visual_servo_manager::next_step(): position_change = (%+07.3lg, %+07.3lg, %+07.3lg)\n", position_change(0, 3), position_change(1, 3), position_change(2, 3));
+
 	lib::Homog_matrix next_position = current_position * position_change;
+
+	//	logDbg("bool visual_servo_manager::next_step(): next_position = (%+07.3lg, %+07.3lg, %+07.3lg)\n", next_position(0, 3), next_position(1, 3), next_position(2, 3));
 
 	// apply weak position constraints
 	bool constraints_kept = false;
@@ -132,6 +136,7 @@ bool visual_servo_manager::next_step()
 		termination_conditions[i]->update_end_effector_accel(a);
 	}
 
+	//	logDbg("bool visual_servo_manager::next_step(): next_position = (%+07.3lg, %+07.3lg, %+07.3lg)\n", next_position(0, 3), next_position(1, 3), next_position(2, 3));
 	// send command to the robot
 	next_position.get_frame_tab(the_robot->ecp_command.instruction.arm.pf_def.arm_frame);
 	the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = current_gripper_coordinate;

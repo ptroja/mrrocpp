@@ -36,7 +36,7 @@ bool object_reached_termination_condition::terminate_now()
 		steps_below_max_speed = 0;
 	}
 
-	logDbg("bool object_reached_termination_condition::terminate_now() steps_below_max_speed: %5d\n", steps_below_max_speed);
+//	logDbg("bool object_reached_termination_condition::terminate_now() steps_below_max_speed: %5d\n", steps_below_max_speed);
 
 	if(steps_below_max_speed >= min_steps){
 		return true;

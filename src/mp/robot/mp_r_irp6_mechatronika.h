@@ -1,16 +1,18 @@
 #if !defined(MP_R_IRP6_MECHATRONIKA_H_)
 #define MP_R_IRP6_MECHATRONIKA_H_
 
-
 #include "mp/robot/mp_r_manip_and_conv.h"
+
 namespace mrrocpp {
 namespace mp {
 namespace robot {
-class irp6_mechatronika: public manip_and_conv {
 
- public:
-  irp6_mechatronika (task::task &mp_object_l);
+class irp6_mechatronika : public manip_and_conv
+{
+public:
+	irp6_mechatronika(task::task &mp_object_l);
 };
+
 } // namespace robot
 } // namespace mp
 } // namespace mrrocpp

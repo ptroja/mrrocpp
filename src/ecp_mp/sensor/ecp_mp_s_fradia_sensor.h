@@ -366,9 +366,7 @@ void fradia_sensor <FROM_VSP_T, TO_VSP_T>::operator()()
 	ECP_VSP_MSG ecp_vsp_msg;
 	VSP_ECP_MSG vsp_ecp_msg;
 	TO_VSP_T object_to_send;
-	FROM_VSP_T received_object;
 
-	int iter = 0;
 	logger::logDbg("fradia_sensor::operator() begin\n");
 
 	try {
@@ -406,7 +404,6 @@ void fradia_sensor <FROM_VSP_T, TO_VSP_T>::operator()()
 					logger::log("void fradia_sensor <FROM_VSP_T, TO_VSP_T>::operator()(): vsp_ecp_msg.vsp_report = %d != VSP_FRADIA_TASK_CONFIGURED\n", vsp_ecp_msg.vsp_report);
 					throw std::logic_error("vsp_ecp_msg.vsp_report != lib::VSP_FRADIA_TASK_CONFIGURED");
 				}
-				//logger::logDbg("fradia_sensor::operator() configure now 3\n");
 			}
 
 			// send VSP_GET_READING
@@ -430,7 +427,6 @@ void fradia_sensor <FROM_VSP_T, TO_VSP_T>::operator()()
 				received_object_shared = vsp_ecp_msg.data;
 				vsp_report_shared = vsp_ecp_msg.vsp_report;
 			}
-			//			logger::logDbg("fradia_sensor::operator(): loop %d\n", ++iter);
 		}
 	} catch (const std::exception &ex) {
 		logger::log("void fradia_sensor <FROM_VSP_T, TO_VSP_T>::operator()(): error %s\n", ex.what());
