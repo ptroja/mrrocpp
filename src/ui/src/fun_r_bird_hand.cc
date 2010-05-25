@@ -99,7 +99,7 @@ int EDP_bird_hand_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 				}
 
 				ui_state.bird_hand.edp.pid
-						= ui_robot.bird_hand->ecp->get_EDP_pid();
+						= ui_robot.bird_hand->the_robot->get_EDP_pid();
 
 				if (ui_state.bird_hand.edp.pid < 0) {
 
