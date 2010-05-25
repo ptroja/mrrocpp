@@ -116,7 +116,7 @@ void effector::move_arm(const lib::c_buffer &instruction) {
 	if (!test_mode) {
 	for (unsigned int i = 0; i < BIRD_HAND_NUM_OF_SERVOS; i++) {
 		switch (ecp_edp_cbuffer.bird_hand_command_structure.profile_type[i]) {
-		case 0: //BIRD_HAND_SIGLE_STEP_POSTION_INCREMENT:
+		case mrrocpp::lib::BIRD_HAND_SIGLE_STEP_POSTION_INCREMENT:
 			device.setCMD1(
 					(uint16_t) i,
 					(int16_t) ecp_edp_cbuffer.bird_hand_command_structure.motion_steps,
@@ -124,7 +124,7 @@ void effector::move_arm(const lib::c_buffer &instruction) {
 					(int16_t) ecp_edp_cbuffer.bird_hand_command_structure.desired_torque[i],
 					(int32_t) ecp_edp_cbuffer.bird_hand_command_structure.desired_position[i]);
 			break;
-		case 1: //BIRD_HAND_MACROSTEP_POSITION_INCREMENT:
+		case mrrocpp::lib::BIRD_HAND_MACROSTEP_POSITION_INCREMENT:
 			device.setCMD2(
 					(uint16_t) i,
 					(int16_t) ecp_edp_cbuffer.bird_hand_command_structure.motion_steps,
@@ -132,7 +132,7 @@ void effector::move_arm(const lib::c_buffer &instruction) {
 					(int16_t) ecp_edp_cbuffer.bird_hand_command_structure.desired_torque[i],
 					(int32_t) ecp_edp_cbuffer.bird_hand_command_structure.desired_position[i]);
 			break;
-		case 2: //BIRD_HAND_MACROSTEP_ABSOLUTE_POSITION:
+		case mrrocpp::lib::BIRD_HAND_MACROSTEP_ABSOLUTE_POSITION:
 			device.setCMD3(
 					(uint16_t) i,
 					(int16_t) ecp_edp_cbuffer.bird_hand_command_structure.motion_steps,
