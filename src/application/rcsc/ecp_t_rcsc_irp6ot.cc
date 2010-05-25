@@ -15,7 +15,7 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace irp6ot {
+namespace irp6ot_m {
 namespace task {
 
 rcsc::rcsc(lib::configurator &_config) :
@@ -220,7 +220,7 @@ namespace common {
 namespace task {
 
 task* return_created_ecp_task(lib::configurator &_config) {
-	return new irp6ot::task::rcsc(_config);
+	return new irp6ot_m::task::rcsc(_config);
 }
 
 }

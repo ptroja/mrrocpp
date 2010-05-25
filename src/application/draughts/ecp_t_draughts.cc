@@ -15,7 +15,7 @@ using namespace std;
 
 namespace mrrocpp {
 namespace ecp {
-namespace irp6ot {
+namespace irp6ot_m {
 namespace task {
 
 const double Draughts::moves_table[32][8] = { { 0.000000, -0.124080, -1.766558,
@@ -545,7 +545,7 @@ namespace common {
 namespace task {
 
 task* return_created_ecp_task(lib::configurator &_config) {
-	return new irp6ot::task::Draughts(_config);
+	return new irp6ot_m::task::Draughts(_config);
 
 }
 

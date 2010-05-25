@@ -22,7 +22,7 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace irp6p {
+namespace irp6p_m {
 namespace generator {
 
 dung::dung(common::task::task& _ecp_task, int step) :

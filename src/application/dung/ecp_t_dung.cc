@@ -23,7 +23,7 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace irp6p {
+namespace irp6p_m {
 namespace task {
 
 // KONSTRUKTORY
@@ -49,7 +49,7 @@ namespace common {
 namespace task {
 
 task* return_created_ecp_task(lib::configurator &_config) {
-	return new irp6p::task::dung(_config);
+	return new irp6p_m::task::dung(_config);
 }
 
 }

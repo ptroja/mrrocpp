@@ -5,7 +5,7 @@
 #include <unistd.h>
 namespace mrrocpp {
 namespace ecp {
-namespace irp6ot {
+namespace irp6ot_m {
 namespace task {
 
 #define robot1
@@ -48,9 +48,9 @@ haar::haar(lib::configurator &_config) :
 	//Configure sensor.
 	sensor_m[lib::SENSOR_CVFRADIA]->configure_sensor();
 
-	ecp_m_robot = new irp6ot_m::robot(*this);
+	ecp_m_robot = new robot(*this);
 
-	planar_vis = new irp6ot::generator::ecp_vis_ib_eih_planar_irp6ot(*this);
+	planar_vis = new generator::ecp_vis_ib_eih_planar_irp6ot(*this);
 	planar_vis->sensor_m = sensor_m;
 
 	//Smooth generator
@@ -159,7 +159,7 @@ namespace common {
 namespace task {
 
 task* return_created_ecp_task(lib::configurator &_config) {
-	return new irp6ot::task::haar(_config);
+	return new irp6ot_m::task::haar(_config);
 
 }
 

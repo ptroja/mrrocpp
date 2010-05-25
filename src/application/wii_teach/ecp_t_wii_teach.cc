@@ -19,7 +19,7 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace irp6ot {
+namespace irp6ot_m {
 namespace task {
 
 wii_teach::wii_teach(lib::configurator &_config) :
@@ -300,11 +300,11 @@ void wii_teach::main_task_algorithm(void) {
 	int gen = 0;
 
 	sg = new common::generator::smooth(*this, true);
-	ag = new irp6ot::generator::wii_absolute(*this,
+	ag = new generator::wii_absolute(*this,
 			(ecp_mp::sensor::wiimote*) sensor_m[lib::SENSOR_WIIMOTE]);
-	rg = new irp6ot::generator::wii_relative(*this,
+	rg = new generator::wii_relative(*this,
 			(ecp_mp::sensor::wiimote*) sensor_m[lib::SENSOR_WIIMOTE]);
-	jg = new irp6ot::generator::wii_joint(*this,
+	jg = new generator::wii_joint(*this,
 			(ecp_mp::sensor::wiimote*) sensor_m[lib::SENSOR_WIIMOTE]);
 
 	bool has_filenames = false;//get_filenames();
@@ -543,7 +543,7 @@ namespace common {
 namespace task {
 
 task* return_created_ecp_task(lib::configurator &_config) {
-	return new irp6ot::task::wii_teach(_config);
+	return new irp6ot_m::task::wii_teach(_config);
 }
 
 }

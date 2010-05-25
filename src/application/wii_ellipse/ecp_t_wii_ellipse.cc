@@ -14,7 +14,7 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace irp6ot {
+namespace irp6ot_m {
 namespace task {
 
 wii_ellipse::wii_ellipse(lib::configurator &_config) :
@@ -87,7 +87,7 @@ namespace common {
 namespace task {
 
 task* return_created_ecp_task(lib::configurator &_config) {
-	return new irp6ot::task::wii_ellipse(_config);
+	return new irp6ot_m::task::wii_ellipse(_config);
 }
 
 }

@@ -29,7 +29,7 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace irp6ot {
+namespace irp6ot_m {
 namespace generator {
 
 ecp_vis_pb_eol_sac_irp6ot::ecp_vis_pb_eol_sac_irp6ot(common::task::task& _ecp_task, int step) : common::generator::ecp_visual_servo(_ecp_task){

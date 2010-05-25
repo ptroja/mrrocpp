@@ -8,7 +8,7 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace irp6ot {
+namespace irp6ot_m {
 namespace task {
 
 //Constructors
@@ -44,7 +44,7 @@ namespace common {
 namespace task {
 
 task* return_created_ecp_task(lib::configurator &_config) {
-	return new irp6ot::task::smooth_test(_config);
+	return new irp6ot_m::task::smooth_test(_config);
 }
 
 } // namespace task

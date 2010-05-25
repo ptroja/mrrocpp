@@ -14,7 +14,7 @@ namespace mrrocpp {
 
 namespace ecp {
 
-namespace irp6ot {
+namespace irp6ot_m {
 
 namespace task {
 
@@ -63,7 +63,7 @@ void ecp_t_objectfollower_pb_sac::main_task_algorithm() {
 namespace common {
 namespace task {
 task* return_created_ecp_task(lib::configurator &config) {
-	return new irp6ot::task::ecp_t_objectfollower_pb_sac(config);
+	return new irp6ot_m::task::ecp_t_objectfollower_pb_sac(config);
 }
 } // namespace task
 } // namespace common

@@ -26,7 +26,7 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace irp6ot {
+namespace irp6ot_m {
 namespace task {
 
 class haar: public common::task::task {
@@ -42,7 +42,7 @@ class haar: public common::task::task {
 	//Linear generator
 	common::generator::linear* linear_gen;
 	//Planar servoing.
-	irp6ot::generator::ecp_vis_ib_eih_planar_irp6ot* planar_vis;
+	generator::ecp_vis_ib_eih_planar_irp6ot* planar_vis;
 	//Trajectory description.
 	lib::trajectory_description td;
 	//Rotation generator.

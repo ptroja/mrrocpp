@@ -15,7 +15,7 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace irp6ot {
+namespace irp6ot_m {
 namespace generator {
 
 class vis_sac_lx : public common::generator::generator {

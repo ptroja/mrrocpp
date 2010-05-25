@@ -6,7 +6,7 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace irp6ot {
+namespace irp6ot_m {
 namespace generator {
 
 wii_velocity::wii_velocity (common::task::task& _ecp_task) : common::generator::tff_nose_run(_ecp_task,10)

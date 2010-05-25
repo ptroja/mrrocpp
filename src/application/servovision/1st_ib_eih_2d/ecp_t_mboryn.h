@@ -18,7 +18,7 @@ namespace mrrocpp {
 
 namespace ecp {
 
-namespace irp6ot {
+namespace irp6ot_m {
 
 namespace task {
 
@@ -31,8 +31,7 @@ namespace task {
 /**
  *
  */
-class ecp_t_mboryn: public mrrocpp::ecp::common::task::task
-{
+class ecp_t_mboryn: public mrrocpp::ecp::common::task::task {
 public:
 	ecp_t_mboryn(mrrocpp::lib::configurator& _configurator);
 	virtual ~ecp_t_mboryn();
