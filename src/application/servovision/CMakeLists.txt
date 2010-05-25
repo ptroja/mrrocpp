@@ -7,7 +7,6 @@ add_executable(ecp_objectfollower_pb_sac
     simple_visual_servo_manager.cc
     position_constraint.cc
     cubic_constraint.cc
-    logger.cc
 )
 
 target_link_libraries(ecp_objectfollower_pb_sac
@@ -26,7 +25,6 @@ add_executable(ecp_objectfollower_pb
     cubic_constraint.cc
     object_reached_termination_condition.cc
     termination_condition.cc
-    logger.cc
 )
 
 target_link_libraries(ecp_objectfollower_pb
@@ -70,7 +68,6 @@ target_link_libraries(ecp_image_capture
 add_executable(ecp_conveyor_test
     visualservo_tester/ecp_g_conveyor_sinus.cc
     visualservo_tester/ecp_t_conveyor_test.cc
-    logger.cc
 )
 
 target_link_libraries(ecp_conveyor_test

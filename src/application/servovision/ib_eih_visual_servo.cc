@@ -22,7 +22,7 @@ namespace common {
 
 namespace generator {
 
-ib_eih_visual_servo::ib_eih_visual_servo(boost::shared_ptr <visual_servo_regulator> regulator, const char* section_name, mrrocpp::lib::configurator& configurator) :
+ib_eih_visual_servo::ib_eih_visual_servo(boost::shared_ptr <visual_servo_regulator> regulator, const std::string & section_name, mrrocpp::lib::configurator& configurator) :
 	visual_servo(regulator)
 {
 	try {

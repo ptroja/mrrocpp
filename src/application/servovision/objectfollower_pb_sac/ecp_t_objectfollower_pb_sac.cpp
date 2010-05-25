@@ -25,7 +25,7 @@ ecp_t_objectfollower_pb_sac::ecp_t_objectfollower_pb_sac(mrrocpp::lib::configura
 
 	char config_section_name[] = { "[object_follower_sac_1]" };
 
-	logDbgEnabled = true;
+	log_dbg_enabled = true;
 
 	Eigen::Matrix <double, 3, 1> p1, p2;
 	p1(0, 0) = 0.7;

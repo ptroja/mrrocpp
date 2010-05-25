@@ -68,9 +68,9 @@ lib::Homog_matrix pb_sac_visual_servo::get_position_change(const lib::Homog_matr
 {
 	lib::Homog_matrix delta_position;
 
-	object_visible = vsp_fradia->received_object.tracking;
-	if (vsp_fradia->received_object.tracking) {
-		lib::Homog_matrix C_T_G(vsp_fradia->received_object.position);
+	object_visible = vsp_fradia->image.tracking;
+	if (vsp_fradia->image.tracking) {
+		lib::Homog_matrix C_T_G(vsp_fradia->image.position);
 		lib::Homog_matrix error_matrix;
 		lib::Homog_matrix E_T_O = !current_position;
 
@@ -98,10 +98,10 @@ lib::Homog_matrix pb_sac_visual_servo::get_position_change(const lib::Homog_matr
 		lib::Xyz_Angle_Axis_vector aa_vector;
 		error_matrix.get_xyz_angle_axis(aa_vector);
 
-		logDbg("aa_vector: %10lg, %10lg, %10lg, %10lg, %10lg, %10lg\n", aa_vector(0, 0), aa_vector(1, 0), aa_vector(2, 0), aa_vector(3, 0), aa_vector(4, 0), aa_vector(5, 0));
+		log_dbg("aa_vector: %10lg, %10lg, %10lg, %10lg, %10lg, %10lg\n", aa_vector(0, 0), aa_vector(1, 0), aa_vector(2, 0), aa_vector(3, 0), aa_vector(4, 0), aa_vector(5, 0));
 
 		aa_vector = regulator->calculate_control(aa_vector, dt);
-		logDbg("aa_vector after regulation: %10lg, %10lg, %10lg, %10lg, %10lg, %10lg\n", aa_vector(0, 0), aa_vector(1, 0), aa_vector(2, 0), aa_vector(3, 0), aa_vector(4, 0), aa_vector(5, 0));
+		log_dbg("aa_vector after regulation: %10lg, %10lg, %10lg, %10lg, %10lg, %10lg\n", aa_vector(0, 0), aa_vector(1, 0), aa_vector(2, 0), aa_vector(3, 0), aa_vector(4, 0), aa_vector(5, 0));
 
 		delta_position.set_from_xyz_angle_axis(aa_vector);
 	}
@@ -109,9 +109,9 @@ lib::Homog_matrix pb_sac_visual_servo::get_position_change(const lib::Homog_matr
 	return delta_position;
 }
 
-boost::shared_ptr <mrrocpp::lib::sensor> pb_sac_visual_servo::get_vsp_fradia()
+boost::shared_ptr <ecp_mp::sensor::sensor_interface> pb_sac_visual_servo::get_vsp_fradia()
 {
-	return boost::dynamic_pointer_cast <mrrocpp::lib::sensor>(vsp_fradia);
+	return boost::dynamic_pointer_cast <ecp_mp::sensor::sensor_interface>(vsp_fradia);
 }
 
 }//namespace
