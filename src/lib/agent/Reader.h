@@ -28,7 +28,8 @@ public:
 		Wait(or1);
 
 		double d;
-		bool double_fresh = DoubleBuffer.Get(d);
+		//bool double_fresh =
+		DoubleBuffer.Get(d);
 		std::cout << "Reader: " << IntBuffer.Get() << "," << d << std::endl;
 
 		return true; //(loops++ < 10);

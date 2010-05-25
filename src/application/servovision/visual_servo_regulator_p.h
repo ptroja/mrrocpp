@@ -26,7 +26,7 @@ namespace generator {
 class regulator_p: public mrrocpp::ecp::common::generator::visual_servo_regulator
 {
 public:
-	regulator_p(const lib::configurator & config, const char * config_section_name) :
+	regulator_p(const lib::configurator & config, const std::string& config_section_name) :
 		visual_servo_regulator(config, config_section_name)
 	{
 		Kp = config.value <6, 6> ("regulator_kp_matrix", config_section_name);
@@ -37,7 +37,7 @@ public:
 	virtual ~regulator_p()
 	{
 	}
-	virtual const Eigen::Matrix <double, 6, 1> & calculate_control(const Eigen::Matrix <double, 6, 1> & error)
+	virtual const Eigen::Matrix <double, 6, 1> & calculate_control(const Eigen::Matrix <double, 6, 1> & error, double dt)
 	{
 		this->calculated_control = Kp * error;
 		return this->calculated_control;

@@ -14,15 +14,16 @@
 #include <boost/thread/mutex.hpp>
 #include <boost/thread/condition.hpp>
 
+#include "edp/common/in_out.h"
+#include "edp/common/vis_server.h"
+#include "edp/common/reader.h"
+#include "edp/common/manip_trans_t.h"
+
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 #include "lib/srlib.h"
 #include "lib/mis_fun.h"
-
-#if defined(USE_MESSIP_SRR)
-#include <messip.h>
-#endif
 
 #include "edp/common/edp_effector.h"
 
@@ -41,12 +42,8 @@ class force;
 namespace common {
 
 // TODO: remove forward declarations
-class manip_trans_t;
-class in_out_buffer;
-class vis_server;
 class servo_buffer;
 class edp_vsp;
-class reader_buffer;
 
 /*!
  * \class motor_driven_effector
@@ -63,9 +60,6 @@ class reader_buffer;
 class motor_driven_effector: public effector, public kinematics::common::kinematics_manager
 {
 protected:
-
-
-
 	/*!
 	 * \brief The number of steps in the macrostep.
 	 *
@@ -106,7 +100,7 @@ protected:
 	 *
 	 * It is done with usage of in_out_object, processed in interrupt handler.
 	 */
-	void get_inputs(lib::r_buffer *local_reply); // odczytanie wejsc binarnych
+	void get_inputs(lib::r_buffer & local_reply); // odczytanie wejsc binarnych
 
 	/*!
 	 * \brief method reset to zero the vectors of motor and joint position.
@@ -200,13 +194,13 @@ public:
 	 *
 	 * It is used for the purpose of the visualisation thread
 	 */
-	void master_joints_read(double*);
+	void master_joints_read(double[]);
 //#ifdef DOCENT_SENSOR
 	void registerReaderStartedCallback(boost::function<void()> startedCallback);
 	void registerReaderStoppedCallback(boost::function<void()> stoppedCallback);
-		void onReaderStarted();
-		void onReaderStopped();
-	//#endif
+	void onReaderStarted();
+	void onReaderStopped();
+//#endif
 
 	/*!
 	 * \brief object to store output and input data
@@ -250,13 +244,6 @@ public:
 	 * The force measurements are collected in dedicated thread. Then the influence of gravitational force is removed in the same thread.
 	 */
 	sensor::force *vs;
-
-	/*!
-	 * \brief Thread to share data with VSP process
-	 *
-	 * Sometimes the sensors (e.g. foce sensors) are used both as the prioceptors and exteroceptors. Then some data is transmitted both to the ECP and VSP.
-	 */
-	edp_vsp* edp_vsp_obj;
 
 	/*!
 	 * \brief class constructor

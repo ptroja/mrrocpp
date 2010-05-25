@@ -36,8 +36,6 @@ common::servo_buffer* effector::return_created_servo_buffer ()
 effector::effector(lib::configurator &_config) :
 	irp6s_postument_track_effector(_config, lib::ROBOT_IRP6_ON_TRACK)
 {
-
-
 	if (is_gripper_active)
 		number_of_servos = IRP6_ON_TRACK_NUM_OF_SERVOS;
 	else
@@ -60,7 +58,6 @@ void effector::create_kinematic_models_for_given_robot(void)
 	add_kinematic_model(new kinematics::irp6ot::model_calibrated_with_wrist(number_of_servos));
 	// Ustawienie aktywnego modelu.
 	set_kinematic_model(0);
-
 }
 
 

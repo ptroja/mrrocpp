@@ -6,7 +6,7 @@
 #include <boost/serialization/string.hpp>
 
 #include "AgentBase.h"
-#include "../xdr_oarchive.hpp"
+#include "lib/xdr/xdr_oarchive.hpp"
 
 #if defined(USE_MESSIP_SRR)
 #include "../messip/messip.h"
@@ -97,7 +97,7 @@ private:
 
 public:
 	RemoteBuffer(RemoteAgent & _owner, const std::string & _name)
-		: owner(_owner), name(_name)
+		: name(_name), owner(_owner)
 	{
 	}
 

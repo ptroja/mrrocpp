@@ -6,31 +6,32 @@
 // -------------------------------------------------------------------------
 
 /* Standard headers */
+#include <iostream>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
 #include <assert.h>
-
 #include <fcntl.h>
 #include <errno.h>
-#include <string.h>
-#include <iostream>
+#include <math.h>
 
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 
 #include "lib/srlib.h"
+
+#include "ui/ui_ecp_r_tfg_and_conv.h"
+
 #include "ecp/irp6ot_tfg/ecp_r_irp6ot_tfg.h"
 #include "ecp/irp6p_tfg/ecp_r_irp6p_tfg.h"
 #include "ecp/conveyor/ecp_r_conv.h"
+#include "ecp/bird_hand/ecp_r_bird_hand.h"
 #include "ecp/spkm/ecp_r_spkm.h"
 #include "ecp/smb/ecp_r_smb.h"
 #include "ecp/shead/ecp_r_shead.h"
-#include "ui/ui_ecp_r_tfg_and_conv.h"
-
-#include <math.h>
 
 // ---------------------------------------------------------------
 ui_tfg_and_conv_robot::ui_tfg_and_conv_robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg, lib::robot_name_t _robot_name) :
@@ -67,6 +68,15 @@ ui_tfg_and_conv_robot::ui_tfg_and_conv_robot(lib::configurator &_config, lib::sr
 			JOINT_LINEAR_STEP = 0.00004; // Przyrost liniowy w przegubach posuwistych [m]
 
 			break;
+
+		case lib::ROBOT_BIRD_HAND:
+			ecp = new ecp::bird_hand::robot(_config, _sr_ecp_msg);
+
+			MOTOR_STEP = 0.1; // Przyrost kata obrotu walu silnika [rad]
+			JOINT_LINEAR_STEP = 0.00004; // Przyrost liniowy w przegubach posuwistych [m]
+
+			break;
+
 		case lib::ROBOT_SMB:
 			ecp = new ecp::smb::robot(_config, _sr_ecp_msg);
 
@@ -99,13 +109,11 @@ ui_tfg_and_conv_robot::ui_tfg_and_conv_robot(lib::configurator &_config, lib::sr
 	ecp->ecp_command.instruction.value_in_step_no = 0;
 
 	ecp->synchronised = false;
-
 }
 
 // ---------------------------------------------------------------
 void ui_tfg_and_conv_robot::move_motors(const double final_position[])
 {
-
 	// Zlecenie wykonania makrokroku ruchu zadanego dla walow silnikow
 	int nr_of_steps; // Liczba krokow
 	double max_inc = 0.0, temp = 0.0; // Zmienne pomocnicze
@@ -164,16 +172,13 @@ void ui_tfg_and_conv_robot::move_motors(const double final_position[])
 	if (ecp->is_synchronised())
 		for (int j = 0; j < ecp->number_of_servos; j++) // Przepisanie aktualnych polozen
 			current_position[j] = ecp->reply_package.arm.pf_def.arm_coordinates[j];
-
 }
 // ---------------------------------------------------------------
 
 // ---------------------------------------------------------------
 void ui_tfg_and_conv_robot::move_joints(const double final_position[])
 {
-
 	// Zlecenie wykonania makrokroku ruchu zadanego dla wspolrzednych wewnetrznych
-	int nr_of_steps; // Liczba krokow
 
 	double max_inc_lin = 0.0, temp = 0.0; // Zmienne pomocnicze
 
@@ -183,9 +188,10 @@ void ui_tfg_and_conv_robot::move_joints(const double final_position[])
 	for (int j = 0; j < ecp->number_of_servos; j++) {
 		temp = fabs(final_position[j] - current_position[j]);
 		max_inc_lin = (max_inc_lin > temp) ? max_inc_lin : temp;
-
 	}
-	nr_of_steps = (int) ceil(max_inc_lin / JOINT_LINEAR_STEP);
+
+	// Liczba krokow
+	const int nr_of_steps = (int) ceil(max_inc_lin / JOINT_LINEAR_STEP);
 
 	// Parametry zlecenia ruchu i odczytu polozenia
 	ecp->ecp_command.instruction.instruction_type = lib::SET_GET;

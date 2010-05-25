@@ -9,7 +9,6 @@ namespace robot {
 
 class conveyor: public manip_and_conv
 {
-
 	public:
 		conveyor(task::task &mp_object_l);
 };

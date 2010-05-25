@@ -45,16 +45,21 @@ ecp_t_objectfollower_ib::ecp_t_objectfollower_ib(mrrocpp::lib::configurator& con
 
 	logDbg("ecp_t_objectfollower_ib::ecp_t_objectfollower_ib(): 1\n");
 	reg = shared_ptr <visual_servo_regulator> (new regulator_p(configurator, config_section_name));
+
 	logDbg("ecp_t_objectfollower_ib::ecp_t_objectfollower_ib(): 2\n");
 	vs = shared_ptr <visual_servo> (new ib_eih_visual_servo(reg, config_section_name, configurator));
 
 	term_cond = shared_ptr<termination_condition>(new object_reached_termination_condition(0.005, 0.005, 50));
+
 	logDbg("ecp_t_objectfollower_ib::ecp_t_objectfollower_ib(): 3\n");
 	sm = shared_ptr <simple_visual_servo_manager> (new simple_visual_servo_manager(*this, config_section_name, vs));
+
 	logDbg("ecp_t_objectfollower_ib::ecp_t_objectfollower_ib(): 4\n");
 	sm->add_position_constraint(cube);
-	sm->add_termination_condition(term_cond);
-	logDbg("ecp_t_objectfollower_ib::ecp_t_objectfollower_ib(): 5\n");
+
+	//sm->add_termination_condition(term_cond);
+	//logDbg("ecp_t_objectfollower_ib::ecp_t_objectfollower_ib(): 5\n");
+
 	sm->configure();
 	logDbg("ecp_t_objectfollower_ib::ecp_t_objectfollower_ib(): 6\n");
 }

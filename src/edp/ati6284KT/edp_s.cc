@@ -71,7 +71,7 @@ struct timespec start[9];
 static const char* interface = "en1";
 static uint8_t boardMac[6] = {0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
 
-static const char* host = "192.168.18.200";
+//static const char* host = "192.168.18.200";
 static const uint16_t port = 55555;
 
 static const unsigned int DESIRED_MEASUREMENT_FREQUENCY = 500;
@@ -85,7 +85,7 @@ static const unsigned int DESIRED_MEASUREMENT_FREQUENCY = 500;
 ATI6284_force::ATI6284_force(common::manip_effector &_master) :
 	force(_master),
 	socket_(interface, boardMac),
-	sensor_(&socket_)
+	sensor_(socket_)
 
 {
 	frame_counter = 0; //licznik wyslanych pakietow
@@ -93,7 +93,7 @@ ATI6284_force::ATI6284_force(common::manip_effector &_master) :
 	//sendSocket = NULL;
 	//recvSocket = NULL;
 
-	for(int i = 0;i<6;++i){
+	for(int i = 0; i<6; ++i){
 		adc_data[i]=0;
 		bias_data[i]=0;
 	}
@@ -227,8 +227,8 @@ void ATI6284_force::configure_sensor(void)
 
 void ATI6284_force::wait_for_event()
 {
-	static boost::posix_time::time_duration timeout = boost::posix_time::microseconds(1500);
-	int iw_ret;
+	const boost::posix_time::time_duration timeout = boost::posix_time::microseconds(1500);
+
 	static int iter_counter = 0; // okresla ile razy pod rzad zostala uruchomiona ta metoda
 
     //TODO: Jesli test mode, dopuszczac wylaczenie sensora
@@ -244,7 +244,7 @@ void ATI6284_force::wait_for_event()
     	timeUtil.startMeasurement();
     }
 
-    AdcReadings readings = sensor_.getAdcReadings(timeout);
+    ForceSensor6284::AdcReadings_t readings = sensor_.getAdcReadings(timeout);
     if (measuring) {
     	timeUtil.stopMeasurement();
     }
@@ -264,9 +264,7 @@ void ATI6284_force::wait_for_event()
 /*************************** inicjacja odczytu ******************************/
 void ATI6284_force::initiate_reading(void)
 {
-	lib::Ft_vector kartez_force;
     double force_fresh[6] = { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f };
-	short measure_report;
 
 	if (!is_sensor_configured) {
 		throw sensor_error(lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
@@ -284,13 +282,10 @@ void ATI6284_force::initiate_reading(void)
 
     // jesli ma byc wykorzytstywana biblioteka transformacji sil
     if (master.force_tryb == 2 && gravity_transformation) {
-
-
         lib::Homog_matrix frame = master.return_current_frame(common::WITH_TRANSLATION);
         // lib::Homog_matrix frame(master.force_current_end_effector_frame);
         lib::Ft_vector output = gravity_transformation->getForce(ft_table, frame);
         master.force_msr_upload(output);
-
     }
 }
 

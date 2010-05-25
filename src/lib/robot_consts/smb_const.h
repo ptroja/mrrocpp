@@ -30,15 +30,15 @@ struct smb_cbuffer {
 	};
 };
 
+#define SMB_NUM_OF_SERVOS	4
+
 struct smb_rbuffer {
 	smb_multi_leg_reply multi_leg_reply;
-	single_controller_epos_reply epos_controller[4];
+	single_controller_epos_reply epos_controller[SMB_NUM_OF_SERVOS];
 };
 
 #define EDP_SMB_SECTION "[edp_smb]"
 #define ECP_SMB_SECTION "[ecp_smb]"
-
-#define SMB_NUM_OF_SERVOS	4
 
 } // namespace lib
 } // namespace mrrocpp

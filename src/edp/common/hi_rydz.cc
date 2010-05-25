@@ -184,11 +184,6 @@ void  hardware_interface::init()
 		reset_counters();
 		is_hardware_error();
 	}
-
-	first = true; // Pierwszy krok
-
-
-
 }
 
 // Konstruktor
@@ -198,7 +193,7 @@ hardware_interface::hardware_interface (motor_driven_effector &_master,
 		unsigned int _hi_intr_timeout_high,
 		unsigned int _hi_first_servo_ptr,
 		unsigned int _hi_intr_generator_servo_ptr,
-		unsigned int _hi_isa_card_offset, int* _max_current)
+		unsigned int _hi_isa_card_offset, const int _max_current[])
         : master(_master),
         hi_irq_real(_hi_irq_real),
         hi_intr_freq_divider(_hi_intr_freq_divider),
@@ -207,11 +202,9 @@ hardware_interface::hardware_interface (motor_driven_effector &_master,
         hi_isa_card_offset(_hi_isa_card_offset),
         hi_intr_generator_servo_ptr(_hi_intr_generator_servo_ptr)
 {
-	for (int i = 0; i < master.number_of_servos; i++ )
-		{
+	for (int i = 0; i < master.number_of_servos; i++ ) {
 		max_current[i] = _max_current[i];
-
-		}
+	}
 }
 
 
@@ -401,8 +394,11 @@ int hardware_interface::hi_int_wait (interrupt_mode_t _interrupt_mode, int lag)
 	static short interrupt_error = 0;
 	static short msg_send = 0;
 
+	// TODO: this can be done passing timeout to InterruptWait()
 	tim_event.sigev_notify = SIGEV_UNBLOCK;
-	TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_INTR , &tim_event, &int_timeout, NULL );
+	if(TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_INTR , &tim_event, &int_timeout, NULL ) == -1) {
+		perror("hardware_interface: TimerTimeout()");
+	}
 	irq_data.md.interrupt_mode=_interrupt_mode;  // przypisanie odpowiedniego trybu oprzerwania
 	//	irq_data.md.is_power_on = true;
 	int iw_ret=InterruptWait (0, NULL);
@@ -473,7 +469,7 @@ void hardware_interface::finish_synchro (int drive_number)
 
 
 // Sprawdzenie czy pojawilo sie zero  (synchronizacji rezolwera)
-bool hardware_interface::is_impulse_zero ( int drive_number )
+bool hardware_interface::is_impulse_zero ( int drive_number ) const
 {
     if ( robot_status[drive_number].adr_offset_plus_0 & 0x0100 )
         return true;

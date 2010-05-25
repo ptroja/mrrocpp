@@ -9,9 +9,10 @@ namespace mrrocpp {
 namespace mp {
 namespace robot {
 
-shead::shead (task::task &mp_object_l) :
-		manip_and_conv (lib::ROBOT_SHEAD, ECP_SHEAD_SECTION, mp_object_l, SHEAD_NUM_OF_SERVOS)
-{}
+shead::shead(task::task &mp_object_l) :
+	manip_and_conv(lib::ROBOT_SHEAD, ECP_SHEAD_SECTION, mp_object_l, SHEAD_NUM_OF_SERVOS)
+{
+}
 
 } // namespace robot
 } // namespace mp

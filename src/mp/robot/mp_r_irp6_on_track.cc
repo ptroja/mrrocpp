@@ -9,9 +9,10 @@ namespace mrrocpp {
 namespace mp {
 namespace robot {
 
-irp6_on_track::irp6_on_track (task::task &mp_object_l) :
-		manip_and_conv (lib::ROBOT_IRP6_ON_TRACK, ECP_IRP6_ON_TRACK_SECTION, mp_object_l, IRP6_ON_TRACK_NUM_OF_SERVOS), has_gripper(true)
-{}
+irp6_on_track::irp6_on_track(task::task &mp_object_l) :
+			manip_and_conv(lib::ROBOT_IRP6_ON_TRACK, ECP_IRP6_ON_TRACK_SECTION, mp_object_l, IRP6_ON_TRACK_NUM_OF_SERVOS)
+{
+}
 
 } // namespace robot
 } // namespace mp

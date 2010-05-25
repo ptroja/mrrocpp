@@ -38,12 +38,16 @@ robot::robot(lib::robot_name_t l_robot_name, const std::string & _section_name,
 		task::task &mp_object_l) :
 	ecp_mp::robot(l_robot_name), mp_object(mp_object_l), communicate(true), // domyslnie robot jest aktywny
 			sr_ecp_msg(*(mp_object_l.sr_ecp_msg)), opened(false), new_pulse(
-					false), new_pulse_checked(false), continuous_coordination(false) {
+					false), new_pulse_checked(false), continuous_coordination(
+					false) {
 	mp_command.pulse_to_ecp_sent = false;
 
 	std::string node_name(mp_object.config.value<std::string> ("node_name",
 			_section_name));
+
+#if !defined(PROCESS_SPAWN_RSH)
 	nd = mp_object.config.return_node_number(node_name.c_str());
+#endif
 
 	std::string ecp_attach_point(
 			mp_object.config.return_attach_point_name(
@@ -80,7 +84,7 @@ robot::robot(lib::robot_name_t l_robot_name, const std::string & _section_name,
 					ecp_attach_point.c_str());
 			perror("Connect to ECP failed");
 			sr_ecp_msg.message(lib::SYSTEM_ERROR, e, "Connect to ECP failed");
-			throw common::MP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
+			throw common::MP_main_error(lib::SYSTEM_ERROR, 0);
 		}
 }
 // -------------------------------------------------------------------
@@ -115,8 +119,9 @@ robot::~robot() {
 
 // Wysyla puls do Mp przed oczekiwaniem na spotkanie
 void robot::send_pulse_to_ecp(int pulse_code, int pulse_value) {
-
-	if ((!(mp_command.pulse_to_ecp_sent))&&(!new_pulse)&&(!continuous_coordination)&&(!(mp_command.command == lib::NEXT_STATE))) {
+	if ((!(mp_command.pulse_to_ecp_sent)) && (!new_pulse)
+			&& (!continuous_coordination) && (!(mp_command.command
+			== lib::NEXT_STATE))) {
 
 #if !defined(USE_MESSIP_SRR)
 		if (MsgSendPulse(ECP_fd, sched_get_priority_min(SCHED_FIFO),
@@ -146,9 +151,9 @@ void robot::start_ecp(void) {
 		uint64_t e = errno;
 		perror("Send to ECP failed");
 		sr_ecp_msg.message(lib::SYSTEM_ERROR, e, "MP: Send to ECP failed");
-		throw common::MP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
+		throw common::MP_main_error(lib::SYSTEM_ERROR, 0);
 	}
-		mp_command.pulse_to_ecp_sent = false;
+	mp_command.pulse_to_ecp_sent = false;
 	// by Y - ECP_ACKNOWLEDGE zamienione na lib::TASK_TERMINATED
 	// w celu uproszczenia programowania zadan wielorobotowych
 	if (ecp_reply_package.reply != lib::TASK_TERMINATED) {
@@ -176,7 +181,7 @@ void robot::execute_motion(void) { // zlecenie wykonania ruchu
 		sr_ecp_msg.message(lib::SYSTEM_ERROR, e, "MP: Send() to ECP failed");
 		throw MP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 	}
-		mp_command.pulse_to_ecp_sent = false;
+	mp_command.pulse_to_ecp_sent = false;
 
 	if (ecp_reply_package.reply == lib::ERROR_IN_ECP) {
 		// Odebrano od ECP informacje o bledzie
@@ -205,7 +210,7 @@ void robot::terminate_ecp(void) { // zlecenie STOP zakonczenia ruchu
 		sr_ecp_msg.message(lib::SYSTEM_ERROR, e, "MP: Send() to ECP failed");
 		throw MP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 	}
-		mp_command.pulse_to_ecp_sent = false;
+	mp_command.pulse_to_ecp_sent = false;
 	if (ecp_reply_package.reply == lib::ERROR_IN_ECP) {
 		// Odebrano od ECP informacje o bledzie
 		throw MP_error(lib::NON_FATAL_ERROR, ECP_ERRORS);

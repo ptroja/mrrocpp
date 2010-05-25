@@ -8,7 +8,9 @@
 #if !defined(_EDP_FORCE_SENSOR_H)
 #define _EDP_FORCE_SENSOR_H
 
+#include <boost/utility.hpp>
 #include <boost/thread/mutex.hpp>
+#include <Eigen/Core>
 
 #include "lib/mrmath/ForceTrans.h"
 #include "lib/sensor.h"				// klasa bazowa sensor
@@ -32,6 +34,8 @@ protected:
 
 	common::manip_effector &master;
 
+	virtual void connect_to_hardware(void) = 0;
+
 public:
 	void operator()(void);
 	boost::mutex mtx;
@@ -46,18 +50,14 @@ public:
 	bool is_sensor_configured; // czy czujnik skonfigurowany?
 	void set_command_execution_finish();
 
-	virtual void connect_to_hardware(void) = 0;
-
-	double next_force_tool_position[3];
-	double next_force_tool_weight;
-	double current_force_tool_position[3];
-	double current_force_tool_weight;
+	Eigen::Vector3d next_force_tool_position, current_force_tool_position;
+	double next_force_tool_weight, current_force_tool_weight;
 
 	bool new_edp_command;
 
 	force(common::manip_effector &_master);
 
-	~force();
+	virtual ~force();
 
 	virtual void wait_for_event(void) = 0; // oczekiwanie na zdarzenie
 	void set_force_tool(void);

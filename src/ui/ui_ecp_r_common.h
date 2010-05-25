@@ -8,14 +8,12 @@
 #ifndef _UI_ECP_R_COMMON_H
 #define _UI_ECP_R_COMMON_H
 
-#include "ecp/common/ecp_robot.h"
-
 #include "ui/ui.h"
 // Konfigurator.
 #include "lib/configurator.h"
 #include "lib/mrmath/mrmath.h"
 
-
+#include "ecp/common/ecp_robot.h"
 
 // ---------------------------------------------------------------
 class ui_common_robot
@@ -51,7 +49,7 @@ public:
 	// virtual void synchronise ( void ); // Zlecenie synchronizacji robota
 	// virtual bool is_synchronised( void ) { return synchronised;};
 
-	virtual void set_desired_position(double des_position[MAX_SERVOS_NR]);
+	virtual void set_desired_position(const double des_position[MAX_SERVOS_NR]);
 	// Przepisanie polozen zadanych
 	// do tablicy desired_position[]
 	virtual void get_current_position(double c_position[MAX_SERVOS_NR]); // Pobranie aktualnych polozen
