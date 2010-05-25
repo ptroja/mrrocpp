@@ -83,7 +83,7 @@ int EDP_shead_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 			if ((!(ui_state.shead.edp.test_mode)) && (access(tmp_string.c_str(), R_OK) == 0)
 					|| (access(tmp2_string.c_str(), R_OK) == 0)) {
 				ui_msg.ui->message(lib::NON_FATAL_ERROR, "edp_shead already exists");
-			} else if (check_node_existence(ui_state.shead.edp.node_name, std::string("edp_shead"))) {
+			} else if (check_node_existence(ui_state.shead.edp.node_name, "edp_shead")) {
 
 				ui_state.shead.edp.node_nr = config->return_node_number(ui_state.shead.edp.node_name);
 

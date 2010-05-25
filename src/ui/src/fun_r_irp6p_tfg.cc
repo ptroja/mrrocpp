@@ -123,7 +123,7 @@ int EDP_irp6p_tfg_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 				ui_msg.ui->message(lib::NON_FATAL_ERROR,
 						"edp_irp6p_tfg already exists");
 			} else if (check_node_existence(ui_state.irp6p_tfg.edp.node_name,
-					std::string("edp_irp6p_tfg"))) {
+					"edp_irp6p_tfg")) {
 
 				ui_state.irp6p_tfg.edp.node_nr = config->return_node_number(
 						ui_state.irp6p_tfg.edp.node_name);

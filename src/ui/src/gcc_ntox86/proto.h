@@ -156,8 +156,8 @@ int pulse_reader_all_robots_trigger(PtWidget_t *widget, ApInfo_t *apinfo,
 int pulse_reader_execute(int coid, int pulse_code, int pulse_value);
 int pulse_ecp_all_robots(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
-bool check_node_existence(const std::string _node,
-		const std::string beginnig_of_message);
+bool check_node_existence(const std::string & _node,
+		const std::string & beginnig_of_message);
 
 /* ../fun_r_conveyor.cc */
 int close_wind_conveyor_moves(PtWidget_t *widget, ApInfo_t *apinfo,

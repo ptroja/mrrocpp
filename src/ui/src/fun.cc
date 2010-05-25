@@ -2265,8 +2265,7 @@ int MPup_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 		// sprawdzenie czy nie jest juz zarejestrowany serwer komunikacyjny MP
 		if (access(mp_network_pulse_attach_point.c_str(), R_OK) == 0) {
 			ui_msg.ui->message(lib::NON_FATAL_ERROR, "MP already exists");
-		} else if (check_node_existence(ui_state.mp.node_name,
-				std::string("mp"))) {
+		} else if (check_node_existence(ui_state.mp.node_name, "mp")) {
 			ui_state.mp.pid = config->process_spawn(MP_SECTION);
 
 			if (ui_state.mp.pid > 0) {
@@ -2660,8 +2659,8 @@ int pulse_ecp_all_robots(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
-bool check_node_existence(const std::string _node,
-		const std::string beginnig_of_message) {
+bool check_node_existence(const std::string & _node,
+		const std::string & beginnig_of_message) {
 
 	std::string opendir_path("/net/");
 	opendir_path += _node;

@@ -85,7 +85,7 @@ int EDP_spkm_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 				ui_msg.ui->message(lib::NON_FATAL_ERROR,
 						"edp_spkm already exists");
 			} else if (check_node_existence(ui_state.spkm.edp.node_name,
-					std::string("edp_spkm"))) {
+					"edp_spkm")) {
 
 				ui_state.spkm.edp.node_nr = config->return_node_number(
 						ui_state.spkm.edp.node_name);

@@ -82,7 +82,7 @@ int EDP_smb_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 			if ((!(ui_state.smb.edp.test_mode)) && (access(tmp_string.c_str(), R_OK) == 0)
 					|| (access(tmp2_string.c_str(), R_OK) == 0)) {
 				ui_msg.ui->message(lib::NON_FATAL_ERROR, "edp_smb already exists");
-			} else if (check_node_existence(ui_state.smb.edp.node_name, std::string("edp_smb"))) {
+			} else if (check_node_existence(ui_state.smb.edp.node_name, "edp_smb")) {
 
 				ui_state.smb.edp.node_nr = config->return_node_number(ui_state.smb.edp.node_name);
 
