@@ -106,7 +106,7 @@ void *comm_thread(void* arg) {
 
 	bool wyjscie;
 
-	if ((attach = name_attach(NULL, ui_state.ui_attach_point.c_str(),
+	if ((attach = name_attach(NULL, ui.ui_attach_point.c_str(),
 			NAME_FLAG_ATTACH_GLOBAL)) == NULL) {
 		// TODO: throw
 		// return EXIT_FAILURE;
@@ -420,13 +420,13 @@ void *sr_thread(void* arg) {
 
 	name_attach_t *attach;
 
-	if ((attach = name_attach(NULL, ui_state.sr_attach_point.c_str(),
+	if ((attach = name_attach(NULL, ui.sr_attach_point.c_str(),
 			NAME_FLAG_ATTACH_GLOBAL)) == NULL) {
 		perror(
 				"BLAD SR ATTACH, przypuszczalnie nie uruchomiono gns, albo blad wczytywania konfiguracji");
 		return NULL;
 	}
-	ui_state.is_sr_thread_loaded = true;
+	ui.is_sr_thread_loaded = true;
 	while (1) {
 		lib::sr_package_t sr_msg;
 		//	printf("przed MsgReceive: \n");

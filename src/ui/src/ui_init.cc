@@ -135,10 +135,6 @@ int init(PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 	set_ui_state_notification(UI_N_STARTING);
 
-	struct utsname sysinfo;
-	char* cwd;
-	char buff[PATH_MAX + 1];
-
 	signal(SIGINT, &catch_signal);// by y aby uniemozliwic niekontrolowane zakonczenie aplikacji ctrl-c z kalwiatury
 	signal(SIGALRM, &catch_signal);
 	signal(SIGSEGV, &catch_signal);
@@ -266,45 +262,10 @@ int init(PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 	ui_state.speaker.edp.is_synchronised = false;
 	ui_state.irp6_mechatronika.edp.is_synchronised = false;
 
-	// ustalenie katalogow UI
+	// some variables initialization
+	ui.init();
 
-	if (uname(&sysinfo) == -1) {
-		perror("uname");
-	}
-
-	cwd = getcwd(buff, PATH_MAX + 1);
-	if (cwd == NULL) {
-		perror("Blad cwd w UI");
-	}
-
-	ui_state.ui_node_name = sysinfo.nodename;
-	ui_state.is_sr_thread_loaded = false;
-
-	ui_state.binaries_local_path = cwd;
-	ui_state.mrrocpp_local_path = cwd;
-	ui_state.mrrocpp_local_path.erase(ui_state.mrrocpp_local_path.length() - 3);// kopiowanie lokalnej sciezki bez "bin" - 3 znaki
-	ui_state.binaries_network_path = "/net/";
-	ui_state.binaries_network_path += ui_state.ui_node_name;
-	ui_state.binaries_network_path += ui_state.binaries_local_path;
-	ui_state.binaries_network_path += "/";// wysylane jako argument do procesow potomnych (mp_m i dalej)
-	// printf( "system name  : %s\n", ui_state.binaries_network_path);
-
-	// sciezka dla okna z wyborem pliku podczas wybor trajektorii dla uczenia
-	ui_state.teach_filesel_fullpath = "/net/";
-	ui_state.teach_filesel_fullpath += ui_state.ui_node_name;
-	ui_state.teach_filesel_fullpath += ui_state.mrrocpp_local_path;
-	//	ui_state.teach_filesel_fullpath += "trj";
-	// 	printf("abba: %s\n", ui_state.teach_filesel_fullpath);
-
-	// sciezka dla okna z wyborem pliku z trajektoria podczas wyboru pliku konfiguracyjnego
-	ui_state.config_file_fullpath = "/net/";
-	ui_state.config_file_fullpath += ui_state.ui_node_name;
-	ui_state.config_file_fullpath += ui_state.mrrocpp_local_path;
-	//	ui_state.config_file_fullpath += "configs";
-
-	// printf ("Remember to create gns server\n");
-
-	// pierwsze zczytanie pliku konfiguracyjnego (aby pobrac nazwy dla pozostalych watkow UI)
+		// pierwsze zczytanie pliku konfiguracyjnego (aby pobrac nazwy dla pozostalych watkow UI)
 	if (get_default_configuration_file_name() >= 1) // zczytaj nazwe pliku konfiguracyjnego
 	{
 		initiate_configuration();
@@ -324,7 +285,7 @@ int init(PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 	// kolejne zczytanie pliku konfiguracyjnego
 	if (get_default_configuration_file_name() == 1) // zczytaj nazwe pliku konfiguracyjnego
 	{
-		reload_whole_configuration();
+		ui.reload_whole_configuration();
 
 	} else {
 		printf("Blad manage_default_configuration_file\n");

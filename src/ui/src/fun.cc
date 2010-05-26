@@ -618,7 +618,7 @@ int file_selection_window_send_location(PtWidget_t *widget, ApInfo_t *apinfo,
 			}
 
 			// kopiowanie biezacej sciezki, aby w nastepnym wywolaniu okna od niej zaczynac
-			ui_state.teach_filesel_fullpath = ui_ecp_obj->ui_rep.path;
+			ui.teach_filesel_fullpath = ui_ecp_obj->ui_rep.path;
 			// opuszczenie semaforu dla watku UI_COMM
 			ui_ecp_obj->communication_state = UI_ECP_REPLY_READY;
 
@@ -627,21 +627,22 @@ int file_selection_window_send_location(PtWidget_t *widget, ApInfo_t *apinfo,
 			if ((item->type) == Pt_FS_FILE) {
 				// To sie pozniej sprawdzi, czy wogule jest wzorzec znaleziony
 				std::string str_fullpath(item->fullpath);
-				std::string str_tail = str_fullpath.substr(str_fullpath.rfind(
-						ui_state.mrrocpp_local_path)
-						+ ui_state.mrrocpp_local_path.length());
-				//fprintf(stderr, "mrrocpp_local_path: %s\n", ui_state.mrrocpp_local_path.c_str());
+				std::string str_tail =
+						str_fullpath.substr(str_fullpath.rfind(
+								ui.mrrocpp_local_path)
+								+ ui.mrrocpp_local_path.length());
+				//fprintf(stderr, "mrrocpp_local_path: %s\n", ui.mrrocpp_local_path.c_str());
 				//fprintf(stderr, "fullpath: %s\n", item->fullpath);
 				//fprintf(stderr, "tail: %s\n", str_tail.c_str());
 				// TODO: what is going on here ?!
 				// char buff[PATH_MAX];
 				// buff[strlen(rindex(item->fullpath,'/'))-1]='\0';
 
-				// ui_state.config_file = buff;
-				ui_state.config_file = str_tail;
+				// ui.config_file = buff;
+				ui.config_file = str_tail;
 
 				PtSetResource(ABW_PtText_config_file, Pt_ARG_TEXT_STRING,
-						ui_state.config_file.c_str(), 0);
+						ui.config_file.c_str(), 0);
 				PtDamageWidget(ABW_PtText_config_file);
 			}
 		}
@@ -678,8 +679,8 @@ int file_selection_window_post_realize(PtWidget_t *widget, ApInfo_t *apinfo,
 	case FSCONFIG:
 		// 	printf("aaa:\n");
 		// ustawienie katalogu root
-		PtSetArg(&args[0], Pt_ARG_FS_ROOT_DIR,
-				ui_state.config_file_fullpath.c_str(), 0);
+		PtSetArg(&args[0], Pt_ARG_FS_ROOT_DIR, ui.config_file_fullpath.c_str(),
+				0);
 		PtSetResources(ABW_PtFileSel_sl, 1, args);
 		PtDamageWidget(ABW_PtFileSel_sl);
 
@@ -696,7 +697,7 @@ int file_selection_window_post_realize(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtDamageWidget(ABW_PtFileSel_sl);
 
 		// przejscie do katalogu z trajektoriami
-		buffer = strdup(ui_state.teach_filesel_fullpath.c_str());
+		buffer = strdup(ui.teach_filesel_fullpath.c_str());
 		strcpy(current_path, "");
 
 		// 	    printf( "%s\n", buffer );
@@ -979,7 +980,7 @@ int task_param_actualization(PtWidget_t *widget, ApInfo_t *apinfo,
 	char* tmp_buf;
 
 	PtGetResource(ABW_PtText_config_file, Pt_ARG_TEXT_STRING, &tmp_buf, 0);
-	ui_state.config_file = tmp_buf;
+	ui.config_file = tmp_buf;
 
 	return (Pt_CONTINUE);
 }
@@ -995,9 +996,9 @@ int task_window_param_actualization(PtWidget_t *widget, ApInfo_t *apinfo,
 	 printf("bbb: %s\n",ui.mp_node_name);*/
 
 	PtSetResource(ABW_PtText_config_file, Pt_ARG_TEXT_STRING,
-			ui_state.config_file.c_str(), 0);
+			ui.config_file.c_str(), 0);
 	PtSetResource(ABW_PtLabel_bin_directory, Pt_ARG_TEXT_STRING,
-			ui_state.binaries_network_path.c_str(), 0);
+			ui.binaries_network_path.c_str(), 0);
 
 	return (Pt_CONTINUE);
 }
@@ -1011,12 +1012,12 @@ int clear_all_configuration_lists() {
 }
 
 int initiate_configuration() {
-	if (access(ui_state.config_file_relativepath.c_str(), R_OK) != 0) {
+	if (access(ui.config_file_relativepath.c_str(), R_OK) != 0) {
 		fprintf(
 				stderr,
 				"Wrong entry in default_file.cfg - load another configuration than: %s\n",
-				ui_state.config_file_relativepath.c_str());
-		ui_state.config_file_relativepath = "../configs/common.ini";
+				ui.config_file_relativepath.c_str());
+		ui.config_file_relativepath = "../configs/common.ini";
 	}
 
 	// sprawdzenie czy nazwa sesji jest unikalna
@@ -1027,14 +1028,14 @@ int initiate_configuration() {
 		time_t now = time(NULL);
 		char now_string[32];
 		strftime(now_string, 8, "_%H%M%S", localtime(&now));
-		ui_state.session_name = now_string;
+		ui.session_name = now_string;
 
 		if (ui.config) {
 			delete ui.config;
 		}
-		ui.config = new lib::configurator(ui_state.ui_node_name,
-				ui_state.mrrocpp_local_path, ui_state.config_file, UI_SECTION,
-				ui_state.session_name);
+		ui.config = new lib::configurator(ui.ui_node_name,
+				ui.mrrocpp_local_path, ui.config_file, UI_SECTION,
+				ui.session_name);
 
 		std::string attach_point =
 				ui.config->return_attach_point_name(
@@ -1064,141 +1065,20 @@ int initiate_configuration() {
 
 	}
 
-	ui_state.ui_attach_point = ui.config->return_attach_point_name(
+	ui.ui_attach_point = ui.config->return_attach_point_name(
 			lib::configurator::CONFIG_SERVER, "ui_attach_point", UI_SECTION);
-	ui_state.sr_attach_point = ui.config->return_attach_point_name(
+	ui.sr_attach_point = ui.config->return_attach_point_name(
 			lib::configurator::CONFIG_SERVER, "sr_attach_point", UI_SECTION);
-	ui_state.network_sr_attach_point = ui.config->return_attach_point_name(
+	ui.network_sr_attach_point = ui.config->return_attach_point_name(
 			lib::configurator::CONFIG_SERVER, "sr_attach_point", UI_SECTION);
 
 	clear_all_configuration_lists();
 
 	// sczytanie listy sekcji
-	fill_section_list(ui_state.config_file_relativepath.c_str());
+	fill_section_list(ui.config_file_relativepath.c_str());
 	fill_section_list("../configs/common.ini");
 	fill_node_list();
 	fill_program_node_list();
-
-	return 1;
-}
-
-int reload_whole_configuration() {
-
-	if (access(ui_state.config_file_relativepath.c_str(), R_OK) != 0) {
-		fprintf(
-				stderr,
-				"Wrong entry in default_file.cfg - load another configuration than: %s\n",
-				ui_state.config_file_relativepath.c_str());
-		ui_state.config_file_relativepath = "../configs/common.ini";
-	}
-
-	if ((ui.mp.state == UI_MP_NOT_PERMITED_TO_RUN) || (ui.mp.state
-			== UI_MP_PERMITED_TO_RUN)) { // jesli nie dziala mp podmien mp ecp vsp
-
-		ui.config->change_ini_file(ui_state.config_file.c_str());
-
-		ui.is_mp_and_ecps_active = ui.config->value<int> (
-				"is_mp_and_ecps_active");
-
-		switch (ui.all_edps) {
-		case UI_ALL_EDPS_NONE_EDP_ACTIVATED:
-		case UI_ALL_EDPS_NONE_EDP_LOADED:
-
-			// dla robota irp6 on_track
-			reload_irp6ot_configuration();
-
-			// dla robota irp6 on_track
-			reload_irp6ot_tfg_configuration();
-
-			reload_irp6p_tfg_configuration();
-
-			// dla robota irp6 postument
-			reload_irp6p_configuration();
-
-			// dla robota conveyor
-			reload_conveyor_configuration();
-
-			reload_spkm_configuration();
-			reload_smb_configuration();
-			reload_shead_configuration();
-
-			ui.bird_hand.reload_configuration();
-
-			// dla robota speaker
-			reload_speaker_configuration();
-
-			// dla robota irp6 mechatronika
-			reload_irp6m_configuration();
-			break;
-		default:
-			break;
-		}
-
-		// clearing of lists
-		clear_all_configuration_lists();
-
-		// sczytanie listy sekcji
-		fill_section_list(ui_state.config_file_relativepath.c_str());
-		fill_section_list("../configs/common.ini");
-		fill_node_list();
-		fill_program_node_list();
-
-		/*
-		 for (list<char*>::iterator list_iterator = ui_state.section_list.begin(); list_iterator != ui_state.section_list.end(); list_iterator++)
-		 {
-		 printf("section_name: %s\n", *list_iterator);
-
-		 }
-
-		 for (list<char*>::iterator node_list_iterator = ui_state.node_list.begin(); node_list_iterator != ui_state.node_list.end(); node_list_iterator++)
-		 {
-		 printf("node_name: %s\n", *node_list_iterator);
-		 }
-
-		 for (list<program_node_def>::iterator program_node_list_iterator = ui_state.program_node_list.begin(); program_node_list_iterator != ui_state.program_node_list.end(); program_node_list_iterator++)
-		 {
-		 printf("node_name: %s\n", program_node_list_iterator->node_name);
-		 }
-		 */
-
-		// zczytanie konfiguracji UI
-
-
-		// zczytanie konfiguracji MP
-
-		if (ui.is_mp_and_ecps_active) {
-			ui.mp.network_pulse_attach_point
-					= ui.config->return_attach_point_name(
-							lib::configurator::CONFIG_SERVER,
-							"mp_pulse_attach_point", MP_SECTION);
-			ui.mp.node_name = ui.config->value<std::string> ("node_name",
-					MP_SECTION);
-			ui.mp.pid = -1;
-		}
-
-		// inicjacja komunikacji z watkiem sr
-		if (ui.ui_msg == NULL) {
-			ui.ui_msg = new lib::sr_ui(lib::UI,
-					ui_state.ui_attach_point.c_str(),
-					ui_state.network_sr_attach_point.c_str(), false);
-		}
-
-		// inicjacja komunikacji z watkiem sr
-		if (ui.all_ecp_msg == NULL) {
-			ui.all_ecp_msg = new lib::sr_ecp(lib::ECP, "ui_all_ecp",
-					ui_state.network_sr_attach_point.c_str(), false);
-		}
-
-		// wypisanie komunikatu o odczytaniu konfiguracji
-		if (ui.ui_msg) {
-			std::string msg(ui_state.config_file);
-			msg += " config file loaded";
-			ui.ui_msg->message(msg.c_str());
-		}
-
-	}
-
-	ui.manage_interface();
 
 	return 1;
 }
@@ -1330,7 +1210,7 @@ int manage_configuration_file(PtWidget_t *widget, ApInfo_t *apinfo,
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
 	task_param_actualization(widget, apinfo, cbinfo);
-	reload_whole_configuration();
+	ui.reload_whole_configuration();
 
 	set_default_configuration_file_name(); // zapis do pliku domyslnej konfiguracji
 	// sprawdza czy sa postawione gns's i ew. stawia je
@@ -1351,10 +1231,10 @@ int get_default_configuration_file_name() {
 		char tmp_buf[255];
 		fgets(tmp_buf, 255, fp); // Uwaga na zwracanego NULLa
 		char *tmp_buf1 = strtok(tmp_buf, "=\n\r"); // get first token
-		ui_state.config_file = tmp_buf1;
+		ui.config_file = tmp_buf1;
 
-		ui_state.config_file_relativepath = "../";
-		ui_state.config_file_relativepath += ui_state.config_file;
+		ui.config_file_relativepath = "../";
+		ui.config_file_relativepath += ui.config_file;
 
 		fclose(fp);
 		return 1;
@@ -1366,16 +1246,16 @@ int get_default_configuration_file_name() {
 		fp = fopen("../configs/default_file.cfg", "w");
 		fclose(fp);
 
-		ui_state.config_file = "configs/common.ini";
-		ui_state.config_file_relativepath = "../";
-		ui_state.config_file_relativepath += ui_state.config_file;
+		ui.config_file = "configs/common.ini";
+		ui.config_file_relativepath = "../";
+		ui.config_file_relativepath += ui.config_file;
 
 		std::ofstream outfile("../configs/default_file.cfg", std::ios::out);
 		if (!outfile.good()) {
 			std::cerr << "Cannot open file: default_file.cfg" << std::endl;
 			perror("because of");
 		} else
-			outfile << ui_state.config_file;
+			outfile << ui.config_file;
 
 		return 2;
 	}
@@ -1384,15 +1264,15 @@ int get_default_configuration_file_name() {
 // zapisuje nazwe domyslengo pliku konfiguracyjnego
 int set_default_configuration_file_name() {
 
-	ui_state.config_file_relativepath = "../";
-	ui_state.config_file_relativepath += ui_state.config_file;
+	ui.config_file_relativepath = "../";
+	ui.config_file_relativepath += ui.config_file;
 
 	std::ofstream outfile("../configs/default_file.cfg", std::ios::out);
 	if (!outfile.good()) {
 		std::cerr << "Cannot open file: default_file.cfg\n";
 		perror("because of");
 	} else
-		outfile << ui_state.config_file;
+		outfile << ui.config_file;
 
 	return 1;
 }
@@ -1496,8 +1376,7 @@ int check_edps_state_and_modify_mp_state() {
 			ui_state.smb) || check_loaded(ui_state.shead))
 
 	{
-		ui.all_edps
-				= UI_ALL_EDPS_THERE_IS_EDP_LOADED_BUT_NOT_ALL_ARE_LOADED;
+		ui.all_edps = UI_ALL_EDPS_THERE_IS_EDP_LOADED_BUT_NOT_ALL_ARE_LOADED;
 
 		// jesli zaden nie jest zaladowany
 	} else {
@@ -1746,7 +1625,7 @@ int check_gns() {
 					"check_gns - Nie wykryto wezla: %s, ktory wystepuje w pliku konfiguracyjnym\n",
 					(*node_list_iterator).c_str());
 
-			if ((ui_state.is_sr_thread_loaded) && (ui.ui_msg != NULL)) {
+			if ((ui.is_sr_thread_loaded) && (ui.ui_msg != NULL)) {
 				std::string tmp;
 				tmp = std::string("check_gns - Nie wykryto wezla: ")
 						+ (*node_list_iterator) + std::string(

@@ -165,20 +165,6 @@ typedef struct {
 
 typedef struct {
 
-		std::string binaries_network_path; // sieciowa sciezka binariow mrrocpp
-	std::string binaries_local_path; // lokalna sciezka binariow mrrocpp
-	std::string mrrocpp_local_path; // lokalna sciezka mrrocpp: np. "/home/yoyek/mrrocpp/". W niej katalogi bin, configs etc.
-
-	std::string teach_filesel_fullpath; // sciezka domyslana dla fileselect dla generatora uczacego
-	std::string config_file;// nazwa pliku konfiguracyjnego dla UI
-	std::string session_name; // nazwa sesji
-	std::string config_file_fullpath; // sciezka globalna do konfiguracji
-	std::string config_file_relativepath; // sciezka lokalana do konfiguracji wraz z plikiem konfiguracyjnym
-
-	std::string ui_attach_point;
-	std::string network_sr_attach_point;
-	std::string sr_attach_point;
-
 	typedef std::string list_t;
 
 	// listy sekcji i wezlow sieciowych plikow konfiguracyjnych
@@ -186,7 +172,6 @@ typedef struct {
 	// lista nazw programow i wezlow na ktorych maja byc uruchamiane
 	std::list<program_node_def> program_node_list;
 
-	std::string ui_node_name; // nazwa wezla na ktorym jest uruchamiany UI
 	int ui_node_nr; // numer wezla na ktorym jest uruchamiany UI
 	pid_t ui_pid; // pid UI
 	short ui_state; // 1 working, 2 exiting started, 3-5 exiting in progress - mrrocpp processes closing, 6 - exit imeditily
@@ -202,8 +187,6 @@ typedef struct {
 	ecp_edp_ui_robot_def spkm;
 	ecp_edp_ui_robot_def smb;
 	ecp_edp_ui_robot_def shead;
-
-	bool is_sr_thread_loaded; // informacja czy okno zadania jest otwarte
 
 	int teachingstate; // dawne systemState do nauki
 	TEACHING_STATE_ENUM file_window_mode;

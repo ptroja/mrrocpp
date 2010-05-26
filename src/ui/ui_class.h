@@ -34,13 +34,30 @@ public:
 	mp_state_def mp;
 	// bool is_any_edp_active;
 	bool is_mp_and_ecps_active;
-
+	bool is_sr_thread_loaded;
 	UI_ALL_EDPS_STATE all_edps;
+	std::string config_file_relativepath; // sciezka lokalana do konfiguracji wraz z plikiem konfiguracyjnym
+	std::string binaries_network_path; // sieciowa sciezka binariow mrrocpp
+	std::string binaries_local_path; // lokalna sciezka binariow mrrocpp
+	std::string mrrocpp_local_path; // lokalna sciezka mrrocpp: np. "/home/yoyek/mrrocpp/". W niej katalogi bin, configs etc.
+
+	std::string teach_filesel_fullpath; // sciezka domyslana dla fileselect dla generatora uczacego
+	std::string config_file;// nazwa pliku konfiguracyjnego dla UI
+	std::string session_name; // nazwa sesji
+	std::string config_file_fullpath; // sciezka globalna do konfiguracji
+
+
+	std::string ui_attach_point;
+	std::string network_sr_attach_point;
+	std::string sr_attach_point;
+	std::string ui_node_name; // nazwa wezla na ktorym jest uruchamiany UI
 
 	UiRobotBirdHand bird_hand;
 
 	Ui();
+	void init();
 	int manage_interface(void);
+	int reload_whole_configuration();
 
 };
 
