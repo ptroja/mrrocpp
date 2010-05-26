@@ -40,7 +40,7 @@ extern ui_state_def ui_state;
 
 extern ui_msg_def ui_msg;
 extern ui_robot_def ui_robot;
-extern boost::mutex process_creation_mtx;
+
 
 int EDP_shead_create(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo)
@@ -95,7 +95,7 @@ int EDP_shead_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 						ui_state.shead.edp.node_name);
 
 				{
-					boost::unique_lock<boost::mutex> lock(process_creation_mtx);
+					boost::unique_lock<boost::mutex> lock(ui.process_creation_mtx);
 					ui_robot.shead = new ui_tfg_and_conv_robot(*ui.config,
 							*ui_msg.all_ecp, lib::ROBOT_SHEAD);
 				}

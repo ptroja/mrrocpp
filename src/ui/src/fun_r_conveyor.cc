@@ -45,7 +45,6 @@ extern ui_state_def ui_state;
 
 extern ui_robot_def ui_robot;
 extern ui_ecp_buffer* ui_ecp_obj;
-extern boost::mutex process_creation_mtx;
 
 double conveyor_current_pos[CONVEYOR_NUM_OF_SERVOS];// pozycja biezaca
 double conveyor_desired_pos[CONVEYOR_NUM_OF_SERVOS]; // pozycja zadana
@@ -545,7 +544,8 @@ int EDP_conveyor_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 				ui_state.conveyor.edp.node_nr = ui.config->return_node_number(
 						ui_state.conveyor.edp.node_name.c_str());
 				{
-					boost::unique_lock<boost::mutex> lock(process_creation_mtx);
+					boost::unique_lock<boost::mutex> lock(
+							ui.process_creation_mtx);
 					ui_robot.conveyor = new ui_tfg_and_conv_robot(*ui.config,
 							*ui_msg.all_ecp, lib::ROBOT_CONVEYOR);
 

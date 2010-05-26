@@ -43,7 +43,7 @@ extern ui_state_def ui_state;
 
 extern ui_robot_def ui_robot;
 extern ui_ecp_buffer* ui_ecp_obj;
-extern boost::mutex process_creation_mtx;
+
 
 double irp6ot_current_pos[IRP6OT_M_NUM_OF_SERVOS]; // pozycja biezaca
 double irp6ot_desired_pos[IRP6OT_M_NUM_OF_SERVOS]; // pozycja zadana
@@ -2540,7 +2540,7 @@ int EDP_irp6_on_track_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 								ui_state.irp6_on_track.edp.node_name);
 
 				{
-					boost::unique_lock<boost::mutex> lock(process_creation_mtx);
+					boost::unique_lock<boost::mutex> lock(ui.process_creation_mtx);
 
 					ui_robot.irp6_on_track = new ui_irp6_common_robot(
 							*ui.config, *ui_msg.all_ecp, lib::ROBOT_IRP6OT_M);

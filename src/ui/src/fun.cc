@@ -54,7 +54,6 @@ extern double irp6p_desired_pos[7]; // pozycja zadana
 extern double irp6m_current_pos[6]; // pozycja biezaca
 extern double irp6m_desired_pos[6]; // pozycja zadana
 
-boost::mutex process_creation_mtx;
 
 // blokowanie widgetu
 int block_widget(PtWidget_t *widget) {

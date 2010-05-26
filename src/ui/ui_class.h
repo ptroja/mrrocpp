@@ -26,6 +26,7 @@ class Ui {
 private:
 
 public:
+	boost::mutex process_creation_mtx;
 	lib::configurator* config;
 	UiRobotBirdHand bird_hand;
 

@@ -35,7 +35,7 @@
 
 extern Ui ui;
 
-extern boost::mutex process_creation_mtx;
+
 extern function_execution_buffer edp_spkm_eb;
 extern ui_state_def ui_state;
 extern ui_msg_def ui_msg;
@@ -92,7 +92,7 @@ int EDP_spkm_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 				ui_state.spkm.edp.node_nr = ui.config->return_node_number(
 						ui_state.spkm.edp.node_name);
 				{
-					boost::unique_lock<boost::mutex> lock(process_creation_mtx);
+					boost::unique_lock<boost::mutex> lock(ui.process_creation_mtx);
 					ui_robot.spkm = new ui_tfg_and_conv_robot(*ui.config,
 							*ui_msg.all_ecp, lib::ROBOT_SPKM);
 

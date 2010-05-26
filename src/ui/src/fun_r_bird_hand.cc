@@ -36,12 +36,11 @@
 
 extern Ui ui;
 
-extern boost::mutex process_creation_mtx;
+
 extern function_execution_buffer edp_bird_hand_eb;
 extern ui_state_def ui_state;
 
 extern ui_msg_def ui_msg;
-extern ui_robot_def ui_robot;
 
 int EDP_bird_hand_create(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo)
@@ -96,7 +95,7 @@ int EDP_bird_hand_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 				ui.bird_hand.state.edp.node_nr = ui.config->return_node_number(
 						ui.bird_hand.state.edp.node_name);
 				{
-					boost::unique_lock<boost::mutex> lock(process_creation_mtx);
+					boost::unique_lock<boost::mutex> lock(ui.process_creation_mtx);
 					ui.bird_hand.ui_ecp_robot = new ui_bird_hand_robot(
 							*ui.config, *ui_msg.all_ecp);
 

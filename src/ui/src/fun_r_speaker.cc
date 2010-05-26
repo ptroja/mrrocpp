@@ -31,7 +31,7 @@
 #include "abimport.h"
 #include "proto.h"
 
-extern boost::mutex process_creation_mtx;
+
 extern Ui ui;
 
 extern ui_msg_def ui_msg;

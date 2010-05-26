@@ -40,7 +40,7 @@ extern ui_state_def ui_state;
 
 extern ui_robot_def ui_robot;
 extern ui_ecp_buffer* ui_ecp_obj;
-extern boost::mutex process_creation_mtx;
+
 
 double irp6m_current_pos[IRP6_MECHATRONIKA_NUM_OF_SERVOS]; // pozycja biezaca
 double irp6m_desired_pos[IRP6_MECHATRONIKA_NUM_OF_SERVOS]; // pozycja zadana
@@ -211,7 +211,7 @@ int EDP_irp6_mechatronika_create(PtWidget_t *widget, ApInfo_t *apinfo,
 						= ui.config->return_node_number(
 								ui_state.irp6_mechatronika.edp.node_name);
 				{
-					boost::unique_lock<boost::mutex> lock(process_creation_mtx);
+					boost::unique_lock<boost::mutex> lock(ui.process_creation_mtx);
 
 					ui_robot.irp6_mechatronika = new ui_irp6_common_robot(
 							*ui.config, *ui_msg.all_ecp,
