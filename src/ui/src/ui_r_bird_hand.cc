@@ -23,11 +23,9 @@ extern Ui ui;
 
 
 UiRobotBirdHand::UiRobotBirdHand() :
-	UiRobot(), ui_ecp_robot(NULL), is_wnd_bird_hand_command_and_status_open(
-			false), is_wnd_bird_hand_configuration_open(false) {
-
-	state.edp.section_name = EDP_BIRD_HAND_SECTION;
-	state.ecp.section_name = ECP_BIRD_HAND_SECTION;
+	UiRobot(EDP_BIRD_HAND_SECTION, ECP_BIRD_HAND_SECTION), ui_ecp_robot(NULL),
+			is_wnd_bird_hand_command_and_status_open(false),
+			is_wnd_bird_hand_configuration_open(false) {
 
 }
 

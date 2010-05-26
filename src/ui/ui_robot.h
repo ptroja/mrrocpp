@@ -30,7 +30,8 @@ public:
 
 	ecp_edp_ui_robot_def state;
 
-	UiRobot();
+	UiRobot(const std::string edp_section_name,
+			const std::string ecp_section_name);
 	virtual int reload_configuration()= 0;
 	void create_thread();
 	void abort_thread();

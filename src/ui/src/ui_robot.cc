@@ -16,8 +16,10 @@ extern ui_state_def ui_state;
 //
 
 
-UiRobot::UiRobot() :
+UiRobot::UiRobot(const std::string edp_section_name, const std::string  ecp_section_name) :
 	tid(NULL) {
+	state.edp.section_name = edp_section_name;
+	state.ecp.section_name = ecp_section_name;
 	state.edp.state = -1; // edp nieaktywne
 	state.edp.last_state = -1; // edp nieaktywne
 	state.ecp.trigger_fd = -1;
