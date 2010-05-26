@@ -145,29 +145,29 @@ int OnTimer(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 	}
 
-	if (ui_state.ui_state == 2) {// jesli ma nastapic zamkniecie z aplikacji
+	if (ui.ui_state == 2) {// jesli ma nastapic zamkniecie z aplikacji
 		set_ui_state_notification(UI_N_EXITING);
 		// 	printf("w ontimer 2\n");
 		closing_delay_counter = 20;// opoznienie zamykania
-		ui_state.ui_state = 3;
+		ui.ui_state = 3;
 		// 		delay(5000);
 		MPslay(widget, apinfo, cbinfo);
 		ui.ui_msg->message("closing");
-	} else if (ui_state.ui_state == 3) {// odliczanie
+	} else if (ui.ui_state == 3) {// odliczanie
 		// 	printf("w ontimer 3\n");
 		if ((--closing_delay_counter) <= 0)
-			ui_state.ui_state = 4;
-	} else if (ui_state.ui_state == 4) {// jesli ma nastapic zamkniecie aplikacji
+			ui.ui_state = 4;
+	} else if (ui.ui_state == 4) {// jesli ma nastapic zamkniecie aplikacji
 		//	printf("w ontimer 4\n");
 		closing_delay_counter = 20;// opoznienie zamykania
-		ui_state.ui_state = 5;
+		ui.ui_state = 5;
 		EDP_all_robots_slay(widget, apinfo, cbinfo);
 
-	} else if (ui_state.ui_state == 5) {// odlcizanie do zamnkiecia
+	} else if (ui.ui_state == 5) {// odlcizanie do zamnkiecia
 		//	printf("w ontimer 5\n");
 		if ((--closing_delay_counter) <= 0)
-			ui_state.ui_state = 6;
-	} else if (ui_state.ui_state == 6) {// zakonczenie aplikacji
+			ui.ui_state = 6;
+	} else if (ui.ui_state == 6) {// zakonczenie aplikacji
 		(*log_file_outfile).close();
 		delete log_file_outfile;
 		printf("UI CLOSED\n");

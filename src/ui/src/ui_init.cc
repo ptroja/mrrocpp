@@ -83,7 +83,7 @@ void catch_signal(int sig) {
 		child_pid = waitpid(-1, &status, 0);
 
 		if (child_pid == -1) {
-			int e = errno;
+			//	int e = errno;
 			perror("UI: waitpid()");
 		} else if (child_pid == 0) {
 			fprintf(stderr, "UI: no child exited\n");
@@ -124,7 +124,7 @@ void catch_signal(int sig) {
 void UI_close(void) {
 	printf("UI CLOSING\n");
 	delay(100);// czas na ustabilizowanie sie edp
-	ui_state.ui_state = 2;// funcja OnTimer dowie sie ze aplikacja ma byc zamknieta
+	ui.ui_state = 2;// funcja OnTimer dowie sie ze aplikacja ma byc zamknieta
 }
 
 int init(PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
@@ -144,7 +144,7 @@ int init(PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 	lib::set_thread_priority(pthread_self(), MAX_PRIORITY - 6);
 
-	ui_state.ui_state = 1;// ui working
+	ui.ui_state = 1;// ui working
 
 	ui_state.irp6_on_track.edp.state = -1; // edp nieaktywne
 	ui_state.irp6_on_track.edp.last_state = -1; // edp nieaktywne
@@ -206,12 +206,12 @@ int init(PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 	ui_state.shead.edp.section_name = EDP_SHEAD_SECTION;
 	ui_state.shead.ecp.section_name = ECP_SHEAD_SECTION;
 
-	ui_state.file_window_mode = FSTRAJECTORY; // uczenie
+	ui.file_window_mode = FSTRAJECTORY; // uczenie
 
-	ui_state.is_task_window_open = false;// informacja czy okno zadanai jest otwarte
-	ui_state.is_process_control_window_open = false;// informacja czy okno sterowania procesami jest otwarte
-	ui_state.process_control_window_renew = true;
-	ui_state.is_file_selection_window_open = false;
+	ui.is_task_window_open = false;// informacja czy okno zadanai jest otwarte
+	ui.is_process_control_window_open = false;// informacja czy okno sterowania procesami jest otwarte
+	ui.process_control_window_renew = true;
+	ui.is_file_selection_window_open = false;
 	ui_state.is_wind_irp6ot_int_open = false;
 	ui_state.is_wind_irp6p_int_open = false;
 	ui_state.is_wind_irp6m_int_open = false;
@@ -232,7 +232,7 @@ int init(PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 	ui_state.is_wind_irp6ot_xyz_euler_zyz_ts_open = false;
 	ui_state.is_wind_irp6p_xyz_euler_zyz_ts_open = false;
 	ui_state.is_wind_irp6m_xyz_euler_zyz_ts_open = false;
-	ui_state.is_teaching_window_open = false;
+	ui.is_teaching_window_open = false;
 	ui_state.is_wind_conveyor_moves_open = false;
 	ui_state.is_wind_irp6ot_tfg_moves_open = false;
 	ui_state.is_wind_irp6p_tfg_moves_open = false;
@@ -265,7 +265,7 @@ int init(PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 	// some variables initialization
 	ui.init();
 
-		// pierwsze zczytanie pliku konfiguracyjnego (aby pobrac nazwy dla pozostalych watkow UI)
+	// pierwsze zczytanie pliku konfiguracyjnego (aby pobrac nazwy dla pozostalych watkow UI)
 	if (get_default_configuration_file_name() >= 1) // zczytaj nazwe pliku konfiguracyjnego
 	{
 		initiate_configuration();

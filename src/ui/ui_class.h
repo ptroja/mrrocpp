@@ -26,6 +26,30 @@ class Ui {
 private:
 
 public:
+
+	typedef std::string list_t;
+
+	// listy sekcji i wezlow sieciowych plikow konfiguracyjnych
+	std::list<list_t> section_list, config_node_list, all_node_list;
+	// lista nazw programow i wezlow na ktorych maja byc uruchamiane
+	std::list<program_node_def> program_node_list;
+
+	int ui_node_nr; // numer wezla na ktorym jest uruchamiany UI
+	pid_t ui_pid; // pid UI
+	short ui_state; // 1 working, 2 exiting started, 3-5 exiting in progress - mrrocpp processes closing, 6 - exit imeditily
+
+	int teachingstate; // dawne systemState do nauki
+	TEACHING_STATE_ENUM file_window_mode;
+	UI_NOTIFICATION_STATE_ENUM notification_state;
+
+	bool is_task_window_open; // informacja czy okno zadania jest otwarte
+	bool is_process_control_window_open; // informacja czy okno sterowania procesami jest otwarte
+	bool process_control_window_renew; // czy okno ma zostac odswierzone
+
+	bool is_teaching_window_open; // informacja czy okno nauki jest otwarte
+	bool is_file_selection_window_open; // informacja czy okno z wyborem pliku jest otwarte
+
+
 	boost::mutex process_creation_mtx;
 	lib::configurator* config;
 	lib::sr_ecp* all_ecp_msg; // Wskaznik na obiekt do komunikacji z SR z fukcja ECP dla wszystkich robotow

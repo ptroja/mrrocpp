@@ -291,7 +291,7 @@ int Ui::reload_whole_configuration() {
 		fill_program_node_list();
 
 		/*
-		 for (list<char*>::iterator list_iterator = ui_state.section_list.begin(); list_iterator != ui_state.section_list.end(); list_iterator++)
+		 for (list<char*>::iterator list_iterator = ui.section_list.begin(); list_iterator != ui.section_list.end(); list_iterator++)
 		 {
 		 printf("section_name: %s\n", *list_iterator);
 
@@ -302,7 +302,7 @@ int Ui::reload_whole_configuration() {
 		 printf("node_name: %s\n", *node_list_iterator);
 		 }
 
-		 for (list<program_node_def>::iterator program_node_list_iterator = ui_state.program_node_list.begin(); program_node_list_iterator != ui_state.program_node_list.end(); program_node_list_iterator++)
+		 for (list<program_node_def>::iterator program_node_list_iterator = ui.program_node_list.begin(); program_node_list_iterator != ui.program_node_list.end(); program_node_list_iterator++)
 		 {
 		 printf("node_name: %s\n", program_node_list_iterator->node_name);
 		 }

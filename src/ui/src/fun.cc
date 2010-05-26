@@ -94,10 +94,10 @@ int set_ui_ready_state_notification(PtWidget_t *widget, ApInfo_t *apinfo,
 }
 
 int set_ui_state_notification(UI_NOTIFICATION_STATE_ENUM new_notifacion) {
-	if (new_notifacion != ui_state.notification_state) {
+	if (new_notifacion != ui.notification_state) {
 		int pt_res = PtEnter(0);
 
-		ui_state.notification_state = new_notifacion;
+		ui.notification_state = new_notifacion;
 
 		switch (new_notifacion) {
 		case UI_N_STARTING:
@@ -160,7 +160,7 @@ int close_process_control_window(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (ui_state.is_process_control_window_open) {
+	if (ui.is_process_control_window_open) {
 		PtDestroyWidget(ABW_wnd_processes_control);
 	}
 
@@ -176,7 +176,7 @@ int clear_teaching_window_flag(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	ui_state.is_teaching_window_open = false;
+	ui.is_teaching_window_open = false;
 	return (Pt_CONTINUE);
 
 }
@@ -189,7 +189,7 @@ int clear_file_selection_window_flag(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	ui_state.is_file_selection_window_open = false;
+	ui.is_file_selection_window_open = false;
 	return (Pt_CONTINUE);
 
 }
@@ -202,7 +202,7 @@ int clear_wnd_process_control_flag(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	ui_state.is_process_control_window_open = false;
+	ui.is_process_control_window_open = false;
 
 	return (Pt_CONTINUE);
 
@@ -216,13 +216,13 @@ int start_process_control_window(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (!ui_state.is_process_control_window_open) {
+	if (!ui.is_process_control_window_open) {
 		ApCreateModule(ABM_wnd_processes_control, ABW_base, NULL);
-		ui_state.is_process_control_window_open = true;
+		ui.is_process_control_window_open = true;
 	} else { // przelacz na okno
 		PtWindowToFront(ABW_wnd_processes_control);
 	}
-	ui_state.process_control_window_renew = true;
+	ui.process_control_window_renew = true;
 	return (Pt_CONTINUE);
 
 }
@@ -234,7 +234,7 @@ int clear_task_config_window_flag(PtWidget_t *widget, ApInfo_t *apinfo,
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
-	ui_state.is_task_window_open = false;
+	ui.is_task_window_open = false;
 	return (Pt_CONTINUE);
 
 }
@@ -246,11 +246,11 @@ int start_task_config_window(PtWidget_t *widget, ApInfo_t *apinfo,
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 	// PtRealizeWidget( ABW_task_config_window );
 
-	if (!ui_state.is_task_window_open) {
+	if (!ui.is_task_window_open) {
 		ApCreateModule(ABM_task_config_window, widget, cbinfo);
 		// 	 PtRealizeWidget( ABW_task_config_window );
 		task_window_param_actualization(widget, apinfo, cbinfo);
-		ui_state.is_task_window_open = true;
+		ui.is_task_window_open = true;
 	} else { // przelacz na okno
 		PtWindowToFront(ABW_task_config_window);
 	}
@@ -441,7 +441,7 @@ int close_file_selection_window(PtWidget_t *widget, ApInfo_t *apinfo,
 
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if ((ui_state.file_window_mode == FSTRAJECTORY)
+	if ((ui.file_window_mode == FSTRAJECTORY)
 			&& (ui_ecp_obj->communication_state != UI_ECP_REPLY_READY)) {
 		ui_ecp_obj->ui_rep.reply = lib::QUIT;
 	}
@@ -573,7 +573,7 @@ int teaching_window_end_motion(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	ui_state.teachingstate = MP_RUNNING;
+	ui.teachingstate = MP_RUNNING;
 	ui_ecp_obj->ui_rep.reply = lib::QUIT;
 
 	ui_ecp_obj->communication_state = UI_ECP_REPLY_READY;
@@ -595,7 +595,7 @@ int file_selection_window_send_location(PtWidget_t *widget, ApInfo_t *apinfo,
 
 	// dla pliku trajektorii
 	if (item != NULL) {
-		if (ui_state.file_window_mode == FSTRAJECTORY) {
+		if (ui.file_window_mode == FSTRAJECTORY) {
 			if ((item->type) == Pt_FS_FILE) {
 				strncpy(ui_ecp_obj->ui_rep.filename,
 						rindex(item->fullpath, '/') + 1, strlen(rindex(
@@ -623,7 +623,7 @@ int file_selection_window_send_location(PtWidget_t *widget, ApInfo_t *apinfo,
 			ui_ecp_obj->communication_state = UI_ECP_REPLY_READY;
 
 			// dla pliku konfiguracyjnego
-		} else if (ui_state.file_window_mode == FSCONFIG) {
+		} else if (ui.file_window_mode == FSCONFIG) {
 			if ((item->type) == Pt_FS_FILE) {
 				// To sie pozniej sprawdzi, czy wogule jest wzorzec znaleziony
 				std::string str_fullpath(item->fullpath);
@@ -675,7 +675,7 @@ int file_selection_window_post_realize(PtWidget_t *widget, ApInfo_t *apinfo,
 
 	// dla wyboru pliku konfiguracyjnego
 
-	switch (ui_state.file_window_mode) {
+	switch (ui.file_window_mode) {
 	case FSCONFIG:
 		// 	printf("aaa:\n");
 		// ustawienie katalogu root
@@ -793,7 +793,7 @@ int process_control_window_init(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (ui_state.is_process_control_window_open) {
+	if (ui.is_process_control_window_open) {
 
 		bool wlacz_PtButton_wnd_processes_control_all_reader_start = false;
 		bool wlacz_PtButton_wnd_processes_control_all_reader_stop = false;
@@ -851,8 +851,8 @@ int process_control_window_init(PtWidget_t *widget, ApInfo_t *apinfo,
 
 		// Dla mp i ecp
 		if ((ui.mp.state != ui.mp.last_state)
-				|| (ui_state.process_control_window_renew)) {
-			ui_state.process_control_window_renew = false;
+				|| (ui.process_control_window_renew)) {
+			ui.process_control_window_renew = false;
 
 			switch (ui.mp.state) {
 			case UI_MP_PERMITED_TO_RUN:
@@ -1005,10 +1005,10 @@ int task_window_param_actualization(PtWidget_t *widget, ApInfo_t *apinfo,
 
 int clear_all_configuration_lists() {
 	// clearing of lists
-	ui_state.section_list.clear();
-	ui_state.config_node_list.clear();
-	ui_state.all_node_list.clear();
-	ui_state.program_node_list.clear();
+	ui.section_list.clear();
+	ui.config_node_list.clear();
+	ui.all_node_list.clear();
+	ui.program_node_list.clear();
 }
 
 int initiate_configuration() {
@@ -1106,18 +1106,18 @@ int fill_section_list(const char* file_name_and_path) {
 			strncpy(current_section, line, strlen(line) - 1);
 			current_section[strlen(line) - 1] = '\0';
 
-			std::list<ui_state_def::list_t>::iterator list_iterator;
+			std::list<Ui::list_t>::iterator list_iterator;
 
 			// checking if section is already considered
-			for (list_iterator = ui_state.section_list.begin(); list_iterator
-					!= ui_state.section_list.end(); list_iterator++) {
+			for (list_iterator = ui.section_list.begin(); list_iterator
+					!= ui.section_list.end(); list_iterator++) {
 				if ((*list_iterator) == current_section)
 					break;
 			}
 
 			// if the section does not exists
-			if (list_iterator == ui_state.section_list.end()) {
-				ui_state.section_list.push_back(std::string(current_section));
+			if (list_iterator == ui.section_list.end()) {
+				ui.section_list.push_back(std::string(current_section));
 			}
 
 		} // end 	if (( fptr!=NULL )&&( line[0]=='[' ))
@@ -1142,30 +1142,30 @@ int fill_node_list() {
 			struct dirent *direntp = readdir(dirp);
 			if (direntp == NULL)
 				break;
-			ui_state.all_node_list.push_back(std::string(direntp->d_name));
+			ui.all_node_list.push_back(std::string(direntp->d_name));
 		}
 		closedir(dirp);
 	}
 
-	for (std::list<ui_state_def::list_t>::iterator section_list_iterator =
-			ui_state.section_list.begin(); section_list_iterator
-			!= ui_state.section_list.end(); section_list_iterator++) {
+	for (std::list<Ui::list_t>::iterator section_list_iterator =
+			ui.section_list.begin(); section_list_iterator
+			!= ui.section_list.end(); section_list_iterator++) {
 		if (ui.config->exists("node_name", *section_list_iterator)) {
 			std::string tmp = ui.config->value<std::string> ("node_name",
 					*section_list_iterator);
 
-			std::list<ui_state_def::list_t>::iterator node_list_iterator;
+			std::list<Ui::list_t>::iterator node_list_iterator;
 
-			for (node_list_iterator = ui_state.config_node_list.begin(); node_list_iterator
-					!= ui_state.config_node_list.end(); node_list_iterator++) {
+			for (node_list_iterator = ui.config_node_list.begin(); node_list_iterator
+					!= ui.config_node_list.end(); node_list_iterator++) {
 				if (tmp == (*node_list_iterator)) {
 					break;
 				}
 			}
 
 			// if the node does not exists
-			if (node_list_iterator == ui_state.config_node_list.end()) {
-				ui_state.config_node_list.push_back(tmp);
+			if (node_list_iterator == ui.config_node_list.end()) {
+				ui.config_node_list.push_back(tmp);
 			}
 		}
 
@@ -1178,9 +1178,9 @@ int fill_node_list() {
 int fill_program_node_list() {
 	//	printf("fill_program_node_list\n");
 
-	for (std::list<ui_state_def::list_t>::iterator section_list_iterator =
-			ui_state.section_list.begin(); section_list_iterator
-			!= ui_state.section_list.end(); section_list_iterator++) {
+	for (std::list<Ui::list_t>::iterator section_list_iterator =
+			ui.section_list.begin(); section_list_iterator
+			!= ui.section_list.end(); section_list_iterator++) {
 
 		if ((ui.config->exists("program_name", *section_list_iterator)
 				&& ui.config->exists("node_name", *section_list_iterator))) {
@@ -1194,7 +1194,7 @@ int fill_program_node_list() {
 			tmp_s.node_name = ui.config->value<std::string> ("node_name",
 					*section_list_iterator);
 
-			ui_state.program_node_list.push_back(tmp_s);
+			ui.program_node_list.push_back(tmp_s);
 		}
 	}
 
@@ -1282,12 +1282,12 @@ int start_file_window(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (!ui_state.is_file_selection_window_open) {
-		ui_state.is_file_selection_window_open = 1;
+	if (!ui.is_file_selection_window_open) {
+		ui.is_file_selection_window_open = 1;
 		if (ApName(ApWidget(cbinfo)) == ABN_PtButton_browse_config_file) {
-			ui_state.file_window_mode = FSCONFIG; // wybor pliku konfiguracyjnego
+			ui.file_window_mode = FSCONFIG; // wybor pliku konfiguracyjnego
 		} else {
-			ui_state.file_window_mode = FSTRAJECTORY; // wybor pliku z trajektoria
+			ui.file_window_mode = FSTRAJECTORY; // wybor pliku z trajektoria
 		}
 		ApCreateModule(ABM_file_selection_window, ABW_base, NULL);
 	} else {
@@ -1465,8 +1465,8 @@ int slay_all(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo) {
 	// brutal overkilling
 
 	for (std::list<program_node_def>::iterator program_node_list_iterator =
-			ui_state.program_node_list.begin(); program_node_list_iterator
-			!= ui_state.program_node_list.end(); program_node_list_iterator++) {
+			ui.program_node_list.begin(); program_node_list_iterator
+			!= ui.program_node_list.end(); program_node_list_iterator++) {
 		char system_command[100];
 		/*
 		 #if 0 && defined(PROCESS_SPAWN_RSH)
@@ -1519,9 +1519,9 @@ int check_gns() {
 	std::string gns_server_node;
 
 	// poszukiwanie serwerow gns
-	for (std::list<ui_state_def::list_t>::iterator node_list_iterator =
-			ui_state.all_node_list.begin(); node_list_iterator
-			!= ui_state.all_node_list.end(); node_list_iterator++) {
+	for (std::list<Ui::list_t>::iterator node_list_iterator =
+			ui.all_node_list.begin(); node_list_iterator
+			!= ui.all_node_list.end(); node_list_iterator++) {
 		std::string opendir_path("/net/");
 
 		opendir_path += *node_list_iterator;
@@ -1540,9 +1540,9 @@ int check_gns() {
 		printf(
 				"UI: There is more than one gns server in the QNX network; the qnet will not work properly.\n");
 		// printing of gns server nodes
-		for (std::list<ui_state_def::list_t>::iterator node_list_iterator =
-				ui_state.all_node_list.begin(); node_list_iterator
-				!= ui_state.all_node_list.end(); node_list_iterator++) {
+		for (std::list<Ui::list_t>::iterator node_list_iterator =
+				ui.all_node_list.begin(); node_list_iterator
+				!= ui.all_node_list.end(); node_list_iterator++) {
 			std::string opendir_path("/net/");
 
 			opendir_path += *node_list_iterator;
@@ -1571,9 +1571,9 @@ int check_gns() {
 		system("gns -s");
 
 		// poszukiwanie serwerow gns
-		for (std::list<ui_state_def::list_t>::iterator node_list_iterator =
-				ui_state.all_node_list.begin(); node_list_iterator
-				!= ui_state.all_node_list.end(); node_list_iterator++) {
+		for (std::list<Ui::list_t>::iterator node_list_iterator =
+				ui.all_node_list.begin(); node_list_iterator
+				!= ui.all_node_list.end(); node_list_iterator++) {
 			std::string opendir_path("/net/");
 
 			opendir_path += *node_list_iterator;
@@ -1597,9 +1597,9 @@ int check_gns() {
 	}
 
 	// sprawdzenie czy wezly w konfiuracji sa uruchomione i ew. uruchomienie na nich brakujacych klientow gns
-	for (std::list<ui_state_def::list_t>::iterator node_list_iterator =
-			ui_state.config_node_list.begin(); node_list_iterator
-			!= ui_state.config_node_list.end(); node_list_iterator++) {
+	for (std::list<Ui::list_t>::iterator node_list_iterator =
+			ui.config_node_list.begin(); node_list_iterator
+			!= ui.config_node_list.end(); node_list_iterator++) {
 		std::string opendir_path("/net/");
 
 		opendir_path += *node_list_iterator;
@@ -2007,7 +2007,7 @@ int MPup_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 						break;
 					}
 
-				ui_state.teachingstate = MP_RUNNING;
+				ui.teachingstate = MP_RUNNING;
 
 				ui.mp.state = UI_MP_WAITING_FOR_START_PULSE; // mp wlaczone
 				pt_res = PtEnter(0);
@@ -2257,12 +2257,12 @@ int signal_mp(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 		signo=SIGUSR1;// by Y - tymczasowo
 	} else if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wnd_processes_control_signal_pause) {
 		signo=SIGSTOP;
-		ui_state.teachingstate = MP_PAUSED_H;
+		ui.teachingstate = MP_PAUSED_H;
 		// Zawieszenie procesow MP, ECP i EDP sygnalem SIGSTOP
 	} else if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wnd_processes_control_signal_resume) {
 		// Odwieszenie procesow EDP, ECP i MP sygnalem
 		signo=SIGCONT;
-		ui_state.teachingstate = MP_RUNNING;
+		ui.teachingstate = MP_RUNNING;
 	}
 
 	/*int SignalKill( uint32_t nd,
