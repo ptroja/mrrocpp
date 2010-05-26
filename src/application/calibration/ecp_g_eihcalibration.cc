@@ -7,6 +7,8 @@
 
 #include "ecp_g_eihcalibration.h"
 
+#include <stdexcept>
+
 namespace mrrocpp {
 namespace ecp {
 namespace common {
@@ -29,7 +31,10 @@ eihgenerator::~eihgenerator ()
 
 bool eihgenerator::first_step()
 {
-	sensor = dynamic_cast<ecp_mp::sensor::fradia_sensor<chessboard_t, eihcalibration_t> *> (sensor_m[lib::SENSOR_CVFRADIA]);
+	sensor = dynamic_cast<ecp_mp::sensor::fradia_sensor<char, eihcalibration_t, chessboard_t> *> (sensor_m[lib::SENSOR_CVFRADIA]);
+	if(sensor == NULL){
+		throw std::logic_error("bool eihgenerator::first_step()");
+	}
 
 	//proste zadanie kinematyki
 	the_robot->ecp_command.instruction.instruction_type = lib::GET;
@@ -46,12 +51,12 @@ bool eihgenerator::next_step()
 {
 	printf("bool eihgenerator::next_step()\n"); fflush(stdout);
 	float t[12];
-	if(sensor->image.found == true)
+	if(sensor->get_reading_message().found == true)
 		count++;
 	get_frame();
 	eihcalibration_t command;
 	command.frame_number = count;
-	sensor->configure_fradia_task(command);
+	sensor->set_initiate_message(command);
 	//sensor->to_vsp.parameters.frame_number = count;
 	return false;
 }

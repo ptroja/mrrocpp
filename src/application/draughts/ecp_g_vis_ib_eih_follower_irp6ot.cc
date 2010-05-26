@@ -46,7 +46,8 @@ bool ecp_vis_ib_eih_follower_irp6ot::first_step() {
 		the_robot->ecp_command.instruction.arm.pf_def.behaviour[i] = lib::UNGUARDED_MOTION;
 	}
 
-	vsp_fradia->configure_fradia_task(ecp_mp::sensor::WITHOUT_ROTATION);
+	// TODO: fix this
+	//vsp_fradia->configure_fradia_task(ecp_mp::sensor::WITHOUT_ROTATION);
 
 	first_move =  true;
 	z_s = 0;
@@ -138,9 +139,9 @@ bool ecp_vis_ib_eih_follower_irp6ot::next_step_without_constraints() {
 
 	//alpha = the_robot->reply_package.arm.pf_def.arm_coordinates[1]- the_robot->reply_package.arm.pf_def.arm_coordinates[6];
 	//Uchyb wyrazony w pikselach.
-	u[0] = vsp_fradia->image.x-20;
-	u[1] = vsp_fradia->image.y;
-	bool tracking = vsp_fradia->image.tracking;
+	u[0] = vsp_fradia->get_reading().x-20;
+	u[1] = vsp_fradia->get_reading().y;
+	bool tracking = vsp_fradia->get_reading().tracking;
 
 	printf("ux: %f\t", u[0]);
 	printf("uy: %f\n", u[1]);

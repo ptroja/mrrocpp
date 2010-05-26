@@ -32,7 +32,7 @@ namespace generator {
 class ecp_vis_ib_eih_follower_irp6ot : public common::generator::ecp_visual_servo {
 
 public:
-	ecp_mp::sensor::fradia_sensor<tracker_t, ecp_mp::sensor::hd_mode_t> *vsp_fradia; //wirtualny sensor
+	ecp_mp::sensor::fradia_sensor<char, hd_mode_t, tracker_t> *vsp_fradia; //wirtualny sensor
 
     double next_position[8]; 	//pozycja w nastepnym kroku.
     //double alpha; //orientacja koncokwi wzgledem ukladu bazowego.

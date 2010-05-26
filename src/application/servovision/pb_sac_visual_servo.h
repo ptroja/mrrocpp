@@ -38,7 +38,7 @@ public:
 	virtual lib::Homog_matrix get_position_change(const lib::Homog_matrix& current_position, double dt);
 	virtual boost::shared_ptr <ecp_mp::sensor::sensor_interface> get_vsp_fradia();
 private:
-	boost::shared_ptr <ecp_mp::sensor::fradia_sensor <position_based_reading, position_based_configuration> > vsp_fradia;
+	boost::shared_ptr <pb_fradia_sensor> vsp_fradia;
 
 	lib::Homog_matrix G_T_E_desired;
 	lib::Homog_matrix O_T_C;

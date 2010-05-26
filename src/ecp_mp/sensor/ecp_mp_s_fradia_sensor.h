@@ -29,15 +29,6 @@ namespace mrrocpp {
 namespace ecp_mp {
 namespace sensor {
 
-///*!
-// * \brief Types commands sent to PW_HaarDetect task.
-// */
-//typedef enum _HD_MODE
-//{
-//	WITHOUT_ROTATION, PERFORM_ROTATION
-//} hd_mode_t;
-
-
 /*!
  * Class for communication with FraDIA. Parametrized by received structure.
  * make fradia process blocking queries: in FraDIA ImageProcessor's constructor make sure you call
@@ -231,16 +222,16 @@ void fradia_sensor <CONFIGURE_T, INITIATE_T, READING_T>::configure_sensor()
 
 	FRADIA_COMMAND_CONFIGURE configure_command;
 	if (fradia_task.size() >= task_name_max_length) {
-		throw runtime_error("fradia_task.size() >= task_name_max_length");
+		throw std::runtime_error("fradia_task.size() >= task_name_max_length");
 	}
-	strpcy(configure_command.task_name, fradia_task.c_str());
+	strcpy(configure_command.task_name, fradia_task.c_str());
 	configure_command.configure_params = configure_message;
 	send_to_fradia(configure_command);
 
 	while (1) {
 		reply_header = receive_from_fradia <FRADIA_REPLY_HEADER> ();
 		if (reply_header.vsp_report != lib::VSP_REPLY_OK) {
-			throw runtime_error("error loading FraDIA task");
+			throw std::runtime_error("error loading FraDIA task");
 		}
 		if (reply_header.data_size == 0) {
 			break;
@@ -302,6 +293,12 @@ void fradia_sensor <CONFIGURE_T, INITIATE_T, READING_T>::set_initiate_message(co
 {
 	initiate_message = msg;
 	send_initiate_message = true;
+}
+
+template <typename CONFIGURE_T, typename INITIATE_T, typename READING_T>
+const READING_T& fradia_sensor <CONFIGURE_T, INITIATE_T, READING_T>::get_reading_message() const
+{
+	return reading_message;
 }
 
 } // namespace sensor

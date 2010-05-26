@@ -93,7 +93,7 @@ void acq_eih::main_task_algorithm(void ){
 	ecp_sub_task::ecp_t.sr_ecp_msg->message("ECP eihacquisition ready");
 
 	//Czekam, az czujnik bedzie skonfigurowany.
-	ecp_mp::sensor::fradia_sensor<chessboard_t,lib::empty_t> * fradia = dynamic_cast<ecp_mp::sensor::fradia_sensor<chessboard_t,lib::empty_t> *> (ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_CVFRADIA]);
+	//ecp_mp::sensor::fradia_sensor<chessboard_t,lib::empty_t> * fradia = dynamic_cast<ecp_mp::sensor::fradia_sensor<chessboard_t,lib::empty_t> *> (ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_CVFRADIA]);
 	fradia->get_reading();
 	while(fradia->get_report() == lib::VSP_SENSOR_NOT_CONFIGURED) {
 		fradia->get_reading();
@@ -106,7 +106,7 @@ void acq_eih::main_task_algorithm(void ){
 	smoothgen->Move();
 
 	// doprowadzenie chwytaka do szachownicy "wodzeniem za nos"
-	while(fradia->image.found == false){
+	while(fradia->get_reading_message().found == false){
 		fradia->get_reading();
 		nose->Move();
 		generator->Move();
@@ -125,7 +125,7 @@ void acq_eih::main_task_algorithm(void ){
 //	std::cout<<sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.chessboard.found<<std::endl;
 
 	//opusc chwytak az przestanie "widziec" szachownice
-	while(fradia->image.found == true && !calibrated){
+	while(fradia->get_reading_message().found == true && !calibrated){
 		//opuszczenie chwytaka o 2.5 cm
 		smoothgen->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, vv, aa, 0.0, 0.0, -1.0 * A, 0.0, 0.0, 0.0, 0.0, 0.0, true);
 		smoothgen->Move();
@@ -179,7 +179,7 @@ void acq_eih::main_task_algorithm(void ){
 				e = -1.0 * E;
 			}
 
-			while(((fradia->image.found) == true)
+			while(((fradia->get_reading_message().found) == true)
 				&& calibrated == false && m < M )
 			{
 				smoothgen->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, vv, aa, 0.0, 0.0, 0.0, e, c, d, 0.0, 0.0, true);
@@ -243,7 +243,7 @@ void acq_eih::main_task_algorithm(void ){
 				b = -1.0 * A;
 			}
 
-			while(fradia->image.found == true && calibrated == false && flaga)
+			while(fradia->get_reading_message().found == true && calibrated == false && flaga)
 			{
 				smoothgen->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, vv, aa, a, b, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, true);
 				smoothgen->Move();
@@ -287,7 +287,7 @@ void acq_eih::main_task_algorithm(void ){
 /*start2 b>0 d<0*/				if (a > 0.0 && m == 0 && c > 0 && ((i == 0 && j == 1) || ( i == 1 && j == 1) || (i == 2 && j == 2) || (i == 3 && j == 3)))
 /*start1 a>0 c>0 ot i p*/					flaga = false;
 
-					while(((fradia->image.found) == true)
+					while(((fradia->get_reading_message().found) == true)
 						&& (calibrated == false) && m < M && flaga)
 					{
 						smoothgen->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, vv, aa, 0.0, 0.0, 0.0, e, c, d, 0.0, 0.0, true);
@@ -362,9 +362,9 @@ bool acq_eih::store_data(void )
 {
 	int i,j=0;
 
-	ecp_mp::sensor::fradia_sensor<chessboard_t,lib::empty_t> * fradia = dynamic_cast<ecp_mp::sensor::fradia_sensor<chessboard_t,lib::empty_t> *> (ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_CVFRADIA]);
+	//ecp_mp::sensor::fradia_sensor<chessboard_t,lib::empty_t> * fradia = dynamic_cast<ecp_mp::sensor::fradia_sensor<chessboard_t,lib::empty_t> *> (ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_CVFRADIA]);
 
-	if(fradia->image.found == true && !calibrated)
+	if(fradia->get_reading_message().found == true && !calibrated)
 	{
 		for(i=0; i<12; ++i)
 		{
@@ -373,7 +373,7 @@ bool acq_eih::store_data(void )
 			{
 				// translation vector
 				gsl_vector_set (ofp.k, 3 * generator->count + j, generator->tab[i]);
-				gsl_vector_set (ofp.m, 3 * generator->count + j, fradia->image.transformation_matrix[i]);
+				gsl_vector_set (ofp.m, 3 * generator->count + j, fradia->get_reading_message().transformation_matrix[i]);
 				++j;
 			}
 			// store rotation matrix received from robot
@@ -381,7 +381,7 @@ bool acq_eih::store_data(void )
 			{
 				// rotation matrix
 				gsl_matrix_set (ofp.K, 3 * generator->count + j, i % 4, generator->tab[i]);
-				gsl_matrix_set (ofp.M, 3 * generator->count + j, i % 4, fradia->image.transformation_matrix[i]);
+				gsl_matrix_set (ofp.M, 3 * generator->count + j, i % 4, fradia->get_reading_message().transformation_matrix[i]);
 			}
 		}
 	}

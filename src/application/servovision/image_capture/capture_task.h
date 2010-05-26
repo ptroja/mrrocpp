@@ -28,6 +28,10 @@ struct effectorTranslation {
 	double z;
 };
 
+
+typedef mrrocpp::ecp_mp::sensor::fradia_sensor <char, effectorTranslation, char> capture_image_sensor;
+
+
 class CaptureTask: public mrrocpp::ecp::common::task::task
 {
 public:
@@ -36,7 +40,7 @@ public:
 	void main_task_algorithm(void);
 protected:
 	mrrocpp::ecp::common::generator::smooth* smoothGen;
-	mrrocpp::ecp_mp::sensor::fradia_sensor<char, effectorTranslation>* fradiaSensor;
+	capture_image_sensor* fradiaSensor;
 
 	effectorTranslation et;
 

@@ -26,11 +26,9 @@ CaptureTask::CaptureTask(mrrocpp::lib::configurator& configurator) :
 	log_enabled = log_dbg_enabled = true;
 	ecp_m_robot = new ecp::irp6ot::robot(*this);
 	smoothGen = new mrrocpp::ecp::common::generator::smooth(*this, true);
-	fradiaSensor
-			= new mrrocpp::ecp_mp::sensor::fradia_sensor <char, effectorTranslation>(configurator, "[capture_task_fradia_config]");
+	fradiaSensor = new capture_image_sensor(configurator, "[capture_task_fradia_config]", 0);
 	fradiaSensor->configure_sensor();
 	et.captureNow = false;
-	fradiaSensor->configure_fradia_task(et);
 
 	configurator.value <double> ("x_points", "[capture_image]");
 
@@ -48,7 +46,7 @@ CaptureTask::CaptureTask(mrrocpp::lib::configurator& configurator) :
 
 CaptureTask::~CaptureTask()
 {
-
+	delete fradiaSensor;
 }
 
 void CaptureTask::main_task_algorithm(void)
@@ -63,13 +61,13 @@ void CaptureTask::main_task_algorithm(void)
 	 smoothGen->load_coordinates(lib::ECP_JOINT, v, a, initialPositionJoints, true);
 	 smoothGen->Move();*/
 
-//	double v[MAX_SERVOS_NR] = { 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02 };
-//	double a[MAX_SERVOS_NR] = { 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02 };
-//
-//	smoothGen->reset();
-//	smoothGen->set_absolute();
-//	smoothGen->load_xyz_angle_axis(v, a, 0.925, 0, 0.05, -2.218, -2.218, 0, 0.075, 0, true);
-//	smoothGen->Move();
+	//	double v[MAX_SERVOS_NR] = { 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02 };
+	//	double a[MAX_SERVOS_NR] = { 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02 };
+	//
+	//	smoothGen->reset();
+	//	smoothGen->set_absolute();
+	//	smoothGen->load_xyz_angle_axis(v, a, 0.925, 0, 0.05, -2.218, -2.218, 0, 0.075, 0, true);
+	//	smoothGen->Move();
 
 	log("\n");
 	fflush(stdout);
@@ -128,7 +126,7 @@ void CaptureTask::nextPosition(double deltaX, double deltaY, double deltaZ)
 void CaptureTask::captureImage()
 {
 	sleep(2);
-	fradiaSensor->configure_fradia_task(et);
+	fradiaSensor->set_initiate_message(et);
 	sleep(2);
 }
 
