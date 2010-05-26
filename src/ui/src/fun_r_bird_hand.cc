@@ -26,6 +26,7 @@
 // #include "ui/ui.h"
 // Konfigurator.
 #include "lib/configurator.h"
+#include "ui/ui_ecp_r_bird_hand.h"
 #include "ui/ui_ecp.h"
 
 /* Local headers */
@@ -96,19 +97,19 @@ int EDP_bird_hand_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 						ui.bird_hand.state.edp.node_name);
 				{
 					boost::unique_lock<boost::mutex> lock(process_creation_mtx);
-					ui_robot.bird_hand = new ui_bird_hand_robot(*ui.config,
-							*ui_msg.all_ecp);
+					ui.bird_hand.ui_ecp_robot = new ui_bird_hand_robot(
+							*ui.config, *ui_msg.all_ecp);
 
 				}
 
 				ui.bird_hand.state.edp.pid
-						= ui_robot.bird_hand->the_robot->get_EDP_pid();
+						= ui.bird_hand.ui_ecp_robot->the_robot->get_EDP_pid();
 
 				if (ui.bird_hand.state.edp.pid < 0) {
 
 					ui.bird_hand.state.edp.state = 0;
 					fprintf(stderr, "EDP spawn failed: %s\n", strerror(errno));
-					delete ui_robot.bird_hand;
+					delete ui.bird_hand.ui_ecp_robot;
 				} else { // jesli spawn sie powiodl
 
 					ui.bird_hand.state.edp.state = 1;
@@ -130,7 +131,7 @@ int EDP_bird_hand_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 					// odczytanie poczatkowego stanu robota (komunikuje sie z EDP)
 					lib::controller_state_t robot_controller_initial_state_tmp;
 
-					ui_robot.bird_hand->get_controller_state(
+					ui.bird_hand.ui_ecp_robot->get_controller_state(
 							robot_controller_initial_state_tmp);
 
 					//ui.bird_hand.state.edp.state = 1; // edp wlaczone reader czeka na start
@@ -180,7 +181,7 @@ int EDP_bird_hand_slay_int(PtWidget_t *widget, ApInfo_t *apinfo,
 						__FILE__, __LINE__, strerror(errno));
 			}
 		}
-		delete ui_robot.bird_hand;
+		delete ui.bird_hand.ui_ecp_robot;
 		ui.bird_hand.state.edp.state = 0; // edp wylaczone
 		ui.bird_hand.state.edp.is_synchronised = false;
 

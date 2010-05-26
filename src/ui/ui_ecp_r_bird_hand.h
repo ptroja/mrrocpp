@@ -21,9 +21,9 @@ class ui_bird_hand_robot {
 public:
 
 	// zadawanie nastaw regulatorow
-	lib::single_thread_port<lib::bird_hand_command>
+	mrrocpp::lib::single_thread_port<mrrocpp::lib::bird_hand_command>
 			*bird_hand_command_data_port;
-	lib::bird_hand_command bird_hand_command_structure;
+	mrrocpp::lib::bird_hand_command bird_hand_command_structure;
 
 	// zadawanie parametrow konfiguracji
 	lib::single_thread_port<lib::bird_hand_configuration>

@@ -10,6 +10,8 @@
 
 #include "ui/ui.h"
 
+class ui_bird_hand_robot;
+
 //
 //
 // KLASA UiRobotBirdHand
@@ -24,6 +26,8 @@ class UiRobotBirdHand {
 private:
 
 public:
+
+	ui_bird_hand_robot *ui_ecp_robot;
 
 	bool is_wnd_bird_hand_command_and_status_open;
 	bool is_wnd_bird_hand_configuration_open;
