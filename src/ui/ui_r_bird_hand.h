@@ -34,6 +34,7 @@ public:
 
 	UiRobotBirdHand();
 	int reload_configuration();
+	int manage_interface();
 };
 
 #endif

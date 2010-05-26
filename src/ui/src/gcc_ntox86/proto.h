@@ -819,7 +819,6 @@ int EDP_bird_hand_slay(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
 int EDP_bird_hand_slay_int(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
-int manage_interface_bird_hand(void);
 
 /* ../timer.cc */
 int OnTimer(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo);

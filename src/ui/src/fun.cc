@@ -1564,7 +1564,7 @@ int manage_interface() {
 	manage_interface_smb();
 	manage_interface_shead();
 
-	manage_interface_bird_hand();
+	ui.bird_hand.manage_interface();
 
 	// Dla robota SPEAKER
 	manage_interface_speaker();
