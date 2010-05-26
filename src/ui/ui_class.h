@@ -80,6 +80,7 @@ public:
 	UiRobotBirdHand bird_hand;
 
 	Ui();
+	void UI_close(void);
 	void init();
 	int manage_interface(void);
 	int reload_whole_configuration();

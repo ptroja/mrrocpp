@@ -780,7 +780,7 @@ int quit(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 	if (do_close) // jesli apliakcja ma byc zamknieta
 	{
-		UI_close();
+		ui.UI_close();
 	}
 	return (Pt_CONTINUE);
 

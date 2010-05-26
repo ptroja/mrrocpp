@@ -1,6 +1,8 @@
 /* Y o u r   D e s c r i p t i o n                       */
 /*                            AppBuilder Photon Code Lib */
 /*                                         Version 2.01  */
+#include <iostream>
+#include <fstream>
 
 #include "ui/ui_class.h"
 
@@ -23,6 +25,13 @@ Ui::Ui() :
 	mp.state = UI_MP_NOT_PERMITED_TO_RUN;// mp wylaczone
 	mp.last_state = UI_MP_NOT_PERMITED_TO_RUN;// mp wylaczone
 	mp.pid = -1;
+	ui_state = 1;// ui working
+	file_window_mode = FSTRAJECTORY; // uczenie
+	is_task_window_open = false;// informacja czy okno zadanai jest otwarte
+	is_process_control_window_open = false;// informacja czy okno sterowania procesami jest otwarte
+	process_control_window_renew = true;
+	is_file_selection_window_open = false;
+	is_teaching_window_open = false;
 
 }
 
@@ -70,6 +79,76 @@ void Ui::init() {
 
 	// printf ("Remember to create gns server\n");
 
+
+	set_ui_state_notification(UI_N_STARTING);
+
+	signal(SIGINT, &catch_signal);// by y aby uniemozliwic niekontrolowane zakonczenie aplikacji ctrl-c z kalwiatury
+	signal(SIGALRM, &catch_signal);
+	signal(SIGSEGV, &catch_signal);
+#ifdef PROCESS_SPAWN_RSH
+	signal(SIGCHLD, &catch_signal);
+#endif /* PROCESS_SPAWN_RSH */
+
+	lib::set_thread_priority(pthread_self(), MAX_PRIORITY - 6);
+
+	// pierwsze zczytanie pliku konfiguracyjnego (aby pobrac nazwy dla pozostalych watkow UI)
+	if (get_default_configuration_file_name() >= 1) // zczytaj nazwe pliku konfiguracyjnego
+	{
+		initiate_configuration();
+		// sprawdza czy sa postawione gns's i ew. stawia je
+		// uwaga serwer musi byc wczesniej postawiony
+		check_gns();
+	} else {
+		printf("Blad manage_default_configuration_file\n");
+		PtExit(EXIT_SUCCESS);
+	}
+
+	create_threads();
+
+	// Zablokowanie domyslnej obslugi sygnalu SIGINT w watkach UI_SR i UI_COMM
+
+
+	// kolejne zczytanie pliku konfiguracyjnego
+	if (get_default_configuration_file_name() == 1) // zczytaj nazwe pliku konfiguracyjnego
+	{
+		reload_whole_configuration();
+
+	} else {
+		printf("Blad manage_default_configuration_file\n");
+		PtExit(EXIT_SUCCESS);
+	}
+
+	// inicjacja pliku z logami sr
+	check_gns();
+
+	time_t time_of_day;
+	char file_date[50];
+	char log_file_with_dir[100];
+	char file_name[50];
+
+	time_of_day = time(NULL);
+	strftime(file_date, 40, "%g%m%d_%H-%M-%S", localtime(&time_of_day));
+
+	sprintf(file_name, "/%s_sr_log", file_date);
+
+	// 	strcpy(file_name,"/pomiar.p");
+	strcpy(log_file_with_dir, "../logs/");
+
+	if (access(log_file_with_dir, R_OK) != 0) {
+		mkdir(log_file_with_dir, S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH
+				| S_IXOTH);
+	}
+
+	strcat(log_file_with_dir, file_name);
+
+	log_file_outfile = new std::ofstream(log_file_with_dir, std::ios::out);
+
+	if (!(*log_file_outfile)) {
+		std::cerr << "Cannot open file: " << file_name << '\n';
+		perror("because of");
+	}
+
+	manage_interface();
 
 }
 
@@ -291,7 +370,7 @@ int Ui::reload_whole_configuration() {
 		fill_program_node_list();
 
 		/*
-		 for (list<char*>::iterator list_iterator = ui.section_list.begin(); list_iterator != ui.section_list.end(); list_iterator++)
+		 for (list<char*>::iterator list_iterator = section_list.begin(); list_iterator != section_list.end(); list_iterator++)
 		 {
 		 printf("section_name: %s\n", *list_iterator);
 
@@ -302,7 +381,7 @@ int Ui::reload_whole_configuration() {
 		 printf("node_name: %s\n", *node_list_iterator);
 		 }
 
-		 for (list<program_node_def>::iterator program_node_list_iterator = ui.program_node_list.begin(); program_node_list_iterator != ui.program_node_list.end(); program_node_list_iterator++)
+		 for (list<program_node_def>::iterator program_node_list_iterator = program_node_list.begin(); program_node_list_iterator != program_node_list.end(); program_node_list_iterator++)
 		 {
 		 printf("node_name: %s\n", program_node_list_iterator->node_name);
 		 }
@@ -345,5 +424,11 @@ int Ui::reload_whole_configuration() {
 	manage_interface();
 
 	return 1;
+}
+
+void Ui::UI_close(void) {
+	printf("UI CLOSING\n");
+	delay(100);// czas na ustabilizowanie sie edp
+	ui_state = 2;// funcja OnTimer dowie sie ze aplikacja ma byc zamknieta
 }
 

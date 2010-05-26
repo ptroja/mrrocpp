@@ -70,7 +70,7 @@ void catch_signal(int sig) {
 
 	switch (sig) {
 	case SIGINT:
-		UI_close();
+		ui.UI_close();
 		break;
 	case SIGALRM:
 		break;
@@ -119,30 +119,12 @@ void catch_signal(int sig) {
 	} // end: switch
 }
 
-void UI_close(void) {
-	printf("UI CLOSING\n");
-	delay(100);// czas na ustabilizowanie sie edp
-	ui.ui_state = 2;// funcja OnTimer dowie sie ze aplikacja ma byc zamknieta
-}
 
 int init(PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 	/* eliminate 'unreferenced' warnings */
 	link_instance = link_instance, apinfo = apinfo, cbinfo = cbinfo;
-
-	set_ui_state_notification(UI_N_STARTING);
-
-	signal(SIGINT, &catch_signal);// by y aby uniemozliwic niekontrolowane zakonczenie aplikacji ctrl-c z kalwiatury
-	signal(SIGALRM, &catch_signal);
-	signal(SIGSEGV, &catch_signal);
-#ifdef PROCESS_SPAWN_RSH
-	signal(SIGCHLD, &catch_signal);
-#endif /* PROCESS_SPAWN_RSH */
-
-	lib::set_thread_priority(pthread_self(), MAX_PRIORITY - 6);
-
-	ui.ui_state = 1;// ui working
 
 	ui_state.irp6ot_m.edp.state = -1; // edp nieaktywne
 	ui_state.irp6ot_m.edp.last_state = -1; // edp nieaktywne
@@ -204,12 +186,6 @@ int init(PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 	ui_state.shead.edp.section_name = EDP_SHEAD_SECTION;
 	ui_state.shead.ecp.section_name = ECP_SHEAD_SECTION;
 
-	ui.file_window_mode = FSTRAJECTORY; // uczenie
-
-	ui.is_task_window_open = false;// informacja czy okno zadanai jest otwarte
-	ui.is_process_control_window_open = false;// informacja czy okno sterowania procesami jest otwarte
-	ui.process_control_window_renew = true;
-	ui.is_file_selection_window_open = false;
 	ui_state.is_wind_irp6ot_int_open = false;
 	ui_state.is_wind_irp6p_int_open = false;
 	ui_state.is_wind_irp6m_int_open = false;
@@ -230,7 +206,7 @@ int init(PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 	ui_state.is_wind_irp6ot_xyz_euler_zyz_ts_open = false;
 	ui_state.is_wind_irp6p_xyz_euler_zyz_ts_open = false;
 	ui_state.is_wind_irp6m_xyz_euler_zyz_ts_open = false;
-	ui.is_teaching_window_open = false;
+
 	ui_state.is_wind_conveyor_moves_open = false;
 	ui_state.is_wind_irp6ot_tfg_moves_open = false;
 	ui_state.is_wind_irp6p_tfg_moves_open = false;
@@ -262,65 +238,6 @@ int init(PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 	// some variables initialization
 	ui.init();
-
-	// pierwsze zczytanie pliku konfiguracyjnego (aby pobrac nazwy dla pozostalych watkow UI)
-	if (get_default_configuration_file_name() >= 1) // zczytaj nazwe pliku konfiguracyjnego
-	{
-		initiate_configuration();
-		// sprawdza czy sa postawione gns's i ew. stawia je
-		// uwaga serwer musi byc wczesniej postawiony
-		check_gns();
-	} else {
-		printf("Blad manage_default_configuration_file\n");
-		PtExit(EXIT_SUCCESS);
-	}
-
-	create_threads();
-
-	// Zablokowanie domyslnej obslugi sygnalu SIGINT w watkach UI_SR i UI_COMM
-
-
-	// kolejne zczytanie pliku konfiguracyjnego
-	if (get_default_configuration_file_name() == 1) // zczytaj nazwe pliku konfiguracyjnego
-	{
-		ui.reload_whole_configuration();
-
-	} else {
-		printf("Blad manage_default_configuration_file\n");
-		PtExit(EXIT_SUCCESS);
-	}
-
-	// inicjacja pliku z logami sr
-	check_gns();
-
-	time_t time_of_day;
-	char file_date[50];
-	char log_file_with_dir[100];
-	char file_name[50];
-
-	time_of_day = time(NULL);
-	strftime(file_date, 40, "%g%m%d_%H-%M-%S", localtime(&time_of_day));
-
-	sprintf(file_name, "/%s_sr_log", file_date);
-
-	// 	strcpy(file_name,"/pomiar.p");
-	strcpy(log_file_with_dir, "../logs/");
-
-	if (access(log_file_with_dir, R_OK) != 0) {
-		mkdir(log_file_with_dir, S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH
-				| S_IXOTH);
-	}
-
-	strcat(log_file_with_dir, file_name);
-
-	ui.log_file_outfile = new std::ofstream(log_file_with_dir, std::ios::out);
-
-	if (!(*ui.log_file_outfile)) {
-		std::cerr << "Cannot open file: " << file_name << '\n';
-		perror("because of");
-	}
-
-	ui.manage_interface();
 
 	return (Pt_CONTINUE);
 
