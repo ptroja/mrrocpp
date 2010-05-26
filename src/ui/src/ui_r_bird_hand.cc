@@ -18,23 +18,12 @@ extern ui_state_def ui_state;
 
 
 UiRobotBirdHand::UiRobotBirdHand() :
-	tid(NULL), ui_ecp_robot(NULL), is_wnd_bird_hand_command_and_status_open(
+	UiRobot(), ui_ecp_robot(NULL), is_wnd_bird_hand_command_and_status_open(
 			false), is_wnd_bird_hand_configuration_open(false) {
 
-	state.edp.state = -1; // edp nieaktywne
-	state.edp.last_state = -1; // edp nieaktywne
-	state.ecp.trigger_fd = -1;
 	state.edp.section_name = EDP_BIRD_HAND_SECTION;
 	state.ecp.section_name = ECP_BIRD_HAND_SECTION;
 
-}
-
-void UiRobotBirdHand::create_thread() {
-	tid = new feb_thread(eb);
-}
-
-void UiRobotBirdHand::abort_thread() {
-	delete tid;
 }
 
 int UiRobotBirdHand::reload_configuration() {

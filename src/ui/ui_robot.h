@@ -5,35 +5,35 @@
 // Ostatnia modyfikacja: 2010
 // -------------------------------------------------------------------------
 
-#ifndef __UI_R_BIRD_HAND_H
-#define __UI_R_BIRD_HAND_H
+#ifndef __UI_ROBOT_H
+#define __UI_ROBOT_H
 
 #include "ui/ui.h"
-#include "ui/ui_robot.h"
 
 //
 //
-// KLASA UiRobotBirdHand
+// KLASA UiRobot
 //
 //
 
 
 // super klasa agregujaca porozrzucane struktury
 
-class ui_bird_hand_robot;
 
-class UiRobotBirdHand: public UiRobot {
+class UiRobot {
 private:
 
 public:
 
-	ui_bird_hand_robot *ui_ecp_robot;
+	feb_thread* tid;
+	function_execution_buffer eb;
 
-	bool is_wnd_bird_hand_command_and_status_open;
-	bool is_wnd_bird_hand_configuration_open;
+	ecp_edp_ui_robot_def state;
 
-	UiRobotBirdHand();
-	int reload_configuration();
+	UiRobot();
+	virtual int reload_configuration()= 0;
+	void create_thread();
+	void abort_thread();
 };
 
 #endif
