@@ -92,7 +92,7 @@ int EDP_bird_hand_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 			} else if (check_node_existence(ui.bird_hand.state.edp.node_name,
 					std::string("edp_bird_hand"))) {
 
-				ui.bird_hand.state.edp.node_nr =ui.config->return_node_number(
+				ui.bird_hand.state.edp.node_nr = ui.config->return_node_number(
 						ui.bird_hand.state.edp.node_name);
 				{
 					boost::unique_lock<boost::mutex> lock(process_creation_mtx);

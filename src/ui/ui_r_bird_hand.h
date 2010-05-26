@@ -9,7 +9,6 @@
 #define __UI_R_BIRD_HAND_H
 
 #include "ui/ui.h"
-#include "ui/ui_r_bird_hand.h"
 
 //
 //
