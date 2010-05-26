@@ -92,7 +92,7 @@ bool check_synchronised_and_loaded(ecp_edp_ui_robot_def &robot);
 bool check_loaded_or_inactive(ecp_edp_ui_robot_def &robot);
 bool check_loaded(ecp_edp_ui_robot_def &robot);
 int check_edps_state_and_modify_mp_state(void);
-int manage_interface(void);
+
 int clear_console(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
 int unload_all(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo);

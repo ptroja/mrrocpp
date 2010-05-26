@@ -35,10 +35,12 @@ public:
 	// bool is_any_edp_active;
 	bool is_mp_and_ecps_active;
 
+	UI_ALL_EDPS_STATE all_edps;
 
 	UiRobotBirdHand bird_hand;
 
 	Ui();
+	int manage_interface(void);
 
 };
 

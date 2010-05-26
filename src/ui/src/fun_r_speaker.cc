@@ -295,7 +295,7 @@ int EDP_speaker_create(PtWidget_t *widget, ApInfo_t *apinfo,
 	} // end try
 	CATCH_SECTION_UI
 
-	manage_interface();
+	ui.manage_interface();
 
 	return (Pt_CONTINUE);
 
@@ -330,7 +330,7 @@ int EDP_speaker_slay(PtWidget_t *widget, ApInfo_t *apinfo,
 	}
 
 	// modyfikacja menu
-	manage_interface();
+	ui.manage_interface();
 
 	return (Pt_CONTINUE);
 

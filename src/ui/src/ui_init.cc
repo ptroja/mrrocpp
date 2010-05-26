@@ -211,7 +211,6 @@ int init(PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 	ui_state.shead.ecp.section_name = ECP_SHEAD_SECTION;
 
 	ui_state.file_window_mode = FSTRAJECTORY; // uczenie
-	ui_state.all_edps = UI_ALL_EDPS_NONE_EDP_LOADED;
 
 	ui_state.is_task_window_open = false;// informacja czy okno zadanai jest otwarte
 	ui_state.is_process_control_window_open = false;// informacja czy okno sterowania procesami jest otwarte
@@ -362,7 +361,7 @@ int init(PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 		perror("because of");
 	}
 
-	manage_interface();
+	ui.manage_interface();
 
 	return (Pt_CONTINUE);
 

@@ -142,7 +142,7 @@ int EDP_bird_hand_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 
 	CATCH_SECTION_UI
 
-	manage_interface();
+	ui.manage_interface();
 
 	return 1;
 }
@@ -191,7 +191,7 @@ int EDP_bird_hand_slay_int(PtWidget_t *widget, ApInfo_t *apinfo,
 
 	// modyfikacja menu
 
-	manage_interface();
+	ui.manage_interface();
 
 	return (Pt_CONTINUE);
 

@@ -165,8 +165,7 @@ typedef struct {
 
 typedef struct {
 
-	UI_ALL_EDPS_STATE all_edps;
-	std::string binaries_network_path; // sieciowa sciezka binariow mrrocpp
+		std::string binaries_network_path; // sieciowa sciezka binariow mrrocpp
 	std::string binaries_local_path; // lokalna sciezka binariow mrrocpp
 	std::string mrrocpp_local_path; // lokalna sciezka mrrocpp: np. "/home/yoyek/mrrocpp/". W niej katalogi bin, configs etc.
 

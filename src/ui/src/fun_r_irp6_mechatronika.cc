@@ -255,7 +255,7 @@ int EDP_irp6_mechatronika_create(PtWidget_t *widget, ApInfo_t *apinfo,
 	} // end try
 	CATCH_SECTION_UI
 
-	manage_interface();
+	ui.manage_interface();
 
 	return (Pt_CONTINUE);
 
@@ -289,7 +289,7 @@ int EDP_irp6_mechatronika_slay(PtWidget_t *widget, ApInfo_t *apinfo,
 	}
 
 	// modyfikacja menu
-	manage_interface();
+	ui.manage_interface();
 
 	return (Pt_CONTINUE);
 
@@ -342,7 +342,7 @@ int EDP_irp6_mechatronika_synchronise(PtWidget_t *widget, ApInfo_t *apinfo,
 	CATCH_SECTION_UI
 
 	// modyfikacje menu
-	manage_interface();
+	ui.manage_interface();
 
 	return (Pt_CONTINUE);
 
