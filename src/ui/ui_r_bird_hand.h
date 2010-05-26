@@ -26,8 +26,13 @@ private:
 
 public:
 
-	UiRobotBirdHand();
+	bool is_wnd_bird_hand_command_and_status_open;
+	bool is_wnd_bird_hand_configuration_open;
 
+	ecp_edp_ui_robot_def state;
+
+	UiRobotBirdHand();
+	int reload_configuration();
 };
 
 #endif

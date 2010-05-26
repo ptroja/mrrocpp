@@ -201,7 +201,6 @@ typedef struct {
 	ecp_edp_ui_robot_def conveyor;
 	ecp_edp_ui_robot_def speaker;
 	ecp_edp_ui_robot_def spkm;
-	ecp_edp_ui_robot_def bird_hand;
 	ecp_edp_ui_robot_def smb;
 	ecp_edp_ui_robot_def shead;
 
@@ -217,9 +216,6 @@ typedef struct {
 	bool is_task_window_open; // informacja czy okno zadania jest otwarte
 	bool is_process_control_window_open; // informacja czy okno sterowania procesami jest otwarte
 	bool process_control_window_renew; // czy okno ma zostac odswierzone
-
-	bool is_wnd_bird_hand_command_and_status_open;
-	bool is_wnd_bird_hand_configuration_open;
 
 	bool is_wind_irp6ot_int_open; // informacja czy okno ruchow w radianach stawow jest otwarte
 	bool is_wind_irp6p_int_open; // informacja czy okno ruchow w radianach stawow jest otwarte

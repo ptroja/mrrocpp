@@ -185,10 +185,10 @@ EDP_polycrank_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cb
 			ui_msg.ui->message(lib::NON_FATAL_ERROR,"edp_irp6_mechatronika already exists");
 
 		} else if (check_node_existence(ui_state.irp6_mechatronika.edp.node_name, std::string("edp_irp6_mechatronika"))) {
-			ui_state.irp6_mechatronika.edp.node_nr = config->return_node_number(ui_state.irp6_mechatronika.edp.node_name);
+			ui_state.irp6_mechatronika.edp.node_nr =ui.config->return_node_number(ui_state.irp6_mechatronika.edp.node_name);
 
 			ui_robot.irp6_mechatronika = new ui_irp6_common_robot(
-					*config, *ui_msg.all_ecp,
+					*ui.config, *ui_msg.all_ecp,
 					lib::ROBOT_IRP6_MECHATRONIKA);
 
 			ui_state.irp6_mechatronika.edp.pid = ui_robot.irp6_mechatronika->ecp->get_EDP_pid();
@@ -2445,14 +2445,14 @@ int
 reload_polycrank_configuration ()
 {
 	// jesli IRP6 mechatronika ma byc aktywne
-	if ((ui_state.irp6_mechatronika.is_active = config->value<int>("is_irp6_mechatronika_active")) == 1)
+	if ((ui_state.irp6_mechatronika.is_active =ui.config->value<int>("is_irp6_mechatronika_active")) == 1)
 	{
 
 		// ui_state.is_any_edp_active = true;
 		// ini_con->create_ecp_irp6_mechatronika (ini_con->ui->ecp_irp6_mechatronika_section);
 		if (ui_state.is_mp_and_ecps_active)
 		{
-			ui_state.irp6_mechatronika.ecp.network_trigger_attach_point = config->return_attach_point_name
+			ui_state.irp6_mechatronika.ecp.network_trigger_attach_point =ui.config->return_attach_point_name
 				(lib::configurator::CONFIG_SERVER, "trigger_attach_point", ui_state.irp6_mechatronika.ecp.section_name.c_str());
 
 	 		ui_state.irp6_mechatronika.ecp.pid = -1;
@@ -2474,10 +2474,10 @@ reload_polycrank_configuration ()
 					char tmp_string[50];
 					sprintf(tmp_string, "preset_position_%d", i);
 
-					if (config->exists(tmp_string, ui_state.irp6_mechatronika.edp.section_name))
+					if (ui.config->exists(tmp_string, ui_state.irp6_mechatronika.edp.section_name))
 					{
 						char* tmp, *tmp1;
-						tmp1 = tmp = strdup(config->value<std::string>(tmp_string, ui_state.irp6_mechatronika.edp.section_name).c_str());
+						tmp1 = tmp = strdup(ui.config->value<std::string>(tmp_string, ui_state.irp6_mechatronika.edp.section_name).c_str());
 						char* toDel = tmp;
 						for (int j=0; j<8; j++)
 						{
@@ -2492,21 +2492,21 @@ reload_polycrank_configuration ()
 					}
 				}
 
-				if (config->exists("test_mode", ui_state.irp6_mechatronika.edp.section_name))
-					ui_state.irp6_mechatronika.edp.test_mode = config->value<int>("test_mode", ui_state.irp6_mechatronika.edp.section_name);
+				if (ui.config->exists("test_mode", ui_state.irp6_mechatronika.edp.section_name))
+					ui_state.irp6_mechatronika.edp.test_mode =ui.config->value<int>("test_mode", ui_state.irp6_mechatronika.edp.section_name);
 				else
 					ui_state.irp6_mechatronika.edp.test_mode = 0;
 
-				ui_state.irp6_mechatronika.edp.hardware_busy_attach_point = config->value<std::string>
+				ui_state.irp6_mechatronika.edp.hardware_busy_attach_point =ui.config->value<std::string>
 					("hardware_busy_attach_point", ui_state.irp6_mechatronika.edp.section_name);
 
-				ui_state.irp6_mechatronika.edp.network_resourceman_attach_point = config->return_attach_point_name
+				ui_state.irp6_mechatronika.edp.network_resourceman_attach_point =ui.config->return_attach_point_name
 					(lib::configurator::CONFIG_SERVER, "resourceman_attach_point", ui_state.irp6_mechatronika.edp.section_name.c_str());
 
-				ui_state.irp6_mechatronika.edp.network_reader_attach_point = config->return_attach_point_name
+				ui_state.irp6_mechatronika.edp.network_reader_attach_point =ui.config->return_attach_point_name
 					(lib::configurator::CONFIG_SERVER, "reader_attach_point", ui_state.irp6_mechatronika.edp.section_name.c_str());
 
-				ui_state.irp6_mechatronika.edp.node_name = config->value<std::string> ("node_name", ui_state.irp6_mechatronika.edp.section_name.c_str());
+				ui_state.irp6_mechatronika.edp.node_name =ui.config->value<std::string> ("node_name", ui_state.irp6_mechatronika.edp.section_name.c_str());
 
 			break;
 			case 1:

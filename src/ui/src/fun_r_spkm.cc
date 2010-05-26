@@ -22,6 +22,7 @@
 
 #include "lib/srlib.h"
 #include "ui/ui_const.h"
+#include "ui/ui_class.h"
 // #include "ui/ui.h"
 // Konfigurator.
 #include "lib/configurator.h"
@@ -32,10 +33,11 @@
 #include "abimport.h"
 #include "proto.h"
 
+extern Ui ui;
+
 extern boost::mutex process_creation_mtx;
 extern function_execution_buffer edp_spkm_eb;
 extern ui_state_def ui_state;
-extern lib::configurator* config;
 extern ui_msg_def ui_msg;
 extern ui_robot_def ui_robot;
 
@@ -87,11 +89,11 @@ int EDP_spkm_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 			} else if (check_node_existence(ui_state.spkm.edp.node_name,
 					std::string("edp_spkm"))) {
 
-				ui_state.spkm.edp.node_nr = config->return_node_number(
+				ui_state.spkm.edp.node_nr = ui.config->return_node_number(
 						ui_state.spkm.edp.node_name);
 				{
 					boost::unique_lock<boost::mutex> lock(process_creation_mtx);
-					ui_robot.spkm = new ui_tfg_and_conv_robot(*config,
+					ui_robot.spkm = new ui_tfg_and_conv_robot(*ui.config,
 							*ui_msg.all_ecp, lib::ROBOT_SPKM);
 
 				}
@@ -195,12 +197,13 @@ int EDP_spkm_slay_int(PtWidget_t *widget, ApInfo_t *apinfo,
 
 int reload_spkm_configuration() {
 	// jesli IRP6 on_track ma byc aktywne
-	if ((ui_state.spkm.is_active = config->value<int> ("is_spkm_active")) == 1) {
+	if ((ui_state.spkm.is_active = ui.config->value<int> ("is_spkm_active"))
+			== 1) {
 		// ini_con->create_ecp_spkm (ini_con->ui->ecp_spkm_section);
 		//ui_state.is_any_edp_active = true;
 		if (ui_state.is_mp_and_ecps_active) {
 			ui_state.spkm.ecp.network_trigger_attach_point
-					= config->return_attach_point_name(
+					= ui.config->return_attach_point_name(
 							lib::configurator::CONFIG_SERVER,
 							"trigger_attach_point",
 							ui_state.spkm.ecp.section_name);
@@ -218,29 +221,29 @@ int reload_spkm_configuration() {
 			ui_state.spkm.edp.reader_fd = -1;
 			ui_state.spkm.edp.state = 0;
 
-			if (config->exists("test_mode", ui_state.spkm.edp.section_name))
-				ui_state.spkm.edp.test_mode = config->value<int> ("test_mode",
-						ui_state.spkm.edp.section_name);
+			if (ui.config->exists("test_mode", ui_state.spkm.edp.section_name))
+				ui_state.spkm.edp.test_mode = ui.config->value<int> (
+						"test_mode", ui_state.spkm.edp.section_name);
 			else
 				ui_state.spkm.edp.test_mode = 0;
 
-			ui_state.spkm.edp.hardware_busy_attach_point = config->value<
+			ui_state.spkm.edp.hardware_busy_attach_point = ui.config->value<
 					std::string> ("hardware_busy_attach_point",
 					ui_state.spkm.edp.section_name);
 
 			ui_state.spkm.edp.network_resourceman_attach_point
-					= config->return_attach_point_name(
+					= ui.config->return_attach_point_name(
 							lib::configurator::CONFIG_SERVER,
 							"resourceman_attach_point",
 							ui_state.spkm.edp.section_name);
 
 			ui_state.spkm.edp.network_reader_attach_point
-					= config->return_attach_point_name(
+					= ui.config->return_attach_point_name(
 							lib::configurator::CONFIG_SERVER,
 							"reader_attach_point",
 							ui_state.spkm.edp.section_name);
 
-			ui_state.spkm.edp.node_name = config->value<std::string> (
+			ui_state.spkm.edp.node_name = ui.config->value<std::string> (
 					"node_name", ui_state.spkm.edp.section_name);
 			break;
 		case 1:

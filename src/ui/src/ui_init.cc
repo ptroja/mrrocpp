@@ -42,7 +42,6 @@
 #include "lib/mis_fun.h"
 #include "lib/srlib.h"
 #include "ui/ui_const.h"
-#include "lib/configurator.h"
 #include "lib/mis_fun.h"
 #include "ui/ui_ecp.h"
 #include "lib/robot_consts/conveyor_const.h"
@@ -57,9 +56,9 @@
 #include <Pt.h>
 #include <Ph.h>
 
-extern ui_msg_def ui_msg;
+Ui ui;
 
-lib::configurator* config;
+extern ui_msg_def ui_msg;
 
 ui_state_def ui_state;
 
@@ -138,8 +137,6 @@ int init(PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 	set_ui_state_notification(UI_N_STARTING);
 
-	Ui ui;
-
 	struct utsname sysinfo;
 	char* cwd;
 	char buff[PATH_MAX + 1];
@@ -153,7 +150,7 @@ int init(PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 	lib::set_thread_priority(pthread_self(), MAX_PRIORITY - 6);
 
-	config = NULL;
+	ui.config = NULL;
 	ui_msg.ui = NULL;
 	ui_state.ui_state = 1;// ui working
 
@@ -204,15 +201,6 @@ int init(PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 	ui_state.spkm.ecp.trigger_fd = -1;
 	ui_state.spkm.edp.section_name = EDP_SPKM_SECTION;
 	ui_state.spkm.ecp.section_name = ECP_SPKM_SECTION;
-
-	ui_state.bird_hand.edp.state = -1; // edp nieaktywne
-	ui_state.bird_hand.edp.last_state = -1; // edp nieaktywne
-	ui_state.bird_hand.ecp.trigger_fd = -1;
-	ui_state.bird_hand.edp.section_name = EDP_BIRD_HAND_SECTION;
-	ui_state.bird_hand.ecp.section_name = ECP_BIRD_HAND_SECTION;
-
-	ui_state.is_wnd_bird_hand_command_and_status_open = false;
-	ui_state.is_wnd_bird_hand_configuration_open = false;
 
 	ui_state.smb.edp.state = -1; // edp nieaktywne
 	ui_state.smb.edp.last_state = -1; // edp nieaktywne

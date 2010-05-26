@@ -22,6 +22,7 @@
 
 #include "lib/srlib.h"
 #include "ui/ui_const.h"
+#include "ui/ui_class.h"
 // #include "ui/ui.h"
 // Konfigurator.
 #include "lib/configurator.h"
@@ -32,9 +33,11 @@
 #include "abimport.h"
 #include "proto.h"
 
+extern Ui ui;
+
 extern function_execution_buffer edp_smb_eb;
 extern ui_state_def ui_state;
-extern lib::configurator* config;
+
 extern ui_msg_def ui_msg;
 extern ui_robot_def ui_robot;
 extern boost::mutex process_creation_mtx;
@@ -79,17 +82,21 @@ int EDP_smb_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 			tmp2_string += ui_state.smb.edp.network_resourceman_attach_point;
 
 			// sprawdzenie czy nie jest juz zarejestrowany zarzadca zasobow
-			if ((!(ui_state.smb.edp.test_mode)) && (access(tmp_string.c_str(), R_OK) == 0)
-					|| (access(tmp2_string.c_str(), R_OK) == 0)) {
-				ui_msg.ui->message(lib::NON_FATAL_ERROR, "edp_smb already exists");
-			} else if (check_node_existence(ui_state.smb.edp.node_name, std::string("edp_smb"))) {
+			if ((!(ui_state.smb.edp.test_mode)) && (access(tmp_string.c_str(),
+					R_OK) == 0) || (access(tmp2_string.c_str(), R_OK) == 0)) {
+				ui_msg.ui->message(lib::NON_FATAL_ERROR,
+						"edp_smb already exists");
+			} else if (check_node_existence(ui_state.smb.edp.node_name,
+					std::string("edp_smb"))) {
 
-				ui_state.smb.edp.node_nr = config->return_node_number(ui_state.smb.edp.node_name);
+				ui_state.smb.edp.node_nr = ui.config->return_node_number(
+						ui_state.smb.edp.node_name);
 
 				{
 					boost::unique_lock<boost::mutex> lock(process_creation_mtx);
 
-					ui_robot.smb = new ui_tfg_and_conv_robot(*config, *ui_msg.all_ecp, lib::ROBOT_SMB);
+					ui_robot.smb = new ui_tfg_and_conv_robot(*ui.config,
+							*ui_msg.all_ecp, lib::ROBOT_SMB);
 				}
 				ui_state.smb.edp.pid = ui_robot.smb->ecp->get_EDP_pid();
 
@@ -106,23 +113,26 @@ int EDP_smb_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 					// kilka sekund  (~1) na otworzenie urzadzenia
 
 					while ((ui_state.smb.edp.reader_fd
-									= name_open(ui_state.smb.edp.network_reader_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL))
-							< 0)
-					if ((tmp++) < CONNECT_RETRY) {
-						delay(CONNECT_DELAY);
-					} else {
-						perror("blad odwolania do READER_OT");
-						break;
-					}
+							= name_open(
+									ui_state.smb.edp.network_reader_attach_point.c_str(),
+									NAME_FLAG_ATTACH_GLOBAL)) < 0)
+						if ((tmp++) < CONNECT_RETRY) {
+							delay(CONNECT_DELAY);
+						} else {
+							perror("blad odwolania do READER_OT");
+							break;
+						}
 
 					// odczytanie poczatkowego stanu robota (komunikuje sie z EDP)
 					lib::controller_state_t robot_controller_initial_state_tmp;
 
-					ui_robot.smb->get_controller_state(robot_controller_initial_state_tmp);
+					ui_robot.smb->get_controller_state(
+							robot_controller_initial_state_tmp);
 
 					//ui_state.smb.edp.state = 1; // edp wlaczone reader czeka na start
 
-					ui_state.smb.edp.is_synchronised = robot_controller_initial_state_tmp.is_synchronised;
+					ui_state.smb.edp.is_synchronised
+							= robot_controller_initial_state_tmp.is_synchronised;
 				}
 			}
 		}
@@ -186,12 +196,12 @@ int EDP_smb_slay_int(PtWidget_t *widget, ApInfo_t *apinfo,
 
 int reload_smb_configuration() {
 	// jesli IRP6 on_track ma byc aktywne
-	if ((ui_state.smb.is_active = config->value<int> ("is_smb_active")) == 1) {
+	if ((ui_state.smb.is_active = ui.config->value<int> ("is_smb_active")) == 1) {
 		// ini_con->create_ecp_smb (ini_con->ui->ecp_smb_section);
 		//ui_state.is_any_edp_active = true;
 		if (ui_state.is_mp_and_ecps_active) {
 			ui_state.smb.ecp.network_trigger_attach_point
-					= config->return_attach_point_name(
+					= ui.config->return_attach_point_name(
 							lib::configurator::CONFIG_SERVER,
 							"trigger_attach_point",
 							ui_state.smb.ecp.section_name);
@@ -209,29 +219,29 @@ int reload_smb_configuration() {
 			ui_state.smb.edp.reader_fd = -1;
 			ui_state.smb.edp.state = 0;
 
-			if (config->exists("test_mode", ui_state.smb.edp.section_name))
-				ui_state.smb.edp.test_mode = config->value<int> ("test_mode",
-						ui_state.smb.edp.section_name);
+			if (ui.config->exists("test_mode", ui_state.smb.edp.section_name))
+				ui_state.smb.edp.test_mode = ui.config->value<int> (
+						"test_mode", ui_state.smb.edp.section_name);
 			else
 				ui_state.smb.edp.test_mode = 0;
 
-			ui_state.smb.edp.hardware_busy_attach_point = config->value<
+			ui_state.smb.edp.hardware_busy_attach_point = ui.config->value<
 					std::string> ("hardware_busy_attach_point",
 					ui_state.smb.edp.section_name);
 
 			ui_state.smb.edp.network_resourceman_attach_point
-					= config->return_attach_point_name(
+					= ui.config->return_attach_point_name(
 							lib::configurator::CONFIG_SERVER,
 							"resourceman_attach_point",
 							ui_state.smb.edp.section_name);
 
 			ui_state.smb.edp.network_reader_attach_point
-					= config->return_attach_point_name(
+					= ui.config->return_attach_point_name(
 							lib::configurator::CONFIG_SERVER,
 							"reader_attach_point",
 							ui_state.smb.edp.section_name);
 
-			ui_state.smb.edp.node_name = config->value<std::string> (
+			ui_state.smb.edp.node_name = ui.config->value<std::string> (
 					"node_name", ui_state.smb.edp.section_name);
 			break;
 		case 1:

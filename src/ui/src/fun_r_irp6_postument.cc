@@ -21,6 +21,7 @@
 
 #include "lib/srlib.h"
 #include "ui/ui_const.h"
+#include "ui/ui_class.h"
 // #include "ui/ui.h"
 // Konfigurator.
 // #include "lib/configurator.h"
@@ -31,13 +32,13 @@
 #include "abimport.h"
 #include "proto.h"
 
+extern Ui ui;
 extern function_execution_buffer edp_irp6p_eb;
 
 extern ui_msg_def ui_msg;
 extern ui_ecp_buffer* ui_ecp_obj;
 
 extern ui_state_def ui_state;
-extern lib::configurator* config;
 
 extern ui_robot_def ui_robot;
 extern ui_ecp_buffer* ui_ecp_obj;
@@ -718,8 +719,7 @@ int wnd_irp6p_motors_copy_current_to_desired(PtWidget_t *widget,
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
 	// wychwytania ew. bledow ECP::robot
-	double *wektor_ptgr[IRP6P_M_NUM_OF_SERVOS],
-			wektor[IRP6P_M_NUM_OF_SERVOS];
+	double *wektor_ptgr[IRP6P_M_NUM_OF_SERVOS], wektor[IRP6P_M_NUM_OF_SERVOS];
 
 	if (ui_state.irp6_postument.edp.pid != -1) {
 		if (ui_state.irp6_postument.edp.is_synchronised) // Czy robot jest zsynchronizowany?
@@ -1045,8 +1045,7 @@ int wnd_irp6p_joints_copy_current_to_desired(PtWidget_t *widget,
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
 	// wychwytania ew. bledow ECP::robot
-	double *wektor_ptgr[IRP6P_M_NUM_OF_SERVOS],
-			wektor[IRP6P_M_NUM_OF_SERVOS];
+	double *wektor_ptgr[IRP6P_M_NUM_OF_SERVOS], wektor[IRP6P_M_NUM_OF_SERVOS];
 
 	if (ui_state.irp6_postument.edp.pid != -1) {
 		if (ui_state.irp6_postument.edp.is_synchronised) // Czy robot jest zsynchronizowany?
@@ -2179,8 +2178,7 @@ int wnd_irp6p_ser_alg_copy_cur_to_desired(PtWidget_t *widget, ApInfo_t *apinfo,
 	// wychwytania ew. bledow ECP::robot
 	uint8_t *wektor_ptgr[IRP6P_M_NUM_OF_SERVOS],
 			*wektor2_ptgr[IRP6P_M_NUM_OF_SERVOS],
-			wektor[IRP6P_M_NUM_OF_SERVOS],
-			wektor2[IRP6P_M_NUM_OF_SERVOS];
+			wektor[IRP6P_M_NUM_OF_SERVOS], wektor2[IRP6P_M_NUM_OF_SERVOS];
 
 	if (ui_state.irp6_postument.edp.pid != -1) {
 		if (ui_state.irp6_postument.edp.is_synchronised) // Czy robot jest zsynchronizowany?
@@ -2400,14 +2398,14 @@ int EDP_irp6_postument_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 					ui_state.irp6_postument.edp.node_name, std::string(
 							"edp_irp6_postument"))) {
 				ui_state.irp6_postument.edp.node_nr
-						= config->return_node_number(
+						= ui.config->return_node_number(
 								ui_state.irp6_postument.edp.node_name);
 
 				{
 					boost::unique_lock<boost::mutex> lock(process_creation_mtx);
 
-					ui_robot.irp6_postument = new ui_irp6_common_robot(*config,
-							*ui_msg.all_ecp, lib::ROBOT_IRP6P_M);
+					ui_robot.irp6_postument = new ui_irp6_common_robot(
+							*ui.config, *ui_msg.all_ecp, lib::ROBOT_IRP6P_M);
 				}
 
 				ui_state.irp6_postument.edp.pid
@@ -2631,7 +2629,7 @@ int pulse_ecp_irp6_postument(PtWidget_t *widget, ApInfo_t *apinfo,
 			// kilka sekund  (~1) na otworzenie urzadzenia
 			// zabezpieczenie przed zawieszeniem poprzez wyslanie sygnalu z opoznieniem
 
-			ualarm((useconds_t)(SIGALRM_TIMEOUT), 0);
+			ualarm((useconds_t) (SIGALRM_TIMEOUT), 0);
 			while ((ui_state.irp6_postument.ecp.trigger_fd
 					= name_open(
 							ui_state.irp6_postument.ecp.network_trigger_attach_point.c_str(),
@@ -2645,7 +2643,7 @@ int pulse_ecp_irp6_postument(PtWidget_t *widget, ApInfo_t *apinfo,
 				};
 			}
 			// odwolanie alarmu
-			ualarm((useconds_t)(0), 0);
+			ualarm((useconds_t) (0), 0);
 		}
 
 		if (ui_state.irp6_postument.ecp.trigger_fd >= 0) {
@@ -2703,13 +2701,13 @@ int process_control_window_irp6p_section_init(
 int reload_irp6p_configuration() {
 
 	// jesli IRP6 postument ma byc aktywne
-	if ((ui_state.irp6_postument.is_active = config->value<int> (
+	if ((ui_state.irp6_postument.is_active = ui.config->value<int> (
 			"is_irp6p_m_active")) == 1) {
 		// ini_con->create_ecp_irp6_postument (ini_con->ui->ECP_IRP6P_M_SECTION);
 		//ui_state.is_any_edp_active = true;
 		if (ui_state.is_mp_and_ecps_active) {
 			ui_state.irp6_postument.ecp.network_trigger_attach_point
-					= config->return_attach_point_name(
+					= ui.config->return_attach_point_name(
 							lib::configurator::CONFIG_SERVER,
 							"trigger_attach_point",
 							ui_state.irp6_postument.ecp.section_name);
@@ -2736,11 +2734,12 @@ int reload_irp6p_configuration() {
 					sprintf(tmp_string, "front_position", i);
 				}
 
-				if (config->exists(tmp_string,
+				if (ui.config->exists(tmp_string,
 						ui_state.irp6_postument.edp.section_name)) {
 					char* tmp, *tmp1;
 
-					tmp1 = tmp = strdup(config->value<std::string> (tmp_string,
+					tmp1 = tmp = strdup(ui.config->value<std::string> (
+							tmp_string,
 							ui_state.irp6_postument.edp.section_name).c_str());
 					char* toDel = tmp;
 					for (int j = 0; j < IRP6P_M_NUM_OF_SERVOS; j++) {
@@ -2767,32 +2766,33 @@ int reload_irp6p_configuration() {
 				}
 			}
 
-			if (config->exists("test_mode",
+			if (ui.config->exists("test_mode",
 					ui_state.irp6_postument.edp.section_name))
-				ui_state.irp6_postument.edp.test_mode = config->value<int> (
+				ui_state.irp6_postument.edp.test_mode = ui.config->value<int> (
 						"test_mode", ui_state.irp6_postument.edp.section_name);
 			else
 				ui_state.irp6_postument.edp.test_mode = 0;
 
 			ui_state.irp6_postument.edp.hardware_busy_attach_point
-					= config->value<std::string> ("hardware_busy_attach_point",
+					= ui.config->value<std::string> (
+							"hardware_busy_attach_point",
 							ui_state.irp6_postument.edp.section_name);
 
 			ui_state.irp6_postument.edp.network_resourceman_attach_point
-					= config->return_attach_point_name(
+					= ui.config->return_attach_point_name(
 							lib::configurator::CONFIG_SERVER,
 							"resourceman_attach_point",
 							ui_state.irp6_postument.edp.section_name);
 
 			ui_state.irp6_postument.edp.network_reader_attach_point
-					= config->return_attach_point_name(
+					= ui.config->return_attach_point_name(
 							lib::configurator::CONFIG_SERVER,
 							"reader_attach_point",
 							ui_state.irp6_postument.edp.section_name);
 
-			ui_state.irp6_postument.edp.node_name
-					= config->value<std::string> ("node_name",
-							ui_state.irp6_postument.edp.section_name);
+			ui_state.irp6_postument.edp.node_name = ui.config->value<
+					std::string> ("node_name",
+					ui_state.irp6_postument.edp.section_name);
 			break;
 		case 1:
 		case 2:

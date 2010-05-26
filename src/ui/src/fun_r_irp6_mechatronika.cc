@@ -20,6 +20,7 @@
 
 #include "lib/srlib.h"
 #include "ui/ui_const.h"
+#include "ui/ui_class.h"
 // #include "ui/ui.h"
 // Konfigurator.
 // #include "lib/configurator.h"
@@ -30,11 +31,12 @@
 #include "abimport.h"
 #include "proto.h"
 
+extern Ui ui;
+
 extern ui_msg_def ui_msg;
 extern ui_ecp_buffer* ui_ecp_obj;
 
 extern ui_state_def ui_state;
-extern lib::configurator* config;
 
 extern ui_robot_def ui_robot;
 extern ui_ecp_buffer* ui_ecp_obj;
@@ -206,13 +208,13 @@ int EDP_irp6_mechatronika_create(PtWidget_t *widget, ApInfo_t *apinfo,
 					ui_state.irp6_mechatronika.edp.node_name, std::string(
 							"edp_irp6_mechatronika"))) {
 				ui_state.irp6_mechatronika.edp.node_nr
-						= config->return_node_number(
+						= ui.config->return_node_number(
 								ui_state.irp6_mechatronika.edp.node_name);
 				{
 					boost::unique_lock<boost::mutex> lock(process_creation_mtx);
 
 					ui_robot.irp6_mechatronika = new ui_irp6_common_robot(
-							*config, *ui_msg.all_ecp,
+							*ui.config, *ui_msg.all_ecp,
 							lib::ROBOT_IRP6_MECHATRONIKA);
 				}
 
@@ -660,7 +662,7 @@ int pulse_ecp_irp6_mechatronika(PtWidget_t *widget, ApInfo_t *apinfo,
 			short tmp = 0;
 			// kilka sekund  (~1) na otworzenie urzadzenia
 			// zabezpieczenie przed zawieszeniem poprzez wyslanie sygnalu z opoznieniem
-			ualarm((useconds_t)(SIGALRM_TIMEOUT), 0);
+			ualarm((useconds_t) (SIGALRM_TIMEOUT), 0);
 			while ((ui_state.irp6_mechatronika.ecp.trigger_fd
 					= name_open(
 							ui_state.irp6_mechatronika.ecp.network_trigger_attach_point.c_str(),
@@ -674,7 +676,7 @@ int pulse_ecp_irp6_mechatronika(PtWidget_t *widget, ApInfo_t *apinfo,
 				}
 			}
 			// odwolanie alarmu
-			ualarm((useconds_t)(0), 0);
+			ualarm((useconds_t) (0), 0);
 		}
 
 		if (ui_state.irp6_mechatronika.ecp.trigger_fd >= 0) {
@@ -2454,14 +2456,14 @@ int process_control_window_irp6m_section_init(
 
 int reload_irp6m_configuration() {
 	// jesli IRP6 mechatronika ma byc aktywne
-	if ((ui_state.irp6_mechatronika.is_active = config->value<int> (
+	if ((ui_state.irp6_mechatronika.is_active = ui.config->value<int> (
 			"is_irp6_mechatronika_active")) == 1) {
 
 		// ui_state.is_any_edp_active = true;
 		// ini_con->create_ecp_irp6_mechatronika (ini_con->ui->ecp_irp6_mechatronika_section);
 		if (ui_state.is_mp_and_ecps_active) {
 			ui_state.irp6_mechatronika.ecp.network_trigger_attach_point
-					= config->return_attach_point_name(
+					= ui.config->return_attach_point_name(
 							lib::configurator::CONFIG_SERVER,
 							"trigger_attach_point",
 							ui_state.irp6_mechatronika.ecp.section_name.c_str());
@@ -2483,13 +2485,13 @@ int reload_irp6m_configuration() {
 				char tmp_string[50];
 				sprintf(tmp_string, "preset_position_%d", i);
 
-				if (config->exists(tmp_string,
+				if (ui.config->exists(tmp_string,
 						ui_state.irp6_mechatronika.edp.section_name)) {
 					char* tmp, *tmp1;
 					tmp1
 							= tmp
 									= strdup(
-											config->value<std::string> (
+											ui.config->value<std::string> (
 													tmp_string,
 													ui_state.irp6_mechatronika.edp.section_name).c_str());
 					char* toDel = tmp;
@@ -2506,31 +2508,32 @@ int reload_irp6m_configuration() {
 				}
 			}
 
-			if (config->exists("test_mode",
+			if (ui.config->exists("test_mode",
 					ui_state.irp6_mechatronika.edp.section_name))
-				ui_state.irp6_mechatronika.edp.test_mode = config->value<int> (
-						"test_mode",
-						ui_state.irp6_mechatronika.edp.section_name);
+				ui_state.irp6_mechatronika.edp.test_mode
+						= ui.config->value<int> ("test_mode",
+								ui_state.irp6_mechatronika.edp.section_name);
 			else
 				ui_state.irp6_mechatronika.edp.test_mode = 0;
 
 			ui_state.irp6_mechatronika.edp.hardware_busy_attach_point
-					= config->value<std::string> ("hardware_busy_attach_point",
+					= ui.config->value<std::string> (
+							"hardware_busy_attach_point",
 							ui_state.irp6_mechatronika.edp.section_name);
 
 			ui_state.irp6_mechatronika.edp.network_resourceman_attach_point
-					= config->return_attach_point_name(
+					= ui.config->return_attach_point_name(
 							lib::configurator::CONFIG_SERVER,
 							"resourceman_attach_point",
 							ui_state.irp6_mechatronika.edp.section_name.c_str());
 
 			ui_state.irp6_mechatronika.edp.network_reader_attach_point
-					= config->return_attach_point_name(
+					= ui.config->return_attach_point_name(
 							lib::configurator::CONFIG_SERVER,
 							"reader_attach_point",
 							ui_state.irp6_mechatronika.edp.section_name.c_str());
 
-			ui_state.irp6_mechatronika.edp.node_name = config->value<
+			ui_state.irp6_mechatronika.edp.node_name = ui.config->value<
 					std::string> ("node_name",
 					ui_state.irp6_mechatronika.edp.section_name.c_str());
 

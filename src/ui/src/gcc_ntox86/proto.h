@@ -10,8 +10,7 @@ int MAM_btn_save_measures(PtWidget_t *widget, ApInfo_t *apinfo,
 int MAM_btn_calibrate(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
 int
-		MAM_btn_exit(PtWidget_t *widget, ApInfo_t *apinfo,
-				PtCallbackInfo_t *cbinfo);
+MAM_btn_exit(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo);
 int MAM_tmr_connect(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
 int MAM_refresh_window(PtWidget_t *widget, ApInfo_t *apinfo,
@@ -761,8 +760,7 @@ int EDP_smb_create(PtWidget_t *widget, ApInfo_t *apinfo,
 int EDP_smb_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
 int
-		EDP_smb_slay(PtWidget_t *widget, ApInfo_t *apinfo,
-				PtCallbackInfo_t *cbinfo);
+EDP_smb_slay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo);
 int EDP_smb_slay_int(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
 int reload_smb_configuration(void);
@@ -821,7 +819,6 @@ int EDP_bird_hand_slay(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
 int EDP_bird_hand_slay_int(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
-int reload_bird_hand_configuration(void);
 int manage_interface_bird_hand(void);
 
 /* ../timer.cc */
@@ -893,8 +890,7 @@ int TRbtnPositionZero(PtWidget_t *widget, ApInfo_t *apinfo,
 int TRbtnLoadTrajectory(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
 int
-		TRbtnSaveAll(PtWidget_t *widget, ApInfo_t *apinfo,
-				PtCallbackInfo_t *cbinfo);
+TRbtnSaveAll(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo);
 int TRConnect(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo);
 int TRRefreshWindow(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);

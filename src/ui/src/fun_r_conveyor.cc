@@ -22,6 +22,7 @@
 
 #include "lib/srlib.h"
 #include "ui/ui_const.h"
+#include "ui/ui_class.h"
 // #include "ui/ui.h"
 // Konfigurator.
 // #include "lib/configurator.h"
@@ -33,13 +34,14 @@
 #include "abimport.h"
 #include "proto.h"
 
+extern Ui ui;
+
 extern function_execution_buffer edp_conv_eb;
 
 extern ui_msg_def ui_msg;
 extern ui_ecp_buffer* ui_ecp_obj;
 
 extern ui_state_def ui_state;
-extern lib::configurator* config;
 
 extern ui_robot_def ui_robot;
 extern ui_ecp_buffer* ui_ecp_obj;
@@ -540,11 +542,11 @@ int EDP_conveyor_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 						"edp_conveyor already exists");
 			} else if (check_node_existence(ui_state.conveyor.edp.node_name,
 					std::string("edp_conveyor"))) {
-				ui_state.conveyor.edp.node_nr = config->return_node_number(
+				ui_state.conveyor.edp.node_nr = ui.config->return_node_number(
 						ui_state.conveyor.edp.node_name.c_str());
 				{
 					boost::unique_lock<boost::mutex> lock(process_creation_mtx);
-					ui_robot.conveyor = new ui_tfg_and_conv_robot(*config,
+					ui_robot.conveyor = new ui_tfg_and_conv_robot(*ui.config,
 							*ui_msg.all_ecp, lib::ROBOT_CONVEYOR);
 
 				}
@@ -740,7 +742,7 @@ int pulse_ecp_conveyor(PtWidget_t *widget, ApInfo_t *apinfo,
 			short tmp = 0;
 			// kilka sekund  (~1) na otworzenie urzadzenia
 			// zabezpieczenie przed zawieszeniem poprzez wyslanie sygnalu z opoznieniem
-			ualarm((useconds_t)(SIGALRM_TIMEOUT), 0);
+			ualarm((useconds_t) (SIGALRM_TIMEOUT), 0);
 			while ((ui_state.conveyor.ecp.trigger_fd = name_open(
 					ui_state.conveyor.ecp.network_trigger_attach_point.c_str(),
 					NAME_FLAG_ATTACH_GLOBAL)) < 0) {
@@ -753,7 +755,7 @@ int pulse_ecp_conveyor(PtWidget_t *widget, ApInfo_t *apinfo,
 				}
 			}
 			// odwolanie alarmu
-			ualarm((useconds_t)(0), 0);
+			ualarm((useconds_t) (0), 0);
 		}
 
 		if (ui_state.conveyor.ecp.trigger_fd >= 0) {
@@ -814,14 +816,14 @@ int process_control_window_conveyor_section_init(
 int reload_conveyor_configuration() {
 
 	// jesli conveyor ma byc aktywny
-	if ((ui_state.conveyor.is_active
-			= config->value<int> ("is_conveyor_active")) == 1) {
+	if ((ui_state.conveyor.is_active = ui.config->value<int> (
+			"is_conveyor_active")) == 1) {
 
 		//ui_state.is_any_edp_active = true;
 
 		if (ui_state.is_mp_and_ecps_active) {
 			ui_state.conveyor.ecp.network_trigger_attach_point
-					= config->return_attach_point_name(
+					= ui.config->return_attach_point_name(
 							lib::configurator::CONFIG_SERVER,
 							"trigger_attach_point",
 							ui_state.conveyor.ecp.section_name.c_str());
@@ -838,45 +840,47 @@ int reload_conveyor_configuration() {
 			ui_state.conveyor.edp.reader_fd = -1;
 			ui_state.conveyor.edp.state = 0;
 
-			if (config->exists("preset_position_0",
+			if (ui.config->exists("preset_position_0",
 					ui_state.conveyor.edp.section_name))
-				ui_state.conveyor.edp.preset_position[0][0] = config->value<
+				ui_state.conveyor.edp.preset_position[0][0] = ui.config->value<
 						double> ("preset_position_0",
 						ui_state.conveyor.edp.section_name);
-			if (config->exists("preset_position_1",
+			if (ui.config->exists("preset_position_1",
 					ui_state.conveyor.edp.section_name))
-				ui_state.conveyor.edp.preset_position[1][0] = config->value<
+				ui_state.conveyor.edp.preset_position[1][0] = ui.config->value<
 						double> ("preset_position_1",
 						ui_state.conveyor.edp.section_name);
-			if (config->exists("preset_position_2",
+			if (ui.config->exists("preset_position_2",
 					ui_state.conveyor.edp.section_name))
-				ui_state.conveyor.edp.preset_position[2][0] = config->value<
+				ui_state.conveyor.edp.preset_position[2][0] = ui.config->value<
 						double> ("preset_position_2",
 						ui_state.conveyor.edp.section_name);
 
-			if (config->exists("test_mode", ui_state.conveyor.edp.section_name))
-				ui_state.conveyor.edp.test_mode = config->value<int> (
+			if (ui.config->exists("test_mode",
+					ui_state.conveyor.edp.section_name))
+				ui_state.conveyor.edp.test_mode = ui.config->value<int> (
 						"test_mode", ui_state.conveyor.edp.section_name);
 			else
 				ui_state.conveyor.edp.test_mode = 0;
 
-			ui_state.conveyor.edp.hardware_busy_attach_point = config->value<
-					std::string> ("hardware_busy_attach_point",
-					ui_state.conveyor.edp.section_name);
+			ui_state.conveyor.edp.hardware_busy_attach_point
+					= ui.config->value<std::string> (
+							"hardware_busy_attach_point",
+							ui_state.conveyor.edp.section_name);
 
 			ui_state.conveyor.edp.network_resourceman_attach_point
-					= config->return_attach_point_name(
+					= ui.config->return_attach_point_name(
 							lib::configurator::CONFIG_SERVER,
 							"resourceman_attach_point",
 							ui_state.conveyor.edp.section_name.c_str());
 
 			ui_state.conveyor.edp.network_reader_attach_point
-					= config->return_attach_point_name(
+					= ui.config->return_attach_point_name(
 							lib::configurator::CONFIG_SERVER,
 							"reader_attach_point",
 							ui_state.conveyor.edp.section_name.c_str());
 
-			ui_state.conveyor.edp.node_name = config->value<std::string> (
+			ui_state.conveyor.edp.node_name = ui.config->value<std::string> (
 					"node_name", ui_state.conveyor.edp.section_name.c_str());
 
 			break;

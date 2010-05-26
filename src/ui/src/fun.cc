@@ -21,6 +21,7 @@
 
 #include "lib/srlib.h"
 #include "ui/ui_const.h"
+#include "ui/ui_class.h"
 // #include "ui/ui.h"
 // Konfigurator (dla PROCESS_SPAWN_RSH)
 #include "lib/configurator.h"
@@ -31,13 +32,14 @@
 #include "abimport.h"
 #include "proto.h"
 
+extern Ui ui;
+
 extern function_execution_buffer main_eb;
 
 extern ui_msg_def ui_msg;
 extern ui_ecp_buffer* ui_ecp_obj;
 
 extern ui_state_def ui_state;
-extern lib::configurator* config;
 
 ui_robot_def ui_robot;
 extern ui_ecp_buffer* ui_ecp_obj;
@@ -1028,14 +1030,15 @@ int initiate_configuration() {
 		strftime(now_string, 8, "_%H%M%S", localtime(&now));
 		ui_state.session_name = now_string;
 
-		if (config)
-			delete config;
-		config = new lib::configurator(ui_state.ui_node_name,
+		if (ui.config) {
+			delete ui.config;
+		}
+		ui.config = new lib::configurator(ui_state.ui_node_name,
 				ui_state.mrrocpp_local_path, ui_state.config_file, UI_SECTION,
 				ui_state.session_name);
 
 		std::string attach_point =
-				config->return_attach_point_name(
+				ui.config->return_attach_point_name(
 						lib::configurator::CONFIG_SERVER, "sr_attach_point",
 						UI_SECTION);
 
@@ -1062,11 +1065,11 @@ int initiate_configuration() {
 
 	}
 
-	ui_state.ui_attach_point = config->return_attach_point_name(
+	ui_state.ui_attach_point = ui.config->return_attach_point_name(
 			lib::configurator::CONFIG_SERVER, "ui_attach_point", UI_SECTION);
-	ui_state.sr_attach_point = config->return_attach_point_name(
+	ui_state.sr_attach_point = ui.config->return_attach_point_name(
 			lib::configurator::CONFIG_SERVER, "sr_attach_point", UI_SECTION);
-	ui_state.network_sr_attach_point = config->return_attach_point_name(
+	ui_state.network_sr_attach_point = ui.config->return_attach_point_name(
 			lib::configurator::CONFIG_SERVER, "sr_attach_point", UI_SECTION);
 
 	clear_all_configuration_lists();
@@ -1093,9 +1096,9 @@ int reload_whole_configuration() {
 	if ((ui_state.mp.state == UI_MP_NOT_PERMITED_TO_RUN) || (ui_state.mp.state
 			== UI_MP_PERMITED_TO_RUN)) { // jesli nie dziala mp podmien mp ecp vsp
 
-		config->change_ini_file(ui_state.config_file.c_str());
+		ui.config->change_ini_file(ui_state.config_file.c_str());
 
-		ui_state.is_mp_and_ecps_active = config->value<int> (
+		ui_state.is_mp_and_ecps_active = ui.config->value<int> (
 				"is_mp_and_ecps_active");
 
 		switch (ui_state.all_edps) {
@@ -1120,7 +1123,7 @@ int reload_whole_configuration() {
 			reload_smb_configuration();
 			reload_shead_configuration();
 
-			reload_bird_hand_configuration();
+			ui.bird_hand.reload_configuration();
 
 			// dla robota speaker
 			reload_speaker_configuration();
@@ -1166,10 +1169,10 @@ int reload_whole_configuration() {
 
 		if (ui_state.is_mp_and_ecps_active) {
 			ui_state.mp.network_pulse_attach_point
-					= config->return_attach_point_name(
+					= ui.config->return_attach_point_name(
 							lib::configurator::CONFIG_SERVER,
 							"mp_pulse_attach_point", MP_SECTION);
-			ui_state.mp.node_name = config->value<std::string> ("node_name",
+			ui_state.mp.node_name = ui.config->value<std::string> ("node_name",
 					MP_SECTION);
 			ui_state.mp.pid = -1;
 		}
@@ -1268,8 +1271,8 @@ int fill_node_list() {
 	for (std::list<ui_state_def::list_t>::iterator section_list_iterator =
 			ui_state.section_list.begin(); section_list_iterator
 			!= ui_state.section_list.end(); section_list_iterator++) {
-		if (config->exists("node_name", *section_list_iterator)) {
-			std::string tmp = config->value<std::string> ("node_name",
+		if (ui.config->exists("node_name", *section_list_iterator)) {
+			std::string tmp = ui.config->value<std::string> ("node_name",
 					*section_list_iterator);
 
 			std::list<ui_state_def::list_t>::iterator node_list_iterator;
@@ -1300,16 +1303,16 @@ int fill_program_node_list() {
 			ui_state.section_list.begin(); section_list_iterator
 			!= ui_state.section_list.end(); section_list_iterator++) {
 
-		if ((config->exists("program_name", *section_list_iterator)
-				&& config->exists("node_name", *section_list_iterator))) {
-			//	char* tmp_p = config->value<std::string>("program_name", *section_list_iterator);
-			//	char* tmp_n = config->value<std::string>("node_name", *section_list_iterator);
+		if ((ui.config->exists("program_name", *section_list_iterator)
+				&& ui.config->exists("node_name", *section_list_iterator))) {
+			//	char* tmp_p =ui.config->value<std::string>("program_name", *section_list_iterator);
+			//	char* tmp_n =ui.config->value<std::string>("node_name", *section_list_iterator);
 
 			program_node_def tmp_s;
 
-			tmp_s.program_name = config->value<std::string> ("program_name",
+			tmp_s.program_name = ui.config->value<std::string> ("program_name",
 					*section_list_iterator);
-			tmp_s.node_name = config->value<std::string> ("node_name",
+			tmp_s.node_name = ui.config->value<std::string> ("node_name",
 					*section_list_iterator);
 
 			ui_state.program_node_list.push_back(tmp_s);
@@ -1449,7 +1452,7 @@ int check_edps_state_and_modify_mp_state() {
 			&& (!(ui_state.conveyor.is_active))
 			&& (!(ui_state.speaker.is_active))
 			&& (!(ui_state.irp6_mechatronika.is_active))
-			&& (!(ui_state.bird_hand.is_active))
+			&& (!(ui.bird_hand.state.is_active))
 			&& (!(ui_state.spkm.is_active)) && (!(ui_state.smb.is_active))
 			&& (!(ui_state.shead.is_active))) {
 		ui_state.all_edps = UI_ALL_EDPS_NONE_EDP_ACTIVATED;
@@ -1462,7 +1465,7 @@ int check_edps_state_and_modify_mp_state() {
 			&& check_synchronised_or_inactive(ui_state.irp6_mechatronika)
 			&& check_synchronised_or_inactive(ui_state.irp6ot_tfg)
 			&& check_synchronised_or_inactive(ui_state.irp6p_tfg)
-			&& check_synchronised_or_inactive(ui_state.bird_hand)
+			&& check_synchronised_or_inactive(ui.bird_hand.state)
 			&& check_synchronised_or_inactive(ui_state.spkm)
 			&& check_synchronised_or_inactive(ui_state.smb)
 			&& check_synchronised_or_inactive(ui_state.shead)) {
@@ -1476,7 +1479,7 @@ int check_edps_state_and_modify_mp_state() {
 			&& check_loaded_or_inactive(ui_state.irp6_mechatronika)
 			&& check_loaded_or_inactive(ui_state.irp6ot_tfg)
 			&& check_loaded_or_inactive(ui_state.irp6p_tfg)
-			&& check_loaded_or_inactive(ui_state.bird_hand)
+			&& check_loaded_or_inactive(ui.bird_hand.state)
 			&& check_loaded_or_inactive(ui_state.spkm)
 			&& check_loaded_or_inactive(ui_state.smb)
 			&& check_loaded_or_inactive(ui_state.shead))
@@ -1490,7 +1493,7 @@ int check_edps_state_and_modify_mp_state() {
 			|| check_loaded(ui_state.speaker) || check_loaded(
 			ui_state.irp6_mechatronika) || check_loaded(ui_state.irp6ot_tfg)
 			|| check_loaded(ui_state.irp6p_tfg) || check_loaded(
-			ui_state.bird_hand) || check_loaded(ui_state.spkm) || check_loaded(
+			ui.bird_hand.state) || check_loaded(ui_state.spkm) || check_loaded(
 			ui_state.smb) || check_loaded(ui_state.shead))
 
 	{
@@ -2256,7 +2259,7 @@ int MPup_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 	if (ui_state.mp.pid == -1) {
 
-		ui_state.mp.node_nr = config->return_node_number(
+		ui_state.mp.node_nr = ui.config->return_node_number(
 				ui_state.mp.node_name.c_str());
 
 		std::string mp_network_pulse_attach_point("/dev/name/global/");
@@ -2267,7 +2270,7 @@ int MPup_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 			ui_msg.ui->message(lib::NON_FATAL_ERROR, "MP already exists");
 		} else if (check_node_existence(ui_state.mp.node_name,
 				std::string("mp"))) {
-			ui_state.mp.pid = config->process_spawn(MP_SECTION);
+			ui_state.mp.pid = ui.config->process_spawn(MP_SECTION);
 
 			if (ui_state.mp.pid > 0) {
 

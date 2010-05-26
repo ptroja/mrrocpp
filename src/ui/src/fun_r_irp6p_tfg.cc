@@ -22,6 +22,7 @@
 
 #include "lib/srlib.h"
 #include "ui/ui_const.h"
+#include "ui/ui_class.h"
 // #include "ui/ui.h"
 // Konfigurator.
 #include "lib/configurator.h"
@@ -32,9 +33,11 @@
 #include "abimport.h"
 #include "proto.h"
 
+extern Ui ui;
+
 extern function_execution_buffer edp_irp6p_tfg_eb;
 extern ui_state_def ui_state;
-extern lib::configurator* config;
+
 extern ui_msg_def ui_msg;
 extern ui_robot_def ui_robot;
 extern boost::mutex process_creation_mtx;
@@ -125,13 +128,13 @@ int EDP_irp6p_tfg_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 			} else if (check_node_existence(ui_state.irp6p_tfg.edp.node_name,
 					std::string("edp_irp6p_tfg"))) {
 
-				ui_state.irp6p_tfg.edp.node_nr = config->return_node_number(
+				ui_state.irp6p_tfg.edp.node_nr = ui.config->return_node_number(
 						ui_state.irp6p_tfg.edp.node_name);
 
 				{
 					boost::unique_lock<boost::mutex> lock(process_creation_mtx);
 
-					ui_robot.irp6p_tfg = new ui_tfg_and_conv_robot(*config,
+					ui_robot.irp6p_tfg = new ui_tfg_and_conv_robot(*ui.config,
 							*ui_msg.all_ecp, lib::ROBOT_IRP6P_TFG);
 				}
 
@@ -666,13 +669,13 @@ int clear_wnd_irp6p_tfg_servo_algorithm_flag(PtWidget_t *widget,
 
 int reload_irp6p_tfg_configuration() {
 	// jesli IRP6 on_track ma byc aktywne
-	if ((ui_state.irp6p_tfg.is_active = config->value<int> (
+	if ((ui_state.irp6p_tfg.is_active = ui.config->value<int> (
 			"is_irp6p_tfg_active")) == 1) {
 		// ini_con->create_ecp_irp6p_tfg (ini_con->ui->ecp_irp6p_tfg_section);
 		//ui_state.is_any_edp_active = true;
 		if (ui_state.is_mp_and_ecps_active) {
 			ui_state.irp6p_tfg.ecp.network_trigger_attach_point
-					= config->return_attach_point_name(
+					= ui.config->return_attach_point_name(
 							lib::configurator::CONFIG_SERVER,
 							"trigger_attach_point",
 							ui_state.irp6p_tfg.ecp.section_name);
@@ -694,11 +697,15 @@ int reload_irp6p_tfg_configuration() {
 				char tmp_string[50];
 				sprintf(tmp_string, "preset_position_%d", i);
 
-				if (config->exists(tmp_string,
+				if (ui.config->exists(tmp_string,
 						ui_state.irp6p_tfg.edp.section_name)) {
 					char* tmp, *tmp1;
-					tmp1 = tmp = strdup(config->value<std::string> (tmp_string,
-							ui_state.irp6p_tfg.edp.section_name).c_str());
+					tmp1
+							= tmp
+									= strdup(
+											ui.config->value<std::string> (
+													tmp_string,
+													ui_state.irp6p_tfg.edp.section_name).c_str());
 					char* toDel = tmp;
 					for (int j = 0; j < IRP6P_TFG_NUM_OF_SERVOS; j++) {
 
@@ -716,29 +723,31 @@ int reload_irp6p_tfg_configuration() {
 				}
 			}
 
-			if (config->exists("test_mode", ui_state.irp6p_tfg.edp.section_name))
-				ui_state.irp6p_tfg.edp.test_mode = config->value<int> (
+			if (ui.config->exists("test_mode",
+					ui_state.irp6p_tfg.edp.section_name))
+				ui_state.irp6p_tfg.edp.test_mode = ui.config->value<int> (
 						"test_mode", ui_state.irp6p_tfg.edp.section_name);
 			else
 				ui_state.irp6p_tfg.edp.test_mode = 0;
 
-			ui_state.irp6p_tfg.edp.hardware_busy_attach_point = config->value<
-					std::string> ("hardware_busy_attach_point",
-					ui_state.irp6p_tfg.edp.section_name);
+			ui_state.irp6p_tfg.edp.hardware_busy_attach_point
+					= ui.config->value<std::string> (
+							"hardware_busy_attach_point",
+							ui_state.irp6p_tfg.edp.section_name);
 
 			ui_state.irp6p_tfg.edp.network_resourceman_attach_point
-					= config->return_attach_point_name(
+					= ui.config->return_attach_point_name(
 							lib::configurator::CONFIG_SERVER,
 							"resourceman_attach_point",
 							ui_state.irp6p_tfg.edp.section_name);
 
 			ui_state.irp6p_tfg.edp.network_reader_attach_point
-					= config->return_attach_point_name(
+					= ui.config->return_attach_point_name(
 							lib::configurator::CONFIG_SERVER,
 							"reader_attach_point",
 							ui_state.irp6p_tfg.edp.section_name);
 
-			ui_state.irp6p_tfg.edp.node_name = config->value<std::string> (
+			ui_state.irp6p_tfg.edp.node_name = ui.config->value<std::string> (
 					"node_name", ui_state.irp6p_tfg.edp.section_name);
 			break;
 		case 1:

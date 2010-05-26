@@ -10,6 +10,7 @@
 
 #include "ui/ui.h"
 #include "ui/ui_r_bird_hand.h"
+#include "lib/configurator.h"
 
 //
 //
@@ -25,7 +26,7 @@ class Ui {
 private:
 
 public:
-
+	lib::configurator* config;
 	UiRobotBirdHand bird_hand;
 
 	Ui();
