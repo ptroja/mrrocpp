@@ -27,6 +27,9 @@ private:
 
 public:
 
+	feb_thread* tid;
+	function_execution_buffer eb;
+
 	ui_bird_hand_robot *ui_ecp_robot;
 
 	bool is_wnd_bird_hand_command_and_status_open;
@@ -36,6 +39,8 @@ public:
 
 	UiRobotBirdHand();
 	int reload_configuration();
+	void create_thread();
+	void abort_thread();
 };
 
 #endif

@@ -38,6 +38,7 @@
 #include <errno.h>
 
 #include "ui/ui.h"
+#include "ui/ui_class.h"
 
 #include "lib/mis_fun.h"
 #include "lib/srlib.h"
@@ -47,6 +48,8 @@
 #include "ui/ui_ecp.h"
 
 #include "lib/srlib.h"
+
+extern Ui ui;
 
 feb_thread* edp_irp6ot_tid;
 feb_thread* edp_irp6p_tid;
@@ -58,8 +61,6 @@ feb_thread* edp_spkm_tid;
 feb_thread* edp_smb_tid;
 feb_thread* edp_shead_tid;
 feb_thread* meb_tid;
-
-feb_thread* edp_bird_hand_tid;
 
 pthread_t ui_tid;
 pthread_t sr_tid;
@@ -75,8 +76,6 @@ function_execution_buffer edp_shead_eb;
 
 function_execution_buffer edp_conv_eb;
 function_execution_buffer main_eb;
-
-function_execution_buffer edp_bird_hand_eb;
 
 busy_flag communication_flag;
 
@@ -512,7 +511,7 @@ void create_threads()
 	edp_spkm_tid = new feb_thread(edp_spkm_eb);
 	edp_smb_tid = new feb_thread(edp_smb_eb);
 	edp_shead_tid = new feb_thread(edp_shead_eb);
-	edp_bird_hand_tid = new feb_thread(edp_bird_hand_eb);
+	ui.bird_hand.create_thread();
 	meb_tid = new feb_thread(main_eb);
 
 }
@@ -531,7 +530,7 @@ void abort_threads()
 	delete edp_spkm_tid;
 	delete edp_smb_tid;
 	delete edp_shead_tid;
-	delete edp_bird_hand_tid;
+	ui.bird_hand.abort_thread();
 	delete meb_tid;
 #endif
 }
