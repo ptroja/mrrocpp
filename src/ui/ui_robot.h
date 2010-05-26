@@ -17,7 +17,7 @@
 //
 
 
-// super klasa agregujaca porozrzucane struktury
+// super klasa agregujaca porozrzucane dotychczas struktury
 
 
 class UiRobot {

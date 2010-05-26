@@ -7,8 +7,6 @@
 
 extern Ui ui;
 
-extern ui_state_def ui_state;
-
 //
 //
 // KLASA UiRobot
@@ -16,7 +14,8 @@ extern ui_state_def ui_state;
 //
 
 
-UiRobot::UiRobot(const std::string edp_section_name, const std::string  ecp_section_name) :
+UiRobot::UiRobot(const std::string edp_section_name,
+		const std::string ecp_section_name) :
 	tid(NULL) {
 	state.edp.section_name = edp_section_name;
 	state.ecp.section_name = ecp_section_name;
