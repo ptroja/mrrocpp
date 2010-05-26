@@ -23,7 +23,7 @@ namespace common {
 namespace generator {
 
 pb_sac_visual_servo::pb_sac_visual_servo(boost::shared_ptr <visual_servo_regulator> regulator, const std::string& section_name, mrrocpp::lib::configurator& configurator) :
-	visual_servo(regulator)
+	pb_visual_servo(regulator)
 {
 	position_based_configuration pb_config;
 
@@ -40,7 +40,7 @@ pb_sac_visual_servo::pb_sac_visual_servo(boost::shared_ptr <visual_servo_regulat
 		pb_config.dcp.distortion[i] = distortion(0, i);
 	}
 
-	vsp_fradia = boost::shared_ptr <pb_fradia_sensor>(pb_sensor(configurator, section_name, pb_config));
+	vsp_fradia = boost::shared_ptr <pb_fradia_sensor>(new pb_fradia_sensor(configurator, section_name, pb_config));
 
 	O_T_C = configurator.value <3, 4> ("O_T_C", section_name);
 	cout << "\nO_T_C\n" << O_T_C << endl;

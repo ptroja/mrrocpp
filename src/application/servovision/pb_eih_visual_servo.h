@@ -8,7 +8,7 @@
 #ifndef PB_EIH_VISUAL_SERVO_H_
 #define PB_EIH_VISUAL_SERVO_H_
 
-#include "visual_servo.h"
+#include "pb_visual_servo.h"
 
 namespace mrrocpp {
 
@@ -25,7 +25,7 @@ namespace generator {
 /**
  *
  */
-class pb_eih_visual_servo : public mrrocpp::ecp::common::generator::visual_servo
+class pb_eih_visual_servo : public pb_visual_servo
 {
 public:
 	EIGEN_MAKE_ALIGNED_OPERATOR_NEW

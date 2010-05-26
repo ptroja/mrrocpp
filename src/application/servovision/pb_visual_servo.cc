@@ -15,18 +15,14 @@ namespace common {
 
 namespace generator {
 
-pb_visual_servo::pb_visual_servo()
+pb_visual_servo::pb_visual_servo(boost::shared_ptr <visual_servo_regulator> regulator):visual_servo(regulator)
 {
-	// TODO Auto-generated constructor stub
-
 }
 
 pb_visual_servo::~pb_visual_servo()
-{
-	// TODO Auto-generated destructor stub
-}
+{}
 
-}
+}//namespace generator {
 
 }
 

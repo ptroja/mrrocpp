@@ -21,13 +21,9 @@ namespace common {
 namespace generator {
 
 pb_eih_visual_servo::pb_eih_visual_servo(boost::shared_ptr <visual_servo_regulator> regulator, const std::string& section_name, mrrocpp::lib::configurator& configurator) :
-	visual_servo(regulator)
+	pb_visual_servo(regulator)
 {
 	try {
-		vsp_fradia
-				= boost::shared_ptr <fradia_sensor <position_based_reading, position_based_configuration> >(new fradia_sensor <
-						position_based_reading, position_based_configuration> (configurator, section_name));
-
 		position_based_configuration pb_config;
 
 		Eigen::Matrix <double, 3, 3> intrinsics = configurator.value <3, 3> ("fradia_camera_intrinsics", section_name);
@@ -43,7 +39,8 @@ pb_eih_visual_servo::pb_eih_visual_servo(boost::shared_ptr <visual_servo_regulat
 			pb_config.dcp.distortion[i] = distortion(0, i);
 		}
 
-		vsp_fradia->configure_fradia_task(pb_config);
+		vsp_fradia = boost::shared_ptr <pb_fradia_sensor>(new pb_fradia_sensor(configurator, section_name, pb_config));
+		vsp_fradia->configure_sensor();
 
 		E_T_C = configurator.value <3, 4> ("E_T_C", section_name);
 
@@ -64,9 +61,9 @@ lib::Homog_matrix pb_eih_visual_servo::get_position_change(const lib::Homog_matr
 {
 	lib::Homog_matrix delta_position;
 
-	object_visible = vsp_fradia->image.tracking;
-	if (vsp_fradia->image.tracking) {
-		lib::Homog_matrix C_T_G(vsp_fradia->image.position);
+	object_visible = vsp_fradia->get_reading_message().tracking;
+	if (object_visible) {
+		lib::Homog_matrix C_T_G(vsp_fradia->get_reading_message().position);
 		lib::Homog_matrix error_matrix;
 
 		error_matrix = G_T_E_desired * E_T_C * C_T_G;
@@ -74,10 +71,10 @@ lib::Homog_matrix pb_eih_visual_servo::get_position_change(const lib::Homog_matr
 		lib::Xyz_Angle_Axis_vector aa_vector;
 		error_matrix.get_xyz_angle_axis(aa_vector);
 
-//		logDbg("aa_vector: %10lg, %10lg, %10lg, %10lg, %10lg, %10lg\n", aa_vector(0, 0), aa_vector(1, 0), aa_vector(2, 0), aa_vector(3, 0), aa_vector(4, 0), aa_vector(5, 0));
+		//		logDbg("aa_vector: %10lg, %10lg, %10lg, %10lg, %10lg, %10lg\n", aa_vector(0, 0), aa_vector(1, 0), aa_vector(2, 0), aa_vector(3, 0), aa_vector(4, 0), aa_vector(5, 0));
 
 		aa_vector = regulator->calculate_control(aa_vector, dt);
-//		logDbg("aa_vector after regulation: %10lg, %10lg, %10lg, %10lg, %10lg, %10lg\n", aa_vector(0, 0), aa_vector(1, 0), aa_vector(2, 0), aa_vector(3, 0), aa_vector(4, 0), aa_vector(5, 0));
+		//		logDbg("aa_vector after regulation: %10lg, %10lg, %10lg, %10lg, %10lg, %10lg\n", aa_vector(0, 0), aa_vector(1, 0), aa_vector(2, 0), aa_vector(3, 0), aa_vector(4, 0), aa_vector(5, 0));
 
 		delta_position.set_from_xyz_angle_axis(aa_vector);
 	}

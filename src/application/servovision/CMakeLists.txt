@@ -2,6 +2,7 @@
 add_executable(ecp_objectfollower_pb_sac
     objectfollower_pb_sac/ecp_t_objectfollower_pb_sac.cpp
     pb_sac_visual_servo.cc
+    pb_visual_servo.cc
     visual_servo.cc
     visual_servo_manager.cc
     simple_visual_servo_manager.cc
@@ -18,6 +19,7 @@ target_link_libraries(ecp_objectfollower_pb_sac
 add_executable(ecp_objectfollower_pb
     objectfollower_pb/ecp_t_objectfollower_pb.cc
     pb_eih_visual_servo.cc
+    pb_visual_servo.cc
     visual_servo.cc
     visual_servo_manager.cc
     simple_visual_servo_manager.cc

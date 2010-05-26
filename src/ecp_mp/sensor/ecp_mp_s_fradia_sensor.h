@@ -126,7 +126,7 @@ private:
 
 template <typename CONFIGURE_T, typename INITIATE_T, typename READING_T>
 fradia_sensor <CONFIGURE_T, INITIATE_T, READING_T>::fradia_sensor(mrrocpp::lib::configurator& configurator, const std::string& section_name, const CONFIGURE_T& configure_message) :
-	configure_message(configure_message), send_initiate_message(false), configurator(configurator)
+	configurator(configurator), configure_message(configure_message), send_initiate_message(false)
 {
 	sockaddr_in serv_addr;
 	hostent* server;

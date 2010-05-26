@@ -27,7 +27,7 @@ typedef ecp_mp::sensor::fradia_sensor <position_based_configuration, char, posit
 class pb_visual_servo : public mrrocpp::ecp::common::generator::visual_servo
 {
 public:
-	pb_visual_servo();
+	pb_visual_servo(boost::shared_ptr <visual_servo_regulator> regulator);
 	virtual ~pb_visual_servo();
 };
 

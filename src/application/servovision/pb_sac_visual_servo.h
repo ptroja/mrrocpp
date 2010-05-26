@@ -8,8 +8,7 @@
 #ifndef PB_SAC_VISUAL_SERVO_H_
 #define PB_SAC_VISUAL_SERVO_H_
 
-#include "visual_servo.h"
-#include "visual_servo_types.h"
+#include "pb_visual_servo.h"
 
 using visual_servo_types::position_based_configuration;
 using visual_servo_types::position_based_reading;
@@ -29,7 +28,7 @@ namespace generator {
 /**
  *
  */
-class pb_sac_visual_servo : public mrrocpp::ecp::common::generator::visual_servo
+class pb_sac_visual_servo : public pb_visual_servo
 {
 public:
 	pb_sac_visual_servo(boost::shared_ptr <visual_servo_regulator> regulator, const std::string& section_name, mrrocpp::lib::configurator& configurator);
