@@ -54,6 +54,7 @@ class acq_eih: public acquisition {
 			int number_of_measures;
 		} ofp;
 
+		ecp_mp::sensor::fradia_sensor<char, eihcalibration_t, chessboard_t> *fradia;
 	protected:
 		std::string K_fp;
 		std::string kk_fp;

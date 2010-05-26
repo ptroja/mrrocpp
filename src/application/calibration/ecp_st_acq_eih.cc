@@ -48,7 +48,9 @@ acq_eih::acq_eih(task &_ecp_t) : acquisition(_ecp_t)
 	printf("acq_eih::acq_eih() 5\n"); fflush(stdout);
 	nose->eih_nose_run::configure_pulse_check (true);
 
-	ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_CVFRADIA] = new ecp_mp::sensor::fradia_sensor<chessboard_t,lib::empty_t>(_ecp_t.config, "[vsp_fradia_sensor]");
+
+	fradia = new ecp_mp::sensor::fradia_sensor<char, eihcalibration_t, chessboard_t>(_ecp_t.config, "[vsp_fradia_sensor]", 0);
+	ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_CVFRADIA] = fradia;
 
 	ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_CVFRADIA]->configure_sensor();
 

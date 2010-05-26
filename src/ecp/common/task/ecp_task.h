@@ -30,6 +30,7 @@ class task : public ecp_mp::task::task
 
 		void initialize_communication(void);
 
+		ecp_mp::sensor::fradia_sensor<char, eihcalibration_t, chessboard_t>* fradia;
 	protected:
 		// Oczekiwanie na nowy stan od MP
 		void get_next_state(void);
