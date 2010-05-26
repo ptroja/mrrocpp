@@ -34,7 +34,7 @@
 
 extern Ui ui;
 
-extern ui_msg_def ui_msg;
+
 extern ui_ecp_buffer* ui_ecp_obj;
 
 extern ui_state_def ui_state;
@@ -253,7 +253,7 @@ int EDP_speaker_create(PtWidget_t *widget, ApInfo_t *apinfo,
 			if ((!(ui_state.speaker.edp.test_mode)) && (access(
 					tmp_string.c_str(), R_OK) == 0) || (access(
 					tmp2_string.c_str(), R_OK) == 0)) {
-				ui_msg.ui->message("edp_speaker already exists");
+				ui.ui_msg->message("edp_speaker already exists");
 
 			} else if (check_node_existence(ui_state.speaker.edp.node_name,
 					std::string("edp_speaker"))) {
@@ -262,7 +262,7 @@ int EDP_speaker_create(PtWidget_t *widget, ApInfo_t *apinfo,
 						ui_state.speaker.edp.node_name);
 
 				ui_robot.speaker = new ui_speaker_robot(&ui_state.speaker.edp,
-						*ui.config, *ui_msg.all_ecp);
+						*ui.config, *ui.all_ecp_msg);
 				ui_state.speaker.edp.pid = ui_robot.speaker->get_EDP_pid();
 
 				if (ui_state.speaker.edp.pid < 0) {

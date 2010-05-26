@@ -37,7 +37,6 @@ extern Ui ui;
 
 extern function_execution_buffer main_eb;
 
-extern ui_msg_def ui_msg;
 extern ui_ecp_buffer* ui_ecp_obj;
 
 extern ui_state_def ui_state;
@@ -1178,23 +1177,23 @@ int reload_whole_configuration() {
 		}
 
 		// inicjacja komunikacji z watkiem sr
-		if (ui_msg.ui == NULL) {
-			ui_msg.ui = new lib::sr_ui(lib::UI,
+		if (ui.ui_msg == NULL) {
+			ui.ui_msg = new lib::sr_ui(lib::UI,
 					ui_state.ui_attach_point.c_str(),
 					ui_state.network_sr_attach_point.c_str(), false);
 		}
 
 		// inicjacja komunikacji z watkiem sr
-		if (ui_msg.all_ecp == NULL) {
-			ui_msg.all_ecp = new lib::sr_ecp(lib::ECP, "ui_all_ecp",
+		if (ui.all_ecp_msg == NULL) {
+			ui.all_ecp_msg = new lib::sr_ecp(lib::ECP, "ui_all_ecp",
 					ui_state.network_sr_attach_point.c_str(), false);
 		}
 
 		// wypisanie komunikatu o odczytaniu konfiguracji
-		if (ui_msg.ui) {
+		if (ui.ui_msg) {
 			std::string msg(ui_state.config_file);
 			msg += " config file loaded";
-			ui_msg.ui->message(msg.c_str());
+			ui.ui_msg->message(msg.c_str());
 		}
 
 	}
@@ -1904,12 +1903,12 @@ int check_gns() {
 					"check_gns - Nie wykryto wezla: %s, ktory wystepuje w pliku konfiguracyjnym\n",
 					(*node_list_iterator).c_str());
 
-			if ((ui_state.is_sr_thread_loaded) && (ui_msg.ui != NULL)) {
+			if ((ui_state.is_sr_thread_loaded) && (ui.ui_msg != NULL)) {
 				std::string tmp;
 				tmp = std::string("check_gns - Nie wykryto wezla: ")
 						+ (*node_list_iterator) + std::string(
 						", ktory wystepuje w pliku konfiguracyjnym");
-				ui_msg.ui->message(lib::NON_FATAL_ERROR, tmp);
+				ui.ui_msg->message(lib::NON_FATAL_ERROR, tmp);
 			}
 
 		}
@@ -2267,7 +2266,7 @@ int MPup_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 		// sprawdzenie czy nie jest juz zarejestrowany serwer komunikacyjny MP
 		if (access(mp_network_pulse_attach_point.c_str(), R_OK) == 0) {
-			ui_msg.ui->message(lib::NON_FATAL_ERROR, "MP already exists");
+			ui.ui_msg->message(lib::NON_FATAL_ERROR, "MP already exists");
 		} else if (check_node_existence(ui_state.mp.node_name,
 				std::string("mp"))) {
 			ui_state.mp.pid = ui.config->process_spawn(MP_SECTION);
@@ -2672,7 +2671,7 @@ bool check_node_existence(const std::string _node,
 	if (access(opendir_path.c_str(), R_OK) != 0) {
 		std::string tmp(beginnig_of_message);
 		tmp += std::string(" node: ") + _node + std::string(" is unreachable");
-		ui_msg.ui->message(lib::NON_FATAL_ERROR, tmp);
+		ui.ui_msg->message(lib::NON_FATAL_ERROR, tmp);
 
 		return false;
 	}

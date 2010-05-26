@@ -37,7 +37,7 @@ extern Ui ui;
 
 extern function_execution_buffer edp_irp6ot_tfg_eb;
 extern ui_state_def ui_state;
-extern ui_msg_def ui_msg;
+
 extern ui_robot_def ui_robot;
 
 
@@ -122,7 +122,7 @@ int EDP_irp6ot_tfg_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 			if ((!(ui_state.irp6ot_tfg.edp.test_mode)) && (access(
 					tmp_string.c_str(), R_OK) == 0) || (access(
 					tmp2_string.c_str(), R_OK) == 0)) {
-				ui_msg.ui->message(lib::NON_FATAL_ERROR,
+				ui.ui_msg->message(lib::NON_FATAL_ERROR,
 						"edp_irp6ot_tfg already exists");
 			} else if (check_node_existence(ui_state.irp6ot_tfg.edp.node_name,
 					std::string("edp_irp6ot_tfg"))) {
@@ -134,7 +134,7 @@ int EDP_irp6ot_tfg_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 				{
 					boost::unique_lock<boost::mutex> lock(ui.process_creation_mtx);
 					ui_robot.irp6ot_tfg = new ui_tfg_and_conv_robot(*ui.config,
-							*ui_msg.all_ecp, lib::ROBOT_IRP6OT_TFG);
+							*ui.all_ecp_msg, lib::ROBOT_IRP6OT_TFG);
 				}
 
 				ui_state.irp6ot_tfg.edp.pid

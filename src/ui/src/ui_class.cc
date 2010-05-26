@@ -11,7 +11,8 @@
 //
 
 
-Ui::Ui() {
+Ui::Ui() :
+	config(NULL), all_ecp_msg(NULL), ui_msg(NULL) {
 
 }
 

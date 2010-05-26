@@ -33,14 +33,12 @@
 
 extern Ui ui;
 
-extern ui_msg_def ui_msg;
 extern ui_ecp_buffer* ui_ecp_obj;
 
 extern ui_state_def ui_state;
 
 extern ui_robot_def ui_robot;
 extern ui_ecp_buffer* ui_ecp_obj;
-
 
 double irp6m_current_pos[IRP6_MECHATRONIKA_NUM_OF_SERVOS]; // pozycja biezaca
 double irp6m_desired_pos[IRP6_MECHATRONIKA_NUM_OF_SERVOS]; // pozycja zadana
@@ -202,7 +200,7 @@ int EDP_irp6_mechatronika_create(PtWidget_t *widget, ApInfo_t *apinfo,
 			if ((!(ui_state.irp6_mechatronika.edp.test_mode)) && (access(
 					busy_attach_point.c_str(), R_OK) == 0) || (access(
 					resourceman_attach_point.c_str(), R_OK) == 0)) {
-				ui_msg.ui->message("edp_irp6_mechatronika already exists");
+				ui.ui_msg->message("edp_irp6_mechatronika already exists");
 
 			} else if (check_node_existence(
 					ui_state.irp6_mechatronika.edp.node_name, std::string(
@@ -211,10 +209,11 @@ int EDP_irp6_mechatronika_create(PtWidget_t *widget, ApInfo_t *apinfo,
 						= ui.config->return_node_number(
 								ui_state.irp6_mechatronika.edp.node_name);
 				{
-					boost::unique_lock<boost::mutex> lock(ui.process_creation_mtx);
+					boost::unique_lock<boost::mutex> lock(
+							ui.process_creation_mtx);
 
 					ui_robot.irp6_mechatronika = new ui_irp6_common_robot(
-							*ui.config, *ui_msg.all_ecp,
+							*ui.config, *ui.all_ecp_msg,
 							lib::ROBOT_IRP6_MECHATRONIKA);
 				}
 
@@ -952,7 +951,7 @@ int export_wnd_irp6m_inc(PtWidget_t *widget, ApInfo_t *apinfo,
 	sprintf(buffer, "EDP_IRP6_M INTERNAL POSITION\n %f %f %f %f %f",
 			*wektor[0], *wektor[1], *wektor[2], *wektor[3], *wektor[4]);
 
-	ui_msg.ui->message(buffer);
+	ui.ui_msg->message(buffer);
 
 	return (Pt_CONTINUE);
 }
@@ -1196,7 +1195,7 @@ int export_wnd_irp6m_int(PtWidget_t *widget, ApInfo_t *apinfo,
 	sprintf(buffer, "EDP_IRP6_M INTERNAL POSITION\n %f %f %f %f %f",
 			*wektor[0], *wektor[1], *wektor[2], *wektor[3], *wektor[4]);
 
-	ui_msg.ui->message(buffer);
+	ui.ui_msg->message(buffer);
 
 	return (Pt_CONTINUE);
 
@@ -2127,7 +2126,7 @@ int export_wnd_irp6m_xyz_euler_zyz(PtWidget_t *widget, ApInfo_t *apinfo,
 			*wektor[0], *wektor[1], *wektor[2], *wektor[3], *wektor[4],
 			*wektor[5]);
 
-	ui_msg.ui->message(buffer);
+	ui.ui_msg->message(buffer);
 
 	return (Pt_CONTINUE);
 
@@ -2725,7 +2724,7 @@ int export_wnd_irp6m_xyz_angle_axis(PtWidget_t *widget, ApInfo_t *apinfo,
 			*wektor[0], *wektor[1], *wektor[2], *wektor[3], *wektor[4],
 			*wektor[5]);
 
-	ui_msg.ui->message(buffer);
+	ui.ui_msg->message(buffer);
 
 	return (Pt_CONTINUE);
 

@@ -43,10 +43,10 @@ catch (ecp::common::ecp_robot::ECP_error & er) { \
 		case INVALID_EDP_REPLY: \
 		case INVALID_ROBOT_MODEL_TYPE: \
 			/* Komunikat o bledzie wysylamy do SR */ \
-			ui_msg.all_ecp->message (lib::NON_FATAL_ERROR, er.error_no); \
+			ui.all_ecp_msg->message (lib::NON_FATAL_ERROR, er.error_no); \
 		break; \
 		default: \
-			ui_msg.all_ecp->message (lib::NON_FATAL_ERROR, 0, "ECP: Unidentified exception"); \
+			ui.all_ecp_msg->message (lib::NON_FATAL_ERROR, 0, "ECP: Unidentified exception"); \
 			perror("Unidentified exception"); \
 		} /* end: switch */ \
 	} \
@@ -55,7 +55,7 @@ catch (ecp::common::ecp_robot::ECP_error & er) { \
 catch(const std::exception & e){\
 	std::string tmp_string(" The following error has been detected: ");\
 	tmp_string += e.what(); \
-	ui_msg.all_ecp->message (lib::NON_FATAL_ERROR, tmp_string.c_str());\
+	ui.all_ecp_msg->message (lib::NON_FATAL_ERROR, tmp_string.c_str());\
    std::cerr<<"UI: The following error has been detected :\n\t"<<e.what()<<std::endl;\
 }\
 \
@@ -301,11 +301,6 @@ public:
 	ui_ecp_buffer();
 
 };
-
-typedef struct {
-	lib::sr_ecp* all_ecp; // Wskaznik na obiekt do komunikacji z SR z fukcja ECP dla wszystkich robotow
-	lib::sr_ui* ui; // Wskaznik na obiekt do komunikacji z SR
-} ui_msg_def;
 
 void UI_close(void);
 

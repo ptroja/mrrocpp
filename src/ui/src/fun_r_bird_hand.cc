@@ -40,7 +40,7 @@ extern Ui ui;
 extern function_execution_buffer edp_bird_hand_eb;
 extern ui_state_def ui_state;
 
-extern ui_msg_def ui_msg;
+
 
 int EDP_bird_hand_create(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo)
@@ -87,7 +87,7 @@ int EDP_bird_hand_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 			if ((!(ui.bird_hand.state.edp.test_mode)) && (access(
 					tmp_string.c_str(), R_OK) == 0) || (access(
 					tmp2_string.c_str(), R_OK) == 0)) {
-				ui_msg.ui->message(lib::NON_FATAL_ERROR,
+				ui.ui_msg->message(lib::NON_FATAL_ERROR,
 						"edp_bird_hand already exists");
 			} else if (check_node_existence(ui.bird_hand.state.edp.node_name,
 					std::string("edp_bird_hand"))) {
@@ -97,7 +97,7 @@ int EDP_bird_hand_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 				{
 					boost::unique_lock<boost::mutex> lock(ui.process_creation_mtx);
 					ui.bird_hand.ui_ecp_robot = new ui_bird_hand_robot(
-							*ui.config, *ui_msg.all_ecp);
+							*ui.config, *ui.all_ecp_msg);
 
 				}
 

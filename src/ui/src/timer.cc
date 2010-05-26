@@ -18,14 +18,16 @@
 #include "lib/srlib.h"
 // #include "ecp/common/ecp.h"
 #include "lib/com_buf.h"
+#include "ui/ui_class.h"
 
 /* Local headers */
 #include "ablibs.h"
 #include "abimport.h"
 #include "proto.h"
 
+extern Ui ui;
 extern ui_sr_buffer* ui_sr_obj;
-extern ui_msg_def ui_msg;
+
 extern ui_state_def ui_state;
 extern std::ofstream *log_file_outfile;
 
@@ -150,7 +152,7 @@ int OnTimer(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 		ui_state.ui_state = 3;
 		// 		delay(5000);
 		MPslay(widget, apinfo, cbinfo);
-		ui_msg.ui->message("closing");
+		ui.ui_msg->message("closing");
 	} else if (ui_state.ui_state == 3) {// odliczanie
 		// 	printf("w ontimer 3\n");
 		if ((--closing_delay_counter) <= 0)

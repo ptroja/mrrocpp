@@ -84,8 +84,6 @@ ui_sr_buffer* ui_sr_obj;
 
 ui_ecp_buffer* ui_ecp_obj;
 
-ui_msg_def ui_msg;
-
 // forward declaration
 void *sr_thread(void* arg);
 

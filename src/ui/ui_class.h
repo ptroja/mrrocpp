@@ -28,6 +28,10 @@ private:
 public:
 	boost::mutex process_creation_mtx;
 	lib::configurator* config;
+	lib::sr_ecp* all_ecp_msg; // Wskaznik na obiekt do komunikacji z SR z fukcja ECP dla wszystkich robotow
+	lib::sr_ui* ui_msg; // Wskaznik na obiekt do komunikacji z SR
+
+
 	UiRobotBirdHand bird_hand;
 
 	Ui();

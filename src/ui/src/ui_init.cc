@@ -58,8 +58,6 @@
 
 Ui ui;
 
-extern ui_msg_def ui_msg;
-
 ui_state_def ui_state;
 
 std::ofstream *log_file_outfile;
@@ -150,8 +148,6 @@ int init(PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 	lib::set_thread_priority(pthread_self(), MAX_PRIORITY - 6);
 
-	ui.config = NULL;
-	ui_msg.ui = NULL;
 	ui_state.ui_state = 1;// ui working
 
 	ui_state.irp6_on_track.edp.state = -1; // edp nieaktywne

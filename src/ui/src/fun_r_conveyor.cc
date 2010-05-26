@@ -38,7 +38,6 @@ extern Ui ui;
 
 extern function_execution_buffer edp_conv_eb;
 
-extern ui_msg_def ui_msg;
 extern ui_ecp_buffer* ui_ecp_obj;
 
 extern ui_state_def ui_state;
@@ -537,7 +536,7 @@ int EDP_conveyor_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 			if ((!(ui_state.conveyor.edp.test_mode)) && (access(
 					tmp_string.c_str(), R_OK) == 0) || (access(
 					tmp2_string.c_str(), R_OK) == 0)) {
-				ui_msg.ui->message(lib::NON_FATAL_ERROR,
+				ui.ui_msg->message(lib::NON_FATAL_ERROR,
 						"edp_conveyor already exists");
 			} else if (check_node_existence(ui_state.conveyor.edp.node_name,
 					std::string("edp_conveyor"))) {
@@ -547,7 +546,7 @@ int EDP_conveyor_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 					boost::unique_lock<boost::mutex> lock(
 							ui.process_creation_mtx);
 					ui_robot.conveyor = new ui_tfg_and_conv_robot(*ui.config,
-							*ui_msg.all_ecp, lib::ROBOT_CONVEYOR);
+							*ui.all_ecp_msg, lib::ROBOT_CONVEYOR);
 
 				}
 				ui_state.conveyor.edp.pid
