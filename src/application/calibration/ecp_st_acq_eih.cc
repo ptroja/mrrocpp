@@ -118,14 +118,14 @@ void acq_eih::main_task_algorithm(void) {
 	smoothgen->Move();
 
 	// doprowadzenie chwytaka do szachownicy "wodzeniem za nos"
-	while (ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.chessboard.found
+	/*while (ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.chessboard.found
 			== false) {
 		ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_CVFRADIA]->get_reading();
 		nose->Move();
 		generator->Move();
 		store_data();
 	}
-	nose->Move();
+	nose->Move();*/
 
 	ecp_sub_task::ecp_t.sr_ecp_msg->message("Data collection\n");
 
@@ -284,7 +284,7 @@ void acq_eih::main_task_algorithm(void) {
 					flaga = true;
 
 					if (m != 0) {
-						//powrot do poprzedniej pozycji
+						//powrot do poprzedniej pozycjiodczyt danych do obliczen z zadanych plikow
 						smoothgen->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS,
 								vv, aa, 0.0, 0.0, 0.0, -1.0 * m * e, -1.0 * m
 										* c, -1.0 * m * d, 0.0, 0.0, true);
