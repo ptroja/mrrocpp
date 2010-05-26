@@ -29,7 +29,6 @@ extern Ui ui;
 extern ui_sr_buffer* ui_sr_obj;
 
 extern ui_state_def ui_state;
-extern std::ofstream *log_file_outfile;
 
 int OnTimer(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
@@ -138,10 +137,10 @@ int OnTimer(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 			PtMultiTextModifyText(ABW_PtMultiText_sr_window, NULL, NULL, -1,
 					current_line, strlen(current_line), &attr, attributes_mask);
 
-			(*log_file_outfile) << current_line;
+			(*ui.log_file_outfile) << current_line;
 		}
 
-		(*log_file_outfile).flush();
+		(*ui.log_file_outfile).flush();
 
 	}
 
@@ -168,8 +167,8 @@ int OnTimer(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 		if ((--closing_delay_counter) <= 0)
 			ui.ui_state = 6;
 	} else if (ui.ui_state == 6) {// zakonczenie aplikacji
-		(*log_file_outfile).close();
-		delete log_file_outfile;
+		(*ui.log_file_outfile).close();
+		delete ui.log_file_outfile;
 		printf("UI CLOSED\n");
 		abort_threads();
 		PtExit(EXIT_SUCCESS);

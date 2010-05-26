@@ -49,6 +49,7 @@ public:
 	bool is_teaching_window_open; // informacja czy okno nauki jest otwarte
 	bool is_file_selection_window_open; // informacja czy okno z wyborem pliku jest otwarte
 
+	std::ofstream *log_file_outfile;
 
 	boost::mutex process_creation_mtx;
 	lib::configurator* config;

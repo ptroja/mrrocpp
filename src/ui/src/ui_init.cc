@@ -60,8 +60,6 @@ Ui ui;
 
 ui_state_def ui_state;
 
-std::ofstream *log_file_outfile;
-
 /* Przechwycenie sygnalu */
 void catch_signal(int sig) {
 	int status;
@@ -315,9 +313,9 @@ int init(PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 	strcat(log_file_with_dir, file_name);
 
-	log_file_outfile = new std::ofstream(log_file_with_dir, std::ios::out);
+	ui.log_file_outfile = new std::ofstream(log_file_with_dir, std::ios::out);
 
-	if (!(*log_file_outfile)) {
+	if (!(*ui.log_file_outfile)) {
 		std::cerr << "Cannot open file: " << file_name << '\n';
 		perror("because of");
 	}
