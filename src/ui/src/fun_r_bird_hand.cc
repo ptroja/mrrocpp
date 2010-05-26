@@ -36,7 +36,6 @@
 
 extern Ui ui;
 
-extern function_execution_buffer edp_bird_hand_eb;
 extern ui_state_def ui_state;
 
 int EDP_bird_hand_create(PtWidget_t *widget, ApInfo_t *apinfo,
