@@ -39,7 +39,7 @@ extern Ui ui;
 extern boost::mutex process_creation_mtx;
 extern function_execution_buffer edp_bird_hand_eb;
 extern ui_state_def ui_state;
-extern lib::configurator* config;
+
 extern ui_msg_def ui_msg;
 extern ui_robot_def ui_robot;
 

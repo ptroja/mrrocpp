@@ -60,10 +60,12 @@ ui_bird_hand_robot::~ui_bird_hand_robot() {
 void ui_bird_hand_robot::get_controller_state(
 		lib::controller_state_t & robot_controller_initial_state_l) {
 	// Zlecenie odczytu numeru modelu i korektora kinematyki
+
+
 	the_robot->ecp_command.instruction.instruction_type = lib::GET;
 	the_robot->ecp_command.instruction.get_type = CONTROLLER_STATE_DEFINITION;
 
-	execute_motion();
+	the_robot->execute_motion();
 
 	robot_controller_initial_state_l
 			= the_robot->reply_package.controller_state;
