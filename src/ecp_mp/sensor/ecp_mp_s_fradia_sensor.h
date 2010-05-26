@@ -52,10 +52,9 @@ private:
 
 	const static int task_name_max_length = 256;
 
-	struct FRADIA_COMMAND_CONFIGURE
+	struct FRADIA_COMMAND_LOAD_TASK
 	{
 		char task_name[task_name_max_length];
-		CONFIGURE_T configure_params;
 	};
 
 public:
@@ -217,16 +216,16 @@ void fradia_sensor <CONFIGURE_T, INITIATE_T, READING_T>::configure_sensor()
 {
 	FRADIA_COMMAND_HEADER header;
 	header.i_code = lib::VSP_CONFIGURE_SENSOR;
-	header.data_size = sizeof(FRADIA_COMMAND_CONFIGURE);
+	header.data_size = sizeof(FRADIA_COMMAND_LOAD_TASK) + sizeof(CONFIGURE_T);
 	send_to_fradia(header);
 
-	FRADIA_COMMAND_CONFIGURE configure_command;
+	FRADIA_COMMAND_LOAD_TASK load_task_command;
 	if (fradia_task.size() >= task_name_max_length) {
 		throw std::runtime_error("fradia_task.size() >= task_name_max_length");
 	}
-	strcpy(configure_command.task_name, fradia_task.c_str());
-	configure_command.configure_params = configure_message;
-	send_to_fradia(configure_command);
+	strcpy(load_task_command.task_name, fradia_task.c_str());
+	send_to_fradia(load_task_command);
+	send_to_fradia(configure_message);
 
 	while (1) {
 		reply_header = receive_from_fradia <FRADIA_REPLY_HEADER> ();
