@@ -294,6 +294,18 @@ ApWindowLink_t wnd_irp6p_tfg_moves = {
 	AbLinks_wnd_irp6p_tfg_moves, 984, 19
 	};
 
+ApWindowLink_t wnd_bird_hand_command_and_status = {
+	"wnd_bird_hand_command_and_status.wgtw",
+	&AbContext,
+	NULL, 999, 0
+	};
+
+ApWindowLink_t wnd_bird_hand_configuration = {
+	"wnd_bird_hand_configuration.wgtw",
+	&AbContext,
+	NULL, 1022, 0
+	};
+
 static ApItem_t ApItems_file_menu[ 2 ] = {
 	{ 1, 1, 0, NULL, 0, "mm_file_quit", "&Quit", NULL },
 	{ 0, 0, NULL, NULL, 0, NULL, NULL, NULL } };
@@ -307,7 +319,7 @@ ApMenuLink_t file_menu = {
 	ApItems_file_menu,
 	& AbContext,
 	AbLinks_file_menu,
-	999, 1, 1
+	1045, 1, 1
 	};
 
 static ApItem_t ApItems_task_menu[ 6 ] = {
@@ -327,7 +339,7 @@ ApMenuLink_t task_menu = {
 	ApItems_task_menu,
 	& AbContext,
 	AbLinks_task_menu,
-	1001, 4, 5
+	1047, 4, 5
 	};
 
 static ApItem_t ApItems_help_menu[ 2 ] = {
@@ -343,7 +355,7 @@ ApMenuLink_t help_menu = {
 	ApItems_help_menu,
 	& AbContext,
 	AbLinks_help_menu,
-	1007, 1, 1
+	1053, 1, 1
 	};
 
 static ApItem_t ApItems_special_menu[ 5 ] = {
@@ -362,7 +374,7 @@ ApMenuLink_t special_menu = {
 	ApItems_special_menu,
 	& AbContext,
 	AbLinks_special_menu,
-	1009, 3, 4
+	1055, 3, 4
 	};
 
 static ApItem_t ApItems_all_robots_menu[ 11 ] = {
@@ -387,7 +399,7 @@ ApMenuLink_t all_robots_menu = {
 	ApItems_all_robots_menu,
 	& AbContext,
 	AbLinks_all_robots_menu,
-	1014, 8, 10
+	1060, 8, 10
 	};
 
 static ApItem_t ApItems_robot_menu[ 139 ] = {
@@ -540,7 +552,7 @@ ApMenuLink_t robot_menu = {
 	ApItems_robot_menu,
 	& AbContext,
 	AbLinks_robot_menu,
-	1025, 93, 138
+	1071, 93, 138
 	};
 
 
