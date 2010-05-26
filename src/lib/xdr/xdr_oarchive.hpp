@@ -103,7 +103,11 @@ public:
 //	SAVE_A_TYPE(int32_t, xdr_int32_t)
 //	SAVE_A_TYPE(uint32_t, xdr_u_int32_t)
 	SAVE_A_TYPE(int64_t, xdr_int64_t)
+#if defined(__QNXNTO__)
 	SAVE_A_TYPE(uint64_t, xdr_u_int64_t)
+#else
+	SAVE_A_TYPE(uint64_t, xdr_uint64_t)
+#endif
 
 	/**
 	 * Saving Archive Concept::is_loading

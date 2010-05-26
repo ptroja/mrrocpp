@@ -98,7 +98,11 @@ public:
 //	LOAD_A_TYPE(int32_t, xdr_int32_t)
 //	LOAD_A_TYPE(uint32_t, xdr_u_int32_t)
 	LOAD_A_TYPE(int64_t, xdr_int64_t)
+#if defined(__QNXNTO__)
 	LOAD_A_TYPE(uint64_t, xdr_u_int64_t)
+#else
+	LOAD_A_TYPE(uint64_t, xdr_uint64_t)
+#endif
 
     /**
      * Saving Archive Concept::is_loading
