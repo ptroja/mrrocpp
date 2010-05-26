@@ -21,6 +21,7 @@ UiRobot::UiRobot() :
 	state.edp.state = -1; // edp nieaktywne
 	state.edp.last_state = -1; // edp nieaktywne
 	state.ecp.trigger_fd = -1;
+	state.edp.is_synchronised = false; // edp nieaktywne
 
 }
 
