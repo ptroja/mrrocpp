@@ -4,7 +4,6 @@
 #include <string.h>
 #include <unistd.h>
 #include "ecp_t_calibration.h"
-#include "ecp_t_calib_axzb.h"
 
 namespace mrrocpp {
 namespace ecp {

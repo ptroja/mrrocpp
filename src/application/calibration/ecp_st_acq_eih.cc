@@ -36,6 +36,8 @@ acq_eih::acq_eih(task &_ecp_t) :
 	C = ecp_sub_task::ecp_t.config.value<double> ("C");
 	D = ecp_sub_task::ecp_t.config.value<double> ("D");
 	E = ecp_sub_task::ecp_t.config.value<double> ("E");
+	acc = ecp_sub_task::ecp_t.config.value<double> ("acceleration");
+	vel = ecp_sub_task::ecp_t.config.value<double> ("velocity");
 	calibrated = false;
 
 	printf("acq_eih::acq_eih() 3\n");
@@ -67,9 +69,8 @@ acq_eih::acq_eih(task &_ecp_t) :
 
 	ecp_sub_task::ecp_t.sr_ecp_msg->message("ECP loaded eihacquisition");
 
-	printf("acq_eih::acq_eih() 8: %d\n", ofp.number_of_measures);
-	fflush(stdout);
 	// TODO: UWAGA: TU JEST WIELKI BUG: pole ofp nie jest zainicjalizowane
+	ofp.number_of_measures = ecp_sub_task::ecp_t.config.value<int> ("measures_count");
 
 	// translation vector (from robot base to tool frame) - received from MRROC
 	ofp.k = gsl_vector_calloc(3 * ofp.number_of_measures);
@@ -117,20 +118,20 @@ void acq_eih::main_task_algorithm(void) {
 	smoothgen->Move();
 
 	// doprowadzenie chwytaka do szachownicy "wodzeniem za nos"
-	while (ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.chessboard.found
+	/*while (ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.chessboard.found
 			== false) {
 		ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_CVFRADIA]->get_reading();
 		nose->Move();
 		generator->Move();
 		store_data();
 	}
-	nose->Move();
+	nose->Move();*/
 
 	ecp_sub_task::ecp_t.sr_ecp_msg->message("Data collection\n");
 
 	// maximum velocity and acceleration of smooth generator
-	double vv[MAX_SERVOS_NR] = { 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3 };
-	double aa[MAX_SERVOS_NR] = { 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 };
+	double vv[MAX_SERVOS_NR] = { vel, vel, vel, vel, vel, vel, vel, vel };
+	double aa[MAX_SERVOS_NR] = { acc, acc, acc, acc, acc, acc, acc, acc };
 	//double coordinates[MAX_SERVOS_NR]={0.0, 0.0, -1.0 * A, 0.0, 0.0, 0.0, 0.0, 0.0};
 	smoothgen->set_relative();
 
@@ -141,13 +142,14 @@ void acq_eih::main_task_algorithm(void) {
 			== true && !calibrated) {
 		//opuszczenie chwytaka o 2.5 cm
 		smoothgen->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, vv, aa, 0.0, 0.0,
-				-1.0 * A, 0.0, 0.0, 0.0, 0.0, 0.0, true);
+				A, 0.0, 0.0, 0.0, 0.0, 0.0, true);
 		smoothgen->Move();
 		nanosleep(&delay, NULL);
 		ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_CVFRADIA]->get_reading();
 		generator->Move();
 		store_data();
 		++i;
+
 	}
 
 	// podnies chwytak do ostatniej pozycji w ktorej wykryto szachownice
@@ -197,7 +199,8 @@ void acq_eih::main_task_algorithm(void) {
 				//powrot do poprzedniej pozycji
 				smoothgen->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, vv, aa,
 						0.0, 0.0, 0.0, -1.0 * m * e, -1.0 * m * c,
-						-1.0 * m * d, 0.0, 0.0, true);
+						-1.0 * m * d, 0.0, 0.0, true);printf("acq_eih::main_task_alg() 1\n");
+						fflush(stdout);
 				smoothgen->Move();
 				m = 0;
 				nanosleep(&delay, NULL);
@@ -281,7 +284,7 @@ void acq_eih::main_task_algorithm(void) {
 					flaga = true;
 
 					if (m != 0) {
-						//powrot do poprzedniej pozycji
+						//powrot do poprzedniej pozycjiodczyt danych do obliczen z zadanych plikow
 						smoothgen->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS,
 								vv, aa, 0.0, 0.0, 0.0, -1.0 * m * e, -1.0 * m
 										* c, -1.0 * m * d, 0.0, 0.0, true);
@@ -313,14 +316,14 @@ void acq_eih::main_task_algorithm(void) {
 
 		// podnies chwytak o 2.5 cm
 		smoothgen->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, vv, aa, 0.0, 0.0,
-				A, 0.0, 0.0, 0.0, 0.0, 0.0, true);
+				-1.0 * A, 0.0, 0.0, 0.0, 0.0, 0.0, true);
 		smoothgen->Move();
 		nanosleep(&delay, NULL);
 		ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_CVFRADIA]->get_reading();
 		--i;
 	}
-
 	if (calibrated) {
+
 		FILE *FP;
 		FP = fopen(M_fp.c_str(), "w");
 		gsl_matrix_fprintf(FP, ofp.M, "%g");

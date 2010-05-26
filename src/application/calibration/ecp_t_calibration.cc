@@ -12,16 +12,20 @@ calibration::calibration(lib::configurator &_config) : task(_config)
 
 void calibration::main_task_algorithm(void)
 {
-	int i,j,k;
+	int i;
 	char buffer[20]; //for sprintf
 
 	fdf.params = (void*)&ofp;
 
 	//calibration
-	gsl_vector *x;
+	gsl_vector *x, *temp;
+	gsl_matrix *X;
 
 	// initialize starting point
 	x = gsl_vector_calloc(dimension);
+
+	temp = gsl_vector_calloc(3);
+	X = gsl_matrix_calloc(3, 3);
 
 	int status;
 	size_t count = 0;
@@ -66,8 +70,28 @@ void calibration::main_task_algorithm(void)
 	for (i = 0; i < dimension; ++i){
 		sprintf(buffer, "%f6.3", gsl_vector_get(s2->x,i));
 		sr_ecp_msg->message(buffer);
+		if(i < 3){
+			gsl_vector_set(temp, i, gsl_vector_get(s2->x, i));
+		}
 //		if (i % 3 == 2)
 //			sr_ecp_msg->message("\t");
+	}
+	angles_to_rotation_matrix(temp, X);
+
+	printf("X = [");
+	fflush(stdout);
+	for (i = 0; i < 3; ++i){
+		for (int j = 0; j < 3; ++j){
+			printf("%0.15lg ", gsl_matrix_get(X, i, j));
+			fflush(stdout);
+		}
+		if(i == 2){
+			printf("%0.15lg]", gsl_vector_get(temp, i));
+			fflush(stdout);
+		}else{
+			printf("%0.15lg; ", gsl_vector_get(temp, i));
+			fflush(stdout);
+		}
 	}
 
 //	sr_ecp_msg->message("Function value=");
