@@ -472,7 +472,7 @@ int reload_speaker_configuration() {
 			"is_speaker_active")) == 1) {
 
 		//ui_state.is_any_edp_active = true;
-		if (ui_state.is_mp_and_ecps_active) {
+		if (ui.is_mp_and_ecps_active) {
 			ui_state.speaker.ecp.network_trigger_attach_point
 					= ui.config->return_attach_point_name(
 							lib::configurator::CONFIG_SERVER,
@@ -576,7 +576,7 @@ int manage_interface_speaker() {
 		if (ui_state.speaker.edp.is_synchronised) {
 			// ApModifyItemState( &robot_menu, AB_ITEM_DIM, ABN_mm_speaker_synchronisation, NULL);
 
-			switch (ui_state.mp.state) {
+			switch (ui.mp.state) {
 			case UI_MP_NOT_PERMITED_TO_RUN:
 			case UI_MP_PERMITED_TO_RUN:
 				ApModifyItemState(&robot_menu, AB_ITEM_NORMAL,

@@ -13,7 +13,7 @@
 
 extern Ui ui;
 
-extern ui_state_def ui_state;
+// extern ui_state_def ui_state;
 
 //
 //
@@ -36,7 +36,7 @@ int UiRobotBirdHand::reload_configuration() {
 	if ((state.is_active = ui.config->value<int> ("is_bird_hand_active")) == 1) {
 		// ini_con->create_ecp_bird_hand (ini_con->ui->ecp_bird_hand_section);
 		//ui_state.is_any_edp_active = true;
-		if (ui_state.is_mp_and_ecps_active) {
+		if (ui.is_mp_and_ecps_active) {
 			state.ecp.network_trigger_attach_point
 					= ui.config->return_attach_point_name(
 							lib::configurator::CONFIG_SERVER,
@@ -130,7 +130,7 @@ int UiRobotBirdHand::manage_interface() {
 			ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL,
 					ABN_mm_all_robots_preset_positions, NULL);
 
-			switch (ui_state.mp.state) {
+			switch (ui.mp.state) {
 			case UI_MP_NOT_PERMITED_TO_RUN:
 			case UI_MP_PERMITED_TO_RUN:
 				ApModifyItemState(&robot_menu, AB_ITEM_NORMAL,

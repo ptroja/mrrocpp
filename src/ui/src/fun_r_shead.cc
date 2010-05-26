@@ -201,7 +201,7 @@ int reload_shead_configuration() {
 			== 1) {
 		// ini_con->create_ecp_shead (ini_con->ui->ecp_shead_section);
 		//ui_state.is_any_edp_active = true;
-		if (ui_state.is_mp_and_ecps_active) {
+		if (ui.is_mp_and_ecps_active) {
 			ui_state.shead.ecp.network_trigger_attach_point
 					= ui.config->return_attach_point_name(
 							lib::configurator::CONFIG_SERVER,
@@ -296,7 +296,7 @@ int manage_interface_shead() {
 			ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL,
 					ABN_mm_all_robots_preset_positions, NULL);
 
-			switch (ui_state.mp.state) {
+			switch (ui.mp.state) {
 			case UI_MP_NOT_PERMITED_TO_RUN:
 			case UI_MP_PERMITED_TO_RUN:
 				ApModifyItemState(&robot_menu, AB_ITEM_NORMAL,

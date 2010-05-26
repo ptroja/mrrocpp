@@ -212,9 +212,7 @@ int init(PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 	ui_state.file_window_mode = FSTRAJECTORY; // uczenie
 	ui_state.all_edps = UI_ALL_EDPS_NONE_EDP_LOADED;
-	ui_state.mp.state = UI_MP_NOT_PERMITED_TO_RUN;// mp wylaczone
-	ui_state.mp.last_state = UI_MP_NOT_PERMITED_TO_RUN;// mp wylaczone
-	ui_state.mp.pid = -1;
+
 	ui_state.is_task_window_open = false;// informacja czy okno zadanai jest otwarte
 	ui_state.is_process_control_window_open = false;// informacja czy okno sterowania procesami jest otwarte
 	ui_state.process_control_window_renew = true;
@@ -257,10 +255,6 @@ int init(PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 	ui_state.is_wind_irp6p_tfg_servo_algorithm_open = false;
 	ui_state.is_wind_irp6m_servo_algorithm_open = false;
 	ui_state.is_wind_conv_servo_algorithm_open = false;
-
-	ui_state.is_mp_and_ecps_active = false;
-	// ui_state.is_any_edp_active = false;
-
 
 	ui_state.irp6_on_track.edp.is_synchronised = false;
 	ui_state.irp6_postument.edp.is_synchronised = false;

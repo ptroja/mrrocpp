@@ -2846,7 +2846,7 @@ int reload_irp6ot_configuration() {
 			"is_irp6ot_m_active")) == 1) {
 		// ini_con->create_ecp_irp6_on_track (ini_con->ui->ECP_IRP6OT_M_SECTION);
 		//ui_state.is_any_edp_active = true;
-		if (ui_state.is_mp_and_ecps_active) {
+		if (ui.is_mp_and_ecps_active) {
 			ui_state.irp6_on_track.ecp.network_trigger_attach_point
 					= ui.config->return_attach_point_name(
 							lib::configurator::CONFIG_SERVER,
@@ -2997,7 +2997,7 @@ int manage_interface_irp6ot() {
 			ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL,
 					ABN_mm_all_robots_preset_positions, NULL);
 
-			switch (ui_state.mp.state) {
+			switch (ui.mp.state) {
 			case UI_MP_NOT_PERMITED_TO_RUN:
 			case UI_MP_PERMITED_TO_RUN:
 				ApModifyItemState(&robot_menu, AB_ITEM_NORMAL,

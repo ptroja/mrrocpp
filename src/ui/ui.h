@@ -204,9 +204,6 @@ typedef struct {
 	ecp_edp_ui_robot_def smb;
 	ecp_edp_ui_robot_def shead;
 
-	mp_state_def mp;
-	// bool is_any_edp_active;
-	bool is_mp_and_ecps_active;
 	bool is_sr_thread_loaded; // informacja czy okno zadania jest otwarte
 
 	int teachingstate; // dawne systemState do nauki

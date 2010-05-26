@@ -849,11 +849,11 @@ int process_control_window_init(PtWidget_t *widget, ApInfo_t *apinfo,
 		}
 
 		// Dla mp i ecp
-		if ((ui_state.mp.state != ui_state.mp.last_state)
+		if ((ui.mp.state != ui.mp.last_state)
 				|| (ui_state.process_control_window_renew)) {
 			ui_state.process_control_window_renew = false;
 
-			switch (ui_state.mp.state) {
+			switch (ui.mp.state) {
 			case UI_MP_PERMITED_TO_RUN:
 				block_widget(ABW_PtButton_wnd_processes_control_mp_pulse_start);
 				block_widget(ABW_PtButton_wnd_processes_control_mp_pulse_stop);
@@ -901,7 +901,7 @@ int process_control_window_init(PtWidget_t *widget, ApInfo_t *apinfo,
 				break;
 			}
 
-			ui_state.mp.last_state = ui_state.mp.state;
+			ui.mp.last_state = ui.mp.state;
 
 		}
 
@@ -991,8 +991,8 @@ int task_window_param_actualization(PtWidget_t *widget, ApInfo_t *apinfo,
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
-	/*			printf("aaa: %s\n",ui_state.mp_name);
-	 printf("bbb: %s\n",ui_state.mp_node_name);*/
+	/*			printf("aaa: %s\n",ui.mp_name);
+	 printf("bbb: %s\n",ui.mp_node_name);*/
 
 	PtSetResource(ABW_PtText_config_file, Pt_ARG_TEXT_STRING,
 			ui_state.config_file.c_str(), 0);
@@ -1092,12 +1092,12 @@ int reload_whole_configuration() {
 		ui_state.config_file_relativepath = "../configs/common.ini";
 	}
 
-	if ((ui_state.mp.state == UI_MP_NOT_PERMITED_TO_RUN) || (ui_state.mp.state
+	if ((ui.mp.state == UI_MP_NOT_PERMITED_TO_RUN) || (ui.mp.state
 			== UI_MP_PERMITED_TO_RUN)) { // jesli nie dziala mp podmien mp ecp vsp
 
 		ui.config->change_ini_file(ui_state.config_file.c_str());
 
-		ui_state.is_mp_and_ecps_active = ui.config->value<int> (
+		ui.is_mp_and_ecps_active = ui.config->value<int> (
 				"is_mp_and_ecps_active");
 
 		switch (ui_state.all_edps) {
@@ -1166,14 +1166,14 @@ int reload_whole_configuration() {
 
 		// zczytanie konfiguracji MP
 
-		if (ui_state.is_mp_and_ecps_active) {
-			ui_state.mp.network_pulse_attach_point
+		if (ui.is_mp_and_ecps_active) {
+			ui.mp.network_pulse_attach_point
 					= ui.config->return_attach_point_name(
 							lib::configurator::CONFIG_SERVER,
 							"mp_pulse_attach_point", MP_SECTION);
-			ui_state.mp.node_name = ui.config->value<std::string> ("node_name",
+			ui.mp.node_name = ui.config->value<std::string> ("node_name",
 					MP_SECTION);
-			ui_state.mp.pid = -1;
+			ui.mp.pid = -1;
 		}
 
 		// inicjacja komunikacji z watkiem sr
@@ -1510,17 +1510,17 @@ int check_edps_state_and_modify_mp_state() {
 	switch (ui_state.all_edps) {
 	case UI_ALL_EDPS_NONE_EDP_ACTIVATED:
 	case UI_ALL_EDPS_LOADED_AND_SYNCHRONISED:
-		if ((ui_state.mp.state == UI_MP_NOT_PERMITED_TO_RUN)
-				&& (ui_state.is_mp_and_ecps_active)) {
-			ui_state.mp.state = UI_MP_PERMITED_TO_RUN; // pozwol na uruchomienie mp
+		if ((ui.mp.state == UI_MP_NOT_PERMITED_TO_RUN)
+				&& (ui.is_mp_and_ecps_active)) {
+			ui.mp.state = UI_MP_PERMITED_TO_RUN; // pozwol na uruchomienie mp
 		}
 		break;
 
 	case UI_ALL_EDPS_LOADED_BUT_NOT_SYNCHRONISED:
 	case UI_ALL_EDPS_THERE_IS_EDP_LOADED_BUT_NOT_ALL_ARE_LOADED:
 	case UI_ALL_EDPS_NONE_EDP_LOADED:
-		if (ui_state.mp.state == UI_MP_PERMITED_TO_RUN) {
-			ui_state.mp.state = UI_MP_NOT_PERMITED_TO_RUN; // nie pozwol na uruchomienie mp
+		if (ui.mp.state == UI_MP_PERMITED_TO_RUN) {
+			ui.mp.state = UI_MP_NOT_PERMITED_TO_RUN; // nie pozwol na uruchomienie mp
 		}
 		break;
 	default:
@@ -1622,7 +1622,7 @@ int manage_interface() {
 		unblock_widget(ABW_base_robot);
 
 		// w zaleznosci od stanu MP
-		switch (ui_state.mp.state) {
+		switch (ui.mp.state) {
 		case UI_MP_NOT_PERMITED_TO_RUN:
 			ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL,
 					ABN_mm_all_robots_edp_unload, NULL);
@@ -1650,7 +1650,7 @@ int manage_interface() {
 	}
 
 	// wlasciwosci menu task_menu
-	switch (ui_state.mp.state) {
+	switch (ui.mp.state) {
 
 	case UI_MP_NOT_PERMITED_TO_RUN:
 		ApModifyItemState(&task_menu, AB_ITEM_DIM, ABN_mm_mp_load,
@@ -2162,8 +2162,8 @@ int all_robots_move_to_preset_position(PtWidget_t *widget, ApInfo_t *apinfo,
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
 	// jesli MP nie pracuje (choc moze byc wlaczone)
-	if ((ui_state.mp.state == UI_MP_NOT_PERMITED_TO_RUN) || (ui_state.mp.state
-			== UI_MP_PERMITED_TO_RUN) || (ui_state.mp.state
+	if ((ui.mp.state == UI_MP_NOT_PERMITED_TO_RUN) || (ui.mp.state
+			== UI_MP_PERMITED_TO_RUN) || (ui.mp.state
 			== UI_MP_WAITING_FOR_START_PULSE)) {
 		// ruch do pozcyji synchronizacji dla Irp6_on_track i dla dalszych analogicznie
 		if (check_synchronised_and_loaded(ui_state.irp6_on_track))
@@ -2256,40 +2256,38 @@ int MPup_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 	int pt_res;
 	set_ui_state_notification(UI_N_PROCESS_CREATION);
 
-	if (ui_state.mp.pid == -1) {
+	if (ui.mp.pid == -1) {
 
-		ui_state.mp.node_nr = ui.config->return_node_number(
-				ui_state.mp.node_name.c_str());
+		ui.mp.node_nr = ui.config->return_node_number(ui.mp.node_name.c_str());
 
 		std::string mp_network_pulse_attach_point("/dev/name/global/");
-		mp_network_pulse_attach_point += ui_state.mp.network_pulse_attach_point;
+		mp_network_pulse_attach_point += ui.mp.network_pulse_attach_point;
 
 		// sprawdzenie czy nie jest juz zarejestrowany serwer komunikacyjny MP
 		if (access(mp_network_pulse_attach_point.c_str(), R_OK) == 0) {
 			ui.ui_msg->message(lib::NON_FATAL_ERROR, "MP already exists");
-		} else if (check_node_existence(ui_state.mp.node_name,
-				std::string("mp"))) {
-			ui_state.mp.pid = ui.config->process_spawn(MP_SECTION);
+		} else if (check_node_existence(ui.mp.node_name, std::string("mp"))) {
+			ui.mp.pid = ui.config->process_spawn(MP_SECTION);
 
-			if (ui_state.mp.pid > 0) {
+			if (ui.mp.pid > 0) {
 
 				short tmp = 0;
 				// kilka sekund  (~1) na otworzenie urzadzenia
-				while ((ui_state.mp.pulse_fd = name_open(
-						ui_state.mp.network_pulse_attach_point.c_str(),
+				while ((ui.mp.pulse_fd = name_open(
+						ui.mp.network_pulse_attach_point.c_str(),
 						NAME_FLAG_ATTACH_GLOBAL)) < 0)
 					if ((tmp++) < CONNECT_RETRY)
 						delay(CONNECT_DELAY);
 					else {
 						fprintf(stderr, "name_open() for %s failed: %s\n",
-								ui_state.mp.network_pulse_attach_point.c_str(),
+								ui.mp.network_pulse_attach_point.c_str(),
 								strerror(errno));
 						break;
 					}
 
 				ui_state.teachingstate = MP_RUNNING;
 
-				ui_state.mp.state = UI_MP_WAITING_FOR_START_PULSE; // mp wlaczone
+				ui.mp.state = UI_MP_WAITING_FOR_START_PULSE; // mp wlaczone
 				pt_res = PtEnter(0);
 				start_process_control_window(widget, apinfo, cbinfo);
 				if (pt_res >= 0)
@@ -2311,27 +2309,27 @@ int MPslay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (ui_state.mp.pid != -1) {
+	if (ui.mp.pid != -1) {
 
-		if ((ui_state.mp.state == UI_MP_TASK_RUNNING) || (ui_state.mp.state
+		if ((ui.mp.state == UI_MP_TASK_RUNNING) || (ui.mp.state
 				== UI_MP_TASK_PAUSED)) {
 
 			pulse_stop_mp(widget, apinfo, cbinfo);
 		}
 
-		name_close(ui_state.mp.pulse_fd);
+		name_close(ui.mp.pulse_fd);
 
 		// 	printf("dddd: %d\n", SignalKill(ini_con->mp-
 		// 	printf("MP slay\n");
-		SignalKill(ui_state.mp.node_nr, ui_state.mp.pid, 0, SIGTERM, 0, 0);
-		ui_state.mp.state = UI_MP_PERMITED_TO_RUN; // mp wylaczone
+		SignalKill(ui.mp.node_nr, ui.mp.pid, 0, SIGTERM, 0, 0);
+		ui.mp.state = UI_MP_PERMITED_TO_RUN; // mp wylaczone
 
 	}
 	// delay(1000);
-	// 	kill(ui_state.mp_pid,SIGTERM);
+	// 	kill(ui.mp_pid,SIGTERM);
 	// 	printf("MP pupa po kill\n");
-	ui_state.mp.pid = -1;
-	ui_state.mp.pulse_fd = -1;
+	ui.mp.pid = -1;
+	ui.mp.pulse_fd = -1;
 
 	deactivate_ecp_trigger(ui_state.irp6_on_track);
 	deactivate_ecp_trigger(ui_state.irp6_postument);
@@ -2368,9 +2366,9 @@ int pulse_start_mp(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (ui_state.mp.state == UI_MP_WAITING_FOR_START_PULSE) {
+	if (ui.mp.state == UI_MP_WAITING_FOR_START_PULSE) {
 
-		ui_state.mp.state = UI_MP_TASK_RUNNING;// czekanie na stop
+		ui.mp.state = UI_MP_TASK_RUNNING;// czekanie na stop
 
 		// zamkniecie okien ruchow recznych o ile sa otwarte
 
@@ -2410,10 +2408,10 @@ int pulse_stop_mp(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if ((ui_state.mp.state == UI_MP_TASK_RUNNING) || (ui_state.mp.state
+	if ((ui.mp.state == UI_MP_TASK_RUNNING) || (ui.mp.state
 			== UI_MP_TASK_PAUSED)) {
 
-		ui_state.mp.state = UI_MP_WAITING_FOR_START_PULSE;// czekanie na stop
+		ui.mp.state = UI_MP_WAITING_FOR_START_PULSE;// czekanie na stop
 
 		execute_mp_pulse(MP_STOP);
 
@@ -2434,9 +2432,9 @@ int pulse_pause_mp(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (ui_state.mp.state == UI_MP_TASK_RUNNING) {
+	if (ui.mp.state == UI_MP_TASK_RUNNING) {
 
-		ui_state.mp.state = UI_MP_TASK_PAUSED;// czekanie na stop
+		ui.mp.state = UI_MP_TASK_PAUSED;// czekanie na stop
 
 		execute_mp_pulse(MP_PAUSE);
 
@@ -2457,9 +2455,9 @@ int pulse_resume_mp(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (ui_state.mp.state == UI_MP_TASK_PAUSED) {
+	if (ui.mp.state == UI_MP_TASK_PAUSED) {
 
-		ui_state.mp.state = UI_MP_TASK_RUNNING;// czekanie na stop
+		ui.mp.state = UI_MP_TASK_RUNNING;// czekanie na stop
 
 		execute_mp_pulse(MP_RESUME);
 
@@ -2480,7 +2478,7 @@ int pulse_trigger_mp(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (ui_state.mp.state == UI_MP_TASK_RUNNING) {
+	if (ui.mp.state == UI_MP_TASK_RUNNING) {
 
 		execute_mp_pulse(MP_TRIGGER);
 
@@ -2497,9 +2495,9 @@ int execute_mp_pulse(char pulse_code) {
 	int ret = -2;
 
 	// printf("w send pulse\n");
-	if (ui_state.mp.pulse_fd > 0) {
+	if (ui.mp.pulse_fd > 0) {
 		long pulse_value = 1;
-		if (ret == MsgSendPulse(ui_state.mp.pulse_fd, sched_get_priority_min(
+		if (ret == MsgSendPulse(ui.mp.pulse_fd, sched_get_priority_min(
 				SCHED_FIFO), pulse_code, pulse_value) == -1) {
 
 			perror("Blad w wysylaniu pulsu do mp");
@@ -2568,7 +2566,7 @@ int signal_mp(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 		printf("sending a signal to ecp failed\n");
 
 	}
-	if ( ( ret = SignalKill(ui_state.mp.node_nr, ui_state.mp.pid, 0, signo,0,0) ) == -1 ) {
+	if ( ( ret = SignalKill(ui.mp.node_nr, ui.mp.pid, 0, signo,0,0) ) == -1 ) {
 		// 	perror("UI: Stop MP failed");
 		printf("sending a signal to mp failed\n");
 

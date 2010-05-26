@@ -31,6 +31,10 @@ public:
 	lib::sr_ecp* all_ecp_msg; // Wskaznik na obiekt do komunikacji z SR z fukcja ECP dla wszystkich robotow
 	lib::sr_ui* ui_msg; // Wskaznik na obiekt do komunikacji z SR
 
+	mp_state_def mp;
+	// bool is_any_edp_active;
+	bool is_mp_and_ecps_active;
+
 
 	UiRobotBirdHand bird_hand;
 

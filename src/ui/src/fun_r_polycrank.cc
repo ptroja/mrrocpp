@@ -2550,7 +2550,7 @@ int reload_polycrank_configuration() {
 
 		// ui_state.is_any_edp_active = true;
 		// ini_con->create_ecp_irp6_mechatronika (ini_con->ui->ecp_irp6_mechatronika_section);
-		if (ui_state.is_mp_and_ecps_active) {
+		if (ui.is_mp_and_ecps_active) {
 			ui_state.irp6_mechatronika.ecp.network_trigger_attach_point
 					= ui.config->return_attach_point_name(
 							lib::configurator::CONFIG_SERVER,
@@ -2689,7 +2689,7 @@ int manage_interface_polycrank() {
 			ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL,
 					ABN_mm_all_robots_preset_positions, NULL);
 
-			switch (ui_state.mp.state) {
+			switch (ui.mp.state) {
 			case UI_MP_NOT_PERMITED_TO_RUN:
 			case UI_MP_PERMITED_TO_RUN:
 				ApModifyItemState(&robot_menu, AB_ITEM_NORMAL,

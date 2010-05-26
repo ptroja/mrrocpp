@@ -12,7 +12,11 @@
 
 
 Ui::Ui() :
-	config(NULL), all_ecp_msg(NULL), ui_msg(NULL) {
+	config(NULL), all_ecp_msg(NULL), ui_msg(NULL), is_mp_and_ecps_active(false) {
+
+	mp.state = UI_MP_NOT_PERMITED_TO_RUN;// mp wylaczone
+	mp.last_state = UI_MP_NOT_PERMITED_TO_RUN;// mp wylaczone
+	mp.pid = -1;
 
 }
 
