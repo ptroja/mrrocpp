@@ -37,7 +37,7 @@
 #include <pthread.h>
 #include <errno.h>
 
-#include "ui/ui.h"
+#include "ui/ui_class.h"
 
 #include "lib/mis_fun.h"
 #include "lib/srlib.h"
@@ -138,6 +138,8 @@ int init(PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 	set_ui_state_notification(UI_N_STARTING);
 
+	Ui ui;
+
 	struct utsname sysinfo;
 	char* cwd;
 	char buff[PATH_MAX + 1];
@@ -208,6 +210,9 @@ int init(PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 	ui_state.bird_hand.ecp.trigger_fd = -1;
 	ui_state.bird_hand.edp.section_name = EDP_BIRD_HAND_SECTION;
 	ui_state.bird_hand.ecp.section_name = ECP_BIRD_HAND_SECTION;
+
+	ui_state.is_wnd_bird_hand_command_and_status_open = false;
+	ui_state.is_wnd_bird_hand_configuration_open = false;
 
 	ui_state.smb.edp.state = -1; // edp nieaktywne
 	ui_state.smb.edp.last_state = -1; // edp nieaktywne

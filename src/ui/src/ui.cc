@@ -129,4 +129,3 @@ feb_thread::~feb_thread() {
 	thread_id->join(); // join it
 	delete thread_id;
 }
-

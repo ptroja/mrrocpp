@@ -218,6 +218,9 @@ typedef struct {
 	bool is_process_control_window_open; // informacja czy okno sterowania procesami jest otwarte
 	bool process_control_window_renew; // czy okno ma zostac odswierzone
 
+	bool is_wnd_bird_hand_command_and_status_open;
+	bool is_wnd_bird_hand_configuration_open;
+
 	bool is_wind_irp6ot_int_open; // informacja czy okno ruchow w radianach stawow jest otwarte
 	bool is_wind_irp6p_int_open; // informacja czy okno ruchow w radianach stawow jest otwarte
 	bool is_wind_irp6m_int_open; // informacja czy okno ruchow w radianach stawow jest otwarte

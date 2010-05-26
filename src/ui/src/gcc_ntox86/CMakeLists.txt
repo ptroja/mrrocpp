@@ -24,7 +24,9 @@ add_executable(ui
 	../ui_ecp_r_speaker.cc
 	../ui_ecp_r_tfg_and_conv.cc
 	../ui_ecp_r_bird_hand.cc
+	../ui_r_bird_hand.cc
 	../ui_init.cc
+	../ui_class.cc
 	../wndFileLocationEvents.cc
 	../wndForceControlEvents.cc
 	../wndTrajectoryReproduceEvents.cc
