@@ -197,8 +197,8 @@ int EDP_irp6_mechatronika_create(PtWidget_t *widget, ApInfo_t *apinfo,
 					+= ui_state.irp6_mechatronika.edp.network_resourceman_attach_point;
 
 			// sprawdzenie czy nie jest juz zarejestrowany zarzadca zasobow
-			if ((!(ui_state.irp6_mechatronika.edp.test_mode)) && (access(
-					busy_attach_point.c_str(), R_OK) == 0) || (access(
+			if (((!(ui_state.irp6_mechatronika.edp.test_mode)) && (access(
+					busy_attach_point.c_str(), R_OK) == 0)) || (access(
 					resourceman_attach_point.c_str(), R_OK) == 0)) {
 				ui.ui_msg->message("edp_irp6_mechatronika already exists");
 
@@ -1536,9 +1536,9 @@ int irp6m_xyz_angle_axis_motion(PtWidget_t *widget, ApInfo_t *apinfo,
 
 	double *wektor_ptgr[6], wektor[6];
 	double *krok;
-	double wl;
-	double l_eps = 0;
-	double kx, ky, kz;
+	//	double wl;
+	//	double l_eps = 0;
+	//	double kx, ky, kz;
 	// double alfa;
 
 	/* eliminate 'unreferenced' warnings */
@@ -1631,7 +1631,7 @@ int init_wnd_irp6m_xyz_angle_axis(PtWidget_t *widget, ApInfo_t *apinfo,
 {
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	double alfa, kx, ky, kz;
+	//double alfa, kx, ky, kz;
 
 	// wychwytania ew. bledow ECP::robot
 	try {
@@ -1729,9 +1729,9 @@ int irp6m_xyz_angle_axis_set_tool(PtWidget_t *widget, ApInfo_t *apinfo,
 
 	double *wektor_ptgr[6], wektor[6];
 	double tool_vector[6];
-	double wl;
-	double l_eps = 0;
-	double kx, ky, kz;
+	//	double wl;
+	//	double l_eps = 0;
+	//	double kx, ky, kz;
 
 	// wychwytania ew. bledow ECP::robot
 	try {

@@ -35,7 +35,6 @@
 
 extern Ui ui;
 
-
 extern function_execution_buffer edp_spkm_eb;
 extern ui_state_def ui_state;
 
@@ -82,8 +81,9 @@ int EDP_spkm_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 			tmp2_string += ui_state.spkm.edp.network_resourceman_attach_point;
 
 			// sprawdzenie czy nie jest juz zarejestrowany zarzadca zasobow
-			if ((!(ui_state.spkm.edp.test_mode)) && (access(tmp_string.c_str(),
-					R_OK) == 0) || (access(tmp2_string.c_str(), R_OK) == 0)) {
+			if (((!(ui_state.spkm.edp.test_mode)) && (access(
+					tmp_string.c_str(), R_OK) == 0)) || (access(
+					tmp2_string.c_str(), R_OK) == 0)) {
 				ui.ui_msg->message(lib::NON_FATAL_ERROR,
 						"edp_spkm already exists");
 			} else if (check_node_existence(ui_state.spkm.edp.node_name,
@@ -92,7 +92,8 @@ int EDP_spkm_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 				ui_state.spkm.edp.node_nr = ui.config->return_node_number(
 						ui_state.spkm.edp.node_name);
 				{
-					boost::unique_lock<boost::mutex> lock(ui.process_creation_mtx);
+					boost::unique_lock<boost::mutex> lock(
+							ui.process_creation_mtx);
 					ui_robot.spkm = new ui_tfg_and_conv_robot(*ui.config,
 							*ui.all_ecp_msg, lib::ROBOT_SPKM);
 

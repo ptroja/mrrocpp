@@ -82,8 +82,8 @@ int EDP_smb_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 			tmp2_string += ui_state.smb.edp.network_resourceman_attach_point;
 
 			// sprawdzenie czy nie jest juz zarejestrowany zarzadca zasobow
-			if ((!(ui_state.smb.edp.test_mode)) && (access(tmp_string.c_str(),
-					R_OK) == 0) || (access(tmp2_string.c_str(), R_OK) == 0)) {
+			if (((!(ui_state.smb.edp.test_mode)) && (access(tmp_string.c_str(),
+					R_OK) == 0)) || (access(tmp2_string.c_str(), R_OK) == 0)) {
 				ui.ui_msg->message(lib::NON_FATAL_ERROR,
 						"edp_smb already exists");
 			} else if (check_node_existence(ui_state.smb.edp.node_name,

@@ -36,14 +36,12 @@
 extern Ui ui;
 extern function_execution_buffer edp_irp6ot_eb;
 
-
 extern ui_ecp_buffer* ui_ecp_obj;
 
 extern ui_state_def ui_state;
 
 extern ui_robot_def ui_robot;
 extern ui_ecp_buffer* ui_ecp_obj;
-
 
 double irp6ot_current_pos[IRP6OT_M_NUM_OF_SERVOS]; // pozycja biezaca
 double irp6ot_desired_pos[IRP6OT_M_NUM_OF_SERVOS]; // pozycja zadana
@@ -717,8 +715,8 @@ int init_wnd_irp6_on_track_inc(PtWidget_t *widget, ApInfo_t *apinfo,
 
 	// wychwytania ew. bledow ECP::robot
 	try {
-		if (ui_state.irp6_on_track.edp.pid != -1) {
-			if (ui_state.irp6_on_track.edp.is_synchronised) // Czy robot jest zsynchronizowany?
+		if (ui_state.irp6ot_m.edp.pid != -1) {
+			if (ui_state.irp6ot_m.edp.is_synchronised) // Czy robot jest zsynchronizowany?
 			{
 
 				unblock_widget(ABW_PtPane_wind_irp6ot_inc_post_synchro_moves);
@@ -765,8 +763,8 @@ int wnd_irp6ot_motors_copy_current_to_desired(PtWidget_t *widget,
 	// wychwytania ew. bledow ECP::robot
 	double *wektor_ptgr[IRP6OT_M_NUM_OF_SERVOS], wektor[IRP6OT_M_NUM_OF_SERVOS];
 
-	if (ui_state.irp6_on_track.edp.pid != -1) {
-		if (ui_state.irp6_on_track.edp.is_synchronised) // Czy robot jest zsynchronizowany?
+	if (ui_state.irp6ot_m.edp.pid != -1) {
+		if (ui_state.irp6ot_m.edp.is_synchronised) // Czy robot jest zsynchronizowany?
 		{
 			unblock_widget(ABW_PtPane_wind_irp6ot_inc_post_synchro_moves);
 
@@ -830,8 +828,8 @@ int wnd_irp6ot_joints_copy_current_to_desired(PtWidget_t *widget,
 	// wychwytania ew. bledow ECP::robot
 	double *wektor_ptgr[IRP6OT_M_NUM_OF_SERVOS], wektor[IRP6OT_M_NUM_OF_SERVOS];
 
-	if (ui_state.irp6_on_track.edp.pid != -1) {
-		if (ui_state.irp6_on_track.edp.is_synchronised) // Czy robot jest zsynchronizowany?
+	if (ui_state.irp6ot_m.edp.pid != -1) {
+		if (ui_state.irp6ot_m.edp.is_synchronised) // Czy robot jest zsynchronizowany?
 		{
 
 			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_joints_cur_p1,
@@ -894,14 +892,13 @@ int irp6ot_move_to_preset_position(PtWidget_t *widget, ApInfo_t *apinfo,
 		my_data = (PhKeyEvent_t *) PhGetData(cbinfo->event);
 	}
 
-	if (ui_state.irp6_on_track.edp.pid != -1) {
+	if (ui_state.irp6ot_m.edp.pid != -1) {
 
 		if ((((ApName(ApWidget(cbinfo))
 				== ABN_mm_irp6_on_track_preset_position_synchro) || (ApName(
 				ApWidget(cbinfo)) == ABN_mm_all_robots_preset_position_synchro))
 				|| ((cbinfo->event->type == Ph_EV_KEY) && (my_data->key_cap
-						== 0x73)))
-				&& (ui_state.irp6_on_track.edp.is_synchronised)) {// powrot do pozycji synchronizacji
+						== 0x73))) && (ui_state.irp6ot_m.edp.is_synchronised)) {// powrot do pozycji synchronizacji
 			for (int i = 0; i < IRP6OT_M_NUM_OF_SERVOS; i++) {
 				irp6ot_desired_pos[i] = 0.0;
 			}
@@ -910,51 +907,46 @@ int irp6ot_move_to_preset_position(PtWidget_t *widget, ApInfo_t *apinfo,
 				== ABN_mm_irp6_on_track_preset_position_0) || (ApName(ApWidget(
 				cbinfo)) == ABN_mm_all_robots_preset_position_0))
 				|| ((cbinfo->event->type == Ph_EV_KEY) && (my_data->key_cap
-						== 0x30)))
-				&& (ui_state.irp6_on_track.edp.is_synchronised)) {// ruch do pozycji zadania (wspolrzedne przyjete arbitralnie)
+						== 0x30))) && (ui_state.irp6ot_m.edp.is_synchronised)) {// ruch do pozycji zadania (wspolrzedne przyjete arbitralnie)
 			for (int i = 0; i < IRP6OT_M_NUM_OF_SERVOS; i++) {
 				irp6ot_desired_pos[i]
-						= ui_state.irp6_on_track.edp.preset_position[0][i];
+						= ui_state.irp6ot_m.edp.preset_position[0][i];
 			}
 			edp_irp6ot_eb.command(boost::bind(irp6ot_execute_joint_motion));
 		} else if ((((ApName(ApWidget(cbinfo))
 				== ABN_mm_irp6_on_track_preset_position_1) || (ApName(ApWidget(
 				cbinfo)) == ABN_mm_all_robots_preset_position_1))
 				|| ((cbinfo->event->type == Ph_EV_KEY) && (my_data->key_cap
-						== 0x31)))
-				&& (ui_state.irp6_on_track.edp.is_synchronised)) {// ruch do pozycji zadania (wspolrzedne przyjete arbitralnie)
+						== 0x31))) && (ui_state.irp6ot_m.edp.is_synchronised)) {// ruch do pozycji zadania (wspolrzedne przyjete arbitralnie)
 			for (int i = 0; i < IRP6OT_M_NUM_OF_SERVOS; i++) {
 				irp6ot_desired_pos[i]
-						= ui_state.irp6_on_track.edp.preset_position[1][i];
+						= ui_state.irp6ot_m.edp.preset_position[1][i];
 			}
 			edp_irp6ot_eb.command(boost::bind(irp6ot_execute_joint_motion));
 		} else if ((((ApName(ApWidget(cbinfo))
 				== ABN_mm_irp6_on_track_preset_position_2) || (ApName(ApWidget(
 				cbinfo)) == ABN_mm_all_robots_preset_position_2))
 				|| ((cbinfo->event->type == Ph_EV_KEY) && (my_data->key_cap
-						== 0x32)))
-				&& (ui_state.irp6_on_track.edp.is_synchronised)) {// ruch do pozycji zadania (wspolrzedne przyjete arbitralnie)
+						== 0x32))) && (ui_state.irp6ot_m.edp.is_synchronised)) {// ruch do pozycji zadania (wspolrzedne przyjete arbitralnie)
 			for (int i = 0; i < IRP6OT_M_NUM_OF_SERVOS; i++) {
 				irp6ot_desired_pos[i]
-						= ui_state.irp6_on_track.edp.preset_position[2][i];
+						= ui_state.irp6ot_m.edp.preset_position[2][i];
 			}
 			edp_irp6ot_eb.command(boost::bind(irp6ot_execute_joint_motion));
 		} else if ((((ApName(ApWidget(cbinfo))
 				== ABN_mm_irp6_on_track_preset_position_front) || (ApName(
 				ApWidget(cbinfo)) == ABN_mm_all_robots_preset_position_front))
 				|| ((cbinfo->event->type == Ph_EV_KEY) && (my_data->key_cap
-						== 0x66)))
-				&& (ui_state.irp6_on_track.edp.is_synchronised)) {// ruch do pozycji zadania (wspolrzedne przyjete arbitralnie)
+						== 0x66))) && (ui_state.irp6ot_m.edp.is_synchronised)) {// ruch do pozycji zadania (wspolrzedne przyjete arbitralnie)
 			for (int i = 0; i < IRP6OT_M_NUM_OF_SERVOS; i++) {
-				irp6ot_desired_pos[i]
-						= ui_state.irp6_on_track.edp.front_position[i];
+				irp6ot_desired_pos[i] = ui_state.irp6ot_m.edp.front_position[i];
 			}
 			edp_irp6ot_eb.command(boost::bind(irp6ot_execute_joint_motion));
 		}
 
 		//	ui_robot.irp6_on_track->move_motors(irp6ot_desired_pos);
 
-	} // end if (ui_state.irp6_on_track.edp.pid!=-1)
+	} // end if (ui_state.irp6ot_m.edp.pid!=-1)
 
 
 	return (Pt_CONTINUE);
@@ -996,9 +988,9 @@ int irp6ot_inc_motion(PtWidget_t *widget, ApInfo_t *apinfo,
 	// wychwytania ew. bledow ECP::robot
 	try {
 
-		if (ui_state.irp6_on_track.edp.pid != -1) {
+		if (ui_state.irp6ot_m.edp.pid != -1) {
 
-			if (ui_state.irp6_on_track.edp.is_synchronised) {
+			if (ui_state.irp6ot_m.edp.is_synchronised) {
 
 				PtGetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p0,
 						Pt_ARG_NUMERIC_VALUE, &(wektor[0]), 0);
@@ -1096,8 +1088,8 @@ int irp6ot_inc_motion(PtWidget_t *widget, ApInfo_t *apinfo,
 
 			ui_robot.irp6_on_track->move_motors(irp6ot_desired_pos);
 
-			if ((ui_state.irp6_on_track.edp.is_synchronised)
-					&& (ui_state.is_wind_irp6ot_inc_open)) { // by Y o dziwo niedziala poprawnie 	 if (ui_state.irp6_on_track.edp.is_synchronised)
+			if ((ui_state.irp6ot_m.edp.is_synchronised)
+					&& (ui_state.is_wind_irp6ot_inc_open)) { // by Y o dziwo niedziala poprawnie 	 if (ui_state.irp6ot_m.edp.is_synchronised)
 
 				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p0,
 						Pt_ARG_NUMERIC_VALUE, &irp6ot_desired_pos[0], 0);
@@ -1117,7 +1109,7 @@ int irp6ot_inc_motion(PtWidget_t *widget, ApInfo_t *apinfo,
 						Pt_ARG_NUMERIC_VALUE, &irp6ot_desired_pos[7], 0);
 
 			}
-		} // end if (ui_state.irp6_on_track.edp.pid!=-1)
+		} // end if (ui_state.irp6ot_m.edp.pid!=-1)
 	} // end try
 
 	CATCH_SECTION_UI
@@ -1133,8 +1125,8 @@ int init_wnd_irp6_on_track_int(PtWidget_t *widget, ApInfo_t *apinfo,
 
 	// wychwytania ew. bledow ECP::robot
 	try {
-		if (ui_state.irp6_on_track.edp.pid != -1) {
-			if (ui_state.irp6_on_track.edp.is_synchronised) // Czy robot jest zsynchronizowany?
+		if (ui_state.irp6ot_m.edp.pid != -1) {
+			if (ui_state.irp6ot_m.edp.is_synchronised) // Czy robot jest zsynchronizowany?
 			{
 				ui_robot.irp6_on_track->read_joints(irp6ot_current_pos); // Odczyt polozenia walow silnikow
 
@@ -1179,8 +1171,8 @@ int irp6ot_int_motion(PtWidget_t *widget, ApInfo_t *apinfo,
 
 	// wychwytania ew. bledow ECP::robot
 	try {
-		if ((ui_state.irp6_on_track.edp.pid != -1)
-				&& (ui_state.irp6_on_track.edp.is_synchronised)) {
+		if ((ui_state.irp6ot_m.edp.pid != -1)
+				&& (ui_state.irp6ot_m.edp.is_synchronised)) {
 
 			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_int_p1,
 					Pt_ARG_NUMERIC_VALUE, &wektor[0], 0);
@@ -1278,7 +1270,7 @@ int irp6ot_int_motion(PtWidget_t *widget, ApInfo_t *apinfo,
 						Pt_ARG_NUMERIC_VALUE, &irp6ot_desired_pos[7], 0);
 			}
 
-		} // end if (ui_state.irp6_on_track.edp.pid!=-1)
+		} // end if (ui_state.irp6ot_m.edp.pid!=-1)
 	} // end try
 	CATCH_SECTION_UI
 
@@ -1293,8 +1285,8 @@ int init_wnd_irp6_on_track_xyz_euler_zyz(PtWidget_t *widget, ApInfo_t *apinfo,
 
 	// wychwytania ew. bledow ECP::robot
 	try {
-		if (ui_state.irp6_on_track.edp.pid != -1) {
-			if (ui_state.irp6_on_track.edp.is_synchronised) // Czy robot jest zsynchronizowany?
+		if (ui_state.irp6ot_m.edp.pid != -1) {
+			if (ui_state.irp6ot_m.edp.is_synchronised) // Czy robot jest zsynchronizowany?
 			{
 				ui_robot.irp6_on_track->read_xyz_euler_zyz(irp6ot_current_pos); // Odczyt polozenia walow silnikow
 
@@ -1343,8 +1335,8 @@ int wnd_irp6ot_xyz_zyz_copy_cur_to_desired(PtWidget_t *widget,
 	// wychwytania ew. bledow ECP::robot
 	double *wektor_ptgr[7], wektor[7];
 
-	if (ui_state.irp6_on_track.edp.pid != -1) {
-		if (ui_state.irp6_on_track.edp.is_synchronised) // Czy robot jest zsynchronizowany?
+	if (ui_state.irp6ot_m.edp.pid != -1) {
+		if (ui_state.irp6ot_m.edp.is_synchronised) // Czy robot jest zsynchronizowany?
 		{
 			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_read_p1,
 					Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[0]), 0);
@@ -1401,7 +1393,7 @@ int irp6ot_xyz_euler_zyz_motion(PtWidget_t *widget, ApInfo_t *apinfo,
 
 	// wychwytania ew. bledow ECP::robot
 	try {
-		if (ui_state.irp6_on_track.edp.is_synchronised) {
+		if (ui_state.irp6ot_m.edp.is_synchronised) {
 
 			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p1,
 					Pt_ARG_NUMERIC_VALUE, &wektor[0], 0);
@@ -1538,8 +1530,8 @@ int init_wnd_irp6_on_track_xyz_angle_axis(PtWidget_t *widget, ApInfo_t *apinfo,
 
 	// wychwytania ew. bledow ECP::robot
 	try {
-		if (ui_state.irp6_on_track.edp.pid != -1) {
-			if (ui_state.irp6_on_track.edp.is_synchronised) // Czy robot jest zsynchronizowany?
+		if (ui_state.irp6ot_m.edp.pid != -1) {
+			if (ui_state.irp6ot_m.edp.is_synchronised) // Czy robot jest zsynchronizowany?
 			{
 				ui_robot.irp6_on_track->read_xyz_angle_axis(irp6ot_current_pos); // Odczyt polozenia walow silnikow
 
@@ -1589,8 +1581,8 @@ int wnd_irp6ot_xyz_aa_copy_current_to_desired(PtWidget_t *widget,
 	// wychwytania ew. bledow ECP::robot
 	double *wektor_ptgr[7], wektor[7];
 
-	if (ui_state.irp6_on_track.edp.pid != -1) {
-		if (ui_state.irp6_on_track.edp.is_synchronised) // Czy robot jest zsynchronizowany?
+	if (ui_state.irp6ot_m.edp.pid != -1) {
+		if (ui_state.irp6ot_m.edp.is_synchronised) // Czy robot jest zsynchronizowany?
 		{
 			PtGetResource(
 					ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_read_p1,
@@ -1651,7 +1643,7 @@ int irp6ot_xyz_angle_axis_motion(PtWidget_t *widget, ApInfo_t *apinfo,
 
 	// wychwytania ew. bledow ECP::robot
 	try {
-		if (ui_state.irp6_on_track.edp.is_synchronised) {
+		if (ui_state.irp6ot_m.edp.is_synchronised) {
 
 			double *wektor_ptgr[7];
 			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p1,
@@ -1783,10 +1775,10 @@ int EDP_irp6_on_track_synchronise_int(PtWidget_t *widget, ApInfo_t *apinfo,
 	try {
 		// dla robota irp6_on_track
 
-		if ((ui_state.irp6_on_track.edp.state > 0)
-				&& (ui_state.irp6_on_track.edp.is_synchronised == false)) {
+		if ((ui_state.irp6ot_m.edp.state > 0)
+				&& (ui_state.irp6ot_m.edp.is_synchronised == false)) {
 			ui_robot.irp6_on_track->ecp->synchronise();
-			ui_state.irp6_on_track.edp.is_synchronised
+			ui_state.irp6ot_m.edp.is_synchronised
 					= ui_robot.irp6_on_track->ecp->is_synchronised();
 		} else {
 			// 	printf("EDP irp6_on_track niepowolane, synchronizacja niedozwolona\n");
@@ -1812,8 +1804,8 @@ int init_wnd_irp6_on_track_xyz_angle_axis_ts(PtWidget_t *widget,
 
 	// wychwytania ew. bledow ECP::robot
 	try {
-		if (ui_state.irp6_on_track.edp.pid != -1) {
-			if (ui_state.irp6_on_track.edp.is_synchronised) // Czy robot jest zsynchronizowany?
+		if (ui_state.irp6ot_m.edp.pid != -1) {
+			if (ui_state.irp6ot_m.edp.is_synchronised) // Czy robot jest zsynchronizowany?
 			{
 				lib::Xyz_Angle_Axis_vector tool_vector;
 
@@ -1860,8 +1852,8 @@ int wnd_irp6ot_xyz_aa_ts_copy_cur_to_desired(PtWidget_t *widget,
 	// wychwytania ew. bledow ECP::robot
 	double *wektor_ptgr[6], wektor[6];
 
-	if (ui_state.irp6_on_track.edp.pid != -1) {
-		if (ui_state.irp6_on_track.edp.is_synchronised) // Czy robot jest zsynchronizowany?
+	if (ui_state.irp6ot_m.edp.pid != -1) {
+		if (ui_state.irp6ot_m.edp.is_synchronised) // Czy robot jest zsynchronizowany?
 		{
 
 			PtGetResource(
@@ -1919,13 +1911,13 @@ int irp6ot_xyz_angle_axis_set_tool(PtWidget_t *widget, ApInfo_t *apinfo,
 
 	double *wektor_ptgr[6], wektor[6];
 	double tool_vector[6];
-	double wl;
-	double l_eps = 0;
-	double kx, ky, kz;
+	//	double wl;
+	//	double l_eps = 0;
+	//	double kx, ky, kz;
 
 	// wychwytania ew. bledow ECP::robot
 	try {
-		if (ui_state.irp6_on_track.edp.is_synchronised) {
+		if (ui_state.irp6ot_m.edp.is_synchronised) {
 
 			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_ts_p1,
 					Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[0], 0);
@@ -1974,8 +1966,8 @@ int init_wnd_irp6_on_track_xyz_euler_zyz_ts(PtWidget_t *widget,
 
 	// wychwytania ew. bledow ECP::robot
 	try {
-		if (ui_state.irp6_on_track.edp.pid != -1) {
-			if (ui_state.irp6_on_track.edp.is_synchronised) // Czy robot jest zsynchronizowany?
+		if (ui_state.irp6ot_m.edp.pid != -1) {
+			if (ui_state.irp6ot_m.edp.is_synchronised) // Czy robot jest zsynchronizowany?
 			{
 				ui_robot.irp6_on_track->read_tool_xyz_euler_zyz(tool_vector); // Odczyt polozenia walow silnikow
 
@@ -2027,8 +2019,8 @@ int wnd_irp6ot_xyz_zyz_ts_copy_cur_to_desired(PtWidget_t *widget,
 	// wychwytania ew. bledow ECP::robot
 	double *wektor_ptgr[6], wektor[6];
 
-	if (ui_state.irp6_on_track.edp.pid != -1) {
-		if (ui_state.irp6_on_track.edp.is_synchronised) // Czy robot jest zsynchronizowany?
+	if (ui_state.irp6ot_m.edp.pid != -1) {
+		if (ui_state.irp6ot_m.edp.is_synchronised) // Czy robot jest zsynchronizowany?
 		{
 			PtGetResource(
 					ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_ts_read_p1,
@@ -2087,7 +2079,7 @@ int irp6ot_xyz_euler_zyz_set_tool(PtWidget_t *widget, ApInfo_t *apinfo,
 
 	// wychwytania ew. bledow ECP::robot
 	try {
-		if (ui_state.irp6_on_track.edp.is_synchronised) {
+		if (ui_state.irp6ot_m.edp.is_synchronised) {
 			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_ts_p1,
 					Pt_ARG_NUMERIC_VALUE, &wektor[0], 0);
 			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_ts_p2,
@@ -2129,8 +2121,8 @@ int init_wnd_irp6_on_track_kinematic(PtWidget_t *widget, ApInfo_t *apinfo,
 
 	// wychwytania ew. bledow ECP::robot
 	try {
-		if (ui_state.irp6_on_track.edp.pid != -1) {
-			if (ui_state.irp6_on_track.edp.is_synchronised) // Czy robot jest zsynchronizowany?
+		if (ui_state.irp6ot_m.edp.pid != -1) {
+			if (ui_state.irp6ot_m.edp.is_synchronised) // Czy robot jest zsynchronizowany?
 			{
 				ui_robot.irp6_on_track->get_kinematic(&model_no); // Odczyt polozenia walow silnikow
 
@@ -2161,7 +2153,7 @@ int irp6ot_kinematic_set(PtWidget_t *widget, ApInfo_t *apinfo,
 
 	// wychwytania ew. bledow ECP::robot
 	try {
-		if (ui_state.irp6_on_track.edp.is_synchronised) {
+		if (ui_state.irp6ot_m.edp.is_synchronised) {
 
 			PtGetResource(ABW_PtNumericInteger_wnd_irp6ot_kinematic_model_no,
 					Pt_ARG_NUMERIC_VALUE, &model_no_tmp, 0);
@@ -2193,8 +2185,8 @@ int init_wnd_irp6_on_track_servo_algorithm(PtWidget_t *widget,
 
 	// wychwytania ew. bledow ECP::robot
 	try {
-		if (ui_state.irp6_on_track.edp.pid != -1) {
-			if (ui_state.irp6_on_track.edp.is_synchronised) // Czy robot jest zsynchronizowany?
+		if (ui_state.irp6ot_m.edp.pid != -1) {
+			if (ui_state.irp6ot_m.edp.is_synchronised) // Czy robot jest zsynchronizowany?
 			{
 				ui_robot.irp6_on_track->get_servo_algorithm(servo_alg_no,
 						servo_par_no); // Odczyt polozenia walow silnikow
@@ -2273,8 +2265,8 @@ int wnd_irp6ot_seralg_copy_current_to_desired(PtWidget_t *widget,
 			*wektor2_ptgr[IRP6OT_M_NUM_OF_SERVOS],
 			wektor[IRP6OT_M_NUM_OF_SERVOS], wektor2[IRP6OT_M_NUM_OF_SERVOS];
 
-	if (ui_state.irp6_on_track.edp.pid != -1) {
-		if (ui_state.irp6_on_track.edp.is_synchronised) // Czy robot jest zsynchronizowany?
+	if (ui_state.irp6ot_m.edp.pid != -1) {
+		if (ui_state.irp6ot_m.edp.is_synchronised) // Czy robot jest zsynchronizowany?
 		{
 
 			PtGetResource(
@@ -2411,7 +2403,7 @@ int irp6ot_servo_algorithm_set(PtWidget_t *widget, ApInfo_t *apinfo,
 
 	// wychwytania ew. bledow ECP::robot
 	try {
-		if (ui_state.irp6_on_track.edp.is_synchronised) {
+		if (ui_state.irp6ot_m.edp.is_synchronised) {
 
 			PtGetResource(
 					ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_alg_1,
@@ -2513,57 +2505,56 @@ int EDP_irp6_on_track_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 	try { // dla bledow robot :: ECP_error
 
 		// dla robota irp6_on_track
-		if (ui_state.irp6_on_track.edp.state == 0) {
+		if (ui_state.irp6ot_m.edp.state == 0) {
 
-			ui_state.irp6_on_track.edp.state = 0;
-			ui_state.irp6_on_track.edp.is_synchronised = false;
+			ui_state.irp6ot_m.edp.state = 0;
+			ui_state.irp6ot_m.edp.is_synchronised = false;
 
 			std::string tmp_string("/dev/name/global/");
-			tmp_string += ui_state.irp6_on_track.edp.hardware_busy_attach_point;
+			tmp_string += ui_state.irp6ot_m.edp.hardware_busy_attach_point;
 
 			std::string tmp2_string("/dev/name/global/");
 			tmp2_string
-					+= ui_state.irp6_on_track.edp.network_resourceman_attach_point;
+					+= ui_state.irp6ot_m.edp.network_resourceman_attach_point;
 
 			// sprawdzenie czy nie jest juz zarejestrowany zarzadca zasobow
-			if ((!(ui_state.irp6_on_track.edp.test_mode)) && (access(
-					tmp_string.c_str(), R_OK) == 0) || (access(
+			if (((!(ui_state.irp6ot_m.edp.test_mode)) && (access(
+					tmp_string.c_str(), R_OK) == 0)) || (access(
 					tmp2_string.c_str(), R_OK) == 0)) {
 				ui.ui_msg->message(lib::NON_FATAL_ERROR,
 						"edp_irp6_on_track already exists");
-			} else if (check_node_existence(
-					ui_state.irp6_on_track.edp.node_name, std::string(
-							"edp_irp6_on_track"))) {
+			} else if (check_node_existence(ui_state.irp6ot_m.edp.node_name,
+					std::string("edp_irp6_on_track"))) {
 
-				ui_state.irp6_on_track.edp.node_nr
-						= ui.config->return_node_number(
-								ui_state.irp6_on_track.edp.node_name);
+				ui_state.irp6ot_m.edp.node_nr = ui.config->return_node_number(
+						ui_state.irp6ot_m.edp.node_name);
 
 				{
-					boost::unique_lock<boost::mutex> lock(ui.process_creation_mtx);
+					boost::unique_lock<boost::mutex> lock(
+							ui.process_creation_mtx);
 
 					ui_robot.irp6_on_track = new ui_irp6_common_robot(
 							*ui.config, *ui.all_ecp_msg, lib::ROBOT_IRP6OT_M);
 				}
 
-				ui_state.irp6_on_track.edp.pid
+				ui_state.irp6ot_m.edp.pid
 						= ui_robot.irp6_on_track->ecp->get_EDP_pid();
 
-				if (ui_state.irp6_on_track.edp.pid < 0) {
+				if (ui_state.irp6ot_m.edp.pid < 0) {
 
-					ui_state.irp6_on_track.edp.state = 0;
+					ui_state.irp6ot_m.edp.state = 0;
 					fprintf(stderr, "EDP spawn failed: %s\n", strerror(errno));
 					delete ui_robot.irp6_on_track;
 				} else { // jesli spawn sie powiodl
 
-					ui_state.irp6_on_track.edp.state = 1;
+					ui_state.irp6ot_m.edp.state = 1;
 
 					short tmp = 0;
 					// kilka sekund  (~1) na otworzenie urzadzenia
 
-					while ((ui_state.irp6_on_track.edp.reader_fd
+					while ((ui_state.irp6ot_m.edp.reader_fd
 							= name_open(
-									ui_state.irp6_on_track.edp.network_reader_attach_point.c_str(),
+									ui_state.irp6ot_m.edp.network_reader_attach_point.c_str(),
 									NAME_FLAG_ATTACH_GLOBAL)) < 0)
 						if ((tmp++) < CONNECT_RETRY) {
 							delay(CONNECT_DELAY);
@@ -2578,9 +2569,9 @@ int EDP_irp6_on_track_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 					ui_robot.irp6_on_track->get_controller_state(
 							robot_controller_initial_state_tmp);
 
-					//ui_state.irp6_on_track.edp.state = 1; // edp wlaczone reader czeka na start
+					//ui_state.irp6ot_m.edp.state = 1; // edp wlaczone reader czeka na start
 
-					ui_state.irp6_on_track.edp.is_synchronised
+					ui_state.irp6ot_m.edp.is_synchronised
 							= robot_controller_initial_state_tmp.is_synchronised;
 				}
 			}
@@ -2620,19 +2611,19 @@ int EDP_irp6_on_track_slay_int(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 	// dla robota irp6_on_track
-	if (ui_state.irp6_on_track.edp.state > 0) { // jesli istnieje EDP
-		if (ui_state.irp6_on_track.edp.reader_fd >= 0) {
-			if (name_close(ui_state.irp6_on_track.edp.reader_fd) == -1) {
+	if (ui_state.irp6ot_m.edp.state > 0) { // jesli istnieje EDP
+		if (ui_state.irp6ot_m.edp.reader_fd >= 0) {
+			if (name_close(ui_state.irp6ot_m.edp.reader_fd) == -1) {
 				fprintf(stderr, "UI: EDP_irp6ot, %s:%d, name_close(): %s\n",
 						__FILE__, __LINE__, strerror(errno));
 			}
 		}
 		delete ui_robot.irp6_on_track;
-		ui_state.irp6_on_track.edp.state = 0; // edp wylaczone
-		ui_state.irp6_on_track.edp.is_synchronised = false;
+		ui_state.irp6ot_m.edp.state = 0; // edp wylaczone
+		ui_state.irp6ot_m.edp.is_synchronised = false;
 
-		ui_state.irp6_on_track.edp.pid = -1;
-		ui_state.irp6_on_track.edp.reader_fd = -1;
+		ui_state.irp6ot_m.edp.pid = -1;
+		ui_state.irp6ot_m.edp.reader_fd = -1;
 		pt_res = PtEnter(0);
 		close_all_irp6ot_windows(NULL, NULL, NULL);
 		if (pt_res >= 0)
@@ -2687,10 +2678,9 @@ int pulse_reader_irp6ot_start(PtWidget_t *widget, ApInfo_t *apinfo,
 
 bool pulse_reader_irp6ot_start_exec_pulse() {
 
-	if (ui_state.irp6_on_track.edp.state == 1) {
-		pulse_reader_execute(ui_state.irp6_on_track.edp.reader_fd,
-				READER_START, 0);
-		ui_state.irp6_on_track.edp.state = 2;
+	if (ui_state.irp6ot_m.edp.state == 1) {
+		pulse_reader_execute(ui_state.irp6ot_m.edp.reader_fd, READER_START, 0);
+		ui_state.irp6ot_m.edp.state = 2;
 		return true;
 	}
 
@@ -2715,10 +2705,9 @@ int pulse_reader_irp6ot_stop(PtWidget_t *widget, ApInfo_t *apinfo,
 
 bool pulse_reader_irp6ot_stop_exec_pulse() {
 
-	if (ui_state.irp6_on_track.edp.state == 2) {
-		pulse_reader_execute(ui_state.irp6_on_track.edp.reader_fd, READER_STOP,
-				0);
-		ui_state.irp6_on_track.edp.state = 1;
+	if (ui_state.irp6ot_m.edp.state == 2) {
+		pulse_reader_execute(ui_state.irp6ot_m.edp.reader_fd, READER_STOP, 0);
+		ui_state.irp6ot_m.edp.state = 1;
 		return true;
 	}
 
@@ -2742,9 +2731,8 @@ int pulse_reader_irp6ot_trigger(PtWidget_t *widget, ApInfo_t *apinfo,
 
 bool pulse_reader_irp6ot_trigger_exec_pulse() {
 
-	if (ui_state.irp6_on_track.edp.state == 2) {
-		pulse_reader_execute(ui_state.irp6_on_track.edp.reader_fd,
-				READER_TRIGGER, 0);
+	if (ui_state.irp6ot_m.edp.state == 2) {
+		pulse_reader_execute(ui_state.irp6ot_m.edp.reader_fd, READER_TRIGGER, 0);
 
 		return true;
 	}
@@ -2763,18 +2751,17 @@ int pulse_ecp_irp6_on_track(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (ui_state.irp6_on_track.edp.is_synchronised) { // o ile ECP dziala (sprawdzanie poprzez dzialanie odpowiedniego EDP)
-		if (ui_state.irp6_on_track.ecp.trigger_fd < 0) {
+	if (ui_state.irp6ot_m.edp.is_synchronised) { // o ile ECP dziala (sprawdzanie poprzez dzialanie odpowiedniego EDP)
+		if (ui_state.irp6ot_m.ecp.trigger_fd < 0) {
 
 			short tmp = 0;
 			// kilka sekund  (~1) na otworzenie urzadzenia
 			// zabezpieczenie przed zawieszeniem poprzez wyslanie sygnalu z opoznieniem
 
 			ualarm((useconds_t) (SIGALRM_TIMEOUT), 0);
-			while ((ui_state.irp6_on_track.ecp.trigger_fd
-					= name_open(
-							ui_state.irp6_on_track.ecp.network_trigger_attach_point.c_str(),
-							NAME_FLAG_ATTACH_GLOBAL)) < 0) {
+			while ((ui_state.irp6ot_m.ecp.trigger_fd = name_open(
+					ui_state.irp6ot_m.ecp.network_trigger_attach_point.c_str(),
+					NAME_FLAG_ATTACH_GLOBAL)) < 0) {
 				if (errno == EINTR)
 					break;
 				if ((tmp++) < CONNECT_RETRY) {
@@ -2787,8 +2774,8 @@ int pulse_ecp_irp6_on_track(PtWidget_t *widget, ApInfo_t *apinfo,
 			ualarm((useconds_t) (0), 0);
 		}
 
-		if (ui_state.irp6_on_track.ecp.trigger_fd >= 0) {
-			if (MsgSendPulse(ui_state.irp6_on_track.ecp.trigger_fd,
+		if (ui_state.irp6ot_m.ecp.trigger_fd >= 0) {
+			if (MsgSendPulse(ui_state.irp6ot_m.ecp.trigger_fd,
 					sched_get_priority_min(SCHED_FIFO), pulse_code, pulse_value)
 					== -1) {
 
@@ -2811,19 +2798,19 @@ int process_control_window_irp6ot_section_init(
 		bool &wlacz_PtButton_wnd_processes_control_all_reader_stop,
 		bool &wlacz_PtButton_wnd_processes_control_all_reader_trigger) {
 
-	if (ui_state.irp6_on_track.edp.state <= 0) {// edp wylaczone
+	if (ui_state.irp6ot_m.edp.state <= 0) {// edp wylaczone
 		block_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_start);
 		block_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_stop);
 		block_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_trigger);
 	} else {
-		if (ui_state.irp6_on_track.edp.state == 1) {// edp wlaczone reader czeka na start
+		if (ui_state.irp6ot_m.edp.state == 1) {// edp wlaczone reader czeka na start
 			wlacz_PtButton_wnd_processes_control_all_reader_start = true;
 			unblock_widget(
 					ABW_PtButton_wnd_processes_control_irp6ot_reader_start);
 			block_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_stop);
 			block_widget(
 					ABW_PtButton_wnd_processes_control_irp6ot_reader_trigger);
-		} else if (ui_state.irp6_on_track.edp.state == 2) {// edp wlaczone reader czeka na stop
+		} else if (ui_state.irp6ot_m.edp.state == 2) {// edp wlaczone reader czeka na stop
 			wlacz_PtButton_wnd_processes_control_all_reader_stop = true;
 			wlacz_PtButton_wnd_processes_control_all_reader_trigger = true;
 			block_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_start);
@@ -2834,7 +2821,7 @@ int process_control_window_irp6ot_section_init(
 		}
 	}
 
-	ui_state.irp6_on_track.edp.last_state = ui_state.irp6_on_track.edp.state;
+	ui_state.irp6ot_m.edp.last_state = ui_state.irp6ot_m.edp.state;
 
 	return 1;
 
@@ -2842,29 +2829,29 @@ int process_control_window_irp6ot_section_init(
 
 int reload_irp6ot_configuration() {
 	// jesli IRP6 on_track ma byc aktywne
-	if ((ui_state.irp6_on_track.is_active = ui.config->value<int> (
+	if ((ui_state.irp6ot_m.is_active = ui.config->value<int> (
 			"is_irp6ot_m_active")) == 1) {
 		// ini_con->create_ecp_irp6_on_track (ini_con->ui->ECP_IRP6OT_M_SECTION);
 		//ui_state.is_any_edp_active = true;
 		if (ui.is_mp_and_ecps_active) {
-			ui_state.irp6_on_track.ecp.network_trigger_attach_point
+			ui_state.irp6ot_m.ecp.network_trigger_attach_point
 					= ui.config->return_attach_point_name(
 							lib::configurator::CONFIG_SERVER,
 							"trigger_attach_point",
-							ui_state.irp6_on_track.ecp.section_name);
+							ui_state.irp6ot_m.ecp.section_name);
 
-			ui_state.irp6_on_track.ecp.pid = -1;
-			ui_state.irp6_on_track.ecp.trigger_fd = -1;
+			ui_state.irp6ot_m.ecp.pid = -1;
+			ui_state.irp6ot_m.ecp.trigger_fd = -1;
 		}
 
-		switch (ui_state.irp6_on_track.edp.state) {
+		switch (ui_state.irp6ot_m.edp.state) {
 		case -1:
 		case 0:
 			// ini_con->create_edp_irp6_on_track (ini_con->ui->EDP_IRP6OT_M_SECTION);
 
-			ui_state.irp6_on_track.edp.pid = -1;
-			ui_state.irp6_on_track.edp.reader_fd = -1;
-			ui_state.irp6_on_track.edp.state = 0;
+			ui_state.irp6ot_m.edp.pid = -1;
+			ui_state.irp6ot_m.edp.reader_fd = -1;
+			ui_state.irp6ot_m.edp.state = 0;
 
 			for (int i = 0; i < 4; i++) {
 				char tmp_string[50];
@@ -2875,32 +2862,31 @@ int reload_irp6ot_configuration() {
 				}
 
 				if (ui.config->exists(tmp_string,
-						ui_state.irp6_on_track.edp.section_name)) {
+						ui_state.irp6ot_m.edp.section_name)) {
 					char* tmp, *tmp1;
 					tmp1
 							= tmp
 									= strdup(
 											ui.config->value<std::string> (
 													tmp_string,
-													ui_state.irp6_on_track.edp.section_name).c_str());
+													ui_state.irp6ot_m.edp.section_name).c_str());
 					char* toDel = tmp;
 					for (int j = 0; j < IRP6OT_M_NUM_OF_SERVOS; j++) {
 						if (i < 3) {
-							ui_state.irp6_on_track.edp.preset_position[i][j]
+							ui_state.irp6ot_m.edp.preset_position[i][j]
 									= strtod(tmp1, &tmp1);
 						} else {
-							ui_state.irp6_on_track.edp.front_position[j]
-									= strtod(tmp1, &tmp1);
+							ui_state.irp6ot_m.edp.front_position[j] = strtod(
+									tmp1, &tmp1);
 						}
 					}
 					free(toDel);
 				} else {
 					for (int j = 0; j < IRP6OT_M_NUM_OF_SERVOS; j++) {
 						if (i < 3) {
-							ui_state.irp6_on_track.edp.preset_position[i][j]
-									= 0.0;
+							ui_state.irp6ot_m.edp.preset_position[i][j] = 0.0;
 						} else {
-							ui_state.irp6_on_track.edp.front_position[j] = 0.0;
+							ui_state.irp6ot_m.edp.front_position[j] = 0.0;
 							printf(
 									"nie zdefiniowano irp6ot front_postion w common.ini\n");
 						}
@@ -2910,32 +2896,31 @@ int reload_irp6ot_configuration() {
 			}
 
 			if (ui.config->exists("test_mode",
-					ui_state.irp6_on_track.edp.section_name))
-				ui_state.irp6_on_track.edp.test_mode = ui.config->value<int> (
-						"test_mode", ui_state.irp6_on_track.edp.section_name);
+					ui_state.irp6ot_m.edp.section_name))
+				ui_state.irp6ot_m.edp.test_mode = ui.config->value<int> (
+						"test_mode", ui_state.irp6ot_m.edp.section_name);
 			else
-				ui_state.irp6_on_track.edp.test_mode = 0;
+				ui_state.irp6ot_m.edp.test_mode = 0;
 
-			ui_state.irp6_on_track.edp.hardware_busy_attach_point
+			ui_state.irp6ot_m.edp.hardware_busy_attach_point
 					= ui.config->value<std::string> (
 							"hardware_busy_attach_point",
-							ui_state.irp6_on_track.edp.section_name);
+							ui_state.irp6ot_m.edp.section_name);
 
-			ui_state.irp6_on_track.edp.network_resourceman_attach_point
+			ui_state.irp6ot_m.edp.network_resourceman_attach_point
 					= ui.config->return_attach_point_name(
 							lib::configurator::CONFIG_SERVER,
 							"resourceman_attach_point",
-							ui_state.irp6_on_track.edp.section_name);
+							ui_state.irp6ot_m.edp.section_name);
 
-			ui_state.irp6_on_track.edp.network_reader_attach_point
+			ui_state.irp6ot_m.edp.network_reader_attach_point
 					= ui.config->return_attach_point_name(
 							lib::configurator::CONFIG_SERVER,
 							"reader_attach_point",
-							ui_state.irp6_on_track.edp.section_name);
+							ui_state.irp6ot_m.edp.section_name);
 
-			ui_state.irp6_on_track.edp.node_name
-					= ui.config->value<std::string> ("node_name",
-							ui_state.irp6_on_track.edp.section_name);
+			ui_state.irp6ot_m.edp.node_name = ui.config->value<std::string> (
+					"node_name", ui_state.irp6ot_m.edp.section_name);
 			break;
 		case 1:
 		case 2:
@@ -2947,10 +2932,10 @@ int reload_irp6ot_configuration() {
 
 	} else // jesli  irp6 on_track ma byc nieaktywne
 	{
-		switch (ui_state.irp6_on_track.edp.state) {
+		switch (ui_state.irp6ot_m.edp.state) {
 		case -1:
 		case 0:
-			ui_state.irp6_on_track.edp.state = -1;
+			ui_state.irp6ot_m.edp.state = -1;
 			break;
 		case 1:
 		case 2:
@@ -2966,7 +2951,7 @@ int reload_irp6ot_configuration() {
 
 int manage_interface_irp6ot() {
 
-	switch (ui_state.irp6_on_track.edp.state) {
+	switch (ui_state.irp6ot_m.edp.state) {
 
 	case -1:
 		ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_irp6_on_track, NULL);
@@ -2991,7 +2976,7 @@ int manage_interface_irp6ot() {
 				NULL);
 		//ApModifyItemState( &all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_edp_unload, NULL);
 		// jesli robot jest zsynchronizowany
-		if (ui_state.irp6_on_track.edp.is_synchronised) {
+		if (ui_state.irp6ot_m.edp.is_synchronised) {
 			ApModifyItemState(&robot_menu, AB_ITEM_DIM,
 					ABN_mm_irp6_on_track_pre_synchro_moves, NULL);
 			ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL,
@@ -3123,7 +3108,7 @@ int irp6ot_xyz_aa_relative_motion(PtWidget_t *widget, ApInfo_t *apinfo,
 
 	// wychwytania ew. bledow ECP::robot
 	try {
-		if (ui_state.irp6_on_track.edp.is_synchronised) {
+		if (ui_state.irp6ot_m.edp.is_synchronised) {
 
 			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_aa_relative_px,
 					Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[0], 0);

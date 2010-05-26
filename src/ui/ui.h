@@ -165,8 +165,8 @@ typedef struct {
 
 typedef struct {
 
-	ecp_edp_ui_robot_def irp6_on_track;
-	ecp_edp_ui_robot_def irp6_postument;
+	ecp_edp_ui_robot_def irp6ot_m;
+	ecp_edp_ui_robot_def irp6p_m;
 	ecp_edp_ui_robot_def irp6ot_tfg;
 	ecp_edp_ui_robot_def irp6p_tfg;
 	ecp_edp_ui_robot_def irp6_mechatronika;

@@ -557,6 +557,8 @@ int init_teaching_window(PtWidget_t *widget, ApInfo_t *apinfo,
 			break;
 		}
 		break;
+	default:
+		break;
 	}
 	// 		ApCreateModule (ABM_teaching_window, ABW_base, cbinfo);
 	// 	PtRealizeWidget( ABW_teaching_window );
@@ -921,10 +923,10 @@ int block_all_ecp_trigger_widgets(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (ui_state.irp6_on_track.edp.is_synchronised) {
+	if (ui_state.irp6ot_m.edp.is_synchronised) {
 		block_widget(ABW_PtButton_wnd_processes_control_irp6ot_ecp_trigger);
 	}
-	if (ui_state.irp6_postument.edp.is_synchronised) {
+	if (ui_state.irp6p_m.edp.is_synchronised) {
 		block_widget(ABW_PtButton_wnd_processes_control_irp6p_ecp_trigger);
 	}
 	if (ui_state.conveyor.edp.is_synchronised) {
@@ -949,10 +951,10 @@ int unblock_all_ecp_trigger_widgets(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (ui_state.irp6_on_track.edp.is_synchronised) {
+	if (ui_state.irp6ot_m.edp.is_synchronised) {
 		unblock_widget(ABW_PtButton_wnd_processes_control_irp6ot_ecp_trigger);
 	}
-	if (ui_state.irp6_postument.edp.is_synchronised) {
+	if (ui_state.irp6p_m.edp.is_synchronised) {
 		unblock_widget(ABW_PtButton_wnd_processes_control_irp6p_ecp_trigger);
 	}
 	if (ui_state.conveyor.edp.is_synchronised) {
@@ -1009,6 +1011,8 @@ int clear_all_configuration_lists() {
 	ui.config_node_list.clear();
 	ui.all_node_list.clear();
 	ui.program_node_list.clear();
+
+	return 1;
 }
 
 int initiate_configuration() {
@@ -1324,8 +1328,7 @@ int check_edps_state_and_modify_mp_state() {
 	// wyznaczenie stanu wszytkich EDP abstahujac od MP
 
 	// jesli wszytkie sa nieaktywne
-	if ((!(ui_state.irp6_postument.is_active))
-			&& (!(ui_state.irp6_on_track.is_active))
+	if ((!(ui_state.irp6p_m.is_active)) && (!(ui_state.irp6ot_m.is_active))
 			&& (!(ui_state.irp6ot_tfg.is_active))
 			&& (!(ui_state.irp6p_tfg.is_active))
 			&& (!(ui_state.conveyor.is_active))
@@ -1337,8 +1340,8 @@ int check_edps_state_and_modify_mp_state() {
 		ui.all_edps = UI_ALL_EDPS_NONE_EDP_ACTIVATED;
 
 		// jesli wszystkie sa zsynchronizowane
-	} else if (check_synchronised_or_inactive(ui_state.irp6_postument)
-			&& check_synchronised_or_inactive(ui_state.irp6_on_track)
+	} else if (check_synchronised_or_inactive(ui_state.irp6p_m)
+			&& check_synchronised_or_inactive(ui_state.irp6ot_m)
 			&& check_synchronised_or_inactive(ui_state.conveyor)
 			&& check_synchronised_or_inactive(ui_state.speaker)
 			&& check_synchronised_or_inactive(ui_state.irp6_mechatronika)
@@ -1351,8 +1354,8 @@ int check_edps_state_and_modify_mp_state() {
 		ui.all_edps = UI_ALL_EDPS_LOADED_AND_SYNCHRONISED;
 
 		// jesli wszystkie sa zaladowane
-	} else if (check_loaded_or_inactive(ui_state.irp6_postument)
-			&& check_loaded_or_inactive(ui_state.irp6_on_track)
+	} else if (check_loaded_or_inactive(ui_state.irp6p_m)
+			&& check_loaded_or_inactive(ui_state.irp6ot_m)
 			&& check_loaded_or_inactive(ui_state.conveyor)
 			&& check_loaded_or_inactive(ui_state.speaker)
 			&& check_loaded_or_inactive(ui_state.irp6_mechatronika)
@@ -1367,13 +1370,13 @@ int check_edps_state_and_modify_mp_state() {
 		ui.all_edps = UI_ALL_EDPS_LOADED_BUT_NOT_SYNCHRONISED;
 
 		// jesli chociaz jeden jest zaladowany
-	} else if (check_loaded(ui_state.irp6_postument) || check_loaded(
-			ui_state.irp6_on_track) || check_loaded(ui_state.conveyor)
-			|| check_loaded(ui_state.speaker) || check_loaded(
-			ui_state.irp6_mechatronika) || check_loaded(ui_state.irp6ot_tfg)
-			|| check_loaded(ui_state.irp6p_tfg) || check_loaded(
-			ui.bird_hand.state) || check_loaded(ui_state.spkm) || check_loaded(
-			ui_state.smb) || check_loaded(ui_state.shead))
+	} else if (check_loaded(ui_state.irp6p_m)
+			|| check_loaded(ui_state.irp6ot_m) || check_loaded(
+			ui_state.conveyor) || check_loaded(ui_state.speaker)
+			|| check_loaded(ui_state.irp6_mechatronika) || check_loaded(
+			ui_state.irp6ot_tfg) || check_loaded(ui_state.irp6p_tfg)
+			|| check_loaded(ui.bird_hand.state) || check_loaded(ui_state.spkm)
+			|| check_loaded(ui_state.smb) || check_loaded(ui_state.shead))
 
 	{
 		ui.all_edps = UI_ALL_EDPS_THERE_IS_EDP_LOADED_BUT_NOT_ALL_ARE_LOADED;
@@ -1405,7 +1408,7 @@ int check_edps_state_and_modify_mp_state() {
 	default:
 		break;
 	}
-
+	return 1;
 }
 
 int clear_console(PtWidget_t *widget, ApInfo_t *apinfo,
@@ -1888,11 +1891,11 @@ int all_robots_move_to_preset_position(PtWidget_t *widget, ApInfo_t *apinfo,
 			== UI_MP_PERMITED_TO_RUN) || (ui.mp.state
 			== UI_MP_WAITING_FOR_START_PULSE)) {
 		// ruch do pozcyji synchronizacji dla Irp6_on_track i dla dalszych analogicznie
-		if (check_synchronised_and_loaded(ui_state.irp6_on_track))
+		if (check_synchronised_and_loaded(ui_state.irp6ot_m))
 			irp6ot_move_to_preset_position(widget, apinfo, cbinfo);
 		if (check_synchronised_and_loaded(ui_state.irp6ot_tfg))
 			irp6ot_tfg_move_to_preset_position(widget, apinfo, cbinfo);
-		if (check_synchronised_and_loaded(ui_state.irp6_postument))
+		if (check_synchronised_and_loaded(ui_state.irp6p_m))
 			irp6p_move_to_preset_position(widget, apinfo, cbinfo);
 		if (check_synchronised_and_loaded(ui_state.irp6p_tfg))
 			irp6p_tfg_move_to_preset_position(widget, apinfo, cbinfo);
@@ -2053,8 +2056,8 @@ int MPslay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 	ui.mp.pid = -1;
 	ui.mp.pulse_fd = -1;
 
-	deactivate_ecp_trigger(ui_state.irp6_on_track);
-	deactivate_ecp_trigger(ui_state.irp6_postument);
+	deactivate_ecp_trigger(ui_state.irp6ot_m);
+	deactivate_ecp_trigger(ui_state.irp6p_m);
 	deactivate_ecp_trigger(ui_state.conveyor);
 	deactivate_ecp_trigger(ui_state.speaker);
 	deactivate_ecp_trigger(ui_state.irp6_mechatronika);
@@ -2219,8 +2222,8 @@ int execute_mp_pulse(char pulse_code) {
 	// printf("w send pulse\n");
 	if (ui.mp.pulse_fd > 0) {
 		long pulse_value = 1;
-		if (ret == MsgSendPulse(ui.mp.pulse_fd, sched_get_priority_min(
-				SCHED_FIFO), pulse_code, pulse_value) == -1) {
+		if ((ret = MsgSendPulse(ui.mp.pulse_fd, sched_get_priority_min(
+				SCHED_FIFO), pulse_code, pulse_value)) == -1) {
 
 			perror("Blad w wysylaniu pulsu do mp");
 			fprintf(stderr, "Blad w wysylaniu pulsu do mp error: %s \n",
@@ -2275,7 +2278,7 @@ int signal_mp(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 	// if((	signo!=SIGCONT)&&(signo!=SIGSTOP)) {
 
-	if ( ( ret = SignalKill(ui_state.irp6_on_track.edp.node_nr, ui_state.irp6_on_track.edp.pid, 1, signo,0,0) ) == -1 ) { // by Y !!! klopoty z wysylaniem do okreslonego watku -
+	if ( ( ret = SignalKill(ui_state.irp6ot_m.edp.node_nr, ui_state.irp6ot_m.edp.pid, 1, signo,0,0) ) == -1 ) { // by Y !!! klopoty z wysylaniem do okreslonego watku -
 		// wstawiona maska na odbior sygnalow po stronie serwo
 		// 	perror("UI: Stop EDP failed");
 		printf("sending a signal to edp failed\n");
@@ -2283,7 +2286,7 @@ int signal_mp(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 	}
 	// 	 }
 	// XXX probably a bug - killing _ecp_ pid on _edp_ node (ptrojane)
-	if ( ( ret = SignalKill(ui_state.irp6_on_track.edp.node_nr, ui_state.irp6_on_track.ecp.pid, 0, signo,0,0) ) == -1 ) {
+	if ( ( ret = SignalKill(ui_state.irp6ot_m.edp.node_nr, ui_state.irp6ot_m.ecp.pid, 0, signo,0,0) ) == -1 ) {
 		// 	perror("UI: Stop ECP failed");
 		printf("sending a signal to ecp failed\n");
 

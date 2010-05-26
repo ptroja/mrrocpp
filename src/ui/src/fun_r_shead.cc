@@ -83,8 +83,8 @@ int EDP_shead_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 			tmp2_string += ui_state.shead.edp.network_resourceman_attach_point;
 
 			// sprawdzenie czy nie jest juz zarejestrowany zarzadca zasobow
-			if ((!(ui_state.shead.edp.test_mode)) && (access(
-					tmp_string.c_str(), R_OK) == 0) || (access(
+			if (((!(ui_state.shead.edp.test_mode)) && (access(
+					tmp_string.c_str(), R_OK) == 0)) || (access(
 					tmp2_string.c_str(), R_OK) == 0)) {
 				ui.ui_msg->message(lib::NON_FATAL_ERROR,
 						"edp_shead already exists");

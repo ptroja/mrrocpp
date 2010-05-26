@@ -31,9 +31,7 @@
 #include "abimport.h"
 #include "proto.h"
 
-
 extern Ui ui;
-
 
 extern ui_ecp_buffer* ui_ecp_obj;
 
@@ -232,8 +230,8 @@ int EDP_speaker_create(PtWidget_t *widget, ApInfo_t *apinfo,
 
 	set_ui_state_notification(UI_N_PROCESS_CREATION);
 
-	char tmp_string[100];
-	char tmp2_string[100];
+	//char tmp_string[100];
+	//char tmp2_string[100];
 
 	try { // dla bledow robot :: ECP_error
 
@@ -250,8 +248,8 @@ int EDP_speaker_create(PtWidget_t *widget, ApInfo_t *apinfo,
 					+= ui_state.speaker.edp.network_resourceman_attach_point;
 
 			// sprawdzeie czy nie jest juz zarejestrowany zarzadca zasobow
-			if ((!(ui_state.speaker.edp.test_mode)) && (access(
-					tmp_string.c_str(), R_OK) == 0) || (access(
+			if (((!(ui_state.speaker.edp.test_mode)) && (access(
+					tmp_string.c_str(), R_OK) == 0)) || (access(
 					tmp2_string.c_str(), R_OK) == 0)) {
 				ui.ui_msg->message("edp_speaker already exists");
 

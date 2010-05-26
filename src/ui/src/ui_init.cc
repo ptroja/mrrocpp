@@ -144,11 +144,11 @@ int init(PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 	ui.ui_state = 1;// ui working
 
-	ui_state.irp6_on_track.edp.state = -1; // edp nieaktywne
-	ui_state.irp6_on_track.edp.last_state = -1; // edp nieaktywne
-	ui_state.irp6_on_track.ecp.trigger_fd = -1;
-	ui_state.irp6_on_track.edp.section_name = EDP_IRP6OT_M_SECTION;
-	ui_state.irp6_on_track.ecp.section_name = ECP_IRP6OT_M_SECTION;
+	ui_state.irp6ot_m.edp.state = -1; // edp nieaktywne
+	ui_state.irp6ot_m.edp.last_state = -1; // edp nieaktywne
+	ui_state.irp6ot_m.ecp.trigger_fd = -1;
+	ui_state.irp6ot_m.edp.section_name = EDP_IRP6OT_M_SECTION;
+	ui_state.irp6ot_m.ecp.section_name = ECP_IRP6OT_M_SECTION;
 
 	ui_state.irp6ot_tfg.edp.state = -1; // edp nieaktywne
 	ui_state.irp6ot_tfg.edp.last_state = -1; // edp nieaktywne
@@ -156,11 +156,11 @@ int init(PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 	ui_state.irp6ot_tfg.edp.section_name = EDP_IRP6OT_TFG_SECTION;
 	ui_state.irp6ot_tfg.ecp.section_name = ECP_IRP6OT_TFG_SECTION;
 
-	ui_state.irp6_postument.edp.state = -1; // edp nieaktywne
-	ui_state.irp6_postument.edp.last_state = -1; // edp nieaktywne
-	ui_state.irp6_postument.ecp.trigger_fd = -1;
-	ui_state.irp6_postument.edp.section_name = EDP_IRP6P_M_SECTION;
-	ui_state.irp6_postument.ecp.section_name = ECP_IRP6P_M_SECTION;
+	ui_state.irp6p_m.edp.state = -1; // edp nieaktywne
+	ui_state.irp6p_m.edp.last_state = -1; // edp nieaktywne
+	ui_state.irp6p_m.ecp.trigger_fd = -1;
+	ui_state.irp6p_m.edp.section_name = EDP_IRP6P_M_SECTION;
+	ui_state.irp6p_m.ecp.section_name = ECP_IRP6P_M_SECTION;
 
 	ui_state.irp6p_tfg.edp.state = -1; // edp nieaktywne
 	ui_state.irp6p_tfg.edp.last_state = -1; // edp nieaktywne
@@ -249,8 +249,8 @@ int init(PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 	ui_state.is_wind_irp6m_servo_algorithm_open = false;
 	ui_state.is_wind_conv_servo_algorithm_open = false;
 
-	ui_state.irp6_on_track.edp.is_synchronised = false;
-	ui_state.irp6_postument.edp.is_synchronised = false;
+	ui_state.irp6ot_m.edp.is_synchronised = false;
+	ui_state.irp6p_m.edp.is_synchronised = false;
 	ui_state.irp6ot_tfg.edp.is_synchronised = false;
 	ui_state.irp6p_tfg.edp.is_synchronised = false;
 	ui_state.conveyor.edp.is_synchronised = false;
