@@ -27,7 +27,6 @@
 // Konfigurator.
 #include "lib/configurator.h"
 #include "ui/ui_ecp_r_tfg_and_conv.h"
-#include "lib/robot_consts/irp6ot_tfg_const.h"
 
 /* Local headers */
 #include "ablibs.h"
@@ -35,10 +34,6 @@
 #include "proto.h"
 
 extern Ui ui;
-
-double irp6ot_tfg_current_pos[IRP6OT_TFG_NUM_OF_SERVOS];// pozycja biezaca
-double irp6ot_tfg_desired_pos[IRP6OT_TFG_NUM_OF_SERVOS]; // pozycja zadana
-
 
 int close_wind_irp6ot_tfg_moves(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo)
@@ -322,7 +317,7 @@ int irp6ot_tfg_move_to_preset_position(PtWidget_t *widget, ApInfo_t *apinfo,
 				|| ((cbinfo->event->type == Ph_EV_KEY) && (my_data->key_cap
 						== 0x73))) && (ui.irp6ot_tfg.state.edp.is_synchronised)) {// powrot do pozycji synchronizacji
 			for (int i = 0; i < IRP6OT_TFG_NUM_OF_SERVOS; i++) {
-				irp6ot_tfg_desired_pos[i] = 0.0;
+				ui.irp6ot_tfg.irp6ot_tfg_desired_pos[i] = 0.0;
 			}
 			ui.irp6ot_tfg.eb.command(boost::bind(
 					irp6ot_tfg_execute_motor_motion));
@@ -332,7 +327,7 @@ int irp6ot_tfg_move_to_preset_position(PtWidget_t *widget, ApInfo_t *apinfo,
 				|| ((cbinfo->event->type == Ph_EV_KEY) && (my_data->key_cap
 						== 0x30))) && (ui.irp6ot_tfg.state.edp.is_synchronised)) {// ruch do pozycji zadania (wspolrzedne przyjete arbitralnie)
 			for (int i = 0; i < IRP6OT_TFG_NUM_OF_SERVOS; i++) {
-				irp6ot_tfg_desired_pos[i]
+				ui.irp6ot_tfg.irp6ot_tfg_desired_pos[i]
 						= ui.irp6ot_tfg.state.edp.preset_position[0][i];
 			}
 			ui.irp6ot_tfg.eb.command(boost::bind(
@@ -343,7 +338,7 @@ int irp6ot_tfg_move_to_preset_position(PtWidget_t *widget, ApInfo_t *apinfo,
 				|| ((cbinfo->event->type == Ph_EV_KEY) && (my_data->key_cap
 						== 0x31))) && (ui.irp6ot_tfg.state.edp.is_synchronised)) {// ruch do pozycji zadania (wspolrzedne przyjete arbitralnie)
 			for (int i = 0; i < IRP6OT_TFG_NUM_OF_SERVOS; i++) {
-				irp6ot_tfg_desired_pos[i]
+				ui.irp6ot_tfg.irp6ot_tfg_desired_pos[i]
 						= ui.irp6ot_tfg.state.edp.preset_position[1][i];
 			}
 			ui.irp6ot_tfg.eb.command(boost::bind(
@@ -354,14 +349,14 @@ int irp6ot_tfg_move_to_preset_position(PtWidget_t *widget, ApInfo_t *apinfo,
 				|| ((cbinfo->event->type == Ph_EV_KEY) && (my_data->key_cap
 						== 0x32))) && (ui.irp6ot_tfg.state.edp.is_synchronised)) {// ruch do pozycji zadania (wspolrzedne przyjete arbitralnie)
 			for (int i = 0; i < IRP6OT_TFG_NUM_OF_SERVOS; i++) {
-				irp6ot_tfg_desired_pos[i]
+				ui.irp6ot_tfg.irp6ot_tfg_desired_pos[i]
 						= ui.irp6ot_tfg.state.edp.preset_position[2][i];
 			}
 			ui.irp6ot_tfg.eb.command(boost::bind(
 					irp6ot_tfg_execute_joint_motion));
 		}
 
-		//	ui.irp6ot_tfg.ui_ecp_robot->move_motors(irp6ot_tfg_desired_pos);
+		//	ui.irp6ot_tfg.ui_ecp_robot->move_motors(ui.irp6ot_tfg.irp6ot_tfg_desired_pos);
 
 	} // end if (ui.irp6ot_tfg.state.edp.pid!=-1)
 
@@ -373,7 +368,8 @@ int irp6ot_tfg_move_to_preset_position(PtWidget_t *widget, ApInfo_t *apinfo,
 int irp6ot_tfg_execute_motor_motion() {
 	try {
 
-		ui.irp6ot_tfg.ui_ecp_robot->move_motors(irp6ot_tfg_desired_pos);
+		ui.irp6ot_tfg.ui_ecp_robot->move_motors(
+				ui.irp6ot_tfg.irp6ot_tfg_desired_pos);
 
 	} // end try
 	CATCH_SECTION_UI
@@ -384,7 +380,8 @@ int irp6ot_tfg_execute_motor_motion() {
 int irp6ot_tfg_execute_joint_motion() {
 	try {
 
-		ui.irp6ot_tfg.ui_ecp_robot->move_joints(irp6ot_tfg_desired_pos);
+		ui.irp6ot_tfg.ui_ecp_robot->move_joints(
+				ui.irp6ot_tfg.irp6ot_tfg_desired_pos);
 
 	} // end try
 	CATCH_SECTION_UI
@@ -517,17 +514,21 @@ int wind_irp6ot_tfg_moves_init(PtWidget_t *widget, ApInfo_t *apinfo,
 				unblock_widget(ABW_PtNumericFloat_wind_irp6ot_tfg_moves_int_pos);
 				unblock_widget(ABW_PtButton_wind_irp6ot_tfg_moves_int_exec);
 
-				ui.irp6ot_tfg.ui_ecp_robot->read_motors(irp6ot_tfg_current_pos); // Odczyt polozenia walow silnikow
+				ui.irp6ot_tfg.ui_ecp_robot->read_motors(
+						ui.irp6ot_tfg.irp6ot_tfg_current_pos); // Odczyt polozenia walow silnikow
 
 				PtSetResource(
 						ABW_PtNumericFloat_wind_irp6ot_tfg_moves_read_motor_pos,
-						Pt_ARG_NUMERIC_VALUE, &irp6ot_tfg_current_pos[0], 0);
+						Pt_ARG_NUMERIC_VALUE,
+						&ui.irp6ot_tfg.irp6ot_tfg_current_pos[0], 0);
 
-				ui.irp6ot_tfg.ui_ecp_robot->read_joints(irp6ot_tfg_current_pos);
+				ui.irp6ot_tfg.ui_ecp_robot->read_joints(
+						ui.irp6ot_tfg.irp6ot_tfg_current_pos);
 
 				PtSetResource(
 						ABW_PtNumericFloat_wind_irp6ot_tfg_moves_read_int_pos,
-						Pt_ARG_NUMERIC_VALUE, &irp6ot_tfg_current_pos[0], 0);
+						Pt_ARG_NUMERIC_VALUE,
+						&ui.irp6ot_tfg.irp6ot_tfg_current_pos[0], 0);
 
 			} else {
 				block_widget(ABW_PtNumericFloat_wind_irp6ot_tfg_moves_inc_pos);

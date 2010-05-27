@@ -10,6 +10,7 @@
 
 #include "ui/ui.h"
 #include "ui/ui_robot.h"
+#include "lib/robot_consts/irp6p_m_const.h"
 
 //
 //
@@ -27,6 +28,9 @@ class UiRobotIrp6p_m: public UiRobot {
 private:
 
 public:
+
+	double irp6p_current_pos[IRP6P_M_NUM_OF_SERVOS]; // pozycja biezaca
+	double irp6p_desired_pos[IRP6P_M_NUM_OF_SERVOS]; // pozycja zadana
 
 	bool is_wind_irp6p_int_open; // informacja czy okno ruchow w radianach stawow jest otwarte
 	bool is_wind_irp6p_inc_open; // informacja czy okno ruchow w radianach na wale silnika jest otwarte

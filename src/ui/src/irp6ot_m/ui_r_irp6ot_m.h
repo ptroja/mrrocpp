@@ -10,6 +10,7 @@
 
 #include "ui/ui.h"
 #include "ui/ui_robot.h"
+#include "lib/robot_consts/irp6ot_m_const.h"
 
 //
 //
@@ -27,6 +28,9 @@ class UiRobotIrp6ot_m: public UiRobot {
 private:
 
 public:
+	double irp6ot_current_pos[IRP6OT_M_NUM_OF_SERVOS]; // pozycja biezaca
+	double irp6ot_desired_pos[IRP6OT_M_NUM_OF_SERVOS]; // pozycja zadana
+
 
 	bool is_wind_irp6ot_int_open; // informacja czy okno ruchow w radianach stawow jest otwarte
 	bool is_wind_irp6ot_inc_open; // informacja czy okno ruchow w radianach na wale silnika jest otwarte
@@ -39,12 +43,7 @@ public:
 	bool is_wind_irp6ot_servo_algorithm_open; // informacja czy okno definicji kinematyki jest otwarte
 
 
-
-
-
 	ui_irp6_common_robot *ui_ecp_robot;
-
-
 
 	UiRobotIrp6ot_m();
 	int reload_configuration();

@@ -10,7 +10,7 @@
 
 #include "ui/ui.h"
 #include "ui/ui_robot.h"
-
+#include "lib/robot_consts/conveyor_const.h"
 //
 //
 // KLASA UiRobotConveyor
@@ -27,6 +27,9 @@ class UiRobotConveyor: public UiRobot {
 private:
 
 public:
+
+	double conveyor_current_pos[CONVEYOR_NUM_OF_SERVOS];// pozycja biezaca
+	double conveyor_desired_pos[CONVEYOR_NUM_OF_SERVOS]; // pozycja zadana
 
 	bool is_wind_conv_servo_algorithm_open; // informacja czy okno definicji kinematyki jest otwarte
 	bool is_wind_conveyor_moves_open; // informacja czy okno ruchow dla robota conveyor

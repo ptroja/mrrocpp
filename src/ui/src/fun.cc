@@ -35,22 +35,6 @@
 
 extern Ui ui;
 
-extern function_execution_buffer main_eb;
-
-
-
-
-
-extern double irp6ot_current_pos[8]; // pozycja biezaca
-extern double irp6ot_desired_pos[8]; // pozycja zadana
-
-extern double irp6p_current_pos[7]; // pozycja biezaca
-extern double irp6p_desired_pos[7]; // pozycja zadana
-
-extern double irp6m_current_pos[6]; // pozycja biezaca
-extern double irp6m_desired_pos[6]; // pozycja zadana
-
-
 // blokowanie widgetu
 int block_widget(PtWidget_t *widget) {
 	PtSetResource(widget, Pt_ARG_FLAGS, Pt_TRUE, Pt_BLOCKED | Pt_GHOST);
@@ -596,15 +580,14 @@ int file_selection_window_send_location(PtWidget_t *widget, ApInfo_t *apinfo,
 	if (item != NULL) {
 		if (ui.file_window_mode == FSTRAJECTORY) {
 			if ((item->type) == Pt_FS_FILE) {
-				strncpy(ui.ui_ecp_obj->ui_rep.filename,
-						rindex(item->fullpath, '/') + 1, strlen(rindex(
-								item->fullpath, '/')) - 1);
-				ui.ui_ecp_obj->ui_rep.filename[strlen(rindex(item->fullpath, '/'))
-						- 1] = '\0';
+				strncpy(ui.ui_ecp_obj->ui_rep.filename, rindex(item->fullpath,
+						'/') + 1, strlen(rindex(item->fullpath, '/')) - 1);
+				ui.ui_ecp_obj->ui_rep.filename[strlen(rindex(item->fullpath,
+						'/')) - 1] = '\0';
 				strncpy(ui.ui_ecp_obj->ui_rep.path, item->fullpath, strlen(
 						item->fullpath) - strlen(rindex(item->fullpath, '/')));
-				ui.ui_ecp_obj->ui_rep.path[strlen(item->fullpath) - strlen(rindex(
-						item->fullpath, '/'))] = '\0';
+				ui.ui_ecp_obj->ui_rep.path[strlen(item->fullpath) - strlen(
+						rindex(item->fullpath, '/'))] = '\0';
 			} else if (((item->type) == Pt_FS_DIR_OP) || ((item->type)
 					== Pt_FS_DIR_CL)) {
 
@@ -1853,15 +1836,16 @@ int teaching_window_send_move(PtWidget_t *widget, ApInfo_t *apinfo,
 	switch (ui.ui_ecp_obj->ecp_to_ui_msg.robot_name) {
 	case lib::ROBOT_IRP6OT_M:
 		for (int i = 0; i < IRP6OT_M_NUM_OF_SERVOS; i++)
-			ui.ui_ecp_obj->ui_rep.coordinates[i] = irp6ot_current_pos[i];
+			ui.ui_ecp_obj->ui_rep.coordinates[i] = ui.irp6ot_m.irp6ot_current_pos[i];
 		break;
 	case lib::ROBOT_IRP6P_M:
 		for (int i = 0; i < IRP6P_M_NUM_OF_SERVOS; i++)
-			ui.ui_ecp_obj->ui_rep.coordinates[i] = irp6p_current_pos[i];
+			ui.ui_ecp_obj->ui_rep.coordinates[i] = ui.irp6p_m.irp6p_current_pos[i];
 		break;
 	case lib::ROBOT_IRP6_MECHATRONIKA:
 		for (int i = 0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++)
-			ui.ui_ecp_obj->ui_rep.coordinates[i] = irp6m_current_pos[i];
+			ui.ui_ecp_obj->ui_rep.coordinates[i]
+					= ui.irp6m_m.irp6m_current_pos[i];
 		break;
 	default:
 		break;

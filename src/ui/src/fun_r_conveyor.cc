@@ -37,13 +37,6 @@
 
 extern Ui ui;
 
-double conveyor_current_pos[CONVEYOR_NUM_OF_SERVOS];// pozycja biezaca
-double conveyor_desired_pos[CONVEYOR_NUM_OF_SERVOS]; // pozycja zadana
-
-
-// zamykanie okien ruchow recznych dla robota irp6_on_track
-
-
 // zamykanie okien ruchow recznych dla robota conveyor
 
 int close_wind_conveyor_moves(PtWidget_t *widget, ApInfo_t *apinfo,
@@ -168,17 +161,21 @@ int wind_conveyor_moves_init(PtWidget_t *widget, ApInfo_t *apinfo,
 				unblock_widget(ABW_PtNumericFloat_wind_conveyor_moves_int_pos);
 				unblock_widget(ABW_PtButton_wind_conveyor_moves_int_exec);
 
-				ui.conveyor.ui_ecp_robot->read_motors(conveyor_current_pos); // Odczyt polozenia walow silnikow
+				ui.conveyor.ui_ecp_robot->read_motors(
+						ui.conveyor.conveyor_current_pos); // Odczyt polozenia walow silnikow
 
 				PtSetResource(
 						ABW_PtNumericFloat_wind_conveyor_moves_read_motor_pos,
-						Pt_ARG_NUMERIC_VALUE, &conveyor_current_pos[0], 0);
+						Pt_ARG_NUMERIC_VALUE,
+						&ui.conveyor.conveyor_current_pos[0], 0);
 
-				ui.conveyor.ui_ecp_robot->read_joints(conveyor_current_pos);
+				ui.conveyor.ui_ecp_robot->read_joints(
+						ui.conveyor.conveyor_current_pos);
 
 				PtSetResource(
 						ABW_PtNumericFloat_wind_conveyor_moves_read_int_pos,
-						Pt_ARG_NUMERIC_VALUE, &conveyor_current_pos[0], 0);
+						Pt_ARG_NUMERIC_VALUE,
+						&ui.conveyor.conveyor_current_pos[0], 0);
 
 			} else {
 				block_widget(ABW_PtNumericFloat_wind_conveyor_moves_inc_pos);
@@ -224,7 +221,7 @@ int conveyor_move_to_preset_position(PtWidget_t *widget, ApInfo_t *apinfo,
 					&& (ui.conveyor.state.edp.is_synchronised)) {
 				// powrot do pozycji synchronizacji
 				for (int i = 0; i < CONVEYOR_NUM_OF_SERVOS; i++) {
-					conveyor_desired_pos[i] = 0.0;
+					ui.conveyor.conveyor_desired_pos[i] = 0.0;
 				}
 
 			} else if ((((ApName(ApWidget(cbinfo))
@@ -235,7 +232,7 @@ int conveyor_move_to_preset_position(PtWidget_t *widget, ApInfo_t *apinfo,
 					&& (ui.conveyor.state.edp.is_synchronised)) {
 				// ruch do pozycji zadania (wspolrzedne przyjete arbitralnie)
 				for (int i = 0; i < CONVEYOR_NUM_OF_SERVOS; i++) {
-					conveyor_desired_pos[i]
+					ui.conveyor.conveyor_desired_pos[i]
 							= ui.conveyor.state.edp.preset_position[0][i];
 				}
 			} else if ((((ApName(ApWidget(cbinfo))
@@ -246,7 +243,7 @@ int conveyor_move_to_preset_position(PtWidget_t *widget, ApInfo_t *apinfo,
 					&& (ui.conveyor.state.edp.is_synchronised)) {
 				// ruch do pozycji zadania (wspolrzedne przyjete arbitralnie)
 				for (int i = 0; i < CONVEYOR_NUM_OF_SERVOS; i++) {
-					conveyor_desired_pos[i]
+					ui.conveyor.conveyor_desired_pos[i]
 							= ui.conveyor.state.edp.preset_position[1][i];
 				}
 			} else if ((((ApName(ApWidget(cbinfo))
@@ -257,12 +254,13 @@ int conveyor_move_to_preset_position(PtWidget_t *widget, ApInfo_t *apinfo,
 					&& (ui.conveyor.state.edp.is_synchronised)) {
 				// ruch do pozycji zadania (wspolrzedne przyjete arbitralnie)
 				for (int i = 0; i < CONVEYOR_NUM_OF_SERVOS; i++) {
-					conveyor_desired_pos[i]
+					ui.conveyor.conveyor_desired_pos[i]
 							= ui.conveyor.state.edp.preset_position[2][i];
 				}
 			}
 
-			ui.conveyor.ui_ecp_robot->move_motors(conveyor_desired_pos);
+			ui.conveyor.ui_ecp_robot->move_motors(
+					ui.conveyor.conveyor_desired_pos);
 
 		}
 
