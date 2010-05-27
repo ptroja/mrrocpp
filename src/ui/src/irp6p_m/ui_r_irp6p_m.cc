@@ -3,7 +3,7 @@
 /*                                         Version 2.01  */
 
 #include "ui/src/irp6p_m/ui_r_irp6p_m.h"
-#include "ui/ui_ecp.h"
+#include "lib/robot_consts/all_robots_const.h"
 #include "ui/ui_class.h"
 
 /* Local headers */

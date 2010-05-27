@@ -26,7 +26,7 @@
 
 #include "lib/srlib.h"
 /*
- #include "ui/ui_ecp.h"
+ #include "lib/robot_consts/all_robots_const.h"
  #include "ui/ui_const.h"
  */
 // Konfigurator.

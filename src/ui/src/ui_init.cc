@@ -43,7 +43,7 @@
 #include "lib/srlib.h"
 #include "ui/ui_const.h"
 #include "lib/mis_fun.h"
-#include "ui/ui_ecp.h"
+#include "lib/robot_consts/all_robots_const.h"
 #include "lib/robot_consts/conveyor_const.h"
 #if defined(USE_MESSIP_SRR)
 #include <messip.h>
