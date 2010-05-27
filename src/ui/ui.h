@@ -165,7 +165,6 @@ typedef struct {
 
 typedef struct {
 
-	ecp_edp_ui_robot_def irp6p_m;
 	ecp_edp_ui_robot_def irp6p_tfg;
 	ecp_edp_ui_robot_def irp6_mechatronika;
 	ecp_edp_ui_robot_def polycrank;
@@ -175,32 +174,23 @@ typedef struct {
 	ecp_edp_ui_robot_def smb;
 	ecp_edp_ui_robot_def shead;
 
-	bool is_wind_irp6p_int_open; // informacja czy okno ruchow w radianach stawow jest otwarte
 	bool is_wind_irp6m_int_open; // informacja czy okno ruchow w radianach stawow jest otwarte
 	bool is_wind_polycrank_int_open; // informacja czy okno ruchow w radianach stawow jest otwarte
 
-	bool is_wind_irp6p_inc_open; // informacja czy okno ruchow w radianach na wale silnika jest otwarte
 	bool is_wind_irp6m_inc_open; // informacja czy okno ruchow w radianach na wale silnika jest otwarte
 	bool is_wind_polycrank_inc_open; // informacja czy okno ruchow w radianach na wale silnika jest otwarte
 
-	bool is_wind_irp6p_xyz_euler_zyz_open; // informacja czy okno ruchow we wspolrzednych zewnetrznych jest otwarte
 	bool is_wind_irp6m_xyz_euler_zyz_open; // informacja czy okno ruchow we wspolrzednych zewnetrznych jest otwarte
 
-	bool is_wind_irp6p_xyz_angle_axis_open; // informacja czy okno ruchow we wspolrzednych zewnetrznych jest otwarte
 	bool is_wind_irp6m_xyz_angle_axis_open; // informacja czy okno ruchow we wspolrzednych zewnetrznych jest otwarte
 
-	bool is_wind_irp6p_xyz_aa_relative_open; // informacja czy okno ruchow we wspolrzednych zewnetrznych jest otwarte
 
-	bool is_wind_irp6p_xyz_angle_axis_ts_open; // informacja czy okno definicji narzedzia we wspolrzednych zewnetrznych jest otwarte
 	bool is_wind_irp6m_xyz_angle_axis_ts_open; // informacja czy okno definicji narzedzia we wspolrzednych zewnetrznych jest otwarte
 
-	bool is_wind_irp6p_xyz_euler_zyz_ts_open; // informacja czy okno definicji narzedzia we wspolrzednych zewnetrznych jest otwarte
 	bool is_wind_irp6m_xyz_euler_zyz_ts_open; // informacja czy okno definicji narzedzia we wspolrzednych zewnetrznych jest otwarte
 
-	bool is_wind_irp6p_kinematic_open; // informacja czy okno definicji kinematyki jest otwarte
 	bool is_wind_irp6m_kinematic_open; // informacja czy okno definicji kinematyki jest otwarte
 
-	bool is_wind_irp6p_servo_algorithm_open; // informacja czy okno definicji kinematyki jest otwarte
 	bool is_wind_irp6p_tfg_servo_algorithm_open; // informacja czy okno definicji kinematyki jest otwarte
 	bool is_wind_irp6m_servo_algorithm_open; // informacja czy okno definicji kinematyki jest otwarte
 	bool is_wind_conv_servo_algorithm_open; // informacja czy okno definicji kinematyki jest otwarte

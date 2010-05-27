@@ -125,12 +125,6 @@ int init(PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 	/* eliminate 'unreferenced' warnings */
 	link_instance = link_instance, apinfo = apinfo, cbinfo = cbinfo;
 
-	ui_state.irp6p_m.edp.state = -1; // edp nieaktywne
-	ui_state.irp6p_m.edp.last_state = -1; // edp nieaktywne
-	ui_state.irp6p_m.ecp.trigger_fd = -1;
-	ui_state.irp6p_m.edp.section_name = EDP_IRP6P_M_SECTION;
-	ui_state.irp6p_m.ecp.section_name = ECP_IRP6P_M_SECTION;
-
 	ui_state.irp6p_tfg.edp.state = -1; // edp nieaktywne
 	ui_state.irp6p_tfg.edp.last_state = -1; // edp nieaktywne
 	ui_state.irp6p_tfg.ecp.trigger_fd = -1;
@@ -173,43 +167,30 @@ int init(PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 	ui_state.shead.edp.section_name = EDP_SHEAD_SECTION;
 	ui_state.shead.ecp.section_name = ECP_SHEAD_SECTION;
 
-	ui_state.is_wind_irp6p_int_open = false;
 	ui_state.is_wind_irp6m_int_open = false;
 	ui_state.is_wind_polycrank_int_open = false;
 
-	ui_state.is_wind_irp6p_inc_open = false;
 	ui_state.is_wind_irp6m_inc_open = false;
 	ui_state.is_wind_polycrank_inc_open = false;
 
-	ui_state.is_wind_irp6p_xyz_euler_zyz_open = false;
 	ui_state.is_wind_irp6m_xyz_euler_zyz_open = false;
 
-	ui_state.is_wind_irp6p_xyz_angle_axis_open = false;
 	ui_state.is_wind_irp6m_xyz_angle_axis_open = false;
 
-	ui_state.is_wind_irp6p_xyz_angle_axis_ts_open = false;
 	ui_state.is_wind_irp6m_xyz_angle_axis_ts_open = false;
 
-	ui_state.is_wind_irp6p_xyz_euler_zyz_ts_open = false;
 	ui_state.is_wind_irp6m_xyz_euler_zyz_ts_open = false;
 
 	ui_state.is_wind_conveyor_moves_open = false;
 
 	ui_state.is_wind_irp6p_tfg_moves_open = false;
 
-	ui_state.is_wind_irp6p_kinematic_open = false;
 	ui_state.is_wind_irp6m_kinematic_open = false;
 	ui_state.is_wind_speaker_play_open = false;
-
-	ui_state.is_wind_irp6p_xyz_aa_relative_open = false;
-
-	ui_state.is_wind_irp6p_servo_algorithm_open = false;
 
 	ui_state.is_wind_irp6p_tfg_servo_algorithm_open = false;
 	ui_state.is_wind_irp6m_servo_algorithm_open = false;
 	ui_state.is_wind_conv_servo_algorithm_open = false;
-
-	ui_state.irp6p_m.edp.is_synchronised = false;
 
 	ui_state.irp6p_tfg.edp.is_synchronised = false;
 	ui_state.conveyor.edp.is_synchronised = false;

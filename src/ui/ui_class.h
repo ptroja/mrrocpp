@@ -13,6 +13,7 @@
 #include "ui/src/bird_hand/ui_r_bird_hand.h"
 #include "ui/src/irp6ot_m/ui_r_irp6ot_m.h"
 #include "ui/src/irp6ot_tfg/ui_r_irp6ot_tfg.h"
+#include "ui/src/irp6p_m/ui_r_irp6p_m.h"
 
 //
 //
@@ -84,6 +85,7 @@ public:
 	UiRobotBirdHand bird_hand;
 	UiRobotIrp6ot_m irp6ot_m;
 	UiRobotIrp6ot_tfg irp6ot_tfg;
+	UiRobotIrp6p_m irp6p_m;
 
 	Ui();
 	void UI_close(void);
