@@ -172,8 +172,7 @@ int Ui::manage_interface(void) {
 	// Dla robota IRP6 ON_TRACK
 	irp6ot_m.manage_interface();
 
-	// Dla robota IRP6 ON_TRACK
-	manage_interface_irp6ot_tfg();
+	irp6ot_tfg.manage_interface();
 
 	manage_interface_irp6p_tfg();
 
@@ -333,8 +332,7 @@ int Ui::reload_whole_configuration() {
 			// dla robota irp6 on_track
 			irp6ot_m.reload_configuration();
 
-			// dla robota irp6 on_track
-			reload_irp6ot_tfg_configuration();
+			irp6ot_tfg.reload_configuration();
 
 			reload_irp6p_tfg_configuration();
 

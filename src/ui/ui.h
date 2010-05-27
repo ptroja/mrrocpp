@@ -166,7 +166,6 @@ typedef struct {
 typedef struct {
 
 	ecp_edp_ui_robot_def irp6p_m;
-	ecp_edp_ui_robot_def irp6ot_tfg;
 	ecp_edp_ui_robot_def irp6p_tfg;
 	ecp_edp_ui_robot_def irp6_mechatronika;
 	ecp_edp_ui_robot_def polycrank;
@@ -202,13 +201,12 @@ typedef struct {
 	bool is_wind_irp6m_kinematic_open; // informacja czy okno definicji kinematyki jest otwarte
 
 	bool is_wind_irp6p_servo_algorithm_open; // informacja czy okno definicji kinematyki jest otwarte
-	bool is_wind_irp6ot_tfg_servo_algorithm_open; // informacja czy okno definicji kinematyki jest otwarte
 	bool is_wind_irp6p_tfg_servo_algorithm_open; // informacja czy okno definicji kinematyki jest otwarte
 	bool is_wind_irp6m_servo_algorithm_open; // informacja czy okno definicji kinematyki jest otwarte
 	bool is_wind_conv_servo_algorithm_open; // informacja czy okno definicji kinematyki jest otwarte
 
 	bool is_wind_conveyor_moves_open; // informacja czy okno ruchow dla robota conveyor
-	bool is_wind_irp6ot_tfg_moves_open; // informacja czy okno ruchow dla robota conveyor
+
 	bool is_wind_irp6p_tfg_moves_open; // informacja czy okno ruchow dla robota conveyor
 
 	bool is_wind_speaker_play_open; // informacja czy okno odtwarzania dzwiekow jest otwarte

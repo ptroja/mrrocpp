@@ -125,12 +125,6 @@ int init(PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 	/* eliminate 'unreferenced' warnings */
 	link_instance = link_instance, apinfo = apinfo, cbinfo = cbinfo;
 
-	ui_state.irp6ot_tfg.edp.state = -1; // edp nieaktywne
-	ui_state.irp6ot_tfg.edp.last_state = -1; // edp nieaktywne
-	ui_state.irp6ot_tfg.ecp.trigger_fd = -1;
-	ui_state.irp6ot_tfg.edp.section_name = EDP_IRP6OT_TFG_SECTION;
-	ui_state.irp6ot_tfg.ecp.section_name = ECP_IRP6OT_TFG_SECTION;
-
 	ui_state.irp6p_m.edp.state = -1; // edp nieaktywne
 	ui_state.irp6p_m.edp.last_state = -1; // edp nieaktywne
 	ui_state.irp6p_m.ecp.trigger_fd = -1;
@@ -200,7 +194,7 @@ int init(PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 	ui_state.is_wind_irp6m_xyz_euler_zyz_ts_open = false;
 
 	ui_state.is_wind_conveyor_moves_open = false;
-	ui_state.is_wind_irp6ot_tfg_moves_open = false;
+
 	ui_state.is_wind_irp6p_tfg_moves_open = false;
 
 	ui_state.is_wind_irp6p_kinematic_open = false;
@@ -210,13 +204,13 @@ int init(PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 	ui_state.is_wind_irp6p_xyz_aa_relative_open = false;
 
 	ui_state.is_wind_irp6p_servo_algorithm_open = false;
-	ui_state.is_wind_irp6ot_tfg_servo_algorithm_open = false;
+
 	ui_state.is_wind_irp6p_tfg_servo_algorithm_open = false;
 	ui_state.is_wind_irp6m_servo_algorithm_open = false;
 	ui_state.is_wind_conv_servo_algorithm_open = false;
 
 	ui_state.irp6p_m.edp.is_synchronised = false;
-	ui_state.irp6ot_tfg.edp.is_synchronised = false;
+
 	ui_state.irp6p_tfg.edp.is_synchronised = false;
 	ui_state.conveyor.edp.is_synchronised = false;
 	ui_state.spkm.edp.is_synchronised = false;

@@ -697,8 +697,6 @@ int wind_irp6ot_tfg_moves_move(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
 int clear_wnd_irp6ot_tfg_servo_algorithm_flag(PtWidget_t *widget,
 		ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo);
-int reload_irp6ot_tfg_configuration(void);
-int manage_interface_irp6ot_tfg(void);
 
 /* ../fun_r_irp6p_tfg.cc */
 int close_wind_irp6p_tfg_moves(PtWidget_t *widget, ApInfo_t *apinfo,

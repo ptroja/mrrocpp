@@ -1329,7 +1329,7 @@ int check_edps_state_and_modify_mp_state() {
 
 	// jesli wszytkie sa nieaktywne
 	if ((!(ui_state.irp6p_m.is_active)) && (!(ui.irp6ot_m.state.is_active))
-			&& (!(ui_state.irp6ot_tfg.is_active))
+			&& (!(ui.irp6ot_tfg.state.is_active))
 			&& (!(ui_state.irp6p_tfg.is_active))
 			&& (!(ui_state.conveyor.is_active))
 			&& (!(ui_state.speaker.is_active))
@@ -1345,7 +1345,7 @@ int check_edps_state_and_modify_mp_state() {
 			&& check_synchronised_or_inactive(ui_state.conveyor)
 			&& check_synchronised_or_inactive(ui_state.speaker)
 			&& check_synchronised_or_inactive(ui_state.irp6_mechatronika)
-			&& check_synchronised_or_inactive(ui_state.irp6ot_tfg)
+			&& check_synchronised_or_inactive(ui.irp6ot_tfg.state)
 			&& check_synchronised_or_inactive(ui_state.irp6p_tfg)
 			&& check_synchronised_or_inactive(ui.bird_hand.state)
 			&& check_synchronised_or_inactive(ui_state.spkm)
@@ -1359,7 +1359,7 @@ int check_edps_state_and_modify_mp_state() {
 			&& check_loaded_or_inactive(ui_state.conveyor)
 			&& check_loaded_or_inactive(ui_state.speaker)
 			&& check_loaded_or_inactive(ui_state.irp6_mechatronika)
-			&& check_loaded_or_inactive(ui_state.irp6ot_tfg)
+			&& check_loaded_or_inactive(ui.irp6ot_tfg.state)
 			&& check_loaded_or_inactive(ui_state.irp6p_tfg)
 			&& check_loaded_or_inactive(ui.bird_hand.state)
 			&& check_loaded_or_inactive(ui_state.spkm)
@@ -1374,7 +1374,7 @@ int check_edps_state_and_modify_mp_state() {
 			|| check_loaded(ui.irp6ot_m.state) || check_loaded(
 			ui_state.conveyor) || check_loaded(ui_state.speaker)
 			|| check_loaded(ui_state.irp6_mechatronika) || check_loaded(
-			ui_state.irp6ot_tfg) || check_loaded(ui_state.irp6p_tfg)
+			ui.irp6ot_tfg.state) || check_loaded(ui_state.irp6p_tfg)
 			|| check_loaded(ui.bird_hand.state) || check_loaded(ui_state.spkm)
 			|| check_loaded(ui_state.smb) || check_loaded(ui_state.shead))
 
@@ -1893,7 +1893,7 @@ int all_robots_move_to_preset_position(PtWidget_t *widget, ApInfo_t *apinfo,
 		// ruch do pozcyji synchronizacji dla Irp6_on_track i dla dalszych analogicznie
 		if (check_synchronised_and_loaded(ui.irp6ot_m.state))
 			irp6ot_move_to_preset_position(widget, apinfo, cbinfo);
-		if (check_synchronised_and_loaded(ui_state.irp6ot_tfg))
+		if (check_synchronised_and_loaded(ui.irp6ot_tfg.state))
 			irp6ot_tfg_move_to_preset_position(widget, apinfo, cbinfo);
 		if (check_synchronised_and_loaded(ui_state.irp6p_m))
 			irp6p_move_to_preset_position(widget, apinfo, cbinfo);
