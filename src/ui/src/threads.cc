@@ -50,8 +50,6 @@
 
 extern Ui ui;
 
-busy_flag communication_flag;
-
 // forward declaration
 void *sr_thread(void* arg);
 

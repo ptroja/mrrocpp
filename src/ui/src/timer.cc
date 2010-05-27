@@ -25,6 +25,8 @@
 #include "abimport.h"
 #include "proto.h"
 
+busy_flag communication_flag;
+
 extern Ui ui;
 
 int OnTimer(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
