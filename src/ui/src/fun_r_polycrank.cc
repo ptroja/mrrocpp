@@ -30,14 +30,12 @@
 #include "abimport.h"
 #include "proto.h"
 
-
 extern ui_ecp_buffer* ui_ecp_obj;
 
 extern ui_state_def ui_state;
 
 extern ui_robot_def ui_robot;
 extern ui_ecp_buffer* ui_ecp_obj;
-
 
 double irp6m_current_pos[POLYCRANK_NUM_OF_SERVOS]; // pozycja biezaca
 double irp6m_desired_pos[POLYCRANK_NUM_OF_SERVOS]; // pozycja zadana
@@ -197,16 +195,13 @@ int EDP_polycrank_create(PtWidget_t *widget, ApInfo_t *apinfo,
 				ui.ui_msg->message(lib::NON_FATAL_ERROR,
 						"edp_irp6_mechatronika already exists");
 
-			} else if (check_node_existence(
-					ui.irp6m_m.state.edp.node_name, std::string(
-							"edp_irp6_mechatronika"))) {
-				ui.irp6m_m.state.edp.node_nr
-						= ui.config->return_node_number(
-								ui.irp6m_m.state.edp.node_name);
+			} else if (check_node_existence(ui.irp6m_m.state.edp.node_name,
+					std::string("edp_irp6_mechatronika"))) {
+				ui.irp6m_m.state.edp.node_nr = ui.config->return_node_number(
+						ui.irp6m_m.state.edp.node_name);
 
-				ui.irp6m_m.ui_ecp_robot = new ui_irp6_common_robot(
-						*ui.config, *ui.all_ecp_msg,
-						lib::ROBOT_IRP6_MECHATRONIKA);
+				ui.irp6m_m.ui_ecp_robot = new ui_irp6_common_robot(*ui.config,
+						*ui.all_ecp_msg, lib::ROBOT_IRP6_MECHATRONIKA);
 
 				ui.irp6m_m.state.edp.pid
 						= ui.irp6m_m.ui_ecp_robot->ecp->get_EDP_pid();
@@ -573,8 +568,7 @@ int pulse_reader_polycrank_start(PtWidget_t *widget, ApInfo_t *apinfo,
 bool pulse_reader_polycrank_start_exec_pulse() {
 
 	if (ui.irp6m_m.state.edp.state == 1) {
-		pulse_reader_execute(ui.irp6m_m.state.edp.reader_fd,
-				READER_START, 0);
+		pulse_reader_execute(ui.irp6m_m.state.edp.reader_fd, READER_START, 0);
 		ui.irp6m_m.state.edp.state = 2;
 		return true;
 	}
@@ -600,8 +594,7 @@ int pulse_reader_polycrank_stop(PtWidget_t *widget, ApInfo_t *apinfo,
 bool pulse_reader_polycrank_stop_exec_pulse() {
 
 	if (ui.irp6m_m.state.edp.state == 2) {
-		pulse_reader_execute(ui.irp6m_m.state.edp.reader_fd,
-				READER_STOP, 0);
+		pulse_reader_execute(ui.irp6m_m.state.edp.reader_fd, READER_STOP, 0);
 		ui.irp6m_m.state.edp.state = 1;
 		return true;
 	}
@@ -627,8 +620,7 @@ int pulse_reader_polycrank_trigger(PtWidget_t *widget, ApInfo_t *apinfo,
 bool pulse_reader_polycrank_trigger_exec_pulse() {
 
 	if (ui.irp6m_m.state.edp.state == 2) {
-		pulse_reader_execute(ui.irp6m_m.state.edp.reader_fd,
-				READER_TRIGGER, 0);
+		pulse_reader_execute(ui.irp6m_m.state.edp.reader_fd, READER_TRIGGER, 0);
 
 		return true;
 	}
@@ -654,10 +646,9 @@ int pulse_ecp_polycrank(PtWidget_t *widget, ApInfo_t *apinfo,
 			// kilka sekund  (~1) na otworzenie urzadzenia
 			// zabezpieczenie przed zawieszeniem poprzez wyslanie sygnalu z opoznieniem
 			ualarm((useconds_t) (SIGALRM_TIMEOUT), 0);
-			while ((ui.irp6m_m.state.ecp.trigger_fd
-					= name_open(
-							ui.irp6m_m.state.ecp.network_trigger_attach_point.c_str(),
-							NAME_FLAG_ATTACH_GLOBAL)) < 0) {
+			while ((ui.irp6m_m.state.ecp.trigger_fd = name_open(
+					ui.irp6m_m.state.ecp.network_trigger_attach_point.c_str(),
+					NAME_FLAG_ATTACH_GLOBAL)) < 0) {
 				if (errno == EINTR)
 					break;
 				if ((tmp++) < CONNECT_RETRY)
@@ -1457,8 +1448,8 @@ int irp6m_servo_algorithm_set(PtWidget_t *widget, ApInfo_t *apinfo,
 			}
 
 			// zlecenie wykonania ruchu
-			ui.irp6m_m.ui_ecp_robot->set_servo_algorithm(
-					servo_alg_no_output, servo_par_no_output);
+			ui.irp6m_m.ui_ecp_robot->set_servo_algorithm(servo_alg_no_output,
+					servo_par_no_output);
 
 		} else {
 		}
@@ -2536,8 +2527,7 @@ int process_control_window_polycrank_section_init(
 		}
 	}
 
-	ui.irp6m_m.state.edp.last_state
-			= ui.irp6m_m.state.edp.state;
+	ui.irp6m_m.state.edp.last_state = ui.irp6m_m.state.edp.state;
 
 	return 1;
 
@@ -2577,38 +2567,32 @@ int reload_polycrank_configuration() {
 				if (ui.config->exists(tmp_string,
 						ui.irp6m_m.state.edp.section_name)) {
 					char* tmp, *tmp1;
-					tmp1
-							= tmp
-									= strdup(
-											ui.config->value<std::string> (
-													tmp_string,
-													ui.irp6m_m.state.edp.section_name).c_str());
+					tmp1 = tmp = strdup(
+							ui.config->value<std::string> (tmp_string,
+									ui.irp6m_m.state.edp.section_name).c_str());
 					char* toDel = tmp;
 					for (int j = 0; j < 8; j++) {
-						ui.irp6m_m.state.edp.preset_position[i][j]
-								= strtod(tmp1, &tmp1);
+						ui.irp6m_m.state.edp.preset_position[i][j] = strtod(
+								tmp1, &tmp1);
 					}
 					free(toDel);
 				} else {
 					for (int j = 0; j < 7; j++) {
-						ui.irp6m_m.state.edp.preset_position[i][j]
-								= 0.0;
+						ui.irp6m_m.state.edp.preset_position[i][j] = 0.0;
 					}
 				}
 			}
 
 			if (ui.config->exists("test_mode",
 					ui.irp6m_m.state.edp.section_name))
-				ui.irp6m_m.state.edp.test_mode
-						= ui.config->value<int> ("test_mode",
-								ui.irp6m_m.state.edp.section_name);
+				ui.irp6m_m.state.edp.test_mode = ui.config->value<int> (
+						"test_mode", ui.irp6m_m.state.edp.section_name);
 			else
 				ui.irp6m_m.state.edp.test_mode = 0;
 
-			ui.irp6m_m.state.edp.hardware_busy_attach_point
-					= ui.config->value<std::string> (
-							"hardware_busy_attach_point",
-							ui.irp6m_m.state.edp.section_name);
+			ui.irp6m_m.state.edp.hardware_busy_attach_point = ui.config->value<
+					std::string> ("hardware_busy_attach_point",
+					ui.irp6m_m.state.edp.section_name);
 
 			ui.irp6m_m.state.edp.network_resourceman_attach_point
 					= ui.config->return_attach_point_name(
@@ -2622,9 +2606,8 @@ int reload_polycrank_configuration() {
 							"reader_attach_point",
 							ui.irp6m_m.state.edp.section_name.c_str());
 
-			ui.irp6m_m.state.edp.node_name = ui.config->value<
-					std::string> ("node_name",
-					ui.irp6m_m.state.edp.section_name.c_str());
+			ui.irp6m_m.state.edp.node_name = ui.config->value<std::string> (
+					"node_name", ui.irp6m_m.state.edp.section_name.c_str());
 
 			break;
 		case 1:

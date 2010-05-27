@@ -31,6 +31,7 @@ add_executable(ui
 	../irp6p_m/ui_r_irp6p_m.cc
 	../irp6p_tfg/ui_r_irp6p_tfg.cc
 	../irp6m_m/ui_r_irp6m_m.cc
+	#../polycrank/ui_r_polycrank.cc
 	../ui_init.cc
 	../ui_class.cc
 	../wndFileLocationEvents.cc

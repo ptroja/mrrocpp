@@ -155,9 +155,6 @@ int init(PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 	ui_state.shead.edp.section_name = EDP_SHEAD_SECTION;
 	ui_state.shead.ecp.section_name = ECP_SHEAD_SECTION;
 
-	ui_state.is_wind_polycrank_int_open = false;
-	ui_state.is_wind_polycrank_inc_open = false;
-
 	ui_state.is_wind_conveyor_moves_open = false;
 	ui_state.is_wind_conv_servo_algorithm_open = false;
 
