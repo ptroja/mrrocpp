@@ -180,7 +180,8 @@ int Ui::manage_interface(void) {
 	// Dla robota CONVEYOR
 	conveyor.manage_interface();
 
-	manage_interface_spkm();
+	// ROBOTY SwamrmItFix
+	spkm.manage_interface();
 	manage_interface_smb();
 	manage_interface_shead();
 
@@ -338,7 +339,8 @@ int Ui::reload_whole_configuration() {
 			// dla robota conveyor
 			conveyor.reload_configuration();
 
-			reload_spkm_configuration();
+			// ROBOTY SwamrmItFix
+			spkm.reload_configuration();
 			reload_smb_configuration();
 			reload_shead_configuration();
 

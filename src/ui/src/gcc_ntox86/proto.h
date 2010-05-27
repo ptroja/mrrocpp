@@ -785,7 +785,6 @@ bool pulse_reader_speaker_trigger_exec_pulse(void);
 int pulse_ecp_speaker(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
 
-
 /* ../fun_r_spkm.cc */
 int EDP_spkm_create(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
@@ -795,8 +794,6 @@ int EDP_spkm_slay(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
 int EDP_spkm_slay_int(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
-int reload_spkm_configuration(void);
-int manage_interface_spkm(void);
 
 int EDP_bird_hand_create(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);

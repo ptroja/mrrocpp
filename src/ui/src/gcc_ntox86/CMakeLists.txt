@@ -34,6 +34,7 @@ add_executable(ui
 	#../polycrank/ui_r_polycrank.cc
 	../conveyor/ui_r_conveyor.cc
 	../speaker/ui_r_speaker.cc
+	../spkm/ui_r_spkm.cc
 	../ui_init.cc
 	../ui_class.cc
 	../wndFileLocationEvents.cc

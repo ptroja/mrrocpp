@@ -164,7 +164,6 @@ typedef struct {
 } program_node_def;
 
 typedef struct {
-	ecp_edp_ui_robot_def spkm;
 	ecp_edp_ui_robot_def smb;
 	ecp_edp_ui_robot_def shead;
 } ui_state_def;

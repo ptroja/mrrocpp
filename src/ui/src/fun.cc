@@ -1335,7 +1335,7 @@ int check_edps_state_and_modify_mp_state() {
 			&& (!(ui.speaker.state.is_active))
 			&& (!(ui.irp6m_m.state.is_active))
 			&& (!(ui.bird_hand.state.is_active))
-			&& (!(ui_state.spkm.is_active)) && (!(ui_state.smb.is_active))
+			&& (!(ui.spkm.state.is_active)) && (!(ui_state.smb.is_active))
 			&& (!(ui_state.shead.is_active))) {
 		ui.all_edps = UI_ALL_EDPS_NONE_EDP_ACTIVATED;
 
@@ -1348,7 +1348,7 @@ int check_edps_state_and_modify_mp_state() {
 			&& check_synchronised_or_inactive(ui.irp6ot_tfg.state)
 			&& check_synchronised_or_inactive(ui.irp6p_tfg.state)
 			&& check_synchronised_or_inactive(ui.bird_hand.state)
-			&& check_synchronised_or_inactive(ui_state.spkm)
+			&& check_synchronised_or_inactive(ui.spkm.state)
 			&& check_synchronised_or_inactive(ui_state.smb)
 			&& check_synchronised_or_inactive(ui_state.shead)) {
 		ui.all_edps = UI_ALL_EDPS_LOADED_AND_SYNCHRONISED;
@@ -1362,7 +1362,7 @@ int check_edps_state_and_modify_mp_state() {
 			&& check_loaded_or_inactive(ui.irp6ot_tfg.state)
 			&& check_loaded_or_inactive(ui.irp6p_tfg.state)
 			&& check_loaded_or_inactive(ui.bird_hand.state)
-			&& check_loaded_or_inactive(ui_state.spkm)
+			&& check_loaded_or_inactive(ui.spkm.state)
 			&& check_loaded_or_inactive(ui_state.smb)
 			&& check_loaded_or_inactive(ui_state.shead))
 
@@ -1375,7 +1375,7 @@ int check_edps_state_and_modify_mp_state() {
 			ui.conveyor.state) || check_loaded(ui.speaker.state)
 			|| check_loaded(ui.irp6m_m.state) || check_loaded(
 			ui.irp6ot_tfg.state) || check_loaded(ui.irp6p_tfg.state)
-			|| check_loaded(ui.bird_hand.state) || check_loaded(ui_state.spkm)
+			|| check_loaded(ui.bird_hand.state) || check_loaded(ui.spkm.state)
 			|| check_loaded(ui_state.smb) || check_loaded(ui_state.shead))
 
 	{
