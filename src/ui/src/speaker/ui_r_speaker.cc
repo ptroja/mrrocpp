@@ -176,9 +176,9 @@ int UiRobotSpeaker::manage_interface() {
 
 bool UiRobotSpeaker::pulse_reader_speaker_start_exec_pulse() {
 
-	if (ui.speaker.state.edp.state == 1) {
-		ui.pulse_reader_execute(ui.speaker.state.edp.reader_fd, READER_START, 0);
-		ui.speaker.state.edp.state = 2;
+	if (state.edp.state == 1) {
+		ui.pulse_reader_execute(state.edp.reader_fd, READER_START, 0);
+		state.edp.state = 2;
 		return true;
 	}
 
@@ -187,9 +187,9 @@ bool UiRobotSpeaker::pulse_reader_speaker_start_exec_pulse() {
 
 bool UiRobotSpeaker::pulse_reader_speaker_stop_exec_pulse() {
 
-	if (ui.speaker.state.edp.state == 2) {
-		ui.pulse_reader_execute(ui.speaker.state.edp.reader_fd, READER_STOP, 0);
-		ui.speaker.state.edp.state = 1;
+	if (state.edp.state == 2) {
+		ui.pulse_reader_execute(state.edp.reader_fd, READER_STOP, 0);
+		state.edp.state = 1;
 		return true;
 	}
 
@@ -198,9 +198,8 @@ bool UiRobotSpeaker::pulse_reader_speaker_stop_exec_pulse() {
 
 bool UiRobotSpeaker::pulse_reader_speaker_trigger_exec_pulse() {
 
-	if (ui.speaker.state.edp.state == 2) {
-		ui.pulse_reader_execute(ui.speaker.state.edp.reader_fd, READER_TRIGGER,
-				0);
+	if (state.edp.state == 2) {
+		ui.pulse_reader_execute(state.edp.reader_fd, READER_TRIGGER, 0);
 
 		return true;
 	}

@@ -37,6 +37,11 @@ public:
 	UiRobotPolycrank();
 	int reload_configuration();
 	int manage_interface();
+
+	bool pulse_reader_polycrank_start_exec_pulse();
+	bool pulse_reader_polycrank_stop_exec_pulse();
+	bool pulse_reader_polycrank_trigger_exec_pulse();
+
 };
 
 #endif

@@ -554,17 +554,6 @@ int pulse_reader_polycrank_start(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
-bool pulse_reader_polycrank_start_exec_pulse() {
-
-	if (ui.irp6m_m.state.edp.state == 1) {
-		pulse_reader_execute(ui.irp6m_m.state.edp.reader_fd, READER_START, 0);
-		ui.irp6m_m.state.edp.state = 2;
-		return true;
-	}
-
-	return false;
-}
-
 int pulse_reader_polycrank_stop(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo)
 
@@ -580,17 +569,6 @@ int pulse_reader_polycrank_stop(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
-bool pulse_reader_polycrank_stop_exec_pulse() {
-
-	if (ui.irp6m_m.state.edp.state == 2) {
-		pulse_reader_execute(ui.irp6m_m.state.edp.reader_fd, READER_STOP, 0);
-		ui.irp6m_m.state.edp.state = 1;
-		return true;
-	}
-
-	return false;
-}
-
 int pulse_reader_polycrank_trigger(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo)
 
@@ -604,17 +582,6 @@ int pulse_reader_polycrank_trigger(PtWidget_t *widget, ApInfo_t *apinfo,
 
 	return (Pt_CONTINUE);
 
-}
-
-bool pulse_reader_polycrank_trigger_exec_pulse() {
-
-	if (ui.irp6m_m.state.edp.state == 2) {
-		pulse_reader_execute(ui.irp6m_m.state.edp.reader_fd, READER_TRIGGER, 0);
-
-		return true;
-	}
-
-	return false;
 }
 
 int pulse_ecp_polycrank(PtWidget_t *widget, ApInfo_t *apinfo,
