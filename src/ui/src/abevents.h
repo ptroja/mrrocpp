@@ -57,6 +57,8 @@ ApEventLink_t AbInternalLinks[] = {
 	{ 3, 0, 0L, 0L, 0L, &wnd_irp6ot_tfg_servo_algorithm, NULL, NULL, 0, NULL, 0, 11, 10, 30, },
 	{ 3, 0, 0L, 0L, 0L, &wnd_irp6p_tfg_moves, NULL, NULL, 0, NULL, 0, 11, 10, 30, },
 	{ 3, 0, 0L, 0L, 0L, &wnd_irp6p_tfg_servo_algorithm, NULL, NULL, 0, NULL, 0, 11, 10, 30, },
+	{ 3, 0, 0L, 0L, 0L, &wnd_bird_hand_command_and_status, NULL, NULL, 0, NULL, 0, 11, 10, 30, },
+	{ 3, 0, 0L, 0L, 0L, &wnd_bird_hand_configuration, NULL, NULL, 0, NULL, 0, 11, 10, 30, },
 	{ 0 }
 	};
 

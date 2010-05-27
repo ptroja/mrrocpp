@@ -18,16 +18,16 @@
 #include "lib/srlib.h"
 // #include "ecp/common/ecp.h"
 #include "lib/com_buf.h"
+#include "ui/ui_class.h"
 
 /* Local headers */
 #include "ablibs.h"
 #include "abimport.h"
 #include "proto.h"
 
-extern ui_sr_buffer* ui_sr_obj;
-extern ui_msg_def ui_msg;
-extern ui_state_def ui_state;
-extern std::ofstream *log_file_outfile;
+busy_flag communication_flag;
+
+extern Ui ui;
 
 int OnTimer(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
@@ -43,13 +43,13 @@ int OnTimer(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 	Iteration_counter++;
 
 	if ((Iteration_counter % CHECK_SPEAKER_STATE_ITER) == 0) {
-		if (ui_state.is_wind_speaker_play_open) // otworz okno
+		if (ui.speaker.is_wind_speaker_play_open) // otworz okno
 		{
 			speaker_check_state(widget, apinfo, cbinfo);
 		}
 	}
 
-	if (!(ui_sr_obj->buffer_empty())) { // by Y jesli mamy co wypisywac
+	if (!(ui.ui_sr_obj->buffer_empty())) { // by Y jesli mamy co wypisywac
 
 		// 	printf("timer\n");
 		int attributes_mask;
@@ -60,10 +60,10 @@ int OnTimer(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 		char current_line[400];
 		lib::sr_package_t sr_msg;
 
-		while (!(ui_sr_obj->buffer_empty())) { // dopoki mamy co wypisywac
+		while (!(ui.ui_sr_obj->buffer_empty())) { // dopoki mamy co wypisywac
 
 
-			ui_sr_obj->get_one_msg(sr_msg);
+			ui.ui_sr_obj->get_one_msg(sr_msg);
 
 			snprintf(current_line, 100, "%-10s", sr_msg.host_name);
 			strcat(current_line, "  ");
@@ -136,40 +136,40 @@ int OnTimer(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 			PtMultiTextModifyText(ABW_PtMultiText_sr_window, NULL, NULL, -1,
 					current_line, strlen(current_line), &attr, attributes_mask);
 
-			(*log_file_outfile) << current_line;
+			(*ui.log_file_outfile) << current_line;
 		}
 
-		(*log_file_outfile).flush();
+		(*ui.log_file_outfile).flush();
 
 	}
 
-	if (ui_state.ui_state == 2) {// jesli ma nastapic zamkniecie z aplikacji
+	if (ui.ui_state == 2) {// jesli ma nastapic zamkniecie z aplikacji
 		set_ui_state_notification(UI_N_EXITING);
 		// 	printf("w ontimer 2\n");
 		closing_delay_counter = 20;// opoznienie zamykania
-		ui_state.ui_state = 3;
+		ui.ui_state = 3;
 		// 		delay(5000);
 		MPslay(widget, apinfo, cbinfo);
-		ui_msg.ui->message("closing");
-	} else if (ui_state.ui_state == 3) {// odliczanie
+		ui.ui_msg->message("closing");
+	} else if (ui.ui_state == 3) {// odliczanie
 		// 	printf("w ontimer 3\n");
 		if ((--closing_delay_counter) <= 0)
-			ui_state.ui_state = 4;
-	} else if (ui_state.ui_state == 4) {// jesli ma nastapic zamkniecie aplikacji
+			ui.ui_state = 4;
+	} else if (ui.ui_state == 4) {// jesli ma nastapic zamkniecie aplikacji
 		//	printf("w ontimer 4\n");
 		closing_delay_counter = 20;// opoznienie zamykania
-		ui_state.ui_state = 5;
+		ui.ui_state = 5;
 		EDP_all_robots_slay(widget, apinfo, cbinfo);
 
-	} else if (ui_state.ui_state == 5) {// odlcizanie do zamnkiecia
+	} else if (ui.ui_state == 5) {// odlcizanie do zamnkiecia
 		//	printf("w ontimer 5\n");
 		if ((--closing_delay_counter) <= 0)
-			ui_state.ui_state = 6;
-	} else if (ui_state.ui_state == 6) {// zakonczenie aplikacji
-		(*log_file_outfile).close();
-		delete log_file_outfile;
+			ui.ui_state = 6;
+	} else if (ui.ui_state == 6) {// zakonczenie aplikacji
+		(*ui.log_file_outfile).close();
+		delete ui.log_file_outfile;
 		printf("UI CLOSED\n");
-		abort_threads();
+		ui.abort_threads();
 		PtExit(EXIT_SUCCESS);
 	} else {
 		if (!(communication_flag.is_busy())) {
