@@ -182,19 +182,16 @@ int EDP_conveyor_slay_int(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
 int pulse_reader_conv_start(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
-bool pulse_reader_conv_start_exec_pulse(void);
+
 int pulse_reader_conv_stop(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
-bool pulse_reader_conv_stop_exec_pulse(void);
+
 int pulse_reader_conv_trigger(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
-bool pulse_reader_conv_trigger_exec_pulse(void);
+
 int pulse_ecp_conveyor(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
-int process_control_window_conveyor_section_init(
-		bool &wlacz_PtButton_wnd_processes_control_all_reader_start,
-		bool &wlacz_PtButton_wnd_processes_control_all_reader_stop,
-		bool &wlacz_PtButton_wnd_processes_control_all_reader_trigger);
+
 
 /* ../fun_r_irp6_mechatronika.cc */
 int init_wnd_irp6m_xyz_euler_zyz_ts(PtWidget_t *widget, ApInfo_t *apinfo,

@@ -35,7 +35,7 @@ int UiRobotPolycrank::reload_configuration() {
 int UiRobotPolycrank::manage_interface() {
 }
 
-bool pulse_reader_polycrank_start_exec_pulse() {
+bool UiRobotPolycrank::pulse_reader_polycrank_start_exec_pulse() {
 
 	if (ui.irp6m_m.state.edp.state == 1) {
 		pulse_reader_execute(ui.irp6m_m.state.edp.reader_fd, READER_START, 0);
@@ -46,7 +46,7 @@ bool pulse_reader_polycrank_start_exec_pulse() {
 	return false;
 }
 
-bool pulse_reader_polycrank_stop_exec_pulse() {
+bool UiRobotPolycrank::pulse_reader_polycrank_stop_exec_pulse() {
 
 	if (ui.irp6m_m.state.edp.state == 2) {
 		pulse_reader_execute(ui.irp6m_m.state.edp.reader_fd, READER_STOP, 0);
@@ -57,7 +57,7 @@ bool pulse_reader_polycrank_stop_exec_pulse() {
 	return false;
 }
 
-bool pulse_reader_polycrank_trigger_exec_pulse() {
+bool UiRobotPolycrank::pulse_reader_polycrank_trigger_exec_pulse() {
 
 	if (ui.irp6m_m.state.edp.state == 2) {
 		pulse_reader_execute(ui.irp6m_m.state.edp.reader_fd, READER_TRIGGER, 0);

@@ -32,72 +32,64 @@ UiRobotConveyor::UiRobotConveyor() :
 int UiRobotConveyor::reload_configuration() {
 
 	// jesli conveyor ma byc aktywny
-	if ((ui.conveyor.state.is_active = ui.config->value<int> (
-			"is_conveyor_active")) == 1) {
+	if ((state.is_active = ui.config->value<int> ("is_conveyor_active")) == 1) {
 
 		//ui_state.is_any_edp_active = true;
 
 		if (ui.is_mp_and_ecps_active) {
-			ui.conveyor.state.ecp.network_trigger_attach_point
+			state.ecp.network_trigger_attach_point
 					= ui.config->return_attach_point_name(
 							lib::configurator::CONFIG_SERVER,
 							"trigger_attach_point",
-							ui.conveyor.state.ecp.section_name.c_str());
+							state.ecp.section_name.c_str());
 
-			ui.conveyor.state.ecp.pid = -1;
-			ui.conveyor.state.ecp.trigger_fd = -1;
+			state.ecp.pid = -1;
+			state.ecp.trigger_fd = -1;
 		}
 
-		switch (ui.conveyor.state.edp.state) {
+		switch (state.edp.state) {
 		case -1:
 		case 0:
 
-			ui.conveyor.state.edp.pid = -1;
-			ui.conveyor.state.edp.reader_fd = -1;
-			ui.conveyor.state.edp.state = 0;
+			state.edp.pid = -1;
+			state.edp.reader_fd = -1;
+			state.edp.state = 0;
 
-			if (ui.config->exists("preset_position_0",
-					ui.conveyor.state.edp.section_name))
-				ui.conveyor.state.edp.preset_position[0][0] = ui.config->value<
-						double> ("preset_position_0",
-						ui.conveyor.state.edp.section_name);
-			if (ui.config->exists("preset_position_1",
-					ui.conveyor.state.edp.section_name))
-				ui.conveyor.state.edp.preset_position[1][0] = ui.config->value<
-						double> ("preset_position_1",
-						ui.conveyor.state.edp.section_name);
-			if (ui.config->exists("preset_position_2",
-					ui.conveyor.state.edp.section_name))
-				ui.conveyor.state.edp.preset_position[2][0] = ui.config->value<
-						double> ("preset_position_2",
-						ui.conveyor.state.edp.section_name);
+			if (ui.config->exists("preset_position_0", state.edp.section_name))
+				state.edp.preset_position[0][0] = ui.config->value<double> (
+						"preset_position_0", state.edp.section_name);
+			if (ui.config->exists("preset_position_1", state.edp.section_name))
+				state.edp.preset_position[1][0] = ui.config->value<double> (
+						"preset_position_1", state.edp.section_name);
+			if (ui.config->exists("preset_position_2", state.edp.section_name))
+				state.edp.preset_position[2][0] = ui.config->value<double> (
+						"preset_position_2", state.edp.section_name);
 
-			if (ui.config->exists("test_mode",
-					ui.conveyor.state.edp.section_name))
-				ui.conveyor.state.edp.test_mode = ui.config->value<int> (
-						"test_mode", ui.conveyor.state.edp.section_name);
+			if (ui.config->exists("test_mode", state.edp.section_name))
+				state.edp.test_mode = ui.config->value<int> ("test_mode",
+						state.edp.section_name);
 			else
-				ui.conveyor.state.edp.test_mode = 0;
+				state.edp.test_mode = 0;
 
-			ui.conveyor.state.edp.hardware_busy_attach_point
+			state.edp.hardware_busy_attach_point
 					= ui.config->value<std::string> (
 							"hardware_busy_attach_point",
-							ui.conveyor.state.edp.section_name);
+							state.edp.section_name);
 
-			ui.conveyor.state.edp.network_resourceman_attach_point
+			state.edp.network_resourceman_attach_point
 					= ui.config->return_attach_point_name(
 							lib::configurator::CONFIG_SERVER,
 							"resourceman_attach_point",
-							ui.conveyor.state.edp.section_name.c_str());
+							state.edp.section_name.c_str());
 
-			ui.conveyor.state.edp.network_reader_attach_point
+			state.edp.network_reader_attach_point
 					= ui.config->return_attach_point_name(
 							lib::configurator::CONFIG_SERVER,
 							"reader_attach_point",
-							ui.conveyor.state.edp.section_name.c_str());
+							state.edp.section_name.c_str());
 
-			ui.conveyor.state.edp.node_name = ui.config->value<std::string> (
-					"node_name", ui.conveyor.state.edp.section_name.c_str());
+			state.edp.node_name = ui.config->value<std::string> ("node_name",
+					state.edp.section_name.c_str());
 
 			break;
 		case 1:
@@ -111,10 +103,10 @@ int UiRobotConveyor::reload_configuration() {
 	} else // jesli  conveyor ma byc nieaktywny
 	{
 
-		switch (ui.conveyor.state.edp.state) {
+		switch (state.edp.state) {
 		case -1:
 		case 0:
-			ui.conveyor.state.edp.state = -1;
+			state.edp.state = -1;
 			break;
 		case 1:
 		case 2:
@@ -130,7 +122,7 @@ int UiRobotConveyor::reload_configuration() {
 
 int UiRobotConveyor::manage_interface() {
 
-	switch (ui.conveyor.state.edp.state) {
+	switch (state.edp.state) {
 	case -1:
 		ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_conveyor, NULL);
 		break;
@@ -148,7 +140,7 @@ int UiRobotConveyor::manage_interface() {
 		ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_conveyor, NULL);
 
 		// jesli robot jest zsynchronizowany
-		if (ui.conveyor.state.edp.is_synchronised) {
+		if (state.edp.is_synchronised) {
 			ApModifyItemState(&robot_menu, AB_ITEM_DIM,
 					ABN_mm_conveyor_synchronisation, NULL);
 			ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL,
@@ -200,3 +192,72 @@ int UiRobotConveyor::manage_interface() {
 	return 1;
 }
 
+bool UiRobotConveyor::pulse_reader_conv_start_exec_pulse() {
+
+	if (state.edp.state == 1) {
+		ui.pulse_reader_execute(state.edp.reader_fd, READER_START, 0);
+		state.edp.state = 2;
+		return true;
+	}
+
+	return false;
+}
+
+bool UiRobotConveyor::pulse_reader_conv_stop_exec_pulse() {
+
+	if (state.edp.state == 2) {
+		ui.pulse_reader_execute(state.edp.reader_fd, READER_STOP, 0);
+		state.edp.state = 1;
+		return true;
+	}
+
+	return false;
+}
+
+bool UiRobotConveyor::pulse_reader_conv_trigger_exec_pulse() {
+
+	if (state.edp.state == 2) {
+		ui.pulse_reader_execute(state.edp.reader_fd, READER_TRIGGER, 0);
+
+		return true;
+	}
+
+	return false;
+}
+
+// aktualizacja ustawien przyciskow
+int UiRobotConveyor::process_control_window_conveyor_section_init(
+		bool &wlacz_PtButton_wnd_processes_control_all_reader_start,
+		bool &wlacz_PtButton_wnd_processes_control_all_reader_stop,
+		bool &wlacz_PtButton_wnd_processes_control_all_reader_trigger) {
+
+	if (state.edp.state <= 0) {// edp wylaczone
+		block_widget(ABW_PtButton_wnd_processes_control_conveyor_reader_start);
+		block_widget(ABW_PtButton_wnd_processes_control_conveyor_reader_stop);
+		block_widget(ABW_PtButton_wnd_processes_control_conveyor_reader_trigger);
+	} else {
+		if (state.edp.state == 1) {// edp wlaczone reader czeka na start
+			wlacz_PtButton_wnd_processes_control_all_reader_start = true;
+			unblock_widget(
+					ABW_PtButton_wnd_processes_control_conveyor_reader_start);
+			block_widget(
+					ABW_PtButton_wnd_processes_control_conveyor_reader_stop);
+			block_widget(
+					ABW_PtButton_wnd_processes_control_conveyor_reader_trigger);
+		} else if (state.edp.state == 2) {// edp wlaczone reader czeka na stop
+			wlacz_PtButton_wnd_processes_control_all_reader_stop = true;
+			wlacz_PtButton_wnd_processes_control_all_reader_trigger = true;
+			block_widget(
+					ABW_PtButton_wnd_processes_control_conveyor_reader_start);
+			unblock_widget(
+					ABW_PtButton_wnd_processes_control_conveyor_reader_stop);
+			unblock_widget(
+					ABW_PtButton_wnd_processes_control_conveyor_reader_trigger);
+		}
+	}
+
+	state.edp.last_state = state.edp.state;
+
+	return 1;
+
+}

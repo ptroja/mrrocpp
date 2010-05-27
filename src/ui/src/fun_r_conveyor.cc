@@ -645,23 +645,11 @@ int pulse_reader_conv_start(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (pulse_reader_conv_start_exec_pulse())
+	if (ui.conveyor.pulse_reader_conv_start_exec_pulse())
 		process_control_window_init(widget, apinfo, cbinfo);
 
 	return (Pt_CONTINUE);
 
-}
-
-bool pulse_reader_conv_start_exec_pulse() {
-
-	if (ui.conveyor.state.edp.state == 1) {
-		ui.pulse_reader_execute(ui.conveyor.state.edp.reader_fd, READER_START,
-				0);
-		ui.conveyor.state.edp.state = 2;
-		return true;
-	}
-
-	return false;
 }
 
 int pulse_reader_conv_stop(PtWidget_t *widget, ApInfo_t *apinfo,
@@ -672,22 +660,11 @@ int pulse_reader_conv_stop(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (pulse_reader_conv_stop_exec_pulse())
+	if (ui.conveyor.pulse_reader_conv_stop_exec_pulse())
 		process_control_window_init(widget, apinfo, cbinfo);
 
 	return (Pt_CONTINUE);
 
-}
-
-bool pulse_reader_conv_stop_exec_pulse() {
-
-	if (ui.conveyor.state.edp.state == 2) {
-		ui.pulse_reader_execute(ui.conveyor.state.edp.reader_fd, READER_STOP, 0);
-		ui.conveyor.state.edp.state = 1;
-		return true;
-	}
-
-	return false;
 }
 
 int pulse_reader_conv_trigger(PtWidget_t *widget, ApInfo_t *apinfo,
@@ -698,23 +675,11 @@ int pulse_reader_conv_trigger(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (pulse_reader_conv_trigger_exec_pulse())
+	if (ui.conveyor.pulse_reader_conv_trigger_exec_pulse())
 		process_control_window_init(widget, apinfo, cbinfo);
 
 	return (Pt_CONTINUE);
 
-}
-
-bool pulse_reader_conv_trigger_exec_pulse() {
-
-	if (ui.conveyor.state.edp.state == 2) {
-		ui.pulse_reader_execute(ui.conveyor.state.edp.reader_fd,
-				READER_TRIGGER, 0);
-
-		return true;
-	}
-
-	return false;
 }
 
 int pulse_ecp_conveyor(PtWidget_t *widget, ApInfo_t *apinfo,
@@ -768,39 +733,3 @@ int pulse_ecp_conveyor(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
-// aktualizacja ustawien przyciskow
-int process_control_window_conveyor_section_init(
-		bool &wlacz_PtButton_wnd_processes_control_all_reader_start,
-		bool &wlacz_PtButton_wnd_processes_control_all_reader_stop,
-		bool &wlacz_PtButton_wnd_processes_control_all_reader_trigger) {
-
-	if (ui.conveyor.state.edp.state <= 0) {// edp wylaczone
-		block_widget(ABW_PtButton_wnd_processes_control_conveyor_reader_start);
-		block_widget(ABW_PtButton_wnd_processes_control_conveyor_reader_stop);
-		block_widget(ABW_PtButton_wnd_processes_control_conveyor_reader_trigger);
-	} else {
-		if (ui.conveyor.state.edp.state == 1) {// edp wlaczone reader czeka na start
-			wlacz_PtButton_wnd_processes_control_all_reader_start = true;
-			unblock_widget(
-					ABW_PtButton_wnd_processes_control_conveyor_reader_start);
-			block_widget(
-					ABW_PtButton_wnd_processes_control_conveyor_reader_stop);
-			block_widget(
-					ABW_PtButton_wnd_processes_control_conveyor_reader_trigger);
-		} else if (ui.conveyor.state.edp.state == 2) {// edp wlaczone reader czeka na stop
-			wlacz_PtButton_wnd_processes_control_all_reader_stop = true;
-			wlacz_PtButton_wnd_processes_control_all_reader_trigger = true;
-			block_widget(
-					ABW_PtButton_wnd_processes_control_conveyor_reader_start);
-			unblock_widget(
-					ABW_PtButton_wnd_processes_control_conveyor_reader_stop);
-			unblock_widget(
-					ABW_PtButton_wnd_processes_control_conveyor_reader_trigger);
-		}
-	}
-
-	ui.conveyor.state.edp.last_state = ui.conveyor.state.edp.state;
-
-	return 1;
-
-}
