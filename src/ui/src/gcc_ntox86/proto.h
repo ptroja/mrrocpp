@@ -459,19 +459,16 @@ int close_all_irp6ot_windows(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
 int pulse_reader_irp6ot_start(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
-bool pulse_reader_irp6ot_start_exec_pulse(void);
+
 int pulse_reader_irp6ot_stop(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
-bool pulse_reader_irp6ot_stop_exec_pulse(void);
+
 int pulse_reader_irp6ot_trigger(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
-bool pulse_reader_irp6ot_trigger_exec_pulse(void);
+
 int pulse_ecp_irp6_on_track(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
-int process_control_window_irp6ot_section_init(
-		bool &wlacz_PtButton_wnd_processes_control_all_reader_start,
-		bool &wlacz_PtButton_wnd_processes_control_all_reader_stop,
-		bool &wlacz_PtButton_wnd_processes_control_all_reader_trigger);
+
 int start_wnd_irp6_on_track_xyz_aa_relative(PtWidget_t *widget,
 		ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo);
 int clear_wnd_irp6ot_xyz_aa_relative_flag(PtWidget_t *widget, ApInfo_t *apinfo,

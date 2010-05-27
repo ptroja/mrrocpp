@@ -240,3 +240,79 @@ int UiRobotIrp6ot_m::manage_interface() {
 	return 1;
 }
 
+
+
+
+
+bool UiRobotIrp6ot_m::pulse_reader_irp6ot_start_exec_pulse() {
+
+	if (state.edp.state == 1) {
+		ui.pulse_reader_execute(state.edp.reader_fd, READER_START,
+				0);
+		state.edp.state = 2;
+		return true;
+	}
+
+	return false;
+}
+
+
+bool UiRobotIrp6ot_m::pulse_reader_irp6ot_stop_exec_pulse() {
+
+	if (state.edp.state == 2) {
+		ui.pulse_reader_execute(state.edp.reader_fd, READER_STOP, 0);
+		state.edp.state = 1;
+		return true;
+	}
+
+	return false;
+}
+
+
+bool UiRobotIrp6ot_m::pulse_reader_irp6ot_trigger_exec_pulse() {
+
+	if (state.edp.state == 2) {
+		ui.pulse_reader_execute(state.edp.reader_fd,
+				READER_TRIGGER, 0);
+
+		return true;
+	}
+
+	return false;
+}
+
+
+// aktualizacja ustawien przyciskow
+int UiRobotIrp6ot_m::process_control_window_irp6ot_section_init(
+		bool &wlacz_PtButton_wnd_processes_control_all_reader_start,
+		bool &wlacz_PtButton_wnd_processes_control_all_reader_stop,
+		bool &wlacz_PtButton_wnd_processes_control_all_reader_trigger) {
+
+	if (state.edp.state <= 0) {// edp wylaczone
+		block_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_start);
+		block_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_stop);
+		block_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_trigger);
+	} else {
+		if (state.edp.state == 1) {// edp wlaczone reader czeka na start
+			wlacz_PtButton_wnd_processes_control_all_reader_start = true;
+			unblock_widget(
+					ABW_PtButton_wnd_processes_control_irp6ot_reader_start);
+			block_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_stop);
+			block_widget(
+					ABW_PtButton_wnd_processes_control_irp6ot_reader_trigger);
+		} else if (state.edp.state == 2) {// edp wlaczone reader czeka na stop
+			wlacz_PtButton_wnd_processes_control_all_reader_stop = true;
+			wlacz_PtButton_wnd_processes_control_all_reader_trigger = true;
+			block_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_start);
+			unblock_widget(
+					ABW_PtButton_wnd_processes_control_irp6ot_reader_stop);
+			unblock_widget(
+					ABW_PtButton_wnd_processes_control_irp6ot_reader_trigger);
+		}
+	}
+
+	state.edp.last_state = state.edp.state;
+
+	return 1;
+
+}
