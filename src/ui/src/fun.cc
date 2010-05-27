@@ -1758,10 +1758,10 @@ int pulse_reader_all_robots_start(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	ui.irp6ot_m.pulse_reader_irp6ot_start_exec_pulse();
-	ui.irp6p_m.pulse_reader_irp6p_start_exec_pulse();
-	ui.conveyor.pulse_reader_conv_start_exec_pulse();
-	ui.irp6m_m.pulse_reader_irp6m_start_exec_pulse();
+	ui.irp6ot_m.pulse_reader_start_exec_pulse();
+	ui.irp6p_m.pulse_reader_start_exec_pulse();
+	ui.conveyor.pulse_reader_start_exec_pulse();
+	ui.irp6m_m.pulse_reader_start_exec_pulse();
 
 	process_control_window_init(widget, apinfo, cbinfo);
 
@@ -1777,10 +1777,10 @@ int pulse_reader_all_robots_stop(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	ui.irp6ot_m.pulse_reader_irp6ot_stop_exec_pulse();
-	ui.irp6p_m.pulse_reader_irp6p_stop_exec_pulse();
-	ui.conveyor.pulse_reader_conv_stop_exec_pulse();
-	ui.irp6m_m.pulse_reader_irp6m_stop_exec_pulse();
+	ui.irp6ot_m.pulse_reader_stop_exec_pulse();
+	ui.irp6p_m.pulse_reader_stop_exec_pulse();
+	ui.conveyor.pulse_reader_stop_exec_pulse();
+	ui.irp6m_m.pulse_reader_stop_exec_pulse();
 	process_control_window_init(widget, apinfo, cbinfo);
 
 	return (Pt_CONTINUE);
@@ -1795,10 +1795,10 @@ int pulse_reader_all_robots_trigger(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	ui.irp6ot_m.pulse_reader_irp6ot_trigger_exec_pulse();
-	ui.irp6p_m.pulse_reader_irp6p_trigger_exec_pulse();
-	ui.conveyor.pulse_reader_conv_trigger_exec_pulse();
-	ui.irp6m_m.pulse_reader_irp6m_trigger_exec_pulse();
+	ui.irp6ot_m.pulse_reader_trigger_exec_pulse();
+	ui.irp6p_m.pulse_reader_trigger_exec_pulse();
+	ui.conveyor.pulse_reader_trigger_exec_pulse();
+	ui.irp6m_m.pulse_reader_trigger_exec_pulse();
 
 	return (Pt_CONTINUE);
 

@@ -243,40 +243,6 @@ int UiRobotIrp6p_m::manage_interface() {
 
 }
 
-bool UiRobotIrp6p_m::pulse_reader_irp6p_start_exec_pulse() {
-
-	if (state.edp.state == 1) {
-		ui.pulse_reader_execute(state.edp.reader_fd, READER_START, 0);
-		state.edp.state = 2;
-		return true;
-	}
-
-	return false;
-}
-
-bool UiRobotIrp6p_m::pulse_reader_irp6p_stop_exec_pulse() {
-
-	if (state.edp.state == 2) {
-		ui.pulse_reader_execute(state.edp.reader_fd, READER_STOP, 0);
-		state.edp.state = 1;
-		return true;
-	}
-
-	return false;
-}
-
-bool UiRobotIrp6p_m::pulse_reader_irp6p_trigger_exec_pulse() {
-
-	if (state.edp.state == 2) {
-		ui.pulse_reader_execute(state.edp.reader_fd, READER_TRIGGER,
-				0);
-
-		return true;
-	}
-
-	return false;
-}
-
 // aktualizacja ustawien przyciskow
 int UiRobotIrp6p_m::process_control_window_irp6p_section_init(
 		bool &wlacz_PtButton_wnd_processes_control_all_reader_start,

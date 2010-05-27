@@ -35,6 +35,9 @@ public:
 	virtual int reload_configuration()= 0;
 	void create_thread();
 	void abort_thread();
+	bool pulse_reader_start_exec_pulse(void);
+	bool pulse_reader_stop_exec_pulse(void);
+	bool pulse_reader_trigger_exec_pulse(void);
 };
 
 #endif

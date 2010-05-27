@@ -46,12 +46,6 @@ public:
 	UiRobotIrp6m_m();
 	int reload_configuration();
 	int manage_interface();
-	bool pulse_reader_irp6m_start_exec_pulse(void);
-
-	bool pulse_reader_irp6m_stop_exec_pulse(void);
-
-	bool pulse_reader_irp6m_trigger_exec_pulse(void);
-
 	int process_control_window_irp6m_section_init(
 			bool &wlacz_PtButton_wnd_processes_control_all_reader_start,
 			bool &wlacz_PtButton_wnd_processes_control_all_reader_stop,

@@ -192,39 +192,6 @@ int UiRobotConveyor::manage_interface() {
 	return 1;
 }
 
-bool UiRobotConveyor::pulse_reader_conv_start_exec_pulse() {
-
-	if (state.edp.state == 1) {
-		ui.pulse_reader_execute(state.edp.reader_fd, READER_START, 0);
-		state.edp.state = 2;
-		return true;
-	}
-
-	return false;
-}
-
-bool UiRobotConveyor::pulse_reader_conv_stop_exec_pulse() {
-
-	if (state.edp.state == 2) {
-		ui.pulse_reader_execute(state.edp.reader_fd, READER_STOP, 0);
-		state.edp.state = 1;
-		return true;
-	}
-
-	return false;
-}
-
-bool UiRobotConveyor::pulse_reader_conv_trigger_exec_pulse() {
-
-	if (state.edp.state == 2) {
-		ui.pulse_reader_execute(state.edp.reader_fd, READER_TRIGGER, 0);
-
-		return true;
-	}
-
-	return false;
-}
-
 // aktualizacja ustawien przyciskow
 int UiRobotConveyor::process_control_window_conveyor_section_init(
 		bool &wlacz_PtButton_wnd_processes_control_all_reader_start,

@@ -559,7 +559,7 @@ int pulse_reader_irp6m_start(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (ui.irp6m_m.pulse_reader_irp6m_start_exec_pulse())
+	if (ui.irp6m_m.pulse_reader_start_exec_pulse())
 		process_control_window_init(widget, apinfo, cbinfo);
 
 	return (Pt_CONTINUE);
@@ -574,7 +574,7 @@ int pulse_reader_irp6m_stop(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (ui.irp6m_m.pulse_reader_irp6m_stop_exec_pulse())
+	if (ui.irp6m_m.pulse_reader_stop_exec_pulse())
 		process_control_window_init(widget, apinfo, cbinfo);
 
 	return (Pt_CONTINUE);
@@ -589,7 +589,7 @@ int pulse_reader_irp6m_trigger(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (ui.irp6m_m.pulse_reader_irp6m_trigger_exec_pulse())
+	if (ui.irp6m_m.pulse_reader_trigger_exec_pulse())
 		process_control_window_init(widget, apinfo, cbinfo);
 
 	return (Pt_CONTINUE);
