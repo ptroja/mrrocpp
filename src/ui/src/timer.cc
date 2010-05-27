@@ -28,8 +28,6 @@
 extern Ui ui;
 extern ui_sr_buffer* ui_sr_obj;
 
-extern ui_state_def ui_state;
-
 int OnTimer(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {

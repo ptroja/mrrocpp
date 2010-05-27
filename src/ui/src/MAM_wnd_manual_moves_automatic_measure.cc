@@ -46,7 +46,7 @@ extern Ui ui;
 extern lib::UI_ECP_message ui_ecp_msg;
 // Rozkaz przeslany z ECP.
 extern ui_ecp_buffer* ui_ecp_obj;
-extern ui_state_def ui_state;
+
 // Zmienna konfiguracyjna.
 
 

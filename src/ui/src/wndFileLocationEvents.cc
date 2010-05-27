@@ -36,7 +36,7 @@
 
 // Wiadomosc wysylana do ECP.
 extern lib::UI_ECP_message ui_ecp_msg;
-extern ui_state_def ui_state;
+
 // PID ECP.
 extern int ECPfd;
 // Komenda wysylana z okna FileDialog po wcisnieciu accept.

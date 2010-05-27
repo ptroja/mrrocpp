@@ -163,11 +163,6 @@ typedef struct {
 	std::string node_name;
 } program_node_def;
 
-typedef struct {
-	ecp_edp_ui_robot_def smb;
-	ecp_edp_ui_robot_def shead;
-} ui_state_def;
-
 /**************************** ui_sr_buffer *****************************/
 
 #define UI_SR_BUFFER_LENGHT 50

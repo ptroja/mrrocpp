@@ -12,9 +12,4 @@
 
 #include "lib/robot_consts/all_robots_const.h"
 
-typedef struct {
-	ui_tfg_and_conv_robot *smb;
-	ui_tfg_and_conv_robot *shead;
-} ui_robot_def;
-
 #endif

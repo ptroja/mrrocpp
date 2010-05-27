@@ -19,6 +19,8 @@
 #include "ui/src/conveyor/ui_r_conveyor.h"
 #include "ui/src/speaker/ui_r_speaker.h"
 #include "ui/src/spkm/ui_r_spkm.h"
+#include "ui/src/shead/ui_r_shead.h"
+#include "ui/src/smb/ui_r_smb.h"
 
 //
 //
@@ -96,6 +98,8 @@ public:
 	UiRobotConveyor conveyor;
 	UiRobotSpeaker speaker;
 	UiRobotSpkm spkm;
+	UiRobotSmb smb;
+	UiRobotShead shead;
 
 	Ui();
 	void UI_close(void);

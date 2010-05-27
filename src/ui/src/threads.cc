@@ -51,15 +51,10 @@
 
 extern Ui ui;
 
-feb_thread* edp_smb_tid;
-feb_thread* edp_shead_tid;
 feb_thread* meb_tid;
 
 pthread_t ui_tid;
 pthread_t sr_tid;
-
-function_execution_buffer edp_smb_eb;
-function_execution_buffer edp_shead_eb;
 
 function_execution_buffer main_eb;
 
@@ -79,8 +74,6 @@ void *sr_thread(void* arg);
 #include "proto.h"
 #include <Pt.h>
 #include <Ph.h>
-
-extern ui_state_def ui_state;
 
 void *comm_thread(void* arg) {
 
@@ -495,8 +488,8 @@ void create_threads()
 
 	ui.conveyor.create_thread();
 	ui.spkm.create_thread();
-	edp_smb_tid = new feb_thread(edp_smb_eb);
-	edp_shead_tid = new feb_thread(edp_shead_eb);
+	ui.smb.create_thread();
+	ui.shead.create_thread();
 	ui.bird_hand.create_thread();
 	meb_tid = new feb_thread(main_eb);
 
@@ -514,9 +507,8 @@ void abort_threads()
 	ui.irp6p_tfg.abort_thread();
 	ui.conveyor.abort_thread();
 	ui.spkm.abort_thread();
-
-	delete edp_smb_tid;
-	delete edp_shead_tid;
+	ui.smb.abort_thread();
+	ui.shead.abort_thread();
 	ui.bird_hand.abort_thread();
 	delete meb_tid;
 #endif

@@ -182,8 +182,8 @@ int Ui::manage_interface(void) {
 
 	// ROBOTY SwamrmItFix
 	spkm.manage_interface();
-	manage_interface_smb();
-	manage_interface_shead();
+	smb.manage_interface();
+	shead.manage_interface();
 
 	bird_hand.manage_interface();
 
@@ -341,8 +341,8 @@ int Ui::reload_whole_configuration() {
 
 			// ROBOTY SwamrmItFix
 			spkm.reload_configuration();
-			reload_smb_configuration();
-			reload_shead_configuration();
+			smb.reload_configuration();
+			shead.reload_configuration();
 
 			bird_hand.reload_configuration();
 

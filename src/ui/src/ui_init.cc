@@ -58,7 +58,7 @@
 
 Ui ui;
 
-ui_state_def ui_state;
+
 
 /* Przechwycenie sygnalu */
 void catch_signal(int sig) {
@@ -124,28 +124,6 @@ int init(PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 {
 	/* eliminate 'unreferenced' warnings */
 	link_instance = link_instance, apinfo = apinfo, cbinfo = cbinfo;
-
-	ui.spkm.state.edp.state = -1; // edp nieaktywne
-	ui.spkm.state.edp.last_state = -1; // edp nieaktywne
-	ui.spkm.state.ecp.trigger_fd = -1;
-	ui.spkm.state.edp.section_name = EDP_SPKM_SECTION;
-	ui.spkm.state.ecp.section_name = ECP_SPKM_SECTION;
-
-	ui_state.smb.edp.state = -1; // edp nieaktywne
-	ui_state.smb.edp.last_state = -1; // edp nieaktywne
-	ui_state.smb.ecp.trigger_fd = -1;
-	ui_state.smb.edp.section_name = EDP_SMB_SECTION;
-	ui_state.smb.ecp.section_name = ECP_SMB_SECTION;
-
-	ui_state.shead.edp.state = -1; // edp nieaktywne
-	ui_state.shead.edp.last_state = -1; // edp nieaktywne
-	ui_state.shead.ecp.trigger_fd = -1;
-	ui_state.shead.edp.section_name = EDP_SHEAD_SECTION;
-	ui_state.shead.ecp.section_name = ECP_SHEAD_SECTION;
-
-	ui.spkm.state.edp.is_synchronised = false;
-	ui_state.smb.edp.is_synchronised = false;
-	ui_state.shead.edp.is_synchronised = false;
 
 	// some variables initialization
 	ui.init();

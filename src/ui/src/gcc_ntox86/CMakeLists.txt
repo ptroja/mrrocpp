@@ -35,6 +35,8 @@ add_executable(ui
 	../conveyor/ui_r_conveyor.cc
 	../speaker/ui_r_speaker.cc
 	../spkm/ui_r_spkm.cc
+	../smb/ui_r_smb.cc
+	../shead/ui_r_shead.cc
 	../ui_init.cc
 	../ui_class.cc
 	../wndFileLocationEvents.cc

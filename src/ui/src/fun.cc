@@ -39,9 +39,6 @@ extern function_execution_buffer main_eb;
 
 extern ui_ecp_buffer* ui_ecp_obj;
 
-extern ui_state_def ui_state;
-
-ui_robot_def ui_robot;
 extern ui_ecp_buffer* ui_ecp_obj;
 
 extern double irp6ot_current_pos[8]; // pozycja biezaca
@@ -1335,8 +1332,8 @@ int check_edps_state_and_modify_mp_state() {
 			&& (!(ui.speaker.state.is_active))
 			&& (!(ui.irp6m_m.state.is_active))
 			&& (!(ui.bird_hand.state.is_active))
-			&& (!(ui.spkm.state.is_active)) && (!(ui_state.smb.is_active))
-			&& (!(ui_state.shead.is_active))) {
+			&& (!(ui.spkm.state.is_active)) && (!(ui.smb.state.is_active))
+			&& (!(ui.shead.state.is_active))) {
 		ui.all_edps = UI_ALL_EDPS_NONE_EDP_ACTIVATED;
 
 		// jesli wszystkie sa zsynchronizowane
@@ -1349,8 +1346,8 @@ int check_edps_state_and_modify_mp_state() {
 			&& check_synchronised_or_inactive(ui.irp6p_tfg.state)
 			&& check_synchronised_or_inactive(ui.bird_hand.state)
 			&& check_synchronised_or_inactive(ui.spkm.state)
-			&& check_synchronised_or_inactive(ui_state.smb)
-			&& check_synchronised_or_inactive(ui_state.shead)) {
+			&& check_synchronised_or_inactive(ui.smb.state)
+			&& check_synchronised_or_inactive(ui.shead.state)) {
 		ui.all_edps = UI_ALL_EDPS_LOADED_AND_SYNCHRONISED;
 
 		// jesli wszystkie sa zaladowane
@@ -1363,8 +1360,8 @@ int check_edps_state_and_modify_mp_state() {
 			&& check_loaded_or_inactive(ui.irp6p_tfg.state)
 			&& check_loaded_or_inactive(ui.bird_hand.state)
 			&& check_loaded_or_inactive(ui.spkm.state)
-			&& check_loaded_or_inactive(ui_state.smb)
-			&& check_loaded_or_inactive(ui_state.shead))
+			&& check_loaded_or_inactive(ui.smb.state)
+			&& check_loaded_or_inactive(ui.shead.state))
 
 	{
 		ui.all_edps = UI_ALL_EDPS_LOADED_BUT_NOT_SYNCHRONISED;
@@ -1376,7 +1373,7 @@ int check_edps_state_and_modify_mp_state() {
 			|| check_loaded(ui.irp6m_m.state) || check_loaded(
 			ui.irp6ot_tfg.state) || check_loaded(ui.irp6p_tfg.state)
 			|| check_loaded(ui.bird_hand.state) || check_loaded(ui.spkm.state)
-			|| check_loaded(ui_state.smb) || check_loaded(ui_state.shead))
+			|| check_loaded(ui.smb.state) || check_loaded(ui.shead.state))
 
 	{
 		ui.all_edps = UI_ALL_EDPS_THERE_IS_EDP_LOADED_BUT_NOT_ALL_ARE_LOADED;

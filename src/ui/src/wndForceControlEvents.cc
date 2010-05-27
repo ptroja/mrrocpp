@@ -40,7 +40,6 @@
 // Wiadomosc wysylana do ECP.
 lib::UI_ECP_message ui_ecp_msg;
 extern Ui ui;
-extern ui_state_def ui_state;
 
 uint64_t e; // kod bledu systemowego
 
@@ -312,8 +311,8 @@ int FCbtnOnOffReader(PtWidget_t *widget, ApInfo_t *apinfo,
 		pulse_code = READER_STOP; // stop
 	else
 		pulse_code = READER_START;// start
-	if (MsgSendPulse(ui.irp6ot_m.state.edp.reader_fd,
-			sched_get_priority_min(SCHED_FIFO), pulse_code, pulse_value) == -1) {
+	if (MsgSendPulse(ui.irp6ot_m.state.edp.reader_fd, sched_get_priority_min(
+			SCHED_FIFO), pulse_code, pulse_value) == -1) {
 		perror("FCbtnOnOffReader: Send pulse to Reader failed");
 	} else {
 		// Reader wylaczony.
