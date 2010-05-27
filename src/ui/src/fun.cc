@@ -923,7 +923,7 @@ int block_all_ecp_trigger_widgets(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (ui_state.irp6ot_m.edp.is_synchronised) {
+	if (ui.irp6ot_m.state.edp.is_synchronised) {
 		block_widget(ABW_PtButton_wnd_processes_control_irp6ot_ecp_trigger);
 	}
 	if (ui_state.irp6p_m.edp.is_synchronised) {
@@ -951,7 +951,7 @@ int unblock_all_ecp_trigger_widgets(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (ui_state.irp6ot_m.edp.is_synchronised) {
+	if (ui.irp6ot_m.state.edp.is_synchronised) {
 		unblock_widget(ABW_PtButton_wnd_processes_control_irp6ot_ecp_trigger);
 	}
 	if (ui_state.irp6p_m.edp.is_synchronised) {
@@ -1328,7 +1328,7 @@ int check_edps_state_and_modify_mp_state() {
 	// wyznaczenie stanu wszytkich EDP abstahujac od MP
 
 	// jesli wszytkie sa nieaktywne
-	if ((!(ui_state.irp6p_m.is_active)) && (!(ui_state.irp6ot_m.is_active))
+	if ((!(ui_state.irp6p_m.is_active)) && (!(ui.irp6ot_m.state.is_active))
 			&& (!(ui_state.irp6ot_tfg.is_active))
 			&& (!(ui_state.irp6p_tfg.is_active))
 			&& (!(ui_state.conveyor.is_active))
@@ -1341,7 +1341,7 @@ int check_edps_state_and_modify_mp_state() {
 
 		// jesli wszystkie sa zsynchronizowane
 	} else if (check_synchronised_or_inactive(ui_state.irp6p_m)
-			&& check_synchronised_or_inactive(ui_state.irp6ot_m)
+			&& check_synchronised_or_inactive(ui.irp6ot_m.state)
 			&& check_synchronised_or_inactive(ui_state.conveyor)
 			&& check_synchronised_or_inactive(ui_state.speaker)
 			&& check_synchronised_or_inactive(ui_state.irp6_mechatronika)
@@ -1355,7 +1355,7 @@ int check_edps_state_and_modify_mp_state() {
 
 		// jesli wszystkie sa zaladowane
 	} else if (check_loaded_or_inactive(ui_state.irp6p_m)
-			&& check_loaded_or_inactive(ui_state.irp6ot_m)
+			&& check_loaded_or_inactive(ui.irp6ot_m.state)
 			&& check_loaded_or_inactive(ui_state.conveyor)
 			&& check_loaded_or_inactive(ui_state.speaker)
 			&& check_loaded_or_inactive(ui_state.irp6_mechatronika)
@@ -1371,7 +1371,7 @@ int check_edps_state_and_modify_mp_state() {
 
 		// jesli chociaz jeden jest zaladowany
 	} else if (check_loaded(ui_state.irp6p_m)
-			|| check_loaded(ui_state.irp6ot_m) || check_loaded(
+			|| check_loaded(ui.irp6ot_m.state) || check_loaded(
 			ui_state.conveyor) || check_loaded(ui_state.speaker)
 			|| check_loaded(ui_state.irp6_mechatronika) || check_loaded(
 			ui_state.irp6ot_tfg) || check_loaded(ui_state.irp6p_tfg)
@@ -1891,7 +1891,7 @@ int all_robots_move_to_preset_position(PtWidget_t *widget, ApInfo_t *apinfo,
 			== UI_MP_PERMITED_TO_RUN) || (ui.mp.state
 			== UI_MP_WAITING_FOR_START_PULSE)) {
 		// ruch do pozcyji synchronizacji dla Irp6_on_track i dla dalszych analogicznie
-		if (check_synchronised_and_loaded(ui_state.irp6ot_m))
+		if (check_synchronised_and_loaded(ui.irp6ot_m.state))
 			irp6ot_move_to_preset_position(widget, apinfo, cbinfo);
 		if (check_synchronised_and_loaded(ui_state.irp6ot_tfg))
 			irp6ot_tfg_move_to_preset_position(widget, apinfo, cbinfo);
@@ -2056,7 +2056,7 @@ int MPslay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 	ui.mp.pid = -1;
 	ui.mp.pulse_fd = -1;
 
-	deactivate_ecp_trigger(ui_state.irp6ot_m);
+	deactivate_ecp_trigger(ui.irp6ot_m.state);
 	deactivate_ecp_trigger(ui_state.irp6p_m);
 	deactivate_ecp_trigger(ui_state.conveyor);
 	deactivate_ecp_trigger(ui_state.speaker);
@@ -2278,7 +2278,7 @@ int signal_mp(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 	// if((	signo!=SIGCONT)&&(signo!=SIGSTOP)) {
 
-	if ( ( ret = SignalKill(ui_state.irp6ot_m.edp.node_nr, ui_state.irp6ot_m.edp.pid, 1, signo,0,0) ) == -1 ) { // by Y !!! klopoty z wysylaniem do okreslonego watku -
+	if ( ( ret = SignalKill(ui.irp6ot_m.state.edp.node_nr, ui.irp6ot_m.state.edp.pid, 1, signo,0,0) ) == -1 ) { // by Y !!! klopoty z wysylaniem do okreslonego watku -
 		// wstawiona maska na odbior sygnalow po stronie serwo
 		// 	perror("UI: Stop EDP failed");
 		printf("sending a signal to edp failed\n");
@@ -2286,7 +2286,7 @@ int signal_mp(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 	}
 	// 	 }
 	// XXX probably a bug - killing _ecp_ pid on _edp_ node (ptrojane)
-	if ( ( ret = SignalKill(ui_state.irp6ot_m.edp.node_nr, ui_state.irp6ot_m.ecp.pid, 0, signo,0,0) ) == -1 ) {
+	if ( ( ret = SignalKill(ui.irp6ot_m.state.edp.node_nr, ui.irp6ot_m.state.ecp.pid, 0, signo,0,0) ) == -1 ) {
 		// 	perror("UI: Stop ECP failed");
 		printf("sending a signal to ecp failed\n");
 

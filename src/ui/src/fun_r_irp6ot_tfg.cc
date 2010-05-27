@@ -40,7 +40,6 @@ extern ui_state_def ui_state;
 
 extern ui_robot_def ui_robot;
 
-
 double irp6ot_tfg_current_pos[IRP6OT_TFG_NUM_OF_SERVOS];// pozycja biezaca
 double irp6ot_tfg_desired_pos[IRP6OT_TFG_NUM_OF_SERVOS]; // pozycja zadana
 
@@ -132,7 +131,8 @@ int EDP_irp6ot_tfg_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 								ui_state.irp6ot_tfg.edp.node_name);
 
 				{
-					boost::unique_lock<boost::mutex> lock(ui.process_creation_mtx);
+					boost::unique_lock<boost::mutex> lock(
+							ui.process_creation_mtx);
 					ui_robot.irp6ot_tfg = new ui_tfg_and_conv_robot(*ui.config,
 							*ui.all_ecp_msg, lib::ROBOT_IRP6OT_TFG);
 				}

@@ -10,6 +10,7 @@
 
 #include "ui/ui.h"
 #include "ui/src/bird_hand/ui_r_bird_hand.h"
+#include "ui/src/irp6ot_m/ui_r_irp6ot_m.h"
 #include "lib/configurator.h"
 
 //
@@ -77,7 +78,10 @@ public:
 	std::string sr_attach_point;
 	std::string ui_node_name; // nazwa wezla na ktorym jest uruchamiany UI
 
+
+	// The Ui robots
 	UiRobotBirdHand bird_hand;
+	UiRobotIrp6ot_m irp6ot_m;
 
 	Ui();
 	void UI_close(void);

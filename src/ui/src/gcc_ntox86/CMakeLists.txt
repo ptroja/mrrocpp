@@ -26,6 +26,7 @@ add_executable(ui
 	../bird_hand/ui_ecp_r_bird_hand.cc
 	../ui_robot.cc
 	../bird_hand/ui_r_bird_hand.cc
+	../irp6ot_m/ui_r_irp6ot_m.cc
 	../ui_init.cc
 	../ui_class.cc
 	../wndFileLocationEvents.cc

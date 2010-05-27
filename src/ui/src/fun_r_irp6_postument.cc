@@ -2935,7 +2935,7 @@ int close_wnd_irp6_postument_xyz_aa_relative(PtWidget_t *widget,
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
-	if (ui_state.is_wind_irp6ot_xyz_aa_relative_open) {
+	if (ui.irp6ot_m.is_wind_irp6ot_xyz_aa_relative_open) {
 		PtDestroyWidget(ABW_wnd_irp6_postument_xyz_angle_axis_relative);
 	}
 

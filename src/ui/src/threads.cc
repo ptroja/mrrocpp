@@ -152,9 +152,9 @@ void *comm_thread(void* arg) {
 		}
 
 		//! FIXME:
-		if (ui_state.irp6ot_m.ecp.pid <= 0) {
+		if (ui.irp6ot_m.state.ecp.pid <= 0) {
 
-			ui_state.irp6ot_m.ecp.pid = info.pid;
+			ui.irp6ot_m.state.ecp.pid = info.pid;
 
 		}
 

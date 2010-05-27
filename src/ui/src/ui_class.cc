@@ -170,7 +170,7 @@ int Ui::manage_interface(void) {
 	// ApModifyItemState( &file_menu, AB_ITEM_DIM, NULL);
 
 	// Dla robota IRP6 ON_TRACK
-	manage_interface_irp6ot();
+	irp6ot_m.manage_interface();
 
 	// Dla robota IRP6 ON_TRACK
 	manage_interface_irp6ot_tfg();
@@ -331,7 +331,7 @@ int Ui::reload_whole_configuration() {
 		case UI_ALL_EDPS_NONE_EDP_LOADED:
 
 			// dla robota irp6 on_track
-			reload_irp6ot_configuration();
+			irp6ot_m.reload_configuration();
 
 			// dla robota irp6 on_track
 			reload_irp6ot_tfg_configuration();
