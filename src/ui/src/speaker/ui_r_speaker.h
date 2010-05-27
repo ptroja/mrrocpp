@@ -28,6 +28,10 @@ private:
 
 public:
 
+	bool pulse_reader_speaker_start_exec_pulse();
+	bool pulse_reader_speaker_stop_exec_pulse();
+	bool pulse_reader_speaker_trigger_exec_pulse();
+
 	bool is_wind_speaker_play_open; // informacja czy okno odtwarzania dzwiekow jest otwarte
 
 

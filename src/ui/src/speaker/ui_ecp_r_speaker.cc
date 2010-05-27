@@ -64,3 +64,6 @@ void ui_speaker_robot::read_state(bool* local_state) {
 	}
 	// printf("UI SPEAKING: %d\n", reply_package.arm.text_def.speaking);
 }
+
+
+

@@ -338,22 +338,11 @@ int pulse_reader_speaker_start(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (pulse_reader_speaker_start_exec_pulse())
+	if (ui.speaker.pulse_reader_speaker_start_exec_pulse())
 		process_control_window_init(widget, apinfo, cbinfo);
 
 	return (Pt_CONTINUE);
 
-}
-
-bool pulse_reader_speaker_start_exec_pulse() {
-
-	if (ui.speaker.state.edp.state == 1) {
-		ui.pulse_reader_execute(ui.speaker.state.edp.reader_fd, READER_START, 0);
-		ui.speaker.state.edp.state = 2;
-		return true;
-	}
-
-	return false;
 }
 
 int pulse_reader_speaker_stop(PtWidget_t *widget, ApInfo_t *apinfo,
@@ -364,22 +353,11 @@ int pulse_reader_speaker_stop(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (pulse_reader_speaker_stop_exec_pulse())
+	if (ui.speaker.pulse_reader_speaker_stop_exec_pulse())
 		process_control_window_init(widget, apinfo, cbinfo);
 
 	return (Pt_CONTINUE);
 
-}
-
-bool pulse_reader_speaker_stop_exec_pulse() {
-
-	if (ui.speaker.state.edp.state == 2) {
-		ui.pulse_reader_execute(ui.speaker.state.edp.reader_fd, READER_STOP, 0);
-		ui.speaker.state.edp.state = 1;
-		return true;
-	}
-
-	return false;
 }
 
 int pulse_reader_speaker_trigger(PtWidget_t *widget, ApInfo_t *apinfo,
@@ -390,23 +368,11 @@ int pulse_reader_speaker_trigger(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (pulse_reader_speaker_trigger_exec_pulse())
+	if (ui.speaker.pulse_reader_speaker_trigger_exec_pulse())
 		process_control_window_init(widget, apinfo, cbinfo);
 
 	return (Pt_CONTINUE);
 
-}
-
-bool pulse_reader_speaker_trigger_exec_pulse() {
-
-	if (ui.speaker.state.edp.state == 2) {
-		ui.pulse_reader_execute(ui.speaker.state.edp.reader_fd, READER_TRIGGER,
-				0);
-
-		return true;
-	}
-
-	return false;
 }
 
 int pulse_ecp_speaker(PtWidget_t *widget, ApInfo_t *apinfo,

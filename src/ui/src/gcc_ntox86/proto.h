@@ -76,14 +76,11 @@ int task_param_actualization(PtWidget_t *widget, ApInfo_t *apinfo,
 int task_window_param_actualization(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
 
-
-
 int manage_configuration_file(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
 
 int start_file_window(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
-
 
 int clear_console(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
@@ -147,7 +144,6 @@ int pulse_reader_all_robots_trigger(PtWidget_t *widget, ApInfo_t *apinfo,
 
 int pulse_ecp_all_robots(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
-
 
 /* ../fun_r_conveyor.cc */
 int close_wind_conveyor_moves(PtWidget_t *widget, ApInfo_t *apinfo,
@@ -762,13 +758,13 @@ int EDP_speaker_slay(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
 int pulse_reader_speaker_start(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
-bool pulse_reader_speaker_start_exec_pulse(void);
+
 int pulse_reader_speaker_stop(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
-bool pulse_reader_speaker_stop_exec_pulse(void);
+
 int pulse_reader_speaker_trigger(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
-bool pulse_reader_speaker_trigger_exec_pulse(void);
+
 int pulse_ecp_speaker(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
 

@@ -31,16 +31,14 @@ UiRobotSpeaker::UiRobotSpeaker() :
 int UiRobotSpeaker::reload_configuration() {
 
 	// jesli speaker ma byc aktywny
-	if ((state.is_active = ui.config->value<int> (
-			"is_speaker_active")) == 1) {
+	if ((state.is_active = ui.config->value<int> ("is_speaker_active")) == 1) {
 
 		//ui_state.is_any_edp_active = true;
 		if (ui.is_mp_and_ecps_active) {
 			state.ecp.network_trigger_attach_point
 					= ui.config->return_attach_point_name(
 							lib::configurator::CONFIG_SERVER,
-							"trigger_attach_point",
-							state.ecp.section_name);
+							"trigger_attach_point", state.ecp.section_name);
 
 			state.ecp.pid = -1;
 			state.ecp.trigger_fd = -1;
@@ -54,41 +52,36 @@ int UiRobotSpeaker::reload_configuration() {
 			state.edp.reader_fd = -1;
 			state.edp.state = 0;
 
-			if (ui.config->exists("test_mode",
-					state.edp.section_name))
-				state.edp.test_mode = ui.config->value<int> (
-						"test_mode", state.edp.section_name);
+			if (ui.config->exists("test_mode", state.edp.section_name))
+				state.edp.test_mode = ui.config->value<int> ("test_mode",
+						state.edp.section_name);
 			else
 				state.edp.test_mode = 0;
 
-			state.edp.hardware_busy_attach_point = ui.config->value<
-					std::string> ("hardware_busy_attach_point",
-					state.edp.section_name);
+			state.edp.hardware_busy_attach_point
+					= ui.config->value<std::string> (
+							"hardware_busy_attach_point",
+							state.edp.section_name);
 
 			state.edp.network_resourceman_attach_point
 					= ui.config->return_attach_point_name(
 							lib::configurator::CONFIG_SERVER,
-							"resourceman_attach_point",
-							state.edp.section_name);
+							"resourceman_attach_point", state.edp.section_name);
 
 			state.edp.network_reader_attach_point
 					= ui.config->return_attach_point_name(
 							lib::configurator::CONFIG_SERVER,
-							"reader_attach_point",
-							state.edp.section_name);
+							"reader_attach_point", state.edp.section_name);
 
-			state.edp.node_name = ui.config->value<std::string> (
-					"node_name", state.edp.section_name);
+			state.edp.node_name = ui.config->value<std::string> ("node_name",
+					state.edp.section_name);
 
-			state.edp.preset_sound_0
-					= ui.config->value<std::string> ("preset_sound_0",
-							state.edp.section_name);
-			state.edp.preset_sound_1
-					= ui.config->value<std::string> ("preset_sound_1",
-							state.edp.section_name);
-			state.edp.preset_sound_2
-					= ui.config->value<std::string> ("preset_sound_2",
-							state.edp.section_name);
+			state.edp.preset_sound_0 = ui.config->value<std::string> (
+					"preset_sound_0", state.edp.section_name);
+			state.edp.preset_sound_1 = ui.config->value<std::string> (
+					"preset_sound_1", state.edp.section_name);
+			state.edp.preset_sound_2 = ui.config->value<std::string> (
+					"preset_sound_2", state.edp.section_name);
 
 			break;
 		case 1:
@@ -181,3 +174,36 @@ int UiRobotSpeaker::manage_interface() {
 
 }
 
+bool UiRobotSpeaker::pulse_reader_speaker_start_exec_pulse() {
+
+	if (ui.speaker.state.edp.state == 1) {
+		ui.pulse_reader_execute(ui.speaker.state.edp.reader_fd, READER_START, 0);
+		ui.speaker.state.edp.state = 2;
+		return true;
+	}
+
+	return false;
+}
+
+bool UiRobotSpeaker::pulse_reader_speaker_stop_exec_pulse() {
+
+	if (ui.speaker.state.edp.state == 2) {
+		ui.pulse_reader_execute(ui.speaker.state.edp.reader_fd, READER_STOP, 0);
+		ui.speaker.state.edp.state = 1;
+		return true;
+	}
+
+	return false;
+}
+
+bool UiRobotSpeaker::pulse_reader_speaker_trigger_exec_pulse() {
+
+	if (ui.speaker.state.edp.state == 2) {
+		ui.pulse_reader_execute(ui.speaker.state.edp.reader_fd, READER_TRIGGER,
+				0);
+
+		return true;
+	}
+
+	return false;
+}
