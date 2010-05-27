@@ -164,7 +164,6 @@ typedef struct {
 } program_node_def;
 
 typedef struct {
-	ecp_edp_ui_robot_def irp6_mechatronika;
 	ecp_edp_ui_robot_def polycrank;
 	ecp_edp_ui_robot_def conveyor;
 	ecp_edp_ui_robot_def speaker;
@@ -172,18 +171,8 @@ typedef struct {
 	ecp_edp_ui_robot_def smb;
 	ecp_edp_ui_robot_def shead;
 
-	bool is_wind_irp6m_int_open; // informacja czy okno ruchow w radianach stawow jest otwarte
-	bool is_wind_irp6m_inc_open; // informacja czy okno ruchow w radianach na wale silnika jest otwarte
-
 	bool is_wind_polycrank_int_open; // informacja czy okno ruchow w radianach stawow jest otwarte
 	bool is_wind_polycrank_inc_open; // informacja czy okno ruchow w radianach na wale silnika jest otwarte
-
-	bool is_wind_irp6m_xyz_euler_zyz_open; // informacja czy okno ruchow we wspolrzednych zewnetrznych jest otwarte
-	bool is_wind_irp6m_xyz_angle_axis_open; // informacja czy okno ruchow we wspolrzednych zewnetrznych jest otwarte
-	bool is_wind_irp6m_xyz_angle_axis_ts_open; // informacja czy okno definicji narzedzia we wspolrzednych zewnetrznych jest otwarte
-	bool is_wind_irp6m_xyz_euler_zyz_ts_open; // informacja czy okno definicji narzedzia we wspolrzednych zewnetrznych jest otwarte
-	bool is_wind_irp6m_kinematic_open; // informacja czy okno definicji kinematyki jest otwarte
-	bool is_wind_irp6m_servo_algorithm_open; // informacja czy okno definicji kinematyki jest otwarte
 
 	bool is_wind_conv_servo_algorithm_open; // informacja czy okno definicji kinematyki jest otwarte
 	bool is_wind_conveyor_moves_open; // informacja czy okno ruchow dla robota conveyor

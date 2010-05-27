@@ -343,8 +343,6 @@ int process_control_window_irp6m_section_init(
 		bool &wlacz_PtButton_wnd_processes_control_all_reader_start,
 		bool &wlacz_PtButton_wnd_processes_control_all_reader_stop,
 		bool &wlacz_PtButton_wnd_processes_control_all_reader_trigger);
-int reload_irp6m_configuration(void);
-int manage_interface_irp6m(void);
 int import_wnd_irp6m_xyz_angle_axis(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
 int export_wnd_irp6m_xyz_angle_axis(PtWidget_t *widget, ApInfo_t *apinfo,

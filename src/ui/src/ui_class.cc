@@ -190,7 +190,7 @@ int Ui::manage_interface(void) {
 	manage_interface_speaker();
 
 	// Dla robota IRP6 MECHATRONIKA
-	manage_interface_irp6m();
+	irp6m_m.manage_interface();
 
 	// zadanie
 	// kolorowanie menu all robots
@@ -348,7 +348,7 @@ int Ui::reload_whole_configuration() {
 			reload_speaker_configuration();
 
 			// dla robota irp6 mechatronika
-			reload_irp6m_configuration();
+			irp6m_m.reload_configuration();
 			break;
 		default:
 			break;

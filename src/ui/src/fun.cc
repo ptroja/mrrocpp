@@ -935,7 +935,7 @@ int block_all_ecp_trigger_widgets(PtWidget_t *widget, ApInfo_t *apinfo,
 	if (ui_state.speaker.edp.is_synchronised) {
 		block_widget(ABW_PtButton_wnd_processes_control_speaker_ecp_trigger);
 	}
-	if (ui_state.irp6_mechatronika.edp.is_synchronised) {
+	if (ui.irp6m_m.state.edp.is_synchronised) {
 		block_widget(ABW_PtButton_wnd_processes_control_irp6m_ecp_trigger);
 	}
 	block_widget(ABW_PtButton_wnd_processes_control_all_ecp_trigger);
@@ -963,7 +963,7 @@ int unblock_all_ecp_trigger_widgets(PtWidget_t *widget, ApInfo_t *apinfo,
 	if (ui_state.speaker.edp.is_synchronised) {
 		unblock_widget(ABW_PtButton_wnd_processes_control_speaker_ecp_trigger);
 	}
-	if (ui_state.irp6_mechatronika.edp.is_synchronised) {
+	if (ui.irp6m_m.state.edp.is_synchronised) {
 		unblock_widget(ABW_PtButton_wnd_processes_control_irp6m_ecp_trigger);
 	}
 	unblock_widget(ABW_PtButton_wnd_processes_control_all_ecp_trigger);
@@ -1333,7 +1333,7 @@ int check_edps_state_and_modify_mp_state() {
 			&& (!(ui.irp6p_tfg.state.is_active))
 			&& (!(ui_state.conveyor.is_active))
 			&& (!(ui_state.speaker.is_active))
-			&& (!(ui_state.irp6_mechatronika.is_active))
+			&& (!(ui.irp6m_m.state.is_active))
 			&& (!(ui.bird_hand.state.is_active))
 			&& (!(ui_state.spkm.is_active)) && (!(ui_state.smb.is_active))
 			&& (!(ui_state.shead.is_active))) {
@@ -1344,7 +1344,7 @@ int check_edps_state_and_modify_mp_state() {
 			&& check_synchronised_or_inactive(ui.irp6ot_m.state)
 			&& check_synchronised_or_inactive(ui_state.conveyor)
 			&& check_synchronised_or_inactive(ui_state.speaker)
-			&& check_synchronised_or_inactive(ui_state.irp6_mechatronika)
+			&& check_synchronised_or_inactive(ui.irp6m_m.state)
 			&& check_synchronised_or_inactive(ui.irp6ot_tfg.state)
 			&& check_synchronised_or_inactive(ui.irp6p_tfg.state)
 			&& check_synchronised_or_inactive(ui.bird_hand.state)
@@ -1358,7 +1358,7 @@ int check_edps_state_and_modify_mp_state() {
 			&& check_loaded_or_inactive(ui.irp6ot_m.state)
 			&& check_loaded_or_inactive(ui_state.conveyor)
 			&& check_loaded_or_inactive(ui_state.speaker)
-			&& check_loaded_or_inactive(ui_state.irp6_mechatronika)
+			&& check_loaded_or_inactive(ui.irp6m_m.state)
 			&& check_loaded_or_inactive(ui.irp6ot_tfg.state)
 			&& check_loaded_or_inactive(ui.irp6p_tfg.state)
 			&& check_loaded_or_inactive(ui.bird_hand.state)
@@ -1373,7 +1373,7 @@ int check_edps_state_and_modify_mp_state() {
 	} else if (check_loaded(ui.irp6p_m.state)
 			|| check_loaded(ui.irp6ot_m.state) || check_loaded(
 			ui_state.conveyor) || check_loaded(ui_state.speaker)
-			|| check_loaded(ui_state.irp6_mechatronika) || check_loaded(
+			|| check_loaded(ui.irp6m_m.state) || check_loaded(
 			ui.irp6ot_tfg.state) || check_loaded(ui.irp6p_tfg.state)
 			|| check_loaded(ui.bird_hand.state) || check_loaded(ui_state.spkm)
 			|| check_loaded(ui_state.smb) || check_loaded(ui_state.shead))
@@ -1901,7 +1901,7 @@ int all_robots_move_to_preset_position(PtWidget_t *widget, ApInfo_t *apinfo,
 			irp6p_tfg_move_to_preset_position(widget, apinfo, cbinfo);
 		if (check_synchronised_and_loaded(ui_state.conveyor))
 			conveyor_move_to_preset_position(widget, apinfo, cbinfo);
-		if (check_synchronised_and_loaded(ui_state.irp6_mechatronika))
+		if (check_synchronised_and_loaded(ui.irp6m_m.state))
 			irp6m_move_to_preset_position(widget, apinfo, cbinfo);
 	}
 
@@ -2060,7 +2060,7 @@ int MPslay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 	deactivate_ecp_trigger(ui.irp6p_m.state);
 	deactivate_ecp_trigger(ui_state.conveyor);
 	deactivate_ecp_trigger(ui_state.speaker);
-	deactivate_ecp_trigger(ui_state.irp6_mechatronika);
+	deactivate_ecp_trigger(ui.irp6m_m.state);
 
 	// modyfikacja menu
 	ui.manage_interface();
