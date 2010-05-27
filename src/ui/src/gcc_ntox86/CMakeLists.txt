@@ -33,6 +33,7 @@ add_executable(ui
 	../irp6m_m/ui_r_irp6m_m.cc
 	#../polycrank/ui_r_polycrank.cc
 	../conveyor/ui_r_conveyor.cc
+	../speaker/ui_r_speaker.cc
 	../ui_init.cc
 	../ui_class.cc
 	../wndFileLocationEvents.cc

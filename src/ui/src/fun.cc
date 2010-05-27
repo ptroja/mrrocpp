@@ -932,7 +932,7 @@ int block_all_ecp_trigger_widgets(PtWidget_t *widget, ApInfo_t *apinfo,
 	if (ui.conveyor.state.edp.is_synchronised) {
 		block_widget(ABW_PtButton_wnd_processes_control_conveyor_ecp_trigger);
 	}
-	if (ui_state.speaker.edp.is_synchronised) {
+	if (ui.speaker.state.edp.is_synchronised) {
 		block_widget(ABW_PtButton_wnd_processes_control_speaker_ecp_trigger);
 	}
 	if (ui.irp6m_m.state.edp.is_synchronised) {
@@ -960,7 +960,7 @@ int unblock_all_ecp_trigger_widgets(PtWidget_t *widget, ApInfo_t *apinfo,
 	if (ui.conveyor.state.edp.is_synchronised) {
 		unblock_widget(ABW_PtButton_wnd_processes_control_conveyor_ecp_trigger);
 	}
-	if (ui_state.speaker.edp.is_synchronised) {
+	if (ui.speaker.state.edp.is_synchronised) {
 		unblock_widget(ABW_PtButton_wnd_processes_control_speaker_ecp_trigger);
 	}
 	if (ui.irp6m_m.state.edp.is_synchronised) {
@@ -1332,7 +1332,7 @@ int check_edps_state_and_modify_mp_state() {
 			&& (!(ui.irp6ot_tfg.state.is_active))
 			&& (!(ui.irp6p_tfg.state.is_active))
 			&& (!(ui.conveyor.state.is_active))
-			&& (!(ui_state.speaker.is_active))
+			&& (!(ui.speaker.state.is_active))
 			&& (!(ui.irp6m_m.state.is_active))
 			&& (!(ui.bird_hand.state.is_active))
 			&& (!(ui_state.spkm.is_active)) && (!(ui_state.smb.is_active))
@@ -1343,7 +1343,7 @@ int check_edps_state_and_modify_mp_state() {
 	} else if (check_synchronised_or_inactive(ui.irp6p_m.state)
 			&& check_synchronised_or_inactive(ui.irp6ot_m.state)
 			&& check_synchronised_or_inactive(ui.conveyor.state)
-			&& check_synchronised_or_inactive(ui_state.speaker)
+			&& check_synchronised_or_inactive(ui.speaker.state)
 			&& check_synchronised_or_inactive(ui.irp6m_m.state)
 			&& check_synchronised_or_inactive(ui.irp6ot_tfg.state)
 			&& check_synchronised_or_inactive(ui.irp6p_tfg.state)
@@ -1357,7 +1357,7 @@ int check_edps_state_and_modify_mp_state() {
 	} else if (check_loaded_or_inactive(ui.irp6p_m.state)
 			&& check_loaded_or_inactive(ui.irp6ot_m.state)
 			&& check_loaded_or_inactive(ui.conveyor.state)
-			&& check_loaded_or_inactive(ui_state.speaker)
+			&& check_loaded_or_inactive(ui.speaker.state)
 			&& check_loaded_or_inactive(ui.irp6m_m.state)
 			&& check_loaded_or_inactive(ui.irp6ot_tfg.state)
 			&& check_loaded_or_inactive(ui.irp6p_tfg.state)
@@ -1372,7 +1372,7 @@ int check_edps_state_and_modify_mp_state() {
 		// jesli chociaz jeden jest zaladowany
 	} else if (check_loaded(ui.irp6p_m.state)
 			|| check_loaded(ui.irp6ot_m.state) || check_loaded(
-			ui.conveyor.state) || check_loaded(ui_state.speaker)
+			ui.conveyor.state) || check_loaded(ui.speaker.state)
 			|| check_loaded(ui.irp6m_m.state) || check_loaded(
 			ui.irp6ot_tfg.state) || check_loaded(ui.irp6p_tfg.state)
 			|| check_loaded(ui.bird_hand.state) || check_loaded(ui_state.spkm)
@@ -2059,7 +2059,7 @@ int MPslay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 	deactivate_ecp_trigger(ui.irp6ot_m.state);
 	deactivate_ecp_trigger(ui.irp6p_m.state);
 	deactivate_ecp_trigger(ui.conveyor.state);
-	deactivate_ecp_trigger(ui_state.speaker);
+	deactivate_ecp_trigger(ui.speaker.state);
 	deactivate_ecp_trigger(ui.irp6m_m.state);
 
 	// modyfikacja menu

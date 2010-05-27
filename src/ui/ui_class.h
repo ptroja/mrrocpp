@@ -17,6 +17,7 @@
 #include "ui/src/irp6p_tfg/ui_r_irp6p_tfg.h"
 #include "ui/src/irp6m_m/ui_r_irp6m_m.h"
 #include "ui/src/conveyor/ui_r_conveyor.h"
+#include "ui/src/speaker/ui_r_speaker.h"
 
 //
 //
@@ -92,6 +93,7 @@ public:
 	UiRobotIrp6p_tfg irp6p_tfg;
 	UiRobotIrp6m_m irp6m_m;
 	UiRobotConveyor conveyor;
+	UiRobotSpeaker speaker;
 
 	Ui();
 	void UI_close(void);

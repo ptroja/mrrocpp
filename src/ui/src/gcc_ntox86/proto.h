@@ -784,8 +784,7 @@ int pulse_reader_speaker_trigger(PtWidget_t *widget, ApInfo_t *apinfo,
 bool pulse_reader_speaker_trigger_exec_pulse(void);
 int pulse_ecp_speaker(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
-int reload_speaker_configuration(void);
-int manage_interface_speaker(void);
+
 
 /* ../fun_r_spkm.cc */
 int EDP_spkm_create(PtWidget_t *widget, ApInfo_t *apinfo,

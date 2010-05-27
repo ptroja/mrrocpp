@@ -187,7 +187,7 @@ int Ui::manage_interface(void) {
 	bird_hand.manage_interface();
 
 	// Dla robota SPEAKER
-	manage_interface_speaker();
+	speaker.manage_interface();
 
 	// Dla robota IRP6 MECHATRONIKA
 	irp6m_m.manage_interface();
@@ -345,7 +345,7 @@ int Ui::reload_whole_configuration() {
 			bird_hand.reload_configuration();
 
 			// dla robota speaker
-			reload_speaker_configuration();
+			speaker.reload_configuration();
 
 			// dla robota irp6 mechatronika
 			irp6m_m.reload_configuration();

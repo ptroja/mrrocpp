@@ -164,13 +164,9 @@ typedef struct {
 } program_node_def;
 
 typedef struct {
-	ecp_edp_ui_robot_def speaker;
 	ecp_edp_ui_robot_def spkm;
 	ecp_edp_ui_robot_def smb;
 	ecp_edp_ui_robot_def shead;
-
-	bool is_wind_speaker_play_open; // informacja czy okno odtwarzania dzwiekow jest otwarte
-
 } ui_state_def;
 
 /**************************** ui_sr_buffer *****************************/

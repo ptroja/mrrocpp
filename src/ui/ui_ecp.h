@@ -17,7 +17,6 @@ typedef struct {
 	ui_tfg_and_conv_robot *spkm;
 	ui_tfg_and_conv_robot *smb;
 	ui_tfg_and_conv_robot *shead;
-	ui_speaker_robot *speaker;
 } ui_robot_def;
 
 #endif
