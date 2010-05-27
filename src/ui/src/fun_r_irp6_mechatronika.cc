@@ -24,6 +24,7 @@
 // #include "ui/ui.h"
 // Konfigurator.
 // #include "lib/configurator.h"
+#include "ui/ui_ecp_r_tfg_and_conv.h"
 #include "ui/ui_ecp.h"
 #include "ui/ui_ecp_r_irp6_common.h"
 #include "lib/robot_consts/all_robots_const.h"

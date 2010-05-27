@@ -26,7 +26,9 @@
 // #include "ui/ui.h"
 // Konfigurator.
 // #include "lib/configurator.h"
+#include "ui/ui_ecp_r_tfg_and_conv.h"
 #include "ui/ui_ecp.h"
+
 #include "lib/robot_consts/conveyor_const.h"
 
 /* Local headers */
