@@ -208,8 +208,6 @@ int process_control_window_conveyor_section_init(
 		bool &wlacz_PtButton_wnd_processes_control_all_reader_start,
 		bool &wlacz_PtButton_wnd_processes_control_all_reader_stop,
 		bool &wlacz_PtButton_wnd_processes_control_all_reader_trigger);
-int reload_conveyor_configuration(void);
-int manage_interface_conveyor(void);
 
 /* ../fun_r_irp6_mechatronika.cc */
 int init_wnd_irp6m_xyz_euler_zyz_ts(PtWidget_t *widget, ApInfo_t *apinfo,

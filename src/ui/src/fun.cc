@@ -929,7 +929,7 @@ int block_all_ecp_trigger_widgets(PtWidget_t *widget, ApInfo_t *apinfo,
 	if (ui.irp6p_m.state.edp.is_synchronised) {
 		block_widget(ABW_PtButton_wnd_processes_control_irp6p_ecp_trigger);
 	}
-	if (ui_state.conveyor.edp.is_synchronised) {
+	if (ui.conveyor.state.edp.is_synchronised) {
 		block_widget(ABW_PtButton_wnd_processes_control_conveyor_ecp_trigger);
 	}
 	if (ui_state.speaker.edp.is_synchronised) {
@@ -957,7 +957,7 @@ int unblock_all_ecp_trigger_widgets(PtWidget_t *widget, ApInfo_t *apinfo,
 	if (ui.irp6p_m.state.edp.is_synchronised) {
 		unblock_widget(ABW_PtButton_wnd_processes_control_irp6p_ecp_trigger);
 	}
-	if (ui_state.conveyor.edp.is_synchronised) {
+	if (ui.conveyor.state.edp.is_synchronised) {
 		unblock_widget(ABW_PtButton_wnd_processes_control_conveyor_ecp_trigger);
 	}
 	if (ui_state.speaker.edp.is_synchronised) {
@@ -1331,7 +1331,7 @@ int check_edps_state_and_modify_mp_state() {
 	if ((!(ui.irp6p_m.state.is_active)) && (!(ui.irp6ot_m.state.is_active))
 			&& (!(ui.irp6ot_tfg.state.is_active))
 			&& (!(ui.irp6p_tfg.state.is_active))
-			&& (!(ui_state.conveyor.is_active))
+			&& (!(ui.conveyor.state.is_active))
 			&& (!(ui_state.speaker.is_active))
 			&& (!(ui.irp6m_m.state.is_active))
 			&& (!(ui.bird_hand.state.is_active))
@@ -1342,7 +1342,7 @@ int check_edps_state_and_modify_mp_state() {
 		// jesli wszystkie sa zsynchronizowane
 	} else if (check_synchronised_or_inactive(ui.irp6p_m.state)
 			&& check_synchronised_or_inactive(ui.irp6ot_m.state)
-			&& check_synchronised_or_inactive(ui_state.conveyor)
+			&& check_synchronised_or_inactive(ui.conveyor.state)
 			&& check_synchronised_or_inactive(ui_state.speaker)
 			&& check_synchronised_or_inactive(ui.irp6m_m.state)
 			&& check_synchronised_or_inactive(ui.irp6ot_tfg.state)
@@ -1356,7 +1356,7 @@ int check_edps_state_and_modify_mp_state() {
 		// jesli wszystkie sa zaladowane
 	} else if (check_loaded_or_inactive(ui.irp6p_m.state)
 			&& check_loaded_or_inactive(ui.irp6ot_m.state)
-			&& check_loaded_or_inactive(ui_state.conveyor)
+			&& check_loaded_or_inactive(ui.conveyor.state)
 			&& check_loaded_or_inactive(ui_state.speaker)
 			&& check_loaded_or_inactive(ui.irp6m_m.state)
 			&& check_loaded_or_inactive(ui.irp6ot_tfg.state)
@@ -1372,7 +1372,7 @@ int check_edps_state_and_modify_mp_state() {
 		// jesli chociaz jeden jest zaladowany
 	} else if (check_loaded(ui.irp6p_m.state)
 			|| check_loaded(ui.irp6ot_m.state) || check_loaded(
-			ui_state.conveyor) || check_loaded(ui_state.speaker)
+			ui.conveyor.state) || check_loaded(ui_state.speaker)
 			|| check_loaded(ui.irp6m_m.state) || check_loaded(
 			ui.irp6ot_tfg.state) || check_loaded(ui.irp6p_tfg.state)
 			|| check_loaded(ui.bird_hand.state) || check_loaded(ui_state.spkm)
@@ -1899,7 +1899,7 @@ int all_robots_move_to_preset_position(PtWidget_t *widget, ApInfo_t *apinfo,
 			irp6p_move_to_preset_position(widget, apinfo, cbinfo);
 		if (check_synchronised_and_loaded(ui.irp6p_tfg.state))
 			irp6p_tfg_move_to_preset_position(widget, apinfo, cbinfo);
-		if (check_synchronised_and_loaded(ui_state.conveyor))
+		if (check_synchronised_and_loaded(ui.conveyor.state))
 			conveyor_move_to_preset_position(widget, apinfo, cbinfo);
 		if (check_synchronised_and_loaded(ui.irp6m_m.state))
 			irp6m_move_to_preset_position(widget, apinfo, cbinfo);
@@ -2058,7 +2058,7 @@ int MPslay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 	deactivate_ecp_trigger(ui.irp6ot_m.state);
 	deactivate_ecp_trigger(ui.irp6p_m.state);
-	deactivate_ecp_trigger(ui_state.conveyor);
+	deactivate_ecp_trigger(ui.conveyor.state);
 	deactivate_ecp_trigger(ui_state.speaker);
 	deactivate_ecp_trigger(ui.irp6m_m.state);
 

@@ -178,7 +178,7 @@ int Ui::manage_interface(void) {
 	irp6p_tfg.manage_interface();
 
 	// Dla robota CONVEYOR
-	manage_interface_conveyor();
+	conveyor.manage_interface();
 
 	manage_interface_spkm();
 	manage_interface_smb();
@@ -336,7 +336,7 @@ int Ui::reload_whole_configuration() {
 			irp6p_tfg.reload_configuration();
 
 			// dla robota conveyor
-			reload_conveyor_configuration();
+			conveyor.reload_configuration();
 
 			reload_spkm_configuration();
 			reload_smb_configuration();

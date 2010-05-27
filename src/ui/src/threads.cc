@@ -51,8 +51,6 @@
 
 extern Ui ui;
 
-feb_thread* edp_conv_tid;
-
 feb_thread* edp_spkm_tid;
 feb_thread* edp_smb_tid;
 feb_thread* edp_shead_tid;
@@ -65,7 +63,6 @@ function_execution_buffer edp_spkm_eb;
 function_execution_buffer edp_smb_eb;
 function_execution_buffer edp_shead_eb;
 
-function_execution_buffer edp_conv_eb;
 function_execution_buffer main_eb;
 
 busy_flag communication_flag;
@@ -498,7 +495,7 @@ void create_threads()
 	ui.irp6p_m.create_thread();
 	ui.irp6p_tfg.create_thread();
 
-	edp_conv_tid = new feb_thread(edp_conv_eb);
+	ui.conveyor.create_thread();
 	edp_spkm_tid = new feb_thread(edp_spkm_eb);
 	edp_smb_tid = new feb_thread(edp_smb_eb);
 	edp_shead_tid = new feb_thread(edp_shead_eb);
@@ -517,7 +514,7 @@ void abort_threads()
 	ui.irp6ot_tfg.abort_thread();
 	ui.irp6p_m.abort_thread();
 	ui.irp6p_tfg.abort_thread();
-	delete edp_conv_tid;
+	ui.conveyor.abort_thread();
 	delete edp_spkm_tid;
 	delete edp_smb_tid;
 	delete edp_shead_tid;

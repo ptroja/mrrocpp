@@ -164,14 +164,10 @@ typedef struct {
 } program_node_def;
 
 typedef struct {
-	ecp_edp_ui_robot_def conveyor;
 	ecp_edp_ui_robot_def speaker;
 	ecp_edp_ui_robot_def spkm;
 	ecp_edp_ui_robot_def smb;
 	ecp_edp_ui_robot_def shead;
-
-	bool is_wind_conv_servo_algorithm_open; // informacja czy okno definicji kinematyki jest otwarte
-	bool is_wind_conveyor_moves_open; // informacja czy okno ruchow dla robota conveyor
 
 	bool is_wind_speaker_play_open; // informacja czy okno odtwarzania dzwiekow jest otwarte
 

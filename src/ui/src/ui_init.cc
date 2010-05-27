@@ -131,11 +131,11 @@ int init(PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 	ui_state.speaker.edp.section_name = EDP_SPEAKER_SECTION;
 	ui_state.speaker.ecp.section_name = ECP_SPEAKER_SECTION;
 
-	ui_state.conveyor.edp.state = -1; // edp nieaktywne
-	ui_state.conveyor.edp.last_state = -1; // edp nieaktywne
-	ui_state.conveyor.ecp.trigger_fd = -1;
-	ui_state.conveyor.edp.section_name = EDP_CONVEYOR_SECTION;
-	ui_state.conveyor.ecp.section_name = ECP_CONVEYOR_SECTION;
+	ui.conveyor.state.edp.state = -1; // edp nieaktywne
+	ui.conveyor.state.edp.last_state = -1; // edp nieaktywne
+	ui.conveyor.state.ecp.trigger_fd = -1;
+	ui.conveyor.state.edp.section_name = EDP_CONVEYOR_SECTION;
+	ui.conveyor.state.ecp.section_name = ECP_CONVEYOR_SECTION;
 
 	ui_state.spkm.edp.state = -1; // edp nieaktywne
 	ui_state.spkm.edp.last_state = -1; // edp nieaktywne
@@ -155,12 +155,12 @@ int init(PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 	ui_state.shead.edp.section_name = EDP_SHEAD_SECTION;
 	ui_state.shead.ecp.section_name = ECP_SHEAD_SECTION;
 
-	ui_state.is_wind_conveyor_moves_open = false;
-	ui_state.is_wind_conv_servo_algorithm_open = false;
+	ui.conveyor.is_wind_conveyor_moves_open = false;
+	ui.conveyor.is_wind_conv_servo_algorithm_open = false;
 
 	ui_state.is_wind_speaker_play_open = false;
 
-	ui_state.conveyor.edp.is_synchronised = false;
+	ui.conveyor.state.edp.is_synchronised = false;
 	ui_state.spkm.edp.is_synchronised = false;
 	ui_state.smb.edp.is_synchronised = false;
 	ui_state.shead.edp.is_synchronised = false;
