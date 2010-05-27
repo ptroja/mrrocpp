@@ -51,10 +51,6 @@
 
 extern Ui ui;
 
-feb_thread* edp_irp6ot_tid;
-feb_thread* edp_irp6p_tid;
-feb_thread* edp_irp6ot_tfg_tid;
-feb_thread* edp_irp6p_tfg_tid;
 feb_thread* edp_conv_tid;
 
 feb_thread* edp_spkm_tid;
@@ -64,11 +60,6 @@ feb_thread* meb_tid;
 
 pthread_t ui_tid;
 pthread_t sr_tid;
-
-function_execution_buffer edp_irp6ot_eb;
-function_execution_buffer edp_irp6p_eb;
-function_execution_buffer edp_irp6ot_tfg_eb;
-function_execution_buffer edp_irp6p_tfg_eb;
 
 function_execution_buffer edp_spkm_eb;
 function_execution_buffer edp_smb_eb;
@@ -502,11 +493,11 @@ void create_threads()
 		printf(" Failed to thread comm_thread\n");
 	}
 #endif
+	ui.irp6ot_m.create_thread();
+	ui.irp6ot_tfg.create_thread();
+	ui.irp6p_m.create_thread();
+	ui.irp6p_tfg.create_thread();
 
-	edp_irp6ot_tid = new feb_thread(edp_irp6ot_eb);
-	edp_irp6p_tid = new feb_thread(edp_irp6p_eb);
-	edp_irp6ot_tfg_tid = new feb_thread(edp_irp6ot_tfg_eb);
-	edp_irp6p_tfg_tid = new feb_thread(edp_irp6p_tfg_eb);
 	edp_conv_tid = new feb_thread(edp_conv_eb);
 	edp_spkm_tid = new feb_thread(edp_spkm_eb);
 	edp_smb_tid = new feb_thread(edp_smb_eb);
@@ -522,10 +513,10 @@ void abort_threads()
 #if defined(__QNXNTO__)
 	pthread_abort(ui_tid);
 	pthread_abort(sr_tid);
-	delete edp_irp6ot_tid;
-	delete edp_irp6p_tid;
-	delete edp_irp6ot_tfg_tid;
-	delete edp_irp6p_tfg_tid;
+	ui.irp6ot_m.abort_thread();
+	ui.irp6ot_tfg.abort_thread();
+	ui.irp6p_m.abort_thread();
+	ui.irp6p_tfg.abort_thread();
 	delete edp_conv_tid;
 	delete edp_spkm_tid;
 	delete edp_smb_tid;

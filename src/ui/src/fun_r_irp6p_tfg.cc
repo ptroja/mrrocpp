@@ -35,11 +35,6 @@
 
 extern Ui ui;
 
-extern function_execution_buffer edp_irp6p_tfg_eb;
-extern ui_state_def ui_state;
-
-extern ui_robot_def ui_robot;
-
 double irp6p_tfg_current_pos[IRP6P_TFG_NUM_OF_SERVOS];// pozycja biezaca
 double irp6p_tfg_desired_pos[IRP6P_TFG_NUM_OF_SERVOS]; // pozycja zadana
 
@@ -84,7 +79,7 @@ int EDP_irp6p_tfg_create(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	edp_irp6p_tfg_eb.command(boost::bind(EDP_irp6p_tfg_create_int, widget,
+	ui.irp6p_tfg.eb.command(boost::bind(EDP_irp6p_tfg_create_int, widget,
 			apinfo, cbinfo));
 
 	return (Pt_CONTINUE);
@@ -194,8 +189,8 @@ int EDP_irp6p_tfg_slay(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	edp_irp6p_tfg_eb.command(boost::bind(EDP_irp6p_tfg_slay_int, widget,
-			apinfo, cbinfo));
+	ui.irp6p_tfg.eb.command(boost::bind(EDP_irp6p_tfg_slay_int, widget, apinfo,
+			cbinfo));
 
 	return (Pt_CONTINUE);
 
@@ -244,7 +239,7 @@ int EDP_irp6p_tfg_synchronise(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	edp_irp6p_tfg_eb.command(boost::bind(EDP_irp6p_tfg_synchronise_int, widget,
+	ui.irp6p_tfg.eb.command(boost::bind(EDP_irp6p_tfg_synchronise_int, widget,
 			apinfo, cbinfo));
 
 	return (Pt_CONTINUE);
@@ -328,8 +323,7 @@ int irp6p_tfg_move_to_preset_position(PtWidget_t *widget, ApInfo_t *apinfo,
 			for (int i = 0; i < IRP6P_TFG_NUM_OF_SERVOS; i++) {
 				irp6p_tfg_desired_pos[i] = 0.0;
 			}
-			edp_irp6p_tfg_eb.command(
-					boost::bind(irp6p_tfg_execute_motor_motion));
+			ui.irp6p_tfg.eb.command(boost::bind(irp6p_tfg_execute_motor_motion));
 		} else if ((((ApName(ApWidget(cbinfo))
 				== ABN_mm_irp6p_tfg_preset_position_0) || (ApName(ApWidget(
 				cbinfo)) == ABN_mm_all_robots_preset_position_0))
@@ -339,8 +333,7 @@ int irp6p_tfg_move_to_preset_position(PtWidget_t *widget, ApInfo_t *apinfo,
 				irp6p_tfg_desired_pos[i]
 						= ui.irp6p_tfg.state.edp.preset_position[0][i];
 			}
-			edp_irp6p_tfg_eb.command(
-					boost::bind(irp6p_tfg_execute_joint_motion));
+			ui.irp6p_tfg.eb.command(boost::bind(irp6p_tfg_execute_joint_motion));
 		} else if ((((ApName(ApWidget(cbinfo))
 				== ABN_mm_irp6p_tfg_preset_position_1) || (ApName(ApWidget(
 				cbinfo)) == ABN_mm_all_robots_preset_position_1))
@@ -350,8 +343,7 @@ int irp6p_tfg_move_to_preset_position(PtWidget_t *widget, ApInfo_t *apinfo,
 				irp6p_tfg_desired_pos[i]
 						= ui.irp6p_tfg.state.edp.preset_position[1][i];
 			}
-			edp_irp6p_tfg_eb.command(
-					boost::bind(irp6p_tfg_execute_joint_motion));
+			ui.irp6p_tfg.eb.command(boost::bind(irp6p_tfg_execute_joint_motion));
 		} else if ((((ApName(ApWidget(cbinfo))
 				== ABN_mm_irp6p_tfg_preset_position_2) || (ApName(ApWidget(
 				cbinfo)) == ABN_mm_all_robots_preset_position_2))
@@ -361,8 +353,7 @@ int irp6p_tfg_move_to_preset_position(PtWidget_t *widget, ApInfo_t *apinfo,
 				irp6p_tfg_desired_pos[i]
 						= ui.irp6p_tfg.state.edp.preset_position[2][i];
 			}
-			edp_irp6p_tfg_eb.command(
-					boost::bind(irp6p_tfg_execute_joint_motion));
+			ui.irp6p_tfg.eb.command(boost::bind(irp6p_tfg_execute_joint_motion));
 		}
 
 		//	ui.irp6p_tfg.ui_ecp_robot->move_motors(irp6p_tfg_desired_pos);

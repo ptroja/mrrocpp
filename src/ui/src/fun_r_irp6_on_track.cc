@@ -34,13 +34,9 @@
 #include "proto.h"
 
 extern Ui ui;
-extern function_execution_buffer edp_irp6ot_eb;
 
 extern ui_ecp_buffer* ui_ecp_obj;
 
-extern ui_state_def ui_state;
-
-extern ui_robot_def ui_robot;
 extern ui_ecp_buffer* ui_ecp_obj;
 
 double irp6ot_current_pos[IRP6OT_M_NUM_OF_SERVOS]; // pozycja biezaca
@@ -902,7 +898,7 @@ int irp6ot_move_to_preset_position(PtWidget_t *widget, ApInfo_t *apinfo,
 			for (int i = 0; i < IRP6OT_M_NUM_OF_SERVOS; i++) {
 				irp6ot_desired_pos[i] = 0.0;
 			}
-			edp_irp6ot_eb.command(boost::bind(irp6ot_execute_motor_motion));
+			ui.irp6ot_m.eb.command(boost::bind(irp6ot_execute_motor_motion));
 		} else if ((((ApName(ApWidget(cbinfo))
 				== ABN_mm_irp6_on_track_preset_position_0) || (ApName(ApWidget(
 				cbinfo)) == ABN_mm_all_robots_preset_position_0))
@@ -912,7 +908,7 @@ int irp6ot_move_to_preset_position(PtWidget_t *widget, ApInfo_t *apinfo,
 				irp6ot_desired_pos[i]
 						= ui.irp6ot_m.state.edp.preset_position[0][i];
 			}
-			edp_irp6ot_eb.command(boost::bind(irp6ot_execute_joint_motion));
+			ui.irp6ot_m.eb.command(boost::bind(irp6ot_execute_joint_motion));
 		} else if ((((ApName(ApWidget(cbinfo))
 				== ABN_mm_irp6_on_track_preset_position_1) || (ApName(ApWidget(
 				cbinfo)) == ABN_mm_all_robots_preset_position_1))
@@ -922,7 +918,7 @@ int irp6ot_move_to_preset_position(PtWidget_t *widget, ApInfo_t *apinfo,
 				irp6ot_desired_pos[i]
 						= ui.irp6ot_m.state.edp.preset_position[1][i];
 			}
-			edp_irp6ot_eb.command(boost::bind(irp6ot_execute_joint_motion));
+			ui.irp6ot_m.eb.command(boost::bind(irp6ot_execute_joint_motion));
 		} else if ((((ApName(ApWidget(cbinfo))
 				== ABN_mm_irp6_on_track_preset_position_2) || (ApName(ApWidget(
 				cbinfo)) == ABN_mm_all_robots_preset_position_2))
@@ -932,7 +928,7 @@ int irp6ot_move_to_preset_position(PtWidget_t *widget, ApInfo_t *apinfo,
 				irp6ot_desired_pos[i]
 						= ui.irp6ot_m.state.edp.preset_position[2][i];
 			}
-			edp_irp6ot_eb.command(boost::bind(irp6ot_execute_joint_motion));
+			ui.irp6ot_m.eb.command(boost::bind(irp6ot_execute_joint_motion));
 		} else if ((((ApName(ApWidget(cbinfo))
 				== ABN_mm_irp6_on_track_preset_position_front) || (ApName(
 				ApWidget(cbinfo)) == ABN_mm_all_robots_preset_position_front))
@@ -941,7 +937,7 @@ int irp6ot_move_to_preset_position(PtWidget_t *widget, ApInfo_t *apinfo,
 			for (int i = 0; i < IRP6OT_M_NUM_OF_SERVOS; i++) {
 				irp6ot_desired_pos[i] = ui.irp6ot_m.state.edp.front_position[i];
 			}
-			edp_irp6ot_eb.command(boost::bind(irp6ot_execute_joint_motion));
+			ui.irp6ot_m.eb.command(boost::bind(irp6ot_execute_joint_motion));
 		}
 
 		//	ui.irp6ot_m.ui_ecp_robot->move_motors(irp6ot_desired_pos);
@@ -1755,7 +1751,7 @@ int EDP_irp6_on_track_synchronise(PtWidget_t *widget, ApInfo_t *apinfo,
 
 	//	EDP_irp6_postumentcreate_int(widget, apinfo, cbinfo);
 
-	edp_irp6ot_eb.command(boost::bind(EDP_irp6_on_track_synchronise_int,
+	ui.irp6ot_m.eb.command(boost::bind(EDP_irp6_on_track_synchronise_int,
 			widget, apinfo, cbinfo));
 
 	return (Pt_CONTINUE);
@@ -2485,7 +2481,7 @@ int EDP_irp6_on_track_create(PtWidget_t *widget, ApInfo_t *apinfo,
 	//	EDP_irp6_on_track_create_int(widget, apinfo, cbinfo);
 
 
-	edp_irp6ot_eb.command(boost::bind(EDP_irp6_on_track_create_int, widget,
+	ui.irp6ot_m.eb.command(boost::bind(EDP_irp6_on_track_create_int, widget,
 			apinfo, cbinfo));
 
 	return (Pt_CONTINUE);
@@ -2597,7 +2593,7 @@ int EDP_irp6_on_track_slay(PtWidget_t *widget, ApInfo_t *apinfo,
 
 	//	EDP_irp6_on_track_create_int(widget, apinfo, cbinfo);
 
-	edp_irp6ot_eb.command(boost::bind(EDP_irp6_on_track_slay_int, widget,
+	ui.irp6ot_m.eb.command(boost::bind(EDP_irp6_on_track_slay_int, widget,
 			apinfo, cbinfo));
 
 	return (Pt_CONTINUE);
