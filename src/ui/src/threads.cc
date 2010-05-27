@@ -46,17 +46,9 @@
 #include "lib/configurator.h"
 #include "lib/mis_fun.h"
 
-
 #include "lib/srlib.h"
 
 extern Ui ui;
-
-feb_thread* meb_tid;
-
-pthread_t ui_tid;
-pthread_t sr_tid;
-
-function_execution_buffer main_eb;
 
 busy_flag communication_flag;
 
@@ -473,11 +465,11 @@ void create_threads()
 	ui_sr_obj = new ui_sr_buffer();
 	ui_ecp_obj = new ui_ecp_buffer();
 
-	if (pthread_create(&sr_tid, NULL, sr_thread, NULL) != EOK) {// Y&W - utowrzenie watku serwa
+	if (pthread_create(&ui.sr_tid, NULL, sr_thread, NULL) != EOK) {// Y&W - utowrzenie watku serwa
 		printf(" Failed to thread sr_thread\n");
 	}
 #if defined(__QNXNTO__)
-	if (pthread_create(&ui_tid, NULL, comm_thread, NULL) != EOK) {// Y&W - utowrzenie watku serwa
+	if (pthread_create(&ui.ui_tid, NULL, comm_thread, NULL) != EOK) {// Y&W - utowrzenie watku serwa
 		printf(" Failed to thread comm_thread\n");
 	}
 #endif
@@ -491,26 +483,9 @@ void create_threads()
 	ui.smb.create_thread();
 	ui.shead.create_thread();
 	ui.bird_hand.create_thread();
-	meb_tid = new feb_thread(main_eb);
+	ui.meb_tid = new feb_thread(ui.main_eb);
 
 }
 
-void abort_threads()
 
-{
-#if defined(__QNXNTO__)
-	pthread_abort(ui_tid);
-	pthread_abort(sr_tid);
-	ui.irp6ot_m.abort_thread();
-	ui.irp6ot_tfg.abort_thread();
-	ui.irp6p_m.abort_thread();
-	ui.irp6p_tfg.abort_thread();
-	ui.conveyor.abort_thread();
-	ui.spkm.abort_thread();
-	ui.smb.abort_thread();
-	ui.shead.abort_thread();
-	ui.bird_hand.abort_thread();
-	delete meb_tid;
-#endif
-}
 

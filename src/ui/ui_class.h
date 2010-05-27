@@ -37,6 +37,13 @@ private:
 
 public:
 
+	feb_thread* meb_tid;
+
+	pthread_t ui_tid;
+	pthread_t sr_tid;
+
+	function_execution_buffer main_eb;
+
 	typedef std::string list_t;
 
 	// listy sekcji i wezlow sieciowych plikow konfiguracyjnych
@@ -106,6 +113,7 @@ public:
 	void init();
 	int manage_interface(void);
 	int reload_whole_configuration();
+	void abort_threads();
 
 };
 

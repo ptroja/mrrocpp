@@ -168,7 +168,7 @@ int OnTimer(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 		(*ui.log_file_outfile).close();
 		delete ui.log_file_outfile;
 		printf("UI CLOSED\n");
-		abort_threads();
+		ui.abort_threads();
 		PtExit(EXIT_SUCCESS);
 	} else {
 		if (!(communication_flag.is_busy())) {

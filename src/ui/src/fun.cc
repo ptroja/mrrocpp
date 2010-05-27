@@ -1963,7 +1963,7 @@ int MPup(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 	//	EDP_irp6_on_track_create_int(widget, apinfo, cbinfo);
 
 
-	main_eb.command(boost::bind(MPup_int, widget, apinfo, cbinfo));
+	ui.main_eb.command(boost::bind(MPup_int, widget, apinfo, cbinfo));
 
 	return (Pt_CONTINUE);
 
