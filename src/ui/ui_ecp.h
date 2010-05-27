@@ -9,7 +9,6 @@
 #define _UI_ECP_H
 
 #include "ui/ui_ecp_r_speaker.h"
-#include "ui/ui_ecp_r_irp6_common.h"
 #include "ui/ui_ecp_r_tfg_and_conv.h"
 
 #include "lib/robot_consts/all_robots_const.h"

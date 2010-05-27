@@ -26,6 +26,7 @@
 // Konfigurator.
 // #include "lib/configurator.h"
 #include "ui/ui_ecp.h"
+#include "ui/ui_ecp_r_irp6_common.h"
 
 /* Local headers */
 #include "ablibs.h"
