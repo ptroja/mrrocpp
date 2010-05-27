@@ -192,7 +192,7 @@ int EDP_irp6_mechatronika_create(PtWidget_t *widget, ApInfo_t *apinfo,
 					resourceman_attach_point.c_str(), R_OK) == 0)) {
 				ui.ui_msg->message("edp_irp6_mechatronika already exists");
 
-			} else if (check_node_existence(ui.irp6m_m.state.edp.node_name,
+			} else if (ui.check_node_existence(ui.irp6m_m.state.edp.node_name,
 					std::string("edp_irp6_mechatronika"))) {
 				ui.irp6m_m.state.edp.node_nr = ui.config->return_node_number(
 						ui.irp6m_m.state.edp.node_name);

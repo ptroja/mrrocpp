@@ -83,7 +83,7 @@ int EDP_bird_hand_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 					tmp2_string.c_str(), R_OK) == 0)) {
 				ui.ui_msg->message(lib::NON_FATAL_ERROR,
 						"edp_bird_hand already exists");
-			} else if (check_node_existence(ui.bird_hand.state.edp.node_name,
+			} else if (ui.check_node_existence(ui.bird_hand.state.edp.node_name,
 					std::string("edp_bird_hand"))) {
 
 				ui.bird_hand.state.edp.node_nr = ui.config->return_node_number(

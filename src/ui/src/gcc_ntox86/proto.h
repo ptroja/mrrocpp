@@ -75,29 +75,21 @@ int task_param_actualization(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
 int task_window_param_actualization(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
-int clear_all_configuration_lists(void);
-int initiate_configuration(void);
 
-int fill_section_list(const char *file_name_and_path);
-int fill_node_list(void);
-int fill_program_node_list(void);
+
+
 int manage_configuration_file(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
-int get_default_configuration_file_name(void);
-int set_default_configuration_file_name(void);
+
 int start_file_window(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
-bool check_synchronised_or_inactive(ecp_edp_ui_robot_def &robot);
-bool check_synchronised_and_loaded(ecp_edp_ui_robot_def &robot);
-bool check_loaded_or_inactive(ecp_edp_ui_robot_def &robot);
-bool check_loaded(ecp_edp_ui_robot_def &robot);
-int check_edps_state_and_modify_mp_state(void);
+
 
 int clear_console(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
 int unload_all(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo);
 int slay_all(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo);
-int check_gns(void);
+
 int activate_menu_from_widget(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
 int activate_file_menu(PtWidget_t *widget, ApInfo_t *apinfo,
@@ -155,8 +147,7 @@ int pulse_reader_all_robots_trigger(PtWidget_t *widget, ApInfo_t *apinfo,
 int pulse_reader_execute(int coid, int pulse_code, int pulse_value);
 int pulse_ecp_all_robots(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
-bool check_node_existence(const std::string _node,
-		const std::string beginnig_of_message);
+
 
 /* ../fun_r_conveyor.cc */
 int close_wind_conveyor_moves(PtWidget_t *widget, ApInfo_t *apinfo,

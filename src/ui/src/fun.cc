@@ -985,206 +985,6 @@ int task_window_param_actualization(PtWidget_t *widget, ApInfo_t *apinfo,
 	return (Pt_CONTINUE);
 }
 
-int clear_all_configuration_lists() {
-	// clearing of lists
-	ui.section_list.clear();
-	ui.config_node_list.clear();
-	ui.all_node_list.clear();
-	ui.program_node_list.clear();
-
-	return 1;
-}
-
-int initiate_configuration() {
-	if (access(ui.config_file_relativepath.c_str(), R_OK) != 0) {
-		fprintf(
-				stderr,
-				"Wrong entry in default_file.cfg - load another configuration than: %s\n",
-				ui.config_file_relativepath.c_str());
-		ui.config_file_relativepath = "../configs/common.ini";
-	}
-
-	// sprawdzenie czy nazwa sesji jest unikalna
-
-	bool wyjscie = false;
-
-	while (!wyjscie) {
-		time_t now = time(NULL);
-		char now_string[32];
-		strftime(now_string, 8, "_%H%M%S", localtime(&now));
-		ui.session_name = now_string;
-
-		if (ui.config) {
-			delete ui.config;
-		}
-		ui.config = new lib::configurator(ui.ui_node_name,
-				ui.mrrocpp_local_path, ui.config_file, UI_SECTION,
-				ui.session_name);
-
-		std::string attach_point =
-				ui.config->return_attach_point_name(
-						lib::configurator::CONFIG_SERVER, "sr_attach_point",
-						UI_SECTION);
-
-		// wykrycie identycznych nazw sesji
-		wyjscie = true;
-
-		DIR* dirp = opendir("/dev/name/global");
-
-		if (dirp != NULL) {
-			for (;;) {
-				struct dirent* direntp = readdir(dirp);
-				if (direntp == NULL)
-					break;
-
-				// printf( "%s\n", direntp->d_name );
-				if (attach_point == direntp->d_name) {
-					wyjscie = false;
-				}
-			}
-
-			closedir(dirp);
-
-		}
-
-	}
-
-	ui.ui_attach_point = ui.config->return_attach_point_name(
-			lib::configurator::CONFIG_SERVER, "ui_attach_point", UI_SECTION);
-	ui.sr_attach_point = ui.config->return_attach_point_name(
-			lib::configurator::CONFIG_SERVER, "sr_attach_point", UI_SECTION);
-	ui.network_sr_attach_point = ui.config->return_attach_point_name(
-			lib::configurator::CONFIG_SERVER, "sr_attach_point", UI_SECTION);
-
-	clear_all_configuration_lists();
-
-	// sczytanie listy sekcji
-	fill_section_list(ui.config_file_relativepath.c_str());
-	fill_section_list("../configs/common.ini");
-	fill_node_list();
-	fill_program_node_list();
-
-	return 1;
-}
-
-// fills section list of configuration files
-int fill_section_list(const char* file_name_and_path) {
-	static char line[256];
-
-	// otworz plik konfiguracyjny
-	FILE * file = fopen(file_name_and_path, "r");
-	if (file == NULL) {
-		printf("UI fill_section_list Wrong file_name: %s\n", file_name_and_path);
-		PtExit(EXIT_SUCCESS);
-	}
-
-	// sczytaj nazwy wszytkich sekcji na liste dynamiczna
-	char * fptr = fgets(line, 255, file); // get input line
-
-	// dopoki nie osiagnieto konca pliku
-
-	while (!feof(file)) {
-		// jesli znaleziono nowa sekcje
-		if ((fptr != NULL) && (line[0] == '[')) {
-			char current_section[50];
-			strncpy(current_section, line, strlen(line) - 1);
-			current_section[strlen(line) - 1] = '\0';
-
-			std::list<Ui::list_t>::iterator list_iterator;
-
-			// checking if section is already considered
-			for (list_iterator = ui.section_list.begin(); list_iterator
-					!= ui.section_list.end(); list_iterator++) {
-				if ((*list_iterator) == current_section)
-					break;
-			}
-
-			// if the section does not exists
-			if (list_iterator == ui.section_list.end()) {
-				ui.section_list.push_back(std::string(current_section));
-			}
-
-		} // end 	if (( fptr!=NULL )&&( line[0]=='[' ))
-
-		// odczytaj nowa lnie
-		fptr = fgets(line, 255, file); // get input line
-	} // end while (!feof(file)	)
-
-	// zamknij plik
-	fclose(file);
-
-	return 1;
-}
-
-// fills node list
-int fill_node_list() {
-	// fill all network nodes list
-
-	DIR* dirp = opendir("/net");
-	if (dirp != NULL) {
-		for (;;) {
-			struct dirent *direntp = readdir(dirp);
-			if (direntp == NULL)
-				break;
-			ui.all_node_list.push_back(std::string(direntp->d_name));
-		}
-		closedir(dirp);
-	}
-
-	for (std::list<Ui::list_t>::iterator section_list_iterator =
-			ui.section_list.begin(); section_list_iterator
-			!= ui.section_list.end(); section_list_iterator++) {
-		if (ui.config->exists("node_name", *section_list_iterator)) {
-			std::string tmp = ui.config->value<std::string> ("node_name",
-					*section_list_iterator);
-
-			std::list<Ui::list_t>::iterator node_list_iterator;
-
-			for (node_list_iterator = ui.config_node_list.begin(); node_list_iterator
-					!= ui.config_node_list.end(); node_list_iterator++) {
-				if (tmp == (*node_list_iterator)) {
-					break;
-				}
-			}
-
-			// if the node does not exists
-			if (node_list_iterator == ui.config_node_list.end()) {
-				ui.config_node_list.push_back(tmp);
-			}
-		}
-
-	}
-
-	return 1;
-}
-
-// fills program_node list
-int fill_program_node_list() {
-	//	printf("fill_program_node_list\n");
-
-	for (std::list<Ui::list_t>::iterator section_list_iterator =
-			ui.section_list.begin(); section_list_iterator
-			!= ui.section_list.end(); section_list_iterator++) {
-
-		if ((ui.config->exists("program_name", *section_list_iterator)
-				&& ui.config->exists("node_name", *section_list_iterator))) {
-			//	char* tmp_p =ui.config->value<std::string>("program_name", *section_list_iterator);
-			//	char* tmp_n =ui.config->value<std::string>("node_name", *section_list_iterator);
-
-			program_node_def tmp_s;
-
-			tmp_s.program_name = ui.config->value<std::string> ("program_name",
-					*section_list_iterator);
-			tmp_s.node_name = ui.config->value<std::string> ("node_name",
-					*section_list_iterator);
-
-			ui.program_node_list.push_back(tmp_s);
-		}
-	}
-
-	return 1;
-}
-
 int manage_configuration_file(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo)
 
@@ -1196,69 +996,14 @@ int manage_configuration_file(PtWidget_t *widget, ApInfo_t *apinfo,
 	task_param_actualization(widget, apinfo, cbinfo);
 	ui.reload_whole_configuration();
 
-	set_default_configuration_file_name(); // zapis do pliku domyslnej konfiguracji
+	ui.set_default_configuration_file_name(); // zapis do pliku domyslnej konfiguracji
 	// sprawdza czy sa postawione gns's i ew. stawia je
 	// uwaga serwer musi byc wczesniej postawiony
-	check_gns();
+	ui.check_gns();
 	task_window_param_actualization(widget, apinfo, cbinfo);
 
 	return (Pt_CONTINUE);
 
-}
-
-// odczytuje nazwe domyslengo pliku konfiguracyjnego, w razie braku ustawia common.ini
-int get_default_configuration_file_name() {
-
-	FILE * fp = fopen("../configs/default_file.cfg", "r");
-	if (fp != NULL) {
-		//printf("alala\n");
-		char tmp_buf[255];
-		fgets(tmp_buf, 255, fp); // Uwaga na zwracanego NULLa
-		char *tmp_buf1 = strtok(tmp_buf, "=\n\r"); // get first token
-		ui.config_file = tmp_buf1;
-
-		ui.config_file_relativepath = "../";
-		ui.config_file_relativepath += ui.config_file;
-
-		fclose(fp);
-		return 1;
-
-	} else {
-		//	printf("balala\n");
-		// jesli plik z domyslna konfiguracja (default_file.cfg) nie istnieje to utworz go i wpisz do niego common.ini
-		printf("Utworzono plik default_file.cfg z konfiguracja common.ini\n");
-		fp = fopen("../configs/default_file.cfg", "w");
-		fclose(fp);
-
-		ui.config_file = "configs/common.ini";
-		ui.config_file_relativepath = "../";
-		ui.config_file_relativepath += ui.config_file;
-
-		std::ofstream outfile("../configs/default_file.cfg", std::ios::out);
-		if (!outfile.good()) {
-			std::cerr << "Cannot open file: default_file.cfg" << std::endl;
-			perror("because of");
-		} else
-			outfile << ui.config_file;
-
-		return 2;
-	}
-}
-
-// zapisuje nazwe domyslengo pliku konfiguracyjnego
-int set_default_configuration_file_name() {
-
-	ui.config_file_relativepath = "../";
-	ui.config_file_relativepath += ui.config_file;
-
-	std::ofstream outfile("../configs/default_file.cfg", std::ios::out);
-	if (!outfile.good()) {
-		std::cerr << "Cannot open file: default_file.cfg\n";
-		perror("because of");
-	} else
-		outfile << ui.config_file;
-
-	return 1;
 }
 
 int start_file_window(PtWidget_t *widget, ApInfo_t *apinfo,
@@ -1278,117 +1023,6 @@ int start_file_window(PtWidget_t *widget, ApInfo_t *apinfo,
 		// 	printf("Okno file selection jest juz otwarte\n");
 	}
 	return (Pt_CONTINUE);
-}
-
-// ustala stan wszytkich EDP
-bool check_synchronised_or_inactive(ecp_edp_ui_robot_def& robot) {
-	return (((robot.is_active) && (robot.edp.is_synchronised))
-			|| (!(robot.is_active)));
-
-}
-
-bool check_synchronised_and_loaded(ecp_edp_ui_robot_def& robot) {
-	return (((robot.edp.state > 0) && (robot.edp.is_synchronised)));
-
-}
-
-bool check_loaded_or_inactive(ecp_edp_ui_robot_def& robot) {
-	return (((robot.is_active) && (robot.edp.state > 0))
-			|| (!(robot.is_active)));
-
-}
-
-bool check_loaded(ecp_edp_ui_robot_def& robot) {
-	return ((robot.is_active) && (robot.edp.state > 0));
-}
-
-// ustala stan wszytkich EDP
-int check_edps_state_and_modify_mp_state() {
-
-	// wyznaczenie stanu wszytkich EDP abstahujac od MP
-
-	// jesli wszytkie sa nieaktywne
-	if ((!(ui.irp6p_m.state.is_active)) && (!(ui.irp6ot_m.state.is_active))
-			&& (!(ui.irp6ot_tfg.state.is_active))
-			&& (!(ui.irp6p_tfg.state.is_active))
-			&& (!(ui.conveyor.state.is_active))
-			&& (!(ui.speaker.state.is_active))
-			&& (!(ui.irp6m_m.state.is_active))
-			&& (!(ui.bird_hand.state.is_active))
-			&& (!(ui.spkm.state.is_active)) && (!(ui.smb.state.is_active))
-			&& (!(ui.shead.state.is_active))) {
-		ui.all_edps = UI_ALL_EDPS_NONE_EDP_ACTIVATED;
-
-		// jesli wszystkie sa zsynchronizowane
-	} else if (check_synchronised_or_inactive(ui.irp6p_m.state)
-			&& check_synchronised_or_inactive(ui.irp6ot_m.state)
-			&& check_synchronised_or_inactive(ui.conveyor.state)
-			&& check_synchronised_or_inactive(ui.speaker.state)
-			&& check_synchronised_or_inactive(ui.irp6m_m.state)
-			&& check_synchronised_or_inactive(ui.irp6ot_tfg.state)
-			&& check_synchronised_or_inactive(ui.irp6p_tfg.state)
-			&& check_synchronised_or_inactive(ui.bird_hand.state)
-			&& check_synchronised_or_inactive(ui.spkm.state)
-			&& check_synchronised_or_inactive(ui.smb.state)
-			&& check_synchronised_or_inactive(ui.shead.state)) {
-		ui.all_edps = UI_ALL_EDPS_LOADED_AND_SYNCHRONISED;
-
-		// jesli wszystkie sa zaladowane
-	} else if (check_loaded_or_inactive(ui.irp6p_m.state)
-			&& check_loaded_or_inactive(ui.irp6ot_m.state)
-			&& check_loaded_or_inactive(ui.conveyor.state)
-			&& check_loaded_or_inactive(ui.speaker.state)
-			&& check_loaded_or_inactive(ui.irp6m_m.state)
-			&& check_loaded_or_inactive(ui.irp6ot_tfg.state)
-			&& check_loaded_or_inactive(ui.irp6p_tfg.state)
-			&& check_loaded_or_inactive(ui.bird_hand.state)
-			&& check_loaded_or_inactive(ui.spkm.state)
-			&& check_loaded_or_inactive(ui.smb.state)
-			&& check_loaded_or_inactive(ui.shead.state))
-
-	{
-		ui.all_edps = UI_ALL_EDPS_LOADED_BUT_NOT_SYNCHRONISED;
-
-		// jesli chociaz jeden jest zaladowany
-	} else if (check_loaded(ui.irp6p_m.state)
-			|| check_loaded(ui.irp6ot_m.state) || check_loaded(
-			ui.conveyor.state) || check_loaded(ui.speaker.state)
-			|| check_loaded(ui.irp6m_m.state) || check_loaded(
-			ui.irp6ot_tfg.state) || check_loaded(ui.irp6p_tfg.state)
-			|| check_loaded(ui.bird_hand.state) || check_loaded(ui.spkm.state)
-			|| check_loaded(ui.smb.state) || check_loaded(ui.shead.state))
-
-	{
-		ui.all_edps = UI_ALL_EDPS_THERE_IS_EDP_LOADED_BUT_NOT_ALL_ARE_LOADED;
-
-		// jesli zaden nie jest zaladowany
-	} else {
-		ui.all_edps = UI_ALL_EDPS_NONE_EDP_LOADED;
-
-	}
-
-	// modyfikacja stanu MP przez stan wysztkich EDP
-
-	switch (ui.all_edps) {
-	case UI_ALL_EDPS_NONE_EDP_ACTIVATED:
-	case UI_ALL_EDPS_LOADED_AND_SYNCHRONISED:
-		if ((ui.mp.state == UI_MP_NOT_PERMITED_TO_RUN)
-				&& (ui.is_mp_and_ecps_active)) {
-			ui.mp.state = UI_MP_PERMITED_TO_RUN; // pozwol na uruchomienie mp
-		}
-		break;
-
-	case UI_ALL_EDPS_LOADED_BUT_NOT_SYNCHRONISED:
-	case UI_ALL_EDPS_THERE_IS_EDP_LOADED_BUT_NOT_ALL_ARE_LOADED:
-	case UI_ALL_EDPS_NONE_EDP_LOADED:
-		if (ui.mp.state == UI_MP_PERMITED_TO_RUN) {
-			ui.mp.state = UI_MP_NOT_PERMITED_TO_RUN; // nie pozwol na uruchomienie mp
-		}
-		break;
-	default:
-		break;
-	}
-	return 1;
 }
 
 int clear_console(PtWidget_t *widget, ApInfo_t *apinfo,
@@ -1483,141 +1117,6 @@ int slay_all(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo) {
 	}
 
 	ui.manage_interface();
-
-	return (Pt_CONTINUE);
-
-}
-
-// sprawdza czy sa postawione gns's i ew. stawia je
-// uwaga serwer powinien byc wczesniej postawiony (dokladnie jeden w sieci)
-
-int check_gns() {
-	if (access("/etc/system/config/useqnet", R_OK)) {
-		printf(
-				"UI: There is no /etc/system/config/useqnet file; the qnet will not work properly.\n");
-		PtExit(EXIT_SUCCESS);
-	}
-
-	unsigned short number_of_gns_servers = 0;
-	std::string gns_server_node;
-
-	// poszukiwanie serwerow gns
-	for (std::list<Ui::list_t>::iterator node_list_iterator =
-			ui.all_node_list.begin(); node_list_iterator
-			!= ui.all_node_list.end(); node_list_iterator++) {
-		std::string opendir_path("/net/");
-
-		opendir_path += *node_list_iterator;
-		opendir_path += "/proc/mount/dev/name/gns_server";
-
-		// sprawdzenie czy dziala serwer gns
-
-		if (access(opendir_path.c_str(), R_OK) == 0) {
-			number_of_gns_servers++;
-			gns_server_node = *node_list_iterator;
-		}
-	}
-
-	// there is more than one gns server in the QNX network
-	if (number_of_gns_servers > 1) {
-		printf(
-				"UI: There is more than one gns server in the QNX network; the qnet will not work properly.\n");
-		// printing of gns server nodes
-		for (std::list<Ui::list_t>::iterator node_list_iterator =
-				ui.all_node_list.begin(); node_list_iterator
-				!= ui.all_node_list.end(); node_list_iterator++) {
-			std::string opendir_path("/net/");
-
-			opendir_path += *node_list_iterator;
-			opendir_path += "/proc/mount/dev/name/gns_server";
-
-			// sprawdzenie czy dziala serwer gns
-			if (access(opendir_path.c_str(), R_OK) == 0) {
-				printf("There is gns server on %s node\n",
-						(*node_list_iterator).c_str());
-			}
-		}
-		PtExit(EXIT_SUCCESS);
-	}
-	// gns server was not found in the QNX network
-	else if (!number_of_gns_servers) {
-		printf(
-				"UI: gns server was not found in the QNX network, it will be automatically run on local node\n");
-
-		// ew. zabicie klienta gns
-
-		if (access("/dev/name", R_OK) == 0) {
-			system("slay gns");
-		}
-
-		// uruchomienie serwera
-		system("gns -s");
-
-		// poszukiwanie serwerow gns
-		for (std::list<Ui::list_t>::iterator node_list_iterator =
-				ui.all_node_list.begin(); node_list_iterator
-				!= ui.all_node_list.end(); node_list_iterator++) {
-			std::string opendir_path("/net/");
-
-			opendir_path += *node_list_iterator;
-			opendir_path += "/proc/mount/dev/name/gns_server";
-			//	strcat(opendir_path, "/dev/name/gns_server");
-
-			// sprawdzenie czy dziala serwer gns
-			if (access(opendir_path.c_str(), R_OK) == 0) {
-				number_of_gns_servers++;
-				gns_server_node = *node_list_iterator;
-			}
-		}
-	}
-
-	// sprawdzanie lokalne
-
-	if (access("/proc/mount/dev/name", R_OK) != 0) {
-		std::string system_command("gns -c ");
-		system_command += gns_server_node;
-		system(system_command.c_str());
-	}
-
-	// sprawdzenie czy wezly w konfiuracji sa uruchomione i ew. uruchomienie na nich brakujacych klientow gns
-	for (std::list<Ui::list_t>::iterator node_list_iterator =
-			ui.config_node_list.begin(); node_list_iterator
-			!= ui.config_node_list.end(); node_list_iterator++) {
-		std::string opendir_path("/net/");
-
-		opendir_path += *node_list_iterator;
-
-		// sprawdzenie czy istnieje wezel
-		if (access(opendir_path.c_str(), R_OK) == 0) {
-			opendir_path += "/proc/mount/dev/name";
-
-			// sprawdzenie czy dziala gns
-			if (access(opendir_path.c_str(), R_OK) != 0) {
-				std::string system_command("on -f ");
-
-				system_command += *node_list_iterator;
-				system_command += " gns -c ";
-				system_command += gns_server_node;
-
-				system(system_command.c_str());
-			}
-
-		} else {
-			fprintf(
-					stderr,
-					"check_gns - Nie wykryto wezla: %s, ktory wystepuje w pliku konfiguracyjnym\n",
-					(*node_list_iterator).c_str());
-
-			if ((ui.is_sr_thread_loaded) && (ui.ui_msg != NULL)) {
-				std::string tmp;
-				tmp = std::string("check_gns - Nie wykryto wezla: ")
-						+ (*node_list_iterator) + std::string(
-						", ktory wystepuje w pliku konfiguracyjnym");
-				ui.ui_msg->message(lib::NON_FATAL_ERROR, tmp);
-			}
-
-		}
-	}
 
 	return (Pt_CONTINUE);
 
@@ -1836,11 +1335,13 @@ int teaching_window_send_move(PtWidget_t *widget, ApInfo_t *apinfo,
 	switch (ui.ui_ecp_obj->ecp_to_ui_msg.robot_name) {
 	case lib::ROBOT_IRP6OT_M:
 		for (int i = 0; i < IRP6OT_M_NUM_OF_SERVOS; i++)
-			ui.ui_ecp_obj->ui_rep.coordinates[i] = ui.irp6ot_m.irp6ot_current_pos[i];
+			ui.ui_ecp_obj->ui_rep.coordinates[i]
+					= ui.irp6ot_m.irp6ot_current_pos[i];
 		break;
 	case lib::ROBOT_IRP6P_M:
 		for (int i = 0; i < IRP6P_M_NUM_OF_SERVOS; i++)
-			ui.ui_ecp_obj->ui_rep.coordinates[i] = ui.irp6p_m.irp6p_current_pos[i];
+			ui.ui_ecp_obj->ui_rep.coordinates[i]
+					= ui.irp6p_m.irp6p_current_pos[i];
 		break;
 	case lib::ROBOT_IRP6_MECHATRONIKA:
 		for (int i = 0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++)
@@ -1872,17 +1373,17 @@ int all_robots_move_to_preset_position(PtWidget_t *widget, ApInfo_t *apinfo,
 			== UI_MP_PERMITED_TO_RUN) || (ui.mp.state
 			== UI_MP_WAITING_FOR_START_PULSE)) {
 		// ruch do pozcyji synchronizacji dla Irp6_on_track i dla dalszych analogicznie
-		if (check_synchronised_and_loaded(ui.irp6ot_m.state))
+		if (ui.check_synchronised_and_loaded(ui.irp6ot_m.state))
 			irp6ot_move_to_preset_position(widget, apinfo, cbinfo);
-		if (check_synchronised_and_loaded(ui.irp6ot_tfg.state))
+		if (ui.check_synchronised_and_loaded(ui.irp6ot_tfg.state))
 			irp6ot_tfg_move_to_preset_position(widget, apinfo, cbinfo);
-		if (check_synchronised_and_loaded(ui.irp6p_m.state))
+		if (ui.check_synchronised_and_loaded(ui.irp6p_m.state))
 			irp6p_move_to_preset_position(widget, apinfo, cbinfo);
-		if (check_synchronised_and_loaded(ui.irp6p_tfg.state))
+		if (ui.check_synchronised_and_loaded(ui.irp6p_tfg.state))
 			irp6p_tfg_move_to_preset_position(widget, apinfo, cbinfo);
-		if (check_synchronised_and_loaded(ui.conveyor.state))
+		if (ui.check_synchronised_and_loaded(ui.conveyor.state))
 			conveyor_move_to_preset_position(widget, apinfo, cbinfo);
-		if (check_synchronised_and_loaded(ui.irp6m_m.state))
+		if (ui.check_synchronised_and_loaded(ui.irp6m_m.state))
 			irp6m_move_to_preset_position(widget, apinfo, cbinfo);
 	}
 
@@ -1972,7 +1473,7 @@ int MPup_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 		// sprawdzenie czy nie jest juz zarejestrowany serwer komunikacyjny MP
 		if (access(mp_network_pulse_attach_point.c_str(), R_OK) == 0) {
 			ui.ui_msg->message(lib::NON_FATAL_ERROR, "MP already exists");
-		} else if (check_node_existence(ui.mp.node_name, std::string("mp"))) {
+		} else if (ui.check_node_existence(ui.mp.node_name, std::string("mp"))) {
 			ui.mp.pid = ui.config->process_spawn(MP_SECTION);
 
 			if (ui.mp.pid > 0) {
@@ -2364,21 +1865,5 @@ int pulse_ecp_all_robots(PtWidget_t *widget, ApInfo_t *apinfo,
 
 	return (Pt_CONTINUE);
 
-}
-
-bool check_node_existence(const std::string _node,
-		const std::string beginnig_of_message) {
-
-	std::string opendir_path("/net/");
-	opendir_path += _node;
-
-	if (access(opendir_path.c_str(), R_OK) != 0) {
-		std::string tmp(beginnig_of_message);
-		tmp += std::string(" node: ") + _node + std::string(" is unreachable");
-		ui.ui_msg->message(lib::NON_FATAL_ERROR, tmp);
-
-		return false;
-	}
-	return true;
 }
 

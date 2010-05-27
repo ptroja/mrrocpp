@@ -1,6 +1,21 @@
 /* Y o u r   D e s c r i p t i o n                       */
 /*                            AppBuilder Photon Code Lib */
-/*                                         Version 2.01  */
+/*                     Version 2.01  */
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <string.h>
+#include <strings.h>
+#include <iostream>
+#include <fstream>
+#include <dirent.h>
+#include <sys/types.h>
+#include <signal.h>
+#include <sys/netmgr.h>
+#include <errno.h>
+#include <spawn.h>
+#include <process.h>
+#include <assert.h>
 #include <iostream>
 #include <fstream>
 
@@ -446,3 +461,512 @@ void Ui::abort_threads()
 	delete meb_tid;
 #endif
 }
+
+bool Ui::check_node_existence(const std::string _node,
+		const std::string beginnig_of_message) {
+
+	std::string opendir_path("/net/");
+	opendir_path += _node;
+
+	if (access(opendir_path.c_str(), R_OK) != 0) {
+		std::string tmp(beginnig_of_message);
+		tmp += std::string(" node: ") + _node + std::string(" is unreachable");
+		ui_msg->message(lib::NON_FATAL_ERROR, tmp);
+
+		return false;
+	}
+	return true;
+}
+
+// sprawdza czy sa postawione gns's i ew. stawia je
+// uwaga serwer powinien byc wczesniej postawiony (dokladnie jeden w sieci)
+
+int Ui::check_gns() {
+	if (access("/etc/system/config/useqnet", R_OK)) {
+		printf(
+				"UI: There is no /etc/system/config/useqnet file; the qnet will not work properly.\n");
+		PtExit(EXIT_SUCCESS);
+	}
+
+	unsigned short number_of_gns_servers = 0;
+	std::string gns_server_node;
+
+	// poszukiwanie serwerow gns
+	for (std::list<Ui::list_t>::iterator node_list_iterator =
+			all_node_list.begin(); node_list_iterator != all_node_list.end(); node_list_iterator++) {
+		std::string opendir_path("/net/");
+
+		opendir_path += *node_list_iterator;
+		opendir_path += "/proc/mount/dev/name/gns_server";
+
+		// sprawdzenie czy dziala serwer gns
+
+		if (access(opendir_path.c_str(), R_OK) == 0) {
+			number_of_gns_servers++;
+			gns_server_node = *node_list_iterator;
+		}
+	}
+
+	// there is more than one gns server in the QNX network
+	if (number_of_gns_servers > 1) {
+		printf(
+				"UI: There is more than one gns server in the QNX network; the qnet will not work properly.\n");
+		// printing of gns server nodes
+		for (std::list<Ui::list_t>::iterator node_list_iterator =
+				all_node_list.begin(); node_list_iterator
+				!= all_node_list.end(); node_list_iterator++) {
+			std::string opendir_path("/net/");
+
+			opendir_path += *node_list_iterator;
+			opendir_path += "/proc/mount/dev/name/gns_server";
+
+			// sprawdzenie czy dziala serwer gns
+			if (access(opendir_path.c_str(), R_OK) == 0) {
+				printf("There is gns server on %s node\n",
+						(*node_list_iterator).c_str());
+			}
+		}
+		PtExit(EXIT_SUCCESS);
+	}
+	// gns server was not found in the QNX network
+	else if (!number_of_gns_servers) {
+		printf(
+				"UI: gns server was not found in the QNX network, it will be automatically run on local node\n");
+
+		// ew. zabicie klienta gns
+
+		if (access("/dev/name", R_OK) == 0) {
+			system("slay gns");
+		}
+
+		// uruchomienie serwera
+		system("gns -s");
+
+		// poszukiwanie serwerow gns
+		for (std::list<Ui::list_t>::iterator node_list_iterator =
+				all_node_list.begin(); node_list_iterator
+				!= all_node_list.end(); node_list_iterator++) {
+			std::string opendir_path("/net/");
+
+			opendir_path += *node_list_iterator;
+			opendir_path += "/proc/mount/dev/name/gns_server";
+			//	strcat(opendir_path, "/dev/name/gns_server");
+
+			// sprawdzenie czy dziala serwer gns
+			if (access(opendir_path.c_str(), R_OK) == 0) {
+				number_of_gns_servers++;
+				gns_server_node = *node_list_iterator;
+			}
+		}
+	}
+
+	// sprawdzanie lokalne
+
+	if (access("/proc/mount/dev/name", R_OK) != 0) {
+		std::string system_command("gns -c ");
+		system_command += gns_server_node;
+		system(system_command.c_str());
+	}
+
+	// sprawdzenie czy wezly w konfiuracji sa uruchomione i ew. uruchomienie na nich brakujacych klientow gns
+	for (std::list<Ui::list_t>::iterator node_list_iterator =
+			config_node_list.begin(); node_list_iterator
+			!= config_node_list.end(); node_list_iterator++) {
+		std::string opendir_path("/net/");
+
+		opendir_path += *node_list_iterator;
+
+		// sprawdzenie czy istnieje wezel
+		if (access(opendir_path.c_str(), R_OK) == 0) {
+			opendir_path += "/proc/mount/dev/name";
+
+			// sprawdzenie czy dziala gns
+			if (access(opendir_path.c_str(), R_OK) != 0) {
+				std::string system_command("on -f ");
+
+				system_command += *node_list_iterator;
+				system_command += " gns -c ";
+				system_command += gns_server_node;
+
+				system(system_command.c_str());
+			}
+
+		} else {
+			fprintf(
+					stderr,
+					"check_gns - Nie wykryto wezla: %s, ktory wystepuje w pliku konfiguracyjnym\n",
+					(*node_list_iterator).c_str());
+
+			if ((is_sr_thread_loaded) && (ui_msg != NULL)) {
+				std::string tmp;
+				tmp = std::string("check_gns - Nie wykryto wezla: ")
+						+ (*node_list_iterator) + std::string(
+						", ktory wystepuje w pliku konfiguracyjnym");
+				ui_msg->message(lib::NON_FATAL_ERROR, tmp);
+			}
+
+		}
+	}
+
+	return (Pt_CONTINUE);
+
+}
+
+// ustala stan wszytkich EDP
+int Ui::check_edps_state_and_modify_mp_state() {
+
+	// wyznaczenie stanu wszytkich EDP abstahujac od MP
+
+	// jesli wszytkie sa nieaktywne
+	if ((!(irp6p_m.state.is_active)) && (!(irp6ot_m.state.is_active))
+			&& (!(irp6ot_tfg.state.is_active))
+			&& (!(irp6p_tfg.state.is_active)) && (!(conveyor.state.is_active))
+			&& (!(speaker.state.is_active)) && (!(irp6m_m.state.is_active))
+			&& (!(bird_hand.state.is_active)) && (!(spkm.state.is_active))
+			&& (!(smb.state.is_active)) && (!(shead.state.is_active))) {
+		all_edps = UI_ALL_EDPS_NONE_EDP_ACTIVATED;
+
+		// jesli wszystkie sa zsynchronizowane
+	} else if (check_synchronised_or_inactive(irp6p_m.state)
+			&& check_synchronised_or_inactive(irp6ot_m.state)
+			&& check_synchronised_or_inactive(conveyor.state)
+			&& check_synchronised_or_inactive(speaker.state)
+			&& check_synchronised_or_inactive(irp6m_m.state)
+			&& check_synchronised_or_inactive(irp6ot_tfg.state)
+			&& check_synchronised_or_inactive(irp6p_tfg.state)
+			&& check_synchronised_or_inactive(bird_hand.state)
+			&& check_synchronised_or_inactive(spkm.state)
+			&& check_synchronised_or_inactive(smb.state)
+			&& check_synchronised_or_inactive(shead.state)) {
+		all_edps = UI_ALL_EDPS_LOADED_AND_SYNCHRONISED;
+
+		// jesli wszystkie sa zaladowane
+	} else if (check_loaded_or_inactive(irp6p_m.state)
+			&& check_loaded_or_inactive(irp6ot_m.state)
+			&& check_loaded_or_inactive(conveyor.state)
+			&& check_loaded_or_inactive(speaker.state)
+			&& check_loaded_or_inactive(irp6m_m.state)
+			&& check_loaded_or_inactive(irp6ot_tfg.state)
+			&& check_loaded_or_inactive(irp6p_tfg.state)
+			&& check_loaded_or_inactive(bird_hand.state)
+			&& check_loaded_or_inactive(spkm.state)
+			&& check_loaded_or_inactive(smb.state) && check_loaded_or_inactive(
+			shead.state))
+
+	{
+		all_edps = UI_ALL_EDPS_LOADED_BUT_NOT_SYNCHRONISED;
+
+		// jesli chociaz jeden jest zaladowany
+	} else if (check_loaded(irp6p_m.state) || check_loaded(irp6ot_m.state)
+			|| check_loaded(conveyor.state) || check_loaded(speaker.state)
+			|| check_loaded(irp6m_m.state) || check_loaded(irp6ot_tfg.state)
+			|| check_loaded(irp6p_tfg.state) || check_loaded(bird_hand.state)
+			|| check_loaded(spkm.state) || check_loaded(smb.state)
+			|| check_loaded(shead.state))
+
+	{
+		all_edps = UI_ALL_EDPS_THERE_IS_EDP_LOADED_BUT_NOT_ALL_ARE_LOADED;
+
+		// jesli zaden nie jest zaladowany
+	} else {
+		all_edps = UI_ALL_EDPS_NONE_EDP_LOADED;
+
+	}
+
+	// modyfikacja stanu MP przez stan wysztkich EDP
+
+	switch (all_edps) {
+	case UI_ALL_EDPS_NONE_EDP_ACTIVATED:
+	case UI_ALL_EDPS_LOADED_AND_SYNCHRONISED:
+		if ((mp.state == UI_MP_NOT_PERMITED_TO_RUN) && (is_mp_and_ecps_active)) {
+			mp.state = UI_MP_PERMITED_TO_RUN; // pozwol na uruchomienie mp
+		}
+		break;
+
+	case UI_ALL_EDPS_LOADED_BUT_NOT_SYNCHRONISED:
+	case UI_ALL_EDPS_THERE_IS_EDP_LOADED_BUT_NOT_ALL_ARE_LOADED:
+	case UI_ALL_EDPS_NONE_EDP_LOADED:
+		if (mp.state == UI_MP_PERMITED_TO_RUN) {
+			mp.state = UI_MP_NOT_PERMITED_TO_RUN; // nie pozwol na uruchomienie mp
+		}
+		break;
+	default:
+		break;
+	}
+	return 1;
+}
+
+// ustala stan wszytkich EDP
+bool Ui::check_synchronised_or_inactive(ecp_edp_ui_robot_def& robot) {
+	return (((robot.is_active) && (robot.edp.is_synchronised))
+			|| (!(robot.is_active)));
+
+}
+
+bool Ui::check_synchronised_and_loaded(ecp_edp_ui_robot_def& robot) {
+	return (((robot.edp.state > 0) && (robot.edp.is_synchronised)));
+
+}
+
+bool Ui::check_loaded_or_inactive(ecp_edp_ui_robot_def& robot) {
+	return (((robot.is_active) && (robot.edp.state > 0))
+			|| (!(robot.is_active)));
+
+}
+
+bool Ui::check_loaded(ecp_edp_ui_robot_def& robot) {
+	return ((robot.is_active) && (robot.edp.state > 0));
+}
+
+// odczytuje nazwe domyslengo pliku konfiguracyjnego, w razie braku ustawia common.ini
+int Ui::get_default_configuration_file_name() {
+
+	FILE * fp = fopen("../configs/default_file.cfg", "r");
+	if (fp != NULL) {
+		//printf("alala\n");
+		char tmp_buf[255];
+		fgets(tmp_buf, 255, fp); // Uwaga na zwracanego NULLa
+		char *tmp_buf1 = strtok(tmp_buf, "=\n\r"); // get first token
+		config_file = tmp_buf1;
+
+		config_file_relativepath = "../";
+		config_file_relativepath += config_file;
+
+		fclose(fp);
+		return 1;
+
+	} else {
+		//	printf("balala\n");
+		// jesli plik z domyslna konfiguracja (default_file.cfg) nie istnieje to utworz go i wpisz do niego common.ini
+		printf("Utworzono plik default_file.cfg z konfiguracja common.ini\n");
+		fp = fopen("../configs/default_file.cfg", "w");
+		fclose(fp);
+
+		config_file = "configs/common.ini";
+		config_file_relativepath = "../";
+		config_file_relativepath += config_file;
+
+		std::ofstream outfile("../configs/default_file.cfg", std::ios::out);
+		if (!outfile.good()) {
+			std::cerr << "Cannot open file: default_file.cfg" << std::endl;
+			perror("because of");
+		} else
+			outfile << config_file;
+
+		return 2;
+	}
+}
+
+// zapisuje nazwe domyslengo pliku konfiguracyjnego
+int Ui::set_default_configuration_file_name() {
+
+	config_file_relativepath = "../";
+	config_file_relativepath += config_file;
+
+	std::ofstream outfile("../configs/default_file.cfg", std::ios::out);
+	if (!outfile.good()) {
+		std::cerr << "Cannot open file: default_file.cfg\n";
+		perror("because of");
+	} else
+		outfile << config_file;
+
+	return 1;
+}
+
+// fills program_node list
+int Ui::fill_program_node_list() {
+	//	printf("fill_program_node_list\n");
+
+	for (std::list<Ui::list_t>::iterator section_list_iterator =
+			section_list.begin(); section_list_iterator != section_list.end(); section_list_iterator++) {
+
+		if ((config->exists("program_name", *section_list_iterator)
+				&& config->exists("node_name", *section_list_iterator))) {
+			//	char* tmp_p =config->value<std::string>("program_name", *section_list_iterator);
+			//	char* tmp_n =config->value<std::string>("node_name", *section_list_iterator);
+
+			program_node_def tmp_s;
+
+			tmp_s.program_name = config->value<std::string> ("program_name",
+					*section_list_iterator);
+			tmp_s.node_name = config->value<std::string> ("node_name",
+					*section_list_iterator);
+
+			program_node_list.push_back(tmp_s);
+		}
+	}
+
+	return 1;
+}
+
+int Ui::clear_all_configuration_lists() {
+	// clearing of lists
+	section_list.clear();
+	config_node_list.clear();
+	all_node_list.clear();
+	program_node_list.clear();
+
+	return 1;
+}
+
+int Ui::initiate_configuration() {
+	if (access(config_file_relativepath.c_str(), R_OK) != 0) {
+		fprintf(
+				stderr,
+				"Wrong entry in default_file.cfg - load another configuration than: %s\n",
+				config_file_relativepath.c_str());
+		config_file_relativepath = "../configs/common.ini";
+	}
+
+	// sprawdzenie czy nazwa sesji jest unikalna
+
+	bool wyjscie = false;
+
+	while (!wyjscie) {
+		time_t now = time(NULL);
+		char now_string[32];
+		strftime(now_string, 8, "_%H%M%S", localtime(&now));
+		session_name = now_string;
+
+		if (config) {
+			delete config;
+		}
+		config = new lib::configurator(ui_node_name, mrrocpp_local_path,
+				config_file, UI_SECTION, session_name);
+
+		std::string attach_point =
+				config->return_attach_point_name(
+						lib::configurator::CONFIG_SERVER, "sr_attach_point",
+						UI_SECTION);
+
+		// wykrycie identycznych nazw sesji
+		wyjscie = true;
+
+		DIR* dirp = opendir("/dev/name/global");
+
+		if (dirp != NULL) {
+			for (;;) {
+				struct dirent* direntp = readdir(dirp);
+				if (direntp == NULL)
+					break;
+
+				// printf( "%s\n", direntp->d_name );
+				if (attach_point == direntp->d_name) {
+					wyjscie = false;
+				}
+			}
+
+			closedir(dirp);
+
+		}
+
+	}
+
+	ui_attach_point = config->return_attach_point_name(
+			lib::configurator::CONFIG_SERVER, "ui_attach_point", UI_SECTION);
+	sr_attach_point = config->return_attach_point_name(
+			lib::configurator::CONFIG_SERVER, "sr_attach_point", UI_SECTION);
+	network_sr_attach_point = config->return_attach_point_name(
+			lib::configurator::CONFIG_SERVER, "sr_attach_point", UI_SECTION);
+
+	clear_all_configuration_lists();
+
+	// sczytanie listy sekcji
+	fill_section_list(config_file_relativepath.c_str());
+	fill_section_list("../configs/common.ini");
+	fill_node_list();
+	fill_program_node_list();
+
+	return 1;
+}
+
+// fills section list of configuration files
+int Ui::fill_section_list(const char* file_name_and_path) {
+	static char line[256];
+
+	// otworz plik konfiguracyjny
+	FILE * file = fopen(file_name_and_path, "r");
+	if (file == NULL) {
+		printf("UI fill_section_list Wrong file_name: %s\n", file_name_and_path);
+		PtExit(EXIT_SUCCESS);
+	}
+
+	// sczytaj nazwy wszytkich sekcji na liste dynamiczna
+	char * fptr = fgets(line, 255, file); // get input line
+
+	// dopoki nie osiagnieto konca pliku
+
+	while (!feof(file)) {
+		// jesli znaleziono nowa sekcje
+		if ((fptr != NULL) && (line[0] == '[')) {
+			char current_section[50];
+			strncpy(current_section, line, strlen(line) - 1);
+			current_section[strlen(line) - 1] = '\0';
+
+			std::list<Ui::list_t>::iterator list_iterator;
+
+			// checking if section is already considered
+			for (list_iterator = section_list.begin(); list_iterator
+					!= section_list.end(); list_iterator++) {
+				if ((*list_iterator) == current_section)
+					break;
+			}
+
+			// if the section does not exists
+			if (list_iterator == section_list.end()) {
+				section_list.push_back(std::string(current_section));
+			}
+
+		} // end 	if (( fptr!=NULL )&&( line[0]=='[' ))
+
+		// odczytaj nowa lnie
+		fptr = fgets(line, 255, file); // get input line
+	} // end while (!feof(file)	)
+
+	// zamknij plik
+	fclose(file);
+
+	return 1;
+}
+
+// fills node list
+int Ui::fill_node_list() {
+	// fill all network nodes list
+
+	DIR* dirp = opendir("/net");
+	if (dirp != NULL) {
+		for (;;) {
+			struct dirent *direntp = readdir(dirp);
+			if (direntp == NULL)
+				break;
+			all_node_list.push_back(std::string(direntp->d_name));
+		}
+		closedir(dirp);
+	}
+
+	for (std::list<Ui::list_t>::iterator section_list_iterator =
+			section_list.begin(); section_list_iterator != section_list.end(); section_list_iterator++) {
+		if (config->exists("node_name", *section_list_iterator)) {
+			std::string tmp = config->value<std::string> ("node_name",
+					*section_list_iterator);
+
+			std::list<Ui::list_t>::iterator node_list_iterator;
+
+			for (node_list_iterator = config_node_list.begin(); node_list_iterator
+					!= config_node_list.end(); node_list_iterator++) {
+				if (tmp == (*node_list_iterator)) {
+					break;
+				}
+			}
+
+			// if the node does not exists
+			if (node_list_iterator == config_node_list.end()) {
+				config_node_list.push_back(tmp);
+			}
+		}
+
+	}
+
+	return 1;
+}
+

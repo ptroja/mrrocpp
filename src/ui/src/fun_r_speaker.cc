@@ -248,7 +248,7 @@ int EDP_speaker_create(PtWidget_t *widget, ApInfo_t *apinfo,
 					tmp2_string.c_str(), R_OK) == 0)) {
 				ui.ui_msg->message("edp_speaker already exists");
 
-			} else if (check_node_existence(ui.speaker.state.edp.node_name,
+			} else if (ui.check_node_existence(ui.speaker.state.edp.node_name,
 					std::string("edp_speaker"))) {
 
 				ui.speaker.state.edp.node_nr = ui.config->return_node_number(
