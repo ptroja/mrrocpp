@@ -25,6 +25,7 @@
 // Konfigurator.
 // #include "lib/configurator.h"
 #include "ui/ui_ecp.h"
+#include "ui/src/speaker/ui_ecp_r_speaker.h"
 
 /* Local headers */
 #include "ablibs.h"
