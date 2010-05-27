@@ -171,13 +171,11 @@ int Ui::manage_interface(void) {
 
 	// Dla robota IRP6 ON_TRACK
 	irp6ot_m.manage_interface();
-
 	irp6ot_tfg.manage_interface();
 
-	manage_interface_irp6p_tfg();
-
 	// Dla robota IRP6 POSTUMENT
-	manage_interface_irp6p();
+	irp6p_m.manage_interface();
+	irp6p_tfg.manage_interface();
 
 	// Dla robota CONVEYOR
 	manage_interface_conveyor();
@@ -331,13 +329,11 @@ int Ui::reload_whole_configuration() {
 
 			// dla robota irp6 on_track
 			irp6ot_m.reload_configuration();
-
 			irp6ot_tfg.reload_configuration();
 
-			reload_irp6p_tfg_configuration();
-
 			// dla robota irp6 postument
-			reload_irp6p_configuration();
+			irp6p_m.reload_configuration();
+			irp6p_tfg.reload_configuration();
 
 			// dla robota conveyor
 			reload_conveyor_configuration();

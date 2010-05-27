@@ -645,8 +645,6 @@ int process_control_window_irp6p_section_init(
 		bool &wlacz_PtButton_wnd_processes_control_all_reader_start,
 		bool &wlacz_PtButton_wnd_processes_control_all_reader_stop,
 		bool &wlacz_PtButton_wnd_processes_control_all_reader_trigger);
-int reload_irp6p_configuration(void);
-int manage_interface_irp6p(void);
 int start_wnd_irp6_postument_xyz_aa_relative(PtWidget_t *widget,
 		ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo);
 int clear_wnd_irp6p_xyz_aa_relative_flag(PtWidget_t *widget, ApInfo_t *apinfo,
@@ -735,8 +733,6 @@ int wind_irp6p_tfg_moves_move(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
 int clear_wnd_irp6p_tfg_servo_algorithm_flag(PtWidget_t *widget,
 		ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo);
-int reload_irp6p_tfg_configuration(void);
-int manage_interface_irp6p_tfg(void);
 
 /* ../fun_r_shead.cc */
 int EDP_shead_create(PtWidget_t *widget, ApInfo_t *apinfo,

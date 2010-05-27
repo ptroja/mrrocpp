@@ -2,7 +2,7 @@
 /*                            AppBuilder Photon Code Lib */
 /*                                         Version 2.01  */
 
-#include "ui/src/irp6ot_tfg/ui_r_irp6ot_tfg.h"
+#include "ui/src/irp6p_tfg/ui_r_irp6p_tfg.h"
 #include "ui/ui_ecp.h"
 #include "ui/ui_class.h"
 
@@ -17,23 +17,22 @@ extern Ui ui;
 
 //
 //
-// KLASA UiRobotIrp6ot_tfg
+// KLASA UiRobotIrp6p_tfg
 //
 //
 
 
-UiRobotIrp6ot_tfg::UiRobotIrp6ot_tfg() :
-			UiRobot(EDP_IRP6OT_TFG_SECTION, ECP_IRP6OT_TFG_SECTION), ui_ecp_robot(
-					NULL), is_wind_irp6ot_tfg_moves_open(false),
-			is_wind_irp6ot_tfg_servo_algorithm_open(false) {
+UiRobotIrp6p_tfg::UiRobotIrp6p_tfg() :
+	UiRobot(EDP_IRP6P_TFG_SECTION, ECP_IRP6P_TFG_SECTION), ui_ecp_robot(NULL),
+			is_wind_irp6p_tfg_moves_open(false),
+			is_wind_irp6p_tfg_servo_algorithm_open(false) {
 
 }
 
-int UiRobotIrp6ot_tfg::reload_configuration() {
-
+int UiRobotIrp6p_tfg::reload_configuration() {
 	// jesli IRP6 on_track ma byc aktywne
-	if ((state.is_active = ui.config->value<int> ("is_irp6ot_tfg_active")) == 1) {
-		// ini_con->create_ecp_irp6ot_tfg (ini_con->ui->ecp_irp6ot_tfg_section);
+	if ((state.is_active = ui.config->value<int> ("is_irp6p_tfg_active")) == 1) {
+		// ini_con->create_ecp_irp6p_tfg (ini_con->ui->ecp_irp6p_tfg_section);
 		//ui_state.is_any_edp_active = true;
 		if (ui.is_mp_and_ecps_active) {
 			state.ecp.network_trigger_attach_point
@@ -48,7 +47,7 @@ int UiRobotIrp6ot_tfg::reload_configuration() {
 		switch (state.edp.state) {
 		case -1:
 		case 0:
-			// ini_con->create_edp_irp6ot_tfg (ini_con->ui->edp_irp6ot_tfg_section);
+			// ini_con->create_edp_irp6p_tfg (ini_con->ui->edp_irp6p_tfg_section);
 
 			state.edp.pid = -1;
 			state.edp.reader_fd = -1;
@@ -63,14 +62,14 @@ int UiRobotIrp6ot_tfg::reload_configuration() {
 					tmp1 = tmp = strdup(ui.config->value<std::string> (
 							tmp_string, state.edp.section_name).c_str());
 					char* toDel = tmp;
-					for (int j = 0; j < IRP6OT_TFG_NUM_OF_SERVOS; j++) {
+					for (int j = 0; j < IRP6P_TFG_NUM_OF_SERVOS; j++) {
 
 						state.edp.preset_position[i][j] = strtod(tmp1, &tmp1);
 
 					}
 					free(toDel);
 				} else {
-					for (int j = 0; j < IRP6OT_TFG_NUM_OF_SERVOS; j++) {
+					for (int j = 0; j < IRP6P_TFG_NUM_OF_SERVOS; j++) {
 
 						state.edp.preset_position[i][j] = 0.074;
 
@@ -124,35 +123,33 @@ int UiRobotIrp6ot_tfg::reload_configuration() {
 		default:
 			break;
 		}
-	} // end irp6ot_tfg
+	} // end irp6p_tfg
 
 	return 1;
 }
 
-int UiRobotIrp6ot_tfg::manage_interface() {
-
+int UiRobotIrp6p_tfg::manage_interface() {
 	switch (state.edp.state) {
 	case -1:
-		ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_irp6ot_tfg, NULL);
+		ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_irp6p_tfg, NULL);
 		break;
 	case 0:
 		ApModifyItemState(&robot_menu, AB_ITEM_DIM,
-				ABN_mm_irp6ot_tfg_edp_unload,
-				ABN_mm_irp6ot_tfg_synchronisation, ABN_mm_irp6ot_tfg_move,
-				ABN_mm_irp6ot_tfg_preset_positions,
-				ABN_mm_irp6ot_tfg_servo_algorithm, NULL);
-		ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_irp6ot_tfg,
-				ABN_mm_irp6ot_tfg_edp_load, NULL);
+				ABN_mm_irp6p_tfg_edp_unload, ABN_mm_irp6p_tfg_synchronisation,
+				ABN_mm_irp6p_tfg_move, ABN_mm_irp6p_tfg_preset_positions,
+				ABN_mm_irp6p_tfg_servo_algorithm, NULL);
+		ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_irp6p_tfg,
+				ABN_mm_irp6p_tfg_edp_load, NULL);
 
 		break;
 	case 1:
 	case 2:
-		ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_irp6ot_tfg, NULL);
+		ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_irp6p_tfg, NULL);
 
 		// jesli robot jest zsynchronizowany
 		if (state.edp.is_synchronised) {
 			ApModifyItemState(&robot_menu, AB_ITEM_DIM,
-					ABN_mm_irp6ot_tfg_synchronisation, NULL);
+					ABN_mm_irp6p_tfg_synchronisation, NULL);
 			ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL,
 					ABN_mm_all_robots_preset_positions, NULL);
 
@@ -160,29 +157,29 @@ int UiRobotIrp6ot_tfg::manage_interface() {
 			case UI_MP_NOT_PERMITED_TO_RUN:
 			case UI_MP_PERMITED_TO_RUN:
 				ApModifyItemState(&robot_menu, AB_ITEM_NORMAL,
-						ABN_mm_irp6ot_tfg_edp_unload, ABN_mm_irp6ot_tfg_move,
-						ABN_mm_irp6ot_tfg_preset_positions,
-						ABN_mm_irp6ot_tfg_servo_algorithm, NULL);
+						ABN_mm_irp6p_tfg_edp_unload, ABN_mm_irp6p_tfg_move,
+						ABN_mm_irp6p_tfg_preset_positions,
+						ABN_mm_irp6p_tfg_servo_algorithm, NULL);
 				ApModifyItemState(&robot_menu, AB_ITEM_DIM,
-						ABN_mm_irp6ot_tfg_edp_load, NULL);
+						ABN_mm_irp6p_tfg_edp_load, NULL);
 				break;
 			case UI_MP_WAITING_FOR_START_PULSE:
 				ApModifyItemState(&robot_menu, AB_ITEM_NORMAL,
-						ABN_mm_irp6ot_tfg_move,
-						ABN_mm_irp6ot_tfg_preset_positions,
-						ABN_mm_irp6ot_tfg_servo_algorithm, NULL);
+						ABN_mm_irp6p_tfg_move,
+						ABN_mm_irp6p_tfg_preset_positions,
+						ABN_mm_irp6p_tfg_servo_algorithm, NULL);
 				ApModifyItemState(&robot_menu, AB_ITEM_DIM,
-						ABN_mm_irp6ot_tfg_edp_load,
-						ABN_mm_irp6ot_tfg_edp_unload, NULL);
+						ABN_mm_irp6p_tfg_edp_load, ABN_mm_irp6p_tfg_edp_unload,
+						NULL);
 				break;
 			case UI_MP_TASK_RUNNING:
 			case UI_MP_TASK_PAUSED:
 				ApModifyItemState(
 						&robot_menu,
 						AB_ITEM_DIM, // modyfikacja menu - ruchy reczne zakazane
-						ABN_mm_irp6ot_tfg_move,
-						ABN_mm_irp6ot_tfg_preset_positions,
-						ABN_mm_irp6ot_tfg_servo_algorithm, NULL);
+						ABN_mm_irp6p_tfg_move,
+						ABN_mm_irp6p_tfg_preset_positions,
+						ABN_mm_irp6p_tfg_servo_algorithm, NULL);
 				break;
 			default:
 				break;
@@ -190,11 +187,11 @@ int UiRobotIrp6ot_tfg::manage_interface() {
 		} else // jesli robot jest niezsynchronizowany
 		{
 			ApModifyItemState(&robot_menu, AB_ITEM_NORMAL,
-					ABN_mm_irp6ot_tfg_edp_unload,
-					ABN_mm_irp6ot_tfg_synchronisation, ABN_mm_irp6ot_tfg_move,
+					ABN_mm_irp6p_tfg_edp_unload,
+					ABN_mm_irp6p_tfg_synchronisation, ABN_mm_irp6p_tfg_move,
 					NULL);
 			ApModifyItemState(&robot_menu, AB_ITEM_DIM,
-					ABN_mm_irp6ot_tfg_edp_load, NULL);
+					ABN_mm_irp6p_tfg_edp_load, NULL);
 			ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL,
 					ABN_mm_all_robots_synchronisation, NULL);
 		}

@@ -125,11 +125,11 @@ int init(PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 	/* eliminate 'unreferenced' warnings */
 	link_instance = link_instance, apinfo = apinfo, cbinfo = cbinfo;
 
-	ui_state.irp6p_tfg.edp.state = -1; // edp nieaktywne
-	ui_state.irp6p_tfg.edp.last_state = -1; // edp nieaktywne
-	ui_state.irp6p_tfg.ecp.trigger_fd = -1;
-	ui_state.irp6p_tfg.edp.section_name = EDP_IRP6P_TFG_SECTION;
-	ui_state.irp6p_tfg.ecp.section_name = ECP_IRP6P_TFG_SECTION;
+	ui.irp6p_tfg.state.edp.state = -1; // edp nieaktywne
+	ui.irp6p_tfg.state.edp.last_state = -1; // edp nieaktywne
+	ui.irp6p_tfg.state.ecp.trigger_fd = -1;
+	ui.irp6p_tfg.state.edp.section_name = EDP_IRP6P_TFG_SECTION;
+	ui.irp6p_tfg.state.ecp.section_name = ECP_IRP6P_TFG_SECTION;
 
 	ui_state.speaker.edp.state = -1; // edp nieaktywne
 	ui_state.speaker.edp.last_state = -1; // edp nieaktywne
@@ -183,16 +183,16 @@ int init(PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 	ui_state.is_wind_conveyor_moves_open = false;
 
-	ui_state.is_wind_irp6p_tfg_moves_open = false;
+	ui.irp6p_tfg.is_wind_irp6p_tfg_moves_open = false;
 
 	ui_state.is_wind_irp6m_kinematic_open = false;
 	ui_state.is_wind_speaker_play_open = false;
 
-	ui_state.is_wind_irp6p_tfg_servo_algorithm_open = false;
+	ui.irp6p_tfg.is_wind_irp6p_tfg_servo_algorithm_open = false;
 	ui_state.is_wind_irp6m_servo_algorithm_open = false;
 	ui_state.is_wind_conv_servo_algorithm_open = false;
 
-	ui_state.irp6p_tfg.edp.is_synchronised = false;
+	ui.irp6p_tfg.state.edp.is_synchronised = false;
 	ui_state.conveyor.edp.is_synchronised = false;
 	ui_state.spkm.edp.is_synchronised = false;
 	ui_state.smb.edp.is_synchronised = false;

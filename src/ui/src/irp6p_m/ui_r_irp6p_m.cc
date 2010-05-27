@@ -36,9 +36,10 @@ UiRobotIrp6p_m::UiRobotIrp6p_m() :
 }
 
 int UiRobotIrp6p_m::reload_configuration() {
-	// jesli IRP6 on_track ma byc aktywne
+
+	// jesli IRP6 postument ma byc aktywne
 	if ((state.is_active = ui.config->value<int> ("is_irp6p_m_active")) == 1) {
-		// ini_con->create_ecp_irp6_on_track (ini_con->ui->ECP_IRP6OT_M_SECTION);
+		// ini_con->create_ecp_irp6_postument (ini_con->ui->ECP_IRP6P_M_SECTION);
 		//ui_state.is_any_edp_active = true;
 		if (ui.is_mp_and_ecps_active) {
 			state.ecp.network_trigger_attach_point
@@ -53,10 +54,11 @@ int UiRobotIrp6p_m::reload_configuration() {
 		switch (state.edp.state) {
 		case -1:
 		case 0:
-			// ini_con->create_edp_irp6_on_track (ini_con->ui->EDP_IRP6OT_M_SECTION);
+			// ini_con->create_edp_irp6_postument (ini_con->ui->EDP_IRP6P_M_SECTION);
 
 			state.edp.pid = -1;
 			state.edp.reader_fd = -1;
+
 			state.edp.state = 0;
 
 			for (int i = 0; i < 4; i++) {
@@ -69,10 +71,11 @@ int UiRobotIrp6p_m::reload_configuration() {
 
 				if (ui.config->exists(tmp_string, state.edp.section_name)) {
 					char* tmp, *tmp1;
+
 					tmp1 = tmp = strdup(ui.config->value<std::string> (
 							tmp_string, state.edp.section_name).c_str());
 					char* toDel = tmp;
-					for (int j = 0; j < IRP6OT_M_NUM_OF_SERVOS; j++) {
+					for (int j = 0; j < IRP6P_M_NUM_OF_SERVOS; j++) {
 						if (i < 3) {
 							state.edp.preset_position[i][j] = strtod(tmp1,
 									&tmp1);
@@ -82,7 +85,7 @@ int UiRobotIrp6p_m::reload_configuration() {
 					}
 					free(toDel);
 				} else {
-					for (int j = 0; j < IRP6OT_M_NUM_OF_SERVOS; j++) {
+					for (int j = 0; j < IRP6P_M_NUM_OF_SERVOS; j++) {
 						if (i < 3) {
 							state.edp.preset_position[i][j] = 0.0;
 						} else {
@@ -90,7 +93,6 @@ int UiRobotIrp6p_m::reload_configuration() {
 							printf(
 									"nie zdefiniowano irp6p front_postion w common.ini\n");
 						}
-
 					}
 				}
 			}
@@ -127,7 +129,7 @@ int UiRobotIrp6p_m::reload_configuration() {
 			break;
 		}
 
-	} else // jesli  irp6 on_track ma byc nieaktywne
+	} else // jesli  irp6 postument ma byc nieaktywne
 	{
 		switch (state.edp.state) {
 		case -1:
@@ -141,7 +143,7 @@ int UiRobotIrp6p_m::reload_configuration() {
 		default:
 			break;
 		}
-	} // end irp6_on_track
+	} // end irp6_postument
 
 	return 1;
 }
@@ -151,31 +153,31 @@ int UiRobotIrp6p_m::manage_interface() {
 	switch (state.edp.state) {
 
 	case -1:
-		ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_irp6_on_track, NULL);
+		ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_irp6_postument, NULL);
 		break;
 	case 0:
 		ApModifyItemState(&robot_menu, AB_ITEM_DIM,
-				ABN_mm_irp6_on_track_edp_unload,
-				ABN_mm_irp6_on_track_pre_synchro_moves,
-				ABN_mm_irp6_on_track_absolute_moves,
-				ABN_mm_irp6_on_track_relative_moves,
-				ABN_mm_irp6_on_track_tool_specification,
-				ABN_mm_irp6_on_track_preset_positions,
-				ABN_mm_irp6_on_track_kinematic,
-				ABN_mm_irp6_on_track_servo_algorithm, NULL);
-		ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_irp6_on_track,
-				ABN_mm_irp6_on_track_edp_load, NULL);
+				ABN_mm_irp6_postument_edp_unload,
+				ABN_mm_irp6_postument_pre_synchro_moves,
+				ABN_mm_irp6_postument_absolute_moves,
+				ABN_mm_irp6_postument_relative_moves,
+				ABN_mm_irp6_postument_tool_specification,
+				ABN_mm_irp6_postument_preset_positions,
+				ABN_mm_irp6_postument_kinematic,
+				ABN_mm_irp6_postument_servo_algorithm, NULL);
+		ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_irp6_postument,
+				ABN_mm_irp6_postument_edp_load, NULL);
 
 		break;
 	case 1:
 	case 2:
-		ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_irp6_on_track,
+		ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_irp6_postument,
 				NULL);
 		//ApModifyItemState( &all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_edp_unload, NULL);
 		// jesli robot jest zsynchronizowany
 		if (state.edp.is_synchronised) {
 			ApModifyItemState(&robot_menu, AB_ITEM_DIM,
-					ABN_mm_irp6_on_track_pre_synchro_moves, NULL);
+					ABN_mm_irp6_postument_pre_synchro_moves, NULL);
 			ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL,
 					ABN_mm_all_robots_preset_positions, NULL);
 
@@ -183,39 +185,39 @@ int UiRobotIrp6p_m::manage_interface() {
 			case UI_MP_NOT_PERMITED_TO_RUN:
 			case UI_MP_PERMITED_TO_RUN:
 				ApModifyItemState(&robot_menu, AB_ITEM_NORMAL,
-						ABN_mm_irp6_on_track_edp_unload,
-						ABN_mm_irp6_on_track_absolute_moves,
-						ABN_mm_irp6_on_track_relative_moves,
-						ABN_mm_irp6_on_track_tool_specification,
-						ABN_mm_irp6_on_track_preset_positions,
-						ABN_mm_irp6_on_track_kinematic,
-						ABN_mm_irp6_on_track_servo_algorithm, NULL);
+						ABN_mm_irp6_postument_edp_unload,
+						ABN_mm_irp6_postument_absolute_moves,
+						ABN_mm_irp6_postument_relative_moves,
+						ABN_mm_irp6_postument_tool_specification,
+						ABN_mm_irp6_postument_preset_positions,
+						ABN_mm_irp6_postument_kinematic,
+						ABN_mm_irp6_postument_servo_algorithm, NULL);
 				ApModifyItemState(&robot_menu, AB_ITEM_DIM,
-						ABN_mm_irp6_on_track_edp_load, NULL);
+						ABN_mm_irp6_postument_edp_load, NULL);
 				break;
 			case UI_MP_WAITING_FOR_START_PULSE:
 				ApModifyItemState(&robot_menu, AB_ITEM_NORMAL,
-						ABN_mm_irp6_on_track_absolute_moves,
-						ABN_mm_irp6_on_track_relative_moves,
-						ABN_mm_irp6_on_track_tool_specification,
-						ABN_mm_irp6_on_track_preset_positions,
-						ABN_mm_irp6_on_track_kinematic,
-						ABN_mm_irp6_on_track_servo_algorithm, NULL);
+						ABN_mm_irp6_postument_absolute_moves,
+						ABN_mm_irp6_postument_relative_moves,
+						ABN_mm_irp6_postument_preset_positions,
+						ABN_mm_irp6_postument_tool_specification,
+						ABN_mm_irp6_postument_kinematic,
+						ABN_mm_irp6_postument_servo_algorithm, NULL);
 				ApModifyItemState(&robot_menu, AB_ITEM_DIM,
-						ABN_mm_irp6_on_track_edp_load,
-						ABN_mm_irp6_on_track_edp_unload, NULL);
+						ABN_mm_irp6_postument_edp_load,
+						ABN_mm_irp6_postument_edp_unload, NULL);
 				break;
 			case UI_MP_TASK_RUNNING:
 			case UI_MP_TASK_PAUSED:
 				ApModifyItemState(
 						&robot_menu,
 						AB_ITEM_DIM, // modyfikacja menu - ruchy reczne zakazane
-						ABN_mm_irp6_on_track_absolute_moves,
-						ABN_mm_irp6_on_track_relative_moves,
-						ABN_mm_irp6_on_track_preset_positions,
-						ABN_mm_irp6_on_track_tool_specification,
-						ABN_mm_irp6_on_track_kinematic,
-						ABN_mm_irp6_on_track_servo_algorithm, NULL);
+						ABN_mm_irp6_postument_absolute_moves,
+						ABN_mm_irp6_postument_relative_moves,
+						ABN_mm_irp6_postument_preset_positions,
+						ABN_mm_irp6_postument_tool_specification,
+						ABN_mm_irp6_postument_kinematic,
+						ABN_mm_irp6_postument_servo_algorithm, NULL);
 				break;
 			default:
 				break;
@@ -224,10 +226,10 @@ int UiRobotIrp6p_m::manage_interface() {
 		} else // jesli robot jest niezsynchronizowany
 		{
 			ApModifyItemState(&robot_menu, AB_ITEM_NORMAL,
-					ABN_mm_irp6_on_track_edp_unload,
-					ABN_mm_irp6_on_track_pre_synchro_moves, NULL);
+					ABN_mm_irp6_postument_edp_unload,
+					ABN_mm_irp6_postument_pre_synchro_moves, NULL);
 			ApModifyItemState(&robot_menu, AB_ITEM_DIM,
-					ABN_mm_irp6_on_track_edp_load, NULL);
+					ABN_mm_irp6_postument_edp_load, NULL);
 			ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL,
 					ABN_mm_all_robots_synchronisation, NULL);
 		}
@@ -238,5 +240,6 @@ int UiRobotIrp6p_m::manage_interface() {
 	}
 
 	return 1;
+
 }
 

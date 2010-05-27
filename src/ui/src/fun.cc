@@ -1330,7 +1330,7 @@ int check_edps_state_and_modify_mp_state() {
 	// jesli wszytkie sa nieaktywne
 	if ((!(ui.irp6p_m.state.is_active)) && (!(ui.irp6ot_m.state.is_active))
 			&& (!(ui.irp6ot_tfg.state.is_active))
-			&& (!(ui_state.irp6p_tfg.is_active))
+			&& (!(ui.irp6p_tfg.state.is_active))
 			&& (!(ui_state.conveyor.is_active))
 			&& (!(ui_state.speaker.is_active))
 			&& (!(ui_state.irp6_mechatronika.is_active))
@@ -1346,7 +1346,7 @@ int check_edps_state_and_modify_mp_state() {
 			&& check_synchronised_or_inactive(ui_state.speaker)
 			&& check_synchronised_or_inactive(ui_state.irp6_mechatronika)
 			&& check_synchronised_or_inactive(ui.irp6ot_tfg.state)
-			&& check_synchronised_or_inactive(ui_state.irp6p_tfg)
+			&& check_synchronised_or_inactive(ui.irp6p_tfg.state)
 			&& check_synchronised_or_inactive(ui.bird_hand.state)
 			&& check_synchronised_or_inactive(ui_state.spkm)
 			&& check_synchronised_or_inactive(ui_state.smb)
@@ -1360,7 +1360,7 @@ int check_edps_state_and_modify_mp_state() {
 			&& check_loaded_or_inactive(ui_state.speaker)
 			&& check_loaded_or_inactive(ui_state.irp6_mechatronika)
 			&& check_loaded_or_inactive(ui.irp6ot_tfg.state)
-			&& check_loaded_or_inactive(ui_state.irp6p_tfg)
+			&& check_loaded_or_inactive(ui.irp6p_tfg.state)
 			&& check_loaded_or_inactive(ui.bird_hand.state)
 			&& check_loaded_or_inactive(ui_state.spkm)
 			&& check_loaded_or_inactive(ui_state.smb)
@@ -1374,7 +1374,7 @@ int check_edps_state_and_modify_mp_state() {
 			|| check_loaded(ui.irp6ot_m.state) || check_loaded(
 			ui_state.conveyor) || check_loaded(ui_state.speaker)
 			|| check_loaded(ui_state.irp6_mechatronika) || check_loaded(
-			ui.irp6ot_tfg.state) || check_loaded(ui_state.irp6p_tfg)
+			ui.irp6ot_tfg.state) || check_loaded(ui.irp6p_tfg.state)
 			|| check_loaded(ui.bird_hand.state) || check_loaded(ui_state.spkm)
 			|| check_loaded(ui_state.smb) || check_loaded(ui_state.shead))
 
@@ -1897,7 +1897,7 @@ int all_robots_move_to_preset_position(PtWidget_t *widget, ApInfo_t *apinfo,
 			irp6ot_tfg_move_to_preset_position(widget, apinfo, cbinfo);
 		if (check_synchronised_and_loaded(ui.irp6p_m.state))
 			irp6p_move_to_preset_position(widget, apinfo, cbinfo);
-		if (check_synchronised_and_loaded(ui_state.irp6p_tfg))
+		if (check_synchronised_and_loaded(ui.irp6p_tfg.state))
 			irp6p_tfg_move_to_preset_position(widget, apinfo, cbinfo);
 		if (check_synchronised_and_loaded(ui_state.conveyor))
 			conveyor_move_to_preset_position(widget, apinfo, cbinfo);

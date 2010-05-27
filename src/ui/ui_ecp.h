@@ -15,9 +15,6 @@
 #include "lib/robot_consts/all_robots_const.h"
 
 typedef struct {
-	ui_irp6_common_robot *irp6_postument;
-	ui_tfg_and_conv_robot *irp6ot_tfg;
-	ui_tfg_and_conv_robot *irp6p_tfg;
 	ui_tfg_and_conv_robot *conveyor;
 	ui_tfg_and_conv_robot *spkm;
 	ui_tfg_and_conv_robot *smb;

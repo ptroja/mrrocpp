@@ -29,6 +29,7 @@ add_executable(ui
 	../irp6ot_m/ui_r_irp6ot_m.cc
 	../irp6ot_tfg/ui_r_irp6ot_tfg.cc
 	../irp6p_m/ui_r_irp6p_m.cc
+	../irp6p_tfg/ui_r_irp6p_tfg.cc
 	../ui_init.cc
 	../ui_class.cc
 	../wndFileLocationEvents.cc

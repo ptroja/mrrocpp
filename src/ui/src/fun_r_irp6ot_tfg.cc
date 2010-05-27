@@ -133,18 +133,18 @@ int EDP_irp6ot_tfg_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 				{
 					boost::unique_lock<boost::mutex> lock(
 							ui.process_creation_mtx);
-					ui_robot.irp6ot_tfg = new ui_tfg_and_conv_robot(*ui.config,
+					ui.irp6ot_tfg.ui_ecp_robot = new ui_tfg_and_conv_robot(*ui.config,
 							*ui.all_ecp_msg, lib::ROBOT_IRP6OT_TFG);
 				}
 
 				ui.irp6ot_tfg.state.edp.pid
-						= ui_robot.irp6ot_tfg->ecp->get_EDP_pid();
+						= ui.irp6ot_tfg.ui_ecp_robot->ecp->get_EDP_pid();
 
 				if (ui.irp6ot_tfg.state.edp.pid < 0) {
 
 					ui.irp6ot_tfg.state.edp.state = 0;
 					fprintf(stderr, "EDP spawn failed: %s\n", strerror(errno));
-					delete ui_robot.irp6ot_tfg;
+					delete ui.irp6ot_tfg.ui_ecp_robot;
 				} else { // jesli spawn sie powiodl
 
 					ui.irp6ot_tfg.state.edp.state = 1;
@@ -166,7 +166,7 @@ int EDP_irp6ot_tfg_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 					// odczytanie poczatkowego stanu robota (komunikuje sie z EDP)
 					lib::controller_state_t robot_controller_initial_state_tmp;
 
-					ui_robot.irp6ot_tfg->get_controller_state(
+					ui.irp6ot_tfg.ui_ecp_robot->get_controller_state(
 							robot_controller_initial_state_tmp);
 
 					//ui.irp6ot_tfg.state.edp.state = 1; // edp wlaczone reader czeka na start
@@ -216,7 +216,7 @@ int EDP_irp6ot_tfg_slay_int(PtWidget_t *widget, ApInfo_t *apinfo,
 						__FILE__, __LINE__, strerror(errno));
 			}
 		}
-		delete ui_robot.irp6ot_tfg;
+		delete ui.irp6ot_tfg.ui_ecp_robot;
 		ui.irp6ot_tfg.state.edp.state = 0; // edp wylaczone
 		ui.irp6ot_tfg.state.edp.is_synchronised = false;
 
@@ -267,9 +267,9 @@ int EDP_irp6ot_tfg_synchronise_int(PtWidget_t *widget, ApInfo_t *apinfo,
 
 		if ((ui.irp6ot_tfg.state.edp.state > 0)
 				&& (ui.irp6ot_tfg.state.edp.is_synchronised == false)) {
-			ui_robot.irp6ot_tfg->ecp->synchronise();
+			ui.irp6ot_tfg.ui_ecp_robot->ecp->synchronise();
 			ui.irp6ot_tfg.state.edp.is_synchronised
-					= ui_robot.irp6ot_tfg->ecp->is_synchronised();
+					= ui.irp6ot_tfg.ui_ecp_robot->ecp->is_synchronised();
 		} else {
 			// 	printf("EDP irp6ot_tfg niepowolane, synchronizacja niedozwolona\n");
 		}
@@ -365,7 +365,7 @@ int irp6ot_tfg_move_to_preset_position(PtWidget_t *widget, ApInfo_t *apinfo,
 					irp6ot_tfg_execute_joint_motion));
 		}
 
-		//	ui_robot.irp6ot_tfg->move_motors(irp6ot_tfg_desired_pos);
+		//	ui.irp6ot_tfg.ui_ecp_robot->move_motors(irp6ot_tfg_desired_pos);
 
 	} // end if (ui.irp6ot_tfg.state.edp.pid!=-1)
 
@@ -377,7 +377,7 @@ int irp6ot_tfg_move_to_preset_position(PtWidget_t *widget, ApInfo_t *apinfo,
 int irp6ot_tfg_execute_motor_motion() {
 	try {
 
-		ui_robot.irp6ot_tfg->move_motors(irp6ot_tfg_desired_pos);
+		ui.irp6ot_tfg.ui_ecp_robot->move_motors(irp6ot_tfg_desired_pos);
 
 	} // end try
 	CATCH_SECTION_UI
@@ -388,7 +388,7 @@ int irp6ot_tfg_execute_motor_motion() {
 int irp6ot_tfg_execute_joint_motion() {
 	try {
 
-		ui_robot.irp6ot_tfg->move_joints(irp6ot_tfg_desired_pos);
+		ui.irp6ot_tfg.ui_ecp_robot->move_joints(irp6ot_tfg_desired_pos);
 
 	} // end try
 	CATCH_SECTION_UI
@@ -432,7 +432,7 @@ int init_wnd_irp6ot_tfg_servo_algorithm(PtWidget_t *widget, ApInfo_t *apinfo,
 		if (ui.irp6ot_tfg.state.edp.pid != -1) {
 			if (ui.irp6ot_tfg.state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
 			{
-				ui_robot.irp6ot_tfg->get_servo_algorithm(servo_alg_no,
+				ui.irp6ot_tfg.ui_ecp_robot->get_servo_algorithm(servo_alg_no,
 						servo_par_no);
 
 				PtSetResource(
@@ -485,7 +485,7 @@ int irp6ot_tfg_servo_algorithm_set(PtWidget_t *widget, ApInfo_t *apinfo,
 			}
 
 			// zlecenie wykonania ruchu
-			ui_robot.irp6ot_tfg->set_servo_algorithm(servo_alg_no_output,
+			ui.irp6ot_tfg.ui_ecp_robot->set_servo_algorithm(servo_alg_no_output,
 					servo_par_no_output);
 
 		} else {
@@ -521,13 +521,13 @@ int wind_irp6ot_tfg_moves_init(PtWidget_t *widget, ApInfo_t *apinfo,
 				unblock_widget(ABW_PtNumericFloat_wind_irp6ot_tfg_moves_int_pos);
 				unblock_widget(ABW_PtButton_wind_irp6ot_tfg_moves_int_exec);
 
-				ui_robot.irp6ot_tfg->read_motors(irp6ot_tfg_current_pos); // Odczyt polozenia walow silnikow
+				ui.irp6ot_tfg.ui_ecp_robot->read_motors(irp6ot_tfg_current_pos); // Odczyt polozenia walow silnikow
 
 				PtSetResource(
 						ABW_PtNumericFloat_wind_irp6ot_tfg_moves_read_motor_pos,
 						Pt_ARG_NUMERIC_VALUE, &irp6ot_tfg_current_pos[0], 0);
 
-				ui_robot.irp6ot_tfg->read_joints(irp6ot_tfg_current_pos);
+				ui.irp6ot_tfg.ui_ecp_robot->read_joints(irp6ot_tfg_current_pos);
 
 				PtSetResource(
 						ABW_PtNumericFloat_wind_irp6ot_tfg_moves_read_int_pos,
@@ -608,7 +608,7 @@ int wind_irp6ot_tfg_moves_move(PtWidget_t *widget, ApInfo_t *apinfo,
 					irp6ot_tfg_desired_pos_motors[0] += (*step1);
 				}
 
-				ui_robot.irp6ot_tfg->move_motors(irp6ot_tfg_desired_pos_motors);
+				ui.irp6ot_tfg.ui_ecp_robot->move_motors(irp6ot_tfg_desired_pos_motors);
 
 			}
 
@@ -633,7 +633,7 @@ int wind_irp6ot_tfg_moves_move(PtWidget_t *widget, ApInfo_t *apinfo,
 						== ABW_PtButton_wind_irp6ot_tfg_moves_int_right) {
 					irp6ot_tfg_desired_pos_int[0] += (*step1);
 				}
-				ui_robot.irp6ot_tfg->move_joints(irp6ot_tfg_desired_pos_int);
+				ui.irp6ot_tfg.ui_ecp_robot->move_joints(irp6ot_tfg_desired_pos_int);
 			}
 
 			// odswierzenie pozycji robota
