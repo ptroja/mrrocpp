@@ -1538,31 +1538,17 @@ int MPslay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 	ui.mp.pid = -1;
 	ui.mp.pulse_fd = -1;
 
-	deactivate_ecp_trigger(ui.irp6ot_m.state);
-	deactivate_ecp_trigger(ui.irp6p_m.state);
-	deactivate_ecp_trigger(ui.conveyor.state);
-	deactivate_ecp_trigger(ui.speaker.state);
-	deactivate_ecp_trigger(ui.irp6m_m.state);
+	ui.deactivate_ecp_trigger(ui.irp6ot_m.state);
+	ui.deactivate_ecp_trigger(ui.irp6p_m.state);
+	ui.deactivate_ecp_trigger(ui.conveyor.state);
+	ui.deactivate_ecp_trigger(ui.speaker.state);
+	ui.deactivate_ecp_trigger(ui.irp6m_m.state);
 
 	// modyfikacja menu
 	ui.manage_interface();
 	process_control_window_init(widget, apinfo, cbinfo);
 	return (Pt_CONTINUE);
 
-}
-
-bool deactivate_ecp_trigger(ecp_edp_ui_robot_def& robot_l) {
-
-	if (robot_l.is_active) {
-		if (robot_l.ecp.trigger_fd >= 0) {
-			name_close(robot_l.ecp.trigger_fd);
-		}
-		robot_l.ecp.trigger_fd = -1;
-		robot_l.ecp.pid = -1;
-		return true;
-	}
-
-	return false;
 }
 
 int pulse_start_mp(PtWidget_t *widget, ApInfo_t *apinfo,
@@ -1596,7 +1582,7 @@ int pulse_start_mp(PtWidget_t *widget, ApInfo_t *apinfo,
 
 		close_wnd_speaker_play(NULL, NULL, NULL);
 
-		execute_mp_pulse(MP_START);
+		ui.execute_mp_pulse(MP_START);
 
 		process_control_window_init(widget, apinfo, cbinfo);
 
@@ -1620,7 +1606,7 @@ int pulse_stop_mp(PtWidget_t *widget, ApInfo_t *apinfo,
 
 		ui.mp.state = UI_MP_WAITING_FOR_START_PULSE;// czekanie na stop
 
-		execute_mp_pulse(MP_STOP);
+		ui.execute_mp_pulse(MP_STOP);
 
 		process_control_window_init(widget, apinfo, cbinfo);
 
@@ -1643,7 +1629,7 @@ int pulse_pause_mp(PtWidget_t *widget, ApInfo_t *apinfo,
 
 		ui.mp.state = UI_MP_TASK_PAUSED;// czekanie na stop
 
-		execute_mp_pulse(MP_PAUSE);
+		ui.execute_mp_pulse(MP_PAUSE);
 
 		process_control_window_init(widget, apinfo, cbinfo);
 
@@ -1666,7 +1652,7 @@ int pulse_resume_mp(PtWidget_t *widget, ApInfo_t *apinfo,
 
 		ui.mp.state = UI_MP_TASK_RUNNING;// czekanie na stop
 
-		execute_mp_pulse(MP_RESUME);
+		ui.execute_mp_pulse(MP_RESUME);
 
 		process_control_window_init(widget, apinfo, cbinfo);
 
@@ -1687,7 +1673,7 @@ int pulse_trigger_mp(PtWidget_t *widget, ApInfo_t *apinfo,
 
 	if (ui.mp.state == UI_MP_TASK_RUNNING) {
 
-		execute_mp_pulse(MP_TRIGGER);
+		ui.execute_mp_pulse(MP_TRIGGER);
 
 		process_control_window_init(widget, apinfo, cbinfo);
 
@@ -1695,25 +1681,6 @@ int pulse_trigger_mp(PtWidget_t *widget, ApInfo_t *apinfo,
 	}
 
 	return (Pt_CONTINUE);
-
-}
-
-int execute_mp_pulse(char pulse_code) {
-	int ret = -2;
-
-	// printf("w send pulse\n");
-	if (ui.mp.pulse_fd > 0) {
-		long pulse_value = 1;
-		if ((ret = MsgSendPulse(ui.mp.pulse_fd, sched_get_priority_min(
-				SCHED_FIFO), pulse_code, pulse_value)) == -1) {
-
-			perror("Blad w wysylaniu pulsu do mp");
-			fprintf(stderr, "Blad w wysylaniu pulsu do mp error: %s \n",
-					strerror(errno));
-			delay(1000);
-		}
-	}
-	return ret;
 
 }
 
@@ -1835,18 +1802,6 @@ int pulse_reader_all_robots_trigger(PtWidget_t *widget, ApInfo_t *apinfo,
 
 	return (Pt_CONTINUE);
 
-}
-
-int pulse_reader_execute(int coid, int pulse_code, int pulse_value)
-
-{
-
-	if (MsgSendPulse(coid, sched_get_priority_min(SCHED_FIFO), pulse_code,
-			pulse_value) == -1) {
-		perror("Blad w wysylaniu pulsu do redera");
-	}
-
-	return 1;
 }
 
 int pulse_ecp_all_robots(PtWidget_t *widget, ApInfo_t *apinfo,

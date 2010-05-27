@@ -970,3 +970,49 @@ int Ui::fill_node_list() {
 	return 1;
 }
 
+int Ui::pulse_reader_execute(int coid, int pulse_code, int pulse_value)
+
+{
+
+	if (MsgSendPulse(coid, sched_get_priority_min(SCHED_FIFO), pulse_code,
+			pulse_value) == -1) {
+		perror("Blad w wysylaniu pulsu do redera");
+	}
+
+	return 1;
+}
+
+int Ui::execute_mp_pulse(char pulse_code) {
+	int ret = -2;
+
+	// printf("w send pulse\n");
+	if (mp.pulse_fd > 0) {
+		long pulse_value = 1;
+		if ((ret = MsgSendPulse(mp.pulse_fd,
+				sched_get_priority_min(SCHED_FIFO), pulse_code, pulse_value))
+				== -1) {
+
+			perror("Blad w wysylaniu pulsu do mp");
+			fprintf(stderr, "Blad w wysylaniu pulsu do mp error: %s \n",
+					strerror(errno));
+			delay(1000);
+		}
+	}
+	return ret;
+
+}
+
+bool Ui::deactivate_ecp_trigger(ecp_edp_ui_robot_def& robot_l) {
+
+	if (robot_l.is_active) {
+		if (robot_l.ecp.trigger_fd >= 0) {
+			name_close(robot_l.ecp.trigger_fd);
+		}
+		robot_l.ecp.trigger_fd = -1;
+		robot_l.ecp.pid = -1;
+		return true;
+	}
+
+	return false;
+}
+

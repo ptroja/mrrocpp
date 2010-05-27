@@ -2728,7 +2728,8 @@ int pulse_reader_irp6ot_start(PtWidget_t *widget, ApInfo_t *apinfo,
 bool pulse_reader_irp6ot_start_exec_pulse() {
 
 	if (ui.irp6ot_m.state.edp.state == 1) {
-		pulse_reader_execute(ui.irp6ot_m.state.edp.reader_fd, READER_START, 0);
+		ui.pulse_reader_execute(ui.irp6ot_m.state.edp.reader_fd, READER_START,
+				0);
 		ui.irp6ot_m.state.edp.state = 2;
 		return true;
 	}
@@ -2755,7 +2756,7 @@ int pulse_reader_irp6ot_stop(PtWidget_t *widget, ApInfo_t *apinfo,
 bool pulse_reader_irp6ot_stop_exec_pulse() {
 
 	if (ui.irp6ot_m.state.edp.state == 2) {
-		pulse_reader_execute(ui.irp6ot_m.state.edp.reader_fd, READER_STOP, 0);
+		ui.pulse_reader_execute(ui.irp6ot_m.state.edp.reader_fd, READER_STOP, 0);
 		ui.irp6ot_m.state.edp.state = 1;
 		return true;
 	}
@@ -2781,7 +2782,8 @@ int pulse_reader_irp6ot_trigger(PtWidget_t *widget, ApInfo_t *apinfo,
 bool pulse_reader_irp6ot_trigger_exec_pulse() {
 
 	if (ui.irp6ot_m.state.edp.state == 2) {
-		pulse_reader_execute(ui.irp6ot_m.state.edp.reader_fd, READER_TRIGGER, 0);
+		ui.pulse_reader_execute(ui.irp6ot_m.state.edp.reader_fd,
+				READER_TRIGGER, 0);
 
 		return true;
 	}
