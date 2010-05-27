@@ -2,14 +2,14 @@
 /*                            AppBuilder Photon Code Lib */
 /*                                         Version 2.01  */
 
-#include "ui/ui_r_bird_hand.h"
+#include "ui/src/bird_hand/ui_r_bird_hand.h"
 #include "ui/ui_ecp.h"
 #include "ui/ui_class.h"
 
 /* Local headers */
-#include "ablibs.h"
-#include "abimport.h"
-#include "proto.h"
+#include "../ablibs.h"
+#include "../abimport.h"
+#include "../gcc_ntox86/proto.h"
 
 extern Ui ui;
 
