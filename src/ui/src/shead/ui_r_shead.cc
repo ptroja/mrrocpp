@@ -30,54 +30,54 @@ UiRobotShead::UiRobotShead() :
 int UiRobotShead::reload_configuration() {
 
 	// jesli IRP6 on_track ma byc aktywne
-	if ((ui.shead.state.is_active = ui.config->value<int> ("is_shead_active"))
+	if ((state.is_active = ui.config->value<int> ("is_shead_active"))
 			== 1) {
 		// ini_con->create_ecp_shead (ini_con->ui->ecp_shead_section);
 		//ui_state.is_any_edp_active = true;
 		if (ui.is_mp_and_ecps_active) {
-			ui.shead.state.ecp.network_trigger_attach_point
+			state.ecp.network_trigger_attach_point
 					= ui.config->return_attach_point_name(
 							lib::configurator::CONFIG_SERVER,
 							"trigger_attach_point",
-							ui.shead.state.ecp.section_name);
+							state.ecp.section_name);
 
-			ui.shead.state.ecp.pid = -1;
-			ui.shead.state.ecp.trigger_fd = -1;
+			state.ecp.pid = -1;
+			state.ecp.trigger_fd = -1;
 		}
 
-		switch (ui.shead.state.edp.state) {
+		switch (state.edp.state) {
 		case -1:
 		case 0:
 			// ini_con->create_edp_shead (ini_con->ui->edp_shead_section);
 
-			ui.shead.state.edp.pid = -1;
-			ui.shead.state.edp.reader_fd = -1;
-			ui.shead.state.edp.state = 0;
+			state.edp.pid = -1;
+			state.edp.reader_fd = -1;
+			state.edp.state = 0;
 
-			if (ui.config->exists("test_mode", ui.shead.state.edp.section_name))
-				ui.shead.state.edp.test_mode = ui.config->value<int> (
-						"test_mode", ui.shead.state.edp.section_name);
+			if (ui.config->exists("test_mode", state.edp.section_name))
+				state.edp.test_mode = ui.config->value<int> (
+						"test_mode", state.edp.section_name);
 			else
-				ui.shead.state.edp.test_mode = 0;
+				state.edp.test_mode = 0;
 
-			ui.shead.state.edp.hardware_busy_attach_point = ui.config->value<
+			state.edp.hardware_busy_attach_point = ui.config->value<
 					std::string> ("hardware_busy_attach_point",
-					ui.shead.state.edp.section_name);
+					state.edp.section_name);
 
-			ui.shead.state.edp.network_resourceman_attach_point
+			state.edp.network_resourceman_attach_point
 					= ui.config->return_attach_point_name(
 							lib::configurator::CONFIG_SERVER,
 							"resourceman_attach_point",
-							ui.shead.state.edp.section_name);
+							state.edp.section_name);
 
-			ui.shead.state.edp.network_reader_attach_point
+			state.edp.network_reader_attach_point
 					= ui.config->return_attach_point_name(
 							lib::configurator::CONFIG_SERVER,
 							"reader_attach_point",
-							ui.shead.state.edp.section_name);
+							state.edp.section_name);
 
-			ui.shead.state.edp.node_name = ui.config->value<std::string> (
-					"node_name", ui.shead.state.edp.section_name);
+			state.edp.node_name = ui.config->value<std::string> (
+					"node_name", state.edp.section_name);
 			break;
 		case 1:
 		case 2:
@@ -89,10 +89,10 @@ int UiRobotShead::reload_configuration() {
 
 	} else // jesli  irp6 on_track ma byc nieaktywne
 	{
-		switch (ui.shead.state.edp.state) {
+		switch (state.edp.state) {
 		case -1:
 		case 0:
-			ui.shead.state.edp.state = -1;
+			state.edp.state = -1;
 			break;
 		case 1:
 		case 2:
@@ -108,7 +108,7 @@ int UiRobotShead::reload_configuration() {
 
 int UiRobotShead::manage_interface() {
 
-	switch (ui.shead.state.edp.state) {
+	switch (state.edp.state) {
 	case -1:
 		ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_shead, NULL);
 		break;
@@ -125,7 +125,7 @@ int UiRobotShead::manage_interface() {
 		ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_shead, NULL);
 
 		// jesli robot jest zsynchronizowany
-		if (ui.shead.state.edp.is_synchronised) {
+		if (state.edp.is_synchronised) {
 			ApModifyItemState(&robot_menu, AB_ITEM_DIM, NULL);
 			ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL,
 					ABN_mm_all_robots_preset_positions, NULL);

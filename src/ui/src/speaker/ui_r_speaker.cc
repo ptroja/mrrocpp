@@ -31,64 +31,64 @@ UiRobotSpeaker::UiRobotSpeaker() :
 int UiRobotSpeaker::reload_configuration() {
 
 	// jesli speaker ma byc aktywny
-	if ((ui.speaker.state.is_active = ui.config->value<int> (
+	if ((state.is_active = ui.config->value<int> (
 			"is_speaker_active")) == 1) {
 
 		//ui_state.is_any_edp_active = true;
 		if (ui.is_mp_and_ecps_active) {
-			ui.speaker.state.ecp.network_trigger_attach_point
+			state.ecp.network_trigger_attach_point
 					= ui.config->return_attach_point_name(
 							lib::configurator::CONFIG_SERVER,
 							"trigger_attach_point",
-							ui.speaker.state.ecp.section_name);
+							state.ecp.section_name);
 
-			ui.speaker.state.ecp.pid = -1;
-			ui.speaker.state.ecp.trigger_fd = -1;
+			state.ecp.pid = -1;
+			state.ecp.trigger_fd = -1;
 		}
 
-		switch (ui.speaker.state.edp.state) {
+		switch (state.edp.state) {
 		case -1:
 		case 0:
 
-			ui.speaker.state.edp.pid = -1;
-			ui.speaker.state.edp.reader_fd = -1;
-			ui.speaker.state.edp.state = 0;
+			state.edp.pid = -1;
+			state.edp.reader_fd = -1;
+			state.edp.state = 0;
 
 			if (ui.config->exists("test_mode",
-					ui.speaker.state.edp.section_name))
-				ui.speaker.state.edp.test_mode = ui.config->value<int> (
-						"test_mode", ui.speaker.state.edp.section_name);
+					state.edp.section_name))
+				state.edp.test_mode = ui.config->value<int> (
+						"test_mode", state.edp.section_name);
 			else
-				ui.speaker.state.edp.test_mode = 0;
+				state.edp.test_mode = 0;
 
-			ui.speaker.state.edp.hardware_busy_attach_point = ui.config->value<
+			state.edp.hardware_busy_attach_point = ui.config->value<
 					std::string> ("hardware_busy_attach_point",
-					ui.speaker.state.edp.section_name);
+					state.edp.section_name);
 
-			ui.speaker.state.edp.network_resourceman_attach_point
+			state.edp.network_resourceman_attach_point
 					= ui.config->return_attach_point_name(
 							lib::configurator::CONFIG_SERVER,
 							"resourceman_attach_point",
-							ui.speaker.state.edp.section_name);
+							state.edp.section_name);
 
-			ui.speaker.state.edp.network_reader_attach_point
+			state.edp.network_reader_attach_point
 					= ui.config->return_attach_point_name(
 							lib::configurator::CONFIG_SERVER,
 							"reader_attach_point",
-							ui.speaker.state.edp.section_name);
+							state.edp.section_name);
 
-			ui.speaker.state.edp.node_name = ui.config->value<std::string> (
-					"node_name", ui.speaker.state.edp.section_name);
+			state.edp.node_name = ui.config->value<std::string> (
+					"node_name", state.edp.section_name);
 
-			ui.speaker.state.edp.preset_sound_0
+			state.edp.preset_sound_0
 					= ui.config->value<std::string> ("preset_sound_0",
-							ui.speaker.state.edp.section_name);
-			ui.speaker.state.edp.preset_sound_1
+							state.edp.section_name);
+			state.edp.preset_sound_1
 					= ui.config->value<std::string> ("preset_sound_1",
-							ui.speaker.state.edp.section_name);
-			ui.speaker.state.edp.preset_sound_2
+							state.edp.section_name);
+			state.edp.preset_sound_2
 					= ui.config->value<std::string> ("preset_sound_2",
-							ui.speaker.state.edp.section_name);
+							state.edp.section_name);
 
 			break;
 		case 1:
@@ -102,10 +102,10 @@ int UiRobotSpeaker::reload_configuration() {
 	} else // jesli  conveyor ma byc nieaktywny
 	{
 
-		switch (ui.speaker.state.edp.state) {
+		switch (state.edp.state) {
 		case -1:
 		case 0:
-			ui.speaker.state.edp.state = -1;
+			state.edp.state = -1;
 			break;
 		case 1:
 		case 2:
@@ -122,7 +122,7 @@ int UiRobotSpeaker::reload_configuration() {
 
 int UiRobotSpeaker::manage_interface() {
 
-	switch (ui.speaker.state.edp.state) {
+	switch (state.edp.state) {
 	case -1:
 		ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_speaker, NULL);
 		break;
@@ -138,7 +138,7 @@ int UiRobotSpeaker::manage_interface() {
 		ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_speaker, NULL);
 		//		ApModifyItemState( &all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_edp_unload, NULL);
 		// jesli robot jest zsynchronizowany
-		if (ui.speaker.state.edp.is_synchronised) {
+		if (state.edp.is_synchronised) {
 			// ApModifyItemState( &robot_menu, AB_ITEM_DIM, ABN_mm_speaker_synchronisation, NULL);
 
 			switch (ui.mp.state) {

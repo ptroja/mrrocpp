@@ -30,53 +30,51 @@ UiRobotSmb::UiRobotSmb() :
 int UiRobotSmb::reload_configuration() {
 
 	// jesli IRP6 on_track ma byc aktywne
-	if ((ui.smb.state.is_active = ui.config->value<int> ("is_smb_active")) == 1) {
+	if ((state.is_active = ui.config->value<int> ("is_smb_active")) == 1) {
 		// ini_con->create_ecp_smb (ini_con->ui->ecp_smb_section);
 		//ui_state.is_any_edp_active = true;
 		if (ui.is_mp_and_ecps_active) {
-			ui.smb.state.ecp.network_trigger_attach_point
+			state.ecp.network_trigger_attach_point
 					= ui.config->return_attach_point_name(
 							lib::configurator::CONFIG_SERVER,
-							"trigger_attach_point",
-							ui.smb.state.ecp.section_name);
+							"trigger_attach_point", state.ecp.section_name);
 
-			ui.smb.state.ecp.pid = -1;
-			ui.smb.state.ecp.trigger_fd = -1;
+			state.ecp.pid = -1;
+			state.ecp.trigger_fd = -1;
 		}
 
-		switch (ui.smb.state.edp.state) {
+		switch (state.edp.state) {
 		case -1:
 		case 0:
 			// ini_con->create_edp_smb (ini_con->ui->edp_smb_section);
 
-			ui.smb.state.edp.pid = -1;
-			ui.smb.state.edp.reader_fd = -1;
-			ui.smb.state.edp.state = 0;
+			state.edp.pid = -1;
+			state.edp.reader_fd = -1;
+			state.edp.state = 0;
 
-			if (ui.config->exists("test_mode", ui.smb.state.edp.section_name))
-				ui.smb.state.edp.test_mode = ui.config->value<int> (
-						"test_mode", ui.smb.state.edp.section_name);
+			if (ui.config->exists("test_mode", state.edp.section_name))
+				state.edp.test_mode = ui.config->value<int> ("test_mode",
+						state.edp.section_name);
 			else
-				ui.smb.state.edp.test_mode = 0;
+				state.edp.test_mode = 0;
 
-			ui.smb.state.edp.hardware_busy_attach_point = ui.config->value<
-					std::string> ("hardware_busy_attach_point",
-					ui.smb.state.edp.section_name);
+			state.edp.hardware_busy_attach_point
+					= ui.config->value<std::string> (
+							"hardware_busy_attach_point",
+							state.edp.section_name);
 
-			ui.smb.state.edp.network_resourceman_attach_point
+			state.edp.network_resourceman_attach_point
 					= ui.config->return_attach_point_name(
 							lib::configurator::CONFIG_SERVER,
-							"resourceman_attach_point",
-							ui.smb.state.edp.section_name);
+							"resourceman_attach_point", state.edp.section_name);
 
-			ui.smb.state.edp.network_reader_attach_point
+			state.edp.network_reader_attach_point
 					= ui.config->return_attach_point_name(
 							lib::configurator::CONFIG_SERVER,
-							"reader_attach_point",
-							ui.smb.state.edp.section_name);
+							"reader_attach_point", state.edp.section_name);
 
-			ui.smb.state.edp.node_name = ui.config->value<std::string> (
-					"node_name", ui.smb.state.edp.section_name);
+			state.edp.node_name = ui.config->value<std::string> ("node_name",
+					state.edp.section_name);
 			break;
 		case 1:
 		case 2:
@@ -88,10 +86,10 @@ int UiRobotSmb::reload_configuration() {
 
 	} else // jesli  irp6 on_track ma byc nieaktywne
 	{
-		switch (ui.smb.state.edp.state) {
+		switch (state.edp.state) {
 		case -1:
 		case 0:
-			ui.smb.state.edp.state = -1;
+			state.edp.state = -1;
 			break;
 		case 1:
 		case 2:
@@ -107,7 +105,7 @@ int UiRobotSmb::reload_configuration() {
 
 int UiRobotSmb::manage_interface() {
 
-	switch (ui.smb.state.edp.state) {
+	switch (state.edp.state) {
 	case -1:
 		ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_smb, NULL);
 		break;
@@ -124,7 +122,7 @@ int UiRobotSmb::manage_interface() {
 		ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_smb, NULL);
 
 		// jesli robot jest zsynchronizowany
-		if (ui.smb.state.edp.is_synchronised) {
+		if (state.edp.is_synchronised) {
 			ApModifyItemState(&robot_menu, AB_ITEM_DIM, NULL);
 			ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL,
 					ABN_mm_all_robots_preset_positions, NULL);
