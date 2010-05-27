@@ -3,7 +3,7 @@
 /*                                         Version 2.01  */
 
 #include "ui/src/speaker/ui_r_speaker.h"
-#include "lib/robot_consts/all_robots_const.h"
+#include "lib/robot_consts/speaker_const.h"
 #include "ui/ui_class.h"
 
 /* Local headers */

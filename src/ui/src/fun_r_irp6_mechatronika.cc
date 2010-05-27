@@ -25,9 +25,8 @@
 // Konfigurator.
 // #include "lib/configurator.h"
 #include "ui/ui_ecp_r_tfg_and_conv.h"
-#include "lib/robot_consts/all_robots_const.h"
 #include "ui/ui_ecp_r_irp6_common.h"
-#include "lib/robot_consts/all_robots_const.h"
+#include "lib/robot_consts/irp6m_const.h"
 /* Local headers */
 #include "ablibs.h"
 #include "abimport.h"

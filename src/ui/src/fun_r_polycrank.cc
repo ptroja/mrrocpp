@@ -23,7 +23,7 @@
 // #include "ui/ui.h"
 // Konfigurator.
 // #include "lib/configurator.h"
-#include "lib/robot_consts/all_robots_const.h"
+#include "lib/robot_consts/polycrank_const.h"
 
 /* Local headers */
 #include "ablibs.h"

@@ -3,7 +3,7 @@
 /*                                         Version 2.01  */
 
 #include "ui/src/shead/ui_r_shead.h"
-#include "lib/robot_consts/all_robots_const.h"
+#include "lib/robot_consts/shead_const.h"
 #include "ui/ui_class.h"
 
 /* Local headers */

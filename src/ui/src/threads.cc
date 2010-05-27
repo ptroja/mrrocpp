@@ -45,7 +45,7 @@
 #include "ui/ui_const.h"
 #include "lib/configurator.h"
 #include "lib/mis_fun.h"
-#include "lib/robot_consts/all_robots_const.h"
+
 
 #include "lib/srlib.h"
 

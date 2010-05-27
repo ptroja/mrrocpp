@@ -28,7 +28,7 @@
 #include "lib/configurator.h"
 #include "ui/ui_ecp_r_tfg_and_conv.h"
 
-#include "lib/robot_consts/all_robots_const.h"
+#include "lib/robot_consts/spkm_const.h"
 /* Local headers */
 #include "ablibs.h"
 #include "abimport.h"
