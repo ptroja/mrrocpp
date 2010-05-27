@@ -37,10 +37,6 @@
 
 extern Ui ui;
 
-extern ui_ecp_buffer* ui_ecp_obj;
-
-extern ui_ecp_buffer* ui_ecp_obj;
-
 double irp6ot_current_pos[IRP6OT_M_NUM_OF_SERVOS]; // pozycja biezaca
 double irp6ot_desired_pos[IRP6OT_M_NUM_OF_SERVOS]; // pozycja zadana
 

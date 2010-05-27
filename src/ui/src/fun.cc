@@ -37,9 +37,9 @@ extern Ui ui;
 
 extern function_execution_buffer main_eb;
 
-extern ui_ecp_buffer* ui_ecp_obj;
 
-extern ui_ecp_buffer* ui_ecp_obj;
+
+
 
 extern double irp6ot_current_pos[8]; // pozycja biezaca
 extern double irp6ot_desired_pos[8]; // pozycja zadana
@@ -273,7 +273,7 @@ int yes_no_callback(PtWidget_t *widget, ApInfo_t *apinfo,
 			|| ((cbinfo->event->type == Ph_EV_KEY)
 					&& (my_data->key_cap == 0x79))) // Y
 	{
-		ui_ecp_obj->ui_rep.reply = lib::ANSWER_YES;
+		ui.ui_ecp_obj->ui_rep.reply = lib::ANSWER_YES;
 	}
 
 	else if (((cbinfo->event->type == Ph_EV_BUT_RELEASE) && (ApName(ApWidget(
@@ -282,10 +282,10 @@ int yes_no_callback(PtWidget_t *widget, ApInfo_t *apinfo,
 					&& (my_data->key_cap == 0x6e))) // N
 
 	{
-		ui_ecp_obj->ui_rep.reply = lib::ANSWER_NO;
+		ui.ui_ecp_obj->ui_rep.reply = lib::ANSWER_NO;
 	}
 
-	ui_ecp_obj->communication_state = UI_ECP_REPLY_READY;
+	ui.ui_ecp_obj->communication_state = UI_ECP_REPLY_READY;
 
 	PtDestroyWidget(ABW_yes_no_window);
 
@@ -314,19 +314,19 @@ int input_integer_callback(PtWidget_t *widget, ApInfo_t *apinfo,
 			|| ((cbinfo->event->type == Ph_EV_KEY)
 					&& (my_data->key_cap == 0x6f))) // O
 	{
-		ui_ecp_obj->ui_rep.reply = lib::ANSWER_YES;
+		ui.ui_ecp_obj->ui_rep.reply = lib::ANSWER_YES;
 		PtGetResource(ABW_PtNumericInteger_wind_input_integer_value,
 				Pt_ARG_NUMERIC_VALUE, &(tmp_ptgr), 0);
-		ui_ecp_obj->ui_rep.integer_number = *tmp_ptgr;
+		ui.ui_ecp_obj->ui_rep.integer_number = *tmp_ptgr;
 	} else if (((cbinfo->event->type == Ph_EV_BUT_RELEASE) && (ApName(ApWidget(
 			cbinfo)) == ABN_PtButton_wind_input_integer_cancel))
 			|| ((cbinfo->event->type == Ph_EV_KEY)
 					&& (my_data->key_cap == 0x63))) // C
 	{
-		ui_ecp_obj->ui_rep.reply = lib::QUIT;
-		ui_ecp_obj->ui_rep.integer_number = 0;
+		ui.ui_ecp_obj->ui_rep.reply = lib::QUIT;
+		ui.ui_ecp_obj->ui_rep.integer_number = 0;
 	}
-	ui_ecp_obj->communication_state = UI_ECP_REPLY_READY;
+	ui.ui_ecp_obj->communication_state = UI_ECP_REPLY_READY;
 
 	PtDestroyWidget(ABW_wnd_input_integer);
 
@@ -355,19 +355,19 @@ int input_double_callback(PtWidget_t *widget, ApInfo_t *apinfo,
 			|| ((cbinfo->event->type == Ph_EV_KEY)
 					&& (my_data->key_cap == 0x6f))) // O
 	{
-		ui_ecp_obj->ui_rep.reply = lib::ANSWER_YES;
+		ui.ui_ecp_obj->ui_rep.reply = lib::ANSWER_YES;
 		PtGetResource(ABW_PtNumericFloat_wind_input_double_value,
 				Pt_ARG_NUMERIC_VALUE, &(tmp_ptgr), 0);
-		ui_ecp_obj->ui_rep.double_number = *tmp_ptgr;
+		ui.ui_ecp_obj->ui_rep.double_number = *tmp_ptgr;
 	} else if (((cbinfo->event->type == Ph_EV_BUT_RELEASE) && (ApName(ApWidget(
 			cbinfo)) == ABN_PtButton_wind_input_double_cancel))
 			|| ((cbinfo->event->type == Ph_EV_KEY)
 					&& (my_data->key_cap == 0x63))) // C
 	{
-		ui_ecp_obj->ui_rep.reply = lib::QUIT;
-		ui_ecp_obj->ui_rep.double_number = 0.0;
+		ui.ui_ecp_obj->ui_rep.reply = lib::QUIT;
+		ui.ui_ecp_obj->ui_rep.double_number = 0.0;
 	}
-	ui_ecp_obj->communication_state = UI_ECP_REPLY_READY;
+	ui.ui_ecp_obj->communication_state = UI_ECP_REPLY_READY;
 
 	PtDestroyWidget(ABW_wnd_input_double);
 
@@ -395,33 +395,33 @@ int choose_option_callback(PtWidget_t *widget, ApInfo_t *apinfo,
 			|| ((cbinfo->event->type == Ph_EV_KEY)
 					&& (my_data->key_cap == 0x31))) // 1
 	{
-		ui_ecp_obj->ui_rep.reply = lib::OPTION_ONE;
+		ui.ui_ecp_obj->ui_rep.reply = lib::OPTION_ONE;
 	} else if (((cbinfo->event->type == Ph_EV_BUT_RELEASE) && (ApName(ApWidget(
 			cbinfo)) == ABN_PtButton_wind_choose_option_2))
 			|| ((cbinfo->event->type == Ph_EV_KEY)
 					&& (my_data->key_cap == 0x32))) // 2
 	{
-		ui_ecp_obj->ui_rep.reply = lib::OPTION_TWO;
+		ui.ui_ecp_obj->ui_rep.reply = lib::OPTION_TWO;
 	} else if (((cbinfo->event->type == Ph_EV_BUT_RELEASE) && (ApName(ApWidget(
 			cbinfo)) == ABN_PtButton_wind_choose_option_3))
 			|| ((cbinfo->event->type == Ph_EV_KEY)
 					&& (my_data->key_cap == 0x33))) // 3
 	{
-		ui_ecp_obj->ui_rep.reply = lib::OPTION_THREE;
+		ui.ui_ecp_obj->ui_rep.reply = lib::OPTION_THREE;
 	} else if (((cbinfo->event->type == Ph_EV_BUT_RELEASE) && (ApName(ApWidget(
 			cbinfo)) == ABN_PtButton_wind_choose_option_4))
 			|| ((cbinfo->event->type == Ph_EV_KEY)
 					&& (my_data->key_cap == 0x34))) // 4
 	{
-		ui_ecp_obj->ui_rep.reply = lib::OPTION_FOUR;
+		ui.ui_ecp_obj->ui_rep.reply = lib::OPTION_FOUR;
 	} else if (((cbinfo->event->type == Ph_EV_BUT_RELEASE) && (ApName(ApWidget(
 			cbinfo)) == ABN_PtButton_wind_choose_option_cancel))
 			|| ((cbinfo->event->type == Ph_EV_KEY)
 					&& (my_data->key_cap == 0x63))) // C
 	{
-		ui_ecp_obj->ui_rep.reply = lib::QUIT;
+		ui.ui_ecp_obj->ui_rep.reply = lib::QUIT;
 	}
-	ui_ecp_obj->communication_state = UI_ECP_REPLY_READY;
+	ui.ui_ecp_obj->communication_state = UI_ECP_REPLY_READY;
 
 	PtDestroyWidget(ABW_wnd_choose_option);
 
@@ -439,10 +439,10 @@ int close_file_selection_window(PtWidget_t *widget, ApInfo_t *apinfo,
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
 	if ((ui.file_window_mode == FSTRAJECTORY)
-			&& (ui_ecp_obj->communication_state != UI_ECP_REPLY_READY)) {
-		ui_ecp_obj->ui_rep.reply = lib::QUIT;
+			&& (ui.ui_ecp_obj->communication_state != UI_ECP_REPLY_READY)) {
+		ui.ui_ecp_obj->ui_rep.reply = lib::QUIT;
 	}
-	ui_ecp_obj->synchroniser.command();
+	ui.ui_ecp_obj->synchroniser.command();
 
 	PtDestroyWidget(ABW_file_selection_window);
 
@@ -459,10 +459,10 @@ int close_teaching_window(PtWidget_t *widget, ApInfo_t *apinfo,
 
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (ui_ecp_obj->communication_state != UI_ECP_REPLY_READY) {
-		ui_ecp_obj->ui_rep.reply = lib::QUIT;
+	if (ui.ui_ecp_obj->communication_state != UI_ECP_REPLY_READY) {
+		ui.ui_ecp_obj->ui_rep.reply = lib::QUIT;
 	}
-	ui_ecp_obj->synchroniser.command();
+	ui.ui_ecp_obj->synchroniser.command();
 
 	PtDestroyWidget(ABW_teaching_window);
 
@@ -493,9 +493,9 @@ int init_teaching_window(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 	// rodzaj polecenia z ECP
-	switch (ui_ecp_obj->ecp_to_ui_msg.ecp_message) {
+	switch (ui.ui_ecp_obj->ecp_to_ui_msg.ecp_message) {
 	case lib::C_XYZ_ANGLE_AXIS:
-		switch (ui_ecp_obj->ecp_to_ui_msg.robot_name) {
+		switch (ui.ui_ecp_obj->ecp_to_ui_msg.robot_name) {
 		case lib::ROBOT_IRP6OT_M:
 			start_wnd_irp6_on_track_xyz_angle_axis(widget, apinfo, cbinfo);
 			break;
@@ -510,7 +510,7 @@ int init_teaching_window(PtWidget_t *widget, ApInfo_t *apinfo,
 		}
 		break;
 	case lib::C_XYZ_EULER_ZYZ:
-		switch (ui_ecp_obj->ecp_to_ui_msg.robot_name) {
+		switch (ui.ui_ecp_obj->ecp_to_ui_msg.robot_name) {
 		case lib::ROBOT_IRP6OT_M:
 			start_wnd_irp6_on_track_xyz_euler_zyz(widget, apinfo, cbinfo);
 			break;
@@ -525,7 +525,7 @@ int init_teaching_window(PtWidget_t *widget, ApInfo_t *apinfo,
 		}
 		break;
 	case lib::C_JOINT:
-		switch (ui_ecp_obj->ecp_to_ui_msg.robot_name) {
+		switch (ui.ui_ecp_obj->ecp_to_ui_msg.robot_name) {
 		case lib::ROBOT_IRP6OT_M:
 			start_wnd_irp6_on_track_int(widget, apinfo, cbinfo);
 			break;
@@ -540,7 +540,7 @@ int init_teaching_window(PtWidget_t *widget, ApInfo_t *apinfo,
 		}
 		break;
 	case lib::C_MOTOR:
-		switch (ui_ecp_obj->ecp_to_ui_msg.robot_name) {
+		switch (ui.ui_ecp_obj->ecp_to_ui_msg.robot_name) {
 		case lib::ROBOT_IRP6OT_M:
 			start_wnd_irp6_on_track_inc(widget, apinfo, cbinfo);
 			break;
@@ -573,9 +573,9 @@ int teaching_window_end_motion(PtWidget_t *widget, ApInfo_t *apinfo,
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
 	ui.teachingstate = MP_RUNNING;
-	ui_ecp_obj->ui_rep.reply = lib::QUIT;
+	ui.ui_ecp_obj->ui_rep.reply = lib::QUIT;
 
-	ui_ecp_obj->communication_state = UI_ECP_REPLY_READY;
+	ui.ui_ecp_obj->communication_state = UI_ECP_REPLY_READY;
 	PtDestroyWidget(ABW_teaching_window);
 
 	return (Pt_CONTINUE);
@@ -596,30 +596,30 @@ int file_selection_window_send_location(PtWidget_t *widget, ApInfo_t *apinfo,
 	if (item != NULL) {
 		if (ui.file_window_mode == FSTRAJECTORY) {
 			if ((item->type) == Pt_FS_FILE) {
-				strncpy(ui_ecp_obj->ui_rep.filename,
+				strncpy(ui.ui_ecp_obj->ui_rep.filename,
 						rindex(item->fullpath, '/') + 1, strlen(rindex(
 								item->fullpath, '/')) - 1);
-				ui_ecp_obj->ui_rep.filename[strlen(rindex(item->fullpath, '/'))
+				ui.ui_ecp_obj->ui_rep.filename[strlen(rindex(item->fullpath, '/'))
 						- 1] = '\0';
-				strncpy(ui_ecp_obj->ui_rep.path, item->fullpath, strlen(
+				strncpy(ui.ui_ecp_obj->ui_rep.path, item->fullpath, strlen(
 						item->fullpath) - strlen(rindex(item->fullpath, '/')));
-				ui_ecp_obj->ui_rep.path[strlen(item->fullpath) - strlen(rindex(
+				ui.ui_ecp_obj->ui_rep.path[strlen(item->fullpath) - strlen(rindex(
 						item->fullpath, '/'))] = '\0';
 			} else if (((item->type) == Pt_FS_DIR_OP) || ((item->type)
 					== Pt_FS_DIR_CL)) {
 
-				strcpy(ui_ecp_obj->ui_rep.path, item->fullpath);
+				strcpy(ui.ui_ecp_obj->ui_rep.path, item->fullpath);
 				PtGetResource(ABW_PtText_file_filename, Pt_ARG_TEXT_STRING,
 						&buffer, 0);
 				char file_name[strlen(buffer)];
 				strcpy(file_name, buffer);
-				strcpy(ui_ecp_obj->ui_rep.filename, file_name);
+				strcpy(ui.ui_ecp_obj->ui_rep.filename, file_name);
 			}
 
 			// kopiowanie biezacej sciezki, aby w nastepnym wywolaniu okna od niej zaczynac
-			ui.teach_filesel_fullpath = ui_ecp_obj->ui_rep.path;
+			ui.teach_filesel_fullpath = ui.ui_ecp_obj->ui_rep.path;
 			// opuszczenie semaforu dla watku UI_COMM
-			ui_ecp_obj->communication_state = UI_ECP_REPLY_READY;
+			ui.ui_ecp_obj->communication_state = UI_ECP_REPLY_READY;
 
 			// dla pliku konfiguracyjnego
 		} else if (ui.file_window_mode == FSCONFIG) {
@@ -1764,10 +1764,10 @@ int close_yes_no_window(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (ui_ecp_obj->communication_state != UI_ECP_REPLY_READY) {
-		ui_ecp_obj->ui_rep.reply = lib::QUIT;
+	if (ui.ui_ecp_obj->communication_state != UI_ECP_REPLY_READY) {
+		ui.ui_ecp_obj->ui_rep.reply = lib::QUIT;
 	}
-	ui_ecp_obj->synchroniser.command();
+	ui.ui_ecp_obj->synchroniser.command();
 	return (Pt_CONTINUE);
 
 }
@@ -1780,10 +1780,10 @@ int close_input_integer_window(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (ui_ecp_obj->communication_state != UI_ECP_REPLY_READY) {
-		ui_ecp_obj->ui_rep.reply = lib::QUIT;
+	if (ui.ui_ecp_obj->communication_state != UI_ECP_REPLY_READY) {
+		ui.ui_ecp_obj->ui_rep.reply = lib::QUIT;
 	}
-	ui_ecp_obj->synchroniser.command();
+	ui.ui_ecp_obj->synchroniser.command();
 	return (Pt_CONTINUE);
 
 }
@@ -1796,10 +1796,10 @@ int close_input_double_window(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (ui_ecp_obj->communication_state != UI_ECP_REPLY_READY) {
-		ui_ecp_obj->ui_rep.reply = lib::QUIT;
+	if (ui.ui_ecp_obj->communication_state != UI_ECP_REPLY_READY) {
+		ui.ui_ecp_obj->ui_rep.reply = lib::QUIT;
 	}
-	ui_ecp_obj->synchroniser.command();
+	ui.ui_ecp_obj->synchroniser.command();
 	return (Pt_CONTINUE);
 
 }
@@ -1812,10 +1812,10 @@ int close_choose_option_window(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (ui_ecp_obj->communication_state != UI_ECP_REPLY_READY) {
-		ui_ecp_obj->ui_rep.reply = lib::QUIT;
+	if (ui.ui_ecp_obj->communication_state != UI_ECP_REPLY_READY) {
+		ui.ui_ecp_obj->ui_rep.reply = lib::QUIT;
 	}
-	ui_ecp_obj->synchroniser.command();
+	ui.ui_ecp_obj->synchroniser.command();
 	return (Pt_CONTINUE);
 
 }
@@ -1850,27 +1850,27 @@ int teaching_window_send_move(PtWidget_t *widget, ApInfo_t *apinfo,
 	PtGetResource(ABW_PtNumericFloat_move_time, Pt_ARG_NUMERIC_VALUE,
 			&motion_time, 0);
 
-	switch (ui_ecp_obj->ecp_to_ui_msg.robot_name) {
+	switch (ui.ui_ecp_obj->ecp_to_ui_msg.robot_name) {
 	case lib::ROBOT_IRP6OT_M:
 		for (int i = 0; i < IRP6OT_M_NUM_OF_SERVOS; i++)
-			ui_ecp_obj->ui_rep.coordinates[i] = irp6ot_current_pos[i];
+			ui.ui_ecp_obj->ui_rep.coordinates[i] = irp6ot_current_pos[i];
 		break;
 	case lib::ROBOT_IRP6P_M:
 		for (int i = 0; i < IRP6P_M_NUM_OF_SERVOS; i++)
-			ui_ecp_obj->ui_rep.coordinates[i] = irp6p_current_pos[i];
+			ui.ui_ecp_obj->ui_rep.coordinates[i] = irp6p_current_pos[i];
 		break;
 	case lib::ROBOT_IRP6_MECHATRONIKA:
 		for (int i = 0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++)
-			ui_ecp_obj->ui_rep.coordinates[i] = irp6m_current_pos[i];
+			ui.ui_ecp_obj->ui_rep.coordinates[i] = irp6m_current_pos[i];
 		break;
 	default:
 		break;
 	}
 
-	ui_ecp_obj->ui_rep.double_number = *motion_time;
-	ui_ecp_obj->ui_rep.reply = lib::NEXT;
-	ui_ecp_obj->communication_state = UI_ECP_REPLY_READY;
-	ui_ecp_obj->synchroniser.command();
+	ui.ui_ecp_obj->ui_rep.double_number = *motion_time;
+	ui.ui_ecp_obj->ui_rep.reply = lib::NEXT;
+	ui.ui_ecp_obj->communication_state = UI_ECP_REPLY_READY;
+	ui.ui_ecp_obj->synchroniser.command();
 
 	return (Pt_CONTINUE);
 }

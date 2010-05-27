@@ -52,10 +52,6 @@ extern Ui ui;
 
 busy_flag communication_flag;
 
-ui_sr_buffer* ui_sr_obj;
-
-ui_ecp_buffer* ui_ecp_obj;
-
 // forward declaration
 void *sr_thread(void* arg);
 
@@ -85,15 +81,15 @@ void *comm_thread(void* arg) {
 	}
 
 	while (1) {
-		// ui_ecp_obj->communication_state = UI_ECP_REPLY_READY;
-		ui_ecp_obj->communication_state = UI_ECP_AFTER_REPLY;
+		// ui.ui_ecp_obj->communication_state = UI_ECP_REPLY_READY;
+		ui.ui_ecp_obj->communication_state = UI_ECP_AFTER_REPLY;
 
 		_msg_info info;
 
-		int rcvid = MsgReceive(attach->chid, &ui_ecp_obj->ecp_to_ui_msg,
-				sizeof(ui_ecp_obj->ecp_to_ui_msg), &info);
+		int rcvid = MsgReceive(attach->chid, &ui.ui_ecp_obj->ecp_to_ui_msg,
+				sizeof(ui.ui_ecp_obj->ecp_to_ui_msg), &info);
 
-		ui_ecp_obj->communication_state = UI_ECP_AFTER_RECEIVE;
+		ui.ui_ecp_obj->communication_state = UI_ECP_AFTER_RECEIVE;
 		if (rcvid == -1) {/* Error condition, exit */
 			perror("UI: Receive failed");
 			// 	  throw generator::ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
@@ -102,9 +98,9 @@ void *comm_thread(void* arg) {
 
 		if (rcvid == 0) {/* Pulse received */
 			// printf("sr puls\n");
-			switch (ui_ecp_obj->ecp_to_ui_msg.hdr.code) {
+			switch (ui.ui_ecp_obj->ecp_to_ui_msg.hdr.code) {
 			case _PULSE_CODE_DISCONNECT:
-				ConnectDetach(ui_ecp_obj->ecp_to_ui_msg.hdr.scoid);
+				ConnectDetach(ui.ui_ecp_obj->ecp_to_ui_msg.hdr.scoid);
 				break;
 			case _PULSE_CODE_UNBLOCK:
 				break;
@@ -115,8 +111,8 @@ void *comm_thread(void* arg) {
 		}
 
 		/* A QNX IO message received, reject */
-		if (ui_ecp_obj->ecp_to_ui_msg.hdr.type >= _IO_BASE
-				&& ui_ecp_obj->ecp_to_ui_msg.hdr.type <= _IO_MAX) {
+		if (ui.ui_ecp_obj->ecp_to_ui_msg.hdr.type >= _IO_BASE
+				&& ui.ui_ecp_obj->ecp_to_ui_msg.hdr.type <= _IO_MAX) {
 
 			MsgReply(rcvid, EOK, 0, 0);
 			continue;
@@ -129,13 +125,13 @@ void *comm_thread(void* arg) {
 
 		}
 
-		switch (ui_ecp_obj->ecp_to_ui_msg.ecp_message) { // rodzaj polecenia z ECP
+		switch (ui.ui_ecp_obj->ecp_to_ui_msg.ecp_message) { // rodzaj polecenia z ECP
 		case lib::C_XYZ_ANGLE_AXIS:
 		case lib::C_XYZ_EULER_ZYZ:
 		case lib::C_JOINT:
 		case lib::C_MOTOR:
 			//  printf("C_MOTOR\n");
-			ui_ecp_obj->synchroniser.null_command();
+			ui.ui_ecp_obj->synchroniser.null_command();
 			if (ui.teachingstate == MP_RUNNING) {
 				ui.teachingstate = ECP_TEACHING;
 			}
@@ -147,24 +143,24 @@ void *comm_thread(void* arg) {
 				PtWindowToFront(ABW_teaching_window);
 			}
 			PtLeave(0);
-			ui_ecp_obj->synchroniser.wait();
+			ui.ui_ecp_obj->synchroniser.wait();
 
-			if (MsgReply(rcvid, EOK, &ui_ecp_obj->ui_rep,
-					sizeof(ui_ecp_obj->ui_rep)) < 0) {
+			if (MsgReply(rcvid, EOK, &ui.ui_ecp_obj->ui_rep,
+					sizeof(ui.ui_ecp_obj->ui_rep)) < 0) {
 				printf("Blad w UI reply\n");
 			}
 			break;
 		case lib::YES_NO:
-			ui_ecp_obj->synchroniser.null_command();
+			ui.ui_ecp_obj->synchroniser.null_command();
 			PtEnter(0);
 			ApCreateModule(ABM_yes_no_window, ABW_base, NULL);
 			PtSetResource(ABW_PtLabel_pytanie, Pt_ARG_TEXT_STRING,
-					ui_ecp_obj->ecp_to_ui_msg.string, 0);
+					ui.ui_ecp_obj->ecp_to_ui_msg.string, 0);
 			PtLeave(0);
-			ui_ecp_obj->synchroniser.wait();
+			ui.ui_ecp_obj->synchroniser.wait();
 
-			if (MsgReply(rcvid, EOK, &ui_ecp_obj->ui_rep,
-					sizeof(ui_ecp_obj->ui_rep)) < 0) {
+			if (MsgReply(rcvid, EOK, &ui.ui_ecp_obj->ui_rep,
+					sizeof(ui.ui_ecp_obj->ui_rep)) < 0) {
 				printf("Blad w UI reply\n");
 			}
 
@@ -173,69 +169,69 @@ void *comm_thread(void* arg) {
 			PtEnter(0);
 			ApCreateModule(ABM_wnd_message, ABW_base, NULL);
 			PtSetResource(ABW_PtLabel_wind_message, Pt_ARG_TEXT_STRING,
-					ui_ecp_obj->ecp_to_ui_msg.string, 0);
+					ui.ui_ecp_obj->ecp_to_ui_msg.string, 0);
 			PtLeave(0);
 
-			ui_ecp_obj->ui_rep.reply = lib::ANSWER_YES;
+			ui.ui_ecp_obj->ui_rep.reply = lib::ANSWER_YES;
 
-			if (MsgReply(rcvid, EOK, &ui_ecp_obj->ui_rep,
-					sizeof(ui_ecp_obj->ui_rep)) < 0) {
+			if (MsgReply(rcvid, EOK, &ui.ui_ecp_obj->ui_rep,
+					sizeof(ui.ui_ecp_obj->ui_rep)) < 0) {
 				printf("Blad w UI reply\n");
 			}
 			break;
 		case lib::DOUBLE_NUMBER:
-			ui_ecp_obj->synchroniser.null_command();
+			ui.ui_ecp_obj->synchroniser.null_command();
 			PtEnter(0);
 			ApCreateModule(ABM_wnd_input_double, ABW_base, NULL);
 			PtSetResource(ABW_PtLabel_wind_input_double, Pt_ARG_TEXT_STRING,
-					ui_ecp_obj->ecp_to_ui_msg.string, 0);
+					ui.ui_ecp_obj->ecp_to_ui_msg.string, 0);
 			PtLeave(0);
-			ui_ecp_obj->synchroniser.wait();
+			ui.ui_ecp_obj->synchroniser.wait();
 
-			if (MsgReply(rcvid, EOK, &ui_ecp_obj->ui_rep,
-					sizeof(ui_ecp_obj->ui_rep)) < 0) {
+			if (MsgReply(rcvid, EOK, &ui.ui_ecp_obj->ui_rep,
+					sizeof(ui.ui_ecp_obj->ui_rep)) < 0) {
 				printf("Blad w UI reply\n");
 			}
 			break;
 		case lib::INTEGER_NUMBER:
-			ui_ecp_obj->synchroniser.null_command();
+			ui.ui_ecp_obj->synchroniser.null_command();
 			PtEnter(0);
 			ApCreateModule(ABM_wnd_input_integer, ABW_base, NULL);
 			PtSetResource(ABW_PtLabel_wind_input_integer, Pt_ARG_TEXT_STRING,
-					ui_ecp_obj->ecp_to_ui_msg.string, 0);
+					ui.ui_ecp_obj->ecp_to_ui_msg.string, 0);
 			PtLeave(0);
-			ui_ecp_obj->synchroniser.wait();
+			ui.ui_ecp_obj->synchroniser.wait();
 
-			if (MsgReply(rcvid, EOK, &ui_ecp_obj->ui_rep,
-					sizeof(ui_ecp_obj->ui_rep)) < 0) {
+			if (MsgReply(rcvid, EOK, &ui.ui_ecp_obj->ui_rep,
+					sizeof(ui.ui_ecp_obj->ui_rep)) < 0) {
 				printf("Blad w UI reply\n");
 			}
 			break;
 		case lib::CHOOSE_OPTION:
-			ui_ecp_obj->synchroniser.null_command();
+			ui.ui_ecp_obj->synchroniser.null_command();
 			PtEnter(0);
 			ApCreateModule(ABM_wnd_choose_option, ABW_base, NULL);
 			PtSetResource(ABW_PtLabel_wind_choose_option, Pt_ARG_TEXT_STRING,
-					ui_ecp_obj->ecp_to_ui_msg.string, 0);
+					ui.ui_ecp_obj->ecp_to_ui_msg.string, 0);
 
-			// wybor ilosci dostepnych opcji w zaleznosci od wartosci ui_ecp_obj->ecp_to_ui_msg.nr_of_options
+			// wybor ilosci dostepnych opcji w zaleznosci od wartosci ui.ui_ecp_obj->ecp_to_ui_msg.nr_of_options
 
-			if (ui_ecp_obj->ecp_to_ui_msg.nr_of_options == 2) {
+			if (ui.ui_ecp_obj->ecp_to_ui_msg.nr_of_options == 2) {
 				block_widget(ABW_PtButton_wind_choose_option_3);
 				block_widget(ABW_PtButton_wind_choose_option_4);
-			} else if (ui_ecp_obj->ecp_to_ui_msg.nr_of_options == 3) {
+			} else if (ui.ui_ecp_obj->ecp_to_ui_msg.nr_of_options == 3) {
 				unblock_widget(ABW_PtButton_wind_choose_option_3);
 				block_widget(ABW_PtButton_wind_choose_option_4);
-			} else if (ui_ecp_obj->ecp_to_ui_msg.nr_of_options == 4) {
+			} else if (ui.ui_ecp_obj->ecp_to_ui_msg.nr_of_options == 4) {
 				unblock_widget(ABW_PtButton_wind_choose_option_3);
 				unblock_widget(ABW_PtButton_wind_choose_option_4);
 			}
 
 			PtLeave(0);
-			ui_ecp_obj->synchroniser.wait();
+			ui.ui_ecp_obj->synchroniser.wait();
 
-			if (MsgReply(rcvid, EOK, &ui_ecp_obj->ui_rep,
-					sizeof(ui_ecp_obj->ui_rep)) < 0) {
+			if (MsgReply(rcvid, EOK, &ui.ui_ecp_obj->ui_rep,
+					sizeof(ui.ui_ecp_obj->ui_rep)) < 0) {
 				printf("Blad w UI reply\n");
 			}
 
@@ -243,7 +239,7 @@ void *comm_thread(void* arg) {
 		case lib::LOAD_FILE: // Zaladowanie pliku - do ECP przekazywana jest nazwa pliku ze sciezka
 			//    printf("lib::LOAD_FILE\n");
 			if (ui.teachingstate == MP_RUNNING) {
-				ui_ecp_obj->synchroniser.null_command();
+				ui.ui_ecp_obj->synchroniser.null_command();
 				wyjscie = false;
 				while (!wyjscie) {
 					if (!ui.is_file_selection_window_open) {
@@ -260,11 +256,11 @@ void *comm_thread(void* arg) {
 					}
 				}
 
-				ui_ecp_obj->ui_rep.reply = lib::FILE_LOADED;
-				ui_ecp_obj->synchroniser.wait();
+				ui.ui_ecp_obj->ui_rep.reply = lib::FILE_LOADED;
+				ui.ui_ecp_obj->synchroniser.wait();
 
-				if (MsgReply(rcvid, EOK, &ui_ecp_obj->ui_rep,
-						sizeof(ui_ecp_obj->ui_rep)) < 0) {
+				if (MsgReply(rcvid, EOK, &ui.ui_ecp_obj->ui_rep,
+						sizeof(ui.ui_ecp_obj->ui_rep)) < 0) {
 					printf("Blad w UI reply\n");
 				}
 
@@ -273,7 +269,7 @@ void *comm_thread(void* arg) {
 		case lib::SAVE_FILE: // Zapisanie do pliku - do ECP przekazywana jest nazwa pliku ze sciezka
 			//    printf("lib::SAVE_FILE\n");
 			if (ui.teachingstate == MP_RUNNING) {
-				ui_ecp_obj->synchroniser.null_command();
+				ui.ui_ecp_obj->synchroniser.null_command();
 				wyjscie = false;
 				while (!wyjscie) {
 					if (!ui.is_file_selection_window_open) {
@@ -289,11 +285,11 @@ void *comm_thread(void* arg) {
 					}
 				}
 
-				ui_ecp_obj->ui_rep.reply = lib::FILE_SAVED;
-				ui_ecp_obj->synchroniser.wait();
+				ui.ui_ecp_obj->ui_rep.reply = lib::FILE_SAVED;
+				ui.ui_ecp_obj->synchroniser.wait();
 
-				if (MsgReply(rcvid, EOK, &ui_ecp_obj->ui_rep,
-						sizeof(ui_ecp_obj->ui_rep)) < 0) {
+				if (MsgReply(rcvid, EOK, &ui.ui_ecp_obj->ui_rep,
+						sizeof(ui.ui_ecp_obj->ui_rep)) < 0) {
 					printf("Blad w UI reply\n");
 				}
 			}
@@ -446,7 +442,7 @@ void *sr_thread(void* arg) {
 			// prrintf("srt: \n");
 			flushall();
 
-			ui_sr_obj->put_one_msg(sr_msg);
+			ui.ui_sr_obj->put_one_msg(sr_msg);
 
 		} else {
 			printf("SR(%s:%d) unexpected message\n", __FILE__, __LINE__);
@@ -462,8 +458,8 @@ void create_threads()
 
 {
 
-	ui_sr_obj = new ui_sr_buffer();
-	ui_ecp_obj = new ui_ecp_buffer();
+	ui.ui_sr_obj = new ui_sr_buffer();
+	ui.ui_ecp_obj = new ui_ecp_buffer();
 
 	if (pthread_create(&ui.sr_tid, NULL, sr_thread, NULL) != EOK) {// Y&W - utowrzenie watku serwa
 		printf(" Failed to thread sr_thread\n");
@@ -486,6 +482,4 @@ void create_threads()
 	ui.meb_tid = new feb_thread(ui.main_eb);
 
 }
-
-
 

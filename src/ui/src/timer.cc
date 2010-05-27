@@ -26,7 +26,6 @@
 #include "proto.h"
 
 extern Ui ui;
-extern ui_sr_buffer* ui_sr_obj;
 
 int OnTimer(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
@@ -48,7 +47,7 @@ int OnTimer(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 		}
 	}
 
-	if (!(ui_sr_obj->buffer_empty())) { // by Y jesli mamy co wypisywac
+	if (!(ui.ui_sr_obj->buffer_empty())) { // by Y jesli mamy co wypisywac
 
 		// 	printf("timer\n");
 		int attributes_mask;
@@ -59,10 +58,10 @@ int OnTimer(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 		char current_line[400];
 		lib::sr_package_t sr_msg;
 
-		while (!(ui_sr_obj->buffer_empty())) { // dopoki mamy co wypisywac
+		while (!(ui.ui_sr_obj->buffer_empty())) { // dopoki mamy co wypisywac
 
 
-			ui_sr_obj->get_one_msg(sr_msg);
+			ui.ui_sr_obj->get_one_msg(sr_msg);
 
 			snprintf(current_line, 100, "%-10s", sr_msg.host_name);
 			strcat(current_line, "  ");

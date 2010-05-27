@@ -42,7 +42,7 @@ extern Ui ui;
 // Wiadomosc wysylana do ECP.
 extern lib::UI_ECP_message ui_ecp_msg;
 // Rozkaz przeslany z ECP.
-extern ui_ecp_buffer* ui_ecp_obj;
+
 
 // Zmienna konfiguracyjna.
 
@@ -225,59 +225,59 @@ int MAM_refresh_window(PtWidget_t *widget, ApInfo_t *apinfo,
 	// Wypisanie pozycji robota w oknie.
 	// Zerowa os.
 	sprintf(tmp_buffer, "%5.5f",
-			ui_ecp_obj->ecp_to_ui_msg.MAM.robot_position[0]);
+			ui.ui_ecp_obj->ecp_to_ui_msg.MAM.robot_position[0]);
 	PtSetResource(ABW_MAM_edt_arm0, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
 
 	sprintf(tmp_buffer, "%5.5f",
-			ui_ecp_obj->ecp_to_ui_msg.MAM.robot_position[1]);
+			ui.ui_ecp_obj->ecp_to_ui_msg.MAM.robot_position[1]);
 	PtSetResource(ABW_MAM_edt_arm1, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
 
 	sprintf(tmp_buffer, "%5.5f",
-			ui_ecp_obj->ecp_to_ui_msg.MAM.robot_position[2]);
+			ui.ui_ecp_obj->ecp_to_ui_msg.MAM.robot_position[2]);
 	PtSetResource(ABW_MAM_edt_arm2, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
 
 	sprintf(tmp_buffer, "%5.5f",
-			ui_ecp_obj->ecp_to_ui_msg.MAM.robot_position[3]);
+			ui.ui_ecp_obj->ecp_to_ui_msg.MAM.robot_position[3]);
 	PtSetResource(ABW_MAM_edt_arm3, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
 
 	sprintf(tmp_buffer, "%5.5f",
-			ui_ecp_obj->ecp_to_ui_msg.MAM.robot_position[4]);
+			ui.ui_ecp_obj->ecp_to_ui_msg.MAM.robot_position[4]);
 	PtSetResource(ABW_MAM_edt_arm4, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
 
 	sprintf(tmp_buffer, "%5.5f",
-			ui_ecp_obj->ecp_to_ui_msg.MAM.robot_position[5]);
+			ui.ui_ecp_obj->ecp_to_ui_msg.MAM.robot_position[5]);
 	PtSetResource(ABW_MAM_edt_arm5, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
 
 	sprintf(tmp_buffer, "%5.5f",
-			ui_ecp_obj->ecp_to_ui_msg.MAM.robot_position[6]);
+			ui.ui_ecp_obj->ecp_to_ui_msg.MAM.robot_position[6]);
 	PtSetResource(ABW_MAM_edt_arm6, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
 
 	sprintf(tmp_buffer, "%5.5f",
-			ui_ecp_obj->ecp_to_ui_msg.MAM.robot_position[7]);
+			ui.ui_ecp_obj->ecp_to_ui_msg.MAM.robot_position[7]);
 	PtSetResource(ABW_MAM_edt_arm7, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
 
 	// Wypisanie odczytow czujnika zlozonego z linialow w oknie.
 	sprintf(tmp_buffer, "%5.5f",
-			ui_ecp_obj->ecp_to_ui_msg.MAM.sensor_reading[0]);
+			ui.ui_ecp_obj->ecp_to_ui_msg.MAM.sensor_reading[0]);
 	PtSetResource(ABW_MAM_edt_scale_reading0, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
 	sprintf(tmp_buffer, "%5.5f",
-			ui_ecp_obj->ecp_to_ui_msg.MAM.sensor_reading[1]);
+			ui.ui_ecp_obj->ecp_to_ui_msg.MAM.sensor_reading[1]);
 	PtSetResource(ABW_MAM_edt_scale_reading1, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
 	sprintf(tmp_buffer, "%5.5f",
-			ui_ecp_obj->ecp_to_ui_msg.MAM.sensor_reading[2]);
+			ui.ui_ecp_obj->ecp_to_ui_msg.MAM.sensor_reading[2]);
 	PtSetResource(ABW_MAM_edt_scale_reading2, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
 	sprintf(tmp_buffer, "%5.5f",
-			ui_ecp_obj->ecp_to_ui_msg.MAM.sensor_reading[3]);
+			ui.ui_ecp_obj->ecp_to_ui_msg.MAM.sensor_reading[3]);
 	PtSetResource(ABW_MAM_edt_scale_reading3, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
 	sprintf(tmp_buffer, "%5.5f",
-			ui_ecp_obj->ecp_to_ui_msg.MAM.sensor_reading[4]);
+			ui.ui_ecp_obj->ecp_to_ui_msg.MAM.sensor_reading[4]);
 	PtSetResource(ABW_MAM_edt_scale_reading4, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
 	sprintf(tmp_buffer, "%5.5f",
-			ui_ecp_obj->ecp_to_ui_msg.MAM.sensor_reading[5]);
+			ui.ui_ecp_obj->ecp_to_ui_msg.MAM.sensor_reading[5]);
 	PtSetResource(ABW_MAM_edt_scale_reading5, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
 
 	// Wypisanie numeru makrokroku.
-	sprintf(tmp_buffer, "%i", ui_ecp_obj->ecp_to_ui_msg.MAM.measure_number);
+	sprintf(tmp_buffer, "%i", ui.ui_ecp_obj->ecp_to_ui_msg.MAM.measure_number);
 	PtSetResource(ABW_MAM_edt_measure_point_number, Pt_ARG_TEXT_STRING,
 			tmp_buffer, 0);
 
