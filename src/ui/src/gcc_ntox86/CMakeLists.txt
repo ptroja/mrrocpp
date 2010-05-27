@@ -21,7 +21,7 @@ add_executable(ui
 	../ui.cc
 	../ui_ecp_r_common.cc
 	../ui_ecp_r_irp6_common.cc
-	../ui_ecp_r_speaker.cc
+	../speaker/ui_ecp_r_speaker.cc
 	../ui_ecp_r_tfg_and_conv.cc
 	../bird_hand/ui_ecp_r_bird_hand.cc
 	../ui_robot.cc
