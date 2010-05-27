@@ -192,7 +192,6 @@ int pulse_reader_conv_trigger(PtWidget_t *widget, ApInfo_t *apinfo,
 int pulse_ecp_conveyor(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
 
-
 /* ../fun_r_irp6_mechatronika.cc */
 int init_wnd_irp6m_xyz_euler_zyz_ts(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
@@ -226,13 +225,13 @@ int start_wnd_irp6m_servo_algorithm(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
 int pulse_reader_irp6m_start(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
-bool pulse_reader_irp6m_start_exec_pulse(void);
+
 int pulse_reader_irp6m_stop(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
-bool pulse_reader_irp6m_stop_exec_pulse(void);
+
 int pulse_reader_irp6m_trigger(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
-bool pulse_reader_irp6m_trigger_exec_pulse(void);
+
 int pulse_ecp_irp6_mechatronika(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
 int wnd_irp6m_motors_copy_cur_to_des(PtWidget_t *widget, ApInfo_t *apinfo,
@@ -321,10 +320,7 @@ int close_wnd_irp6_mechatronika_xyz_angle_axis_ts(PtWidget_t *widget,
 		ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo);
 int start_wnd_irp6m_xyz_angle_axis(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
-int process_control_window_irp6m_section_init(
-		bool &wlacz_PtButton_wnd_processes_control_all_reader_start,
-		bool &wlacz_PtButton_wnd_processes_control_all_reader_stop,
-		bool &wlacz_PtButton_wnd_processes_control_all_reader_trigger);
+
 int import_wnd_irp6m_xyz_angle_axis(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
 int export_wnd_irp6m_xyz_angle_axis(PtWidget_t *widget, ApInfo_t *apinfo,

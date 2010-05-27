@@ -559,22 +559,11 @@ int pulse_reader_irp6m_start(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (pulse_reader_irp6m_start_exec_pulse())
+	if (ui.irp6m_m.pulse_reader_irp6m_start_exec_pulse())
 		process_control_window_init(widget, apinfo, cbinfo);
 
 	return (Pt_CONTINUE);
 
-}
-
-bool pulse_reader_irp6m_start_exec_pulse() {
-
-	if (ui.irp6m_m.state.edp.state == 1) {
-		ui.pulse_reader_execute(ui.irp6m_m.state.edp.reader_fd, READER_START, 0);
-		ui.irp6m_m.state.edp.state = 2;
-		return true;
-	}
-
-	return false;
 }
 
 int pulse_reader_irp6m_stop(PtWidget_t *widget, ApInfo_t *apinfo,
@@ -585,22 +574,11 @@ int pulse_reader_irp6m_stop(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (pulse_reader_irp6m_stop_exec_pulse())
+	if (ui.irp6m_m.pulse_reader_irp6m_stop_exec_pulse())
 		process_control_window_init(widget, apinfo, cbinfo);
 
 	return (Pt_CONTINUE);
 
-}
-
-bool pulse_reader_irp6m_stop_exec_pulse() {
-
-	if (ui.irp6m_m.state.edp.state == 2) {
-		ui.pulse_reader_execute(ui.irp6m_m.state.edp.reader_fd, READER_STOP, 0);
-		ui.irp6m_m.state.edp.state = 1;
-		return true;
-	}
-
-	return false;
 }
 
 int pulse_reader_irp6m_trigger(PtWidget_t *widget, ApInfo_t *apinfo,
@@ -611,23 +589,11 @@ int pulse_reader_irp6m_trigger(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (pulse_reader_irp6m_trigger_exec_pulse())
+	if (ui.irp6m_m.pulse_reader_irp6m_trigger_exec_pulse())
 		process_control_window_init(widget, apinfo, cbinfo);
 
 	return (Pt_CONTINUE);
 
-}
-
-bool pulse_reader_irp6m_trigger_exec_pulse() {
-
-	if (ui.irp6m_m.state.edp.state == 2) {
-		ui.pulse_reader_execute(ui.irp6m_m.state.edp.reader_fd, READER_TRIGGER,
-				0);
-
-		return true;
-	}
-
-	return false;
 }
 
 int pulse_ecp_irp6_mechatronika(PtWidget_t *widget, ApInfo_t *apinfo,
@@ -2439,40 +2405,6 @@ int start_wnd_irp6m_xyz_angle_axis(PtWidget_t *widget, ApInfo_t *apinfo,
 	}
 
 	return (Pt_CONTINUE);
-
-}
-
-// aktualizacja ustawien przyciskow
-int process_control_window_irp6m_section_init(
-		bool &wlacz_PtButton_wnd_processes_control_all_reader_start,
-		bool &wlacz_PtButton_wnd_processes_control_all_reader_stop,
-		bool &wlacz_PtButton_wnd_processes_control_all_reader_trigger) {
-
-	if (ui.irp6m_m.state.edp.state <= 0) {// edp wylaczone
-		block_widget(ABW_PtButton_wnd_processes_control_irp6m_reader_start);
-		block_widget(ABW_PtButton_wnd_processes_control_irp6m_reader_stop);
-		block_widget(ABW_PtButton_wnd_processes_control_irp6m_reader_trigger);
-	} else {
-		if (ui.irp6m_m.state.edp.state == 1) {// edp wlaczone reader czeka na start
-			wlacz_PtButton_wnd_processes_control_all_reader_start = true;
-			unblock_widget(
-					ABW_PtButton_wnd_processes_control_irp6m_reader_start);
-			block_widget(ABW_PtButton_wnd_processes_control_irp6m_reader_stop);
-			block_widget(
-					ABW_PtButton_wnd_processes_control_irp6m_reader_trigger);
-		} else if (ui.irp6m_m.state.edp.state == 2) {// edp wlaczone reader czeka na stop
-			wlacz_PtButton_wnd_processes_control_all_reader_stop = true;
-			wlacz_PtButton_wnd_processes_control_all_reader_trigger = true;
-			block_widget(ABW_PtButton_wnd_processes_control_irp6m_reader_start);
-			unblock_widget(ABW_PtButton_wnd_processes_control_irp6m_reader_stop);
-			unblock_widget(
-					ABW_PtButton_wnd_processes_control_irp6m_reader_trigger);
-		}
-	}
-
-	ui.irp6m_m.state.edp.last_state = ui.irp6m_m.state.edp.state;
-
-	return 1;
 
 }
 

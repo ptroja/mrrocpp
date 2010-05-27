@@ -812,7 +812,7 @@ int process_control_window_init(PtWidget_t *widget, ApInfo_t *apinfo,
 
 		// Dla irp6_mechatronika
 
-		process_control_window_irp6m_section_init(
+		ui.irp6m_m.process_control_window_irp6m_section_init(
 				wlacz_PtButton_wnd_processes_control_all_reader_start,
 				wlacz_PtButton_wnd_processes_control_all_reader_stop,
 				wlacz_PtButton_wnd_processes_control_all_reader_trigger);
@@ -1761,7 +1761,7 @@ int pulse_reader_all_robots_start(PtWidget_t *widget, ApInfo_t *apinfo,
 	ui.irp6ot_m.pulse_reader_irp6ot_start_exec_pulse();
 	ui.irp6p_m.pulse_reader_irp6p_start_exec_pulse();
 	ui.conveyor.pulse_reader_conv_start_exec_pulse();
-	pulse_reader_irp6m_start_exec_pulse();
+	ui.irp6m_m.pulse_reader_irp6m_start_exec_pulse();
 
 	process_control_window_init(widget, apinfo, cbinfo);
 
@@ -1780,7 +1780,7 @@ int pulse_reader_all_robots_stop(PtWidget_t *widget, ApInfo_t *apinfo,
 	ui.irp6ot_m.pulse_reader_irp6ot_stop_exec_pulse();
 	ui.irp6p_m.pulse_reader_irp6p_stop_exec_pulse();
 	ui.conveyor.pulse_reader_conv_stop_exec_pulse();
-	pulse_reader_irp6m_stop_exec_pulse();
+	ui.irp6m_m.pulse_reader_irp6m_stop_exec_pulse();
 	process_control_window_init(widget, apinfo, cbinfo);
 
 	return (Pt_CONTINUE);
@@ -1798,7 +1798,7 @@ int pulse_reader_all_robots_trigger(PtWidget_t *widget, ApInfo_t *apinfo,
 	ui.irp6ot_m.pulse_reader_irp6ot_trigger_exec_pulse();
 	ui.irp6p_m.pulse_reader_irp6p_trigger_exec_pulse();
 	ui.conveyor.pulse_reader_conv_trigger_exec_pulse();
-	pulse_reader_irp6m_trigger_exec_pulse();
+	ui.irp6m_m.pulse_reader_irp6m_trigger_exec_pulse();
 
 	return (Pt_CONTINUE);
 
