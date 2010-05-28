@@ -2521,10 +2521,7 @@ int EDP_irp6_postument_slay_int(PtWidget_t *widget, ApInfo_t *apinfo,
 
 		ui.irp6p_m.state.edp.pid = -1;
 		ui.irp6p_m.state.edp.reader_fd = -1;
-		pt_res = PtEnter(0);
-		close_all_irp6p_windows(NULL, NULL, NULL);
-		if (pt_res >= 0)
-			PtLeave(0);
+		ui.irp6p_m.close_all_windows();
 	}
 
 	// modyfikacja menu
@@ -2535,27 +2532,7 @@ int EDP_irp6_postument_slay_int(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
-int close_all_irp6p_windows(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
 
-{
-
-	/* eliminate 'unreferenced' warnings */
-	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
-
-	close_wnd_irp6_postument_inc(NULL, NULL, NULL);
-	close_wnd_irp6_postument_int(NULL, NULL, NULL);
-	close_wnd_irp6_postument_xyz_angle_axis(NULL, NULL, NULL);
-	close_wnd_irp6_postument_xyz_angle_axis_ts(NULL, NULL, NULL);
-	close_wnd_irp6_postument_xyz_euler_zyz(NULL, NULL, NULL);
-	close_wnd_irp6_postument_xyz_euler_zyz_ts(NULL, NULL, NULL);
-	close_wnd_irp6_postument_xyz_aa_relative(NULL, NULL, NULL);
-	close_wnd_irp6_postument_kinematic(NULL, NULL, NULL);
-	close_wnd_irp6_postument_servo_algorithm(NULL, NULL, NULL);
-
-	return (Pt_CONTINUE);
-
-}
 
 int pulse_reader_irp6p_start(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo)

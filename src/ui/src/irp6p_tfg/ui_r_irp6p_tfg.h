@@ -41,6 +41,7 @@ public:
 	UiRobotIrp6p_tfg();
 	int reload_configuration();
 	int manage_interface();
+	int close_all_windows();
 };
 
 #endif

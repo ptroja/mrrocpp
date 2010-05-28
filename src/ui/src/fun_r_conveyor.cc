@@ -623,11 +623,7 @@ int EDP_conveyor_slay_int(PtWidget_t *widget, ApInfo_t *apinfo,
 
 		ui.conveyor.state.edp.pid = -1;
 		ui.conveyor.state.edp.reader_fd = -1;
-		pt_res = PtEnter(0);
-		close_wind_conveyor_moves(NULL, NULL, NULL);
-		close_wnd_conveyor_servo_algorithm(NULL, NULL, NULL);
-		if (pt_res >= 0)
-			PtLeave(0);
+		ui.conveyor.close_all_windows();
 	}
 
 	// modyfikacja menu

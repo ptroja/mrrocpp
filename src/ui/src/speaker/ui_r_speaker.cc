@@ -174,35 +174,15 @@ int UiRobotSpeaker::manage_interface() {
 
 }
 
-bool UiRobotSpeaker::pulse_reader_speaker_start_exec_pulse() {
+int UiRobotSpeaker::close_all_windows() {
 
-	if (state.edp.state == 1) {
-		ui.pulse_reader_execute(state.edp.reader_fd, READER_START, 0);
-		state.edp.state = 2;
-		return true;
+	int pt_res = PtEnter(0);
+
+	close_wnd_speaker_play(NULL, NULL, NULL);
+
+	if (pt_res >= 0) {
+		PtLeave(0);
 	}
+	return 1;
 
-	return false;
-}
-
-bool UiRobotSpeaker::pulse_reader_speaker_stop_exec_pulse() {
-
-	if (state.edp.state == 2) {
-		ui.pulse_reader_execute(state.edp.reader_fd, READER_STOP, 0);
-		state.edp.state = 1;
-		return true;
-	}
-
-	return false;
-}
-
-bool UiRobotSpeaker::pulse_reader_speaker_trigger_exec_pulse() {
-
-	if (state.edp.state == 2) {
-		ui.pulse_reader_execute(state.edp.reader_fd, READER_TRIGGER, 0);
-
-		return true;
-	}
-
-	return false;
 }

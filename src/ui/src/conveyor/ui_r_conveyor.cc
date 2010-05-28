@@ -228,3 +228,20 @@ int UiRobotConveyor::process_control_window_conveyor_section_init(
 	return 1;
 
 }
+
+
+
+int UiRobotConveyor::close_all_windows() {
+
+	int pt_res = PtEnter(0);
+
+	close_wind_conveyor_moves(NULL, NULL, NULL);
+	close_wnd_conveyor_servo_algorithm(NULL, NULL, NULL);
+
+	if (pt_res >= 0) {
+		PtLeave(0);
+	}
+	return 1;
+
+}
+

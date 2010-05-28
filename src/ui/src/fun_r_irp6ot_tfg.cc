@@ -114,8 +114,9 @@ int EDP_irp6ot_tfg_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 					tmp2_string.c_str(), R_OK) == 0)) {
 				ui.ui_msg->message(lib::NON_FATAL_ERROR,
 						"edp_irp6ot_tfg already exists");
-			} else if (ui.check_node_existence(ui.irp6ot_tfg.state.edp.node_name,
-					std::string("edp_irp6ot_tfg"))) {
+			} else if (ui.check_node_existence(
+					ui.irp6ot_tfg.state.edp.node_name, std::string(
+							"edp_irp6ot_tfg"))) {
 
 				ui.irp6ot_tfg.state.edp.node_nr
 						= ui.config->return_node_number(
@@ -214,7 +215,7 @@ int EDP_irp6ot_tfg_slay_int(PtWidget_t *widget, ApInfo_t *apinfo,
 		ui.irp6ot_tfg.state.edp.pid = -1;
 		ui.irp6ot_tfg.state.edp.reader_fd = -1;
 		pt_res = PtEnter(0);
-		close_all_irp6ot_windows(NULL, NULL, NULL);
+		ui.irp6ot_tfg.close_all_windows();
 		if (pt_res >= 0)
 			PtLeave(0);
 	}

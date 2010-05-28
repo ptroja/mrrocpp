@@ -277,3 +277,23 @@ int UiRobotIrp6p_m::process_control_window_irp6p_section_init(
 
 }
 
+int UiRobotIrp6p_m::close_all_windows() {
+
+	int pt_res = PtEnter(0);
+
+	close_wnd_irp6_postument_inc(NULL, NULL, NULL);
+	close_wnd_irp6_postument_int(NULL, NULL, NULL);
+	close_wnd_irp6_postument_xyz_angle_axis(NULL, NULL, NULL);
+	close_wnd_irp6_postument_xyz_angle_axis_ts(NULL, NULL, NULL);
+	close_wnd_irp6_postument_xyz_euler_zyz(NULL, NULL, NULL);
+	close_wnd_irp6_postument_xyz_euler_zyz_ts(NULL, NULL, NULL);
+	close_wnd_irp6_postument_xyz_aa_relative(NULL, NULL, NULL);
+	close_wnd_irp6_postument_kinematic(NULL, NULL, NULL);
+	close_wnd_irp6_postument_servo_algorithm(NULL, NULL, NULL);
+
+	if (pt_res >= 0) {
+		PtLeave(0);
+	}
+	return 1;
+
+}
