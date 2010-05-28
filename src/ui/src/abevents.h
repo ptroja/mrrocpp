@@ -1188,6 +1188,8 @@ static const ApEventLink_t AbLinks_robot_menu[] = {
 	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "mm_shead_edp_unload", 2009, EDP_shead_slay, 0, 0, 0, 0, },
 	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "mm_bird_hand_edp_load", 2009, EDP_bird_hand_create, 0, 0, 0, 0, },
 	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "mm_bird_hand_edp_unload", 2009, EDP_bird_hand_slay, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "mm_bird_hand_command", 2009, start_wnd_bird_hand_command_and_status, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "mm_bird_hand_configuration", 2009, start_wnd_bird_hand_configuration, 0, 0, 0, 0, },
 	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "mm_speaker_edp_load", 2009, EDP_speaker_create, 0, 0, 0, 0, },
 	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "mm_speaker_edp_unload", 2009, EDP_speaker_slay, 0, 0, 0, 0, },
 	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "mm_speaker_play", 2009, start_wind_speaker_play, 0, 0, 0, 0, },

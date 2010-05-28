@@ -195,3 +195,29 @@ int EDP_bird_hand_slay_int(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
+
+int
+start_wnd_bird_hand_command_and_status( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
+
+	{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	return( Pt_CONTINUE );
+
+	}
+
+
+int
+start_wnd_bird_hand_configuration( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
+
+	{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	return( Pt_CONTINUE );
+
+	}
+

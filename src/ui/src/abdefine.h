@@ -2198,54 +2198,6 @@ extern const int ABN_PtButton_wind_irp6p_tfg_moves_int_read;
 extern const int ABN_PtNumericFloat_wind_irp6p_tfg_moves_read_int_pos;
 #define ABW_PtNumericFloat_wind_irp6p_tfg_moves_read_int_pos AbGetABW( ABN_PtNumericFloat_wind_irp6p_tfg_moves_read_int_pos )
 
-/* 'wnd_bird_hand_command_and_status' Window link */
-extern const int ABN_wnd_bird_hand_command_and_status;
-#define ABW_wnd_bird_hand_command_and_status AbGetABW( ABN_wnd_bird_hand_command_and_status )
-extern const int ABN_PtPane_wind_irp6m_inc_post_synchro_moves0;
-#define ABW_PtPane_wind_irp6m_inc_post_synchro_moves0 AbGetABW( ABN_PtPane_wind_irp6m_inc_post_synchro_moves0 )
-extern const int ABN_PtNumericFloat_wind_irp6m_inc_p00;
-#define ABW_PtNumericFloat_wind_irp6m_inc_p00 AbGetABW( ABN_PtNumericFloat_wind_irp6m_inc_p00 )
-extern const int ABN_PtNumericFloat_wind_irp6m_inc_p10;
-#define ABW_PtNumericFloat_wind_irp6m_inc_p10 AbGetABW( ABN_PtNumericFloat_wind_irp6m_inc_p10 )
-extern const int ABN_PtNumericFloat_wind_irp6m_inc_p20;
-#define ABW_PtNumericFloat_wind_irp6m_inc_p20 AbGetABW( ABN_PtNumericFloat_wind_irp6m_inc_p20 )
-extern const int ABN_PtNumericFloat_wind_irp6m_inc_p30;
-#define ABW_PtNumericFloat_wind_irp6m_inc_p30 AbGetABW( ABN_PtNumericFloat_wind_irp6m_inc_p30 )
-extern const int ABN_PtNumericFloat_wind_irp6m_inc_p40;
-#define ABW_PtNumericFloat_wind_irp6m_inc_p40 AbGetABW( ABN_PtNumericFloat_wind_irp6m_inc_p40 )
-extern const int ABN_PtButton_wind_irp6m_inc_exec_move0;
-#define ABW_PtButton_wind_irp6m_inc_exec_move0 AbGetABW( ABN_PtButton_wind_irp6m_inc_exec_move0 )
-extern const int ABN_PtButton_wind_irp6m_inc_import0;
-#define ABW_PtButton_wind_irp6m_inc_import0  AbGetABW( ABN_PtButton_wind_irp6m_inc_import0 )
-extern const int ABN_PtButton_wind_irp6m_inc_export0;
-#define ABW_PtButton_wind_irp6m_inc_export0  AbGetABW( ABN_PtButton_wind_irp6m_inc_export0 )
-extern const int ABN_PtNumericFloat_wind_irp6m_motors_cur_p00;
-#define ABW_PtNumericFloat_wind_irp6m_motors_cur_p00 AbGetABW( ABN_PtNumericFloat_wind_irp6m_motors_cur_p00 )
-extern const int ABN_PtNumericFloat_wind_irp6m_motors_cur_p10;
-#define ABW_PtNumericFloat_wind_irp6m_motors_cur_p10 AbGetABW( ABN_PtNumericFloat_wind_irp6m_motors_cur_p10 )
-extern const int ABN_PtNumericFloat_wind_irp6m_motors_cur_p20;
-#define ABW_PtNumericFloat_wind_irp6m_motors_cur_p20 AbGetABW( ABN_PtNumericFloat_wind_irp6m_motors_cur_p20 )
-extern const int ABN_PtNumericFloat_wind_irp6m_motors_cur_p30;
-#define ABW_PtNumericFloat_wind_irp6m_motors_cur_p30 AbGetABW( ABN_PtNumericFloat_wind_irp6m_motors_cur_p30 )
-extern const int ABN_PtNumericFloat_wind_irp6m_motors_cur_p40;
-#define ABW_PtNumericFloat_wind_irp6m_motors_cur_p40 AbGetABW( ABN_PtNumericFloat_wind_irp6m_motors_cur_p40 )
-extern const int ABN_PtButton_wind_irp6m_inc_read_pos0;
-#define ABW_PtButton_wind_irp6m_inc_read_pos0 AbGetABW( ABN_PtButton_wind_irp6m_inc_read_pos0 )
-extern const int ABN_PtButton_wind_irp6m_motors_set_desired_as_current0;
-#define ABW_PtButton_wind_irp6m_motors_set_desired_as_current0 AbGetABW( ABN_PtButton_wind_irp6m_motors_set_desired_as_current0 )
-extern const int ABN_PtLabel1100;
-#define ABW_PtLabel1100                      AbGetABW( ABN_PtLabel1100 )
-extern const int ABN_PtLabel2000;
-#define ABW_PtLabel2000                      AbGetABW( ABN_PtLabel2000 )
-extern const int ABN_PtLabel3000;
-#define ABW_PtLabel3000                      AbGetABW( ABN_PtLabel3000 )
-extern const int ABN_PtLabel4000;
-#define ABW_PtLabel4000                      AbGetABW( ABN_PtLabel4000 )
-extern const int ABN_PtLabel5000;
-#define ABW_PtLabel5000                      AbGetABW( ABN_PtLabel5000 )
-extern const int ABN_PtLabel10100;
-#define ABW_PtLabel10100                     AbGetABW( ABN_PtLabel10100 )
-
 /* 'wnd_bird_hand_configuration' Window link */
 extern const int ABN_wnd_bird_hand_configuration;
 #define ABW_wnd_bird_hand_configuration      AbGetABW( ABN_wnd_bird_hand_configuration )
@@ -2293,6 +2245,30 @@ extern const int ABN_PtLabel50000;
 #define ABW_PtLabel50000                     AbGetABW( ABN_PtLabel50000 )
 extern const int ABN_PtLabel101000;
 #define ABW_PtLabel101000                    AbGetABW( ABN_PtLabel101000 )
+
+/* 'wnd_bird_hand_command_and_status' Window link */
+extern const int ABN_wnd_bird_hand_command_and_status;
+#define ABW_wnd_bird_hand_command_and_status AbGetABW( ABN_wnd_bird_hand_command_and_status )
+extern const int ABN_PtNumericFloat_wind_irp6m_motors_cur_p00;
+#define ABW_PtNumericFloat_wind_irp6m_motors_cur_p00 AbGetABW( ABN_PtNumericFloat_wind_irp6m_motors_cur_p00 )
+extern const int ABN_PtNumericFloat_wind_irp6m_inc_p00;
+#define ABW_PtNumericFloat_wind_irp6m_inc_p00 AbGetABW( ABN_PtNumericFloat_wind_irp6m_inc_p00 )
+extern const int ABN_PtLabel1100;
+#define ABW_PtLabel1100                      AbGetABW( ABN_PtLabel1100 )
+extern const int ABN_PtLabel2000;
+#define ABW_PtLabel2000                      AbGetABW( ABN_PtLabel2000 )
+extern const int ABN_PtLabel3000;
+#define ABW_PtLabel3000                      AbGetABW( ABN_PtLabel3000 )
+extern const int ABN_PtLabel4000;
+#define ABW_PtLabel4000                      AbGetABW( ABN_PtLabel4000 )
+extern const int ABN_PtLabel10100;
+#define ABW_PtLabel10100                     AbGetABW( ABN_PtLabel10100 )
+extern const int ABN_PtButton_wind_irp6m_inc_read_pos0;
+#define ABW_PtButton_wind_irp6m_inc_read_pos0 AbGetABW( ABN_PtButton_wind_irp6m_inc_read_pos0 )
+extern const int ABN_PtButton_wind_irp6m_inc_exec_move0;
+#define ABW_PtButton_wind_irp6m_inc_exec_move0 AbGetABW( ABN_PtButton_wind_irp6m_inc_exec_move0 )
+extern const int ABN_PtButton_wind_irp6m_motors_set_desired_as_current0;
+#define ABW_PtButton_wind_irp6m_motors_set_desired_as_current0 AbGetABW( ABN_PtButton_wind_irp6m_motors_set_desired_as_current0 )
 
 #define AbGetABW( n ) ( AbWidgets[ n ].wgt )
 
@@ -2424,6 +2400,8 @@ extern const int ABN_mm_shead_edp_unload;
 extern const int ABN_mm_bird_hand;
 extern const int ABN_mm_bird_hand_edp_load;
 extern const int ABN_mm_bird_hand_edp_unload;
+extern const int ABN_mm_bird_hand_command;
+extern const int ABN_mm_bird_hand_configuration;
 extern const int ABN_mm_speaker;
 extern const int ABN_mm_speaker_edp_load;
 extern const int ABN_mm_speaker_edp_unload;
