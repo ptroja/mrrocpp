@@ -102,7 +102,7 @@ class ui_model
 		int set_tree_view(void);
 
 		//! old-type .INI configurator
-		lib::configurator *config;
+		lib::configurator *ui.config;
 
 		//! SR object for UI
 		mrrocpp::lib::sr_ui* ui_report;
