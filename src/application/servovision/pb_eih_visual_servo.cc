@@ -7,6 +7,8 @@
 
 #include "pb_eih_visual_servo.h"
 
+#include <iostream>
+
 using ecp_mp::sensor::fradia_sensor;
 using namespace logger;
 using namespace visual_servo_types;
@@ -40,7 +42,7 @@ pb_eih_visual_servo::pb_eih_visual_servo(boost::shared_ptr <visual_servo_regulat
 		}
 
 		vsp_fradia = boost::shared_ptr <pb_fradia_sensor>(new pb_fradia_sensor(configurator, section_name, pb_config));
-		vsp_fradia->configure_sensor();
+		//vsp_fradia->configure_sensor();
 
 		E_T_C = configurator.value <3, 4> ("E_T_C", section_name);
 
@@ -61,9 +63,18 @@ lib::Homog_matrix pb_eih_visual_servo::get_position_change(const lib::Homog_matr
 {
 	lib::Homog_matrix delta_position;
 
+//	log_dbg("pb_eih_visual_servo::get_position_change(): report: %d\n", vsp_fradia->get_report());
+
+	if (vsp_fradia->get_report() == lib::VSP_SENSOR_NOT_CONFIGURED) {
+		return delta_position;
+	}
+
 	object_visible = vsp_fradia->get_reading_message().tracking;
 	if (object_visible) {
 		lib::Homog_matrix C_T_G(vsp_fradia->get_reading_message().position);
+//		cout << "C_T_G:\n" << C_T_G;
+//		cout.flush();
+
 		lib::Homog_matrix error_matrix;
 
 		error_matrix = G_T_E_desired * E_T_C * C_T_G;

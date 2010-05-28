@@ -26,7 +26,7 @@ CaptureTask::CaptureTask(mrrocpp::lib::configurator& configurator) :
 	log_enabled = log_dbg_enabled = true;
 	ecp_m_robot = new ecp::irp6ot::robot(*this);
 	smoothGen = new mrrocpp::ecp::common::generator::smooth(*this, true);
-	fradiaSensor = new capture_image_sensor(configurator, "[capture_task_fradia_config]", 0);
+	fradiaSensor = new capture_image_sensor(configurator, "[capture_task_fradia_config]", lib::empty_t());
 	fradiaSensor->configure_sensor();
 	et.captureNow = false;
 

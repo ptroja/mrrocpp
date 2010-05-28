@@ -22,7 +22,7 @@ namespace common {
 
 namespace generator {
 
-typedef ecp_mp::sensor::fradia_sensor <position_based_configuration, char, position_based_reading> pb_fradia_sensor;
+typedef ecp_mp::sensor::fradia_sensor <position_based_configuration, position_based_reading> pb_fradia_sensor;
 
 class pb_visual_servo : public mrrocpp::ecp::common::generator::visual_servo
 {

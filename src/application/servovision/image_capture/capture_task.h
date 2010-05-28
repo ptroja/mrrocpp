@@ -29,7 +29,7 @@ struct effectorTranslation {
 };
 
 
-typedef mrrocpp::ecp_mp::sensor::fradia_sensor <char, effectorTranslation, char> capture_image_sensor;
+typedef mrrocpp::ecp_mp::sensor::fradia_sensor <lib::empty_t, lib::empty_t, effectorTranslation> capture_image_sensor;
 
 
 class CaptureTask: public mrrocpp::ecp::common::task::task

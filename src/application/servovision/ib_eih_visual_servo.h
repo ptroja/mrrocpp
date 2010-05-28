@@ -14,7 +14,7 @@
 using visual_servo_types::image_based_reading;
 using visual_servo_types::image_based_configuration;
 
-typedef ecp_mp::sensor::fradia_sensor <image_based_configuration, char, image_based_reading> ib_fradia_sensor;
+typedef ecp_mp::sensor::fradia_sensor <image_based_configuration, image_based_reading> ib_fradia_sensor;
 
 namespace mrrocpp {
 
