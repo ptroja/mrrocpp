@@ -139,9 +139,9 @@ bool ecp_vis_ib_eih_follower_irp6ot::next_step_without_constraints() {
 
 	//alpha = the_robot->reply_package.arm.pf_def.arm_coordinates[1]- the_robot->reply_package.arm.pf_def.arm_coordinates[6];
 	//Uchyb wyrazony w pikselach.
-	u[0] = vsp_fradia->get_reading().x-20;
-	u[1] = vsp_fradia->get_reading().y;
-	bool tracking = vsp_fradia->get_reading().tracking;
+	u[0] = vsp_fradia->get_reading_message().x-20;
+	u[1] = vsp_fradia->get_reading_message().y;
+	bool tracking = vsp_fradia->get_reading_message().tracking;
 
 	printf("ux: %f\t", u[0]);
 	printf("uy: %f\n", u[1]);

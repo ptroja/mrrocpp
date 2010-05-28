@@ -31,7 +31,7 @@ eihgenerator::~eihgenerator ()
 
 bool eihgenerator::first_step()
 {
-	sensor = dynamic_cast<ecp_mp::sensor::fradia_sensor<char, eihcalibration_t, chessboard_t> *> (sensor_m[lib::SENSOR_CVFRADIA]);
+	sensor = dynamic_cast<ecp_mp::sensor::fradia_sensor<lib::empty_t, chessboard_t, eihcalibration_t> *> (sensor_m[lib::SENSOR_CVFRADIA]);
 	if(sensor == NULL){
 		throw std::logic_error("bool eihgenerator::first_step()");
 	}

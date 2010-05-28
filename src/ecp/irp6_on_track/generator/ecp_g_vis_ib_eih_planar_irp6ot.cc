@@ -90,8 +90,8 @@ bool ecp_vis_ib_eih_planar_irp6ot::next_step_without_constraints()
 		alpha = the_robot->reply_package.arm.pf_def.arm_coordinates[1]
 				- the_robot->reply_package.arm.pf_def.arm_coordinates[6];
 		//Uchyb wyrazony w pikselach.
-		double ux = vsp_fradia->image.x;
-		double uy = vsp_fradia->image.y;
+		double ux = vsp_fradia->get_reading_message().x;
+		double uy = vsp_fradia->get_reading_message().y;
 
 		//Sprawdz czy jest odczyt z fradii.
 		lib::VSP_REPORT_t vsp_report = vsp_fradia->get_report();
@@ -167,7 +167,7 @@ bool ecp_vis_ib_eih_planar_irp6ot::next_step_without_constraints()
 
 bool ecp_vis_ib_eih_planar_irp6ot::check_if_followed()
 {
-	double frame_no = vsp_fradia->image.frame_number;
+	double frame_no = vsp_fradia->get_reading_message().frame_number;
 
 	//Ograniczenia na ruch
 	if (first_move) {

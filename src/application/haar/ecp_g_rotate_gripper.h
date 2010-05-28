@@ -37,7 +37,7 @@ typedef enum _HD_MODE
 {
 WITHOUT_ROTATION, PERFORM_ROTATION
 } hd_mode_t;
-typedef ecp_mp::sensor::fradia_sensor<char, hd_mode_t, hd_angle_t> fradia_sensor_haar_detect;
+typedef ecp_mp::sensor::fradia_sensor<lib::empty_t, hd_angle_t, hd_mode_t> fradia_sensor_haar_detect;
 
 class ecp_g_rotate_gripper: public common::generator::generator {
 	//Wirtualny sensor

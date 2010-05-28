@@ -37,7 +37,7 @@ typedef enum _HD_MODE
 	WITHOUT_ROTATION, PERFORM_ROTATION
 } hd_mode_t;
 
-typedef ecp_mp::sensor::fradia_sensor<deviation_t, ecp_mp::sensor::hd_mode_t> fradia_sensor_deviation;
+typedef ecp_mp::sensor::fradia_sensor<lib::empty_t, deviation_t, hd_mode_t> fradia_sensor_deviation;
 
 class ecp_vis_ib_eih_planar_irp6ot: public common::generator::ecp_visual_servo {
 	bool check_if_followed();

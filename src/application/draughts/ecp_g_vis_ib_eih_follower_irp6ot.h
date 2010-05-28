@@ -29,10 +29,15 @@ namespace generator {
 
 #define MOTION_STEPS 25
 
+typedef enum _HD_MODE
+{
+	WITHOUT_ROTATION, PERFORM_ROTATION
+} hd_mode_t;
+
 class ecp_vis_ib_eih_follower_irp6ot : public common::generator::ecp_visual_servo {
 
 public:
-	ecp_mp::sensor::fradia_sensor<char, hd_mode_t, tracker_t> *vsp_fradia; //wirtualny sensor
+	ecp_mp::sensor::fradia_sensor<lib::empty_t, tracker_t, hd_mode_t> *vsp_fradia; //wirtualny sensor
 
     double next_position[8]; 	//pozycja w nastepnym kroku.
     //double alpha; //orientacja koncokwi wzgledem ukladu bazowego.

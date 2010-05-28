@@ -59,7 +59,7 @@ const int AI_NORMAL_MOVE=0;
 const int AI_COMPUTER_WON=1;
 const int AI_HUMAN_WON=2;
 
-typedef ecp_mp::sensor::fradia_sensor<board, draughts_control> fradia_sensor_board_and_draughts;
+typedef ecp_mp::sensor::fradia_sensor<lib::empty_t, board, draughts_control> fradia_sensor_board_and_draughts;
 
 class Draughts: public common::task::task {
 

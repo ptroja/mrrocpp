@@ -16,7 +16,7 @@ namespace ecp {
 namespace irp6ot {
 namespace task {
 
-typedef ecp_mp::sensor::fradia_sensor <lib::object_tracker_t, lib::empty_t> fradia_sensor_tracker;
+typedef ecp_mp::sensor::fradia_sensor <lib::empty_t, lib::object_tracker_t> fradia_sensor_tracker;
 
 class grab_cube : public common::task::task
 {

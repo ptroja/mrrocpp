@@ -59,8 +59,8 @@ bool ecp_vis_ib_eih_wrist_turner_irp6ot::next_step_without_constraints()
 	lib::VSP_REPORT_t vsp_report = vsp_fradia->get_report();
 	if (vsp_report == lib::VSP_REPLY_OK) {
 
-		tracking = vsp_fradia->image.tracking;
-		reached = vsp_fradia->image.reached;
+		tracking = vsp_fradia->get_reading_message().tracking;
+		reached = vsp_fradia->get_reading_message().reached;
 		printf("tracking: %d\t reached: %d \n", tracking, reached);
 		flushall();
 

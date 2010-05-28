@@ -81,10 +81,10 @@ bool ecp_vis_ib_eih_object_tracker_irp6ot::next_step_without_constraints() {
 
 		// TODO: zapyta�� czy da sie to zrobic w petli
 		// TODO: {x,y,z} mozna raczej zaimplementowa�� jako Eigen::Vector3d i wtedy uzyc operatora =.
-		u[0] = vsp_fradia->image.x;
-		u[1] = vsp_fradia->image.y;
-		u[2] = vsp_fradia->image.z;
-		tracking = vsp_fradia->image.tracking;
+		u[0] = vsp_fradia->get_reading_message().x;
+		u[1] = vsp_fradia->get_reading_message().y;
+		u[2] = vsp_fradia->get_reading_message().z;
+		tracking = vsp_fradia->get_reading_message().tracking;
 
 		printf("ux: %f\t", u[0]);
 		printf("uy: %f\n", u[1]);

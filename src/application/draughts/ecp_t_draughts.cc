@@ -81,7 +81,7 @@ const double Draughts::bkings_table[8][8]={//blue, green kings
 /*==============================Constructor==================================*/
 //Constructors
 Draughts::Draughts(lib::configurator &_config): task(_config){
-	sensor_m[lib::SENSOR_CVFRADIA] = new fradia_sensor_board_and_draughts(this->config, "[vsp_fradia_sensor]");
+	sensor_m[lib::SENSOR_CVFRADIA] = new fradia_sensor_board_and_draughts(this->config, "[vsp_fradia_sensor]", lib::empty_t());
 	sensor_m[lib::SENSOR_CVFRADIA]->configure_sensor();
 
 	ecp_m_robot=new robot(*this);				//initialization of robot
@@ -138,7 +138,7 @@ void Draughts::fradiaControl(DRAUGHTS_MODE dmode, char pawn_nr=-1){
 	draughts_control msg;
 	msg.draughts_mode=dmode;
 	msg.pawn_nr=pawn_nr;
-	vsp_fr->configure_fradia_task(msg);
+	vsp_fr->set_initiate_message(msg);
 
 	snooze(0.4);						//wait until signal is read
 }
@@ -162,7 +162,7 @@ void Draughts::getAIMove(int player){
 	vsp_fradia->get_reading();
 	printf("dane: \n");
 	for(int i=0;i<32;i++){
-		aitrans->to_va.board[i]=vsp_fradia->image.fields[i];
+		aitrans->to_va.board[i]=vsp_fradia->get_reading_message().fields[i];
 		printf("%d ",aitrans->to_va.board[i]);
 	}
 	aitrans->to_va.player=player;
@@ -185,7 +185,7 @@ BOARD_STATUS Draughts::getBoardStatus(){
 	}
 
 	vsp_fradia->get_reading();
-	return vsp_fradia->image.status;
+	return vsp_fradia->get_reading_message().status;
 }
 
 /*============================goToInitialPos=================================*/
