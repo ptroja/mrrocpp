@@ -83,8 +83,9 @@ int EDP_bird_hand_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 					tmp2_string.c_str(), R_OK) == 0)) {
 				ui.ui_msg->message(lib::NON_FATAL_ERROR,
 						"edp_bird_hand already exists");
-			} else if (ui.check_node_existence(ui.bird_hand.state.edp.node_name,
-					std::string("edp_bird_hand"))) {
+			} else if (ui.check_node_existence(
+					ui.bird_hand.state.edp.node_name, std::string(
+							"edp_bird_hand"))) {
 
 				ui.bird_hand.state.edp.node_nr = ui.config->return_node_number(
 						ui.bird_hand.state.edp.node_name);
@@ -195,29 +196,45 @@ int EDP_bird_hand_slay_int(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
+int start_wnd_bird_hand_command_and_status(PtWidget_t *widget,
+		ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
-int
-start_wnd_bird_hand_command_and_status( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
-
-	{
-
-	/* eliminate 'unreferenced' warnings */
-	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
-
-	return( Pt_CONTINUE );
-
-	}
-
-
-int
-start_wnd_bird_hand_configuration( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
-
-	{
+{
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	return( Pt_CONTINUE );
-
+	if (!ui.bird_hand.is_wnd_bird_hand_command_and_status_open) // otworz okno
+	{
+		ApCreateModule(ABM_wnd_bird_hand_command_and_status, widget, cbinfo);
+		ui.bird_hand.is_wnd_bird_hand_command_and_status_open = true;
+		printf("start_wnd_bird_hand_command_and_status false\n");
+	} else { // przelacz na okno
+		PtWindowToFront(ABW_wnd_bird_hand_command_and_status);
+		printf("start_wnd_bird_hand_command_and_status true\n");
 	}
+
+	return (Pt_CONTINUE);
+
+}
+
+int start_wnd_bird_hand_configuration(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo)
+
+{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	if (!ui.bird_hand.is_wnd_bird_hand_configuration_open) // otworz okno
+	{
+		ApCreateModule(ABM_wnd_bird_hand_configuration, widget, cbinfo);
+		ui.bird_hand.is_wnd_bird_hand_configuration_open = true;
+	} else { // przelacz na okno
+		PtWindowToFront(ABW_wnd_bird_hand_configuration);
+	}
+
+	return (Pt_CONTINUE);
+
+}
 
