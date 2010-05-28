@@ -21,9 +21,24 @@ add_executable(ui
 	../ui.cc
 	../ui_ecp_r_common.cc
 	../ui_ecp_r_irp6_common.cc
-	../ui_ecp_r_speaker.cc
+	../speaker/ui_ecp_r_speaker.cc
 	../ui_ecp_r_tfg_and_conv.cc
+	../bird_hand/ui_ecp_r_bird_hand.cc
+	../ui_robot.cc
+	../bird_hand/ui_r_bird_hand.cc
+	../irp6ot_m/ui_r_irp6ot_m.cc
+	../irp6ot_tfg/ui_r_irp6ot_tfg.cc
+	../irp6p_m/ui_r_irp6p_m.cc
+	../irp6p_tfg/ui_r_irp6p_tfg.cc
+	../irp6m_m/ui_r_irp6m_m.cc
+	#../polycrank/ui_r_polycrank.cc
+	../conveyor/ui_r_conveyor.cc
+	../speaker/ui_r_speaker.cc
+	../spkm/ui_r_spkm.cc
+	../smb/ui_r_smb.cc
+	../shead/ui_r_shead.cc
 	../ui_init.cc
+	../ui_class.cc
 	../wndFileLocationEvents.cc
 	../wndForceControlEvents.cc
 	../wndTrajectoryReproduceEvents.cc

@@ -65,7 +65,7 @@ extern "C" {
 
 } /* extern "C" */
 
-gchar **config_files;
+gchar **ui.config_files;
 
 static GOptionEntry entries[] =
 {
@@ -122,10 +122,10 @@ int main(int argc, char *argv[])
 
 	gtk_widget_show(GTK_WIDGET(ui_model::instance().getUiGObject("window")));
 
-	if(config_files && *config_files) {
+	if(config_files && *ui.config_files) {
 		std::string config_file = xmlconfig->getConfig_dir();
 		config_file += "/";
-		config_file += (*config_files);
+		config_file += (*ui.config_files);
 		xmlconfig->open_config_file(config_file.c_str());
 	}
 

@@ -47,7 +47,7 @@ void *sr_thread(void* arg)
 {
 	messip_channel_t *ch;
 
-	// TODO: config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", UI_SECTION);
+	// TODO:ui.config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", UI_SECTION);
 	if ((ch = messip::port_create("sr")) == NULL) {
 		return NULL;
 	}
