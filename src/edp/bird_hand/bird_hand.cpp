@@ -4,6 +4,7 @@
 #include <exception>
 #include <stdexcept>
 #include <string.h>
+#include <iostream>
 
 #define BAUD 921600
 
@@ -46,8 +47,10 @@ Bird_hand::~Bird_hand()
 
 void Bird_hand::connect(std::string port)
 {
-	for (unsigned int i = 0; i < 8; i++) {
-		fd[i] = open((port+(char)(i+48)).c_str(), O_RDWR | O_NOCTTY | O_NDELAY);
+	for (unsigned int i = 0; i < 8; i++)
+	{
+		std::cout << "opening port : " << (port+(char)(i+50)).c_str() << std::endl;
+		fd[i] = open((port+(char)(i+50)).c_str(), O_RDWR | O_NOCTTY | O_NDELAY);
 		if (fd[i] < 0) {
 			throw(std::runtime_error("unable to open device device !!!"));
 		}
