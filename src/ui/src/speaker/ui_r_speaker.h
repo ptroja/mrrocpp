@@ -35,9 +35,7 @@ public:
 	int reload_configuration();
 	int manage_interface();
 
-	bool pulse_reader_speaker_start_exec_pulse();
-	bool pulse_reader_speaker_stop_exec_pulse();
-	bool pulse_reader_speaker_trigger_exec_pulse();
+	int close_all_windows();
 };
 
 #endif

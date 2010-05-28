@@ -203,8 +203,7 @@ int EDP_irp6_mechatronika_create(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
 int EDP_irp6_mechatronika_slay(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
-int close_all_irp6m_windows(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo);
+
 int EDP_irp6_mechatronika_synchronise(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
 int start_wnd_irp6m_int(PtWidget_t *widget, ApInfo_t *apinfo,
@@ -451,8 +450,6 @@ int EDP_irp6_on_track_slay(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
 int EDP_irp6_on_track_slay_int(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
-int close_all_irp6ot_windows(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo);
 int pulse_reader_irp6ot_start(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
 
@@ -601,8 +598,7 @@ int EDP_irp6_postument_slay(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
 int EDP_irp6_postument_slay_int(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
-int close_all_irp6p_windows(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo);
+
 int pulse_reader_irp6p_start(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
 
@@ -789,8 +785,6 @@ int close_wnd_bird_hand_configuration(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
 
 int clear_wnd_bird_hand_configuration(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo);
-int close_all_bird_hand_windows(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
 
 /* ../timer.cc */

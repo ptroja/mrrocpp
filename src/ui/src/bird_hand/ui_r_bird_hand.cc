@@ -172,3 +172,16 @@ int UiRobotBirdHand::manage_interface() {
 	return 1;
 }
 
+int UiRobotBirdHand::close_all_windows() {
+
+	int pt_res = PtEnter(0);
+
+	close_wnd_bird_hand_command_and_status(NULL, NULL, NULL);
+	close_wnd_bird_hand_configuration(NULL, NULL, NULL);
+
+	if (pt_res >= 0) {
+		PtLeave(0);
+	}
+	return 1;
+
+}

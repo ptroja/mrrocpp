@@ -183,7 +183,7 @@ int EDP_bird_hand_slay_int(PtWidget_t *widget, ApInfo_t *apinfo,
 		ui.bird_hand.state.edp.pid = -1;
 		ui.bird_hand.state.edp.reader_fd = -1;
 
-		close_all_bird_hand_windows(NULL, NULL, NULL);
+		ui.bird_hand.close_all_windows();
 
 	}
 
@@ -195,22 +195,6 @@ int EDP_bird_hand_slay_int(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
-int close_all_bird_hand_windows(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
-
-{
-	/* eliminate 'unreferenced' warnings */
-	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
-
-	int pt_res;
-	pt_res = PtEnter(0);
-	close_wnd_bird_hand_command_and_status(NULL, NULL, NULL);
-	close_wnd_bird_hand_configuration(NULL, NULL, NULL);
-	if (pt_res >= 0)
-		PtLeave(0);
-
-	return (Pt_CONTINUE);
-}
 
 int start_wnd_bird_hand_command_and_status(PtWidget_t *widget,
 		ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
