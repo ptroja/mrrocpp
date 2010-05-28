@@ -790,6 +790,8 @@ int close_wnd_bird_hand_configuration(PtWidget_t *widget, ApInfo_t *apinfo,
 
 int clear_wnd_bird_hand_configuration(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
+int close_all_bird_hand_windows(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo);
 
 /* ../timer.cc */
 int OnTimer(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo);

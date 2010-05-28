@@ -1570,6 +1570,7 @@ int pulse_start_mp(PtWidget_t *widget, ApInfo_t *apinfo,
 		close_all_irp6p_windows(NULL, NULL, NULL);
 
 		close_all_irp6m_windows(NULL, NULL, NULL);
+		close_all_bird_hand_windows(NULL, NULL, NULL);
 
 		close_wind_conveyor_moves(NULL, NULL, NULL);
 		close_wnd_conveyor_servo_algorithm(NULL, NULL, NULL);
