@@ -208,12 +208,38 @@ int start_wnd_bird_hand_command_and_status(PtWidget_t *widget,
 	{
 		ApCreateModule(ABM_wnd_bird_hand_command_and_status, widget, cbinfo);
 		ui.bird_hand.is_wnd_bird_hand_command_and_status_open = true;
-		printf("start_wnd_bird_hand_command_and_status false\n");
+
 	} else { // przelacz na okno
 		PtWindowToFront(ABW_wnd_bird_hand_command_and_status);
-		printf("start_wnd_bird_hand_command_and_status true\n");
+
 	}
 
+	return (Pt_CONTINUE);
+
+}
+
+int close_wnd_bird_hand_command_and_status(PtWidget_t *widget,
+		ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo) {
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	if (ui.bird_hand.is_wnd_bird_hand_command_and_status_open) {
+		PtDestroyWidget(ABW_wnd_bird_hand_command_and_status);
+	}
+
+	return (Pt_CONTINUE);
+}
+
+int clear_wnd_bird_hand_command_and_status(PtWidget_t *widget,
+		ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+
+{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	ui.bird_hand.is_wnd_bird_hand_command_and_status_open = false;
 	return (Pt_CONTINUE);
 
 }
@@ -238,3 +264,28 @@ int start_wnd_bird_hand_configuration(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
+int close_wnd_bird_hand_configuration(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo) {
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	if (ui.bird_hand.is_wnd_bird_hand_configuration_open) {
+		PtDestroyWidget(ABW_wnd_bird_hand_configuration);
+	}
+
+	return (Pt_CONTINUE);
+}
+
+int clear_wnd_bird_hand_configuration(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo)
+
+{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	ui.bird_hand.is_wnd_bird_hand_configuration_open = false;
+	return (Pt_CONTINUE);
+
+}
