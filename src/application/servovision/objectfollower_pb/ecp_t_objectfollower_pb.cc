@@ -22,7 +22,6 @@ ecp_t_objectfollower_pb::ecp_t_objectfollower_pb(mrrocpp::lib::configurator& con
 	task(config)
 {
 	ecp_m_robot = new ecp::irp6ot_m::robot(*this);
-	//ecp_m_robot = new ecp::irp6ot_m::robot(*this);
 
 	char config_section_name[] = { "[object_follower_1]" };
 

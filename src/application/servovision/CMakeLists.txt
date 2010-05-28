@@ -67,17 +67,9 @@ target_link_libraries(ecp_image_capture
 
 
 # conveyor test
-add_executable(ecp_conveyor_test
-    visualservo_tester/ecp_g_conveyor_sinus.cc
-    visualservo_tester/ecp_t_conveyor_test.cc
-    logger.cc
-)
-
-target_link_libraries(ecp_conveyor_test
-	ecp_r_conv
-	ecp ${COMMON_LIBRARIES}
-)
-
 
 ####################################3
-install(TARGETS ecp_objectfollower_ib ecp_objectfollower_pb ecp_objectfollower_pb_sac ecp_image_capture ecp_conveyor_test DESTINATION bin)
+install(TARGETS ecp_objectfollower_ib ecp_objectfollower_pb ecp_objectfollower_pb_sac ecp_image_capture DESTINATION bin)
+
+
+add_subdirectory(visualservo_tester)
