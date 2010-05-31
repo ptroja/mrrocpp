@@ -144,12 +144,14 @@ void effector::move_arm(const lib::c_buffer &instruction) {
 	}
 
 	std::stringstream ss(std::stringstream::in | std::stringstream::out);
-	/*
-	 ss << ecp_edp_cbuffer.bird_hand_command_structure.motion_steps << " "
-	 << ecp_edp_cbuffer.bird_hand_command_structure.ecp_query_step;
 
-	 msg->message(ss.str().c_str());
-	 */
+	ss
+			<< ecp_edp_cbuffer.bird_hand_command_structure.finger[0].desired_position
+			<< " "
+			<< ecp_edp_cbuffer.bird_hand_command_structure.finger[0].reciprocal_of_damping;
+
+	msg->message(ss.str().c_str());
+
 	if (clock_gettime(CLOCK_MONOTONIC, &current_timespec) == -1) {
 		perror("clock gettime");
 	}

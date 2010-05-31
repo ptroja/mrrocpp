@@ -2227,8 +2227,8 @@ extern const int ABN_wnd_bird_hand_command_and_status;
 #define ABW_wnd_bird_hand_command_and_status AbGetABW( ABN_wnd_bird_hand_command_and_status )
 extern const int ABN_PtNumericFloat_wind_irp6m_motors_cur_p00;
 #define ABW_PtNumericFloat_wind_irp6m_motors_cur_p00 AbGetABW( ABN_PtNumericFloat_wind_irp6m_motors_cur_p00 )
-extern const int ABN_PtNumericFloat_wind_irp6m_inc_p00;
-#define ABW_PtNumericFloat_wind_irp6m_inc_p00 AbGetABW( ABN_PtNumericFloat_wind_irp6m_inc_p00 )
+extern const int ABN_index_f_0_desired_position_wnd_bird_hand_command_and_status;
+#define ABW_index_f_0_desired_position_wnd_bird_hand_command_and_status AbGetABW( ABN_index_f_0_desired_position_wnd_bird_hand_command_and_status )
 extern const int ABN_PtLabel1100;
 #define ABW_PtLabel1100                      AbGetABW( ABN_PtLabel1100 )
 extern const int ABN_PtLabel2000;
@@ -2257,6 +2257,10 @@ extern const int ABN_motion_steps_wnd_bird_hand_command_and_status;
 #define ABW_motion_steps_wnd_bird_hand_command_and_status AbGetABW( ABN_motion_steps_wnd_bird_hand_command_and_status )
 extern const int ABN_ecp_query_step_wnd_bird_hand_command_and_status;
 #define ABW_ecp_query_step_wnd_bird_hand_command_and_status AbGetABW( ABN_ecp_query_step_wnd_bird_hand_command_and_status )
+extern const int ABN_index_f_0_desired_torque_wnd_bird_hand_command_and_status;
+#define ABW_index_f_0_desired_torque_wnd_bird_hand_command_and_status AbGetABW( ABN_index_f_0_desired_torque_wnd_bird_hand_command_and_status )
+extern const int ABN_index_f_0_recip_of_damping_wnd_bird_hand_command_and_status;
+#define ABW_index_f_0_recip_of_damping_wnd_bird_hand_command_and_status AbGetABW( ABN_index_f_0_recip_of_damping_wnd_bird_hand_command_and_status )
 
 #define AbGetABW( n ) ( AbWidgets[ n ].wgt )
 

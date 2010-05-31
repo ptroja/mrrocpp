@@ -223,9 +223,14 @@ int execute_wnd_bird_hand_command_and_status(PtWidget_t *widget,
 	ui.bird_hand.read_index_f_0_command();
 
 	std::stringstream ss(std::stringstream::in | std::stringstream::out);
+	/*
+	 ss << bhcs.index_f[0].profile_type << " " << bhcs.motion_steps << "  "
+	 << bhcs.ecp_query_step;
+	 */
 
-	ss << bhcs.index_f[0].profile_type << " " << bhcs.motion_steps << "  "
-			<< bhcs.ecp_query_step;
+	ss << bhcs.index_f[0].desired_position << " "
+			<< bhcs.index_f[0].desired_torque << "  "
+			<< bhcs.index_f[0].reciprocal_of_damping;
 
 	ui.ui_msg->message(ss.str().c_str());
 

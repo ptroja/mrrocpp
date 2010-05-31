@@ -221,6 +221,26 @@ int UiRobotBirdHand::read_index_f_0_command() {
 				= lib::BIRD_HAND_SIGLE_STEP_POSTION_INCREMENT;
 	}
 
+	double* tmp_double;
+
+	PtGetResource(
+			ABW_index_f_0_desired_position_wnd_bird_hand_command_and_status,
+			Pt_ARG_NUMERIC_VALUE, &tmp_double, 0);
+
+	bhcs.index_f[0].desired_position = *tmp_double;
+
+	PtGetResource(
+			ABW_index_f_0_desired_torque_wnd_bird_hand_command_and_status,
+			Pt_ARG_NUMERIC_VALUE, &tmp_double, 0);
+
+	bhcs.index_f[0].desired_torque = *tmp_double;
+
+	PtGetResource(
+			ABW_index_f_0_recip_of_damping_wnd_bird_hand_command_and_status,
+			Pt_ARG_NUMERIC_VALUE, &tmp_double, 0);
+
+	bhcs.index_f[0].reciprocal_of_damping = *tmp_double;
+
 	return 1;
 
 }
