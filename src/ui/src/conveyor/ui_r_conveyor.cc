@@ -11,7 +11,7 @@
 #include "../abimport.h"
 #include "../gcc_ntox86/proto.h"
 
-extern Ui ui;
+
 
 // extern ui_state_def ui_state;
 
@@ -22,8 +22,8 @@ extern Ui ui;
 //
 
 
-UiRobotConveyor::UiRobotConveyor() :
-	UiRobot(EDP_CONVEYOR_SECTION, ECP_CONVEYOR_SECTION), ui_ecp_robot(NULL),
+UiRobotConveyor::UiRobotConveyor(Ui& _ui) :
+	UiRobot(_ui, EDP_CONVEYOR_SECTION, ECP_CONVEYOR_SECTION), ui_ecp_robot(NULL),
 			is_wind_conv_servo_algorithm_open(false),
 			is_wind_conveyor_moves_open(false) {
 

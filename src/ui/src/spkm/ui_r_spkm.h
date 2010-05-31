@@ -18,9 +18,7 @@
 //
 
 
-// super klasa agregujaca porozrzucane struktury
-
-
+class Ui;
 class ui_tfg_and_conv_robot;
 
 class UiRobotSpkm: public UiRobot {
@@ -30,7 +28,7 @@ public:
 
 	ui_tfg_and_conv_robot *ui_ecp_robot;
 
-	UiRobotSpkm();
+	UiRobotSpkm(Ui& _ui);
 	int reload_configuration();
 	int manage_interface();
 };

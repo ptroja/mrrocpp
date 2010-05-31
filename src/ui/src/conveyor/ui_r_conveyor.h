@@ -11,7 +11,9 @@
 #include "ui/ui.h"
 #include "ui/ui_robot.h"
 #include "lib/robot_consts/conveyor_const.h"
-//
+
+class Ui;
+
 //
 // KLASA UiRobotConveyor
 //
@@ -36,7 +38,7 @@ public:
 
 	ui_tfg_and_conv_robot *ui_ecp_robot;
 
-	UiRobotConveyor();
+	UiRobotConveyor(Ui& _ui);
 	int reload_configuration();
 	int manage_interface();
 	int process_control_window_conveyor_section_init(

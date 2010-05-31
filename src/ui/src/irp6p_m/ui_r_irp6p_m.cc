@@ -11,9 +11,6 @@
 #include "../abimport.h"
 #include "../gcc_ntox86/proto.h"
 
-extern Ui ui;
-
-// extern ui_state_def ui_state;
 
 //
 //
@@ -22,8 +19,8 @@ extern Ui ui;
 //
 
 
-UiRobotIrp6p_m::UiRobotIrp6p_m() :
-	UiRobot(EDP_IRP6P_M_SECTION, ECP_IRP6P_M_SECTION), ui_ecp_robot(NULL),
+UiRobotIrp6p_m::UiRobotIrp6p_m(Ui& _ui) :
+	UiRobot(_ui, EDP_IRP6P_M_SECTION, ECP_IRP6P_M_SECTION), ui_ecp_robot(NULL),
 			is_wind_irp6p_int_open(false), is_wind_irp6p_inc_open(false),
 			is_wind_irp6p_xyz_euler_zyz_open(false),
 			is_wind_irp6p_xyz_angle_axis_open(false),

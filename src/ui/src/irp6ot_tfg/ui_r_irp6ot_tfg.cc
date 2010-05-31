@@ -11,9 +11,7 @@
 #include "../abimport.h"
 #include "../gcc_ntox86/proto.h"
 
-extern Ui ui;
 
-// extern ui_state_def ui_state;
 
 //
 //
@@ -22,8 +20,8 @@ extern Ui ui;
 //
 
 
-UiRobotIrp6ot_tfg::UiRobotIrp6ot_tfg() :
-			UiRobot(EDP_IRP6OT_TFG_SECTION, ECP_IRP6OT_TFG_SECTION), ui_ecp_robot(
+UiRobotIrp6ot_tfg::UiRobotIrp6ot_tfg(Ui& _ui) :
+			UiRobot(_ui, EDP_IRP6OT_TFG_SECTION, ECP_IRP6OT_TFG_SECTION), ui_ecp_robot(
 					NULL), is_wind_irp6ot_tfg_moves_open(false),
 			is_wind_irp6ot_tfg_servo_algorithm_open(false) {
 

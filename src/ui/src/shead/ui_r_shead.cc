@@ -11,10 +11,6 @@
 #include "../abimport.h"
 #include "../gcc_ntox86/proto.h"
 
-extern Ui ui;
-
-// extern ui_state_def ui_state;
-
 //
 //
 // KLASA UiRobotIrp6ot_m
@@ -22,8 +18,8 @@ extern Ui ui;
 //
 
 
-UiRobotShead::UiRobotShead() :
-	UiRobot(EDP_SHEAD_SECTION, ECP_SHEAD_SECTION), ui_ecp_robot(NULL) {
+UiRobotShead::UiRobotShead(Ui& _ui) :
+	UiRobot(_ui, EDP_SHEAD_SECTION, ECP_SHEAD_SECTION), ui_ecp_robot(NULL) {
 
 }
 

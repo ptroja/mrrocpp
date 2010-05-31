@@ -28,7 +28,6 @@ class UiRobotBirdHand: public UiRobot {
 private:
 
 public:
-	Ui& ui;
 	ui_bird_hand_robot *ui_ecp_robot;
 
 	bool is_wnd_bird_hand_command_and_status_open;

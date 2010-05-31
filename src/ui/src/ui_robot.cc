@@ -4,8 +4,6 @@
 #include "ui/ui_robot.h"
 #include "ui/ui_class.h"
 
-extern Ui ui;
-
 //
 //
 // KLASA UiRobot
@@ -13,9 +11,9 @@ extern Ui ui;
 //
 
 
-UiRobot::UiRobot(const std::string edp_section_name,
+UiRobot::UiRobot(Ui& _ui, const std::string edp_section_name,
 		const std::string ecp_section_name) :
-	tid(NULL) {
+	ui(_ui), tid(NULL) {
 	state.edp.section_name = edp_section_name;
 	state.ecp.section_name = ecp_section_name;
 	state.edp.state = -1; // edp nieaktywne

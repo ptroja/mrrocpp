@@ -20,9 +20,8 @@
 
 
 UiRobotBirdHand::UiRobotBirdHand(Ui& _ui) :
-	UiRobot(EDP_BIRD_HAND_SECTION, ECP_BIRD_HAND_SECTION), ui(_ui),
-			ui_ecp_robot(NULL),
-			is_wnd_bird_hand_command_and_status_open(false),
+	UiRobot(_ui, EDP_BIRD_HAND_SECTION, ECP_BIRD_HAND_SECTION),
+	ui_ecp_robot(NULL), is_wnd_bird_hand_command_and_status_open(false),
 			is_wnd_bird_hand_configuration_open(false) {
 
 }

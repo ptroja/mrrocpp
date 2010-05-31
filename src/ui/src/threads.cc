@@ -117,9 +117,9 @@ void *comm_thread(void* arg) {
 		}
 
 		//! FIXME:
-		if (ui.irp6ot_m.state.ecp.pid <= 0) {
+		if (ui.irp6ot_m->state.ecp.pid <= 0) {
 
-			ui.irp6ot_m.state.ecp.pid = info.pid;
+			ui.irp6ot_m->state.ecp.pid = info.pid;
 
 		}
 
@@ -467,15 +467,15 @@ void create_threads()
 		printf(" Failed to thread comm_thread\n");
 	}
 #endif
-	ui.irp6ot_m.create_thread();
-	ui.irp6ot_tfg.create_thread();
-	ui.irp6p_m.create_thread();
-	ui.irp6p_tfg.create_thread();
+	ui.irp6ot_m->create_thread();
+	ui.irp6ot_tfg->create_thread();
+	ui.irp6p_m->create_thread();
+	ui.irp6p_tfg->create_thread();
 
-	ui.conveyor.create_thread();
-	ui.spkm.create_thread();
-	ui.smb.create_thread();
-	ui.shead.create_thread();
+	ui.conveyor->create_thread();
+	ui.spkm->create_thread();
+	ui.smb->create_thread();
+	ui.shead->create_thread();
 	ui.bird_hand->create_thread();
 	ui.meb_tid = new feb_thread(ui.main_eb);
 

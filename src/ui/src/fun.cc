@@ -773,21 +773,21 @@ int process_control_window_init(PtWidget_t *widget, ApInfo_t *apinfo,
 
 		// Dla irp6_on_track
 
-		ui.irp6ot_m.process_control_window_irp6ot_section_init(
+		ui.irp6ot_m->process_control_window_irp6ot_section_init(
 				wlacz_PtButton_wnd_processes_control_all_reader_start,
 				wlacz_PtButton_wnd_processes_control_all_reader_stop,
 				wlacz_PtButton_wnd_processes_control_all_reader_trigger);
 
 		// Dla irp6_postument
 
-		ui.irp6p_m.process_control_window_irp6p_section_init(
+		ui.irp6p_m->process_control_window_irp6p_section_init(
 				wlacz_PtButton_wnd_processes_control_all_reader_start,
 				wlacz_PtButton_wnd_processes_control_all_reader_stop,
 				wlacz_PtButton_wnd_processes_control_all_reader_trigger);
 
 		// Dla conveyor
 
-		ui.conveyor.process_control_window_conveyor_section_init(
+		ui.conveyor->process_control_window_conveyor_section_init(
 				wlacz_PtButton_wnd_processes_control_all_reader_start,
 				wlacz_PtButton_wnd_processes_control_all_reader_stop,
 				wlacz_PtButton_wnd_processes_control_all_reader_trigger);
@@ -796,7 +796,7 @@ int process_control_window_init(PtWidget_t *widget, ApInfo_t *apinfo,
 
 		// Dla irp6_mechatronika
 
-		ui.irp6m_m.process_control_window_irp6m_section_init(
+		ui.irp6m_m->process_control_window_irp6m_section_init(
 				wlacz_PtButton_wnd_processes_control_all_reader_start,
 				wlacz_PtButton_wnd_processes_control_all_reader_stop,
 				wlacz_PtButton_wnd_processes_control_all_reader_trigger);
@@ -902,19 +902,19 @@ int block_all_ecp_trigger_widgets(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (ui.irp6ot_m.state.edp.is_synchronised) {
+	if (ui.irp6ot_m->state.edp.is_synchronised) {
 		ui.block_widget(ABW_PtButton_wnd_processes_control_irp6ot_ecp_trigger);
 	}
-	if (ui.irp6p_m.state.edp.is_synchronised) {
+	if (ui.irp6p_m->state.edp.is_synchronised) {
 		ui.block_widget(ABW_PtButton_wnd_processes_control_irp6p_ecp_trigger);
 	}
-	if (ui.conveyor.state.edp.is_synchronised) {
+	if (ui.conveyor->state.edp.is_synchronised) {
 		ui.block_widget(ABW_PtButton_wnd_processes_control_conveyor_ecp_trigger);
 	}
-	if (ui.speaker.state.edp.is_synchronised) {
+	if (ui.speaker->state.edp.is_synchronised) {
 		ui.block_widget(ABW_PtButton_wnd_processes_control_speaker_ecp_trigger);
 	}
-	if (ui.irp6m_m.state.edp.is_synchronised) {
+	if (ui.irp6m_m->state.edp.is_synchronised) {
 		ui.block_widget(ABW_PtButton_wnd_processes_control_irp6m_ecp_trigger);
 	}
 	ui.block_widget(ABW_PtButton_wnd_processes_control_all_ecp_trigger);
@@ -930,21 +930,21 @@ int unblock_all_ecp_trigger_widgets(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (ui.irp6ot_m.state.edp.is_synchronised) {
+	if (ui.irp6ot_m->state.edp.is_synchronised) {
 		ui.unblock_widget(ABW_PtButton_wnd_processes_control_irp6ot_ecp_trigger);
 	}
-	if (ui.irp6p_m.state.edp.is_synchronised) {
+	if (ui.irp6p_m->state.edp.is_synchronised) {
 		ui.unblock_widget(ABW_PtButton_wnd_processes_control_irp6p_ecp_trigger);
 	}
-	if (ui.conveyor.state.edp.is_synchronised) {
+	if (ui.conveyor->state.edp.is_synchronised) {
 		ui.unblock_widget(
 				ABW_PtButton_wnd_processes_control_conveyor_ecp_trigger);
 	}
-	if (ui.speaker.state.edp.is_synchronised) {
+	if (ui.speaker->state.edp.is_synchronised) {
 		ui.unblock_widget(
 				ABW_PtButton_wnd_processes_control_speaker_ecp_trigger);
 	}
-	if (ui.irp6m_m.state.edp.is_synchronised) {
+	if (ui.irp6m_m->state.edp.is_synchronised) {
 		ui.unblock_widget(ABW_PtButton_wnd_processes_control_irp6m_ecp_trigger);
 	}
 	ui.unblock_widget(ABW_PtButton_wnd_processes_control_all_ecp_trigger);
@@ -1337,17 +1337,17 @@ int teaching_window_send_move(PtWidget_t *widget, ApInfo_t *apinfo,
 	case lib::ROBOT_IRP6OT_M:
 		for (int i = 0; i < IRP6OT_M_NUM_OF_SERVOS; i++)
 			ui.ui_ecp_obj->ui_rep.coordinates[i]
-					= ui.irp6ot_m.irp6ot_current_pos[i];
+					= ui.irp6ot_m->irp6ot_current_pos[i];
 		break;
 	case lib::ROBOT_IRP6P_M:
 		for (int i = 0; i < IRP6P_M_NUM_OF_SERVOS; i++)
 			ui.ui_ecp_obj->ui_rep.coordinates[i]
-					= ui.irp6p_m.irp6p_current_pos[i];
+					= ui.irp6p_m->irp6p_current_pos[i];
 		break;
 	case lib::ROBOT_IRP6_MECHATRONIKA:
 		for (int i = 0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++)
 			ui.ui_ecp_obj->ui_rep.coordinates[i]
-					= ui.irp6m_m.irp6m_current_pos[i];
+					= ui.irp6m_m->irp6m_current_pos[i];
 		break;
 	default:
 		break;
@@ -1374,17 +1374,17 @@ int all_robots_move_to_preset_position(PtWidget_t *widget, ApInfo_t *apinfo,
 			== UI_MP_PERMITED_TO_RUN) || (ui.mp.state
 			== UI_MP_WAITING_FOR_START_PULSE)) {
 		// ruch do pozcyji synchronizacji dla Irp6_on_track i dla dalszych analogicznie
-		if (ui.check_synchronised_and_loaded(ui.irp6ot_m.state))
+		if (ui.check_synchronised_and_loaded(ui.irp6ot_m->state))
 			irp6ot_move_to_preset_position(widget, apinfo, cbinfo);
-		if (ui.check_synchronised_and_loaded(ui.irp6ot_tfg.state))
+		if (ui.check_synchronised_and_loaded(ui.irp6ot_tfg->state))
 			irp6ot_tfg_move_to_preset_position(widget, apinfo, cbinfo);
-		if (ui.check_synchronised_and_loaded(ui.irp6p_m.state))
+		if (ui.check_synchronised_and_loaded(ui.irp6p_m->state))
 			irp6p_move_to_preset_position(widget, apinfo, cbinfo);
-		if (ui.check_synchronised_and_loaded(ui.irp6p_tfg.state))
+		if (ui.check_synchronised_and_loaded(ui.irp6p_tfg->state))
 			irp6p_tfg_move_to_preset_position(widget, apinfo, cbinfo);
-		if (ui.check_synchronised_and_loaded(ui.conveyor.state))
+		if (ui.check_synchronised_and_loaded(ui.conveyor->state))
 			conveyor_move_to_preset_position(widget, apinfo, cbinfo);
-		if (ui.check_synchronised_and_loaded(ui.irp6m_m.state))
+		if (ui.check_synchronised_and_loaded(ui.irp6m_m->state))
 			irp6m_move_to_preset_position(widget, apinfo, cbinfo);
 	}
 
@@ -1539,11 +1539,11 @@ int MPslay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 	ui.mp.pid = -1;
 	ui.mp.pulse_fd = -1;
 
-	ui.deactivate_ecp_trigger(ui.irp6ot_m.state);
-	ui.deactivate_ecp_trigger(ui.irp6p_m.state);
-	ui.deactivate_ecp_trigger(ui.conveyor.state);
-	ui.deactivate_ecp_trigger(ui.speaker.state);
-	ui.deactivate_ecp_trigger(ui.irp6m_m.state);
+	ui.deactivate_ecp_trigger(ui.irp6ot_m->state);
+	ui.deactivate_ecp_trigger(ui.irp6p_m->state);
+	ui.deactivate_ecp_trigger(ui.conveyor->state);
+	ui.deactivate_ecp_trigger(ui.speaker->state);
+	ui.deactivate_ecp_trigger(ui.irp6m_m->state);
 
 	// modyfikacja menu
 	ui.manage_interface();
@@ -1566,14 +1566,14 @@ int pulse_start_mp(PtWidget_t *widget, ApInfo_t *apinfo,
 
 		// zamkniecie okien ruchow recznych o ile sa otwarte
 
-		ui.irp6ot_m.close_all_windows();
-		ui.irp6p_m.close_all_windows();
-		ui.irp6m_m.close_all_windows();
+		ui.irp6ot_m->close_all_windows();
+		ui.irp6p_m->close_all_windows();
+		ui.irp6m_m->close_all_windows();
 		ui.bird_hand->close_all_windows();
-		ui.conveyor.close_all_windows();
-		ui.irp6ot_tfg.close_all_windows();
-		ui.irp6p_tfg.close_all_windows();
-		ui.speaker.close_all_windows();
+		ui.conveyor->close_all_windows();
+		ui.irp6ot_tfg->close_all_windows();
+		ui.irp6p_tfg->close_all_windows();
+		ui.speaker->close_all_windows();
 
 		ui.execute_mp_pulse(MP_START);
 
@@ -1720,7 +1720,7 @@ int signal_mp(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 	// if((	signo!=SIGCONT)&&(signo!=SIGSTOP)) {
 
-	if ( ( ret = SignalKill(ui.irp6ot_m.state.edp.node_nr, ui.irp6ot_m.state.edp.pid, 1, signo,0,0) ) == -1 ) { // by Y !!! klopoty z wysylaniem do okreslonego watku -
+	if ( ( ret = SignalKill(ui.irp6ot_m->state.edp.node_nr, ui.irp6ot_m->state.edp.pid, 1, signo,0,0) ) == -1 ) { // by Y !!! klopoty z wysylaniem do okreslonego watku -
 		// wstawiona maska na odbior sygnalow po stronie serwo
 		// 	perror("UI: Stop EDP failed");
 		printf("sending a signal to edp failed\n");
@@ -1728,7 +1728,7 @@ int signal_mp(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 	}
 	// 	 }
 	// XXX probably a bug - killing _ecp_ pid on _edp_ node (ptrojane)
-	if ( ( ret = SignalKill(ui.irp6ot_m.state.edp.node_nr, ui.irp6ot_m.state.ecp.pid, 0, signo,0,0) ) == -1 ) {
+	if ( ( ret = SignalKill(ui.irp6ot_m->state.edp.node_nr, ui.irp6ot_m->state.ecp.pid, 0, signo,0,0) ) == -1 ) {
 		// 	perror("UI: Stop ECP failed");
 		printf("sending a signal to ecp failed\n");
 
@@ -1751,10 +1751,10 @@ int pulse_reader_all_robots_start(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	ui.irp6ot_m.pulse_reader_start_exec_pulse();
-	ui.irp6p_m.pulse_reader_start_exec_pulse();
-	ui.conveyor.pulse_reader_start_exec_pulse();
-	ui.irp6m_m.pulse_reader_start_exec_pulse();
+	ui.irp6ot_m->pulse_reader_start_exec_pulse();
+	ui.irp6p_m->pulse_reader_start_exec_pulse();
+	ui.conveyor->pulse_reader_start_exec_pulse();
+	ui.irp6m_m->pulse_reader_start_exec_pulse();
 
 	process_control_window_init(widget, apinfo, cbinfo);
 
@@ -1770,10 +1770,10 @@ int pulse_reader_all_robots_stop(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	ui.irp6ot_m.pulse_reader_stop_exec_pulse();
-	ui.irp6p_m.pulse_reader_stop_exec_pulse();
-	ui.conveyor.pulse_reader_stop_exec_pulse();
-	ui.irp6m_m.pulse_reader_stop_exec_pulse();
+	ui.irp6ot_m->pulse_reader_stop_exec_pulse();
+	ui.irp6p_m->pulse_reader_stop_exec_pulse();
+	ui.conveyor->pulse_reader_stop_exec_pulse();
+	ui.irp6m_m->pulse_reader_stop_exec_pulse();
 	process_control_window_init(widget, apinfo, cbinfo);
 
 	return (Pt_CONTINUE);
@@ -1788,10 +1788,10 @@ int pulse_reader_all_robots_trigger(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	ui.irp6ot_m.pulse_reader_trigger_exec_pulse();
-	ui.irp6p_m.pulse_reader_trigger_exec_pulse();
-	ui.conveyor.pulse_reader_trigger_exec_pulse();
-	ui.irp6m_m.pulse_reader_trigger_exec_pulse();
+	ui.irp6ot_m->pulse_reader_trigger_exec_pulse();
+	ui.irp6p_m->pulse_reader_trigger_exec_pulse();
+	ui.conveyor->pulse_reader_trigger_exec_pulse();
+	ui.irp6m_m->pulse_reader_trigger_exec_pulse();
 
 	return (Pt_CONTINUE);
 

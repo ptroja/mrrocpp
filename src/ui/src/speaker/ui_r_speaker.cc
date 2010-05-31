@@ -11,10 +11,6 @@
 #include "../abimport.h"
 #include "../gcc_ntox86/proto.h"
 
-extern Ui ui;
-
-// extern ui_state_def ui_state;
-
 //
 //
 // KLASA UiRobotIrp6ot_m
@@ -22,8 +18,8 @@ extern Ui ui;
 //
 
 
-UiRobotSpeaker::UiRobotSpeaker() :
-	UiRobot(EDP_SPEAKER_SECTION, ECP_SPEAKER_SECTION), ui_ecp_robot(NULL),
+UiRobotSpeaker::UiRobotSpeaker(Ui& _ui) :
+	UiRobot(_ui, EDP_SPEAKER_SECTION, ECP_SPEAKER_SECTION), ui_ecp_robot(NULL),
 			is_wind_speaker_play_open(false) {
 
 }

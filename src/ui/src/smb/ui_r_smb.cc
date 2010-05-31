@@ -11,9 +11,6 @@
 #include "../abimport.h"
 #include "../gcc_ntox86/proto.h"
 
-extern Ui ui;
-
-// extern ui_state_def ui_state;
 
 //
 //
@@ -22,8 +19,8 @@ extern Ui ui;
 //
 
 
-UiRobotSmb::UiRobotSmb() :
-	UiRobot(EDP_SMB_SECTION, ECP_SMB_SECTION), ui_ecp_robot(NULL) {
+UiRobotSmb::UiRobotSmb(Ui& _ui) :
+	UiRobot(_ui, EDP_SMB_SECTION, ECP_SMB_SECTION), ui_ecp_robot(NULL) {
 
 }
 
