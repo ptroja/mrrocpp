@@ -759,7 +759,7 @@ int EDP_spkm_slay(PtWidget_t *widget, ApInfo_t *apinfo,
 int EDP_spkm_slay_int(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
 
-/* ../fun_r_bird_hand.cc */
+/* ../fun_r_bird_hand->cc */
 
 int EDP_bird_hand_create(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);

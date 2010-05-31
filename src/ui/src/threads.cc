@@ -476,7 +476,7 @@ void create_threads()
 	ui.spkm.create_thread();
 	ui.smb.create_thread();
 	ui.shead.create_thread();
-	ui.bird_hand.create_thread();
+	ui.bird_hand->create_thread();
 	ui.meb_tid = new feb_thread(ui.main_eb);
 
 }

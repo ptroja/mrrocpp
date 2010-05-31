@@ -803,11 +803,13 @@ int process_control_window_init(PtWidget_t *widget, ApInfo_t *apinfo,
 
 		// All reader's pulse buttons
 		if (wlacz_PtButton_wnd_processes_control_all_reader_start) {
-			ui.unblock_widget(ABW_PtButton_wnd_processes_control_all_reader_start);
+			ui.unblock_widget(
+					ABW_PtButton_wnd_processes_control_all_reader_start);
 		}
 
 		if (wlacz_PtButton_wnd_processes_control_all_reader_stop) {
-			ui.unblock_widget(ABW_PtButton_wnd_processes_control_all_reader_stop);
+			ui.unblock_widget(
+					ABW_PtButton_wnd_processes_control_all_reader_stop);
 		}
 
 		if (wlacz_PtButton_wnd_processes_control_all_reader_trigger) {
@@ -822,10 +824,14 @@ int process_control_window_init(PtWidget_t *widget, ApInfo_t *apinfo,
 
 			switch (ui.mp.state) {
 			case UI_MP_PERMITED_TO_RUN:
-				ui.block_widget(ABW_PtButton_wnd_processes_control_mp_pulse_start);
-				ui.block_widget(ABW_PtButton_wnd_processes_control_mp_pulse_stop);
-				ui.block_widget(ABW_PtButton_wnd_processes_control_mp_pulse_pause);
-				ui.block_widget(ABW_PtButton_wnd_processes_control_mp_pulse_resume);
+				ui.block_widget(
+						ABW_PtButton_wnd_processes_control_mp_pulse_start);
+				ui.block_widget(
+						ABW_PtButton_wnd_processes_control_mp_pulse_stop);
+				ui.block_widget(
+						ABW_PtButton_wnd_processes_control_mp_pulse_pause);
+				ui.block_widget(
+						ABW_PtButton_wnd_processes_control_mp_pulse_resume);
 				ui.block_widget(
 						ABW_PtButton_wnd_processes_control_mp_pulse_trigger);
 
@@ -834,29 +840,38 @@ int process_control_window_init(PtWidget_t *widget, ApInfo_t *apinfo,
 			case UI_MP_WAITING_FOR_START_PULSE:
 				ui.unblock_widget(
 						ABW_PtButton_wnd_processes_control_mp_pulse_start);
-				ui.block_widget(ABW_PtButton_wnd_processes_control_mp_pulse_stop);
-				ui.block_widget(ABW_PtButton_wnd_processes_control_mp_pulse_pause);
-				ui.block_widget(ABW_PtButton_wnd_processes_control_mp_pulse_resume);
+				ui.block_widget(
+						ABW_PtButton_wnd_processes_control_mp_pulse_stop);
+				ui.block_widget(
+						ABW_PtButton_wnd_processes_control_mp_pulse_pause);
+				ui.block_widget(
+						ABW_PtButton_wnd_processes_control_mp_pulse_resume);
 				ui.block_widget(
 						ABW_PtButton_wnd_processes_control_mp_pulse_trigger);
 
 				block_all_ecp_trigger_widgets(NULL, NULL, NULL);
 				break;
 			case UI_MP_TASK_RUNNING:
-				ui.block_widget(ABW_PtButton_wnd_processes_control_mp_pulse_start);
-				ui.unblock_widget(ABW_PtButton_wnd_processes_control_mp_pulse_stop);
+				ui.block_widget(
+						ABW_PtButton_wnd_processes_control_mp_pulse_start);
+				ui.unblock_widget(
+						ABW_PtButton_wnd_processes_control_mp_pulse_stop);
 				ui.unblock_widget(
 						ABW_PtButton_wnd_processes_control_mp_pulse_pause);
-				ui.block_widget(ABW_PtButton_wnd_processes_control_mp_pulse_resume);
+				ui.block_widget(
+						ABW_PtButton_wnd_processes_control_mp_pulse_resume);
 				ui.unblock_widget(
 						ABW_PtButton_wnd_processes_control_mp_pulse_trigger);
 
 				unblock_all_ecp_trigger_widgets(NULL, NULL, NULL);
 				break;
 			case UI_MP_TASK_PAUSED:
-				ui.block_widget(ABW_PtButton_wnd_processes_control_mp_pulse_start);
-				ui.unblock_widget(ABW_PtButton_wnd_processes_control_mp_pulse_stop);
-				ui.block_widget(ABW_PtButton_wnd_processes_control_mp_pulse_pause);
+				ui.block_widget(
+						ABW_PtButton_wnd_processes_control_mp_pulse_start);
+				ui.unblock_widget(
+						ABW_PtButton_wnd_processes_control_mp_pulse_stop);
+				ui.block_widget(
+						ABW_PtButton_wnd_processes_control_mp_pulse_pause);
 				ui.unblock_widget(
 						ABW_PtButton_wnd_processes_control_mp_pulse_resume);
 				ui.block_widget(
@@ -922,10 +937,12 @@ int unblock_all_ecp_trigger_widgets(PtWidget_t *widget, ApInfo_t *apinfo,
 		ui.unblock_widget(ABW_PtButton_wnd_processes_control_irp6p_ecp_trigger);
 	}
 	if (ui.conveyor.state.edp.is_synchronised) {
-		ui.unblock_widget(ABW_PtButton_wnd_processes_control_conveyor_ecp_trigger);
+		ui.unblock_widget(
+				ABW_PtButton_wnd_processes_control_conveyor_ecp_trigger);
 	}
 	if (ui.speaker.state.edp.is_synchronised) {
-		ui.unblock_widget(ABW_PtButton_wnd_processes_control_speaker_ecp_trigger);
+		ui.unblock_widget(
+				ABW_PtButton_wnd_processes_control_speaker_ecp_trigger);
 	}
 	if (ui.irp6m_m.state.edp.is_synchronised) {
 		ui.unblock_widget(ABW_PtButton_wnd_processes_control_irp6m_ecp_trigger);
@@ -1552,7 +1569,7 @@ int pulse_start_mp(PtWidget_t *widget, ApInfo_t *apinfo,
 		ui.irp6ot_m.close_all_windows();
 		ui.irp6p_m.close_all_windows();
 		ui.irp6m_m.close_all_windows();
-		ui.bird_hand.close_all_windows();
+		ui.bird_hand->close_all_windows();
 		ui.conveyor.close_all_windows();
 		ui.irp6ot_tfg.close_all_windows();
 		ui.irp6p_tfg.close_all_windows();

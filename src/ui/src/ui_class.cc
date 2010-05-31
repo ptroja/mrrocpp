@@ -67,6 +67,8 @@ void Ui::init() {
 		perror("Blad cwd w UI");
 	}
 
+	bird_hand = new UiRobotBirdHand(*this);
+
 	ui_node_name = sysinfo.nodename;
 	is_sr_thread_loaded = false;
 
@@ -200,7 +202,7 @@ int Ui::manage_interface(void) {
 	smb.manage_interface();
 	shead.manage_interface();
 
-	bird_hand.manage_interface();
+	bird_hand->manage_interface();
 
 	// Dla robota SPEAKER
 	speaker.manage_interface();
@@ -359,7 +361,7 @@ int Ui::reload_whole_configuration() {
 			smb.reload_configuration();
 			shead.reload_configuration();
 
-			bird_hand.reload_configuration();
+			bird_hand->reload_configuration();
 
 			// dla robota speaker
 			speaker.reload_configuration();
@@ -457,7 +459,7 @@ void Ui::abort_threads()
 	spkm.abort_thread();
 	smb.abort_thread();
 	shead.abort_thread();
-	bird_hand.abort_thread();
+	bird_hand->abort_thread();
 	delete meb_tid;
 #endif
 }
@@ -622,7 +624,7 @@ int Ui::check_edps_state_and_modify_mp_state() {
 			&& (!(irp6ot_tfg.state.is_active))
 			&& (!(irp6p_tfg.state.is_active)) && (!(conveyor.state.is_active))
 			&& (!(speaker.state.is_active)) && (!(irp6m_m.state.is_active))
-			&& (!(bird_hand.state.is_active)) && (!(spkm.state.is_active))
+			&& (!(bird_hand->state.is_active)) && (!(spkm.state.is_active))
 			&& (!(smb.state.is_active)) && (!(shead.state.is_active))) {
 		all_edps = UI_ALL_EDPS_NONE_EDP_ACTIVATED;
 
@@ -634,7 +636,7 @@ int Ui::check_edps_state_and_modify_mp_state() {
 			&& check_synchronised_or_inactive(irp6m_m.state)
 			&& check_synchronised_or_inactive(irp6ot_tfg.state)
 			&& check_synchronised_or_inactive(irp6p_tfg.state)
-			&& check_synchronised_or_inactive(bird_hand.state)
+			&& check_synchronised_or_inactive(bird_hand->state)
 			&& check_synchronised_or_inactive(spkm.state)
 			&& check_synchronised_or_inactive(smb.state)
 			&& check_synchronised_or_inactive(shead.state)) {
@@ -648,7 +650,7 @@ int Ui::check_edps_state_and_modify_mp_state() {
 			&& check_loaded_or_inactive(irp6m_m.state)
 			&& check_loaded_or_inactive(irp6ot_tfg.state)
 			&& check_loaded_or_inactive(irp6p_tfg.state)
-			&& check_loaded_or_inactive(bird_hand.state)
+			&& check_loaded_or_inactive(bird_hand->state)
 			&& check_loaded_or_inactive(spkm.state)
 			&& check_loaded_or_inactive(smb.state) && check_loaded_or_inactive(
 			shead.state))
@@ -660,7 +662,7 @@ int Ui::check_edps_state_and_modify_mp_state() {
 	} else if (check_loaded(irp6p_m.state) || check_loaded(irp6ot_m.state)
 			|| check_loaded(conveyor.state) || check_loaded(speaker.state)
 			|| check_loaded(irp6m_m.state) || check_loaded(irp6ot_tfg.state)
-			|| check_loaded(irp6p_tfg.state) || check_loaded(bird_hand.state)
+			|| check_loaded(irp6p_tfg.state) || check_loaded(bird_hand->state)
 			|| check_loaded(spkm.state) || check_loaded(smb.state)
 			|| check_loaded(shead.state))
 

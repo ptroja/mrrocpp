@@ -44,7 +44,7 @@ int EDP_bird_hand_create(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	ui.bird_hand.eb.command(boost::bind(EDP_bird_hand_create_int, widget,
+	ui.bird_hand->eb.command(boost::bind(EDP_bird_hand_create_int, widget,
 			apinfo, cbinfo));
 
 	return (Pt_CONTINUE);
@@ -65,56 +65,57 @@ int EDP_bird_hand_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 	try { // dla bledow robot :: ECP_error
 
 		// dla robota bird_hand
-		if (ui.bird_hand.state.edp.state == 0) {
+		if (ui.bird_hand->state.edp.state == 0) {
 
-			ui.bird_hand.state.edp.state = 0;
-			ui.bird_hand.state.edp.is_synchronised = false;
+			ui.bird_hand->state.edp.state = 0;
+			ui.bird_hand->state.edp.is_synchronised = false;
 
 			std::string tmp_string("/dev/name/global/");
-			tmp_string += ui.bird_hand.state.edp.hardware_busy_attach_point;
+			tmp_string += ui.bird_hand->state.edp.hardware_busy_attach_point;
 
 			std::string tmp2_string("/dev/name/global/");
 			tmp2_string
-					+= ui.bird_hand.state.edp.network_resourceman_attach_point;
+					+= ui.bird_hand->state.edp.network_resourceman_attach_point;
 
 			// sprawdzenie czy nie jest juz zarejestrowany zarzadca zasobow
-			if (((!(ui.bird_hand.state.edp.test_mode)) && (access(
+			if (((!(ui.bird_hand->state.edp.test_mode)) && (access(
 					tmp_string.c_str(), R_OK) == 0)) || (access(
 					tmp2_string.c_str(), R_OK) == 0)) {
 				ui.ui_msg->message(lib::NON_FATAL_ERROR,
 						"edp_bird_hand already exists");
 			} else if (ui.check_node_existence(
-					ui.bird_hand.state.edp.node_name, std::string(
+					ui.bird_hand->state.edp.node_name, std::string(
 							"edp_bird_hand"))) {
 
-				ui.bird_hand.state.edp.node_nr = ui.config->return_node_number(
-						ui.bird_hand.state.edp.node_name);
+				ui.bird_hand->state.edp.node_nr
+						= ui.config->return_node_number(
+								ui.bird_hand->state.edp.node_name);
 				{
 					boost::unique_lock<boost::mutex> lock(
 							ui.process_creation_mtx);
-					ui.bird_hand.ui_ecp_robot = new ui_bird_hand_robot(
+					ui.bird_hand->ui_ecp_robot = new ui_bird_hand_robot(
 							*ui.config, *ui.all_ecp_msg);
 
 				}
 
-				ui.bird_hand.state.edp.pid
-						= ui.bird_hand.ui_ecp_robot->the_robot->get_EDP_pid();
+				ui.bird_hand->state.edp.pid
+						= ui.bird_hand->ui_ecp_robot->the_robot->get_EDP_pid();
 
-				if (ui.bird_hand.state.edp.pid < 0) {
+				if (ui.bird_hand->state.edp.pid < 0) {
 
-					ui.bird_hand.state.edp.state = 0;
+					ui.bird_hand->state.edp.state = 0;
 					fprintf(stderr, "EDP spawn failed: %s\n", strerror(errno));
-					delete ui.bird_hand.ui_ecp_robot;
+					delete ui.bird_hand->ui_ecp_robot;
 				} else { // jesli spawn sie powiodl
 
-					ui.bird_hand.state.edp.state = 1;
+					ui.bird_hand->state.edp.state = 1;
 
 					short tmp = 0;
 					// kilka sekund  (~1) na otworzenie urzadzenia
 
-					while ((ui.bird_hand.state.edp.reader_fd
+					while ((ui.bird_hand->state.edp.reader_fd
 							= name_open(
-									ui.bird_hand.state.edp.network_reader_attach_point.c_str(),
+									ui.bird_hand->state.edp.network_reader_attach_point.c_str(),
 									NAME_FLAG_ATTACH_GLOBAL)) < 0)
 						if ((tmp++) < CONNECT_RETRY) {
 							delay(CONNECT_DELAY);
@@ -126,12 +127,12 @@ int EDP_bird_hand_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 					// odczytanie poczatkowego stanu robota (komunikuje sie z EDP)
 					lib::controller_state_t robot_controller_initial_state_tmp;
 
-					ui.bird_hand.ui_ecp_robot->get_controller_state(
+					ui.bird_hand->ui_ecp_robot->get_controller_state(
 							robot_controller_initial_state_tmp);
 
-					//ui.bird_hand.state.edp.state = 1; // edp wlaczone reader czeka na start
+					//ui.bird_hand->state.edp.state = 1; // edp wlaczone reader czeka na start
 
-					ui.bird_hand.state.edp.is_synchronised
+					ui.bird_hand->state.edp.is_synchronised
 							= robot_controller_initial_state_tmp.is_synchronised;
 				}
 			}
@@ -154,8 +155,8 @@ int EDP_bird_hand_slay(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	ui.bird_hand.eb.command(boost::bind(EDP_bird_hand_slay_int, widget, apinfo,
-			cbinfo));
+	ui.bird_hand->eb.command(boost::bind(EDP_bird_hand_slay_int, widget,
+			apinfo, cbinfo));
 
 	return (Pt_CONTINUE);
 
@@ -169,21 +170,21 @@ int EDP_bird_hand_slay_int(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 	// dla robota bird_hand
-	if (ui.bird_hand.state.edp.state > 0) { // jesli istnieje EDP
-		if (ui.bird_hand.state.edp.reader_fd >= 0) {
-			if (name_close(ui.bird_hand.state.edp.reader_fd) == -1) {
+	if (ui.bird_hand->state.edp.state > 0) { // jesli istnieje EDP
+		if (ui.bird_hand->state.edp.reader_fd >= 0) {
+			if (name_close(ui.bird_hand->state.edp.reader_fd) == -1) {
 				fprintf(stderr, "UI: EDP_irp6ot, %s:%d, name_close(): %s\n",
 						__FILE__, __LINE__, strerror(errno));
 			}
 		}
-		ui.bird_hand.close_all_windows();
+		ui.bird_hand->close_all_windows();
 
-		delete ui.bird_hand.ui_ecp_robot;
-		ui.bird_hand.state.edp.state = 0; // edp wylaczone
-		ui.bird_hand.state.edp.is_synchronised = false;
+		delete ui.bird_hand->ui_ecp_robot;
+		ui.bird_hand->state.edp.state = 0; // edp wylaczone
+		ui.bird_hand->state.edp.is_synchronised = false;
 
-		ui.bird_hand.state.edp.pid = -1;
-		ui.bird_hand.state.edp.reader_fd = -1;
+		ui.bird_hand->state.edp.pid = -1;
+		ui.bird_hand->state.edp.reader_fd = -1;
 	}
 
 	// modyfikacja menu
@@ -203,7 +204,7 @@ int execute_wnd_bird_hand_command_and_status(PtWidget_t *widget,
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
 	mrrocpp::lib::bird_hand_command &bhcs =
-			ui.bird_hand.ui_ecp_robot->bird_hand_command_structure;
+			ui.bird_hand->ui_ecp_robot->bird_hand_command_structure;
 
 	// odczyt ilosci krokow i ecp_query step
 
@@ -220,7 +221,7 @@ int execute_wnd_bird_hand_command_and_status(PtWidget_t *widget,
 	// odczyt wariantu ruchu
 
 
-	ui.bird_hand.get_index_f_0_command();
+	ui.bird_hand->get_index_f_0_command();
 
 	std::stringstream ss(std::stringstream::in | std::stringstream::out);
 	/*
@@ -234,8 +235,8 @@ int execute_wnd_bird_hand_command_and_status(PtWidget_t *widget,
 
 	 ui.ui_msg->message(ss.str().c_str());
 	 */
-	ui.bird_hand.ui_ecp_robot->bird_hand_command_data_port->set(bhcs);
-	ui.bird_hand.ui_ecp_robot->execute_motion();
+	ui.bird_hand->ui_ecp_robot->bird_hand_command_data_port->set(bhcs);
+	ui.bird_hand->ui_ecp_robot->execute_motion();
 	return (Pt_CONTINUE);
 }
 
@@ -260,14 +261,14 @@ int init_wnd_bird_hand_command_and_status(PtWidget_t *widget, ApInfo_t *apinfo,
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
 	mrrocpp::lib::bird_hand_status &bhsrs =
-			ui.bird_hand.ui_ecp_robot->bird_hand_status_reply_structure;
+			ui.bird_hand->ui_ecp_robot->bird_hand_status_reply_structure;
 
-	ui.bird_hand.ui_ecp_robot->bird_hand_status_reply_data_request_port->set_request();
-	ui.bird_hand.ui_ecp_robot->execute_motion();
-	ui.bird_hand.ui_ecp_robot->bird_hand_status_reply_data_request_port->get(
+	ui.bird_hand->ui_ecp_robot->bird_hand_status_reply_data_request_port->set_request();
+	ui.bird_hand->ui_ecp_robot->execute_motion();
+	ui.bird_hand->ui_ecp_robot->bird_hand_status_reply_data_request_port->get(
 			bhsrs);
 
-	ui.bird_hand.set_index_f_0_status();
+	ui.bird_hand->set_index_f_0_status();
 
 	return (Pt_CONTINUE);
 
@@ -281,10 +282,10 @@ int start_wnd_bird_hand_command_and_status(PtWidget_t *widget,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (!ui.bird_hand.is_wnd_bird_hand_command_and_status_open) // otworz okno
+	if (!ui.bird_hand->is_wnd_bird_hand_command_and_status_open) // otworz okno
 	{
 		ApCreateModule(ABM_wnd_bird_hand_command_and_status, widget, cbinfo);
-		ui.bird_hand.is_wnd_bird_hand_command_and_status_open = true;
+		ui.bird_hand->is_wnd_bird_hand_command_and_status_open = true;
 
 	} else { // przelacz na okno
 		PtWindowToFront(ABW_wnd_bird_hand_command_and_status);
@@ -301,7 +302,7 @@ int close_wnd_bird_hand_command_and_status(PtWidget_t *widget,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (ui.bird_hand.is_wnd_bird_hand_command_and_status_open) {
+	if (ui.bird_hand->is_wnd_bird_hand_command_and_status_open) {
 		PtDestroyWidget(ABW_wnd_bird_hand_command_and_status);
 	}
 
@@ -316,7 +317,7 @@ int clear_wnd_bird_hand_command_and_status(PtWidget_t *widget,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	ui.bird_hand.is_wnd_bird_hand_command_and_status_open = false;
+	ui.bird_hand->is_wnd_bird_hand_command_and_status_open = false;
 	return (Pt_CONTINUE);
 
 }
@@ -364,10 +365,10 @@ int start_wnd_bird_hand_configuration(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (!ui.bird_hand.is_wnd_bird_hand_configuration_open) // otworz okno
+	if (!ui.bird_hand->is_wnd_bird_hand_configuration_open) // otworz okno
 	{
 		ApCreateModule(ABM_wnd_bird_hand_configuration, widget, cbinfo);
-		ui.bird_hand.is_wnd_bird_hand_configuration_open = true;
+		ui.bird_hand->is_wnd_bird_hand_configuration_open = true;
 	} else { // przelacz na okno
 		PtWindowToFront(ABW_wnd_bird_hand_configuration);
 	}
@@ -382,7 +383,7 @@ int close_wnd_bird_hand_configuration(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (ui.bird_hand.is_wnd_bird_hand_configuration_open) {
+	if (ui.bird_hand->is_wnd_bird_hand_configuration_open) {
 		PtDestroyWidget(ABW_wnd_bird_hand_configuration);
 	}
 
@@ -397,7 +398,7 @@ int clear_wnd_bird_hand_configuration(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	ui.bird_hand.is_wnd_bird_hand_configuration_open = false;
+	ui.bird_hand->is_wnd_bird_hand_configuration_open = false;
 	return (Pt_CONTINUE);
 
 }
