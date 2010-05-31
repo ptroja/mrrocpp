@@ -44,7 +44,7 @@ public:
 
 	// --------------------------------------------------------------------------
 	// Wczytanie trajektorii z pliku
-	bool load_file_with_path (const char* file_name);
+	bool load_file_with_path (const std::string & file_name);
 
 	// --------------------------------------------------------------------------
 	// Zapis trajektorii do pliku

@@ -230,7 +230,7 @@ bool teach_in::load_file_from_ui()
   // --------------------------------------------------------------------------
 
 
-bool teach_in::load_file_with_path(const char* file_name)
+bool teach_in::load_file_with_path(const std::string & file_name)
   {
     // Funkcja zwraca true jesli wczytanie trajektorii powiodlo sie,
 
@@ -245,10 +245,10 @@ bool teach_in::load_file_with_path(const char* file_name)
     double motion_time; // Czas dojscia do wspolrzednych
 
 
-    std::ifstream from_file(file_name); // otworz plik do odczytu
+    std::ifstream from_file(file_name.c_str()); // otworz plik do odczytu
     if (!from_file.good())
       {
-        perror(file_name);
+        perror(file_name.c_str());
         BOOST_THROW_EXCEPTION(
         	lib::exception::NonFatal_error() <<
         	lib::exception::error_code(NON_EXISTENT_FILE) <<
