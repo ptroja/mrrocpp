@@ -15,16 +15,15 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <unistd.h>
+
+#include <string>
 #include <cstring>
-#include <strings.h>
-
-#include <cstdio>
-
-#include <boost/shared_ptr.hpp>
+#include <stdexcept>
 
 #include "ecp_mp/sensor/ecp_mp_sensor.h"
 
 #include "lib/logger.h"
+#include "lib/configurator.h"
 
 namespace mrrocpp {
 namespace ecp_mp {
@@ -41,43 +40,55 @@ class fradia_sensor : public ecp_mp::sensor::sensor_interface
 private:
 	const static int task_name_size = 256;
 
+	/**
+	 * Message sent to FraDIA by configure_sensor()
+	 */
 	struct FRADIA_LOAD_TASK
 	{
+		/** Name of task to load. */
 		char task_name[task_name_size];
+		/** sizeof(CONFIGURE_T) */
 		size_t configure_size;
 		CONFIGURE_T configure_message;
 	};
 
+	/** Task loading report received from FraDIA. */
 	enum TASK_LOAD_STATUS
 	{
 		FRADIA_TASK_NOT_EXISTS, FRADIA_TASK_LOADED,
 	};
 
+	/** Task loading report received from FraDIA. */
 	struct FRADIA_LOAD_TASK_STATUS
 	{
+		/** Should be equal to sent task name. */
 		char task_name[task_name_size];
+		/** Should be equal to sizeof(READING_T) */
 		size_t reading_size;
+		/** Should be equal to sizeof(INITIATE_T) */
 		size_t initiate_size;
+		/** Status. */
 		TASK_LOAD_STATUS status;
 	};
 public:
 
 	/**
 	 * Create FraDIA sensor.
-	 * Specified section must contain following options: fradia_node_name, fradia_port, fradia_task
+	 * Specified section in config must contain following options: fradia_node_name, fradia_port, fradia_task.
+	 * Creates socket and connects to FraDIA, but doesn't send any data.
 	 * @param configurator
 	 * @param section_name
 	 * @param configure_message will be send by configure_sensor()
 	 */
-			fradia_sensor(mrrocpp::lib::configurator& configurator, const std::string& section_name, const CONFIGURE_T& configure_message);
+	fradia_sensor(mrrocpp::lib::configurator& configurator, const std::string& section_name, const CONFIGURE_T& configure_message);
 
-	/*!
+	/**
 	 * Closes cvFraDIA socket connection.
 	 */
 	~fradia_sensor();
 
 	/**
-	 * Loads FraDIA task and sends configuration message. Then waits for reply.
+	 * Sends configuration message (with task name and CONFIGURE_T  message). Then waits for reply.
 	 * Exception is thrown if task has not been loaded.
 	 */
 	void configure_sensor();
@@ -98,28 +109,47 @@ public:
 	 */
 	lib::VSP_REPORT_t get_report(void) const;
 
+	/**
+	 * Set message to be sent by initiate_reading().
+	 * @param msg
+	 */
 	void set_initiate_message(const INITIATE_T& msg);
+	/**
+	 * Get message received by get_reading().
+	 * Throws exception if sensor is not configured.
+	 * @return
+	 */
 	const READING_T& get_reading_message() const;
 private:
+	/** Task name to load. */
 	std::string fradia_task;
 
-	/*!
-	 * Socket file descriptor.
-	 */
+	/** Socket file descriptor.  */
 	int sockfd;
 
 	/** Configurator. */
 	mrrocpp::lib::configurator& configurator;
 
+	/** Report set by get_reading(). */
 	lib::VSP_REPORT_t report;
 	CONFIGURE_T configure_message;
 	bool send_initiate_message;
 	INITIATE_T initiate_message;
 	READING_T reading_message;
 
+	/**
+	 * Send one message to FraDIA.
+	 * Throws exception on error.
+	 * @param message
+	 */
 	template <typename MESSAGE_T>
 	void send_to_fradia(const MESSAGE_T& message);
 
+	/**
+	 * Receive one message from FraDIA.
+	 * Throws exception on error.
+	 * @return
+	 */
 	template <typename MESSAGE_T>
 	MESSAGE_T receive_from_fradia();
 }; // class fradia_sensor
@@ -179,8 +209,7 @@ template <typename CONFIGURE_T, typename READING_T, typename INITIATE_T>
 fradia_sensor <CONFIGURE_T, READING_T, INITIATE_T>::~fradia_sensor()
 {
 	close(sockfd);
-	logger::log_dbg("fradia_sensor <FROM_VSP_T, TO_VSP_T>::~fradia_sensor() end\n");
-} // end: terminate()
+}
 
 template <typename CONFIGURE_T, typename READING_T, typename INITIATE_T>
 template <typename MESSAGE_T>
@@ -251,9 +280,24 @@ void fradia_sensor <CONFIGURE_T, READING_T, INITIATE_T>::configure_sensor()
 template <typename CONFIGURE_T, typename READING_T, typename INITIATE_T>
 void fradia_sensor <CONFIGURE_T, READING_T, INITIATE_T>::initiate_reading()
 {
-	logger::log_dbg("fradia_sensor::initiate_reading()\n");
+	//logger::log_dbg("fradia_sensor::initiate_reading()\n");
 	if (send_initiate_message) {
-		// TODO: select() komunikat o blokowaniu
+		fd_set wfds;
+
+		FD_ZERO(&wfds);
+		FD_SET(sockfd, &wfds);
+
+		struct timeval tv;
+		tv.tv_sec = tv.tv_usec = 0;
+
+		int result = select(sockfd + 1, NULL, &wfds, NULL, &tv);
+		if (result == -1) {
+			throw std::runtime_error(std::string("select() failed: ") + strerror(errno));
+		}
+		if (result > 0) {
+			logger::log("fradia_sensor::initiate_reading(): write will block.");
+		}
+
 		send_to_fradia(initiate_message);
 		send_initiate_message = false;
 	}
@@ -262,7 +306,7 @@ void fradia_sensor <CONFIGURE_T, READING_T, INITIATE_T>::initiate_reading()
 template <typename CONFIGURE_T, typename READING_T, typename INITIATE_T>
 void fradia_sensor <CONFIGURE_T, READING_T, INITIATE_T>::get_reading()
 {
-	logger::log_dbg("fradia_sensor::get_reading()\n");
+	//logger::log_dbg("fradia_sensor::get_reading()\n");
 	if (report != lib::VSP_SENSOR_NOT_CONFIGURED) {
 		report = lib::VSP_READING_NOT_READY;
 	}
@@ -277,7 +321,7 @@ void fradia_sensor <CONFIGURE_T, READING_T, INITIATE_T>::get_reading()
 		tv.tv_sec = tv.tv_usec = 0;
 
 		int result = select(sockfd + 1, &rfds, NULL, NULL, &tv);
-		logger::log_dbg("fradia_sensor::get_reading(): select(): %d\n", result);
+		//logger::log_dbg("fradia_sensor::get_reading(): select(): %d\n", result);
 		if (result == -1) {
 			throw std::runtime_error(std::string("select() failed: ") + strerror(errno));
 		}
@@ -306,7 +350,7 @@ void fradia_sensor <CONFIGURE_T, READING_T, INITIATE_T>::set_initiate_message(co
 template <typename CONFIGURE_T, typename READING_T, typename INITIATE_T>
 const READING_T& fradia_sensor <CONFIGURE_T, READING_T, INITIATE_T>::get_reading_message() const
 {
-	logger::log_dbg("fradia_sensor::get_reading_message()\n");
+	//logger::log_dbg("fradia_sensor::get_reading_message()\n");
 
 	if (report == lib::VSP_SENSOR_NOT_CONFIGURED) {
 		throw std::logic_error("fradia_sensor::get_reading_message(): report == lib::VSP_SENSOR_NOT_CONFIGURED");

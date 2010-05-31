@@ -71,7 +71,7 @@ lib::Homog_matrix pb_eih_visual_servo::get_position_change(const lib::Homog_matr
 
 	object_visible = vsp_fradia->get_reading_message().tracking;
 
-	log_dbg("pb_eih_visual_servo::get_position_change(): message_number: %d\n", vsp_fradia->get_reading_message().message_number);
+//	log_dbg("pb_eih_visual_servo::get_position_change(): message_number: %d\n", vsp_fradia->get_reading_message().message_number);
 
 	if (object_visible) {
 		lib::Homog_matrix C_T_G(vsp_fradia->get_reading_message().position);

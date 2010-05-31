@@ -31,8 +31,6 @@ ib_eih_visual_servo::ib_eih_visual_servo(boost::shared_ptr <visual_servo_regulat
 	Eigen::Matrix <double, 1, 5> distortion;
 
 	image_based_configuration ib_config;
-	ib_config.set_parameters = true;
-
 	desired_translation = configurator.value <1, 3> ("desired_position_translation", section_name);
 	ib_config.desired_position.x = desired_translation(0, 0);
 	ib_config.desired_position.y = desired_translation(0, 1);
