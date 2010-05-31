@@ -173,7 +173,7 @@ void smooth::load_trajectory_from_xml(const char* fileName, const char* nodeName
 	xmlCleanupParser();
 }
 
-void smooth::load_file_with_path(const char* file_name) {
+void smooth::load_file_with_path(const std::string & file_name) {
 
 	reset();
 
@@ -192,10 +192,10 @@ void smooth::load_file_with_path(const char* file_name) {
     double a[MAX_SERVOS_NR];	// Wczytane wspolrzedne
     double coordinates[MAX_SERVOS_NR];     // Wczytane wspolrzedne
 
-    std::ifstream from_file(file_name); // otworz plik do odczytu
+    std::ifstream from_file(file_name.c_str()); // otworz plik do odczytu
     if (!from_file.good())
     {
-        perror(file_name);
+        perror(file_name.c_str());
         THROW_NONFATAL_ERROR(NON_EXISTENT_FILE);
     }
 
@@ -502,13 +502,13 @@ void smooth::flush_coordinate_list(void) {
 	coordinate_list.clear();
 }
 
-void smooth::load_a_v_min (const char* file_name)
+void smooth::load_a_v_min (const std::string & file_name)
 {
-    std::ifstream from_file(file_name); // otworz plik do odczytu
+    std::ifstream from_file(file_name.c_str()); // otworz plik do odczytu
 
     if (!from_file.good())
     {
-        perror(file_name);
+        perror(file_name.c_str());
         THROW_NONFATAL_ERROR(NON_EXISTENT_FILE);
     }
 
@@ -533,13 +533,13 @@ void smooth::load_a_v_min (const char* file_name)
     }
 } // end: bool load_a_v_min()
 
-void smooth::load_a_v_max (const char* file_name)
+void smooth::load_a_v_max (const std::string & file_name)
 {
-    std::ifstream from_file(file_name); // otworz plik do odczytu
+    std::ifstream from_file(file_name.c_str()); // otworz plik do odczytu
 
     if (!from_file.good())
     {
-        perror(file_name);
+        perror(file_name.c_str());
         THROW_NONFATAL_ERROR(NON_EXISTENT_FILE);
     }
 
@@ -622,8 +622,8 @@ smooth::smooth (common::task::task& _ecp_task, bool _is_synchronised)
 	std::string min_path(ecp_t.mrrocpp_network_path);
 	min_path += "src/ecp_mp/v_min_gripp.txt";
 
-	load_a_v_max(max_path.c_str());
-	load_a_v_min(min_path.c_str());
+	load_a_v_max(max_path);
+	load_a_v_min(min_path);
 
 	//is_synchronised = _is_synchronised;
 	type=lib::ABSOLUTE;
@@ -953,11 +953,11 @@ void smooth::generate_coords() {
 	//printowanie listy coordinate
 	initiate_coordinate_list();
 	for (int m = 0; m < coordinate_list.size(); m++) {
-		printf("makrokrok: %d\t", m);
+		//printf("makrokrok: %d\t", m);
 		for (int n = 0; n < 8; n++) {
-			printf("%f\t", coordinate_list_iterator->coordinate[n]);
+			//printf("%f\t", coordinate_list_iterator->coordinate[n]);
 		}
-		printf("\n");
+		//printf("\n");
 		flushall();
 		coordinate_list_iterator++;
 	}
@@ -1033,7 +1033,7 @@ void smooth::send_coordinates() {
 	if (type == lib::RELATIVE) {
 		gripper_position = pose_list_iterator->k[gripp]*((tk)*pose_list_iterator->v_grip);
 
-		printf("gripper_position: %f\n ", gripper_position);
+		//printf("gripper_position: %f\n ", gripper_position);
 
 		//printf(" %f \t", gripper_position);
 		if((node_counter * gripper_position > pose_list_iterator->coordinates[gripp] && pose_list_iterator->k[gripp] == -1) ||
@@ -1053,18 +1053,18 @@ void smooth::send_coordinates() {
 			//printf("git");
 			the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = gripper_position;
 		} else {
-			printf("no gripp\t");
+			//printf("no gripp\t");
 			the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = pose_list_iterator->coordinates[gripp];
 		}
 	}
 
 	for (int n = 0; n < gripp; n++) {
-		printf("%f\t", coordinate_list_iterator->coordinate[n]);
+		//printf("%f\t", coordinate_list_iterator->coordinate[n]);
 	}
 
-	printf("%f\n", gripper_position);
+	//printf("%f\n", gripper_position);
 
-	flushall();
+	//flushall();
 
 	coordinate_list_iterator++;
 }
@@ -1718,8 +1718,8 @@ void smooth::calculate(void) { //zeby wrocic do starego trybu relative nalezy st
 
 		//warunki na modele ruchu dla wszystkich osi
 		for (i = 0; i < MAX_SERVOS_NR; i++) { //petla w ktorej obliczany jest czas dla kazdej osi i sprawdzane jest czy da sie wykonac ruch w zalozonych etapach
-			printf("=============================================\n");
-			printf("v_p: %f\t v_r: %f\t v_r_next: %f\t a_r: %f\t v_k: %f\n", pose_list_iterator->v_p[i], pose_list_iterator->v_r[i], v_r_next[i], pose_list_iterator->a_r[i], pose_list_iterator->v_k[i]);
+			//printf("=============================================\n");
+			//printf("v_p: %f\t v_r: %f\t v_r_next: %f\t a_r: %f\t v_k: %f\n", pose_list_iterator->v_p[i], pose_list_iterator->v_r[i], v_r_next[i], pose_list_iterator->a_r[i], pose_list_iterator->v_k[i]);
 			flushall();
 
 			if (s[i] < distance_eps) {//najmniejsza wykrywalna droga
@@ -1749,7 +1749,7 @@ void smooth::calculate(void) { //zeby wrocic do starego trybu relative nalezy st
 				//printf("t_temp1: %f\tt_temp2: %f\n", t_temp1, t_temp2);
 
 				if (s_temp1[i] + s_temp2[i] > s[i]) {
-					printf("redukcja predkosci w osi %d\n", i);
+					//printf("redukcja predkosci w osi %d\n", i);
 					//TODO tutaj wstawic optymalizacje czasu
 					optimize_time1(pose_list_iterator, i, s[i]);//nastepuje zapisanie czasu, mozliwe wywolanie vp_reduction lub vk_reduction wewnatrz
 					if (trajectory_calculated == true) {
@@ -1935,7 +1935,7 @@ void smooth::calculate(void) { //zeby wrocic do starego trybu relative nalezy st
 
 				//printf("redukcja predkosci z powodu czasu w osi %d\n", i);
 			}
-			printf("v_p: %f\t v_r: %f\t v_r_next: %f\t a_r: %f\t v_k: %f\n", pose_list_iterator->v_p[i], pose_list_iterator->v_r[i], v_r_next[i], pose_list_iterator->a_r[i], pose_list_iterator->v_k[i]);
+			//printf("v_p: %f\t v_r: %f\t v_r_next: %f\t a_r: %f\t v_k: %f\n", pose_list_iterator->v_p[i], pose_list_iterator->v_r[i], v_r_next[i], pose_list_iterator->a_r[i], pose_list_iterator->v_k[i]);
 			pose_list_iterator->przysp[i]=fabs((pose_list_iterator->v_r[i]-pose_list_iterator->v_p[i])/(pose_list_iterator->a_r[i]*tk));//zapisanie makrokroku w ktorym konczy sie przyspieszanie
 			pose_list_iterator->jedn[i]=(t_max-(fabs(pose_list_iterator->v_r[i]-pose_list_iterator->v_k[i])/pose_list_iterator->a_r[i]))/tk - pose_list_iterator->przysp[i];//zapisanie makrokroku w ktorym konczy sie jednostajny
 		    printf("przysp: %f\t jedn: %f\n", pose_list_iterator->przysp[i], pose_list_iterator->jedn[i]);
@@ -1956,7 +1956,7 @@ void smooth::calculate(void) { //zeby wrocic do starego trybu relative nalezy st
 			case lib::ECP_XYZ_ANGLE_AXIS:
 				if(pose_list_iterator->v_grip < v_grip_min_aa) {
 					pose_list_iterator->v_grip = v_grip_min_aa;
-					printf("ustawienie v_gripp na minimum\n");
+					//printf("ustawienie v_gripp na minimum\n");
 				}
 				break;
 
@@ -1977,21 +1977,21 @@ void smooth::calculate(void) { //zeby wrocic do starego trybu relative nalezy st
 
 		//if (debug) {
 			for (int os = 0; os < MAX_SERVOS_NR; os++) {
-				printf("\n=============== pozycja trajektorii nr %d pos: %d ============== os: %d ====\n", j, pose_list_iterator->pos_num, os);
-				printf("czas ruchu %f\t model: %d\n", pose_list_iterator->t, pose_list_iterator->model[i]);
-				printf("coordinates: %f\n", pose_list_iterator->coordinates[os]);
-				printf("jedn: %f\t przysp: %f\n", pose_list_iterator->jedn[os], pose_list_iterator->przysp[os]);
-				printf("liczba makrokrokow: %d\n", pose_list_iterator->interpolation_node_no);
-				printf("start pos: %f\t kierunek (k): %f\n", pose_list_iterator->start_position[os], pose_list_iterator->k[os]);
-				printf("s: %f\ns_przysp: %f\t s_jedn: %f\n", s[os], pose_list_iterator->s_przysp[os], pose_list_iterator->s_jedn[os]);
-				printf("czas\t\tv_r\t\tv_r_next\ta_r\t\tv_p\t\tv_k\n");
-				printf("%f\t%f\t%f\t%f\t%f\t%f\n", t[os], pose_list_iterator->v_r[os], v_r_next[os], pose_list_iterator->a_r[os], pose_list_iterator->v_p[os], pose_list_iterator->v_k[os]);
-				printf("v_grip: %f\n\n", pose_list_iterator->v_grip);
+				//printf("\n=============== pozycja trajektorii nr %d pos: %d ============== os: %d ====\n", j, pose_list_iterator->pos_num, os);
+				//printf("czas ruchu %f\t model: %d\n", pose_list_iterator->t, pose_list_iterator->model[i]);
+				//printf("coordinates: %f\n", pose_list_iterator->coordinates[os]);
+				//printf("jedn: %f\t przysp: %f\n", pose_list_iterator->jedn[os], pose_list_iterator->przysp[os]);
+				//printf("liczba makrokrokow: %d\n", pose_list_iterator->interpolation_node_no);
+				//printf("start pos: %f\t kierunek (k): %f\n", pose_list_iterator->start_position[os], pose_list_iterator->k[os]);
+				//printf("s: %f\ns_przysp: %f\t s_jedn: %f\n", s[os], pose_list_iterator->s_przysp[os], pose_list_iterator->s_jedn[os]);
+				//printf("czas\t\tv_r\t\tv_r_next\ta_r\t\tv_p\t\tv_k\n");
+				//printf("%f\t%f\t%f\t%f\t%f\t%f\n", t[os], pose_list_iterator->v_r[os], v_r_next[os], pose_list_iterator->a_r[os], pose_list_iterator->v_p[os], pose_list_iterator->v_k[os]);
+				//printf("v_grip: %f\n\n", pose_list_iterator->v_grip);
 				flushall();
 			}
 
-			printf("************************************************** nowa pozycja **************************************************\n");
-			printf("type: %d\n", type);
+			//printf("************************************************** nowa pozycja **************************************************\n");
+			//printf("type: %d\n", type);
 			flushall();
 		//}
     }
@@ -2045,7 +2045,7 @@ void smooth::reduction_model_1(std::list<ecp_mp::common::smooth_trajectory_pose>
 							                       2 * pose_list_iterator->v_p[i])) / (-4);
 		}
 
-		printf("v_r: %f\n", pose_list_iterator->v_r[i]);
+		//printf("v_r: %f\n", pose_list_iterator->v_r[i]);
 		t1 = fabs(pose_list_iterator->v_p[i] - pose_list_iterator->v_r[i]) / pose_list_iterator->a_r[i];
 		t2 = pose_list_iterator->t - t1 - (fabs(pose_list_iterator->v_k[i] - pose_list_iterator->v_r[i]) / pose_list_iterator->a_r[i]);
 
@@ -2228,7 +2228,7 @@ void smooth::reduction_model_4(std::list<ecp_mp::common::smooth_trajectory_pose>
 }
 
 void smooth::vp_reduction(std::list<ecp_mp::common::smooth_trajectory_pose>::iterator pose_list_iterator, int i, double s, double t) {
-	printf("v_p redukcja w osi: %d\n", i);
+	//printf("v_p redukcja w osi: %d\n", i);
 	double v_r; //zmiana ruchu na jednostajny
 
 	v_r = s/t;
@@ -2294,7 +2294,7 @@ void smooth::vk_reduction(std::list<ecp_mp::common::smooth_trajectory_pose>::ite
 }
 
 void smooth::optimize_time1(std::list<ecp_mp::common::smooth_trajectory_pose>::iterator pose_list_iterator, int i, double s) {
-	printf("\noptymalizacja czasu 1 os: %d\n", i);
+	//printf("\noptymalizacja czasu 1 os: %d\n", i);
 	double v_r;
 	double t;
 
@@ -2303,7 +2303,7 @@ void smooth::optimize_time1(std::list<ecp_mp::common::smooth_trajectory_pose>::i
 
 	if (pose_list_iterator->v_p[i] >= pose_list_iterator->v_k[i] && v_r < pose_list_iterator->v_p[i]) {
 		t = (pose_list_iterator->v_p[i] - pose_list_iterator->v_k[i])/pose_list_iterator->a_r[i];
-		printf("vp reduction\n");
+		//printf("vp reduction\n");
 		vp_reduction(pose_list_iterator, i, s, t);
 		return;
 	} else if (pose_list_iterator->v_p[i] < pose_list_iterator->v_k[i] && v_r < pose_list_iterator->v_k[i]) {
@@ -2313,7 +2313,7 @@ void smooth::optimize_time1(std::list<ecp_mp::common::smooth_trajectory_pose>::i
 		vk_reduction(pose_list_iterator, i, s, t);
 		return;
 	} else {
-		printf("normal\n");
+		//printf("normal\n");
 		t = ((v_r - pose_list_iterator->v_p[i])/pose_list_iterator->a_r[i] + (v_r - pose_list_iterator->v_k[i])/pose_list_iterator->a_r[i]);
 		pose_list_iterator->v_r[i] = v_r;
 	}
@@ -2322,7 +2322,7 @@ void smooth::optimize_time1(std::list<ecp_mp::common::smooth_trajectory_pose>::i
 }
 
 void smooth::optimize_time2(std::list<ecp_mp::common::smooth_trajectory_pose>::iterator pose_list_iterator, int i, double s) {
-	printf("\noptymalizacja czasu 2 os: %d\n", i);
+	//printf("\noptymalizacja czasu 2 os: %d\n", i);
 	double v_r;
 	double t;
 
@@ -2331,11 +2331,11 @@ void smooth::optimize_time2(std::list<ecp_mp::common::smooth_trajectory_pose>::i
 	t = (pose_list_iterator->v_k[i] - pose_list_iterator->v_p[i])/pose_list_iterator->a_r[i];
 
 	pose_list_iterator->t = t;
-	printf("v_r: %f\t t: %f\n", v_r, t);
+	//printf("v_r: %f\t t: %f\n", v_r, t);
 }
 
 void smooth::optimize_time4(std::list<ecp_mp::common::smooth_trajectory_pose>::iterator pose_list_iterator, int i, double s) {
-	printf("\noptymalizacja czasu 4 os: %d\n", i);
+	//printf("\noptymalizacja czasu 4 os: %d\n", i);
 	double v_r;
 	double t;
 
@@ -2344,7 +2344,7 @@ void smooth::optimize_time4(std::list<ecp_mp::common::smooth_trajectory_pose>::i
 	t = (pose_list_iterator->v_p[i] - pose_list_iterator->v_k[i])/pose_list_iterator->a_r[i];
 
 	pose_list_iterator->t = t;
-	printf("v_r: %f\t t: %f\n", v_r, t);
+	//printf("v_r: %f\t t: %f\n", v_r, t);
 }
 
 } // namespace generator

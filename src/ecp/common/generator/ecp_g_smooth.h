@@ -260,15 +260,15 @@ class smooth : public delta {
 		/**
 		 *
 		 */
-		void load_a_v_max(const char* file_name);
+		void load_a_v_max(const std::string & file_name);
 		/**
 		 *
 		 */
-		void load_a_v_min(const char* file_name);
+		void load_a_v_min(const std::string & file_name);
 		/**
 		 *
 		 */
-		void load_file_with_path(const char* file_name);
+		void load_file_with_path(const std::string & file_name);
 		/**
 		 *
 		 */
