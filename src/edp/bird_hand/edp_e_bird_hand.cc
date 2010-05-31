@@ -144,11 +144,12 @@ void effector::move_arm(const lib::c_buffer &instruction) {
 	}
 
 	std::stringstream ss(std::stringstream::in | std::stringstream::out);
+	/*
+	 ss << ecp_edp_cbuffer.bird_hand_command_structure.motion_steps << " "
+	 << ecp_edp_cbuffer.bird_hand_command_structure.ecp_query_step;
 
-	ss << ecp_edp_cbuffer.bird_hand_command_structure.motion_steps;
-
-	msg->message(ss.str().c_str());
-
+	 msg->message(ss.str().c_str());
+	 */
 	if (clock_gettime(CLOCK_MONOTONIC, &current_timespec) == -1) {
 		perror("clock gettime");
 	}
@@ -157,6 +158,8 @@ void effector::move_arm(const lib::c_buffer &instruction) {
 
 	if (current_time >= macrostep_end_time) {
 		// stan bierny
+
+
 		query_time = current_time
 				+ ecp_edp_cbuffer.bird_hand_command_structure.ecp_query_step
 						* BIRD_HAND_STEP_TIME_IN_NS;
@@ -165,9 +168,36 @@ void effector::move_arm(const lib::c_buffer &instruction) {
 				+ ecp_edp_cbuffer.bird_hand_command_structure.motion_steps
 						* BIRD_HAND_STEP_TIME_IN_NS;
 
+		/*
+		 ss << " stan bierny c:" << current_time << " q: " << query_time
+		 << " e: " << macrostep_end_time;
+
+		 msg->message(ss.str().c_str());
+		 ss.str("");
+
+		 ss << " stan bierny c:" << current_time << " q: "
+		 << ecp_edp_cbuffer.bird_hand_command_structure.ecp_query_step
+		 << " e: "
+		 << ecp_edp_cbuffer.bird_hand_command_structure.motion_steps;
+
+		 msg->message(ss.str().c_str());
+
+		 ss.str("");
+
+		 ss << " stan bierny c:" << current_time << " q: "
+		 << ecp_edp_cbuffer.bird_hand_command_structure.ecp_query_step
+		 * (uint64_t) BIRD_HAND_STEP_TIME_IN_NS << " e: "
+		 << ecp_edp_cbuffer.bird_hand_command_structure.motion_steps
+		 * (uint64_t) BIRD_HAND_STEP_TIME_IN_NS;
+
+		 msg->message(ss.str().c_str());
+		 */
 	} else {
 		// stan czynny
 		// UWAGA NA KOLEJNOSC OBLICZEN query_time i macrostep_end_time NIE ZAMIENIAC
+		/*
+		 msg->message("stan czynny");
+		 */
 		query_time = macrostep_end_time
 				+ ecp_edp_cbuffer.bird_hand_command_structure.ecp_query_step
 						* BIRD_HAND_STEP_TIME_IN_NS;

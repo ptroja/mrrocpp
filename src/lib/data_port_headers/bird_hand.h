@@ -5,7 +5,8 @@
 #if !defined(__BIRD_HAND_DATA_PORT_H)
 #define __BIRD_HAND_DATA_PORT_H
 
-#define BIRD_HAND_STEP_TIME_IN_NS 2000000
+// ponizej konieczne zdefiniowanie typu 64bitowego bo inaczej przepalnia sie typ 32bitowy przy mnozeniu
+#define BIRD_HAND_STEP_TIME_IN_NS ((uint64_t) 2000000)
 
 namespace mrrocpp {
 namespace lib {
