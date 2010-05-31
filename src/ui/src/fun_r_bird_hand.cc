@@ -203,11 +203,20 @@ int execute_wnd_bird_hand_command_and_status(PtWidget_t *widget,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
+	mrrocpp::lib::bird_hand_command &bhcs =
+			ui.bird_hand.ui_ecp_robot->bird_hand_command_structure;
+
+	bhcs.motion_steps = 10;
+	bhcs.ecp_query_step = 8;
+	bhcs.index_f[0].desired_position = 1;
+
+	ui.bird_hand.ui_ecp_robot->bird_hand_command_data_port->set(bhcs);
+	ui.bird_hand.ui_ecp_robot->execute_motion();
 	return (Pt_CONTINUE);
 }
 
-int copy_wnd_bird_hand_command_and_status(
-		PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int copy_wnd_bird_hand_command_and_status(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -225,6 +234,14 @@ int init_wnd_bird_hand_command_and_status(PtWidget_t *widget, ApInfo_t *apinfo,
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	mrrocpp::lib::bird_hand_status &bhsrs =
+			ui.bird_hand.ui_ecp_robot->bird_hand_status_reply_structure;
+
+	ui.bird_hand.ui_ecp_robot->bird_hand_status_reply_data_request_port->set_request();
+	ui.bird_hand.ui_ecp_robot->execute_motion();
+	ui.bird_hand.ui_ecp_robot->bird_hand_status_reply_data_request_port->get(
+			bhsrs);
 
 	return (Pt_CONTINUE);
 
@@ -278,8 +295,8 @@ int clear_wnd_bird_hand_command_and_status(PtWidget_t *widget,
 
 }
 
-int execute_wnd_bird_hand_configuration(PtWidget_t *widget,
-		ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int execute_wnd_bird_hand_configuration(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -289,8 +306,8 @@ int execute_wnd_bird_hand_configuration(PtWidget_t *widget,
 	return (Pt_CONTINUE);
 }
 
-int copy_wnd_bird_hand_configuration(PtWidget_t *widget,
-		ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int copy_wnd_bird_hand_configuration(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo)
 
 {
 
