@@ -2245,6 +2245,10 @@ extern const int ABN_PtButton_wind_irp6m_inc_exec_move0;
 #define ABW_PtButton_wind_irp6m_inc_exec_move0 AbGetABW( ABN_PtButton_wind_irp6m_inc_exec_move0 )
 extern const int ABN_PtButton_wind_irp6m_motors_set_desired_as_current0;
 #define ABW_PtButton_wind_irp6m_motors_set_desired_as_current0 AbGetABW( ABN_PtButton_wind_irp6m_motors_set_desired_as_current0 )
+extern const int ABN_motion_steps_wnd_bird_hand_command_and_status;
+#define ABW_motion_steps_wnd_bird_hand_command_and_status AbGetABW( ABN_motion_steps_wnd_bird_hand_command_and_status )
+extern const int ABN_ecp_query_step_wnd_bird_hand_command_and_status;
+#define ABW_ecp_query_step_wnd_bird_hand_command_and_status AbGetABW( ABN_ecp_query_step_wnd_bird_hand_command_and_status )
 
 #define AbGetABW( n ) ( AbWidgets[ n ].wgt )
 

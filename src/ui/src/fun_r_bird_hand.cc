@@ -176,15 +176,14 @@ int EDP_bird_hand_slay_int(PtWidget_t *widget, ApInfo_t *apinfo,
 						__FILE__, __LINE__, strerror(errno));
 			}
 		}
+		ui.bird_hand.close_all_windows();
+
 		delete ui.bird_hand.ui_ecp_robot;
 		ui.bird_hand.state.edp.state = 0; // edp wylaczone
 		ui.bird_hand.state.edp.is_synchronised = false;
 
 		ui.bird_hand.state.edp.pid = -1;
 		ui.bird_hand.state.edp.reader_fd = -1;
-
-		ui.bird_hand.close_all_windows();
-
 	}
 
 	// modyfikacja menu
@@ -206,8 +205,24 @@ int execute_wnd_bird_hand_command_and_status(PtWidget_t *widget,
 	mrrocpp::lib::bird_hand_command &bhcs =
 			ui.bird_hand.ui_ecp_robot->bird_hand_command_structure;
 
-	bhcs.motion_steps = 10;
-	bhcs.ecp_query_step = 8;
+	int* motion_steps, *ecp_query_step;
+
+	PtGetResource(ABW_motion_steps_wnd_bird_hand_command_and_status,
+			Pt_ARG_NUMERIC_VALUE, &motion_steps, 0);
+	PtGetResource(ABW_ecp_query_step_wnd_bird_hand_command_and_status,
+			Pt_ARG_NUMERIC_VALUE, &ecp_query_step, 0);
+
+	std::stringstream ss(std::stringstream::in | std::stringstream::out);
+
+	bhcs.motion_steps = *motion_steps;
+	bhcs.ecp_query_step = *ecp_query_step;
+
+	ss << bhcs.motion_steps << "  " << bhcs.ecp_query_step;
+
+	ui.ui_msg->message(ss.str().c_str());
+
+	//bhcs.motion_steps = 10;
+	//bhcs.ecp_query_step = 8;
 	bhcs.index_f[0].desired_position = 1;
 
 	ui.bird_hand.ui_ecp_robot->bird_hand_command_data_port->set(bhcs);
