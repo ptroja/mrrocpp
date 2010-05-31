@@ -8,6 +8,7 @@
 #ifndef __UI_ROBOT_H
 #define __UI_ROBOT_H
 
+
 #include "ui/ui.h"
 
 //
@@ -38,6 +39,7 @@ public:
 	bool pulse_reader_start_exec_pulse(void);
 	bool pulse_reader_stop_exec_pulse(void);
 	bool pulse_reader_trigger_exec_pulse(void);
+
 };
 
 #endif

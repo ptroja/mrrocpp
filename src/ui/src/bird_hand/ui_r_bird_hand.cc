@@ -259,6 +259,17 @@ int UiRobotBirdHand::set_index_f_0_status() {
 	PtSetResource(
 			ABW_index_f_0_meassured_current_wnd_bird_hand_command_and_status,
 			Pt_ARG_NUMERIC_VALUE, &bhsrs.index_f[0].meassured_current, 0);
+
+	if (bhsrs.index_f[0].lower_limit_of_absolute_position) {
+
+		ui.set_toggle_button(
+				ABW_index_f_0_limit_1_wnd_bird_hand_command_and_status);
+
+	} else {
+		ui.unset_toggle_button(
+				ABW_index_f_0_limit_1_wnd_bird_hand_command_and_status);
+	}
+
 	return 1;
 }
 

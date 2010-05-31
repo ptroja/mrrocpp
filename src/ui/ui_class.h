@@ -22,6 +22,9 @@
 #include "ui/src/shead/ui_r_shead.h"
 #include "ui/src/smb/ui_r_smb.h"
 
+/* Local headers */
+#include "../ablibs.h"
+
 //
 //
 // KLASA ui
@@ -136,6 +139,8 @@ public:
 	bool deactivate_ecp_trigger(ecp_edp_ui_robot_def &robot_l);
 	int execute_mp_pulse(char pulse_code);
 	int pulse_reader_execute(int coid, int pulse_code, int pulse_value);
+	int set_toggle_button(PtWidget_t *widget);
+	int unset_toggle_button(PtWidget_t *widget);
 
 };
 
