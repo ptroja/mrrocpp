@@ -205,6 +205,8 @@ int execute_wnd_bird_hand_command_and_status(PtWidget_t *widget,
 	mrrocpp::lib::bird_hand_command &bhcs =
 			ui.bird_hand.ui_ecp_robot->bird_hand_command_structure;
 
+	// odczyt ilosci krokow i ecp_query step
+
 	int* motion_steps, *ecp_query_step;
 
 	PtGetResource(ABW_motion_steps_wnd_bird_hand_command_and_status,
@@ -212,12 +214,48 @@ int execute_wnd_bird_hand_command_and_status(PtWidget_t *widget,
 	PtGetResource(ABW_ecp_query_step_wnd_bird_hand_command_and_status,
 			Pt_ARG_NUMERIC_VALUE, &ecp_query_step, 0);
 
-	std::stringstream ss(std::stringstream::in | std::stringstream::out);
-
 	bhcs.motion_steps = *motion_steps;
 	bhcs.ecp_query_step = *ecp_query_step;
 
-	ss << bhcs.motion_steps << "  " << bhcs.ecp_query_step;
+	// odczyt wariantu ruchu
+
+
+
+
+
+	unsigned long *flags;
+
+	PtGetResource(
+			ABW_index_f_0_absolute_variant_wnd_bird_hand_command_and_status,
+			Pt_ARG_FLAGS, &flags, 0);
+
+	if (*flags & Pt_SET) {
+		bhcs.index_f[0].profile_type
+				= lib::BIRD_HAND_MACROSTEP_ABSOLUTE_POSITION;
+	}
+
+	PtGetResource(
+			ABW_index_f_0_relative_variant_wnd_bird_hand_command_and_status,
+			Pt_ARG_FLAGS, &flags, 0);
+
+	if (*flags & Pt_SET) {
+		bhcs.index_f[0].profile_type
+				= lib::BIRD_HAND_MACROSTEP_POSITION_INCREMENT;
+	}
+
+	PtGetResource(
+			ABW_index_f_0_velocity_variant_wnd_bird_hand_command_and_status,
+			Pt_ARG_FLAGS, &flags, 0);
+
+	if (*flags & Pt_SET) {
+		bhcs.index_f[0].profile_type
+				= lib::BIRD_HAND_SIGLE_STEP_POSTION_INCREMENT;
+	}
+
+	std::stringstream ss(std::stringstream::in | std::stringstream::out);
+
+	ss << bhcs.index_f[0].profile_type << " " << bhcs.motion_steps << "  "
+			<< bhcs.ecp_query_step;
 
 	ui.ui_msg->message(ss.str().c_str());
 

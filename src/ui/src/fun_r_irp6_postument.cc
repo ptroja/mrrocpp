@@ -2502,8 +2502,6 @@ int EDP_irp6_postument_slay_int(PtWidget_t *widget, ApInfo_t *apinfo,
 
 {
 
-	int pt_res;
-
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
@@ -2531,8 +2529,6 @@ int EDP_irp6_postument_slay_int(PtWidget_t *widget, ApInfo_t *apinfo,
 	return 1;
 
 }
-
-
 
 int pulse_reader_irp6p_start(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo)
