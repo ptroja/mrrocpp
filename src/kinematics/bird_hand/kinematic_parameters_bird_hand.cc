@@ -15,16 +15,16 @@ namespace kinematics {
 namespace bird_hand {
 
 kinematic_parameters_bird_hand::kinematic_parameters_bird_hand() {
-	gear[0] = 275.0 * 7.826; //kciuk 0
-	gear[1] = 275.0 * 7.826; //kciuk 1
-	gear[2] = 1.0; //TODO wskazujacy obrot
-	gear[3] = 275.0 * 7.826; //wskazujacy 0
-	gear[4] = 275.0 * 7.826; //wskazujacy 1
-	gear[5] = 1.0; //TODO serdeczny obrot
-	gear[6] = 275.0 * 7.826; //serdeczny 0
-	gear[7] = 275.0 * 7.826; //serdeczny 1
+	gear[0] = 275.0 * 7.826;  //thumb_f 0
+	gear[1] = 275.0 * 7.826;  //thumb_f 1
+	gear[2] = 275.0 * 2.1585; //index_f rotation
+	gear[3] = 275.0 * 7.826;  //index_f 0
+	gear[4] = 275.0 * 7.826;  //index_f 1
+	gear[5] = 275.0 * 2.1585; //ring_f rotation
+	gear[6] = 275.0 * 7.826;  //ring_f 0
+	gear[7] = 275.0 * 7.826;  //ring_f 1
 
-	//TODO fix lower limits ...
+	//TODO fix lower limits
 	lower_limit_axis[0] = -1000000.0;
 	lower_limit_axis[1] = -1000000.0;
 	lower_limit_axis[2] = -1000000.0;
@@ -34,7 +34,7 @@ kinematic_parameters_bird_hand::kinematic_parameters_bird_hand() {
 	lower_limit_axis[6] = -1000000.0;
 	lower_limit_axis[7] = -1000000.0;
 
-	//TODO fix upper limits ...
+	//TODO fix upper limits
 	upper_limit_axis[0] = 1000000.0;
 	upper_limit_axis[1] = 1000000.0;
 	upper_limit_axis[2] = 1000000.0;
