@@ -144,14 +144,16 @@ void effector::move_arm(const lib::c_buffer &instruction) {
 	}
 
 	std::stringstream ss(std::stringstream::in | std::stringstream::out);
+	/*
+	 ss << "dt: "
+	 << ecp_edp_cbuffer.bird_hand_command_structure.finger[2].desired_torque
+	 << " rod: "
+	 << ecp_edp_cbuffer.bird_hand_command_structure.finger[2].reciprocal_of_damping
+	 << " dp: "
+	 << ecp_edp_cbuffer.bird_hand_command_structure.finger[2].desired_position;
 
-	ss
-			<< ecp_edp_cbuffer.bird_hand_command_structure.finger[0].desired_position
-			<< " "
-			<< ecp_edp_cbuffer.bird_hand_command_structure.finger[0].reciprocal_of_damping;
-
-	msg->message(ss.str().c_str());
-
+	 msg->message(ss.str().c_str());
+	 */
 	if (clock_gettime(CLOCK_MONOTONIC, &current_timespec) == -1) {
 		perror("clock gettime");
 	}

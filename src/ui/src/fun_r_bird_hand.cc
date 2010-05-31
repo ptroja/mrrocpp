@@ -227,17 +227,13 @@ int execute_wnd_bird_hand_command_and_status(PtWidget_t *widget,
 	 ss << bhcs.index_f[0].profile_type << " " << bhcs.motion_steps << "  "
 	 << bhcs.ecp_query_step;
 	 */
+	/*
+	 ss << bhcs.index_f[0].desired_position << " "
+	 << bhcs.index_f[0].desired_torque << "  "
+	 << bhcs.index_f[0].reciprocal_of_damping;
 
-	ss << bhcs.index_f[0].desired_position << " "
-			<< bhcs.index_f[0].desired_torque << "  "
-			<< bhcs.index_f[0].reciprocal_of_damping;
-
-	ui.ui_msg->message(ss.str().c_str());
-
-	//bhcs.motion_steps = 10;
-	//bhcs.ecp_query_step = 8;
-	bhcs.index_f[0].desired_position = 1;
-
+	 ui.ui_msg->message(ss.str().c_str());
+	 */
 	ui.bird_hand.ui_ecp_robot->bird_hand_command_data_port->set(bhcs);
 	ui.bird_hand.ui_ecp_robot->execute_motion();
 	return (Pt_CONTINUE);
