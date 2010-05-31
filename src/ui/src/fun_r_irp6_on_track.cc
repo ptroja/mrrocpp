@@ -710,7 +710,7 @@ int init_wnd_irp6_on_track_inc(PtWidget_t *widget, ApInfo_t *apinfo,
 			if (ui.irp6ot_m.state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
 			{
 
-				unblock_widget(ABW_PtPane_wind_irp6ot_inc_post_synchro_moves);
+				ui.unblock_widget(ABW_PtPane_wind_irp6ot_inc_post_synchro_moves);
 				ui.irp6ot_m.ui_ecp_robot->read_motors(
 						ui.irp6ot_m.irp6ot_current_pos); // Odczyt polozenia walow silnikow
 
@@ -744,7 +744,7 @@ int init_wnd_irp6_on_track_inc(PtWidget_t *widget, ApInfo_t *apinfo,
 				 */
 			} else {
 				// Wygaszanie elementow przy niezsynchronizowanym robocie
-				block_widget(ABW_PtPane_wind_irp6ot_inc_post_synchro_moves);
+				ui.block_widget(ABW_PtPane_wind_irp6ot_inc_post_synchro_moves);
 			}
 		}
 	} // end try
@@ -766,7 +766,7 @@ int wnd_irp6ot_motors_copy_current_to_desired(PtWidget_t *widget,
 	if (ui.irp6ot_m.state.edp.pid != -1) {
 		if (ui.irp6ot_m.state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
 		{
-			unblock_widget(ABW_PtPane_wind_irp6ot_inc_post_synchro_moves);
+			ui.unblock_widget(ABW_PtPane_wind_irp6ot_inc_post_synchro_moves);
 
 			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_motors_cur_p0,
 					Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[0]), 0);
@@ -808,7 +808,7 @@ int wnd_irp6ot_motors_copy_current_to_desired(PtWidget_t *widget,
 
 		} else {
 			// Wygaszanie elementow przy niezsynchronizowanym robocie
-			block_widget(ABW_PtPane_wind_irp6ot_inc_post_synchro_moves);
+			ui.block_widget(ABW_PtPane_wind_irp6ot_inc_post_synchro_moves);
 
 		}
 	}
@@ -1141,7 +1141,7 @@ int init_wnd_irp6_on_track_int(PtWidget_t *widget, ApInfo_t *apinfo,
 				ui.irp6ot_m.ui_ecp_robot->read_joints(
 						ui.irp6ot_m.irp6ot_current_pos); // Odczyt polozenia walow silnikow
 
-				// 	unblock_widget(ABW_PtPane_wind_irp6ot_int_post_synchro_moves);
+				// 	ui.unblock_widget(ABW_PtPane_wind_irp6ot_int_post_synchro_moves);
 				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_joints_cur_p1,
 						Pt_ARG_NUMERIC_VALUE,
 						&ui.irp6ot_m.irp6ot_current_pos[0], 0);
@@ -1171,7 +1171,7 @@ int init_wnd_irp6_on_track_int(PtWidget_t *widget, ApInfo_t *apinfo,
 					ui.irp6ot_m.irp6ot_desired_pos[i]
 							= ui.irp6ot_m.irp6ot_current_pos[i];
 			} else {
-				// 		block_widget(ABW_PtPane_wind_irp6ot_int_post_synchro_moves);
+				// 		ui.block_widget(ABW_PtPane_wind_irp6ot_int_post_synchro_moves);
 			}
 		}
 	} // end try

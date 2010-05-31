@@ -1032,3 +1032,18 @@ int Ui::unset_toggle_button(PtWidget_t * widget) {
 	return 1;
 }
 
+// blokowanie widgetu
+int Ui::block_widget(PtWidget_t *widget) {
+	PtSetResource(widget, Pt_ARG_FLAGS, Pt_TRUE, Pt_BLOCKED | Pt_GHOST);
+	PtDamageWidget(widget);
+
+	return 1;
+}
+
+// odblokowanie widgetu
+int Ui::unblock_widget(PtWidget_t *widget) {
+	PtSetResource(widget, Pt_ARG_FLAGS, Pt_FALSE, Pt_BLOCKED | Pt_GHOST);
+	PtDamageWidget(widget);
+
+	return 1;
+}

@@ -141,6 +141,8 @@ public:
 	int pulse_reader_execute(int coid, int pulse_code, int pulse_value);
 	int set_toggle_button(PtWidget_t *widget);
 	int unset_toggle_button(PtWidget_t *widget);
+	int block_widget(PtWidget_t *widget);
+	int unblock_widget(PtWidget_t *widget);
 
 };
 

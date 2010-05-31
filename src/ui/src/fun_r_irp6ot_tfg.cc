@@ -505,15 +505,15 @@ int wind_irp6ot_tfg_moves_init(PtWidget_t *widget, ApInfo_t *apinfo,
 				&& (ui.irp6ot_tfg.is_wind_irp6ot_tfg_moves_open)) {
 			if (ui.irp6ot_tfg.state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
 			{
-				unblock_widget(ABW_PtNumericFloat_wind_irp6ot_tfg_moves_inc_pos);
-				unblock_widget(ABW_PtButton_wind_irp6ot_tfg_moves_inc_exec);
+				ui.unblock_widget(ABW_PtNumericFloat_wind_irp6ot_tfg_moves_inc_pos);
+				ui.unblock_widget(ABW_PtButton_wind_irp6ot_tfg_moves_inc_exec);
 
-				unblock_widget(ABW_PtButton_wind_irp6ot_tfg_moves_int_left);
-				unblock_widget(ABW_PtButton_wind_irp6ot_tfg_moves_int_right);
-				unblock_widget(
+				ui.unblock_widget(ABW_PtButton_wind_irp6ot_tfg_moves_int_left);
+				ui.unblock_widget(ABW_PtButton_wind_irp6ot_tfg_moves_int_right);
+				ui.unblock_widget(
 						ABW_PtNumericFloat_wind_irp6ot_tfg_moves_int_step);
-				unblock_widget(ABW_PtNumericFloat_wind_irp6ot_tfg_moves_int_pos);
-				unblock_widget(ABW_PtButton_wind_irp6ot_tfg_moves_int_exec);
+				ui.unblock_widget(ABW_PtNumericFloat_wind_irp6ot_tfg_moves_int_pos);
+				ui.unblock_widget(ABW_PtButton_wind_irp6ot_tfg_moves_int_exec);
 
 				ui.irp6ot_tfg.ui_ecp_robot->read_motors(
 						ui.irp6ot_tfg.irp6ot_tfg_current_pos); // Odczyt polozenia walow silnikow
@@ -532,14 +532,14 @@ int wind_irp6ot_tfg_moves_init(PtWidget_t *widget, ApInfo_t *apinfo,
 						&ui.irp6ot_tfg.irp6ot_tfg_current_pos[0], 0);
 
 			} else {
-				block_widget(ABW_PtNumericFloat_wind_irp6ot_tfg_moves_inc_pos);
-				block_widget(ABW_PtButton_wind_irp6ot_tfg_moves_inc_exec);
+				ui.block_widget(ABW_PtNumericFloat_wind_irp6ot_tfg_moves_inc_pos);
+				ui.block_widget(ABW_PtButton_wind_irp6ot_tfg_moves_inc_exec);
 
-				block_widget(ABW_PtButton_wind_irp6ot_tfg_moves_int_left);
-				block_widget(ABW_PtButton_wind_irp6ot_tfg_moves_int_right);
-				block_widget(ABW_PtNumericFloat_wind_irp6ot_tfg_moves_int_step);
-				block_widget(ABW_PtNumericFloat_wind_irp6ot_tfg_moves_int_pos);
-				block_widget(ABW_PtButton_wind_irp6ot_tfg_moves_int_exec);
+				ui.block_widget(ABW_PtButton_wind_irp6ot_tfg_moves_int_left);
+				ui.block_widget(ABW_PtButton_wind_irp6ot_tfg_moves_int_right);
+				ui.block_widget(ABW_PtNumericFloat_wind_irp6ot_tfg_moves_int_step);
+				ui.block_widget(ABW_PtNumericFloat_wind_irp6ot_tfg_moves_int_pos);
+				ui.block_widget(ABW_PtButton_wind_irp6ot_tfg_moves_int_exec);
 			}
 			PtDamageWidget(ABW_wnd_irp6ot_tfg_moves);
 		}

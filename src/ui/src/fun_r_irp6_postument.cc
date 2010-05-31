@@ -667,7 +667,7 @@ int init_wnd_irp6_postument_inc(PtWidget_t *widget, ApInfo_t *apinfo,
 			if (ui.irp6p_m.state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
 			{
 
-				unblock_widget(ABW_PtPane_wind_irp6p_inc_post_synchro_moves);
+				ui.unblock_widget(ABW_PtPane_wind_irp6p_inc_post_synchro_moves);
 				ui.irp6p_m.ui_ecp_robot->read_motors(
 						ui.irp6p_m.irp6p_current_pos); // Odczyt polozenia walow silnikow
 
@@ -698,7 +698,7 @@ int init_wnd_irp6_postument_inc(PtWidget_t *widget, ApInfo_t *apinfo,
 							= ui.irp6p_m.irp6p_current_pos[i];
 			} else {
 				// Wygaszanie elementow przy niezsynchronizowanym robocie
-				block_widget(ABW_PtPane_wind_irp6p_inc_post_synchro_moves);
+				ui.block_widget(ABW_PtPane_wind_irp6p_inc_post_synchro_moves);
 			}
 		}
 	} // end try
@@ -1009,7 +1009,7 @@ int init_wnd_irp6_postument_int(PtWidget_t *widget, ApInfo_t *apinfo,
 				ui.irp6p_m.ui_ecp_robot->read_joints(
 						ui.irp6p_m.irp6p_current_pos); // Odczyt polozenia walow silnikow
 
-				// 	unblock_widget(ABW_PtPane_wind_irp6p_int_post_synchro_moves);
+				// 	ui.unblock_widget(ABW_PtPane_wind_irp6p_int_post_synchro_moves);
 				PtSetResource(ABW_PtNumericFloat_wind_irp6p_joints_cur_p1,
 						Pt_ARG_NUMERIC_VALUE, &ui.irp6p_m.irp6p_current_pos[0],
 						0);
@@ -1036,7 +1036,7 @@ int init_wnd_irp6_postument_int(PtWidget_t *widget, ApInfo_t *apinfo,
 					ui.irp6p_m.irp6p_desired_pos[i]
 							= ui.irp6p_m.irp6p_current_pos[i];
 			} else {
-				// 	block_widget(ABW_PtPane_wind_irp6p_int_post_synchro_moves);
+				// 	ui.block_widget(ABW_PtPane_wind_irp6p_int_post_synchro_moves);
 			}
 		}
 	} // end try
