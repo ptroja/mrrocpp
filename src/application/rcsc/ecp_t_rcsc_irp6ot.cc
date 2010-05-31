@@ -24,15 +24,15 @@ rcsc::rcsc(lib::configurator &_config) :
 	// the robot is choose dependendat on the section of configuration file sent as argv[4]
 	ecp_m_robot = new robot(*this);
 
-	gt = new common::generator::transparent(*this);
-	nrg = new common::generator::tff_nose_run(*this, 8);
-	rgg = new common::generator::tff_rubik_grab(*this, 8);
-	gag = new common::generator::tff_gripper_approach(*this, 8);
-	rfrg = new common::generator::tff_rubik_face_rotate(*this, 8);
-	tig = new common::generator::teach_in(*this);
-	befg = new common::generator::bias_edp_force(*this);
-	sg = new common::generator::smooth(*this, true);
-	wmg = new common::generator::weight_meassure(*this, 1);
+	gt = shared_ptr<common::generator::transparent> (new common::generator::transparent(*this));
+	nrg = shared_ptr<common::generator::tff_nose_run> (new common::generator::tff_nose_run(*this, 8));
+	rgg = shared_ptr<common::generator::tff_rubik_grab> (new common::generator::tff_rubik_grab(*this, 8));
+	gag = shared_ptr<common::generator::tff_gripper_approach> (new common::generator::tff_gripper_approach(*this, 8));
+	rfrg = shared_ptr<common::generator::tff_rubik_face_rotate> (new common::generator::tff_rubik_face_rotate(*this, 8));
+	tig = shared_ptr<common::generator::teach_in> (new common::generator::teach_in(*this));
+	befg = shared_ptr<common::generator::bias_edp_force> (new common::generator::bias_edp_force(*this));
+	sg = shared_ptr<common::generator::smooth> (new common::generator::smooth(*this, true));
+	wmg = shared_ptr<common::generator::weight_meassure> (new common::generator::weight_meassure(*this, 1));
 
 	char fradia_config_section_name[] = { "[fradia_object_follower]" };
 	if (config.exists("fradia_task", fradia_config_section_name)) {
@@ -57,24 +57,9 @@ rcsc::rcsc(lib::configurator &_config) :
 		sm->configure();
 	}
 
-	go_st = new common::task::ecp_sub_task_gripper_opening(*this);
+	go_st = shared_ptr<common::task::ecp_sub_task_gripper_opening> (new common::task::ecp_sub_task_gripper_opening(*this));
 
 	sr_ecp_msg->message("ECP loaded");
-}
-
-rcsc::~rcsc()
-{
-	delete gt;
-	delete nrg;
-	delete rgg;
-	delete gag;
-	delete rfrg;
-	delete tig;
-	delete befg;
-	//delete sg;
-	delete sg;
-	delete wmg;
-	delete go_st;
 }
 
 void rcsc::main_task_algorithm(void)

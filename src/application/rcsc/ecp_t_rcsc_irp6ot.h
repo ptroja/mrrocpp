@@ -35,18 +35,18 @@ class rcsc: public common::task::task
 {
 protected:
     //generatory
-	common::generator::transparent* gt;
-	common::generator::tff_nose_run* nrg;
-	common::generator::tff_rubik_grab* rgg;
-	common::generator::tff_gripper_approach* gag;
-	common::generator::tff_rubik_face_rotate* rfrg;
-	common::generator::teach_in* tig;
-	common::generator::smooth* sg;
+	shared_ptr<common::generator::transparent> gt;
+	shared_ptr<common::generator::tff_nose_run> nrg;
+	shared_ptr<common::generator::tff_rubik_grab> rgg;
+	shared_ptr<common::generator::tff_gripper_approach> gag;
+	shared_ptr<common::generator::tff_rubik_face_rotate> rfrg;
+	shared_ptr<common::generator::teach_in> tig;
+	shared_ptr<common::generator::smooth> sg;
 
-	common::generator::bias_edp_force* befg;
-	common::generator::weight_meassure* wmg;
+	shared_ptr<common::generator::bias_edp_force> befg;
+	shared_ptr<common::generator::weight_meassure> wmg;
     //podzadania
-	common::task::ecp_sub_task_gripper_opening* go_st;
+	shared_ptr<common::task::ecp_sub_task_gripper_opening> go_st;
 
 	shared_ptr<simple_visual_servo_manager> sm;
 	shared_ptr<visual_servo> vs;
@@ -54,7 +54,6 @@ protected:
 	shared_ptr<termination_condition> term_cond;
 public:
     rcsc(lib::configurator &_config);
-    ~rcsc();
 
     // methods for ECP template to redefine in concrete classes
     void main_task_algorithm(void);
