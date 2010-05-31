@@ -2201,38 +2201,10 @@ extern const int ABN_PtNumericFloat_wind_irp6p_tfg_moves_read_int_pos;
 /* 'wnd_bird_hand_configuration' Window link */
 extern const int ABN_wnd_bird_hand_configuration;
 #define ABW_wnd_bird_hand_configuration      AbGetABW( ABN_wnd_bird_hand_configuration )
-extern const int ABN_PtPane_wind_irp6m_inc_post_synchro_moves00;
-#define ABW_PtPane_wind_irp6m_inc_post_synchro_moves00 AbGetABW( ABN_PtPane_wind_irp6m_inc_post_synchro_moves00 )
-extern const int ABN_PtNumericFloat_wind_irp6m_inc_p000;
-#define ABW_PtNumericFloat_wind_irp6m_inc_p000 AbGetABW( ABN_PtNumericFloat_wind_irp6m_inc_p000 )
-extern const int ABN_PtNumericFloat_wind_irp6m_inc_p100;
-#define ABW_PtNumericFloat_wind_irp6m_inc_p100 AbGetABW( ABN_PtNumericFloat_wind_irp6m_inc_p100 )
-extern const int ABN_PtNumericFloat_wind_irp6m_inc_p200;
-#define ABW_PtNumericFloat_wind_irp6m_inc_p200 AbGetABW( ABN_PtNumericFloat_wind_irp6m_inc_p200 )
-extern const int ABN_PtNumericFloat_wind_irp6m_inc_p300;
-#define ABW_PtNumericFloat_wind_irp6m_inc_p300 AbGetABW( ABN_PtNumericFloat_wind_irp6m_inc_p300 )
-extern const int ABN_PtNumericFloat_wind_irp6m_inc_p400;
-#define ABW_PtNumericFloat_wind_irp6m_inc_p400 AbGetABW( ABN_PtNumericFloat_wind_irp6m_inc_p400 )
-extern const int ABN_PtButton_wind_irp6m_inc_exec_move00;
-#define ABW_PtButton_wind_irp6m_inc_exec_move00 AbGetABW( ABN_PtButton_wind_irp6m_inc_exec_move00 )
-extern const int ABN_PtButton_wind_irp6m_inc_import00;
-#define ABW_PtButton_wind_irp6m_inc_import00 AbGetABW( ABN_PtButton_wind_irp6m_inc_import00 )
-extern const int ABN_PtButton_wind_irp6m_inc_export00;
-#define ABW_PtButton_wind_irp6m_inc_export00 AbGetABW( ABN_PtButton_wind_irp6m_inc_export00 )
 extern const int ABN_PtNumericFloat_wind_irp6m_motors_cur_p000;
 #define ABW_PtNumericFloat_wind_irp6m_motors_cur_p000 AbGetABW( ABN_PtNumericFloat_wind_irp6m_motors_cur_p000 )
-extern const int ABN_PtNumericFloat_wind_irp6m_motors_cur_p100;
-#define ABW_PtNumericFloat_wind_irp6m_motors_cur_p100 AbGetABW( ABN_PtNumericFloat_wind_irp6m_motors_cur_p100 )
-extern const int ABN_PtNumericFloat_wind_irp6m_motors_cur_p200;
-#define ABW_PtNumericFloat_wind_irp6m_motors_cur_p200 AbGetABW( ABN_PtNumericFloat_wind_irp6m_motors_cur_p200 )
-extern const int ABN_PtNumericFloat_wind_irp6m_motors_cur_p300;
-#define ABW_PtNumericFloat_wind_irp6m_motors_cur_p300 AbGetABW( ABN_PtNumericFloat_wind_irp6m_motors_cur_p300 )
-extern const int ABN_PtNumericFloat_wind_irp6m_motors_cur_p400;
-#define ABW_PtNumericFloat_wind_irp6m_motors_cur_p400 AbGetABW( ABN_PtNumericFloat_wind_irp6m_motors_cur_p400 )
-extern const int ABN_PtButton_wind_irp6m_inc_read_pos00;
-#define ABW_PtButton_wind_irp6m_inc_read_pos00 AbGetABW( ABN_PtButton_wind_irp6m_inc_read_pos00 )
-extern const int ABN_PtButton_wind_irp6m_motors_set_desired_as_current00;
-#define ABW_PtButton_wind_irp6m_motors_set_desired_as_current00 AbGetABW( ABN_PtButton_wind_irp6m_motors_set_desired_as_current00 )
+extern const int ABN_PtNumericFloat_wind_irp6m_inc_p000;
+#define ABW_PtNumericFloat_wind_irp6m_inc_p000 AbGetABW( ABN_PtNumericFloat_wind_irp6m_inc_p000 )
 extern const int ABN_PtLabel11000;
 #define ABW_PtLabel11000                     AbGetABW( ABN_PtLabel11000 )
 extern const int ABN_PtLabel20000;
@@ -2241,10 +2213,14 @@ extern const int ABN_PtLabel30000;
 #define ABW_PtLabel30000                     AbGetABW( ABN_PtLabel30000 )
 extern const int ABN_PtLabel40000;
 #define ABW_PtLabel40000                     AbGetABW( ABN_PtLabel40000 )
-extern const int ABN_PtLabel50000;
-#define ABW_PtLabel50000                     AbGetABW( ABN_PtLabel50000 )
 extern const int ABN_PtLabel101000;
 #define ABW_PtLabel101000                    AbGetABW( ABN_PtLabel101000 )
+extern const int ABN_PtButton_wind_irp6m_inc_read_pos00;
+#define ABW_PtButton_wind_irp6m_inc_read_pos00 AbGetABW( ABN_PtButton_wind_irp6m_inc_read_pos00 )
+extern const int ABN_PtButton_wind_irp6m_inc_exec_move00;
+#define ABW_PtButton_wind_irp6m_inc_exec_move00 AbGetABW( ABN_PtButton_wind_irp6m_inc_exec_move00 )
+extern const int ABN_PtButton_wind_irp6m_motors_set_desired_as_current00;
+#define ABW_PtButton_wind_irp6m_motors_set_desired_as_current00 AbGetABW( ABN_PtButton_wind_irp6m_motors_set_desired_as_current00 )
 
 /* 'wnd_bird_hand_command_and_status' Window link */
 extern const int ABN_wnd_bird_hand_command_and_status;

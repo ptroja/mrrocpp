@@ -195,6 +195,40 @@ int EDP_bird_hand_slay_int(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
+int execute_wnd_bird_hand_command_and_status(PtWidget_t *widget,
+		ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+
+{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	return (Pt_CONTINUE);
+}
+
+int copy_wnd_bird_hand_command_and_status(
+		PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+
+{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	return (Pt_CONTINUE);
+
+}
+
+int init_wnd_bird_hand_command_and_status(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo)
+
+{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	return (Pt_CONTINUE);
+
+}
 
 int start_wnd_bird_hand_command_and_status(PtWidget_t *widget,
 		ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
@@ -240,6 +274,41 @@ int clear_wnd_bird_hand_command_and_status(PtWidget_t *widget,
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
 	ui.bird_hand.is_wnd_bird_hand_command_and_status_open = false;
+	return (Pt_CONTINUE);
+
+}
+
+int execute_wnd_bird_hand_configuration(PtWidget_t *widget,
+		ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+
+{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	return (Pt_CONTINUE);
+}
+
+int copy_wnd_bird_hand_configuration(PtWidget_t *widget,
+		ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+
+{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	return (Pt_CONTINUE);
+
+}
+
+int init_wnd_bird_hand_configuration(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo)
+
+{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
 	return (Pt_CONTINUE);
 
 }
