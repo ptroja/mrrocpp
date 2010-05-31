@@ -1018,30 +1018,17 @@ bool Ui::deactivate_ecp_trigger(ecp_edp_ui_robot_def& robot_l) {
 
 int Ui::set_toggle_button(PtWidget_t * widget) {
 
-	unsigned long *flags;
-
-	PtGetResource(widget, Pt_ARG_FLAGS, &flags, 0);
-
-	unsigned long set_flags;
-	set_flags = (*flags) | Pt_SET;
-
-	PtSetResource(widget, Pt_ARG_FLAGS, set_flags, 0);
+	PtSetResource(widget, Pt_ARG_FLAGS, Pt_TRUE, Pt_SET);
+	PtDamageWidget(widget);
 
 	return 1;
 }
 
 int Ui::unset_toggle_button(PtWidget_t * widget) {
 
-	unsigned long *flags;
+	PtSetResource(widget, Pt_ARG_FLAGS, Pt_FALSE, Pt_SET);
+	PtDamageWidget(widget);
 
-	PtGetResource(widget, Pt_ARG_FLAGS, &flags, 0);
-
-	unsigned long set_flags;
-	set_flags = (*flags) & (!Pt_SET);
-
-	PtSetResource(widget, Pt_ARG_FLAGS, set_flags, 0);
-
-	return 1;
 	return 1;
 }
 

@@ -268,6 +268,9 @@ int UiRobotBirdHand::set_index_f_0_status() {
 	} else {
 		ui.unset_toggle_button(
 				ABW_index_f_0_limit_1_wnd_bird_hand_command_and_status);
+
+		PtSetResource(ABW_index_f_0_limit_1_wnd_bird_hand_command_and_status,
+				Pt_ARG_FLAGS, Pt_SET, 0);
 	}
 
 	return 1;
