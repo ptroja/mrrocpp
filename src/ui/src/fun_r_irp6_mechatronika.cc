@@ -273,7 +273,7 @@ int EDP_irp6_mechatronika_slay(PtWidget_t *widget, ApInfo_t *apinfo,
 		ui.irp6m_m.state.edp.pid = -1;
 		ui.irp6m_m.state.edp.reader_fd = -1;
 
-		close_all_irp6m_windows(NULL, NULL, NULL);
+		ui.irp6m_m.close_all_windows();
 	}
 
 	// modyfikacja menu
@@ -283,26 +283,7 @@ int EDP_irp6_mechatronika_slay(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
-int close_all_irp6m_windows(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
 
-{
-
-	/* eliminate 'unreferenced' warnings */
-	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
-
-	close_wnd_irp6_mechatronika_inc(NULL, NULL, NULL);
-	close_wnd_irp6_mechatronika_int(NULL, NULL, NULL);
-	close_wnd_irp6_mechatronika_xyz_angle_axis(NULL, NULL, NULL);
-	close_wnd_irp6_mechatronika_xyz_angle_axis_ts(NULL, NULL, NULL);
-	close_wnd_irp6_mechatronika_xyz_euler_zyz(NULL, NULL, NULL);
-	close_wnd_irp6_mechatronika_xyz_euler_zyz_ts(NULL, NULL, NULL);
-	close_wnd_irp6_mechatronika_kinematic(NULL, NULL, NULL);
-	close_wnd_irp6_mechatronika_servo_algorithm(NULL, NULL, NULL);
-
-	return (Pt_CONTINUE);
-
-}
 
 int EDP_irp6_mechatronika_synchronise(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo)

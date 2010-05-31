@@ -215,7 +215,7 @@ int EDP_irp6p_tfg_slay_int(PtWidget_t *widget, ApInfo_t *apinfo,
 		ui.irp6p_tfg.state.edp.pid = -1;
 		ui.irp6p_tfg.state.edp.reader_fd = -1;
 		pt_res = PtEnter(0);
-		close_all_irp6ot_windows(NULL, NULL, NULL);
+		ui.irp6p_tfg.close_all_windows();
 		if (pt_res >= 0)
 			PtLeave(0);
 	}

@@ -230,8 +230,6 @@ int UiRobotIrp6m_m::manage_interface() {
 	return 1;
 }
 
-
-
 // aktualizacja ustawien przyciskow
 int UiRobotIrp6m_m::process_control_window_irp6m_section_init(
 		bool &wlacz_PtButton_wnd_processes_control_all_reader_start,
@@ -265,3 +263,24 @@ int UiRobotIrp6m_m::process_control_window_irp6m_section_init(
 	return 1;
 
 }
+
+int UiRobotIrp6m_m::close_all_windows() {
+
+	int pt_res = PtEnter(0);
+
+	close_wnd_irp6_mechatronika_inc(NULL, NULL, NULL);
+	close_wnd_irp6_mechatronika_int(NULL, NULL, NULL);
+	close_wnd_irp6_mechatronika_xyz_angle_axis(NULL, NULL, NULL);
+	close_wnd_irp6_mechatronika_xyz_angle_axis_ts(NULL, NULL, NULL);
+	close_wnd_irp6_mechatronika_xyz_euler_zyz(NULL, NULL, NULL);
+	close_wnd_irp6_mechatronika_xyz_euler_zyz_ts(NULL, NULL, NULL);
+	close_wnd_irp6_mechatronika_kinematic(NULL, NULL, NULL);
+	close_wnd_irp6_mechatronika_servo_algorithm(NULL, NULL, NULL);
+
+	if (pt_res >= 0) {
+		PtLeave(0);
+	}
+	return 1;
+
+}
+

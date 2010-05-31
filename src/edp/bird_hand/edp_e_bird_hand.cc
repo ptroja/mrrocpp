@@ -54,14 +54,13 @@ void effector::master_order(common::MT_ORDER nm_task, int nm_tryb) {
 
 void effector::get_controller_state(lib::c_buffer &instruction) {
 
-	if(!test_mode)
-	{
-	for (uint8_t i = 0; i < BIRD_HAND_NUM_OF_SERVOS; i++) {
-		int16_t abspos;
-		if (i < 2)
-			device.getSynchroPos(i, abspos);
-		synchro_position[i] = (int32_t) (abspos * 124345.23443); // TODO : tu wstawić magiczną stałą
-	}
+	if (!test_mode) {
+		for (uint8_t i = 0; i < BIRD_HAND_NUM_OF_SERVOS; i++) {
+			int16_t abspos;
+			if (i < 2)
+				device.getSynchroPos(i, abspos);
+			synchro_position[i] = (int32_t) (abspos * 124345.23443); // TODO : tu wstawić magiczną stałą
+		}
 	}
 	controller_state_edp_buf.is_synchronised = true;
 
@@ -114,34 +113,34 @@ void effector::move_arm(const lib::c_buffer &instruction) {
 
 	struct timespec current_timespec;
 	if (!test_mode) {
-	for (unsigned int i = 0; i < BIRD_HAND_NUM_OF_SERVOS; i++) {
-		switch (ecp_edp_cbuffer.bird_hand_command_structure.profile_type[i]) {
-		case mrrocpp::lib::BIRD_HAND_SIGLE_STEP_POSTION_INCREMENT:
-			device.setCMD1(
-					(uint16_t) i,
-					(int16_t) ecp_edp_cbuffer.bird_hand_command_structure.motion_steps,
-					(int16_t) ecp_edp_cbuffer.bird_hand_command_structure.reciprocal_of_damping[i],
-					(int16_t) ecp_edp_cbuffer.bird_hand_command_structure.desired_torque[i],
-					(int32_t) ecp_edp_cbuffer.bird_hand_command_structure.desired_position[i]);
-			break;
-		case mrrocpp::lib::BIRD_HAND_MACROSTEP_POSITION_INCREMENT:
-			device.setCMD2(
-					(uint16_t) i,
-					(int16_t) ecp_edp_cbuffer.bird_hand_command_structure.motion_steps,
-					(int16_t) ecp_edp_cbuffer.bird_hand_command_structure.reciprocal_of_damping[i],
-					(int16_t) ecp_edp_cbuffer.bird_hand_command_structure.desired_torque[i],
-					(int32_t) ecp_edp_cbuffer.bird_hand_command_structure.desired_position[i]);
-			break;
-		case mrrocpp::lib::BIRD_HAND_MACROSTEP_ABSOLUTE_POSITION:
-			device.setCMD3(
-					(uint16_t) i,
-					(int16_t) ecp_edp_cbuffer.bird_hand_command_structure.motion_steps,
-					(int16_t) ecp_edp_cbuffer.bird_hand_command_structure.reciprocal_of_damping[i],
-					(int16_t) ecp_edp_cbuffer.bird_hand_command_structure.desired_torque[i],
-					(int32_t) ecp_edp_cbuffer.bird_hand_command_structure.desired_position[i]);
-			break;
+		for (unsigned int i = 0; i < BIRD_HAND_NUM_OF_SERVOS; i++) {
+			switch (ecp_edp_cbuffer.bird_hand_command_structure.finger[i].profile_type) {
+			case mrrocpp::lib::BIRD_HAND_SIGLE_STEP_POSTION_INCREMENT:
+				device.setCMD1(
+						(uint16_t) i,
+						(int16_t) ecp_edp_cbuffer.bird_hand_command_structure.motion_steps,
+						(int16_t) ecp_edp_cbuffer.bird_hand_command_structure.finger[i].reciprocal_of_damping,
+						(int16_t) ecp_edp_cbuffer.bird_hand_command_structure.finger[i].desired_torque,
+						(int32_t) ecp_edp_cbuffer.bird_hand_command_structure.finger[i].desired_position);
+				break;
+			case mrrocpp::lib::BIRD_HAND_MACROSTEP_POSITION_INCREMENT:
+				device.setCMD2(
+						(uint16_t) i,
+						(int16_t) ecp_edp_cbuffer.bird_hand_command_structure.motion_steps,
+						(int16_t) ecp_edp_cbuffer.bird_hand_command_structure.finger[i].reciprocal_of_damping,
+						(int16_t) ecp_edp_cbuffer.bird_hand_command_structure.finger[i].desired_torque,
+						(int32_t) ecp_edp_cbuffer.bird_hand_command_structure.finger[i].desired_position);
+				break;
+			case mrrocpp::lib::BIRD_HAND_MACROSTEP_ABSOLUTE_POSITION:
+				device.setCMD3(
+						(uint16_t) i,
+						(int16_t) ecp_edp_cbuffer.bird_hand_command_structure.motion_steps,
+						(int16_t) ecp_edp_cbuffer.bird_hand_command_structure.finger[i].reciprocal_of_damping,
+						(int16_t) ecp_edp_cbuffer.bird_hand_command_structure.finger[i].desired_torque,
+						(int32_t) ecp_edp_cbuffer.bird_hand_command_structure.finger[i].desired_position);
+				break;
+			}
 		}
-	}
 	}
 
 	if (clock_gettime(CLOCK_MONOTONIC, &current_timespec) == -1) {
@@ -191,10 +190,10 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction) 
 
 	if (test_mode) {
 		for (int i = 0; i < BIRD_HAND_NUM_OF_SERVOS; i++) {
-			edp_ecp_rbuffer.bird_hand_status_reply_structure.meassured_position[i]
-					= ecp_edp_cbuffer.bird_hand_command_structure.desired_position[i];
-			edp_ecp_rbuffer.bird_hand_status_reply_structure.meassured_torque[i]
-					= ecp_edp_cbuffer.bird_hand_command_structure.desired_torque[i];
+			edp_ecp_rbuffer.bird_hand_status_reply_structure.finger[i].meassured_position
+					= ecp_edp_cbuffer.bird_hand_command_structure.finger[i].desired_position;
+			edp_ecp_rbuffer.bird_hand_status_reply_structure.finger[i].meassured_torque
+					= ecp_edp_cbuffer.bird_hand_command_structure.finger[i].desired_torque;
 		}
 	} else {
 		for (uint8_t i = 0; i < BIRD_HAND_NUM_OF_SERVOS; i++) {
@@ -205,11 +204,11 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction) 
 			if (i < 2)
 				device.getStatus(i, status, pos, c, t);
 
-			edp_ecp_rbuffer.bird_hand_status_reply_structure.meassured_position[i]
+			edp_ecp_rbuffer.bird_hand_status_reply_structure.finger[i].meassured_position
 					= (pos - synchro_position[i]);
-			edp_ecp_rbuffer.bird_hand_status_reply_structure.meassured_current[i]
+			edp_ecp_rbuffer.bird_hand_status_reply_structure.finger[i].meassured_current
 					= c;
-			edp_ecp_rbuffer.bird_hand_status_reply_structure.meassured_torque[i]
+			edp_ecp_rbuffer.bird_hand_status_reply_structure.finger[i].meassured_torque
 					= t;
 		}
 	}
@@ -223,9 +222,12 @@ void effector::set_robot_model(const lib::c_buffer &instruction) {
 
 	for (uint8_t i = 0; i < BIRD_HAND_NUM_OF_SERVOS; i++) {
 		int16_t p, i, d;
-		p = edp_ecp_rbuffer.bird_hand_configuration_reply_structure.p_factor[i];
-		i = edp_ecp_rbuffer.bird_hand_configuration_reply_structure.i_factor[i];
-		d = edp_ecp_rbuffer.bird_hand_configuration_reply_structure.d_factor[i];
+		p
+				= edp_ecp_rbuffer.bird_hand_configuration_reply_structure.finger[i].p_factor;
+		i
+				= edp_ecp_rbuffer.bird_hand_configuration_reply_structure.finger[i].i_factor;
+		d
+				= edp_ecp_rbuffer.bird_hand_configuration_reply_structure.finger[i].d_factor;
 		if (i < 2)
 			device.setPID(i, p, i, d);
 
@@ -238,17 +240,20 @@ void effector::set_robot_model(const lib::c_buffer &instruction) {
 void effector::get_robot_model(lib::c_buffer &instruction) {
 	if (!test_mode) {
 
-	for (uint8_t i = 0; i < BIRD_HAND_NUM_OF_SERVOS; i++) {
-		int16_t p, i, d;
+		for (uint8_t i = 0; i < BIRD_HAND_NUM_OF_SERVOS; i++) {
+			int16_t p, i, d;
 
-		if (i < 2)
-			device.getPID(i, p, i, d);
-		edp_ecp_rbuffer.bird_hand_configuration_reply_structure.p_factor[i] = p;
-		edp_ecp_rbuffer.bird_hand_configuration_reply_structure.i_factor[i] = i;
-		edp_ecp_rbuffer.bird_hand_configuration_reply_structure.d_factor[i] = d;
+			if (i < 2)
+				device.getPID(i, p, i, d);
+			edp_ecp_rbuffer.bird_hand_configuration_reply_structure.finger[i].p_factor
+					= p;
+			edp_ecp_rbuffer.bird_hand_configuration_reply_structure.finger[i].i_factor
+					= i;
+			edp_ecp_rbuffer.bird_hand_configuration_reply_structure.finger[i].d_factor
+					= d;
 
-		//TODO : add limits
-	}
+			//TODO : add limits
+		}
 	}
 }
 /*--------------------------------------------------------------------------*/

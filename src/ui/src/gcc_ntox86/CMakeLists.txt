@@ -95,6 +95,7 @@ set(ABMOD Icon.wgti MAM_wnd_manual_moves_automatic_measures.wgtw base.wgtw
 	wnd_irp6_postument_xyz_euler_zyz_ts.wgtw wnd_irp6ot_tfg_moves.wgtw
 	wnd_irp6ot_tfg_servo_algorithm.wgtw wnd_irp6p_tfg_moves.wgtw
 	wnd_irp6p_tfg_servo_algorithm.wgtw wnd_message.wgtw
+	wnd_bird_hand_command_and_status.wgtw wnd_bird_hand_configuration.wgtw
 	wnd_processes_control.wgtw wnd_speaker_play.wgtw yes_no_window.wgtw)
 
 ADD_CUSTOM_TARGET(ui_photon_application ALL

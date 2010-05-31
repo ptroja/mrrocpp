@@ -1565,22 +1565,14 @@ int pulse_start_mp(PtWidget_t *widget, ApInfo_t *apinfo,
 
 		// zamkniecie okien ruchow recznych o ile sa otwarte
 
-		close_all_irp6ot_windows(NULL, NULL, NULL);
-
-		close_all_irp6p_windows(NULL, NULL, NULL);
-
-		close_all_irp6m_windows(NULL, NULL, NULL);
-
-		close_wind_conveyor_moves(NULL, NULL, NULL);
-		close_wnd_conveyor_servo_algorithm(NULL, NULL, NULL);
-
-		close_wind_irp6ot_tfg_moves(NULL, NULL, NULL);
-		close_wnd_irp6ot_tfg_servo_algorithm(NULL, NULL, NULL);
-
-		close_wind_irp6p_tfg_moves(NULL, NULL, NULL);
-		close_wnd_irp6p_tfg_servo_algorithm(NULL, NULL, NULL);
-
-		close_wnd_speaker_play(NULL, NULL, NULL);
+		ui.irp6ot_m.close_all_windows();
+		ui.irp6p_m.close_all_windows();
+		ui.irp6m_m.close_all_windows();
+		ui.bird_hand.close_all_windows();
+		ui.conveyor.close_all_windows();
+		ui.irp6ot_tfg.close_all_windows();
+		ui.irp6p_tfg.close_all_windows();
+		ui.speaker.close_all_windows();
 
 		ui.execute_mp_pulse(MP_START);
 

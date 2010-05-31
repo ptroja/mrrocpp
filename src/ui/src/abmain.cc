@@ -79,6 +79,7 @@ static const ApClassTab_t ClassTable[] = {
 	{ "PtMultiText", &PtMultiText },
 	{ "PtComboBox", &PtComboBox },
 	{ "PtFileSel", &PtFileSel },
+	{ "PtToggleButton", &PtToggleButton },
 	{ NULL, NULL }
 	};
 
