@@ -37,7 +37,8 @@ public:
 	int manage_interface();
 	int close_all_windows();
 
-	int read_index_f_0_command();
+	int get_index_f_0_command();
+	int set_index_f_0_status();
 
 };
 

@@ -220,7 +220,7 @@ int execute_wnd_bird_hand_command_and_status(PtWidget_t *widget,
 	// odczyt wariantu ruchu
 
 
-	ui.bird_hand.read_index_f_0_command();
+	ui.bird_hand.get_index_f_0_command();
 
 	std::stringstream ss(std::stringstream::in | std::stringstream::out);
 	/*
@@ -266,6 +266,8 @@ int init_wnd_bird_hand_command_and_status(PtWidget_t *widget, ApInfo_t *apinfo,
 	ui.bird_hand.ui_ecp_robot->execute_motion();
 	ui.bird_hand.ui_ecp_robot->bird_hand_status_reply_data_request_port->get(
 			bhsrs);
+
+	ui.bird_hand.set_index_f_0_status();
 
 	return (Pt_CONTINUE);
 

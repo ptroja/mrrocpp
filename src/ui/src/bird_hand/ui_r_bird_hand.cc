@@ -187,7 +187,7 @@ int UiRobotBirdHand::close_all_windows() {
 
 }
 
-int UiRobotBirdHand::read_index_f_0_command() {
+int UiRobotBirdHand::get_index_f_0_command() {
 
 	unsigned long *flags;
 
@@ -243,5 +243,22 @@ int UiRobotBirdHand::read_index_f_0_command() {
 
 	return 1;
 
+}
+
+int UiRobotBirdHand::set_index_f_0_status() {
+
+	mrrocpp::lib::bird_hand_status &bhsrs =
+			ui_ecp_robot->bird_hand_status_reply_structure;
+
+	PtSetResource(
+			ABW_index_f_0_current_position_wnd_bird_hand_command_and_status,
+			Pt_ARG_NUMERIC_VALUE, &bhsrs.index_f[0].meassured_position, 0);
+	PtSetResource(
+			ABW_index_f_0_current_torque_wnd_bird_hand_command_and_status,
+			Pt_ARG_NUMERIC_VALUE, &bhsrs.index_f[0].meassured_torque, 0);
+	PtSetResource(
+			ABW_index_f_0_meassured_current_wnd_bird_hand_command_and_status,
+			Pt_ARG_NUMERIC_VALUE, &bhsrs.index_f[0].meassured_current, 0);
+	return 1;
 }
 
