@@ -36,6 +36,9 @@ public:
 	int reload_configuration();
 	int manage_interface();
 	int close_all_windows();
+
+	int read_index_f_0_command();
+
 };
 
 #endif

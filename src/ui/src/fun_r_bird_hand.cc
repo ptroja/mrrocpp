@@ -220,37 +220,7 @@ int execute_wnd_bird_hand_command_and_status(PtWidget_t *widget,
 	// odczyt wariantu ruchu
 
 
-
-
-
-	unsigned long *flags;
-
-	PtGetResource(
-			ABW_index_f_0_absolute_variant_wnd_bird_hand_command_and_status,
-			Pt_ARG_FLAGS, &flags, 0);
-
-	if (*flags & Pt_SET) {
-		bhcs.index_f[0].profile_type
-				= lib::BIRD_HAND_MACROSTEP_ABSOLUTE_POSITION;
-	}
-
-	PtGetResource(
-			ABW_index_f_0_relative_variant_wnd_bird_hand_command_and_status,
-			Pt_ARG_FLAGS, &flags, 0);
-
-	if (*flags & Pt_SET) {
-		bhcs.index_f[0].profile_type
-				= lib::BIRD_HAND_MACROSTEP_POSITION_INCREMENT;
-	}
-
-	PtGetResource(
-			ABW_index_f_0_velocity_variant_wnd_bird_hand_command_and_status,
-			Pt_ARG_FLAGS, &flags, 0);
-
-	if (*flags & Pt_SET) {
-		bhcs.index_f[0].profile_type
-				= lib::BIRD_HAND_SIGLE_STEP_POSTION_INCREMENT;
-	}
+	ui.bird_hand.read_index_f_0_command();
 
 	std::stringstream ss(std::stringstream::in | std::stringstream::out);
 

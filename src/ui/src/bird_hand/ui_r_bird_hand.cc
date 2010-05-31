@@ -2,6 +2,7 @@
 /*                            AppBuilder Photon Code Lib */
 /*                                         Version 2.01  */
 
+#include "ui/src/bird_hand/ui_ecp_r_bird_hand.h"
 #include "ui/src/bird_hand/ui_r_bird_hand.h"
 #include "lib/robot_consts/bird_hand_const.h"
 #include "ui/ui_class.h"
@@ -185,3 +186,42 @@ int UiRobotBirdHand::close_all_windows() {
 	return 1;
 
 }
+
+int UiRobotBirdHand::read_index_f_0_command() {
+
+	unsigned long *flags;
+
+	mrrocpp::lib::bird_hand_command &bhcs =
+			ui_ecp_robot->bird_hand_command_structure;
+
+	PtGetResource(
+			ABW_index_f_0_absolute_variant_wnd_bird_hand_command_and_status,
+			Pt_ARG_FLAGS, &flags, 0);
+
+	if (*flags & Pt_SET) {
+		bhcs.index_f[0].profile_type
+				= lib::BIRD_HAND_MACROSTEP_ABSOLUTE_POSITION;
+	}
+
+	PtGetResource(
+			ABW_index_f_0_relative_variant_wnd_bird_hand_command_and_status,
+			Pt_ARG_FLAGS, &flags, 0);
+
+	if (*flags & Pt_SET) {
+		bhcs.index_f[0].profile_type
+				= lib::BIRD_HAND_MACROSTEP_POSITION_INCREMENT;
+	}
+
+	PtGetResource(
+			ABW_index_f_0_velocity_variant_wnd_bird_hand_command_and_status,
+			Pt_ARG_FLAGS, &flags, 0);
+
+	if (*flags & Pt_SET) {
+		bhcs.index_f[0].profile_type
+				= lib::BIRD_HAND_SIGLE_STEP_POSTION_INCREMENT;
+	}
+
+	return 1;
+
+}
+
