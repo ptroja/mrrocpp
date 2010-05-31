@@ -32,6 +32,9 @@
 //
 //
 
+// forward declaration
+extern void *sr_thread(void* arg);
+extern void *comm_thread(void* arg);
 
 Ui::Ui() :
 	config(NULL), all_ecp_msg(NULL), ui_msg(NULL),
@@ -1059,4 +1062,33 @@ int Ui::unblock_widget(PtWidget_t *widget) {
 	PtDamageWidget(widget);
 
 	return 1;
+}
+
+void Ui::create_threads()
+
+{
+
+	ui_sr_obj = new ui_sr_buffer();
+	ui_ecp_obj = new ui_ecp_buffer();
+
+	if (pthread_create(&sr_tid, NULL, sr_thread, NULL) != EOK) {// Y&W - utowrzenie watku serwa
+		printf(" Failed to thread sr_thread\n");
+	}
+#if defined(__QNXNTO__)
+	if (pthread_create(&ui_tid, NULL, comm_thread, NULL) != EOK) {// Y&W - utowrzenie watku serwa
+		printf(" Failed to thread comm_thread\n");
+	}
+#endif
+	irp6ot_m->create_thread();
+	irp6ot_tfg->create_thread();
+	irp6p_m->create_thread();
+	irp6p_tfg->create_thread();
+
+	conveyor->create_thread();
+	spkm->create_thread();
+	smb->create_thread();
+	shead->create_thread();
+	bird_hand->create_thread();
+	meb_tid = new feb_thread(main_eb);
+
 }

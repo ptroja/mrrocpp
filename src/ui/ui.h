@@ -269,7 +269,5 @@ public:
 // TODO: reimplement this as a singleton
 extern busy_flag communication_flag;
 
-void create_threads();
-
 #endif
 

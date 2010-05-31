@@ -152,13 +152,16 @@ int wind_conveyor_moves_init(PtWidget_t *widget, ApInfo_t *apinfo,
 				&& (ui.conveyor->is_wind_conveyor_moves_open)) {
 			if (ui.conveyor->state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
 			{
-				ui.unblock_widget(ABW_PtNumericFloat_wind_conveyor_moves_inc_pos);
+				ui.unblock_widget(
+						ABW_PtNumericFloat_wind_conveyor_moves_inc_pos);
 				ui.unblock_widget(ABW_PtButton_wind_conveyor_moves_inc_exec);
 
 				ui.unblock_widget(ABW_PtButton_wind_conveyor_moves_int_left);
 				ui.unblock_widget(ABW_PtButton_wind_conveyor_moves_int_right);
-				ui.unblock_widget(ABW_PtNumericFloat_wind_conveyor_moves_int_step);
-				ui.unblock_widget(ABW_PtNumericFloat_wind_conveyor_moves_int_pos);
+				ui.unblock_widget(
+						ABW_PtNumericFloat_wind_conveyor_moves_int_step);
+				ui.unblock_widget(
+						ABW_PtNumericFloat_wind_conveyor_moves_int_pos);
 				ui.unblock_widget(ABW_PtButton_wind_conveyor_moves_int_exec);
 
 				ui.conveyor->ui_ecp_robot->read_motors(
@@ -492,8 +495,8 @@ int EDP_conveyor_create(PtWidget_t *widget, ApInfo_t *apinfo,
 
 	//	EDP_irp6_postumentcreate_int(widget, apinfo, cbinfo);
 
-	ui.conveyor->eb.command(boost::bind(EDP_conveyor_create_int, widget, apinfo,
-			cbinfo));
+	ui.conveyor->eb.command(boost::bind(EDP_conveyor_create_int, widget,
+			apinfo, cbinfo));
 
 	return (Pt_CONTINUE);
 
@@ -529,8 +532,9 @@ int EDP_conveyor_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 					tmp2_string.c_str(), R_OK) == 0)) {
 				ui.ui_msg->message(lib::NON_FATAL_ERROR,
 						"edp_conveyor already exists");
-			} else if (ui.check_node_existence(ui.conveyor->state.edp.node_name,
-					std::string("edp_conveyor"))) {
+			} else if (ui.check_node_existence(
+					ui.conveyor->state.edp.node_name, std::string(
+							"edp_conveyor"))) {
 				ui.conveyor->state.edp.node_nr = ui.config->return_node_number(
 						ui.conveyor->state.edp.node_name.c_str());
 				{
@@ -604,7 +608,7 @@ int EDP_conveyor_slay_int(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo)
 
 {
-	int pt_res;
+
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
@@ -696,9 +700,10 @@ int pulse_ecp_conveyor(PtWidget_t *widget, ApInfo_t *apinfo,
 			// kilka sekund  (~1) na otworzenie urzadzenia
 			// zabezpieczenie przed zawieszeniem poprzez wyslanie sygnalu z opoznieniem
 			ualarm((useconds_t) (SIGALRM_TIMEOUT), 0);
-			while ((ui.conveyor->state.ecp.trigger_fd = name_open(
-					ui.conveyor->state.ecp.network_trigger_attach_point.c_str(),
-					NAME_FLAG_ATTACH_GLOBAL)) < 0) {
+			while ((ui.conveyor->state.ecp.trigger_fd
+					= name_open(
+							ui.conveyor->state.ecp.network_trigger_attach_point.c_str(),
+							NAME_FLAG_ATTACH_GLOBAL)) < 0) {
 				if (errno == EINTR)
 					break;
 				if ((tmp++) < CONNECT_RETRY)

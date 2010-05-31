@@ -50,9 +50,6 @@
 
 extern Ui ui;
 
-// forward declaration
-void *sr_thread(void* arg);
-
 #if !defined(USE_MESSIP_SRR)
 /* Local headers */
 #include "ablibs.h"
@@ -451,33 +448,4 @@ void *sr_thread(void* arg) {
 	return 0;
 }
 #endif /* USE_MESSIP_SRR */
-
-void create_threads()
-
-{
-
-	ui.ui_sr_obj = new ui_sr_buffer();
-	ui.ui_ecp_obj = new ui_ecp_buffer();
-
-	if (pthread_create(&ui.sr_tid, NULL, sr_thread, NULL) != EOK) {// Y&W - utowrzenie watku serwa
-		printf(" Failed to thread sr_thread\n");
-	}
-#if defined(__QNXNTO__)
-	if (pthread_create(&ui.ui_tid, NULL, comm_thread, NULL) != EOK) {// Y&W - utowrzenie watku serwa
-		printf(" Failed to thread comm_thread\n");
-	}
-#endif
-	ui.irp6ot_m->create_thread();
-	ui.irp6ot_tfg->create_thread();
-	ui.irp6p_m->create_thread();
-	ui.irp6p_tfg->create_thread();
-
-	ui.conveyor->create_thread();
-	ui.spkm->create_thread();
-	ui.smb->create_thread();
-	ui.shead->create_thread();
-	ui.bird_hand->create_thread();
-	ui.meb_tid = new feb_thread(ui.main_eb);
-
-}
 
