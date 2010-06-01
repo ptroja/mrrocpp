@@ -466,7 +466,8 @@ void Ui::abort_threads()
 #if defined(__QNXNTO__)
 
 	pthread_abort(ui_tid);
-	pthread_abort(sr_tid);
+
+	delete ui_sr_obj;
 	delete meb_tid;
 #endif
 }
@@ -1065,9 +1066,6 @@ void Ui::create_threads()
 	ui_sr_obj = new ui_sr_buffer(*this);
 	ui_ecp_obj = new ui_ecp_buffer(*this);
 
-	if (pthread_create(&sr_tid, NULL, sr_thread, NULL) != EOK) {// Y&W - utowrzenie watku serwa
-		printf(" Failed to thread sr_thread\n");
-	}
 #if defined(__QNXNTO__)
 	if (pthread_create(&ui_tid, NULL, comm_thread, NULL) != EOK) {// Y&W - utowrzenie watku serwa
 		printf(" Failed to thread comm_thread\n");

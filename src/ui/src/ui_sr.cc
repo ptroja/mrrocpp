@@ -41,8 +41,6 @@
 
 #include "lib/srlib.h"
 
-extern Ui ui;
-
 #if !defined(USE_MESSIP_SRR)
 /* Local headers */
 #include "ablibs.h"
@@ -51,7 +49,7 @@ extern Ui ui;
 #include <Pt.h>
 #include <Ph.h>
 
-void *sr_thread(void* arg) {
+void ui_sr_buffer::operator()() {
 	lib::set_thread_name("sr");
 
 	name_attach_t *attach;
@@ -60,7 +58,7 @@ void *sr_thread(void* arg) {
 			NAME_FLAG_ATTACH_GLOBAL)) == NULL) {
 		perror(
 				"BLAD SR ATTACH, przypuszczalnie nie uruchomiono gns, albo blad wczytywania konfiguracji");
-		return NULL;
+		return;
 	}
 	ui.is_sr_thread_loaded = true;
 	while (1) {
@@ -118,14 +116,19 @@ void *sr_thread(void* arg) {
 		}
 
 	}
-
-	return 0;
 }
+
 #endif /* USE_MESSIP_SRR */
 
 ui_sr_buffer::ui_sr_buffer(Ui& _ui) :
 	ui(_ui), cb(UI_SR_BUFFER_LENGHT) {
 
+	thread_id = new boost::thread(boost::bind(&ui_sr_buffer::operator(), this));
+}
+
+ui_sr_buffer::~ui_sr_buffer() {
+
+	delete thread_id;
 }
 
 void ui_sr_buffer::put_one_msg(const lib::sr_package_t& new_msg) {

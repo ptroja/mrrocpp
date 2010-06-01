@@ -29,6 +29,7 @@ class ui_ecp_buffer {
 private:
 
 	Ui& ui;
+	boost::thread *thread_id;
 
 public:
 	UI_ECP_COMMUNICATION_STATE communication_state;
