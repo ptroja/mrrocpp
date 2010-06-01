@@ -493,11 +493,11 @@ int EDP_conveyor_create(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	//	EDP_irp6_postumentcreate_int(widget, apinfo, cbinfo);
-
-	ui.conveyor->eb.command(boost::bind(EDP_conveyor_create_int, widget,
-			apinfo, cbinfo));
-
+	if (ui.conveyor->state.edp.state == 0) {
+		ui.conveyor->create_thread();
+		ui.conveyor->eb.command(boost::bind(EDP_conveyor_create_int, widget,
+				apinfo, cbinfo));
+	}
 	return (Pt_CONTINUE);
 
 }
@@ -597,42 +597,7 @@ int EDP_conveyor_slay(PtWidget_t *widget, ApInfo_t *apinfo,
 
 	//	EDP_irp6_postumentcreate_int(widget, apinfo, cbinfo);
 
-	ui.conveyor->eb.command(boost::bind(EDP_conveyor_slay_int, widget, apinfo,
-			cbinfo));
-
-	return (Pt_CONTINUE);
-
-}
-
-int EDP_conveyor_slay_int(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
-
-{
-
-	/* eliminate 'unreferenced' warnings */
-	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
-
-	// dla robota conveyor
-	if (ui.conveyor->state.edp.state > 0) { // jesli istnieje EDP
-		if (ui.conveyor->state.edp.reader_fd >= 0) {
-			if (name_close(ui.conveyor->state.edp.reader_fd) == -1) {
-				fprintf(stderr, "UI: EDP_conv, %s:%d, name_close(): %s\n",
-						__FILE__, __LINE__, strerror(errno));
-			}
-		}
-
-		delete ui.conveyor->ui_ecp_robot;
-		ui.conveyor->state.edp.state = 0; // edp wylaczone
-		ui.conveyor->state.edp.is_synchronised = false;
-
-		ui.conveyor->state.edp.pid = -1;
-		ui.conveyor->state.edp.reader_fd = -1;
-		ui.conveyor->close_all_windows();
-	}
-
-	// modyfikacja menu
-	ui.manage_interface();
-
+	ui.conveyor->EDP_slay_int();
 	return (Pt_CONTINUE);
 
 }

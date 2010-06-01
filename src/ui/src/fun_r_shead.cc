@@ -44,9 +44,12 @@ int EDP_shead_create(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	ui.shead->eb.command(boost::bind(EDP_shead_create_int, widget, apinfo,
-			cbinfo));
+	if (ui.shead->state.edp.state == 0) {
+		ui.shead->create_thread();
 
+		ui.shead->eb.command(boost::bind(EDP_shead_create_int, widget, apinfo,
+				cbinfo));
+	}
 	return (Pt_CONTINUE);
 
 }
@@ -149,45 +152,10 @@ int EDP_shead_slay(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	ui.shead->eb.command(
-			boost::bind(EDP_shead_slay_int, widget, apinfo, cbinfo));
+	ui.shead->EDP_slay_int();
 
 	return (Pt_CONTINUE);
 
 }
 
-int EDP_shead_slay_int(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
-
-{
-	int pt_res;
-	/* eliminate 'unreferenced' warnings */
-	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
-	// dla robota shead
-	if (ui.shead->state.edp.state > 0) { // jesli istnieje EDP
-		if (ui.shead->state.edp.reader_fd >= 0) {
-			if (name_close(ui.shead->state.edp.reader_fd) == -1) {
-				fprintf(stderr, "UI: EDP_irp6ot, %s:%d, name_close(): %s\n",
-						__FILE__, __LINE__, strerror(errno));
-			}
-		}
-		delete ui.shead->ui_ecp_robot;
-		ui.shead->state.edp.state = 0; // edp wylaczone
-		ui.shead->state.edp.is_synchronised = false;
-
-		ui.shead->state.edp.pid = -1;
-		ui.shead->state.edp.reader_fd = -1;
-		pt_res = PtEnter(0);
-		//	ui.shead->close_all_windows();
-		if (pt_res >= 0)
-			PtLeave(0);
-	}
-
-	// modyfikacja menu
-
-	ui.manage_interface();
-
-	return (Pt_CONTINUE);
-
-}
 

@@ -2530,12 +2530,11 @@ int EDP_irp6_on_track_create(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	//	EDP_irp6_on_track_create_int(widget, apinfo, cbinfo);
-
-
-	ui.irp6ot_m->eb.command(boost::bind(EDP_irp6_on_track_create_int, widget,
-			apinfo, cbinfo));
-
+	if (ui.irp6ot_m->state.edp.state == 0) {
+		ui.irp6ot_m->create_thread();
+		ui.irp6ot_m->eb.command(boost::bind(EDP_irp6_on_track_create_int,
+				widget, apinfo, cbinfo));
+	}
 	return (Pt_CONTINUE);
 
 }
@@ -2645,44 +2644,12 @@ int EDP_irp6_on_track_slay(PtWidget_t *widget, ApInfo_t *apinfo,
 
 	//	EDP_irp6_on_track_create_int(widget, apinfo, cbinfo);
 
-	ui.irp6ot_m->eb.command(boost::bind(EDP_irp6_on_track_slay_int, widget,
-			apinfo, cbinfo));
+	ui.irp6ot_m->EDP_slay_int();
 
 	return (Pt_CONTINUE);
 
 }
 
-int EDP_irp6_on_track_slay_int(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
-
-{
-
-	/* eliminate 'unreferenced' warnings */
-	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
-	// dla robota irp6_on_track
-	if (ui.irp6ot_m->state.edp.state > 0) { // jesli istnieje EDP
-		if (ui.irp6ot_m->state.edp.reader_fd >= 0) {
-			if (name_close(ui.irp6ot_m->state.edp.reader_fd) == -1) {
-				fprintf(stderr, "UI: EDP_irp6ot, %s:%d, name_close(): %s\n",
-						__FILE__, __LINE__, strerror(errno));
-			}
-		}
-		delete ui.irp6ot_m->ui_ecp_robot;
-		ui.irp6ot_m->state.edp.state = 0; // edp wylaczone
-		ui.irp6ot_m->state.edp.is_synchronised = false;
-
-		ui.irp6ot_m->state.edp.pid = -1;
-		ui.irp6ot_m->state.edp.reader_fd = -1;
-		ui.irp6ot_m->close_all_windows();
-	}
-
-	// modyfikacja menu
-
-	ui.manage_interface();
-
-	return (Pt_CONTINUE);
-
-}
 
 int pulse_reader_irp6ot_start(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo)

@@ -672,26 +672,26 @@ int init_wnd_irp6_postument_inc(PtWidget_t *widget, ApInfo_t *apinfo,
 						ui.irp6p_m->irp6p_current_pos); // Odczyt polozenia walow silnikow
 
 				PtSetResource(ABW_PtNumericFloat_wind_irp6p_motors_cur_p0,
-						Pt_ARG_NUMERIC_VALUE, &ui.irp6p_m->irp6p_current_pos[0],
-						0);
+						Pt_ARG_NUMERIC_VALUE,
+						&ui.irp6p_m->irp6p_current_pos[0], 0);
 				PtSetResource(ABW_PtNumericFloat_wind_irp6p_motors_cur_p1,
-						Pt_ARG_NUMERIC_VALUE, &ui.irp6p_m->irp6p_current_pos[1],
-						0);
+						Pt_ARG_NUMERIC_VALUE,
+						&ui.irp6p_m->irp6p_current_pos[1], 0);
 				PtSetResource(ABW_PtNumericFloat_wind_irp6p_motors_cur_p2,
-						Pt_ARG_NUMERIC_VALUE, &ui.irp6p_m->irp6p_current_pos[2],
-						0);
+						Pt_ARG_NUMERIC_VALUE,
+						&ui.irp6p_m->irp6p_current_pos[2], 0);
 				PtSetResource(ABW_PtNumericFloat_wind_irp6p_motors_cur_p3,
-						Pt_ARG_NUMERIC_VALUE, &ui.irp6p_m->irp6p_current_pos[3],
-						0);
+						Pt_ARG_NUMERIC_VALUE,
+						&ui.irp6p_m->irp6p_current_pos[3], 0);
 				PtSetResource(ABW_PtNumericFloat_wind_irp6p_motors_cur_p4,
-						Pt_ARG_NUMERIC_VALUE, &ui.irp6p_m->irp6p_current_pos[4],
-						0);
+						Pt_ARG_NUMERIC_VALUE,
+						&ui.irp6p_m->irp6p_current_pos[4], 0);
 				PtSetResource(ABW_PtNumericFloat_wind_irp6p_motors_cur_p5,
-						Pt_ARG_NUMERIC_VALUE, &ui.irp6p_m->irp6p_current_pos[5],
-						0);
+						Pt_ARG_NUMERIC_VALUE,
+						&ui.irp6p_m->irp6p_current_pos[5], 0);
 				PtSetResource(ABW_PtNumericFloat_wind_irp6p_motors_cur_p6,
-						Pt_ARG_NUMERIC_VALUE, &ui.irp6p_m->irp6p_current_pos[6],
-						0);
+						Pt_ARG_NUMERIC_VALUE,
+						&ui.irp6p_m->irp6p_current_pos[6], 0);
 
 				for (int i = 0; i < IRP6P_M_NUM_OF_SERVOS; i++)
 					ui.irp6p_m->irp6p_desired_pos[i]
@@ -965,26 +965,26 @@ int irp6p_inc_motion(PtWidget_t *widget, ApInfo_t *apinfo,
 					&& (ui.irp6p_m->is_wind_irp6p_inc_open)) {
 
 				PtSetResource(ABW_PtNumericFloat_wind_irp6p_inc_p0,
-						Pt_ARG_NUMERIC_VALUE, &ui.irp6p_m->irp6p_desired_pos[0],
-						0);
+						Pt_ARG_NUMERIC_VALUE,
+						&ui.irp6p_m->irp6p_desired_pos[0], 0);
 				PtSetResource(ABW_PtNumericFloat_wind_irp6p_inc_p1,
-						Pt_ARG_NUMERIC_VALUE, &ui.irp6p_m->irp6p_desired_pos[1],
-						0);
+						Pt_ARG_NUMERIC_VALUE,
+						&ui.irp6p_m->irp6p_desired_pos[1], 0);
 				PtSetResource(ABW_PtNumericFloat_wind_irp6p_inc_p2,
-						Pt_ARG_NUMERIC_VALUE, &ui.irp6p_m->irp6p_desired_pos[2],
-						0);
+						Pt_ARG_NUMERIC_VALUE,
+						&ui.irp6p_m->irp6p_desired_pos[2], 0);
 				PtSetResource(ABW_PtNumericFloat_wind_irp6p_inc_p3,
-						Pt_ARG_NUMERIC_VALUE, &ui.irp6p_m->irp6p_desired_pos[3],
-						0);
+						Pt_ARG_NUMERIC_VALUE,
+						&ui.irp6p_m->irp6p_desired_pos[3], 0);
 				PtSetResource(ABW_PtNumericFloat_wind_irp6p_inc_p4,
-						Pt_ARG_NUMERIC_VALUE, &ui.irp6p_m->irp6p_desired_pos[4],
-						0);
+						Pt_ARG_NUMERIC_VALUE,
+						&ui.irp6p_m->irp6p_desired_pos[4], 0);
 				PtSetResource(ABW_PtNumericFloat_wind_irp6p_inc_p5,
-						Pt_ARG_NUMERIC_VALUE, &ui.irp6p_m->irp6p_desired_pos[5],
-						0);
+						Pt_ARG_NUMERIC_VALUE,
+						&ui.irp6p_m->irp6p_desired_pos[5], 0);
 				PtSetResource(ABW_PtNumericFloat_wind_irp6p_inc_p6,
-						Pt_ARG_NUMERIC_VALUE, &ui.irp6p_m->irp6p_desired_pos[6],
-						0);
+						Pt_ARG_NUMERIC_VALUE,
+						&ui.irp6p_m->irp6p_desired_pos[6], 0);
 
 			}
 		} // end if (ui.irp6p_m->state.edp.pid!=-1)
@@ -1011,26 +1011,26 @@ int init_wnd_irp6_postument_int(PtWidget_t *widget, ApInfo_t *apinfo,
 
 				// 	ui.unblock_widget(ABW_PtPane_wind_irp6p_int_post_synchro_moves);
 				PtSetResource(ABW_PtNumericFloat_wind_irp6p_joints_cur_p1,
-						Pt_ARG_NUMERIC_VALUE, &ui.irp6p_m->irp6p_current_pos[0],
-						0);
+						Pt_ARG_NUMERIC_VALUE,
+						&ui.irp6p_m->irp6p_current_pos[0], 0);
 				PtSetResource(ABW_PtNumericFloat_wind_irp6p_joints_cur_p2,
-						Pt_ARG_NUMERIC_VALUE, &ui.irp6p_m->irp6p_current_pos[1],
-						0);
+						Pt_ARG_NUMERIC_VALUE,
+						&ui.irp6p_m->irp6p_current_pos[1], 0);
 				PtSetResource(ABW_PtNumericFloat_wind_irp6p_joints_cur_p3,
-						Pt_ARG_NUMERIC_VALUE, &ui.irp6p_m->irp6p_current_pos[2],
-						0);
+						Pt_ARG_NUMERIC_VALUE,
+						&ui.irp6p_m->irp6p_current_pos[2], 0);
 				PtSetResource(ABW_PtNumericFloat_wind_irp6p_joints_cur_p4,
-						Pt_ARG_NUMERIC_VALUE, &ui.irp6p_m->irp6p_current_pos[3],
-						0);
+						Pt_ARG_NUMERIC_VALUE,
+						&ui.irp6p_m->irp6p_current_pos[3], 0);
 				PtSetResource(ABW_PtNumericFloat_wind_irp6p_joints_cur_p5,
-						Pt_ARG_NUMERIC_VALUE, &ui.irp6p_m->irp6p_current_pos[4],
-						0);
+						Pt_ARG_NUMERIC_VALUE,
+						&ui.irp6p_m->irp6p_current_pos[4], 0);
 				PtSetResource(ABW_PtNumericFloat_wind_irp6p_joints_cur_p6,
-						Pt_ARG_NUMERIC_VALUE, &ui.irp6p_m->irp6p_current_pos[5],
-						0);
+						Pt_ARG_NUMERIC_VALUE,
+						&ui.irp6p_m->irp6p_current_pos[5], 0);
 				PtSetResource(ABW_PtNumericFloat_wind_irp6p_joints_cur_p7,
-						Pt_ARG_NUMERIC_VALUE, &ui.irp6p_m->irp6p_current_pos[6],
-						0);
+						Pt_ARG_NUMERIC_VALUE,
+						&ui.irp6p_m->irp6p_current_pos[6], 0);
 
 				for (int i = 0; i < IRP6P_M_NUM_OF_SERVOS; i++)
 					ui.irp6p_m->irp6p_desired_pos[i]
@@ -1186,26 +1186,26 @@ int irp6p_int_motion(PtWidget_t *widget, ApInfo_t *apinfo,
 			{
 
 				PtSetResource(ABW_PtNumericFloat_wind_irp6p_int_p1,
-						Pt_ARG_NUMERIC_VALUE, &ui.irp6p_m->irp6p_desired_pos[0],
-						0);
+						Pt_ARG_NUMERIC_VALUE,
+						&ui.irp6p_m->irp6p_desired_pos[0], 0);
 				PtSetResource(ABW_PtNumericFloat_wind_irp6p_int_p2,
-						Pt_ARG_NUMERIC_VALUE, &ui.irp6p_m->irp6p_desired_pos[1],
-						0);
+						Pt_ARG_NUMERIC_VALUE,
+						&ui.irp6p_m->irp6p_desired_pos[1], 0);
 				PtSetResource(ABW_PtNumericFloat_wind_irp6p_int_p3,
-						Pt_ARG_NUMERIC_VALUE, &ui.irp6p_m->irp6p_desired_pos[2],
-						0);
+						Pt_ARG_NUMERIC_VALUE,
+						&ui.irp6p_m->irp6p_desired_pos[2], 0);
 				PtSetResource(ABW_PtNumericFloat_wind_irp6p_int_p4,
-						Pt_ARG_NUMERIC_VALUE, &ui.irp6p_m->irp6p_desired_pos[3],
-						0);
+						Pt_ARG_NUMERIC_VALUE,
+						&ui.irp6p_m->irp6p_desired_pos[3], 0);
 				PtSetResource(ABW_PtNumericFloat_wind_irp6p_int_p5,
-						Pt_ARG_NUMERIC_VALUE, &ui.irp6p_m->irp6p_desired_pos[4],
-						0);
+						Pt_ARG_NUMERIC_VALUE,
+						&ui.irp6p_m->irp6p_desired_pos[4], 0);
 				PtSetResource(ABW_PtNumericFloat_wind_irp6p_int_p6,
-						Pt_ARG_NUMERIC_VALUE, &ui.irp6p_m->irp6p_desired_pos[5],
-						0);
+						Pt_ARG_NUMERIC_VALUE,
+						&ui.irp6p_m->irp6p_desired_pos[5], 0);
 				PtSetResource(ABW_PtNumericFloat_wind_irp6p_int_p7,
-						Pt_ARG_NUMERIC_VALUE, &ui.irp6p_m->irp6p_desired_pos[6],
-						0);
+						Pt_ARG_NUMERIC_VALUE,
+						&ui.irp6p_m->irp6p_desired_pos[6], 0);
 
 			}
 
@@ -1232,32 +1232,32 @@ int init_wnd_irp6_postument_xyz_euler_zyz(PtWidget_t *widget, ApInfo_t *apinfo,
 
 				PtSetResource(
 						ABW_PtNumericFloat_wind_irp6p_xyz_euler_zyz_read_p1,
-						Pt_ARG_NUMERIC_VALUE, &ui.irp6p_m->irp6p_current_pos[0],
-						0);
+						Pt_ARG_NUMERIC_VALUE,
+						&ui.irp6p_m->irp6p_current_pos[0], 0);
 				PtSetResource(
 						ABW_PtNumericFloat_wind_irp6p_xyz_euler_zyz_read_p2,
-						Pt_ARG_NUMERIC_VALUE, &ui.irp6p_m->irp6p_current_pos[1],
-						0);
+						Pt_ARG_NUMERIC_VALUE,
+						&ui.irp6p_m->irp6p_current_pos[1], 0);
 				PtSetResource(
 						ABW_PtNumericFloat_wind_irp6p_xyz_euler_zyz_read_p3,
-						Pt_ARG_NUMERIC_VALUE, &ui.irp6p_m->irp6p_current_pos[2],
-						0);
+						Pt_ARG_NUMERIC_VALUE,
+						&ui.irp6p_m->irp6p_current_pos[2], 0);
 				PtSetResource(
 						ABW_PtNumericFloat_wind_irp6p_xyz_euler_zyz_read_p4,
-						Pt_ARG_NUMERIC_VALUE, &ui.irp6p_m->irp6p_current_pos[3],
-						0);
+						Pt_ARG_NUMERIC_VALUE,
+						&ui.irp6p_m->irp6p_current_pos[3], 0);
 				PtSetResource(
 						ABW_PtNumericFloat_wind_irp6p_xyz_euler_zyz_read_p5,
-						Pt_ARG_NUMERIC_VALUE, &ui.irp6p_m->irp6p_current_pos[4],
-						0);
+						Pt_ARG_NUMERIC_VALUE,
+						&ui.irp6p_m->irp6p_current_pos[4], 0);
 				PtSetResource(
 						ABW_PtNumericFloat_wind_irp6p_xyz_euler_zyz_read_p6,
-						Pt_ARG_NUMERIC_VALUE, &ui.irp6p_m->irp6p_current_pos[5],
-						0);
+						Pt_ARG_NUMERIC_VALUE,
+						&ui.irp6p_m->irp6p_current_pos[5], 0);
 				PtSetResource(
 						ABW_PtNumericFloat_wind_irp6p_xyz_euler_zyz_read_p7,
-						Pt_ARG_NUMERIC_VALUE, &ui.irp6p_m->irp6p_current_pos[6],
-						0);
+						Pt_ARG_NUMERIC_VALUE,
+						&ui.irp6p_m->irp6p_current_pos[6], 0);
 
 				for (int i = 0; i < 7; i++)
 					ui.irp6p_m->irp6p_desired_pos[i]
@@ -1490,32 +1490,32 @@ int init_wnd_irp6_postument_xyz_angle_axis(PtWidget_t *widget,
 
 				PtSetResource(
 						ABW_PtNumericFloat_wind_irp6p_xyz_angle_axis_read_p1,
-						Pt_ARG_NUMERIC_VALUE, &ui.irp6p_m->irp6p_current_pos[0],
-						0);
+						Pt_ARG_NUMERIC_VALUE,
+						&ui.irp6p_m->irp6p_current_pos[0], 0);
 				PtSetResource(
 						ABW_PtNumericFloat_wind_irp6p_xyz_angle_axis_read_p2,
-						Pt_ARG_NUMERIC_VALUE, &ui.irp6p_m->irp6p_current_pos[1],
-						0);
+						Pt_ARG_NUMERIC_VALUE,
+						&ui.irp6p_m->irp6p_current_pos[1], 0);
 				PtSetResource(
 						ABW_PtNumericFloat_wind_irp6p_xyz_angle_axis_read_p3,
-						Pt_ARG_NUMERIC_VALUE, &ui.irp6p_m->irp6p_current_pos[2],
-						0);
+						Pt_ARG_NUMERIC_VALUE,
+						&ui.irp6p_m->irp6p_current_pos[2], 0);
 				PtSetResource(
 						ABW_PtNumericFloat_wind_irp6p_xyz_angle_axis_read_p4,
-						Pt_ARG_NUMERIC_VALUE, &ui.irp6p_m->irp6p_current_pos[3],
-						0);
+						Pt_ARG_NUMERIC_VALUE,
+						&ui.irp6p_m->irp6p_current_pos[3], 0);
 				PtSetResource(
 						ABW_PtNumericFloat_wind_irp6p_xyz_angle_axis_read_p5,
-						Pt_ARG_NUMERIC_VALUE, &ui.irp6p_m->irp6p_current_pos[4],
-						0);
+						Pt_ARG_NUMERIC_VALUE,
+						&ui.irp6p_m->irp6p_current_pos[4], 0);
 				PtSetResource(
 						ABW_PtNumericFloat_wind_irp6p_xyz_angle_axis_read_p6,
-						Pt_ARG_NUMERIC_VALUE, &ui.irp6p_m->irp6p_current_pos[5],
-						0);
+						Pt_ARG_NUMERIC_VALUE,
+						&ui.irp6p_m->irp6p_current_pos[5], 0);
 				PtSetResource(
 						ABW_PtNumericFloat_wind_irp6p_xyz_angle_axis_read_p8,
-						Pt_ARG_NUMERIC_VALUE, &ui.irp6p_m->irp6p_current_pos[6],
-						0);
+						Pt_ARG_NUMERIC_VALUE,
+						&ui.irp6p_m->irp6p_current_pos[6], 0);
 
 				for (int i = 0; i < 7; i++) {
 					ui.irp6p_m->irp6p_desired_pos[i]
@@ -1704,12 +1704,12 @@ int EDP_irp6_postument_synchronise(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	//	EDP_irp6_postumentcreate_int(widget, apinfo, cbinfo);
+	if (ui.irp6p_m->state.edp.state == 0) {
+		ui.irp6p_m->create_thread();
 
-
-	ui.irp6p_m->eb.command(boost::bind(EDP_irp6_postument_synchronise_int,
-			widget, apinfo, cbinfo));
-
+		ui.irp6p_m->eb.command(boost::bind(EDP_irp6_postument_synchronise_int,
+				widget, apinfo, cbinfo));
+	}
 	return (Pt_CONTINUE);
 
 }
@@ -2490,43 +2490,9 @@ int EDP_irp6_postument_slay(PtWidget_t *widget, ApInfo_t *apinfo,
 	//	EDP_irp6_postumentcreate_int(widget, apinfo, cbinfo);
 
 
-	ui.irp6p_m->eb.command(boost::bind(EDP_irp6_postument_slay_int, widget,
-			apinfo, cbinfo));
+	ui.irp6p_m->EDP_slay_int();
 
 	return (Pt_CONTINUE);
-
-}
-
-int EDP_irp6_postument_slay_int(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
-
-{
-
-	/* eliminate 'unreferenced' warnings */
-	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
-
-	// dla robota irp6_postument
-	if (ui.irp6p_m->state.edp.state > 0) { // jesli istnieje EDP
-		if (ui.irp6p_m->state.edp.reader_fd >= 0) {
-			if (name_close(ui.irp6p_m->state.edp.reader_fd) == -1) {
-				fprintf(stderr, "UI: EDP_irp6p, %s:%d, name_close(): %s\n",
-						__FILE__, __LINE__, strerror(errno));
-			}
-		}
-		delete ui.irp6p_m->ui_ecp_robot;
-		ui.irp6p_m->state.edp.state = 0; // edp wylaczone
-		ui.irp6p_m->state.edp.is_synchronised = false;
-
-		ui.irp6p_m->state.edp.pid = -1;
-		ui.irp6p_m->state.edp.reader_fd = -1;
-		ui.irp6p_m->close_all_windows();
-	}
-
-	// modyfikacja menu
-
-	ui.manage_interface();
-
-	return 1;
 
 }
 

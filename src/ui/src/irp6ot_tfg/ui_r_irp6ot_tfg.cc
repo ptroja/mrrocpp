@@ -222,4 +222,5 @@ int UiRobotIrp6ot_tfg::close_all_windows() {
 
 int UiRobotIrp6ot_tfg::delete_ui_ecp_robot() {
 	delete ui_ecp_robot;
+	return 1;
 }

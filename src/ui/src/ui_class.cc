@@ -465,15 +465,6 @@ void Ui::abort_threads()
 
 	pthread_abort(ui_tid);
 	pthread_abort(sr_tid);
-	irp6ot_m->abort_thread();
-	irp6ot_tfg->abort_thread();
-	irp6p_m->abort_thread();
-	irp6p_tfg->abort_thread();
-	conveyor->abort_thread();
-	spkm->abort_thread();
-	smb->abort_thread();
-	shead->abort_thread();
-
 	delete meb_tid;
 #endif
 }

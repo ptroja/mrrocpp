@@ -43,9 +43,12 @@ int EDP_smb_create(PtWidget_t *widget, ApInfo_t *apinfo,
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+	if (ui.smb->state.edp.state == 0) {
+		ui.smb->create_thread();
 
-	ui.smb->eb.command(boost::bind(EDP_smb_create_int, widget, apinfo, cbinfo));
-
+		ui.smb->eb.command(boost::bind(EDP_smb_create_int, widget, apinfo,
+				cbinfo));
+	}
 	return (Pt_CONTINUE);
 
 }
@@ -76,8 +79,9 @@ int EDP_smb_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 			tmp2_string += ui.smb->state.edp.network_resourceman_attach_point;
 
 			// sprawdzenie czy nie jest juz zarejestrowany zarzadca zasobow
-			if (((!(ui.smb->state.edp.test_mode)) && (access(tmp_string.c_str(),
-					R_OK) == 0)) || (access(tmp2_string.c_str(), R_OK) == 0)) {
+			if (((!(ui.smb->state.edp.test_mode)) && (access(
+					tmp_string.c_str(), R_OK) == 0)) || (access(
+					tmp2_string.c_str(), R_OK) == 0)) {
 				ui.ui_msg->message(lib::NON_FATAL_ERROR,
 						"edp_smb already exists");
 			} else if (ui.check_node_existence(ui.smb->state.edp.node_name,
@@ -90,10 +94,11 @@ int EDP_smb_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 					boost::unique_lock<boost::mutex> lock(
 							ui.process_creation_mtx);
 
-					ui.smb->ui_ecp_robot = new ui_tfg_and_conv_robot(*ui.config,
-							*ui.all_ecp_msg, lib::ROBOT_SMB);
+					ui.smb->ui_ecp_robot = new ui_tfg_and_conv_robot(
+							*ui.config, *ui.all_ecp_msg, lib::ROBOT_SMB);
 				}
-				ui.smb->state.edp.pid = ui.smb->ui_ecp_robot->ecp->get_EDP_pid();
+				ui.smb->state.edp.pid
+						= ui.smb->ui_ecp_robot->ecp->get_EDP_pid();
 
 				if (ui.smb->state.edp.pid < 0) {
 
@@ -148,42 +153,7 @@ int EDP_smb_slay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	ui.smb->eb.command(boost::bind(EDP_smb_slay_int, widget, apinfo, cbinfo));
-
-	return (Pt_CONTINUE);
-
-}
-
-int EDP_smb_slay_int(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
-
-{
-	int pt_res;
-	/* eliminate 'unreferenced' warnings */
-	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
-	// dla robota smb
-	if (ui.smb->state.edp.state > 0) { // jesli istnieje EDP
-		if (ui.smb->state.edp.reader_fd >= 0) {
-			if (name_close(ui.smb->state.edp.reader_fd) == -1) {
-				fprintf(stderr, "UI: EDP_irp6ot, %s:%d, name_close(): %s\n",
-						__FILE__, __LINE__, strerror(errno));
-			}
-		}
-		delete ui.smb->ui_ecp_robot;
-		ui.smb->state.edp.state = 0; // edp wylaczone
-		ui.smb->state.edp.is_synchronised = false;
-
-		ui.smb->state.edp.pid = -1;
-		ui.smb->state.edp.reader_fd = -1;
-		pt_res = PtEnter(0);
-		//	ui.smb->close_all_windows();
-		if (pt_res >= 0)
-			PtLeave(0);
-	}
-
-	// modyfikacja menu
-
-	ui.manage_interface();
+	ui.smb->EDP_slay_int();
 
 	return (Pt_CONTINUE);
 

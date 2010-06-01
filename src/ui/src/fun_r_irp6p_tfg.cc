@@ -74,9 +74,11 @@ int EDP_irp6p_tfg_create(PtWidget_t *widget, ApInfo_t *apinfo,
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
-
-	ui.irp6p_tfg->eb.command(boost::bind(EDP_irp6p_tfg_create_int, widget,
-			apinfo, cbinfo));
+	if (ui.irp6p_tfg->state.edp.state == 0) {
+		ui.irp6p_tfg->create_thread();
+		ui.irp6p_tfg->eb.command(boost::bind(EDP_irp6p_tfg_create_int, widget,
+				apinfo, cbinfo));
+	}
 
 	return (Pt_CONTINUE);
 
@@ -118,8 +120,9 @@ int EDP_irp6p_tfg_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 					ui.irp6p_tfg->state.edp.node_name, std::string(
 							"edp_irp6p_tfg"))) {
 
-				ui.irp6p_tfg->state.edp.node_nr = ui.config->return_node_number(
-						ui.irp6p_tfg->state.edp.node_name);
+				ui.irp6p_tfg->state.edp.node_nr
+						= ui.config->return_node_number(
+								ui.irp6p_tfg->state.edp.node_name);
 
 				{
 					boost::unique_lock<boost::mutex> lock(
@@ -186,43 +189,7 @@ int EDP_irp6p_tfg_slay(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	ui.irp6p_tfg->eb.command(boost::bind(EDP_irp6p_tfg_slay_int, widget, apinfo,
-			cbinfo));
-
-	return (Pt_CONTINUE);
-
-}
-
-int EDP_irp6p_tfg_slay_int(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
-
-{
-	int pt_res;
-	/* eliminate 'unreferenced' warnings */
-	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
-	// dla robota irp6p_tfg
-	if (ui.irp6p_tfg->state.edp.state > 0) { // jesli istnieje EDP
-		if (ui.irp6p_tfg->state.edp.reader_fd >= 0) {
-			if (name_close(ui.irp6p_tfg->state.edp.reader_fd) == -1) {
-				fprintf(stderr, "UI: EDP_irp6ot, %s:%d, name_close(): %s\n",
-						__FILE__, __LINE__, strerror(errno));
-			}
-		}
-		delete ui.irp6p_tfg->ui_ecp_robot;
-		ui.irp6p_tfg->state.edp.state = 0; // edp wylaczone
-		ui.irp6p_tfg->state.edp.is_synchronised = false;
-
-		ui.irp6p_tfg->state.edp.pid = -1;
-		ui.irp6p_tfg->state.edp.reader_fd = -1;
-		pt_res = PtEnter(0);
-		ui.irp6p_tfg->close_all_windows();
-		if (pt_res >= 0)
-			PtLeave(0);
-	}
-
-	// modyfikacja menu
-
-	ui.manage_interface();
+	ui.irp6p_tfg->EDP_slay_int();
 
 	return (Pt_CONTINUE);
 
@@ -320,7 +287,8 @@ int irp6p_tfg_move_to_preset_position(PtWidget_t *widget, ApInfo_t *apinfo,
 			for (int i = 0; i < IRP6P_TFG_NUM_OF_SERVOS; i++) {
 				ui.irp6p_tfg->irp6p_tfg_desired_pos[i] = 0.0;
 			}
-			ui.irp6p_tfg->eb.command(boost::bind(irp6p_tfg_execute_motor_motion));
+			ui.irp6p_tfg->eb.command(
+					boost::bind(irp6p_tfg_execute_motor_motion));
 		} else if ((((ApName(ApWidget(cbinfo))
 				== ABN_mm_irp6p_tfg_preset_position_0) || (ApName(ApWidget(
 				cbinfo)) == ABN_mm_all_robots_preset_position_0))
@@ -330,7 +298,8 @@ int irp6p_tfg_move_to_preset_position(PtWidget_t *widget, ApInfo_t *apinfo,
 				ui.irp6p_tfg->irp6p_tfg_desired_pos[i]
 						= ui.irp6p_tfg->state.edp.preset_position[0][i];
 			}
-			ui.irp6p_tfg->eb.command(boost::bind(irp6p_tfg_execute_joint_motion));
+			ui.irp6p_tfg->eb.command(
+					boost::bind(irp6p_tfg_execute_joint_motion));
 		} else if ((((ApName(ApWidget(cbinfo))
 				== ABN_mm_irp6p_tfg_preset_position_1) || (ApName(ApWidget(
 				cbinfo)) == ABN_mm_all_robots_preset_position_1))
@@ -340,7 +309,8 @@ int irp6p_tfg_move_to_preset_position(PtWidget_t *widget, ApInfo_t *apinfo,
 				ui.irp6p_tfg->irp6p_tfg_desired_pos[i]
 						= ui.irp6p_tfg->state.edp.preset_position[1][i];
 			}
-			ui.irp6p_tfg->eb.command(boost::bind(irp6p_tfg_execute_joint_motion));
+			ui.irp6p_tfg->eb.command(
+					boost::bind(irp6p_tfg_execute_joint_motion));
 		} else if ((((ApName(ApWidget(cbinfo))
 				== ABN_mm_irp6p_tfg_preset_position_2) || (ApName(ApWidget(
 				cbinfo)) == ABN_mm_all_robots_preset_position_2))
@@ -350,7 +320,8 @@ int irp6p_tfg_move_to_preset_position(PtWidget_t *widget, ApInfo_t *apinfo,
 				ui.irp6p_tfg->irp6p_tfg_desired_pos[i]
 						= ui.irp6p_tfg->state.edp.preset_position[2][i];
 			}
-			ui.irp6p_tfg->eb.command(boost::bind(irp6p_tfg_execute_joint_motion));
+			ui.irp6p_tfg->eb.command(
+					boost::bind(irp6p_tfg_execute_joint_motion));
 		}
 
 		//	ui.irp6p_tfg->ui_ecp_robot->move_motors(ui.irp6p_tfg->irp6p_tfg_desired_pos);
@@ -475,8 +446,8 @@ int irp6p_tfg_servo_algorithm_set(PtWidget_t *widget, ApInfo_t *apinfo,
 			}
 
 			// zlecenie wykonania ruchu
-			ui.irp6p_tfg->ui_ecp_robot->set_servo_algorithm(servo_alg_no_output,
-					servo_par_no_output);
+			ui.irp6p_tfg->ui_ecp_robot->set_servo_algorithm(
+					servo_alg_no_output, servo_par_no_output);
 
 		} else {
 		}
@@ -501,13 +472,16 @@ int wind_irp6p_tfg_moves_init(PtWidget_t *widget, ApInfo_t *apinfo,
 				&& (ui.irp6p_tfg->is_wind_irp6p_tfg_moves_open)) {
 			if (ui.irp6p_tfg->state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
 			{
-				ui.unblock_widget(ABW_PtNumericFloat_wind_irp6p_tfg_moves_inc_pos);
+				ui.unblock_widget(
+						ABW_PtNumericFloat_wind_irp6p_tfg_moves_inc_pos);
 				ui.unblock_widget(ABW_PtButton_wind_irp6p_tfg_moves_inc_exec);
 
 				ui.unblock_widget(ABW_PtButton_wind_irp6p_tfg_moves_int_left);
 				ui.unblock_widget(ABW_PtButton_wind_irp6p_tfg_moves_int_right);
-				ui.unblock_widget(ABW_PtNumericFloat_wind_irp6p_tfg_moves_int_step);
-				ui.unblock_widget(ABW_PtNumericFloat_wind_irp6p_tfg_moves_int_pos);
+				ui.unblock_widget(
+						ABW_PtNumericFloat_wind_irp6p_tfg_moves_int_step);
+				ui.unblock_widget(
+						ABW_PtNumericFloat_wind_irp6p_tfg_moves_int_pos);
 				ui.unblock_widget(ABW_PtButton_wind_irp6p_tfg_moves_int_exec);
 
 				ui.irp6p_tfg->ui_ecp_robot->read_motors(
@@ -532,7 +506,8 @@ int wind_irp6p_tfg_moves_init(PtWidget_t *widget, ApInfo_t *apinfo,
 
 				ui.block_widget(ABW_PtButton_wind_irp6p_tfg_moves_int_left);
 				ui.block_widget(ABW_PtButton_wind_irp6p_tfg_moves_int_right);
-				ui.block_widget(ABW_PtNumericFloat_wind_irp6p_tfg_moves_int_step);
+				ui.block_widget(
+						ABW_PtNumericFloat_wind_irp6p_tfg_moves_int_step);
 				ui.block_widget(ABW_PtNumericFloat_wind_irp6p_tfg_moves_int_pos);
 				ui.block_widget(ABW_PtButton_wind_irp6p_tfg_moves_int_exec);
 			}

@@ -43,9 +43,11 @@ int EDP_spkm_create(PtWidget_t *widget, ApInfo_t *apinfo,
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
-
-	ui.spkm->eb.command(boost::bind(EDP_spkm_create_int, widget, apinfo, cbinfo));
-
+	if (ui.spkm->state.edp.state == 0) {
+		ui.spkm->create_thread();
+		ui.spkm->eb.command(boost::bind(EDP_spkm_create_int, widget, apinfo,
+				cbinfo));
+	}
 	return (Pt_CONTINUE);
 
 }
@@ -151,43 +153,7 @@ int EDP_spkm_slay(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	ui.spkm->eb.command(boost::bind(EDP_spkm_slay_int, widget, apinfo, cbinfo));
-
-	return (Pt_CONTINUE);
-
-}
-
-int EDP_spkm_slay_int(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
-
-{
-	int pt_res;
-	/* eliminate 'unreferenced' warnings */
-	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
-	// dla robota spkm
-	if (ui.spkm->state.edp.state > 0) { // jesli istnieje EDP
-		if (ui.spkm->state.edp.reader_fd >= 0) {
-			if (name_close(ui.spkm->state.edp.reader_fd) == -1) {
-				fprintf(stderr, "UI: EDP_irp6ot, %s:%d, name_close(): %s\n",
-						__FILE__, __LINE__, strerror(errno));
-			}
-		}
-		delete ui.spkm->ui_ecp_robot;
-		ui.spkm->state.edp.state = 0; // edp wylaczone
-		ui.spkm->state.edp.is_synchronised = false;
-
-		ui.spkm->state.edp.pid = -1;
-		ui.spkm->state.edp.reader_fd = -1;
-		pt_res = PtEnter(0);
-		//	ui.spkm->close_all_windows();
-		if (pt_res >= 0)
-			PtLeave(0);
-	}
-
-	// modyfikacja menu
-
-	ui.manage_interface();
-
+	ui.spkm->EDP_slay_int();
 	return (Pt_CONTINUE);
 
 }
