@@ -3,6 +3,7 @@
 /*                                         Version 2.01  */
 
 #include "ui/src/speaker/ui_r_speaker.h"
+#include "ui/src/speaker/ui_ecp_r_speaker.h"
 #include "lib/robot_consts/speaker_const.h"
 #include "ui/ui_class.h"
 
@@ -19,8 +20,8 @@
 
 
 UiRobotSpeaker::UiRobotSpeaker(Ui& _ui) :
-	UiRobot(_ui, EDP_SPEAKER_SECTION, ECP_SPEAKER_SECTION), ui_ecp_robot(NULL),
-			is_wind_speaker_play_open(false) {
+	UiRobot(_ui, EDP_SPEAKER_SECTION, ECP_SPEAKER_SECTION),
+			is_wind_speaker_play_open(false), ui_ecp_robot(NULL) {
 
 }
 
@@ -186,4 +187,5 @@ int UiRobotSpeaker::close_all_windows() {
 
 int UiRobotSpeaker::delete_ui_ecp_robot() {
 	delete ui_ecp_robot;
+	return 1;
 }

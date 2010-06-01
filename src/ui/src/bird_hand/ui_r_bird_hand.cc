@@ -275,5 +275,6 @@ int UiRobotBirdHand::set_index_f_0_status() {
 
 int UiRobotBirdHand::delete_ui_ecp_robot() {
 	delete ui_ecp_robot;
+	return 1;
 }
 

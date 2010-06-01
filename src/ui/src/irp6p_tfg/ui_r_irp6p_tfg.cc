@@ -3,6 +3,7 @@
 /*                                         Version 2.01  */
 
 #include "ui/src/irp6p_tfg/ui_r_irp6p_tfg.h"
+#include "ui/ui_ecp_r_tfg_and_conv.h"
 #include "lib/robot_consts/irp6p_tfg_const.h"
 #include "ui/ui_class.h"
 
@@ -21,9 +22,9 @@
 
 
 UiRobotIrp6p_tfg::UiRobotIrp6p_tfg(Ui& _ui) :
-	UiRobot(_ui, EDP_IRP6P_TFG_SECTION, ECP_IRP6P_TFG_SECTION), ui_ecp_robot(NULL),
+	UiRobot(_ui, EDP_IRP6P_TFG_SECTION, ECP_IRP6P_TFG_SECTION),
 			is_wind_irp6p_tfg_moves_open(false),
-			is_wind_irp6p_tfg_servo_algorithm_open(false) {
+			is_wind_irp6p_tfg_servo_algorithm_open(false), ui_ecp_robot(NULL) {
 
 }
 

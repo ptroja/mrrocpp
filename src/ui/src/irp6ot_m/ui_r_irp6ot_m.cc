@@ -3,6 +3,7 @@
 /*                                         Version 2.01  */
 
 #include "ui/src/irp6ot_m/ui_r_irp6ot_m.h"
+#include "ui/ui_ecp_r_irp6_common.h"
 #include "lib/robot_consts/irp6ot_m_const.h"
 #include "ui/ui_class.h"
 
@@ -19,15 +20,15 @@
 
 
 UiRobotIrp6ot_m::UiRobotIrp6ot_m(Ui& _ui) :
-			UiRobot(_ui, EDP_IRP6OT_M_SECTION, ECP_IRP6OT_M_SECTION), ui_ecp_robot(
-					NULL), is_wind_irp6ot_int_open(false),
+			UiRobot(_ui, EDP_IRP6OT_M_SECTION, ECP_IRP6OT_M_SECTION), is_wind_irp6ot_int_open(false),
 			is_wind_irp6ot_inc_open(false), is_wind_irp6ot_xyz_euler_zyz_open(
 					false), is_wind_irp6ot_xyz_angle_axis_open(false),
 			is_wind_irp6ot_xyz_aa_relative_open(false),
 			is_wind_irp6ot_xyz_angle_axis_ts_open(false),
 			is_wind_irp6ot_xyz_euler_zyz_ts_open(false),
 			is_wind_irp6ot_kinematic_open(false),
-			is_wind_irp6ot_servo_algorithm_open(false) {
+			is_wind_irp6ot_servo_algorithm_open(false), ui_ecp_robot(
+					NULL) {
 
 }
 

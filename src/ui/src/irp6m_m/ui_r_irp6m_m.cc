@@ -3,6 +3,7 @@
 /*                                         Version 2.01  */
 
 #include "ui/src/irp6m_m/ui_r_irp6m_m.h"
+#include "ui/ui_ecp_r_irp6_common.h"
 #include "lib/robot_consts/irp6m_const.h"
 #include "ui/ui_class.h"
 
@@ -24,14 +25,14 @@
 
 UiRobotIrp6m_m::UiRobotIrp6m_m(Ui& _ui) :
 			UiRobot(_ui, EDP_IRP6_MECHATRONIKA_SECTION,
-					ECP_IRP6_MECHATRONIKA_SECTION), ui_ecp_robot(NULL),
+					ECP_IRP6_MECHATRONIKA_SECTION),
 			is_wind_irp6m_int_open(false), is_wind_irp6m_inc_open(false),
 			is_wind_irp6m_xyz_euler_zyz_open(false),
 			is_wind_irp6m_xyz_angle_axis_open(false),
 			is_wind_irp6m_xyz_angle_axis_ts_open(false),
 			is_wind_irp6m_xyz_euler_zyz_ts_open(false),
 			is_wind_irp6m_kinematic_open(false),
-			is_wind_irp6m_servo_algorithm_open(false) {
+			is_wind_irp6m_servo_algorithm_open(false), ui_ecp_robot(NULL) {
 
 }
 
@@ -285,5 +286,6 @@ int UiRobotIrp6m_m::close_all_windows() {
 }
 int UiRobotIrp6m_m::delete_ui_ecp_robot() {
 	delete ui_ecp_robot;
+	return 1;
 }
 

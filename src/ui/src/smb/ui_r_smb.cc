@@ -3,6 +3,7 @@
 /*                                         Version 2.01  */
 
 #include "ui/src/smb/ui_r_smb.h"
+#include "ui/ui_ecp_r_tfg_and_conv.h"
 #include "lib/robot_consts/smb_const.h"
 #include "ui/ui_class.h"
 
@@ -166,5 +167,6 @@ int UiRobotSmb::manage_interface() {
 
 int UiRobotSmb::delete_ui_ecp_robot() {
 	delete ui_ecp_robot;
+	return 1;
 }
 
