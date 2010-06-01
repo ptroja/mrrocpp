@@ -31,6 +31,7 @@
 //
 //
 
+class ui_ecp_buffer;
 
 // super klasa agregujaca porozrzucane struktury
 

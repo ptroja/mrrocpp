@@ -39,6 +39,7 @@ add_executable(ui
 	../shead/ui_r_shead.cc
 	../ui_init.cc
 	../ui_class.cc
+	../ui_ecp.cc
 	../wndFileLocationEvents.cc
 	../wndForceControlEvents.cc
 	../wndTrajectoryReproduceEvents.cc

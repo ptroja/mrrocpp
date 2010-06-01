@@ -31,12 +31,6 @@ bool ui_sr_buffer::buffer_empty() // sprawdza czy bufor jest pusty
 	return cb.empty();
 }
 
-ui_ecp_buffer::ui_ecp_buffer() :
-	synchroniser() {
-
-	communication_state = UI_ECP_AFTER_REPLY;
-}
-
 busy_flagger::busy_flagger(busy_flag & _flag) :
 	flag(_flag) {
 	flag.increment();

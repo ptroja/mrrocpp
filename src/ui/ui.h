@@ -183,20 +183,7 @@ public:
 
 /**************************** ui_sr_buffer *****************************/
 
-#define UI_SR_BUFFER_LENGHT 50
 
-class ui_ecp_buffer {
-private:
-
-public:
-	UI_ECP_COMMUNICATION_STATE communication_state;
-	lib::ECP_message ecp_to_ui_msg;
-	lib::UI_reply ui_rep;
-
-	lib::condition_synchroniser synchroniser;
-	ui_ecp_buffer();
-
-};
 
 class function_execution_buffer {
 public:
