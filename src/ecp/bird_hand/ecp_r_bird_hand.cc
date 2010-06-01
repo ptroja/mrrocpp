@@ -85,19 +85,58 @@ void robot::create_command() {
 
 	ecp_command.instruction.set_type = NOTHING_DEFINITION;
 
-	if (bird_hand_command_data_port.get(bird_hand_command_structure) == mrrocpp::lib::NewData) {
+	if (bird_hand_command_data_port.get(bird_hand_command_structure)
+			== mrrocpp::lib::NewData) {
 		ecp_command.instruction.set_type |= ARM_DEFINITION;
 
-		ecp_edp_cbuffer.bird_hand_command_structure
-				= bird_hand_command_structure;
+		ecp_edp_cbuffer.bird_hand_command_structure.motion_steps
+				= bird_hand_command_structure.motion_steps;
+		ecp_edp_cbuffer.bird_hand_command_structure.ecp_query_step
+				= bird_hand_command_structure.ecp_query_step;
+
+		for (int i = 0; i < BIRD_HAND_THUMB_F_NUM_OF_SERVOS; i++) {
+			ecp_edp_cbuffer.bird_hand_command_structure.finger[i]
+					= bird_hand_command_structure.thumb_f[i];
+		}
+
+		for (int i = 0; i < BIRD_HAND_INDEX_F_NUM_OF_SERVOS; i++) {
+			ecp_edp_cbuffer.bird_hand_command_structure.finger[i
+					+ BIRD_HAND_THUMB_F_NUM_OF_SERVOS]
+					= bird_hand_command_structure.index_f[i];
+		}
+
+		for (int i = 0; i < BIRD_HAND_RING_F_NUM_OF_SERVOS; i++) {
+			ecp_edp_cbuffer.bird_hand_command_structure.finger[i
+					+ BIRD_HAND_THUMB_F_NUM_OF_SERVOS
+					+ BIRD_HAND_RING_F_NUM_OF_SERVOS]
+					= bird_hand_command_structure.ring_f[i];
+		}
+
 		is_new_data = true;
 	}
 
-	if (bird_hand_configuration_command_data_port.get(bird_hand_configuration_command_structure) == mrrocpp::lib::NewData) {
+	if (bird_hand_configuration_command_data_port.get(
+			bird_hand_configuration_command_structure) == mrrocpp::lib::NewData) {
 		ecp_command.instruction.set_type |= ROBOT_MODEL_DEFINITION;
 
-		ecp_edp_cbuffer.bird_hand_configuration_command_structure
-				= bird_hand_configuration_command_structure;
+		for (int i = 0; i < BIRD_HAND_THUMB_F_NUM_OF_SERVOS; i++) {
+			ecp_edp_cbuffer.bird_hand_configuration_command_structure.finger[i]
+					= bird_hand_configuration_command_structure.thumb_f[i];
+		}
+
+		for (int i = 0; i < BIRD_HAND_INDEX_F_NUM_OF_SERVOS; i++) {
+			ecp_edp_cbuffer.bird_hand_configuration_command_structure.finger[i
+					+ BIRD_HAND_THUMB_F_NUM_OF_SERVOS]
+					= bird_hand_configuration_command_structure.index_f[i];
+		}
+
+		for (int i = 0; i < BIRD_HAND_RING_F_NUM_OF_SERVOS; i++) {
+			ecp_edp_cbuffer.bird_hand_configuration_command_structure.finger[i
+					+ BIRD_HAND_THUMB_F_NUM_OF_SERVOS
+					+ BIRD_HAND_RING_F_NUM_OF_SERVOS]
+					= bird_hand_configuration_command_structure.ring_f[i];
+		}
+
 		is_new_data = true;
 	}
 
@@ -127,16 +166,54 @@ void robot::get_reply() {
 
 	// generator reply generation
 	if (bird_hand_status_reply_data_request_port.is_new_request()) {
-		bird_hand_status_reply_structure
-				= edp_ecp_rbuffer.bird_hand_status_reply_structure;
+
+		for (int i = 0; i < BIRD_HAND_THUMB_F_NUM_OF_SERVOS; i++) {
+			bird_hand_status_reply_structure.thumb_f[i]
+					= edp_ecp_rbuffer.bird_hand_status_reply_structure.finger[i];
+		}
+
+		for (int i = 0; i < BIRD_HAND_INDEX_F_NUM_OF_SERVOS; i++) {
+
+			bird_hand_status_reply_structure.index_f[i]
+					= edp_ecp_rbuffer.bird_hand_status_reply_structure.finger[i
+							+ BIRD_HAND_THUMB_F_NUM_OF_SERVOS];
+
+		}
+
+		for (int i = 0; i < BIRD_HAND_RING_F_NUM_OF_SERVOS; i++) {
+			bird_hand_status_reply_structure.ring_f[i]
+					= edp_ecp_rbuffer.bird_hand_status_reply_structure.finger[i
+							+ BIRD_HAND_THUMB_F_NUM_OF_SERVOS
+							+ BIRD_HAND_RING_F_NUM_OF_SERVOS];
+
+		}
 
 		bird_hand_status_reply_data_request_port.set(
 				bird_hand_status_reply_structure);
 	}
 
 	if (bird_hand_configuration_reply_data_request_port.is_new_request()) {
-		bird_hand_configuration_reply_structure
-				= edp_ecp_rbuffer.bird_hand_configuration_reply_structure;
+
+		for (int i = 0; i < BIRD_HAND_THUMB_F_NUM_OF_SERVOS; i++) {
+			bird_hand_configuration_reply_structure.thumb_f[i]
+					= edp_ecp_rbuffer.bird_hand_configuration_reply_structure.finger[i];
+		}
+
+		for (int i = 0; i < BIRD_HAND_INDEX_F_NUM_OF_SERVOS; i++) {
+
+			bird_hand_configuration_reply_structure.index_f[i]
+					= edp_ecp_rbuffer.bird_hand_configuration_reply_structure.finger[i
+							+ BIRD_HAND_THUMB_F_NUM_OF_SERVOS];
+
+		}
+
+		for (int i = 0; i < BIRD_HAND_RING_F_NUM_OF_SERVOS; i++) {
+			bird_hand_configuration_reply_structure.ring_f[i]
+					= edp_ecp_rbuffer.bird_hand_configuration_reply_structure.finger[i
+							+ BIRD_HAND_THUMB_F_NUM_OF_SERVOS
+							+ BIRD_HAND_RING_F_NUM_OF_SERVOS];
+
+		}
 
 		bird_hand_configuration_reply_data_request_port.set(
 				bird_hand_configuration_reply_structure);

@@ -39,7 +39,7 @@ class acq_eih: public acquisition {
 private:
 	std::string smooth_path;
 	int delay_ms, robot, M;
-	double A, C, D, E;
+	double A, C, D, E, vel, acc;
 	bool calibrated;
 	struct objective_function_parameters {
 		// rotation matrix (from robot base to tool frame) - received from MRROC
