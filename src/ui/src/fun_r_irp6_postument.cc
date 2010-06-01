@@ -1704,12 +1704,9 @@ int EDP_irp6_postument_synchronise(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (ui.irp6p_m->state.edp.state == 0) {
-		ui.irp6p_m->create_thread();
+	ui.irp6p_m->eb.command(boost::bind(EDP_irp6_postument_synchronise_int,
+			widget, apinfo, cbinfo));
 
-		ui.irp6p_m->eb.command(boost::bind(EDP_irp6_postument_synchronise_int,
-				widget, apinfo, cbinfo));
-	}
 	return (Pt_CONTINUE);
 
 }
@@ -2385,10 +2382,11 @@ int EDP_irp6_postument_create(PtWidget_t *widget, ApInfo_t *apinfo,
 
 	//	EDP_irp6_postumentcreate_int(widget, apinfo, cbinfo);
 
-
-	ui.irp6p_m->eb.command(boost::bind(EDP_irp6_postument_create_int, widget,
-			apinfo, cbinfo));
-
+	if (ui.irp6p_m->state.edp.state == 0) {
+		ui.irp6p_m->create_thread();
+		ui.irp6p_m->eb.command(boost::bind(EDP_irp6_postument_create_int,
+				widget, apinfo, cbinfo));
+	}
 	return (Pt_CONTINUE);
 
 }
