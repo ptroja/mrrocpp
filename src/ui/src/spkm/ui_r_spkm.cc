@@ -161,3 +161,7 @@ int UiRobotSpkm::manage_interface() {
 	return 1;
 }
 
+int UiRobotSpkm::delete_ui_ecp_robot() {
+	delete ui_ecp_robot;
+}
+

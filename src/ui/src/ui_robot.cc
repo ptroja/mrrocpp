@@ -63,3 +63,43 @@ bool UiRobot::pulse_reader_trigger_exec_pulse() {
 
 	return false;
 }
+
+int UiRobot::close_all_windows() {
+
+	return 1;
+
+}
+
+int UiRobot::EDP_slay_int()
+
+{
+
+	// dla robota bird_hand
+	if (state.edp.state > 0) { // jesli istnieje EDP
+		if (state.edp.reader_fd >= 0) {
+			if (name_close(state.edp.reader_fd) == -1) {
+				fprintf(stderr, "UI: EDP_irp6ot, %s:%d, name_close(): %s\n",
+						__FILE__, __LINE__, strerror(errno));
+			}
+		}
+		close_all_windows();
+
+		delete_ui_ecp_robot();
+		state.edp.state = 0; // edp wylaczone
+		state.edp.is_synchronised = false;
+
+		state.edp.pid = -1;
+		state.edp.reader_fd = -1;
+
+		abort_thread();
+
+	}
+
+	// modyfikacja menu
+
+	ui.manage_interface();
+
+	return 1;
+
+}
+

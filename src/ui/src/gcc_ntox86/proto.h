@@ -767,8 +767,7 @@ int EDP_bird_hand_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
 int EDP_bird_hand_slay(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
-int EDP_bird_hand_slay_int(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo);
+int EDP_bird_hand_slay_int();
 
 int execute_wnd_bird_hand_command_and_status(PtWidget_t *widget,
 		ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo);

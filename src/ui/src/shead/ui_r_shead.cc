@@ -166,3 +166,7 @@ int UiRobotShead::manage_interface() {
 	return 1;
 }
 
+int UiRobotShead::delete_ui_ecp_robot() {
+	delete ui_ecp_robot;
+}
+

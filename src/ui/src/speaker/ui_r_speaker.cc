@@ -181,4 +181,9 @@ int UiRobotSpeaker::close_all_windows() {
 	}
 	return 1;
 
+
+}
+
+int UiRobotSpeaker::delete_ui_ecp_robot() {
+	delete ui_ecp_robot;
 }

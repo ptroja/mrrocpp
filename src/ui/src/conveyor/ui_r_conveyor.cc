@@ -245,3 +245,6 @@ int UiRobotConveyor::close_all_windows() {
 
 }
 
+int UiRobotConveyor::delete_ui_ecp_robot() {
+	delete ui_ecp_robot;
+}

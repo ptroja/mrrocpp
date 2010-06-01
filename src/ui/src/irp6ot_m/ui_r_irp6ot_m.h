@@ -53,6 +53,7 @@ public:
 			bool &wlacz_PtButton_wnd_processes_control_all_reader_stop,
 			bool &wlacz_PtButton_wnd_processes_control_all_reader_trigger);
 	int close_all_windows();
+	int delete_ui_ecp_robot();
 };
 
 #endif

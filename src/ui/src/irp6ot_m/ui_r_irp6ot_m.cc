@@ -292,3 +292,7 @@ int UiRobotIrp6ot_m::close_all_windows() {
 	return 1;
 
 }
+
+int UiRobotIrp6ot_m::delete_ui_ecp_robot() {
+	delete ui_ecp_robot;
+}

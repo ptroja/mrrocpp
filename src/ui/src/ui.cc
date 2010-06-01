@@ -125,7 +125,10 @@ feb_thread::feb_thread(function_execution_buffer & _feb) :
 }
 
 feb_thread::~feb_thread() {
+
 	thread_id->interrupt();
+
 	thread_id->join(); // join it
+
 	delete thread_id;
 }

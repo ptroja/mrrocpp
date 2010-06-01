@@ -40,6 +40,9 @@ public:
 	bool pulse_reader_start_exec_pulse(void);
 	bool pulse_reader_stop_exec_pulse(void);
 	bool pulse_reader_trigger_exec_pulse(void);
+	virtual int close_all_windows();
+	int EDP_slay_int();
+	virtual int delete_ui_ecp_robot() = 0;
 
 };
 

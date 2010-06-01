@@ -42,6 +42,7 @@ public:
 	int reload_configuration();
 	int manage_interface();
 	int close_all_windows();
+	int delete_ui_ecp_robot();
 };
 
 #endif

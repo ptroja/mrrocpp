@@ -44,8 +44,13 @@ int EDP_bird_hand_create(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	ui.bird_hand->eb.command(boost::bind(EDP_bird_hand_create_int, widget,
-			apinfo, cbinfo));
+	if (ui.bird_hand->state.edp.state == 0) {
+		ui.bird_hand->create_thread();
+
+		ui.bird_hand->eb.command(boost::bind(EDP_bird_hand_create_int, widget,
+				apinfo, cbinfo));
+
+	}
 
 	return (Pt_CONTINUE);
 
@@ -66,7 +71,6 @@ int EDP_bird_hand_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 
 		// dla robota bird_hand
 		if (ui.bird_hand->state.edp.state == 0) {
-
 			ui.bird_hand->state.edp.state = 0;
 			ui.bird_hand->state.edp.is_synchronised = false;
 
@@ -155,41 +159,7 @@ int EDP_bird_hand_slay(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	ui.bird_hand->eb.command(boost::bind(EDP_bird_hand_slay_int, widget,
-			apinfo, cbinfo));
-
-	return (Pt_CONTINUE);
-
-}
-
-int EDP_bird_hand_slay_int(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
-
-{
-
-	/* eliminate 'unreferenced' warnings */
-	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
-	// dla robota bird_hand
-	if (ui.bird_hand->state.edp.state > 0) { // jesli istnieje EDP
-		if (ui.bird_hand->state.edp.reader_fd >= 0) {
-			if (name_close(ui.bird_hand->state.edp.reader_fd) == -1) {
-				fprintf(stderr, "UI: EDP_irp6ot, %s:%d, name_close(): %s\n",
-						__FILE__, __LINE__, strerror(errno));
-			}
-		}
-		ui.bird_hand->close_all_windows();
-
-		delete ui.bird_hand->ui_ecp_robot;
-		ui.bird_hand->state.edp.state = 0; // edp wylaczone
-		ui.bird_hand->state.edp.is_synchronised = false;
-
-		ui.bird_hand->state.edp.pid = -1;
-		ui.bird_hand->state.edp.reader_fd = -1;
-	}
-
-	// modyfikacja menu
-
-	ui.manage_interface();
+	ui.bird_hand->EDP_slay_int();
 
 	return (Pt_CONTINUE);
 

@@ -31,6 +31,7 @@ public:
 	UiRobotSpkm(Ui& _ui);
 	int reload_configuration();
 	int manage_interface();
+	int delete_ui_ecp_robot();
 };
 
 #endif

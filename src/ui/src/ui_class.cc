@@ -462,6 +462,7 @@ void Ui::abort_threads()
 
 {
 #if defined(__QNXNTO__)
+
 	pthread_abort(ui_tid);
 	pthread_abort(sr_tid);
 	irp6ot_m->abort_thread();
@@ -472,7 +473,7 @@ void Ui::abort_threads()
 	spkm->abort_thread();
 	smb->abort_thread();
 	shead->abort_thread();
-	bird_hand->abort_thread();
+
 	delete meb_tid;
 #endif
 }
@@ -1079,16 +1080,7 @@ void Ui::create_threads()
 		printf(" Failed to thread comm_thread\n");
 	}
 #endif
-	irp6ot_m->create_thread();
-	irp6ot_tfg->create_thread();
-	irp6p_m->create_thread();
-	irp6p_tfg->create_thread();
 
-	conveyor->create_thread();
-	spkm->create_thread();
-	smb->create_thread();
-	shead->create_thread();
-	bird_hand->create_thread();
 	meb_tid = new feb_thread(main_eb);
 
 }
