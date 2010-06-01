@@ -11,13 +11,23 @@ else(NOT QNXNTO)
 endif(NOT QNXNTO)
 
 add_executable(ecp_t_axzb_eih
-        ecp_t_calib_axzb.cc
+	ecp_t_calib_axzb.cc
 	ecp_t_calibration.cc
 	ecp_st_acq_eih.cc
 	ecp_st_acquisition.cc
-        ecp_t_axzb_eih.cc
-        ecp_g_eihcalibration.cc
-        ecp_g_eih_nose_run.cc
+	ecp_t_axzb_eih.cc
+	ecp_g_eihcalibration.cc
+	ecp_g_eih_nose_run.cc
+)
+
+add_executable(ecp_t_axxb_eih
+	ecp_t_calib_axxb.cc
+	ecp_t_calibration.cc
+	ecp_st_acq_eih.cc
+	ecp_st_acquisition.cc
+	ecp_t_axxb_eih.cc
+	ecp_g_eihcalibration.cc
+	ecp_g_eih_nose_run.cc
 )
 
 add_executable(ecp_t_axzb_force
@@ -38,10 +48,10 @@ add_executable(ecp_t_kcz_test
 	${ECP_MPDIR}/sensor/ecp_mp_s_pcbird.cc
 )
 
-SET(EXECUTABLES ecp_t_axzb_eih ecp_t_axzb_force ecp_t_kcz_test)
+SET(EXECUTABLES ecp_t_axzb_eih ecp_t_axxb_eih ecp_t_axzb_force ecp_t_kcz_test)
 FOREACH(executable ${EXECUTABLES})
 	target_link_libraries(${executable}
-		ecp_r_irp6ot ecp_r_irp6p
+		ecp_r_irp6ot_m ecp_r_irp6p_m
 		ecp
 		${GSL_LIBRARIES}
 	)

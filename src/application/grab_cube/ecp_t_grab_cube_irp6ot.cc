@@ -3,19 +3,19 @@
 #include <unistd.h>
 #include <iostream>
 
-#include "ecp/irp6_on_track/ecp_r_irp6ot.h"
+#include "ecp/irp6ot_m/ecp_r_irp6ot_m.h"
 #include "ecp_t_grab_cube_irp6ot.h"
 
 namespace mrrocpp {
 namespace ecp {
-namespace irp6ot {
+namespace irp6ot_m {
 namespace task {
 
 //Constructors
 grab_cube::grab_cube(lib::configurator &_config) :
 	task(_config)
 {
-	ecp_m_robot = new robot(*this);
+	ecp_m_robot = new irp6ot_m::robot(*this);
 
 	smoothgen2 = new common::generator::smooth(*this, true);
 	befgen = new common::generator::bias_edp_force(*this);
@@ -102,9 +102,8 @@ void grab_cube::main_task_algorithm(void)
 namespace common {
 namespace task {
 
-task* return_created_ecp_task(lib::configurator &_config)
-{
-	return new irp6ot::task::grab_cube(_config);
+task* return_created_ecp_task(lib::configurator &_config) {
+	return new irp6ot_m::task::grab_cube(_config);
 }
 
 }

@@ -10,7 +10,7 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace irp6ot {
+namespace irp6ot_m {
 namespace generator {
 
 /** @addtogroup wii_teach
@@ -18,9 +18,8 @@ namespace generator {
  *  @{
  */
 
-class wii_absolute : public irp6ot::generator::wii
-{
-    public:
+class wii_absolute: public generator::wii {
+public:
 	/**
 	 * Tworzy generator odtwarzajacy orientacje kontrolera
 	 * @param zadanie
@@ -28,23 +27,24 @@ class wii_absolute : public irp6ot::generator::wii
 	 * @param minor_axis wartosc mniejszej polosi
 	 * @author jedrzej
 	 */
-        wii_absolute (common::task::task& _ecp_task,ecp_mp::sensor::wiimote* _wiimote);
+	wii_absolute(common::task::task& _ecp_task,
+			ecp_mp::sensor::wiimote* _wiimote);
 
-        /**
-         * Generuje pierwszy krok
-         * @author jedrzej
-         */
-        virtual bool first_step();
+	/**
+	 * Generuje pierwszy krok
+	 * @author jedrzej
+	 */
+	virtual bool first_step();
 
-        void preset_position(void);
+	void preset_position(void);
 
-        virtual void set_position(void);
+	virtual void set_position(void);
 
-    protected:
-        lib::Homog_matrix rotation_matrix;
+protected:
+	lib::Homog_matrix rotation_matrix;
 };
 
-/** @} */ // end of wii_teach
+/** @} */// end of wii_teach
 
 }
 } // namespace irp6ot

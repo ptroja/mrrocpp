@@ -6,7 +6,7 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace irp6ot {
+namespace irp6ot_m {
 namespace generator {
 
 wii_relative::wii_relative (common::task::task& _ecp_task,ecp_mp::sensor::wiimote* _wiimote) : wii(_ecp_task,_wiimote)
@@ -40,7 +40,7 @@ void wii_relative::set_position(void)
 
     homog_matrix.get_frame_tab(the_robot->ecp_command.instruction.arm.pf_def.arm_frame);
 
-    the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = nextChange[7];
+  //  the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = nextChange[7];
 }
 
 

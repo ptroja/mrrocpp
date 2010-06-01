@@ -5,10 +5,9 @@
 #include "application/wii_velocity/generator/ecp_g_wii_velocity.h"
 #include "ecp/common/generator/ecp_g_smooth.h"
 
-
 namespace mrrocpp {
 namespace ecp {
-namespace irp6ot {
+namespace irp6ot_m {
 namespace task {
 
 /** @defgroup wii_velocity Wii velocity
@@ -24,10 +23,9 @@ namespace task {
  * Odtwarza orientacje kontrolera
  * @author jkurylo
  */
-class wii_velocity: public common::task::task
-{
+class wii_velocity: public common::task::task {
 protected:
-//	ecp_wii_velocity_generator* eg;
+	//	ecp_wii_velocity_generator* eg;
 	common::generator::tff_nose_run* eg;
 public:
 	/**
@@ -44,7 +42,7 @@ public:
 	void main_task_algorithm(void);
 };
 
-/** @} */ // end of wii_velocity
+/** @} */// end of wii_velocity
 
 }
 } // namespace irp6ot

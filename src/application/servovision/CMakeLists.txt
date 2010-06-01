@@ -11,7 +11,7 @@ add_executable(ecp_objectfollower_pb_sac
 )
 
 target_link_libraries(ecp_objectfollower_pb_sac
-	ecp_r_irp6ot
+	ecp_r_irp6ot_m
 	ecp ${COMMON_LIBRARIES}
 )
 
@@ -30,8 +30,7 @@ add_executable(ecp_objectfollower_pb
 )
 
 target_link_libraries(ecp_objectfollower_pb
-	ecp_r_irp6ot
-#	ecp_r_irp6ot_m
+	ecp_r_irp6ot_m
 	ecp ${COMMON_LIBRARIES}
 )
 
@@ -49,8 +48,7 @@ add_executable(ecp_objectfollower_ib
 )
 
 target_link_libraries(ecp_objectfollower_ib
-	ecp_r_irp6ot
-#	ecp_r_irp6ot_m
+	ecp_r_irp6ot_m
 	ecp ${COMMON_LIBRARIES}
 )
 
@@ -61,7 +59,7 @@ add_executable(ecp_image_capture
 )
 
 target_link_libraries(ecp_image_capture
-	ecp_r_irp6ot
+	ecp_r_irp6ot_m
 	ecp ${COMMON_LIBRARIES}
 )
 

@@ -13,13 +13,23 @@ namespace mrrocpp {
 namespace lib {
 
 struct bird_hand_cbuffer {
-	bird_hand_command bird_hand_command_structure;
-	bird_hand_configuration bird_hand_configuration_command_structure;
+	struct {
+		int motion_steps;
+		int ecp_query_step;
+		bird_hand_single_joint_command finger[BIRD_HAND_NUM_OF_SERVOS];
+	} bird_hand_command_structure;
+	struct {
+		bird_hand_single_joint_configuration finger[BIRD_HAND_NUM_OF_SERVOS];
+	} bird_hand_configuration_command_structure;
 };
 
 struct bird_hand_rbuffer {
-	bird_hand_status bird_hand_status_reply_structure;
-	bird_hand_configuration bird_hand_configuration_reply_structure;
+	struct {
+		bird_hand_single_joint_status finger[BIRD_HAND_NUM_OF_SERVOS];
+	} bird_hand_status_reply_structure;
+	struct {
+		bird_hand_single_joint_configuration finger[BIRD_HAND_NUM_OF_SERVOS];
+	} bird_hand_configuration_reply_structure;
 }__attribute__((__packed__));
 
 #define EDP_BIRD_HAND_SECTION "[edp_bird_hand]"

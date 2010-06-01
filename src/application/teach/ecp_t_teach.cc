@@ -12,8 +12,8 @@
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 #include "lib/srlib.h"
-#include "ecp/irp6_on_track/ecp_r_irp6ot.h"
-#include "ecp/irp6_postument/ecp_r_irp6p.h"
+#include "ecp/irp6ot_m/ecp_r_irp6ot_m.h"
+#include "ecp/irp6p_m/ecp_r_irp6p_m.h"
 #include "ecp/irp6_mechatronika/ecp_r_irp6m.h"
 
 #include "application/teach/ecp_t_teach.h"
@@ -29,13 +29,13 @@ namespace task {
 // KONSTRUKTORY
 teach::teach(lib::configurator &_config) : task(_config)
 {
-    if (config.section_name == ECP_IRP6_ON_TRACK_SECTION)
+    if (config.section_name == ECP_IRP6OT_M_SECTION)
     {
-        ecp_m_robot = new irp6ot::robot (*this);
+        ecp_m_robot = new irp6ot_m::robot (*this);
     }
-    else if (config.section_name == ECP_IRP6_POSTUMENT_SECTION)
+    else if (config.section_name == ECP_IRP6P_M_SECTION)
     {
-        ecp_m_robot = new irp6p::robot (*this);
+        ecp_m_robot = new irp6p_m::robot (*this);
     }
     else if (config.section_name == ECP_IRP6_MECHATRONIKA_SECTION)
     {
@@ -56,10 +56,10 @@ void teach::main_task_algorithm(void)
 {
     switch (ecp_m_robot->robot_name)
     {
-    case lib::ROBOT_IRP6_ON_TRACK:
+    case lib::ROBOT_IRP6OT_M:
         sr_ecp_msg->message("ECP teach irp6ot");
         break;
-    case lib::ROBOT_IRP6_POSTUMENT:
+    case lib::ROBOT_IRP6P_M:
         sr_ecp_msg->message("ECP teach irp6p");
         break;
     default:

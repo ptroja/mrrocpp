@@ -99,6 +99,10 @@ extern const int ABI_wnd_irp6p_tfg_moves;
 #define ABM_wnd_irp6p_tfg_moves              &AbInternalLinks[ABI_wnd_irp6p_tfg_moves]
 extern const int ABI_wnd_irp6p_tfg_servo_algorithm;
 #define ABM_wnd_irp6p_tfg_servo_algorithm    &AbInternalLinks[ABI_wnd_irp6p_tfg_servo_algorithm]
+extern const int ABI_wnd_bird_hand_command_and_status;
+#define ABM_wnd_bird_hand_command_and_status &AbInternalLinks[ABI_wnd_bird_hand_command_and_status]
+extern const int ABI_wnd_bird_hand_configuration;
+#define ABM_wnd_bird_hand_configuration      &AbInternalLinks[ABI_wnd_bird_hand_configuration]
 
 /* 'task_config_window' Window link */
 extern const int ABN_task_config_window;
@@ -2194,6 +2198,76 @@ extern const int ABN_PtButton_wind_irp6p_tfg_moves_int_read;
 extern const int ABN_PtNumericFloat_wind_irp6p_tfg_moves_read_int_pos;
 #define ABW_PtNumericFloat_wind_irp6p_tfg_moves_read_int_pos AbGetABW( ABN_PtNumericFloat_wind_irp6p_tfg_moves_read_int_pos )
 
+/* 'wnd_bird_hand_configuration' Window link */
+extern const int ABN_wnd_bird_hand_configuration;
+#define ABW_wnd_bird_hand_configuration      AbGetABW( ABN_wnd_bird_hand_configuration )
+extern const int ABN_PtNumericFloat_wind_irp6m_motors_cur_p000;
+#define ABW_PtNumericFloat_wind_irp6m_motors_cur_p000 AbGetABW( ABN_PtNumericFloat_wind_irp6m_motors_cur_p000 )
+extern const int ABN_PtNumericFloat_wind_irp6m_inc_p000;
+#define ABW_PtNumericFloat_wind_irp6m_inc_p000 AbGetABW( ABN_PtNumericFloat_wind_irp6m_inc_p000 )
+extern const int ABN_PtLabel11000;
+#define ABW_PtLabel11000                     AbGetABW( ABN_PtLabel11000 )
+extern const int ABN_PtLabel20000;
+#define ABW_PtLabel20000                     AbGetABW( ABN_PtLabel20000 )
+extern const int ABN_PtLabel30000;
+#define ABW_PtLabel30000                     AbGetABW( ABN_PtLabel30000 )
+extern const int ABN_PtLabel40000;
+#define ABW_PtLabel40000                     AbGetABW( ABN_PtLabel40000 )
+extern const int ABN_PtLabel101000;
+#define ABW_PtLabel101000                    AbGetABW( ABN_PtLabel101000 )
+extern const int ABN_PtButton_wind_irp6m_inc_read_pos00;
+#define ABW_PtButton_wind_irp6m_inc_read_pos00 AbGetABW( ABN_PtButton_wind_irp6m_inc_read_pos00 )
+extern const int ABN_PtButton_wind_irp6m_inc_exec_move00;
+#define ABW_PtButton_wind_irp6m_inc_exec_move00 AbGetABW( ABN_PtButton_wind_irp6m_inc_exec_move00 )
+extern const int ABN_PtButton_wind_irp6m_motors_set_desired_as_current00;
+#define ABW_PtButton_wind_irp6m_motors_set_desired_as_current00 AbGetABW( ABN_PtButton_wind_irp6m_motors_set_desired_as_current00 )
+
+/* 'wnd_bird_hand_command_and_status' Window link */
+extern const int ABN_wnd_bird_hand_command_and_status;
+#define ABW_wnd_bird_hand_command_and_status AbGetABW( ABN_wnd_bird_hand_command_and_status )
+extern const int ABN_index_f_0_current_position_wnd_bird_hand_command_and_status;
+#define ABW_index_f_0_current_position_wnd_bird_hand_command_and_status AbGetABW( ABN_index_f_0_current_position_wnd_bird_hand_command_and_status )
+extern const int ABN_index_f_0_desired_position_wnd_bird_hand_command_and_status;
+#define ABW_index_f_0_desired_position_wnd_bird_hand_command_and_status AbGetABW( ABN_index_f_0_desired_position_wnd_bird_hand_command_and_status )
+extern const int ABN_PtLabel1100;
+#define ABW_PtLabel1100                      AbGetABW( ABN_PtLabel1100 )
+extern const int ABN_PtLabel2000;
+#define ABW_PtLabel2000                      AbGetABW( ABN_PtLabel2000 )
+extern const int ABN_PtLabel3000;
+#define ABW_PtLabel3000                      AbGetABW( ABN_PtLabel3000 )
+extern const int ABN_PtLabel4000;
+#define ABW_PtLabel4000                      AbGetABW( ABN_PtLabel4000 )
+extern const int ABN_PtLabel10100;
+#define ABW_PtLabel10100                     AbGetABW( ABN_PtLabel10100 )
+extern const int ABN_PtButton_wind_irp6m_inc_read_pos0;
+#define ABW_PtButton_wind_irp6m_inc_read_pos0 AbGetABW( ABN_PtButton_wind_irp6m_inc_read_pos0 )
+extern const int ABN_PtButton_wind_irp6m_inc_exec_move0;
+#define ABW_PtButton_wind_irp6m_inc_exec_move0 AbGetABW( ABN_PtButton_wind_irp6m_inc_exec_move0 )
+extern const int ABN_PtButton_wind_irp6m_motors_set_desired_as_current0;
+#define ABW_PtButton_wind_irp6m_motors_set_desired_as_current0 AbGetABW( ABN_PtButton_wind_irp6m_motors_set_desired_as_current0 )
+extern const int ABN_index_f_0_absolute_variant_wnd_bird_hand_command_and_status;
+#define ABW_index_f_0_absolute_variant_wnd_bird_hand_command_and_status AbGetABW( ABN_index_f_0_absolute_variant_wnd_bird_hand_command_and_status )
+extern const int ABN_index_f_0_velocity_variant_wnd_bird_hand_command_and_status;
+#define ABW_index_f_0_velocity_variant_wnd_bird_hand_command_and_status AbGetABW( ABN_index_f_0_velocity_variant_wnd_bird_hand_command_and_status )
+extern const int ABN_index_f_0_relative_variant_wnd_bird_hand_command_and_status;
+#define ABW_index_f_0_relative_variant_wnd_bird_hand_command_and_status AbGetABW( ABN_index_f_0_relative_variant_wnd_bird_hand_command_and_status )
+extern const int ABN_motion_steps_wnd_bird_hand_command_and_status;
+#define ABW_motion_steps_wnd_bird_hand_command_and_status AbGetABW( ABN_motion_steps_wnd_bird_hand_command_and_status )
+extern const int ABN_ecp_query_step_wnd_bird_hand_command_and_status;
+#define ABW_ecp_query_step_wnd_bird_hand_command_and_status AbGetABW( ABN_ecp_query_step_wnd_bird_hand_command_and_status )
+extern const int ABN_index_f_0_desired_torque_wnd_bird_hand_command_and_status;
+#define ABW_index_f_0_desired_torque_wnd_bird_hand_command_and_status AbGetABW( ABN_index_f_0_desired_torque_wnd_bird_hand_command_and_status )
+extern const int ABN_index_f_0_recip_of_damping_wnd_bird_hand_command_and_status;
+#define ABW_index_f_0_recip_of_damping_wnd_bird_hand_command_and_status AbGetABW( ABN_index_f_0_recip_of_damping_wnd_bird_hand_command_and_status )
+extern const int ABN_index_f_0_current_torque_wnd_bird_hand_command_and_status;
+#define ABW_index_f_0_current_torque_wnd_bird_hand_command_and_status AbGetABW( ABN_index_f_0_current_torque_wnd_bird_hand_command_and_status )
+extern const int ABN_index_f_0_meassured_current_wnd_bird_hand_command_and_status;
+#define ABW_index_f_0_meassured_current_wnd_bird_hand_command_and_status AbGetABW( ABN_index_f_0_meassured_current_wnd_bird_hand_command_and_status )
+extern const int ABN_index_f_0_limit_2_wnd_bird_hand_command_and_status;
+#define ABW_index_f_0_limit_2_wnd_bird_hand_command_and_status AbGetABW( ABN_index_f_0_limit_2_wnd_bird_hand_command_and_status )
+extern const int ABN_index_f_0_limit_1_wnd_bird_hand_command_and_status;
+#define ABW_index_f_0_limit_1_wnd_bird_hand_command_and_status AbGetABW( ABN_index_f_0_limit_1_wnd_bird_hand_command_and_status )
+
 #define AbGetABW( n ) ( AbWidgets[ n ].wgt )
 
 /* 'file_menu' Menu link */
@@ -2324,6 +2398,8 @@ extern const int ABN_mm_shead_edp_unload;
 extern const int ABN_mm_bird_hand;
 extern const int ABN_mm_bird_hand_edp_load;
 extern const int ABN_mm_bird_hand_edp_unload;
+extern const int ABN_mm_bird_hand_command;
+extern const int ABN_mm_bird_hand_configuration;
 extern const int ABN_mm_speaker;
 extern const int ABN_mm_speaker_edp_load;
 extern const int ABN_mm_speaker_edp_unload;

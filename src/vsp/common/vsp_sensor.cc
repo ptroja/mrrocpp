@@ -21,9 +21,9 @@ namespace vsp {
 namespace sensor {
 
 sensor_interface::sensor_interface (lib::configurator &_config) :
-	config(_config),
 	is_sensor_configured(false),
 	is_reading_ready(false),
+	config(_config),
 	mrrocpp_network_path(config.return_mrrocpp_network_path())
 {
 	/* Lokalizacja procesu wyswietlania komunikatow SR */

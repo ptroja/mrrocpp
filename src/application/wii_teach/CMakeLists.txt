@@ -8,7 +8,7 @@ add_executable(ecp_wii_teach
 )
 
 target_link_libraries(ecp_wii_teach
-	ecp_r_irp6ot
+	ecp_r_irp6ot_m
 	ecp
 )
 

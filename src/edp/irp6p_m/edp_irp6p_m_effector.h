@@ -22,7 +22,7 @@
 
 namespace mrrocpp {
 namespace edp {
-namespace irp6p {
+namespace irp6p_m {
 
 // Klasa reprezentujaca robota IRp-6 na postumencie.
 class effector: public common::manip_effector

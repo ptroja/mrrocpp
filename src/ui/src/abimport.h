@@ -56,7 +56,9 @@ extern ApWindowLink_t wnd_irp6ot_tfg_servo_algorithm;
 extern ApWindowLink_t wnd_irp6ot_tfg_moves;
 extern ApWindowLink_t wnd_irp6p_tfg_servo_algorithm;
 extern ApWindowLink_t wnd_irp6p_tfg_moves;
-extern ApWidget_t AbWidgets[ 999 ];
+extern ApWindowLink_t wnd_bird_hand_configuration;
+extern ApWindowLink_t wnd_bird_hand_command_and_status;
+extern ApWidget_t AbWidgets[ 1032 ];
 
 extern ApMenuLink_t file_menu;
 extern ApMenuLink_t task_menu;
@@ -397,4 +399,14 @@ int import_wnd_irp6m_xyz_angle_axis( PtWidget_t *widget, ApInfo_t *data, PtCallb
 int export_wnd_irp6m_xyz_angle_axis( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 int EDP_bird_hand_create( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 int EDP_bird_hand_slay( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int start_wnd_bird_hand_command_and_status( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int start_wnd_bird_hand_configuration( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int init_wnd_bird_hand_command_and_status( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int clear_wnd_bird_hand_command_and_status( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int copy_wnd_bird_hand_command_and_status( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int execute_wnd_bird_hand_command_and_status( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int init_wnd_bird_hand_configuration( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int copy_wnd_bird_hand_configuration( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int clear_wnd_bird_hand_configuration( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int execute_wnd_bird_hand_configuration( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 #endif
