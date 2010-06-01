@@ -40,6 +40,7 @@
 #include "ui/ui.h"
 #include "ui/ui_class.h"
 #include "ui/src/ui_ecp.h"
+#include "ui/src/ui_sr.h"
 
 #include "lib/mis_fun.h"
 #include "lib/srlib.h"

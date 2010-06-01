@@ -19,6 +19,7 @@
 // #include "ecp/common/ecp.h"
 #include "lib/com_buf.h"
 #include "ui/ui_class.h"
+#include "ui/src/ui_sr.h"
 
 /* Local headers */
 #include "ablibs.h"

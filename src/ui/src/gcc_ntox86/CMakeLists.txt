@@ -40,6 +40,7 @@ add_executable(ui
 	../ui_init.cc
 	../ui_class.cc
 	../ui_ecp.cc
+	../ui_sr.cc
 	../wndFileLocationEvents.cc
 	../wndForceControlEvents.cc
 	../wndTrajectoryReproduceEvents.cc
