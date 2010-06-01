@@ -25,7 +25,7 @@
 
 /**************************** ui_ecp_buffer *****************************/
 
-class ui_ecp_buffer {
+class ui_ecp_buffer  : public boost::noncopyable{
 private:
 
 	Ui& ui;
