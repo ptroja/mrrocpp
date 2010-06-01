@@ -96,7 +96,7 @@ const double Draughts::bkings_table[8][8] = {//blue, green kings
 /*==============================Constructor==================================*/
 //Constructors
 Draughts::Draughts(lib::configurator &_config): task(_config){
-	sensor_m[lib::SENSOR_CVFRADIA] = new fradia_sensor_board_and_draughts(this->config, "[vsp_fradia_sensor]", lib::empty_t());
+	sensor_m[lib::SENSOR_CVFRADIA] = new fradia_sensor_board_and_draughts(this->config, "[vsp_fradia_sensor]");
 	sensor_m[lib::SENSOR_CVFRADIA]->configure_sensor();
 
 	ecp_m_robot = new irp6ot_m::robot(*this); //initialization of robot

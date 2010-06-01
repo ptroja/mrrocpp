@@ -24,7 +24,7 @@ grab_cube::grab_cube(lib::configurator &_config) :
 	turner = new generator::ecp_vis_ib_eih_wrist_turner_irp6ot(*this);
 
 	sensor_m[lib::SENSOR_CVFRADIA]
-			= new fradia_sensor_tracker(this->config, "[vsp_fradia_sensor]", lib::empty_t());
+			= new fradia_sensor_tracker(this->config, "[vsp_fradia_sensor]");
 	sensor_m[lib::SENSOR_CVFRADIA]->configure_sensor();
 	tracker->sensor_m = sensor_m;
 	turner->sensor_m = sensor_m;

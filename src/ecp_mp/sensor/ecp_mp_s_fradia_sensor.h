@@ -80,7 +80,7 @@ public:
 	 * @param section_name
 	 * @param configure_message will be send by configure_sensor()
 	 */
-	fradia_sensor(mrrocpp::lib::configurator& configurator, const std::string& section_name, const CONFIGURE_T& configure_message);
+	fradia_sensor(mrrocpp::lib::configurator& configurator, const std::string& section_name, const CONFIGURE_T& configure_message = CONFIGURE_T());
 
 	/**
 	 * Closes cvFraDIA socket connection.
