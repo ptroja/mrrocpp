@@ -16,7 +16,6 @@ add_executable(ui
 	../fun_r_smb.cc
 	../fun_r_speaker.cc
 	../fun_r_spkm.cc
-	../threads.cc
 	../timer.cc
 	../ui.cc
 	../ui_ecp_r_common.cc
