@@ -1,6 +1,4 @@
-/* ! \file include/edp/ati6284/ati/xmltok.h
-    * \brief plik nag³ówkowy ATI
-    * Ostatnia modyfikacja: 04.2006 /* ATI Krzysztof Dziubek
+/*
      * Copyright (c) 1998, 1999 Thai Open Source Software Center Ltd
      *
      * The MIT License
