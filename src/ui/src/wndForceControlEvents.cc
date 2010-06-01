@@ -311,7 +311,7 @@ int FCbtnOnOffReader(PtWidget_t *widget, ApInfo_t *apinfo,
 		pulse_code = READER_STOP; // stop
 	else
 		pulse_code = READER_START;// start
-	if (MsgSendPulse(ui.irp6ot_m.state.edp.reader_fd, sched_get_priority_min(
+	if (MsgSendPulse(ui.irp6ot_m->state.edp.reader_fd, sched_get_priority_min(
 			SCHED_FIFO), pulse_code, pulse_value) == -1) {
 		perror("FCbtnOnOffReader: Send pulse to Reader failed");
 	} else {

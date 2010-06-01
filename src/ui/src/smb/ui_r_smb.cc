@@ -3,6 +3,7 @@
 /*                                         Version 2.01  */
 
 #include "ui/src/smb/ui_r_smb.h"
+#include "ui/ui_ecp_r_tfg_and_conv.h"
 #include "lib/robot_consts/smb_const.h"
 #include "ui/ui_class.h"
 
@@ -11,9 +12,6 @@
 #include "../abimport.h"
 #include "../gcc_ntox86/proto.h"
 
-extern Ui ui;
-
-// extern ui_state_def ui_state;
 
 //
 //
@@ -22,8 +20,8 @@ extern Ui ui;
 //
 
 
-UiRobotSmb::UiRobotSmb() :
-	UiRobot(EDP_SMB_SECTION, ECP_SMB_SECTION), ui_ecp_robot(NULL) {
+UiRobotSmb::UiRobotSmb(Ui& _ui) :
+	UiRobot(_ui, EDP_SMB_SECTION, ECP_SMB_SECTION), ui_ecp_robot(NULL) {
 
 }
 
@@ -164,6 +162,11 @@ int UiRobotSmb::manage_interface() {
 		break;
 	}
 
+	return 1;
+}
+
+int UiRobotSmb::delete_ui_ecp_robot() {
+	delete ui_ecp_robot;
 	return 1;
 }
 

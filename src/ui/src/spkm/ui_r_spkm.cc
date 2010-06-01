@@ -3,6 +3,7 @@
 /*                                         Version 2.01  */
 
 #include "ui/src/spkm/ui_r_spkm.h"
+#include "ui/ui_ecp_r_tfg_and_conv.h"
 #include "lib/robot_consts/spkm_const.h"
 #include "ui/ui_class.h"
 
@@ -11,10 +12,6 @@
 #include "../abimport.h"
 #include "../gcc_ntox86/proto.h"
 
-extern Ui ui;
-
-// extern ui_state_def ui_state;
-
 //
 //
 // KLASA UiRobotIrp6ot_m
@@ -22,23 +19,21 @@ extern Ui ui;
 //
 
 
-UiRobotSpkm::UiRobotSpkm() :
-	UiRobot(EDP_SPKM_SECTION, ECP_SPKM_SECTION), ui_ecp_robot(NULL) {
+UiRobotSpkm::UiRobotSpkm(Ui& _ui) :
+	UiRobot(_ui, EDP_SPKM_SECTION, ECP_SPKM_SECTION), ui_ecp_robot(NULL) {
 
 }
 
 int UiRobotSpkm::reload_configuration() {
 	// jesli IRP6 on_track ma byc aktywne
-	if ((state.is_active = ui.config->value<int> ("is_spkm_active"))
-			== 1) {
+	if ((state.is_active = ui.config->value<int> ("is_spkm_active")) == 1) {
 		// ini_con->create_ecp_spkm (ini_con->ui->ecp_spkm_section);
 		//ui_state.is_any_edp_active = true;
 		if (ui.is_mp_and_ecps_active) {
 			state.ecp.network_trigger_attach_point
 					= ui.config->return_attach_point_name(
 							lib::configurator::CONFIG_SERVER,
-							"trigger_attach_point",
-							state.ecp.section_name);
+							"trigger_attach_point", state.ecp.section_name);
 
 			state.ecp.pid = -1;
 			state.ecp.trigger_fd = -1;
@@ -54,29 +49,28 @@ int UiRobotSpkm::reload_configuration() {
 			state.edp.state = 0;
 
 			if (ui.config->exists("test_mode", state.edp.section_name))
-				state.edp.test_mode = ui.config->value<int> (
-						"test_mode", state.edp.section_name);
+				state.edp.test_mode = ui.config->value<int> ("test_mode",
+						state.edp.section_name);
 			else
 				state.edp.test_mode = 0;
 
-			state.edp.hardware_busy_attach_point = ui.config->value<
-					std::string> ("hardware_busy_attach_point",
-					state.edp.section_name);
+			state.edp.hardware_busy_attach_point
+					= ui.config->value<std::string> (
+							"hardware_busy_attach_point",
+							state.edp.section_name);
 
 			state.edp.network_resourceman_attach_point
 					= ui.config->return_attach_point_name(
 							lib::configurator::CONFIG_SERVER,
-							"resourceman_attach_point",
-							state.edp.section_name);
+							"resourceman_attach_point", state.edp.section_name);
 
 			state.edp.network_reader_attach_point
 					= ui.config->return_attach_point_name(
 							lib::configurator::CONFIG_SERVER,
-							"reader_attach_point",
-							state.edp.section_name);
+							"reader_attach_point", state.edp.section_name);
 
-			state.edp.node_name = ui.config->value<std::string> (
-					"node_name", state.edp.section_name);
+			state.edp.node_name = ui.config->value<std::string> ("node_name",
+					state.edp.section_name);
 			break;
 		case 1:
 		case 2:
@@ -165,6 +159,11 @@ int UiRobotSpkm::manage_interface() {
 		break;
 	}
 
+	return 1;
+}
+
+int UiRobotSpkm::delete_ui_ecp_robot() {
+	delete ui_ecp_robot;
 	return 1;
 }
 

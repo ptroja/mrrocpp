@@ -12,10 +12,6 @@
 #include "../abimport.h"
 #include "../gcc_ntox86/proto.h"
 
-extern Ui ui;
-
-// extern ui_state_def ui_state;
-
 //
 //
 // KLASA UiRobotBirdHand
@@ -23,9 +19,9 @@ extern Ui ui;
 //
 
 
-UiRobotBirdHand::UiRobotBirdHand() :
-	UiRobot(EDP_BIRD_HAND_SECTION, ECP_BIRD_HAND_SECTION), ui_ecp_robot(NULL),
-			is_wnd_bird_hand_command_and_status_open(false),
+UiRobotBirdHand::UiRobotBirdHand(Ui& _ui) :
+	UiRobot(_ui, EDP_BIRD_HAND_SECTION, ECP_BIRD_HAND_SECTION),
+	ui_ecp_robot(NULL), is_wnd_bird_hand_command_and_status_open(false),
 			is_wnd_bird_hand_configuration_open(false) {
 
 }
@@ -273,6 +269,12 @@ int UiRobotBirdHand::set_index_f_0_status() {
 				Pt_ARG_FLAGS, Pt_SET, 0);
 	}
 
+	return 1;
+
+}
+
+int UiRobotBirdHand::delete_ui_ecp_robot() {
+	delete ui_ecp_robot;
 	return 1;
 }
 

@@ -32,6 +32,9 @@
 //
 //
 
+// forward declaration
+extern void *sr_thread(void* arg);
+extern void *comm_thread(void* arg);
 
 Ui::Ui() :
 	config(NULL), all_ecp_msg(NULL), ui_msg(NULL),
@@ -66,6 +69,18 @@ void Ui::init() {
 	if (cwd == NULL) {
 		perror("Blad cwd w UI");
 	}
+
+	bird_hand = new UiRobotBirdHand(*this);
+	irp6ot_m = new UiRobotIrp6ot_m(*this);
+	irp6ot_tfg = new UiRobotIrp6ot_tfg(*this);
+	irp6p_m = new UiRobotIrp6p_m(*this);
+	irp6p_tfg = new UiRobotIrp6p_tfg(*this);
+	irp6m_m = new UiRobotIrp6m_m(*this);
+	conveyor = new UiRobotConveyor(*this);
+	speaker = new UiRobotSpeaker(*this);
+	spkm = new UiRobotSpkm(*this);
+	smb = new UiRobotSmb(*this);
+	shead = new UiRobotShead(*this);
 
 	ui_node_name = sysinfo.nodename;
 	is_sr_thread_loaded = false;
@@ -185,28 +200,28 @@ int Ui::manage_interface(void) {
 	// ApModifyItemState( &file_menu, AB_ITEM_DIM, NULL);
 
 	// Dla robota IRP6 ON_TRACK
-	irp6ot_m.manage_interface();
-	irp6ot_tfg.manage_interface();
+	irp6ot_m->manage_interface();
+	irp6ot_tfg->manage_interface();
 
 	// Dla robota IRP6 POSTUMENT
-	irp6p_m.manage_interface();
-	irp6p_tfg.manage_interface();
+	irp6p_m->manage_interface();
+	irp6p_tfg->manage_interface();
 
 	// Dla robota CONVEYOR
-	conveyor.manage_interface();
+	conveyor->manage_interface();
 
 	// ROBOTY SwamrmItFix
-	spkm.manage_interface();
-	smb.manage_interface();
-	shead.manage_interface();
+	spkm->manage_interface();
+	smb->manage_interface();
+	shead->manage_interface();
 
-	bird_hand.manage_interface();
+	bird_hand->manage_interface();
 
 	// Dla robota SPEAKER
-	speaker.manage_interface();
+	speaker->manage_interface();
 
 	// Dla robota IRP6 MECHATRONIKA
-	irp6m_m.manage_interface();
+	irp6m_m->manage_interface();
 
 	// zadanie
 	// kolorowanie menu all robots
@@ -344,28 +359,28 @@ int Ui::reload_whole_configuration() {
 		case UI_ALL_EDPS_NONE_EDP_LOADED:
 
 			// dla robota irp6 on_track
-			irp6ot_m.reload_configuration();
-			irp6ot_tfg.reload_configuration();
+			irp6ot_m->reload_configuration();
+			irp6ot_tfg->reload_configuration();
 
 			// dla robota irp6 postument
-			irp6p_m.reload_configuration();
-			irp6p_tfg.reload_configuration();
+			irp6p_m->reload_configuration();
+			irp6p_tfg->reload_configuration();
 
 			// dla robota conveyor
-			conveyor.reload_configuration();
+			conveyor->reload_configuration();
 
 			// ROBOTY SwamrmItFix
-			spkm.reload_configuration();
-			smb.reload_configuration();
-			shead.reload_configuration();
+			spkm->reload_configuration();
+			smb->reload_configuration();
+			shead->reload_configuration();
 
-			bird_hand.reload_configuration();
+			bird_hand->reload_configuration();
 
 			// dla robota speaker
-			speaker.reload_configuration();
+			speaker->reload_configuration();
 
 			// dla robota irp6 mechatronika
-			irp6m_m.reload_configuration();
+			irp6m_m->reload_configuration();
 			break;
 		default:
 			break;
@@ -447,17 +462,9 @@ void Ui::abort_threads()
 
 {
 #if defined(__QNXNTO__)
+
 	pthread_abort(ui_tid);
 	pthread_abort(sr_tid);
-	irp6ot_m.abort_thread();
-	irp6ot_tfg.abort_thread();
-	irp6p_m.abort_thread();
-	irp6p_tfg.abort_thread();
-	conveyor.abort_thread();
-	spkm.abort_thread();
-	smb.abort_thread();
-	shead.abort_thread();
-	bird_hand.abort_thread();
 	delete meb_tid;
 #endif
 }
@@ -618,51 +625,52 @@ int Ui::check_edps_state_and_modify_mp_state() {
 	// wyznaczenie stanu wszytkich EDP abstahujac od MP
 
 	// jesli wszytkie sa nieaktywne
-	if ((!(irp6p_m.state.is_active)) && (!(irp6ot_m.state.is_active))
-			&& (!(irp6ot_tfg.state.is_active))
-			&& (!(irp6p_tfg.state.is_active)) && (!(conveyor.state.is_active))
-			&& (!(speaker.state.is_active)) && (!(irp6m_m.state.is_active))
-			&& (!(bird_hand.state.is_active)) && (!(spkm.state.is_active))
-			&& (!(smb.state.is_active)) && (!(shead.state.is_active))) {
+	if ((!(irp6p_m->state.is_active)) && (!(irp6ot_m->state.is_active))
+			&& (!(irp6ot_tfg->state.is_active))
+			&& (!(irp6p_tfg->state.is_active))
+			&& (!(conveyor->state.is_active)) && (!(speaker->state.is_active))
+			&& (!(irp6m_m->state.is_active)) && (!(bird_hand->state.is_active))
+			&& (!(spkm->state.is_active)) && (!(smb->state.is_active))
+			&& (!(shead->state.is_active))) {
 		all_edps = UI_ALL_EDPS_NONE_EDP_ACTIVATED;
 
 		// jesli wszystkie sa zsynchronizowane
-	} else if (check_synchronised_or_inactive(irp6p_m.state)
-			&& check_synchronised_or_inactive(irp6ot_m.state)
-			&& check_synchronised_or_inactive(conveyor.state)
-			&& check_synchronised_or_inactive(speaker.state)
-			&& check_synchronised_or_inactive(irp6m_m.state)
-			&& check_synchronised_or_inactive(irp6ot_tfg.state)
-			&& check_synchronised_or_inactive(irp6p_tfg.state)
-			&& check_synchronised_or_inactive(bird_hand.state)
-			&& check_synchronised_or_inactive(spkm.state)
-			&& check_synchronised_or_inactive(smb.state)
-			&& check_synchronised_or_inactive(shead.state)) {
+	} else if (check_synchronised_or_inactive(irp6p_m->state)
+			&& check_synchronised_or_inactive(irp6ot_m->state)
+			&& check_synchronised_or_inactive(conveyor->state)
+			&& check_synchronised_or_inactive(speaker->state)
+			&& check_synchronised_or_inactive(irp6m_m->state)
+			&& check_synchronised_or_inactive(irp6ot_tfg->state)
+			&& check_synchronised_or_inactive(irp6p_tfg->state)
+			&& check_synchronised_or_inactive(bird_hand->state)
+			&& check_synchronised_or_inactive(spkm->state)
+			&& check_synchronised_or_inactive(smb->state)
+			&& check_synchronised_or_inactive(shead->state)) {
 		all_edps = UI_ALL_EDPS_LOADED_AND_SYNCHRONISED;
 
 		// jesli wszystkie sa zaladowane
-	} else if (check_loaded_or_inactive(irp6p_m.state)
-			&& check_loaded_or_inactive(irp6ot_m.state)
-			&& check_loaded_or_inactive(conveyor.state)
-			&& check_loaded_or_inactive(speaker.state)
-			&& check_loaded_or_inactive(irp6m_m.state)
-			&& check_loaded_or_inactive(irp6ot_tfg.state)
-			&& check_loaded_or_inactive(irp6p_tfg.state)
-			&& check_loaded_or_inactive(bird_hand.state)
-			&& check_loaded_or_inactive(spkm.state)
-			&& check_loaded_or_inactive(smb.state) && check_loaded_or_inactive(
-			shead.state))
+	} else if (check_loaded_or_inactive(irp6p_m->state)
+			&& check_loaded_or_inactive(irp6ot_m->state)
+			&& check_loaded_or_inactive(conveyor->state)
+			&& check_loaded_or_inactive(speaker->state)
+			&& check_loaded_or_inactive(irp6m_m->state)
+			&& check_loaded_or_inactive(irp6ot_tfg->state)
+			&& check_loaded_or_inactive(irp6p_tfg->state)
+			&& check_loaded_or_inactive(bird_hand->state)
+			&& check_loaded_or_inactive(spkm->state)
+			&& check_loaded_or_inactive(smb->state)
+			&& check_loaded_or_inactive(shead->state))
 
 	{
 		all_edps = UI_ALL_EDPS_LOADED_BUT_NOT_SYNCHRONISED;
 
 		// jesli chociaz jeden jest zaladowany
-	} else if (check_loaded(irp6p_m.state) || check_loaded(irp6ot_m.state)
-			|| check_loaded(conveyor.state) || check_loaded(speaker.state)
-			|| check_loaded(irp6m_m.state) || check_loaded(irp6ot_tfg.state)
-			|| check_loaded(irp6p_tfg.state) || check_loaded(bird_hand.state)
-			|| check_loaded(spkm.state) || check_loaded(smb.state)
-			|| check_loaded(shead.state))
+	} else if (check_loaded(irp6p_m->state) || check_loaded(irp6ot_m->state)
+			|| check_loaded(conveyor->state) || check_loaded(speaker->state)
+			|| check_loaded(irp6m_m->state) || check_loaded(irp6ot_tfg->state)
+			|| check_loaded(irp6p_tfg->state) || check_loaded(bird_hand->state)
+			|| check_loaded(spkm->state) || check_loaded(smb->state)
+			|| check_loaded(shead->state))
 
 	{
 		all_edps = UI_ALL_EDPS_THERE_IS_EDP_LOADED_BUT_NOT_ALL_ARE_LOADED;
@@ -1046,4 +1054,24 @@ int Ui::unblock_widget(PtWidget_t *widget) {
 	PtDamageWidget(widget);
 
 	return 1;
+}
+
+void Ui::create_threads()
+
+{
+
+	ui_sr_obj = new ui_sr_buffer();
+	ui_ecp_obj = new ui_ecp_buffer();
+
+	if (pthread_create(&sr_tid, NULL, sr_thread, NULL) != EOK) {// Y&W - utowrzenie watku serwa
+		printf(" Failed to thread sr_thread\n");
+	}
+#if defined(__QNXNTO__)
+	if (pthread_create(&ui_tid, NULL, comm_thread, NULL) != EOK) {// Y&W - utowrzenie watku serwa
+		printf(" Failed to thread comm_thread\n");
+	}
+#endif
+
+	meb_tid = new feb_thread(main_eb);
+
 }

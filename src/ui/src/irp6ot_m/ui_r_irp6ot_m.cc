@@ -3,6 +3,7 @@
 /*                                         Version 2.01  */
 
 #include "ui/src/irp6ot_m/ui_r_irp6ot_m.h"
+#include "ui/ui_ecp_r_irp6_common.h"
 #include "lib/robot_consts/irp6ot_m_const.h"
 #include "ui/ui_class.h"
 
@@ -11,10 +12,6 @@
 #include "../abimport.h"
 #include "../gcc_ntox86/proto.h"
 
-extern Ui ui;
-
-// extern ui_state_def ui_state;
-
 //
 //
 // KLASA UiRobotIrp6ot_m
@@ -22,16 +19,16 @@ extern Ui ui;
 //
 
 
-UiRobotIrp6ot_m::UiRobotIrp6ot_m() :
-	UiRobot(EDP_IRP6OT_M_SECTION, ECP_IRP6OT_M_SECTION), ui_ecp_robot(NULL),
-			is_wind_irp6ot_int_open(false), is_wind_irp6ot_inc_open(false),
-			is_wind_irp6ot_xyz_euler_zyz_open(false),
-			is_wind_irp6ot_xyz_angle_axis_open(false),
+UiRobotIrp6ot_m::UiRobotIrp6ot_m(Ui& _ui) :
+			UiRobot(_ui, EDP_IRP6OT_M_SECTION, ECP_IRP6OT_M_SECTION), is_wind_irp6ot_int_open(false),
+			is_wind_irp6ot_inc_open(false), is_wind_irp6ot_xyz_euler_zyz_open(
+					false), is_wind_irp6ot_xyz_angle_axis_open(false),
 			is_wind_irp6ot_xyz_aa_relative_open(false),
 			is_wind_irp6ot_xyz_angle_axis_ts_open(false),
 			is_wind_irp6ot_xyz_euler_zyz_ts_open(false),
 			is_wind_irp6ot_kinematic_open(false),
-			is_wind_irp6ot_servo_algorithm_open(false) {
+			is_wind_irp6ot_servo_algorithm_open(false), ui_ecp_robot(
+					NULL) {
 
 }
 
@@ -249,19 +246,22 @@ int UiRobotIrp6ot_m::process_control_window_irp6ot_section_init(
 	if (state.edp.state <= 0) {// edp wylaczone
 		ui.block_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_start);
 		ui.block_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_stop);
-		ui.block_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_trigger);
+		ui.block_widget(
+				ABW_PtButton_wnd_processes_control_irp6ot_reader_trigger);
 	} else {
 		if (state.edp.state == 1) {// edp wlaczone reader czeka na start
 			wlacz_PtButton_wnd_processes_control_all_reader_start = true;
 			ui.unblock_widget(
 					ABW_PtButton_wnd_processes_control_irp6ot_reader_start);
-			ui.block_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_stop);
+			ui.block_widget(
+					ABW_PtButton_wnd_processes_control_irp6ot_reader_stop);
 			ui.block_widget(
 					ABW_PtButton_wnd_processes_control_irp6ot_reader_trigger);
 		} else if (state.edp.state == 2) {// edp wlaczone reader czeka na stop
 			wlacz_PtButton_wnd_processes_control_all_reader_stop = true;
 			wlacz_PtButton_wnd_processes_control_all_reader_trigger = true;
-			ui.block_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_start);
+			ui.block_widget(
+					ABW_PtButton_wnd_processes_control_irp6ot_reader_start);
 			ui.unblock_widget(
 					ABW_PtButton_wnd_processes_control_irp6ot_reader_stop);
 			ui.unblock_widget(
@@ -294,4 +294,9 @@ int UiRobotIrp6ot_m::close_all_windows() {
 	}
 	return 1;
 
+}
+
+int UiRobotIrp6ot_m::delete_ui_ecp_robot() {
+	delete ui_ecp_robot;
+	return 1;
 }

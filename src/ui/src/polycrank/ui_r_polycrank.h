@@ -20,7 +20,7 @@
 
 // super klasa agregujaca porozrzucane struktury
 
-
+class Ui;
 class ui_irp6_common_robot;
 
 class UiRobotPolycrank: public UiRobot {
@@ -34,13 +34,10 @@ public:
 
 	ui_irp6_common_robot *ui_ecp_robot;
 
-	UiRobotPolycrank();
+	UiRobotPolycrank(Ui& _ui);
 	int reload_configuration();
 	int manage_interface();
-
-	bool pulse_reader_polycrank_start_exec_pulse();
-	bool pulse_reader_polycrank_stop_exec_pulse();
-	bool pulse_reader_polycrank_trigger_exec_pulse();
+	int delete_ui_ecp_robot();
 
 };
 
