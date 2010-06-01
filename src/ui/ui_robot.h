@@ -23,10 +23,12 @@ class Ui;
 
 
 class UiRobot {
-private:
+protected:
+
+	Ui& ui;
 
 public:
-	Ui& ui;
+
 	feb_thread* tid;
 	function_execution_buffer eb;
 

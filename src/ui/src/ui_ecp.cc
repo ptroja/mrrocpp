@@ -31,8 +31,8 @@ extern busy_flag communication_flag;
 
 extern Ui ui;
 
-ui_ecp_buffer::ui_ecp_buffer() :
-	synchroniser() {
+ui_ecp_buffer::ui_ecp_buffer(Ui& _ui) :
+	ui(_ui), synchroniser() {
 
 	communication_state = UI_ECP_AFTER_REPLY;
 }

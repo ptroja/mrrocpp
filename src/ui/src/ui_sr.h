@@ -27,12 +27,16 @@
 
 class ui_sr_buffer {
 private:
+
+	Ui& ui;
+
 	boost::circular_buffer<lib::sr_package_t> cb;
 	boost::mutex mtx; // = PTHREAD_MUTEX_INITIALIZER ;
 
+
 public:
 
-	ui_sr_buffer();
+	ui_sr_buffer(Ui& _ui);
 
 	void put_one_msg(const lib::sr_package_t& new_msg); // podniesienie semafora
 	void get_one_msg(lib::sr_package_t& new_msg); // podniesienie semafora

@@ -28,13 +28,15 @@
 class ui_ecp_buffer {
 private:
 
+	Ui& ui;
+
 public:
 	UI_ECP_COMMUNICATION_STATE communication_state;
 	lib::ECP_message ecp_to_ui_msg;
 	lib::UI_reply ui_rep;
 
 	lib::condition_synchroniser synchroniser;
-	ui_ecp_buffer();
+	ui_ecp_buffer(Ui& _ui);
 
 };
 

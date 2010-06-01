@@ -123,8 +123,8 @@ void *sr_thread(void* arg) {
 }
 #endif /* USE_MESSIP_SRR */
 
-ui_sr_buffer::ui_sr_buffer() :
-	cb(UI_SR_BUFFER_LENGHT) {
+ui_sr_buffer::ui_sr_buffer(Ui& _ui) :
+	ui(_ui), cb(UI_SR_BUFFER_LENGHT) {
 
 }
 
