@@ -3,6 +3,7 @@
 /*                                         Version 2.01  */
 
 #include "ui/src/irp6p_m/ui_r_irp6p_m.h"
+#include "ui/ui_ecp_r_irp6_common.h"
 #include "lib/robot_consts/irp6p_m_const.h"
 #include "ui/ui_class.h"
 
@@ -11,9 +12,6 @@
 #include "../abimport.h"
 #include "../gcc_ntox86/proto.h"
 
-extern Ui ui;
-
-// extern ui_state_def ui_state;
 
 //
 //
@@ -22,8 +20,8 @@ extern Ui ui;
 //
 
 
-UiRobotIrp6p_m::UiRobotIrp6p_m() :
-	UiRobot(EDP_IRP6P_M_SECTION, ECP_IRP6P_M_SECTION), ui_ecp_robot(NULL),
+UiRobotIrp6p_m::UiRobotIrp6p_m(Ui& _ui) :
+	UiRobot(_ui, EDP_IRP6P_M_SECTION, ECP_IRP6P_M_SECTION),
 			is_wind_irp6p_int_open(false), is_wind_irp6p_inc_open(false),
 			is_wind_irp6p_xyz_euler_zyz_open(false),
 			is_wind_irp6p_xyz_angle_axis_open(false),
@@ -31,7 +29,7 @@ UiRobotIrp6p_m::UiRobotIrp6p_m() :
 			is_wind_irp6p_xyz_angle_axis_ts_open(false),
 			is_wind_irp6p_xyz_euler_zyz_ts_open(false),
 			is_wind_irp6p_kinematic_open(false),
-			is_wind_irp6p_servo_algorithm_open(false) {
+			is_wind_irp6p_servo_algorithm_open(false), ui_ecp_robot(NULL) {
 
 }
 
@@ -296,4 +294,9 @@ int UiRobotIrp6p_m::close_all_windows() {
 	}
 	return 1;
 
+}
+
+int UiRobotIrp6p_m::delete_ui_ecp_robot() {
+	delete ui_ecp_robot;
+	return 1;
 }

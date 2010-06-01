@@ -43,7 +43,7 @@ int close_wnd_speaker_play(PtWidget_t *widget, ApInfo_t *apinfo,
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
-	if (ui.speaker.is_wind_speaker_play_open) {
+	if (ui.speaker->is_wind_speaker_play_open) {
 		PtDestroyWidget(ABW_wnd_speaker_play);
 	}
 
@@ -59,10 +59,10 @@ int start_wind_speaker_play(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (!ui.speaker.is_wind_speaker_play_open) // otworz okno
+	if (!ui.speaker->is_wind_speaker_play_open) // otworz okno
 	{
 		ApCreateModule(ABM_wnd_speaker_play, widget, cbinfo);
-		ui.speaker.is_wind_speaker_play_open = true;
+		ui.speaker->is_wind_speaker_play_open = true;
 	} else { // przelacz na okno
 		PtWindowToFront(ABW_wnd_speaker_play);
 	}
@@ -79,7 +79,7 @@ int clear_wind_speaker_play_flag(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	ui.speaker.is_wind_speaker_play_open = false;
+	ui.speaker->is_wind_speaker_play_open = false;
 	return (Pt_CONTINUE);
 
 }
@@ -117,26 +117,26 @@ int speaker_preset_sound_play(PtWidget_t *widget, ApInfo_t *apinfo,
 
 	try {
 
-		if (ui.speaker.state.edp.pid != -1) {
+		if (ui.speaker->state.edp.pid != -1) {
 
 			if ((ApName(ApWidget(cbinfo)) == ABN_mm_speaker_preset_sound_0)
 					|| ((cbinfo->event->type == Ph_EV_KEY) && (my_data->key_cap
 							== 0x30))) {
-				text = ui.speaker.state.edp.preset_sound_0;
+				text = ui.speaker->state.edp.preset_sound_0;
 				prosody = "neutral";
 			} else if ((ApName(ApWidget(cbinfo))
 					== ABN_mm_speaker_preset_sound_1) || ((cbinfo->event->type
 					== Ph_EV_KEY) && (my_data->key_cap == 0x31))) {
-				text = ui.speaker.state.edp.preset_sound_1;
+				text = ui.speaker->state.edp.preset_sound_1;
 				prosody = "neutral";
 			} else if ((ApName(ApWidget(cbinfo))
 					== ABN_mm_speaker_preset_sound_2) || ((cbinfo->event->type
 					== Ph_EV_KEY) && (my_data->key_cap == 0x32))) {
-				text = ui.speaker.state.edp.preset_sound_2;
+				text = ui.speaker->state.edp.preset_sound_2;
 				prosody = "neutral";
 			}
 
-			ui.speaker.ui_ecp_robot->send_command(text.c_str(), prosody.c_str());
+			ui.speaker->ui_ecp_robot->send_command(text.c_str(), prosody.c_str());
 
 		}
 
@@ -165,7 +165,7 @@ int speaker_play_exec(PtWidget_t *widget, ApInfo_t *apinfo,
 	// wychwytania ew. bledow ECP::robot
 	try {
 
-		if (ui.speaker.state.edp.pid != -1)
+		if (ui.speaker->state.edp.pid != -1)
 
 			PtGetResource(ABW_PtText_wnd_speaker_play_text_entry,
 					Pt_ARG_TEXT_STRING, &ref_local_text, 0);
@@ -174,7 +174,7 @@ int speaker_play_exec(PtWidget_t *widget, ApInfo_t *apinfo,
 		strcpy(local_text, ref_local_text);
 		strcpy(local_prosody, ref_local_prosody);
 
-		ui.speaker.ui_ecp_robot->send_command(local_text, local_prosody);
+		ui.speaker->ui_ecp_robot->send_command(local_text, local_prosody);
 
 		speaker_check_state(widget, apinfo, cbinfo);
 
@@ -194,11 +194,11 @@ int speaker_check_state(PtWidget_t *widget, ApInfo_t *apinfo,
 
 	// wychwytania ew. bledow ECP::robot
 	try {
-		if (ui.speaker.state.edp.pid != -1) {
-			ui.speaker.ui_ecp_robot->read_state(
-					&(ui.speaker.ui_ecp_robot->speaking_state));
+		if (ui.speaker->state.edp.pid != -1) {
+			ui.speaker->ui_ecp_robot->read_state(
+					&(ui.speaker->ui_ecp_robot->speaking_state));
 
-			if (ui.speaker.ui_ecp_robot->speaking_state) { // odtwarzanie w toku
+			if (ui.speaker->ui_ecp_robot->speaking_state) { // odtwarzanie w toku
 				PtSetResource(ABW_PtLabel_wnd_speaker_play_status,
 						Pt_ARG_TEXT_STRING, "busy", 0);
 			} else {
@@ -231,46 +231,46 @@ int EDP_speaker_create(PtWidget_t *widget, ApInfo_t *apinfo,
 	try { // dla bledow robot :: ECP_error
 
 		// dla robota speaker
-		if (ui.speaker.state.edp.state == 0) {
-			ui.speaker.state.edp.state = 0;
-			ui.speaker.state.edp.is_synchronised = false;
+		if (ui.speaker->state.edp.state == 0) {
+			ui.speaker->state.edp.state = 0;
+			ui.speaker->state.edp.is_synchronised = false;
 
 			std::string tmp_string("/dev/name/global/");
-			tmp_string += ui.speaker.state.edp.hardware_busy_attach_point;
+			tmp_string += ui.speaker->state.edp.hardware_busy_attach_point;
 
 			std::string tmp2_string("/dev/name/global/");
 			tmp2_string
-					+= ui.speaker.state.edp.network_resourceman_attach_point;
+					+= ui.speaker->state.edp.network_resourceman_attach_point;
 
 			// sprawdzeie czy nie jest juz zarejestrowany zarzadca zasobow
-			if (((!(ui.speaker.state.edp.test_mode)) && (access(
+			if (((!(ui.speaker->state.edp.test_mode)) && (access(
 					tmp_string.c_str(), R_OK) == 0)) || (access(
 					tmp2_string.c_str(), R_OK) == 0)) {
 				ui.ui_msg->message("edp_speaker already exists");
 
-			} else if (ui.check_node_existence(ui.speaker.state.edp.node_name,
+			} else if (ui.check_node_existence(ui.speaker->state.edp.node_name,
 					std::string("edp_speaker"))) {
 
-				ui.speaker.state.edp.node_nr = ui.config->return_node_number(
-						ui.speaker.state.edp.node_name);
+				ui.speaker->state.edp.node_nr = ui.config->return_node_number(
+						ui.speaker->state.edp.node_name);
 
-				ui.speaker.ui_ecp_robot = new ui_speaker_robot(
-						&ui.speaker.state.edp, *ui.config, *ui.all_ecp_msg);
-				ui.speaker.state.edp.pid
-						= ui.speaker.ui_ecp_robot->get_EDP_pid();
+				ui.speaker->ui_ecp_robot = new ui_speaker_robot(
+						&ui.speaker->state.edp, *ui.config, *ui.all_ecp_msg);
+				ui.speaker->state.edp.pid
+						= ui.speaker->ui_ecp_robot->get_EDP_pid();
 
-				if (ui.speaker.state.edp.pid < 0) {
-					ui.speaker.state.edp.state = 0;
+				if (ui.speaker->state.edp.pid < 0) {
+					ui.speaker->state.edp.state = 0;
 					fprintf(stderr, "EDP spawn failed: %s\n", strerror(errno));
-					delete ui.speaker.ui_ecp_robot;
+					delete ui.speaker->ui_ecp_robot;
 				} else { // jesli spawn sie powiodl
 
-					ui.speaker.state.edp.state = 1;
+					ui.speaker->state.edp.state = 1;
 
 					/*
 					 tmp = 0;
 					 // kilka sekund  (~1) na otworzenie urzadzenia
-					 while((ui.speaker.state.edp.reader_fd = name_open(ini_con->edp_speaker->network_reader_attach_point,
+					 while((ui.speaker->state.edp.reader_fd = name_open(ini_con->edp_speaker->network_reader_attach_point,
 					 NAME_FLAG_ATTACH_GLOBAL))  < 0)
 					 if((tmp++)<20)
 					 delay(50);
@@ -280,8 +280,8 @@ int EDP_speaker_create(PtWidget_t *widget, ApInfo_t *apinfo,
 					 };
 					 */
 
-					//ui.speaker.state.edp.state=1;// edp wlaczone reader czeka na start
-					ui.speaker.state.edp.is_synchronised = true;
+					//ui.speaker->state.edp.state=1;// edp wlaczone reader czeka na start
+					ui.speaker->state.edp.is_synchronised = true;
 				}
 			}
 		}
@@ -304,20 +304,20 @@ int EDP_speaker_slay(PtWidget_t *widget, ApInfo_t *apinfo,
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
 	// dla robota speaker
-	if (ui.speaker.state.edp.state > 0) { // jesli istnieje EDP
-		if (ui.speaker.state.edp.reader_fd >= 0) {
-			if (name_close(ui.speaker.state.edp.reader_fd) == -1) {
+	if (ui.speaker->state.edp.state > 0) { // jesli istnieje EDP
+		if (ui.speaker->state.edp.reader_fd >= 0) {
+			if (name_close(ui.speaker->state.edp.reader_fd) == -1) {
 				fprintf(stderr, "UI: EDP_speaker, %s:%d, name_close(): %s\n",
 						__FILE__, __LINE__, strerror(errno));
 			}
 		}
 
-		delete ui.speaker.ui_ecp_robot;
-		ui.speaker.state.edp.state = 0; // edp wylaczone
-		ui.speaker.state.edp.is_synchronised = false;
+		delete ui.speaker->ui_ecp_robot;
+		ui.speaker->state.edp.state = 0; // edp wylaczone
+		ui.speaker->state.edp.is_synchronised = false;
 
-		ui.speaker.state.edp.pid = -1;
-		ui.speaker.state.edp.reader_fd = -1;
+		ui.speaker->state.edp.pid = -1;
+		ui.speaker->state.edp.reader_fd = -1;
 
 		close_wnd_speaker_play(NULL, NULL, NULL);
 
@@ -338,7 +338,7 @@ int pulse_reader_speaker_start(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (ui.speaker.pulse_reader_start_exec_pulse())
+	if (ui.speaker->pulse_reader_start_exec_pulse())
 		process_control_window_init(widget, apinfo, cbinfo);
 
 	return (Pt_CONTINUE);
@@ -353,7 +353,7 @@ int pulse_reader_speaker_stop(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (ui.speaker.pulse_reader_stop_exec_pulse())
+	if (ui.speaker->pulse_reader_stop_exec_pulse())
 		process_control_window_init(widget, apinfo, cbinfo);
 
 	return (Pt_CONTINUE);
@@ -368,7 +368,7 @@ int pulse_reader_speaker_trigger(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (ui.speaker.pulse_reader_trigger_exec_pulse())
+	if (ui.speaker->pulse_reader_trigger_exec_pulse())
 		process_control_window_init(widget, apinfo, cbinfo);
 
 	return (Pt_CONTINUE);
@@ -386,15 +386,15 @@ int pulse_ecp_speaker(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (ui.speaker.state.edp.is_synchronised > 0) { // o ile ECP dziala (sprawdzanie poprzez dzialanie odpowiedniego EDP)
-		if (ui.speaker.state.ecp.trigger_fd < 0) {
+	if (ui.speaker->state.edp.is_synchronised > 0) { // o ile ECP dziala (sprawdzanie poprzez dzialanie odpowiedniego EDP)
+		if (ui.speaker->state.ecp.trigger_fd < 0) {
 
 			short tmp = 0;
 			// kilka sekund  (~1) na otworzenie urzadzenia
 			// zabezpieczenie przed zawieszeniem poprzez wyslanie sygnalu z opoznieniem
 			ualarm((useconds_t) (SIGALRM_TIMEOUT), 0);
-			while ((ui.speaker.state.ecp.trigger_fd = name_open(
-					ui.speaker.state.ecp.network_trigger_attach_point.c_str(),
+			while ((ui.speaker->state.ecp.trigger_fd = name_open(
+					ui.speaker->state.ecp.network_trigger_attach_point.c_str(),
 					NAME_FLAG_ATTACH_GLOBAL)) < 0) {
 				if (errno == EINTR)
 					break;
@@ -408,8 +408,8 @@ int pulse_ecp_speaker(PtWidget_t *widget, ApInfo_t *apinfo,
 			ualarm((useconds_t) (0), 0);
 		}
 
-		if (ui.speaker.state.ecp.trigger_fd >= 0) {
-			if (MsgSendPulse(ui.speaker.state.ecp.trigger_fd,
+		if (ui.speaker->state.ecp.trigger_fd >= 0) {
+			if (MsgSendPulse(ui.speaker->state.ecp.trigger_fd,
 					sched_get_priority_min(SCHED_FIFO), pulse_code, pulse_value)
 					== -1) {
 

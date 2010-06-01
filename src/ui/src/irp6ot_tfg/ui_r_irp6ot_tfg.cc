@@ -3,6 +3,7 @@
 /*                                         Version 2.01  */
 
 #include "ui/src/irp6ot_tfg/ui_r_irp6ot_tfg.h"
+#include "ui/ui_ecp_r_tfg_and_conv.h"
 #include "lib/robot_consts/irp6ot_tfg_const.h"
 #include "ui/ui_class.h"
 
@@ -11,10 +12,6 @@
 #include "../abimport.h"
 #include "../gcc_ntox86/proto.h"
 
-extern Ui ui;
-
-// extern ui_state_def ui_state;
-
 //
 //
 // KLASA UiRobotIrp6ot_tfg
@@ -22,10 +19,10 @@ extern Ui ui;
 //
 
 
-UiRobotIrp6ot_tfg::UiRobotIrp6ot_tfg() :
-			UiRobot(EDP_IRP6OT_TFG_SECTION, ECP_IRP6OT_TFG_SECTION), ui_ecp_robot(
-					NULL), is_wind_irp6ot_tfg_moves_open(false),
-			is_wind_irp6ot_tfg_servo_algorithm_open(false) {
+UiRobotIrp6ot_tfg::UiRobotIrp6ot_tfg(Ui& _ui) :
+			UiRobot(_ui, EDP_IRP6OT_TFG_SECTION, ECP_IRP6OT_TFG_SECTION), is_wind_irp6ot_tfg_moves_open(
+					false), is_wind_irp6ot_tfg_servo_algorithm_open(false),
+			ui_ecp_robot(NULL) {
 
 }
 
@@ -206,8 +203,6 @@ int UiRobotIrp6ot_tfg::manage_interface() {
 	return 1;
 }
 
-
-
 int UiRobotIrp6ot_tfg::close_all_windows() {
 
 	int pt_res = PtEnter(0);
@@ -220,4 +215,9 @@ int UiRobotIrp6ot_tfg::close_all_windows() {
 	}
 	return 1;
 
+}
+
+int UiRobotIrp6ot_tfg::delete_ui_ecp_robot() {
+	delete ui_ecp_robot;
+	return 1;
 }

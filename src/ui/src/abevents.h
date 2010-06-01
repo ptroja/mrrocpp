@@ -1102,7 +1102,7 @@ static const ApEventLink_t AbLinks_wnd_bird_hand_command_and_status[] = {
 	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_irp6m_inc_read_pos0", 2009, init_wnd_bird_hand_command_and_status, 0, 0, 0, 0, },
 	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_irp6m_inc_exec_move0", 2009, execute_wnd_bird_hand_command_and_status, 0, 0, 0, 0, },
 	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_irp6m_inc_exec_move0", 2009, init_wnd_bird_hand_command_and_status, 0, 0, 0, 0, },
-	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_irp6m_motors_set_desired_as_current0", 1012, copy_wnd_bird_hand_command_and_status, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_irp6m_motors_set_desired_as_current0", 2009, copy_wnd_bird_hand_command_and_status, 0, 0, 0, 0, },
 	{ 0 }
 	};
 

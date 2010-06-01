@@ -198,8 +198,6 @@ public:
 
 };
 
-void UI_close(void);
-
 class function_execution_buffer {
 public:
 	typedef boost::function<int()> command_function_t;
@@ -270,9 +268,6 @@ public:
 
 // TODO: reimplement this as a singleton
 extern busy_flag communication_flag;
-
-void create_threads();
-void abort_threads();
 
 #endif
 

@@ -103,17 +103,17 @@ public:
 
 
 	// The Ui robots
-	UiRobotBirdHand bird_hand;
-	UiRobotIrp6ot_m irp6ot_m;
-	UiRobotIrp6ot_tfg irp6ot_tfg;
-	UiRobotIrp6p_m irp6p_m;
-	UiRobotIrp6p_tfg irp6p_tfg;
-	UiRobotIrp6m_m irp6m_m;
-	UiRobotConveyor conveyor;
-	UiRobotSpeaker speaker;
-	UiRobotSpkm spkm;
-	UiRobotSmb smb;
-	UiRobotShead shead;
+	UiRobotBirdHand *bird_hand;
+	UiRobotIrp6ot_m *irp6ot_m;
+	UiRobotIrp6ot_tfg *irp6ot_tfg;
+	UiRobotIrp6p_m *irp6p_m;
+	UiRobotIrp6p_tfg *irp6p_tfg;
+	UiRobotIrp6m_m *irp6m_m;
+	UiRobotConveyor *conveyor;
+	UiRobotSpeaker *speaker;
+	UiRobotSpkm *spkm;
+	UiRobotSmb *smb;
+	UiRobotShead *shead;
 
 	Ui();
 	void UI_close(void);
@@ -143,6 +143,7 @@ public:
 	int unset_toggle_button(PtWidget_t *widget);
 	int block_widget(PtWidget_t *widget);
 	int unblock_widget(PtWidget_t *widget);
+	void create_threads();
 
 };
 

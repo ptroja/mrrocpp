@@ -3,6 +3,7 @@
 /*                                         Version 2.01  */
 
 #include "ui/src/irp6p_tfg/ui_r_irp6p_tfg.h"
+#include "ui/ui_ecp_r_tfg_and_conv.h"
 #include "lib/robot_consts/irp6p_tfg_const.h"
 #include "ui/ui_class.h"
 
@@ -11,9 +12,7 @@
 #include "../abimport.h"
 #include "../gcc_ntox86/proto.h"
 
-extern Ui ui;
 
-// extern ui_state_def ui_state;
 
 //
 //
@@ -22,10 +21,10 @@ extern Ui ui;
 //
 
 
-UiRobotIrp6p_tfg::UiRobotIrp6p_tfg() :
-	UiRobot(EDP_IRP6P_TFG_SECTION, ECP_IRP6P_TFG_SECTION), ui_ecp_robot(NULL),
+UiRobotIrp6p_tfg::UiRobotIrp6p_tfg(Ui& _ui) :
+	UiRobot(_ui, EDP_IRP6P_TFG_SECTION, ECP_IRP6P_TFG_SECTION),
 			is_wind_irp6p_tfg_moves_open(false),
-			is_wind_irp6p_tfg_servo_algorithm_open(false) {
+			is_wind_irp6p_tfg_servo_algorithm_open(false), ui_ecp_robot(NULL) {
 
 }
 
@@ -214,6 +213,13 @@ int UiRobotIrp6p_tfg::close_all_windows() {
 	if (pt_res >= 0) {
 		PtLeave(0);
 	}
+	return 1;
+
+}
+
+
+int UiRobotIrp6p_tfg::delete_ui_ecp_robot() {
+	delete ui_ecp_robot;
 	return 1;
 
 }

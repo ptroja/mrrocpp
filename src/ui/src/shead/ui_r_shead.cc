@@ -3,6 +3,7 @@
 /*                                         Version 2.01  */
 
 #include "ui/src/shead/ui_r_shead.h"
+#include "ui/ui_ecp_r_tfg_and_conv.h"
 #include "lib/robot_consts/shead_const.h"
 #include "ui/ui_class.h"
 
@@ -11,10 +12,6 @@
 #include "../abimport.h"
 #include "../gcc_ntox86/proto.h"
 
-extern Ui ui;
-
-// extern ui_state_def ui_state;
-
 //
 //
 // KLASA UiRobotIrp6ot_m
@@ -22,8 +19,8 @@ extern Ui ui;
 //
 
 
-UiRobotShead::UiRobotShead() :
-	UiRobot(EDP_SHEAD_SECTION, ECP_SHEAD_SECTION), ui_ecp_robot(NULL) {
+UiRobotShead::UiRobotShead(Ui& _ui) :
+	UiRobot(_ui, EDP_SHEAD_SECTION, ECP_SHEAD_SECTION), ui_ecp_robot(NULL) {
 
 }
 
@@ -167,6 +164,11 @@ int UiRobotShead::manage_interface() {
 		break;
 	}
 
+	return 1;
+}
+
+int UiRobotShead::delete_ui_ecp_robot() {
+	delete ui_ecp_robot;
 	return 1;
 }
 
