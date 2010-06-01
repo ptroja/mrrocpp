@@ -218,6 +218,18 @@ int copy_wnd_bird_hand_command_and_status(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
+	double* tmp_double;
+
+	PtGetResource(
+			ABW_index_f_0_current_position_wnd_bird_hand_command_and_status,
+			Pt_ARG_NUMERIC_VALUE, &tmp_double, 0);
+
+	double set_double = *tmp_double;
+
+	PtSetResource(
+			ABW_index_f_0_desired_position_wnd_bird_hand_command_and_status,
+			Pt_ARG_NUMERIC_VALUE, &set_double, 0);
+
 	return (Pt_CONTINUE);
 
 }

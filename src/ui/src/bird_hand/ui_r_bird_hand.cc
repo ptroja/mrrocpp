@@ -257,13 +257,75 @@ int UiRobotBirdHand::set_index_f_0_status() {
 			Pt_ARG_NUMERIC_VALUE, &bhsrs.index_f[0].meassured_current, 0);
 
 	if (bhsrs.index_f[0].lower_limit_of_absolute_position) {
-
 		ui.set_toggle_button(
 				ABW_index_f_0_limit_1_wnd_bird_hand_command_and_status);
 
 	} else {
 		ui.unset_toggle_button(
 				ABW_index_f_0_limit_1_wnd_bird_hand_command_and_status);
+	}
+
+	if (bhsrs.index_f[0].lower_limit_of_absolute_value_of_desired_torque) {
+		ui.set_toggle_button(
+				ABW_index_f_0_limit_2_wnd_bird_hand_command_and_status);
+
+	} else {
+		ui.unset_toggle_button(
+				ABW_index_f_0_limit_2_wnd_bird_hand_command_and_status);
+	}
+
+	if (bhsrs.index_f[0].upper_limit_of_absolute_position) {
+		ui.set_toggle_button(
+				ABW_index_f_0_limit_3_wnd_bird_hand_command_and_status);
+
+	} else {
+		ui.unset_toggle_button(
+				ABW_index_f_0_limit_3_wnd_bird_hand_command_and_status);
+	}
+
+	if (bhsrs.index_f[0].upper_limit_of_absolute_value_of_computed_position_increment) {
+		ui.set_toggle_button(
+				ABW_index_f_0_limit_4_wnd_bird_hand_command_and_status);
+
+	} else {
+		ui.unset_toggle_button(
+				ABW_index_f_0_limit_4_wnd_bird_hand_command_and_status);
+	}
+
+	if (bhsrs.index_f[0].upper_limit_of_absolute_value_of_desired_position_increment) {
+		ui.set_toggle_button(
+				ABW_index_f_0_limit_5_wnd_bird_hand_command_and_status);
+
+	} else {
+		ui.unset_toggle_button(
+				ABW_index_f_0_limit_5_wnd_bird_hand_command_and_status);
+	}
+
+	if (bhsrs.index_f[0].upper_limit_of_absolute_value_of_desired_torque) {
+		ui.set_toggle_button(
+				ABW_index_f_0_limit_6_wnd_bird_hand_command_and_status);
+
+	} else {
+		ui.unset_toggle_button(
+				ABW_index_f_0_limit_6_wnd_bird_hand_command_and_status);
+	}
+
+	if (bhsrs.index_f[0].upper_limit_of_absolute_value_of_meassured_torque) {
+		ui.set_toggle_button(
+				ABW_index_f_0_limit_7_wnd_bird_hand_command_and_status);
+
+	} else {
+		ui.unset_toggle_button(
+				ABW_index_f_0_limit_7_wnd_bird_hand_command_and_status);
+	}
+
+	if (bhsrs.index_f[0].upper_limit_of_meassured_current) {
+		ui.set_toggle_button(
+				ABW_index_f_0_limit_8_wnd_bird_hand_command_and_status);
+
+	} else {
+		ui.unset_toggle_button(
+				ABW_index_f_0_limit_8_wnd_bird_hand_command_and_status);
 	}
 
 	return 1;
