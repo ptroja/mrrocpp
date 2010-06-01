@@ -38,6 +38,9 @@ protected:
 
 	lib::Homog_matrix G_T_E_desired;
 	lib::Homog_matrix E_T_C;
+
+	int max_steps_without_reading;
+	int steps_without_reading;
 };
 
 /** @} */

@@ -274,7 +274,7 @@ void fradia_sensor <CONFIGURE_T, READING_T, INITIATE_T>::configure_sensor()
 		throw std::runtime_error("Failed to load FraDIA task \"" + fradia_task + "\"");
 	}
 
-	//	logger::log_dbg("fradia_sensor::configure_sensor() end\n");
+	logger::log_dbg("fradia_sensor::configure_sensor() end\n");
 }
 
 template <typename CONFIGURE_T, typename READING_T, typename INITIATE_T>

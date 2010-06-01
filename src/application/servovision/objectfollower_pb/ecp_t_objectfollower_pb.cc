@@ -30,11 +30,11 @@ ecp_t_objectfollower_pb::ecp_t_objectfollower_pb(mrrocpp::lib::configurator& con
 
 	Eigen::Matrix <double, 3, 1> p1, p2;
 	p1(0, 0) = 0.6;
-	p1(1, 0) = -0.2;
+	p1(1, 0) = -0.3;
 	p1(2, 0) = 0.1;
 
-	p2(0, 0) = 0.97;
-	p2(1, 0) = 0.2;
+	p2(0, 0) = 0.98;
+	p2(1, 0) = 0.3;
 	p2(2, 0) = 0.3;
 
 	shared_ptr <position_constraint> cube(new cubic_constraint(p1, p2));
