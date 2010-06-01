@@ -1,6 +1,6 @@
 # object follower - PB - SAC
 add_executable(ecp_objectfollower_pb_sac
-    objectfollower_pb_sac/ecp_t_objectfollower_pb_sac.cpp
+    objectfollower_pb_sac/ecp_t_objectfollower_pb_sac.cc
     pb_sac_visual_servo.cc
     pb_visual_servo.cc
     visual_servo.cc
