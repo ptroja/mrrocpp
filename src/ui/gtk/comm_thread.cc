@@ -161,14 +161,14 @@ void *comm_thread(void* arg)
 				// wybor ilosci dostepnych opcji w zaleznosci od wartosci ui.ui_ecp_obj->ecp_to_ui_msg.nr_of_options
 
 				if (ui.ui_ecp_obj->ecp_to_ui_msg.nr_of_options == 2) {
-					block_widget(ABW_PtButton_wind_choose_option_3);
-					block_widget(ABW_PtButton_wind_choose_option_4);
+					ui.block_widget(ABW_PtButton_wind_choose_option_3);
+					ui.block_widget(ABW_PtButton_wind_choose_option_4);
 				} else if (ui.ui_ecp_obj->ecp_to_ui_msg.nr_of_options == 3) {
-					unblock_widget(ABW_PtButton_wind_choose_option_3);
-					block_widget(ABW_PtButton_wind_choose_option_4);
+					ui.unblock_widget(ABW_PtButton_wind_choose_option_3);
+					ui.block_widget(ABW_PtButton_wind_choose_option_4);
 				} else if (ui.ui_ecp_obj->ecp_to_ui_msg.nr_of_options == 4) {
-					unblock_widget(ABW_PtButton_wind_choose_option_3);
-					unblock_widget(ABW_PtButton_wind_choose_option_4);
+					ui.unblock_widget(ABW_PtButton_wind_choose_option_3);
+					ui.unblock_widget(ABW_PtButton_wind_choose_option_4);
 				}
 
 				PtLeave(0);

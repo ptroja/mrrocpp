@@ -294,16 +294,16 @@ ApWindowLink_t wnd_irp6p_tfg_moves = {
 	AbLinks_wnd_irp6p_tfg_moves, 984, 19
 	};
 
-ApWindowLink_t wnd_bird_hand_command_and_status = {
-	"wnd_bird_hand_command_and_status.wgtw",
-	&AbContext,
-	NULL, 999, 0
-	};
-
 ApWindowLink_t wnd_bird_hand_configuration = {
 	"wnd_bird_hand_configuration.wgtw",
 	&AbContext,
-	NULL, 1022, 0
+	AbLinks_wnd_bird_hand_configuration, 999, 9
+	};
+
+ApWindowLink_t wnd_bird_hand_command_and_status = {
+	"wnd_bird_hand_command_and_status.wgtw",
+	&AbContext,
+	AbLinks_wnd_bird_hand_command_and_status, 1010, 10
 	};
 
 static ApItem_t ApItems_file_menu[ 2 ] = {
@@ -319,7 +319,7 @@ ApMenuLink_t file_menu = {
 	ApItems_file_menu,
 	& AbContext,
 	AbLinks_file_menu,
-	1045, 1, 1
+	1032, 1, 1
 	};
 
 static ApItem_t ApItems_task_menu[ 6 ] = {
@@ -339,7 +339,7 @@ ApMenuLink_t task_menu = {
 	ApItems_task_menu,
 	& AbContext,
 	AbLinks_task_menu,
-	1047, 4, 5
+	1034, 4, 5
 	};
 
 static ApItem_t ApItems_help_menu[ 2 ] = {
@@ -355,7 +355,7 @@ ApMenuLink_t help_menu = {
 	ApItems_help_menu,
 	& AbContext,
 	AbLinks_help_menu,
-	1053, 1, 1
+	1040, 1, 1
 	};
 
 static ApItem_t ApItems_special_menu[ 5 ] = {
@@ -374,7 +374,7 @@ ApMenuLink_t special_menu = {
 	ApItems_special_menu,
 	& AbContext,
 	AbLinks_special_menu,
-	1055, 3, 4
+	1042, 3, 4
 	};
 
 static ApItem_t ApItems_all_robots_menu[ 11 ] = {
@@ -399,10 +399,10 @@ ApMenuLink_t all_robots_menu = {
 	ApItems_all_robots_menu,
 	& AbContext,
 	AbLinks_all_robots_menu,
-	1060, 8, 10
+	1047, 8, 10
 	};
 
-static ApItem_t ApItems_robot_menu[ 139 ] = {
+static ApItem_t ApItems_robot_menu[ 142 ] = {
 	{ 1, 2, 0, NULL, 1, "mm_irp6_on_track", "Irp6-on-&Track", NULL },
 	{ 2, 1, 0, NULL, 0, "mm_irp6_on_track_edp_load", "EDP &Load", NULL },
 	{ 2, 1, 0, NULL, 0, "mm_irp6_on_track_edp_unload", "EDP &Unload", NULL },
@@ -481,7 +481,7 @@ static ApItem_t ApItems_robot_menu[ 139 ] = {
 	{ 3, 1, 0, NULL, 0, "mm_irp6p_tfg_preset_position_2", "Position &2", NULL },
 	{ 2, 16, 0, NULL, 4, "", "", NULL },
 	{ 2, 1, 0, NULL, 0, "mm_irp6p_tfg_servo_algorithm", "Servo &Algorithm", NULL },
-	{ 1, 2, 0, NULL, 1, "mm_conveyor", "&Conveyor", NULL },
+	{ 1, 2, 0, NULL, 0, "mm_conveyor", "&Conveyor", NULL },
 	{ 2, 1, 0, NULL, 0, "mm_conveyor_edp_load", "EDP &Load", NULL },
 	{ 2, 1, 0, NULL, 0, "mm_conveyor_edp_unload", "EDP &Unload", NULL },
 	{ 2, 16, 0, NULL, 4, "", "", NULL },
@@ -495,19 +495,22 @@ static ApItem_t ApItems_robot_menu[ 139 ] = {
 	{ 2, 16, 0, NULL, 4, "", "", NULL },
 	{ 2, 1, 0, NULL, 0, "mm_conveyor_servo_algorithm", "Servo &Algorithm", NULL },
 	{ 1, 16, 0, NULL, 4, "", "", NULL },
-	{ 1, 2, 0, NULL, 0, "mm_spkm", "sp&Km", NULL },
+	{ 1, 2, 0, NULL, 1, "mm_spkm", "sp&Km", NULL },
 	{ 2, 1, 0, NULL, 0, "mm_spkm_edp_load", "EDP &Load", NULL },
 	{ 2, 1, 0, NULL, 0, "mm_spkm_edp_unload", "EDP &Unload", NULL },
-	{ 1, 2, 0, NULL, 0, "mm_smb", "sm&B", NULL },
+	{ 1, 2, 0, NULL, 1, "mm_smb", "sm&B", NULL },
 	{ 2, 1, 0, NULL, 0, "mm_smb_edp_load", "EDP &Load", NULL },
 	{ 2, 1, 0, NULL, 0, "mm_smb_edp_unload", "EDP &Unload", NULL },
-	{ 1, 2, 0, NULL, 0, "mm_shead", "s&Head", NULL },
+	{ 1, 2, 0, NULL, 1, "mm_shead", "s&Head", NULL },
 	{ 2, 1, 0, NULL, 0, "mm_shead_edp_load", "EDP &Load", NULL },
 	{ 2, 1, 0, NULL, 0, "mm_shead_edp_unload", "EDP &Unload", NULL },
 	{ 1, 16, 0, NULL, 4, "", "", NULL },
 	{ 1, 2, 0, NULL, 0, "mm_bird_hand", "b&Ird hand", NULL },
 	{ 2, 1, 0, NULL, 0, "mm_bird_hand_edp_load", "EDP &Load", NULL },
 	{ 2, 1, 0, NULL, 0, "mm_bird_hand_edp_unload", "EDP &Unload", NULL },
+	{ 2, 16, 0, NULL, 4, "", "", NULL },
+	{ 2, 1, 0, NULL, 0, "mm_bird_hand_command", "&Command", NULL },
+	{ 2, 1, 0, NULL, 0, "mm_bird_hand_configuration", "Co&Nfiguration", NULL },
 	{ 1, 16, 0, NULL, 4, "", "", NULL },
 	{ 1, 2, 0, NULL, 1, "mm_speaker", "&Speaker", NULL },
 	{ 2, 1, 0, NULL, 0, "mm_speaker_edp_load", "EDP &Load", NULL },
@@ -552,7 +555,7 @@ ApMenuLink_t robot_menu = {
 	ApItems_robot_menu,
 	& AbContext,
 	AbLinks_robot_menu,
-	1071, 93, 138
+	1058, 95, 141
 	};
 
 

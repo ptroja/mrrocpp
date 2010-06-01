@@ -338,7 +338,7 @@ int pulse_reader_speaker_start(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (ui.speaker.pulse_reader_speaker_start_exec_pulse())
+	if (ui.speaker.pulse_reader_start_exec_pulse())
 		process_control_window_init(widget, apinfo, cbinfo);
 
 	return (Pt_CONTINUE);
@@ -353,7 +353,7 @@ int pulse_reader_speaker_stop(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (ui.speaker.pulse_reader_speaker_stop_exec_pulse())
+	if (ui.speaker.pulse_reader_stop_exec_pulse())
 		process_control_window_init(widget, apinfo, cbinfo);
 
 	return (Pt_CONTINUE);
@@ -368,7 +368,7 @@ int pulse_reader_speaker_trigger(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (ui.speaker.pulse_reader_speaker_trigger_exec_pulse())
+	if (ui.speaker.pulse_reader_trigger_exec_pulse())
 		process_control_window_init(widget, apinfo, cbinfo);
 
 	return (Pt_CONTINUE);

@@ -273,7 +273,7 @@ int EDP_irp6_mechatronika_slay(PtWidget_t *widget, ApInfo_t *apinfo,
 		ui.irp6m_m.state.edp.pid = -1;
 		ui.irp6m_m.state.edp.reader_fd = -1;
 
-		close_all_irp6m_windows(NULL, NULL, NULL);
+		ui.irp6m_m.close_all_windows();
 	}
 
 	// modyfikacja menu
@@ -283,26 +283,7 @@ int EDP_irp6_mechatronika_slay(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
-int close_all_irp6m_windows(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
 
-{
-
-	/* eliminate 'unreferenced' warnings */
-	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
-
-	close_wnd_irp6_mechatronika_inc(NULL, NULL, NULL);
-	close_wnd_irp6_mechatronika_int(NULL, NULL, NULL);
-	close_wnd_irp6_mechatronika_xyz_angle_axis(NULL, NULL, NULL);
-	close_wnd_irp6_mechatronika_xyz_angle_axis_ts(NULL, NULL, NULL);
-	close_wnd_irp6_mechatronika_xyz_euler_zyz(NULL, NULL, NULL);
-	close_wnd_irp6_mechatronika_xyz_euler_zyz_ts(NULL, NULL, NULL);
-	close_wnd_irp6_mechatronika_kinematic(NULL, NULL, NULL);
-	close_wnd_irp6_mechatronika_servo_algorithm(NULL, NULL, NULL);
-
-	return (Pt_CONTINUE);
-
-}
 
 int EDP_irp6_mechatronika_synchronise(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo)
@@ -819,7 +800,7 @@ int init_wnd_irp6m_inc(PtWidget_t *widget, ApInfo_t *apinfo,
 			if (ui.irp6m_m.state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
 			{
 
-				unblock_widget(ABW_PtPane_wind_irp6m_inc_post_synchro_moves);
+				ui.unblock_widget(ABW_PtPane_wind_irp6m_inc_post_synchro_moves);
 				ui.irp6m_m.ui_ecp_robot->read_motors(
 						ui.irp6m_m.irp6m_current_pos); // Odczyt polozenia walow silnikow
 
@@ -844,7 +825,7 @@ int init_wnd_irp6m_inc(PtWidget_t *widget, ApInfo_t *apinfo,
 							= ui.irp6m_m.irp6m_current_pos[i];
 			} else {
 				// Wygaszanie elementow przy niezsynchronizowanym robocie
-				block_widget(ABW_PtPane_wind_irp6m_inc_post_synchro_moves);
+				ui.block_widget(ABW_PtPane_wind_irp6m_inc_post_synchro_moves);
 			}
 		}
 	} // end try
@@ -1081,7 +1062,7 @@ int init_wnd_irp6m_int(PtWidget_t *widget, ApInfo_t *apinfo,
 				ui.irp6m_m.ui_ecp_robot->read_joints(
 						ui.irp6m_m.irp6m_current_pos); // Odczyt polozenia walow silnikow
 
-				// 	unblock_widget(ABW_PtPane_wind_irp6m_int_post_synchro_moves);
+				// 	ui.unblock_widget(ABW_PtPane_wind_irp6m_int_post_synchro_moves);
 
 				PtSetResource(ABW_PtNumericFloat_wind_irp6m_joints_cur_p1,
 						Pt_ARG_NUMERIC_VALUE, &ui.irp6m_m.irp6m_current_pos[0],
@@ -1103,7 +1084,7 @@ int init_wnd_irp6m_int(PtWidget_t *widget, ApInfo_t *apinfo,
 					ui.irp6m_m.irp6m_desired_pos[i]
 							= ui.irp6m_m.irp6m_current_pos[i];
 			} else {
-				// 	block_widget(ABW_PtPane_wind_irp6m_int_post_synchro_moves);
+				// 	ui.block_widget(ABW_PtPane_wind_irp6m_int_post_synchro_moves);
 			}
 		}
 	} // end try

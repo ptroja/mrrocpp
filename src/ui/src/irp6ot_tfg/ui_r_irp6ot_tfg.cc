@@ -206,3 +206,18 @@ int UiRobotIrp6ot_tfg::manage_interface() {
 	return 1;
 }
 
+
+
+int UiRobotIrp6ot_tfg::close_all_windows() {
+
+	int pt_res = PtEnter(0);
+
+	close_wind_irp6ot_tfg_moves(NULL, NULL, NULL);
+	close_wnd_irp6ot_tfg_servo_algorithm(NULL, NULL, NULL);
+
+	if (pt_res >= 0) {
+		PtLeave(0);
+	}
+	return 1;
+
+}

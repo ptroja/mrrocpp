@@ -83,8 +83,9 @@ int EDP_bird_hand_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 					tmp2_string.c_str(), R_OK) == 0)) {
 				ui.ui_msg->message(lib::NON_FATAL_ERROR,
 						"edp_bird_hand already exists");
-			} else if (ui.check_node_existence(ui.bird_hand.state.edp.node_name,
-					std::string("edp_bird_hand"))) {
+			} else if (ui.check_node_existence(
+					ui.bird_hand.state.edp.node_name, std::string(
+							"edp_bird_hand"))) {
 
 				ui.bird_hand.state.edp.node_nr = ui.config->return_node_number(
 						ui.bird_hand.state.edp.node_name);
@@ -164,7 +165,7 @@ int EDP_bird_hand_slay_int(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo)
 
 {
-	int pt_res;
+
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 	// dla robota bird_hand
@@ -175,16 +176,14 @@ int EDP_bird_hand_slay_int(PtWidget_t *widget, ApInfo_t *apinfo,
 						__FILE__, __LINE__, strerror(errno));
 			}
 		}
+		ui.bird_hand.close_all_windows();
+
 		delete ui.bird_hand.ui_ecp_robot;
 		ui.bird_hand.state.edp.state = 0; // edp wylaczone
 		ui.bird_hand.state.edp.is_synchronised = false;
 
 		ui.bird_hand.state.edp.pid = -1;
 		ui.bird_hand.state.edp.reader_fd = -1;
-		pt_res = PtEnter(0);
-		close_all_irp6ot_windows(NULL, NULL, NULL);
-		if (pt_res >= 0)
-			PtLeave(0);
 	}
 
 	// modyfikacja menu
@@ -195,3 +194,210 @@ int EDP_bird_hand_slay_int(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
+int execute_wnd_bird_hand_command_and_status(PtWidget_t *widget,
+		ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+
+{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	mrrocpp::lib::bird_hand_command &bhcs =
+			ui.bird_hand.ui_ecp_robot->bird_hand_command_structure;
+
+	// odczyt ilosci krokow i ecp_query step
+
+	int* motion_steps, *ecp_query_step;
+
+	PtGetResource(ABW_motion_steps_wnd_bird_hand_command_and_status,
+			Pt_ARG_NUMERIC_VALUE, &motion_steps, 0);
+	PtGetResource(ABW_ecp_query_step_wnd_bird_hand_command_and_status,
+			Pt_ARG_NUMERIC_VALUE, &ecp_query_step, 0);
+
+	bhcs.motion_steps = *motion_steps;
+	bhcs.ecp_query_step = *ecp_query_step;
+
+	// odczyt wariantu ruchu
+
+
+	ui.bird_hand.get_index_f_0_command();
+
+	std::stringstream ss(std::stringstream::in | std::stringstream::out);
+	/*
+	 ss << bhcs.index_f[0].profile_type << " " << bhcs.motion_steps << "  "
+	 << bhcs.ecp_query_step;
+	 */
+	/*
+	 ss << bhcs.index_f[0].desired_position << " "
+	 << bhcs.index_f[0].desired_torque << "  "
+	 << bhcs.index_f[0].reciprocal_of_damping;
+
+	 ui.ui_msg->message(ss.str().c_str());
+	 */
+	ui.bird_hand.ui_ecp_robot->bird_hand_command_data_port->set(bhcs);
+	ui.bird_hand.ui_ecp_robot->execute_motion();
+	return (Pt_CONTINUE);
+}
+
+int copy_wnd_bird_hand_command_and_status(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo)
+
+{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	return (Pt_CONTINUE);
+
+}
+
+int init_wnd_bird_hand_command_and_status(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo)
+
+{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	mrrocpp::lib::bird_hand_status &bhsrs =
+			ui.bird_hand.ui_ecp_robot->bird_hand_status_reply_structure;
+
+	ui.bird_hand.ui_ecp_robot->bird_hand_status_reply_data_request_port->set_request();
+	ui.bird_hand.ui_ecp_robot->execute_motion();
+	ui.bird_hand.ui_ecp_robot->bird_hand_status_reply_data_request_port->get(
+			bhsrs);
+
+	ui.bird_hand.set_index_f_0_status();
+
+	return (Pt_CONTINUE);
+
+}
+
+int start_wnd_bird_hand_command_and_status(PtWidget_t *widget,
+		ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+
+{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	if (!ui.bird_hand.is_wnd_bird_hand_command_and_status_open) // otworz okno
+	{
+		ApCreateModule(ABM_wnd_bird_hand_command_and_status, widget, cbinfo);
+		ui.bird_hand.is_wnd_bird_hand_command_and_status_open = true;
+
+	} else { // przelacz na okno
+		PtWindowToFront(ABW_wnd_bird_hand_command_and_status);
+
+	}
+
+	return (Pt_CONTINUE);
+
+}
+
+int close_wnd_bird_hand_command_and_status(PtWidget_t *widget,
+		ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo) {
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	if (ui.bird_hand.is_wnd_bird_hand_command_and_status_open) {
+		PtDestroyWidget(ABW_wnd_bird_hand_command_and_status);
+	}
+
+	return (Pt_CONTINUE);
+}
+
+int clear_wnd_bird_hand_command_and_status(PtWidget_t *widget,
+		ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+
+{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	ui.bird_hand.is_wnd_bird_hand_command_and_status_open = false;
+	return (Pt_CONTINUE);
+
+}
+
+int execute_wnd_bird_hand_configuration(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo)
+
+{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	return (Pt_CONTINUE);
+}
+
+int copy_wnd_bird_hand_configuration(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo)
+
+{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	return (Pt_CONTINUE);
+
+}
+
+int init_wnd_bird_hand_configuration(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo)
+
+{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	return (Pt_CONTINUE);
+
+}
+
+int start_wnd_bird_hand_configuration(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo)
+
+{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	if (!ui.bird_hand.is_wnd_bird_hand_configuration_open) // otworz okno
+	{
+		ApCreateModule(ABM_wnd_bird_hand_configuration, widget, cbinfo);
+		ui.bird_hand.is_wnd_bird_hand_configuration_open = true;
+	} else { // przelacz na okno
+		PtWindowToFront(ABW_wnd_bird_hand_configuration);
+	}
+
+	return (Pt_CONTINUE);
+
+}
+
+int close_wnd_bird_hand_configuration(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo) {
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	if (ui.bird_hand.is_wnd_bird_hand_configuration_open) {
+		PtDestroyWidget(ABW_wnd_bird_hand_configuration);
+	}
+
+	return (Pt_CONTINUE);
+}
+
+int clear_wnd_bird_hand_configuration(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo)
+
+{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	ui.bird_hand.is_wnd_bird_hand_configuration_open = false;
+	return (Pt_CONTINUE);
+
+}

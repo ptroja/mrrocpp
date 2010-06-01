@@ -35,22 +35,6 @@
 
 extern Ui ui;
 
-// blokowanie widgetu
-int block_widget(PtWidget_t *widget) {
-	PtSetResource(widget, Pt_ARG_FLAGS, Pt_TRUE, Pt_BLOCKED | Pt_GHOST);
-	PtDamageWidget(widget);
-
-	return 1;
-}
-
-// odblokowanie widgetu
-int unblock_widget(PtWidget_t *widget) {
-	PtSetResource(widget, Pt_ARG_FLAGS, Pt_FALSE, Pt_BLOCKED | Pt_GHOST);
-	PtDamageWidget(widget);
-
-	return 1;
-}
-
 // odblokowanie widgetu
 int set_ui_busy_state_notification(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo) {
@@ -783,9 +767,9 @@ int process_control_window_init(PtWidget_t *widget, ApInfo_t *apinfo,
 
 		// Dla READER'A
 
-		block_widget(ABW_PtButton_wnd_processes_control_all_reader_start);
-		block_widget(ABW_PtButton_wnd_processes_control_all_reader_stop);
-		block_widget(ABW_PtButton_wnd_processes_control_all_reader_trigger);
+		ui.block_widget(ABW_PtButton_wnd_processes_control_all_reader_start);
+		ui.block_widget(ABW_PtButton_wnd_processes_control_all_reader_stop);
+		ui.block_widget(ABW_PtButton_wnd_processes_control_all_reader_trigger);
 
 		// Dla irp6_on_track
 
@@ -819,15 +803,15 @@ int process_control_window_init(PtWidget_t *widget, ApInfo_t *apinfo,
 
 		// All reader's pulse buttons
 		if (wlacz_PtButton_wnd_processes_control_all_reader_start) {
-			unblock_widget(ABW_PtButton_wnd_processes_control_all_reader_start);
+			ui.unblock_widget(ABW_PtButton_wnd_processes_control_all_reader_start);
 		}
 
 		if (wlacz_PtButton_wnd_processes_control_all_reader_stop) {
-			unblock_widget(ABW_PtButton_wnd_processes_control_all_reader_stop);
+			ui.unblock_widget(ABW_PtButton_wnd_processes_control_all_reader_stop);
 		}
 
 		if (wlacz_PtButton_wnd_processes_control_all_reader_trigger) {
-			unblock_widget(
+			ui.unblock_widget(
 					ABW_PtButton_wnd_processes_control_all_reader_trigger);
 		}
 
@@ -838,44 +822,44 @@ int process_control_window_init(PtWidget_t *widget, ApInfo_t *apinfo,
 
 			switch (ui.mp.state) {
 			case UI_MP_PERMITED_TO_RUN:
-				block_widget(ABW_PtButton_wnd_processes_control_mp_pulse_start);
-				block_widget(ABW_PtButton_wnd_processes_control_mp_pulse_stop);
-				block_widget(ABW_PtButton_wnd_processes_control_mp_pulse_pause);
-				block_widget(ABW_PtButton_wnd_processes_control_mp_pulse_resume);
-				block_widget(
+				ui.block_widget(ABW_PtButton_wnd_processes_control_mp_pulse_start);
+				ui.block_widget(ABW_PtButton_wnd_processes_control_mp_pulse_stop);
+				ui.block_widget(ABW_PtButton_wnd_processes_control_mp_pulse_pause);
+				ui.block_widget(ABW_PtButton_wnd_processes_control_mp_pulse_resume);
+				ui.block_widget(
 						ABW_PtButton_wnd_processes_control_mp_pulse_trigger);
 
 				block_all_ecp_trigger_widgets(NULL, NULL, NULL);
 				break;
 			case UI_MP_WAITING_FOR_START_PULSE:
-				unblock_widget(
+				ui.unblock_widget(
 						ABW_PtButton_wnd_processes_control_mp_pulse_start);
-				block_widget(ABW_PtButton_wnd_processes_control_mp_pulse_stop);
-				block_widget(ABW_PtButton_wnd_processes_control_mp_pulse_pause);
-				block_widget(ABW_PtButton_wnd_processes_control_mp_pulse_resume);
-				block_widget(
+				ui.block_widget(ABW_PtButton_wnd_processes_control_mp_pulse_stop);
+				ui.block_widget(ABW_PtButton_wnd_processes_control_mp_pulse_pause);
+				ui.block_widget(ABW_PtButton_wnd_processes_control_mp_pulse_resume);
+				ui.block_widget(
 						ABW_PtButton_wnd_processes_control_mp_pulse_trigger);
 
 				block_all_ecp_trigger_widgets(NULL, NULL, NULL);
 				break;
 			case UI_MP_TASK_RUNNING:
-				block_widget(ABW_PtButton_wnd_processes_control_mp_pulse_start);
-				unblock_widget(ABW_PtButton_wnd_processes_control_mp_pulse_stop);
-				unblock_widget(
+				ui.block_widget(ABW_PtButton_wnd_processes_control_mp_pulse_start);
+				ui.unblock_widget(ABW_PtButton_wnd_processes_control_mp_pulse_stop);
+				ui.unblock_widget(
 						ABW_PtButton_wnd_processes_control_mp_pulse_pause);
-				block_widget(ABW_PtButton_wnd_processes_control_mp_pulse_resume);
-				unblock_widget(
+				ui.block_widget(ABW_PtButton_wnd_processes_control_mp_pulse_resume);
+				ui.unblock_widget(
 						ABW_PtButton_wnd_processes_control_mp_pulse_trigger);
 
 				unblock_all_ecp_trigger_widgets(NULL, NULL, NULL);
 				break;
 			case UI_MP_TASK_PAUSED:
-				block_widget(ABW_PtButton_wnd_processes_control_mp_pulse_start);
-				unblock_widget(ABW_PtButton_wnd_processes_control_mp_pulse_stop);
-				block_widget(ABW_PtButton_wnd_processes_control_mp_pulse_pause);
-				unblock_widget(
+				ui.block_widget(ABW_PtButton_wnd_processes_control_mp_pulse_start);
+				ui.unblock_widget(ABW_PtButton_wnd_processes_control_mp_pulse_stop);
+				ui.block_widget(ABW_PtButton_wnd_processes_control_mp_pulse_pause);
+				ui.unblock_widget(
 						ABW_PtButton_wnd_processes_control_mp_pulse_resume);
-				block_widget(
+				ui.block_widget(
 						ABW_PtButton_wnd_processes_control_mp_pulse_trigger);
 
 				block_all_ecp_trigger_widgets(NULL, NULL, NULL);
@@ -904,21 +888,21 @@ int block_all_ecp_trigger_widgets(PtWidget_t *widget, ApInfo_t *apinfo,
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
 	if (ui.irp6ot_m.state.edp.is_synchronised) {
-		block_widget(ABW_PtButton_wnd_processes_control_irp6ot_ecp_trigger);
+		ui.block_widget(ABW_PtButton_wnd_processes_control_irp6ot_ecp_trigger);
 	}
 	if (ui.irp6p_m.state.edp.is_synchronised) {
-		block_widget(ABW_PtButton_wnd_processes_control_irp6p_ecp_trigger);
+		ui.block_widget(ABW_PtButton_wnd_processes_control_irp6p_ecp_trigger);
 	}
 	if (ui.conveyor.state.edp.is_synchronised) {
-		block_widget(ABW_PtButton_wnd_processes_control_conveyor_ecp_trigger);
+		ui.block_widget(ABW_PtButton_wnd_processes_control_conveyor_ecp_trigger);
 	}
 	if (ui.speaker.state.edp.is_synchronised) {
-		block_widget(ABW_PtButton_wnd_processes_control_speaker_ecp_trigger);
+		ui.block_widget(ABW_PtButton_wnd_processes_control_speaker_ecp_trigger);
 	}
 	if (ui.irp6m_m.state.edp.is_synchronised) {
-		block_widget(ABW_PtButton_wnd_processes_control_irp6m_ecp_trigger);
+		ui.block_widget(ABW_PtButton_wnd_processes_control_irp6m_ecp_trigger);
 	}
-	block_widget(ABW_PtButton_wnd_processes_control_all_ecp_trigger);
+	ui.block_widget(ABW_PtButton_wnd_processes_control_all_ecp_trigger);
 
 	return (Pt_CONTINUE);
 }
@@ -932,21 +916,21 @@ int unblock_all_ecp_trigger_widgets(PtWidget_t *widget, ApInfo_t *apinfo,
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
 	if (ui.irp6ot_m.state.edp.is_synchronised) {
-		unblock_widget(ABW_PtButton_wnd_processes_control_irp6ot_ecp_trigger);
+		ui.unblock_widget(ABW_PtButton_wnd_processes_control_irp6ot_ecp_trigger);
 	}
 	if (ui.irp6p_m.state.edp.is_synchronised) {
-		unblock_widget(ABW_PtButton_wnd_processes_control_irp6p_ecp_trigger);
+		ui.unblock_widget(ABW_PtButton_wnd_processes_control_irp6p_ecp_trigger);
 	}
 	if (ui.conveyor.state.edp.is_synchronised) {
-		unblock_widget(ABW_PtButton_wnd_processes_control_conveyor_ecp_trigger);
+		ui.unblock_widget(ABW_PtButton_wnd_processes_control_conveyor_ecp_trigger);
 	}
 	if (ui.speaker.state.edp.is_synchronised) {
-		unblock_widget(ABW_PtButton_wnd_processes_control_speaker_ecp_trigger);
+		ui.unblock_widget(ABW_PtButton_wnd_processes_control_speaker_ecp_trigger);
 	}
 	if (ui.irp6m_m.state.edp.is_synchronised) {
-		unblock_widget(ABW_PtButton_wnd_processes_control_irp6m_ecp_trigger);
+		ui.unblock_widget(ABW_PtButton_wnd_processes_control_irp6m_ecp_trigger);
 	}
-	unblock_widget(ABW_PtButton_wnd_processes_control_all_ecp_trigger);
+	ui.unblock_widget(ABW_PtButton_wnd_processes_control_all_ecp_trigger);
 
 	return (Pt_CONTINUE);
 }
@@ -1565,22 +1549,14 @@ int pulse_start_mp(PtWidget_t *widget, ApInfo_t *apinfo,
 
 		// zamkniecie okien ruchow recznych o ile sa otwarte
 
-		close_all_irp6ot_windows(NULL, NULL, NULL);
-
-		close_all_irp6p_windows(NULL, NULL, NULL);
-
-		close_all_irp6m_windows(NULL, NULL, NULL);
-
-		close_wind_conveyor_moves(NULL, NULL, NULL);
-		close_wnd_conveyor_servo_algorithm(NULL, NULL, NULL);
-
-		close_wind_irp6ot_tfg_moves(NULL, NULL, NULL);
-		close_wnd_irp6ot_tfg_servo_algorithm(NULL, NULL, NULL);
-
-		close_wind_irp6p_tfg_moves(NULL, NULL, NULL);
-		close_wnd_irp6p_tfg_servo_algorithm(NULL, NULL, NULL);
-
-		close_wnd_speaker_play(NULL, NULL, NULL);
+		ui.irp6ot_m.close_all_windows();
+		ui.irp6p_m.close_all_windows();
+		ui.irp6m_m.close_all_windows();
+		ui.bird_hand.close_all_windows();
+		ui.conveyor.close_all_windows();
+		ui.irp6ot_tfg.close_all_windows();
+		ui.irp6p_tfg.close_all_windows();
+		ui.speaker.close_all_windows();
 
 		ui.execute_mp_pulse(MP_START);
 

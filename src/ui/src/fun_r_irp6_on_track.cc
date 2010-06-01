@@ -710,7 +710,7 @@ int init_wnd_irp6_on_track_inc(PtWidget_t *widget, ApInfo_t *apinfo,
 			if (ui.irp6ot_m.state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
 			{
 
-				unblock_widget(ABW_PtPane_wind_irp6ot_inc_post_synchro_moves);
+				ui.unblock_widget(ABW_PtPane_wind_irp6ot_inc_post_synchro_moves);
 				ui.irp6ot_m.ui_ecp_robot->read_motors(
 						ui.irp6ot_m.irp6ot_current_pos); // Odczyt polozenia walow silnikow
 
@@ -744,7 +744,7 @@ int init_wnd_irp6_on_track_inc(PtWidget_t *widget, ApInfo_t *apinfo,
 				 */
 			} else {
 				// Wygaszanie elementow przy niezsynchronizowanym robocie
-				block_widget(ABW_PtPane_wind_irp6ot_inc_post_synchro_moves);
+				ui.block_widget(ABW_PtPane_wind_irp6ot_inc_post_synchro_moves);
 			}
 		}
 	} // end try
@@ -766,7 +766,7 @@ int wnd_irp6ot_motors_copy_current_to_desired(PtWidget_t *widget,
 	if (ui.irp6ot_m.state.edp.pid != -1) {
 		if (ui.irp6ot_m.state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
 		{
-			unblock_widget(ABW_PtPane_wind_irp6ot_inc_post_synchro_moves);
+			ui.unblock_widget(ABW_PtPane_wind_irp6ot_inc_post_synchro_moves);
 
 			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_motors_cur_p0,
 					Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[0]), 0);
@@ -808,7 +808,7 @@ int wnd_irp6ot_motors_copy_current_to_desired(PtWidget_t *widget,
 
 		} else {
 			// Wygaszanie elementow przy niezsynchronizowanym robocie
-			block_widget(ABW_PtPane_wind_irp6ot_inc_post_synchro_moves);
+			ui.block_widget(ABW_PtPane_wind_irp6ot_inc_post_synchro_moves);
 
 		}
 	}
@@ -1141,7 +1141,7 @@ int init_wnd_irp6_on_track_int(PtWidget_t *widget, ApInfo_t *apinfo,
 				ui.irp6ot_m.ui_ecp_robot->read_joints(
 						ui.irp6ot_m.irp6ot_current_pos); // Odczyt polozenia walow silnikow
 
-				// 	unblock_widget(ABW_PtPane_wind_irp6ot_int_post_synchro_moves);
+				// 	ui.unblock_widget(ABW_PtPane_wind_irp6ot_int_post_synchro_moves);
 				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_joints_cur_p1,
 						Pt_ARG_NUMERIC_VALUE,
 						&ui.irp6ot_m.irp6ot_current_pos[0], 0);
@@ -1171,7 +1171,7 @@ int init_wnd_irp6_on_track_int(PtWidget_t *widget, ApInfo_t *apinfo,
 					ui.irp6ot_m.irp6ot_desired_pos[i]
 							= ui.irp6ot_m.irp6ot_current_pos[i];
 			} else {
-				// 		block_widget(ABW_PtPane_wind_irp6ot_int_post_synchro_moves);
+				// 		ui.block_widget(ABW_PtPane_wind_irp6ot_int_post_synchro_moves);
 			}
 		}
 	} // end try
@@ -2656,7 +2656,7 @@ int EDP_irp6_on_track_slay_int(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo)
 
 {
-	int pt_res;
+
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 	// dla robota irp6_on_track
@@ -2673,37 +2673,12 @@ int EDP_irp6_on_track_slay_int(PtWidget_t *widget, ApInfo_t *apinfo,
 
 		ui.irp6ot_m.state.edp.pid = -1;
 		ui.irp6ot_m.state.edp.reader_fd = -1;
-		pt_res = PtEnter(0);
-		close_all_irp6ot_windows(NULL, NULL, NULL);
-		if (pt_res >= 0)
-			PtLeave(0);
+		ui.irp6ot_m.close_all_windows();
 	}
 
 	// modyfikacja menu
 
 	ui.manage_interface();
-
-	return (Pt_CONTINUE);
-
-}
-
-int close_all_irp6ot_windows(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
-
-{
-
-	/* eliminate 'unreferenced' warnings */
-	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
-
-	close_wnd_irp6_on_track_inc(NULL, NULL, NULL);
-	close_wnd_irp6_on_track_int(NULL, NULL, NULL);
-	close_wnd_irp6_on_track_xyz_angle_axis(NULL, NULL, NULL);
-	close_wnd_irp6_on_track_xyz_angle_axis_ts(NULL, NULL, NULL);
-	close_wnd_irp6_on_track_xyz_aa_relative(NULL, NULL, NULL);
-	close_wnd_irp6_on_track_xyz_euler_zyz(NULL, NULL, NULL);
-	close_wnd_irp6_on_track_xyz_euler_zyz_ts(NULL, NULL, NULL);
-	close_wnd_irp6_on_track_kinematic(NULL, NULL, NULL);
-	close_wnd_irp6_on_track_servo_algorithm(NULL, NULL, NULL);
 
 	return (Pt_CONTINUE);
 

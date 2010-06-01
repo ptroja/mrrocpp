@@ -199,26 +199,26 @@ int UiRobotConveyor::process_control_window_conveyor_section_init(
 		bool &wlacz_PtButton_wnd_processes_control_all_reader_trigger) {
 
 	if (state.edp.state <= 0) {// edp wylaczone
-		block_widget(ABW_PtButton_wnd_processes_control_conveyor_reader_start);
-		block_widget(ABW_PtButton_wnd_processes_control_conveyor_reader_stop);
-		block_widget(ABW_PtButton_wnd_processes_control_conveyor_reader_trigger);
+		ui.block_widget(ABW_PtButton_wnd_processes_control_conveyor_reader_start);
+		ui.block_widget(ABW_PtButton_wnd_processes_control_conveyor_reader_stop);
+		ui.block_widget(ABW_PtButton_wnd_processes_control_conveyor_reader_trigger);
 	} else {
 		if (state.edp.state == 1) {// edp wlaczone reader czeka na start
 			wlacz_PtButton_wnd_processes_control_all_reader_start = true;
-			unblock_widget(
+			ui.unblock_widget(
 					ABW_PtButton_wnd_processes_control_conveyor_reader_start);
-			block_widget(
+			ui.block_widget(
 					ABW_PtButton_wnd_processes_control_conveyor_reader_stop);
-			block_widget(
+			ui.block_widget(
 					ABW_PtButton_wnd_processes_control_conveyor_reader_trigger);
 		} else if (state.edp.state == 2) {// edp wlaczone reader czeka na stop
 			wlacz_PtButton_wnd_processes_control_all_reader_stop = true;
 			wlacz_PtButton_wnd_processes_control_all_reader_trigger = true;
-			block_widget(
+			ui.block_widget(
 					ABW_PtButton_wnd_processes_control_conveyor_reader_start);
-			unblock_widget(
+			ui.unblock_widget(
 					ABW_PtButton_wnd_processes_control_conveyor_reader_stop);
-			unblock_widget(
+			ui.unblock_widget(
 					ABW_PtButton_wnd_processes_control_conveyor_reader_trigger);
 		}
 	}
@@ -228,3 +228,20 @@ int UiRobotConveyor::process_control_window_conveyor_section_init(
 	return 1;
 
 }
+
+
+
+int UiRobotConveyor::close_all_windows() {
+
+	int pt_res = PtEnter(0);
+
+	close_wind_conveyor_moves(NULL, NULL, NULL);
+	close_wnd_conveyor_servo_algorithm(NULL, NULL, NULL);
+
+	if (pt_res >= 0) {
+		PtLeave(0);
+	}
+	return 1;
+
+}
+

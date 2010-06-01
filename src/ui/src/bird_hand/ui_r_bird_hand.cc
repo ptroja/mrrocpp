@@ -2,6 +2,7 @@
 /*                            AppBuilder Photon Code Lib */
 /*                                         Version 2.01  */
 
+#include "ui/src/bird_hand/ui_ecp_r_bird_hand.h"
 #include "ui/src/bird_hand/ui_r_bird_hand.h"
 #include "lib/robot_consts/bird_hand_const.h"
 #include "ui/ui_class.h"
@@ -111,9 +112,8 @@ int UiRobotBirdHand::manage_interface() {
 		break;
 	case 0:
 		ApModifyItemState(&robot_menu, AB_ITEM_DIM,
-				ABN_mm_bird_hand_edp_unload,
-
-				NULL);
+				ABN_mm_bird_hand_edp_unload, ABN_mm_bird_hand_command,
+				ABN_mm_bird_hand_configuration, NULL);
 		ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_bird_hand,
 				ABN_mm_bird_hand_edp_load, NULL);
 
@@ -132,22 +132,25 @@ int UiRobotBirdHand::manage_interface() {
 			case UI_MP_NOT_PERMITED_TO_RUN:
 			case UI_MP_PERMITED_TO_RUN:
 				ApModifyItemState(&robot_menu, AB_ITEM_NORMAL,
-						ABN_mm_bird_hand_edp_unload, NULL);
+						ABN_mm_bird_hand_edp_unload, ABN_mm_bird_hand_command,
+						ABN_mm_bird_hand_configuration, NULL);
 				ApModifyItemState(&robot_menu, AB_ITEM_DIM,
 						ABN_mm_bird_hand_edp_load, NULL);
 				break;
 			case UI_MP_WAITING_FOR_START_PULSE:
 				ApModifyItemState(&robot_menu, AB_ITEM_NORMAL,
-
-				NULL);
+						ABN_mm_bird_hand_command,
+						ABN_mm_bird_hand_configuration, NULL);
 				ApModifyItemState(&robot_menu, AB_ITEM_DIM,
 						ABN_mm_bird_hand_edp_load, ABN_mm_bird_hand_edp_unload,
 						NULL);
 				break;
 			case UI_MP_TASK_RUNNING:
 			case UI_MP_TASK_PAUSED:
-				ApModifyItemState(&robot_menu, AB_ITEM_DIM, // modyfikacja menu - ruchy reczne zakazane
-						NULL);
+				ApModifyItemState(&robot_menu,
+						AB_ITEM_DIM, // modyfikacja menu - ruchy reczne zakazane
+						ABN_mm_bird_hand_command,
+						ABN_mm_bird_hand_configuration, NULL);
 				break;
 			default:
 				break;
@@ -157,13 +160,117 @@ int UiRobotBirdHand::manage_interface() {
 			ApModifyItemState(&robot_menu, AB_ITEM_NORMAL,
 					ABN_mm_bird_hand_edp_unload, NULL);
 			ApModifyItemState(&robot_menu, AB_ITEM_DIM,
-					ABN_mm_bird_hand_edp_load, NULL);
+					ABN_mm_bird_hand_edp_load, ABN_mm_bird_hand_command,
+					ABN_mm_bird_hand_configuration, NULL);
 			ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL,
 					ABN_mm_all_robots_synchronisation, NULL);
 		}
 		break;
 	default:
 		break;
+	}
+
+	return 1;
+}
+
+int UiRobotBirdHand::close_all_windows() {
+
+	int pt_res = PtEnter(0);
+
+	close_wnd_bird_hand_command_and_status(NULL, NULL, NULL);
+	close_wnd_bird_hand_configuration(NULL, NULL, NULL);
+
+	if (pt_res >= 0) {
+		PtLeave(0);
+	}
+	return 1;
+
+}
+
+int UiRobotBirdHand::get_index_f_0_command() {
+
+	unsigned long *flags;
+
+	mrrocpp::lib::bird_hand_command &bhcs =
+			ui_ecp_robot->bird_hand_command_structure;
+
+	PtGetResource(
+			ABW_index_f_0_absolute_variant_wnd_bird_hand_command_and_status,
+			Pt_ARG_FLAGS, &flags, 0);
+
+	if (*flags & Pt_SET) {
+		bhcs.index_f[0].profile_type
+				= lib::BIRD_HAND_MACROSTEP_ABSOLUTE_POSITION;
+	}
+
+	PtGetResource(
+			ABW_index_f_0_relative_variant_wnd_bird_hand_command_and_status,
+			Pt_ARG_FLAGS, &flags, 0);
+
+	if (*flags & Pt_SET) {
+		bhcs.index_f[0].profile_type
+				= lib::BIRD_HAND_MACROSTEP_POSITION_INCREMENT;
+	}
+
+	PtGetResource(
+			ABW_index_f_0_velocity_variant_wnd_bird_hand_command_and_status,
+			Pt_ARG_FLAGS, &flags, 0);
+
+	if (*flags & Pt_SET) {
+		bhcs.index_f[0].profile_type
+				= lib::BIRD_HAND_SIGLE_STEP_POSTION_INCREMENT;
+	}
+
+	double* tmp_double;
+
+	PtGetResource(
+			ABW_index_f_0_desired_position_wnd_bird_hand_command_and_status,
+			Pt_ARG_NUMERIC_VALUE, &tmp_double, 0);
+
+	bhcs.index_f[0].desired_position = *tmp_double;
+
+	PtGetResource(
+			ABW_index_f_0_desired_torque_wnd_bird_hand_command_and_status,
+			Pt_ARG_NUMERIC_VALUE, &tmp_double, 0);
+
+	bhcs.index_f[0].desired_torque = *tmp_double;
+
+	PtGetResource(
+			ABW_index_f_0_recip_of_damping_wnd_bird_hand_command_and_status,
+			Pt_ARG_NUMERIC_VALUE, &tmp_double, 0);
+
+	bhcs.index_f[0].reciprocal_of_damping = *tmp_double;
+
+	return 1;
+
+}
+
+int UiRobotBirdHand::set_index_f_0_status() {
+
+	mrrocpp::lib::bird_hand_status &bhsrs =
+			ui_ecp_robot->bird_hand_status_reply_structure;
+
+	PtSetResource(
+			ABW_index_f_0_current_position_wnd_bird_hand_command_and_status,
+			Pt_ARG_NUMERIC_VALUE, &bhsrs.index_f[0].meassured_position, 0);
+	PtSetResource(
+			ABW_index_f_0_current_torque_wnd_bird_hand_command_and_status,
+			Pt_ARG_NUMERIC_VALUE, &bhsrs.index_f[0].meassured_torque, 0);
+	PtSetResource(
+			ABW_index_f_0_meassured_current_wnd_bird_hand_command_and_status,
+			Pt_ARG_NUMERIC_VALUE, &bhsrs.index_f[0].meassured_current, 0);
+
+	if (bhsrs.index_f[0].lower_limit_of_absolute_position) {
+
+		ui.set_toggle_button(
+				ABW_index_f_0_limit_1_wnd_bird_hand_command_and_status);
+
+	} else {
+		ui.unset_toggle_button(
+				ABW_index_f_0_limit_1_wnd_bird_hand_command_and_status);
+
+		PtSetResource(ABW_index_f_0_limit_1_wnd_bird_hand_command_and_status,
+				Pt_ARG_FLAGS, Pt_SET, 0);
 	}
 
 	return 1;

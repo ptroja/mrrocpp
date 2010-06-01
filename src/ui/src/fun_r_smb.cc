@@ -176,7 +176,7 @@ int EDP_smb_slay_int(PtWidget_t *widget, ApInfo_t *apinfo,
 		ui.smb.state.edp.pid = -1;
 		ui.smb.state.edp.reader_fd = -1;
 		pt_res = PtEnter(0);
-		close_all_irp6ot_windows(NULL, NULL, NULL);
+		//	ui.smb.close_all_windows();
 		if (pt_res >= 0)
 			PtLeave(0);
 	}
