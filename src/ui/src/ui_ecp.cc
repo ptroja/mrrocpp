@@ -29,15 +29,17 @@
 
 extern busy_flag communication_flag;
 
-extern Ui ui;
-
 ui_ecp_buffer::ui_ecp_buffer(Ui& _ui) :
-	ui(_ui), synchroniser() {
+	ui(_ui), communication_state(UI_ECP_AFTER_REPLY), synchroniser() {
 
-	communication_state = UI_ECP_AFTER_REPLY;
 }
 
-void *comm_thread(void* arg) {
+ui_ecp_buffer::~ui_ecp_buffer() {
+
+	delete thread_id;
+}
+
+void ui_ecp_buffer::operator()() {
 
 	lib::set_thread_priority(pthread_self(), MAX_PRIORITY - 5);
 
@@ -353,5 +355,4 @@ void *comm_thread(void* arg) {
 		}; // end: switch
 	}// end while
 
-	return 0;
 }

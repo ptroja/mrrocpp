@@ -34,9 +34,6 @@
 //
 //
 
-// forward declaration
-extern void *sr_thread(void* arg);
-extern void *comm_thread(void* arg);
 
 Ui::Ui() :
 	config(NULL), all_ecp_msg(NULL), ui_msg(NULL),
@@ -465,8 +462,7 @@ void Ui::abort_threads()
 {
 #if defined(__QNXNTO__)
 
-	pthread_abort(ui_tid);
-
+	delete ui_ecp_obj;
 	delete ui_sr_obj;
 	delete meb_tid;
 #endif
@@ -1067,9 +1063,7 @@ void Ui::create_threads()
 	ui_ecp_obj = new ui_ecp_buffer(*this);
 
 #if defined(__QNXNTO__)
-	if (pthread_create(&ui_tid, NULL, comm_thread, NULL) != EOK) {// Y&W - utowrzenie watku serwa
-		printf(" Failed to thread comm_thread\n");
-	}
+
 #endif
 
 	meb_tid = new feb_thread(main_eb);

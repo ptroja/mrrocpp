@@ -47,8 +47,6 @@ public:
 
 	feb_thread* meb_tid;
 
-	pthread_t ui_tid;
-
 
 	function_execution_buffer main_eb;
 

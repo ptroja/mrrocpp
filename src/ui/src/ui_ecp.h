@@ -36,8 +36,12 @@ public:
 	lib::ECP_message ecp_to_ui_msg;
 	lib::UI_reply ui_rep;
 
+	//! main thread loop
+	void operator()();
+
 	lib::condition_synchroniser synchroniser;
 	ui_ecp_buffer(Ui& _ui);
+	~ui_ecp_buffer();
 
 };
 
