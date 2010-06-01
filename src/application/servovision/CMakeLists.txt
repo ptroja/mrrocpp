@@ -1,6 +1,6 @@
 # object follower - PB - SAC
 add_executable(ecp_objectfollower_pb_sac
-    objectfollower_pb_sac/ecp_t_objectfollower_pb_sac.cpp
+    objectfollower_pb_sac/ecp_t_objectfollower_pb_sac.cc
     pb_sac_visual_servo.cc
     pb_visual_servo.cc
     visual_servo.cc
@@ -11,7 +11,7 @@ add_executable(ecp_objectfollower_pb_sac
 )
 
 target_link_libraries(ecp_objectfollower_pb_sac
-	ecp_r_irp6ot
+	ecp_r_irp6ot_m
 	ecp ${COMMON_LIBRARIES}
 )
 
@@ -30,8 +30,7 @@ add_executable(ecp_objectfollower_pb
 )
 
 target_link_libraries(ecp_objectfollower_pb
-	ecp_r_irp6ot
-#	ecp_r_irp6ot_m
+	ecp_r_irp6ot_m
 	ecp ${COMMON_LIBRARIES}
 )
 
@@ -49,8 +48,7 @@ add_executable(ecp_objectfollower_ib
 )
 
 target_link_libraries(ecp_objectfollower_ib
-	ecp_r_irp6ot
-#	ecp_r_irp6ot_m
+	ecp_r_irp6ot_m
 	ecp ${COMMON_LIBRARIES}
 )
 
@@ -61,7 +59,7 @@ add_executable(ecp_image_capture
 )
 
 target_link_libraries(ecp_image_capture
-	ecp_r_irp6ot
+	ecp_r_irp6ot_m
 	ecp ${COMMON_LIBRARIES}
 )
 

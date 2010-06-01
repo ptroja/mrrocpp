@@ -23,7 +23,7 @@
 
 namespace mrrocpp {
 namespace edp {
-namespace irp6ot {
+namespace irp6ot_m {
 
 // Klasa reprezentujaca robota IRp-6 na torze jezdnym.
 class effector : public common::manip_effector

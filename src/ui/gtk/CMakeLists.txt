@@ -30,7 +30,7 @@ add_executable(ui.gtk
 	../src/threads.cc
 )
 
-target_link_libraries(ui.gtk ${GTKMM_LIBRARIES} ${GTK2_LIBRARIES} ${GTHREAD_LIBRARIES} ${COMMON_LIBRARIES})
+target_link_libraries(ui.gtk ${GTKMM_LIBRARIES} ${GTK2_LIBRARIES} ${GTHREAD_LIBRARIES} ${LIBXML2_LIBRARIES} ${COMMON_LIBRARIES})
 
 install(TARGETS ui.gtk DESTINATION bin)
 

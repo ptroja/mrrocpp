@@ -16,8 +16,8 @@
 #include "ecp_mp/task/ecp_mp_t_rcsc.h"
 
 
-#include "ecp/irp6_on_track/ecp_r_irp6ot.h"
-#include "ecp/irp6_postument/ecp_r_irp6p.h"
+#include "ecp/irp6ot_m/ecp_r_irp6ot_m.h"
+#include "ecp/irp6p_m/ecp_r_irp6p_m.h"
 #include "ecp/common/generator/ecp_g_force.h"
 #include "application/sk/ecp_g_sk.h"
 
@@ -33,13 +33,13 @@ namespace task {
 sk::sk(lib::configurator &_config) : task(_config)
 {
 	// the robot is choose dependendant on the section of configuration file sent as argv[4]
-	if (config.section_name == ECP_IRP6_ON_TRACK_SECTION)
+	if (config.section_name == ECP_IRP6OT_M_SECTION)
 	{
-		ecp_m_robot = new irp6ot::robot (*this);
+		ecp_m_robot = new irp6ot_m::robot (*this);
 	}
-	else if (config.section_name == ECP_IRP6_POSTUMENT_SECTION)
+	else if (config.section_name == ECP_IRP6P_M_SECTION)
 	{
-		ecp_m_robot = new irp6p::robot (*this);
+		ecp_m_robot = new irp6p_m::robot (*this);
 	} else {
 		// TODO: throw
 	}
@@ -53,10 +53,10 @@ sk::sk(lib::configurator &_config) : task(_config)
 
 	switch (ecp_m_robot->robot_name)
 	{
-	case lib::ROBOT_IRP6_ON_TRACK:
+	case lib::ROBOT_IRP6OT_M:
 		sr_ecp_msg->message("ECP sk irp6ot loaded");
 		break;
-	case lib::ROBOT_IRP6_POSTUMENT:
+	case lib::ROBOT_IRP6P_M:
 		sr_ecp_msg->message("ECP sk irp6p loaded");
 		break;
 	default:

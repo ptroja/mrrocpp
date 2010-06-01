@@ -17,50 +17,52 @@ namespace ecp {
 namespace shead {
 
 robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
-			shead_head_soldification_data_port(
-					SHEAD_HEAD_SOLIDIFICATION_DATA_PORT),
+	shead_head_soldification_data_port(SHEAD_HEAD_SOLIDIFICATION_DATA_PORT),
 			shead_vacuum_activation_data_port(SHEAD_VACUUM_ACTIVATION_DATA_PORT),
 			shead_reply_data_request_port(SHEAD_VACUUM_ACTIVATION_DATA_PORT),
-			ecp_robot(lib::ROBOT_SHEAD, SHEAD_NUM_OF_SERVOS, EDP_SHEAD_SECTION,
-					_config, _sr_ecp), kinematics_manager() {
+			ecp_robot(lib::ROBOT_SHEAD, SHEAD_NUM_OF_SERVOS, EDP_SHEAD_SECTION, _config, _sr_ecp), kinematics_manager()
+{
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();
 }
 ;
 robot::robot(common::task::task& _ecp_object) :
-			shead_head_soldification_data_port(
-					SHEAD_HEAD_SOLIDIFICATION_DATA_PORT),
+	shead_head_soldification_data_port(SHEAD_HEAD_SOLIDIFICATION_DATA_PORT),
 			shead_vacuum_activation_data_port(SHEAD_VACUUM_ACTIVATION_DATA_PORT),
 			shead_reply_data_request_port(SHEAD_VACUUM_ACTIVATION_DATA_PORT),
-			ecp_robot(lib::ROBOT_SHEAD, SHEAD_NUM_OF_SERVOS, EDP_SHEAD_SECTION,
-					_ecp_object), kinematics_manager() {
+			ecp_robot(lib::ROBOT_SHEAD, SHEAD_NUM_OF_SERVOS, EDP_SHEAD_SECTION, _ecp_object), kinematics_manager()
+{
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();
 }
 
 // Stworzenie modeli kinematyki dla robota IRp-6 na postumencie.
-void robot::create_kinematic_models_for_given_robot(void) {
+void robot::create_kinematic_models_for_given_robot(void)
+{
 	// Stworzenie wszystkich modeli kinematyki.
 	add_kinematic_model(new kinematics::shead::model());
 	// Ustawienie aktywnego modelu.
 	set_kinematic_model(0);
 }
 
-void robot::add_data_ports() {
+void robot::add_data_ports()
+{
 	port_manager.add_port(&shead_head_soldification_data_port);
 	port_manager.add_port(&shead_vacuum_activation_data_port);
 	port_manager.add_port(&shead_reply_data_request_port);
 
 }
 
-void robot::clear_data_ports() {
+void robot::clear_data_ports()
+{
 	shead_head_soldification_data_port.clear_new_data_flag();
 	shead_vacuum_activation_data_port.clear_new_data_flag();
 	shead_reply_data_request_port.clear_new_request_flag();
 	shead_reply_data_request_port.clear_new_data_flag();
 }
 
-void robot::create_command() {
+void robot::create_command()
+{
 
 	int new_data_counter;
 	bool is_new_data;
@@ -68,23 +70,41 @@ void robot::create_command() {
 
 	sr_ecp_msg.message("create_command");
 
-	new_data_counter = 0;
+	is_new_data = false;
 
-	if (shead_head_soldification_data_port.is_new_data()) {
-		new_data_counter++;
+	if (shead_head_soldification_data_port.get(shead_head_soldification_structure) == mrrocpp::lib::NewData) {
+		ecp_command.instruction.set_type = ARM_DEFINITION;
+
+		// generator command interpretation
+		// narazie proste przepisanie
+
+		ecp_edp_cbuffer.variant = lib::SHEAD_CBUFFER_HEAD_SOLIDIFICATION;
+
+		ecp_edp_cbuffer.head_solidification = shead_head_soldification_structure;
+
+		if (is_new_data) {
+			throw ecp_robot::ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
+		} else {
+			is_new_data = true;
+		}
 	}
 
-	if (shead_vacuum_activation_data_port.is_new_data()) {
-		new_data_counter++;
-	}
+	if (shead_vacuum_activation_data_port.get(shead_vacuum_activation_structure) == mrrocpp::lib::NewData) {
+		ecp_command.instruction.set_type = ARM_DEFINITION;
 
-	if (new_data_counter == 0) {
-		is_new_data = false;
-	} else if (new_data_counter == 1) {
-		is_new_data = true;
-	} else if (new_data_counter > 1) {
-		is_new_data = false;
-		throw ecp_robot::ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
+		// generator command interpretation
+		// narazie proste przepisanie
+
+		ecp_edp_cbuffer.variant = lib::SHEAD_CBUFFER_VACUUM_ACTIVATION;
+
+		ecp_edp_cbuffer.vacuum_activation = shead_vacuum_activation_structure;
+
+		if (is_new_data) {
+			throw ecp_robot::ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
+		} else {
+			is_new_data = true;
+		}
+
 	}
 
 	is_new_request = shead_reply_data_request_port.is_new_request();
@@ -105,43 +125,17 @@ void robot::create_command() {
 		ecp_command.instruction.get_type = ARM_DEFINITION;
 	}
 
-	if (shead_head_soldification_data_port.is_new_data()) {
-		ecp_command.instruction.set_type = ARM_DEFINITION;
-		shead_head_soldification_structure
-				= shead_head_soldification_data_port.get();
-		// generator command interpretation
-		// narazie proste przepisanie
-
-		ecp_edp_cbuffer.variant = lib::SHEAD_CBUFFER_HEAD_SOLIDIFICATION;
-
-		ecp_edp_cbuffer.head_solidification
-				= shead_head_soldification_structure;
-
-	} else if (shead_vacuum_activation_data_port.is_new_data()) {
-		ecp_command.instruction.set_type = ARM_DEFINITION;
-		shead_vacuum_activation_structure
-				= shead_vacuum_activation_data_port.get();
-		// generator command interpretation
-		// narazie proste przepisanie
-
-		ecp_edp_cbuffer.variant = lib::SHEAD_CBUFFER_VACUUM_ACTIVATION;
-
-		ecp_edp_cbuffer.vacuum_activation = shead_vacuum_activation_structure;
-
-	}
-
 	// message serialization
 	if (communicate_with_edp) {
-		memcpy(ecp_command.instruction.arm.serialized_command,
-				&ecp_edp_cbuffer, sizeof(ecp_edp_cbuffer));
+		memcpy(ecp_command.instruction.arm.serialized_command, &ecp_edp_cbuffer, sizeof(ecp_edp_cbuffer));
 	}
 }
 
-void robot::get_reply() {
+void robot::get_reply()
+{
 
 	// message deserialization
-	memcpy(&edp_ecp_rbuffer, reply_package.arm.serialized_reply,
-			sizeof(edp_ecp_rbuffer));
+	memcpy(&edp_ecp_rbuffer, reply_package.arm.serialized_reply, sizeof(edp_ecp_rbuffer));
 
 	// generator reply generation
 

@@ -5,10 +5,10 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace irp6p {
+namespace irp6p_m {
 namespace task {
 
-class dung: public common::task::task  {
+class dung: public common::task::task {
 
 public:
 	// KONSTRUKTORY

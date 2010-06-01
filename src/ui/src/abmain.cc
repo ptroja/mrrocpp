@@ -31,10 +31,9 @@ Examples:
 #include <string.h>
 #include <unistd.h>
 
-#include "../ui.h"
-
 /* Local headers */
 #include "ablibs.h"
+#include "../ui.h"
 #include "abimport.h"
 #include "proto.h"
 #include "abwidgets.h"
@@ -80,6 +79,8 @@ static const ApClassTab_t ClassTable[] = {
 	{ "PtMultiText", &PtMultiText },
 	{ "PtComboBox", &PtComboBox },
 	{ "PtFileSel", &PtFileSel },
+	{ "PtToggleButton", &PtToggleButton },
+	{ "PtGroup", &PtGroup },
 	{ NULL, NULL }
 	};
 

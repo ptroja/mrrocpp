@@ -24,7 +24,7 @@ typedef struct _tracker {
 
 namespace mrrocpp {
 namespace ecp {
-namespace irp6ot {
+namespace irp6ot_m {
 namespace generator {
 
 #define MOTION_STEPS 25

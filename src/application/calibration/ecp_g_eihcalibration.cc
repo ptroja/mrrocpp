@@ -50,9 +50,8 @@ bool eihgenerator::first_step()
 bool eihgenerator::next_step()
 {
 	printf("bool eihgenerator::next_step()\n"); fflush(stdout);
-	float t[12];
 	if(sensor->get_reading_message().found == true)
-		count++;
+	count++;
 	get_frame();
 	eihcalibration_t command;
 	command.frame_number = count;

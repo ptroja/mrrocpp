@@ -42,21 +42,19 @@ namespace edp {
 namespace common {
 
 reader_buffer::reader_buffer(motor_driven_effector &_master) :
-	master (_master), new_data(false)
-{
-	thread_id = new boost::thread(boost::bind(&reader_buffer::operator(), this));
+	master(_master), new_data(false) {
+	thread_id
+			= new boost::thread(boost::bind(&reader_buffer::operator(), this));
 }
 
-reader_buffer::~reader_buffer()
-{
+reader_buffer::~reader_buffer() {
 	// TODO: stop (interrupt?) the thread
 	//thread_id->interrupt();
 	//thread_id->join(); // join it
 	//delete thread_id; // delete a pointer
 }
 
-void reader_buffer::operator()()
-{
+void reader_buffer::operator()() {
 	uint64_t nr_of_samples; // maksymalna liczba pomiarow
 	bool start; // shall we start the reader?
 	bool stop; // shall we stop the reader?
@@ -73,15 +71,18 @@ void reader_buffer::operator()()
 	std::string reader_meassures_dir;
 
 	if (master.config.exists("reader_meassures_dir")) {
-		reader_meassures_dir = master.config.value<std::string>("reader_meassures_dir", UI_SECTION);
+		reader_meassures_dir = master.config.value<std::string> (
+				"reader_meassures_dir", UI_SECTION);
 	} else {
-		reader_meassures_dir = master.config.return_default_reader_measures_path();
+		reader_meassures_dir
+				= master.config.return_default_reader_measures_path();
 	}
 
-	std::string robot_filename = master.config.value<std::string>("reader_attach_point");
+	std::string robot_filename = master.config.value<std::string> (
+			"reader_attach_point");
 
 	if (master.config.exists("reader_samples"))
-		nr_of_samples = master.config.value<int>("reader_samples");
+		nr_of_samples = master.config.value<int> ("reader_samples");
 	else
 		nr_of_samples = 1000;
 
@@ -116,22 +117,28 @@ void reader_buffer::operator()()
 			reader_cnf.force[j] = master.config.check_config(tmp_string);
 
 			sprintf(tmp_string, "desired_force_%d", j);
-			reader_cnf.desired_force[j] = master.config.check_config(tmp_string);
+			reader_cnf.desired_force[j]
+					= master.config.check_config(tmp_string);
 
 			sprintf(tmp_string, "filtered_force_%d", j);
-			reader_cnf.filtered_force[j] = master.config.check_config(tmp_string);
+			reader_cnf.filtered_force[j] = master.config.check_config(
+					tmp_string);
 
 			sprintf(tmp_string, "desired_cartesian_position_%d", j);
-			reader_cnf.desired_cartesian_position[j] = master.config.check_config(tmp_string);
+			reader_cnf.desired_cartesian_position[j]
+					= master.config.check_config(tmp_string);
 
 			sprintf(tmp_string, "real_cartesian_position_%d", j);
-			reader_cnf.real_cartesian_position[j] = master.config.check_config(tmp_string);
+			reader_cnf.real_cartesian_position[j] = master.config.check_config(
+					tmp_string);
 
 			sprintf(tmp_string, "real_cartesian_vel_%d", j);
-			reader_cnf.real_cartesian_vel[j] = master.config.check_config(tmp_string);
+			reader_cnf.real_cartesian_vel[j] = master.config.check_config(
+					tmp_string);
 
 			sprintf(tmp_string, "real_cartesian_acc_%d", j);
-			reader_cnf.real_cartesian_acc[j] = master.config.check_config(tmp_string);
+			reader_cnf.real_cartesian_acc[j] = master.config.check_config(
+					tmp_string);
 		}
 	}
 
@@ -142,20 +149,22 @@ void reader_buffer::operator()()
 	// boost::scoped_array takes care of deallocating in case of exception
 	boost::circular_buffer<reader_data> reader_buf(nr_of_samples);
 
-//	fprintf(stderr, "reader buffer size %lluKB\n", nr_of_samples*sizeof(reader_data)/1024);
+	//	fprintf(stderr, "reader buffer size %lluKB\n", nr_of_samples*sizeof(reader_data)/1024);
 
 	// by Y komuniakicja pomiedzy ui i reader'em rozwiazalem poprzez pulsy
 	// powolanie kanalu komunikacyjnego do odbioru pulsow sterujacych
 #if !defined(USE_MESSIP_SRR)
 	name_attach_t *my_attach; // nazwa kanalu komunikacyjnego
 
-	if ((my_attach = name_attach(NULL, master.config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "reader_attach_point").c_str(), NAME_FLAG_ATTACH_GLOBAL)) == NULL) {
+	if ((my_attach = name_attach(NULL, master.config.return_attach_point_name(
+			lib::configurator::CONFIG_SERVER, "reader_attach_point").c_str(),
+			NAME_FLAG_ATTACH_GLOBAL)) == NULL) {
 #else
-	messip_channel_t *my_attach;
+		messip_channel_t *my_attach;
 
-	if ((my_attach = messip::port_create(
-			master.config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "reader_attach_point")))
-			== NULL) {
+		if ((my_attach = messip::port_create(
+								master.config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "reader_attach_point")))
+				== NULL) {
 #endif
 		perror("Failed to attach pulse chanel for READER");
 		master.msg->message("Failed to attach pulse chanel for READER");
@@ -165,10 +174,10 @@ void reader_buffer::operator()()
 	// GLOWNA PETLA Z OCZEKIWANIEM NA ZLECENIE POMIAROW
 	for (;;) {
 		// ustawienie priorytetu watku
-		lib::set_thread_priority(pthread_self(), MAX_PRIORITY-10);
+		lib::set_thread_priority(pthread_self(), MAX_PRIORITY - 10);
 
 		// ustawienie priorytetu watku
-		lib::set_thread_priority(pthread_self(), MAX_PRIORITY-10);
+		lib::set_thread_priority(pthread_self(), MAX_PRIORITY - 10);
 
 		start = false; // okresla czy odebrano juz puls rozpoczecia pomiarow
 
@@ -177,7 +186,8 @@ void reader_buffer::operator()()
 #if !defined(USE_MESSIP_SRR)
 			_pulse_msg ui_msg;// wiadomosc z ui
 
-			int rcvid = MsgReceive(my_attach->chid, &ui_msg, sizeof(ui_msg), NULL);
+			int rcvid = MsgReceive(my_attach->chid, &ui_msg, sizeof(ui_msg),
+					NULL);
 
 			if (rcvid == -1) {/* Error condition, exit */
 				perror("blad receive w reader");
@@ -187,17 +197,17 @@ void reader_buffer::operator()()
 			if (rcvid == 0) {/* Pulse received */
 				//  printf("reader puls\n");
 				switch (ui_msg.hdr.code) {
-					case _PULSE_CODE_DISCONNECT:
+				case _PULSE_CODE_DISCONNECT:
 					ConnectDetach(ui_msg.hdr.scoid);
 					break;
-					case _PULSE_CODE_UNBLOCK:
+				case _PULSE_CODE_UNBLOCK:
 					break;
-					default:
-					if (ui_msg.hdr.code==READER_START) { // odebrano puls start
+				default:
+					if (ui_msg.hdr.code == READER_START) { // odebrano puls start
 						start = true;
-//#ifdef DOCENT_SENSOR
+						//#ifdef DOCENT_SENSOR
 						master.onReaderStarted();
-//#endif
+						//#endif
 					}
 				}
 				continue;
@@ -210,7 +220,9 @@ void reader_buffer::operator()()
 			}
 
 			/* A message (presumable ours) received, handle */
-			fprintf(stderr, "reader server receive strange message of type: %d\n", ui_msg.data);
+			fprintf(stderr,
+					"reader server receive strange message of type: %d\n",
+					ui_msg.data);
 			MsgReply(rcvid, EOK, 0, 0);
 			rcvid = MsgReceive(my_attach->chid, &ui_msg, sizeof(ui_msg), NULL);
 #else
@@ -227,15 +239,17 @@ void reader_buffer::operator()()
 
 		master.msg->message("measures started");
 
-		lib::set_thread_priority(pthread_self(), MAX_PRIORITY+1);
+		lib::set_thread_priority(pthread_self(), MAX_PRIORITY + 1);
 
 		// dopoki nie przyjdzie puls stopu
 		do {
+			//	master.msg->message("measure 1");
+			new_data = false;
 			// sekcja krytyczna odczytu danych pomiarowych dla biezacego kroku
 			{
 				boost::mutex::scoped_lock lock(reader_mutex);
 
-				while(!new_data) {
+				while (!new_data) {
 					// czekamy na opuszcenie semafora przez watek EDP_SERVO (co mikrokrok)
 					cond.wait(lock);
 				}
@@ -246,6 +260,8 @@ void reader_buffer::operator()()
 				reader_buf.push_back(step_data);
 			}
 
+			//	master.msg->message("measure 2");
+
 			// warunkowy odbior pulsu (o ile przyszedl)
 			stop = false;
 			ui_trigger = false;
@@ -254,11 +270,13 @@ void reader_buffer::operator()()
 			_pulse_msg ui_msg;// wiadomosc z ui
 
 			// sprawdzamy pulsu stopu
-			if(TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_RECEIVE, NULL, NULL, NULL) == -1) {
+			if (TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_RECEIVE, NULL, NULL,
+					NULL) == -1) {
 				perror("TimerTimeout()");
 			}
 
-			int rcvid = MsgReceive(my_attach->chid, &ui_msg, sizeof(ui_msg), NULL);
+			int rcvid = MsgReceive(my_attach->chid, &ui_msg, sizeof(ui_msg),
+					NULL);
 
 			if (rcvid == -1 && errno != ETIMEDOUT) {/* Error condition, exit */
 				perror("reader::MsgReceive()");
@@ -267,31 +285,33 @@ void reader_buffer::operator()()
 			if (rcvid == 0) {/* Pulse received */
 				// printf("reader puls\n");
 				switch (ui_msg.hdr.code) {
-					case _PULSE_CODE_DISCONNECT:
+				case _PULSE_CODE_DISCONNECT:
 					ConnectDetach(ui_msg.hdr.scoid);
 					break;
-					case _PULSE_CODE_UNBLOCK:
+				case _PULSE_CODE_UNBLOCK:
 					break;
-					default:
-					if (ui_msg.hdr.code==READER_STOP) {
+				default:
+					if (ui_msg.hdr.code == READER_STOP) {
 						stop = true; // dostalismy puls STOP
-//#ifdef DOCENT_SENSOR
+						//#ifdef DOCENT_SENSOR
 						master.onReaderStopped();
-//#endif
-					} else if (ui_msg.hdr.code==READER_TRIGGER) {
+						//#endif
+					} else if (ui_msg.hdr.code == READER_TRIGGER) {
 						ui_trigger = true; // dostalismy puls TRIGGER
 					}
 
 				}
 			}
 
-			if (rcvid> 0) {
+			if (rcvid > 0) {
 				/* A QNX IO message received, reject */
 				if (ui_msg.hdr.type >= _IO_BASE && ui_msg.hdr.type <= _IO_MAX) {
 					MsgReply(rcvid, EOK, 0, 0);
 				} else {
 					/* A message (presumable ours) received, handle */
-					printf("reader server receive strange message of type: %d\n", ui_msg.data);
+					printf(
+							"reader server receive strange message of type: %d\n",
+							ui_msg.data);
 					MsgReply(rcvid, EOK, 0, 0);
 				}
 			}
@@ -316,12 +336,13 @@ void reader_buffer::operator()()
 		time_of_day = time(NULL);
 		strftime(file_date, 40, "%g%m%d_%H-%M-%S", localtime(&time_of_day));
 
-		sprintf(file_name, "/%s_%s_pomiar-%d", file_date, robot_filename.c_str(), ++file_counter);
+		sprintf(file_name, "/%s_%s_pomiar-%d", file_date,
+				robot_filename.c_str(), ++file_counter);
 		strcpy(config_file_with_dir, reader_meassures_dir.c_str());
 
 		strcat(config_file_with_dir, file_name);
 
-        std::ofstream outfile(config_file_with_dir, std::ios::out);
+		std::ofstream outfile(config_file_with_dir, std::ios::out);
 		if (!outfile.good()) // jesli plik nie instnieje
 		{
 			std::cerr << "Cannot open file: " << file_name << '\n';

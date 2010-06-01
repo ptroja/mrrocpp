@@ -10,7 +10,7 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace irp6ot {
+namespace irp6ot_m {
 namespace generator {
 
 /** @addtogroup wii_teach
@@ -18,7 +18,7 @@ namespace generator {
  *  @{
  */
 
-class wii_joint : public irp6ot::generator::wii
+class wii_joint : public generator::wii
 {
     public:
 	/**

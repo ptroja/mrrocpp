@@ -4,11 +4,12 @@ add_executable(edp_irp6p_m
 	hi_irp6p_m.cc
 	int_hand_irp6p_m.cc
 	sg_irp6p_m.cc
+	 regulator_irp6p_m.cc 
 )
 
 target_link_libraries(
 	edp_irp6p_m
-	kinematicsirp6p
+	kinematicsirp6p_m
 	edp ${COMMON_LIBRARIES}
 )
 

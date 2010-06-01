@@ -12,7 +12,7 @@ namespace mrrocpp {
 
 namespace ecp {
 
-namespace irp6ot {
+namespace irp6ot_m {
 
 namespace task {
 
@@ -31,7 +31,7 @@ ecp_t_mboryn::ecp_t_mboryn(mrrocpp::lib::configurator& _configurator)
 :
 	task(_configurator)
 {
-	ecp_m_robot = new ecp::irp6ot::robot(*this);
+	ecp_m_robot = new ecp::irp6ot_m::robot(*this);
 	ecp_g_mboryn_ = new generator::ecp_g_mboryn(*this);
 	smooth_gen = new mrrocpp::ecp::common::generator::smooth(*this, true);
 

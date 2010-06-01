@@ -4,7 +4,7 @@ add_executable(ecp_sk
 )
 
 target_link_libraries(ecp_sk
-	ecp_r_irp6p ecp_r_irp6ot
+	ecp_r_irp6p_m ecp_r_irp6ot_m
 	ecp
 )
 
@@ -14,9 +14,10 @@ add_executable(ecp_sk_mr
 )
 
 target_link_libraries(ecp_sk_mr
-	ecp_r_irp6p ecp_r_irp6ot
+	ecp_r_irp6p_m ecp_r_irp6ot_m
 	ecp
 )
+
 
 add_executable(mp_sk_mr
 	mp_t_sk_mr.cc

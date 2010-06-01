@@ -4,8 +4,17 @@
 cmake_minimum_required (VERSION 2.6)
 project (MRROCPP)
 
+set(CMAKE_MODULE_PATH ${MRROCPP_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
+
+
+include(MacroOutOfSourceBuild)
+macro_ensure_out_of_source_build("${PROJECT_NAME} requires an out of source build.")
+
 # include module for dependent option
 include(CMakeDependentOption)
+
+
+
 
 # set short names for project directories
 set (ECP_MPDIR ${PROJECT_SOURCE_DIR}/src/ecp_mp)

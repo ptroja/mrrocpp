@@ -43,7 +43,7 @@ public:
 	//! Utworzenie macierzy przesuniecia o [x, y, z], R - jednostkowa.
 	Homog_matrix(double x, double y, double z);
 	//! Utworzenie macierzy obrotu o male katy wzgledem 3 osi.
-			Homog_matrix(const K_vector & versor_x, const K_vector & versor_y, const K_vector & versor_z, const K_vector & angles);
+	Homog_matrix(const K_vector & versor_x, const K_vector & versor_y, const K_vector & versor_z, const K_vector & angles);
 	//! Utworzenie macierzy obrotu o male katy
 	Homog_matrix(const K_vector & angles);
 

@@ -6,7 +6,7 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace irp6ot {
+namespace irp6ot_m {
 namespace generator {
 
 wii::wii (common::task::task& _ecp_task,ecp_mp::sensor::wiimote* _wiimote) : generator(_ecp_task), _wiimote(_wiimote)
@@ -25,7 +25,6 @@ wii::wii (common::task::task& _ecp_task,ecp_mp::sensor::wiimote* _wiimote) : gen
 
 bool wii::calculate_change(int axis, double value)
 {
-    char buffer[200];
     bool changed = false;
 
     value *= multipliers[axis];
@@ -89,7 +88,6 @@ int wii::get_axis(void)
 
 bool wii::next_step()
 {
-    char buffer[200];
     ecp_mp::sensor::wii_command_t message;
     int axis;
     double value;
