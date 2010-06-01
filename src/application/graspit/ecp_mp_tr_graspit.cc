@@ -25,7 +25,6 @@ void TRGraspit::TRconnect(const char *host,unsigned short int serverPort){
 	int socketDesc;
 	struct sockaddr_in serverAddress;
 	struct hostent *hostInfo;
-	char c;
 
 	hostInfo=gethostbyname(host);
 	if (hostInfo==NULL) {

@@ -10,14 +10,13 @@ namespace ecp {
 namespace common {
 namespace task {
 
-class Graspit: public common::task::task {
+class irp6_grasp: public common::task::task {
 
   private:
 	  common::generator::smooth* smoothgen2;
-	  ecp_mp::transmitter::TRGraspit* trgraspit;		//grasp transmiter
 
   public:
-	  Graspit(lib::configurator &_config);
+	  irp6_grasp(lib::configurator &_config);
 
 	  void main_task_algorithm(void);
 };

@@ -1079,6 +1079,33 @@ static const ApEventLink_t AbLinks_wnd_irp6p_tfg_moves[] = {
 	{ 0 }
 	};
 
+static const ApEventLink_t AbLinks_wnd_bird_hand_configuration[] = {
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "wnd_bird_hand_configuration", 2009, init_wnd_bird_hand_configuration, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "wnd_bird_hand_configuration", 2010, init_wnd_bird_hand_configuration, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "wnd_bird_hand_configuration", 2011, init_wnd_bird_hand_configuration, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "wnd_bird_hand_configuration", 1012, init_wnd_bird_hand_configuration, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "wnd_bird_hand_configuration", 1012, copy_wnd_bird_hand_configuration, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "wnd_bird_hand_configuration", 1013, clear_wnd_bird_hand_configuration, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_irp6m_inc_read_pos00", 2009, init_wnd_bird_hand_configuration, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_irp6m_inc_exec_move00", 2009, execute_wnd_bird_hand_configuration, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_irp6m_motors_set_desired_as_current00", 2009, copy_wnd_bird_hand_configuration, 0, 0, 0, 0, },
+	{ 0 }
+	};
+
+static const ApEventLink_t AbLinks_wnd_bird_hand_command_and_status[] = {
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "wnd_bird_hand_command_and_status", 2009, init_wnd_bird_hand_command_and_status, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "wnd_bird_hand_command_and_status", 2010, init_wnd_bird_hand_command_and_status, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "wnd_bird_hand_command_and_status", 2011, init_wnd_bird_hand_command_and_status, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "wnd_bird_hand_command_and_status", 1012, init_wnd_bird_hand_command_and_status, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "wnd_bird_hand_command_and_status", 1013, clear_wnd_bird_hand_command_and_status, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "wnd_bird_hand_command_and_status", 1012, copy_wnd_bird_hand_command_and_status, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_irp6m_inc_read_pos0", 2009, init_wnd_bird_hand_command_and_status, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_irp6m_inc_exec_move0", 2009, execute_wnd_bird_hand_command_and_status, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_irp6m_inc_exec_move0", 2009, init_wnd_bird_hand_command_and_status, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_irp6m_motors_set_desired_as_current0", 1012, copy_wnd_bird_hand_command_and_status, 0, 0, 0, 0, },
+	{ 0 }
+	};
+
 static const ApEventLink_t AbLinks_file_menu[] = {
 	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "mm_file_quit", 2009, quit, 0, 0, 0, 0, },
 	{ 0 }

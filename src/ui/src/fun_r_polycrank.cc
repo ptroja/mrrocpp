@@ -802,7 +802,7 @@ try {
 		if (ui.irp6m_m.state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
 		{
 
-			unblock_widget(ABW_PtPane_wind_irp6m_inc_post_synchro_moves);
+			ui.unblock_widget(ABW_PtPane_wind_irp6m_inc_post_synchro_moves);
 			if (!(ui.irp6m_m.ui_ecp_robot->read_motors(ui.irp6m_m.irp6m_current_pos))) // Odczyt polozenia walow silnikow
 			printf("Blad w read motors\n");
 
@@ -821,7 +821,7 @@ try {
 			ui.irp6m_m.irp6m_desired_pos[i] = ui.irp6m_m.irp6m_current_pos[i];
 		} else {
 			// Wygaszanie elementow przy niezsynchronizowanym robocie
-			block_widget(ABW_PtPane_wind_irp6m_inc_post_synchro_moves);
+			ui.block_widget(ABW_PtPane_wind_irp6m_inc_post_synchro_moves);
 		}
 	}
 } // end try
@@ -1053,7 +1053,7 @@ try {
 			if (!(ui.irp6m_m.ui_ecp_robot->read_joints(ui.irp6m_m.irp6m_current_pos))) // Odczyt polozenia walow silnikow
 			printf("Blad w read joints\n");
 
-			// 	unblock_widget(ABW_PtPane_wind_irp6m_int_post_synchro_moves);
+			// 	ui.unblock_widget(ABW_PtPane_wind_irp6m_int_post_synchro_moves);
 
 			PtSetResource(ABW_PtNumericFloat_wind_irp6m_joints_cur_p1,
 					Pt_ARG_NUMERIC_VALUE, &ui.irp6m_m.irp6m_current_pos[0], 0);
@@ -1069,7 +1069,7 @@ try {
 			for (int i = 0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++)
 			ui.irp6m_m.irp6m_desired_pos[i] = ui.irp6m_m.irp6m_current_pos[i];
 		} else {
-			// 	block_widget(ABW_PtPane_wind_irp6m_int_post_synchro_moves);
+			// 	ui.block_widget(ABW_PtPane_wind_irp6m_int_post_synchro_moves);
 		}
 	}
 } // end try
@@ -2462,23 +2462,23 @@ int process_control_window_polycrank_section_init(
 		bool &wlacz_PtButton_wnd_processes_control_all_reader_trigger) {
 
 	if (ui.irp6m_m.state.edp.state <= 0) {// edp wylaczone
-		block_widget(ABW_PtButton_wnd_processes_control_irp6m_reader_start);
-		block_widget(ABW_PtButton_wnd_processes_control_irp6m_reader_stop);
-		block_widget(ABW_PtButton_wnd_processes_control_irp6m_reader_trigger);
+		ui.block_widget(ABW_PtButton_wnd_processes_control_irp6m_reader_start);
+		ui.block_widget(ABW_PtButton_wnd_processes_control_irp6m_reader_stop);
+		ui.block_widget(ABW_PtButton_wnd_processes_control_irp6m_reader_trigger);
 	} else {
 		if (ui.irp6m_m.state.edp.state == 1) {// edp wlaczone reader czeka na start
 			wlacz_PtButton_wnd_processes_control_all_reader_start = true;
-			unblock_widget(
+			ui.unblock_widget(
 					ABW_PtButton_wnd_processes_control_irp6m_reader_start);
-			block_widget(ABW_PtButton_wnd_processes_control_irp6m_reader_stop);
-			block_widget(
+			ui.block_widget(ABW_PtButton_wnd_processes_control_irp6m_reader_stop);
+			ui.block_widget(
 					ABW_PtButton_wnd_processes_control_irp6m_reader_trigger);
 		} else if (ui.irp6m_m.state.edp.state == 2) {// edp wlaczone reader czeka na stop
 			wlacz_PtButton_wnd_processes_control_all_reader_stop = true;
 			wlacz_PtButton_wnd_processes_control_all_reader_trigger = true;
-			block_widget(ABW_PtButton_wnd_processes_control_irp6m_reader_start);
-			unblock_widget(ABW_PtButton_wnd_processes_control_irp6m_reader_stop);
-			unblock_widget(
+			ui.block_widget(ABW_PtButton_wnd_processes_control_irp6m_reader_start);
+			ui.unblock_widget(ABW_PtButton_wnd_processes_control_irp6m_reader_stop);
+			ui.unblock_widget(
 					ABW_PtButton_wnd_processes_control_irp6m_reader_trigger);
 		}
 	}

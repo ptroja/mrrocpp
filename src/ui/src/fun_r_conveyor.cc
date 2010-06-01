@@ -152,14 +152,14 @@ int wind_conveyor_moves_init(PtWidget_t *widget, ApInfo_t *apinfo,
 				&& (ui.conveyor.is_wind_conveyor_moves_open)) {
 			if (ui.conveyor.state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
 			{
-				unblock_widget(ABW_PtNumericFloat_wind_conveyor_moves_inc_pos);
-				unblock_widget(ABW_PtButton_wind_conveyor_moves_inc_exec);
+				ui.unblock_widget(ABW_PtNumericFloat_wind_conveyor_moves_inc_pos);
+				ui.unblock_widget(ABW_PtButton_wind_conveyor_moves_inc_exec);
 
-				unblock_widget(ABW_PtButton_wind_conveyor_moves_int_left);
-				unblock_widget(ABW_PtButton_wind_conveyor_moves_int_right);
-				unblock_widget(ABW_PtNumericFloat_wind_conveyor_moves_int_step);
-				unblock_widget(ABW_PtNumericFloat_wind_conveyor_moves_int_pos);
-				unblock_widget(ABW_PtButton_wind_conveyor_moves_int_exec);
+				ui.unblock_widget(ABW_PtButton_wind_conveyor_moves_int_left);
+				ui.unblock_widget(ABW_PtButton_wind_conveyor_moves_int_right);
+				ui.unblock_widget(ABW_PtNumericFloat_wind_conveyor_moves_int_step);
+				ui.unblock_widget(ABW_PtNumericFloat_wind_conveyor_moves_int_pos);
+				ui.unblock_widget(ABW_PtButton_wind_conveyor_moves_int_exec);
 
 				ui.conveyor.ui_ecp_robot->read_motors(
 						ui.conveyor.conveyor_current_pos); // Odczyt polozenia walow silnikow
@@ -178,14 +178,14 @@ int wind_conveyor_moves_init(PtWidget_t *widget, ApInfo_t *apinfo,
 						&ui.conveyor.conveyor_current_pos[0], 0);
 
 			} else {
-				block_widget(ABW_PtNumericFloat_wind_conveyor_moves_inc_pos);
-				block_widget(ABW_PtButton_wind_conveyor_moves_inc_exec);
+				ui.block_widget(ABW_PtNumericFloat_wind_conveyor_moves_inc_pos);
+				ui.block_widget(ABW_PtButton_wind_conveyor_moves_inc_exec);
 
-				block_widget(ABW_PtButton_wind_conveyor_moves_int_left);
-				block_widget(ABW_PtButton_wind_conveyor_moves_int_right);
-				block_widget(ABW_PtNumericFloat_wind_conveyor_moves_int_step);
-				block_widget(ABW_PtNumericFloat_wind_conveyor_moves_int_pos);
-				block_widget(ABW_PtButton_wind_conveyor_moves_int_exec);
+				ui.block_widget(ABW_PtButton_wind_conveyor_moves_int_left);
+				ui.block_widget(ABW_PtButton_wind_conveyor_moves_int_right);
+				ui.block_widget(ABW_PtNumericFloat_wind_conveyor_moves_int_step);
+				ui.block_widget(ABW_PtNumericFloat_wind_conveyor_moves_int_pos);
+				ui.block_widget(ABW_PtButton_wind_conveyor_moves_int_exec);
 			}
 			PtDamageWidget(ABW_wnd_conveyor_moves);
 		}

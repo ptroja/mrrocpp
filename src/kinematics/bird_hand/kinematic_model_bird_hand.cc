@@ -18,7 +18,7 @@ namespace bird_hand {
 kinematic_model_bird_hand::kinematic_model_bird_hand(void) {
 	// Set model name.
 	set_kinematic_model_label(
-			"BIRD_HAND kinematic model by D.Zlatanow and M.Zoppi");
+			"BIRD_HAND kinematic model");
 }
 
 void kinematic_model_bird_hand::check_motor_position(

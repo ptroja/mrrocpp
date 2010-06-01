@@ -247,24 +247,24 @@ int UiRobotIrp6ot_m::process_control_window_irp6ot_section_init(
 		bool &wlacz_PtButton_wnd_processes_control_all_reader_trigger) {
 
 	if (state.edp.state <= 0) {// edp wylaczone
-		block_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_start);
-		block_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_stop);
-		block_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_trigger);
+		ui.block_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_start);
+		ui.block_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_stop);
+		ui.block_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_trigger);
 	} else {
 		if (state.edp.state == 1) {// edp wlaczone reader czeka na start
 			wlacz_PtButton_wnd_processes_control_all_reader_start = true;
-			unblock_widget(
+			ui.unblock_widget(
 					ABW_PtButton_wnd_processes_control_irp6ot_reader_start);
-			block_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_stop);
-			block_widget(
+			ui.block_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_stop);
+			ui.block_widget(
 					ABW_PtButton_wnd_processes_control_irp6ot_reader_trigger);
 		} else if (state.edp.state == 2) {// edp wlaczone reader czeka na stop
 			wlacz_PtButton_wnd_processes_control_all_reader_stop = true;
 			wlacz_PtButton_wnd_processes_control_all_reader_trigger = true;
-			block_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_start);
-			unblock_widget(
+			ui.block_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_start);
+			ui.unblock_widget(
 					ABW_PtButton_wnd_processes_control_irp6ot_reader_stop);
-			unblock_widget(
+			ui.unblock_widget(
 					ABW_PtButton_wnd_processes_control_irp6ot_reader_trigger);
 		}
 	}
