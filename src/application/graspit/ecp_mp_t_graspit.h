@@ -10,7 +10,7 @@ namespace task {
  * Used generators.
  */
 enum GRASPIT_ECP_STATES {
-	ECP_GEN_IRP6 = 0
+	ECP_GEN_IRP6 = 0, ECP_GEN_BIRD_HAND
 };
 
 } // namespace task

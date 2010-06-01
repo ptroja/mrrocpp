@@ -28,12 +28,12 @@ irp6_grasp::irp6_grasp(lib::configurator &_config): task(_config){
 	smoothgen2 = new common::generator::smooth(*this, true);
 	smoothgen2->sensor_m = sensor_m;
 
-	sr_ecp_msg->message("ECP IRp6 loaded");
+	sr_ecp_msg->message("ECP IRP6 loaded");
 };
 
 void irp6_grasp::main_task_algorithm(void ){
 
-	sr_ecp_msg->message("ECP IRp6 ready");
+	sr_ecp_msg->message("ECP IRP6 ready");
 
 	double v[8], a[8];
 	for (int i=0; i<8; ++i) {
@@ -51,6 +51,8 @@ void irp6_grasp::main_task_algorithm(void ){
 
 			switch ((ecp_mp::task::GRASPIT_ECP_STATES) mp_command.ecp_next_state.mp_2_ecp_next_state) {
 			case ecp_mp::task::ECP_GEN_IRP6:
+				sr_ecp_msg->message("ECP_GEN_IRP6");
+				sr_ecp_msg->message("Smooth->Move()");
 //				smoothgen2->load_coordinates(lib::ECP_JOINT, v, a,
 //											trgraspit->from_va.graspit.grasp_joint[7],
 //											trgraspit->from_va.graspit.grasp_joint[8],

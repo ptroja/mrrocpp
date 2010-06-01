@@ -55,10 +55,10 @@ kinematic_parameters_bird_hand::kinematic_parameters_bird_hand() {
 
 	upper_limit_joint[0] = 60.0 * M_PI / 180.0;
 	upper_limit_joint[1] = 60.0 * M_PI / 180.0;
-	upper_limit_joint[2] = 180.0 * M_PI / 180.0;
+	upper_limit_joint[2] = 90.0 * M_PI / 180.0;
 	upper_limit_joint[3] = 60.0 * M_PI / 180.0;
 	upper_limit_joint[4] = 60.0 * M_PI / 180.0;
-	upper_limit_joint[5] = 180.0 * M_PI / 180.0;
+	upper_limit_joint[5] = 90.0 * M_PI / 180.0;
 	upper_limit_joint[6] = 60.0 * M_PI / 180.0;
 	upper_limit_joint[7] = 60.0 * M_PI / 180.0;
 
