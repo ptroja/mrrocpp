@@ -80,7 +80,7 @@ public:
 	 * @param section_name
 	 * @param configure_message will be send by configure_sensor()
 	 */
-	fradia_sensor(mrrocpp::lib::configurator& configurator, const std::string& section_name, const CONFIGURE_T& configure_message = CONFIGURE_T());
+	fradia_sensor(mrrocpp::lib::configurator& _configurator, const std::string& section_name, const CONFIGURE_T& configure_message = CONFIGURE_T());
 
 	/**
 	 * Closes cvFraDIA socket connection.
@@ -122,7 +122,7 @@ public:
 	const READING_T& get_reading_message() const;
 private:
 	/** Task name to load. */
-	std::string fradia_task;
+	const std::string fradia_task;
 
 	/** Socket file descriptor.  */
 	int sockfd;
@@ -155,19 +155,19 @@ private:
 }; // class fradia_sensor
 
 template <typename CONFIGURE_T, typename READING_T, typename INITIATE_T>
-fradia_sensor <CONFIGURE_T, READING_T, INITIATE_T>::fradia_sensor(mrrocpp::lib::configurator& configurator, const std::string& section_name, const CONFIGURE_T& configure_message) :
-	configurator(configurator), report(lib::VSP_SENSOR_NOT_CONFIGURED), configure_message(configure_message),
-			send_initiate_message(false)
+fradia_sensor <CONFIGURE_T, READING_T, INITIATE_T>::fradia_sensor(mrrocpp::lib::configurator& _configurator, const std::string& section_name, const CONFIGURE_T& configure_message) :
+	fradia_task(_configurator.value <std::string> ("fradia_task", section_name)),
+	configurator(_configurator),
+	report(lib::VSP_SENSOR_NOT_CONFIGURED),
+	configure_message(configure_message),
+	send_initiate_message(false)
 {
-	sockaddr_in serv_addr;
-	hostent* server;
-
 	// Set period variables.
 	base_period = current_period = 1;
 
 	// Retrieve cvfradia node name and port from configuration file.
-	int cvfradia_port = configurator.value <int> ("fradia_port", section_name);
-	std::string cvfradia_node_name = configurator.value <std::string> ("fradia_node_name", section_name);
+	uint16_t cvfradia_port = configurator.value <uint16_t> ("fradia_port", section_name);
+	const std::string cvfradia_node_name = configurator.value <std::string> ("fradia_node_name", section_name);
 
 	// Try to open socket.
 	sockfd = socket(AF_INET, SOCK_STREAM, 0);
@@ -176,33 +176,34 @@ fradia_sensor <CONFIGURE_T, READING_T, INITIATE_T>::fradia_sensor(mrrocpp::lib::
 	}
 
 	int flag = 1;
-	if (setsockopt(sockfd, IPPROTO_TCP, TCP_NODELAY, (char *) &flag, sizeof(int))) {
+	if (setsockopt(sockfd, IPPROTO_TCP, TCP_NODELAY, (char *) &flag, sizeof(int)) == -1) {
 		throw std::runtime_error("setsockopt(): " + std::string(strerror(errno)));
 	}
 
 	// Get server hostname.
-	server = gethostbyname(cvfradia_node_name.c_str());
+	hostent * server = gethostbyname(cvfradia_node_name.c_str());
 	if (server == NULL) {
 		throw std::runtime_error("gethostbyname(" + cvfradia_node_name + "): " + std::string(hstrerror(h_errno)));
 	}
 
+	// Data with address of connection
+	sockaddr_in serv_addr;
+
 	// Reset socketaddr data.
-	bzero((char *) &serv_addr, sizeof(serv_addr));
+	memset(&serv_addr, 0, sizeof(serv_addr));
+
 	// Fill it with data.
 	serv_addr.sin_family = AF_INET;
-	bcopy((char *) server->h_addr, (char *) &serv_addr.sin_addr.s_addr, server->h_length);
+	memcpy(&serv_addr.sin_addr.s_addr, server->h_addr, server->h_length);
 	serv_addr.sin_port = htons(cvfradia_port);
 
 	// Try to establish a connection with cvFraDIA.
-	if (connect(sockfd, (const struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) {
+	if (connect(sockfd, (const struct sockaddr *) &serv_addr, sizeof(serv_addr)) == -1) {
 		throw std::runtime_error("connect(): " + std::string(strerror(errno)));
 	}
 
-	// Retrieve task name.
-	fradia_task = configurator.value <std::string> ("fradia_task", section_name);
-
 	report = lib::VSP_SENSOR_NOT_CONFIGURED;
-	logger::log("FraDIA senosr created.\n");
+	logger::log("FraDIA sensor created.\n");
 }
 
 template <typename CONFIGURE_T, typename READING_T, typename INITIATE_T>
