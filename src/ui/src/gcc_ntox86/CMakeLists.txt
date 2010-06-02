@@ -23,6 +23,7 @@ add_executable(ui
 	../speaker/ui_ecp_r_speaker.cc
 	../ui_ecp_r_tfg_and_conv.cc
 	../bird_hand/ui_ecp_r_bird_hand.cc
+	../bird_hand/wnd_bird_hand_command_and_status.cc
 	../ui_robot.cc
 	../bird_hand/ui_r_bird_hand.cc
 	../irp6ot_m/ui_r_irp6ot_m.cc
