@@ -31,6 +31,8 @@
 //
 //
 
+class ui_sr_buffer;
+class ui_ecp_buffer;
 
 // super klasa agregujaca porozrzucane struktury
 
@@ -41,13 +43,10 @@ private:
 public:
 
 	ui_sr_buffer* ui_sr_obj;
-
 	ui_ecp_buffer* ui_ecp_obj;
 
 	feb_thread* meb_tid;
 
-	pthread_t ui_tid;
-	pthread_t sr_tid;
 
 	function_execution_buffer main_eb;
 

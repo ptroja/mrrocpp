@@ -20,6 +20,8 @@
 #include <fstream>
 
 #include "ui/ui_class.h"
+#include "ui/src/ui_ecp.h"
+#include "ui/src/ui_sr.h"
 
 /* Local headers */
 #include "ablibs.h"
@@ -32,9 +34,6 @@
 //
 //
 
-// forward declaration
-extern void *sr_thread(void* arg);
-extern void *comm_thread(void* arg);
 
 Ui::Ui() :
 	config(NULL), all_ecp_msg(NULL), ui_msg(NULL),
@@ -462,9 +461,9 @@ void Ui::abort_threads()
 
 {
 #if defined(__QNXNTO__)
+	delete ui_sr_obj;
+	delete ui_ecp_obj;
 
-	pthread_abort(ui_tid);
-	pthread_abort(sr_tid);
 	delete meb_tid;
 #endif
 }
@@ -1059,19 +1058,12 @@ int Ui::unblock_widget(PtWidget_t *widget) {
 void Ui::create_threads()
 
 {
-
-	ui_sr_obj = new ui_sr_buffer();
-	ui_ecp_obj = new ui_ecp_buffer();
-
-	if (pthread_create(&sr_tid, NULL, sr_thread, NULL) != EOK) {// Y&W - utowrzenie watku serwa
-		printf(" Failed to thread sr_thread\n");
-	}
-#if defined(__QNXNTO__)
-	if (pthread_create(&ui_tid, NULL, comm_thread, NULL) != EOK) {// Y&W - utowrzenie watku serwa
-		printf(" Failed to thread comm_thread\n");
-	}
-#endif
-
 	meb_tid = new feb_thread(main_eb);
+	ui_sr_obj = new ui_sr_buffer(*this);
+	ui_ecp_obj = new ui_ecp_buffer(*this);
+
+#if defined(__QNXNTO__)
+
+#endif
 
 }

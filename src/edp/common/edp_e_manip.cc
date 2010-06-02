@@ -346,7 +346,6 @@ void manip_effector::iterate_macrostep(const lib::JointArray & begining_joints,
 
 	lib::MotorArray desired_motor_pos_new_tmp(number_of_servos);
 	lib::JointArray desired_joints_tmp(number_of_servos); // Wspolrzedne wewnetrzne -
-	const lib::MOTION_TYPE &motion_type = instruction.motion_type;
 
 	// zmienne z bufora wejsciowego
 	const uint16_t &ECP_motion_steps = instruction.motion_steps; // liczba krokow w makrokroku

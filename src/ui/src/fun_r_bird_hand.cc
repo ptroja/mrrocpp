@@ -23,6 +23,7 @@
 #include "lib/srlib.h"
 #include "ui/ui_const.h"
 #include "ui/ui_class.h"
+#include "ui/src/bird_hand/wnd_bird_hand_command_and_status.h"
 // #include "ui/ui.h"
 // Konfigurator.
 #include "lib/configurator.h"
@@ -173,40 +174,8 @@ int execute_wnd_bird_hand_command_and_status(PtWidget_t *widget,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	mrrocpp::lib::bird_hand_command &bhcs =
-			ui.bird_hand->ui_ecp_robot->bird_hand_command_structure;
+	ui.bird_hand->wnd_command_and_status->get_command();
 
-	// odczyt ilosci krokow i ecp_query step
-
-	int* motion_steps, *ecp_query_step;
-
-	PtGetResource(ABW_motion_steps_wnd_bird_hand_command_and_status,
-			Pt_ARG_NUMERIC_VALUE, &motion_steps, 0);
-	PtGetResource(ABW_ecp_query_step_wnd_bird_hand_command_and_status,
-			Pt_ARG_NUMERIC_VALUE, &ecp_query_step, 0);
-
-	bhcs.motion_steps = *motion_steps;
-	bhcs.ecp_query_step = *ecp_query_step;
-
-	// odczyt wariantu ruchu
-
-
-	ui.bird_hand->get_index_f_0_command();
-
-	std::stringstream ss(std::stringstream::in | std::stringstream::out);
-	/*
-	 ss << bhcs.index_f[0].profile_type << " " << bhcs.motion_steps << "  "
-	 << bhcs.ecp_query_step;
-	 */
-	/*
-	 ss << bhcs.index_f[0].desired_position << " "
-	 << bhcs.index_f[0].desired_torque << "  "
-	 << bhcs.index_f[0].reciprocal_of_damping;
-
-	 ui.ui_msg->message(ss.str().c_str());
-	 */
-	ui.bird_hand->ui_ecp_robot->bird_hand_command_data_port->set(bhcs);
-	ui.bird_hand->ui_ecp_robot->execute_motion();
 	return (Pt_CONTINUE);
 }
 
@@ -218,17 +187,7 @@ int copy_wnd_bird_hand_command_and_status(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	double* tmp_double;
-
-	PtGetResource(
-			ABW_index_f_0_current_position_wnd_bird_hand_command_and_status,
-			Pt_ARG_NUMERIC_VALUE, &tmp_double, 0);
-
-	double set_double = *tmp_double;
-
-	PtSetResource(
-			ABW_index_f_0_desired_position_wnd_bird_hand_command_and_status,
-			Pt_ARG_NUMERIC_VALUE, &set_double, 0);
+	ui.bird_hand->wnd_command_and_status->copy_command();
 
 	return (Pt_CONTINUE);
 
@@ -242,15 +201,7 @@ int init_wnd_bird_hand_command_and_status(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	mrrocpp::lib::bird_hand_status &bhsrs =
-			ui.bird_hand->ui_ecp_robot->bird_hand_status_reply_structure;
-
-	ui.bird_hand->ui_ecp_robot->bird_hand_status_reply_data_request_port->set_request();
-	ui.bird_hand->ui_ecp_robot->execute_motion();
-	ui.bird_hand->ui_ecp_robot->bird_hand_status_reply_data_request_port->get(
-			bhsrs);
-
-	ui.bird_hand->set_index_f_0_status();
+	ui.bird_hand->wnd_command_and_status->set_status();
 
 	return (Pt_CONTINUE);
 
@@ -264,10 +215,10 @@ int start_wnd_bird_hand_command_and_status(PtWidget_t *widget,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (!ui.bird_hand->is_wnd_bird_hand_command_and_status_open) // otworz okno
+	if (!ui.bird_hand->wnd_command_and_status->is_open) // otworz okno
 	{
 		ApCreateModule(ABM_wnd_bird_hand_command_and_status, widget, cbinfo);
-		ui.bird_hand->is_wnd_bird_hand_command_and_status_open = true;
+		ui.bird_hand->wnd_command_and_status->is_open = true;
 
 	} else { // przelacz na okno
 		PtWindowToFront(ABW_wnd_bird_hand_command_and_status);
@@ -284,7 +235,7 @@ int close_wnd_bird_hand_command_and_status(PtWidget_t *widget,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (ui.bird_hand->is_wnd_bird_hand_command_and_status_open) {
+	if (ui.bird_hand->wnd_command_and_status->is_open) {
 		PtDestroyWidget(ABW_wnd_bird_hand_command_and_status);
 	}
 
@@ -299,7 +250,7 @@ int clear_wnd_bird_hand_command_and_status(PtWidget_t *widget,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	ui.bird_hand->is_wnd_bird_hand_command_and_status_open = false;
+	ui.bird_hand->wnd_command_and_status->is_open = false;
 	return (Pt_CONTINUE);
 
 }
