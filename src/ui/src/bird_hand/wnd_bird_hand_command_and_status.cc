@@ -128,7 +128,7 @@ int WndBirdHandCommandAndStatus::get_variant_thumb_f_0_command() {
 			Pt_ARG_FLAGS, &flags, 0);
 
 	if (*flags & Pt_SET) {
-		bhcs.thumb_f[1].profile_type
+		bhcs.thumb_f[0].profile_type
 				= lib::BIRD_HAND_MACROSTEP_ABSOLUTE_POSITION;
 	}
 
@@ -137,7 +137,7 @@ int WndBirdHandCommandAndStatus::get_variant_thumb_f_0_command() {
 			Pt_ARG_FLAGS, &flags, 0);
 
 	if (*flags & Pt_SET) {
-		bhcs.thumb_f[1].profile_type
+		bhcs.thumb_f[0].profile_type
 				= lib::BIRD_HAND_MACROSTEP_POSITION_INCREMENT;
 	}
 
@@ -146,7 +146,7 @@ int WndBirdHandCommandAndStatus::get_variant_thumb_f_0_command() {
 			Pt_ARG_FLAGS, &flags, 0);
 
 	if (*flags & Pt_SET) {
-		bhcs.thumb_f[1].profile_type
+		bhcs.thumb_f[0].profile_type
 				= lib::BIRD_HAND_SIGLE_STEP_POSTION_INCREMENT;
 	}
 
@@ -165,19 +165,19 @@ int WndBirdHandCommandAndStatus::get_thumb_f_0_command() {
 			ABW_thumb_f_0_desired_position_wnd_bird_hand_command_and_status,
 			Pt_ARG_NUMERIC_VALUE, &tmp_double, 0);
 
-	bhcs.thumb_f[1].desired_position = *tmp_double;
+	bhcs.thumb_f[0].desired_position = *tmp_double;
 
 	PtGetResource(
 			ABW_thumb_f_0_desired_torque_wnd_bird_hand_command_and_status,
 			Pt_ARG_NUMERIC_VALUE, &tmp_double, 0);
 
-	bhcs.thumb_f[1].desired_torque = *tmp_double;
+	bhcs.thumb_f[0].desired_torque = *tmp_double;
 
 	PtGetResource(
 			ABW_thumb_f_0_recip_of_damping_wnd_bird_hand_command_and_status,
 			Pt_ARG_NUMERIC_VALUE, &tmp_double, 0);
 
-	bhcs.thumb_f[1].reciprocal_of_damping = *tmp_double;
+	bhcs.thumb_f[0].reciprocal_of_damping = *tmp_double;
 
 	get_variant_thumb_f_0_command();
 
@@ -192,15 +192,15 @@ int WndBirdHandCommandAndStatus::set_thumb_f_0_status() {
 
 	PtSetResource(
 			ABW_thumb_f_0_current_position_wnd_bird_hand_command_and_status,
-			Pt_ARG_NUMERIC_VALUE, &bhsrs.thumb_f[1].meassured_position, 0);
+			Pt_ARG_NUMERIC_VALUE, &bhsrs.thumb_f[0].meassured_position, 0);
 	PtSetResource(
 			ABW_thumb_f_0_current_torque_wnd_bird_hand_command_and_status,
-			Pt_ARG_NUMERIC_VALUE, &bhsrs.thumb_f[1].meassured_torque, 0);
+			Pt_ARG_NUMERIC_VALUE, &bhsrs.thumb_f[0].meassured_torque, 0);
 	PtSetResource(
 			ABW_thumb_f_0_meassured_current_wnd_bird_hand_command_and_status,
-			Pt_ARG_NUMERIC_VALUE, &bhsrs.thumb_f[1].meassured_current, 0);
+			Pt_ARG_NUMERIC_VALUE, &bhsrs.thumb_f[0].meassured_current, 0);
 
-	if (bhsrs.thumb_f[1].lower_limit_of_absolute_position) {
+	if (bhsrs.thumb_f[0].lower_limit_of_absolute_position) {
 		ui.set_toggle_button(
 				ABW_thumb_f_0_limit_1_wnd_bird_hand_command_and_status);
 
@@ -209,7 +209,7 @@ int WndBirdHandCommandAndStatus::set_thumb_f_0_status() {
 				ABW_thumb_f_0_limit_1_wnd_bird_hand_command_and_status);
 	}
 
-	if (bhsrs.thumb_f[1].lower_limit_of_absolute_value_of_desired_torque) {
+	if (bhsrs.thumb_f[0].lower_limit_of_absolute_value_of_desired_torque) {
 		ui.set_toggle_button(
 				ABW_thumb_f_0_limit_2_wnd_bird_hand_command_and_status);
 
@@ -218,7 +218,7 @@ int WndBirdHandCommandAndStatus::set_thumb_f_0_status() {
 				ABW_thumb_f_0_limit_2_wnd_bird_hand_command_and_status);
 	}
 
-	if (bhsrs.thumb_f[1].upper_limit_of_absolute_position) {
+	if (bhsrs.thumb_f[0].upper_limit_of_absolute_position) {
 		ui.set_toggle_button(
 				ABW_thumb_f_0_limit_3_wnd_bird_hand_command_and_status);
 
@@ -227,7 +227,7 @@ int WndBirdHandCommandAndStatus::set_thumb_f_0_status() {
 				ABW_thumb_f_0_limit_3_wnd_bird_hand_command_and_status);
 	}
 
-	if (bhsrs.thumb_f[1].upper_limit_of_absolute_value_of_computed_position_increment) {
+	if (bhsrs.thumb_f[0].upper_limit_of_absolute_value_of_computed_position_increment) {
 		ui.set_toggle_button(
 				ABW_thumb_f_0_limit_4_wnd_bird_hand_command_and_status);
 
@@ -236,7 +236,7 @@ int WndBirdHandCommandAndStatus::set_thumb_f_0_status() {
 				ABW_thumb_f_0_limit_4_wnd_bird_hand_command_and_status);
 	}
 
-	if (bhsrs.thumb_f[1].upper_limit_of_absolute_value_of_desired_position_increment) {
+	if (bhsrs.thumb_f[0].upper_limit_of_absolute_value_of_desired_position_increment) {
 		ui.set_toggle_button(
 				ABW_thumb_f_0_limit_5_wnd_bird_hand_command_and_status);
 
@@ -245,7 +245,7 @@ int WndBirdHandCommandAndStatus::set_thumb_f_0_status() {
 				ABW_thumb_f_0_limit_5_wnd_bird_hand_command_and_status);
 	}
 
-	if (bhsrs.thumb_f[1].upper_limit_of_absolute_value_of_desired_torque) {
+	if (bhsrs.thumb_f[0].upper_limit_of_absolute_value_of_desired_torque) {
 		ui.set_toggle_button(
 				ABW_thumb_f_0_limit_6_wnd_bird_hand_command_and_status);
 
@@ -254,7 +254,7 @@ int WndBirdHandCommandAndStatus::set_thumb_f_0_status() {
 				ABW_thumb_f_0_limit_6_wnd_bird_hand_command_and_status);
 	}
 
-	if (bhsrs.thumb_f[1].upper_limit_of_absolute_value_of_meassured_torque) {
+	if (bhsrs.thumb_f[0].upper_limit_of_absolute_value_of_meassured_torque) {
 		ui.set_toggle_button(
 				ABW_thumb_f_0_limit_7_wnd_bird_hand_command_and_status);
 
@@ -263,7 +263,7 @@ int WndBirdHandCommandAndStatus::set_thumb_f_0_status() {
 				ABW_thumb_f_0_limit_7_wnd_bird_hand_command_and_status);
 	}
 
-	if (bhsrs.thumb_f[1].upper_limit_of_meassured_current) {
+	if (bhsrs.thumb_f[0].upper_limit_of_meassured_current) {
 		ui.set_toggle_button(
 				ABW_thumb_f_0_limit_8_wnd_bird_hand_command_and_status);
 
@@ -285,7 +285,7 @@ int WndBirdHandCommandAndStatus::copy_thumb_f_0_command() {
 
 	get_variant_thumb_f_0_command();
 
-	if (bhcs.thumb_f[1].profile_type
+	if (bhcs.thumb_f[0].profile_type
 			== lib::BIRD_HAND_MACROSTEP_ABSOLUTE_POSITION) {
 
 		PtGetResource(
