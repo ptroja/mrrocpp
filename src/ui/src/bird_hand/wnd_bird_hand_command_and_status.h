@@ -37,10 +37,39 @@ public:
 	int set_status();
 	int copy_command();
 
+	//
+	//
+	// index_f_0
+	//
+	//
+
 	int get_index_f_0_command();
 	int get_variant_index_f_0_command();
 	int set_index_f_0_status();
 	int copy_index_f_0_command();
+
+	//
+	//
+	// index_f_1
+	//
+	//
+
+	int get_index_f_1_command();
+	int get_variant_index_f_1_command();
+	int set_index_f_1_status();
+	int copy_index_f_1_command();
+
+	//
+	//
+	// index_f_2
+	//
+	//
+
+	int get_index_f_2_command();
+	int get_variant_index_f_2_command();
+	int set_index_f_2_status();
+	int copy_index_f_2_command();
+
 };
 
 #endif
