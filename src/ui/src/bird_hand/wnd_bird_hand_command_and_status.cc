@@ -26,6 +26,69 @@ WndBirdHandCommandAndStatus::WndBirdHandCommandAndStatus(Ui& _ui,
 
 }
 
+int WndBirdHandCommandAndStatus::get_command() {
+
+	mrrocpp::lib::bird_hand_command &bhcs =
+			bird_hand.ui_ecp_robot->bird_hand_command_structure;
+
+	// odczyt ilosci krokow i ecp_query step
+
+	int* motion_steps, *ecp_query_step;
+
+	PtGetResource(ABW_motion_steps_wnd_bird_hand_command_and_status,
+			Pt_ARG_NUMERIC_VALUE, &motion_steps, 0);
+	PtGetResource(ABW_ecp_query_step_wnd_bird_hand_command_and_status,
+			Pt_ARG_NUMERIC_VALUE, &ecp_query_step, 0);
+
+	bhcs.motion_steps = *motion_steps;
+	bhcs.ecp_query_step = *ecp_query_step;
+
+	get_index_f_0_command();
+
+	std::stringstream ss(std::stringstream::in | std::stringstream::out);
+	/*
+	 ss << bhcs.index_f[0].profile_type << " " << bhcs.motion_steps << "  "
+	 << bhcs.ecp_query_step;
+	 */
+	/*
+	 ss << bhcs.index_f[0].desired_position << " "
+	 << bhcs.index_f[0].desired_torque << "  "
+	 << bhcs.index_f[0].reciprocal_of_damping;
+
+	 ui.ui_msg->message(ss.str().c_str());
+	 */
+	bird_hand.ui_ecp_robot->bird_hand_command_data_port->set(bhcs);
+	bird_hand.ui_ecp_robot->execute_motion();
+
+	return 1;
+}
+
+int WndBirdHandCommandAndStatus::set_status() {
+
+	mrrocpp::lib::bird_hand_status &bhsrs =
+			bird_hand.ui_ecp_robot->bird_hand_status_reply_structure;
+
+	bird_hand.ui_ecp_robot->bird_hand_status_reply_data_request_port->set_request();
+	bird_hand.ui_ecp_robot->execute_motion();
+	bird_hand.ui_ecp_robot->bird_hand_status_reply_data_request_port->get(bhsrs);
+
+	set_index_f_0_status();
+
+	return 1;
+}
+
+int WndBirdHandCommandAndStatus::copy_command() {
+	copy_index_f_0_command();
+	return 1;
+}
+
+//
+//
+// index_f_0
+//
+//
+
+
 int WndBirdHandCommandAndStatus::get_variant_index_f_0_command() {
 
 	unsigned long *flags;
