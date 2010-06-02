@@ -31,12 +31,15 @@ extern busy_flag communication_flag;
 
 ui_ecp_buffer::ui_ecp_buffer(Ui& _ui) :
 	ui(_ui), communication_state(UI_ECP_AFTER_REPLY), synchroniser() {
-
+	thread_id
+			= new boost::thread(boost::bind(&ui_ecp_buffer::operator(), this));
 }
 
 ui_ecp_buffer::~ui_ecp_buffer() {
-
-	delete thread_id;
+	//	printf("ui_ecp_buffer\n");
+	//	thread_id->interrupt();
+	//	thread_id->join(); // join it
+	//	delete thread_id;
 }
 
 void ui_ecp_buffer::operator()() {

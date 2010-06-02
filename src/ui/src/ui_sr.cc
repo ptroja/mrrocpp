@@ -127,8 +127,10 @@ ui_sr_buffer::ui_sr_buffer(Ui& _ui) :
 }
 
 ui_sr_buffer::~ui_sr_buffer() {
-
-	delete thread_id;
+	//	printf("ui_sr_buffer\n");
+	//	thread_id->interrupt();
+	//	thread_id->join(); // join it
+	//	delete thread_id;
 }
 
 void ui_sr_buffer::put_one_msg(const lib::sr_package_t& new_msg) {
