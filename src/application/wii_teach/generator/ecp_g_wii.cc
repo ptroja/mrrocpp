@@ -11,8 +11,7 @@ namespace generator {
 
 wii::wii (common::task::task& _ecp_task,ecp_mp::sensor::wiimote* _wiimote) : generator(_ecp_task), _wiimote(_wiimote)
 {
-    int i;
-    for(i  = 0;i < MAX_NO_OF_DEGREES;++i)
+    for(int i  = 0;i < MAX_NO_OF_DEGREES;++i)
     {
         currentValue[i] = 0;
         requestedChange[i] = 0;
@@ -26,14 +25,12 @@ wii::wii (common::task::task& _ecp_task,ecp_mp::sensor::wiimote* _wiimote) : gen
 
 bool wii::calculate_change(int axis, double value)
 {
-    char buffer[200];
-    int i;
     bool changed = false;
 
     value *= multipliers[axis];
     requestedChange[axis] = value;
     
-    for(i = 0;i < MAX_NO_OF_DEGREES;++i)
+    for(int i = 0;i < MAX_NO_OF_DEGREES;++i)
     {
         if(fabs(nextChange[i] - requestedChange[i]) < maxChange[i])
         {
@@ -53,35 +50,35 @@ bool wii::calculate_change(int axis, double value)
 int wii::get_axis(void)
 {
     int axis = -1;
-    if(!_wiimote->image.sensor_union.wiimote.buttonB && _wiimote->image.sensor_union.wiimote.left)
+    if(!_wiimote->image.buttonB && _wiimote->image.left)
     {
         axis = 0;
     }
-    else if(!_wiimote->image.sensor_union.wiimote.buttonB && _wiimote->image.sensor_union.wiimote.up)
+    else if(!_wiimote->image.buttonB && _wiimote->image.up)
     {
         axis = 1;
     }
-    else if(!_wiimote->image.sensor_union.wiimote.buttonB && _wiimote->image.sensor_union.wiimote.right)
+    else if(!_wiimote->image.buttonB && _wiimote->image.right)
     {
         axis = 2;
     }
-    else if(!_wiimote->image.sensor_union.wiimote.buttonB && _wiimote->image.sensor_union.wiimote.down)
+    else if(!_wiimote->image.buttonB && _wiimote->image.down)
     {
         axis = 3;
     }
-    else if(_wiimote->image.sensor_union.wiimote.buttonB && _wiimote->image.sensor_union.wiimote.left)
+    else if(_wiimote->image.buttonB && _wiimote->image.left)
     {
         axis = 4;
     }
-    else if(_wiimote->image.sensor_union.wiimote.buttonB && _wiimote->image.sensor_union.wiimote.up)
+    else if(_wiimote->image.buttonB && _wiimote->image.up)
     {
         axis = 5;
     }
-    else if(_wiimote->image.sensor_union.wiimote.buttonB && _wiimote->image.sensor_union.wiimote.right)
+    else if(_wiimote->image.buttonB && _wiimote->image.right)
     {
         axis = 6;
     }
-    else if(_wiimote->image.sensor_union.wiimote.buttonB && _wiimote->image.sensor_union.wiimote.down)
+    else if(_wiimote->image.buttonB && _wiimote->image.down)
     {
         axis = 7;
     }
@@ -91,23 +88,24 @@ int wii::get_axis(void)
 
 bool wii::next_step()
 {
-    char buffer[200];
-    struct lib::ECP_VSP_MSG message;
+    ecp_mp::sensor::wii_command_t message;
     int axis;
     double value;
-    message.i_code = lib::VSP_CONFIGURE_SENSOR;
-    message.wii_command.led_change = false;
+
+    message.led_change = false;
 
     try
     {
         if(rumble)
         {
-            message.wii_command.rumble = true;
+            message.rumble = true;
+            // TODO: check this send/get _reading()
             _wiimote->get_reading(message);
         }
         else
         {
-            message.wii_command.rumble = false;
+            message.rumble = false;
+            // TODO: check this send/get _reading()
             _wiimote->get_reading(message);
         }
     }
@@ -115,14 +113,14 @@ bool wii::next_step()
     {
     }
 
-    if(!_wiimote->image.sensor_union.wiimote.buttonA) releasedA = true;
+    if(!_wiimote->image.buttonA) releasedA = true;
 
     ++step_no;
  
-    if(releasedA && _wiimote->image.sensor_union.wiimote.buttonA) stop = true;
+    if(releasedA && _wiimote->image.buttonA) stop = true;
 
     //get value and convert to nonlinear when needed
-    value = _wiimote->image.sensor_union.wiimote.orientation_x;
+    value = _wiimote->image.orientation_x;
     if(value > -1 && value < 1) value = pow(value,3);
 
 

@@ -25,8 +25,8 @@ kcz_test::kcz_test(lib::configurator &_config): task(_config)
         ecp_m_robot = new irp6p_m::robot (*this);
     }
 
-	sensor_m[lib::SENSOR_PCBIRD] = new ecp_mp::sensor::pcbird("[vsp_pcbird]", *this);
-	sensor_m[lib::SENSOR_PCBIRD]->configure_sensor();
+	sensor_m[ecp_mp::sensor::SENSOR_PCBIRD] = new ecp_mp::sensor::pcbird("[vsp_pcbird]", *this->sr_ecp_msg, this->config);
+	sensor_m[ecp_mp::sensor::SENSOR_PCBIRD]->configure_sensor();
 
 	smoothgen2 = new common::generator::smooth(*this, true);
 	smoothgen2->sensor_m = sensor_m;
@@ -39,13 +39,15 @@ void kcz_test::main_task_algorithm(void ) {
 
 	smoothgen2->set_absolute();
 
+	ecp_mp::sensor::pcbird * bird = dynamic_cast<ecp_mp::sensor::pcbird *> (sensor_m[ecp_mp::sensor::SENSOR_PCBIRD]);
+
 	smoothgen2->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, -0.150, 1.12, -0.1, 0.729*3.14, 0.685*3.14, -0.001*3.14, 0.09, 0.000, true);
 	smoothgen2->Move();
 	smoothgen2->reset();
 	smoothgen2->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS,
-						sensor_m[lib::SENSOR_PCBIRD]->image.sensor_union.pcbird.x - 0.421,
-						-1.0 * sensor_m[lib::SENSOR_PCBIRD]->image.sensor_union.pcbird.y + 1.119,
-						-1.0 * sensor_m[lib::SENSOR_PCBIRD]->image.sensor_union.pcbird.z - 0.22 + 0.20,
+						bird->image.x - 0.421,
+						-1.0 * bird->image.y + 1.119,
+						-1.0 * bird->image.z - 0.22 + 0.20,
 						0.729*3.14,
 						0.685*3.14,
 						-0.001*3.14,
@@ -58,13 +60,13 @@ void kcz_test::main_task_algorithm(void ) {
 	double vv[MAX_SERVOS_NR]={0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3};
 	double aa[MAX_SERVOS_NR]={0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5};
 
-	float lastx = sensor_m[lib::SENSOR_PCBIRD]->image.sensor_union.pcbird.x;
-	float lasty = sensor_m[lib::SENSOR_PCBIRD]->image.sensor_union.pcbird.y;
-	float lastz = sensor_m[lib::SENSOR_PCBIRD]->image.sensor_union.pcbird.z;
+	float lastx = bird->image.x;
+	float lasty = bird->image.y;
+	float lastz = bird->image.z;
 
-	float Zang = sensor_m[lib::SENSOR_PCBIRD]->image.sensor_union.pcbird.a * M_PI / 180;
-	float Yang = sensor_m[lib::SENSOR_PCBIRD]->image.sensor_union.pcbird.b * M_PI / 180;
-	float Xang = sensor_m[lib::SENSOR_PCBIRD]->image.sensor_union.pcbird.g * M_PI / 180;
+	float Zang = bird->image.a * M_PI / 180;
+	float Yang = bird->image.b * M_PI / 180;
+	float Xang = bird->image.g * M_PI / 180;
 	double lastrot[3][3];
 	lastrot[0][0] = cos(Yang)*cos(Zang);
 	lastrot[0][1] = cos(Yang)*sin(Zang);
@@ -86,13 +88,13 @@ void kcz_test::main_task_algorithm(void ) {
 	float movex, movey, movez, movea, moveb, movec;
 	float delta = 0.001;
 	do {
-    movex = abs(sensor_m[lib::SENSOR_PCBIRD]->image.sensor_union.pcbird.y - lasty) > delta ? sensor_m[lib::SENSOR_PCBIRD]->image.sensor_union.pcbird.y - lasty : 0;
-    movey = abs(sensor_m[lib::SENSOR_PCBIRD]->image.sensor_union.pcbird.x - lastx) > delta ? sensor_m[lib::SENSOR_PCBIRD]->image.sensor_union.pcbird.x - lastx : 0;
-    movez = abs(sensor_m[lib::SENSOR_PCBIRD]->image.sensor_union.pcbird.z - lastz) > delta ? sensor_m[lib::SENSOR_PCBIRD]->image.sensor_union.pcbird.z - lastz : 0;
+    movex = abs(bird->image.y - lasty) > delta ? bird->image.y - lasty : 0;
+    movey = abs(bird->image.x - lastx) > delta ? bird->image.x - lastx : 0;
+    movez = abs(bird->image.z - lastz) > delta ? bird->image.z - lastz : 0;
 
-	Zang = sensor_m[lib::SENSOR_PCBIRD]->image.sensor_union.pcbird.a * M_PI / 180;
-	Yang = sensor_m[lib::SENSOR_PCBIRD]->image.sensor_union.pcbird.b * M_PI / 180;
-	Xang = sensor_m[lib::SENSOR_PCBIRD]->image.sensor_union.pcbird.g * M_PI / 180;
+	Zang = bird->image.a * M_PI / 180;
+	Yang = bird->image.b * M_PI / 180;
+	Xang = bird->image.g * M_PI / 180;
 	lastrot[0][0] = cos(Yang)*cos(Zang);
 	lastrot[0][1] = cos(Yang)*sin(Zang);
 	lastrot[0][2] = -sin(Yang);
@@ -118,9 +120,9 @@ void kcz_test::main_task_algorithm(void ) {
 															-1.0 * movea,
 															-1.0 * movec,
 															0.0, 0.0, true);
-	lastx = sensor_m[lib::SENSOR_PCBIRD]->image.sensor_union.pcbird.x;
-	lasty = sensor_m[lib::SENSOR_PCBIRD]->image.sensor_union.pcbird.y;
-	lastz = sensor_m[lib::SENSOR_PCBIRD]->image.sensor_union.pcbird.z;
+	lastx = bird->image.x;
+	lasty = bird->image.y;
+	lastz = bird->image.z;
 	lasta = temp1[3];
 	lastb = temp1[4];
 	lastc = temp1[5];
@@ -130,7 +132,6 @@ void kcz_test::main_task_algorithm(void ) {
 	smoothgen2->reset();
 
 	ecp_termination_notice();
-
 };
 
 }

@@ -22,6 +22,8 @@
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 
+#include "ui/ui_ecp_r_irp6_common.h"
+
 #include "lib/srlib.h"
 
 #include "ui/ui_ecp_r_irp6_common.h"

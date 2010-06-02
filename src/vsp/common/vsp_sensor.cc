@@ -20,27 +20,26 @@ namespace mrrocpp {
 namespace vsp {
 namespace sensor {
 
-sensor::sensor (lib::configurator &_config) :
-	config(_config),
+sensor_interface::sensor_interface (lib::configurator &_config) :
 	is_sensor_configured(false),
-	is_reading_ready(false)
+	is_reading_ready(false),
+	config(_config),
+	mrrocpp_network_path(config.return_mrrocpp_network_path())
 {
 	/* Lokalizacja procesu wyswietlania komunikatow SR */
 	sr_msg = new lib::sr_vsp(lib::VSP,
-			config.value<std::string>("resourceman_attach_point").c_str(),
-			config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", UI_SECTION).c_str(), true);
+			config.value<std::string>("resourceman_attach_point"),
+			config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", UI_SECTION), true);
 
 	sr_msg->message ("Communication with SR ready");
-
-	mrrocpp_network_path = config.return_mrrocpp_network_path();
 }
 
 
-void sensor::wait_for_event(void)
+void sensor_interface::wait_for_event(void)
 {
 }
 
-sensor::~sensor() {
+sensor_interface::~sensor_interface() {
 	sr_msg->message("VSP terminated");
 	delete sr_msg;
 }

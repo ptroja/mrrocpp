@@ -42,30 +42,30 @@ void graspit::main_task_algorithm(void) {
 	//mrroc++ kinematics,
 	//1 affects 2
 	//2 affects 3
-	trgraspit->from_va.graspit.grasp_joint[2] += trgraspit->from_va.graspit.grasp_joint[1];
-	trgraspit->from_va.graspit.grasp_joint[3] += trgraspit->from_va.graspit.grasp_joint[2];
+	trgraspit->from_va.grasp_joint[2] += trgraspit->from_va.grasp_joint[1];
+	trgraspit->from_va.grasp_joint[3] += trgraspit->from_va.grasp_joint[2];
 
-	trgraspit->from_va.graspit.grasp_joint[9] += trgraspit->from_va.graspit.grasp_joint[8];
-	trgraspit->from_va.graspit.grasp_joint[10] += trgraspit->from_va.graspit.grasp_joint[9];
+	trgraspit->from_va.grasp_joint[9] += trgraspit->from_va.grasp_joint[8];
+	trgraspit->from_va.grasp_joint[10] += trgraspit->from_va.grasp_joint[9];
 
 	//synchro with GraspIt
-	//trgraspit->from_va.graspit.grasp_joint[0] ;
-	trgraspit->from_va.graspit.grasp_joint[1] -= 1.542;
-	//trgraspit->from_va.graspit.grasp_joint[2] ;
-	//trgraspit->from_va.graspit.grasp_joint[3] ;
-	trgraspit->from_va.graspit.grasp_joint[4] += 4.712;
-	//trgraspit->from_va.graspit.grasp_joint[5] ;
-	trgraspit->from_va.graspit.grasp_joint[6] = (45.5 - trgraspit->from_va.graspit.grasp_joint[6]) * 2;
-	trgraspit->from_va.graspit.grasp_joint[6] /= 1000;
+	//trgraspit->from_va.grasp_joint[0] ;
+	trgraspit->from_va.grasp_joint[1] -= 1.542;
+	//trgraspit->from_va.grasp_joint[2] ;
+	//trgraspit->from_va.grasp_joint[3] ;
+	trgraspit->from_va.grasp_joint[4] += 4.712;
+	//trgraspit->from_va.grasp_joint[5] ;
+	trgraspit->from_va.grasp_joint[6] = (45.5 - trgraspit->from_va.grasp_joint[6]) * 2;
+	trgraspit->from_va.grasp_joint[6] /= 1000;
 
-	//trgraspit->from_va.graspit.grasp_joint[7] ;
-	trgraspit->from_va.graspit.grasp_joint[8] -= 1.542;
-	//trgraspit->from_va.graspit.grasp_joint[9] ;
-	//trgraspit->from_va.graspit.grasp_joint[10] ;
-	trgraspit->from_va.graspit.grasp_joint[11] += 4.712;
-	//trgraspit->from_va.graspit.grasp_joint[12] ;
-	trgraspit->from_va.graspit.grasp_joint[13] = (45.5 - trgraspit->from_va.graspit.grasp_joint[13]) * 2;
-	trgraspit->from_va.graspit.grasp_joint[13] /= 1000;
+	//trgraspit->from_va.grasp_joint[7] ;
+	trgraspit->from_va.grasp_joint[8] -= 1.542;
+	//trgraspit->from_va.grasp_joint[9] ;
+	//trgraspit->from_va.grasp_joint[10] ;
+	trgraspit->from_va.grasp_joint[11] += 4.712;
+	//trgraspit->from_va.grasp_joint[12] ;
+	trgraspit->from_va.grasp_joint[13] = (45.5 - trgraspit->from_va.grasp_joint[13]) * 2;
+	trgraspit->from_va.grasp_joint[13] /= 1000;
 
 
 
@@ -92,14 +92,14 @@ void graspit::main_task_algorithm(void) {
 
 	lib::bird_hand_command mp_ecp_bird_hand_command;
 
-	mp_ecp_bird_hand_command.thumb_f[0].desired_position = trgraspit->from_va.graspit.grasp_joint[0];
-	mp_ecp_bird_hand_command.thumb_f[1].desired_position = trgraspit->from_va.graspit.grasp_joint[1];
-	mp_ecp_bird_hand_command.index_f[0].desired_position = trgraspit->from_va.graspit.grasp_joint[2];
-	mp_ecp_bird_hand_command.index_f[1].desired_position = trgraspit->from_va.graspit.grasp_joint[3];
-	mp_ecp_bird_hand_command.index_f[2].desired_position = trgraspit->from_va.graspit.grasp_joint[4];
-	mp_ecp_bird_hand_command.ring_f[0].desired_position = trgraspit->from_va.graspit.grasp_joint[5];
-	mp_ecp_bird_hand_command.ring_f[1].desired_position = trgraspit->from_va.graspit.grasp_joint[6];
-	mp_ecp_bird_hand_command.ring_f[2].desired_position = trgraspit->from_va.graspit.grasp_joint[7];
+	mp_ecp_bird_hand_command.thumb_f[0].desired_position = trgraspit->from_va.grasp_joint[0];
+	mp_ecp_bird_hand_command.thumb_f[1].desired_position = trgraspit->from_va.grasp_joint[1];
+	mp_ecp_bird_hand_command.index_f[0].desired_position = trgraspit->from_va.grasp_joint[2];
+	mp_ecp_bird_hand_command.index_f[1].desired_position = trgraspit->from_va.grasp_joint[3];
+	mp_ecp_bird_hand_command.index_f[2].desired_position = trgraspit->from_va.grasp_joint[4];
+	mp_ecp_bird_hand_command.ring_f[0].desired_position = trgraspit->from_va.grasp_joint[5];
+	mp_ecp_bird_hand_command.ring_f[1].desired_position = trgraspit->from_va.grasp_joint[6];
+	mp_ecp_bird_hand_command.ring_f[2].desired_position = trgraspit->from_va.grasp_joint[7];
 
 	memcpy(tmp_string, &mp_ecp_bird_hand_command, sizeof(mp_ecp_bird_hand_command));
 

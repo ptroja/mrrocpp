@@ -32,8 +32,8 @@ acq_force::acq_force(task &_ecp_t): acquisition(_ecp_t)
     	ecp_sub_task::ecp_t.sr_ecp_msg->message("IRp6p loaded");
     }
 
-    ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_PCBIRD] = new ecp_mp::sensor::pcbird("[vsp_pcbird]", _ecp_t);
-    ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_PCBIRD]->configure_sensor();
+    ecp_sub_task::ecp_t.sensor_m[ecp_mp::sensor::SENSOR_PCBIRD] = new ecp_mp::sensor::pcbird("[vsp_pcbird]", *_ecp_t.sr_ecp_msg, _ecp_t.config);
+    ecp_sub_task::ecp_t.sensor_m[ecp_mp::sensor::SENSOR_PCBIRD]->configure_sensor();
 
     nose_run = new common::generator::pcbird_nose_run(_ecp_t, 8);
     nose_run->configure_pulse_check (true);
@@ -95,9 +95,10 @@ void acq_force::main_task_algorithm(void) {
 		*/
 		//conversion from Euler angles ZYX to rotation matrix
 		//conversion to radians first
-		float Zang = ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_PCBIRD]->image.sensor_union.pcbird.a * M_PI / 180;
-		float Yang = ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_PCBIRD]->image.sensor_union.pcbird.b * M_PI / 180;
-		float Xang = ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_PCBIRD]->image.sensor_union.pcbird.g * M_PI / 180;
+		ecp_mp::sensor::pcbird * bird = dynamic_cast<ecp_mp::sensor::pcbird *> (ecp_sub_task::ecp_t.sensor_m[ecp_mp::sensor::SENSOR_PCBIRD]);
+		float Zang = bird->image.a * M_PI / 180;
+		float Yang = bird->image.b * M_PI / 180;
+		float Xang = bird->image.g * M_PI / 180;
 		//conversion to matrix (pcbirdmanual, p.94)
 		gsl_matrix_set(M, 0, 0, cos(Yang)*cos(Zang));
 		gsl_matrix_set(M, 0, 1, cos(Yang)*sin(Zang));
@@ -108,9 +109,9 @@ void acq_force::main_task_algorithm(void) {
 		gsl_matrix_set(M, 2, 0, sin(Xang)*sin(Zang)+cos(Xang)*sin(Yang)*cos(Zang));
 		gsl_matrix_set(M, 2, 1, -sin(Xang)*cos(Zang)+cos(Xang)*sin(Yang)*sin(Zang));
 		gsl_matrix_set(M, 2, 2, cos(Xang)*cos(Yang));
-		gsl_vector_set(m, 0, ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_PCBIRD]->image.sensor_union.pcbird.x);
-		gsl_vector_set(m, 1, ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_PCBIRD]->image.sensor_union.pcbird.y);
-		gsl_vector_set(m, 2, ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_PCBIRD]->image.sensor_union.pcbird.z);
+		gsl_vector_set(m, 0, bird->image.x);
+		gsl_vector_set(m, 1, bird->image.y);
+		gsl_vector_set(m, 2, bird->image.z);
 
 		FP = fopen(M_fp.c_str(),"a");
 		gsl_matrix_fprintf (FP, M, "%g");
@@ -126,9 +127,9 @@ void acq_force::main_task_algorithm(void) {
 		fclose(FP);
 
 		/*
-		float tempx = sensor_m[lib::SENSOR_PCBIRD]->image.sensor_union.pcbird.x;
-		float tempy = sensor_m[lib::SENSOR_PCBIRD]->image.sensor_union.pcbird.y;
-		float tempz = sensor_m[lib::SENSOR_PCBIRD]->image.sensor_union.pcbird.z;
+		float tempx = bird->image.x;
+		float tempy = bird->image.y;
+		float tempz = bird->image.z;
 		float temp00 = ecp_m_robot->reply_package.arm.pf_def.arm_frame[0][0];
 		float temp01 = ecp_m_robot->reply_package.arm.pf_def.arm_frame[0][1];
 		float temp02 = ecp_m_robot->reply_package.arm.pf_def.arm_frame[0][2];

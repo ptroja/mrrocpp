@@ -19,7 +19,6 @@
 #include "ecp/common/task/ecp_task.h"
 #include "ecp/common/generator/ecp_g_smooth.h"
 #include "ecp/common/generator/ecp_g_transparent.h"
-#include "ecp_mp/sensor/ecp_mp_s_cvfradia.h"
 #include "ecp/common/generator/ecp_g_force.h"
 #include "ecp_g_eih_nose_run.h"
 #include "ecp_st_acquisition.h"
@@ -54,11 +53,12 @@ private:
 		int number_of_measures;
 	} ofp;
 
-protected:
-	std::string K_fp;
-	std::string kk_fp;
-	std::string M_fp;
-	std::string mm_fp;
+		ecp_mp::sensor::fradia_sensor<lib::empty_t, chessboard_t, eihcalibration_t> *fradia;
+	protected:
+		std::string K_fp;
+		std::string kk_fp;
+		std::string M_fp;
+		std::string mm_fp;
 
 	// generator do wodzenia za nos
 	generator::eih_nose_run* nose;

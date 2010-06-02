@@ -35,8 +35,9 @@ visual_servo_manager::visual_servo_manager(
 visual_servo_manager::~visual_servo_manager() {
 }
 
-bool visual_servo_manager::first_step() {
-	logDbg("ecp_g_ib_eih::first_step()\n");
+bool visual_servo_manager::first_step()
+{
+	log_dbg("ecp_g_ib_eih::first_step()\n");
 
 	the_robot->ecp_command.instruction.instruction_type = lib::GET;
 	the_robot->ecp_command.instruction.get_type = ARM_DEFINITION;
@@ -87,13 +88,12 @@ bool visual_servo_manager::next_step() {
 	//	log("timer_gettime(timerek, &curr_t): %d.%09d\n", curr_t.it_value.tv_sec, curr_t.it_value.tv_nsec);
 	//	setup_timer();
 
-	//	logDbg("bool visual_servo_manager::next_step() begin\n");
+	//	log_dbg("bool visual_servo_manager::next_step() begin\n");
 	the_robot->ecp_command.instruction.instruction_type = lib::SET_GET;
 
 	if (!current_position_saved) { // save first frame
-		//logDbg("ecp_g_ib_eih::next_step() 1\n");
-		current_position.set_from_frame_tab(
-				the_robot->reply_package.arm.pf_def.arm_frame);
+		//log_dbg("ecp_g_ib_eih::next_step() 1\n");
+		current_position.set_from_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame);
 
 		current_position_saved = true;
 	}
@@ -112,11 +112,11 @@ bool visual_servo_manager::next_step() {
 
 	// get readings from all servos and aggregate
 	lib::Homog_matrix position_change = get_aggregated_position_change();
-	//	logDbg("bool visual_servo_manager::next_step(): position_change = (%+07.3lg, %+07.3lg, %+07.3lg)\n", position_change(0, 3), position_change(1, 3), position_change(2, 3));
+	//	log_dbg("bool visual_servo_manager::next_step(): position_change = (%+07.3lg, %+07.3lg, %+07.3lg)\n", position_change(0, 3), position_change(1, 3), position_change(2, 3));
 
 	lib::Homog_matrix next_position = current_position * position_change;
 
-	//	logDbg("bool visual_servo_manager::next_step(): next_position = (%+07.3lg, %+07.3lg, %+07.3lg)\n", next_position(0, 3), next_position(1, 3), next_position(2, 3));
+	//	log_dbg("bool visual_servo_manager::next_step(): next_position = (%+07.3lg, %+07.3lg, %+07.3lg)\n", next_position(0, 3), next_position(1, 3), next_position(2, 3));
 
 	// apply weak position constraints
 	bool constraints_kept = false;
@@ -137,7 +137,7 @@ bool visual_servo_manager::next_step() {
 		termination_conditions[i]->update_end_effector_accel(a);
 	}
 
-	//	logDbg("bool visual_servo_manager::next_step(): next_position = (%+07.3lg, %+07.3lg, %+07.3lg)\n", next_position(0, 3), next_position(1, 3), next_position(2, 3));
+	//	log_dbg("bool visual_servo_manager::next_step(): next_position = (%+07.3lg, %+07.3lg, %+07.3lg)\n", next_position(0, 3), next_position(1, 3), next_position(2, 3));
 	// send command to the robot
 	next_position.get_frame_tab(
 			the_robot->ecp_command.instruction.arm.pf_def.arm_frame);
@@ -174,14 +174,14 @@ void visual_servo_manager::apply_speed_accel_constraints(
 	// apply acceleration constraints
 	Eigen::Matrix<double, 3, 1> dv = v - prev_v;
 	double dv_norm = dv.norm();
-	//	logDbg("dv = %10lg    prev_v = %10lg     v = %10lg\n", dv_norm, prev_v.norm(), v.norm());
+	//	log_dbg("dv = %10lg    prev_v = %10lg     v = %10lg\n", dv_norm, prev_v.norm(), v.norm());
 	if (dv_norm > (a_max * dt)) {
 		dv = dv * ((a_max * dt) / dv_norm);
 		v = prev_v + dv;
 		ds = v * dt;
-		//		logDbg("Acceleration constrained (%10lg > %10lg): dv = %10lg  ds = %10lg\n", dv_norm, (a_max * dt), dv.norm(), ds.norm());
+		//		log_dbg("Acceleration constrained (%10lg > %10lg): dv = %10lg  ds = %10lg\n", dv_norm, (a_max * dt), dv.norm(), ds.norm());
 	}
-	//	logDbg("ds = %10lg\n", ds.norm());
+	//	log_dbg("ds = %10lg\n", ds.norm());
 
 	for (int i = 0; i < 3; ++i) {
 		new_position(i, 3) = current_position(i, 3) + ds(i, 0);
@@ -195,15 +195,15 @@ const lib::Homog_matrix& visual_servo_manager::get_current_position() const {
 	return current_position;
 }
 
-void visual_servo_manager::configure() {
-	//	logDbg("void visual_servo_manager::configure() 1\n");
+void visual_servo_manager::configure()
+{
+	//	log_dbg("void visual_servo_manager::configure() 1\n");
 	configure_all_servos();
-	//	logDbg("void visual_servo_manager::configure() 2\n");
-	for (std::vector<boost::shared_ptr<visual_servo> >::iterator it =
-			servos.begin(); it != servos.end(); ++it) {
+	//	log_dbg("void visual_servo_manager::configure() 2\n");
+	for (std::vector <boost::shared_ptr <visual_servo> >::iterator it = servos.begin(); it != servos.end(); ++it) {
 		(*it)->get_vsp_fradia()->configure_sensor();
 	}
-	//	logDbg("void visual_servo_manager::configure() 3\n");
+	//	log_dbg("void visual_servo_manager::configure() 3\n");
 }
 
 void visual_servo_manager::add_position_constraint(boost::shared_ptr<

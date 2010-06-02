@@ -95,25 +95,20 @@ const double Draughts::bkings_table[8][8] = {//blue, green kings
 
 /*==============================Constructor==================================*/
 //Constructors
-Draughts::Draughts(lib::configurator &_config) :
-	task(_config) {
-	sensor_m[lib::SENSOR_CVFRADIA] = new ecp_mp::sensor::cvfradia(
-			lib::SENSOR_CVFRADIA, "[vsp_cvfradia]", *this,
-			sizeof(lib::sensor_image_t::sensor_union_t::fradia_t));
+Draughts::Draughts(lib::configurator &_config): task(_config){
+	sensor_m[lib::SENSOR_CVFRADIA] = new fradia_sensor_board_and_draughts(this->config, "[vsp_fradia_sensor]");
 	sensor_m[lib::SENSOR_CVFRADIA]->configure_sensor();
 
 	ecp_m_robot = new irp6ot_m::robot(*this); //initialization of robot
 
 	//sgen=new common::generator::smooth(*this, true);
 	sgen2 = new common::generator::smooth(*this, true);
-	befgen = new common::generator::bias_edp_force(*this);
-	gagen = new common::generator::tff_gripper_approach(*this, 8); //gripper approach constructor (task&, no_of_steps)
-	sleepgen = new common::generator::sleep(*this);
-	aitrans = new ecp_mp::transmitter::TRDraughtsAI(
-			ecp_mp::transmitter::TRANSMITTER_DRAUGHTSAI,
-			"[transmitter_draughts_ai]", *this);
+	befgen=new common::generator::bias_edp_force(*this);
+	gagen=new common::generator::tff_gripper_approach (*this, 8);	//gripper approach constructor (task&, no_of_steps)
+	sleepgen=new common::generator::sleep(*this);
+	aitrans=new ecp_mp::transmitter::TRDraughtsAI(ecp_mp::transmitter::TRANSMITTER_DRAUGHTSAI, "[transmitter_draughts_ai]",*this);
 
-	follower_vis = new generator::ecp_vis_ib_eih_follower_irp6ot(*this); //follower servomechanism generator
+	follower_vis = new generator::ecp_vis_ib_eih_follower_irp6ot(*this);	//follower servomechanism generator
 	follower_vis->sensor_m = sensor_m;
 }
 ;
@@ -154,25 +149,26 @@ void Draughts::closeGripper() {
 }
 
 /*===============================fradiaControl=================================*/
-void Draughts::fradiaControl(lib::DRAUGHTS_MODE dmode, char pawn_nr = -1) {
-	lib::ECP_VSP_MSG msg;
-	ecp_mp::sensor::cvfradia* vsp_fr =
-			(ecp_mp::sensor::cvfradia*) sensor_m[lib::SENSOR_CVFRADIA];
-	msg.draughts_control.draughts_mode = dmode;
-	msg.draughts_control.pawn_nr = pawn_nr;
-	vsp_fr->send_reading(msg);
-	snooze(0.4); //wait until signal is read
+void Draughts::fradiaControl(DRAUGHTS_MODE dmode, char pawn_nr=-1){
+	fradia_sensor_board_and_draughts * vsp_fr = dynamic_cast<fradia_sensor_board_and_draughts *> (sensor_m[lib::SENSOR_CVFRADIA]);
+
+	draughts_control msg;
+	msg.draughts_mode=dmode;
+	msg.pawn_nr=pawn_nr;
+	vsp_fr->set_initiate_message(msg);
+
+	snooze(0.4);						//wait until signal is read
 }
 
 /*===========================gatAIMove=======================================*/
 //1 get Black move - blue
 //0 get White move - red
-void Draughts::getAIMove(int player) {
-	vsp_fradia = sensor_m[lib::SENSOR_CVFRADIA];
+void Draughts::getAIMove(int player){
+	vsp_fradia = dynamic_cast<fradia_sensor_board_and_draughts *> (sensor_m[lib::SENSOR_CVFRADIA]);
 
 	vsp_fradia->get_reading();
-	while (vsp_fradia->from_vsp.vsp_report == lib::VSP_SENSOR_NOT_CONFIGURED) {
-		vsp_fradia->get_reading();
+	while(vsp_fradia->get_report() == lib::VSP_SENSOR_NOT_CONFIGURED){
+			vsp_fradia->get_reading();
 	}
 
 	int port = config.value<int> ("ai_port", "[AI]");
@@ -183,12 +179,10 @@ void Draughts::getAIMove(int player) {
 	vsp_fradia->get_reading();
 	printf("dane: \n");
 	for (int i = 0; i < 32; i++) {
-		aitrans->to_va.draughts_ai.board[i]
-				= vsp_fradia->from_vsp.comm_image.sensor_union.board.fields[i];
-		printf("%d ", aitrans->to_va.draughts_ai.board[i]);
-
+		aitrans->to_va.board[i]=vsp_fradia->get_reading_message().fields[i];
+		printf("%d ",aitrans->to_va.board[i]);
 	}
-	aitrans->to_va.draughts_ai.player = player;
+	aitrans->to_va.player=player;
 	printf("\n");
 	aitrans->t_write();
 	aitrans->t_read();
@@ -199,16 +193,16 @@ void Draughts::getAIMove(int player) {
 }
 
 /*===============================getBoardStatus================================*/
-lib::BOARD_STATUS Draughts::getBoardStatus() {
-	vsp_fradia = sensor_m[lib::SENSOR_CVFRADIA];
+BOARD_STATUS Draughts::getBoardStatus(){
+	vsp_fradia = dynamic_cast<fradia_sensor_board_and_draughts *> (sensor_m[lib::SENSOR_CVFRADIA]);
 
 	vsp_fradia->get_reading();
-	while (vsp_fradia->from_vsp.vsp_report == lib::VSP_SENSOR_NOT_CONFIGURED) {
-		vsp_fradia->get_reading();
+	while(vsp_fradia->get_report() == lib::VSP_SENSOR_NOT_CONFIGURED){
+			vsp_fradia->get_reading();
 	}
 
 	vsp_fradia->get_reading();
-	return vsp_fradia->from_vsp.comm_image.sensor_union.board.status;
+	return vsp_fradia->get_reading_message().status;
 }
 
 /*============================goToInitialPos=================================*/
@@ -249,7 +243,7 @@ void Draughts::main_task_algorithm(void) {
 	wkings = 0;
 	bkings = 0;
 	goToInitialPos();
-	fradiaControl(lib::DETECT_BOARD_STATE);
+	fradiaControl(DETECT_BOARD_STATE);
 	uint8_t choice;
 	choice = choose_option(
 			"Do you want to play: 1 - Black(blue), or 2 - White(red)", 2);
@@ -275,7 +269,7 @@ void Draughts::main_task_algorithm(void) {
 
 	//takeDynamicPawn(31);
 
-	fradiaControl(lib::NONE);
+	fradiaControl(NONE);
 	ecp_termination_notice();
 }
 ;
@@ -291,20 +285,20 @@ int Draughts::makeAIMove(int player) {
 	getAIMove(player);
 
 	//printf("status: %d \nincoming: ",aitrans->from_va.draughts_ai.status);
-	switch (aitrans->from_va.draughts_ai.status) {
-	case AI_NORMAL_MOVE:
-		printf("status: normal move\n");
-		break;
-	case AI_COMPUTER_WON:
-		printf("status: computer won\n");
-		break;
-	case AI_HUMAN_WON:
-		printf("status: human won\n");
-		return AI_HUMAN_WON;
+	switch(aitrans->from_va.status){
+		case AI_NORMAL_MOVE:
+			printf("status: normal move\n");
+			break;
+		case AI_COMPUTER_WON:
+			printf("status: computer won\n");
+			break;
+		case AI_HUMAN_WON:
+			printf("status: human won\n");
+			return AI_HUMAN_WON;
 	}
 
-	move = aitrans->from_va.draughts_ai.move;
-	board = aitrans->to_va.draughts_ai.board;
+	move=aitrans->from_va.move;
+	board=aitrans->to_va.board;
 
 	//count number of jumper fields
 
@@ -341,7 +335,7 @@ int Draughts::makeAIMove(int player) {
 	}
 	goToInitialPos();
 
-	if (aitrans->from_va.draughts_ai.status == AI_COMPUTER_WON)
+	if(aitrans->from_va.status==AI_COMPUTER_WON)
 		return AI_COMPUTER_WON;
 
 	return AI_NORMAL_MOVE;
@@ -485,14 +479,14 @@ void Draughts::throwPawn(int from) {
 }
 
 /*=======================trackPawn===========================================*/
-void Draughts::trackPawn(char pawn_nr) {
-	fradiaControl(lib::NONE);
-	fradiaControl(lib::TRACK_PAWN, pawn_nr);
-	vsp_fradia = sensor_m[lib::SENSOR_CVFRADIA];
+void Draughts::trackPawn(char pawn_nr){
+	fradiaControl(NONE);
+	fradiaControl(TRACK_PAWN, pawn_nr);
+	vsp_fradia = dynamic_cast<fradia_sensor_board_and_draughts *> (sensor_m[lib::SENSOR_CVFRADIA]);
 
 	vsp_fradia->get_reading();
-	while (vsp_fradia->from_vsp.vsp_report == lib::VSP_SENSOR_NOT_CONFIGURED) {
-		vsp_fradia->get_reading();
+	while(vsp_fradia->get_report() == lib::VSP_SENSOR_NOT_CONFIGURED){
+			vsp_fradia->get_reading();
 	}
 
 	sr_ecp_msg->message("Przed follower_vis");
@@ -501,29 +495,29 @@ void Draughts::trackPawn(char pawn_nr) {
 }
 
 /*============================wait4move=======================================*/
-void Draughts::wait4move() {
-	lib::BOARD_STATUS status;
-	fradiaControl(lib::STORE_BOARD); //store board
+void Draughts::wait4move(){
+	BOARD_STATUS status;
+	fradiaControl(STORE_BOARD);	//store board
 
-	do {
-		fradiaControl(lib::NONE); //do not analyze board for a while
-		snooze(1); //wait 2 seconds and..
-		fradiaControl(lib::CHECK_MOVE);
-		status = getBoardStatus(); //check if state of the board changed
-		switch (status) {
-		case lib::STATE_CHANGED:
-			printf("state changed\n");
-			break;
-		case lib::STATE_UNCHANGED:
-			printf("state unchanged\n");
-			break;
-		case lib::BOARD_DETECTION_ERROR:
-			printf("board detection error\n");
-			break;
+	do{
+		fradiaControl(NONE);			//do not analyze board for a while
+		snooze(1);							//wait 2 seconds and..
+		fradiaControl(CHECK_MOVE);
+		status=getBoardStatus();			//check if state of the board changed
+		switch(status){
+			case STATE_CHANGED:
+				printf("state changed\n");
+				break;
+			case STATE_UNCHANGED:
+				printf("state unchanged\n");
+				break;
+			case BOARD_DETECTION_ERROR:
+				printf("board detection error\n");
+				break;
 		}
-	} while (status != lib::STATE_CHANGED);
+	}while(status!=STATE_CHANGED);
 
-	fradiaControl(lib::DETECT_BOARD_STATE);
+	fradiaControl(DETECT_BOARD_STATE);
 }
 
 /*=============================wPawn2wKing===================================*/

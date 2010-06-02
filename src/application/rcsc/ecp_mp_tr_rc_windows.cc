@@ -31,9 +31,8 @@ namespace transmitter {
 rc_win_buf_typedef *rc_windows::rc_win_buf = NULL;
 
 rc_windows::rc_windows(TRANSMITTER_ENUM _transmitter_name, const char* _section_name, task::task& _ecp_mp_object) :
-	transmitter(_transmitter_name, _section_name, _ecp_mp_object)
+	rc_windows_transmitter_t(_transmitter_name, _section_name, _ecp_mp_object)
 {
-
 	if (!rc_win_buf) {
 		rc_win_buf = new rc_win_buf_typedef;
 	} else {
@@ -46,14 +45,11 @@ rc_windows::rc_windows(TRANSMITTER_ENUM _transmitter_name, const char* _section_
 
 rc_windows::~rc_windows()
 {
-
-	delete[] rc_win_buf->solver_hostname;
 	delete rc_win_buf;
 }
 
 void * rc_windows::do_query(void * arg)
 {
-
 	boost::mutex::scoped_lock lock(rc_win_buf->mtx);
 
 	int sock;
@@ -128,7 +124,7 @@ void * rc_windows::do_query(void * arg)
 	return NULL;
 }
 
-int rc_windows::make_socket (const char *hostname, uint16_t port)
+int rc_windows::make_socket (const std::string & hostname, uint16_t port)
 {
 	int sock;
 	struct sockaddr_in server;
@@ -143,9 +139,9 @@ int rc_windows::make_socket (const char *hostname, uint16_t port)
 
 	server.sin_family = AF_INET;
 	server.sin_port = htons (port);
-	hostinfo = gethostbyname (hostname);
+	hostinfo = gethostbyname (hostname.c_str());
 	if (hostinfo == NULL) {
-		fprintf (stderr, "Unknown host %s.\n", hostname);
+		std::cerr << "Unknown host: " << hostname << std::endl;
 		return -1;
 	}
 	server.sin_addr = *(struct in_addr *) hostinfo->h_addr;
@@ -160,7 +156,7 @@ int rc_windows::make_socket (const char *hostname, uint16_t port)
 
 bool rc_windows::t_write() {
 
-	snprintf(rc_win_buf->request, sizeof(rc_win_buf->request), "GET /?%s HTTP/1.0\r\n", to_va.rc_windows.rc_state);
+	snprintf(rc_win_buf->request, sizeof(rc_win_buf->request), "GET /?%s HTTP/1.0\r\n", to_va.rc_state);
 
 	pthread_create(&worker, NULL, do_query, NULL);
 
@@ -169,27 +165,25 @@ bool rc_windows::t_write() {
 
 bool rc_windows::t_read(bool wait) {
 
-	int l=0;
-
 	if (wait) {
 
 		boost::mutex::scoped_lock lock(rc_win_buf->mtx);
 
 		printf("W SEMAFORZE 1 %d\n", strlen(rc_win_buf->response)-33);
 
-		l=strlen(rc_win_buf->response)-33-16;
+		int l=strlen(rc_win_buf->response)-33-16;
 		if(l<0) l=0;
 
-		strncpy(from_va.rc_windows.sequence, rc_win_buf->response+33, l);
-		from_va.rc_windows.sequence[l]='\0';
+		strncpy(from_va.sequence, rc_win_buf->response+33, l);
+		from_va.sequence[l]='\0';
 
 	} else {
 
 		printf("W SEMAFORZE2 %d\n", strlen(rc_win_buf->response)-33);
-		l=strlen(rc_win_buf->response)-33-16;
+		int l=strlen(rc_win_buf->response)-33-16;
 		if(l<0) l=0;
-		strncpy(from_va.rc_windows.sequence, rc_win_buf->response+33, l);
-		from_va.rc_windows.sequence[l]='\0';
+		strncpy(from_va.sequence, rc_win_buf->response+33, l);
+		from_va.sequence[l]='\0';
 
 	}
 	return true;

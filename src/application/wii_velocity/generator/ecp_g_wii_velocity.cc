@@ -1,4 +1,5 @@
 #include "application/wii_velocity/generator/ecp_g_wii_velocity.h"
+#include "application/wii_teach/sensor/ecp_mp_s_wiimote.h"
 
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
@@ -55,9 +56,8 @@ bool wii_velocity::first_step() {
 
 bool wii_velocity::next_step() {
 	char buffer[200];
-	int operate = 0;
 
-	sensor_m[lib::SENSOR_WIIMOTE]->get_reading();
+	sensor_m[ecp_mp::sensor::SENSOR_WIIMOTE]->get_reading();
 
 	if (pulse_check_activated && check_and_null_trigger()) {
 		return false;
@@ -66,41 +66,24 @@ bool wii_velocity::next_step() {
 	// Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
 	the_robot->ecp_command.instruction.instruction_type = lib::SET_GET;
 
-	operate
-			= (int) sensor_m[lib::SENSOR_WIIMOTE]->image.sensor_union.wiimote.up
-					|| (int) sensor_m[lib::SENSOR_WIIMOTE]->image.sensor_union.wiimote.right
-					|| (int) sensor_m[lib::SENSOR_WIIMOTE]->image.sensor_union.wiimote.down
-					|| (int) sensor_m[lib::SENSOR_WIIMOTE]->image.sensor_union.wiimote.left;
+	ecp_mp::sensor::wiimote * wii = dynamic_cast<ecp_mp::sensor::wiimote *> (sensor_m[ecp_mp::sensor::SENSOR_WIIMOTE]);
+
+	int operate = wii->image.up || wii->image.right || wii->image.down || wii->image.left;
 
 	if (operate) {
 		//wyznaczenie nowych wartosci predkosci
 		configure_velocity(
-				(int) sensor_m[lib::SENSOR_WIIMOTE]->image.sensor_union.wiimote.up
-						&& !(int) sensor_m[lib::SENSOR_WIIMOTE]->image.sensor_union.wiimote.right ? sensor_m[lib::SENSOR_WIIMOTE]->image.sensor_union.wiimote.orientation_y
-						* C_0
-						: 0,
-				(int) sensor_m[lib::SENSOR_WIIMOTE]->image.sensor_union.wiimote.right
-						&& !(int) sensor_m[lib::SENSOR_WIIMOTE]->image.sensor_union.wiimote.up
-						&& !(int) sensor_m[lib::SENSOR_WIIMOTE]->image.sensor_union.wiimote.down ? sensor_m[lib::SENSOR_WIIMOTE]->image.sensor_union.wiimote.orientation_y
-						* C_1
-						: 0,
-				(int) sensor_m[lib::SENSOR_WIIMOTE]->image.sensor_union.wiimote.down
-						&& !(int) sensor_m[lib::SENSOR_WIIMOTE]->image.sensor_union.wiimote.right ? sensor_m[lib::SENSOR_WIIMOTE]->image.sensor_union.wiimote.orientation_y
-						* C_2
-						: 0,
-				(int) sensor_m[lib::SENSOR_WIIMOTE]->image.sensor_union.wiimote.left ? sensor_m[lib::SENSOR_WIIMOTE]->image.sensor_union.wiimote.orientation_y
-						* C_3
-						: 0,
-				(int) sensor_m[lib::SENSOR_WIIMOTE]->image.sensor_union.wiimote.up
-						&& (int) sensor_m[lib::SENSOR_WIIMOTE]->image.sensor_union.wiimote.right ? sensor_m[lib::SENSOR_WIIMOTE]->image.sensor_union.wiimote.orientation_y
-						* C_4
-						: 0,
-				(int) sensor_m[lib::SENSOR_WIIMOTE]->image.sensor_union.wiimote.down
-						&& (int) sensor_m[lib::SENSOR_WIIMOTE]->image.sensor_union.wiimote.right ? sensor_m[lib::SENSOR_WIIMOTE]->image.sensor_union.wiimote.orientation_y
-						* C_5
-						: 0);
-	} else {
-		configure_velocity(0, 0, 0, 0, 0, 0);
+			wii->image.up && !wii->image.right ? wii->image.orientation_y * C_0 : 0,
+			wii->image.right && !wii->image.up && !wii->image.down ? wii->image.orientation_y * C_1 : 0,
+			wii->image.down && !wii->image.right ? wii->image.orientation_y * C_2 : 0,
+			wii->image.left ? wii->image.orientation_y * C_3 : 0,
+			wii->image.up && wii->image.right ? wii->image.orientation_y * C_4 : 0,
+			wii->image.down && wii->image.right ? wii->image.orientation_y * C_5 : 0
+		);
+	}
+	else
+	{
+		configure_velocity(0,0,0,0,0,0);
 	}
 
 	for (int i = 0; i < 6; i++) {

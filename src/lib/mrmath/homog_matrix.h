@@ -145,7 +145,7 @@ public:
 	bool operator!=(const Homog_matrix &) const;
 
 	//! operator wypisania
-	friend std::ostream& operator<<(std::ostream &, Homog_matrix &);
+	friend std::ostream& operator<<(std::ostream &, const Homog_matrix &);
 
 	//! funkcja sprawdzajaca czy macierz jest macierza jednorodna
 	bool is_valid() const;
