@@ -35,6 +35,7 @@ public:
 
 	int get_index_f_0_command();
 	int set_index_f_0_status();
+	int copy_index_f_0_command();
 };
 
 #endif

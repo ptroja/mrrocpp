@@ -174,3 +174,20 @@ int WndBirdHandCommandAndStatus::set_index_f_0_status() {
 	return 1;
 
 }
+
+int WndBirdHandCommandAndStatus::copy_index_f_0_command() {
+
+	double* tmp_double;
+
+	PtGetResource(
+			ABW_index_f_0_current_position_wnd_bird_hand_command_and_status,
+			Pt_ARG_NUMERIC_VALUE, &tmp_double, 0);
+
+	double set_double = *tmp_double;
+
+	PtSetResource(
+			ABW_index_f_0_desired_position_wnd_bird_hand_command_and_status,
+			Pt_ARG_NUMERIC_VALUE, &set_double, 0);
+
+	return 1;
+}

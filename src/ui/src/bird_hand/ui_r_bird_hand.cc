@@ -186,7 +186,6 @@ int UiRobotBirdHand::close_all_windows() {
 
 int UiRobotBirdHand::delete_ui_ecp_robot() {
 	delete ui_ecp_robot;
-	delete wnd_command_and_status;
 	return 1;
 }
 
