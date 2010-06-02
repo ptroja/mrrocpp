@@ -3,6 +3,7 @@
 /*                                         Version 2.01  */
 
 #include "ui/src/speaker/ui_r_speaker.h"
+#include "ui/src/speaker/ui_ecp_r_speaker.h"
 #include "lib/robot_consts/speaker_const.h"
 #include "ui/ui_class.h"
 
@@ -11,10 +12,6 @@
 #include "../abimport.h"
 #include "../gcc_ntox86/proto.h"
 
-extern Ui ui;
-
-// extern ui_state_def ui_state;
-
 //
 //
 // KLASA UiRobotIrp6ot_m
@@ -22,9 +19,9 @@ extern Ui ui;
 //
 
 
-UiRobotSpeaker::UiRobotSpeaker() :
-	UiRobot(EDP_SPEAKER_SECTION, ECP_SPEAKER_SECTION), ui_ecp_robot(NULL),
-			is_wind_speaker_play_open(false) {
+UiRobotSpeaker::UiRobotSpeaker(Ui& _ui) :
+	UiRobot(_ui, EDP_SPEAKER_SECTION, ECP_SPEAKER_SECTION),
+			is_wind_speaker_play_open(false), ui_ecp_robot(NULL) {
 
 }
 
@@ -185,4 +182,10 @@ int UiRobotSpeaker::close_all_windows() {
 	}
 	return 1;
 
+
+}
+
+int UiRobotSpeaker::delete_ui_ecp_robot() {
+	delete ui_ecp_robot;
+	return 1;
 }

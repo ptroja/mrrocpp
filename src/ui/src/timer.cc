@@ -19,6 +19,7 @@
 // #include "ecp/common/ecp.h"
 #include "lib/com_buf.h"
 #include "ui/ui_class.h"
+#include "ui/src/ui_sr.h"
 
 /* Local headers */
 #include "ablibs.h"
@@ -43,7 +44,7 @@ int OnTimer(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 	Iteration_counter++;
 
 	if ((Iteration_counter % CHECK_SPEAKER_STATE_ITER) == 0) {
-		if (ui.speaker.is_wind_speaker_play_open) // otworz okno
+		if (ui.speaker->is_wind_speaker_play_open) // otworz okno
 		{
 			speaker_check_state(widget, apinfo, cbinfo);
 		}

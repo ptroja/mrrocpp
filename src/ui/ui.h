@@ -163,43 +163,6 @@ typedef struct {
 	std::string node_name;
 } program_node_def;
 
-/**************************** ui_sr_buffer *****************************/
-
-#define UI_SR_BUFFER_LENGHT 50
-
-class ui_sr_buffer {
-private:
-	boost::circular_buffer<lib::sr_package_t> cb;
-	boost::mutex mtx; // = PTHREAD_MUTEX_INITIALIZER ;
-
-public:
-
-	ui_sr_buffer();
-
-	void put_one_msg(const lib::sr_package_t& new_msg); // podniesienie semafora
-	void get_one_msg(lib::sr_package_t& new_msg); // podniesienie semafora
-	bool buffer_empty(); // czy bufor cykliczny jest pusty
-};
-
-/**************************** ui_sr_buffer *****************************/
-
-#define UI_SR_BUFFER_LENGHT 50
-
-class ui_ecp_buffer {
-private:
-
-public:
-	UI_ECP_COMMUNICATION_STATE communication_state;
-	lib::ECP_message ecp_to_ui_msg;
-	lib::UI_reply ui_rep;
-
-	lib::condition_synchroniser synchroniser;
-	ui_ecp_buffer();
-
-};
-
-void UI_close(void);
-
 class function_execution_buffer {
 public:
 	typedef boost::function<int()> command_function_t;
@@ -270,9 +233,6 @@ public:
 
 // TODO: reimplement this as a singleton
 extern busy_flag communication_flag;
-
-void create_threads();
-void abort_threads();
 
 #endif
 

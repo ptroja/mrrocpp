@@ -4,39 +4,6 @@
 
 #include "ui/ui.h"
 
-ui_sr_buffer::ui_sr_buffer() :
-	cb(UI_SR_BUFFER_LENGHT) {
-
-}
-
-void ui_sr_buffer::put_one_msg(const lib::sr_package_t& new_msg) {
-
-	boost::mutex::scoped_lock lock(mtx);
-	cb.push_back(new_msg);
-
-	return;
-}
-
-void ui_sr_buffer::get_one_msg(lib::sr_package_t& new_msg) {
-	boost::mutex::scoped_lock lock(mtx);
-	new_msg = cb.front();
-	cb.pop_front();
-
-	return;
-}
-
-bool ui_sr_buffer::buffer_empty() // sprawdza czy bufor jest pusty
-{
-	boost::mutex::scoped_lock lock(mtx);
-	return cb.empty();
-}
-
-ui_ecp_buffer::ui_ecp_buffer() :
-	synchroniser() {
-
-	communication_state = UI_ECP_AFTER_REPLY;
-}
-
 busy_flagger::busy_flagger(busy_flag & _flag) :
 	flag(_flag) {
 	flag.increment();

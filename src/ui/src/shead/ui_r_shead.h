@@ -20,7 +20,7 @@
 
 // super klasa agregujaca porozrzucane struktury
 
-
+class Ui;
 class ui_tfg_and_conv_robot;
 
 class UiRobotShead: public UiRobot {
@@ -30,9 +30,10 @@ public:
 
 	ui_tfg_and_conv_robot *ui_ecp_robot;
 
-	UiRobotShead();
+	UiRobotShead(Ui& _ui);
 	int reload_configuration();
 	int manage_interface();
+	int delete_ui_ecp_robot();
 };
 
 #endif

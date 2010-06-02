@@ -21,7 +21,7 @@
 
 // super klasa agregujaca porozrzucane struktury
 
-
+class Ui;
 class ui_irp6_common_robot;
 
 class UiRobotIrp6ot_m: public UiRobot {
@@ -45,7 +45,7 @@ public:
 
 	ui_irp6_common_robot *ui_ecp_robot;
 
-	UiRobotIrp6ot_m();
+	UiRobotIrp6ot_m(Ui& _ui);
 	int reload_configuration();
 	int manage_interface();
 	int process_control_window_irp6ot_section_init(
@@ -53,6 +53,7 @@ public:
 			bool &wlacz_PtButton_wnd_processes_control_all_reader_stop,
 			bool &wlacz_PtButton_wnd_processes_control_all_reader_trigger);
 	int close_all_windows();
+	int delete_ui_ecp_robot();
 };
 
 #endif
