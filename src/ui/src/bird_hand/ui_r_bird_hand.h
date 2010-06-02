@@ -23,14 +23,15 @@ class Ui;
 // super klasa agregujaca porozrzucane struktury
 
 class ui_bird_hand_robot;
+class WndBirdHandCommandAndStatus;
 
 class UiRobotBirdHand: public UiRobot {
 private:
 
 public:
 	ui_bird_hand_robot *ui_ecp_robot;
+	WndBirdHandCommandAndStatus *wnd_command_and_status;
 
-	bool is_wnd_bird_hand_command_and_status_open;
 	bool is_wnd_bird_hand_configuration_open;
 
 	UiRobotBirdHand(Ui& _ui);
