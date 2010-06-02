@@ -39,8 +39,6 @@ public:
 	int manage_interface();
 	int close_all_windows();
 
-	int get_index_f_0_command();
-	int set_index_f_0_status();
 	int delete_ui_ecp_robot();
 };
 
