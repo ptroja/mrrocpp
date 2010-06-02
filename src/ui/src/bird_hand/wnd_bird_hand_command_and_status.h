@@ -34,6 +34,7 @@ public:
 	WndBirdHandCommandAndStatus(Ui& _ui, UiRobotBirdHand& _bird_hand);
 
 	int get_index_f_0_command();
+	int get_variant_index_f_0_command();
 	int set_index_f_0_status();
 	int copy_index_f_0_command();
 };

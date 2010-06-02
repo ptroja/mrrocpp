@@ -26,7 +26,7 @@ WndBirdHandCommandAndStatus::WndBirdHandCommandAndStatus(Ui& _ui,
 
 }
 
-int WndBirdHandCommandAndStatus::get_index_f_0_command() {
+int WndBirdHandCommandAndStatus::get_variant_index_f_0_command() {
 
 	unsigned long *flags;
 
@@ -60,6 +60,15 @@ int WndBirdHandCommandAndStatus::get_index_f_0_command() {
 				= lib::BIRD_HAND_SIGLE_STEP_POSTION_INCREMENT;
 	}
 
+	return 1;
+
+}
+
+int WndBirdHandCommandAndStatus::get_index_f_0_command() {
+
+	mrrocpp::lib::bird_hand_command &bhcs =
+			bird_hand.ui_ecp_robot->bird_hand_command_structure;
+
 	double* tmp_double;
 
 	PtGetResource(
@@ -79,6 +88,8 @@ int WndBirdHandCommandAndStatus::get_index_f_0_command() {
 			Pt_ARG_NUMERIC_VALUE, &tmp_double, 0);
 
 	bhcs.index_f[0].reciprocal_of_damping = *tmp_double;
+
+	get_variant_index_f_0_command();
 
 	return 1;
 
@@ -179,15 +190,24 @@ int WndBirdHandCommandAndStatus::copy_index_f_0_command() {
 
 	double* tmp_double;
 
-	PtGetResource(
-			ABW_index_f_0_current_position_wnd_bird_hand_command_and_status,
-			Pt_ARG_NUMERIC_VALUE, &tmp_double, 0);
+	mrrocpp::lib::bird_hand_command &bhcs =
+			bird_hand.ui_ecp_robot->bird_hand_command_structure;
 
-	double set_double = *tmp_double;
+	get_variant_index_f_0_command();
 
-	PtSetResource(
-			ABW_index_f_0_desired_position_wnd_bird_hand_command_and_status,
-			Pt_ARG_NUMERIC_VALUE, &set_double, 0);
+	if (bhcs.index_f[0].profile_type
+			== lib::BIRD_HAND_MACROSTEP_ABSOLUTE_POSITION) {
 
+		PtGetResource(
+				ABW_index_f_0_current_position_wnd_bird_hand_command_and_status,
+				Pt_ARG_NUMERIC_VALUE, &tmp_double, 0);
+
+		double set_double = *tmp_double;
+
+		PtSetResource(
+				ABW_index_f_0_desired_position_wnd_bird_hand_command_and_status,
+				Pt_ARG_NUMERIC_VALUE, &set_double, 0);
+
+	}
 	return 1;
 }
