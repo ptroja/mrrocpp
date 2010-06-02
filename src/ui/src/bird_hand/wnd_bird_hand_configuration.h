@@ -33,8 +33,8 @@ public:
 
 	WndBirdHandConfiguration(Ui& _ui, UiRobotBirdHand& _bird_hand);
 
-	int get_command();
-	int set_status();
+	int get_configuration();
+	int set_configuration();
 	int copy_command();
 
 };

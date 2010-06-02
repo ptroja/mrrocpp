@@ -5,6 +5,7 @@
 #include "ui/src/bird_hand/ui_ecp_r_bird_hand.h"
 #include "ui/src/bird_hand/ui_r_bird_hand.h"
 #include "ui/src/bird_hand/wnd_bird_hand_command_and_status.h"
+#include "ui/src/bird_hand/wnd_bird_hand_configuration.h"
 #include "lib/robot_consts/bird_hand_const.h"
 #include "ui/ui_class.h"
 
@@ -22,8 +23,9 @@
 
 UiRobotBirdHand::UiRobotBirdHand(Ui& _ui) :
 	UiRobot(_ui, EDP_BIRD_HAND_SECTION, ECP_BIRD_HAND_SECTION),
-	ui_ecp_robot(NULL), is_wnd_bird_hand_configuration_open(false) {
+	ui_ecp_robot(NULL) {
 	wnd_command_and_status = new WndBirdHandCommandAndStatus(ui, *this);
+	wnd_configuration = new WndBirdHandConfiguration(ui, *this);
 
 }
 

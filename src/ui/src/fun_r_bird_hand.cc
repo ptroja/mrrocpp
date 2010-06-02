@@ -24,6 +24,7 @@
 #include "ui/ui_const.h"
 #include "ui/ui_class.h"
 #include "ui/src/bird_hand/wnd_bird_hand_command_and_status.h"
+#include "ui/src/bird_hand/wnd_bird_hand_configuration.h"
 // #include "ui/ui.h"
 // Konfigurator.
 #include "lib/configurator.h"
@@ -263,6 +264,8 @@ int execute_wnd_bird_hand_configuration(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
+	ui.bird_hand->wnd_configuration->get_configuration();
+
 	return (Pt_CONTINUE);
 }
 
@@ -273,6 +276,8 @@ int copy_wnd_bird_hand_configuration(PtWidget_t *widget, ApInfo_t *apinfo,
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	ui.bird_hand->wnd_configuration->copy_command();
 
 	return (Pt_CONTINUE);
 
@@ -286,6 +291,8 @@ int init_wnd_bird_hand_configuration(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
+	ui.bird_hand->wnd_configuration->set_configuration();
+
 	return (Pt_CONTINUE);
 
 }
@@ -298,10 +305,10 @@ int start_wnd_bird_hand_configuration(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (!ui.bird_hand->is_wnd_bird_hand_configuration_open) // otworz okno
+	if (!ui.bird_hand->wnd_configuration->is_open) // otworz okno
 	{
 		ApCreateModule(ABM_wnd_bird_hand_configuration, widget, cbinfo);
-		ui.bird_hand->is_wnd_bird_hand_configuration_open = true;
+		ui.bird_hand->wnd_configuration->is_open = true;
 	} else { // przelacz na okno
 		PtWindowToFront(ABW_wnd_bird_hand_configuration);
 	}
@@ -316,7 +323,7 @@ int close_wnd_bird_hand_configuration(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (ui.bird_hand->is_wnd_bird_hand_configuration_open) {
+	if (ui.bird_hand->wnd_configuration->is_open) {
 		PtDestroyWidget(ABW_wnd_bird_hand_configuration);
 	}
 
@@ -331,7 +338,7 @@ int clear_wnd_bird_hand_configuration(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	ui.bird_hand->is_wnd_bird_hand_configuration_open = false;
+	ui.bird_hand->wnd_configuration->is_open = false;
 	return (Pt_CONTINUE);
 
 }

@@ -24,6 +24,7 @@ class Ui;
 
 class ui_bird_hand_robot;
 class WndBirdHandCommandAndStatus;
+class WndBirdHandConfiguration;
 
 class UiRobotBirdHand: public UiRobot {
 private:
@@ -31,8 +32,7 @@ private:
 public:
 	ui_bird_hand_robot *ui_ecp_robot;
 	WndBirdHandCommandAndStatus *wnd_command_and_status;
-
-	bool is_wnd_bird_hand_configuration_open;
+	WndBirdHandConfiguration *wnd_configuration;
 
 	UiRobotBirdHand(Ui& _ui);
 	int reload_configuration();

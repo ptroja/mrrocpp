@@ -26,12 +26,12 @@ WndBirdHandConfiguration::WndBirdHandConfiguration(Ui& _ui,
 
 }
 
-int WndBirdHandConfiguration::get_command() {
+int WndBirdHandConfiguration::get_configuration() {
 
 	return 1;
 }
 
-int WndBirdHandConfiguration::set_status() {
+int WndBirdHandConfiguration::set_configuration() {
 
 	return 1;
 }
