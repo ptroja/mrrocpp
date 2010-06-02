@@ -39,6 +39,28 @@ public:
 
 	//
 	//
+	// thumb_f_0
+	//
+	//
+
+	int get_thumb_f_0_command();
+	int get_variant_thumb_f_0_command();
+	int set_thumb_f_0_status();
+	int copy_thumb_f_0_command();
+
+	//
+	//
+	// thumb_f_1
+	//
+	//
+
+	int get_thumb_f_1_command();
+	int get_variant_thumb_f_1_command();
+	int set_thumb_f_1_status();
+	int copy_thumb_f_1_command();
+
+	//
+	//
 	// index_f_0
 	//
 	//
@@ -69,6 +91,39 @@ public:
 	int get_variant_index_f_2_command();
 	int set_index_f_2_status();
 	int copy_index_f_2_command();
+
+	//
+	//
+	// ring_f_0
+	//
+	//
+
+	int get_ring_f_0_command();
+	int get_variant_ring_f_0_command();
+	int set_ring_f_0_status();
+	int copy_ring_f_0_command();
+
+	//
+	//
+	// ring_f_1
+	//
+	//
+
+	int get_ring_f_1_command();
+	int get_variant_ring_f_1_command();
+	int set_ring_f_1_status();
+	int copy_ring_f_1_command();
+
+	//
+	//
+	// ring_f_2
+	//
+	//
+
+	int get_ring_f_2_command();
+	int get_variant_ring_f_2_command();
+	int set_ring_f_2_status();
+	int copy_ring_f_2_command();
 
 };
 
