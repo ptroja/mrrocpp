@@ -15,8 +15,8 @@ namespace common {
 namespace trajectory_pose {
 
 trajectory_pose::trajectory_pose (lib::ECP_POSE_SPECIFICATION arm_type,
-		const vector<double> & coordinates, const int axes_num) {
-	this->axes_num = axes_num;
+		const vector<double> & coordinates) {
+	this->axes_num = coordinates.size();
 	this->arm_type=arm_type;
 
 	this->coordinates = coordinates;

@@ -91,8 +91,7 @@ public:
   bang_bang_trajectory_pose (lib::ECP_POSE_SPECIFICATION arm_type,
 		  const vector<double> & coordinates,
 		  const vector<double> & v,
-		  const vector<double> & a,
-		  const int axes_num);
+		  const vector<double> & a);
   /**
    * Destructor.
    */

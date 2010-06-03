@@ -19,9 +19,8 @@ constant_velocity_trajectory_pose::constant_velocity_trajectory_pose (void) {
 
 constant_velocity_trajectory_pose::constant_velocity_trajectory_pose (lib::ECP_POSE_SPECIFICATION arm_type,
 		const vector<double> & coordinates,
-		const vector<double> & v,
-		const int axes_num) :
-		trajectory_pose (arm_type, coordinates, axes_num) {
+		const vector<double> & v) :
+		trajectory_pose (arm_type, coordinates) {
 
 	this->v = v;
 

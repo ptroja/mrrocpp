@@ -48,14 +48,11 @@ public:
    * Constructor which initiates some variables (those which can be found in the file containing trajectory).
    * \param at representation used in the given pose
    * \param coordinates desired position for all of the axes
-   * \param vv maximal velocities for the trajectory segment for all of the axes
-   * \param aa maximal accelerations for the trajectory segment for all of the axes
-   * \param axes_num number of axes
+   * \param v maximal velocities for the trajectory segment for all of the axes
    */
   constant_velocity_trajectory_pose (lib::ECP_POSE_SPECIFICATION arm_type,
 		  const vector<double> & coordinates,
-		  const vector<double> & v,
-		  const int axes_num);
+		  const vector<double> & v);
   /**
    * Destructor.
    */

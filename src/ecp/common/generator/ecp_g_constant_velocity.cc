@@ -14,8 +14,9 @@ namespace generator {
 
 constant_velocity::constant_velocity(common::task::task& _ecp_task, bool _is_synchronised, lib::ECP_POSE_SPECIFICATION pose_spec, int axes_num) :
 		multiple_position (_ecp_task) {
-	// TODO Auto-generated constructor stub
-
+	this->pose_spec = pose_spec;
+	this->axes_num = axes_num;
+	this->vpc = velocity_profile_calculator::constant_velocity_profile();
 }
 
 constant_velocity::~constant_velocity() {
@@ -62,6 +63,23 @@ bool constant_velocity::first_step() {
 }
 
 bool constant_velocity::next_step() {
+
+}
+
+bool multiple_position::load_absolute_joint_trajectory_pose(vector<double> & coordinates) {
+	ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose pose;
+	vector<double> joint_max_velocity;
+	for (int i = 0; i < axes_num; i++) {
+		joint_max_velocity.push_back(0.05);
+	}
+	if (pose_vector.size() > 0 && pose_spec != lib::ECP_JOINT) {
+
+		return false;
+	}
+	pose_spec = lib::ECP_JOINT;
+	pose = ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose(lib::ECP_JOINT, coordinates, joint_max_velocity);
+
+	pose_vector.push_back(pose);
 
 }
 

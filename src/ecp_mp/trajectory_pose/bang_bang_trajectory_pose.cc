@@ -20,9 +20,8 @@ bang_bang_trajectory_pose::bang_bang_trajectory_pose (void) {
 bang_bang_trajectory_pose::bang_bang_trajectory_pose (lib::ECP_POSE_SPECIFICATION arm_type,
 		const vector<double> & coordinates,
 		const vector<double> & v,
-		const vector<double> & a,
-		const int axes_num) :
-		trajectory_pose (arm_type, coordinates, axes_num) {
+		const vector<double> & a) :
+		trajectory_pose (arm_type, coordinates) {
 
 	this->v = v;
 	this->a = a;

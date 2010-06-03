@@ -10,6 +10,8 @@
 
 #include "ecp/common/generator/ecp_g_multiple_position.h"
 #include "lib/mrmath/mrmath.h"
+#include "ecp_mp/trajectory_pose/constant_velocity_trajectory_pose.h"
+#include "ecp/common/generator/velocity_profile_calculator/constant_velocity_profile.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -39,16 +41,13 @@ class constant_velocity : public multiple_position {
 		 * Implementation of the next_step method.s
 		 */
 		virtual bool next_step();
+		/**
+		 *
+		 */
+		bool calculate_interpolate();
 
 	private:
-		/**
-		 * Number of axes for a given robot in used representation.
-		 */
-		int axes_num;
-		/**
-		 * Type of the used representation.
-		 */
-		 lib::ECP_POSE_SPECIFICATION pose_spec;
+
 };
 
 } // namespace generator

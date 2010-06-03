@@ -66,8 +66,7 @@ public:
      * \param axes_num number of axes
      */
   trajectory_pose (lib::ECP_POSE_SPECIFICATION arm_type,
-			const vector<double> & coordinates,
-			const int axes_num);
+			const vector<double> & coordinates);
   /**
    * Destructor.
    */

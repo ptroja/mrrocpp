@@ -10,6 +10,7 @@
 
 #include "ecp_mp/trajectory_pose/trajectory_pose.h"
 #include "ecp/common/generator/ecp_generator.h"
+#include "ecp/common/generator/velocity_profile_calculator/velocity_profile.h"
 
 #include <vector>
 
@@ -42,13 +43,21 @@ protected:
 	 */
 	vector<vector<double> >::iterator coordinate_vector_iterator;
 	/**
-	 * Number of axes in which we want to move in the given representation.
-	 */
-	int axes_num;
-	/**
 	 * Type of the commanded motion (absolute or relative)
 	 */
 	lib::MOTION_TYPE motion_type;
+	/**
+	 * Velocity profile calculator.
+	 */
+	velocity_profile_calculator::velocity_profile vpc;
+	/**
+	 * Number of axes for a given robot in used representation.
+	 */
+	int axes_num;
+	/**
+	 * Type of the used representation.
+	 */
+	lib::ECP_POSE_SPECIFICATION pose_spec;
 
 public:
 	/**
@@ -59,6 +68,10 @@ public:
 	 * Destructor.
 	 */
 	virtual ~multiple_position();
+	/**
+	 *
+	 */
+	virtual bool calculate_interpolate() = 0;
 	/**
 	 * Sets the number of axes in which the generator will move the robot.
 	 */
@@ -75,6 +88,10 @@ public:
 	 * Sets the absolute type of motion.
 	 */
 	void set_absolute(void); //zmiana na tryb bezwzgledny
+	/**
+	 * Loads a single trajectory pose described in joint coordinates to the list. Maximal velocities are set automatically.
+	 */
+	virtual bool load_absolute_joint_trajectory_pose(vector<double> & coordinates) = 0;
 };
 
 } // namespace generator

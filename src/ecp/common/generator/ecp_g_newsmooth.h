@@ -73,7 +73,7 @@ class newsmooth : public multiple_position {
 		/**
 		 *
 		 */
-		void calculate_interpolate();
+		bool calculate_interpolate();
 		/**
 		 * Constructor.
 		 */
