@@ -636,7 +636,7 @@ messip_channel_create0( messip_cnx_t * cnx,
 	server_addr.sin_port = htons( 0 );
 	status =
 	   bind( sockfd, ( struct sockaddr * ) &server_addr, sizeof( struct sockaddr_in ) );
-	if ( status < 0 )
+	if ( status == -1 )
 	{
 		perror("bind()");
 		close( sockfd );
