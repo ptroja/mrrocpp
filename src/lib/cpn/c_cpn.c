@@ -40,7 +40,7 @@
 
 
 
-int socketfd = -1;
+static int socketfd = -1;
 
 typedef struct bufferlist_node {
 	char* buffer;
