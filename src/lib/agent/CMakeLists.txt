@@ -1,4 +1,4 @@
-add_library(agent DataBufferBase.cc AndDataCondition.cc OrDataCondition.cc AgentBase.cc Agent.cc)
+add_library(agent DataBufferBase.cc AndDataCondition.cc OrDataCondition.cc AgentBase.cc Agent.cc RemoteAgent.cc)
 
 target_link_libraries(agent ${Boost_SERIALIZATION_LIBRARY})
 

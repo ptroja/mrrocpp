@@ -4,6 +4,7 @@
 
 #include "Agent.h"
 #include "DataBuffer.h"
+#include "OrDataCondition.h"
 
 class Reader : public Agent {
 private:
@@ -14,11 +15,11 @@ private:
 public:
 
 	Reader(const std::string & name) : Agent(name),
-		IntBuffer("integer buffer"),
-		DoubleBuffer("double buffer")
+		IntBuffer(*this, "integer buffer"),
+		DoubleBuffer(*this, "double buffer")
 	{
-		registerBuffer(IntBuffer);
-		registerBuffer(DoubleBuffer);
+//		registerBuffer(IntBuffer);
+//		registerBuffer(DoubleBuffer);
 		or1 = DoubleBuffer | IntBuffer;
 		listBuffers();
 		loops = 0;

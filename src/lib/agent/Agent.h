@@ -5,7 +5,7 @@
 
 #include <boost/unordered_map.hpp>
 #include <boost/thread/thread.hpp>
-#include <boost/thread/mutex.hpp>
+#include <boost/thread/recursive_mutex.hpp>
 #include <boost/thread/condition_variable.hpp>
 
 #if defined(USE_MESSIP_SRR)
@@ -18,19 +18,14 @@
 #include "lib/xdr/xdr_iarchive.hpp"
 #include "AgentBase.h"
 
-#include "DataBufferBase.h"
-#include "DataBuffer.h"
-#include "OrDataCondition.h"
-#include "AndDataCondition.h"
+class DataBufferBase;
+class DataCondition;
 
 /**
  * Agent base class
  */
 class Agent : public AgentBase {
 private:
-	//! check if given data availability condition is satisfied
-	bool checkCondition(const OrDataCondition &condition);
-
 #if defined(USE_MESSIP_SRR)
 	//! server channel id
 	messip_channel_t * channel;
@@ -46,7 +41,7 @@ private:
 	boost::condition_variable cond;
 
 	//! mutex for protection data between receiver and readers
-	mutable boost::mutex mtx;
+	mutable boost::recursive_mutex mtx;
 
 	//! Data receiver thread loop
 	void ReceiveDataLoop(void);
@@ -63,6 +58,12 @@ private:
 	//! Main loop of the agent
 	void operator ()();
 
+	//! add friendship with a buffer base class to allow registration
+	friend class DataBufferBase;
+
+	//! Add a buffer to the agent
+	void registerBuffer(DataBufferBase & buf);
+
 protected:
 	//! Datatype of buffers container
 	typedef boost::unordered_map<std::string, DataBufferBase * > buffers_t;
@@ -73,13 +74,10 @@ protected:
 	//! Buffer container
 	buffers_t buffers;
 
-	//! Add a buffer to the agent
-	void registerBuffer(DataBufferBase & buf);
-
 	//! List buffers of the agent
 	void listBuffers() const;
 
-protected:
+public: // TODO: add friend relationship with generators
 	/**
 	 * Wait for given data availability condition to be satisfied
 	 * @param condition condition to wait for
@@ -90,6 +88,11 @@ protected:
 	 * Wait for null data availability condition to be satisfied
 	 */
 	void Wait(void);
+
+	/**
+	 * Get access for locking
+	 */
+	boost::recursive_mutex & getMutex() const;
 
 public:
 	//! Constructor

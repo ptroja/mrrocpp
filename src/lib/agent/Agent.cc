@@ -5,10 +5,20 @@
 #include <boost/serialization/string.hpp>
 #include <boost/thread/locks.hpp>
 
+#include "lib/exception.h"
+#include <exception>
+#include <boost/throw_exception.hpp>
+#include <boost/exception/errinfo_errno.hpp>
+#include <boost/exception/errinfo_api_function.hpp>
+
+#if defined(USE_MESSIP_SRR)
 #include "lib/messip/messip.h"
+#endif
 #include "lib/xdr/xdr_iarchive.hpp"
 
-#include "DataBuffer.h"
+#include "Agent.h"
+#include "DataBufferBase.h"
+#include "DataCondition.h"
 
 void Agent::Start(void)
 {
@@ -26,21 +36,23 @@ void Agent::registerBuffer(DataBufferBase & buf)
 
 	{
 		// lock access to the data buffers
-		boost::unique_lock<boost::mutex> lock(mtx);
+		boost::unique_lock<boost::recursive_mutex> lock(mtx);
 
 		result = buffers.insert(buffer_item_t(buf.getName(), &buf));
 	}
 
 	if(!result.second) {
-		std::cerr << "Duplicated buffer ('" << buf.getName() << "')" << std::endl;
-		throw;
+		std::string error_message("Duplicated buffer name ('");
+		error_message += buf.getName();
+		error_message += "')";
+		throw std::logic_error(error_message);
 	}
 }
 
 void Agent::listBuffers() const
 {
 	// lock access to the data buffers
-	boost::unique_lock<boost::mutex> lock(mtx);
+	boost::unique_lock<boost::recursive_mutex> lock(mtx);
 
 	std::cout << "Buffer list of \"" << getName() << "\"[" << buffers.size() << "]:" << std::endl;
 
@@ -55,14 +67,18 @@ Agent::Agent(const std::string & _name)
 #if defined(USE_MESSIP_SRR)
 	channel = messip_channel_create(NULL, getName().c_str(), MESSIP_NOTIMEOUT, 0);
 #else /* USE_MESSIP_SRR  */
-	channel = name_attach(NULL, getName().c_str(), 0 /*NAME_FLAG_ATTACH_GLOBAL*/);
+	channel = name_attach(NULL, getName().c_str(), NAME_FLAG_ATTACH_GLOBAL);
 #endif /* USE_MESSIP_SRR */
 
 	if(channel == NULL)
 	{
-		// TODO:
+		// TODO: pass name in the exception
 		std::cerr << "server channel create for '" << getName() << "' failed" << std::endl;
-		throw;
+		BOOST_THROW_EXCEPTION(
+			mrrocpp::lib::exception::System_error() <<
+			boost::errinfo_errno(errno) <<
+			boost::errinfo_api_function("name_attach/messip_channel_create")
+		);
 	}
 
 	tid = boost::thread(&Agent::ReceiveDataLoop, this);
@@ -96,9 +112,13 @@ Agent::~Agent()
 	if(name_detach(channel, 0) == -1)
 #endif /* USE_MESSIP_SRR */
 	{
-		// TODO:
+		// TODO: pass channel name in the exception
 		std::cerr << "server channel create for for '" << getName() << "' failed" << std::endl;
-		throw;
+		BOOST_THROW_EXCEPTION(
+			mrrocpp::lib::exception::System_error() <<
+			boost::errinfo_errno(errno) <<
+			boost::errinfo_api_function("name_detach/messip_channel_delete")
+		);
 	}
 }
 
@@ -120,7 +140,11 @@ int Agent::ReceiveMessage(void * msg, std::size_t msglen, bool block)
 
 		if (ret == -1) {
 			std::cerr << "messip_receive() failed" << std::endl;
-			throw;
+			BOOST_THROW_EXCEPTION(
+				mrrocpp::lib::exception::System_error() <<
+				boost::errinfo_errno(errno) <<
+				boost::errinfo_api_function("messip_receive")
+			);
 		}
 		else if (!block && ret == MESSIP_MSG_TIMEOUT) {
 			return -1;
@@ -137,8 +161,11 @@ int Agent::ReceiveMessage(void * msg, std::size_t msglen, bool block)
 		if(!block) {
 			if (TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_RECEIVE, NULL, NULL, NULL) == -1) {
 				perror("TimerTimeout()");
-				// TODO: exception
-				throw;
+				BOOST_THROW_EXCEPTION(
+					mrrocpp::lib::exception::System_error() <<
+					boost::errinfo_errno(errno) <<
+					boost::errinfo_api_function("TimerTimeout")
+				);
 			}
 		}
 
@@ -153,8 +180,11 @@ int Agent::ReceiveMessage(void * msg, std::size_t msglen, bool block)
 				return -1;
 			} else {
 				perror("MsgReceive()");
-				// TODO:
-				throw;
+				BOOST_THROW_EXCEPTION(
+					mrrocpp::lib::exception::System_error() <<
+					boost::errinfo_errno(errno) <<
+					boost::errinfo_api_function("MsgReceive")
+				);
 			}
 		}
 
@@ -180,7 +210,7 @@ int Agent::ReceiveMessage(void * msg, std::size_t msglen, bool block)
 
 		/* A QNX IO message received, reject */
 		if (hdr->type >= _IO_BASE && hdr->type <= _IO_MAX) {
-			std::cerr << "A QNX IO message received, reject" << std::endl;
+			//std::cerr << "A QNX IO message received, reject" << std::endl;
 
 			MsgReply(rcvid, EOK, 0, 0);
 			continue;
@@ -236,7 +266,7 @@ void Agent::ReceiveDataLoop(void)
 		ia >> msg_buffer_name;
 
 		// lock access to the data buffers
-		boost::mutex::scoped_lock l(mtx);
+		boost::unique_lock<boost::recursive_mutex> l(mtx);
 
 		Store(msg_buffer_name, ia);
 
@@ -259,7 +289,7 @@ void Agent::ReceiveDataLoop(void)
 
 void Agent::Wait(DataCondition & condition)
 {
-	boost::unique_lock<boost::mutex> lock(mtx);
+	boost::unique_lock<boost::recursive_mutex> lock(mtx);
 
 	while(!condition.isNewData())
 		cond.wait(lock);
@@ -271,9 +301,14 @@ void Agent::Wait(DataCondition & condition)
 
 void Agent::Wait(void)
 {
-	boost::unique_lock<boost::mutex> lock(mtx);
+	boost::unique_lock<boost::recursive_mutex> lock(mtx);
 
 	BOOST_FOREACH(const buffer_item_t item, buffers) {
 		item.second->Update();
 	}
+}
+
+boost::recursive_mutex & Agent::getMutex(void) const
+{
+	return mtx;
 }

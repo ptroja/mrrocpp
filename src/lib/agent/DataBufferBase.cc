@@ -5,13 +5,16 @@
  *      Author: ptroja
  */
 
+#include "Agent.h"
 #include "DataBufferBase.h"
 #include "AndDataCondition.h"
 #include "OrDataCondition.h"
 
-DataBufferBase::DataBufferBase(const std::string & _name)
-	: name(_name), new_data_ready(false)
+DataBufferBase::DataBufferBase(Agent & _owner, const std::string & _name)
+	: name(_name), owner(_owner), owner_agent_name(owner.getName()),
+	  new_data_ready(false)
 {
+	owner.registerBuffer(*this);
 }
 
 const std::string & DataBufferBase::getName() const

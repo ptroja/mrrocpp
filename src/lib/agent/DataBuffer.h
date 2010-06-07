@@ -6,16 +6,17 @@
 
 #include "lib/xdr/xdr_iarchive.hpp"
 
+#include "DataBufferBase.h"
+#include "DataCondition.h"
 #include "Agent.h"
 
 // forward declarations
-class DataBufferBase;
 class AndDataCondition;
 class OrDataCondition;
 
 template <class T>
-class DataBuffer : public DataBufferBase {
-	//! Agent needs an access to Store/Update methods
+class DataBuffer : public DataBufferBase, public DataCondition {
+//	//! Agent needs an access to Store/Update methods
 	friend class Agent;
 
 private:
@@ -35,7 +36,7 @@ private:
 	void Store(xdr_iarchive<> & ia) {
  		ia >> new_data;
  		if (new_data_ready) {
- 			std::cerr << "Warning: data overwrite at buffer '" << getName() << "'" << std::endl;
+ 			std::cerr << "Warning: data overwrite at buffer " << owner_agent_name << ":" << getName() << std::endl;
  		}
 		new_data_ready = true;
 	}
@@ -53,8 +54,8 @@ private:
 
 public:
 	//! Constructor
-	DataBuffer(const std::string & _name, const T & _default_value = T())
-		: DataBufferBase(_name), data(_default_value),
+	DataBuffer(Agent & owner, const std::string & _name, const T & _default_value = T())
+		: DataBufferBase(owner, _name), data(_default_value),
 		fresh(false)
 	{
 	}
@@ -71,7 +72,7 @@ public:
 	/**
 	 * Get data from the buffer
 	 * @param item where the data will be stored
-	 * @return fresh flag indicatig if this data has been already "getted"
+	 * @return fresh flag indicating if this data has been already "getted"
 	 */
 	bool Get(T & item) {
 		bool fresh_flag = fresh;
@@ -81,11 +82,19 @@ public:
 	}
 
 	/**
-	 * Check if data has ben already "getted"
+	 * Check if data has been already get
 	 * @return fresh flag
 	 */
 	bool isFresh(void) const {
 		return fresh;
+	}
+
+	/**
+	 * Implement DataCondition interface
+	 */
+
+	bool isNewData() const {
+		return new_data_ready;
 	}
 };
 

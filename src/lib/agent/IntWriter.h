@@ -7,6 +7,7 @@
 
 #include "Agent.h"
 #include "RemoteAgent.h"
+#include "RemoteBuffer.h"
 #include "DataBuffer.h"
 
 class IntWriter : public Agent {

@@ -12,7 +12,10 @@
 
 #include "lib/xdr/xdr_iarchive.hpp"
 
+class Agent;
+
 // forward declarations
+class Agent;
 class AndDataCondition;
 class OrDataCondition;
 
@@ -23,6 +26,11 @@ class DataBufferBase {
 protected:
 	//! name of the data buffer
 	const std::string name;
+
+	Agent & owner;
+
+	//! name of the data buffer
+	const std::string & owner_agent_name;
 
 	//! flag for marking a new data
 	bool new_data_ready;
@@ -35,7 +43,7 @@ protected:
 
 public:
 	//! Constructor
-	DataBufferBase(const std::string & _name);
+	DataBufferBase(Agent & _owner, const std::string & _name);
 
 	//! compose 'And' condition
 	AndDataCondition operator&(DataBufferBase &op);

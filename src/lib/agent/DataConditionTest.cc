@@ -10,6 +10,7 @@
 #include <boost/typeof/typeof.hpp>
 
 #include "DataBuffer.h"
+#include "Reader.h"
 #include "AndDataCondition.h"
 #include "OrDataCondition.h"
 
@@ -22,7 +23,8 @@
 int
 main(int argc, char *argv[])
 {
-	DataBuffer<bool> d1("d1"), d2("d2");
+	Reader r("test");
+	DataBuffer<bool> d1(r, "d1"), d2(r, "d2");
 	AndDataCondition a1, a2;
 	OrDataCondition o1, o2;
 
