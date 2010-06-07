@@ -25,6 +25,10 @@
 //#include <boost/algorithm/string/trim.hpp>
 //#include <boost/algorithm/string/classification.hpp>
 #include <stdexcept>
+#include "lib/exception.h"
+#include <boost/throw_exception.hpp>
+#include <boost/exception/errinfo_errno.hpp>
+#include <boost/exception/errinfo_api_function.hpp>
 
 #include <string>
 #if defined(USE_MESSIP_SRR)
@@ -354,48 +358,48 @@ pid_t configurator::process_spawn(const std::string & _section_name) {
 
 
 	std::string spawned_program_name = value<std::string>("program_name", _section_name);
-		std::string spawned_node_name = value<std::string>("node_name", _section_name);
+	std::string spawned_node_name = value<std::string>("node_name", _section_name);
 
-		std::string rsh_spawn_node;
+	std::string rsh_spawn_node;
 
-		if (spawned_node_name == sysinfo.nodename)
-		{
-			rsh_spawn_node = "localhost";
-		} else {
-			rsh_spawn_node = spawned_node_name;
+	if (spawned_node_name == sysinfo.nodename)
+	{
+		rsh_spawn_node = "localhost";
+	} else {
+		rsh_spawn_node = spawned_node_name;
 
-			std::string opendir_path("/net/");
-			opendir_path += rsh_spawn_node;
-
-			if (access(opendir_path.c_str(), R_OK) != 0) {
-				printf("spawned node absent: %s\n", opendir_path.c_str());
-				throw std::logic_error("spawned node absent: "+opendir_path);
-			}
-
-		}
-
-		// Sciezka do binariow.
-		char bin_path[PATH_MAX];
-		if (exists("binpath", _section_name)) {
-			std::string _bin_path = value<std::string>("binpath", _section_name);
-			strcpy(bin_path, _bin_path.c_str());
-			if(strlen(bin_path) && bin_path[strlen(bin_path)-1] != '/') {
-				strcat(bin_path, "/");
-			}
-
-		} else {
-			snprintf(bin_path, sizeof(bin_path), "/net/%s%sbin/",
-					node.c_str(), dir.c_str());
-		}
-
-
-		std::string opendir_path(bin_path);
-		opendir_path += spawned_program_name;
+		std::string opendir_path("/net/");
+		opendir_path += rsh_spawn_node;
 
 		if (access(opendir_path.c_str(), R_OK) != 0) {
-			printf("spawned program absent: %s\n", opendir_path.c_str());
-			throw std::logic_error("spawned program absent: "+opendir_path);
+			printf("spawned node absent: %s\n", opendir_path.c_str());
+			throw std::logic_error("spawned node absent: "+opendir_path);
 		}
+
+	}
+
+	// Sciezka do binariow.
+	char bin_path[PATH_MAX];
+	if (exists("binpath", _section_name)) {
+		std::string _bin_path = value<std::string>("binpath", _section_name);
+		strcpy(bin_path, _bin_path.c_str());
+		if(strlen(bin_path) && bin_path[strlen(bin_path)-1] != '/') {
+			strcat(bin_path, "/");
+		}
+
+	} else {
+		snprintf(bin_path, sizeof(bin_path), "/net/%s%sbin/",
+				node.c_str(), dir.c_str());
+	}
+
+
+	std::string opendir_path(bin_path);
+	opendir_path += spawned_program_name;
+
+	if (access(opendir_path.c_str(), R_OK) != 0) {
+		printf("spawned program absent: %s\n", opendir_path.c_str());
+		throw std::logic_error("spawned program absent: "+opendir_path);
+	}
 
 	pid_t child_pid = vfork();
 
@@ -462,7 +466,11 @@ pid_t configurator::process_spawn(const std::string & _section_name) {
 	} else if (child_pid > 0) {
 		printf("child %d created\n", child_pid);
 	} else {
-		perror("vfork()");
+		BOOST_THROW_EXCEPTION(
+				lib::exception::System_error() <<
+				boost::errinfo_errno(errno) <<
+				boost::errinfo_api_function("vfork")
+		);
 	}
 
 	return child_pid;
