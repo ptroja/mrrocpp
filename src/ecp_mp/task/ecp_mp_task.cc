@@ -88,6 +88,11 @@ task::~task()
 	BOOST_FOREACH(sensor_item_t & sensor_item, sensor_m) {
 		delete sensor_item.second;
 	}
+#if !defined(USE_MESSIP_SRR)
+    name_close(UI_fd);
+#else
+	messip::port_disconnect(UI_fd);
+#endif
 }
 
 

@@ -1,8 +1,14 @@
 #ifndef MP_ROBOT_H_
 #define MP_ROBOT_H_
 
+#include <boost/shared_ptr.hpp>
+
 #include "mp/task/mp_task.h"
 #include "ecp_mp/ecp_mp_robot.h"
+#include "mp/generator/mp_generator.h"
+
+#include "lib/agent/RemoteAgent.h"
+#include "lib/agent/RemoteBuffer.h"
 
 #include <time.h>
 
@@ -12,62 +18,40 @@ namespace robot {
 
 class robot : public ecp_mp::robot
 {
-	// Klasa bazowa dla robotow (klasa abstrakcyjna)
-	// Kazdy robot konkretny (wyprowadzony z klasy bazowej)
-	// musi zawierac pola danych (skladowe) dotyczace
-	// ostatnio zrealizowanej pozycji oraz pozycji zadanej
+	friend class mp::generator::generator;
+
+protected:
+	task::task &mp_object;
+
+public:
+	//! Bufor z odpowiedzia z ECP
+	lib::ECP_REPLY_PACKAGE ecp_reply_package;
+	DataBuffer<lib::ECP_REPLY_PACKAGE> ecp_reply_package_buffer;
+
 private:
 #if !defined(PROCESS_SPAWN_RSH)
 	//! deskryptor wezla na ktorym jest powolane ECP oraz jego PID
 	uint32_t nd;
 #endif
 
-	pid_t ECP_pid;
-
-#if !defined(USE_MESSIP_SRR)
-	//! main ECP request channel
-	int ECP_fd;
-#else
-	//! main ECP request channel
-	messip_channel_t* ECP_fd;
-#endif
+	const pid_t ECP_pid;
 
 protected:
+	//! ECP agent
+	RemoteAgent ecp_agent;
 
-	task::task &mp_object;
+	//! ECP command buffer
+	RemoteBuffer<lib::MP_COMMAND_PACKAGE> mp_command_buffer;
 
 public:
-	// Wysyla puls do Mp przed oczekiwaniem na spotkanie
-	void send_pulse_to_ecp(int pulse_code, int pulse_value = 1);
-
 	//! Bufor z rozkazem dla ECP
 	lib::MP_COMMAND_PACKAGE mp_command;
-
-	//! Bufor z odpowiedzia z ECP
-	lib::ECP_REPLY_PACKAGE ecp_reply_package;
-
-	struct timespec pulse_receive_time;
 
 	//! okresla czy robot ma byc obslugiwany w Move
 	bool communicate;
 
 	//! obiekt do komunikacji z SR
 	lib::sr_ecp &sr_ecp_msg;
-
-	//! A server connection ID identifying UI
-	int scoid;
-
-	//! flag indicating opened pulse connection from UI
-	bool opened;
-
-	//! kod pulsu ktory zostal wyslany przez ECP w celu zgloszenia gotowosci do komunikacji (wartosci w impconst.h)
-	char pulse_code;
-
-	//! okresla czy jest nowy puls
-	bool new_pulse;
-
-	//! okresla czy czy nowy puls zostal juz uwzgledniony w generatorze
-	bool new_pulse_checked;
 
 	//! ew. koordynacja ciagla domyslnie wylaczona ma wplyw na instrukcje move
 	bool continuous_coordination;

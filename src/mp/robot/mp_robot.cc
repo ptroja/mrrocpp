@@ -37,53 +37,21 @@ namespace robot {
 robot::robot(lib::robot_name_t l_robot_name, const std::string & _section_name, task::task &mp_object_l) :
 	ecp_mp::robot(l_robot_name),
 	mp_object(mp_object_l),
+
+	ecp_reply_package_buffer(mp_object, std::string("mp:") + _section_name),
+	ECP_pid(mp_object.config.process_spawn(_section_name)),
+	ecp_agent(_section_name),
+	mp_command_buffer(ecp_agent, "command"),
+
 	communicate(true), // domyslnie robot jest aktywny
 	sr_ecp_msg(*(mp_object_l.sr_ecp_msg)),
-	opened(false),
-	new_pulse(false),
-	new_pulse_checked(false),
 	continuous_coordination(false)
 {
-	mp_command.pulse_to_ecp_sent = false;
-
-	std::string node_name(mp_object.config.value <std::string> ("node_name", _section_name));
-
 #if !defined(PROCESS_SPAWN_RSH)
-	nd = mp_object.config.return_node_number(node_name.c_str());
+	const std::string node_name(mp_object.config.value <std::string> ("node_name", _section_name));
+
+	nd = mp_object.config.return_node_number(node_name);
 #endif
-
-	std::string
-			ecp_attach_point(mp_object.config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "ecp_attach_point", _section_name));
-
-	ECP_pid = mp_object.config.process_spawn(_section_name);
-
-	if (ECP_pid < 0) {
-		BOOST_THROW_EXCEPTION(
-				lib::exception::System_error() <<
-				boost::errinfo_errno(errno)
-		);
-	}
-
-	// handle ECP's name_open() call
-	scoid = mp_object.wait_for_name_open();
-	opened = true;
-
-	// nawiazanie komunikacji z ECP
-	short tmp = 0;
-	// kilka sekund  (~1) na otworzenie urzadzenia
-#if !defined(USE_MESSIP_SRR)
-	while ((ECP_fd = name_open(ecp_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) < 0)
-#else
-	while ((ECP_fd = messip::port_connect(ecp_attach_point)) == NULL)
-#endif
-	if ((tmp++) < CONNECT_RETRY)
-		usleep(1000 * CONNECT_DELAY);
-	else {
-		BOOST_THROW_EXCEPTION(
-				lib::exception::System_error() <<
-				boost::errinfo_errno(errno)
-		);
-	}
 }
 // -------------------------------------------------------------------
 
@@ -91,15 +59,6 @@ robot::robot(lib::robot_name_t l_robot_name, const std::string & _section_name, 
 robot::~robot()
 {
 	fprintf(stderr, "robot::~robot()\n");
-#if !defined(USE_MESSIP_SRR)
-	if (ECP_fd >= 0) {
-		name_close(ECP_fd);
-	}
-#else /* USE_MESSIP_SRR */
-	if (ECP_fd) {
-		messip::port_disconnect(ECP_fd);
-	}
-#endif /* USE_MESSIP_SRR */
 
 #if defined(PROCESS_SPAWN_RSH)
 	if (kill(ECP_pid, SIGTERM) == -1) {
@@ -115,80 +74,20 @@ robot::~robot()
 #endif
 }
 
-// Wysyla puls do Mp przed oczekiwaniem na spotkanie
-void robot::send_pulse_to_ecp(int pulse_code, int pulse_value)
-{
-	if ((!(mp_command.pulse_to_ecp_sent)) && (!new_pulse) && (!continuous_coordination) && (!(mp_command.command
-			== lib::NEXT_STATE))) {
-
-#if !defined(USE_MESSIP_SRR)
-		if (MsgSendPulse(ECP_fd, sched_get_priority_min(SCHED_FIFO), pulse_code, pulse_value) == -1)
-#else
-		if (messip::port_send_pulse(ECP_fd, pulse_code, pulse_value) < 0)
-#endif
-		{
-			perror("MsgSendPulse()");
-		}
-		mp_command.pulse_to_ecp_sent = true;
-	}
-}
-
 // ------------------------------------------------------------------------
-void robot::start_ecp(void) {
-
+void robot::start_ecp(void)
+{
 	mp_command.command = lib::START_TASK;
-
-#if !defined(USE_MESSIP_SRR)
-	mp_command.hdr.type = 0;
-	if (MsgSend(ECP_fd, &mp_command, sizeof(mp_command), &ecp_reply_package, sizeof(ecp_reply_package)) == -1)
-#else
-	if(messip::port_send(ECP_fd, 0, 0, mp_command, ecp_reply_package) < 0)
-#endif
-	{
-		BOOST_THROW_EXCEPTION(
-				lib::exception::System_error() <<
-				boost::errinfo_errno(errno)
-		);
-	}
-	mp_command.pulse_to_ecp_sent = false;
-	// by Y - ECP_ACKNOWLEDGE zamienione na lib::TASK_TERMINATED
-	// w celu uproszczenia programowania zadan wielorobotowych
-	if (ecp_reply_package.reply != lib::TASK_TERMINATED) {
-		// Odebrano od ECP informacje o bledzie
-		printf("Error w start_ecp w ECP\n");
-		BOOST_THROW_EXCEPTION(
-				lib::exception::NonFatal_error()
-		);
-	}
+	fprintf(stderr, "robot::start_ecp()\n");
+	mp_command_buffer.Set(mp_command);
 }
 // ------------------------------------------------------------------------
 
 
 // -------------------------------------------------------------------
-void robot::execute_motion(void) { // zlecenie wykonania ruchu
-
-#if !defined(USE_MESSIP_SRR)
-	mp_command.hdr.type = 0;
-	if (MsgSend(ECP_fd, &mp_command, sizeof(mp_command), &ecp_reply_package, sizeof(ecp_reply_package)) == -1)
-#else
-	if(messip::port_send(ECP_fd, 0, 0, mp_command, ecp_reply_package) < 0)
-#endif
-	{
-		BOOST_THROW_EXCEPTION(
-				lib::exception::System_error() <<
-				boost::errinfo_errno(errno)
-		);
-	}
-	mp_command.pulse_to_ecp_sent = false;
-
-	if (ecp_reply_package.reply == lib::ERROR_IN_ECP) {
-		BOOST_THROW_EXCEPTION(
-				lib::exception::NonFatal_error() <<
-				lib::exception::error_code(ECP_ERRORS)
-		);
-	}
-	// W.S. ...
-	// Ewentualna aktualizacja skladowych robota na podstawie ecp_reply
+void robot::execute_motion(void)
+{
+	mp_command_buffer.Set(mp_command);
 }
 // ---------------------------------------------------------------
 
@@ -197,26 +96,7 @@ void robot::execute_motion(void) { // zlecenie wykonania ruchu
 void robot::terminate_ecp(void) { // zlecenie STOP zakonczenia ruchu
 	mp_command.command = lib::STOP;
 
-#if !defined(USE_MESSIP_SRR)
-	mp_command.hdr.type = 0;
-	if (MsgSend(ECP_fd, &mp_command, sizeof(mp_command), &ecp_reply_package, sizeof(ecp_reply_package)) == -1)
-#else
-	if(messip::port_send(ECP_fd, 0, 0, mp_command, ecp_reply_package) < 0)
-#endif
-	{
-		BOOST_THROW_EXCEPTION(
-				lib::exception::System_error() <<
-				boost::errinfo_errno(errno)
-		);
-	}
-	mp_command.pulse_to_ecp_sent = false;
-	if (ecp_reply_package.reply == lib::ERROR_IN_ECP) {
-		// Odebrano od ECP informacje o bledzie
-		BOOST_THROW_EXCEPTION(
-				lib::exception::NonFatal_error() <<
-				lib::exception::error_code(ECP_ERRORS)
-		);
-	}
+	mp_command_buffer.Set(mp_command);
 }
 // ---------------------------------------------------------------
 

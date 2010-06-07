@@ -17,6 +17,9 @@
 #include <string>
 #include <list>
 
+#include "lib/agent/RemoteAgent.h"
+#include "lib/agent/RemoteBuffer.h"
+
 #include "lib/com_buf.h"
 #include "lib/srlib.h"
 #include "lib/mis_fun.h"
@@ -122,7 +125,8 @@ typedef struct {
 	std::string node_name;
 	std::string network_pulse_attach_point;
 	int node_nr;
-	int pulse_fd;
+	RemoteAgent * agent;
+	RemoteBuffer<char> * command_buffer;
 	UI_MP_STATE state;
 	UI_MP_STATE last_state;
 } mp_state_def;

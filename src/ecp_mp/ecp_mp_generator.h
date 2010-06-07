@@ -1,7 +1,6 @@
 #ifndef ECP_MP_GENERATOR_H_
 #define ECP_MP_GENERATOR_H_
 
-#include <map>
 #include "lib/srlib.h"
 #include "ecp_mp/sensor/ecp_mp_sensor.h"
 #include "ecp_mp/transmitter/transmitter.h"
@@ -20,8 +19,6 @@ protected:
 	lib::sr_ecp& sr_ecp_msg;		// obiekt do komunikacji z SR
 
 public:
-	bool trigger;			// informacja czy pszyszedl puls trigger
-
 	generator(lib::sr_ecp& _sr_ecp_msg);
 
 	bool check_and_null_trigger(); 		// zwraca wartosc trigger i zeruje go

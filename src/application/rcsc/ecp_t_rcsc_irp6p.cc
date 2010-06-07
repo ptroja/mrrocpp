@@ -42,11 +42,12 @@ rcsc::rcsc(lib::configurator &_config) :
 void rcsc::main_task_algorithm(void)
 {
 	for (;;) {
-		sr_ecp_msg->message("Waiting for MP order");
+		sr_ecp_msg->message("Waiting for MP command");
+		fprintf(stderr, "P: Waiting for MP command\n");
 
 		get_next_state();
 
-		sr_ecp_msg->message("Order received");
+		sr_ecp_msg->message("Command received");
 		//printf("postument: %d\n", mp_command.ecp_next_state.mp_2_ecp_next_state);
 		flushall();
 

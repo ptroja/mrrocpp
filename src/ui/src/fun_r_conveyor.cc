@@ -541,7 +541,7 @@ int EDP_conveyor_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 			} else if (check_node_existence(ui_state.conveyor.edp.node_name,
 					"edp_conveyor")) {
 				ui_state.conveyor.edp.node_nr = config->return_node_number(
-						ui_state.conveyor.edp.node_name.c_str());
+						ui_state.conveyor.edp.node_name);
 				{
 					boost::unique_lock<boost::mutex> lock(process_creation_mtx);
 					ui_robot.conveyor = new ui_tfg_and_conv_robot(*config,

@@ -41,7 +41,7 @@ haar::haar(lib::configurator &_config) :
 	{
 		sr_ecp_msg->message("Zle zdefiniowany obiekt: USTAW PLIK KONFIGURACYJNY");
 		ecp_termination_notice();
-		ecp_wait_for_stop();
+		wait_for_stop();
 	}
 
 
@@ -131,7 +131,7 @@ void haar::main_task_algorithm(void) {
 	sr_ecp_msg->message("Wait_for_stop\n");
 	ecp_termination_notice();
 
-	ecp_wait_for_stop();
+	wait_for_stop();
 */
 }
 

@@ -32,7 +32,7 @@ namespace ecp_mp {
 namespace task {
 
 // klasa macierzysta dla klas globalnych procesow ECP i MP
-class task : Agent
+class task : public Agent
 {
 public:
 	typedef std::map <const char *, ecp_mp::common::Trajectory /*, str_cmp */> trajectories_t;
@@ -80,6 +80,12 @@ public:
 
 	// methods for ECP template to redefine in concrete classes
 	virtual void main_task_algorithm(void) = 0;
+
+	// Oczekiwanie na zlecenie START
+	virtual void wait_for_start(void) = 0;
+
+	// Oczekiwanie na zlecenie STOP
+	virtual void wait_for_stop(void) = 0;
 
 	bool step(void) {
 		main_task_algorithm();

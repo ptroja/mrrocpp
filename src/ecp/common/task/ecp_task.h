@@ -3,6 +3,9 @@
 
 #include "ecp_mp/task/ecp_mp_task.h"
 #include "ecp/common/ecp_robot.h"
+#include "lib/agent/RemoteAgent.h"
+#include "lib/agent/RemoteBuffer.h"
+#include "lib/agent/DataBuffer.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -13,18 +16,6 @@ namespace task {
 class task : public ecp_mp::task::task
 {
 	private:
-#if !defined(USE_MESSIP_SRR)
-		name_attach_t *ecp_attach, *trigger_attach; // by Y
-		int MP_fd;
-#else
-		messip_channel_t *ecp_attach, *trigger_attach, *MP_fd;
-#endif
-		// Wysyla puls do Mp przed oczekiwaniem na spotkanie
-		void send_pulse_to_mp(int pulse_code, int pulse_value = 1);
-
-		// Receive of mp message
-		int receive_mp_message(bool block);
-
 		// Badanie typu polecenia z MP
 		lib::MP_COMMAND mp_command_type(void) const;
 
@@ -33,6 +24,18 @@ class task : public ecp_mp::task::task
 	protected:
 		// Oczekiwanie na nowy stan od MP
 		void get_next_state(void);
+
+		//! Coordinator agent
+		RemoteAgent mp_agent;
+	public:
+		//! Output buffer for reply to a coordinator
+		RemoteBuffer<lib::ECP_REPLY_PACKAGE> ecp_reply_buffer;
+
+		//! Input buffer for command from a coordinator
+		DataBuffer<lib::MP_COMMAND_PACKAGE> mp_command_buffer;
+
+		//! Input buffer for a trigger from a UI
+		DataBuffer<char> ui_trigger_buffer;
 
 	public: // TODO: following packages should be 'protected'
 		// Odpowiedz ECP do MP, pola do ew. wypelnienia przez generatory
@@ -46,9 +49,6 @@ class task : public ecp_mp::task::task
 		//ew. koordynacja ciagla domyslnie wylaczona ma wplyw na instrukcje move
 		bool continuous_coordination;
 
-		// sprawdza czy przeszedl puls do ECP lub MP
-		bool pulse_check();
-
 		// KONSTRUKTOR
 		task(lib::configurator &_config);
 
@@ -59,15 +59,15 @@ class task : public ecp_mp::task::task
 		void ecp_termination_notice(void);
 
 		// Oczekiwanie na polecenie START od MP
-		bool ecp_wait_for_start(void);
+		void wait_for_start(void);
 
 		// Oczekiwanie na STOP
-		void ecp_wait_for_stop(void);
+		void wait_for_stop(void);
 
 	public: // TODO: what follows should be private method
 
 		// Oczekiwanie na polecenie od MP
-		bool mp_buffer_receive_and_send(void);
+		//bool mp_buffer_receive_and_send(void);
 
 		// Ustawienie typu odpowiedzi z ECP do MP
 		void set_ecp_reply(lib::ECP_REPLY ecp_r);

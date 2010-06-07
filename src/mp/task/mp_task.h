@@ -4,6 +4,7 @@
 #include "mp/generator/mp_generator.h"
 #include "mp/mp.h"
 #include "ecp_mp/task/ecp_mp_task.h"
+#include "lib/agent/DataBuffer.h"
 
 #if !defined(USE_MESSIP_SRR)
 #include <sys/iofunc.h>
@@ -22,37 +23,32 @@ class generator;
 
 namespace task {
 
+const std::string UI_COMMAND_BUFFER = "UI command";
+
 // klasa globalna dla calego procesu MP
 class task : public ecp_mp::task::task
 {
+	// robot class needs an access to the the Agent buffers
+	friend class mp::robot::robot;
+
+	// generator class needs an access to the UI command buffer
+	friend class mp::generator::generator;
+
 private:
+	//! Start/Stop data buffer
+	DataBuffer<char> ui_command_buffer;
+
 	void initialize_communication(void);
 
 	/// utworzenie robotow
 	virtual void create_robots(void);
 
 public:
-#if !defined(USE_MESSIP_SRR)
-	static name_attach_t *mp_pulse_attach;
-#else
-	static messip_channel_t *mp_pulse_attach;
-#endif
 	/// KONSTRUKTORY
 	task(lib::configurator &_config);
 	virtual ~task(void);
 
 	void stop_and_terminate(void);
-
-	// oczekiwanie na puls z ECP
-	typedef enum _MP_RECEIVE_PULSE_ENUM
-	{
-		NONBLOCK, BLOCK
-	} RECEIVE_PULSE_MODE;
-
-	typedef enum _WAIT_FOR_NEW_PULSE_ENUM
-	{
-		NEW_ECP_PULSE, NEW_UI_PULSE, NEW_UI_OR_ECP_PULSE
-	} WAIT_FOR_NEW_PULSE_MODE;
 
 	void set_next_playerpos_goal(lib::robot_name_t robot_l, const lib::playerpos_goal_t &goal);
 
@@ -81,36 +77,11 @@ public:
 	// Zatrzymanie wszystkich ECP
 	void terminate_all(const common::robots_t & _robot_m);
 
-	// warunkowe wyslanie pulsu zadania komunikacji do ECP
-	void request_communication_with_robots(const common::robots_t & _robot_m);
-
 	// Wyslanie rozkazu do wszystkich ECP
 	void execute_all(const common::robots_t & _robot_m);
 
 	/// mapa wszystkich robotow
 	common::robots_t robot_m;
-
-	// funkcja odbierajaca pulsy z UI lub ECP wykorzystywana w MOVE
-	void mp_receive_ui_or_ecp_pulse(common::robots_t & _robot_m, generator::generator& the_generator);
-
-private:
-	friend class robot::robot;
-
-	//! wait until ECP/UI calls name_open() to pulse channel;
-	//! \return {identifier (scoid/QNET or socket/messip) of the next connected process}
-	int wait_for_name_open(void);
-
-	//! A server connection ID identifying UI
-	int ui_scoid;
-
-	//! flag indicating opened pulse connection from UI
-	bool ui_opened;
-
-	char ui_pulse_code; // kod pulsu ktory zostal wyslany przez ECP w celu zgloszenia gotowosci do komunikacji (wartosci w impconst.h)
-	bool ui_new_pulse; // okresla czy jest nowy puls
-
-	bool
-			check_and_optional_wait_for_new_pulse(WAIT_FOR_NEW_PULSE_MODE process_type, const RECEIVE_PULSE_MODE desired_wait_mode);
 };
 
 task* return_created_mp_task(lib::configurator &_config);

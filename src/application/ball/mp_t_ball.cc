@@ -65,11 +65,16 @@ void ball::main_task_algorithm(void)
    	mp_h_gen.robot_m = robot_m;
 
 	set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, (int) ecp_mp::task::ABSOLUTE, "src/application/ball/irp6ot_init.trj", 0, 1, lib::ROBOT_IRP6_ON_TRACK);
+	fprintf(stderr, "snes OT done\n");
 	set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, (int) ecp_mp::task::ABSOLUTE, "src/application/ball/irp6p_init.trj", 0, 1, lib::ROBOT_IRP6_POSTUMENT);
+	fprintf(stderr, "snes P done\n");
 
 	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 			(2, 2, lib::ROBOT_IRP6_ON_TRACK, lib::ROBOT_IRP6_POSTUMENT,
 					lib::ROBOT_IRP6_ON_TRACK, lib::ROBOT_IRP6_POSTUMENT);
+
+	fprintf(stderr, "wait DONE\n");
+	return;
 
    	sr_ecp_msg->message("New series");
    	// wlaczenie generatora do konfiguracji czujnika w EDP w obydwu robotach

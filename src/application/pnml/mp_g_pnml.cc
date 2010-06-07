@@ -35,7 +35,8 @@ bool pnmlExecutor::next_step() {
 		robot_node.second->communicate = false;
 	}
 
-	wait_for_ECP_pulse = pnmlNet.ExecuteStep(robot_m);
+	// wait_for_ECP_pulse =
+	pnmlNet.ExecuteStep(robot_m);
 	return true;
 }
 

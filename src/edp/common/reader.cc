@@ -240,6 +240,7 @@ void reader_buffer::operator()()
 					cond.wait(lock);
 				}
 
+				new_data = false;
 				step_data.ui_trigger = ui_trigger;
 
 				// przepisanie danych dla biezacego kroku do bufora lokalnego reader

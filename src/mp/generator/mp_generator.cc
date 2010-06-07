@@ -1,61 +1,57 @@
+#include <boost/foreach.hpp>
+
 #include "mp/generator/mp_generator.h"
 #include "mp/robot/mp_robot.h"
 
-#include <boost/foreach.hpp>
+#include "lib/agent/OrDataCondition.h"
 
 namespace mrrocpp {
 namespace mp {
 namespace generator {
 
 generator::generator(task::task& _mp_task) :
-	ecp_mp::generator::generator(*_mp_task.sr_ecp_msg), mp_t(_mp_task),
-			wait_for_ECP_pulse(false) {
+	ecp_mp::generator::generator(*_mp_task.sr_ecp_msg), mp_t(_mp_task)
+{
 }
 
 // ---------------------------------------------------------------
-void generator::Move() {
-	// Funkcja zwraca false gdy samoistny koniec ruchu
-	// Funkcja zwraca true gdy koniec ruchu wywolany jest przez STOP
+void generator::Move(void)
+{
+	OrDataCondition anyData(mp_t.ui_command_buffer);
 
-	// czyszczenie aby nie czekac na pulsy z ECP
-	BOOST_FOREACH(const common::robot_pair_t & robot_node, mp_t.robot_m)
-{	if (robot_node.second->new_pulse) {
-		robot_node.second->new_pulse_checked = false;
+	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m) {
+		anyData = anyData | robot_node.second->ecp_reply_package_buffer;
 	}
-}
 
-// by Y - linia ponizej dodana 26.02.2007 - usunac komentarz jak bedzie dzialalo
-// ze wzgledu na obluge pulsow z UI w szczegolnosci stopu i wstrzymania
-mp_t.mp_receive_ui_or_ecp_pulse(mp_t.robot_m, *this);
+	node_counter = 0;
 
-// czyszczenie aby nie czekac na pulsy z ECP
-BOOST_FOREACH(const common::robot_pair_t & robot_node, mp_t.robot_m) {
-	if (robot_node.second->new_pulse) {
-		robot_node.second->new_pulse_checked = false;
-	}
-}
+	// (Inicjacja) generacja pierwszego kroku ruchu
+	if (!first_step())
+		return;
 
-node_counter = 0;
-// (Inicjacja) generacja pierwszego kroku ruchu
-if (!first_step())
-return;
+	do { // realizacja ruchu
 
-do { // realizacja ruchu
+		// zadanie przygotowania danych od czujnikow
+		mp_t.all_sensors_initiate_reading(sensor_m);
 
-	// zadanie przygotowania danych od czujnikow
-	mp_t.all_sensors_initiate_reading(sensor_m);
+		// wykonanie kroku ruchu przez wybrane roboty (z flaga 'communicate')
+		mp_t.execute_all(robot_m);
 
-	// wykonanie kroku ruchu przez wybrane roboty (z flaga 'communicate')
-	mp_t.execute_all(robot_m);
+		// odczytanie danych z wszystkich czujnikow
+		mp_t.all_sensors_get_reading(sensor_m);
 
-	// odczytanie danych z wszystkich czujnikow
-	mp_t.all_sensors_get_reading(sensor_m);
+		// Wait for new data from any source
+		mp_t.Wait(anyData);
 
-	// oczekiwanie na puls z ECP lub UI
-	mp_t.mp_receive_ui_or_ecp_pulse(mp_t.robot_m, *this);
+		// copy fresh data from buffers
+		BOOST_FOREACH(const common::robot_pair_t & robot_node, mp_t.robot_m) {
+			if(robot_node.second->ecp_reply_package_buffer.isFresh()) {
+				robot_node.second->ecp_reply_package = robot_node.second->ecp_reply_package_buffer.Get();
+			}
+		}
 
-	node_counter++;
-}while (next_step());
+		node_counter++;
+	} while (next_step());
 }
 // ------------------------------------------------------------------------
 

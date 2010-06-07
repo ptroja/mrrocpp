@@ -82,7 +82,7 @@ void ball::setup_command(robot::robot & robot)
 
 bool ball::first_step()
 {
-	std::cout << "first_step" << std::endl;
+	std::cerr << "first_step" << std::endl;
 
 	irp6ot = robot_m[lib::ROBOT_IRP6_ON_TRACK];
 	irp6p = robot_m[lib::ROBOT_IRP6_POSTUMENT];

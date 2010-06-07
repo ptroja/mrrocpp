@@ -26,6 +26,8 @@
 #include "lib/configurator.h"
 #include "ui/ui_ecp.h"
 
+//#include "mp/task/mp_task.h"
+
 /* Local headers */
 #include "ablibs.h"
 #include "abimport.h"
@@ -2257,7 +2259,7 @@ int MPup_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 	if (ui_state.mp.pid == -1) {
 
 		ui_state.mp.node_nr = config->return_node_number(
-				ui_state.mp.node_name.c_str());
+				ui_state.mp.node_name);
 
 		std::string mp_network_pulse_attach_point("/dev/name/global/");
 		mp_network_pulse_attach_point += ui_state.mp.network_pulse_attach_point;
@@ -2270,19 +2272,8 @@ int MPup_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 			if (ui_state.mp.pid > 0) {
 
-				short tmp = 0;
-				// kilka sekund  (~1) na otworzenie urzadzenia
-				while ((ui_state.mp.pulse_fd = name_open(
-						ui_state.mp.network_pulse_attach_point.c_str(),
-						NAME_FLAG_ATTACH_GLOBAL)) < 0)
-					if ((tmp++) < CONNECT_RETRY)
-						delay(CONNECT_DELAY);
-					else {
-						fprintf(stderr, "name_open() for %s failed: %s\n",
-								ui_state.mp.network_pulse_attach_point.c_str(),
-								strerror(errno));
-						break;
-					}
+				ui_state.mp.agent = new RemoteAgent(MP_SECTION);
+				ui_state.mp.command_buffer = new RemoteBuffer<char>(*ui_state.mp.agent, "UI command");
 
 				ui_state.teachingstate = MP_RUNNING;
 
@@ -2316,7 +2307,8 @@ int MPslay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 			pulse_stop_mp(widget, apinfo, cbinfo);
 		}
 
-		name_close(ui_state.mp.pulse_fd);
+		delete ui_state.mp.command_buffer;
+		delete ui_state.mp.agent;
 
 		// 	printf("dddd: %d\n", SignalKill(ini_con->mp-
 		// 	printf("MP slay\n");
@@ -2328,7 +2320,6 @@ int MPslay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 	// 	kill(ui_state.mp_pid,SIGTERM);
 	// 	printf("MP pupa po kill\n");
 	ui_state.mp.pid = -1;
-	ui_state.mp.pulse_fd = -1;
 
 	deactivate_ecp_trigger(ui_state.irp6_on_track);
 	deactivate_ecp_trigger(ui_state.irp6_postument);
@@ -2490,23 +2481,8 @@ int pulse_trigger_mp(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
-int execute_mp_pulse(char pulse_code) {
-	int ret = -2;
-
-	// printf("w send pulse\n");
-	if (ui_state.mp.pulse_fd > 0) {
-		long pulse_value = 1;
-		if (ret == MsgSendPulse(ui_state.mp.pulse_fd, sched_get_priority_min(
-				SCHED_FIFO), pulse_code, pulse_value) == -1) {
-
-			perror("Blad w wysylaniu pulsu do mp");
-			fprintf(stderr, "Blad w wysylaniu pulsu do mp error: %s \n",
-					strerror(errno));
-			delay(1000);
-		}
-	}
-	return ret;
-
+void execute_mp_pulse(char pulse_code) {
+	ui_state.mp.command_buffer->Set(pulse_code);
 }
 
 int signal_mp(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)

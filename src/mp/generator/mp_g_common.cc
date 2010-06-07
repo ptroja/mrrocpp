@@ -27,7 +27,7 @@ namespace generator {
 // generator for setting the next ecps state
 
 set_next_ecps_state::set_next_ecps_state(task::task& _mp_task) :
-			generator(_mp_task)
+	generator(_mp_task)
 {
 }
 
@@ -123,7 +123,6 @@ void extended_empty::configure (bool l_activate_trigger)
 
 bool extended_empty::first_step ()
 {
-	wait_for_ECP_pulse = true;
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
 	{
 		robot_node.second->mp_command.command = lib::NEXT_POSE;
@@ -154,10 +153,10 @@ bool extended_empty::next_step ()
 		return false;
 	}
 
-	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-	{
-		robot_node.second->communicate = (robot_node.second->new_pulse);
-	}
+//	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
+//	{
+//		robot_node.second->communicate = (robot_node.second->new_pulse);
+//	}
 
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
 	{

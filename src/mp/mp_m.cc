@@ -17,6 +17,7 @@
 #include "lib/mis_fun.h"
 #include "mp/mp.h"
 
+#include <exception>
 #include <boost/exception/get_error_info.hpp>
 #include <boost/exception/diagnostic_information.hpp>
 
@@ -152,8 +153,16 @@ int main (int argc, char *argv[], char **arge)
 	}
 	catch (lib::exception::Error_base & e) {  /* Dla zewnetrznej petli try*/
 		// not sure if SR object still exists
+		std::cerr << "Exception in MP:" << std::endl;
 		std::cerr << diagnostic_information(e);
 		mp::common::mp_t->sr_ecp_msg->message (lib::FATAL_ERROR, MP_UNIDENTIFIED_ERROR);
-		exit(EXIT_FAILURE);
 	}
+
+	catch (std::exception & e) {  /* Dla zewnetrznej petli try*/
+		// not sure if SR object still exists
+		std::cerr << e.what() << std::endl;
+		mp::common::mp_t->sr_ecp_msg->message (lib::FATAL_ERROR, MP_UNIDENTIFIED_ERROR);
+	}
+
+	return (EXIT_FAILURE);
 }

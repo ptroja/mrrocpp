@@ -42,7 +42,7 @@ class generator : public ecp_mp::generator::generator {
 
 		virtual ~generator();
 
-		bool is_EDP_error (ecp_robot& _robot) const;
+		bool is_EDP_error (const ecp_robot& _robot) const;
 };
 
 } // namespace generator

@@ -78,11 +78,11 @@ int main(int argc, char *argv[])
 
 			try {
 				ecp::common::ecp_t->sr_ecp_msg->message("Press START");
-				ecp::common::ecp_t->ecp_wait_for_start();
+				ecp::common::ecp_t->wait_for_start();
 
 				ecp::common::ecp_t->main_task_algorithm();
 
-				ecp::common::ecp_t->ecp_wait_for_stop();
+				ecp::common::ecp_t->wait_for_stop();
 				ecp::common::ecp_t->sr_ecp_msg->message("Press STOP");
 			}
 
@@ -125,12 +125,14 @@ int main(int argc, char *argv[])
 	}
 
 	catch (const boost::exception & e ) {
+		std::cerr << "Exception in ECP:" << std::endl;
 		std::cerr << diagnostic_information(e);
 		const std::string message(diagnostic_information(e));
 		ecp::common::ecp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, message);
 	}
 
 	catch (const std::exception & e) {
+		std::cerr << "Exception in ECP:" << std::endl;
 		std::string message("The following error has been detected: ");
 		message += e.what();
 		ecp::common::ecp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, message);

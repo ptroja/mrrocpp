@@ -18,12 +18,6 @@ class generator : public ecp_mp::generator::generator
 		// Funkcja ruchu
 		void Move (void);
 
-		/*!
-		 * okresla czy przed next step Move ma sie zawieszac w oczekwianiu na puls z ECP;
-		 * wykorzystywane przy luznej i sporadycznej wspolpracy robotow.
-		 */
-		bool wait_for_ECP_pulse;
-
 		//! mapa wszystkich robotow
 		common::robots_t robot_m;
 
