@@ -8,9 +8,10 @@ if(USE_MESSIP)
 endif(USE_MESSIP)
 
 add_subdirectory (agent)
+add_subdirectory (cpn)
 
-# Create a library called "mrrocpp" which includes the source file "hello.cxx".
-# The extension is already found. Any number of sources could be listed here. 
+# Create a library. The extension is already found. Any number of sources could
+# be listed here. 
 
 add_library(mrrocpp 
 	mrmath/ft_v_tr.cc
