@@ -949,7 +949,7 @@ struct r_buffer {
 //		ar & robot_model;
 //		ar & arm;
 	}
-}/*__attribute__((__packed__))*/; // Boost serialization can not handle packed values
+};
 
 //------------------------------------------------------------------------------
 /*! Target position for the mobile robot. */
@@ -982,6 +982,18 @@ struct ecp_next_state_t {
 
 	/*! Target position for the mobile robot. */
 	playerpos_goal_t playerpos_goal;
+
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template<class Archive>
+	void serialize(Archive & ar, const unsigned int version) {
+		ar & mp_2_ecp_next_state;
+		ar & mp_2_ecp_next_state_variant;
+		ar & mp_2_ecp_next_state_string;
+		// ar & playerpos_goal; // this is not needed at this moment
+	}
 };
 
 //------------------------------------------------------------------------------
@@ -1002,7 +1014,25 @@ struct MP_COMMAND_PACKAGE {
 	MP_COMMAND command;
 	ecp_next_state_t ecp_next_state;
 	c_buffer instruction;
-	bool pulse_to_ecp_sent;
+
+	/**
+	 * Default constructor
+	 */
+	MP_COMMAND_PACKAGE()
+		: command(INVALID_COMMAND)
+	{
+	}
+
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template<class Archive>
+	void serialize(Archive & ar, const unsigned int version) {
+		ar & command;
+		ar & ecp_next_state;
+		ar & instruction;
+	}
 };
 
 //------------------------------------------------------------------------------
@@ -1032,16 +1062,6 @@ struct ECP_REPLY_PACKAGE {
 };
 
 // ------------------------------------------------------------------------
-
-/*
- // by Y
- inline void copy_frame(frame_tab destination_frame, frame_tab source_frame)
- {
- for (int   column = 0; column < 4; column++)
- for (int row = 0; row < 3; row++)
- destination_frame[column][row] = source_frame[column][row];
- }
- */
 
 } // namespace lib
 } // namespace mrrocpp
