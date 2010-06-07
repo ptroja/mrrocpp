@@ -36,7 +36,7 @@ void Agent::registerBuffer(DataBufferBase & buf)
 
 	{
 		// lock access to the data buffers
-		boost::unique_lock<boost::recursive_mutex> lock(mtx);
+		boost::unique_lock<boost::mutex> lock(mtx);
 
 		result = buffers.insert(buffer_item_t(buf.getName(), &buf));
 	}
@@ -52,7 +52,7 @@ void Agent::registerBuffer(DataBufferBase & buf)
 void Agent::listBuffers() const
 {
 	// lock access to the data buffers
-	boost::unique_lock<boost::recursive_mutex> lock(mtx);
+	boost::unique_lock<boost::mutex> lock(mtx);
 
 	std::cout << "Buffer list of \"" << getName() << "\"[" << buffers.size() << "]:" << std::endl;
 
@@ -266,7 +266,7 @@ void Agent::ReceiveDataLoop(void)
 		ia >> msg_buffer_name;
 
 		// lock access to the data buffers
-		boost::unique_lock<boost::recursive_mutex> l(mtx);
+		boost::unique_lock<boost::mutex> l(mtx);
 
 		Store(msg_buffer_name, ia);
 
@@ -289,7 +289,7 @@ void Agent::ReceiveDataLoop(void)
 
 void Agent::Wait(DataCondition & condition)
 {
-	boost::unique_lock<boost::recursive_mutex> lock(mtx);
+	boost::unique_lock<boost::mutex> lock(mtx);
 
 	while(!condition.isNewData())
 		cond.wait(lock);
@@ -301,14 +301,14 @@ void Agent::Wait(DataCondition & condition)
 
 void Agent::Wait(void)
 {
-	boost::unique_lock<boost::recursive_mutex> lock(mtx);
+	boost::unique_lock<boost::mutex> lock(mtx);
 
 	BOOST_FOREACH(const buffer_item_t item, buffers) {
 		item.second->Update();
 	}
 }
 
-boost::recursive_mutex & Agent::getMutex(void) const
+boost::mutex & Agent::getMutex(void) const
 {
 	return mtx;
 }

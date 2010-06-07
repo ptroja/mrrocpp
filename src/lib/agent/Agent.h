@@ -5,7 +5,7 @@
 
 #include <boost/unordered_map.hpp>
 #include <boost/thread/thread.hpp>
-#include <boost/thread/recursive_mutex.hpp>
+#include <boost/thread/mutex.hpp>
 #include <boost/thread/condition_variable.hpp>
 
 #if defined(USE_MESSIP_SRR)
@@ -41,7 +41,7 @@ private:
 	boost::condition_variable cond;
 
 	//! mutex for protection data between receiver and readers
-	mutable boost::recursive_mutex mtx;
+	mutable boost::mutex mtx;
 
 	//! Data receiver thread loop
 	void ReceiveDataLoop(void);
@@ -92,7 +92,7 @@ public: // TODO: add friend relationship with generators
 	/**
 	 * Get access for locking
 	 */
-	boost::recursive_mutex & getMutex() const;
+	boost::mutex & getMutex() const;
 
 public:
 	//! Constructor
