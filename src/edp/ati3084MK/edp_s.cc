@@ -93,7 +93,7 @@ void ATI3084_force::configure_sensor(void)
 			//		master.config.value<double>("y_axis_arm"), master.config.return_double_value("z_axis_arm") };
 			lib::K_vector pointofgravity(point);
 			gravity_transformation
-					= new lib::ForceTrans(lib::FORCE_SENSOR_ATI3084, frame, sensor_frame, weight, pointofgravity);
+					= new lib::ForceTrans(frame, sensor_frame, weight, pointofgravity);
 
 		} else {
 			gravity_transformation->synchro(frame);

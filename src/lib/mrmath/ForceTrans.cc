@@ -28,8 +28,8 @@ ForceTrans::ForceTrans(const lib::Homog_matrix & init_frame, const lib::Homog_ma
 }
 */
 
-ForceTrans::ForceTrans(const short l_force_sensor_name, const lib::Homog_matrix & init_frame, const lib::Homog_matrix & s_frame,
-	const double weight, const lib::K_vector & point_of_gravity) : force_sensor_name(l_force_sensor_name), initialized (false)
+ForceTrans::ForceTrans(const lib::Homog_matrix & init_frame, const lib::Homog_matrix & s_frame,
+	const double weight, const lib::K_vector & point_of_gravity) : initialized (false)
 {
 
 	sensor_frame = s_frame;

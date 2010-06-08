@@ -292,33 +292,52 @@ void ATI3084_force::configure_sensor(void)
 		// lib::Homog_matrix frame(master.force_current_end_effector_frame); // pobranie aktualnej ramki
 		if (!gravity_transformation) // nie powolano jeszcze obiektu
 		{
-			lib::Xyz_Angle_Axis_vector tab;
 			lib::Homog_matrix sensor_frame;
-			if (master.config.exists("sensor_in_wrist")) {
-				char *tmp = strdup(master.config.value <std::string> ("sensor_in_wrist").c_str());
-				char* toDel = tmp;
-				for (int i = 0; i < 6; i++)
-					tab[i] = strtod(tmp, &tmp);
-				sensor_frame = lib::Homog_matrix(tab);
-				free(toDel);
-				// std::cout<<sensor_frame<<std::endl;
-			} else
-				sensor_frame = lib::Homog_matrix(0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 1, 0.09);
-			// lib::Homog_matrix sensor_frame = lib::Homog_matrix(0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 1, 0.09);
 
-			double weight = master.config.value <double> ("weight");
+			if (master.config.exists("sensor_in_wrist")) {
+				lib::Xyz_Angle_Axis_vector tab;
+
+				// This section contain C code, so there should be no exception here
+				{
+					char *tmp = strdup(master.config.value <std::string> ("sensor_in_wrist").c_str());
+					char* toDel = tmp;
+
+					for (int i = 0; i < 6; i++)
+						tab[i] = strtod(tmp, &tmp);
+
+					free(toDel);
+				}
+
+				sensor_frame = lib::Homog_matrix(tab);
+
+				// std::cout<<sensor_frame<<std::endl;
+			} else {
+				sensor_frame = lib::Homog_matrix(0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 1, 0.09);
+			}
+
+			const double weight = master.config.value <double> ("weight");
 
 			double point[3];
-			char *tmp = strdup(master.config.value <std::string> ("default_mass_center_in_wrist").c_str());
-			char* toDel = tmp;
-			for (int i = 0; i < 3; i++)
-				point[i] = strtod(tmp, &tmp);
-			free(toDel);
-			// double point[3] = { master.config.value<double>("x_axis_arm"),
-			//		master.config.value<double>("y_axis_arm"), master.config.return_double_value("z_axis_arm") };
+
+			// This section contain C code, so there should be no exception here
+			{
+				char *tmp = strdup(master.config.value <std::string> ("default_mass_center_in_wrist").c_str());
+				char* toDel = tmp;
+				for (int i = 0; i < 3; i++)
+					point[i] = strtod(tmp, &tmp);
+				free(toDel);
+			}
+
+			// double point[3] = {
+			//	master.config.value<double>("x_axis_arm"),
+			//	master.config.value<double>("y_axis_arm"),
+			// master.config.return_double_value("z_axis_arm")
+			// };
+
 			lib::K_vector pointofgravity(point);
+
 			gravity_transformation
-					= new lib::ForceTrans(lib::FORCE_SENSOR_ATI3084, frame, sensor_frame, weight, pointofgravity);
+					= new lib::ForceTrans(frame, sensor_frame, weight, pointofgravity);
 		} else {
 			gravity_transformation->synchro(frame);
 		}
