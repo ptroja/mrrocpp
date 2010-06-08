@@ -307,8 +307,3 @@ void Agent::Wait(void)
 		item.second->Update();
 	}
 }
-
-boost::mutex & Agent::getMutex(void) const
-{
-	return mtx;
-}

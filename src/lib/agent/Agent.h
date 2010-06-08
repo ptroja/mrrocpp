@@ -89,11 +89,6 @@ public: // TODO: add friend relationship with generators
 	 */
 	void Wait(void);
 
-	/**
-	 * Get access for locking
-	 */
-	boost::mutex & getMutex() const;
-
 public:
 	//! Constructor
 	Agent(const std::string & _name);
