@@ -94,7 +94,7 @@ public:
 }; // end: class vsp_sensor
 
 void send_request(uint64_t &counter);
-void convert_data(int16_t result_raw[6], int16_t bias_raw[6], double force[6]);
+void convert_data(const int16_t result_raw[6], const int16_t bias_raw[6], double force[6]);
 int get_data_from_ethernet(unsigned char buffer[512], int16_t data_raw[6]) ;
 
 

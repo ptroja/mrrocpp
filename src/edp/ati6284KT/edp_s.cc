@@ -264,8 +264,6 @@ void ATI6284_force::wait_for_event()
 /*************************** inicjacja odczytu ******************************/
 void ATI6284_force::initiate_reading(void)
 {
-    double force_fresh[6] = { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f };
-
 	if (!is_sensor_configured) {
 		BOOST_THROW_EXCEPTION(
 				lib::exception::Fatal_error() <<
@@ -273,10 +271,10 @@ void ATI6284_force::initiate_reading(void)
 		);
     }
 
-    lib::Ft_vector ft_table;
-
+	double force_fresh[6] = { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f };
     convert_data(adc_data, bias_data, force_fresh);
 
+    lib::Ft_vector ft_table;
     for (int i = 0; i < 6; ++i) {
         ft_table[i] = force_fresh[i];
     }

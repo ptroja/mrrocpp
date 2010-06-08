@@ -231,12 +231,13 @@ void ATI6284_force::wait_for_event()
 /*************************** inicjacja odczytu ******************************/
 void ATI6284_force::initiate_reading(void)
 {
-	lib::Ft_vector kartez_force;
     double force_fresh[6] = { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f };
-	short measure_report;
 
 	if (!is_sensor_configured) {
-		throw sensor_error(lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
+		BOOST_THROW_EXCEPTION(
+				lib::exception::Fatal_error() <<
+				lib::exception::error_code(SENSOR_NOT_CONFIGURED)
+		);
     }
 
     lib::Ft_vector ft_table;
@@ -251,13 +252,10 @@ void ATI6284_force::initiate_reading(void)
 
     // jesli ma byc wykorzytstywana biblioteka transformacji sil
     if (master.force_tryb == 2 && gravity_transformation) {
-
-
         lib::Homog_matrix frame = master.return_current_frame(common::WITH_TRANSLATION);
         // lib::Homog_matrix frame(master.force_current_end_effector_frame);
         lib::Ft_vector output = gravity_transformation->getForce(ft_table, frame);
         master.force_msr_upload(output);
-
     }
 }
 
@@ -285,18 +283,18 @@ void send_request(uint64_t &counter) {
 // int16_t result_raw[6] - input data in hex
 // int16_t bias_raw[6] - bias data in hex
 // double force[6] - output data in N, N*m
-void convert_data(int16_t result_raw[6], int16_t bias_raw[6], double force[6]) {
-  int i, j;
+void convert_data(const int16_t result_raw[6], const int16_t bias_raw[6], double force[6]) {
+
   double result_voltage[6] = { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f };
 
-  for (i = 0; i < 6; ++i) {
+  for (int i = 0; i < 6; ++i) {
     result_voltage[i] =
         (double) ((result_raw[i] - bias_raw[i]) * 10.0f / 2048.0f);
     force[i]=0.0;
   }
 
-  for (i = 0; i < 6; ++i) {
-    for (j = 0; j < 6; ++j) {
+  for (int i = 0; i < 6; ++i) {
+    for (int j = 0; j < 6; ++j) {
       force[i] += (double) (result_voltage[j] * conversion_matrix[i][j]);
     }
     force[i] /= conversion_scale[i];
@@ -307,34 +305,30 @@ void convert_data(int16_t result_raw[6], int16_t bias_raw[6], double force[6]) {
 	printf("%c\t%c\t%c\t%c\t%c\t%c\n",'X','Y','Z','X','Y','Z');
 	printf("\n-----------------------------------------------------------------------------------------------\n");
 	printf("Bias reading:\n");
-	for (i=0;i<6;i++)
+	for (int i=0;i<6;i++)
 		printf("%9.6f[V] ",bias_voltage[i]);
 	printf("\n\nMeasurement:\n\n");
-	for (i=0;i<6;i++)
+	for (int i=0;i<6;i++)
 		printf("%9.6f[V] ",voltage[i]);
 	printf("\n\nDifference Measurement - Bias reading :\n\n");
-	for (i=0;i<6;i++)
+	for (int i=0;i<6;i++)
 		printf("%9.6f[V] ",voltage[i]-bias_voltage[i]);
 	printf("\n\nResult (force/torque):\n\n");
-	for (i=0;i<6;i++){
+	for (int i=0;i<6;i++){
 		if (i<3)
 			printf("%9.6f[N] ",force[i]);
 		else
 			printf("%9.6f[N-m] ",force[i]);
 	}
 	printf("\n\nResult local (force/torque):\n\n");
-	for (i=0;i<6;i++){
+	for (int i=0;i<6;i++){
 		if (i<3)
 			printf("%9.6f[N] ",force_local[i]);
 		else
 			printf("%9.6f[N-m] ",force_local[i]);
 	}
 	printf("\n-----------------------------------------------------------------------------------------------\n");
-
 */
-
-
-
 }
 /*******************************************************************/
 /* gets data from ethernet and store it in int16_t data_raw[6] */

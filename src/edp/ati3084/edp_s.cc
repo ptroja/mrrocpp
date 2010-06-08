@@ -285,8 +285,6 @@ void ATI3084_force::configure_sensor(void)
 	// cout << "Przed konf" << endl;
 	// jesli ma byc wykorzytstywana biblioteka transformacji sil
 	if (master.force_tryb == 2) {
-		// synchronize gravity transformation
-		//		printf("master.force_tryb == 2\n");
 		// polozenie kisci bez narzedzia wzgledem bazy
 		lib::Homog_matrix frame = master.return_current_frame(common::WITH_TRANSLATION); // FORCE Transformation by Slawomir Bazant
 		// lib::Homog_matrix frame(master.force_current_end_effector_frame); // pobranie aktualnej ramki
