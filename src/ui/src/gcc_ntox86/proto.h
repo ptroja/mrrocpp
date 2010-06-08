@@ -10,8 +10,7 @@ int MAM_btn_save_measures(PtWidget_t *widget, ApInfo_t *apinfo,
 int MAM_btn_calibrate(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
 int
-		MAM_btn_exit(PtWidget_t *widget, ApInfo_t *apinfo,
-				PtCallbackInfo_t *cbinfo);
+MAM_btn_exit(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo);
 int MAM_tmr_connect(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
 int MAM_refresh_window(PtWidget_t *widget, ApInfo_t *apinfo,
@@ -20,8 +19,6 @@ int MAM_refresh_window(PtWidget_t *widget, ApInfo_t *apinfo,
 /* ../abmain.cc */
 
 /* ../fun.cc */
-int block_widget(PtWidget_t *widget);
-int unblock_widget(PtWidget_t *widget);
 int set_ui_busy_state_notification(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
 int set_ui_ready_state_notification(PtWidget_t *widget, ApInfo_t *apinfo,
@@ -76,29 +73,18 @@ int task_param_actualization(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
 int task_window_param_actualization(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
-int clear_all_configuration_lists(void);
-int initiate_configuration(void);
-int reload_whole_configuration(void);
-int fill_section_list(const char *file_name_and_path);
-int fill_node_list(void);
-int fill_program_node_list(void);
+
 int manage_configuration_file(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
-int get_default_configuration_file_name(void);
-int set_default_configuration_file_name(void);
+
 int start_file_window(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
-bool check_synchronised_or_inactive(ecp_edp_ui_robot_def &robot);
-bool check_synchronised_and_loaded(ecp_edp_ui_robot_def &robot);
-bool check_loaded_or_inactive(ecp_edp_ui_robot_def &robot);
-bool check_loaded(ecp_edp_ui_robot_def &robot);
-int check_edps_state_and_modify_mp_state(void);
-int manage_interface(void);
+
 int clear_console(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
 int unload_all(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo);
 int slay_all(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo);
-int check_gns(void);
+
 int activate_menu_from_widget(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
 int activate_file_menu(PtWidget_t *widget, ApInfo_t *apinfo,
@@ -134,7 +120,7 @@ int EDP_all_robots_slay(PtWidget_t *widget, ApInfo_t *apinfo,
 int MPup(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo);
 int MPup_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo);
 int MPslay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo);
-bool deactivate_ecp_trigger(ecp_edp_ui_robot_def &robot_l);
+
 int pulse_start_mp(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
 int pulse_stop_mp(PtWidget_t *widget, ApInfo_t *apinfo,
@@ -153,7 +139,7 @@ int pulse_reader_all_robots_stop(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
 int pulse_reader_all_robots_trigger(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
-int pulse_reader_execute(int coid, int pulse_code, int pulse_value);
+
 int pulse_ecp_all_robots(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
 bool check_node_existence(const std::string & _node,
@@ -192,25 +178,18 @@ int EDP_conveyor_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
 int EDP_conveyor_slay(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
-int EDP_conveyor_slay_int(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo);
+
 int pulse_reader_conv_start(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
-bool pulse_reader_conv_start_exec_pulse(void);
+
 int pulse_reader_conv_stop(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
-bool pulse_reader_conv_stop_exec_pulse(void);
+
 int pulse_reader_conv_trigger(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
-bool pulse_reader_conv_trigger_exec_pulse(void);
+
 int pulse_ecp_conveyor(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
-int process_control_window_conveyor_section_init(
-		bool &wlacz_PtButton_wnd_processes_control_all_reader_start,
-		bool &wlacz_PtButton_wnd_processes_control_all_reader_stop,
-		bool &wlacz_PtButton_wnd_processes_control_all_reader_trigger);
-int reload_conveyor_configuration(void);
-int manage_interface_conveyor(void);
 
 /* ../fun_r_irp6_mechatronika.cc */
 int init_wnd_irp6m_xyz_euler_zyz_ts(PtWidget_t *widget, ApInfo_t *apinfo,
@@ -223,8 +202,7 @@ int EDP_irp6_mechatronika_create(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
 int EDP_irp6_mechatronika_slay(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
-int close_all_irp6m_windows(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo);
+
 int EDP_irp6_mechatronika_synchronise(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
 int start_wnd_irp6m_int(PtWidget_t *widget, ApInfo_t *apinfo,
@@ -245,13 +223,13 @@ int start_wnd_irp6m_servo_algorithm(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
 int pulse_reader_irp6m_start(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
-bool pulse_reader_irp6m_start_exec_pulse(void);
+
 int pulse_reader_irp6m_stop(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
-bool pulse_reader_irp6m_stop_exec_pulse(void);
+
 int pulse_reader_irp6m_trigger(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
-bool pulse_reader_irp6m_trigger_exec_pulse(void);
+
 int pulse_ecp_irp6_mechatronika(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
 int wnd_irp6m_motors_copy_cur_to_des(PtWidget_t *widget, ApInfo_t *apinfo,
@@ -340,12 +318,7 @@ int close_wnd_irp6_mechatronika_xyz_angle_axis_ts(PtWidget_t *widget,
 		ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo);
 int start_wnd_irp6m_xyz_angle_axis(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
-int process_control_window_irp6m_section_init(
-		bool &wlacz_PtButton_wnd_processes_control_all_reader_start,
-		bool &wlacz_PtButton_wnd_processes_control_all_reader_stop,
-		bool &wlacz_PtButton_wnd_processes_control_all_reader_trigger);
-int reload_irp6m_configuration(void);
-int manage_interface_irp6m(void);
+
 int import_wnd_irp6m_xyz_angle_axis(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
 int export_wnd_irp6m_xyz_angle_axis(PtWidget_t *widget, ApInfo_t *apinfo,
@@ -474,27 +447,19 @@ int EDP_irp6_on_track_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
 int EDP_irp6_on_track_slay(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
-int EDP_irp6_on_track_slay_int(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo);
-int close_all_irp6ot_windows(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo);
+
 int pulse_reader_irp6ot_start(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
-bool pulse_reader_irp6ot_start_exec_pulse(void);
+
 int pulse_reader_irp6ot_stop(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
-bool pulse_reader_irp6ot_stop_exec_pulse(void);
+
 int pulse_reader_irp6ot_trigger(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
-bool pulse_reader_irp6ot_trigger_exec_pulse(void);
+
 int pulse_ecp_irp6_on_track(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
-int process_control_window_irp6ot_section_init(
-		bool &wlacz_PtButton_wnd_processes_control_all_reader_start,
-		bool &wlacz_PtButton_wnd_processes_control_all_reader_stop,
-		bool &wlacz_PtButton_wnd_processes_control_all_reader_trigger);
-int reload_irp6ot_configuration(void);
-int manage_interface_irp6ot(void);
+
 int start_wnd_irp6_on_track_xyz_aa_relative(PtWidget_t *widget,
 		ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo);
 int clear_wnd_irp6ot_xyz_aa_relative_flag(PtWidget_t *widget, ApInfo_t *apinfo,
@@ -629,27 +594,19 @@ int EDP_irp6_postument_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
 int EDP_irp6_postument_slay(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
-int EDP_irp6_postument_slay_int(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo);
-int close_all_irp6p_windows(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo);
+
 int pulse_reader_irp6p_start(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
-bool pulse_reader_irp6p_start_exec_pulse(void);
+
 int pulse_reader_irp6p_stop(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
-bool pulse_reader_irp6p_stop_exec_pulse(void);
+
 int pulse_reader_irp6p_trigger(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
-bool pulse_reader_irp6p_trigger_exec_pulse(void);
+
 int pulse_ecp_irp6_postument(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
-int process_control_window_irp6p_section_init(
-		bool &wlacz_PtButton_wnd_processes_control_all_reader_start,
-		bool &wlacz_PtButton_wnd_processes_control_all_reader_stop,
-		bool &wlacz_PtButton_wnd_processes_control_all_reader_trigger);
-int reload_irp6p_configuration(void);
-int manage_interface_irp6p(void);
+
 int start_wnd_irp6_postument_xyz_aa_relative(PtWidget_t *widget,
 		ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo);
 int clear_wnd_irp6p_xyz_aa_relative_flag(PtWidget_t *widget, ApInfo_t *apinfo,
@@ -674,8 +631,7 @@ int EDP_irp6ot_tfg_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
 int EDP_irp6ot_tfg_slay(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
-int EDP_irp6ot_tfg_slay_int(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo);
+
 int EDP_irp6ot_tfg_synchronise(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
 int EDP_irp6ot_tfg_synchronise_int(PtWidget_t *widget, ApInfo_t *apinfo,
@@ -700,8 +656,6 @@ int wind_irp6ot_tfg_moves_move(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
 int clear_wnd_irp6ot_tfg_servo_algorithm_flag(PtWidget_t *widget,
 		ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo);
-int reload_irp6ot_tfg_configuration(void);
-int manage_interface_irp6ot_tfg(void);
 
 /* ../fun_r_irp6p_tfg.cc */
 int close_wind_irp6p_tfg_moves(PtWidget_t *widget, ApInfo_t *apinfo,
@@ -714,8 +668,7 @@ int EDP_irp6p_tfg_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
 int EDP_irp6p_tfg_slay(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
-int EDP_irp6p_tfg_slay_int(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo);
+
 int EDP_irp6p_tfg_synchronise(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
 int EDP_irp6p_tfg_synchronise_int(PtWidget_t *widget, ApInfo_t *apinfo,
@@ -740,8 +693,6 @@ int wind_irp6p_tfg_moves_move(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
 int clear_wnd_irp6p_tfg_servo_algorithm_flag(PtWidget_t *widget,
 		ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo);
-int reload_irp6p_tfg_configuration(void);
-int manage_interface_irp6p_tfg(void);
 
 /* ../fun_r_shead.cc */
 int EDP_shead_create(PtWidget_t *widget, ApInfo_t *apinfo,
@@ -750,10 +701,6 @@ int EDP_shead_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
 int EDP_shead_slay(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
-int EDP_shead_slay_int(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo);
-int reload_shead_configuration(void);
-int manage_interface_shead(void);
 
 /* ../fun_r_smb.cc */
 int EDP_smb_create(PtWidget_t *widget, ApInfo_t *apinfo,
@@ -761,12 +708,7 @@ int EDP_smb_create(PtWidget_t *widget, ApInfo_t *apinfo,
 int EDP_smb_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
 int
-		EDP_smb_slay(PtWidget_t *widget, ApInfo_t *apinfo,
-				PtCallbackInfo_t *cbinfo);
-int EDP_smb_slay_int(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo);
-int reload_smb_configuration(void);
-int manage_interface_smb(void);
+EDP_smb_slay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo);
 
 /* ../fun_r_speaker.cc */
 int close_wnd_speaker_play(PtWidget_t *widget, ApInfo_t *apinfo,
@@ -789,17 +731,15 @@ int EDP_speaker_slay(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
 int pulse_reader_speaker_start(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
-bool pulse_reader_speaker_start_exec_pulse(void);
+
 int pulse_reader_speaker_stop(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
-bool pulse_reader_speaker_stop_exec_pulse(void);
+
 int pulse_reader_speaker_trigger(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
-bool pulse_reader_speaker_trigger_exec_pulse(void);
+
 int pulse_ecp_speaker(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
-int reload_speaker_configuration(void);
-int manage_interface_speaker(void);
 
 /* ../fun_r_spkm.cc */
 int EDP_spkm_create(PtWidget_t *widget, ApInfo_t *apinfo,
@@ -808,10 +748,8 @@ int EDP_spkm_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
 int EDP_spkm_slay(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
-int EDP_spkm_slay_int(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo);
-int reload_spkm_configuration(void);
-int manage_interface_spkm(void);
+
+/* ../fun_r_bird_hand->cc */
 
 int EDP_bird_hand_create(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
@@ -819,17 +757,45 @@ int EDP_bird_hand_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
 int EDP_bird_hand_slay(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
-int EDP_bird_hand_slay_int(PtWidget_t *widget, ApInfo_t *apinfo,
+
+int execute_wnd_bird_hand_command_and_status(PtWidget_t *widget,
+		ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo);
+int copy_wnd_bird_hand_command_and_status(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
-int reload_bird_hand_configuration(void);
-int manage_interface_bird_hand(void);
+int init_wnd_bird_hand_command_and_status(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo);
+
+int start_wnd_bird_hand_command_and_status(PtWidget_t *widget, ApInfo_t *data,
+		PtCallbackInfo_t *cbinfo);
+
+int close_wnd_bird_hand_command_and_status(PtWidget_t *widget,
+		ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo);
+
+int clear_wnd_bird_hand_command_and_status(PtWidget_t *widget,
+		ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo);
+
+int execute_wnd_bird_hand_configuration(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo);
+int copy_wnd_bird_hand_configuration(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo);
+int init_wnd_bird_hand_configuration(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo);
+
+int start_wnd_bird_hand_configuration(PtWidget_t *widget, ApInfo_t *data,
+		PtCallbackInfo_t *cbinfo);
+
+int close_wnd_bird_hand_configuration(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo);
+
+int clear_wnd_bird_hand_configuration(PtWidget_t *widget, ApInfo_t *apinfo,
+		PtCallbackInfo_t *cbinfo);
 
 /* ../timer.cc */
 int OnTimer(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo);
 
 /* ../ui_init.cc */
 void catch_signal(int sig);
-void UI_close(void);
+
 int init(PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo);
 
 /* ../wndFileLocationEvents.cc */
@@ -893,8 +859,7 @@ int TRbtnPositionZero(PtWidget_t *widget, ApInfo_t *apinfo,
 int TRbtnLoadTrajectory(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);
 int
-		TRbtnSaveAll(PtWidget_t *widget, ApInfo_t *apinfo,
-				PtCallbackInfo_t *cbinfo);
+TRbtnSaveAll(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo);
 int TRConnect(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo);
 int TRRefreshWindow(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo);

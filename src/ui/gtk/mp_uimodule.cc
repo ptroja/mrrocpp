@@ -267,7 +267,7 @@ MpPanel::~MpPanel(void) {
 	}
 
 /*
-	if ((ui_state.mp.state == UI_MP_TASK_RUNNING) || (ui_state.mp.state == UI_MP_TASK_PAUSED)){
+	if ((ui.mp.state == UI_MP_TASK_RUNNING) || (ui.mp.state == UI_MP_TASK_PAUSED)){
 
 		pulse_stop_mp (widget,apinfo,cbinfo);
 	}

@@ -46,9 +46,6 @@ struct position_based_configuration
 /** Configuration of image based visual servo. This structure is sent from MRROC++ to FraDIA. */
 struct image_based_configuration
 {
-	/** Set to true if dcp and desired_position are valid */
-	bool set_parameters;
-
 	distortion_correction_parameters dcp;
 	/** parameters for calculating camera-object distance: Z = A / (diameter + B) + C. */
 	double z_estimation_A;

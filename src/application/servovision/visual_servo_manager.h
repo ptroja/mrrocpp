@@ -86,7 +86,6 @@ private:
 	lib::Homog_matrix current_position;
 	bool current_position_saved;
 	int motion_steps;
-	double current_gripper_coordinate;
 
 	std::vector <boost::shared_ptr <position_constraint> > position_constraints;
 	std::vector <boost::shared_ptr <termination_condition> > termination_conditions;

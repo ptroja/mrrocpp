@@ -97,6 +97,7 @@ void error_handler(ERROR & e)
 			vsp::common::vs->sr_msg->message(lib::FATAL_ERROR, e.error_no);
 			break;
 		case lib::NON_FATAL_ERROR:
+<<<<<<< HEAD
 			switch (e.error_no)
 			{
 				case INVALID_COMMAND_TO_VSP:
@@ -112,6 +113,22 @@ void error_handler(ERROR & e)
 					break;
 				default:
 					vsp::common::vs->sr_msg->message(lib::NON_FATAL_ERROR, VSP_UNIDENTIFIED_ERROR);
+=======
+			switch(e.error_no) {
+			case INVALID_COMMAND_TO_VSP:
+				vsp::common::vs->set_vsp_report(lib::INVALID_VSP_COMMAND);
+				vsp::common::vs->sr_msg->message (lib::NON_FATAL_ERROR, e.error_no);
+			break;
+			case SENSOR_NOT_CONFIGURED:
+				vsp::common::vs->set_vsp_report(lib::VSP_SENSOR_NOT_CONFIGURED);
+				vsp::common::vs->sr_msg->message (lib::NON_FATAL_ERROR, e.error_no);
+				break;
+			case READING_NOT_READY:
+				vsp::common::vs->set_vsp_report(lib::VSP_READING_NOT_READY);
+				break;
+			default:
+				vsp::common::vs->sr_msg->message (lib::NON_FATAL_ERROR, VSP_UNIDENTIFIED_ERROR);
+>>>>>>> master
 			}
 			break;
 		default:
@@ -135,8 +152,13 @@ void* cyclic_read( void*  arg ){
 			pthread_mutex_lock( &mutex );
 			vsp::common::vs->initiate_reading();
 			pthread_mutex_unlock( &mutex );
+<<<<<<< HEAD
 		} // koniec TRY
 		catch (lib::VSP_main_error & e){
+=======
+			} // koniec TRY
+		catch (vsp::sensor::VSP_main_error & e){
+>>>>>>> master
 			error_handler(e);
 			pthread_mutex_unlock( &mutex );
 		} // end CATCH
@@ -380,8 +402,13 @@ int main(int argc, char *argv[]) {
 		} // end for(;;)
 	     vsp::common::vs->sr_msg->message ("VSP terminated");
 	     delete vsp::common::vs;
+<<<<<<< HEAD
 	} // koniec TRY
 	catch (lib::VSP_main_error & e){
+=======
+		} // koniec TRY
+	catch (vsp::sensor::VSP_main_error & e){
+>>>>>>> master
 		vsp::common::error_handler(e);
 		exit(EXIT_FAILURE);
 	} // end CATCH

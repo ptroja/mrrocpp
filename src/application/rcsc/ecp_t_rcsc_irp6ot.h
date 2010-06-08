@@ -28,7 +28,7 @@ using boost::shared_ptr;
 
 namespace mrrocpp {
 namespace ecp {
-namespace irp6ot {
+namespace irp6ot_m {
 namespace task {
 
 class rcsc: public common::task::task

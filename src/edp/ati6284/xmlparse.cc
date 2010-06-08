@@ -223,8 +223,10 @@ initializeEncoding(XML_Parser parser);
 static enum XML_Error
 doProlog(XML_Parser parser, const ENCODING *enc, const char *s,
 	 const char *end, int tok, const char *next, const char **nextPtr);
+#ifdef XML_DTD
 static enum XML_Error
 processInternalParamEntity(XML_Parser parser, ENTITY *entity);
+#endif
 static enum XML_Error
 doContent(XML_Parser parser, int startTagLevel, const ENCODING *enc,
 	  const char *start, const char *end, const char **endPtr);

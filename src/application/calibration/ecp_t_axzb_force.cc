@@ -1,5 +1,5 @@
-#include "ecp/irp6_on_track/ecp_r_irp6ot.h"
-#include "ecp/irp6_postument/ecp_r_irp6p.h"
+#include "ecp/irp6ot_m/ecp_r_irp6ot_m.h"
+#include "ecp/irp6p_m/ecp_r_irp6p_m.h"
 
 #include "ecp_t_axzb_force.h"
 #include "ecp_st_acq_force.h"

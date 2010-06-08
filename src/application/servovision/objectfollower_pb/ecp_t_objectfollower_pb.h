@@ -11,8 +11,7 @@
 #include "ecp/common/task/ecp_task.h"
 #include <boost/shared_ptr.hpp>
 #include "lib/logger.h"
-#include "ecp/irp6_on_track/ecp_r_irp6ot.h"
-//#include "ecp/irp6ot_m/ecp_r_irp6ot_m.h"
+#include "ecp/irp6ot_m/ecp_r_irp6ot_m.h"
 #include "../simple_visual_servo_manager.h"
 #include "../pb_eih_visual_servo.h"
 #include "../cubic_constraint.h"

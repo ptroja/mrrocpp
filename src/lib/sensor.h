@@ -25,8 +25,7 @@ typedef enum _VSP_COMMAND
 	VSP_CONFIGURE_SENSOR,
 	VSP_INITIATE_READING,
 	VSP_GET_READING,
-	VSP_TERMINATE,
-	VSP_FRADIA_CONFIGURE_TASK
+	VSP_TERMINATE
 } VSP_COMMAND_t;
 
 typedef enum _VSP_REPORT
@@ -34,9 +33,7 @@ typedef enum _VSP_REPORT
 	VSP_REPLY_OK,
 	VSP_SENSOR_NOT_CONFIGURED,
 	VSP_READING_NOT_READY,
-	INVALID_VSP_COMMAND,
-	VSP_FRADIA_TASK_LOADED,
-	VSP_FRADIA_TASK_CONFIGURED
+	INVALID_VSP_COMMAND
 } VSP_REPORT_t;
 
 typedef struct _object_tracker {//unia do lapania kostki
@@ -68,6 +65,11 @@ typedef struct _empty {
 
 typedef std::string SENSOR_t;
 
+const SENSOR_t SENSOR_CAMERA_SA = "SENSOR_CAMERA_SA";
+const SENSOR_t SENSOR_CAMERA_ON_TRACK = "SENSOR_CAMERA_ON_TRACK";
+const SENSOR_t SENSOR_CAMERA_POSTUMENT = "SENSOR_CAMERA_POSTUMENT";
+const SENSOR_t SENSOR_CVFRADIA = "SENSOR_CVFRADIA";
+
 // Klasa bazowa dla czujnikow (klasa abstrakcyjna)
 // Czujniki konkretne wyprowadzane sa z klasy bazowej
 class sensor_interface
@@ -90,6 +92,21 @@ public:
 	{
 	}
 };
+
+namespace sensor {
+// Klasa obslugi bledow czujnikow
+class sensor_error
+{
+public:
+	const lib::error_class_t error_class;
+	uint64_t error_no;
+
+	sensor_error(lib::error_class_t err_cl, uint64_t err_no) :
+		error_class(err_cl), error_no(err_no)
+	{
+	}
+};
+} // namespace sensor
 
 } // namespace lib
 } // namespace mrrocpp

@@ -15,19 +15,18 @@
 #include "edp/irp6p_tfg/hi_irp6p_tfg.h"
 // Klasa servo_buffer.
 #include "edp/irp6p_tfg/sg_irp6p_tfg.h"
-#include "edp/common/regulator_irp6p_tfg.h"
+#include "edp/irp6p_tfg/regulator_irp6p_tfg.h"
 
 namespace mrrocpp {
 namespace edp {
-namespace irp6p {
+namespace irp6p_tfg {
 
 // extern uint64_t kk;				  // numer pomiaru od momentu startu pomiarow
 
 
 /*-----------------------------------------------------------------------*/
 servo_buffer::servo_buffer(effector &_master) :
-	common::servo_buffer(_master), master(_master)
-{
+	common::servo_buffer(_master), master(_master) {
 
 	synchro_axis_order[0] = 0;
 
@@ -39,15 +38,15 @@ servo_buffer::servo_buffer(effector &_master) :
 }
 /*-----------------------------------------------------------------------*/
 
-void servo_buffer::load_hardware_interface(void)
-{
+void servo_buffer::load_hardware_interface(void) {
 
 	// tablica pradow maksymalnych dla poszczegolnych osi
-	int
-			max_current[IRP6P_TFG_NUM_OF_SERVOS] = { IRP6_POSTUMENT_AXIS_7_MAX_CURRENT };
+	int max_current[IRP6P_TFG_NUM_OF_SERVOS] = {
+			IRP6_POSTUMENT_AXIS_7_MAX_CURRENT };
 
-	hi
-			= new hardware_interface(master, IRQ_REAL, INT_FREC_DIVIDER, HI_RYDZ_INTR_TIMEOUT_HIGH, FIRST_SERVO_PTR, INTERRUPT_GENERATOR_SERVO_PTR, ISA_CARD_OFFSET, max_current);
+	hi = new hardware_interface(master, IRQ_REAL, INT_FREC_DIVIDER,
+			HI_RYDZ_INTR_TIMEOUT_HIGH, FIRST_SERVO_PTR,
+			INTERRUPT_GENERATOR_SERVO_PTR, ISA_CARD_OFFSET, max_current);
 	hi->init();
 
 	// utworzenie tablicy regulatorow
@@ -55,15 +54,15 @@ void servo_buffer::load_hardware_interface(void)
 
 	// regulator_ptr[1] = new NL_regulator_2 (0, 0, 0.71, 13./4, 12.57/4, 0.35);
 	// kolumna dla irp6 postument
-	regulator_ptr[0] =new NL_regulator_8_irp6p(0, 0, 0.39, 8.62 / 2., 7.89 / 2., 0.35, master);
+	regulator_ptr[0] = new NL_regulator_8_irp6p(0, 0, 0.39, 8.62 / 2., 7.89
+			/ 2., 0.35, master);
 
 	common::servo_buffer::load_hardware_interface();
 
 }
 
 /*-----------------------------------------------------------------------*/
-void servo_buffer::get_all_positions(void)
-{
+void servo_buffer::get_all_positions(void) {
 	common::servo_buffer::get_all_positions();
 
 	// przepisanie stanu regulatora chwytaka do bufora odpowiedzi dla EDP_master
@@ -75,9 +74,8 @@ void servo_buffer::get_all_positions(void)
 } // namespace irp6p
 namespace common {
 
-servo_buffer* return_created_servo_buffer(motor_driven_effector &_master)
-{
-	return new irp6p::servo_buffer((irp6p::effector &) (_master));
+servo_buffer* return_created_servo_buffer(motor_driven_effector &_master) {
+	return new irp6p_tfg::servo_buffer((irp6p_tfg::effector &) (_master));
 }
 
 } // namespace common

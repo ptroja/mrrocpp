@@ -24,15 +24,20 @@ typedef struct _tracker {
 
 namespace mrrocpp {
 namespace ecp {
-namespace irp6ot {
+namespace irp6ot_m {
 namespace generator {
 
 #define MOTION_STEPS 25
 
+typedef enum _HD_MODE
+{
+	WITHOUT_ROTATION, PERFORM_ROTATION
+} hd_mode_t;
+
 class ecp_vis_ib_eih_follower_irp6ot : public common::generator::ecp_visual_servo {
 
 public:
-	ecp_mp::sensor::fradia_sensor<tracker_t, ecp_mp::sensor::hd_mode_t> *vsp_fradia; //wirtualny sensor
+	ecp_mp::sensor::fradia_sensor<lib::empty_t, tracker_t, hd_mode_t> *vsp_fradia; //wirtualny sensor
 
     double next_position[8]; 	//pozycja w nastepnym kroku.
     //double alpha; //orientacja koncokwi wzgledem ukladu bazowego.

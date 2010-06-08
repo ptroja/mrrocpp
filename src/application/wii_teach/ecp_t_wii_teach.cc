@@ -8,7 +8,7 @@
 #include "lib/srlib.h"
 #include "application/wii_teach/sensor/ecp_mp_s_wiimote.h"
 
-#include "ecp/irp6_on_track/ecp_r_irp6ot.h"
+#include "ecp/irp6ot_m/ecp_r_irp6ot_m.h"
 #include "application/wii_teach/ecp_t_wii_teach.h"
 #include "lib/mrmath/mrmath.h"
 #include "ecp_t_wii_teach.h"
@@ -25,7 +25,7 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace irp6ot {
+namespace irp6ot_m {
 namespace task {
 
 wii_teach::wii_teach(lib::configurator &_config) :
@@ -124,7 +124,10 @@ void wii_teach::load_trajectory()
 		++trajectory.count;
 
 		char buffer[200];
-		sprintf(buffer, "Loaded %d: %.4f %.4f %.4f %.4f %.4f %.4f %.4f", trajectory.count, current->position[0], current->position[1], current->position[2], current->position[3], current->position[4], current->position[5], current->gripper);
+		sprintf(buffer, "Loaded %d: %.4f %.4f %.4f %.4f %.4f %.4f %.4f",
+				trajectory.count, current->position[0], current->position[1],
+				current->position[2], current->position[3],
+				current->position[4], current->position[5], current->gripper);
 		sr_ecp_msg->message(buffer);
 	}
 
@@ -269,7 +272,10 @@ void wii_teach::print_trajectory(void)
 
 	sr_ecp_msg->message("=== Trajektoria ===");
 	while (current) {
-		sprintf(buffer, "Pozycja %d: %.4f %.4f %.4f %.4f %.4f %.4f %.4f", ++i, current->position[0], current->position[1], current->position[2], current->position[3], current->position[4], current->position[5], current->gripper);
+		sprintf(buffer, "Pozycja %d: %.4f %.4f %.4f %.4f %.4f %.4f %.4f", ++i,
+				current->position[0], current->position[1],
+				current->position[2], current->position[3],
+				current->position[4], current->position[5], current->gripper);
 		sr_ecp_msg->message(buffer);
 		current = current->next;
 	}
@@ -277,13 +283,26 @@ void wii_teach::print_trajectory(void)
 }
 
 void wii_teach::move_to_current(void)
-{
-	char buffer[200];
+{	
 	if (trajectory.current) {
-		sprintf(buffer, "Move to %d: %.4f %.4f %.4f %.4f %.4f %.4f %.4f", trajectory.current->id, trajectory.current->position[0], trajectory.current->position[1], trajectory.current->position[2], trajectory.current->position[3], trajectory.current->position[4], trajectory.current->position[5], trajectory.current->gripper);
+		char buffer[200];
+		sprintf(buffer, "Move to %d: %.4f %.4f %.4f %.4f %.4f %.4f %.4f",
+				trajectory.current->id, trajectory.current->position[0],
+				trajectory.current->position[1],
+				trajectory.current->position[2],
+				trajectory.current->position[3],
+				trajectory.current->position[4],
+				trajectory.current->position[5], trajectory.current->gripper);
 		sr_ecp_msg->message(buffer);
 		sg->set_absolute();
-		sg->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, trajectory.current->position[0], trajectory.current->position[1], trajectory.current->position[2], trajectory.current->position[3], trajectory.current->position[4], trajectory.current->position[5], trajectory.current->gripper, 0, true);
+		sg->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS,
+				trajectory.current->position[0],
+				trajectory.current->position[1],
+				trajectory.current->position[2],
+				trajectory.current->position[3],
+				trajectory.current->position[4],
+				trajectory.current->position[5], trajectory.current->gripper,
+				0, true);
 		sg->Move();
 	}
 
@@ -298,9 +317,9 @@ void wii_teach::main_task_algorithm(void)
     ecp_mp::sensor::wiimote * wii = dynamic_cast<ecp_mp::sensor::wiimote *> (sensor_m[ecp_mp::sensor::SENSOR_WIIMOTE]);
 
     sg = new common::generator::smooth(*this, true);
-    ag = new irp6ot::generator::wii_absolute(*this, wii);
-    rg = new irp6ot::generator::wii_relative(*this, wii);
-    jg = new irp6ot::generator::wii_joint(*this, wii);
+    ag = new irp6ot_m::generator::wii_absolute(*this, wii);
+    rg = new irp6ot_m::generator::wii_relative(*this, wii);
+    jg = new irp6ot_m::generator::wii_joint(*this, wii);
 
     bool has_filenames = false;//get_filenames();
     if(has_filenames)
@@ -451,7 +470,6 @@ void wii_teach::main_task_algorithm(void)
                 lib::Xyz_Angle_Axis_vector tmp_vector;
                 homog_matrix.get_xyz_angle_axis(tmp_vector);
                 tmp_vector.to_table(current->position);
-                current->gripper = ecp_m_robot->reply_package.arm.pf_def.gripper_coordinate;
 
                 if(trajectory.current)
                 {
@@ -522,7 +540,6 @@ void wii_teach::main_task_algorithm(void)
                 	lib::Xyz_Angle_Axis_vector tmp_vector;
                     homog_matrix.get_xyz_angle_axis(tmp_vector);
                 	tmp_vector.to_table(trajectory.current->position);
-                    trajectory.current->gripper = ecp_m_robot->reply_package.arm.pf_def.gripper_coordinate;
 
                     sprintf(buffer,"Changed %d: %.4f %.4f %.4f %.4f %.4f %.4f %.4f",trajectory.current->id,trajectory.current->position[0],trajectory.current->position[1],trajectory.current->position[2],trajectory.current->position[3],trajectory.current->position[4],trajectory.current->position[5],trajectory.current->gripper);
                     sr_ecp_msg->message(buffer);
@@ -550,9 +567,8 @@ void wii_teach::main_task_algorithm(void)
 namespace common {
 namespace task {
 
-task* return_created_ecp_task(lib::configurator &_config)
-{
-	return new irp6ot::task::wii_teach(_config);
+task* return_created_ecp_task(lib::configurator &_config) {
+	return new irp6ot_m::task::wii_teach(_config);
 }
 
 }

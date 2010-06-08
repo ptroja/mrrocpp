@@ -1,7 +1,7 @@
 #include <iostream>
 
 #include "edp/common/edp.h"
-#include "edp/common/edp_irp6s_postument_track.h"
+#include "edp/common/edp_e_manip.h"
 #include "lib/mis_fun.h"
 #include "edp/common/reader.h"
 #include "kinematics/common/kinematic_model_with_tool.h"
@@ -11,8 +11,7 @@ namespace edp {
 namespace sensor {
 
 //!< watek do komunikacji ze sprzetem
-void force::operator()(void)
-{
+void force::operator()(void) {
 	lib::set_thread_priority(pthread_self(), MAX_PRIORITY - 1);
 
 	connect_to_hardware();
@@ -23,6 +22,7 @@ void force::operator()(void)
 		configure_sensor();
 	}
 	// TODO: transport exception to main thread
+
 	catch (...) {
 		std::cerr << "unidentified error force thread w EDP" << std::endl;
 	}
@@ -33,16 +33,15 @@ void force::operator()(void)
 			if (new_edp_command) {
 				boost::mutex::scoped_lock lock(mtx);
 				// TODO: this should be handled with boost::bind functor parameter
-				switch (command)
-				{
-					case (common::FORCE_SET_TOOL):
-						set_force_tool();
-						break;
-					case (common::FORCE_CONFIGURE):
-						configure_sensor();
-						break;
-					default:
-						break;
+				switch (command) {
+				case (common::FORCE_SET_TOOL):
+					set_force_tool();
+					break;
+				case (common::FORCE_CONFIGURE):
+					configure_sensor();
+					break;
+				default:
+					break;
 				}
 				set_command_execution_finish();
 			} else {
@@ -54,30 +53,36 @@ void force::operator()(void)
 
 				lib::Ft_vector current_force;
 
-				lib::Homog_matrix current_frame_wo_offset = master.return_current_frame(common::WITHOUT_TRANSLATION);
-				lib::Ft_tr ft_tr_inv_current_frame_matrix(!current_frame_wo_offset);
+				lib::Homog_matrix
+						current_frame_wo_offset = master.return_current_frame(
+								common::WITHOUT_TRANSLATION);
+				lib::Ft_tr ft_tr_inv_current_frame_matrix(
+						!current_frame_wo_offset);
 
 				lib::Homog_matrix
-						current_tool(((mrrocpp::kinematics::common::kinematic_model_with_tool*) master.get_current_kinematic_model())->tool);
+						current_tool(
+								((mrrocpp::kinematics::common::kinematic_model_with_tool*) master.get_current_kinematic_model())->tool);
 				lib::Ft_tr ft_tr_inv_tool_matrix(!current_tool);
 
 				// uwaga sila nie przemnozona przez tool'a i current frame orientation
 				master.force_msr_download(current_force);
 
-				lib::Ft_vector current_force_torque(ft_tr_inv_tool_matrix * ft_tr_inv_current_frame_matrix
-						* current_force);
+				lib::Ft_vector current_force_torque(ft_tr_inv_tool_matrix
+						* ft_tr_inv_current_frame_matrix * current_force);
 
 				// scope-locked reader data update
 				{
 					boost::mutex::scoped_lock lock(master.rb_obj->reader_mutex);
 
-					current_force_torque.to_table(master.rb_obj->step_data.force);
+					current_force_torque.to_table(
+							master.rb_obj->step_data.force);
 				}
 			}
 			edp_vsp_synchroniser.command();
 
 		} //!< koniec TRY
 		// TODO: transport exception to main thread
+
 		catch (...) {
 			std::cerr << "unidentified error in EDP force thread" << std::endl;
 		}
@@ -101,16 +106,16 @@ force::force(common::manip_effector &_master) :
 					true);
 }
 
-force::~force()
-{
+force::~force() {
 	delete sr_msg;
 }
 
-void force::set_force_tool(void)
-{
+void force::set_force_tool(void) {
 	lib::K_vector gravity_arm_in_sensor(next_force_tool_position);
-	lib::Homog_matrix frame = master.return_current_frame(common::WITH_TRANSLATION);
-	gravity_transformation->defineTool(frame, next_force_tool_weight, gravity_arm_in_sensor);
+	lib::Homog_matrix frame = master.return_current_frame(
+			common::WITH_TRANSLATION);
+	gravity_transformation->defineTool(frame, next_force_tool_weight,
+			gravity_arm_in_sensor);
 
 	current_force_tool_position = next_force_tool_position;
 	current_force_tool_weight = next_force_tool_weight;

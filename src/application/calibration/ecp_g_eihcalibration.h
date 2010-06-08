@@ -26,7 +26,7 @@ namespace generator {
 
 class eihgenerator : public common::generator::generator
 {
-	ecp_mp::sensor::fradia_sensor<chessboard_t, eihcalibration_t> * sensor;
+	ecp_mp::sensor::fradia_sensor<lib::empty_t, chessboard_t, eihcalibration_t> * sensor;
 
   public:
 	int count;

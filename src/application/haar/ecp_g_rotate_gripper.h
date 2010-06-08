@@ -17,7 +17,7 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace irp6ot {
+namespace irp6ot_m {
 
 /*!
  * \enum HD_READING
@@ -30,8 +30,14 @@ typedef struct _hd_angle {
 	HD_READING reading_state;
 	float angle;
 } hd_angle_t;
-
-typedef ecp_mp::sensor::fradia_sensor<hd_angle_t, ecp_mp::sensor::hd_mode_t> fradia_sensor_haar_detect;
+/*!
+* \brief Types commands sent to PW_HaarDetect task.
+*/
+typedef enum _HD_MODE
+{
+WITHOUT_ROTATION, PERFORM_ROTATION
+} hd_mode_t;
+typedef ecp_mp::sensor::fradia_sensor<lib::empty_t, hd_angle_t, hd_mode_t> fradia_sensor_haar_detect;
 
 class ecp_g_rotate_gripper: public common::generator::generator {
 	//Wirtualny sensor
