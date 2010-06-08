@@ -13,7 +13,8 @@ namespace transmitter {
 /*==============================STRUCTURES===================================*/
 
 typedef struct _from_graspit {
-	double grasp_joint[7];
+	//double grasp_joint[2*6+1]; //tfg
+	double grasp_joint[2*6+8]; //bird_hand
 } from_graspit_t;
 
 /*===============================CLASS=======================================*/

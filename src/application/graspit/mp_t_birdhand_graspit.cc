@@ -45,8 +45,8 @@ void graspit::main_task_algorithm(void) {
 	trgraspit->from_va.grasp_joint[2] += trgraspit->from_va.grasp_joint[1];
 	trgraspit->from_va.grasp_joint[3] += trgraspit->from_va.grasp_joint[2];
 
+	trgraspit->from_va.grasp_joint[8] += trgraspit->from_va.grasp_joint[7];
 	trgraspit->from_va.grasp_joint[9] += trgraspit->from_va.grasp_joint[8];
-	trgraspit->from_va.grasp_joint[10] += trgraspit->from_va.grasp_joint[9];
 
 	//synchro with GraspIt
 	//trgraspit->from_va.grasp_joint[0] ;
@@ -55,18 +55,16 @@ void graspit::main_task_algorithm(void) {
 	//trgraspit->from_va.grasp_joint[3] ;
 	trgraspit->from_va.grasp_joint[4] += 4.712;
 	//trgraspit->from_va.grasp_joint[5] ;
-	trgraspit->from_va.grasp_joint[6] = (45.5 - trgraspit->from_va.grasp_joint[6]) * 2;
-	trgraspit->from_va.grasp_joint[6] /= 1000;
 
-	//trgraspit->from_va.grasp_joint[7] ;
-	trgraspit->from_va.grasp_joint[8] -= 1.542;
+	//trgraspit->from_va.grasp_joint[6] ;
+	trgraspit->from_va.grasp_joint[7] -= 1.542;
+	//trgraspit->from_va.grasp_joint[8] ;
 	//trgraspit->from_va.grasp_joint[9] ;
-	//trgraspit->from_va.grasp_joint[10] ;
-	trgraspit->from_va.grasp_joint[11] += 4.712;
-	//trgraspit->from_va.grasp_joint[12] ;
-	trgraspit->from_va.grasp_joint[13] = (45.5 - trgraspit->from_va.grasp_joint[13]) * 2;
-	trgraspit->from_va.grasp_joint[13] /= 1000;
+	trgraspit->from_va.grasp_joint[10] += 4.712;
+	//trgraspit->from_va.grasp_joint[11] ;
 
+	//Bird Hand synchro?
+	//trgraspit->from_va.grasp_joint[12] += 0.0;
 
 
 	// ROBOT IRP6_ON_TRACK
@@ -88,36 +86,65 @@ void graspit::main_task_algorithm(void) {
 		// TODO: throw
 	}
 
-	char tmp_string[MP_2_ECP_STRING_SIZE];
+	char tmp_string1[MP_2_ECP_STRING_SIZE];
+	char tmp_string2[MP_2_ECP_STRING_SIZE];
 
+	struct _irp6{
+		double joint[6];
+	} mp_ecp_irp6_command;
 	lib::bird_hand_command mp_ecp_bird_hand_command;
 
-	mp_ecp_bird_hand_command.thumb_f[0].desired_position = trgraspit->from_va.grasp_joint[0];
-	mp_ecp_bird_hand_command.thumb_f[1].desired_position = trgraspit->from_va.grasp_joint[1];
-	mp_ecp_bird_hand_command.index_f[0].desired_position = trgraspit->from_va.grasp_joint[2];
-	mp_ecp_bird_hand_command.index_f[1].desired_position = trgraspit->from_va.grasp_joint[3];
-	mp_ecp_bird_hand_command.index_f[2].desired_position = trgraspit->from_va.grasp_joint[4];
-	mp_ecp_bird_hand_command.ring_f[0].desired_position = trgraspit->from_va.grasp_joint[5];
-	mp_ecp_bird_hand_command.ring_f[1].desired_position = trgraspit->from_va.grasp_joint[6];
-	mp_ecp_bird_hand_command.ring_f[2].desired_position = trgraspit->from_va.grasp_joint[7];
+	for (int i=0; i<6; ++i)
+		mp_ecp_irp6_command.joint[i] = trgraspit->from_va.grasp_joint[i];
+	mp_ecp_bird_hand_command.thumb_f[0].desired_position = 0.0;
+	mp_ecp_bird_hand_command.thumb_f[1].desired_position = 0.0;
+	mp_ecp_bird_hand_command.index_f[0].desired_position = 0.0;
+	mp_ecp_bird_hand_command.index_f[1].desired_position = 0.0;
+	mp_ecp_bird_hand_command.index_f[2].desired_position = 0.0;
+	mp_ecp_bird_hand_command.ring_f[0].desired_position = 0.0;
+	mp_ecp_bird_hand_command.ring_f[1].desired_position = 0.0;
+	mp_ecp_bird_hand_command.ring_f[2].desired_position = 0.0;
 
-	memcpy(tmp_string, &mp_ecp_bird_hand_command, sizeof(mp_ecp_bird_hand_command));
+	memcpy(tmp_string1, &mp_ecp_bird_hand_command, sizeof(mp_ecp_bird_hand_command));
+	memcpy(tmp_string2, &mp_ecp_irp6_command, sizeof(mp_ecp_irp6_command));
 
-
-
-	set_next_ecps_state((int) ecp_mp::task::ECP_GEN_BIRD_HAND, (int) 5, tmp_string,
+	set_next_ecps_state((int) ecp_mp::task::ECP_GEN_BIRD_HAND, (int) 5, tmp_string1,
 			sizeof(mp_ecp_bird_hand_command), 1, gripper_name);
-
 	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(
 			1, 1, gripper_name, gripper_name);
-
-	set_next_ecps_state((int) ecp_mp::task::ECP_GEN_IRP6, (int) 5, "",
-			0, 1, manipulator_name);
-
+	set_next_ecps_state((int) ecp_mp::task::ECP_GEN_IRP6, (int) 5, tmp_string2,
+			sizeof(mp_ecp_irp6_command), 1, manipulator_name);
 	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(
 			1, 1, manipulator_name, manipulator_name);
 
+	for (int i=0; i<6; ++i)
+		mp_ecp_irp6_command.joint[i] = trgraspit->from_va.grasp_joint[i+6];
+	mp_ecp_bird_hand_command.thumb_f[0].desired_position = trgraspit->from_va.grasp_joint[12];
+	mp_ecp_bird_hand_command.thumb_f[1].desired_position = trgraspit->from_va.grasp_joint[13];
+	mp_ecp_bird_hand_command.index_f[0].desired_position = trgraspit->from_va.grasp_joint[14];
+	mp_ecp_bird_hand_command.index_f[1].desired_position = trgraspit->from_va.grasp_joint[15];
+	mp_ecp_bird_hand_command.index_f[2].desired_position = trgraspit->from_va.grasp_joint[16];
+	mp_ecp_bird_hand_command.ring_f[0].desired_position = trgraspit->from_va.grasp_joint[17];
+	mp_ecp_bird_hand_command.ring_f[1].desired_position = trgraspit->from_va.grasp_joint[18];
+	mp_ecp_bird_hand_command.ring_f[2].desired_position = trgraspit->from_va.grasp_joint[19];
 
+	memcpy(tmp_string1, &mp_ecp_bird_hand_command, sizeof(mp_ecp_bird_hand_command));
+	memcpy(tmp_string2, &mp_ecp_irp6_command, sizeof(mp_ecp_irp6_command));
+
+	set_next_ecps_state((int) ecp_mp::task::ECP_GEN_IRP6, (int) 5, tmp_string2,
+			sizeof(mp_ecp_irp6_command), 1, manipulator_name);
+	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(
+			1, 1, manipulator_name, manipulator_name);
+	set_next_ecps_state((int) ecp_mp::task::ECP_GEN_BIRD_HAND, (int) 5, tmp_string1,
+			sizeof(mp_ecp_bird_hand_command), 1, gripper_name);
+	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(
+			1, 1, gripper_name, gripper_name);
+
+
+	std::stringstream ss(std::stringstream::in | std::stringstream::out);
+	for (int i=12; i<20; ++i)
+		ss << "\n rec_val: " << trgraspit->from_va.grasp_joint[i];
+	sr_ecp_msg->message(ss.str().c_str());
 
 	sr_ecp_msg->message("END GRASP");
 }

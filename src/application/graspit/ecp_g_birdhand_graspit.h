@@ -38,6 +38,9 @@ private:
 			*bird_hand_configuration_reply_data_request_port;
 	lib::bird_hand_configuration bird_hand_configuration_reply_structure;
 
+	// maksymalna predkosc [rad/s]
+	double max_v;
+
 public:
 	void create_ecp_mp_reply();
 	void get_mp_ecp_command();

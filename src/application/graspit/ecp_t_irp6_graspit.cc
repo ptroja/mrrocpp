@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <string.h>
+#include <string>
 #include <unistd.h>
 #include <iostream>
 
@@ -41,6 +41,12 @@ void irp6_grasp::main_task_algorithm(void ){
 		a[i] = 0.1;
 	}
 
+	struct _irp6{
+		double joint[6];
+	} mp_ecp_irp6_command;
+
+	std::stringstream ss(std::stringstream::in | std::stringstream::out);
+
 	for (;;) {
 			sr_ecp_msg->message("Waiting for MP order");
 
@@ -53,6 +59,12 @@ void irp6_grasp::main_task_algorithm(void ){
 			case ecp_mp::task::ECP_GEN_IRP6:
 				sr_ecp_msg->message("ECP_GEN_IRP6");
 				sr_ecp_msg->message("Smooth->Move()");
+
+				memcpy(&mp_ecp_irp6_command, mp_command.ecp_next_state.mp_2_ecp_next_state_string, sizeof(mp_ecp_irp6_command));
+				for (int i=0; i<6; ++i)
+					ss << "\n irp6_rec_val: " << mp_ecp_irp6_command.joint[i];
+				sr_ecp_msg->message(ss.str().c_str());
+
 //				smoothgen2->load_coordinates(lib::ECP_JOINT, v, a,
 //											trgraspit->from_va.graspit.grasp_joint[7],
 //											trgraspit->from_va.graspit.grasp_joint[8],
