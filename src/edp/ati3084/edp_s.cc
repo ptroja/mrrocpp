@@ -442,30 +442,15 @@ void ATI3084_force::get_reading(void)
 			if (master.force_tryb == 2 && gravity_transformation) {
 				for (int i = 0; i < 3; i++)
 					ft_table[i] /= 20;
-				//			for(int i=3;i<6;i++) ft_table[i]/=333;
+
 				for (int i = 3; i < 6; i++)
 					ft_table[i] /= 1000; // by Y - korekta
+
 				lib::Homog_matrix frame = master.return_current_frame(common::WITH_TRANSLATION);
-				// lib::Homog_matrix frame(master.force_current_end_effector_frame);
+
 				lib::Ft_vector output = gravity_transformation->getForce(ft_table, frame);
+
 				master.force_msr_upload(output);
-#if 0
-				static int ms_nr = 0; // numer odczytu z czujnika
-				if (!((ms_nr++)%1000)) {
-				 cerr << "Output\t";
-				 for(int i=0;i<3;i++) output[i]*=20;
-				 for(int i=3;i<6;i++) output[i]*=333;
-				 for(int i=0;i<6;i++) cerr << ceil(output[i]) << "  ";
-				 cerr << endl;// << "Input\t";
-				 for(int i=6;i<12;i++) cerr << ceil(output[i]) << "  ";
-				 cerr << endl << endl;// << "Gravity\t";
-				 for(int i=12;i<18;i++) cerr << ceil(output[i]) << "  ";
-				 cerr << endl << "Bias\t";
-				 for(int i=18;i<24;i++) cerr << ceil(output[i]) << "  ";
-				 cerr << endl << endl;
-				 cerr << frame << endl;
-				 }
-#endif
 			}
 		}
 	}

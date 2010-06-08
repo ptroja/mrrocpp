@@ -572,7 +572,7 @@ void ATI6284_force::initiate_reading(void) {
 		printf ("aaa: %f, %f, %f: \n", force_torque[0], force_torque[1], force_torque[2]);
 #endif
 		// // // // // // // // // // // // // // / PRZEPISANIE WYNIKU // // // // // // // // // // // // // // // // // // // // // // // //
-		lib::Ft_vector kartez_force, root_force;
+
 		if (master.force_tryb == 1) {
 			for (int i = 0; i < 6; i++) {
 				from_vsp.force.rez[i] = force_torque[i];
@@ -580,46 +580,23 @@ void ATI6284_force::initiate_reading(void) {
 			from_vsp.force.rez[0] = force_torque[1] * 20;
 			from_vsp.force.rez[1] = force_torque[0] * 20;
 			from_vsp.force.rez[2] = -force_torque[2] * 20;
+
+			lib::Ft_vector kartez_force;
 			for (int i = 0; i < 6; i++) {
 				kartez_force[i] = from_vsp.force.rez[i];
-				root_force[i] = force_torque[i];
 			}
 			from_vsp.force.status = sensor_status;
 			master.force_msr_upload(kartez_force);//!< wpisanie sily do zmiennych globalnych dla calego procesu
 		} else if (master.force_tryb == 2 && gravity_transformation) {
+			lib::Ft_vector ft_table;
 			for (int i = 0; i < 6; i++)
-				root_force[i] = force_torque[i];
+				ft_table[i] = force_torque[i];
 
-			lib::Homog_matrix frame = master.return_current_frame(
-					common::WITH_TRANSLATION);
-			// lib::Homog_matrix frame(master.force_current_end_effector_frame);
-			lib::Ft_vector output = gravity_transformation->getForce(
-					root_force, frame);
+			lib::Homog_matrix frame = master.return_current_frame(common::WITH_TRANSLATION);
 
-			//		printf("output: %f, %f, %f, %f, %f, %f\n", output[0], output[1], output[2], output[3], output[4], output[5]);
-			//		printf("output: %f, %f, %f, %f, %f, %f\n", root_force[0], root_force[1], root_force[2], root_force[3], root_force[4], root_force[5]);
+			lib::Ft_vector output = gravity_transformation->getForce(ft_table, frame);
+
 			master.force_msr_upload(output);
-			/*		if (show==1000){
-			 cerr << "Output\t";
-			 for(int i=0;i<3;i++) {
-			 output[i] *= 20;
-			 cerr << ceil(output[i]) << "  ";
-			 }
-			 for(int i=3;i<6;i++) {
-			 output[i] *= 333;
-			 cerr << ceil(output[i]) << "  ";
-			 }
-			 cerr << endl;// << "Input\t";
-			 for(int i=6;i<12;i++) cerr << ceil(output[i]) << "  ";
-			 cerr << endl << "Gravity\t";
-			 for(int i=12;i<18;i++) cerr << ceil(output[i]) << "  ";
-			 cerr << endl << "Bias\t";
-			 for(int i=18;i<24;i++) cerr << ceil(output[i]) << "  ";
-			 cerr << endl << endl;
-			 cerr << frame;
-			 show=0;
-			 }
-			 */
 		}
 	} else {
 		lib::Ft_vector kartez_force;
