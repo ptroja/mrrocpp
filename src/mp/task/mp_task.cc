@@ -35,8 +35,8 @@
 #include "mp/generator/mp_g_delay_ms_condition.h"
 
 #include "mp/robot/mp_r_conveyor.h"
-#include "mp/robot/mp_r_irp6_on_track.h"
-#include "mp/robot/mp_r_irp6_postument.h"
+#include "mp/robot/mp_r_irp6ot_m.h"
+#include "mp/robot/mp_r_irp6p_m.h"
 #include "mp/robot/mp_r_irp6_mechatronika.h"
 #include "mp/robot/mp_r_speaker.h"
 #include "mp/robot/mp_r_polycrank.h"
@@ -88,24 +88,12 @@ void task::stop_and_terminate()
 void task::create_robots()
 {
 	/*
-	 * this is necessary to first create robot and then assign it to robot_m
+	 * it is necessary to first create robot and then assign it to robot_m
 	 * reason: mp_robot() constructor uses this map (by calling
 	 * mp_task::mp_wait_for_name_open() so needs the map to be in
 	 * a consistent state
 	 */
 	robot::robot* created_robot;
-
-	// ROBOT IRP6_ON_TRACK
-	if (config.value<int>("is_irp6_on_track_active", UI_SECTION)) {
-		created_robot = new robot::irp6_on_track (*this);
-		robot_m[lib::ROBOT_IRP6_ON_TRACK] = created_robot;
-	}
-
-	// ROBOT IRP6_POSTUMENT
-	if (config.value<int>("is_irp6_postument_active", UI_SECTION)) {
-		created_robot = new robot::irp6_postument (*this);
-		robot_m[lib::ROBOT_IRP6_POSTUMENT] = created_robot;
-	}
 
 	// ROBOT CONVEYOR
 	if (config.value<int>("is_conveyor_active", UI_SECTION)) {
@@ -165,6 +153,18 @@ void task::create_robots()
 	if (config.value<int>("is_irp6p_tfg_active", UI_SECTION)) {
 		created_robot = new robot::irp6p_tfg (*this);
 		robot_m[lib::ROBOT_IRP6P_TFG] = created_robot;
+	}
+
+	// ROBOT IRP6OT_M
+	if (config.value<int>("is_irp6ot_m_active", UI_SECTION)) {
+		created_robot = new robot::irp6ot_m (*this);
+		robot_m[lib::ROBOT_IRP6OT_M] = created_robot;
+	}
+
+	// ROBOT IRP6P_M
+	if (config.value<int>("is_irp6p_m_active", UI_SECTION)) {
+		created_robot = new robot::irp6p_m (*this);
+		robot_m[lib::ROBOT_IRP6P_M] = created_robot;
 	}
 
 	// ROBOT_ELECTRON

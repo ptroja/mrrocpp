@@ -183,7 +183,7 @@ int EDP_polycrank_create(PtWidget_t *widget, ApInfo_t *apinfo,
 		{
 			ui_msg.ui->message(lib::NON_FATAL_ERROR,"edp_irp6_mechatronika already exists");
 
-		} else if (check_node_existence(ui_state.irp6_mechatronika.edp.node_name, "edp_irp6_mechatronika")) {
+		} else if (ui.check_node_existence(ui_state.irp6_mechatronika.edp.node_name, "edp_irp6_mechatronika")) {
 			ui_state.irp6_mechatronika.edp.node_nr = config->return_node_number(ui_state.irp6_mechatronika.edp.node_name);
 
 			ui_robot.irp6_mechatronika = new ui_irp6_common_robot(

@@ -2571,9 +2571,8 @@ int EDP_irp6_on_track_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 					tmp2_string.c_str(), R_OK) == 0)) {
 				ui.ui_msg->message(lib::NON_FATAL_ERROR,
 						"edp_irp6_on_track already exists");
-			} else if (check_node_existence(
-					ui_state.irp6_on_track.edp.node_name,
-							"edp_irp6_on_track")) {
+			} else if (ui.check_node_existence(ui.irp6ot_m->state.edp.node_name,
+					"edp_irp6_on_track")) {
 
 				ui.irp6ot_m->state.edp.node_nr = ui.config->return_node_number(
 						ui.irp6ot_m->state.edp.node_name);

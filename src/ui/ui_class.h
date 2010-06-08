@@ -133,10 +133,10 @@ public:
 	bool check_loaded(ecp_edp_ui_robot_def &robot);
 	int check_edps_state_and_modify_mp_state(void);
 	int check_gns(void);
-	bool check_node_existence(const std::string _node,
-			const std::string beginnig_of_message);
+	bool check_node_existence(const std::string & _node,
+			const std::string & beginnig_of_message);
 	bool deactivate_ecp_trigger(ecp_edp_ui_robot_def &robot_l);
-	int execute_mp_pulse(char pulse_code);
+	void execute_mp_pulse(char pulse_code);
 	int pulse_reader_execute(int coid, int pulse_code, int pulse_value);
 	int set_toggle_button(PtWidget_t *widget);
 	int unset_toggle_button(PtWidget_t *widget);

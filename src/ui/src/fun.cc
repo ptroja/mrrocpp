@@ -1469,21 +1469,21 @@ int MPup_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 	if (ui.mp.pid == -1) {
 
-		ui_state.mp.node_nr = config->return_node_number(ui_state.mp.node_name);
+		ui.mp.node_nr = ui.config->return_node_number(ui.mp.node_name);
 
 		std::string mp_network_pulse_attach_point("/dev/name/global/");
 		mp_network_pulse_attach_point += ui.mp.network_pulse_attach_point;
 
 		// sprawdzenie czy nie jest juz zarejestrowany serwer komunikacyjny MP
 		if (access(mp_network_pulse_attach_point.c_str(), R_OK) == 0) {
-			ui_msg.ui->message(lib::NON_FATAL_ERROR, "MP already exists");
-		} else if (check_node_existence(ui_state.mp.node_name, "mp")) {
-			ui_state.mp.pid = config->process_spawn(MP_SECTION);
+			ui.ui_msg->message(lib::NON_FATAL_ERROR, "MP already exists");
+		} else if (ui.check_node_existence(ui.mp.node_name, "mp")) {
+			ui.mp.pid = ui.config->process_spawn(MP_SECTION);
 
 			if (ui.mp.pid > 0) {
 
-				ui_state.mp.agent = new RemoteAgent(MP_SECTION);
-				ui_state.mp.command_buffer = new RemoteBuffer<char>(*ui_state.mp.agent, "UI command");
+				ui.mp.agent = new RemoteAgent(MP_SECTION);
+				ui.mp.command_buffer = new RemoteBuffer<char>(*ui.mp.agent, "UI command");
 
 
 				ui.teachingstate = MP_RUNNING;
@@ -1518,8 +1518,8 @@ int MPslay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 			pulse_stop_mp(widget, apinfo, cbinfo);
 		}
 
-		delete ui_state.mp.command_buffer;
-		delete ui_state.mp.agent;
+		delete ui.mp.command_buffer;
+		delete ui.mp.agent;
 
 		// 	printf("dddd: %d\n", SignalKill(ini_con->mp-
 		// 	printf("MP slay\n");
@@ -1530,7 +1530,7 @@ int MPslay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 	// delay(1000);
 	// 	kill(ui.mp_pid,SIGTERM);
 	// 	printf("MP pupa po kill\n");
-	ui_state.mp.pid = -1;
+	ui.mp.pid = -1;
 
 	ui.deactivate_ecp_trigger(ui.irp6ot_m->state);
 	ui.deactivate_ecp_trigger(ui.irp6p_m->state);
@@ -1670,10 +1670,6 @@ int pulse_trigger_mp(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
-void execute_mp_pulse(char pulse_code) {
-	ui_state.mp.command_buffer->Set(pulse_code);
-}
-
 int signal_mp(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
@@ -1811,23 +1807,3 @@ int pulse_ecp_all_robots(PtWidget_t *widget, ApInfo_t *apinfo,
 	return (Pt_CONTINUE);
 
 }
-
-<<<<<<< HEAD
-bool check_node_existence(const std::string & _node,
-		const std::string & beginnig_of_message) {
-
-	std::string opendir_path("/net/");
-	opendir_path += _node;
-
-	if (access(opendir_path.c_str(), R_OK) != 0) {
-		std::string tmp(beginnig_of_message);
-		tmp += std::string(" node: ") + _node + std::string(" is unreachable");
-		ui_msg.ui->message(lib::NON_FATAL_ERROR, tmp);
-
-		return false;
-	}
-	return true;
-}
-
-=======
->>>>>>> master

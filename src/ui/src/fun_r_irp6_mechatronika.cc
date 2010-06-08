@@ -190,14 +190,14 @@ int EDP_irp6_mechatronika_create(PtWidget_t *widget, ApInfo_t *apinfo,
 			if (((!(ui.irp6m_m->state.edp.test_mode)) && (access(
 					busy_attach_point.c_str(), R_OK) == 0)) || (access(
 					resourceman_attach_point.c_str(), R_OK) == 0)) {
-				ui_msg.ui->message("edp_irp6_mechatronika already exists");
+				ui.ui_msg->message("edp_irp6_mechatronika already exists");
 
-			} else if (check_node_existence(
-					ui_state.irp6_mechatronika.edp.node_name,
+			} else if (ui.check_node_existence(
+					ui.irp6m_m->state.edp.node_name,
 							"edp_irp6_mechatronika")) {
-				ui_state.irp6_mechatronika.edp.node_nr
-						= config->return_node_number(
-								ui_state.irp6_mechatronika.edp.node_name);
+				ui.irp6m_m->state.edp.node_nr
+						= ui.config->return_node_number(
+								ui.irp6m_m->state.edp.node_name);
 				{
 					boost::unique_lock<boost::mutex> lock(
 							ui.process_creation_mtx);

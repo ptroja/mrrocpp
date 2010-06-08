@@ -116,8 +116,9 @@ int EDP_irp6p_tfg_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 					tmp2_string.c_str(), R_OK) == 0)) {
 				ui.ui_msg->message(lib::NON_FATAL_ERROR,
 						"edp_irp6p_tfg already exists");
-			} else if (check_node_existence(ui_state.irp6p_tfg.edp.node_name,
-					"edp_irp6p_tfg")) {
+			} else if (ui.check_node_existence(
+					ui.irp6p_tfg->state.edp.node_name,
+							"edp_irp6p_tfg")) {
 
 				ui.irp6p_tfg->state.edp.node_nr
 						= ui.config->return_node_number(

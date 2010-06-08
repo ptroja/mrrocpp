@@ -86,7 +86,10 @@ void robot::create_command()
 		ecp_edp_cbuffer.head_solidification = shead_head_soldification_structure;
 
 		if (is_new_data) {
-			throw ecp_robot::ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
+			BOOST_THROW_EXCEPTION(
+				lib::exception::NonFatal_error() <<
+				lib::exception::error_code(INVALID_COMMAND_TO_EDP)
+			);
 		} else {
 			is_new_data = true;
 		}

@@ -20,6 +20,11 @@
 #include <cstring>
 #include <stdexcept>
 
+#include "lib/exception.h"
+#include <boost/throw_exception.hpp>
+#include <boost/exception/errinfo_errno.hpp>
+#include <boost/exception/errinfo_api_function.hpp>
+
 #include "ecp_mp/sensor/ecp_mp_sensor.h"
 
 #include "lib/logger.h"
@@ -28,6 +33,11 @@
 namespace mrrocpp {
 namespace ecp_mp {
 namespace sensor {
+
+const lib::SENSOR_t SENSOR_CAMERA_SA = "SENSOR_CAMERA_SA";
+const lib::SENSOR_t SENSOR_CAMERA_ON_TRACK = "SENSOR_CAMERA_ON_TRACK";
+const lib::SENSOR_t SENSOR_CAMERA_POSTUMENT = "SENSOR_CAMERA_POSTUMENT";
+const lib::SENSOR_t SENSOR_CVFRADIA = "SENSOR_CVFRADIA";
 
 /*!
  * Class for communication with FraDIA. Parametrized by received structure.

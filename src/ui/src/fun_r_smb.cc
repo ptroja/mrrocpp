@@ -79,10 +79,13 @@ int EDP_smb_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 			tmp2_string += ui.smb->state.edp.network_resourceman_attach_point;
 
 			// sprawdzenie czy nie jest juz zarejestrowany zarzadca zasobow
-			if ((!(ui_state.smb.edp.test_mode)) && (access(tmp_string.c_str(), R_OK) == 0)
-					|| (access(tmp2_string.c_str(), R_OK) == 0)) {
-				ui_msg.ui->message(lib::NON_FATAL_ERROR, "edp_smb already exists");
-			} else if (check_node_existence(ui_state.smb.edp.node_name, "edp_smb")) {
+			if (((!(ui.smb->state.edp.test_mode)) && (access(
+					tmp_string.c_str(), R_OK) == 0)) || (access(
+					tmp2_string.c_str(), R_OK) == 0)) {
+				ui.ui_msg->message(lib::NON_FATAL_ERROR,
+						"edp_smb already exists");
+			} else if (ui.check_node_existence(ui.smb->state.edp.node_name,
+					"edp_smb")) {
 
 				ui.smb->state.edp.node_nr = ui.config->return_node_number(
 						ui.smb->state.edp.node_name);

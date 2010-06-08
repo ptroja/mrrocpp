@@ -112,10 +112,10 @@ int speaker_preset_sound_play(PtWidget_t *widget, ApInfo_t *apinfo,
 		my_data = (PhKeyEvent_t *) PhGetData(cbinfo->event);
 	}
 
-	std::string text;
-	std::string prosody;
-
 	try {
+
+		std::string text;
+		std::string prosody;
 
 		if (ui.speaker->state.edp.pid != -1) {
 
@@ -230,56 +230,59 @@ int EDP_speaker_create(PtWidget_t *widget, ApInfo_t *apinfo,
 
 	try { // dla bledow robot :: ECP_error
 
-	// dla robota speaker
-	if (ui_state.speaker.edp.state == 0)
-	{
-		ui_state.speaker.edp.state = 0;
-		ui_state.speaker.edp.is_synchronised = false;
+		// dla robota speaker
+		if (ui.speaker->state.edp.state == 0) {
+			ui.speaker->state.edp.state = 0;
+			ui.speaker->state.edp.is_synchronised = false;
 
-		std::string tmp_string("/dev/name/global/");
-		tmp_string += ui_state.speaker.edp.hardware_busy_attach_point;
+			std::string tmp_string("/dev/name/global/");
+			tmp_string += ui.speaker->state.edp.hardware_busy_attach_point;
 
-		std::string tmp2_string("/dev/name/global/");
-		tmp2_string += ui_state.speaker.edp.network_resourceman_attach_point;
+			std::string tmp2_string("/dev/name/global/");
+			tmp2_string
+					+= ui.speaker->state.edp.network_resourceman_attach_point;
 
-		// sprawdzeie czy nie jest juz zarejestrowany zarzadca zasobow
-		if( (!(ui_state.speaker.edp.test_mode)) && (access(tmp_string.c_str(), R_OK)== 0 )
-			|| (access(tmp2_string.c_str(), R_OK)== 0 )
-		)
-		{
-			ui_msg.ui->message("edp_speaker already exists");
+			// sprawdzeie czy nie jest juz zarejestrowany zarzadca zasobow
+			if (((!(ui.speaker->state.edp.test_mode)) && (access(
+					tmp_string.c_str(), R_OK) == 0)) || (access(
+					tmp2_string.c_str(), R_OK) == 0)) {
+				ui.ui_msg->message("edp_speaker already exists");
 
-		} else if (check_node_existence(ui_state.speaker.edp.node_name, "edp_speaker")) {
+			} else if (ui.check_node_existence(ui.speaker->state.edp.node_name,
+					"edp_speaker")) {
 
-			ui_state.speaker.edp.node_nr = config->return_node_number(ui_state.speaker.edp.node_name);
+				ui.speaker->state.edp.node_nr = ui.config->return_node_number(
+						ui.speaker->state.edp.node_name);
 
-				ui_robot.speaker = new ui_speaker_robot(&ui_state.speaker.edp, *config, *ui_msg.all_ecp);
-			ui_state.speaker.edp.pid = ui_robot.speaker->get_EDP_pid();
+				ui.speaker->ui_ecp_robot = new ui_speaker_robot(
+						&ui.speaker->state.edp, *ui.config, *ui.all_ecp_msg);
+				ui.speaker->state.edp.pid
+						= ui.speaker->ui_ecp_robot->get_EDP_pid();
 
-			if (ui_state.speaker.edp.pid<0)
-			{
-				ui_state.speaker.edp.state = 0;
-				fprintf( stderr, "EDP spawn failed: %s\n", strerror( errno ));
-				delete ui_robot.speaker;
-			} else {  // jesli spawn sie powiodl
+				if (ui.speaker->state.edp.pid < 0) {
+					ui.speaker->state.edp.state = 0;
+					fprintf(stderr, "EDP spawn failed: %s\n", strerror(errno));
+					delete ui.speaker->ui_ecp_robot;
+				} else { // jesli spawn sie powiodl
 
-				ui_state.speaker.edp.state = 1;
+					ui.speaker->state.edp.state = 1;
 
-				/*
-				 tmp = 0;
-			 	// kilka sekund  (~1) na otworzenie urzadzenia
-				while((ui_state.speaker.edp.reader_fd = name_open(ini_con->edp_speaker->network_reader_attach_point,
-					NAME_FLAG_ATTACH_GLOBAL))  < 0)
-					if((tmp++)<20)
-						delay(50);
-					else{
-					   perror("blad odwolania do READER_START");
-	   				   break;
-					};
-				*/
+					/*
+					 tmp = 0;
+					 // kilka sekund  (~1) na otworzenie urzadzenia
+					 while((ui.speaker->state.edp.reader_fd = name_open(ini_con->edp_speaker->network_reader_attach_point,
+					 NAME_FLAG_ATTACH_GLOBAL))  < 0)
+					 if((tmp++)<20)
+					 delay(50);
+					 else{
+					 perror("blad odwolania do READER_START");
+					 break;
+					 };
+					 */
 
-				//ui_state.speaker.edp.state=1;// edp wlaczone reader czeka na start
-				ui_state.speaker.edp.is_synchronised=true;
+					//ui.speaker->state.edp.state=1;// edp wlaczone reader czeka na start
+					ui.speaker->state.edp.is_synchronised = true;
+				}
 			}
 		}
 

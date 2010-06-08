@@ -55,7 +55,7 @@ protected:
 
 public:
 	single_thread_port(std::string _name) :
-		no_data(true), single_thread_port_interface(_name)
+		single_thread_port_interface(_name), no_data(true)
 	{
 	}
 

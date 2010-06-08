@@ -239,17 +239,14 @@ void servo_buffer::operator()() {
 void servo_buffer::get_all_positions(void) {
 	// Przepisanie aktualnych polozen servo do pakietu wysylkowego
 	for (int i = 0; i < master.number_of_servos; i++) {
-
-		servo_data.abs_position[i] = hi->get_position(i) * (2 * M_PI)
-				/ axe_inc_per_revolution[i];
+		servo_data.abs_position[i] = hi->get_position(i) * (2 * M_PI) / axe_inc_per_revolution[i];
 
 		// przyrost polozenia w impulsach
 		servo_data.position[i] = regulator_ptr[i]->get_position_inc(1);
 		servo_data.current[i] = regulator_ptr[i]->get_meassured_current();
 		servo_data.PWM_value[i] = regulator_ptr[i]->get_PWM_value();
 		servo_data.algorithm_no[i] = regulator_ptr[i]->get_algorithm_no();
-		servo_data.algorithm_parameters_no[i]
-				= regulator_ptr[i]->get_algorithm_parameters_no();
+		servo_data.algorithm_parameters_no[i] = regulator_ptr[i]->get_algorithm_parameters_no();
 	}
 }
 /*-----------------------------------------------------------------------*/
@@ -731,6 +728,7 @@ void servo_buffer::synchronise(void)
 					reply_to_EDP_MASTER();
 					return;
 			}
+
 			break;
 		}
 
@@ -801,6 +799,7 @@ void servo_buffer::synchronise(void)
 					//   	printf("baabb: default\n");
 					break;
 			}
+
 			break;
 		}
 		//	 printf("D\n ");
@@ -853,6 +852,7 @@ void servo_buffer::synchronise(void)
 					continue;
 				}
 			}
+			; // end: for (;;)
 			//     if ( ((reply_status_tmp.error0 >> (5*j)) & 0x000000000000001FULL) != lib::SYNCHRO_ZERO) {
 			// by Y - wyciecie SYNCHRO_SWITCH_ON
 			if (((reply_status_tmp.error0 >> (5 * j)) & 0x000000000000001DULL)
@@ -865,24 +865,7 @@ void servo_buffer::synchronise(void)
 				// Wypelnic servo_data
 				reply_to_EDP_MASTER();
 				return;
-			} else {
-				hi->finish_synchro(j);
-				hi->reset_position(j);
-				crp->clear_regulator();
-				delay(1);
-				continue;
-			}
-		default:
-			//    	printf(" default error\n");
-			// awaria w trakcie synchronizacji
-			convert_error();
-			reply_status.error0 = reply_status_tmp.error0 | SYNCHRO_ERROR;
-			reply_status.error1 = reply_status_tmp.error1;
-			clear_reply_status_tmp();
-			// Wypelnic servo_data
-			reply_to_EDP_MASTER();
-			return;
-		}; // end: switch
+		}
 		// zakonczenie synchronizacji danej osi i przejscie do trybu normalnego
 	}
 

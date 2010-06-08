@@ -2422,12 +2422,10 @@ int EDP_irp6_postument_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 					tmp2_string.c_str(), R_OK) == 0)) {
 				ui.ui_msg->message(lib::NON_FATAL_ERROR,
 						"edp_irp6_postument already exists");
-			} else if (check_node_existence(
-					ui_state.irp6_postument.edp.node_name,
-							"edp_irp6_postument")) {
-				ui_state.irp6_postument.edp.node_nr
-						= config->return_node_number(
-								ui_state.irp6_postument.edp.node_name);
+			} else if (ui.check_node_existence(ui.irp6p_m->state.edp.node_name,
+					std::string("edp_irp6_postument"))) {
+				ui.irp6p_m->state.edp.node_nr = ui.config->return_node_number(
+						ui.irp6p_m->state.edp.node_name);
 
 				{
 					boost::unique_lock<boost::mutex> lock(
