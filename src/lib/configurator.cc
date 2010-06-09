@@ -53,6 +53,9 @@
 #include "lib/config_types.h"
 #include "lib/typedefs.h"
 
+// Typy zmiennych odczytywanych z pliku INI.
+//#include "lib/cfgopts.h"
+
 namespace mrrocpp {
 namespace lib {
 
@@ -85,12 +88,16 @@ configurator::configurator(const std::string & _node, const std::string & _dir, 
 
 void configurator::read_property_tree_from_file(boost::property_tree::ptree & pt, const std::string & file)
 {
-	if(boost::filesystem::extension(file) == ".ini") {
-		boost::property_tree::read_ini(file, pt);
-	} else if (boost::filesystem::extension(file) == ".xml") {
-		boost::property_tree::read_xml(file, pt);
-	} else {
-		throw std::logic_error("unknown config file extension");
+	try {
+		if(boost::filesystem::extension(file) == ".ini") {
+			boost::property_tree::read_ini(file, pt);
+		} else if (boost::filesystem::extension(file) == ".xml") {
+			boost::property_tree::read_xml(file, pt);
+		} else {
+			throw std::logic_error("unknown config file extension");
+		}
+	} catch (boost::property_tree::ptree_error & e) {
+		std::cerr << e.what() << std::endl;
 	}
 }
 
@@ -221,28 +228,20 @@ bool configurator::exists(const char* _key, const char* __section_name) const
 	return value;
 #else
 	const char *_section_name = (__section_name) ? __section_name : section_name.c_str();
-	int value;
-	struct Config_Tag configs[] = {
-		// Pobierane pole.
-		{	(char *) _key, Int_Tag, &value},
-		// Pole konczace.
-		{	NULL , Error_Tag, NULL}
-	};
 
 	boost::mutex::scoped_lock l(file_mutex);
 
-	if (input_config(file_location, configs, _section_name)<1) {
-		if (input_config(common_file_location, configs, _section_name)<1) {
-			// Zwolnienie pamieci.
-
-			return false;
-		}
+	try {
+		value<std::string>(_key, _section_name);
+	} catch (boost::property_tree::ptree_bad_path & e) {
+		return false;
 	}
 
 	return true;
 #endif /* USE_MESSIP_SRR */
 }
 
+#if 0
 // Zwraca wartosc (char*) dla klucza.
 std::string configurator::return_string_value(const char* _key, const char*__section_name) const
 {
@@ -265,30 +264,26 @@ std::string configurator::return_string_value(const char* _key, const char*__sec
 	return std::string(value);
 #else
 	const char *_section_name = (__section_name) ? __section_name : section_name.c_str();
-	// Zwracana zmienna.
-	char tmp[200];
-	struct Config_Tag configs[] = {
-		// Pobierane pole.
-		{	(char *) _key, String_Tag, tmp},
-		// Pole konczace.
-		{	NULL , Error_Tag, NULL}
-	};
 
-	// Odczytanie zmiennej.
-	boost::mutex::scoped_lock l(file_mutex);
-	if (input_config(file_location, configs, _section_name)<1) {
-		if (input_config(common_file_location, configs, _section_name)<1) {
-			fprintf(stderr, "Blad input_config() w value<std::string> file_location:%s, _section_name:%s, _key:%s\n",
-					file_location.c_str(), _section_name, _key);
-		}
+	// initialize property tree path
+	std::string pt_path = _section_name;
+
+	// trim leading '[' char
+	pt_path.erase(0,1);
+	// trim trailing '[' char
+	pt_path.erase(pt_path.length()-1,1);
+
+	pt_path += ".";
+	pt_path += _key;
+
+	try {
+		return file_pt.get<std::string>(pt_path);
+	} catch (boost::property_tree::ptree_bad_path & e) {
+		return common_file_pt.get<std::string>(pt_path);
 	}
-
-	// 	throw ERROR
-
-	// Zwrocenie wartosci.
-	return std::string(tmp);
 #endif /* USE_MESSIP_SRR */
-}// : value<std::string>
+}
+#endif
 
 //
 //boost::numeric::ublas::vector <double> configurator::get_vector_elements(std::string text_value, int n) const
