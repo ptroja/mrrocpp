@@ -2,8 +2,6 @@
 // Plik:			configurator.cc
 // System:	QNX/MRROCPP  v. 6.3
 // Opis:		Plik zawiera definicje matod klasy lib::configurator - obsluga konfiguracji z pliku INI.
-// Autor:		tkornuta
-// Data:		10.11.2005
 // -------------------------------------------------------------------------
 
 #include <stdio.h>
@@ -21,8 +19,6 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-//#include <boost/algorithm/string/trim.hpp>
-//#include <boost/algorithm/string/classification.hpp>
 #include <stdexcept>
 #include "lib/exception.h"
 #include <boost/throw_exception.hpp>
@@ -288,8 +284,6 @@ std::string configurator::return_string_value(const char* _key, const char*__sec
 
 pid_t configurator::process_spawn(const std::string & _section_name) {
 #if defined(PROCESS_SPAWN_RSH)
-
-
 	std::string spawned_program_name = value<std::string>("program_name", _section_name);
 	std::string spawned_node_name = value<std::string>("node_name", _section_name);
 
@@ -308,7 +302,6 @@ pid_t configurator::process_spawn(const std::string & _section_name) {
 			printf("spawned node absent: %s\n", opendir_path.c_str());
 			throw std::logic_error("spawned node absent: "+opendir_path);
 		}
-
 	}
 
 	// Sciezka do binariow.
@@ -324,7 +317,6 @@ pid_t configurator::process_spawn(const std::string & _section_name) {
 		snprintf(bin_path, sizeof(bin_path), "/net/%s%sbin/",
 				node.c_str(), dir.c_str());
 	}
-
 
 	std::string opendir_path(bin_path);
 	opendir_path += spawned_program_name;

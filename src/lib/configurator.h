@@ -125,18 +125,7 @@ public:
 	template <class Type>
 	Type value(const std::string & _key) const
 	{
-		// initialize property tree path
-		std::string pt_path = section_name;
-
-		// trim leading '[' char
-		pt_path.erase(0,1);
-		// trim trailing '[' char
-		pt_path.erase(pt_path.length()-1,1);
-
-		pt_path += ".";
-		pt_path += _key;
-
-		return file_pt.get<Type>(pt_path);
+		return value<Type>(_key, section_name);
 	}
 
 	//	/**
