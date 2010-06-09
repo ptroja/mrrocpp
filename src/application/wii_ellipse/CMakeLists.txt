@@ -5,7 +5,7 @@ add_executable(ecp_wii_ellipse
 )
 
 target_link_libraries(ecp_wii_ellipse
-	ecp_r_irp6ot
+	ecp_r_irp6ot_m
 	ecp
 )
 

@@ -16,7 +16,7 @@ namespace mrrocpp {
 
 namespace ecp {
 
-namespace irp6ot {
+namespace irp6ot_m {
 
 namespace task {
 
@@ -36,7 +36,7 @@ ecp_t_pb_eih_tester::ecp_t_pb_eih_tester(mrrocpp::lib::configurator& _configurat
 	task(_configurator)
 {
 	try{
-	ecp_m_robot = new ecp::irp6ot::robot(*this);
+	ecp_m_robot = new ecp::irp6ot_m::robot(*this);
 
 	smooth_gen = new mrrocpp::ecp::common::generator::smooth(*this, true);
 

@@ -8,7 +8,7 @@
 #include "ecp_t_conveyor_test.h"
 #include "ecp/conveyor/ecp_r_conv.h"
 
-#include "../logger.h"
+#include "lib/logger.h"
 
 using namespace boost;
 using namespace std;
@@ -25,16 +25,16 @@ namespace task {
 ecp_t_conveyor_test::ecp_t_conveyor_test(mrrocpp::lib::configurator& config) :
 	task(config)
 {
-	logDbgEnabled = true;
-	logEnabled = true;
+	log_dbg_enabled = true;
+	log_enabled = true;
 
-	logDbg("ecp_t_conveyor_test::ecp_t_conveyor_test() 1\n");
+	log_dbg("ecp_t_conveyor_test::ecp_t_conveyor_test() 1\n");
 	ecp_m_robot = new ecp::conveyor::robot(*this);
 
-	logDbg("ecp_t_conveyor_test::ecp_t_conveyor_test() 2\n");
+	log_dbg("ecp_t_conveyor_test::ecp_t_conveyor_test() 2\n");
 
 	sinus_gen = shared_ptr <ecp_g_conveyor_sinus> (new ecp_g_conveyor_sinus(*this, "[sinus_generator]"));
-	logDbg("ecp_t_conveyor_test::ecp_t_conveyor_test() 3\n");
+	log_dbg("ecp_t_conveyor_test::ecp_t_conveyor_test() 3\n");
 }
 
 ecp_t_conveyor_test::~ecp_t_conveyor_test()
@@ -45,9 +45,9 @@ ecp_t_conveyor_test::~ecp_t_conveyor_test()
 void ecp_t_conveyor_test::main_task_algorithm(void)
 {
 
-	logDbg("ecp_t_conveyor_test::main_task_algorithm() 1\n");
+	log_dbg("ecp_t_conveyor_test::main_task_algorithm() 1\n");
 	sinus_gen->Move();
-	logDbg("ecp_t_conveyor_test::main_task_algorithm() 2\n");
+	log_dbg("ecp_t_conveyor_test::main_task_algorithm() 2\n");
 
 	ecp_termination_notice();
 }

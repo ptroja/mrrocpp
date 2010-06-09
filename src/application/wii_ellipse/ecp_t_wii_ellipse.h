@@ -7,7 +7,7 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace irp6ot {
+namespace irp6ot_m {
 namespace task {
 
 /** @defgroup wii_ellipse Wii ellipsis

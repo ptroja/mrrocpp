@@ -631,8 +631,6 @@ typedef union c_buffer_arm {
 		double inertia[6], reciprocal_damping[6];
 		double force_xyz_torque_xyz[6];
 		BEHAVIOUR_SPECIFICATION behaviour[6];
-		/*! Dilation degree of the gripper. */
-		double gripper_coordinate;
 	} pf_def;
 	//----------------------------------------------------------
 	struct {
@@ -850,11 +848,6 @@ typedef union r_buffer_arm {
 		 *  @todo Translate to English.
 		 */
 		short gripper_reg_state;
-		/*!
-		 *  Stopien rozwarcia chwytaka.
-		 *  @todo Translate to English.
-		 */
-		double gripper_coordinate;
 	} pf_def;
 	//----------------------------------------------------------
 	struct {

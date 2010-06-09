@@ -126,14 +126,14 @@ bool ecp_g_ib_eih::next_step()
 
 	logDbg("ecp_g_ib_eih::next_step() 2\n");
 
-	if (vsp_fradia->received_object.size == sizeof(visual_object_tracker_t) && vsp_fradia->received_object.tracking) {
+	if (vsp_fradia->image.size == sizeof(visual_object_tracker_t) && vsp_fradia->image.tracking) {
 		logDbg("ecp_g_ib_eih::next_step() 3\n");
 
-		e(0, 0) = vsp_fradia->received_object.x;
-		e(1, 0) = vsp_fradia->received_object.y;
-		e(2, 0) = vsp_fradia->received_object.z;
+		e(0, 0) = vsp_fradia->image.x;
+		e(1, 0) = vsp_fradia->image.y;
+		e(2, 0) = vsp_fradia->image.z;
 		//e(2, 0) = 0;
-		e(3, 0) = vsp_fradia->received_object.alpha;
+		e(3, 0) = vsp_fradia->image.alpha;
 
 		e_translation(0,0) = e(0,0);
 		e_translation(1,0) = e(1,0);
@@ -181,7 +181,7 @@ bool ecp_g_ib_eih::next_step()
 		logDbg("\n");
 
 		//logDbg("Tracking.\n");
-	} else if (vsp_fradia->received_object.size != sizeof(visual_object_tracker_t)) {
+	} else if (vsp_fradia->image.size != sizeof(visual_object_tracker_t)) {
 		log("Size of received structure doesn't match it's size field.\n");
 	}
 
@@ -204,7 +204,7 @@ bool ecp_g_ib_eih::next_step()
 		//logDbg("Acceleration constrained (%g > %g).\n", d2s, (max_a * delta_t * delta_t));
 	}
 
-	if(vsp_fradia->received_object.tracking && e_translation.squaredNorm() < stop_e_translation &&
+	if(vsp_fradia->image.tracking && e_translation.squaredNorm() < stop_e_translation &&
 			fabs(e(3, 0)) < stop_e_rotation && ds < (stop_v * delta_t) && d2s < (stop_a * delta_t * delta_t)){
 		return false;
 	}

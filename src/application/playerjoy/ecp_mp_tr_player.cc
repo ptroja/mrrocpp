@@ -154,7 +154,6 @@ bool player::t_write()
 
 bool player::t_read(bool wait)
 {
-
 	if (wait) {
 		pthread_mutex_lock(&this->mtx);
 		int rc = 0;
@@ -239,7 +238,6 @@ bool player::t_read(bool wait)
 
 void * player::query_loop(void * arg)
 {
-
 	// Read data from the server
 	player *me = (player *) arg;
 	playerc_client_t *clnt = me->client;

@@ -32,9 +32,7 @@ namespace task {
 
 // klasa macierzysta dla klas globalnych procesow ECP i MP
 class task {
-
 public:
-
 	typedef std::map<const char *, ecp_mp::common::Trajectory /*, str_cmp */> trajectories_t;
 
 	task(lib::configurator &_config);

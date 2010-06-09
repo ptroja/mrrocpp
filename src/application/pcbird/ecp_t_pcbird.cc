@@ -16,8 +16,8 @@
 
 #include "lib/srlib.h"
 
-#include "ecp/irp6_on_track/ecp_r_irp6ot.h"
-#include "ecp/irp6_postument/ecp_r_irp6p.h"
+#include "ecp/irp6ot_m/ecp_r_irp6ot_m.h"
+#include "ecp/irp6p_m/ecp_r_irp6p_m.h"
 
 #include "ecp_mp/sensor/ecp_mp_s_pcbird.h"
 #include "ecp_t_pcbird.h"
@@ -40,14 +40,14 @@ pcbird::pcbird(lib::configurator &_config) : task(_config)
 	sensor_m[lib::SENSOR_PCBIRD]->configure_sensor();
 
 	// Create an adequate robot. - depending on the ini section name.
-	if (config.section_name == ECP_IRP6_ON_TRACK_SECTION)
+	if (config.section_name == ECP_IRP6OT_M_SECTION)
 	{
-		ecp_m_robot = new irp6ot::robot (*this);
+		ecp_m_robot = new irp6ot_m::robot (*this);
 		sr_ecp_msg->message("IRp6ot loaded");
 	}
-	else if (config.section_name == ECP_IRP6_POSTUMENT_SECTION)
+	else if (config.section_name == ECP_IRP6P_M_SECTION)
 	{
-		ecp_m_robot = new irp6p::robot (*this);
+		ecp_m_robot = new irp6p_m::robot (*this);
 		sr_ecp_msg->message("IRp6p loaded");
 	}
 

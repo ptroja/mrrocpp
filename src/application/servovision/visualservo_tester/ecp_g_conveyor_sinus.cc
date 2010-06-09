@@ -8,7 +8,7 @@
 #include "ecp_g_conveyor_sinus.h"
 #include <math.h>
 
-#include "../logger.h"
+#include "lib/logger.h"
 
 using namespace std;
 using namespace logger;
@@ -55,7 +55,7 @@ bool ecp_g_conveyor_sinus::first_step()
 
 	initial_position_saved = false;
 
-	logDbg("bool ecp_g_conveyor_sinus::first_step()\n");
+	log_dbg("bool ecp_g_conveyor_sinus::first_step()\n");
 
 	return true;
 }
@@ -70,7 +70,7 @@ bool ecp_g_conveyor_sinus::next_step()
 
 	double new_position = A * (1 - cos(2 * M_PI * f * t));
 
-//	logDbg("bool ecp_g_conveyor_sinus::next_step(): new_position = %+8.6lg     initial_position = %+8.6lg\n", new_position, initial_position);
+//	log_dbg("bool ecp_g_conveyor_sinus::next_step(): new_position = %+8.6lg     initial_position = %+8.6lg\n", new_position, initial_position);
 
 	the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[0] = initial_position + new_position;
 

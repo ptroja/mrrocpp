@@ -14,7 +14,7 @@
 #include "lib/com_buf.h"
 
 #include "lib/srlib.h"
-#include "ecp/irp6_postument/ecp_r_irp6p.h"
+#include "ecp/irp6p_m/ecp_r_irp6p_m.h"
 #include "ecp_g_dung.h"
 
 #include "lib/mrmath/mrmath.h"
@@ -22,7 +22,7 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace irp6p {
+namespace irp6p_m {
 namespace generator {
 
 dung::dung(common::task::task& _ecp_task, int step) :

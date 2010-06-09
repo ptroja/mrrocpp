@@ -3,9 +3,10 @@
 #include <unistd.h>
 #include <math.h>
 #include <iostream>
+#include <cstdlib>
 
-#include "ecp/irp6_on_track/ecp_r_irp6ot.h"
-#include "ecp/irp6_postument/ecp_r_irp6p.h"
+#include "ecp/irp6ot_m/ecp_r_irp6ot_m.h"
+#include "ecp/irp6p_m/ecp_r_irp6p_m.h"
 #include "ecp_st_acq_force.h"
 #include "ecp_st_acquisition.h"
 #include "ecp_mp/sensor/ecp_mp_s_pcbird.h"
@@ -20,19 +21,19 @@ namespace task {
 //Constructors
 acq_force::acq_force(task &_ecp_t): acquisition(_ecp_t)
 {
-    if (ecp_sub_task::ecp_t.config.section_name == ECP_IRP6_ON_TRACK_SECTION)
+    if (ecp_sub_task::ecp_t.config.section_name == ECP_IRP6OT_M_SECTION)
     {
-    	ecp_sub_task::ecp_t.ecp_m_robot = new irp6ot::robot (_ecp_t);
+    	ecp_sub_task::ecp_t.ecp_m_robot = new irp6ot_m::robot (_ecp_t);
     	ecp_sub_task::ecp_t.sr_ecp_msg->message("IRp6ot loaded");
     }
-    else if (ecp_sub_task::ecp_t.config.section_name == ECP_IRP6_POSTUMENT_SECTION)
+    else if (ecp_sub_task::ecp_t.config.section_name == ECP_IRP6P_M_SECTION)
     {
-    	ecp_sub_task::ecp_t.ecp_m_robot = new irp6p::robot (_ecp_t);
+    	ecp_sub_task::ecp_t.ecp_m_robot = new irp6p_m::robot (_ecp_t);
     	ecp_sub_task::ecp_t.sr_ecp_msg->message("IRp6p loaded");
     }
 
-    ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_PCBIRD] = new ecp_mp::sensor::pcbird("[vsp_pcbird]", _ecp_t);
-    ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_PCBIRD]->configure_sensor();
+    ecp_sub_task::ecp_t.sensor_m[ecp_mp::sensor::SENSOR_PCBIRD] = new ecp_mp::sensor::pcbird("[vsp_pcbird]", *_ecp_t.sr_ecp_msg, _ecp_t.config);
+    ecp_sub_task::ecp_t.sensor_m[ecp_mp::sensor::SENSOR_PCBIRD]->configure_sensor();
 
     nose_run = new common::generator::pcbird_nose_run(_ecp_t, 8);
     nose_run->configure_pulse_check (true);
@@ -48,10 +49,11 @@ void acq_force::write_data(std::string _K_fp, std::string _kk_fp, std::string _M
 	M_fp = _M_fp;
 	mm_fp = _mm_fp;
 	number_of_measures = _number_of_measures;
-	std::remove(K_fp.c_str());
-	std::remove(kk_fp.c_str());
-	std::remove(M_fp.c_str());
-	std::remove(mm_fp.c_str());
+	remove(K_fp.c_str());
+	remove(kk_fp.c_str());
+	remove(M_fp.c_str());
+	remove(mm_fp.c_str());
+
 	acq_force::main_task_algorithm();
 }
 
@@ -93,9 +95,10 @@ void acq_force::main_task_algorithm(void) {
 		*/
 		//conversion from Euler angles ZYX to rotation matrix
 		//conversion to radians first
-		float Zang = ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_PCBIRD]->image.sensor_union.pcbird.a * M_PI / 180;
-		float Yang = ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_PCBIRD]->image.sensor_union.pcbird.b * M_PI / 180;
-		float Xang = ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_PCBIRD]->image.sensor_union.pcbird.g * M_PI / 180;
+		ecp_mp::sensor::pcbird * bird = dynamic_cast<ecp_mp::sensor::pcbird *> (ecp_sub_task::ecp_t.sensor_m[ecp_mp::sensor::SENSOR_PCBIRD]);
+		float Zang = bird->image.a * M_PI / 180;
+		float Yang = bird->image.b * M_PI / 180;
+		float Xang = bird->image.g * M_PI / 180;
 		//conversion to matrix (pcbirdmanual, p.94)
 		gsl_matrix_set(M, 0, 0, cos(Yang)*cos(Zang));
 		gsl_matrix_set(M, 0, 1, cos(Yang)*sin(Zang));
@@ -106,9 +109,9 @@ void acq_force::main_task_algorithm(void) {
 		gsl_matrix_set(M, 2, 0, sin(Xang)*sin(Zang)+cos(Xang)*sin(Yang)*cos(Zang));
 		gsl_matrix_set(M, 2, 1, -sin(Xang)*cos(Zang)+cos(Xang)*sin(Yang)*sin(Zang));
 		gsl_matrix_set(M, 2, 2, cos(Xang)*cos(Yang));
-		gsl_vector_set(m, 0, ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_PCBIRD]->image.sensor_union.pcbird.x);
-		gsl_vector_set(m, 1, ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_PCBIRD]->image.sensor_union.pcbird.y);
-		gsl_vector_set(m, 2, ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_PCBIRD]->image.sensor_union.pcbird.z);
+		gsl_vector_set(m, 0, bird->image.x);
+		gsl_vector_set(m, 1, bird->image.y);
+		gsl_vector_set(m, 2, bird->image.z);
 
 		FP = fopen(M_fp.c_str(),"a");
 		gsl_matrix_fprintf (FP, M, "%g");
@@ -124,9 +127,9 @@ void acq_force::main_task_algorithm(void) {
 		fclose(FP);
 
 		/*
-		float tempx = sensor_m[lib::SENSOR_PCBIRD]->image.sensor_union.pcbird.x;
-		float tempy = sensor_m[lib::SENSOR_PCBIRD]->image.sensor_union.pcbird.y;
-		float tempz = sensor_m[lib::SENSOR_PCBIRD]->image.sensor_union.pcbird.z;
+		float tempx = bird->image.x;
+		float tempy = bird->image.y;
+		float tempz = bird->image.z;
 		float temp00 = ecp_m_robot->reply_package.arm.pf_def.arm_frame[0][0];
 		float temp01 = ecp_m_robot->reply_package.arm.pf_def.arm_frame[0][1];
 		float temp02 = ecp_m_robot->reply_package.arm.pf_def.arm_frame[0][2];

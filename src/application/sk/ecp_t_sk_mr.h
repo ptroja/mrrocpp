@@ -1,5 +1,5 @@
-#if !defined(_ECP_T_SPKM_SK_MR_H)
-#define _ECP_T_SPKM_SK_MR_H
+#if !defined(_ECP_T_SK_MR_H)
+#define _ECP_T_SK_MR_H
 
 #include "ecp/common/task/ecp_task.h"
 #include "ecp/common/generator/ecp_g_force.h"

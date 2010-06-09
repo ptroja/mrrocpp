@@ -2,8 +2,8 @@
  * \file kinematic_model_bird_hand.cc
  * \brief File containing definition of kinematic_model_bird_hand class methods.
  *
- * \author tkornuta
- * \date Jan 05, 2010
+ * \author kczajkowski
+ * \date May 28, 2010
  */
 
 #include <math.h>
@@ -18,159 +18,138 @@ namespace bird_hand {
 kinematic_model_bird_hand::kinematic_model_bird_hand(void) {
 	// Set model name.
 	set_kinematic_model_label(
-			"BIRD_HAND kinematic model by D.Zlatanow and M.Zoppi");
+			"BIRD_HAND kinematic model");
 }
 
 void kinematic_model_bird_hand::check_motor_position(
 		const lib::MotorArray & motor_position) {
+
+	if (motor_position[0] < params.lower_limit_axis[0])
+		throw NonFatal_error_2(BEYOND_LOWER_LIMIT_AXIS_0);
+	else if (motor_position[0] > params.upper_limit_axis[0])
+		throw NonFatal_error_2(BEYOND_UPPER_LIMIT_AXIS_0);
+
+	if (motor_position[1] < params.lower_limit_axis[1])
+		throw NonFatal_error_2(BEYOND_LOWER_LIMIT_AXIS_1);
+	else if (motor_position[1] > params.upper_limit_axis[1])
+		throw NonFatal_error_2(BEYOND_UPPER_LIMIT_AXIS_1);
+
+	if (motor_position[2] < params.lower_limit_axis[2])
+		throw NonFatal_error_2(BEYOND_LOWER_LIMIT_AXIS_2);
+	else if (motor_position[2] > params.upper_limit_axis[2])
+		throw NonFatal_error_2(BEYOND_UPPER_LIMIT_AXIS_2);
+
+	if (motor_position[3] < params.lower_limit_axis[3])
+		throw NonFatal_error_2(BEYOND_LOWER_LIMIT_AXIS_3);
+	else if (motor_position[3] > params.upper_limit_axis[3])
+		throw NonFatal_error_2(BEYOND_UPPER_LIMIT_AXIS_3);
+
+	if (motor_position[4] < params.lower_limit_axis[4])
+		throw NonFatal_error_2(BEYOND_LOWER_LIMIT_AXIS_4);
+	else if (motor_position[4] > params.upper_limit_axis[4])
+		throw NonFatal_error_2(BEYOND_UPPER_LIMIT_AXIS_4);
+
+	if (motor_position[5] < params.lower_limit_axis[5])
+		throw NonFatal_error_2(BEYOND_LOWER_LIMIT_AXIS_5);
+	else if (motor_position[5] > params.upper_limit_axis[5])
+		throw NonFatal_error_2(BEYOND_UPPER_LIMIT_AXIS_5);
+
+	if (motor_position[6] < params.lower_limit_axis[6])
+		throw NonFatal_error_2(BEYOND_LOWER_LIMIT_AXIS_6);
+	else if (motor_position[6] > params.upper_limit_axis[6])
+		throw NonFatal_error_2(BEYOND_UPPER_LIMIT_AXIS_6);
+
+	if (motor_position[7] < params.lower_limit_axis[7])
+		throw NonFatal_error_2(BEYOND_LOWER_LIMIT_AXIS_7);
+	else if (motor_position[7] > params.upper_limit_axis[7])
+		throw NonFatal_error_2(BEYOND_UPPER_LIMIT_AXIS_7);
 }
 
-void kinematic_model_bird_hand::check_joints(const lib::JointArray & q) {
+void kinematic_model_bird_hand::check_joints(
+		const lib::JointArray & q) {
+
+	if (isnan(q[0]))
+		throw NonFatal_error_2(NOT_A_NUMBER_JOINT_VALUE_D0);
+	if (q[0] < params.lower_limit_joint[0])
+		throw NonFatal_error_2(BEYOND_LOWER_D0_LIMIT);
+	else if (q[0] > params.upper_limit_joint[0])
+		throw NonFatal_error_2(BEYOND_UPPER_D0_LIMIT);
+
+	if (isnan(q[1]))
+		throw NonFatal_error_2(NOT_A_NUMBER_JOINT_VALUE_THETA1);
+	if (q[1] < params.lower_limit_joint[1])
+		throw NonFatal_error_2(BEYOND_LOWER_THETA1_LIMIT);
+	else if (q[1] > params.upper_limit_joint[1])
+		throw NonFatal_error_2(BEYOND_UPPER_THETA1_LIMIT);
+
+	if (isnan(q[2]))
+		throw NonFatal_error_2(NOT_A_NUMBER_JOINT_VALUE_THETA2);
+	if (q[2] < params.lower_limit_joint[2])
+		throw NonFatal_error_2(BEYOND_LOWER_THETA2_LIMIT);
+	else if (q[2] > params.upper_limit_joint[2])
+		throw NonFatal_error_2(BEYOND_UPPER_THETA2_LIMIT);
+
+	if (isnan(q[3]))
+		throw NonFatal_error_2(NOT_A_NUMBER_JOINT_VALUE_THETA3);
+	if (q[3] < params.lower_limit_joint[3])
+		throw NonFatal_error_2(BEYOND_LOWER_THETA3_LIMIT);
+	else if (q[3] > params.upper_limit_joint[3])
+		throw NonFatal_error_2(BEYOND_UPPER_THETA3_LIMIT);
+
+	if (isnan(q[4]))
+		throw NonFatal_error_2(NOT_A_NUMBER_JOINT_VALUE_THETA4);
+	if (q[4] < params.lower_limit_joint[4])
+		throw NonFatal_error_2(BEYOND_LOWER_THETA4_LIMIT);
+	else if (q[4] > params.upper_limit_joint[4])
+		throw NonFatal_error_2(BEYOND_UPPER_THETA4_LIMIT);
+
+	if (isnan(q[5]))
+		throw NonFatal_error_2(NOT_A_NUMBER_JOINT_VALUE_THETA5);
+	if (q[5] < params.lower_limit_joint[5])
+		throw NonFatal_error_2(BEYOND_LOWER_THETA5_LIMIT);
+	else if (q[5] > params.upper_limit_joint[5])
+		throw NonFatal_error_2(BEYOND_UPPER_THETA5_LIMIT);
+
+	if (isnan(q[6]))
+		throw NonFatal_error_2(NOT_A_NUMBER_JOINT_VALUE_THETA6);
+	if (q[6] < params.lower_limit_joint[6])
+		throw NonFatal_error_2(BEYOND_LOWER_THETA6_LIMIT);
+	else if (q[6] > params.upper_limit_joint[6])
+		throw NonFatal_error_2(BEYOND_UPPER_THETA6_LIMIT);
+
+	if (isnan(q[7]))
+		throw NonFatal_error_2(NOT_A_NUMBER_JOINT_VALUE_THETA7);
+	if (q[7] < params.lower_limit_joint[7])
+		throw NonFatal_error_2(BEYOND_LOWER_THETA7_LIMIT);
+	else if (q[7] > params.upper_limit_joint[7])
+		throw NonFatal_error_2(BEYOND_UPPER_THETA7_LIMIT);
 }
 
 void kinematic_model_bird_hand::i2mp_transform(
 		lib::MotorArray & local_desired_motor_pos_new,
 		lib::JointArray & local_desired_joints) {
+
+	//check_joints(local_desired_joints);
+
+	for (int i = 0; i<8; ++i)
+		local_desired_motor_pos_new[i] = (local_desired_joints[i] - params.synchro_joint_position[i]) * params.gear[i];
+
+	//check_motor_position(local_desired_motor_pos_new);
 }
 
-void kinematic_model_bird_hand::inverse_kinematics_transform(
-		lib::JointArray & local_desired_joints,
-		lib::JointArray & local_current_joints,
-		const lib::Homog_matrix& local_desired_end_effector_frame) {
-	// Transform Homog_matrix to Matrix4d.
-	Homog4d O_W_T;
-	O_W_T.matrix() << local_desired_end_effector_frame(0,0), local_desired_end_effector_frame(0,1), local_desired_end_effector_frame(0,2), local_desired_end_effector_frame(0,3), local_desired_end_effector_frame(1,0), local_desired_end_effector_frame(1,1), local_desired_end_effector_frame(1,2), local_desired_end_effector_frame(1,3), local_desired_end_effector_frame(2,0), local_desired_end_effector_frame(2,1), local_desired_end_effector_frame(2,2), local_desired_end_effector_frame(2,3), 0, 0, 0, 1;
+void kinematic_model_bird_hand::mp2i_transform(
+		const lib::MotorArray & local_current_motor_pos,
+		lib::JointArray & local_current_joints) {
 
-	// Compute O_S_T.
-	Homog4d O_S_T = O_W_T * params.W_S_T;
-	// Extract translation O_S_P.
-	Vector3d O_S_P = O_S_T.translation();
+	//check_motor_position(local_current_motor_pos);
 
-	// Compute e basing only on translation O_S_P from O_S_T.
-	Vector5d e = PKM_S_to_e(O_S_P);
-	// Compute inverse PKM kinematics basing on e.
-	Vector3d PKM_joints = PKM_inverse_from_e(e);
+	for (int i = 0; i<8; ++i)
+		local_current_joints[i] = (local_current_motor_pos[i] - params.synchro_motor_position[i]) / params.gear[i];
 
-	// Compute upper platform pose.
-	Homog4d O_P_T = PKM_O_P_T_from_e(e);
-	// Compute location of wrist end-effector in relation to its base (upper PKM platform).
-	Homog4d P_W_T;
-	P_W_T.matrix() = O_P_T.inverse(Isometry) * O_W_T;
-
-	// Compute spherical wrist inverse kinematics.
-	Vector3d SW_joints = SW_inverse(P_W_T);
-
-	// Fill joints array.
-	local_current_joints[0] = PKM_joints[0];
-	local_current_joints[1] = PKM_joints[1];
-	local_current_joints[2] = PKM_joints[2];
-	local_current_joints[3] = SW_joints[0];
-	local_current_joints[4] = SW_joints[1];
-	local_current_joints[5] = SW_joints[2];
-}
-
-Vector5d kinematic_model_bird_hand::PKM_S_to_e(Vector3d _O_S_P) {
-	// Temporary variables used for computations of alpha..
-	double t0_sq = _O_S_P.x() * _O_S_P.x() + _O_S_P.z() * _O_S_P.z();
-	double hx_sq = params.S_P_P.x() * params.S_P_P.x();
-
-	// Compute sine and cosine of the alpha angle.
-	double s_alpha = (params.delta_B1 * _O_S_P.z() * sqrt(t0_sq - hx_sq)
-			+ _O_S_P.x() * params.S_P_P.x()) / (t0_sq);
-	double c_alpha = (-params.delta_B1 * _O_S_P.x() * sqrt(t0_sq - hx_sq)
-			+ _O_S_P.z() * params.S_P_P.x()) / (t0_sq);
-
-	// Compute sine and cosine of the beta angle.
-	double t6 = (params.delta_B1 * (_O_S_P.z() * _O_S_P.z() + _O_S_P.x()
-			* _O_S_P.x() - params.dB * _O_S_P.x()) * sqrt(t0_sq - hx_sq)
-			+ params.dB * _O_S_P.z() * params.S_P_P.x()) / (t0_sq);
-	double s_beta = -params.delta_B2 * _O_S_P.y() / sqrt(t6 * t6 + _O_S_P.y()
-			* _O_S_P.y());
-	double c_beta = params.delta_B2 * t6 / sqrt(t6 * t6 + _O_S_P.y()
-			* _O_S_P.y());
-
-	// Compute h.
-	double h = params.delta_B2 * (_O_S_P.y() * _O_S_P.y() + params.delta_B1
-			* t6 * sqrt(t0_sq - hx_sq)) / sqrt(t6 * t6 + _O_S_P.y()
-			* _O_S_P.y()) - params.S_P_P.z();
-
-	// Return computed e vector.
-	Vector5d e;
-	e << s_alpha, c_alpha, s_beta, c_beta, h;
-	return e;
-}
-
-Vector3d kinematic_model_bird_hand::PKM_inverse_from_e(Vector5d _e) {
-	// "Retrieve" values from e.
-	double s_alpha = _e[0];
-	double c_alpha = _e[1];
-	double s_beta = _e[2];
-	double c_beta = _e[3];
-	double h = _e[4];
-
-	// Compute temporary variables.
-	double t1 = params.dB * s_alpha - params.pB;
-	double t2 = params.dB * c_alpha * c_beta + h;
-	double t3 = params.dB * c_alpha - t2 * c_beta;
-	// Compute joints.
-	double qB = sqrt(t1 * t1 + t2 * t2);
-	double qA = sqrt(pow(t3 - params.pB * s_beta - params.hA * c_beta
-			+ params.delta_A * params.l12A, 2.0) + pow(t2 * s_beta - params.pB
-			* c_beta + params.hA * s_beta + params.dA, 2.0));
-	double qC = sqrt(pow(t3 - params.pC * s_beta - params.hC * c_beta
-			+ params.delta_C * params.l12C, 2.0) + pow(t2 * s_beta - params.pC
-			* c_beta + params.hC * s_beta + params.dC, 2.0));
-
-	// Return vector with joints.
-	Vector3d joints;
-	joints << qA, qB, qC;
-	return joints;
-}
-
-Homog4d kinematic_model_bird_hand::PKM_O_P_T_from_e(Vector5d _e) {
-	Matrix4d O_P_T;
-
-	// "Retrieve" values from e.
-	double s_alpha = _e[0];
-	double c_alpha = _e[1];
-	double s_beta = _e[2];
-	double c_beta = _e[3];
-	double h = _e[4];
-
-	// Compute matrix representing the location and orientation of upper platform.
-	O_P_T(0, 0) = s_alpha;
-	O_P_T(0, 1) = 0.0;
-	O_P_T(0, 2) = c_alpha;
-	O_P_T(0, 3) = 0.0;
-	O_P_T(1, 0) = -s_beta * c_alpha;
-	O_P_T(1, 1) = c_beta;
-	O_P_T(1, 2) = s_beta * s_alpha;
-	O_P_T(1, 3) = c_alpha * params.dB * s_beta;
-	O_P_T(2, 0) = -c_beta * c_alpha;
-	O_P_T(2, 1) = -s_beta;
-	O_P_T(2, 2) = c_beta * s_alpha;
-	O_P_T(2, 3) = -h;
-	O_P_T(3, 0) = 0.0;
-	O_P_T(3, 1) = 0.0;
-	O_P_T(3, 2) = 0.0;
-	O_P_T(3, 3) = 1.0;
-
-	// Return matrix.
-	return Homog4d(O_P_T);
-}
-
-Vector3d kinematic_model_bird_hand::SW_inverse(Homog4d _P_W_T) {
-	// TODO Inverse kinematics of the spherical wrist.
-
-	// Return vector with joints.
-	Vector3d joints;
-	joints << 0, 0, 0;
-	return joints;
-
+	//check_joints(local_current_joints);
 }
 
 } // namespace bird_hand
 } // namespace kinematic
-}
-// namespace mrrocpp
+} // namespace mrrocpp
 

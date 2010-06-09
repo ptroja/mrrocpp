@@ -43,7 +43,7 @@ public:
 	//! Utworzenie macierzy przesuniecia o [x, y, z], R - jednostkowa.
 	Homog_matrix(double x, double y, double z);
 	//! Utworzenie macierzy obrotu o male katy wzgledem 3 osi.
-			Homog_matrix(const K_vector & versor_x, const K_vector & versor_y, const K_vector & versor_z, const K_vector & angles);
+	Homog_matrix(const K_vector & versor_x, const K_vector & versor_y, const K_vector & versor_z, const K_vector & angles);
 	//! Utworzenie macierzy obrotu o male katy
 	Homog_matrix(const K_vector & angles);
 
@@ -145,7 +145,7 @@ public:
 	bool operator!=(const Homog_matrix &) const;
 
 	//! operator wypisania
-	friend std::ostream& operator<<(std::ostream &, Homog_matrix &);
+	friend std::ostream& operator<<(std::ostream &, const Homog_matrix &);
 
 	//! funkcja sprawdzajaca czy macierz jest macierza jednorodna
 	bool is_valid() const;

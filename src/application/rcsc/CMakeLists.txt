@@ -27,7 +27,6 @@ add_executable(ecp_irp6ot_rcsc
     ../servovision/cubic_constraint.cc
     ../servovision/termination_condition.cc
     ../servovision/object_reached_termination_condition.cc
-    ../servovision/logger.cc
 )
 add_executable(ecp_irp6p_rcsc
 	ecp_t_rcsc_irp6p.cc
@@ -50,10 +49,10 @@ add_executable(ecp_fsautomat
 target_link_libraries(mp_rcsc mp)
 target_link_libraries(mp_fsautomat mp)
 
-target_link_libraries(ecp_irp6ot_rcsc ecp_r_irp6ot ecp)
-target_link_libraries(ecp_irp6p_rcsc ecp_r_irp6p ecp)
+target_link_libraries(ecp_irp6ot_rcsc ecp_r_irp6ot_m ecp)
+target_link_libraries(ecp_irp6p_rcsc ecp_r_irp6p_m ecp)
 target_link_libraries(ecp_speak_rcsc ecp_r_speaker ecp)
-target_link_libraries(ecp_fsautomat ecp_r_irp6p ecp_r_irp6ot ecp)
+target_link_libraries(ecp_fsautomat ecp_r_irp6p_m ecp_r_irp6ot_m ecp)
 
 install(TARGETS
 	mp_fsautomat ecp_fsautomat

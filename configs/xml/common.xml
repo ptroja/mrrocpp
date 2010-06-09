@@ -9,14 +9,14 @@
         <sensor name="force_irp6ot">
             <vsp>
                 <resourceman_attach_point>VSP_FORCE_T</resourceman_attach_point>
-                <edp_section>[edp_irp6_on_track]</edp_section>
+                <edp_section>[edp_irp6ot_m]</edp_section>
             </vsp>
         </sensor>
 
         <sensor name="force_irp6p">
             <vsp>
                 <resourceman_attach_point>VSP_FORCE_P</resourceman_attach_point>
-                <edp_section>[edp_irp6_postument]</edp_section>
+                <edp_section>[edp_irp6p_m]</edp_section>
             </vsp>
         </sensor>
     </sensors>

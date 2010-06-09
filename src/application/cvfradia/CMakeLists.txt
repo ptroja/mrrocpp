@@ -5,7 +5,7 @@ add_executable(ecp_cvfradia
 )
 
 target_link_libraries(ecp_cvfradia
-	ecp_r_irp6ot ecp_r_irp6p
+	ecp_r_irp6ot_m ecp_r_irp6p_m
 	ecp
 )
 

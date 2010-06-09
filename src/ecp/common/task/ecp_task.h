@@ -29,7 +29,6 @@ class task : public ecp_mp::task::task
 		lib::MP_COMMAND mp_command_type(void) const;
 
 		void initialize_communication(void);
-
 	protected:
 		// Oczekiwanie na nowy stan od MP
 		void get_next_state(void);

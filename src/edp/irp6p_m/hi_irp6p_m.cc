@@ -14,7 +14,7 @@
 
 namespace mrrocpp {
 namespace edp {
-namespace irp6p {
+namespace irp6p_m {
 
 // ------------------------------------------------------------------------
 hardware_interface::hardware_interface (common::motor_driven_effector &_master,

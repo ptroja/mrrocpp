@@ -9,7 +9,7 @@
 #define ECP_T_IB_EIH_TESTER_H_
 
 #include "ecp/common/task/ecp_task.h"
-#include "ecp/irp6_on_track/ecp_r_irp6ot.h"
+#include "ecp/irp6ot_m/ecp_r_irp6ot_m.h"
 #include "ecp_mp/sensor/ecp_mp_s_fradia_sensor.h"
 #include "ecp/common/generator/ecp_g_smooth.h"
 #include "../ecp_g_ib_eih.h"
@@ -20,7 +20,7 @@ namespace mrrocpp {
 
 namespace ecp {
 
-namespace irp6ot {
+namespace irp6ot_m {
 
 namespace task {
 

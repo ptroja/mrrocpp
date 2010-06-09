@@ -1,5 +1,5 @@
 /* ! \file include/edp/ati6284/ni/osiTypes.h
-    * \brief plik nag³ówkowy NI
+    * \brief plik nagï¿½ï¿½wkowy NI
     * Ostatnia modyfikacja: 04.2006 
     *   
     *  osiTypes.h contains the constants and macros
@@ -32,7 +32,7 @@ enum {
 	kTrue = 1
 };
 
-#define  markAsUnused(type,variable)   {type* _variable = (type*) &variable;}
+#define  markAsUnused(type,variable)
 #define  kStatusOffset                    -50000
 #define  kStatusSuccess                   0
 #define  kStatusBadWindowType             (-16  + kStatusOffset)

@@ -10,7 +10,7 @@ add_executable(ecp_irp6ot_multiplayer
 )
 
 target_link_libraries(ecp_irp6ot_multiplayer
-	ecp_r_irp6ot ecp
+	ecp_r_irp6ot_m ecp
 )
 
 install(TARGETS mp_multiplayer ecp_irp6ot_multiplayer DESTINATION bin)

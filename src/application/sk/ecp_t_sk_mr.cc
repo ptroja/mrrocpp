@@ -10,8 +10,8 @@
 #include "ecp/common/generator/ecp_g_smooth.h"
 #include "ecp/common/generator/ecp_g_sleep.h"
 
-#include "ecp/irp6_on_track/ecp_r_irp6ot.h"
-#include "ecp/irp6_postument/ecp_r_irp6p.h"
+#include "ecp/irp6ot_m/ecp_r_irp6ot_m.h"
+#include "ecp/irp6p_m/ecp_r_irp6p_m.h"
 
 #include "ecp_t_sk_mr.h"
 
@@ -24,10 +24,10 @@ namespace task {
 sk_mr::sk_mr(lib::configurator &_config) :
 	task(_config) {
 	// the robot is choose dependendat on the section of configuration file sent as argv[4]
-	if (config.section_name == ECP_IRP6_ON_TRACK_SECTION) {
-		ecp_m_robot = new irp6ot::robot(*this);
-	} else if (config.section_name == ECP_IRP6_POSTUMENT_SECTION) {
-		ecp_m_robot = new irp6p::robot(*this);
+	if (config.section_name == ECP_IRP6OT_M_SECTION) {
+		ecp_m_robot = new irp6ot_m::robot(*this);
+	} else if (config.section_name == ECP_IRP6P_M_SECTION) {
+		ecp_m_robot = new irp6p_m::robot(*this);
 	} else {
 		// TODO: throw
 	}

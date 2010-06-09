@@ -1,12 +1,11 @@
-#include "application/wii_ellipse/generator/ecp_g_wii_ellipse.h"
+#include <math.h>
 
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
-#include "math.h"
+#include "application/wii_ellipse/generator/ecp_g_wii_ellipse.h"
+#include "application/wii_teach/sensor/ecp_mp_s_wiimote.h"
 
 namespace mrrocpp {
 namespace ecp {
-namespace irp6ot {
+namespace irp6ot_m {
 namespace generator {
 
 wii_ellipse::wii_ellipse (common::task::task& _ecp_task,double major_axis,double minor_axis,int max_steps) : common::generator::generator (_ecp_task),major_axis(major_axis),minor_axis(minor_axis),max_steps(max_steps),d_rad(2*M_PI/max_steps) {}
@@ -34,27 +33,28 @@ bool wii_ellipse::next_step()
 {
 	try
 	{
-		sensor_m[lib::SENSOR_WIIMOTE]->get_reading();
+		ecp_mp::sensor::wiimote * wii = dynamic_cast<ecp_mp::sensor::wiimote *>(sensor_m[ecp_mp::sensor::SENSOR_WIIMOTE]);
+		wii->get_reading();
 		char buffer[100];
-		if(sensor_m[lib::SENSOR_WIIMOTE]->image.sensor_union.wiimote.left && !sensor_m[lib::SENSOR_WIIMOTE]->image.sensor_union.wiimote.right)
+		if(wii->image.left && !wii->image.right)
 		{
 			major_axis *= 0.99;
 			sprintf(buffer,"Nowa wartosc wiekszej polosi: %.3f",major_axis);
 		    sr_ecp_msg.message(buffer);
 		}
-		if(!sensor_m[lib::SENSOR_WIIMOTE]->image.sensor_union.wiimote.left && sensor_m[lib::SENSOR_WIIMOTE]->image.sensor_union.wiimote.right)
+		if(!wii->image.left && wii->image.right)
 		{
 			major_axis *= 1.01;
 			sprintf(buffer,"Nowa wartosc wiekszej polosi: %.3f",major_axis);
 		    sr_ecp_msg.message(buffer);
 		}
-		if(sensor_m[lib::SENSOR_WIIMOTE]->image.sensor_union.wiimote.down && !sensor_m[lib::SENSOR_WIIMOTE]->image.sensor_union.wiimote.up)
+		if(wii->image.down && !wii->image.up)
 		{
 			minor_axis *= 0.99;
 			sprintf(buffer,"Nowa wartosc mniejszej polosi: %.3f",minor_axis);
 		    sr_ecp_msg.message(buffer);
 		}
-		if(!sensor_m[lib::SENSOR_WIIMOTE]->image.sensor_union.wiimote.down && sensor_m[lib::SENSOR_WIIMOTE]->image.sensor_union.wiimote.up)
+		if(!wii->image.down && wii->image.up)
 		{
 			minor_axis *= 1.01;
 			sprintf(buffer,"Nowa wartosc mniejszej polosi: %.3f",minor_axis);
@@ -90,7 +90,7 @@ bool wii_ellipse::next_step()
     the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[3] = 0.0;
     the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[4] = 1.57;
     the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[5] = 3.14;
-    the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = 0.08;
+//    the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = 0.08;
 
 	return true;
 }

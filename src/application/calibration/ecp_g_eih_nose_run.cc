@@ -11,9 +11,6 @@
  * $LastChangedBy: yoyek $
  */
 
-
-
-
 // -------------------------------------------------------------------------
 //                            ecp.cc
 //            Effector Control Process (lib::ECP) - force methods
@@ -41,10 +38,8 @@ namespace ecp {
 namespace common {
 namespace generator {
 
-
-eih_nose_run::eih_nose_run(common::task::task& _ecp_task,
-		int step) : tff_nose_run(_ecp_task, step)
-{
+eih_nose_run::eih_nose_run(common::task::task& _ecp_task, int step) :
+	tff_nose_run(_ecp_task, step) {
 	count = 0;
 }
 
@@ -52,16 +47,13 @@ eih_nose_run::eih_nose_run(common::task::task& _ecp_task,
 // -----------------------------------  metoda	next_step -----------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool eih_nose_run::next_step()
-{
+bool eih_nose_run::next_step() {
 	++count;
 
-	if (count > 25)
-	{// co jakis czas generator sie zatrzymuje
+	if (count > 25) {// co jakis czas generator sie zatrzymuje
 		count = 0;
 		return false;
-	}else if (pulse_check_activated && check_and_null_trigger())
-	{ // Koniec odcinka
+	} else if (pulse_check_activated && check_and_null_trigger()) { // Koniec odcinka
 		//	ecp_t.set_ecp_reply (lib::TASK_TERMINATED);
 
 		return false;
@@ -72,21 +64,18 @@ bool eih_nose_run::next_step()
 
 	// Obliczenie zadanej pozycji posredniej w tym kroku ruchu
 
-	if (node_counter==1)
-	{
-		the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate=0;
-	}
 
 	// wyrzucanie odczytu sil
 
-	if(force_meassure)
-	{
-		lib::Homog_matrix current_frame_wo_offset(the_robot->reply_package.arm.pf_def.arm_frame);
+	if (force_meassure) {
+		lib::Homog_matrix current_frame_wo_offset(
+				the_robot->reply_package.arm.pf_def.arm_frame);
 		current_frame_wo_offset.remove_translation();
 
-		lib::Ft_v_vector force_torque(the_robot->reply_package.arm.pf_def.force_xyz_torque_xyz);
+		lib::Ft_v_vector force_torque(
+				the_robot->reply_package.arm.pf_def.force_xyz_torque_xyz);
 
-		std::cout<<"force: "<<force_torque<<std::endl;
+		std::cout << "force: " << force_torque << std::endl;
 	}
 	return true;
 
