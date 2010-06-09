@@ -1040,14 +1040,8 @@ int Ui::unblock_widget(PtWidget_t *widget) {
 }
 
 void Ui::create_threads()
-
 {
 	meb_tid = new feb_thread(main_eb);
 	ui_sr_obj = new ui_sr_buffer(*this);
 	ui_ecp_obj = new ui_ecp_buffer(*this);
-
-#if defined(__QNXNTO__)
-
-#endif
-
 }
