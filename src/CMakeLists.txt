@@ -66,7 +66,7 @@ if (QNXNTO)
 
 	# Boost is provided by mrlib repository
 	set(BOOST_ROOT "${MRLIB}")
-	find_package(Boost 1.39 COMPONENTS thread serialization)
+	find_package(Boost 1.39 COMPONENTS thread serialization filesystem system)
 	# include boost compatibility layer
 	include_directories ("${Boost_INCLUDE_DIRS}/boost/compatibility/cpp_c_headers") 
 
@@ -79,7 +79,7 @@ if (QNXNTO)
 	set (COMPATIBILITY_LIBRARIES socket m)
 else (QNXNTO) # Linux, etc.
 	# find dependency packages
-	find_package(Boost 1.39 COMPONENTS thread serialization)
+	find_package(Boost 1.39 COMPONENTS thread serialization filesystem system)
 	find_package(Threads REQUIRED)
 	find_package(LibXml2 REQUIRED)
 

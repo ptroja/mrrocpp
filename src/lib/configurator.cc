@@ -20,7 +20,6 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <stdlib.h>
-#include <stdexcept>
 
 //#include <boost/algorithm/string/trim.hpp>
 //#include <boost/algorithm/string/classification.hpp>
@@ -29,6 +28,11 @@
 #include <boost/throw_exception.hpp>
 #include <boost/exception/errinfo_errno.hpp>
 #include <boost/exception/errinfo_api_function.hpp>
+
+#include <boost/filesystem.hpp>
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/xml_parser.hpp>
+#include <boost/property_tree/ini_parser.hpp>
 
 #include <string>
 #if defined(USE_MESSIP_SRR)
@@ -55,13 +59,11 @@ namespace lib {
 //typedef boost::tokenizer <boost::char_separator <char> > tokenizer;
 
 // Konstruktor obiektu - konfiguratora.
-configurator::configurator(const std::string & _node, const std::string & _dir,
-		const std::string & _ini_file, const std::string & _section_name,
-		const std::string & _session_name) :
-	node(_node), dir(_dir), ini_file(_ini_file), session_name(_session_name),
-			section_name(_section_name) {
+configurator::configurator(const std::string & _node, const std::string & _dir, const std::string & _ini_file, const std::string & _section_name, const std::string & _session_name) :
+	node(_node), dir(_dir), ini_file(_ini_file), session_name(_session_name), section_name(_section_name)
+{
 	if (uname(&sysinfo) == -1) {
-		perror("uname");
+		perror("uname()");
 	}
 
 	mrrocpp_network_path = "/net/";
@@ -75,8 +77,22 @@ configurator::configurator(const std::string & _node, const std::string & _dir,
 #else
 	file_location = return_ini_file_path();
 	common_file_location = return_common_ini_file_path();
+
+	read_property_tree_from_file(file_pt, file_location);
+	read_property_tree_from_file(common_file_pt, common_file_location);
 #endif /* USE_MESSIP_SRR */
-}// : configurator
+}
+
+void configurator::read_property_tree_from_file(boost::property_tree::ptree & pt, const std::string & file)
+{
+	if(boost::filesystem::extension(file) == ".ini") {
+		boost::property_tree::read_ini(file, pt);
+	} else if (boost::filesystem::extension(file) == ".xml") {
+		boost::property_tree::read_xml(file, pt);
+	} else {
+		throw std::logic_error("unknown config file extension");
+	}
+}
 
 void configurator::change_ini_file(const std::string & _ini_file) {
 #ifdef USE_MESSIP_SRR
@@ -95,6 +111,9 @@ void configurator::change_ini_file(const std::string & _ini_file) {
 
 	file_location = return_ini_file_path();
 	common_file_location = return_common_ini_file_path();
+
+	read_property_tree_from_file(file_pt, file_location);
+	read_property_tree_from_file(common_file_pt, common_file_location);
 #endif /* USE_MESSIP_SRR */
 }
 
@@ -143,7 +162,7 @@ std::string configurator::return_attach_point_name(config_path_type_t _type,
 
 	// Zwrocenie atach_point'a.
 	return (name);
-}// : return_created_resourceman_attach_point_name
+}
 
 #ifndef USE_MESSIP_SRR
 // Zwraca wartosc (char*) dla sciezki do pliku konfiguracyjnego.

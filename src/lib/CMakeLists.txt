@@ -3,7 +3,7 @@ if(USE_MESSIP)
 
 	# configsrv is needed only for non-QNX platforms and then messip is used
 	add_executable(configsrv configsrv.cc cfgopts.cc configsrv_m.cc)
-	target_link_libraries (configsrv messip ${Boost_THREAD_LIBRARY})
+	target_link_libraries (configsrv messip ${Boost_THREAD_LIBRARY} ${Boost_FILESYSTEM_LIBRARY} ${Boost_SYSTEM_LIBRARY})
 	install(TARGETS configsrv DESTINATION bin)
 endif(USE_MESSIP)
 
@@ -34,3 +34,7 @@ add_library(mrrocpp
 	condition_synchroniser.cc
 	logger.cc
 )
+
+if(NOT USE_MESSIP)
+	target_link_libraries (mrrocpp ${Boost_FILESYSTEM_LIBRARY} ${Boost_SYSTEM_LIBRARY})
+endif(NOT USE_MESSIP)
