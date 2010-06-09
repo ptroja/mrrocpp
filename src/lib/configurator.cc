@@ -29,14 +29,15 @@
 #include <boost/exception/errinfo_errno.hpp>
 #include <boost/exception/errinfo_api_function.hpp>
 
+#include <string>
+
+#if defined(USE_MESSIP_SRR)
+#include "messip_dataport.h"
+#else
 #include <boost/filesystem.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/xml_parser.hpp>
 #include <boost/property_tree/ini_parser.hpp>
-
-#include <string>
-#if defined(USE_MESSIP_SRR)
-#include "messip_dataport.h"
 #endif
 
 #if defined(__QNXNTO__)
@@ -82,7 +83,7 @@ configurator::configurator(const std::string & _node, const std::string & _dir, 
 	common_file_location = return_common_ini_file_path();
 
 	read_property_tree_from_file(file_pt, file_location);
-	read_property_tree_from_file(common_file_pt, common_file_location);
+	read_property_tree_from_file(file_pt, common_file_location);
 #endif /* USE_MESSIP_SRR */
 }
 
@@ -120,7 +121,7 @@ void configurator::change_ini_file(const std::string & _ini_file) {
 	common_file_location = return_common_ini_file_path();
 
 	read_property_tree_from_file(file_pt, file_location);
-	read_property_tree_from_file(common_file_pt, common_file_location);
+	read_property_tree_from_file(file_pt, common_file_location);
 #endif /* USE_MESSIP_SRR */
 }
 
@@ -164,7 +165,7 @@ std::string configurator::return_attach_point_name(config_path_type_t _type,
 	} else {
 		fprintf(stderr,
 				"Nieznany argument w metodzie configuratora return_attach_point_name\n");
-		throw ;
+		throw;
 	}
 
 	// Zwrocenie atach_point'a.
@@ -284,88 +285,6 @@ std::string configurator::return_string_value(const char* _key, const char*__sec
 #endif /* USE_MESSIP_SRR */
 }
 #endif
-
-//
-//boost::numeric::ublas::vector <double> configurator::get_vector_elements(std::string text_value, int n) const
-//{
-//	//std::cout << "configurator::get_vector_elements() begin\n";
-//	boost::numeric::ublas::vector <double> value(n);
-//	const char * blank_chars = {" \t\n\r"};
-//	boost::algorithm::trim_if(text_value, boost::algorithm::is_any_of(blank_chars));
-//
-//	// split it into elements
-//	boost::char_separator <char> space_separator(blank_chars);
-//	tokenizer tok(text_value, space_separator);
-//
-//	int element_no = 0;
-//	for (tokenizer::iterator it = tok.begin(); it != tok.end(); ++it, ++element_no) {
-//		//std::cout << " " << *it << ", ";
-//		if (element_no > n) {
-//			throw std::logic_error("configurator::get_vector_elements(): vector has more elements than expected.");
-//		}
-//		std::string element = *it;
-//		boost::algorithm::trim(element);
-//		double element_value = boost::lexical_cast <double>(element);
-//		value(element_no) = element_value;
-//	}
-//
-//	if (element_no != n) {
-//		throw std::logic_error("configurator::get_vector_elements(): vector has less elements than expected.");
-//	}
-//	return value;
-//}
-//
-//boost::numeric::ublas::vector <double> configurator::value(const std::string & key, const std::string & section_name, int n) const
-//{
-//	//std::cout << "configurator::get_vector_value() begin\n";
-//	// get string value and remove leading and trailing spaces
-//	std::string text_value = return_string_value (key.c_str(), section_name.c_str());
-//	boost::algorithm::trim(text_value);
-//
-//	// check for [ and ], and then remove it
-//	if (text_value.size() < 3 || text_value[0] != '[' || text_value[text_value.size() - 1] != ']') {
-//		throw std::logic_error("configurator::value(): leading or trailing chars [] not found or no value supplied.");
-//	}
-//
-//	boost::algorithm::trim_if(text_value, boost::algorithm::is_any_of("[]"));
-//	return get_vector_elements(text_value, n);
-//}
-//
-//boost::numeric::ublas::matrix <double> configurator::value(const std::string & key, const std::string & section_name, int n, int m) const
-//{
-//	//std::cout << "configurator::get_matrix_value() begin\n";
-//	boost::numeric::ublas::matrix <double> value(n, m);
-//
-//	// get string value and remove leading and trailing spaces
-//	std::string text_value = return_string_value (key.c_str(), section_name.c_str());
-//	boost::algorithm::trim(text_value);
-//
-//	//std::cout << "visual_servo_regulator::get_matrix_value() Processing value: "<<text_value<<"\n";
-//
-//	// check for [ and ], and then remove it
-//	if (text_value.size() < 3 || text_value[0] != '[' || text_value[text_value.size() - 1] != ']') {
-//		throw std::logic_error("configurator::value(): leading or trailing chars [] not found or no value supplied.");
-//	}
-//	boost::algorithm::trim_if(text_value, boost::algorithm::is_any_of("[]"));
-//
-//	boost::char_separator <char> semicolon_separator(";");
-//	tokenizer tok(text_value, semicolon_separator);
-//
-//	int row_no = 0;
-//	for (tokenizer::iterator it = tok.begin(); it != tok.end(); ++it, ++row_no) {
-//		if (row_no > n) {
-//			throw std::logic_error("configurator::value(): matrix has more rows than expected.");
-//		}
-//		boost::numeric::ublas::vector <double> row = get_vector_elements(*it, m);
-//		for (int i = 0; i < m; ++i) {
-//			value(row_no, i) = row(i);
-//		}
-//	}
-//	if (row_no != n) {
-//		throw std::logic_error("configurator::value(): matrix has more rows than expected.");
-//	}
-//	return value;
-//}
 
 pid_t configurator::process_spawn(const std::string & _section_name) {
 #if defined(PROCESS_SPAWN_RSH)

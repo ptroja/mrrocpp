@@ -18,12 +18,12 @@
 #include <boost/algorithm/string/trim.hpp>
 #include <boost/algorithm/string/classification.hpp>
 
-#include <boost/property_tree/ptree.hpp>
-
 #include <Eigen/Core>
 
 #if defined(USE_MESSIP_SRR)
 #include <messip.h>
+#else
+#include <boost/property_tree/ptree.hpp>
 #endif
 
 namespace mrrocpp {
@@ -59,8 +59,8 @@ private:
 	// Zwraca wartosc (char*) dla sciezki do pliku konfiguracyjnego.
 	std::string return_common_ini_file_path() const;
 
-	//! Property trees of main and common configuration files
-	boost::property_tree::ptree file_pt, common_file_pt;
+	//! Property tree of configuration file
+	boost::property_tree::ptree file_pt;
 
 	/**
 	 * Read property tree from configuration file
@@ -119,11 +119,7 @@ public:
 		pt_path += ".";
 		pt_path += _key;
 
-		try {
-			return file_pt.get<Type>(pt_path);
-		} catch (boost::property_tree::ptree_bad_path & e) {
-			return common_file_pt.get<Type>(pt_path);
-		}
+		return file_pt.get<Type>(pt_path);
 	}
 
 	template <class Type>
@@ -140,11 +136,7 @@ public:
 		pt_path += ".";
 		pt_path += _key;
 
-		try {
-			return file_pt.get<Type>(pt_path);
-		} catch (boost::property_tree::ptree_bad_path & e) {
-			return common_file_pt.get<Type>(pt_path);
-		}
+		return file_pt.get<Type>(pt_path);
 	}
 
 	//	/**
