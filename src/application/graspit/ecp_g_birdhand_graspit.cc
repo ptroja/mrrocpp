@@ -115,7 +115,6 @@ bool bird_hand::next_step() {
 			bird_hand_status_reply_structure) == mrrocpp::lib::NewData) {
 
 		if (first_next_step) {
-			double max_dist;
 			max_dist = fabs(bird_hand_status_reply_structure.thumb_f[0].meassured_position - des_thumb_f[0]);
 			if (fabs(bird_hand_status_reply_structure.thumb_f[1].meassured_position - des_thumb_f[1]) > max_dist)
 				max_dist = fabs(bird_hand_status_reply_structure.thumb_f[1].meassured_position - des_thumb_f[1]);
@@ -126,10 +125,12 @@ bool bird_hand::next_step() {
 				if (fabs(bird_hand_status_reply_structure.ring_f[i].meassured_position - des_ring_f[i]) > max_dist)
 					max_dist = fabs(bird_hand_status_reply_structure.ring_f[i].meassured_position - des_ring_f[i]);
 
-			double time = max_dist / max_v;
+			time = max_dist / max_v;
 
 			last_step = fmod(time, step_no);
 			macro_no = (time - last_step) / step_no;
+			if (macro_no <= 0)
+				return false;
 			last_step += step_no;
 			--macro_no;
 
@@ -146,14 +147,15 @@ bool bird_hand::next_step() {
 		}
 
 		std::stringstream ss(std::stringstream::in | std::stringstream::out);
+		ss << "\n node_counter: " << node_counter;
+		ss << "\n macro_no: " << macro_no;
+		ss << "\n step_no: " << step_no;
+		ss << "\n last_step: " << last_step;
+		ss << "\n time: " << time;
+		ss << "\n max_dist: " << max_dist;
+		ss << "\n max_v: " << max_v;
 		ss << "\n thumb_f[0].meassured_position: " << bird_hand_status_reply_structure.thumb_f[0].meassured_position;
 		ss << "\n thumb_f[1].meassured_position: " << bird_hand_status_reply_structure.thumb_f[1].meassured_position;
-		ss << "\n index_f[0].meassured_position: " << bird_hand_status_reply_structure.index_f[0].meassured_position;
-		ss << "\n index_f[1].meassured_position: " << bird_hand_status_reply_structure.index_f[1].meassured_position;
-		ss << "\n index_f[2].meassured_position: " << bird_hand_status_reply_structure.index_f[2].meassured_position;
-		ss << "\n ring_f[0].meassured_position: " << bird_hand_status_reply_structure.ring_f[0].meassured_position;
-		ss << "\n ring_f[1].meassured_position: " << bird_hand_status_reply_structure.ring_f[1].meassured_position;
-		ss << "\n ring_f[2].meassured_position: " << bird_hand_status_reply_structure.ring_f[2].meassured_position;
 		ecp_t.sr_ecp_msg->message(ss.str().c_str());
 	}
 

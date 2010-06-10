@@ -50,6 +50,8 @@ private:
 	int step_no;
 	int macro_no;
 	int last_step;
+	double time;
+	double max_dist;
 
 public:
 	void create_ecp_mp_reply();
