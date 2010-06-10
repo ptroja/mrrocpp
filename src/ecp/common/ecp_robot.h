@@ -36,7 +36,7 @@ class ecp_robot: public ecp_mp::robot {
 	// ostatnio zrealizowanej pozycji oraz pozycji zadanej
 private:
 	// Kopiowanie bufora przesylanego z MP do bufora wysylanego do EDP
-	void copy_mp_to_edp_buffer(lib::c_buffer& mp_buffer);
+	void copy_mp_to_edp_buffer(const lib::c_buffer& mp_buffer);
 
 	// by Y - o dziwo tego nie bylo !!!
 	// Kopiowanie bufora przesylanego z EDP do bufora wysylanego do MP
@@ -65,6 +65,8 @@ public:
 	virtual void create_command();
 	virtual void get_reply();
 	virtual void clear_data_ports();
+
+	//! Wyslanie do EDP polecenia
 	void send();
 	void query();
 
@@ -99,8 +101,9 @@ public:
 	// destruktor by Y - do usuniecia obiektu do komunikacji z SR
 	virtual ~ecp_robot(void);
 
+	//! Zlecenie synchronizacji robota
 	void synchronise(void);
-	// Zlecenie synchronizacji robota
+
 	// Pobranie aktualnych polozen
 
 	bool is_synchronised(void) const; // Czy robot zsynchronizowany?
