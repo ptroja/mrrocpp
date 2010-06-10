@@ -20,7 +20,7 @@ playerpos::playerpos(common::task::task& _ecp_task)
 	device = new PositionProxy(client, device_index, 'a');
 	device->SelectPositionMode(1);
 	
-	test_mode = ecp_t.config.value<int>("test_mode");
+	test_mode = ecp_t.config.value<int>("robot_test_mode");
 }
 
 playerpos::~playerpos()

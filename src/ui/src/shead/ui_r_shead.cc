@@ -51,9 +51,9 @@ int UiRobotShead::reload_configuration() {
 			state.edp.reader_fd = -1;
 			state.edp.state = 0;
 
-			if (ui.config->exists("test_mode", state.edp.section_name))
+			if (ui.config->exists("robot_test_mode", state.edp.section_name))
 				state.edp.test_mode = ui.config->value<int> (
-						"test_mode", state.edp.section_name);
+						"robot_test_mode", state.edp.section_name);
 			else
 				state.edp.test_mode = 0;
 
