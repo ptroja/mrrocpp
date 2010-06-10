@@ -53,7 +53,7 @@ void  hardware_interface::init()
 	irq_data.md.is_robot_blocked = false;
 	irq_data.md.hardware_error = 0;
 
-	if(master.test_mode) {
+	if(master.robot_test_mode) {
 		// domyslnie robot jest zsynchronizowany
 		irq_data.md.is_synchronised = true;
 
@@ -138,7 +138,7 @@ void  hardware_interface::init()
 	if (hi_int_wait(INT_EMPTY, 0)==-1) // jesli nie przyjdzie na czas
 	{
 		// inicjacja wystawiania przerwan
-		if(master.test_mode==0)
+		if(master.robot_test_mode==0)
 		{
 			// Ustawienie czestotliwosci przerwan
 			uint16_t int_freq = SET_INT_FREQUENCY | hi_intr_freq_divider;
@@ -162,7 +162,7 @@ void  hardware_interface::init()
 
 	// Zakaz pracy recznej we wszystkich osiach
 
-	if(master.test_mode==0) {
+	if(master.robot_test_mode==0) {
 		for (int i = 0; i < master.number_of_servos; i++ )
 		{
 			/*
@@ -240,7 +240,7 @@ long int hardware_interface::get_position ( int drive_number ) const
 // ------------------------------------------------------------------------
 hardware_interface::~hardware_interface ( void )   // destruktor
 {
-	if(master.test_mode==0)
+	if(master.robot_test_mode==0)
 	{
 		reset_counters();
 
@@ -280,7 +280,7 @@ uint64_t hardware_interface::read_write_hardware ( void )
 	// oczekiwanie na przerwanie
 	hi_int_wait(INT_SERVOING, 0);
 
-	if(master.test_mode) {
+	if(master.robot_test_mode) {
 		// Tylko dla testow
 		return irq_data.md.hardware_error;
 	}
@@ -386,7 +386,7 @@ bool hardware_interface::is_hardware_error ( void)
 
 int hardware_interface::hi_int_wait (interrupt_mode_t _interrupt_mode, int lag)
 {
-	if(master.test_mode == 0) {
+	if(master.robot_test_mode == 0) {
 #ifdef __QNXNTO__
 	const uint64_t int_timeout = hi_intr_timeout_high;
 	struct sigevent tim_event;

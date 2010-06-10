@@ -50,7 +50,7 @@ effector::effector(lib::configurator &_config) :
 
 void effector::get_controller_state(lib::c_buffer &instruction) {
 
-	if (test_mode)
+	if (robot_test_mode)
 		controller_state_edp_buf.is_synchronised = true;
 
 	//printf("get_controller_state: %d\n", controller_state_edp_buf.is_synchronised); fflush(stdout);

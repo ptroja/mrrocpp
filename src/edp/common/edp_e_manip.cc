@@ -114,7 +114,12 @@ bool manip_effector::compute_servo_joints_and_frame(void) {
 /*--------------------------------------------------------------------------*/
 manip_effector::manip_effector(lib::configurator &_config,
 		lib::robot_name_t l_robot_name) :
-	motor_driven_effector(_config, l_robot_name) {
+	motor_driven_effector(_config, l_robot_name), force_sensor_test_mode(true) {
+
+	if (config.exists("force_sensor_test_mode")) {
+		force_sensor_test_mode = config.value<int> ("force_sensor_test_mode");
+	}
+
 	if (config.exists("force_tryb"))
 		force_tryb = config.value<int> ("force_tryb");
 	else

@@ -238,7 +238,7 @@ motor_driven_effector::motor_driven_effector(lib::configurator &_config, lib::ro
 	ThreadCtl(_NTO_TCTL_IO, NULL);
 #endif
 
-	if (test_mode) {
+	if (robot_test_mode) {
 		msg->message("Test mode activated");
 	}
 }
