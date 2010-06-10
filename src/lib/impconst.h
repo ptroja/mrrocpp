@@ -89,6 +89,10 @@ enum FORCE_SENSOR_ENUM {
 #define FORCE_RECIPROCAL_DAMPING 0.005
 #define TORQUE_RECIPROCAL_DAMPING 0.1
 
+
+#define ROBOT_TEST_MODE "robot_test_mode"
+#define FORCE_SENSOR_TEST_MODE "force_sensor_test_mode"
+
 // Stale czasowe
 #define ONE_MSEC  1000000L // 1 milisek w nanosekundach
 #define TEN_MSEC 10000000L // 10 milisek w nanosekundach

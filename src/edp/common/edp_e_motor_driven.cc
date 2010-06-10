@@ -53,7 +53,6 @@ servo_buffer * motor_driven_effector::return_created_servo_buffer()
 	return NULL;
 }
 
-
 /*--------------------------------------------------------------------------*/
 void motor_driven_effector::get_arm_position_read_hardware_sb()
 { // odczytanie pozycji ramienia
@@ -68,24 +67,24 @@ void motor_driven_effector::get_arm_position_read_hardware_sb()
 	//		printf("get_arm_position read_hardware\n");
 
 	sb->send_to_SERVO_GROUP();
-/*
-	// Ustawienie poprzedniej wartosci zadanej na obecnie odczytane polozenie walow silnikow
-	for (int i = 0; i < number_of_servos; i++) {
-		desired_motor_pos_new[i] = desired_motor_pos_old[i] = current_motor_pos[i];
-	}
+	/*
+	 // Ustawienie poprzedniej wartosci zadanej na obecnie odczytane polozenie walow silnikow
+	 for (int i = 0; i < number_of_servos; i++) {
+	 desired_motor_pos_new[i] = desired_motor_pos_old[i] = current_motor_pos[i];
+	 }
 
-	if (is_synchronised()) {
-		//  check_motor_position(desired_motor_pos_new);
-		// dla sprawdzenia ograncizen w joints i motors
+	 if (is_synchronised()) {
+	 //  check_motor_position(desired_motor_pos_new);
+	 // dla sprawdzenia ograncizen w joints i motors
 
-		get_current_kinematic_model()->mp2i_transform(desired_motor_pos_new, desired_joints_tmp);
+	 get_current_kinematic_model()->mp2i_transform(desired_motor_pos_new, desired_joints_tmp);
 
-		for (int i = 0; i < number_of_servos; i++) {
-			desired_joints[i] = current_joints[i] = desired_joints_tmp[i];
-		}
+	 for (int i = 0; i < number_of_servos; i++) {
+	 desired_joints[i] = current_joints[i] = desired_joints_tmp[i];
+	 }
 
-	}
-*/
+	 }
+	 */
 }
 
 /*--------------------------------------------------------------------------*/
@@ -140,11 +139,8 @@ void motor_driven_effector::single_thread_move_arm(const lib::c_buffer &instruct
 			throw NonFatal_error_2(INVALID_SET_END_EFFECTOR_TYPE);
 	}
 
-
-
 }
 /*--------------------------------------------------------------------------*/
-
 
 /*--------------------------------------------------------------------------*/
 void motor_driven_effector::multi_thread_move_arm(const lib::c_buffer &instruction)
@@ -169,11 +165,8 @@ void motor_driven_effector::multi_thread_move_arm(const lib::c_buffer &instructi
 			throw NonFatal_error_2(INVALID_SET_END_EFFECTOR_TYPE);
 	}
 
-
-
 }
 /*--------------------------------------------------------------------------*/
-
 
 void motor_driven_effector::single_thread_master_order(common::MT_ORDER nm_task, int nm_tryb)
 {
@@ -211,12 +204,10 @@ void motor_driven_effector::multi_thread_master_order(MT_ORDER nm_task, int nm_t
 
 /*--------------------------------------------------------------------------*/
 motor_driven_effector::motor_driven_effector(lib::configurator &_config, lib::robot_name_t l_robot_name) :
-	effector(_config, l_robot_name), kinematics_manager(),
-	servo_current_motor_pos(MAX_SERVOS_NR),	servo_current_joints(MAX_SERVOS_NR),
-	desired_joints(MAX_SERVOS_NR), current_joints(MAX_SERVOS_NR),
-	desired_motor_pos_old(MAX_SERVOS_NR), desired_motor_pos_new(MAX_SERVOS_NR),
-	current_motor_pos(MAX_SERVOS_NR),vs(NULL),
-	step_counter(0), number_of_servos(-1)
+	effector(_config, l_robot_name), kinematics_manager(), servo_current_motor_pos(MAX_SERVOS_NR),
+			servo_current_joints(MAX_SERVOS_NR), desired_joints(MAX_SERVOS_NR), current_joints(MAX_SERVOS_NR),
+			desired_motor_pos_old(MAX_SERVOS_NR), desired_motor_pos_new(MAX_SERVOS_NR),
+			current_motor_pos(MAX_SERVOS_NR), vs(NULL), step_counter(0), number_of_servos(-1)
 {
 
 	controller_state_edp_buf.is_synchronised = false;
@@ -229,18 +220,15 @@ motor_driven_effector::motor_driven_effector(lib::configurator &_config, lib::ro
 	// is_get_arm_read_hardware=false;
 
 
-//#ifdef DOCENT_SENSOR
+	//#ifdef DOCENT_SENSOR
 	startedCallbackRegistered_ = false;
 	stoppedCallbackRegistered_ = false;
-//#endif
+	//#endif
 
 #ifdef __QNXNTO__
 	ThreadCtl(_NTO_TCTL_IO, NULL);
 #endif
 
-	if (robot_test_mode) {
-		msg->message("Test mode activated");
-	}
 }
 
 motor_driven_effector::~motor_driven_effector()
@@ -341,8 +329,8 @@ bool motor_driven_effector::pre_synchro_motion(lib::c_buffer &instruction) const
 // sprawdzenie czy jest to dopuszczalny rozkaz ruchu
 // przed wykonaniem synchronizacji robota
 {
-	if ((instruction.instruction_type == lib::SET) && (instruction.set_type == ARM_DEFINITION) && (instruction.set_arm_type
-			== lib::MOTOR) && (instruction.motion_type == lib::RELATIVE))
+	if ((instruction.instruction_type == lib::SET) && (instruction.set_type == ARM_DEFINITION)
+			&& (instruction.set_arm_type == lib::MOTOR) && (instruction.motion_type == lib::RELATIVE))
 		return true;
 	else
 		return false;
@@ -1255,22 +1243,26 @@ void motor_driven_effector::main_loop()
 
 //#ifdef DOCENT_SENSOR
 
-void motor_driven_effector::registerReaderStartedCallback(boost::function<void()> startedCallback) {
+void motor_driven_effector::registerReaderStartedCallback(boost::function <void()> startedCallback)
+{
 	startedCallback_ = startedCallback;
 	startedCallbackRegistered_ = true;
 }
 
-void motor_driven_effector::registerReaderStoppedCallback(boost::function<void()> stoppedCallback) {
+void motor_driven_effector::registerReaderStoppedCallback(boost::function <void()> stoppedCallback)
+{
 	stoppedCallback_ = stoppedCallback;
 	stoppedCallbackRegistered_ = true;
 }
 
-void motor_driven_effector::onReaderStarted() {
+void motor_driven_effector::onReaderStarted()
+{
 	if (startedCallbackRegistered_) {
 		startedCallback_();
 	}
 }
-void motor_driven_effector::onReaderStopped() {
+void motor_driven_effector::onReaderStopped()
+{
 	if (stoppedCallbackRegistered_) {
 		stoppedCallback_();
 	}
