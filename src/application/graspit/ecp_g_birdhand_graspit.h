@@ -38,8 +38,18 @@ private:
 			*bird_hand_configuration_reply_data_request_port;
 	lib::bird_hand_configuration bird_hand_configuration_reply_structure;
 
-	// maksymalna predkosc [rad/s]
+	// maksymalna predkosc [rad/ms]
 	double max_v;
+
+	double des_thumb_f[2];
+	double des_index_f[3];
+	double des_ring_f[3];
+
+	bool first_next_step;
+
+	int step_no;
+	int macro_no;
+	int last_step;
 
 public:
 	void create_ecp_mp_reply();
