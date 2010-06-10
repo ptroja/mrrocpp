@@ -2470,14 +2470,17 @@ int process_control_window_polycrank_section_init(
 			wlacz_PtButton_wnd_processes_control_all_reader_start = true;
 			ui.unblock_widget(
 					ABW_PtButton_wnd_processes_control_irp6m_reader_start);
-			ui.block_widget(ABW_PtButton_wnd_processes_control_irp6m_reader_stop);
+			ui.block_widget(
+					ABW_PtButton_wnd_processes_control_irp6m_reader_stop);
 			ui.block_widget(
 					ABW_PtButton_wnd_processes_control_irp6m_reader_trigger);
 		} else if (ui.irp6m_m->state.edp.state == 2) {// edp wlaczone reader czeka na stop
 			wlacz_PtButton_wnd_processes_control_all_reader_stop = true;
 			wlacz_PtButton_wnd_processes_control_all_reader_trigger = true;
-			ui.block_widget(ABW_PtButton_wnd_processes_control_irp6m_reader_start);
-			ui.unblock_widget(ABW_PtButton_wnd_processes_control_irp6m_reader_stop);
+			ui.block_widget(
+					ABW_PtButton_wnd_processes_control_irp6m_reader_start);
+			ui.unblock_widget(
+					ABW_PtButton_wnd_processes_control_irp6m_reader_stop);
 			ui.unblock_widget(
 					ABW_PtButton_wnd_processes_control_irp6m_reader_trigger);
 		}
@@ -2523,9 +2526,12 @@ int reload_polycrank_configuration() {
 				if (ui.config->exists(tmp_string,
 						ui.irp6m_m->state.edp.section_name)) {
 					char* tmp, *tmp1;
-					tmp1 = tmp = strdup(
-							ui.config->value<std::string> (tmp_string,
-									ui.irp6m_m->state.edp.section_name).c_str());
+					tmp1
+							= tmp
+									= strdup(
+											ui.config->value<std::string> (
+													tmp_string,
+													ui.irp6m_m->state.edp.section_name).c_str());
 					char* toDel = tmp;
 					for (int j = 0; j < 8; j++) {
 						ui.irp6m_m->state.edp.preset_position[i][j] = strtod(
@@ -2539,16 +2545,17 @@ int reload_polycrank_configuration() {
 				}
 			}
 
-			if (ui.config->exists("test_mode",
+			if (ui.config->exists("robot_test_mode",
 					ui.irp6m_m->state.edp.section_name))
 				ui.irp6m_m->state.edp.test_mode = ui.config->value<int> (
-						"test_mode", ui.irp6m_m->state.edp.section_name);
+						"robot_test_mode", ui.irp6m_m->state.edp.section_name);
 			else
 				ui.irp6m_m->state.edp.test_mode = 0;
 
-			ui.irp6m_m->state.edp.hardware_busy_attach_point = ui.config->value<
-					std::string> ("hardware_busy_attach_point",
-					ui.irp6m_m->state.edp.section_name);
+			ui.irp6m_m->state.edp.hardware_busy_attach_point
+					= ui.config->value<std::string> (
+							"hardware_busy_attach_point",
+							ui.irp6m_m->state.edp.section_name);
 
 			ui.irp6m_m->state.edp.network_resourceman_attach_point
 					= ui.config->return_attach_point_name(

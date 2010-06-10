@@ -95,8 +95,8 @@ int UiRobotIrp6p_m::reload_configuration() {
 				}
 			}
 
-			if (ui.config->exists("test_mode", state.edp.section_name))
-				state.edp.test_mode = ui.config->value<int> ("test_mode",
+			if (ui.config->exists("robot_test_mode", state.edp.section_name))
+				state.edp.test_mode = ui.config->value<int> ("robot_test_mode",
 						state.edp.section_name);
 			else
 				state.edp.test_mode = 0;
