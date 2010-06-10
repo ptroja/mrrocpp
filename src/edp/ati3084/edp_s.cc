@@ -239,50 +239,49 @@ void ATI3084_force::configure_sensor(void) {// by Y
 	InterruptUnlock(&mds.spinlock);
 	// cout << "Przed konf" << endl;
 	// jesli ma byc wykorzytstywana biblioteka transformacji sil
-	if (master.force_tryb == 2) {
-		// synchronize gravity transformation
-		//		printf("master.force_tryb == 2\n");
-		// polozenie kisci bez narzedzia wzgledem bazy
-		lib::Homog_matrix frame = master.return_current_frame(
-				common::WITH_TRANSLATION); // FORCE Transformation by Slawomir Bazant
-		// lib::Homog_matrix frame(master.force_current_end_effector_frame); // pobranie aktualnej ramki
-		if (!gravity_transformation) // nie powolano jeszcze obiektu
-		{
-			lib::Xyz_Angle_Axis_vector tab;
-			lib::Homog_matrix sensor_frame;
-			if (master.config.exists("sensor_in_wrist")) {
-				char *tmp = strdup(master.config.value<std::string> (
-						"sensor_in_wrist").c_str());
-				char* toDel = tmp;
-				for (int i = 0; i < 6; i++)
-					tab[i] = strtod(tmp, &tmp);
-				sensor_frame = lib::Homog_matrix(tab);
-				free(toDel);
-				// std::cout<<sensor_frame<<std::endl;
-			} else
-				sensor_frame = lib::Homog_matrix(0, 1, 0, 0, -1, 0, 0, 0, 0, 0,
-						1, 0.09);
-			// lib::Homog_matrix sensor_frame = lib::Homog_matrix(0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 1, 0.09);
 
-			double weight = master.config.value<double> ("weight");
+	// synchronize gravity transformation
 
-			double point[3];
+	// polozenie kisci bez narzedzia wzgledem bazy
+	lib::Homog_matrix frame = master.return_current_frame(
+			common::WITH_TRANSLATION); // FORCE Transformation by Slawomir Bazant
+	// lib::Homog_matrix frame(master.force_current_end_effector_frame); // pobranie aktualnej ramki
+	if (!gravity_transformation) // nie powolano jeszcze obiektu
+	{
+		lib::Xyz_Angle_Axis_vector tab;
+		lib::Homog_matrix sensor_frame;
+		if (master.config.exists("sensor_in_wrist")) {
 			char *tmp = strdup(master.config.value<std::string> (
-					"default_mass_center_in_wrist").c_str());
+					"sensor_in_wrist").c_str());
 			char* toDel = tmp;
-			for (int i = 0; i < 3; i++)
-				point[i] = strtod(tmp, &tmp);
+			for (int i = 0; i < 6; i++)
+				tab[i] = strtod(tmp, &tmp);
+			sensor_frame = lib::Homog_matrix(tab);
 			free(toDel);
-			// double point[3] = { master.config.value<double>("x_axis_arm"),
-			//		master.config.value<double>("y_axis_arm"), master.config.return_double_value("z_axis_arm") };
-			lib::K_vector pointofgravity(point);
-			gravity_transformation = new lib::ForceTrans(
-					lib::FORCE_SENSOR_ATI3084, frame, sensor_frame, weight,
-					pointofgravity);
-		} else {
-			gravity_transformation->synchro(frame);
-		}
+			// std::cout<<sensor_frame<<std::endl;
+		} else
+			sensor_frame = lib::Homog_matrix(0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 1,
+					0.09);
+		// lib::Homog_matrix sensor_frame = lib::Homog_matrix(0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 1, 0.09);
+
+		double weight = master.config.value<double> ("weight");
+
+		double point[3];
+		char *tmp = strdup(master.config.value<std::string> (
+				"default_mass_center_in_wrist").c_str());
+		char* toDel = tmp;
+		for (int i = 0; i < 3; i++)
+			point[i] = strtod(tmp, &tmp);
+		free(toDel);
+		// double point[3] = { master.config.value<double>("x_axis_arm"),
+		//		master.config.value<double>("y_axis_arm"), master.config.return_double_value("z_axis_arm") };
+		lib::K_vector pointofgravity(point);
+		gravity_transformation = new lib::ForceTrans(lib::FORCE_SENSOR_ATI3084,
+				frame, sensor_frame, weight, pointofgravity);
+	} else {
+		gravity_transformation->synchro(frame);
 	}
+
 }
 
 void ATI3084_force::wait_for_event() {
@@ -378,7 +377,7 @@ void ATI3084_force::get_reading(void) {
 			is_reading_ready = true;
 
 			// jesli ma byc wykorzytstywana biblioteka transformacji sil
-			if (master.force_tryb == 2 && gravity_transformation) {
+
 				for (int i = 0; i < 3; i++)
 					ft_table[i] /= 20;
 				//			for(int i=3;i<6;i++) ft_table[i]/=333;
@@ -408,7 +407,7 @@ void ATI3084_force::get_reading(void) {
 				}
 #endif
 			}
-		}
+
 	}
 }
 

@@ -89,7 +89,7 @@ bool manip_effector::compute_servo_joints_and_frame(void) {
 			if (vs != NULL) {
 
 				boost::mutex::scoped_lock lock(vs->mtx);
-				if ((force_tryb > 0) && (is_synchronised())
+				if ((is_synchronised())
 						&& (!(vs->is_sensor_configured))) {
 					vs->new_edp_command = true;
 					vs->command = FORCE_CONFIGURE;
@@ -120,10 +120,6 @@ manip_effector::manip_effector(lib::configurator &_config,
 		force_sensor_test_mode = config.value<int> ("force_sensor_test_mode");
 	}
 
-	if (config.exists("force_tryb"))
-		force_tryb = config.value<int> ("force_tryb");
-	else
-		force_tryb = 0;
 }
 
 /*--------------------------------------------------------------------------*/
@@ -192,7 +188,7 @@ void manip_effector::get_arm_position_with_force_and_sb(bool read_hardware,
 
 	reply.servo_step = step_counter;
 
-	if (force_tryb > 0) {
+
 		lib::Homog_matrix current_frame_wo_offset = return_current_frame(
 				WITHOUT_TRANSLATION);
 		lib::Ft_tr ft_tr_inv_current_frame_matrix(!current_frame_wo_offset);
@@ -211,7 +207,7 @@ void manip_effector::get_arm_position_with_force_and_sb(bool read_hardware,
 		lib::Ft_v_vector current_force_torque(ft_tr_inv_tool_matrix
 				* ft_tr_inv_current_frame_matrix * current_force);
 		current_force_torque.to_table(reply.arm.pf_def.force_xyz_torque_xyz);
-	}
+
 }
 /*--------------------------------------------------------------------------*/
 
@@ -583,7 +579,7 @@ void manip_effector::set_robot_model(const lib::c_buffer &instruction) {
 	switch (instruction.set_robot_model_type) {
 	case lib::FORCE_TOOL:
 		if (vs == NULL) {
-			printf("Nie wlaczono force_tryb=2 w pliku ini\n");
+			printf("vs == NULL\n");
 			break;
 		}
 		{
@@ -602,7 +598,7 @@ void manip_effector::set_robot_model(const lib::c_buffer &instruction) {
 		break;
 	case lib::FORCE_BIAS:
 		if (vs == NULL) {
-			printf("Nie wlaczono force_tryb=2 w pliku ini\n");
+			printf("vs == NULL\n");
 			break;
 		}
 		{
@@ -656,7 +652,7 @@ void manip_effector::get_robot_model(lib::c_buffer &instruction) {
 	switch (instruction.get_robot_model_type) {
 	case lib::FORCE_TOOL:
 		if (vs == NULL) {
-			printf("Nie wlaczono force_tryb=2 w pliku ini\n");
+			printf("vs == NULL\n");
 			break;
 		}
 		for (int i = 0; i < 3; i++) {

@@ -99,12 +99,6 @@ protected:
 
 public:
 
-	/*!
-	 * \brief variable to memorize if the force_control is active
-	 *
-	 * It is set from the configuration file
-	 */
-	int force_tryb;
 
 	/*!
 	 * \brief Info if the force sensor test mode is active.

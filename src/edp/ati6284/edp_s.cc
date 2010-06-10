@@ -341,7 +341,7 @@ void ATI6284_force::configure_sensor(void) {
 		is_sensor_configured = true;
 	}
 
-	if (master.force_tryb == 2) {
+
 		//!< synchronize gravity transformation
 		// polozenie kisci bez narzedzia wzgledem bazy
 		lib::Homog_matrix frame = master.return_current_frame(
@@ -384,7 +384,7 @@ void ATI6284_force::configure_sensor(void) {
 		} else {
 			gravity_transformation->synchro(frame);
 		}
-	}
+
 }
 
 // // // // // // // // // // // // // // /   inicjalizacja zbierania danych z czujnika, wait_for_event // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////
@@ -560,20 +560,7 @@ void ATI6284_force::initiate_reading(void) {
 #endif
 		// // // // // // // // // // // // // // / PRZEPISANIE WYNIKU // // // // // // // // // // // // // // // // // // // // // // // //
 		lib::Ft_vector kartez_force, root_force;
-		if (master.force_tryb == 1) {
-			for (int i = 0; i < 6; i++) {
-				from_vsp.force.rez[i] = force_torque[i];
-			}
-			from_vsp.force.rez[0] = force_torque[1] * 20;
-			from_vsp.force.rez[1] = force_torque[0] * 20;
-			from_vsp.force.rez[2] = -force_torque[2] * 20;
-			for (int i = 0; i < 6; i++) {
-				kartez_force[i] = from_vsp.force.rez[i];
-				root_force[i] = force_torque[i];
-			}
-			from_vsp.force.status = sensor_status;
-			master.force_msr_upload(kartez_force);//!< wpisanie sily do zmiennych globalnych dla calego procesu
-		} else if (master.force_tryb == 2 && gravity_transformation) {
+	if (gravity_transformation) {
 			for (int i = 0; i < 6; i++)
 				root_force[i] = force_torque[i];
 
