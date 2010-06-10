@@ -66,8 +66,8 @@ int UiRobotConveyor::reload_configuration() {
 				state.edp.preset_position[2][0] = ui.config->value<double> (
 						"preset_position_2", state.edp.section_name);
 
-			if (ui.config->exists("robot_test_mode", state.edp.section_name))
-				state.edp.test_mode = ui.config->value<int> ("robot_test_mode",
+			if (ui.config->exists(ROBOT_TEST_MODE, state.edp.section_name))
+				state.edp.test_mode = ui.config->value<int> (ROBOT_TEST_MODE,
 						state.edp.section_name);
 			else
 				state.edp.test_mode = 0;

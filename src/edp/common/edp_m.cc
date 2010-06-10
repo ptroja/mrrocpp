@@ -89,7 +89,7 @@ int main(int argc, char *argv[]) {
 		lib::configurator _config(argv[1], argv[2], argv[3], argv[4], (argc < 6) ? "" : argv[5]);
 
 		// block test-mode timer signal for all the threads
-		if(_config.value<int>("robot_test_mode")) {
+		if(_config.value<int>(ROBOT_TEST_MODE)) {
 		    /* Block timer signal from test mode timer for all threads */
 //		    fprintf(stderr, "Blocking signal %d\n", SIGRTMIN);
 		    sigset_t mask;

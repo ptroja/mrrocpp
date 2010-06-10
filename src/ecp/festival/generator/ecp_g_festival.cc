@@ -25,7 +25,7 @@ generator::generator(common::task::task& _ecp_task) :
 {
 	host = ecp_t.config.value<std::string>("server_host");
 	portnum = ecp_t.config.value<int>("server_port");
-	test_mode = ecp_t.config.value<int>("robot_test_mode");
+	test_mode = ecp_t.config.value<int>("test_mode");
 	voice = "";
 	sock = -1;
 }
