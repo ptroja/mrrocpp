@@ -47,7 +47,7 @@ uint8_t servo_buffer::Move_a_step(void) {
 	if (master.is_synchronised()) {// by Y aktualizacja transformera am jedynie sens po synchronizacji (kiedy robot zna swoja pozycje)
 		// by Y - do dokonczenia
 		for (int i = 0; i < master.number_of_servos; i++) {
-			if (!(master.test_mode)) {
+			if (!(master.robot_test_mode)) {
 				master.update_servo_current_motor_pos_abs(hi->get_position(i)
 						* (2 * M_PI) / axe_inc_per_revolution[i], i);
 			}
@@ -142,7 +142,7 @@ void servo_buffer::send_to_SERVO_GROUP() {
 
 		//	 printf("current motor pos: %d\n", current_motor_pos[0]);
 
-		if (master.test_mode) {
+		if (master.robot_test_mode) {
 			// W.S. Tylko przy testowaniu
 			master.current_motor_pos[i] = master.desired_motor_pos_new[i];
 		}
@@ -477,7 +477,7 @@ void servo_buffer::Move(void) {
 
 		for (int k = 0; k < master.number_of_servos; k++) {
 			regulator_ptr[k]->insert_new_step(new_increment[k]);
-			if (master.test_mode) {
+			if (master.robot_test_mode) {
 				master.update_servo_current_motor_pos_abs(
 						regulator_ptr[k]->previous_abs_position
 								+ new_increment[k] * j, k);
@@ -608,7 +608,7 @@ uint64_t servo_buffer::compute_all_set_values(void) {
 
 
 	for (int j = 0; j < master.number_of_servos; j++) {
-		if (master.test_mode) {
+		if (master.robot_test_mode) {
 			regulator_ptr[j]->insert_new_pos_increment(
 					regulator_ptr[j]->return_new_step()
 							* axe_inc_per_revolution[j] / (2 * M_PI));
@@ -634,7 +634,7 @@ void servo_buffer::synchronise(void) {
 
 	double synchro_step = 0.0; // zadany przyrost polozenia
 
-	if (master.test_mode) {
+	if (master.robot_test_mode) {
 		// W.S. Tylko przy testowaniu
 		clear_reply_status();
 		clear_reply_status_tmp();

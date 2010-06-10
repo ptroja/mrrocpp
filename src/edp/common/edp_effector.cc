@@ -35,7 +35,7 @@ namespace common {
 
 /*--------------------------------------------------------------------------*/
 effector::effector(lib::configurator &_config, lib::robot_name_t l_robot_name) :
-	robot_name(l_robot_name), config(_config) {
+	robot_name(l_robot_name), config(_config), robot_test_mode(true) {
 
 	/* Lokalizacja procesu wywietlania komunikatow SR */
 	msg = new lib::sr_edp(lib::EDP, config.value<std::string> (
@@ -48,11 +48,9 @@ effector::effector(lib::configurator &_config, lib::robot_name_t l_robot_name) :
 			config.return_attach_point_name(lib::configurator::CONFIG_SERVER,
 					"sr_attach_point", UI_SECTION).c_str(), false);
 
-	if (config.exists("test_mode"))
-		test_mode = config.value<int> ("test_mode");
-	else
-		test_mode = 0;
-
+	if (config.exists("robot_test_mode")) {
+		robot_test_mode = config.value<int> ("robot_test_mode");
+	}
 }
 
 effector::~effector() {
@@ -67,7 +65,7 @@ bool effector::initialize_communication() {
 
 #if !defined(USE_MESSIP_SRR)
 	// obsluga mechanizmu sygnalizacji zajetosci sprzetu
-	if (!(test_mode)) {
+	if (!(robot_test_mode)) {
 
 		const std::string hardware_busy_attach_point =
 				config.value<std::string> ("hardware_busy_attach_point");
@@ -261,5 +259,6 @@ void effector::reply_serialization() {
 
 } // namespace common
 } // namespace edp
-} // namespace mrrocpp
+}
+// namespace mrrocpp
 

@@ -48,7 +48,7 @@ uint64_t hardware_interface::read_write_hardware ( void )
 	// oczekiwanie na przerwanie
 	hi_int_wait(edp::common::INT_SERVOING, 0);
 
-	if(master.test_mode) {
+	if(master.robot_test_mode) {
 		// Tylko dla testow
 		return irq_data.md.hardware_error;
 	}

@@ -58,7 +58,7 @@ int_handler (void *arg, int int_id)
 
 	md.hardware_error = (uint64_t) lib::ALL_RIGHT; // Nie ma bledow sprzetowych
 
-	if(common::master->test_mode)
+	if(common::master->robot_test_mode)
 	{
 		return (&event); // by Y&W
 	}

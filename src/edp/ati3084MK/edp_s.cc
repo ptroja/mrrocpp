@@ -29,7 +29,7 @@ ATI3084_force::ATI3084_force(common::manip_effector &_master) :
 
 void ATI3084_force::connect_to_hardware(void)
 {
-	if (!master.test_mode) {
+	if (!master.force_sensor_test_mode) {
 		uart = open_port();
 		//printf("2\n");
 		tcflush(uart, TCIFLUSH);
@@ -40,7 +40,7 @@ void ATI3084_force::connect_to_hardware(void)
 
 ATI3084_force::~ATI3084_force(void)
 {
-	if (!master.test_mode) {
+	if (!master.force_sensor_test_mode) {
 		close(uart);
 	}
 	if (gravity_transformation)
@@ -54,7 +54,7 @@ void ATI3084_force::configure_sensor(void)
 	//  printf("EDP Sensor configured\n");
 	sr_msg->message("EDP Sensor configured");
 
-	if (!master.test_mode) {
+	if (!master.force_sensor_test_mode) {
 		sendBias();
 	}
 
@@ -105,7 +105,7 @@ void ATI3084_force::wait_for_event()
 {
 	//	sr_msg->message("wait_for_event");
 
-	if (!master.test_mode) {
+	if (!master.force_sensor_test_mode) {
 
 		ftxyz = getFT();
 
@@ -126,7 +126,7 @@ void ATI3084_force::get_reading(void)
 {
 	lib::Ft_vector kartez_force;
 
-	if (master.test_mode) {
+	if (master.force_sensor_test_mode) {
 		for (int i = 0; i < 6; ++i) {
 			kartez_force[i] = 0.0;
 		}
