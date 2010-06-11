@@ -100,16 +100,16 @@ void graspit::main_task_algorithm(void) {
 
 
 	set_next_ecps_state((int) ecp_mp::task::ECP_GEN_TFG, (int) 5, tmp_string,
-			sizeof(mp_ecp_tfg_command), 1, gripper_name);
+			sizeof(mp_ecp_tfg_command), 1, gripper_name.c_str());
 
 	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(
-			1, 1, gripper_name, gripper_name);
+			1, 1, gripper_name.c_str(), gripper_name.c_str());
 
 	set_next_ecps_state((int) ecp_mp::task::ECP_GEN_IRP6, (int) 5, "",
-			0, 1, manipulator_name);
+			0, 1, manipulator_name.c_str());
 
 	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(
-			1, 1, manipulator_name, manipulator_name);
+			1, 1, manipulator_name.c_str(), manipulator_name.c_str());
 
 
 
