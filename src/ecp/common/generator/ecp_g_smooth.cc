@@ -1014,8 +1014,8 @@ void smooth::send_coordinates()
 
 			break;
 
-	default:
-		THROW_NONFATAL_ERROR(INVALID_POSE_SPECIFICATION);
+		default:
+			THROW_NONFATAL_ERROR(INVALID_POSE_SPECIFICATION);
 	}// end:switch
 
 	//gripper
@@ -1144,8 +1144,8 @@ bool smooth::first_step()
 			}
 			break;
 
-	default:
-		THROW_NONFATAL_ERROR(INVALID_POSE_SPECIFICATION);
+		default:
+			THROW_NONFATAL_ERROR(INVALID_POSE_SPECIFICATION);
 	} // end : switch ( td.arm_type )
 
 	return true;
@@ -1319,13 +1319,11 @@ void smooth::calculate(void)
 
 					for (i = 0; i < MAX_SERVOS_NR; i++) {
 
-					if (v_max_aa[i] == 0 || a_max_aa[i] == 0
-							|| pose_list_iterator->v[i] == 0
-							|| pose_list_iterator->a[i] == 0) {
-						sr_ecp_msg.message(
-								"One or more of 'v' or 'a' values is 0");
-						THROW_NONFATAL_ERROR(INVALID_MP_COMMAND);
-					}
+						if (v_max_aa[i] == 0 || a_max_aa[i] == 0 || pose_list_iterator->v[i] == 0
+								|| pose_list_iterator->a[i] == 0) {
+							sr_ecp_msg.message("One or more of 'v' or 'a' values is 0");
+							THROW_NONFATAL_ERROR(INVALID_MP_COMMAND);
+						}
 
 						pose_list_iterator->v_r[i] = v_max_aa[i] * pose_list_iterator->v[i];
 						pose_list_iterator->a_r[i] = a_max_aa[i] * pose_list_iterator->a[i];
@@ -1377,15 +1375,13 @@ void smooth::calculate(void)
 						pose_list_iterator->start_position[gripp + 1] = 0.0;//TODO sprawdzic
 					}
 
-				for (i = 0; i < MAX_SERVOS_NR; i++) {
-					if (!(the_robot->robot_name == lib::ROBOT_IRP6P_M && i
-							== (MAX_SERVOS_NR - 1))) {
-						if (v_max_joint[i] == 0 || a_max_joint[i] == 0
-								|| pose_list_iterator->v[i] == 0
-								|| pose_list_iterator->a[i] == 0) {
-							sr_ecp_msg.message(
-									"One or more of 'v' or 'a' values is 0");
-							THROW_NONFATAL_ERROR(INVALID_MP_COMMAND);
+					for (i = 0; i < MAX_SERVOS_NR; i++) {
+						if (!(the_robot->robot_name == lib::ROBOT_IRP6P_M && i == (MAX_SERVOS_NR - 1))) {
+							if (v_max_joint[i] == 0 || a_max_joint[i] == 0 || pose_list_iterator->v[i] == 0
+									|| pose_list_iterator->a[i] == 0) {
+								sr_ecp_msg.message("One or more of 'v' or 'a' values is 0");
+								THROW_NONFATAL_ERROR(INVALID_MP_COMMAND);
+							}
 						}
 
 						pose_list_iterator->v_r[i] = v_max_joint[i] * pose_list_iterator->v[i];
@@ -1434,33 +1430,15 @@ void smooth::calculate(void)
 						pose_list_iterator->start_position[gripp] = temp;//przypisanie pozycji koncowej poprzedniego ruchu jako
 						prev_pose_list_ptr(); //pozycje startowa nowego ruchu
 					}
-				}
-				temp = pose_list_iterator->coordinates[gripp];
-				pose_list_iterator->start_position[gripp]
-						= the_robot->reply_package.arm.pf_def.arm_coordinates[gripp];
-				if (!is_last_list_element()) { //musi byc zrobione tutaj zeby zadzialalo przypisanie kierunkow dla drugiego ruchu
-					next_pose_list_ptr();
-					pose_list_iterator->start_position[gripp] = temp;//przypisanie pozycji koncowej poprzedniego ruchu jako
-					prev_pose_list_ptr(); //pozycje startowa nowego ruchu
-				}
-				if (gripp < (MAX_SERVOS_NR - 1)) {
-					pose_list_iterator->start_position[gripp + 1] = 0.0;//TODO sprawdzic
-				}
-
-				for (i = 0; i < MAX_SERVOS_NR; i++) {
-					if (v_max_motor[i] == 0 || a_max_motor[i] == 0
-							|| pose_list_iterator->v[i] == 0
-							|| pose_list_iterator->a[i] == 0) {
-						sr_ecp_msg.message(
-								"One or more of 'v' or 'a' values is 0");
-						THROW_NONFATAL_ERROR(INVALID_MP_COMMAND);
+					if (gripp < (MAX_SERVOS_NR - 1)) {
+						pose_list_iterator->start_position[gripp + 1] = 0.0;//TODO sprawdzic
 					}
 
 					for (i = 0; i < MAX_SERVOS_NR; i++) {
 						if (v_max_motor[i] == 0 || a_max_motor[i] == 0 || pose_list_iterator->v[i] == 0
 								|| pose_list_iterator->a[i] == 0) {
 							sr_ecp_msg.message("One or more of 'v' or 'a' values is 0");
-							throw ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
+							THROW_NONFATAL_ERROR(INVALID_MP_COMMAND);
 						}
 
 						pose_list_iterator->v_r[i] = v_max_motor[i] * pose_list_iterator->v[i];
@@ -1523,13 +1501,14 @@ void smooth::calculate(void)
 					}
 
 					for (i = 0; i < MAX_SERVOS_NR; i++) {
-						if (v_max_zyz[i] == 0 || a_max_zyz[i] == 0
-								|| pose_list_iterator->v[i] == 0
+						if (v_max_zyz[i] == 0 || a_max_zyz[i] == 0 || pose_list_iterator->v[i] == 0
 								|| pose_list_iterator->a[i] == 0) {
-							sr_ecp_msg.message(
-									"One or more of 'v' or 'a' values is 0");
+							sr_ecp_msg.message("One or more of 'v' or 'a' values is 0");
 							THROW_NONFATAL_ERROR(INVALID_MP_COMMAND);
 						}
+						pose_list_iterator->v_r[i] = v_max_zyz[i] * pose_list_iterator->v[i];
+						pose_list_iterator->a_r[i] = a_max_zyz[i] * pose_list_iterator->a[i];
+					}
 
 					break;
 
@@ -1558,12 +1537,13 @@ void smooth::calculate(void)
 					}
 
 					for (i = 0; i < MAX_SERVOS_NR; i++) {
-						if (v_max_aa[i] == 0 || a_max_aa[i] == 0
-								|| pose_list_iterator->v[i] == 0
+						if (v_max_aa[i] == 0 || a_max_aa[i] == 0 || pose_list_iterator->v[i] == 0
 								|| pose_list_iterator->a[i] == 0) {
-							sr_ecp_msg.message(
-									"One or more of 'v' or 'a' values is 0");
+							sr_ecp_msg.message("One or more of 'v' or 'a' values is 0");
 							THROW_NONFATAL_ERROR(INVALID_MP_COMMAND);
+						}
+						pose_list_iterator->v_r[i] = v_max_aa[i] * pose_list_iterator->v[i];
+						pose_list_iterator->a_r[i] = a_max_aa[i] * pose_list_iterator->a[i];
 					}
 
 					break;
@@ -1603,12 +1583,13 @@ void smooth::calculate(void)
 					}
 
 					for (i = 0; i < MAX_SERVOS_NR; i++) {
-						if (v_max_joint[i] == 0 || a_max_joint[i] == 0
-								|| pose_list_iterator->v[i] == 0
+						if (v_max_joint[i] == 0 || a_max_joint[i] == 0 || pose_list_iterator->v[i] == 0
 								|| pose_list_iterator->a[i] == 0) {
-							sr_ecp_msg.message(
-									"One or more of 'v' or 'a' values is 0");
+							sr_ecp_msg.message("One or more of 'v' or 'a' values is 0");
 							THROW_NONFATAL_ERROR(INVALID_MP_COMMAND);
+						}
+						pose_list_iterator->v_r[i] = v_max_joint[i] * pose_list_iterator->v[i];
+						pose_list_iterator->a_r[i] = a_max_joint[i] * pose_list_iterator->a[i];
 					}
 
 					break;
@@ -1648,12 +1629,13 @@ void smooth::calculate(void)
 					}
 
 					for (i = 0; i < MAX_SERVOS_NR; i++) {
-						if (v_max_motor[i] == 0 || a_max_motor[i] == 0
-								|| pose_list_iterator->v[i] == 0
+						if (v_max_motor[i] == 0 || a_max_motor[i] == 0 || pose_list_iterator->v[i] == 0
 								|| pose_list_iterator->a[i] == 0) {
-							sr_ecp_msg.message(
-									"One or more of 'v' or 'a' values is 0");
+							sr_ecp_msg.message("One or more of 'v' or 'a' values is 0");
 							THROW_NONFATAL_ERROR(INVALID_MP_COMMAND);
+						}
+						pose_list_iterator->v_r[i] = v_max_motor[i] * pose_list_iterator->v[i];
+						pose_list_iterator->a_r[i] = a_max_motor[i] * pose_list_iterator->a[i];
 					}
 
 					break;
@@ -1915,8 +1897,7 @@ void smooth::calculate(void)
 				//printf("\n ten przypadek nigdy nie moze wystapic\n");
 				//printf(" ********************** Error w osi %d *************************\n", i);
 				//flushall();pose_list_iterator->t = t_max;
-				sr_ecp_msg.message(
-						"Unexpected calculation error 1. Save your trajectory and report bug");
+				sr_ecp_msg.message("Unexpected calculation error 1. Save your trajectory and report bug");
 				THROW_NONFATAL_ERROR(INVALID_MP_COMMAND);
 			}
 
@@ -1980,8 +1961,7 @@ void smooth::calculate(void)
 					}
 				} else {
 					//printf(" ten przypadek nie moze wystapic (redukcja ze wzgledu na czas)\n");
-					sr_ecp_msg.message(
-							"Unexpected calculation error 2. Save your trajectory and report bug");
+					sr_ecp_msg.message("Unexpected calculation error 2. Save your trajectory and report bug");
 					THROW_NONFATAL_ERROR(INVALID_MP_COMMAND);
 				}
 
@@ -2021,13 +2001,13 @@ void smooth::calculate(void)
 				}
 				break;
 
-		case lib::ECP_JOINT:
-			if (pose_list_iterator->v_grip < v_grip_min_joint) {
-				pose_list_iterator->v_grip = v_grip_min_joint;
-			}
-			break;
-		default:
-			THROW_NONFATAL_ERROR(INVALID_POSE_SPECIFICATION);
+			case lib::ECP_JOINT:
+				if (pose_list_iterator->v_grip < v_grip_min_joint) {
+					pose_list_iterator->v_grip = v_grip_min_joint;
+				}
+				break;
+			default:
+				THROW_NONFATAL_ERROR(INVALID_POSE_SPECIFICATION);
 		}
 
 		//if (debug) {
@@ -2312,11 +2292,11 @@ void smooth::vp_reduction(std::list <ecp_mp::common::smooth_trajectory_pose>::it
 			pose_list_iterator->v[i] = v_r / v_max_motor[i];
 			break;
 
-	case lib::ECP_JOINT:
-		pose_list_iterator->v[i] = v_r / v_max_zyz[i];
-		break;
-	default:
-		THROW_NONFATAL_ERROR(INVALID_POSE_SPECIFICATION);
+		case lib::ECP_JOINT:
+			pose_list_iterator->v[i] = v_r / v_max_zyz[i];
+			break;
+		default:
+			THROW_NONFATAL_ERROR(INVALID_POSE_SPECIFICATION);
 	}
 
 	calculate();
