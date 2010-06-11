@@ -452,9 +452,7 @@ void fsautomat::writeCubeState(common::State &state)
 				break;
 		}
 	}
-}
-printf("\n");
-
+	printf("\n");
 }
 
 void fsautomat::changeCubeState(common::State &state)
