@@ -65,7 +65,11 @@ lib::Homog_matrix pb_sac_visual_servo::get_position_change(const lib::Homog_matr
 		lib::Homog_matrix E_T_O = !current_position;
 
 		{
+
 			cout << "\nC_T_G:\n" << C_T_G << endl;
+
+			lib::Homog_matrix O_T_G = O_T_C * C_T_G;
+			cout<<"\nO_T_G:\n"<< O_T_G <<endl;
 
 			cout << "\ncurrent_position:\n" << current_position << endl;
 			cout << "\nE_T_O:\n" << E_T_O << endl;
@@ -78,9 +82,9 @@ lib::Homog_matrix pb_sac_visual_servo::get_position_change(const lib::Homog_matr
 
 		}
 
-		//		error_matrix = G_T_E_desired * E_T_O * O_T_C * C_T_G;
+		error_matrix = G_T_E_desired * E_T_O * O_T_C * C_T_G;
 
-		error_matrix = E_T_O * O_T_C * C_T_G;
+		//error_matrix = E_T_O * O_T_C * C_T_G;
 
 		cout << "\nerror_matrix:\n" << error_matrix << endl;
 		cout.flush();
