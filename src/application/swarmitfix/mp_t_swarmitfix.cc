@@ -94,7 +94,7 @@ void swarmitfix::main_task_algorithm(void)
 
 	memcpy(tmp_string, &epos_params, sizeof(epos_params));
 
-	set_next_ecps_state((int) ecp_mp::task::ECP_GEN_EPOS, (int) 5, tmp_string, sizeof(epos_params), 1, lib::ROBOT_SPKM.c_str());
+	set_next_ecps_state(ecp_mp::task::ECP_GEN_EPOS, (int) 5, tmp_string, sizeof(epos_params), 1, lib::ROBOT_SPKM.c_str());
 	sr_ecp_msg->message("5");
 	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, lib::ROBOT_SPKM.c_str(), lib::ROBOT_SPKM.c_str());
 
