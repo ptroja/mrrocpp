@@ -42,9 +42,9 @@ namespace edp {
 namespace common {
 
 reader_buffer::reader_buffer(motor_driven_effector &_master) :
-	master(_master), new_data(false) {
-	thread_id
-			= new boost::thread(boost::bind(&reader_buffer::operator(), this));
+	master(_master), new_data(false)
+{
+	thread_id = boost::thread(boost::bind(&reader_buffer::operator(), this));
 }
 
 reader_buffer::~reader_buffer() {
@@ -116,28 +116,12 @@ void reader_buffer::operator()() {
 			sprintf(tmp_string, "force_%d", j);
 			reader_cnf.force[j] = master.config.check_config(tmp_string);
 
-			sprintf(tmp_string, "desired_force_%d", j);
-			reader_cnf.desired_force[j]
-					= master.config.check_config(tmp_string);
-
-			sprintf(tmp_string, "filtered_force_%d", j);
-			reader_cnf.filtered_force[j] = master.config.check_config(
-					tmp_string);
-
 			sprintf(tmp_string, "desired_cartesian_position_%d", j);
 			reader_cnf.desired_cartesian_position[j]
 					= master.config.check_config(tmp_string);
 
 			sprintf(tmp_string, "real_cartesian_position_%d", j);
 			reader_cnf.real_cartesian_position[j] = master.config.check_config(
-					tmp_string);
-
-			sprintf(tmp_string, "real_cartesian_vel_%d", j);
-			reader_cnf.real_cartesian_vel[j] = master.config.check_config(
-					tmp_string);
-
-			sprintf(tmp_string, "real_cartesian_acc_%d", j);
-			reader_cnf.real_cartesian_acc[j] = master.config.check_config(
 					tmp_string);
 		}
 	}
@@ -393,10 +377,6 @@ void reader_buffer::operator()() {
 				for (int j = 0; j < 6; j++) {
 					if (reader_cnf.force[j])
 						outfile << data.force[j] << " ";
-					if (reader_cnf.desired_force[j])
-						outfile << data.desired_force[j] << " ";
-					if (reader_cnf.filtered_force[j])
-						outfile << data.filtered_force[j] << " ";
 				}
 
 				outfile << "k: ";
@@ -411,20 +391,6 @@ void reader_buffer::operator()() {
 				for (int j = 0; j < 6; j++) {
 					if (reader_cnf.real_cartesian_position[j])
 						outfile << data.real_cartesian_position[j] << " ";
-				}
-
-				outfile << "v: ";
-
-				for (int j = 0; j < 6; j++) {
-					if (reader_cnf.real_cartesian_vel[j])
-						outfile << data.real_cartesian_vel[j] << " ";
-				}
-
-				outfile << "a: ";
-
-				for (int j = 0; j < 6; j++) {
-					if (reader_cnf.real_cartesian_acc[j])
-						outfile << data.real_cartesian_acc[j] << " ";
 				}
 
 				outfile << "t: " << data.ui_trigger;
