@@ -15,7 +15,8 @@
 namespace mrrocpp {
 namespace lib {
 
-std::string toString(const double valArr[], int length) {
+std::string toString(const double valArr[], int length)
+{
 	std::ostringstream stm;
 	for (int i = 0; i < length; i++) {
 		if (i == 0)
@@ -28,58 +29,39 @@ std::string toString(const double valArr[], int length) {
 	return stm.str();
 }
 
-std::string toString(int numberOfPoses) {
-	return boost::lexical_cast<std::string>(numberOfPoses);
+std::string toString(int numberOfPoses)
+{
+	return boost::lexical_cast <std::string>(numberOfPoses);
 }
 
-std::string toString(lib::robot_name_t robot) {
+std::string toString(lib::robot_name_t robot)
+{
 	using namespace lib;
-	switch (robot) {
-	case ROBOT_IRP6OT_M:
-		return std::string("ROBOT_IRP6OT_M");
-	case ROBOT_IRP6P_M:
-		return std::string("ROBOT_IRP6P_M");
-	case ROBOT_IRP6OT_TFG:
-		return std::string("ROBOT_IRP6OT_TFG");
-	case ROBOT_IRP6P_TFG:
-		return std::string("ROBOT_IRP6P_TFG");
-	case ROBOT_CONVEYOR:
-		return std::string("ROBOT_CONVEYOR");
-	case ROBOT_SPEAKER:
-		return std::string("ROBOT_SPEAKER");
-	case ROBOT_IRP6_MECHATRONIKA:
-		return std::string("ROBOT_IRP6_MECHATRONIKA");
-	case ROBOT_ELECTRON:
-		return std::string("ROBOT_ELECTRON");
-	case ROBOT_FESTIVAL:
-		return std::string("ROBOT_FESTIVAL");
-	case ROBOT_HAND:
-		return std::string("ROBOT_HAND");
-	case ROBOT_SPEECHRECOGNITION:
-		return std::string("ROBOT_SPEECHRECOGNITION");
-	default:
-		return std::string("ROBOT_UNDEFINED");
-	}
+
+	return robot;
 }
 
-std::string toString(lib::ECP_POSE_SPECIFICATION ps) {
-	switch (ps) {
-	case lib::ECP_XYZ_ANGLE_AXIS:
-		return std::string("ECP_XYZ_ANGLE_AXIS");
-	case lib::ECP_XYZ_EULER_ZYZ:
-		return std::string("ECP_XYZ_EULER_ZYZ");
-	case lib::ECP_MOTOR:
-		return std::string("MOTOR");
-	case lib::ECP_JOINT:
-		return std::string("JOINT");
-	default:
-		return std::string("INVALID_END_EFFECTOR");
+std::string toString(lib::ECP_POSE_SPECIFICATION ps)
+{
+	switch (ps)
+	{
+		case lib::ECP_XYZ_ANGLE_AXIS:
+			return std::string("ECP_XYZ_ANGLE_AXIS");
+		case lib::ECP_XYZ_EULER_ZYZ:
+			return std::string("ECP_XYZ_EULER_ZYZ");
+		case lib::ECP_MOTOR:
+			return std::string("MOTOR");
+		case lib::ECP_JOINT:
+			return std::string("JOINT");
+		default:
+			return std::string("INVALID_END_EFFECTOR");
 	}
 }
 
 //-----------------------------------------------------------------------------------------------------------
 
-lib::robot_name_t returnProperRobot(const std::string & robotName) {
+lib::robot_name_t returnProperRobot(const std::string & robotName)
+{
 	if (robotName == "ROBOT_IRP6OT_M")
 		return lib::ROBOT_IRP6OT_M;
 	else if (robotName == "ROBOT_IRP6P_M")
@@ -106,8 +88,8 @@ lib::robot_name_t returnProperRobot(const std::string & robotName) {
 		return lib::ROBOT_UNDEFINED;
 }
 
-lib::ECP_POSE_SPECIFICATION returnProperPS(
-		const std::string & poseSpecification) {
+lib::ECP_POSE_SPECIFICATION returnProperPS(const std::string & poseSpecification)
+{
 	if (poseSpecification == "ECP_XYZ_ANGLE_AXIS") {
 		return lib::ECP_XYZ_ANGLE_AXIS;
 	}
@@ -123,14 +105,15 @@ lib::ECP_POSE_SPECIFICATION returnProperPS(
 		return lib::ECP_INVALID_END_EFFECTOR;
 }
 
-int setValuesInArray(double arrayToFill[], const std::string & dataString) {
+int setValuesInArray(double arrayToFill[], const std::string & dataString)
+{
 	int index = 0;
-	typedef boost::tokenizer<boost::char_separator<char> > tokenizer;
-	boost::char_separator<char> sep(" \t");
+	typedef boost::tokenizer <boost::char_separator <char> > tokenizer;
+	boost::char_separator <char> sep(" \t");
 	tokenizer tok(dataString, sep);
 
 	for (tokenizer::iterator beg = tok.begin(); beg != tok.end(); ++beg) {
-		arrayToFill[index++] = boost::lexical_cast<double>(std::string(*beg));
+		arrayToFill[index++] = boost::lexical_cast <double>(std::string(*beg));
 	}
 
 	return index;

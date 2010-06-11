@@ -8,6 +8,7 @@
 #if !defined(_IMPCONST_H)
 #define _IMPCONST_H
 
+#include <string>
 #include <stdint.h>
 
 #define delta_m (M_PI - 3.14154)
@@ -45,28 +46,30 @@ typedef double frame_tab[3][4];
 #define MP_SECTION "[mp]"
 #define UI_SECTION "[ui]"
 
-typedef enum _ROBOT_ENUM {
-	ROBOT_UNDEFINED,
-	ROBOT_IRP6OT_TFG,
-	ROBOT_IRP6OT_M,
-	ROBOT_IRP6P_TFG,
-	ROBOT_IRP6P_M,
-	ROBOT_CONVEYOR,
-	ROBOT_SPEAKER,
-	ROBOT_IRP6_MECHATRONIKA,
-	ROBOT_POLYCRANK,
-	ROBOT_ELECTRON,
-	ROBOT_FESTIVAL,
-	ROBOT_HAND,
-	ROBOT_SPEECHRECOGNITION,
-	ROBOT_SMB,
-	ROBOT_SPKM,
-	ROBOT_SHEAD,
-	ROBOT_BIRD_HAND
-// three finger Krzysztof Mianowski gripper 2010
-} robot_name_t;
+typedef std::string robot_name_t;
 
-enum FORCE_SENSOR_ENUM {
+const robot_name_t ROBOT_UNDEFINED = "ROBOT_UNDEFINED";
+const robot_name_t ROBOT_IRP6OT_TFG = "ROBOT_IRP6OT_TFG";
+const robot_name_t ROBOT_IRP6OT_M = "ROBOT_IRP6OT_M";
+const robot_name_t ROBOT_IRP6P_TFG = "ROBOT_IRP6P_TFG";
+
+const robot_name_t ROBOT_IRP6P_M = "ROBOT_IRP6P_M";
+const robot_name_t ROBOT_CONVEYOR = "ROBOT_CONVEYOR";
+const robot_name_t ROBOT_SPEAKER = "ROBOT_SPEAKER";
+const robot_name_t ROBOT_IRP6_MECHATRONIKA = "ROBOT_IRP6_MECHATRONIKA";
+const robot_name_t ROBOT_POLYCRANK = "ROBOT_POLYCRANK";
+const robot_name_t ROBOT_ELECTRON = "ROBOT_ELECTRON";
+const robot_name_t ROBOT_FESTIVAL = "ROBOT_FESTIVAL";
+const robot_name_t ROBOT_SPEECHRECOGNITION = "ROBOT_SPEECHRECOGNITION";
+const robot_name_t ROBOT_SMB = "ROBOT_SMB";
+const robot_name_t ROBOT_SPKM = "ROBOT_SPKM";
+const robot_name_t ROBOT_SHEAD = "ROBOT_SHEAD";
+const robot_name_t ROBOT_BIRD_HAND = "ROBOT_BIRD_HAND"; // three finger Krzysztof Mianowski gripper 2010
+
+const robot_name_t ROBOT_HAND = "ROBOT_HAND";
+
+enum FORCE_SENSOR_ENUM
+{
 	FORCE_SENSOR_ATI3084, FORCE_SENSOR_ATI6284
 };
 
@@ -76,7 +79,6 @@ enum FORCE_SENSOR_ENUM {
 
 #define TIME_SLICE 500000 // by Y
 #define STEP              0.002  // Krok sterowania w [s]
-
 // dla starej wersji sterowania
 //#define FORCE_INERTIA 0.96
 //#define TORQUE_INERTIA 0.98
@@ -88,7 +90,6 @@ enum FORCE_SENSOR_ENUM {
 #define TORQUE_INERTIA 0.5
 #define FORCE_RECIPROCAL_DAMPING 0.005
 #define TORQUE_RECIPROCAL_DAMPING 0.1
-
 
 #define ROBOT_TEST_MODE "robot_test_mode"
 #define FORCE_SENSOR_TEST_MODE "force_sensor_test_mode"
