@@ -65,7 +65,10 @@ public:
 	virtual ~task();
 
 	// methods for ECP template to redefine in concrete classes
-	virtual void main_task_algorithm(void) = 0;
+	virtual void main_task_algorithm(void);
+
+	virtual void mp_2_ecp_next_state_string_handler(void);
+
 
 	// Informacja dla MP o zakonczeniu zadania uzytkownika
 	void ecp_termination_notice(void);

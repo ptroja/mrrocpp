@@ -37,7 +37,7 @@ sk_mr::sk_mr(lib::configurator &_config) :
 
 	nrg = new generator::tff_nose_run(*this, 8);
 	nrg->configure_pulse_check(true);
-	yefg = new generator::y_edge_follow_force(*this, 8);
+	//	yefg = new generator::y_edge_follow_force(*this, 8);
 	befg = new generator::bias_edp_force(*this);
 
 	// utworzenie podzadania
@@ -48,30 +48,15 @@ sk_mr::sk_mr(lib::configurator &_config) :
 	sr_ecp_msg->message("ECP SK_MR loaded");
 }
 
-void sk_mr::main_task_algorithm(void)
+void sk_mr::mp_2_ecp_next_state_string_handler(void)
 {
-	for (;;) {
-		sr_ecp_msg->message("Waiting for MP order");
 
-		get_next_state();
+	if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_BIAS_EDP_FORCE) {
+		befg->Move();
+	} else if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_TFF_NOSE_RUN) {
+		nrg->Move();
+	}
 
-		sr_ecp_msg->message("Order received");
-		//printf("postument: %d\n", mp_command.ecp_next_state.mp_2_ecp_next_state);
-		//flushall();
-
-		subtasks_conditional_execution();
-
-		if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_BIAS_EDP_FORCE) {
-			befg->Move();
-		} else if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_TFF_NOSE_RUN) {
-			nrg->Move();
-		}
-		/*else if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_EDGE_FOLLOW_FORCE) {
-		 yefg->Move();
-		 }*/
-
-		ecp_termination_notice();
-	} //end for
 }
 
 }

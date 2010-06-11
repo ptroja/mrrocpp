@@ -25,6 +25,28 @@ task::task(lib::configurator &_config) :
 	initialize_communication();
 }
 
+void task::main_task_algorithm(void)
+{
+	for (;;) {
+		sr_ecp_msg->message("Waiting for MP order");
+
+		get_next_state();
+
+		sr_ecp_msg->message("Order received");
+
+		subtasks_conditional_execution();
+
+		mp_2_ecp_next_state_string_handler();
+
+		ecp_termination_notice();
+	} //end for
+}
+
+void task::mp_2_ecp_next_state_string_handler(void)
+{
+
+}
+
 task::~task()
 {
 	// TODO: error check

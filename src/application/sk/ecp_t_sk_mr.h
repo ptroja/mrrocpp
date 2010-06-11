@@ -10,11 +10,12 @@ namespace ecp {
 namespace common {
 namespace task {
 
-class sk_mr: public common::task::task {
+class sk_mr : public common::task::task
+{
 protected:
 	//generatory
 	generator::tff_nose_run* nrg;
-	generator::y_edge_follow_force* yefg;
+	//	generator::y_edge_follow_force* yefg;
 	generator::bias_edp_force* befg;
 	bool save_activated;
 
@@ -23,7 +24,7 @@ public:
 	sk_mr(lib::configurator &_config);
 
 	// methods for ECP template to redefine in concrete classes
-	void main_task_algorithm(void);
+	void mp_2_ecp_next_state_string_handler(void);
 };
 
 }
