@@ -54,7 +54,7 @@ void effector::master_order(common::MT_ORDER nm_task, int nm_tryb) {
 
 void effector::get_controller_state(lib::c_buffer &instruction) {
 
-	if (!test_mode) {
+	if (!robot_test_mode) {
 		for (uint8_t i = 0; i < BIRD_HAND_NUM_OF_SERVOS; i++) {
 			int16_t abspos;
 			if (i < 2)
@@ -104,7 +104,7 @@ effector::effector(lib::configurator &_config) :
 	create_kinematic_models_for_given_robot();
 
 	reset_variables();
-	if (!test_mode)
+	if (!robot_test_mode)
 		device.connect(PORT);
 }
 
@@ -112,7 +112,7 @@ effector::effector(lib::configurator &_config) :
 void effector::move_arm(const lib::c_buffer &instruction) {
 
 	struct timespec current_timespec;
-	if (!test_mode) {
+	if (!robot_test_mode) {
 		for (unsigned int i = 0; i < BIRD_HAND_NUM_OF_SERVOS; i++) {
 			switch (ecp_edp_cbuffer.bird_hand_command_structure.finger[i].profile_type) {
 			case mrrocpp::lib::BIRD_HAND_SIGLE_STEP_POSTION_INCREMENT:
@@ -228,7 +228,7 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction) 
 
 	clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &query_timespec, NULL);
 
-	if (test_mode) {
+	if (robot_test_mode) {
 		for (int i = 0; i < BIRD_HAND_NUM_OF_SERVOS; i++) {
 			edp_ecp_rbuffer.bird_hand_status_reply_structure.finger[i].meassured_position
 					= ecp_edp_cbuffer.bird_hand_command_structure.finger[i].desired_position;
@@ -278,7 +278,7 @@ void effector::set_robot_model(const lib::c_buffer &instruction) {
 
 /*--------------------------------------------------------------------------*/
 void effector::get_robot_model(lib::c_buffer &instruction) {
-	if (!test_mode) {
+	if (!robot_test_mode) {
 
 		for (uint8_t i = 0; i < BIRD_HAND_NUM_OF_SERVOS; i++) {
 			int16_t p, i, d;

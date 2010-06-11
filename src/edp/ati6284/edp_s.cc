@@ -89,7 +89,7 @@ ATI6284_force::ATI6284_force(common::manip_effector &_master) :
 void ATI6284_force::connect_to_hardware(void) {
 	// unsigned  uCount;  //!< Count index
 	// unsigned  uStatus; //!< Flag to indicate FIFO not empty
-	if (!(master.test_mode)) {
+	if (!(master.force_sensor_test_mode)) {
 		Total_Number_of_Samples = 6;
 		index = 1;
 
@@ -179,7 +179,7 @@ void ATI6284_force::connect_to_hardware(void) {
 // // // // // // // // // // // // // // /   odlaczenie czujnika // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////
 
 ATI6284_force::~ATI6284_force(void) {
-	if (!(master.test_mode)) {
+	if (!(master.force_sensor_test_mode)) {
 		delete theSTC;
 		delete board;
 
@@ -197,7 +197,7 @@ ATI6284_force::~ATI6284_force(void) {
 
 // // // // // // // // // // // // // // /   inicjacja odczytu // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////
 void ATI6284_force::configure_sensor(void) {
-	if (!(master.test_mode)) {
+	if (!(master.force_sensor_test_mode)) {
 		// double kartez_force[6];
 		// short  measure_report;
 		short int sensor_overload = 0;
@@ -341,7 +341,7 @@ void ATI6284_force::configure_sensor(void) {
 		is_sensor_configured = true;
 	}
 
-	if (master.force_tryb == 2) {
+
 		//!< synchronize gravity transformation
 		// polozenie kisci bez narzedzia wzgledem bazy
 		lib::Homog_matrix frame = master.return_current_frame(
@@ -383,7 +383,7 @@ void ATI6284_force::configure_sensor(void) {
 		} else {
 			gravity_transformation->synchro(frame);
 		}
-	}
+
 }
 
 // // // // // // // // // // // // // // /   inicjalizacja zbierania danych z czujnika, wait_for_event // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////
@@ -397,7 +397,7 @@ void ATI6284_force::wait_for_event()
 		);
 	}
 
-	if (!master.test_mode) {
+	if (!(master.force_sensor_test_mode)) {
 		lib::timer local_timer;
 		float sec;
 
@@ -456,7 +456,7 @@ void ATI6284_force::initiate_reading(void) {
 		);
 	}
 
-	if (!(master.test_mode)) {
+	if (!(master.force_sensor_test_mode)) {
 #if	 WITHOUT_INTERRUPT
 
 		lib::timer local_timer;
@@ -572,23 +572,8 @@ void ATI6284_force::initiate_reading(void) {
 		printf ("aaa: %f, %f, %f: \n", force_torque[0], force_torque[1], force_torque[2]);
 #endif
 		// // // // // // // // // // // // // // / PRZEPISANIE WYNIKU // // // // // // // // // // // // // // // // // // // // // // // //
-
-		if (master.force_tryb == 1) {
-			for (int i = 0; i < 6; i++) {
-				from_vsp.force.rez[i] = force_torque[i];
-			}
-			from_vsp.force.rez[0] = force_torque[1] * 20;
-			from_vsp.force.rez[1] = force_torque[0] * 20;
-			from_vsp.force.rez[2] = -force_torque[2] * 20;
-
-			lib::Ft_vector kartez_force;
-			for (int i = 0; i < 6; i++) {
-				kartez_force[i] = from_vsp.force.rez[i];
-			}
-			from_vsp.force.status = sensor_status;
-			master.force_msr_upload(kartez_force);//!< wpisanie sily do zmiennych globalnych dla calego procesu
-		} else if (master.force_tryb == 2 && gravity_transformation) {
-			lib::Ft_vector ft_table;
+		lib::Ft_vector kartez_force, root_force;
+	if (gravity_transformation) {
 			for (int i = 0; i < 6; i++)
 				ft_table[i] = force_torque[i];
 
