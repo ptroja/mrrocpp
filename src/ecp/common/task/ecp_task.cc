@@ -44,7 +44,6 @@ void task::main_task_algorithm(void)
 
 void task::mp_2_ecp_next_state_string_handler(void)
 {
-
 }
 
 task::~task()

@@ -32,26 +32,18 @@ rcsc::rcsc(lib::configurator &_config) :
 	sr_ecp_msg->message("ECP loaded");
 }
 
-void rcsc::main_task_algorithm(void)
+void rcsc::mp_2_ecp_next_state_string_handler(void)
 {
-	for (;;) {
 
-		sr_ecp_msg->message("Waiting for MP order");
+	if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_TRANSPARENT) {
+		gt->Move();
 
-		get_next_state();
-
-		sr_ecp_msg->message("Order received");
-
-		if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_TRANSPARENT) {
-			gt->Move();
-
-		} else if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_SPEAK) {
-			speak->configure(mp_command.ecp_next_state.mp_2_ecp_next_state_string);
-			speak->Move();
-
-		}
+	} else if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_SPEAK) {
+		speak->configure(mp_command.ecp_next_state.mp_2_ecp_next_state_string);
+		speak->Move();
 
 	}
+
 }
 
 }

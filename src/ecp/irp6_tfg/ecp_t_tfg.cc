@@ -35,24 +35,16 @@ tfg::tfg(lib::configurator &_config) :
 	sr_ecp_msg->message("ECP TFG loaded");
 }
 
-void tfg::main_task_algorithm(void)
+void tfg::mp_2_ecp_next_state_string_handler(void)
 {
-	for (;;) {
-		sr_ecp_msg->message("Waiting for MP order");
 
-		get_next_state();
-
-		sr_ecp_msg->message("Order received");
-		//printf("postument: %d\n", mp_command.ecp_next_state.mp_2_ecp_next_state);
-		//flushall();
 
 		if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_TFG) {
 
 			tfgg->Move();
 		}
 
-		ecp_termination_notice();
-	} //end for
+
 }
 
 }

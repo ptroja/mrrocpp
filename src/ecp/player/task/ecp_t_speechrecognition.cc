@@ -15,39 +15,30 @@ namespace player {
 namespace task {
 
 // KONSTRUKTORY
-speechrecognition::speechrecognition(lib::configurator &_config)
-        : task(_config)
+speechrecognition::speechrecognition(lib::configurator &_config) :
+	task(_config)
 {
-    srg = new generator::speechrecognition (*this);
+	srg = new generator::speechrecognition(*this);
 }
 
 speechrecognition::~speechrecognition()
 {
-    delete srg;
+	delete srg;
 }
 
-void speechrecognition::main_task_algorithm(void)
+void speechrecognition::mp_2_ecp_next_state_string_handler(void)
 {
-    for(;;)
-    {
-        sr_ecp_msg->message("Waiting for MP order");
 
-        get_next_state ();
+	switch ((ecp_mp::task::ECP_PLAYER_STATES) mp_command.ecp_next_state.mp_2_ecp_next_state)
+	{
+		case ecp_mp::task::ECP_GEN_SPEECHRECOGNITION:
+			srg->Move();
+			break;
+		default:
+			fprintf(stderr, "invalid ecp_next_state.mp_2_ecp_next_state (%d)\n", mp_command.ecp_next_state.mp_2_ecp_next_state);
+			break;
+	}
 
-        sr_ecp_msg->message("Order received");
-
-        switch ( (ecp_mp::task::ECP_PLAYER_STATES) mp_command.ecp_next_state.mp_2_ecp_next_state)
-        {
-        	case ecp_mp::task::ECP_GEN_SPEECHRECOGNITION:
-        		srg->Move();
-        		break;
-        	default:
-        		fprintf(stderr, "invalid ecp_next_state.mp_2_ecp_next_state (%d)\n", mp_command.ecp_next_state.mp_2_ecp_next_state);
-        		break;
-        }
-
-        ecp_termination_notice();
-    }
 }
 
 }
@@ -56,7 +47,7 @@ void speechrecognition::main_task_algorithm(void)
 namespace common {
 namespace task {
 
-task* return_created_ecp_task (lib::configurator &_config)
+task* return_created_ecp_task(lib::configurator &_config)
 {
 	return new player::task::speechrecognition(_config);
 }

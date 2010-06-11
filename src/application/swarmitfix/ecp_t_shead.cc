@@ -36,53 +36,43 @@ swarmitfix::swarmitfix(lib::configurator &_config) :
 	sr_ecp_msg->message("ECP shead loaded");
 }
 
-void swarmitfix::main_task_algorithm(void)
+void swarmitfix::mp_2_ecp_next_state_string_handler(void)
 {
-	for (;;) {
-		sr_ecp_msg->message("Waiting for MP order");
 
-		get_next_state();
+	if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_TRANSPARENT) {
+		gt->throw_kinematics_exceptions = (bool) mp_command.ecp_next_state.mp_2_ecp_next_state_variant;
+		gt->Move();
+	} else if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_SMOOTH) {
+		std::string path(mrrocpp_network_path);
+		path += mp_command.ecp_next_state.mp_2_ecp_next_state_string;
 
-		sr_ecp_msg->message("Order received");
-		//printf("postument: %d\n", mp_command.ecp_next_state.mp_2_ecp_next_state);
-		// flushall();
-
-		if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_TRANSPARENT) {
-			gt->throw_kinematics_exceptions = (bool) mp_command.ecp_next_state.mp_2_ecp_next_state_variant;
-			gt->Move();
-		} else if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_SMOOTH) {
-			std::string path(mrrocpp_network_path);
-			path += mp_command.ecp_next_state.mp_2_ecp_next_state_string;
-
-			switch ((ecp_mp::task::SMOOTH_MOTION_TYPE) mp_command.ecp_next_state.mp_2_ecp_next_state_variant)
-			{
-				case ecp_mp::task::RELATIVE:
-					sg->set_relative();
-					break;
-				case ecp_mp::task::ABSOLUTE:
-					sg->set_absolute();
-					break;
-				default:
-					break;
-			}
-
-			sg->load_file_with_path(path.c_str());
-			sg->Move();
-		} else if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_SLEEP) {
-			g_sleep->init_time(mp_command.ecp_next_state.mp_2_ecp_next_state_variant);
-			g_sleep->Move();
-		} else if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_HEAD_SOLDIFY) {
-			g_head_soldify->Move();
-		} else if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_HEAD_DESOLDIFY) {
-			g_head_desoldify->Move();
-		} else if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_VACUUM_ON) {
-			g_head_vacuum_on->Move();
-		} else if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_VACUUM_OFF) {
-			g_head_vacuum_off->Move();
+		switch ((ecp_mp::task::SMOOTH_MOTION_TYPE) mp_command.ecp_next_state.mp_2_ecp_next_state_variant)
+		{
+			case ecp_mp::task::RELATIVE:
+				sg->set_relative();
+				break;
+			case ecp_mp::task::ABSOLUTE:
+				sg->set_absolute();
+				break;
+			default:
+				break;
 		}
 
-		ecp_termination_notice();
-	} //end for
+		sg->load_file_with_path(path.c_str());
+		sg->Move();
+	} else if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_SLEEP) {
+		g_sleep->init_time(mp_command.ecp_next_state.mp_2_ecp_next_state_variant);
+		g_sleep->Move();
+	} else if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_HEAD_SOLDIFY) {
+		g_head_soldify->Move();
+	} else if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_HEAD_DESOLDIFY) {
+		g_head_desoldify->Move();
+	} else if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_VACUUM_ON) {
+		g_head_vacuum_on->Move();
+	} else if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_VACUUM_OFF) {
+		g_head_vacuum_off->Move();
+	}
+
 }
 
 }

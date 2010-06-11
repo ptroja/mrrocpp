@@ -10,10 +10,10 @@ namespace ecp {
 namespace irp6p_m {
 namespace task {
 
-class rcsc: public common::task::task
+class rcsc : public common::task::task
 {
 protected:
-    //generatory
+	//generatory
 	common::generator::transparent* gt;
 	common::generator::tff_nose_run* nrg;
 	common::generator::tff_rubik_grab* rgg;
@@ -23,15 +23,15 @@ protected:
 	common::generator::smooth* sg;
 	common::generator::bias_edp_force* befg;
 	common::generator::weight_meassure* wmg;
-    //podzadania
+	//podzadania
 	common::task::ecp_sub_task_gripper_opening* go_st;
 
 public:
-    // KONSTRUKTORY
-    rcsc(lib::configurator &_config);
+	// KONSTRUKTORY
+	rcsc(lib::configurator &_config);
 
-    // methods for ECP template to redefine in concrete classes
-    void main_task_algorithm(void);
+	// methods for ECP template to redefine in concrete classes
+	void mp_2_ecp_next_state_string_handler(void);
 };
 
 }

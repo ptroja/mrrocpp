@@ -29,7 +29,7 @@ public:
     multiplayer(lib::configurator &_config);
 
     // methods for ECP template to redefine in concrete classes
-    void main_task_algorithm(void);
+    void mp_2_ecp_next_state_string_handler(void);
 };
 
 }

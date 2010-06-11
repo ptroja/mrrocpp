@@ -32,35 +32,24 @@ bird_hand_test::bird_hand_test(lib::configurator &_config) :
 	sr_ecp_msg->message("ECP BIRD HAND TEST loaded");
 }
 
-void bird_hand_test::main_task_algorithm(void)
+void bird_hand_test::mp_2_ecp_next_state_string_handler(void)
 {
-	for (;;) {
-		sr_ecp_msg->message("Waiting for MP order");
 
-		get_next_state();
+	if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_TRANSPARENT) {
 
-		sr_ecp_msg->message("Order received");
-		//printf("postument: %d\n", mp_command.ecp_next_state.mp_2_ecp_next_state);
-		// flushall();
+		gt->throw_kinematics_exceptions = (bool) mp_command.ecp_next_state.mp_2_ecp_next_state_variant;
+		gt->Move();
+	} else if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_SLEEP) {
 
+		g_sleep->init_time(mp_command.ecp_next_state.mp_2_ecp_next_state_variant);
+		g_sleep->Move();
+	} else if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_BIRD_HAND) {
 
-		if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_TRANSPARENT) {
+		sr_ecp_msg->message("ECP_GEN_BIRD_HAND");
 
-			gt->throw_kinematics_exceptions = (bool) mp_command.ecp_next_state.mp_2_ecp_next_state_variant;
-			gt->Move();
-		} else if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_SLEEP) {
+		g_bird_hand->Move();
+	}
 
-			g_sleep->init_time(mp_command.ecp_next_state.mp_2_ecp_next_state_variant);
-			g_sleep->Move();
-		} else if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_BIRD_HAND) {
-
-			sr_ecp_msg->message("ECP_GEN_BIRD_HAND");
-
-			g_bird_hand->Move();
-		}
-
-		ecp_termination_notice();
-	} //end for
 }
 
 }
