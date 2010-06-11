@@ -252,7 +252,6 @@ void ATI6284_force::wait_for_event() {
 }
 
 /*************************** inicjacja odczytu ******************************/
-<<<<<<< HEAD
 void ATI6284_force::initiate_reading(void)
 {
 	if (!is_sensor_configured) {
@@ -269,22 +268,6 @@ void ATI6284_force::initiate_reading(void)
     for (int i = 0; i < 6; ++i) {
         ft_table[i] = force_fresh[i];
     }
-=======
-void ATI6284_force::initiate_reading(void) {
-	double force_fresh[6] = { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f };
-
-	if (!is_sensor_configured) {
-		throw lib::sensor::sensor_error(lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
-	}
-
-	lib::Ft_vector ft_table;
-
-	convert_data(adc_data, bias_data, force_fresh);
-
-	for (int i = 0; i < 6; ++i) {
-		ft_table[i] = force_fresh[i];
-	}
->>>>>>> 523ef9ec929103c923b4205613d59202b24b9dc0
 
 	is_reading_ready = true;
 
@@ -305,7 +288,7 @@ void ATI6284_force::get_reading(void) {
 /*******************************************************************/
 force* return_created_edp_force_sensor(common::manip_effector &_master) {
 	return new ATI6284_force(_master);
-}// : return_created_sensor
+}
 
 
 /*******************************************************************/

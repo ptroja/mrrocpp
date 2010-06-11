@@ -435,7 +435,8 @@ void ATI6284_force::wait_for_event()
 }
 // // // // // // // // // // // // // // /   odczyt danych  // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////
 
-void ATI6284_force::initiate_reading(void) {
+void ATI6284_force::initiate_reading(void)
+{
 	short int no_result = 0; //brak wyniku
 	static short int show = 0; //wyswietl
 	float force_torque[6]; //wektor z si�ami i napi�ciami
@@ -475,8 +476,7 @@ void ATI6284_force::initiate_reading(void) {
 
 			local_timer.timer_stop();
 			local_timer.get_time(&sec);
-		} while ((Samples_Acquired < Total_Number_of_Samples) && (sec
-				< START_TO_READ_FAILURE));
+		} while ((Samples_Acquired < Total_Number_of_Samples) && (sec < START_TO_READ_FAILURE));
 		if (sec >= START_TO_READ_FAILURE) {
 			no_result = 1;
 			invalid_value = 1;
@@ -554,8 +554,7 @@ void ATI6284_force::initiate_reading(void) {
 				show_no_result = 0;
 			} else {
 				if (overload == 1) {
-					sr_msg->message(
-							"EDP Sensor initiate_reading - OVERLOAD REMOVED");
+					sr_msg->message("EDP Sensor initiate_reading - OVERLOAD REMOVED");
 					overload = 0;
 				}
 			}
@@ -572,8 +571,9 @@ void ATI6284_force::initiate_reading(void) {
 		printf ("aaa: %f, %f, %f: \n", force_torque[0], force_torque[1], force_torque[2]);
 #endif
 		// // // // // // // // // // // // // // / PRZEPISANIE WYNIKU // // // // // // // // // // // // // // // // // // // // // // // //
-		lib::Ft_vector kartez_force, root_force;
-	if (gravity_transformation) {
+		lib::Ft_vector ft_table;
+		if (gravity_transformation) {
+			lib::Ft_vector ft_table;
 			for (int i = 0; i < 6; i++)
 				ft_table[i] = force_torque[i];
 

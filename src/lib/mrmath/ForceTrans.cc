@@ -4,9 +4,6 @@
 
 #include "lib/mrmath/mrmath.h"
 
-int debugi = 1;
-
-
 namespace mrrocpp {
 namespace lib {
 
@@ -29,7 +26,7 @@ ForceTrans::ForceTrans(const lib::Homog_matrix & init_frame, const lib::Homog_ma
 */
 
 ForceTrans::ForceTrans(const lib::Homog_matrix & init_frame, const lib::Homog_matrix & s_frame,
-	const double weight, const lib::K_vector & point_of_gravity) : initialized (false)
+	const double weight, const lib::K_vector & point_of_gravity) : debugi(1), initialized (false)
 {
 
 	sensor_frame = s_frame;

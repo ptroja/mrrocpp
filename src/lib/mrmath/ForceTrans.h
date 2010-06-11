@@ -13,6 +13,8 @@ namespace lib {
 
 class ForceTrans
 {
+private:
+	int debugi;
 
 protected:
 	bool initialized;
