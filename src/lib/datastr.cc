@@ -62,30 +62,9 @@ std::string toString(lib::ECP_POSE_SPECIFICATION ps)
 
 lib::robot_name_t returnProperRobot(const std::string & robotName)
 {
-	if (robotName == "ROBOT_IRP6OT_M")
-		return lib::ROBOT_IRP6OT_M;
-	else if (robotName == "ROBOT_IRP6P_M")
-		return lib::ROBOT_IRP6P_M;
-	else if (robotName == "ROBOT_IRP6OT_TFG")
-		return lib::ROBOT_IRP6OT_TFG;
-	else if (robotName == "ROBOT_IRP6P_TFG")
-		return lib::ROBOT_IRP6P_TFG;
-	else if (robotName == "ROBOT_CONVEYOR")
-		return lib::ROBOT_CONVEYOR;
-	else if (robotName == "ROBOT_SPEAKER")
-		return lib::ROBOT_SPEAKER;
-	else if (robotName == "ROBOT_IRP6_MECHATRONIKA")
-		return lib::ROBOT_IRP6_MECHATRONIKA;
-	else if (robotName == "ROBOT_ELECTRON")
-		return lib::ROBOT_ELECTRON;
-	else if (robotName == "ROBOT_FESTIVAL")
-		return lib::ROBOT_FESTIVAL;
-	else if (robotName == "ROBOT_HAND")
-		return lib::ROBOT_HAND;
-	else if (robotName == "ROBOT_SPEECHRECOGNITION")
-		return lib::ROBOT_SPEECHRECOGNITION;
-	else
-		return lib::ROBOT_UNDEFINED;
+
+	lib::robot_name_t returned_robot = robotName;
+	return returned_robot;
 }
 
 lib::ECP_POSE_SPECIFICATION returnProperPS(const std::string & poseSpecification)

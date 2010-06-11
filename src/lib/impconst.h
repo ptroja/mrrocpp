@@ -49,7 +49,10 @@ typedef double frame_tab[3][4];
 typedef std::string robot_name_t;
 
 const robot_name_t ROBOT_UNDEFINED = "ROBOT_UNDEFINED";
-const robot_name_t ROBOT_IRP6OT_TFG = "ROBOT_IRP6OT_TFG";
+
+// the other robots in dedicated robot consts files
+
+
 const robot_name_t ROBOT_IRP6OT_M = "ROBOT_IRP6OT_M";
 const robot_name_t ROBOT_IRP6P_TFG = "ROBOT_IRP6P_TFG";
 
