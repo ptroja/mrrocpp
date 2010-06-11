@@ -33,7 +33,7 @@ namespace mrrocpp {
 namespace edp {
 namespace common {
 
-extern irp6m::effector* master;   // Bufor polecen i odpowiedzi EDP_MASTER
+extern irp6m::effector* master; // Bufor polecen i odpowiedzi EDP_MASTER
 
 }
 
@@ -49,7 +49,7 @@ int_handler (void *arg, int int_id)
 	common::motor_data & md = irq_data->md;
 	struct sigevent & event = irq_data->event;
 
-	md.hardware_error = (uint64_t) lib::ALL_RIGHT; // Nie ma bledow sprzetowych
+	md.hardware_error = (uint64_t) common::ALL_RIGHT; // Nie ma bledow sprzetowych
 
 	if(common::master->robot_test_mode)
 	{
@@ -110,11 +110,11 @@ int_handler (void *arg, int int_id)
 			md.robot_status[i].adr_offset_plus_4 = robot_status[i].adr_offset_plus_4;
 			md.robot_status[i].adr_offset_plus_6 = robot_status[i].adr_offset_plus_6;
 
-			low_word  = robot_status[i].adr_offset_plus_4;
+			low_word = robot_status[i].adr_offset_plus_4;
 			high_word = robot_status[i].adr_offset_plus_6;
 
 			// Obliczenie polozenia
-			md.current_absolute_position[i] =  (((uint32_t) (high_word<<16)) & (0xFFFF0000)) | ((uint16_t) low_word);
+			md.current_absolute_position[i] = (((uint32_t) (high_word<<16)) & (0xFFFF0000)) | ((uint16_t) low_word);
 
 			//   md.robot_status[i].adr_offset_plus_6 = robot_status[i].adr_offset_plus_6;
 			//   md.high_word = high_word;
@@ -125,25 +125,24 @@ int_handler (void *arg, int int_id)
 
 			// Obsluga bledow
 			if ( robot_status[i].adr_offset_plus_0 & 0x0100 )
-				md.hardware_error |= (uint64_t) (lib::SYNCHRO_ZERO << (5*i)); // Impuls zera rezolwera
+			md.hardware_error |= (uint64_t) (common::SYNCHRO_ZERO << (5*i)); // Impuls zera rezolwera
 
 			if ( robot_status[i].adr_offset_plus_0 & 0x4000 )
-					md.hardware_error |= (uint64_t) (lib::SYNCHRO_SWITCH_ON << (5*i)); // Zadzialal wylacznik synchronizacji
+			md.hardware_error |= (uint64_t) (common::SYNCHRO_SWITCH_ON << (5*i)); // Zadzialal wylacznik synchronizacji
 
 			// wylaczniki krancowe
 			if ( ~(robot_status[i].adr_offset_plus_0) & 0x1000 ) {
-			//	out8((ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), FIRST_SERVO_PTR + (uint8_t)i);
-			//	out16((SERVO_COMMAND1_ADR + ISA_CARD_OFFSET), RESET_ALARM); // Skasowanie alarmu i umozliwienie ruchu osi
-				md.hardware_error |= (uint64_t) (lib::UPPER_LIMIT_SWITCH << (5*i)); // Zadzialal wylacznik "gorny" krancowy
+				//	out8((ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), FIRST_SERVO_PTR + (uint8_t)i);
+				//	out16((SERVO_COMMAND1_ADR + ISA_CARD_OFFSET), RESET_ALARM); // Skasowanie alarmu i umozliwienie ruchu osi
+				md.hardware_error |= (uint64_t) (common::UPPER_LIMIT_SWITCH << (5*i)); // Zadzialal wylacznik "gorny" krancowy
 			}
 			else if ( ~(robot_status[i].adr_offset_plus_0) & 0x2000 ) {
-				md.hardware_error |= (uint64_t) (lib::LOWER_LIMIT_SWITCH << (5*i)); // Zadzialal wylacznik "dolny" krancowy
+				md.hardware_error |= (uint64_t) (common::LOWER_LIMIT_SWITCH << (5*i)); // Zadzialal wylacznik "dolny" krancowy
 			}
-
 
 			if ( robot_status[i].adr_offset_plus_0 & 0x0400 )
 			{
-				md.hardware_error |= (uint64_t) (lib::OVER_CURRENT << (5*i));
+				md.hardware_error |= (uint64_t) (common::OVER_CURRENT << (5*i));
 				//     out8((ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), FIRST_SERVO_PTR + (uint8_t)i);
 				//     out16((SERVO_COMMAND1_ADR + ISA_CARD_OFFSET), RESET_ALARM); // Skasowanie alarmu i umozliwienie ruchu osi
 			}
@@ -157,8 +156,7 @@ int_handler (void *arg, int int_id)
 			md.is_power_on = false;
 		}
 
-
-		if ( md.hardware_error & lib::HARDWARE_ERROR_MASK ) // wyciecie SYNCHRO_ZERO i SYNCHRO_SWITCH_ON
+		if ( md.hardware_error & common::HARDWARE_ERROR_MASK ) // wyciecie SYNCHRO_ZERO i SYNCHRO_SWITCH_ON
 		{
 			for ( i = 0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++ ) {
 				// Zapis wartosci zadanej wypelnienia PWM

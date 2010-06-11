@@ -13,6 +13,8 @@
 #include "edp/common/edp_e_motor_driven.h"
 #include "edp/common/vis_server.h"
 #include "lib/mis_fun.h"
+#include "lib/robot_consts/irp6ot_m_const.h"
+#include "lib/robot_consts/irp6p_m_const.h"
 
 #define MAXBUFLEN 100
 
@@ -21,15 +23,18 @@ namespace edp {
 namespace common {
 
 vis_server::vis_server(motor_driven_effector &_master) :
-	master(_master), thread_id(NULL) {
+	master(_master), thread_id(NULL)
+{
 	thread_id = new boost::thread(boost::bind(&vis_server::operator(), this));
 }
 
-vis_server::~vis_server(void) {
+vis_server::~vis_server(void)
+{
 	delete thread_id;
 }
 
-void vis_server::operator()(void) {
+void vis_server::operator()(void)
+{
 	lib::set_thread_name("visualization");
 
 	int sockfd;
@@ -37,10 +42,9 @@ void vis_server::operator()(void) {
 	struct sockaddr_in their_addr; // connector's address information
 	socklen_t addr_len;
 
-	uint16_t port = master.config.value<int> ("visual_udp_port");
+	uint16_t port = master.config.value <int> ("visual_udp_port");
 	if (port == 0) {
-		master.msg->message(
-				"visualisation_thread: bad or missing <visual_udp_port> config entry");
+		master.msg->message("visualisation_thread: bad or missing <visual_udp_port> config entry");
 		return;
 	}
 
@@ -65,8 +69,7 @@ void vis_server::operator()(void) {
 		int numbytes;
 		char buf[MAXBUFLEN];
 
-		if ((numbytes = recvfrom(sockfd, buf, MAXBUFLEN - 1, 0,
-				(struct sockaddr *) &their_addr, &addr_len)) == -1) {
+		if ((numbytes = recvfrom(sockfd, buf, MAXBUFLEN - 1, 0, (struct sockaddr *) &their_addr, &addr_len)) == -1) {
 			perror("recvfrom()");
 			break;
 		}
@@ -77,20 +80,20 @@ void vis_server::operator()(void) {
 		master.master_joints_read(tmp);
 
 		// korekta aby polozenia byly wzgledem poprzedniego czlonu
-		switch (master.robot_name) {
-		case lib::ROBOT_IRP6OT_M:
+
+
+		if (master.robot_name == lib::ROBOT_IRP6OT_M) {
+
 			tmp[3] -= tmp[2] + M_PI_2;
 			tmp[4] -= tmp[3] + tmp[2] + M_PI_2;
-			break;
-		case lib::ROBOT_IRP6P_M:
+		} else if (master.robot_name == lib::ROBOT_IRP6P_M) {
+
 			tmp[2] -= tmp[1] + M_PI_2;
 			tmp[3] -= tmp[2] + tmp[1] + M_PI_2;
-			break;
-		default:
-			break;
 		}
 
-		struct {
+		struct
+		{
 			int synchronised;
 			float joints[MAX_SERVOS_NR];
 		} reply;
@@ -98,17 +101,15 @@ void vis_server::operator()(void) {
 		reply.synchronised = (master.is_synchronised()) ? 1 : 0;
 
 		for (int i = 0; i < master.number_of_servos; i++) {
-			reply.joints[i] = static_cast<float> (tmp[i]);
+			reply.joints[i] = static_cast <float> (tmp[i]);
 		}
 
-		numbytes = sendto(sockfd, &reply, sizeof(reply), 0,
-				(struct sockaddr *) &their_addr, addr_len);
+		numbytes = sendto(sockfd, &reply, sizeof(reply), 0, (struct sockaddr *) &their_addr, addr_len);
 		if (numbytes == -1) {
 			perror("sendto()");
 			break;
 		} else if (numbytes < (ssize_t) sizeof(reply)) {
-			fprintf(stderr, "send only %d of %d bytes\n", numbytes,
-					sizeof(reply));
+			fprintf(stderr, "send only %d of %d bytes\n", numbytes, sizeof(reply));
 			break;
 		}
 

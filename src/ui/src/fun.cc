@@ -39,8 +39,8 @@
 extern Ui ui;
 
 // odblokowanie widgetu
-int set_ui_busy_state_notification(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo) {
+int set_ui_busy_state_notification(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
@@ -50,8 +50,8 @@ int set_ui_busy_state_notification(PtWidget_t *widget, ApInfo_t *apinfo,
 	return (Pt_CONTINUE);
 }
 
-int set_ui_ready_state_notification(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo) {
+int set_ui_ready_state_notification(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
@@ -61,47 +61,43 @@ int set_ui_ready_state_notification(PtWidget_t *widget, ApInfo_t *apinfo,
 	return (Pt_CONTINUE);
 }
 
-int set_ui_state_notification(UI_NOTIFICATION_STATE_ENUM new_notifacion) {
+int set_ui_state_notification(UI_NOTIFICATION_STATE_ENUM new_notifacion)
+{
 	if (new_notifacion != ui.notification_state) {
 		int pt_res = PtEnter(0);
 
 		ui.notification_state = new_notifacion;
 
-		switch (new_notifacion) {
-		case UI_N_STARTING:
-			PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_TEXT_STRING,
-					"STARTING", 0);
-			PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_COLOR, Pg_MAGENTA, 0);
-			break;
-		case UI_N_READY:
-			PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_TEXT_STRING, "READY",
-					0);
-			PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_COLOR, Pg_BLUE, 0);
-			break;
-		case UI_N_BUSY:
-			PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_TEXT_STRING, "BUSY", 0);
-			PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_COLOR, Pg_RED, 0);
-			break;
-		case UI_N_EXITING:
-			PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_TEXT_STRING,
-					"EXITING", 0);
-			PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_COLOR, Pg_MAGENTA, 0);
-			break;
-		case UI_N_COMMUNICATION:
-			PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_TEXT_STRING,
-					"COMMUNICATION", 0);
-			PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_COLOR, Pg_RED, 0);
-			break;
-		case UI_N_SYNCHRONISATION:
-			PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_TEXT_STRING,
-					"SYNCHRONISATION", 0);
-			PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_COLOR, Pg_RED, 0);
-			break;
-		case UI_N_PROCESS_CREATION:
-			PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_TEXT_STRING,
-					"PROCESS CREATION", 0);
-			PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_COLOR, Pg_RED, 0);
-			break;
+		switch (new_notifacion)
+		{
+			case UI_N_STARTING:
+				PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_TEXT_STRING, "STARTING", 0);
+				PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_COLOR, Pg_MAGENTA, 0);
+				break;
+			case UI_N_READY:
+				PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_TEXT_STRING, "READY", 0);
+				PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_COLOR, Pg_BLUE, 0);
+				break;
+			case UI_N_BUSY:
+				PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_TEXT_STRING, "BUSY", 0);
+				PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_COLOR, Pg_RED, 0);
+				break;
+			case UI_N_EXITING:
+				PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_TEXT_STRING, "EXITING", 0);
+				PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_COLOR, Pg_MAGENTA, 0);
+				break;
+			case UI_N_COMMUNICATION:
+				PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_TEXT_STRING, "COMMUNICATION", 0);
+				PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_COLOR, Pg_RED, 0);
+				break;
+			case UI_N_SYNCHRONISATION:
+				PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_TEXT_STRING, "SYNCHRONISATION", 0);
+				PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_COLOR, Pg_RED, 0);
+				break;
+			case UI_N_PROCESS_CREATION:
+				PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_TEXT_STRING, "PROCESS CREATION", 0);
+				PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_COLOR, Pg_RED, 0);
+				break;
 		}
 
 		PtDamageWidget(ABW_PtLabel_ready_busy);
@@ -120,8 +116,7 @@ int set_ui_state_notification(UI_NOTIFICATION_STATE_ENUM new_notifacion) {
 
 // zamyka okno proces control
 
-int close_process_control_window(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
+int close_process_control_window(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -136,8 +131,7 @@ int close_process_control_window(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
-int clear_teaching_window_flag(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
+int clear_teaching_window_flag(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -149,8 +143,7 @@ int clear_teaching_window_flag(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
-int clear_file_selection_window_flag(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
+int clear_file_selection_window_flag(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -162,8 +155,7 @@ int clear_file_selection_window_flag(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
-int clear_wnd_process_control_flag(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
+int clear_wnd_process_control_flag(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -176,8 +168,7 @@ int clear_wnd_process_control_flag(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
-int start_process_control_window(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
+int start_process_control_window(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -195,8 +186,7 @@ int start_process_control_window(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
-int clear_task_config_window_flag(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
+int clear_task_config_window_flag(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -207,8 +197,8 @@ int clear_task_config_window_flag(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
-int start_task_config_window(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo) {
+int start_task_config_window(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
@@ -226,8 +216,8 @@ int start_task_config_window(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
-int yes_no_callback(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo) {
+int yes_no_callback(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 
 	/* eliminate 'unreferenced' warnings */
 
@@ -239,18 +229,14 @@ int yes_no_callback(PtWidget_t *widget, ApInfo_t *apinfo,
 		my_data = (PhKeyEvent_t *) PhGetData(cbinfo->event);
 	}
 
-	if (((cbinfo->event->type == Ph_EV_BUT_RELEASE)
-			&& (ApName(ApWidget(cbinfo)) == ABN_PtButton_yes))
-			|| ((cbinfo->event->type == Ph_EV_KEY)
-					&& (my_data->key_cap == 0x79))) // Y
+	if (((cbinfo->event->type == Ph_EV_BUT_RELEASE) && (ApName(ApWidget(cbinfo)) == ABN_PtButton_yes))
+			|| ((cbinfo->event->type == Ph_EV_KEY) && (my_data->key_cap == 0x79))) // Y
 	{
 		ui.ui_ecp_obj->ui_rep.reply = lib::ANSWER_YES;
 	}
 
-	else if (((cbinfo->event->type == Ph_EV_BUT_RELEASE) && (ApName(ApWidget(
-			cbinfo)) == ABN_PtButton_no))
-			|| ((cbinfo->event->type == Ph_EV_KEY)
-					&& (my_data->key_cap == 0x6e))) // N
+	else if (((cbinfo->event->type == Ph_EV_BUT_RELEASE) && (ApName(ApWidget(cbinfo)) == ABN_PtButton_no))
+			|| ((cbinfo->event->type == Ph_EV_KEY) && (my_data->key_cap == 0x6e))) // N
 
 	{
 		ui.ui_ecp_obj->ui_rep.reply = lib::ANSWER_NO;
@@ -264,8 +250,7 @@ int yes_no_callback(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
-int input_integer_callback(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
+int input_integer_callback(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -280,19 +265,15 @@ int input_integer_callback(PtWidget_t *widget, ApInfo_t *apinfo,
 		my_data = (PhKeyEvent_t *) PhGetData(cbinfo->event);
 	}
 
-	if (((cbinfo->event->type == Ph_EV_BUT_RELEASE)
-			&& (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_input_integer_ok))
-			|| ((cbinfo->event->type == Ph_EV_KEY)
-					&& (my_data->key_cap == 0x6f))) // O
+	if (((cbinfo->event->type == Ph_EV_BUT_RELEASE) && (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_input_integer_ok))
+			|| ((cbinfo->event->type == Ph_EV_KEY) && (my_data->key_cap == 0x6f))) // O
 	{
 		ui.ui_ecp_obj->ui_rep.reply = lib::ANSWER_YES;
-		PtGetResource(ABW_PtNumericInteger_wind_input_integer_value,
-				Pt_ARG_NUMERIC_VALUE, &(tmp_ptgr), 0);
+		PtGetResource(ABW_PtNumericInteger_wind_input_integer_value, Pt_ARG_NUMERIC_VALUE, &(tmp_ptgr), 0);
 		ui.ui_ecp_obj->ui_rep.integer_number = *tmp_ptgr;
-	} else if (((cbinfo->event->type == Ph_EV_BUT_RELEASE) && (ApName(ApWidget(
-			cbinfo)) == ABN_PtButton_wind_input_integer_cancel))
-			|| ((cbinfo->event->type == Ph_EV_KEY)
-					&& (my_data->key_cap == 0x63))) // C
+	} else if (((cbinfo->event->type == Ph_EV_BUT_RELEASE) && (ApName(ApWidget(cbinfo))
+			== ABN_PtButton_wind_input_integer_cancel)) || ((cbinfo->event->type == Ph_EV_KEY) && (my_data->key_cap
+			== 0x63))) // C
 	{
 		ui.ui_ecp_obj->ui_rep.reply = lib::QUIT;
 		ui.ui_ecp_obj->ui_rep.integer_number = 0;
@@ -305,8 +286,7 @@ int input_integer_callback(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
-int input_double_callback(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
+int input_double_callback(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -321,19 +301,15 @@ int input_double_callback(PtWidget_t *widget, ApInfo_t *apinfo,
 		my_data = (PhKeyEvent_t *) PhGetData(cbinfo->event);
 	}
 
-	if (((cbinfo->event->type == Ph_EV_BUT_RELEASE)
-			&& (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_input_double_ok))
-			|| ((cbinfo->event->type == Ph_EV_KEY)
-					&& (my_data->key_cap == 0x6f))) // O
+	if (((cbinfo->event->type == Ph_EV_BUT_RELEASE) && (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_input_double_ok))
+			|| ((cbinfo->event->type == Ph_EV_KEY) && (my_data->key_cap == 0x6f))) // O
 	{
 		ui.ui_ecp_obj->ui_rep.reply = lib::ANSWER_YES;
-		PtGetResource(ABW_PtNumericFloat_wind_input_double_value,
-				Pt_ARG_NUMERIC_VALUE, &(tmp_ptgr), 0);
+		PtGetResource(ABW_PtNumericFloat_wind_input_double_value, Pt_ARG_NUMERIC_VALUE, &(tmp_ptgr), 0);
 		ui.ui_ecp_obj->ui_rep.double_number = *tmp_ptgr;
-	} else if (((cbinfo->event->type == Ph_EV_BUT_RELEASE) && (ApName(ApWidget(
-			cbinfo)) == ABN_PtButton_wind_input_double_cancel))
-			|| ((cbinfo->event->type == Ph_EV_KEY)
-					&& (my_data->key_cap == 0x63))) // C
+	} else if (((cbinfo->event->type == Ph_EV_BUT_RELEASE) && (ApName(ApWidget(cbinfo))
+			== ABN_PtButton_wind_input_double_cancel)) || ((cbinfo->event->type == Ph_EV_KEY) && (my_data->key_cap
+			== 0x63))) // C
 	{
 		ui.ui_ecp_obj->ui_rep.reply = lib::QUIT;
 		ui.ui_ecp_obj->ui_rep.double_number = 0.0;
@@ -346,8 +322,7 @@ int input_double_callback(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
-int choose_option_callback(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
+int choose_option_callback(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -361,34 +336,28 @@ int choose_option_callback(PtWidget_t *widget, ApInfo_t *apinfo,
 		my_data = (PhKeyEvent_t *) PhGetData(cbinfo->event);
 	}
 
-	if (((cbinfo->event->type == Ph_EV_BUT_RELEASE)
-			&& (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_choose_option_1))
-			|| ((cbinfo->event->type == Ph_EV_KEY)
-					&& (my_data->key_cap == 0x31))) // 1
+	if (((cbinfo->event->type == Ph_EV_BUT_RELEASE) && (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_choose_option_1))
+			|| ((cbinfo->event->type == Ph_EV_KEY) && (my_data->key_cap == 0x31))) // 1
 	{
 		ui.ui_ecp_obj->ui_rep.reply = lib::OPTION_ONE;
-	} else if (((cbinfo->event->type == Ph_EV_BUT_RELEASE) && (ApName(ApWidget(
-			cbinfo)) == ABN_PtButton_wind_choose_option_2))
-			|| ((cbinfo->event->type == Ph_EV_KEY)
-					&& (my_data->key_cap == 0x32))) // 2
+	} else if (((cbinfo->event->type == Ph_EV_BUT_RELEASE) && (ApName(ApWidget(cbinfo))
+			== ABN_PtButton_wind_choose_option_2))
+			|| ((cbinfo->event->type == Ph_EV_KEY) && (my_data->key_cap == 0x32))) // 2
 	{
 		ui.ui_ecp_obj->ui_rep.reply = lib::OPTION_TWO;
-	} else if (((cbinfo->event->type == Ph_EV_BUT_RELEASE) && (ApName(ApWidget(
-			cbinfo)) == ABN_PtButton_wind_choose_option_3))
-			|| ((cbinfo->event->type == Ph_EV_KEY)
-					&& (my_data->key_cap == 0x33))) // 3
+	} else if (((cbinfo->event->type == Ph_EV_BUT_RELEASE) && (ApName(ApWidget(cbinfo))
+			== ABN_PtButton_wind_choose_option_3))
+			|| ((cbinfo->event->type == Ph_EV_KEY) && (my_data->key_cap == 0x33))) // 3
 	{
 		ui.ui_ecp_obj->ui_rep.reply = lib::OPTION_THREE;
-	} else if (((cbinfo->event->type == Ph_EV_BUT_RELEASE) && (ApName(ApWidget(
-			cbinfo)) == ABN_PtButton_wind_choose_option_4))
-			|| ((cbinfo->event->type == Ph_EV_KEY)
-					&& (my_data->key_cap == 0x34))) // 4
+	} else if (((cbinfo->event->type == Ph_EV_BUT_RELEASE) && (ApName(ApWidget(cbinfo))
+			== ABN_PtButton_wind_choose_option_4))
+			|| ((cbinfo->event->type == Ph_EV_KEY) && (my_data->key_cap == 0x34))) // 4
 	{
 		ui.ui_ecp_obj->ui_rep.reply = lib::OPTION_FOUR;
-	} else if (((cbinfo->event->type == Ph_EV_BUT_RELEASE) && (ApName(ApWidget(
-			cbinfo)) == ABN_PtButton_wind_choose_option_cancel))
-			|| ((cbinfo->event->type == Ph_EV_KEY)
-					&& (my_data->key_cap == 0x63))) // C
+	} else if (((cbinfo->event->type == Ph_EV_BUT_RELEASE) && (ApName(ApWidget(cbinfo))
+			== ABN_PtButton_wind_choose_option_cancel)) || ((cbinfo->event->type == Ph_EV_KEY) && (my_data->key_cap
+			== 0x63))) // C
 	{
 		ui.ui_ecp_obj->ui_rep.reply = lib::QUIT;
 	}
@@ -400,8 +369,7 @@ int choose_option_callback(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
-int close_file_selection_window(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
+int close_file_selection_window(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -409,8 +377,7 @@ int close_file_selection_window(PtWidget_t *widget, ApInfo_t *apinfo,
 
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if ((ui.file_window_mode == FSTRAJECTORY)
-			&& (ui.ui_ecp_obj->communication_state != UI_ECP_REPLY_READY)) {
+	if ((ui.file_window_mode == FSTRAJECTORY) && (ui.ui_ecp_obj->communication_state != UI_ECP_REPLY_READY)) {
 		ui.ui_ecp_obj->ui_rep.reply = lib::QUIT;
 	}
 	ui.ui_ecp_obj->synchroniser.command();
@@ -421,8 +388,7 @@ int close_file_selection_window(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
-int close_teaching_window(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
+int close_teaching_window(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -441,8 +407,7 @@ int close_teaching_window(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
-int close_task_config_window(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
+int close_task_config_window(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -456,77 +421,59 @@ int close_task_config_window(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
-int init_teaching_window(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
+int init_teaching_window(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 	// rodzaj polecenia z ECP
-	switch (ui.ui_ecp_obj->ecp_to_ui_msg.ecp_message) {
-	case lib::C_XYZ_ANGLE_AXIS:
-		switch (ui.ui_ecp_obj->ecp_to_ui_msg.robot_name) {
-		case lib::ROBOT_IRP6OT_M:
-			start_wnd_irp6_on_track_xyz_angle_axis(widget, apinfo, cbinfo);
+	switch (ui.ui_ecp_obj->ecp_to_ui_msg.ecp_message)
+	{
+		case lib::C_XYZ_ANGLE_AXIS:
+
+			if (ui.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::ROBOT_IRP6OT_M) {
+				start_wnd_irp6_on_track_xyz_angle_axis(widget, apinfo, cbinfo);
+			} else if (ui.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::ROBOT_IRP6P_M) {
+
+				start_wnd_irp6_postument_xyz_angle_axis(widget, apinfo, cbinfo);
+			} else if (ui.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::ROBOT_IRP6_MECHATRONIKA) {
+				start_wnd_irp6m_xyz_angle_axis(widget, apinfo, cbinfo);
+			}
 			break;
-		case lib::ROBOT_IRP6P_M:
-			start_wnd_irp6_postument_xyz_angle_axis(widget, apinfo, cbinfo);
+		case lib::C_XYZ_EULER_ZYZ:
+
+			if (ui.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::ROBOT_IRP6OT_M) {
+				start_wnd_irp6_on_track_xyz_euler_zyz(widget, apinfo, cbinfo);
+			} else if (ui.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::ROBOT_IRP6P_M) {
+				start_wnd_irp6_postument_xyz_euler_zyz(widget, apinfo, cbinfo);
+			} else if (ui.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::ROBOT_IRP6_MECHATRONIKA) {
+				start_wnd_irp6m_xyz_euler_zyz(widget, apinfo, cbinfo);
+			}
+
 			break;
-		case lib::ROBOT_IRP6_MECHATRONIKA:
-			start_wnd_irp6m_xyz_angle_axis(widget, apinfo, cbinfo);
+		case lib::C_JOINT:
+			if (ui.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::ROBOT_IRP6OT_M) {
+				start_wnd_irp6_on_track_int(widget, apinfo, cbinfo);
+			} else if (ui.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::ROBOT_IRP6P_M) {
+				start_wnd_irp6_postument_int(widget, apinfo, cbinfo);
+			} else if (ui.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::ROBOT_IRP6_MECHATRONIKA) {
+				start_wnd_irp6m_int(widget, apinfo, cbinfo);
+			}
+
 			break;
-		default:
-			break;
-		}
-		break;
-	case lib::C_XYZ_EULER_ZYZ:
-		switch (ui.ui_ecp_obj->ecp_to_ui_msg.robot_name) {
-		case lib::ROBOT_IRP6OT_M:
-			start_wnd_irp6_on_track_xyz_euler_zyz(widget, apinfo, cbinfo);
-			break;
-		case lib::ROBOT_IRP6P_M:
-			start_wnd_irp6_postument_xyz_euler_zyz(widget, apinfo, cbinfo);
-			break;
-		case lib::ROBOT_IRP6_MECHATRONIKA:
-			start_wnd_irp6m_xyz_euler_zyz(widget, apinfo, cbinfo);
-			break;
-		default:
-			break;
-		}
-		break;
-	case lib::C_JOINT:
-		switch (ui.ui_ecp_obj->ecp_to_ui_msg.robot_name) {
-		case lib::ROBOT_IRP6OT_M:
-			start_wnd_irp6_on_track_int(widget, apinfo, cbinfo);
-			break;
-		case lib::ROBOT_IRP6P_M:
-			start_wnd_irp6_postument_int(widget, apinfo, cbinfo);
-			break;
-		case lib::ROBOT_IRP6_MECHATRONIKA:
-			start_wnd_irp6m_int(widget, apinfo, cbinfo);
-			break;
-		default:
-			break;
-		}
-		break;
-	case lib::C_MOTOR:
-		switch (ui.ui_ecp_obj->ecp_to_ui_msg.robot_name) {
-		case lib::ROBOT_IRP6OT_M:
-			start_wnd_irp6_on_track_inc(widget, apinfo, cbinfo);
-			break;
-		case lib::ROBOT_IRP6P_M:
-			start_wnd_irp6_postument_inc(widget, apinfo, cbinfo);
-			break;
-		case lib::ROBOT_IRP6_MECHATRONIKA:
-			start_wnd_irp6m_inc(widget, apinfo, cbinfo);
+		case lib::C_MOTOR:
+			if (ui.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::ROBOT_IRP6OT_M) {
+				start_wnd_irp6_on_track_inc(widget, apinfo, cbinfo);
+			} else if (ui.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::ROBOT_IRP6P_M) {
+				start_wnd_irp6_postument_inc(widget, apinfo, cbinfo);
+			} else if (ui.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::ROBOT_IRP6_MECHATRONIKA) {
+				start_wnd_irp6m_inc(widget, apinfo, cbinfo);
+			}
+
 			break;
 		default:
 			break;
-		}
-		break;
-	default:
-		break;
 	}
 	// 		ApCreateModule (ABM_teaching_window, ABW_base, cbinfo);
 	// 	PtRealizeWidget( ABW_teaching_window );
@@ -535,8 +482,7 @@ int init_teaching_window(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
-int teaching_window_end_motion(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
+int teaching_window_end_motion(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -553,8 +499,8 @@ int teaching_window_end_motion(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
-int file_selection_window_send_location(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo) {
+int file_selection_window_send_location(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 	PtFileSelItem_t *item;
 	char *buffer;
 
@@ -567,20 +513,16 @@ int file_selection_window_send_location(PtWidget_t *widget, ApInfo_t *apinfo,
 	if (item != NULL) {
 		if (ui.file_window_mode == FSTRAJECTORY) {
 			if ((item->type) == Pt_FS_FILE) {
-				strncpy(ui.ui_ecp_obj->ui_rep.filename, rindex(item->fullpath,
-						'/') + 1, strlen(rindex(item->fullpath, '/')) - 1);
-				ui.ui_ecp_obj->ui_rep.filename[strlen(rindex(item->fullpath,
-						'/')) - 1] = '\0';
-				strncpy(ui.ui_ecp_obj->ui_rep.path, item->fullpath, strlen(
-						item->fullpath) - strlen(rindex(item->fullpath, '/')));
-				ui.ui_ecp_obj->ui_rep.path[strlen(item->fullpath) - strlen(
-						rindex(item->fullpath, '/'))] = '\0';
-			} else if (((item->type) == Pt_FS_DIR_OP) || ((item->type)
-					== Pt_FS_DIR_CL)) {
+				strncpy(ui.ui_ecp_obj->ui_rep.filename, rindex(item->fullpath, '/') + 1, strlen(rindex(item->fullpath, '/'))
+						- 1);
+				ui.ui_ecp_obj->ui_rep.filename[strlen(rindex(item->fullpath, '/')) - 1] = '\0';
+				strncpy(ui.ui_ecp_obj->ui_rep.path, item->fullpath, strlen(item->fullpath)
+						- strlen(rindex(item->fullpath, '/')));
+				ui.ui_ecp_obj->ui_rep.path[strlen(item->fullpath) - strlen(rindex(item->fullpath, '/'))] = '\0';
+			} else if (((item->type) == Pt_FS_DIR_OP) || ((item->type) == Pt_FS_DIR_CL)) {
 
 				strcpy(ui.ui_ecp_obj->ui_rep.path, item->fullpath);
-				PtGetResource(ABW_PtText_file_filename, Pt_ARG_TEXT_STRING,
-						&buffer, 0);
+				PtGetResource(ABW_PtText_file_filename, Pt_ARG_TEXT_STRING, &buffer, 0);
 				char file_name[strlen(buffer)];
 				strcpy(file_name, buffer);
 				strcpy(ui.ui_ecp_obj->ui_rep.filename, file_name);
@@ -596,10 +538,8 @@ int file_selection_window_send_location(PtWidget_t *widget, ApInfo_t *apinfo,
 			if ((item->type) == Pt_FS_FILE) {
 				// To sie pozniej sprawdzi, czy wogule jest wzorzec znaleziony
 				std::string str_fullpath(item->fullpath);
-				std::string str_tail =
-						str_fullpath.substr(str_fullpath.rfind(
-								ui.mrrocpp_local_path)
-								+ ui.mrrocpp_local_path.length());
+				std::string str_tail = str_fullpath.substr(str_fullpath.rfind(ui.mrrocpp_local_path)
+						+ ui.mrrocpp_local_path.length());
 				//fprintf(stderr, "mrrocpp_local_path: %s\n", ui.mrrocpp_local_path.c_str());
 				//fprintf(stderr, "fullpath: %s\n", item->fullpath);
 				//fprintf(stderr, "tail: %s\n", str_tail.c_str());
@@ -610,8 +550,7 @@ int file_selection_window_send_location(PtWidget_t *widget, ApInfo_t *apinfo,
 				// ui.config_file = buff;
 				ui.config_file = str_tail;
 
-				PtSetResource(ABW_PtText_config_file, Pt_ARG_TEXT_STRING,
-						ui.config_file.c_str(), 0);
+				PtSetResource(ABW_PtText_config_file, Pt_ARG_TEXT_STRING, ui.config_file.c_str(), 0);
 				PtDamageWidget(ABW_PtText_config_file);
 			}
 		}
@@ -624,8 +563,7 @@ int file_selection_window_send_location(PtWidget_t *widget, ApInfo_t *apinfo,
 }
 
 // Strojenie okna wyboru pliku do wyboru pliku trajektorii badz pliku konfiguracyjnego
-int file_selection_window_post_realize(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
+int file_selection_window_post_realize(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 	PtFileSelItem_t *item;
@@ -644,68 +582,67 @@ int file_selection_window_post_realize(PtWidget_t *widget, ApInfo_t *apinfo,
 
 	// dla wyboru pliku konfiguracyjnego
 
-	switch (ui.file_window_mode) {
-	case FSCONFIG:
-		// 	printf("aaa:\n");
-		// ustawienie katalogu root
-		PtSetArg(&args[0], Pt_ARG_FS_ROOT_DIR, ui.config_file_fullpath.c_str(),
-				0);
-		PtSetResources(ABW_PtFileSel_sl, 1, args);
-		PtDamageWidget(ABW_PtFileSel_sl);
+	switch (ui.file_window_mode)
+	{
+		case FSCONFIG:
+			// 	printf("aaa:\n");
+			// ustawienie katalogu root
+			PtSetArg(&args[0], Pt_ARG_FS_ROOT_DIR, ui.config_file_fullpath.c_str(), 0);
+			PtSetResources(ABW_PtFileSel_sl, 1, args);
+			PtDamageWidget(ABW_PtFileSel_sl);
 
-		// zaznaczenie jednego z elementow
-		item_list = PtFSAllItems(ABW_PtFileSel_sl, NULL );
-		item = *item_list;
-		PtFSSelect(ABW_PtFileSel_sl, item);
-		break;
-	case FSTRAJECTORY:
-		// printf("bbb:\n");
-		// ustawienie katalogu root
-		PtSetArg(&args[0], Pt_ARG_FS_ROOT_DIR, "/net", 0);
-		PtSetResources(ABW_PtFileSel_sl, 1, args);
-		PtDamageWidget(ABW_PtFileSel_sl);
-
-		// przejscie do katalogu z trajektoriami
-		buffer = strdup(ui.teach_filesel_fullpath.c_str());
-		strcpy(current_path, "");
-
-		// 	    printf( "%s\n", buffer );
-		p = strtok(buffer, delims);
-		wyjscie = 1;
-		while ((p != NULL) && (wyjscie)) {
-			wyjscie = 0;
-			strcat(current_path, "/");
-			strcat(current_path, p);
-			// 	     printf( "word: %s\n", current_path );
-
+			// zaznaczenie jednego z elementow
 			item_list = PtFSAllItems(ABW_PtFileSel_sl, NULL );
-			for (; !(((*item_list) == NULL) || (wyjscie)); item_list++) {
-				item = *item_list;
-				if (strcmp(item->fullpath, current_path) == 0)
-					wyjscie++;
-				// 		printf ("fullpath: %s, opened: %d, type: %d, root: %d, tag: %d\n", item->fullpath,  item->opened, item->type, item->root, item->tag);
-			}
-			if (wyjscie) {
-				PtFSSelect(ABW_PtFileSel_sl, item);
-				PtFSFolderExpand(ABW_PtFileSel_sl, item, NULL );
-				PtFSGoto(ABW_PtFileSel_sl, item);
-				PtFSDamageItem(ABW_PtFileSel_sl, item);
-			}
-			p = strtok(NULL, delims);
-		}
-		//   printf( "%s\n", buffer );
-		free(buffer);
-		break;
-	default:
+			item = *item_list;
+			PtFSSelect(ABW_PtFileSel_sl, item);
+			break;
+		case FSTRAJECTORY:
+			// printf("bbb:\n");
+			// ustawienie katalogu root
+			PtSetArg(&args[0], Pt_ARG_FS_ROOT_DIR, "/net", 0);
+			PtSetResources(ABW_PtFileSel_sl, 1, args);
+			PtDamageWidget(ABW_PtFileSel_sl);
 
-		break;
+			// przejscie do katalogu z trajektoriami
+			buffer = strdup(ui.teach_filesel_fullpath.c_str());
+			strcpy(current_path, "");
+
+			// 	    printf( "%s\n", buffer );
+			p = strtok(buffer, delims);
+			wyjscie = 1;
+			while ((p != NULL) && (wyjscie)) {
+				wyjscie = 0;
+				strcat(current_path, "/");
+				strcat(current_path, p);
+				// 	     printf( "word: %s\n", current_path );
+
+				item_list = PtFSAllItems(ABW_PtFileSel_sl, NULL );
+				for (; !(((*item_list) == NULL) || (wyjscie)); item_list++) {
+					item = *item_list;
+					if (strcmp(item->fullpath, current_path) == 0)
+						wyjscie++;
+					// 		printf ("fullpath: %s, opened: %d, type: %d, root: %d, tag: %d\n", item->fullpath,  item->opened, item->type, item->root, item->tag);
+				}
+				if (wyjscie) {
+					PtFSSelect(ABW_PtFileSel_sl, item);
+					PtFSFolderExpand(ABW_PtFileSel_sl, item, NULL );
+					PtFSGoto(ABW_PtFileSel_sl, item);
+					PtFSDamageItem(ABW_PtFileSel_sl, item);
+				}
+				p = strtok(NULL, delims);
+			}
+			//   printf( "%s\n", buffer );
+			free(buffer);
+			break;
+		default:
+
+			break;
 	}
 
 	return (Pt_CONTINUE);
 }
 
-int close_base_window(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
+int close_base_window(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -754,8 +691,7 @@ int quit(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 }
 
 // aktualizacja ustawien przyciskow
-int process_control_window_init(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
+int process_control_window_init(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -776,114 +712,79 @@ int process_control_window_init(PtWidget_t *widget, ApInfo_t *apinfo,
 
 		// Dla irp6_on_track
 
-		ui.irp6ot_m->process_control_window_irp6ot_section_init(
-				wlacz_PtButton_wnd_processes_control_all_reader_start,
-				wlacz_PtButton_wnd_processes_control_all_reader_stop,
-				wlacz_PtButton_wnd_processes_control_all_reader_trigger);
+		ui.irp6ot_m->process_control_window_irp6ot_section_init(wlacz_PtButton_wnd_processes_control_all_reader_start, wlacz_PtButton_wnd_processes_control_all_reader_stop, wlacz_PtButton_wnd_processes_control_all_reader_trigger);
 
 		// Dla irp6_postument
 
-		ui.irp6p_m->process_control_window_irp6p_section_init(
-				wlacz_PtButton_wnd_processes_control_all_reader_start,
-				wlacz_PtButton_wnd_processes_control_all_reader_stop,
-				wlacz_PtButton_wnd_processes_control_all_reader_trigger);
+		ui.irp6p_m->process_control_window_irp6p_section_init(wlacz_PtButton_wnd_processes_control_all_reader_start, wlacz_PtButton_wnd_processes_control_all_reader_stop, wlacz_PtButton_wnd_processes_control_all_reader_trigger);
 
 		// Dla conveyor
 
-		ui.conveyor->process_control_window_conveyor_section_init(
-				wlacz_PtButton_wnd_processes_control_all_reader_start,
-				wlacz_PtButton_wnd_processes_control_all_reader_stop,
-				wlacz_PtButton_wnd_processes_control_all_reader_trigger);
+		ui.conveyor->process_control_window_conveyor_section_init(wlacz_PtButton_wnd_processes_control_all_reader_start, wlacz_PtButton_wnd_processes_control_all_reader_stop, wlacz_PtButton_wnd_processes_control_all_reader_trigger);
 
 		// Dla speakera - wylaczone
 
 		// Dla irp6_mechatronika
 
-		ui.irp6m_m->process_control_window_irp6m_section_init(
-				wlacz_PtButton_wnd_processes_control_all_reader_start,
-				wlacz_PtButton_wnd_processes_control_all_reader_stop,
-				wlacz_PtButton_wnd_processes_control_all_reader_trigger);
+		ui.irp6m_m->process_control_window_irp6m_section_init(wlacz_PtButton_wnd_processes_control_all_reader_start, wlacz_PtButton_wnd_processes_control_all_reader_stop, wlacz_PtButton_wnd_processes_control_all_reader_trigger);
 
 		// All reader's pulse buttons
 		if (wlacz_PtButton_wnd_processes_control_all_reader_start) {
-			ui.unblock_widget(
-					ABW_PtButton_wnd_processes_control_all_reader_start);
+			ui.unblock_widget(ABW_PtButton_wnd_processes_control_all_reader_start);
 		}
 
 		if (wlacz_PtButton_wnd_processes_control_all_reader_stop) {
-			ui.unblock_widget(
-					ABW_PtButton_wnd_processes_control_all_reader_stop);
+			ui.unblock_widget(ABW_PtButton_wnd_processes_control_all_reader_stop);
 		}
 
 		if (wlacz_PtButton_wnd_processes_control_all_reader_trigger) {
-			ui.unblock_widget(
-					ABW_PtButton_wnd_processes_control_all_reader_trigger);
+			ui.unblock_widget(ABW_PtButton_wnd_processes_control_all_reader_trigger);
 		}
 
 		// Dla mp i ecp
-		if ((ui.mp.state != ui.mp.last_state)
-				|| (ui.process_control_window_renew)) {
+		if ((ui.mp.state != ui.mp.last_state) || (ui.process_control_window_renew)) {
 			ui.process_control_window_renew = false;
 
-			switch (ui.mp.state) {
-			case UI_MP_PERMITED_TO_RUN:
-				ui.block_widget(
-						ABW_PtButton_wnd_processes_control_mp_pulse_start);
-				ui.block_widget(
-						ABW_PtButton_wnd_processes_control_mp_pulse_stop);
-				ui.block_widget(
-						ABW_PtButton_wnd_processes_control_mp_pulse_pause);
-				ui.block_widget(
-						ABW_PtButton_wnd_processes_control_mp_pulse_resume);
-				ui.block_widget(
-						ABW_PtButton_wnd_processes_control_mp_pulse_trigger);
+			switch (ui.mp.state)
+			{
+				case UI_MP_PERMITED_TO_RUN:
+					ui.block_widget(ABW_PtButton_wnd_processes_control_mp_pulse_start);
+					ui.block_widget(ABW_PtButton_wnd_processes_control_mp_pulse_stop);
+					ui.block_widget(ABW_PtButton_wnd_processes_control_mp_pulse_pause);
+					ui.block_widget(ABW_PtButton_wnd_processes_control_mp_pulse_resume);
+					ui.block_widget(ABW_PtButton_wnd_processes_control_mp_pulse_trigger);
 
-				block_all_ecp_trigger_widgets(NULL, NULL, NULL);
-				break;
-			case UI_MP_WAITING_FOR_START_PULSE:
-				ui.unblock_widget(
-						ABW_PtButton_wnd_processes_control_mp_pulse_start);
-				ui.block_widget(
-						ABW_PtButton_wnd_processes_control_mp_pulse_stop);
-				ui.block_widget(
-						ABW_PtButton_wnd_processes_control_mp_pulse_pause);
-				ui.block_widget(
-						ABW_PtButton_wnd_processes_control_mp_pulse_resume);
-				ui.block_widget(
-						ABW_PtButton_wnd_processes_control_mp_pulse_trigger);
+					block_all_ecp_trigger_widgets(NULL, NULL, NULL);
+					break;
+				case UI_MP_WAITING_FOR_START_PULSE:
+					ui.unblock_widget(ABW_PtButton_wnd_processes_control_mp_pulse_start);
+					ui.block_widget(ABW_PtButton_wnd_processes_control_mp_pulse_stop);
+					ui.block_widget(ABW_PtButton_wnd_processes_control_mp_pulse_pause);
+					ui.block_widget(ABW_PtButton_wnd_processes_control_mp_pulse_resume);
+					ui.block_widget(ABW_PtButton_wnd_processes_control_mp_pulse_trigger);
 
-				block_all_ecp_trigger_widgets(NULL, NULL, NULL);
-				break;
-			case UI_MP_TASK_RUNNING:
-				ui.block_widget(
-						ABW_PtButton_wnd_processes_control_mp_pulse_start);
-				ui.unblock_widget(
-						ABW_PtButton_wnd_processes_control_mp_pulse_stop);
-				ui.unblock_widget(
-						ABW_PtButton_wnd_processes_control_mp_pulse_pause);
-				ui.block_widget(
-						ABW_PtButton_wnd_processes_control_mp_pulse_resume);
-				ui.unblock_widget(
-						ABW_PtButton_wnd_processes_control_mp_pulse_trigger);
+					block_all_ecp_trigger_widgets(NULL, NULL, NULL);
+					break;
+				case UI_MP_TASK_RUNNING:
+					ui.block_widget(ABW_PtButton_wnd_processes_control_mp_pulse_start);
+					ui.unblock_widget(ABW_PtButton_wnd_processes_control_mp_pulse_stop);
+					ui.unblock_widget(ABW_PtButton_wnd_processes_control_mp_pulse_pause);
+					ui.block_widget(ABW_PtButton_wnd_processes_control_mp_pulse_resume);
+					ui.unblock_widget(ABW_PtButton_wnd_processes_control_mp_pulse_trigger);
 
-				unblock_all_ecp_trigger_widgets(NULL, NULL, NULL);
-				break;
-			case UI_MP_TASK_PAUSED:
-				ui.block_widget(
-						ABW_PtButton_wnd_processes_control_mp_pulse_start);
-				ui.unblock_widget(
-						ABW_PtButton_wnd_processes_control_mp_pulse_stop);
-				ui.block_widget(
-						ABW_PtButton_wnd_processes_control_mp_pulse_pause);
-				ui.unblock_widget(
-						ABW_PtButton_wnd_processes_control_mp_pulse_resume);
-				ui.block_widget(
-						ABW_PtButton_wnd_processes_control_mp_pulse_trigger);
+					unblock_all_ecp_trigger_widgets(NULL, NULL, NULL);
+					break;
+				case UI_MP_TASK_PAUSED:
+					ui.block_widget(ABW_PtButton_wnd_processes_control_mp_pulse_start);
+					ui.unblock_widget(ABW_PtButton_wnd_processes_control_mp_pulse_stop);
+					ui.block_widget(ABW_PtButton_wnd_processes_control_mp_pulse_pause);
+					ui.unblock_widget(ABW_PtButton_wnd_processes_control_mp_pulse_resume);
+					ui.block_widget(ABW_PtButton_wnd_processes_control_mp_pulse_trigger);
 
-				block_all_ecp_trigger_widgets(NULL, NULL, NULL);
-				break;
-			default:
-				break;
+					block_all_ecp_trigger_widgets(NULL, NULL, NULL);
+					break;
+				default:
+					break;
 			}
 
 			ui.mp.last_state = ui.mp.state;
@@ -897,8 +798,7 @@ int process_control_window_init(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
-int block_all_ecp_trigger_widgets(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
+int block_all_ecp_trigger_widgets(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -925,8 +825,7 @@ int block_all_ecp_trigger_widgets(PtWidget_t *widget, ApInfo_t *apinfo,
 	return (Pt_CONTINUE);
 }
 
-int unblock_all_ecp_trigger_widgets(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
+int unblock_all_ecp_trigger_widgets(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -940,12 +839,10 @@ int unblock_all_ecp_trigger_widgets(PtWidget_t *widget, ApInfo_t *apinfo,
 		ui.unblock_widget(ABW_PtButton_wnd_processes_control_irp6p_ecp_trigger);
 	}
 	if (ui.conveyor->state.edp.is_synchronised) {
-		ui.unblock_widget(
-				ABW_PtButton_wnd_processes_control_conveyor_ecp_trigger);
+		ui.unblock_widget(ABW_PtButton_wnd_processes_control_conveyor_ecp_trigger);
 	}
 	if (ui.speaker->state.edp.is_synchronised) {
-		ui.unblock_widget(
-				ABW_PtButton_wnd_processes_control_speaker_ecp_trigger);
+		ui.unblock_widget(ABW_PtButton_wnd_processes_control_speaker_ecp_trigger);
 	}
 	if (ui.irp6m_m->state.edp.is_synchronised) {
 		ui.unblock_widget(ABW_PtButton_wnd_processes_control_irp6m_ecp_trigger);
@@ -955,8 +852,7 @@ int unblock_all_ecp_trigger_widgets(PtWidget_t *widget, ApInfo_t *apinfo,
 	return (Pt_CONTINUE);
 }
 
-int task_param_actualization(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
+int task_param_actualization(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -971,8 +867,7 @@ int task_param_actualization(PtWidget_t *widget, ApInfo_t *apinfo,
 	return (Pt_CONTINUE);
 }
 
-int task_window_param_actualization(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
+int task_window_param_actualization(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -981,16 +876,13 @@ int task_window_param_actualization(PtWidget_t *widget, ApInfo_t *apinfo,
 	/*			printf("aaa: %s\n",ui.mp_name);
 	 printf("bbb: %s\n",ui.mp_node_name);*/
 
-	PtSetResource(ABW_PtText_config_file, Pt_ARG_TEXT_STRING,
-			ui.config_file.c_str(), 0);
-	PtSetResource(ABW_PtLabel_bin_directory, Pt_ARG_TEXT_STRING,
-			ui.binaries_network_path.c_str(), 0);
+	PtSetResource(ABW_PtText_config_file, Pt_ARG_TEXT_STRING, ui.config_file.c_str(), 0);
+	PtSetResource(ABW_PtLabel_bin_directory, Pt_ARG_TEXT_STRING, ui.binaries_network_path.c_str(), 0);
 
 	return (Pt_CONTINUE);
 }
 
-int manage_configuration_file(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
+int manage_configuration_file(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -1010,8 +902,8 @@ int manage_configuration_file(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
-int start_file_window(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo) {
+int start_file_window(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
@@ -1029,8 +921,8 @@ int start_file_window(PtWidget_t *widget, ApInfo_t *apinfo,
 	return (Pt_CONTINUE);
 }
 
-int clear_console(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo) {
+int clear_console(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
@@ -1043,11 +935,9 @@ int clear_console(PtWidget_t *widget, ApInfo_t *apinfo,
 
 	// czyszczenie kolejnych linii
 	do {
-		PtMultiTextInfo(ABW_PtMultiText_sr_window, Pt_MT_QUERY_LINE, NULL,
-				&cur_line, NULL, NULL, NULL, &line_width, NULL, NULL);
+		PtMultiTextInfo(ABW_PtMultiText_sr_window, Pt_MT_QUERY_LINE, NULL, &cur_line, NULL, NULL, NULL, &line_width, NULL, NULL);
 		if (line_width != 0)
-			PtMultiTextModifyText(ABW_PtMultiText_sr_window, 0, line_width,
-					NULL, NULL, NULL, &attr, attributes_mask);
+			PtMultiTextModifyText(ABW_PtMultiText_sr_window, 0, line_width, NULL, NULL, NULL, &attr, attributes_mask);
 	} while (line_width != 0);
 	PtDamageWidget(ABW_PtMultiText_sr_window);
 
@@ -1074,7 +964,8 @@ int unload_all(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 // najpierw unload_all zabija wszystkie procesy wzmiankowane w pliku konfiguracyjnym
 
-int slay_all(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo) {
+int slay_all(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
@@ -1085,8 +976,7 @@ int slay_all(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo) {
 
 	// brutal overkilling
 
-	for (std::list<program_node_def>::iterator program_node_list_iterator =
-			ui.program_node_list.begin(); program_node_list_iterator
+	for (std::list <program_node_def>::iterator program_node_list_iterator = ui.program_node_list.begin(); program_node_list_iterator
 			!= ui.program_node_list.end(); program_node_list_iterator++) {
 		char system_command[100];
 		/*
@@ -1112,9 +1002,7 @@ int slay_all(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo) {
 				program_node_list_iterator->program_name.c_str()
 		);
 #else
-		sprintf(system_command, "slay -9 -v -f -n %s %s",
-				program_node_list_iterator->node_name.c_str(),
-				program_node_list_iterator->program_name.c_str());
+		sprintf(system_command, "slay -9 -v -f -n %s %s", program_node_list_iterator->node_name.c_str(), program_node_list_iterator->program_name.c_str());
 #endif
 		printf("bbb: %s\n", system_command);
 		system(system_command);
@@ -1126,15 +1014,15 @@ int slay_all(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo) {
 
 }
 
-int activate_menu_from_widget(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
+int activate_menu_from_widget(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	struct {
+	struct
+	{
 		PhEvent_t event;
 		PhRect_t rect;
 		PhPointerEvent_t pevent;
@@ -1158,8 +1046,7 @@ int activate_menu_from_widget(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
-int activate_file_menu(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
+int activate_file_menu(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -1172,8 +1059,7 @@ int activate_file_menu(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
-int activate_robot_menu(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
+int activate_robot_menu(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -1186,8 +1072,7 @@ int activate_robot_menu(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
-int activate_all_robots_menu(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
+int activate_all_robots_menu(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -1200,8 +1085,7 @@ int activate_all_robots_menu(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
-int activate_task_menu(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
+int activate_task_menu(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -1214,8 +1098,7 @@ int activate_task_menu(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
-int activate_special_menu(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
+int activate_special_menu(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -1228,8 +1111,7 @@ int activate_special_menu(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
-int activate_help_menu(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
+int activate_help_menu(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -1242,8 +1124,7 @@ int activate_help_menu(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
-int close_yes_no_window(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
+int close_yes_no_window(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -1258,8 +1139,7 @@ int close_yes_no_window(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
-int close_input_integer_window(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
+int close_input_integer_window(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -1274,8 +1154,7 @@ int close_input_integer_window(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
-int close_input_double_window(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
+int close_input_double_window(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -1290,8 +1169,7 @@ int close_input_double_window(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
-int close_choose_option_window(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
+int close_choose_option_window(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -1306,8 +1184,7 @@ int close_choose_option_window(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
-int EDP_all_robots_synchronise(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
+int EDP_all_robots_synchronise(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -1325,35 +1202,25 @@ int EDP_all_robots_synchronise(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
-int teaching_window_send_move(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo) {
+int teaching_window_send_move(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 
 	double *motion_time;
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	PtGetResource(ABW_PtNumericFloat_move_time, Pt_ARG_NUMERIC_VALUE,
-			&motion_time, 0);
+	PtGetResource(ABW_PtNumericFloat_move_time, Pt_ARG_NUMERIC_VALUE, &motion_time, 0);
 
-	switch (ui.ui_ecp_obj->ecp_to_ui_msg.robot_name) {
-	case lib::ROBOT_IRP6OT_M:
+	if (ui.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::ROBOT_IRP6OT_M) {
 		for (int i = 0; i < IRP6OT_M_NUM_OF_SERVOS; i++)
-			ui.ui_ecp_obj->ui_rep.coordinates[i]
-					= ui.irp6ot_m->irp6ot_current_pos[i];
-		break;
-	case lib::ROBOT_IRP6P_M:
+			ui.ui_ecp_obj->ui_rep.coordinates[i] = ui.irp6ot_m->irp6ot_current_pos[i];
+	} else if (ui.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::ROBOT_IRP6P_M) {
 		for (int i = 0; i < IRP6P_M_NUM_OF_SERVOS; i++)
-			ui.ui_ecp_obj->ui_rep.coordinates[i]
-					= ui.irp6p_m->irp6p_current_pos[i];
-		break;
-	case lib::ROBOT_IRP6_MECHATRONIKA:
+			ui.ui_ecp_obj->ui_rep.coordinates[i] = ui.irp6p_m->irp6p_current_pos[i];
+	} else if (ui.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::ROBOT_IRP6_MECHATRONIKA) {
 		for (int i = 0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++)
-			ui.ui_ecp_obj->ui_rep.coordinates[i]
-					= ui.irp6m_m->irp6m_current_pos[i];
-		break;
-	default:
-		break;
+			ui.ui_ecp_obj->ui_rep.coordinates[i] = ui.irp6m_m->irp6m_current_pos[i];
 	}
 
 	ui.ui_ecp_obj->ui_rep.double_number = *motion_time;
@@ -1364,8 +1231,7 @@ int teaching_window_send_move(PtWidget_t *widget, ApInfo_t *apinfo,
 	return (Pt_CONTINUE);
 }
 
-int all_robots_move_to_preset_position(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
+int all_robots_move_to_preset_position(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -1373,8 +1239,7 @@ int all_robots_move_to_preset_position(PtWidget_t *widget, ApInfo_t *apinfo,
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
 	// jesli MP nie pracuje (choc moze byc wlaczone)
-	if ((ui.mp.state == UI_MP_NOT_PERMITED_TO_RUN) || (ui.mp.state
-			== UI_MP_PERMITED_TO_RUN) || (ui.mp.state
+	if ((ui.mp.state == UI_MP_NOT_PERMITED_TO_RUN) || (ui.mp.state == UI_MP_PERMITED_TO_RUN) || (ui.mp.state
 			== UI_MP_WAITING_FOR_START_PULSE)) {
 		// ruch do pozcyji synchronizacji dla Irp6_on_track i dla dalszych analogicznie
 		if (ui.check_synchronised_and_loaded(ui.irp6ot_m->state))
@@ -1395,8 +1260,7 @@ int all_robots_move_to_preset_position(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
-int EDP_all_robots_create(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
+int EDP_all_robots_create(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -1419,8 +1283,7 @@ int EDP_all_robots_create(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
-int EDP_all_robots_slay(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
+int EDP_all_robots_slay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -1485,7 +1348,6 @@ int MPup_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 				ui.mp.agent = new RemoteAgent(MP_SECTION);
 				ui.mp.command_buffer = new RemoteBuffer<char>(*ui.mp.agent, "UI command");
 
-
 				ui.teachingstate = MP_RUNNING;
 
 				ui.mp.state = UI_MP_WAITING_FOR_START_PULSE; // mp wlaczone
@@ -1512,8 +1374,7 @@ int MPslay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 	if (ui.mp.pid != -1) {
 
-		if ((ui.mp.state == UI_MP_TASK_RUNNING) || (ui.mp.state
-				== UI_MP_TASK_PAUSED)) {
+		if ((ui.mp.state == UI_MP_TASK_RUNNING) || (ui.mp.state == UI_MP_TASK_PAUSED)) {
 
 			pulse_stop_mp(widget, apinfo, cbinfo);
 		}
@@ -1545,8 +1406,7 @@ int MPslay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 }
 
-int pulse_start_mp(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
+int pulse_start_mp(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -1579,16 +1439,14 @@ int pulse_start_mp(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
-int pulse_stop_mp(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
+int pulse_stop_mp(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if ((ui.mp.state == UI_MP_TASK_RUNNING) || (ui.mp.state
-			== UI_MP_TASK_PAUSED)) {
+	if ((ui.mp.state == UI_MP_TASK_RUNNING) || (ui.mp.state == UI_MP_TASK_PAUSED)) {
 
 		ui.mp.state = UI_MP_WAITING_FOR_START_PULSE;// czekanie na stop
 
@@ -1603,8 +1461,7 @@ int pulse_stop_mp(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
-int pulse_pause_mp(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
+int pulse_pause_mp(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -1626,8 +1483,7 @@ int pulse_pause_mp(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
-int pulse_resume_mp(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
+int pulse_resume_mp(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -1649,8 +1505,7 @@ int pulse_resume_mp(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
-int pulse_trigger_mp(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
+int pulse_trigger_mp(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -1674,8 +1529,7 @@ int signal_mp(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
-	fprintf(stderr, "UI: %s:%d signal_mp() -- thish should not happend!\n",
-			__FILE__, __LINE__);
+	fprintf(stderr, "UI: %s:%d signal_mp() -- thish should not happend!\n", __FILE__, __LINE__);
 	assert(0);
 #if 0
 	/*
@@ -1736,8 +1590,7 @@ int signal_mp(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 	return (Pt_CONTINUE);
 }
 
-int pulse_reader_all_robots_start(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
+int pulse_reader_all_robots_start(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -1755,8 +1608,7 @@ int pulse_reader_all_robots_start(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
-int pulse_reader_all_robots_stop(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
+int pulse_reader_all_robots_stop(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -1773,8 +1625,7 @@ int pulse_reader_all_robots_stop(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
-int pulse_reader_all_robots_trigger(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
+int pulse_reader_all_robots_trigger(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -1790,8 +1641,7 @@ int pulse_reader_all_robots_trigger(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
-int pulse_ecp_all_robots(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
+int pulse_ecp_all_robots(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
