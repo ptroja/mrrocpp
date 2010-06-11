@@ -31,10 +31,6 @@ task::task(lib::configurator &_config) :
 	initialize_communication();
 }
 
-task::~task()
-{
-}
-
 void task::initialize_communication()
 {
 	const std::string ecp_attach_point =

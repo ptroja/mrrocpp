@@ -45,8 +45,10 @@ public: // TODO: following packages should be 'protected'
 	// Polecenie od MP dla TASKa
 	lib::MP_COMMAND_PACKAGE mp_command;
 
-		//ew. koordynacja ciagla domyslnie wylaczona ma wplyw na instrukcje move
-		bool continuous_coordination;
+	//ew. koordynacja ciagla domyslnie wylaczona ma wplyw na instrukcje move
+	bool continuous_coordination;
+
+	ecp_robot* ecp_m_robot;
 
 	// sprawdza czy przeszedl puls do ECP lub MP
 	bool pulse_check();
