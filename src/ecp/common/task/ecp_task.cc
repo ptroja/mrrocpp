@@ -207,7 +207,7 @@ void task::send_pulse_to_mp(int pulse_code, int pulse_value)
 void task::subtasks_conditional_execution()
 {
 
-	subtasks_t subtasks_m_tmp;
+	subtasks_t subtasks_m_tmp = subtask_m;
 
 	BOOST_FOREACH(const subtask_pair_t & subtask_node, subtasks_m_tmp)
 {	if (mp_2_ecp_next_state_string == subtask_node.first) {

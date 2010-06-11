@@ -14,6 +14,7 @@
 #include "ecp/irp6p_m/ecp_r_irp6p_m.h"
 
 #include "ecp_t_sk_mr.h"
+#include "ecp_st_edge_follow.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -38,6 +39,11 @@ sk_mr::sk_mr(lib::configurator &_config) :
 	yefg = new generator::y_edge_follow_force(*this, 8);
 	befg = new generator::bias_edp_force(*this);
 
+	// utworzenie podzadania
+	ecp_sub_task* ecpst;
+	ecpst = new ecp_sub_task_edge_follow(*this);
+	subtask_m[ecp_mp::task::ECP_ST_EDGE_FOLLOW] = ecpst;
+
 	sr_ecp_msg->message("ECP SK_MR loaded");
 }
 
@@ -58,9 +64,10 @@ void sk_mr::main_task_algorithm(void)
 			befg->Move();
 		} else if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_TFF_NOSE_RUN) {
 			nrg->Move();
-		} else if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_EDGE_FOLLOW_FORCE) {
-			yefg->Move();
 		}
+		/*else if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_EDGE_FOLLOW_FORCE) {
+		 yefg->Move();
+		 }*/
 
 		ecp_termination_notice();
 	} //end for
