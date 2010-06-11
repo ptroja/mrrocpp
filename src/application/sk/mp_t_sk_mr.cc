@@ -8,6 +8,9 @@
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
+#include <iostream>
+#include <string>
+#include <sstream>
 
 #include "lib/srlib.h"
 #include "mp/mp.h"
@@ -21,9 +24,7 @@
 #include "lib/robot_consts/irp6ot_m_const.h"
 #include "lib/robot_consts/irp6p_m_const.h"
 
-#include <iostream>
-#include <string>
-#include <sstream>
+#include "application/sk/ecp_mp_st_edge_follow.h"
 
 namespace mrrocpp {
 namespace mp {
