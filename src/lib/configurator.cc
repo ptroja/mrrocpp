@@ -2,8 +2,6 @@
 // Plik:			configurator.cc
 // System:	QNX/MRROCPP  v. 6.3
 // Opis:		Plik zawiera definicje matod klasy lib::configurator - obsluga konfiguracji z pliku INI.
-// Autor:		tkornuta
-// Data:		10.11.2005
 // -------------------------------------------------------------------------
 
 #include <stdio.h>
@@ -21,22 +19,21 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-//#include <boost/algorithm/string/trim.hpp>
-//#include <boost/algorithm/string/classification.hpp>
 #include <stdexcept>
 #include "lib/exception.h"
 #include <boost/throw_exception.hpp>
 #include <boost/exception/errinfo_errno.hpp>
 #include <boost/exception/errinfo_api_function.hpp>
 
+#include <string>
+
+#if defined(USE_MESSIP_SRR)
+#include "messip_dataport.h"
+#else
 #include <boost/filesystem.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/xml_parser.hpp>
 #include <boost/property_tree/ini_parser.hpp>
-
-#include <string>
-#if defined(USE_MESSIP_SRR)
-#include "messip_dataport.h"
 #endif
 
 #if defined(__QNXNTO__)
@@ -52,6 +49,9 @@
 #endif
 #include "lib/config_types.h"
 #include "lib/typedefs.h"
+
+// Typy zmiennych odczytywanych z pliku INI.
+//#include "lib/cfgopts.h"
 
 namespace mrrocpp {
 namespace lib {
@@ -79,18 +79,22 @@ configurator::configurator(const std::string & _node, const std::string & _dir, 
 	common_file_location = return_common_ini_file_path();
 
 	read_property_tree_from_file(file_pt, file_location);
-	read_property_tree_from_file(common_file_pt, common_file_location);
+	read_property_tree_from_file(file_pt, common_file_location);
 #endif /* USE_MESSIP_SRR */
 }
 
 void configurator::read_property_tree_from_file(boost::property_tree::ptree & pt, const std::string & file)
 {
-	if(boost::filesystem::extension(file) == ".ini") {
-		boost::property_tree::read_ini(file, pt);
-	} else if (boost::filesystem::extension(file) == ".xml") {
-		boost::property_tree::read_xml(file, pt);
-	} else {
-		throw std::logic_error("unknown config file extension");
+	try {
+		if(boost::filesystem::extension(file) == ".ini") {
+			boost::property_tree::read_ini(file, pt);
+		} else if (boost::filesystem::extension(file) == ".xml") {
+			boost::property_tree::read_xml(file, pt);
+		} else {
+			throw std::logic_error("unknown config file extension");
+		}
+	} catch (boost::property_tree::ptree_error & e) {
+		std::cerr << e.what() << std::endl;
 	}
 }
 
@@ -112,8 +116,9 @@ void configurator::change_ini_file(const std::string & _ini_file) {
 	file_location = return_ini_file_path();
 	common_file_location = return_common_ini_file_path();
 
+	file_pt.clear();
 	read_property_tree_from_file(file_pt, file_location);
-	read_property_tree_from_file(common_file_pt, common_file_location);
+	read_property_tree_from_file(file_pt, common_file_location);
 #endif /* USE_MESSIP_SRR */
 }
 
@@ -157,7 +162,7 @@ std::string configurator::return_attach_point_name(config_path_type_t _type,
 	} else {
 		fprintf(stderr,
 				"Nieznany argument w metodzie configuratora return_attach_point_name\n");
-		throw ;
+		throw;
 	}
 
 	// Zwrocenie atach_point'a.
@@ -221,28 +226,20 @@ bool configurator::exists(const char* _key, const char* __section_name) const
 	return value;
 #else
 	const char *_section_name = (__section_name) ? __section_name : section_name.c_str();
-	int value;
-	struct Config_Tag configs[] = {
-		// Pobierane pole.
-		{	(char *) _key, Int_Tag, &value},
-		// Pole konczace.
-		{	NULL , Error_Tag, NULL}
-	};
 
 	boost::mutex::scoped_lock l(file_mutex);
 
-	if (input_config(file_location, configs, _section_name)<1) {
-		if (input_config(common_file_location, configs, _section_name)<1) {
-			// Zwolnienie pamieci.
-
-			return false;
-		}
+	try {
+		value<std::string>(_key, _section_name);
+	} catch (boost::property_tree::ptree_bad_path & e) {
+		return false;
 	}
 
 	return true;
 #endif /* USE_MESSIP_SRR */
 }
 
+#if 0
 // Zwraca wartosc (char*) dla klucza.
 std::string configurator::return_string_value(const char* _key, const char*__section_name) const
 {
@@ -265,117 +262,29 @@ std::string configurator::return_string_value(const char* _key, const char*__sec
 	return std::string(value);
 #else
 	const char *_section_name = (__section_name) ? __section_name : section_name.c_str();
-	// Zwracana zmienna.
-	char tmp[200];
-	struct Config_Tag configs[] = {
-		// Pobierane pole.
-		{	(char *) _key, String_Tag, tmp},
-		// Pole konczace.
-		{	NULL , Error_Tag, NULL}
-	};
 
-	// Odczytanie zmiennej.
-	boost::mutex::scoped_lock l(file_mutex);
-	if (input_config(file_location, configs, _section_name)<1) {
-		if (input_config(common_file_location, configs, _section_name)<1) {
-			fprintf(stderr, "Blad input_config() w value<std::string> file_location:%s, _section_name:%s, _key:%s\n",
-					file_location.c_str(), _section_name, _key);
-		}
+	// initialize property tree path
+	std::string pt_path = _section_name;
+
+	// trim leading '[' char
+	pt_path.erase(0,1);
+	// trim trailing '[' char
+	pt_path.erase(pt_path.length()-1,1);
+
+	pt_path += ".";
+	pt_path += _key;
+
+	try {
+		return file_pt.get<std::string>(pt_path);
+	} catch (boost::property_tree::ptree_bad_path & e) {
+		return common_file_pt.get<std::string>(pt_path);
 	}
-
-	// 	throw ERROR
-
-	// Zwrocenie wartosci.
-	return std::string(tmp);
 #endif /* USE_MESSIP_SRR */
-}// : value<std::string>
-
-//
-//boost::numeric::ublas::vector <double> configurator::get_vector_elements(std::string text_value, int n) const
-//{
-//	//std::cout << "configurator::get_vector_elements() begin\n";
-//	boost::numeric::ublas::vector <double> value(n);
-//	const char * blank_chars = {" \t\n\r"};
-//	boost::algorithm::trim_if(text_value, boost::algorithm::is_any_of(blank_chars));
-//
-//	// split it into elements
-//	boost::char_separator <char> space_separator(blank_chars);
-//	tokenizer tok(text_value, space_separator);
-//
-//	int element_no = 0;
-//	for (tokenizer::iterator it = tok.begin(); it != tok.end(); ++it, ++element_no) {
-//		//std::cout << " " << *it << ", ";
-//		if (element_no > n) {
-//			throw std::logic_error("configurator::get_vector_elements(): vector has more elements than expected.");
-//		}
-//		std::string element = *it;
-//		boost::algorithm::trim(element);
-//		double element_value = boost::lexical_cast <double>(element);
-//		value(element_no) = element_value;
-//	}
-//
-//	if (element_no != n) {
-//		throw std::logic_error("configurator::get_vector_elements(): vector has less elements than expected.");
-//	}
-//	return value;
-//}
-//
-//boost::numeric::ublas::vector <double> configurator::value(const std::string & key, const std::string & section_name, int n) const
-//{
-//	//std::cout << "configurator::get_vector_value() begin\n";
-//	// get string value and remove leading and trailing spaces
-//	std::string text_value = return_string_value (key.c_str(), section_name.c_str());
-//	boost::algorithm::trim(text_value);
-//
-//	// check for [ and ], and then remove it
-//	if (text_value.size() < 3 || text_value[0] != '[' || text_value[text_value.size() - 1] != ']') {
-//		throw std::logic_error("configurator::value(): leading or trailing chars [] not found or no value supplied.");
-//	}
-//
-//	boost::algorithm::trim_if(text_value, boost::algorithm::is_any_of("[]"));
-//	return get_vector_elements(text_value, n);
-//}
-//
-//boost::numeric::ublas::matrix <double> configurator::value(const std::string & key, const std::string & section_name, int n, int m) const
-//{
-//	//std::cout << "configurator::get_matrix_value() begin\n";
-//	boost::numeric::ublas::matrix <double> value(n, m);
-//
-//	// get string value and remove leading and trailing spaces
-//	std::string text_value = return_string_value (key.c_str(), section_name.c_str());
-//	boost::algorithm::trim(text_value);
-//
-//	//std::cout << "visual_servo_regulator::get_matrix_value() Processing value: "<<text_value<<"\n";
-//
-//	// check for [ and ], and then remove it
-//	if (text_value.size() < 3 || text_value[0] != '[' || text_value[text_value.size() - 1] != ']') {
-//		throw std::logic_error("configurator::value(): leading or trailing chars [] not found or no value supplied.");
-//	}
-//	boost::algorithm::trim_if(text_value, boost::algorithm::is_any_of("[]"));
-//
-//	boost::char_separator <char> semicolon_separator(";");
-//	tokenizer tok(text_value, semicolon_separator);
-//
-//	int row_no = 0;
-//	for (tokenizer::iterator it = tok.begin(); it != tok.end(); ++it, ++row_no) {
-//		if (row_no > n) {
-//			throw std::logic_error("configurator::value(): matrix has more rows than expected.");
-//		}
-//		boost::numeric::ublas::vector <double> row = get_vector_elements(*it, m);
-//		for (int i = 0; i < m; ++i) {
-//			value(row_no, i) = row(i);
-//		}
-//	}
-//	if (row_no != n) {
-//		throw std::logic_error("configurator::value(): matrix has more rows than expected.");
-//	}
-//	return value;
-//}
+}
+#endif
 
 pid_t configurator::process_spawn(const std::string & _section_name) {
 #if defined(PROCESS_SPAWN_RSH)
-
-
 	std::string spawned_program_name = value<std::string>("program_name", _section_name);
 	std::string spawned_node_name = value<std::string>("node_name", _section_name);
 
@@ -394,7 +303,6 @@ pid_t configurator::process_spawn(const std::string & _section_name) {
 			printf("spawned node absent: %s\n", opendir_path.c_str());
 			throw std::logic_error("spawned node absent: "+opendir_path);
 		}
-
 	}
 
 	// Sciezka do binariow.
@@ -410,7 +318,6 @@ pid_t configurator::process_spawn(const std::string & _section_name) {
 		snprintf(bin_path, sizeof(bin_path), "/net/%s%sbin/",
 				node.c_str(), dir.c_str());
 	}
-
 
 	std::string opendir_path(bin_path);
 	opendir_path += spawned_program_name;

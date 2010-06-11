@@ -2,7 +2,7 @@ if(USE_MESSIP)
 	add_subdirectory (messip)
 
 	# configsrv is needed only for non-QNX platforms and then messip is used
-	add_executable(configsrv configsrv.cc cfgopts.cc configsrv_m.cc)
+	add_executable(configsrv configsrv.cc configsrv_m.cc)
 	target_link_libraries (configsrv messip ${Boost_THREAD_LIBRARY} ${Boost_FILESYSTEM_LIBRARY} ${Boost_SYSTEM_LIBRARY})
 	install(TARGETS configsrv DESTINATION bin)
 endif(USE_MESSIP)
@@ -21,7 +21,6 @@ add_library(mrrocpp
 	mrmath/k_vector.cc
 	mrmath/ft_v_vector.cc
 	mrmath/jacobian_matrix.cc
-	cfgopts.cc
 	configurator.cc
 	c_buffer.cc r_buffer.cc
 	mis_fun.cc

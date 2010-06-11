@@ -18,15 +18,13 @@
 #include <boost/algorithm/string/trim.hpp>
 #include <boost/algorithm/string/classification.hpp>
 
-#include <boost/property_tree/ptree.hpp>
-
 #include <Eigen/Core>
 
 #if defined(USE_MESSIP_SRR)
 #include <messip.h>
+#else
+#include <boost/property_tree/ptree.hpp>
 #endif
-// Typy zmiennych odczytywanych z pliku INI.
-#include "lib/cfgopts.h"
 
 namespace mrrocpp {
 namespace lib {
@@ -61,8 +59,8 @@ private:
 	// Zwraca wartosc (char*) dla sciezki do pliku konfiguracyjnego.
 	std::string return_common_ini_file_path() const;
 
-	//! Property trees of main and common configuration files
-	boost::property_tree::ptree file_pt, common_file_pt;
+	//! Property tree of configuration file
+	boost::property_tree::ptree file_pt;
 
 	/**
 	 * Read property tree from configuration file
@@ -72,9 +70,6 @@ private:
 	void read_property_tree_from_file(boost::property_tree::ptree & pt, const std::string & file);
 
 #endif /* USE_MESSIP_SRR */
-
-	// Zwraca wartosc (char*) dla klucza.
-	std::string return_string_value(const char* _key, const char* __section_name = NULL) const;
 
 public:
 	std::string return_mrrocpp_network_path() const;
@@ -113,27 +108,24 @@ public:
 	template <class Type>
 	Type value(const std::string & _key, const std::string & __section_name) const
 	{
-		std::string str_value = return_string_value(_key.c_str(), __section_name.c_str());
-		boost::algorithm::trim(str_value);
-		try {
-			return boost::lexical_cast <Type>(str_value);
-		} catch (const std::exception &ex) {
-			throw std::runtime_error("lib::configurator::value() section \"" + __section_name + "\", key: \"" + _key
-					+ "\", value: \"" + str_value + "\", " + ex.what());
-		}
+		// initialize property tree path
+		std::string pt_path = __section_name;
+
+		// trim leading '[' char
+		pt_path.erase(0,1);
+		// trim trailing '[' char
+		pt_path.erase(pt_path.length()-1,1);
+
+		pt_path += ".";
+		pt_path += _key;
+
+		return file_pt.get<Type>(pt_path);
 	}
 
 	template <class Type>
 	Type value(const std::string & _key) const
 	{
-		std::string str_value = return_string_value(_key.c_str());
-		boost::algorithm::trim(str_value);
-		try {
-			return boost::lexical_cast <Type>(str_value);
-		} catch (const std::exception &ex) {
-			throw std::runtime_error("lib::configurator::value() key: \"" + _key + "\", value: \"" + str_value + "\", "
-					+ ex.what());
-		}
+		return value<Type>(_key, section_name);
 	}
 
 	//	/**
@@ -222,7 +214,7 @@ Eigen::Matrix <double, ROWS, COLS> configurator::value(const std::string & key, 
 	Eigen::Matrix <double, ROWS, COLS> matrix_value;
 
 	// get string value and remove leading and trailing spaces
-	std::string text_value = return_string_value(key.c_str(), section_name.c_str());
+	std::string text_value = value<std::string>(key, section_name);
 	boost::algorithm::trim(text_value);
 
 	//std::cout << "visual_servo_regulator::get_matrix_value() Processing value: "<<text_value<<"\n";
@@ -255,6 +247,5 @@ Eigen::Matrix <double, ROWS, COLS> configurator::value(const std::string & key, 
 
 } // namespace lib
 } // namespace mrrocpp
-
 
 #endif
