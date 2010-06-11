@@ -15,74 +15,74 @@ namespace task {
 // klasa globalna dla calego procesu MP
 class task : public ecp_mp::task::task
 {
-	private:
-		// Badanie typu polecenia z MP
-		lib::MP_COMMAND mp_command_type(void) const;
+private:
+	// Badanie typu polecenia z MP
+	lib::MP_COMMAND mp_command_type(void) const;
 
-		void initialize_communication(void);
-	protected:
-		// Oczekiwanie na nowy stan od MP
-		void get_next_state(void);
+	void initialize_communication(void);
+protected:
+	// Oczekiwanie na nowy stan od MP
+	void get_next_state(void);
 
-		//! Coordinator agent
-		RemoteAgent mp_agent;
-	public:
-		//! Output buffer for reply to a coordinator
-		RemoteBuffer<lib::ECP_REPLY_PACKAGE> ecp_reply_buffer;
+	//! Coordinator agent
+	RemoteAgent mp_agent;
+public:
+	//! Output buffer for reply to a coordinator
+	RemoteBuffer<lib::ECP_REPLY_PACKAGE> ecp_reply_buffer;
 
-		//! Input buffer for command from a coordinator
-		DataBuffer<lib::MP_COMMAND_PACKAGE> mp_command_buffer;
+	//! Input buffer for command from a coordinator
+	DataBuffer<lib::MP_COMMAND_PACKAGE> mp_command_buffer;
 
-		//! Input buffer for a trigger from a UI
-		DataBuffer<char> ui_trigger_buffer;
+	//! Input buffer for a trigger from a UI
+	DataBuffer<char> ui_trigger_buffer;
 
-	public: // TODO: following packages should be 'protected'
-		// Odpowiedz ECP do MP, pola do ew. wypelnienia przez generatory
-		lib::ECP_REPLY_PACKAGE ecp_reply;
+public: // TODO: following packages should be 'protected'
+	// Odpowiedz ECP do MP, pola do ew. wypelnienia przez generatory
+	lib::ECP_REPLY_PACKAGE ecp_reply;
 
-		// Polecenie od MP dla TASKa
-		lib::MP_COMMAND_PACKAGE mp_command;
+	std::string mp_2_ecp_next_state_string;
 
-		ecp_robot* ecp_m_robot;
+	// Polecenie od MP dla TASKa
+	lib::MP_COMMAND_PACKAGE mp_command;
 
 		//ew. koordynacja ciagla domyslnie wylaczona ma wplyw na instrukcje move
 		bool continuous_coordination;
 
-		// KONSTRUKTOR
-		task(lib::configurator &_config);
+	// sprawdza czy przeszedl puls do ECP lub MP
+	bool pulse_check();
 
-		// dla gcc: `'class Foo' has virtual functions but non-virtual destructor` warning.
-		virtual ~task();
+	// KONSTRUKTOR
+	task(lib::configurator &_config);
 
-		// Informacja dla MP o zakonczeniu zadania uzytkownika
-		void ecp_termination_notice(void);
+	// Informacja dla MP o zakonczeniu zadania uzytkownika
+	void ecp_termination_notice(void);
 
-		// Oczekiwanie na polecenie START od MP
-		void wait_for_start(void);
+	// Oczekiwanie na polecenie START od MP
+	void wait_for_start(void);
 
-		// Oczekiwanie na STOP
-		void wait_for_stop(void);
+	// Oczekiwanie na STOP
+	void wait_for_stop(void);
 
-	public: // TODO: what follows should be private method
+	// Oczekiwanie na STOP
+	void ecp_wait_for_stop(void);
 
-		// Oczekiwanie na polecenie od MP
-		//bool mp_buffer_receive_and_send(void);
+	// Oczekiwanie na polecenie od MP
+	bool mp_buffer_receive_and_send(void);
 
-		// Ustawienie typu odpowiedzi z ECP do MP
-		void set_ecp_reply(lib::ECP_REPLY ecp_r);
+	// Ustawienie typu odpowiedzi z ECP do MP
+	void set_ecp_reply(lib::ECP_REPLY ecp_r);
 };
 
-task* return_created_ecp_task (lib::configurator &_config);
-
+task* return_created_ecp_task(lib::configurator &_config);
 
 // klasa podzadania
 class ecp_sub_task
 {
-	protected:
-		task &ecp_t;
+protected:
+	task &ecp_t;
 
-	public:
-		ecp_sub_task(task &_ecp_t);
+public:
+	ecp_sub_task(task &_ecp_t);
 };
 
 } // namespace task

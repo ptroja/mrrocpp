@@ -48,17 +48,20 @@ void task::initialize_communication()
 }
 
 // Badanie typu polecenia z MP
-lib::MP_COMMAND task::mp_command_type(void) const {
+lib::MP_COMMAND task::mp_command_type(void) const
+{
 	return mp_command.command;
 }
 
 // Ustawienie typu odpowiedzi z ECP do MP
-void task::set_ecp_reply(lib::ECP_REPLY ecp_r) {
+void task::set_ecp_reply(lib::ECP_REPLY ecp_r)
+{
 	ecp_reply.reply = ecp_r;
 }
 
 // Informacja dla MP o zakonczeniu zadania uzytkownika
-void task::ecp_termination_notice(void) {
+void task::ecp_termination_notice(void)
+{
 	if (mp_command_type() != lib::END_MOTION) {
 
 		set_ecp_reply(lib::TASK_TERMINATED);
@@ -89,8 +92,11 @@ void task::get_next_state(void)
 	fprintf(stderr, "%s: get_next_state()\n", getName().c_str());
 	while(mp_command_buffer.Get().command != lib::NEXT_STATE) {
 		Wait(mp_command_buffer);
+
 	}
 	mp_command = mp_command_buffer.Get();
+
+	mp_2_ecp_next_state_string = mp_command.ecp_next_state.mp_2_ecp_next_state;
 
 	// acknowledge the command
 	set_ecp_reply(lib::ECP_ACKNOWLEDGE);
@@ -98,7 +104,8 @@ void task::get_next_state(void)
 }
 
 ecp_sub_task::ecp_sub_task(task &_ecp_t) :
-	ecp_t(_ecp_t) {
+	ecp_t(_ecp_t)
+{
 }
 
 } // namespace task

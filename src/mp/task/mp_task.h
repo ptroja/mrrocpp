@@ -52,7 +52,8 @@ public:
 
 	void set_next_playerpos_goal(lib::robot_name_t robot_l, const lib::playerpos_goal_t &goal);
 
-	void set_next_ecps_state(int l_state, int l_variant, const char* l_string, int str_len, int number_of_robots, ...);
+	void
+			set_next_ecps_state(std::string l_state, int l_variant, const char* l_string, int str_len, int number_of_robots, ...);
 
 	void send_end_motion_to_ecps(int number_of_robots, ...);
 	void send_end_motion_to_ecps(int number_of_robots, lib::robot_name_t *properRobotsSet);

@@ -22,7 +22,8 @@ namespace task {
 
 // KONSTRUKTORY
 sk_mr::sk_mr(lib::configurator &_config) :
-	task(_config) {
+	task(_config)
+{
 	// the robot is choose dependendat on the section of configuration file sent as argv[4]
 	if (config.section_name == ECP_IRP6OT_M_SECTION) {
 		ecp_m_robot = new irp6ot_m::robot(*this);
@@ -40,7 +41,8 @@ sk_mr::sk_mr(lib::configurator &_config) :
 	sr_ecp_msg->message("ECP SK_MR loaded");
 }
 
-void sk_mr::main_task_algorithm(void) {
+void sk_mr::main_task_algorithm(void)
+{
 	for (;;) {
 		sr_ecp_msg->message("Waiting for MP order");
 
@@ -50,20 +52,13 @@ void sk_mr::main_task_algorithm(void) {
 		//printf("postument: %d\n", mp_command.ecp_next_state.mp_2_ecp_next_state);
 		flushall();
 
-		switch ((ecp_mp::task::SK_MR_ECP_STATES) mp_command.ecp_next_state.mp_2_ecp_next_state) {
-		case ecp_mp::task::ECP_GEN_BIAS_EDP_FORCE:
+		if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_BIAS_EDP_FORCE) {
 			befg->Move();
-			break;
-		case ecp_mp::task::ECP_GEN_TFF_NOSE_RUN:
+		} else if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_TFF_NOSE_RUN) {
 			nrg->Move();
-			break;
-		case ecp_mp::task::ECP_GEN_EDGE_FOLLOW_FORCE: {
+		} else if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_EDGE_FOLLOW_FORCE) {
 			yefg->Move();
-			break;
 		}
-		default:
-			break;
-		} // end switch
 
 		ecp_termination_notice();
 	} //end for
@@ -75,7 +70,8 @@ void sk_mr::main_task_algorithm(void) {
 namespace common {
 namespace task {
 
-task* return_created_ecp_task(lib::configurator &_config) {
+task* return_created_ecp_task(lib::configurator &_config)
+{
 	return new common::task::sk_mr(_config);
 }
 

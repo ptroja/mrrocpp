@@ -15,9 +15,8 @@ namespace task {
 /**
  * Used generators.
  */
-enum TFG_ECP_STATES {
-	ECP_GEN_TFG = 0
-};
+
+std::string ECP_GEN_TFG = "ECP_GEN_TFG";
 
 } // namespace task
 } // namespace ecp_mp
