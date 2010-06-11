@@ -28,17 +28,17 @@ ecp_sub_task_gripper_opening::ecp_sub_task_gripper_opening(task &_ecp_t) :
 void ecp_sub_task_gripper_opening::init()
 {
 	/*
-	tdes.arm_type = lib::XYZ_EULER_ZYZ;
-	tdes.interpolation_node_no = 1;
-	// Wspolrzedne kartezjanskie XYZ i katy Eulera ZYZ
-	tdes.coordinate_delta[0] = 0.0; // przyrost wspolrzednej X
-	tdes.coordinate_delta[1] = 0.0;// przyrost wspolrzednej Y
-	tdes.coordinate_delta[2] = 0.0; // przyrost wspolrzednej Z
-	tdes.coordinate_delta[3] = 0.0; // przyrost wspolrzednej FI
-	tdes.coordinate_delta[4] = 0.0; // przyrost wspolrzednej TETA
-	tdes.coordinate_delta[5] = 0.0; // przyrost wspolrzednej PSI
-	//	tdes.coordinate_delta[6] = 0.0;   // przyrost wspolrzednej PSI
-	 	 */
+	 tdes.arm_type = lib::XYZ_EULER_ZYZ;
+	 tdes.interpolation_node_no = 1;
+	 // Wspolrzedne kartezjanskie XYZ i katy Eulera ZYZ
+	 tdes.coordinate_delta[0] = 0.0; // przyrost wspolrzednej X
+	 tdes.coordinate_delta[1] = 0.0;// przyrost wspolrzednej Y
+	 tdes.coordinate_delta[2] = 0.0; // przyrost wspolrzednej Z
+	 tdes.coordinate_delta[3] = 0.0; // przyrost wspolrzednej FI
+	 tdes.coordinate_delta[4] = 0.0; // przyrost wspolrzednej TETA
+	 tdes.coordinate_delta[5] = 0.0; // przyrost wspolrzednej PSI
+	 //	tdes.coordinate_delta[6] = 0.0;   // przyrost wspolrzednej PSI
+	 */
 }
 
 void ecp_sub_task_gripper_opening::configure(double gripper_increment, int motion_time)
@@ -55,8 +55,13 @@ void ecp_sub_task_gripper_opening::execute()
 	lg.Move();
 }
 
+void ecp_sub_task_gripper_opening::conditional_execution()
+{
+
+}
 
 } // namespace task
+
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp

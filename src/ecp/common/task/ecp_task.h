@@ -9,6 +9,8 @@ namespace ecp {
 namespace common {
 namespace task {
 
+class ecp_sub_task;
+
 // klasa globalna dla calego procesu MP
 class task : public ecp_mp::task::task
 {
@@ -37,6 +39,8 @@ public:
 	// TODO: following packages should be 'protected'
 	// Odpowiedz ECP do MP, pola do ew. wypelnienia przez generatory
 	lib::ECP_REPLY_PACKAGE ecp_reply;
+
+	std::map <std::string, ecp_sub_task *> subtask_m;
 
 	std::string mp_2_ecp_next_state_string;
 
@@ -89,6 +93,12 @@ protected:
 
 public:
 	ecp_sub_task(task &_ecp_t);
+
+	/*
+	 * executed on the MP demand
+	 */
+
+	virtual void conditional_execution() = 0;
 };
 
 } // namespace task

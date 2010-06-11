@@ -90,6 +90,14 @@ acq_eih::acq_eih(task &_ecp_t) :
 	fflush(stdout);
 }
 
+
+void acq_eih::conditional_execution()
+{
+
+}
+
+
+
 void acq_eih::main_task_algorithm(void) {
 
 	int i = 0, j = 0, k, l, m = 0;
