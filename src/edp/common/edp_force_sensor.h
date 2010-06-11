@@ -63,13 +63,20 @@ protected:
 	 */
 	bool test_mode;
 
+	lib::sr_vsp *sr_msg; //!< komunikacja z SR
+
+	/**
+	 * Derived classes are supposed to call this method in get_reading.
+	 * The base class will handle transformation to current effector frame.
+	 * @param current_ft current force-torque reading from sensor
+	 */
+	void set_current_ft_reading(const lib::Ft_vector& current_ft);
+
 public:
 	void operator()(void);
 	boost::mutex mtx;
 	lib::condition_synchroniser thread_started;
 
-	lib::sr_vsp *sr_msg; //!< komunikacja z SR
-	lib::condition_synchroniser edp_vsp_synchroniser;//!< dostep do nowej wiadomosci dla vsp
 	lib::condition_synchroniser new_command_synchroniser;//!< dostep do nowej wiadomosci dla vsp
 	common::FORCE_ORDER command;
 
@@ -86,9 +93,19 @@ public:
 
 	virtual ~force();
 
-	virtual void wait_for_event(void) = 0; // oczekiwanie na zdarzenie
+	void set_force_tool();
 
-	void set_force_tool(void);
+	//! Default sleep imlpementation
+	virtual void wait_for_event();
+
+	//! Default implementation for test mode
+	virtual void get_reading();
+
+	//! Common implementation to be called by derived classes
+	virtual void configure_sensor();
+
+	//! Default implementation
+	virtual void initiate_reading();
 }; // end: class edp_force_sensor
 
 

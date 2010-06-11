@@ -15,167 +15,77 @@
 #include "lib/srlib.h"
 #include "edp/ati3084MK/edp_s.h"
 
-// Konfigurator
-#include "lib/configurator.h"
-
 namespace mrrocpp {
 namespace edp {
 namespace sensor {
 
 ATI3084_force::ATI3084_force(common::manip_effector &_master) :
-	force(_master) {
+	force(_master)
+{
 }
 
-void ATI3084_force::connect_to_hardware(void) {
-	if (!test_mode) {
-		uart = open_port();
-		//printf("2\n");
-		tcflush(uart, TCIFLUSH);
-
-		sendBias();
-	}
+void ATI3084_force::connect_to_hardware(void)
+{
+	uart = open_port();
 }
 
-ATI3084_force::~ATI3084_force(void) {
+ATI3084_force::~ATI3084_force(void)
+{
 	if (!test_mode) {
 		close(uart);
 	}
-	if (gravity_transformation)
-		delete gravity_transformation;
 }
 
 /**************************** inicjacja czujnika ****************************/
-void ATI3084_force::configure_sensor(void) {// by Y
-	is_sensor_configured = true;
-	//  printf("EDP Sensor configured\n");
-	sr_msg->message("EDP Sensor configured");
-
-	if (!test_mode) {
-		sendBias();
-	}
-
-	// synchronize gravity transformation
-
-	// polozenie kisci bez narzedzia wzgledem bazy
-	lib::Homog_matrix frame = master.return_current_frame(
-			common::WITH_TRANSLATION); // FORCE Transformation by Slawomir Bazant
-	// lib::Homog_matrix frame(master.force_current_end_effector_frame); // pobranie aktualnej ramki
-	if (!gravity_transformation) // nie powolano jeszcze obiektu
-	{
-		// TODO: rewrite this code with boost::tokenizer
-		lib::Xyz_Angle_Axis_vector tab;
-		lib::Homog_matrix sensor_frame;
-		if (master.config.exists("sensor_in_wrist")) {
-			char *tmp = strdup(master.config.value<std::string> (
-					"sensor_in_wrist").c_str());
-			char* toDel = tmp;
-			for (int i = 0; i < 6; i++)
-				tab[i] = strtod(tmp, &tmp);
-			free(toDel);
-			sensor_frame = lib::Homog_matrix(tab);
-			// std::cout<<sensor_frame<<std::endl;
-		} else
-			sensor_frame = lib::Homog_matrix(0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 1,
-					0.09);
-		// lib::Homog_matrix sensor_frame = lib::Homog_matrix(0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 1, 0.09);
-
-		double weight = master.config.value<double> ("weight");
-
-		double point[3];
-		char *tmp = strdup(master.config.value<std::string> (
-				"default_mass_center_in_wrist").c_str());
-		char* toDel = tmp;
-		for (int i = 0; i < 3; i++)
-			point[i] = strtod(tmp, &tmp);
-		free(toDel);
-		// double point[3] = { master.config.value<double>("x_axis_arm"),
-		//		master.config.value<double>("y_axis_arm"), master.config.return_double_value("z_axis_arm") };
-		lib::K_vector pointofgravity(point);
-		gravity_transformation = new lib::ForceTrans(frame, sensor_frame, weight, pointofgravity);
-	} else {
-		gravity_transformation->synchro(frame);
-	}
-
-}
-
-void ATI3084_force::wait_for_event() {
-	//	sr_msg->message("wait_for_event");
-
-	if (!test_mode) {
-
-		ftxyz = getFT();
-
-	} else {
-		usleep(1000);
-	}
-}
-
-/*************************** inicjacja odczytu ******************************/
-void ATI3084_force::initiate_reading(void)
+void ATI3084_force::configure_sensor(void)
 {
-	if (!is_sensor_configured) {
-		BOOST_THROW_EXCEPTION(
-				lib::exception::Fatal_error() <<
-				lib::exception::error_code(SENSOR_NOT_CONFIGURED)
-		);
-	}
+	sendBias();
+
+	// Call the default implementation
+	force::configure_sensor();
+}
+
+void ATI3084_force::wait_for_event()
+{
+	ftxyz = getFT();
 }
 
 /***************************** odczyt z czujnika *****************************/
-void ATI3084_force::get_reading(void) {
-	lib::Ft_vector kartez_force;
+void ATI3084_force::get_reading(void)
+{
+	lib::Ft_vector ft_table;
 
-	if (test_mode) {
-		for (int i = 0; i < 6; ++i) {
-			kartez_force[i] = 0.0;
-		}
-		master.force_msr_upload(kartez_force);
-	} else {
-
-		lib::Ft_vector ft_table;
-
-		for (int i = 0; i < 6; i++) {
-			ft_table[i] = static_cast<double> (ftxyz.ft[i]);
-		}
-		/*
-		 char aaa[50];
-		 sprintf(aaa,"%f",ft_table[0]);
-		 sr_msg->message(aaa);
-		 */
-		is_reading_ready = true;
-
-		// jesli ma byc wykorzytstywana biblioteka transformacji sil
-		if (gravity_transformation) {
-			for (int i = 0; i < 3; i++) {
-				ft_table[i] *= 10;
-				ft_table[i] /= 115;
-			}
-			//ft_table[i]*=(10/115);
-			//			for(int i=3;i<6;i++) ft_table[i]/=333;
-			for (int i = 3; i < 6; i++) {
-				ft_table[i] *= 5; // by Y - korekta 5/1000
-				ft_table[i] /= 940; // by Y - korekta 5/1000
-			}
-			lib::Homog_matrix frame = master.return_current_frame(
-					common::WITH_TRANSLATION);
-			// lib::Homog_matrix frame(master.force_current_end_effector_frame);
-			lib::Ft_vector output = gravity_transformation->getForce(ft_table,
-					frame);
-			master.force_msr_upload(output);
-		}
+	for (int i = 0; i < 6; i++) {
+		ft_table[i] = static_cast <double> (ftxyz.ft[i]);
 	}
+
+	for (int i = 0; i < 3; i++) {
+		ft_table[i] *= 10;
+		ft_table[i] /= 115;
+	}
+	//ft_table[i]*=(10/115);
+	//			for(int i=3;i<6;i++) ft_table[i]/=333;
+	for (int i = 3; i < 6; i++) {
+		ft_table[i] *= 5; // by Y - korekta 5/1000
+		ft_table[i] /= 940; // by Y - korekta 5/1000
+	}
+
+	// Call the base class to do a processing of a current reading
+	set_current_ft_reading(ft_table);
 }
 
 // metoda na wypadek skasowanie pamiecia nvram
 // uwaga sterownik czujnika wysyla komunikat po zlaczu szeregowym zaraz po jego wlaczeniu
 
-void ATI3084_force::solve_transducer_controller_failure(void) {
+void ATI3084_force::solve_transducer_controller_failure(void)
+{
 	usleep(10);
 	sendBias();
 	usleep(100);
 }
 
-void ATI3084_force::sendBias() {
+void ATI3084_force::sendBias()
+{
 	const char bias = 'b';
 	if (write(uart, &bias, 1) != 1) {
 		// TODO: throw
@@ -183,7 +93,8 @@ void ATI3084_force::sendBias() {
 	}
 }
 
-ATI3084_force::forceReadings_t ATI3084_force::getFT() {
+ATI3084_force::forceReadings_t ATI3084_force::getFT()
+{
 	const char query = 'q';
 	int r;
 	int current_bytes = 14;
@@ -213,15 +124,13 @@ ATI3084_force::forceReadings_t ATI3084_force::getFT() {
 		if (r == 0) {
 			if (iter_counter == 1) {
 				printf("Nie otrzymano oczekiwanej ilosci znakow: %d\n", r);
-				sr_msg->message(lib::NON_FATAL_ERROR,
-						"MK Force / Torque read error - check sensor controller");
+				sr_msg->message(lib::NON_FATAL_ERROR, "MK Force / Torque read error - check sensor controller");
 			}
 
 			solve_transducer_controller_failure();
 		} else {
 			if (iter_counter > 1) {
-				sr_msg->message(
-						"MK Force / Torque sensor connection reastablished");
+				sr_msg->message("MK Force / Torque sensor connection reastablished");
 			}
 		}
 	} while (r == 0);
@@ -235,7 +144,8 @@ ATI3084_force::forceReadings_t ATI3084_force::getFT() {
 	return ftxyz;
 }
 
-int ATI3084_force::open_port(void) {
+int ATI3084_force::open_port(void)
+{
 	int fd = open(PORT, O_RDWR);
 	if (fd == -1) {
 		perror("open()");
@@ -273,10 +183,14 @@ int ATI3084_force::open_port(void) {
 	tcsetattr(fd, TCSADRAIN, &options);
 	fcntl(fd, F_SETFL, 0);
 	//	printf("4\n");
+
+	tcflush(uart, TCIFLUSH);
+
 	return fd;
 }
 
-force* return_created_edp_force_sensor(common::manip_effector &_master) {
+force* return_created_edp_force_sensor(common::manip_effector &_master)
+{
 	return new ATI3084_force(_master);
 }
 

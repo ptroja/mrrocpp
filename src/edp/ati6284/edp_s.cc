@@ -89,97 +89,95 @@ ATI6284_force::ATI6284_force(common::manip_effector &_master) :
 void ATI6284_force::connect_to_hardware(void) {
 	// unsigned  uCount;  //!< Count index
 	// unsigned  uStatus; //!< Flag to indicate FIFO not empty
-	if (!(test_mode)) {
-		Total_Number_of_Samples = 6;
-		index = 1;
 
-		std::string calfilepath(master.config.return_mrrocpp_network_path());
-		calfilepath += "src/edp/ati6284/ft6284.cal";
+	Total_Number_of_Samples = 6;
+	index = 1;
 
-		for (int i = 0; i < 5; i++)
-			last_correct[i] = 0;
-		overload = 0;
-		show_no_result = 0;
+	std::string calfilepath(master.config.return_mrrocpp_network_path());
+	calfilepath += "src/edp/ati6284/ft6284.cal";
 
-		//!< create Calibration struct
-		cal = createCalibration(calfilepath.c_str(), index);
-		if (cal == NULL) {
-			printf("\nSpecified calibration could not be loaded.\n");
-		}
+	for (int i = 0; i < 5; i++)
+		last_correct[i] = 0;
+	overload = 0;
+	show_no_result = 0;
 
-		if (ThreadCtl(_NTO_TCTL_IO, NULL) == -1) //!< dostep do sprzetu
-			printf("Unable to connect to card\n");
-
-		bus = acquireBoard(0x10932CA0); //!< funkcja uruchamiaj�ca kart�
-
-		if (bus == NULL) {
-			printf("Error accessing the PCI device.  Exiting.\n");
-			exit(EXIT_FAILURE);
-		}
-
-		Bar1 = bus->createAddressSpace(kPCI_BAR1);
-		board = new tESeries(Bar1);
-		theSTC = new tSTC(Bar1);
-
-		//!< Intitialise Mite Chip.
-		InitMite();
-
-		//!< Configure the board with the channel settings.
-		Configure_Board();
-
-		//!< Now Program the DAQ-STC
-
-		//!< Configure the timebase options for DAQ-STC
-		MSC_Clock_Configure();
-
-		//!< Clear ADC FIFO
-		Clear_FIFO();
-
-		//!< Stop any activities in progress
-		AI_Reset_All();
-
-		//!< Set DAQ STC for E-series board
-		AI_Board_Personalize();
-
-		//!< Access the first value in the configuration FIFO
-		AI_Initialize_Configuration_Memory_Output();
-
-		//!< Setup for any external multiplexer
-		AI_Board_Environmentalize();
-
-		//!< Set triggering options
-		AI_Trigger_Signals();
-
-		//!< Select the number of scans
-		Number_of_Scans();
-
-		//!< Select the scan start event
-		AI_Scan_Start();
-
-		//!< Select the end of scan event
-		AI_End_of_Scan();
-
-		//!< Select the convert signal
-		Convert_Signal();
-
-		memset(&hi_event, 0, sizeof(hi_event));
-		hi_event.sigev_notify = SIGEV_INTR;
-
-		irq_no = edp::irp6p_m::IRQ_REAL; //!< Numer przerwania sprzetowego od karty ISA
-
-		if ((szafa_id = InterruptAttach(irq_no, szafa_handler, NULL, NULL, 0))
-				== -1) {
-			//!< Obsluga bledu
-			perror("Unable to attach szafa interrupt handler: ");
-		}
+	//!< create Calibration struct
+	cal = createCalibration(calfilepath.c_str(), index);
+	if (cal == NULL) {
+		printf("\nSpecified calibration could not be loaded.\n");
 	}
 
+	if (ThreadCtl(_NTO_TCTL_IO, NULL) == -1) //!< dostep do sprzetu
+		printf("Unable to connect to card\n");
+
+	bus = acquireBoard(0x10932CA0); //!< funkcja uruchamiaj�ca kart�
+
+	if (bus == NULL) {
+		printf("Error accessing the PCI device.  Exiting.\n");
+		exit(EXIT_FAILURE);
+	}
+
+	Bar1 = bus->createAddressSpace(kPCI_BAR1);
+	board = new tESeries(Bar1);
+	theSTC = new tSTC(Bar1);
+
+	//!< Intitialise Mite Chip.
+	InitMite();
+
+	//!< Configure the board with the channel settings.
+	Configure_Board();
+
+	//!< Now Program the DAQ-STC
+
+	//!< Configure the timebase options for DAQ-STC
+	MSC_Clock_Configure();
+
+	//!< Clear ADC FIFO
+	Clear_FIFO();
+
+	//!< Stop any activities in progress
+	AI_Reset_All();
+
+	//!< Set DAQ STC for E-series board
+	AI_Board_Personalize();
+
+	//!< Access the first value in the configuration FIFO
+	AI_Initialize_Configuration_Memory_Output();
+
+	//!< Setup for any external multiplexer
+	AI_Board_Environmentalize();
+
+	//!< Set triggering options
+	AI_Trigger_Signals();
+
+	//!< Select the number of scans
+	Number_of_Scans();
+
+	//!< Select the scan start event
+	AI_Scan_Start();
+
+	//!< Select the end of scan event
+	AI_End_of_Scan();
+
+	//!< Select the convert signal
+	Convert_Signal();
+
+	memset(&hi_event, 0, sizeof(hi_event));
+	hi_event.sigev_notify = SIGEV_INTR;
+
+	irq_no = edp::irp6p_m::IRQ_REAL; //!< Numer przerwania sprzetowego od karty ISA
+
+	if ((szafa_id = InterruptAttach(irq_no, szafa_handler, NULL, NULL, 0))
+			== -1) {
+		//!< Obsluga bledu
+		perror("Unable to attach szafa interrupt handler: ");
+	}
 }
 
 // // // // // // // // // // // // // // /   odlaczenie czujnika // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////
 
 ATI6284_force::~ATI6284_force(void) {
-	if (!(test_mode)) {
+	if (!test_mode) {
 		delete theSTC;
 		delete board;
 
@@ -189,305 +187,85 @@ ATI6284_force::~ATI6284_force(void) {
 #endif
 
 		releaseBoard(bus);
-		if (gravity_transformation)
-			delete gravity_transformation;
 	}
-	printf("Destruktor VSP\n");
 }
 
 // // // // // // // // // // // // // // /   inicjacja odczytu // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////
 void ATI6284_force::configure_sensor(void) {
-	if (!(test_mode)) {
-		// double kartez_force[6];
-		// short  measure_report;
-		short int sensor_overload = 0;
-		float force_torque[6];
+	// double kartez_force[6];
+	// short  measure_report;
+	short int sensor_overload = 0;
+	float force_torque[6];
 
-		lib::timer local_timer;
-		float sec;
+	lib::timer local_timer;
+	float sec;
 
-		overload = 0;
+	overload = 0;
+	do {
+
+#if	 WITHOUT_INTERRUPT
 		do {
-
-#if	 WITHOUT_INTERRUPT
-			do {
 #endif
-				//!< Clear ADC FIFO
-				Clear_FIFO();
+			//!< Clear ADC FIFO
+			Clear_FIFO();
 
-				//!< Enable interrupts
-				AI_Interrupt_Enable();
+			//!< Enable interrupts
+			AI_Interrupt_Enable();
 
-				//!< Arm the analog input counters
-				AI_Arming();
+			//!< Arm the analog input counters
+			AI_Arming();
 
-				//!< Add back _enable and _disable from comment
-				//!< _disable;
+			//!< Add back _enable and _disable from comment
+			//!< _disable;
 
-				//!< Start the acquistion
-				AI_Start_The_Acquisition();
-				Samples_Acquired = 0;
-				invalid_value = 0;
-
-				local_timer.timer_start();
-
-				do {
-					//!< odczekaj
-					InterruptWait(0, NULL);
-					local_timer.timer_stop();
-					local_timer.get_time(&sec);
-				} while (sec < START_TO_READ_TIME_INTERVAL);
-#if	 WITHOUT_INTERRUPT
-
-				local_timer.timer_start();
-				do {
-					//!< this is the ISR
-					uStatus = theSTC->AI_Status_1.readRegister();
-					if (!((uStatus & 0x1000) == 0x1000)) {
-						//!< If the FIFO is not empty, call the ISR.
-						Interrupt_Service_Routine();
-					}
-					local_timer.timer_stop();
-					local_timer.get_time(&sec);
-				} while ((Samples_Acquired < Total_Number_of_Samples) && (sec
-						< START_TO_READ_FAILURE));
-
-				if (sec >= START_TO_READ_FAILURE) {
-					printf("aa :%f\n", sec);
-					if (show_no_result == 0) {
-						sr_msg->message(
-								"EDP Sensor configure_sensor - brak wyniku");
-						show_no_result = 1;
-					}
-				} else {
-					if (show_no_result == 1) {
-						sr_msg->message(
-								"EDP Sensor configure_sensor - wynik otrzymany");
-						show_no_result = 0;
-					}
-				}
-			} while (sec >= START_TO_READ_FAILURE); //!< przeciwdzialanie zawieszeniu w petli podczas odczytu
-
-#endif
-
-#if	 INTERRUPT
+			//!< Start the acquistion
+			AI_Start_The_Acquisition();
+			Samples_Acquired = 0;
+			invalid_value = 0;
 
 			local_timer.timer_start();
-			do
-			{
+
+			do {
 				//!< odczekaj
+				InterruptWait(0, NULL);
 				local_timer.timer_stop();
 				local_timer.get_time(&sec);
-			}
-			while(sec<INTERRUPT_INTERVAL);
-#if DEBUG
-
-			printf("Interrupt enabling!!!\n");
-#endif
-
-			theSTC->Interrupt_Control.setInterrupt_A_Output_Select(0);
-			theSTC->Interrupt_Control.setInterrupt_A_Enable(1);
-			theSTC->Interrupt_Control.flush();
-#if DEBUG
-
-			printf("Interrupt enabled!!!\n");
-#endif
-
-			InterruptWait (0, NULL);
-			do
-			{
-				uValues[Samples_Acquired] = board->AIFifoData.readRegister();
-				Samples_Acquired++;
-			}
-			while (Samples_Acquired<Total_Number_of_Samples);
-#if DEBUG
-
-			printf("After InterruptWait!!!\n");
-#endif
-
-			theSTC->Interrupt_Control.setInterrupt_A_Output_Select(4);
-			theSTC->Interrupt_Control.setInterrupt_A_Enable(1);
-			theSTC->Interrupt_Control.flush();
-
-#endif
-
-			Clear_FIFO();
-			Samples_Acquired = 0;
-			Input_to_Volts();
-
-			for (int i = 0; i < 6; i++) {
-				sBias[i] = 0;
-			}
-			ftconvert(sVolt, sBias, force_torque);
-
-			//!< jesli pomiar byl poprawny
-			if (invalid_value == 0) {
-				sr_msg->message("EDP Sensor configure_sensor - OK");
-				sensor_overload = 0;
-				overload = 0;
-				is_sensor_configured = true;
-			} else {
-				if (overload == 0) {
-					sr_msg->message("EDP Sensor configure_sensor - OVERLOAD!!!");
-				}
-				sensor_overload = 1;
-				overload = 1;
-			}
-		} while (sensor_overload == 1);
-
-		for (int j = 0; j < 6; j++)
-			sBias[j] = sVolt[j];
-	} else {
-		is_sensor_configured = true;
-	}
-
-
-		//!< synchronize gravity transformation
-		// polozenie kisci bez narzedzia wzgledem bazy
-		lib::Homog_matrix frame = master.return_current_frame(
-				common::WITH_TRANSLATION); //!< FORCE Transformation by Slawomir Bazant
-		// lib::Homog_matrix frame(master.force_current_end_effector_frame); // pobranie aktualnej pozycji
-		if (!gravity_transformation) // nie powolano jeszcze obiektu
-		{
-
-			lib::Xyz_Angle_Axis_vector tab;
-			lib::Homog_matrix sensor_frame;
-			if (master.config.exists("sensor_in_wrist")) {
-				char *tmp = strdup(master.config.value<std::string> (
-						"sensor_in_wrist").c_str());
-				char* toDel = tmp;
-				for (int i = 0; i < 6; i++)
-					tab[i] = strtod(tmp, &tmp);
-				free(toDel);
-				sensor_frame = lib::Homog_matrix(tab);
-
-			} else
-				sensor_frame = lib::Homog_matrix(-1, 0, 0, 0, 0, -1, 0, 0, 0,
-						0, 1, 0.09);
-			// lib::Homog_matrix sensor_frame = lib::Homog_matrix(-1, 0, 0, 0,  0, -1, 0, 0,  0, 0, 1, 0.09);
-
-			double weight = master.config.value<double> ("weight");
-
-			double point[3];
-			char *tmp = strdup(master.config.value<std::string> (
-					"default_mass_center_in_wrist").c_str());
-			char* toDel = tmp;
-			for (int i = 0; i < 3; i++)
-				point[i] = strtod(tmp, &tmp);
-			free(toDel);
-			// double point[3] = { master.config.value<double>("x_axis_arm"),
-			// 		master.config.value<double>("y_axis_arm"), master.config.return_double_value("z_axis_arm") };
-			lib::K_vector pointofgravity(point);
-			gravity_transformation
-					= new lib::ForceTrans(frame, sensor_frame, weight, pointofgravity);
-		} else {
-			gravity_transformation->synchro(frame);
-		}
-
-}
-
-// // // // // // // // // // // // // // /   inicjalizacja zbierania danych z czujnika, wait_for_event // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////
-
-void ATI6284_force::wait_for_event()
-{
-	if (!is_sensor_configured) {
-		BOOST_THROW_EXCEPTION(
-				lib::exception::Fatal_error() <<
-				lib::exception::error_code(SENSOR_NOT_CONFIGURED)
-		);
-	}
-
-	if (!(test_mode)) {
-		lib::timer local_timer;
-		float sec;
-
-		//!< Clear ADC FIFO
-		Clear_FIFO();
-
-		//!< Enable interrupts
-		AI_Interrupt_Enable();
-
-		//!< Arm the analog input counters
-		AI_Arming();
-
-		//!< Add back _enable and _disable from comment
-		//!< _disable;
-
-		//!< Start the acquistion
-		AI_Start_The_Acquisition();
-		Samples_Acquired = 0;
-		invalid_value = 0;
-
-		local_timer.timer_start();
-
-		do {
-			//!< odczekaj
-			InterruptWait(0, NULL);
-
-			local_timer.timer_stop();
-			local_timer.get_time(&sec);
-		} while (sec < START_TO_READ_TIME_INTERVAL);
-	} else {
-		usleep(1000);
-	}
-	is_reading_ready = true;
-
-}
-// // // // // // // // // // // // // // /   odczyt danych  // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////
-
-void ATI6284_force::initiate_reading(void)
-{
-	short int no_result = 0; //brak wyniku
-	static short int show = 0; //wyswietl
-	float force_torque[6]; //wektor z si�ami i napi�ciami
-	force_readring_status_t sensor_status = EDP_FORCE_SENSOR_READING_CORRECT;
-
-	if (!is_sensor_configured) {
-		BOOST_THROW_EXCEPTION(
-				lib::exception::Fatal_error() <<
-				lib::exception::error_code(SENSOR_NOT_CONFIGURED)
-		);
-	}
-
-	//!< jezeli chcemy jakikolwiek odczyt	-> is_reading_ready
-	if (!is_reading_ready) {
-		BOOST_THROW_EXCEPTION(
-				lib::exception::Fatal_error() <<
-				lib::exception::error_code(READING_NOT_READY)
-		);
-	}
-
-	if (!(test_mode)) {
+			} while (sec < START_TO_READ_TIME_INTERVAL);
 #if	 WITHOUT_INTERRUPT
 
-		lib::timer local_timer;
-		float sec;
+			local_timer.timer_start();
+			do {
+				//!< this is the ISR
+				uStatus = theSTC->AI_Status_1.readRegister();
+				if (!((uStatus & 0x1000) == 0x1000)) {
+					//!< If the FIFO is not empty, call the ISR.
+					Interrupt_Service_Routine();
+				}
+				local_timer.timer_stop();
+				local_timer.get_time(&sec);
+			} while ((Samples_Acquired < Total_Number_of_Samples) && (sec
+					< START_TO_READ_FAILURE));
 
-		local_timer.timer_start();
-
-		do {
-			//!< this is the ISR
-			//!< Flag to indicate FIFO not empty
-			uint16_t uStatus = theSTC->AI_Status_1.readRegister();
-			if (!((uStatus & 0x1000) == 0x1000)) {
-				//!< If the FIFO is not empty, call the ISR.
-				Interrupt_Service_Routine();
+			if (sec >= START_TO_READ_FAILURE) {
+				printf("aa :%f\n", sec);
+				if (show_no_result == 0) {
+					sr_msg->message(
+							"EDP Sensor configure_sensor - brak wyniku");
+					show_no_result = 1;
+				}
+			} else {
+				if (show_no_result == 1) {
+					sr_msg->message(
+							"EDP Sensor configure_sensor - wynik otrzymany");
+					show_no_result = 0;
+				}
 			}
-
-			local_timer.timer_stop();
-			local_timer.get_time(&sec);
-		} while ((Samples_Acquired < Total_Number_of_Samples) && (sec < START_TO_READ_FAILURE));
-		if (sec >= START_TO_READ_FAILURE) {
-			no_result = 1;
-			invalid_value = 1;
-		} else {
-			no_result = 0;
-			invalid_value = 0;
-		}
+		} while (sec >= START_TO_READ_FAILURE); //!< przeciwdzialanie zawieszeniu w petli podczas odczytu
 
 #endif
 
 #if	 INTERRUPT
+
 		local_timer.timer_start();
 		do
 		{
@@ -527,75 +305,204 @@ void ATI6284_force::initiate_reading(void)
 
 #endif
 
-		if (no_result == 0) {
-			Input_to_Volts();
-			ftconvert(sVolt, sBias, force_torque);
-		}
-		if (invalid_value == 1) {
-			if (no_result == 1) {
-				if (show_no_result == 0) {
-					sr_msg->message("EDP Sensor initiate_reading - brak wyniku");
-					show_no_result = 1;
-					sensor_status = EDP_FORCE_SENSOR_READING_ERROR;
-				}
-			} else {
-				if (overload == 0) {
-					sr_msg->message("EDP Sensor initiate_reading - OVERLOAD!!!");
-					overload = 1;
-					sensor_status = EDP_FORCE_SENSOR_OVERLOAD;
-				}
-			}
-			for (int i = 0; i < 6; i++) {
-				force_torque[i] = last_correct[i];
-			}
-		} else {
-			if (show_no_result == 1) {
-				sr_msg->message("EDP Sensor initiate_reading - wynik otrzymany");
-				show_no_result = 0;
-			} else {
-				if (overload == 1) {
-					sr_msg->message("EDP Sensor initiate_reading - OVERLOAD REMOVED");
-					overload = 0;
-				}
-			}
-			for (int i = 0; i < 6; i++) {
-				last_correct[i] = force_torque[i];
-			}
-		}
-		//!< ok
-		from_vsp.vsp_report = lib::VSP_REPLY_OK;
-		//!< tutaj: czujnik skalibrowany, odczyt dokonany, przepisanie wszystkich pol
-		//!< przepisanie do bufora komunikacyjnego
-#if WYNIKI_MRROCPP
+		Clear_FIFO();
+		Samples_Acquired = 0;
+		Input_to_Volts();
 
-		printf ("aaa: %f, %f, %f: \n", force_torque[0], force_torque[1], force_torque[2]);
-#endif
-		// // // // // // // // // // // // // // / PRZEPISANIE WYNIKU // // // // // // // // // // // // // // // // // // // // // // // //
-		lib::Ft_vector ft_table;
-		if (gravity_transformation) {
-			lib::Ft_vector ft_table;
-			for (int i = 0; i < 6; i++)
-				ft_table[i] = force_torque[i];
-
-			lib::Homog_matrix frame = master.return_current_frame(common::WITH_TRANSLATION);
-
-			lib::Ft_vector output = gravity_transformation->getForce(ft_table, frame);
-
-			master.force_msr_upload(output);
-		}
-	} else {
-		lib::Ft_vector kartez_force;
 		for (int i = 0; i < 6; i++) {
-			kartez_force[i] = 0.0;
+			sBias[i] = 0;
 		}
-		master.force_msr_upload(kartez_force);
-	}
-	show++;
-	is_reading_ready = true;
+		ftconvert(sVolt, sBias, force_torque);
+
+		//!< jesli pomiar byl poprawny
+		if (invalid_value == 0) {
+			sr_msg->message("EDP Sensor configure_sensor - OK");
+			sensor_overload = 0;
+			overload = 0;
+			is_sensor_configured = true;
+		} else {
+			if (overload == 0) {
+				sr_msg->message("EDP Sensor configure_sensor - OVERLOAD!!!");
+			}
+			sensor_overload = 1;
+			overload = 1;
+		}
+	} while (sensor_overload == 1);
+
+	for (int j = 0; j < 6; j++)
+		sBias[j] = sVolt[j];
+
+	// Call the default implementation
+	force::configure_sensor();
 }
 
-// // // // // // // // // // // // // // /   odczyt z czujnika // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////
-void ATI6284_force::get_reading(void) {
+// // // // // // // // // // // // // // /   inicjalizacja zbierania danych z czujnika, wait_for_event // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////
+
+void ATI6284_force::wait_for_event()
+{
+	//!< Clear ADC FIFO
+	Clear_FIFO();
+
+	//!< Enable interrupts
+	AI_Interrupt_Enable();
+
+	//!< Arm the analog input counters
+	AI_Arming();
+
+	//!< Add back _enable and _disable from comment
+	//!< _disable;
+
+	//!< Start the acquistion
+	AI_Start_The_Acquisition();
+	Samples_Acquired = 0;
+	invalid_value = 0;
+
+	float sec;
+	lib::timer local_timer;
+
+	local_timer.timer_start();
+
+	do {
+		//!< odczekaj
+		InterruptWait(0, NULL);
+
+		local_timer.timer_stop();
+
+
+		local_timer.get_time(&sec);
+	} while (sec < START_TO_READ_TIME_INTERVAL);
+}
+// // // // // // // // // // // // // // /   odczyt danych  // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////
+
+void ATI6284_force::get_reading(void)
+{
+	short int no_result = 0; //brak wyniku
+	static short int show = 0; //wyswietl
+	float force_torque[6]; //wektor z si�ami i napi�ciami
+	force_readring_status_t sensor_status = EDP_FORCE_SENSOR_READING_CORRECT;
+
+#if	 WITHOUT_INTERRUPT
+	lib::timer local_timer;
+	float sec;
+
+	local_timer.timer_start();
+
+	do {
+		//!< this is the ISR
+		//!< Flag to indicate FIFO not empty
+		uint16_t uStatus = theSTC->AI_Status_1.readRegister();
+		if (!((uStatus & 0x1000) == 0x1000)) {
+			//!< If the FIFO is not empty, call the ISR.
+			Interrupt_Service_Routine();
+		}
+
+		local_timer.timer_stop();
+		local_timer.get_time(&sec);
+	} while ((Samples_Acquired < Total_Number_of_Samples) && (sec < START_TO_READ_FAILURE));
+	if (sec >= START_TO_READ_FAILURE) {
+		no_result = 1;
+		invalid_value = 1;
+	} else {
+		no_result = 0;
+		invalid_value = 0;
+	}
+
+#endif
+
+#if	 INTERRUPT
+	local_timer.timer_start();
+	do
+	{
+		//!< odczekaj
+		local_timer.timer_stop();
+		local_timer.get_time(&sec);
+	}
+	while(sec<INTERRUPT_INTERVAL);
+#if DEBUG
+
+	printf("Interrupt enabling!!!\n");
+#endif
+
+	theSTC->Interrupt_Control.setInterrupt_A_Output_Select(0);
+	theSTC->Interrupt_Control.setInterrupt_A_Enable(1);
+	theSTC->Interrupt_Control.flush();
+#if DEBUG
+
+	printf("Interrupt enabled!!!\n");
+#endif
+
+	InterruptWait (0, NULL);
+	do
+	{
+		uValues[Samples_Acquired] = board->AIFifoData.readRegister();
+		Samples_Acquired++;
+	}
+	while (Samples_Acquired<Total_Number_of_Samples);
+#if DEBUG
+
+	printf("After InterruptWait!!!\n");
+#endif
+
+	theSTC->Interrupt_Control.setInterrupt_A_Output_Select(4);
+	theSTC->Interrupt_Control.setInterrupt_A_Enable(1);
+	theSTC->Interrupt_Control.flush();
+
+#endif
+
+	if (no_result == 0) {
+		Input_to_Volts();
+		ftconvert(sVolt, sBias, force_torque);
+	}
+	if (invalid_value == 1) {
+		if (no_result == 1) {
+			if (show_no_result == 0) {
+				sr_msg->message("EDP Sensor get_reading - brak wyniku");
+				show_no_result = 1;
+				sensor_status = EDP_FORCE_SENSOR_READING_ERROR;
+			}
+		} else {
+			if (overload == 0) {
+				sr_msg->message("EDP Sensor get_reading - OVERLOAD!!!");
+				overload = 1;
+				sensor_status = EDP_FORCE_SENSOR_OVERLOAD;
+			}
+		}
+		for (int i = 0; i < 6; i++) {
+			force_torque[i] = last_correct[i];
+		}
+	} else {
+		if (show_no_result == 1) {
+			sr_msg->message("EDP Sensor get_reading - wynik otrzymany");
+			show_no_result = 0;
+		} else {
+			if (overload == 1) {
+				sr_msg->message("EDP Sensor get_reading - OVERLOAD REMOVED");
+				overload = 0;
+			}
+		}
+		for (int i = 0; i < 6; i++) {
+			last_correct[i] = force_torque[i];
+		}
+	}
+	//!< ok
+	from_vsp.vsp_report = lib::VSP_REPLY_OK;
+	//!< tutaj: czujnik skalibrowany, odczyt dokonany, przepisanie wszystkich pol
+	//!< przepisanie do bufora komunikacyjnego
+#if WYNIKI_MRROCPP
+
+	printf ("aaa: %f, %f, %f: \n", force_torque[0], force_torque[1], force_torque[2]);
+#endif
+	// // // // // // // // // // // // // // / PRZEPISANIE WYNIKU // // // // // // // // // // // // // // // // // // // // // // // //
+	lib::Ft_vector ft_table;
+
+	// Convert from floats to doubles
+	for (int i = 0; i < 6; i++)
+		ft_table[i] = force_torque[i];
+
+	// Call the base class to do a processing of a current reading
+	set_current_ft_reading(ft_table);
+
+	show++;
 }
 
 // // // // // // // // // // // // // // /  inne potrzebne funkcje // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////

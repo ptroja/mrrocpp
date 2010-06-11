@@ -52,9 +52,6 @@
 
 #include "edp/ati3084/edp_s.h"
 
-// Konfigurator
-#include "lib/configurator.h"
-
 namespace mrrocpp {
 namespace edp {
 namespace sensor {
@@ -62,7 +59,8 @@ namespace sensor {
 //! PCI device base IO address
 static uintptr_t base_io_address;
 
-const struct sigevent * schunk_int_handler(void *arg, int sint_id) {
+const struct sigevent * schunk_int_handler(void *arg, int sint_id)
+{
 	if (!check_intr()) {
 		// przyczyna przerwania inna niz sygnal stb z karty advantech
 		return NULL;
@@ -116,327 +114,249 @@ const struct sigevent * schunk_int_handler(void *arg, int sint_id) {
 }
 
 ATI3084_force::ATI3084_force(common::manip_effector &_master) :
-	force(_master), int_attached(false) {
+	force(_master), int_attached(false)
+{
 	memset(&mds, 0, sizeof(mds));
 }
 
-void ATI3084_force::connect_to_hardware(void) {
-	if (!(test_mode)) {
-		// 	printf("Konstruktor VSP!\n");
+void ATI3084_force::connect_to_hardware(void)
+{
+	// nadanie odpowiednich uprawnien watkowi
+	ThreadCtl(_NTO_TCTL_IO, NULL);
 
-		ThreadCtl(_NTO_TCTL_IO, NULL); // nadanie odpowiednich uprawnien watkowi
-		// 	printf("KONTRUKTOR EDP_S POCATEK\n");
+	// ZMIENNE POMOCNICZE
+	int_timeout = SCHUNK_INTR_TIMEOUT_HIGH;// by Y
 
-		// ZMIENNE POMOCNICZE
-		int_timeout = SCHUNK_INTR_TIMEOUT_HIGH;// by Y
+	tim_event.sigev_notify = SIGEV_UNBLOCK;// by Y
 
-		tim_event.sigev_notify = SIGEV_UNBLOCK;// by Y
+	// PODLACZENIE DO PCI, INICJACJA KARTY ADVANTECH I OBSLUGI PRZERWANIA
 
-		// PODLACZENIE DO PCI, INICJACJA KARTY ADVANTECH I OBSLUGI PRZERWANIA
-
-		phdl = pci_attach(0);
-		if (phdl == -1) {
-			BOOST_THROW_EXCEPTION(
-					lib::exception::System_error() <<
-					boost::errinfo_api_function("pci_attach") <<
-					boost::errinfo_errno(errno)
-			);
-		}
-
-		/* Initialize the pci_dev_info structure */
-		memset(&info, 0, sizeof(info));
-		pidx = 0x0;
-		info.VendorId = 0x13fe;
-		info.DeviceId = 0x1751;
-
-		hdl = pci_attach_device(NULL, PCI_INIT_ALL, pidx, &info);
-		if (hdl == NULL) {
-			BOOST_THROW_EXCEPTION(
-					lib::exception::System_error() <<
-					boost::errinfo_api_function("pci_attach_device") <<
-					boost::errinfo_errno(errno)
-			);
-		} else {
-			// 	printf("connected to Advantech 1751\n");
-			delay(100);
-			// printf("Przerwanie numer: %d\n",info.Irq);
-			base_io_address = mmap_device_io(info.BaseAddressSize[2],
-					PCI_IO_ADDR(info.CpuBaseAddress[2]));
-			// 	printf("base: %d\n",base_io_address);
-
-			initiate_registers();// konfiguracja karty
-
-			mds.sevent.sigev_notify = SIGEV_INTR;
-
-			// spinlock is not required until interrupt attached
-			mds.intr_mode = 0; // obsluga przerwania ustawiona na odbior pojedynczych slow
-			mds.byte_counter = 0;
-			mds.is_received = false;
-
-			if ((sint_id = InterruptAttach(info.Irq, schunk_int_handler, (void *) &mds, sizeof(mds), 0)) == -1) {
-				BOOST_THROW_EXCEPTION(
-						lib::exception::System_error() <<
-						boost::errinfo_api_function("InterruptAttach") <<
-						boost::errinfo_errno(errno)
-				);
-			}
-		}
-
-		// setup serial device
-		const char * serial = "/dev/ser1";
-		uart = open(serial, O_RDWR);
-		if (uart == -1) {
-			BOOST_THROW_EXCEPTION(
-					lib::exception::System_error() <<
-					boost::errinfo_api_function("open") <<
-					boost::errinfo_errno(errno) <<
-					boost::errinfo_file_name(serial)
-			);
-		}
-
-		// serial port settings: 38400, 8-N-1
-		struct termios tattr;
-
-		if(tcgetattr(uart, &tattr) == -1) {
-			BOOST_THROW_EXCEPTION(
-					lib::exception::System_error() <<
-					boost::errinfo_api_function("tcgetattr") <<
-					boost::errinfo_errno(errno)
-			);
-		}
-
-		// setup input speed
-		if(cfsetispeed(&tattr, B38400) == -1) {
-			BOOST_THROW_EXCEPTION(
-					lib::exception::System_error() <<
-					boost::errinfo_api_function("cfsetispeed") <<
-					boost::errinfo_errno(errno)
-			);
-		}
-
-		// setup output speed
-		if(cfsetospeed(&tattr, B38400) == -1) {
-			BOOST_THROW_EXCEPTION(
-					lib::exception::System_error() <<
-					boost::errinfo_api_function("cfsetospeed") <<
-					boost::errinfo_errno(errno)
-			);
-		}
-
-		// setup raw mode
-		if(cfmakeraw(&tattr) == -1) {
-			BOOST_THROW_EXCEPTION(
-					lib::exception::System_error() <<
-					boost::errinfo_api_function("cfmakeraw") <<
-					boost::errinfo_errno(errno)
-			);
-		}
-
-		// apply settings to serial port
-		if(tcsetattr(uart, TCSANOW, &tattr) == -1) {
-			BOOST_THROW_EXCEPTION(
-					lib::exception::System_error() <<
-					boost::errinfo_api_function("tcsetattr") <<
-					boost::errinfo_errno(errno)
-			);
-		}
-
-		do_init(); // komunikacja wstepna
+	phdl = pci_attach(0);
+	if (phdl == -1) {
+		BOOST_THROW_EXCEPTION(
+				lib::exception::System_error() <<
+				boost::errinfo_api_function("pci_attach") <<
+				boost::errinfo_errno(errno)
+		);
 	}
 
+	/* Initialize the pci_dev_info structure */
+	memset(&info, 0, sizeof(info));
+	pidx = 0x0;
+	info.VendorId = 0x13fe;
+	info.DeviceId = 0x1751;
+
+	hdl = pci_attach_device(NULL, PCI_INIT_ALL, pidx, &info);
+	if (hdl == NULL) {
+		BOOST_THROW_EXCEPTION(
+				lib::exception::System_error() <<
+				boost::errinfo_api_function("pci_attach_device") <<
+				boost::errinfo_errno(errno)
+		);
+	} else {
+		// 	printf("connected to Advantech 1751\n");
+		delay(100);
+		// printf("Przerwanie numer: %d\n",info.Irq);
+		base_io_address = mmap_device_io(info.BaseAddressSize[2], PCI_IO_ADDR(info.CpuBaseAddress[2]));
+		// 	printf("base: %d\n",base_io_address);
+
+		initiate_registers();// konfiguracja karty
+
+		mds.sevent.sigev_notify = SIGEV_INTR;
+
+		// spinlock is not required until interrupt attached
+		mds.intr_mode = 0; // obsluga przerwania ustawiona na odbior pojedynczych slow
+		mds.byte_counter = 0;
+		mds.is_received = false;
+
+		if ((sint_id = InterruptAttach(info.Irq, schunk_int_handler, (void *) &mds, sizeof(mds), 0)) == -1) {
+			BOOST_THROW_EXCEPTION(
+					lib::exception::System_error() <<
+					boost::errinfo_api_function("InterruptAttach") <<
+					boost::errinfo_errno(errno)
+			);
+		}
+	}
+
+	// setup serial device
+	const char * serial = "/dev/ser1";
+	uart = open(serial, O_RDWR);
+	if (uart == -1) {
+		BOOST_THROW_EXCEPTION(
+				lib::exception::System_error() <<
+				boost::errinfo_api_function("open") <<
+				boost::errinfo_errno(errno) <<
+				boost::errinfo_file_name(serial)
+		);
+	}
+
+	// serial port settings: 38400, 8-N-1
+	struct termios tattr;
+
+	if (tcgetattr(uart, &tattr) == -1) {
+		BOOST_THROW_EXCEPTION(
+				lib::exception::System_error() <<
+				boost::errinfo_api_function("tcgetattr") <<
+				boost::errinfo_errno(errno)
+		);
+	}
+
+	// setup input speed
+	if (cfsetispeed(&tattr, B38400) == -1) {
+		BOOST_THROW_EXCEPTION(
+				lib::exception::System_error() <<
+				boost::errinfo_api_function("cfsetispeed") <<
+				boost::errinfo_errno(errno)
+		);
+	}
+
+	// setup output speed
+	if (cfsetospeed(&tattr, B38400) == -1) {
+		BOOST_THROW_EXCEPTION(
+				lib::exception::System_error() <<
+				boost::errinfo_api_function("cfsetospeed") <<
+				boost::errinfo_errno(errno)
+		);
+	}
+
+	// setup raw mode
+	if (cfmakeraw(&tattr) == -1) {
+		BOOST_THROW_EXCEPTION(
+				lib::exception::System_error() <<
+				boost::errinfo_api_function("cfmakeraw") <<
+				boost::errinfo_errno(errno)
+		);
+	}
+
+	// apply settings to serial port
+	if (tcsetattr(uart, TCSANOW, &tattr) == -1) {
+		BOOST_THROW_EXCEPTION(
+				lib::exception::System_error() <<
+				boost::errinfo_api_function("tcsetattr") <<
+				boost::errinfo_errno(errno)
+		);
+	}
+
+	do_init(); // komunikacja wstepna
 }
 
-ATI3084_force::~ATI3084_force(void) {
+ATI3084_force::~ATI3084_force(void)
+{
 	if (!test_mode) {
 		InterruptDetach(sint_id);
 		pci_detach_device(hdl); // odlacza driver od danego urzadzenia na PCI
 		pci_detach(phdl); // Disconnect from the PCI server
 		close(uart);
 	}
-	if (gravity_transformation)
-		delete gravity_transformation;
-	printf("ATI3084_force::~ATI3084_force\n");
 }
 
 /**************************** inicjacja czujnika ****************************/
-void ATI3084_force::configure_sensor(void) {// by Y
-	is_sensor_configured = true;
-	//  printf("EDP Sensor configured\n");
-	sr_msg->message("EDP Sensor configured");
-	if (!test_mode) {
-		InterruptLock(&mds.spinlock);
-		mds.intr_mode = 0;
-		InterruptUnlock(&mds.spinlock);
+void ATI3084_force::configure_sensor(void)
+{
+	// switch to control mode
+	InterruptLock(&mds.spinlock);
+	mds.intr_mode = 0;
+	InterruptUnlock(&mds.spinlock);
 
-		do_send_command(SB);
-		do_Wait();
+	// send bias command
+	do_send_command(SB);
+	do_Wait();
 
 #ifdef PARALLEL
-		do_Wait();
+	do_Wait();
 #endif
-	}
+
+	// switch back to 7bit data mode
 	InterruptLock(&mds.spinlock);
-	mds.intr_mode = 1; // przywrocenie do 7 bajtowego trybu odbiotu danych
+	mds.intr_mode = 1;
 	mds.byte_counter = 0;
 	InterruptUnlock(&mds.spinlock);
-	// cout << "Przed konf" << endl;
-	// jesli ma byc wykorzytstywana biblioteka transformacji sil
 
-	// synchronize gravity transformation
-
-	// polozenie kisci bez narzedzia wzgledem bazy
-	lib::Homog_matrix frame = master.return_current_frame(
-			common::WITH_TRANSLATION); // FORCE Transformation by Slawomir Bazant
-	// lib::Homog_matrix frame(master.force_current_end_effector_frame); // pobranie aktualnej ramki
-	if (!gravity_transformation) // nie powolano jeszcze obiektu
-	{
-		lib::Xyz_Angle_Axis_vector tab;
-		lib::Homog_matrix sensor_frame;
-		if (master.config.exists("sensor_in_wrist")) {
-			char *tmp = strdup(master.config.value<std::string> (
-					"sensor_in_wrist").c_str());
-			char* toDel = tmp;
-			for (int i = 0; i < 6; i++)
-				tab[i] = strtod(tmp, &tmp);
-			sensor_frame = lib::Homog_matrix(tab);
-			free(toDel);
-			// std::cout<<sensor_frame<<std::endl;
-		} else
-			sensor_frame = lib::Homog_matrix(0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 1,
-					0.09);
-		// lib::Homog_matrix sensor_frame = lib::Homog_matrix(0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 1, 0.09);
-
-		double weight = master.config.value<double> ("weight");
-
-		double point[3];
-		char *tmp = strdup(master.config.value<std::string> (
-				"default_mass_center_in_wrist").c_str());
-		char* toDel = tmp;
-		for (int i = 0; i < 3; i++)
-			point[i] = strtod(tmp, &tmp);
-		free(toDel);
-		// double point[3] = { master.config.value<double>("x_axis_arm"),
-		//		master.config.value<double>("y_axis_arm"), master.config.return_double_value("z_axis_arm") };
-		lib::K_vector pointofgravity(point);
-		gravity_transformation = new lib::ForceTrans(frame, sensor_frame, weight, pointofgravity);
-	} else {
-		gravity_transformation->synchro(frame);
-	}
-
+	// Call the default implementation
+	force::configure_sensor();
 }
 
-void ATI3084_force::wait_for_event() {
+void ATI3084_force::wait_for_event()
+{
+	if (!int_attached) {
+		int_attached = true;
+		InterruptLock(&mds.spinlock);
+		mds.intr_mode = 1; // obsluga przerwania ustawiona na odbior 7 slow
+		InterruptUnlock(&mds.spinlock);
+	}
+
 	int iw_ret;
-	int iter_counter = 0; // okresla ile razy pod rzad zostala uruchomiona ta metoda
+	int iter_counter = 0; // okresla ile razy pod rzad zostala wykonana petla
 
-	if (!test_mode) {
+	do {
+		iter_counter++;
 
-		if (!int_attached) {
-			int_attached = true;
+		InterruptLock(&mds.spinlock);
+
+		mds.byte_counter = 0;// zabezpieczenie przed niektorymi bledami pomiarow - sprawdzone dziala ;)
+		mds.intr_mode = 1; // przywrocenie do 7 bajtowego trybu odbiotu danych
+		mds.byte_counter = 0;
+
+		InterruptUnlock(&mds.spinlock);
+
+		do_send_command(SGET1);
+
+		int_timeout = SCHUNK_INTR_TIMEOUT_LOW;// by Y
+		TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_INTR, &tim_event, &int_timeout, NULL);
+		iw_ret = InterruptWait(0, NULL);
+		// kiedy po uplynieciu okreslonego czasu nie zostanie zgloszone przerwanie
+		if (iw_ret == -1) {
+			if (iter_counter == 1) {
+				sr_msg->message(lib::NON_FATAL_ERROR, "Force / Torque read error - check sensor controller");
+			}
+			if (iter_counter % 10 == 0) // raz na 10
+			{
+
+				solve_transducer_controller_failure(); // na wypadek bledu kontrolera
+
+			}
+			usleep(10000); // aby nadmiernie nie obciazac procesora
 			InterruptLock(&mds.spinlock);
-			mds.intr_mode = 1; // obsluga przerwania ustawiona na odbior 7 slow
+			mds.intr_mode = 0; // obsluga przerwania ustawiona na odbior pojedynczych slow
+			mds.byte_counter = 0;
+			mds.is_received = false;
 			InterruptUnlock(&mds.spinlock);
+			do_init(); // komunikacja wstepna
+		} else {
+			if (iter_counter > 1) {
+				sr_msg->message("Force / Torque sensor connection reastablished");
+			}
 		}
 
-		do {
-			iter_counter++;
-
-			InterruptLock(&mds.spinlock);
-
-			mds.byte_counter = 0;// zabezpieczenie przed niektorymi bledami pomiarow - sprawdzone dziala ;)
-			mds.intr_mode = 1; // przywrocenie do 7 bajtowego trybu odbiotu danych
-			mds.byte_counter = 0;
-
-			InterruptUnlock(&mds.spinlock);
-
-			do_send_command(SGET1);
-
-			int_timeout = SCHUNK_INTR_TIMEOUT_LOW;// by Y
-			TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_INTR, &tim_event,
-					&int_timeout, NULL);
-			iw_ret = InterruptWait(0, NULL);
-			// kiedy po uplynieciu okreslonego czasu nie zostanie zgloszone przerwanie
-			if (iw_ret == -1) {
-				if (iter_counter == 1) {
-					sr_msg->message(lib::NON_FATAL_ERROR,
-							"Force / Torque read error - check sensor controller");
-				}
-				if (iter_counter % 10 == 0) // raz na 10
-				{
-
-					solve_transducer_controller_failure(); // na wypadek bledu kontrolera
-
-				}
-				usleep(10000); // aby nadmiernie nie obciazac procesora
-				InterruptLock(&mds.spinlock);
-				mds.intr_mode = 0; // obsluga przerwania ustawiona na odbior pojedynczych slow
-				mds.byte_counter = 0;
-				mds.is_received = false;
-				InterruptUnlock(&mds.spinlock);
-				do_init(); // komunikacja wstepna
-			} else {
-				if (iter_counter > 1) {
-					sr_msg->message(
-							"Force / Torque sensor connection reastablished");
-				}
-			}
-
-		} while (iw_ret == -1); // dopoki nie zostanie odebrana paczka pomiarow
-	} else {
-		usleep(1000);
-	}
-}
-
-/*************************** inicjacja odczytu ******************************/
-void ATI3084_force::initiate_reading(void)
-{
-	if (!is_sensor_configured) {
-		BOOST_THROW_EXCEPTION(
-				lib::exception::Fatal_error() <<
-				lib::exception::error_code(SENSOR_NOT_CONFIGURED)
-		);
-	}
+	} while (iw_ret == -1); // dopoki nie zostanie odebrana paczka pomiarow
 }
 
 /***************************** odczyt z czujnika *****************************/
-void ATI3084_force::get_reading(void) {
-	lib::Ft_vector kartez_force;
+void ATI3084_force::get_reading(void)
+{
+	lib::Ft_vector ft_table;
 
-	if (test_mode) {
-		for (int i = 0; i < 6; ++i) {
-			kartez_force[i] = 0.0;
-		}
-		master.force_msr_upload(kartez_force);
+	InterruptLock(&mds.spinlock);
+
+	for (int i = 0; i < 6; i++)
+		ft_table[i] = static_cast <double> (mds.data[i + 1]);
+	int16_t measure_report = mds.data[0];
+
+	InterruptUnlock(&mds.spinlock);
+
+	// jesli pomiar byl poprawny
+	if (measure_report == COMMAND_OK) {
+		// by Y - korekta
+		for (int i = 0; i < 3; i++)
+			ft_table[i] /= 20;
+
+		for (int i = 3; i < 6; i++)
+			ft_table[i] /= 1000;
+
+		// Call the base class to do a processing of a current reading
+		set_current_ft_reading(ft_table);
 	} else {
-		lib::Ft_vector ft_table;
-
-		InterruptLock(&mds.spinlock);
-
-		for (int i = 0; i < 6; i++)
-			ft_table[i] = static_cast<double> (mds.data[i + 1]);
-		int16_t measure_report = mds.data[0];
-
-		InterruptUnlock(&mds.spinlock);
-
-		// jesli pomiar byl poprawny
-		if (measure_report == COMMAND_OK) {
-			is_reading_ready = true;
-
-			// jesli ma byc wykorzytstywana biblioteka transformacji sil
-
-				for (int i = 0; i < 3; i++)
-					ft_table[i] /= 20;
-
-				for (int i = 3; i < 6; i++)
-					ft_table[i] /= 1000; // by Y - korekta
-
-				lib::Homog_matrix frame = master.return_current_frame(common::WITH_TRANSLATION);
-
-				lib::Ft_vector output = gravity_transformation->getForce(ft_table, frame);
-
-				master.force_msr_upload(output);
-			}
-
+		is_reading_ready = false;
 	}
 }
 
