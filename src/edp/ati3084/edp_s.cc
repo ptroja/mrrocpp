@@ -121,7 +121,7 @@ ATI3084_force::ATI3084_force(common::manip_effector &_master) :
 }
 
 void ATI3084_force::connect_to_hardware(void) {
-	if (!(master.force_sensor_test_mode)) {
+	if (!(test_mode)) {
 		// 	printf("Konstruktor VSP!\n");
 
 		ThreadCtl(_NTO_TCTL_IO, NULL); // nadanie odpowiednich uprawnien watkowi
@@ -247,7 +247,7 @@ void ATI3084_force::connect_to_hardware(void) {
 }
 
 ATI3084_force::~ATI3084_force(void) {
-	if (!master.force_sensor_test_mode) {
+	if (!test_mode) {
 		InterruptDetach(sint_id);
 		pci_detach_device(hdl); // odlacza driver od danego urzadzenia na PCI
 		pci_detach(phdl); // Disconnect from the PCI server
@@ -263,7 +263,7 @@ void ATI3084_force::configure_sensor(void) {// by Y
 	is_sensor_configured = true;
 	//  printf("EDP Sensor configured\n");
 	sr_msg->message("EDP Sensor configured");
-	if (!master.force_sensor_test_mode) {
+	if (!test_mode) {
 		InterruptLock(&mds.spinlock);
 		mds.intr_mode = 0;
 		InterruptUnlock(&mds.spinlock);
@@ -329,7 +329,7 @@ void ATI3084_force::wait_for_event() {
 	int iw_ret;
 	int iter_counter = 0; // okresla ile razy pod rzad zostala uruchomiona ta metoda
 
-	if (!master.force_sensor_test_mode) {
+	if (!test_mode) {
 
 		if (!int_attached) {
 			int_attached = true;
@@ -402,7 +402,7 @@ void ATI3084_force::initiate_reading(void)
 void ATI3084_force::get_reading(void) {
 	lib::Ft_vector kartez_force;
 
-	if (master.force_sensor_test_mode) {
+	if (test_mode) {
 		for (int i = 0; i < 6; ++i) {
 			kartez_force[i] = 0.0;
 		}

@@ -111,7 +111,7 @@ void ATI6284_force::stopMeasurements() {
 }
 
 void ATI6284_force::connect_to_hardware(void) {
-	if (!(master.force_sensor_test_mode)) {
+	if (!(test_mode)) {
 		// 	printf("Konstruktor VSP!\n");
 
 		ThreadCtl(_NTO_TCTL_IO, NULL); // nadanie odpowiednich uprawnien watkowi
@@ -135,7 +135,7 @@ void ATI6284_force::connect_to_hardware(void) {
 }
 
 ATI6284_force::~ATI6284_force(void) {
-	if (!(master.force_sensor_test_mode)) {
+	if (!(test_mode)) {
 		//delete recvSocket;
 		//delete sendSocket;
 	}
@@ -151,7 +151,7 @@ void ATI6284_force::configure_sensor(void) {// by Y
 	//  printf("EDP Sensor configured\n");
 	sr_msg->message("EDP Sensor configured");
 
-	if (!(master.force_sensor_test_mode)) {
+	if (!(test_mode)) {
 
 		// synchronize gravity transformation
 

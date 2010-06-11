@@ -98,15 +98,6 @@ protected:
 	void multi_thread_move_arm(const lib::c_buffer &instruction);
 
 public:
-
-
-	/*!
-	 * \brief Info if the force sensor test mode is active.
-	 *
-	 * It is taken from configuration data.
-	 */
-	bool force_sensor_test_mode;
-
 	/*!
 	 * \brief geat_arm_position methos with servo_buffer and force measurement
 	 *

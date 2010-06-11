@@ -91,12 +91,13 @@ void force::operator()(void) {
 } //!< end MAIN
 
 force::force(common::manip_effector &_master) :
-	gravity_transformation(NULL),
-	new_edp_command(false),
-	master(_master),
-	is_sensor_configured(false), //!< czujnik niezainicjowany
 	is_reading_ready(false), //!< nie ma zadnego gotowego odczytu
-	TERMINATE(false)
+	gravity_transformation(NULL),
+	master(_master),
+	test_mode(true),
+	TERMINATE(false),
+	is_sensor_configured(false), //!< czujnik niezainicjowany
+	new_edp_command(false)
 {
 	//! Lokalizacja procesu wywietlania komunikatow SR
 	sr_msg = new lib::sr_vsp(lib::EDP,
@@ -104,6 +105,14 @@ force::force(common::manip_effector &_master) :
 					master.config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point",
 					UI_SECTION),
 					true);
+
+	if (master.config.exists(FORCE_SENSOR_TEST_MODE)) {
+		test_mode = master.config.value <int> (FORCE_SENSOR_TEST_MODE);
+	}
+
+	if (test_mode) {
+		sr_msg->message("Force sensor test mode activated");
+	}
 }
 
 force::~force() {

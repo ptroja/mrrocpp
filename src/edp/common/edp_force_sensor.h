@@ -56,6 +56,13 @@ protected:
 		force_data_t force;
 	} from_vsp;
 
+	/*!
+	 * \brief Info if the force sensor test mode is active.
+	 *
+	 * It is taken from configuration data.
+	 */
+	bool test_mode;
+
 public:
 	void operator()(void);
 	boost::mutex mtx;

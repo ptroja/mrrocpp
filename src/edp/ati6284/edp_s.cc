@@ -89,7 +89,7 @@ ATI6284_force::ATI6284_force(common::manip_effector &_master) :
 void ATI6284_force::connect_to_hardware(void) {
 	// unsigned  uCount;  //!< Count index
 	// unsigned  uStatus; //!< Flag to indicate FIFO not empty
-	if (!(master.force_sensor_test_mode)) {
+	if (!(test_mode)) {
 		Total_Number_of_Samples = 6;
 		index = 1;
 
@@ -179,7 +179,7 @@ void ATI6284_force::connect_to_hardware(void) {
 // // // // // // // // // // // // // // /   odlaczenie czujnika // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////
 
 ATI6284_force::~ATI6284_force(void) {
-	if (!(master.force_sensor_test_mode)) {
+	if (!(test_mode)) {
 		delete theSTC;
 		delete board;
 
@@ -197,7 +197,7 @@ ATI6284_force::~ATI6284_force(void) {
 
 // // // // // // // // // // // // // // /   inicjacja odczytu // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////
 void ATI6284_force::configure_sensor(void) {
-	if (!(master.force_sensor_test_mode)) {
+	if (!(test_mode)) {
 		// double kartez_force[6];
 		// short  measure_report;
 		short int sensor_overload = 0;
@@ -397,7 +397,7 @@ void ATI6284_force::wait_for_event()
 		);
 	}
 
-	if (!(master.force_sensor_test_mode)) {
+	if (!(test_mode)) {
 		lib::timer local_timer;
 		float sec;
 
@@ -457,7 +457,7 @@ void ATI6284_force::initiate_reading(void)
 		);
 	}
 
-	if (!(master.force_sensor_test_mode)) {
+	if (!(test_mode)) {
 #if	 WITHOUT_INTERRUPT
 
 		lib::timer local_timer;
