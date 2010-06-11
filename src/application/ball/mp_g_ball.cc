@@ -17,24 +17,28 @@
 #include "application/ball/mp_g_ball.h"
 #include "lib/mrmath/mrmath.h"
 #include "mp/generator/mp_g_common.h"
+#include "lib/robot_consts/irp6ot_m_const.h"
+#include "lib/robot_consts/irp6p_m_const.h"
 
 namespace mrrocpp {
 namespace mp {
 namespace generator {
 
 ball::ball(task::task& _mp_task, int step) :
-	generator(_mp_task), irp6ot_con(true), irp6p_con(true), global_base(1, 0,
-			0, -0.08, 0, 1, 0, 2.08, 0, 0, 1, -0.015), speedup(0.0),
-			speedup_factor(0.005) {
+	generator(_mp_task), irp6ot_con(true), irp6p_con(true),
+			global_base(1, 0, 0, -0.08, 0, 1, 0, 2.08, 0, 0, 1, -0.015), speedup(0.0), speedup_factor(0.005)
+{
 	step_no = step;
 }
 
-void ball::configure(bool l_irp6ot_con, bool l_irp6p_con) {
+void ball::configure(bool l_irp6ot_con, bool l_irp6p_con)
+{
 	irp6ot_con = l_irp6ot_con;
 	irp6p_con = l_irp6p_con;
 }
 
-void ball::setup_command(robot::robot & robot) {
+void ball::setup_command(robot::robot & robot)
+{
 	lib::trajectory_description td;
 
 	td.internode_step_no = step_no;
@@ -43,8 +47,7 @@ void ball::setup_command(robot::robot & robot) {
 	robot.mp_command.command = lib::NEXT_POSE;
 	robot.mp_command.instruction.instruction_type = lib::GET;
 	robot.mp_command.instruction.get_type = ARM_DEFINITION;
-	robot.mp_command.instruction.set_type = ARM_DEFINITION
-			| ROBOT_MODEL_DEFINITION;
+	robot.mp_command.instruction.set_type = ARM_DEFINITION | ROBOT_MODEL_DEFINITION;
 	robot.mp_command.instruction.set_robot_model_type = lib::TOOL_FRAME;
 	robot.mp_command.instruction.get_robot_model_type = lib::TOOL_FRAME;
 	robot.mp_command.instruction.set_arm_type = lib::FRAME;
@@ -59,29 +62,25 @@ void ball::setup_command(robot::robot & robot) {
 		robot.mp_command.instruction.arm.pf_def.force_xyz_torque_xyz[i] = 0;
 		robot.mp_command.instruction.arm.pf_def.arm_coordinates[i + 3] = 0;
 		robot.mp_command.instruction.arm.pf_def.force_xyz_torque_xyz[i + 3] = 0;
-		robot.mp_command.instruction.arm.pf_def.reciprocal_damping[i]
-				= FORCE_RECIPROCAL_DAMPING;
-		robot.mp_command.instruction.arm.pf_def.reciprocal_damping[i + 3]
-				= TORQUE_RECIPROCAL_DAMPING;
-		robot.mp_command.instruction.arm.pf_def.behaviour[i]
-				= lib::UNGUARDED_MOTION;
-		robot.mp_command.instruction.arm.pf_def.behaviour[i + 3]
-				= lib::UNGUARDED_MOTION;
+		robot.mp_command.instruction.arm.pf_def.reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
+		robot.mp_command.instruction.arm.pf_def.reciprocal_damping[i + 3] = TORQUE_RECIPROCAL_DAMPING;
+		robot.mp_command.instruction.arm.pf_def.behaviour[i] = lib::UNGUARDED_MOTION;
+		robot.mp_command.instruction.arm.pf_def.behaviour[i + 3] = lib::UNGUARDED_MOTION;
 		robot.mp_command.instruction.arm.pf_def.inertia[i] = FORCE_INERTIA;
 		robot.mp_command.instruction.arm.pf_def.inertia[i + 3] = TORQUE_INERTIA;
 	}
 
 	// define virtual tool position
 	const lib::Homog_matrix tool_frame(0.0, 0.0, 0.25);
-	tool_frame.get_frame_tab(
-			robot.mp_command.instruction.robot_model.tool_frame_def.tool_frame);
+	tool_frame.get_frame_tab(robot.mp_command.instruction.robot_model.tool_frame_def.tool_frame);
 }
 
 // ----------------------------------------------------------------------------------------------
 // ---------------------------------    metoda	first_step ---------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool ball::first_step() {
+bool ball::first_step()
+{
 	std::cout << "first_step" << std::endl;
 
 	irp6ot = robot_m[lib::ROBOT_IRP6OT_M];
@@ -106,7 +105,8 @@ bool ball::first_step() {
 // -----------------------------------  metoda	next_step -----------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool ball::next_step() {
+bool ball::next_step()
+{
 	// Oczekiwanie na odczyt aktualnego polozenia koncowki
 	if (node_counter < 3) {
 		return true;
@@ -121,10 +121,8 @@ bool ball::next_step() {
 		irp6ot->mp_command.instruction.instruction_type = lib::SET_GET;
 		irp6p->mp_command.instruction.instruction_type = lib::SET_GET;
 
-		irp6ot_start.set_from_frame_tab(
-				irp6ot->ecp_reply_package.reply_package.arm.pf_def.arm_frame);
-		irp6p_start.set_from_frame_tab(
-				irp6p->ecp_reply_package.reply_package.arm.pf_def.arm_frame);
+		irp6ot_start.set_from_frame_tab(irp6ot->ecp_reply_package.reply_package.arm.pf_def.arm_frame);
+		irp6p_start.set_from_frame_tab(irp6p->ecp_reply_package.reply_package.arm.pf_def.arm_frame);
 	}
 
 	// trajectory generation helper variables
@@ -181,8 +179,8 @@ bool ball::next_step() {
 
 	return true;
 
-	if ((irp6ot->ecp_reply_package.reply == lib::TASK_TERMINATED)
-			|| (irp6p->ecp_reply_package.reply == lib::TASK_TERMINATED)) {
+	if ((irp6ot->ecp_reply_package.reply == lib::TASK_TERMINATED) || (irp6p->ecp_reply_package.reply
+			== lib::TASK_TERMINATED)) {
 		sr_ecp_msg.message("w mp task terminated");
 		return false;
 	} else

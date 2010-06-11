@@ -50,23 +50,13 @@ typedef std::string robot_name_t;
 
 const robot_name_t ROBOT_UNDEFINED = "ROBOT_UNDEFINED";
 
-// the other robots in dedicated robot consts files
-
-
-const robot_name_t ROBOT_IRP6OT_M = "ROBOT_IRP6OT_M";
-const robot_name_t ROBOT_IRP6P_TFG = "ROBOT_IRP6P_TFG";
-const robot_name_t ROBOT_IRP6P_M = "ROBOT_IRP6P_M";
-const robot_name_t ROBOT_CONVEYOR = "ROBOT_CONVEYOR";
-const robot_name_t ROBOT_SPEAKER = "ROBOT_SPEAKER";
-const robot_name_t ROBOT_IRP6_MECHATRONIKA = "ROBOT_IRP6_MECHATRONIKA";
-const robot_name_t ROBOT_POLYCRANK = "ROBOT_POLYCRANK";
 const robot_name_t ROBOT_ELECTRON = "ROBOT_ELECTRON";
 const robot_name_t ROBOT_FESTIVAL = "ROBOT_FESTIVAL";
 const robot_name_t ROBOT_SPEECHRECOGNITION = "ROBOT_SPEECHRECOGNITION";
-const robot_name_t ROBOT_SMB = "ROBOT_SMB";
-const robot_name_t ROBOT_SPKM = "ROBOT_SPKM";
-const robot_name_t ROBOT_SHEAD = "ROBOT_SHEAD";
 const robot_name_t ROBOT_HAND = "ROBOT_HAND";
+
+// the other robots in dedicated robot consts files
+
 
 enum FORCE_SENSOR_ENUM
 {
@@ -119,8 +109,6 @@ enum FORCE_SENSOR_ENUM
 #define ECP_WAIT_FOR_STOP (_PULSE_CODE_MINAVAIL + 3)
 #define ECP_WAIT_FOR_COMMAND (_PULSE_CODE_MINAVAIL + 4)
 #define ECP_WAIT_FOR_NEXT_STATE (_PULSE_CODE_MINAVAIL + 5)
-
-
 
 #define MP_2_ECP_STRING_SIZE	300
 

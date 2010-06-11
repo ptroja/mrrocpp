@@ -10,6 +10,9 @@
 #include "mp_t_tfg_graspit.h"
 #include "ecp_mp_t_graspit.h"
 #include "lib/robot_consts/irp6ot_tfg_const.h"
+#include "lib/robot_consts/irp6ot_m_const.h"
+#include "lib/robot_consts/irp6p_m_const.h"
+#include "lib/robot_consts/irp6p_tfg_const.h"
 
 #include <iostream>
 #include <string>

@@ -5,10 +5,13 @@
 //
 // -------------------------------------------------------------------------
 
+#include <iostream>
+#include <string>
+#include <sstream>
+
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
-
 #include "lib/srlib.h"
 #include "mp/mp.h"
 #include "ecp_mp_t_swarmitfix.h"
@@ -16,10 +19,9 @@
 #include "lib/single_thread_port.h"
 #include "lib/mrmath/mrmath.h"
 #include "lib/data_port_headers/epos.h"
-
-#include <iostream>
-#include <string>
-#include <sstream>
+#include "lib/robot_consts/smb_const.h"
+#include "lib/robot_consts/spkm_const.h"
+#include "lib/robot_consts/shead_const.h"
 
 namespace mrrocpp {
 namespace mp {

@@ -15,6 +15,8 @@
 #include "ecp_mp_tr_rc_windows.h"
 #include "ecp/festival/generator/ecp_g_festival.h"
 #include "ecp_mp/task/ecp_mp_t_festival.h"
+#include "lib/robot_consts/irp6ot_m_const.h"
+#include "lib/robot_consts/irp6p_m_const.h"
 
 #include <boost/foreach.hpp>
 

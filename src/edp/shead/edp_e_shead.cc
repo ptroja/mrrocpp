@@ -33,13 +33,15 @@ namespace mrrocpp {
 namespace edp {
 namespace shead {
 
-void effector::master_order(common::MT_ORDER nm_task, int nm_tryb) {
+void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
+{
 	motor_driven_effector::single_thread_master_order(nm_task, nm_tryb);
 }
 
 // Konstruktor.
 effector::effector(lib::configurator &_config) :
-	motor_driven_effector(_config, lib::ROBOT_SMB) {
+	motor_driven_effector(_config, lib::ROBOT_SHEAD)
+{
 
 	number_of_servos = SHEAD_NUM_OF_SERVOS;
 	//  Stworzenie listy dostepnych kinematyk.
@@ -48,7 +50,8 @@ effector::effector(lib::configurator &_config) :
 	reset_variables();
 }
 
-void effector::get_controller_state(lib::c_buffer &instruction) {
+void effector::get_controller_state(lib::c_buffer &instruction)
+{
 
 	if (robot_test_mode)
 		controller_state_edp_buf.is_synchronised = true;
@@ -67,52 +70,50 @@ void effector::get_controller_state(lib::c_buffer &instruction) {
 	 sb->send_to_SERVO_GROUP();
 	 */
 	// dla pierwszego wypelnienia current_joints
-	get_current_kinematic_model()->mp2i_transform(current_motor_pos,
-			current_joints);
+	get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
 
 	{
 		boost::mutex::scoped_lock lock(edp_irp6s_effector_mutex);
 
 		// Ustawienie poprzedniej wartosci zadanej na obecnie odczytane polozenie walow silnikow
 		for (int i = 0; i < number_of_servos; i++) {
-			servo_current_motor_pos[i] = desired_motor_pos_new[i]
-					= desired_motor_pos_old[i] = current_motor_pos[i];
+			servo_current_motor_pos[i] = desired_motor_pos_new[i] = desired_motor_pos_old[i] = current_motor_pos[i];
 			desired_joints[i] = current_joints[i];
 		}
 	}
 }
 
 /*--------------------------------------------------------------------------*/
-void effector::move_arm(const lib::c_buffer &instruction) {
+void effector::move_arm(const lib::c_buffer &instruction)
+{
 	msg->message("move_arm");
 
 	std::stringstream ss(std::stringstream::in | std::stringstream::out);
 
-	switch (ecp_edp_cbuffer.variant) {
-	case lib::SHEAD_CBUFFER_HEAD_SOLIDIFICATION: {
-		lib::SHEAD_HEAD_SOLIDIFICATION head_solidification;
+	switch (ecp_edp_cbuffer.variant)
+	{
+		case lib::SHEAD_CBUFFER_HEAD_SOLIDIFICATION: {
+			lib::SHEAD_HEAD_SOLIDIFICATION head_solidification;
 
-		memcpy(&head_solidification, &(ecp_edp_cbuffer.head_solidification),
-				sizeof(head_solidification));
+			memcpy(&head_solidification, &(ecp_edp_cbuffer.head_solidification), sizeof(head_solidification));
 
-		msg->message(ss.str().c_str());
+			msg->message(ss.str().c_str());
 
-		// previously computed parameters send to epos2 controllers
+			// previously computed parameters send to epos2 controllers
 
 
-		// start the trajectory execution
+			// start the trajectory execution
 
-	}
-		break;
-	case lib::SHEAD_CBUFFER_VACUUM_ACTIVATION: {
-		lib::SHEAD_VACUUM_ACTIVATION vacuum_activation;
+		}
+			break;
+		case lib::SHEAD_CBUFFER_VACUUM_ACTIVATION: {
+			lib::SHEAD_VACUUM_ACTIVATION vacuum_activation;
 
-		memcpy(&vacuum_activation, &(ecp_edp_cbuffer.vacuum_activation),
-				sizeof(vacuum_activation));
-	}
-		break;
-	default:
-		break;
+			memcpy(&vacuum_activation, &(ecp_edp_cbuffer.vacuum_activation), sizeof(vacuum_activation));
+		}
+			break;
+		default:
+			break;
 
 	}
 
@@ -120,7 +121,8 @@ void effector::move_arm(const lib::c_buffer &instruction) {
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
-void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction) {
+void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
+{
 	//lib::JointArray desired_joints_tmp(MAX_SERVOS_NR); // Wspolrzedne wewnetrzne -
 	//	printf(" GET ARM\n");
 	//	flushall();
@@ -137,7 +139,8 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction) 
 /*--------------------------------------------------------------------------*/
 
 // Stworzenie modeli kinematyki dla robota IRp-6 na postumencie.
-void effector::create_kinematic_models_for_given_robot(void) {
+void effector::create_kinematic_models_for_given_robot(void)
+{
 	// Stworzenie wszystkich modeli kinematyki.
 	add_kinematic_model(new kinematics::shead::model());
 	// Ustawienie aktywnego modelu.
@@ -145,21 +148,22 @@ void effector::create_kinematic_models_for_given_robot(void) {
 }
 
 /*--------------------------------------------------------------------------*/
-void effector::create_threads() {
+void effector::create_threads()
+{
 	rb_obj = new common::reader_buffer(*this);
 	vis_obj = new common::vis_server(*this);
 }
 
-void effector::instruction_deserialization() {
+void effector::instruction_deserialization()
+{
 
-	memcpy(&ecp_edp_cbuffer, instruction.arm.serialized_command,
-			sizeof(ecp_edp_cbuffer));
+	memcpy(&ecp_edp_cbuffer, instruction.arm.serialized_command, sizeof(ecp_edp_cbuffer));
 
 }
 
-void effector::reply_serialization(void) {
-	memcpy(reply.arm.serialized_reply, &edp_ecp_rbuffer,
-			sizeof(edp_ecp_rbuffer));
+void effector::reply_serialization(void)
+{
+	memcpy(reply.arm.serialized_reply, &edp_ecp_rbuffer, sizeof(edp_ecp_rbuffer));
 
 }
 
@@ -170,7 +174,8 @@ void effector::reply_serialization(void) {
 namespace common {
 
 // Stworzenie obiektu edp_irp6m_effector.
-effector* return_created_efector(lib::configurator &_config) {
+effector* return_created_efector(lib::configurator &_config)
+{
 	return new shead::effector(_config);
 }
 

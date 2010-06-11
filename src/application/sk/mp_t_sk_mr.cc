@@ -17,6 +17,9 @@
 #include "ecp_mp/task/ecp_mp_t_tfg.h"
 #include "lib/data_port_headers/tfg.h"
 #include "lib/robot_consts/irp6ot_tfg_const.h"
+#include "lib/robot_consts/irp6p_tfg_const.h"
+#include "lib/robot_consts/irp6ot_m_const.h"
+#include "lib/robot_consts/irp6p_m_const.h"
 
 #include <iostream>
 #include <string>
