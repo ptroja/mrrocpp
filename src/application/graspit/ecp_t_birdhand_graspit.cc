@@ -18,7 +18,8 @@ namespace task {
 
 // KONSTRUKTORY
 bird_hand_test::bird_hand_test(lib::configurator &_config) :
-	task(_config) {
+	task(_config)
+{
 	// the robot is choose dependendat on the section of configuration file sent as argv[4]
 	ecp_m_robot = new robot(*this);
 
@@ -27,7 +28,8 @@ bird_hand_test::bird_hand_test(lib::configurator &_config) :
 	sr_ecp_msg->message("ECP BIRDHAND loaded");
 }
 
-void bird_hand_test::main_task_algorithm(void) {
+void bird_hand_test::main_task_algorithm(void)
+{
 
 	sr_ecp_msg->message("ECP BIRDHAND ready");
 
@@ -38,17 +40,12 @@ void bird_hand_test::main_task_algorithm(void) {
 
 		sr_ecp_msg->message("Order received");
 		//printf("postument: %d\n", mp_command.ecp_next_state.mp_2_ecp_next_state);
-		flushall();
+		//flushall();
 
-		switch ((ecp_mp::task::GRASPIT_ECP_STATES) mp_command.ecp_next_state.mp_2_ecp_next_state) {
-		case ecp_mp::task::ECP_GEN_BIRD_HAND: {
+		if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_BIRD_HAND) {
+
 			sr_ecp_msg->message("ECP_GEN_BIRD_HAND");
 
-			g_bird_hand->Move();
-			break;
-		}
-		default:
-			break;
 		} // end switch
 
 		ecp_termination_notice();
@@ -61,7 +58,8 @@ void bird_hand_test::main_task_algorithm(void) {
 namespace common {
 namespace task {
 
-task* return_created_ecp_task(lib::configurator &_config) {
+task* return_created_ecp_task(lib::configurator &_config)
+{
 	return new bird_hand::task::bird_hand_test(_config);
 }
 

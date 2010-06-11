@@ -13,14 +13,13 @@ namespace task {
 
 // KONSTRUKTORY
 task::task(lib::configurator &_config) :
-	common::task::task(_config),
-	fg(*this)
+	common::task::task(_config), fg(*this)
 {
 }
 
 void task::main_task_algorithm(void)
 {
-	int isTest = config.value<int>("test_mode");
+	int isTest = config.value <int> ("test_mode");
 
 	for (;;) {
 		sr_ecp_msg->message("Waiting for MP order");
@@ -29,20 +28,16 @@ void task::main_task_algorithm(void)
 
 		sr_ecp_msg->message("NEXT_STATE received");
 
-		switch ( (ecp_mp::task::ECP_FESTIVAL_STATES) mp_command.ecp_next_state.mp_2_ecp_next_state) {
-			case ecp_mp::task::ECP_GEN_FESTIVAL:
-				if(isTest)
-					sr_ecp_msg->message(mp_command.ecp_next_state.mp_2_ecp_next_state_string);
-				else
-				{
-					fg.set_voice((generator::generator::VOICE) mp_command.ecp_next_state.mp_2_ecp_next_state_variant);
-					fg.set_phrase(mp_command.ecp_next_state.mp_2_ecp_next_state_string);
-					fg.Move();
-				}
-				break;
-			default:
-				fprintf(stderr, "invalid ecp_next_state.mp_2_ecp_next_state (%d)\n", mp_command.ecp_next_state.mp_2_ecp_next_state);
-				break;
+		if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_FESTIVAL) {
+
+			if (isTest)
+				sr_ecp_msg->message(mp_command.ecp_next_state.mp_2_ecp_next_state_string);
+			else {
+				fg.set_voice((generator::generator::VOICE) mp_command.ecp_next_state.mp_2_ecp_next_state_variant);
+				fg.set_phrase(mp_command.ecp_next_state.mp_2_ecp_next_state_string);
+				fg.Move();
+			}
+
 		}
 
 		ecp_termination_notice();

@@ -21,40 +21,36 @@ namespace speaker {
 namespace task {
 
 // KONSTRUKTORY
-rcsc::rcsc(lib::configurator &_config) : task(_config)
+rcsc::rcsc(lib::configurator &_config) :
+	task(_config)
 {
-    ecp_m_robot = new robot (*this);
+	ecp_m_robot = new robot(*this);
 
-    gt = new common::generator::transparent(*this);
-    speak = new generator::speaking (*this, 8);
+	gt = new common::generator::transparent(*this);
+	speak = new generator::speaking(*this, 8);
 
-    sr_ecp_msg->message("ECP loaded");
+	sr_ecp_msg->message("ECP loaded");
 }
-
 
 void rcsc::main_task_algorithm(void)
 {
-	for(;;)
-	{
+	for (;;) {
 
 		sr_ecp_msg->message("Waiting for MP order");
 
-		get_next_state ();
+		get_next_state();
 
 		sr_ecp_msg->message("Order received");
 
-		switch ( (ecp_mp::task::RCSC_ECP_STATES) mp_command.ecp_next_state.mp_2_ecp_next_state)
-		{
-			case ecp_mp::task::ECP_GEN_TRANSPARENT:
-				gt->Move();
-				break;
-			case ecp_mp::task::ECP_GEN_SPEAK:
-				speak->configure(mp_command.ecp_next_state.mp_2_ecp_next_state_string);
-				speak->Move();
-				break;
-			default:
-				break;
+		if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_TRANSPARENT) {
+			gt->Move();
+
+		} else if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_SPEAK) {
+			speak->configure(mp_command.ecp_next_state.mp_2_ecp_next_state_string);
+			speak->Move();
+
 		}
+
 	}
 }
 
@@ -64,7 +60,7 @@ void rcsc::main_task_algorithm(void)
 namespace common {
 namespace task {
 
-task* return_created_ecp_task (lib::configurator &_config)
+task* return_created_ecp_task(lib::configurator &_config)
 {
 	return new speaker::task::rcsc(_config);
 }

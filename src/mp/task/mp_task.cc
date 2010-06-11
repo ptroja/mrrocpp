@@ -215,7 +215,7 @@ mp_snes_gen.Move();
 }
 
 // metody do obslugi najczesniej uzywanych generatorow
-void task::set_next_ecps_state (int l_state, int l_variant, const char* l_string, int str_len, int number_of_robots, ... )
+void task::set_next_ecps_state (std::string l_state, int l_variant, const char* l_string, int str_len, int number_of_robots, ... )
 {
 // setting the next ecps state
 generator::set_next_ecps_state mp_snes_gen (*this);
