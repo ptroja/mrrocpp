@@ -55,7 +55,7 @@ int_handler (void *arg, int int_id)
 	common::status_of_a_dof robot_status[IRP6P_M_NUM_OF_SERVOS];
 	short int low_word, high_word;
 
-	md.hardware_error = (uint64_t) lib::ALL_RIGHT; // Nie ma bledow sprzetowych
+	md.hardware_error = (uint64_t) common::ALL_RIGHT; // Nie ma bledow sprzetowych
 
 	if(common::master->robot_test_mode)
 	{
@@ -127,31 +127,31 @@ int_handler (void *arg, int int_id)
 
 			// Obsluga bledow
 			if ( robot_status[i].adr_offset_plus_0 & 0x0100 )
-			md.hardware_error |= (uint64_t) (lib::SYNCHRO_ZERO << (5*i)); // Impuls zera rezolwera
+			md.hardware_error |= (uint64_t) (common::SYNCHRO_ZERO << (5*i)); // Impuls zera rezolwera
 
 			if (i>=5) //  sterowniki osi z mechatroniki z przekaznikami
 			{
 				if ( ~(robot_status[i].adr_offset_plus_0) & 0x4000 )
-				md.hardware_error |= (uint64_t) (lib::SYNCHRO_SWITCH_ON << (5*i)); // Zadzialal wylacznik synchronizacji
+				md.hardware_error |= (uint64_t) (common::SYNCHRO_SWITCH_ON << (5*i)); // Zadzialal wylacznik synchronizacji
 			} else
 			{
 				if ( robot_status[i].adr_offset_plus_0 & 0x4000 )
-				md.hardware_error |= (uint64_t) (lib::SYNCHRO_SWITCH_ON << (5*i)); // Zadzialal wylacznik synchronizacji
+				md.hardware_error |= (uint64_t) (common::SYNCHRO_SWITCH_ON << (5*i)); // Zadzialal wylacznik synchronizacji
 			}
 
 			// wylaczniki krancowe
 			if ( ~(robot_status[i].adr_offset_plus_0) & 0x1000 ) {
 				//	out8((ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), FIRST_SERVO_PTR + (uint8_t)i);
 				//	out16((SERVO_COMMAND1_ADR + ISA_CARD_OFFSET), RESET_ALARM); // Skasowanie alarmu i umozliwienie ruchu osi
-				md.hardware_error |= (uint64_t) (lib::UPPER_LIMIT_SWITCH << (5*i)); // Zadzialal wylacznik "gorny" krancowy
+				md.hardware_error |= (uint64_t) (common::UPPER_LIMIT_SWITCH << (5*i)); // Zadzialal wylacznik "gorny" krancowy
 			}
 			else if ( ~(robot_status[i].adr_offset_plus_0) & 0x2000 ) {
-				md.hardware_error |= (uint64_t) (lib::LOWER_LIMIT_SWITCH << (5*i)); // Zadzialal wylacznik "dolny" krancowy
+				md.hardware_error |= (uint64_t) (common::LOWER_LIMIT_SWITCH << (5*i)); // Zadzialal wylacznik "dolny" krancowy
 			}
 
 			if ( robot_status[i].adr_offset_plus_0 & 0x0400 )
 			{
-				md.hardware_error |= (uint64_t) (lib::OVER_CURRENT << (5*i));
+				md.hardware_error |= (uint64_t) (common::OVER_CURRENT << (5*i));
 				//     out8((ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), FIRST_SERVO_PTR + (uint8_t)i);
 				//     out16((SERVO_COMMAND1_ADR + ISA_CARD_OFFSET), RESET_ALARM); // Skasowanie alarmu i umozliwienie ruchu osi
 			}
