@@ -27,7 +27,6 @@ add_executable(ui.gtk
 	sr_console.cc
 	comm_thread.cc
 	../src/ui.cc
-	../src/threads.cc
 )
 
 target_link_libraries(ui.gtk ${GTKMM_LIBRARIES} ${GTK2_LIBRARIES} ${GTHREAD_LIBRARIES} ${LIBXML2_LIBRARIES} ${COMMON_LIBRARIES})
