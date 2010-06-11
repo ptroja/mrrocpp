@@ -61,7 +61,8 @@ messip_channel_t* task::mp_pulse_attach = NULL;
 
 // KONSTRUKTORY
 task::task(lib::configurator &_config) :
-	ecp_mp::task::task(_config), ui_opened(false), ui_new_pulse(false) {
+	ecp_mp::task::task(_config), ui_opened(false), ui_new_pulse(false)
+{
 	// initialize communication with other processes
 	initialize_communication();
 
@@ -69,7 +70,8 @@ task::task(lib::configurator &_config) :
 	create_robots();
 }
 
-task::~task() {
+task::~task()
+{
 	// Remove (kill) all ECP from the container
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
 {	delete robot_node.second;
@@ -213,7 +215,7 @@ mp_snes_gen.Move();
 }
 
 // metody do obslugi najczesniej uzywanych generatorow
-void task::set_next_ecps_state (int l_state, int l_variant, const char* l_string, int str_len, int number_of_robots, ... )
+void task::set_next_ecps_state (std::string l_state, int l_variant, const char* l_string, int str_len, int number_of_robots, ... )
 {
 // setting the next ecps state
 generator::set_next_ecps_state mp_snes_gen (*this);
@@ -224,7 +226,7 @@ lib::robot_name_t robot_l;
 va_start ( arguments, number_of_robots ); // Initializing arguments to store all values after num
 for ( int x = 0; x < number_of_robots; x++ ) // Loop until all numbers are added
 {
-	robot_l = (lib::robot_name_t) (va_arg ( arguments, int )); // Adds the next value in argument list to sum.
+	robot_l = (lib::robot_name_t) (va_arg ( arguments, char* )); // Adds the next value in argument list to sum.
 	mp_snes_gen.robot_m[robot_l] = robot_m[robot_l];
 }
 va_end ( arguments ); // Cleans up the list
@@ -253,7 +255,7 @@ lib::robot_name_t robot_l;
 va_start ( arguments, number_of_robots ); // Initializing arguments to store all values after num
 for ( int x = 0; x < number_of_robots; x++ ) // Loop until all numbers are added
 {
-	robot_l = (lib::robot_name_t) (va_arg ( arguments, int )); // Adds the next value in argument list to sum.
+	robot_l = (lib::robot_name_t) (va_arg ( arguments, char* )); // Adds the next value in argument list to sum.
 	mp_semte_gen.robot_m[robot_l] = robot_m[robot_l];
 }
 va_end ( arguments ); // Cleans up the list
@@ -287,7 +289,7 @@ lib::robot_name_t robot_l;
 va_start ( arguments, number_of_robots ); // Initializing arguments to store all values after num
 for ( int x = 0; x < number_of_robots; x++ ) // Loop until all numbers are added
 {
-	robot_l = (lib::robot_name_t) (va_arg ( arguments, int )); // Adds the next value in argument list to sum.
+	robot_l = (lib::robot_name_t) (va_arg ( arguments, char* )); // Adds the next value in argument list to sum.
 	mp_ext_empty_gen.robot_m[robot_l] = robot_m[robot_l];
 }
 va_end ( arguments ); // Cleans up the list
@@ -318,7 +320,7 @@ va_start ( arguments, number_of_robots_to_wait_for_task_termin);
 // najpierw zbior robots_to_move...
 for ( int x = 0; x < number_of_robots_to_move; x++ ) // Loop until all numbers are added
 {
-	robot_l = (lib::robot_name_t) (va_arg ( arguments, int )); // Adds the next value in argument list to sum.
+	robot_l = (lib::robot_name_t) (va_arg ( arguments, char* )); // Adds the next value in argument list to sum.
 
 	if (robot_m.count(robot_l) == 0)
 	{
@@ -330,7 +332,7 @@ for ( int x = 0; x < number_of_robots_to_move; x++ ) // Loop until all numbers a
 // ...potem zbior robots_to_wait_for_task_termination
 for ( int x = 0; x < number_of_robots_to_wait_for_task_termin; x++ ) // Loop until all numbers are added
 {
-	robot_l = (lib::robot_name_t) (va_arg ( arguments, int )); // Adds the next value in argument list to sum.
+	robot_l = (lib::robot_name_t) (va_arg ( arguments, char* )); // Adds the next value in argument list to sum.
 	if (robot_m.count(robot_l) == 0)
 	{
 		sr_ecp_msg->message ("run_..._for_set_of_robots_... usunieto nadmiarowe roboty 2");

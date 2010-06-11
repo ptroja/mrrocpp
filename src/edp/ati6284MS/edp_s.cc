@@ -143,10 +143,9 @@ void ATI6284_force::configure_sensor(void)
 	if (!(master.test_mode)) {
 
 
-	}
-	if (master.force_tryb == 2) {
+
 		// synchronize gravity transformation
-		//		printf("master.force_tryb == 2\n");
+
 		// polozenie kisci bez narzedzia wzgledem bazy
 		lib::Homog_matrix frame = master.return_current_frame(common::WITH_TRANSLATION); // FORCE Transformation by Slawomir Bazant
 		// lib::Homog_matrix frame(master.force_current_end_effector_frame); // pobranie aktualnej ramki
@@ -250,7 +249,7 @@ void ATI6284_force::initiate_reading(void)
     is_reading_ready = true;
 
     // jesli ma byc wykorzytstywana biblioteka transformacji sil
-    if (master.force_tryb == 2 && gravity_transformation) {
+    if (gravity_transformation) {
 
 
         lib::Homog_matrix frame = master.return_current_frame(common::WITH_TRANSLATION);

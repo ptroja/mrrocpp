@@ -11,21 +11,25 @@ using namespace mrrocpp;
 
 namespace mrrocpp {
 namespace lib {
-
-enum SPKM_CBUFFER_VARIANT {
+const robot_name_t ROBOT_SPKM = "ROBOT_SPKM";
+enum SPKM_CBUFFER_VARIANT
+{
 	SPKM_CBUFFER_EPOS_LOW_LEVEL_COMMAND, SPKM_CBUFFER_EPOS_GEN_PARAMETERS
 };
 
-struct spkm_cbuffer {
+struct spkm_cbuffer
+{
 	SPKM_CBUFFER_VARIANT variant;
-	union {
+	union
+	{
 		epos_low_level_command epos_low_level_command_structure;
 		epos_gen_parameters epos_gen_parameters_structure;
 	};
 
 };
 
-struct spkm_rbuffer {
+struct spkm_rbuffer
+{
 	bool contact;
 	single_controller_epos_reply epos_controller[6];
 }__attribute__((__packed__));

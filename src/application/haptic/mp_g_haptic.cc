@@ -17,6 +17,8 @@
 #include "application/haptic/mp_g_haptic.h"
 #include "lib/mrmath/mrmath.h"
 #include "mp/generator/mp_g_common.h"
+#include "lib/robot_consts/irp6ot_m_const.h"
+#include "lib/robot_consts/irp6p_m_const.h"
 
 namespace mrrocpp {
 namespace mp {

@@ -99,7 +99,6 @@ protected:
 	 */
 	virtual void instruction_deserialization();
 
-
 	/*!
 	 * \brief method to serialize part of the reply
 	 *
@@ -144,11 +143,11 @@ public:
 	lib::sr_edp *sh_msg;
 
 	/*!
-	 * \brief Info if the test mode is active.
+	 * \brief Info if the robot test mode is active.
 	 *
 	 * It is taken from configuration data.
 	 */
-	int test_mode;
+	bool robot_test_mode;
 
 	/*!
 	 * \brief Method to initiate communication.

@@ -155,16 +155,15 @@ packages = \
     "vim-7.2.184", \
     "libxml2-2.7.3", \
     "gsl-1.12", \
-	"ncurses-5.7nb1", \
-	"makedepend-1.0.1"
+    "ncurses-5.7nb1"
 
 for package in packages:
     os.system(r"/usr/pkg/sbin/pkg_add " + pkgsrc_url_prefix + "All/" + package + ".tgz")
 
 our_packages = \
-    "boost-libs-1.38.0nb1", \
-    "boost-headers-1.38.0nb1", \
-	"cmake-2.8.0", \
+    "boost-libs-1.42.0", \
+    "boost-headers-1.42.0", \
+    "cmake-2.8.0", \
     "xerces-c-3.0.1"
 
 for package in our_packages:

@@ -35,45 +35,44 @@ namespace common {
 
 /*--------------------------------------------------------------------------*/
 effector::effector(lib::configurator &_config, lib::robot_name_t l_robot_name) :
-	robot_name(l_robot_name), config(_config) {
+	robot_name(l_robot_name), config(_config), robot_test_mode(true)
+{
 
 	/* Lokalizacja procesu wywietlania komunikatow SR */
-	msg = new lib::sr_edp(lib::EDP, config.value<std::string> (
-			"resourceman_attach_point").c_str(),
-			config.return_attach_point_name(lib::configurator::CONFIG_SERVER,
-					"sr_attach_point", UI_SECTION).c_str(), true);
+	msg
+			= new lib::sr_edp(lib::EDP, config.value <std::string> ("resourceman_attach_point").c_str(), config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", UI_SECTION).c_str(), true);
 
-	sh_msg = new lib::sr_edp(lib::EDP, config.value<std::string> (
-			"resourceman_attach_point").c_str(),
-			config.return_attach_point_name(lib::configurator::CONFIG_SERVER,
-					"sr_attach_point", UI_SECTION).c_str(), false);
+	sh_msg
+			= new lib::sr_edp(lib::EDP, config.value <std::string> ("resourceman_attach_point").c_str(), config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", UI_SECTION).c_str(), false);
 
-	if (config.exists("test_mode"))
-		test_mode = config.value<int> ("test_mode");
-	else
-		test_mode = 0;
+	if (config.exists(ROBOT_TEST_MODE)) {
+		robot_test_mode = config.value <int> (ROBOT_TEST_MODE);
+	}
 
+	if (robot_test_mode) {
+		msg->message("Robot test mode activated");
+	}
 }
 
-effector::~effector() {
+effector::~effector()
+{
 	delete msg;
 	delete sh_msg;
 }
 
 /*--------------------------------------------------------------------------*/
-bool effector::initialize_communication() {
-	const std::string server_attach_point(config.return_attach_point_name(
-			lib::configurator::CONFIG_SERVER, "resourceman_attach_point"));
+bool effector::initialize_communication()
+{
+	const std::string
+			server_attach_point(config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "resourceman_attach_point"));
 
 #if !defined(USE_MESSIP_SRR)
 	// obsluga mechanizmu sygnalizacji zajetosci sprzetu
-	if (!(test_mode)) {
+	if (!(robot_test_mode)) {
 
-		const std::string hardware_busy_attach_point =
-				config.value<std::string> ("hardware_busy_attach_point");
+		const std::string hardware_busy_attach_point = config.value <std::string> ("hardware_busy_attach_point");
 
-		std::string
-				full_path_to_hardware_busy_attach_point("/dev/name/global/");
+		std::string full_path_to_hardware_busy_attach_point("/dev/name/global/");
 		full_path_to_hardware_busy_attach_point += hardware_busy_attach_point;
 
 		// sprawdzenie czy nie jakis proces EDP nie zajmuje juz sprzetu
@@ -82,16 +81,11 @@ bool effector::initialize_communication() {
 			return false;
 		}
 
-		name_attach_t * tmp_attach = name_attach(NULL,
-				hardware_busy_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL);
+		name_attach_t * tmp_attach = name_attach(NULL, hardware_busy_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL);
 
 		if (tmp_attach == NULL) {
-			msg->message(lib::SYSTEM_ERROR, errno,
-					"EDP: hardware_busy_attach_point failed to attach");
-			fprintf(
-					stderr,
-					"hardware_busy_attach_point name_attach() to %s failed: %s\n",
-					hardware_busy_attach_point.c_str(), strerror(errno));
+			msg->message(lib::SYSTEM_ERROR, errno, "EDP: hardware_busy_attach_point failed to attach");
+			fprintf(stderr, "hardware_busy_attach_point name_attach() to %s failed: %s\n", hardware_busy_attach_point.c_str(), strerror(errno));
 			// TODO: throw
 			return false;
 		}
@@ -113,8 +107,7 @@ bool effector::initialize_communication() {
 
 	server_attach =
 #if !defined(USE_MESSIP_SRR)
-			name_attach(NULL, server_attach_point.c_str(),
-					NAME_FLAG_ATTACH_GLOBAL);
+			name_attach(NULL, server_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL);
 #else /* USE_MESSIP_SRR */
 	messip::port_create(server_attach_point);
 #endif /* USE_MESSIP_SRR */
@@ -130,13 +123,15 @@ bool effector::initialize_communication() {
 	return true;
 }
 
-void effector::establish_error(uint64_t err0, uint64_t err1) {
+void effector::establish_error(uint64_t err0, uint64_t err1)
+{
 	reply.reply_type = lib::ERROR;
 	reply.error_no.error0 = err0;
 	reply.error_no.error1 = err1;
 }
 
-lib::INSTRUCTION_TYPE effector::receive_instruction(void) {
+lib::INSTRUCTION_TYPE effector::receive_instruction(void)
+{
 	// oczekuje na polecenie od ECP, wczytuje je oraz zwraca jego typ
 	int rcvid;
 	/* Oczekiwanie na polecenie od ECP */
@@ -149,8 +144,7 @@ lib::INSTRUCTION_TYPE effector::receive_instruction(void) {
 	/* Do your MsgReceive's here now with the chid */
 	while (1) {
 #if !defined(USE_MESSIP_SRR)
-		rcvid = MsgReceive(server_attach->chid, &new_ecp_command,
-				sizeof(lib::ecp_command_buffer), NULL);
+		rcvid = MsgReceive(server_attach->chid, &new_ecp_command, sizeof(lib::ecp_command_buffer), NULL);
 
 		if (rcvid == -1) {/* Error condition, exit */
 			perror("MsgReceive()");
@@ -158,29 +152,30 @@ lib::INSTRUCTION_TYPE effector::receive_instruction(void) {
 		}
 
 		if (rcvid == 0) {/* Pulse received */
-			switch (new_ecp_command.hdr.code) {
-			case _PULSE_CODE_DISCONNECT:
-				/*
-				 * A client disconnected all its connections (called
-				 * name_close() for each name_open() of our name) or
-				 * terminated
-				 */
-				ConnectDetach(new_ecp_command.hdr.scoid);
-				break;
-			case _PULSE_CODE_UNBLOCK:
-				/*
-				 * REPLY blocked client wants to unblock (was hit by
-				 * a signal or timed out).  It's up to you if you
-				 * reply now or later.
-				 */
-				break;
-			default:
-				/*
-				 * A pulse sent by one of your processes or a
-				 * _PULSE_CODE_COIDDEATH or _PULSE_CODE_THREADDEATH
-				 * from the kernel?
-				 */
-				break;
+			switch (new_ecp_command.hdr.code)
+			{
+				case _PULSE_CODE_DISCONNECT:
+					/*
+					 * A client disconnected all its connections (called
+					 * name_close() for each name_open() of our name) or
+					 * terminated
+					 */
+					ConnectDetach(new_ecp_command.hdr.scoid);
+					break;
+				case _PULSE_CODE_UNBLOCK:
+					/*
+					 * REPLY blocked client wants to unblock (was hit by
+					 * a signal or timed out).  It's up to you if you
+					 * reply now or later.
+					 */
+					break;
+				default:
+					/*
+					 * A pulse sent by one of your processes or a
+					 * _PULSE_CODE_COIDDEATH or _PULSE_CODE_THREADDEATH
+					 * from the kernel?
+					 */
+					break;
 
 			}
 			continue;
@@ -193,8 +188,7 @@ lib::INSTRUCTION_TYPE effector::receive_instruction(void) {
 		}
 
 		/* Some other QNX IO message was received; reject it */
-		if (new_ecp_command.hdr.type > _IO_BASE && new_ecp_command.hdr.type
-				<= _IO_MAX) {
+		if (new_ecp_command.hdr.type > _IO_BASE && new_ecp_command.hdr.type <= _IO_MAX) {
 			MsgError(rcvid, ENOSYS);
 			continue;
 		}
@@ -227,7 +221,8 @@ lib::INSTRUCTION_TYPE effector::receive_instruction(void) {
 	return instruction.instruction_type;
 }
 
-void effector::reply_to_instruction(void) {
+void effector::reply_to_instruction(void)
+{
 	// Wyslanie potwierdzenia przyjecia polecenia do wykonania,
 	// adekwatnej odpowiedzi na zapytanie lub
 	// informacji o tym, ze przyslane polecenie nie moze byc przyjte
@@ -236,8 +231,7 @@ void effector::reply_to_instruction(void) {
 
 	reply_serialization();
 
-	if (!((reply.reply_type == lib::ERROR) || (reply.reply_type
-			== lib::SYNCHRO_OK)))
+	if (!((reply.reply_type == lib::ERROR) || (reply.reply_type == lib::SYNCHRO_OK)))
 		reply.reply_type = real_reply_type;
 
 #if !defined(USE_MESSIP_SRR)
@@ -253,13 +247,16 @@ void effector::reply_to_instruction(void) {
 	real_reply_type = lib::ACKNOWLEDGE;
 }
 
-void effector::instruction_deserialization() {
+void effector::instruction_deserialization()
+{
 }
 
-void effector::reply_serialization() {
+void effector::reply_serialization()
+{
 }
 
 } // namespace common
 } // namespace edp
-} // namespace mrrocpp
+}
+// namespace mrrocpp
 

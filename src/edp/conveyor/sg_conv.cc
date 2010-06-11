@@ -57,7 +57,7 @@ void servo_buffer::synchronise(void)
 
 	double synchro_step = 0.0; // zadany przyrost polozenia
 
-	if (master.test_mode) {
+	if (master.robot_test_mode) {
 		// W.S. Tylko przy testowaniu
 		clear_reply_status();
 		clear_reply_status_tmp();
