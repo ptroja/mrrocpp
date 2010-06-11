@@ -16,6 +16,7 @@
 #include "lib/single_thread_port.h"
 #include "lib/mrmath/mrmath.h"
 #include "lib/data_port_headers/bird_hand.h"
+#include "lib/robot_consts/bird_hand_const.h"
 
 #include <iostream>
 #include <string>

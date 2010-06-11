@@ -55,7 +55,6 @@ const robot_name_t ROBOT_UNDEFINED = "ROBOT_UNDEFINED";
 
 const robot_name_t ROBOT_IRP6OT_M = "ROBOT_IRP6OT_M";
 const robot_name_t ROBOT_IRP6P_TFG = "ROBOT_IRP6P_TFG";
-
 const robot_name_t ROBOT_IRP6P_M = "ROBOT_IRP6P_M";
 const robot_name_t ROBOT_CONVEYOR = "ROBOT_CONVEYOR";
 const robot_name_t ROBOT_SPEAKER = "ROBOT_SPEAKER";
@@ -67,8 +66,6 @@ const robot_name_t ROBOT_SPEECHRECOGNITION = "ROBOT_SPEECHRECOGNITION";
 const robot_name_t ROBOT_SMB = "ROBOT_SMB";
 const robot_name_t ROBOT_SPKM = "ROBOT_SPKM";
 const robot_name_t ROBOT_SHEAD = "ROBOT_SHEAD";
-const robot_name_t ROBOT_BIRD_HAND = "ROBOT_BIRD_HAND"; // three finger Krzysztof Mianowski gripper 2010
-
 const robot_name_t ROBOT_HAND = "ROBOT_HAND";
 
 enum FORCE_SENSOR_ENUM

@@ -12,22 +12,31 @@ using namespace mrrocpp;
 namespace mrrocpp {
 namespace lib {
 
-struct bird_hand_cbuffer {
-	struct {
+const robot_name_t ROBOT_BIRD_HAND = "ROBOT_BIRD_HAND"; // three finger Krzysztof Mianowski gripper 2010
+
+
+struct bird_hand_cbuffer
+{
+	struct
+	{
 		int motion_steps;
 		int ecp_query_step;
 		bird_hand_single_joint_command finger[BIRD_HAND_NUM_OF_SERVOS];
 	} bird_hand_command_structure;
-	struct {
+	struct
+	{
 		bird_hand_single_joint_configuration finger[BIRD_HAND_NUM_OF_SERVOS];
 	} bird_hand_configuration_command_structure;
 };
 
-struct bird_hand_rbuffer {
-	struct {
+struct bird_hand_rbuffer
+{
+	struct
+	{
 		bird_hand_single_joint_status finger[BIRD_HAND_NUM_OF_SERVOS];
 	} bird_hand_status_reply_structure;
-	struct {
+	struct
+	{
 		bird_hand_single_joint_configuration finger[BIRD_HAND_NUM_OF_SERVOS];
 	} bird_hand_configuration_reply_structure;
 }__attribute__((__packed__));
