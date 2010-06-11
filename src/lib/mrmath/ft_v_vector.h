@@ -1,6 +1,7 @@
 #ifndef __FT_V_VECTOR_H
 #define __FT_V_VECTOR_H
 
+#include "lib/mrmath/homog_matrix.h"
 #include <Eigen/Core>
 
 namespace mrrocpp {

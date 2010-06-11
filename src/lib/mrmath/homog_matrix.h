@@ -5,6 +5,8 @@
 #include <cstring>
 #include <cassert>
 
+#include <Eigen/Core>
+
 #include "lib/impconst.h"	// frame_tab
 namespace mrrocpp {
 namespace lib {
