@@ -50,7 +50,9 @@ void sk_mr::main_task_algorithm(void)
 
 		sr_ecp_msg->message("Order received");
 		//printf("postument: %d\n", mp_command.ecp_next_state.mp_2_ecp_next_state);
-		flushall();
+		//flushall();
+
+		subtasks_conditional_execution();
 
 		if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_BIAS_EDP_FORCE) {
 			befg->Move();

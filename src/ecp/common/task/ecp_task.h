@@ -11,6 +11,9 @@ namespace task {
 
 class ecp_sub_task;
 
+typedef std::map <std::string, ecp_sub_task *> subtasks_t;
+typedef subtasks_t::value_type subtask_pair_t;
+
 // klasa globalna dla calego procesu MP
 class task : public ecp_mp::task::task
 {
@@ -40,7 +43,7 @@ public:
 	// Odpowiedz ECP do MP, pola do ew. wypelnienia przez generatory
 	lib::ECP_REPLY_PACKAGE ecp_reply;
 
-	std::map <std::string, ecp_sub_task *> subtask_m;
+	subtasks_t subtask_m;
 
 	std::string mp_2_ecp_next_state_string;
 
@@ -72,6 +75,8 @@ public:
 
 	// Oczekiwanie na STOP
 	void ecp_wait_for_stop(void);
+
+	void subtasks_conditional_execution();
 
 public:
 	// TODO: what follows should be private method
