@@ -16,9 +16,9 @@ namespace task {
  * Used generators.
  */
 
-std::string ECP_GEN_TFF_NOSE_RUN = "ECP_GEN_TFF_NOSE_RUN";
-std::string ECP_GEN_EDGE_FOLLOW_FORCE = "ECP_GEN_EDGE_FOLLOW_FORCE";
-std::string ECP_GEN_BIAS_EDP_FORCE = "ECP_GEN_BIAS_EDP_FORCE";
+const std::string ECP_GEN_TFF_NOSE_RUN = "ECP_GEN_TFF_NOSE_RUN";
+const std::string ECP_GEN_EDGE_FOLLOW_FORCE = "ECP_GEN_EDGE_FOLLOW_FORCE";
+const std::string ECP_GEN_BIAS_EDP_FORCE = "ECP_GEN_BIAS_EDP_FORCE";
 
 } // namespace task
 } // namespace ecp_mp
