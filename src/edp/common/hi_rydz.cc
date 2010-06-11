@@ -279,7 +279,7 @@ uint64_t hardware_interface::read_write_hardware(void)
 
 	if (!trace_resolver_zero) {
 		//	printf("read_write_hardware: w mask resolver_zero\n");
-		irq_data.md.hardware_error &= lib::MASK_RESOLVER_ZERO;
+		irq_data.md.hardware_error &= common::MASK_RESOLVER_ZERO;
 	}
 
 	return irq_data.md.hardware_error;
