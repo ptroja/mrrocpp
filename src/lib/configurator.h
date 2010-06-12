@@ -68,7 +68,6 @@ private:
 	 * @param file configuration file
 	 */
 	void read_property_tree_from_file(boost::property_tree::ptree & pt, const std::string & file);
-
 #endif /* USE_MESSIP_SRR */
 
 public:
@@ -108,6 +107,10 @@ public:
 	template <class Type>
 	Type value(const std::string & _key, const std::string & __section_name) const
 	{
+#if defined(USE_MESSIP_SRR)
+		// TODO
+		return Type();
+#else
 		// initialize property tree path
 		std::string pt_path = __section_name;
 
@@ -120,6 +123,7 @@ public:
 		pt_path += _key;
 
 		return file_pt.get<Type>(pt_path);
+#endif
 	}
 
 	template <class Type>

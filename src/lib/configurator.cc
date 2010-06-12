@@ -83,6 +83,7 @@ configurator::configurator(const std::string & _node, const std::string & _dir, 
 #endif /* USE_MESSIP_SRR */
 }
 
+#ifndef USE_MESSIP_SRR
 void configurator::read_property_tree_from_file(boost::property_tree::ptree & pt, const std::string & file)
 {
 	try {
@@ -97,6 +98,7 @@ void configurator::read_property_tree_from_file(boost::property_tree::ptree & pt
 		std::cerr << e.what() << std::endl;
 	}
 }
+#endif
 
 void configurator::change_ini_file(const std::string & _ini_file) {
 #ifdef USE_MESSIP_SRR

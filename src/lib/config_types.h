@@ -8,7 +8,8 @@
 
 #define CONFIGSRV_CHANNEL_NAME			"configsrv"
 
-typedef enum _config_request {
+typedef enum _config_request
+{
 	CONFIG_CHANGE_INI_FILE,
 	CONFIG_RETURN_INT_VALUE,
 	CONFIG_RETURN_DOUBLE_VALUE,
@@ -16,14 +17,16 @@ typedef enum _config_request {
 	CONFIG_EXISTS
 } config_request_t;
 
-typedef struct _query {
-			char key[CONFIG_MAX_KEY_LEN];
-			char section[CONFIG_MAX_SECTION_NAME_LEN];
+typedef struct _query
+{
+	char key[CONFIG_MAX_KEY_LEN];
+	char section[CONFIG_MAX_SECTION_NAME_LEN];
 } query_t;
 
 typedef char configfile_t[CONFIG_MAX_CONFIGFILE_LEN];
 
-typedef union data_t {
+typedef union data_t
+{
 	query_t query;
 	configfile_t configfile;
 } config_msg_t;
