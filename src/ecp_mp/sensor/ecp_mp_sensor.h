@@ -13,7 +13,7 @@
 #include <boost/throw_exception.hpp>
 
 #if defined(USE_MESSIP_SRR)
-#include <messip.h>
+#include "lib/messip/messip_dataport.h"
 #endif
 
 #include <map>
@@ -151,7 +151,6 @@ public:
 				usleep(1000*CONNECT_DELAY);
 			else {
 				std::cerr << "ecp_mp_sensor: messip::port_connect(" << VSP_NAME << ") failed" << std::endl;
-				throw sensor_error(lib::SYSTEM_ERROR, CANNOT_LOCATE_DEVICE);
 				BOOST_THROW_EXCEPTION(
 					lib::exception::System_error() <<
 					lib::exception::error_code(CANNOT_LOCATE_DEVICE)
