@@ -78,8 +78,8 @@ configurator::configurator(const std::string & _node, const std::string & _dir, 
 	file_location = return_ini_file_path();
 	common_file_location = return_common_ini_file_path();
 
-	read_property_tree_from_file(file_pt, file_location);
 	read_property_tree_from_file(file_pt, common_file_location);
+	read_property_tree_from_file(file_pt, file_location);
 #endif /* USE_MESSIP_SRR */
 }
 
