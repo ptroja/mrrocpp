@@ -13,6 +13,7 @@
 
 #include <boost/thread/mutex.hpp>
 #include <boost/lexical_cast.hpp>
+#include <boost/property_tree/ptree.hpp>
 
 class configsrv
 {
@@ -24,23 +25,42 @@ private:
 	// do ochrony wylacznosci dostepu do pliku miedzy watkami jednego procesu
 	boost::mutex mtx;
 
-	// Zwraca wartosc dla klucza.
-	std::string return_string_value(const std::string & _key, const std::string & _section_name);
+	//! Property tree of configuration file
+	boost::property_tree::ptree file_pt;
+
+	/**
+	 * Read property tree from configuration file
+	 * @param pt property tree
+	 * @param file configuration file
+	 */
+	void read_property_tree_from_file(boost::property_tree::ptree & pt, const std::string & file);
 
 public:
 	// Konstruktor obiektu - konfiguratora.
 	configsrv(const std::string & _node, const std::string & _dir, const std::string & _ini_file);
 
-	void change_ini_file (const std::string & _ini_file);
+	void change_ini_file(const std::string & _ini_file);
 
 	// Zwraca wartosc dla klucza.
 	template <class Type>
-	Type value(const std::string & _key, const std::string & _section_name) {
-		return boost::lexical_cast<Type>(return_string_value(_key, _section_name));
+	Type value(const std::string & _key, const std::string & __section_name) const
+	{
+		// initialize property tree path
+		std::string pt_path = __section_name;
+
+		// trim leading '[' char
+		pt_path.erase(0, 1);
+		// trim trailing '[' char
+		pt_path.erase(pt_path.length() - 1, 1);
+
+		pt_path += ".";
+		pt_path += _key;
+
+		return file_pt.get <Type> (pt_path);
 	}
 
 	// Zwraca czy dany klucz istnieje
 	bool exists(const std::string & _key, const std::string & _section_name);
-};// : configsrv
+};
 
 #endif /* _CONFIGSRV_H */
