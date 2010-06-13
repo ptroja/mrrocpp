@@ -259,6 +259,8 @@ void fsautomat::main_task_algorithm(void)
 			gt->Move();
 		} else if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_TFF_NOSE_RUN) {
 			nrg->Move();
+		} else if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_BIAS_EDP_FORCE) {
+			befg->Move();
 		} else if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_TFF_RUBIK_GRAB) {
 			double gen_args[4];
 			int size = lib::setValuesInArray(gen_args, mp_command.ecp_next_state.mp_2_ecp_next_state_string);
