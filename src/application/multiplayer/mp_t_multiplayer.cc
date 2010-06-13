@@ -19,6 +19,7 @@
 #include "ecp/festival/generator/ecp_g_festival.h"
 #include "lib/robot_consts/irp6ot_m_const.h"
 #include "lib/robot_consts/irp6p_m_const.h"
+#include "ecp_mp/task/ecp_mp_st_bias_edp_force.h"
 
 namespace mrrocpp {
 namespace mp {
@@ -137,7 +138,7 @@ void multiplayer::main_task_algorithm(void)
 	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, lib::ROBOT_FESTIVAL.c_str(), lib::ROBOT_FESTIVAL.c_str());
 
 	//biasowanie czujnika sily
-	set_next_ecps_state(ecp_mp::task::ECP_GEN_BIAS_EDP_FORCE, 0, "", 0, 1, lib::ROBOT_IRP6OT_M.c_str());
+	set_next_ecps_state(ecp_mp::task::ECP_ST_BIAS_EDP_FORCE, 0, "", 0, 1, lib::ROBOT_IRP6OT_M.c_str());
 
 	//oczekiwanie na ustalenie balansu bieli w kamerze
 	wait_ms(7000);

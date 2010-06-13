@@ -16,7 +16,7 @@ private:
 	//generatory
 	common::generator::transparent* gt;
 	common::generator::smooth* sg;
-	common::generator::bias_edp_force* befg;
+
 	common::generator::weight_meassure* wmg;
 
     //podzadania

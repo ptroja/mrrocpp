@@ -27,6 +27,7 @@
 #include "ecp/common/generator/ecp_g_smooth.h"
 #include "ecp/common/generator/ecp_g_force.h"
 #include "ecp_t_fsautomat.h"
+#include "ecp/common/task/ecp_st_bias_edp_force.h"
 
 #include "lib/datastr.h"
 
@@ -148,10 +149,22 @@ fsautomat::fsautomat(lib::configurator &_config) :
 										tig = new common::generator::teach_in(*this);
 										xmlFree(argument);
 									} else if (!xmlStrcmp(child_node->children->name, (const xmlChar *) "bias_edp_force_gen")) {
+
 										xmlChar *argument = xmlNodeGetContent(child_node->children);
 										if (argument && xmlStrcmp(argument, (const xmlChar *) ""))
 											;
 										befg = new common::generator::bias_edp_force(*this);
+										xmlFree(argument);
+									} else if (!xmlStrcmp(child_node->children->name, (const xmlChar *) "bias_edp_force_st")) {
+
+										xmlChar *argument = xmlNodeGetContent(child_node->children);
+										if (argument && xmlStrcmp(argument, (const xmlChar *) ""))
+											;
+										{
+											ecp_sub_task* ecpst;
+											ecpst = new ecp_sub_task_bias_edp_force(*this);
+											subtask_m[ecp_mp::task::ECP_ST_BIAS_EDP_FORCE] = ecpst;
+										}
 										xmlFree(argument);
 									} else if (!xmlStrcmp(child_node->children->name, (const xmlChar *) "ecp_smooth_gen")) {
 										xmlChar *argument = xmlNodeGetContent(child_node->children);
@@ -205,6 +218,8 @@ void fsautomat::main_task_algorithm(void)
 
 		sr_ecp_msg->message("Order received");
 
+		subtasks_conditional_execution();
+
 		if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_TEACH_IN) {
 			std::string path(mrrocpp_network_path);
 			path += mp_command.ecp_next_state.mp_2_ecp_next_state_string;
@@ -242,8 +257,6 @@ void fsautomat::main_task_algorithm(void)
 			wmg->Move();
 		} else if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_TRANSPARENT) {
 			gt->Move();
-		} else if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_BIAS_EDP_FORCE) {
-			befg->Move();
 		} else if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_TFF_NOSE_RUN) {
 			nrg->Move();
 		} else if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_TFF_RUBIK_GRAB) {

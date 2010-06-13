@@ -12,6 +12,7 @@
 //#include "ecp/common/generator/ecp_g_smooth.h"
 #include "ecp/common/generator/ecp_g_smooth.h"
 #include "ecp_t_rcsc_irp6ot.h"
+#include "ecp/common/task/ecp_st_bias_edp_force.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -30,7 +31,7 @@ rcsc::rcsc(lib::configurator &_config) :
 	gag = new common::generator::tff_gripper_approach(*this, 8);
 	rfrg = new common::generator::tff_rubik_face_rotate(*this, 8);
 	tig = new common::generator::teach_in(*this);
-	befg = new common::generator::bias_edp_force(*this);
+
 	sg = new common::generator::smooth(*this, true);
 	wmg = new common::generator::weight_meassure(*this, 1);
 
@@ -59,6 +60,13 @@ rcsc::rcsc(lib::configurator &_config) :
 
 	go_st = new common::task::ecp_sub_task_gripper_opening(*this);
 
+	// utworzenie podzadan
+	{
+		common::task::ecp_sub_task* ecpst;
+		ecpst = new common::task::ecp_sub_task_bias_edp_force(*this);
+		subtask_m[ecp_mp::task::ECP_ST_BIAS_EDP_FORCE] = ecpst;
+	}
+
 	sr_ecp_msg->message("ECP loaded");
 }
 
@@ -70,7 +78,7 @@ rcsc::~rcsc()
 	delete gag;
 	delete rfrg;
 	delete tig;
-	delete befg;
+	//	delete befg;
 	//delete sg;
 	delete sg;
 	delete wmg;
@@ -86,9 +94,6 @@ void rcsc::mp_2_ecp_next_state_string_handler(void)
 	} else if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_TRANSPARENT) {
 		gt->throw_kinematics_exceptions = (bool) mp_command.ecp_next_state.mp_2_ecp_next_state_variant;
 		gt->Move();
-
-	} else if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_BIAS_EDP_FORCE) {
-		befg->Move();
 
 	} else if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_TFF_NOSE_RUN) {
 		nrg->Move();
