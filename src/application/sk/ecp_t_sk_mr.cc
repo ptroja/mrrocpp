@@ -16,6 +16,7 @@
 #include "ecp_t_sk_mr.h"
 
 #include "ecp_st_edge_follow.h"
+#include "ecp/common/task/ecp_st_bias_edp_force.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -38,12 +39,15 @@ sk_mr::sk_mr(lib::configurator &_config) :
 	nrg = new generator::tff_nose_run(*this, 8);
 	nrg->configure_pulse_check(true);
 	//	yefg = new generator::y_edge_follow_force(*this, 8);
-	befg = new generator::bias_edp_force(*this);
+	//befg = new generator::bias_edp_force(*this);
 
-	// utworzenie podzadania
+	// utworzenie podzadan
 	ecp_sub_task* ecpst;
 	ecpst = new ecp_sub_task_edge_follow(*this);
 	subtask_m[ecp_mp::task::ECP_ST_EDGE_FOLLOW] = ecpst;
+
+	ecpst = new ecp_sub_task_bias_edp_force(*this);
+	subtask_m[ecp_mp::task::ECP_ST_BIAS_EDP_FORCE] = ecpst;
 
 	sr_ecp_msg->message("ECP SK_MR loaded");
 }
@@ -51,9 +55,7 @@ sk_mr::sk_mr(lib::configurator &_config) :
 void sk_mr::mp_2_ecp_next_state_string_handler(void)
 {
 
-	if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_BIAS_EDP_FORCE) {
-		befg->Move();
-	} else if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_TFF_NOSE_RUN) {
+	if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_TFF_NOSE_RUN) {
 		nrg->Move();
 	}
 

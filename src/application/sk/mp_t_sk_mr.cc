@@ -25,6 +25,7 @@
 #include "lib/robot_consts/irp6p_m_const.h"
 
 #include "application/sk/ecp_mp_st_edge_follow.h"
+#include "ecp_mp/task/ecp_mp_st_bias_edp_force.h"
 
 namespace mrrocpp {
 namespace mp {
@@ -86,7 +87,7 @@ void sk_mr::main_task_algorithm(void)
 	 */
 	// sekwencja generator na wybranym manipulatorze
 
-	set_next_ecps_state(ecp_mp::task::ECP_GEN_BIAS_EDP_FORCE, (int) 5, "", 0, 1, manipulator_name.c_str());
+	set_next_ecps_state(ecp_mp::task::ECP_ST_BIAS_EDP_FORCE, (int) 5, "", 0, 1, manipulator_name.c_str());
 
 	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, manipulator_name.c_str(), manipulator_name.c_str());
 

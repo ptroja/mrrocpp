@@ -16,7 +16,7 @@ protected:
 	//generatory
 	generator::tff_nose_run* nrg;
 	//	generator::y_edge_follow_force* yefg;
-	generator::bias_edp_force* befg;
+	//generator::bias_edp_force* befg;
 	bool save_activated;
 
 public:
