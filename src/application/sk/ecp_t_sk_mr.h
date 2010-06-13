@@ -11,7 +11,6 @@ namespace task {
 class sk_mr : public common::task::task
 {
 protected:
-	bool save_activated;
 
 public:
 	// KONSTRUKTORY
