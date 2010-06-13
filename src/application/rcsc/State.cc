@@ -6,6 +6,7 @@
 #include "lib/datastr.h"
 #include "State.h"
 #include "ecp_mp/task/ecp_mp_st_bias_edp_force.h"
+#include "ecp_mp/task/ecp_mp_st_tff_nose_run.h"
 
 namespace mrrocpp {
 namespace mp {
@@ -134,6 +135,8 @@ void State::setGeneratorType(const std::string & genType)
 		this->generatorType = ecp_mp::task::ECP_GEN_TRANSPARENT;
 	else if (genType == "ECP_GEN_TFF_NOSE_RUN")
 		this->generatorType = ecp_mp::task::ECP_GEN_TFF_NOSE_RUN;
+	else if (genType == "ECP_ST_TFF_NOSE_RUN")
+		this->generatorType = ecp_mp::task::ECP_ST_TFF_NOSE_RUN;
 	else if (genType == "ECP_GEN_TEACH_IN")
 		this->generatorType = ecp_mp::task::ECP_GEN_TEACH_IN;
 	else if (genType == "ECP_GEN_SMOOTH")

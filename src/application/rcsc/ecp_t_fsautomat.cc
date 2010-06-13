@@ -28,6 +28,7 @@
 #include "ecp/common/generator/ecp_g_force.h"
 #include "ecp_t_fsautomat.h"
 #include "ecp/common/task/ecp_st_bias_edp_force.h"
+#include "ecp/common/task/ecp_st_tff_nose_run.h"
 
 #include "lib/datastr.h"
 
@@ -124,6 +125,14 @@ fsautomat::fsautomat(lib::configurator &_config) :
 										xmlChar *argument = xmlNodeGetContent(child_node->children);
 										if (argument && xmlStrcmp(argument, (const xmlChar *) ""))
 											nrg = new common::generator::tff_nose_run(*this, atoi((char *) argument));
+										xmlFree(argument);
+									} else if (!xmlStrcmp(child_node->children->name, (const xmlChar *) "ecp_tff_nose_run_st")) {
+										xmlChar *argument = xmlNodeGetContent(child_node->children);
+										if (argument && xmlStrcmp(argument, (const xmlChar *) "")) {
+											ecp_sub_task_tff_nose_run* ecpst;
+											ecpst = new ecp_sub_task_tff_nose_run(*this);
+											subtask_m[ecp_mp::task::ECP_ST_TFF_NOSE_RUN] = ecpst;
+										}
 										xmlFree(argument);
 									} else if (!xmlStrcmp(child_node->children->name, (const xmlChar *) "ecp_tff_rubik_grab_gen")) {
 										xmlChar *argument = xmlNodeGetContent(child_node->children);

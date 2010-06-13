@@ -9,10 +9,13 @@
 
 #include "ecp/irp6p_m/ecp_r_irp6p_m.h"
 #include "ecp/common/generator/ecp_g_force.h"
+
 //#include "ecp/common/generator/ecp_g_smooth.h"
 #include "ecp/common/generator/ecp_g_smooth.h"
 #include "ecp_t_rcsc_irp6p.h"
 #include "ecp/common/task/ecp_st_bias_edp_force.h"
+#include "ecp/common/task/ecp_st_tff_nose_run.h"
+#include "ecp/common/generator/ecp_g_force.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -27,7 +30,6 @@ rcsc::rcsc(lib::configurator &_config) :
 	ecp_m_robot = new irp6p_m::robot(*this);
 
 	gt = new common::generator::transparent(*this);
-	nrg = new common::generator::tff_nose_run(*this, 8);
 	rgg = new common::generator::tff_rubik_grab(*this, 8);
 	gag = new common::generator::tff_gripper_approach(*this, 8);
 	rfrg = new common::generator::tff_rubik_face_rotate(*this, 8);
@@ -44,6 +46,12 @@ rcsc::rcsc(lib::configurator &_config) :
 		subtask_m[ecp_mp::task::ECP_ST_BIAS_EDP_FORCE] = ecpst;
 	}
 
+	{
+		common::task::ecp_sub_task_tff_nose_run* ecpst;
+		ecpst = new common::task::ecp_sub_task_tff_nose_run(*this);
+		subtask_m[ecp_mp::task::ECP_ST_TFF_NOSE_RUN] = ecpst;
+	}
+
 	sr_ecp_msg->message("ECP loaded");
 }
 
@@ -53,9 +61,6 @@ void rcsc::mp_2_ecp_next_state_string_handler(void)
 	if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_TRANSPARENT) {
 		gt->throw_kinematics_exceptions = (bool) mp_command.ecp_next_state.mp_2_ecp_next_state_variant;
 		gt->Move();
-
-	} else if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_TFF_NOSE_RUN) {
-		nrg->Move();
 
 	} else if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_TFF_RUBIK_GRAB) {
 		switch ((ecp_mp::task::RCSC_RUBIK_GRAB_PHASES) mp_command.ecp_next_state.mp_2_ecp_next_state_variant)

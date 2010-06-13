@@ -17,7 +17,6 @@ namespace task {
  */
 
 const std::string ECP_GEN_TRANSPARENT = "ECP_GEN_TRANSPARENT";
-const std::string ECP_GEN_TFF_NOSE_RUN = "ECP_GEN_TFF_NOSE_RUN";
 const std::string ECP_GEN_TEACH_IN = "ECP_GEN_TEACH_IN";
 const std::string ECP_GEN_SMOOTH = "ECP_GEN_SMOOTH";
 const std::string ECP_GEN_TFF_RUBIK_GRAB = "ECP_GEN_TFF_RUBIK_GRAB";

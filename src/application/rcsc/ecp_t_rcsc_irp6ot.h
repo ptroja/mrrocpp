@@ -36,7 +36,7 @@ class rcsc: public common::task::task
 protected:
     //generatory
 	common::generator::transparent* gt;
-	common::generator::tff_nose_run* nrg;
+
 	common::generator::tff_rubik_grab* rgg;
 	common::generator::tff_gripper_approach* gag;
 	common::generator::tff_rubik_face_rotate* rfrg;

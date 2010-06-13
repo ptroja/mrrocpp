@@ -18,6 +18,7 @@
 #include "lib/robot_consts/irp6ot_m_const.h"
 #include "lib/robot_consts/irp6p_m_const.h"
 #include "ecp_mp/task/ecp_mp_st_bias_edp_force.h"
+#include "ecp_mp/task/ecp_mp_st_tff_nose_run.h"
 
 #include <boost/foreach.hpp>
 
@@ -751,7 +752,7 @@ run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_mes
 if ((config.exists("irp6p_compliant")) && ((bool) config.value<int>("irp6p_compliant")))
 {
 	// wlaczenie genrator tff_nose_run_generator w postumencie
-	set_next_ecps_state (ecp_mp::task::ECP_GEN_TFF_NOSE_RUN, (int) 0, "", 0,1, lib::ROBOT_IRP6P_M.c_str());
+	set_next_ecps_state (ecp_mp::task::ECP_ST_TFF_NOSE_RUN, (int) 0, "", 0,1, lib::ROBOT_IRP6P_M.c_str());
 
 	// uruchomienie generatora empty_gen
 	run_extended_empty_gen (true, 1, lib::ROBOT_IRP6P_M.c_str());
@@ -762,7 +763,7 @@ if ((config.exists("irp6p_compliant")) && ((bool) config.value<int>("irp6p_compl
 else
 {
 	// wlaczenie genrator tff_nose_run_generator w tracku
-	set_next_ecps_state (ecp_mp::task::ECP_GEN_TFF_NOSE_RUN, (int) 0, "", 0,1, lib::ROBOT_IRP6OT_M.c_str());
+	set_next_ecps_state (ecp_mp::task::ECP_ST_TFF_NOSE_RUN, (int) 0, "", 0,1, lib::ROBOT_IRP6OT_M.c_str());
 
 	// uruchomienie generatora empty_gen
 	run_extended_empty_gen (true, 1, lib::ROBOT_IRP6OT_M.c_str());
