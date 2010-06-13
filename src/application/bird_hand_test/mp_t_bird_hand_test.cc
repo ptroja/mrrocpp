@@ -17,6 +17,7 @@
 #include "lib/mrmath/mrmath.h"
 #include "lib/data_port_headers/bird_hand.h"
 #include "lib/robot_consts/bird_hand_const.h"
+#include "ecp_mp/common/generator/ecp_mp_g_transparent.h"
 
 #include <iostream>
 #include <string>
@@ -42,7 +43,7 @@ void bird_hand_test::main_task_algorithm(void)
 	sr_ecp_msg->message("New bird_hand_test series");
 
 	// wlaczenie generatora transparentnego w obu robotach
-	set_next_ecps_state(ecp_mp::task::ECP_GEN_TRANSPARENT, (int) 0, "", 0, 1, lib::ROBOT_BIRD_HAND.c_str());
+	set_next_ecps_state(ecp_mp::common::generator::ECP_GEN_TRANSPARENT, (int) 0, "", 0, 1, lib::ROBOT_BIRD_HAND.c_str());
 
 	send_end_motion_to_ecps(1, lib::ROBOT_BIRD_HAND.c_str());
 

@@ -22,6 +22,7 @@
 #include "lib/robot_consts/smb_const.h"
 #include "lib/robot_consts/spkm_const.h"
 #include "lib/robot_consts/shead_const.h"
+#include "ecp_mp/common/generator/ecp_mp_g_transparent.h"
 
 namespace mrrocpp {
 namespace mp {
@@ -43,9 +44,9 @@ void swarmitfix::main_task_algorithm(void)
 	sr_ecp_msg->message("New swarmitfix series");
 
 	// wlaczenie generatora transparentnego w obu robotach
-	set_next_ecps_state(ecp_mp::task::ECP_GEN_TRANSPARENT, (int) 0, "", 0, 1, lib::ROBOT_SPKM.c_str());
-	set_next_ecps_state(ecp_mp::task::ECP_GEN_TRANSPARENT, (int) 0, "", 0, 1, lib::ROBOT_SMB.c_str());
-	set_next_ecps_state(ecp_mp::task::ECP_GEN_TRANSPARENT, (int) 0, "", 0, 1, lib::ROBOT_SHEAD.c_str());
+	set_next_ecps_state(ecp_mp::common::generator::ECP_GEN_TRANSPARENT, (int) 0, "", 0, 1, lib::ROBOT_SPKM.c_str());
+	set_next_ecps_state(ecp_mp::common::generator::ECP_GEN_TRANSPARENT, (int) 0, "", 0, 1, lib::ROBOT_SMB.c_str());
+	set_next_ecps_state(ecp_mp::common::generator::ECP_GEN_TRANSPARENT, (int) 0, "", 0, 1, lib::ROBOT_SHEAD.c_str());
 
 	double a = 2.88;
 

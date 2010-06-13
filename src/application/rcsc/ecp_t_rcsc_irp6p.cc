@@ -16,6 +16,7 @@
 #include "ecp/common/task/ecp_st_bias_edp_force.h"
 #include "ecp/common/task/ecp_st_tff_nose_run.h"
 #include "ecp/common/generator/ecp_g_force.h"
+#include "ecp_mp/common/generator/ecp_mp_g_transparent.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -58,7 +59,7 @@ rcsc::rcsc(lib::configurator &_config) :
 void rcsc::mp_2_ecp_next_state_string_handler(void)
 {
 
-	if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_TRANSPARENT) {
+	if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_GEN_TRANSPARENT) {
 		gt->throw_kinematics_exceptions = (bool) mp_command.ecp_next_state.mp_2_ecp_next_state_variant;
 		gt->Move();
 

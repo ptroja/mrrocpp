@@ -16,7 +16,7 @@ namespace task {
  * Used generators.
  */
 
-const std::string ECP_GEN_TRANSPARENT = "ECP_GEN_TRANSPARENT";
+
 const std::string ECP_GEN_SMOOTH = "ECP_GEN_SMOOTH";
 const std::string ECP_GEN_SLEEP = "ECP_GEN_SLEEP";
 const std::string ECP_GEN_EPOS = "ECP_GEN_EPOS";

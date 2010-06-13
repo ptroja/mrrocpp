@@ -10,6 +10,7 @@
 #include "ecp_t_multiplayer_irp6ot.h"
 #include "ecp/common/task/ecp_st_bias_edp_force.h"
 #include "ecp/common/task/ecp_task.h"
+#include "ecp_mp/common/generator/ecp_mp_g_transparent.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -49,7 +50,7 @@ void multiplayer::mp_2_ecp_next_state_string_handler(void)
 
 		wmg->Move();
 
-	} else if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_TRANSPARENT) {
+	} else if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_GEN_TRANSPARENT) {
 		gt->Move();
 	} else if (mp_2_ecp_next_state_string == ecp_mp::task::MULTIPLAYER_GRIPPER_OPENING) {
 		switch ((ecp_mp::task::MULTIPLAYER_GRIPPER_OP) mp_command.ecp_next_state.mp_2_ecp_next_state_variant)

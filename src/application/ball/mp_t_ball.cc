@@ -17,7 +17,7 @@
 #include "lib/robot_consts/irp6ot_m_const.h"
 #include "lib/robot_consts/irp6p_m_const.h"
 #include "ecp_mp/task/ecp_mp_st_bias_edp_force.h"
-
+#include "ecp_mp/common/generator/ecp_mp_g_transparent.h"
 
 namespace mrrocpp {
 namespace mp {
@@ -67,8 +67,8 @@ void ball::main_task_algorithm(void)
 	configure_edp_force_sensor(true, true);
 
 	// wlaczenie generatora transparentnego w obu robotach
-	set_next_ecps_state(ecp_mp::task::ECP_GEN_TRANSPARENT, 0, "", 0, 1, lib::ROBOT_IRP6OT_M.c_str());
-	set_next_ecps_state(ecp_mp::task::ECP_GEN_TRANSPARENT, 0, "", 0, 1, lib::ROBOT_IRP6P_M.c_str());
+	set_next_ecps_state(ecp_mp::common::generator::ECP_GEN_TRANSPARENT, 0, "", 0, 1, lib::ROBOT_IRP6OT_M.c_str());
+	set_next_ecps_state(ecp_mp::common::generator::ECP_GEN_TRANSPARENT, 0, "", 0, 1, lib::ROBOT_IRP6P_M.c_str());
 
 	mp_h_gen.configure(1, 0);
 	sr_ecp_msg->message("Track podatny do czasu wcisniecia mp_trigger");

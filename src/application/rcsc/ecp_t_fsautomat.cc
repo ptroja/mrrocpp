@@ -30,6 +30,7 @@
 #include "ecp_t_fsautomat.h"
 #include "ecp/common/task/ecp_st_bias_edp_force.h"
 #include "ecp/common/task/ecp_st_tff_nose_run.h"
+#include "ecp_mp/common/generator/ecp_mp_g_transparent.h"
 
 #include "lib/datastr.h"
 
@@ -265,7 +266,7 @@ void fsautomat::main_task_algorithm(void)
 			sg->Move();
 		} else if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_WEIGHT_MEASURE_GENERATOR) {
 			wmg->Move();
-		} else if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_TRANSPARENT) {
+		} else if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_GEN_TRANSPARENT) {
 			gt->Move();
 		} else if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_TFF_NOSE_RUN) {
 			nrg->Move();
