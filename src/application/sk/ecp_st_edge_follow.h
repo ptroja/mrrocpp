@@ -11,6 +11,10 @@
 namespace mrrocpp {
 namespace ecp {
 namespace common {
+namespace generator {
+class y_edge_follow_force;
+}
+
 namespace task {
 
 class ecp_sub_task_edge_follow : public ecp_sub_task

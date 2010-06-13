@@ -17,6 +17,8 @@
 
 #include "ecp_st_edge_follow.h"
 #include "ecp/common/task/ecp_st_bias_edp_force.h"
+#include "ecp/common/task/ecp_st_tff_nose_run.h"
+#include "ecp/common/generator/ecp_g_force.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -36,36 +38,25 @@ sk_mr::sk_mr(lib::configurator &_config) :
 		// TODO: throw
 	}
 
-	nrg = new generator::tff_nose_run(*this, 8);
-	nrg->configure_pulse_check(true);
-	//	yefg = new generator::y_edge_follow_force(*this, 8);
-	//befg = new generator::bias_edp_force(*this);
-
 	// utworzenie podzadan
-	ecp_sub_task* ecpst;
-	ecpst = new ecp_sub_task_edge_follow(*this);
-	subtask_m[ecp_mp::task::ECP_ST_EDGE_FOLLOW] = ecpst;
+	{
+		ecp_sub_task* ecpst;
+		ecpst = new ecp_sub_task_edge_follow(*this);
+		subtask_m[ecp_mp::task::ECP_ST_EDGE_FOLLOW] = ecpst;
 
-	ecpst = new ecp_sub_task_bias_edp_force(*this);
-	subtask_m[ecp_mp::task::ECP_ST_BIAS_EDP_FORCE] = ecpst;
+		ecpst = new ecp_sub_task_bias_edp_force(*this);
+		subtask_m[ecp_mp::task::ECP_ST_BIAS_EDP_FORCE] = ecpst;
+	}
+
+	{
+		ecp_sub_task_tff_nose_run* ecpst;
+		ecpst = new ecp_sub_task_tff_nose_run(*this);
+		subtask_m[ecp_mp::task::ECP_ST_TFF_NOSE_RUN] = ecpst;
+		ecpst->nrg->configure_pulse_check(true);
+	}
 
 	sr_ecp_msg->message("ECP SK_MR loaded");
 }
-
-void sk_mr::mp_2_ecp_next_state_string_handler(void)
-{
-
-	if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_TFF_NOSE_RUN) {
-		nrg->Move();
-	}
-
-}
-
-}
-} // namespace common
-
-namespace common {
-namespace task {
 
 task* return_created_ecp_task(lib::configurator &_config)
 {

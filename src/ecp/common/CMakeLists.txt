@@ -4,6 +4,7 @@ add_library(ecp
 	ecp_m.cc
 	task/ecp_task.cc
 	task/ecp_st_bias_edp_force.cc
+	task/ecp_st_tff_nose_run.cc
 	generator/ecp_generator.cc
 	generator/ecp_g_teach_in.cc
 	generator/ecp_g_delta.cc
