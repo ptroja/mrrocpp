@@ -68,7 +68,7 @@ void acq_force::main_task_algorithm(void)
 
 	int i, j, t;
 	FILE *FP;
-	char buffer[60];
+//	char buffer[60];
 	gsl_matrix *M = gsl_matrix_alloc(3, 3);
 	gsl_matrix *K = gsl_matrix_alloc(3, 3);
 	gsl_vector *m = gsl_vector_alloc(3);

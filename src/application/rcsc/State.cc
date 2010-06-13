@@ -7,6 +7,7 @@
 #include "State.h"
 #include "ecp_mp/task/ecp_mp_st_bias_edp_force.h"
 #include "ecp_mp/task/ecp_mp_st_tff_nose_run.h"
+#include "ecp_mp/common/generator/ecp_mp_g_bias_edp_force.h"
 
 namespace mrrocpp {
 namespace mp {
@@ -150,7 +151,7 @@ void State::setGeneratorType(const std::string & genType)
 	else if (genType == "RCSC_GRIPPER_OPENING")
 		this->generatorType = ecp_mp::task::RCSC_GRIPPER_OPENING;
 	else if (genType == "ECP_GEN_BIAS_EDP_FORCE")
-		this->generatorType = ecp_mp::task::ECP_GEN_BIAS_EDP_FORCE;
+		this->generatorType = ecp_mp::common::generator::ECP_GEN_BIAS_EDP_FORCE;
 	else if (genType == "ECP_ST_BIAS_EDP_FORCE")
 		this->generatorType = ecp_mp::task::ECP_ST_BIAS_EDP_FORCE;
 	else if (genType == "ECP_WEIGHT_MEASURE_GENERATOR")
