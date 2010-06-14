@@ -30,39 +30,53 @@ void force::operator()(void)
 		// Notify the caller, that the thread is ready
 		thread_started.command();
 
-		configure_sensor();
+		// FIXME: this is necessary because of some race condition with reader_object creation
+		boost::this_thread::sleep(boost::posix_time::millisec(20));
+
+		if(!test_mode) {
+			connect_to_hardware();
+		} else {
+			force::configure_sensor();
+		}
 
 		while (!TERMINATE) //!< for (;;)
 		{
-			if (new_edp_command) {
+			{
 				boost::mutex::scoped_lock lock(mtx);
-				// TODO: this should be handled with boost::bind functor parameter
-				switch (command)
-				{
-					case (common::FORCE_SET_TOOL):
-						set_force_tool();
-						break;
-					case (common::FORCE_CONFIGURE):
-						configure_sensor();
-						break;
-					default:
-						break;
+					if (new_edp_command)  {
+					// TODO: this should be handled with boost::bind functor parameter
+					switch (command)
+					{
+						case (common::FORCE_SET_TOOL):
+							set_force_tool();
+							break;
+						case (common::FORCE_CONFIGURE):
+							if(!test_mode) {
+								connect_to_hardware();
+							} else {
+								force::configure_sensor();
+							}
+							break;
+						default:
+							break;
+					}
+					set_command_execution_finish();
+					continue;
 				}
-				set_command_execution_finish();
+			}
+
+			if(!test_mode) {
+				wait_for_event();
+
+				initiate_reading();
+
+				get_reading();
 			} else {
-				if(!test_mode) {
-					wait_for_event();
+				force::wait_for_event();
 
-					initiate_reading();
+				force::initiate_reading();
 
-					get_reading();
-				} else {
-					force::wait_for_event();
-
-					force::initiate_reading();
-
-					force::get_reading();
-				}
+				force::get_reading();
 			}
 		}
 	}
@@ -129,8 +143,6 @@ void force::set_command_execution_finish() // podniesienie semafora
 void force::get_reading()
 {
 	const lib::Ft_vector zero_ft;
-
-	//boost::this_thread::sleep(boost::posix_time::millisec(20));
 
 	master.force_msr_upload(zero_ft);
 
