@@ -619,7 +619,7 @@ struct servo_group_reply
 
 //------------------------------------------------------------------------------
 /*! robot_model */
-typedef union c_buffer_robot_model
+typedef struct /* union */ c_buffer_robot_model
 {
 	//----------------------------------------------------------
 	struct
@@ -648,11 +648,25 @@ typedef union c_buffer_robot_model
 		double weight;
 	} force_tool;
 
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & tool_frame_def.tool_frame;
+		ar & kinematic_model.kinematic_model_no;
+		ar & servo_algorithm.servo_algorithm_no;
+		ar & servo_algorithm.servo_parameters_no;
+		ar & force_tool.position;
+		ar & force_tool.weight;
+	}
 } c_buffer_robot_model_t;
 
 //------------------------------------------------------------------------------
 /*! arm */
-typedef union c_buffer_arm
+typedef struct /* union */ c_buffer_arm
 {
 	//----------------------------------------------------------
 	struct
@@ -677,6 +691,28 @@ typedef union c_buffer_arm
 	} text_def;
 	//----------------------------------------------------------
 	char serialized_command[ECP_EDP_SERIALIZED_COMMAND_SIZE];
+
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & pf_def.arm_frame;
+		ar & pf_def.arm_coordinates;
+		ar & pf_def.desired_torque;
+		ar & pf_def.inertia;
+		ar & pf_def.reciprocal_damping;
+		ar & pf_def.force_xyz_torque_xyz;
+		ar & pf_def.arm_frame;
+		ar & pf_def.behaviour;
+
+//		ar & text_def.text;
+//		ar & text_def.prosody;
+
+///		ar & serialized_command;
+	}
 } c_buffer_arm_t;
 
 //------------------------------------------------------------------------------
@@ -756,8 +792,8 @@ struct c_buffer
 		ar & motion_type;
 		ar & motion_steps;
 		ar & value_in_step_no;
-//		c_buffer_robot_model_t robot_model;
-//		c_buffer_arm_t arm;
+		ar & robot_model;
+		ar & arm;
 	}
 
 	c_buffer(void); // by W odkomentowane
@@ -805,6 +841,7 @@ struct c_buffer
 
 //------------------------------------------------------------------------------
 /*! robot_model */
+#if 0
 typedef union r_buffer_robot_model
 {
 	//----------------------------------------------------------
@@ -847,6 +884,10 @@ typedef union r_buffer_robot_model
 	} force_tool;
 
 } r_buffer_robot_model_t;
+#else
+//! The same data can be commanded and queried
+typedef c_buffer_robot_model r_buffer_robot_model_t;
+#endif
 
 //------------------------------------------------------------------------------
 typedef struct _controller_state_t
@@ -889,10 +930,6 @@ typedef union r_buffer_arm
 {
 	struct
 	{
-		/*! Given values for PWM fill (Phase Wave Modulation) - (usualy unnecessary). */
-		int16_t PWM_value[MAX_SERVOS_NR];
-		/*! Control current - (usualy unnecessary). */
-		int16_t current[MAX_SERVOS_NR];
 		/*!
 		 *  Macierz reprezentujaca koncowke wzgledem bazy manipulatora.
 		 *  @todo Translate to English.
@@ -922,6 +959,19 @@ typedef union r_buffer_arm
 
 	char serialized_reply[EDP_ECP_SERIALIZED_REPLY_SIZE];
 
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template<class Archive>
+	void serialize(Archive & ar, const unsigned int version) {
+		ar & pf_def.arm_frame;
+		ar & pf_def.arm_coordinates;
+		ar & pf_def.force_xyz_torque_xyz;
+//		ar & pf_def.gripper_reg_state;
+//		ar & text_def.speaking;
+//		ar & serialized_reply;
+	}
 } r_buffer_arm_t;
 
 //------------------------------------------------------------------------------
@@ -980,8 +1030,8 @@ struct r_buffer
 		ar & PWM_value;
 		ar & current;
 		// The following are unions... probably have to handle with boost::variant
-//		ar & robot_model;
-//		ar & arm;
+		ar & robot_model;
+		ar & arm;
 	}
 };
 
