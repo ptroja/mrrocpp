@@ -29,7 +29,7 @@ RemoteAgent::RemoteAgent(const std::string & _name, int retry, int sleep_ms) :
 		if (channel == -1)
 #endif /* USE_MESSIP_SRR */
 		{
-			if(--retry == 0) {
+			if(retry-- == 0) {
 				std::cerr << "Unable to connect to '" << getName() << "'" << std::endl;
 				BOOST_THROW_EXCEPTION(
 					mrrocpp::lib::exception::System_error() <<
