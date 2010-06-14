@@ -73,22 +73,10 @@ bool haptic::first_step()
 		irp6ot->mp_command.instruction.arm.pf_def.force_xyz_torque_xyz[i + 3] = 0;
 		irp6ot->mp_command.instruction.arm.pf_def.reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING / 2;
 		irp6ot->mp_command.instruction.arm.pf_def.reciprocal_damping[i + 3] = TORQUE_RECIPROCAL_DAMPING / 2;
-		//		irp6ot->mp_command.instruction.arm.pf_def.reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING / 40;
-		//		irp6ot->mp_command.instruction.arm.pf_def.reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING / 40;
 		irp6ot->mp_command.instruction.arm.pf_def.behaviour[i] = lib::CONTACT;
 		irp6ot->mp_command.instruction.arm.pf_def.behaviour[i + 3] = lib::CONTACT;
-		/*
-		 if(irp6ot_con) irp6ot->ecp_td.MPtoECP_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
-		 else irp6ot->ecp_td.MPtoECP_reciprocal_damping[i] = 0.0;
-		 if(irp6ot_con) irp6ot->ecp_td.MPtoECP_reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING;
-		 else irp6ot->ecp_td.MPtoECP_reciprocal_damping[i+3] = 0.0;
-		 */
 		irp6ot->mp_command.instruction.arm.pf_def.inertia[i] = FORCE_INERTIA;
 		irp6ot->mp_command.instruction.arm.pf_def.inertia[i + 3] = TORQUE_INERTIA;
-
-		//		irp6ot->mp_command.instruction.arm.pf_def.inertia[i] = 0;
-		//		irp6ot->mp_command.instruction.arm.pf_def.inertia[i+3] = 0;
-
 	}
 
 	lib::Homog_matrix tool_frame(0.0, 0.0, 0.25);
@@ -116,30 +104,12 @@ bool haptic::first_step()
 		irp6p->mp_command.instruction.arm.pf_def.force_xyz_torque_xyz[i + 3] = 0;
 		irp6p->mp_command.instruction.arm.pf_def.reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING / 2;
 		irp6p->mp_command.instruction.arm.pf_def.reciprocal_damping[i + 3] = TORQUE_RECIPROCAL_DAMPING / 2;
-		//		irp6p->mp_command.instruction.arm.pf_def.reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING/40;
-		//		irp6p->mp_command.instruction.arm.pf_def.reciprocal_damping[i+3] = FORCE_RECIPROCAL_DAMPING/40;
 		irp6p->mp_command.instruction.arm.pf_def.behaviour[i] = lib::GUARDED_MOTION;
 		irp6p->mp_command.instruction.arm.pf_def.behaviour[i + 3] = lib::GUARDED_MOTION;
-		/*
-		 if(irp6p_con) irp6p->ecp_td.MPtoECP_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
-		 else irp6p->ecp_td.MPtoECP_reciprocal_damping[i] = 0.0;
-		 if(irp6p_con) irp6p->ecp_td.MPtoECP_reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING;
-		 else irp6p->ecp_td.MPtoECP_reciprocal_damping[i+3] = 0.0;
-		 */
-
 		irp6p->mp_command.instruction.arm.pf_def.inertia[i] = FORCE_INERTIA;
 		irp6p->mp_command.instruction.arm.pf_def.inertia[i + 3] = TORQUE_INERTIA;
-
-		//		irp6p->mp_command.instruction.arm.pf_def.inertia[i] = 0;
-		//		irp6p->mp_command.instruction.arm.pf_def.inertia[i+3] = 0;
-
-		/*
-		 irp6p->ecp_td.MPtoECP_inertia[i] = 0.0;
-		 irp6p->ecp_td.MPtoECP_inertia[i+3] = 0.0;
-		 */
 	}
 
-	//	  cout << "first_step 3" << endl;
 	return true;
 }
 
@@ -149,13 +119,8 @@ bool haptic::first_step()
 
 bool haptic::next_step()
 {
-	// Generacja trajektorii prostoliniowej o zadany przyrost polozenia i orientacji
-	// Funkcja zwraca false gdy koniec generacji trajektorii
-	// Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
-	// UWAGA: dzialamy na jednoelementowej liscie robotow
-	//	cout << "next_step" << endl;
-
-	if (node_counter < 3) { // Oczekiwanie na odczyt aktualnego polozenia koncowki
+	// Oczekiwanie na odczyt aktualnego polozenia koncowki
+	if (node_counter < 3) {
 		return true;
 	}
 
@@ -164,10 +129,8 @@ bool haptic::next_step()
 	}
 
 	if (node_counter == 3) {
-
 		irp6ot->mp_command.instruction.instruction_type = lib::SET_GET;
 		irp6p->mp_command.instruction.instruction_type = lib::SET_GET;
-
 	}
 
 	lib::Homog_matrix irp6ot_current_arm_frame(irp6ot->ecp_reply_package.reply_package.arm.pf_def.arm_frame);
@@ -175,19 +138,6 @@ bool haptic::next_step()
 
 	lib::Homog_matrix irp6p_goal_frame(global_base * irp6ot_current_arm_frame);
 	irp6p_goal_frame.get_frame_tab(irp6p->mp_command.instruction.arm.pf_def.arm_frame);
-
-	/*
-	 lib::Homog_matrix irp6p_goal_frame_increment_in_end_effector ((!irp6p_current_arm_frame)*irp6p_goal_frame);
-	 lib::Ft_v_vector irp6p_goal_xyz_angle_axis_increment_in_end_effector;
-
-	 irp6p_goal_frame_increment_in_end_effector.get_xyz_angle_axis(irp6p_goal_xyz_angle_axis_increment_in_end_effector);
-
-	 irp6p_goal_xyz_angle_axis_increment_in_end_effector=irp6p_goal_xyz_angle_axis_increment_in_end_effector *
-	 (double) (1/ ( ((double)STEP)*((double)step_no)*2) );
-
-	 irp6p_goal_xyz_angle_axis_increment_in_end_effector.to_table (irp6p->ecp_td.MPtoECP_position_velocity);
-	 */
-	//	irp6p->ecp_td.MPtoECP_position_velocity[2] = 0.01;
 
 	lib::Ft_v_vector
 			irp6p_ECPtoMP_force_xyz_torque_xyz(irp6p->ecp_reply_package.reply_package.arm.pf_def.force_xyz_torque_xyz);
@@ -214,7 +164,6 @@ bool haptic::next_step()
 		std::cout << "irp6p_ECPtoMP_force_xyz_torque_xyz\n" << irp6p_ECPtoMP_force_xyz_torque_xyz << "interval:"
 				<< time_interval << std::endl;
 		//	std::cout << "irp6p_goal_xyz_angle_axis_increment_in_end_effector\n" << irp6p_goal_xyz_angle_axis_increment_in_end_effector << std::endl;
-
 	}
 
 	if ((irp6ot->ecp_reply_package.reply == lib::TASK_TERMINATED) || (irp6p->ecp_reply_package.reply
@@ -228,4 +177,3 @@ bool haptic::next_step()
 } // namespace generator
 } // namespace mp
 } // namespace mrrocpp
-

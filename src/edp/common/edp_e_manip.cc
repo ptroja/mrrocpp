@@ -328,7 +328,6 @@ void manip_effector::iterate_macrostep(const lib::JointArray & begining_joints, 
 	double reciprocal_damping[6];
 
 	const lib::BEHAVIOUR_SPECIFICATION (&behaviour)[6] = instruction.arm.pf_def.behaviour;
-	//	const double &desired_gripper_coordinate = instruction.arm.pf_def.gripper_coordinate;
 
 	// w trybie TCIM interpolujemy w edp_trans stad zadajemy pojedynczy krok do serwo
 	motion_steps = 1;
