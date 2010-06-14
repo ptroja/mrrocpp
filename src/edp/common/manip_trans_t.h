@@ -28,7 +28,6 @@ public:
     void operator()();
 
     manip_trans_t(motor_driven_effector& _master);
-    ~manip_trans_t();
 };
 
 } // namespace common

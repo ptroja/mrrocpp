@@ -208,42 +208,42 @@ public:
 	 * It is used for the purpose of govering of input data form the hardware
 	 * and transmission of output data to the hardware
 	 */
-	in_out_buffer *in_out_obj;
+	boost::shared_ptr<in_out_buffer> in_out_obj;
 
 	/*!
 	 * \brief object to handle measurements
 	 *
 	 * It is implemented as the thread that collects the measurement in cyclic buffer and then saving it to the text file.
 	 */
-	reader_buffer *rb_obj;
+	boost::shared_ptr<reader_buffer> rb_obj;
 
 	/*!
 	 * \brief object that interpolates the motion in dedicated thread
 	 *
 	 * It is used for the purpose of interpolation in the external coordinates (in manipulators) e.g. for the purpose of position-force control
 	 */
-	manip_trans_t *mt_tt_obj;
+	boost::shared_ptr<manip_trans_t> mt_tt_obj;
 
 	/*!
 	 * \brief object of servo buffer
 	 *
 	 * With motor controllers in dedicated thread.
 	 */
-	servo_buffer* sb;
+	boost::shared_ptr<servo_buffer> sb;
 
 	/*!
 	 * \brief Object of visualisation
 	 *
 	 * This is dedicated thread that transmits joints positions to visualisation process.
 	 */
-	vis_server* vis_obj;
+	boost::shared_ptr<vis_server> vis_obj;
 
 	/*!
 	 * \brief force object to collect force measurements.
 	 *
 	 * The force measurements are collected in dedicated thread. Then the influence of gravitational force is removed in the same thread.
 	 */
-	sensor::force *vs;
+	boost::shared_ptr<sensor::force> vs;
 
 	/*!
 	 * \brief class constructor

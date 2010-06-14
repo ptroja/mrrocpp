@@ -81,7 +81,7 @@ protected:
 	 *
 	 * This measueremnt is set by the force thread and get by the transformation thread.
 	 */
-	boost::mutex force_mutex; // mutex do sily   XXXXXX
+	boost::mutex force_mutex;
 
 	/*!
 	 * \brief move arm method for the FRAME command in the single thread variant.

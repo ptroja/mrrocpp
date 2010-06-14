@@ -103,7 +103,6 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 	common::motor_driven_effector::get_arm_position_get_arm_type_switch(instruction);
 
 	reply.servo_step = step_counter;
-
 }
 
 // Stworzenie modeli kinematyki dla tasmociagu.

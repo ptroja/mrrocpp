@@ -180,8 +180,8 @@ void effector::create_kinematic_models_for_given_robot(void) {
 
 /*--------------------------------------------------------------------------*/
 void effector::create_threads() {
-	rb_obj = new common::reader_buffer(*this);
-	vis_obj = new common::vis_server(*this);
+	rb_obj = boost::shared_ptr<common::reader_buffer> (new common::reader_buffer(*this));
+	vis_obj = boost::shared_ptr <common::vis_server> (new common::vis_server(*this));
 }
 
 void effector::instruction_deserialization() {
