@@ -1,8 +1,10 @@
 #ifndef __FT_V_VECTOR_H
 #define __FT_V_VECTOR_H
 
-#include "lib/mrmath/homog_matrix.h"
 #include <Eigen/Core>
+#include <boost/serialization/serialization.hpp>
+
+#include "lib/mrmath/homog_matrix.h"
 
 namespace mrrocpp {
 namespace lib {
@@ -37,6 +39,17 @@ public:
 	//! Wyciagniecie max elementu z wektora
 	//! @author Sibi
 	double max_element ();	//wyciagniecie maksymalnego elementu wektora
+
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template<class Archive>
+	void serialize(Archive & ar, const unsigned int version) {
+		for (int i = 0; i < this->size(); ++i) {
+			ar & this->operator[](i);
+		}
+	}
 
 public:
 	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
