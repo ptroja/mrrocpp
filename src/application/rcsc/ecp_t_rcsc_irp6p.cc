@@ -18,6 +18,7 @@
 #include "ecp/common/generator/ecp_g_force.h"
 #include "ecp_mp/common/generator/ecp_mp_g_transparent.h"
 #include "ecp_mp/common/generator/ecp_mp_g_smooth.h"
+#include "ecp_mp/common/generator/ecp_mp_g_teach_in.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -134,7 +135,7 @@ void rcsc::mp_2_ecp_next_state_string_handler(void)
 				break;
 		}
 
-	} else if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_TEACH_IN) {
+	} else if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_GEN_TEACH_IN) {
 		std::string path(mrrocpp_network_path);
 		path += mp_command.ecp_next_state.mp_2_ecp_next_state_string;
 

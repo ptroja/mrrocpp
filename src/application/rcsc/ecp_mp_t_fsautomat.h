@@ -7,7 +7,6 @@
 #ifndef __ECP_MP_T_FSAUTOMAT_H
 #define __ECP_MP_T_FSAUTOMAT_H
 
-
 namespace mrrocpp {
 namespace ecp_mp {
 namespace task {
@@ -22,9 +21,7 @@ enum POURING_PHASES
 	POURING_PHASE_1, POURING_PHASE_2
 };
 
-
 const std::string ECP_GEN_TFF_NOSE_RUN = "ECP_GEN_TFF_NOSE_RUN";
-const std::string ECP_GEN_TEACH_IN = "ECP_GEN_TEACH_IN";
 const std::string ECP_GEN_TFF_RUBIK_GRAB = "ECP_GEN_TFF_RUBIK_GRAB";
 const std::string ECP_GEN_TFF_RUBIK_FACE_ROTATE = "ECP_GEN_TFF_RUBIK_FACE_ROTATE";
 const std::string ECP_GEN_TFF_GRIPPER_APPROACH = "ECP_GEN_TFF_GRIPPER_APPROACH";
