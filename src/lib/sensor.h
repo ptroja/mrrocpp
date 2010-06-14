@@ -93,21 +93,6 @@ public:
 	}
 };
 
-namespace sensor {
-// Klasa obslugi bledow czujnikow
-class sensor_error
-{
-public:
-	const lib::error_class_t error_class;
-	uint64_t error_no;
-
-	sensor_error(lib::error_class_t err_cl, uint64_t err_no) :
-		error_class(err_cl), error_no(err_no)
-	{
-	}
-};
-} // namespace sensor
-
 } // namespace lib
 } // namespace mrrocpp
 
