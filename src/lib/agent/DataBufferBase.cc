@@ -67,4 +67,5 @@ OrDataCondition DataBufferBase::operator|(OrDataCondition &op) {
 
 DataBufferBase::~DataBufferBase()
 {
+	owner.removeBuffer(*this);
 }

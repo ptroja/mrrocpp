@@ -49,6 +49,16 @@ void Agent::registerBuffer(DataBufferBase & buf)
 	}
 }
 
+void Agent::removeBuffer(DataBufferBase & buf)
+{
+	// lock access to the data buffers
+	boost::unique_lock<boost::mutex> lock(mtx);
+
+	if (buffers.erase(buf.getName()) != 1) {
+		throw std::logic_error("Unable to remove buffer");
+	}
+}
+
 void Agent::listBuffers() const
 {
 	// lock access to the data buffers

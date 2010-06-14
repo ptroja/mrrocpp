@@ -64,6 +64,9 @@ private:
 	//! Add a buffer to the agent
 	void registerBuffer(DataBufferBase & buf);
 
+	//! Remove a buffer to the agent
+	void removeBuffer(DataBufferBase & buf);
+
 protected:
 	//! Datatype of buffers container
 	typedef boost::unordered_map<std::string, DataBufferBase * > buffers_t;
