@@ -34,6 +34,7 @@
 #include "ecp_mp/common/generator/ecp_mp_g_smooth.h"
 #include "ecp_mp/common/generator/ecp_mp_g_teach_in.h"
 #include "ecp_mp/common/generator/ecp_mp_g_force.h"
+#include "ecp_mp/task/ecp_mp_st_gripper_opening.h"
 
 #include "lib/datastr.h"
 
@@ -293,7 +294,7 @@ void fsautomat::main_task_algorithm(void)
 			lib::setValuesInArray(gen_args, mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 			gag->configure(gen_args[0], (unsigned int) gen_args[1]);
 			gag->Move();
-		} else if (mp_2_ecp_next_state_string == ecp_mp::task::RCSC_GRIPPER_OPENING) {
+		} else if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_ST_GRIPPER_OPENING) {
 			double gen_args[2];
 			lib::setValuesInArray(gen_args, mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 			go_st->configure(gen_args[0], (int) gen_args[1]);

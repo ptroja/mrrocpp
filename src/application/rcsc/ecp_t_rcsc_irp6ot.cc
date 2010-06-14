@@ -19,6 +19,7 @@
 #include "ecp_mp/common/generator/ecp_mp_g_smooth.h"
 #include "ecp_mp/common/generator/ecp_mp_g_teach_in.h"
 #include "ecp_mp/common/generator/ecp_mp_g_force.h"
+#include "ecp_mp/task/ecp_mp_st_gripper_opening.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -159,7 +160,7 @@ void rcsc::mp_2_ecp_next_state_string_handler(void)
 		}
 		rfrg->Move();
 
-	} else if (mp_2_ecp_next_state_string == ecp_mp::task::RCSC_GRIPPER_OPENING) {
+	} else if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_ST_GRIPPER_OPENING) {
 		switch ((ecp_mp::task::RCSC_GRIPPER_OP) mp_command.ecp_next_state.mp_2_ecp_next_state_variant)
 		{
 			case ecp_mp::task::RCSC_GO_VAR_1:

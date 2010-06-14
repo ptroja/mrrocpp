@@ -16,7 +16,6 @@ namespace task {
  * Used generators.
  */
 
-const std::string RCSC_GRIPPER_OPENING = "RCSC_GRIPPER_OPENING";
 const std::string ECP_GEN_SPEAK = "ECP_GEN_SPEAK";
 const std::string ECP_GEN_IB_EIH = "ECP_GEN_IB_EIH";
 

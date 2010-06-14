@@ -633,7 +633,7 @@ set_next_ecps_state (ecp_mp::common::generator::ECP_GEN_TFF_RUBIK_GRAB, (int) ec
 run_extended_empty_gen (false, 1, lib::ROBOT_IRP6OT_M.c_str());
 
 // wstepne rozwarcie chwytaka postumenta
-//set_next_ecps_state ((int) ecp_mp::task::RCSC_GRIPPER_OPENING, (int) ecp_mp::task::RCSC_GO_VAR_1, "",  0,1, lib::ROBOT_IRP6P_M.c_str());
+//set_next_ecps_state ((int) ecp_mp::task::ECP_ST_GRIPPER_OPENING, (int) ecp_mp::task::RCSC_GO_VAR_1, "",  0,1, lib::ROBOT_IRP6P_M.c_str());
 set_next_ecps_state (ecp_mp::common::generator::ECP_GEN_SMOOTH, (int) ecp_mp::task::RELATIVE, "src/application/rcsc/trj/gripper_opening.trj", 0,1, lib::ROBOT_IRP6P_M.c_str());
 // uruchomienie generatora empty_gen
 run_extended_empty_gen (false, 1, lib::ROBOT_IRP6P_M.c_str());

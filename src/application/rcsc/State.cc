@@ -12,6 +12,7 @@
 #include "ecp_mp/common/generator/ecp_mp_g_smooth.h"
 #include "ecp_mp/common/generator/ecp_mp_g_teach_in.h"
 #include "ecp_mp/common/generator/ecp_mp_g_force.h"
+#include "ecp_mp/task/ecp_mp_st_gripper_opening.h"
 
 namespace mrrocpp {
 namespace mp {
@@ -152,8 +153,8 @@ void State::setGeneratorType(const std::string & genType)
 		this->generatorType = ecp_mp::common::generator::ECP_GEN_TFF_RUBIK_FACE_ROTATE;
 	else if (genType == "ECP_GEN_TFF_GRIPPER_APPROACH")
 		this->generatorType = ecp_mp::common::generator::ECP_GEN_TFF_GRIPPER_APPROACH;
-	else if (genType == "RCSC_GRIPPER_OPENING")
-		this->generatorType = ecp_mp::task::RCSC_GRIPPER_OPENING;
+	else if (genType == "ECP_ST_GRIPPER_OPENING")
+		this->generatorType = ecp_mp::task::ECP_ST_GRIPPER_OPENING;
 	else if (genType == "ECP_GEN_BIAS_EDP_FORCE")
 		this->generatorType = ecp_mp::common::generator::ECP_GEN_BIAS_EDP_FORCE;
 	else if (genType == "ECP_ST_BIAS_EDP_FORCE")
