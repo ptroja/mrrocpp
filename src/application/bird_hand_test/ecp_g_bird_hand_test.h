@@ -13,29 +13,26 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace bird_hand {
 namespace generator {
 
-class bird_hand: public common::generator::generator {
+class bird_hand : public common::generator::generator
+{
 private:
 	// zadawanie nastaw regulatorow
-	lib::single_thread_port<lib::bird_hand_command>
-			*bird_hand_command_data_port;
+	lib::single_thread_port <lib::bird_hand_command> *bird_hand_command_data_port;
 	lib::bird_hand_command bird_hand_command_structure;
 
 	// zadawanie parametrow konfiguracji
-	lib::single_thread_port<lib::bird_hand_configuration>
-			*bird_hand_configuration_command_data_port;
+	lib::single_thread_port <lib::bird_hand_configuration> *bird_hand_configuration_command_data_port;
 	lib::bird_hand_configuration bird_hand_configuration_command_structure;
 
 	// odbieranie statusu robota
-	lib::single_thread_request_port<lib::bird_hand_status>
-			*bird_hand_status_reply_data_request_port;
+	lib::single_thread_request_port <lib::bird_hand_status> *bird_hand_status_reply_data_request_port;
 	lib::bird_hand_status bird_hand_status_reply_structure;
 
 	// odczytanie parametrow konfiguracji
-	lib::single_thread_request_port<lib::bird_hand_configuration>
-			*bird_hand_configuration_reply_data_request_port;
+	lib::single_thread_request_port <lib::bird_hand_configuration> *bird_hand_configuration_reply_data_request_port;
 	lib::bird_hand_configuration bird_hand_configuration_reply_structure;
 
 public:
@@ -49,7 +46,7 @@ public:
 };
 
 } // namespace generator
-} // namespace common
+} // namespace bird_hand
 } // namespace ecp
 } // namespace mrrocpp
 

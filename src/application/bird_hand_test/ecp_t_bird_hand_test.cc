@@ -14,6 +14,7 @@
 #include "ecp_t_bird_hand_test.h"
 #include "ecp_mp/common/generator/ecp_mp_g_transparent.h"
 #include "ecp_mp/common/generator/ecp_mp_g_sleep.h"
+#include "ecp_mp_g_bird_hand_test.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -29,7 +30,7 @@ bird_hand_test::bird_hand_test(lib::configurator &_config) :
 
 	gt = new common::generator::transparent(*this);
 	g_sleep = new common::generator::sleep(*this);
-	g_bird_hand = new common::generator::bird_hand(*this);
+	g_bird_hand = new generator::bird_hand(*this);
 
 	sr_ecp_msg->message("ECP BIRD HAND TEST loaded");
 }
@@ -45,7 +46,7 @@ void bird_hand_test::mp_2_ecp_next_state_string_handler(void)
 
 		g_sleep->init_time(mp_command.ecp_next_state.mp_2_ecp_next_state_variant);
 		g_sleep->Move();
-	} else if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_BIRD_HAND) {
+	} else if (mp_2_ecp_next_state_string == ecp_mp::bird_hand::generator::ECP_GEN_BIRD_HAND_TEST) {
 
 		sr_ecp_msg->message("ECP_GEN_BIRD_HAND");
 
