@@ -58,7 +58,7 @@ protected:
 
 	/*!
 	 * \brief Info if the force sensor test mode is active.
-	 *
+	 * \todo This should have a 'const' qualifier
 	 * It is taken from configuration data.
 	 */
 	bool test_mode;

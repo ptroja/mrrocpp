@@ -1,5 +1,8 @@
-#include <boost/thread/xtime.hpp>
 #include <iostream>
+
+#include <boost/thread/xtime.hpp>
+#include <boost/exception/diagnostic_information.hpp>
+
 
 #include "edp/common/edp.h"
 #include "edp/common/edp_e_manip.h"
@@ -14,30 +17,23 @@ namespace sensor {
 //!< watek do komunikacji ze sprzetem
 void force::operator()(void)
 {
-	// Set thread parameters
-	lib::set_thread_priority(pthread_self(), MAX_PRIORITY - 1);
-	lib::set_thread_name("force sensor");
-
-	// Do not touch the hardware when running in test mode
-	if(!test_mode) {
-		connect_to_hardware();
-	}
-
-	// Notify the caller, that the thread is ready
-	thread_started.command();
-
 	try {
+		// Set thread parameters
+		lib::set_thread_priority(pthread_self(), MAX_PRIORITY - 1);
+		lib::set_thread_name("force sensor");
+
+		// Do not touch the hardware when running in test mode
+		if(!test_mode) {
+			connect_to_hardware();
+		}
+
+		// Notify the caller, that the thread is ready
+		thread_started.command();
+
 		configure_sensor();
-	}
-	// TODO: transport exception to main thread
 
-	catch (...) {
-		std::cerr << "unidentified error force thread w EDP" << std::endl;
-	}
-
-	while (!TERMINATE) //!< for (;;)
-	{
-		try {
+		while (!TERMINATE) //!< for (;;)
+		{
 			if (new_edp_command) {
 				boost::mutex::scoped_lock lock(mtx);
 				// TODO: this should be handled with boost::bind functor parameter
@@ -61,16 +57,27 @@ void force::operator()(void)
 
 					get_reading();
 				} else {
-					initiate_reading();
+					force::wait_for_event();
 
-					get_reading();
+					force::initiate_reading();
+
+					force::get_reading();
 				}
 			}
 		}
-		// TODO: transport exception to main thread
-		catch (...) {
-			std::cerr << "unidentified error in EDP force thread" << std::endl;
-		}
+	}
+	// TODO: transport exception to main thread
+	catch (const boost::exception & e ) {
+		std::cerr << "Exception in EDP force thread:" << std::endl;
+		std::cerr << diagnostic_information(e);
+	}
+
+	catch (const std::exception & e) {
+		std::cerr << "Exception in EDP force thread:" << e.what() << std::endl;
+	}
+
+	catch (...) {
+		std::cerr << "Unidentified exception in EDP force thread:" << std::endl;
 	}
 }
 
@@ -121,7 +128,9 @@ void force::set_command_execution_finish() // podniesienie semafora
 
 void force::get_reading()
 {
-	lib::Ft_vector zero_ft;
+	const lib::Ft_vector zero_ft;
+
+	//boost::this_thread::sleep(boost::posix_time::millisec(20));
 
 	master.force_msr_upload(zero_ft);
 
