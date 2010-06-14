@@ -14,7 +14,6 @@ namespace mrrocpp {
 namespace ecp_mp {
 namespace task {
 
-const std::string ECP_WEIGHT_MEASURE_GENERATOR = "ECP_WEIGHT_MEASURE_GENERATOR";
 const std::string MULTIPLAYER_GRIPPER_OPENING = "MULTIPLAYER_GRIPPER_OPENING";
 const std::string ECP_GEN_TAKE_FROM_ROVER = "ECP_GEN_TAKE_FROM_ROVER";
 const std::string ECP_GEN_GRAB_FROM_ROVER = "ECP_GEN_GRAB_FROM_ROVER";

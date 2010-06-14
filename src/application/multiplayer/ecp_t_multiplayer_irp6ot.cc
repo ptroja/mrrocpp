@@ -12,6 +12,7 @@
 #include "ecp/common/task/ecp_task.h"
 #include "ecp_mp/common/generator/ecp_mp_g_transparent.h"
 #include "ecp_mp/common/generator/ecp_mp_g_smooth.h"
+#include "ecp_mp/common/generator/ecp_mp_g_force.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -47,7 +48,7 @@ multiplayer::multiplayer(lib::configurator &_config) :
 void multiplayer::mp_2_ecp_next_state_string_handler(void)
 {
 
-	if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_WEIGHT_MEASURE_GENERATOR) {
+	if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_WEIGHT_MEASURE_GENERATOR) {
 
 		wmg->Move();
 

@@ -21,6 +21,7 @@
 #include "lib/robot_consts/irp6p_m_const.h"
 #include "ecp_mp/task/ecp_mp_st_bias_edp_force.h"
 #include "ecp_mp/common/generator/ecp_mp_g_smooth.h"
+#include "ecp_mp/common/generator/ecp_mp_g_force.h"
 
 namespace mrrocpp {
 namespace mp {
@@ -175,7 +176,7 @@ void multiplayer::main_task_algorithm(void)
 	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, lib::ROBOT_IRP6OT_M.c_str(), lib::ROBOT_IRP6OT_M.c_str());
 
 	// FAZA ODBIERANIA KOSTKI
-	set_next_ecps_state(ecp_mp::task::ECP_WEIGHT_MEASURE_GENERATOR, 0, NULL, 0, 1, lib::ROBOT_IRP6OT_M.c_str());
+	set_next_ecps_state(ecp_mp::common::generator::ECP_WEIGHT_MEASURE_GENERATOR, 0, NULL, 0, 1, lib::ROBOT_IRP6OT_M.c_str());
 	set_next_ecps_state(ecp_mp::task::ECP_GEN_FESTIVAL, ecp::festival::generator::generator::POLISH_VOICE, "prosze~ odbierz kostke~", 0, 1, lib::ROBOT_FESTIVAL.c_str());
 	// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie generatorow ECP
 	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(2, 2, lib::ROBOT_IRP6OT_M.c_str(), lib::ROBOT_FESTIVAL.c_str(), lib::ROBOT_IRP6OT_M.c_str(), lib::ROBOT_FESTIVAL.c_str());

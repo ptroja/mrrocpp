@@ -19,6 +19,7 @@
 #include "ecp_mp/common/generator/ecp_mp_g_transparent.h"
 #include "ecp_mp/common/generator/ecp_mp_g_smooth.h"
 #include "ecp_mp/common/generator/ecp_mp_g_teach_in.h"
+#include "ecp_mp/common/generator/ecp_mp_g_force.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -65,7 +66,7 @@ void rcsc::mp_2_ecp_next_state_string_handler(void)
 		gt->throw_kinematics_exceptions = (bool) mp_command.ecp_next_state.mp_2_ecp_next_state_variant;
 		gt->Move();
 
-	} else if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_TFF_RUBIK_GRAB) {
+	} else if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_GEN_TFF_RUBIK_GRAB) {
 		switch ((ecp_mp::task::RCSC_RUBIK_GRAB_PHASES) mp_command.ecp_next_state.mp_2_ecp_next_state_variant)
 		{
 			case ecp_mp::task::RCSC_RG_FACE_TURN_PHASE_0:
@@ -96,11 +97,11 @@ void rcsc::mp_2_ecp_next_state_string_handler(void)
 
 	}
 
-	else if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_TFF_GRIPPER_APPROACH) {
+	else if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_GEN_TFF_GRIPPER_APPROACH) {
 		gag->configure(0.005, 150);
 		gag->Move();
 
-	} else if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_TFF_RUBIK_FACE_ROTATE) {
+	} else if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_GEN_TFF_RUBIK_FACE_ROTATE) {
 		switch ((ecp_mp::task::RCSC_TURN_ANGLES) mp_command.ecp_next_state.mp_2_ecp_next_state_variant)
 		{
 			case ecp_mp::task::RCSC_CCL_90:
