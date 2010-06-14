@@ -294,7 +294,6 @@ public:
 	 */
 	short number_of_servos;
 
-
 	/*!
 	 * \brief pure virtual method of move arm to be implemented in specific robot.
 	 *
