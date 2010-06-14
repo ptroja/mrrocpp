@@ -12,6 +12,7 @@
 #include "ecp_mp/common/generator/ecp_mp_g_smooth.h"
 #include "ecp_mp/common/generator/ecp_mp_g_teach_in.h"
 #include "ecp_mp/common/generator/ecp_mp_g_force.h"
+#include "ecp_mp/speaker/generator/ecp_mp_g_speak.h"
 #include "ecp_mp/task/ecp_mp_st_gripper_opening.h"
 
 namespace mrrocpp {
@@ -164,7 +165,7 @@ void State::setGeneratorType(const std::string & genType)
 	else if (genType == "ECP_TOOL_CHANGE_GENERATOR")
 		this->generatorType = ecp_mp::task::ECP_TOOL_CHANGE_GENERATOR;
 	else
-		this->generatorType = ecp_mp::task::ECP_GEN_SPEAK;
+		this->generatorType = ecp_mp::speaker::generator::ECP_GEN_SPEAK;
 	// TODO: unknown generatorType handler should throw an exception
 }
 

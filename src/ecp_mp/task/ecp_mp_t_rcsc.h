@@ -13,12 +13,6 @@ namespace ecp_mp {
 namespace task {
 
 /**
- * Used generators.
- */
-
-const std::string ECP_GEN_SPEAK = "ECP_GEN_SPEAK";
-
-/**
  *
  */
 enum RCSC_GRIPPER_OP

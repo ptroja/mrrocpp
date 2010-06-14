@@ -22,7 +22,7 @@ enum POURING_PHASES
 };
 
 
-const std::string ECP_GEN_SPEAK = "ECP_GEN_SPEAK";
+
 const std::string ECP_TOOL_CHANGE_GENERATOR = "ECP_TOOL_CHANGE_GENERATOR";
 
 } // namespace task
