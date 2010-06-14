@@ -16,9 +16,6 @@ namespace task {
  * Used generators.
  */
 
-
-
-const std::string ECP_GEN_SLEEP = "ECP_GEN_SLEEP";
 const std::string ECP_GEN_BIRD_HAND = "ECP_GEN_BIRD_HAND";
 
 } // namespace task
