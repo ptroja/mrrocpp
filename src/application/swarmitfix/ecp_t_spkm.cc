@@ -16,6 +16,8 @@
 #include "ecp_mp/common/generator/ecp_mp_g_smooth.h"
 #include "ecp_mp/common/generator/ecp_mp_g_sleep.h"
 
+#include "ecp_mp_g_epos.h"
+
 namespace mrrocpp {
 namespace ecp {
 namespace spkm {
@@ -66,7 +68,7 @@ void swarmitfix::mp_2_ecp_next_state_string_handler(void)
 
 		g_sleep->init_time(mp_command.ecp_next_state.mp_2_ecp_next_state_variant);
 		g_sleep->Move();
-	} else if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_EPOS) {
+	} else if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_GEN_EPOS) {
 		sr_ecp_msg->message("ECP_GEN_EPOS");
 
 		g_epos->Move();

@@ -23,6 +23,7 @@
 #include "lib/robot_consts/spkm_const.h"
 #include "lib/robot_consts/shead_const.h"
 #include "ecp_mp/common/generator/ecp_mp_g_transparent.h"
+#include "ecp_mp_g_epos.h"
 
 namespace mrrocpp {
 namespace mp {
@@ -95,7 +96,7 @@ void swarmitfix::main_task_algorithm(void)
 
 	memcpy(tmp_string, &epos_params, sizeof(epos_params));
 
-	set_next_ecps_state(ecp_mp::task::ECP_GEN_EPOS, (int) 5, tmp_string, sizeof(epos_params), 1, lib::ROBOT_SPKM.c_str());
+	set_next_ecps_state(ecp_mp::common::generator::ECP_GEN_EPOS, (int) 5, tmp_string, sizeof(epos_params), 1, lib::ROBOT_SPKM.c_str());
 	sr_ecp_msg->message("5");
 	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, lib::ROBOT_SPKM.c_str(), lib::ROBOT_SPKM.c_str());
 

@@ -16,6 +16,8 @@
 #include "ecp_mp/common/generator/ecp_mp_g_transparent.h"
 #include "ecp_mp/common/generator/ecp_mp_g_smooth.h"
 #include "ecp_mp/common/generator/ecp_mp_g_sleep.h"
+#include "ecp_mp_g_smb.h"
+#include "ecp_mp_g_epos.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -69,15 +71,15 @@ void swarmitfix::mp_2_ecp_next_state_string_handler(void)
 	} else if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_GEN_SLEEP) {
 		g_sleep->init_time(mp_command.ecp_next_state.mp_2_ecp_next_state_variant);
 		g_sleep->Move();
-	} else if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_EPOS) {
+	} else if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_GEN_EPOS) {
 		g_epos->Move();
-	} else if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_PIN_LOCK) {
+	} else if (mp_2_ecp_next_state_string == ecp_mp::smb::generator::ECP_GEN_PIN_LOCK) {
 		g_pin_lock->Move();
-	} else if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_PIN_UNLOCK) {
+	} else if (mp_2_ecp_next_state_string == ecp_mp::smb::generator::ECP_GEN_PIN_UNLOCK) {
 		g_pin_unlock->Move();
-	} else if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_PIN_RISE) {
+	} else if (mp_2_ecp_next_state_string == ecp_mp::smb::generator::ECP_GEN_PIN_RISE) {
 		g_pin_rise->Move();
-	} else if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_PIN_LOWER) {
+	} else if (mp_2_ecp_next_state_string == ecp_mp::smb::generator::ECP_GEN_PIN_LOWER) {
 		g_pin_lower->Move();
 	}
 

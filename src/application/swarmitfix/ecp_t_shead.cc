@@ -15,7 +15,7 @@
 #include "ecp_mp/common/generator/ecp_mp_g_transparent.h"
 #include "ecp_mp/common/generator/ecp_mp_g_smooth.h"
 #include "ecp_mp/common/generator/ecp_mp_g_sleep.h"
-
+#include "ecp_mp_g_shead.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -67,13 +67,13 @@ void swarmitfix::mp_2_ecp_next_state_string_handler(void)
 	} else if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_GEN_SLEEP) {
 		g_sleep->init_time(mp_command.ecp_next_state.mp_2_ecp_next_state_variant);
 		g_sleep->Move();
-	} else if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_HEAD_SOLDIFY) {
+	} else if (mp_2_ecp_next_state_string == ecp_mp::shead::generator::ECP_GEN_HEAD_SOLDIFY) {
 		g_head_soldify->Move();
-	} else if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_HEAD_DESOLDIFY) {
+	} else if (mp_2_ecp_next_state_string == ecp_mp::shead::generator::ECP_GEN_HEAD_DESOLDIFY) {
 		g_head_desoldify->Move();
-	} else if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_VACUUM_ON) {
+	} else if (mp_2_ecp_next_state_string == ecp_mp::shead::generator::ECP_GEN_VACUUM_ON) {
 		g_head_vacuum_on->Move();
-	} else if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_VACUUM_OFF) {
+	} else if (mp_2_ecp_next_state_string == ecp_mp::shead::generator::ECP_GEN_VACUUM_OFF) {
 		g_head_vacuum_off->Move();
 	}
 
