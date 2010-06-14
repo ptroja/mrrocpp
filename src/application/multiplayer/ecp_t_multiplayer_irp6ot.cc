@@ -11,6 +11,7 @@
 #include "ecp/common/task/ecp_st_bias_edp_force.h"
 #include "ecp/common/task/ecp_task.h"
 #include "ecp_mp/common/generator/ecp_mp_g_transparent.h"
+#include "ecp_mp/common/generator/ecp_mp_g_smooth.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -66,7 +67,7 @@ void multiplayer::mp_2_ecp_next_state_string_handler(void)
 			default:
 				break;
 		}
-	} else if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_SMOOTH) {
+	} else if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_GEN_SMOOTH) {
 		std::string path(mrrocpp_network_path);
 		path += mp_command.ecp_next_state.mp_2_ecp_next_state_string;
 		sg->load_file_with_path(path.c_str());

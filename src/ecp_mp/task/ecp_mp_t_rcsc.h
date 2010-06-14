@@ -17,7 +17,6 @@ namespace task {
  */
 
 const std::string ECP_GEN_TEACH_IN = "ECP_GEN_TEACH_IN";
-const std::string ECP_GEN_SMOOTH = "ECP_GEN_SMOOTH";
 const std::string ECP_GEN_TFF_RUBIK_GRAB = "ECP_GEN_TFF_RUBIK_GRAB";
 const std::string ECP_GEN_TFF_RUBIK_FACE_ROTATE = "ECP_GEN_TFF_RUBIK_FACE_ROTATE";
 const std::string ECP_GEN_TFF_GRIPPER_APPROACH = "ECP_GEN_TFF_GRIPPER_APPROACH";

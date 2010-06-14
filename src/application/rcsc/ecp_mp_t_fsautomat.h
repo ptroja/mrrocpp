@@ -6,9 +6,7 @@
 
 #ifndef __ECP_MP_T_FSAUTOMAT_H
 #define __ECP_MP_T_FSAUTOMAT_H
-/*enum POURING_ECP_STATES {ECP_GEN_TRANSPARENT = 0, ECP_GEN_POURING,
- ECP_END_POURING, ECP_GEN_SMOOTH, GRIP, LET_GO, WEIGHT
- };*/
+
 
 namespace mrrocpp {
 namespace ecp_mp {
@@ -27,7 +25,6 @@ enum POURING_PHASES
 
 const std::string ECP_GEN_TFF_NOSE_RUN = "ECP_GEN_TFF_NOSE_RUN";
 const std::string ECP_GEN_TEACH_IN = "ECP_GEN_TEACH_IN";
-const std::string ECP_GEN_SMOOTH = "ECP_GEN_SMOOTH";
 const std::string ECP_GEN_TFF_RUBIK_GRAB = "ECP_GEN_TFF_RUBIK_GRAB";
 const std::string ECP_GEN_TFF_RUBIK_FACE_ROTATE = "ECP_GEN_TFF_RUBIK_FACE_ROTATE";
 const std::string ECP_GEN_TFF_GRIPPER_APPROACH = "ECP_GEN_TFF_GRIPPER_APPROACH";

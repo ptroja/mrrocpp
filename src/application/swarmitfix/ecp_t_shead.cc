@@ -13,6 +13,7 @@
 #include "ecp_g_shead.h"
 #include "ecp_t_shead.h"
 #include "ecp_mp/common/generator/ecp_mp_g_transparent.h"
+#include "ecp_mp/common/generator/ecp_mp_g_smooth.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -43,7 +44,7 @@ void swarmitfix::mp_2_ecp_next_state_string_handler(void)
 	if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_GEN_TRANSPARENT) {
 		gt->throw_kinematics_exceptions = (bool) mp_command.ecp_next_state.mp_2_ecp_next_state_variant;
 		gt->Move();
-	} else if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_SMOOTH) {
+	} else if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_GEN_SMOOTH) {
 		std::string path(mrrocpp_network_path);
 		path += mp_command.ecp_next_state.mp_2_ecp_next_state_string;
 

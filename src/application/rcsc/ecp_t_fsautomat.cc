@@ -31,6 +31,7 @@
 #include "ecp/common/task/ecp_st_bias_edp_force.h"
 #include "ecp/common/task/ecp_st_tff_nose_run.h"
 #include "ecp_mp/common/generator/ecp_mp_g_transparent.h"
+#include "ecp_mp/common/generator/ecp_mp_g_smooth.h"
 
 #include "lib/datastr.h"
 
@@ -242,7 +243,7 @@ void fsautomat::main_task_algorithm(void)
 				tig->save_file(lib::ECP_MOTOR);
 			//tig->Move();
 
-		} else if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_SMOOTH) {
+		} else if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_GEN_SMOOTH) {
 
 			if (trjConf) {
 

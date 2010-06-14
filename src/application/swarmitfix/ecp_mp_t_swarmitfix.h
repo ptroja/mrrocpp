@@ -17,7 +17,7 @@ namespace task {
  */
 
 
-const std::string ECP_GEN_SMOOTH = "ECP_GEN_SMOOTH";
+
 const std::string ECP_GEN_SLEEP = "ECP_GEN_SLEEP";
 const std::string ECP_GEN_EPOS = "ECP_GEN_EPOS";
 const std::string ECP_GEN_PIN_LOCK = "ECP_GEN_PIN_LOCK";

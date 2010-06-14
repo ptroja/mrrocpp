@@ -9,6 +9,7 @@
 #include "ecp_mp/task/ecp_mp_st_tff_nose_run.h"
 #include "ecp_mp/common/generator/ecp_mp_g_bias_edp_force.h"
 #include "ecp_mp/common/generator/ecp_mp_g_transparent.h"
+#include "ecp_mp/common/generator/ecp_mp_g_smooth.h"
 
 namespace mrrocpp {
 namespace mp {
@@ -142,7 +143,7 @@ void State::setGeneratorType(const std::string & genType)
 	else if (genType == "ECP_GEN_TEACH_IN")
 		this->generatorType = ecp_mp::task::ECP_GEN_TEACH_IN;
 	else if (genType == "ECP_GEN_SMOOTH")
-		this->generatorType = ecp_mp::task::ECP_GEN_SMOOTH;
+		this->generatorType = ecp_mp::common::generator::ECP_GEN_SMOOTH;
 	else if (genType == "ECP_GEN_TFF_RUBIK_GRAB")
 		this->generatorType = ecp_mp::task::ECP_GEN_TFF_RUBIK_GRAB;
 	else if (genType == "ECP_GEN_TFF_RUBIK_FACE_ROTATE")
