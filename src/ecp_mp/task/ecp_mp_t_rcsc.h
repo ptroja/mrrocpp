@@ -17,7 +17,6 @@ namespace task {
  */
 
 const std::string ECP_GEN_SPEAK = "ECP_GEN_SPEAK";
-const std::string ECP_GEN_IB_EIH = "ECP_GEN_IB_EIH";
 
 /**
  *

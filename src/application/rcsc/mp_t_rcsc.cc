@@ -21,6 +21,7 @@
 #include "ecp_mp/task/ecp_mp_st_tff_nose_run.h"
 #include "ecp_mp/common/generator/ecp_mp_g_smooth.h"
 #include "ecp_mp/common/generator/ecp_mp_g_force.h"
+#include "application/servovision/ecp_mp_g_simple_visual_servo_manager.h"
 
 #include <boost/foreach.hpp>
 
@@ -791,7 +792,7 @@ run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_mes
 		lib::ROBOT_FESTIVAL.c_str(), lib::ROBOT_IRP6OT_M.c_str());
 
 //generator sledzacy kostke
-set_next_ecps_state (ecp_mp::task::ECP_GEN_IB_EIH, (int) 1, "", 0,1, lib::ROBOT_IRP6OT_M.c_str());
+set_next_ecps_state (ecp_mp::common::generator::ECP_GEN_IB_EIH, (int) 1, "", 0,1, lib::ROBOT_IRP6OT_M.c_str());
 
 run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 (3, 1, lib::ROBOT_IRP6OT_M.c_str(), lib::ROBOT_IRP6P_M.c_str(), lib::ROBOT_FESTIVAL.c_str(),
