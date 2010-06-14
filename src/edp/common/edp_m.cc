@@ -25,6 +25,8 @@
 #include "lib/mis_fun.h"
 #include "edp/common/edp_effector.h"
 
+#include <boost/exception/diagnostic_information.hpp>
+
 namespace mrrocpp {
 namespace edp {
 namespace common {
@@ -128,6 +130,15 @@ int main(int argc, char *argv[]) {
 		 //   printf("\a"); // Sygnal dzwiekowy
 		 }
 		 */
+	}
+
+	catch (const boost::exception & e ) {
+		std::cerr << "Exception in EDP:" << std::endl;
+		std::cerr << diagnostic_information(e);
+	}
+
+	catch (const std::exception & e) {
+		std::cerr << "Exception in EDP:" << e.what() << std::endl;
 	}
 
 	catch (...) { // Dla zewnetrznej petli try
