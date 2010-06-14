@@ -6,3 +6,5 @@ add_library(edp
 	trans_t.cc manip_trans_t.cc vis_server.cc reader.cc
 	hi_rydz.cc
 )
+
+target_link_libraries(edp agent)

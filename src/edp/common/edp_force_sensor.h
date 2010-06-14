@@ -15,7 +15,10 @@
 #include "lib/mrmath/ForceTrans.h"
 #include "lib/sensor.h"				// klasa bazowa sensor
 #include "edp/common/edp.h"				// klasa bazowa sensor
-#include "lib/mis_fun.h"
+#include "lib/condition_synchroniser.h"
+
+#include "lib/agent/RemoteAgent.h"
+#include "lib/agent/RemoteBuffer.h"
 
 namespace mrrocpp {
 namespace edp {
@@ -42,10 +45,17 @@ typedef struct _force_data
 /********** klasa czujnikow po stronie EDP **************/
 class force: public lib::sensor_interface
 {
+private:
+	//! Coordinator interested in direct force readings
+	RemoteAgent * coordinator;
+
+	//! Coordinator buffer for force readings
+	RemoteBuffer<lib::Ft_vector> * remote_buffer;
+
 protected:
 	bool is_reading_ready; // czy jakikolwiek odczyt jest gotowy?
 
-	lib::ForceTrans *gravity_transformation; // klasa likwidujaca wplyw grawitacji na czujnik
+	boost::shared_ptr<lib::ForceTrans> gravity_transformation; // klasa likwidujaca wplyw grawitacji na czujnik
 
 	common::manip_effector &master;
 
@@ -63,7 +73,7 @@ protected:
 	 */
 	bool test_mode;
 
-	lib::sr_vsp *sr_msg; //!< komunikacja z SR
+	boost::shared_ptr<lib::sr_vsp> sr_msg; //!< komunikacja z SR
 
 	/**
 	 * Derived classes are supposed to call this method in get_reading.

@@ -60,14 +60,18 @@ void ball::main_task_algorithm(void)
 	set_next_ecps_state (ecp_mp::task::ECP_GEN_SMOOTH, (int) ecp_mp::task::ABSOLUTE, "src/application/ball/irp6p_init.trj", 0, 1, lib::ROBOT_IRP6P_M.c_str());
 	fprintf(stderr, "snes P done\n");
 
-	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(2, 2, lib::ROBOT_IRP6OT_M.c_str(), lib::ROBOT_IRP6P_M.c_str(), lib::ROBOT_IRP6OT_M.c_str(), lib::ROBOT_IRP6P_M.c_str());
-
-	fprintf(stderr, "wait DONE\n");
-	return;
+	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(
+			2, 2,
+			lib::ROBOT_IRP6OT_M.c_str(), lib::ROBOT_IRP6P_M.c_str(),
+			lib::ROBOT_IRP6OT_M.c_str(), lib::ROBOT_IRP6P_M.c_str()
+	);
 
    	sr_ecp_msg->message("New series");
    	// wlaczenie generatora do konfiguracji czujnika w EDP w obydwu robotach
    	configure_edp_force_sensor(true, true);
+
+	fprintf(stderr, "wait DONE\n");
+	return;
 
 	// wlaczenie generatora transparentnego w obu robotach
 	set_next_ecps_state(ecp_mp::task::ECP_GEN_TRANSPARENT, 0, "", 0, 1, lib::ROBOT_IRP6OT_M.c_str());

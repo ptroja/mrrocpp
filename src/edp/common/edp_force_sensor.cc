@@ -96,17 +96,19 @@ void force::operator()(void)
 }
 
 force::force(common::manip_effector &_master) :
+			coordinator(NULL), remote_buffer(NULL),
 			is_reading_ready(false), //!< nie ma zadnego gotowego odczytu
-			gravity_transformation(NULL), master(_master), test_mode(true), TERMINATE(false),
+			master(_master), test_mode(true), TERMINATE(false),
 			is_sensor_configured(false), //!< czujnik niezainicjowany
 			new_edp_command(false)
 {
 	//! Lokalizacja procesu wywietlania komunikatow SR
-	sr_msg
-			= new lib::sr_vsp(lib::EDP,
+	sr_msg = boost::shared_ptr<lib::sr_vsp> (
+				new lib::sr_vsp(lib::EDP,
 					master.config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "edp_vsp_attach_point"),
 					master.config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", UI_SECTION),
-					true);
+					true)
+	);
 
 	if (master.config.exists(FORCE_SENSOR_TEST_MODE)) {
 		test_mode = master.config.value <int> (FORCE_SENSOR_TEST_MODE);
@@ -119,9 +121,13 @@ force::force(common::manip_effector &_master) :
 
 force::~force()
 {
-	if (gravity_transformation)
-		delete gravity_transformation;
-	delete sr_msg;
+	if(remote_buffer) {
+		delete remote_buffer;
+	}
+
+	if(coordinator) {
+		delete coordinator;
+	}
 }
 
 void force::set_force_tool(void)
@@ -153,6 +159,17 @@ void force::get_reading()
 		boost::mutex::scoped_lock lock(master.rb_obj->reader_mutex);
 
 		master.rb_obj->step_data.force = zero_ft;
+	}
+
+	try {
+		if(coordinator && remote_buffer) {
+			remote_buffer->Set(zero_ft);
+		}
+	}
+	catch (mrrocpp::lib::exception::System_error & e) {
+		sr_msg->message("Unable to send reading to coordinator agent");
+		coordinator = NULL;
+		remote_buffer = NULL;
 	}
 }
 
@@ -191,12 +208,23 @@ void force::configure_sensor()
 		free(toDel);
 
 		lib::K_vector pointofgravity(point);
-		gravity_transformation = new lib::ForceTrans(frame, sensor_frame, weight, pointofgravity);
+		gravity_transformation = boost::shared_ptr<lib::ForceTrans> (new lib::ForceTrans(frame, sensor_frame, weight, pointofgravity));
 	} else {
 		gravity_transformation->synchro(frame);
 	}
 
 	is_sensor_configured = true;
+
+	try {
+		coordinator = new RemoteAgent(MP_SECTION, 0);
+
+		remote_buffer = new RemoteBuffer<lib::Ft_vector>(*coordinator, master.robot_name + ":ForceTorque");
+	}
+	catch (mrrocpp::lib::exception::System_error & e) {
+		sr_msg->message("Unable to connect to coordinator agent");
+		coordinator = NULL;
+		remote_buffer = NULL;
+	}
 
 	sr_msg->message("EDP Sensor configured");
 }
@@ -224,6 +252,17 @@ void force::set_current_ft_reading(const lib::Ft_vector& current_ft)
 		boost::mutex::scoped_lock lock(master.rb_obj->reader_mutex);
 
 		master.rb_obj->step_data.force = current_ft;
+	}
+
+	try {
+		if(coordinator && remote_buffer) {
+			remote_buffer->Set(output);
+		}
+	}
+	catch (mrrocpp::lib::exception::System_error & e) {
+		sr_msg->message("Unable to send reading to coordinator agent");
+		coordinator = NULL;
+		remote_buffer = NULL;
 	}
 
 	is_reading_ready = true;
