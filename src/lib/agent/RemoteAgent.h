@@ -36,8 +36,10 @@ public:
 	/**
 	 * Constructor
 	 * @param _name name of the remote agent
+	 * @param retry number of retries to connect
+	 * @param sleep_ms interval between trying to connect in milliseconds
 	 */
-	RemoteAgent(const std::string & _name);
+	RemoteAgent(const std::string & _name, int retry = 50, int sleep_ms = 100);
 
 	/**
 	 * Destructor

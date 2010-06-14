@@ -17,11 +17,9 @@
 
 #include "RemoteAgent.h"
 
-RemoteAgent::RemoteAgent(const std::string & _name) :
+RemoteAgent::RemoteAgent(const std::string & _name, int retry, int sleep_ms) :
 	AgentBase(_name)
 {
-	// number of retries to connect
-	int retry = 50;
 	do {
 #if defined(USE_MESSIP_SRR)
 		channel = messip_channel_connect(NULL, getName().c_str(), MESSIP_NOTIMEOUT);
@@ -42,7 +40,7 @@ RemoteAgent::RemoteAgent(const std::string & _name) :
 				printf("."); fflush(stdout);
 
 				// wait some time for process startup
-				boost::this_thread::sleep(boost::posix_time::milliseconds(100));
+				boost::this_thread::sleep(boost::posix_time::milliseconds(sleep_ms));
 			}
 		} else {
 			// channel was successfully opened
