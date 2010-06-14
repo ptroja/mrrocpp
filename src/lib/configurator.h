@@ -59,8 +59,8 @@ private:
 	// Zwraca wartosc (char*) dla sciezki do pliku konfiguracyjnego.
 	std::string return_common_ini_file_path() const;
 
-	//! Property tree of configuration file
-	boost::property_tree::ptree file_pt;
+	//! Property tree of configuration files
+	boost::property_tree::ptree common_file_pt, file_pt;
 
 	/**
 	 * Read property tree from configuration file
@@ -122,7 +122,16 @@ public:
 		pt_path += ".";
 		pt_path += _key;
 
-		return file_pt.get<Type>(pt_path);
+		try {
+			return file_pt.get<Type>(pt_path);
+		} catch (boost::property_tree::ptree_error & e) {
+			try {
+				return common_file_pt.get<Type>(pt_path);
+			} catch (boost::property_tree::ptree_error & e) {
+				throw;
+			}
+		}
+
 #endif
 	}
 

@@ -78,8 +78,8 @@ configurator::configurator(const std::string & _node, const std::string & _dir, 
 	file_location = return_ini_file_path();
 	common_file_location = return_common_ini_file_path();
 
-	read_property_tree_from_file(file_pt, common_file_location);
 	read_property_tree_from_file(file_pt, file_location);
+	read_property_tree_from_file(common_file_pt, common_file_location);
 #endif /* USE_MESSIP_SRR */
 }
 
@@ -118,9 +118,8 @@ void configurator::change_ini_file(const std::string & _ini_file) {
 	file_location = return_ini_file_path();
 	common_file_location = return_common_ini_file_path();
 
-	file_pt.clear();
 	read_property_tree_from_file(file_pt, file_location);
-	read_property_tree_from_file(file_pt, common_file_location);
+	read_property_tree_from_file(common_file_pt, common_file_location);
 #endif /* USE_MESSIP_SRR */
 }
 
@@ -278,8 +277,13 @@ std::string configurator::return_string_value(const char* _key, const char*__sec
 
 	try {
 		return file_pt.get<std::string>(pt_path);
-	} catch (boost::property_tree::ptree_bad_path & e) {
-		return common_file_pt.get<std::string>(pt_path);
+	} catch (boost::property_tree::ptree_error & e) {
+		try {
+			return common_file_pt.get<std::string>(pt_path);
+		} catch (boost::property_tree::ptree_error & e) {
+			std::cerr << e.what() << std::endl;
+			throw;
+		}
 	}
 #endif /* USE_MESSIP_SRR */
 }
