@@ -8,15 +8,6 @@
 #ifndef __UI_ECP_H
 #define __UI_ECP_H
 
-#include <boost/function.hpp>
-#include <boost/thread/condition_variable.hpp>
-#include <boost/thread/mutex.hpp>
-#include <boost/circular_buffer.hpp>
-#include <stdexcept>
-#include <iostream>
-#include <string>
-#include <list>
-
 #include "lib/com_buf.h"
 #include "lib/srlib.h"
 #include "lib/mis_fun.h"
@@ -25,9 +16,9 @@
 
 /**************************** ui_ecp_buffer *****************************/
 
-class ui_ecp_buffer  : public boost::noncopyable{
+class ui_ecp_buffer : public boost::noncopyable
+{
 private:
-
 	Ui& ui;
 	boost::thread thread_id;
 
@@ -42,7 +33,6 @@ public:
 	lib::condition_synchroniser synchroniser;
 	ui_ecp_buffer(Ui& _ui);
 	~ui_ecp_buffer();
-
 };
 
 #endif
