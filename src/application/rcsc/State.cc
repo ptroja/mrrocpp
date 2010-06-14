@@ -163,7 +163,7 @@ void State::setGeneratorType(const std::string & genType)
 	else if (genType == "ECP_WEIGHT_MEASURE_GENERATOR")
 		this->generatorType = ecp_mp::common::generator::ECP_WEIGHT_MEASURE_GENERATOR;
 	else if (genType == "ECP_TOOL_CHANGE_GENERATOR")
-		this->generatorType = ecp_mp::task::ECP_TOOL_CHANGE_GENERATOR;
+		this->generatorType = ecp_mp::common::generator::ECP_TOOL_CHANGE_GENERATOR;
 	else
 		this->generatorType = ecp_mp::speaker::generator::ECP_GEN_SPEAK;
 	// TODO: unknown generatorType handler should throw an exception

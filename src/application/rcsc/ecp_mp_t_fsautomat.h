@@ -21,10 +21,6 @@ enum POURING_PHASES
 	POURING_PHASE_1, POURING_PHASE_2
 };
 
-
-
-const std::string ECP_TOOL_CHANGE_GENERATOR = "ECP_TOOL_CHANGE_GENERATOR";
-
 } // namespace task
 } // namespace ecp_mp
 } // namespace mrrocpp

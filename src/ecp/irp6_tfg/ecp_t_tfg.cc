@@ -11,6 +11,8 @@
 #include "ecp/irp6p_tfg/ecp_r_irp6p_tfg.h"
 
 #include "ecp/irp6_tfg/ecp_t_tfg.h"
+#include "ecp_mp/common/generator/ecp_mp_g_tfg.h"
+
 
 namespace mrrocpp {
 namespace ecp {
@@ -39,7 +41,7 @@ void tfg::mp_2_ecp_next_state_string_handler(void)
 {
 
 
-		if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_TFG) {
+		if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_GEN_TFG) {
 
 			tfgg->Move();
 		}

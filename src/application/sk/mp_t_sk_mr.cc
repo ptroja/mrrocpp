@@ -27,6 +27,7 @@
 #include "application/sk/ecp_mp_st_edge_follow.h"
 #include "ecp_mp/task/ecp_mp_st_bias_edp_force.h"
 #include "ecp_mp/task/ecp_mp_st_tff_nose_run.h"
+#include "ecp_mp/common/generator/ecp_mp_g_tfg.h"
 
 namespace mrrocpp {
 namespace mp {
@@ -81,7 +82,7 @@ void sk_mr::main_task_algorithm(void)
 
 	memcpy(tmp_string, &mp_ecp_tfg_command, sizeof(mp_ecp_tfg_command));
 
-	set_next_ecps_state(ecp_mp::task::ECP_GEN_TFG, (int) 5, tmp_string, sizeof(mp_ecp_tfg_command), 1, gripper_name.c_str());
+	set_next_ecps_state(ecp_mp::common::generator::ECP_GEN_TFG, (int) 5, tmp_string, sizeof(mp_ecp_tfg_command), 1, gripper_name.c_str());
 	/*
 	 run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(
 	 1, 1, gripper_name, gripper_name.c_str());
