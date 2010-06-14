@@ -241,7 +241,7 @@ bool teach_in::load_file_with_path(const std::string & file_name)
     uint64_t i, j; // Liczniki petli
     bool first_time = true; // Znacznik
     double coordinates[MAX_SERVOS_NR]; // Wczytane wspolrzedne
-    int extra_info; // by Y - dodatkowe info do dowolnego wykorzystania
+    int extra_info = 0; // by Y - dodatkowe info do dowolnego wykorzystania
     double motion_time; // Czas dojscia do wspolrzednych
 
 
