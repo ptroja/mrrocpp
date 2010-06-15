@@ -358,6 +358,7 @@ void motor_driven_effector::interpret_instruction(lib::c_buffer &instruction)
 	rep_type(instruction); // okreslenie typu odpowiedzi
 	reply.error_no.error0 = OK;
 	reply.error_no.error1 = OK;
+
 	// Wykonanie instrukcji
 	switch (instruction.instruction_type)
 	{
@@ -434,10 +435,11 @@ void motor_driven_effector::interpret_instruction(lib::c_buffer &instruction)
 				// jego korektor, nr algorytmu regulacji i zestawu jego parametrow)
 				//        set_robot_model();
 				master_order(MT_SET_ROBOT_MODEL, 0);
-			if (instruction.is_set_arm())
+			if (instruction.is_set_arm()) {
 				// przemieszczenie koncowki
 				// move_arm();
 				master_order(MT_MOVE_ARM, 0);
+			}
 			// Cz GET
 			// ustalenie formatu odpowiedzi
 			switch (reply.reply_type)

@@ -36,7 +36,6 @@ bool transparent::next_step()
 	// the_robot->get_reply();
 	if (the_robot) the_robot->communicate_with_edp = true;
 
-
 	// by Y - Przepisanie przyslanej z EDP pozycji do MP
 	the_robot->copy_edp_to_mp_buffer(ecp_t.ecp_reply.reply_package);
 	the_robot->copy_mp_to_edp_buffer(ecp_t.mp_command.instruction);
