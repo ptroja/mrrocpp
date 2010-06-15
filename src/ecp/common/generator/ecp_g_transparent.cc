@@ -41,15 +41,13 @@ bool transparent::next_step()
 
 		if (the_robot) the_robot->communicate_with_edp = true;
 
-		assert(ecp_t.mp_command.command == lib::NEXT_POSE);
-		assert(	ecp_t.mp_command.instruction.instruction_type == lib::SET_GET ||
-				ecp_t.mp_command.instruction.instruction_type == lib::GET);
-
 		if (ecp_t.mp_command.command == lib::END_MOTION ||
 			ecp_t.mp_command.command == lib::NEXT_STATE	||
 			ecp_t.mp_command.command == lib::STOP)
 
 			return false;
+	} else {
+		if (the_robot) the_robot->communicate_with_edp = false;
 	}
 
 	return true;
@@ -60,6 +58,8 @@ void transparent::execute_motion(void)
 	// Zlecenie wykonania ruchu przez robota jest to polecenie dla EDP
 
 	// komunikacja wlasciwa
+	assert(	ecp_t.mp_command.instruction.instruction_type == lib::SET_GET ||
+			ecp_t.mp_command.instruction.instruction_type == lib::GET);
 	the_robot->send();
 	if (the_robot->reply_package.reply_type == lib::ERROR) {
 
@@ -67,7 +67,9 @@ void transparent::execute_motion(void)
 
 		BOOST_THROW_EXCEPTION(
 				lib::exception::NonFatal_error() <<
-				lib::exception::error_code(EDP_ERROR)
+				lib::exception::error_code(EDP_ERROR) <<
+				lib::exception::err0(the_robot->reply_package.error_no.error0) <<
+				lib::exception::err1(the_robot->reply_package.error_no.error1)
 		);
 	}
 	the_robot->query();
