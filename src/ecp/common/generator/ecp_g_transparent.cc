@@ -21,7 +21,7 @@ transparent::transparent(common::task::task& _ecp_task) :
 bool transparent::first_step()
 {
 	if (the_robot) the_robot->communicate_with_edp = false;
-	ecp_t.continuous_coordination=true;
+	ecp_t.continuous_coordination = true;
 	return true;
 }
 
@@ -31,14 +31,16 @@ bool transparent::first_step()
 
 bool transparent::next_step()
 {
-	// Kopiowanie danych z bufora przyslanego z EDP do
-	// obrazu danych wykorzystywanych przez generator
-	// the_robot->get_reply();
-	if (the_robot) the_robot->communicate_with_edp = true;
-
-	// by Y - Przepisanie przyslanej z EDP pozycji do MP
+	// Przepisanie przyslanej z EDP pozycji do MP
 	the_robot->copy_edp_to_mp_buffer(ecp_t.ecp_reply.reply_package);
-	the_robot->copy_mp_to_edp_buffer(ecp_t.mp_command.instruction);
+	ecp_t.ecp_reply_buffer.Set(ecp_t.ecp_reply);
+
+	if(ecp_t.mp_command_buffer.isFresh()) {
+		ecp_t.mp_command_buffer.Get(ecp_t.mp_command);
+		the_robot->copy_mp_to_edp_buffer(ecp_t.mp_command.instruction);
+
+		if (the_robot) the_robot->communicate_with_edp = true;
+	}
 
 	return true;
 }

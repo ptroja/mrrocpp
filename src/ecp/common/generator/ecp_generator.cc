@@ -11,7 +11,7 @@ namespace generator {
 
 generator::generator(common::task::task& _ecp_task) :
 	ecp_mp::generator::generator(*(ecp_t.sr_ecp_msg)), ecp_t(_ecp_task),
-			communicate_with_mp_in_move(true), the_robot(ecp_t.ecp_m_robot)
+			the_robot(ecp_t.ecp_m_robot)
 {
 }
 
@@ -57,8 +57,6 @@ void generator::Move() {
 		return; // Warunek koncowy spelniony w pierwszym kroku
 	}
 
-	bool first_mp_cmd_received = false;
-
 	do { // realizacja ruchu
 
 		// zadanie przygotowania danych od czujnikow
@@ -90,18 +88,11 @@ void generator::Move() {
 		node_counter++;
 
 		// ECP synchronizes itself at query() to EDP
-		ecp_t.Wait();
-
-		if(ecp_t.continuous_coordination) {
-			ecp_t.ecp_reply_buffer.Set(ecp_t.ecp_reply);
-
-			while(!first_mp_cmd_received) {
-				ecp_t.Wait(ecp_t.mp_command_buffer);
-				first_mp_cmd_received = ecp_t.mp_command_buffer.Get(ecp_t.mp_command);
-			}
+		if (the_robot && the_robot->communicate_with_edp) {
+			ecp_t.Wait();
+		} else {
+			ecp_t.Wait(ecp_t.mp_command_buffer);
 		}
-
-		ecp_t.mp_command_buffer.Get(ecp_t.mp_command);
 
 		/*
 		if (ecp_t.pulse_check()) {

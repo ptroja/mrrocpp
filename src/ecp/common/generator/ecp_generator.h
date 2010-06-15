@@ -14,35 +14,30 @@
 #include "ecp_mp/ecp_mp_generator.h"
 #include "lib/single_thread_port.h"
 
-
 namespace mrrocpp {
 namespace ecp {
 namespace common {
 namespace generator {
 
+class generator : public ecp_mp::generator::generator
+{
+protected:
+	common::task::task& ecp_t;
 
-class generator : public ecp_mp::generator::generator {
+public:
+	// Zlecenie ruchu dla EDP
+	void Move(void);
+	virtual void execute_motion(void);
 
-	protected:
-		common::task::task& ecp_t;
+	void move_init(void);
 
-	public:
-	    // Zlecenie ruchu dla EDP
-  		void Move(void);
-  		virtual void execute_motion (void);
+	ecp_robot* the_robot;
 
-  		void move_init (void);
+	generator(common::task::task& _ecp_task);
 
+	virtual ~generator();
 
-		bool communicate_with_mp_in_move;
-
-		ecp_robot* the_robot;
-
-		generator(common::task::task& _ecp_task);
-
-		virtual ~generator();
-
-		bool is_EDP_error (const ecp_robot& _robot) const;
+	bool is_EDP_error(const ecp_robot& _robot) const;
 };
 
 } // namespace generator
