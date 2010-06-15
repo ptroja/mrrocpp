@@ -116,6 +116,8 @@ int main(int argc, char *argv[])
 				break;
 	*/
 			catch (lib::exception::NonFatal_error & e) {
+				std::cerr << "Exception in ECP:" << std::endl;
+				std::cerr << diagnostic_information(e);
 				ecp::common::ecp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, ECP_UNIDENTIFIED_ERROR);
 			}
 
