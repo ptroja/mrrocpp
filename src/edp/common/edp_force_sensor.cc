@@ -216,12 +216,17 @@ void force::configure_sensor()
 	is_sensor_configured = true;
 
 	try {
-		coordinator = new RemoteAgent(MP_SECTION, 0);
+		if (!coordinator) {
+			coordinator = new RemoteAgent(MP_SECTION, 0);
+		}
 
-		remote_buffer = new RemoteBuffer<lib::Ft_vector>(*coordinator, master.robot_name + ":ForceTorque");
+		if(!remote_buffer) {
+			remote_buffer = new RemoteBuffer<lib::Ft_vector>(*coordinator, master.robot_name + ":ForceTorque");
+		}
 	}
 	catch (mrrocpp::lib::exception::System_error & e) {
 		sr_msg->message("Unable to connect to coordinator agent");
+		// TODO: fixme
 		coordinator = NULL;
 		remote_buffer = NULL;
 	}
