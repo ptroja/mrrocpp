@@ -32,6 +32,7 @@
 #include "StateHeap.h"
 
 #include "lib/datastr.h"
+#include "ecp_mp/common/generator/ecp_mp_g_smooth.h"
 
 namespace mrrocpp {
 namespace mp {
@@ -324,7 +325,7 @@ run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_mes
 void fsautomat::executeMotion(common::State &state)
 {
 int trjConf = config.value<int>("trajectory_from_xml", "[xml_settings]");
-if (trjConf && state.getGeneratorType() == ecp_mp::task::ECP_GEN_SMOOTH) {
+if (trjConf && state.getGeneratorType() == ecp_mp::common::generator::ECP_GEN_SMOOTH) {
 	set_next_ecps_state(state.getGeneratorType(), state.getNumArgument(), state.getStateID(), 0, 1,
 			(state.getRobot()).c_str());
 } else {

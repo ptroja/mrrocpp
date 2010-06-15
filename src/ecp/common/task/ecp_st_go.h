@@ -24,6 +24,7 @@ public:
     ecp_sub_task_gripper_opening(task &_ecp_t);
     void configure(double gripper_increment, int motion_time);
     void execute();
+    void conditional_execution();
 };
 
 } // namespace task

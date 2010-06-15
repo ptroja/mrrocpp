@@ -9,6 +9,11 @@ namespace ecp {
 namespace common {
 namespace task {
 
+class ecp_sub_task;
+
+typedef std::map <std::string, ecp_sub_task *> subtasks_t;
+typedef subtasks_t::value_type subtask_pair_t;
+
 // klasa globalna dla calego procesu MP
 class task : public ecp_mp::task::task
 {
@@ -38,6 +43,8 @@ public:
 	// Odpowiedz ECP do MP, pola do ew. wypelnienia przez generatory
 	lib::ECP_REPLY_PACKAGE ecp_reply;
 
+	subtasks_t subtask_m;
+
 	std::string mp_2_ecp_next_state_string;
 
 	// Polecenie od MP dla TASKa
@@ -58,7 +65,10 @@ public:
 	virtual ~task();
 
 	// methods for ECP template to redefine in concrete classes
-	virtual void main_task_algorithm(void) = 0;
+	virtual void main_task_algorithm(void);
+
+	virtual void mp_2_ecp_next_state_string_handler(void);
+
 
 	// Informacja dla MP o zakonczeniu zadania uzytkownika
 	void ecp_termination_notice(void);
@@ -68,6 +78,8 @@ public:
 
 	// Oczekiwanie na STOP
 	void ecp_wait_for_stop(void);
+
+	void subtasks_conditional_execution();
 
 public:
 	// TODO: what follows should be private method
@@ -89,6 +101,12 @@ protected:
 
 public:
 	ecp_sub_task(task &_ecp_t);
+
+	/*
+	 * executed on the MP demand
+	 */
+
+	virtual void conditional_execution() = 0;
 };
 
 } // namespace task

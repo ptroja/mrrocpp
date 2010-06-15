@@ -70,7 +70,7 @@ void axzb_eih::main_task_algorithm(void)
 	gsl_matrix_fscanf(FP, ofp.M);
 	fclose(FP);
 	if ((FP = fopen(mm_file_path.c_str(), "r")) == NULL) {
-		throw runtime_error("fopen(mm_file_path = " + mm_file_path +"): " + string(strerror(errno)));
+		throw runtime_error("fopen(mm_file_path = " + mm_file_path + "): " + string(strerror(errno)));
 	}
 	gsl_vector_fscanf(FP, ofp.m);
 	fclose(FP);

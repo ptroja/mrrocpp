@@ -11,6 +11,8 @@
 #include "ecp/irp6p_tfg/ecp_r_irp6p_tfg.h"
 
 #include "ecp/irp6_tfg/ecp_t_tfg.h"
+#include "ecp_mp/common/generator/ecp_mp_g_tfg.h"
+
 
 namespace mrrocpp {
 namespace ecp {
@@ -35,24 +37,16 @@ tfg::tfg(lib::configurator &_config) :
 	sr_ecp_msg->message("ECP TFG loaded");
 }
 
-void tfg::main_task_algorithm(void)
+void tfg::mp_2_ecp_next_state_string_handler(void)
 {
-	for (;;) {
-		sr_ecp_msg->message("Waiting for MP order");
 
-		get_next_state();
 
-		sr_ecp_msg->message("Order received");
-		//printf("postument: %d\n", mp_command.ecp_next_state.mp_2_ecp_next_state);
-		//flushall();
-
-		if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_TFG) {
+		if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_GEN_TFG) {
 
 			tfgg->Move();
 		}
 
-		ecp_termination_notice();
-	} //end for
+
 }
 
 }

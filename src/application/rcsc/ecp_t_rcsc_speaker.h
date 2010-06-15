@@ -10,7 +10,8 @@ namespace ecp {
 namespace speaker {
 namespace task {
 
-class rcsc: public common::task::task  {
+class rcsc : public common::task::task
+{
 protected:
 	common::generator::transparent* gt;
 	generator::speaking* speak;
@@ -20,7 +21,7 @@ public:
 	rcsc(lib::configurator &_config);
 
 	// methods for ECP template to redefine in concrete classes
-	void main_task_algorithm(void);
+	void mp_2_ecp_next_state_string_handler(void);
 
 };
 

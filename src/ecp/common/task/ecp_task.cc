@@ -3,6 +3,7 @@
 #include <errno.h>
 #include <ctype.h>
 #include <stdio.h>
+#include <boost/foreach.hpp>
 
 #include "lib/mis_fun.h"
 #include "ecp/common/task/ecp_task.h"
@@ -22,6 +23,27 @@ task::task(lib::configurator &_config) :
 	ecp_mp::task::task(_config), ecp_m_robot(NULL), continuous_coordination(false)
 {
 	initialize_communication();
+}
+
+void task::main_task_algorithm(void)
+{
+	for (;;) {
+		sr_ecp_msg->message("Waiting for MP order");
+
+		get_next_state();
+
+		sr_ecp_msg->message("Order received");
+
+		subtasks_conditional_execution();
+
+		mp_2_ecp_next_state_string_handler();
+
+		ecp_termination_notice();
+	} //end for
+}
+
+void task::mp_2_ecp_next_state_string_handler(void)
+{
 }
 
 task::~task()
@@ -203,17 +225,235 @@ void task::send_pulse_to_mp(int pulse_code, int pulse_value)
 	}
 }
 
+void task::subtasks_conditional_execution()
+{
+
+	subtasks_t subtasks_m_tmp = subtask_m;
+
+	BOOST_FOREACH(const subtask_pair_t & subtask_node, subtasks_m_tmp)
+{	if (mp_2_ecp_next_state_string == subtask_node.first) {
+
+		subtask_node.second->conditional_execution();
+	}
+}
+
+}
+
 // Petla odbierania wiadomosci.
 void task::ecp_wait_for_stop(void)
 {
+// Wyslanie pulsu do MP
+
+bool mp_pulse_received = false;
+
+send_pulse_to_mp(ECP_WAIT_FOR_STOP);
+
+// Oczekiwanie na wiadomosc.
+int caller = -2;
+
+while (caller <= 0) {
+
+	caller = receive_mp_message(true);
+	if (caller == 0) {
+		mp_pulse_received = true;
+		// przyszedl puls
+
+	}
+	//printf("mp_buffer_receive_and_send caller: %d\n", caller);
+}
+bool ecp_stop = false;
+if (mp_command_type() == lib::STOP) {
+	set_ecp_reply(lib::ECP_ACKNOWLEDGE);
+	ecp_stop = true;
+} else {
+	set_ecp_reply(lib::ERROR_IN_ECP);
+}
+
+// Wyslanie odpowiedzi.
+#if !defined(USE_MESSIP_SRR)
+if (MsgReply(caller, EOK, &ecp_reply, sizeof(ecp_reply)) == -1)
+#else
+if (messip::port_reply(ecp_attach, caller, 0, ecp_reply) < 0)
+#endif
+{// by Y&W
+	uint64_t e = errno; // kod bledu systemowego
+	perror("ECP: Reply to MP failed");
+	sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ECP: Reply to MP failed");
+	throw common::generator::generator::ECP_error(lib::SYSTEM_ERROR, 0);
+}
+
+// ew. odebranie pulsu z MP
+// sprawdzeniem czy MP wyslalo puls przed spotkaniem z ECP
+if ((!mp_pulse_received) && (mp_command.pulse_to_ecp_sent)) {
+	caller = receive_mp_message(true);
+}
+
+if (!ecp_stop) {
+	fprintf(stderr, "ecp_generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND) @ %s:%d\n", __FILE__, __LINE__);
+	throw common::generator::generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
+}
+}
+
+// Oczekiwanie na polecenie START od MP
+bool task::ecp_wait_for_start(void)
+{
+bool ecp_stop = false;
+bool mp_pulse_received = false;
+// Wyslanie pulsu do MP
+send_pulse_to_mp(ECP_WAIT_FOR_START);
+
+int caller = -2;
+
+while (caller <= 0) {
+
+	caller = receive_mp_message(true);
+	if (caller == 0) {
+		mp_pulse_received = true;
+		// przyszedl puls
+
+	}
+	//printf("mp_buffer_receive_and_send caller: %d\n", caller);
+}
+
+switch (mp_command_type())
+{
+	case lib::START_TASK:
+	// by Y - ECP_ACKNOWLEDGE zamienione na lib::TASK_TERMINATED w celu uproszczenia oprogramowania zadan wielorobotowych
+	set_ecp_reply(lib::TASK_TERMINATED);
+	break;
+	case lib::STOP:
+	set_ecp_reply(lib::TASK_TERMINATED);
+	ecp_stop = true;
+	break;
+	default:
+	set_ecp_reply(lib::INCORRECT_MP_COMMAND);
+	break;
+}
+
+// if (Reply (caller, &ecp_reply, sizeof(lib::ECP_REPLY_PACKAGE)) == -1 ) {
+#if !defined(USE_MESSIP_SRR)
+if (MsgReply(caller, EOK, &ecp_reply, sizeof(lib::ECP_REPLY_PACKAGE)) == -1)
+#else
+if (messip::port_reply(ecp_attach, caller, 0, ecp_reply) < 0)
+#endif
+{// by Y&W
+	uint64_t e = errno; // kod bledu systemowego
+	perror("ECP: Reply to MP failed");
+	sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ECP: Reply to MP failed");
+	throw ECP_main_error(lib::SYSTEM_ERROR, 0);
+}
+
+// ew. odebranie pulsu z MP
+// sprawdzeniem czy MP wyslalo puls przed spotkaniem z ECP
+if ((!mp_pulse_received) && (mp_command.pulse_to_ecp_sent)) {
+	caller = receive_mp_message(true);
+}
+
+if (ecp_stop)
+throw common::generator::generator::ECP_error(lib::NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
+
+if (ecp_reply.reply == lib::INCORRECT_MP_COMMAND) {
+	fprintf(stderr, "ecp_generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND) @ %s:%d\n", __FILE__, __LINE__);
+	throw common::generator::generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
+}
+
+sr_ecp_msg->message("ECP user program is running");
+return false;
+}
+
+// Oczekiwanie na kolejne zlecenie od MP
+void task::get_next_state(void)
+{
+
+bool mp_pulse_received = false;
+// Wyslanie pulsu do MP
+send_pulse_to_mp(ECP_WAIT_FOR_NEXT_STATE);
+
+int caller = -2;
+
+while (caller <= 0) {
+
+	caller = receive_mp_message(true);
+	if (caller == 0) {
+		mp_pulse_received = true;
+		// przyszedl puls
+
+	}
+	//printf("mp_buffer_receive_and_send caller: %d\n", caller);
+}
+
+bool ecp_stop = false;
+
+switch (mp_command_type())
+{
+	case lib::NEXT_STATE:
+	set_ecp_reply(lib::ECP_ACKNOWLEDGE);
+	break;
+	case lib::STOP:
+	set_ecp_reply(lib::ECP_ACKNOWLEDGE);
+	ecp_stop = true;
+	break;
+	default:
+	set_ecp_reply(lib::INCORRECT_MP_COMMAND);
+	break;
+}
+
+#if !defined(USE_MESSIP_SRR)
+if (MsgReply(caller, EOK, &ecp_reply, sizeof(lib::ECP_REPLY_PACKAGE)) == -1)
+#else
+if (messip::port_reply(ecp_attach, caller, 0, ecp_reply) < 0)
+#endif
+{// by Y&W{
+	uint64_t e = errno; // kod bledu systemowego
+	perror("ECP: Reply to MP failed");
+	sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ECP: Reply to MP failed");
+	throw ECP_main_error(lib::SYSTEM_ERROR, 0);
+}
+
+// ew. odebranie pulsu z MP
+// sprawdzeniem czy MP wyslalo puls przed spotkaniem z ECP
+if ((!mp_pulse_received) && (mp_command.pulse_to_ecp_sent)) {
+	caller = receive_mp_message(true);
+}
+
+if (ecp_stop)
+throw common::generator::generator::ECP_error(lib::NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
+
+if (ecp_reply.reply == lib::INCORRECT_MP_COMMAND) {
+	fprintf(stderr, "ecp_generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND) @ %s:%d, mp_command_type() = %d\n", __FILE__, __LINE__, mp_command_type());
+	throw common::generator::generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
+}
+
+mp_2_ecp_next_state_string = mp_command.ecp_next_state.mp_2_ecp_next_state;
+
+}
+
+// Oczekiwanie na polecenie od MP
+bool task::mp_buffer_receive_and_send(void)
+{
+
+int caller = -2;
+
+bool ecp_communication_request;
+bool mp_pulse_received = false;
+
+bool mp_ecp_randevouz = false;
+
+if ((ecp_reply.reply == lib::TASK_TERMINATED) || (ecp_reply.reply == lib::ERROR_IN_ECP)
+		|| (continuous_coordination)) {
+	// wariant pierwszy ECP chce sie skomunikowac
+	ecp_communication_request = true;
+
+} else {
+	// czy
+	ecp_communication_request = false;
+
+}
+
+if (ecp_communication_request) {
 	// Wyslanie pulsu do MP
-
-	bool mp_pulse_received = false;
-
-	send_pulse_to_mp(ECP_WAIT_FOR_STOP);
-
-	// Oczekiwanie na wiadomosc.
-	int caller = -2;
+	// zglaszamy chec i mozliwosc komunikacji
+	send_pulse_to_mp(ECP_WAIT_FOR_COMMAND);
 
 	while (caller <= 0) {
 
@@ -225,15 +465,52 @@ void task::ecp_wait_for_stop(void)
 		}
 		//printf("mp_buffer_receive_and_send caller: %d\n", caller);
 	}
-	bool ecp_stop = false;
-	if (mp_command_type() == lib::STOP) {
-		set_ecp_reply(lib::ECP_ACKNOWLEDGE);
-		ecp_stop = true;
-	} else {
-		set_ecp_reply(lib::ERROR_IN_ECP);
+
+	mp_ecp_randevouz = true;
+
+	// jesli nie odebralismy pulsu od mp to sprawdzamy czy czasem nie pownninsmy go odebrac na podstawie komunikatu z mp
+} else {
+
+	caller = receive_mp_message(false);
+
+	if (caller == 0) {
+		// przyszedl puls od mp, ktore chce sie komunikowac
+		mp_pulse_received = true;
+		send_pulse_to_mp(ECP_WAIT_FOR_COMMAND);
+		mp_ecp_randevouz = true;
+		caller = receive_mp_message(true);
 	}
 
-	// Wyslanie odpowiedzi.
+}
+
+//printf("mp_buffer_receive_and_send caller za: %d\n", caller);
+
+bool returned_value = true;
+bool ecp_stop = false;
+
+if (mp_ecp_randevouz) {
+
+	switch (mp_command_type())
+	{
+		case lib::NEXT_POSE:
+		if ((ecp_reply.reply != lib::TASK_TERMINATED) && (ecp_reply.reply != lib::ERROR_IN_ECP))
+		set_ecp_reply(lib::ECP_ACKNOWLEDGE);
+		break;
+		case lib::STOP:
+		set_ecp_reply(lib::ECP_ACKNOWLEDGE);
+		ecp_stop = true;
+		break;
+		case lib::END_MOTION:
+		// dla ulatwienia programowania aplikacji wielorobotowych
+		if (ecp_reply.reply != lib::ERROR_IN_ECP)
+		set_ecp_reply(lib::TASK_TERMINATED);
+		returned_value = false;
+		break;
+		default:
+		set_ecp_reply(lib::INCORRECT_MP_COMMAND);
+		break;
+	}
+
 #if !defined(USE_MESSIP_SRR)
 	if (MsgReply(caller, EOK, &ecp_reply, sizeof(ecp_reply)) == -1)
 #else
@@ -243,68 +520,7 @@ void task::ecp_wait_for_stop(void)
 		uint64_t e = errno; // kod bledu systemowego
 		perror("ECP: Reply to MP failed");
 		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ECP: Reply to MP failed");
-		throw common::generator::generator::ECP_error(lib::SYSTEM_ERROR, 0);
-	}
-
-	// ew. odebranie pulsu z MP
-	// sprawdzeniem czy MP wyslalo puls przed spotkaniem z ECP
-	if ((!mp_pulse_received) && (mp_command.pulse_to_ecp_sent)) {
-		caller = receive_mp_message(true);
-	}
-
-	if (!ecp_stop) {
-		fprintf(stderr, "ecp_generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND) @ %s:%d\n", __FILE__, __LINE__);
-		throw common::generator::generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
-	}
-}
-
-// Oczekiwanie na polecenie START od MP
-bool task::ecp_wait_for_start(void)
-{
-	bool ecp_stop = false;
-	bool mp_pulse_received = false;
-	// Wyslanie pulsu do MP
-	send_pulse_to_mp(ECP_WAIT_FOR_START);
-
-	int caller = -2;
-
-	while (caller <= 0) {
-
-		caller = receive_mp_message(true);
-		if (caller == 0) {
-			mp_pulse_received = true;
-			// przyszedl puls
-
-		}
-		//printf("mp_buffer_receive_and_send caller: %d\n", caller);
-	}
-
-	switch (mp_command_type())
-	{
-		case lib::START_TASK:
-			// by Y - ECP_ACKNOWLEDGE zamienione na lib::TASK_TERMINATED w celu uproszczenia oprogramowania zadan wielorobotowych
-			set_ecp_reply(lib::TASK_TERMINATED);
-			break;
-		case lib::STOP:
-			set_ecp_reply(lib::TASK_TERMINATED);
-			ecp_stop = true;
-			break;
-		default:
-			set_ecp_reply(lib::INCORRECT_MP_COMMAND);
-			break;
-	}
-
-	// if (Reply (caller, &ecp_reply, sizeof(lib::ECP_REPLY_PACKAGE)) == -1 ) {
-#if !defined(USE_MESSIP_SRR)
-	if (MsgReply(caller, EOK, &ecp_reply, sizeof(lib::ECP_REPLY_PACKAGE)) == -1)
-#else
-	if (messip::port_reply(ecp_attach, caller, 0, ecp_reply) < 0)
-#endif
-	{// by Y&W
-		uint64_t e = errno; // kod bledu systemowego
-		perror("ECP: Reply to MP failed");
-		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ECP: Reply to MP failed");
-		throw ECP_main_error(lib::SYSTEM_ERROR, 0);
+		throw ecp_robot::ECP_error(lib::SYSTEM_ERROR, 0);
 	}
 
 	// ew. odebranie pulsu z MP
@@ -314,276 +530,96 @@ bool task::ecp_wait_for_start(void)
 	}
 
 	if (ecp_stop)
-		throw common::generator::generator::ECP_error(lib::NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
+	throw common::generator::generator::ECP_error(lib::NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
 
 	if (ecp_reply.reply == lib::INCORRECT_MP_COMMAND) {
 		fprintf(stderr, "ecp_generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND) @ %s:%d\n", __FILE__, __LINE__);
 		throw common::generator::generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
 	}
-
-	sr_ecp_msg->message("ECP user program is running");
-	return false;
 }
 
-// Oczekiwanie na kolejne zlecenie od MP
-void task::get_next_state(void)
-{
-
-	bool mp_pulse_received = false;
-	// Wyslanie pulsu do MP
-	send_pulse_to_mp(ECP_WAIT_FOR_NEXT_STATE);
-
-	int caller = -2;
-
-	while (caller <= 0) {
-
-		caller = receive_mp_message(true);
-		if (caller == 0) {
-			mp_pulse_received = true;
-			// przyszedl puls
-
-		}
-		//printf("mp_buffer_receive_and_send caller: %d\n", caller);
-	}
-
-	bool ecp_stop = false;
-
-	switch (mp_command_type())
-	{
-		case lib::NEXT_STATE:
-			set_ecp_reply(lib::ECP_ACKNOWLEDGE);
-			break;
-		case lib::STOP:
-			set_ecp_reply(lib::ECP_ACKNOWLEDGE);
-			ecp_stop = true;
-			break;
-		default:
-			set_ecp_reply(lib::INCORRECT_MP_COMMAND);
-			break;
-	}
-
-#if !defined(USE_MESSIP_SRR)
-	if (MsgReply(caller, EOK, &ecp_reply, sizeof(lib::ECP_REPLY_PACKAGE)) == -1)
-#else
-	if (messip::port_reply(ecp_attach, caller, 0, ecp_reply) < 0)
-#endif
-	{// by Y&W{
-		uint64_t e = errno; // kod bledu systemowego
-		perror("ECP: Reply to MP failed");
-		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ECP: Reply to MP failed");
-		throw ECP_main_error(lib::SYSTEM_ERROR, 0);
-	}
-
-	// ew. odebranie pulsu z MP
-	// sprawdzeniem czy MP wyslalo puls przed spotkaniem z ECP
-	if ((!mp_pulse_received) && (mp_command.pulse_to_ecp_sent)) {
-		caller = receive_mp_message(true);
-	}
-
-	if (ecp_stop)
-		throw common::generator::generator::ECP_error(lib::NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
-
-	if (ecp_reply.reply == lib::INCORRECT_MP_COMMAND) {
-		fprintf(stderr, "ecp_generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND) @ %s:%d, mp_command_type() = %d\n", __FILE__, __LINE__, mp_command_type());
-		throw common::generator::generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
-	}
-
-	mp_2_ecp_next_state_string = mp_command.ecp_next_state.mp_2_ecp_next_state;
-
-}
-
-// Oczekiwanie na polecenie od MP
-bool task::mp_buffer_receive_and_send(void)
-{
-
-	int caller = -2;
-
-	bool ecp_communication_request;
-	bool mp_pulse_received = false;
-
-	bool mp_ecp_randevouz = false;
-
-	if ((ecp_reply.reply == lib::TASK_TERMINATED) || (ecp_reply.reply == lib::ERROR_IN_ECP)
-			|| (continuous_coordination)) {
-		// wariant pierwszy ECP chce sie skomunikowac
-		ecp_communication_request = true;
-
-	} else {
-		// czy
-		ecp_communication_request = false;
-
-	}
-
-	if (ecp_communication_request) {
-		// Wyslanie pulsu do MP
-		// zglaszamy chec i mozliwosc komunikacji
-		send_pulse_to_mp(ECP_WAIT_FOR_COMMAND);
-
-		while (caller <= 0) {
-
-			caller = receive_mp_message(true);
-			if (caller == 0) {
-				mp_pulse_received = true;
-				// przyszedl puls
-
-			}
-			//printf("mp_buffer_receive_and_send caller: %d\n", caller);
-		}
-
-		mp_ecp_randevouz = true;
-
-		// jesli nie odebralismy pulsu od mp to sprawdzamy czy czasem nie pownninsmy go odebrac na podstawie komunikatu z mp
-	} else {
-
-		caller = receive_mp_message(false);
-
-		if (caller == 0) {
-			// przyszedl puls od mp, ktore chce sie komunikowac
-			mp_pulse_received = true;
-			send_pulse_to_mp(ECP_WAIT_FOR_COMMAND);
-			mp_ecp_randevouz = true;
-			caller = receive_mp_message(true);
-		}
-
-	}
-
-	//printf("mp_buffer_receive_and_send caller za: %d\n", caller);
-
-	bool returned_value = true;
-	bool ecp_stop = false;
-
-	if (mp_ecp_randevouz) {
-
-		switch (mp_command_type())
-		{
-			case lib::NEXT_POSE:
-				if ((ecp_reply.reply != lib::TASK_TERMINATED) && (ecp_reply.reply != lib::ERROR_IN_ECP))
-					set_ecp_reply(lib::ECP_ACKNOWLEDGE);
-				break;
-			case lib::STOP:
-				set_ecp_reply(lib::ECP_ACKNOWLEDGE);
-				ecp_stop = true;
-				break;
-			case lib::END_MOTION:
-				// dla ulatwienia programowania aplikacji wielorobotowych
-				if (ecp_reply.reply != lib::ERROR_IN_ECP)
-					set_ecp_reply(lib::TASK_TERMINATED);
-				returned_value = false;
-				break;
-			default:
-				set_ecp_reply(lib::INCORRECT_MP_COMMAND);
-				break;
-		}
-
-#if !defined(USE_MESSIP_SRR)
-		if (MsgReply(caller, EOK, &ecp_reply, sizeof(ecp_reply)) == -1)
-#else
-		if (messip::port_reply(ecp_attach, caller, 0, ecp_reply) < 0)
-#endif
-		{// by Y&W
-			uint64_t e = errno; // kod bledu systemowego
-			perror("ECP: Reply to MP failed");
-			sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ECP: Reply to MP failed");
-			throw ecp_robot::ECP_error(lib::SYSTEM_ERROR, 0);
-		}
-
-		// ew. odebranie pulsu z MP
-		// sprawdzeniem czy MP wyslalo puls przed spotkaniem z ECP
-		if ((!mp_pulse_received) && (mp_command.pulse_to_ecp_sent)) {
-			caller = receive_mp_message(true);
-		}
-
-		if (ecp_stop)
-			throw common::generator::generator::ECP_error(lib::NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
-
-		if (ecp_reply.reply == lib::INCORRECT_MP_COMMAND) {
-			fprintf(stderr, "ecp_generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND) @ %s:%d\n", __FILE__, __LINE__);
-			throw common::generator::generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
-		}
-	}
-
-	return returned_value;
+return returned_value;
 }
 
 // Receive of mp message
 int task::receive_mp_message(bool block)
 {
-	while (1) {
+while (1) {
 #if !defined(USE_MESSIP_SRR)
-		if (!block) {
-			// by Y zamiast creceive i flagi z EDP_MASTER
-			if (TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_RECEIVE, NULL, NULL, NULL) == -1) {
-				perror("ecp_task: TimerTimeout()");
-			}
+	if (!block) {
+		// by Y zamiast creceive i flagi z EDP_MASTER
+		if (TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_RECEIVE, NULL, NULL, NULL) == -1) {
+			perror("ecp_task: TimerTimeout()");
 		}
-		int caller = MsgReceive_r(ecp_attach->chid, &mp_command, sizeof(mp_command), NULL);
-#else
-		int32_t type, subtype;
-		int caller = messip::port_receive(ecp_attach, type, subtype, mp_command);
-#endif
-
-		if (caller < 0) {/* Error condition, exit */
-
-			if (caller == -ETIMEDOUT) {
-				return caller;
-			}
-
-			uint64_t e = errno; // kod bledu systemowego
-			perror("ECP: Receive from MP failed");
-			sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ECP: Receive from MP failed");
-			throw ecp_robot::ECP_error(lib::SYSTEM_ERROR, 0);
-		}
-#if !defined(USE_MESSIP_SRR)
-		if (caller == 0) {/* Pulse received */
-			switch (mp_command.hdr.code)
-			{
-				case _PULSE_CODE_DISCONNECT:
-					/*
-					 * A client disconnected all its connections (called
-					 * name_close() for each name_open() of our name) or
-					 * terminated
-					 */
-					ConnectDetach(mp_command.hdr.scoid);
-					break;
-				case _PULSE_CODE_UNBLOCK:
-					/*
-					 * REPLY blocked client wants to unblock (was hit by
-					 * a signal or timed out).  It's up to you if you
-					 * reply now or later.
-					 */
-					break;
-				case MP_TO_ECP_COMMUNICATION_REQUEST:
-					return caller;
-					break;
-				default:
-					/*
-					 * A pulse sent by one of your processes or a
-					 * _PULSE_CODE_COIDDEATH or _PULSE_CODE_THREADDEATH
-					 * from the kernel?
-					 */
-					break;
-			}
-			continue;
-		}
-
-		/* A QNX IO message received, reject */
-		if (mp_command.hdr.type >= _IO_BASE && mp_command.hdr.type <= _IO_MAX) {
-			MsgReply(caller, EOK, 0, 0);
-			continue;
-		}
-#else
-		if (caller < -1) {
-			// ie. MESSIP_MSG_DISCONNECT
-			fprintf(stderr, "MP: messip::port_receive() -> %d, ie. MESSIP_MSG_DISCONNECT\n", caller);
-			continue;
-		}
-#endif
-		return caller;
 	}
+	int caller = MsgReceive_r(ecp_attach->chid, &mp_command, sizeof(mp_command), NULL);
+#else
+	int32_t type, subtype;
+	int caller = messip::port_receive(ecp_attach, type, subtype, mp_command);
+#endif
+
+	if (caller < 0) {/* Error condition, exit */
+
+		if (caller == -ETIMEDOUT) {
+			return caller;
+		}
+
+		uint64_t e = errno; // kod bledu systemowego
+		perror("ECP: Receive from MP failed");
+		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ECP: Receive from MP failed");
+		throw ecp_robot::ECP_error(lib::SYSTEM_ERROR, 0);
+	}
+#if !defined(USE_MESSIP_SRR)
+	if (caller == 0) {/* Pulse received */
+		switch (mp_command.hdr.code)
+		{
+			case _PULSE_CODE_DISCONNECT:
+			/*
+			 * A client disconnected all its connections (called
+			 * name_close() for each name_open() of our name) or
+			 * terminated
+			 */
+			ConnectDetach(mp_command.hdr.scoid);
+			break;
+			case _PULSE_CODE_UNBLOCK:
+			/*
+			 * REPLY blocked client wants to unblock (was hit by
+			 * a signal or timed out).  It's up to you if you
+			 * reply now or later.
+			 */
+			break;
+			case MP_TO_ECP_COMMUNICATION_REQUEST:
+			return caller;
+			break;
+			default:
+			/*
+			 * A pulse sent by one of your processes or a
+			 * _PULSE_CODE_COIDDEATH or _PULSE_CODE_THREADDEATH
+			 * from the kernel?
+			 */
+			break;
+		}
+		continue;
+	}
+
+	/* A QNX IO message received, reject */
+	if (mp_command.hdr.type >= _IO_BASE && mp_command.hdr.type <= _IO_MAX) {
+		MsgReply(caller, EOK, 0, 0);
+		continue;
+	}
+#else
+	if (caller < -1) {
+		// ie. MESSIP_MSG_DISCONNECT
+		fprintf(stderr, "MP: messip::port_receive() -> %d, ie. MESSIP_MSG_DISCONNECT\n", caller);
+		continue;
+	}
+#endif
+	return caller;
+}
 }
 
 ecp_sub_task::ecp_sub_task(task &_ecp_t) :
-	ecp_t(_ecp_t)
+ecp_t(_ecp_t)
 {
 }
 

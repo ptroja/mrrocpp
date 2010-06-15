@@ -9,19 +9,20 @@ namespace ecp {
 namespace bird_hand {
 namespace task {
 
-class bird_hand_test: public common::task::task {
+class bird_hand_test : public common::task::task
+{
 protected:
 	//generatory
 	common::generator::transparent* gt;
 	common::generator::sleep* g_sleep;
-	common::generator::bird_hand* g_bird_hand;
+	generator::bird_hand* g_bird_hand;
 
 public:
 	// KONSTRUKTORY
 	bird_hand_test(lib::configurator &_config);
 
 	// methods for ECP template to redefine in concrete classes
-	void main_task_algorithm(void);
+	void mp_2_ecp_next_state_string_handler(void);
 };
 
 }

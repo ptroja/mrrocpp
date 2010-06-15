@@ -34,13 +34,15 @@ namespace ecp {
 namespace common {
 namespace task {
 
-class acq_eih: public acquisition {
+class acq_eih : public acquisition
+{
 private:
 	std::string smooth_path;
 	int delay_ms, robot, M;
 	double A, C, D, E, vel, acc;
 	bool calibrated;
-	struct objective_function_parameters {
+	struct objective_function_parameters
+	{
 		// rotation matrix (from robot base to tool frame) - received from MRROC
 		gsl_matrix *K;
 		// rotation matrix (from chessboard base to camera frame)
@@ -53,12 +55,12 @@ private:
 		int number_of_measures;
 	} ofp;
 
-		ecp_mp::sensor::fradia_sensor<lib::empty_t, chessboard_t, eihcalibration_t> *fradia;
-	protected:
-		std::string K_fp;
-		std::string kk_fp;
-		std::string M_fp;
-		std::string mm_fp;
+	ecp_mp::sensor::fradia_sensor <lib::empty_t, chessboard_t, eihcalibration_t> *fradia;
+protected:
+	std::string K_fp;
+	std::string kk_fp;
+	std::string M_fp;
+	std::string mm_fp;
 
 	// generator do wodzenia za nos
 	generator::eih_nose_run* nose;
@@ -70,9 +72,11 @@ private:
 	void main_task_algorithm(void);
 
 public:
+
+	void conditional_execution();
 	acq_eih(task &_ecp_t);
-	void write_data(std::string _K_fp, std::string _k_fp, std::string _M_fp,
-			std::string _m_fp, int _number_of_measures);
+	void
+			write_data(std::string _K_fp, std::string _k_fp, std::string _M_fp, std::string _m_fp, int _number_of_measures);
 };
 
 }

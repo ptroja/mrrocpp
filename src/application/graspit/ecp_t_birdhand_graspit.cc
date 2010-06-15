@@ -28,28 +28,16 @@ bird_hand_test::bird_hand_test(lib::configurator &_config) :
 	sr_ecp_msg->message("ECP BIRDHAND loaded");
 }
 
-void bird_hand_test::main_task_algorithm(void)
+void bird_hand_test::mp_2_ecp_next_state_string_handler(void)
 {
 
-	sr_ecp_msg->message("ECP BIRDHAND ready");
+	if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_BIRD_HAND) {
 
-	for (;;) {
-		sr_ecp_msg->message("Waiting for MP order");
+		sr_ecp_msg->message("ECP_GEN_BIRD_HAND");
 
-		get_next_state();
+	} // end switch
 
-		sr_ecp_msg->message("Order received");
-		//printf("postument: %d\n", mp_command.ecp_next_state.mp_2_ecp_next_state);
-		//flushall();
 
-		if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_BIRD_HAND) {
-
-			sr_ecp_msg->message("ECP_GEN_BIRD_HAND");
-
-		} // end switch
-
-		ecp_termination_notice();
-	} //end for
 }
 
 }

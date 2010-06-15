@@ -12,11 +12,7 @@ namespace mrrocpp {
 namespace ecp_mp {
 namespace task {
 
-/**
- * Used generators.
- */
 
-std::string ECP_GEN_TFG = "ECP_GEN_TFG";
 
 } // namespace task
 } // namespace ecp_mp
