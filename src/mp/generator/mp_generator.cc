@@ -1,9 +1,11 @@
 #include <boost/foreach.hpp>
+#include <boost/throw_exception.hpp>
 
 #include "mp/generator/mp_generator.h"
 #include "mp/robot/mp_robot.h"
 
 #include "lib/agent/OrDataCondition.h"
+#include "lib/exception.h"
 
 namespace mrrocpp {
 namespace mp {
@@ -47,6 +49,30 @@ void generator::Move(void)
 		BOOST_FOREACH(const common::robot_pair_t & robot_node, mp_t.robot_m) {
 			if(robot_node.second->ecp_reply_package_buffer.isFresh()) {
 				robot_node.second->ecp_reply_package = robot_node.second->ecp_reply_package_buffer.Get();
+			}
+		}
+
+		// Handle UI commands
+		bool resume = false;
+		while(!resume && mp_t.ui_command_buffer.isFresh()) {
+			char ui_command = mp_t.ui_command_buffer.Get();
+
+			switch(ui_command) {
+				case MP_STOP:
+					BOOST_THROW_EXCEPTION(
+							lib::exception::NonFatal_error() <<
+							lib::exception::error_code(ECP_STOP_ACCEPTED)
+					);
+					break;
+				case MP_PAUSE:
+					// TODO: pass PASUE to the ECPs
+					mp_t.Wait(mp_t.ui_command_buffer);
+					break;
+				case MP_RESUME:
+					resume = true;
+					break;
+				default:
+					break;
 			}
 		}
 
