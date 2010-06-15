@@ -10,7 +10,8 @@
 #include "lib/mrmath/mrmath.h"
 
 #include "mp/generator/mp_generator.h"
-#include "mp/robot/mp_robot.h"
+#include "mp/robot/mp_r_irp6ot_m.h"
+#include "mp/robot/mp_r_irp6p_m.h"
 
 namespace mrrocpp {
 namespace mp {
@@ -27,12 +28,8 @@ namespace generator {
 class ball : public generator
 {
 private:
-	robot::robot *irp6ot, *irp6p;
-	//lib::sensor *vsp_force_irp6ot, *vsp_force_irp6p;
-
-	// do konfiguracji pracy generatora
-	bool irp6ot_con, irp6p_con;
-	lib::Homog_matrix global_base;
+	robot::irp6ot_m *irp6ot;
+	robot::irp6p_m *irp6p;
 
 	//! initial speed factor of trajectory
 	double speedup;

@@ -57,6 +57,8 @@ void generator::Move() {
 		return; // Warunek koncowy spelniony w pierwszym kroku
 	}
 
+	bool first_mp_cmd_received = false;
+
 	do { // realizacja ruchu
 
 		// zadanie przygotowania danych od czujnikow
@@ -87,10 +89,19 @@ void generator::Move() {
 
 		node_counter++;
 
-		// ECP synchronizes isself at query() to EDP
+		// ECP synchronizes itself at query() to EDP
 		ecp_t.Wait();
 
-		ecp_t.mp_command = ecp_t.mp_command_buffer.Get();
+		if(ecp_t.continuous_coordination) {
+			ecp_t.ecp_reply_buffer.Set(ecp_t.ecp_reply);
+
+			while(!first_mp_cmd_received) {
+				ecp_t.Wait(ecp_t.mp_command_buffer);
+				first_mp_cmd_received = ecp_t.mp_command_buffer.Get(ecp_t.mp_command);
+			}
+		}
+
+		ecp_t.mp_command_buffer.Get(ecp_t.mp_command);
 
 		/*
 		if (ecp_t.pulse_check()) {

@@ -25,16 +25,9 @@ namespace mp {
 namespace generator {
 
 ball::ball(task::task& _mp_task, int step) :
-	generator(_mp_task), irp6ot_con(true), irp6p_con(true),
-			global_base(1, 0, 0, -0.08, 0, 1, 0, 2.08, 0, 0, 1, -0.015), speedup(0.0), speedup_factor(0.005)
+	generator(_mp_task), speedup(0.0), speedup_factor(0.005)
 {
 	step_no = step;
-}
-
-void ball::configure(bool l_irp6ot_con, bool l_irp6p_con)
-{
-	irp6ot_con = l_irp6ot_con;
-	irp6p_con = l_irp6p_con;
 }
 
 void ball::setup_command(robot::robot & robot)
@@ -81,10 +74,13 @@ void ball::setup_command(robot::robot & robot)
 
 bool ball::first_step()
 {
-	std::cerr << "first_step" << std::endl;
+	std::cerr << "ball::first_step()" << std::endl;
 
-	irp6ot = robot_m[lib::ROBOT_IRP6OT_M];
-	irp6p = robot_m[lib::ROBOT_IRP6P_M];
+	irp6ot = dynamic_cast<robot::irp6ot_m *> (robot_m[lib::ROBOT_IRP6OT_M]);
+	assert(irp6ot);
+
+	irp6p = dynamic_cast<robot::irp6p_m *> (robot_m[lib::ROBOT_IRP6P_M]);
+	assert(irp6p);
 
 	irp6ot->communicate = true;
 	irp6p->communicate = true;
@@ -107,6 +103,13 @@ bool ball::first_step()
 
 bool ball::next_step()
 {
+	lib::Ft_vector ft_p;
+	if(irp6p->ft_data_buffer.Get(ft_p)) {
+		//std::cout << ft_p << std::endl;
+	}
+
+	lib::Ft_vector ft_ot = irp6ot->ft_data_buffer.Get();
+
 	// Oczekiwanie na odczyt aktualnego polozenia koncowki
 	if (node_counter < 3) {
 		return true;
@@ -123,6 +126,8 @@ bool ball::next_step()
 
 		irp6ot_start.set_from_frame_tab(irp6ot->ecp_reply_package.reply_package.arm.pf_def.arm_frame);
 		irp6p_start.set_from_frame_tab(irp6p->ecp_reply_package.reply_package.arm.pf_def.arm_frame);
+
+		std::cerr << "Switched to SET_GET" << std::endl;
 	}
 
 	// trajectory generation helper variables
@@ -155,6 +160,8 @@ bool ball::next_step()
 
 	// homogeneous transformation matrix -> frame_tab
 	hm.get_frame_tab(irp6ot->mp_command.instruction.arm.pf_def.arm_frame);
+
+//	std::cerr << hm << std::endl;
 
 	// IRP6 postument
 
