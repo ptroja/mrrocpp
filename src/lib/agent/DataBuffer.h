@@ -36,7 +36,7 @@ private:
 	void Store(xdr_iarchive<> & ia) {
  		ia >> new_data;
  		if (new_data_ready) {
- 			std::cerr << "Warning: data overwrite at buffer " << owner_agent_name << ":" << getName() << std::endl;
+// 			std::cerr << "Warning: data overwrite at buffer " << owner_agent_name << ":" << getName() << std::endl;
  		}
 		new_data_ready = true;
 	}
