@@ -115,7 +115,7 @@ public:
     typedef boost::mpl::bool_<false> is_saving;
 
     /**
-     * Construtor
+     * Constructor
      * @param _buffer data buffer
      * @param _buffer_size data buffer size
      * @return
