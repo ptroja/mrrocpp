@@ -938,11 +938,11 @@ void smooth::generate_coords()
 	//printowanie listy coordinate
 	initiate_coordinate_list();
 	for (int m = 0; m < coordinate_list.size(); m++) {
-		printf("makrokrok: %d\t", m);
+//		printf("makrokrok: %d\t", m);
 		for (int n = 0; n < 8; n++) {
-			printf("%f\t", coordinate_list_iterator->coordinate[n]);
+//			printf("%f\t", coordinate_list_iterator->coordinate[n]);
 		}
-		printf("\n");
+//		printf("\n");
 		flushall();
 		coordinate_list_iterator++;
 	}
@@ -1022,7 +1022,7 @@ void smooth::send_coordinates()
 	if (type == lib::RELATIVE) {
 		gripper_position = pose_list_iterator->k[gripp] * ((tk) * pose_list_iterator->v_grip);
 
-		printf("gripper_position: %f\n ", gripper_position);
+//		printf("gripper_position: %f\n ", gripper_position);
 
 		//printf(" %f \t", gripper_position);
 		if ((node_counter * gripper_position > pose_list_iterator->coordinates[gripp] && pose_list_iterator->k[gripp]
@@ -1052,7 +1052,7 @@ void smooth::send_coordinates()
 			 = gripper_position;
 			 */
 		} else {
-			printf("no gripp\t");
+//			printf("no gripp\t");
 			/*
 			 the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate
 			 = pose_list_iterator->coordinates[gripp];
@@ -1061,10 +1061,10 @@ void smooth::send_coordinates()
 	}
 
 	for (int n = 0; n < gripp; n++) {
-		printf("%f\t", coordinate_list_iterator->coordinate[n]);
+//		printf("%f\t", coordinate_list_iterator->coordinate[n]);
 	}
 
-	printf("%f\n", gripper_position);
+//	printf("%f\n", gripper_position);
 
 	flushall();
 
