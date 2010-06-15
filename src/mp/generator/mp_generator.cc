@@ -29,9 +29,9 @@ void generator::Move(void)
 	if (!first_step())
 		return;
 
-	do { // realizacja ruchu
-
-		// zadanie przygotowania danych od czujnikow
+	// realizacja ruchu
+	do {
+		// przygotowanie danych od czujnikow
 		mp_t.all_sensors_initiate_reading(sensor_m);
 
 		// wykonanie kroku ruchu przez wybrane roboty (z flaga 'communicate')
