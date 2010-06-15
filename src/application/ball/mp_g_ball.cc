@@ -91,8 +91,10 @@ bool ball::first_step()
 	setup_command(*irp6ot);
 	setup_command(*irp6p);
 
+	usleep(10000);
+
 	irp6ot->mp_command.instruction.arm.pf_def.behaviour[2] = lib::CONTACT;
-	irp6ot->mp_command.instruction.arm.pf_def.force_xyz_torque_xyz[2] = 12.5;
+	irp6ot->mp_command.instruction.arm.pf_def.force_xyz_torque_xyz[2] = 0;
 
 	return true;
 }

@@ -40,6 +40,16 @@ bool transparent::next_step()
 		the_robot->copy_mp_to_edp_buffer(ecp_t.mp_command.instruction);
 
 		if (the_robot) the_robot->communicate_with_edp = true;
+
+		assert(ecp_t.mp_command.command == lib::NEXT_POSE);
+		assert(	ecp_t.mp_command.instruction.instruction_type == lib::SET_GET ||
+				ecp_t.mp_command.instruction.instruction_type == lib::GET);
+
+		if (ecp_t.mp_command.command == lib::END_MOTION ||
+			ecp_t.mp_command.command == lib::NEXT_STATE	||
+			ecp_t.mp_command.command == lib::STOP)
+
+			return false;
 	}
 
 	return true;
