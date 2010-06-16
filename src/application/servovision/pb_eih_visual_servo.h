@@ -34,13 +34,7 @@ public:
 	virtual lib::Homog_matrix get_position_change(const lib::Homog_matrix& current_position, double dt);
 	virtual boost::shared_ptr <ecp_mp::sensor::sensor_interface> get_vsp_fradia();
 protected:
-	boost::shared_ptr <pb_fradia_sensor> vsp_fradia;
-
-	lib::Homog_matrix G_T_E_desired;
 	lib::Homog_matrix E_T_C;
-
-	int max_steps_without_reading;
-	int steps_without_reading;
 };
 
 /** @} */

@@ -23,35 +23,9 @@ namespace common {
 namespace generator {
 
 pb_eih_visual_servo::pb_eih_visual_servo(boost::shared_ptr <visual_servo_regulator> regulator, const std::string& section_name, mrrocpp::lib::configurator& configurator) :
-	pb_visual_servo(regulator), max_steps_without_reading(10), steps_without_reading(0)
+	pb_visual_servo(regulator, section_name, configurator)
 {
-	try {
-		position_based_configuration pb_config;
-
-		Eigen::Matrix <double, 3, 3> intrinsics = configurator.value <3, 3> ("fradia_camera_intrinsics", section_name);
-
-		Eigen::Matrix <double, 1, 5> distortion = configurator.value <1, 5> ("fradia_camera_distortion", section_name);
-
-		for (int i = 0; i < 3; ++i) {
-			for (int j = 0; j < 3; ++j) {
-				pb_config.dcp.intrinsics[i][j] = intrinsics(i, j);
-			}
-		}
-		for (int i = 0; i < 5; ++i) {
-			pb_config.dcp.distortion[i] = distortion(0, i);
-		}
-
-		vsp_fradia = boost::shared_ptr <pb_fradia_sensor>(new pb_fradia_sensor(configurator, section_name, pb_config));
-		//vsp_fradia->configure_sensor();
-
-		E_T_C = configurator.value <3, 4> ("E_T_C", section_name);
-
-		lib::Homog_matrix E_T_G_desired = configurator.value <3, 4> ("E_T_G_desired", section_name);
-		G_T_E_desired = !E_T_G_desired;
-	} catch (const exception& e) {
-		printf("pb_eih_visual_servo::pb_eih_visual_servo(): %s\n", e.what());
-		throw e;
-	}
+	E_T_C = configurator.value <3, 4> ("E_T_C", section_name);
 }
 
 pb_eih_visual_servo::~pb_eih_visual_servo()
@@ -64,11 +38,11 @@ lib::Homog_matrix pb_eih_visual_servo::get_position_change(const lib::Homog_matr
 
 	//	log_dbg("pb_eih_visual_servo::get_position_change(): report: %d\n", vsp_fradia->get_report());
 
-	if (vsp_fradia->get_report() == lib::VSP_SENSOR_NOT_CONFIGURED) {	// sensor not yet ready
+	if (vsp_fradia->get_report() == lib::VSP_SENSOR_NOT_CONFIGURED) { // sensor not yet ready
 		return delta_position;
 	} else if (vsp_fradia->get_report() == lib::VSP_READING_NOT_READY) { // maybe there was a reading
 		if (steps_without_reading > max_steps_without_reading) { // but if it was too long ago
-			object_visible = false;	// we have to consider object not longer visible
+			object_visible = false; // we have to consider object not longer visible
 			log_dbg("pb_eih_visual_servo::get_position_change(): object considered no longer visible\n");
 			return delta_position;
 		} else {

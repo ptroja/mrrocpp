@@ -16,7 +16,7 @@ namespace common {
 namespace generator {
 
 visual_servo::visual_servo(boost::shared_ptr <visual_servo_regulator> regulator) :
-	regulator(regulator), object_visible(false)
+	regulator(regulator), object_visible(false), max_steps_without_reading(3), steps_without_reading(0)
 {
 
 }
@@ -25,7 +25,8 @@ visual_servo::~visual_servo()
 {
 }
 
-bool visual_servo::is_object_visible(){
+bool visual_servo::is_object_visible()
+{
 	return object_visible;
 }
 

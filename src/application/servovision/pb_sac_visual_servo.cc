@@ -23,40 +23,33 @@ namespace common {
 namespace generator {
 
 pb_sac_visual_servo::pb_sac_visual_servo(boost::shared_ptr <visual_servo_regulator> regulator, const std::string& section_name, mrrocpp::lib::configurator& configurator) :
-	pb_visual_servo(regulator)
+	pb_visual_servo(regulator, section_name, configurator)
 {
-	position_based_configuration pb_config;
-
-	Eigen::Matrix <double, 3, 3> intrinsics = configurator.value <3, 3> ("fradia_camera_intrinsics", section_name);
-
-	Eigen::Matrix <double, 1, 5> distortion = configurator.value <1, 5> ("fradia_camera_distortion", section_name);
-
-	for (int i = 0; i < 3; ++i) {
-		for (int j = 0; j < 3; ++j) {
-			pb_config.dcp.intrinsics[i][j] = intrinsics(i, j);
-		}
-	}
-	for (int i = 0; i < 5; ++i) {
-		pb_config.dcp.distortion[i] = distortion(0, i);
-	}
-
-	vsp_fradia = boost::shared_ptr <pb_fradia_sensor>(new pb_fradia_sensor(configurator, section_name, pb_config));
-
 	O_T_C = configurator.value <3, 4> ("O_T_C", section_name);
-	cout << "\nO_T_C\n" << O_T_C << endl;
-
-	lib::Homog_matrix E_T_G_desired = configurator.value <3, 4> ("E_T_G_desired", section_name);
-	G_T_E_desired = !E_T_G_desired;
+	//	cout << "\nO_T_C\n" << O_T_C << endl;
 }
 
 pb_sac_visual_servo::~pb_sac_visual_servo()
 {
-
 }
 
 lib::Homog_matrix pb_sac_visual_servo::get_position_change(const lib::Homog_matrix& current_position, double dt)
 {
 	lib::Homog_matrix delta_position;
+
+	if (vsp_fradia->get_report() == lib::VSP_SENSOR_NOT_CONFIGURED) { // sensor not yet ready
+		return delta_position;
+	} else if (vsp_fradia->get_report() == lib::VSP_READING_NOT_READY) { // maybe there was a reading
+		if (steps_without_reading > max_steps_without_reading) { // but if it was too long ago
+			object_visible = false; // we have to consider object not longer visible
+			log_dbg("pb_sac_visual_servo::get_position_change(): object considered no longer visible\n");
+			return delta_position;
+		} else {
+			steps_without_reading++;
+		}
+	} else if (vsp_fradia->get_report() == lib::VSP_REPLY_OK) { // we have a reading
+		steps_without_reading = 0; // reset counter
+	}
 
 	object_visible = vsp_fradia->get_reading_message().tracking;
 	if (object_visible) {
@@ -65,11 +58,10 @@ lib::Homog_matrix pb_sac_visual_servo::get_position_change(const lib::Homog_matr
 		lib::Homog_matrix E_T_O = !current_position;
 
 		{
-
 			cout << "\nC_T_G:\n" << C_T_G << endl;
 
 			lib::Homog_matrix O_T_G = O_T_C * C_T_G;
-			cout<<"\nO_T_G:\n"<< O_T_G <<endl;
+			cout << "\nO_T_G:\n" << O_T_G << endl;
 
 			cout << "\ncurrent_position:\n" << current_position << endl;
 			cout << "\nE_T_O:\n" << E_T_O << endl;
@@ -79,7 +71,6 @@ lib::Homog_matrix pb_sac_visual_servo::get_position_change(const lib::Homog_matr
 
 			lib::Homog_matrix E_T_G = E_T_O * O_T_C * C_T_G;
 			cout << "\nE_T_O * O_T_C * C_T_G:\n" << E_T_G << endl;
-
 		}
 
 		error_matrix = G_T_E_desired * E_T_O * O_T_C * C_T_G;
@@ -101,11 +92,6 @@ lib::Homog_matrix pb_sac_visual_servo::get_position_change(const lib::Homog_matr
 	}
 
 	return delta_position;
-}
-
-boost::shared_ptr <ecp_mp::sensor::sensor_interface> pb_sac_visual_servo::get_vsp_fradia()
-{
-	return boost::dynamic_pointer_cast <ecp_mp::sensor::sensor_interface>(vsp_fradia);
 }
 
 }//namespace

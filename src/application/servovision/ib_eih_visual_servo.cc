@@ -84,6 +84,20 @@ lib::Homog_matrix ib_eih_visual_servo::get_position_change(const lib::Homog_matr
 	Eigen::Matrix <double, 6, 1> e;
 	Eigen::Matrix <double, 3, 1> e_translation;
 
+	if (vsp_fradia->get_report() == lib::VSP_SENSOR_NOT_CONFIGURED) { // sensor not yet ready
+		return delta_position;
+	} else if (vsp_fradia->get_report() == lib::VSP_READING_NOT_READY) { // maybe there was a reading
+		if (steps_without_reading > max_steps_without_reading) { // but if it was too long ago
+			object_visible = false; // we have to consider object not longer visible
+			log_dbg("ib_eih_visual_servo::get_position_change(): object considered no longer visible\n");
+			return delta_position;
+		} else {
+			steps_without_reading++;
+		}
+	} else if (vsp_fradia->get_report() == lib::VSP_REPLY_OK) { // we have a reading
+		steps_without_reading = 0; // reset counter
+	}
+
 	//	logDbg("ecp_g_ib_eih::next_step() 2\n");
 	object_visible = vsp_fradia->get_reading_message().tracking;
 	if (vsp_fradia->get_reading_message().tracking) {

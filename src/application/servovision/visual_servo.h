@@ -1,4 +1,4 @@
-	/*
+/*
  * $Id$
  *
  *  Created on: Mar 3, 2010
@@ -45,7 +45,7 @@ public:
 	 * Returns fradia_sensor.
 	 * @return
 	 */
-	virtual boost::shared_ptr <ecp_mp::sensor::sensor_interface > get_vsp_fradia() = 0;
+	virtual boost::shared_ptr <ecp_mp::sensor::sensor_interface> get_vsp_fradia() = 0;
 
 	/**
 	 * Returns object visibility.
@@ -56,6 +56,9 @@ protected:
 	visual_servo(boost::shared_ptr <visual_servo_regulator> regulator);
 	boost::shared_ptr <visual_servo_regulator> regulator;
 	bool object_visible;
+
+	int max_steps_without_reading;
+	int steps_without_reading;
 private:
 
 }; // class visual_servo
