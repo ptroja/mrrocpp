@@ -113,7 +113,7 @@ bool ecp_robot::is_synchronised(void) const {
 }
 
 // Kopiowanie bufora przesylanego z MP do bufora wysylanego do EDP
-void ecp_robot::copy_mp_to_edp_buffer(lib::c_buffer& mp_buffer) {
+void ecp_robot::copy_mp_to_edp_buffer(const lib::c_buffer& mp_buffer) {
 	ecp_command.instruction = mp_buffer;
 }
 
@@ -127,7 +127,7 @@ void ecp_robot::copy_edp_to_mp_buffer(lib::r_buffer& mp_buffer) {
 void ecp_robot::connect_to_edp(lib::configurator &config) {
 	EDP_MASTER_Pid = (spawn_and_kill) ? config.process_spawn(edp_section) : -1;
 
-	std::string edp_net_attach_point = config.return_attach_point_name(
+	const std::string edp_net_attach_point = config.return_attach_point_name(
 			lib::configurator::CONFIG_SERVER, "resourceman_attach_point",
 			edp_section);
 
@@ -154,29 +154,14 @@ void ecp_robot::connect_to_edp(lib::configurator &config) {
 					edp_net_attach_point.c_str(), strerror(errno));
 			sr_ecp_msg.message(lib::SYSTEM_ERROR, e,
 					"Unable to locate EDP_MASTER process");
-			throw ecp_robot::ECP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
+			throw ecp_robot::ECP_main_error(lib::SYSTEM_ERROR, 0);
 		}
 	}
 	printf(".done\n");
 }
 
-void ecp_robot::synchronise(void) {
-	// Zlecenie synchronizacji robota
-
-	/*
-	 // maskowanie sygnalu SIGTERM
-	 // w celu zapobierzenia przerwania komunikacji ECP z EDP pomiedzy SET a QUERY - usuniete
-
-	 sigset_t set;
-
-	 sigemptyset( &set );
-	 sigaddset( &set, SIGTERM );
-
-	 if  (sigprocmask( SIG_SETMASK, &set, NULL)==-1)
-	 {
-	 printf ("blad w ECP procmask signal\n");
-	 }
-	 */
+void ecp_robot::synchronise(void)
+{
 	// komunikacja wlasciwa
 	ecp_command.instruction.instruction_type = lib::SYNCHRO;
 
@@ -184,65 +169,34 @@ void ecp_robot::synchronise(void) {
 	query(); // Odebranie wyniku zlecenia
 
 	synchronised = (reply_package.reply_type == lib::SYNCHRO_OK);
-
-	/*
-	 // odmaskowanie sygnalu SIGTERM
-	 sigemptyset( &set );
-
-	 if  (sigprocmask( SIG_SETMASK, &set, NULL)==-1)
-	 {
-	 printf ("blad w ECP procmask signal\n");
-	 }
-	 */
 }
 
 void ecp_robot::send()
-
 {
-	// Wyslanie do EDP polecenia
-	// int command_size;  // rozmiar przesylanej przesylki
-	// printf("\n a w send fd=%d",fd);  // debug
-
-	// printf("w ECP send instruction.instruction_type: %d\n", ecp_command.instruction.instruction_type);
-
-	switch (ecp_command.instruction.instruction_type) {
-	case lib::SET:
-	case lib::SET_GET:
-	case lib::GET:
-	case lib::SYNCHRO:
-	case lib::QUERY:
-	case lib::INVALID:
-		// command_size = ((uint8_t*) (&instruction.address_byte)) - ((uint8_t*) (&instruction.instruction_type));
-		// by Y bylo command_size zamiast sizeof(in..)
-		// by Y&W doszlo dodatkowe pole w instruction zwiazane z obsluga resource managera
-
-#if !defined(USE_MESSIP_SRR)
-		if (MsgSend(EDP_fd, &ecp_command, sizeof(ecp_command), &reply_package,
-				sizeof(lib::r_buffer)) == -1)
-#else
-		if ( messip::port_send(EDP_fd, 0, 0, ecp_command, reply_package) == -1 )
-#endif
-		{
-			int e = errno; // kod bledu systemowego
-			perror("ECP: Send to EDP_MASTER error");
-			sr_ecp_msg.message(lib::SYSTEM_ERROR, e,
-					"ECP: Send to EDP_MASTER error");
-			throw ecp_robot::ECP_error(lib::SYSTEM_ERROR, 0);
-		}
-		//printf("sizeof(lib::r_buffer) = %d\n", sizeof(lib::r_buffer));
-
-		break;
-	default: // blad: nieprawidlowe polecenie
-		perror("ECP: INVALID COMMAND TO EDP");
+	// minimal check for command correctness
+	if (ecp_command.instruction.instruction_type == lib::INVALID) {
 		sr_ecp_msg.message(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
 		throw ecp_robot::ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
+	}
+
+#if !defined(USE_MESSIP_SRR)
+	if (MsgSend(EDP_fd, &ecp_command, sizeof(ecp_command), &reply_package, sizeof(reply_package)) == -1)
+#else
+	if (messip::port_send(EDP_fd, 0, 0, ecp_command, reply_package) == -1)
+#endif
+	{
+		int e = errno; // kod bledu systemowego
+		perror("ECP: Send to EDP_MASTER error");
+		sr_ecp_msg.message(lib::SYSTEM_ERROR, e, "ECP: Send to EDP_MASTER error");
+		throw ecp_robot::ECP_error(lib::SYSTEM_ERROR, 0);
 	}
 
 	// TODO: this is called much too often (?!)
 	lib::set_thread_priority(pthread_self(), MAX_PRIORITY - 2);
 }
 
-void ecp_robot::create_command() {
+void ecp_robot::create_command()
+{
 }
 
 void ecp_robot::get_reply() {
@@ -252,50 +206,25 @@ void ecp_robot::clear_data_ports() {
 }
 
 void ecp_robot::query()
-
 {
 	ecp_command.instruction.instruction_type = lib::QUERY;
 	send(); // czyli wywolanie funkcji ecp_buffer::send, ktora jest powyzej :)
 }
 
-void ecp_robot::execute_motion(void) {
-	// Zlecenie wykonania ruchu przez robota jest to polecenie dla EDP
-	/*
-	 // maskowanie sygnalu SIGTERM
-	 // w celu zapobierzenia przerwania komunikacji ECP z EDP pomiedzy SET a QUERY - usuniete
-
-	 sigset_t set;
-
-	 sigemptyset( &set );
-	 sigaddset( &set, SIGTERM );
-
-	 if  (sigprocmask( SIG_SETMASK, &set, NULL)==-1)
-	 {
-	 printf ("blad w ECP procmask signal\n");
-	 }
-	 */
-	// komunikacja wlasciwa
+void ecp_robot::execute_motion(void)
+{
 	send();
 	if (reply_package.reply_type == lib::ERROR) {
 		query();
 		throw ECP_error(lib::NON_FATAL_ERROR, EDP_ERROR);
 	}
+
 	query();
-
-	/*
-	 // odmaskowanie sygnalu SIGTERM
-
-	 sigemptyset( &set );
-
-	 if  (sigprocmask( SIG_SETMASK, &set, NULL)==-1)
-	 {
-	 printf ("blad w ECP procmask signal\n");
-	 }
-	 */
 	if (reply_package.reply_type == lib::ERROR) {
 		throw ECP_error(lib::NON_FATAL_ERROR, EDP_ERROR);
 	}
 }
+
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp

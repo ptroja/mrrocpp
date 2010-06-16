@@ -11,7 +11,6 @@
 #include "ecp/common/task/ecp_task.h"
 #include "ecp/irp6ot_m/ecp_r_irp6ot_m.h"
 #include "ecp_g_mboryn.h"
-#include "ecp_mp/sensor/ecp_mp_s_cvfradia.h"
 #include "ecp/common/generator/ecp_g_smooth.h"
 
 namespace mrrocpp {

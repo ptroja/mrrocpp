@@ -23,18 +23,16 @@ wii_velocity::wii_velocity(lib::configurator &_config) :
 	sr_ecp_msg->message("ECP loaded");
 
 	//create Wii-mote virtual sensor object
-	sensor_m[lib::SENSOR_WIIMOTE] = new ecp_mp::sensor::wiimote(
-			lib::SENSOR_WIIMOTE, "[vsp_wiimote]", *this,
-			sizeof(lib::sensor_image_t::sensor_union_t::wiimote_t));
+	sensor_m[ecp_mp::sensor::SENSOR_WIIMOTE] = new ecp_mp::sensor::wiimote(ecp_mp::sensor::SENSOR_WIIMOTE, "[vsp_wiimote]", *this->sr_ecp_msg, this->config);
 	//configure the sensor
-	sensor_m[lib::SENSOR_WIIMOTE]->configure_sensor();
+	sensor_m[ecp_mp::sensor::SENSOR_WIIMOTE]->configure_sensor();
 }
 
 void wii_velocity::main_task_algorithm(void) {
 	eg = new generator::wii_velocity(*this);
 	//	eg = new ecp_tff_nose_run_generator(*this,8);
 
-	eg->sensor_m[lib::SENSOR_WIIMOTE] = sensor_m[lib::SENSOR_WIIMOTE];
+    eg->sensor_m[ecp_mp::sensor::SENSOR_WIIMOTE] = sensor_m[ecp_mp::sensor::SENSOR_WIIMOTE];
 
 	while (1) {
 		eg->Move();

@@ -22,7 +22,19 @@ namespace sensor {
  * \brief Virtual sensor on the ECP/MP side used for communication with pcbird.
  * \author tkornuta
  */
-class pcbird : public lib::sensor
+
+// struktura z pozycja i katami pcbirda
+typedef struct _pcbird
+{
+	float x, y, z; // pozycja
+	float a, b, g; // katy (a = azimuth, b = elevation, g = roll)
+	float distance; // odleglosc
+	uint32_t ts_sec, ts_usec; // timestamp
+} pcbird_t;
+
+const lib::SENSOR_t SENSOR_PCBIRD = "SENSOR_PCBIRD";
+
+class pcbird : public sensor_interface
 {
 private:
 	/*!
@@ -41,11 +53,15 @@ private:
 	const lib::SENSOR_t sensor_name;
 
 public:
+	/*!
+	 * Data image
+	 */
+	pcbird_t image;
 
 	/*!
       * Constructor. Creates socket connection to pcbird.
       */
- 	pcbird (const char* _section_name, task::task& _ecp_mp_object);
+ 	pcbird (const std::string & _section_name, lib::sr_ecp & _sr_ecp_msg, lib::configurator & config);
 
 	/*!
       * Sends sensor configuration to pcbird.
@@ -74,4 +90,3 @@ public:
 } // namespace mrrocpp
 
 #endif
-

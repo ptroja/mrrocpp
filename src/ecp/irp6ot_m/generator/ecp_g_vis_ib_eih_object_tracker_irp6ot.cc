@@ -6,9 +6,9 @@
  * \brief
  */
 
-#include "ecp_g_vis_ib_eih_object_tracker_irp6ot.h"
 #include <math.h>
 
+#include "ecp_g_vis_ib_eih_object_tracker_irp6ot.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -25,7 +25,7 @@ bool ecp_vis_ib_eih_object_tracker_irp6ot::first_step() {
 
 	//printf("first step\n");
 	flushall();
-	vsp_fradia = sensor_m[lib::SENSOR_CVFRADIA];
+	vsp_fradia = dynamic_cast<fradia_sensor_tracker *> (sensor_m[lib::SENSOR_CVFRADIA]);
 
 	the_robot->ecp_command.instruction.instruction_type = lib::GET;
 	the_robot->ecp_command.instruction.get_type = ARM_DEFINITION;
@@ -76,13 +76,15 @@ bool ecp_vis_ib_eih_object_tracker_irp6ot::next_step_without_constraints() {
 
 	the_robot->ecp_command.instruction.instruction_type = lib::SET_GET;//TODO sprawdzic czy to moze byc robione tylko raz
 
-	lib::VSP_REPORT vsp_report = vsp_fradia->from_vsp.vsp_report;
+	lib::VSP_REPORT_t vsp_report = vsp_fradia->get_report();
 	if (vsp_report == lib::VSP_REPLY_OK) {
 
-		u[0] = vsp_fradia->from_vsp.comm_image.sensor_union.object_tracker.x;//TODO zapytać czy da sie to zrobic w petli
-		u[1] = vsp_fradia->from_vsp.comm_image.sensor_union.object_tracker.y;
-		u[2] = vsp_fradia->from_vsp.comm_image.sensor_union.object_tracker.z;
-		tracking = vsp_fradia->from_vsp.comm_image.sensor_union.object_tracker.tracking;
+		// TODO: zapyta�� czy da sie to zrobic w petli
+		// TODO: {x,y,z} mozna raczej zaimplementowa�� jako Eigen::Vector3d i wtedy uzyc operatora =.
+		u[0] = vsp_fradia->get_reading_message().x;
+		u[1] = vsp_fradia->get_reading_message().y;
+		u[2] = vsp_fradia->get_reading_message().z;
+		tracking = vsp_fradia->get_reading_message().tracking;
 
 		printf("ux: %f\t", u[0]);
 		printf("uy: %f\n", u[1]);
@@ -91,7 +93,7 @@ bool ecp_vis_ib_eih_object_tracker_irp6ot::next_step_without_constraints() {
 
 		if (fabs(u[0]) < u_stop[0]/5 && fabs(u[1]) < u_stop[1]/5 && fabs(u[2]) < u_stop[2]/5 &&
 				v[0] <= v_stop[0] && v[1] <= v_stop[1] && v[2] <= v_stop[2] &&
-				reached[0] == true && reached[1] == true && reached[2] == true && tracking == true) {//TODO przemyśleć, poprawić
+				reached[0] == true && reached[1] == true && reached[2] == true && tracking == true) {//TODO przemy��le��, poprawi��
 			//if (z_stop) {
 				printf("koniec sledzenia\n");
 				flushall();
@@ -187,7 +189,7 @@ bool ecp_vis_ib_eih_object_tracker_irp6ot::next_step_without_constraints() {
 
 bool ecp_vis_ib_eih_object_tracker_irp6ot::read_parametres() {//metoda wczytujaca predkosci, przyspieszenia etc z pliku konfiguracyjnego
 															//przykladowe wartosci podane sa w first stepie
-	v_max[0] = ecp_t.config.value<double>("v_max_x");//TODO dorobić łapanie wyjątku gdy w pliku konfiguracyjnym nie ma odpowiednich zmiennych
+	v_max[0] = ecp_t.config.value<double>("v_max_x");//TODO dorobi�� ��apanie wyj��tku gdy w pliku konfiguracyjnym nie ma odpowiednich zmiennych
 	v_max[1] = ecp_t.config.value<double>("v_max_y");
 	v_max[2] = ecp_t.config.value<double>("v_max_z");
 	a_max[0] = ecp_t.config.value<double>("a_max_x");

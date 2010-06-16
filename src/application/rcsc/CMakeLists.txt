@@ -27,7 +27,6 @@ add_executable(ecp_irp6ot_rcsc
     ../servovision/cubic_constraint.cc
     ../servovision/termination_condition.cc
     ../servovision/object_reached_termination_condition.cc
-    ../servovision/logger.cc
 )
 add_executable(ecp_irp6p_rcsc
 	ecp_t_rcsc_irp6p.cc
@@ -42,7 +41,6 @@ add_executable(ecp_fsautomat
 	../../ecp/common/task/ecp_st_go.cc
 	../../ecp/common/generator/ecp_g_smooth.cc
 	../../ecp/common/generator/ecp_g_force.cc
-	../../ecp/common/generator/ecp_g_transparent.cc
 	../../ecp/common/generator/ecp_g_jarosz.cc
 	../../ecp/common/generator/ecp_g_operator_reaction_condition.cc
 )

@@ -19,7 +19,8 @@ namespace task {
 
 // KONSTRUKTORY
 tfg::tfg(lib::configurator &_config) :
-	task(_config) {
+	task(_config)
+{
 	// the robot is choose dependendat on the section of configuration file sent as argv[4]
 	if (config.section_name == ECP_IRP6OT_TFG_SECTION) {
 		ecp_m_robot = new irp6ot_tfg::robot(*this);
@@ -34,7 +35,8 @@ tfg::tfg(lib::configurator &_config) :
 	sr_ecp_msg->message("ECP TFG loaded");
 }
 
-void tfg::main_task_algorithm(void) {
+void tfg::main_task_algorithm(void)
+{
 	for (;;) {
 		sr_ecp_msg->message("Waiting for MP order");
 
@@ -42,15 +44,12 @@ void tfg::main_task_algorithm(void) {
 
 		sr_ecp_msg->message("Order received");
 		//printf("postument: %d\n", mp_command.ecp_next_state.mp_2_ecp_next_state);
-		flushall();
+		//flushall();
 
-		switch ((ecp_mp::task::TFG_ECP_STATES) mp_command.ecp_next_state.mp_2_ecp_next_state) {
-		case ecp_mp::task::ECP_GEN_TFG:
+		if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_TFG) {
+
 			tfgg->Move();
-			break;
-		default:
-			break;
-		} // end switch
+		}
 
 		ecp_termination_notice();
 	} //end for
@@ -62,7 +61,8 @@ void tfg::main_task_algorithm(void) {
 namespace common {
 namespace task {
 
-task* return_created_ecp_task(lib::configurator &_config) {
+task* return_created_ecp_task(lib::configurator &_config)
+{
 	return new common::task::tfg(_config);
 }
 

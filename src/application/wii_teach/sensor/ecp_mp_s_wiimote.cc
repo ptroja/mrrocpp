@@ -14,32 +14,32 @@ namespace mrrocpp {
 namespace ecp_mp {
 namespace sensor {
 
-wiimote::wiimote(lib::SENSOR_t _sensor_name, const char* _section_name, task::task& _ecp_mp_object, int _union_size)
-	: sr_ecp_msg(*_ecp_mp_object.sr_ecp_msg), sensor_name(_sensor_name)
+wiimote::wiimote(lib::SENSOR_t _sensor_name, const std::string & _section_name, lib::sr_ecp & _sr_ecp_msg, lib::configurator & config)
+	: sr_ecp_msg(_sr_ecp_msg), sensor_name(_sensor_name)
 {
-	// Set size of passed message/union.
-	union_size = _union_size + sizeof(image.sensor_union.begin);
-
 	// Set period variables.
 	base_period=current_period=1;
 
 	// Retrieve wiimote node name and port from configuration file.
-	int wiimote_port = _ecp_mp_object.config.value<int>("wiimote_port", _section_name);
-	std::string wiimote_node_name = _ecp_mp_object.config.value<std::string>("wiimote_node_name", _section_name);
+	int wiimote_port = config.value<int>("wiimote_port", _section_name);
+	std::string wiimote_node_name = config.value<std::string>("wiimote_node_name", _section_name);
 
     // Try to open socket.
 	sockfd = socket(AF_INET, SOCK_STREAM, 0);
 	if (sockfd < 0) {
 		sr_ecp_msg.message("ERROR opening socket");
-		throw sensor_error(lib::SYSTEM_ERROR, CANNOT_LOCATE_DEVICE);
+		throw lib::sensor::sensor_error(lib::SYSTEM_ERROR, CANNOT_LOCATE_DEVICE);
 	}
 
 	// Get server hostname.
 	server = gethostbyname(wiimote_node_name.c_str());
 	if (server == NULL) {
+		//buffer used for communication
+		char buffer[128];
+
 		sprintf(buffer,"ERROR, no host %s", wiimote_node_name.c_str());
 		sr_ecp_msg.message(buffer);
-		throw sensor_error(lib::SYSTEM_ERROR, CANNOT_LOCATE_DEVICE);
+		throw lib::sensor::sensor_error(lib::SYSTEM_ERROR, CANNOT_LOCATE_DEVICE);
 	}
 
 	// Reset socketaddr data.
@@ -52,7 +52,7 @@ wiimote::wiimote(lib::SENSOR_t _sensor_name, const char* _section_name, task::ta
 	// Try to establish a connection with wiimote.
 	if (connect(sockfd, (const struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) {
 		sr_ecp_msg.message("Error connecting");
-		throw sensor_error(lib::SYSTEM_ERROR, CANNOT_LOCATE_DEVICE);
+		throw lib::sensor::sensor_error(lib::SYSTEM_ERROR, CANNOT_LOCATE_DEVICE);
 	}
 
 	sr_ecp_msg.message("Connected to wiimote");
@@ -62,8 +62,8 @@ wiimote::wiimote(lib::SENSOR_t _sensor_name, const char* _section_name, task::ta
 void wiimote::configure_sensor() {
 	// Send adequate command to wiimote.
 	to_vsp.i_code = lib::VSP_CONFIGURE_SENSOR;
-	if(write(sockfd, &to_vsp, sizeof(lib::ECP_VSP_MSG)) == -1)
-		throw sensor_error (lib::SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE);
+	if(write(sockfd, &to_vsp, sizeof(to_vsp)) == -1)
+		throw lib::sensor::sensor_error (lib::SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE);
 }
 
 
@@ -71,42 +71,43 @@ void wiimote::initiate_reading() {
 	// Send adequate command to wiimote.
 	to_vsp.i_code = lib::VSP_INITIATE_READING;
 
-	if(write(sockfd, &to_vsp, sizeof(lib::ECP_VSP_MSG)) == -1)
-		throw sensor_error (lib::SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE);
+	if(write(sockfd, &to_vsp, sizeof(to_vsp)) == -1)
+		throw lib::sensor::sensor_error (lib::SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE);
 }
 
 
-void wiimote::send_reading(lib::ECP_VSP_MSG to) {
+void wiimote::send_reading(const wii_command_t & cmd) {
 	// Send any command to wiimote.
-
-	if(write(sockfd, &to, sizeof(lib::ECP_VSP_MSG)) == -1)
-		throw sensor_error (lib::SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE);
+	to_vsp.i_code = lib::VSP_CONFIGURE_SENSOR;
+	to_vsp.wii_command = cmd;
+	if(write(sockfd, &to_vsp, sizeof(to_vsp)) == -1)
+		throw lib::sensor::sensor_error (lib::SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE);
 }
 
 
 void wiimote::get_reading() {
 	// Send adequate command to wiimote.
-	to_vsp.i_code = lib::VSP_GET_READING;
-        to_vsp.wii_command.led_change = false;
-        to_vsp.wii_command.rumble = false;
-        get_reading(to_vsp);
+	wii_command_t cmd;
+	cmd.led_change = false;
+	cmd.rumble = false;
+	get_reading(cmd);
 }
 
-void wiimote::get_reading(lib::ECP_VSP_MSG message) {
+void wiimote::get_reading(const wii_command_t & message) {
 	// Send adequate command to wiimote.
 	to_vsp.i_code = lib::VSP_GET_READING;
-        to_vsp.wii_command = message.wii_command;
+	to_vsp.wii_command = message;
         
-	if(write(sockfd, &to_vsp, sizeof(lib::ECP_VSP_MSG)) == -1)
-		throw sensor_error (lib::SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE);
+	if(write(sockfd, &to_vsp, sizeof(to_vsp)) == -1)
+		throw lib::sensor::sensor_error (lib::SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE);
 
 	// Read aggregated data from wiimote.
- 	if(read(sockfd, &from_vsp, sizeof(lib::VSP_ECP_MSG))==-1)
-		throw sensor_error (lib::SYSTEM_ERROR, CANNOT_READ_FROM_DEVICE);
+ 	if(read(sockfd, &from_vsp, sizeof(from_vsp))==-1)
+		throw lib::sensor::sensor_error (lib::SYSTEM_ERROR, CANNOT_READ_FROM_DEVICE);
 
 	// Check and copy data from buffer to image.
 	if(from_vsp.vsp_report == lib::VSP_REPLY_OK)
-		memcpy( &(image.sensor_union.begin), &(from_vsp.comm_image.sensor_union.begin), union_size);
+		image = from_vsp.wiimote;
 	else
 		sr_ecp_msg.message ("Reply from VSP not ok");
 }
@@ -115,8 +116,8 @@ void wiimote::get_reading(lib::ECP_VSP_MSG message) {
 wiimote::~wiimote() {
 	// Send adequate command to wiimote.
 	to_vsp.i_code = lib::VSP_TERMINATE;
-	if(write(sockfd, &to_vsp, sizeof(lib::ECP_VSP_MSG)) == -1)
-		throw sensor_error (lib::SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE);
+	if(write(sockfd, &to_vsp, sizeof(to_vsp)) == -1)
+		throw lib::sensor::sensor_error (lib::SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE);
 
 	close(sockfd);
 	sr_ecp_msg.message("Terminate\n");

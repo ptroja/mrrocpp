@@ -1,6 +1,5 @@
 add_executable(ecp_tran
 	../common/task/ecp_t_tran.cc
-	../common/generator/ecp_g_transparent.cc
 )
 
 # enable conditional inclusion to this process

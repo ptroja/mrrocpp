@@ -5,21 +5,22 @@
  *      Author: rtulwin
  */
 
-#include "ecp_g_vis_ib_eih_wrist_turner_irp6ot.h"
 #include <math.h>
+
+#include "ecp_g_vis_ib_eih_wrist_turner_irp6ot.h"
 
 namespace mrrocpp {
 namespace ecp {
 namespace irp6ot_m {
 namespace generator {
 
-ecp_vis_ib_eih_wrist_turner_irp6ot::ecp_vis_ib_eih_wrist_turner_irp6ot(
-		common::task::task& _ecp_task) :
-	common::generator::ecp_visual_servo(_ecp_task) {
-
+ecp_vis_ib_eih_wrist_turner_irp6ot::ecp_vis_ib_eih_wrist_turner_irp6ot(common::task::task& _ecp_task) :
+	common::generator::ecp_visual_servo(_ecp_task)
+{
 }
 
-bool ecp_vis_ib_eih_wrist_turner_irp6ot::first_step() {
+bool ecp_vis_ib_eih_wrist_turner_irp6ot::first_step()
+{
 	/*
 	 printf("first step\n");
 	 flushall();
@@ -48,20 +49,18 @@ bool ecp_vis_ib_eih_wrist_turner_irp6ot::first_step() {
 	 */
 }
 
-bool ecp_vis_ib_eih_wrist_turner_irp6ot::next_step_without_constraints() {
-
+bool ecp_vis_ib_eih_wrist_turner_irp6ot::next_step_without_constraints()
+{
 	printf("poczatek next_step\n");
 	the_robot->ecp_command.instruction.instruction_type = lib::SET_GET;//TODO sprawdzic czy to moze byc robione tylko raz
 
 	printf("next step\n");
 
-	lib::VSP_REPORT vsp_report = vsp_fradia->from_vsp.vsp_report;
+	lib::VSP_REPORT_t vsp_report = vsp_fradia->get_report();
 	if (vsp_report == lib::VSP_REPLY_OK) {
 
-		tracking
-				= vsp_fradia->from_vsp.comm_image.sensor_union.object_tracker.tracking;
-		reached
-				= vsp_fradia->from_vsp.comm_image.sensor_union.object_tracker.reached;
+		tracking = vsp_fradia->get_reading_message().tracking;
+		reached = vsp_fradia->get_reading_message().reached;
 		printf("tracking: %d\t reached: %d \n", tracking, reached);
 		flushall();
 
@@ -74,8 +73,7 @@ bool ecp_vis_ib_eih_wrist_turner_irp6ot::next_step_without_constraints() {
 		}
 	}
 
-	memcpy(the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates,
-			next_position, 6 * sizeof(double)); //zapisanie pozycji w angle axes
+	memcpy(the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates, next_position, 6 * sizeof(double)); //zapisanie pozycji w angle axes
 
 
 	for (int i = 0; i <= 7; i++) {//ustawianie next_position dla wszystkich osi (lacznie z chwytakiem) na 0
@@ -85,7 +83,8 @@ bool ecp_vis_ib_eih_wrist_turner_irp6ot::next_step_without_constraints() {
 	return true;
 }
 
-void ecp_vis_ib_eih_wrist_turner_irp6ot::limit_step() {
+void ecp_vis_ib_eih_wrist_turner_irp6ot::limit_step()
+{
 
 }
 

@@ -46,7 +46,7 @@ namespace vsp {
 namespace common {
 
 /********************************* GLOBALS **********************************/
-static sensor::sensor *vs; // czujnik wirtualny
+static sensor::sensor_interface *vs;		// czujnik wirtualny
 
 static lib::condition_synchroniser vsp_synchroniser;
 
@@ -97,21 +97,20 @@ void error_handler(ERROR & e)
 			vsp::common::vs->sr_msg->message(lib::FATAL_ERROR, e.error_no);
 			break;
 		case lib::NON_FATAL_ERROR:
-			switch (e.error_no)
-			{
-				case INVALID_COMMAND_TO_VSP:
-					vsp::common::vs->from_vsp.vsp_report = lib::INVALID_VSP_COMMAND;
-					vsp::common::vs->sr_msg->message(lib::NON_FATAL_ERROR, e.error_no);
-					break;
-				case SENSOR_NOT_CONFIGURED:
-					vsp::common::vs->from_vsp.vsp_report = lib::VSP_SENSOR_NOT_CONFIGURED;
-					vsp::common::vs->sr_msg->message(lib::NON_FATAL_ERROR, e.error_no);
-					break;
-				case READING_NOT_READY:
-					vsp::common::vs->from_vsp.vsp_report = lib::VSP_READING_NOT_READY;
-					break;
-				default:
-					vsp::common::vs->sr_msg->message(lib::NON_FATAL_ERROR, VSP_UNIDENTIFIED_ERROR);
+			switch(e.error_no) {
+			case INVALID_COMMAND_TO_VSP:
+				vsp::common::vs->set_vsp_report(lib::INVALID_VSP_COMMAND);
+				vsp::common::vs->sr_msg->message (lib::NON_FATAL_ERROR, e.error_no);
+			break;
+			case SENSOR_NOT_CONFIGURED:
+				vsp::common::vs->set_vsp_report(lib::VSP_SENSOR_NOT_CONFIGURED);
+				vsp::common::vs->sr_msg->message (lib::NON_FATAL_ERROR, e.error_no);
+				break;
+			case READING_NOT_READY:
+				vsp::common::vs->set_vsp_report(lib::VSP_READING_NOT_READY);
+				break;
+			default:
+				vsp::common::vs->sr_msg->message (lib::NON_FATAL_ERROR, VSP_UNIDENTIFIED_ERROR);
 			}
 			break;
 		default:
@@ -135,8 +134,8 @@ void* cyclic_read( void*  arg ){
 			pthread_mutex_lock( &mutex );
 			vsp::common::vs->initiate_reading();
 			pthread_mutex_unlock( &mutex );
-		} // koniec TRY
-		catch (lib::VSP_main_error & e){
+			} // koniec TRY
+		catch (vsp::sensor::VSP_main_error & e){
 			error_handler(e);
 			pthread_mutex_unlock( &mutex );
 		} // end CATCH
@@ -149,8 +148,9 @@ void* cyclic_read( void*  arg ){
 }
 
 /**************************** WRITE_TO_SENSOR ******************************/
-void write_to_sensor( lib::VSP_COMMAND i_code){
-	vsp::common::vs->from_vsp.vsp_report= lib::VSP_REPLY_OK;
+void write_to_sensor() {
+	lib::VSP_COMMAND_t i_code = vsp::common::vs->get_command();
+	vsp::common::vs->set_vsp_report(lib::VSP_REPLY_OK);
 	switch(i_code){
 		case lib::VSP_CONFIGURE_SENSOR :
 			vsp::common::vs->configure_sensor();
@@ -164,7 +164,7 @@ void write_to_sensor( lib::VSP_COMMAND i_code){
 			TERMINATE=true;
 			break;
 		default :
-			throw lib::VSP_main_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_VSP);
+			throw vsp::sensor::VSP_main_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_VSP);
 	}
 }
 
@@ -178,16 +178,16 @@ int io_read (resmgr_context_t *ctp, io_read_t *msg, RESMGR_OCB_T *ocb){
 	// SEKCJA KRYTYCZNA - nie moze byc naraz odczyt z urzadzenia i zapis nowego odczytu
 	pthread_mutex_lock( &mutex );
 	  try{
-			vsp::common::vs->from_vsp.vsp_report= lib::VSP_REPLY_OK;
+			vsp::common::vs->set_vsp_report(lib::VSP_REPLY_OK);
 			vsp::common::vs->get_reading();
 			} // end TRY
-		catch (lib::VSP_main_error & e){
+		catch (vsp::sensor::VSP_main_error & e){
 			error_handler(e);
 			} // end CATCH
 		catch (lib::sensor::sensor_error & e){
 			error_handler(e);
 			} // end CATCH
-       resmgr_msgwrite(ctp, &vsp::common::vs->from_vsp, sizeof(lib::VSP_REPORT) + vsp::common::vs->union_size, 0);
+       vs->msgwrite(ctp);
 	pthread_mutex_unlock( &mutex );
 	return(EOK);
 }	// end io_read
@@ -200,12 +200,12 @@ int io_write (resmgr_context_t *ctp, io_write_t *msg, RESMGR_OCB_T *ocb){
 	if (msg->i.xtype & _IO_XTYPE_MASK != _IO_XTYPE_NONE)
 		return(ENOSYS);
 	_IO_SET_WRITE_NBYTES (ctp, msg->i.nbytes);
-	resmgr_msgread(ctp, &vsp::common::vs->to_vsp, msg->i.nbytes, sizeof(msg->i));
+	vs->msgread(ctp);
 	pthread_mutex_lock( &mutex );
 		try{
-		  write_to_sensor(vsp::common::vs->to_vsp.i_code);
+		  write_to_sensor();
 		  } // end TRY
-		catch (lib::VSP_main_error & e){
+		catch (vsp::sensor::VSP_main_error & e){
 		  error_handler(e);
 		  } // end CATCH
 		catch (lib::sensor::sensor_error & e){
@@ -225,15 +225,15 @@ int io_devctl(resmgr_context_t *ctp, io_devctl_t *msg, RESMGR_OCB_T *ocb) {
         return(status);
 
 	_IO_SET_WRITE_NBYTES (ctp, msg->i.nbytes);
-	resmgr_msgread(ctp, &vsp::common::vs->to_vsp, msg->i.nbytes, sizeof(msg->i));
+	vs->msgread(ctp);
 
     switch (msg->i.dcmd) {
     case DEVCTL_WT:
 		pthread_mutex_lock( &mutex );
 			try{
-			  write_to_sensor(vsp::common::vs->to_vsp.i_code);
+			  write_to_sensor();
 			  } // end TRY
-			catch (lib::VSP_main_error & e){
+			catch (vsp::sensor::VSP_main_error & e){
 			  error_handler(e);
 			  } // end CATCH
 			catch (lib::sensor::sensor_error & e){
@@ -245,47 +245,32 @@ int io_devctl(resmgr_context_t *ctp, io_devctl_t *msg, RESMGR_OCB_T *ocb) {
     case DEVCTL_RD:
 		pthread_mutex_lock( &mutex );
 			try{
-				vsp::common::vs->from_vsp.vsp_report= lib::VSP_REPLY_OK;
+				vsp::common::vs->set_vsp_report(lib::VSP_REPLY_OK);
 				vsp::common::vs->get_reading();
 				} // end TRY
-			catch (lib::VSP_main_error & e){
+			catch (vsp::sensor::VSP_main_error & e){
 				error_handler(e);
 				} // end CATCH
 			catch (lib::sensor::sensor_error & e){
 				error_handler(e);
 				} // end CATCH
 		  // Count the start address of reply message content.
-		  /*
-		  struct _io_devctl_reply {
-	          uint32_t                  zero;
-	          int32_t                   ret_val;
-	          int32_t                   nbytes;
-	          int32_t                   zero2;
-		     // char                      data[nbytes];//
-		  =>
-		  &data = &_io_devctl_reply + 16bytes = &_io_devctl_reply + 4*int
-		  */
-		  addr = (int*)&msg->o +4;
-		  memcpy( addr, &vsp::common::vs->from_vsp, vsp::common::vs->union_size + sizeof(lib::VSP_REPORT));
-		  resmgr_msgwrite(ctp, &msg->o,  sizeof(msg->o) + sizeof(lib::VSP_REPORT) + vsp::common::vs->union_size, 0);
+		  vs->msgwrite(ctp);
 		pthread_mutex_unlock( &mutex );
 		return(EOK);
         break;
     case DEVCTL_RW:
 		pthread_mutex_lock( &mutex );
 			try{
-				write_to_sensor(vsp::common::vs->to_vsp.i_code);
+				write_to_sensor();
 				} // end TRY
-			catch (lib::VSP_main_error & e){
+			catch (vsp::sensor::VSP_main_error & e){
 				error_handler(e);
 				} // end CATCH
 			catch (lib::sensor::sensor_error & e){
 				error_handler(e);
 				} // end CATCH
-		  // Count the start address of reply message content.
-		  addr = (int*)&msg->o +4;
-		  memcpy( addr, &vsp::common::vs->from_vsp, vsp::common::vs->union_size + sizeof(lib::VSP_REPORT));
-		  resmgr_msgwrite(ctp, &msg->o,  sizeof(msg->o) + sizeof(lib::VSP_REPORT) + vsp::common::vs->union_size, 0);
+		  vs->msgwrite(ctp);
 		pthread_mutex_unlock( &mutex );
 		return(EOK);
         break;
@@ -341,17 +326,17 @@ int main(int argc, char *argv[]) {
 		// Sprawdzenie czy istnieje /dev/TWOJSENSOR.
 
 		if( access(resourceman_attach_point.c_str(), R_OK)== 0 ){
-			throw lib::VSP_main_error(lib::SYSTEM_ERROR, DEVICE_EXISTS);	// wyrzucany blad
+			throw vsp::sensor::VSP_main_error(lib::SYSTEM_ERROR, DEVICE_EXISTS);	// wyrzucany blad
 		}
 
 		/* initialize dispatch interface */
 		if((dpp = dispatch_create()) == NULL)
-			throw lib::VSP_main_error(lib::SYSTEM_ERROR, DISPATCH_ALLOCATION_ERROR);	// wyrzucany blad
+			throw vsp::sensor::VSP_main_error(lib::SYSTEM_ERROR, DISPATCH_ALLOCATION_ERROR);	// wyrzucany blad
 
 		/* initialize resource manager attributes */
 		memset(&resmgr_attr, 0, sizeof resmgr_attr);
 		resmgr_attr.nparts_max = 1;
-		resmgr_attr.msg_max_size = sizeof(lib::DEVCTL_MSG);
+		resmgr_attr.msg_max_size = sizeof(mrrocpp::vsp::sensor::DEVCTL_MSG);
 
 		/* initialize functions for handling messages */
 		iofunc_func_init(_RESMGR_CONNECT_NFUNCS, &connect_funcs, _RESMGR_IO_NFUNCS, &io_funcs);
@@ -361,7 +346,7 @@ int main(int argc, char *argv[]) {
 
 		/* initialize attribute structure used by the device */
 		iofunc_attr_init(&attr, S_IFNAM | 0666, 0, 0);
-		attr.nbytes = sizeof(lib::DEVCTL_MSG);
+		attr.nbytes = sizeof(mrrocpp::vsp::sensor::DEVCTL_MSG);
 
 
 		/* attach our device name */
@@ -374,7 +359,7 @@ int main(int argc, char *argv[]) {
                        &connect_funcs,		/* connect routines       */
                        &io_funcs,				/* I/O routines           */
                        &attr)) 	== -1){		/* handle                 */
-			throw lib::VSP_main_error(lib::SYSTEM_ERROR, DEVICE_CREATION_ERROR);	// wyrzucany blad
+			throw vsp::sensor::VSP_main_error(lib::SYSTEM_ERROR, DEVICE_CREATION_ERROR);	// wyrzucany blad
 			}
 
 		/* allocate a context structure */
@@ -389,13 +374,13 @@ int main(int argc, char *argv[]) {
 		/* start the resource manager message loop */
 		while(!vsp::common::TERMINATE) { // for (;;)
 			if((ctp = dispatch_block(ctp)) == NULL)
-				throw lib::VSP_main_error(lib::SYSTEM_ERROR, DISPATCH_LOOP_ERROR);	// wyrzucany blad
+				throw vsp::sensor::VSP_main_error(lib::SYSTEM_ERROR, DISPATCH_LOOP_ERROR);	// wyrzucany blad
 			dispatch_handler(ctp);
 		} // end for(;;)
 	     vsp::common::vs->sr_msg->message ("VSP terminated");
 	     delete vsp::common::vs;
-	} // koniec TRY
-	catch (lib::VSP_main_error & e){
+		} // koniec TRY
+	catch (vsp::sensor::VSP_main_error & e){
 		vsp::common::error_handler(e);
 		exit(EXIT_FAILURE);
 	} // end CATCH

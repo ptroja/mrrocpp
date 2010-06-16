@@ -24,8 +24,23 @@ class manip_effector;
 }
 namespace sensor {
 
+typedef enum _force_readring_status {
+	EDP_FORCE_SENSOR_READING_CORRECT,
+	EDP_FORCE_SENSOR_READING_ERROR,
+	EDP_FORCE_SENSOR_OVERLOAD
+} force_readring_status_t;
+
+typedef struct _force_data
+{
+	double rez[6]; // by Y pomiar sily
+
+	//! Force reading status
+	force_readring_status_t status;
+} force_data_t;
+
+
 /********** klasa czujnikow po stronie EDP **************/
-class force: public lib::sensor, boost::noncopyable
+class force: public lib::sensor_interface
 {
 protected:
 	bool is_reading_ready; // czy jakikolwiek odczyt jest gotowy?
@@ -35,6 +50,11 @@ protected:
 	common::manip_effector &master;
 
 	virtual void connect_to_hardware(void) = 0;
+
+	struct _from_vsp {
+		lib::VSP_REPORT_t vsp_report;
+		force_data_t force;
+	} from_vsp;
 
 public:
 	void operator()(void);
@@ -60,6 +80,7 @@ public:
 	virtual ~force();
 
 	virtual void wait_for_event(void) = 0; // oczekiwanie na zdarzenie
+
 	void set_force_tool(void);
 }; // end: class edp_force_sensor
 

@@ -12,36 +12,37 @@ namespace ecp {
 namespace irp6ot_m {
 namespace generator {
 
-ecp_vis_ib_eih_planar_irp6ot::ecp_vis_ib_eih_planar_irp6ot(
-		common::task::task& _ecp_task) :
-	common::generator::ecp_visual_servo(_ecp_task) {
+ecp_vis_ib_eih_planar_irp6ot::ecp_vis_ib_eih_planar_irp6ot(common::task::task& _ecp_task) :
+	common::generator::ecp_visual_servo(_ecp_task)
+{
 	retrieve_parameters();
 }
 
-void ecp_vis_ib_eih_planar_irp6ot::retrieve_parameters() {
+void ecp_vis_ib_eih_planar_irp6ot::retrieve_parameters()
+{
 	//Maksymalna wartosc  predkosci.
-	v_max = ecp_t.config.value<double> ("v_max");
+	v_max = ecp_t.config.value <double> ("v_max");
 
 	//Wartosc przyspieszenia z jakim osiagana jest maksymalna predkosc.
-	a = ecp_t.config.value<double> ("a");
+	a = ecp_t.config.value <double> ("a");
 
 	//Minimalna  wartosc predkosci do jakiej schodzimy przy hamowaniu.
-	v_min = ecp_t.config.value<double> ("v_min");
+	v_min = ecp_t.config.value <double> ("v_min");
 
 	//Dystans wyrazony w pikselach, przy ktorym powinnismy hamowac.
-	breaking_dist = ecp_t.config.value<double> ("breaking_dist");
-
+	breaking_dist = ecp_t.config.value <double> ("breaking_dist");
 }
 
-bool ecp_vis_ib_eih_planar_irp6ot::first_step() {
+bool ecp_vis_ib_eih_planar_irp6ot::first_step()
+{
 	/*
-	 vsp_fradia = sensor_m[lib::SENSOR_CVFRADIA];
+	 vsp_fradia = dynamic_cast<fradia_sensor_deviation *> sensor_m[lib::SENSOR_CVFRADIA];
 
 	 the_robot->ecp_command.instruction.instruction_type = lib::GET;
 	 the_robot->ecp_command.instruction.get_type = ARM_DEFINITION;
 	 the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_ANGLE_AXIS;
 	 the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
-	 vsp_fradia->to_vsp.haar_detect_mode = lib::WITHOUT_ROTATION;
+	 vsp_fradia->to_vsp = lib::WITHOUT_ROTATION;
 	 t_m = MOTION_STEPS * STEP;
 	 x = 0;y = 0;v = 0;s = 0;
 	 breaking = false;
@@ -57,7 +58,8 @@ bool ecp_vis_ib_eih_planar_irp6ot::first_step() {
 	 */
 }
 
-bool ecp_vis_ib_eih_planar_irp6ot::next_step_without_constraints() {
+bool ecp_vis_ib_eih_planar_irp6ot::next_step_without_constraints()
+{
 
 	//Odczytanie pozycji poczatkowej koncowki w reprezentacji os-kat.
 	if (node_counter == 1) {
@@ -88,11 +90,11 @@ bool ecp_vis_ib_eih_planar_irp6ot::next_step_without_constraints() {
 		alpha = the_robot->reply_package.arm.pf_def.arm_coordinates[1]
 				- the_robot->reply_package.arm.pf_def.arm_coordinates[6];
 		//Uchyb wyrazony w pikselach.
-		double ux = vsp_fradia->from_vsp.comm_image.sensor_union.deviation.x;
-		double uy = vsp_fradia->from_vsp.comm_image.sensor_union.deviation.y;
+		double ux = vsp_fradia->get_reading_message().x;
+		double uy = vsp_fradia->get_reading_message().y;
 
 		//Sprawdz czy jest odczyt z fradii.
-		lib::VSP_REPORT vsp_report = vsp_fradia->from_vsp.vsp_report;
+		lib::VSP_REPORT_t vsp_report = vsp_fradia->get_report();
 		if (vsp_report == lib::VSP_REPLY_OK) {
 			//Sprawdzam czy osiagnieto odleglosc przy ktorej hamujemy.
 			if (fabs(ux) < breaking_dist && fabs(uy) < breaking_dist)
@@ -163,9 +165,9 @@ bool ecp_vis_ib_eih_planar_irp6ot::next_step_without_constraints() {
 	return false;
 }
 
-bool ecp_vis_ib_eih_planar_irp6ot::check_if_followed() {
-	double frame_no =
-			vsp_fradia->from_vsp.comm_image.sensor_union.deviation.frame_number;
+bool ecp_vis_ib_eih_planar_irp6ot::check_if_followed()
+{
+	double frame_no = vsp_fradia->get_reading_message().frame_number;
 
 	//Ograniczenia na ruch
 	if (first_move) {
@@ -187,11 +189,10 @@ bool ecp_vis_ib_eih_planar_irp6ot::check_if_followed() {
 		return false;
 	} else
 		return true;
-
 }
 
-void ecp_vis_ib_eih_planar_irp6ot::limit_step() {
-
+void ecp_vis_ib_eih_planar_irp6ot::limit_step()
+{
 }
 
 } // namespace generator

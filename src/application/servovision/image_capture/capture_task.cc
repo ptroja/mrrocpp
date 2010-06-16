@@ -6,7 +6,8 @@
  */
 
 #include "capture_task.h"
-#include "../logger.h"
+
+#include "lib/logger.h"
 #include "ecp/irp6ot_m/ecp_r_irp6ot_m.h"
 
 using namespace logger;
@@ -22,14 +23,12 @@ namespace task {
 CaptureTask::CaptureTask(mrrocpp::lib::configurator& configurator) :
 	task(configurator) {
 	log("CaptureTask::CaptureTask()\n");
-	logEnabled = logDbgEnabled = true;
+	log_enabled = log_dbg_enabled = true;
 	ecp_m_robot = new ecp::irp6ot_m::robot(*this);
 	smoothGen = new mrrocpp::ecp::common::generator::smooth(*this, true);
-	fradiaSensor = new mrrocpp::ecp_mp::sensor::fradia_sensor<char,
-			effectorTranslation>(configurator, "[capture_task_fradia_config]");
+	fradiaSensor = new capture_image_sensor(configurator, "[capture_task_fradia_config]");
 	fradiaSensor->configure_sensor();
 	et.captureNow = false;
-	fradiaSensor->configure_fradia_task(et);
 
 	configurator.value<double> ("x_points", "[capture_image]");
 
@@ -46,8 +45,9 @@ CaptureTask::CaptureTask(mrrocpp::lib::configurator& configurator) :
 	log("Rozmiar kroku x: %g, y: %g, z: %g\n", deltaX, deltaY, deltaZ);
 }
 
-CaptureTask::~CaptureTask() {
-
+CaptureTask::~CaptureTask()
+{
+	delete fradiaSensor;
 }
 
 void CaptureTask::main_task_algorithm(void) {
@@ -128,7 +128,7 @@ void CaptureTask::nextPosition(double deltaX, double deltaY, double deltaZ) {
 
 void CaptureTask::captureImage() {
 	sleep(2);
-	fradiaSensor->configure_fradia_task(et);
+	fradiaSensor->set_initiate_message(et);
 	sleep(2);
 }
 

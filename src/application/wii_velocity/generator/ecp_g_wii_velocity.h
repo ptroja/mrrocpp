@@ -1,12 +1,6 @@
 #ifndef ECP_WII_VELOCITY_GENERATOR_H
 #define ECP_WII_VELOCITY_GENERATOR_H
 
-#include <string.h>
-#include <math.h>
-#include <unistd.h>
-
-#include <time.h>
-
 #include "ecp/common/generator/ecp_g_force.h"
 
 namespace mrrocpp {

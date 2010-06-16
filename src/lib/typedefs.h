@@ -13,10 +13,10 @@
 
 typedef struct _pulse msg_header_t;
 
-typedef struct  { // wiadomosc odbierana przez readera
-    msg_header_t hdr;
-    int data;	// TODO: to pole chyba nie jest potrzebne (ptroja)
-} _pulse_msg;
+typedef struct { // wiadomosc odbierana przez readera
+	msg_header_t hdr;
+	int data; // TODO: to pole chyba nie jest potrzebne (ptroja)
+}_pulse_msg;
 
 #else
 #include <stdint.h>
@@ -48,14 +48,14 @@ typedef struct  { // wiadomosc odbierana przez readera
 #define	in16(port)		inw(port)
 #elif defined(sun)
 /*
-// These functions are obsolete, but more handy; use ddi_put8(9F) and similar instead
-#include <sys/ddi.h>
-#include <sys/sunddi.h>
-#define	out8(port,val)	outb((port),(val))
-#define	out16(port,val)	outw((port),(val))
-#define	in8(port)		inb(port)
-#define	in16(port)		inw(port)
-*/
+ // These functions are obsolete, but more handy; use ddi_put8(9F) and similar instead
+ #include <sys/ddi.h>
+ #include <sys/sunddi.h>
+ #define	out8(port,val)	outb((port),(val))
+ #define	out16(port,val)	outw((port),(val))
+ #define	in8(port)		inb(port)
+ #define	in16(port)		inw(port)
+ */
 #define	out8(port,val)	(void) 0
 #define	out16(port,val)	(void) 0
 #define	in8(port)		0

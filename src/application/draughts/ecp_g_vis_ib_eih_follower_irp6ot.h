@@ -8,18 +8,19 @@
 #ifndef ECP_VIS_IB_EIH_FOLLOWER_IRP6OT_H_
 #define ECP_VIS_IB_EIH_FOLLOWER_IRP6OT_H_
 
-#include "ecp/common/generator/ecp_g_visual_servo.h"
-
+#include <iostream>
 #include <string.h>
 #include <math.h>
 
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
+#include "ecp/common/generator/ecp_g_visual_servo.h"
+#include "ecp_mp/sensor/ecp_mp_s_fradia_sensor.h"
 
-#include "ecp_mp/sensor/ecp_mp_s_cvfradia.h"
-
-
-#include <iostream>
+// uchyb w follower
+typedef struct _tracker {
+	bool tracking;
+	int x;
+	int y;
+} tracker_t;
 
 namespace mrrocpp {
 namespace ecp {
@@ -28,12 +29,16 @@ namespace generator {
 
 #define MOTION_STEPS 25
 
+typedef enum _HD_MODE
+{
+	WITHOUT_ROTATION, PERFORM_ROTATION
+} hd_mode_t;
 
-class ecp_vis_ib_eih_follower_irp6ot: public common::generator::ecp_visual_servo {
+class ecp_vis_ib_eih_follower_irp6ot : public common::generator::ecp_visual_servo {
 
 public:
+	ecp_mp::sensor::fradia_sensor<lib::empty_t, tracker_t, hd_mode_t> *vsp_fradia; //wirtualny sensor
 
-	lib::sensor *vsp_fradia; //wirtualny sensor
     double next_position[8]; 	//pozycja w nastepnym kroku.
     //double alpha; //orientacja koncokwi wzgledem ukladu bazowego.
     double u[2]; //uchyb

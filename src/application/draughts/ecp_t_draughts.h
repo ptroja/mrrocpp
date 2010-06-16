@@ -7,7 +7,7 @@
 #include "lib/com_buf.h"
 #include "ecp/common/task/ecp_st_go.h"
 #include "ecp/common/generator/ecp_g_sleep.h"
-#include "ecp_mp/sensor/ecp_mp_s_cvfradia.h"
+#include "ecp_mp/sensor/ecp_mp_s_fradia_sensor.h"
 #include "ecp_mp_tr_draughtsAI.h"
 #include "ecp_g_vis_ib_eih_follower_irp6ot.h"
 
@@ -15,6 +15,40 @@ namespace mrrocpp {
 namespace ecp {
 namespace irp6ot_m {
 namespace task {
+
+/*commands from mrrocpp used in Draughts task*/
+typedef enum {
+	TRACK_PAWN,
+	Z_TRACKER,
+	DETECT_BOARD_STATE,
+	NONE,
+	STORE_BOARD,
+	CHECK_MOVE
+} DRAUGHTS_MODE;
+
+/*information returned to mrrocpp used in Draughts task*/
+typedef enum {
+	STATE_CHANGED,
+	STATE_UNCHANGED,
+	STATE_OK,
+	BOARD_DETECTION_ERROR
+} BOARD_STATUS;
+
+/*
+ * Structure for storing pawn coordinates from cvFraDIA
+ * used in Draughts task
+ * \author tbem
+ */
+typedef struct {
+	char fields[32];
+	BOARD_STATUS status;
+} board;
+
+//structure for controlling fraDIA form mrrocpp
+typedef struct {
+	DRAUGHTS_MODE draughts_mode;
+	char pawn_nr;
+} draughts_control;
 
 const int WKING =0, BKING=1;
 const int WMAN  =2, BMAN=3;
@@ -25,10 +59,12 @@ const int AI_NORMAL_MOVE=0;
 const int AI_COMPUTER_WON=1;
 const int AI_HUMAN_WON=2;
 
-class Draughts: public common::task::task{
+typedef ecp_mp::sensor::fradia_sensor<lib::empty_t, board, draughts_control> fradia_sensor_board_and_draughts;
+
+class Draughts: public common::task::task {
 
 	private:
-		lib::sensor *vsp_fradia;						//Virtual sensor
+		fradia_sensor_board_and_draughts *vsp_fradia;		//Virtual sensor
 		//common::generator::smooth* sgen;				//smooth movement generator
 		common::generator::smooth* sgen2;				//smooth movement generator
 		common::generator::bias_edp_force* befgen;		//calibration of force
@@ -48,9 +84,9 @@ class Draughts: public common::task::task{
 		~Draughts();
 		void bPawn2bKing(int from, int to);
 		void closeGripper();
-		void fradiaControl(lib::DRAUGHTS_MODE,char);
+		void fradiaControl(DRAUGHTS_MODE,char);
 		void getAIMove(int player);
-		lib::BOARD_STATUS getBoardStatus();
+		BOARD_STATUS getBoardStatus();
 		void goToInitialPos();
 		void goUp();
 		void init_tdes(lib::ECP_POSE_SPECIFICATION, int);

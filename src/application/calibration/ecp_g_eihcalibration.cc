@@ -7,6 +7,8 @@
 
 #include "ecp_g_eihcalibration.h"
 
+#include <stdexcept>
+
 namespace mrrocpp {
 namespace ecp {
 namespace common {
@@ -29,23 +31,32 @@ eihgenerator::~eihgenerator ()
 
 bool eihgenerator::first_step()
 {
-	sensor = (ecp_mp::sensor::cvfradia *)sensor_m[lib::SENSOR_CVFRADIA];
+	sensor = dynamic_cast<ecp_mp::sensor::fradia_sensor<lib::empty_t, chessboard_t, eihcalibration_t> *> (sensor_m[lib::SENSOR_CVFRADIA]);
+	if(sensor == NULL){
+		throw std::logic_error("bool eihgenerator::first_step()");
+	}
 
 	//proste zadanie kinematyki
 	the_robot->ecp_command.instruction.instruction_type = lib::GET;
 	the_robot->ecp_command.instruction.get_type = ARM_DEFINITION;
 	the_robot->ecp_command.instruction.get_arm_type = lib::FRAME;
 
-	sensor->to_vsp.i_code = lib::VSP_INITIATE_READING;
+	//sensor->to_vsp.i_code = lib::VSP_INITIATE_READING;
+
+	printf("bool eihgenerator::first_step()\n"); fflush(stdout);
 	return true;
 }
 
 bool eihgenerator::next_step()
 {
-	if(sensor->from_vsp.comm_image.sensor_union.chessboard.found == true)
-		count++;
+	printf("bool eihgenerator::next_step()\n"); fflush(stdout);
+	if(sensor->get_reading_message().found == true)
+	count++;
 	get_frame();
-	sensor->to_vsp.eihcalibration.frame_number = count;
+	eihcalibration_t command;
+	command.frame_number = count;
+	sensor->set_initiate_message(command);
+	//sensor->to_vsp.parameters.frame_number = count;
 	return false;
 }
 

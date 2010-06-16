@@ -11,21 +11,25 @@ using namespace mrrocpp;
 
 namespace mrrocpp {
 namespace lib {
-
-enum SHEAD_CBUFFER_VARIANT {
+const robot_name_t ROBOT_SHEAD = "ROBOT_SHEAD";
+enum SHEAD_CBUFFER_VARIANT
+{
 	SHEAD_CBUFFER_HEAD_SOLIDIFICATION, SHEAD_CBUFFER_VACUUM_ACTIVATION
 };
 
-struct shead_cbuffer {
+struct shead_cbuffer
+{
 	SHEAD_CBUFFER_VARIANT variant;
-	union {
+	union
+	{
 		lib::SHEAD_HEAD_SOLIDIFICATION head_solidification;
 		lib::SHEAD_VACUUM_ACTIVATION vacuum_activation;
 	};
 
 };
 
-struct shead_rbuffer {
+struct shead_rbuffer
+{
 	shead_reply reply;
 };
 

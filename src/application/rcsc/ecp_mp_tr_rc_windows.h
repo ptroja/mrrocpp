@@ -25,17 +25,30 @@ namespace transmitter {
 typedef struct {
 	char response[1024];
 	char request[255];
-	const char* solver_hostname;
+	std::string solver_hostname;
 	uint16_t solver_port;
 	boost::mutex mtx;
 } rc_win_buf_typedef;
 
-/***************** Klasa czujnikow ********************/
-class rc_windows: public transmitter{
-  private:									// pola do komunikacji
+// wlasciwe pola obrazu - unie!
+typedef struct _to_rc_windows {
+	char rc_state[54+1];	// 6faces*9facets+trailing '0'
+} to_rc_windows_t;
+
+typedef struct _from_rc_windows_t {
+	char sequence[100];
+} from_rc_windows_t;
+
+static const std::string TRANSMITTER_RC_WINDOWS = "TRANSMITTER_RC_WINDOWS";
+
+typedef transmitter<to_rc_windows_t, from_rc_windows_t> rc_windows_transmitter_t;
+
+class rc_windows: public rc_windows_transmitter_t {
+  private:
+	// TODO: rewrite with boost::thread
   	pthread_t worker;
 
-	static int make_socket (const char *hostname, uint16_t port);
+	static int make_socket (const std::string & hostname, uint16_t port);
 	static void * do_query(void *);
 
   	static rc_win_buf_typedef *rc_win_buf;
@@ -43,8 +56,7 @@ class rc_windows: public transmitter{
   public:
 	// Konstruktor
  	rc_windows (TRANSMITTER_ENUM _transmitter_name, const char* _section_name, task::task& _ecp_mp_object);
-											// konstruktor czujnika virtualnego
-	~rc_windows();						// destruktor czujnika virtualnego
+	~rc_windows();
 
     // odczyt z zawieszaniem lub bez
 	virtual bool t_read (bool wait);

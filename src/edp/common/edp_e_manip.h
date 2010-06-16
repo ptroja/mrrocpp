@@ -37,8 +37,7 @@ namespace common {
  * It extends motor_driven_effector by the methods of computation of the end--effector position with direct and inverse kinematic task
  * and some methods of govering data for the purpose of position--force control.
  */
-class manip_effector: public common::motor_driven_effector
-{
+class manip_effector: public common::motor_driven_effector {
 
 protected:
 
@@ -100,29 +99,27 @@ protected:
 
 public:
 
+
 	/*!
-	 * \brief variable to memorize if the force_control is active
+	 * \brief Info if the force sensor test mode is active.
 	 *
-	 * It is set from the configuration file
+	 * It is taken from configuration data.
 	 */
-    int force_tryb;
+	bool force_sensor_test_mode;
 
 	/*!
 	 * \brief geat_arm_position methos with servo_buffer and force measurement
 	 *
 	 * One of the variant of get_arm_position method commonly choosen in inherited robots.
 	 */
-    void get_arm_position_with_force_and_sb(bool, lib::c_buffer &);
-
-
+	void get_arm_position_with_force_and_sb(bool, lib::c_buffer &);
 
 	/*!
 	 * \brief method to set the robot model commanded by ECP with usage of ser_buffer
 	 *
 	 * This method extends set_robot_model_method in case of usage of servo_buffer thread
 	 */
-    void set_robot_model_with_sb(const lib::c_buffer &instruction);
-
+	void set_robot_model_with_sb(const lib::c_buffer &instruction);
 
 	/*!
 	 * \brief manip_effector class constructor
@@ -144,7 +141,11 @@ public:
 	 * For the purpose of the position-force control. It is called once from the pose_force_torque_at_frame_move.
 	 */
 	void
-			compute_base_pos_xyz_rot_xyz_vector(const lib::JointArray & begining_joints, const lib::Homog_matrix & begining_end_effector_frame, const lib::c_buffer & instruction, lib::Xyz_Angle_Axis_vector & base_pos_xyz_rot_xyz_vector);
+	compute_base_pos_xyz_rot_xyz_vector(
+			const lib::JointArray & begining_joints,
+			const lib::Homog_matrix & begining_end_effector_frame,
+			const lib::c_buffer & instruction,
+			lib::Xyz_Angle_Axis_vector & base_pos_xyz_rot_xyz_vector);
 
 	/*!
 	 * \brief Iteration (interpolation) of the position-force control motion.
@@ -152,8 +153,10 @@ public:
 	 * It bases on the pose_force_torque_at_frame_move and other ECP command arguments.
 	 */
 	virtual void
-			iterate_macrostep(const lib::JointArray & begining_joints, const lib::Homog_matrix & begining_end_effector_frame, const lib::c_buffer & instruction, const lib::Xyz_Angle_Axis_vector & base_pos_xyz_rot_xyz_vector);
-
+	iterate_macrostep(const lib::JointArray & begining_joints,
+			const lib::Homog_matrix & begining_end_effector_frame,
+			const lib::c_buffer & instruction,
+			const lib::Xyz_Angle_Axis_vector & base_pos_xyz_rot_xyz_vector);
 
 	/*!
 	 * \brief pose-force command execution
@@ -161,7 +164,7 @@ public:
 	 * The main function of the pose-force command execution (interpolation)
 	 * It calls compute_base_pos_xyz_rot_xyz_vector and iterate_macrostep methods.
 	 */
-    void pose_force_torque_at_frame_move (const lib::c_buffer &instruction);
+	void pose_force_torque_at_frame_move(const lib::c_buffer &instruction);
 
 	/*!
 	 * \brief method to set global_force_msr with mutex protection.
@@ -219,7 +222,8 @@ public:
 	 * it defines the execution for the frame coordinates and
 	 * calls the get_arm_position_get_arm_type_switch method of the motor_driven_effector class.
 	 */
-	virtual void get_arm_position_get_arm_type_switch(lib::c_buffer &instruction);
+	virtual void get_arm_position_get_arm_type_switch(
+			lib::c_buffer &instruction);
 };
 
 } // namespace common

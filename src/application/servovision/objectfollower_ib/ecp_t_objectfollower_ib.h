@@ -10,7 +10,7 @@
 
 #include "ecp/common/task/ecp_task.h"
 #include <boost/shared_ptr.hpp>
-#include "../logger.h"
+#include "lib/logger.h"
 #include "ecp/irp6ot_m/ecp_r_irp6ot_m.h"
 //#include "ecp/irp6ot_m/ecp_r_irp6ot_m.h"
 #include "ecp/common/generator/ecp_g_smooth.h"

@@ -22,11 +22,9 @@ wii_ellipse::wii_ellipse(lib::configurator &_config) :
 	ecp_m_robot = new irp6ot_m::robot(*this);
 
 	//create Wii-mote virtual sensor object
-	sensor_m[lib::SENSOR_WIIMOTE] = new ecp_mp::sensor::wiimote(
-			lib::SENSOR_WIIMOTE, "[vsp_wiimote]", *this,
-			sizeof(lib::sensor_image_t::sensor_union_t::wiimote_t));
+	sensor_m[ecp_mp::sensor::SENSOR_WIIMOTE] = new ecp_mp::sensor::wiimote(ecp_mp::sensor::SENSOR_WIIMOTE, "[vsp_wiimote]", *this->sr_ecp_msg, this->config);
 	//configure the sensor
-	sensor_m[lib::SENSOR_WIIMOTE]->configure_sensor();
+	sensor_m[ecp_mp::sensor::SENSOR_WIIMOTE]->configure_sensor();
 }
 
 void wii_ellipse::main_task_algorithm(void) {
