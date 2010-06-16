@@ -101,6 +101,8 @@ void Bird_hand::getStatus(uint8_t id, uint8_t &status, int32_t &position, int16_
 
 	struct status_* stat = (status_*) &buf[3];
 
+	printf("<%d> %d ", id, stat->abspos);
+
 	status = stat->status;
 	position = stat->position;
 	current = stat->current;

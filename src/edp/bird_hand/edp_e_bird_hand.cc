@@ -18,6 +18,8 @@
 #include "lib/mis_fun.h"
 #include "lib/mrmath/mrmath.h"
 
+#include "combuf.h"
+
 // Klasa edp_irp6ot_effector.
 #include "edp/bird_hand/edp_e_bird_hand.h"
 #include "edp/common/reader.h"
@@ -57,14 +59,15 @@ void effector::get_controller_state(lib::c_buffer &instruction) {
 	if (!test_mode) {
 		for (uint8_t i = 0; i < BIRD_HAND_NUM_OF_SERVOS; i++) {
 			int16_t abspos;
-			if (i < 2)
+			if (i < 4)
 				device.getSynchroPos(i, abspos);
-			synchro_position[i] = (int32_t) (abspos * 124345.23443); // TODO : tu wstawić magiczną stałą
+			synchro_position[i] = (int32_t) ((double)abspos /4096 * 275 * 7.826 * 512); // TODO : tu wstawić magiczną stałą
+			printf("synchro position readed : %d \n", synchro_position[i]);
 		}
 	}
 	controller_state_edp_buf.is_synchronised = true;
 
-	printf("synchro position readed : %d \n", synchro_position[0]);
+
 
 	reply.controller_state = controller_state_edp_buf;
 
@@ -137,7 +140,9 @@ void effector::move_arm(const lib::c_buffer &instruction) {
 						(int16_t) ecp_edp_cbuffer.bird_hand_command_structure.motion_steps,
 						(int16_t) ecp_edp_cbuffer.bird_hand_command_structure.finger[i].reciprocal_of_damping,
 						(int16_t) ecp_edp_cbuffer.bird_hand_command_structure.finger[i].desired_torque,
-						(int32_t) ecp_edp_cbuffer.bird_hand_command_structure.finger[i].desired_position);
+						(int32_t) (ecp_edp_cbuffer.bird_hand_command_structure.finger[i].desired_position * 512 * 275 * 7.826) + synchro_position[i]);
+						printf("cmd pos: %lf * 275 * 7.826 * 512 + %d = %d \n", ecp_edp_cbuffer.bird_hand_command_structure.finger[i].desired_position, synchro_position[i], (int32_t) (ecp_edp_cbuffer.bird_hand_command_structure.finger[i].desired_position * 275 * 7.826 * 512) + synchro_position[i]);
+
 				break;
 			}
 		}
@@ -241,16 +246,25 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction) 
 			int16_t t, c;
 			uint8_t status;
 
-			if (i < 2)
+			if (i < 4)
 				device.getStatus(i, status, pos, c, t);
 
 			edp_ecp_rbuffer.bird_hand_status_reply_structure.finger[i].meassured_position
-					= (pos - synchro_position[i]);
+					= (double)(pos - synchro_position[i])/512 * 1/275 * 1/7.826;
+			//printf("msr pos: %lf = (%d - %d)/512 * 1/275 * 1/7.826 \n", edp_ecp_rbuffer.bird_hand_status_reply_structure.finger[i].meassured_position, pos, synchro_position[i]);
+			fflush(stdout);
 			edp_ecp_rbuffer.bird_hand_status_reply_structure.finger[i].meassured_current
 					= c;
 			edp_ecp_rbuffer.bird_hand_status_reply_structure.finger[i].meassured_torque
 					= t;
+		//	printf(" (%d) : %d", i, (int)t);
+			//printf("status %d \n", (int)status);
+			edp_ecp_rbuffer.bird_hand_status_reply_structure.finger[i].upper_limit_of_absolute_value_of_meassured_torque = status & (1<<TORQUE_LIMIT);
+			edp_ecp_rbuffer.bird_hand_status_reply_structure.finger[i].lower_limit_of_absolute_position = status & (1<<LOWER_LIMIT);
+			edp_ecp_rbuffer.bird_hand_status_reply_structure.finger[i].upper_limit_of_absolute_position = status & (1<<UPPER_LIMIT);
+			edp_ecp_rbuffer.bird_hand_status_reply_structure.finger[i].upper_limit_of_meassured_current = status & (1<<CURRENT_LIMIT);
 		}
+		printf("\n");
 	}
 	reply.servo_step = step_counter;
 
