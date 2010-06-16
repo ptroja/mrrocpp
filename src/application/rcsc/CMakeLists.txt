@@ -41,7 +41,6 @@ add_executable(ecp_fsautomat
 	../../ecp/common/task/ecp_st_go.cc
 	../../ecp/common/generator/ecp_g_smooth.cc
 	../../ecp/common/generator/ecp_g_force.cc
-	../../ecp/common/generator/ecp_g_transparent.cc
 	../../ecp/common/generator/ecp_g_jarosz.cc
 	../../ecp/common/generator/ecp_g_operator_reaction_condition.cc
 )
