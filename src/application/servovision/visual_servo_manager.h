@@ -64,8 +64,6 @@ public:
 	 * @param term_cond
 	 */
 	void add_termination_condition(boost::shared_ptr <termination_condition> term_cond);
-
-	void set_speed_accel_constraints(double v_max, double a_max);
 protected:
 	visual_servo_manager(mrrocpp::ecp::common::task::task & ecp_task, const std::string& section_name);
 	/**
@@ -90,21 +88,42 @@ private:
 	std::vector <boost::shared_ptr <position_constraint> > position_constraints;
 	std::vector <boost::shared_ptr <termination_condition> > termination_conditions;
 
-	double a_max, v_max;
+	/** End effector's linear speed */
+	double max_speed;
+	/** End effector's rotation speed */
+	double max_angular_speed;
+
+	/** End effector's linear acceleration */
+	double max_acceleration;
+	/** End effector's rotation acceleration */
+	double max_angular_acceleration;
+
 	/** Current end effector speed */
-	Eigen::Matrix <double, 3, 1> v;
+	Eigen::Matrix <double, 3, 1> velocity;
+	/** Current end effector speed */
+	Eigen::Matrix <double, 3, 1> angular_velocity;
 
 	/** Previous end effector speed */
-	Eigen::Matrix <double, 3, 1> prev_v;
+	Eigen::Matrix <double, 3, 1> prev_velocity;
+	/** Previous end effector speed */
+	Eigen::Matrix <double, 3, 1> prev_angular_velocity;
 
 	/** End effector acceleration */
-	Eigen::Matrix <double, 3, 1> a;
+	Eigen::Matrix <double, 3, 1> acceleration;
+	/** End effector acceleration */
+	Eigen::Matrix <double, 3, 1> angular_acceleration;
 
 	/**
 	 * Apply constraints for speed and acceleration.
-	 * @param new_position Matrix will be modified to satisfy constraints.
+	 * @param ds
+	 * @param prev_v
+	 * @param v
+	 * @param a
+	 * @param max_v
+	 * @param max_a
 	 */
-	void apply_speed_accel_constraints(lib::Homog_matrix& new_position);
+	void constrain_vector(Eigen::Matrix <double, 3, 1> &ds, Eigen::Matrix <double, 3, 1> &prev_v, Eigen::Matrix <
+			double, 3, 1> &v, Eigen::Matrix <double, 3, 1> &a, double max_v, double max_a);
 
 	//	timer_t timerek;
 	//	itimerspec max_t;
