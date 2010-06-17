@@ -15,8 +15,8 @@ namespace generator {
 multiple_position::multiple_position(common::task::task& _ecp_task) :
 	generator(_ecp_task) {
 
-	pose_vector = vector<ecp_mp::common::trajectory_pose::trajectory_pose>();
-	coordinate_vector = vector<vector<double> >();
+	//pose_vector = vector<ecp_mp::common::trajectory_pose::trajectory_pose>();
+	//coordinate_vector = vector<vector<double> >();
 }
 
 multiple_position::~multiple_position() {

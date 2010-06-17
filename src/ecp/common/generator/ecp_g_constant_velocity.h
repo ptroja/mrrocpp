@@ -38,13 +38,9 @@ class constant_velocity : public multiple_position {
 		 */
 		virtual bool first_step();
 		/**
-		 * Implementation of the next_step method.s
+		 * Implementation of the next_step method.
 		 */
 		virtual bool next_step();
-		/**
-		 *
-		 */
-		bool calculate_interpolate();
 
 	private:
 

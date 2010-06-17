@@ -34,6 +34,10 @@ constant_velocity_trajectory_pose::~constant_velocity_trajectory_pose() {
 
 }
 
+/*bool constant_velocity_trajectory_pose::set_max_velocity(const vector<double> & v_max) {
+	this->v_max = v_max;
+}*/
+
 } // namespace trajectory_pose
 } // namespace common
 } // namespace ecp

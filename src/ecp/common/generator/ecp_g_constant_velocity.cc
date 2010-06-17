@@ -17,6 +17,8 @@ constant_velocity::constant_velocity(common::task::task& _ecp_task, bool _is_syn
 	this->pose_spec = pose_spec;
 	this->axes_num = axes_num;
 	this->vpc = velocity_profile_calculator::constant_velocity_profile();
+	//pose_vector = vector<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose>();
+	//pose_vector_iterator = vector<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose>::iterator();
 }
 
 constant_velocity::~constant_velocity() {
@@ -60,27 +62,44 @@ bool constant_velocity::first_step() {
 		default:
 			throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 	}
+
+	return true;
 }
 
 bool constant_velocity::next_step() {
 
+	return true;
+}
+
+bool multiple_position::calculate_interpolate() {
+
+	get_position * get_pos = new get_position(ecp_t, true, pose_spec, axes_num);
+
+	pose_vector_iterator = pose_vector.begin();
+	get_pos->Move();
+	//boost::dynamic_pointer_cast<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose>(*pose_vector_iterator)->start_position = get_pos->get_position_vector();
+	return true;
 }
 
 bool multiple_position::load_absolute_joint_trajectory_pose(vector<double> & coordinates) {
 	ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose pose;
-	vector<double> joint_max_velocity;
+	vector<double> joint_velocity;
 	for (int i = 0; i < axes_num; i++) {
-		joint_max_velocity.push_back(0.05);
+		joint_velocity.push_back(0.05);
 	}
 	if (pose_vector.size() > 0 && pose_spec != lib::ECP_JOINT) {
-
 		return false;
 	}
 	pose_spec = lib::ECP_JOINT;
-	pose = ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose(lib::ECP_JOINT, coordinates, joint_max_velocity);
+	pose = ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose(lib::ECP_JOINT, coordinates, joint_velocity);
+	for (int j = 0; j < axes_num; j++) {
+		pose.v_max.push_back(1.5);
+		pose.v_r[j] = pose.v[j] * pose.v_max[j];
+	}
 
-	pose_vector.push_back(pose);
+	//pose_vector.push_back(pose);
 
+	return true;
 }
 
 } // namespace generator

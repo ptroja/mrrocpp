@@ -91,8 +91,8 @@ newsmooth::newsmooth (common::task::task& _ecp_task, bool _is_synchronised, bool
 		multiple_position (_ecp_task)
 
 {
-	pose_vector = vector<ecp_mp::common::trajectory_pose::trajectory_pose>();
-	coordinate_vector = vector<vector<double> >();
+	//pose_vector = vector<ecp_mp::common::trajectory_pose::trajectory_pose>();
+	//coordinate_vector = vector<vector<double> >();
 } // end : konstruktor
 
 /*double newsmooth::generate_next_coords(int node_counter, int interpolation_node_no, double start_position, double v_p, double v_r,

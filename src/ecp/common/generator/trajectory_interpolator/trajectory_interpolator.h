@@ -8,6 +8,10 @@
 #ifndef _TRAJECTORY_INTERPOLATOR_H_
 #define _TRAJECTORY_INTERPOLATOR_H_
 
+#include "ecp_mp/trajectory_pose/trajectory_pose.h"
+
+#include <vector>
+
 namespace mrrocpp {
 namespace ecp {
 namespace common {
@@ -18,7 +22,7 @@ class trajectory_interpolator {
 public:
 	trajectory_interpolator();
 	virtual ~trajectory_interpolator();
-	//virtual bool calculate_interpolate();
+	virtual bool interpolate(vector<ecp_mp::common::trajectory_pose::trajectory_pose>::iterator pose_vector_iterator, vector<vector<double> >::iterator coordinate_vector_iterator) = 0;
 };
 
 } // namespace trajectory_interpolator

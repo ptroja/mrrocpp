@@ -20,6 +20,7 @@ class constant_velocity_interpolator: public mrrocpp::ecp::common::generator::tr
 public:
 	constant_velocity_interpolator();
 	virtual ~constant_velocity_interpolator();
+
 };
 
 } // namespace trajectory_interpolator

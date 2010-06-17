@@ -34,7 +34,13 @@ class constant_velocity_profile : public velocity_profile {
 		 * @param i number of axis for which the calculations are performed
 		 * @return true if the trajectory recalculation is not needed (if initial velocity was not changed)
 		 */
-		bool calculate_constant_velocity_profile(vector<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose>::iterator & it, int i);
+		bool calculate_constant_velocity(vector<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose>::iterator & it, int i);
+		/**
+		 * Calculates time for the given velocity and distance.
+		 * @param i number of axis for which the calculations are performed
+		 * @return true if the trajectory recalculation is not needed (if initial velocity was not changed)
+		 */
+		bool calculate_time(vector<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose>::iterator & it, int i);
 };
 
 } // namespace velocity_profile_calculator

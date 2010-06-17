@@ -9,6 +9,7 @@
 #define _MULTIPLE_POSITION_H_
 
 #include "ecp_mp/trajectory_pose/trajectory_pose.h"
+#include "ecp/common/generator/ecp_g_get_position.h"
 #include "ecp/common/generator/ecp_generator.h"
 #include "ecp/common/generator/velocity_profile_calculator/velocity_profile.h"
 
@@ -26,13 +27,17 @@ namespace generator {
  */
 class multiple_position : public generator {
 protected:
+
+	//typedef vector<boost::shared_ptr <ecp_mp::common::trajectory_pose::trajectory_pose> > trajectory_pose_vector;
 	/**
 	 * Vector of positions (vector of velocity profiles).
 	 */
+	//trajectory_pose_vector pose_vector;
 	vector<ecp_mp::common::trajectory_pose::trajectory_pose> pose_vector;
 	/**
 	 * Position vector iterator.
 	 */
+	//trajectory_pose_vector::iterator pose_vector_iterator;
 	vector<ecp_mp::common::trajectory_pose::trajectory_pose>::iterator pose_vector_iterator;
 	/**
 	 * Vector of coordinates.
@@ -69,7 +74,7 @@ public:
 	 */
 	virtual ~multiple_position();
 	/**
-	 *
+	 * Performs calculation of the trajectory and interpolation. Fills in pose_vector and coordinate_vector.
 	 */
 	virtual bool calculate_interpolate() = 0;
 	/**

@@ -58,6 +58,8 @@ public:
    */
   ~constant_velocity_trajectory_pose();
 
+  //bool set_max_velocity(const vector<double> & v);
+
 };
 
 } // namespace trajectory_pose
