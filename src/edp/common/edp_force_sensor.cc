@@ -34,10 +34,9 @@ void force::operator()(void)
 		boost::this_thread::sleep(boost::posix_time::millisec(20));
 
 		if(!test_mode) {
-			connect_to_hardware();
-		} else {
-			force::configure_sensor();
+			configure_sensor();
 		}
+		force::configure_sensor();
 
 		while (!TERMINATE) //!< for (;;)
 		{
@@ -52,10 +51,9 @@ void force::operator()(void)
 							break;
 						case (common::FORCE_CONFIGURE):
 							if(!test_mode) {
-								connect_to_hardware();
-							} else {
-								force::configure_sensor();
+								configure_sensor();
 							}
+							force::configure_sensor();
 							break;
 						default:
 							break;
