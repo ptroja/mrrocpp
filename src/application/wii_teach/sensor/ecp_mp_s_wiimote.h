@@ -14,15 +14,40 @@ namespace sensor {
  *  @{
  */
 
+//Structure for storing data retrieved from the Wii-mote server
+typedef struct _wiimote_t
+{
+	int left;
+	int right;
+	int up;
+	int down;
+    int buttonA;
+    int buttonB;
+    int button1;
+    int button2;
+    int buttonPlus;
+    int buttonMinus;
+    int buttonHome;
+	float orientation_x;
+	float orientation_y;
+	float orientation_z;
+} wiimote_t;
 
-#define BUFFER_SIZE 8*256
+typedef struct _wii_command
+{
+  bool led_change;
+  unsigned int led_status;
+  bool rumble;
+} wii_command_t;
+
+const lib::SENSOR_t SENSOR_WIIMOTE = "SENSOR_WIIMOTE";
 
 /**
  * Virtual sensor that communicates with the Wii-mote
  *
  * @author jedrzej
  */
-class wiimote : public lib::sensor
+class wiimote : public sensor_interface
 {
 private:
 	//socket descriptor
@@ -34,16 +59,25 @@ private:
 	//pointer to the server
 	hostent* server;
 
-	//buffer used for communication
-	char buffer[BUFFER_SIZE];
-
 	//link to SRP communication object
 	lib::sr_ecp& sr_ecp_msg;
 
 	//sensor name
 	const lib::SENSOR_t sensor_name;
 
+	struct _to_vsp {
+		lib::VSP_COMMAND_t i_code;
+		wii_command_t wii_command;
+	} to_vsp;
+
+	struct _from_vsp {
+		lib::VSP_REPORT_t vsp_report;
+		wiimote_t wiimote;
+	} from_vsp;
+
 public:
+	wiimote_t image;
+
 	/**
 	 * Creates the sensor object. Connects to the Wii-mote server
 	 *
@@ -54,7 +88,7 @@ public:
 	 *
 	 * @author jedrzej
 	 */
-	wiimote (lib::SENSOR_t _sensor_name, const char* _section_name, task::task& _ecp_mp_object, int _union_size);
+	wiimote (lib::SENSOR_t _sensor_name, const std::string & _section_name, lib::sr_ecp & _sr_ecp_msg, lib::configurator & config);
 
 	/**
 	 * Sends sensor configuration to the Wii-mote server
@@ -75,7 +109,7 @@ public:
 	 *
 	 * @author jedrzej
 	 */
-	void send_reading (lib::ECP_VSP_MSG);
+	void send_reading (const wii_command_t & cmd);
 
 	/**
 	 * Retrieves aggregated data from the Wii-mote server
@@ -83,7 +117,8 @@ public:
 	 * @author jedrzej
 	 */
 	void get_reading (void);
-        void get_reading (lib::ECP_VSP_MSG);
+
+	void get_reading (const wii_command_t & msg);
 
 	/**
 	 * Terminates the connection to the Wii-mote server

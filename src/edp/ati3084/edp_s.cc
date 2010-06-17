@@ -55,8 +55,7 @@ namespace sensor {
 //! PCI device base IO address
 static uintptr_t base_io_address;
 
-const struct sigevent * schunk_int_handler(void *arg, int sint_id)
-{
+const struct sigevent * schunk_int_handler(void *arg, int sint_id) {
 	if (!check_intr()) {
 		// przyczyna przerwania inna niz sygnal stb z karty advantech
 		return NULL;
@@ -110,14 +109,12 @@ const struct sigevent * schunk_int_handler(void *arg, int sint_id)
 }
 
 ATI3084_force::ATI3084_force(common::manip_effector &_master) :
-	force(_master), int_attached(false)
-{
+	force(_master), int_attached(false) {
 	memset(&mds, 0, sizeof(mds));
 }
 
-void ATI3084_force::connect_to_hardware(void)
-{
-	if (!(master.test_mode)) {
+void ATI3084_force::connect_to_hardware(void) {
+	if (!(master.force_sensor_test_mode)) {
 		// 	printf("Konstruktor VSP!\n");
 
 		ThreadCtl(_NTO_TCTL_IO, NULL); // nadanie odpowiednich uprawnien watkowi
@@ -150,7 +147,8 @@ void ATI3084_force::connect_to_hardware(void)
 			// 	printf("connected to Advantech 1751\n");
 			delay(100);
 			// printf("Przerwanie numer: %d\n",info.Irq);
-			base_io_address = mmap_device_io(info.BaseAddressSize[2], PCI_IO_ADDR(info.CpuBaseAddress[2]));
+			base_io_address = mmap_device_io(info.BaseAddressSize[2],
+					PCI_IO_ADDR(info.CpuBaseAddress[2]));
 			// 	printf("base: %d\n",base_io_address);
 
 			initiate_registers();// konfiguracja karty
@@ -162,7 +160,8 @@ void ATI3084_force::connect_to_hardware(void)
 			mds.byte_counter = 0;
 			mds.is_received = false;
 
-			if ((sint_id = InterruptAttach(info.Irq, schunk_int_handler, (void *) &mds, sizeof(mds), 0)) == -1)
+			if ((sint_id = InterruptAttach(info.Irq, schunk_int_handler,
+					(void *) &mds, sizeof(mds), 0)) == -1)
 				printf("Unable to attach interrupt handler: \n");
 		}
 
@@ -175,28 +174,28 @@ void ATI3084_force::connect_to_hardware(void)
 
 		// serial port settings: 38400, 8-N-1
 		struct termios tattr;
-		if(tcgetattr(uart, &tattr) == -1) {
+		if (tcgetattr(uart, &tattr) == -1) {
 			// TODO: throw
 			perror("tcgetattr()");
 		}
 
 		// setup input speed
-		if(cfsetispeed(&tattr, B38400) == -1) {
+		if (cfsetispeed(&tattr, B38400) == -1) {
 			perror("cfsetispeed()");
 		}
 
 		// setup output speed
-		if(cfsetospeed(&tattr, B38400) == -1) {
+		if (cfsetospeed(&tattr, B38400) == -1) {
 			perror("cfsetospeed()");
 		}
 
 		// setup raw mode
-		if(cfmakeraw(&tattr) == -1) {
+		if (cfmakeraw(&tattr) == -1) {
 			perror("cfmakeraw()");
 		}
 
 		// apply settings to serial port
-		if(tcsetattr(uart, TCSANOW, &tattr) == -1) {
+		if (tcsetattr(uart, TCSANOW, &tattr) == -1) {
 			perror("tcsetattr()");
 		}
 
@@ -205,9 +204,8 @@ void ATI3084_force::connect_to_hardware(void)
 
 }
 
-ATI3084_force::~ATI3084_force(void)
-{
-	if (!master.test_mode) {
+ATI3084_force::~ATI3084_force(void) {
+	if (!master.force_sensor_test_mode) {
 		InterruptDetach(sint_id);
 		pci_detach_device(hdl); // odlacza driver od danego urzadzenia na PCI
 		pci_detach(phdl); // Disconnect from the PCI server
@@ -219,12 +217,11 @@ ATI3084_force::~ATI3084_force(void)
 }
 
 /**************************** inicjacja czujnika ****************************/
-void ATI3084_force::configure_sensor(void)
-{// by Y
+void ATI3084_force::configure_sensor(void) {// by Y
 	is_sensor_configured = true;
 	//  printf("EDP Sensor configured\n");
 	sr_msg->message("EDP Sensor configured");
-	if (!master.test_mode) {
+	if (!master.force_sensor_test_mode) {
 		InterruptLock(&mds.spinlock);
 		mds.intr_mode = 0;
 		InterruptUnlock(&mds.spinlock);
@@ -242,53 +239,56 @@ void ATI3084_force::configure_sensor(void)
 	InterruptUnlock(&mds.spinlock);
 	// cout << "Przed konf" << endl;
 	// jesli ma byc wykorzytstywana biblioteka transformacji sil
-	if (master.force_tryb == 2) {
-		// synchronize gravity transformation
-		//		printf("master.force_tryb == 2\n");
-		// polozenie kisci bez narzedzia wzgledem bazy
-		lib::Homog_matrix frame = master.return_current_frame(common::WITH_TRANSLATION); // FORCE Transformation by Slawomir Bazant
-		// lib::Homog_matrix frame(master.force_current_end_effector_frame); // pobranie aktualnej ramki
-		if (!gravity_transformation) // nie powolano jeszcze obiektu
-		{
-			lib::Xyz_Angle_Axis_vector tab;
-			lib::Homog_matrix sensor_frame;
-			if (master.config.exists("sensor_in_wrist")) {
-				char *tmp = strdup(master.config.value <std::string> ("sensor_in_wrist").c_str());
-				char* toDel = tmp;
-				for (int i = 0; i < 6; i++)
-					tab[i] = strtod(tmp, &tmp);
-				sensor_frame = lib::Homog_matrix(tab);
-				free(toDel);
-				// std::cout<<sensor_frame<<std::endl;
-			} else
-				sensor_frame = lib::Homog_matrix(0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 1, 0.09);
-			// lib::Homog_matrix sensor_frame = lib::Homog_matrix(0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 1, 0.09);
 
-			double weight = master.config.value <double> ("weight");
+	// synchronize gravity transformation
 
-			double point[3];
-			char *tmp = strdup(master.config.value <std::string> ("default_mass_center_in_wrist").c_str());
+	// polozenie kisci bez narzedzia wzgledem bazy
+	lib::Homog_matrix frame = master.return_current_frame(
+			common::WITH_TRANSLATION); // FORCE Transformation by Slawomir Bazant
+	// lib::Homog_matrix frame(master.force_current_end_effector_frame); // pobranie aktualnej ramki
+	if (!gravity_transformation) // nie powolano jeszcze obiektu
+	{
+		lib::Xyz_Angle_Axis_vector tab;
+		lib::Homog_matrix sensor_frame;
+		if (master.config.exists("sensor_in_wrist")) {
+			char *tmp = strdup(master.config.value<std::string> (
+					"sensor_in_wrist").c_str());
 			char* toDel = tmp;
-			for (int i = 0; i < 3; i++)
-				point[i] = strtod(tmp, &tmp);
+			for (int i = 0; i < 6; i++)
+				tab[i] = strtod(tmp, &tmp);
+			sensor_frame = lib::Homog_matrix(tab);
 			free(toDel);
-			// double point[3] = { master.config.value<double>("x_axis_arm"),
-			//		master.config.value<double>("y_axis_arm"), master.config.return_double_value("z_axis_arm") };
-			lib::K_vector pointofgravity(point);
-			gravity_transformation
-					= new lib::ForceTrans(lib::FORCE_SENSOR_ATI3084, frame, sensor_frame, weight, pointofgravity);
-		} else {
-			gravity_transformation->synchro(frame);
-		}
+			// std::cout<<sensor_frame<<std::endl;
+		} else
+			sensor_frame = lib::Homog_matrix(0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 1,
+					0.09);
+		// lib::Homog_matrix sensor_frame = lib::Homog_matrix(0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 1, 0.09);
+
+		double weight = master.config.value<double> ("weight");
+
+		double point[3];
+		char *tmp = strdup(master.config.value<std::string> (
+				"default_mass_center_in_wrist").c_str());
+		char* toDel = tmp;
+		for (int i = 0; i < 3; i++)
+			point[i] = strtod(tmp, &tmp);
+		free(toDel);
+		// double point[3] = { master.config.value<double>("x_axis_arm"),
+		//		master.config.value<double>("y_axis_arm"), master.config.return_double_value("z_axis_arm") };
+		lib::K_vector pointofgravity(point);
+		gravity_transformation = new lib::ForceTrans(lib::FORCE_SENSOR_ATI3084,
+				frame, sensor_frame, weight, pointofgravity);
+	} else {
+		gravity_transformation->synchro(frame);
 	}
+
 }
 
-void ATI3084_force::wait_for_event()
-{
+void ATI3084_force::wait_for_event() {
 	int iw_ret;
 	int iter_counter = 0; // okresla ile razy pod rzad zostala uruchomiona ta metoda
 
-	if (!master.test_mode) {
+	if (!master.force_sensor_test_mode) {
 
 		if (!int_attached) {
 			int_attached = true;
@@ -311,12 +311,14 @@ void ATI3084_force::wait_for_event()
 			do_send_command(SGET1);
 
 			int_timeout = SCHUNK_INTR_TIMEOUT_LOW;// by Y
-			TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_INTR, &tim_event, &int_timeout, NULL);
+			TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_INTR, &tim_event,
+					&int_timeout, NULL);
 			iw_ret = InterruptWait(0, NULL);
 			// kiedy po uplynieciu okreslonego czasu nie zostanie zgloszone przerwanie
 			if (iw_ret == -1) {
 				if (iter_counter == 1) {
-					sr_msg->message(lib::NON_FATAL_ERROR, "Force / Torque read error - check sensor controller");
+					sr_msg->message(lib::NON_FATAL_ERROR,
+							"Force / Torque read error - check sensor controller");
 				}
 				if (iter_counter % 10 == 0) // raz na 10
 				{
@@ -333,7 +335,8 @@ void ATI3084_force::wait_for_event()
 				do_init(); // komunikacja wstepna
 			} else {
 				if (iter_counter > 1) {
-					sr_msg->message("Force / Torque sensor connection reastablished");
+					sr_msg->message(
+							"Force / Torque sensor connection reastablished");
 				}
 			}
 
@@ -344,18 +347,16 @@ void ATI3084_force::wait_for_event()
 }
 
 /*************************** inicjacja odczytu ******************************/
-void ATI3084_force::initiate_reading(void)
-{
+void ATI3084_force::initiate_reading(void) {
 	if (!is_sensor_configured)
-		throw sensor_error(lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
+		throw lib::sensor::sensor_error(lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
 }
 
 /***************************** odczyt z czujnika *****************************/
-void ATI3084_force::get_reading(void)
-{
+void ATI3084_force::get_reading(void) {
 	lib::Ft_vector kartez_force;
 
-	if (master.test_mode) {
+	if (master.force_sensor_test_mode) {
 		for (int i = 0; i < 6; ++i) {
 			kartez_force[i] = 0.0;
 		}
@@ -366,7 +367,7 @@ void ATI3084_force::get_reading(void)
 		InterruptLock(&mds.spinlock);
 
 		for (int i = 0; i < 6; i++)
-			ft_table[i] = static_cast <double> (mds.data[i + 1]);
+			ft_table[i] = static_cast<double> (mds.data[i + 1]);
 		int16_t measure_report = mds.data[0];
 
 		InterruptUnlock(&mds.spinlock);
@@ -376,47 +377,49 @@ void ATI3084_force::get_reading(void)
 			is_reading_ready = true;
 
 			// jesli ma byc wykorzytstywana biblioteka transformacji sil
-			if (master.force_tryb == 2 && gravity_transformation) {
+
 				for (int i = 0; i < 3; i++)
 					ft_table[i] /= 20;
 				//			for(int i=3;i<6;i++) ft_table[i]/=333;
 				for (int i = 3; i < 6; i++)
 					ft_table[i] /= 1000; // by Y - korekta
-				lib::Homog_matrix frame = master.return_current_frame(common::WITH_TRANSLATION);
+				lib::Homog_matrix frame = master.return_current_frame(
+						common::WITH_TRANSLATION);
 				// lib::Homog_matrix frame(master.force_current_end_effector_frame);
-				lib::Ft_vector output = gravity_transformation->getForce(ft_table, frame);
+				lib::Ft_vector output = gravity_transformation->getForce(
+						ft_table, frame);
 				master.force_msr_upload(output);
 #if 0
 				static int ms_nr = 0; // numer odczytu z czujnika
 				if (!((ms_nr++)%1000)) {
-				 cerr << "Output\t";
-				 for(int i=0;i<3;i++) output[i]*=20;
-				 for(int i=3;i<6;i++) output[i]*=333;
-				 for(int i=0;i<6;i++) cerr << ceil(output[i]) << "  ";
-				 cerr << endl;// << "Input\t";
-				 for(int i=6;i<12;i++) cerr << ceil(output[i]) << "  ";
-				 cerr << endl << endl;// << "Gravity\t";
-				 for(int i=12;i<18;i++) cerr << ceil(output[i]) << "  ";
-				 cerr << endl << "Bias\t";
-				 for(int i=18;i<24;i++) cerr << ceil(output[i]) << "  ";
-				 cerr << endl << endl;
-				 cerr << frame << endl;
-				 }
+					cerr << "Output\t";
+					for(int i=0;i<3;i++) output[i]*=20;
+					for(int i=3;i<6;i++) output[i]*=333;
+					for(int i=0;i<6;i++) cerr << ceil(output[i]) << "  ";
+					cerr << endl;// << "Input\t";
+					for(int i=6;i<12;i++) cerr << ceil(output[i]) << "  ";
+					cerr << endl << endl;// << "Gravity\t";
+					for(int i=12;i<18;i++) cerr << ceil(output[i]) << "  ";
+					cerr << endl << "Bias\t";
+					for(int i=18;i<24;i++) cerr << ceil(output[i]) << "  ";
+					cerr << endl << endl;
+					cerr << frame << endl;
+				}
 #endif
 			}
-		}
+
 	}
 }
 
-void ATI3084_force::set_output(int16_t value)
-{
+void ATI3084_force::set_output(int16_t value) {
 	int16_t output = 0;
 	uint16_t comp = 0x0001;
 	uint8_t lower, upper;
 	// wersja z pajaczkiem
 	// 	const unsigned char output_positions[16]={15,7,14,6,13,5,12,4,0,8,1,9,2,10,3,11};
 	// wersja z nowa plytka
-	const unsigned char output_positions[16] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 };
+	const unsigned char output_positions[16] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
+			10, 11, 12, 13, 14, 15 };
 
 	for (int i = 0; i < 16; i++) {
 		uint16_t mask = 0x0001;
@@ -432,20 +435,19 @@ void ATI3084_force::set_output(int16_t value)
 	out8(base_io_address + UPPER_OUTPUT, upper);
 }
 
-
-int16_t get_input(void)
-{
+int16_t get_input(void) {
 	int16_t input = 0, temp_input;
 	uint16_t comp = 0x0001;
 	// wersja z pajaczkiem
 	// 	const unsigned char input_positions[16]={8,10,12,14,7,5,3,1,9,11,13,15,6,4,2,0};
 	// wersja z nowa plytka
-	const unsigned char input_positions[16] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 };
+	const unsigned char input_positions[16] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
+			10, 11, 12, 13, 14, 15 };
 
 	uint8_t lower = in8(base_io_address + LOWER_INPUT);
 	uint8_t upper = in8(base_io_address + UPPER_INPUT);
 
-	temp_input = lower + 256* upper ;
+	temp_input = lower + 256 * upper;
 
 	for (int i = 0; i < 16; i++) {
 		uint16_t mask = 0x0001;
@@ -457,8 +459,7 @@ int16_t get_input(void)
 	return input;
 }
 
-void ATI3084_force::set_obf(unsigned char state)
-{
+void ATI3084_force::set_obf(unsigned char state) {
 	uint8_t temp_register = in8(base_io_address + CONTROL_OUTPUT);
 
 	if (state)
@@ -469,8 +470,7 @@ void ATI3084_force::set_obf(unsigned char state)
 	out8(base_io_address + CONTROL_OUTPUT, temp_register);
 }
 
-void set_ibf(unsigned char state)
-{
+void set_ibf(unsigned char state) {
 	uint8_t temp_register = in8(base_io_address + CONTROL_OUTPUT);
 
 	if (state)
@@ -481,8 +481,7 @@ void set_ibf(unsigned char state)
 	out8(base_io_address + CONTROL_OUTPUT, temp_register);
 }
 
-bool ATI3084_force::check_ack()
-{
+bool ATI3084_force::check_ack() {
 	uint8_t temp_register = in8(base_io_address + ACK_PORT_INPUT);
 
 	if (temp_register & 0x01)
@@ -491,8 +490,7 @@ bool ATI3084_force::check_ack()
 		return false;
 }
 
-bool check_stb()
-{
+bool check_stb() {
 	uint8_t temp_register = in8(base_io_address + STB_PORT_INPUT);
 
 	if (temp_register & 0x01)
@@ -501,8 +499,7 @@ bool check_stb()
 		return false;
 }
 
-void ATI3084_force::initiate_registers(void)
-{
+void ATI3084_force::initiate_registers(void) {
 	out8(base_io_address + PORT_0_CONFIG, 0x03);
 	out8(base_io_address + PORT_1_CONFIG, 0x03);
 	out8(base_io_address + INTER_CONFIG, 0x10);// przerwanie od !stb, mozna dolaczyc przerwanie od !ack
@@ -511,8 +508,7 @@ void ATI3084_force::initiate_registers(void)
 	set_ibf(0);
 }
 
-bool check_intr(void)
-{
+bool check_intr(void) {
 	uint8_t temp_register = in8(base_io_address + INTER_CONFIG);
 
 	if (temp_register & 0x80)
@@ -521,8 +517,7 @@ bool check_intr(void)
 		return 0;
 }
 
-void ATI3084_force::check_cs(void)
-{
+void ATI3084_force::check_cs(void) {
 	printf("Input int: %d, char: %c,   ", get_input(), get_input());
 	if (check_ack())
 		printf("ACK HIGH,  ");
@@ -534,12 +529,12 @@ void ATI3084_force::check_cs(void)
 		printf("STB LOW\n");
 }
 
-void ATI3084_force::do_Wait(void)
-{
+void ATI3084_force::do_Wait(void) {
 	int iw_ret;
 
 	do {
-		TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_INTR, &tim_event, &int_timeout, NULL);
+		TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_INTR, &tim_event,
+				&int_timeout, NULL);
 		iw_ret = InterruptWait(0, NULL);
 		InterruptLock(&mds.spinlock);
 		if (iw_ret != -1) {
@@ -549,8 +544,7 @@ void ATI3084_force::do_Wait(void)
 	} while (iw_ret != -1);
 }
 
-void ATI3084_force::do_send_command(const char* command)
-{
+void ATI3084_force::do_send_command(const char* command) {
 #if SERIAL
 	ssize_t data_written = write(uart, command, strlen(command));
 
@@ -573,9 +567,9 @@ void ATI3084_force::do_send_command(const char* command)
 		nanosleep(&rqtp, NULL);
 
 		if (value != 23)
-			while (check_ack()); // jesli polcecenie rozne od RESET
+		while (check_ack()); // jesli polcecenie rozne od RESET
 		else
-			delay(1);
+		delay(1);
 		set_obf(1);
 	}
 #endif
@@ -584,8 +578,7 @@ void ATI3084_force::do_send_command(const char* command)
 // metoda na wypadek skasowanie pamiecia nvram
 // uwaga sterownik czujnika wysyla komunikat po zlaczu szeregowym zaraz po jego wlaczeniu
 
-void ATI3084_force::solve_transducer_controller_failure(void)
-{
+void ATI3084_force::solve_transducer_controller_failure(void) {
 	tcflush(uart, TCIFLUSH);
 
 	do_send_command(YESCOMM); /* command ^W to FT */
@@ -593,8 +586,7 @@ void ATI3084_force::solve_transducer_controller_failure(void)
 	tcflush(uart, TCIFLUSH);
 }
 
-void ATI3084_force::do_init(void)
-{
+void ATI3084_force::do_init(void) {
 	int_timeout = SCHUNK_INTR_TIMEOUT_HIGH; // by Y
 
 	do_send_command(RESET); /* command ^W to FT */
@@ -659,8 +651,7 @@ void ATI3084_force::do_init(void)
 #endif
 }
 
-void clear_intr(void)
-{
+void clear_intr(void) {
 	uint8_t temp_register = in8(base_io_address + INTER_CONFIG);
 
 	temp_register |= 0x80;
@@ -668,8 +659,7 @@ void clear_intr(void)
 	out8(base_io_address + INTER_CONFIG, temp_register);
 }
 
-force* return_created_edp_force_sensor(common::manip_effector &_master)
-{
+force* return_created_edp_force_sensor(common::manip_effector &_master) {
 	return new ATI3084_force(_master);
 }// : return_created_sensor
 

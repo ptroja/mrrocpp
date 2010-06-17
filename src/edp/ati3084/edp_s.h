@@ -10,7 +10,7 @@
 #if !defined(_EDP_S_ATI3084_H)
 #define _EDP_S_ATI3084_H
 
-#include "edp/common/edp_irp6s_postument_track.h"
+#include "edp/common/edp_e_manip.h"
 
 namespace mrrocpp {
 namespace edp {
@@ -69,12 +69,11 @@ namespace sensor {
 #define MDS_DATA_RANGE 20
 
 /********** klasa czujnikow po stronie VSP **************/
-class ATI3084_force : public force {
+class ATI3084_force: public force {
 
 public:
 	//! Measurement data type shared with interrupt handler
-	typedef struct mds_data
-	{
+	typedef struct mds_data {
 		int intr_mode;
 		int byte_counter;
 		bool is_received;
@@ -121,15 +120,15 @@ private:
 
 public:
 
-	void connect_to_hardware (void);
+	void connect_to_hardware(void);
 
 	ATI3084_force(common::manip_effector &_master);
 	virtual ~ATI3084_force();
 
-	void configure_sensor (void);	// konfiguracja czujnika
-	void wait_for_event(void);		// oczekiwanie na zdarzenie
-	void initiate_reading (void);		// zadanie odczytu od VSP
-	void get_reading (void);			// odebranie odczytu od VSP		// zwraca blad
+	void configure_sensor(void); // konfiguracja czujnika
+	void wait_for_event(void); // oczekiwanie na zdarzenie
+	void initiate_reading(void); // zadanie odczytu od VSP
+	void get_reading(void); // odebranie odczytu od VSP		// zwraca blad
 
 }; // end: class vsp_sensor
 

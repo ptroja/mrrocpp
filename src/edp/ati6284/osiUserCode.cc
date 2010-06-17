@@ -26,7 +26,9 @@ static void* hdl;			//!< wlasciwy uchwyt do danego urzadzenia
 static int phdl;			//!< pci handle -> fd do servera PCI
 static void *mem0,*mem1;
 static struct pci_dev_info info;
+#if INTERRUPT
 static int id;				//! Board interrupt id
+#endif
 
 namespace mrrocpp {
 namespace edp {
@@ -44,7 +46,7 @@ extern struct sigevent ati6284event;
 */
 iBus* acquireBoard(const u32 devicePCI_ID)
 {
-	u32 devBAR0,BAR0sz,devBAR1,BAR1sz;
+	u32 devBAR0,devBAR1;
 	iBus *bus;
 	
 	//!< Find the PCI BAR memory ranges

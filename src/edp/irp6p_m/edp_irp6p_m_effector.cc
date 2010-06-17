@@ -28,13 +28,12 @@
 
 namespace mrrocpp {
 namespace edp {
-namespace irp6p {
+namespace irp6p_m {
 
-common::servo_buffer* effector::return_created_servo_buffer ()
+common::servo_buffer* effector::return_created_servo_buffer()
 {
-	return new irp6p::servo_buffer (*this);
+	return new servo_buffer(*this);
 }
-
 
 /*--------------------------------------------------------------------------*/
 void effector::set_robot_model(const lib::c_buffer &instruction)
@@ -43,8 +42,6 @@ void effector::set_robot_model(const lib::c_buffer &instruction)
 }
 
 /*--------------------------------------------------------------------------*/
-
-
 
 /*--------------------------------------------------------------------------*/
 void effector::move_arm(const lib::c_buffer &instruction)
@@ -57,35 +54,31 @@ void effector::move_arm(const lib::c_buffer &instruction)
 }
 /*--------------------------------------------------------------------------*/
 
-
 /*--------------------------------------------------------------------------*/
 void effector::create_threads()
 {
 #ifdef __QNXNTO__
 	// jesli wlaczono obsluge sily
-	if (force_tryb > 0) {
-		vs = sensor::return_created_edp_force_sensor(*this); //!< czujnik wirtualny
 
-		// byY - utworzenie watku pomiarow sily
-		new boost::thread(boost::bind(&sensor::force::operator(), vs));
+	vs = sensor::return_created_edp_force_sensor(*this); //!< czujnik wirtualny
 
-		vs->thread_started.wait();
-	}
+	// byY - utworzenie watku pomiarow sily
+	new boost::thread(boost::bind(&sensor::force::operator(), vs));
+
+	vs->thread_started.wait();
+
 #endif
 	motor_driven_effector::hi_create_threads();
 }
 
-
 // Konstruktor.
 effector::effector(lib::configurator &_config) :
-	manip_effector(_config, lib::ROBOT_IRP6_POSTUMENT)
+	manip_effector(_config, lib::ROBOT_IRP6P_M)
 {
 
 	number_of_servos = IRP6P_M_NUM_OF_SERVOS;
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();
-
-
 
 	reset_variables();
 }
@@ -105,8 +98,6 @@ void effector::create_kinematic_models_for_given_robot(void)
 	set_kinematic_model(0);
 }
 
-
-
 /*--------------------------------------------------------------------------*/
 void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 { // odczytanie pozycji ramienia
@@ -114,18 +105,12 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 }
 /*--------------------------------------------------------------------------*/
 
-
 void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
 {
 	motor_driven_effector::multi_thread_master_order(nm_task, nm_tryb);
 }
 
-
-
-
 } // namespace irp6p
-
-
 
 
 namespace common {
@@ -133,7 +118,7 @@ namespace common {
 // Stworzenie obiektu edp_irp6p_effector.
 effector* return_created_efector(lib::configurator &_config)
 {
-	return new irp6p::effector (_config);
+	return new irp6p_m::effector(_config);
 }
 
 } // namespace common

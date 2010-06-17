@@ -53,10 +53,10 @@ int_handler (void *arg, int int_id)
 	common::status_of_a_dof robot_status[CONVEYOR_NUM_OF_SERVOS];
 	short int low_word, high_word;
 
-	md.hardware_error = (uint64_t) lib::ALL_RIGHT; // Nie ma bledow sprzetowych
+	md.hardware_error = (uint64_t) common::ALL_RIGHT; // Nie ma bledow sprzetowych
 	md.is_synchronised = true; // conveyor jest stale zsynchronizowany
 
-	if(common::master->test_mode)
+	if(common::master->robot_test_mode)
 	{
 		return (&event);// by Y&W
 	}
@@ -82,17 +82,17 @@ int_handler (void *arg, int int_id)
 		md.robot_status[0].adr_offset_plus_2 = robot_status[0].adr_offset_plus_2 = in16((SERVO_REPLY_INT_ADR + ISA_CARD_OFFSET));
 
 		// Odczyt polozenia osi: slowo 32 bitowe - negacja licznikow 16-bitowych
-		robot_status[0].adr_offset_plus_4 = 0xFFFF ^ in16((SERVO_REPLY_POS_LOW_ADR + ISA_CARD_OFFSET));  // Mlodsze slowo 16-bitowe
+		robot_status[0].adr_offset_plus_4 = 0xFFFF ^ in16((SERVO_REPLY_POS_LOW_ADR + ISA_CARD_OFFSET)); // Mlodsze slowo 16-bitowe
 		robot_status[0].adr_offset_plus_6 = 0xFFFF ^ in16((SERVO_REPLY_POS_HIGH_ADR+ ISA_CARD_OFFSET)); // Starsze slowo 16-bitowe
 
 		md.robot_status[0].adr_offset_plus_4 = robot_status[0].adr_offset_plus_4;
 		md.robot_status[0].adr_offset_plus_6 = robot_status[0].adr_offset_plus_6;
 
-		low_word  = robot_status[0].adr_offset_plus_4;
+		low_word = robot_status[0].adr_offset_plus_4;
 		high_word = robot_status[0].adr_offset_plus_6;
 
 		// Obliczenie polozenia
-		md.current_absolute_position[0] =  (((uint32_t) (high_word<<16)) & (0xFFFF0000)) | ((uint16_t) low_word);
+		md.current_absolute_position[0] = (((uint32_t) (high_word<<16)) & (0xFFFF0000)) | ((uint16_t) low_word);
 
 		//   md.robot_status[i].adr_offset_plus_6 = robot_status[i].adr_offset_plus_6;
 		//   md.high_word = high_word;
@@ -103,15 +103,15 @@ int_handler (void *arg, int int_id)
 		// Obsluga bledow
 
 		if ( robot_status[0].adr_offset_plus_0 & 0x0100 )
-			md.hardware_error |= (uint64_t) (lib::SYNCHRO_ZERO); // Impuls zera rezolwera
+		md.hardware_error |= (uint64_t) (common::SYNCHRO_ZERO); // Impuls zera rezolwera
 
 		if ( robot_status[0].adr_offset_plus_0 & 0x4000 )
-			md.hardware_error |= (uint64_t) (lib::SYNCHRO_SWITCH_ON); // Zadzialal wylacznik synchronizacji
+		md.hardware_error |= (uint64_t) (common::SYNCHRO_SWITCH_ON); // Zadzialal wylacznik synchronizacji
 
 
 		if ( robot_status[0].adr_offset_plus_0 & 0x0400 )
 		{
-			md.hardware_error |= (uint64_t) (lib::OVER_CURRENT);
+			md.hardware_error |= (uint64_t) (common::OVER_CURRENT);
 			//     out8((ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), FIRST_SERVO_PTR + (uint8_t)i);
 			//     out16((SERVO_COMMAND1_ADR + ISA_CARD_OFFSET), RESET_ALARM); // Skasowanie alarmu i umozliwienie ruchu osi
 		}
@@ -125,8 +125,7 @@ int_handler (void *arg, int int_id)
 			md.is_robot_blocked = true;
 		}
 
-
-		if ( md.hardware_error & lib::HARDWARE_ERROR_MASK ) // wyciecie SYNCHRO_ZERO i SYNCHRO_SWITCH_ON
+		if ( md.hardware_error & common::HARDWARE_ERROR_MASK ) // wyciecie SYNCHRO_ZERO i SYNCHRO_SWITCH_ON
 		{
 
 			// Zapis wartosci zadanej wypelnienia PWM
@@ -136,11 +135,10 @@ int_handler (void *arg, int int_id)
 			return (&event); // Yoyek & 7
 		}
 
-
 		// Zapis wartosci zadanej wypelnienia PWM
 		out8((ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), FIRST_SERVO_PTR);
 		if (md.is_robot_blocked)
-			md.robot_control[0].adr_offset_plus_0 &= 0xff00;
+		md.robot_control[0].adr_offset_plus_0 &= 0xff00;
 		out16((SERVO_COMMAND1_ADR + ISA_CARD_OFFSET), md.robot_control[0].adr_offset_plus_0);
 
 		return (&event);
@@ -150,14 +148,14 @@ int_handler (void *arg, int int_id)
 	else if (md.interrupt_mode==edp::common::INT_SINGLE_COMMAND)
 	{
 		out8((ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), md.card_adress);
-		out16(md	.register_adress, md.value);
+		out16(md .register_adress, md.value);
 		// konieczne dla skasowania przyczyny przerwania
 
 		out8((ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), FIRST_SERVO_PTR);
 		md.robot_status[0].adr_offset_plus_0 = robot_status[0].adr_offset_plus_0 = in16((SERVO_REPLY_STATUS_ADR+ ISA_CARD_OFFSET)); // Odczyt stanu wylacznikow
 		md.robot_status[0].adr_offset_plus_2 = robot_status[0].adr_offset_plus_2 = in16((SERVO_REPLY_INT_ADR + ISA_CARD_OFFSET));
 
-		md.interrupt_mode=edp::common::	INT_EMPTY; // aby tylko raz wyslac polecenie
+		md.interrupt_mode=edp::common:: INT_EMPTY; // aby tylko raz wyslac polecenie
 		return (&event);
 	}
 
@@ -172,7 +170,6 @@ int_handler (void *arg, int int_id)
 		md.interrupt_mode=edp::common::INT_EMPTY; // aby tylko raz sprawdzic stan
 		return (&event);
 	}
-
 
 	// Zakonczenie obslugi przerwania ze wzbudzeniem posrednika (proxy)
 

@@ -40,7 +40,7 @@ void effector::master_order(common::MT_ORDER nm_task, int nm_tryb) {
 
 void effector::get_controller_state(lib::c_buffer &instruction) {
 
-	if (test_mode)
+	if (robot_test_mode)
 		controller_state_edp_buf.is_synchronised = true;
 	//printf("get_controller_state: %d\n", controller_state_edp_buf.is_synchronised); fflush(stdout);
 	reply.controller_state = controller_state_edp_buf;
@@ -85,7 +85,6 @@ effector::effector(lib::configurator &_config) :
 /*--------------------------------------------------------------------------*/
 void effector::move_arm(const lib::c_buffer &instruction) {
 	msg->message("move_arm");
-
 
 	std::stringstream ss(std::stringstream::in | std::stringstream::out);
 
@@ -167,7 +166,6 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction) 
 	}
 	licznikaaa++;
 
-
 	reply.servo_step = step_counter;
 }
 /*--------------------------------------------------------------------------*/
@@ -198,7 +196,6 @@ void effector::reply_serialization(void) {
 			sizeof(edp_ecp_rbuffer));
 
 }
-
 
 }
 // namespace smb

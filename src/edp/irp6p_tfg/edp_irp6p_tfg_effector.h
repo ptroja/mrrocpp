@@ -22,7 +22,7 @@
 
 namespace mrrocpp {
 namespace edp {
-namespace irp6p {
+namespace irp6p_tfg {
 
 // Klasa reprezentujaca tasmociag.
 class effector: public common::motor_driven_effector

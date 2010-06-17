@@ -470,10 +470,6 @@ void sr_ecp::interpret(void) {
 			sprintf(sr_message.description, "INVALID POSE SPECIFICATION"); break;
 			case INVALID_ROBOT_MODEL_TYPE:
 			sprintf(sr_message.description, "INVALID ROBOT_MODEL TYPE"); break;
-			case INVALID_ECP_COMMAND:
-			sprintf(sr_message.description, "INVALID ECP COMMAND"); break;
-			case INVALID_EDP_REPLY:
-			sprintf(sr_message.description, "INVALID EDP REPLY"); break;
 			case ECP_ERRORS:
 			sprintf(sr_message.description, "ECP ERRORS"); break;
 			case INVALID_COMMAND_TO_EDP:
@@ -496,14 +492,8 @@ void sr_ecp::interpret(void) {
 			sprintf(sr_message.description, "MAX ACCELERATION EXCEEDED"); break;
 			case MAX_VELOCITY_EXCEEDED:
 			sprintf(sr_message.description, "MAX VELOCITY EXCEEDED"); break;
-			case NOT_ENOUGH_MEMORY:
-			sprintf(sr_message.description, "NOT ENOUGH MEMORY"); break;
-			case INVALID_VSP_REPLY:
-			sprintf(sr_message.description, "INVALID VSP REPLY"); break;
 			case DANGEROUS_FORCE_DETECTED:
 			sprintf(sr_message.description, "DANGEROUS FORCE DETECTED"); break;
-			case BAD_VSP_REPLY:
-			sprintf(sr_message.description, "BAD VSP REPLY"); break;
 			case INVALID_ECP_PULSE_IN_MP_START_ALL:
 			sprintf(sr_message.description, "INVALID ECP PULSE IN MP START ALL"); break;
 			case INVALID_ECP_PULSE_IN_MP_EXECUTE_ALL:

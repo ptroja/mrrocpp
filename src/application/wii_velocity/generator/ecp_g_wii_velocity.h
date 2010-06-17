@@ -1,17 +1,11 @@
 #ifndef ECP_WII_VELOCITY_GENERATOR_H
 #define ECP_WII_VELOCITY_GENERATOR_H
 
-#include <string.h>
-#include <math.h>
-#include <unistd.h>
-
-#include <time.h>
-
 #include "ecp/common/generator/ecp_g_force.h"
 
 namespace mrrocpp {
 namespace ecp {
-namespace irp6ot {
+namespace irp6ot_m {
 namespace generator {
 
 /** @addtogroup wii_velocity

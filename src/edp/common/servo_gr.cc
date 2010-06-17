@@ -49,8 +49,8 @@ uint8_t servo_buffer::Move_a_step(void)
 	if (master.is_synchronised()) {// by Y aktualizacja transformera am jedynie sens po synchronizacji (kiedy robot zna swoja pozycje)
 		// by Y - do dokonczenia
 		for (int i = 0; i < master.number_of_servos; i++) {
-			if (!(master.test_mode)) {
-				master.update_servo_current_motor_pos_abs(hi->get_position(i) * (2*M_PI) / axe_inc_per_revolution[i], i);
+			if (!(master.robot_test_mode)) {
+				master.update_servo_current_motor_pos_abs(hi->get_position(i) * (2 * M_PI) / axe_inc_per_revolution[i], i);
 			}
 		}
 
@@ -116,13 +116,13 @@ void servo_buffer::send_to_SERVO_GROUP()
 	}
 #else
 	{
-		boost::lock_guard<boost::mutex> lock(servo_command_mtx);
+		boost::lock_guard <boost::mutex> lock(servo_command_mtx);
 		servo_command_rdy = true;
 	}
 
 	{
-		boost::unique_lock<boost::mutex> lock(sg_reply_mtx);
-		while(!sg_reply_rdy) {
+		boost::unique_lock <boost::mutex> lock(sg_reply_mtx);
+		while (!sg_reply_rdy) {
 			sg_reply_cond.wait(sg_reply_mtx);
 		}
 		sg_reply_rdy = false;
@@ -144,7 +144,7 @@ void servo_buffer::send_to_SERVO_GROUP()
 
 		//	 printf("current motor pos: %d\n", current_motor_pos[0]);
 
-		if (master.test_mode) {
+		if (master.robot_test_mode) {
 			// W.S. Tylko przy testowaniu
 			master.current_motor_pos[i] = master.desired_motor_pos_new[i];
 		}
@@ -232,7 +232,7 @@ void servo_buffer::get_all_positions(void)
 	// Przepisanie aktualnych polozen servo do pakietu wysylkowego
 	for (int i = 0; i < master.number_of_servos; i++) {
 
-		servo_data.abs_position[i] = hi->get_position(i) * (2*M_PI) / axe_inc_per_revolution[i];
+		servo_data.abs_position[i] = hi->get_position(i) * (2 * M_PI) / axe_inc_per_revolution[i];
 
 		// przyrost polozenia w impulsach
 		servo_data.position[i] = regulator_ptr[i]->get_position_inc(1);
@@ -294,11 +294,11 @@ bool servo_buffer::get_command(void)
 		perror("servo_buffer: TimerTimeout()");
 	}
 	if ((edp_caller = MsgReceive_r(servo_to_tt_chid, &command, sizeof(command), NULL)) >= 0)
-		new_command_available = true;
+	new_command_available = true;
 #else
 	{
-		boost::lock_guard<boost::mutex> lock(servo_command_mtx);
-		if(servo_command_rdy) {
+		boost::lock_guard <boost::mutex> lock(servo_command_mtx);
+		if (servo_command_rdy) {
 			command = servo_command;
 			servo_command_rdy = false;
 			new_command_available = true;
@@ -357,8 +357,6 @@ uint8_t servo_buffer::Move_1_step(void)
 	// Obliczenie nowej wartosci zadanej
 	// Wyslanie wartosci zadanej do hardware'u
 
-	master.rb_obj->cond.notify_one();
-
 	reply_status_tmp.error1 = compute_all_set_values(); // obliczenie nowej wartosci zadanej dla regulatorow
 	reply_status_tmp.error0 = hi->read_write_hardware(); // realizacja kroku przez wszystkie napedy oraz
 	// odczyt poprzedniego polozenia
@@ -371,19 +369,30 @@ uint8_t servo_buffer::Move_1_step(void)
 		struct timespec step_time;
 
 		if (clock_gettime(CLOCK_REALTIME, &step_time) == -1) {
-			perror("clock_gettime()");
+			/*
+			 BOOST_THROW_EXCEPTION(
+			 System_error() <<
+			 boost::errinfo_errno(errno) <<
+			 boost::errinfo_api_function("clock_gettime")
+			 );
+			 */
+
 		}
 
 		master.rb_obj->step_data.step = master.step_counter;
 		master.rb_obj->step_data.msec = (int) (step_time.tv_nsec / 1000000);
+
+		master.rb_obj->new_data = true;
+		master.rb_obj->cond.notify_one();
 	}
 
 	if (reply_status_tmp.error0 || reply_status_tmp.error1) {
-		// 	std::cout<<"w move 1 step error detected\n";
+		//         std::cout<<"w move 1 step error detected\n";
 		return ERROR_DETECTED; // info o awarii
 	} else
 		return NO_ERROR_DETECTED;
 }
+
 /*-----------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------*/
@@ -396,7 +405,7 @@ uint8_t servo_buffer::convert_error(void)
 	uint64_t err1 = OK;
 	for (int i = 0; i < master.number_of_servos; i++) {
 		reply_status_tmp.error0 >>= 2;
-		err1 |= (reply_status_tmp.error0 & 0x07) << (3* i );
+		err1 |= (reply_status_tmp.error0 & 0x07) << (3 * i);
 		reply_status_tmp.error0 >>= 3;
 	}
 
@@ -476,7 +485,7 @@ void servo_buffer::Move(void)
 
 		for (int k = 0; k < master.number_of_servos; k++) {
 			regulator_ptr[k]->insert_new_step(new_increment[k]);
-			if (master.test_mode) {
+			if (master.robot_test_mode) {
 				master.update_servo_current_motor_pos_abs(regulator_ptr[k]->previous_abs_position + new_increment[k]
 						* j, k);
 			}
@@ -529,10 +538,10 @@ void servo_buffer::reply_to_EDP_MASTER(void)
 	// Wyslac informacje do EDP_MASTER
 #ifdef __QNXNTO__
 	if (MsgReply(edp_caller, EOK, &servo_data, sizeof(lib::servo_group_reply)) < 0)
-		perror(" Reply to EDP_MASTER error");
+	perror(" Reply to EDP_MASTER error");
 #else
 	{
-		boost::lock_guard<boost::mutex> lock(sg_reply_mtx);
+		boost::lock_guard <boost::mutex> lock(sg_reply_mtx);
 
 		sg_reply = servo_data;
 		sg_reply_rdy = true;
@@ -605,15 +614,15 @@ uint64_t servo_buffer::compute_all_set_values(void)
 
 
 	for (int j = 0; j < master.number_of_servos; j++) {
-		if (master.test_mode) {
+		if (master.robot_test_mode) {
 			regulator_ptr[j]->insert_new_pos_increment(regulator_ptr[j]->return_new_step() * axe_inc_per_revolution[j]
-					/ (2*M_PI));
+					/ (2 * M_PI));
 		} else {
 			regulator_ptr[j]->insert_meassured_current(hi->get_current(j));
 			regulator_ptr[j]->insert_new_pos_increment(hi->get_increment(j));
 		}
 		// obliczenie nowej wartosci zadanej dla napedu
-		status |= ((uint64_t) regulator_ptr[j]->compute_set_value()) << 2* j ;
+		status |= ((uint64_t) regulator_ptr[j]->compute_set_value()) << 2 * j;
 		// przepisanie obliczonej wartosci zadanej do hardware interface
 		hi->insert_set_value(j, regulator_ptr[j]->get_set_value());
 	}
@@ -631,7 +640,7 @@ void servo_buffer::synchronise(void)
 
 	double synchro_step = 0.0; // zadany przyrost polozenia
 
-	if (master.test_mode) {
+	if (master.robot_test_mode) {
 		// W.S. Tylko przy testowaniu
 		clear_reply_status();
 		clear_reply_status_tmp();
@@ -683,16 +692,16 @@ void servo_buffer::synchronise(void)
 			//		printf("aaa: %d, %x\n", j, reply_status_tmp.error0);
 			// analiza przyslanego bledu (czy wjechano na wylacznik synchronizacji?)
 			// jezeli nie, to blad
-			switch ((reply_status_tmp.error0 >> (5* j )) & 0x000000000000001FULL)
+			switch ((reply_status_tmp.error0 >> (5 * j)) & 0x000000000000001FULL)
 			{
-				case lib::SYNCHRO_SWITCH_ON:
+				case SYNCHRO_SWITCH_ON:
 					//  printf("aaa: SYNCHRO_SWITCH_ON\n");
-				case lib::SYNCHRO_SWITCH_ON_AND_SYNCHRO_ZERO:
+				case SYNCHRO_SWITCH_ON_AND_SYNCHRO_ZERO:
 					// cprintf("B=%lx\n", reply_status_tmp.error0);
 					//		printf("aaa: SYNCHRO_SWITCH_ON_AND_SYNCHRO_ZERO\n");
 					break;
-				case lib::ALL_RIGHT:
-				case lib::SYNCHRO_ZERO:
+				case ALL_RIGHT:
+				case SYNCHRO_ZERO:
 					//     printf("aaa: SYNCHRO_ZERO\n");
 					continue;
 				default:
@@ -719,12 +728,12 @@ void servo_buffer::synchronise(void)
 		for (int i = 0; i < 250; i++) {
 			Move_1_step();
 			//  printf("aabb: %d, %x\n", j, reply_status_tmp.error0);
-			switch ((reply_status_tmp.error0 >> (5* j )) & 0x000000000000001FULL)
+			switch ((reply_status_tmp.error0 >> (5 * j)) & 0x000000000000001FULL)
 			{
-				case lib::SYNCHRO_SWITCH_ON:
-				case lib::SYNCHRO_SWITCH_ON_AND_SYNCHRO_ZERO:
-				case lib::ALL_RIGHT:
-				case lib::SYNCHRO_ZERO:
+				case SYNCHRO_SWITCH_ON:
+				case SYNCHRO_SWITCH_ON_AND_SYNCHRO_ZERO:
+				case ALL_RIGHT:
+				case SYNCHRO_ZERO:
 					continue;
 				default:
 					// awaria w trakcie stania
@@ -764,11 +773,11 @@ void servo_buffer::synchronise(void)
 
 			// W.S. -----------------------------------------------------
 			//    	   printf("bbbb if: %llx\n", ((reply_status_tmp.error0 >> (5*j)) & 0x000000000000001FULL));
-			switch ((reply_status_tmp.error0 >> (5* j )) & 0x000000000000001FULL)
+			switch ((reply_status_tmp.error0 >> (5 * j)) & 0x000000000000001FULL)
 			{
-				case lib::SYNCHRO_SWITCH_ON:
+				case SYNCHRO_SWITCH_ON:
 					//    	printf("bcbb:�SYNCHRO_SWITCH_ON\n");
-				case lib::SYNCHRO_SWITCH_ON_AND_SYNCHRO_ZERO:
+				case SYNCHRO_SWITCH_ON_AND_SYNCHRO_ZERO:
 					//     	printf("bfbb: SYNCHRO_SWITCH_ON_AND_SYNCHRO_ZERO\n");
 					continue;
 				default:
@@ -781,9 +790,9 @@ void servo_buffer::synchronise(void)
 
 		// analiza powstalej sytuacji (czy zjechano z wylacznika synchronizacji)
 		// jezeli nie, to blad
-		switch (((reply_status_tmp.error0 >> (5* j )) & 0x000000000000001FULL))
+		switch (((reply_status_tmp.error0 >> (5 * j)) & 0x000000000000001FULL))
 		{
-			case lib::SYNCHRO_ZERO: // zjechano z wylacznika synchronizacji i SYNCHRO_ZERO jest od razu
+			case SYNCHRO_ZERO: // zjechano z wylacznika synchronizacji i SYNCHRO_ZERO jest od razu
 				//     printf("SYNCHRO_ZERO\n");
 				hi->finish_synchro(j);
 
@@ -800,7 +809,7 @@ void servo_buffer::synchronise(void)
 					//        printf("OK Move_1_step\n");
 					//      if ( ((reply_status_tmp.error0 >> (5*j)) & 0xCE739CE739CE739FULL) != OK)
 					// by Y - wyciecie SYNCHRO_SWITCH_ON - ze wzgledu na wystepujace drgania
-					if (((reply_status_tmp.error0 >> (5* j )) & 0xCE739CE739CE739DULL) != OK) {
+					if (((reply_status_tmp.error0 >> (5 * j)) & 0xCE739CE739CE739DULL) != OK) {
 						//   printf("OK os: %d, if: %llx, %llx\n", j, reply_status_tmp.error0, ((reply_status_tmp.error0 >> (5*j)) & 0xCE739CE739CE739FULL));
 						// Usuniecie bitow SYNCHRO_ZERO i SYNCHRO_SWITCH_ON z wszystkich osi
 						// oprocz synchronizowanej
@@ -811,7 +820,7 @@ void servo_buffer::synchronise(void)
 				; // end: for (;;)
 				//     if ( ((reply_status_tmp.error0 >> (5*j)) & 0x000000000000001FULL) != lib::SYNCHRO_ZERO) {
 				// by Y - wyciecie SYNCHRO_SWITCH_ON
-				if (((reply_status_tmp.error0 >> (5* j )) & 0x000000000000001DULL) != lib::SYNCHRO_ZERO) {
+				if (((reply_status_tmp.error0 >> (5 * j)) & 0x000000000000001DULL) != SYNCHRO_ZERO) {
 					// 	  printf("OK convert_error: %llx\n", ((reply_status_tmp.error0 >> (5*j)) & 0x000000000000001FULL));
 					convert_error();
 					reply_status.error0 = reply_status_tmp.error0 | SYNCHRO_ERROR;

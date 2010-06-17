@@ -35,25 +35,23 @@ namespace common {
 
 /*--------------------------------------------------------------------------*/
 effector::effector(lib::configurator &_config, lib::robot_name_t l_robot_name) :
-	robot_name(l_robot_name), config(_config)
+	robot_name(l_robot_name), config(_config), robot_test_mode(true)
 {
 
 	/* Lokalizacja procesu wywietlania komunikatow SR */
-	msg = new lib::sr_edp(lib::EDP, config.value<std::string> (
-			"resourceman_attach_point").c_str(),
-			config.return_attach_point_name(lib::configurator::CONFIG_SERVER,
-					"sr_attach_point", UI_SECTION).c_str(), true);
+	msg
+			= new lib::sr_edp(lib::EDP, config.value <std::string> ("resourceman_attach_point").c_str(), config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", UI_SECTION).c_str(), true);
 
-	sh_msg = new lib::sr_edp(lib::EDP, config.value<std::string> (
-			"resourceman_attach_point").c_str(),
-			config.return_attach_point_name(lib::configurator::CONFIG_SERVER,
-					"sr_attach_point", UI_SECTION).c_str(), false);
+	sh_msg
+			= new lib::sr_edp(lib::EDP, config.value <std::string> ("resourceman_attach_point").c_str(), config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", UI_SECTION).c_str(), false);
 
-	if (config.exists("test_mode"))
-		test_mode = config.value<int> ("test_mode");
-	else
-		test_mode = 0;
+	if (config.exists(ROBOT_TEST_MODE)) {
+		robot_test_mode = config.value <int> (ROBOT_TEST_MODE);
+	}
 
+	if (robot_test_mode) {
+		msg->message("Robot test mode activated");
+	}
 }
 
 effector::~effector()
@@ -70,13 +68,11 @@ bool effector::initialize_communication()
 
 #if !defined(USE_MESSIP_SRR)
 	// obsluga mechanizmu sygnalizacji zajetosci sprzetu
-	if (!(test_mode)) {
+	if (!(robot_test_mode)) {
 
-		const std::string hardware_busy_attach_point = config.value<std::string> (
-				"hardware_busy_attach_point");
+		const std::string hardware_busy_attach_point = config.value <std::string> ("hardware_busy_attach_point");
 
-		std::string
-				full_path_to_hardware_busy_attach_point("/dev/name/global/");
+		std::string full_path_to_hardware_busy_attach_point("/dev/name/global/");
 		full_path_to_hardware_busy_attach_point += hardware_busy_attach_point;
 
 		// sprawdzenie czy nie jakis proces EDP nie zajmuje juz sprzetu
@@ -85,16 +81,11 @@ bool effector::initialize_communication()
 			return false;
 		}
 
-		name_attach_t * tmp_attach = name_attach(NULL,
-				hardware_busy_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL);
+		name_attach_t * tmp_attach = name_attach(NULL, hardware_busy_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL);
 
 		if (tmp_attach == NULL) {
-			msg->message(lib::SYSTEM_ERROR, errno,
-					"EDP: hardware_busy_attach_point failed to attach");
-			fprintf(
-					stderr,
-					"hardware_busy_attach_point name_attach() to %s failed: %s\n",
-					hardware_busy_attach_point.c_str(), strerror(errno));
+			msg->message(lib::SYSTEM_ERROR, errno, "EDP: hardware_busy_attach_point failed to attach");
+			fprintf(stderr, "hardware_busy_attach_point name_attach() to %s failed: %s\n", hardware_busy_attach_point.c_str(), strerror(errno));
 			// TODO: throw
 			return false;
 		}
@@ -116,9 +107,9 @@ bool effector::initialize_communication()
 
 	server_attach =
 #if !defined(USE_MESSIP_SRR)
-		name_attach(NULL, server_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL);
+			name_attach(NULL, server_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL);
 #else /* USE_MESSIP_SRR */
-		messip::port_create(server_attach_point);
+	messip::port_create(server_attach_point);
 #endif /* USE_MESSIP_SRR */
 
 	if (server_attach == NULL) {
@@ -230,7 +221,8 @@ lib::INSTRUCTION_TYPE effector::receive_instruction(void)
 	return instruction.instruction_type;
 }
 
-void effector::reply_to_instruction(void) {
+void effector::reply_to_instruction(void)
+{
 	// Wyslanie potwierdzenia przyjecia polecenia do wykonania,
 	// adekwatnej odpowiedzi na zapytanie lub
 	// informacji o tym, ze przyslane polecenie nie moze byc przyjte
@@ -239,8 +231,7 @@ void effector::reply_to_instruction(void) {
 
 	reply_serialization();
 
-	if (!((reply.reply_type == lib::ERROR) || (reply.reply_type
-			== lib::SYNCHRO_OK)))
+	if (!((reply.reply_type == lib::ERROR) || (reply.reply_type == lib::SYNCHRO_OK)))
 		reply.reply_type = real_reply_type;
 
 #if !defined(USE_MESSIP_SRR)
@@ -266,5 +257,6 @@ void effector::reply_serialization()
 
 } // namespace common
 } // namespace edp
-} // namespace mrrocpp
+}
+// namespace mrrocpp
 

@@ -6,7 +6,7 @@
  */
 
 #include "object_reached_termination_condition.h"
-#include "logger.h"
+#include "lib/logger.h"
 
 using namespace logger;
 

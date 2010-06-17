@@ -83,7 +83,7 @@ bool manip_effector::compute_servo_joints_and_frame(void)
 			if (vs != NULL) {
 
 				boost::mutex::scoped_lock lock(vs->mtx);
-				if ((force_tryb > 0) && (is_synchronised()) && (!(vs->is_sensor_configured))) {
+				if ((is_synchronised()) && (!(vs->is_sensor_configured))) {
 					vs->new_edp_command = true;
 					vs->command = FORCE_CONFIGURE;
 				}
@@ -105,15 +105,18 @@ bool manip_effector::compute_servo_joints_and_frame(void)
 
 /*--------------------------------------------------------------------------*/
 manip_effector::manip_effector(lib::configurator &_config, lib::robot_name_t l_robot_name) :
-	motor_driven_effector(_config, l_robot_name)
+	motor_driven_effector(_config, l_robot_name), force_sensor_test_mode(true)
 {
-	if (config.exists("force_tryb"))
-		force_tryb = config.value <int> ("force_tryb");
-	else
-		force_tryb = 0;
+
+	if (config.exists(FORCE_SENSOR_TEST_MODE)) {
+		force_sensor_test_mode = config.value <int> (FORCE_SENSOR_TEST_MODE);
+	}
+
+	if (force_sensor_test_mode) {
+		msg->message("Force sensor test mode activated");
+	}
+
 }
-
-
 
 /*--------------------------------------------------------------------------*/
 void manip_effector::set_robot_model_with_sb(const lib::c_buffer &instruction)
@@ -181,23 +184,22 @@ void manip_effector::get_arm_position_with_force_and_sb(bool read_hardware, lib:
 
 	reply.servo_step = step_counter;
 
-	if (force_tryb>0){
-		lib::Homog_matrix current_frame_wo_offset = return_current_frame(WITHOUT_TRANSLATION);
-		lib::Ft_tr ft_tr_inv_current_frame_matrix(!current_frame_wo_offset);
+	lib::Homog_matrix current_frame_wo_offset = return_current_frame(WITHOUT_TRANSLATION);
+	lib::Ft_tr ft_tr_inv_current_frame_matrix(!current_frame_wo_offset);
 
-		lib::Homog_matrix
-				current_tool(((mrrocpp::kinematics::common::kinematic_model_with_tool*) get_current_kinematic_model())->tool);
-		lib::Ft_tr ft_tr_inv_tool_matrix(!current_tool);
+	lib::Homog_matrix
+			current_tool(((mrrocpp::kinematics::common::kinematic_model_with_tool*) get_current_kinematic_model())->tool);
+	lib::Ft_tr ft_tr_inv_tool_matrix(!current_tool);
 
-		lib::Ft_vector current_force;
-		force_msr_download(current_force);
+	lib::Ft_vector current_force;
+	force_msr_download(current_force);
 
-		// sprowadzenie sil z ukladu bazowego do ukladu kisci
-		// modyfikacja pobranych sil w ukladzie czujnika - do ukladu wyznaczonego przez force_tool_frame i reference_frame
+	// sprowadzenie sil z ukladu bazowego do ukladu kisci
+	// modyfikacja pobranych sil w ukladzie czujnika - do ukladu wyznaczonego przez force_tool_frame i reference_frame
 
-		lib::Ft_v_vector current_force_torque(ft_tr_inv_tool_matrix * ft_tr_inv_current_frame_matrix * current_force);
-		current_force_torque.to_table(reply.arm.pf_def.force_xyz_torque_xyz);
-	}
+	lib::Ft_v_vector current_force_torque(ft_tr_inv_tool_matrix * ft_tr_inv_current_frame_matrix * current_force);
+	current_force_torque.to_table(reply.arm.pf_def.force_xyz_torque_xyz);
+
 }
 /*--------------------------------------------------------------------------*/
 
@@ -324,7 +326,6 @@ void manip_effector::iterate_macrostep(const lib::JointArray & begining_joints, 
 
 	lib::MotorArray desired_motor_pos_new_tmp(number_of_servos);
 	lib::JointArray desired_joints_tmp(number_of_servos); // Wspolrzedne wewnetrzne -
-	const lib::MOTION_TYPE &motion_type = instruction.motion_type;
 
 	// zmienne z bufora wejsciowego
 	const uint16_t &ECP_motion_steps = instruction.motion_steps; // liczba krokow w makrokroku
@@ -336,7 +337,7 @@ void manip_effector::iterate_macrostep(const lib::JointArray & begining_joints, 
 	double reciprocal_damping[6];
 
 	const lib::BEHAVIOUR_SPECIFICATION (&behaviour)[6] = instruction.arm.pf_def.behaviour;
-	const double &desired_gripper_coordinate = instruction.arm.pf_def.gripper_coordinate;
+	//	const double &desired_gripper_coordinate = instruction.arm.pf_def.gripper_coordinate;
 
 	// w trybie TCIM interpolujemy w edp_trans stad zadajemy pojedynczy krok do serwo
 	motion_steps = 1;
@@ -538,7 +539,7 @@ void manip_effector::set_robot_model(const lib::c_buffer &instruction)
 	{
 		case lib::FORCE_TOOL:
 			if (vs == NULL) {
-				printf("Nie wlaczono force_tryb=2 w pliku ini\n");
+				printf("vs == NULL\n");
 				break;
 			}
 			{
@@ -555,7 +556,7 @@ void manip_effector::set_robot_model(const lib::c_buffer &instruction)
 			break;
 		case lib::FORCE_BIAS:
 			if (vs == NULL) {
-				printf("Nie wlaczono force_tryb=2 w pliku ini\n");
+				printf("vs == NULL\n");
 				break;
 			}
 			{
@@ -610,7 +611,7 @@ void manip_effector::get_robot_model(lib::c_buffer &instruction)
 	{
 		case lib::FORCE_TOOL:
 			if (vs == NULL) {
-				printf("Nie wlaczono force_tryb=2 w pliku ini\n");
+				printf("vs == NULL\n");
 				break;
 			}
 			for (int i = 0; i < 3; i++) {
