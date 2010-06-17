@@ -18,6 +18,9 @@ class generator
 protected:
 	lib::sr_ecp& sr_ecp_msg;		// obiekt do komunikacji z SR
 
+	//! Flag for the UI trigger
+	bool trigger;
+
 public:
 	generator(lib::sr_ecp& _sr_ecp_msg);
 

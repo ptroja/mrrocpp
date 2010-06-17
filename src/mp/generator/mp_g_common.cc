@@ -130,7 +130,7 @@ bool extended_empty::first_step ()
 		robot_node.second->communicate = false;
 	}
 
-return true;
+	return true;
 }
 
 // ----------------------------------------------------------------------------------------------
@@ -139,35 +139,35 @@ return true;
 
 bool extended_empty::next_step ()
 {
-// Funkcja zwraca false gdy koniec generacji trajektorii
-// Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
-// Na podstawie ecp_reply dla poszczegolnych robotow nalezy okreslic czy
-// skonczono zadanie uzytkownika
+	// Funkcja zwraca false gdy koniec generacji trajektorii
+	// Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
+	// Na podstawie ecp_reply dla poszczegolnych robotow nalezy okreslic czy
+	// skonczono zadanie uzytkownika
 
-// 	if (trigger) printf("Yh\n"); else printf("N\n");
-// printf("mp next step\n");
-// UWAGA: dzialamy na jednoelementowej liscie robotow
+	// 	if (trigger) printf("Yh\n"); else printf("N\n");
+	// printf("mp next step\n");
+	// UWAGA: dzialamy na jednoelementowej liscie robotow
 
-if (check_and_null_trigger() && activate_trigger)
-{
-	return false;
-}
-
-//	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-//	{
-//		robot_node.second->communicate = (robot_node.second->new_pulse);
-//	}
-
-BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-{
-	if ( robot_node.second->ecp_reply_package.reply == lib::TASK_TERMINATED )
+	if (check_and_null_trigger() && activate_trigger)
 	{
-		//  sr_ecp_msg.message("w mp task terminated");
 		return false;
 	}
-}
 
-return true;
+	//	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
+	//	{
+	//		robot_node.second->communicate = (robot_node.second->new_pulse);
+	//	}
+
+	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
+	{
+		if ( robot_node.second->ecp_reply_package.reply == lib::TASK_TERMINATED )
+		{
+			//  sr_ecp_msg.message("w mp task terminated");
+			return false;
+		}
+	}
+
+	return true;
 }
 
 // ###############################################################

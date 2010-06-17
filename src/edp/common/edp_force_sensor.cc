@@ -216,11 +216,11 @@ void force::configure_sensor()
 	is_sensor_configured = true;
 
 	try {
-		if (!coordinator) {
-			coordinator = new RemoteAgent(MP_SECTION, 0);
-		}
+//		if (!coordinator) {
+//			coordinator = new RemoteAgent(MP_SECTION, 0);
+//		}
 
-		if(!remote_buffer) {
+		if(coordinator && !remote_buffer) {
 			remote_buffer = new RemoteBuffer<lib::Ft_vector>(*coordinator, master.robot_name + ":ForceTorque");
 		}
 	}

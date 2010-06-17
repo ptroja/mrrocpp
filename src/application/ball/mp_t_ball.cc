@@ -64,28 +64,17 @@ void ball::main_task_algorithm(void)
 			lib::ROBOT_IRP6OT_M.c_str(), lib::ROBOT_IRP6P_M.c_str()
 	);
 
-   	sr_ecp_msg->message("New series1");
    	// wlaczenie generatora do konfiguracji czujnika w EDP w obydwu robotach
+   	sr_ecp_msg->message("Bias force sensors");
    	configure_edp_force_sensor(true, true);
 
-//	fprintf(stderr, "wait DONE\n");
-//	return;
-
-   	sr_ecp_msg->message("New series2");
-
 	// wlaczenie generatora transparentnego w obu robotach
-	set_next_ecps_state(ecp_mp::task::ECP_GEN_TRANSPARENT, 0, "", 0, 1, lib::ROBOT_IRP6OT_M.c_str());
+   	sr_ecp_msg->message("Start transparent generators");
+   	set_next_ecps_state(ecp_mp::task::ECP_GEN_TRANSPARENT, 0, "", 0, 1, lib::ROBOT_IRP6OT_M.c_str());
 	set_next_ecps_state(ecp_mp::task::ECP_GEN_TRANSPARENT, 0, "", 0, 1, lib::ROBOT_IRP6P_M.c_str());
 
-	sr_ecp_msg->message("New series3");
+	sr_ecp_msg->message("Execute coordinated movements");
 
-//	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(
-//			2, 2,
-//			lib::ROBOT_IRP6OT_M.c_str(), lib::ROBOT_IRP6P_M.c_str(),
-//			lib::ROBOT_IRP6OT_M.c_str(), lib::ROBOT_IRP6P_M.c_str()
-//	);
-//
-//	sr_ecp_msg->message("Track podatny do czasu wcisniecia mp_trigger");
 	mp_ball_gen.Move();
 
 	send_end_motion_to_ecps(2, lib::ROBOT_IRP6OT_M.c_str(), lib::ROBOT_IRP6P_M.c_str());

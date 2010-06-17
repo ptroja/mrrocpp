@@ -35,6 +35,7 @@ namespace robot {
 
 // -------------------------------------------------------------------
 robot::robot(lib::robot_name_t l_robot_name, const std::string & _section_name, task::task &mp_object_l) :
+	new_data_flag(false),
 	ecp_mp::robot(l_robot_name),
 	mp_object(mp_object_l),
 
@@ -55,7 +56,6 @@ robot::robot(lib::robot_name_t l_robot_name, const std::string & _section_name, 
 }
 // -------------------------------------------------------------------
 
-
 robot::~robot()
 {
 	fprintf(stderr, "robot::~robot()\n");
@@ -72,6 +72,13 @@ robot::~robot()
 #else
 	SignalKill(nd, ECP_pid, 0, SIGTERM, 0, 0);
 #endif
+}
+
+bool robot::is_new_data()
+{
+	const bool new_data_status = new_data_flag;
+	new_data_flag = false;
+	return new_data_status;
 }
 
 // ------------------------------------------------------------------------

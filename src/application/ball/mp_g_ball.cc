@@ -74,6 +74,8 @@ void ball::setup_command(robot::robot & robot)
 
 bool ball::first_step()
 {
+	usleep(10000);
+
 	std::cerr << "ball::first_step()" << std::endl;
 
 	irp6ot = dynamic_cast<robot::irp6ot_m *> (robot_m[lib::ROBOT_IRP6OT_M]);
@@ -90,8 +92,6 @@ bool ball::first_step()
 
 	setup_command(*irp6ot);
 	setup_command(*irp6p);
-
-	usleep(10000);
 
 	irp6ot->mp_command.instruction.arm.pf_def.behaviour[2] = lib::CONTACT;
 	irp6ot->mp_command.instruction.arm.pf_def.force_xyz_torque_xyz[2] = 0;
@@ -130,12 +130,17 @@ bool ball::next_step()
 		irp6p_start.set_from_frame_tab(irp6p->ecp_reply_package.reply_package.arm.pf_def.arm_frame);
 
 		std::cerr << "Switched to SET_GET" << std::endl;
+
+		start_clk = boost::posix_time::microsec_clock::universal_time();
 	}
+
+	// Get the current time
+	boost::posix_time::ptime now = boost::posix_time::microsec_clock::universal_time();
 
 	// trajectory generation helper variables
 	lib::Homog_matrix hm;
 	lib::Xyz_Angle_Axis_vector aa_vector;
-	const double t = speedup * 2 * M_PI * node_counter / 800;
+	const double t = speedup * 2 * M_PI * (now - start_clk).total_milliseconds() / 20000;
 
 	speedup += speedup_factor;
 	if (speedup > 1.0) {
@@ -143,54 +148,62 @@ bool ball::next_step()
 	}
 
 	// IRP6 on track
+	if(irp6ot->is_new_data()) {
+		// frame_tab -> homogeneous transformation matrix
+		hm = irp6ot_start;
 
-	// frame_tab -> homogeneous transformation matrix
-	hm = irp6ot_start;
+		// homogeneous transformation matrix -> angle axis vector
+		hm.get_xyz_angle_axis(aa_vector);
 
-	// homogeneous transformation matrix -> angle axis vector
-	hm.get_xyz_angle_axis(aa_vector);
+		// actual command
+		aa_vector[0] = 0.1 * sin(t);
+		aa_vector[1] = 0.920;
+		aa_vector[2] = 0.165 + 0.1 * cos(t);
 
-	// actual command
-	aa_vector[0] = 0.1 * sin(t);
-	aa_vector[1] = 0.920;
-	aa_vector[2] = 0.165 + 0.1 * cos(t);
+		//	std::cout << aa_vector << std::endl;
 
-	//	std::cout << aa_vector << std::endl;
+		// angle axis vector -> homogeneous transformation matrix
+		hm.set_from_xyz_angle_axis(aa_vector);
 
-	// angle axis vector -> homogeneous transformation matrix
-	hm.set_from_xyz_angle_axis(aa_vector);
+		// homogeneous transformation matrix -> frame_tab
+		hm.get_frame_tab(irp6ot->mp_command.instruction.arm.pf_def.arm_frame);
 
-	// homogeneous transformation matrix -> frame_tab
-	hm.get_frame_tab(irp6ot->mp_command.instruction.arm.pf_def.arm_frame);
+//		std::cerr << aa_vector << std::endl;
 
-//	std::cerr << hm << std::endl;
+		irp6ot->communicate = true;
+	} else {
+		irp6ot->communicate = false;
+	}
 
 	// IRP6 postument
+	if(irp6p->is_new_data()) {
+		// frame_tab -> homogeneous transformation matrix
+		hm = irp6p_start;
 
-	// frame_tab -> homogeneous transformation matrix
-	hm = irp6p_start;
+		// homogeneous transformation matrix -> angle axis vector
+		hm.get_xyz_angle_axis(aa_vector);
 
-	// homogeneous transformation matrix -> angle axis vector
-	hm.get_xyz_angle_axis(aa_vector);
+		// actual command
+		aa_vector[0] = -0.106 + 0.1 * sin(t);
+		aa_vector[1] = 1.087 + 0.1 * sin(t);
+		aa_vector[2] = 0.135 + 0.1 * cos(t);
 
-	// actual command
-	aa_vector[0] = -0.106 + 0.1 * sin(t);
-	aa_vector[1] = 1.087 + 0.1 * sin(t);
-	aa_vector[2] = 0.135 + 0.1 * cos(t);
+		//	std::cout << aa_vector << std::endl;
 
-	//	std::cout << aa_vector << std::endl;
+		// angle axis vector -> homogeneous transformation matrix
+		hm.set_from_xyz_angle_axis(aa_vector);
 
-	// angle axis vector -> homogeneous transformation matrix
-	hm.set_from_xyz_angle_axis(aa_vector);
+		// homogeneous transformation matrix -> frame_tab
+		hm.get_frame_tab(irp6p->mp_command.instruction.arm.pf_def.arm_frame);
 
-	// homogeneous transformation matrix -> frame_tab
-	hm.get_frame_tab(irp6p->mp_command.instruction.arm.pf_def.arm_frame);
+		irp6p->communicate = true;
+	} else {
+		irp6p->communicate = false;
+	}
 
-	return true;
-
-	if ((irp6ot->ecp_reply_package.reply == lib::TASK_TERMINATED) || (irp6p->ecp_reply_package.reply
-			== lib::TASK_TERMINATED)) {
-		sr_ecp_msg.message("w mp task terminated");
+	if ((irp6ot->ecp_reply_package.reply == lib::TASK_TERMINATED)||
+			(irp6p->ecp_reply_package.reply == lib::TASK_TERMINATED)) {
+		sr_ecp_msg.message("One of transparent generator terminated");
 		return false;
 	} else
 		return true;
@@ -199,4 +212,4 @@ bool ball::next_step()
 } // namespace generator
 } // namespace mp
 } // namespace mrrocpp
-
+s

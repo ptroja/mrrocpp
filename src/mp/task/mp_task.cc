@@ -549,9 +549,9 @@ void task::execute_all (const common::robots_t & _robot_m)
 {
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, _robot_m)
 	{
-//		if (robot_node.second->communicate) {
+		if (robot_node.second->communicate) {
 			robot_node.second->execute_motion();
-//		}
+		}
 	}
 }
 // ------------------------------------------------------------------------

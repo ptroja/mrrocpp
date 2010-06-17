@@ -20,6 +20,14 @@ class robot : public ecp_mp::robot
 {
 	friend class mp::generator::generator;
 
+	/**
+	 * This flag is set when the new data has arrived from the robot.
+	 *
+	 * This flag belongs to the internal memory of the agent ($c_{c_j}$)
+	 * and is supposed to make transition function implementation easier.
+	 */
+	bool new_data_flag;
+
 protected:
 	task::task &mp_object;
 
@@ -27,6 +35,9 @@ public:
 	//! Bufor z odpowiedzia z ECP
 	lib::ECP_REPLY_PACKAGE ecp_reply_package;
 	DataBuffer<lib::ECP_REPLY_PACKAGE> ecp_reply_package_buffer;
+
+	//! Returns true if new data was received since last call
+	bool is_new_data();
 
 private:
 #if !defined(PROCESS_SPAWN_RSH)

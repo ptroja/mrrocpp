@@ -49,6 +49,7 @@ void generator::Move(void)
 		BOOST_FOREACH(const common::robot_pair_t & robot_node, mp_t.robot_m) {
 			if(robot_node.second->ecp_reply_package_buffer.isFresh()) {
 				robot_node.second->ecp_reply_package = robot_node.second->ecp_reply_package_buffer.Get();
+				robot_node.second->new_data_flag = true;
 			}
 		}
 
@@ -70,6 +71,9 @@ void generator::Move(void)
 					break;
 				case MP_RESUME:
 					resume = true;
+					break;
+				case MP_TRIGGER:
+					trigger = true;
 					break;
 				default:
 					break;

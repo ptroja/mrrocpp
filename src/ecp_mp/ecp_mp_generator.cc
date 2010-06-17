@@ -5,6 +5,7 @@ namespace ecp_mp {
 namespace generator {
 
 generator::generator(lib::sr_ecp& _sr_ecp_msg) :
+	trigger(false),
 	sr_ecp_msg(_sr_ecp_msg),
 	node_counter(0)
 {
@@ -14,7 +15,9 @@ bool generator::check_and_null_trigger()
 {
 	// this require ui_command_buffer at this level of hierarchy;
 	// do agree with it?
-	return false;
+	const bool trigger_flag = trigger;
+	trigger = false;
+	return trigger_flag;
 }
 
 generator::~generator()

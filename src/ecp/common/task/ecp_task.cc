@@ -86,11 +86,13 @@ void task::wait_for_start(void)
 void task::get_next_state(void)
 {
 	fprintf(stderr, "%s: get_next_state()\n", getName().c_str());
-	while(mp_command_buffer.Get().command != lib::NEXT_STATE) {
+
+	while(!mp_command_buffer.Get(mp_command)) {
 		Wait(mp_command_buffer);
 
+		if (mp_command.command == lib::NEXT_STATE)
+			break;
 	}
-	mp_command = mp_command_buffer.Get();
 
 	mp_2_ecp_next_state_string = mp_command.ecp_next_state.mp_2_ecp_next_state;
 

@@ -13,6 +13,9 @@
 #include "mp/robot/mp_r_irp6ot_m.h"
 #include "mp/robot/mp_r_irp6p_m.h"
 
+#include <boost/date_time/microsec_time_clock.hpp>
+#include <boost/date_time/posix_time/posix_time.hpp> //include all types plus i/o
+
 namespace mrrocpp {
 namespace mp {
 namespace generator {
@@ -41,6 +44,9 @@ private:
 	lib::Homog_matrix irp6ot_start, irp6p_start;
 
 	void setup_command(robot::robot & robot);
+
+	//! Clock value at generator's start
+	boost::posix_time::ptime start_clk;
 
 public:
 	int step_no;
