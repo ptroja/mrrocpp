@@ -21,7 +21,7 @@ namespace task {
 ecp_t_objectfollower_pb::ecp_t_objectfollower_pb(mrrocpp::lib::configurator& config) :
 	task(config)
 {
-	ecp_m_robot = new ecp::irp6ot_m::robot(*this);
+	ecp_m_robot = new ecp::irp6p_m::robot(*this);
 
 	char config_section_name[] = { "[object_follower_1]" };
 
@@ -29,11 +29,11 @@ ecp_t_objectfollower_pb::ecp_t_objectfollower_pb(mrrocpp::lib::configurator& con
 
 	Eigen::Matrix <double, 3, 1> p1, p2;
 	p1(0, 0) = 0.6;
-	p1(1, 0) = -0.3;
+	p1(1, 0) = -1.7;
 	p1(2, 0) = 0.1;
 
 	p2(0, 0) = 0.98;
-	p2(1, 0) = 0.3;
+	p2(1, 0) = 2.3;
 	p2(2, 0) = 0.3;
 
 	shared_ptr <position_constraint> cube(new cubic_constraint(p1, p2));
