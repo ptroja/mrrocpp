@@ -23,7 +23,7 @@ ecp_t_objectfollower_pb::ecp_t_objectfollower_pb(mrrocpp::lib::configurator& con
 {
 	ecp_m_robot = new ecp::irp6p_m::robot(*this);
 
-	char config_section_name[] = { "[object_follower_1]" };
+	char config_section_name[] = { "[object_follower_pb]" };
 
 	log_dbg_enabled = true;
 

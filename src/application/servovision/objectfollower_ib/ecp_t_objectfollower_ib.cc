@@ -24,21 +24,28 @@ const double
 ecp_t_objectfollower_ib::ecp_t_objectfollower_ib(mrrocpp::lib::configurator& configurator) :
 	task(configurator)
 {
-	ecp_m_robot = new ecp::irp6ot_m::robot(*this);
+	ecp_m_robot = new ecp::irp6p_m::robot(*this);
 	//ecp_m_robot = new ecp::irp6ot_m::robot(*this);
 	smooth_gen = shared_ptr <smooth> (new smooth(*this, true));
 
-	char config_section_name[] = { "[object_follower_1]" };
+	char config_section_name[] = { "[object_follower_ib]" };
 
 	log_dbg_enabled = true;
 
 	Eigen::Matrix <double, 3, 1> p1, p2;
+	//	p1(0, 0) = 0.6;
+	//	p1(1, 0) = -0.4;
+	//	p1(2, 0) = 0.1;
+	//
+	//	p2(0, 0) = 0.95;
+	//	p2(1, 0) = 0.4;
+	//	p2(2, 0) = 0.3;
 	p1(0, 0) = 0.6;
-	p1(1, 0) = -0.4;
+	p1(1, 0) = -1.7;
 	p1(2, 0) = 0.1;
 
-	p2(0, 0) = 0.95;
-	p2(1, 0) = 0.4;
+	p2(0, 0) = 0.98;
+	p2(1, 0) = 2.3;
 	p2(2, 0) = 0.3;
 
 	shared_ptr <position_constraint> cube(new cubic_constraint(p1, p2));
@@ -49,7 +56,7 @@ ecp_t_objectfollower_ib::ecp_t_objectfollower_ib(mrrocpp::lib::configurator& con
 	log_dbg("ecp_t_objectfollower_ib::ecp_t_objectfollower_ib(): 2\n");
 	vs = shared_ptr <visual_servo> (new ib_eih_visual_servo(reg, config_section_name, configurator));
 
-	term_cond = shared_ptr<termination_condition>(new object_reached_termination_condition(0.005, 0.005, 50));
+	term_cond = shared_ptr <termination_condition> (new object_reached_termination_condition(0.005, 0.005, 50));
 
 	log_dbg("ecp_t_objectfollower_ib::ecp_t_objectfollower_ib(): 3\n");
 	sm = shared_ptr <simple_visual_servo_manager> (new simple_visual_servo_manager(*this, config_section_name, vs));
@@ -85,7 +92,6 @@ void ecp_t_objectfollower_ib::moveToInitialPosition()
 {
 	double a[MAX_SERVOS_NR] = { 0.15, 0.15, 0.5, 0.15, 0.15, 0.15, 0.15, 0.001 };
 	double v[MAX_SERVOS_NR] = { 0.20, 0.20, 0.01, 0.20, 0.20, 0.20, 0.20, 0.01 };
-
 
 	smooth_gen->reset();
 	smooth_gen->set_absolute();

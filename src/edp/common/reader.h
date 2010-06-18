@@ -28,6 +28,8 @@ namespace common {
 // Struktura z informacja, ktore elementy struktury reader_data maja byc zapisane do pliku
 struct reader_config
 {
+	reader_config();
+
 	bool step;       // numer kroku
 
     bool msec; // czas wykonania pomiaru (w ms)
