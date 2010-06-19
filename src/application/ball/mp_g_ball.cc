@@ -212,4 +212,3 @@ bool ball::next_step()
 } // namespace generator
 } // namespace mp
 } // namespace mrrocpp
-s
