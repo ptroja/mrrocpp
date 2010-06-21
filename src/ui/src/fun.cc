@@ -28,9 +28,9 @@
 // Konfigurator (dla PROCESS_SPAWN_RSH)
 #include "lib/configurator.h"
 #include "robot/irp6_mechatronika/irp6m_const.h"
-#include "lib/robot_consts/irp6ot_m_const.h"
+#include "robot/irp6ot_m/irp6ot_m_const.h"
 #include "robot/irp6ot_tfg/irp6ot_tfg_const.h"
-#include "lib/robot_consts/irp6p_m_const.h"
+#include "robot/irp6p_m/irp6p_m_const.h"
 #include "robot/irp6p_tfg/irp6p_tfg_const.h"
 #include "robot/polycrank/polycrank_const.h"
 #include "robot/smb/smb_const.h"

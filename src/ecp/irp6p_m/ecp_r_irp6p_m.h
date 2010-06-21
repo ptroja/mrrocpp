@@ -9,14 +9,14 @@
 #define _ECP_R_IRP6P_M_H
 
 #include "ecp/common/ecp_robot.h"
-#include "lib/robot_consts/irp6p_m_const.h"
+#include "robot/irp6p_m/irp6p_m_const.h"
 
 #include "kinematics/common/kinematics_manager.h"
-#include "kinematics/irp6_postument/kinematic_model_irp6p_with_wrist.h"
-#include "kinematics/irp6_postument/kinematic_model_irp6p_5dof.h"
-#include "kinematics/irp6_postument/kinematic_model_calibrated_irp6p_with_wrist.h"
-#include "kinematics/irp6_postument/kinematic_model_irp6p_jacobian_with_wrist.h"
-#include "kinematics/irp6_postument/kinematic_model_irp6p_jacobian_transpose_with_wrist.h"
+#include "robot/irp6p_m/kinematic_model_irp6p_with_wrist.h"
+#include "robot/irp6p_m/kinematic_model_irp6p_5dof.h"
+#include "robot/irp6p_m/kinematic_model_calibrated_irp6p_with_wrist.h"
+#include "robot/irp6p_m/kinematic_model_irp6p_jacobian_with_wrist.h"
+#include "robot/irp6p_m/kinematic_model_irp6p_jacobian_transpose_with_wrist.h"
 #include "kinematics/common/kinematic_model_with_tool.h"
 
 namespace mrrocpp {

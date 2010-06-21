@@ -9,8 +9,8 @@ add_library(mp
 
 add_library(mprobots
 	../robot/conveyor/mp_r_conveyor.cc
-	robot/mp_r_irp6ot_m.cc
-	robot/mp_r_irp6p_m.cc
+	../robot/irp6ot_m/mp_r_irp6ot_m.cc
+	../robot/irp6p_m/mp_r_irp6p_m.cc
 	../robot/speaker/mp_r_speaker.cc
 	../robot/irp6_mechatronika/mp_r_irp6_mechatronika.cc
 	../robot/polycrank/mp_r_polycrank.cc

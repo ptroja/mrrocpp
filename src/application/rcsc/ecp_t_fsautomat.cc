@@ -22,8 +22,8 @@
 #include "lib/srlib.h"
 #include "ecp_mp_t_fsautomat.h"
 
-#include "ecp/irp6ot_m/ecp_r_irp6ot_m.h"
-#include "ecp/irp6p_m/ecp_r_irp6p_m.h"
+#include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
+#include "robot/irp6p_m/ecp_r_irp6p_m.h"
 #include "ecp/common/generator/ecp_g_smooth.h"
 #include "ecp/common/generator/ecp_g_force.h"
 #include "ecp_mp/common/generator/ecp_mp_g_bias_edp_force.h"

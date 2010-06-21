@@ -31,8 +31,8 @@
 #include "mp/generator/mp_g_delay_ms_condition.h"
 
 #include "robot/conveyor/mp_r_conveyor.h"
-#include "mp/robot/mp_r_irp6ot_m.h"
-#include "mp/robot/mp_r_irp6p_m.h"
+#include "robot/irp6ot_m/mp_r_irp6ot_m.h"
+#include "robot/irp6p_m/mp_r_irp6p_m.h"
 #include "robot/irp6_mechatronika/mp_r_irp6_mechatronika.h"
 #include "robot/speaker/mp_r_speaker.h"
 #include "robot/polycrank/mp_r_polycrank.h"

@@ -7,7 +7,7 @@
 #include "lib/srlib.h"
 #include "ecp_mp/task/ecp_mp_t_rcsc.h"
 
-#include "ecp/irp6p_m/ecp_r_irp6p_m.h"
+#include "robot/irp6p_m/ecp_r_irp6p_m.h"
 #include "ecp/common/generator/ecp_g_force.h"
 
 //#include "ecp/common/generator/ecp_g_smooth.h"

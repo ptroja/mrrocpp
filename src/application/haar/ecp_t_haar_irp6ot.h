@@ -8,8 +8,8 @@
 
 #include "lib/srlib.h"
 
-#include "ecp/irp6ot_m/ecp_r_irp6ot_m.h"
-#include "ecp/irp6ot_m/generator/ecp_g_vis_ib_eih_planar_irp6ot.h"
+#include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
+#include "robot/irp6ot_m/generator/ecp_g_vis_ib_eih_planar_irp6ot.h"
 #include "ecp_g_rotate_gripper.h"
 #include "ecp/common/generator/ecp_g_smooth.h"
 #include "ecp/common/generator/ecp_g_jarosz.h"

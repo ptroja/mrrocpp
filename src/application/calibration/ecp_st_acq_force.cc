@@ -5,8 +5,8 @@
 #include <iostream>
 #include <cstdlib>
 
-#include "ecp/irp6ot_m/ecp_r_irp6ot_m.h"
-#include "ecp/irp6p_m/ecp_r_irp6p_m.h"
+#include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
+#include "robot/irp6p_m/ecp_r_irp6p_m.h"
 #include "ecp_st_acq_force.h"
 #include "ecp_st_acquisition.h"
 #include "ecp_mp/sensor/ecp_mp_s_pcbird.h"

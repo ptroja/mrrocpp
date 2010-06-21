@@ -12,8 +12,8 @@
 #include <iostream>
 #include <string>
 #include <sstream>
-#include "lib/robot_consts/irp6ot_m_const.h"
-#include "lib/robot_consts/irp6p_m_const.h"
+#include "robot/irp6ot_m/irp6ot_m_const.h"
+#include "robot/irp6p_m/irp6p_m_const.h"
 
 namespace mrrocpp {
 namespace mp {

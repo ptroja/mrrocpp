@@ -10,7 +10,7 @@
 
 #include "ecp/common/task/ecp_task.h"
 <<<<<<< HEAD
-#include "ecp/irp6ot_m/ecp_r_irp6ot_m.h"
+#include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
 #include "ecp_mp/sensor/ecp_mp_s_cvfradia.h"
 =======
 #include "ecp/irp6_on_track/ecp_r_irp6ot.h"

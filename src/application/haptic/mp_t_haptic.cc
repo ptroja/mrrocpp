@@ -14,8 +14,8 @@
 #include "application/haptic/mp_g_haptic.h"
 #include "application/haptic/mp_t_haptic.h"
 #include "ecp_mp/task/ecp_mp_t_rcsc.h"
-#include "lib/robot_consts/irp6ot_m_const.h"
-#include "lib/robot_consts/irp6p_m_const.h"
+#include "robot/irp6ot_m/irp6ot_m_const.h"
+#include "robot/irp6p_m/irp6p_m_const.h"
 #include "ecp_mp/task/ecp_mp_st_bias_edp_force.h"
 #include "ecp_mp/common/generator/ecp_mp_g_transparent.h"
 
