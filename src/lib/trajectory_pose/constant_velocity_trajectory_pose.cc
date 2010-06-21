@@ -7,7 +7,7 @@
 
 #include <string.h>
 
-#include "ecp_mp/trajectory_pose/constant_velocity_trajectory_pose.h"
+#include "lib/trajectory_pose/constant_velocity_trajectory_pose.h"
 
 namespace mrrocpp {
 namespace ecp_mp {

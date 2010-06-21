@@ -8,7 +8,7 @@
 #ifndef _TRAJECTORY_INTERPOLATOR_H_
 #define _TRAJECTORY_INTERPOLATOR_H_
 
-#include "ecp_mp/trajectory_pose/trajectory_pose.h"
+#include "lib/trajectory_pose/trajectory_pose.h"
 
 #include <vector>
 

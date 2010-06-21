@@ -10,7 +10,7 @@
 
 #include "ecp/common/generator/ecp_g_multiple_position.h"
 #include "lib/mrmath/mrmath.h"
-#include "ecp_mp/trajectory_pose/constant_velocity_trajectory_pose.h"
+#include "lib/trajectory_pose/constant_velocity_trajectory_pose.h"
 #include "ecp/common/generator/velocity_profile_calculator/constant_velocity_profile.h"
 
 namespace mrrocpp {

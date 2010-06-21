@@ -8,7 +8,7 @@
 #ifndef _CONSTANT_VELOCITY_PROFILE_H_
 #define _CONSTANT_VELOCITY_PROFILE_H_
 
-#include "ecp_mp/trajectory_pose/constant_velocity_trajectory_pose.h"
+#include "lib/trajectory_pose/constant_velocity_trajectory_pose.h"
 #include "ecp/generator/velocity_profile_calculator/velocity_profile.h"
 
 using namespace std;

@@ -8,7 +8,7 @@
 #ifndef _BANG_BANG_PROFILE_H_
 #define _BANG_BANG_PROFILE_H_
 
-#include "ecp_mp/trajectory_pose/bang_bang_trajectory_pose.h"
+#include "lib/trajectory_pose/bang_bang_trajectory_pose.h"
 #include "ecp/generator/velocity_profile_calculator/velocity_profile.h"
 
 using namespace std;

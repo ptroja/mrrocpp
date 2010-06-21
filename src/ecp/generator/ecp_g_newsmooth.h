@@ -30,7 +30,7 @@ using namespace std;
 #include "lib/mrmath/mrmath.h"
 
 #include "ecp/generator/ecp_g_multiple_position.h"
-#include "ecp_mp/trajectory_pose/bang_bang_trajectory_pose.h"
+#include "lib/trajectory_pose/bang_bang_trajectory_pose.h"
 
 using namespace std;
 

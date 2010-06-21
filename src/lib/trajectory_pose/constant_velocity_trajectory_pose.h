@@ -8,7 +8,7 @@
 #if !defined(_ECP_CONSTANT_VELOCITY_TRAJECTORY_POSE_H)
 #define  _ECP_CONSTANT_VELOCITY_TRAJECTORY_POSE_H
 
-#include "ecp_mp/trajectory_pose/trajectory_pose.h"
+#include "lib/trajectory_pose/trajectory_pose.h"
 #include <vector>
 
 using namespace std;
