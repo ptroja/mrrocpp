@@ -3,7 +3,7 @@
 
 #include "ecp/common/task/ecp_task.h"
 #include "ecp/common/generator/ecp_g_force.h"
-#include "ecp/irp6_tfg/ecp_g_tfg.h"
+#include "robot/irp6_tfg/ecp_g_tfg.h"
 
 namespace mrrocpp {
 namespace ecp {

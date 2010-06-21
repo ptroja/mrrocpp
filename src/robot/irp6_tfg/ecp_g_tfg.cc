@@ -31,7 +31,7 @@
 #include "lib/com_buf.h"
 
 #include "lib/srlib.h"
-#include "ecp/irp6_tfg/ecp_g_tfg.h"
+#include "robot/irp6_tfg/ecp_g_tfg.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -46,10 +46,12 @@ namespace generator {
 
 
 tfg::tfg(common::task::task& _ecp_task, int step) :
-	generator(_ecp_task), step_no(step) {
+	generator(_ecp_task), step_no(step)
+{
 }
 
-bool tfg::first_step() {
+bool tfg::first_step()
+{
 
 	// parameters copying
 	get_mp_ecp_command();
@@ -71,7 +73,8 @@ bool tfg::first_step() {
 
 
 // --------------------------------------------------------------------------
-bool tfg::next_step() {
+bool tfg::next_step()
+{
 	ecp_t.sr_ecp_msg->message("tfg next step");
 	// static int count;
 	// struct timespec start[9];
@@ -81,15 +84,12 @@ bool tfg::next_step() {
 
 	the_robot->ecp_command.instruction.instruction_type = lib::SET;
 
-	the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[0]
-			= mp_ecp_tfg_command.desired_position;
+	the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[0] = mp_ecp_tfg_command.desired_position;
 	the_robot->ecp_command.instruction.motion_steps = 1000;
 	the_robot->ecp_command.instruction.value_in_step_no = 998;
 
 	std::stringstream ss(std::stringstream::in | std::stringstream::out);
-	ss << "position: "
-			<< the_robot->reply_package.arm.pf_def.arm_coordinates[0]
-			<< ", node_counter:  " << node_counter;
+	ss << "position: " << the_robot->reply_package.arm.pf_def.arm_coordinates[0] << ", node_counter:  " << node_counter;
 
 	ecp_t.sr_ecp_msg->message(ss.str().c_str());
 
@@ -104,14 +104,14 @@ bool tfg::next_step() {
 
 }
 
-void tfg::create_ecp_mp_reply() {
+void tfg::create_ecp_mp_reply()
+{
 
 }
 
-void tfg::get_mp_ecp_command() {
-	memcpy(&mp_ecp_tfg_command,
-			ecp_t.mp_command.ecp_next_state.mp_2_ecp_next_state_string,
-			sizeof(mp_ecp_tfg_command));
+void tfg::get_mp_ecp_command()
+{
+	memcpy(&mp_ecp_tfg_command, ecp_t.mp_command.ecp_next_state.mp_2_ecp_next_state_string, sizeof(mp_ecp_tfg_command));
 
 }
 
