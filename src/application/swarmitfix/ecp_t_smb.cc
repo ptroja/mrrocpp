@@ -8,8 +8,8 @@
 #include "ecp_mp_t_swarmitfix.h"
 
 #include "robot/smb/ecp_r_smb.h"
-#include "ecp/common/generator/ecp_g_smooth.h"
-#include "ecp/common/generator/ecp_g_sleep.h"
+#include "ecp/generator/ecp_g_smooth.h"
+#include "ecp/generator/ecp_g_sleep.h"
 #include "ecp_g_epos.h"
 #include "ecp_g_smb.h"
 #include "ecp_t_smb.h"

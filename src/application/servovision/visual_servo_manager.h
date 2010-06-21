@@ -11,7 +11,7 @@
 #include <vector>
 #include <boost/shared_ptr.hpp>
 
-#include "ecp/common/generator/ecp_generator.h"
+#include "ecp/generator/ecp_generator.h"
 #include "visual_servo.h"
 #include "position_constraint.h"
 #include "termination_condition.h"

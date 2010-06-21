@@ -7,8 +7,8 @@
 #include "lib/srlib.h"
 #include "ecp_mp_t_sk_mr.h"
 
-#include "ecp/common/generator/ecp_g_smooth.h"
-#include "ecp/common/generator/ecp_g_sleep.h"
+#include "ecp/generator/ecp_g_smooth.h"
+#include "ecp/generator/ecp_g_sleep.h"
 
 #include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
 #include "robot/irp6p_m/ecp_r_irp6p_m.h"
@@ -16,9 +16,9 @@
 #include "ecp_t_sk_mr.h"
 
 #include "ecp_st_edge_follow.h"
-#include "ecp/common/task/ecp_st_bias_edp_force.h"
-#include "ecp/common/task/ecp_st_tff_nose_run.h"
-#include "ecp/common/generator/ecp_g_force.h"
+#include "ecp/task/ecp_st_bias_edp_force.h"
+#include "ecp/task/ecp_st_tff_nose_run.h"
+#include "ecp/generator/ecp_g_force.h"
 
 namespace mrrocpp {
 namespace ecp {

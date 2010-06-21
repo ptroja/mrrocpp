@@ -1,7 +1,7 @@
 #if !defined(_ECP_GEN_PLAYERPOS_H)
 #define _ECP_GEN_PLAYERPOS_H
 
-#include "ecp/common/generator/ecp_generator.h"
+#include "ecp/generator/ecp_generator.h"
 #include "player/playerclient.h"
 
 namespace mrrocpp {

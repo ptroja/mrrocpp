@@ -8,7 +8,7 @@
 #if !defined(_ECP_R_SPKM_H)
 #define _ECP_R_SPKM_H
 
-#include "ecp/common/ecp_robot.h"
+#include "ecp/ecp_robot.h"
 #include "robot/spkm/spkm_const.h"
 #include "kinematics/kinematics_manager.h"
 #include "robot/spkm/kinematic_model_spkm.h"

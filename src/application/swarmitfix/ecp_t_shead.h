@@ -1,8 +1,8 @@
 #if !defined(_ECP_T_SHEAD_SWARMITFIX_H)
 #define _ECP_T_SHEAD_SWARMITFIX_H
 
-#include "ecp/common/task/ecp_task.h"
-#include "ecp/common/generator/ecp_g_transparent.h"
+#include "ecp/task/ecp_task.h"
+#include "ecp/generator/ecp_g_transparent.h"
 
 
 namespace mrrocpp {

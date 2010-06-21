@@ -8,7 +8,7 @@
 #if !defined(_ECP_R_POLYCRANK_H)
 #define _ECP_R_POLYCRANK_H
 
-#include "ecp/common/ecp_robot.h"
+#include "ecp/ecp_robot.h"
 #include "robot/polycrank/polycrank_const.h"
 
 namespace mrrocpp {

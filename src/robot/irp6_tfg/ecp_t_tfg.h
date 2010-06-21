@@ -1,8 +1,8 @@
 #if !defined(_ECP_T_TFG_H)
 #define _ECP_T_TFG_H
 
-#include "ecp/common/task/ecp_task.h"
-#include "ecp/common/generator/ecp_g_force.h"
+#include "ecp/task/ecp_task.h"
+#include "ecp/generator/ecp_g_force.h"
 #include "robot/irp6_tfg/ecp_g_tfg.h"
 
 namespace mrrocpp {

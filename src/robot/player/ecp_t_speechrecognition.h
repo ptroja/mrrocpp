@@ -1,7 +1,7 @@
 #if !defined(_ECP_T_SPEECHRECOGNITION_H)
 #define _ECP_T_SPEECHRECOGNITION_H
 
-#include "ecp/common/task/ecp_task.h"
+#include "ecp/task/ecp_task.h"
 #include "ecp/player/generator/ecp_g_speechrecognition.h"
 
 namespace mrrocpp {

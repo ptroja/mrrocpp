@@ -8,7 +8,7 @@
 #if !defined(_ECP_R_IRP6_MECHATRONIKA_H)
 #define _ECP_R_IRP6_MECHATRONIKA_H
 
-#include "ecp/common/ecp_robot.h"
+#include "ecp/ecp_robot.h"
 #include "robot/irp6_mechatronika/irp6m_const.h"
 
 namespace mrrocpp {

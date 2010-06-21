@@ -8,7 +8,7 @@
 #if !defined(_ECP_R_BIRD_HAND_H)
 #define _ECP_R_BIRD_HAND_H
 
-#include "ecp/common/ecp_robot.h"
+#include "ecp/ecp_robot.h"
 #include "robot/bird_hand/bird_hand_const.h"
 #include "kinematics/kinematics_manager.h"
 #include "robot/bird_hand/kinematic_model_bird_hand.h"

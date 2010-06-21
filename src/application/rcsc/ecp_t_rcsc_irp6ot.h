@@ -3,9 +3,9 @@
 
 #include <boost/shared_ptr.hpp>
 
-#include "ecp/common/task/ecp_task.h"
-#include "ecp/common/generator/ecp_g_transparent.h"
-#include "ecp/common/task/ecp_st_go.h"
+#include "ecp/task/ecp_task.h"
+#include "ecp/generator/ecp_g_transparent.h"
+#include "ecp/task/ecp_st_go.h"
 #include "ecp_mp/sensor/ecp_mp_s_fradia_sensor.h"
 
 #include "../servovision/simple_visual_servo_manager.h"

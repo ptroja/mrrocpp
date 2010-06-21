@@ -1,7 +1,7 @@
 #if !defined(_ECP_T_BIRDHAND_GRASPIT_H)
 #define _ECP_T_BIRDHAND_GRASPIT_H
 
-#include "ecp/common/task/ecp_task.h"
+#include "ecp/task/ecp_task.h"
 
 namespace mrrocpp {
 namespace ecp {

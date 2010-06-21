@@ -1,9 +1,9 @@
 #if !defined(_ECP_T_MULTIPLAYER_IRP6OT_H)
 #define _ECP_T_MULTIPLAYER_IRP6OT_H
 
-#include "ecp/common/task/ecp_task.h"
-#include "ecp/common/task/ecp_st_go.h"
-#include "ecp/common/generator/ecp_g_transparent.h"
+#include "ecp/task/ecp_task.h"
+#include "ecp/task/ecp_st_go.h"
+#include "ecp/generator/ecp_g_transparent.h"
 
 namespace mrrocpp {
 namespace ecp {

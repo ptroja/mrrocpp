@@ -10,7 +10,7 @@
 
 #include <boost/shared_ptr.hpp>
 
-#include "ecp/common/task/ecp_task.h"
+#include "ecp/task/ecp_task.h"
 #include "ecp_g_conveyor_sinus.h"
 
 using boost::shared_ptr;

@@ -22,7 +22,7 @@
 #include "application/teach-dll/ecp_t_teach.h"
 #include "application/teach-dll/ecp_g_teach.h"
 
-#include "ecp/common/ecp_robot.h"
+#include "ecp/ecp_robot.h"
 
 namespace mrrocpp {
 namespace ecp {
