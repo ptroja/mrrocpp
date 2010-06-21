@@ -3,7 +3,7 @@
 /*                                         Version 2.01  */
 
 #include "ui/src/polycrank/ui_r_polycrank.h"
-#include "lib/robot_consts/polycrank_const.h"
+#include "robot/polycrank/polycrank_const.h"
 #include "ui/ui_class.h"
 
 /* Local headers */
