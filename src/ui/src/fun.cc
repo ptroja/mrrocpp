@@ -27,7 +27,18 @@
 // #include "ui/ui.h"
 // Konfigurator (dla PROCESS_SPAWN_RSH)
 #include "lib/configurator.h"
-#include "lib/all_robots_const.h"
+#include "robot/irp6_mechatronika/irp6m_const.h"
+#include "lib/robot_consts/irp6ot_m_const.h"
+#include "lib/robot_consts/irp6ot_tfg_const.h"
+#include "lib/robot_consts/irp6p_m_const.h"
+#include "lib/robot_consts/irp6p_tfg_const.h"
+#include "robot/polycrank/polycrank_const.h"
+#include "robot/smb/smb_const.h"
+#include "robot/spkm/spkm_const.h"
+#include "robot/shead/shead_const.h"
+#include "robot/speaker/speaker_const.h"
+#include "robot/conveyor/conveyor_const.h"
+#include "robot/bird_hand/bird_hand_const.h"
 
 /* Local headers */
 #include "ablibs.h"
