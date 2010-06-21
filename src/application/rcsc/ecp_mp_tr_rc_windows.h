@@ -13,7 +13,7 @@
 
 #include <pthread.h>
 
-#include "ecp_mp/transmitter/transmitter.h"				// klasa bazowa transmitter
+#include "ecp_mp/transmitter.h"				// klasa bazowa transmitter
 #include <boost/thread/condition_variable.hpp>
 #include <boost/thread/mutex.hpp>
 #include <boost/circular_buffer.hpp>

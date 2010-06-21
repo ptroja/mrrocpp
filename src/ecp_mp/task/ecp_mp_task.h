@@ -19,7 +19,7 @@
 #include "lib/srlib.h"
 #include "lib/configurator.h"
 
-#include "ecp_mp/transmitter/transmitter.h"
+#include "ecp_mp/transmitter.h"
 #include "ecp_mp/ecp_mp_sensor.h"
 
 #include <libxml/tree.h>

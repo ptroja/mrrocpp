@@ -1,6 +1,6 @@
 add_library(ecp_mp
 	ecp_mp_generator.cc
-	transmitter/transmitter.cc
+	transmitter.cc
 	task/ecp_mp_task.cc
 	ecp_mp_robot.cc
 	Trajectory.cc

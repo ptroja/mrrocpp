@@ -8,7 +8,7 @@
 #ifndef ECP_MP_TR_DRAUGHTSAI_H_
 #define ECP_MP_TR_DRAUGHTSAI_H_
 
-#include "ecp_mp/transmitter/transmitter.h"				// klasa bazowa transmitter
+#include "ecp_mp/transmitter.h"				// klasa bazowa transmitter
 
 namespace mrrocpp {
 namespace ecp_mp {
