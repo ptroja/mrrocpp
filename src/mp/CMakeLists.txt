@@ -18,8 +18,8 @@ add_library(mprobots
 	../robot/spkm/mp_r_spkm.cc
 	../robot/smb/mp_r_smb.cc
 	../robot/shead/mp_r_shead.cc
-	robot/mp_r_irp6ot_tfg.cc
-	robot/mp_r_irp6p_tfg.cc
+	../robot/irp6ot_tfg/mp_r_irp6ot_tfg.cc
+	../robot/irp6p_tfg/mp_r_irp6p_tfg.cc
 	robot/mp_r_motor_driven.cc
 )
 

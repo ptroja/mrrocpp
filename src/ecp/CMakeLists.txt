@@ -11,8 +11,6 @@ ENDMACRO(ADD_ECP_ROBOT_WITH_KINEMATICS)
 
 add_subdirectory (common)
 add_subdirectory (irp6ot_m)
-add_subdirectory (irp6ot_tfg)
 add_subdirectory (irp6p_m)
-add_subdirectory (irp6p_tfg)
 add_subdirectory (multi_robot_binaries)
-add_subdirectory (irp6_tfg)
+

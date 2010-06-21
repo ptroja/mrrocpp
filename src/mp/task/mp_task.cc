@@ -39,8 +39,8 @@
 #include "robot/bird_hand/mp_r_bird_hand.h"
 #include "robot/spkm/mp_r_spkm.h"
 #include "robot/smb/mp_r_smb.h"
-#include "mp/robot/mp_r_irp6ot_tfg.h"
-#include "mp/robot/mp_r_irp6p_tfg.h"
+#include "robot/irp6ot_tfg/mp_r_irp6ot_tfg.h"
+#include "robot/irp6p_tfg/mp_r_irp6p_tfg.h"
 #include "robot/shead/mp_r_shead.h"
 
 #if defined(USE_MESSIP_SRR)

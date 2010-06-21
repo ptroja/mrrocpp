@@ -12,11 +12,11 @@
 #include "lib/com_buf.h"
 
 // Klasa kinematic_model_conveyor.
-#include "kinematics/irp6ot_tfg/kinematic_model_irp6ot_tfg.h"
+#include "robot/irp6p_tfg/kinematic_model_irp6p_tfg.h"
 
 namespace mrrocpp {
 namespace kinematics {
-namespace irp6ot_tfg {
+namespace irp6p_tfg {
 
 /* -----------------------------------------------------------------------
  Konstruktor.
@@ -64,7 +64,6 @@ void model::set_kinematic_parameters(void)
 	upper_limit_joint = 0.091;
 
 } // end: set_kinematic_parameters
-
 
 
 } // namespace irp6ot

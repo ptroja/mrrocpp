@@ -12,7 +12,7 @@
 #include "lib/com_buf.h"
 
 // Klasa kinematic_model_conveyor.
-#include "kinematics/common/kinematic_model_irp6_tfg.h"
+#include "robot/irp6_tfg/kinematic_model_irp6_tfg.h"
 
 namespace mrrocpp {
 namespace kinematics {

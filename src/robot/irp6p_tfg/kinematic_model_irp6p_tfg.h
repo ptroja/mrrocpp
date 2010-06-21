@@ -12,7 +12,7 @@
 #if !defined(_IRP6P_TFG_KIN_MODEL)
 #define _IRP6P_TFG_KIN_MODEL
 
-#include "kinematics/common/kinematic_model_irp6_tfg.h"
+#include "robot/irp6_tfg/kinematic_model_irp6_tfg.h"
 
 namespace mrrocpp {
 namespace kinematics {

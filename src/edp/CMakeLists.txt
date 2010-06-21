@@ -6,6 +6,5 @@ add_subdirectory (ati6284KT)
 add_subdirectory (ati6284MS)
 add_subdirectory (common)
 add_subdirectory (irp6ot_m)
-add_subdirectory (irp6ot_tfg)
 add_subdirectory (irp6p_m)
-add_subdirectory (irp6p_tfg)
+

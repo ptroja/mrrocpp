@@ -1,20 +1,20 @@
 // ------------------------------------------------------------------------
 //                            hi_rydz.cc
 //
-// Funkcje do obslugi sprzetu (serwomechanizmow cyfrowych) dla robota irp6 on_track
+// Funkcje do obslugi sprzetu (serwomechanizmow cyfrowych) dla robota irp6 postument
 //
 // cala komunikacja ze sprzetem przerzucona do oblsugi przerwania ze wzgledu na drugi proces korzystajacy z tego samego
 // przerwania - tasmociag
 // ------------------------------------------------------------------------
 
-// Klasa edp_irp6ot_effector.
-#include "edp/irp6ot_tfg/edp_irp6ot_tfg_effector.h"
+// Klasa edp_irp6p_effector.
+#include "robot/irp6p_tfg/edp_irp6p_tfg_effector.h"
 // Klasa hardware_interface.
-#include "edp/irp6ot_tfg/hi_irp6ot_tfg.h"
+#include "robot/irp6p_tfg/hi_irp6p_tfg.h"
 
 namespace mrrocpp {
 namespace edp {
-namespace irp6ot_tfg {
+namespace irp6p_tfg {
 
 // ------------------------------------------------------------------------
 hardware_interface::hardware_interface(common::motor_driven_effector &_master, int _hi_irq_real, unsigned short int _hi_intr_freq_divider, unsigned int _hi_intr_timeout_high, unsigned int _hi_first_servo_ptr, unsigned int _hi_intr_generator_servo_ptr, unsigned int _hi_isa_card_offset, const int _max_current[]) :
@@ -24,7 +24,6 @@ hardware_interface::hardware_interface(common::motor_driven_effector &_master, i
 // ------------------------------------------------------------------------
 
 
-} // namespace irp6ot
+} // namespace irp6p
 } // namespace edp
 } // namespace mrrocpp
-

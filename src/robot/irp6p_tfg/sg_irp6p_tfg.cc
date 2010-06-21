@@ -10,12 +10,12 @@
 #include "lib/com_buf.h"
 
 // Klasa edp_irp6p_effector.
-#include "edp/irp6p_tfg/edp_irp6p_tfg_effector.h"
+#include "robot/irp6p_tfg/edp_irp6p_tfg_effector.h"
 // Klasa hardware_interface.
-#include "edp/irp6p_tfg/hi_irp6p_tfg.h"
+#include "robot/irp6p_tfg/hi_irp6p_tfg.h"
 // Klasa servo_buffer.
-#include "edp/irp6p_tfg/sg_irp6p_tfg.h"
-#include "edp/irp6p_tfg/regulator_irp6p_tfg.h"
+#include "robot/irp6p_tfg/sg_irp6p_tfg.h"
+#include "robot/irp6p_tfg/regulator_irp6p_tfg.h"
 
 namespace mrrocpp {
 namespace edp {

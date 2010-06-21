@@ -19,8 +19,8 @@
 #include "lib/mrmath/mrmath.h"
 #include "ecp_mp/task/ecp_mp_t_tfg.h"
 #include "lib/data_port_headers/tfg.h"
-#include "lib/robot_consts/irp6ot_tfg_const.h"
-#include "lib/robot_consts/irp6p_tfg_const.h"
+#include "robot/irp6ot_tfg/irp6ot_tfg_const.h"
+#include "robot/irp6p_tfg/irp6p_tfg_const.h"
 #include "lib/robot_consts/irp6ot_m_const.h"
 #include "lib/robot_consts/irp6p_m_const.h"
 

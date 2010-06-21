@@ -13,10 +13,10 @@
 #include "lib/data_port_headers/tfg.h"
 #include "mp_t_tfg_graspit.h"
 #include "ecp_mp_t_graspit.h"
-#include "lib/robot_consts/irp6ot_tfg_const.h"
+#include "robot/irp6ot_tfg/irp6ot_tfg_const.h"
 #include "lib/robot_consts/irp6ot_m_const.h"
 #include "lib/robot_consts/irp6p_m_const.h"
-#include "lib/robot_consts/irp6p_tfg_const.h"
+#include "robot/irp6p_tfg/irp6p_tfg_const.h"
 #include "ecp_mp/common/generator/ecp_mp_g_tfg.h"
 
 namespace mrrocpp {

@@ -12,9 +12,9 @@
 
 #include "lib/srlib.h"
 
-#include "ecp/irp6ot_tfg/ecp_r_irp6ot_tfg.h"
+#include "robot/irp6ot_tfg/ecp_r_irp6ot_tfg.h"
 #include "ecp/irp6ot_m/ecp_r_irp6ot_m.h"
-#include "ecp/irp6p_tfg/ecp_r_irp6p_tfg.h"
+#include "robot/irp6p_tfg/ecp_r_irp6p_tfg.h"
 #include "ecp/irp6p_m/ecp_r_irp6p_m.h"
 #include "robot/irp6_mechatronika/ecp_r_irp6m.h"
 #include "robot/conveyor/ecp_r_conv.h"

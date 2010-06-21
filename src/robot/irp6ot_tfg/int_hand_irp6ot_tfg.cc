@@ -25,9 +25,9 @@
 #include "lib/com_buf.h"
 
 // Klasa edp_irp6ot_effector.
-#include "edp/irp6ot_tfg/edp_irp6ot_tfg_effector.h"
+#include "robot/irp6ot_tfg/edp_irp6ot_tfg_effector.h"
 // Klasa hardware_interface.
-#include "edp/irp6ot_tfg/hi_irp6ot_tfg.h"
+#include "robot/irp6ot_tfg/hi_irp6ot_tfg.h"
 
 namespace mrrocpp {
 namespace edp {

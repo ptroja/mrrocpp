@@ -1,9 +1,9 @@
 // ------------------------------------------------------------------------
 // Proces:		EDP
-// Plik:			edp_irp6p_effector.cc
+// Plik:			edp_irp6ot_effector.cc
 // System:	QNX/MRROC++  v. 6.3
-// Opis:		Robot IRp-6 na postumencie
-//				- definicja metod klasy edp_irp6p_effector
+// Opis:		Robota IRp-6 na torze jezdnym
+//				- definicja metod klasy edp_irp6ot_effector
 //				- definicja funkcji return_created_efector()
 //
 // Autor:		tkornuta
@@ -13,17 +13,15 @@
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
-#include "lib/mrmath/mrmath.h"
 
 // Klasa edp_irp6ot_effector.
-#include "edp/irp6p_tfg/edp_irp6p_tfg_effector.h"
+#include "robot/irp6ot_tfg/edp_irp6ot_tfg_effector.h"
 // Kinematyki.
-
-#include "kinematics/irp6p_tfg/kinematic_model_irp6p_tfg.h"
+#include "robot/irp6ot_tfg/kinematic_model_irp6ot_tfg.h"
 
 namespace mrrocpp {
 namespace edp {
-namespace irp6p_tfg {
+namespace irp6ot_tfg {
 
 /*--------------------------------------------------------------------------*/
 void effector::create_threads()
@@ -38,10 +36,10 @@ void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
 
 // Konstruktor.
 effector::effector(lib::configurator &_config) :
-	motor_driven_effector(_config, lib::ROBOT_IRP6P_TFG)
+	motor_driven_effector(_config, lib::ROBOT_IRP6OT_TFG)
 {
 
-	number_of_servos = IRP6P_TFG_NUM_OF_SERVOS;
+	number_of_servos = IRP6OT_TFG_NUM_OF_SERVOS;
 
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();
@@ -115,7 +113,7 @@ common::servo_buffer* effector::return_created_servo_buffer()
 void effector::create_kinematic_models_for_given_robot(void)
 {
 	// Stworzenie wszystkich modeli kinematyki.
-	add_kinematic_model(new kinematics::irp6p_tfg::model());
+	add_kinematic_model(new kinematics::irp6ot_tfg::model());
 	// Ustawienie aktywnego modelu.
 	set_kinematic_model(0);
 
@@ -128,7 +126,7 @@ namespace common {
 // Stworzenie obiektu edp_irp6p_effector.
 effector* return_created_efector(lib::configurator &_config)
 {
-	return new irp6p_tfg::effector(_config);
+	return new irp6ot_tfg::effector(_config);
 }
 
 } // namespace common
