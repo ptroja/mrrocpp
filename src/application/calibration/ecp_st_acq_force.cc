@@ -9,7 +9,7 @@
 #include "robot/irp6p_m/ecp_r_irp6p_m.h"
 #include "ecp_st_acq_force.h"
 #include "ecp_st_acquisition.h"
-#include "ecp_mp/sensor/ecp_mp_s_pcbird.h"
+#include "sensor/pcbird/ecp_mp_s_pcbird.h"
 #include "gsl/gsl_vector.h"
 #include "gsl/gsl_matrix.h"
 
@@ -68,7 +68,7 @@ void acq_force::main_task_algorithm(void)
 
 	int i, j, t;
 	FILE *FP;
-//	char buffer[60];
+	//	char buffer[60];
 	gsl_matrix *M = gsl_matrix_alloc(3, 3);
 	gsl_matrix *K = gsl_matrix_alloc(3, 3);
 	gsl_vector *m = gsl_vector_alloc(3);

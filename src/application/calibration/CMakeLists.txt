@@ -38,14 +38,14 @@ add_executable(ecp_t_axzb_force
 	ecp_t_axzb_force.cc
 	ecp_g_pcbird_nose_run.cc
 	${ECPDIR}/generator/ecp_g_force.cc
-	${ECP_MPDIR}/birdclient.cc
-	${ECP_MPDIR}/sensor/ecp_mp_s_pcbird.cc
+	../../sensor/pcbird/birdclient.cc
+	../../sensor/pcbird/ecp_mp_s_pcbird.cc
 )
 
 add_executable(ecp_t_kcz_test
 	ecp_t_kcz_test.cc
-	${ECP_MPDIR}/birdclient.cc
-	${ECP_MPDIR}/sensor/ecp_mp_s_pcbird.cc
+	../../sensor/pcbird/birdclient.cc
+	../../sensor/pcbird/ecp_mp_s_pcbird.cc
 )
 
 SET(EXECUTABLES ecp_t_axzb_eih ecp_t_axxb_eih ecp_t_axzb_force ecp_t_kcz_test)
