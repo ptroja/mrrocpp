@@ -20,7 +20,7 @@ add_library(ecp
 	ecp_g_transparent.cc
 )
 
-target_link_libraries(ecp ecp_generators ecp_mp)
+target_link_libraries(ecp ecp_generators ecp_subtasks ecp_mp)
 
 
 add_executable(ecp_tran

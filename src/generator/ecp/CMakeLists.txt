@@ -20,5 +20,5 @@ add_library(ecp_generators
 	
 )
 
-target_link_libraries(ecp_generators ecp ecp_mp)
+target_link_libraries(ecp_generators ecp)
 
