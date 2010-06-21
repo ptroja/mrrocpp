@@ -28,7 +28,7 @@
 
 #include "mp/mp.h"
 #include "mp/generator/mp_g_common.h"
-#include "mp/generator/mp_g_delay_ms_condition.h"
+#include "generator/mp/mp_g_delay_ms_condition.h"
 
 #include "robot/conveyor/mp_r_conveyor.h"
 #include "robot/irp6ot_m/mp_r_irp6ot_m.h"

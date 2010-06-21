@@ -3,7 +3,7 @@ add_library(mp
 	robot/mp_robot.cc
 	mp_m.cc
 	generator/mp_generator.cc
-	generator/mp_g_delay_ms_condition.cc
+	../generator/mp/mp_g_delay_ms_condition.cc
 	generator/mp_g_common.cc
 )
 
