@@ -13,7 +13,7 @@
  * \date 20.08.2008
  */
 
-#include "ecp/irp6_on_track/generator/ecp_g_vis_ib_eih_irp6ot.h"
+#include "base/ecp/irp6_on_track/generator/ecp_g_vis_ib_eih_irp6ot.h"
 
 
 namespace mrrocpp {
@@ -197,7 +197,7 @@ void ecp_vis_ib_eih_irp6ot::limit_step(){
 
 	O_Tx_Ep.get_xyz_angle_axis(O_r_Ep[0]);
 
-	std::cout << "ECP Ep: ";
+	std::cout << "base/ecp Ep: ";
 
 	for (int i=0; i<6; i++)
 	{

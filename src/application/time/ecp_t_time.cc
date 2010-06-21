@@ -50,7 +50,7 @@ time::time(lib::configurator &_config) : task(_config)
 	tfg = new generator::time(*this, 8);
 	//tfg->sensor_m = sensor_m;
 
-	sr_ecp_msg->message("ECP time loaded");
+	sr_ecp_msg->message("base/ecp time loaded");
 }
 
 void time::main_task_algorithm(void)

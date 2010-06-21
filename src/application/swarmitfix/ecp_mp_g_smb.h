@@ -10,10 +10,10 @@ namespace ecp_mp {
 namespace smb {
 namespace generator {
 
-const std::string ECP_GEN_PIN_LOCK = "ECP_GEN_PIN_LOCK";
-const std::string ECP_GEN_PIN_UNLOCK = "ECP_GEN_PIN_UNLOCK";
-const std::string ECP_GEN_PIN_RISE = "ECP_GEN_PIN_RISE";
-const std::string ECP_GEN_PIN_LOWER = "ECP_GEN_PIN_LOWER";
+const std::string ECP_GEN_PIN_LOCK = "ecp_GEN_PIN_LOCK";
+const std::string ECP_GEN_PIN_UNLOCK = "ecp_GEN_PIN_UNLOCK";
+const std::string ECP_GEN_PIN_RISE = "ecp_GEN_PIN_RISE";
+const std::string ECP_GEN_PIN_LOWER = "ecp_GEN_PIN_LOWER";
 
 }// namespace generator
 } // namespace common

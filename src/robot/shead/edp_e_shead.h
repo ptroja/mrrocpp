@@ -10,7 +10,7 @@
 #ifndef __EDP_E_SHEAD_H
 #define __EDP_E_SHEAD_H
 
-#include "edp/edp_e_motor_driven.h"
+#include "base/edp/edp_e_motor_driven.h"
 #include "robot/shead/shead_const.h"
 
 namespace mrrocpp {

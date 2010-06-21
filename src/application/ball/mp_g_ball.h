@@ -9,8 +9,8 @@
 
 #include "lib/mrmath/mrmath.h"
 
-#include "mp/mp_generator.h"
-#include "mp/mp_robot.h"
+#include "base/mp/mp_generator.h"
+#include "base/mp/mp_robot.h"
 
 namespace mrrocpp {
 namespace mp {

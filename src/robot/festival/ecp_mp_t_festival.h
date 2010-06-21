@@ -5,7 +5,7 @@ namespace mrrocpp {
 namespace ecp_mp {
 namespace task {
 
-std::string ECP_GEN_FESTIVAL = "ECP_GEN_FESTIVAL";
+std::string ECP_GEN_FESTIVAL = "ecp_GEN_FESTIVAL";
 
 } // namespace task
 } // namespace ecp_mp

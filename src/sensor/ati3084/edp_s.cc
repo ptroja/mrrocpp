@@ -222,8 +222,8 @@ ATI3084_force::~ATI3084_force(void)
 void ATI3084_force::configure_sensor(void)
 {// by Y
 	is_sensor_configured = true;
-	//  printf("EDP Sensor configured\n");
-	sr_msg->message("EDP Sensor configured");
+	//  printf("base/edp Sensor configured\n");
+	sr_msg->message("base/edp Sensor configured");
 	if (!master.force_sensor_test_mode) {
 		InterruptLock(&mds.spinlock);
 		mds.intr_mode = 0;

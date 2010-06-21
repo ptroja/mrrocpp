@@ -20,12 +20,12 @@
 
 // Klasa edp_irp6ot_effector.
 #include "robot/bird_hand/edp_e_bird_hand.h"
-#include "edp/reader.h"
+#include "base/edp/reader.h"
 
 // Kinematyki.
 #include "robot/bird_hand/kinematic_model_bird_hand.h"
-#include "edp/manip_trans_t.h"
-#include "edp/vis_server.h"
+#include "base/edp/manip_trans_t.h"
+#include "base/edp/vis_server.h"
 
 #define PORT "/dev/ser"
 

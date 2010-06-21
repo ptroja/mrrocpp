@@ -16,7 +16,7 @@
 #include "ui/ui.h"
 
 #include "lib/srlib.h"
-// #include "ecp/ecp.h"
+// #include "base/ecp/ecp.h"
 #include "lib/com_buf.h"
 #include "ui/ui_class.h"
 #include "ui/src/ui_sr.h"
@@ -74,17 +74,17 @@ int OnTimer(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 			switch (sr_msg.process_type) {
 			case lib::EDP:
-				strcat(current_line, "EDP: ");
+				strcat(current_line, "base/edp: ");
 				break;
 			case lib::ECP:
-				strcat(current_line, "ECP: ");
+				strcat(current_line, "base/ecp: ");
 				break;
 			case lib::MP:
-				// printf("MP w ontimer\n");
-				strcat(current_line, "MP:  ");
+				// printf("base/mp w ontimer\n");
+				strcat(current_line, "base/mp:  ");
 				break;
 			case lib::VSP:
-				strcat(current_line, "VSP: ");
+				strcat(current_line, "base/vsp: ");
 				break;
 			case lib::UI:
 				strcat(current_line, "UI:  ");

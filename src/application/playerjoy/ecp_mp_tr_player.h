@@ -3,7 +3,7 @@
 
 #include <pthread.h>
 
-#include "ecp_mp/transmitter.h"				// klasa bazowa transmitter
+#include "base/ecp_mp/transmitter.h"				// klasa bazowa transmitter
 #include "player/playerc.h"
 
 playerc_joystick_t player_joystick;

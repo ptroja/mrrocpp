@@ -1,7 +1,7 @@
 #if !defined(_ECP_T_TFG_H)
 #define _ECP_T_TFG_H
 
-#include "ecp/ecp_task.h"
+#include "base/ecp/ecp_task.h"
 #include "generator/ecp/ecp_g_force.h"
 #include "robot/irp6_tfg/ecp_g_tfg.h"
 

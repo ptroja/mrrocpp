@@ -7,7 +7,7 @@
 #if !defined(_ECP_GEN_SPEAK_H)
 #define _ECP_GEN_SPEAK_H
 
-#include "ecp/ecp_generator.h"
+#include "base/ecp/ecp_generator.h"
 
 namespace mrrocpp {
 namespace ecp {

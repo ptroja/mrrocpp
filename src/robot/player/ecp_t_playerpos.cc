@@ -6,8 +6,8 @@
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 
-#include "ecp/player/generator/ecp_g_playerpos.h"
-#include "ecp/player/task/ecp_t_playerpos.h"
+#include "base/ecp/player/generator/ecp_g_playerpos.h"
+#include "base/ecp/player/task/ecp_t_playerpos.h"
 #include "robot/player/ecp_mp_t_player.h"
 
 namespace mrrocpp {

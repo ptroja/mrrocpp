@@ -24,13 +24,13 @@
 #include "lib/srlib.h"
 
 #include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
-#include "ecp/irp6_on_track/generator/ecp_g_vis_weights_driven_irp6ot.h"
+#include "base/ecp/irp6_on_track/generator/ecp_g_vis_weights_driven_irp6ot.h"
 
-#include "ecp/irp6_on_track/generator/ecp_g_vis_pb_eol_sac_irp6ot.h"
-#include "ecp/irp6_on_track/generator/ecp_g_vis_pb_eih_irp6ot.h"
+#include "base/ecp/irp6_on_track/generator/ecp_g_vis_pb_eol_sac_irp6ot.h"
+#include "base/ecp/irp6_on_track/generator/ecp_g_vis_pb_eih_irp6ot.h"
 
-#include "ecp_mp/sensor/ecp_mp_s_vis.h"
-#include "ecp/irp6_on_track/task/ecp_t_vis_weights_driven_irp6ot.h"
+#include "base/ecp_mp/sensor/ecp_mp_s_vis.h"
+#include "base/ecp/irp6_on_track/task/ecp_t_vis_weights_driven_irp6ot.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -164,7 +164,7 @@ void ecp_vis_weights_driven_irp6ot::limit_step(){
 
 	O_Tx_Ep.get_xyz_angle_axis(O_r_Ep[0]);
 
-	std::cout << "ECP Ep: ";
+	std::cout << "base/ecp Ep: ";
 
 	for (int i=0; i<6; i++)
 	{

@@ -10,7 +10,7 @@
 #include "lib/com_buf.h"
 
 #include "lib/srlib.h"
-#include "mp/mp.h"
+#include "base/mp/mp.h"
 #include "ecp_mp_t_bird_hand_test.h"
 #include "mp_t_bird_hand_test.h"
 #include "lib/single_thread_port.h"

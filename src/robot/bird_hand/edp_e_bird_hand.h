@@ -10,7 +10,7 @@
 #ifndef __EDP_E_BIRD_HAND_H
 #define __EDP_E_BIRD_HAND_H
 
-#include "edp/edp_e_manip.h"
+#include "base/edp/edp_e_manip.h"
 #include "robot/bird_hand/bird_hand_const.h"
 
 #include "hi_bird_hand.h"

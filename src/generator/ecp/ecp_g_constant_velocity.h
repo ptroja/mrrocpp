@@ -8,10 +8,10 @@
 #ifndef _ECP_G_CONSTANT_VELOCITY_H_
 #define _ECP_G_CONSTANT_VELOCITY_H_
 
-#include "ecp/common/generator/ecp_g_multiple_position.h"
+#include "base/ecp/common/generator/ecp_g_multiple_position.h"
 #include "lib/mrmath/mrmath.h"
 #include "lib/trajectory_pose/constant_velocity_trajectory_pose.h"
-#include "ecp/common/generator/velocity_profile_calculator/constant_velocity_profile.h"
+#include "base/ecp/common/generator/velocity_profile_calculator/constant_velocity_profile.h"
 
 namespace mrrocpp {
 namespace ecp {

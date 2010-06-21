@@ -9,8 +9,8 @@
 #if !defined(__MP_TASK_FSAUTOMAT)
 #define __MP_TASK_FSAUTOMAT
 
-#include "mp/mp.h"
-#include "ecp_mp/ecp_mp_task.h"
+#include "base/mp/mp.h"
+#include "base/ecp_mp/ecp_mp_task.h"
 //#include "subtask/ecp_mp_t_fsautomat.h"
 #include "State.h"
 #include "CubeState.h"

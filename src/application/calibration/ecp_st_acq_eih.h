@@ -16,9 +16,9 @@
 
 #include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
 #include "robot/irp6p_m/ecp_r_irp6p_m.h"
-#include "ecp/ecp_task.h"
+#include "base/ecp/ecp_task.h"
 #include "generator/ecp/ecp_g_smooth.h"
-#include "ecp/ecp_g_transparent.h"
+#include "base/ecp/ecp_g_transparent.h"
 #include "generator/ecp/ecp_g_force.h"
 #include "ecp_g_eih_nose_run.h"
 #include "ecp_st_acquisition.h"

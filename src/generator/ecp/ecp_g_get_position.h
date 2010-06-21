@@ -9,7 +9,7 @@
 #define _ECP_GEN_GET_POSITION_H_
 
 #include "lib/mrmath/mrmath.h"
-#include "ecp/ecp_generator.h"
+#include "base/ecp/ecp_generator.h"
 
 #include <vector>
 

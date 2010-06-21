@@ -1,7 +1,7 @@
 if(ROBOT_BIRD_HAND)
 add_executable(edp_bird_hand
 	edp_e_bird_hand.cc
-	../../edp/int_hand_suplement.cc
+	../../base/edp/int_hand_suplement.cc
 	hi_bird_hand.cc
 )
 

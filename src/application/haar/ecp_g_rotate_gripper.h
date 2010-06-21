@@ -12,7 +12,7 @@
 #include <string.h>
 #include <math.h>
 
-#include "ecp/ecp_generator.h"
+#include "base/ecp/ecp_generator.h"
 #include "sensor/fradia/ecp_mp_s_fradia_sensor.h"
 
 namespace mrrocpp {

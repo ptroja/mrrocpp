@@ -8,7 +8,7 @@
 #if !defined(__MP_T_SWARMITFIX_H)
 #define __MP_T_SWARMITFIX_H
 
-#include "mp/mp.h"
+#include "base/mp/mp.h"
 
 
 namespace mrrocpp {

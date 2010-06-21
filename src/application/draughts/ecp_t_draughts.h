@@ -1,7 +1,7 @@
 #if !defined(_ECP_T_TB_IRP6OT_H)
 #define _ECP_T_TB_IRP6OT_H
 
-#include "ecp/ecp_task.h"
+#include "base/ecp/ecp_task.h"
 #include "generator/ecp/ecp_g_smooth.h"
 #include "generator/ecp/ecp_g_force.h"
 #include "lib/com_buf.h"

@@ -13,7 +13,7 @@
 #if !defined(_SHEAD_KIN_MODEL)
 #define _SHEAD_KIN_MODEL
 
-#include "kinematics/kinematic_model.h"
+#include "base/kinematics/kinematic_model.h"
 
 namespace mrrocpp {
 namespace kinematics {

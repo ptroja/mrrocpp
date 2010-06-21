@@ -1,7 +1,7 @@
 #ifndef ECP_T_WII_ELLIPSE_H
 #define ECP_T_WII_ELLIPSE_H
 
-#include "ecp_mp/ecp_mp_task.h"
+#include "base/ecp_mp/ecp_mp_task.h"
 #include "application/wii_ellipse/generator/ecp_g_wii_ellipse.h"
 #include "generator/ecp/ecp_g_smooth.h"
 

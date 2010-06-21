@@ -103,7 +103,7 @@ int EDP_smb_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 				if (ui.smb->state.edp.pid < 0) {
 
 					ui.smb->state.edp.state = 0;
-					fprintf(stderr, "EDP spawn failed: %s\n", strerror(errno));
+					fprintf(stderr, "base/edp spawn failed: %s\n", strerror(errno));
 					delete ui.smb->ui_ecp_robot;
 				} else { // jesli spawn sie powiodl
 

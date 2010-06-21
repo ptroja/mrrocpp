@@ -8,7 +8,7 @@
 #if !defined(_ECP_R_SPEAKER_H)
 #define _ECP_R_SPEAKER_H
 
-#include "ecp/ecp_robot.h"
+#include "base/ecp/ecp_robot.h"
 #include "robot/speaker/speaker_const.h"
 
 namespace mrrocpp {

@@ -1,4 +1,4 @@
-//#include "ecp/irp6_on_track/ecp_local.h"
+//#include "base/ecp/irp6_on_track/ecp_local.h"
 #include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
 #include "ecp_t_draughts.h"
 #include <stdio.h>

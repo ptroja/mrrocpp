@@ -1,8 +1,8 @@
 #if !defined(_ECP_T_RCSC_IRP6P_H)
 #define _ECP_T_RCSC_IRP6P_H
 
-#include "ecp/ecp_task.h"
-#include "ecp/ecp_g_transparent.h"
+#include "base/ecp/ecp_task.h"
+#include "base/ecp/ecp_g_transparent.h"
 #include "subtask/ecp_st_go.h"
 
 namespace mrrocpp {

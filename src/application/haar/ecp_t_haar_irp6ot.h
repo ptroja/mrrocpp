@@ -4,7 +4,7 @@
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
-#include "ecp/ecp_task.h"
+#include "base/ecp/ecp_task.h"
 
 #include "lib/srlib.h"
 

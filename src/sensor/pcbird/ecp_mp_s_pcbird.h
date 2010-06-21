@@ -11,7 +11,7 @@
 
 #include <netdb.h>
 
-#include "ecp_mp/ecp_mp_sensor.h"
+#include "base/ecp_mp/ecp_mp_sensor.h"
 
 namespace mrrocpp {
 namespace ecp_mp {

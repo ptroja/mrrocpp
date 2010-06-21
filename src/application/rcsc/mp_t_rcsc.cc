@@ -9,8 +9,8 @@
 #include "lib/com_buf.h"
 
 #include "lib/srlib.h"
-#include "mp/mp.h"
-#include "mp/mp_g_common.h"
+#include "base/mp/mp.h"
+#include "base/mp/mp_g_common.h"
 #include "mp_t_rcsc.h"
 #include "ecp_mp_tr_rc_windows.h"
 #include "robot/festival/ecp_g_festival.h"

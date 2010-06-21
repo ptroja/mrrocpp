@@ -10,7 +10,7 @@ namespace ecp_mp {
 namespace common {
 namespace generator {
 
-const std::string ECP_GEN_TRANSPARENT = "ECP_GEN_TRANSPARENT";
+const std::string ECP_GEN_TRANSPARENT = "ecp_GEN_TRANSPARENT";
 
 }// namespace generator
 } // namespace common

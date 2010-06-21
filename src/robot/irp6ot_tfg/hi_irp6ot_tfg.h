@@ -8,7 +8,7 @@
 #ifndef __HI_LOCAL_IRP6OT_TFG_H
 #define __HI_LOCAL_IRP6OT_TFG_H
 
-#include "edp/hi_rydz.h"
+#include "base/edp/hi_rydz.h"
 
 namespace mrrocpp {
 namespace edp {

@@ -9,8 +9,8 @@
 #ifndef __REGULATOR_CONV_H
 #define __REGULATOR_CONV_H
 
-//#include "edp/servo_gr.h"
-#include "edp/regulator.h"
+//#include "base/edp/servo_gr.h"
+#include "base/edp/regulator.h"
 
 
 namespace mrrocpp {

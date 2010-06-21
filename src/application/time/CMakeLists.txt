@@ -1,6 +1,6 @@
 add_executable(vsp_time_int
 	vsp_time_sensor.cc
-	../../vsp/vsp_m_int.cc ../../vsp/vsp_sensor.cc
+	../../base/vsp/vsp_m_int.cc ../../base/vsp/vsp_sensor.cc
 )
 
 target_link_libraries(vsp_time_int
@@ -9,7 +9,7 @@ target_link_libraries(vsp_time_int
 
 add_executable(vsp_time_nint
 	vsp_time_sensor.cc
-	../../vsp/vsp_m_nint.cc ../../vsp/vsp_sensor.cc
+	../../base/vsp/vsp_m_nint.cc ../../base/vsp/vsp_sensor.cc
 )
 
 target_link_libraries(vsp_time_nint
@@ -18,7 +18,7 @@ target_link_libraries(vsp_time_nint
 
 #add_executable(vsp_time_int_nw
 #	vsp_time_sensor.cc
-#	../../vsp/vsp_m_int_nw.cc ../../vsp/vsp_sensor.cc
+#	../../base/vsp/vsp_m_int_nw.cc ../../base/vsp/vsp_sensor.cc
 #)
 
 #target_link_libraries(vsp_time_int_nw

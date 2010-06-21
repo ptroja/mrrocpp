@@ -8,14 +8,14 @@
 #if !defined(_ECP_R_IRP6OT_M_H)
 #define _ECP_R_IRP6OT_M_H
 
-#include "ecp/ecp_robot.h"
+#include "base/ecp/ecp_robot.h"
 #include "robot/irp6ot_m/irp6ot_m_const.h"
 
-#include "kinematics/kinematics_manager.h"
+#include "base/kinematics/kinematics_manager.h"
 #include "robot/irp6ot_m/kinematic_model_irp6ot_with_track.h"
 #include "robot/irp6ot_m/kinematic_model_irp6ot_with_wrist.h"
 #include "robot/irp6ot_m/kinematic_model_calibrated_irp6ot_with_wrist.h"
-#include "kinematics/kinematic_model_with_tool.h"
+#include "base/kinematics/kinematic_model_with_tool.h"
 
 namespace mrrocpp {
 namespace ecp {

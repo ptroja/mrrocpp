@@ -1348,8 +1348,8 @@ int MPup_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 		// sprawdzenie czy nie jest juz zarejestrowany serwer komunikacyjny MP
 		if (access(mp_network_pulse_attach_point.c_str(), R_OK) == 0) {
-			ui.ui_msg->message(lib::NON_FATAL_ERROR, "MP already exists");
-		} else if (ui.check_node_existence(ui.mp.node_name, std::string("mp"))) {
+			ui.ui_msg->message(lib::NON_FATAL_ERROR, "base/mp already exists");
+		} else if (ui.check_node_existence(ui.mp.node_name, std::string("base/mp"))) {
 			ui.mp.pid = ui.config->process_spawn(MP_SECTION);
 
 			if (ui.mp.pid > 0) {
@@ -1373,7 +1373,7 @@ int MPup_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 				if (pt_res >= 0)
 					PtLeave(0);
 			} else {
-				fprintf(stderr, "MP spawn failed\n");
+				fprintf(stderr, "base/mp spawn failed\n");
 			}
 			ui.manage_interface();
 		}
@@ -1399,14 +1399,14 @@ int MPslay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 		name_close(ui.mp.pulse_fd);
 
 		// 	printf("dddd: %d\n", SignalKill(ini_con->mp-
-		// 	printf("MP slay\n");
+		// 	printf("base/mp slay\n");
 		SignalKill(ui.mp.node_nr, ui.mp.pid, 0, SIGTERM, 0, 0);
 		ui.mp.state = UI_MP_PERMITED_TO_RUN; // mp wylaczone
 
 	}
 	// delay(1000);
 	// 	kill(ui.mp_pid,SIGTERM);
-	// 	printf("MP pupa po kill\n");
+	// 	printf("base/mp pupa po kill\n");
 	ui.mp.pid = -1;
 	ui.mp.pulse_fd = -1;
 

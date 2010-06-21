@@ -5,7 +5,7 @@
 #if !defined(_ECP_SUB_TASK_EDGE_FOLLOW_H)
 #define _ECP_SUB_TASK_EDGE_FOLLOW_H
 
-#include "ecp/ecp_task.h"
+#include "base/ecp/ecp_task.h"
 #include "application/sk/ecp_mp_st_edge_follow.h"
 
 namespace mrrocpp {

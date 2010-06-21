@@ -9,7 +9,7 @@ namespace mrrocpp {
 namespace ecp_mp {
 namespace task {
 
-const std::string ECP_ST_GRIPPER_OPENING = "ECP_ST_GRIPPER_OPENING";
+const std::string ECP_ST_GRIPPER_OPENING = "ecp_ST_GRIPPER_OPENING";
 
 } // namespace task
 } // namespace ecp_mp

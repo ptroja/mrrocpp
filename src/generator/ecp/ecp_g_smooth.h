@@ -31,10 +31,10 @@
 #include "lib/srlib.h"
 #include "lib/mrmath/mrmath.h"
 
-#include "ecp_mp/smooth_trajectory_pose.h"
+#include "base/ecp_mp/smooth_trajectory_pose.h"
 
 #include "generator/ecp/ecp_g_delta.h"
-#include "ecp_mp/Trajectory.h"
+#include "base/ecp_mp/Trajectory.h"
 
 namespace mrrocpp {
 namespace ecp {

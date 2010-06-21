@@ -10,7 +10,7 @@ namespace ecp_mp {
 namespace speaker {
 namespace generator {
 
-const std::string ECP_GEN_SPEAK = "ECP_GEN_SPEAK";
+const std::string ECP_GEN_SPEAK = "ecp_GEN_SPEAK";
 
 }// namespace generator
 } // namespace speaker

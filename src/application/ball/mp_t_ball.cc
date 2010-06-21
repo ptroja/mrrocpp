@@ -10,7 +10,7 @@
 #include "lib/com_buf.h"
 
 #include "lib/srlib.h"
-#include "mp/mp.h"
+#include "base/mp/mp.h"
 #include "application/ball/mp_g_ball.h"
 #include "application/ball/mp_t_ball.h"
 #include "application/rcsc/ecp_mp_t_rcsc.h"

@@ -10,7 +10,7 @@
 #include "lib/impconst.h"		// lib::frame_tab
 #include "lib/com_buf.h"			// lib::trajectory_description
 
-#include "ecp/ecp_generator.h"
+#include "base/ecp/ecp_generator.h"
 #include "lib/mrmath/mrmath.h"
 
 namespace mrrocpp {

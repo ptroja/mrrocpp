@@ -11,7 +11,7 @@
 #include <string.h>
 
 #include "lib/srlib.h"
-#include "mp/mp.h"
+#include "base/mp/mp.h"
 #include "mp_t_multiplayer.h"
 #include "robot/festival/ecp_mp_t_festival.h"
 #include "robot/player/ecp_mp_t_player.h"

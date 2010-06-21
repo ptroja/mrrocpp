@@ -48,9 +48,9 @@ sk::sk(lib::configurator &_config) :
 	befg = new generator::bias_edp_force(*this);
 
 	if (ecp_m_robot->robot_name == lib::ROBOT_IRP6OT_M) {
-		sr_ecp_msg->message("ECP sk irp6ot loaded");
+		sr_ecp_msg->message("base/ecp sk irp6ot loaded");
 	} else if (ecp_m_robot->robot_name == lib::ROBOT_IRP6P_M) {
-		sr_ecp_msg->message("ECP sk irp6p loaded");
+		sr_ecp_msg->message("base/ecp sk irp6p loaded");
 	}
 
 	// sprawdzenie dodatkowej opcji w konfiguracji dotyczacej uruchomienie zapamietywania trajektorii do pliku

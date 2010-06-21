@@ -13,7 +13,7 @@
 #include <sstream>
 
 #include "lib/srlib.h"
-#include "mp/mp.h"
+#include "base/mp/mp.h"
 #include "ecp_mp_t_sk_mr.h"
 #include "mp_t_sk_mr.h"
 #include "lib/mrmath/mrmath.h"

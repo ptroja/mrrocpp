@@ -8,7 +8,7 @@
 #define ECP_G_BIRDHAND_GRASPIT_H_
 
 #include <time.h>
-#include "ecp/ecp_generator.h"
+#include "base/ecp/ecp_generator.h"
 #include "lib/data_port_headers/bird_hand.h"
 
 namespace mrrocpp {

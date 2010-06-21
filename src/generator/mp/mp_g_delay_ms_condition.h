@@ -1,7 +1,7 @@
 #ifndef MP_DELAY_MS_CONDITION_H_
 #define MP_DELAY_MS_CONDITION_H_
 
-#include "mp/mp.h"
+#include "base/mp/mp.h"
 #include "lib/timer.h"
 
 namespace mrrocpp {

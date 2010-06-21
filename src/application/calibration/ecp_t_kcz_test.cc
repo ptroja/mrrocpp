@@ -31,11 +31,11 @@ kcz_test::kcz_test(lib::configurator &_config): task(_config)
 	smoothgen2 = new common::generator::smooth(*this, true);
 	smoothgen2->sensor_m = sensor_m;
 
-	sr_ecp_msg->message("ECP loaded kcz_test");
+	sr_ecp_msg->message("base/ecp loaded kcz_test");
 };
 
 void kcz_test::main_task_algorithm(void ) {
-	sr_ecp_msg->message("ECP kcz_test ready");
+	sr_ecp_msg->message("base/ecp kcz_test ready");
 
 	smoothgen2->set_absolute();
 

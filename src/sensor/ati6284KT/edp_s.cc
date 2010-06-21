@@ -93,24 +93,25 @@ ATI6284_force::ATI6284_force(common::manip_effector &_master) :
 	}
 
 	measuring = false;
-	_master.registerReaderStartedCallback(boost::bind(
-			&ATI6284_force::startMeasurements, this));
-	_master.registerReaderStoppedCallback(boost::bind(
-			&ATI6284_force::stopMeasurements, this));
+	_master.registerReaderStartedCallback(boost::bind(&ATI6284_force::startMeasurements, this));
+	_master.registerReaderStoppedCallback(boost::bind(&ATI6284_force::stopMeasurements, this));
 
 }
 
-void ATI6284_force::startMeasurements() {
+void ATI6284_force::startMeasurements()
+{
 	timeUtil.reset();
 	measuring = true;
 }
 
-void ATI6284_force::stopMeasurements() {
+void ATI6284_force::stopMeasurements()
+{
 	measuring = false;
 	timeUtil.dump("/tmp/measures2.txt");
 }
 
-void ATI6284_force::connect_to_hardware(void) {
+void ATI6284_force::connect_to_hardware(void)
+{
 	if (!(master.force_sensor_test_mode)) {
 		// 	printf("Konstruktor VSP!\n");
 
@@ -134,7 +135,8 @@ void ATI6284_force::connect_to_hardware(void) {
 
 }
 
-ATI6284_force::~ATI6284_force(void) {
+ATI6284_force::~ATI6284_force(void)
+{
 	if (!(master.force_sensor_test_mode)) {
 		//delete recvSocket;
 		//delete sendSocket;
@@ -146,18 +148,18 @@ ATI6284_force::~ATI6284_force(void) {
 }
 
 /**************************** inicjacja czujnika ****************************/
-void ATI6284_force::configure_sensor(void) {// by Y
+void ATI6284_force::configure_sensor(void)
+{// by Y
 	is_sensor_configured = true;
-	//  printf("EDP Sensor configured\n");
-	sr_msg->message("EDP Sensor configured");
+	//  printf("base/edp Sensor configured\n");
+	sr_msg->message("base/edp Sensor configured");
 
 	if (!(master.force_sensor_test_mode)) {
 
 		// synchronize gravity transformation
 
 		// polozenie kisci bez narzedzia wzgledem bazy
-		lib::Homog_matrix frame = master.return_current_frame(
-				common::WITH_TRANSLATION); // FORCE Transformation by Slawomir Bazant
+		lib::Homog_matrix frame = master.return_current_frame(common::WITH_TRANSLATION); // FORCE Transformation by Slawomir Bazant
 		// lib::Homog_matrix frame(master.force_current_end_effector_frame); // pobranie aktualnej ramki
 
 
@@ -181,8 +183,7 @@ void ATI6284_force::configure_sensor(void) {// by Y
 			lib::Xyz_Angle_Axis_vector tab;
 			lib::Homog_matrix sensor_frame;
 			if (master.config.exists("sensor_in_wrist")) {
-				char *tmp = strdup(master.config.value<std::string> (
-						"sensor_in_wrist").c_str());
+				char *tmp = strdup(master.config.value <std::string> ("sensor_in_wrist").c_str());
 				char* toDel = tmp;
 				for (int i = 0; i < 6; i++)
 					tab[i] = strtod(tmp, &tmp);
@@ -190,15 +191,13 @@ void ATI6284_force::configure_sensor(void) {// by Y
 				free(toDel);
 				// std::cout<<sensor_frame<<std::endl;
 			} else
-				sensor_frame = lib::Homog_matrix(0, 1, 0, 0, -1, 0, 0, 0, 0, 0,
-						1, 0.09);
+				sensor_frame = lib::Homog_matrix(0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 1, 0.09);
 			// lib::Homog_matrix sensor_frame = lib::Homog_matrix(0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 1, 0.09);
 
-			double weight = master.config.value<double> ("weight");
+			double weight = master.config.value <double> ("weight");
 
 			double point[3];
-			char *tmp = strdup(master.config.value<std::string> (
-					"default_mass_center_in_wrist").c_str());
+			char *tmp = strdup(master.config.value <std::string> ("default_mass_center_in_wrist").c_str());
 			char* toDel = tmp;
 			for (int i = 0; i < 3; i++)
 				point[i] = strtod(tmp, &tmp);
@@ -206,9 +205,8 @@ void ATI6284_force::configure_sensor(void) {// by Y
 			// double point[3] = { master.config.value<double>("x_axis_arm"),
 			//		master.config.value<double>("y_axis_arm"), master.config.return_double_value("z_axis_arm") };
 			lib::K_vector pointofgravity(point);
-			gravity_transformation = new lib::ForceTrans(
-					lib::FORCE_SENSOR_ATI6284, frame, sensor_frame, weight,
-					pointofgravity);
+			gravity_transformation
+					= new lib::ForceTrans(lib::FORCE_SENSOR_ATI6284, frame, sensor_frame, weight, pointofgravity);
 
 		} else {
 			gravity_transformation->synchro(frame);
@@ -216,9 +214,9 @@ void ATI6284_force::configure_sensor(void) {// by Y
 	}
 }
 
-void ATI6284_force::wait_for_event() {
-	const boost::posix_time::time_duration timeout =
-			boost::posix_time::microseconds(1500);
+void ATI6284_force::wait_for_event()
+{
+	const boost::posix_time::time_duration timeout = boost::posix_time::microseconds(1500);
 
 	static int iter_counter = 0; // okresla ile razy pod rzad zostala uruchomiona ta metoda
 
@@ -253,7 +251,8 @@ void ATI6284_force::wait_for_event() {
 }
 
 /*************************** inicjacja odczytu ******************************/
-void ATI6284_force::initiate_reading(void) {
+void ATI6284_force::initiate_reading(void)
+{
 	double force_fresh[6] = { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f };
 
 	if (!is_sensor_configured) {
@@ -272,26 +271,27 @@ void ATI6284_force::initiate_reading(void) {
 
 	// jesli ma byc wykorzytstywana biblioteka transformacji sil
 	if (gravity_transformation) {
-		lib::Homog_matrix frame = master.return_current_frame(
-				common::WITH_TRANSLATION);
+		lib::Homog_matrix frame = master.return_current_frame(common::WITH_TRANSLATION);
 		// lib::Homog_matrix frame(master.force_current_end_effector_frame);
-		lib::Ft_vector output = gravity_transformation->getForce(ft_table,
-				frame);
+		lib::Ft_vector output = gravity_transformation->getForce(ft_table, frame);
 		master.force_msr_upload(output);
 	}
 }
 
 /***************************** odczyt z czujnika *****************************/
-void ATI6284_force::get_reading(void) {
+void ATI6284_force::get_reading(void)
+{
 }
 /*******************************************************************/
-force* return_created_edp_force_sensor(common::manip_effector &_master) {
+force* return_created_edp_force_sensor(common::manip_effector &_master)
+{
 	return new ATI6284_force(_master);
 }// : return_created_sensor
 
 
 /*******************************************************************/
-void send_request(uint64_t &counter) {
+void send_request(uint64_t &counter)
+{
 	unsigned char send_buffer[8];
 	++counter;
 	memcpy((void *) (send_buffer), (void *) (&(counter)), 8); //64bit unsigned counter
@@ -303,13 +303,13 @@ void send_request(uint64_t &counter) {
 // int16_t result_raw[6] - input data in hex
 // int16_t bias_raw[6] - bias data in hex
 // double force[6] - output data in N, N*m
-void convert_data(int16_t result_raw[6], int16_t bias_raw[6], double force[6]) {
+void convert_data(int16_t result_raw[6], int16_t bias_raw[6], double force[6])
+{
 	int i, j;
 	double result_voltage[6] = { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f };
 
 	for (i = 0; i < 6; ++i) {
-		result_voltage[i] = (double) ((result_raw[i] - bias_raw[i]) * 10.0f
-				/ 2048.0f);
+		result_voltage[i] = (double) ((result_raw[i] - bias_raw[i]) * 10.0f / 2048.0f);
 		force[i] = 0.0;
 	}
 
@@ -354,7 +354,8 @@ void convert_data(int16_t result_raw[6], int16_t bias_raw[6], double force[6]) {
 }
 /*******************************************************************/
 /* gets data from ethernet and store it in int16_t data_raw[6] */
-int get_data_from_ethernet(unsigned char buffer[512], int16_t data_raw[6]) {
+int get_data_from_ethernet(unsigned char buffer[512], int16_t data_raw[6])
+{
 	std::size_t recvd = 0;//sock->recv(buffer, 512);
 	unsigned char *buffer_data = buffer + 8; //8 bytes for uint64_t
 
@@ -362,8 +363,7 @@ int get_data_from_ethernet(unsigned char buffer[512], int16_t data_raw[6]) {
 
 		//convert two bytes to one word. &0xFF - take only one byte, not four...
 		for (int i = 0; i < 6; ++i) {
-			data_raw[i] = (((buffer_data[2 * i] & 0xFF) << 8) | (buffer_data[2
-					* i + 1] & 0xFF));
+			data_raw[i] = (((buffer_data[2 * i] & 0xFF) << 8) | (buffer_data[2 * i + 1] & 0xFF));
 
 		}
 		return 0;

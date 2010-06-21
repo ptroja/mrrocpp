@@ -13,7 +13,7 @@
 
 #include "sensor/pcbird/birdclient.h"
 #include "sensor/pcbird/ecp_mp_s_pcbird.h"
-#include "ecp_mp/ecp_mp_task.h"
+#include "base/ecp_mp/ecp_mp_task.h"
 
 using namespace std;
 

@@ -28,7 +28,7 @@
 #include "robot/irp6ot_m/edp_irp6ot_m_effector.h"
 // Klasa hardware_interface.
 #include "robot/irp6ot_m/hi_irp6ot_m.h"
-#include "edp/in_out.h"
+#include "base/edp/in_out.h"
 
 namespace mrrocpp {
 namespace edp {

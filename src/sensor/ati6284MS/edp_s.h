@@ -12,7 +12,7 @@
 #if !defined(_EDP_S_ATI6284_MS_H)
 #define _EDP_S_ATI6284_MS_H
 
-#include "edp/edp_irp6s_postument_track.h"
+#include "base/edp/edp_irp6s_postument_track.h"
 
 #define USE_RAW
 

@@ -1,7 +1,7 @@
 #if !defined(MP_R_SPKM_H_)
 #define MP_R_SPKM_H_
 
-#include "mp/mp_r_motor_driven.h"
+#include "base/mp/mp_r_motor_driven.h"
 
 namespace mrrocpp {
 namespace mp {

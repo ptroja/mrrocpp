@@ -13,7 +13,7 @@
 #include "lib/configurator.h"
 #include "lib/mrmath/mrmath.h"
 
-#include "ecp/ecp_robot.h"
+#include "base/ecp/ecp_robot.h"
 
 // ---------------------------------------------------------------
 class ui_common_robot

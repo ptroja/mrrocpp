@@ -31,7 +31,7 @@ playerjoy::playerjoy(lib::configurator &_config) : task(_config)
 {
     ecp_m_robot = new robot (*this);
 
-    sr_ecp_msg->message("ECP loaded");
+    sr_ecp_msg->message("base/ecp loaded");
 
     transmitter_m[ecp_mp::transmitter::TRANSMITTER_PLAYER] =
         new ecp_mp::transmitter::player (ecp_mp::transmitter::TRANSMITTER_PLAYER, "[transmitter_player]", *this,

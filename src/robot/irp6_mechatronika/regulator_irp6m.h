@@ -10,9 +10,9 @@
 #ifndef __REGULATOR_IRP6M_H
 #define __REGULATOR_IRP6M_H
 
-#include "edp/edp.h"
+#include "base/edp/edp.h"
 
-#include "edp/regulator.h"
+#include "base/edp/regulator.h"
 
 namespace mrrocpp {
 namespace edp {

@@ -8,7 +8,7 @@
 #ifndef ECP_T_MBORYN_H_
 #define ECP_T_MBORYN_H_
 
-#include "ecp/ecp_task.h"
+#include "base/ecp/ecp_task.h"
 #include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
 #include "ecp_g_mboryn.h"
 #include "generator/ecp/ecp_g_smooth.h"

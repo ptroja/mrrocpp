@@ -9,11 +9,11 @@
 #if !defined(_ECP_TASK_FSAUTOMAT_H)
 #define _ECP_TASK_FSAUTOMAT_H
 
-#include "ecp/ecp_task.h"
+#include "base/ecp/ecp_task.h"
 #include "subtask/ecp_st_go.h"
-#include "ecp/ecp_g_transparent.h"
+#include "base/ecp/ecp_g_transparent.h"
 
-#include "ecp_mp/Trajectory.h"
+#include "base/ecp_mp/Trajectory.h"
 
 namespace mrrocpp {
 namespace ecp {

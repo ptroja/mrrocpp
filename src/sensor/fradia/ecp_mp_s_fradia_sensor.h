@@ -20,7 +20,7 @@
 #include <cstring>
 #include <stdexcept>
 
-#include "ecp_mp/ecp_mp_sensor.h"
+#include "base/ecp_mp/ecp_mp_sensor.h"
 
 #include "lib/logger.h"
 #include "lib/configurator.h"

@@ -12,7 +12,7 @@
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 
-#include "ecp/ecp_generator.h"
+#include "base/ecp/ecp_generator.h"
 
 namespace mrrocpp {
 namespace ecp {

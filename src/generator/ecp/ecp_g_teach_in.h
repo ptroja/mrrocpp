@@ -7,8 +7,8 @@
 
 #include <list>
 
-#include "ecp/ecp_generator.h"
-#include "ecp/ecp_taught_in_pose.h"
+#include "base/ecp/ecp_generator.h"
+#include "base/ecp/ecp_taught_in_pose.h"
 
 namespace mrrocpp {
 namespace ecp {

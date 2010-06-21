@@ -3,7 +3,7 @@
 #if !defined(_ECP_T_smooth_TEST_H)
 #define _ECP_T_smooth_TEST_H
 
-#include "ecp/ecp_task.h"
+#include "base/ecp/ecp_task.h"
 #include "generator/ecp/ecp_g_smooth.h"
 
 namespace mrrocpp {

@@ -11,7 +11,7 @@
 #include "lib/com_buf.h"
 #include "lib/srlib.h"
 #include "lib/configurator.h"
-#include "ecp/ecp_task.h"
+#include "base/ecp/ecp_task.h"
 #include "gsl/gsl_vector.h"
 #include "gsl/gsl_matrix.h"
 #include "gsl/gsl_multimin.h"

@@ -33,7 +33,7 @@ speaking::speaking(lib::configurator &_config) :
 	speak = new generator::speaking(*this, 8);
 	speak->sensor_m = sensor_m;
 
-	sr_ecp_msg->message("ECP loaded");
+	sr_ecp_msg->message("base/ecp loaded");
 }
 
 void speaking::main_task_algorithm(void)
