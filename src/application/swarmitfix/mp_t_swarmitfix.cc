@@ -19,9 +19,9 @@
 #include "lib/single_thread_port.h"
 #include "lib/mrmath/mrmath.h"
 #include "lib/data_port_headers/epos.h"
-#include "lib/robot_consts/smb_const.h"
-#include "lib/robot_consts/spkm_const.h"
-#include "lib/robot_consts/shead_const.h"
+#include "robot/smb/smb_const.h"
+#include "robot/spkm/spkm_const.h"
+#include "robot/shead/shead_const.h"
 #include "ecp_mp/common/generator/ecp_mp_g_transparent.h"
 #include "ecp_mp_g_epos.h"
 

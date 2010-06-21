@@ -9,7 +9,7 @@
 #define _ECP_R_SPKM_H
 
 #include "ecp/common/ecp_robot.h"
-#include "lib/robot_consts/spkm_const.h"
+#include "robot/spkm/spkm_const.h"
 #include "kinematics/common/kinematics_manager.h"
 #include "robot/spkm/kinematic_model_spkm.h"
 #include "lib/data_port_headers/epos.h"

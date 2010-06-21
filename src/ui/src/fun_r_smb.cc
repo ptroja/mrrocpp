@@ -27,7 +27,7 @@
 // Konfigurator.
 #include "lib/configurator.h"
 #include "ui/ui_ecp_r_tfg_and_conv.h"
-#include "lib/robot_consts/smb_const.h"
+#include "robot/smb/smb_const.h"
 
 /* Local headers */
 #include "ablibs.h"

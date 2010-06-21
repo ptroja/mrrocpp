@@ -11,7 +11,7 @@
 #include "ecp/common/ecp_robot.h"
 #include "kinematics/common/kinematics_manager.h"
 #include "robot/smb/kinematic_model_smb.h"
-#include "lib/robot_consts/smb_const.h"
+#include "robot/smb/smb_const.h"
 #include "lib/data_port_headers/epos.h"
 #include "lib/data_port_headers/smb.h"
 

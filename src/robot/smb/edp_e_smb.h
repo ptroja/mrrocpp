@@ -11,7 +11,7 @@
 #define __EDP_E_SMB_H
 
 #include "edp/common/edp_e_motor_driven.h"
-#include "lib/robot_consts/smb_const.h"
+#include "robot/smb/smb_const.h"
 
 namespace mrrocpp {
 namespace edp {
