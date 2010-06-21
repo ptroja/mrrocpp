@@ -36,7 +36,7 @@
 #include "mp/robot/mp_r_irp6_mechatronika.h"
 #include "mp/robot/mp_r_speaker.h"
 #include "mp/robot/mp_r_polycrank.h"
-#include "mp/robot/mp_r_bird_hand.h"
+#include "robot/bird_hand/mp_r_bird_hand.h"
 #include "mp/robot/mp_r_spkm.h"
 #include "mp/robot/mp_r_smb.h"
 #include "mp/robot/mp_r_irp6ot_tfg.h"

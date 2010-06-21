@@ -16,7 +16,7 @@
 #include "lib/single_thread_port.h"
 #include "lib/mrmath/mrmath.h"
 #include "lib/data_port_headers/bird_hand.h"
-#include "lib/robot_consts/bird_hand_const.h"
+#include "robot/bird_hand/bird_hand_const.h"
 #include "ecp_mp/common/generator/ecp_mp_g_transparent.h"
 #include "ecp_mp_g_bird_hand_test.h"
 

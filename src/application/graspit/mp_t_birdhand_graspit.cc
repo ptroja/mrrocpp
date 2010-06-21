@@ -8,7 +8,7 @@
 #include "lib/data_port_headers/bird_hand.h"
 #include "mp_t_birdhand_graspit.h"
 #include "ecp_mp_t_graspit.h"
-#include "lib/robot_consts/bird_hand_const.h"
+#include "robot/bird_hand/bird_hand_const.h"
 #include <iostream>
 #include <string>
 #include <sstream>

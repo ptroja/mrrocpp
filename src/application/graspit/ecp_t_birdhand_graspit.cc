@@ -7,7 +7,7 @@
 #include "lib/srlib.h"
 #include "ecp_mp_t_graspit.h"
 
-#include "ecp/bird_hand/ecp_r_bird_hand.h"
+#include "robot/bird_hand/ecp_r_bird_hand.h"
 #include "ecp_g_birdhand_graspit.h"
 #include "ecp_t_birdhand_graspit.h"
 

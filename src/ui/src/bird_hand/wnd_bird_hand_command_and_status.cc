@@ -5,7 +5,7 @@
 #include "ui/src/bird_hand/ui_ecp_r_bird_hand.h"
 #include "ui/src/bird_hand/ui_r_bird_hand.h"
 #include "ui/src/bird_hand/wnd_bird_hand_command_and_status.h"
-#include "lib/robot_consts/bird_hand_const.h"
+#include "robot/bird_hand/bird_hand_const.h"
 #include "ui/ui_class.h"
 
 /* Local headers */

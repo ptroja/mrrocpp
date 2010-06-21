@@ -7,7 +7,7 @@
 #include "lib/srlib.h"
 #include "ecp_mp_t_bird_hand_test.h"
 
-#include "ecp/bird_hand/ecp_r_bird_hand.h"
+#include "robot/bird_hand/ecp_r_bird_hand.h"
 #include "ecp/common/generator/ecp_g_smooth.h"
 #include "ecp/common/generator/ecp_g_sleep.h"
 #include "ecp_g_bird_hand_test.h"

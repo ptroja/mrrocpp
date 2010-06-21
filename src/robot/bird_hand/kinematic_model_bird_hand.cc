@@ -9,20 +9,20 @@
 #include <math.h>
 
 #include "lib/com_buf.h"
-#include "kinematics/bird_hand/kinematic_model_bird_hand.h"
+#include "robot/bird_hand/kinematic_model_bird_hand.h"
 
 namespace mrrocpp {
 namespace kinematics {
 namespace bird_hand {
 
-kinematic_model_bird_hand::kinematic_model_bird_hand(void) {
+kinematic_model_bird_hand::kinematic_model_bird_hand(void)
+{
 	// Set model name.
-	set_kinematic_model_label(
-			"BIRD_HAND kinematic model");
+	set_kinematic_model_label("BIRD_HAND kinematic model");
 }
 
-void kinematic_model_bird_hand::check_motor_position(
-		const lib::MotorArray & motor_position) {
+void kinematic_model_bird_hand::check_motor_position(const lib::MotorArray & motor_position)
+{
 
 	if (motor_position[0] < params.lower_limit_axis[0])
 		throw NonFatal_error_2(BEYOND_LOWER_LIMIT_AXIS_0);
@@ -65,8 +65,8 @@ void kinematic_model_bird_hand::check_motor_position(
 		throw NonFatal_error_2(BEYOND_UPPER_LIMIT_AXIS_7);
 }
 
-void kinematic_model_bird_hand::check_joints(
-		const lib::JointArray & q) {
+void kinematic_model_bird_hand::check_joints(const lib::JointArray & q)
+{
 
 	if (isnan(q[0]))
 		throw NonFatal_error_2(NOT_A_NUMBER_JOINT_VALUE_D0);
@@ -125,25 +125,23 @@ void kinematic_model_bird_hand::check_joints(
 		throw NonFatal_error_2(BEYOND_UPPER_THETA7_LIMIT);
 }
 
-void kinematic_model_bird_hand::i2mp_transform(
-		lib::MotorArray & local_desired_motor_pos_new,
-		lib::JointArray & local_desired_joints) {
+void kinematic_model_bird_hand::i2mp_transform(lib::MotorArray & local_desired_motor_pos_new, lib::JointArray & local_desired_joints)
+{
 
 	//check_joints(local_desired_joints);
 
-	for (int i = 0; i<8; ++i)
+	for (int i = 0; i < 8; ++i)
 		local_desired_motor_pos_new[i] = (local_desired_joints[i] - params.synchro_joint_position[i]) * params.gear[i];
 
 	//check_motor_position(local_desired_motor_pos_new);
 }
 
-void kinematic_model_bird_hand::mp2i_transform(
-		const lib::MotorArray & local_current_motor_pos,
-		lib::JointArray & local_current_joints) {
+void kinematic_model_bird_hand::mp2i_transform(const lib::MotorArray & local_current_motor_pos, lib::JointArray & local_current_joints)
+{
 
 	//check_motor_position(local_current_motor_pos);
 
-	for (int i = 0; i<8; ++i)
+	for (int i = 0; i < 8; ++i)
 		local_current_joints[i] = (local_current_motor_pos[i] - params.synchro_motor_position[i]) / params.gear[i];
 
 	//check_joints(local_current_joints);

@@ -12,7 +12,7 @@
 #include "lib/robot_consts/shead_const.h"
 #include "lib/robot_consts/speaker_const.h"
 #include "lib/robot_consts/conveyor_const.h"
-#include "lib/robot_consts/bird_hand_const.h"
+#include "robot/bird_hand/bird_hand_const.h"
 #include "lib/robot_consts/sarkofag_const.h"
 
 #endif /* _ALL_ROBOTS_CONST_H */
