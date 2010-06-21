@@ -3,7 +3,7 @@
 
 #include "lib/mis_fun.h"
 #include "lib/srlib.h"
-#include "mp/robot/mp_r_polycrank.h"
+#include "robot/polycrank/mp_r_polycrank.h"
 
 namespace mrrocpp {
 namespace mp {

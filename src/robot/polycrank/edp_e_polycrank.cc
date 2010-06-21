@@ -19,10 +19,10 @@
 #include "lib/mrmath/mrmath.h"
 
 // Klasa edp_irp6ot_effector.
-#include "edp/polycrank/edp_e_polycrank.h"
+#include "robot/polycrank/edp_e_polycrank.h"
 #include "edp/common/reader.h"
 // Kinematyki.
-#include "kinematics/polycrank/kinematic_model_polycrank.h"
+#include "robot/polycrank/kinematic_model_polycrank.h"
 #include "edp/common/manip_trans_t.h"
 #include "edp/common/vis_server.h"
 
@@ -37,7 +37,6 @@ namespace polycrank {
 effector::effector(lib::configurator &_config) :
 	manip_effector(_config, lib::ROBOT_POLYCRANK)
 {
-
 
 	number_of_servos = POLYCRANK_NUM_OF_SERVOS;
 

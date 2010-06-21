@@ -19,7 +19,7 @@
 #include "ecp/irp6_mechatronika/ecp_r_irp6m.h"
 #include "robot/conveyor/ecp_r_conv.h"
 #include "robot/speaker/ecp_r_speaker.h"
-#include "ecp/polycrank/ecp_r_polycrank.h"
+#include "robot/polycrank/ecp_r_polycrank.h"
 
 #include "ecp/common/task/ecp_t_tran.h"
 #include "ecp/common/generator/ecp_g_transparent.h"

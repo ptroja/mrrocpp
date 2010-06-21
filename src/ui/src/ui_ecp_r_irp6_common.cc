@@ -31,7 +31,7 @@
 #include "ecp/irp6ot_m/ecp_r_irp6ot_m.h"
 #include "ecp/irp6p_m/ecp_r_irp6p_m.h"
 #include "ecp/irp6_mechatronika/ecp_r_irp6m.h"
-#include "ecp/polycrank/ecp_r_polycrank.h"
+#include "robot/polycrank/ecp_r_polycrank.h"
 #include "robot/smb/ecp_r_smb.h"
 #include "robot/spkm/ecp_r_spkm.h"
 
