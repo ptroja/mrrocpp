@@ -17,7 +17,7 @@
 #include "lib/com_buf.h"
 
 #include "ecp/generator/ecp_g_visual_servo.h"
-#include "ecp_mp/sensor/ecp_mp_s_fradia_sensor.h"
+#include "sensor/fradia/ecp_mp_s_fradia_sensor.h"
 
 namespace mrrocpp {
 namespace ecp {

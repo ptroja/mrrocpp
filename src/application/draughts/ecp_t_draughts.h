@@ -7,7 +7,7 @@
 #include "lib/com_buf.h"
 #include "ecp/task/ecp_st_go.h"
 #include "ecp/generator/ecp_g_sleep.h"
-#include "ecp_mp/sensor/ecp_mp_s_fradia_sensor.h"
+#include "sensor/fradia/ecp_mp_s_fradia_sensor.h"
 #include "ecp_mp_tr_draughtsAI.h"
 #include "ecp_g_vis_ib_eih_follower_irp6ot.h"
 

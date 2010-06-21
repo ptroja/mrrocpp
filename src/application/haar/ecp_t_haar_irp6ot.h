@@ -15,7 +15,7 @@
 #include "ecp/generator/ecp_g_jarosz.h"
 #include "ecp/generator/ecp_g_force.h"
 
-#include "ecp_mp/sensor/ecp_mp_s_fradia_sensor.h"
+#include "sensor/fradia/ecp_mp_s_fradia_sensor.h"
 
 //#define JAW_PINCHING_0 -0.016//zacisk szczeki dla puszki
 //#define JAW_PINCHING_1 -0.024//zacisk szczeki dla pudelka

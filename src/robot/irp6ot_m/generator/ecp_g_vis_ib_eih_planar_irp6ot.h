@@ -13,7 +13,7 @@
 #include <math.h>
 
 #include "ecp/generator/ecp_g_visual_servo.h"
-#include "ecp_mp/sensor/ecp_mp_s_fradia_sensor.h"
+#include "sensor/fradia/ecp_mp_s_fradia_sensor.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -23,7 +23,8 @@ namespace generator {
 #define MOTION_STEPS 25
 
 // uchyb vsp pwilkows
-typedef struct _deviation {
+typedef struct _deviation
+{
 	int frame_number;
 	int x;
 	int y;
@@ -37,29 +38,30 @@ typedef enum _HD_MODE
 	WITHOUT_ROTATION, PERFORM_ROTATION
 } hd_mode_t;
 
-typedef ecp_mp::sensor::fradia_sensor<lib::empty_t, deviation_t, hd_mode_t> fradia_sensor_deviation;
+typedef ecp_mp::sensor::fradia_sensor <lib::empty_t, deviation_t, hd_mode_t> fradia_sensor_deviation;
 
-class ecp_vis_ib_eih_planar_irp6ot: public common::generator::ecp_visual_servo {
+class ecp_vis_ib_eih_planar_irp6ot : public common::generator::ecp_visual_servo
+{
 	bool check_if_followed();
 public:
 	//Wirtualny sensor
 	fradia_sensor_deviation *vsp_fradia;
 	//Pozycja w nastepnym kroku.
-    double next_position[8];
-    //Obliczone sterowanie dla osi x;
-    double x;
-    //Obliczone sterowanie dla osi y;
-    double y;
-    //Przyrost polozenia w makrokroku
-    double s;
+	double next_position[8];
+	//Obliczone sterowanie dla osi x;
+	double x;
+	//Obliczone sterowanie dla osi y;
+	double y;
+	//Przyrost polozenia w makrokroku
+	double s;
 
-    //Orientacja koncokwi wzgledem ukladu bazowego.
-    double alpha;
+	//Orientacja koncokwi wzgledem ukladu bazowego.
+	double alpha;
 
 	//Maksymalna wartosc  predkosci.
 	double v_max;
 	//Wartosc przyspieszenia z jakim osiagana jest maksymalna predkosc.
-	double  a;
+	double a;
 	//Minimalna  wartosc predkosci do jakiej schodzimy przy hamowaniu.
 	double v_min;
 	//Predkosc chwilowa.
@@ -92,5 +94,4 @@ public:
 } // namespace mrrocpp
 
 #endif /* ECP_VIS_IB_EIH_PLANAR_IRP6OT_H_ */
-
 

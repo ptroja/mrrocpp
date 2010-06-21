@@ -16,7 +16,7 @@
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 
-#include "ecp_mp/sensor/ecp_mp_s_fradia_sensor.h"
+#include "sensor/fradia/ecp_mp_s_fradia_sensor.h"
 
 #include <iostream>
 
