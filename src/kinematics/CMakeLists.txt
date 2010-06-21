@@ -1,13 +1,8 @@
-# Recurse into subdirectories.
-add_subdirectory (common)
-add_subdirectory (conveyor)
-add_subdirectory (irp6_mechatronika)
-add_subdirectory (irp6_on_track)
-add_subdirectory (irp6_postument)
-add_subdirectory (irp6ot_tfg)
-add_subdirectory (irp6p_tfg)
-add_subdirectory (polycrank)
-add_subdirectory (shead)
-add_subdirectory (smb)
-add_subdirectory (spkm)
-add_subdirectory (bird_hand)
+add_library(kinematics
+	kinematic_model.cc
+	kinematic_model_with_local_corrector.cc
+	kinematic_model_with_tool.cc
+	kinematics_manager.cc
+)
+
+target_link_libraries(kinematics mrrocpp)

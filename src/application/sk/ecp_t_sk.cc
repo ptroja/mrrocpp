@@ -15,9 +15,9 @@
 #include "lib/srlib.h"
 #include "ecp_mp/task/ecp_mp_t_rcsc.h"
 
-#include "ecp/irp6ot_m/ecp_r_irp6ot_m.h"
-#include "ecp/irp6p_m/ecp_r_irp6p_m.h"
-#include "ecp/common/generator/ecp_g_force.h"
+#include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
+#include "robot/irp6p_m/ecp_r_irp6p_m.h"
+#include "ecp/generator/ecp_g_force.h"
 #include "application/sk/ecp_g_sk.h"
 
 #include "application/sk/ecp_t_sk.h"

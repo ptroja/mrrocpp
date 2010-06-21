@@ -17,7 +17,7 @@ add_executable(mp_fsautomat
 
 add_executable(ecp_irp6ot_rcsc
 	ecp_t_rcsc_irp6ot.cc
-	../../ecp/common/task/ecp_st_go.cc
+	../../ecp/task/ecp_st_go.cc
 #	../../ecp/irp6_on_track/generator/ecp_g_vis_ib_eih_object_tracker_irp6ot.cc
     ../servovision/ib_eih_visual_servo.cc
     ../servovision/visual_servo.cc
@@ -30,19 +30,19 @@ add_executable(ecp_irp6ot_rcsc
 )
 add_executable(ecp_irp6p_rcsc
 	ecp_t_rcsc_irp6p.cc
-	../../ecp/common/task/ecp_st_go.cc
+	../../ecp/task/ecp_st_go.cc
 )
 add_executable(ecp_speak_rcsc
 	ecp_t_rcsc_speaker.cc
-	../../ecp/speaker/generator/ecp_g_speak.cc
+	../../robot/speaker/ecp_g_speak.cc
 )
 add_executable(ecp_fsautomat
 	ecp_t_fsautomat.cc
-	../../ecp/common/task/ecp_st_go.cc
-	../../ecp/common/generator/ecp_g_smooth.cc
-	../../ecp/common/generator/ecp_g_force.cc
-	../../ecp/common/generator/ecp_g_jarosz.cc
-	../../ecp/common/generator/ecp_g_operator_reaction_condition.cc
+	../../ecp/task/ecp_st_go.cc
+	../../ecp/generator/ecp_g_smooth.cc
+	../../ecp/generator/ecp_g_force.cc
+	../../ecp/generator/ecp_g_jarosz.cc
+	../../ecp/generator/ecp_g_operator_reaction_condition.cc
 )
 
 target_link_libraries(mp_rcsc mp)

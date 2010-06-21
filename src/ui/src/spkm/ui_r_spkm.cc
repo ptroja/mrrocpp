@@ -4,7 +4,7 @@
 
 #include "ui/src/spkm/ui_r_spkm.h"
 #include "ui/ui_ecp_r_tfg_and_conv.h"
-#include "lib/robot_consts/spkm_const.h"
+#include "robot/spkm/spkm_const.h"
 #include "ui/ui_class.h"
 
 /* Local headers */

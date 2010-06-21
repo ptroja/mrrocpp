@@ -2,7 +2,7 @@
 #define ECP_T_WII_TEACH_H
 
 #include "ecp_mp/task/ecp_mp_task.h"
-#include "ecp/common/generator/ecp_g_smooth.h"
+#include "ecp/generator/ecp_g_smooth.h"
 #include "application/wii_teach/generator/ecp_g_wii_relative.h"
 #include "application/wii_teach/generator/ecp_g_wii_absolute.h"
 #include "application/wii_teach/generator/ecp_g_wii_joint.h"

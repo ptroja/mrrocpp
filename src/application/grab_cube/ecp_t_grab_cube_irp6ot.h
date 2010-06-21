@@ -3,13 +3,13 @@
 #if !defined(_ECP_T_GRAB_CUBE_IRP6OT_H)
 #define _ECP_T_GRAB_CUBE_IRP6OT_H
 
-#include "ecp/common/task/ecp_task.h"
-#include "ecp/common/generator/ecp_g_smooth.h"
-#include "ecp/irp6ot_m/generator/ecp_g_vis_ib_eih_object_tracker_irp6ot.h"
+#include "ecp/task/ecp_task.h"
+#include "ecp/generator/ecp_g_smooth.h"
+#include "robot/irp6ot_m/generator/ecp_g_vis_ib_eih_object_tracker_irp6ot.h"
 #include "ecp_g_vis_ib_eih_wrist_turner_irp6ot.h"
 #include "ecp_mp/sensor/ecp_mp_s_fradia_sensor.h"
 #include "lib/com_buf.h"
-#include "ecp/common/generator/ecp_g_force.h"
+#include "ecp/generator/ecp_g_force.h"
 
 namespace mrrocpp {
 namespace ecp {

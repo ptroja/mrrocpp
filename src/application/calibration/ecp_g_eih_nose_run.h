@@ -11,8 +11,8 @@
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 
-#include "ecp/common/generator/ecp_g_teach_in.h"
-#include "ecp/common/generator/ecp_g_force.h"
+#include "ecp/generator/ecp_g_teach_in.h"
+#include "ecp/generator/ecp_g_force.h"
 #include "lib/mrmath/mrmath.h"
 
 

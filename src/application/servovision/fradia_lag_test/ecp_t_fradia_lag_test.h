@@ -8,14 +8,14 @@
 #ifndef ECP_T_MBORYN_H_
 #define ECP_T_MBORYN_H_
 
-#include "ecp/common/task/ecp_task.h"
+#include "ecp/task/ecp_task.h"
 <<<<<<< HEAD
-#include "ecp/irp6ot_m/ecp_r_irp6ot_m.h"
+#include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
 #include "ecp_mp/sensor/ecp_mp_s_cvfradia.h"
 =======
 #include "ecp/irp6_on_track/ecp_r_irp6ot.h"
 >>>>>>> transmitter_template
-#include "ecp/common/generator/ecp_g_smooth.h"
+#include "ecp/generator/ecp_g_smooth.h"
 
 namespace mrrocpp {
 

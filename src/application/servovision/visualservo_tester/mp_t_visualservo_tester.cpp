@@ -6,8 +6,8 @@
  */
 
 #include "mp_t_visualservo_tester.h"
-#include "lib/robot_consts/irp6ot_m_const.h"
-#include "lib/robot_consts/conveyor_const.h"
+#include "robot/irp6ot_m/irp6ot_m_const.h"
+#include "robot/conveyor/conveyor_const.h"
 
 namespace mrrocpp {
 

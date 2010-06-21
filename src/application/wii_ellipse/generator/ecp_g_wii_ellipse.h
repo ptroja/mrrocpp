@@ -4,7 +4,7 @@
 #include <string.h>
 #include <math.h>
 
-#include "ecp/common/generator/ecp_generator.h"
+#include "ecp/generator/ecp_generator.h"
 
 namespace mrrocpp {
 namespace ecp {

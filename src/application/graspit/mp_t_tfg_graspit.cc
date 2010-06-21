@@ -1,3 +1,7 @@
+#include <iostream>
+#include <string>
+#include <sstream>
+
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
@@ -9,14 +13,11 @@
 #include "lib/data_port_headers/tfg.h"
 #include "mp_t_tfg_graspit.h"
 #include "ecp_mp_t_graspit.h"
-#include "lib/robot_consts/irp6ot_tfg_const.h"
-#include "lib/robot_consts/irp6ot_m_const.h"
-#include "lib/robot_consts/irp6p_m_const.h"
-#include "lib/robot_consts/irp6p_tfg_const.h"
-
-#include <iostream>
-#include <string>
-#include <sstream>
+#include "robot/irp6ot_tfg/irp6ot_tfg_const.h"
+#include "robot/irp6ot_m/irp6ot_m_const.h"
+#include "robot/irp6p_m/irp6p_m_const.h"
+#include "robot/irp6p_tfg/irp6p_tfg_const.h"
+#include "ecp_mp/common/generator/ecp_mp_g_tfg.h"
 
 namespace mrrocpp {
 namespace mp {
@@ -101,7 +102,7 @@ void graspit::main_task_algorithm(void)
 
 	memcpy(tmp_string, &mp_ecp_tfg_command, sizeof(mp_ecp_tfg_command));
 
-	set_next_ecps_state(ecp_mp::task::ECP_GEN_TFG, (int) 5, tmp_string, sizeof(mp_ecp_tfg_command), 1, gripper_name.c_str());
+	set_next_ecps_state(ecp_mp::common::generator::ECP_GEN_TFG, (int) 5, tmp_string, sizeof(mp_ecp_tfg_command), 1, gripper_name.c_str());
 
 	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, gripper_name.c_str(), gripper_name.c_str());
 

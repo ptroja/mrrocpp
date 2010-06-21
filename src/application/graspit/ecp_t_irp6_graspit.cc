@@ -3,8 +3,8 @@
 #include <unistd.h>
 #include <iostream>
 
-#include "ecp/irp6ot_m/ecp_r_irp6ot_m.h"
-#include "ecp/irp6p_m/ecp_r_irp6p_m.h"
+#include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
+#include "robot/irp6p_m/ecp_r_irp6p_m.h"
 #include "ecp_t_irp6_graspit.h"
 #include "ecp_mp_t_graspit.h"
 

@@ -12,7 +12,7 @@
 // Konfigurator.
 #include "lib/configurator.h"
 #include "lib/mrmath/mrmath.h"
-#include "ecp/common/ecp_robot.h"
+#include "ecp/ecp_robot.h"
 #include "ui/ui_ecp_r_common.h"
 
 // ---------------------------------------------------------------

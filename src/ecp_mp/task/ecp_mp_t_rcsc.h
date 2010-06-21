@@ -13,23 +13,6 @@ namespace ecp_mp {
 namespace task {
 
 /**
- * Used generators.
- */
-
-const std::string ECP_GEN_TRANSPARENT = "ECP_GEN_TRANSPARENT";
-const std::string ECP_GEN_TFF_NOSE_RUN = "ECP_GEN_TFF_NOSE_RUN";
-const std::string ECP_GEN_TEACH_IN = "ECP_GEN_TEACH_IN";
-const std::string ECP_GEN_SMOOTH = "ECP_GEN_SMOOTH";
-const std::string ECP_GEN_TFF_RUBIK_GRAB = "ECP_GEN_TFF_RUBIK_GRAB";
-const std::string ECP_GEN_TFF_RUBIK_FACE_ROTATE = "ECP_GEN_TFF_RUBIK_FACE_ROTATE";
-const std::string ECP_GEN_TFF_GRIPPER_APPROACH = "ECP_GEN_TFF_GRIPPER_APPROACH";
-const std::string RCSC_GRIPPER_OPENING = "RCSC_GRIPPER_OPENING";
-const std::string ECP_GEN_SPEAK = "ECP_GEN_SPEAK";
-const std::string ECP_GEN_BIAS_EDP_FORCE = "ECP_GEN_BIAS_EDP_FORCE";
-const std::string ECP_WEIGHT_MEASURE_GENERATOR = "ECP_WEIGHT_MEASURE_GENERATOR";
-const std::string ECP_GEN_IB_EIH = "ECP_GEN_IB_EIH";
-
-/**
  *
  */
 enum RCSC_GRIPPER_OP

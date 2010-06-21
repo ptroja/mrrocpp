@@ -1,20 +1,8 @@
-# Recurse into subdirectories.
-add_subdirectory (ati3084)
-add_subdirectory (ati6284)
-add_subdirectory (ati3084MK)
-add_subdirectory (ati6284KT)
-add_subdirectory (ati6284MS)
-add_subdirectory (common)
-add_subdirectory (conveyor)
-add_subdirectory (epos)
-add_subdirectory (irp6_mechatronika)
-add_subdirectory (irp6ot_m)
-add_subdirectory (irp6ot_tfg)
-add_subdirectory (irp6p_m)
-add_subdirectory (irp6p_tfg)
-add_subdirectory (polycrank)
-add_subdirectory (shead)
-add_subdirectory (smb)
-add_subdirectory (speaker)
-add_subdirectory (spkm)
-add_subdirectory (bird_hand)
+add_library(edp
+	edp_m.cc edp_effector.cc
+	edp_e_manip.cc edp_e_motor_driven.cc
+	edp_force_sensor.cc
+	servo_gr.cc regulator.cc in_out.cc
+	trans_t.cc manip_trans_t.cc vis_server.cc reader.cc
+	hi_rydz.cc
+)

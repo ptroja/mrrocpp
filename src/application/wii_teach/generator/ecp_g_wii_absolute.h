@@ -4,7 +4,7 @@
 #include <string.h>
 #include <math.h>
 
-#include "ecp/common/generator/ecp_generator.h"
+#include "ecp/generator/ecp_generator.h"
 #include "application/wii_teach/sensor/ecp_mp_s_wiimote.h"
 #include "application/wii_teach/generator/ecp_g_wii.h"
 

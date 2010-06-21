@@ -15,7 +15,7 @@
 //fradia
 #include "ecp_mp/sensor/ecp_mp_s_fradia_sensor.h"
 
-#include "ecp/common/generator/ecp_generator.h"
+#include "ecp/generator/ecp_generator.h"
 
 #include "datatypes.h"
 

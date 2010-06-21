@@ -8,19 +8,19 @@ add_library(mp
 )
 
 add_library(mprobots
-	robot/mp_r_conveyor.cc
-	robot/mp_r_irp6ot_m.cc
-	robot/mp_r_irp6p_m.cc
-	robot/mp_r_speaker.cc
-	robot/mp_r_irp6_mechatronika.cc
-	robot/mp_r_polycrank.cc
-	robot/mp_r_bird_hand.cc
-	robot/mp_r_spkm.cc
-	robot/mp_r_smb.cc
-	robot/mp_r_shead.cc
-	robot/mp_r_irp6ot_tfg.cc
-	robot/mp_r_irp6p_tfg.cc
-	robot/mp_r_manip_and_conv.cc
+	../robot/conveyor/mp_r_conveyor.cc
+	../robot/irp6ot_m/mp_r_irp6ot_m.cc
+	../robot/irp6p_m/mp_r_irp6p_m.cc
+	../robot/speaker/mp_r_speaker.cc
+	../robot/irp6_mechatronika/mp_r_irp6_mechatronika.cc
+	../robot/polycrank/mp_r_polycrank.cc
+	../robot/bird_hand/mp_r_bird_hand.cc
+	../robot/spkm/mp_r_spkm.cc
+	../robot/smb/mp_r_smb.cc
+	../robot/shead/mp_r_shead.cc
+	../robot/irp6ot_tfg/mp_r_irp6ot_tfg.cc
+	../robot/irp6p_tfg/mp_r_irp6p_tfg.cc
+	robot/mp_r_motor_driven.cc
 )
 
 add_executable(mp_c

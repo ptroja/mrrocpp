@@ -22,7 +22,7 @@
 #include "lib/com_buf.h"
 
 #include "ui/ui.h"
-#include "lib/robot_consts/irp6ot_m_const.h"
+#include "robot/irp6ot_m/irp6ot_m_const.h"
 #include "ui/ui_const.h"
 #include "ui/ui_class.h"
 #include "ui/src/ui_ecp.h"
