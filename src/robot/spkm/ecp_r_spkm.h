@@ -11,7 +11,7 @@
 #include "ecp/common/ecp_robot.h"
 #include "lib/robot_consts/spkm_const.h"
 #include "kinematics/common/kinematics_manager.h"
-#include "kinematics/spkm/kinematic_model_spkm.h"
+#include "robot/spkm/kinematic_model_spkm.h"
 #include "lib/data_port_headers/epos.h"
 
 namespace mrrocpp {

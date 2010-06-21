@@ -15,9 +15,9 @@ add_library(mprobots
 	robot/mp_r_irp6_mechatronika.cc
 	robot/mp_r_polycrank.cc
 	../robot/bird_hand/mp_r_bird_hand.cc
-	./robot/spkm/mp_r_spkm.cc
-	./robot/smb/mp_r_smb.cc
-	./robot/shead/mp_r_shead.cc
+	../robot/spkm/mp_r_spkm.cc
+	../robot/smb/mp_r_smb.cc
+	../robot/shead/mp_r_shead.cc
 	robot/mp_r_irp6ot_tfg.cc
 	robot/mp_r_irp6p_tfg.cc
 	robot/mp_r_manip_and_conv.cc

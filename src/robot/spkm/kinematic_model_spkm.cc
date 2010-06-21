@@ -9,7 +9,7 @@
 #include <math.h>
 
 #include "lib/com_buf.h"
-#include "kinematics/spkm/kinematic_model_spkm.h"
+#include "robot/spkm/kinematic_model_spkm.h"
 
 namespace mrrocpp {
 namespace kinematics {
@@ -37,13 +37,10 @@ void kinematic_model_spkm::inverse_kinematics_transform(lib::JointArray & local_
 {
 	// Transform Homog_matrix to Matrix4d.
 	Homog4d O_W_T;
-	O_W_T.matrix() << local_desired_end_effector_frame(0,0),  local_desired_end_effector_frame(0,1), local_desired_end_effector_frame(0,2), local_desired_end_effector_frame(0,3),
-			local_desired_end_effector_frame(1,0),  local_desired_end_effector_frame(1,1), local_desired_end_effector_frame(1,2), local_desired_end_effector_frame(1,3),
-			local_desired_end_effector_frame(2,0),  local_desired_end_effector_frame(2,1), local_desired_end_effector_frame(2,2), local_desired_end_effector_frame(2,3),
-			0, 0, 0, 1;
+	O_W_T.matrix() << local_desired_end_effector_frame(0, 0), local_desired_end_effector_frame(0, 1), local_desired_end_effector_frame(0, 2), local_desired_end_effector_frame(0, 3), local_desired_end_effector_frame(1, 0), local_desired_end_effector_frame(1, 1), local_desired_end_effector_frame(1, 2), local_desired_end_effector_frame(1, 3), local_desired_end_effector_frame(2, 0), local_desired_end_effector_frame(2, 1), local_desired_end_effector_frame(2, 2), local_desired_end_effector_frame(2, 3), 0, 0, 0, 1;
 
 	// Compute O_S_T.
-	Homog4d O_S_T = O_W_T*params.W_S_T;
+	Homog4d O_S_T = O_W_T * params.W_S_T;
 	// Extract translation O_S_P.
 	Vector3d O_S_P = O_S_T.translation();
 
@@ -134,28 +131,29 @@ Homog4d kinematic_model_spkm::PKM_O_P_T_from_e(Vector5d _e)
 	double h = _e[4];
 
 	// Compute matrix representing the location and orientation of upper platform.
-	O_P_T(0,0) = s_alpha;
-	O_P_T(0,1) = 0.0;
-	O_P_T(0,2) = c_alpha;
-	O_P_T(0,3) = 0.0;
-	O_P_T(1,0) = -s_beta * c_alpha;
-	O_P_T(1,1) = c_beta;
-	O_P_T(1,2) = s_beta * s_alpha;
-	O_P_T(1,3) = c_alpha * params.dB * s_beta;
-	O_P_T(2,0) = -c_beta * c_alpha;
-	O_P_T(2,1) = -s_beta;
-	O_P_T(2,2) = c_beta * s_alpha;
-	O_P_T(2,3) = -h;
-	O_P_T(3,0) = 0.0;
-	O_P_T(3,1) = 0.0;
-	O_P_T(3,2) = 0.0;
-	O_P_T(3,3) = 1.0;
+	O_P_T(0, 0) = s_alpha;
+	O_P_T(0, 1) = 0.0;
+	O_P_T(0, 2) = c_alpha;
+	O_P_T(0, 3) = 0.0;
+	O_P_T(1, 0) = -s_beta * c_alpha;
+	O_P_T(1, 1) = c_beta;
+	O_P_T(1, 2) = s_beta * s_alpha;
+	O_P_T(1, 3) = c_alpha * params.dB * s_beta;
+	O_P_T(2, 0) = -c_beta * c_alpha;
+	O_P_T(2, 1) = -s_beta;
+	O_P_T(2, 2) = c_beta * s_alpha;
+	O_P_T(2, 3) = -h;
+	O_P_T(3, 0) = 0.0;
+	O_P_T(3, 1) = 0.0;
+	O_P_T(3, 2) = 0.0;
+	O_P_T(3, 3) = 1.0;
 
 	// Return matrix.
 	return Homog4d(O_P_T);
 }
 
-Vector3d kinematic_model_spkm::SW_inverse(Homog4d _P_W_T) {
+Vector3d kinematic_model_spkm::SW_inverse(Homog4d _P_W_T)
+{
 	// TODO Inverse kinematics of the spherical wrist.
 
 	// Return vector with joints.
@@ -164,8 +162,6 @@ Vector3d kinematic_model_spkm::SW_inverse(Homog4d _P_W_T) {
 	return joints;
 
 }
-
-
 
 } // namespace spkm
 } // namespace kinematic

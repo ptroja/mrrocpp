@@ -3,15 +3,14 @@
 
 #include "lib/mis_fun.h"
 #include "lib/srlib.h"
-#include "mp/robot/mp_r_spkm.h"
+#include "robot/spkm/mp_r_spkm.h"
 
 namespace mrrocpp {
 namespace mp {
 namespace robot {
 
 spkm::spkm(task::task &mp_object_l) :
-	manip_and_conv(lib::ROBOT_SPKM, ECP_SPKM_SECTION, mp_object_l,
-			SPKM_NUM_OF_SERVOS)
+	manip_and_conv(lib::ROBOT_SPKM, ECP_SPKM_SECTION, mp_object_l, SPKM_NUM_OF_SERVOS)
 {
 }
 

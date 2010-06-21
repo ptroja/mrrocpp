@@ -1,25 +1,22 @@
-if(ROBOT_BIRD_HAND)
-add_executable(edp_bird_hand
-	edp_e_bird_hand.cc
+if(ROBOT_SMB)
+add_executable(edp_smb
+	edp_e_smb.cc
 	../../edp/common/int_hand_suplement.cc
-	hi_bird_hand.cc
 )
 
-target_link_libraries(edp_bird_hand kinematicsbird_hand edp
+target_link_libraries(edp_smb kinematicssmb edp
 	${COMMON_LIBRARIES})
 	
-	
-	
-add_library(kinematicsbird_hand
-	kinematic_model_bird_hand.cc
-	kinematic_parameters_bird_hand.cc
+		
+add_library(kinematicssmb
+	kinematic_model_smb.cc
 )
 
-target_link_libraries(kinematicsbird_hand kinematics)
+target_link_libraries(kinematicssmb kinematics)
 	
-add_library(ecp_r_bird_hand ecp_r_bird_hand.cc)	
+add_library(ecp_r_smb ecp_r_smb.cc)	
 	
-target_link_libraries(ecp_r_bird_hand kinematicsbird_hand)
+target_link_libraries(ecp_r_smb kinematicssmb)
 
-install(TARGETS edp_bird_hand DESTINATION bin)
-endif(ROBOT_BIRD_HAND)
+install(TARGETS edp_smb DESTINATION bin)
+endif(ROBOT_SMB)

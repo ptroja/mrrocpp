@@ -32,8 +32,8 @@
 #include "ecp/irp6p_m/ecp_r_irp6p_m.h"
 #include "ecp/irp6_mechatronika/ecp_r_irp6m.h"
 #include "ecp/polycrank/ecp_r_polycrank.h"
-#include "ecp/smb/ecp_r_smb.h"
-#include "ecp/spkm/ecp_r_spkm.h"
+#include "robot/smb/ecp_r_smb.h"
+#include "robot/spkm/ecp_r_spkm.h"
 
 // ---------------------------------------------------------------
 ui_irp6_common_robot::ui_irp6_common_robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg, lib::robot_name_t _robot_name) :

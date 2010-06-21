@@ -19,10 +19,10 @@
 #include "lib/mrmath/mrmath.h"
 
 // Klasa edp_irp6ot_effector.
-#include "edp/shead/edp_e_shead.h"
+#include "robot/shead/edp_e_shead.h"
 #include "edp/common/reader.h"
 // Kinematyki.
-#include "kinematics/shead/kinematic_model_shead.h"
+#include "robot/shead/kinematic_model_shead.h"
 #include "edp/common/manip_trans_t.h"
 #include "edp/common/vis_server.h"
 

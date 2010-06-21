@@ -10,7 +10,7 @@
 #include "lib/com_buf.h"
 #include "lib/mis_fun.h"
 
-#include "ecp/spkm/ecp_r_spkm.h"
+#include "robot/spkm/ecp_r_spkm.h"
 
 namespace mrrocpp {
 namespace ecp {

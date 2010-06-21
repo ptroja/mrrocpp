@@ -3,7 +3,7 @@
 
 #include "lib/mis_fun.h"
 #include "lib/srlib.h"
-#include "mp/robot/mp_r_shead.h"
+#include "robot/shead/mp_r_shead.h"
 
 namespace mrrocpp {
 namespace mp {

@@ -15,7 +15,7 @@
 #include "lib/com_buf.h"
 
 // Klasa kinematic_model_irp6m_with_wrist.
-#include "kinematics/shead/kinematic_model_shead.h"
+#include "robot/shead/kinematic_model_shead.h"
 
 namespace mrrocpp {
 namespace kinematics {
@@ -49,7 +49,6 @@ void model::mp2i_transform(const lib::MotorArray & local_current_motor_pos, lib:
 void model::i2mp_transform(lib::MotorArray & local_desired_motor_pos_new, lib::JointArray & local_desired_joints)
 {
 }
-
 
 } // namespace smb
 } // namespace kinematic

@@ -19,10 +19,10 @@
 #include "lib/mrmath/mrmath.h"
 
 // Klasa edp_irp6ot_effector.
-#include "edp/smb/edp_e_smb.h"
+#include "robot/smb/edp_e_smb.h"
 #include "edp/common/reader.h"
 // Kinematyki.
-#include "kinematics/smb/kinematic_model_smb.h"
+#include "robot/smb/kinematic_model_smb.h"
 #include "edp/common/manip_trans_t.h"
 #include "edp/common/vis_server.h"
 #include "lib/epos_gen.h"
@@ -34,11 +34,13 @@ namespace mrrocpp {
 namespace edp {
 namespace smb {
 
-void effector::master_order(common::MT_ORDER nm_task, int nm_tryb) {
+void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
+{
 	motor_driven_effector::single_thread_master_order(nm_task, nm_tryb);
 }
 
-void effector::get_controller_state(lib::c_buffer &instruction) {
+void effector::get_controller_state(lib::c_buffer &instruction)
+{
 
 	if (robot_test_mode)
 		controller_state_edp_buf.is_synchronised = true;
@@ -56,16 +58,14 @@ void effector::get_controller_state(lib::c_buffer &instruction) {
 	 sb->send_to_SERVO_GROUP();
 	 */
 	// dla pierwszego wypelnienia current_joints
-	get_current_kinematic_model()->mp2i_transform(current_motor_pos,
-			current_joints);
+	get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
 
 	{
 		boost::mutex::scoped_lock lock(edp_irp6s_effector_mutex);
 
 		// Ustawienie poprzedniej wartosci zadanej na obecnie odczytane polozenie walow silnikow
 		for (int i = 0; i < number_of_servos; i++) {
-			servo_current_motor_pos[i] = desired_motor_pos_new[i]
-					= desired_motor_pos_old[i] = current_motor_pos[i];
+			servo_current_motor_pos[i] = desired_motor_pos_new[i] = desired_motor_pos_old[i] = current_motor_pos[i];
 			desired_joints[i] = current_joints[i];
 		}
 	}
@@ -73,7 +73,8 @@ void effector::get_controller_state(lib::c_buffer &instruction) {
 
 // Konstruktor.
 effector::effector(lib::configurator &_config) :
-	motor_driven_effector(_config, lib::ROBOT_SMB) {
+	motor_driven_effector(_config, lib::ROBOT_SMB)
+{
 
 	number_of_servos = SMB_NUM_OF_SERVOS;
 	//  Stworzenie listy dostepnych kinematyk.
@@ -83,56 +84,51 @@ effector::effector(lib::configurator &_config) :
 }
 
 /*--------------------------------------------------------------------------*/
-void effector::move_arm(const lib::c_buffer &instruction) {
+void effector::move_arm(const lib::c_buffer &instruction)
+{
 	msg->message("move_arm");
 
 	std::stringstream ss(std::stringstream::in | std::stringstream::out);
 
-	switch (ecp_edp_cbuffer.variant) {
-	case lib::SMB_CBUFFER_EPOS_GEN_PARAMETERS: {
-		// epos parameters computation basing on trajectory parameters
-		lib::epos_gen_parameters epos_gen_parameters_structure;
-		lib::epos_low_level_command epos_low_level_command_structure;
+	switch (ecp_edp_cbuffer.variant)
+	{
+		case lib::SMB_CBUFFER_EPOS_GEN_PARAMETERS: {
+			// epos parameters computation basing on trajectory parameters
+			lib::epos_gen_parameters epos_gen_parameters_structure;
+			lib::epos_low_level_command epos_low_level_command_structure;
 
-		memcpy(&epos_gen_parameters_structure,
-				&(ecp_edp_cbuffer.epos_gen_parameters_structure),
-				sizeof(epos_gen_parameters_structure));
+			memcpy(&epos_gen_parameters_structure, &(ecp_edp_cbuffer.epos_gen_parameters_structure), sizeof(epos_gen_parameters_structure));
 
-		compute_epos_command(epos_gen_parameters_structure,
-				epos_low_level_command_structure);
+			compute_epos_command(epos_gen_parameters_structure, epos_low_level_command_structure);
 
-		ss << ecp_edp_cbuffer.epos_gen_parameters_structure.dm[4];
+			ss << ecp_edp_cbuffer.epos_gen_parameters_structure.dm[4];
 
-		msg->message(ss.str().c_str());
+			msg->message(ss.str().c_str());
 
-		// previously computed parameters send to epos2 controllers
+			// previously computed parameters send to epos2 controllers
 
 
-		// start the trajectory execution
+			// start the trajectory execution
 
-	}
-		break;
-	case lib::SMB_CBUFFER_EPOS_LOW_LEVEL_COMMAND: {
-		lib::epos_low_level_command epos_low_level_command_structure;
-		memcpy(&epos_low_level_command_structure,
-				&(ecp_edp_cbuffer.epos_low_level_command_structure),
-				sizeof(epos_low_level_command_structure));
-	}
-		break;
-	case lib::SMB_CBUFFER_PIN_INSERTION: {
-		lib::smb_multi_pin_insertion multi_pin_insertion;
-		memcpy(&multi_pin_insertion, &(ecp_edp_cbuffer.multi_pin_insertion),
-				sizeof(multi_pin_insertion));
-	}
-		break;
-	case lib::SMB_CBUFFER_PIN_LOCKING: {
-		lib::smb_multi_pin_locking multi_pin_locking;
-		memcpy(&multi_pin_locking, &(ecp_edp_cbuffer.multi_pin_locking),
-				sizeof(multi_pin_locking));
-	}
-		break;
-	default:
-		break;
+		}
+			break;
+		case lib::SMB_CBUFFER_EPOS_LOW_LEVEL_COMMAND: {
+			lib::epos_low_level_command epos_low_level_command_structure;
+			memcpy(&epos_low_level_command_structure, &(ecp_edp_cbuffer.epos_low_level_command_structure), sizeof(epos_low_level_command_structure));
+		}
+			break;
+		case lib::SMB_CBUFFER_PIN_INSERTION: {
+			lib::smb_multi_pin_insertion multi_pin_insertion;
+			memcpy(&multi_pin_insertion, &(ecp_edp_cbuffer.multi_pin_insertion), sizeof(multi_pin_insertion));
+		}
+			break;
+		case lib::SMB_CBUFFER_PIN_LOCKING: {
+			lib::smb_multi_pin_locking multi_pin_locking;
+			memcpy(&multi_pin_locking, &(ecp_edp_cbuffer.multi_pin_locking), sizeof(multi_pin_locking));
+		}
+			break;
+		default:
+			break;
 
 	}
 
@@ -140,7 +136,8 @@ void effector::move_arm(const lib::c_buffer &instruction) {
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
-void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction) {
+void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
+{
 	//lib::JointArray desired_joints_tmp(MAX_SERVOS_NR); // Wspolrzedne wewnetrzne -
 	//	printf(" GET ARM\n");
 	//	flushall();
@@ -171,7 +168,8 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction) 
 /*--------------------------------------------------------------------------*/
 
 // Stworzenie modeli kinematyki dla robota IRp-6 na postumencie.
-void effector::create_kinematic_models_for_given_robot(void) {
+void effector::create_kinematic_models_for_given_robot(void)
+{
 	// Stworzenie wszystkich modeli kinematyki.
 	add_kinematic_model(new kinematics::smb::model());
 	// Ustawienie aktywnego modelu.
@@ -179,21 +177,22 @@ void effector::create_kinematic_models_for_given_robot(void) {
 }
 
 /*--------------------------------------------------------------------------*/
-void effector::create_threads() {
+void effector::create_threads()
+{
 	rb_obj = new common::reader_buffer(*this);
 	vis_obj = new common::vis_server(*this);
 }
 
-void effector::instruction_deserialization() {
+void effector::instruction_deserialization()
+{
 
-	memcpy(&ecp_edp_cbuffer, instruction.arm.serialized_command,
-			sizeof(ecp_edp_cbuffer));
+	memcpy(&ecp_edp_cbuffer, instruction.arm.serialized_command, sizeof(ecp_edp_cbuffer));
 
 }
 
-void effector::reply_serialization(void) {
-	memcpy(reply.arm.serialized_reply, &edp_ecp_rbuffer,
-			sizeof(edp_ecp_rbuffer));
+void effector::reply_serialization(void)
+{
+	memcpy(reply.arm.serialized_reply, &edp_ecp_rbuffer, sizeof(edp_ecp_rbuffer));
 
 }
 
@@ -204,7 +203,8 @@ void effector::reply_serialization(void) {
 namespace common {
 
 // Stworzenie obiektu edp_irp6m_effector.
-effector* return_created_efector(lib::configurator &_config) {
+effector* return_created_efector(lib::configurator &_config)
+{
 	return new smb::effector(_config);
 }
 

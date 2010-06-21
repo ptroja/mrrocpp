@@ -7,7 +7,7 @@
 #include "lib/srlib.h"
 #include "ecp_mp_t_swarmitfix.h"
 
-#include "ecp/shead/ecp_r_shead.h"
+#include "robot/shead/ecp_r_shead.h"
 #include "ecp/common/generator/ecp_g_smooth.h"
 #include "ecp/common/generator/ecp_g_sleep.h"
 #include "ecp_g_shead.h"

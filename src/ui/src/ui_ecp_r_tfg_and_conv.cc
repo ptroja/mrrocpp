@@ -28,9 +28,9 @@
 #include "ecp/irp6ot_tfg/ecp_r_irp6ot_tfg.h"
 #include "ecp/irp6p_tfg/ecp_r_irp6p_tfg.h"
 #include "robot/conveyor/ecp_r_conv.h"
-#include "ecp/spkm/ecp_r_spkm.h"
-#include "ecp/smb/ecp_r_smb.h"
-#include "ecp/shead/ecp_r_shead.h"
+#include "robot/spkm/ecp_r_spkm.h"
+#include "robot/smb/ecp_r_smb.h"
+#include "robot/shead/ecp_r_shead.h"
 
 // ---------------------------------------------------------------
 ui_tfg_and_conv_robot::ui_tfg_and_conv_robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg, lib::robot_name_t _robot_name) :
