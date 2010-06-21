@@ -13,8 +13,6 @@ add_library(ecp
 	ecp_robot.cc
 	ecp_m.cc
 	ecp_task.cc
-	../../subtask/ecp_st_bias_edp_force.cc
-	../../subtask/ecp_st_tff_nose_run.cc
 	ecp_generator.cc
 	ecp_taught_in_pose.cc
 	ecp_g_transparent.cc
