@@ -17,4 +17,4 @@ add_subdirectory (shead)
 add_subdirectory (smb)
 add_subdirectory (speaker)
 add_subdirectory (spkm)
-add_subdirectory (bird_hand)
+
