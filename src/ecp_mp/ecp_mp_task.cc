@@ -25,7 +25,7 @@
 
 #include "lib/datastr.h"
 #include "lib/srlib.h"
-#include "ecp_mp/task/ecp_mp_task.h"
+#include "ecp_mp/ecp_mp_task.h"
 #include "ecp_mp/ecp_mp_sensor.h"
 #include "ecp/ECP_main_error.h"
 

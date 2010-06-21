@@ -1,5 +1,5 @@
 #include "ecp_mp/transmitter.h"
-#include "ecp_mp/task/ecp_mp_task.h"
+#include "ecp_mp/ecp_mp_task.h"
 
 namespace mrrocpp {
 namespace ecp_mp {

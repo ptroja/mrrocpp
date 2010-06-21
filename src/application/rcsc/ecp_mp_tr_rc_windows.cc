@@ -20,7 +20,7 @@
 #include "lib/impconst.h"
 #include "lib/com_buf.h"				// numery bledow
 #include "ecp_mp/transmitter.h"
-#include "ecp_mp/task/ecp_mp_task.h"
+#include "ecp_mp/ecp_mp_task.h"
 #include "lib/srlib.h"					// klasy bledow
 #include "ecp_mp_tr_rc_windows.h"
 

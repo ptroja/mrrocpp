@@ -1,7 +1,7 @@
 #if !defined(_ECP_TASK_H)
 #define _ECP_TASK_H
 
-#include "ecp_mp/task/ecp_mp_task.h"
+#include "ecp_mp/ecp_mp_task.h"
 #include "ecp/ecp_robot.h"
 
 namespace mrrocpp {

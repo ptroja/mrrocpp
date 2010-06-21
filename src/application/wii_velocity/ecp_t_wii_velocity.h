@@ -1,7 +1,7 @@
 #ifndef ECP_T_WII_VELOCITY_H
 #define ECP_T_WII_VELOCITY_H
 
-#include "ecp_mp/task/ecp_mp_task.h"
+#include "ecp_mp/ecp_mp_task.h"
 #include "application/wii_velocity/generator/ecp_g_wii_velocity.h"
 #include "ecp/generator/ecp_g_smooth.h"
 

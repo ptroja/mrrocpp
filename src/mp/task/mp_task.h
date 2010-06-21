@@ -3,7 +3,7 @@
 
 #include "mp/generator/mp_generator.h"
 #include "mp/mp.h"
-#include "ecp_mp/task/ecp_mp_task.h"
+#include "ecp_mp/ecp_mp_task.h"
 
 #if !defined(USE_MESSIP_SRR)
 #include <sys/iofunc.h>
