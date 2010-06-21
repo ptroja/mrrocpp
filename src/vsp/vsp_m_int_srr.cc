@@ -21,7 +21,7 @@
 #include "lib/com_buf.h"
 
 #include "lib/srlib.h"
-#include "vsp/common/vsp_sensor.h"				// zawiera deklaracje klasy vsp_sensor + struktury komunikacyjne
+#include "vsp/vsp_sensor.h"				// zawiera deklaracje klasy vsp_sensor + struktury komunikacyjne
 // Konfigurator
 #include "lib/configurator.h"
 

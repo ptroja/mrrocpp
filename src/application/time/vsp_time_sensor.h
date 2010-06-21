@@ -3,7 +3,7 @@
 
 #include <time.h>
 
-#include "vsp/common/vsp_sensor.h"
+#include "vsp/vsp_sensor.h"
 
 namespace mrrocpp {
 namespace vsp {
