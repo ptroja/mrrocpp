@@ -13,7 +13,7 @@
 
 // Klasa edp_irp6ot_effector.
 #include "robot/irp6ot_tfg/edp_irp6ot_tfg_effector.h"
-#include "edp/common/reader.h"
+#include "edp/reader.h"
 // Klasa hardware_interface.
 #include "robot/irp6ot_tfg/hi_irp6ot_tfg.h"
 // Klasa servo_buffer.

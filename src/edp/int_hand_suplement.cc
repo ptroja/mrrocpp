@@ -2,8 +2,8 @@
 #include <sys/siginfo.h>
 #endif
 
-#include "edp/common/edp_e_motor_driven.h"
-#include "edp/common/hi_rydz.h"
+#include "edp/edp_e_motor_driven.h"
+#include "edp/hi_rydz.h"
 
 namespace mrrocpp {
 namespace edp {

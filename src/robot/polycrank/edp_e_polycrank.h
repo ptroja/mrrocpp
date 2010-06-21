@@ -13,7 +13,7 @@
 #ifndef __EDP_E_POLYCRANK_H
 #define __EDP_E_POLYCRANK_H
 
-#include "edp/common/edp_e_manip.h"
+#include "edp/edp_e_manip.h"
 #include "robot/polycrank/polycrank_const.h"
 
 namespace mrrocpp {

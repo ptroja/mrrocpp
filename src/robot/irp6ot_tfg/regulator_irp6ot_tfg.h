@@ -9,8 +9,8 @@
 
 #ifndef __REGULATOR_IRP6OT_TFG_H
 #define __REGULATOR_IRP6OT_TFG_H
-#include "edp/common/edp.h"
-#include "edp/common/regulator.h"
+#include "edp/edp.h"
+#include "edp/regulator.h"
 
 
 namespace mrrocpp {

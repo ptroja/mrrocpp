@@ -12,7 +12,7 @@
 #include "lib/com_buf.h"
 
 #include "lib/mis_fun.h"
-#include "edp/common/trans_t.h"
+#include "edp/trans_t.h"
 
 /********************************* GLOBALS **********************************/
 

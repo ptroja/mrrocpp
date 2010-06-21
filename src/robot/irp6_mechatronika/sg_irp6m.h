@@ -9,9 +9,9 @@
 #ifndef __SG_IRP6M_H
 #define __SG_IRP6M_H
 
-#include "edp/common/edp.h"
+#include "edp/edp.h"
 
-#include "edp/common/servo_gr.h"
+#include "edp/servo_gr.h"
 
 namespace mrrocpp {
 namespace edp {

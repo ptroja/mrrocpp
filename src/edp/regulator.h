@@ -8,8 +8,8 @@
 #ifndef __EDP_REGULATOR_H
 #define __EDP_REGULATOR_H
 
-#include "edp/common/edp.h"
-#include "edp/common/hi_rydz.h"
+#include "edp/edp.h"
+#include "edp/hi_rydz.h"
 
 namespace mrrocpp {
 namespace edp {

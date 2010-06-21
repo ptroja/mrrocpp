@@ -20,8 +20,8 @@
 #endif
 
 #include "kinematics/kinematics_manager.h"
-#include "edp/common/edp_e_motor_driven.h"
-#include "edp/common/edp_force_sensor.h"
+#include "edp/edp_e_motor_driven.h"
+#include "edp/edp_force_sensor.h"
 
 // Konfigurator
 #include "lib/configurator.h"

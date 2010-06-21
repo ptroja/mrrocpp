@@ -14,7 +14,7 @@
 #include "lib/com_buf.h"
 #include "lib/mis_fun.h"
 
-#include "edp/common/edp.h"
+#include "edp/edp.h"
 
 #include "lib/exception.h"
 

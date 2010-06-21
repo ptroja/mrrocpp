@@ -10,8 +10,8 @@
 
 #include <stdint.h>
 
-#include "edp/common/edp.h"
-#include "edp/common/servo_gr.h"
+#include "edp/edp.h"
+#include "edp/servo_gr.h"
 
 namespace mrrocpp {
 namespace edp {

@@ -34,8 +34,8 @@
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 #include "lib/mis_fun.h"
-#include "edp/common/edp_e_motor_driven.h"
-#include "edp/common/reader.h"
+#include "edp/edp_e_motor_driven.h"
+#include "edp/reader.h"
 
 namespace mrrocpp {
 namespace edp {

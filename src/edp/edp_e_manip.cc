@@ -23,10 +23,10 @@
 #include "lib/com_buf.h"
 #include "lib/mis_fun.h"
 #include "lib/mrmath/mrmath.h"
-#include "edp/common/servo_gr.h"
-#include "edp/common/reader.h"
-#include "edp/common/manip_trans_t.h"
-#include "edp/common/edp_e_manip.h"
+#include "edp/servo_gr.h"
+#include "edp/reader.h"
+#include "edp/manip_trans_t.h"
+#include "edp/edp_e_manip.h"
 
 #include "kinematics/kinematic_model_with_tool.h"
 

@@ -16,11 +16,11 @@
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 #include "lib/mis_fun.h"
-#include "edp/common/edp.h"
-#include "edp/common/reader.h"
-#include "edp/common/hi_rydz.h"
-#include "edp/common/servo_gr.h"
-#include "edp/common/regulator.h"
+#include "edp/edp.h"
+#include "edp/reader.h"
+#include "edp/hi_rydz.h"
+#include "edp/servo_gr.h"
+#include "edp/regulator.h"
 
 #include "lib/exception.h"
 using namespace mrrocpp::lib::exception;

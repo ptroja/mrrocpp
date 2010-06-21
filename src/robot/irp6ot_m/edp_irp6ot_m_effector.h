@@ -15,7 +15,7 @@
 
 // Klasa edp_irp6s_robot.
 #include "robot/irp6ot_m/sg_irp6ot_m.h"
-#include "edp/common/edp_e_manip.h"
+#include "edp/edp_e_manip.h"
 #include "robot/irp6ot_m/irp6ot_m_const.h"
 
 

@@ -14,10 +14,10 @@
 #include <boost/thread/mutex.hpp>
 #include <boost/thread/condition.hpp>
 
-#include "edp/common/in_out.h"
-#include "edp/common/vis_server.h"
-#include "edp/common/reader.h"
-#include "edp/common/manip_trans_t.h"
+#include "edp/in_out.h"
+#include "edp/vis_server.h"
+#include "edp/reader.h"
+#include "edp/manip_trans_t.h"
 
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
@@ -25,7 +25,7 @@
 #include "lib/srlib.h"
 #include "lib/mis_fun.h"
 
-#include "edp/common/edp_effector.h"
+#include "edp/edp_effector.h"
 
 // Konfigurator
 #include "lib/configurator.h"

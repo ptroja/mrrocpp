@@ -14,7 +14,7 @@
 
 #include "lib/mrmath/ForceTrans.h"
 #include "lib/sensor.h"				// klasa bazowa sensor
-#include "edp/common/edp.h"				// klasa bazowa sensor
+#include "edp/edp.h"				// klasa bazowa sensor
 #include "lib/mis_fun.h"
 
 namespace mrrocpp {

@@ -6,7 +6,7 @@
 #include <pthread.h>
 #endif
 
-#include "edp/common/in_out.h"
+#include "edp/in_out.h"
 
 namespace mrrocpp {
 namespace edp {

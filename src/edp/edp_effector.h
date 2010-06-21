@@ -22,7 +22,7 @@
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 #include "lib/srlib.h"
-#include "edp/common/edp.h"
+#include "edp/edp.h"
 #include "kinematics/kinematics_manager.h"
 
 // Konfigurator

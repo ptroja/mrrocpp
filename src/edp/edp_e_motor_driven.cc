@@ -33,16 +33,16 @@
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
-#include "edp/common/servo_gr.h"
-#include "edp/common/reader.h"
-#include "edp/common/edp_e_motor_driven.h"
-#include "edp/common/manip_trans_t.h"
-#include "edp/common/vis_server.h"
+#include "edp/servo_gr.h"
+#include "edp/reader.h"
+#include "edp/edp_e_motor_driven.h"
+#include "edp/manip_trans_t.h"
+#include "edp/vis_server.h"
 
 #include "lib/mrmath/mrmath.h"
 
 //#include "kinematics/kinematic_model.h"
-#include "edp/common/in_out.h"
+#include "edp/in_out.h"
 
 namespace mrrocpp {
 namespace edp {

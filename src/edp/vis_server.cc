@@ -10,8 +10,8 @@
 #include <assert.h>
 
 #include "lib/impconst.h"
-#include "edp/common/edp_e_motor_driven.h"
-#include "edp/common/vis_server.h"
+#include "edp/edp_e_motor_driven.h"
+#include "edp/vis_server.h"
 #include "lib/mis_fun.h"
 #include "robot/irp6ot_m/irp6ot_m_const.h"
 #include "robot/irp6p_m/irp6p_m_const.h"

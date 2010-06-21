@@ -20,12 +20,12 @@
 
 // Klasa edp_irp6ot_effector.
 #include "robot/irp6_mechatronika/edp_irp6m_effector.h"
-#include "edp/common/reader.h"
+#include "edp/reader.h"
 // Kinematyki.
 #include "robot/irp6_mechatronika/kinematic_model_irp6m_with_wrist.h"
 #include "robot/irp6_mechatronika/kinematic_model_irp6m_5dof.h"
-#include "edp/common/servo_gr.h"
-#include "edp/common/manip_trans_t.h"
+#include "edp/servo_gr.h"
+#include "edp/manip_trans_t.h"
 #include "kinematics/kinematic_model_with_tool.h"
 
 namespace mrrocpp {

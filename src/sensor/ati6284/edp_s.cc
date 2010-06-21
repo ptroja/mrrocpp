@@ -12,7 +12,7 @@
 
 #include "lib/srlib.h"
 #include "sensor/ati6284/edp_s.h"
-#include "edp/common/edp_e_manip.h"
+#include "edp/edp_e_manip.h"
 
 #include "lib/configurator.h"
 #include "lib/timer.h"

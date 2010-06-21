@@ -11,7 +11,7 @@
 
 #include <boost/utility.hpp>
 
-#include "edp/common/trans_t.h"
+#include "edp/trans_t.h"
 
 namespace mrrocpp {
 namespace edp {

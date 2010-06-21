@@ -13,7 +13,7 @@
 #define __edp_conveyor_effector_H
 
 #include "robot/conveyor/sg_conv.h"
-#include "edp/common/edp_e_motor_driven.h"
+#include "edp/edp_e_motor_driven.h"
 #include "robot/conveyor/conveyor_const.h"
 
 namespace mrrocpp {

@@ -10,9 +10,9 @@
 
 #include <boost/utility.hpp>
 
-#include "edp/common/edp.h"
-#include "edp/common/hi_rydz.h"
-#include "edp/common/regulator.h"
+#include "edp/edp.h"
+#include "edp/hi_rydz.h"
+#include "edp/regulator.h"
 
 #define ERROR_DETECTED     1
 #define NO_ERROR_DETECTED  0

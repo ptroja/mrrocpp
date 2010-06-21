@@ -20,11 +20,11 @@
 
 // Klasa edp_irp6ot_effector.
 #include "robot/spkm/edp_e_spkm.h"
-#include "edp/common/reader.h"
+#include "edp/reader.h"
 // Kinematyki.
 #include "robot/spkm/kinematic_model_spkm.h"
-#include "edp/common/manip_trans_t.h"
-#include "edp/common/vis_server.h"
+#include "edp/manip_trans_t.h"
+#include "edp/vis_server.h"
 #include "lib/epos_gen.h"
 
 using namespace mrrocpp::lib::exception;

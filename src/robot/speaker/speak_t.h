@@ -12,7 +12,7 @@
 #include <stdint.h>
 #include <pthread.h>
 
-#include "edp/common/trans_t.h"
+#include "edp/trans_t.h"
 
 namespace mrrocpp {
 namespace edp {

@@ -27,7 +27,7 @@
 #include <errno.h>
 
 #include "lib/mis_fun.h"
-#include "edp/common/edp_effector.h"
+#include "edp/edp_effector.h"
 
 namespace mrrocpp {
 namespace edp {

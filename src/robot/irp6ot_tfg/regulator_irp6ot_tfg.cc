@@ -13,7 +13,7 @@
 
 // Klasa edp_irp6ot_effector.
 //#include "edp/irp6_on_track/edp_irp6ot_effector.h"
-#include "edp/common/reader.h"
+#include "edp/reader.h"
 // Klasa hardware_interface.
 //#include "edp/irp6_on_track/hi_irp6ot.h"
 // Klasa servo_buffer.

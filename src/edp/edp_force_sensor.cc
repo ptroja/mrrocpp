@@ -1,9 +1,9 @@
 #include <iostream>
 
-#include "edp/common/edp.h"
-#include "edp/common/edp_e_manip.h"
+#include "edp/edp.h"
+#include "edp/edp_e_manip.h"
 #include "lib/mis_fun.h"
-#include "edp/common/reader.h"
+#include "edp/reader.h"
 #include "kinematics/kinematic_model_with_tool.h"
 
 namespace mrrocpp {
