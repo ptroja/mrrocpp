@@ -1,5 +1,5 @@
 /*
- * ecp_g_constant_velocity.cpp
+ * ecp_g_constant_velocity.cc
  *
  *  Created on: May 18, 2010
  *      Author: rtulwin
@@ -13,12 +13,10 @@ namespace common {
 namespace generator {
 
 constant_velocity::constant_velocity(common::task::task& _ecp_task, bool _is_synchronised, lib::ECP_POSE_SPECIFICATION pose_spec, int axes_num) :
-		multiple_position (_ecp_task) {
+		multiple_position<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose> (_ecp_task) {
 	this->pose_spec = pose_spec;
 	this->axes_num = axes_num;
 	this->vpc = velocity_profile_calculator::constant_velocity_profile();
-	//pose_vector = vector<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose>();
-	//pose_vector_iterator = vector<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose>::iterator();
 }
 
 constant_velocity::~constant_velocity() {
@@ -71,33 +69,32 @@ bool constant_velocity::next_step() {
 	return true;
 }
 
-bool multiple_position::calculate_interpolate() {
+template <class T>
+bool multiple_position<T>::calculate_interpolate() {
 
 	get_position * get_pos = new get_position(ecp_t, true, pose_spec, axes_num);
 
 	pose_vector_iterator = pose_vector.begin();
 	get_pos->Move();
-	//boost::dynamic_pointer_cast<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose>(*pose_vector_iterator)->start_position = get_pos->get_position_vector();
+	pose_vector_iterator->start_position = get_pos->get_position_vector();
 	return true;
 }
 
-bool multiple_position::load_absolute_joint_trajectory_pose(vector<double> & coordinates) {
+template <class T>
+bool multiple_position<T>::load_absolute_joint_trajectory_pose(vector<double> & coordinates) {
 	ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose pose;
-	vector<double> joint_velocity;
-	for (int i = 0; i < axes_num; i++) {
-		joint_velocity.push_back(0.05);
-	}
-	if (pose_vector.size() > 0 && pose_spec != lib::ECP_JOINT) {
+	vector<double> joint_velocity(axes_num, 0.05);
+	if (pose_vector.size() > 0 && pose_spec != lib::ECP_JOINT) { //check if previous positions were provided in joint representation
 		return false;
 	}
 	pose_spec = lib::ECP_JOINT;
-	pose = ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose(lib::ECP_JOINT, coordinates, joint_velocity);
-	for (int j = 0; j < axes_num; j++) {
+	pose = ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose(lib::ECP_JOINT, coordinates, joint_velocity); //create new trajectory pose
+	for (int j = 0; j < axes_num; j++) { //set the v_max and calculate v_r velocities
 		pose.v_max.push_back(1.5);
 		pose.v_r[j] = pose.v[j] * pose.v_max[j];
 	}
 
-	//pose_vector.push_back(pose);
+	pose_vector.push_back(pose); //put new trajectory pose into a pose vector
 
 	return true;
 }

@@ -42,7 +42,7 @@ namespace generator {
 /**
  *
  */
-class newsmooth : public multiple_position {
+class newsmooth : public multiple_position<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose> {
 
 	protected:
 		/**

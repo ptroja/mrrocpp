@@ -88,7 +88,7 @@ void newsmooth::load_a_v_max_from_file(const char* file_name)
 } // end: bool load_a_v_max()
 
 newsmooth::newsmooth (common::task::task& _ecp_task, bool _is_synchronised, bool _debug) :
-		multiple_position (_ecp_task)
+		multiple_position<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose> (_ecp_task)
 
 {
 	//pose_vector = vector<ecp_mp::common::trajectory_pose::trajectory_pose>();

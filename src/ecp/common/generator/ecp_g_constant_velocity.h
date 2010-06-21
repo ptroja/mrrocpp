@@ -21,7 +21,7 @@ namespace generator {
 /**
  * Generator which moves the robot with a constant velocity.
  */
-class constant_velocity : public multiple_position {
+class constant_velocity : public multiple_position<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose> {
 	public:
 		/**
 		 * Constructor. Sets the axes_num and pose_spec variables.

@@ -25,20 +25,19 @@ namespace generator {
 /**
  * Base class for the motion generators interpolating between fixed trajectory points.
  */
+template <class T>
 class multiple_position : public generator {
 protected:
 
-	//typedef vector<boost::shared_ptr <ecp_mp::common::trajectory_pose::trajectory_pose> > trajectory_pose_vector;
 	/**
 	 * Vector of positions (vector of velocity profiles).
 	 */
-	//trajectory_pose_vector pose_vector;
-	vector<ecp_mp::common::trajectory_pose::trajectory_pose> pose_vector;
+	//vector<ecp_mp::common::trajectory_pose::trajectory_pose> pose_vector;
+	vector<T> pose_vector;
 	/**
 	 * Position vector iterator.
 	 */
-	//trajectory_pose_vector::iterator pose_vector_iterator;
-	vector<ecp_mp::common::trajectory_pose::trajectory_pose>::iterator pose_vector_iterator;
+	typename vector<T>::iterator pose_vector_iterator;
 	/**
 	 * Vector of coordinates.
 	 */

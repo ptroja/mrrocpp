@@ -1,5 +1,5 @@
 /*
- * multiple_position.cpp
+ * multiple_position.cc
  *
  *  Created on: May 21, 2010
  *      Author: rtulwin
@@ -12,26 +12,27 @@ namespace ecp {
 namespace common {
 namespace generator {
 
-multiple_position::multiple_position(common::task::task& _ecp_task) :
+template <class T> multiple_position<T>::multiple_position(common::task::task& _ecp_task) :
 	generator(_ecp_task) {
-
-	//pose_vector = vector<ecp_mp::common::trajectory_pose::trajectory_pose>();
-	//coordinate_vector = vector<vector<double> >();
+	// TODO Auto-generated constructor stub
 }
 
-multiple_position::~multiple_position() {
+template <class T> multiple_position<T>::~multiple_position() {
 	// TODO Auto-generated destructor stub
 }
 
-void multiple_position::set_relative(void) {
+template <class T>
+void multiple_position<T>::set_relative(void) {
 	motion_type=lib::RELATIVE;
 }
 
-void multiple_position::set_absolute(void) {
+template <class T>
+void multiple_position<T>::set_absolute(void) {
 	motion_type=lib::ABSOLUTE;
 }
 
-void multiple_position::set_axes_num(int axes_num) {
+template <class T>
+void multiple_position<T>::set_axes_num(int axes_num) {
 	this->axes_num = axes_num;
 }
 
