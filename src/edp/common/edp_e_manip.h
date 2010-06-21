@@ -19,7 +19,7 @@
 #include <messip.h>
 #endif
 
-#include "kinematics/common/kinematics_manager.h"
+#include "kinematics/kinematics_manager.h"
 #include "edp/common/edp_e_motor_driven.h"
 #include "edp/common/edp_force_sensor.h"
 
@@ -37,7 +37,8 @@ namespace common {
  * It extends motor_driven_effector by the methods of computation of the end--effector position with direct and inverse kinematic task
  * and some methods of govering data for the purpose of position--force control.
  */
-class manip_effector: public common::motor_driven_effector {
+class manip_effector : public common::motor_driven_effector
+{
 
 protected:
 
@@ -99,7 +100,6 @@ protected:
 
 public:
 
-
 	/*!
 	 * \brief Info if the force sensor test mode is active.
 	 *
@@ -141,11 +141,7 @@ public:
 	 * For the purpose of the position-force control. It is called once from the pose_force_torque_at_frame_move.
 	 */
 	void
-	compute_base_pos_xyz_rot_xyz_vector(
-			const lib::JointArray & begining_joints,
-			const lib::Homog_matrix & begining_end_effector_frame,
-			const lib::c_buffer & instruction,
-			lib::Xyz_Angle_Axis_vector & base_pos_xyz_rot_xyz_vector);
+			compute_base_pos_xyz_rot_xyz_vector(const lib::JointArray & begining_joints, const lib::Homog_matrix & begining_end_effector_frame, const lib::c_buffer & instruction, lib::Xyz_Angle_Axis_vector & base_pos_xyz_rot_xyz_vector);
 
 	/*!
 	 * \brief Iteration (interpolation) of the position-force control motion.
@@ -153,10 +149,7 @@ public:
 	 * It bases on the pose_force_torque_at_frame_move and other ECP command arguments.
 	 */
 	virtual void
-	iterate_macrostep(const lib::JointArray & begining_joints,
-			const lib::Homog_matrix & begining_end_effector_frame,
-			const lib::c_buffer & instruction,
-			const lib::Xyz_Angle_Axis_vector & base_pos_xyz_rot_xyz_vector);
+			iterate_macrostep(const lib::JointArray & begining_joints, const lib::Homog_matrix & begining_end_effector_frame, const lib::c_buffer & instruction, const lib::Xyz_Angle_Axis_vector & base_pos_xyz_rot_xyz_vector);
 
 	/*!
 	 * \brief pose-force command execution
@@ -222,8 +215,7 @@ public:
 	 * it defines the execution for the frame coordinates and
 	 * calls the get_arm_position_get_arm_type_switch method of the motor_driven_effector class.
 	 */
-	virtual void get_arm_position_get_arm_type_switch(
-			lib::c_buffer &instruction);
+	virtual void get_arm_position_get_arm_type_switch(lib::c_buffer &instruction);
 };
 
 } // namespace common

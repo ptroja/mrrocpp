@@ -10,7 +10,7 @@
 
 #include "ecp/common/ecp_robot.h"
 #include "robot/shead/shead_const.h"
-#include "kinematics/common/kinematics_manager.h"
+#include "kinematics/kinematics_manager.h"
 #include "robot/shead/kinematic_model_shead.h"
 #include "lib/data_port_headers/shead.h"
 

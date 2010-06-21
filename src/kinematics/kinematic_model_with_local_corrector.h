@@ -9,7 +9,7 @@
 #ifndef KINEMATIC_MODEL_WITH_LOCAL_CORRECTOR_H_
 #define KINEMATIC_MODEL_WITH_LOCAL_CORRECTOR_H_
 
-#include "kinematics/common/kinematic_model_with_tool.h"
+#include "kinematics/kinematic_model_with_tool.h"
 
 namespace mrrocpp {
 namespace kinematics {

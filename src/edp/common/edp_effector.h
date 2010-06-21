@@ -23,7 +23,7 @@
 #include "lib/com_buf.h"
 #include "lib/srlib.h"
 #include "edp/common/edp.h"
-#include "kinematics/common/kinematics_manager.h"
+#include "kinematics/kinematics_manager.h"
 
 // Konfigurator
 #include "lib/configurator.h"

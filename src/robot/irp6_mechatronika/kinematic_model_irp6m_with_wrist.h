@@ -14,7 +14,7 @@
 #define _IRP6M_KIN_MODEL_WITH_WRIST
 
 // Definicja klasy kinematic_model.
-#include "kinematics/common/kinematic_model_with_tool.h"
+#include "kinematics/kinematic_model_with_tool.h"
 
 namespace mrrocpp {
 namespace kinematics {

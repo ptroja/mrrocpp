@@ -11,7 +11,7 @@
 #include "ecp/common/ecp_robot.h"
 #include "robot/irp6p_tfg/irp6p_tfg_const.h"
 
-#include "kinematics/common/kinematics_manager.h"
+#include "kinematics/kinematics_manager.h"
 
 #include "robot/irp6p_tfg/kinematic_model_irp6p_tfg.h"
 

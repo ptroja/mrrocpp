@@ -11,11 +11,11 @@
 #include "ecp/common/ecp_robot.h"
 #include "robot/irp6ot_m/irp6ot_m_const.h"
 
-#include "kinematics/common/kinematics_manager.h"
+#include "kinematics/kinematics_manager.h"
 #include "robot/irp6ot_m/kinematic_model_irp6ot_with_track.h"
 #include "robot/irp6ot_m/kinematic_model_irp6ot_with_wrist.h"
 #include "robot/irp6ot_m/kinematic_model_calibrated_irp6ot_with_wrist.h"
-#include "kinematics/common/kinematic_model_with_tool.h"
+#include "kinematics/kinematic_model_with_tool.h"
 
 namespace mrrocpp {
 namespace ecp {

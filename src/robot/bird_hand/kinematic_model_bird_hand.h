@@ -9,7 +9,7 @@
 #ifndef KINEMATIC_MODEL_BIRD_HAND_H_
 #define KINEMATIC_MODEL_BIRD_HAND_H_
 
-#include "kinematics/common/kinematic_model.h"
+#include "kinematics/kinematic_model.h"
 #include "robot/bird_hand/kinematic_parameters_bird_hand.h"
 
 namespace mrrocpp {

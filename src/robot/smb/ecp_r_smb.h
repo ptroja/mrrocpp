@@ -9,7 +9,7 @@
 #define _ECP_R_SMB_H
 
 #include "ecp/common/ecp_robot.h"
-#include "kinematics/common/kinematics_manager.h"
+#include "kinematics/kinematics_manager.h"
 #include "robot/smb/kinematic_model_smb.h"
 #include "robot/smb/smb_const.h"
 #include "lib/data_port_headers/epos.h"

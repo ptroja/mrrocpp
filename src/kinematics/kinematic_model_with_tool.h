@@ -12,7 +12,7 @@
 #include <string>
 #include "lib/mrmath/mrmath.h"
 #include "lib/impconst.h"
-#include "kinematics/common/kinematic_model.h"
+#include "kinematics/kinematic_model.h"
 
 namespace mrrocpp {
 namespace kinematics {

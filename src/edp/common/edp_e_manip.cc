@@ -28,7 +28,7 @@
 #include "edp/common/manip_trans_t.h"
 #include "edp/common/edp_e_manip.h"
 
-#include "kinematics/common/kinematic_model_with_tool.h"
+#include "kinematics/kinematic_model_with_tool.h"
 
 using std::cout;
 

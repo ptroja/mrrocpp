@@ -41,7 +41,7 @@
 
 #include "lib/mrmath/mrmath.h"
 
-//#include "kinematics/common/kinematic_model.h"
+//#include "kinematics/kinematic_model.h"
 #include "edp/common/in_out.h"
 
 namespace mrrocpp {

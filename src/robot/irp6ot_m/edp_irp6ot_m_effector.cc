@@ -19,7 +19,7 @@
 #include "robot/irp6ot_m/kinematic_model_irp6ot_with_track.h"
 #include "robot/irp6ot_m/kinematic_model_irp6ot_with_wrist.h"
 #include "robot/irp6ot_m/kinematic_model_calibrated_irp6ot_with_wrist.h"
-#include "kinematics/common/kinematic_model_with_tool.h"
+#include "kinematics/kinematic_model_with_tool.h"
 
 namespace mrrocpp {
 namespace edp {

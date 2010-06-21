@@ -4,7 +4,7 @@
 #include "edp/common/edp_e_manip.h"
 #include "lib/mis_fun.h"
 #include "edp/common/reader.h"
-#include "kinematics/common/kinematic_model_with_tool.h"
+#include "kinematics/kinematic_model_with_tool.h"
 
 namespace mrrocpp {
 namespace edp {

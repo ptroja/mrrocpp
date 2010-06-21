@@ -7,7 +7,7 @@
  */
 
 #include "lib/com_buf.h"
-#include "kinematics/common/kinematics_manager.h"
+#include "kinematics/kinematics_manager.h"
 
 #include "lib/exception.h"
 using namespace mrrocpp::lib::exception;

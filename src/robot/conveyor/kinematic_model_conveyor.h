@@ -12,7 +12,7 @@
 #if !defined(_CONVEYOR_KIN_MODEL)
 #define _CONVEYOR_KIN_MODEL
 
-#include "kinematics/common/kinematic_model.h"
+#include "kinematics/kinematic_model.h"
 
 namespace mrrocpp {
 namespace kinematics {

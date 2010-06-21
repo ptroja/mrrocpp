@@ -10,7 +10,7 @@
 #define __EDP_KIN_MAN_H
 
 #include <map>
-#include "kinematics/common/kinematic_model.h"
+#include "kinematics/kinematic_model.h"
 
 using namespace std;
 

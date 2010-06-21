@@ -6,7 +6,7 @@
  * \date Jan 04, 2010
  */
 
-#include "kinematics/common/kinematic_model_with_tool.h"
+#include "kinematics/kinematic_model_with_tool.h"
 
 namespace mrrocpp {
 namespace kinematics {
