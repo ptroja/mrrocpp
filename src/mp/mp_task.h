@@ -1,7 +1,7 @@
 #ifndef MP_TASK_H_
 #define MP_TASK_H_
 
-#include "mp/generator/mp_generator.h"
+#include "mp/mp_generator.h"
 #include "mp/mp.h"
 #include "ecp_mp/ecp_mp_task.h"
 

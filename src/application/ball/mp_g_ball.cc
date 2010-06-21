@@ -16,7 +16,7 @@
 #include "mp/mp.h"
 #include "application/ball/mp_g_ball.h"
 #include "lib/mrmath/mrmath.h"
-#include "mp/generator/mp_g_common.h"
+#include "mp/mp_g_common.h"
 #include "robot/irp6ot_m/irp6ot_m_const.h"
 #include "robot/irp6p_m/irp6p_m_const.h"
 

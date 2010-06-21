@@ -1,7 +1,7 @@
 #if !defined(MP_R_SHEAD_H_)
 #define MP_R_SHEAD_H_
 
-#include "mp/robot/mp_r_motor_driven.h"
+#include "mp/mp_r_motor_driven.h"
 
 namespace mrrocpp {
 namespace mp {

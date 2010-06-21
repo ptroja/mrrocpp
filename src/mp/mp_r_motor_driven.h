@@ -3,7 +3,7 @@
 
 #include "lib/impconst.h"
 #include "mp/mp.h"
-#include "mp/robot/mp_robot.h"
+#include "mp/mp_robot.h"
 
 #include "robot/irp6_mechatronika/irp6m_const.h"
 #include "robot/irp6ot_m/irp6ot_m_const.h"

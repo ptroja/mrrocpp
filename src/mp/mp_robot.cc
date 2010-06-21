@@ -17,7 +17,7 @@
 
 #include "lib/srlib.h"
 #include "mp/mp.h"
-#include "mp/task/mp_task.h"
+#include "mp/mp_task.h"
 
 #if defined(USE_MESSIP_SRR)
 #include "messip_dataport.h"

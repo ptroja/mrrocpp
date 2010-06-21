@@ -1,5 +1,5 @@
-#include "mp/generator/mp_generator.h"
-#include "mp/robot/mp_robot.h"
+#include "mp/mp_generator.h"
+#include "mp/mp_robot.h"
 
 #include <boost/foreach.hpp>
 

@@ -1,10 +1,10 @@
 add_library(mp
-	task/mp_task.cc
-	robot/mp_robot.cc
+	mp_task.cc
+	mp_robot.cc
 	mp_m.cc
-	generator/mp_generator.cc
+	mp_generator.cc
 	../generator/mp/mp_g_delay_ms_condition.cc
-	generator/mp_g_common.cc
+	mp_g_common.cc
 )
 
 add_library(mprobots
@@ -20,11 +20,11 @@ add_library(mprobots
 	../robot/shead/mp_r_shead.cc
 	../robot/irp6ot_tfg/mp_r_irp6ot_tfg.cc
 	../robot/irp6p_tfg/mp_r_irp6p_tfg.cc
-	robot/mp_r_motor_driven.cc
+	mp_r_motor_driven.cc
 )
 
 add_executable(mp_c
-	task/mp_t_c.cc
+	mp_t_c.cc
 )
 
 target_link_libraries(mp_c mp)

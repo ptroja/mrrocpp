@@ -18,7 +18,7 @@
 #include "mp/mp.h"
 
 #include "ecp_mp/task/ecp_mp_t_player.h"
-#include "mp/generator/mp_g_common.h"
+#include "mp/mp_g_common.h"
 
 namespace mrrocpp {
 namespace mp {

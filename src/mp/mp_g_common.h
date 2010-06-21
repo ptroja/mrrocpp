@@ -1,8 +1,8 @@
 #ifndef MP_GEN_COMMON_H_
 #define MP_GEN_COMMON_H_
 
-#include "mp/generator/mp_generator.h"
-#include "mp/task/mp_task.h"
+#include "mp/mp_generator.h"
+#include "mp/mp_task.h"
 #include "mp/mp.h"
 
 // generator for setting the next ecps state

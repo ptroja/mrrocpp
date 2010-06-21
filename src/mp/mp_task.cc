@@ -27,7 +27,7 @@
 #include "lib/datastr.h"
 
 #include "mp/mp.h"
-#include "mp/generator/mp_g_common.h"
+#include "mp/mp_g_common.h"
 #include "generator/mp/mp_g_delay_ms_condition.h"
 
 #include "robot/conveyor/mp_r_conveyor.h"

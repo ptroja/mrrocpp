@@ -9,7 +9,7 @@
 
 #include "lib/mrmath/mrmath.h"
 
-#include "mp/generator/mp_generator.h"
+#include "mp/mp_generator.h"
 
 namespace mrrocpp {
 namespace mp {

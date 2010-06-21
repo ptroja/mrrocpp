@@ -11,7 +11,7 @@
 #include "PNExec/Net.hh"
 
 #include "mp/mp.h"
-#include "mp/task/mp_task.h"
+#include "mp/mp_task.h"
 #include "mp_g_pnml.h"
 
 namespace mrrocpp {

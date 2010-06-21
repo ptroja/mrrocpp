@@ -1,4 +1,4 @@
-#include "mp/robot/mp_r_motor_driven.h"
+#include "mp/mp_r_motor_driven.h"
 
 namespace mrrocpp {
 namespace mp {

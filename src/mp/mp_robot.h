@@ -1,7 +1,7 @@
 #ifndef MP_ROBOT_H_
 #define MP_ROBOT_H_
 
-#include "mp/task/mp_task.h"
+#include "mp/mp_task.h"
 #include "ecp_mp/ecp_mp_robot.h"
 
 #include <time.h>
