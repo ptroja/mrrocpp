@@ -6,7 +6,4 @@ add_subdirectory (irp6_postument)
 add_subdirectory (irp6ot_tfg)
 add_subdirectory (irp6p_tfg)
 add_subdirectory (polycrank)
-add_subdirectory (shead)
-add_subdirectory (smb)
-add_subdirectory (spkm)
 
