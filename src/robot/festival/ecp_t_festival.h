@@ -2,7 +2,7 @@
 #define _ECP_T_FESTIVAL_H
 
 #include "ecp/common/task/ecp_task.h"
-#include "ecp/festival/generator/ecp_g_festival.h"
+#include "robot/festival/ecp_g_festival.h"
 
 namespace mrrocpp {
 namespace ecp {

@@ -16,7 +16,7 @@
 #include "ecp_mp/task/ecp_mp_t_festival.h"
 #include "ecp_mp/task/ecp_mp_t_player.h"
 #include "ecp_mp_t_multiplayer.h"
-#include "ecp/festival/generator/ecp_g_festival.h"
+#include "robot/festival/ecp_g_festival.h"
 #include "lib/robot_consts/irp6ot_m_const.h"
 #include "lib/robot_consts/irp6p_m_const.h"
 #include "ecp_mp/task/ecp_mp_st_bias_edp_force.h"

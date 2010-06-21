@@ -13,7 +13,7 @@
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 
-#include "ecp/festival/generator/ecp_g_festival.h"
+#include "robot/festival/ecp_g_festival.h"
 
 namespace mrrocpp {
 namespace ecp {
