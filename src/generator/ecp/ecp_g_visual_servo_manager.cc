@@ -13,7 +13,7 @@
  * \date 04.08.2008
  */
 
-#include "ecp/generator/ecp_g_visual_servo_manager.h"
+#include "generator/ecp/ecp_g_visual_servo_manager.h"
 
 namespace mrrocpp {
 namespace ecp {

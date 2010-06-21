@@ -28,7 +28,7 @@
 #endif
 
 #include "lib/srlib.h"
-#include "ecp/generator/ecp_g_delta.h"
+#include "generator/ecp/ecp_g_delta.h"
 
 namespace mrrocpp {
 namespace ecp {

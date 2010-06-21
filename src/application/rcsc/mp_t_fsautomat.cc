@@ -32,7 +32,7 @@
 #include "StateHeap.h"
 
 #include "lib/datastr.h"
-#include "ecp_mp/common/generator/ecp_mp_g_smooth.h"
+#include "generator/ecp/ecp_mp_g_smooth.h"
 
 namespace mrrocpp {
 namespace mp {

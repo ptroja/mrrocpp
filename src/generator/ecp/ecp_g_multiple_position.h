@@ -9,9 +9,9 @@
 #define _MULTIPLE_POSITION_H_
 
 #include "lib/trajectory_pose/trajectory_pose.h"
-#include "ecp/generator/ecp_g_get_position.h"
+#include "generator/ecp/ecp_g_get_position.h"
 #include "ecp/ecp_generator.h"
-#include "ecp/generator/velocity_profile_calculator/velocity_profile.h"
+#include "generator/ecp/velocity_profile_calculator/velocity_profile.h"
 
 #include <vector>
 

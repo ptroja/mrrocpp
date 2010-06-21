@@ -39,10 +39,10 @@ add_executable(ecp_speak_rcsc
 add_executable(ecp_fsautomat
 	ecp_t_fsautomat.cc
 	../../ecp/task/ecp_st_go.cc
-	../../ecp/generator/ecp_g_smooth.cc
-	../../ecp/generator/ecp_g_force.cc
-	../../ecp/generator/ecp_g_jarosz.cc
-	../../ecp/generator/ecp_g_operator_reaction_condition.cc
+	../../generator/ecp/ecp_g_smooth.cc
+	../../generator/ecp/ecp_g_force.cc
+	../../generator/ecp/ecp_g_jarosz.cc
+	../../generator/ecp/ecp_g_operator_reaction_condition.cc
 )
 
 target_link_libraries(mp_rcsc mp)

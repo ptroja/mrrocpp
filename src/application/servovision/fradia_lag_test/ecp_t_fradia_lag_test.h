@@ -15,7 +15,7 @@
 =======
 #include "ecp/irp6_on_track/ecp_r_irp6ot.h"
 >>>>>>> transmitter_template
-#include "ecp/generator/ecp_g_smooth.h"
+#include "generator/ecp/ecp_g_smooth.h"
 
 namespace mrrocpp {
 

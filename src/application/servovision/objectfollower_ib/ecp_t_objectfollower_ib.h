@@ -13,7 +13,7 @@
 #include "lib/logger.h"
 #include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
 //#include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
-#include "ecp/generator/ecp_g_smooth.h"
+#include "generator/ecp/ecp_g_smooth.h"
 #include "../simple_visual_servo_manager.h"
 #include "../ib_eih_visual_servo.h"
 #include "../visual_servo_regulator_p.h"

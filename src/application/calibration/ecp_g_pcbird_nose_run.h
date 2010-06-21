@@ -2,7 +2,7 @@
 #ifndef ECP_G_PCBIRD_NOSE_RUN_H_
 #define ECP_G_PCBIRD_NOSE_RUN_H_
 
-#include "ecp/generator/ecp_g_force.h"
+#include "generator/ecp/ecp_g_force.h"
 
 namespace mrrocpp {
 namespace ecp {

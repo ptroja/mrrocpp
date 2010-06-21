@@ -14,9 +14,9 @@
 
 #include "lib/impconst.h"
 
-#include "ecp/generator/ecp_g_teach_in.h"
-#include "ecp/generator/ecp_g_delta.h"
-#include "ecp/generator/ecp_g_operator_reaction_condition.h"
+#include "generator/ecp/ecp_g_teach_in.h"
+#include "generator/ecp/ecp_g_delta.h"
+#include "generator/ecp/ecp_g_operator_reaction_condition.h"
 
 #include <Eigen/Core>
 

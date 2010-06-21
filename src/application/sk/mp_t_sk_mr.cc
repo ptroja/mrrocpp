@@ -27,7 +27,7 @@
 #include "application/sk/ecp_mp_st_edge_follow.h"
 #include "ecp_mp/task/ecp_mp_st_bias_edp_force.h"
 #include "ecp_mp/task/ecp_mp_st_tff_nose_run.h"
-#include "ecp_mp/common/generator/ecp_mp_g_tfg.h"
+#include "generator/ecp/ecp_mp_g_tfg.h"
 
 namespace mrrocpp {
 namespace mp {

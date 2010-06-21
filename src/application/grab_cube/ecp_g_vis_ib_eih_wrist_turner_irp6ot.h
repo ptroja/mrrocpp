@@ -8,7 +8,7 @@
 #ifndef ECP_VIS_IB_EIH_WRIST_TURNER_IRP6OT_H_
 #define ECP_VIS_IB_EIH_WRIST_TURNER_IRP6OT_H_
 
-#include "ecp/generator/ecp_g_visual_servo.h"
+#include "generator/ecp/ecp_g_visual_servo.h"
 
 #include <string.h>
 #include <math.h>

@@ -11,7 +11,7 @@
 #include "robot/irp6p_tfg/ecp_r_irp6p_tfg.h"
 
 #include "robot/irp6_tfg/ecp_t_tfg.h"
-#include "ecp_mp/common/generator/ecp_mp_g_tfg.h"
+#include "generator/ecp/ecp_mp_g_tfg.h"
 
 namespace mrrocpp {
 namespace ecp {

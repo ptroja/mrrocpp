@@ -19,8 +19,8 @@
 #include "robot/irp6p_m/irp6p_m_const.h"
 #include "ecp_mp/task/ecp_mp_st_bias_edp_force.h"
 #include "ecp_mp/task/ecp_mp_st_tff_nose_run.h"
-#include "ecp_mp/common/generator/ecp_mp_g_smooth.h"
-#include "ecp_mp/common/generator/ecp_mp_g_force.h"
+#include "generator/ecp/ecp_mp_g_smooth.h"
+#include "generator/ecp/ecp_mp_g_force.h"
 #include "application/servovision/ecp_mp_g_simple_visual_servo_manager.h"
 
 #include <boost/foreach.hpp>

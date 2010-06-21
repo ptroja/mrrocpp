@@ -10,7 +10,7 @@
 // Ostatnia modyfikacja: 2009
 // -------------------------------------------------------------------------
 
-#include "ecp/generator/ecp_g_smooth.h"
+#include "generator/ecp/ecp_g_smooth.h"
 #include "robot/irp6ot_m/irp6ot_m_const.h"
 #include "robot/irp6p_m/irp6p_m_const.h"
 

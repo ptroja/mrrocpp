@@ -9,7 +9,7 @@
 #define CAPTURETASK_H_
 
 #include "ecp/ecp_task.h"
-#include "ecp/generator/ecp_g_smooth.h"
+#include "generator/ecp/ecp_g_smooth.h"
 #include "sensor/fradia/ecp_mp_s_fradia_sensor.h"
 
 namespace mrrocpp {

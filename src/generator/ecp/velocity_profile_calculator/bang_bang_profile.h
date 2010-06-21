@@ -9,7 +9,7 @@
 #define _BANG_BANG_PROFILE_H_
 
 #include "lib/trajectory_pose/bang_bang_trajectory_pose.h"
-#include "ecp/generator/velocity_profile_calculator/velocity_profile.h"
+#include "generator/ecp/velocity_profile_calculator/velocity_profile.h"
 
 using namespace std;
 

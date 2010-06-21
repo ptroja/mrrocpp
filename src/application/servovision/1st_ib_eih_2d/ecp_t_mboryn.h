@@ -11,7 +11,7 @@
 #include "ecp/ecp_task.h"
 #include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
 #include "ecp_g_mboryn.h"
-#include "ecp/generator/ecp_g_smooth.h"
+#include "generator/ecp/ecp_g_smooth.h"
 
 namespace mrrocpp {
 

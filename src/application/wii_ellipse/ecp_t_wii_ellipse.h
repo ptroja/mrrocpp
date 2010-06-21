@@ -3,7 +3,7 @@
 
 #include "ecp_mp/ecp_mp_task.h"
 #include "application/wii_ellipse/generator/ecp_g_wii_ellipse.h"
-#include "ecp/generator/ecp_g_smooth.h"
+#include "generator/ecp/ecp_g_smooth.h"
 
 namespace mrrocpp {
 namespace ecp {

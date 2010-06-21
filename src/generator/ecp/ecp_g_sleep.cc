@@ -4,7 +4,7 @@
  *Author: Tomasz Bem
  */
 
-#include "ecp/generator/ecp_g_sleep.h"
+#include "generator/ecp/ecp_g_sleep.h"
 
 namespace mrrocpp {
 namespace ecp {

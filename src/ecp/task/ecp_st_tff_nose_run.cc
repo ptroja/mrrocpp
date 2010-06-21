@@ -11,7 +11,7 @@
 #include "lib/com_buf.h"
 
 #include "lib/srlib.h"
-#include "ecp/generator/ecp_g_force.h"
+#include "generator/ecp/ecp_g_force.h"
 #include "ecp/task/ecp_st_tff_nose_run.h"
 
 namespace mrrocpp {

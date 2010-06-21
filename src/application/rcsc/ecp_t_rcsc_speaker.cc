@@ -14,7 +14,7 @@
 #include "robot/speaker/ecp_r_speaker.h"
 #include "ecp_t_rcsc_speaker.h"
 #include "application/rcsc/ecp_mp_t_rcsc.h"
-#include "ecp_mp/common/generator/ecp_mp_g_transparent.h"
+#include "generator/ecp/ecp_mp_g_transparent.h"
 #include "robot/speaker/ecp_mp_g_speak.h"
 
 namespace mrrocpp {

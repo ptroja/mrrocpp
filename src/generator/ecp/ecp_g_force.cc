@@ -33,7 +33,7 @@
 #include "lib/com_buf.h"
 
 #include "lib/srlib.h"
-#include "ecp/generator/ecp_g_force.h"
+#include "generator/ecp/ecp_g_force.h"
 
 namespace mrrocpp {
 namespace ecp {

@@ -8,13 +8,13 @@
 #include "ecp_mp_t_swarmitfix.h"
 
 #include "robot/spkm/ecp_r_spkm.h"
-#include "ecp/generator/ecp_g_smooth.h"
-#include "ecp/generator/ecp_g_sleep.h"
+#include "generator/ecp/ecp_g_smooth.h"
+#include "generator/ecp/ecp_g_sleep.h"
 #include "ecp_g_epos.h"
 #include "ecp_t_spkm.h"
-#include "ecp_mp/common/generator/ecp_mp_g_transparent.h"
-#include "ecp_mp/common/generator/ecp_mp_g_smooth.h"
-#include "ecp_mp/common/generator/ecp_mp_g_sleep.h"
+#include "generator/ecp/ecp_mp_g_transparent.h"
+#include "generator/ecp/ecp_mp_g_smooth.h"
+#include "generator/ecp/ecp_mp_g_sleep.h"
 
 #include "ecp_mp_g_epos.h"
 

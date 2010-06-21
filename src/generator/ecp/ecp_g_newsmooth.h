@@ -29,7 +29,7 @@ using namespace std;
 #include "lib/srlib.h"
 #include "lib/mrmath/mrmath.h"
 
-#include "ecp/generator/ecp_g_multiple_position.h"
+#include "generator/ecp/ecp_g_multiple_position.h"
 #include "lib/trajectory_pose/bang_bang_trajectory_pose.h"
 
 using namespace std;

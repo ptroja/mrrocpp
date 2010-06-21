@@ -2,7 +2,7 @@
 #define _ECP_T_KCZ_TEST_H
 
 #include "ecp/ecp_task.h"
-#include "ecp/generator/ecp_g_smooth.h"
+#include "generator/ecp/ecp_g_smooth.h"
 
 namespace mrrocpp {
 namespace ecp {

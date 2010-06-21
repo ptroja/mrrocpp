@@ -5,7 +5,7 @@
  * Contains bodies of the methods of newsmooth class.
  */
 
-#include "ecp/generator/ecp_g_newsmooth.h"
+#include "generator/ecp/ecp_g_newsmooth.h"
 
 namespace mrrocpp {
 namespace ecp {

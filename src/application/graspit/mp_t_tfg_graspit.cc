@@ -17,7 +17,7 @@
 #include "robot/irp6ot_m/irp6ot_m_const.h"
 #include "robot/irp6p_m/irp6p_m_const.h"
 #include "robot/irp6p_tfg/irp6p_tfg_const.h"
-#include "ecp_mp/common/generator/ecp_mp_g_tfg.h"
+#include "generator/ecp/ecp_mp_g_tfg.h"
 
 namespace mrrocpp {
 namespace mp {
