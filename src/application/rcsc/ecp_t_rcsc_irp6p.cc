@@ -5,7 +5,7 @@
 #include "lib/com_buf.h"
 
 #include "lib/srlib.h"
-#include "ecp_mp/task/ecp_mp_t_rcsc.h"
+#include "application/rcsc/ecp_mp_t_rcsc.h"
 
 #include "robot/irp6p_m/ecp_r_irp6p_m.h"
 #include "ecp/generator/ecp_g_force.h"

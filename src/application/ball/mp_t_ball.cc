@@ -13,7 +13,7 @@
 #include "mp/mp.h"
 #include "application/ball/mp_g_ball.h"
 #include "application/ball/mp_t_ball.h"
-#include "ecp_mp/task/ecp_mp_t_rcsc.h"
+#include "application/rcsc/ecp_mp_t_rcsc.h"
 #include "robot/irp6ot_m/irp6ot_m_const.h"
 #include "robot/irp6p_m/irp6p_m_const.h"
 #include "ecp_mp/task/ecp_mp_st_bias_edp_force.h"

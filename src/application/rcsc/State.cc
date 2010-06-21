@@ -12,7 +12,7 @@
 #include "ecp_mp/common/generator/ecp_mp_g_smooth.h"
 #include "ecp_mp/common/generator/ecp_mp_g_teach_in.h"
 #include "ecp_mp/common/generator/ecp_mp_g_force.h"
-#include "ecp_mp/speaker/generator/ecp_mp_g_speak.h"
+#include "robot/speaker/ecp_mp_g_speak.h"
 #include "ecp_mp/task/ecp_mp_st_gripper_opening.h"
 
 namespace mrrocpp {
