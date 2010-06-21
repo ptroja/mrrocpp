@@ -27,7 +27,7 @@
 // #include "ui/ui.h"
 // Konfigurator (dla PROCESS_SPAWN_RSH)
 #include "lib/configurator.h"
-#include "lib/robot_consts/all_robots_const.h"
+#include "lib/all_robots_const.h"
 
 /* Local headers */
 #include "ablibs.h"
