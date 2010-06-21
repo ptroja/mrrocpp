@@ -20,7 +20,7 @@ add_library(mprobots
 	../robot/shead/mp_r_shead.cc
 	robot/mp_r_irp6ot_tfg.cc
 	robot/mp_r_irp6p_tfg.cc
-	robot/mp_r_manip_and_conv.cc
+	robot/mp_r_motor_driven.cc
 )
 
 add_executable(mp_c

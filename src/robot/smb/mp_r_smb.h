@@ -1,12 +1,12 @@
 #if !defined(MP_R_SMB_H_)
 #define MP_R_SMB_H_
 
-#include "mp/robot/mp_r_manip_and_conv.h"
+#include "mp/robot/mp_r_motor_driven.h"
 
 namespace mrrocpp {
 namespace mp {
 namespace robot {
-class smb : public manip_and_conv
+class smb : public motor_driven
 {
 public:
 	smb(task::task &mp_object_l);

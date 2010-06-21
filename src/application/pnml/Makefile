@@ -12,7 +12,7 @@ MP_ROBOTS_OBJECTS = \
 	../../mp/robot/mp_r_speaker.o \
 	../../mp/robot/mp_r_irp6_mechatronika.o \
 	../../mp/robot/mp_r_polycrank.o \
-	../../mp/robot/mp_r_manip_and_conv.o
+	../../mp/robot/mp_r_motor_driven.o
 
 BINARIES = mp_pnml
 

@@ -1,5 +1,5 @@
-#ifndef MP_R_MANIP_AND_CONV_H_
-#define MP_R_MANIP_AND_CONV_H_
+#ifndef MP_R_motor_driven_H_
+#define MP_R_motor_driven_H_
 
 #include "lib/impconst.h"
 #include "mp/mp.h"
@@ -22,16 +22,16 @@ namespace mrrocpp {
 namespace mp {
 namespace robot {
 
-class manip_and_conv : public robot
+class motor_driven : public robot
 {
 private:
 	const int servos_number;
 
 public:
-			manip_and_conv(lib::robot_name_t l_robot_name, const std::string & _section_name, task::task &mp_object_l, int _number_of_servos);
+			motor_driven(lib::robot_name_t l_robot_name, const std::string & _section_name, task::task &mp_object_l, int _number_of_servos);
 };
 
 } // namespace robot
 } // namespace mp
 } // namespace mrrocpp
-#endif /*MP_R_MANIP_AND_CONV_H_*/
+#endif /*MP_R_motor_driven_H_*/
