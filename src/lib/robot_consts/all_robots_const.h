@@ -10,7 +10,7 @@
 #include "robot/smb/smb_const.h"
 #include "robot/spkm/spkm_const.h"
 #include "robot/shead/shead_const.h"
-#include "lib/robot_consts/speaker_const.h"
+#include "robot/speaker/speaker_const.h"
 #include "robot/conveyor/conveyor_const.h"
 #include "robot/bird_hand/bird_hand_const.h"
 #include "lib/robot_consts/sarkofag_const.h"

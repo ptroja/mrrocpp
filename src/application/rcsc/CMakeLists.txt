@@ -34,7 +34,7 @@ add_executable(ecp_irp6p_rcsc
 )
 add_executable(ecp_speak_rcsc
 	ecp_t_rcsc_speaker.cc
-	../../ecp/speaker/generator/ecp_g_speak.cc
+	../../robot/speaker/ecp_g_speak.cc
 )
 add_executable(ecp_fsautomat
 	ecp_t_fsautomat.cc

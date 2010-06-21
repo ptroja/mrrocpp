@@ -39,13 +39,13 @@
 #include "lib/com_buf.h"
 #include "lib/mis_fun.h"
 
-#include "edp/speaker/sound.h" // MAC7
-//#include "edp/speaker/stdafx.h" // MAC& [ARTUR]
-#include "edp/speaker/tts.h" // MAC& [ARTUR]
+#include "robot/speaker/sound.h" // MAC7
+//#include "robot/speaker/stdafx.h" // MAC& [ARTUR]
+#include "robot/speaker/tts.h" // MAC& [ARTUR]
 // Klasa edp_speaker_effector.
-#include "edp/speaker/edp_speaker_effector.h"
-#include "edp/speaker/speak_t.h"
-#include "lib/robot_consts/speaker_const.h"
+#include "robot/speaker/edp_speaker_effector.h"
+#include "robot/speaker/speak_t.h"
+#include "robot/speaker/speaker_const.h"
 
 #include "lib/exception.h"
 using namespace mrrocpp::lib::exception;

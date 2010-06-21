@@ -13,16 +13,20 @@
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 
-#include "ecp/speaker/ecp_r_speaker.h"
-#include "ecp/speaker/generator/ecp_g_speak.h"
+#include "robot/speaker/ecp_r_speaker.h"
+#include "robot/speaker/ecp_g_speak.h"
 
 namespace mrrocpp {
 namespace ecp {
 namespace speaker {
 namespace generator {
 
-speaking::speaking(common::task::task& _ecp_task, int step):
-	generator(_ecp_task){	step_no = step;  };
+speaking::speaking(common::task::task& _ecp_task, int step) :
+	generator(_ecp_task)
+{
+	step_no = step;
+}
+;
 
 bool speaking::configure(const char* text)
 {
@@ -35,14 +39,16 @@ bool speaking::configure(const char* text)
 	}
 }
 
-bool speaking::first_step ( ) {
+bool speaking::first_step()
+{
 
-	for (int i=0; i<6; i++)
-		delta[i]=0.0;
+	for (int i = 0; i < 6; i++)
+		delta[i] = 0.0;
 
 	//(sensor_m.begin())->second->base_period=1;
 	//(sensor_m.begin())->second->current_period=0;
-	if (the_robot) the_robot->communicate_with_edp = true;
+	if (the_robot)
+		the_robot->communicate_with_edp = true;
 
 	last_sg_state = new_sg_state = SG_FIRST_GET;
 
@@ -54,22 +60,21 @@ bool speaking::first_step ( ) {
 
 
 // --------------------------------------------------------------------------
-bool speaking::next_step ( ) {
+bool speaking::next_step()
+{
 	// struct timespec start[9];
 
-/*
-	if (pulse_check(the_robot->trigger_attach)) { // Koniec odcinka
-		ecp_t.mp_buffer_receive_and_send ();
-		return false;
-	} else { // w trakcie interpolacji
-		ecp_t.set_ecp_reply (lib::ECP_ACKNOWLEDGE);
-		ecp_t.mp_buffer_receive_and_send ();
-	}
-	*/ //odrem jako niezalezny od rcsc generator
+	/*
+	 if (pulse_check(the_robot->trigger_attach)) { // Koniec odcinka
+	 ecp_t.mp_buffer_receive_and_send ();
+	 return false;
+	 } else { // w trakcie interpolacji
+	 ecp_t.set_ecp_reply (lib::ECP_ACKNOWLEDGE);
+	 ecp_t.mp_buffer_receive_and_send ();
+	 }
+	 *///odrem jako niezalezny od rcsc generator
 
 	last_sg_state = new_sg_state;
-
-
 
 	// Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
 
@@ -86,12 +91,13 @@ bool speaking::next_step ( ) {
 			break;
 		case SG_AFTER_SET:
 			the_robot->ecp_command.instruction.instruction_type = lib::GET;
-			new_sg_state=SG_LAST_GET;
+			new_sg_state = SG_LAST_GET;
 			break;
 		case SG_LAST_GET:
 			if (the_robot->reply_package.arm.text_def.speaking == 0) {
 				new_sg_state = SG_FINISH;
-				if (the_robot) the_robot->communicate_with_edp = false;
+				if (the_robot)
+					the_robot->communicate_with_edp = false;
 			} else {
 				new_sg_state = SG_LAST_GET;
 				usleep(1000 * 20);
@@ -104,7 +110,7 @@ bool speaking::next_step ( ) {
 			break;
 	}
 
-//	printf("last %d\n",lastSET);
+	//	printf("last %d\n",lastSET);
 
 	// for mic
 	// printf("%d \n",(sensor_m.begin())->second->image.sensor_union.mic.word_id);

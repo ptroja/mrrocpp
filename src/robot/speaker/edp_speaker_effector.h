@@ -17,7 +17,7 @@
 #include <pthread.h>
 #include <sys/asoundlib.h> //MAC7 - should be before "edp/common/edp.h"
 #include "edp/common/edp_e_manip.h"
-//#include "edp/speaker/sound.h" // MAC7
+//#include "robot/speaker/sound.h" // MAC7
 
 namespace mrrocpp {
 namespace edp {

@@ -9,5 +9,26 @@ if(ROBOT_SPEAKER AND QNXNTO)
 		$ENV{QNX_TARGET}/x86/lib/libasound.so
 		${COMMON_LIBRARIES})
 	
+	
+	add_library(ecp_r_speaker ecp_r_speaker.cc)
+	
+
+
+add_executable(ecp_speaker
+	ecp_t_s.cc
+	ecp_g_speak.cc
+)
+
+target_link_libraries(ecp_speaker ecp_r_speaker ecp)
+
+install(TARGETS ecp_speaker DESTINATION bin)
+	
+	
+	
 	install(TARGETS edp_speaker DESTINATION bin)
+	
+	
+	
+	
+	
 endif(ROBOT_SPEAKER AND QNXNTO)

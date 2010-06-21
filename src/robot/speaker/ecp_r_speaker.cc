@@ -11,12 +11,11 @@
 #include "lib/com_buf.h"
 #include "lib/mis_fun.h"
 
-#include "ecp/speaker/ecp_r_speaker.h"
+#include "robot/speaker/ecp_r_speaker.h"
 
 namespace mrrocpp {
 namespace ecp {
 namespace speaker {
-
 
 // ####################################################################################################
 // ####################################################################################################

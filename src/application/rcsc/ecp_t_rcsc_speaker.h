@@ -3,7 +3,7 @@
 
 #include "ecp/common/task/ecp_task.h"
 #include "ecp/common/generator/ecp_g_transparent.h"
-#include "ecp/speaker/generator/ecp_g_speak.h"
+#include "robot/speaker/ecp_g_speak.h"
 
 namespace mrrocpp {
 namespace ecp {

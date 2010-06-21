@@ -16,8 +16,8 @@
 #include "lib/mis_fun.h"
 
 // Klasa edp_speaker_effector.
-#include "edp/speaker/edp_speaker_effector.h"
-#include "edp/speaker/speak_t.h"
+#include "robot/speaker/edp_speaker_effector.h"
+#include "robot/speaker/speak_t.h"
 
 #include "lib/exception.h"
 using namespace mrrocpp::lib::exception;

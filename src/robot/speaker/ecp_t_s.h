@@ -2,14 +2,15 @@
 #define _ECP_T_SPEAKER_H
 
 #include "ecp/common/task/ecp_task.h"
-#include "ecp/speaker/generator/ecp_g_speak.h"
+#include "robot/speaker/ecp_g_speak.h"
 
 namespace mrrocpp {
 namespace ecp {
 namespace speaker {
 namespace task {
 
-class speaking: public common::task::task  {
+class speaking : public common::task::task
+{
 protected:
 	generator::speaking* speak;
 
