@@ -9,7 +9,6 @@
 #include "lib/srlib.h"
 #include "mp/mp.h"
 #include "lib/mrmath/mrmath.h"
-#include "ecp_mp/task/ecp_mp_t_tfg.h"
 #include "lib/data_port_headers/tfg.h"
 #include "mp_t_tfg_graspit.h"
 #include "ecp_mp_t_graspit.h"

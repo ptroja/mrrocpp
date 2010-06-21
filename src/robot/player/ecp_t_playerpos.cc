@@ -8,7 +8,7 @@
 
 #include "ecp/player/generator/ecp_g_playerpos.h"
 #include "ecp/player/task/ecp_t_playerpos.h"
-#include "ecp_mp/task/ecp_mp_t_player.h"
+#include "robot/player/ecp_mp_t_player.h"
 
 namespace mrrocpp {
 namespace ecp {

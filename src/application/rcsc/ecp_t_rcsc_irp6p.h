@@ -3,7 +3,7 @@
 
 #include "ecp/ecp_task.h"
 #include "ecp/ecp_g_transparent.h"
-#include "ecp/task/ecp_st_go.h"
+#include "subtask/ecp_st_go.h"
 
 namespace mrrocpp {
 namespace ecp {

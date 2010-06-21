@@ -5,7 +5,7 @@
 
 #include "ecp/ecp_task.h"
 #include "ecp/ecp_g_transparent.h"
-#include "ecp/task/ecp_st_go.h"
+#include "subtask/ecp_st_go.h"
 #include "sensor/fradia/ecp_mp_s_fradia_sensor.h"
 
 #include "../servovision/simple_visual_servo_manager.h"

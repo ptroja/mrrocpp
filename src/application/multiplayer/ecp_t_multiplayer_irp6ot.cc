@@ -8,8 +8,8 @@
 #include "generator/ecp/ecp_g_smooth.h"
 #include "generator/ecp/ecp_g_force.h"
 #include "ecp_t_multiplayer_irp6ot.h"
-#include "ecp/task/ecp_st_bias_edp_force.h"
-#include "ecp_mp/task/ecp_mp_st_gripper_opening.h"
+#include "subtask/ecp_st_bias_edp_force.h"
+#include "subtask/ecp_mp_st_gripper_opening.h"
 
 #include "ecp/ecp_task.h"
 #include "generator/ecp/ecp_mp_g_transparent.h"

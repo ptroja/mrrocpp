@@ -12,23 +12,23 @@
 
 #include "lib/srlib.h"
 #include "generator/ecp/ecp_g_force.h"
-#include "ecp/task/ecp_st_tff_nose_run.h"
+#include "subtask/ecp_st_bias_edp_force.h"
 
 namespace mrrocpp {
 namespace ecp {
 namespace common {
 namespace task {
 
-ecp_sub_task_tff_nose_run::ecp_sub_task_tff_nose_run(task &_ecp_t) :
+ecp_sub_task_bias_edp_force::ecp_sub_task_bias_edp_force(task &_ecp_t) :
 	ecp_sub_task(_ecp_t)
 {
-	nrg = new generator::tff_nose_run(_ecp_t, 8);
+	befg = new generator::bias_edp_force(_ecp_t);
 }
 
-void ecp_sub_task_tff_nose_run::conditional_execution()
+void ecp_sub_task_bias_edp_force::conditional_execution()
 {
 
-	nrg->Move();
+	befg->Move();
 }
 
 } // namespace task

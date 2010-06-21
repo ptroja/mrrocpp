@@ -13,16 +13,16 @@
 #include "lib/srlib.h"
 #include "mp/mp.h"
 #include "mp_t_multiplayer.h"
-#include "ecp_mp/task/ecp_mp_t_festival.h"
-#include "ecp_mp/task/ecp_mp_t_player.h"
+#include "robot/festival/ecp_mp_t_festival.h"
+#include "robot/player/ecp_mp_t_player.h"
 #include "ecp_mp_t_multiplayer.h"
 #include "robot/festival/ecp_g_festival.h"
 #include "robot/irp6ot_m/irp6ot_m_const.h"
 #include "robot/irp6p_m/irp6p_m_const.h"
-#include "ecp_mp/task/ecp_mp_st_bias_edp_force.h"
+#include "subtask/ecp_mp_st_bias_edp_force.h"
 #include "generator/ecp/ecp_mp_g_smooth.h"
 #include "generator/ecp/ecp_mp_g_force.h"
-#include "ecp_mp/task/ecp_mp_st_gripper_opening.h"
+#include "subtask/ecp_mp_st_gripper_opening.h"
 
 namespace mrrocpp {
 namespace mp {

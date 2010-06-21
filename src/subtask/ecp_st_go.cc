@@ -12,7 +12,7 @@
 
 #include "lib/srlib.h"
 #include "generator/ecp/ecp_g_jarosz.h"
-#include "ecp/task/ecp_st_go.h"
+#include "subtask/ecp_st_go.h"
 
 namespace mrrocpp {
 namespace ecp {

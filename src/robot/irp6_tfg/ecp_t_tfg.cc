@@ -5,7 +5,7 @@
 #include "lib/com_buf.h"
 
 #include "lib/srlib.h"
-#include "ecp_mp/task/ecp_mp_t_tfg.h"
+
 
 #include "robot/irp6ot_tfg/ecp_r_irp6ot_tfg.h"
 #include "robot/irp6p_tfg/ecp_r_irp6p_tfg.h"

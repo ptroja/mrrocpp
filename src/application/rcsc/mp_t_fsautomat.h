@@ -11,7 +11,7 @@
 
 #include "mp/mp.h"
 #include "ecp_mp/ecp_mp_task.h"
-//#include "ecp_mp/task/ecp_mp_t_fsautomat.h"
+//#include "subtask/ecp_mp_t_fsautomat.h"
 #include "State.h"
 #include "CubeState.h"
 #include "SingleManipulation.h"

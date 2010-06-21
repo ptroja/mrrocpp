@@ -16,8 +16,8 @@
 #include "ecp_t_sk_mr.h"
 
 #include "ecp_st_edge_follow.h"
-#include "ecp/task/ecp_st_bias_edp_force.h"
-#include "ecp/task/ecp_st_tff_nose_run.h"
+#include "subtask/ecp_st_bias_edp_force.h"
+#include "subtask/ecp_st_tff_nose_run.h"
 #include "generator/ecp/ecp_g_force.h"
 
 namespace mrrocpp {

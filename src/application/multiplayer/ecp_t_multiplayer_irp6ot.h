@@ -2,7 +2,7 @@
 #define _ECP_T_MULTIPLAYER_IRP6OT_H
 
 #include "ecp/ecp_task.h"
-#include "ecp/task/ecp_st_go.h"
+#include "subtask/ecp_st_go.h"
 #include "ecp/ecp_g_transparent.h"
 
 namespace mrrocpp {

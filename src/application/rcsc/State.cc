@@ -5,15 +5,15 @@
 
 #include "lib/datastr.h"
 #include "State.h"
-#include "ecp_mp/task/ecp_mp_st_bias_edp_force.h"
-#include "ecp_mp/task/ecp_mp_st_tff_nose_run.h"
+#include "subtask/ecp_mp_st_bias_edp_force.h"
+#include "subtask/ecp_mp_st_tff_nose_run.h"
 #include "generator/ecp/ecp_mp_g_bias_edp_force.h"
 #include "generator/ecp/ecp_mp_g_transparent.h"
 #include "generator/ecp/ecp_mp_g_smooth.h"
 #include "generator/ecp/ecp_mp_g_teach_in.h"
 #include "generator/ecp/ecp_mp_g_force.h"
 #include "robot/speaker/ecp_mp_g_speak.h"
-#include "ecp_mp/task/ecp_mp_st_gripper_opening.h"
+#include "subtask/ecp_mp_st_gripper_opening.h"
 
 namespace mrrocpp {
 namespace mp {

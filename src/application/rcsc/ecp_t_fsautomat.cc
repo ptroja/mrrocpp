@@ -28,13 +28,13 @@
 #include "generator/ecp/ecp_g_force.h"
 #include "generator/ecp/ecp_mp_g_bias_edp_force.h"
 #include "ecp_t_fsautomat.h"
-#include "ecp/task/ecp_st_bias_edp_force.h"
-#include "ecp/task/ecp_st_tff_nose_run.h"
+#include "subtask/ecp_st_bias_edp_force.h"
+#include "subtask/ecp_st_tff_nose_run.h"
 #include "generator/ecp/ecp_mp_g_transparent.h"
 #include "generator/ecp/ecp_mp_g_smooth.h"
 #include "generator/ecp/ecp_mp_g_teach_in.h"
 #include "generator/ecp/ecp_mp_g_force.h"
-#include "ecp_mp/task/ecp_mp_st_gripper_opening.h"
+#include "subtask/ecp_mp_st_gripper_opening.h"
 
 #include "lib/datastr.h"
 
