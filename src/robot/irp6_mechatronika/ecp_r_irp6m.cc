@@ -10,7 +10,7 @@
 #include "lib/com_buf.h"
 #include "lib/mis_fun.h"
 
-#include "ecp/irp6_mechatronika/ecp_r_irp6m.h"
+#include "robot/irp6_mechatronika/ecp_r_irp6m.h"
 
 namespace mrrocpp {
 namespace ecp {

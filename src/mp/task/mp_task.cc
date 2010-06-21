@@ -33,7 +33,7 @@
 #include "robot/conveyor/mp_r_conveyor.h"
 #include "mp/robot/mp_r_irp6ot_m.h"
 #include "mp/robot/mp_r_irp6p_m.h"
-#include "mp/robot/mp_r_irp6_mechatronika.h"
+#include "robot/irp6_mechatronika/mp_r_irp6_mechatronika.h"
 #include "robot/speaker/mp_r_speaker.h"
 #include "robot/polycrank/mp_r_polycrank.h"
 #include "robot/bird_hand/mp_r_bird_hand.h"

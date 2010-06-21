@@ -14,7 +14,7 @@
 #define _IRP6M_KIN_MODEL_5DOF
 
 // Definicja klasy kinematic_model.
-#include "kinematics/irp6_mechatronika/kinematic_model_irp6m_with_wrist.h"
+#include "robot/irp6_mechatronika/kinematic_model_irp6m_with_wrist.h"
 
 namespace mrrocpp {
 namespace kinematics {

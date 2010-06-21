@@ -14,9 +14,9 @@
 #define __EDP_IRP6_MECHATRONIKA_H
 
 // Klasa edp_irp6s_robot.
-#include "edp/irp6_mechatronika/sg_irp6m.h"
+#include "robot/irp6_mechatronika/sg_irp6m.h"
 #include "edp/common/edp_e_manip.h"
-#include "lib/robot_consts/irp6m_const.h"
+#include "robot/irp6_mechatronika/irp6m_const.h"
 
 namespace mrrocpp {
 namespace edp {

@@ -19,11 +19,11 @@
 #include "lib/mrmath/mrmath.h"
 
 // Klasa edp_irp6ot_effector.
-#include "edp/irp6_mechatronika/edp_irp6m_effector.h"
+#include "robot/irp6_mechatronika/edp_irp6m_effector.h"
 #include "edp/common/reader.h"
 // Kinematyki.
-#include "kinematics/irp6_mechatronika/kinematic_model_irp6m_with_wrist.h"
-#include "kinematics/irp6_mechatronika/kinematic_model_irp6m_5dof.h"
+#include "robot/irp6_mechatronika/kinematic_model_irp6m_with_wrist.h"
+#include "robot/irp6_mechatronika/kinematic_model_irp6m_5dof.h"
 #include "edp/common/servo_gr.h"
 #include "edp/common/manip_trans_t.h"
 #include "kinematics/common/kinematic_model_with_tool.h"
@@ -37,7 +37,6 @@ void effector::create_threads()
 {
 	motor_driven_effector::hi_create_threads();
 }
-
 
 common::servo_buffer* effector::return_created_servo_buffer()
 {

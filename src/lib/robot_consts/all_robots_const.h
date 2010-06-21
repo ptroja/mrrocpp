@@ -1,7 +1,7 @@
 #if !defined(_ALL_ROBOTS_CONST_H)
 #define _ALL_ROBOTS_CONST_H
 
-#include "lib/robot_consts/irp6m_const.h"
+#include "robot/irp6_mechatronika/irp6m_const.h"
 #include "lib/robot_consts/irp6ot_m_const.h"
 #include "lib/robot_consts/irp6ot_tfg_const.h"
 #include "lib/robot_consts/irp6p_m_const.h"
