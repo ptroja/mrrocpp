@@ -3,7 +3,7 @@
 
 #include <map>
 #include "lib/srlib.h"
-#include "ecp_mp/sensor/ecp_mp_sensor.h"
+#include "ecp_mp/ecp_mp_sensor.h"
 #include "ecp_mp/transmitter/transmitter.h"
 
 namespace mrrocpp {
@@ -17,16 +17,16 @@ class generator
 	// sprawdzania spelnienia warunku koncowego
 
 protected:
-	lib::sr_ecp& sr_ecp_msg;		// obiekt do komunikacji z SR
+	lib::sr_ecp& sr_ecp_msg; // obiekt do komunikacji z SR
 
 public:
-	bool trigger;			// informacja czy pszyszedl puls trigger
+	bool trigger; // informacja czy pszyszedl puls trigger
 
 	generator(lib::sr_ecp& _sr_ecp_msg);
 
-	bool check_and_null_trigger(); 		// zwraca wartosc trigger i zeruje go
+	bool check_and_null_trigger(); // zwraca wartosc trigger i zeruje go
 
-	unsigned int node_counter;  // biezacy wezel interpolacji
+	unsigned int node_counter; // biezacy wezel interpolacji
 
 	virtual ~generator();
 
@@ -40,11 +40,11 @@ public:
 	// pierwszy krok czesto rozni sie od pozostalych,
 	// np. do jego generacji nie wykorzystuje sie czujnikow
 	// (zadanie realizowane przez klase konkretna)
-	virtual bool first_step (void) = 0;
+	virtual bool first_step(void) = 0;
 
 	// generuje kazdy nastepny krok ruchu
 	// (zadanie realizowane przez klase konkretna)
-	virtual bool next_step (void) = 0;
+	virtual bool next_step(void) = 0;
 };
 
 } // namespace generatora

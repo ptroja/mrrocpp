@@ -12,7 +12,7 @@
 
 #include <time.h>
 
-#include "ecp_mp/sensor/ecp_mp_sensor.h"				// klasa bazowa ecp_mp_task
+#include "ecp_mp/ecp_mp_sensor.h"				// klasa bazowa ecp_mp_task
 
 namespace mrrocpp {
 namespace ecp_mp {
