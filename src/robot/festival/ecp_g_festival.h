@@ -1,7 +1,7 @@
 #if !defined(_ECP_GEN_FESTIVAL_H)
 #define _ECP_GEN_FESTIVAL_H
 
-#include "ecp/generator/ecp_generator.h"
+#include "ecp/ecp_generator.h"
 
 namespace mrrocpp {
 namespace ecp {

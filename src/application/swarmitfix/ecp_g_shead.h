@@ -8,7 +8,7 @@
 #define ECP_G_SHEAD_H_
 
 #include <time.h>
-#include "ecp/generator/ecp_generator.h"
+#include "ecp/ecp_generator.h"
 #include "lib/data_port_headers/shead.h"
 
 namespace mrrocpp {

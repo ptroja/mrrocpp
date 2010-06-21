@@ -12,7 +12,7 @@
 
 #include "sys/time.h"
 #include "lib/mrmath/mrmath.h"
-#include "ecp/generator/ecp_generator.h"
+#include "ecp/ecp_generator.h"
 
 namespace mrrocpp {
 namespace ecp {

@@ -12,10 +12,10 @@ add_library(ecp
 	ECP_main_error.cc
 	ecp_robot.cc
 	ecp_m.cc
-	task/ecp_task.cc
+	ecp_task.cc
 	task/ecp_st_bias_edp_force.cc
 	task/ecp_st_tff_nose_run.cc
-	generator/ecp_generator.cc
+	ecp_generator.cc
 	generator/ecp_g_teach_in.cc
 	generator/ecp_g_delta.cc
 	generator/ecp_g_operator_reaction_condition.cc
@@ -26,7 +26,7 @@ add_library(ecp
 	generator/ecp_g_smooth.cc
 	generator/ecp_g_sleep.cc
 	generator/ecp_g_force.cc
-	generator/ecp_g_transparent.cc
+	ecp_g_transparent.cc
 	generator/ecp_g_get_position.cc
 	generator/ecp_g_multiple_position.cc
 	generator/ecp_g_newsmooth.cc
@@ -42,7 +42,7 @@ target_link_libraries(ecp ecp_mp)
 
 
 add_executable(ecp_tran
-	task/ecp_t_tran.cc
+	ecp_t_tran.cc
 )
 
 # enable conditional inclusion to this process

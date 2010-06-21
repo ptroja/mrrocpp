@@ -21,8 +21,8 @@
 #include "robot/speaker/ecp_r_speaker.h"
 #include "robot/polycrank/ecp_r_polycrank.h"
 
-#include "ecp/task/ecp_t_tran.h"
-#include "ecp/generator/ecp_g_transparent.h"
+#include "ecp/ecp_t_tran.h"
+#include "ecp/ecp_g_transparent.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -31,7 +31,8 @@ namespace task {
 
 // KONSTRUKTORY
 tran::tran(lib::configurator &_config) :
-	task(_config) {
+	task(_config)
+{
 	// the robot is choose dependendat on the section of configuration file sent as argv[4]
 	if (config.section_name == ECP_IRP6OT_TFG_SECTION) {
 		ecp_m_robot = new irp6ot_tfg::robot(*this);
@@ -54,14 +55,16 @@ tran::tran(lib::configurator &_config) :
 	sr_ecp_msg->message("ECP loaded");
 }
 
-void tran::main_task_algorithm(void) {
+void tran::main_task_algorithm(void)
+{
 	generator::transparent gt(*this);
 	sr_ecp_msg->message("Ruch");
 
 	gt.Move();
 }
 
-task* return_created_ecp_task(lib::configurator &_config) {
+task* return_created_ecp_task(lib::configurator &_config)
+{
 	return new tran(_config);
 }
 

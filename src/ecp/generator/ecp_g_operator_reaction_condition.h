@@ -3,7 +3,7 @@
 
 #include <list>
 
-#include "ecp/generator/ecp_generator.h"
+#include "ecp/ecp_generator.h"
 #include "ecp/ecp_taught_in_pose.h"
 
 namespace mrrocpp {

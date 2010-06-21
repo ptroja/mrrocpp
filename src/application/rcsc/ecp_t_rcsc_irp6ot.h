@@ -3,8 +3,8 @@
 
 #include <boost/shared_ptr.hpp>
 
-#include "ecp/task/ecp_task.h"
-#include "ecp/generator/ecp_g_transparent.h"
+#include "ecp/ecp_task.h"
+#include "ecp/ecp_g_transparent.h"
 #include "ecp/task/ecp_st_go.h"
 #include "sensor/fradia/ecp_mp_s_fradia_sensor.h"
 

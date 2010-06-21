@@ -10,7 +10,7 @@
 
 #include "ecp_mp/trajectory_pose/trajectory_pose.h"
 #include "ecp/generator/ecp_g_get_position.h"
-#include "ecp/generator/ecp_generator.h"
+#include "ecp/ecp_generator.h"
 #include "ecp/generator/velocity_profile_calculator/velocity_profile.h"
 
 #include <vector>

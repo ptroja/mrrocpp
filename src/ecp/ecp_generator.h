@@ -9,7 +9,7 @@
 #if !defined(_ECP_GENERATOR_H)
 #define _ECP_GENERATOR_H
 
-#include "ecp/task/ecp_task.h"
+#include "ecp/ecp_task.h"
 #include "ecp/ecp_robot.h"
 #include "ecp_mp/ecp_mp_generator.h"
 #include "lib/single_thread_port.h"

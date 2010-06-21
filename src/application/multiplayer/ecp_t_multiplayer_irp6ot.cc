@@ -11,7 +11,7 @@
 #include "ecp/task/ecp_st_bias_edp_force.h"
 #include "ecp_mp/task/ecp_mp_st_gripper_opening.h"
 
-#include "ecp/task/ecp_task.h"
+#include "ecp/ecp_task.h"
 #include "ecp_mp/common/generator/ecp_mp_g_transparent.h"
 #include "ecp_mp/common/generator/ecp_mp_g_smooth.h"
 #include "ecp_mp/common/generator/ecp_mp_g_force.h"

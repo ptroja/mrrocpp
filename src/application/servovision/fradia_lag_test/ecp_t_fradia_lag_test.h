@@ -8,7 +8,7 @@
 #ifndef ECP_T_MBORYN_H_
 #define ECP_T_MBORYN_H_
 
-#include "ecp/task/ecp_task.h"
+#include "ecp/ecp_task.h"
 <<<<<<< HEAD
 #include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
 #include "ecp_mp/sensor/ecp_mp_s_cvfradia.h"

@@ -15,9 +15,9 @@
 
 #include "lib/srlib.h"
 #include "lib/mis_fun.h"
-#include "ecp/task/ecp_task.h"
+#include "ecp/ecp_task.h"
 #include "ecp/ECP_main_error.h"
-#include "ecp/generator/ecp_generator.h"
+#include "ecp/ecp_generator.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -91,8 +91,7 @@ int main(int argc, char *argv[])
 	} catch (lib::sensor::sensor_error & e) {
 		ecp::common::ecp_t->sr_ecp_msg->message(e.error_class, e.error_no);
 		printf("Mam blad czujnika section 1 (@%s:%d)\n", __FILE__, __LINE__);
-	}
-	catch (ecp_mp::transmitter::transmitter_base::transmitter_error & e) {
+	} catch (ecp_mp::transmitter::transmitter_base::transmitter_error & e) {
 		ecp::common::ecp_t->sr_ecp_msg->message(e.error_class, 0);
 		printf("ecp_m.cc: Mam blad trasnmittera section 1 (@%s:%d)\n", __FILE__, __LINE__);
 	}
@@ -191,9 +190,8 @@ int main(int argc, char *argv[])
 		catch (lib::sensor::sensor_error & e) {
 			ecp::common::ecp_t->sr_ecp_msg->message(e.error_class, e.error_no);
 			printf("Mam blad czujnika section 2 (@%s:%d)\n", __FILE__, __LINE__);
-		}
-		catch (ecp_mp::transmitter::transmitter_base::transmitter_error & e) {
-			ecp::common::ecp_t->sr_ecp_msg->message (e.error_class, 0);
+		} catch (ecp_mp::transmitter::transmitter_base::transmitter_error & e) {
+			ecp::common::ecp_t->sr_ecp_msg->message(e.error_class, 0);
 			printf("Mam blad trasnmittera section 2 (@%s:%d)\n", __FILE__, __LINE__);
 		}
 

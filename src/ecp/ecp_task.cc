@@ -6,9 +6,9 @@
 #include <boost/foreach.hpp>
 
 #include "lib/mis_fun.h"
-#include "ecp/task/ecp_task.h"
+#include "ecp/ecp_task.h"
 #include "ecp/ECP_main_error.h"
-#include "ecp/generator/ecp_generator.h"
+#include "ecp/ecp_generator.h"
 
 #if defined(USE_MESSIP_SRR)
 #include "messip_dataport.h"

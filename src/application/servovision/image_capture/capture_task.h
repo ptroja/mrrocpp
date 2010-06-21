@@ -8,7 +8,7 @@
 #ifndef CAPTURETASK_H_
 #define CAPTURETASK_H_
 
-#include "ecp/task/ecp_task.h"
+#include "ecp/ecp_task.h"
 #include "ecp/generator/ecp_g_smooth.h"
 #include "sensor/fradia/ecp_mp_s_fradia_sensor.h"
 

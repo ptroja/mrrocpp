@@ -2,7 +2,7 @@
 #if !defined(_ECP_ST_KCZ_FORCE_H)
 #define _ECP_ST_KCZ_FORCE_H
 
-#include "ecp/task/ecp_task.h"
+#include "ecp/ecp_task.h"
 #include "ecp_g_pcbird_nose_run.h"
 #include "ecp_st_acquisition.h"
 

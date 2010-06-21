@@ -8,7 +8,7 @@
 #ifndef ECP_G_MBORYN_H_
 #define ECP_G_MBORYN_H_
 
-#include "ecp/generator/ecp_generator.h"
+#include "ecp/ecp_generator.h"
 #include "lib/mrmath/mrmath.h"
 
 namespace mrrocpp {

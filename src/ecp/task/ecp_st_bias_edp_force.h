@@ -5,7 +5,7 @@
 #if !defined(_ECP_ST_BIAS_EDP_FORCE_H)
 #define _ECP_ST_BIAS_EDP_FORCE_H
 
-#include "ecp/task/ecp_task.h"
+#include "ecp/ecp_task.h"
 #include "ecp_mp/task/ecp_mp_st_bias_edp_force.h"
 
 namespace mrrocpp {
