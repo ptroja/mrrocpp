@@ -27,7 +27,7 @@
 
 #include "ecp/irp6ot_tfg/ecp_r_irp6ot_tfg.h"
 #include "ecp/irp6p_tfg/ecp_r_irp6p_tfg.h"
-#include "ecp/conveyor/ecp_r_conv.h"
+#include "robot/conveyor/ecp_r_conv.h"
 #include "ecp/spkm/ecp_r_spkm.h"
 #include "ecp/smb/ecp_r_smb.h"
 #include "ecp/shead/ecp_r_shead.h"

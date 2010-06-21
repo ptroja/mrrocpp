@@ -10,7 +10,6 @@ MACRO(ADD_ECP_ROBOT_WITH_KINEMATICS NAME)
 ENDMACRO(ADD_ECP_ROBOT_WITH_KINEMATICS)
 
 add_subdirectory (common)
-add_subdirectory (conveyor)
 add_subdirectory (festival)
 add_subdirectory (irp6_mechatronika)
 add_subdirectory (irp6ot_m)

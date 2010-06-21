@@ -21,11 +21,11 @@
 // Klasa edp_conveyor_effector.
 #include "edp/common/edp.h"
 #include "edp/common/manip_trans_t.h"
-#include "edp/conveyor/edp_conveyor_effector.h"
+#include "robot/conveyor/edp_conveyor_effector.h"
 #include "edp/common/servo_gr.h"
 // Model kinematyczny tasmociagu.
-#include "kinematics/conveyor/kinematic_model_conveyor.h"
-#include "lib/robot_consts/conveyor_const.h"
+#include "robot/conveyor/kinematic_model_conveyor.h"
+#include "robot/conveyor/conveyor_const.h"
 
 using namespace mrrocpp::lib::exception;
 
@@ -33,13 +33,11 @@ namespace mrrocpp {
 namespace edp {
 namespace conveyor {
 
-
 /*--------------------------------------------------------------------------*/
 void effector::create_threads()
 {
 	motor_driven_effector::hi_create_threads();
 }
-
 
 common::servo_buffer* effector::return_created_servo_buffer()
 {
@@ -81,7 +79,6 @@ void effector::set_robot_model(const lib::c_buffer &instruction)
 	}
 }
 /*--------------------------------------------------------------------------*/
-
 
 // Przemieszczenie tasmociagu.
 void effector::move_arm(const lib::c_buffer &instruction)

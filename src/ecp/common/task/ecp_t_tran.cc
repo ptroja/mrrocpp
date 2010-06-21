@@ -17,7 +17,7 @@
 #include "ecp/irp6p_tfg/ecp_r_irp6p_tfg.h"
 #include "ecp/irp6p_m/ecp_r_irp6p_m.h"
 #include "ecp/irp6_mechatronika/ecp_r_irp6m.h"
-#include "ecp/conveyor/ecp_r_conv.h"
+#include "robot/conveyor/ecp_r_conv.h"
 #include "ecp/speaker/ecp_r_speaker.h"
 #include "ecp/polycrank/ecp_r_polycrank.h"
 

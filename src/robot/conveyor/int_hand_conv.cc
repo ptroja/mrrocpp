@@ -25,10 +25,10 @@
 #include "lib/com_buf.h"
 
 // Klasa edp_conveyor_effector.
-#include "edp/conveyor/edp_conveyor_effector.h"
+#include "robot/conveyor/edp_conveyor_effector.h"
 // Klasa hardware_interface.
-#include "edp/conveyor/hi_conv.h"
-#include "lib/robot_consts/conveyor_const.h"
+#include "robot/conveyor/hi_conv.h"
+#include "robot/conveyor/conveyor_const.h"
 
 namespace mrrocpp {
 namespace edp {

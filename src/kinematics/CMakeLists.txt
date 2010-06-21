@@ -1,6 +1,5 @@
 # Recurse into subdirectories.
 add_subdirectory (common)
-add_subdirectory (conveyor)
 add_subdirectory (irp6_mechatronika)
 add_subdirectory (irp6_on_track)
 add_subdirectory (irp6_postument)

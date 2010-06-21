@@ -30,7 +30,7 @@
 #include "mp/generator/mp_g_common.h"
 #include "mp/generator/mp_g_delay_ms_condition.h"
 
-#include "mp/robot/mp_r_conveyor.h"
+#include "robot/conveyor/mp_r_conveyor.h"
 #include "mp/robot/mp_r_irp6ot_m.h"
 #include "mp/robot/mp_r_irp6p_m.h"
 #include "mp/robot/mp_r_irp6_mechatronika.h"
