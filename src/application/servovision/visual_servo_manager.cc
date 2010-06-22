@@ -97,9 +97,7 @@ bool visual_servo_manager::next_step()
 	the_robot->ecp_command.instruction.instruction_type = lib::SET_GET;
 
 	if (!current_position_saved) { // save first frame
-		//log_dbg("ecp_g_ib_eih::next_step() 1\n");
 		current_position.set_from_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame);
-
 		current_position_saved = true;
 	}
 
