@@ -210,7 +210,7 @@ int EDP_irp6_mechatronika_create(PtWidget_t *widget, ApInfo_t *apinfo,
 
 				if (ui.irp6m_m->state.edp.pid < 0) {
 					ui.irp6m_m->state.edp.state = 0;
-					fprintf(stderr, "base/edp spawn failed: %s\n", strerror(errno));
+					fprintf(stderr, "edp spawn failed: %s\n", strerror(errno));
 					delete ui.irp6m_m->ui_ecp_robot;
 				} else { // jesli spawn sie powiodl
 
@@ -304,7 +304,7 @@ int EDP_irp6_mechatronika_synchronise(PtWidget_t *widget, ApInfo_t *apinfo,
 			ui.irp6m_m->state.edp.is_synchronised
 					= ui.irp6m_m->ui_ecp_robot->ecp->is_synchronised();
 		} else {
-			// 	printf("base/edp irp6_mechatronika niepowolane, synchronizacja niedozwolona\n");
+			// 	printf("edp irp6_mechatronika niepowolane, synchronizacja niedozwolona\n");
 		}
 
 	} // end try
