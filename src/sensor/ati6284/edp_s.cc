@@ -259,12 +259,12 @@ void ATI6284_force::configure_sensor(void)
 				if (sec >= START_TO_READ_FAILURE) {
 					printf("aa :%f\n", sec);
 					if (show_no_result == 0) {
-						sr_msg->message("base/edp Sensor configure_sensor - brak wyniku");
+						sr_msg->message("edp Sensor configure_sensor - brak wyniku");
 						show_no_result = 1;
 					}
 				} else {
 					if (show_no_result == 1) {
-						sr_msg->message("base/edp Sensor configure_sensor - wynik otrzymany");
+						sr_msg->message("edp Sensor configure_sensor - wynik otrzymany");
 						show_no_result = 0;
 					}
 				}
@@ -324,13 +324,13 @@ void ATI6284_force::configure_sensor(void)
 
 			//!< jesli pomiar byl poprawny
 			if (invalid_value == 0) {
-				sr_msg->message("base/edp Sensor configure_sensor - OK");
+				sr_msg->message("edp Sensor configure_sensor - OK");
 				sensor_overload = 0;
 				overload = 0;
 				is_sensor_configured = true;
 			} else {
 				if (overload == 0) {
-					sr_msg->message("base/edp Sensor configure_sensor - OVERLOAD!!!");
+					sr_msg->message("edp Sensor configure_sensor - OVERLOAD!!!");
 				}
 				sensor_overload = 1;
 				overload = 1;
@@ -376,7 +376,7 @@ void ATI6284_force::configure_sensor(void)
 		// 		master.config.value<double>("y_axis_arm"), master.config.return_double_value("z_axis_arm") };
 		lib::K_vector pointofgravity(point);
 		gravity_transformation
-				= new lib::ForceTrans(lib::FORCE_SENSOR_ATI3084, frame, sensor_frame, weight, pointofgravity);
+				= new lib::ForceTrans(lib::FORCE_SENSOR_ATI3084, frame, sensor_frame, weight, pointofgravity, is_right_turn_frame);
 	} else {
 		gravity_transformation->synchro(frame);
 	}
@@ -518,13 +518,13 @@ void ATI6284_force::initiate_reading(void)
 		if (invalid_value == 1) {
 			if (no_result == 1) {
 				if (show_no_result == 0) {
-					sr_msg->message("base/edp Sensor initiate_reading - brak wyniku");
+					sr_msg->message("edp Sensor initiate_reading - brak wyniku");
 					show_no_result = 1;
 					sensor_status = EDP_FORCE_SENSOR_READING_ERROR;
 				}
 			} else {
 				if (overload == 0) {
-					sr_msg->message("base/edp Sensor initiate_reading - OVERLOAD!!!");
+					sr_msg->message("edp Sensor initiate_reading - OVERLOAD!!!");
 					overload = 1;
 					sensor_status = EDP_FORCE_SENSOR_OVERLOAD;
 				}
@@ -534,11 +534,11 @@ void ATI6284_force::initiate_reading(void)
 			}
 		} else {
 			if (show_no_result == 1) {
-				sr_msg->message("base/edp Sensor initiate_reading - wynik otrzymany");
+				sr_msg->message("edp Sensor initiate_reading - wynik otrzymany");
 				show_no_result = 0;
 			} else {
 				if (overload == 1) {
-					sr_msg->message("base/edp Sensor initiate_reading - OVERLOAD REMOVED");
+					sr_msg->message("edp Sensor initiate_reading - OVERLOAD REMOVED");
 					overload = 0;
 				}
 			}

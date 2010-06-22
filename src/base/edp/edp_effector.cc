@@ -97,7 +97,7 @@ bool effector::initialize_communication()
 
 	// sprawdzenie czy nie jest juz zarejestrowany server EDP
 	if (access(full_path_to_server_attach_point.c_str(), R_OK) == 0) {
-		fprintf(stderr, "base/edp already exists() failed: %s\n", strerror(errno));
+		fprintf(stderr, "edp already exists() failed: %s\n", strerror(errno));
 		return false;
 	}
 
@@ -118,7 +118,7 @@ bool effector::initialize_communication()
 		return false;
 	}
 
-	msg->message("base/edp loaded");
+	msg->message("edp loaded");
 
 	return true;
 }

@@ -89,7 +89,7 @@ void error_handler(ERROR & e)
 				printf("ERROR: Unable to attach sensor device.\n");
 			if (e.error_no == DISPATCH_LOOP_ERROR)
 				printf("ERROR: Block error in main dispatch loop.\n");
-			printf("base/vsp aborted due to lib::SYSTEM_ERROR\n");
+			printf("vsp  aborted due to lib::SYSTEM_ERROR\n");
 			vsp::common::vs->sr_msg->message(lib::SYSTEM_ERROR, e.error_no);
 			TERMINATE = true;
 			break;
@@ -377,7 +377,7 @@ int main(int argc, char *argv[]) {
 				throw vsp::sensor::VSP_main_error(lib::SYSTEM_ERROR, DISPATCH_LOOP_ERROR);	// wyrzucany blad
 			dispatch_handler(ctp);
 		} // end for(;;)
-	     vsp::common::vs->sr_msg->message ("base/vsp terminated");
+	     vsp::common::vs->sr_msg->message ("vsp  terminated");
 	     delete vsp::common::vs;
 		} // koniec TRY
 	catch (vsp::sensor::VSP_main_error & e){

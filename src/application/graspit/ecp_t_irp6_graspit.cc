@@ -27,14 +27,14 @@ irp6_grasp::irp6_grasp(lib::configurator &_config) :
 	smoothgen2 = new common::generator::smooth(*this, true);
 	smoothgen2->sensor_m = sensor_m;
 
-	sr_ecp_msg->message("base/ecp IRP6 loaded");
+	sr_ecp_msg->message("ecp IRP6 loaded");
 }
 ;
 
 void irp6_grasp::main_task_algorithm(void)
 {
 
-	sr_ecp_msg->message("base/ecp IRP6 ready");
+	sr_ecp_msg->message("ecp IRP6 ready");
 
 	double v[8], a[8];
 	for (int i = 0; i < 8; ++i) {

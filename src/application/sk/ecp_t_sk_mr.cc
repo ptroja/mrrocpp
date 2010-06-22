@@ -55,7 +55,7 @@ sk_mr::sk_mr(lib::configurator &_config) :
 		ecpst->nrg->configure_pulse_check(true);
 	}
 
-	sr_ecp_msg->message("base/ecp SK_MR loaded");
+	sr_ecp_msg->message("ecp SK_MR loaded");
 }
 
 task* return_created_ecp_task(lib::configurator &_config)

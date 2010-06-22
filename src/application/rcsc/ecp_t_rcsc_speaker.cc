@@ -31,7 +31,7 @@ rcsc::rcsc(lib::configurator &_config) :
 	gt = new common::generator::transparent(*this);
 	speak = new generator::speaking(*this, 8);
 
-	sr_ecp_msg->message("base/ecp loaded");
+	sr_ecp_msg->message("ecp loaded");
 }
 
 void rcsc::mp_2_ecp_next_state_string_handler(void)

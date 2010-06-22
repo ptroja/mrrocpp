@@ -57,7 +57,7 @@ rcsc::rcsc(lib::configurator &_config) :
 		subtask_m[ecp_mp::task::ECP_ST_TFF_NOSE_RUN] = ecpst;
 	}
 
-	sr_ecp_msg->message("base/ecp loaded");
+	sr_ecp_msg->message("ecp loaded");
 }
 
 void rcsc::mp_2_ecp_next_state_string_handler(void)

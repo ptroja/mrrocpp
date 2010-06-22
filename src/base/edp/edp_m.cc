@@ -44,7 +44,7 @@ void catch_signal(int sig)
 #ifdef __QNXNTO__
 			ClockPeriod(CLOCK_REALTIME, &old_cp, NULL, 0);
 #endif /* __QNXNTO__ */
-			master->sh_msg->message("base/edp terminated");
+			master->sh_msg->message("edp terminated");
 			_exit(EXIT_SUCCESS);
 			break;
 		case SIGSEGV:

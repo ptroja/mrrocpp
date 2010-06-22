@@ -65,7 +65,7 @@ void teach_in::teach(lib::ECP_POSE_SPECIFICATION ps, const char *msg)
           { // Y&W
 
             e = errno;
-            perror("base/ecp teach(): Send() to UI failed");
+            perror("ecp teach(): Send() to UI failed");
             sr_ecp_msg.message(lib::SYSTEM_ERROR, e, "base/ecp: Send() to UI failed");
             throw generator::ECP_error(lib::SYSTEM_ERROR, 0);
           }
