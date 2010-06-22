@@ -110,7 +110,7 @@ void ui_model::init_sr(void) {
 	ecp_report = new lib::sr_ecp(mrrocpp::lib::UI, "ui", "sr");
 
 	ui_report->message("UI report");
-	ecp_report->message("base/ecp report");
+	ecp_report->message("ecp report");
 }
 
 mrrocpp::lib::sr_ecp & ui_model::getEcpSr(void) const {
@@ -196,20 +196,20 @@ Glib::RefPtr<Glib::Object> ui_model::getUiObject(const gchar *name) {
 }
 
 void ui_model::setMpLoadButton (bool sensitive, bool button_type_is_load) {
-	Gtk::ToolButton & MpButton = *Glib::wrap(GTK_TOOL_BUTTON(getUiGObject("base/mpLoadButton")));
+	Gtk::ToolButton & MpButton = *Glib::wrap(GTK_TOOL_BUTTON(getUiGObject("mpLoadButton")));
 
 	MpButton.set_sensitive(sensitive);
 	if (button_type_is_load) {
 		MpButton.set_stock_id(Gtk::Stock::CONNECT);
-		MpButton.set_label("base/mp Load");
+		MpButton.set_label("mp Load");
 	} else {
 		MpButton.set_stock_id(Gtk::Stock::DISCONNECT);
-		MpButton.set_label("base/mp Unload");
+		MpButton.set_label("mp Unload");
 	}
 }
 
 void ui_model::setEdpsLoadButton (bool sensitive, bool button_type_is_load) {
-	GObject *obj = getUiGObject("base/edpsLoadButton");
+	GObject *obj = getUiGObject("edpsLoadButton");
 	g_assert (obj);
 	Gtk::ToolButton & EcpsButton = *Glib::wrap(GTK_TOOL_BUTTON(obj));
 

@@ -102,7 +102,7 @@ int EDP_spkm_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 				if (ui.spkm->state.edp.pid < 0) {
 
 					ui.spkm->state.edp.state = 0;
-					fprintf(stderr, "base/edp spawn failed: %s\n", strerror(errno));
+					fprintf(stderr, "edp spawn failed: %s\n", strerror(errno));
 					delete ui.spkm->ui_ecp_robot;
 				} else { // jesli spawn sie powiodl
 
