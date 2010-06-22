@@ -38,7 +38,7 @@ acq_force::acq_force(task &_ecp_t) :
 	nose_run->configure_pulse_check(true);
 	nose_run->sensor_m = ecp_sub_task::ecp_t.sensor_m;
 
-	ecp_sub_task::ecp_t.sr_ecp_msg->message("base/ecp loaded kcz_force");
+	ecp_sub_task::ecp_t.sr_ecp_msg->message("ecp loaded kcz_force");
 }
 ;
 
@@ -64,7 +64,7 @@ void acq_force::write_data(std::string _K_fp, std::string _kk_fp, std::string _M
 
 void acq_force::main_task_algorithm(void)
 {
-	ecp_sub_task::ecp_t.sr_ecp_msg->message("base/ecp kcz_force ready");
+	ecp_sub_task::ecp_t.sr_ecp_msg->message("ecp kcz_force ready");
 
 	int i, j, t;
 	FILE *FP;

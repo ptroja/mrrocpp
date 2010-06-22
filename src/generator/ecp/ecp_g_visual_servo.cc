@@ -106,7 +106,7 @@ void ecp_visual_servo::limit_step() {
 	lib::Xyz_Angle_Axis_vector tmp_vector;
 	O_Tx_Ep.get_xyz_angle_axis(tmp_vector);
 	tmp_vector.to_table(O_r_Ep[0]);
-	//std::cout << "base/ecp Ep: ";
+	//std::cout << "ecp Ep: ";
 
 	for (int i = 0; i < 6; i++) {
 		the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
@@ -116,7 +116,7 @@ void ecp_visual_servo::limit_step() {
 	/*
 	 std::cout << std::endl;
 
-	 std::cout << "base/ecp E: ";
+	 std::cout << "ecp E: ";
 	 for (int i=0; i<6; i++)
 	 {
 	 std::cout << O_r_E1[i] << " ";

@@ -245,7 +245,7 @@ void ecp_vis_pb_eol_sac_irp6ot::limit_step(){
 
 	O_Tx_Ep.get_xyz_angle_axis(O_r_Ep[0]);
 
-	std::cout << "base/ecp Ep: ";
+	std::cout << "ecp Ep: ";
 
 	for (int i=0; i<6; i++)
 	{

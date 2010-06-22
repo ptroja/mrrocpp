@@ -146,7 +146,7 @@ bool extended_empty::next_step ()
 // skonczono zadanie uzytkownika
 
 // 	if (trigger) printf("Yh\n"); else printf("N\n");
-// printf("base/mp next step\n");
+// printf("mp next step\n");
 // UWAGA: dzialamy na jednoelementowej liscie robotow
 
 if (check_and_null_trigger() && activate_trigger)
@@ -189,7 +189,7 @@ bool empty::first_step()
 // Funkcja zwraca false gdy koniec generacji trajektorii
 // Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
 // Inicjacja generatora trajektorii
-// printf("base/mp first step\n");
+// printf("mp first step\n");
 // wait_for_ECP_pulse = true;
 BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m) {
 	robot_node.second->mp_command.command = lib::NEXT_POSE;
@@ -214,7 +214,7 @@ bool empty::next_step()
 // obrazu danych wykorzystywanych przez generator
 
 // 	if (trigger) printf("Yh\n"); else printf("N\n");
-// printf("base/mp next step\n");
+// printf("mp next step\n");
 // UWAGA: dzialamy na jednoelementowej liscie robotow
 
 BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)

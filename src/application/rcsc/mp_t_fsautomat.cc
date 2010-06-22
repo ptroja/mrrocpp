@@ -70,7 +70,7 @@ fsautomat::fsautomat(lib::configurator &_config) :
 	 root = xmlDocGetRootElement(doc);
 	 if(!root || !root->name)
 	 {
-	 printf("base/ecp initialization ERROR: Bad root node name!");
+	 printf("ecp initialization ERROR: Bad root node name!");
 	 xmlFreeDoc(doc);
 	 return;
 	 }

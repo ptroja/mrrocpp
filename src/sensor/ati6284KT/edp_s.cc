@@ -151,8 +151,8 @@ ATI6284_force::~ATI6284_force(void)
 void ATI6284_force::configure_sensor(void)
 {// by Y
 	is_sensor_configured = true;
-	//  printf("base/edp Sensor configured\n");
-	sr_msg->message("base/edp Sensor configured");
+	//  printf("edp Sensor configured\n");
+	sr_msg->message("edp Sensor configured");
 
 	if (!(master.force_sensor_test_mode)) {
 
