@@ -74,17 +74,17 @@ int OnTimer(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 			switch (sr_msg.process_type) {
 			case lib::EDP:
-				strcat(current_line, "base/edp: ");
+				strcat(current_line, "edp: ");
 				break;
 			case lib::ECP:
-				strcat(current_line, "base/ecp: ");
+				strcat(current_line, "ecp: ");
 				break;
 			case lib::MP:
-				// printf("base/mp w ontimer\n");
-				strcat(current_line, "base/mp:  ");
+				// printf("mp w ontimer\n");
+				strcat(current_line, "mp:  ");
 				break;
 			case lib::VSP:
-				strcat(current_line, "base/vsp: ");
+				strcat(current_line, "vsp: ");
 				break;
 			case lib::UI:
 				strcat(current_line, "UI:  ");

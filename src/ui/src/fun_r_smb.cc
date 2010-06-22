@@ -36,8 +36,7 @@
 
 extern Ui ui;
 
-int EDP_smb_create(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
+int EDP_smb_create(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -46,15 +45,13 @@ int EDP_smb_create(PtWidget_t *widget, ApInfo_t *apinfo,
 	if (ui.smb->state.edp.state == 0) {
 		ui.smb->create_thread();
 
-		ui.smb->eb.command(boost::bind(EDP_smb_create_int, widget, apinfo,
-				cbinfo));
+		ui.smb->eb.command(boost::bind(EDP_smb_create_int, widget, apinfo, cbinfo));
 	}
 	return (Pt_CONTINUE);
 
 }
 
-int EDP_smb_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
+int EDP_smb_create_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -79,31 +76,24 @@ int EDP_smb_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 			tmp2_string += ui.smb->state.edp.network_resourceman_attach_point;
 
 			// sprawdzenie czy nie jest juz zarejestrowany zarzadca zasobow
-			if (((!(ui.smb->state.edp.test_mode)) && (access(
-					tmp_string.c_str(), R_OK) == 0)) || (access(
-					tmp2_string.c_str(), R_OK) == 0)) {
-				ui.ui_msg->message(lib::NON_FATAL_ERROR,
-						"edp_smb already exists");
-			} else if (ui.check_node_existence(ui.smb->state.edp.node_name,
-					std::string("edp_smb"))) {
+			if (((!(ui.smb->state.edp.test_mode)) && (access(tmp_string.c_str(), R_OK) == 0))
+					|| (access(tmp2_string.c_str(), R_OK) == 0)) {
+				ui.ui_msg->message(lib::NON_FATAL_ERROR, "edp_smb already exists");
+			} else if (ui.check_node_existence(ui.smb->state.edp.node_name, std::string("edp_smb"))) {
 
-				ui.smb->state.edp.node_nr = ui.config->return_node_number(
-						ui.smb->state.edp.node_name);
+				ui.smb->state.edp.node_nr = ui.config->return_node_number(ui.smb->state.edp.node_name);
 
 				{
-					boost::unique_lock<boost::mutex> lock(
-							ui.process_creation_mtx);
+					boost::unique_lock <boost::mutex> lock(ui.process_creation_mtx);
 
-					ui.smb->ui_ecp_robot = new ui_tfg_and_conv_robot(
-							*ui.config, *ui.all_ecp_msg, lib::ROBOT_SMB);
+					ui.smb->ui_ecp_robot = new ui_tfg_and_conv_robot(*ui.config, *ui.all_ecp_msg, lib::ROBOT_SMB);
 				}
-				ui.smb->state.edp.pid
-						= ui.smb->ui_ecp_robot->ecp->get_EDP_pid();
+				ui.smb->state.edp.pid = ui.smb->ui_ecp_robot->ecp->get_EDP_pid();
 
 				if (ui.smb->state.edp.pid < 0) {
 
 					ui.smb->state.edp.state = 0;
-					fprintf(stderr, "base/edp spawn failed: %s\n", strerror(errno));
+					fprintf(stderr, "edp spawn failed: %s\n", strerror(errno));
 					delete ui.smb->ui_ecp_robot;
 				} else { // jesli spawn sie powiodl
 
@@ -113,9 +103,8 @@ int EDP_smb_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 					// kilka sekund  (~1) na otworzenie urzadzenia
 
 					while ((ui.smb->state.edp.reader_fd
-							= name_open(
-									ui.smb->state.edp.network_reader_attach_point.c_str(),
-									NAME_FLAG_ATTACH_GLOBAL)) < 0)
+							= name_open(ui.smb->state.edp.network_reader_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL))
+							< 0)
 						if ((tmp++) < CONNECT_RETRY) {
 							delay(CONNECT_DELAY);
 						} else {
@@ -126,13 +115,11 @@ int EDP_smb_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 					// odczytanie poczatkowego stanu robota (komunikuje sie z EDP)
 					lib::controller_state_t robot_controller_initial_state_tmp;
 
-					ui.smb->ui_ecp_robot->get_controller_state(
-							robot_controller_initial_state_tmp);
+					ui.smb->ui_ecp_robot->get_controller_state(robot_controller_initial_state_tmp);
 
 					//ui.smb->state.edp.state = 1; // edp wlaczone reader czeka na start
 
-					ui.smb->state.edp.is_synchronised
-							= robot_controller_initial_state_tmp.is_synchronised;
+					ui.smb->state.edp.is_synchronised = robot_controller_initial_state_tmp.is_synchronised;
 				}
 			}
 		}
