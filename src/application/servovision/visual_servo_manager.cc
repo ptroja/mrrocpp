@@ -103,17 +103,6 @@ bool visual_servo_manager::next_step()
 		current_position_saved = true;
 	}
 
-	bool object_visible = false;
-	for (std::vector <boost::shared_ptr <visual_servo> >::iterator it = servos.begin(); it != servos.end(); ++it) {
-		(*it)->get_vsp_fradia()->get_reading();
-		object_visible = object_visible || (*it)->is_object_visible();
-	}
-
-	// update object visiblity in termination conditions
-	for (int i = 0; i < termination_conditions.size(); ++i) {
-		termination_conditions[i]->update_object_visibility(object_visible);
-	}
-
 	// get readings from all servos and aggregate
 	lib::Homog_matrix position_change = get_aggregated_position_change();
 	//	log_dbg("bool visual_servo_manager::next_step(): position_change = (%+07.3lg, %+07.3lg, %+07.3lg)\n", position_change(0, 3), position_change(1, 3), position_change(2, 3));
@@ -163,6 +152,16 @@ bool visual_servo_manager::next_step()
 	// save next position
 	current_position = next_position;
 
+	bool object_visible = false;
+	for (std::vector <boost::shared_ptr <visual_servo> >::iterator it = servos.begin(); it != servos.end(); ++it) {
+		object_visible = object_visible || (*it)->is_object_visible();
+	}
+
+	// update object visiblity in termination conditions
+	for (int i = 0; i < termination_conditions.size(); ++i) {
+		termination_conditions[i]->update_object_visibility(object_visible);
+	}
+
 	// check termination conditions
 	for (int i = 0; i < termination_conditions.size(); ++i) {
 		if (termination_conditions[i]->terminate_now()) {
@@ -204,13 +203,18 @@ const lib::Homog_matrix& visual_servo_manager::get_current_position() const
 	return current_position;
 }
 
-void visual_servo_manager::configure()
+void visual_servo_manager::configure(const std::string & sensor_prefix)
 {
 	//	log_dbg("void visual_servo_manager::configure() 1\n");
 	configure_all_servos();
 	//	log_dbg("void visual_servo_manager::configure() 2\n");
-	for (std::vector <boost::shared_ptr <visual_servo> >::iterator it = servos.begin(); it != servos.end(); ++it) {
+	int i = 0;
+	for (std::vector <boost::shared_ptr <visual_servo> >::iterator it = servos.begin(); it != servos.end(); ++it, ++i) {
 		(*it)->get_vsp_fradia()->configure_sensor();
+		char sensor_suffix[64];
+		sprintf(sensor_suffix, "%02d", i);
+		lib::SENSOR_t sensor_id = sensor_prefix + sensor_suffix;
+		sensor_m[sensor_id] = (*it)->get_vsp_fradia().get();
 	}
 	//	log_dbg("void visual_servo_manager::configure() 3\n");
 }

@@ -37,10 +37,10 @@ public:
 	virtual ~regulator_p()
 	{
 	}
-	virtual const Eigen::Matrix <double, 6, 1> & calculate_control(const Eigen::Matrix <double, 6, 1> & error, double dt)
+	virtual const Eigen::Matrix <double, 6, 1> & compute_control(const Eigen::Matrix <double, 6, 1> & error, double dt)
 	{
-		this->calculated_control = Kp * error;
-		return this->calculated_control;
+		this->computed_control = Kp * error;
+		return this->computed_control;
 	}
 protected:
 	Eigen::Matrix <double, 6, 6> Kp;

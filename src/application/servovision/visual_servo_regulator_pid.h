@@ -32,7 +32,7 @@ public:
 	virtual ~regulator_pid();
 
 	virtual const Eigen::Matrix <double, 6, 1>
-			& calculate_control(const Eigen::Matrix <double, 6, 1> & error, double dt);
+			& compute_control(const Eigen::Matrix <double, 6, 1> & error, double dt);
 protected:
 	Eigen::Matrix <double, 6, 6> Kp, Ki, Kd;
 	Eigen::Matrix <double, 6, 1> error_t_1;

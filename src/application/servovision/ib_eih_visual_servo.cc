@@ -116,7 +116,7 @@ lib::Homog_matrix ib_eih_visual_servo::get_position_change(const lib::Homog_matr
 
 		Eigen::Matrix <double, 6, 1> control;
 
-		control = regulator->calculate_control(e, dt);
+		control = regulator->compute_control(e, dt);
 		//logDbg("ib_eih_visual_servo::get_position_change() control: %+07.3lg, %+07.3lg, %+07.3lg\n", control(0, 0), control(1, 0), control(2, 0));
 
 		Eigen::Matrix <double, 3, 1> camera_to_object_translation;

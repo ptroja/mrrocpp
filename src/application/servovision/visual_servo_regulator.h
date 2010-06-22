@@ -43,25 +43,25 @@ public:
 	 * @param dt time between calls (in miliseconds)
 	 * @return control
 	 */
-	virtual const Eigen::Matrix <double, 6, 1> & calculate_control(const Eigen::Matrix <double, 6, 1> & error, double dt) = 0;
+	virtual const Eigen::Matrix <double, 6, 1> & compute_control(const Eigen::Matrix <double, 6, 1> & error, double dt) = 0;
 
 	const Eigen::Matrix <double, 6, 1> & get_control()
 	{
-		return calculated_control;
+		return computed_control;
 	}
 
 protected:
 	visual_servo_regulator(const lib::configurator & config, const std::string& config_section_name) :
 		config(config), config_section_name(config_section_name)
 	{
-		calculated_control.setZero();
+		computed_control.setZero();
 	}
 
 	const lib::configurator & config;
 
 	const std::string config_section_name;
 
-	Eigen::Matrix <double, 6, 1> calculated_control;
+	Eigen::Matrix <double, 6, 1> computed_control;
 private:
 
 }; // class visual_servo_regulator

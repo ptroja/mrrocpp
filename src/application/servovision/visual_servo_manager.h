@@ -10,6 +10,7 @@
 
 #include <vector>
 #include <boost/shared_ptr.hpp>
+#include <string>
 
 #include "base/ecp/ecp_generator.h"
 #include "visual_servo.h"
@@ -44,8 +45,11 @@ public:
 	virtual bool first_step();
 	virtual bool next_step();
 
-	/** Configures all servos. Calls configure_all_servos() of derived class and then for all sensors calls configure_sensor(). */
-	virtual void configure();
+	/** Configures all servos.
+	 * Calls configure_all_servos() of derived class and then for all sensors calls configure_sensor().
+	 * After that updates sensor map
+	 */
+	void configure(const std::string & sensor_prefix = "VSM_SENSOR_");
 
 	/**
 	 * Add position constraint.
