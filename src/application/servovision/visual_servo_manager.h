@@ -117,6 +117,8 @@ private:
 	/** End effector acceleration */
 	Eigen::Matrix <double, 3, 1> angular_acceleration;
 
+	void constrain_position(lib::Homog_matrix & new_position);
+
 	/**
 	 * Apply constraints for speed and acceleration.
 	 * @param ds

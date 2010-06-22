@@ -110,15 +110,7 @@ bool visual_servo_manager::next_step()
 	//	log_dbg("bool visual_servo_manager::next_step(): next_position = (%+07.3lg, %+07.3lg, %+07.3lg)\n", next_position(0, 3), next_position(1, 3), next_position(2, 3));
 
 	// apply weak position constraints
-	bool constraints_kept = false;
-	for (int i = 0; i < position_constraints.size(); ++i) {
-		if (position_constraints[i]->is_position_ok(next_position)) {
-			constraints_kept = true;
-		}
-	}
-	if (!constraints_kept && position_constraints.size() > 0) {
-		position_constraints[0]->apply_constraint(next_position);
-	}
+	constrain_position(next_position);
 
 	position_change = (!current_position) * next_position;
 
@@ -170,6 +162,30 @@ bool visual_servo_manager::next_step()
 	return true;
 } // next_step()
 
+void visual_servo_manager::constrain_position(lib::Homog_matrix & new_position)
+{
+	bool constraints_kept = false;
+
+	int nearest_allowed_area_idx = -1;
+	double nearest_allowed_area_distance = INFINITY;
+
+	for (int i = 0; i < position_constraints.size(); ++i) {
+		position_constraints[i]->set_new_position(new_position);
+		if (position_constraints[i]->is_translation_ok() && position_constraints[i]->is_rotation_ok()) {
+			constraints_kept = true;
+		} else if (!position_constraints[i]->is_translation_ok()) {
+			double dist = position_constraints[i]->get_distance_from_allowed_area();
+			if (nearest_allowed_area_distance > dist) {
+				nearest_allowed_area_distance = dist;
+				nearest_allowed_area_idx = i;
+			}
+		}
+	}
+	if (!constraints_kept && nearest_allowed_area_idx >= 0) {
+		position_constraints[nearest_allowed_area_idx]->apply_constraint();
+		new_position = position_constraints[nearest_allowed_area_idx]->get_constrained_position();
+	}
+}
 
 void visual_servo_manager::constrain_vector(Eigen::Matrix <double, 3, 1> &ds, Eigen::Matrix <double, 3, 1> &prev_v, Eigen::Matrix <
 		double, 3, 1> &v, Eigen::Matrix <double, 3, 1> &a, double max_v, double max_a)

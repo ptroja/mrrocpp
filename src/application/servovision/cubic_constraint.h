@@ -54,6 +54,7 @@ private:
 	Eigen::Matrix <double, 3, 1> translation_max;
 	Eigen::Matrix <double, 3, 1> rotation_min;
 	Eigen::Matrix <double, 3, 1> rotation_max;
+	Eigen::Matrix <double, 3, 1> rotation_division;
 };
 
 /** @} */

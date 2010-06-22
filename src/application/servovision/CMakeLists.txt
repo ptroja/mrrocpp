@@ -1,20 +1,3 @@
-# object follower - PB - SAC
-add_executable(ecp_objectfollower_pb_sac
-    objectfollower_pb_sac/ecp_t_objectfollower_pb_sac.cc
-    pb_sac_visual_servo.cc
-    pb_visual_servo.cc
-    visual_servo.cc
-    visual_servo_manager.cc
-    simple_visual_servo_manager.cc
-    position_constraint.cc
-    cubic_constraint.cc
-)
-
-target_link_libraries(ecp_objectfollower_pb_sac
-	ecp_r_irp6ot_m
-	ecp ${COMMON_LIBRARIES}
-)
-
 # robienie zdjec obiektu z zadanych pozycji
 
 add_executable(ecp_image_capture
@@ -27,8 +10,9 @@ target_link_libraries(ecp_image_capture
 )
 
 ####################################3
-install(TARGETS ecp_objectfollower_pb_sac ecp_image_capture DESTINATION bin)
+install(TARGETS ecp_image_capture DESTINATION bin)
 
-add_subdirectory(objectfollower_ib)
+#add_subdirectory(objectfollower_ib)
 add_subdirectory(objectfollower_pb)
+#add_subdirectory(objectfollower_pb_sac)
 add_subdirectory(visualservo_tester)

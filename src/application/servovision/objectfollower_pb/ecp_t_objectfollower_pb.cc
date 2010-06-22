@@ -27,23 +27,32 @@ ecp_t_objectfollower_pb::ecp_t_objectfollower_pb(mrrocpp::lib::configurator& con
 
 	log_dbg_enabled = true;
 
-	Eigen::Matrix <double, 3, 1> p1, p2;
-	p1(0, 0) = 0.6;
-	p1(1, 0) = 2;
-	p1(2, 0) = 0.1;
+	Eigen::Matrix <double, 3, 1> translation_min, translation_max, rotation_min, rotation_max;
+	translation_min(0, 0) = 0.6;
+	translation_min(1, 0) = 2;
+	translation_min(2, 0) = 0.1;
 
-	p2(0, 0) = 0.98;
-	p2(1, 0) = 2.3;
-	p2(2, 0) = 0.3;
+	translation_max(0, 0) = 0.98;
+	translation_max(1, 0) = 2.3;
+	translation_max(2, 0) = 0.3;
 
-	shared_ptr <position_constraint> cube(new cubic_constraint(p1, p2));
+	rotation_min(0, 0) = 0;
+	rotation_min(1, 0) = 0;
+	rotation_min(2, 0) = 0;
+
+	rotation_max(0, 0) = 0;
+	rotation_max(1, 0) = 0;
+	rotation_max(2, 0) = 0;
+
+	shared_ptr <position_constraint>
+			cube(new cubic_constraint(translation_min, translation_max, rotation_min, rotation_max));
 
 	log_dbg("ecp_t_objectfollower_ib::ecp_t_objectfollower_ib(): 1\n");
 	reg = shared_ptr <visual_servo_regulator> (new regulator_p(config, config_section_name));
 	log_dbg("ecp_t_objectfollower_pb::ecp_t_objectfollower_pb(): 2\n");
 	vs = shared_ptr <visual_servo> (new pb_eih_visual_servo(reg, config_section_name, config));
 
-	term_cond = shared_ptr<termination_condition>(new object_reached_termination_condition(0.005, 0.005, 50));
+	term_cond = shared_ptr <termination_condition> (new object_reached_termination_condition(0.005, 0.005, 50));
 	log_dbg("ecp_t_objectfollower_pb::ecp_t_objectfollower_pb(): 3\n");
 	sm = shared_ptr <simple_visual_servo_manager> (new simple_visual_servo_manager(*this, config_section_name, vs));
 	log_dbg("ecp_t_objectfollower_pb::ecp_t_objectfollower_pb(): 4\n");
@@ -62,7 +71,6 @@ ecp_t_objectfollower_pb::~ecp_t_objectfollower_pb()
 void ecp_t_objectfollower_pb::main_task_algorithm(void)
 {
 	log_dbg("ecp_t_objectfollower_pb::main_task_algorithm(void) begin\n");
-
 
 	sm->Move();
 	log("ecp_t_objectfollower_pb::main_task_algorithm(void) 2\n");
