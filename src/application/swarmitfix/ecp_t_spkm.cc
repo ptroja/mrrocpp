@@ -7,14 +7,14 @@
 #include "lib/srlib.h"
 #include "ecp_mp_t_swarmitfix.h"
 
-#include "ecp/spkm/ecp_r_spkm.h"
-#include "ecp/common/generator/ecp_g_smooth.h"
-#include "ecp/common/generator/ecp_g_sleep.h"
+#include "robot/spkm/ecp_r_spkm.h"
+#include "generator/ecp/ecp_g_smooth.h"
+#include "generator/ecp/ecp_g_sleep.h"
 #include "ecp_g_epos.h"
 #include "ecp_t_spkm.h"
-#include "ecp_mp/common/generator/ecp_mp_g_transparent.h"
-#include "ecp_mp/common/generator/ecp_mp_g_smooth.h"
-#include "ecp_mp/common/generator/ecp_mp_g_sleep.h"
+#include "generator/ecp/ecp_mp_g_transparent.h"
+#include "generator/ecp/ecp_mp_g_smooth.h"
+#include "generator/ecp/ecp_mp_g_sleep.h"
 
 #include "ecp_mp_g_epos.h"
 
@@ -35,7 +35,7 @@ swarmitfix::swarmitfix(lib::configurator &_config) :
 	g_sleep = new common::generator::sleep(*this);
 	g_epos = new common::generator::epos(*this);
 
-	sr_ecp_msg->message("ECP spkm loaded");
+	sr_ecp_msg->message("base/ecp spkm loaded");
 }
 
 void swarmitfix::mp_2_ecp_next_state_string_handler(void)
@@ -69,7 +69,7 @@ void swarmitfix::mp_2_ecp_next_state_string_handler(void)
 		g_sleep->init_time(mp_command.ecp_next_state.mp_2_ecp_next_state_variant);
 		g_sleep->Move();
 	} else if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_GEN_EPOS) {
-		sr_ecp_msg->message("ECP_GEN_EPOS");
+		sr_ecp_msg->message("ecp_GEN_EPOS");
 
 		g_epos->Move();
 

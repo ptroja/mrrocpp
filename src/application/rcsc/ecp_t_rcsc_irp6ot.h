@@ -3,10 +3,10 @@
 
 #include <boost/shared_ptr.hpp>
 
-#include "ecp/common/task/ecp_task.h"
-#include "ecp/common/generator/ecp_g_transparent.h"
-#include "ecp/common/task/ecp_st_go.h"
-#include "ecp_mp/sensor/ecp_mp_s_fradia_sensor.h"
+#include "base/ecp/ecp_task.h"
+#include "base/ecp/ecp_g_transparent.h"
+#include "subtask/ecp_st_go.h"
+#include "sensor/fradia/ecp_mp_s_fradia_sensor.h"
 
 #include "../servovision/simple_visual_servo_manager.h"
 #include "../servovision/ib_eih_visual_servo.h"

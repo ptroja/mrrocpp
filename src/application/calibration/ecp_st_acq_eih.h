@@ -14,12 +14,12 @@
 #include <iostream>
 #include <unistd.h>
 
-#include "ecp/irp6ot_m/ecp_r_irp6ot_m.h"
-#include "ecp/irp6p_m/ecp_r_irp6p_m.h"
-#include "ecp/common/task/ecp_task.h"
-#include "ecp/common/generator/ecp_g_smooth.h"
-#include "ecp/common/generator/ecp_g_transparent.h"
-#include "ecp/common/generator/ecp_g_force.h"
+#include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
+#include "robot/irp6p_m/ecp_r_irp6p_m.h"
+#include "base/ecp/ecp_task.h"
+#include "generator/ecp/ecp_g_smooth.h"
+#include "base/ecp/ecp_g_transparent.h"
+#include "generator/ecp/ecp_g_force.h"
 #include "ecp_g_eih_nose_run.h"
 #include "ecp_st_acquisition.h"
 #include "ecp_g_eihcalibration.h"

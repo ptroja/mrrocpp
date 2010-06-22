@@ -8,9 +8,9 @@
 #if !defined(__MP_TASK_RCSC_H)
 #define __MP_TASK_RCSC_H
 
-#include "mp/mp.h"
-#include "ecp_mp/task/ecp_mp_t_rcsc.h"
-#include "ecp_mp/task/ecp_mp_t_festival.h"
+#include "base/mp/mp.h"
+#include "application/rcsc/ecp_mp_t_rcsc.h"
+#include "robot/festival/ecp_mp_t_festival.h"
 
 #include <list>
 

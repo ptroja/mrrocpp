@@ -23,7 +23,7 @@
 // #include "ui/ui.h"
 // Konfigurator.
 // #include "lib/configurator.h"
-#include "lib/robot_consts/polycrank_const.h"
+#include "robot/polycrank/polycrank_const.h"
 
 /* Local headers */
 #include "ablibs.h"
@@ -197,7 +197,7 @@ int EDP_polycrank_create(PtWidget_t *widget, ApInfo_t *apinfo,
 
 				if (ui.irp6m_m->state.edp.pid < 0) {
 					ui.irp6m_m->state.edp.state = 0;
-					fprintf(stderr, "EDP spawn failed: %s\n", strerror(errno));
+					fprintf(stderr, "base/edp spawn failed: %s\n", strerror(errno));
 					delete ui.irp6m_m->ui_ecp_robot;
 				} else { // jesli spawn sie powiodl
 
@@ -311,7 +311,7 @@ int EDP_polycrank_synchronise(PtWidget_t *widget, ApInfo_t *apinfo,
 			ui.irp6m_m->state.edp.is_synchronised
 			= ui.irp6m_m->ui_ecp_robot->ecp->is_synchronised();
 		} else {
-			// 	printf("EDP irp6_mechatronika niepowolane, synchronizacja niedozwolona\n");
+			// 	printf("base/edp irp6_mechatronika niepowolane, synchronizacja niedozwolona\n");
 		}
 
 	} // end try
@@ -888,7 +888,7 @@ int export_wnd_polycrank_inc(PtWidget_t *widget, ApInfo_t *apinfo,
 	PtGetResource(ABW_PtNumericFloat_wind_irp6m_inc_p4, Pt_ARG_NUMERIC_VALUE,
 			&wektor[4], 0);
 
-	sprintf(buffer, "EDP_IRP6_M INTERNAL POSITION\n %f %f %f %f %f",
+	sprintf(buffer, "edp_IRP6_M INTERNAL POSITION\n %f %f %f %f %f",
 			*wektor[0], *wektor[1], *wektor[2], *wektor[3], *wektor[4]);
 
 	ui.ui_msg->message(buffer);
@@ -1133,7 +1133,7 @@ int export_wnd_polycrank_int(PtWidget_t *widget, ApInfo_t *apinfo,
 			&wektor[3], 0);
 	PtGetResource(ABW_PtNumericFloat_wind_irp6m_int_p5, Pt_ARG_NUMERIC_VALUE,
 			&wektor[4], 0);
-	sprintf(buffer, "EDP_IRP6_M INTERNAL POSITION\n %f %f %f %f %f",
+	sprintf(buffer, "edp_IRP6_M INTERNAL POSITION\n %f %f %f %f %f",
 			*wektor[0], *wektor[1], *wektor[2], *wektor[3], *wektor[4]);
 
 	ui.ui_msg->message(buffer);
@@ -2159,7 +2159,7 @@ int export_wnd_polycrank_xyz_euler_zyz(PtWidget_t *widget, ApInfo_t *apinfo,
 	PtGetResource(ABW_PtNumericFloat_wind_irp6m_xyz_euler_zyz_p6,
 			Pt_ARG_NUMERIC_VALUE, &wektor[5], 0);
 
-	sprintf(buffer, "EDP_IRP6_M XYZ_EULER_ZYZ POSITION\n %f %f %f %f %f %f",
+	sprintf(buffer, "edp_IRP6_M XYZ_EULER_ZYZ POSITION\n %f %f %f %f %f %f",
 			*wektor[0], *wektor[1], *wektor[2], *wektor[3], *wektor[4],
 			*wektor[5]);
 

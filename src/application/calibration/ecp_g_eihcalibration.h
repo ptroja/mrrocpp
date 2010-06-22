@@ -13,9 +13,9 @@
 #include <unistd.h>
 
 //fradia
-#include "ecp_mp/sensor/ecp_mp_s_fradia_sensor.h"
+#include "sensor/fradia/ecp_mp_s_fradia_sensor.h"
 
-#include "ecp/common/generator/ecp_generator.h"
+#include "base/ecp/ecp_generator.h"
 
 #include "datatypes.h"
 

@@ -5,7 +5,7 @@
  * @author yoyek
  * @date 01.01.2002
  *
- * $URL: https://segomo.elka.pw.edu.pl/svn/mrrocpp/base/trunk/src/ecp/common/generator/ecp_g_force.cc $
+ * $URL: https://segomo.elka.pw.edu.pl/svn/mrrocpp/base/trunk/src/generator/ecp/ecp_g_force.cc $
  * $LastChangedRevision: 3339 $
  * $LastChangedDate: 2009-12-23 23:24:07 +0100 (Wed, 23 Dec 2009) $
  * $LastChangedBy: yoyek $

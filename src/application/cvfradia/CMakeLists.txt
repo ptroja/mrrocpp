@@ -1,6 +1,6 @@
 add_executable(ecp_cvfradia
 	ecp_t_cvfradia.cc
-	${ECPDIR}/common/generator/ecp_g_cvfradia.cc
+	${ECPDIR}/generator/ecp_g_cvfradia.cc
 	${ECP_MPDIR}/sensor/ecp_mp_s_cvfradia.cc
 )
 

@@ -15,14 +15,14 @@
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 #include "lib/srlib.h"
-#include "ecp/irp6ot_m/ecp_r_irp6ot_m.h"
-#include "ecp/irp6p_m/ecp_r_irp6p_m.h"
-#include "ecp/irp6_mechatronika/ecp_r_irp6m.h"
+#include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
+#include "robot/irp6p_m/ecp_r_irp6p_m.h"
+#include "robot/irp6_mechatronika/ecp_r_irp6m.h"
 
 #include "application/teach-dll/ecp_t_teach.h"
 #include "application/teach-dll/ecp_g_teach.h"
 
-#include "ecp/common/ecp_robot.h"
+#include "base/ecp/ecp_robot.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -80,7 +80,7 @@ teach::teach(lib::configurator &_config) : task(_config)
      dlclose(gener);
 */
 
-    sr_ecp_msg->message("ECP loaded");
+    sr_ecp_msg->message("base/ecp loaded");
 }
 
 
@@ -91,10 +91,10 @@ void teach::main_task_algorithm(void)
     switch (ecp_m_robot->robot_name)
     {
     case lib::ROBOT_IRP6OT_M:
-        sr_ecp_msg->message("ECP teach irp6ot");
+        sr_ecp_msg->message("base/ecp teach irp6ot");
         break;
     case lib::ROBOT_IRP6P_M:
-        sr_ecp_msg->message("ECP teach irp6p");
+        sr_ecp_msg->message("base/ecp teach irp6p");
         break;
     default:
         fprintf(stderr, "%s:%d unknown robot type\n", __FILE__, __LINE__);

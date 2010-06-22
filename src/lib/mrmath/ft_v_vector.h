@@ -2,6 +2,7 @@
 #define __FT_V_VECTOR_H
 
 #include <Eigen/Core>
+#include <vector>
 
 namespace mrrocpp {
 namespace lib {
@@ -32,6 +33,8 @@ public:
 
 	//! Zwrocenie elementu wektora.
 	void to_table(double tablica[6]) const;					// przepisanie wektora do tablicy podanej jako argument
+
+	void to_vector(std::vector<double> & vector);			//fill in the input vector with the coordinates from the actual vector
 
 	//! Wyciagniecie max elementu z wektora
 	//! @author Sibi

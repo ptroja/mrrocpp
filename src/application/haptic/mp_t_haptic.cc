@@ -10,14 +10,14 @@
 #include "lib/com_buf.h"
 
 #include "lib/srlib.h"
-#include "mp/mp.h"
+#include "base/mp/mp.h"
 #include "application/haptic/mp_g_haptic.h"
 #include "application/haptic/mp_t_haptic.h"
-#include "ecp_mp/task/ecp_mp_t_rcsc.h"
-#include "lib/robot_consts/irp6ot_m_const.h"
-#include "lib/robot_consts/irp6p_m_const.h"
-#include "ecp_mp/task/ecp_mp_st_bias_edp_force.h"
-#include "ecp_mp/common/generator/ecp_mp_g_transparent.h"
+#include "application/rcsc/ecp_mp_t_rcsc.h"
+#include "robot/irp6ot_m/irp6ot_m_const.h"
+#include "robot/irp6p_m/irp6p_m_const.h"
+#include "subtask/ecp_mp_st_bias_edp_force.h"
+#include "generator/ecp/ecp_mp_g_transparent.h"
 
 namespace mrrocpp {
 namespace mp {

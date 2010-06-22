@@ -9,11 +9,11 @@
 #define VISUAL_SERVO_H_
 
 #include "lib/mrmath/mrmath.h"
-#include "ecp_mp/sensor/ecp_mp_s_fradia_sensor.h"
+#include "sensor/fradia/ecp_mp_s_fradia_sensor.h"
 #include <boost/shared_ptr.hpp>
 #include "visual_servo_regulator.h"
 
-#include "ecp_mp/sensor/ecp_mp_sensor.h"
+#include "base/ecp_mp/ecp_mp_sensor.h"
 
 namespace mrrocpp {
 

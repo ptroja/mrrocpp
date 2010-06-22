@@ -384,7 +384,7 @@ void sr_edp::interpret(void) {
 			case ALREADY_SYNCHRONISED: strcat (sr_message.description, "ALREADY_SYNCHRONISED"); break;
 			case UNKNOWN_SYNCHRO_ERROR: strcat (sr_message.description, "UNKNOWN_SYNCHRO_ERROR"); break;
 			case INVALID_KINEMATIC_MODEL_NO: strcat (sr_message.description, "INVALID_KINEMATIC_MODEL_NO"); break;
-			case EDP_UNIDENTIFIED_ERROR: strcat (sr_message.description, "EDP_UNIDENTIFIED_ERROR"); break;
+			case EDP_UNIDENTIFIED_ERROR: strcat (sr_message.description, "edp_UNIDENTIFIED_ERROR"); break;
 			case NOT_A_NUMBER_JOINT_VALUE_D0: strcat (sr_message.description, "NOT_A_NUMBER_JOINT_VALUE_D0"); break;
 			case NOT_A_NUMBER_JOINT_VALUE_THETA1: strcat (sr_message.description, "NOT_A_NUMBER_JOINT_VALUE_THETA1"); break;
 			case NOT_A_NUMBER_JOINT_VALUE_THETA2: strcat (sr_message.description, "NOT_A_NUMBER_JOINT_VALUE_THETA2"); break;
@@ -417,7 +417,7 @@ void sr_edp::interpret(void) {
 		}
 		break;
 		default:
-		strcat (sr_message.description, "EDP UNIDENTIFIED ERROR");
+		strcat (sr_message.description, "base/edp UNIDENTIFIED ERROR");
 	}
 } // end: sr_edp::interpret()
 // ---------------------------------------------------------------------
@@ -471,13 +471,13 @@ void sr_ecp::interpret(void) {
 			case INVALID_ROBOT_MODEL_TYPE:
 			sprintf(sr_message.description, "INVALID ROBOT_MODEL TYPE"); break;
 			case ECP_ERRORS:
-			sprintf(sr_message.description, "ECP ERRORS"); break;
+			sprintf(sr_message.description, "base/ecp ERRORS"); break;
 			case INVALID_COMMAND_TO_EDP:
 			sprintf(sr_message.description, "INVALID COMMAND TO EDP"); break;
 			case ECP_UNIDENTIFIED_ERROR:
-			sprintf(sr_message.description, "ECP UNIDENTIFIED ERROR"); break;
+			sprintf(sr_message.description, "base/ecp UNIDENTIFIED ERROR"); break;
 			case MP_UNIDENTIFIED_ERROR:
-			sprintf(sr_message.description, "MP UNIDENTIFIED ERROR"); break;
+			sprintf(sr_message.description, "base/mp UNIDENTIFIED ERROR"); break;
 			case NON_EXISTENT_DIRECTORY:
 			sprintf(sr_message.description, "NON-EXISTENT DIRECTORY"); break;
 			case NON_EXISTENT_FILE:

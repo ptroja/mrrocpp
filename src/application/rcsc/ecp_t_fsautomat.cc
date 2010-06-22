@@ -17,24 +17,24 @@
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 
-#include "ecp_mp/Trajectory.h"
+#include "base/ecp_mp/Trajectory.h"
 
 #include "lib/srlib.h"
 #include "ecp_mp_t_fsautomat.h"
 
-#include "ecp/irp6ot_m/ecp_r_irp6ot_m.h"
-#include "ecp/irp6p_m/ecp_r_irp6p_m.h"
-#include "ecp/common/generator/ecp_g_smooth.h"
-#include "ecp/common/generator/ecp_g_force.h"
-#include "ecp_mp/common/generator/ecp_mp_g_bias_edp_force.h"
+#include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
+#include "robot/irp6p_m/ecp_r_irp6p_m.h"
+#include "generator/ecp/ecp_g_smooth.h"
+#include "generator/ecp/ecp_g_force.h"
+#include "generator/ecp/ecp_mp_g_bias_edp_force.h"
 #include "ecp_t_fsautomat.h"
-#include "ecp/common/task/ecp_st_bias_edp_force.h"
-#include "ecp/common/task/ecp_st_tff_nose_run.h"
-#include "ecp_mp/common/generator/ecp_mp_g_transparent.h"
-#include "ecp_mp/common/generator/ecp_mp_g_smooth.h"
-#include "ecp_mp/common/generator/ecp_mp_g_teach_in.h"
-#include "ecp_mp/common/generator/ecp_mp_g_force.h"
-#include "ecp_mp/task/ecp_mp_st_gripper_opening.h"
+#include "subtask/ecp_st_bias_edp_force.h"
+#include "subtask/ecp_st_tff_nose_run.h"
+#include "generator/ecp/ecp_mp_g_transparent.h"
+#include "generator/ecp/ecp_mp_g_smooth.h"
+#include "generator/ecp/ecp_mp_g_teach_in.h"
+#include "generator/ecp/ecp_mp_g_force.h"
+#include "subtask/ecp_mp_st_gripper_opening.h"
 
 #include "lib/datastr.h"
 
@@ -101,7 +101,7 @@ fsautomat::fsautomat(lib::configurator &_config) :
 	// XML root
 	xmlNode *root = xmlDocGetRootElement(doc);
 	if (!root || !root->name) {
-		fprintf(stderr, "ECP initialization ERROR: Bad root node name!");
+		fprintf(stderr, "base/ecp initialization ERROR: Bad root node name!");
 		xmlFreeDoc(doc);
 		return;
 	}
@@ -116,7 +116,7 @@ fsautomat::fsautomat(lib::configurator &_config) :
 				// For each child of state: i.e. Robot
 				for (xmlNode *child_node = cur_node->children->children; child_node != NULL; child_node
 						= child_node->next) {
-					if (child_node->type == XML_ELEMENT_NODE && !xmlStrcmp(child_node->name, (const xmlChar *) "ecp")) {
+					if (child_node->type == XML_ELEMENT_NODE && !xmlStrcmp(child_node->name, (const xmlChar *) "base/ecp")) {
 						xmlChar * robot = xmlGetProp(child_node, (const xmlChar *) "name");
 						if (robot && !xmlStrcmp(robot, (const xmlChar *) whichECP.c_str())) {
 							for (; child_node->children; child_node->children = child_node->children->next) {

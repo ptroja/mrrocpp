@@ -1,6 +1,6 @@
 # servo + generator sinusa
 add_executable(mp_visualservo_tester
-    mp_t_visualservo_tester.cpp
+    mp_t_visualservo_tester.cc
 )
 
 target_link_libraries(mp_visualservo_tester mp)
