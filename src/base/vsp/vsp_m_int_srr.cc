@@ -46,7 +46,7 @@ void error_handler(ERROR & e)
 	switch (e.error_class)
 	{
 		case lib::SYSTEM_ERROR:
-			printf("base/vsp aborted due to lib::SYSTEM_ERROR\n");
+			printf("vsp  aborted due to lib::SYSTEM_ERROR\n");
 			vs->sr_msg->message(lib::SYSTEM_ERROR, e.error_no);
 			TERMINATE = true;
 			break;
@@ -162,7 +162,7 @@ int main(int argc, char *argv[])
 
 			messip::port_reply(ch, rcvid, 0, vsp::common::vs->from_vsp);
 		} // end while()
-		vsp::common::vs->sr_msg->message("base/vsp terminated");
+		vsp::common::vs->sr_msg->message("vsp  terminated");
 	} // koniec TRY
 	catch (lib::VSP_main_error & e) {
 		vsp::common::error_handler(e);

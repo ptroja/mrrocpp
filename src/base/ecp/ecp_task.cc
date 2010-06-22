@@ -109,7 +109,7 @@ bool task::pulse_check()
 			MsgReply(rcvid, EOK, 0, 0);
 		} else {
 			/* A message (presumable ours) received, handle */
-			printf("base/ecp trigger server receive strange message of type: %d\n", ui_msg.data);
+			printf("ecp trigger server receive strange message of type: %d\n", ui_msg.data);
 			MsgReply(rcvid, EOK, 0, 0);
 		}
 	}
@@ -357,7 +357,7 @@ if (ecp_reply.reply == lib::INCORRECT_MP_COMMAND) {
 	throw common::generator::generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
 }
 
-sr_ecp_msg->message("base/ecp user program is running");
+sr_ecp_msg->message("ecp user program is running");
 return false;
 }
 

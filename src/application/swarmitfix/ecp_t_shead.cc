@@ -37,7 +37,7 @@ swarmitfix::swarmitfix(lib::configurator &_config) :
 	g_head_vacuum_on = new generator::head_vacuum_on(*this);
 	g_head_vacuum_off = new generator::head_vacuum_off(*this);
 
-	sr_ecp_msg->message("base/ecp shead loaded");
+	sr_ecp_msg->message("ecp shead loaded");
 }
 
 void swarmitfix::mp_2_ecp_next_state_string_handler(void)

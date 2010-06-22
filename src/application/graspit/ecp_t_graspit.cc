@@ -29,12 +29,12 @@ Graspit::Graspit(lib::configurator &_config): task(_config){
 	smoothgen2->sensor_m = sensor_m;
 	trgraspit = new ecp_mp::transmitter::TRGraspit(ecp_mp::transmitter::TRANSMITTER_GRASPIT,"[transmitter_graspit]",*this);
 
-	sr_ecp_msg->message("base/ecp loaded graspit");
+	sr_ecp_msg->message("ecp loaded graspit");
 };
 
 void Graspit::main_task_algorithm(void ){
 
-	sr_ecp_msg->message("base/ecp graspit ready");
+	sr_ecp_msg->message("ecp graspit ready");
 
 	int port=config.value<int>("graspit_port","[transmitter_graspit]");
 	std::string node_name=config.value<std::string>("graspit_node_name","[transmitter_graspit]");

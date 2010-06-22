@@ -33,7 +33,7 @@ void catch_signal_in_mp(int sig)
 	int status;
 	switch (sig) {
 	case SIGTERM:
-		mp_t->sh_msg->message("base/mp terminated");
+		mp_t->sh_msg->message("mp terminated");
 		// restore default (none) handler for SIGCHLD
 		signal(SIGCHLD, SIG_DFL);
 		delete mp_t;
@@ -101,7 +101,7 @@ int main (int argc, char *argv[], char **arge)
 
 			mp::common::mp_t = mp::task::return_created_mp_task(*_config);
 
-			mp::common::mp_t->sr_ecp_msg->message("base/mp loaded");
+			mp::common::mp_t->sr_ecp_msg->message("mp loaded");
 
 			lib::set_thread_priority(pthread_self(), MAX_PRIORITY-4);
 
@@ -173,7 +173,7 @@ int main (int argc, char *argv[], char **arge)
 		for (;;) {  // Wewnetrzna petla nieskonczona
 
 			try {
-				mp::common::mp_t->sr_ecp_msg->message("base/mp - wcisnij start");
+				mp::common::mp_t->sr_ecp_msg->message("mp - wcisnij start");
 
 				// Oczekiwanie na zlecenie START od UI
 				mp::common::mp_t->wait_for_start();
@@ -210,7 +210,7 @@ int main (int argc, char *argv[], char **arge)
 						mp::common::mp_t->stop_and_terminate();
 						break;
 					case ECP_STOP_ACCEPTED:
-						mp::common::mp_t->sr_ecp_msg->message("base/ecp STOP ACCEPTED");
+						mp::common::mp_t->sr_ecp_msg->message("ecp STOP ACCEPTED");
 					break;
 					default:
 						perror("Unidentified mp error");

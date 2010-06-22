@@ -33,7 +33,7 @@ tfg::tfg(lib::configurator &_config) :
 
 	tfgg = new generator::tfg(*this, 10);
 
-	sr_ecp_msg->message("base/ecp TFG loaded");
+	sr_ecp_msg->message("ecp TFG loaded");
 }
 
 void tfg::mp_2_ecp_next_state_string_handler(void)

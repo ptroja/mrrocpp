@@ -18,13 +18,13 @@ smooth_test::smooth_test(lib::configurator &_config) :
 
 	//delay(20000);
 	smoothgen2 = new common::generator::smooth(*this, true);
-	sr_ecp_msg->message("base/ecp loaded smooth_test");
+	sr_ecp_msg->message("ecp loaded smooth_test");
 }
 ;
 
 void smooth_test::main_task_algorithm(void) {
 
-	sr_ecp_msg->message("base/ecp smooth_test ready");
+	sr_ecp_msg->message("ecp smooth_test ready");
 
 	//smoothgen2->set_relative();
 	smoothgen2->set_absolute();

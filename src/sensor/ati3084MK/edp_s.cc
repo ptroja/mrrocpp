@@ -47,8 +47,8 @@ ATI3084_force::~ATI3084_force(void) {
 /**************************** inicjacja czujnika ****************************/
 void ATI3084_force::configure_sensor(void) {// by Y
 	is_sensor_configured = true;
-	//  printf("base/edp Sensor configured\n");
-	sr_msg->message("base/edp Sensor configured");
+	//  printf("edp Sensor configured\n");
+	sr_msg->message("edp Sensor configured");
 
 	if (!master.force_sensor_test_mode) {
 		sendBias();
