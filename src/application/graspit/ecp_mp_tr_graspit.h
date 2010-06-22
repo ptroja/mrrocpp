@@ -3,7 +3,7 @@
 #define ECP_MP_TR_GRASPIT_H_
 
 #include "lib/sensor.h"
-#include "ecp_mp/transmitter/transmitter.h"				// klasa bazowa transmitter
+#include "base/ecp_mp/transmitter.h"				// klasa bazowa transmitter
 
 namespace mrrocpp {
 namespace ecp_mp {

@@ -1,16 +1,17 @@
 #if !defined(_ECP_T_RCSC_SPEAKER_H)
 #define _ECP_T_RCSC_SPEAKER_H
 
-#include "ecp/common/task/ecp_task.h"
-#include "ecp/common/generator/ecp_g_transparent.h"
-#include "ecp/speaker/generator/ecp_g_speak.h"
+#include "base/ecp/ecp_task.h"
+#include "base/ecp/ecp_g_transparent.h"
+#include "robot/speaker/ecp_g_speak.h"
 
 namespace mrrocpp {
 namespace ecp {
 namespace speaker {
 namespace task {
 
-class rcsc: public common::task::task  {
+class rcsc : public common::task::task
+{
 protected:
 	common::generator::transparent* gt;
 	generator::speaking* speak;

@@ -496,7 +496,7 @@ int export_wnd_irp6_on_track_inc(PtWidget_t *widget, ApInfo_t *apinfo,
 			&wektor[7], 0);
 
 	sprintf(buffer,
-			"EDP_IRP6_OT INCREMENTAL POSITION\n %f %f %f %f %f %f %f %f",
+			"edp_IRP6_OT INCREMENTAL POSITION\n %f %f %f %f %f %f %f %f",
 			*wektor[0], *wektor[1], *wektor[2], *wektor[3], *wektor[4],
 			*wektor[5], *wektor[6], *wektor[7]);
 
@@ -579,7 +579,7 @@ int export_wnd_irp6_on_track_int(PtWidget_t *widget, ApInfo_t *apinfo,
 	PtGetResource(ABW_PtNumericFloat_wind_irp6ot_int_p8, Pt_ARG_NUMERIC_VALUE,
 			&wektor[7], 0);
 
-	sprintf(buffer, "EDP_IRP6_OT INTERNAL POSITION\n %f %f %f %f %f %f %f %f",
+	sprintf(buffer, "edp_IRP6_OT INTERNAL POSITION\n %f %f %f %f %f %f %f %f",
 			*wektor[0], *wektor[1], *wektor[2], *wektor[3], *wektor[4],
 			*wektor[5], *wektor[6], *wektor[7]);
 
@@ -658,7 +658,7 @@ int export_wnd_irp6_on_track_xyz_euler_zyz(PtWidget_t *widget,
 			Pt_ARG_NUMERIC_VALUE, &wektor[6], 0);
 
 	sprintf(buffer,
-			"EDP_IRP6_OT XYZ_EULER_ZYZ POSITION\n %f %f %f %f %f %f %f",
+			"edp_IRP6_OT XYZ_EULER_ZYZ POSITION\n %f %f %f %f %f %f %f",
 			*wektor[0], *wektor[1], *wektor[2], *wektor[3], *wektor[4],
 			*wektor[5], *wektor[6]);
 
@@ -1830,7 +1830,7 @@ int EDP_irp6_on_track_synchronise_int(PtWidget_t *widget, ApInfo_t *apinfo,
 			ui.irp6ot_m->state.edp.is_synchronised
 					= ui.irp6ot_m->ui_ecp_robot->ecp->is_synchronised();
 		} else {
-			// 	printf("EDP irp6_on_track niepowolane, synchronizacja niedozwolona\n");
+			// 	printf("base/edp irp6_on_track niepowolane, synchronizacja niedozwolona\n");
 		}
 
 	} // end try
@@ -2591,7 +2591,7 @@ int EDP_irp6_on_track_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 				if (ui.irp6ot_m->state.edp.pid < 0) {
 
 					ui.irp6ot_m->state.edp.state = 0;
-					fprintf(stderr, "EDP spawn failed: %s\n", strerror(errno));
+					fprintf(stderr, "base/edp spawn failed: %s\n", strerror(errno));
 					delete ui.irp6ot_m->ui_ecp_robot;
 				} else { // jesli spawn sie powiodl
 
@@ -2976,7 +2976,7 @@ int export_wnd_irp6_on_track_xyz_angle_axis(PtWidget_t *widget,
 			Pt_ARG_NUMERIC_VALUE, &wektor[6], 0);
 
 	sprintf(buffer,
-			"EDP_IRP6_OT XYZ_ANGLE_AXIS POSITION\n %f %f %f %f %f %f %f",
+			"edp_IRP6_OT XYZ_ANGLE_AXIS POSITION\n %f %f %f %f %f %f %f",
 			*wektor[0], *wektor[1], *wektor[2], *wektor[3], *wektor[4],
 			*wektor[5], *wektor[6]);
 

@@ -13,7 +13,7 @@
 #if !defined(_ECP_T_TEACH_H)
 #define _ECP_T_TEACH_H
 
-#include "ecp/common/task/ecp_task.h"
+#include "base/ecp/ecp_task.h"
 #include "application/teach-dll/ecp_g_teach.h"
 
 namespace mrrocpp {

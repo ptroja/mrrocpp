@@ -1,8 +1,8 @@
 #if !defined(_ECP_T_SMB_SWARMITFIX_H)
 #define _ECP_T_SMB_SWARMITFIX_H
 
-#include "ecp/common/task/ecp_task.h"
-#include "ecp/common/generator/ecp_g_transparent.h"
+#include "base/ecp/ecp_task.h"
+#include "base/ecp/ecp_g_transparent.h"
 
 
 namespace mrrocpp {

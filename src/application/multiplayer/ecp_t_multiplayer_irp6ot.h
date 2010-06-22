@@ -1,9 +1,9 @@
 #if !defined(_ECP_T_MULTIPLAYER_IRP6OT_H)
 #define _ECP_T_MULTIPLAYER_IRP6OT_H
 
-#include "ecp/common/task/ecp_task.h"
-#include "ecp/common/task/ecp_st_go.h"
-#include "ecp/common/generator/ecp_g_transparent.h"
+#include "base/ecp/ecp_task.h"
+#include "subtask/ecp_st_go.h"
+#include "base/ecp/ecp_g_transparent.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -16,7 +16,7 @@ private:
 	//generatory
 	common::generator::transparent* gt;
 	common::generator::smooth* sg;
-	common::generator::bias_edp_force* befg;
+
 	common::generator::weight_meassure* wmg;
 
     //podzadania

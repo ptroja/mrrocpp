@@ -10,7 +10,7 @@
 
 #include <string>
 
-#include "ecp/common/generator/ecp_generator.h"
+#include "base/ecp/ecp_generator.h"
 
 namespace mrrocpp {
 

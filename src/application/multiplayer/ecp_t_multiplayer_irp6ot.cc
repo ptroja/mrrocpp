@@ -4,10 +4,17 @@
 #include "lib/srlib.h"
 #include "ecp_mp_t_multiplayer.h"
 
-#include "ecp/irp6ot_m/ecp_r_irp6ot_m.h"
-#include "ecp/common/generator/ecp_g_smooth.h"
-#include "ecp/common/generator/ecp_g_force.h"
+#include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
+#include "generator/ecp/ecp_g_smooth.h"
+#include "generator/ecp/ecp_g_force.h"
 #include "ecp_t_multiplayer_irp6ot.h"
+#include "subtask/ecp_st_bias_edp_force.h"
+#include "subtask/ecp_mp_st_gripper_opening.h"
+
+#include "base/ecp/ecp_task.h"
+#include "generator/ecp/ecp_mp_g_transparent.h"
+#include "generator/ecp/ecp_mp_g_smooth.h"
+#include "generator/ecp/ecp_mp_g_force.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -20,7 +27,6 @@ multiplayer::multiplayer(lib::configurator &_config) :
 	ecp_m_robot = new irp6ot_m::robot(*this);
 
 	//powolanie generatorow
-	befg = new common::generator::bias_edp_force(*this);
 
 	sg = new common::generator::smooth(*this, true);
 	wmg = new common::generator::weight_meassure(*this, -0.3, 2);
@@ -30,21 +36,27 @@ multiplayer::multiplayer(lib::configurator &_config) :
 
 	rgg = new common::generator::tff_rubik_grab(*this, 8);
 
-	sr_ecp_msg->message("ECP loaded");
+	// utworzenie podzadan
+	{
+		common::task::ecp_sub_task* ecpst;
+
+		ecpst = new common::task::ecp_sub_task_bias_edp_force(*this);
+		subtask_m[ecp_mp::task::ECP_ST_BIAS_EDP_FORCE] = ecpst;
+	}
+
+	sr_ecp_msg->message("base/ecp loaded");
 }
 
 void multiplayer::mp_2_ecp_next_state_string_handler(void)
 {
 
-	if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_WEIGHT_MEASURE_GENERATOR) {
+	if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_WEIGHT_MEASURE_GENERATOR) {
 
 		wmg->Move();
 
-	} else if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_TRANSPARENT) {
+	} else if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_GEN_TRANSPARENT) {
 		gt->Move();
-	} else if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_BIAS_EDP_FORCE) {
-		befg->Move();
-	} else if (mp_2_ecp_next_state_string == ecp_mp::task::MULTIPLAYER_GRIPPER_OPENING) {
+	} else if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_ST_GRIPPER_OPENING) {
 		switch ((ecp_mp::task::MULTIPLAYER_GRIPPER_OP) mp_command.ecp_next_state.mp_2_ecp_next_state_variant)
 		{
 			case ecp_mp::task::MULTIPLAYER_GO_VAR_1:
@@ -58,7 +70,7 @@ void multiplayer::mp_2_ecp_next_state_string_handler(void)
 			default:
 				break;
 		}
-	} else if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_SMOOTH) {
+	} else if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_GEN_SMOOTH) {
 		std::string path(mrrocpp_network_path);
 		path += mp_command.ecp_next_state.mp_2_ecp_next_state_string;
 		sg->load_file_with_path(path.c_str());

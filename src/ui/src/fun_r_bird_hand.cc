@@ -29,7 +29,7 @@
 // Konfigurator.
 #include "lib/configurator.h"
 #include "ui/src/bird_hand/ui_ecp_r_bird_hand.h"
-#include "lib/robot_consts/bird_hand_const.h"
+#include "robot/bird_hand/bird_hand_const.h"
 
 /* Local headers */
 #include "ablibs.h"
@@ -110,7 +110,7 @@ int EDP_bird_hand_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 				if (ui.bird_hand->state.edp.pid < 0) {
 
 					ui.bird_hand->state.edp.state = 0;
-					fprintf(stderr, "EDP spawn failed: %s\n", strerror(errno));
+					fprintf(stderr, "base/edp spawn failed: %s\n", strerror(errno));
 					delete ui.bird_hand->ui_ecp_robot;
 				} else { // jesli spawn sie powiodl
 

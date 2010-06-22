@@ -1,3 +1,0 @@
-if(ROBOT_IRP6_POSTUMENT_M)
-add_ecp_robot_with_kinematics(irp6p_m)
-endif(ROBOT_IRP6_POSTUMENT_M)

@@ -5,11 +5,11 @@
 #include <iostream>
 #include <cstdlib>
 
-#include "ecp/irp6ot_m/ecp_r_irp6ot_m.h"
-#include "ecp/irp6p_m/ecp_r_irp6p_m.h"
+#include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
+#include "robot/irp6p_m/ecp_r_irp6p_m.h"
 #include "ecp_st_acq_force.h"
 #include "ecp_st_acquisition.h"
-#include "ecp_mp/sensor/ecp_mp_s_pcbird.h"
+#include "sensor/pcbird/ecp_mp_s_pcbird.h"
 #include "gsl/gsl_vector.h"
 #include "gsl/gsl_matrix.h"
 
@@ -38,7 +38,7 @@ acq_force::acq_force(task &_ecp_t) :
 	nose_run->configure_pulse_check(true);
 	nose_run->sensor_m = ecp_sub_task::ecp_t.sensor_m;
 
-	ecp_sub_task::ecp_t.sr_ecp_msg->message("ECP loaded kcz_force");
+	ecp_sub_task::ecp_t.sr_ecp_msg->message("base/ecp loaded kcz_force");
 }
 ;
 
@@ -64,11 +64,11 @@ void acq_force::write_data(std::string _K_fp, std::string _kk_fp, std::string _M
 
 void acq_force::main_task_algorithm(void)
 {
-	ecp_sub_task::ecp_t.sr_ecp_msg->message("ECP kcz_force ready");
+	ecp_sub_task::ecp_t.sr_ecp_msg->message("base/ecp kcz_force ready");
 
 	int i, j, t;
 	FILE *FP;
-	char buffer[60];
+	//	char buffer[60];
 	gsl_matrix *M = gsl_matrix_alloc(3, 3);
 	gsl_matrix *K = gsl_matrix_alloc(3, 3);
 	gsl_vector *m = gsl_vector_alloc(3);

@@ -17,7 +17,7 @@
 
 #include "lib/srlib.h"
 
-#include "ecp/irp6p_m/ecp_r_irp6p_m.h"
+#include "robot/irp6p_m/ecp_r_irp6p_m.h"
 #include "ecp_t_dung.h"
 #include "ecp_g_dung.h"
 

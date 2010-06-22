@@ -6,7 +6,7 @@
  */
 
 #include "ecp_t_conveyor_test.h"
-#include "ecp/conveyor/ecp_r_conv.h"
+#include "robot/conveyor/ecp_r_conv.h"
 
 #include "lib/logger.h"
 

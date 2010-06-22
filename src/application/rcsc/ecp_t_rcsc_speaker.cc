@@ -11,9 +11,11 @@
 #include "lib/com_buf.h"
 
 #include "lib/srlib.h"
-#include "ecp/speaker/ecp_r_speaker.h"
+#include "robot/speaker/ecp_r_speaker.h"
 #include "ecp_t_rcsc_speaker.h"
-#include "ecp_mp/task/ecp_mp_t_rcsc.h"
+#include "application/rcsc/ecp_mp_t_rcsc.h"
+#include "generator/ecp/ecp_mp_g_transparent.h"
+#include "robot/speaker/ecp_mp_g_speak.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -29,16 +31,16 @@ rcsc::rcsc(lib::configurator &_config) :
 	gt = new common::generator::transparent(*this);
 	speak = new generator::speaking(*this, 8);
 
-	sr_ecp_msg->message("ECP loaded");
+	sr_ecp_msg->message("base/ecp loaded");
 }
 
 void rcsc::mp_2_ecp_next_state_string_handler(void)
 {
 
-	if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_TRANSPARENT) {
+	if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_GEN_TRANSPARENT) {
 		gt->Move();
 
-	} else if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_SPEAK) {
+	} else if (mp_2_ecp_next_state_string == ecp_mp::speaker::generator::ECP_GEN_SPEAK) {
 		speak->configure(mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 		speak->Move();
 
