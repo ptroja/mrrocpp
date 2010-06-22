@@ -24,10 +24,9 @@ class manip_effector;
 }
 namespace sensor {
 
-typedef enum _force_readring_status {
-	EDP_FORCE_SENSOR_READING_CORRECT,
-	EDP_FORCE_SENSOR_READING_ERROR,
-	EDP_FORCE_SENSOR_OVERLOAD
+typedef enum _force_readring_status
+{
+	EDP_FORCE_SENSOR_READING_CORRECT, EDP_FORCE_SENSOR_READING_ERROR, EDP_FORCE_SENSOR_OVERLOAD
 } force_readring_status_t;
 
 typedef struct _force_data
@@ -38,12 +37,13 @@ typedef struct _force_data
 	force_readring_status_t status;
 } force_data_t;
 
-
 /********** klasa czujnikow po stronie EDP **************/
-class force: public lib::sensor_interface
+class force : public lib::sensor_interface
 {
 protected:
 	bool is_reading_ready; // czy jakikolwiek odczyt jest gotowy?
+
+	bool is_right_turn_frame;
 
 	lib::ForceTrans *gravity_transformation; // klasa likwidujaca wplyw grawitacji na czujnik
 
@@ -51,7 +51,8 @@ protected:
 
 	virtual void connect_to_hardware(void) = 0;
 
-	struct _from_vsp {
+	struct _from_vsp
+	{
 		lib::VSP_REPORT_t vsp_report;
 		force_data_t force;
 	} from_vsp;
