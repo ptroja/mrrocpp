@@ -6,8 +6,8 @@
  * \date 15.03.2008
  */
 
-#ifndef __FRADIA_SENSOR_BLOCKING_H
-#define __FRADIA_SENSOR_BLOCKING_H
+#ifndef ECP_MP_S_FRADIA_SENSOR_H
+#define ECP_MP_S_FRADIA_SENSOR_H
 
 #include <netdb.h>
 #include <netinet/in.h>
