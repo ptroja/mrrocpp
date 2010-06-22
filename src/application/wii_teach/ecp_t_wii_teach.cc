@@ -130,8 +130,8 @@ bool wii_teach::get_filenames(void) {
 #endif
 	{// by Y&W
 		e = errno;
-		perror("base/ecp: Send() to UI failed");
-		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "base/ecp: Send() to UI failed");
+		perror("ecp: Send() to UI failed");
+		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ecp: Send() to UI failed");
 		throw common::ecp_robot::ECP_error(lib::SYSTEM_ERROR, 0);
 	}
 
@@ -154,8 +154,8 @@ bool wii_teach::get_filenames(void) {
 #endif
 	{// by Y&W
 		e = errno;
-		perror("base/ecp: Send() to UI failed");
-		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "base/ecp: Send() to UI failed");
+		perror("ecp: Send() to UI failed");
+		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ecp: Send() to UI failed");
 		throw common::ecp_robot::ECP_error(lib::SYSTEM_ERROR, 0);
 	}
 

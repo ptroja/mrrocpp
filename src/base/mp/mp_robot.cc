@@ -59,7 +59,7 @@ robot::robot(lib::robot_name_t l_robot_name, const std::string & _section_name,
 	if (ECP_pid < 0) {
 		uint64_t e = errno; // kod bledu
 		perror("Failed to spawn ECP");
-		sr_ecp_msg.message(lib::SYSTEM_ERROR, e, "base/mp: Failed to spawn ECP");
+		sr_ecp_msg.message(lib::SYSTEM_ERROR, e, "mp: Failed to spawn ECP");
 		throw common::MP_main_error(lib::SYSTEM_ERROR, 0);
 	}
 
@@ -150,7 +150,7 @@ void robot::start_ecp(void) {
 #endif
 		uint64_t e = errno;
 		perror("Send to ECP failed");
-		sr_ecp_msg.message(lib::SYSTEM_ERROR, e, "base/mp: Send to ECP failed");
+		sr_ecp_msg.message(lib::SYSTEM_ERROR, e, "mp: Send to ECP failed");
 		throw common::MP_main_error(lib::SYSTEM_ERROR, 0);
 	}
 	mp_command.pulse_to_ecp_sent = false;
@@ -178,7 +178,7 @@ void robot::execute_motion(void) { // zlecenie wykonania ruchu
 		// Blad komunikacji miedzyprocesowej - wyjatek
 		uint64_t e = errno;
 		perror("Send to ECP failed");
-		sr_ecp_msg.message(lib::SYSTEM_ERROR, e, "base/mp: Send() to ECP failed");
+		sr_ecp_msg.message(lib::SYSTEM_ERROR, e, "mp: Send() to ECP failed");
 		throw MP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 	}
 	mp_command.pulse_to_ecp_sent = false;
@@ -207,7 +207,7 @@ void robot::terminate_ecp(void) { // zlecenie STOP zakonczenia ruchu
 		// Blad komunikacji miedzyprocesowej - wyjatek
 		uint64_t e = errno;
 		perror("Send to ECP failed ?");
-		sr_ecp_msg.message(lib::SYSTEM_ERROR, e, "base/mp: Send() to ECP failed");
+		sr_ecp_msg.message(lib::SYSTEM_ERROR, e, "mp: Send() to ECP failed");
 		throw MP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 	}
 	mp_command.pulse_to_ecp_sent = false;
