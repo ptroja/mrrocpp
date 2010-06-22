@@ -29,7 +29,7 @@ ecp_t_objectfollower_pb::ecp_t_objectfollower_pb(mrrocpp::lib::configurator& con
 
 	Eigen::Matrix <double, 3, 1> p1, p2;
 	p1(0, 0) = 0.6;
-	p1(1, 0) = -1.7;
+	p1(1, 0) = 2;
 	p1(2, 0) = 0.1;
 
 	p2(0, 0) = 0.98;
