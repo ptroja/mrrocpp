@@ -32,7 +32,7 @@ bird_hand_test::bird_hand_test(lib::configurator &_config) :
 	g_sleep = new common::generator::sleep(*this);
 	g_bird_hand = new generator::bird_hand(*this);
 
-	sr_ecp_msg->message("base/ecp BIRD HAND TEST loaded");
+	sr_ecp_msg->message("ecp BIRD HAND TEST loaded");
 }
 
 void bird_hand_test::mp_2_ecp_next_state_string_handler(void)

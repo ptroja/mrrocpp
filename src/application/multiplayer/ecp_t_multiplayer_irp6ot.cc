@@ -44,7 +44,7 @@ multiplayer::multiplayer(lib::configurator &_config) :
 		subtask_m[ecp_mp::task::ECP_ST_BIAS_EDP_FORCE] = ecpst;
 	}
 
-	sr_ecp_msg->message("base/ecp loaded");
+	sr_ecp_msg->message("ecp loaded");
 }
 
 void multiplayer::mp_2_ecp_next_state_string_handler(void)

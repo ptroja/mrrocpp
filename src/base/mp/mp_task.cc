@@ -931,7 +931,7 @@ while (1) {
 	}
 }
 
-sr_ecp_msg->message("base/mp user program is running");
+sr_ecp_msg->message("mp user program is running");
 }
 // ------------------------------------------------------------------------
 

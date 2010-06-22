@@ -43,16 +43,16 @@ teach::teach(lib::configurator &_config) :
 
 	tig = new generator::teach_in(*this);
 
-	sr_ecp_msg->message("base/ecp loaded");
+	sr_ecp_msg->message("ecp loaded");
 }
 
 void teach::main_task_algorithm(void)
 {
 
 	if (ecp_m_robot->robot_name == lib::ROBOT_IRP6OT_M) {
-		sr_ecp_msg->message("base/ecp teach irp6ot_m");
+		sr_ecp_msg->message("ecp teach irp6ot_m");
 	} else if (ecp_m_robot->robot_name == lib::ROBOT_IRP6P_M) {
-		sr_ecp_msg->message("base/ecp teach irp6p_m");
+		sr_ecp_msg->message("ecp teach irp6p_m");
 	}
 
 	if (operator_reaction("Teach in? ")) {

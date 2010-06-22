@@ -368,7 +368,7 @@ void reader_buffer::operator()()
 
 			while (!reader_buf.empty()) {
 				// zapis pomiarow z biezacego kroku do pliku
-				// printf("base/edp %f\n", reader_buf.front().desired_cartesian_position[1]);
+				// printf("edp %f\n", reader_buf.front().desired_cartesian_position[1]);
 
 				reader_data & data = reader_buf.front();
 

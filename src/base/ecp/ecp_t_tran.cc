@@ -52,7 +52,7 @@ tran::tran(lib::configurator &_config) :
 		ecp_m_robot = new polycrank::robot(*this);
 	}
 
-	sr_ecp_msg->message("base/ecp loaded");
+	sr_ecp_msg->message("ecp loaded");
 }
 
 void tran::main_task_algorithm(void)

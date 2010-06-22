@@ -35,7 +35,7 @@ swarmitfix::swarmitfix(lib::configurator &_config) :
 	g_sleep = new common::generator::sleep(*this);
 	g_epos = new common::generator::epos(*this);
 
-	sr_ecp_msg->message("base/ecp spkm loaded");
+	sr_ecp_msg->message("ecp spkm loaded");
 }
 
 void swarmitfix::mp_2_ecp_next_state_string_handler(void)

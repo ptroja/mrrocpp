@@ -25,7 +25,7 @@ bird_hand_test::bird_hand_test(lib::configurator &_config) :
 
 	g_bird_hand = new common::generator::bird_hand(*this);
 
-	sr_ecp_msg->message("base/ecp BIRDHAND loaded");
+	sr_ecp_msg->message("ecp BIRDHAND loaded");
 }
 
 void bird_hand_test::mp_2_ecp_next_state_string_handler(void)
