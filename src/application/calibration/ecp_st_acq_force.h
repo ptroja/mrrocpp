@@ -2,7 +2,7 @@
 #if !defined(_ECP_ST_KCZ_FORCE_H)
 #define _ECP_ST_KCZ_FORCE_H
 
-#include "ecp/common/task/ecp_task.h"
+#include "base/ecp/ecp_task.h"
 #include "ecp_g_pcbird_nose_run.h"
 #include "ecp_st_acquisition.h"
 
@@ -26,6 +26,8 @@ class acq_force: public acquisition {
 	  common::generator::pcbird_nose_run* nose_run;
 	  acq_force(task &_ecp_t);
 	  void write_data(std::string _K_fp, std::string _kk_fp, std::string _M_fp, std::string _mm_fp, int _number_of_measures);
+	  void conditional_execution();
+
 };
 
 }

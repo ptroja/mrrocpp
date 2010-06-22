@@ -3,9 +3,9 @@ add_executable(ecp_draughts
 	ecp_g_vis_ib_eih_follower_irp6ot.cc
 	ecp_mp_tr_draughtsAI.cc
 	ecp_t_draughts.cc
-	${ECPDIR}/irp6ot_m/generator/ecp_g_vis_ib_eih_planar_irp6ot.cc
-	${ECPDIR}/common/task/ecp_st_go.cc
-	${ECPDIR}/common/generator/ecp_g_sleep.cc
+	../../robot/irp6ot_m/generator/ecp_g_vis_ib_eih_planar_irp6ot.cc
+	../../subtask/ecp_st_go.cc
+	../../generator/ecp/ecp_g_sleep.cc
 )
 
 target_link_libraries(ecp_draughts

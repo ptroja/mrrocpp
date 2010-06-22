@@ -4,7 +4,7 @@
 
 #include "ui/src/conveyor/ui_r_conveyor.h"
 #include "ui/ui_ecp_r_tfg_and_conv.h"
-#include "lib/robot_consts/conveyor_const.h"
+#include "robot/conveyor/conveyor_const.h"
 #include "ui/ui_class.h"
 
 /* Local headers */

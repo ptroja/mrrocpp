@@ -1,7 +1,0 @@
-if(ROBOT_IRP6_POSTUMENT_TFG)
-add_library(kinematicsirp6p_tfg
-	kinematic_model_irp6p_tfg.cc
-)
-
-target_link_libraries(kinematicsirp6p_tfg kinematics)
-endif(ROBOT_IRP6_POSTUMENT_TFG)

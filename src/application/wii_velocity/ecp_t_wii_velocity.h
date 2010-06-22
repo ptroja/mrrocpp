@@ -1,9 +1,9 @@
 #ifndef ECP_T_WII_VELOCITY_H
 #define ECP_T_WII_VELOCITY_H
 
-#include "ecp_mp/task/ecp_mp_task.h"
+#include "base/ecp_mp/ecp_mp_task.h"
 #include "application/wii_velocity/generator/ecp_g_wii_velocity.h"
-#include "ecp/common/generator/ecp_g_smooth.h"
+#include "generator/ecp/ecp_g_smooth.h"
 
 namespace mrrocpp {
 namespace ecp {

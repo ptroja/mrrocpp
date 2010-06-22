@@ -27,7 +27,7 @@
 // Konfigurator.
 #include "lib/configurator.h"
 #include "ui/ui_ecp_r_tfg_and_conv.h"
-#include "lib/robot_consts/smb_const.h"
+#include "robot/smb/smb_const.h"
 
 /* Local headers */
 #include "ablibs.h"
@@ -103,7 +103,7 @@ int EDP_smb_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 				if (ui.smb->state.edp.pid < 0) {
 
 					ui.smb->state.edp.state = 0;
-					fprintf(stderr, "EDP spawn failed: %s\n", strerror(errno));
+					fprintf(stderr, "base/edp spawn failed: %s\n", strerror(errno));
 					delete ui.smb->ui_ecp_robot;
 				} else { // jesli spawn sie powiodl
 

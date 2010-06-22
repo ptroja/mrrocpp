@@ -55,7 +55,7 @@ bool wii_velocity::first_step() {
 }
 
 bool wii_velocity::next_step() {
-	char buffer[200];
+//	char buffer[200];
 
 	sensor_m[ecp_mp::sensor::SENSOR_WIIMOTE]->get_reading();
 

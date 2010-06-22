@@ -24,7 +24,7 @@
 #include "lib/com_buf.h"
 
 #include "lib/srlib.h"
-#include "mp/mp.h"
+#include "base/mp/mp.h"
 #include "mp_t_fsautomat.h"
 
 #include "ecp_mp_tr_rc_windows.h"
@@ -32,6 +32,7 @@
 #include "StateHeap.h"
 
 #include "lib/datastr.h"
+#include "generator/ecp/ecp_mp_g_smooth.h"
 
 namespace mrrocpp {
 namespace mp {
@@ -69,7 +70,7 @@ fsautomat::fsautomat(lib::configurator &_config) :
 	 root = xmlDocGetRootElement(doc);
 	 if(!root || !root->name)
 	 {
-	 printf("ECP initialization ERROR: Bad root node name!");
+	 printf("base/ecp initialization ERROR: Bad root node name!");
 	 xmlFreeDoc(doc);
 	 return;
 	 }
@@ -87,7 +88,7 @@ fsautomat::fsautomat(lib::configurator &_config) :
 	 // For each child of state: i.e. Robot
 	 for(child_node = cur_node->children->children; child_node != NULL; child_node = child_node->next)
 	 {
-	 if ( child_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(child_node->name, (const xmlChar *)"mp") )
+	 if ( child_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(child_node->name, (const xmlChar *)"base/mp") )
 	 {
 	 for(;child_node->children; child_node->children = child_node->children->next)
 	 {
@@ -161,7 +162,7 @@ if (stateType) {
 // For each child of state: i.e. Robot
 for (xmlNodePtr child_node = stateNode->children; child_node != NULL; child_node = child_node->next) {
 	if (child_node->type == XML_ELEMENT_NODE) {
-		if(!xmlStrcmp(child_node->name, (const xmlChar *) "ECPGeneratorType")) {
+		if(!xmlStrcmp(child_node->name, (const xmlChar *) "base/ecpGeneratorType")) {
 			xmlChar * ecpGeneratorType = xmlNodeGetContent(child_node);
 			if (ecpGeneratorType)
 			actState->setGeneratorType((char*) ecpGeneratorType);
@@ -324,7 +325,7 @@ run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_mes
 void fsautomat::executeMotion(common::State &state)
 {
 int trjConf = config.value<int>("trajectory_from_xml", "[xml_settings]");
-if (trjConf && state.getGeneratorType() == ecp_mp::task::ECP_GEN_SMOOTH) {
+if (trjConf && state.getGeneratorType() == ecp_mp::common::generator::ECP_GEN_SMOOTH) {
 	set_next_ecps_state(state.getGeneratorType(), state.getNumArgument(), state.getStateID(), 0, 1,
 			(state.getRobot()).c_str());
 } else {

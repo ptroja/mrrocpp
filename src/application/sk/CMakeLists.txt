@@ -11,6 +11,7 @@ target_link_libraries(ecp_sk
 add_executable(ecp_sk_mr
 	ecp_g_sk.cc
 	ecp_t_sk_mr.cc
+	ecp_st_edge_follow.cc
 )
 
 target_link_libraries(ecp_sk_mr

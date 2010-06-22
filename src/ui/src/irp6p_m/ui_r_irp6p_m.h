@@ -10,7 +10,7 @@
 
 #include "ui/ui.h"
 #include "ui/ui_robot.h"
-#include "lib/robot_consts/irp6p_m_const.h"
+#include "robot/irp6p_m/irp6p_m_const.h"
 
 //
 //

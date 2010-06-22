@@ -1,7 +1,7 @@
 #if !defined(_ECP_T_SK_H)
 #define _ECP_T_SK_H
 
-#include "ecp/common/task/ecp_task.h"
+#include "base/ecp/ecp_task.h"
 #include "ecp_g_time.h"
 
 namespace mrrocpp {
