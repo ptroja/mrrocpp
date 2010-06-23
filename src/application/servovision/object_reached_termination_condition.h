@@ -28,7 +28,7 @@ public:
 	object_reached_termination_condition(double max_speed, double max_accel, int min_steps);
 	virtual ~object_reached_termination_condition();
 	virtual void reset();
-	virtual bool terminate_now();
+	virtual bool is_condition_met();
 protected:
 	double max_speed;
 	double max_accel;

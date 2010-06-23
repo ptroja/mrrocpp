@@ -43,7 +43,7 @@ public:
 	 * Implement this to indicate when generator should be terminated.
 	 * @return true if generator should be terminated.
 	 */
-	virtual bool terminate_now() = 0;
+	virtual bool is_condition_met() = 0;
 
 	/**
 	 * Set end effector's speed.

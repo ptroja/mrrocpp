@@ -27,7 +27,7 @@ object_reached_termination_condition::~object_reached_termination_condition()
 {
 }
 
-bool object_reached_termination_condition::terminate_now()
+bool object_reached_termination_condition::is_condition_met()
 {
 	if(object_visible && current_speed.norm() <= max_speed && current_accel.norm() <= max_accel){
 		steps_below_max_speed++;

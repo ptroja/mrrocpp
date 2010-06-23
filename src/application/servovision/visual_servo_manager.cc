@@ -154,7 +154,7 @@ bool visual_servo_manager::next_step()
 
 	// check termination conditions
 	for (int i = 0; i < termination_conditions.size(); ++i) {
-		if (termination_conditions[i]->terminate_now()) {
+		if (termination_conditions[i]->is_condition_met()) {
 			return false;
 		}
 	}
@@ -172,13 +172,18 @@ void visual_servo_manager::constrain_position(lib::Homog_matrix & new_position)
 	for (int i = 0; i < position_constraints.size(); ++i) {
 		position_constraints[i]->set_new_position(new_position);
 		if (position_constraints[i]->is_translation_ok() && position_constraints[i]->is_rotation_ok()) {
-			constraints_kept = true;
-		} else if (!position_constraints[i]->is_translation_ok()) {
+			constraints_kept = true; // at least one constraint is kept
+		} else if (!position_constraints[i]->is_translation_ok()) { // this constraint is not kept at all
 			double dist = position_constraints[i]->get_distance_from_allowed_area();
 			if (nearest_allowed_area_distance > dist) {
 				nearest_allowed_area_distance = dist;
 				nearest_allowed_area_idx = i;
 			}
+		} else if (position_constraints[i]->is_translation_ok() && !position_constraints[i]->is_rotation_ok()) {
+			// correct end effector's rotation
+			position_constraints[i]->apply_constraint();
+			new_position = position_constraints[i]->get_constrained_position();
+			constraints_kept = true; // this constraint is now kept
 		}
 	}
 	if (!constraints_kept && nearest_allowed_area_idx >= 0) {

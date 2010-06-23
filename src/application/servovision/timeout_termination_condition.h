@@ -24,7 +24,7 @@ public:
 	timeout_termination_condition(double timeout);
 	virtual ~timeout_termination_condition();
 	virtual void reset();
-	virtual bool terminate_now();
+	virtual bool is_condition_met();
 protected:
 	double timeout;
 	double time_left;

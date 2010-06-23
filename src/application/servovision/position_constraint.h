@@ -72,6 +72,22 @@ public:
 	const lib::Homog_matrix& get_constrained_position();
 protected:
 	lib::Homog_matrix new_position;
+
+	/**
+	 * Makes angle to keep within [-M_PI; M_PI)
+	 * @param angle any angle
+	 * @return angle within [-M_PI; M_PI)
+	 */
+	double normalize_angle(double angle);
+
+	/**
+	 * Check if angle is within specified range
+	 * @param angle
+	 * @param min
+	 * @param max
+	 * @return true if angle in [min; max]
+	 */
+	bool is_angle_between(double angle, double min, double max);
 private:
 
 };

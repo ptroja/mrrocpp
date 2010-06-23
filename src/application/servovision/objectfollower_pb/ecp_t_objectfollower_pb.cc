@@ -28,21 +28,21 @@ ecp_t_objectfollower_pb::ecp_t_objectfollower_pb(mrrocpp::lib::configurator& con
 	log_dbg_enabled = true;
 
 	Eigen::Matrix <double, 3, 1> translation_min, translation_max, rotation_min, rotation_max;
-	translation_min(0, 0) = 0.6;
+	translation_min(0, 0) = 0.7;
 	translation_min(1, 0) = 2;
 	translation_min(2, 0) = 0.1;
 
-	translation_max(0, 0) = 0.98;
+	translation_max(0, 0) = 0.94;
 	translation_max(1, 0) = 2.3;
 	translation_max(2, 0) = 0.3;
 
-	rotation_min(0, 0) = 0;
-	rotation_min(1, 0) = 0;
-	rotation_min(2, 0) = 0;
+	rotation_min(0, 0) = 2.0;
+	rotation_min(1, 0) = 2.0;
+	rotation_min(2, 0) = -0.2;
 
-	rotation_max(0, 0) = 0;
-	rotation_max(1, 0) = 0;
-	rotation_max(2, 0) = 0;
+	rotation_max(0, 0) = 2.4;
+	rotation_max(1, 0) = 2.4;
+	rotation_max(2, 0) = 0.2;
 
 	shared_ptr <position_constraint>
 			cube(new cubic_constraint(translation_min, translation_max, rotation_min, rotation_max));

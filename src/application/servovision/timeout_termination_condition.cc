@@ -30,7 +30,7 @@ void timeout_termination_condition::reset()
 {
 	time_left = timeout;
 }
-bool timeout_termination_condition::terminate_now()
+bool timeout_termination_condition::is_condition_met()
 {
 	return time_left <= 0;
 }
