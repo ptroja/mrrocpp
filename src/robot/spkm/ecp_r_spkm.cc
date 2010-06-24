@@ -17,10 +17,11 @@ namespace ecp {
 namespace spkm {
 
 robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
-	epos_low_level_command_data_port(EPOS_LOW_LEVEL_COMMAND_DATA_PORT),
+	ecp_robot(lib::ROBOT_SPKM, SPKM_NUM_OF_SERVOS, EDP_SPKM_SECTION, _config, _sr_ecp), kinematics_manager(),
+			epos_low_level_command_data_port(EPOS_LOW_LEVEL_COMMAND_DATA_PORT),
 			epos_gen_parameters_data_port(EPOS_GEN_PARAMETERS_DATA_PORT),
-			epos_reply_data_request_port(EPOS_REPLY_DATA_REQUEST_PORT),
-			ecp_robot(lib::ROBOT_SPKM, SPKM_NUM_OF_SERVOS, EDP_SPKM_SECTION, _config, _sr_ecp), kinematics_manager()
+			epos_reply_data_request_port(EPOS_REPLY_DATA_REQUEST_PORT)
+
 {
 	add_data_ports();
 	//  Stworzenie listy dostepnych kinematyk.
@@ -29,10 +30,11 @@ robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
 }
 
 robot::robot(common::task::task& _ecp_object) :
-	epos_low_level_command_data_port(EPOS_LOW_LEVEL_COMMAND_DATA_PORT),
+	ecp_robot(lib::ROBOT_SPKM, SPKM_NUM_OF_SERVOS, EDP_SPKM_SECTION, _ecp_object), kinematics_manager(),
+			epos_low_level_command_data_port(EPOS_LOW_LEVEL_COMMAND_DATA_PORT),
 			epos_gen_parameters_data_port(EPOS_GEN_PARAMETERS_DATA_PORT),
-			epos_reply_data_request_port(EPOS_REPLY_DATA_REQUEST_PORT),
-			ecp_robot(lib::ROBOT_SPKM, SPKM_NUM_OF_SERVOS, EDP_SPKM_SECTION, _ecp_object), kinematics_manager()
+			epos_reply_data_request_port(EPOS_REPLY_DATA_REQUEST_PORT)
+
 {
 	add_data_ports();
 	//  Stworzenie listy dostepnych kinematyk.

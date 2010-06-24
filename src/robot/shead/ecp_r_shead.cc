@@ -17,20 +17,22 @@ namespace ecp {
 namespace shead {
 
 robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
-	shead_head_soldification_data_port(SHEAD_HEAD_SOLIDIFICATION_DATA_PORT),
+	ecp_robot(lib::ROBOT_SHEAD, SHEAD_NUM_OF_SERVOS, EDP_SHEAD_SECTION, _config, _sr_ecp), kinematics_manager(),
+			shead_head_soldification_data_port(SHEAD_HEAD_SOLIDIFICATION_DATA_PORT),
 			shead_vacuum_activation_data_port(SHEAD_VACUUM_ACTIVATION_DATA_PORT),
-			shead_reply_data_request_port(SHEAD_VACUUM_ACTIVATION_DATA_PORT),
-			ecp_robot(lib::ROBOT_SHEAD, SHEAD_NUM_OF_SERVOS, EDP_SHEAD_SECTION, _config, _sr_ecp), kinematics_manager()
+			shead_reply_data_request_port(SHEAD_VACUUM_ACTIVATION_DATA_PORT)
+
 {
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();
 }
 ;
 robot::robot(common::task::task& _ecp_object) :
-	shead_head_soldification_data_port(SHEAD_HEAD_SOLIDIFICATION_DATA_PORT),
+	ecp_robot(lib::ROBOT_SHEAD, SHEAD_NUM_OF_SERVOS, EDP_SHEAD_SECTION, _ecp_object), kinematics_manager(),
+			shead_head_soldification_data_port(SHEAD_HEAD_SOLIDIFICATION_DATA_PORT),
 			shead_vacuum_activation_data_port(SHEAD_VACUUM_ACTIVATION_DATA_PORT),
-			shead_reply_data_request_port(SHEAD_VACUUM_ACTIVATION_DATA_PORT),
-			ecp_robot(lib::ROBOT_SHEAD, SHEAD_NUM_OF_SERVOS, EDP_SHEAD_SECTION, _ecp_object), kinematics_manager()
+			shead_reply_data_request_port(SHEAD_VACUUM_ACTIVATION_DATA_PORT)
+
 {
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();
