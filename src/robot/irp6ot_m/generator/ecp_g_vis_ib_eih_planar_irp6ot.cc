@@ -53,9 +53,9 @@ bool ecp_vis_ib_eih_planar_irp6ot::first_step()
 	 //z = 0;
 
 	 above_object = false;
-
+*/
 	 return true;
-	 */
+
 }
 
 bool ecp_vis_ib_eih_planar_irp6ot::next_step_without_constraints()
@@ -118,7 +118,7 @@ bool ecp_vis_ib_eih_planar_irp6ot::next_step_without_constraints()
 				//Sprawdzam czy nie przekroczono predkosci maxymalnej.
 				if (v > v_max)
 					v = v_max;
-			} else if (v = v_max) { //Ruch jednostajny.
+			} else if (v == v_max) { //Ruch jednostajny.
 				//return false;
 				s = v * t_m;
 			}

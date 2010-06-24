@@ -36,7 +36,6 @@ typedef enum {
 
 /*
  * Structure for storing pawn coordinates from cvFraDIA
- * used in Draughts task
  * \author tbem
  */
 typedef struct {
