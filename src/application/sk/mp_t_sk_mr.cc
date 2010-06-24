@@ -48,6 +48,17 @@ void sk_mr::main_task_algorithm(void)
 
 	sr_ecp_msg->message("New sk_mr series");
 
+	std::stringstream ss(std::stringstream::in | std::stringstream::out);
+
+	lib::Xyz_Euler_Zyz_vector rel_eu(0, 0, 0, -1.57, 1.57, 1.57);
+	lib::Homog_matrix tmp_hm(rel_eu);
+	lib::Xyz_Angle_Axis_vector rel_aa;
+	tmp_hm.get_xyz_angle_axis(rel_aa);
+
+	ss << rel_aa;
+
+	sr_ecp_msg->message(ss.str().c_str());
+
 	// wybor manipulatora do sterowania na podstawie konfiguracji
 
 	lib::robot_name_t manipulator_name;
