@@ -52,7 +52,7 @@ void irp6_grasp::main_task_algorithm(void)
 
 		if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_IRP6) {
 
-			sr_ecp_msg->message("ecp_GEN_IRP6");
+			sr_ecp_msg->message("ECP_GEN_IRP6");
 			sr_ecp_msg->message("Smooth->Move()");
 			//				smoothgen2->load_coordinates(lib::ECP_JOINT, v, a,
 			//											trgraspit->from_va.graspit.grasp_joint[7],

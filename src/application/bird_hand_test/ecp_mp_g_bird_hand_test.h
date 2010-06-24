@@ -10,7 +10,7 @@ namespace ecp_mp {
 namespace bird_hand {
 namespace generator {
 
-const std::string ECP_GEN_BIRD_HAND_TEST = "ecp_GEN_BIRD_HAND_TEST";
+const std::string ECP_GEN_BIRD_HAND_TEST = "ECP_GEN_BIRD_HAND_TEST";
 
 }// namespace generator
 } // namespace bird_hand

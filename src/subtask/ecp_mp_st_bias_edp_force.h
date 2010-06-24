@@ -9,7 +9,7 @@ namespace mrrocpp {
 namespace ecp_mp {
 namespace task {
 
-const std::string ECP_ST_BIAS_EDP_FORCE = "ecp_ST_BIAS_EDP_FORCE";
+const std::string ECP_ST_BIAS_EDP_FORCE = "ECP_ST_BIAS_EDP_FORCE";
 
 } // namespace task
 } // namespace ecp_mp
