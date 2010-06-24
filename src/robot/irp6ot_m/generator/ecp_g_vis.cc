@@ -16,7 +16,7 @@
 
 #include "lib/srlib.h"
 #include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
-#include "ecp/irp6_on_track/generator/ecp_g_vis.h"
+#include "base/ecp/irp6_on_track/generator/ecp_g_vis.h"
 
 #include "lib/mrmath/mrmath.h"
 
@@ -453,7 +453,7 @@ gammax=atan2(Rckk[3][2],Rckk[3][3]);
  	alfa=180*alfa/M_PI;
  */
  /*
- 	printf("ECP: alfa=%f, beta=%f, gammax=%f\n", alfa, beta, gammax);
+ 	printf("ecp: alfa=%f, beta=%f, gammax=%f\n", alfa, beta, gammax);
 	printf("VALID: %d\n", valid_measure);
 */
 
@@ -762,7 +762,7 @@ clock_gettime( CLOCK_REALTIME , &crr_time);
 
 
 clock_gettime( CLOCK_REALTIME , &e_time);
-// printf( "ECP= %f %f %f\n",(double)(e_time.tv_nsec), (double)(crr_time.tv_nsec), (double)(s_time.tv_nsec));
+// printf( "base/ecp= %f %f %f\n",(double)(e_time.tv_nsec), (double)(crr_time.tv_nsec), (double)(s_time.tv_nsec));
 
    // skopiowac przygotowany rozkaz dla EDP do bufora wysylkowego
 // the_robot->create_command ();

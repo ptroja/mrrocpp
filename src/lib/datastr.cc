@@ -46,9 +46,9 @@ std::string toString(lib::ECP_POSE_SPECIFICATION ps)
 	switch (ps)
 	{
 		case lib::ECP_XYZ_ANGLE_AXIS:
-			return std::string("ECP_XYZ_ANGLE_AXIS");
+			return std::string("ecp_XYZ_ANGLE_AXIS");
 		case lib::ECP_XYZ_EULER_ZYZ:
-			return std::string("ECP_XYZ_EULER_ZYZ");
+			return std::string("ecp_XYZ_EULER_ZYZ");
 		case lib::ECP_MOTOR:
 			return std::string("MOTOR");
 		case lib::ECP_JOINT:
@@ -69,10 +69,10 @@ lib::robot_name_t returnProperRobot(const std::string & robotName)
 
 lib::ECP_POSE_SPECIFICATION returnProperPS(const std::string & poseSpecification)
 {
-	if (poseSpecification == "ECP_XYZ_ANGLE_AXIS") {
+	if (poseSpecification == "ecp_XYZ_ANGLE_AXIS") {
 		return lib::ECP_XYZ_ANGLE_AXIS;
 	}
-	if (poseSpecification == "ECP_XYZ_EULER_ZYZ") {
+	if (poseSpecification == "ecp_XYZ_EULER_ZYZ") {
 		return lib::ECP_XYZ_EULER_ZYZ;
 	}
 	if (poseSpecification == "MOTOR") {

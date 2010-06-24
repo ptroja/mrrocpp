@@ -1,4 +1,4 @@
-//#include "ecp/irp6_on_track/ecp_local.h"
+//#include "base/ecp/irp6_on_track/ecp_local.h"
 #include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
 #include "ecp_t_draughts.h"
 #include <stdio.h>
@@ -220,7 +220,7 @@ void Draughts::main_task_algorithm(void)
 /*===============================makeAIMove========================================*/
 int Draughts::makeAIMove(int player)
 {
-	char* move;
+	uint8_t* move;
 	char* board;
 	//int to;
 	int movesnr;

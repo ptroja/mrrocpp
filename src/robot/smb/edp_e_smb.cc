@@ -20,11 +20,11 @@
 
 // Klasa edp_irp6ot_effector.
 #include "robot/smb/edp_e_smb.h"
-#include "edp/reader.h"
+#include "base/edp/reader.h"
 // Kinematyki.
 #include "robot/smb/kinematic_model_smb.h"
-#include "edp/manip_trans_t.h"
-#include "edp/vis_server.h"
+#include "base/edp/manip_trans_t.h"
+#include "base/edp/vis_server.h"
 #include "lib/epos_gen.h"
 
 #include "lib/exception.h"

@@ -18,7 +18,7 @@
 #include "lib/srlib.h"
 
 #include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
-#include "ecp/irp6_on_track/generator/ecp_g_vis_sac_lx.h"
+#include "base/ecp/irp6_on_track/generator/ecp_g_vis_sac_lx.h"
 #include "lib/configurator.h"
 
 namespace mrrocpp {

@@ -3,8 +3,8 @@
 #if !defined(_ECP_T_smooth_TEST_H)
 #define _ECP_T_smooth_TEST_H
 
-#include "ecp/task/ecp_task.h"
-#include "ecp/generator/ecp_g_smooth.h"
+#include "base/ecp/ecp_task.h"
+#include "generator/ecp/ecp_g_smooth.h"
 
 namespace mrrocpp {
 namespace ecp {

@@ -38,8 +38,7 @@
 
 extern Ui ui;
 
-int EDP_bird_hand_create(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
+int EDP_bird_hand_create(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -49,8 +48,7 @@ int EDP_bird_hand_create(PtWidget_t *widget, ApInfo_t *apinfo,
 	if (ui.bird_hand->state.edp.state == 0) {
 		ui.bird_hand->create_thread();
 
-		ui.bird_hand->eb.command(boost::bind(EDP_bird_hand_create_int, widget,
-				apinfo, cbinfo));
+		ui.bird_hand->eb.command(boost::bind(EDP_bird_hand_create_int, widget, apinfo, cbinfo));
 
 	}
 
@@ -58,8 +56,7 @@ int EDP_bird_hand_create(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
-int EDP_bird_hand_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
+int EDP_bird_hand_create_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -80,37 +77,27 @@ int EDP_bird_hand_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 			tmp_string += ui.bird_hand->state.edp.hardware_busy_attach_point;
 
 			std::string tmp2_string("/dev/name/global/");
-			tmp2_string
-					+= ui.bird_hand->state.edp.network_resourceman_attach_point;
+			tmp2_string += ui.bird_hand->state.edp.network_resourceman_attach_point;
 
 			// sprawdzenie czy nie jest juz zarejestrowany zarzadca zasobow
-			if (((!(ui.bird_hand->state.edp.test_mode)) && (access(
-					tmp_string.c_str(), R_OK) == 0)) || (access(
-					tmp2_string.c_str(), R_OK) == 0)) {
-				ui.ui_msg->message(lib::NON_FATAL_ERROR,
-						"edp_bird_hand already exists");
-			} else if (ui.check_node_existence(
-					ui.bird_hand->state.edp.node_name, std::string(
-							"edp_bird_hand"))) {
+			if (((!(ui.bird_hand->state.edp.test_mode)) && (access(tmp_string.c_str(), R_OK) == 0))
+					|| (access(tmp2_string.c_str(), R_OK) == 0)) {
+				ui.ui_msg->message(lib::NON_FATAL_ERROR, "edp_bird_hand already exists");
+			} else if (ui.check_node_existence(ui.bird_hand->state.edp.node_name, std::string("edp_bird_hand"))) {
 
-				ui.bird_hand->state.edp.node_nr
-						= ui.config->return_node_number(
-								ui.bird_hand->state.edp.node_name);
+				ui.bird_hand->state.edp.node_nr = ui.config->return_node_number(ui.bird_hand->state.edp.node_name);
 				{
-					boost::unique_lock<boost::mutex> lock(
-							ui.process_creation_mtx);
-					ui.bird_hand->ui_ecp_robot = new ui_bird_hand_robot(
-							*ui.config, *ui.all_ecp_msg);
+					boost::unique_lock <boost::mutex> lock(ui.process_creation_mtx);
+					ui.bird_hand->ui_ecp_robot = new ui_bird_hand_robot(*ui.config, *ui.all_ecp_msg);
 
 				}
 
-				ui.bird_hand->state.edp.pid
-						= ui.bird_hand->ui_ecp_robot->the_robot->get_EDP_pid();
+				ui.bird_hand->state.edp.pid = ui.bird_hand->ui_ecp_robot->the_robot->get_EDP_pid();
 
 				if (ui.bird_hand->state.edp.pid < 0) {
 
 					ui.bird_hand->state.edp.state = 0;
-					fprintf(stderr, "EDP spawn failed: %s\n", strerror(errno));
+					fprintf(stderr, "edp spawn failed: %s\n", strerror(errno));
 					delete ui.bird_hand->ui_ecp_robot;
 				} else { // jesli spawn sie powiodl
 
@@ -120,9 +107,8 @@ int EDP_bird_hand_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 					// kilka sekund  (~1) na otworzenie urzadzenia
 
 					while ((ui.bird_hand->state.edp.reader_fd
-							= name_open(
-									ui.bird_hand->state.edp.network_reader_attach_point.c_str(),
-									NAME_FLAG_ATTACH_GLOBAL)) < 0)
+							= name_open(ui.bird_hand->state.edp.network_reader_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL))
+							< 0)
 						if ((tmp++) < CONNECT_RETRY) {
 							delay(CONNECT_DELAY);
 						} else {
@@ -133,13 +119,11 @@ int EDP_bird_hand_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 					// odczytanie poczatkowego stanu robota (komunikuje sie z EDP)
 					lib::controller_state_t robot_controller_initial_state_tmp;
 
-					ui.bird_hand->ui_ecp_robot->get_controller_state(
-							robot_controller_initial_state_tmp);
+					ui.bird_hand->ui_ecp_robot->get_controller_state(robot_controller_initial_state_tmp);
 
 					//ui.bird_hand->state.edp.state = 1; // edp wlaczone reader czeka na start
 
-					ui.bird_hand->state.edp.is_synchronised
-							= robot_controller_initial_state_tmp.is_synchronised;
+					ui.bird_hand->state.edp.is_synchronised = robot_controller_initial_state_tmp.is_synchronised;
 				}
 			}
 		}
@@ -153,8 +137,7 @@ int EDP_bird_hand_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 	return 1;
 }
 
-int EDP_bird_hand_slay(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
+int EDP_bird_hand_slay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -167,8 +150,7 @@ int EDP_bird_hand_slay(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
-int execute_wnd_bird_hand_command_and_status(PtWidget_t *widget,
-		ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int execute_wnd_bird_hand_command_and_status(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -180,8 +162,7 @@ int execute_wnd_bird_hand_command_and_status(PtWidget_t *widget,
 	return (Pt_CONTINUE);
 }
 
-int copy_wnd_bird_hand_command_and_status(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
+int copy_wnd_bird_hand_command_and_status(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -194,8 +175,7 @@ int copy_wnd_bird_hand_command_and_status(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
-int init_wnd_bird_hand_command_and_status(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
+int init_wnd_bird_hand_command_and_status(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -208,8 +188,7 @@ int init_wnd_bird_hand_command_and_status(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
-int start_wnd_bird_hand_command_and_status(PtWidget_t *widget,
-		ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int start_wnd_bird_hand_command_and_status(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -230,8 +209,8 @@ int start_wnd_bird_hand_command_and_status(PtWidget_t *widget,
 
 }
 
-int close_wnd_bird_hand_command_and_status(PtWidget_t *widget,
-		ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo) {
+int close_wnd_bird_hand_command_and_status(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
@@ -243,8 +222,7 @@ int close_wnd_bird_hand_command_and_status(PtWidget_t *widget,
 	return (Pt_CONTINUE);
 }
 
-int clear_wnd_bird_hand_command_and_status(PtWidget_t *widget,
-		ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int clear_wnd_bird_hand_command_and_status(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -256,8 +234,7 @@ int clear_wnd_bird_hand_command_and_status(PtWidget_t *widget,
 
 }
 
-int execute_wnd_bird_hand_configuration(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
+int execute_wnd_bird_hand_configuration(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -269,8 +246,7 @@ int execute_wnd_bird_hand_configuration(PtWidget_t *widget, ApInfo_t *apinfo,
 	return (Pt_CONTINUE);
 }
 
-int copy_wnd_bird_hand_configuration(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
+int copy_wnd_bird_hand_configuration(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -283,8 +259,7 @@ int copy_wnd_bird_hand_configuration(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
-int init_wnd_bird_hand_configuration(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
+int init_wnd_bird_hand_configuration(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -297,8 +272,7 @@ int init_wnd_bird_hand_configuration(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
-int start_wnd_bird_hand_configuration(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
+int start_wnd_bird_hand_configuration(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -317,8 +291,8 @@ int start_wnd_bird_hand_configuration(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
-int close_wnd_bird_hand_configuration(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo) {
+int close_wnd_bird_hand_configuration(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
@@ -330,8 +304,7 @@ int close_wnd_bird_hand_configuration(PtWidget_t *widget, ApInfo_t *apinfo,
 	return (Pt_CONTINUE);
 }
 
-int clear_wnd_bird_hand_configuration(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
+int clear_wnd_bird_hand_configuration(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 

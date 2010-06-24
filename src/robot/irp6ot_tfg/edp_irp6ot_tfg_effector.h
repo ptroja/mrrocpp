@@ -15,7 +15,7 @@
 
 // Klasa edp_irp6s_robot.
 #include "robot/irp6ot_tfg/sg_irp6ot_tfg.h"
-#include "edp/edp_e_motor_driven.h"
+#include "base/edp/edp_e_motor_driven.h"
 #include "robot/irp6ot_tfg/irp6ot_tfg_const.h"
 
 #define IRP6OT_GRIPPER_CATCH_AXE 7

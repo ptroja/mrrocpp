@@ -1,7 +1,7 @@
 #if !defined(_ECP_T_SK_MR_H)
 #define _ECP_T_SK_MR_H
 
-#include "ecp/task/ecp_task.h"
+#include "base/ecp/ecp_task.h"
 
 namespace mrrocpp {
 namespace ecp {

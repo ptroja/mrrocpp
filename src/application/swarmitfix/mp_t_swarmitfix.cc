@@ -13,7 +13,7 @@
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 #include "lib/srlib.h"
-#include "mp/mp.h"
+#include "base/mp/mp.h"
 #include "ecp_mp_t_swarmitfix.h"
 #include "mp_t_swarmitfix.h"
 #include "lib/single_thread_port.h"
@@ -22,7 +22,7 @@
 #include "robot/smb/smb_const.h"
 #include "robot/spkm/spkm_const.h"
 #include "robot/shead/shead_const.h"
-#include "ecp_mp/common/generator/ecp_mp_g_transparent.h"
+#include "generator/ecp/ecp_mp_g_transparent.h"
 #include "ecp_mp_g_epos.h"
 
 namespace mrrocpp {

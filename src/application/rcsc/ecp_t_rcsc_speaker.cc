@@ -13,9 +13,9 @@
 #include "lib/srlib.h"
 #include "robot/speaker/ecp_r_speaker.h"
 #include "ecp_t_rcsc_speaker.h"
-#include "ecp_mp/task/ecp_mp_t_rcsc.h"
-#include "ecp_mp/common/generator/ecp_mp_g_transparent.h"
-#include "ecp_mp/speaker/generator/ecp_mp_g_speak.h"
+#include "application/rcsc/ecp_mp_t_rcsc.h"
+#include "generator/ecp/ecp_mp_g_transparent.h"
+#include "robot/speaker/ecp_mp_g_speak.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -31,7 +31,7 @@ rcsc::rcsc(lib::configurator &_config) :
 	gt = new common::generator::transparent(*this);
 	speak = new generator::speaking(*this, 8);
 
-	sr_ecp_msg->message("ECP loaded");
+	sr_ecp_msg->message("ecp loaded");
 }
 
 void rcsc::mp_2_ecp_next_state_string_handler(void)

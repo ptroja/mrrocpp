@@ -5,9 +5,9 @@
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 
-#include "ecp/player/generator/ecp_g_speechrecognition.h"
-#include "ecp/player/task/ecp_t_speechrecognition.h"
-#include "ecp_mp/task/ecp_mp_t_player.h"
+#include "base/ecp/player/generator/ecp_g_speechrecognition.h"
+#include "base/ecp/player/task/ecp_t_speechrecognition.h"
+#include "robot/player/ecp_mp_t_player.h"
 
 namespace mrrocpp {
 namespace ecp {

@@ -10,7 +10,7 @@ namespace ecp_mp {
 namespace common {
 namespace generator {
 
-const std::string ECP_GEN_IB_EIH = "ECP_GEN_IB_EIH";
+const std::string ECP_GEN_IB_EIH = "ecp_GEN_IB_EIH";
 
 }// namespace generator
 } // namespace common

@@ -138,7 +138,7 @@ int EDP_irp6p_tfg_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 				if (ui.irp6p_tfg->state.edp.pid < 0) {
 
 					ui.irp6p_tfg->state.edp.state = 0;
-					fprintf(stderr, "EDP spawn failed: %s\n", strerror(errno));
+					fprintf(stderr, "edp spawn failed: %s\n", strerror(errno));
 					delete ui.irp6p_tfg->ui_ecp_robot;
 				} else { // jesli spawn sie powiodl
 
@@ -230,7 +230,7 @@ int EDP_irp6p_tfg_synchronise_int(PtWidget_t *widget, ApInfo_t *apinfo,
 			ui.irp6p_tfg->state.edp.is_synchronised
 					= ui.irp6p_tfg->ui_ecp_robot->ecp->is_synchronised();
 		} else {
-			// 	printf("EDP irp6p_tfg niepowolane, synchronizacja niedozwolona\n");
+			// 	printf("edp irp6p_tfg niepowolane, synchronizacja niedozwolona\n");
 		}
 
 	} // end try

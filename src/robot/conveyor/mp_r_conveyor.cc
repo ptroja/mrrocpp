@@ -3,7 +3,7 @@
 
 #include "lib/mis_fun.h"
 #include "lib/srlib.h"
-#include "mp/mp.h"
+#include "base/mp/mp.h"
 #include "robot/conveyor/mp_r_conveyor.h"
 
 namespace mrrocpp {

@@ -112,9 +112,9 @@ MpPanel::MpPanel(ui_config_entry &entry)
 		GtkButton **object;
 		const char *name;
 	} builder_widgets[] = {
-			{ &MpStartPauseButton, "MpStartPauseButton" },
-			{ &MpStopButton, "MpStopButton" },
-			{ &MpTriggerButton, "MpTriggerButton" },
+			{ &MpStartPauseButton, "mpStartPauseButton" },
+			{ &MpStopButton, "mpStopButton" },
+			{ &MpTriggerButton, "mpTriggerButton" },
 			{ &AllRobotsReaderButton, "AllRobotsReaderButton" },
 			{ &AllRobotsReaderTriggerButton, "AllRobotsReaderTriggerButton" },
 			{ &AllRobotsEcpTrigger, "AllRobotsEcpTrigger" },
@@ -123,7 +123,7 @@ MpPanel::MpPanel(ui_config_entry &entry)
 	for (size_t i = 0; i < sizeof(builder_widgets)/sizeof(builder_widgets[0]); i++) {
 		*builder_widgets[i].object = GTK_BUTTON(gtk_builder_get_object(&builder, builder_widgets[i].name));
 		if(!*builder_widgets[i].object) {
-			fprintf(stderr, "MP button object %d (\"%s\") assignment failed\n", i, builder_widgets[i].name);
+			fprintf(stderr, "mp button object %d (\"%s\") assignment failed\n", i, builder_widgets[i].name);
 
 		}
 		g_assert(*builder_widgets[i].object);
@@ -217,7 +217,7 @@ MpPanel::MpPanel(ui_config_entry &entry)
 
 	const char *vseparators[] = {
 			"ReaderSeparator",
-			"EcpSeparator",
+			"ecpSeparator",
 			NULL
 	};
 
@@ -252,7 +252,7 @@ MpPanel::MpPanel(ui_config_entry &entry)
 				break;
 			}
 	} else {
-		fprintf(stderr, "MP spawn failed\n");
+		fprintf(stderr, "mp spawn failed\n");
 		return;
 	}
 
@@ -316,7 +316,7 @@ void MpPanel::StartButtonMode(StartButtonMode_t mode) {
 	GtkBuilder & builder = (config_entry.getBuilder());
 
 	// get the button image
-	GtkImage *button_image = GTK_IMAGE(gtk_builder_get_object(&builder, "MpStartButtonImage"));
+	GtkImage *button_image = GTK_IMAGE(gtk_builder_get_object(&builder, "mpStartButtonImage"));
 	g_assert(button_image);
 
 	// get the stock image size
@@ -325,7 +325,7 @@ void MpPanel::StartButtonMode(StartButtonMode_t mode) {
 	gtk_image_get_stock(button_image, &stock_id, &icon_size);
 
 	// get the button label
-	GtkLabel *button_label = GTK_LABEL(gtk_builder_get_object(&builder, "MpStartButtonLabel"));
+	GtkLabel *button_label = GTK_LABEL(gtk_builder_get_object(&builder, "mpStartButtonLabel"));
 	g_assert(button_label);
 
 	switch (mode) {

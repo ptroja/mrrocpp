@@ -47,8 +47,8 @@ ATI3084_force::~ATI3084_force(void) {
 /**************************** inicjacja czujnika ****************************/
 void ATI3084_force::configure_sensor(void) {// by Y
 	is_sensor_configured = true;
-	//  printf("EDP Sensor configured\n");
-	sr_msg->message("EDP Sensor configured");
+	//  printf("edp Sensor configured\n");
+	sr_msg->message("edp Sensor configured");
 
 	if (!master.force_sensor_test_mode) {
 		sendBias();
@@ -92,7 +92,7 @@ void ATI3084_force::configure_sensor(void) {// by Y
 		//		master.config.value<double>("y_axis_arm"), master.config.return_double_value("z_axis_arm") };
 		lib::K_vector pointofgravity(point);
 		gravity_transformation = new lib::ForceTrans(lib::FORCE_SENSOR_ATI3084,
-				frame, sensor_frame, weight, pointofgravity);
+				frame, sensor_frame, weight, pointofgravity, is_right_turn_frame);
 
 	} else {
 		gravity_transformation->synchro(frame);

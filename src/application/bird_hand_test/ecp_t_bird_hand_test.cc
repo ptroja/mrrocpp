@@ -8,12 +8,12 @@
 #include "ecp_mp_t_bird_hand_test.h"
 
 #include "robot/bird_hand/ecp_r_bird_hand.h"
-#include "ecp/generator/ecp_g_smooth.h"
-#include "ecp/generator/ecp_g_sleep.h"
+#include "generator/ecp/ecp_g_smooth.h"
+#include "generator/ecp/ecp_g_sleep.h"
 #include "ecp_g_bird_hand_test.h"
 #include "ecp_t_bird_hand_test.h"
-#include "ecp_mp/common/generator/ecp_mp_g_transparent.h"
-#include "ecp_mp/common/generator/ecp_mp_g_sleep.h"
+#include "generator/ecp/ecp_mp_g_transparent.h"
+#include "generator/ecp/ecp_mp_g_sleep.h"
 #include "ecp_mp_g_bird_hand_test.h"
 
 namespace mrrocpp {
@@ -32,7 +32,7 @@ bird_hand_test::bird_hand_test(lib::configurator &_config) :
 	g_sleep = new common::generator::sleep(*this);
 	g_bird_hand = new generator::bird_hand(*this);
 
-	sr_ecp_msg->message("ECP BIRD HAND TEST loaded");
+	sr_ecp_msg->message("ecp BIRD HAND TEST loaded");
 }
 
 void bird_hand_test::mp_2_ecp_next_state_string_handler(void)
@@ -48,7 +48,7 @@ void bird_hand_test::mp_2_ecp_next_state_string_handler(void)
 		g_sleep->Move();
 	} else if (mp_2_ecp_next_state_string == ecp_mp::bird_hand::generator::ECP_GEN_BIRD_HAND_TEST) {
 
-		sr_ecp_msg->message("ECP_GEN_BIRD_HAND");
+		sr_ecp_msg->message("ecp_GEN_BIRD_HAND");
 
 		g_bird_hand->Move();
 	}

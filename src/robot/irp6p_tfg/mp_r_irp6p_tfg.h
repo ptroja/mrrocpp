@@ -1,7 +1,7 @@
 #if !defined(MP_R_IRP6P_TFG_H_)
 #define MP_R_IRP6P_TFG_H_
 
-#include "mp/robot/mp_r_motor_driven.h"
+#include "base/mp/mp_r_motor_driven.h"
 
 namespace mrrocpp {
 namespace mp {

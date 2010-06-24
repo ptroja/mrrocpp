@@ -8,8 +8,8 @@
 #if !defined(_ECP_R_SMB_H)
 #define _ECP_R_SMB_H
 
-#include "ecp/ecp_robot.h"
-#include "kinematics/kinematics_manager.h"
+#include "base/ecp/ecp_robot.h"
+#include "base/kinematics/kinematics_manager.h"
 #include "robot/smb/kinematic_model_smb.h"
 #include "robot/smb/smb_const.h"
 #include "lib/data_port_headers/epos.h"

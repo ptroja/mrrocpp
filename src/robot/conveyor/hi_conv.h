@@ -8,7 +8,7 @@
 #ifndef __HI_LOCAL_CONV_H
 #define __HI_LOCAL_CONV_H
 
-#include "edp/hi_rydz.h"
+#include "base/edp/hi_rydz.h"
 
 namespace mrrocpp {
 namespace edp {

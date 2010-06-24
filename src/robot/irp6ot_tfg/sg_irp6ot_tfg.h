@@ -9,8 +9,8 @@
 #ifndef __SG_IRP6OT_TFG_H
 #define __SG_IRP6OT_TFG_H
 
-#include "edp/edp.h"
-#include "edp/servo_gr.h"
+#include "base/edp/edp.h"
+#include "base/edp/servo_gr.h"
 
 namespace mrrocpp {
 namespace edp {

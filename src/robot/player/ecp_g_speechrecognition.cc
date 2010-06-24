@@ -1,7 +1,7 @@
 #include <assert.h>
 #include <unistd.h>
 
-#include "ecp/player/generator/ecp_g_speechrecognition.h"
+#include "base/ecp/player/generator/ecp_g_speechrecognition.h"
 
 namespace mrrocpp {
 namespace ecp {

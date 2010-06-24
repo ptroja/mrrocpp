@@ -8,7 +8,7 @@
 #ifndef ECP_T_OBJECTFOLLOWER_PB_H_
 #define ECP_T_OBJECTFOLLOWER_PB_H_
 
-#include "ecp/task/ecp_task.h"
+#include "base/ecp/ecp_task.h"
 #include <boost/shared_ptr.hpp>
 #include "lib/logger.h"
 #include "robot/irp6ot_m/ecp_r_irp6ot_m.h"

@@ -3,7 +3,7 @@
 #include <unistd.h>
 
 #include "robot/festival/ecp_g_festival.h"
-#include "ecp_mp/task/ecp_mp_t_festival.h"
+#include "robot/festival/ecp_mp_t_festival.h"
 #include "robot/festival/ecp_t_festival.h"
 
 namespace mrrocpp {

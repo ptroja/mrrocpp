@@ -5,22 +5,22 @@
 #include "lib/com_buf.h"
 
 #include "lib/srlib.h"
-#include "ecp_mp/task/ecp_mp_t_rcsc.h"
+#include "application/rcsc/ecp_mp_t_rcsc.h"
 
 #include "robot/irp6p_m/ecp_r_irp6p_m.h"
-#include "ecp/generator/ecp_g_force.h"
+#include "generator/ecp/ecp_g_force.h"
 
-//#include "ecp/generator/ecp_g_smooth.h"
-#include "ecp/generator/ecp_g_smooth.h"
+//#include "generator/ecp/ecp_g_smooth.h"
+#include "generator/ecp/ecp_g_smooth.h"
 #include "ecp_t_rcsc_irp6p.h"
-#include "ecp/task/ecp_st_bias_edp_force.h"
-#include "ecp/task/ecp_st_tff_nose_run.h"
-#include "ecp/generator/ecp_g_force.h"
-#include "ecp_mp/common/generator/ecp_mp_g_transparent.h"
-#include "ecp_mp/common/generator/ecp_mp_g_smooth.h"
-#include "ecp_mp/common/generator/ecp_mp_g_teach_in.h"
-#include "ecp_mp/common/generator/ecp_mp_g_force.h"
-#include "ecp_mp/task/ecp_mp_st_gripper_opening.h"
+#include "subtask/ecp_st_bias_edp_force.h"
+#include "subtask/ecp_st_tff_nose_run.h"
+#include "generator/ecp/ecp_g_force.h"
+#include "generator/ecp/ecp_mp_g_transparent.h"
+#include "generator/ecp/ecp_mp_g_smooth.h"
+#include "generator/ecp/ecp_mp_g_teach_in.h"
+#include "generator/ecp/ecp_mp_g_force.h"
+#include "subtask/ecp_mp_st_gripper_opening.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -57,7 +57,7 @@ rcsc::rcsc(lib::configurator &_config) :
 		subtask_m[ecp_mp::task::ECP_ST_TFF_NOSE_RUN] = ecpst;
 	}
 
-	sr_ecp_msg->message("ECP loaded");
+	sr_ecp_msg->message("ecp loaded");
 }
 
 void rcsc::mp_2_ecp_next_state_string_handler(void)

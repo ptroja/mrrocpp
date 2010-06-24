@@ -12,7 +12,7 @@
 #if !defined(_EDP_S_ATI6284_MS_H)
 #define _EDP_S_ATI6284_MS_H
 
-#include "edp/edp_e_manip.h"
+#include "base/edp/edp_e_manip.h"
 #include "sensor/ati6284KT/TimeUtil.h"
 #include "sensor/ati6284KT/RawSocket.h"
 #include "sensor/ati6284KT/ForceSensor.h"

@@ -15,7 +15,7 @@
 #include "lib/mrmath/mrmath.h"
 #include "ui/ui_ecp_r_common.h"
 
-#include "ecp/ecp_robot.h"
+#include "base/ecp/ecp_robot.h"
 
 // ---------------------------------------------------------------
 class ui_irp6_common_robot : public ui_common_robot

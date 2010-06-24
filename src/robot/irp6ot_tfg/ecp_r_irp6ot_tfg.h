@@ -8,10 +8,10 @@
 #if !defined(_ECP_R_IRP6OT_TFG_H)
 #define _ECP_R_IRP6OT_TFG_H
 
-#include "ecp/ecp_robot.h"
+#include "base/ecp/ecp_robot.h"
 #include "robot/irp6ot_tfg/irp6ot_tfg_const.h"
 
-#include "kinematics/kinematics_manager.h"
+#include "base/kinematics/kinematics_manager.h"
 #include "robot/irp6ot_tfg/kinematic_model_irp6ot_tfg.h"
 
 namespace mrrocpp {

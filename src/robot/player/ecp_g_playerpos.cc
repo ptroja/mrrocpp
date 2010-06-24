@@ -1,7 +1,7 @@
 #include <assert.h>
 #include <unistd.h>
 
-#include "ecp/player/generator/ecp_g_playerpos.h"
+#include "base/ecp/player/generator/ecp_g_playerpos.h"
 
 namespace mrrocpp {
 namespace ecp {

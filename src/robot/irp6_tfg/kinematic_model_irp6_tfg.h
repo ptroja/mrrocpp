@@ -12,7 +12,7 @@
 #if !defined(_IRP6_TFG_KIN_MODEL)
 #define _IRP6_TFG_KIN_MODEL
 
-#include "kinematics/kinematic_model.h"
+#include "base/kinematics/kinematic_model.h"
 
 namespace mrrocpp {
 namespace kinematics {

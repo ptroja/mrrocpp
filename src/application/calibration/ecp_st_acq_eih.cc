@@ -63,7 +63,7 @@ acq_eih::acq_eih(task &_ecp_t) :
 	printf("acq_eih::acq_eih() 7\n");
 	fflush(stdout);
 
-	ecp_sub_task::ecp_t.sr_ecp_msg->message("ECP loaded eihacquisition");
+	ecp_sub_task::ecp_t.sr_ecp_msg->message("ecp loaded eihacquisition");
 
 	// TODO: UWAGA: TU JEST WIELKI BUG: pole ofp nie jest zainicjalizowane
 	ofp.number_of_measures = ecp_sub_task::ecp_t.config.value<int> ("measures_count");
@@ -106,7 +106,7 @@ void acq_eih::main_task_algorithm(void) {
 	delay.tv_nsec = (delay_ms % 1000) * 1000000;//delay in ms
 	delay.tv_sec = (int) (delay_ms / 1000);
 
-	ecp_sub_task::ecp_t.sr_ecp_msg->message("ECP eihacquisition ready");
+	ecp_sub_task::ecp_t.sr_ecp_msg->message("ecp eihacquisition ready");
 
 	//Czekam, az czujnik bedzie skonfigurowany.
 	//ecp_mp::sensor::fradia_sensor<chessboard_t,lib::empty_t> * fradia = dynamic_cast<ecp_mp::sensor::fradia_sensor<chessboard_t,lib::empty_t> *> (ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_CVFRADIA]);

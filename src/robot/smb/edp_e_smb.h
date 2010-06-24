@@ -10,7 +10,7 @@
 #ifndef __EDP_E_SMB_H
 #define __EDP_E_SMB_H
 
-#include "edp/edp_e_motor_driven.h"
+#include "base/edp/edp_e_motor_driven.h"
 #include "robot/smb/smb_const.h"
 
 namespace mrrocpp {

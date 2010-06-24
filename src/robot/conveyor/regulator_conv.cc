@@ -14,8 +14,8 @@
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
-#include "edp/edp.h"
-#include "edp/reader.h"
+#include "base/edp/edp.h"
+#include "base/edp/reader.h"
 #include "robot/conveyor/regulator_conv.h"
 
 #include "lib/mrmath/mrmath.h"

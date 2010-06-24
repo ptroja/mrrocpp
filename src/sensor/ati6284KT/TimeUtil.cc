@@ -56,7 +56,7 @@ void TimeUtil::stopMeasurement() {
 		unsigned int timeElapsedUs = cyclesToUs(ClockCycles() - mpsFirstCycle);
 		//printf("Time elapsed us = %u\n", timeElapsedUs);
 		mps_ = 1000000000ull / timeElapsedUs;
-		//printf("mps = %u\n", mps_);
+		//printf("base/mps = %u\n", mps_);
 		mpsFirstCycle = ClockCycles();
 
 	}

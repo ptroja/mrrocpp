@@ -8,13 +8,13 @@
 #include "ecp_mp_t_swarmitfix.h"
 
 #include "robot/shead/ecp_r_shead.h"
-#include "ecp/generator/ecp_g_smooth.h"
-#include "ecp/generator/ecp_g_sleep.h"
+#include "generator/ecp/ecp_g_smooth.h"
+#include "generator/ecp/ecp_g_sleep.h"
 #include "ecp_g_shead.h"
 #include "ecp_t_shead.h"
-#include "ecp_mp/common/generator/ecp_mp_g_transparent.h"
-#include "ecp_mp/common/generator/ecp_mp_g_smooth.h"
-#include "ecp_mp/common/generator/ecp_mp_g_sleep.h"
+#include "generator/ecp/ecp_mp_g_transparent.h"
+#include "generator/ecp/ecp_mp_g_smooth.h"
+#include "generator/ecp/ecp_mp_g_sleep.h"
 #include "ecp_mp_g_shead.h"
 
 namespace mrrocpp {
@@ -37,7 +37,7 @@ swarmitfix::swarmitfix(lib::configurator &_config) :
 	g_head_vacuum_on = new generator::head_vacuum_on(*this);
 	g_head_vacuum_off = new generator::head_vacuum_off(*this);
 
-	sr_ecp_msg->message("ECP shead loaded");
+	sr_ecp_msg->message("ecp shead loaded");
 }
 
 void swarmitfix::mp_2_ecp_next_state_string_handler(void)

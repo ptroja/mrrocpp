@@ -8,10 +8,10 @@
 #if !defined(_ECP_R_IRP6P_TFG_H)
 #define _ECP_R_IRP6P_TFG_H
 
-#include "ecp/ecp_robot.h"
+#include "base/ecp/ecp_robot.h"
 #include "robot/irp6p_tfg/irp6p_tfg_const.h"
 
-#include "kinematics/kinematics_manager.h"
+#include "base/kinematics/kinematics_manager.h"
 
 #include "robot/irp6p_tfg/kinematic_model_irp6p_tfg.h"
 

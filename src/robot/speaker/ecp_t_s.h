@@ -1,7 +1,7 @@
 #if !defined(_ECP_T_SPEAKER_H)
 #define _ECP_T_SPEAKER_H
 
-#include "ecp/task/ecp_task.h"
+#include "base/ecp/ecp_task.h"
 #include "robot/speaker/ecp_g_speak.h"
 
 namespace mrrocpp {

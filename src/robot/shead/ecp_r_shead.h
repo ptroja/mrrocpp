@@ -8,9 +8,9 @@
 #if !defined(_ECP_R_SHEAD_H)
 #define _ECP_R_SHEAD_H
 
-#include "ecp/ecp_robot.h"
+#include "base/ecp/ecp_robot.h"
 #include "robot/shead/shead_const.h"
-#include "kinematics/kinematics_manager.h"
+#include "base/kinematics/kinematics_manager.h"
 #include "robot/shead/kinematic_model_shead.h"
 #include "lib/data_port_headers/shead.h"
 

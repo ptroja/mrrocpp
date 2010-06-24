@@ -1,8 +1,8 @@
 #if !defined(_ECP_T_SPKM_BIRD_HAND_TEST_H)
 #define _ECP_T_SPKM_BIRD_HAND_TEST_H
 
-#include "ecp/task/ecp_task.h"
-#include "ecp/generator/ecp_g_transparent.h"
+#include "base/ecp/ecp_task.h"
+#include "base/ecp/ecp_g_transparent.h"
 
 namespace mrrocpp {
 namespace ecp {

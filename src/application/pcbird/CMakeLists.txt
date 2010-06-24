@@ -1,6 +1,6 @@
 add_executable(ecp_pcbird
 	ecp_t_pcbird.cc
-	${ECP_MPDIR}/birdclient.cc
+	../../sensor/pcbird/birdclient.cc
 	${ECP_MPDIR}/sensor/ecp_mp_s_pcbird.cc
 	${ECPDIR}/generator/ecp_g_cvfradia.cc
 )

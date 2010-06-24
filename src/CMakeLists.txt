@@ -115,13 +115,11 @@ set(COMMON_LIBRARIES mrrocpp ${COMMON_LIBRARIES}
 
 # Recurse into subdirectories.
 add_subdirectory (lib)
-add_subdirectory (kinematics)
+add_subdirectory (base)
 add_subdirectory (sensor)
-add_subdirectory (edp)
-add_subdirectory (ecp)
-add_subdirectory (ecp_mp)
-add_subdirectory (mp)
+add_subdirectory (generator)
+add_subdirectory (subtask)
 add_subdirectory (robot)
 add_subdirectory (ui)
 add_subdirectory (application)
-add_subdirectory (vsp)
+

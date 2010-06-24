@@ -14,7 +14,7 @@
 #define _POLYCRANK_KIN_model
 
 // Definicja klasy kinematic_model.
-#include "kinematics/kinematic_model_with_tool.h"
+#include "base/kinematics/kinematic_model_with_tool.h"
 
 namespace mrrocpp {
 namespace kinematics {

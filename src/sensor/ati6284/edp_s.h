@@ -5,7 +5,7 @@
 #if !defined(_EDP_S_ATI6284_H)
 #define _EDP_S_ATI6284_H
 
-#include "edp/edp_force_sensor.h"
+#include "base/edp/edp_force_sensor.h"
 
 namespace mrrocpp {
 namespace edp {

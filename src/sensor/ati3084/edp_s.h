@@ -10,7 +10,7 @@
 #if !defined(_EDP_S_ATI3084_H)
 #define _EDP_S_ATI3084_H
 
-#include "edp/edp_e_manip.h"
+#include "base/edp/edp_e_manip.h"
 
 namespace mrrocpp {
 namespace edp {

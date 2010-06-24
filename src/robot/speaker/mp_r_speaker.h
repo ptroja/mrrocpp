@@ -6,7 +6,7 @@
 #if !defined(__MP_R_SPEAKER_H)
 #define __MP_R_SPEAKER_H
 
-#include "mp/mp.h"
+#include "base/mp/mp.h"
 #include "robot/speaker/speaker_const.h"
 
 namespace mrrocpp {

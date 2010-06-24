@@ -16,7 +16,7 @@
 #if !defined(EA_9A938E04_44AF_4d5f_B8CC_BE3DF0E08682__INCLUDED_)
 #define EA_9A938E04_44AF_4d5f_B8CC_BE3DF0E08682__INCLUDED_
 
-#include "ecp/generator/ecp_g_visual_servo.h"
+#include "generator/ecp/ecp_g_visual_servo.h"
 
 namespace mrrocpp {
 namespace ecp {

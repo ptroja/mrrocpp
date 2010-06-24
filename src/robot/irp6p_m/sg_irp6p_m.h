@@ -9,8 +9,8 @@
 #ifndef __SG_IRP6P_M_H
 #define __SG_IRP6P_M_H
 
-#include "edp/edp.h"
-#include "edp/servo_gr.h"
+#include "base/edp/edp.h"
+#include "base/edp/servo_gr.h"
 
 // os od ktorej startuje synchronizacja - numeracja od 0
 #define IRP6P_SYN_INIT_AXE 1

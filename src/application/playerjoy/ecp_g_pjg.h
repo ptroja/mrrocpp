@@ -9,7 +9,7 @@
 
 #include "lib/impconst.h"
 
-#include "ecp/generator/ecp_generator.h"
+#include "base/ecp/ecp_generator.h"
 
 namespace mrrocpp {
 namespace ecp {

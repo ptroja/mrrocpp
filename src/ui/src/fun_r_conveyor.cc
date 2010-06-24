@@ -393,7 +393,7 @@ int EDP_conveyor_synchronise_int(PtWidget_t *widget, ApInfo_t *apinfo,
 			ui.conveyor->state.edp.is_synchronised
 					= ui.conveyor->ui_ecp_robot->ecp->is_synchronised();
 		} else {
-			// 	printf("EDP conveyor niepowolane, synchronizacja niedozwolona\n");
+			// 	printf("edp conveyor niepowolane, synchronizacja niedozwolona\n");
 		}
 
 	} // end try
@@ -549,7 +549,7 @@ int EDP_conveyor_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 
 				if (ui.conveyor->state.edp.pid < 0) {
 					ui.conveyor->state.edp.state = 0;
-					fprintf(stderr, "EDP spawn failed: %s\n", strerror(errno));
+					fprintf(stderr, "edp spawn failed: %s\n", strerror(errno));
 					delete ui.conveyor->ui_ecp_robot;
 				} else { // jesli spawn sie powiodl
 					ui.conveyor->state.edp.state = 1;

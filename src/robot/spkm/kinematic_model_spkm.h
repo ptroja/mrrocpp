@@ -9,9 +9,9 @@
 #ifndef KINEMATIC_MODEL_SPKM_H_
 #define KINEMATIC_MODEL_SPKM_H_
 
-#include "kinematics/kinematic_model.h"
+#include "base/kinematics/kinematic_model.h"
 #include "robot/spkm/kinematic_parameters_spkm.h"
-#include "kinematics/kinematic_model_with_tool.h"
+#include "base/kinematics/kinematic_model_with_tool.h"
 
 namespace mrrocpp {
 namespace kinematics {

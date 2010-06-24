@@ -1,13 +1,13 @@
 #if !defined(_ECP_T_TB_IRP6OT_H)
 #define _ECP_T_TB_IRP6OT_H
 
-#include "ecp/task/ecp_task.h"
-#include "ecp/generator/ecp_g_smooth.h"
-#include "ecp/generator/ecp_g_force.h"
+#include "base/ecp/ecp_task.h"
+#include "generator/ecp/ecp_g_smooth.h"
+#include "generator/ecp/ecp_g_force.h"
 #include "lib/com_buf.h"
-#include "ecp/task/ecp_st_go.h"
-#include "ecp/generator/ecp_g_sleep.h"
-#include "ecp_mp/sensor/ecp_mp_s_fradia_sensor.h"
+#include "subtask/ecp_st_go.h"
+#include "generator/ecp/ecp_g_sleep.h"
+#include "sensor/fradia/ecp_mp_s_fradia_sensor.h"
 #include "ecp_mp_tr_draughtsAI.h"
 #include "ecp_g_vis_ib_eih_follower_irp6ot.h"
 
@@ -36,7 +36,6 @@ typedef enum {
 
 /*
  * Structure for storing pawn coordinates from cvFraDIA
- * used in Draughts task
  * \author tbem
  */
 typedef struct {

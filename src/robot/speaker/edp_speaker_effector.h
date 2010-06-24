@@ -15,8 +15,8 @@
 
 // Klasa edp_effector.
 #include <pthread.h>
-#include <sys/asoundlib.h> //MAC7 - should be before "edp/edp.h"
-#include "edp/edp_e_manip.h"
+#include <sys/asoundlib.h> //MAC7 - should be before "base/edp/edp.h"
+#include "base/edp/edp_e_manip.h"
 //#include "robot/speaker/sound.h" // MAC7
 
 namespace mrrocpp {

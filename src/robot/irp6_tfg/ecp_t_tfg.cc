@@ -5,13 +5,13 @@
 #include "lib/com_buf.h"
 
 #include "lib/srlib.h"
-#include "ecp_mp/task/ecp_mp_t_tfg.h"
+
 
 #include "robot/irp6ot_tfg/ecp_r_irp6ot_tfg.h"
 #include "robot/irp6p_tfg/ecp_r_irp6p_tfg.h"
 
 #include "robot/irp6_tfg/ecp_t_tfg.h"
-#include "ecp_mp/common/generator/ecp_mp_g_tfg.h"
+#include "generator/ecp/ecp_mp_g_tfg.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -33,7 +33,7 @@ tfg::tfg(lib::configurator &_config) :
 
 	tfgg = new generator::tfg(*this, 10);
 
-	sr_ecp_msg->message("ECP TFG loaded");
+	sr_ecp_msg->message("ecp TFG loaded");
 }
 
 void tfg::mp_2_ecp_next_state_string_handler(void)

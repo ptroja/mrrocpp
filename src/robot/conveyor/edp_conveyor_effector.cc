@@ -16,13 +16,13 @@
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 #include "lib/mrmath/mrmath.h"
-#include "edp/reader.h"
+#include "base/edp/reader.h"
 
 // Klasa edp_conveyor_effector.
-#include "edp/edp.h"
-#include "edp/manip_trans_t.h"
+#include "base/edp/edp.h"
+#include "base/edp/manip_trans_t.h"
 #include "robot/conveyor/edp_conveyor_effector.h"
-#include "edp/servo_gr.h"
+#include "base/edp/servo_gr.h"
 // Model kinematyczny tasmociagu.
 #include "robot/conveyor/kinematic_model_conveyor.h"
 #include "robot/conveyor/conveyor_const.h"

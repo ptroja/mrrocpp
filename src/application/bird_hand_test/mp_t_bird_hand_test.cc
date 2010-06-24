@@ -10,14 +10,14 @@
 #include "lib/com_buf.h"
 
 #include "lib/srlib.h"
-#include "mp/mp.h"
+#include "base/mp/mp.h"
 #include "ecp_mp_t_bird_hand_test.h"
 #include "mp_t_bird_hand_test.h"
 #include "lib/single_thread_port.h"
 #include "lib/mrmath/mrmath.h"
 #include "lib/data_port_headers/bird_hand.h"
 #include "robot/bird_hand/bird_hand_const.h"
-#include "ecp_mp/common/generator/ecp_mp_g_transparent.h"
+#include "generator/ecp/ecp_mp_g_transparent.h"
 #include "ecp_mp_g_bird_hand_test.h"
 
 #include <iostream>

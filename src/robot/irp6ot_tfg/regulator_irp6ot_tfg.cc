@@ -12,10 +12,10 @@
 #include "lib/com_buf.h"
 
 // Klasa edp_irp6ot_effector.
-//#include "edp/irp6_on_track/edp_irp6ot_effector.h"
-#include "edp/reader.h"
+//#include "base/edp/irp6_on_track/edp_irp6ot_effector.h"
+#include "base/edp/reader.h"
 // Klasa hardware_interface.
-//#include "edp/irp6_on_track/hi_irp6ot.h"
+//#include "base/edp/irp6_on_track/hi_irp6ot.h"
 // Klasa servo_buffer.
 #include "robot/irp6ot_tfg/regulator_irp6ot_tfg.h"
 

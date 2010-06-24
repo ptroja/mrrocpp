@@ -8,7 +8,7 @@
 #if !defined(_ECP_R_CONVEYOR_H)
 #define _ECP_R_CONVEYOR_H
 
-#include "ecp/ecp_robot.h"
+#include "base/ecp/ecp_robot.h"
 #include "robot/conveyor/conveyor_const.h"
 
 namespace mrrocpp {
