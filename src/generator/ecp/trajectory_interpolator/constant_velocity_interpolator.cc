@@ -22,8 +22,15 @@ constant_velocity_interpolator::~constant_velocity_interpolator() {
 	// TODO Auto-generated destructor stub
 }
 
-bool constant_velocity_interpolator::interpolate(vector<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose>::iterator & it, vector<vector<double> >::iterator & cit) {
+bool constant_velocity_interpolator::interpolate_relative(vector<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose>::iterator & it, vector<vector<double> >::iterator & cit) {
 
+	//next_position = k * (s_przysp + ((node_counter - przysp) * tk) * v_r);
+	return true;
+}
+
+bool constant_velocity_interpolator::interpolate_absolute(vector<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose>::iterator & it, vector<vector<double> >::iterator & cit) {
+
+	//next_position = it->start_position + k * (s_przysp + ((node_counter - przysp) * tk) * v_r);
 	return true;
 }
 

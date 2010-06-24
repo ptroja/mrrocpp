@@ -75,11 +75,33 @@ bool constant_velocity_profile::calculate_pose_time(vector<ecp_mp::common::traje
 	}
 }
 
-bool constant_velocity_profile::calculate_distance_direction_pose(vector<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose>::iterator & it) {
+bool constant_velocity_profile::calculate_absolute_distance_direction_pose(vector<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose>::iterator & it) {
+
+	if (it->coordinates.size() < it->axes_num || it->start_position.size() < it->axes_num) {
+		return false;
+	}
 
 	for (int i = 0; i < it->axes_num; i++) {
 		it->s[i] = abs(it->coordinates[i] - it->start_position[i]);
 		if (it->coordinates[i] - it->start_position[i] >= 0) {
+			it->k[i] = 1;
+		} else {
+			it->k[i] = -1;
+		}
+	}
+
+	return true;
+}
+
+bool constant_velocity_profile::calculate_relative_distance_direction_pose(vector<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose>::iterator & it) {
+
+	if (it->coordinates.size() < it->axes_num) {
+		return false;
+	}
+
+	for (int i = 0; i < it->axes_num; i++) {
+		it->s[i] = it->coordinates[i];
+		if (it->coordinates[i] >= 0) {
 			it->k[i] = 1;
 		} else {
 			it->k[i] = -1;

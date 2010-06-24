@@ -33,13 +33,19 @@ public:
 	 */
 	virtual ~trajectory_interpolator();
 	/**
-	 * Method interpolates the trajectory basing on the list of poses of type %constant_velocity_trajectory_pose.
+	 * Method interpolates the relative type trajectory basing on the list of poses of stored in objects of types derived from %trajectory_pose.
 	 * @param it iterator to the list of positions
 	 * @param cit iterator to the list of coordinates
 	 * @return true if the interpolation was successful
 	 */
-	virtual bool interpolate(typename vector<Pos>::iterator & pose_vector_iterator, vector<vector<double> >::iterator & coordinate_vector_iterator) = 0;
-
+	virtual bool interpolate_relative(typename vector<Pos>::iterator & pose_vector_iterator, vector<vector<double> >::iterator & coordinate_vector_iterator) = 0;
+	/**
+	 * Method interpolates the absolute type trajectory basing on the list of poses of stored in objects of types derived from %trajectory_pose.
+	 * @param it iterator to the list of positions
+	 * @param cit iterator to the list of coordinates
+	 * @return true if the interpolation was successful
+	 */
+	virtual bool interpolate_absolute(typename vector<Pos>::iterator & pose_vector_iterator, vector<vector<double> >::iterator & coordinate_vector_iterator) = 0;
 };
 
 } // namespace trajectory_interpolator

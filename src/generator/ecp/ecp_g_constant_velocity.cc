@@ -32,13 +32,19 @@ bool constant_velocity::first_step() {
 		return false;
 	}
 
-	the_robot->ecp_command.instruction.get_type = ARM_DEFINITION;
+	the_robot->ecp_command.instruction.get_type = NOTHING_DEFINITION;
 	the_robot->ecp_command.instruction.set_type = ARM_DEFINITION;
-	the_robot->ecp_command.instruction.instruction_type = lib::GET;
+	the_robot->ecp_command.instruction.get_arm_type = lib::INVALID_END_EFFECTOR;
+	the_robot->ecp_command.instruction.motion_steps = 10;
+	the_robot->ecp_command.instruction.value_in_step_no = 8;
+	the_robot->ecp_command.instruction.instruction_type = lib::SET;
+
 	if (motion_type == lib::RELATIVE) {
 		the_robot->ecp_command.instruction.motion_type = lib::RELATIVE;
-	} else {
+	} else if (motion_Type == lib::ABSOLUTE) {
 		the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
+	} else {
+		//TODO throw exception
 	}
 
 	switch (pose_spec) {
@@ -68,12 +74,61 @@ bool constant_velocity::first_step() {
 			throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 	}
 
+	coordinate_vector_iterator = coordinate_vector.begin();
+
 	return true;
 }
 
 bool constant_velocity::next_step() {
 
-	return true;
+	if (coordinate_vector.empty()) {
+		return false;
+	}
+
+	switch (pose_spec)
+		{
+
+		case lib::ECP_XYZ_EULER_ZYZ:
+
+			//homog_matrix.set_from_xyz_euler_zyz(lib::Xyz_Euler_Zyz_vector(*coordinate_vector_iterator));
+			//homog_matrix.get_frame_tab(the_robot->ecp_command.instruction.arm.pf_def.arm_frame);
+
+			break;
+
+		case lib::ECP_XYZ_ANGLE_AXIS:
+
+			//homog_matrix.set_from_xyz_angle_axis(lib::Xyz_Angle_Axis_vector(*coordinate_vector_iterator));
+			//homog_matrix.get_frame_tab(the_robot->ecp_command.instruction.arm.pf_def.arm_frame);
+
+			break;
+
+		case lib::ECP_JOINT:
+
+			for (i = 0; i < axes_num; i++) {
+				//the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
+					//	= coordinate_list_iterator->coordinate[i];
+			}
+
+			break;
+
+		case lib::ECP_MOTOR:
+
+			for (i = 0; i < axes_num; i++) {
+				//the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
+					//	= coordinate_list_iterator->coordinate[i];
+			}
+
+			break;
+
+		default:
+			throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+	}// end:switch
+
+	if (coordinate_vector_iterator == coordinate_vector.end()) {
+		return false;
+	} else {
+		return true;
+	}
 }
 
 bool constant_velocity::calculate_interpolate() {
@@ -88,11 +143,29 @@ bool constant_velocity::calculate_interpolate() {
 	get_pos->Move();
 
 	pose_vector_iterator = pose_vector.begin();
-	pose_vector_iterator->start_position = get_pos->get_position_vector();//get actual position of the robot
+	if (motion_type == lib::ABSOLUTE) {
+		pose_vector_iterator->start_position = get_pos->get_position_vector();//get actual position of the robot
+	} else if (motion_type == lib::RELATIVE) {
+		pose_vector_iterator->start_position = 0;
+	} else {
+		//TODO throw exception
+	}
 
 	for (i = 0; i < pose_vector.size(); i++) {//calculate distances and directions for each pose and axis
-		if (!vpc.calculate_distance_direction_pose(pose_vector_iterator) ||
-		!vpc.calculate_time_pose(pose_vector_iterator) ||//calculate times for each of the axes
+
+		if(motion_type == lib::ABSOLUTE) {
+			if (!vpc.calculate_absolute_distance_direction_pose(pose_vector_iterator)) {
+				return false;
+			}
+		} else if(motion_type == lib::RELATIVE) {
+			if (!vpc.calculate_relative_distance_direction_pose(pose_vector_iterator)) {
+				return false;
+			}
+		} else {
+			//TODO throw exception
+		}
+
+		if(!vpc.calculate_time_pose(pose_vector_iterator) ||//calculate times for each of the axes
 		!vpc.calculate_pose_time(pose_vector_iterator) ||//calculate the longest time from each of the axes and set it as the pose time
 		!vpc.calculate_constant_velocity_pose(pose_vector_iterator)) {
 			return false;//calculate velocities for all of the axes according to the longest needed time
@@ -104,8 +177,15 @@ bool constant_velocity::calculate_interpolate() {
 
 	coordinate_vector.clear();
 	coordinate_vector_iterator = coordinate_vector.begin();
+	pose_vector_iterator = pose_vector.begin();
 
-	interpolated = inter.interpolate(pose_vector_iterator, coordinate_vector_iterator); //interpolate trajectory, fill in the coordinate list
+	if (motion_type == lib::ABSOLUTE) {
+		interpolated = inter.interpolate_absolute(pose_vector_iterator, coordinate_vector_iterator); //interpolate trajectory, fill in the coordinate list
+	} else if (motion_type == lib::RELATIVE) {
+		interpolated = inter.interpolate_relative(pose_vector_iterator, coordinate_vector_iterator); //interpolate trajectory, fill in the coordinate list
+	} else {
+		//TODO throw exception
+	}
 
 	if (calculated && interpolated)
 		return true;
