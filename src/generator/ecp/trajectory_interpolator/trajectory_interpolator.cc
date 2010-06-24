@@ -13,12 +13,12 @@ namespace common {
 namespace generator {
 namespace trajectory_interpolator {
 
-trajectory_interpolator::trajectory_interpolator() {
+template <class Pos> trajectory_interpolator<Pos>::trajectory_interpolator() {
 	// TODO Auto-generated constructor stub
 
 }
 
-trajectory_interpolator::~trajectory_interpolator() {
+template <class Pos> trajectory_interpolator<Pos>::~trajectory_interpolator() {
 	// TODO Auto-generated destructor stub
 }
 

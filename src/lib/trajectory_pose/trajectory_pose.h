@@ -36,9 +36,13 @@ public:
    */
   int interpolation_node_no;
   /**
-   * Time needed to perform a movement.
+   * Time needed to perform a movement (usually the biggest time stored in the vector times).
    */
   double t;
+  /**
+   * Times needed to perform a movement in each of the axes.
+   */
+  vector<double> times;
   /**
    * Direction of the motion. Either equal to 1 or -1.
    */
