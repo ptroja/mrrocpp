@@ -1549,11 +1549,15 @@ int16_t model_5dof::QuadraticEquation(double a, double b, double c, double *x1, 
 	} /* koniec rozwiazania rownania kwadratowego */
 	else { /* rownanie liniowe */
 		if ((b < EPS) && (b > -EPS)) /* b == 0 */
+		{
 			if ((c < EPS) && (c > -EPS)) /* c == 0 */
+			{
 				return (TRIVIAL_EQUATION);
-			else
+			} else {
 				/* c != 0 */
 				return (INCONSISTENT_DATA);
+			}
+		}
 		/* b != 0 */
 		*x1 = -c / b;
 		/* z powodu kumulacji bledow numerycznych pierwiastek, ktory
@@ -1707,12 +1711,13 @@ int16_t model_5dof::Ecos_Fsin_G(double e, double f, double g, double *theta1_ptr
 		if (*theta1_ptr > M_PI)
 			*theta1_ptr = M_PI;
 		/* sprawdzenie legalnosci kata theta */
-		if ((*theta1_ptr <= upper_limit) && (*theta1_ptr >= lower_limit))
-			if ((no_of_solutions == ALL_SOLUTIONS) || (fabs(*theta1_ptr - OldTheta) < max_theta_inc))
+		if ((*theta1_ptr <= upper_limit) && (*theta1_ptr >= lower_limit)) {
+			if ((no_of_solutions == ALL_SOLUTIONS) || (fabs(*theta1_ptr - OldTheta) < max_theta_inc)) {
 				return (ONE_SOLUTION);
-			else {
+			} else {
 				return (NO_SOLUTION);
 			}
+		}
 	} else /* efg != 0 --> e^2 + f^2 - g^2  ! 0 */
 	if (efg < -EQ_EPS) /* e^2 + f^2 - g^2  < 0 */
 		return (INCONSISTENT_DATA);

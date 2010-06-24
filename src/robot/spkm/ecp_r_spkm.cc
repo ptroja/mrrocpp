@@ -57,7 +57,7 @@ void robot::clear_data_ports()
 void robot::create_command()
 {
 
-	int new_data_counter;
+	//	int new_data_counter;
 	bool is_new_data;
 	bool is_new_request;
 
