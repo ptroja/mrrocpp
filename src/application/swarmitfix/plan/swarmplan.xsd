@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="State">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="TindFrom" type="xs:nonNegativeInteger"/>
+                <xs:element name="TindTo" type="xs:nonNegativeInteger"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="PkmState">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="State"/>
+                <xs:element name="ind" type="xs:nonNegativeInteger"/>
+                <xs:element form="unqualified" name="l1" nillable="false" type="xs:double"/>
+                <xs:element form="unqualified" name="l2" nillable="false" type="xs:double"/>
+                <xs:element form="unqualified" name="l3" nillable="false" type="xs:double"/>
+                <xs:element form="unqualified" name="phi" nillable="false" type="xs:double"/>
+                <xs:element form="unqualified" name="psi1" nillable="false" type="xs:double"/>
+                <xs:element form="unqualified" name="psi2" nillable="false" type="xs:double"/>
+                <xs:element form="unqualified" name="psi3" nillable="false" type="xs:double"/>
+                <xs:element form="unqualified" name="rho" nillable="false" type="xs:double"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="BaseState">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="State"/>
+                <xs:element name="ind" type="xs:nonNegativeInteger"/>
+                <xs:element name="bx" type="xs:double"/>
+                <xs:element name="by" type="xs:double"/>
+                <xs:element name="bz" type="xs:double"/>
+                <xs:element name="theta" type="xs:double"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="HeadState">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="State"/>
+                <xs:element name="ind" type="xs:nonNegativeInteger"/>
+                <xs:element name="alpha" type="xs:double"/>
+                <xs:element name="beta" type="xs:double"/>
+                <xs:element name="gamma" type="xs:double"/>
+                <xs:element name="hx" type="xs:double"/>
+                <xs:element name="hy" type="xs:double"/>
+                <xs:element name="hz" type="xs:double"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Plan">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="head">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element maxOccurs="unbounded" ref="HeadState"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="mbase">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element maxOccurs="unbounded" ref="BaseState"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="pkm">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element maxOccurs="unbounded" ref="PkmState"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="PathPlan">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="agents">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element maxOccurs="unbounded" ref="Plan"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="D">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element maxOccurs="unbounded" name="D" type="xs:double"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="H">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element maxOccurs="unbounded" name="H" type="xs:double"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="timePoints">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element maxOccurs="unbounded" name="timePoint" type="xs:double"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>
