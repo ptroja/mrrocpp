@@ -8,8 +8,10 @@
 #ifndef _VELOCITY_PROFILE_H_
 #define _VELOCITY_PROFILE_H_
 
-#include <list>
+//#include <list>
 #include <math.h>
+#include <algorithm>
+//#include <vector>
 
 #include "ecp_mp/trajectory_pose/trajectory_pose.h"
 

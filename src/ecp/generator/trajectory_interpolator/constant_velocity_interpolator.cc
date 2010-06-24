@@ -22,6 +22,11 @@ constant_velocity_interpolator::~constant_velocity_interpolator() {
 	// TODO Auto-generated destructor stub
 }
 
+bool constant_velocity_interpolator::interpolate(vector<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose>::iterator & it, vector<vector<double> >::iterator & cit) {
+
+	return true;
+}
+
 } // namespace trajectory_interpolator
 } // namespace generator
 } // namespace common

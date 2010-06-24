@@ -13,10 +13,13 @@ namespace common {
 namespace generator {
 
 constant_velocity::constant_velocity(common::task::task& _ecp_task, bool _is_synchronised, lib::ECP_POSE_SPECIFICATION pose_spec, int axes_num) :
-		multiple_position<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose> (_ecp_task) {
+		multiple_position<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose,
+		ecp::common::generator::trajectory_interpolator::constant_velocity_interpolator,
+		ecp::common::generator::velocity_profile_calculator::constant_velocity_profile> (_ecp_task) {
 	this->pose_spec = pose_spec;
 	this->axes_num = axes_num;
 	this->vpc = velocity_profile_calculator::constant_velocity_profile();
+	this->inter = trajectory_interpolator::constant_velocity_interpolator();
 }
 
 constant_velocity::~constant_velocity() {
@@ -24,7 +27,11 @@ constant_velocity::~constant_velocity() {
 }
 
 bool constant_velocity::first_step() {
-	//TODO sprawdzic czy trajektoria jest wygenerowana
+
+	if (!calculated || !interpolated) {
+		return false;
+	}
+
 	the_robot->ecp_command.instruction.get_type = ARM_DEFINITION;
 	the_robot->ecp_command.instruction.set_type = ARM_DEFINITION;
 	the_robot->ecp_command.instruction.instruction_type = lib::GET;
@@ -69,29 +76,61 @@ bool constant_velocity::next_step() {
 	return true;
 }
 
-template <class T>
-bool multiple_position<T>::calculate_interpolate() {
+bool constant_velocity::calculate_interpolate() {
 
-	get_position * get_pos = new get_position(ecp_t, true, pose_spec, axes_num);
+	int i; //loop counter
 
-	pose_vector_iterator = pose_vector.begin();
-	get_pos->Move();
-	pose_vector_iterator->start_position = get_pos->get_position_vector();
-	return true;
-}
-
-template <class T>
-bool multiple_position<T>::load_absolute_joint_trajectory_pose(vector<double> & coordinates) {
-	ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose pose;
-	vector<double> joint_velocity(axes_num, 0.05);
-	if (pose_vector.size() > 0 && pose_spec != lib::ECP_JOINT) { //check if previous positions were provided in joint representation
+	if (pose_vector.empty()) {
 		return false;
 	}
+
+	get_position * get_pos = new get_position(ecp_t, true, pose_spec, axes_num); //generator used to get the actual position of the robot
+	get_pos->Move();
+
+	pose_vector_iterator = pose_vector.begin();
+	pose_vector_iterator->start_position = get_pos->get_position_vector();//get actual position of the robot
+
+	for (i = 0; i < pose_vector.size(); i++) {//calculate distances and directions for each pose and axis
+		if (!vpc.calculate_distance_direction_pose(pose_vector_iterator) ||
+		!vpc.calculate_time_pose(pose_vector_iterator) ||//calculate times for each of the axes
+		!vpc.calculate_pose_time(pose_vector_iterator) ||//calculate the longest time from each of the axes and set it as the pose time
+		!vpc.calculate_constant_velocity_pose(pose_vector_iterator)) {
+			return false;//calculate velocities for all of the axes according to the longest needed time
+		}
+		pose_vector_iterator++;
+	}
+
+	calculated = true;
+
+	coordinate_vector.clear();
+	coordinate_vector_iterator = coordinate_vector.begin();
+
+	interpolated = inter.interpolate(pose_vector_iterator, coordinate_vector_iterator); //interpolate trajectory, fill in the coordinate list
+
+	if (calculated && interpolated)
+		return true;
+	else {
+		return false;
+	}
+}
+
+bool constant_velocity::load_absolute_joint_trajectory_pose(vector<double> & coordinates) {
+	ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose pose;
+	vector<double> joint_velocity(axes_num, 0.05);
+	if (!pose_vector.empty() && pose_spec != lib::ECP_JOINT) { //check if previous positions were provided in joint representation
+		return false;
+	}
+
 	pose_spec = lib::ECP_JOINT;
 	pose = ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose(lib::ECP_JOINT, coordinates, joint_velocity); //create new trajectory pose
 	for (int j = 0; j < axes_num; j++) { //set the v_max and calculate v_r velocities
 		pose.v_max.push_back(1.5);
 		pose.v_r[j] = pose.v[j] * pose.v_max[j];
+	}
+
+	if (!pose_vector.empty()) {//set the start position as the desired position of the previous pose
+		pose_vector_iterator = pose_vector.end();
+		pose.start_position = pose_vector_iterator->start_position;
 	}
 
 	pose_vector.push_back(pose); //put new trajectory pose into a pose vector

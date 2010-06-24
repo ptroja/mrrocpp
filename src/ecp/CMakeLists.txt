@@ -29,7 +29,8 @@ add_library(ecp
 	generator/ecp_g_transparent.cc
 	generator/ecp_g_get_position.cc
 	generator/ecp_g_multiple_position.cc
-	generator/ecp_g_newsmooth.cc
+	#generator/ecp_g_newsmooth.cc
+	generator/ecp_g_constant_velocity.cc
 	generator/velocity_profile_calculator/bang_bang_profile.cc
 	generator/velocity_profile_calculator/constant_velocity_profile.cc
 	generator/velocity_profile_calculator/velocity_profile.cc
