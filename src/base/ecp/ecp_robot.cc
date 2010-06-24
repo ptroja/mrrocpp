@@ -186,8 +186,8 @@ void ecp_robot::send()
 #endif
 	{
 		int e = errno; // kod bledu systemowego
-		perror("base/ecp: Send to EDP_MASTER error");
-		sr_ecp_msg.message(lib::SYSTEM_ERROR, e, "base/ecp: Send to EDP_MASTER error");
+		perror("ecp: Send to EDP_MASTER error");
+		sr_ecp_msg.message(lib::SYSTEM_ERROR, e, "ecp: Send to EDP_MASTER error");
 		throw ecp_robot::ECP_error(lib::SYSTEM_ERROR, 0);
 	}
 
