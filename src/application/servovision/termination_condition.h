@@ -39,13 +39,19 @@ public:
 
 	/**
 	 * Reset condition state.
+	 *
 	 * Called in first_step() of visual_servo_manager in order to reset condition state.
 	 */
 	virtual void reset() = 0;
 
+	/**
+	 * Make termination condition update itself.
+	 * @param vsm
+	 */
 	virtual void update(const visual_servo_manager* vsm) = 0;
 
 	/**
+	 * Check if condition is met.
 	 * Implement this to indicate when generator should be terminated.
 	 * @return true if generator should be terminated.
 	 */
