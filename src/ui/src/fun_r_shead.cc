@@ -103,7 +103,7 @@ int EDP_shead_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 				if (ui.shead->state.edp.pid < 0) {
 
 					ui.shead->state.edp.state = 0;
-					fprintf(stderr, "base/edp spawn failed: %s\n", strerror(errno));
+					fprintf(stderr, "edp spawn failed: %s\n", strerror(errno));
 					delete ui.shead->ui_ecp_robot;
 				} else { // jesli spawn sie powiodl
 					ui.shead->state.edp.state = 1;

@@ -109,7 +109,7 @@ bool task::pulse_check()
 			MsgReply(rcvid, EOK, 0, 0);
 		} else {
 			/* A message (presumable ours) received, handle */
-			printf("base/ecp trigger server receive strange message of type: %d\n", ui_msg.data);
+			printf("ecp trigger server receive strange message of type: %d\n", ui_msg.data);
 			MsgReply(rcvid, EOK, 0, 0);
 		}
 	}
@@ -146,7 +146,7 @@ void task::initialize_communication()
 	sr_ecp_msg = new lib::sr_ecp(lib::ECP, ecp_attach_point, sr_net_attach_point, true);
 	sh_msg = new lib::sr_ecp(lib::ECP, ecp_attach_point, sr_net_attach_point, false);
 
-	//	std::cout << "base/ecp: Opening MP pulses channel at '" << mp_pulse_attach_point << "'" << std::endl;
+	//	std::cout << "ecp: Opening MP pulses channel at '" << mp_pulse_attach_point << "'" << std::endl;
 
 #if !defined(USE_MESSIP_SRR)
 	if ((MP_fd = name_open(mp_pulse_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) < 0)
@@ -155,8 +155,8 @@ void task::initialize_communication()
 #endif
 	{
 		int e = errno; // kod bledu systemowego
-		fprintf(stderr, "base/ecp: Unable to locate MP_MASTER process at '%s'\n", mp_pulse_attach_point.c_str());
-		perror("base/ecp: Unable to locate MP_MASTER process");
+		fprintf(stderr, "ecp: Unable to locate MP_MASTER process at '%s'\n", mp_pulse_attach_point.c_str());
+		perror("ecp: Unable to locate MP_MASTER process");
 		throw ECP_main_error(lib::SYSTEM_ERROR, e);
 	}
 
@@ -277,8 +277,8 @@ if (messip::port_reply(ecp_attach, caller, 0, ecp_reply) < 0)
 #endif
 {// by Y&W
 	uint64_t e = errno; // kod bledu systemowego
-	perror("base/ecp: Reply to MP failed");
-	sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "base/ecp: Reply to MP failed");
+	perror("ecp: Reply to MP failed");
+	sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ecp: Reply to MP failed");
 	throw common::generator::generator::ECP_error(lib::SYSTEM_ERROR, 0);
 }
 
@@ -338,8 +338,8 @@ if (messip::port_reply(ecp_attach, caller, 0, ecp_reply) < 0)
 #endif
 {// by Y&W
 	uint64_t e = errno; // kod bledu systemowego
-	perror("base/ecp: Reply to MP failed");
-	sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "base/ecp: Reply to MP failed");
+	perror("ecp: Reply to MP failed");
+	sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ecp: Reply to MP failed");
 	throw ECP_main_error(lib::SYSTEM_ERROR, 0);
 }
 
@@ -357,7 +357,7 @@ if (ecp_reply.reply == lib::INCORRECT_MP_COMMAND) {
 	throw common::generator::generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
 }
 
-sr_ecp_msg->message("base/ecp user program is running");
+sr_ecp_msg->message("ecp user program is running");
 return false;
 }
 
@@ -405,8 +405,8 @@ if (messip::port_reply(ecp_attach, caller, 0, ecp_reply) < 0)
 #endif
 {// by Y&W{
 	uint64_t e = errno; // kod bledu systemowego
-	perror("base/ecp: Reply to MP failed");
-	sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "base/ecp: Reply to MP failed");
+	perror("ecp: Reply to MP failed");
+	sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ecp: Reply to MP failed");
 	throw ECP_main_error(lib::SYSTEM_ERROR, 0);
 }
 
@@ -518,8 +518,8 @@ if (mp_ecp_randevouz) {
 #endif
 	{// by Y&W
 		uint64_t e = errno; // kod bledu systemowego
-		perror("base/ecp: Reply to MP failed");
-		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "base/ecp: Reply to MP failed");
+		perror("ecp: Reply to MP failed");
+		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ecp: Reply to MP failed");
 		throw ecp_robot::ECP_error(lib::SYSTEM_ERROR, 0);
 	}
 
@@ -565,8 +565,8 @@ while (1) {
 		}
 
 		uint64_t e = errno; // kod bledu systemowego
-		perror("base/ecp: Receive from MP failed");
-		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "base/ecp: Receive from MP failed");
+		perror("ecp: Receive from MP failed");
+		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ecp: Receive from MP failed");
 		throw ecp_robot::ECP_error(lib::SYSTEM_ERROR, 0);
 	}
 #if !defined(USE_MESSIP_SRR)
@@ -610,7 +610,7 @@ while (1) {
 #else
 	if (caller < -1) {
 		// ie. MESSIP_MSG_DISCONNECT
-		fprintf(stderr, "base/mp: messip::port_receive() -> %d, ie. MESSIP_MSG_DISCONNECT\n", caller);
+		fprintf(stderr, "mp: messip::port_receive() -> %d, ie. MESSIP_MSG_DISCONNECT\n", caller);
 		continue;
 	}
 #endif

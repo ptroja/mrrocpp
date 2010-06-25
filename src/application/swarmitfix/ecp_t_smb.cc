@@ -40,7 +40,7 @@ swarmitfix::swarmitfix(lib::configurator &_config) :
 	g_pin_rise = new generator::pin_rise(*this);
 	g_pin_lower = new generator::pin_lower(*this);
 
-	sr_ecp_msg->message("base/ecp smb loaded");
+	sr_ecp_msg->message("ecp smb loaded");
 }
 
 void swarmitfix::mp_2_ecp_next_state_string_handler(void)

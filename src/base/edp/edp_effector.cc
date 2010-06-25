@@ -77,14 +77,14 @@ bool effector::initialize_communication()
 
 		// sprawdzenie czy nie jakis proces EDP nie zajmuje juz sprzetu
 		if (access(full_path_to_hardware_busy_attach_point.c_str(), R_OK) == 0) {
-			fprintf(stderr, "base/edp: hardware busy\n");
+			fprintf(stderr, "edp: hardware busy\n");
 			return false;
 		}
 
 		name_attach_t * tmp_attach = name_attach(NULL, hardware_busy_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL);
 
 		if (tmp_attach == NULL) {
-			msg->message(lib::SYSTEM_ERROR, errno, "base/edp: hardware_busy_attach_point failed to attach");
+			msg->message(lib::SYSTEM_ERROR, errno, "edp: hardware_busy_attach_point failed to attach");
 			fprintf(stderr, "hardware_busy_attach_point name_attach() to %s failed: %s\n", hardware_busy_attach_point.c_str(), strerror(errno));
 			// TODO: throw
 			return false;
@@ -97,7 +97,7 @@ bool effector::initialize_communication()
 
 	// sprawdzenie czy nie jest juz zarejestrowany server EDP
 	if (access(full_path_to_server_attach_point.c_str(), R_OK) == 0) {
-		fprintf(stderr, "base/edp already exists() failed: %s\n", strerror(errno));
+		fprintf(stderr, "edp already exists() failed: %s\n", strerror(errno));
 		return false;
 	}
 
@@ -113,12 +113,12 @@ bool effector::initialize_communication()
 #endif /* USE_MESSIP_SRR */
 
 	if (server_attach == NULL) {
-		msg->message(lib::SYSTEM_ERROR, errno, "base/edp: resmg failed to attach");
+		msg->message(lib::SYSTEM_ERROR, errno, "edp: resmg failed to attach");
 		fprintf(stderr, "name_attach() failed: %s\n", strerror(errno));
 		return false;
 	}
 
-	msg->message("base/edp loaded");
+	msg->message("edp loaded");
 
 	return true;
 }

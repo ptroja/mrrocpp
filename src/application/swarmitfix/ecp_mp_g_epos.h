@@ -10,7 +10,7 @@ namespace ecp_mp {
 namespace common {
 namespace generator {
 
-const std::string ECP_GEN_EPOS = "ecp_GEN_EPOS";
+const std::string ECP_GEN_EPOS = "ECP_GEN_EPOS";
 
 }// namespace generator
 } // namespace common

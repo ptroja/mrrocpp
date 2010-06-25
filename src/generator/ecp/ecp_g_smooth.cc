@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------------
-//                            generator/ecp_g_smooth.cc
+//                            src/generator/ecp_g_smooth.cc
 //            Effector Control Process (lib::ECP) - smooth generator
 // Generator powstal na podstawie generatora smooth, glowna zmiana jest
 // rezygnacja z podawanie predkosci poczatkowej i koncowej w kazdym ruchu.
@@ -583,10 +583,10 @@ smooth::smooth(common::task::task& _ecp_task, bool _is_synchronised) :
 	distance_eps = 0.00001;
 
 	std::string max_path(ecp_t.mrrocpp_network_path);
-	max_path += "src/base/ecp_mp/a_v_max.txt";
+	max_path += "src/generator/ecp/a_v_max.txt";
 
 	std::string min_path(ecp_t.mrrocpp_network_path);
-	min_path += "src/base/ecp_mp/v_min_gripp.txt";
+	min_path += "src/generator/ecp/v_min_gripp.txt";
 
 	load_a_v_max(max_path.c_str());
 	load_a_v_min(min_path.c_str());
@@ -1196,7 +1196,7 @@ void smooth::calculate(void)
 	double t_max; //nadluzszy czas ruchu w jednej osi w jednym ruchu
 	int i;
 	double tk = 10 * STEP; //czas jednego makrokroku
-	int gripp; //os grippera
+	int gripp=0; //os grippera
 
 	trajectory_calculated = false;
 	//TODO dorobic zabezpieczenia dla 0 predkosci w osmej wspolrzednej postumenta i w angle axes

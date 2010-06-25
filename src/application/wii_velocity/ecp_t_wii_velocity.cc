@@ -20,7 +20,7 @@ namespace task {
 wii_velocity::wii_velocity(lib::configurator &_config) :
 	task(_config) {
 	ecp_m_robot = new irp6ot_m::robot(*this);
-	sr_ecp_msg->message("base/ecp loaded");
+	sr_ecp_msg->message("ecp loaded");
 
 	//create Wii-mote virtual sensor object
 	sensor_m[ecp_mp::sensor::SENSOR_WIIMOTE] = new ecp_mp::sensor::wiimote(ecp_mp::sensor::SENSOR_WIIMOTE, "[vsp_wiimote]", *this->sr_ecp_msg, this->config);

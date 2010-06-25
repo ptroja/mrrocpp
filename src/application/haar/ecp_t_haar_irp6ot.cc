@@ -60,7 +60,7 @@ haar::haar(lib::configurator &_config) :
 	//Linear generator.
 	linear_gen = NULL;
 
-	sr_ecp_msg->message("base/ecp PW loaded");
+	sr_ecp_msg->message("ecp PW loaded");
 }
 
 void haar::main_task_algorithm(void) {

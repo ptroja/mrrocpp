@@ -151,8 +151,8 @@ ATI6284_force::~ATI6284_force(void)
 void ATI6284_force::configure_sensor(void)
 {// by Y
 	is_sensor_configured = true;
-	//  printf("base/edp Sensor configured\n");
-	sr_msg->message("base/edp Sensor configured");
+	//  printf("edp Sensor configured\n");
+	sr_msg->message("edp Sensor configured");
 
 	if (!(master.force_sensor_test_mode)) {
 
@@ -206,7 +206,7 @@ void ATI6284_force::configure_sensor(void)
 			//		master.config.value<double>("y_axis_arm"), master.config.return_double_value("z_axis_arm") };
 			lib::K_vector pointofgravity(point);
 			gravity_transformation
-					= new lib::ForceTrans(lib::FORCE_SENSOR_ATI6284, frame, sensor_frame, weight, pointofgravity);
+					= new lib::ForceTrans(lib::FORCE_SENSOR_ATI6284, frame, sensor_frame, weight, pointofgravity, is_right_turn_frame);
 
 		} else {
 			gravity_transformation->synchro(frame);

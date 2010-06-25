@@ -41,6 +41,7 @@ bool get_position::first_step() {
 		default:
 			throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 	}
+	return true;
 }
 
 bool get_position::next_step() {
@@ -70,6 +71,7 @@ bool get_position::next_step() {
 	} else {
 		throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 	}
+	return true;
 }
 
 vector<double> get_position::get_position_vector() {

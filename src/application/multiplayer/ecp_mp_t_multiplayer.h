@@ -14,8 +14,8 @@ namespace mrrocpp {
 namespace ecp_mp {
 namespace task {
 
-const std::string ECP_GEN_TAKE_FROM_ROVER = "ecp_GEN_TAKE_FROM_ROVER";
-const std::string ECP_GEN_GRAB_FROM_ROVER = "ecp_GEN_GRAB_FROM_ROVER";
+const std::string ECP_GEN_TAKE_FROM_ROVER = "ECP_GEN_TAKE_FROM_ROVER";
+const std::string ECP_GEN_GRAB_FROM_ROVER = "ECP_GEN_GRAB_FROM_ROVER";
 
 enum MULTIPLAYER_GRIPPER_OP
 {

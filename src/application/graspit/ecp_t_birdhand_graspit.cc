@@ -25,7 +25,7 @@ bird_hand_test::bird_hand_test(lib::configurator &_config) :
 
 	g_bird_hand = new common::generator::bird_hand(*this);
 
-	sr_ecp_msg->message("base/ecp BIRDHAND loaded");
+	sr_ecp_msg->message("ecp BIRDHAND loaded");
 }
 
 void bird_hand_test::mp_2_ecp_next_state_string_handler(void)
@@ -33,7 +33,7 @@ void bird_hand_test::mp_2_ecp_next_state_string_handler(void)
 
 	if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_BIRD_HAND) {
 
-		sr_ecp_msg->message("ecp_GEN_BIRD_HAND");
+		sr_ecp_msg->message("ECP_GEN_BIRD_HAND");
 
 	} // end switch
 

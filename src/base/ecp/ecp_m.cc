@@ -27,12 +27,12 @@ common::task::task *ecp_t;
 
 void catch_signal_in_ecp(int sig)
 {
-	fprintf(stderr, "base/ecp: %s\n", strsignal(sig));
+	fprintf(stderr, "ecp: %s\n", strsignal(sig));
 	switch (sig)
 	{
 		// print info message
 		case SIGTERM:
-			ecp_t->sh_msg->message("base/ecp terminated");
+			ecp_t->sh_msg->message("ecp terminated");
 			delete ecp_t;
 			exit(EXIT_SUCCESS);
 			break;
@@ -100,7 +100,7 @@ int main(int argc, char *argv[])
 		std::string tmp_string(" The following error has been detected: ");
 		tmp_string += e.what();
 		ecp::common::ecp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, tmp_string.c_str());
-		std::cerr << "base/ecp: The following error has been detected :\n\t" << e.what() << std::endl;
+		std::cerr << "ecp: The following error has been detected :\n\t" << e.what() << std::endl;
 	}
 
 	catch (...) { /* Dla zewnetrznej petli try*/
@@ -133,7 +133,7 @@ int main(int argc, char *argv[])
 		catch (ecp::common::ecp_robot::ECP_error & er) {
 			/* Wylapywanie bledow generowanych przez modul transmisji danych do EDP*/
 			if (er.error_class == lib::SYSTEM_ERROR) { /*blad systemowy juz wyslano komunukat do SR*/
-				perror("base/ecp aborted due to lib::SYSTEM_ERRORn");
+				perror("ecp aborted due to lib::SYSTEM_ERRORn");
 				exit(EXIT_FAILURE);
 			}
 
@@ -149,7 +149,7 @@ int main(int argc, char *argv[])
 					ecp::common::ecp_t->mp_buffer_receive_and_send();
 					break;
 				default:
-					ecp::common::ecp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, 0, "base/ecp: Unidentified exception");
+					ecp::common::ecp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, 0, "ecp: Unidentified exception");
 					perror("Unidentified exception");
 					exit(EXIT_FAILURE);
 			} /* end: switch */
@@ -158,7 +158,7 @@ int main(int argc, char *argv[])
 		catch (ecp::common::generator::generator::ECP_error & er) {
 			/* Wylapywanie bledow generowanych przez generatory*/
 			if (er.error_class == lib::SYSTEM_ERROR) { /* blad systemowy juz wyslano komunukat do SR */
-				perror("base/ecp aborted due to lib::SYSTEM_ERROR");
+				perror("ecp aborted due to lib::SYSTEM_ERROR");
 				exit(EXIT_FAILURE);
 			}
 			switch (er.error_no)
@@ -181,7 +181,7 @@ int main(int argc, char *argv[])
 					ecp::common::ecp_t->sr_ecp_msg->message("pierwszy catch stop");
 					break;
 				default:
-					ecp::common::ecp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, 0, "base/ecp: Unidentified exception");
+					ecp::common::ecp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, 0, "ecp: Unidentified exception");
 					perror("Unidentified exception");
 					exit(EXIT_FAILURE);
 			} /* end: switch*/
@@ -199,7 +199,7 @@ int main(int argc, char *argv[])
 			std::string tmp_string(" The following error has been detected: ");
 			tmp_string += e.what();
 			ecp::common::ecp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, tmp_string.c_str());
-			std::cerr << "base/ecp: The following error has been detected :\n\t" << e.what() << std::endl;
+			std::cerr << "ecp: The following error has been detected :\n\t" << e.what() << std::endl;
 		}
 
 		catch (...) { /* Dla zewnetrznej petli try*/
@@ -209,7 +209,7 @@ int main(int argc, char *argv[])
 			exit(EXIT_FAILURE);
 		} /*end: catch */
 
-		ecp::common::ecp_t->sr_ecp_msg->message("base/ecp user program is finished");
+		ecp::common::ecp_t->sr_ecp_msg->message("ecp user program is finished");
 
 	} // end: for (;;) zewnetrznej
 

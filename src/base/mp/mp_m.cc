@@ -28,12 +28,12 @@ task::task* mp_t;
 void catch_signal_in_mp(int sig)
 {
 	// print info message
-	fprintf(stderr, "base/mp: %s\n", strsignal(sig));
+	fprintf(stderr, "mp: %s\n", strsignal(sig));
 	pid_t child_pid;
 	int status;
 	switch (sig) {
 	case SIGTERM:
-		mp_t->sh_msg->message("base/mp terminated");
+		mp_t->sh_msg->message("mp terminated");
 		// restore default (none) handler for SIGCHLD
 		signal(SIGCHLD, SIG_DFL);
 		delete mp_t;
@@ -45,33 +45,33 @@ void catch_signal_in_mp(int sig)
 	case SIGCHLD:
 		child_pid = waitpid(-1, &status, 0);
 		if (child_pid == -1) {
-			perror("base/mp: waitpid()");
+			perror("mp: waitpid()");
 		} else if (child_pid == 0) {
-			fprintf(stderr, "base/mp: no child exited\n");
+			fprintf(stderr, "mp: no child exited\n");
 		} else {
 			//fprintf(stderr, "UI: child %d...\n", child_pid);
 			if (WIFEXITED(status)) {
-				fprintf(stderr, "base/mp: child %d exited normally with status %d\n",
+				fprintf(stderr, "mp: child %d exited normally with status %d\n",
 						child_pid, WEXITSTATUS(status));
 			}
 			if (WIFSIGNALED(status)) {
 #ifdef WCOREDUMP
 				if (WCOREDUMP(status)) {
-					fprintf(stderr, "base/mp: child %d terminated by signal %d (core dumped)\n",
+					fprintf(stderr, "mp: child %d terminated by signal %d (core dumped)\n",
 							child_pid, WTERMSIG(status));
 				}
 				else
 #endif /* WCOREDUMP */
 				{
-					fprintf(stderr, "base/mp: child %d terminated by signal %d\n",
+					fprintf(stderr, "mp: child %d terminated by signal %d\n",
 							child_pid, WTERMSIG(status));
 				}
 			}
 			if (WIFSTOPPED(status)) {
-				fprintf(stderr, "base/mp: child %d stopped\n", child_pid);
+				fprintf(stderr, "mp: child %d stopped\n", child_pid);
 			}
 			if (WIFCONTINUED(status)) {
-				fprintf(stderr, "base/mp: child %d resumed\n", child_pid);
+				fprintf(stderr, "mp: child %d resumed\n", child_pid);
 			}
 		}
 		break;
@@ -101,7 +101,7 @@ int main (int argc, char *argv[], char **arge)
 
 			mp::common::mp_t = mp::task::return_created_mp_task(*_config);
 
-			mp::common::mp_t->sr_ecp_msg->message("base/mp loaded");
+			mp::common::mp_t->sr_ecp_msg->message("mp loaded");
 
 			lib::set_thread_priority(pthread_self(), MAX_PRIORITY-4);
 
@@ -159,7 +159,7 @@ int main (int argc, char *argv[], char **arge)
 			std::string tmp_string(" The following error has been detected: ");
 			tmp_string += e.what();
 			mp::common::mp_t->sr_ecp_msg->message (lib::NON_FATAL_ERROR, tmp_string.c_str());
-		   std::cerr<<"base/mp: The following error has been detected :\n\t"<<e.what()<<std::endl;
+		   std::cerr<<"mp: The following error has been detected :\n\t"<<e.what()<<std::endl;
 		}
 
 
@@ -173,7 +173,7 @@ int main (int argc, char *argv[], char **arge)
 		for (;;) {  // Wewnetrzna petla nieskonczona
 
 			try {
-				mp::common::mp_t->sr_ecp_msg->message("base/mp - wcisnij start");
+				mp::common::mp_t->sr_ecp_msg->message("mp - wcisnij start");
 
 				// Oczekiwanie na zlecenie START od UI
 				mp::common::mp_t->wait_for_start();
@@ -210,7 +210,7 @@ int main (int argc, char *argv[], char **arge)
 						mp::common::mp_t->stop_and_terminate();
 						break;
 					case ECP_STOP_ACCEPTED:
-						mp::common::mp_t->sr_ecp_msg->message("base/ecp STOP ACCEPTED");
+						mp::common::mp_t->sr_ecp_msg->message("ecp STOP ACCEPTED");
 					break;
 					default:
 						perror("Unidentified mp error");
@@ -281,7 +281,7 @@ int main (int argc, char *argv[], char **arge)
 				std::string tmp_string(" The following error has been detected: ");
 				tmp_string += e.what();
 				mp::common::mp_t->sr_ecp_msg->message (lib::NON_FATAL_ERROR, tmp_string.c_str());
-			   std::cerr<<"base/mp: The following error has been detected :\n\t"<<e.what()<<std::endl;
+			   std::cerr<<"mp: The following error has been detected :\n\t"<<e.what()<<std::endl;
 			}
 
 			catch (...) {  /* Dla zewnetrznej petli try*/

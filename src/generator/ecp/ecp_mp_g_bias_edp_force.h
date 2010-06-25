@@ -10,7 +10,7 @@ namespace ecp_mp {
 namespace common {
 namespace generator {
 
-const std::string ECP_GEN_BIAS_EDP_FORCE = "ecp_GEN_BIAS_EDP_FORCE";
+const std::string ECP_GEN_BIAS_EDP_FORCE = "ECP_GEN_BIAS_EDP_FORCE";
 
 }// namespace generator
 } // namespace common

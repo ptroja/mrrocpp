@@ -98,7 +98,7 @@ void error_handler(ERROR & e)
 				printf("ERROR: Unable to attach sensor device.\n");
 			if (e.error_no == DISPATCH_LOOP_ERROR)
 				printf("ERROR: Block error in main dispatch loop.\n");
-			printf("base/vsp aborted due to lib::SYSTEM_ERROR\n");
+			printf("vsp  aborted due to lib::SYSTEM_ERROR\n");
 			vs->sr_msg->message(lib::SYSTEM_ERROR, e.error_no);
 			TERMINATE = true;
 			synchroniser.command();
@@ -180,7 +180,7 @@ void write_to_sensor()
 {
 	lib::VSP_COMMAND_t i_code = vs->get_command();
 
-	//printf("base/vsp: write_to_sensor begin\n");
+	//printf("vsp: write_to_sensor begin\n");
 	switch (i_code)
 	{
 		case lib::VSP_CONFIGURE_SENSOR:
@@ -234,13 +234,13 @@ void write_to_sensor()
 		default:
 			throw vsp::sensor::VSP_main_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_VSP);
 	}
-	//printf("base/vsp: write_to_sensor_end\n");
+	//printf("vsp: write_to_sensor_end\n");
 }
 
 /********************************* IO_READ **********************************/
 int io_read(resmgr_context_t *ctp, io_read_t *msg, RESMGR_OCB_T *ocb)
 {
-	//printf("base/vsp: io_read begin\n");
+	//printf("vsp: io_read begin\n");
 	int status;
 	if ((status = iofunc_read_verify(ctp, msg, ocb, NULL)) != EOK)
 		return (status);
@@ -272,13 +272,13 @@ int io_read(resmgr_context_t *ctp, io_read_t *msg, RESMGR_OCB_T *ocb)
 	vs->msgwrite(ctp);
 	INITIATE_FLAG = false;
 	return (EOK);
-	//printf("base/vsp: io_read end\n");
+	//printf("vsp: io_read end\n");
 } // end io_read
 
 /********************************* IO_WRITE *********************************/
 int io_write(resmgr_context_t *ctp, io_write_t *msg, RESMGR_OCB_T *ocb)
 {
-	//printf("base/vsp: io_write begin\n");
+	//printf("vsp: io_write begin\n");
 	int status;
 	if ((status = iofunc_write_verify(ctp, msg, ocb, NULL)) != EOK)
 		return (status);
@@ -288,14 +288,14 @@ int io_write(resmgr_context_t *ctp, io_write_t *msg, RESMGR_OCB_T *ocb)
 	vs->msgread(ctp);
 	write_to_sensor();
 	return (EOK);
-	printf("base/vsp: io_write end\n");
+	printf("vsp: io_write end\n");
 } // end io_write
 
 
 /******************************** IO_DEVCTL *********************************/
 int io_devctl(resmgr_context_t *ctp, io_devctl_t *msg, RESMGR_OCB_T *ocb)
 {
-	//printf("base/vsp: io_devctl end\n");
+	//printf("vsp: io_devctl end\n");
 	unsigned int status;
 	int *addr;
 	if ((status = iofunc_devctl_default(ctp, msg, ocb)) != _RESMGR_DEFAULT)
@@ -443,13 +443,13 @@ int main(int argc, char *argv[])
 		/* start the resource manager message loop */
 		vsp::common::vs->sr_msg->message("Device is waiting for clients...");
 		while (!vsp::common::TERMINATE) { // for(;;)
-			//printf("base/vsp: main loop begin\n");
+			//printf("vsp: main loop begin\n");
 			if ((ctp = dispatch_block(ctp)) == NULL)
 				throw vsp::sensor::VSP_main_error(lib::SYSTEM_ERROR, DISPATCH_LOOP_ERROR); // wyrzucany blad
 			dispatch_handler(ctp);
-			//printf("base/vsp: main loop end\n");
+			//printf("vsp: main loop end\n");
 		} // end for(;;)
-		vsp::common::vs->sr_msg->message("base/vsp terminated");
+		vsp::common::vs->sr_msg->message("vsp  terminated");
 		delete vsp::common::vs;
 	} // koniec TRY
 	catch (vsp::sensor::VSP_main_error & e) {

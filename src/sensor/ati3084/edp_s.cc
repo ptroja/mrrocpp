@@ -222,14 +222,14 @@ ATI3084_force::~ATI3084_force(void)
 void ATI3084_force::configure_sensor(void)
 {// by Y
 	is_sensor_configured = true;
-	//  printf("base/edp Sensor configured\n");
-	sr_msg->message("base/edp Sensor configured");
+	//  printf("edp Sensor configured\n");
+	sr_msg->message("edp Sensor configured");
 	if (!master.force_sensor_test_mode) {
 		InterruptLock(&mds.spinlock);
 		mds.intr_mode = 0;
 		InterruptUnlock(&mds.spinlock);
 
-		do_send_command( SB);
+		do_send_command(SB);
 		do_Wait();
 
 #ifdef PARALLEL
@@ -276,7 +276,7 @@ void ATI3084_force::configure_sensor(void)
 		//		master.config.value<double>("y_axis_arm"), master.config.return_double_value("z_axis_arm") };
 		lib::K_vector pointofgravity(point);
 		gravity_transformation
-				= new lib::ForceTrans(lib::FORCE_SENSOR_ATI3084, frame, sensor_frame, weight, pointofgravity);
+				= new lib::ForceTrans(lib::FORCE_SENSOR_ATI3084, frame, sensor_frame, weight, pointofgravity, is_right_turn_frame);
 	} else {
 		gravity_transformation->synchro(frame);
 	}
@@ -308,7 +308,7 @@ void ATI3084_force::wait_for_event()
 
 			InterruptUnlock(&mds.spinlock);
 
-			do_send_command( SGET1);
+			do_send_command(SGET1);
 
 			int_timeout = SCHUNK_INTR_TIMEOUT_LOW;// by Y
 			TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_INTR, &tim_event, &int_timeout, NULL);
@@ -382,6 +382,7 @@ void ATI3084_force::get_reading(void)
 			//			for(int i=3;i<6;i++) ft_table[i]/=333;
 			for (int i = 3; i < 6; i++)
 				ft_table[i] /= 1000; // by Y - korekta
+
 			lib::Homog_matrix frame = master.return_current_frame(common::WITH_TRANSLATION);
 			// lib::Homog_matrix frame(master.force_current_end_effector_frame);
 			lib::Ft_vector output = gravity_transformation->getForce(ft_table, frame);
@@ -587,7 +588,7 @@ void ATI3084_force::solve_transducer_controller_failure(void)
 {
 	tcflush(uart, TCIFLUSH);
 
-	do_send_command( YESCOMM); /* command ^W to FT */
+	do_send_command(YESCOMM); /* command ^W to FT */
 
 	tcflush(uart, TCIFLUSH);
 }
@@ -596,34 +597,34 @@ void ATI3084_force::do_init(void)
 {
 	int_timeout = SCHUNK_INTR_TIMEOUT_HIGH; // by Y
 
-	do_send_command( RESET); /* command ^W to FT */
+	do_send_command(RESET); /* command ^W to FT */
 	delay(20);
 
-	do_send_command( CL_0);
-	delay(20);
-
-	do_send_command( CD_B);
+	do_send_command(CL_0);
 	delay(20);
 
 	do_send_command(CD_B);
 	delay(20);
 
-	do_send_command( CD_R);
+	do_send_command(CD_B);
 	delay(20);
 
-	do_send_command( CV_6);
+	do_send_command(CD_R);
 	delay(20);
 
-	do_send_command( SA);
+	do_send_command(CV_6);
 	delay(20);
 
-	do_send_command( SM);
+	do_send_command(SA);
 	delay(20);
 
-	do_send_command( SB);
+	do_send_command(SM);
 	delay(20);
 
-	do_send_command( CP_P);
+	do_send_command(SB);
+	delay(20);
+
+	do_send_command(CP_P);
 	do_Wait();
 
 	do_send_command(CL_0);
@@ -647,7 +648,7 @@ void ATI3084_force::do_init(void)
 	do_send_command(SM);
 	do_Wait();
 
-	do_send_command( SZ);
+	do_send_command(SZ);
 	do_Wait();
 
 	do_send_command(SB);

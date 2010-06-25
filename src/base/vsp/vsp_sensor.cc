@@ -40,7 +40,7 @@ void sensor_interface::wait_for_event(void)
 }
 
 sensor_interface::~sensor_interface() {
-	sr_msg->message("base/vsp terminated");
+	sr_msg->message("vsp  terminated");
 	delete sr_msg;
 }
 
