@@ -59,27 +59,25 @@ class kinematic_model_spkm: public common::kinematic_model
 		 * \param _O_S_P Position of the middle of the spherical wrist (S) in the O (lower PM platform) reference frame.
 		 * \return Platform pose in the form of e = <s_alpha,c_alpha,s_beta,c_beta, h>.
 		 */
-		Vector5d PKM_S_to_e(Vector3d _O_S_P);
+		Vector5d PKM_S_to_e(const Vector3d & _O_S_P);
 
 		/*! Computes values of PM joints basing on given e.
 		 * \param _e Platform pose in the form of e = <s_alpha,c_alpha,s_beta,c_beta, h>.
 		 * \return Joints in the form of vector <qA,qB,qC>.
 		 */
-		Vector3d PKM_inverse_from_e(Vector5d _e);
+		Vector3d PKM_inverse_from_e(const Vector5d & _e);
 
 		/*! Computes matrix O_P_T, representing the position  and orientation of upper platform (P) in relation to the lower one (O).
 		 * \param _e Platform pose in the form of e = <s_alpha,c_alpha,s_beta,c_beta, h>.
 		 * \return O_P_T.
 		 */
-		Homog4d PKM_O_P_T_from_e(Vector5d _e);
+		Homog4d PKM_O_P_T_from_e(const Vector5d & _e);
 
 		/*! Computes values of SW joints basing on P_W_T.
 		 \param _P_W_T Position of end of spherical wrist (W) with relation to its base, which is in fact upper platform reference frame (P).
 		 \return Joints in the form of vector <q1,q2,q3>.
 		 */
-		Vector3d SW_inverse(Homog4d _P_W_T);
-
-
+		Vector3d SW_inverse(const Homog4d & _P_W_T);
 };
 
 } // namespace spkm

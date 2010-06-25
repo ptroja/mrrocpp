@@ -67,7 +67,7 @@ void kinematic_model_spkm::inverse_kinematics_transform(lib::JointArray & local_
 	local_current_joints[5] = SW_joints[2];
 }
 
-Vector5d kinematic_model_spkm::PKM_S_to_e(Vector3d _O_S_P)
+Vector5d kinematic_model_spkm::PKM_S_to_e(const Vector3d & _O_S_P)
 {
 	// Temporary variables used for computations of alpha..
 	double t0_sq = _O_S_P.x() * _O_S_P.x() + _O_S_P.z() * _O_S_P.z();
@@ -93,7 +93,7 @@ Vector5d kinematic_model_spkm::PKM_S_to_e(Vector3d _O_S_P)
 	return e;
 }
 
-Vector3d kinematic_model_spkm::PKM_inverse_from_e(Vector5d _e)
+Vector3d kinematic_model_spkm::PKM_inverse_from_e(const Vector5d & _e)
 {
 	// "Retrieve" values from e.
 	double s_alpha = _e[0];
@@ -119,7 +119,7 @@ Vector3d kinematic_model_spkm::PKM_inverse_from_e(Vector5d _e)
 	return joints;
 }
 
-Homog4d kinematic_model_spkm::PKM_O_P_T_from_e(Vector5d _e)
+Homog4d kinematic_model_spkm::PKM_O_P_T_from_e(const Vector5d & _e)
 {
 	Matrix4d O_P_T;
 
@@ -152,7 +152,7 @@ Homog4d kinematic_model_spkm::PKM_O_P_T_from_e(Vector5d _e)
 	return Homog4d(O_P_T);
 }
 
-Vector3d kinematic_model_spkm::SW_inverse(Homog4d _P_W_T)
+Vector3d kinematic_model_spkm::SW_inverse(const Homog4d & _P_W_T)
 {
 	// TODO Inverse kinematics of the spherical wrist.
 
@@ -160,11 +160,8 @@ Vector3d kinematic_model_spkm::SW_inverse(Homog4d _P_W_T)
 	Vector3d joints;
 	joints << 0, 0, 0;
 	return joints;
-
 }
 
 } // namespace spkm
 } // namespace kinematic
-}
-// namespace mrrocpp
-
+} // namespace mrrocpp

@@ -10,8 +10,6 @@
 #define KINEMATIC_PARAMETERS_SPKM_H_
 
 // Libraries stddef and stdlib are required by Eigen to compile with QCC.
-#include <stddef.h>
-#include <stdlib.h>
 #include <eigen2/Eigen/Core>
 #include <eigen2/Eigen/Geometry>
 #include <eigen2/Eigen/LU>
