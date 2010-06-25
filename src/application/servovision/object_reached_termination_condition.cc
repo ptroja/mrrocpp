@@ -27,26 +27,31 @@ object_reached_termination_condition::~object_reached_termination_condition()
 {
 }
 
-bool object_reached_termination_condition::is_condition_met()
-{
-	if(object_visible && current_speed.norm() <= max_speed && current_accel.norm() <= max_accel){
-		steps_below_max_speed++;
-	}
-	else{
-		steps_below_max_speed = 0;
-	}
-
-//	logDbg("bool object_reached_termination_condition::terminate_now() steps_below_max_speed: %5d\n", steps_below_max_speed);
-
-	if(steps_below_max_speed >= min_steps){
-		return true;
-	}
-	return false;
-}
-
 void object_reached_termination_condition::reset()
 {
 	steps_below_max_speed = 0;
+}
+
+void object_reached_termination_condition::update(const visual_servo_manager* vsm)
+{
+
+}
+
+bool object_reached_termination_condition::is_condition_met() const
+{
+	//	if(object_visible && current_speed.norm() <= max_speed && current_accel.norm() <= max_accel){
+	//		steps_below_max_speed++;
+	//	}
+	//	else{
+	//		steps_below_max_speed = 0;
+	//	}
+	//
+	////	logDbg("bool object_reached_termination_condition::terminate_now() steps_below_max_speed: %5d\n", steps_below_max_speed);
+	//
+	//	if(steps_below_max_speed >= min_steps){
+	//		return true;
+	//	}
+	return false;
 }
 
 }//namespace generator

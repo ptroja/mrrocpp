@@ -28,6 +28,8 @@ namespace common {
 
 namespace generator {
 
+class termination_condition;
+
 /** @addtogroup servovision
  *  @{
  */

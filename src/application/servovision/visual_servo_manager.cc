@@ -129,12 +129,6 @@ bool visual_servo_manager::next_step()
 
 	next_position = current_position * position_change;
 
-	// update speed and acceleration in termination conditions
-	for (int i = 0; i < termination_conditions.size(); ++i) {
-		termination_conditions[i]->update_end_effector_speed(velocity);
-		termination_conditions[i]->update_end_effector_accel(acceleration);
-	}
-
 	//	log_dbg("bool visual_servo_manager::next_step(): next_position = (%+07.3lg, %+07.3lg, %+07.3lg)\n", next_position(0, 3), next_position(1, 3), next_position(2, 3));
 	// send command to the robot
 	next_position.get_frame_tab(the_robot->ecp_command.instruction.arm.pf_def.arm_frame);
@@ -142,24 +136,16 @@ bool visual_servo_manager::next_step()
 	// save next position
 	current_position = next_position;
 
-	bool object_visible = false;
-	for (std::vector <boost::shared_ptr <visual_servo> >::iterator it = servos.begin(); it != servos.end(); ++it) {
-		object_visible = object_visible || (*it)->is_object_visible();
-	}
-
-	// update object visiblity in termination conditions
-	for (int i = 0; i < termination_conditions.size(); ++i) {
-		termination_conditions[i]->update_object_visibility(object_visible);
-	}
-
 	// check termination conditions
+	bool any_condition_met = false;
 	for (int i = 0; i < termination_conditions.size(); ++i) {
+		termination_conditions[i]->update(this);
 		if (termination_conditions[i]->is_condition_met()) {
-			return false;
+			any_condition_met = true;
 		}
 	}
 
-	return true;
+	return !any_condition_met;
 } // next_step()
 
 void visual_servo_manager::constrain_position(lib::Homog_matrix & new_position)

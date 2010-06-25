@@ -10,6 +10,8 @@
 
 #include <Eigen/Core>
 
+#include "visual_servo_manager.h"
+
 namespace mrrocpp {
 
 namespace ecp {
@@ -17,6 +19,8 @@ namespace ecp {
 namespace common {
 
 namespace generator {
+
+class visual_servo_manager;
 
 /** @addtogroup servovision
  *  @{
@@ -39,34 +43,13 @@ public:
 	 */
 	virtual void reset() = 0;
 
+	virtual void update(const visual_servo_manager* vsm) = 0;
+
 	/**
 	 * Implement this to indicate when generator should be terminated.
 	 * @return true if generator should be terminated.
 	 */
-	virtual bool is_condition_met() = 0;
-
-	/**
-	 * Set end effector's speed.
-	 * @param current_speed
-	 */
-	virtual void update_end_effector_speed(const Eigen::Matrix<double, 3, 1>& current_speed);
-
-	/**
-	 * Update end effector's acceleration.
-	 * @param current_accel
-	 */
-	virtual void update_end_effector_accel(const Eigen::Matrix<double, 3, 1>& current_accel);
-
-	/**
-	 *
-	 * @param object_visible
-	 */
-	virtual void update_object_visibility(bool object_visible);
-
-protected:
-	Eigen::Matrix<double, 3, 1> current_speed;
-	Eigen::Matrix<double, 3, 1> current_accel;
-	bool object_visible;
+	virtual bool is_condition_met() const = 0;
 };
 
 /** @} */

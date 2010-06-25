@@ -28,7 +28,8 @@ public:
 	object_reached_termination_condition(double max_speed, double max_accel, int min_steps);
 	virtual ~object_reached_termination_condition();
 	virtual void reset();
-	virtual bool is_condition_met();
+	virtual void update(const visual_servo_manager* vsm);
+	virtual bool is_condition_met() const;
 protected:
 	double max_speed;
 	double max_accel;

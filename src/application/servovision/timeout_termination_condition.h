@@ -24,7 +24,8 @@ public:
 	timeout_termination_condition(double timeout);
 	virtual ~timeout_termination_condition();
 	virtual void reset();
-	virtual bool is_condition_met();
+	virtual void update(const visual_servo_manager* vsm);
+	virtual bool is_condition_met() const;
 protected:
 	double timeout;
 	double time_left;
