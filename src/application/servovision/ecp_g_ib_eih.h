@@ -10,7 +10,7 @@
 
 #include <Eigen/Core>
 
-#include "kinematics/irp6_on_track/kinematic_model_irp6ot_with_wrist.h"
+#include "robot/irp6ot_m/kinematic_model_irp6ot_with_wrist.h"
 
 #include "ecp_g_visual_servo.h"
 

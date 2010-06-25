@@ -109,7 +109,7 @@ void ui_sr_buffer::operator()() {
 			// prrintf("srt: \n");
 			flushall();
 
-			ui.ui_sr_obj->put_one_msg(sr_msg);
+			put_one_msg(sr_msg);
 
 		} else {
 			printf("SR(%s:%d) unexpected message\n", __FILE__, __LINE__);

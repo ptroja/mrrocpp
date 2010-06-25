@@ -4,7 +4,7 @@
 
 #include "ui/src/speaker/ui_r_speaker.h"
 #include "ui/src/speaker/ui_ecp_r_speaker.h"
-#include "lib/robot_consts/speaker_const.h"
+#include "robot/speaker/speaker_const.h"
 #include "ui/ui_class.h"
 
 /* Local headers */
@@ -49,8 +49,8 @@ int UiRobotSpeaker::reload_configuration() {
 			state.edp.reader_fd = -1;
 			state.edp.state = 0;
 
-			if (ui.config->exists("test_mode", state.edp.section_name))
-				state.edp.test_mode = ui.config->value<int> ("test_mode",
+			if (ui.config->exists(ROBOT_TEST_MODE, state.edp.section_name))
+				state.edp.test_mode = ui.config->value<int> (ROBOT_TEST_MODE,
 						state.edp.section_name);
 			else
 				state.edp.test_mode = 0;

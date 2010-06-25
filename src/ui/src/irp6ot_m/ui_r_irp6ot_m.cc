@@ -4,7 +4,7 @@
 
 #include "ui/src/irp6ot_m/ui_r_irp6ot_m.h"
 #include "ui/ui_ecp_r_irp6_common.h"
-#include "lib/robot_consts/irp6ot_m_const.h"
+#include "robot/irp6ot_m/irp6ot_m_const.h"
 #include "ui/ui_class.h"
 
 /* Local headers */
@@ -92,8 +92,8 @@ int UiRobotIrp6ot_m::reload_configuration() {
 				}
 			}
 
-			if (ui.config->exists("test_mode", state.edp.section_name))
-				state.edp.test_mode = ui.config->value<int> ("test_mode",
+			if (ui.config->exists(ROBOT_TEST_MODE, state.edp.section_name))
+				state.edp.test_mode = ui.config->value<int> (ROBOT_TEST_MODE,
 						state.edp.section_name);
 			else
 				state.edp.test_mode = 0;

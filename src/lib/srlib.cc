@@ -384,7 +384,7 @@ void sr_edp::interpret(void) {
 			case ALREADY_SYNCHRONISED: strcat (sr_message.description, "ALREADY_SYNCHRONISED"); break;
 			case UNKNOWN_SYNCHRO_ERROR: strcat (sr_message.description, "UNKNOWN_SYNCHRO_ERROR"); break;
 			case INVALID_KINEMATIC_MODEL_NO: strcat (sr_message.description, "INVALID_KINEMATIC_MODEL_NO"); break;
-			case EDP_UNIDENTIFIED_ERROR: strcat (sr_message.description, "EDP_UNIDENTIFIED_ERROR"); break;
+			case EDP_UNIDENTIFIED_ERROR: strcat (sr_message.description, "edp_UNIDENTIFIED_ERROR"); break;
 			case NOT_A_NUMBER_JOINT_VALUE_D0: strcat (sr_message.description, "NOT_A_NUMBER_JOINT_VALUE_D0"); break;
 			case NOT_A_NUMBER_JOINT_VALUE_THETA1: strcat (sr_message.description, "NOT_A_NUMBER_JOINT_VALUE_THETA1"); break;
 			case NOT_A_NUMBER_JOINT_VALUE_THETA2: strcat (sr_message.description, "NOT_A_NUMBER_JOINT_VALUE_THETA2"); break;
@@ -417,7 +417,7 @@ void sr_edp::interpret(void) {
 		}
 		break;
 		default:
-		strcat (sr_message.description, "EDP UNIDENTIFIED ERROR");
+		strcat (sr_message.description, "edp UNIDENTIFIED ERROR");
 	}
 } // end: sr_edp::interpret()
 // ---------------------------------------------------------------------
@@ -470,18 +470,14 @@ void sr_ecp::interpret(void) {
 			sprintf(sr_message.description, "INVALID POSE SPECIFICATION"); break;
 			case INVALID_ROBOT_MODEL_TYPE:
 			sprintf(sr_message.description, "INVALID ROBOT_MODEL TYPE"); break;
-			case INVALID_ECP_COMMAND:
-			sprintf(sr_message.description, "INVALID ECP COMMAND"); break;
-			case INVALID_EDP_REPLY:
-			sprintf(sr_message.description, "INVALID EDP REPLY"); break;
 			case ECP_ERRORS:
-			sprintf(sr_message.description, "ECP ERRORS"); break;
+			sprintf(sr_message.description, "ecp ERRORS"); break;
 			case INVALID_COMMAND_TO_EDP:
 			sprintf(sr_message.description, "INVALID COMMAND TO EDP"); break;
 			case ECP_UNIDENTIFIED_ERROR:
-			sprintf(sr_message.description, "ECP UNIDENTIFIED ERROR"); break;
+			sprintf(sr_message.description, "ecp UNIDENTIFIED ERROR"); break;
 			case MP_UNIDENTIFIED_ERROR:
-			sprintf(sr_message.description, "MP UNIDENTIFIED ERROR"); break;
+			sprintf(sr_message.description, "mp UNIDENTIFIED ERROR"); break;
 			case NON_EXISTENT_DIRECTORY:
 			sprintf(sr_message.description, "NON-EXISTENT DIRECTORY"); break;
 			case NON_EXISTENT_FILE:
@@ -496,14 +492,8 @@ void sr_ecp::interpret(void) {
 			sprintf(sr_message.description, "MAX ACCELERATION EXCEEDED"); break;
 			case MAX_VELOCITY_EXCEEDED:
 			sprintf(sr_message.description, "MAX VELOCITY EXCEEDED"); break;
-			case NOT_ENOUGH_MEMORY:
-			sprintf(sr_message.description, "NOT ENOUGH MEMORY"); break;
-			case INVALID_VSP_REPLY:
-			sprintf(sr_message.description, "INVALID VSP REPLY"); break;
 			case DANGEROUS_FORCE_DETECTED:
 			sprintf(sr_message.description, "DANGEROUS FORCE DETECTED"); break;
-			case BAD_VSP_REPLY:
-			sprintf(sr_message.description, "BAD VSP REPLY"); break;
 			case INVALID_ECP_PULSE_IN_MP_START_ALL:
 			sprintf(sr_message.description, "INVALID ECP PULSE IN MP START ALL"); break;
 			case INVALID_ECP_PULSE_IN_MP_EXECUTE_ALL:

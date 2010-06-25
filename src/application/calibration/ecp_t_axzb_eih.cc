@@ -1,7 +1,7 @@
 #include <stdexcept>
 
-#include "ecp/irp6ot_m/ecp_r_irp6ot_m.h"
-#include "ecp/irp6p_m/ecp_r_irp6p_m.h"
+#include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
+#include "robot/irp6p_m/ecp_r_irp6p_m.h"
 
 #include "ecp_t_axzb_eih.h"
 #include "ecp_st_acq_eih.h"
@@ -70,7 +70,7 @@ void axzb_eih::main_task_algorithm(void)
 	gsl_matrix_fscanf(FP, ofp.M);
 	fclose(FP);
 	if ((FP = fopen(mm_file_path.c_str(), "r")) == NULL) {
-		throw runtime_error("fopen(mm_file_path = " + mm_file_path +"): " + string(strerror(errno)));
+		throw runtime_error("fopen(mm_file_path = " + mm_file_path + "): " + string(strerror(errno)));
 	}
 	gsl_vector_fscanf(FP, ofp.m);
 	fclose(FP);

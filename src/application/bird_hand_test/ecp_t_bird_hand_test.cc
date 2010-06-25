@@ -7,11 +7,14 @@
 #include "lib/srlib.h"
 #include "ecp_mp_t_bird_hand_test.h"
 
-#include "ecp/bird_hand/ecp_r_bird_hand.h"
-#include "ecp/common/generator/ecp_g_smooth.h"
-#include "ecp/common/generator/ecp_g_sleep.h"
+#include "robot/bird_hand/ecp_r_bird_hand.h"
+#include "generator/ecp/ecp_g_smooth.h"
+#include "generator/ecp/ecp_g_sleep.h"
 #include "ecp_g_bird_hand_test.h"
 #include "ecp_t_bird_hand_test.h"
+#include "generator/ecp/ecp_mp_g_transparent.h"
+#include "generator/ecp/ecp_mp_g_sleep.h"
+#include "ecp_mp_g_bird_hand_test.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -20,50 +23,36 @@ namespace task {
 
 // KONSTRUKTORY
 bird_hand_test::bird_hand_test(lib::configurator &_config) :
-	task(_config) {
+	task(_config)
+{
 	// the robot is choose dependendat on the section of configuration file sent as argv[4]
 	ecp_m_robot = new robot(*this);
 
 	gt = new common::generator::transparent(*this);
 	g_sleep = new common::generator::sleep(*this);
-	g_bird_hand = new common::generator::bird_hand(*this);
+	g_bird_hand = new generator::bird_hand(*this);
 
-	sr_ecp_msg->message("ECP BIRD HAND TEST loaded");
+	sr_ecp_msg->message("ecp BIRD HAND TEST loaded");
 }
 
-void bird_hand_test::main_task_algorithm(void) {
-	for (;;) {
-		sr_ecp_msg->message("Waiting for MP order");
+void bird_hand_test::mp_2_ecp_next_state_string_handler(void)
+{
 
-		get_next_state();
+	if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_GEN_TRANSPARENT) {
 
-		sr_ecp_msg->message("Order received");
-		//printf("postument: %d\n", mp_command.ecp_next_state.mp_2_ecp_next_state);
-		flushall();
+		gt->throw_kinematics_exceptions = (bool) mp_command.ecp_next_state.mp_2_ecp_next_state_variant;
+		gt->Move();
+	} else if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_GEN_SLEEP) {
 
-		switch ((ecp_mp::task::BIRD_HAND_TEST_ECP_STATES) mp_command.ecp_next_state.mp_2_ecp_next_state) {
-		case ecp_mp::task::ECP_GEN_TRANSPARENT:
-			gt->throw_kinematics_exceptions
-					= (bool) mp_command.ecp_next_state.mp_2_ecp_next_state_variant;
-			gt->Move();
-			break;
-		case ecp_mp::task::ECP_GEN_SLEEP:
-			g_sleep->init_time(
-					mp_command.ecp_next_state.mp_2_ecp_next_state_variant);
-			g_sleep->Move();
-			break;
-		case ecp_mp::task::ECP_GEN_BIRD_HAND: {
-			sr_ecp_msg->message("ECP_GEN_BIRD_HAND");
+		g_sleep->init_time(mp_command.ecp_next_state.mp_2_ecp_next_state_variant);
+		g_sleep->Move();
+	} else if (mp_2_ecp_next_state_string == ecp_mp::bird_hand::generator::ECP_GEN_BIRD_HAND_TEST) {
 
-			g_bird_hand->Move();
-			break;
-		}
-		default:
-			break;
-		} // end switch
+		sr_ecp_msg->message("ECP_GEN_BIRD_HAND");
 
-		ecp_termination_notice();
-	} //end for
+		g_bird_hand->Move();
+	}
+
 }
 
 }
@@ -72,7 +61,8 @@ void bird_hand_test::main_task_algorithm(void) {
 namespace common {
 namespace task {
 
-task* return_created_ecp_task(lib::configurator &_config) {
+task* return_created_ecp_task(lib::configurator &_config)
+{
 	return new bird_hand::task::bird_hand_test(_config);
 }
 

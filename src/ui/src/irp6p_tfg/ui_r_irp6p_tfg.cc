@@ -4,7 +4,7 @@
 
 #include "ui/src/irp6p_tfg/ui_r_irp6p_tfg.h"
 #include "ui/ui_ecp_r_tfg_and_conv.h"
-#include "lib/robot_consts/irp6p_tfg_const.h"
+#include "robot/irp6p_tfg/irp6p_tfg_const.h"
 #include "ui/ui_class.h"
 
 /* Local headers */
@@ -76,8 +76,8 @@ int UiRobotIrp6p_tfg::reload_configuration() {
 				}
 			}
 
-			if (ui.config->exists("test_mode", state.edp.section_name))
-				state.edp.test_mode = ui.config->value<int> ("test_mode",
+			if (ui.config->exists(ROBOT_TEST_MODE, state.edp.section_name))
+				state.edp.test_mode = ui.config->value<int> (ROBOT_TEST_MODE,
 						state.edp.section_name);
 			else
 				state.edp.test_mode = 0;

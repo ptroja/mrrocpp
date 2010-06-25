@@ -23,7 +23,7 @@
 // #include "ui/ui.h"
 // Konfigurator.
 // #include "lib/configurator.h"
-#include "lib/robot_consts/polycrank_const.h"
+#include "robot/polycrank/polycrank_const.h"
 
 /* Local headers */
 #include "ablibs.h"
@@ -197,7 +197,7 @@ int EDP_polycrank_create(PtWidget_t *widget, ApInfo_t *apinfo,
 
 				if (ui.irp6m_m->state.edp.pid < 0) {
 					ui.irp6m_m->state.edp.state = 0;
-					fprintf(stderr, "EDP spawn failed: %s\n", strerror(errno));
+					fprintf(stderr, "edp spawn failed: %s\n", strerror(errno));
 					delete ui.irp6m_m->ui_ecp_robot;
 				} else { // jesli spawn sie powiodl
 
@@ -311,7 +311,7 @@ int EDP_polycrank_synchronise(PtWidget_t *widget, ApInfo_t *apinfo,
 			ui.irp6m_m->state.edp.is_synchronised
 			= ui.irp6m_m->ui_ecp_robot->ecp->is_synchronised();
 		} else {
-			// 	printf("EDP irp6_mechatronika niepowolane, synchronizacja niedozwolona\n");
+			// 	printf("edp irp6_mechatronika niepowolane, synchronizacja niedozwolona\n");
 		}
 
 	} // end try
@@ -888,7 +888,7 @@ int export_wnd_polycrank_inc(PtWidget_t *widget, ApInfo_t *apinfo,
 	PtGetResource(ABW_PtNumericFloat_wind_irp6m_inc_p4, Pt_ARG_NUMERIC_VALUE,
 			&wektor[4], 0);
 
-	sprintf(buffer, "EDP_IRP6_M INTERNAL POSITION\n %f %f %f %f %f",
+	sprintf(buffer, "edp_IRP6_M INTERNAL POSITION\n %f %f %f %f %f",
 			*wektor[0], *wektor[1], *wektor[2], *wektor[3], *wektor[4]);
 
 	ui.ui_msg->message(buffer);
@@ -1133,7 +1133,7 @@ int export_wnd_polycrank_int(PtWidget_t *widget, ApInfo_t *apinfo,
 			&wektor[3], 0);
 	PtGetResource(ABW_PtNumericFloat_wind_irp6m_int_p5, Pt_ARG_NUMERIC_VALUE,
 			&wektor[4], 0);
-	sprintf(buffer, "EDP_IRP6_M INTERNAL POSITION\n %f %f %f %f %f",
+	sprintf(buffer, "edp_IRP6_M INTERNAL POSITION\n %f %f %f %f %f",
 			*wektor[0], *wektor[1], *wektor[2], *wektor[3], *wektor[4]);
 
 	ui.ui_msg->message(buffer);
@@ -2159,7 +2159,7 @@ int export_wnd_polycrank_xyz_euler_zyz(PtWidget_t *widget, ApInfo_t *apinfo,
 	PtGetResource(ABW_PtNumericFloat_wind_irp6m_xyz_euler_zyz_p6,
 			Pt_ARG_NUMERIC_VALUE, &wektor[5], 0);
 
-	sprintf(buffer, "EDP_IRP6_M XYZ_EULER_ZYZ POSITION\n %f %f %f %f %f %f",
+	sprintf(buffer, "edp_IRP6_M XYZ_EULER_ZYZ POSITION\n %f %f %f %f %f %f",
 			*wektor[0], *wektor[1], *wektor[2], *wektor[3], *wektor[4],
 			*wektor[5]);
 
@@ -2470,14 +2470,17 @@ int process_control_window_polycrank_section_init(
 			wlacz_PtButton_wnd_processes_control_all_reader_start = true;
 			ui.unblock_widget(
 					ABW_PtButton_wnd_processes_control_irp6m_reader_start);
-			ui.block_widget(ABW_PtButton_wnd_processes_control_irp6m_reader_stop);
+			ui.block_widget(
+					ABW_PtButton_wnd_processes_control_irp6m_reader_stop);
 			ui.block_widget(
 					ABW_PtButton_wnd_processes_control_irp6m_reader_trigger);
 		} else if (ui.irp6m_m->state.edp.state == 2) {// edp wlaczone reader czeka na stop
 			wlacz_PtButton_wnd_processes_control_all_reader_stop = true;
 			wlacz_PtButton_wnd_processes_control_all_reader_trigger = true;
-			ui.block_widget(ABW_PtButton_wnd_processes_control_irp6m_reader_start);
-			ui.unblock_widget(ABW_PtButton_wnd_processes_control_irp6m_reader_stop);
+			ui.block_widget(
+					ABW_PtButton_wnd_processes_control_irp6m_reader_start);
+			ui.unblock_widget(
+					ABW_PtButton_wnd_processes_control_irp6m_reader_stop);
 			ui.unblock_widget(
 					ABW_PtButton_wnd_processes_control_irp6m_reader_trigger);
 		}
@@ -2523,9 +2526,12 @@ int reload_polycrank_configuration() {
 				if (ui.config->exists(tmp_string,
 						ui.irp6m_m->state.edp.section_name)) {
 					char* tmp, *tmp1;
-					tmp1 = tmp = strdup(
-							ui.config->value<std::string> (tmp_string,
-									ui.irp6m_m->state.edp.section_name).c_str());
+					tmp1
+							= tmp
+									= strdup(
+											ui.config->value<std::string> (
+													tmp_string,
+													ui.irp6m_m->state.edp.section_name).c_str());
 					char* toDel = tmp;
 					for (int j = 0; j < 8; j++) {
 						ui.irp6m_m->state.edp.preset_position[i][j] = strtod(
@@ -2539,16 +2545,17 @@ int reload_polycrank_configuration() {
 				}
 			}
 
-			if (ui.config->exists("test_mode",
+			if (ui.config->exists(ROBOT_TEST_MODE,
 					ui.irp6m_m->state.edp.section_name))
 				ui.irp6m_m->state.edp.test_mode = ui.config->value<int> (
-						"test_mode", ui.irp6m_m->state.edp.section_name);
+						ROBOT_TEST_MODE, ui.irp6m_m->state.edp.section_name);
 			else
 				ui.irp6m_m->state.edp.test_mode = 0;
 
-			ui.irp6m_m->state.edp.hardware_busy_attach_point = ui.config->value<
-					std::string> ("hardware_busy_attach_point",
-					ui.irp6m_m->state.edp.section_name);
+			ui.irp6m_m->state.edp.hardware_busy_attach_point
+					= ui.config->value<std::string> (
+							"hardware_busy_attach_point",
+							ui.irp6m_m->state.edp.section_name);
 
 			ui.irp6m_m->state.edp.network_resourceman_attach_point
 					= ui.config->return_attach_point_name(
@@ -2592,97 +2599,3 @@ int reload_polycrank_configuration() {
 
 	return 1;
 }
-
-int manage_interface_polycrank() {
-
-	switch (ui.irp6m_m->state.edp.state) {
-
-	case -1:
-		ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_irp6_mechatronika,
-				NULL);
-		break;
-	case 0:
-		ApModifyItemState(&robot_menu, AB_ITEM_DIM,
-				ABN_mm_irp6_mechatronika_edp_unload,
-				ABN_mm_irp6_mechatronika_pre_synchro_moves,
-				ABN_mm_irp6_mechatronika_absolute_moves,
-				ABN_mm_irp6_mechatronika_tool_specification,
-				ABN_mm_irp6_mechatronika_preset_positions,
-				ABN_mm_irp6_mechatronika_kinematic,
-				ABN_mm_irp6_mechatronika_servo_algorithm, NULL);
-		ApModifyItemState(&robot_menu, AB_ITEM_NORMAL,
-				ABN_mm_irp6_mechatronika, ABN_mm_irp6_mechatronika_edp_load,
-				NULL);
-
-		break;
-	case 1:
-	case 2:
-
-		ApModifyItemState(&robot_menu, AB_ITEM_NORMAL,
-				ABN_mm_irp6_mechatronika, NULL);
-		//ApModifyItemState( &all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_edp_unload, NULL);
-		// jesli robot jest zsynchronizowany
-		if (ui.irp6m_m->state.edp.is_synchronised) {
-			ApModifyItemState(&robot_menu, AB_ITEM_DIM,
-					ABN_mm_irp6_mechatronika_pre_synchro_moves, NULL);
-			ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL,
-					ABN_mm_all_robots_preset_positions, NULL);
-
-			switch (ui.mp.state) {
-			case UI_MP_NOT_PERMITED_TO_RUN:
-			case UI_MP_PERMITED_TO_RUN:
-				ApModifyItemState(&robot_menu, AB_ITEM_NORMAL,
-						ABN_mm_irp6_mechatronika_edp_unload,
-						ABN_mm_irp6_mechatronika_absolute_moves,
-						ABN_mm_irp6_mechatronika_tool_specification,
-						ABN_mm_irp6_mechatronika_preset_positions,
-						ABN_mm_irp6_mechatronika_kinematic,
-						ABN_mm_irp6_mechatronika_servo_algorithm, NULL);
-				ApModifyItemState(&robot_menu, AB_ITEM_DIM,
-						ABN_mm_irp6_mechatronika_edp_load, NULL);
-				break;
-			case UI_MP_WAITING_FOR_START_PULSE:
-				ApModifyItemState(&robot_menu, AB_ITEM_NORMAL,
-						ABN_mm_irp6_mechatronika_absolute_moves,
-						ABN_mm_irp6_mechatronika_preset_positions,
-						ABN_mm_irp6_mechatronika_tool_specification,
-						ABN_mm_irp6_mechatronika_kinematic,
-						ABN_mm_irp6_mechatronika_servo_algorithm, NULL);
-				ApModifyItemState(&robot_menu, AB_ITEM_DIM,
-						ABN_mm_irp6_mechatronika_edp_load,
-						ABN_mm_irp6_mechatronika_edp_unload, NULL);
-				break;
-			case UI_MP_TASK_RUNNING:
-			case UI_MP_TASK_PAUSED:
-				ApModifyItemState(
-						&robot_menu,
-						AB_ITEM_DIM, // modyfikacja menu - ruchy reczne zakazane
-						ABN_mm_irp6_mechatronika_absolute_moves,
-						ABN_mm_irp6_mechatronika_preset_positions,
-						ABN_mm_irp6_mechatronika_tool_specification,
-						ABN_mm_irp6_mechatronika_kinematic,
-						ABN_mm_irp6_mechatronika_servo_algorithm, NULL);
-				break;
-			default:
-				break;
-			}
-
-		} else // jesli robot jest niezsynchronizowany
-		{
-			ApModifyItemState(&robot_menu, AB_ITEM_NORMAL,
-					ABN_mm_irp6_mechatronika_edp_unload,
-					ABN_mm_irp6_mechatronika_pre_synchro_moves, NULL);
-			ApModifyItemState(&robot_menu, AB_ITEM_DIM,
-					ABN_mm_irp6_mechatronika_edp_load, NULL);
-			ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL,
-					ABN_mm_all_robots_synchronisation, NULL);
-		}
-		break;
-	default:
-		break;
-
-	}
-
-	return 1;
-}
-

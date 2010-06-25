@@ -6,7 +6,7 @@
 #include "ui/src/bird_hand/ui_r_bird_hand.h"
 #include "ui/src/bird_hand/wnd_bird_hand_command_and_status.h"
 #include "ui/src/bird_hand/wnd_bird_hand_configuration.h"
-#include "lib/robot_consts/bird_hand_const.h"
+#include "robot/bird_hand/bird_hand_const.h"
 #include "ui/ui_class.h"
 
 /* Local headers */
@@ -53,8 +53,8 @@ int UiRobotBirdHand::reload_configuration() {
 			state.edp.reader_fd = -1;
 			state.edp.state = 0;
 
-			if (ui.config->exists("test_mode", state.edp.section_name))
-				state.edp.test_mode = ui.config->value<int> ("test_mode",
+			if (ui.config->exists(ROBOT_TEST_MODE, state.edp.section_name))
+				state.edp.test_mode = ui.config->value<int> (ROBOT_TEST_MODE,
 						state.edp.section_name);
 			else
 				state.edp.test_mode = 0;

@@ -4,7 +4,7 @@
 
 #include "ui/src/conveyor/ui_r_conveyor.h"
 #include "ui/ui_ecp_r_tfg_and_conv.h"
-#include "lib/robot_consts/conveyor_const.h"
+#include "robot/conveyor/conveyor_const.h"
 #include "ui/ui_class.h"
 
 /* Local headers */
@@ -66,8 +66,8 @@ int UiRobotConveyor::reload_configuration() {
 				state.edp.preset_position[2][0] = ui.config->value<double> (
 						"preset_position_2", state.edp.section_name);
 
-			if (ui.config->exists("test_mode", state.edp.section_name))
-				state.edp.test_mode = ui.config->value<int> ("test_mode",
+			if (ui.config->exists(ROBOT_TEST_MODE, state.edp.section_name))
+				state.edp.test_mode = ui.config->value<int> (ROBOT_TEST_MODE,
 						state.edp.section_name);
 			else
 				state.edp.test_mode = 0;

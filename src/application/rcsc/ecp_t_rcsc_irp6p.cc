@@ -5,13 +5,22 @@
 #include "lib/com_buf.h"
 
 #include "lib/srlib.h"
-#include "ecp_mp/task/ecp_mp_t_rcsc.h"
+#include "application/rcsc/ecp_mp_t_rcsc.h"
 
-#include "ecp/irp6p_m/ecp_r_irp6p_m.h"
-#include "ecp/common/generator/ecp_g_force.h"
-//#include "ecp/common/generator/ecp_g_smooth.h"
-#include "ecp/common/generator/ecp_g_smooth.h"
+#include "robot/irp6p_m/ecp_r_irp6p_m.h"
+#include "generator/ecp/ecp_g_force.h"
+
+//#include "generator/ecp/ecp_g_smooth.h"
+#include "generator/ecp/ecp_g_smooth.h"
 #include "ecp_t_rcsc_irp6p.h"
+#include "subtask/ecp_st_bias_edp_force.h"
+#include "subtask/ecp_st_tff_nose_run.h"
+#include "generator/ecp/ecp_g_force.h"
+#include "generator/ecp/ecp_mp_g_transparent.h"
+#include "generator/ecp/ecp_mp_g_smooth.h"
+#include "generator/ecp/ecp_mp_g_teach_in.h"
+#include "generator/ecp/ecp_mp_g_force.h"
+#include "subtask/ecp_mp_st_gripper_opening.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -20,48 +29,47 @@ namespace task {
 
 // KONSTRUKTORY
 rcsc::rcsc(lib::configurator &_config) :
-	task(_config) {
+	task(_config)
+{
 	// the robot is choose dependendat on the section of configuration file sent as argv[4]
 	ecp_m_robot = new irp6p_m::robot(*this);
 
 	gt = new common::generator::transparent(*this);
-	nrg = new common::generator::tff_nose_run(*this, 8);
 	rgg = new common::generator::tff_rubik_grab(*this, 8);
 	gag = new common::generator::tff_gripper_approach(*this, 8);
 	rfrg = new common::generator::tff_rubik_face_rotate(*this, 8);
 	tig = new common::generator::teach_in(*this);
-	befg = new common::generator::bias_edp_force(*this);
+
 	sg = new common::generator::smooth(*this, true);
 
 	go_st = new common::task::ecp_sub_task_gripper_opening(*this);
 
-	sr_ecp_msg->message("ECP loaded");
+	// utworzenie podzadan
+	{
+		common::task::ecp_sub_task* ecpst;
+		ecpst = new common::task::ecp_sub_task_bias_edp_force(*this);
+		subtask_m[ecp_mp::task::ECP_ST_BIAS_EDP_FORCE] = ecpst;
+	}
+
+	{
+		common::task::ecp_sub_task_tff_nose_run* ecpst;
+		ecpst = new common::task::ecp_sub_task_tff_nose_run(*this);
+		subtask_m[ecp_mp::task::ECP_ST_TFF_NOSE_RUN] = ecpst;
+	}
+
+	sr_ecp_msg->message("ecp loaded");
 }
 
-void rcsc::main_task_algorithm(void) {
-	for (;;) {
-		sr_ecp_msg->message("Waiting for MP order");
+void rcsc::mp_2_ecp_next_state_string_handler(void)
+{
 
-		get_next_state();
+	if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_GEN_TRANSPARENT) {
+		gt->throw_kinematics_exceptions = (bool) mp_command.ecp_next_state.mp_2_ecp_next_state_variant;
+		gt->Move();
 
-		sr_ecp_msg->message("Order received");
-		//printf("postument: %d\n", mp_command.ecp_next_state.mp_2_ecp_next_state);
-		flushall();
-
-		switch ((ecp_mp::task::RCSC_ECP_STATES) mp_command.ecp_next_state.mp_2_ecp_next_state) {
-		case ecp_mp::task::ECP_GEN_TRANSPARENT:
-			gt->throw_kinematics_exceptions
-					= (bool) mp_command.ecp_next_state.mp_2_ecp_next_state_variant;
-			gt->Move();
-			break;
-		case ecp_mp::task::ECP_GEN_BIAS_EDP_FORCE:
-			befg->Move();
-			break;
-		case ecp_mp::task::ECP_GEN_TFF_NOSE_RUN:
-			nrg->Move();
-			break;
-		case ecp_mp::task::ECP_GEN_TFF_RUBIK_GRAB:
-			switch ((ecp_mp::task::RCSC_RUBIK_GRAB_PHASES) mp_command.ecp_next_state.mp_2_ecp_next_state_variant) {
+	} else if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_GEN_TFF_RUBIK_GRAB) {
+		switch ((ecp_mp::task::RCSC_RUBIK_GRAB_PHASES) mp_command.ecp_next_state.mp_2_ecp_next_state_variant)
+		{
 			case ecp_mp::task::RCSC_RG_FACE_TURN_PHASE_0:
 				rgg->configure(0.072, 0.00005, 0, false);
 				break;
@@ -85,15 +93,18 @@ void rcsc::main_task_algorithm(void) {
 				break;
 			default:
 				break;
-			}
-			rgg->Move();
-			break;
-		case ecp_mp::task::ECP_GEN_TFF_GRIPPER_APPROACH:
-			gag->configure(0.005, 150);
-			gag->Move();
-			break;
-		case ecp_mp::task::ECP_GEN_TFF_RUBIK_FACE_ROTATE:
-			switch ((ecp_mp::task::RCSC_TURN_ANGLES) mp_command.ecp_next_state.mp_2_ecp_next_state_variant) {
+		}
+		rgg->Move();
+
+	}
+
+	else if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_GEN_TFF_GRIPPER_APPROACH) {
+		gag->configure(0.005, 150);
+		gag->Move();
+
+	} else if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_GEN_TFF_RUBIK_FACE_ROTATE) {
+		switch ((ecp_mp::task::RCSC_TURN_ANGLES) mp_command.ecp_next_state.mp_2_ecp_next_state_variant)
+		{
 			case ecp_mp::task::RCSC_CCL_90:
 				rfrg->configure(-90.0);
 				break;
@@ -108,11 +119,12 @@ void rcsc::main_task_algorithm(void) {
 				break;
 			default:
 				break;
-			}
-			rfrg->Move();
-			break;
-		case ecp_mp::task::RCSC_GRIPPER_OPENING:
-			switch ((ecp_mp::task::RCSC_GRIPPER_OP) mp_command.ecp_next_state.mp_2_ecp_next_state_variant) {
+		}
+		rfrg->Move();
+
+	} else if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_ST_GRIPPER_OPENING) {
+		switch ((ecp_mp::task::RCSC_GRIPPER_OP) mp_command.ecp_next_state.mp_2_ecp_next_state_variant)
+		{
 			case ecp_mp::task::RCSC_GO_VAR_1:
 				go_st->configure(0.002, 1000);
 				go_st->execute();
@@ -123,23 +135,25 @@ void rcsc::main_task_algorithm(void) {
 				break;
 			default:
 				break;
-			}
-			break;
-		case ecp_mp::task::ECP_GEN_TEACH_IN: {
-			std::string path(mrrocpp_network_path);
-			path += mp_command.ecp_next_state.mp_2_ecp_next_state_string;
-			tig->flush_pose_list();
-			tig->load_file_with_path(path.c_str());
-			//	printf("\nPOSTUMENT ECP_GEN_TEACH_IN :%s\n\n", path1);
-			tig->initiate_pose_list();
-			tig->Move();
-			break;
 		}
-		case ecp_mp::task::ECP_GEN_SMOOTH: {
-			std::string path(mrrocpp_network_path);
-			path += mp_command.ecp_next_state.mp_2_ecp_next_state_string;
 
-			switch ((ecp_mp::task::SMOOTH_MOTION_TYPE) mp_command.ecp_next_state.mp_2_ecp_next_state_variant) {
+	} else if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_GEN_TEACH_IN) {
+		std::string path(mrrocpp_network_path);
+		path += mp_command.ecp_next_state.mp_2_ecp_next_state_string;
+
+		tig->flush_pose_list();
+		tig->load_file_with_path(path.c_str());
+		//		printf("\nTRACK ECP_GEN_TEACH_IN :%s\n\n", path1);
+		tig->initiate_pose_list();
+
+		tig->Move();
+
+	} else if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_GEN_SMOOTH) {
+		std::string path(mrrocpp_network_path);
+		path += mp_command.ecp_next_state.mp_2_ecp_next_state_string;
+
+		switch ((ecp_mp::task::SMOOTH_MOTION_TYPE) mp_command.ecp_next_state.mp_2_ecp_next_state_variant)
+		{
 			case ecp_mp::task::RELATIVE:
 				sg->set_relative();
 				break;
@@ -148,18 +162,13 @@ void rcsc::main_task_algorithm(void) {
 				break;
 			default:
 				break;
-			}
-
-			sg->load_file_with_path(path.c_str());
-			sg->Move();
-			break;
 		}
-		default:
-			break;
-		} // end switch
 
-		ecp_termination_notice();
-	} //end for
+		sg->load_file_with_path(path.c_str());
+		sg->Move();
+
+	}
+
 }
 
 }
@@ -168,7 +177,8 @@ void rcsc::main_task_algorithm(void) {
 namespace common {
 namespace task {
 
-task* return_created_ecp_task(lib::configurator &_config) {
+task* return_created_ecp_task(lib::configurator &_config)
+{
 	return new irp6p_m::task::rcsc(_config);
 }
 

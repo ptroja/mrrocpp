@@ -1,38 +1,42 @@
-
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 
 #include "lib/srlib.h"
-#include "mp/mp.h"
+#include "base/mp/mp.h"
 #include "lib/mrmath/mrmath.h"
 #include "lib/data_port_headers/bird_hand.h"
 #include "mp_t_birdhand_graspit.h"
 #include "ecp_mp_t_graspit.h"
-
+#include "robot/bird_hand/bird_hand_const.h"
 #include <iostream>
 #include <string>
 #include <sstream>
+#include "robot/irp6ot_m/irp6ot_m_const.h"
+#include "robot/irp6p_m/irp6p_m_const.h"
 
 namespace mrrocpp {
 namespace mp {
 namespace task {
 
 graspit::graspit(lib::configurator &_config) :
-	task(_config) {
+	task(_config)
+{
 
-	trgraspit = new ecp_mp::transmitter::TRGraspit(ecp_mp::transmitter::TRANSMITTER_GRASPIT,"[transmitter_graspit]",*this);
+	trgraspit
+			= new ecp_mp::transmitter::TRGraspit(ecp_mp::transmitter::TRANSMITTER_GRASPIT, "[transmitter_graspit]", *this);
 }
 
-void graspit::main_task_algorithm(void) {
+void graspit::main_task_algorithm(void)
+{
 
 	sr_ecp_msg->message("START GRASP");
 
 	lib::robot_name_t manipulator_name;
 	lib::robot_name_t gripper_name;
 
-	int port=config.value<int>("graspit_port","[transmitter_graspit]");
-	std::string node_name=config.value<std::string>("graspit_node_name","[transmitter_graspit]");
+	int port = config.value <int> ("graspit_port", "[transmitter_graspit]");
+	std::string node_name = config.value <std::string> ("graspit_node_name", "[transmitter_graspit]");
 
 	//get the data from GraspIt
 	trgraspit->TRconnect(node_name.c_str(), port);
@@ -63,21 +67,24 @@ void graspit::main_task_algorithm(void) {
 	trgraspit->from_va.grasp_joint[10] += 4.712;
 	//trgraspit->from_va.grasp_joint[11] ;
 
+<<<<<<< HEAD
 	//Bird Hand synchro?
 	//trgraspit->from_va.grasp_joint[12] += 0.0;
 
 
+=======
+>>>>>>> 014c76e56c4f1f572e714336ca8e87ea81fbf98a
 	// ROBOT IRP6_ON_TRACK
-	if (config.value<int> ("is_irp6ot_m_active", UI_SECTION)) {
+	if (config.value <int> ("is_irp6ot_m_active", UI_SECTION)) {
 		manipulator_name = lib::ROBOT_IRP6OT_M;
-		if (config.value<int> ("is_bird_hand_active", UI_SECTION)) {
+		if (config.value <int> ("is_bird_hand_active", UI_SECTION)) {
 			gripper_name = lib::ROBOT_BIRD_HAND;
 		} else {
 			// TODO: throw
 		}
-	} else if (config.value<int> ("is_irp6p_m_active", UI_SECTION)) {
+	} else if (config.value <int> ("is_irp6p_m_active", UI_SECTION)) {
 		manipulator_name = lib::ROBOT_IRP6P_M;
-		if (config.value<int> ("is_bird_hand_active", UI_SECTION)) {
+		if (config.value <int> ("is_bird_hand_active", UI_SECTION)) {
 			gripper_name = lib::ROBOT_BIRD_HAND;
 		} else {
 			// TODO: throw
@@ -94,6 +101,7 @@ void graspit::main_task_algorithm(void) {
 	} mp_ecp_irp6_command;
 	lib::bird_hand_command mp_ecp_bird_hand_command;
 
+<<<<<<< HEAD
 	for (int i=0; i<6; ++i)
 		mp_ecp_irp6_command.joint[i] = trgraspit->from_va.grasp_joint[i];
 	mp_ecp_bird_hand_command.thumb_f[0].desired_position = 0.0;
@@ -145,11 +153,32 @@ void graspit::main_task_algorithm(void) {
 	for (int i=12; i<20; ++i)
 		ss << "\n rec_val: " << trgraspit->from_va.grasp_joint[i];
 	sr_ecp_msg->message(ss.str().c_str());
+=======
+	mp_ecp_bird_hand_command.thumb_f[0].desired_position = trgraspit->from_va.grasp_joint[0];
+	mp_ecp_bird_hand_command.thumb_f[1].desired_position = trgraspit->from_va.grasp_joint[1];
+	mp_ecp_bird_hand_command.index_f[0].desired_position = trgraspit->from_va.grasp_joint[2];
+	mp_ecp_bird_hand_command.index_f[1].desired_position = trgraspit->from_va.grasp_joint[3];
+	mp_ecp_bird_hand_command.index_f[2].desired_position = trgraspit->from_va.grasp_joint[4];
+	mp_ecp_bird_hand_command.ring_f[0].desired_position = trgraspit->from_va.grasp_joint[5];
+	mp_ecp_bird_hand_command.ring_f[1].desired_position = trgraspit->from_va.grasp_joint[6];
+	mp_ecp_bird_hand_command.ring_f[2].desired_position = trgraspit->from_va.grasp_joint[7];
+
+	memcpy(tmp_string, &mp_ecp_bird_hand_command, sizeof(mp_ecp_bird_hand_command));
+
+	set_next_ecps_state(ecp_mp::task::ECP_GEN_BIRD_HAND, (int) 5, tmp_string, sizeof(mp_ecp_bird_hand_command), 1, gripper_name.c_str());
+
+	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, gripper_name.c_str(), gripper_name.c_str());
+
+	set_next_ecps_state(ecp_mp::task::ECP_GEN_IRP6, (int) 5, "", 0, 1, manipulator_name.c_str());
+
+	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, manipulator_name.c_str(), manipulator_name.c_str());
+>>>>>>> 014c76e56c4f1f572e714336ca8e87ea81fbf98a
 
 	sr_ecp_msg->message("END GRASP");
 }
 
-task* return_created_mp_task(lib::configurator &_config) {
+task* return_created_mp_task(lib::configurator &_config)
+{
 	return new graspit(_config);
 }
 

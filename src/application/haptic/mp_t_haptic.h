@@ -8,7 +8,7 @@
 #if !defined(__MP_T_HAPTIC_H)
 #define __MP_T_HAPTIC_H
 
-#include "mp/mp.h"
+#include "base/mp/mp.h"
 
 namespace mrrocpp {
 namespace mp {

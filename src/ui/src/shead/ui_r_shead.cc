@@ -4,7 +4,7 @@
 
 #include "ui/src/shead/ui_r_shead.h"
 #include "ui/ui_ecp_r_tfg_and_conv.h"
-#include "lib/robot_consts/shead_const.h"
+#include "robot/shead/shead_const.h"
 #include "ui/ui_class.h"
 
 /* Local headers */
@@ -51,9 +51,9 @@ int UiRobotShead::reload_configuration() {
 			state.edp.reader_fd = -1;
 			state.edp.state = 0;
 
-			if (ui.config->exists("test_mode", state.edp.section_name))
+			if (ui.config->exists(ROBOT_TEST_MODE, state.edp.section_name))
 				state.edp.test_mode = ui.config->value<int> (
-						"test_mode", state.edp.section_name);
+						ROBOT_TEST_MODE, state.edp.section_name);
 			else
 				state.edp.test_mode = 0;
 

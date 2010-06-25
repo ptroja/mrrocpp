@@ -15,9 +15,6 @@ namespace task {
 /**
  * Used generators.
  */
-enum BIRD_HAND_TEST_ECP_STATES {
-	ECP_GEN_TRANSPARENT = 0, ECP_GEN_SMOOTH, ECP_GEN_SLEEP, ECP_GEN_BIRD_HAND
-};
 
 } // namespace task
 } // namespace ecp_mp

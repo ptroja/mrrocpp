@@ -12,7 +12,7 @@
 #include "lib/com_buf.h"
 
 // Zawiera klase bazowa ecp_mp_sensor.
-#include "ecp_mp/sensor/ecp_mp_sensor.h"
+#include "base/ecp_mp/ecp_mp_sensor.h"
 // Zawiera klase ecp_mp_time_sensor.
 #include "ecp_mp_s_time.h"
 
