@@ -15,6 +15,7 @@ namespace common {
 namespace trajectory_pose {
 
 constant_velocity_trajectory_pose::constant_velocity_trajectory_pose (void) {
+
 }
 
 constant_velocity_trajectory_pose::constant_velocity_trajectory_pose (lib::ECP_POSE_SPECIFICATION arm_type,
@@ -24,10 +25,9 @@ constant_velocity_trajectory_pose::constant_velocity_trajectory_pose (lib::ECP_P
 
 	this->v = v;
 
-	v_max = vector<double>();
-	start_position = vector<double>();
-	v_r = vector<double>();
-	s = vector<double>();
+	v_max = vector<double>(axes_num);
+	start_position = vector<double>(axes_num);
+	v_r = vector<double>(axes_num);
 }
 
 constant_velocity_trajectory_pose::~constant_velocity_trajectory_pose() {

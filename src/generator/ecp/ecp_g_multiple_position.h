@@ -80,11 +80,15 @@ public:
 	/**
 	 * Constructor.
 	 */
-	multiple_position(common::task::task& _ecp_task);
+	multiple_position(common::task::task& _ecp_task) : generator (_ecp_task) {
+
+	}
 	/**
 	 * Destructor.
 	 */
-	virtual ~multiple_position();
+	virtual ~multiple_position() {
+
+	}
 	/**
 	 * Performs calculation of the trajectory and interpolation. Fills in pose_vector and coordinate_vector.
 	 * @return true if the calculation was succesfull
@@ -93,28 +97,41 @@ public:
 	/**
 	 * Sets the number of axes in which the generator will move the robot.
 	 */
-	void set_axes_num(int axes_num);
+	void set_axes_num(int axes_num) {
+		this->axes_num = axes_num;
+	}
 	/**
 	 * Sets the chosen type of interpolation.
 	 */
-	void set_interpolation_type();
+	void set_interpolation_type() {
+
+	}
 	/**
 	 * Sets the relative type of motion.
 	 */
-	void set_relative(void); //zmiana na tryb przyrostowy
+	void set_relative(void) {
+		motion_type=lib::RELATIVE;
+	}
 	/**
 	 * Sets the absolute type of motion.
 	 */
-	void set_absolute(void); //zmiana na tryb bezwzgledny
+	void set_absolute(void) {
+		motion_type=lib::ABSOLUTE;
+	}
 	/**
 	 * Loads a single trajectory pose described in joint coordinates to the list. Maximal velocities are set automatically.
 	 * @return true if the addition was succesfull
 	 */
-	virtual bool load_absolute_joint_trajectory_pose(vector<double> & coordinates);
+	virtual bool load_absolute_joint_trajectory_pose(vector<double> & coordinates) = 0;
 	/**
 	 * Clears vectors of positions and coordinates. Sets %calculated and %interpolated flags to false;
 	 */
-	void reset();
+	void reset() {
+		pose_vector.clear();
+		coordinate_vector.clear();
+		calculated = false;
+		interpolated = false;
+	}
 };
 
 } // namespace generator

@@ -27,11 +27,15 @@ public:
 	/**
 	 * Constructor.
 	 */
-	trajectory_interpolator();
+	trajectory_interpolator() {
+
+	}
 	/**
 	 * Destructor.
 	 */
-	virtual ~trajectory_interpolator();
+	virtual ~trajectory_interpolator() {
+
+	}
 	/**
 	 * Method interpolates the relative type trajectory basing on the list of poses of stored in objects of types derived from %trajectory_pose.
 	 * @param it iterator to the list of positions
