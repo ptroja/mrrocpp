@@ -18,11 +18,28 @@ namespace common {
 namespace generator {
 namespace trajectory_interpolator {
 
+/**
+ * Base class for all trajectory interpolators.
+ */
+template <class Pos>
 class trajectory_interpolator {
 public:
+	/**
+	 * Constructor.
+	 */
 	trajectory_interpolator();
+	/**
+	 * Destructor.
+	 */
 	virtual ~trajectory_interpolator();
-	virtual bool interpolate(vector<ecp_mp::common::trajectory_pose::trajectory_pose>::iterator pose_vector_iterator, vector<vector<double> >::iterator coordinate_vector_iterator) = 0;
+	/**
+	 * Method interpolates the trajectory basing on the list of poses of type %constant_velocity_trajectory_pose.
+	 * @param it iterator to the list of positions
+	 * @param cit iterator to the list of coordinates
+	 * @return true if the interpolation was successful
+	 */
+	virtual bool interpolate(typename vector<Pos>::iterator & pose_vector_iterator, vector<vector<double> >::iterator & coordinate_vector_iterator) = 0;
+
 };
 
 } // namespace trajectory_interpolator

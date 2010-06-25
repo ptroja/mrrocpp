@@ -79,6 +79,8 @@ bool bang_bang_profile::reduction_model_1(vector<ecp_mp::common::trajectory_pose
 										  0.5 * pose_vector_iterator->a_r[i] * t1 * t1;
 		pose_vector_iterator->s_jedn[i] = pose_vector_iterator->v_r[i] * t2;
 	}
+
+	return true;
 }
 
 bool bang_bang_profile::reduction_model_2(vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator &pose_vector_iterator, int i, double s) {
@@ -331,6 +333,7 @@ bool bang_bang_profile::optimize_time1(vector<ecp_mp::common::trajectory_pose::b
 		pose_vector_iterator->v_r[i] = v_r;
 	}
 	pose_vector_iterator->t = t;
+	return true;
 }
 
 bool bang_bang_profile::optimize_time2(vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator &pose_vector_iterator, int i, double s) {

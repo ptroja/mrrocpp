@@ -66,7 +66,7 @@ void teach_in::teach(lib::ECP_POSE_SPECIFICATION ps, const char *msg)
 
             e = errno;
             perror("ecp teach(): Send() to UI failed");
-            sr_ecp_msg.message(lib::SYSTEM_ERROR, e, "base/ecp: Send() to UI failed");
+            sr_ecp_msg.message(lib::SYSTEM_ERROR, e, "ecp: Send() to UI failed");
             throw generator::ECP_error(lib::SYSTEM_ERROR, 0);
           }
         if (ui_to_ecp_rep.reply == lib::QUIT) // Koniec uczenia
@@ -113,8 +113,8 @@ void teach_in::save_file(lib::ECP_POSE_SPECIFICATION ps)
 #endif
     {// by Y&W
         e = errno;
-        perror("base/ecp: Send() to UI failed");
-        sr_ecp_msg.message(lib::SYSTEM_ERROR, e, "base/ecp: Send() to UI failed");
+        perror("ecp: Send() to UI failed");
+        sr_ecp_msg.message(lib::SYSTEM_ERROR, e, "ecp: Send() to UI failed");
         throw generator::ECP_error(lib::SYSTEM_ERROR, 0);
       }
     if (ui_to_ecp_rep.reply == lib::QUIT)
@@ -196,8 +196,8 @@ bool teach_in::load_file_from_ui()
 #endif
     {// by Y&W
         e = errno;
-        perror("base/ecp: Send() to UI failed");
-        sr_ecp_msg.message(lib::SYSTEM_ERROR, e, "base/ecp: Send() to UI failed");
+        perror("ecp: Send() to UI failed");
+        sr_ecp_msg.message(lib::SYSTEM_ERROR, e, "ecp: Send() to UI failed");
         throw generator::ECP_error(lib::SYSTEM_ERROR, 0);
       }
     if (ui_to_ecp_rep.reply == lib::QUIT) // Nie wybrano nazwy pliku lub zrezygnowano z zapisu
@@ -225,7 +225,7 @@ bool teach_in::load_file_with_path(const char* file_name)
     uint64_t i, j; // Liczniki petli
     bool first_time = true; // Znacznik
     double coordinates[MAX_SERVOS_NR]; // Wczytane wspolrzedne
-    int extra_info; // by Y - dodatkowe info do dowolnego wykorzystania
+    int extra_info=0; // by Y - dodatkowe info do dowolnego wykorzystania
     double motion_time; // Czas dojscia do wspolrzednych
 
 

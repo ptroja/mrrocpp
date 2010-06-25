@@ -12,6 +12,7 @@
 #include "generator/ecp/ecp_g_get_position.h"
 #include "base/ecp/ecp_generator.h"
 #include "generator/ecp/velocity_profile_calculator/velocity_profile.h"
+#include "generator/ecp/trajectory_interpolator/trajectory_interpolator.h"
 
 #include <vector>
 
@@ -25,7 +26,7 @@ namespace generator {
 /**
  * Base class for the motion generators interpolating between fixed trajectory points.
  */
-template <class T>
+template <class Pos, class Inter, class Calc>
 class multiple_position : public generator {
 protected:
 
@@ -33,11 +34,11 @@ protected:
 	 * Vector of positions (vector of velocity profiles).
 	 */
 	//vector<ecp_mp::common::trajectory_pose::trajectory_pose> pose_vector;
-	vector<T> pose_vector;
+	vector<Pos> pose_vector;
 	/**
 	 * Position vector iterator.
 	 */
-	typename vector<T>::iterator pose_vector_iterator;
+	typename vector<Pos>::iterator pose_vector_iterator;
 	/**
 	 * Vector of coordinates.
 	 */
@@ -53,7 +54,11 @@ protected:
 	/**
 	 * Velocity profile calculator.
 	 */
-	velocity_profile_calculator::velocity_profile vpc;
+	Calc vpc;
+	/**
+	 * Trajectory interpolator.
+	 */
+	Inter inter;
 	/**
 	 * Number of axes for a given robot in used representation.
 	 */
@@ -62,6 +67,14 @@ protected:
 	 * Type of the used representation.
 	 */
 	lib::ECP_POSE_SPECIFICATION pose_spec;
+	/**
+	 * Set to true if trajectory was calculated (list of positions contains all of the information needed to start the interpolation).
+	 */
+	bool calculated;
+	/**
+	 * Set to true if list of coordinates was filled in.
+	 */
+	bool interpolated;
 
 public:
 	/**
@@ -74,6 +87,7 @@ public:
 	virtual ~multiple_position();
 	/**
 	 * Performs calculation of the trajectory and interpolation. Fills in pose_vector and coordinate_vector.
+	 * @return true if the calculation was succesfull
 	 */
 	virtual bool calculate_interpolate() = 0;
 	/**
@@ -94,8 +108,13 @@ public:
 	void set_absolute(void); //zmiana na tryb bezwzgledny
 	/**
 	 * Loads a single trajectory pose described in joint coordinates to the list. Maximal velocities are set automatically.
+	 * @return true if the addition was succesfull
 	 */
-	virtual bool load_absolute_joint_trajectory_pose(vector<double> & coordinates) = 0;
+	virtual bool load_absolute_joint_trajectory_pose(vector<double> & coordinates);
+	/**
+	 * Clears vectors of positions and coordinates. Sets %calculated and %interpolated flags to false;
+	 */
+	void reset();
 };
 
 } // namespace generator

@@ -10,7 +10,7 @@ namespace ecp_mp {
 namespace common {
 namespace generator {
 
-std::string ECP_GEN_TFG = "ecp_GEN_TFG";
+std::string ECP_GEN_TFG = "ECP_GEN_TFG";
 
 }// namespace generator
 } // namespace common

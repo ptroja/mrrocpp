@@ -108,7 +108,7 @@ bool task::operator_reaction (const char* question )
 #endif
 		uint64_t e = errno;
 		perror("ecp operator_reaction(): Send() to UI failed");
-		sr_ecp_msg->message (lib::SYSTEM_ERROR, e, "base/ecp: Send() to UI failed");
+		sr_ecp_msg->message (lib::SYSTEM_ERROR, e, "ecp: Send() to UI failed");
 		throw ECP_MP_main_error(lib::SYSTEM_ERROR, 0);
 	}
 
@@ -135,8 +135,8 @@ uint8_t task::choose_option (const char* question, uint8_t nr_of_options_input )
 	if(messip::port_send(UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0) {
 #endif
 		uint64_t e = errno;
-		perror("base/ecp: Send() to UI failed");
-		sr_ecp_msg->message (lib::SYSTEM_ERROR, e, "base/ecp: Send() to UI failed");
+		perror("ecp: Send() to UI failed");
+		sr_ecp_msg->message (lib::SYSTEM_ERROR, e, "ecp: Send() to UI failed");
 		throw ECP_MP_main_error(lib::SYSTEM_ERROR, 0);
 	}
 
@@ -162,8 +162,8 @@ int task::input_integer (const char* question )
 	if(messip::port_send(UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0) {
 #endif
 		uint64_t e = errno;
-		perror("base/ecp: Send() to UI failed");
-		sr_ecp_msg->message (lib::SYSTEM_ERROR, e, "base/ecp: Send() to UI failed");
+		perror("ecp: Send() to UI failed");
+		sr_ecp_msg->message (lib::SYSTEM_ERROR, e, "ecp: Send() to UI failed");
 		throw ECP_MP_main_error(lib::SYSTEM_ERROR, 0);
 	}
 
@@ -189,8 +189,8 @@ double task::input_double (const char* question )
 	if(messip::port_send(UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0) {
 #endif
 		uint64_t e = errno;
-		perror("base/ecp: Send() to UI failed");
-		sr_ecp_msg->message (lib::SYSTEM_ERROR, e, "base/ecp: Send() to UI failed");
+		perror("ecp: Send() to UI failed");
+		sr_ecp_msg->message (lib::SYSTEM_ERROR, e, "ecp: Send() to UI failed");
 		throw ECP_MP_main_error(lib::SYSTEM_ERROR, 0);
 	}
 	return ui_to_ecp_rep.double_number; // by Y
@@ -215,8 +215,8 @@ bool task::show_message (const char* message)
 	if(messip::port_send(UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0) {
 #endif
 		uint64_t e = errno;
-		perror("base/ecp: Send() to UI failed");
-		sr_ecp_msg->message (lib::SYSTEM_ERROR, e, "base/ecp: Send() to UI failed");
+		perror("ecp: Send() to UI failed");
+		sr_ecp_msg->message (lib::SYSTEM_ERROR, e, "ecp: Send() to UI failed");
 		throw ECP_MP_main_error(lib::SYSTEM_ERROR, 0);
 	}
 

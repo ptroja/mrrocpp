@@ -269,7 +269,7 @@ servo_buffer::servo_buffer(motor_driven_effector &_master) :
 #ifndef __QNXNTO__
 			servo_command_rdy(false), sg_reply_rdy(false),
 #endif
-			master(_master), thread_started()
+			thread_started(), master(_master)
 {
 #ifdef __QNXNTO__
 	if ((servo_to_tt_chid = ChannelCreate(_NTO_CHF_UNBLOCK)) == -1) {

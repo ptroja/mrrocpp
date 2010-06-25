@@ -220,7 +220,7 @@ void Draughts::main_task_algorithm(void)
 /*===============================makeAIMove========================================*/
 int Draughts::makeAIMove(int player)
 {
-	char* move;
+	uint8_t* move;
 	char* board;
 	//int to;
 	int movesnr;

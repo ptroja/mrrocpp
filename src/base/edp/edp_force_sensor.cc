@@ -117,9 +117,9 @@ void force::operator()(void)
 } //!< end MAIN
 
 force::force(common::manip_effector &_master) :
-	gravity_transformation(NULL), new_edp_command(false), master(_master), is_sensor_configured(false), //!< czujnik niezainicjowany
 			is_reading_ready(false), //!< nie ma zadnego gotowego odczytu
-			TERMINATE(false), is_right_turn_frame(true)
+			is_right_turn_frame(true), gravity_transformation(NULL), master(_master), TERMINATE(false),
+			is_sensor_configured(false), new_edp_command(false) //!< czujnik niezainicjowany
 {
 	/*!Lokalizacja procesu wywietlania komunikatow SR */
 	sr_msg

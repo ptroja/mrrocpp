@@ -1600,8 +1600,8 @@ void calibration::ecp_save_extended_file(operator_reaction_condition& the_condit
 	if (messip::port_send(ecp_t.UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0) {
 #endif
 		e = errno;
-		perror("base/ecp: Send() to UI failed");
-		ecp_t.sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "base/ecp: Send() to UI failed");
+		perror("ecp: Send() to UI failed");
+		ecp_t.sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ecp: Send() to UI failed");
 		throw generator::ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 	}
 	if (ui_to_ecp_rep.reply == lib::QUIT) // Nie wybrano nazwy pliku lub zrezygnowano z zapisu
@@ -3177,8 +3177,8 @@ void elipsoid::ecp_save_trajectory()
 	if (messip::port_send(ecp_t.UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0) {
 #endif
 		e = errno;
-		perror("base/ecp: Send() to UI failed");
-		ecp_t.sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "base/ecp: Send() to UI failed");
+		perror("ecp: Send() to UI failed");
+		ecp_t.sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ecp: Send() to UI failed");
 		throw generator::ECP_error(lib::SYSTEM_ERROR, 0);
 	}
 

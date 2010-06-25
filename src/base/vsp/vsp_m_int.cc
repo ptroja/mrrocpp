@@ -145,10 +145,12 @@ void write_to_sensor(void)
 int io_read(resmgr_context_t *ctp, io_read_t *msg, RESMGR_OCB_T *ocb)
 {
 	int status;
-	if ((status = iofunc_read_verify(ctp, msg, ocb, NULL)) != EOK)
+	if ((status = iofunc_read_verify(ctp, msg, ocb, NULL)) != EOK) {
 		return (status);
-	if (msg->i.xtype & _IO_XTYPE_MASK != _IO_XTYPE_NONE)
+	}
+	if (msg->i.xtype & (_IO_XTYPE_MASK != _IO_XTYPE_NONE)) {
 		return (ENOSYS);
+	}
 	try {
 		vs->set_vsp_report(lib::VSP_REPLY_OK);
 		vs->get_reading();
@@ -167,11 +169,13 @@ int io_read(resmgr_context_t *ctp, io_read_t *msg, RESMGR_OCB_T *ocb)
 int io_write(resmgr_context_t *ctp, io_write_t *msg, RESMGR_OCB_T *ocb)
 {
 	int status;
-	if ((status = iofunc_write_verify(ctp, msg, ocb, NULL)) != EOK)
+	if ((status = iofunc_write_verify(ctp, msg, ocb, NULL)) != EOK) {
 		return (status);
-	if (msg->i.xtype & _IO_XTYPE_MASK != _IO_XTYPE_NONE)
+	}
+	if (msg->i.xtype & (_IO_XTYPE_MASK != _IO_XTYPE_NONE)) {
 		return (ENOSYS);
-	_IO_SET_WRITE_NBYTES (ctp, msg->i.nbytes);
+	}
+	_IO_SET_WRITE_NBYTES(ctp, msg->i.nbytes);
 	vs->msgread(ctp);
 	try {
 		write_to_sensor();
@@ -194,7 +198,7 @@ int io_devctl(resmgr_context_t *ctp, io_devctl_t *msg, RESMGR_OCB_T *ocb)
 	if ((status = iofunc_devctl_default(ctp, msg, ocb)) != _RESMGR_DEFAULT)
 		return (status);
 
-	_IO_SET_WRITE_NBYTES (ctp, msg->i.nbytes);
+	_IO_SET_WRITE_NBYTES(ctp, msg->i.nbytes);
 	vs->msgread(ctp);
 
 	switch (msg->i.dcmd)
