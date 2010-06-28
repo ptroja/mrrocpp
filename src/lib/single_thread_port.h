@@ -148,14 +148,14 @@ public:
 	single_thread_port <T>* get_port(std::string name)
 	{
 		// TODO: dodac obsluge wyjatku w sytuacji gdy nie ma takiego pola lub typ sie nie zgadza
-		return (single_thread_port <T>*)(single_thread_port_map[name]);
+		return (single_thread_port <T>*) (single_thread_port_map[name]);
 	}
 
 	template <class T>
 	single_thread_request_port <T>* get_request_port(std::string name)
 	{
 		// TODO: dodac obsluge wyjatku w sytuacji gdy nie ma takiego pola lub typ sie nie zgadza
-		return (single_thread_request_port <T>*)(single_thread_port_map[name]);
+		return (single_thread_request_port <T>*) (single_thread_port_map[name]);
 	}
 
 };

@@ -24,7 +24,7 @@
 // #include "ui/ui.h"
 // Konfigurator.
 // #include "lib/configurator.h"
-#include "lib/robot_consts/speaker_const.h"
+#include "robot/speaker/speaker_const.h"
 #include "ui/src/speaker/ui_ecp_r_speaker.h"
 
 /* Local headers */
@@ -261,7 +261,7 @@ int EDP_speaker_create(PtWidget_t *widget, ApInfo_t *apinfo,
 
 				if (ui.speaker->state.edp.pid < 0) {
 					ui.speaker->state.edp.state = 0;
-					fprintf(stderr, "EDP spawn failed: %s\n", strerror(errno));
+					fprintf(stderr, "edp spawn failed: %s\n", strerror(errno));
 					delete ui.speaker->ui_ecp_robot;
 				} else { // jesli spawn sie powiodl
 

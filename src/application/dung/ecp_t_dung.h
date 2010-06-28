@@ -1,7 +1,7 @@
 #if !defined(_ECP_T_DUNG_H)
 #define _ECP_T_DUNG_H
 
-#include "ecp/common/task/ecp_task.h"
+#include "base/ecp/ecp_task.h"
 
 namespace mrrocpp {
 namespace ecp {

@@ -25,7 +25,7 @@ wii_relative::wii_relative (common::task::task& _ecp_task,ecp_mp::sensor::wiimot
 
 void wii_relative::set_position(void)
 {
-    char buffer[200];
+ //   char buffer[200];
 
     the_robot->ecp_command.instruction.instruction_type = lib::SET_GET;
 

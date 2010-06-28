@@ -3,10 +3,10 @@
 
 #include <boost/shared_ptr.hpp>
 
-#include "ecp/common/task/ecp_task.h"
-#include "ecp/common/generator/ecp_g_transparent.h"
-#include "ecp/common/task/ecp_st_go.h"
-#include "ecp_mp/sensor/ecp_mp_s_fradia_sensor.h"
+#include "base/ecp/ecp_task.h"
+#include "base/ecp/ecp_g_transparent.h"
+#include "subtask/ecp_st_go.h"
+#include "sensor/fradia/ecp_mp_s_fradia_sensor.h"
 
 #include "../servovision/simple_visual_servo_manager.h"
 #include "../servovision/ib_eih_visual_servo.h"
@@ -36,14 +36,12 @@ class rcsc: public common::task::task
 protected:
     //generatory
 	shared_ptr<common::generator::transparent> gt;
-	shared_ptr<common::generator::tff_nose_run> nrg;
 	shared_ptr<common::generator::tff_rubik_grab> rgg;
 	shared_ptr<common::generator::tff_gripper_approach> gag;
 	shared_ptr<common::generator::tff_rubik_face_rotate> rfrg;
 	shared_ptr<common::generator::teach_in> tig;
 	shared_ptr<common::generator::smooth> sg;
 
-	shared_ptr<common::generator::bias_edp_force> befg;
 	shared_ptr<common::generator::weight_meassure> wmg;
     //podzadania
 	shared_ptr<common::task::ecp_sub_task_gripper_opening> go_st;
@@ -56,7 +54,7 @@ public:
     rcsc(lib::configurator &_config);
 
     // methods for ECP template to redefine in concrete classes
-    void main_task_algorithm(void);
+    void mp_2_ecp_next_state_string_handler(void);
 };
 
 }

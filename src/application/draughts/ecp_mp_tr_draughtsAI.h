@@ -8,8 +8,7 @@
 #ifndef ECP_MP_TR_DRAUGHTSAI_H_
 #define ECP_MP_TR_DRAUGHTSAI_H_
 
-#include "ecp_mp/transmitter/transmitter.h"				// klasa bazowa transmitter
-
+#include "base/ecp_mp/transmitter.h"				// klasa bazowa transmitter
 namespace mrrocpp {
 namespace ecp_mp {
 namespace transmitter {
@@ -26,7 +25,7 @@ struct game_board_struct
 
 struct result_struct
 {
-	char move[25];
+	uint8_t move[25];
 	char status;
 };
 
@@ -40,17 +39,19 @@ typedef struct _to_draughts_ai
 
 typedef struct _from_draughts_ai
 {
-	char move[25];
+	uint8_t move[25];
 	char status;
 } from_draughts_ai_t;
 
-typedef transmitter<to_draughts_ai_t, from_draughts_ai_t> DraughtsAI_transmitter_t;
+typedef transmitter <to_draughts_ai_t, from_draughts_ai_t> DraughtsAI_transmitter_t;
 
-class TRDraughtsAI : public DraughtsAI_transmitter_t {
-	private:									// pola do komunikacji
-		struct result_struct result;
-		struct game_board_struct gameBoard;
-		int socketDescriptor;
+class TRDraughtsAI : public DraughtsAI_transmitter_t
+{
+private:
+	// pola do komunikacji
+	struct result_struct result;
+	struct game_board_struct gameBoard;
+	int socketDescriptor;
 
 	public:
 		TRDraughtsAI(TRANSMITTER_ENUM _transmitter_name, const char* _section_name, task::task& _ecp_mp_object);

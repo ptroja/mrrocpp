@@ -3,8 +3,8 @@
 #include <unistd.h>
 #include <iostream>
 
-#include "ecp/irp6_on_track/ecp_r_irp6ot.h"
-#include "ecp/irp6_postument/ecp_r_irp6p.h"
+#include "base/ecp/irp6_on_track/ecp_r_irp6ot.h"
+#include "base/ecp/irp6_postument/ecp_r_irp6p.h"
 #include "ecp_t_graspit.h"
 #include "ecp_mp_tr_graspit.h"
 
@@ -29,12 +29,12 @@ Graspit::Graspit(lib::configurator &_config): task(_config){
 	smoothgen2->sensor_m = sensor_m;
 	trgraspit = new ecp_mp::transmitter::TRGraspit(ecp_mp::transmitter::TRANSMITTER_GRASPIT,"[transmitter_graspit]",*this);
 
-	sr_ecp_msg->message("ECP loaded graspit");
+	sr_ecp_msg->message("ecp loaded graspit");
 };
 
 void Graspit::main_task_algorithm(void ){
 
-	sr_ecp_msg->message("ECP graspit ready");
+	sr_ecp_msg->message("ecp graspit ready");
 
 	int port=config.value<int>("graspit_port","[transmitter_graspit]");
 	std::string node_name=config.value<std::string>("graspit_node_name","[transmitter_graspit]");

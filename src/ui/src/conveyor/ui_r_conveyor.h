@@ -10,7 +10,7 @@
 
 #include "ui/ui.h"
 #include "ui/ui_robot.h"
-#include "lib/robot_consts/conveyor_const.h"
+#include "robot/conveyor/conveyor_const.h"
 
 class Ui;
 

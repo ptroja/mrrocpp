@@ -6,7 +6,7 @@
 #include <string.h>
 
 #include "application/wii_teach/sensor/ecp_mp_s_wiimote.h"
-#include "ecp_mp/task/ecp_mp_task.h"
+#include "base/ecp_mp/ecp_mp_task.h"
 
 #include "lib/exception.h"
 #include <boost/throw_exception.hpp>

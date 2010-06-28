@@ -3,7 +3,7 @@
 #include <unistd.h>
 #include <iostream>
 
-#include "ecp/irp6ot_m/ecp_r_irp6ot_m.h"
+#include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
 #include "ecp_t_grab_cube_irp6ot.h"
 
 namespace mrrocpp {

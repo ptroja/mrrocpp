@@ -37,6 +37,8 @@ protected:
 
 	lib::Ft_tr ft_tr_sensor_in_wrist;
 
+	const bool is_right_turn_frame;
+
 	//	lib::Ft_v_tr ft_tr_sensor_translation_matrix;
 	//	lib::Ft_v_tr ft_tr_inv_sensor_translation_matrix;
 	//	lib::Ft_v_tr ft_tr_sensor_rotation_matrix;
@@ -44,10 +46,10 @@ protected:
 
 public:
 	//	ForceTrans(const lib::Homog_matrix & init_frame, const lib::Homog_matrix & s_frame);										// standardowy tool
-	ForceTrans(const lib::Homog_matrix & init_frame, const lib::Homog_matrix & s_frame, const double weight, const lib::K_vector & point_of_gravity);
+	ForceTrans(const lib::Homog_matrix & init_frame, const lib::Homog_matrix & s_frame, const double weight, const lib::K_vector & point_of_gravity, bool _is_right_turn_frame);
 	void defineTool(const lib::Homog_matrix & init_frame, const double weight, const lib::K_vector & point_of_gravity);
 	void synchro(const lib::Homog_matrix & init_frame);
-	lib::Ft_vector getForce(const lib::Ft_vector inputForceTorque, const lib::Homog_matrix curr_frame);
+	lib::Ft_vector getForce(const lib::Ft_vector _inputForceTorque, const lib::Homog_matrix curr_frame);
 };
 
 } // namespace lib

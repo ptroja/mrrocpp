@@ -13,11 +13,11 @@
 #include "lib/com_buf.h"
 
 #include "lib/srlib.h"
-#include "ecp_mp/task/ecp_mp_t_rcsc.h"
+#include "application/rcsc/ecp_mp_t_rcsc.h"
 
-#include "ecp/irp6ot_m/ecp_r_irp6ot_m.h"
-#include "ecp/irp6p_m/ecp_r_irp6p_m.h"
-#include "ecp/common/generator/ecp_g_force.h"
+#include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
+#include "robot/irp6p_m/ecp_r_irp6p_m.h"
+#include "generator/ecp/ecp_g_force.h"
 #include "application/sk/ecp_g_sk.h"
 
 #include "application/sk/ecp_t_sk.h"
@@ -48,9 +48,9 @@ sk::sk(lib::configurator &_config) :
 	befg = new generator::bias_edp_force(*this);
 
 	if (ecp_m_robot->robot_name == lib::ROBOT_IRP6OT_M) {
-		sr_ecp_msg->message("ECP sk irp6ot loaded");
+		sr_ecp_msg->message("ecp sk irp6ot loaded");
 	} else if (ecp_m_robot->robot_name == lib::ROBOT_IRP6P_M) {
-		sr_ecp_msg->message("ECP sk irp6p loaded");
+		sr_ecp_msg->message("ecp sk irp6p loaded");
 	}
 
 	// sprawdzenie dodatkowej opcji w konfiguracji dotyczacej uruchomienie zapamietywania trajektorii do pliku

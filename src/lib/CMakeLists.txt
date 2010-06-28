@@ -32,6 +32,9 @@ add_library(mrrocpp
 	datastr.cc
 	condition_synchroniser.cc
 	logger.cc
+	trajectory_pose/bang_bang_trajectory_pose.cc
+	trajectory_pose/trajectory_pose.cc
+	trajectory_pose/constant_velocity_trajectory_pose.cc
 )
 
 if(NOT USE_MESSIP)

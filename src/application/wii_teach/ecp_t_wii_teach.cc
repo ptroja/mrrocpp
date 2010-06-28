@@ -8,7 +8,7 @@
 #include "lib/srlib.h"
 #include "application/wii_teach/sensor/ecp_mp_s_wiimote.h"
 
-#include "ecp/irp6ot_m/ecp_r_irp6ot_m.h"
+#include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
 #include "application/wii_teach/ecp_t_wii_teach.h"
 #include "lib/mrmath/mrmath.h"
 #include "ecp_t_wii_teach.h"
@@ -249,19 +249,19 @@ void wii_teach::save_trajectory(void)
 
 void wii_teach::updateButtonsPressed(void)
 {
-	ecp_mp::sensor::wiimote * wii = dynamic_cast<ecp_mp::sensor::wiimote *> (sensor_m[ecp_mp::sensor::SENSOR_WIIMOTE]);
+	ecp_mp::sensor::wiimote * wii = dynamic_cast <ecp_mp::sensor::wiimote *> (sensor_m[ecp_mp::sensor::SENSOR_WIIMOTE]);
 
-    buttonsPressed.left = !lastButtons.left && wii->image.left;
-    buttonsPressed.right = !lastButtons.right && wii->image.right;
-    buttonsPressed.up = !lastButtons.up && wii->image.up;
-    buttonsPressed.down = !lastButtons.down && wii->image.down;
-    buttonsPressed.buttonA = !lastButtons.buttonA && wii->image.buttonA;
-    buttonsPressed.buttonB = !lastButtons.buttonB && wii->image.buttonB;
-    buttonsPressed.button1 = !lastButtons.button1 && wii->image.button1;
-    buttonsPressed.button2 = !lastButtons.button2 && wii->image.button2;
-    buttonsPressed.buttonPlus = !lastButtons.buttonPlus && wii->image.buttonPlus;
-    buttonsPressed.buttonMinus = !lastButtons.buttonMinus && wii->image.buttonMinus;
-    buttonsPressed.buttonHome = !lastButtons.buttonHome && wii->image.buttonHome;
+	buttonsPressed.left = !lastButtons.left && wii->image.left;
+	buttonsPressed.right = !lastButtons.right && wii->image.right;
+	buttonsPressed.up = !lastButtons.up && wii->image.up;
+	buttonsPressed.down = !lastButtons.down && wii->image.down;
+	buttonsPressed.buttonA = !lastButtons.buttonA && wii->image.buttonA;
+	buttonsPressed.buttonB = !lastButtons.buttonB && wii->image.buttonB;
+	buttonsPressed.button1 = !lastButtons.button1 && wii->image.button1;
+	buttonsPressed.button2 = !lastButtons.button2 && wii->image.button2;
+	buttonsPressed.buttonPlus = !lastButtons.buttonPlus && wii->image.buttonPlus;
+	buttonsPressed.buttonMinus = !lastButtons.buttonMinus && wii->image.buttonMinus;
+	buttonsPressed.buttonHome = !lastButtons.buttonHome && wii->image.buttonHome;
 }
 
 void wii_teach::print_trajectory(void)
@@ -272,10 +272,7 @@ void wii_teach::print_trajectory(void)
 
 	sr_ecp_msg->message("=== Trajektoria ===");
 	while (current) {
-		sprintf(buffer, "Pozycja %d: %.4f %.4f %.4f %.4f %.4f %.4f %.4f", ++i,
-				current->position[0], current->position[1],
-				current->position[2], current->position[3],
-				current->position[4], current->position[5], current->gripper);
+		sprintf(buffer, "Pozycja %d: %.4f %.4f %.4f %.4f %.4f %.4f %.4f", ++i, current->position[0], current->position[1], current->position[2], current->position[3], current->position[4], current->position[5], current->gripper);
 		sr_ecp_msg->message(buffer);
 		current = current->next;
 	}
@@ -295,14 +292,7 @@ void wii_teach::move_to_current(void)
 				trajectory.current->position[5], trajectory.current->gripper);
 		sr_ecp_msg->message(buffer);
 		sg->set_absolute();
-		sg->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS,
-				trajectory.current->position[0],
-				trajectory.current->position[1],
-				trajectory.current->position[2],
-				trajectory.current->position[3],
-				trajectory.current->position[4],
-				trajectory.current->position[5], trajectory.current->gripper,
-				0, true);
+		sg->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, trajectory.current->position[0], trajectory.current->position[1], trajectory.current->position[2], trajectory.current->position[3], trajectory.current->position[4], trajectory.current->position[5], trajectory.current->gripper, 0, true);
 		sg->Move();
 	}
 
@@ -310,255 +300,219 @@ void wii_teach::move_to_current(void)
 
 void wii_teach::main_task_algorithm(void)
 {
-    int cnt = 0;
-    char buffer[200];
-    int gen = 0;
+	int cnt = 0;
+	char buffer[200];
+	int gen = 0;
 
-    ecp_mp::sensor::wiimote * wii = dynamic_cast<ecp_mp::sensor::wiimote *> (sensor_m[ecp_mp::sensor::SENSOR_WIIMOTE]);
+	ecp_mp::sensor::wiimote * wii = dynamic_cast <ecp_mp::sensor::wiimote *> (sensor_m[ecp_mp::sensor::SENSOR_WIIMOTE]);
 
-    sg = new common::generator::smooth(*this, true);
-    ag = new irp6ot_m::generator::wii_absolute(*this, wii);
-    rg = new irp6ot_m::generator::wii_relative(*this, wii);
-    jg = new irp6ot_m::generator::wii_joint(*this, wii);
+	sg = new common::generator::smooth(*this, true);
+	ag = new irp6ot_m::generator::wii_absolute(*this, wii);
+	rg = new irp6ot_m::generator::wii_relative(*this, wii);
+	jg = new irp6ot_m::generator::wii_joint(*this, wii);
 
-    bool has_filenames = false;//get_filenames();
-    if(has_filenames)
-    {
-        load_trajectory();
-        move_to_current();
-    }
+	bool has_filenames = false;//get_filenames();
+	if (has_filenames) {
+		load_trajectory();
+		move_to_current();
+	}
 
-    common::generator::generator* g = ag;
-    int i = 0;
+	common::generator::generator* g = ag;
+	//	int i = 0;
 
-    ecp_mp::sensor::wii_command_t message;
+	ecp_mp::sensor::wii_command_t message;
 
-    message.led_change = true;
-    message.rumble = false;
-    switch(gen)
-    {
-        case 0:
-            message.led_status = 0x1;
-            break;
-        case 1:
-            message.led_status = 0x2;
-            break;
-        case 2:
-            message.led_status = 0x4;
-            break;
-    }
-    wii->send_reading(message);
+	message.led_change = true;
+	message.rumble = false;
+	switch (gen)
+	{
+		case 0:
+			message.led_status = 0x1;
+			break;
+		case 1:
+			message.led_status = 0x2;
+			break;
+		case 2:
+			message.led_status = 0x4;
+			break;
+	}
+	wii->send_reading(message);
 
-    while(1)
-    {
-        sensor_m[ecp_mp::sensor::SENSOR_WIIMOTE]->get_reading();
-        updateButtonsPressed();
-        lastButtons = wii->image;
+	while (1) {
+		sensor_m[ecp_mp::sensor::SENSOR_WIIMOTE]->get_reading();
+		updateButtonsPressed();
+		lastButtons = wii->image;
 
-        if(buttonsPressed.button1 || buttonsPressed.button2)
-        {
-            if(buttonsPressed.button1)
-            {
-                buttonsPressed.button1 = 0;
-                gen = ++gen % 3;
-            }
-            else if(buttonsPressed.button2)
-            {
-                buttonsPressed.button2 = 0;
-                gen = --gen % 3;
-                if(gen < 0) gen = 2;
-            }
+		if (buttonsPressed.button1 || buttonsPressed.button2) {
+			if (buttonsPressed.button1) {
+				buttonsPressed.button1 = 0;
+				gen = ++gen % 3;
+			} else if (buttonsPressed.button2) {
+				buttonsPressed.button2 = 0;
+				gen = --gen % 3;
+				if (gen < 0)
+					gen = 2;
+			}
+			message.led_change = true;
+			message.rumble = false;
+			switch (gen)
+			{
+				case 0:
+					g = ag;
+					message.led_status = 0x1;
+					break;
+				case 1:
+					g = rg;
+					message.led_status = 0x2;
+					break;
+				case 2:
+					g = jg;
+					message.led_status = 0x4;
+					break;
+			}
+			((ecp_mp::sensor::wiimote*) sensor_m[ecp_mp::sensor::SENSOR_WIIMOTE])->send_reading(message);
+		} else if (buttonsPressed.buttonA) {
+			buttonsPressed.buttonA = 0;
 
-            message.led_change = true;
-            message.rumble = false;
-            switch(gen)
-            {
-                case 0:
-                    g = ag;
-                    message.led_status = 0x1;
-                    break;
-                case 1:
-                    g = rg;
-                    message.led_status = 0x2;
-                    break;
-                case 2:
-                    g = jg;
-                    message.led_status = 0x4;
-                    break;
-            }
-            ((ecp_mp::sensor::wiimote*)sensor_m[ecp_mp::sensor::SENSOR_WIIMOTE])->send_reading(message);
-        }
-        else if(buttonsPressed.buttonA) 
-        {
-            buttonsPressed.buttonA = 0;
+			message.led_change = true;
+			message.rumble = false;
 
-            message.led_change = true;
-            message.rumble = false;
+			switch (gen)
+			{
+				case 0:
+					message.led_status = 0x1 | 0x8;
+					break;
+				case 1:
+					message.led_status = 0x2 | 0x8;
+					break;
+				case 2:
+					message.led_status = 0x4 | 0x8;
+					break;
+			}
+			((ecp_mp::sensor::wiimote*) sensor_m[ecp_mp::sensor::SENSOR_WIIMOTE])->send_reading(message);
 
-            switch(gen)
-            {
-                case 0:
-                    message.led_status = 0x1 | 0x8;
-                    break;
-                case 1:
-                    message.led_status = 0x2 | 0x8;
-                    break;
-                case 2:
-                    message.led_status = 0x4 | 0x8;
-                    break;
-            }
-            ((ecp_mp::sensor::wiimote*)sensor_m[ecp_mp::sensor::SENSOR_WIIMOTE])->send_reading(message);
+			g->Move();
 
-            g->Move();
-            
-            message.led_change = true;
-            message.led_status &= 0x1 | 0x2 | 0x4;
-            message.rumble = false;
-            ((ecp_mp::sensor::wiimote*)sensor_m[ecp_mp::sensor::SENSOR_WIIMOTE])->send_reading(message);
-            
-        }
-        else
-        {
-            if(buttonsPressed.left)
-            {
-                buttonsPressed.left = 0;
-                if(trajectory.position > 1)
-                {
-                    --trajectory.position;
-                    trajectory.current = trajectory.current->prev;
-                    move_to_current();
-                }
-            }
-            else if(buttonsPressed.right)
-            {
-                buttonsPressed.right = 0;
-                if(trajectory.position < trajectory.count)
-                {
-                    ++trajectory.position;
-                    trajectory.current = trajectory.current->next;
-                    move_to_current();
-                }
-            }
-            else if(buttonsPressed.up)
-            {
-                buttonsPressed.up = 0;
-                if(trajectory.count > 0)
-                {
-                    trajectory.position = trajectory.count;
-                    trajectory.current = trajectory.tail;
-                    move_to_current();
-                }
-            }
-            else if(buttonsPressed.down)
-            {
-                buttonsPressed.down = 0;
-                if(trajectory.count > 0)
-                {
-                    trajectory.position = 1;
-                    trajectory.current = trajectory.head;
-                    move_to_current();
-                }
-            }
-            else if(buttonsPressed.buttonPlus)
-            {
-                buttonsPressed.buttonPlus = 0;
+			message.led_change = true;
+			message.led_status &= 0x1 | 0x2 | 0x4;
+			message.rumble = false;
+			((ecp_mp::sensor::wiimote*) sensor_m[ecp_mp::sensor::SENSOR_WIIMOTE])->send_reading(message);
 
-                node* current = new node;
-                current->id = ++cnt;
+		} else {
+			if (buttonsPressed.left) {
+				buttonsPressed.left = 0;
+				if (trajectory.position > 1) {
+					--trajectory.position;
+					trajectory.current = trajectory.current->prev;
+					move_to_current();
+				}
+			} else if (buttonsPressed.right) {
+				buttonsPressed.right = 0;
+				if (trajectory.position < trajectory.count) {
+					++trajectory.position;
+					trajectory.current = trajectory.current->next;
+					move_to_current();
+				}
+			} else if (buttonsPressed.up) {
+				buttonsPressed.up = 0;
+				if (trajectory.count > 0) {
+					trajectory.position = trajectory.count;
+					trajectory.current = trajectory.tail;
+					move_to_current();
+				}
+			} else if (buttonsPressed.down) {
+				buttonsPressed.down = 0;
+				if (trajectory.count > 0) {
+					trajectory.position = 1;
+					trajectory.current = trajectory.head;
+					move_to_current();
+				}
+			} else if (buttonsPressed.buttonPlus) {
+				buttonsPressed.buttonPlus = 0;
 
-                homog_matrix.set_from_frame_tab(ecp_m_robot->reply_package.arm.pf_def.arm_frame);
-                lib::Xyz_Angle_Axis_vector tmp_vector;
-                homog_matrix.get_xyz_angle_axis(tmp_vector);
-                tmp_vector.to_table(current->position);
+				node* current = new node;
+				current->id = ++cnt;
 
-                if(trajectory.current)
-                {
-                    current->next = trajectory.current->next;
-                    current->prev = trajectory.current;
-                    trajectory.current->next = current;
-                    if(trajectory.tail == trajectory.current) trajectory.tail = current;
-                    trajectory.current = current;
-                }
-                else
-                {
-                    trajectory.current = trajectory.head = trajectory.tail = current;
-                }
+				homog_matrix.set_from_frame_tab(ecp_m_robot->reply_package.arm.pf_def.arm_frame);
+				lib::Xyz_Angle_Axis_vector tmp_vector;
+				homog_matrix.get_xyz_angle_axis(tmp_vector);
+				tmp_vector.to_table(current->position);
 
-                ++trajectory.position;
-                ++trajectory.count;
+				if (trajectory.current) {
+					current->next = trajectory.current->next;
+					current->prev = trajectory.current;
+					trajectory.current->next = current;
+					if (trajectory.tail == trajectory.current)
+						trajectory.tail = current;
+					trajectory.current = current;
+				} else {
+					trajectory.current = trajectory.head = trajectory.tail = current;
+				}
 
-                sprintf(buffer,"Added %d: %.4f %.4f %.4f %.4f %.4f %.4f %.4f",current->id,current->position[0],current->position[1],current->position[2],current->position[3],current->position[4],current->position[5],current->gripper);
-                sr_ecp_msg->message(buffer);
+				++trajectory.position;
+				++trajectory.count;
 
-                print_trajectory();
-            }
-            else if(buttonsPressed.buttonMinus)
-            {
-                buttonsPressed.buttonMinus = 0;
-                if(trajectory.position > 0)
-                {
-                    node* tmp = trajectory.current;
-                    if(trajectory.current == trajectory.head)
-                    {
-                        trajectory.head = trajectory.current->next;
-                    }
-                    if(trajectory.current == trajectory.tail)
-                    {
-                        trajectory.tail = trajectory.current->prev;
-                    }
-                    if(trajectory.current->prev)
-                    {
-                        trajectory.current->prev->next = trajectory.current->next;
-                    }
-                    if(trajectory.current->next)
-                    {
-                        trajectory.current->next->prev = trajectory.current->prev;
-                    }
-                    trajectory.current = trajectory.current->prev;
+				sprintf(buffer, "Added %d: %.4f %.4f %.4f %.4f %.4f %.4f %.4f", current->id, current->position[0], current->position[1], current->position[2], current->position[3], current->position[4], current->position[5], current->gripper);
+				sr_ecp_msg->message(buffer);
 
-                    sprintf(buffer,"Removed %d",tmp->id);
-                    sr_ecp_msg->message(buffer);
-                    delete tmp;
+				print_trajectory();
+			} else if (buttonsPressed.buttonMinus) {
+				buttonsPressed.buttonMinus = 0;
+				if (trajectory.position > 0) {
+					node* tmp = trajectory.current;
+					if (trajectory.current == trajectory.head) {
+						trajectory.head = trajectory.current->next;
+					}
+					if (trajectory.current == trajectory.tail) {
+						trajectory.tail = trajectory.current->prev;
+					}
+					if (trajectory.current->prev) {
+						trajectory.current->prev->next = trajectory.current->next;
+					}
+					if (trajectory.current->next) {
+						trajectory.current->next->prev = trajectory.current->prev;
+					}
+					trajectory.current = trajectory.current->prev;
 
-                    --trajectory.count;
-                    --trajectory.position;
-                    if(!trajectory.position && trajectory.count) trajectory.position = 1;
-                    print_trajectory();
+					sprintf(buffer, "Removed %d", tmp->id);
+					sr_ecp_msg->message(buffer);
+					delete tmp;
 
-                    if(trajectory.current) move_to_current();
-                }
-            }
-            else if(buttonsPressed.buttonHome)
-            {
-                buttonsPressed.buttonHome = 0;
-                if(trajectory.position > 0)
-                {
-                    int old = trajectory.current->id;
-                    trajectory.current->id = ++cnt;
+					--trajectory.count;
+					--trajectory.position;
+					if (!trajectory.position && trajectory.count)
+						trajectory.position = 1;
+					print_trajectory();
 
-                    homog_matrix.set_from_frame_tab(ecp_m_robot->reply_package.arm.pf_def.arm_frame);
-                	lib::Xyz_Angle_Axis_vector tmp_vector;
-                    homog_matrix.get_xyz_angle_axis(tmp_vector);
-                	tmp_vector.to_table(trajectory.current->position);
+					if (trajectory.current)
+						move_to_current();
+				}
+			} else if (buttonsPressed.buttonHome) {
+				buttonsPressed.buttonHome = 0;
+				if (trajectory.position > 0) {
+					//			int old = trajectory.current->id;
+					trajectory.current->id = ++cnt;
 
-                    sprintf(buffer,"Changed %d: %.4f %.4f %.4f %.4f %.4f %.4f %.4f",trajectory.current->id,trajectory.current->position[0],trajectory.current->position[1],trajectory.current->position[2],trajectory.current->position[3],trajectory.current->position[4],trajectory.current->position[5],trajectory.current->gripper);
-                    sr_ecp_msg->message(buffer);
-                }
+					homog_matrix.set_from_frame_tab(ecp_m_robot->reply_package.arm.pf_def.arm_frame);
+					lib::Xyz_Angle_Axis_vector tmp_vector;
+					homog_matrix.get_xyz_angle_axis(tmp_vector);
+					tmp_vector.to_table(trajectory.current->position);
 
-                print_trajectory();
-            }
-            else if(buttonsPressed.buttonB)
-            {
-                buttonsPressed.buttonB = 0;
-                if(has_filenames)
-                {
-                    save_trajectory();
-                }
-            }
-        }
-    }
+					sprintf(buffer, "Changed %d: %.4f %.4f %.4f %.4f %.4f %.4f %.4f", trajectory.current->id, trajectory.current->position[0], trajectory.current->position[1], trajectory.current->position[2], trajectory.current->position[3], trajectory.current->position[4], trajectory.current->position[5], trajectory.current->gripper);
+					sr_ecp_msg->message(buffer);
+				}
 
-    ecp_termination_notice();
+				print_trajectory();
+			} else if (buttonsPressed.buttonB) {
+				buttonsPressed.buttonB = 0;
+				if (has_filenames) {
+					save_trajectory();
+				}
+			}
+		}
+	}
+
+	ecp_termination_notice();
 }
 
 }
@@ -567,7 +521,8 @@ void wii_teach::main_task_algorithm(void)
 namespace common {
 namespace task {
 
-task* return_created_ecp_task(lib::configurator &_config) {
+task* return_created_ecp_task(lib::configurator &_config)
+{
 	return new irp6ot_m::task::wii_teach(_config);
 }
 

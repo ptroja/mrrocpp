@@ -8,7 +8,7 @@
 #ifndef ECP_VIS_IB_EIH_WRIST_TURNER_IRP6OT_H_
 #define ECP_VIS_IB_EIH_WRIST_TURNER_IRP6OT_H_
 
-#include "ecp/common/generator/ecp_g_visual_servo.h"
+#include "generator/ecp/ecp_g_visual_servo.h"
 
 #include <string.h>
 #include <math.h>
@@ -16,7 +16,7 @@
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 
-#include "ecp_mp/sensor/ecp_mp_s_fradia_sensor.h"
+#include "sensor/fradia/ecp_mp_s_fradia_sensor.h"
 
 #include <iostream>
 

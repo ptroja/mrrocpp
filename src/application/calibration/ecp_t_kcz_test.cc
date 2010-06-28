@@ -3,10 +3,10 @@
 #include <unistd.h>
 #include <iostream>
 
-#include "ecp/irp6ot_m/ecp_r_irp6ot_m.h"
-#include "ecp/irp6p_m/ecp_r_irp6p_m.h"
+#include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
+#include "robot/irp6p_m/ecp_r_irp6p_m.h"
 #include "ecp_t_kcz_test.h"
-#include "ecp_mp/sensor/ecp_mp_s_pcbird.h"
+#include "sensor/pcbird/ecp_mp_s_pcbird.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -31,11 +31,11 @@ kcz_test::kcz_test(lib::configurator &_config): task(_config)
 	smoothgen2 = new common::generator::smooth(*this, true);
 	smoothgen2->sensor_m = sensor_m;
 
-	sr_ecp_msg->message("ECP loaded kcz_test");
+	sr_ecp_msg->message("ecp loaded kcz_test");
 };
 
 void kcz_test::main_task_algorithm(void ) {
-	sr_ecp_msg->message("ECP kcz_test ready");
+	sr_ecp_msg->message("ecp kcz_test ready");
 
 	smoothgen2->set_absolute();
 

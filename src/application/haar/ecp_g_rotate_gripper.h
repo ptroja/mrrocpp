@@ -12,8 +12,8 @@
 #include <string.h>
 #include <math.h>
 
-#include "ecp/common/generator/ecp_generator.h"
-#include "ecp_mp/sensor/ecp_mp_s_fradia_sensor.h"
+#include "base/ecp/ecp_generator.h"
+#include "sensor/fradia/ecp_mp_s_fradia_sensor.h"
 
 namespace mrrocpp {
 namespace ecp {

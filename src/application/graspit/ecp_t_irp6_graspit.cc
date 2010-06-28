@@ -3,8 +3,8 @@
 #include <unistd.h>
 #include <iostream>
 
-#include "ecp/irp6ot_m/ecp_r_irp6ot_m.h"
-#include "ecp/irp6p_m/ecp_r_irp6p_m.h"
+#include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
+#include "robot/irp6p_m/ecp_r_irp6p_m.h"
 #include "ecp_t_irp6_graspit.h"
 #include "ecp_mp_t_graspit.h"
 
@@ -27,14 +27,14 @@ irp6_grasp::irp6_grasp(lib::configurator &_config) :
 	smoothgen2 = new common::generator::smooth(*this, true);
 	smoothgen2->sensor_m = sensor_m;
 
-	sr_ecp_msg->message("ECP IRP6 loaded");
+	sr_ecp_msg->message("ecp IRP6 loaded");
 }
 ;
 
 void irp6_grasp::main_task_algorithm(void)
 {
 
-	sr_ecp_msg->message("ECP IRP6 ready");
+	sr_ecp_msg->message("ecp IRP6 ready");
 
 	double v[8], a[8];
 	for (int i = 0; i < 8; ++i) {

@@ -1,8 +1,8 @@
 #if !defined(_ECP_T_SHEAD_SWARMITFIX_H)
 #define _ECP_T_SHEAD_SWARMITFIX_H
 
-#include "ecp/common/task/ecp_task.h"
-#include "ecp/common/generator/ecp_g_transparent.h"
+#include "base/ecp/ecp_task.h"
+#include "base/ecp/ecp_g_transparent.h"
 
 
 namespace mrrocpp {
@@ -27,7 +27,7 @@ public:
     swarmitfix(lib::configurator &_config);
 
     // methods for ECP template to redefine in concrete classes
-    void main_task_algorithm(void);
+    void mp_2_ecp_next_state_string_handler(void);
 };
 
 }

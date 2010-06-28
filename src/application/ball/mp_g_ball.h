@@ -9,9 +9,8 @@
 
 #include "lib/mrmath/mrmath.h"
 
-#include "mp/generator/mp_generator.h"
-#include "mp/robot/mp_r_irp6ot_m.h"
-#include "mp/robot/mp_r_irp6p_m.h"
+#include "base/mp/mp_generator.h"
+#include "base/mp/mp_robot.h"
 
 #include <boost/date_time/microsec_time_clock.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp> //include all types plus i/o

@@ -27,7 +27,18 @@
 // #include "ui/ui.h"
 // Konfigurator (dla PROCESS_SPAWN_RSH)
 #include "lib/configurator.h"
-#include "lib/robot_consts/all_robots_const.h"
+#include "robot/irp6_mechatronika/irp6m_const.h"
+#include "robot/irp6ot_m/irp6ot_m_const.h"
+#include "robot/irp6ot_tfg/irp6ot_tfg_const.h"
+#include "robot/irp6p_m/irp6p_m_const.h"
+#include "robot/irp6p_tfg/irp6p_tfg_const.h"
+#include "robot/polycrank/polycrank_const.h"
+#include "robot/smb/smb_const.h"
+#include "robot/spkm/spkm_const.h"
+#include "robot/shead/shead_const.h"
+#include "robot/speaker/speaker_const.h"
+#include "robot/conveyor/conveyor_const.h"
+#include "robot/bird_hand/bird_hand_const.h"
 
 //#include "mp/task/mp_task.h"
 
@@ -1356,7 +1367,7 @@ int MPup_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 				if (pt_res >= 0)
 					PtLeave(0);
 			} else {
-				fprintf(stderr, "MP spawn failed\n");
+				fprintf(stderr, "mp spawn failed\n");
 			}
 			ui.manage_interface();
 		}
@@ -1383,14 +1394,14 @@ int MPslay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 		delete ui.mp.agent;
 
 		// 	printf("dddd: %d\n", SignalKill(ini_con->mp-
-		// 	printf("MP slay\n");
+		// 	printf("mp slay\n");
 		SignalKill(ui.mp.node_nr, ui.mp.pid, 0, SIGTERM, 0, 0);
 		ui.mp.state = UI_MP_PERMITED_TO_RUN; // mp wylaczone
 
 	}
 	// delay(1000);
 	// 	kill(ui.mp_pid,SIGTERM);
-	// 	printf("MP pupa po kill\n");
+	// 	printf("mp pupa po kill\n");
 	ui.mp.pid = -1;
 
 	ui.deactivate_ecp_trigger(ui.irp6ot_m->state);

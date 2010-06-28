@@ -27,7 +27,7 @@
 // Konfigurator.
 #include "lib/configurator.h"
 #include "ui/ui_ecp_r_tfg_and_conv.h"
-#include "lib/robot_consts/shead_const.h"
+#include "robot/shead/shead_const.h"
 
 /* Local headers */
 #include "ablibs.h"
@@ -103,7 +103,7 @@ int EDP_shead_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 				if (ui.shead->state.edp.pid < 0) {
 
 					ui.shead->state.edp.state = 0;
-					fprintf(stderr, "EDP spawn failed: %s\n", strerror(errno));
+					fprintf(stderr, "edp spawn failed: %s\n", strerror(errno));
 					delete ui.shead->ui_ecp_robot;
 				} else { // jesli spawn sie powiodl
 					ui.shead->state.edp.state = 1;

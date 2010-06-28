@@ -8,7 +8,7 @@
 #include "lib/com_buf.h"
 #include "lib/srlib.h"
 #include "lib/configurator.h"
-#include "ecp/common/task/ecp_task.h"
+#include "base/ecp/ecp_task.h"
 #include "ecp_t_calib_axxb.h"
 #include "gsl/gsl_vector.h"
 #include "gsl/gsl_matrix.h"
