@@ -1,3 +1,6 @@
+# Recurse into subdirectories.
+add_subdirectory (plan)
+
 add_executable(mp_swarmitfix
 	mp_t_swarmitfix.cc
 )
