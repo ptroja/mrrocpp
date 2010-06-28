@@ -35,8 +35,8 @@ namespace robot {
 
 // -------------------------------------------------------------------
 robot::robot(lib::robot_name_t l_robot_name, const std::string & _section_name, task::task &mp_object_l) :
-	new_data_flag(false),
 	ecp_mp::robot(l_robot_name),
+	new_data_flag(false),
 	mp_object(mp_object_l),
 
 	ecp_reply_package_buffer(mp_object, std::string("mp:") + _section_name),

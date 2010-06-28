@@ -5,8 +5,8 @@ namespace ecp_mp {
 namespace generator {
 
 generator::generator(lib::sr_ecp& _sr_ecp_msg) :
-	trigger(false),
 	sr_ecp_msg(_sr_ecp_msg),
+	trigger(false),
 	node_counter(0)
 {
 }

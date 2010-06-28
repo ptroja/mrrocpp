@@ -17,11 +17,9 @@ namespace lib {
  }
  */
 
-ForceTrans::ForceTrans(const short l_force_sensor_name, const lib::Homog_matrix & init_frame, const lib::Homog_matrix & s_frame, const double weight, const lib::K_vector & point_of_gravity, bool _is_right_turn_frame) :
-	force_sensor_name(l_force_sensor_name), initialized(false), is_right_turn_frame(true)
+ForceTrans::ForceTrans(const lib::Homog_matrix & init_frame, const lib::Homog_matrix & s_frame, const double weight, const lib::K_vector & point_of_gravity, bool _is_right_turn_frame) :
+	initialized(false), is_right_turn_frame(_is_right_turn_frame)
 {
-
-	is_right_turn_frame = _is_right_turn_frame;
 	sensor_frame = s_frame;
 	//	sensor_frame_translation = lib::Homog_matrix (sensor_frame.return_with_with_removed_rotation());
 	// sensor_frame_translation.remove_rotation();

@@ -2,6 +2,7 @@
 #define __FT_V_VECTOR_H
 
 #include <Eigen/Core>
+#include <vector>
 #include <boost/serialization/serialization.hpp>
 
 #include "lib/mrmath/homog_matrix.h"

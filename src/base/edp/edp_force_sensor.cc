@@ -4,11 +4,11 @@
 #include <boost/exception/diagnostic_information.hpp>
 
 
-#include "edp/common/edp.h"
-#include "edp/common/edp_e_manip.h"
+#include "base/edp/edp.h"
+#include "base/edp/edp_e_manip.h"
 #include "lib/mis_fun.h"
-#include "edp/common/reader.h"
-#include "kinematics/common/kinematic_model_with_tool.h"
+#include "base/edp/reader.h"
+#include "base/kinematics/kinematic_model_with_tool.h"
 
 namespace mrrocpp {
 namespace edp {
@@ -206,7 +206,7 @@ void force::configure_sensor()
 		free(toDel);
 
 		lib::K_vector pointofgravity(point);
-		gravity_transformation = boost::shared_ptr<lib::ForceTrans> (new lib::ForceTrans(frame, sensor_frame, weight, pointofgravity));
+		gravity_transformation = boost::shared_ptr<lib::ForceTrans> (new lib::ForceTrans(frame, sensor_frame, weight, pointofgravity, is_right_turn_frame));
 	} else {
 		gravity_transformation->synchro(frame);
 	}

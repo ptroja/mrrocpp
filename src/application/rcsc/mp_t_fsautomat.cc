@@ -28,7 +28,7 @@
 #include "mp_t_fsautomat.h"
 
 #include "ecp_mp_tr_rc_windows.h"
-#include "ecp_mp/sensor/ecp_mp_s_fradia_sensor.h"
+#include "sensor/fradia/ecp_mp_s_fradia_sensor.h"
 #include "State.h"
 #include "StateHeap.h"
 

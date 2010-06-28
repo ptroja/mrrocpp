@@ -5,7 +5,7 @@
 
 #include "base/mp/mp_task.h"
 #include "base/ecp_mp/ecp_mp_robot.h"
-#include "mp/generator/mp_generator.h"
+#include "base/mp/mp_generator.h"
 
 #include "lib/agent/RemoteAgent.h"
 #include "lib/agent/RemoteBuffer.h"
