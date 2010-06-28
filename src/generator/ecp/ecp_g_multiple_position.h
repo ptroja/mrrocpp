@@ -13,6 +13,7 @@
 #include "base/ecp/ecp_generator.h"
 #include "generator/ecp/velocity_profile_calculator/velocity_profile.h"
 #include "generator/ecp/trajectory_interpolator/trajectory_interpolator.h"
+#include "lib/mrmath/mrmath.h"
 
 #include <vector>
 
@@ -33,7 +34,6 @@ protected:
 	/**
 	 * Vector of positions (vector of velocity profiles).
 	 */
-	//vector<ecp_mp::common::trajectory_pose::trajectory_pose> pose_vector;
 	vector<Pos> pose_vector;
 	/**
 	 * Position vector iterator.
@@ -47,6 +47,10 @@ protected:
 	 * Coordinate vector iterator.
 	 */
 	vector<vector<double> >::iterator coordinate_vector_iterator;
+	/**
+	 * Temporary iterator used mainly to iterate through a single position which is always of type vector<double>.
+	 */
+	vector<double>::iterator tempIter;
 	/**
 	 * Type of the commanded motion (absolute or relative)
 	 */
@@ -75,6 +79,14 @@ protected:
 	 * Set to true if list of coordinates was filled in.
 	 */
 	bool interpolated;
+	/**
+	 * Time of a single macrostep.
+	 */
+	double mc;
+	/**
+	 * Number of steps in a single macrostep.
+	 */
+	int nmc;
 
 public:
 	/**

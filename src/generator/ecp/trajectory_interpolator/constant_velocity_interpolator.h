@@ -30,17 +30,19 @@ public:
 	/**
 	 * Method interpolates the relative type trajectory basing on the list of poses of stored in objects of types derived from %trajectory_pose.
 	 * @param it iterator to the list of positions
-	 * @param cit iterator to the list of coordinates
+	 * @param cv list of coordinates
+	 * @param mc time of a single macrostep
 	 * @return true if the interpolation was succesful
 	 */
-	bool interpolate_relative(vector<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose>::iterator & it, vector<vector<double> >::iterator & cit);
+	bool interpolate_relative_pose(vector<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose>::iterator & it, vector<vector<double> > & cv, const double & mc);
 	/**
 	 * Method interpolates the absolute type trajectory basing on the list of poses of stored in objects of types derived from %trajectory_pose.
 	 * @param it iterator to the list of positions
-	 * @param cit iterator to the list of coordinates
+	 * @param cv list of coordinates
+	 * @param mc time of a single macrostep
 	 * @return true if the interpolation was succesful
 	 */
-	bool interpolate_absolute(vector<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose>::iterator & it, vector<vector<double> >::iterator & cit);
+	bool interpolate_absolute_pose(vector<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose>::iterator & it, vector<vector<double> > & cv, const double & mc);
 };
 
 } // namespace trajectory_interpolator

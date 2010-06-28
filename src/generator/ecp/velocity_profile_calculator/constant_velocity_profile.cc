@@ -24,12 +24,12 @@ constant_velocity_profile::~constant_velocity_profile() {
 
 bool constant_velocity_profile::calculate_constant_velocity(vector<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose>::iterator & it, int i) {
 
-	//if (it->s[i] != NULL && it->t != NULL) {
+	if (it->s[i] == 0 || it->t == 0) {//if the distance to be covered equals to 0 or pose time equal to 0 (no motion in a pose)
+		it->v_r[i] = 0;
+	} else {//normal calculation
 		it->v_r[i] = it->s[i] / it->t;
-		return true;
-	//} else {
-	//	return false;
-	//}
+	}
+	return true;
 }
 
 bool constant_velocity_profile::calculate_constant_velocity_pose(vector<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose>::iterator & it) {
@@ -49,12 +49,12 @@ bool constant_velocity_profile::calculate_constant_velocity_pose(vector<ecp_mp::
 
 bool constant_velocity_profile::calculate_time(vector<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose>::iterator & it, int i) {
 
-	//if (it->v_r[i] != NULL && it->s[i] != NULL) {
+	if (it->s[i] == 0 || it->v_r[i] == 0) {//if distance to be covered or maximal velocity equal to 0
+		it->times[i] = 0;
+	} else {//normal calculation
 		it->times[i] = it->s[i] / it->v_r[i];
-		return true;
-	//} else {
-		//return false;
-	//}
+	}
+	return true;
 }
 
 bool constant_velocity_profile::calculate_time_pose(vector<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose>::iterator & it) {
@@ -72,9 +72,21 @@ bool constant_velocity_profile::calculate_time_pose(vector<ecp_mp::common::traje
 	return trueFlag;
 }
 
-bool constant_velocity_profile::calculate_pose_time(vector<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose>::iterator & it) {
+bool constant_velocity_profile::calculate_pose_time(vector<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose>::iterator & it, const double & mc) {
 	if (it->times.size() == it->axes_num) {
-		it->t = *max_element(it->times.begin(), it->times.end());
+		double t_max = *max_element(it->times.begin(), it->times.end());
+
+		if (t_max == 0) {
+			it->t = 0;
+			return true;
+		}
+
+		if (ceil(t_max / mc) * mc != t_max) { //extend the pose time to be the multiplicity of the macrostep time
+			t_max = ceil(t_max / mc);
+			t_max = t_max * mc;
+			it->t = t_max;
+		}
+
 		return true;
 	} else {
 		printf("nieudane calculate pose time\n");
@@ -84,9 +96,6 @@ bool constant_velocity_profile::calculate_pose_time(vector<ecp_mp::common::traje
 }
 
 bool constant_velocity_profile::calculate_absolute_distance_direction_pose(vector<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose>::iterator & it) {
-
-	printf("############## calculate absolute distance direction pose ##############\n");
-	printf("coordinates.size(): %d \t axes_num: %d \t start_position.size(): %d \n", it->coordinates.size(), it->axes_num, it->start_position.size());
 
 	if (it->coordinates.size() < it->axes_num || it->start_position.size() < it->axes_num) {
 		printf("nieudane calculate absolute distance direction pose\n");

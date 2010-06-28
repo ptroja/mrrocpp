@@ -55,6 +55,14 @@ class constant_velocity : public multiple_position<ecp_mp::common::trajectory_po
 		virtual bool next_step();
 
 	private:
+		/**
+		 * Temporary table od doubles.
+		 */
+		double coordinates[];
+		/**
+		 * Temporary homog matrix.
+		 */
+		lib::Homog_matrix homog_matrix;
 
 };
 

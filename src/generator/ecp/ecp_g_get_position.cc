@@ -25,12 +25,7 @@ get_position::~get_position() {
 }
 
 bool get_position::first_step() {
-	//TODO usunac zbedne rzeczy, sa ustawiane niepotrzebne opcje
-	the_robot->ecp_command.instruction.get_type = NOTHING_DEFINITION;
-	the_robot->ecp_command.instruction.set_type = ARM_DEFINITION;
-	the_robot->ecp_command.instruction.get_arm_type = lib::INVALID_END_EFFECTOR;
-	the_robot->ecp_command.instruction.motion_steps = 10;
-	the_robot->ecp_command.instruction.value_in_step_no = 8;
+	the_robot->ecp_command.instruction.get_type = ARM_DEFINITION;
 	the_robot->ecp_command.instruction.instruction_type = lib::GET;
 	the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE; //aqui siempre ABSOLUTE, RELATIVE makes no sense here
 	the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
@@ -55,7 +50,6 @@ bool get_position::first_step() {
 }
 
 bool get_position::next_step() {
-	//TODO wysylac mu aktualna pozycje jaka posiada
 	if (pose_spec == lib::ECP_XYZ_ANGLE_AXIS || pose_spec == lib::ECP_XYZ_EULER_ZYZ) {
 
 		lib::Homog_matrix actual_position;

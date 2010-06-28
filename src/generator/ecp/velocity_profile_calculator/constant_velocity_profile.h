@@ -68,11 +68,12 @@ class constant_velocity_profile : public velocity_profile {
 		 */
 		bool calculate_relative_distance_direction_pose(vector<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose>::iterator & it);
 		/**
-		 * Calculates the longest time from the times vector and stores it in t variable in the pose.
+		 * Calculates the longest time from the times vector and stores it in t variable in the pose. Extends t to make it the multiplicity of the macrostep time.
 		 * @param it iterator to the list of positions
+		 * @param mc macrostep time
 		 * @return true if the set of the time was successful (usually is if the vector times was initiated and filled in before)
 		 */
-		bool calculate_pose_time(vector<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose>::iterator & it);
+		bool calculate_pose_time(vector<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose>::iterator & it, const double & mc);
 };
 
 } // namespace velocity_profile_calculator

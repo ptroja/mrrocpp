@@ -21,6 +21,8 @@ constant_velocity::constant_velocity(common::task::task& _ecp_task, lib::ECP_POS
 	this->vpc = velocity_profile_calculator::constant_velocity_profile();
 	this->inter = trajectory_interpolator::constant_velocity_interpolator();
 	motion_type = lib::ABSOLUTE;
+	nmc = 10;
+	mc = nmc * STEP;
 }
 
 constant_velocity::~constant_velocity() {
@@ -28,7 +30,7 @@ constant_velocity::~constant_velocity() {
 }
 
 bool constant_velocity::first_step() {
-	printf("##################################### first_step ####################################\n");
+	printf("\n##################################### first_step ####################################\n");
 	flushall();
 	if (!calculated || !interpolated) {
 		return false;
@@ -36,9 +38,8 @@ bool constant_velocity::first_step() {
 
 	the_robot->ecp_command.instruction.get_type = NOTHING_DEFINITION;
 	the_robot->ecp_command.instruction.set_type = ARM_DEFINITION;
-	the_robot->ecp_command.instruction.get_arm_type = lib::INVALID_END_EFFECTOR;
-	the_robot->ecp_command.instruction.motion_steps = 10;
-	the_robot->ecp_command.instruction.value_in_step_no = 8;
+	the_robot->ecp_command.instruction.motion_steps = nmc;
+	the_robot->ecp_command.instruction.value_in_step_no = nmc - 2;
 	the_robot->ecp_command.instruction.instruction_type = lib::SET;
 
 	if (motion_type == lib::RELATIVE) {
@@ -52,7 +53,7 @@ bool constant_velocity::first_step() {
 	switch (pose_spec) {
 		case lib::ECP_XYZ_ANGLE_AXIS || lib::ECP_XYZ_EULER_ZYZ:
 			the_robot->ecp_command.instruction.set_arm_type = lib::FRAME;
-			the_robot->ecp_command.instruction.get_arm_type = lib::FRAME;
+			//the_robot->ecp_command.instruction.get_arm_type = lib::FRAME;
 			if (motion_type == lib::RELATIVE) {
 				the_robot->ecp_command.instruction.interpolation_type = lib::TCIM;
 				for (int i=0; i<axes_num; i++) {
@@ -64,12 +65,12 @@ bool constant_velocity::first_step() {
 			break;
 		case lib::ECP_MOTOR:
 			the_robot->ecp_command.instruction.set_arm_type = lib::MOTOR;
-			the_robot->ecp_command.instruction.get_arm_type = lib::MOTOR;
+			//the_robot->ecp_command.instruction.get_arm_type = lib::MOTOR;
 			the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
 			break;
 		case lib::ECP_JOINT:
 			the_robot->ecp_command.instruction.set_arm_type = lib::JOINT;
-			the_robot->ecp_command.instruction.get_arm_type = lib::JOINT;
+			//the_robot->ecp_command.instruction.get_arm_type = lib::JOINT;
 			the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
 			break;
 		default:
@@ -77,16 +78,16 @@ bool constant_velocity::first_step() {
 	}
 
 	coordinate_vector_iterator = coordinate_vector.begin();
-
 	return true;
 }
 
 bool constant_velocity::next_step() {
-	printf("##################################### next_step ####################################\n");
+	printf("\n##################################### next_step ####################################\n");
 	flushall();
 	int i;//loop counter
 
 	if (coordinate_vector.empty()) {
+		//TODO message "no coordinates generated"
 		return false;
 	}
 
@@ -95,32 +96,39 @@ bool constant_velocity::next_step() {
 
 		case lib::ECP_XYZ_EULER_ZYZ:
 
-			//homog_matrix.set_from_xyz_euler_zyz(lib::Xyz_Euler_Zyz_vector(*coordinate_vector_iterator));
-			//homog_matrix.get_frame_tab(the_robot->ecp_command.instruction.arm.pf_def.arm_frame);
+			i = 0;
+
+			for (tempIter = (*coordinate_vector_iterator).begin(); tempIter != (*coordinate_vector_iterator).end(); tempIter++) {
+				coordinates[i] = *tempIter;
+				i++;
+			}
+
+			homog_matrix.set_from_xyz_euler_zyz(lib::Xyz_Euler_Zyz_vector(coordinates));
+			homog_matrix.get_frame_tab(the_robot->ecp_command.instruction.arm.pf_def.arm_frame);
 
 			break;
 
 		case lib::ECP_XYZ_ANGLE_AXIS:
 
-			//homog_matrix.set_from_xyz_angle_axis(lib::Xyz_Angle_Axis_vector(*coordinate_vector_iterator));
-			//homog_matrix.get_frame_tab(the_robot->ecp_command.instruction.arm.pf_def.arm_frame);
+			i = 0;
+
+			for (tempIter = (*coordinate_vector_iterator).begin(); tempIter != (*coordinate_vector_iterator).end(); tempIter++) {
+				coordinates[i] = *tempIter;
+				i++;
+			}
+
+			homog_matrix.set_from_xyz_angle_axis(lib::Xyz_Angle_Axis_vector(coordinates));
+			homog_matrix.get_frame_tab(the_robot->ecp_command.instruction.arm.pf_def.arm_frame);
 
 			break;
 
 		case lib::ECP_JOINT:
 
+			tempIter = (*coordinate_vector_iterator).begin();
 			for (i = 0; i < axes_num; i++) {
-				//the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
-					//	= coordinate_list_iterator->coordinate[i];
-			}
-
-			break;
-
-		case lib::ECP_MOTOR:
-
-			for (i = 0; i < axes_num; i++) {
-				//the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
-					//	= coordinate_list_iterator->coordinate[i];
+				the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
+						= *tempIter;
+				tempIter++;
 			}
 
 			break;
@@ -129,6 +137,7 @@ bool constant_velocity::next_step() {
 			throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 	}// end:switch
 
+	coordinate_vector_iterator++;
 	if (coordinate_vector_iterator == coordinate_vector.end()) {
 		return false;
 	} else {
@@ -138,11 +147,12 @@ bool constant_velocity::next_step() {
 
 bool constant_velocity::calculate_interpolate() {
 
-	printf("##################################### calculate_interpolate ####################################\n");
+	printf("\n##################################### calculate_interpolate ####################################\n");
 	flushall();
 	int i; //loop counter
 
 	if (pose_vector.empty()) {
+		//TODO message "no loaded poses"
 		return false;
 	}
 
@@ -166,13 +176,13 @@ bool constant_velocity::calculate_interpolate() {
 		//TODO throw exception
 	}
 
-	for (i = 0; i < pose_vector.size(); i++) {//calculate distances and directions for each pose and axis
+	for (i = 0; i < pose_vector.size(); i++) {//calculate distances, directions, times and velocities for each pose and axis
 
-		if(motion_type == lib::ABSOLUTE) {
+		if(motion_type == lib::ABSOLUTE) {//absolute type of motion
 			if (!vpc.calculate_absolute_distance_direction_pose(pose_vector_iterator)) {
 				return false;
 			}
-		} else if(motion_type == lib::RELATIVE) {
+		} else if(motion_type == lib::RELATIVE) {//relative type of motion
 			if (!vpc.calculate_relative_distance_direction_pose(pose_vector_iterator)) {
 				return false;
 			}
@@ -181,11 +191,18 @@ bool constant_velocity::calculate_interpolate() {
 		}
 
 		if(!vpc.calculate_time_pose(pose_vector_iterator) ||//calculate times for each of the axes
-		!vpc.calculate_pose_time(pose_vector_iterator) ||//calculate the longest time from each of the axes and set it as the pose time
-		!vpc.calculate_constant_velocity_pose(pose_vector_iterator)) {
+		!vpc.calculate_pose_time(pose_vector_iterator, mc) ||//calculate the longest time from each of the axes and set it as the pose time (also extend the time to be the multiplcity of a single macrostep time)
+		!vpc.calculate_constant_velocity_pose(pose_vector_iterator)) {//calculate velocities for all of the axes according to the longest needed time
 			printf("nieudane inne calculate\n");
-			return false;//calculate velocities for all of the axes according to the longest needed time
+			return false;
 		}
+
+		//calculate the number of the macrosteps for the pose
+		printf("przed kalkulacja ilosci macrostepow t: %f\t mc: %f\n", pose_vector_iterator->t, mc);
+		pose_vector_iterator->interpolation_node_no = ceil(pose_vector_iterator->t / mc);
+
+		printf("interpolation node no: %d\n", pose_vector_iterator->interpolation_node_no);
+
 		pose_vector_iterator++;
 	}
 
@@ -200,6 +217,11 @@ bool constant_velocity::calculate_interpolate() {
 			printf("%f\t", pose_vector_iterator->s[z]);
 		}
 		printf("\n");
+		printf("k:\t");
+		for (z = 0; z < pose_vector_iterator->k.size(); z++) {
+			printf("%f\t", pose_vector_iterator->k[z]);
+		}
+		printf("\n");
 		printf("times:\t");
 		for (z = 0; z < pose_vector_iterator->s.size(); z++) {
 			printf("%f\t", pose_vector_iterator->times[z]);
@@ -210,6 +232,7 @@ bool constant_velocity::calculate_interpolate() {
 			printf("%f\t", pose_vector_iterator->v_r[z]);
 		}
 		printf("\n");
+		printf("t: %f\n", pose_vector_iterator->t);
 		flushall();
 		pose_vector_iterator++;
 	}
@@ -221,38 +244,56 @@ bool constant_velocity::calculate_interpolate() {
 	coordinate_vector_iterator = coordinate_vector.begin();
 	pose_vector_iterator = pose_vector.begin();
 
+	bool trueFlag = true;//flag set to false if interpolation is not successful at some point
+
 	if (motion_type == lib::ABSOLUTE) {
-		interpolated = inter.interpolate_absolute(pose_vector_iterator, coordinate_vector_iterator); //interpolate trajectory, fill in the coordinate list
+		for (i = 0; i < pose_vector.size(); i++) {//interpolate trajectory, fill in the coordinate list
+			if(inter.interpolate_absolute_pose(pose_vector_iterator, coordinate_vector, mc) == false) {
+				trueFlag = false;
+			}
+			pose_vector_iterator++;
+		}
 	} else if (motion_type == lib::RELATIVE) {
-		interpolated = inter.interpolate_relative(pose_vector_iterator, coordinate_vector_iterator); //interpolate trajectory, fill in the coordinate list
+		for (i = 0; i < pose_vector.size(); i++) {//interpolate trajectory, fill in the coordinate list
+			if(inter.interpolate_relative_pose(pose_vector_iterator, coordinate_vector, mc) == false) {
+				trueFlag = false;
+			}
+			pose_vector_iterator++;
+		}
 	} else {
 		//TODO throw exception
 	}
 
-	if (calculated && interpolated)
-		return true;
-	else {
-		return false;
+	//---------------- DEGUG --------------------
+	coordinate_vector_iterator = coordinate_vector.begin();
+	printf("coordinate_vector_size: %d\n", coordinate_vector.size());
+	for (i = 0; i < coordinate_vector.size(); i++) {
+		tempIter = (*coordinate_vector_iterator).begin();
+		printf("%d:\t", (i+1));
+		for (tempIter = (*coordinate_vector_iterator).begin(); tempIter != (*coordinate_vector_iterator).end(); tempIter++) {
+			printf(" %f\t", *tempIter);
+		}
+		coordinate_vector_iterator++;
+		printf("\n");
 	}
+	flushall();
+	//------------------ DEBUG END ---------------
+
+	interpolated = trueFlag;
+
+	return calculated && interpolated;
 }
 
 bool constant_velocity::load_absolute_joint_trajectory_pose(vector<double> & coordinates) {
-	printf("##################################### load absolute joint trajectory pose ####################################\n");
-	flushall();
+
 	ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose pose;
 	vector<double> joint_velocity(axes_num, 0.05);
 
-	//printf("debug 0\n");
-	flushall();
-
 	if (!pose_vector.empty() && pose_spec != lib::ECP_JOINT) { //check if previous positions were provided in joint representation
-//		printf("pose vector not empty and pose spec != joint\n");
-		flushall();
+
+		//TODO message "representation different than the previous one"
 		return false;
 	}
-
-	//printf("debug 1\n");
-	flushall();
 
 	pose_spec = lib::ECP_JOINT;
 	pose = ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose(lib::ECP_JOINT, coordinates, joint_velocity); //create new trajectory pose
@@ -261,21 +302,9 @@ bool constant_velocity::load_absolute_joint_trajectory_pose(vector<double> & coo
 		pose.v_r[j] = pose.v[j] * pose.v_max[j];
 	}
 
-	//printf("debug 2\n");
-	flushall();
-
 	if (!pose_vector.empty()) {//set the start position of the added pose as the desired position of the previous pose
-		printf("ustawiam start position na poprzednie coordinates\n");
-		printf("wektor coordinates o rozmiarze: %d\n", pose_vector.back().coordinates.size());
-		for (int j = 0; j < pose_vector.back().coordinates.size(); j++) {
-			printf("%f\t", pose_vector.back().coordinates[j]);
-		}
-		printf("\n");
 		pose.start_position = pose_vector.back().coordinates;
 	}
-
-	//printf("debug 3\n");
-	flushall();
 
 	pose_vector.push_back(pose); //put new trajectory pose into a pose vector
 
