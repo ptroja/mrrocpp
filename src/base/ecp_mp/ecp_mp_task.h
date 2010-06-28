@@ -26,8 +26,8 @@
 
 #include "base/ecp_mp/Trajectory.h"
 
-typedef std::map <std::string, boost::any> mem_t;
-typedef mem_t::value_type mem_item_t;
+typedef std::map <std::string, boost::any> cc_t;
+typedef cc_t::value_type cc_item_t;
 
 namespace mrrocpp {
 namespace ecp_mp {
@@ -46,7 +46,7 @@ public:
 	sensors_t sensor_m;
 
 	// the map of the shared memory (ccj buffer)
-	mem_t mem_m;
+	cc_t cc_m;
 
 	// mapa wszystkich transmiterow
 	transmitters_t transmitter_m;
