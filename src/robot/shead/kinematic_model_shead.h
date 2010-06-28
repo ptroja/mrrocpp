@@ -1,15 +1,3 @@
-// ------------------------------------------------------------------------
-// Proces:		EDP
-// Plik:			kinematic_model_irp6m_with_wrist.h
-// System:	QNX/MRROC++  v. 6.3
-// Opis:		Model kinematyki robota IRp-6 na postumencie
-//				- deklaracja klasy
-//				- wykorzystanie nowego stopnia swobody  jako czynnego stopnia swobody
-//
-// Autor:		tkornuta
-// Data:		31.01.2007
-// ------------------------------------------------------------------------
-
 #if !defined(_SHEAD_KIN_MODEL)
 #define _SHEAD_KIN_MODEL
 
@@ -41,13 +29,10 @@ public:
   // Przeliczenie wspolrzednych wewnetrznych na polozenia walow silnikow.
   virtual void i2mp_transform(lib::MotorArray & local_desired_motor_pos_new, lib::JointArray & local_desired_joints);
 
-};//: kinematic_model_irp6m_with_wrist;
-
+};
 
 } // namespace smb
 } // namespace kinematic
 } // namespace mrrocpp
 
-
 #endif
-
