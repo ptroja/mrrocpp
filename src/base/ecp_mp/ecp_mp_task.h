@@ -1,4 +1,3 @@
-
 // -------------------------------------------------------------------------
 //                            ecp_mp_task.h dla QNX6
 // Definicje wspolnych struktur danych i metod dla procesow ECP i MP
@@ -13,6 +12,7 @@
 
 #include <stdint.h>
 #include <map>
+#include <boost/any.hpp>
 
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
@@ -26,20 +26,27 @@
 
 #include "base/ecp_mp/Trajectory.h"
 
+typedef std::map <std::string, boost::any> mem_t;
+typedef mem_t::value_type mem_item_t;
+
 namespace mrrocpp {
 namespace ecp_mp {
 namespace task {
 
 // klasa macierzysta dla klas globalnych procesow ECP i MP
-class task {
+class task
+{
 public:
-	typedef std::map<const char *, ecp_mp::common::Trajectory /*, str_cmp */> trajectories_t;
+	typedef std::map <const char *, ecp_mp::common::Trajectory /*, str_cmp */> trajectories_t;
 
 	task(lib::configurator &_config);
 	virtual ~task();
 
 	// mapa wszystkich czujnikow
 	sensors_t sensor_m;
+
+	// the map of the shared memory (ccj buffer)
+	mem_t mem_m;
 
 	// mapa wszystkich transmiterow
 	transmitters_t transmitter_m;
@@ -58,28 +65,29 @@ public:
 
 	// METODY
 	// Odpowiedz operatora na zadane pytanie: (Yes/No)
-	bool operator_reaction (const char* question );
+	bool operator_reaction(const char* question);
 
 	// by Y - Wybor przez operatora jednej z opcji
-	uint8_t choose_option (const char* question, uint8_t nr_of_options_input );
+	uint8_t choose_option(const char* question, uint8_t nr_of_options_input);
 
 	// Zadanie od operatora wprowadzenia liczby calkowitej (int)
-	int input_integer (const char* question);
+	int input_integer(const char* question);
 
 	// --------------------------------------------------------------------------
 	// Zadanie od operatora wprowadzenia liczby rzeczywistej (double)
-	double input_double (const char* question);
+	double input_double(const char* question);
 
 	// --------------------------------------------------------------------------
 	// Wyswietlenie komunikatu
-	bool show_message (const char* message);
+	bool show_message(const char* message);
 
 	// funkcje do obslugi czujnikow
-	void all_sensors_initiate_reading (sensors_t & _sensor_m);
-	void all_sensors_get_reading (sensors_t & _sensor_m);
+	void all_sensors_initiate_reading(sensors_t & _sensor_m);
+	void all_sensors_get_reading(sensors_t & _sensor_m);
 
 	// funkcjonalnosc dodana na potrzeby czytania trajektorii z pliku xml
-	class str_cmp{
+	class str_cmp
+	{
 	public:
 		bool operator()(char const *a, char const *b) const;
 	};
@@ -92,14 +100,14 @@ public:
 // ---------------------------------------------------------------
 class ECP_MP_main_error
 { // Klasa obslugi bledow poziomie MP
-	public:
-		const lib::error_class_t error_class;
-		const uint64_t mp_error;
-		ECP_MP_main_error(lib::error_class_t err0, uint64_t err1, const char *file, int line) :
-			error_class(err0), mp_error(err1)
-		{
-			fprintf(stderr, "ecp_MP_main_error @ %s:%d\n", file, line);
-		}
+public:
+	const lib::error_class_t error_class;
+	const uint64_t mp_error;
+	ECP_MP_main_error(lib::error_class_t err0, uint64_t err1, const char *file, int line) :
+		error_class(err0), mp_error(err1)
+	{
+		fprintf(stderr, "ecp_MP_main_error @ %s:%d\n", file, line);
+	}
 #define ECP_MP_main_error(e0,e1)	ECP_MP_main_error((e0),(e1), __FILE__, __LINE__)
 };
 
