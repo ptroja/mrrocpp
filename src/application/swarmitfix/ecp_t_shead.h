@@ -4,7 +4,6 @@
 #include "base/ecp/ecp_task.h"
 #include "base/ecp/ecp_g_transparent.h"
 
-
 namespace mrrocpp {
 namespace ecp {
 namespace shead {

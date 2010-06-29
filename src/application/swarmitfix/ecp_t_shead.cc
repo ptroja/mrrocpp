@@ -1,5 +1,3 @@
-#include <stdio.h>
-
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
@@ -42,7 +40,6 @@ swarmitfix::swarmitfix(lib::configurator &_config) :
 
 void swarmitfix::mp_2_ecp_next_state_string_handler(void)
 {
-
 	if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_GEN_TRANSPARENT) {
 		gt->throw_kinematics_exceptions = (bool) mp_command.ecp_next_state.mp_2_ecp_next_state_variant;
 		gt->Move();
@@ -62,7 +59,7 @@ void swarmitfix::mp_2_ecp_next_state_string_handler(void)
 				break;
 		}
 
-		sg->load_file_with_path(path.c_str());
+		sg->load_file_with_path(path);
 		sg->Move();
 	} else if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_GEN_SLEEP) {
 		g_sleep->init_time(mp_command.ecp_next_state.mp_2_ecp_next_state_variant);
@@ -76,7 +73,6 @@ void swarmitfix::mp_2_ecp_next_state_string_handler(void)
 	} else if (mp_2_ecp_next_state_string == ecp_mp::shead::generator::ECP_GEN_VACUUM_OFF) {
 		g_head_vacuum_off->Move();
 	}
-
 }
 
 }
