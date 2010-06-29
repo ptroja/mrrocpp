@@ -1,11 +1,7 @@
 #if !defined(_SPEAKER_CONST_H)
 #define _SPEAKER_CONST_H
 
-namespace mrrocpp {
-
-}
-
-using namespace mrrocpp;
+#include "lib/impconst.h"
 
 namespace mrrocpp {
 namespace lib {

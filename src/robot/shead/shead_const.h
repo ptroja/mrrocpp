@@ -3,11 +3,7 @@
 
 #include "lib/data_port_headers/shead.h"
 
-namespace mrrocpp {
-
-}
-
-using namespace mrrocpp;
+#include "lib/impconst.h"
 
 namespace mrrocpp {
 namespace lib {
