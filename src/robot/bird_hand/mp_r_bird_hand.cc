@@ -1,9 +1,5 @@
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
-
-#include "lib/mis_fun.h"
-#include "lib/srlib.h"
 #include "mp_r_bird_hand.h"
+#include "bird_hand_const.h"
 
 namespace mrrocpp {
 namespace mp {

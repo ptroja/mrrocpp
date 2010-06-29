@@ -1,9 +1,5 @@
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
-
-#include "lib/mis_fun.h"
-#include "lib/srlib.h"
 #include "robot/irp6_mechatronika/mp_r_irp6_mechatronika.h"
+#include "robot/irp6_mechatronika/irp6m_const.h"
 
 namespace mrrocpp {
 namespace mp {

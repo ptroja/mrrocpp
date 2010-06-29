@@ -1,11 +1,7 @@
 #if !defined(_CONVEYOR_CONST_H)
 #define _CONVEYOR_CONST_H
 
-namespace mrrocpp {
-
-}
-
-using namespace mrrocpp;
+#include "lib/impconst.h"
 
 namespace mrrocpp {
 namespace lib {

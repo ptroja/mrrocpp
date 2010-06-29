@@ -3,17 +3,12 @@
 
 #include "lib/data_port_headers/bird_hand.h"
 
-namespace mrrocpp {
-
-}
-
-using namespace mrrocpp;
+#include "lib/impconst.h"
 
 namespace mrrocpp {
 namespace lib {
 
 const robot_name_t ROBOT_BIRD_HAND = "ROBOT_BIRD_HAND"; // three finger Krzysztof Mianowski gripper 2010
-
 
 struct bird_hand_cbuffer
 {

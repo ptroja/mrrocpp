@@ -4,11 +4,7 @@
 #include "lib/data_port_headers/smb.h"
 #include "lib/data_port_headers/epos.h"
 
-namespace mrrocpp {
-
-}
-
-using namespace mrrocpp;
+#include "lib/impconst.h"
 
 namespace mrrocpp {
 namespace lib {
