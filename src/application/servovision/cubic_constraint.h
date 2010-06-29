@@ -8,6 +8,9 @@
 #ifndef CUBIC_CONSTRAINT_H_
 #define CUBIC_CONSTRAINT_H_
 
+#include <string>
+#include "lib/configurator.h"
+
 #include "position_constraint.h"
 
 namespace mrrocpp {
@@ -31,13 +34,16 @@ public:
 	/**
 	 * Generate constraint.
 	 * Make sure that translation and rotation vectors are between min(i, 0) and  max(i, 0) for i=0..2
-	 * @param translation_min
-	 * @param translation_max
-	 * @param rotation_min
-	 * @param rotation_max
+	 * In config file in specified section there must be:
+	 *    Eigen::Matrix <double, 3, 1> translation_min;
+	 *    Eigen::Matrix <double, 3, 1> translation_max;
+	 *    Eigen::Matrix <double, 3, 1> cone_axis;
+	 *    double min_inclination;
+	 *    double min_wrist_rotation;
+	 *    double max_wrist_rotation
+	 * @param config
 	 */
-			cubic_constraint(const Eigen::Matrix <double, 3, 1>& translation_min, const Eigen::Matrix <double, 3, 1>& translation_max, const Eigen::Matrix <
-					double, 3, 1>& rotation_min, const Eigen::Matrix <double, 3, 1>& rotation_max);
+	cubic_constraint(const lib::configurator& config, const std::string &section_name);
 
 	virtual ~cubic_constraint();
 
@@ -52,9 +58,10 @@ public:
 private:
 	Eigen::Matrix <double, 3, 1> translation_min;
 	Eigen::Matrix <double, 3, 1> translation_max;
-	Eigen::Matrix <double, 3, 1> rotation_min;
-	Eigen::Matrix <double, 3, 1> rotation_max;
-	Eigen::Matrix <double, 3, 1> rotation_division;
+	Eigen::Matrix <double, 3, 1> cone_axis;
+	double min_inclination;
+	double wrist_rotation_min;
+	double wrist_rotation_max;
 };
 
 /** @} */

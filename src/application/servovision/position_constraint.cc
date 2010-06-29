@@ -53,6 +53,27 @@ bool position_constraint::is_angle_between(double angle, double min, double max)
 	}
 }
 
+double position_constraint::constrain_angle(double angle, double min, double max)
+{
+	double division = (min + max) / 2;
+
+	if (min <= max) {
+		if (division <= 0) {
+			division += M_PI;
+		} else {
+			division -= M_PI;
+		}
+	}
+
+	if (is_angle_between(angle, division, min)) {
+		return min;
+	}
+	if (is_angle_between(angle, max, division)) {
+		return max;
+	}
+	return angle;
+}
+
 } // namespace generator
 
 }

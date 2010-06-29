@@ -88,6 +88,16 @@ protected:
 	 * @return true if angle in [min; max]
 	 */
 	bool is_angle_between(double angle, double min, double max);
+
+	/**
+	 * Constraints angle so that it's in [min; max]
+	 *
+	 * @param angle
+	 * @param min angle in (-M_PI; M_PI]
+	 * @param max angle in (-M_PI; M_PI]
+	 * @return angle in [min; max]
+	 */
+	double constrain_angle(double angle, double min, double max);
 private:
 
 };
