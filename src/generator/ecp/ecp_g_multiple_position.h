@@ -87,19 +87,29 @@ protected:
 	 * Number of steps in a single macrostep.
 	 */
 	int nmc;
+	/**
+	 * If true, debug information is shown.
+	 */
+	bool debug;
 
 public:
 	/**
 	 * Constructor.
 	 */
 	multiple_position(common::task::task& _ecp_task) : generator (_ecp_task) {
-
+		debug = false;
 	}
 	/**
 	 * Destructor.
 	 */
 	virtual ~multiple_position() {
 
+	}
+	/**
+	 * Set debug variable.
+	 */
+	void set_debug(bool debug) {
+		this->debug = debug;
 	}
 	/**
 	 * Performs calculation of the trajectory and interpolation. Fills in pose_vector and coordinate_vector.
@@ -131,10 +141,17 @@ public:
 		motion_type=lib::ABSOLUTE;
 	}
 	/**
-	 * Loads a single trajectory pose described in joint coordinates to the list. Maximal velocities are set automatically.
+	 * Loads a single trajectory pose described in joint coordinates (absolute motion) to the list. Maximal velocities are set automatically.
+	 * @param coordinates desired position
 	 * @return true if the addition was succesfull
 	 */
-	virtual bool load_absolute_joint_trajectory_pose(vector<double> & coordinates) = 0;
+	virtual bool load_absolute_joint_trajectory_pose(const vector<double> & coordinates) = 0;
+	/**
+	 * Loads a single trajectory pose described in joint coordinates (relative motion) to the list. Maximal velocities are set automatically.
+	 * @param coordinates desired position
+	 * @return true if the addition was succesfull
+	 */
+	virtual bool load_relative_joint_trajectory_pose(const vector<double> & coordinates) = 0;
 	/**
 	 * Clears vectors of positions and coordinates. Sets %calculated and %interpolated flags to false;
 	 */
@@ -143,6 +160,7 @@ public:
 		coordinate_vector.clear();
 		calculated = false;
 		interpolated = false;
+		//TODO message "generator reset"
 	}
 };
 

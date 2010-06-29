@@ -33,9 +33,17 @@ class constant_velocity : public multiple_position<ecp_mp::common::trajectory_po
 		 */
 		constant_velocity(common::task::task& _ecp_task, lib::ECP_POSE_SPECIFICATION pose_spec, int axes_num);
 		/**
-		 * Loads a single trajectory pose described in joint coordinates to the list. Maximal velocities are set automatically.
+		 * Loads a single trajectory pose described in joint coordinates (absolute motion) to the list. Maximal velocities are set automatically.
+		 * @param coordinates desired position
+		 * @return true if the addition was succesfull
 		 */
-		bool load_absolute_joint_trajectory_pose(vector<double> & coordinates);
+		bool load_absolute_joint_trajectory_pose(const vector<double> & coordinates);
+		/**
+		 * Loads a single trajectory pose described in joint coordinates (relative motion) to the list. Maximal velocities are set automatically.
+		 * @param coordinates desired position
+		 * @return true if the addition was succesfull
+		 */
+		bool load_relative_joint_trajectory_pose(const vector<double> & coordinates);
 		/**
 		 * Performs calculation of the trajectory and interpolation. Fills in pose_vector and coordinate_vector.
 		 * @return true if the calculation was succesfull
@@ -56,14 +64,13 @@ class constant_velocity : public multiple_position<ecp_mp::common::trajectory_po
 
 	private:
 		/**
-		 * Temporary table od doubles.
-		 */
-		double coordinates[];
-		/**
 		 * Temporary homog matrix.
 		 */
 		lib::Homog_matrix homog_matrix;
-
+		/**
+		 * Loads trajectory pose.
+		 */
+		bool load_trajectory_pose(const vector<double> & coordinates, lib::MOTION_TYPE motion_type, lib::ECP_POSE_SPECIFICATION pose_spec, const vector<double> & v, const vector<double> & v_max);
 };
 
 } // namespace generator

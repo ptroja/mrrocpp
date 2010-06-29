@@ -27,7 +27,7 @@ bool constant_velocity_interpolator::interpolate_relative_pose(vector<ecp_mp::co
 	vector<double> coordinates (it->axes_num);
 	for (int i = 0; i < it->interpolation_node_no; i++) {
 		for (int j = 0; j < it->axes_num; j++) {
-			coordinates[j] = it->k[j] * mc * it->v_r[i];
+			coordinates[j] = it->k[j] * mc * it->v_r[j];
 		}
 		cv.push_back(coordinates);
 	}
@@ -36,9 +36,6 @@ bool constant_velocity_interpolator::interpolate_relative_pose(vector<ecp_mp::co
 }
 
 bool constant_velocity_interpolator::interpolate_absolute_pose(vector<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose>::iterator & it, vector<vector<double> > & cv, const double & mc) {
-
-	printf("\n##################################### interpolate_absolute_pose ####################################\n");
-	printf("interpolate_node_no: %d\n", it->interpolation_node_no);
 
 	int i,j;
 
