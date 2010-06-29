@@ -40,9 +40,9 @@ bool head_soldify::next_step()
 
 	shead_reply_data_request_port->get(ecp_edp_shead_reply_structure);
 
-	bool motion_in_progress = ecp_edp_shead_reply_structure.soldification_in_progress;
+	lib::SHEAD_STATE_OF_THE_HEAD motion_in_progress = ecp_edp_shead_reply_structure.head_state;
 
-	if (motion_in_progress) {
+	if (motion_in_progress == lib::HEAD_STATE_INTERMEDIATE) {
 		shead_reply_data_request_port->set_request();
 		return true;
 	} else {
@@ -88,9 +88,9 @@ bool head_desoldify::next_step()
 
 	shead_reply_data_request_port->get(ecp_edp_shead_reply_structure);
 
-	bool motion_in_progress = ecp_edp_shead_reply_structure.soldification_in_progress;
+	lib::SHEAD_STATE_OF_THE_HEAD motion_in_progress = ecp_edp_shead_reply_structure.head_state;
 
-	if (motion_in_progress) {
+	if (motion_in_progress == lib::HEAD_STATE_INTERMEDIATE) {
 		shead_reply_data_request_port->set_request();
 		return true;
 	} else {
@@ -135,9 +135,9 @@ bool head_vacuum_on::next_step()
 
 	shead_reply_data_request_port->get(ecp_edp_shead_reply_structure);
 
-	bool motion_in_progress = ecp_edp_shead_reply_structure.vacumization_in_progress;
+	lib::SHEAD_STATE_OF_THE_VACUUM motion_in_progress = ecp_edp_shead_reply_structure.vacuum_state;
 
-	if (motion_in_progress) {
+	if (motion_in_progress == lib::VACUUM_STATE_INTERMEDIATE) {
 		shead_reply_data_request_port->set_request();
 		return true;
 	} else {
@@ -181,9 +181,9 @@ bool head_vacuum_off::next_step()
 {
 	shead_reply_data_request_port->get(ecp_edp_shead_reply_structure);
 
-	bool motion_in_progress = ecp_edp_shead_reply_structure.vacumization_in_progress;
+	lib::SHEAD_STATE_OF_THE_VACUUM motion_in_progress = ecp_edp_shead_reply_structure.vacuum_state;
 
-	if (motion_in_progress) {
+	if (motion_in_progress == lib::VACUUM_STATE_INTERMEDIATE) {
 		shead_reply_data_request_port->set_request();
 		return true;
 	} else {
