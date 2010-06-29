@@ -1196,7 +1196,7 @@ void smooth::calculate(void)
 	double t_max; //nadluzszy czas ruchu w jednej osi w jednym ruchu
 	int i;
 	double tk = 10 * STEP; //czas jednego makrokroku
-	int gripp; //os grippera
+	int gripp=0; //os grippera
 
 	trajectory_calculated = false;
 	//TODO dorobic zabezpieczenia dla 0 predkosci w osmej wspolrzednej postumenta i w angle axes

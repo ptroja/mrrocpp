@@ -48,7 +48,7 @@ void bird_hand_test::mp_2_ecp_next_state_string_handler(void)
 		g_sleep->Move();
 	} else if (mp_2_ecp_next_state_string == ecp_mp::bird_hand::generator::ECP_GEN_BIRD_HAND_TEST) {
 
-		sr_ecp_msg->message("ecp_GEN_BIRD_HAND");
+		sr_ecp_msg->message("ECP_GEN_BIRD_HAND");
 
 		g_bird_hand->Move();
 	}

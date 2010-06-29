@@ -10,7 +10,7 @@ namespace ecp_mp {
 namespace common {
 namespace generator {
 
-const std::string ECP_GEN_TEACH_IN = "ecp_GEN_TEACH_IN";
+const std::string ECP_GEN_TEACH_IN = "ECP_GEN_TEACH_IN";
 
 }// namespace generator
 } // namespace common

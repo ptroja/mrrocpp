@@ -9,7 +9,7 @@ namespace mrrocpp {
 namespace ecp_mp {
 namespace task {
 
-const std::string ECP_ST_TFF_NOSE_RUN = "ecp_ST_TFF_NOSE_RUN";
+const std::string ECP_ST_TFF_NOSE_RUN = "ECP_ST_TFF_NOSE_RUN";
 
 } // namespace task
 } // namespace ecp_mp

@@ -11,7 +11,7 @@ add_library(ecp_generators
 	../../generator/ecp/ecp_g_force.cc
 	../../generator/ecp/ecp_g_get_position.cc
 	../../generator/ecp/ecp_g_multiple_position.cc
-	../../generator/ecp/ecp_g_newsmooth.cc
+	#../../generator/ecp/ecp_g_newsmooth.cc
 	../../generator/ecp/velocity_profile_calculator/bang_bang_profile.cc
 	../../generator/ecp/velocity_profile_calculator/constant_velocity_profile.cc
 	../../generator/ecp/velocity_profile_calculator/velocity_profile.cc

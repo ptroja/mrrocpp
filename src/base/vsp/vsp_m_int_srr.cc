@@ -122,11 +122,11 @@ int main(int argc, char *argv[])
 
 			if (rcvid == -1) /* Error condition, exit */
 			{
-				perror("base/vsp: Receive failed");
+				perror("vsp: Receive failed");
 				break;
 			} else if (rcvid < -1) {
 				// ie. MESSIP_MSG_DISCONNECT
-				fprintf(stderr, "base/vsp: ie. MESSIP_MSG_DISCONNECT\n");
+				fprintf(stderr, "vsp: ie. MESSIP_MSG_DISCONNECT\n");
 				continue;
 			}
 

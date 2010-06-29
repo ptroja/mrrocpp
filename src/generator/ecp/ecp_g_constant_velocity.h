@@ -8,10 +8,11 @@
 #ifndef _ECP_G_CONSTANT_VELOCITY_H_
 #define _ECP_G_CONSTANT_VELOCITY_H_
 
-#include "base/ecp/common/generator/ecp_g_multiple_position.h"
+#include "generator/ecp/ecp_g_multiple_position.h"
 #include "lib/mrmath/mrmath.h"
 #include "lib/trajectory_pose/constant_velocity_trajectory_pose.h"
-#include "base/ecp/common/generator/velocity_profile_calculator/constant_velocity_profile.h"
+#include "generator/ecp/velocity_profile_calculator/constant_velocity_profile.h"
+#include "generator/ecp/trajectory_interpolator/constant_velocity_interpolator.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -21,7 +22,9 @@ namespace generator {
 /**
  * Generator which moves the robot with a constant velocity.
  */
-class constant_velocity : public multiple_position<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose> {
+class constant_velocity : public multiple_position<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose,
+		ecp::common::generator::trajectory_interpolator::constant_velocity_interpolator,
+		ecp::common::generator::velocity_profile_calculator::constant_velocity_profile> {
 	public:
 		/**
 		 * Constructor. Sets the axes_num and pose_spec variables.
@@ -29,6 +32,15 @@ class constant_velocity : public multiple_position<ecp_mp::common::trajectory_po
 		 * @param pose_spec representation in which the robot position is expressed
 		 */
 		constant_velocity(common::task::task& _ecp_task, bool _is_synchronised, lib::ECP_POSE_SPECIFICATION pose_spec, int axes_num);
+		/**
+		 * Loads a single trajectory pose described in joint coordinates to the list. Maximal velocities are set automatically.
+		 */
+		bool load_absolute_joint_trajectory_pose(vector<double> & coordinates);
+		/**
+		 * Performs calculation of the trajectory and interpolation. Fills in pose_vector and coordinate_vector.
+		 * @return true if the calculation was succesfull
+		 */
+		bool calculate_interpolate();
 		/**
 		 * Destructor.
 		 */

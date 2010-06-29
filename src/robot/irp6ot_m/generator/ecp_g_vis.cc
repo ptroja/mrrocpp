@@ -453,7 +453,7 @@ gammax=atan2(Rckk[3][2],Rckk[3][3]);
  	alfa=180*alfa/M_PI;
  */
  /*
- 	printf("base/ecp: alfa=%f, beta=%f, gammax=%f\n", alfa, beta, gammax);
+ 	printf("ecp: alfa=%f, beta=%f, gammax=%f\n", alfa, beta, gammax);
 	printf("VALID: %d\n", valid_measure);
 */
 

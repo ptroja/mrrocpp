@@ -292,12 +292,13 @@ void AddPhoneme(const char *chPhonemeName, vector <Phoneme> *vphoPhonemes)
 
 vector <Phoneme> PerformNLPAnalysis(string sText)
 {
+	vector <Phoneme> vphoPhonemes;
 	/*
 	 char chCharIn, chCharInL, chCharInR, chCharInR2, chLeftVoiced, chRightVoiced, pszBuff[4];
 	 string::size_type stI;
 	 Phoneme phoPhoneme;
 	 string sPhonemeName;
-	 vector <Phoneme> vphoPhonemes;
+
 
 	 //zamiana na lowercase
 	 for (stI = 0; stI < sText.length(); stI++) {
@@ -711,9 +712,9 @@ vector <Phoneme> PerformNLPAnalysis(string sText)
 	 if (phoPhoneme.cCategory > 109) //usuwanie spacji
 	 vphoPhonemes.erase(itI--);
 	 }
-
-	 return vphoPhonemes;
 	 */
+	return vphoPhonemes;
+
 }
 //koniec funkcji PerformNLPAnalysis
 

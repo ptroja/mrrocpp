@@ -513,7 +513,7 @@ while (1) {
 
 	if (rcvid == -1) {/* Error condition, exit */
 		int e = errno;
-		perror("base/mp: MsgReceivePulse()");
+		perror("mp: MsgReceivePulse()");
 		throw common::MP_main_error(lib::SYSTEM_ERROR, e);
 	}
 
@@ -573,7 +573,7 @@ while (1) {
 	}
 
 	/* A message (presumable ours) received, handle */
-	fprintf(stderr, "base/mp: unexpected message received\n");
+	fprintf(stderr, "mp: unexpected message received\n");
 	MsgReply(rcvid, ENOSYS, 0, 0);
 
 	throw common::MP_main_error(lib::SYSTEM_ERROR, 0);
@@ -585,10 +585,10 @@ while(1) {
 
 	if (rcvid == -1) {
 		int e = errno;
-		perror("base/mp: messip::port_receive_pulse()");
+		perror("mp: messip::port_receive_pulse()");
 		throw common::MP_main_error(lib::SYSTEM_ERROR, e);
 	} else if (rcvid >= 0) {
-		fprintf(stderr, "base/mp: unexpected message received\n");
+		fprintf(stderr, "mp: unexpected message received\n");
 		throw common::MP_main_error(lib::SYSTEM_ERROR, 0);
 	} else if (rcvid == MESSIP_MSG_NOREPLY) {
 		// handle pulse
@@ -639,7 +639,7 @@ while(!exit_from_while) {
 		// like creceive in QNX4
 		if (TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_RECEIVE, NULL, NULL, NULL ) == -1) {
 			int e = errno;
-			perror("base/mp: TimerTimeout()");
+			perror("mp: TimerTimeout()");
 			throw common::MP_main_error(lib::SYSTEM_ERROR, e);
 		}
 	}
@@ -660,7 +660,7 @@ while(!exit_from_while) {
 			continue;
 		}
 		int e = errno;
-		perror("base/mp: MsgReceivePulse()");
+		perror("mp: MsgReceivePulse()");
 		throw common::MP_main_error(lib::SYSTEM_ERROR, e);
 	} else if (rcvid == 0) {/* Pulse received */
 		switch (msg.code) {
@@ -723,7 +723,7 @@ while(!exit_from_while) {
 		 * this should not happend if using MsgReceivePulse, but we want to be sure
 		 */
 		MsgError( rcvid, ENOSYS );
-		fprintf(stderr, "base/mp: unexpected message received\n");
+		fprintf(stderr, "mp: unexpected message received\n");
 		throw common::MP_main_error(lib::SYSTEM_ERROR, 0);
 	}
 #else
@@ -733,7 +733,7 @@ while(!exit_from_while) {
 
 	if (rcvid == -1) {
 		int e = errno;
-		perror("base/mp: messip::port_receive_pulse()");
+		perror("mp: messip::port_receive_pulse()");
 		throw common::MP_main_error(lib::SYSTEM_ERROR, e);
 	} else if (rcvid == MESSIP_MSG_TIMEOUT) {
 		if (desired_wait_mode == BLOCK && !desired_pulse_found) {
@@ -743,7 +743,7 @@ while(!exit_from_while) {
 		}
 		continue;
 	} else if (rcvid >= 0) {
-		fprintf(stderr, "base/mp: unexpected message received\n");
+		fprintf(stderr, "mp: unexpected message received\n");
 		throw common::MP_main_error(lib::SYSTEM_ERROR, 0);
 	} else if (rcvid == MESSIP_MSG_NOREPLY) {
 		// handle pulse
@@ -905,7 +905,7 @@ if(!mp_pulse_attach) {
 	{
 		uint64_t e = errno; // kod bledu systemowego
 		perror("Failed to attach UI Pulse chanel for Master Process");
-		sr_ecp_msg->message (lib::SYSTEM_ERROR, e, "base/mp: Failed to attach UI Pulse channel");
+		sr_ecp_msg->message (lib::SYSTEM_ERROR, e, "mp: Failed to attach UI Pulse channel");
 
 		throw common::MP_main_error(lib::SYSTEM_ERROR, 0);
 	}

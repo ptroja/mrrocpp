@@ -502,7 +502,7 @@ void model::direct_kinematics_transform(const lib::JointArray & local_current_jo
 	double s4 = sin(local_current_joints[3]);
 	double c4 = cos(local_current_joints[3]);
 	double s5 = sin(local_current_joints[4]);
-	double c5 = cos(local_current_joints[4]);
+	//	double c5 = cos(local_current_joints[4]);
 	//  double s6 = sin(local_current_joints[5]);
 	// double c6 = cos(local_current_joints[5]);
 
@@ -543,14 +543,14 @@ void model::inverse_kinematics_transform(lib::JointArray & local_desired_joints,
 {
 
 	// Stale
-	const double EPS = 1e-10;
-	double Nx, Ox, Ax, Px;
-	double Ny, Oy, Ay, Py;
-	double Nz, Oz, Az, Pz;
-	double s0, c0, s1, c1, s2, c2, s3, c3, s4, c4;
+	//const double EPS = 1e-10;
+	double Nx, Px;
+	double Ny, Py;
+	double Nz, Pz;
+	double s0, c0, s1, c1, s3, c3;
 	double E, F, K, ro, G, H;
-	double t5, t_ok;
-	double delta1, delta2, temp1, temp2, a, b, d;
+	//	double t5, t_ok;
+	double delta1, delta2;
 	delta1 = 1, delta2 = 1;
 	// Przepisanie zmiennych.
 	Nx = local_desired_end_effector_frame(0, 0); // alfa
