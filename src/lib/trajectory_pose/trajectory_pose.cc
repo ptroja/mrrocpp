@@ -14,6 +14,10 @@ namespace ecp_mp {
 namespace common {
 namespace trajectory_pose {
 
+trajectory_pose::trajectory_pose() {
+
+}
+
 trajectory_pose::trajectory_pose (lib::ECP_POSE_SPECIFICATION arm_type,
 		const vector<double> & coordinates) {
 	this->axes_num = coordinates.size();
@@ -21,8 +25,9 @@ trajectory_pose::trajectory_pose (lib::ECP_POSE_SPECIFICATION arm_type,
 
 	this->coordinates = coordinates;
 
-	k = vector<double>();
-	s = vector<double>();
+	times = vector<double>(axes_num);
+	k = vector<double>(axes_num);
+	s = vector<double>(axes_num);
 }
 
 trajectory_pose::~trajectory_pose() {

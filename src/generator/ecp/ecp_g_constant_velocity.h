@@ -31,7 +31,7 @@ class constant_velocity : public multiple_position<ecp_mp::common::trajectory_po
 		 * @param axes_num number of axes for a given robot and representation
 		 * @param pose_spec representation in which the robot position is expressed
 		 */
-		constant_velocity(common::task::task& _ecp_task, bool _is_synchronised, lib::ECP_POSE_SPECIFICATION pose_spec, int axes_num);
+		constant_velocity(common::task::task& _ecp_task, lib::ECP_POSE_SPECIFICATION pose_spec, int axes_num);
 		/**
 		 * Loads a single trajectory pose described in joint coordinates to the list. Maximal velocities are set automatically.
 		 */
@@ -55,6 +55,14 @@ class constant_velocity : public multiple_position<ecp_mp::common::trajectory_po
 		virtual bool next_step();
 
 	private:
+		/**
+		 * Temporary table od doubles.
+		 */
+		double coordinates[];
+		/**
+		 * Temporary homog matrix.
+		 */
+		lib::Homog_matrix homog_matrix;
 
 };
 

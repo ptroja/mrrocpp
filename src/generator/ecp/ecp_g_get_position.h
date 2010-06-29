@@ -30,7 +30,7 @@ class get_position : public generator {
 		 * @param axes_num number of axes for a given robot and representation
 		 * @param pose_spec representation in which the robot position is expressed
 		 */
-		get_position(common::task::task& _ecp_task, bool _is_synchronised, lib::ECP_POSE_SPECIFICATION pose_spec, int axes_num);
+		get_position(common::task::task& _ecp_task, lib::ECP_POSE_SPECIFICATION pose_spec, int axes_num);
 		/**
 		 * Destructor.
 		 */
@@ -44,6 +44,7 @@ class get_position : public generator {
 		 */
 		virtual bool next_step();
 		/**
+		 * Returns actual position.
 		 * @return array containing actual robot position expressed in representation specified by pose_spec variable
 		 */
 		vector<double> get_position_vector();
