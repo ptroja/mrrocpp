@@ -41,11 +41,11 @@
 #include "robot/speaker/mp_r_speaker.h"
 #include "robot/polycrank/mp_r_polycrank.h"
 #include "robot/bird_hand/mp_r_bird_hand.h"
-#include "robot/spkm/mp_r_spkm.h"
-#include "robot/smb/mp_r_smb.h"
 #include "robot/irp6ot_tfg/mp_r_irp6ot_tfg.h"
 #include "robot/irp6p_tfg/mp_r_irp6p_tfg.h"
 #include "robot/shead/mp_r_shead.h"
+#include "robot/spkm/mp_r_spkm.h"
+#include "robot/smb/mp_r_smb.h"
 
 #include "robot/irp6_mechatronika/irp6m_const.h"
 #include "robot/irp6ot_m/irp6ot_m_const.h"
@@ -94,7 +94,9 @@ task::~task()
 void task::stop_and_terminate()
 {
 	sr_ecp_msg->message("To terminate MP click STOP icon");
+
 	wait_for_stop ();
+
 	terminate_all (robot_m);
 }
 
@@ -112,91 +114,91 @@ void task::create_robots()
 	// ROBOT CONVEYOR
 	if (config.value<int>("is_conveyor_active", UI_SECTION)) {
 		created_robot = new robot::conveyor (*this);
-		robot_m[lib::ROBOT_CONVEYOR] = created_robot;
+		robot_m[created_robot->robot_name] = created_robot;
 	}
 
 	// ROBOT SPEAKER
 	if (config.value<int>("is_speaker_active", UI_SECTION)) {
 		created_robot = new robot::speaker (*this);
-		robot_m[lib::ROBOT_SPEAKER] = created_robot;
+		robot_m[created_robot->robot_name] = created_robot;
 	}
 
 	// ROBOT IRP6_MECHATRONIKA
 	if (config.value<int>("is_irp6_mechatronika_active", UI_SECTION)) {
 		created_robot = new robot::irp6_mechatronika (*this);
-		robot_m[lib::ROBOT_IRP6_MECHATRONIKA] = created_robot;
+		robot_m[created_robot->robot_name] = created_robot;
 	}
 
 	// ROBOT POLYCRANK
 	if (config.value<int>("is_polycrank_active", UI_SECTION)) {
 		created_robot = new robot::polycrank (*this);
-		robot_m[lib::ROBOT_POLYCRANK] = created_robot;
+		robot_m[created_robot->robot_name] = created_robot;
 	}
 
 	// ROBOT BIRD_HAND
 	if (config.value<int>("is_bird_hand_active", UI_SECTION)) {
 		created_robot = new robot::bird_hand (*this);
-		robot_m[lib::ROBOT_BIRD_HAND] = created_robot;
+		robot_m[created_robot->robot_name] = created_robot;
 	}
 
 	// ROBOT SPKM
 	if (config.value<int>("is_spkm_active", UI_SECTION)) {
 		created_robot = new robot::spkm (*this);
-		robot_m[lib::ROBOT_SPKM] = created_robot;
+		robot_m[created_robot->robot_name] = created_robot;
 	}
 
 	// ROBOT SMB
 	if (config.value<int>("is_smb_active", UI_SECTION)) {
 		created_robot = new robot::smb (*this);
-		robot_m[lib::ROBOT_SMB] = created_robot;
+		robot_m[created_robot->robot_name] = created_robot;
 	}
 
 	// ROBOT SHEAD
 	if (config.value<int>("is_shead_active", UI_SECTION)) {
 		created_robot = new robot::shead (*this);
-		robot_m[lib::ROBOT_SHEAD] = created_robot;
+		robot_m[created_robot->robot_name] = created_robot;
 	}
 
 	// ROBOT IRP6OT_TFG
 	if (config.value<int>("is_irp6ot_tfg_active", UI_SECTION)) {
 		created_robot = new robot::irp6ot_tfg (*this);
-		robot_m[lib::ROBOT_IRP6OT_TFG] = created_robot;
+		robot_m[created_robot->robot_name] = created_robot;
 	}
 
 	// ROBOT IRP6P_TFG
 	if (config.value<int>("is_irp6p_tfg_active", UI_SECTION)) {
 		created_robot = new robot::irp6p_tfg (*this);
-		robot_m[lib::ROBOT_IRP6P_TFG] = created_robot;
+		robot_m[created_robot->robot_name] = created_robot;
 	}
 
 	// ROBOT IRP6OT_M
 	if (config.value<int>("is_irp6ot_m_active", UI_SECTION)) {
 		created_robot = new robot::irp6ot_m (*this);
-		robot_m[lib::ROBOT_IRP6OT_M] = created_robot;
+		robot_m[created_robot->robot_name] = created_robot;
 	}
 
 	// ROBOT IRP6P_M
 	if (config.value<int>("is_irp6p_m_active", UI_SECTION)) {
 		created_robot = new robot::irp6p_m (*this);
-		robot_m[lib::ROBOT_IRP6P_M] = created_robot;
+		robot_m[created_robot->robot_name] = created_robot;
 	}
 
 	// ROBOT_ELECTRON
 	if (config.value<int>("is_electron_robot_active", UI_SECTION)) {
 		created_robot = new robot::robot (lib::ROBOT_ELECTRON, "[ecp_electron]", *this);
-		robot_m[lib::ROBOT_ELECTRON] = created_robot;
+		robot_m[created_robot->robot_name] = created_robot;
 	}
 
 	// ROBOT_SPEECHRECOGNITION
 	if (config.value<int>("is_speechrecognition_active", UI_SECTION)) {
 		created_robot = new robot::robot (lib::ROBOT_SPEECHRECOGNITION, "[ecp_speechrecognition]", *this);
-		robot_m[lib::ROBOT_SPEECHRECOGNITION] = created_robot;
+		robot_m[created_robot->robot_name] = created_robot;
 	}
 
 	// ROBOT_FESTIVAL
 	if (config.value<int>("is_festival_active", UI_SECTION)) {
 		created_robot = new robot::robot (lib::ROBOT_FESTIVAL, "[ecp_festival]", *this);
-		robot_m[lib::ROBOT_FESTIVAL] = created_robot;
+		robot_m[created_robot->robot_name] = created_robot;
 	}
 }
 
@@ -398,7 +400,7 @@ void task::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_term
 		mp_ext_empty_gen.Move();
 
 		//		if (debug_tmp) printf("ZA MOVE move run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots 1\n");
-	}while (true);
+	} while (true);
 }
 
 void task::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots

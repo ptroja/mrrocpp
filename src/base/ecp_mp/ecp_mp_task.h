@@ -13,6 +13,7 @@
 #include "lib/agent/Agent.h"
 
 #include <map>
+#include <boost/any.hpp>
 
 #include <stdint.h>
 #include <libxml/tree.h>
@@ -26,6 +27,9 @@
 #include "base/ecp_mp/ecp_mp_sensor.h"
 
 #include "base/ecp_mp/Trajectory.h"
+
+typedef std::map <std::string, boost::any> cc_t;
+typedef cc_t::value_type cc_item_t;
 
 namespace mrrocpp {
 namespace ecp_mp {
@@ -42,6 +46,9 @@ public:
 
 	// mapa wszystkich czujnikow
 	sensors_t sensor_m;
+
+	// the map of the shared memory (ccj buffer)
+	cc_t cc_m;
 
 	// mapa wszystkich transmiterow
 	transmitters_t transmitter_m;
