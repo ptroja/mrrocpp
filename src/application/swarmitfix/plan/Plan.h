@@ -14,9 +14,15 @@
 #include "BaseState.h"
 #include "PkmState.h"
 
+//! Plan for a single agent
 class Plan {
+	//! list of head positions
 	std::vector<HeadState> head;
+
+	//! list of mobile base positions
 	std::vector<BaseState> mbase;
+
+	//! list of PKM positions
 	std::vector<PkmState> pkm;
 };
 

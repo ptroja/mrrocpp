@@ -42,17 +42,17 @@
                 </xs:element>
                 <xs:element form="unqualified" name="psi1" nillable="false" type="xs:double">
                     <xs:annotation>
-                        <xs:documentation>first rotation angle of head support</xs:documentation>
+                        <xs:documentation>first rotation angle of the head support</xs:documentation>
                     </xs:annotation>
                 </xs:element>
                 <xs:element form="unqualified" name="psi2" nillable="false" type="xs:double">
                     <xs:annotation>
-                        <xs:documentation>second rotation angle of head support</xs:documentation>
+                        <xs:documentation>second rotation angle of the head support</xs:documentation>
                     </xs:annotation>
                 </xs:element>
                 <xs:element form="unqualified" name="psi3" nillable="false" type="xs:double">
                     <xs:annotation>
-                        <xs:documentation>third rotation angle of head support</xs:documentation>
+                        <xs:documentation>third rotation angle of the head support</xs:documentation>
                     </xs:annotation>
                 </xs:element>
                 <xs:element form="unqualified" name="rho" nillable="false" type="xs:double">
@@ -113,17 +113,17 @@
                 </xs:element>
                 <xs:element name="hx" type="xs:double">
                     <xs:annotation>
-                        <xs:documentation>X-location of the head reference point in world coordinates (relative to bench)</xs:documentation>
+                        <xs:documentation>X-location of the head reference point in world coordinates (relative to the bench)</xs:documentation>
                     </xs:annotation>
                 </xs:element>
                 <xs:element name="hy" type="xs:double">
                     <xs:annotation>
-                        <xs:documentation>Y-location of the head reference point in world coordinates (relative to bench)</xs:documentation>
+                        <xs:documentation>Y-location of the head reference point in world coordinates (relative to the bench)</xs:documentation>
                     </xs:annotation>
                 </xs:element>
                 <xs:element name="hz" type="xs:double">
                     <xs:annotation>
-                        <xs:documentation>Z-location of the head reference point in world coordinates (relative to bench)</xs:documentation>
+                        <xs:documentation>Z-location of the head reference point in world coordinates (relative to the bench)</xs:documentation>
                     </xs:annotation>
                 </xs:element>
             </xs:sequence>
