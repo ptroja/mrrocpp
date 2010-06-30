@@ -2,7 +2,6 @@
 //                            impconst.h
 // Typy i stale wykorzystywane w MRROC++
 //
-// Ostatnia modyfikacja: 16.04.98
 // -------------------------------------------------------------------------
 
 #if !defined(_IMPCONST_H)
