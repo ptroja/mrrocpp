@@ -130,26 +130,13 @@ public:
 		}
 	}
 
-	//	/**
-	//	 * Read vector from config. Vector has format similar to MatLAB, for example: [ x y z ].
-	//	 * @param name
-	//	 * @param n vector size
-	//	 * @return vector read
-	//	 * @throws exception if vector has not been read
-	//	 */
-	//	boost::numeric::ublas::vector <double> value(const std::string & key, const std::string & section_name, int n) const;
-	//
-	//	/**
-	//	 * Read matrix from config. Matrix has format similar to MatLAB, for example: [ a b c d; e f g h ].
-	//	 * @param name
-	//	 * @param n matrix size - rows
-	//	 * @param m matrix size - columns
-	//	 * @return vector read
-	//	 * @throws exception if vector has not been read
-	//	 */
-	//	boost::numeric::ublas::matrix <double>
-	//			value(const std::string & key, const std::string & section_name, int n, int m) const;
-
+	/**
+	 * Read matrix from config.
+	 * Matrix has format similar to MatLAB, for example: [ a b c; d e f; g h i].
+	 * @param key
+	 * @param section_name
+	 * @return
+	 */
 	template <int ROWS, int COLS>
 	Eigen::Matrix <double, ROWS, COLS> value(const std::string & key, const std::string & section_name) const;
 
@@ -163,11 +150,6 @@ public:
 	~configurator();
 
 protected:
-	//	/**
-	//	 * Extract elements from vector or matrix row. For example: " 1   2 3   4 "
-	//	 */
-	//	boost::numeric::ublas::vector <double> get_vector_elements(std::string text_value, int n) const;
-
 	/**
 	 * Extract elements from matrix row. For example: string " 1   2 3   4 " will be interpreted as a vector {1,2,3,4}
 	 */
