@@ -1,10 +1,7 @@
 #ifndef ECP_MP_ROBOT_H_
 #define ECP_MP_ROBOT_H_
 
-#include <map>
-#include "lib/srlib.h"
-#include "lib/sensor.h"
-#include "base/ecp_mp/transmitter.h"
+#include "lib/impconst.h"
 
 namespace mrrocpp {
 namespace ecp_mp {
@@ -12,7 +9,8 @@ namespace ecp_mp {
 class robot
 {
 public:
-	const lib::robot_name_t robot_name; // by Y - nazwa robota (track, postument etc.)
+	// by Y - nazwa robota (track, postument etc.)
+	const lib::robot_name_t robot_name;
 
 	robot(lib::robot_name_t _robot_name);
 };
