@@ -8,3 +8,7 @@ configs/default_file.cfg
 .qnx_internal.mk
 .settings/
 *.patch
+GPATH
+GRTAGS
+GSYMS
+GTAGS
