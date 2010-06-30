@@ -40,6 +40,10 @@ public:
 	{
 		return name;
 	}
+
+	virtual ~single_thread_port_interface()
+	{
+	}
 };
 
 template <class T>
@@ -136,14 +140,14 @@ public:
 	single_thread_port <T>* get_port(const std::string & name)
 	{
 		// TODO: dodac obsluge wyjatku w sytuacji gdy nie ma takiego pola lub typ sie nie zgadza
-		return (single_thread_port <T>*) (single_thread_port_map[name]);
+		return dynamic_cast<single_thread_port <T> *> (single_thread_port_map[name]);
 	}
 
 	template <class T>
 	single_thread_request_port <T>* get_request_port(const std::string & name)
 	{
 		// TODO: dodac obsluge wyjatku w sytuacji gdy nie ma takiego pola lub typ sie nie zgadza
-		return (single_thread_request_port <T>*) (single_thread_port_map[name]);
+		return dynamic_cast<single_thread_request_port <T> *> (single_thread_port_map[name]);
 	}
 };
 
