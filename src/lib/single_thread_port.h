@@ -4,7 +4,7 @@
  * \date 2010
  * \author yoyek
  *
- * \brief Template class for single robot communication port
+ * \brief Template class for a single robot communication port
  */
 
 #ifndef SINGLE_THREAD_PORT_H_
