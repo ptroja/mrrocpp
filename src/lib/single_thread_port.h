@@ -18,7 +18,7 @@ namespace lib {
 
 enum FlowStatus
 {
-	NoData = 0, OldData = 1, NewData = 2
+	NoData, OldData, NewData
 };
 
 class single_thread_port_interface
@@ -40,9 +40,6 @@ public:
 	{
 		return name;
 	}
-
-	//virtual void test() = 0;
-
 };
 
 template <class T>
@@ -84,12 +81,6 @@ public:
 	{
 		new_data = false;
 	}
-
-	void test()
-	{
-
-	}
-
 };
 
 template <class T>
@@ -125,7 +116,6 @@ public:
 	{
 		new_request = false;
 	}
-
 };
 
 class single_thread_port_manager
@@ -157,7 +147,6 @@ public:
 		// TODO: dodac obsluge wyjatku w sytuacji gdy nie ma takiego pola lub typ sie nie zgadza
 		return (single_thread_request_port <T>*) (single_thread_port_map[name]);
 	}
-
 };
 
 }

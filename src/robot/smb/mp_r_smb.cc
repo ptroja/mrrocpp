@@ -13,4 +13,3 @@ smb::smb(task::task &mp_object_l) :
 } // namespace robot
 } // namespace mp
 } // namespace mrrocpp
-
