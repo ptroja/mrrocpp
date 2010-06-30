@@ -8,6 +8,7 @@
 #include "visual_servo_manager.h"
 
 using namespace logger;
+using namespace mrrocpp::ecp::servovision;
 
 namespace mrrocpp {
 

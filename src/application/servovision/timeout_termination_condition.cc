@@ -8,12 +8,8 @@
 #include "timeout_termination_condition.h"
 
 namespace mrrocpp {
-
 namespace ecp {
-
-namespace common {
-
-namespace generator {
+namespace servovision{
 
 timeout_termination_condition::timeout_termination_condition()
 {
@@ -39,9 +35,5 @@ bool timeout_termination_condition::is_condition_met(const visual_servo_manager*
 }
 
 }//namespace generator
-
 }
-
-}
-
 }

@@ -18,9 +18,7 @@ namespace mrrocpp {
 
 namespace ecp {
 
-namespace common {
-
-namespace generator {
+namespace servovision {
 
 pb_sac_visual_servo::pb_sac_visual_servo(boost::shared_ptr <visual_servo_regulator> regulator, const std::string& section_name, mrrocpp::lib::configurator& configurator) :
 	pb_visual_servo(regulator, section_name, configurator)
@@ -100,4 +98,3 @@ lib::Homog_matrix pb_sac_visual_servo::get_position_change(const lib::Homog_matr
 
 }
 
-}

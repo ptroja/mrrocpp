@@ -15,12 +15,8 @@
 #include "lib/configurator.h"
 
 namespace mrrocpp {
-
 namespace ecp {
-
-namespace common {
-
-namespace generator {
+namespace servovision {
 
 /** @addtogroup servovision
  *  @{
@@ -68,12 +64,8 @@ private:
 
 /** @} */
 
-} // namespace generator
-
-} // namespace common
-
+} // namespace servovision
 } // namespace ecp
-
 } // namespace mrrocpp
 
 #endif /* VISUAL_SERVO_REGULATOR_H_ */

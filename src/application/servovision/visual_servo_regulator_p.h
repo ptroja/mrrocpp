@@ -14,16 +14,14 @@ namespace mrrocpp {
 
 namespace ecp {
 
-namespace common {
-
-namespace generator {
+namespace servovision {
 
 /** @addtogroup servovision
  *  @{
  */
 
 //template <int ERROR_SIZE, int CONTROL_SIZE>
-class regulator_p: public mrrocpp::ecp::common::generator::visual_servo_regulator
+class regulator_p: public visual_servo_regulator
 {
 public:
 	regulator_p(const lib::configurator & config, const std::string& config_section_name) :
@@ -48,12 +46,8 @@ protected:
 
 /** @} */
 
-} // namespace generator
-
+} // namespace servovision
 }
-
-}
-
 }
 
 #endif /* VISUAL_SERVO_REGULATOR_P_H_ */

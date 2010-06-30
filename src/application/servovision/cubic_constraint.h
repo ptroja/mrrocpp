@@ -17,9 +17,7 @@ namespace mrrocpp {
 
 namespace ecp {
 
-namespace common {
-
-namespace generator {
+namespace servovision {
 
 /** @addtogroup servovision
  *  @{
@@ -28,7 +26,7 @@ namespace generator {
 /**
  * Keeps end effector inside cube of specified dimensions.
  */
-class cubic_constraint : public mrrocpp::ecp::common::generator::position_constraint
+class cubic_constraint : public position_constraint
 {
 public:
 	/**
@@ -42,6 +40,8 @@ public:
 	 *    double min_wrist_rotation;
 	 *    double max_wrist_rotation
 	 * @param config
+	 * @param section_name
+	 * @return
 	 */
 	cubic_constraint(const lib::configurator& config, const std::string &section_name);
 
@@ -68,8 +68,6 @@ private:
 /** @} */
 
 } // namespace generator
-
-}
 
 }
 

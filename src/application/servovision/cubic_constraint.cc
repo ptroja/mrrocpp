@@ -18,9 +18,7 @@ namespace mrrocpp {
 
 namespace ecp {
 
-namespace common {
-
-namespace generator {
+namespace servovision {
 
 cubic_constraint::cubic_constraint(const lib::configurator& config, const std::string &section_name)
 {
@@ -153,8 +151,6 @@ void cubic_constraint::apply_constraint()
 }
 
 } // namespace generator
-
-}
 
 }
 

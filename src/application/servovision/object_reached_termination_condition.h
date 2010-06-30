@@ -14,21 +14,19 @@ namespace mrrocpp {
 
 namespace ecp {
 
-namespace common {
-
-namespace generator {
+namespace servovision {
 
 /** @addtogroup servovision
  *  @{
  */
 
-class object_reached_termination_condition: public mrrocpp::ecp::common::generator::termination_condition
+class object_reached_termination_condition: public termination_condition
 {
 public:
 	object_reached_termination_condition(double max_speed, double max_accel, int min_steps);
 	virtual ~object_reached_termination_condition();
 	virtual void reset();
-	virtual void update(const visual_servo_manager* vsm);
+	virtual void update(const mrrocpp::ecp::common::generator::visual_servo_manager* vsm);
 	virtual bool is_condition_met() const;
 protected:
 	double max_speed;
@@ -40,8 +38,6 @@ protected:
 /** @} */
 
 }//namespace generator
-
-}
 
 }
 

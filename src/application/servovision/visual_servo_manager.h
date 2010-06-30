@@ -24,11 +24,14 @@ namespace mrrocpp {
 
 namespace ecp {
 
+namespace servovision{
+class termination_condition;
+}
+
 namespace common {
 
 namespace generator {
 
-class termination_condition;
 
 /** @addtogroup servovision
  *  @{
@@ -60,7 +63,7 @@ public:
 	 * so it is likely to move end effector beyond it's limits.
 	 * @param new_constraint
 	 */
-	void add_position_constraint(boost::shared_ptr <position_constraint> new_constraint);
+	void add_position_constraint(boost::shared_ptr <servovision::position_constraint> new_constraint);
 
 	/**
 	 * Add termination condition.
@@ -69,7 +72,7 @@ public:
 	 * If there are no termination conditions, generator will never stop.
 	 * @param term_cond
 	 */
-	void add_termination_condition(boost::shared_ptr <termination_condition> term_cond);
+	void add_termination_condition(boost::shared_ptr <servovision::termination_condition> term_cond);
 protected:
 	visual_servo_manager(mrrocpp::ecp::common::task::task & ecp_task, const std::string& section_name);
 	/**
@@ -81,7 +84,7 @@ protected:
 	 * Called from constructor to initialize all servos. After this call, servos field must be initialized.
 	 */
 	virtual void configure_all_servos() = 0;
-	std::vector <boost::shared_ptr <visual_servo> > servos;
+	std::vector <boost::shared_ptr <servovision::visual_servo> > servos;
 	const lib::Homog_matrix& get_current_position() const;
 
 	/** Time between next_step() calls */
@@ -91,8 +94,8 @@ private:
 	bool current_position_saved;
 	int motion_steps;
 
-	std::vector <boost::shared_ptr <position_constraint> > position_constraints;
-	std::vector <boost::shared_ptr <termination_condition> > termination_conditions;
+	std::vector <boost::shared_ptr <servovision::position_constraint> > position_constraints;
+	std::vector <boost::shared_ptr <servovision::termination_condition> > termination_conditions;
 
 	/** End effector's linear speed */
 	double max_speed;

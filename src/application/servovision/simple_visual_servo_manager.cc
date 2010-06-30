@@ -18,7 +18,7 @@ namespace common {
 namespace generator {
 
 simple_visual_servo_manager::simple_visual_servo_manager(mrrocpp::ecp::common::task::task & ecp_task, const char * section_name, boost::shared_ptr <
-		visual_servo> vs) :
+		mrrocpp::ecp::servovision::visual_servo> vs) :
 	visual_servo_manager(ecp_task, section_name)
 {
 	servos.push_back(vs);

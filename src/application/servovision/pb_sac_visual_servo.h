@@ -17,9 +17,7 @@ namespace mrrocpp {
 
 namespace ecp {
 
-namespace common {
-
-namespace generator {
+namespace servovision {
 
 /** @addtogroup servovision
  *  @{
@@ -42,8 +40,6 @@ private:
 /** @} */
 
 } //namespace
-
-}
 
 }
 

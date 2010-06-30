@@ -11,9 +11,7 @@ namespace mrrocpp {
 
 namespace ecp {
 
-namespace common {
-
-namespace generator {
+namespace servovision {
 
 position_constraint::position_constraint()
 {
@@ -75,9 +73,5 @@ double position_constraint::constrain_angle(double angle, double min, double max
 }
 
 } // namespace generator
-
 }
-
-}
-
 }
