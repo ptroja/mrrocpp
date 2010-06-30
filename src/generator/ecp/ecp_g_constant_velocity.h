@@ -9,7 +9,6 @@
 #define _ECP_G_CONSTANT_VELOCITY_H_
 
 #include "generator/ecp/ecp_g_multiple_position.h"
-#include "lib/mrmath/mrmath.h"
 #include "lib/trajectory_pose/constant_velocity_trajectory_pose.h"
 #include "generator/ecp/velocity_profile_calculator/constant_velocity_profile.h"
 #include "generator/ecp/trajectory_interpolator/constant_velocity_interpolator.h"
@@ -107,15 +106,11 @@ class constant_velocity : public multiple_position<ecp_mp::common::trajectory_po
 		 */
 		bool next_step();
 		/**
-		 * Sets the number of axes in which the generator will move the robot. New velocities vectors are created to match the new number of axes.
+		 * Sets the number of axes in which the generator will move the robot. New velocity vectors are created to match the new number of axes.
 		 */
 		void set_axes_num(int axes_num);
 
 	private:
-		/**
-		 * Temporary homog matrix.
-		 */
-		lib::Homog_matrix homog_matrix;
 		/**
 		 * Loads trajectory pose.
 		 */

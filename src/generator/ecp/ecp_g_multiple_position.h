@@ -91,6 +91,8 @@ protected:
 	 * If true, debug information is shown.
 	 */
 	bool debug;
+
+	//--------- VELOCITY AND ACCELERATION VECTORS ---------
 	/**
 	 * Standard velocity in joint coordinates.
 	 */
@@ -123,6 +125,44 @@ protected:
 	 * Maximal velocity in angle axis coordinates.
 	 */
 	vector<double> angle_axis_max_velocity;
+	/**
+	 * Standard acceleration in joint coordinates.
+	 */
+	vector<double> joint_acceleration;
+	/**
+	 * Maximal acceleration in joint coordinates.
+	 */
+	vector<double> joint_max_acceleration;
+	/**
+	 * Standard acceleration in motor coordinates.
+	 */
+	vector<double> motor_acceleration;
+	/**
+	 * Maximal acceleration in motor coordinates.
+	 */
+	vector<double> motor_max_acceleration;
+	/**
+	 * Standard acceleration in euler zyz coordinates.
+	 */
+	vector<double> euler_zyz_acceleration;
+	/**
+	 * Maximal acceleration in euler zyz coordinates.
+	 */
+	vector<double> euler_zyz_max_acceleration;
+	/**
+	 * Standard acceleration in angle axis coordinates.
+	 */
+	vector<double> angle_axis_acceleration;
+	/**
+	 * Maximal acceleration in angle axis coordinates.
+	 */
+	vector<double> angle_axis_max_acceleration;
+	//--------- VELOCITY AND ACCELERATION VECTORS END ---------
+
+	/**
+	 * Temporary homog matrix.
+	 */
+	lib::Homog_matrix homog_matrix;
 
 public:
 	/**
@@ -175,7 +215,7 @@ public:
 	/**
 	 * Clears vectors of positions and coordinates. Sets %calculated and %interpolated flags to false;
 	 */
-	void reset() {
+	virtual void reset() {
 		pose_vector.clear();
 		coordinate_vector.clear();
 		calculated = false;

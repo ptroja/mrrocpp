@@ -1,36 +1,21 @@
 /**
-* \file	ecp_g_newsmooth.h
-* \brief Smooth class and its methods.
-* \author rtulwin
-* \date	2009
-*
-* Smooth trajectory generator having an ability to calculate every trajectory.
+* @file	ecp_g_newsmooth.h
+* @brief Smooth class and its methods.
+* @author rtulwin
+* @date	2010
 */
 
 #if !defined(_ECP_GEN_NEWSMOOTH_H)
 # define _ECP_GEN_NEWSMOOTH_H
 
-#include <stdio.h>
-#include <stdlib.h>
 #include <math.h>
-#include <ctype.h>
-#include <iostream>
-
-#include <fstream>
-#include <string.h>
-#include <vector>
 
 using namespace std;
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
-#include "lib/datastr.h"
-#include "lib/srlib.h"
-#include "lib/mrmath/mrmath.h"
-
 #include "generator/ecp/ecp_g_multiple_position.h"
 #include "lib/trajectory_pose/bang_bang_trajectory_pose.h"
+#include "generator/ecp/velocity_profile_calculator/bang_bang_profile.h"
+#include "generator/ecp/trajectory_interpolator/bang_bang_interpolator.h"
 
 using namespace std;
 
@@ -40,64 +25,40 @@ namespace common {
 namespace generator {
 
 /**
- *
+ * Smooth trajectory generator which has an ability to calculate every trajectory (posiada moce super krowy).
  */
-class newsmooth : public multiple_position<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose> {
+class newsmooth : public multiple_position<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose,
+ecp::common::generator::trajectory_interpolator::bang_bang_interpolator,
+ecp::common::generator::velocity_profile_calculator::bang_bang_profile> {
 
 	protected:
-		/**
-		 *
-		 */
-		bool debug; //czy maja byc wyswietlane debugi
-		/**
-		 *
-		 */
-		//void generate_coords();
-		/**
-		 *
-		 */
-		//void calculate(void);
-		/**
-		 *
-		 */
-		//void send_coordinates(void);
-		/**
-		 *
-		 */
-		//double generate_next_coords(int node_counter, int interpolation_node_no, double start_position, double v_p, double v_r, double v_k, double a_r, int k, double przysp, double jedn, double s_przysp, double s_jedn);
-		/**
-		 *
-		 */
-		void insert_pose_list_element(lib::ECP_POSE_SPECIFICATION ps, vector<double> v, vector<double> a, vector<double> coordinates);
+
 	public:
 		/**
-		 *
+		 * Performs calculation of the trajectory and interpolation. Fills in pose_vector and coordinate_vector.
+		 * @return true if the calculation was succesfull
 		 */
 		bool calculate_interpolate();
 		/**
 		 * Constructor.
 		 */
-		newsmooth(common::task::task& _ecp_task, bool _is_synchronised, bool _debug);
+		newsmooth(common::task::task& _ecp_task, lib::ECP_POSE_SPECIFICATION pose_spec, int axes_num);
 		/**
 		 * Destructor.
 		 */
 		virtual ~newsmooth();
 		/**
-		 *
+		 * Implementation of the first_step method.
 		 */
-		void reset(void);
+		bool first_step();
 		/**
-		 *
+		 * Implementation of the next_step method.
 		 */
-		void load_a_v_max_from_file(const char* file_name);
+		bool next_step();
 		/**
-		 *
+		 * Sets the number of axes in which the generator will move the robot. New velocity and acceleration vectors are created to match the new number of axes.
 		 */
-		virtual bool first_step();
-		/**
-		 *
-		 */
-		virtual bool next_step();
+		void set_axes_num(int axes_num);
 
 };
 
