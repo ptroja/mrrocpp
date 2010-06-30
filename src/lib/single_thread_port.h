@@ -18,43 +18,39 @@ namespace lib {
 
 enum FlowStatus
 {
-	NoData = 0, OldData = 1, NewData = 2
+	NoData, OldData, NewData
 };
 
 class single_thread_port_interface
 {
 private:
-	std::string name;
+	const std::string name;
 
 protected:
 	bool new_data;
 
 public:
 
-	single_thread_port_interface(std::string _name) :
+	single_thread_port_interface(const std::string & _name) :
 		name(_name), new_data(false)
 	{
 	}
 
-	std::string get_name()
+	std::string get_name() const
 	{
 		return name;
 	}
-
-	//virtual void test() = 0;
-
 };
 
 template <class T>
 class single_thread_port : public single_thread_port_interface
 {
-
 protected:
 	bool no_data;
 	T data;
 
 public:
-	single_thread_port(std::string _name) :
+	single_thread_port(const std::string & _name) :
 		single_thread_port_interface(_name), no_data(true)
 	{
 	}
@@ -84,23 +80,16 @@ public:
 	{
 		new_data = false;
 	}
-
-	void test()
-	{
-
-	}
-
 };
 
 template <class T>
 class single_thread_request_port : public single_thread_port <T>
 {
-
 protected:
 	bool new_request;
 
 public:
-	single_thread_request_port(std::string _name) :
+	single_thread_request_port(const std::string & _name) :
 		single_thread_port <T> (_name), new_request(false)
 	{
 	}
@@ -110,13 +99,13 @@ public:
 		new_request = true;
 	}
 
-	void set(T& _data)
+	void set(const T& _data)
 	{
 		new_request = false;
 		single_thread_port <T>::set(_data);
 	}
 
-	bool is_new_request()
+	bool is_new_request() const
 	{
 		return new_request;
 	}
@@ -125,7 +114,6 @@ public:
 	{
 		new_request = false;
 	}
-
 };
 
 class single_thread_port_manager
@@ -145,19 +133,18 @@ public:
 	}
 
 	template <class T>
-	single_thread_port <T>* get_port(std::string name)
+	single_thread_port <T>* get_port(const std::string & name)
 	{
 		// TODO: dodac obsluge wyjatku w sytuacji gdy nie ma takiego pola lub typ sie nie zgadza
 		return (single_thread_port <T>*) (single_thread_port_map[name]);
 	}
 
 	template <class T>
-	single_thread_request_port <T>* get_request_port(std::string name)
+	single_thread_request_port <T>* get_request_port(const std::string & name)
 	{
 		// TODO: dodac obsluge wyjatku w sytuacji gdy nie ma takiego pola lub typ sie nie zgadza
 		return (single_thread_request_port <T>*) (single_thread_port_map[name]);
 	}
-
 };
 
 }
