@@ -3,6 +3,8 @@
 
 #include "lib/data_port_headers/epos.h"
 
+#define SPKM_NUM_OF_SERVOS	7
+
 namespace mrrocpp {
 
 }
@@ -30,14 +32,12 @@ struct spkm_cbuffer
 
 struct spkm_rbuffer
 {
+	single_controller_epos_reply epos_controller[SPKM_NUM_OF_SERVOS];
 	bool contact;
-	single_controller_epos_reply epos_controller[6];
 }__attribute__((__packed__));
 
 #define EDP_SPKM_SECTION "[edp_spkm]"
 #define ECP_SPKM_SECTION "[ecp_spkm]"
-
-#define SPKM_NUM_OF_SERVOS	6
 
 } // namespace lib
 } // namespace mrrocpp

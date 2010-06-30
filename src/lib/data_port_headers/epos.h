@@ -12,7 +12,7 @@ namespace lib {
 
 enum EPOS_GEN_PROFILE
 {
-	TRAPEZOIDAL_VELOCITY, CUBIC_POSITION, EPOS_GEN_PROFILE_NO_ACTION
+	TRAPEZOIDAL_VELOCITY, CUBIC_POSITION, OPERATIONAL_SPACE, EPOS_GEN_PROFILE_NO_ACTION
 };
 
 #define EPOS_GEN_PARAMETERS_DATA_PORT "epos_gen_paramteres_data_port"
@@ -23,6 +23,7 @@ struct single_controller_epos_reply
 {
 	double position;
 	bool motion_in_progress;
+	bool buffer_full;
 }__attribute__((__packed__));
 
 struct epos_gen_parameters
@@ -36,13 +37,13 @@ struct epos_gen_parameters
 
 struct epos_low_level_command
 {
+	EPOS_GEN_PROFILE profile_type;
 	double em[EPOS_DATA_PORT_SERVOS_NUMBER];
 	double emdm[EPOS_DATA_PORT_SERVOS_NUMBER];
 	double aa[EPOS_DATA_PORT_SERVOS_NUMBER];
 	double da[EPOS_DATA_PORT_SERVOS_NUMBER];
 	double av[EPOS_DATA_PORT_SERVOS_NUMBER];
 	double tt;
-	EPOS_GEN_PROFILE profile_type;
 };
 
 struct epos_reply
