@@ -9,7 +9,6 @@
 #define _IMPCONST_H
 
 #include <string>
-#include <stdint.h>
 
 #define delta_m (M_PI - 3.14154)
 #define DEGREES_TO_RADIANS 57.295780
