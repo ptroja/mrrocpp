@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PathPlan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
- xsi:noNamespaceSchemaLocation="file:/tmp/swarmplan.xsd">
+ xsi:noNamespaceSchemaLocation="swarmplan.xsd">
     <agents>
         <Plan>
             <head>
