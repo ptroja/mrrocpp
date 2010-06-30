@@ -58,7 +58,8 @@ public:
 private:
 	Eigen::Matrix <double, 3, 1> translation_min;
 	Eigen::Matrix <double, 3, 1> translation_max;
-	Eigen::Matrix <double, 3, 1> cone_axis;
+	//Eigen::Matrix <double, 3, 3> cone_rotation;
+	lib::Homog_matrix cone_rotation;
 	double min_inclination;
 	double wrist_rotation_min;
 	double wrist_rotation_max;
