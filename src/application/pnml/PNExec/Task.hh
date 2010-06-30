@@ -51,10 +51,10 @@ class ExecTask : public Task {
 			std::cout << "ExecTask()" << std::endl;
 		}
 
-		virtual mrrocpp::lib::robot_name_t execute(mrrocpp::mp::common::robots_t & _robots, workers_t & _workers) {
-//			system(job.c_str());
-			std::cerr << "executing " << job << std::endl;
-			return mrrocpp::lib::ROBOT_UNDEFINED;
+		virtual mrrocpp::lib::robot_name_t execute(mrrocpp::mp::common::robots_t & _robots, workers_t & _workers)
+		{
+			// return default (invalid) robot name
+			return mrrocpp::lib::robot_name_t();
 		}
 
 		virtual ~ExecTask() {

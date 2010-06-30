@@ -35,10 +35,10 @@ void Place::execute(mrrocpp::mp::common::robots_t & _robots, workers_t & _worker
 	BOOST_FOREACH(PNExecToolSpecific & ts, toolspecifics) {
 		BOOST_FOREACH(Task & t, ts.tasks) {
 			mrrocpp::lib::robot_name_t who = t.execute(_robots, _workers);
-			if (who != mrrocpp::lib::ROBOT_UNDEFINED) {
+			//if (who != mrrocpp::lib::ROBOT_UNDEFINED) {
 				_workers[who] = this;
 				found_a_worker = true;
-			}
+			//}
 		}
 	}
 
