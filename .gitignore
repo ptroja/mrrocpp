@@ -9,3 +9,7 @@ configs/default_file.cfg
 .settings/
 common.mk
 *.patch
+GPATH
+GRTAGS
+GSYMS
+GTAGS
