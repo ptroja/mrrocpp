@@ -49,8 +49,11 @@ void ecp_sub_task_const_vel_gen_test::conditional_execution() {
 	}
 }
 
-} // namespace task
+ecp_sub_task_const_vel_gen_test::~ecp_sub_task_const_vel_gen_test() {
+	delete cvgen;
+}
 
+} // namespace task
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp

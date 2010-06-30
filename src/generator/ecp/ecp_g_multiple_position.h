@@ -91,6 +91,38 @@ protected:
 	 * If true, debug information is shown.
 	 */
 	bool debug;
+	/**
+	 * Standard velocity in joint coordinates.
+	 */
+	vector<double> joint_velocity;
+	/**
+	 * Maximal velocity in joint coordinates.
+	 */
+	vector<double> joint_max_velocity;
+	/**
+	 * Standard velocity in motor coordinates.
+	 */
+	vector<double> motor_velocity;
+	/**
+	 * Maximal velocity in motor coordinates.
+	 */
+	vector<double> motor_max_velocity;
+	/**
+	 * Standard velocity in euler zyz coordinates.
+	 */
+	vector<double> euler_zyz_velocity;
+	/**
+	 * Maximal velocity in euler zyz coordinates.
+	 */
+	vector<double> euler_zyz_max_velocity;
+	/**
+	 * Standard velocity in angle axis coordinates.
+	 */
+	vector<double> angle_axis_velocity;
+	/**
+	 * Maximal velocity in angle axis coordinates.
+	 */
+	vector<double> angle_axis_max_velocity;
 
 public:
 	/**
@@ -119,7 +151,7 @@ public:
 	/**
 	 * Sets the number of axes in which the generator will move the robot.
 	 */
-	void set_axes_num(int axes_num) {
+	virtual void set_axes_num(int axes_num) {
 		this->axes_num = axes_num;
 	}
 	/**
@@ -140,18 +172,6 @@ public:
 	void set_absolute(void) {
 		motion_type=lib::ABSOLUTE;
 	}
-	/**
-	 * Loads a single trajectory pose described in joint coordinates (absolute motion) to the list. Maximal velocities are set automatically.
-	 * @param coordinates desired position
-	 * @return true if the addition was succesfull
-	 */
-	virtual bool load_absolute_joint_trajectory_pose(const vector<double> & coordinates) = 0;
-	/**
-	 * Loads a single trajectory pose described in joint coordinates (relative motion) to the list. Maximal velocities are set automatically.
-	 * @param coordinates desired position
-	 * @return true if the addition was succesfull
-	 */
-	virtual bool load_relative_joint_trajectory_pose(const vector<double> & coordinates) = 0;
 	/**
 	 * Clears vectors of positions and coordinates. Sets %calculated and %interpolated flags to false;
 	 */

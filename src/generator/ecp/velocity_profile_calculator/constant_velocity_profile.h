@@ -19,6 +19,10 @@ namespace common {
 namespace generator {
 namespace velocity_profile_calculator {
 
+/**
+ * Class contains methods used to fill in the trajectory pose list in a way that created trajectory describes the motion of the
+ * robot with a constant velocity. Methods implemented here can cope with the absolute and relative type of motion.
+ */
 class constant_velocity_profile : public velocity_profile {
 	public:
 		/**

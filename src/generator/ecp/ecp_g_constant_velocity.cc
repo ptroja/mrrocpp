@@ -23,10 +23,12 @@ constant_velocity::constant_velocity(common::task::task& _ecp_task, lib::ECP_POS
 	motion_type = lib::ABSOLUTE;
 	nmc = 10;
 	mc = nmc * STEP;
+
+	create_velocity_vectors(axes_num);
 }
 
 constant_velocity::~constant_velocity() {
-	// TODO Auto-generated destructor stub
+
 }
 
 bool constant_velocity::first_step() {
@@ -37,6 +39,7 @@ bool constant_velocity::first_step() {
 	}
 
 	if (!calculated || !interpolated) {
+		reset();
 		return false;
 	}
 
@@ -50,7 +53,8 @@ bool constant_velocity::first_step() {
 	} else if (motion_type == lib::ABSOLUTE) {
 		the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
 	} else {
-		//TODO throw exception
+		sr_ecp_msg.message("Wrong motion type");
+		throw ECP_error(lib::NON_FATAL_ERROR, ECP_ERRORS);//TODO change the second argument
 	}
 
 	switch (pose_spec) {
@@ -74,6 +78,7 @@ bool constant_velocity::first_step() {
 			the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
 			break;
 		default:
+			reset();
 			throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 	}
 
@@ -91,7 +96,7 @@ bool constant_velocity::next_step() {
 
 	if (coordinate_vector.empty()) {
 
-		//TODO message "no coordinates generated"
+		sr_ecp_msg.message("No coordinates generated");
 		reset();
 		return false;
 	}
@@ -168,6 +173,7 @@ bool constant_velocity::next_step() {
 			break;
 
 		default:
+			reset();
 			throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 	}// end:switch
 
@@ -190,7 +196,7 @@ bool constant_velocity::calculate_interpolate() {
 	int i; //loop counter
 
 	if (pose_vector.empty()) {
-		//TODO message "no loaded poses"
+		sr_ecp_msg.message("No loaded poses");
 		return false;
 	}
 
@@ -217,7 +223,8 @@ bool constant_velocity::calculate_interpolate() {
 	} else if (motion_type == lib::RELATIVE) {
 		pose_vector_iterator->start_position = vector<double>(axes_num,0);
 	} else {
-		//TODO throw exception
+		sr_ecp_msg.message("Wrong motion type");
+		throw ECP_error(lib::NON_FATAL_ERROR, ECP_ERRORS);//TODO change the second argument
 	}
 
 	for (i = 0; i < pose_vector.size(); i++) {//calculate distances, directions, times and velocities for each pose and axis
@@ -231,7 +238,8 @@ bool constant_velocity::calculate_interpolate() {
 				return false;
 			}
 		} else {
-			//TODO throw exception
+			sr_ecp_msg.message("Wrong motion type");
+			throw ECP_error(lib::NON_FATAL_ERROR, ECP_ERRORS);//TODO change the second argument
 		}
 
 		if(!vpc.calculate_time_pose(pose_vector_iterator) ||//calculate times for each of the axes
@@ -307,7 +315,8 @@ bool constant_velocity::calculate_interpolate() {
 			pose_vector_iterator++;
 		}
 	} else {
-		//TODO throw exception
+		sr_ecp_msg.message("Wrong motion type");
+		throw ECP_error(lib::NON_FATAL_ERROR, ECP_ERRORS);//TODO change the second argument
 	}
 
 	//---------------- DEGUG --------------------
@@ -332,11 +341,27 @@ bool constant_velocity::calculate_interpolate() {
 	return calculated && interpolated;
 }
 
+void constant_velocity::set_axes_num(int axes_num) {
+	this->axes_num = axes_num;
+	create_velocity_vectors(axes_num);
+}
+
+void constant_velocity::create_velocity_vectors(int axes_num) {
+	joint_velocity = vector<double>(axes_num, 0.05);
+	joint_max_velocity = vector<double>(axes_num, 1.5);
+	motor_velocity = vector<double>(axes_num, 0.05);//TODO check if this is a reasonable value
+	motor_velocity = vector<double>(axes_num, 120.0);
+	euler_zyz_velocity= vector<double>(axes_num, 0.05);//TODO check if this is a reasonable value
+	euler_zyz_max_velocity = vector<double>(axes_num, 5.0);
+	angle_axis_velocity = vector<double>(axes_num, 0.05);//TODO check if this is a reasonable value
+	angle_axis_velocity = vector<double>(axes_num, 5.0);
+}
+
+//--------------- METHODS USED TO LOAD POSES ----------------
+
 bool constant_velocity::load_absolute_joint_trajectory_pose(const vector<double> & coordinates) {
 
 	ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose pose;
-	vector<double> joint_velocity(axes_num, 0.05);
-	vector<double> joint_max_velocity(axes_num, 1.5);
 
 	return load_trajectory_pose(coordinates, lib::ABSOLUTE, lib::ECP_JOINT, joint_velocity, joint_max_velocity);
 }
@@ -344,23 +369,63 @@ bool constant_velocity::load_absolute_joint_trajectory_pose(const vector<double>
 bool constant_velocity::load_relative_joint_trajectory_pose(const vector<double> & coordinates) {
 
 	ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose pose;
-	vector<double> joint_velocity(axes_num, 0.05);
-	vector<double> joint_max_velocity(axes_num, 1.5);
 
 	return load_trajectory_pose(coordinates, lib::RELATIVE, lib::ECP_JOINT, joint_velocity, joint_max_velocity);
+}
+
+bool constant_velocity::load_absolute_motor_trajectory_pose(const vector<double> & coordinates) {
+
+	ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose pose;
+
+	return load_trajectory_pose(coordinates, lib::ABSOLUTE, lib::ECP_MOTOR, joint_velocity, joint_max_velocity);
+}
+
+bool constant_velocity::load_relative_motor_trajectory_pose(const vector<double> & coordinates) {
+
+	ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose pose;
+
+	return load_trajectory_pose(coordinates, lib::RELATIVE, lib::ECP_MOTOR, joint_velocity, joint_max_velocity);
+}
+
+bool constant_velocity::load_absolute_euler_zyz_trajectory_pose(const vector<double> & coordinates) {
+
+	ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose pose;
+
+	return load_trajectory_pose(coordinates, lib::ABSOLUTE, lib::ECP_XYZ_EULER_ZYZ, euler_zyz_velocity, euler_zyz_max_velocity);
+}
+
+bool constant_velocity::load_relative_euler_zyz_trajectory_pose(const vector<double> & coordinates) {
+
+	ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose pose;
+
+	return load_trajectory_pose(coordinates, lib::RELATIVE, lib::ECP_XYZ_EULER_ZYZ, euler_zyz_velocity, euler_zyz_max_velocity);
+}
+
+bool constant_velocity::load_absolute_angle_axis_trajectory_pose(const vector<double> & coordinates) {
+
+	ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose pose;
+
+	return load_trajectory_pose(coordinates, lib::ABSOLUTE, lib::ECP_XYZ_ANGLE_AXIS, angle_axis_velocity, angle_axis_max_velocity);
+}
+
+bool constant_velocity::load_relative_angle_axis_trajectory_pose(const vector<double> & coordinates) {
+
+	ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose pose;
+
+	return load_trajectory_pose(coordinates, lib::RELATIVE, lib::ECP_XYZ_ANGLE_AXIS, angle_axis_velocity, angle_axis_max_velocity);
 }
 
 bool constant_velocity::load_trajectory_pose(const vector<double> & coordinates, lib::MOTION_TYPE motion_type, lib::ECP_POSE_SPECIFICATION pose_spec, const vector<double> & v, const vector<double> & v_max) {
 
 	if (!pose_vector.empty() && this->pose_spec != pose_spec) { //check if previous positions were provided in joint representation
 
-		//TODO message "representation different than the previous one"
+		sr_ecp_msg.message("Representation different than the previous one");
 		return false;
 	}
 
 	if (!pose_vector.empty() && this->motion_type != motion_type) {
 
-		//TODO message "wrong motion type"
+		sr_ecp_msg.message("Wrong motion type");
 		return false;
 	}
 
@@ -385,7 +450,7 @@ bool constant_velocity::load_trajectory_pose(const vector<double> & coordinates,
 
 	return true;
 }
-
+//--------------- METHODS USED TO LOAD POSES END ----------------
 
 } // namespace generator
 } // namespace common
