@@ -33,7 +33,8 @@ namespace common {
 namespace generator {
 
 
-/** @addtogroup servovision
+/** @defgroup servovision Visual servoing
+ * @ingroup application
  *  @{
  */
 
@@ -63,7 +64,7 @@ public:
 	 * so it is likely to move end effector beyond it's limits.
 	 * @param new_constraint
 	 */
-	void add_position_constraint(boost::shared_ptr <servovision::position_constraint> new_constraint);
+	void add_position_constraint(boost::shared_ptr <mrrocpp::ecp::servovision::position_constraint> new_constraint);
 
 	/**
 	 * Add termination condition.
@@ -72,7 +73,7 @@ public:
 	 * If there are no termination conditions, generator will never stop.
 	 * @param term_cond
 	 */
-	void add_termination_condition(boost::shared_ptr <servovision::termination_condition> term_cond);
+	void add_termination_condition(boost::shared_ptr <mrrocpp::ecp::servovision::termination_condition> term_cond);
 protected:
 	visual_servo_manager(mrrocpp::ecp::common::task::task & ecp_task, const std::string& section_name);
 	/**
@@ -84,7 +85,7 @@ protected:
 	 * Called from constructor to initialize all servos. After this call, servos field must be initialized.
 	 */
 	virtual void configure_all_servos() = 0;
-	std::vector <boost::shared_ptr <servovision::visual_servo> > servos;
+	std::vector <boost::shared_ptr <mrrocpp::ecp::servovision::visual_servo> > servos;
 	const lib::Homog_matrix& get_current_position() const;
 
 	/** Time between next_step() calls */
