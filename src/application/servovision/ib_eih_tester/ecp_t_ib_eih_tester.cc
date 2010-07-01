@@ -54,7 +54,7 @@ ecp_t_ib_eih_tester::ecp_t_ib_eih_tester(mrrocpp::lib::configurator& _configurat
 		befgen = new common::generator::bias_edp_force(*this);
 		gagen = new common::generator::tff_gripper_approach(*this, 8); //gripper approach constructor (task&, no_of_steps)
 
-		sensor_m[lib::SENSOR_CVFRADIA] = vsp_fradia;
+		sensor_m[ecp_mp::sensor::SENSOR_CVFRADIA] = vsp_fradia;
 		//g_ib_eih->sensor_m = sensor_m;
 		sr_ecp_msg->message("ecp_t_ib_eih_tester::ecp_t_ib_eih_tester() finished.");
 	} catch (const std::exception & e) {
