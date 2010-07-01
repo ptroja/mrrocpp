@@ -1,12 +1,12 @@
-#if !defined(_ECP_MP_G_SMOOTH_H)
-#define _ECP_MP_G_SMOOTH_H
+#if !defined(_ECP_MP_G_CONSTANT_VELOCITY_H)
+#define _ECP_MP_G_CONSTANT_VELOCITY_H
 
 namespace mrrocpp {
 namespace ecp_mp {
 namespace common {
 namespace generator {
 
-const std::string ECP_GEN_SMOOTH = "ECP_GEN_SMOOTH";
+const std::string ECP_GEN_CONSTANT_VELOCITY = "ECP_GEN_CONSTANT_VELOCITY";
 
 }// namespace generator
 } // namespace common

@@ -13,7 +13,7 @@ namespace common {
 namespace generator {
 
 
-get_position::get_position(common::task::task& _ecp_task, bool _is_synchronised, lib::ECP_POSE_SPECIFICATION pose_spec, int axes_num) :
+get_position::get_position(common::task::task& _ecp_task, lib::ECP_POSE_SPECIFICATION pose_spec, int axes_num) :
         generator (_ecp_task) {
 	position = vector<double>();
 	this->axes_num = axes_num;
@@ -25,6 +25,11 @@ get_position::~get_position() {
 }
 
 bool get_position::first_step() {
+	the_robot->ecp_command.instruction.get_type = ARM_DEFINITION;
+	the_robot->ecp_command.instruction.instruction_type = lib::GET;
+	the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE; //aqui siempre ABSOLUTE, RELATIVE makes no sense here
+	the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
+
 	switch (pose_spec) {
 		case lib::ECP_XYZ_ANGLE_AXIS:
 			the_robot->ecp_command.instruction.get_arm_type = lib::FRAME;
@@ -71,7 +76,7 @@ bool get_position::next_step() {
 	} else {
 		throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 	}
-	return true;
+	return false;
 }
 
 vector<double> get_position::get_position_vector() {

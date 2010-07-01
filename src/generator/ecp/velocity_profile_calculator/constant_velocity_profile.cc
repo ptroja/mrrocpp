@@ -24,19 +24,19 @@ constant_velocity_profile::~constant_velocity_profile() {
 
 bool constant_velocity_profile::calculate_constant_velocity(vector<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose>::iterator & it, int i) {
 
-	if (it->s[i] != NULL && it->t != NULL) {
+	if (it->s[i] == 0 || it->t == 0) {//if the distance to be covered equals to 0 or pose time equal to 0 (no motion in a pose)
+		it->v_r[i] = 0;
+	} else {//normal calculation
 		it->v_r[i] = it->s[i] / it->t;
-		return true;
-	} else {
-		return false;
 	}
+	return true;
 }
 
 bool constant_velocity_profile::calculate_constant_velocity_pose(vector<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose>::iterator & it) {
 
 	bool trueFlag = true;
 
-	for (int i; i < it->axes_num; i++) {
+	for (int i = 0; i < it->axes_num; i++) {
 		if (calculate_constant_velocity(it, i) == false) {
 			trueFlag = false;
 		}
@@ -47,42 +47,82 @@ bool constant_velocity_profile::calculate_constant_velocity_pose(vector<ecp_mp::
 
 bool constant_velocity_profile::calculate_time(vector<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose>::iterator & it, int i) {
 
-	if (it->v_r[i] != NULL && it->s[i] != NULL) {
+	if (it->s[i] == 0 || it->v_r[i] == 0) {//if distance to be covered or maximal velocity equal to 0
+		it->times[i] = 0;
+	} else {//normal calculation
 		it->times[i] = it->s[i] / it->v_r[i];
+	}
+	return true;
+}
+
+bool constant_velocity_profile::calculate_time_pose(vector<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose>::iterator & it) {
+
+	bool trueFlag = true;
+
+	for (int i = 0; i < it->axes_num; i++) {
+		if (calculate_time(it, i) == false) {
+			trueFlag = false;
+		}
+	}
+
+	return trueFlag;
+}
+
+bool constant_velocity_profile::calculate_pose_time(vector<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose>::iterator & it, const double & mc) {
+	if (it->times.size() == it->axes_num) {
+		double t_max = *max_element(it->times.begin(), it->times.end());
+
+		if (t_max == 0) {
+			it->t = 0;
+			return true;
+		}
+
+		if (ceil(t_max / mc) * mc != t_max) { //extend the pose time to be the multiplicity of the macrostep time
+			t_max = ceil(t_max / mc);
+			t_max = t_max * mc;
+			it->t = t_max;
+		}
+
 		return true;
 	} else {
 		return false;
 	}
 }
 
-bool constant_velocity_profile::calculate_time_pose(vector<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose>::iterator & it) {
+bool constant_velocity_profile::calculate_absolute_distance_direction_pose(vector<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose>::iterator & it) {
 
-	for (int i; i < it->axes_num; i++) {
-		if (calculate_time(it, i) == false) {
-			return false;
+	if (it->coordinates.size() < it->axes_num || it->start_position.size() < it->axes_num) {
+		return false;
+	}
+
+	it->s.clear();
+	it->k.clear();
+	for (int i = 0; i < it->axes_num; i++) {
+		it->s.push_back(fabs(it->coordinates[i] - it->start_position[i]));
+		if (it->coordinates[i] - it->start_position[i] >= 0) {
+			it->k.push_back(1);
+		} else {
+			it->k.push_back(-1);
 		}
 	}
 
 	return true;
 }
 
-bool constant_velocity_profile::calculate_pose_time(vector<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose>::iterator & it) {
-	if (it->times.size() == it->axes_num) {
-		it->t = *max_element(it->times.begin(), it->times.end());
-		return true;
-	} else {
+bool constant_velocity_profile::calculate_relative_distance_direction_pose(vector<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose>::iterator & it) {
+
+	if (it->coordinates.size() < it->axes_num) {
 		return false;
 	}
-}
 
-bool constant_velocity_profile::calculate_distance_direction_pose(vector<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose>::iterator & it) {
-
+	it->s.clear();
+	it->k.clear();
 	for (int i = 0; i < it->axes_num; i++) {
-		it->s[i] = abs(it->coordinates[i] - it->start_position[i]);
-		if (it->coordinates[i] - it->start_position[i] >= 0) {
-			it->k[i] = 1;
+		it->s.push_back(it->coordinates[i]);
+		if (it->coordinates[i] >= 0) {
+			it->k.push_back(1);
 		} else {
-			it->k[i] = -1;
+			it->k.push_back(-1);
 		}
 	}
 
