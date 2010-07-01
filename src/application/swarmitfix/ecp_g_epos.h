@@ -82,6 +82,25 @@ public:
 
 };
 
+class epos_brake : public common::generator::generator
+{
+private:
+
+	//	lib::epos_gen_parameters mp_ecp_epos_gen_parameters_structure;
+
+	lib::single_thread_port <bool> * epos_brake_command_data_port;
+	bool ecp_edp_brake_command_structure;
+
+public:
+	void create_ecp_mp_reply();
+	void get_mp_ecp_command();
+
+	epos_brake(common::task::task& _ecp_task); //constructor
+	bool first_step(); //first step generation
+	bool next_step(); //next step generation
+
+};
+
 } // namespace generator
 } // namespace common
 } // namespace ecp

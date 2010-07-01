@@ -19,6 +19,7 @@ protected:
 	common::generator::epos_cubic* g_epos_cubic;
 	common::generator::epos_trapezoidal* g_epos_trapezoidal;
 	common::generator::epos_operational* g_epos_operational;
+	common::generator::epos_brake* g_epos_brake;
 
 public:
 	// KONSTRUKTORY
