@@ -5,10 +5,20 @@
 #if !defined(__SMB_DATA_PORT_H)
 #define __SMB_DATA_PORT_H
 
-#define SMB_DATA_PORT_SERVOS_NUMBER 3
+#define SMB_DATA_PORT_SERVOS_NUMBER 2
+#define SMB_DATA_PORT_LEG_CLAMP_NUMBER 3
+
+#include "epos.h"
 
 namespace mrrocpp {
 namespace lib {
+
+struct smb_mp_to_ecp_parameters
+{
+	int locking_device_clamp_number;
+	EPOS_GEN_PROFILE motion_type;
+	smb_mp_to_ecp_cubic_spline_parameters cubic_spline[SMB_DATA_PORT_SERVOS_NUMBER];
+};
 
 struct smb_leg_reply
 {
@@ -34,17 +44,17 @@ enum SMB_PIN_LOCKING
 
 struct smb_multi_pin_insertion
 {
-	SMB_PIN_INSERTION leg[SMB_DATA_PORT_SERVOS_NUMBER];
+	SMB_PIN_INSERTION leg[SMB_DATA_PORT_LEG_CLAMP_NUMBER];
 };
 
 struct smb_multi_pin_locking
 {
-	SMB_PIN_LOCKING leg[SMB_DATA_PORT_SERVOS_NUMBER];
+	SMB_PIN_LOCKING leg[SMB_DATA_PORT_LEG_CLAMP_NUMBER];
 };
 
 struct smb_multi_leg_reply
 {
-	smb_leg_reply leg[SMB_DATA_PORT_SERVOS_NUMBER];
+	smb_leg_reply leg[SMB_DATA_PORT_LEG_CLAMP_NUMBER];
 };
 
 }

@@ -67,23 +67,23 @@ void robot::create_command()
 			is_new_data = true;
 		}
 	}
+	/*
+	 if (epos_gen_parameters_data_port.get(epos_gen_parameters_structure) == mrrocpp::lib::NewData) {
+	 ecp_command.instruction.set_type = ARM_DEFINITION;
+	 // generator command interpretation
+	 // narazie proste przepisanie
 
-	if (epos_gen_parameters_data_port.get(epos_gen_parameters_structure) == mrrocpp::lib::NewData) {
-		ecp_command.instruction.set_type = ARM_DEFINITION;
-		// generator command interpretation
-		// narazie proste przepisanie
+	 ecp_edp_cbuffer.variant = lib::SPKM_CBUFFER_EPOS_GEN_PARAMETERS;
 
-		ecp_edp_cbuffer.variant = lib::SPKM_CBUFFER_EPOS_GEN_PARAMETERS;
+	 ecp_edp_cbuffer.epos_gen_parameters_structure = epos_gen_parameters_structure;
 
-		ecp_edp_cbuffer.epos_gen_parameters_structure = epos_gen_parameters_structure;
-
-		if (is_new_data) {
-			throw ecp_robot::ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
-		} else {
-			is_new_data = true;
-		}
-	}
-
+	 if (is_new_data) {
+	 throw ecp_robot::ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
+	 } else {
+	 is_new_data = true;
+	 }
+	 }
+	 */
 	is_new_request = epos_reply_data_request_port.is_new_request();
 
 	communicate_with_edp = true;

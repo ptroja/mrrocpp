@@ -27,9 +27,10 @@ protected:
 	lib::single_thread_port <lib::epos_low_level_command> epos_low_level_command_data_port;
 	lib::epos_low_level_command epos_low_level_command_structure;
 
-	lib::single_thread_port <lib::epos_gen_parameters> epos_gen_parameters_data_port;
-	lib::epos_gen_parameters epos_gen_parameters_structure;
-
+	/*
+	 lib::single_thread_port <lib::epos_gen_parameters> epos_gen_parameters_data_port;
+	 lib::epos_gen_parameters epos_gen_parameters_structure;
+	 */
 	// bufor wyjsciowe do generatora
 	lib::single_thread_request_port <lib::epos_reply> epos_reply_data_request_port;
 	lib::epos_reply epos_reply_structure;
