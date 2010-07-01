@@ -32,9 +32,6 @@ protected:
 	lib::single_thread_port <lib::epos_trapezoidal_command> epos_trapezoidal_command_data_port;
 	lib::epos_trapezoidal_command epos_trapezoidal_command_structure;
 
-	lib::single_thread_port <lib::epos_operational_command> epos_operational_command_data_port;
-	lib::epos_operational_command epos_operational_command_structure;
-
 	/*
 	 lib::single_thread_port<lib::epos_gen_parameters>
 	 epos_gen_parameters_data_port;

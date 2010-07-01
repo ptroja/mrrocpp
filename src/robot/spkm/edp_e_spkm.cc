@@ -112,9 +112,21 @@ void effector::move_arm(const lib::c_buffer &instruction)
 
 		 }
 		 break;*/
-		case lib::SPKM_CBUFFER_EPOS_LOW_LEVEL_COMMAND: {
-			lib::epos_low_level_command epos_low_level_command_structure;
-			memcpy(&epos_low_level_command_structure, &(ecp_edp_cbuffer.epos_low_level_command_structure), sizeof(epos_low_level_command_structure));
+		case lib::SPKM_CBUFFER_EPOS_CUBIC_COMMAND: {
+			lib::epos_cubic_command epos_cubic_command_structure;
+			memcpy(&epos_cubic_command_structure, &(ecp_edp_cbuffer.epos_cubic_command_structure), sizeof(epos_cubic_command_structure));
+
+		}
+			break;
+		case lib::SPKM_CBUFFER_EPOS_TRAPEZOIDAL_COMMAND: {
+			lib::epos_trapezoidal_command epos_trapezoidal_command_structure;
+			memcpy(&epos_trapezoidal_command_structure, &(ecp_edp_cbuffer.epos_trapezoidal_command_structure), sizeof(epos_trapezoidal_command_structure));
+
+		}
+			break;
+		case lib::SPKM_CBUFFER_EPOS_OPERATIONAL_COMMAND: {
+			lib::epos_operational_command epos_operational_command_structure;
+			memcpy(&epos_operational_command_structure, &(ecp_edp_cbuffer.epos_operational_command_structure), sizeof(epos_operational_command_structure));
 
 		}
 			break;
