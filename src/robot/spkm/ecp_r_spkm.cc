@@ -54,14 +54,46 @@ void robot::create_command()
 
 	is_new_data = false;
 
-	if (epos_low_level_command_data_port.get(epos_low_level_command_structure) == mrrocpp::lib::NewData) {
+	if (epos_cubic_command_data_port.get(epos_cubic_command_structure) == mrrocpp::lib::NewData) {
 		ecp_command.instruction.set_type = ARM_DEFINITION;
 		// generator command interpretation
 		// narazie proste przepisanie
 
-		ecp_edp_cbuffer.variant = lib::SPKM_CBUFFER_EPOS_LOW_LEVEL_COMMAND;
+		ecp_edp_cbuffer.variant = lib::SPKM_CBUFFER_EPOS_CUBIC_COMMAND;
 
-		ecp_edp_cbuffer.epos_low_level_command_structure = epos_low_level_command_structure;
+		ecp_edp_cbuffer.epos_cubic_command_structure = epos_cubic_command_structure;
+
+		if (is_new_data) {
+			throw ecp_robot::ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
+		} else {
+			is_new_data = true;
+		}
+	}
+
+	if (epos_trapezoidal_command_data_port.get(epos_trapezoidal_command_structure) == mrrocpp::lib::NewData) {
+		ecp_command.instruction.set_type = ARM_DEFINITION;
+		// generator command interpretation
+		// narazie proste przepisanie
+
+		ecp_edp_cbuffer.variant = lib::SPKM_CBUFFER_EPOS_TRAPEZOIDAL_COMMAND;
+
+		ecp_edp_cbuffer.epos_trapezoidal_command_structure = epos_trapezoidal_command_structure;
+
+		if (is_new_data) {
+			throw ecp_robot::ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
+		} else {
+			is_new_data = true;
+		}
+	}
+
+	if (epos_operational_command_data_port.get(epos_operational_command_structure) == mrrocpp::lib::NewData) {
+		ecp_command.instruction.set_type = ARM_DEFINITION;
+		// generator command interpretation
+		// narazie proste przepisanie
+
+		ecp_edp_cbuffer.variant = lib::SPKM_CBUFFER_EPOS_OPERATIONAL_COMMAND;
+
+		ecp_edp_cbuffer.epos_operational_command_structure = epos_operational_command_structure;
 
 		if (is_new_data) {
 			throw ecp_robot::ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
