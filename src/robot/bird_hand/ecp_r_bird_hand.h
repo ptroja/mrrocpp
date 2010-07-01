@@ -21,7 +21,6 @@ namespace bird_hand {
 // ---------------------------------------------------------------
 class robot : public common::ecp_robot, public kinematics::common::kinematics_manager
 {
-
 protected:
 
 	// zadawanie rozkazu
@@ -55,7 +54,7 @@ public:
 	void get_reply();
 	void clear_data_ports();
 
-}; // end: class ecp_irp6_mechatronika_robot
+};
 // ---------------------------------------------------------------
 
 } // namespace bird_hand

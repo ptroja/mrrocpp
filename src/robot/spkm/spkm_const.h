@@ -3,13 +3,8 @@
 
 #include "lib/data_port_headers/epos.h"
 
+#include "lib/impconst.h"
 #define SPKM_NUM_OF_SERVOS	7
-
-namespace mrrocpp {
-
-}
-
-using namespace mrrocpp;
 
 namespace mrrocpp {
 namespace lib {

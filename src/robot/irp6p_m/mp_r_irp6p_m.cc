@@ -4,6 +4,7 @@
 #include "lib/mis_fun.h"
 #include "lib/srlib.h"
 #include "robot/irp6p_m/mp_r_irp6p_m.h"
+#include "robot/irp6p_m/irp6p_m_const.h"
 
 namespace mrrocpp {
 namespace mp {

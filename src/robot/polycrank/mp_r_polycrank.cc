@@ -1,9 +1,5 @@
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
-
-#include "lib/mis_fun.h"
-#include "lib/srlib.h"
 #include "robot/polycrank/mp_r_polycrank.h"
+#include "robot/polycrank/polycrank_const.h"
 
 namespace mrrocpp {
 namespace mp {
