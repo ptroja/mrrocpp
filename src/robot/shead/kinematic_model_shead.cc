@@ -1,17 +1,3 @@
-// ------------------------------------------------------------------------
-// Proces:		EDP
-// Plik:			kinematic_model_irp6m_with_wrist.cc
-// System:	QNX/MRROC++  v. 6.3
-// Opis:		Model kinematyki robota IRp-6 na postumencie
-//				- definicja metod klasy
-//				- wykorzystanie nowego stopnia swobody  jako czynnego stopnia swobody
-//
-// Autor:		tkornuta
-// Data:		24.02.2007
-// ------------------------------------------------------------------------
-
-#include <math.h>
-
 #include "lib/com_buf.h"
 
 // Klasa kinematic_model_irp6m_with_wrist.

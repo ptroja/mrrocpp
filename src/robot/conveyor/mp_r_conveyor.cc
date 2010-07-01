@@ -1,10 +1,6 @@
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
-
-#include "lib/mis_fun.h"
-#include "lib/srlib.h"
 #include "base/mp/mp.h"
 #include "robot/conveyor/mp_r_conveyor.h"
+#include "robot/conveyor/conveyor_const.h"
 
 namespace mrrocpp {
 namespace mp {

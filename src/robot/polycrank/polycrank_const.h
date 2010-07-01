@@ -1,11 +1,7 @@
 #if !defined(_POLYCRANK_CONST_H)
 #define _POLYCRANK_CONST_H
 
-namespace mrrocpp {
-
-}
-
-using namespace mrrocpp;
+#include "lib/impconst.h"
 
 namespace mrrocpp {
 namespace lib {
