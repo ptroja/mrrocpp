@@ -14,17 +14,17 @@ namespace task {
 ecp_sub_task_const_vel_gen_test::ecp_sub_task_const_vel_gen_test(task & _ecp_t) :
 	ecp_sub_task(_ecp_t) {
 
-	cvgenjoint = new generator::constant_velocity(ecp_t, lib::ECP_JOINT, 6);
-	cvgenjoint->set_debug(true);
+	//cvgenjoint = new generator::constant_velocity(ecp_t, lib::ECP_JOINT, 6);
+	//cvgenjoint->set_debug(true);
 
 	cvgenmotor = new generator::constant_velocity(ecp_t, lib::ECP_MOTOR, 6);
 	cvgenmotor->set_debug(true);
 
-	cvgeneuler = new generator::constant_velocity(ecp_t, lib::ECP_XYZ_EULER_ZYZ, 6);
-	cvgenangle->set_debug(true);
+	//cvgeneuler = new generator::constant_velocity(ecp_t, lib::ECP_XYZ_EULER_ZYZ, 6);
+	//cvgenangle->set_debug(true);
 
-	cvgeneuler = new generator::constant_velocity(ecp_t, lib::ECP_XYZ_ANGLE_AXIS, 6);
-	cvgenangle->set_debug(true);
+	//cvgeneuler = new generator::constant_velocity(ecp_t, lib::ECP_XYZ_ANGLE_AXIS, 6);
+	//cvgenangle->set_debug(true);
 }
 
 void ecp_sub_task_const_vel_gen_test::conditional_execution() {
@@ -63,7 +63,7 @@ void ecp_sub_task_const_vel_gen_test::conditional_execution() {
 		cvgenjoint->Move();
 	}
 	// JOINT ABSOLUTE END
-*/
+/*
 /*
 	// JOINT RELATIVE
 	cvgenjoint->reset();
@@ -132,10 +132,10 @@ void ecp_sub_task_const_vel_gen_test::conditional_execution() {
 }
 
 ecp_sub_task_const_vel_gen_test::~ecp_sub_task_const_vel_gen_test() {
-	delete cvgenjoint;
+	//delete cvgenjoint;
 	delete cvgenmotor;
-	delete cvgeneuler;
-	delete cvgenangle;
+	//delete cvgeneuler;
+	//delete cvgenangle;
 }
 
 } // namespace task
