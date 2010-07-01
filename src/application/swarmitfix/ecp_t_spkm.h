@@ -17,6 +17,8 @@ protected:
 	common::generator::smooth* sg;
 	common::generator::sleep* g_sleep;
 	common::generator::epos_cubic* g_epos_cubic;
+	common::generator::epos_trapezoidal* g_epos_trapezoidal;
+	common::generator::epos_operational* g_epos_operational;
 
 public:
 	// KONSTRUKTORY

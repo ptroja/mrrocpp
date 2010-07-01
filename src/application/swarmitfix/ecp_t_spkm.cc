@@ -34,6 +34,8 @@ swarmitfix::swarmitfix(lib::configurator &_config) :
 	sg = new common::generator::smooth(*this, true);
 	g_sleep = new common::generator::sleep(*this);
 	g_epos_cubic = new common::generator::epos_cubic(*this);
+	g_epos_trapezoidal = new common::generator::epos_trapezoidal(*this);
+	g_epos_operational = new common::generator::epos_operational(*this);
 
 	sr_ecp_msg->message("ecp spkm loaded");
 }
@@ -69,9 +71,19 @@ void swarmitfix::mp_2_ecp_next_state_string_handler(void)
 		g_sleep->init_time(mp_command.ecp_next_state.mp_2_ecp_next_state_variant);
 		g_sleep->Move();
 	} else if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_GEN_EPOS_CUBIC) {
-		sr_ecp_msg->message("ECP_GEN_EPOS");
+		//	sr_ecp_msg->message("ECP_GEN_EPOS");
 
 		g_epos_cubic->Move();
+
+	} else if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_GEN_EPOS_TRAPEZOIDAL) {
+		//	sr_ecp_msg->message("ECP_GEN_EPOS");
+
+		g_epos_trapezoidal->Move();
+
+	} else if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_GEN_EPOS_OPERATIONAL) {
+		//	sr_ecp_msg->message("ECP_GEN_EPOS");
+
+		g_epos_operational->Move();
 
 	}
 

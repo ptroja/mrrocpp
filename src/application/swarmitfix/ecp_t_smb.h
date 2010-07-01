@@ -17,6 +17,7 @@ protected:
 	common::generator::smooth* sg;
 	common::generator::sleep* g_sleep;
 	common::generator::epos_cubic* g_epos_cubic;
+	common::generator::epos_trapezoidal* g_epos_trapezoidal;
 	generator::pin_lock* g_pin_lock;
 	generator::pin_unlock* g_pin_unlock;
 	generator::pin_rise* g_pin_rise;

@@ -35,6 +35,7 @@ swarmitfix::swarmitfix(lib::configurator &_config) :
 	sg = new common::generator::smooth(*this, true);
 	g_sleep = new common::generator::sleep(*this);
 	g_epos_cubic = new common::generator::epos_cubic(*this);
+	g_epos_trapezoidal = new common::generator::epos_trapezoidal(*this);
 	g_pin_lock = new generator::pin_lock(*this);
 	g_pin_unlock = new generator::pin_unlock(*this);
 	g_pin_rise = new generator::pin_rise(*this);
@@ -73,6 +74,8 @@ void swarmitfix::mp_2_ecp_next_state_string_handler(void)
 		g_sleep->Move();
 	} else if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_GEN_EPOS_CUBIC) {
 		g_epos_cubic->Move();
+	} else if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_GEN_EPOS_TRAPEZOIDAL) {
+		g_epos_trapezoidal->Move();
 	} else if (mp_2_ecp_next_state_string == ecp_mp::smb::generator::ECP_GEN_PIN_LOCK) {
 		g_pin_lock->Move();
 	} else if (mp_2_ecp_next_state_string == ecp_mp::smb::generator::ECP_GEN_PIN_UNLOCK) {
