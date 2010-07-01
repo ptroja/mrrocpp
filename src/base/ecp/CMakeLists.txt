@@ -32,7 +32,9 @@ target_link_library_if(ROBOT_IRP6_POSTUMENT ecp_tran ecp_r_irp6p_tfg)
 target_link_library_if(ROBOT_IRP6_MECHATRONICS ecp_tran ecp_r_irp6m)
 target_link_library_if(ROBOT_POLYCRANK ecp_tran ecp_r_polycrank)
 target_link_library_if(ROBOT_CONVEYOR ecp_tran ecp_r_conv)
+if(QNXNTO)
 target_link_library_if(ROBOT_SPEAKER ecp_tran ecp_r_speaker)
+endif(QNXNTO)
 
 # this are dependency libraries
 target_link_libraries(ecp_tran ecp)

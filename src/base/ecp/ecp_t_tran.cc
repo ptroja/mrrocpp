@@ -44,8 +44,10 @@ tran::tran(lib::configurator &_config) :
 		ecp_m_robot = new irp6p_m::robot(*this);
 	} else if (config.section_name == ECP_CONVEYOR_SECTION) {
 		ecp_m_robot = new conveyor::robot(*this);
+#if defined(QNXNTO)
 	} else if (config.section_name == ECP_SPEAKER_SECTION) {
 		ecp_m_robot = new speaker::robot(*this);
+#endif /* QNXNTO */
 	} else if (config.section_name == ECP_IRP6_MECHATRONIKA_SECTION) {
 		ecp_m_robot = new irp6m::robot(*this);
 	} else if (config.section_name == ECP_POLYCRANK_SECTION) {
