@@ -5,6 +5,7 @@
  *      Author: rtulwin
  */
 
+#include <stdio.h>
 #include "bang_bang_profile.h"
 
 namespace mrrocpp {
