@@ -25,6 +25,15 @@ std::string single_thread_port_interface::get_name()
 	return name;
 }
 
+single_thread_port_manager::single_thread_port_manager()
+{
+}
+
+void single_thread_port_manager::add_port(single_thread_port_interface* single_thread_port_inter)
+{
+	single_thread_port_map[single_thread_port_inter->get_name()] = single_thread_port_inter;
+}
+
 }
 }
 
