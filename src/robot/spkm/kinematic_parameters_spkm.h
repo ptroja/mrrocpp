@@ -11,6 +11,7 @@
 
 #include <eigen2/Eigen/Core>
 #include <eigen2/Eigen/Geometry>
+#include <eigen2/Eigen/LU>
 
 using namespace Eigen;
 
