@@ -2,7 +2,6 @@
 #define _ECP_T_GRASPIT_H
 
 #include "base/ecp/ecp_task.h"
-#include "generator/ecp/ecp_g_smooth.h"
 #include "ecp_mp_tr_graspit.h"
 
 namespace mrrocpp {
@@ -13,7 +12,7 @@ namespace task {
 class irp6_grasp: public common::task::task {
 
   private:
-	  common::generator::smooth* smoothgen2;
+	  generator::constant_velocity* cvgenjoint;;
 
   public:
 	  irp6_grasp(lib::configurator &_config);
