@@ -119,6 +119,20 @@ class constant_velocity : public multiple_position<ecp_mp::common::trajectory_po
 		 * Creates the vectors containning the information about the maximal and typical velocities for each representation.
 		 */
 		void create_velocity_vectors(int axes_num);
+		/**
+		 * Sets up the start position vector of the first position in the trajectory chain.
+		 */
+		void get_initial_position();
+		/**
+		 * Calculates trajectory.
+		 * @return true if calculation was successful.
+		 */
+		bool calculate();
+		/**
+		 * Performs interpolation of the trajectory. Fills in the coordinates vector.
+		 * @return true if interpolation was successful
+		 */
+		bool interpolate();
 };
 
 } // namespace generator

@@ -36,7 +36,7 @@ bool constant_velocity_profile::calculate_constant_velocity_pose(vector<ecp_mp::
 
 	bool trueFlag = true;
 
-	for (int i; i < it->axes_num; i++) {
+	for (int i = 0; i < it->axes_num; i++) {
 		if (calculate_constant_velocity(it, i) == false) {
 			trueFlag = false;
 		}
@@ -59,7 +59,7 @@ bool constant_velocity_profile::calculate_time_pose(vector<ecp_mp::common::traje
 
 	bool trueFlag = true;
 
-	for (int i; i < it->axes_num; i++) {
+	for (int i = 0; i < it->axes_num; i++) {
 		if (calculate_time(it, i) == false) {
 			trueFlag = false;
 		}
@@ -98,7 +98,7 @@ bool constant_velocity_profile::calculate_absolute_distance_direction_pose(vecto
 	it->s.clear();
 	it->k.clear();
 	for (int i = 0; i < it->axes_num; i++) {
-		it->s.push_back(abs(it->coordinates[i] - it->start_position[i]));
+		it->s.push_back(fabs(it->coordinates[i] - it->start_position[i]));
 		if (it->coordinates[i] - it->start_position[i] >= 0) {
 			it->k.push_back(1);
 		} else {
