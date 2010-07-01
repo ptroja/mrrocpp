@@ -220,7 +220,7 @@ public:
 		coordinate_vector.clear();
 		calculated = false;
 		interpolated = false;
-		//TODO message "generator reset"
+		sr_ecp_msg.message("Generator reset");
 	}
 };
 

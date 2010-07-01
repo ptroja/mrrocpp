@@ -55,9 +55,8 @@ void Ft_v_vector::to_table(double tablica[6]) const
 
 void Ft_v_vector::to_vector(std::vector<double> & vector)
 {
-
+	vector.clear();
 	for (int i = 0; i < this->size(); i++) {
-		vector.clear();
 		vector.push_back(this->operator[](i));
 	}
 }

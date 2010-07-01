@@ -58,7 +58,18 @@ bool constant_velocity::first_step() {
 	}
 
 	switch (pose_spec) {
-		case lib::ECP_XYZ_ANGLE_AXIS || lib::ECP_XYZ_EULER_ZYZ:
+		case lib::ECP_XYZ_EULER_ZYZ:
+			the_robot->ecp_command.instruction.set_arm_type = lib::FRAME;
+			if (motion_type == lib::RELATIVE) {
+				the_robot->ecp_command.instruction.interpolation_type = lib::TCIM;
+				for (int i=0; i<axes_num; i++) {
+					the_robot->ecp_command.instruction.arm.pf_def.behaviour[i] = lib::UNGUARDED_MOTION;
+				}
+			} else {
+				the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
+			}
+			break;
+		case lib::ECP_XYZ_ANGLE_AXIS:
 			the_robot->ecp_command.instruction.set_arm_type = lib::FRAME;
 			if (motion_type == lib::RELATIVE) {
 				the_robot->ecp_command.instruction.interpolation_type = lib::TCIM;
@@ -151,7 +162,15 @@ bool constant_velocity::next_step() {
 
 			for (tempIter = (*coordinate_vector_iterator).begin(); tempIter != (*coordinate_vector_iterator).end(); tempIter++) {
 				coordinates[i] = *tempIter;
+				if (debug) {
+					printf("%f\t", *tempIter);
+				}
 				i++;
+			}
+
+			if (debug) {
+				printf("\n");
+				flushall();
 			}
 
 			homog_matrix.set_from_xyz_euler_zyz(lib::Xyz_Euler_Zyz_vector(coordinates));
@@ -165,7 +184,15 @@ bool constant_velocity::next_step() {
 
 			for (tempIter = (*coordinate_vector_iterator).begin(); tempIter != (*coordinate_vector_iterator).end(); tempIter++) {
 				coordinates[i] = *tempIter;
+				if (debug) {
+					printf("%f\t", *tempIter);
+				}
 				i++;
+			}
+
+			if (debug) {
+				printf("\n");
+				flushall();
 			}
 
 			homog_matrix.set_from_xyz_angle_axis(lib::Xyz_Angle_Axis_vector(coordinates));
@@ -180,8 +207,8 @@ bool constant_velocity::next_step() {
 
 	coordinate_vector_iterator++;
 	if (coordinate_vector_iterator == coordinate_vector.end()) {
-		reset();//reset the generator, set generated and calculated flags to false, flush coordinate and pose lists
 		sr_ecp_msg.message("Motion finished");
+		reset();//reset the generator, set generated and calculated flags to false, flush coordinate and pose lists
 		return false;
 	} else {
 		return true;
@@ -376,10 +403,10 @@ void constant_velocity::create_velocity_vectors(int axes_num) {
 	joint_max_velocity = vector<double>(axes_num, 1.5);
 	motor_velocity = vector<double>(axes_num, 0.05);
 	motor_max_velocity = vector<double>(axes_num, 200.0);
-	euler_zyz_velocity= vector<double>(axes_num, 0.05);//TODO check if this is a reasonable value
+	euler_zyz_velocity= vector<double>(axes_num, 0.01);//TODO check if this is a reasonable value
 	euler_zyz_max_velocity = vector<double>(axes_num, 5.0);
-	angle_axis_velocity = vector<double>(axes_num, 0.05);//TODO check if this is a reasonable value
-	angle_axis_velocity = vector<double>(axes_num, 5.0);
+	angle_axis_velocity = vector<double>(axes_num, 0.01);//TODO check if this is a reasonable value
+	angle_axis_max_velocity = vector<double>(axes_num, 5.0);
 }
 
 //--------------- METHODS USED TO LOAD POSES ----------------
@@ -472,6 +499,8 @@ bool constant_velocity::load_trajectory_pose(const vector<double> & coordinates,
 	}
 
 	pose_vector.push_back(pose); //put new trajectory pose into a pose vector
+
+	sr_ecp_msg.message("Pose loaded");
 
 	return true;
 }
