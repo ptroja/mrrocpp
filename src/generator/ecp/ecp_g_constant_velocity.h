@@ -9,7 +9,6 @@
 #define _ECP_G_CONSTANT_VELOCITY_H_
 
 #include "generator/ecp/ecp_g_multiple_position.h"
-#include "lib/mrmath/mrmath.h"
 #include "lib/trajectory_pose/constant_velocity_trajectory_pose.h"
 #include "generator/ecp/velocity_profile_calculator/constant_velocity_profile.h"
 #include "generator/ecp/trajectory_interpolator/constant_velocity_interpolator.h"
@@ -20,7 +19,16 @@ namespace common {
 namespace generator {
 
 /**
- * Generator which moves the robot with a constant velocity.
+ * @brief Generator which moves the robot with a constant velocity.
+ *
+ * Generator is able to generate the list of trajectory points and send it to the robot. Trajectory is generated in a way that
+ * the robot moves with a constans velocity. The generator is able to interpolate the trajectory described as the list of
+ * %constant_velocity_trajectory_pose objects.
+ *
+ * Usage:
+ * Load one or more of trajectory poses using one of the load methods. Velocities are set autimatically. Call %calculate_interpolate() method.
+ * If it returns true generator is ready to communicate with the robot. Call the %Move() method. The generator resets itself automatically after
+ * successfull termination of the assumed trajectory, however it is safe to call the %reset() method before the next use of the generator.
  */
 class constant_velocity : public multiple_position<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose,
 		ecp::common::generator::trajectory_interpolator::constant_velocity_interpolator,
@@ -33,9 +41,53 @@ class constant_velocity : public multiple_position<ecp_mp::common::trajectory_po
 		 */
 		constant_velocity(common::task::task& _ecp_task, lib::ECP_POSE_SPECIFICATION pose_spec, int axes_num);
 		/**
-		 * Loads a single trajectory pose described in joint coordinates to the list. Maximal velocities are set automatically.
+		 * Loads a single trajectory pose described in joint coordinates (absolute motion) to the list. Maximal velocities are set automatically.
+		 * @param coordinates desired position
+		 * @return true if the addition was succesfull
 		 */
-		bool load_absolute_joint_trajectory_pose(vector<double> & coordinates);
+		bool load_absolute_joint_trajectory_pose(const vector<double> & coordinates);
+		/**
+		 * Loads a single trajectory pose described in joint coordinates (relative motion) to the list. Maximal velocities are set automatically.
+		 * @param coordinates desired position
+		 * @return true if the addition was succesfull
+		 */
+		bool load_relative_joint_trajectory_pose(const vector<double> & coordinates);
+		/**
+		 * Loads a single trajectory pose described in motor coordinates (absolute motion) to the list. Maximal velocities are set automatically.
+		 * @param coordinates desired position
+		 * @return true if the addition was succesfull
+		 */
+		bool load_absolute_motor_trajectory_pose(const vector<double> & coordinates);
+		/**
+		 * Loads a single trajectory pose described in motor coordinates (relative motion) to the list. Maximal velocities are set automatically.
+		 * @param coordinates desired position
+		 * @return true if the addition was succesfull
+		 */
+		bool load_relative_motor_trajectory_pose(const vector<double> & coordinates);
+		/**
+		 * Loads a single trajectory pose described in euler zyz coordinates (absolute motion) to the list. Maximal velocities are set automatically.
+		 * @param coordinates desired position
+		 * @return true if the addition was succesfull
+		 */
+		bool load_absolute_euler_zyz_trajectory_pose(const vector<double> & coordinates);
+		/**
+		 * Loads a single trajectory pose described in euler zyz coordinates (relative motion) to the list. Maximal velocities are set automatically.
+		 * @param coordinates desired position
+		 * @return true if the addition was succesfull
+		 */
+		bool load_relative_euler_zyz_trajectory_pose(const vector<double> & coordinates);
+		/**
+		 * Loads a single trajectory pose described in angle axis coordinates (absolute motion) to the list. Maximal velocities are set automatically.
+		 * @param coordinates desired position
+		 * @return true if the addition was succesfull
+		 */
+		bool load_absolute_angle_axis_trajectory_pose(const vector<double> & coordinates);
+		/**
+		 * Loads a single trajectory pose described in angle axis coordinates (relative motion) to the list. Maximal velocities are set automatically.
+		 * @param coordinates desired position
+		 * @return true if the addition was succesfull
+		 */
+		bool load_relative_angle_axis_trajectory_pose(const vector<double> & coordinates);
 		/**
 		 * Performs calculation of the trajectory and interpolation. Fills in pose_vector and coordinate_vector.
 		 * @return true if the calculation was succesfull
@@ -48,22 +100,25 @@ class constant_velocity : public multiple_position<ecp_mp::common::trajectory_po
 		/**
 		 * Implementation of the first_step method.
 		 */
-		virtual bool first_step();
+		bool first_step();
 		/**
 		 * Implementation of the next_step method.
 		 */
-		virtual bool next_step();
+		bool next_step();
+		/**
+		 * Sets the number of axes in which the generator will move the robot. New velocity vectors are created to match the new number of axes.
+		 */
+		void set_axes_num(int axes_num);
 
 	private:
 		/**
-		 * Temporary table od doubles.
+		 * Loads trajectory pose.
 		 */
-		double coordinates[];
+		bool load_trajectory_pose(const vector<double> & coordinates, lib::MOTION_TYPE motion_type, lib::ECP_POSE_SPECIFICATION pose_spec, const vector<double> & v, const vector<double> & v_max);
 		/**
-		 * Temporary homog matrix.
+		 * Creates the vectors containning the information about the maximal and typical velocities for each representation.
 		 */
-		lib::Homog_matrix homog_matrix;
-
+		void create_velocity_vectors(int axes_num);
 };
 
 } // namespace generator

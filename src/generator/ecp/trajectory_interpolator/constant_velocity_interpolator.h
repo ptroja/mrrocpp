@@ -17,6 +17,11 @@ namespace common {
 namespace generator {
 namespace trajectory_interpolator {
 
+/**
+ * @brief Methods to perform the interpolation of the motion with the constant velocity.
+ *
+ * Class contains methods used to create the list of coordinates basing on the trajectory pose list which describes the motion of the robot with a constant velocity.
+ */
 class constant_velocity_interpolator: public mrrocpp::ecp::common::generator::trajectory_interpolator::trajectory_interpolator<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose> {
 public:
 	/**

@@ -38,8 +38,6 @@ bool constant_velocity_profile::calculate_constant_velocity_pose(vector<ecp_mp::
 
 	for (int i; i < it->axes_num; i++) {
 		if (calculate_constant_velocity(it, i) == false) {
-			printf("nieudane calculate constant velocity pose na elemencie %d\n", i);
-			flushall();
 			trueFlag = false;
 		}
 	}
@@ -63,8 +61,6 @@ bool constant_velocity_profile::calculate_time_pose(vector<ecp_mp::common::traje
 
 	for (int i; i < it->axes_num; i++) {
 		if (calculate_time(it, i) == false) {
-			printf("nieudane calculate time pose na elemencie %d\n", i);
-			flushall();
 			trueFlag = false;
 		}
 	}
@@ -89,8 +85,6 @@ bool constant_velocity_profile::calculate_pose_time(vector<ecp_mp::common::traje
 
 		return true;
 	} else {
-		printf("nieudane calculate pose time\n");
-		flushall();
 		return false;
 	}
 }
@@ -98,7 +92,6 @@ bool constant_velocity_profile::calculate_pose_time(vector<ecp_mp::common::traje
 bool constant_velocity_profile::calculate_absolute_distance_direction_pose(vector<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose>::iterator & it) {
 
 	if (it->coordinates.size() < it->axes_num || it->start_position.size() < it->axes_num) {
-		printf("nieudane calculate absolute distance direction pose\n");
 		return false;
 	}
 
