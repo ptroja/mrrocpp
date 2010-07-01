@@ -31,9 +31,9 @@ enum SHEAD_VACUUM_ACTIVATION
 }; // namespace mrrocpp
 
 
-const std::string SHEAD_HEAD_SOLIDIFICATION_DATA_PORT = "shead_head_soldification_data_port";
-const std::string SHEAD_VACUUM_ACTIVATION_DATA_PORT = "shead_vacuum_activation_data_port";
-const std::string SHEAD_REPLY_DATA_REQUEST_PORT = "shead_reply_data_request_port";
+const std::string SHEAD_HEAD_SOLIDIFICATION_DATA_PORT = "SHEAD_HEAD_SOLIDIFICATION_DATA_PORT";
+const std::string SHEAD_VACUUM_ACTIVATION_DATA_PORT = "SHEAD_VACUUM_ACTIVATION_DATA_PORT";
+const std::string SHEAD_REPLY_DATA_REQUEST_PORT = "SHEAD_REPLY_DATA_REQUEST_PORT";
 
 struct shead_reply
 {

@@ -19,25 +19,22 @@ namespace ecp {
 namespace shead {
 
 // ---------------------------------------------------------------
-class robot: public common::ecp_robot,
-		public kinematics::common::kinematics_manager {
+class robot : public common::ecp_robot, public kinematics::common::kinematics_manager
+{
 	// Klasa dla robota irp6_postument (sztywnego)
 
 protected:
 	//bufory wejsciowe z generatora
 	//shead.h
-	lib::single_thread_port<lib::SHEAD_HEAD_SOLIDIFICATION>
-			shead_head_soldification_data_port;
+	lib::single_thread_port <lib::SHEAD_HEAD_SOLIDIFICATION> shead_head_soldification_data_port;
 	lib::SHEAD_HEAD_SOLIDIFICATION shead_head_soldification_structure;
 
-	lib::single_thread_port<lib::SHEAD_VACUUM_ACTIVATION>
-			shead_vacuum_activation_data_port;
+	lib::single_thread_port <lib::SHEAD_VACUUM_ACTIVATION> shead_vacuum_activation_data_port;
 	lib::SHEAD_VACUUM_ACTIVATION shead_vacuum_activation_structure;
 
 	// bufory wyjsciowe do generatora
 	// shead.h
-	lib::single_thread_request_port<lib::shead_reply>
-			shead_reply_data_request_port;
+	lib::single_thread_request_port <lib::shead_reply> shead_reply_data_request_port;
 	lib::shead_reply shead_reply_structure;
 
 	// bufory do edp
@@ -46,14 +43,12 @@ protected:
 
 	void create_kinematic_models_for_given_robot(void);
 
-
 public:
 	robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp);
 	robot(common::task::task& _ecp_object);
 
 	void create_command();
 	void get_reply();
-
 
 }; // end: class ecp_irp6_mechatronika_robot
 // ---------------------------------------------------------------
