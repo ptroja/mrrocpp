@@ -33,7 +33,7 @@ swarmitfix::swarmitfix(lib::configurator &_config) :
 	gt = new common::generator::transparent(*this);
 	sg = new common::generator::smooth(*this, true);
 	g_sleep = new common::generator::sleep(*this);
-	g_epos = new common::generator::epos(*this);
+	g_epos_cubic = new common::generator::epos_cubic(*this);
 
 	sr_ecp_msg->message("ecp spkm loaded");
 }
@@ -68,10 +68,10 @@ void swarmitfix::mp_2_ecp_next_state_string_handler(void)
 
 		g_sleep->init_time(mp_command.ecp_next_state.mp_2_ecp_next_state_variant);
 		g_sleep->Move();
-	} else if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_GEN_EPOS) {
+	} else if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_GEN_EPOS_CUBIC) {
 		sr_ecp_msg->message("ECP_GEN_EPOS");
 
-		g_epos->Move();
+		g_epos_cubic->Move();
 
 	}
 
