@@ -33,9 +33,9 @@ namespace task {
 cvfradia::cvfradia(lib::configurator &_config) : task(_config)
 {
 	// Create cvFraDIA sensor - for testing purposes.
-	sensor_m[lib::SENSOR_CVFRADIA] = new ecp_mp::sensor::cvfradia(lib::SENSOR_CVFRADIA, "[vsp_cvfradia]", *this, sizeof(lib::sensor_image_t::sensor_union_t::fradia_t));
+	sensor_m[ecp_mp::sensor::SENSOR_CVFRADIA] = new ecp_mp::sensor::cvfradia(ecp_mp::sensor::SENSOR_CVFRADIA, "[vsp_cvfradia]", *this, sizeof(lib::sensor_image_t::sensor_union_t::fradia_t));
 	// Configure sensor.
-	sensor_m[lib::SENSOR_CVFRADIA]->configure_sensor();
+	sensor_m[ecp_mp::sensor::SENSOR_CVFRADIA]->configure_sensor();
 
 	// Create an adequate robot. - depending on the ini section name.
     if (config.section_name == ECP_IRP6OT_M_SECTION)

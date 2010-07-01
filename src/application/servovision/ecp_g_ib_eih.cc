@@ -28,7 +28,7 @@ ecp_g_ib_eih::ecp_g_ib_eih(mrrocpp::ecp::common::task::task & _ecp_task, ecp_mp:
 	visual_servo <4, 4> (_ecp_task, regulator), vsp_fradia(vsp_fradia), delta_t(MOTION_STEPS * 2e-3),
 			local_desired_joints(8), local_current_joints(8)
 {
-	sensor_m[lib::SENSOR_CVFRADIA] = vsp_fradia;
+	sensor_m[ecp_mp::sensor::SENSOR_CVFRADIA] = vsp_fradia;
 
 	max_v = _ecp_task.config.value <double> ("max_v", configSectionName);
 	max_a = _ecp_task.config.value <double> ("max_a", configSectionName);

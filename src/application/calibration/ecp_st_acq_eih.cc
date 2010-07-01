@@ -53,9 +53,9 @@ acq_eih::acq_eih(task &_ecp_t) :
 	nose->eih_nose_run::configure_pulse_check(true);
 
 	fradia = new ecp_mp::sensor::fradia_sensor<lib::empty_t, chessboard_t, eihcalibration_t>(_ecp_t.config, "[vsp_fradia_sensor]");
-	ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_CVFRADIA] = fradia;
+	ecp_sub_task::ecp_t.sensor_m[ecp_mp::sensor::SENSOR_CVFRADIA] = fradia;
 
-	ecp_sub_task::ecp_t.sensor_m[lib::SENSOR_CVFRADIA]->configure_sensor();
+	ecp_sub_task::ecp_t.sensor_m[ecp_mp::sensor::SENSOR_CVFRADIA]->configure_sensor();
 
 	generator = new generator::eihgenerator(_ecp_t);
 	generator->sensor_m = ecp_sub_task::ecp_t.sensor_m;
@@ -140,7 +140,7 @@ void acq_eih::main_task_algorithm(void) {
 	//double coordinates[MAX_SERVOS_NR]={0.0, 0.0, -1.0 * A, 0.0, 0.0, 0.0, 0.0, 0.0};
 	smoothgen->set_relative();
 
-	//	std::cout<<sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.chessboard.found<<std::endl;
+	//	std::cout<<sensor_m[ecp_mp::sensor::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.chessboard.found<<std::endl;
 
 	//opusc chwytak az przestanie "widziec" szachownice
 	while(fradia->get_reading_message().found == true && !calibrated){
