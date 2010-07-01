@@ -19,6 +19,10 @@ namespace common {
 namespace generator {
 namespace velocity_profile_calculator {
 
+/**
+ * Class contains methods used to fill in the trajectory pose list in a way that created trajectory describes the motion of the
+ * robot with a constant velocity. Methods implemented here can cope with the absolute and relative type of motion.
+ */
 class constant_velocity_profile : public velocity_profile {
 	public:
 		/**
@@ -56,17 +60,24 @@ class constant_velocity_profile : public velocity_profile {
 		 */
 		bool calculate_time_pose(vector<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose>::iterator & it);
 		/**
-		 * Calculates distance for all of the axes in a single trajectory pose and sets the directions of movements.
+		 * Calculates distance for all of the axes in a single trajectory pose and sets the directions of movements of absolute type.
 		 * @param it iterator to the list of positions
 		 * @return true if the set of the distance and direction was successful (usually is if the vectors start_position and coordinates were initiated and filled in before)
 		 */
-		bool calculate_distance_direction_pose(vector<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose>::iterator & it);
+		bool calculate_absolute_distance_direction_pose(vector<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose>::iterator & it);
 		/**
-		 * Calculates the longest time from the times vector and stores it in t variable in the pose.
+		 * Calculates distance for all of the axes in a single trajectory pose and sets the directions of movements of relative type..
 		 * @param it iterator to the list of positions
+		 * @return true if the set of the distance and direction was successful (usually is if the coordinates vector was initiated and filled in before)
+		 */
+		bool calculate_relative_distance_direction_pose(vector<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose>::iterator & it);
+		/**
+		 * Calculates the longest time from the times vector and stores it in t variable in the pose. Extends t to make it the multiplicity of the macrostep time.
+		 * @param it iterator to the list of positions
+		 * @param mc macrostep time
 		 * @return true if the set of the time was successful (usually is if the vector times was initiated and filled in before)
 		 */
-		bool calculate_pose_time(vector<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose>::iterator & it);
+		bool calculate_pose_time(vector<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose>::iterator & it, const double & mc);
 };
 
 } // namespace velocity_profile_calculator

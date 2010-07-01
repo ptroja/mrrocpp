@@ -13,6 +13,7 @@
 #include "base/ecp/ecp_generator.h"
 #include "generator/ecp/velocity_profile_calculator/velocity_profile.h"
 #include "generator/ecp/trajectory_interpolator/trajectory_interpolator.h"
+#include "lib/mrmath/mrmath.h"
 
 #include <vector>
 
@@ -33,7 +34,6 @@ protected:
 	/**
 	 * Vector of positions (vector of velocity profiles).
 	 */
-	//vector<ecp_mp::common::trajectory_pose::trajectory_pose> pose_vector;
 	vector<Pos> pose_vector;
 	/**
 	 * Position vector iterator.
@@ -47,6 +47,10 @@ protected:
 	 * Coordinate vector iterator.
 	 */
 	vector<vector<double> >::iterator coordinate_vector_iterator;
+	/**
+	 * Temporary iterator used mainly to iterate through a single position which is always of type vector<double>.
+	 */
+	vector<double>::iterator tempIter;
 	/**
 	 * Type of the commanded motion (absolute or relative)
 	 */
@@ -75,16 +79,110 @@ protected:
 	 * Set to true if list of coordinates was filled in.
 	 */
 	bool interpolated;
+	/**
+	 * Time of a single macrostep.
+	 */
+	double mc;
+	/**
+	 * Number of steps in a single macrostep.
+	 */
+	int nmc;
+	/**
+	 * If true, debug information is shown.
+	 */
+	bool debug;
+
+	//--------- VELOCITY AND ACCELERATION VECTORS ---------
+	/**
+	 * Standard velocity in joint coordinates.
+	 */
+	vector<double> joint_velocity;
+	/**
+	 * Maximal velocity in joint coordinates.
+	 */
+	vector<double> joint_max_velocity;
+	/**
+	 * Standard velocity in motor coordinates.
+	 */
+	vector<double> motor_velocity;
+	/**
+	 * Maximal velocity in motor coordinates.
+	 */
+	vector<double> motor_max_velocity;
+	/**
+	 * Standard velocity in euler zyz coordinates.
+	 */
+	vector<double> euler_zyz_velocity;
+	/**
+	 * Maximal velocity in euler zyz coordinates.
+	 */
+	vector<double> euler_zyz_max_velocity;
+	/**
+	 * Standard velocity in angle axis coordinates.
+	 */
+	vector<double> angle_axis_velocity;
+	/**
+	 * Maximal velocity in angle axis coordinates.
+	 */
+	vector<double> angle_axis_max_velocity;
+	/**
+	 * Standard acceleration in joint coordinates.
+	 */
+	vector<double> joint_acceleration;
+	/**
+	 * Maximal acceleration in joint coordinates.
+	 */
+	vector<double> joint_max_acceleration;
+	/**
+	 * Standard acceleration in motor coordinates.
+	 */
+	vector<double> motor_acceleration;
+	/**
+	 * Maximal acceleration in motor coordinates.
+	 */
+	vector<double> motor_max_acceleration;
+	/**
+	 * Standard acceleration in euler zyz coordinates.
+	 */
+	vector<double> euler_zyz_acceleration;
+	/**
+	 * Maximal acceleration in euler zyz coordinates.
+	 */
+	vector<double> euler_zyz_max_acceleration;
+	/**
+	 * Standard acceleration in angle axis coordinates.
+	 */
+	vector<double> angle_axis_acceleration;
+	/**
+	 * Maximal acceleration in angle axis coordinates.
+	 */
+	vector<double> angle_axis_max_acceleration;
+	//--------- VELOCITY AND ACCELERATION VECTORS END ---------
+
+	/**
+	 * Temporary homog matrix.
+	 */
+	lib::Homog_matrix homog_matrix;
 
 public:
 	/**
 	 * Constructor.
 	 */
-	multiple_position(common::task::task& _ecp_task);
+	multiple_position(common::task::task& _ecp_task) : generator (_ecp_task) {
+		debug = false;
+	}
 	/**
 	 * Destructor.
 	 */
-	virtual ~multiple_position();
+	virtual ~multiple_position() {
+
+	}
+	/**
+	 * Set debug variable.
+	 */
+	void set_debug(bool debug) {
+		this->debug = debug;
+	}
 	/**
 	 * Performs calculation of the trajectory and interpolation. Fills in pose_vector and coordinate_vector.
 	 * @return true if the calculation was succesfull
@@ -93,28 +191,37 @@ public:
 	/**
 	 * Sets the number of axes in which the generator will move the robot.
 	 */
-	void set_axes_num(int axes_num);
+	virtual void set_axes_num(int axes_num) {
+		this->axes_num = axes_num;
+	}
 	/**
 	 * Sets the chosen type of interpolation.
 	 */
-	void set_interpolation_type();
+	void set_interpolation_type() {
+
+	}
 	/**
 	 * Sets the relative type of motion.
 	 */
-	void set_relative(void); //zmiana na tryb przyrostowy
+	void set_relative(void) {
+		motion_type=lib::RELATIVE;
+	}
 	/**
 	 * Sets the absolute type of motion.
 	 */
-	void set_absolute(void); //zmiana na tryb bezwzgledny
-	/**
-	 * Loads a single trajectory pose described in joint coordinates to the list. Maximal velocities are set automatically.
-	 * @return true if the addition was succesfull
-	 */
-	virtual bool load_absolute_joint_trajectory_pose(vector<double> & coordinates);
+	void set_absolute(void) {
+		motion_type=lib::ABSOLUTE;
+	}
 	/**
 	 * Clears vectors of positions and coordinates. Sets %calculated and %interpolated flags to false;
 	 */
-	void reset();
+	virtual void reset() {
+		pose_vector.clear();
+		coordinate_vector.clear();
+		calculated = false;
+		interpolated = false;
+		sr_ecp_msg.message("Generator reset");
+	}
 };
 
 } // namespace generator

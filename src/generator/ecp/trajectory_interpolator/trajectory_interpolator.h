@@ -27,19 +27,31 @@ public:
 	/**
 	 * Constructor.
 	 */
-	trajectory_interpolator();
+	trajectory_interpolator() {
+
+	}
 	/**
 	 * Destructor.
 	 */
-	virtual ~trajectory_interpolator();
+	virtual ~trajectory_interpolator() {
+
+	}
 	/**
-	 * Method interpolates the trajectory basing on the list of poses of type %constant_velocity_trajectory_pose.
+	 * Method interpolates the relative type trajectory basing on the list of poses of stored in objects of types derived from %trajectory_pose.
 	 * @param it iterator to the list of positions
-	 * @param cit iterator to the list of coordinates
+	 * @param coordinate_vector list of coordinates
+	 * @param mc time of a single macrostep
 	 * @return true if the interpolation was successful
 	 */
-	virtual bool interpolate(typename vector<Pos>::iterator & pose_vector_iterator, vector<vector<double> >::iterator & coordinate_vector_iterator) = 0;
-
+	virtual bool interpolate_relative_pose(typename vector<Pos>::iterator & pose_vector_iterator, vector<vector<double> > & coordinate_vector, const double & mc) = 0;
+	/**
+	 * Method interpolates the absolute type trajectory basing on the list of poses of stored in objects of types derived from %trajectory_pose.
+	 * @param it iterator to the list of positions
+	 * @param coordinate_vector list of coordinates
+	 * @param mc time of a single macrostep
+	 * @return true if the interpolation was successful
+	 */
+	virtual bool interpolate_absolute_pose(typename vector<Pos>::iterator & pose_vector_iterator, vector<vector<double> > & coordinate_vector, const double & mc) = 0;
 };
 
 } // namespace trajectory_interpolator

@@ -71,13 +71,12 @@ void generator::Move() {
 
 			// zlecenie ruchu SET oraz odczyt stanu robota GET
 			if (!(ecp_t.continuous_coordination)) {
-
 				the_robot->create_command();
 			}
 
 			// wykonanie kroku ruchu
-
 			if (the_robot->communicate_with_edp) {
+
 				execute_motion();
 
 				the_robot->get_reply();
@@ -86,6 +85,7 @@ void generator::Move() {
 
 		// odczytanie danych z wszystkich czujnikow
 		ecp_t.all_sensors_get_reading(sensor_m);
+
 		node_counter++;
 		if (ecp_t.pulse_check()) {
 			trigger = true;
