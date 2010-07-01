@@ -45,7 +45,7 @@ protected:
 	lib::shead_rbuffer edp_ecp_rbuffer;
 
 	void create_kinematic_models_for_given_robot(void);
-	void add_data_ports();
+
 
 public:
 	robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp);
@@ -53,7 +53,7 @@ public:
 
 	void create_command();
 	void get_reply();
-	void clear_data_ports();
+
 
 }; // end: class ecp_irp6_mechatronika_robot
 // ---------------------------------------------------------------

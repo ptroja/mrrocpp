@@ -13,8 +13,8 @@ const robot_name_t ROBOT_SMB = "ROBOT_SMB";
 
 enum SMB_CBUFFER_VARIANT
 {
-	SMB_CBUFFER_EPOS_LOW_LEVEL_COMMAND,
-	SMB_CBUFFER_EPOS_GEN_PARAMETERS,
+	SMB_CBUFFER_EPOS_CUBIC_COMMAND,
+	SMB_CBUFFER_EPOS_TRAPEZOIDAL_COMMAND,
 	SMB_CBUFFER_PIN_INSERTION,
 	SMB_CBUFFER_PIN_LOCKING
 };
@@ -24,8 +24,9 @@ struct smb_cbuffer
 	SMB_CBUFFER_VARIANT variant;
 	union
 	{
-		epos_low_level_command epos_low_level_command_structure;
-		epos_gen_parameters epos_gen_parameters_structure;
+		epos_cubic_command epos_cubic_command_structure;
+		epos_trapezoidal_command epos_trapezoidal_command_structure;
+		epos_operational_command epos_operational_command_structure;
 		smb_multi_pin_insertion multi_pin_insertion;
 		smb_multi_pin_locking multi_pin_locking;
 	};

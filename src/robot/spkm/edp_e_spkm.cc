@@ -91,29 +91,42 @@ void effector::move_arm(const lib::c_buffer &instruction)
 
 	switch (ecp_edp_cbuffer.variant)
 	{
-		case lib::SPKM_CBUFFER_EPOS_GEN_PARAMETERS: {
-			// epos parameters computation basing on trajectory parameters
-			lib::epos_gen_parameters epos_gen_parameters_structure;
-			lib::epos_low_level_command epos_low_level_command_structure;
+		/*
+		 case lib::SPKM_CBUFFER_EPOS_GEN_PARAMETERS: {
+		 // epos parameters computation basing on trajectory parameters
+		 lib::epos_gen_parameters epos_gen_parameters_structure;
+		 lib::epos_low_level_command epos_low_level_command_structure;
 
-			memcpy(&epos_gen_parameters_structure, &(ecp_edp_cbuffer.epos_gen_parameters_structure), sizeof(epos_gen_parameters_structure));
+		 memcpy(&epos_gen_parameters_structure, &(ecp_edp_cbuffer.epos_gen_parameters_structure), sizeof(epos_gen_parameters_structure));
 
-			compute_epos_command(epos_gen_parameters_structure, epos_low_level_command_structure);
+		 compute_epos_command(epos_gen_parameters_structure, epos_low_level_command_structure);
 
-			ss << ecp_edp_cbuffer.epos_gen_parameters_structure.dm[4];
+		 ss << ecp_edp_cbuffer.epos_gen_parameters_structure.dm[4];
 
-			msg->message(ss.str().c_str());
+		 msg->message(ss.str().c_str());
 
-			// previously computed parameters send to epos2 controllers
+		 // previously computed parameters send to epos2 controllers
 
 
-			// start the trajectory execution
+		 // start the trajectory execution
+
+		 }
+		 break;*/
+		case lib::SPKM_CBUFFER_EPOS_CUBIC_COMMAND: {
+			lib::epos_cubic_command epos_cubic_command_structure;
+			memcpy(&epos_cubic_command_structure, &(ecp_edp_cbuffer.epos_cubic_command_structure), sizeof(epos_cubic_command_structure));
 
 		}
 			break;
-		case lib::SPKM_CBUFFER_EPOS_LOW_LEVEL_COMMAND: {
-			lib::epos_low_level_command epos_low_level_command_structure;
-			memcpy(&epos_low_level_command_structure, &(ecp_edp_cbuffer.epos_low_level_command_structure), sizeof(epos_low_level_command_structure));
+		case lib::SPKM_CBUFFER_EPOS_TRAPEZOIDAL_COMMAND: {
+			lib::epos_trapezoidal_command epos_trapezoidal_command_structure;
+			memcpy(&epos_trapezoidal_command_structure, &(ecp_edp_cbuffer.epos_trapezoidal_command_structure), sizeof(epos_trapezoidal_command_structure));
+
+		}
+			break;
+		case lib::SPKM_CBUFFER_EPOS_OPERATIONAL_COMMAND: {
+			lib::epos_operational_command epos_operational_command_structure;
+			memcpy(&epos_operational_command_structure, &(ecp_edp_cbuffer.epos_operational_command_structure), sizeof(epos_operational_command_structure));
 
 		}
 			break;
