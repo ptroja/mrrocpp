@@ -14,16 +14,16 @@ namespace task {
 ecp_sub_task_const_vel_gen_test::ecp_sub_task_const_vel_gen_test(task & _ecp_t) :
 	ecp_sub_task(_ecp_t) {
 
-	//cvgenjoint = new generator::constant_velocity(ecp_t, lib::ECP_JOINT, 6);
-	//cvgenjoint->set_debug(true);
+	cvgenjoint = new generator::constant_velocity(ecp_t, lib::ECP_JOINT, 6);
+	cvgenjoint->set_debug(true);
 
 	cvgenmotor = new generator::constant_velocity(ecp_t, lib::ECP_MOTOR, 6);
 	cvgenmotor->set_debug(true);
 
-	//cvgeneuler = new generator::constant_velocity(ecp_t, lib::ECP_XYZ_EULER_ZYZ, 6);
-	//cvgenangle->set_debug(true);
+	cvgeneuler = new generator::constant_velocity(ecp_t, lib::ECP_XYZ_EULER_ZYZ, 6);
+	cvgeneuler->set_debug(true);
 
-	//cvgeneuler = new generator::constant_velocity(ecp_t, lib::ECP_XYZ_ANGLE_AXIS, 6);
+	//cvgenangle = new generator::constant_velocity(ecp_t, lib::ECP_XYZ_ANGLE_AXIS, 6);
 	//cvgenangle->set_debug(true);
 }
 
@@ -95,36 +95,98 @@ void ecp_sub_task_const_vel_gen_test::conditional_execution() {
 	}
 	// JOINT RELATIVE END
 */
-
+/*
 	// MOTOR ABSOLUTE
 	cvgenmotor->reset();
 	cvgenmotor->set_absolute();
-	coordinates1[0] = 10.0;
-	coordinates1[1] = 0.0;
-	coordinates1[2] = 50.0;
-	coordinates1[3] = 100.0;
-	coordinates1[4] = 400.0;
-	coordinates1[5] = 0.0;
-	cvgenmotor->load_absolute_motor_trajectory_pose(coordinates1);
 	coordinates1[0] = 0.0;
 	coordinates1[1] = 20.0;
 	coordinates1[2] = 0.0;
-	coordinates1[3] = 300.0;
+	coordinates1[3] = 0.0;
+	coordinates1[4] = 20.0;
+	coordinates1[5] = 0.0;
+	cvgenmotor->load_absolute_motor_trajectory_pose(coordinates1);
+	coordinates1[0] = 0.0;
+	coordinates1[1] = 0.0;
+	coordinates1[2] = 0.0;
+	coordinates1[3] = 50.0;
 	coordinates1[4] = 0.0;
 	coordinates1[5] = 0.0;
 	cvgenmotor->load_absolute_motor_trajectory_pose(coordinates1);
 	coordinates1[0] = 0.0;
-	coordinates1[1] = -50.0;
+	coordinates1[1] = -10.0;
 	coordinates1[2] = 0.0;
-	coordinates1[3] = -100.0;
-	coordinates1[4] = 0.0;
-	coordinates1[5] = 40.0;
+	coordinates1[3] = 0.0;
+	coordinates1[4] = 15.0;
+	coordinates1[5] = 0.0;
 	cvgenmotor->load_absolute_motor_trajectory_pose(coordinates1);
 
 	if (cvgenmotor->calculate_interpolate()) {
 		cvgenmotor->Move();
 	}
 	// MOTOR ABSOLUTE END
+*/
+/*
+	// MOTOR RELATIVE
+	cvgenmotor->reset();
+	cvgenmotor->set_relative();
+	coordinates1[0] = 0.0;
+	coordinates1[1] = 20.0;
+	coordinates1[2] = 0.0;
+	coordinates1[3] = 0.0;
+	coordinates1[4] = 20.0;
+	coordinates1[5] = 0.0;
+	cvgenmotor->load_relative_motor_trajectory_pose(coordinates1);
+	coordinates1[0] = 0.0;
+	coordinates1[1] = -20.0;
+	coordinates1[2] = 0.0;
+	coordinates1[3] = 50.0;
+	coordinates1[4] = -20.0;
+	coordinates1[5] = 0.0;
+	cvgenmotor->load_relative_motor_trajectory_pose(coordinates1);
+	coordinates1[0] = 0.0;
+	coordinates1[1] = -30.0;
+	coordinates1[2] = 0.0;
+	coordinates1[3] = 0.0;
+	coordinates1[4] = -5.0;
+	coordinates1[5] = 0.0;
+	cvgenmotor->load_relative_motor_trajectory_pose(coordinates1);
+
+	if (cvgenmotor->calculate_interpolate()) {
+		cvgenmotor->Move();
+	}
+	// MOTOR RELATIVE END
+*/
+
+	// EULER ABSOLUTE
+	cvgeneuler->reset();
+	cvgeneuler->set_absolute();
+	coordinates1[0] = 0.530;
+	coordinates1[1] = 1.406;
+	coordinates1[2] = 0.078;
+	coordinates1[3] = -2.185;
+	coordinates1[4] = 1.767;
+	coordinates1[5] = 2.229;
+	cvgeneuler->load_absolute_euler_zyz_trajectory_pose(coordinates1);
+	coordinates1[0] = 0.530;
+	coordinates1[1] = 1.806;
+	coordinates1[2] = 0.178;
+	coordinates1[3] = -1.885;
+	coordinates1[4] = 1.767;
+	coordinates1[5] = 2.329;
+	cvgeneuler->load_absolute_euler_zyz_trajectory_pose(coordinates1);
+	coordinates1[0] = 0.530;
+	coordinates1[1] = 1.806;
+	coordinates1[2] = 0.178;
+	coordinates1[3] = -2.185;
+	coordinates1[4] = 1.767;
+	coordinates1[5] = 2.329;
+	cvgeneuler->load_absolute_euler_zyz_trajectory_pose(coordinates1);
+
+	if (cvgeneuler->calculate_interpolate()) {
+		cvgeneuler->Move();
+	}
+	// EULER ABSOLUTE END
 
 
 	// POSTUMENT END
@@ -132,9 +194,9 @@ void ecp_sub_task_const_vel_gen_test::conditional_execution() {
 }
 
 ecp_sub_task_const_vel_gen_test::~ecp_sub_task_const_vel_gen_test() {
-	//delete cvgenjoint;
+	delete cvgenjoint;
 	delete cvgenmotor;
-	//delete cvgeneuler;
+	delete cvgeneuler;
 	//delete cvgenangle;
 }
 

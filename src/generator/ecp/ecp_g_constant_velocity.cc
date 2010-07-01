@@ -374,8 +374,8 @@ void constant_velocity::set_axes_num(int axes_num) {
 void constant_velocity::create_velocity_vectors(int axes_num) {
 	joint_velocity = vector<double>(axes_num, 0.05);
 	joint_max_velocity = vector<double>(axes_num, 1.5);
-	motor_velocity = vector<double>(axes_num, 0.05);//TODO check if this is a reasonable value
-	motor_velocity = vector<double>(axes_num, 120.0);
+	motor_velocity = vector<double>(axes_num, 0.05);
+	motor_max_velocity = vector<double>(axes_num, 200.0);
 	euler_zyz_velocity= vector<double>(axes_num, 0.05);//TODO check if this is a reasonable value
 	euler_zyz_max_velocity = vector<double>(axes_num, 5.0);
 	angle_axis_velocity = vector<double>(axes_num, 0.05);//TODO check if this is a reasonable value
