@@ -38,9 +38,9 @@ enum SMB_PIN_LOCKING
 	CLAMB, UNCLAMB, SMB_PIN_LOCKING_NO_ACTION
 }; // namespace mrrocpp
 
-#define SMB_MULTI_PIN_INSERTION_DATA_PORT "smb_multi_pin_insertion_data_port"
-#define SMB_MULTI_PIN_LOCKING_DATA_PORT "smb_multi_pin_locking_data_port"
-#define SMB_MULTI_LEG_REPLY_DATA_REQUEST_PORT "smb_multi_leg_reply_data_request_port"
+const std::string SMB_MULTI_PIN_INSERTION_DATA_PORT = "SMB_MULTI_PIN_INSERTION_DATA_PORT";
+const std::string SMB_MULTI_PIN_LOCKING_DATA_PORT = "SMB_MULTI_PIN_LOCKING_DATA_PORT";
+const std::string SMB_MULTI_LEG_REPLY_DATA_REQUEST_PORT = "SMB_MULTI_LEG_REPLY_DATA_REQUEST_PORT";
 
 struct smb_multi_pin_insertion
 {

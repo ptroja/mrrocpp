@@ -18,9 +18,9 @@ namespace shead {
 
 robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
 	ecp_robot(lib::ROBOT_SHEAD, SHEAD_NUM_OF_SERVOS, EDP_SHEAD_SECTION, _config, _sr_ecp), kinematics_manager(),
-			shead_head_soldification_data_port(SHEAD_HEAD_SOLIDIFICATION_DATA_PORT, port_manager),
-			shead_vacuum_activation_data_port(SHEAD_VACUUM_ACTIVATION_DATA_PORT, port_manager),
-			shead_reply_data_request_port(SHEAD_VACUUM_ACTIVATION_DATA_PORT, port_manager)
+			shead_head_soldification_data_port(lib::SHEAD_HEAD_SOLIDIFICATION_DATA_PORT, port_manager),
+			shead_vacuum_activation_data_port(lib::SHEAD_VACUUM_ACTIVATION_DATA_PORT, port_manager),
+			shead_reply_data_request_port(lib::SHEAD_VACUUM_ACTIVATION_DATA_PORT, port_manager)
 
 {
 	//  Stworzenie listy dostepnych kinematyk.
@@ -29,9 +29,9 @@ robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
 
 robot::robot(common::task::task& _ecp_object) :
 	ecp_robot(lib::ROBOT_SHEAD, SHEAD_NUM_OF_SERVOS, EDP_SHEAD_SECTION, _ecp_object), kinematics_manager(),
-			shead_head_soldification_data_port(SHEAD_HEAD_SOLIDIFICATION_DATA_PORT, port_manager),
-			shead_vacuum_activation_data_port(SHEAD_VACUUM_ACTIVATION_DATA_PORT, port_manager),
-			shead_reply_data_request_port(SHEAD_VACUUM_ACTIVATION_DATA_PORT, port_manager)
+			shead_head_soldification_data_port(lib::SHEAD_HEAD_SOLIDIFICATION_DATA_PORT, port_manager),
+			shead_vacuum_activation_data_port(lib::SHEAD_VACUUM_ACTIVATION_DATA_PORT, port_manager),
+			shead_reply_data_request_port(lib::SHEAD_VACUUM_ACTIVATION_DATA_PORT, port_manager)
 
 {
 	//  Stworzenie listy dostepnych kinematyk.
@@ -46,8 +46,6 @@ void robot::create_kinematic_models_for_given_robot(void)
 	// Ustawienie aktywnego modelu.
 	set_kinematic_model(0);
 }
-
-
 
 void robot::create_command()
 {

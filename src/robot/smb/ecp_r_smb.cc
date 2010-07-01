@@ -18,12 +18,13 @@ namespace smb {
 
 robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
 	ecp_robot(lib::ROBOT_SMB, SMB_NUM_OF_SERVOS, EDP_SMB_SECTION, _config, _sr_ecp), kinematics_manager(),
-			epos_low_level_command_data_port(EPOS_LOW_LEVEL_COMMAND_DATA_PORT, port_manager),
-			epos_gen_parameters_data_port(EPOS_GEN_PARAMETERS_DATA_PORT, port_manager),
-			smb_multi_pin_insertion_data_port(SMB_MULTI_PIN_INSERTION_DATA_PORT, port_manager),
-			smb_multi_pin_locking_data_port(SMB_MULTI_PIN_LOCKING_DATA_PORT, port_manager),
-			epos_reply_data_request_port(EPOS_REPLY_DATA_REQUEST_PORT, port_manager),
-			smb_multi_leg_reply_data_request_port(SMB_MULTI_LEG_REPLY_DATA_REQUEST_PORT, port_manager)
+			epos_cubic_command_data_port(lib::EPOS_CUBIC_COMMAND_DATA_PORT, port_manager),
+			epos_trapezoidal_command_data_port(lib::EPOS_TRAPEZOIAL_COMMAND_DATA_PORT, port_manager),
+			epos_operational_command_data_port(lib::EPOS_OPERATIONAL_COMMAND_DATA_PORT, port_manager),
+			smb_multi_pin_insertion_data_port(lib::SMB_MULTI_PIN_INSERTION_DATA_PORT, port_manager),
+			smb_multi_pin_locking_data_port(lib::SMB_MULTI_PIN_LOCKING_DATA_PORT, port_manager),
+			epos_reply_data_request_port(lib::EPOS_REPLY_DATA_REQUEST_PORT, port_manager),
+			smb_multi_leg_reply_data_request_port(lib::SMB_MULTI_LEG_REPLY_DATA_REQUEST_PORT, port_manager)
 {
 
 	create_kinematic_models_for_given_robot();
@@ -31,12 +32,13 @@ robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
 
 robot::robot(common::task::task& _ecp_object) :
 	ecp_robot(lib::ROBOT_SMB, SMB_NUM_OF_SERVOS, EDP_SMB_SECTION, _ecp_object), kinematics_manager(),
-			epos_low_level_command_data_port(EPOS_LOW_LEVEL_COMMAND_DATA_PORT, port_manager),
-			epos_gen_parameters_data_port(EPOS_GEN_PARAMETERS_DATA_PORT, port_manager),
-			smb_multi_pin_insertion_data_port(SMB_MULTI_PIN_INSERTION_DATA_PORT, port_manager),
-			smb_multi_pin_locking_data_port(SMB_MULTI_PIN_LOCKING_DATA_PORT, port_manager),
-			epos_reply_data_request_port(EPOS_REPLY_DATA_REQUEST_PORT, port_manager),
-			smb_multi_leg_reply_data_request_port(SMB_MULTI_LEG_REPLY_DATA_REQUEST_PORT, port_manager)
+			epos_cubic_command_data_port(lib::EPOS_CUBIC_COMMAND_DATA_PORT, port_manager),
+			epos_trapezoidal_command_data_port(lib::EPOS_TRAPEZOIAL_COMMAND_DATA_PORT, port_manager),
+			epos_operational_command_data_port(lib::EPOS_OPERATIONAL_COMMAND_DATA_PORT, port_manager),
+			smb_multi_pin_insertion_data_port(lib::SMB_MULTI_PIN_INSERTION_DATA_PORT, port_manager),
+			smb_multi_pin_locking_data_port(lib::SMB_MULTI_PIN_LOCKING_DATA_PORT, port_manager),
+			epos_reply_data_request_port(lib::EPOS_REPLY_DATA_REQUEST_PORT, port_manager),
+			smb_multi_leg_reply_data_request_port(lib::SMB_MULTI_LEG_REPLY_DATA_REQUEST_PORT, port_manager)
 {
 
 	create_kinematic_models_for_given_robot();

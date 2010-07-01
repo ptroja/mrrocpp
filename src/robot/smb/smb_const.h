@@ -30,7 +30,7 @@ struct smb_cbuffer
 	union
 	{
 		epos_cubic_command epos_cubic_command_structure;
-		epos_spline_command epos_spline_command_structure;
+		epos_trapezoidal_command epos_trapezoidal_command_structure;
 		epos_operational_command epos_operational_command_structure;
 		smb_multi_pin_insertion multi_pin_insertion;
 		smb_multi_pin_locking multi_pin_locking;

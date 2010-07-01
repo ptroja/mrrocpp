@@ -17,9 +17,11 @@ enum EPOS_GEN_PROFILE
 	TRAPEZOIDAL_VELOCITY, CUBIC_POSITION, OPERATIONAL_SPACE, EPOS_GEN_PROFILE_NO_ACTION
 };
 
-const std::string EPOS_GEN_PARAMETERS_DATA_PORT = "epos_gen_paramteres_data_port";
-const std::string EPOS_LOW_LEVEL_COMMAND_DATA_PORT = "epos_low_level_command_data_port";
-const std::string EPOS_REPLY_DATA_REQUEST_PORT = "epos_reply_data_request_port";
+const std::string EPOS_CUBIC_COMMAND_DATA_PORT = "EPOS_CUBIC_COMMAND_DATA_PORT";
+const std::string EPOS_TRAPEZOIAL_COMMAND_DATA_PORT = "EPOS_TRAPEZOIAL_COMMAND_DATA_PORT";
+const std::string EPOS_OPERATIONAL_COMMAND_DATA_PORT = "EPOS_OPERATIONAL_COMMAND_DATA_PORT";
+
+const std::string EPOS_REPLY_DATA_REQUEST_PORT = "EPOS_REPLY_DATA_REQUEST_PORT";
 
 struct smb_mp_to_ecp_cubic_spline_parameters
 {
@@ -44,7 +46,7 @@ struct epos_cubic_command
 	double av[EPOS_DATA_PORT_SERVOS_NUMBER];
 };
 
-struct epos_spline_command
+struct epos_trapezoidal_command
 {
 	double em[EPOS_DATA_PORT_SERVOS_NUMBER];
 	double emdm[EPOS_DATA_PORT_SERVOS_NUMBER];

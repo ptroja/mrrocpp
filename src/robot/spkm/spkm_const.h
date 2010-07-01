@@ -25,7 +25,7 @@ struct spkm_cbuffer
 	union
 	{
 		epos_cubic_command epos_cubic_command_structure;
-		epos_spline_command epos_spline_command_structure;
+		epos_trapezoidal_command epos_trapezoidal_command_structure;
 		epos_operational_command epos_operational_command_structure;
 	};
 

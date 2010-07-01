@@ -24,8 +24,14 @@ class robot : public common::ecp_robot, public kinematics::common::kinematics_ma
 	// Klasa dla robota irp6_postument (sztywnego)
 protected:
 	//bufory wejsciowe z generatora
-	lib::single_thread_port <lib::epos_low_level_command> epos_low_level_command_data_port;
-	lib::epos_low_level_command epos_low_level_command_structure;
+	lib::single_thread_port <lib::epos_cubic_command> epos_cubic_command_data_port;
+	lib::epos_cubic_command epos_cubic_command_structure;
+
+	lib::single_thread_port <lib::epos_trapezoidal_command> epos_trapezoidal_command_data_port;
+	lib::epos_trapezoidal_command epos_trapezoidal_command_structure;
+
+	lib::single_thread_port <lib::epos_operational_command> epos_operational_command_data_port;
+	lib::epos_operational_command epos_operational_command_structure;
 
 	/*
 	 lib::single_thread_port <lib::epos_gen_parameters> epos_gen_parameters_data_port;
