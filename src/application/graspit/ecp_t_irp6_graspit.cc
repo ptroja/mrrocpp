@@ -49,7 +49,6 @@ void irp6_grasp::main_task_algorithm(void)
 	std::stringstream ss(std::stringstream::in | std::stringstream::out);
 
 	for (;;) {
-<<<<<<< HEAD
 			sr_ecp_msg->message("Waiting for MP order");
 
 			get_next_state();
@@ -57,8 +56,8 @@ void irp6_grasp::main_task_algorithm(void)
 			sr_ecp_msg->message("Order received");
 			flushall();
 
-			switch ((ecp_mp::task::GRASPIT_ECP_STATES) mp_command.ecp_next_state.mp_2_ecp_next_state) {
-			case ecp_mp::task::ECP_GEN_IRP6:
+			if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_IRP6)  {
+
 				sr_ecp_msg->message("ECP_GEN_IRP6");
 				sr_ecp_msg->message("Smooth->Move()");
 
@@ -78,38 +77,9 @@ void irp6_grasp::main_task_algorithm(void)
 //											0.0, false);
 //				smoothgen2->Move();
 //				smoothgen2->reset();
-				break;
-			default:
-				break;
-			} // end switch
+			} // end if
 
 			ecp_termination_notice();
-=======
-		sr_ecp_msg->message("Waiting for MP order");
-
-		get_next_state();
-
-		sr_ecp_msg->message("Order received");
-		flushall();
-
-		if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_IRP6) {
-
-			sr_ecp_msg->message("ECP_GEN_IRP6");
-			sr_ecp_msg->message("Smooth->Move()");
-			//				smoothgen2->load_coordinates(lib::ECP_JOINT, v, a,
-			//											trgraspit->from_va.graspit.grasp_joint[7],
-			//											trgraspit->from_va.graspit.grasp_joint[8],
-			//											trgraspit->from_va.graspit.grasp_joint[9],
-			//											trgraspit->from_va.graspit.grasp_joint[10],
-			//											trgraspit->from_va.graspit.grasp_joint[11],
-			//											trgraspit->from_va.graspit.grasp_joint[12],
-			//											0.08,
-			//											0.0, false);
-			//
-		} // end switch
-
-		ecp_termination_notice();
->>>>>>> 014c76e56c4f1f572e714336ca8e87ea81fbf98a
 	} //end for
 
 	ecp_termination_notice();
