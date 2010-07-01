@@ -98,7 +98,7 @@ void graspit::main_task_algorithm(void)
 	lib::bird_hand_command mp_ecp_bird_hand_command;
 
 	for (int i=0; i<6; ++i)
-		mp_ecp_irp6_command.joint[i] = trgraspit->from_va.grasp_joint[i];
+		mp_ecp_irp6_command.joint[i] = trgraspit->from_va.grasp_joint[i+6];
 	mp_ecp_bird_hand_command.thumb_f[0].desired_position = 0.0;
 	mp_ecp_bird_hand_command.thumb_f[1].desired_position = 0.0;
 	mp_ecp_bird_hand_command.index_f[0].desired_position = 0.0;
@@ -122,7 +122,7 @@ void graspit::main_task_algorithm(void)
 
 
 	for (int i=0; i<6; ++i)
-		mp_ecp_irp6_command.joint[i] = trgraspit->from_va.grasp_joint[i+6];
+		mp_ecp_irp6_command.joint[i] = trgraspit->from_va.grasp_joint[i];
 	mp_ecp_bird_hand_command.thumb_f[0].desired_position = trgraspit->from_va.grasp_joint[12];
 	mp_ecp_bird_hand_command.thumb_f[1].desired_position = trgraspit->from_va.grasp_joint[13];
 	mp_ecp_bird_hand_command.index_f[0].desired_position = trgraspit->from_va.grasp_joint[14];
