@@ -63,7 +63,7 @@ void ecp_sub_task_const_vel_gen_test::conditional_execution() {
 		cvgenjoint->Move();
 	}
 	// JOINT ABSOLUTE END
-/*
+*/
 /*
 	// JOINT RELATIVE
 	cvgenjoint->reset();
