@@ -16,6 +16,8 @@
 namespace mrrocpp {
 namespace lib {
 
+class single_thread_port_manager;
+
 enum FlowStatus
 {
 	NoData = 0, OldData = 1, NewData = 2
@@ -31,15 +33,9 @@ protected:
 
 public:
 
-	single_thread_port_interface(std::string _name) :
-		name(_name), new_data(false)
-	{
-	}
+	single_thread_port_interface(std::string _name, single_thread_port_manager & _port_manager);
 
-	std::string get_name()
-	{
-		return name;
-	}
+	std::string get_name();
 
 	//virtual void test() = 0;
 
@@ -54,8 +50,8 @@ protected:
 	T data;
 
 public:
-	single_thread_port(std::string _name) :
-		single_thread_port_interface(_name), no_data(true)
+	single_thread_port(std::string _name, single_thread_port_manager & _port_manager) :
+		single_thread_port_interface(_name, _port_manager), no_data(true)
 	{
 	}
 
@@ -100,8 +96,8 @@ protected:
 	bool new_request;
 
 public:
-	single_thread_request_port(std::string _name) :
-		single_thread_port <T> (_name), new_request(false)
+	single_thread_request_port(std::string _name, single_thread_port_manager & _port_manager) :
+		single_thread_port <T> (_name, _port_manager), new_request(false)
 	{
 	}
 

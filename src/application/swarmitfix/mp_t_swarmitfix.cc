@@ -57,13 +57,10 @@ void swarmitfix::main_task_algorithm(void)
 	std::stringstream ss(std::stringstream::in | std::stringstream::out);
 	ss << a;
 	astring = ss.str();
-
-	lib::single_thread_port <int> int_port("int_port_label");
-	lib::single_thread_port <int>* int_port_from_manager;
-
 	lib::single_thread_port_manager port_manager;
 
-	port_manager.add_port(&int_port);
+	lib::single_thread_port <int> int_port("int_port_label", port_manager);
+	lib::single_thread_port <int>* int_port_from_manager;
 
 	int_port_from_manager = port_manager.get_port <int> ("int_port_label");
 
