@@ -19,7 +19,7 @@ namespace ecp {
 namespace sarkofag {
 
 // ---------------------------------------------------------------
-class robot: public common::ecp_robot, public kinematics::common::kinematics_manager
+class robot : public common::ecp_robot, public kinematics::common::kinematics_manager
 {
 	// Klasa dla robota irp6_on_track
 protected:

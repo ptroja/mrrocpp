@@ -123,7 +123,7 @@ void effector::create_kinematic_models_for_given_robot(void)
 
 namespace common {
 
-// Stworzenie obiektu edp_irp6p_effector.
+// Stworzenie obiektu edp_sarkofag_effector.
 effector* return_created_efector(lib::configurator &_config)
 {
 	return new sarkofag::effector(_config);

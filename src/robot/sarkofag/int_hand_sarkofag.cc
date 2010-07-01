@@ -1,9 +1,9 @@
 // ------------------------------------------------------------------------
 //                            int_hand.cc
 //
-// Funkcja obslugi przerwania -- odczyt i zapis rejestrow sprzetowych dla robota irp6 on_track
+// Funkcja obslugi przerwania -- odczyt i zapis rejestrow sprzetowych dla robota irp6 postument
 //
-// Ostatnia modyfikacja: 2006
+// Ostatnia modyfikacja: 2005
 // ------------------------------------------------------------------------
 
 #include <stdio.h>
@@ -24,7 +24,7 @@
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 
-// Klasa edp_irp6ot_effector.
+// Klasa edp_sarkofag_effector.
 #include "robot/sarkofag/edp_e_sarkofag.h"
 // Klasa hardware_interface.
 #include "robot/sarkofag/hi_sarkofag.h"
@@ -81,7 +81,6 @@ int_handler(void *arg, int int_id)
 			if (!(robot_status[i].adr_offset_plus_0 & 0x0040)) {
 				md.is_synchronised = false;
 			}
-
 		}
 
 		return (&event);
@@ -108,13 +107,13 @@ int_handler(void *arg, int int_id)
 			robot_status[i].adr_offset_plus_4 = 0xFFFF ^ in16((SERVO_REPLY_POS_LOW_ADR + ISA_CARD_OFFSET)); // Mlodsze slowo 16-bitowe
 			robot_status[i].adr_offset_plus_6 = 0xFFFF ^ in16((SERVO_REPLY_POS_HIGH_ADR + ISA_CARD_OFFSET));// Starsze slowo 16-bitowe
 
-
 			md.robot_status[i].adr_offset_plus_4 = robot_status[i].adr_offset_plus_4;
 			md.robot_status[i].adr_offset_plus_6 = robot_status[i].adr_offset_plus_6;
 
 			low_word = robot_status[i].adr_offset_plus_4;
 			high_word = robot_status[i].adr_offset_plus_6;
 
+			// Obliczenie polozenia
 			md.current_absolute_position[i] = (((uint32_t) (high_word << 16)) & (0xFFFF0000)) | ((uint16_t) low_word);
 
 			//   md.robot_status[i].adr_offset_plus_6 = robot_status[i].adr_offset_plus_6;
@@ -133,6 +132,7 @@ int_handler(void *arg, int int_id)
 			md.hardware_error |= (uint64_t) (common::SYNCHRO_SWITCH_ON << (5* i )); // Zadzialal wylacznik synchronizacji
 
 
+			// wylaczniki krancowe
 			if (~(robot_status[i].adr_offset_plus_0) & 0x1000) {
 				//	out8((ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), FIRST_SERVO_PTR + (uint8_t)i);
 				//	out16((SERVO_COMMAND1_ADR + ISA_CARD_OFFSET), RESET_ALARM); // Skasowanie alarmu i umozliwienie ruchu osi
@@ -220,9 +220,7 @@ int_handler(void *arg, int int_id)
 		return (&event);
 	}
 
-	// Zakonczenie obslugi przerwania ze wzbudzeniem posrednika (proxy)
-
-	return (&event);// Yoyek & wojtek
+	return (&event);
 }
 #endif /*__QNXNTO__ */
 
@@ -231,4 +229,3 @@ int_handler(void *arg, int int_id)
 } // namespace common
 } // namespace edp
 } // namespace mrrocpp
-
