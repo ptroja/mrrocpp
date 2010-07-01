@@ -12,15 +12,18 @@
 
 #include "visual_servo_manager.h"
 
-namespace mrrocpp {
+//class mrrocpp::ecp::common::generator::visual_servo_manager;
 
+namespace mrrocpp {
 namespace ecp {
 
 namespace common {
-
 namespace generator {
-
 class visual_servo_manager;
+}//namespace generator
+}//namespace common
+
+namespace servovision {
 
 /** @addtogroup servovision
  *  @{
@@ -48,7 +51,7 @@ public:
 	 * Make termination condition update itself.
 	 * @param vsm
 	 */
-	virtual void update(const visual_servo_manager* vsm) = 0;
+	virtual void update(const mrrocpp::ecp::common::generator::visual_servo_manager* vsm) = 0;
 
 	/**
 	 * Check if condition is met.
@@ -61,11 +64,7 @@ public:
 /** @} */
 
 }//namespace generator
-
 }
-
-}
-
 }
 
 #endif /* TERMINATION_CONDITION_H_ */

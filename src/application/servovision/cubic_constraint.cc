@@ -18,9 +18,7 @@ namespace mrrocpp {
 
 namespace ecp {
 
-namespace common {
-
-namespace generator {
+namespace servovision {
 
 cubic_constraint::cubic_constraint(const lib::configurator& config, const std::string &section_name)
 {
@@ -114,8 +112,8 @@ void cubic_constraint::apply_constraint()
 	rot.get_xyz_angle_axis(position_aa);
 
 	for (int i = 0; i < 3; ++i) {
-		position_aa(i, 0) = min(translation_max(i, 0), position_aa(i, 0));
-		position_aa(i, 0) = max(translation_min(i, 0), position_aa(i, 0));
+		new_position(i, 3) = min(translation_max(i, 0), new_position(i, 3));
+		new_position(i, 3) = max(translation_min(i, 0), new_position(i, 3));
 	}
 
 	Eigen::Matrix <double, 3, 1> axis = position_aa.block(3, 0, 3, 1);
@@ -153,8 +151,6 @@ void cubic_constraint::apply_constraint()
 }
 
 } // namespace generator
-
-}
 
 }
 

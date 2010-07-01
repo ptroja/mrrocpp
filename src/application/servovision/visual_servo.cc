@@ -8,12 +8,8 @@
 #include "visual_servo.h"
 
 namespace mrrocpp {
-
 namespace ecp {
-
-namespace common {
-
-namespace generator {
+namespace servovision {
 
 visual_servo::visual_servo(boost::shared_ptr <visual_servo_regulator> regulator) :
 	regulator(regulator), object_visible(false), max_steps_without_reading(5), steps_without_reading(0)
@@ -30,10 +26,6 @@ bool visual_servo::is_object_visible()
 	return object_visible;
 }
 
-} // namespace generator
-
-} // namespace common
-
+} // namespace servovision
 } // namespace ecp
-
 } // namespace mrrocpp

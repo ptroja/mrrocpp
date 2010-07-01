@@ -16,12 +16,8 @@
 #include "base/ecp_mp/ecp_mp_sensor.h"
 
 namespace mrrocpp {
-
 namespace ecp {
-
-namespace common {
-
-namespace generator {
+namespace servovision {
 
 /** @addtogroup servovision
  *  @{
@@ -37,8 +33,9 @@ public:
 	virtual ~visual_servo();
 	/**
 	 * Calculates relative change of position.
-	 * @param currentPosition
-	 * @param newPosition
+	 * @param current_position end effector's current position.
+	 * @param dt time between calls to get_position_change.
+	 * @return
 	 */
 	virtual lib::Homog_matrix get_position_change(const lib::Homog_matrix& current_position, double dt) = 0;
 	/**
@@ -65,12 +62,8 @@ private:
 
 /** @} */
 
-} // namespace generator
-
-} // namespace common
-
+} // namespace servovision
 } // namespace ecp
-
 } // namespace mrrocpp
 
 #endif /* VISUAL_SERVO_H_ */

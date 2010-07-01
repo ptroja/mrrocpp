@@ -11,12 +11,8 @@
 #include "visual_servo_regulator.h"
 
 namespace mrrocpp {
-
 namespace ecp {
-
-namespace common {
-
-namespace generator {
+namespace servovision {
 
 /** @addtogroup servovision
  *  @{
@@ -25,7 +21,7 @@ namespace generator {
 /**
  *
  */
-class regulator_pid : public mrrocpp::ecp::common::generator::visual_servo_regulator
+class regulator_pid : public visual_servo_regulator
 {
 public:
 	regulator_pid(const lib::configurator & config, const std::string& config_section_name);
@@ -42,11 +38,7 @@ protected:
 /** @} */
 
 } // namespace
-
 }
-
-}
-
 }
 
 #endif /* VISUAL_SERVO_REGULATOR_PID_H_ */

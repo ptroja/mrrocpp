@@ -11,14 +11,10 @@
 #include "termination_condition.h"
 
 namespace mrrocpp {
-
 namespace ecp {
+namespace servovision {
 
-namespace common {
-
-namespace generator {
-
-class timeout_termination_condition : public mrrocpp::ecp::common::generator::termination_condition
+class timeout_termination_condition : public termination_condition
 {
 public:
 	timeout_termination_condition(double timeout);
@@ -32,11 +28,7 @@ protected:
 };
 
 }//namespace generator
-
 }
-
-}
-
 }
 
 #endif /* TIMEOUT_TERMINATION_CONDITION_H_ */

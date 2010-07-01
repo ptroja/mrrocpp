@@ -18,13 +18,11 @@ namespace mrrocpp {
 
 namespace ecp {
 
-namespace common {
-
-namespace generator {
+namespace servovision {
 
 typedef ecp_mp::sensor::fradia_sensor <position_based_configuration, position_based_reading> pb_fradia_sensor;
 
-class pb_visual_servo : public mrrocpp::ecp::common::generator::visual_servo
+class pb_visual_servo : public visual_servo
 {
 public:
 	pb_visual_servo(boost::shared_ptr <visual_servo_regulator> regulator, const std::string& section_name, mrrocpp::lib::configurator& configurator);
@@ -37,8 +35,6 @@ protected:
 };
 
 }//namespace generator {
-
-}
 
 }
 

@@ -14,9 +14,7 @@ namespace mrrocpp {
 
 namespace ecp {
 
-namespace common {
-
-namespace generator {
+namespace servovision {
 
 /** @addtogroup servovision
  *  @{
@@ -45,6 +43,5 @@ protected:
 
 }
 
-}
 
 #endif /* PB_EIH_VISUAL_SERVO_H_ */

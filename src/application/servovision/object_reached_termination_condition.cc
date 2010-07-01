@@ -14,9 +14,7 @@ namespace mrrocpp {
 
 namespace ecp {
 
-namespace common {
-
-namespace generator {
+namespace servovision {
 
 object_reached_termination_condition::object_reached_termination_condition(double max_speed, double max_accel, int min_steps) :
 	max_speed(max_speed), max_accel(max_accel), min_steps(min_steps), steps_below_max_speed(0)
@@ -32,7 +30,7 @@ void object_reached_termination_condition::reset()
 	steps_below_max_speed = 0;
 }
 
-void object_reached_termination_condition::update(const visual_servo_manager* vsm)
+void object_reached_termination_condition::update(const mrrocpp::ecp::common::generator::visual_servo_manager* vsm)
 {
 
 }
@@ -55,8 +53,6 @@ bool object_reached_termination_condition::is_condition_met() const
 }
 
 }//namespace generator
-
-}
 
 }
 

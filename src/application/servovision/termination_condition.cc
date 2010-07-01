@@ -11,9 +11,7 @@ namespace mrrocpp {
 
 namespace ecp {
 
-namespace common {
-
-namespace generator {
+namespace servovision {
 
 termination_condition::termination_condition()
 {
@@ -23,10 +21,6 @@ termination_condition::~termination_condition()
 {
 }
 
-}//namespace generator
-
+}//namespace servovision
 }
-
-}
-
 }

@@ -19,9 +19,7 @@ namespace mrrocpp {
 
 namespace ecp {
 
-namespace common {
-
-namespace generator {
+namespace servovision {
 
 ib_eih_visual_servo::ib_eih_visual_servo(boost::shared_ptr <visual_servo_regulator> regulator, const std::string & section_name, mrrocpp::lib::configurator& configurator) :
 	visual_servo(regulator)
@@ -145,8 +143,6 @@ boost::shared_ptr <ecp_mp::sensor::sensor_interface> ib_eih_visual_servo::get_vs
 }
 
 }//namespace generator
-
-}
 
 }
 

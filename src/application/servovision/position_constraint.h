@@ -11,12 +11,8 @@
 #include "lib/mrmath/mrmath.h"
 
 namespace mrrocpp {
-
 namespace ecp {
-
-namespace common {
-
-namespace generator {
+namespace servovision {
 
 /** @addtogroup servovision
  *  @{
@@ -105,11 +101,7 @@ private:
 /** @} */
 
 } // namespace generator
-
 }
-
-}
-
 }
 
 #endif /* POSITION_CONSTRAINT_H_ */

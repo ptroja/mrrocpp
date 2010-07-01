@@ -8,14 +8,11 @@
 #include "timeout_termination_condition.h"
 
 namespace mrrocpp {
-
 namespace ecp {
+namespace servovision {
 
-namespace common {
-
-namespace generator {
-
-timeout_termination_condition::timeout_termination_condition()
+timeout_termination_condition::timeout_termination_condition(double timeout) :
+	timeout(timeout), time_left(timeout)
 {
 }
 
@@ -33,15 +30,11 @@ void timeout_termination_condition::update(const visual_servo_manager* vsm)
 
 }
 
-bool timeout_termination_condition::is_condition_met(const visual_servo_manager* vsm) const
+bool timeout_termination_condition::is_condition_met() const
 {
 	return time_left <= 0;
 }
 
 }//namespace generator
-
 }
-
-}
-
 }

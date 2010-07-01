@@ -8,12 +8,8 @@
 #include "visual_servo_regulator_pid.h"
 
 namespace mrrocpp {
-
 namespace ecp {
-
-namespace common {
-
-namespace generator {
+namespace servovision {
 
 regulator_pid::regulator_pid(const lib::configurator & config, const std::string& config_section_name) :
 	visual_servo_regulator(config, config_section_name)
@@ -44,9 +40,5 @@ const Eigen::Matrix <double, 6, 1> & regulator_pid::compute_control(const Eigen:
 }
 
 } //namespace
-
 }
-
-}
-
 }
