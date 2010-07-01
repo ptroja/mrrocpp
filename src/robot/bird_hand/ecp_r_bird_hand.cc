@@ -40,15 +40,7 @@ robot::robot(common::task::task& _ecp_object) :
 	create_kinematic_models_for_given_robot();
 }
 
-void robot::clear_data_ports()
-{
-	bird_hand_command_data_port.clear_new_data_flag();
-	bird_hand_configuration_command_data_port.clear_new_data_flag();
-	bird_hand_status_reply_data_request_port.clear_new_data_flag();
-	bird_hand_status_reply_data_request_port.clear_new_request_flag();
-	bird_hand_configuration_reply_data_request_port.clear_new_data_flag();
-	bird_hand_configuration_reply_data_request_port.clear_new_request_flag();
-}
+
 
 void robot::create_command()
 {

@@ -36,8 +36,7 @@ public:
 	single_thread_port_interface(std::string _name, single_thread_port_manager & _port_manager);
 
 	std::string get_name();
-
-	//virtual void test() = 0;
+	virtual void clear_all_flags()=0;
 
 };
 
@@ -81,6 +80,11 @@ public:
 		new_data = false;
 	}
 
+	virtual void clear_all_flags()
+	{
+		clear_new_data_flag();
+	}
+
 	void test()
 	{
 
@@ -112,6 +116,12 @@ public:
 		single_thread_port <T>::set(_data);
 	}
 
+	void clear_all_flags()
+	{
+		single_thread_port <T>::clear_new_data_flag();
+		clear_new_request_flag();
+	}
+
 	bool is_new_request()
 	{
 		return new_request;
@@ -124,16 +134,21 @@ public:
 
 };
 
+typedef std::map <std::string, single_thread_port_interface *> single_thread_port_interface_t;
+typedef single_thread_port_interface_t::value_type single_thread_port_interface_pair_t;
+
 class single_thread_port_manager
 {
 private:
-	std::map <std::string, single_thread_port_interface *> single_thread_port_map;
+	single_thread_port_interface_t single_thread_port_map;
 
 public:
 
 	single_thread_port_manager();
 
 	void add_port(single_thread_port_interface* single_thread_port_inter);
+
+	void clear_data_ports();
 
 	template <class T>
 	single_thread_port <T>* get_port(std::string name)

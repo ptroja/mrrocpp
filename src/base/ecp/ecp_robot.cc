@@ -202,8 +202,7 @@ void ecp_robot::create_command()
 void ecp_robot::get_reply() {
 }
 
-void ecp_robot::clear_data_ports() {
-}
+
 
 void ecp_robot::query()
 {

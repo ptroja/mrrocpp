@@ -53,7 +53,7 @@ public:
 
 	void create_command();
 	void get_reply();
-	void clear_data_ports();
+
 
 }; // end: class ecp_irp6_mechatronika_robot
 // ---------------------------------------------------------------

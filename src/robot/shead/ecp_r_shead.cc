@@ -47,13 +47,7 @@ void robot::create_kinematic_models_for_given_robot(void)
 	set_kinematic_model(0);
 }
 
-void robot::clear_data_ports()
-{
-	shead_head_soldification_data_port.clear_new_data_flag();
-	shead_vacuum_activation_data_port.clear_new_data_flag();
-	shead_reply_data_request_port.clear_new_request_flag();
-	shead_reply_data_request_port.clear_new_data_flag();
-}
+
 
 void robot::create_command()
 {

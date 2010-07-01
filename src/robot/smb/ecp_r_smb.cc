@@ -51,18 +51,6 @@ void robot::create_kinematic_models_for_given_robot(void)
 	set_kinematic_model(0);
 }
 
-void robot::clear_data_ports()
-{
-	epos_low_level_command_data_port.clear_new_data_flag();
-	epos_gen_parameters_data_port.clear_new_data_flag();
-	epos_reply_data_request_port.clear_new_request_flag();
-	epos_reply_data_request_port.clear_new_data_flag();
-
-	smb_multi_pin_insertion_data_port.clear_new_data_flag();
-	smb_multi_pin_locking_data_port.clear_new_data_flag();
-	smb_multi_leg_reply_data_request_port.clear_new_request_flag();
-	smb_multi_leg_reply_data_request_port.clear_new_data_flag();
-}
 
 void robot::create_command()
 {
