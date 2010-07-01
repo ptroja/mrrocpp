@@ -130,6 +130,10 @@ void effector::move_arm(const lib::c_buffer &instruction)
 
 		}
 			break;
+		case lib::SPKM_CBUFFER_EPOS_BRAKE_COMMAND: {
+
+		}
+			break;
 		default:
 			break;
 

@@ -249,6 +249,50 @@ bool epos_operational::next_step()
 
 }
 
+//
+//
+//
+// epos_brake
+//
+//
+//
+
+
+epos_brake::epos_brake(common::task::task& _ecp_task) :
+	generator(_ecp_task)
+{
+	//	if (the_robot) the_robot->communicate_with_edp = false; //do not communicate with edp
+
+
+	epos_brake_command_data_port = the_robot->port_manager.get_port <bool> (lib::EPOS_BRAKE_COMMAND_DATA_PORT);
+
+}
+
+void epos_brake::create_ecp_mp_reply()
+{
+
+}
+
+void epos_brake::get_mp_ecp_command()
+{
+	//	memcpy(&mp_ecp_epos_gen_parameters_structure, ecp_t.mp_command.ecp_next_state.mp_2_ecp_next_state_string, sizeof(mp_ecp_epos_gen_parameters_structure));
+
+	//	printf("aaaaa: %lf\n", mp_ecp_epos_gen_parameters_structure.dm[4]);
+}
+
+bool epos_brake::first_step()
+{
+
+	return true;
+}
+
+bool epos_brake::next_step()
+{
+
+	return true;
+
+}
+
 } // namespace generator
 } // namespace common
 } // namespace ecp

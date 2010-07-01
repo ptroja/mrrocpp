@@ -21,6 +21,7 @@ robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
 			epos_cubic_command_data_port(lib::EPOS_CUBIC_COMMAND_DATA_PORT, port_manager),
 			epos_trapezoidal_command_data_port(lib::EPOS_TRAPEZOIDAL_COMMAND_DATA_PORT, port_manager),
 			epos_operational_command_data_port(lib::EPOS_OPERATIONAL_COMMAND_DATA_PORT, port_manager),
+			epos_brake_command_data_port(lib::EPOS_BRAKE_COMMAND_DATA_PORT, port_manager),
 			epos_reply_data_request_port(lib::EPOS_REPLY_DATA_REQUEST_PORT, port_manager)
 
 {
@@ -35,6 +36,7 @@ robot::robot(common::task::task& _ecp_object) :
 			epos_cubic_command_data_port(lib::EPOS_CUBIC_COMMAND_DATA_PORT, port_manager),
 			epos_trapezoidal_command_data_port(lib::EPOS_TRAPEZOIDAL_COMMAND_DATA_PORT, port_manager),
 			epos_operational_command_data_port(lib::EPOS_OPERATIONAL_COMMAND_DATA_PORT, port_manager),
+			epos_brake_command_data_port(lib::EPOS_BRAKE_COMMAND_DATA_PORT, port_manager),
 			epos_reply_data_request_port(lib::EPOS_REPLY_DATA_REQUEST_PORT, port_manager)
 
 {
@@ -94,6 +96,19 @@ void robot::create_command()
 		ecp_edp_cbuffer.variant = lib::SPKM_CBUFFER_EPOS_OPERATIONAL_COMMAND;
 
 		ecp_edp_cbuffer.epos_operational_command_structure = epos_operational_command_structure;
+
+		if (is_new_data) {
+			throw ecp_robot::ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
+		} else {
+			is_new_data = true;
+		}
+	}
+	if (epos_brake_command_data_port.get(epos_brake_command_structure) == mrrocpp::lib::NewData) {
+		ecp_command.instruction.set_type = ARM_DEFINITION;
+		// generator command interpretation
+		// narazie proste przepisanie
+
+		ecp_edp_cbuffer.variant = lib::SPKM_CBUFFER_EPOS_BRAKE_COMMAND;
 
 		if (is_new_data) {
 			throw ecp_robot::ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
