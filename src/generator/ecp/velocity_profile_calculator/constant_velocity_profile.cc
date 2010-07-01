@@ -98,7 +98,7 @@ bool constant_velocity_profile::calculate_absolute_distance_direction_pose(vecto
 	it->s.clear();
 	it->k.clear();
 	for (int i = 0; i < it->axes_num; i++) {
-		it->s.push_back(abs(it->coordinates[i] - it->start_position[i]));
+		it->s.push_back(fabs(it->coordinates[i] - it->start_position[i]));
 		if (it->coordinates[i] - it->start_position[i] >= 0) {
 			it->k.push_back(1);
 		} else {

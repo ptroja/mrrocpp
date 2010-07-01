@@ -18,7 +18,10 @@ class ecp_sub_task_const_vel_gen_test : public ecp_sub_task
 {
 
 private:
-	generator::constant_velocity* cvgen;
+	generator::constant_velocity* cvgenjoint;
+	generator::constant_velocity* cvgenmotor;
+	generator::constant_velocity* cvgeneuler;
+	generator::constant_velocity* cvgenangle;
 
 public:
 	ecp_sub_task_const_vel_gen_test(task & _ecp_t);
