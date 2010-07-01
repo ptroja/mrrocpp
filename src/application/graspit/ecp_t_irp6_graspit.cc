@@ -1,10 +1,11 @@
 #include <stdio.h>
-#include <string.h>
+#include <string>
 #include <unistd.h>
 #include <iostream>
 
 #include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
 #include "robot/irp6p_m/ecp_r_irp6p_m.h"
+#include "generator/ecp/ecp_g_constant_velocity.h"
 #include "ecp_t_irp6_graspit.h"
 #include "ecp_mp_t_graspit.h"
 
@@ -24,8 +25,8 @@ irp6_grasp::irp6_grasp(lib::configurator &_config) :
 		ecp_m_robot = new irp6p_m::robot(*this);
 	}
 
-	smoothgen2 = new common::generator::smooth(*this, true);
-	smoothgen2->sensor_m = sensor_m;
+	cvgenjoint = new generator::constant_velocity(*this, lib::ECP_JOINT, 6);
+	cvgenjoint->set_debug(true);
 
 	sr_ecp_msg->message("ecp IRP6 loaded");
 }
@@ -36,38 +37,38 @@ void irp6_grasp::main_task_algorithm(void)
 
 	sr_ecp_msg->message("ecp IRP6 ready");
 
-	double v[8], a[8];
-	for (int i = 0; i < 8; ++i) {
-		v[i] = 0.1;
-		a[i] = 0.1;
-	}
+	struct _irp6{
+		double joint[6];
+	} mp_ecp_irp6_command;
+	vector<double> coordinates1(6);
+
+	std::stringstream ss(std::stringstream::in | std::stringstream::out);
 
 	for (;;) {
-		sr_ecp_msg->message("Waiting for MP order");
+			sr_ecp_msg->message("Waiting for MP order");
 
-		get_next_state();
+			get_next_state();
 
-		sr_ecp_msg->message("Order received");
-		flushall();
+			sr_ecp_msg->message("Order received");
+			flushall();
 
-		if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_IRP6) {
+			if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_IRP6)  {
 
-			sr_ecp_msg->message("ECP_GEN_IRP6");
-			sr_ecp_msg->message("Smooth->Move()");
-			//				smoothgen2->load_coordinates(lib::ECP_JOINT, v, a,
-			//											trgraspit->from_va.graspit.grasp_joint[7],
-			//											trgraspit->from_va.graspit.grasp_joint[8],
-			//											trgraspit->from_va.graspit.grasp_joint[9],
-			//											trgraspit->from_va.graspit.grasp_joint[10],
-			//											trgraspit->from_va.graspit.grasp_joint[11],
-			//											trgraspit->from_va.graspit.grasp_joint[12],
-			//											0.08,
-			//											0.0, false);
-			//
-		} // end switch
+				sr_ecp_msg->message("ECP_GEN_IRP6");
 
-		ecp_termination_notice();
-	} //end for
+				memcpy(&mp_ecp_irp6_command, mp_command.ecp_next_state.mp_2_ecp_next_state_string, sizeof(mp_ecp_irp6_command));
+				for (int i=0; i<6; ++i)
+					coordinates1[i] = mp_ecp_irp6_command.joint[i];
+
+				cvgenjoint->reset();
+				cvgenjoint->set_absolute();
+				cvgenjoint->load_absolute_joint_trajectory_pose(coordinates1);
+				if (cvgenjoint->calculate_interpolate())
+					cvgenjoint->Move();
+			}
+
+			ecp_termination_notice();
+	}
 
 	ecp_termination_notice();
 }

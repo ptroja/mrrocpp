@@ -38,6 +38,21 @@ private:
 			*bird_hand_configuration_reply_data_request_port;
 	lib::bird_hand_configuration bird_hand_configuration_reply_structure;
 
+	// docelowe pozycje palcow
+	double des_thumb_f[2];
+	double des_index_f[3];
+	double des_ring_f[3];
+
+	// liczba makrokrokow
+	int macro_no;
+	// dlugosc ostatniego makrokroku
+	int last_step;
+
+	// maksymalna predkosc [rad/ms]
+	const double MAX_V;
+	// czas trwania makrokroku, 1 step = 1ms
+	const int STEP_NO;
+
 public:
 	void create_ecp_mp_reply();
 	void get_mp_ecp_command();
