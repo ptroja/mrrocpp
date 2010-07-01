@@ -36,7 +36,7 @@ bool constant_velocity_profile::calculate_constant_velocity_pose(vector<ecp_mp::
 
 	bool trueFlag = true;
 
-	for (int i; i < it->axes_num; i++) {
+	for (int i = 0; i < it->axes_num; i++) {
 		if (calculate_constant_velocity(it, i) == false) {
 			trueFlag = false;
 		}
@@ -59,7 +59,7 @@ bool constant_velocity_profile::calculate_time_pose(vector<ecp_mp::common::traje
 
 	bool trueFlag = true;
 
-	for (int i; i < it->axes_num; i++) {
+	for (int i = 0; i < it->axes_num; i++) {
 		if (calculate_time(it, i) == false) {
 			trueFlag = false;
 		}
