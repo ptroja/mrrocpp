@@ -113,10 +113,6 @@ class constant_velocity : public multiple_position<ecp_mp::common::trajectory_po
 		 * Method used to print list of positions.
 		 */
 		void print_pose_vector();
-		/**
-		 * Method used to print list of coordinates.
-		 */
-		void print_coordinate_vector();
 };
 
 } // namespace generator

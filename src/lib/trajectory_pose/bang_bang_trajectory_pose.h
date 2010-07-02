@@ -44,6 +44,10 @@ public:
    */
   vector<double> a;
   /**
+   * Maximal acceleration set for the given robot (a_r = a * a_max).
+   */
+  vector<double> a_max;
+  /**
    * Number of the macrostep in which the first part of the movement ends (first out of three).
    */
   vector<double> przysp;

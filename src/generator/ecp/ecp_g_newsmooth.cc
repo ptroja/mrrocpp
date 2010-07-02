@@ -69,21 +69,6 @@ void newsmooth::print_pose_vector() {
 	}
 }
 
-void newsmooth::print_coordinate_vector() {
-	coordinate_vector_iterator = coordinate_vector.begin();
-	printf("coordinate_vector_size: %d\n", coordinate_vector.size());
-	for (int i = 0; i < coordinate_vector.size(); i++) {
-		tempIter = (*coordinate_vector_iterator).begin();
-		printf("%d:\t", (i+1));
-		for (tempIter = (*coordinate_vector_iterator).begin(); tempIter != (*coordinate_vector_iterator).end(); tempIter++) {
-			printf(" %f\t", *tempIter);
-		}
-		coordinate_vector_iterator++;
-		printf("\n");
-	}
-	flushall();
-}
-
 void newsmooth::create_velocity_vectors(int axes_num) {
 	joint_velocity = vector<double>(axes_num, 0.05);
 	joint_max_velocity = vector<double>(axes_num, 1.5);
@@ -103,7 +88,42 @@ void newsmooth::create_velocity_vectors(int axes_num) {
 	angle_axis_max_acceleration = vector<double>(axes_num, 5.0);
 }
 
-bool newsmooth::load_trajectory_pose(const vector<double> & coordinates, lib::MOTION_TYPE motion_type, lib::ECP_POSE_SPECIFICATION pose_spec, const vector<double> & v, const vector<double> & v_max) {
+bool newsmooth::load_trajectory_pose(const vector<double> & coordinates, lib::MOTION_TYPE motion_type, lib::ECP_POSE_SPECIFICATION pose_spec, const vector<double> & v, const vector<double> & a, const vector<double> & v_max, const vector<double> & a_max) {
+
+	if (!pose_vector.empty() && this->pose_spec != pose_spec) { //check if previous positions were provided in joint representation
+
+		sr_ecp_msg.message("Representation different than the previous one");
+		return false;
+	}
+
+	if (!pose_vector.empty() && this->motion_type != motion_type) {
+
+		sr_ecp_msg.message("Wrong motion type");
+		return false;
+	}
+
+	this->motion_type = motion_type;
+	this->pose_spec = pose_spec;
+
+	ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose pose; //new trajectory pose
+	pose = ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose(pose_spec, coordinates, v, a); //create new trajectory pose
+	pose.v_max = v_max; //set the v_max vector
+	pose.a_max = a_max;
+
+	for (int j = 0; j < axes_num; j++) { //calculate v_r velocities
+		pose.v_r[j] = pose.v[j] * pose.v_max[j];
+		pose.a_r[j] = pose.a[j] * pose.a_max[j];
+	}
+
+	if (motion_type == lib::ABSOLUTE) {
+		if (!pose_vector.empty()) {//set the start position of the added pose as the desired position of the previous pose
+			pose.start_position = pose_vector.back().coordinates;
+		}
+	}
+
+	pose_vector.push_back(pose); //put new trajectory pose into a pose vector
+
+	sr_ecp_msg.message("Pose loaded");
 
 	return true;
 }

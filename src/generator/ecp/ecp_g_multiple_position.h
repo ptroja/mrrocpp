@@ -252,7 +252,20 @@ protected:
 	/**
 	 * Method used to print list of coordinates.
 	 */
-	virtual void print_coordinate_vector() = 0;
+	virtual void print_coordinate_vector() {
+		coordinate_vector_iterator = coordinate_vector.begin();
+		printf("coordinate_vector_size: %d\n", coordinate_vector.size());
+		for (int i = 0; i < coordinate_vector.size(); i++) {
+			tempIter = (*coordinate_vector_iterator).begin();
+			printf("%d:\t", (i+1));
+			for (tempIter = (*coordinate_vector_iterator).begin(); tempIter != (*coordinate_vector_iterator).end(); tempIter++) {
+				printf(" %f\t", *tempIter);
+			}
+			coordinate_vector_iterator++;
+			printf("\n");
+		}
+		flushall();
+	}
 
 public:
 	/**

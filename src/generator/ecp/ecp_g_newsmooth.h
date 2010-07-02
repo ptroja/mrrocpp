@@ -46,15 +46,11 @@ ecp::common::generator::velocity_profile_calculator::bang_bang_profile> {
 		 * Loads trajectory pose.
 		 * @return true if the addition was successful
 		 */
-		bool load_trajectory_pose(const vector<double> & coordinates, lib::MOTION_TYPE motion_type, lib::ECP_POSE_SPECIFICATION pose_spec, const vector<double> & v, const vector<double> & v_max);
+		bool load_trajectory_pose(const vector<double> & coordinates, lib::MOTION_TYPE motion_type, lib::ECP_POSE_SPECIFICATION pose_spec, const vector<double> & v, const vector<double> & a, const vector<double> & v_max, const vector<double> & a_max);
 		/**
 		 * Method used to print list of positions.
 		 */
 		void print_pose_vector();
-		/**
-		 * Method used to print list of coordinates.
-		 */
-		void print_coordinate_vector();
 
 	public:
 		/**
@@ -65,6 +61,54 @@ ecp::common::generator::velocity_profile_calculator::bang_bang_profile> {
 		 * Destructor.
 		 */
 		virtual ~newsmooth();
+		/**
+		 * Loads a single trajectory pose described in joint coordinates (absolute motion) to the list. Maximal velocities and accelerations are set automatically.
+		 * @param coordinates desired position
+		 * @return true if the addition was succesfull
+		 */
+		bool load_absolute_joint_trajectory_pose(const vector<double> & coordinates);
+		/**
+		 * Loads a single trajectory pose described in joint coordinates (relative motion) to the list. Maximal velocities and accelerations are set automatically.
+		 * @param coordinates desired position
+		 * @return true if the addition was succesfull
+		 */
+		bool load_relative_joint_trajectory_pose(const vector<double> & coordinates);
+		/**
+		 * Loads a single trajectory pose described in motor coordinates (absolute motion) to the list. Maximal velocities and accelerations are set automatically.
+		 * @param coordinates desired position
+		 * @return true if the addition was succesfull
+		 */
+		bool load_absolute_motor_trajectory_pose(const vector<double> & coordinates);
+		/**
+		 * Loads a single trajectory pose described in motor coordinates (relative motion) to the list. Maximal velocities and accelerations are set automatically.
+		 * @param coordinates desired position
+		 * @return true if the addition was succesfull
+		 */
+		bool load_relative_motor_trajectory_pose(const vector<double> & coordinates);
+		/**
+		 * Loads a single trajectory pose described in euler zyz coordinates (absolute motion) to the list. Maximal velocities and accelerations are set automatically.
+		 * @param coordinates desired position
+		 * @return true if the addition was succesfull
+		 */
+		bool load_absolute_euler_zyz_trajectory_pose(const vector<double> & coordinates);
+		/**
+		 * Loads a single trajectory pose described in euler zyz coordinates (relative motion) to the list. Maximal velocities and accelerations are set automatically.
+		 * @param coordinates desired position
+		 * @return true if the addition was succesfull
+		 */
+		bool load_relative_euler_zyz_trajectory_pose(const vector<double> & coordinates);
+		/**
+		 * Loads a single trajectory pose described in angle axis coordinates (absolute motion) to the list. Maximal velocities and accelerations are set automatically.
+		 * @param coordinates desired position
+		 * @return true if the addition was succesfull
+		 */
+		bool load_absolute_angle_axis_trajectory_pose(const vector<double> & coordinates);
+		/**
+		 * Loads a single trajectory pose described in angle axis coordinates (relative motion) to the list. Maximal velocities and accelerations are set automatically.
+		 * @param coordinates desired position
+		 * @return true if the addition was succesfull
+		 */
+		bool load_relative_angle_axis_trajectory_pose(const vector<double> & coordinates);
 
 };
 

@@ -29,6 +29,7 @@ bang_bang_trajectory_pose::bang_bang_trajectory_pose(lib::ECP_POSE_SPECIFICATION
 	v_p = vector <double> (axes_num);
 	v_k = vector <double> (axes_num);
 	v_max = vector <double> (axes_num);
+	a_max = vector <double> (axes_num);
 	przysp = vector <double> (axes_num);
 	jedn = vector <double> (axes_num);
 	s_jedn = vector <double> (axes_num);
