@@ -31,14 +31,32 @@ class newsmooth : public multiple_position<ecp_mp::common::trajectory_pose::bang
 ecp::common::generator::trajectory_interpolator::bang_bang_interpolator,
 ecp::common::generator::velocity_profile_calculator::bang_bang_profile> {
 
-	protected:
+	private:
+		/**
+		 * Creates the vectors containning the information about the maximal and typical velocities and accelerations for each representation.
+		 * @axes_num actual number of axes
+		 */
+		void create_velocity_vectors(int axes_num);
+		/**
+		 * Calculates trajectory.
+		 * @return true if calculation was successful.
+		 */
+		bool calculate();
+		/**
+		 * Loads trajectory pose.
+		 * @return true if the addition was successful
+		 */
+		bool load_trajectory_pose(const vector<double> & coordinates, lib::MOTION_TYPE motion_type, lib::ECP_POSE_SPECIFICATION pose_spec, const vector<double> & v, const vector<double> & v_max);
+		/**
+		 * Method used to print list of positions.
+		 */
+		void print_pose_vector();
+		/**
+		 * Method used to print list of coordinates.
+		 */
+		void print_coordinate_vector();
 
 	public:
-		/**
-		 * Performs calculation of the trajectory and interpolation. Fills in pose_vector and coordinate_vector.
-		 * @return true if the calculation was succesfull
-		 */
-		bool calculate_interpolate();
 		/**
 		 * Constructor.
 		 */
@@ -47,18 +65,6 @@ ecp::common::generator::velocity_profile_calculator::bang_bang_profile> {
 		 * Destructor.
 		 */
 		virtual ~newsmooth();
-		/**
-		 * Implementation of the first_step method.
-		 */
-		bool first_step();
-		/**
-		 * Implementation of the next_step method.
-		 */
-		bool next_step();
-		/**
-		 * Sets the number of axes in which the generator will move the robot. New velocity and acceleration vectors are created to match the new number of axes.
-		 */
-		void set_axes_num(int axes_num);
 
 };
 
