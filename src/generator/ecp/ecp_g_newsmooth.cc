@@ -30,7 +30,7 @@ newsmooth::~newsmooth() {
 
 bool newsmooth::calculate() {
 
-	return true;
+	return false;
 }
 
 void newsmooth::print_pose_vector() {
@@ -88,6 +88,64 @@ void newsmooth::create_velocity_vectors(int axes_num) {
 	angle_axis_max_acceleration = vector<double>(axes_num, 5.0);
 }
 
+//--------------- METHODS USED TO LOAD POSES ----------------
+
+bool newsmooth::load_absolute_joint_trajectory_pose(const vector<double> & coordinates) {
+
+	ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose pose;
+
+	return load_trajectory_pose(coordinates, lib::ABSOLUTE, lib::ECP_JOINT, joint_velocity, joint_acceleration, joint_max_velocity, joint_max_acceleration);
+}
+
+bool newsmooth::load_relative_joint_trajectory_pose(const vector<double> & coordinates) {
+
+	ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose pose;
+
+	return load_trajectory_pose(coordinates, lib::RELATIVE, lib::ECP_JOINT, joint_velocity, joint_acceleration, joint_max_velocity, joint_max_acceleration);
+}
+
+bool newsmooth::load_absolute_motor_trajectory_pose(const vector<double> & coordinates) {
+
+	ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose pose;
+
+	return load_trajectory_pose(coordinates, lib::ABSOLUTE, lib::ECP_MOTOR, motor_velocity, motor_acceleration, motor_max_velocity, motor_max_acceleration);
+}
+
+bool newsmooth::load_relative_motor_trajectory_pose(const vector<double> & coordinates) {
+
+	ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose pose;
+
+	return load_trajectory_pose(coordinates, lib::RELATIVE, lib::ECP_MOTOR, motor_velocity, motor_acceleration, motor_max_velocity, motor_max_acceleration);
+}
+
+bool newsmooth::load_absolute_euler_zyz_trajectory_pose(const vector<double> & coordinates) {
+
+	ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose pose;
+
+	return load_trajectory_pose(coordinates, lib::ABSOLUTE, lib::ECP_XYZ_EULER_ZYZ, euler_zyz_velocity, euler_zyz_acceleration, euler_zyz_max_velocity, euler_zyz_max_acceleration);
+}
+
+bool newsmooth::load_relative_euler_zyz_trajectory_pose(const vector<double> & coordinates) {
+
+	ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose pose;
+
+	return load_trajectory_pose(coordinates, lib::RELATIVE, lib::ECP_XYZ_EULER_ZYZ, euler_zyz_velocity, euler_zyz_acceleration, euler_zyz_max_velocity, euler_zyz_max_acceleration);
+}
+
+bool newsmooth::load_absolute_angle_axis_trajectory_pose(const vector<double> & coordinates) {
+
+	ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose pose;
+
+	return load_trajectory_pose(coordinates, lib::ABSOLUTE, lib::ECP_XYZ_ANGLE_AXIS, angle_axis_velocity, angle_axis_acceleration, angle_axis_max_velocity, angle_axis_max_acceleration);
+}
+
+bool newsmooth::load_relative_angle_axis_trajectory_pose(const vector<double> & coordinates) {
+
+	ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose pose;
+
+	return load_trajectory_pose(coordinates, lib::RELATIVE, lib::ECP_XYZ_ANGLE_AXIS, angle_axis_velocity, angle_axis_acceleration, angle_axis_max_velocity, angle_axis_max_acceleration);
+}
+
 bool newsmooth::load_trajectory_pose(const vector<double> & coordinates, lib::MOTION_TYPE motion_type, lib::ECP_POSE_SPECIFICATION pose_spec, const vector<double> & v, const vector<double> & a, const vector<double> & v_max, const vector<double> & a_max) {
 
 	if (!pose_vector.empty() && this->pose_spec != pose_spec) { //check if previous positions were provided in joint representation
@@ -127,6 +185,8 @@ bool newsmooth::load_trajectory_pose(const vector<double> & coordinates, lib::MO
 
 	return true;
 }
+
+//--------------- METHODS USED TO LOAD POSES END ----------------
 
 } // namespace generator
 } // namespace common
