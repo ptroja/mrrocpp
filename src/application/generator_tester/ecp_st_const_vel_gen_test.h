@@ -1,5 +1,5 @@
-#if !defined(_ECP_SUB_TASK_EDGE_FOLLOW_H)
-#define _ECP_SUB_TASK_EDGE_FOLLOW_H
+#if !defined(_ECP_SUB_TASK_CONST_VEL_GEN_TEST_H)
+#define _ECP_SUB_TASK_CONST_VEL_GEN_TEST_H
 
 #include "base/ecp/ecp_task.h"
 #include "application/generator_tester/ecp_mp_st_const_vel_gen_test.h"
