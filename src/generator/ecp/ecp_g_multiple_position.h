@@ -163,6 +163,109 @@ protected:
 	 * Temporary homog matrix.
 	 */
 	lib::Homog_matrix homog_matrix;
+	/**
+	 * Sets up the start position vector of the first position in the trajectory chain.
+	 */
+	void get_initial_position() {
+		pose_vector_iterator = pose_vector.begin();
+		if (motion_type == lib::ABSOLUTE) {
+			get_position * get_pos = new get_position(ecp_t, pose_spec, axes_num); //generator used to get the actual position of the robot
+			get_pos->Move();
+
+			//---------------- DEGUG --------------------
+
+			if (debug) {
+				printf("actual position vector, size: %d\n", get_pos->get_position_vector().size());
+				for (int j = 0; j < get_pos->get_position_vector().size(); j++) {
+					printf("%f\t", get_pos->get_position_vector()[j]);
+				}
+				printf("\n");
+				flushall();
+			}
+
+			//------------------ DEBUG END ---------------
+
+			pose_vector_iterator->start_position = get_pos->get_position_vector();//get actual position of the robot
+			delete get_pos;
+		} else if (motion_type == lib::RELATIVE) {
+			pose_vector_iterator->start_position = vector<double>(axes_num,0);
+		} else {
+			sr_ecp_msg.message("Wrong motion type");
+			throw ECP_error(lib::NON_FATAL_ERROR, ECP_ERRORS);//TODO change the second argument
+		}
+	}
+	/**
+	 * Creates the vectors containning the information about the maximal and typical velocities for each representation.
+	 */
+	virtual void create_velocity_vectors(int axes_num) = 0;
+	/**
+	 * Performs interpolation of the trajectory. Fills in the coordinates vector.
+	 * @return true if interpolation was successful
+	 */
+	bool interpolate() {
+
+		sr_ecp_msg.message("Interpolating...");
+
+		if (!calculated) {
+			sr_ecp_msg.message("Cannot perform interpolation. Trajectory not calculated.");
+			return false;
+		}
+
+		coordinate_vector.clear();
+		coordinate_vector_iterator = coordinate_vector.begin();
+		pose_vector_iterator = pose_vector.begin();
+
+		int i; //loop counter
+
+		bool trueFlag = true;//flag set to false if interpolation is not successful at some point
+
+		if (motion_type == lib::ABSOLUTE) {
+			for (i = 0; i < pose_vector.size(); i++) {//interpolate trajectory, fill in the coordinate list
+				if(inter.interpolate_absolute_pose(pose_vector_iterator, coordinate_vector, mc) == false) {
+					trueFlag = false;
+				}
+				pose_vector_iterator++;
+			}
+		} else if (motion_type == lib::RELATIVE) {
+			for (i = 0; i < pose_vector.size(); i++) {//interpolate trajectory, fill in the coordinate list
+				if(inter.interpolate_relative_pose(pose_vector_iterator, coordinate_vector, mc) == false) {
+					trueFlag = false;
+				}
+				pose_vector_iterator++;
+			}
+		} else {
+			sr_ecp_msg.message("Wrong motion type");
+			throw ECP_error(lib::NON_FATAL_ERROR, ECP_ERRORS);//TODO change the second argument
+		}
+
+		return trueFlag;
+	}
+	/**
+	 * Calculates trajectory.
+	 * @return true if calculation was successful.
+	 */
+	virtual bool calculate() = 0;
+	/**
+	 * Method used to print list of positions.
+	 */
+	virtual void print_pose_vector() = 0;
+	/**
+	 * Method used to print list of coordinates.
+	 */
+	virtual void print_coordinate_vector() {
+		coordinate_vector_iterator = coordinate_vector.begin();
+		printf("coordinate_vector_size: %d\n", coordinate_vector.size());
+		for (int i = 0; i < coordinate_vector.size(); i++) {
+			tempIter = (*coordinate_vector_iterator).begin();
+			printf("%d:\t", (i+1));
+			for (tempIter = (*coordinate_vector_iterator).begin(); tempIter != (*coordinate_vector_iterator).end(); tempIter++) {
+				printf(" %f\t", *tempIter);
+			}
+			coordinate_vector_iterator++;
+			printf("\n");
+		}
+		flushall();
+	}
 
 public:
 	/**
@@ -170,6 +273,10 @@ public:
 	 */
 	multiple_position(common::task::task& _ecp_task) : generator (_ecp_task) {
 		debug = false;
+		motion_type = lib::ABSOLUTE;
+		nmc = 10;
+		mc = nmc * STEP;
+
 	}
 	/**
 	 * Destructor.
@@ -184,15 +291,232 @@ public:
 		this->debug = debug;
 	}
 	/**
+	 * Implementation of the first_step method.
+	 */
+	bool first_step() {
+
+		if (debug) {
+			printf("\n##################################### first_step ####################################\n");
+			flushall();
+		}
+
+		if (!calculated || !interpolated) {
+			reset();
+			return false;
+		}
+
+		the_robot->ecp_command.instruction.set_type = ARM_DEFINITION;
+		the_robot->ecp_command.instruction.motion_steps = nmc;
+		the_robot->ecp_command.instruction.value_in_step_no = nmc - 2;
+		the_robot->communicate_with_edp = false;
+
+		if (motion_type == lib::RELATIVE) {
+			the_robot->ecp_command.instruction.motion_type = lib::RELATIVE;
+		} else if (motion_type == lib::ABSOLUTE) {
+			the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
+		} else {
+			sr_ecp_msg.message("Wrong motion type");
+			throw ECP_error(lib::NON_FATAL_ERROR, ECP_ERRORS);//TODO change the second argument
+		}
+
+		switch (pose_spec) {
+			case lib::ECP_XYZ_EULER_ZYZ:
+				the_robot->ecp_command.instruction.set_arm_type = lib::FRAME;
+				if (motion_type == lib::RELATIVE) {
+					the_robot->ecp_command.instruction.interpolation_type = lib::TCIM;
+					for (int i=0; i<axes_num; i++) {
+						the_robot->ecp_command.instruction.arm.pf_def.behaviour[i] = lib::UNGUARDED_MOTION;
+					}
+				} else {
+					the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
+				}
+				break;
+			case lib::ECP_XYZ_ANGLE_AXIS:
+				the_robot->ecp_command.instruction.set_arm_type = lib::FRAME;
+				if (motion_type == lib::RELATIVE) {
+					the_robot->ecp_command.instruction.interpolation_type = lib::TCIM;
+					for (int i=0; i<axes_num; i++) {
+						the_robot->ecp_command.instruction.arm.pf_def.behaviour[i] = lib::UNGUARDED_MOTION;
+					}
+				} else {
+					the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
+				}
+				break;
+			case lib::ECP_MOTOR:
+				the_robot->ecp_command.instruction.set_arm_type = lib::MOTOR;
+				the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
+				break;
+			case lib::ECP_JOINT:
+				the_robot->ecp_command.instruction.set_arm_type = lib::JOINT;
+				the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
+				break;
+			default:
+				reset();
+				throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+		}
+
+		coordinate_vector_iterator = coordinate_vector.begin();
+		sr_ecp_msg.message("Moving...");
+		return true;
+	}
+	/**
+	 * Implementation of the next_step method.
+	 */
+	bool next_step() {
+
+		if (debug) {
+			//printf("\n##################################### next_step ####################################\n");
+			flushall();
+		}
+
+		int i;//loop counter
+
+		if (coordinate_vector.empty()) {
+
+			sr_ecp_msg.message("No coordinates generated");
+			reset();
+			return false;
+		}
+
+		the_robot->communicate_with_edp = true;//turn on the communication with EDP
+		the_robot->ecp_command.instruction.instruction_type = lib::SET;
+
+		double coordinates[axes_num];
+
+		switch (pose_spec) {
+
+			case lib::ECP_JOINT:
+
+				tempIter = (*coordinate_vector_iterator).begin();
+				for (i = 0; i < axes_num; i++) {
+					the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
+							= *tempIter;
+					if (debug) {
+						printf("%f\t", *tempIter);
+					}
+					tempIter++;
+
+				}
+				if (debug) {
+					printf("\n");
+					flushall();
+				}
+				break;
+
+			case lib::ECP_MOTOR:
+
+				tempIter = (*coordinate_vector_iterator).begin();
+				for (i = 0; i < axes_num; i++) {
+					the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
+							= *tempIter;
+					if (debug) {
+						printf("%f\t", *tempIter);
+					}
+					tempIter++;
+
+				}
+				if (debug) {
+					printf("\n");
+					flushall();
+				}
+				break;
+
+			case lib::ECP_XYZ_EULER_ZYZ:
+
+				i = 0;
+
+				for (tempIter = (*coordinate_vector_iterator).begin(); tempIter != (*coordinate_vector_iterator).end(); tempIter++) {
+					coordinates[i] = *tempIter;
+					if (debug) {
+						printf("%f\t", *tempIter);
+					}
+					i++;
+				}
+
+				if (debug) {
+					printf("\n");
+					flushall();
+				}
+
+				homog_matrix.set_from_xyz_euler_zyz(lib::Xyz_Euler_Zyz_vector(coordinates));
+				homog_matrix.get_frame_tab(the_robot->ecp_command.instruction.arm.pf_def.arm_frame);
+
+				break;
+
+			case lib::ECP_XYZ_ANGLE_AXIS:
+
+				i = 0;
+
+				for (tempIter = (*coordinate_vector_iterator).begin(); tempIter != (*coordinate_vector_iterator).end(); tempIter++) {
+					coordinates[i] = *tempIter;
+					if (debug) {
+						printf("%f\t", *tempIter);
+					}
+					i++;
+				}
+
+				if (debug) {
+					printf("\n");
+					flushall();
+				}
+
+				homog_matrix.set_from_xyz_angle_axis(lib::Xyz_Angle_Axis_vector(coordinates));
+				homog_matrix.get_frame_tab(the_robot->ecp_command.instruction.arm.pf_def.arm_frame);
+
+				break;
+
+			default:
+				reset();
+				throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+		}// end:switch
+
+		coordinate_vector_iterator++;
+		if (coordinate_vector_iterator == coordinate_vector.end()) {
+			sr_ecp_msg.message("Motion finished");
+			reset();//reset the generator, set generated and calculated flags to false, flush coordinate and pose lists
+			return false;
+		} else {
+			return true;
+		}
+	}
+	/**
 	 * Performs calculation of the trajectory and interpolation. Fills in pose_vector and coordinate_vector.
 	 * @return true if the calculation was succesfull
 	 */
-	virtual bool calculate_interpolate() = 0;
+	virtual bool calculate_interpolate() {
+
+		if (debug) {
+			printf("\n##################################### calculate_interpolate ####################################\n");
+			flushall();
+		}
+
+		if (pose_vector.empty()) {
+			sr_ecp_msg.message("No loaded poses");
+			return false;
+		}
+
+		get_initial_position();
+
+		calculated = calculate();
+
+		if (debug) {
+			print_pose_vector();
+		}
+
+		interpolated = interpolate();
+
+		if (debug) {
+			print_coordinate_vector();
+		}
+
+		return calculated && interpolated;
+	}
 	/**
 	 * Sets the number of axes in which the generator will move the robot.
 	 */
 	virtual void set_axes_num(int axes_num) {
 		this->axes_num = axes_num;
+		create_velocity_vectors(axes_num);
 	}
 	/**
 	 * Sets the chosen type of interpolation.
