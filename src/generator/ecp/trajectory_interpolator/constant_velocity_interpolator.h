@@ -17,6 +17,11 @@ namespace common {
 namespace generator {
 namespace trajectory_interpolator {
 
+/**
+ * @brief Methods to perform the interpolation of the motion with the constant velocity.
+ *
+ * Class contains methods used to create the list of coordinates basing on the trajectory pose list which describes the motion of the robot with a constant velocity.
+ */
 class constant_velocity_interpolator: public mrrocpp::ecp::common::generator::trajectory_interpolator::trajectory_interpolator<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose> {
 public:
 	/**
@@ -28,12 +33,21 @@ public:
 	 */
 	virtual ~constant_velocity_interpolator();
 	/**
-	 * Method interpolates the trajectory basing on the list of poses of type %constant_velocity_trajectory_pose.
+	 * Method interpolates the relative type trajectory basing on the list of poses of stored in objects of types derived from %trajectory_pose.
 	 * @param it iterator to the list of positions
-	 * @param cit iterator to the list of coordinates
+	 * @param cv list of coordinates
+	 * @param mc time of a single macrostep
 	 * @return true if the interpolation was succesful
 	 */
-	bool interpolate(vector<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose>::iterator & it, vector<vector<double> >::iterator & cit);
+	bool interpolate_relative_pose(vector<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose>::iterator & it, vector<vector<double> > & cv, const double & mc);
+	/**
+	 * Method interpolates the absolute type trajectory basing on the list of poses of stored in objects of types derived from %trajectory_pose.
+	 * @param it iterator to the list of positions
+	 * @param cv list of coordinates
+	 * @param mc time of a single macrostep
+	 * @return true if the interpolation was succesful
+	 */
+	bool interpolate_absolute_pose(vector<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose>::iterator & it, vector<vector<double> > & cv, const double & mc);
 };
 
 } // namespace trajectory_interpolator

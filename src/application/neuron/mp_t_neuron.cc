@@ -29,10 +29,8 @@ neuron::neuron(lib::configurator &_config) :
 void neuron::main_task_algorithm(void) {
 	sr_ecp_msg->message("Neuron task initialization");
 
-	set_next_ecps_state(ecp_mp::task::ECP_T_NEURON, (int) 5, "", 0, 1,
-			lib::ROBOT_IRP6OT_M);
-	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(
-			1, 1, lib::ROBOT_IRP6OT_M, lib::ROBOT_IRP6OT_M);
+	set_next_ecps_state(ecp_mp::task::ECP_T_NEURON, (int) 5, "", 0, 1, lib::ROBOT_IRP6OT_M.c_str());
+	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, lib::ROBOT_IRP6OT_M.c_str(), lib::ROBOT_IRP6OT_M.c_str());
 
 	sr_ecp_msg->message("END");
 }

@@ -21,14 +21,18 @@ namespace sensor {
  */
 class neuron_sensor : public ecp_mp::sensor::sensor_interface {
 private:
-	int a;
+	/** Configurator. */
+	mrrocpp::lib::configurator& config;
+	int socketDescriptor;
+	uint16_t command;
 
 public:
-	neuron_sensor();
+	neuron_sensor(mrrocpp::lib::configurator& _configurator);
 	virtual ~neuron_sensor();
 	void get_reading();
 	void configure_sensor();
 	void initiate_reading();
+	bool transmissionFinished();
 };
 
 } //sensor

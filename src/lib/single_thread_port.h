@@ -4,7 +4,7 @@
  * \date 2010
  * \author yoyek
  *
- * \brief Template class for single robot communication port
+ * \brief Template class for a single robot communication port
  */
 
 #ifndef SINGLE_THREAD_PORT_H_
@@ -13,49 +13,53 @@
 #include <string>
 #include <map>
 
+#include <boost/cast.hpp>
+
 namespace mrrocpp {
 namespace lib {
 
+class single_thread_port_manager;
+
 enum FlowStatus
 {
-	NoData = 0, OldData = 1, NewData = 2
+	NoData, OldData, NewData
 };
 
 class single_thread_port_interface
 {
 private:
-	std::string name;
+	const std::string name;
 
 protected:
 	bool new_data;
 
 public:
 
-	single_thread_port_interface(std::string _name) :
-		name(_name), new_data(false)
+	single_thread_port_interface(std::string _name, single_thread_port_manager & _port_manager);
+	/**
+	 * This is a base class, so virtual destructor is recommended
+	 * and it is also required for dynamic casting.
+	 */
+	virtual ~single_thread_port_interface()
 	{
 	}
-
-	std::string get_name()
-	{
-		return name;
-	}
-
-	//virtual void test() = 0;
+	std::string get_name();
+	virtual void clear_all_flags()=0;
 
 };
 
 template <class T>
 class single_thread_port : public single_thread_port_interface
 {
-
 protected:
 	bool no_data;
 	T data;
 
 public:
-	single_thread_port(std::string _name) :
-		single_thread_port_interface(_name), no_data(true)
+
+	single_thread_port(std::string _name, single_thread_port_manager & _port_manager) :
+		single_thread_port_interface(_name, _port_manager), no_data(true)
+
 	{
 	}
 
@@ -85,6 +89,11 @@ public:
 		new_data = false;
 	}
 
+	virtual void clear_all_flags()
+	{
+		clear_new_data_flag();
+	}
+
 	void test()
 	{
 
@@ -95,13 +104,14 @@ public:
 template <class T>
 class single_thread_request_port : public single_thread_port <T>
 {
-
 protected:
 	bool new_request;
 
 public:
-	single_thread_request_port(std::string _name) :
-		single_thread_port <T> (_name), new_request(false)
+
+	single_thread_request_port(std::string _name, single_thread_port_manager & _port_manager) :
+		single_thread_port <T> (_name, _port_manager), new_request(false)
+
 	{
 	}
 
@@ -110,13 +120,20 @@ public:
 		new_request = true;
 	}
 
-	void set(T& _data)
+	void set(const T& _data)
 	{
 		new_request = false;
 		single_thread_port <T>::set(_data);
 	}
 
-	bool is_new_request()
+	void clear_all_flags()
+	{
+		single_thread_port <T>::clear_new_data_flag();
+		clear_new_request_flag();
+	}
+
+	bool is_new_request() const
+
 	{
 		return new_request;
 	}
@@ -125,39 +142,35 @@ public:
 	{
 		new_request = false;
 	}
-
 };
+
+typedef std::map <std::string, single_thread_port_interface *> single_thread_port_interface_t;
+typedef single_thread_port_interface_t::value_type single_thread_port_interface_pair_t;
 
 class single_thread_port_manager
 {
 private:
-	std::map <std::string, single_thread_port_interface *> single_thread_port_map;
+	single_thread_port_interface_t single_thread_port_map;
 
 public:
 
-	single_thread_port_manager()
-	{
-	}
+	single_thread_port_manager();
 
-	void add_port(single_thread_port_interface* single_thread_port_inter)
+	void add_port(single_thread_port_interface* single_thread_port_inter);
+
+	void clear_data_ports();
+
+	template <class T>
+	single_thread_port <T>* get_port(const std::string & name)
 	{
-		single_thread_port_map[single_thread_port_inter->get_name()] = single_thread_port_inter;
+		return boost::polymorphic_cast <single_thread_port <T> *>(single_thread_port_map[name]);
 	}
 
 	template <class T>
-	single_thread_port <T>* get_port(std::string name)
+	single_thread_request_port <T>* get_request_port(const std::string & name)
 	{
-		// TODO: dodac obsluge wyjatku w sytuacji gdy nie ma takiego pola lub typ sie nie zgadza
-		return (single_thread_port <T>*) (single_thread_port_map[name]);
+		return boost::polymorphic_cast <single_thread_request_port <T> *>(single_thread_port_map[name]);
 	}
-
-	template <class T>
-	single_thread_request_port <T>* get_request_port(std::string name)
-	{
-		// TODO: dodac obsluge wyjatku w sytuacji gdy nie ma takiego pola lub typ sie nie zgadza
-		return (single_thread_request_port <T>*) (single_thread_port_map[name]);
-	}
-
 };
 
 }

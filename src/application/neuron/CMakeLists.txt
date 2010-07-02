@@ -1,6 +1,7 @@
 add_executable(ecp_neuron
 	ecp_t_neuron.cc
 	neuron_sensor.cc
+	ecp_g_neuron_generator.cc
 )
 
 target_link_libraries(ecp_neuron

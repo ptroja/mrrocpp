@@ -3,15 +3,13 @@
 
 #include "lib/data_port_headers/shead.h"
 
-namespace mrrocpp {
-
-}
-
-using namespace mrrocpp;
+#include "lib/impconst.h"
 
 namespace mrrocpp {
 namespace lib {
+
 const robot_name_t ROBOT_SHEAD = "ROBOT_SHEAD";
+
 enum SHEAD_CBUFFER_VARIANT
 {
 	SHEAD_CBUFFER_HEAD_SOLIDIFICATION, SHEAD_CBUFFER_VACUUM_ACTIVATION
@@ -25,7 +23,6 @@ struct shead_cbuffer
 		lib::SHEAD_HEAD_SOLIDIFICATION head_solidification;
 		lib::SHEAD_VACUUM_ACTIVATION vacuum_activation;
 	};
-
 };
 
 struct shead_rbuffer

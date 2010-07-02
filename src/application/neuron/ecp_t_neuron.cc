@@ -8,6 +8,8 @@
 #include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
 #include "ecp_t_neuron.h"
 #include "neuron_sensor.h"
+#include "ecp_mp_t_neuron.h"
+#include "ecp_mp_neuron_sensor.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -17,48 +19,34 @@ namespace task {
 /*==============================Constructor==================================*/
 //Constructors
 Neuron::Neuron(lib::configurator &_config): task(_config){
+	sensor_m[ecp_mp::sensor::ECP_MP_NEURON_SENSOR] = new ecp_mp::sensor::neuron_sensor(config);
 	ecp_m_robot=new irp6ot_m::robot(*this);				//initialization of robot
 
 	//sgen=new common::generator::smooth(*this, true);
-	sgen2 = new common::generator::smooth(*this, true);
+	//sgen2 = new common::generator::smooth(*this, true);
+	neurong = new common::generator::neuron_generator(*this);
+	neurong->sensor_m=sensor_m;
 	sr_ecp_msg->message("ECP loaded Neuron");
 };
 
 /*============================Destructor=====================================*/
 Neuron::~Neuron(){
 	delete ecp_m_robot;
-	delete sgen2;
+	delete neurong;
 };
 
 /*====================mp_2_ecp_next_state_string_handler=====================*/
 void Neuron::mp_2_ecp_next_state_string_handler(void){
 	uint8_t choice;
-	sr_ecp_msg->message("Game canceled");
-	choice=choose_option ("Do you want to play: 1 - Black(blue), or 2 - White(red)", 2);
-}
-
-/*=========================main_task_algorithm===============================*/
-/*void Neuron::main_task_algorithm(void){
-	sr_ecp_msg->message("ECP neuron ready");
-	uint8_t choice;
-
-	neuron_sensor* ns = new neuron_sensor();
-	ns->get_reading();
-
-	choice=choose_option ("Do you want to play: 1 - Black(blue), or 2 - White(red)", 2);
-	if (choice==lib::OPTION_ONE){
-		sr_ecp_msg->message("You will play black, while I will play white");
-		printf("You will play black, while I will play white\n");
-	}else if(choice==lib::OPTION_TWO){
-		sr_ecp_msg->message("You will play white, while I will play black");
-		printf("You will play white, while I will play black\n");
-	}else{
+	if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_T_NEURON) {
+		choice=choose_option ("Do you want to play: 1 - Black(blue), or 2 - White(red)", 2);
 		sr_ecp_msg->message("Game canceled");
+
+		neurong->Move();
 	}
 
-	ecp_termination_notice();
-};*/
 
+}
 
 }  //namespace task
 } // namespace irp6ot

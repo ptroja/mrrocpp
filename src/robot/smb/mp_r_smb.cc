@@ -1,9 +1,5 @@
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
-
-#include "lib/mis_fun.h"
-#include "lib/srlib.h"
 #include "robot/smb/mp_r_smb.h"
+#include "robot/smb/smb_const.h"
 
 namespace mrrocpp {
 namespace mp {
