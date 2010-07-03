@@ -29,6 +29,39 @@ newsmooth::~newsmooth() {
 }
 
 bool newsmooth::calculate() {
+	sr_ecp_msg.message("Calculating...");
+	int i;//loop counter
+
+	for (i = 0; i < pose_vector.size(); i++) {//calculate distances, directions, times and velocities for each pose and axis
+
+		if(motion_type == lib::ABSOLUTE) {//absolute type of motion
+			if (!vpc.calculate_absolute_distance_direction_pose(pose_vector_iterator)) {
+				return false;
+			}
+		} else if(motion_type == lib::RELATIVE) {//relative type of motion
+			if (!vpc.calculate_relative_distance_direction_pose(pose_vector_iterator)) {
+				return false;
+			}
+		} else {
+			sr_ecp_msg.message("Wrong motion type");
+			throw ECP_error(lib::NON_FATAL_ERROR, ECP_ERRORS);//TODO change the second argument
+		}
+
+		//if(!vpc.calculate_time_pose(pose_vector_iterator) ||//calculate times for each of the axes
+		//!vpc.calculate_pose_time(pose_vector_iterator, mc) ||//calculate the longest time from each of the axes and set it as the pose time (also extend the time to be the multiplcity of a single macrostep time)
+		//!vpc.calculate_constant_velocity_pose(pose_vector_iterator)) {//calculate velocities for all of the axes according to the longest needed time
+			//return false;
+		//}
+
+		//calculate the number of the macrosteps for the pose
+		pose_vector_iterator->interpolation_node_no = ceil(pose_vector_iterator->t / mc);
+
+		if (debug) {
+			printf("interpolation node no: %d\n", pose_vector_iterator->interpolation_node_no);
+		}
+
+		pose_vector_iterator++;
+	}
 
 	return false;
 }
