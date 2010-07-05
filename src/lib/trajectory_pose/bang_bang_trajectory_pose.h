@@ -50,19 +50,19 @@ public:
   /**
    * Number of the macrostep in which the first part of the movement ends (first out of three).
    */
-  vector<double> przysp;
+  vector<double> acc;
   /**
    * Number of the macrostep in which the seconde part of the movement ends.
    */
-  vector<double> jedn;
+  vector<double> uni;
   /**
    * Distance covered in the second part of the movement.
    */
-  vector<double> s_jedn;
+  vector<double> s_uni;
   /**
    * Distance covered in the first part of the movement.
    */
-  vector<double> s_przysp;
+  vector<double> s_acc;
   /**
    * Initial position for the pose.
    */

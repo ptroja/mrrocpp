@@ -39,14 +39,14 @@ void ecp_sub_task_smooth_gen_test::conditional_execution() {
 	sgenjoint->reset();
 	sgenjoint->set_absolute();
 	coordinates1[0] = 0.101;
-	coordinates1[1] = -1.242;
+	coordinates1[1] = -1.742;
 	coordinates1[2] = 0.049;
-	coordinates1[3] = 1.082;
-	coordinates1[4] = 3.058;
+	coordinates1[3] = 1.182;
+	coordinates1[4] = 3.658;
 	coordinates1[5] = -2.738;
 	sgenjoint->load_absolute_joint_trajectory_pose(coordinates1);
-	coordinates1[0] = -0.101;
-	coordinates1[1] = -1.542;
+	coordinates1[0] = 0.001;
+	coordinates1[1] = -1.642;
 	coordinates1[2] = 0.049;
 	coordinates1[3] = 1.182;
 	coordinates1[4] = 3.658;
@@ -65,7 +65,7 @@ void ecp_sub_task_smooth_gen_test::conditional_execution() {
 	}
 	// JOINT ABSOLUTE END
 
-
+/*
 	// JOINT RELATIVE
 	ecp_t.sr_ecp_msg->message("Joint relative");
 	sgenjoint->reset();
@@ -288,7 +288,7 @@ void ecp_sub_task_smooth_gen_test::conditional_execution() {
 		sgenangle->Move();
 	}
 	// ANGLE AXIS RELATIVE END
-
+*/
 
 	// POSTUMENT END
 
