@@ -89,50 +89,30 @@ class constant_velocity : public multiple_position<ecp_mp::common::trajectory_po
 		 */
 		bool load_relative_angle_axis_trajectory_pose(const vector<double> & coordinates);
 		/**
-		 * Performs calculation of the trajectory and interpolation. Fills in pose_vector and coordinate_vector.
-		 * @return true if the calculation was succesfull
-		 */
-		bool calculate_interpolate();
-		/**
 		 * Destructor.
 		 */
 		virtual ~constant_velocity();
-		/**
-		 * Implementation of the first_step method.
-		 */
-		bool first_step();
-		/**
-		 * Implementation of the next_step method.
-		 */
-		bool next_step();
-		/**
-		 * Sets the number of axes in which the generator will move the robot. New velocity vectors are created to match the new number of axes.
-		 */
-		void set_axes_num(int axes_num);
 
 	private:
 		/**
 		 * Loads trajectory pose.
+		 * @return true if the addition was successful
 		 */
 		bool load_trajectory_pose(const vector<double> & coordinates, lib::MOTION_TYPE motion_type, lib::ECP_POSE_SPECIFICATION pose_spec, const vector<double> & v, const vector<double> & v_max);
 		/**
 		 * Creates the vectors containning the information about the maximal and typical velocities for each representation.
+		 * @axes_num actual number of axes
 		 */
 		void create_velocity_vectors(int axes_num);
-		/**
-		 * Sets up the start position vector of the first position in the trajectory chain.
-		 */
-		void get_initial_position();
 		/**
 		 * Calculates trajectory.
 		 * @return true if calculation was successful.
 		 */
 		bool calculate();
 		/**
-		 * Performs interpolation of the trajectory. Fills in the coordinates vector.
-		 * @return true if interpolation was successful
+		 * Method used to print list of positions.
 		 */
-		bool interpolate();
+		void print_pose_vector();
 };
 
 } // namespace generator

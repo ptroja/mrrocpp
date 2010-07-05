@@ -10,17 +10,17 @@
 // ------------------------------------------------------------------------
 
 
-#ifndef __EDP_IRP6OT_TFG_H
-#define __EDP_IRP6OT_TFG_H
+#ifndef __EDP_SARKOFAG_H
+#define __EDP_SARKOFAG_H
 
 // Klasa edp_irp6s_robot.
-#include "robot/irp6ot_tfg/sg_irp6ot_tfg.h"
+#include "robot/sarkofag/sg_sarkofag.h"
 #include "base/edp/edp_e_motor_driven.h"
-#include "robot/irp6ot_tfg/irp6ot_tfg_const.h"
+#include "robot/sarkofag/sarkofag_const.h"
 
 namespace mrrocpp {
 namespace edp {
-namespace irp6ot_tfg {
+namespace sarkofag {
 
 // Klasa reprezentujaca tasmociag.
 class effector : public common::motor_driven_effector
