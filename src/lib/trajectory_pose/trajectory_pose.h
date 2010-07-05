@@ -46,7 +46,7 @@ public:
   /**
    * Direction of the motion. Either equal to 1 or -1.
    */
-  vector<double> k;
+  vector<double> k;//TODO change to int
   /**
    * Number of the given position in whole trajectory chain.
    */

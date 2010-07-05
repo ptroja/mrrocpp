@@ -101,6 +101,70 @@ class bang_bang_profile : public velocity_profile<ecp_mp::common::trajectory_pos
 		 * @return true if the time was calculated successfully (if all of the necessary information was provided)
 		 */
 		bool calculate_time(vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator & it, int i);
+		/**
+		 * Sets the v_k (maximal velocity of the next pose, assumed terminal velocity of the current pose) of a single axis of a single pose.
+		 * @param it iterator to the list of positions
+		 * @param end_it iterator to the one past last element in the pose list
+		 * @param i number of axis for which the setting is made
+		 * @return true if the calculation was successful
+		 */
+		bool set_v_k(vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator & it, vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator & end_it, int i);
+		/**
+		 * Sets the v_k (maximal velocity of the next pose, assumed terminal velocity of the current pose) of a single pose and all axes.
+		 * @param it iterator to the list of positions
+		 * @param end_it iterator to the one past last element in the pose list
+		 * @return true if the calculation was successful
+		 */
+		bool set_v_k_pose(vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator & it, vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator & end_it);
+		/**
+		 * Sets the v_p (initial velocity) of a single pose and all axes.
+		 * @param it iterator to the list of positions
+		 * @param beginning_it iterator to the one past last element in the pose list
+		 * @return true if the calculation was successful
+		 */
+		bool set_v_p_pose(vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator & it, vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator & beginning_it);
+		/**
+		 * Sets the v_p (initial velocity) of a single axis of a single pose.
+		 * @param it iterator to the list of positions
+		 * @param beginning_it iterator to the one past last element in the pose list
+		 * @param i number of axis for which the setting is made
+		 * @return true if the calculation was successful
+		 */
+		bool set_v_p(vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator & it, vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator & beginning_it, int i);
+		/**
+		 * Sets the model of a single axis of a single pose.
+		 * @param it iterator to the list of positions
+		 * @param i number of axis for which the setting is made
+		 * @return true if the calculation was successful
+		 */
+		bool set_model(vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator & it, int i);
+		/**
+		 * Sets the motion model of a single pose and all axes.
+		 * @param it iterator to the list of positions
+		 * @return true if the calculation was successful
+		 */
+		bool set_model_pose(vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator & it);
+		/**
+		 * Method checks if s_acc + s_dec is smaller than the whole distance to be covered in a single axis of a single pose.
+		 * @param it iterator to the list of positions
+		 * @param i number of axis for which the setting is made
+		 * @return true if s_acc + s_decc is smaller than s
+		 */
+		bool check_s_acc_s_decc(vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator & it, int i);
+		/**
+		 * Calculates the distances covered in the non uniform motion phases (acceleration and deceleration) for a single axis in a single pose.
+		 * @param it iterator to the list of positions
+		 * @param i number of axis for which the setting is made
+		 * @return true if the calculation was successful
+		 */
+		bool calculate_s_acc_s_dec(vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator & it, int i);
+		/**
+		 * Calculates the distances covered in the non uniform motion phases (acceleration and deceleration) for a single pose.
+		 * @param it iterator to the list of positions
+		 * @return true if the calculation was successful
+		 */
+		bool calculate_s_acc_s_dec_pose(vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator & it);
+
 };
 
 } // namespace velocity_profile_calculator

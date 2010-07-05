@@ -30,9 +30,11 @@ newsmooth::~newsmooth() {
 
 bool newsmooth::calculate() {
 	sr_ecp_msg.message("Calculating...");
-	int i;//loop counter
+	int i,j;//loop counters
 
-	for (i = 0; i < pose_vector.size(); i++) {//calculate distances, directions, times and velocities for each pose and axis
+	pose_vector_iterator = pose_vector.begin();
+
+	for (i = 0; i < pose_vector.size(); i++) {//calculate distances, directions
 
 		if(motion_type == lib::ABSOLUTE) {//absolute type of motion
 			if (!vpc.calculate_absolute_distance_direction_pose(pose_vector_iterator)) {
@@ -47,18 +49,47 @@ bool newsmooth::calculate() {
 			throw ECP_error(lib::NON_FATAL_ERROR, ECP_ERRORS);//TODO change the second argument
 		}
 
-		//if(!vpc.calculate_time_pose(pose_vector_iterator) ||//calculate times for each of the axes
-		//!vpc.calculate_pose_time(pose_vector_iterator, mc) ||//calculate the longest time from each of the axes and set it as the pose time (also extend the time to be the multiplcity of a single macrostep time)
-		//!vpc.calculate_constant_velocity_pose(pose_vector_iterator)) {//calculate velocities for all of the axes according to the longest needed time
-			//return false;
-		//}
+		pose_vector_iterator++;
+	}
 
+	pose_vector_iterator = pose_vector.begin();
+
+	vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator tempIter = pose_vector.end();
+	vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator tempIter2 = pose_vector.begin();
+
+	for (i = 0; i < pose_vector.size(); i++) { //for each pose
+
+		if (!vpc.set_v_k_pose(pose_vector_iterator, tempIter) ||//set up v_k for the pose
+		!vpc.set_v_p_pose(pose_vector_iterator, tempIter2) ||//set up v_p for the pose
+		!vpc.set_model_pose(pose_vector_iterator) || //choose motion model for the pose
+		!vpc.calculate_s_acc_s_dec_pose(pose_vector_iterator)) { //calculate s_acc and s_dec for the pose
+			return false;
+		}
+
+		for(j = 0; j < axes_num; j++) { //for each axis
+			if (vpc.check_s_acc_s_decc(pose_vector_iterator, j)) {//check if s_acc && s_dec < s
+				//invoke optimize time
+				//invoke model reduction method
+			} else{//if not
+				//calculate and set time
+				//calculate and set s_acc && s_uni
+			}
+		}
+
+		//calculate pose_time
+		//set times to t
 		//calculate the number of the macrosteps for the pose
 		pose_vector_iterator->interpolation_node_no = ceil(pose_vector_iterator->t / mc);
 
 		if (debug) {
 			printf("interpolation node no: %d\n", pose_vector_iterator->interpolation_node_no);
 		}
+
+		//for each axis
+			//call reduction methods
+			//set uni and acc
+
+
 
 		pose_vector_iterator++;
 	}
@@ -96,7 +127,23 @@ void newsmooth::print_pose_vector() {
 			printf("%f\t", pose_vector_iterator->a_r[z]);
 		}
 		printf("\n");
-		printf("t: %f\n", pose_vector_iterator->t);
+		printf("v_p:\t");
+		for (z = 0; z < pose_vector_iterator->v_p.size(); z++) {
+			printf("%f\t", pose_vector_iterator->v_p[z]);
+		}
+		printf("\n");
+		printf("v_k:\t");
+		for (z = 0; z < pose_vector_iterator->v_k.size(); z++) {
+			printf("%f\t", pose_vector_iterator->v_k[z]);
+		}
+		printf("\n");
+		printf("model:\t");
+		for (z = 0; z < pose_vector_iterator->model.size(); z++) {
+			printf("%d\t\t", pose_vector_iterator->model[z]);
+		}
+		printf("\n");
+		printf("t: %f\t pos_num: %d\n", pose_vector_iterator->t, pose_vector_iterator->pos_num);
+		printf("--------------------------------\n\n");
 		flushall();
 		pose_vector_iterator++;
 	}
@@ -204,6 +251,12 @@ bool newsmooth::load_trajectory_pose(const vector<double> & coordinates, lib::MO
 	for (int j = 0; j < axes_num; j++) { //calculate v_r velocities
 		pose.v_r[j] = pose.v[j] * pose.v_max[j];
 		pose.a_r[j] = pose.a[j] * pose.a_max[j];
+	}
+
+	if (pose_vector.empty()) {
+		pose.pos_num = 1;
+	} else {
+		pose.pos_num = pose_vector.back().pos_num + 1;
 	}
 
 	if (motion_type == lib::ABSOLUTE) {

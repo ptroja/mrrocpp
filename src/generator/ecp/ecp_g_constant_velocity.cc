@@ -64,6 +64,8 @@ bool constant_velocity::calculate() {
 	sr_ecp_msg.message("Calculating...");
 	int i;//loop counter
 
+	pose_vector_iterator = pose_vector.begin();
+
 	for (i = 0; i < pose_vector.size(); i++) {//calculate distances, directions, times and velocities for each pose and axis
 
 		if(motion_type == lib::ABSOLUTE) {//absolute type of motion
@@ -190,6 +192,12 @@ bool constant_velocity::load_trajectory_pose(const vector<double> & coordinates,
 
 	for (int j = 0; j < axes_num; j++) { //calculate v_r velocities
 		pose.v_r[j] = pose.v[j] * pose.v_max[j];
+	}
+
+	if (pose_vector.empty()) {
+		pose.pos_num = 1;
+	} else {
+		pose.pos_num = pose_vector.back().pos_num + 1;
 	}
 
 	if (motion_type == lib::ABSOLUTE) {

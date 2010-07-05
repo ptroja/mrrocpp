@@ -47,7 +47,7 @@ class velocity_profile {
 		 * @return true if values are the same
 		 */
 		bool eq(double a, double b) {
-			const double EPS = 0.0001;
+			const double EPS = 0.0000001;
 			const double& diff = a - b;
 			return diff < EPS && diff > -EPS;
 		}
@@ -66,7 +66,9 @@ class velocity_profile {
 			it->k.clear();
 			for (int i = 0; i < it->axes_num; i++) {
 				it->s.push_back(fabs(it->coordinates[i] - it->start_position[i]));
-				if (it->coordinates[i] - it->start_position[i] >= 0) {
+				if (eq(it->coordinates[i] - it->start_position[i],0)) {
+					it->k.push_back(0);
+				} else if (it->coordinates[i] - it->start_position[i] > 0) {
 					it->k.push_back(1);
 				} else {
 					it->k.push_back(-1);
