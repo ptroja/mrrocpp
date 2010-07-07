@@ -57,13 +57,10 @@ void swarmitfix::main_task_algorithm(void)
 	std::stringstream ss(std::stringstream::in | std::stringstream::out);
 	ss << a;
 	astring = ss.str();
-
-	lib::single_thread_port <int> int_port("int_port_label");
-	lib::single_thread_port <int>* int_port_from_manager;
-
 	lib::single_thread_port_manager port_manager;
 
-	port_manager.add_port(&int_port);
+	lib::single_thread_port <int> int_port("int_port_label", port_manager);
+	lib::single_thread_port <int>* int_port_from_manager;
 
 	int_port_from_manager = port_manager.get_port <int> ("int_port_label");
 
@@ -90,13 +87,13 @@ void swarmitfix::main_task_algorithm(void)
 
 	char tmp_string[MP_2_ECP_STRING_SIZE];
 
-	lib::epos_gen_parameters epos_params;
+	lib::epos_cubic_command epos_params;
 
-	epos_params.dm[4] = 3.7;
+	epos_params.da[4] = 3.7;
 
 	memcpy(tmp_string, &epos_params, sizeof(epos_params));
 
-	set_next_ecps_state(ecp_mp::common::generator::ECP_GEN_EPOS, (int) 5, tmp_string, sizeof(epos_params), 1, lib::ROBOT_SPKM.c_str());
+	set_next_ecps_state(ecp_mp::common::generator::ECP_GEN_EPOS_CUBIC, (int) 5, tmp_string, sizeof(epos_params), 1, lib::ROBOT_SPKM.c_str());
 	sr_ecp_msg->message("5");
 	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, lib::ROBOT_SPKM.c_str(), lib::ROBOT_SPKM.c_str());
 

@@ -26,17 +26,18 @@ bang_bang_trajectory_pose::bang_bang_trajectory_pose(lib::ECP_POSE_SPECIFICATION
 	this->v = v;
 	this->a = a;
 
-	v_p = vector <double> ();
-	v_k = vector <double> ();
-	v_max = vector <double> ();
-	przysp = vector <double> ();
-	jedn = vector <double> ();
-	s_jedn = vector <double> ();
-	s_przysp = vector <double> ();
-	start_position = vector <double> ();
-	a_r = vector <double> ();
-	v_r = vector <double> ();
-	model = vector <int> ();
+	v_p = vector <double> (axes_num);
+	v_k = vector <double> (axes_num);
+	v_max = vector <double> (axes_num);
+	a_max = vector <double> (axes_num);
+	przysp = vector <double> (axes_num);
+	jedn = vector <double> (axes_num);
+	s_jedn = vector <double> (axes_num);
+	s_przysp = vector <double> (axes_num);
+	start_position = vector <double> (axes_num);
+	a_r = vector <double> (axes_num);
+	v_r = vector <double> (axes_num);
+	model = vector <int> (axes_num);
 }
 
 bang_bang_trajectory_pose::~bang_bang_trajectory_pose()

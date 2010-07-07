@@ -7,6 +7,7 @@ configs/default_file.cfg
 .cproject
 .qnx_internal.mk
 .settings/
+common.mk
 *.patch
 GPATH
 GRTAGS

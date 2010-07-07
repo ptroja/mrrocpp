@@ -60,6 +60,7 @@ void ui_sr_buffer::operator()() {
 				"BLAD SR ATTACH, przypuszczalnie nie uruchomiono gns, albo blad wczytywania konfiguracji");
 		return;
 	}
+
 	ui.is_sr_thread_loaded = true;
 	while (1) {
 		lib::sr_package_t sr_msg;
@@ -122,7 +123,6 @@ void ui_sr_buffer::operator()() {
 
 ui_sr_buffer::ui_sr_buffer(Ui& _ui) :
 	ui(_ui), cb(UI_SR_BUFFER_LENGHT) {
-
 	thread_id = new boost::thread(boost::bind(&ui_sr_buffer::operator(), this));
 }
 

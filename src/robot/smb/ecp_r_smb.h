@@ -22,27 +22,38 @@ namespace smb {
 // ---------------------------------------------------------------
 class robot : public common::ecp_robot, public kinematics::common::kinematics_manager
 {
-private:
-	lib::single_thread_port <lib::epos_low_level_command> epos_low_level_command_data_port;
-	lib::single_thread_port <lib::epos_gen_parameters> epos_gen_parameters_data_port;
-	lib::single_thread_port <lib::smb_multi_pin_insertion> smb_multi_pin_insertion_data_port;
-	lib::single_thread_port <lib::smb_multi_pin_locking> smb_multi_pin_locking_data_port;
 
-	lib::single_thread_request_port <lib::epos_reply> epos_reply_data_request_port;
-	lib::single_thread_request_port <lib::smb_multi_leg_reply> smb_multi_leg_reply_data_request_port;
-
-	void create_kinematic_models_for_given_robot(void);
-	void add_data_ports();
-
+	// Klasa dla robota irp6_postument (sztywnego)
 protected:
+	void create_kinematic_models_for_given_robot(void);
 	//bufory wejsciowe z generatora
-	lib::epos_low_level_command epos_low_level_command_structure;
-	lib::epos_gen_parameters epos_gen_parameters_structure;
+	//epos.h
+	lib::single_thread_port <lib::epos_cubic_command> epos_cubic_command_data_port;
+	lib::epos_cubic_command epos_cubic_command_structure;
+
+	lib::single_thread_port <lib::epos_trapezoidal_command> epos_trapezoidal_command_data_port;
+	lib::epos_trapezoidal_command epos_trapezoidal_command_structure;
+
+	/*
+	 lib::single_thread_port<lib::epos_gen_parameters>
+	 epos_gen_parameters_data_port;
+	 lib::epos_gen_parameters epos_gen_parameters_structure;
+	 */
+	//smb.h
+	lib::single_thread_port <lib::smb_multi_pin_insertion> smb_multi_pin_insertion_data_port;
 	lib::smb_multi_pin_insertion smb_multi_pin_insertion_structure;
+
+	lib::single_thread_port <lib::smb_multi_pin_locking> smb_multi_pin_locking_data_port;
 	lib::smb_multi_pin_locking smb_multi_pin_locking_structure;
 
 	// bufory wyjsciowe do generatora
+	// epos.h
+	lib::single_thread_request_port <lib::epos_reply> epos_reply_data_request_port;
 	lib::epos_reply epos_reply_structure;
+
+	//smb.h
+	lib::single_thread_request_port <lib::smb_multi_leg_reply> smb_multi_leg_reply_data_request_port;
+
 	lib::smb_multi_leg_reply smb_multi_leg_reply_structure;
 
 	// bufory do edp
@@ -55,8 +66,10 @@ public:
 
 	void create_command();
 	void get_reply();
-	void clear_data_ports();
-};
+
+}; // end: class ecp_irp6_mechatronika_robot
+// ---------------------------------------------------------------
+
 
 } // namespace smb
 } // namespace ecp

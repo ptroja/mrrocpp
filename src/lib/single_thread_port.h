@@ -18,6 +18,8 @@
 namespace mrrocpp {
 namespace lib {
 
+class single_thread_port_manager;
+
 enum FlowStatus
 {
 	NoData, OldData, NewData
@@ -32,16 +34,8 @@ protected:
 	bool new_data;
 
 public:
-	single_thread_port_interface(const std::string & _name) :
-		name(_name), new_data(false)
-	{
-	}
 
-	std::string get_name() const
-	{
-		return name;
-	}
-
+	single_thread_port_interface(std::string _name, single_thread_port_manager & _port_manager);
 	/**
 	 * This is a base class, so virtual destructor is recommended
 	 * and it is also required for dynamic casting.
@@ -49,6 +43,9 @@ public:
 	virtual ~single_thread_port_interface()
 	{
 	}
+	std::string get_name();
+	virtual void clear_all_flags()=0;
+
 };
 
 template <class T>
@@ -59,8 +56,10 @@ protected:
 	T data;
 
 public:
-	single_thread_port(const std::string & _name) :
-		single_thread_port_interface(_name), no_data(true)
+
+	single_thread_port(std::string _name, single_thread_port_manager & _port_manager) :
+		single_thread_port_interface(_name, _port_manager), no_data(true)
+
 	{
 	}
 
@@ -89,6 +88,17 @@ public:
 	{
 		new_data = false;
 	}
+
+	virtual void clear_all_flags()
+	{
+		clear_new_data_flag();
+	}
+
+	void test()
+	{
+
+	}
+
 };
 
 template <class T>
@@ -98,8 +108,10 @@ protected:
 	bool new_request;
 
 public:
-	single_thread_request_port(const std::string & _name) :
-		single_thread_port <T> (_name), new_request(false)
+
+	single_thread_request_port(std::string _name, single_thread_port_manager & _port_manager) :
+		single_thread_port <T> (_name, _port_manager), new_request(false)
+
 	{
 	}
 
@@ -114,7 +126,14 @@ public:
 		single_thread_port <T>::set(_data);
 	}
 
+	void clear_all_flags()
+	{
+		single_thread_port <T>::clear_new_data_flag();
+		clear_new_request_flag();
+	}
+
 	bool is_new_request() const
+
 	{
 		return new_request;
 	}
@@ -125,31 +144,32 @@ public:
 	}
 };
 
+typedef std::map <std::string, single_thread_port_interface *> single_thread_port_interface_t;
+typedef single_thread_port_interface_t::value_type single_thread_port_interface_pair_t;
+
 class single_thread_port_manager
 {
 private:
-	std::map <std::string, single_thread_port_interface *> single_thread_port_map;
+	single_thread_port_interface_t single_thread_port_map;
 
 public:
-	single_thread_port_manager()
-	{
-	}
 
-	void add_port(single_thread_port_interface* single_thread_port_inter)
-	{
-		single_thread_port_map[single_thread_port_inter->get_name()] = single_thread_port_inter;
-	}
+	single_thread_port_manager();
+
+	void add_port(single_thread_port_interface* single_thread_port_inter);
+
+	void clear_data_ports();
 
 	template <class T>
 	single_thread_port <T>* get_port(const std::string & name)
 	{
-		return boost::polymorphic_cast<single_thread_port <T> *> (single_thread_port_map[name]);
+		return boost::polymorphic_cast <single_thread_port <T> *>(single_thread_port_map[name]);
 	}
 
 	template <class T>
 	single_thread_request_port <T>* get_request_port(const std::string & name)
 	{
-		return boost::polymorphic_cast<single_thread_request_port <T> *> (single_thread_port_map[name]);
+		return boost::polymorphic_cast <single_thread_request_port <T> *>(single_thread_port_map[name]);
 	}
 };
 

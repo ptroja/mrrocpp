@@ -32,8 +32,8 @@ const double Draughts::bkings_table[8][8] = {//blue, green kings
 Draughts::Draughts(lib::configurator &_config) :
 	task(_config)
 {
-	sensor_m[lib::SENSOR_CVFRADIA] = new fradia_sensor_board_and_draughts(this->config, "[vsp_fradia_sensor]");
-	sensor_m[lib::SENSOR_CVFRADIA]->configure_sensor();
+	sensor_m[ecp_mp::sensor::SENSOR_CVFRADIA] = new fradia_sensor_board_and_draughts(this->config, "[vsp_fradia_sensor]");
+	sensor_m[ecp_mp::sensor::SENSOR_CVFRADIA]->configure_sensor();
 
 	ecp_m_robot = new irp6ot_m::robot(*this); //initialization of robot
 
@@ -92,7 +92,7 @@ void Draughts::closeGripper()
 void Draughts::fradiaControl(DRAUGHTS_MODE dmode, char pawn_nr = -1)
 {
 	fradia_sensor_board_and_draughts * vsp_fr =
-			dynamic_cast <fradia_sensor_board_and_draughts *> (sensor_m[lib::SENSOR_CVFRADIA]);
+			dynamic_cast <fradia_sensor_board_and_draughts *> (sensor_m[ecp_mp::sensor::SENSOR_CVFRADIA]);
 
 	draughts_control msg;
 	msg.draughts_mode = dmode;
@@ -107,7 +107,7 @@ void Draughts::fradiaControl(DRAUGHTS_MODE dmode, char pawn_nr = -1)
 //0 get White move - red
 void Draughts::getAIMove(int player)
 {
-	vsp_fradia = dynamic_cast <fradia_sensor_board_and_draughts *> (sensor_m[lib::SENSOR_CVFRADIA]);
+	vsp_fradia = dynamic_cast <fradia_sensor_board_and_draughts *> (sensor_m[ecp_mp::sensor::SENSOR_CVFRADIA]);
 
 	vsp_fradia->get_reading();
 	while (vsp_fradia->get_report() == lib::VSP_SENSOR_NOT_CONFIGURED) {
@@ -138,7 +138,7 @@ void Draughts::getAIMove(int player)
 /*===============================getBoardStatus================================*/
 BOARD_STATUS Draughts::getBoardStatus()
 {
-	vsp_fradia = dynamic_cast <fradia_sensor_board_and_draughts *> (sensor_m[lib::SENSOR_CVFRADIA]);
+	vsp_fradia = dynamic_cast <fradia_sensor_board_and_draughts *> (sensor_m[ecp_mp::sensor::SENSOR_CVFRADIA]);
 
 	vsp_fradia->get_reading();
 	while (vsp_fradia->get_report() == lib::VSP_SENSOR_NOT_CONFIGURED) {
@@ -406,7 +406,7 @@ void Draughts::trackPawn(char pawn_nr)
 {
 	fradiaControl(NONE);
 	fradiaControl(TRACK_PAWN, pawn_nr);
-	vsp_fradia = dynamic_cast <fradia_sensor_board_and_draughts *> (sensor_m[lib::SENSOR_CVFRADIA]);
+	vsp_fradia = dynamic_cast <fradia_sensor_board_and_draughts *> (sensor_m[ecp_mp::sensor::SENSOR_CVFRADIA]);
 
 	vsp_fradia->get_reading();
 	while (vsp_fradia->get_report() == lib::VSP_SENSOR_NOT_CONFIGURED) {
