@@ -48,9 +48,9 @@ void ecp_sub_task_smooth_gen_test::conditional_execution() {
 	coordinates1[0] = 0.001;
 	coordinates1[1] = -1.742;
 	coordinates1[2] = 0.049;
-	coordinates1[3] = 1.182;
+	coordinates1[3] = 1.382;
 	coordinates1[4] = 3.658;
-	coordinates1[5] = -2.738;
+	coordinates1[5] = -2.338;
 	sgenjoint->load_absolute_joint_trajectory_pose(coordinates1);
 	coordinates1[0] = -0.101;
 	coordinates1[1] = -1.542;
@@ -97,7 +97,7 @@ void ecp_sub_task_smooth_gen_test::conditional_execution() {
 	}
 	// JOINT RELATIVE END
 
-/*
+
 	// MOTOR ABSOLUTE
 	ecp_t.sr_ecp_msg->message("Motor absolute");
 	sgenmotor->reset();
@@ -288,7 +288,7 @@ void ecp_sub_task_smooth_gen_test::conditional_execution() {
 		sgenangle->Move();
 	}
 	// ANGLE AXIS RELATIVE END
-*/
+
 
 	// POSTUMENT END
 

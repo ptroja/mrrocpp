@@ -354,7 +354,7 @@ bool bang_bang_profile::optimize_time2(vector<ecp_mp::common::trajectory_pose::b
 	it->v_k[i] = sqrt(2 * it->a_r[i] * it->s[i] + it->v_p[i] * it->v_p[i]);
 	it->times[i] = (it->v_k[i] - it->v_p[i])/it->a_r[i];
 
-	printf("Time optimization model 2, axis: %d \t v_k: %f\t times: %f\n", i, it->v_k[i], it->times[i]);
+	//printf("Time optimization model 2, axis: %d \t v_k: %f\t times: %f\n", i, it->v_k[i], it->times[i]);
 
 	return true;
 }
@@ -649,6 +649,26 @@ bool bang_bang_profile::optimize_time_axis(vector<ecp_mp::common::trajectory_pos
 		} else {
 			//TODO ??
 		}
+	return true;
+}
+
+bool bang_bang_profile::calculate_v_r_a_r_pose(vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator & it) {
+	bool trueFlag = true;
+
+	for (int i = 0; i < it->axes_num; i++) {
+		if (calculate_v_r_a_r(it, i) == false) {
+			trueFlag = false;
+		}
+	}
+
+	return trueFlag;
+}
+
+bool bang_bang_profile::calculate_v_r_a_r(vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator & it, int i) {
+
+	it->v_r[i] = it->v[i] * it->v_max[i];
+	it->a_r[i] = it->a[i] * it->a_max[i];
+
 	return true;
 }
 
