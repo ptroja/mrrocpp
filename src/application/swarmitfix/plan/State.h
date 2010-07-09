@@ -10,7 +10,10 @@
 
 class State {
 protected:
+	//! index of situation, when the move towards this position should start
 	int TindFrom;
+
+	//! index of situation, when the move should end and the required position should be reached
 	int TindTo;
 };
 

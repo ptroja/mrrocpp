@@ -31,6 +31,7 @@ add_library(mrrocpp
 	playerpos_goal.cc
 	datastr.cc
 	condition_synchroniser.cc
+	single_thread_port.cc
 	logger.cc
 	trajectory_pose/bang_bang_trajectory_pose.cc
 	trajectory_pose/trajectory_pose.cc

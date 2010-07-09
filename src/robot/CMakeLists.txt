@@ -1,4 +1,5 @@
 # Recurse into subdirectories.
+add_subdirectory (sarkofag)
 add_subdirectory (bird_hand)
 add_subdirectory (conveyor)
 add_subdirectory (shead)

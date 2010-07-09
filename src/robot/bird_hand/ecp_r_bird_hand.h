@@ -21,7 +21,6 @@ namespace bird_hand {
 // ---------------------------------------------------------------
 class robot : public common::ecp_robot, public kinematics::common::kinematics_manager
 {
-
 protected:
 
 	// zadawanie rozkazu
@@ -45,7 +44,7 @@ protected:
 	lib::bird_hand_rbuffer edp_ecp_rbuffer;
 
 	void create_kinematic_models_for_given_robot(void);
-	void add_data_ports();
+
 
 public:
 	robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp);
@@ -53,9 +52,9 @@ public:
 
 	void create_command();
 	void get_reply();
-	void clear_data_ports();
 
-}; // end: class ecp_irp6_mechatronika_robot
+
+};
 // ---------------------------------------------------------------
 
 } // namespace bird_hand

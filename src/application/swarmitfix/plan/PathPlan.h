@@ -12,9 +12,15 @@
 
 #include "Plan.h"
 
+//! Plan for multiple-agent system
 class PathPlan {
+	//! Plans for individual agents
 	std::vector<Plan> agents;
+
+	//! TODO:
 	std::vector<double> D, H;
+
+	//! list of the time-point values for individual indices
 	std::vector<double> timePoints;
 };
 

@@ -24,10 +24,13 @@
 
 #include "lib/logger.h"
 #include "lib/configurator.h"
+#include "lib/sensor.h"
 
 namespace mrrocpp {
 namespace ecp_mp {
 namespace sensor {
+
+const lib::SENSOR_t SENSOR_CVFRADIA = "SENSOR_CVFRADIA";
 
 /*!
  * Class for communication with FraDIA. Parametrized by received structure.
