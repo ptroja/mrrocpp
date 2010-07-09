@@ -194,12 +194,24 @@ class bang_bang_profile : public velocity_profile<ecp_mp::common::trajectory_pos
 		bool calculate_acc_uni(vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator & it, const double & mc, int i);
 		/**
 		 * Calls the appropriate reduction method for a single axis in a single pose, depending on the motion model.
+		 * @return true if the calculation was successful
 		 */
 		bool reduction_axis(vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator & it, int i);
 		/**
 		 * Calls the appropriate optimize time method for a single axis in a single pose, depending on the motion model.
+		 * @return true if the trajectory recalculation is not needed (if initial velocity was not changed)
 		 */
 		bool optimize_time_axis(vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator & it, int i);
+		/**
+		 * Calculates velocities and accelerations (v_r and a_r) basing on v, v_max, a and a_max vectors for all of the axes in a single pose.
+		 * @return true if the calculation was successful
+		 */
+		bool calculate_v_r_a_r_pose(vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator & it);
+		/**
+		 * Calculates velocities and accelerations (v_r and a_r) basing on v, v_max, a and a_max vectors in one axis in a single pose.
+		 * @return true if the calculation was successful
+		 */
+		bool calculate_v_r_a_r(vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator & it, int i);
 };
 
 } // namespace velocity_profile_calculator

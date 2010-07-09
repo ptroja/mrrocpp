@@ -29,8 +29,18 @@ newsmooth::~newsmooth() {
 }
 
 bool newsmooth::calculate() {
+	printf("\n################################## Calculate #################################\n");
 	sr_ecp_msg.message("Calculating...");
 	int i,j;//loop counters
+
+	pose_vector_iterator = pose_vector.begin();
+
+	for (i = 0; i < pose_vector.size(); i++) {
+		if (!vpc.calculate_v_r_a_r_pose(pose_vector_iterator)) {
+			return false;
+		}
+		pose_vector_iterator++;
+	}
 
 	pose_vector_iterator = pose_vector.begin();
 
@@ -85,6 +95,10 @@ bool newsmooth::calculate() {
 					return calculate();
 				}
 			}
+		}
+
+		if (!vpc.set_model_pose(pose_vector_iterator)) {
+			return false;
 		}
 
 		if (!vpc.calculate_pose_time(pose_vector_iterator, mc) ||//calculate pose time
@@ -200,19 +214,19 @@ void newsmooth::print_pose(vector<ecp_mp::common::trajectory_pose::bang_bang_tra
 void newsmooth::create_velocity_vectors(int axes_num) {
 	joint_velocity = vector<double>(axes_num, 0.15);
 	joint_max_velocity = vector<double>(axes_num, 1.5);
-	joint_acceleration = vector<double>(axes_num, 0.01);
+	joint_acceleration = vector<double>(axes_num, 0.02);
 	joint_max_acceleration = vector<double>(axes_num, 7.0);
-	motor_velocity = vector<double>(axes_num, 0.05);
+	motor_velocity = vector<double>(axes_num, 0.15);
 	motor_max_velocity = vector<double>(axes_num, 200.0);
-	motor_acceleration = vector<double>(axes_num, 0.05);
+	motor_acceleration = vector<double>(axes_num, 0.02);
 	motor_max_acceleration = vector<double>(axes_num, 150.0);
-	euler_zyz_velocity= vector<double>(axes_num, 0.01);//TODO check if this is a reasonable value
+	euler_zyz_velocity= vector<double>(axes_num, 0.15);//TODO check if this is a reasonable value
 	euler_zyz_max_velocity = vector<double>(axes_num, 5.0);
-	euler_zyz_acceleration = vector<double>(axes_num, 0.01);//TODO check if this is a reasonable value
+	euler_zyz_acceleration = vector<double>(axes_num, 0.02);//TODO check if this is a reasonable value
 	euler_zyz_max_acceleration = vector<double>(axes_num, 5.0);
-	angle_axis_velocity = vector<double>(axes_num, 0.01);//TODO check if this is a reasonable value
+	angle_axis_velocity = vector<double>(axes_num, 0.15);//TODO check if this is a reasonable value
 	angle_axis_max_velocity = vector<double>(axes_num, 5.0);
-	angle_axis_acceleration = vector<double>(axes_num, 0.01);//TODO check if this is a reasonable value
+	angle_axis_acceleration = vector<double>(axes_num, 0.02);//TODO check if this is a reasonable value
 	angle_axis_max_acceleration = vector<double>(axes_num, 5.0);
 }
 
@@ -295,11 +309,6 @@ bool newsmooth::load_trajectory_pose(const vector<double> & coordinates, lib::MO
 	pose = ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose(pose_spec, coordinates, v, a); //create new trajectory pose
 	pose.v_max = v_max; //set the v_max vector
 	pose.a_max = a_max;
-
-	for (int j = 0; j < axes_num; j++) { //calculate v_r velocities
-		pose.v_r[j] = pose.v[j] * pose.v_max[j];
-		pose.a_r[j] = pose.a[j] * pose.a_max[j];
-	}
 
 	if (pose_vector.empty()) {
 		pose.pos_num = 1;

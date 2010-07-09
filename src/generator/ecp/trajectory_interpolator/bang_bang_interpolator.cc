@@ -27,7 +27,11 @@ bool bang_bang_interpolator::interpolate_relative_pose(vector<ecp_mp::common::tr
 	vector<double> coordinates (it->axes_num);
 	for (int i = 0; i < it->interpolation_node_no; i++) {
 		for (int j = 0; j < it->axes_num; j++) {
-			coordinates[j] = generate_next_coords(i+1, it->interpolation_node_no, it->start_position[j], it->v_p[j], it->v_r[j], it->v_k[j], it->a_r[j], it->k[j], it->acc[j], it->uni[j], it->s_acc[j], it->s_uni[j], lib::RELATIVE);
+			if (it->s[j] == 0.0) {
+				coordinates[j] = 0;
+			} else {
+				coordinates[j] = generate_next_coords(i+1, it->interpolation_node_no, it->start_position[j], it->v_p[j], it->v_r[j], it->v_k[j], it->a_r[j], it->k[j], it->acc[j], it->uni[j], it->s_acc[j], it->s_uni[j], lib::RELATIVE);
+			}
 		}
 		cv.push_back(coordinates);
 	}
@@ -86,7 +90,7 @@ double bang_bang_interpolator::generate_next_coords(int node_counter, int interp
 						//printf("przyspieszanie wchodzi na jednostajny, macrostep liczony od 1: %d\n", node_counter);
 						//next_position = start_position + k * ((node_counter-1)*v_p*tk + (node_counter-1)*(node_counter-1)*a_r*tk*tk/2);
 						//next_position += k * (v_p*tk + a_r*tk*tk/2 + (v_p+a_r*(node_counter-1) *tk)) * (przysp - (node_counter-1)) + k * tk * v_r * (node_counter - przysp);
-						next_position = start_position + k * (v_p * node_counter * tk + przysp * przysp * tk * tk * a_r
+						next_position = start_position + k * (v_p * przysp * tk + przysp * przysp * tk * tk * a_r
 								/ 2 + v_r * (node_counter - przysp) * tk);
 					}
 				} else {//normalne przyspieszanie
@@ -125,7 +129,7 @@ double bang_bang_interpolator::generate_next_coords(int node_counter, int interp
 		} else { //hamowanie w pierwszym etapie
 			//printf(" ham1 %d ", node_counter);
 			if (type == lib::ABSOLUTE) {
-				if ((przysp) > node_counter && (przysp) < (node_counter + 1)) {
+				if ((przysp) > (node_counter-1) && (przysp) < (node_counter)) {
 
 					if (przysp + jedn < node_counter) {
 
@@ -144,7 +148,7 @@ double bang_bang_interpolator::generate_next_coords(int node_counter, int interp
 					} else {//hamowanie + poczatek jednostajnego
 						//next_position = start_position + k * ((node_counter-1)*v_p*tk + (node_counter-1)*(node_counter-1)*a_r*tk*tk/2);
 						//next_position += k * (v_p*tk - a_r*tk*tk/2) * (przysp - (node_counter-1)) + k * tk * v_r * (node_counter - przysp);
-						next_position = start_position + k * (v_p * node_counter * tk - przysp * przysp * tk * tk * a_r
+						next_position = start_position + k * (v_p * przysp * tk - przysp * przysp * tk * tk * a_r
 								/ 2 + v_r * (node_counter - przysp) * tk);
 					}
 				} else {//normalne hamowanie
@@ -202,12 +206,15 @@ double bang_bang_interpolator::generate_next_coords(int node_counter, int interp
 		} else if (type == lib::RELATIVE) {
 			if ((przysp + jedn) > (node_counter - 1) && (przysp + jedn) < (node_counter)) {//jednostajny wchodzi w faze trzecia
 
-				next_position = v_r * tk * (1 - node_counter + przysp + jedn);
+				printf("v_r: %f\t node: %d\t przysp: %f\t jedn: %f\t k: %f\t a_r: %f\t tk: %f\n", v_r, node_counter, przysp, jedn, k, a_r, tk);
+
+				next_position = k* v_r * tk * (1 - node_counter + przysp + jedn);
 
 				if (v_r > v_k) {//hamowanie w 3 etapie
 					//printf("wchodzi macrostep: %d\n", node_counter);
 					next_position += k * (v_r * (node_counter - jedn - przysp) * tk - (node_counter - jedn - przysp)
 							* (node_counter - jedn - przysp) * tk * tk * a_r / 2);
+					printf("hamowanie w 3 etapie: %f \n", next_position);
 				} else {//przyspieszanie w 3 etapie
 					next_position += k * (v_r * (node_counter - jedn - przysp) * tk + (node_counter - jedn - przysp)
 							* (node_counter - jedn - przysp) * tk * tk * a_r / 2);
