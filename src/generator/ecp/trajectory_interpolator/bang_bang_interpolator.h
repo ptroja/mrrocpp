@@ -7,7 +7,7 @@
 
 #ifndef _BANG_BANG_INTERPOLATOR_H_
 #define _BANG_BANG_INTERPOLATOR_H_
-
+#include "lib/com_buf.h"
 #include "trajectory_interpolator.h"
 #include "lib/trajectory_pose/bang_bang_trajectory_pose.h"
 
@@ -18,7 +18,7 @@ namespace generator {
 namespace trajectory_interpolator {
 
 /**
- * @brief Methods to perform the interpolation of the motion with the trapezoidal velocity.
+ * @brief Methods to perform the interpolation of the motion with the trapezoidal velocity profile.
  *
  * Class contains methods used to create the list of coordinates basing on the trajectory pose list which describes the motion of the robot with a trapezoidal velocity.
  */
@@ -48,6 +48,10 @@ public:
 	 * @return true if the interpolation was succesful
 	 */
 	bool interpolate_absolute_pose(vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator & it, vector<vector<double> > & cv, const double & mc);
+
+private:
+	double generate_next_coords(int node_counter, int interpolation_node_no, double start_position, double v_p, double v_r, double v_k, double a_r, double k, double przysp, double jedn, double s_przysp, double s_jedn, lib::MOTION_TYPE type);
+
 };
 
 } // namespace trajectory_interpolator

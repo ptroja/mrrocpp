@@ -34,6 +34,7 @@ bang_bang_trajectory_pose::bang_bang_trajectory_pose(lib::ECP_POSE_SPECIFICATION
 	uni = vector <double> (axes_num);
 	s_uni = vector <double> (axes_num);
 	s_acc = vector <double> (axes_num);
+	s_dec = vector <double> (axes_num);
 	start_position = vector <double> (axes_num);
 	a_r = vector <double> (axes_num);
 	v_r = vector <double> (axes_num);

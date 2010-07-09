@@ -148,7 +148,7 @@ class bang_bang_profile : public velocity_profile<ecp_mp::common::trajectory_pos
 		 * Method checks if s_acc + s_dec is smaller than the whole distance to be covered in a single axis of a single pose.
 		 * @param it iterator to the list of positions
 		 * @param i number of axis for which the setting is made
-		 * @return true if s_acc + s_decc is smaller than s
+		 * @return true if s_acc + s_decc is smaller or equal to s
 		 */
 		bool check_s_acc_s_decc(vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator & it, int i);
 		/**
@@ -164,7 +164,42 @@ class bang_bang_profile : public velocity_profile<ecp_mp::common::trajectory_pos
 		 * @return true if the calculation was successful
 		 */
 		bool calculate_s_acc_s_dec_pose(vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator & it);
-
+		/**
+		 * Calculates the distances covered in the uniform motion phase for a single axis in a single pose.
+		 * @param it iterator to the list of positions
+		 * @param i number of axis for which the setting is made
+		 * @return true if the calculation was successful
+		 */
+		bool calculate_s_uni(vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator & it, int i);
+		/**
+		 * Calculates the distances covered in the uniform motion phase for a single pose.
+		 * @param it iterator to the list of positions
+		 * @return true if the calculation was successful
+		 */
+		bool calculate_s_uni_pose(vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator & it);
+		/**
+		 * Calculates and sets the numbers of macrosteps in which the first and second parts of the motion in each axis of the pose end.
+		 * @param it iterator to the list of positions
+		 * @param mc macrostep time
+		 * @return true if the calculation was successful
+		 */
+		bool calculate_acc_uni_pose(vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator & it, const double & mc);
+		/**
+		 * Calculates and sets the numbers of macrosteps in which the first and second parts of the motion in a single axis of the pose.
+		 * @param it iterator to the list of positions
+		 * @param mc macrostep time
+		 * @param i number of axis for which the setting is made
+		 * @return true if the calculation was successful
+		 */
+		bool calculate_acc_uni(vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator & it, const double & mc, int i);
+		/**
+		 * Calls the appropriate reduction method for a single axis in a single pose, depending on the motion model.
+		 */
+		bool reduction_axis(vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator & it, int i);
+		/**
+		 * Calls the appropriate optimize time method for a single axis in a single pose, depending on the motion model.
+		 */
+		bool optimize_time_axis(vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator & it, int i);
 };
 
 } // namespace velocity_profile_calculator

@@ -65,94 +65,142 @@ bool newsmooth::calculate() {
 		!vpc.calculate_s_acc_s_dec_pose(pose_vector_iterator)) { //calculate s_acc and s_dec for the pose
 			return false;
 		}
+		printf("\n------------ first print pose %d --------------\n", pose_vector_iterator->pos_num);
+		print_pose(pose_vector_iterator);
 
 		for(j = 0; j < axes_num; j++) { //for each axis
+			if (vpc.check_if_no_movement(pose_vector_iterator, j)) {
+				continue;
+			}
+
 			if (vpc.check_s_acc_s_decc(pose_vector_iterator, j)) {//check if s_acc && s_dec < s
-				//invoke optimize time
-				//invoke model reduction method
+				vpc.calculate_s_uni(pose_vector_iterator, j);//calculate s_uni
+				vpc.calculate_time(pose_vector_iterator, j);//calculate and set time
 			} else{//if not
-				//calculate and set time
-				//calculate and set s_acc && s_uni
+				if(!vpc.optimize_time_axis(pose_vector_iterator, j)) {
+					return calculate();
+				}
+
+				if(!vpc.reduction_axis(pose_vector_iterator, j)) {
+					return calculate();
+				}
 			}
 		}
 
-		//calculate pose_time
-		//set times to t
-		//calculate the number of the macrosteps for the pose
-		pose_vector_iterator->interpolation_node_no = ceil(pose_vector_iterator->t / mc);
-
-		if (debug) {
-			printf("interpolation node no: %d\n", pose_vector_iterator->interpolation_node_no);
+		if (!vpc.calculate_pose_time(pose_vector_iterator, mc) ||//calculate pose time
+			!vpc.set_times_to_t(pose_vector_iterator)) {//set times to t
+			return false;
 		}
 
-		//for each axis
-			//call reduction methods
-			//set uni and acc
+		printf("\n------------ second print pose %d --------------\n", pose_vector_iterator->pos_num);
+		print_pose(pose_vector_iterator);
 
+		pose_vector_iterator->interpolation_node_no = ceil(pose_vector_iterator->t / mc);//calculate the number of the macrosteps for the pose
 
+		for(j = 0; j < axes_num; j++) {//for each axis call reduction methods
+			if(!vpc.reduction_axis(pose_vector_iterator, j)) {
+				return calculate();
+			}
+		}
+
+		printf("\n------------ third print pose %d --------------\n", pose_vector_iterator->pos_num);
+		print_pose(pose_vector_iterator);
+
+		if (!vpc.calculate_acc_uni_pose(pose_vector_iterator, mc)) {//set uni and acc
+			return false;
+		}
 
 		pose_vector_iterator++;
 	}
 
-	return false;
+	return true;
 }
 
 void newsmooth::print_pose_vector() {
-	printf("------------------ Pose List ------------------\n");
+	printf("\n------------------ Pose List ------------------\n");
 	pose_vector_iterator = pose_vector.begin();
-	int z;
 	for (int k = 0; k < pose_vector.size(); k++) {
-		printf("s:\t");
-		for (z = 0; z < pose_vector_iterator->s.size(); z++) {
-			printf("%f\t", pose_vector_iterator->s[z]);
-		}
-		printf("\n");
-		printf("k:\t");
-		for (z = 0; z < pose_vector_iterator->k.size(); z++) {
-			printf("%f\t", pose_vector_iterator->k[z]);
-		}
-		printf("\n");
-		printf("times:\t");
-		for (z = 0; z < pose_vector_iterator->s.size(); z++) {
-			printf("%f\t", pose_vector_iterator->times[z]);
-		}
-		printf("\n");
-		printf("v_r:\t");
-		for (z = 0; z < pose_vector_iterator->v_r.size(); z++) {
-			printf("%f\t", pose_vector_iterator->v_r[z]);
-		}
-		printf("\n");
-		printf("a_r:\t");
-		for (z = 0; z < pose_vector_iterator->a_r.size(); z++) {
-			printf("%f\t", pose_vector_iterator->a_r[z]);
-		}
-		printf("\n");
-		printf("v_p:\t");
-		for (z = 0; z < pose_vector_iterator->v_p.size(); z++) {
-			printf("%f\t", pose_vector_iterator->v_p[z]);
-		}
-		printf("\n");
-		printf("v_k:\t");
-		for (z = 0; z < pose_vector_iterator->v_k.size(); z++) {
-			printf("%f\t", pose_vector_iterator->v_k[z]);
-		}
-		printf("\n");
-		printf("model:\t");
-		for (z = 0; z < pose_vector_iterator->model.size(); z++) {
-			printf("%d\t\t", pose_vector_iterator->model[z]);
-		}
-		printf("\n");
-		printf("t: %f\t pos_num: %d\n", pose_vector_iterator->t, pose_vector_iterator->pos_num);
-		printf("--------------------------------\n\n");
-		flushall();
+		print_pose(pose_vector_iterator);
 		pose_vector_iterator++;
 	}
 }
 
+void newsmooth::print_pose(vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator & it) {
+	int z;
+	printf("s:\t");
+	for (z = 0; z < pose_vector_iterator->s.size(); z++) {
+		printf("%f\t", pose_vector_iterator->s[z]);
+	}
+	printf("\n");
+	printf("k:\t");
+	for (z = 0; z < pose_vector_iterator->k.size(); z++) {
+		printf("%f\t", pose_vector_iterator->k[z]);
+	}
+	printf("\n");
+	printf("times:\t");
+	for (z = 0; z < pose_vector_iterator->s.size(); z++) {
+		printf("%f\t", pose_vector_iterator->times[z]);
+	}
+	printf("\n");
+	printf("v_r:\t");
+	for (z = 0; z < pose_vector_iterator->v_r.size(); z++) {
+		printf("%f\t", pose_vector_iterator->v_r[z]);
+	}
+	printf("\n");
+	printf("a_r:\t");
+	for (z = 0; z < pose_vector_iterator->a_r.size(); z++) {
+		printf("%f\t", pose_vector_iterator->a_r[z]);
+	}
+	printf("\n");
+	printf("v_p:\t");
+	for (z = 0; z < pose_vector_iterator->v_p.size(); z++) {
+		printf("%f\t", pose_vector_iterator->v_p[z]);
+	}
+	printf("\n");
+	printf("v_k:\t");
+	for (z = 0; z < pose_vector_iterator->v_k.size(); z++) {
+		printf("%f\t", pose_vector_iterator->v_k[z]);
+	}
+	printf("\n");
+	printf("s_acc:\t");
+	for (z = 0; z < pose_vector_iterator->s_acc.size(); z++) {
+		printf("%f\t", pose_vector_iterator->s_acc[z]);
+	}
+	printf("\n");
+	printf("s_uni:\t");
+	for (z = 0; z < pose_vector_iterator->s_uni.size(); z++) {
+		printf("%f\t", pose_vector_iterator->s_uni[z]);
+	}
+	printf("\n");
+	printf("s_dec:\t");
+	for (z = 0; z < pose_vector_iterator->s_dec.size(); z++) {
+		printf("%f\t", pose_vector_iterator->s_dec[z]);
+	}
+	printf("\n");
+	printf("model:\t");
+	for (z = 0; z < pose_vector_iterator->model.size(); z++) {
+		printf("%d\t\t", pose_vector_iterator->model[z]);
+	}
+	printf("\n");
+	printf("acc:\t");
+	for (z = 0; z < pose_vector_iterator->acc.size(); z++) {
+		printf("%f\t", pose_vector_iterator->acc[z]);
+	}
+	printf("\n");
+	printf("uni:\t");
+	for (z = 0; z < pose_vector_iterator->uni.size(); z++) {
+		printf("%f\t", pose_vector_iterator->uni[z]);
+	}
+	printf("\n");
+	printf("t: %f\t pos_num: %d\t number of macrosteps: %d\n", pose_vector_iterator->t, pose_vector_iterator->pos_num, pose_vector_iterator->interpolation_node_no);
+	printf("--------------------------------\n\n");
+	flushall();
+}
+
 void newsmooth::create_velocity_vectors(int axes_num) {
-	joint_velocity = vector<double>(axes_num, 0.05);
+	joint_velocity = vector<double>(axes_num, 0.15);
 	joint_max_velocity = vector<double>(axes_num, 1.5);
-	joint_acceleration = vector<double>(axes_num, 0.05);
+	joint_acceleration = vector<double>(axes_num, 0.01);
 	joint_max_acceleration = vector<double>(axes_num, 7.0);
 	motor_velocity = vector<double>(axes_num, 0.05);
 	motor_max_velocity = vector<double>(axes_num, 200.0);
