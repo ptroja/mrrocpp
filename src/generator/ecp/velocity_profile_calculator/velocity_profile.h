@@ -47,9 +47,9 @@ class velocity_profile {
 		 * @return true if values are the same
 		 */
 		bool eq(double a, double b) {
-			const double EPS = 0.0000001;
+			const double epsilon = 0.0000001;
 			const double& diff = a - b;
-			return diff < EPS && diff > -EPS;
+			return diff < epsilon && diff > -epsilon;
 		}
 		/**
 		 * Checks if the distance covered in the given axis is equal to 0.

@@ -104,23 +104,23 @@ void ecp_sub_task_smooth_gen_test::conditional_execution() {
 	sgenmotor->set_absolute();
 	coordinates1[0] = 0.0;
 	coordinates1[1] = 20.0;
-	coordinates1[2] = 0.0;
+	coordinates1[2] = 5.0;
 	coordinates1[3] = 0.0;
 	coordinates1[4] = 20.0;
 	coordinates1[5] = 0.0;
 	sgenmotor->load_absolute_motor_trajectory_pose(coordinates1);
 	coordinates1[0] = 0.0;
-	coordinates1[1] = 0.0;
+	coordinates1[1] = 40.0;
 	coordinates1[2] = 0.0;
 	coordinates1[3] = 50.0;
-	coordinates1[4] = 0.0;
+	coordinates1[4] = 6.0;
 	coordinates1[5] = 0.0;
 	sgenmotor->load_absolute_motor_trajectory_pose(coordinates1);
 	coordinates1[0] = 0.0;
-	coordinates1[1] = -10.0;
+	coordinates1[1] = 0.0;
 	coordinates1[2] = 0.0;
 	coordinates1[3] = 0.0;
-	coordinates1[4] = 15.0;
+	coordinates1[4] = 0.0;
 	coordinates1[5] = 0.0;
 	sgenmotor->load_absolute_motor_trajectory_pose(coordinates1);
 

@@ -206,7 +206,7 @@ double bang_bang_interpolator::generate_next_coords(int node_counter, int interp
 		} else if (type == lib::RELATIVE) {
 			if ((przysp + jedn) > (node_counter - 1) && (przysp + jedn) < (node_counter)) {//jednostajny wchodzi w faze trzecia
 
-				printf("v_r: %f\t node: %d\t przysp: %f\t jedn: %f\t k: %f\t a_r: %f\t tk: %f\n", v_r, node_counter, przysp, jedn, k, a_r, tk);
+				//printf("v_r: %f\t node: %d\t przysp: %f\t jedn: %f\t k: %f\t a_r: %f\t tk: %f\n", v_r, node_counter, przysp, jedn, k, a_r, tk);
 
 				next_position = k* v_r * tk * (1 - node_counter + przysp + jedn);
 
@@ -214,7 +214,7 @@ double bang_bang_interpolator::generate_next_coords(int node_counter, int interp
 					//printf("wchodzi macrostep: %d\n", node_counter);
 					next_position += k * (v_r * (node_counter - jedn - przysp) * tk - (node_counter - jedn - przysp)
 							* (node_counter - jedn - przysp) * tk * tk * a_r / 2);
-					printf("hamowanie w 3 etapie: %f \n", next_position);
+					//printf("hamowanie w 3 etapie: %f \n", next_position);
 				} else {//przyspieszanie w 3 etapie
 					next_position += k * (v_r * (node_counter - jedn - przysp) * tk + (node_counter - jedn - przysp)
 							* (node_counter - jedn - przysp) * tk * tk * a_r / 2);

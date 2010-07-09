@@ -29,7 +29,7 @@ newsmooth::~newsmooth() {
 }
 
 bool newsmooth::calculate() {
-	printf("\n################################## Calculate #################################\n");
+	//printf("\n################################## Calculate #################################\n");
 	sr_ecp_msg.message("Calculating...");
 	int i,j;//loop counters
 
@@ -75,8 +75,8 @@ bool newsmooth::calculate() {
 		!vpc.calculate_s_acc_s_dec_pose(pose_vector_iterator)) { //calculate s_acc and s_dec for the pose
 			return false;
 		}
-		printf("\n------------ first print pose %d --------------\n", pose_vector_iterator->pos_num);
-		print_pose(pose_vector_iterator);
+		//printf("\n------------ first print pose %d --------------\n", pose_vector_iterator->pos_num);
+		//print_pose(pose_vector_iterator);
 
 		for(j = 0; j < axes_num; j++) { //for each axis
 			if (vpc.check_if_no_movement(pose_vector_iterator, j)) {
@@ -106,8 +106,8 @@ bool newsmooth::calculate() {
 			return false;
 		}
 
-		printf("\n------------ second print pose %d --------------\n", pose_vector_iterator->pos_num);
-		print_pose(pose_vector_iterator);
+		//printf("\n------------ second print pose %d --------------\n", pose_vector_iterator->pos_num);
+		//print_pose(pose_vector_iterator);
 
 		pose_vector_iterator->interpolation_node_no = ceil(pose_vector_iterator->t / mc);//calculate the number of the macrosteps for the pose
 
@@ -117,8 +117,8 @@ bool newsmooth::calculate() {
 			}
 		}
 
-		printf("\n------------ third print pose %d --------------\n", pose_vector_iterator->pos_num);
-		print_pose(pose_vector_iterator);
+		//printf("\n------------ third print pose %d --------------\n", pose_vector_iterator->pos_num);
+		//print_pose(pose_vector_iterator);
 
 		if (!vpc.calculate_acc_uni_pose(pose_vector_iterator, mc)) {//set uni and acc
 			return false;
