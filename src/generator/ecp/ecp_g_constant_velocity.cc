@@ -53,7 +53,7 @@ void constant_velocity::print_pose_vector() {
 			printf("%f\t", pose_vector_iterator->v_r[z]);
 		}
 		printf("\n");
-		printf("t: %f\n", pose_vector_iterator->t);
+		printf("t: %f\t pos_num: %d\t number of macrosteps: %d\n", pose_vector_iterator->t, pose_vector_iterator->pos_num, pose_vector_iterator->interpolation_node_no);
 		flushall();
 		pose_vector_iterator++;
 	}

@@ -48,11 +48,11 @@ public:
    */
   vector<double> a_max;
   /**
-   * Number of the macrostep in which the first part of the movement ends (first out of three).
+   * Number of the macrostep in which the first part of the movement ends (first out of three). Duration of the first part of the motion in macrosteps.
    */
   vector<double> acc;
   /**
-   * Number of the macrostep in which the seconde part of the movement ends.
+   * Duration of the second part of the motion in macrosteps.
    */
   vector<double> uni;
   /**
@@ -63,6 +63,10 @@ public:
    * Distance covered in the first part of the movement.
    */
   vector<double> s_acc;
+  /**
+   * Distance covered in the third part of the movement.
+   */
+  vector<double> s_dec;
   /**
    * Initial position for the pose.
    */

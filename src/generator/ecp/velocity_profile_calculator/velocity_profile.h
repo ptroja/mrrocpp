@@ -52,6 +52,17 @@ class velocity_profile {
 			return diff < EPS && diff > -EPS;
 		}
 		/**
+		 * Checks if the distance covered in the given axis is equal to 0.
+		 * @return true if the distance covered in the given pose and axis is equal to 0.
+		 */
+		bool check_if_no_movement(typename vector<Pos>::iterator & it, int i) {
+			if (eq(it->s[i],0.0)) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+		/**
 		 * Calculates distance for all of the axes in a single trajectory pose and sets the directions of movements of absolute type.
 		 * @param it iterator to the list of positions
 		 * @return true if the set of the distance and direction was successful (usually is if the vectors start_position and coordinates were initiated and filled in before)
@@ -150,6 +161,16 @@ class velocity_profile {
 			} else {
 				return false;
 			}
+		}
+		/**
+		 * Sets all of the values in %times vector to t.
+		 * @return true if the calculation was successful
+		 */
+		bool set_times_to_t(typename vector<Pos>::iterator & it) {
+			for (int i = 0; i < it->axes_num; i++) {
+				it->times[i] = it->t;
+			}
+			return true;
 		}
 };
 
