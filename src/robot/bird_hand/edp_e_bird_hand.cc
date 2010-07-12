@@ -88,7 +88,7 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 			int16_t abspos;
 			if (i < 6)
 				device.getSynchroPos(i, abspos);
-			desired_joints_tmp[i] = (double)abspos / 4096;
+			desired_joints_tmp[i] = (double)abspos / 4096.0;
 			//synchro_position[i] = (int32_t) ((double)abspos /4096 * 275 * 7.826 * 512);
 			//printf("[info] synchro position read : %d \n", synchro_position[i]);
 			//fflush(stdout);

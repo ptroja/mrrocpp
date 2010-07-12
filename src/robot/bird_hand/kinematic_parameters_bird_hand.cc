@@ -15,13 +15,13 @@ namespace kinematics {
 namespace bird_hand {
 
 kinematic_parameters_bird_hand::kinematic_parameters_bird_hand() {
-	gear[0] = 512.0 * 275.0 * 7.826;  //index_f[2]
-	gear[1] = 512.0 * 275.0 * 7.826;  //index_f[1]
-	gear[2] = 512.0 * 275.0 * 7.826;  //thumb_f[0]
-	gear[3] = 512.0 * 275.0 * 7.826;  //thumb_f[1]
-	gear[4] = 512.0 * 275.0 * 7.826;  //ring_f[1]
+	gear[0] = 						  //index_f[2]
+	gear[1] = 						  //index_f[1]
+	gear[2] = 						  //thumb_f[0]
+	gear[3] = 						  //thumb_f[1]
+	gear[4] = 						  //ring_f[1]
 	gear[5] = 512.0 * 275.0 * 7.826;  //ring_f[2]
-	gear[6] = 512.0 * 275.0 * 2.1585; //index_f[0] (rotation)
+	gear[6] = 						  //index_f[0] (rotation)
 	gear[7] = 512.0 * 275.0 * 2.1585; //index_f[0] (rotation)
 
 	lower_limit_axis[0] = 460;

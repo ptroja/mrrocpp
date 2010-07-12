@@ -31,8 +31,8 @@ public:
 	double gear[8];
 
 	// Zakresy ruchu walow silnikow
-	uint16_t lower_limit_axis[8];
-	uint16_t upper_limit_axis[8];
+	double lower_limit_axis[8];
+	double upper_limit_axis[8];
 
 	// Zakresy ruchu stopni swobody w radianach.
 	double lower_limit_joint[8];
