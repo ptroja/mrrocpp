@@ -9,6 +9,8 @@
 #ifndef KINEMATIC_PARAMETERS_BIRD_HAND_H_
 #define KINEMATIC_PARAMETERS_BIRD_HAND_H_
 
+#include "lib/typedefs.h"
+
 namespace mrrocpp {
 namespace kinematics {
 namespace bird_hand {
@@ -28,9 +30,10 @@ public:
 	// Zmienne opisujace przekladnie dla wszystkich stopni swobody.
 	double gear[8];
 
-	// Zakresy ruchu walow silnikow w radianach.
-	double lower_limit_axis[8];
-	double upper_limit_axis[8];
+	// Zakresy ruchu walow silnikow
+	uint16_t lower_limit_axis[8];
+	uint16_t upper_limit_axis[8];
+
 	// Zakresy ruchu stopni swobody w radianach.
 	double lower_limit_joint[8];
 	double upper_limit_joint[8];
