@@ -15,24 +15,33 @@ namespace mrrocpp {
 namespace ecp_mp {
 namespace sensor {
 
+struct Coordinates{
+	double x;
+	double y;
+	double z;
+};
 /*
  * Class responsible for representing neuron vsp in mrrocpp that in fact handles communication between
  * mrrocpp and external vsp
  */
 class neuron_sensor : public ecp_mp::sensor::sensor_interface {
-private:
-	/** Configurator. */
-	mrrocpp::lib::configurator& config;
-	int socketDescriptor;
-	uint16_t command;
 
-public:
-	neuron_sensor(mrrocpp::lib::configurator& _configurator);
-	virtual ~neuron_sensor();
-	void get_reading();
-	void configure_sensor();
-	void initiate_reading();
-	bool transmissionFinished();
+	private:
+		/** Configurator. */
+		mrrocpp::lib::configurator& config;
+		int socketDescriptor;
+		uint16_t command;
+		Coordinates coordinates;
+
+	public:
+		neuron_sensor(mrrocpp::lib::configurator& _configurator);
+		virtual ~neuron_sensor();
+		void get_reading();
+		void configure_sensor();
+		void initiate_reading();
+		bool transmissionFinished();
+		uint16_t getCommand();
+		Coordinates getCoordinates();
 };
 
 } //sensor

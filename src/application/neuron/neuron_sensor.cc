@@ -20,12 +20,7 @@ namespace mrrocpp {
 namespace ecp_mp {
 namespace sensor {
 
-struct Coordinates{
-	double x;
-	double y;
-	double z;
-};
-
+/*Sensor creation along with initialization of communication*/
 neuron_sensor::neuron_sensor(mrrocpp::lib::configurator& _configurator):config(_configurator) {
 
 	base_period=5;
@@ -73,34 +68,40 @@ neuron_sensor::~neuron_sensor() {
 
 void neuron_sensor::get_reading(){
 	printf("getReading\n");
-
 	char buff[26];
 
-	double x,y,z;
-
-
+	//Read packet from socket*/
 	int result = read(socketDescriptor, buff, sizeof(buff));
 	printf("size of buff %d %d\n",sizeof(buff),sizeof(double));
 	if (result < 0) {
 		throw std::runtime_error(std::string("read() failed: ") + strerror(errno));
 	}
 
+	//check whether whole incoming packet received
 	if (result != sizeof(buff)) {
 		throw std::runtime_error("read() failed: result != sizeof(MESSAGE_T)");
 	}
 
+	//copy data from packet to variables
 	memcpy(&command,buff,2);
-	memcpy(&x,buff+2,8);
-	memcpy(&y,buff+10,8);
-	memcpy(&z,buff+18,8);
-
-	printf("%d %lf %lf %lf\n",command,x,y,z);
+	memcpy(&(coordinates.x),buff+2,8);
+	memcpy(&(coordinates.y),buff+10,8);
+	memcpy(&(coordinates.z),buff+18,8);
 }
 
+/*Check whether appropriate information was sent from VSP, that finishes communication*/
 bool neuron_sensor::transmissionFinished(){
 	if(command==0)
 		return true;
 	return false;
+}
+
+Coordinates neuron_sensor::getCoordinates(){
+	return coordinates;
+}
+
+uint16_t neuron_sensor::getCommand(){
+	return command;
 }
 
 void neuron_sensor::configure_sensor(){
