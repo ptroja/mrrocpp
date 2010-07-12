@@ -30,7 +30,6 @@
 #include "base/edp/vis_server.h"
 
 #define PORT "/dev/ser"
-
 using namespace mrrocpp::lib::exception;
 
 #ifndef __QNXNTO__
@@ -52,6 +51,28 @@ namespace mrrocpp {
 namespace edp {
 namespace bird_hand {
 
+const uint16_t u_limits[8] = {
+		1350,
+		1750,
+		2630,
+		2230,
+		1040,
+		2540,
+		4096,
+		4096
+};
+
+const uint16_t l_limits[8] = {
+		460,
+		730,
+		1790,
+		1450,
+		340,
+		1630,
+		0,
+		0
+};
+
 void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
 {
 	manip_effector::single_thread_master_order(nm_task, nm_tryb);
@@ -63,12 +84,28 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 	if (!robot_test_mode) {
 		for (uint8_t i = 0; i < BIRD_HAND_NUM_OF_SERVOS; i++) {
 			int16_t abspos;
-			if (i < 4)
+			if (i < 6)
 				device.getSynchroPos(i, abspos);
-			synchro_position[i] = (int32_t) ((double)abspos /4096 * 275 * 7.826 * 512); // TODO : tu wstawić magiczną stałą
-			printf("synchro position readed : %d \n", synchro_position[i]);
+			synchro_position[i] = (int32_t) ((double)abspos /4096 * 275 * 7.826 * 512);
+			printf("[info] synchro position readed : %d \n", synchro_position[i]);
+			fflush(stdout);
 
 		}
+
+		for (uint8_t i = 0; i < BIRD_HAND_NUM_OF_SERVOS; i++)
+		{
+			device.setLimit(i, u_limits[i], l_limits[i]);
+		}
+
+		for (uint8_t i = 0; i < BIRD_HAND_NUM_OF_SERVOS; i++)
+		{
+
+			int16_t ulimit, llimit;
+			if(i < 6)
+				device.getLimit(i, ulimit, llimit);
+			//printf("< %d > u: %d  l: %d", i, ulimit, llimit);
+		}
+
 	}
 	controller_state_edp_buf.is_synchronised = true;
 
@@ -146,7 +183,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 						(int16_t) ecp_edp_cbuffer.bird_hand_command_structure.finger[i].reciprocal_of_damping,
 						(int16_t) ecp_edp_cbuffer.bird_hand_command_structure.finger[i].desired_torque,
 						(int32_t) (ecp_edp_cbuffer.bird_hand_command_structure.finger[i].desired_position * 512 * 275 * 7.826) + synchro_position[i]);
-						printf("cmd pos: %lf * 275 * 7.826 * 512 + %d = %d \n", ecp_edp_cbuffer.bird_hand_command_structure.finger[i].desired_position, synchro_position[i], (int32_t) (ecp_edp_cbuffer.bird_hand_command_structure.finger[i].desired_position * 275 * 7.826 * 512) + synchro_position[i]);
+					//	printf("cmd pos: %lf * 275 * 7.826 * 512 + %d = %d \n", ecp_edp_cbuffer.bird_hand_command_structure.finger[i].desired_position, synchro_position[i], (int32_t) (ecp_edp_cbuffer.bird_hand_command_structure.finger[i].desired_position * 275 * 7.826 * 512) + synchro_position[i]);
 
 				break;
 
@@ -155,16 +192,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 	}
 
 	std::stringstream ss(std::stringstream::in | std::stringstream::out);
-	/*
-	 ss << "dt: "
-	 << ecp_edp_cbuffer.bird_hand_command_structure.finger[2].desired_torque
-	 << " rod: "
-	 << ecp_edp_cbuffer.bird_hand_command_structure.finger[2].reciprocal_of_damping
-	 << " dp: "
-	 << ecp_edp_cbuffer.bird_hand_command_structure.finger[2].desired_position;
 
-	 msg->message(ss.str().c_str());
-	 */
 	if (clock_gettime(CLOCK_MONOTONIC, &current_timespec) == -1) {
 		perror("clock gettime");
 	}
@@ -181,36 +209,10 @@ void effector::move_arm(const lib::c_buffer &instruction)
 		macrostep_end_time = current_time + ecp_edp_cbuffer.bird_hand_command_structure.motion_steps
 				* BIRD_HAND_STEP_TIME_IN_NS;
 
-		/*
-		 ss << " stan bierny c:" << current_time << " q: " << query_time
-		 << " e: " << macrostep_end_time;
-
-		 msg->message(ss.str().c_str());
-		 ss.str("");
-
-		 ss << " stan bierny c:" << current_time << " q: "
-		 << ecp_edp_cbuffer.bird_hand_command_structure.ecp_query_step
-		 << " e: "
-		 << ecp_edp_cbuffer.bird_hand_command_structure.motion_steps;
-
-		 msg->message(ss.str().c_str());
-
-		 ss.str("");
-
-		 ss << " stan bierny c:" << current_time << " q: "
-		 << ecp_edp_cbuffer.bird_hand_command_structure.ecp_query_step
-		 * (uint64_t) BIRD_HAND_STEP_TIME_IN_NS << " e: "
-		 << ecp_edp_cbuffer.bird_hand_command_structure.motion_steps
-		 * (uint64_t) BIRD_HAND_STEP_TIME_IN_NS;
-
-		 msg->message(ss.str().c_str());
-		 */
 	} else {
 		// stan czynny
 		// UWAGA NA KOLEJNOSC OBLICZEN query_time i macrostep_end_time NIE ZAMIENIAC
-		/*
-		 msg->message("stan czynny");
-		 */
+
 		query_time = macrostep_end_time + ecp_edp_cbuffer.bird_hand_command_structure.ecp_query_step
 				* BIRD_HAND_STEP_TIME_IN_NS;
 
@@ -248,26 +250,22 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 			int16_t t, c;
 			uint8_t status;
 
-			if (i < 4)
+			if (i < 6)
 				device.getStatus(i, status, pos, c, t);
 
 			edp_ecp_rbuffer.bird_hand_status_reply_structure.finger[i].meassured_position
 					= (double)(pos - synchro_position[i])/512 * 1/275 * 1/7.826;
-			//printf("msr pos: %lf = (%d - %d)/512 * 1/275 * 1/7.826 \n", edp_ecp_rbuffer.bird_hand_status_reply_structure.finger[i].meassured_position, pos, synchro_position[i]);
-			fflush(stdout);
 			edp_ecp_rbuffer.bird_hand_status_reply_structure.finger[i].meassured_current
 					= c;
 			edp_ecp_rbuffer.bird_hand_status_reply_structure.finger[i].meassured_torque
 					= t;
-		//	printf(" (%d) : %d", i, (int)t);
-			//printf("status %d \n", (int)status);
+
 			edp_ecp_rbuffer.bird_hand_status_reply_structure.finger[i].upper_limit_of_absolute_value_of_meassured_torque = status & (1<<TORQUE_LIMIT);
 			edp_ecp_rbuffer.bird_hand_status_reply_structure.finger[i].lower_limit_of_absolute_position = status & (1<<LOWER_LIMIT);
 			edp_ecp_rbuffer.bird_hand_status_reply_structure.finger[i].upper_limit_of_absolute_position = status & (1<<UPPER_LIMIT);
 			edp_ecp_rbuffer.bird_hand_status_reply_structure.finger[i].upper_limit_of_meassured_current = status & (1<<CURRENT_LIMIT);
 
 		}
-		printf("\n");
 	}
 	reply.servo_step = step_counter;
 
@@ -286,7 +284,6 @@ void effector::set_robot_model(const lib::c_buffer &instruction)
 		if (i < 2)
 			device.setPID(i, p, i, d);
 
-		//TODO : add limits
 	}
 }
 /*--------------------------------------------------------------------------*/

@@ -21,7 +21,7 @@ void Bird_hand::write_read(int fd, char* b, unsigned int w_len, unsigned int r_l
 
 		// timeout
 		struct timeval timeout;
-		timeout.tv_sec = (time_t) 10;
+		timeout.tv_sec = (time_t) 1;
 		timeout.tv_usec = 500;
 
 		int select_retval = select(fd + 1, &rfds, NULL, NULL, &timeout);
@@ -50,7 +50,7 @@ void Bird_hand::connect(std::string port)
 
 	for (unsigned int i = 0; i < 8; i++)
 	{
-		std::cout << "opening port : " << (port+(char)(i+50)).c_str() << std::endl;
+		std::cout << "[info] opening port : " << (port+(char)(i+50)).c_str() << std::endl;
 		fd[i] = open((port+(char)(i+50)).c_str(), O_RDWR | O_NOCTTY | O_NDELAY);
 		if (fd[i] < 0) {
 			throw(std::runtime_error("unable to open device device !!!"));
@@ -69,7 +69,7 @@ void Bird_hand::connect(std::string port)
 			tcsetattr(fd[i], TCSANOW, &oldtio[i]);
 			close(fd[i]);
 			fd[i] = -1;
-			throw(std::runtime_error("unable to set baudrate device !!!"));
+			throw(std::runtime_error("unable to set baudrate !!!"));
 			return;
 		}
 		// activate new settings
@@ -101,8 +101,6 @@ void Bird_hand::getStatus(uint8_t id, uint8_t &status, int32_t &position, int16_
 		printf("error \n");
 
 	struct status_* stat = (status_*) &buf[3];
-
-	printf("<%d> %d ", id, stat->abspos);
 
 	status = stat->status;
 	position = stat->position;
@@ -185,6 +183,8 @@ void Bird_hand::setLimit(uint8_t id, int16_t upper, int16_t lower)
 
 	a->u_limit = upper;
 	a->l_limit = lower;
+	a->cur_limit = 10000;
+	a->f_limit = 1000;
 
 	write_read(fd[id / 2], buf, 21, 0);
 
