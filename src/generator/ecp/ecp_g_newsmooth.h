@@ -51,6 +51,10 @@ ecp::common::generator::velocity_profile_calculator::bang_bang_profile> {
 		 * Method used to print list of positions.
 		 */
 		void print_pose_vector();
+		/**
+		 * Prints single pose.
+		 */
+		void print_pose(vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator & it);
 
 	public:
 		/**
