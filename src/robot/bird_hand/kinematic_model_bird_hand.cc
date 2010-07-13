@@ -23,10 +23,6 @@ kinematic_model_bird_hand::kinematic_model_bird_hand(void)
 
 void kinematic_model_bird_hand::check_motor_position(const lib::MotorArray & motor_position)
 {
-       for (int i=0; i<8; ++i){
-               printf("[info] check_motor_position: %d \n", motor_position[i]);
-               fflush(stdout);
-       }
 
        if (motor_position[0] < params.lower_limit_axis[0])
                throw NonFatal_error_2(BEYOND_LOWER_LIMIT_AXIS_0);
@@ -136,7 +132,7 @@ void kinematic_model_bird_hand::i2mp_transform(lib::MotorArray & local_desired_m
 	//check_joints(local_desired_joints);
 
 	for (int i = 0; i < 8; ++i)
-		local_desired_motor_pos_new[i] = local_desired_joints[i] * params.gear[i] + params.synchro_joint_position[i];
+		local_desired_motor_pos_new[i] = local_desired_joints[i] * params.gear[i] + params.synchro_motor_position[i];
 
 	//check_motor_position(local_desired_motor_pos_new);
 }

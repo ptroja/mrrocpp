@@ -80,23 +80,25 @@ void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
 
 void effector::get_controller_state(lib::c_buffer &instruction)
 {
-	lib::JointArray desired_joints_tmp(number_of_servos); // Wspolrzedne wewnetrzne
-	lib::MotorArray desired_motor_pos_new_tmp(number_of_servos);
+	lib::JointArray desired_joints_tmp(BIRD_HAND_NUM_OF_SERVOS); // Wspolrzedne wewnetrzne
+	lib::MotorArray desired_motor_pos_new_tmp(BIRD_HAND_NUM_OF_SERVOS);
 
 	if (!robot_test_mode) {
 		for (uint8_t i = 0; i < BIRD_HAND_NUM_OF_SERVOS; i++) {
 			int16_t abspos;
 			if (i < 6)
 				device.getSynchroPos(i, abspos);
-			desired_joints_tmp[i] = (double)abspos / 4096.0;
+			desired_joints_tmp[i] = (double)abspos / 4096.0 * M_PI;
 			//synchro_position[i] = (int32_t) ((double)abspos /4096 * 275 * 7.826 * 512);
 			//printf("[info] synchro position read : %d \n", synchro_position[i]);
 			//fflush(stdout);
 		}
-		get_current_kinematic_model()->i2mp_transform(desired_motor_pos_new_tmp, desired_joints_tmp);
+		try{get_current_kinematic_model()->i2mp_transform(desired_motor_pos_new_tmp, desired_joints_tmp);}
+		catch(...){}
 		for (uint8_t i = 0; i < BIRD_HAND_NUM_OF_SERVOS; i++) {
 			synchro_position[i] = (int32_t) desired_motor_pos_new_tmp[i];
 			printf("[info] synchro position read: %d \n", synchro_position[i]);
+			printf("[info] abspos/4096.0 read: %f \n", desired_joints_tmp[i]);
 			fflush(stdout);
 		}
 
@@ -149,8 +151,8 @@ void effector::move_arm(const lib::c_buffer &instruction)
 {
 
 	struct timespec current_timespec;
-	lib::JointArray desired_joints_tmp(number_of_servos); // Wspolrzedne wewnetrzne
-	lib::MotorArray desired_motor_pos_new_tmp(number_of_servos);
+	lib::JointArray desired_joints_tmp(BIRD_HAND_NUM_OF_SERVOS); // Wspolrzedne wewnetrzne
+	lib::MotorArray desired_motor_pos_new_tmp(BIRD_HAND_NUM_OF_SERVOS);
 
 	if (!robot_test_mode) {
 		for (unsigned int i = 0; i < BIRD_HAND_NUM_OF_SERVOS; i++) {
@@ -233,8 +235,8 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 
 	struct timespec query_timespec;
 
-	lib::JointArray desired_joints_tmp(number_of_servos); // Wspolrzedne wewnetrzne
-	lib::MotorArray desired_motor_pos_new_tmp(number_of_servos);
+	lib::JointArray desired_joints_tmp(BIRD_HAND_NUM_OF_SERVOS); // Wspolrzedne wewnetrzne
+	lib::MotorArray desired_motor_pos_new_tmp(BIRD_HAND_NUM_OF_SERVOS);
 
 	nsec2timespec(&query_timespec, query_time);
 
@@ -275,6 +277,12 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 	}
 	reply.servo_step = step_counter;
 
+    for (int i=0; i<8; ++i){
+            printf("[info] desired_motor_pos_new_tmp[%d]: %f \n", i, desired_motor_pos_new_tmp[i]);
+            fflush(stdout);
+    }
+    printf("\n");
+    fflush(stdout);
 }
 /*--------------------------------------------------------------------------*/
 
