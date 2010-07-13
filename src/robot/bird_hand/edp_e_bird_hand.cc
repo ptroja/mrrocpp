@@ -88,7 +88,7 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 			int16_t abspos;
 			if (i < 6)
 				device.getSynchroPos(i, abspos);
-			desired_joints_tmp[i] = (double)abspos / 4096.0 * M_PI;
+			desired_joints_tmp[i] = (double)abspos / 4096.0 / 2.0 *2.0*M_PI;
 			//synchro_position[i] = (int32_t) ((double)abspos /4096 * 275 * 7.826 * 512);
 			//printf("[info] synchro position read : %d \n", synchro_position[i]);
 			//fflush(stdout);
@@ -169,7 +169,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 						(int16_t) ecp_edp_cbuffer.bird_hand_command_structure.motion_steps,
 						(int16_t) ecp_edp_cbuffer.bird_hand_command_structure.finger[i].reciprocal_of_damping,
 						(int16_t) ecp_edp_cbuffer.bird_hand_command_structure.finger[i].desired_torque,
-						(int32_t) ecp_edp_cbuffer.bird_hand_command_structure.finger[i].desired_position);
+						(int32_t) desired_motor_pos_new_tmp[i]);
 				break;
 			case mrrocpp::lib::BIRD_HAND_MACROSTEP_POSITION_INCREMENT:
 				device.setCMD2(
@@ -177,7 +177,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 						(int16_t) ecp_edp_cbuffer.bird_hand_command_structure.motion_steps,
 						(int16_t) ecp_edp_cbuffer.bird_hand_command_structure.finger[i].reciprocal_of_damping,
 						(int16_t) ecp_edp_cbuffer.bird_hand_command_structure.finger[i].desired_torque,
-						(int32_t) ecp_edp_cbuffer.bird_hand_command_structure.finger[i].desired_position);
+						(int32_t) desired_motor_pos_new_tmp[i]);
 				break;
 			case mrrocpp::lib::BIRD_HAND_MACROSTEP_ABSOLUTE_POSITION:
 				device.setCMD3(

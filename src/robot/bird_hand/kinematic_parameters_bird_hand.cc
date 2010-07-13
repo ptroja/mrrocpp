@@ -20,7 +20,7 @@ kinematic_parameters_bird_hand::kinematic_parameters_bird_hand() {
 	gear[2] = 						  //thumb_f[0]
 	gear[3] = 						  //thumb_f[1]
 	gear[4] = 						  //ring_f[1]
-	gear[5] = 1024.0 * 275.0 * 7.826 /2.0/M_PI;  //ring_f[2]
+	gear[5] = 1024.0 * 275.0 * (11.3/3.1 * 10.95/5.1) /2.0/M_PI;  //ring_f[2]
 	gear[6] = 						  //index_f[0] (rotation)
 	gear[7] = 512.0 * 275.0 * 2.1585; //index_f[0] (rotation)
 

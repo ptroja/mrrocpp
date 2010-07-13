@@ -132,7 +132,7 @@ void kinematic_model_bird_hand::i2mp_transform(lib::MotorArray & local_desired_m
 	//check_joints(local_desired_joints);
 
 	for (int i = 0; i < 8; ++i)
-		local_desired_motor_pos_new[i] = local_desired_joints[i] * params.gear[i] + params.synchro_motor_position[i];
+		local_desired_motor_pos_new[i] = local_desired_joints[i] * params.gear[i] + params.synchro_joint_position[i];
 
 	//check_motor_position(local_desired_motor_pos_new);
 }
