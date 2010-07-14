@@ -59,6 +59,8 @@ ApEventLink_t AbInternalLinks[] = {
 	{ 3, 0, 0L, 0L, 0L, &wnd_irp6p_tfg_servo_algorithm, NULL, NULL, 0, NULL, 0, 11, 10, 30, },
 	{ 3, 0, 0L, 0L, 0L, &wnd_bird_hand_command_and_status, NULL, NULL, 0, NULL, 0, 11, 10, 30, },
 	{ 3, 0, 0L, 0L, 0L, &wnd_bird_hand_configuration, NULL, NULL, 0, NULL, 0, 11, 10, 30, },
+	{ 3, 0, 0L, 0L, 0L, &wnd_sarkofag_moves, NULL, NULL, 0, NULL, 0, 11, 10, 20, },
+	{ 3, 0, 0L, 0L, 0L, &wnd_sarkofag_servo_algorithm, NULL, NULL, 0, NULL, 0, 11, 10, 20, },
 	{ 0 }
 	};
 
@@ -1217,6 +1219,15 @@ static const ApEventLink_t AbLinks_robot_menu[] = {
 	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "mm_bird_hand_edp_unload", 2009, EDP_bird_hand_slay, 0, 0, 0, 0, },
 	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "mm_bird_hand_command", 2009, start_wnd_bird_hand_command_and_status, 0, 0, 0, 0, },
 	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "mm_bird_hand_configuration", 2009, start_wnd_bird_hand_configuration, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "mm_sarkofag_edp_load", 2009, EDP_sarkofag_create, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "mm_sarkofag_edp_unload", 2009, EDP_sarkofag_slay, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "mm_sarkofag_synchronisation", 2009, EDP_sarkofag_synchronise, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "mm_sarkofag_move", 2009, start_wind_sarkofag_moves, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "mm_sarkofag_preset_position_synchro", 2009, sarkofag_move_to_preset_position, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "mm_sarkofag_preset_position_0", 2009, sarkofag_move_to_preset_position, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "mm_sarkofag_preset_position_1", 2009, sarkofag_move_to_preset_position, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "mm_sarkofag_preset_position_2", 2009, sarkofag_move_to_preset_position, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "mm_sarkofag_servo_algorithm", 2009, start_wnd_sarkofag_servo_algorithm, 0, 0, 0, 0, },
 	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "mm_speaker_edp_load", 2009, EDP_speaker_create, 0, 0, 0, 0, },
 	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "mm_speaker_edp_unload", 2009, EDP_speaker_slay, 0, 0, 0, 0, },
 	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "mm_speaker_play", 2009, start_wind_speaker_play, 0, 0, 0, 0, },
