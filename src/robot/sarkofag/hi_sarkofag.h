@@ -49,7 +49,7 @@ int_handler(void *arg, int id);
 }
 #endif
 
-} // namespace irp6ot
+} // namespace sarkofag
 } // namespace edp
 } // namespace mrrocpp
 

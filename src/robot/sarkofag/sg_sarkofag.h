@@ -31,7 +31,7 @@ public:
 	// obliczenie nastepnej wartosci zadanej dla wszystkich napedow
 };
 
-} // namespace irp6ot
+} // namespace sarkofag
 } // namespace edp
 } // namespace mrrocpp
 

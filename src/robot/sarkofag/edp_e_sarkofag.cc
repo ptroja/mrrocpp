@@ -1,9 +1,9 @@
 // ------------------------------------------------------------------------
 // Proces:		EDP
-// Plik:			edp_irp6ot_effector.cc
+// Plik:			edp_sarkofag_effector.cc
 // System:	QNX/MRROC++  v. 6.3
-// Opis:		Robota IRp-6 na torze jezdnym
-//				- definicja metod klasy edp_irp6ot_effector
+// Opis:		Robota sarkofag jezdnym
+//				- definicja metod klasy edp_sarkofag_effector
 //				- definicja funkcji return_created_efector()
 //
 // Autor:		tkornuta
@@ -14,7 +14,7 @@
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 
-// Klasa edp_irp6ot_effector.
+// Klasa edp_sarkofag_effector.
 #include "robot/sarkofag/edp_e_sarkofag.h"
 // Kinematyki.
 #include "robot/sarkofag/kinematic_model_sarkofag.h"
@@ -109,7 +109,7 @@ common::servo_buffer* effector::return_created_servo_buffer()
 	return new servo_buffer(*this);
 }
 
-// Stworzenie modeli kinematyki dla robota IRp-6 na torze.
+// Stworzenie modeli kinematyki dla robota sarkofag.
 void effector::create_kinematic_models_for_given_robot(void)
 {
 	// Stworzenie wszystkich modeli kinematyki.
@@ -119,7 +119,7 @@ void effector::create_kinematic_models_for_given_robot(void)
 
 }
 
-} // namespace irp6ot
+} // namespace sarkofag
 
 namespace common {
 

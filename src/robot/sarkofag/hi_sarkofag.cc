@@ -7,7 +7,7 @@
 // przerwania - tasmociag
 // ------------------------------------------------------------------------
 
-// Klasa edp_irp6ot_effector.
+// Klasa edp_sarkofag_effector.
 #include "robot/sarkofag/edp_e_sarkofag.h"
 // Klasa hardware_interface.
 #include "robot/sarkofag/hi_sarkofag.h"
@@ -24,7 +24,7 @@ hardware_interface::hardware_interface(common::motor_driven_effector &_master, i
 // ------------------------------------------------------------------------
 
 
-} // namespace irp6ot
+} // namespace sarkofag
 } // namespace edp
 } // namespace mrrocpp
 
