@@ -2,7 +2,7 @@
 // Proces:		EDP
 // Plik:			edp_sarkofag_effector.cc
 // System:	QNX/MRROC++  v. 6.3
-// Opis:		Robota sarkofag jezdnym
+// Opis:		Robota sarkofag
 //				- definicja metod klasy edp_sarkofag_effector
 //				- definicja funkcji return_created_efector()
 //
