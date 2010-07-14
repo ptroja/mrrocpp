@@ -112,6 +112,7 @@ enum FORCE_SENSOR_ENUM
 
 #define MP_2_ECP_NEXT_STATE_STRING_SIZE	100
 #define MP_2_ECP_STRING_SIZE	300
+#define ECP_2_MP_STRING_SIZE	300
 
 #ifdef __cplusplus
 }
