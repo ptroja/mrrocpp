@@ -1108,6 +1108,41 @@ static const ApEventLink_t AbLinks_wnd_bird_hand_command_and_status[] = {
 	{ 0 }
 	};
 
+static const ApEventLink_t AbLinks_wnd_sarkofag_moves[] = {
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "wnd_sarkofag_moves", 2009, wind_sarkofag_moves_init, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "wnd_sarkofag_moves", 2010, wind_sarkofag_moves_init, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "wnd_sarkofag_moves", 2011, wind_sarkofag_moves_init, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "wnd_sarkofag_moves", 1013, clear_wind_sarkofag_moves_flag, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "wnd_sarkofag_moves", 1012, wind_sarkofag_moves_init, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_sarkofag_moves_inc_right", 2009, wind_sarkofag_moves_move, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_sarkofag_moves_inc_right", 2009, wind_sarkofag_moves_init, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_sarkofag_moves_inc_left", 2009, wind_sarkofag_moves_move, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_sarkofag_moves_inc_left", 2009, wind_sarkofag_moves_init, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_sarkofag_moves_inc_exec", 2009, wind_sarkofag_moves_move, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_sarkofag_moves_inc_exec", 2009, wind_sarkofag_moves_init, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_sarkofag_moves_int_right", 2009, wind_sarkofag_moves_move, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_sarkofag_moves_int_right", 2009, wind_sarkofag_moves_init, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_sarkofag_moves_int_left", 2009, wind_sarkofag_moves_move, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_sarkofag_moves_int_left", 2009, wind_sarkofag_moves_init, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_sarkofag_moves_int_exec", 2009, wind_sarkofag_moves_move, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_sarkofag_moves_int_exec", 2009, wind_sarkofag_moves_init, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_sarkofag_moves_inc_read", 2009, wind_sarkofag_moves_init, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_sarkofag_moves_int_read", 2009, wind_sarkofag_moves_init, 0, 0, 0, 0, },
+	{ 0 }
+	};
+
+static const ApEventLink_t AbLinks_wnd_sarkofag_servo_algorithm[] = {
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "wnd_sarkofag_servo_algorithm", 2009, init_wnd_sarkofag_servo_algorithm, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "wnd_sarkofag_servo_algorithm", 2010, init_wnd_sarkofag_servo_algorithm, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "wnd_sarkofag_servo_algorithm", 2011, init_wnd_sarkofag_servo_algorithm, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "wnd_sarkofag_servo_algorithm", 1013, init_wnd_sarkofag_servo_algorithm, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "wnd_sarkofag_servo_algorithm", 1009, clear_wnd_sarkofag_servo_algorithm_flag, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wnd_sarkofag_servo_algorithm_set", 2009, sarkofag_servo_algorithm_set, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wnd_sarkofag_servo_algorithm_set", 2009, init_wnd_sarkofag_servo_algorithm, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wnd_sarkofag_servo_algorithm_read", 2009, init_wnd_sarkofag_servo_algorithm, 0, 0, 0, 0, },
+	{ 0 }
+	};
+
 static const ApEventLink_t AbLinks_file_menu[] = {
 	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "mm_file_quit", 2009, quit, 0, 0, 0, 0, },
 	{ 0 }

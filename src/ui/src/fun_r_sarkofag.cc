@@ -43,7 +43,7 @@ int close_wind_sarkofag_moves(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackIn
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
 	if (ui.sarkofag->is_wind_sarkofag_moves_open) {
-		PtDestroyWidget( ABW_wnd_sarkofag_moves);
+		PtDestroyWidget(ABW_wnd_sarkofag_moves);
 	}
 
 	return (Pt_CONTINUE);
@@ -58,7 +58,7 @@ int close_wnd_sarkofag_servo_algorithm(PtWidget_t *widget, ApInfo_t *apinfo, PtC
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
 	if (ui.sarkofag->is_wind_sarkofag_servo_algorithm_open) {
-		PtDestroyWidget( ABW_wnd_sarkofag_servo_algorithm);
+		PtDestroyWidget(ABW_wnd_sarkofag_servo_algorithm);
 	}
 
 	return (Pt_CONTINUE);
@@ -232,7 +232,7 @@ int start_wind_sarkofag_moves(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackIn
 		ApCreateModule(ABM_wnd_sarkofag_moves, widget, cbinfo);
 		ui.sarkofag->is_wind_sarkofag_moves_open = true;
 	} else { // przelacz na okno
-		PtWindowToFront( ABW_wnd_sarkofag_moves);
+		PtWindowToFront(ABW_wnd_sarkofag_moves);
 	}
 
 	return (Pt_CONTINUE);
@@ -329,7 +329,7 @@ int start_wnd_sarkofag_servo_algorithm(PtWidget_t *widget, ApInfo_t *apinfo, PtC
 		ApCreateModule(ABM_wnd_sarkofag_servo_algorithm, widget, cbinfo);
 		ui.sarkofag->is_wind_sarkofag_servo_algorithm_open = 1;
 	} else { // przelacz na okno
-		PtWindowToFront( ABW_wnd_sarkofag_servo_algorithm);
+		PtWindowToFront(ABW_wnd_sarkofag_servo_algorithm);
 	}
 
 	return (Pt_CONTINUE);
@@ -444,7 +444,7 @@ int wind_sarkofag_moves_init(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInf
 				ui.block_widget(ABW_PtNumericFloat_wind_sarkofag_moves_int_pos);
 				ui.block_widget(ABW_PtButton_wind_sarkofag_moves_int_exec);
 			}
-			PtDamageWidget( ABW_wnd_sarkofag_moves);
+			PtDamageWidget(ABW_wnd_sarkofag_moves);
 		}
 	} // end try
 	CATCH_SECTION_UI
@@ -551,4 +551,3 @@ int clear_wnd_sarkofag_servo_algorithm_flag(PtWidget_t *widget, ApInfo_t *apinfo
 	return (Pt_CONTINUE);
 
 }
-

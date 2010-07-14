@@ -417,4 +417,10 @@ int EDP_sarkofag_synchronise( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo
 int start_wind_sarkofag_moves( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 int start_wnd_sarkofag_servo_algorithm( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 int sarkofag_move_to_preset_position( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int init_wnd_sarkofag_servo_algorithm( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int clear_wnd_sarkofag_servo_algorithm_flag( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int sarkofag_servo_algorithm_set( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int wind_sarkofag_moves_init( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int clear_wind_sarkofag_moves_flag( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int wind_sarkofag_moves_move( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 #endif

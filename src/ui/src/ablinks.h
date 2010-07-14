@@ -309,13 +309,13 @@ ApWindowLink_t wnd_bird_hand_command_and_status = {
 ApWindowLink_t wnd_sarkofag_moves = {
 	"wnd_sarkofag_moves.wgtw",
 	&AbContext,
-	NULL, 1164, 0
+	AbLinks_wnd_sarkofag_moves, 1164, 19
 	};
 
 ApWindowLink_t wnd_sarkofag_servo_algorithm = {
 	"wnd_sarkofag_servo_algorithm.wgtw",
 	&AbContext,
-	NULL, 1179, 0
+	AbLinks_wnd_sarkofag_servo_algorithm, 1179, 8
 	};
 
 static ApItem_t ApItems_file_menu[ 2 ] = {
