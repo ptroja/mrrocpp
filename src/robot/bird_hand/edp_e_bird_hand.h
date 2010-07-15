@@ -101,7 +101,7 @@ public:
 private:
 	Bird_hand device;
 
-	Eigen::Matrix <int32_t, 8, 1> synchro_position;
+	lib::JointArray synchro_position;
 
 	/*!
 	 * \brief method to deserialize part of the reply

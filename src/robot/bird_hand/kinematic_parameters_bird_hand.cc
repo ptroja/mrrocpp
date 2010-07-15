@@ -59,24 +59,6 @@ kinematic_parameters_bird_hand::kinematic_parameters_bird_hand() {
 	upper_limit_joint[5] = 60.0 * M_PI / 180.0;
 	upper_limit_joint[6] = 90.0 * M_PI / 180.0;
 	upper_limit_joint[7] = 90.0 * M_PI / 180.0;
-
-	synchro_joint_position[0] = -1.0393;
-	synchro_joint_position[1] = -2.5863;
-	synchro_joint_position[2] = -2.0233;
-	synchro_joint_position[3] = -2.0325;
-	synchro_joint_position[4] = -0.7992;
-	synchro_joint_position[5] = -1.8922;
-	synchro_joint_position[6] = -0.0;
-	synchro_joint_position[7] = -0.0;
-
-//	synchro_joint_position[0] = 0.0;
-//	synchro_joint_position[1] = 0.0;
-//	synchro_joint_position[2] = 0.0;
-//	synchro_joint_position[3] = 0.0;
-//	synchro_joint_position[4] = 0.0;
-//	synchro_joint_position[5] = 0.0;
-//	synchro_joint_position[6] = 0.0;
-//	synchro_joint_position[7] = 0.0;
 }
 
 } // namespace bird_hand
