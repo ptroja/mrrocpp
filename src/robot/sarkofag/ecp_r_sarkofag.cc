@@ -2,7 +2,7 @@
 //                            ecp.cc
 //            Effector Control Process (lib::ECP) - methods
 // Funkcje do tworzenia procesow ECP
-// robot - irp6_on_track
+// robot - sarkofag
 //
 // -------------------------------------------------------------------------
 
@@ -32,7 +32,7 @@ robot::robot(common::task::task& _ecp_object) :
 	create_kinematic_models_for_given_robot();
 }
 
-// Stworzenie modeli kinematyki dla robota IRp-6 na torze.
+// Stworzenie modeli kinematyki dla robota sarkofag.
 void robot::create_kinematic_models_for_given_robot(void)
 {
 	// Stworzenie wszystkich modeli kinematyki.
@@ -42,7 +42,7 @@ void robot::create_kinematic_models_for_given_robot(void)
 
 }
 
-} // namespace irp6ot
+} // namespace sarkofag
 } // namespace ecp
 } // namespace mrrocpp
 

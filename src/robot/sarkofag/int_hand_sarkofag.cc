@@ -1,7 +1,7 @@
 // ------------------------------------------------------------------------
 //                            int_hand.cc
 //
-// Funkcja obslugi przerwania -- odczyt i zapis rejestrow sprzetowych dla robota irp6 postument
+// Funkcja obslugi przerwania -- odczyt i zapis rejestrow sprzetowych dla robota sarkofag
 //
 // Ostatnia modyfikacja: 2005
 // ------------------------------------------------------------------------

@@ -128,7 +128,7 @@ void model::i2mp_transform(lib::MotorArray & local_desired_motor_pos_new, lib::J
 } //: i2mp_transform
 
 
-} // namespace irp6ot
+} // namespace sarkofag
 } // namespace kinematic
 } // namespace mrrocpp
 

@@ -10,6 +10,7 @@ add_executable(ui
 	../fun_r_irp6_postument.cc
 	../fun_r_irp6ot_tfg.cc
 	../fun_r_irp6p_tfg.cc
+	../fun_r_sarkofag.cc
 	../fun_r_bird_hand.cc
 	#../fun_r_polycrank.cc
 	../fun_r_shead.cc
@@ -31,6 +32,7 @@ add_executable(ui
 	../irp6ot_tfg/ui_r_irp6ot_tfg.cc
 	../irp6p_m/ui_r_irp6p_m.cc
 	../irp6p_tfg/ui_r_irp6p_tfg.cc
+	../sarkofag/ui_r_sarkofag.cc
 	../irp6m_m/ui_r_irp6m_m.cc
 	#../polycrank/ui_r_polycrank.cc
 	../conveyor/ui_r_conveyor.cc
@@ -55,6 +57,7 @@ set(PHOTON_LIBRARIES ${PHEX_LIBRARY} ${AP_LIBRARY} ${PH_LIBRARY})
 set(ROBOT_LIBRARIES
 	ecp_r_irp6ot_m ecp_r_irp6p_m
 	ecp_r_irp6ot_tfg ecp_r_irp6p_tfg
+	ecp_r_sarkofag
 	ecp_r_irp6m ecp_r_conv
 	ecp_r_polycrank
 	ecp_r_speaker
@@ -97,7 +100,8 @@ set(ABMOD Icon.wgti MAM_wnd_manual_moves_automatic_measures.wgtw base.wgtw
 	wnd_irp6_postument_xyz_euler_zyz.wgtw
 	wnd_irp6_postument_xyz_euler_zyz_ts.wgtw wnd_irp6ot_tfg_moves.wgtw
 	wnd_irp6ot_tfg_servo_algorithm.wgtw wnd_irp6p_tfg_moves.wgtw
-	wnd_irp6p_tfg_servo_algorithm.wgtw wnd_message.wgtw
+	wnd_irp6p_tfg_servo_algorithm.wgtw wnd_sarkofag_moves.wgtw
+	wnd_sarkofag_servo_algorithm.wgtw wnd_message.wgtw
 	wnd_bird_hand_command_and_status.wgtw wnd_bird_hand_configuration.wgtw
 	wnd_processes_control.wgtw wnd_speaker_play.wgtw yes_no_window.wgtw)
 

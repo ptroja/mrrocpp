@@ -95,7 +95,7 @@ void multiplayer::main_task_algorithm(void)
 		// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie generatorow ECP
 		run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, lib::ROBOT_SPEECHRECOGNITION.c_str(), lib::ROBOT_SPEECHRECOGNITION.c_str());
 
-		char *qq = robot_m[lib::ROBOT_SPEECHRECOGNITION]->ecp_reply_package.commandRecognized;
+		char *qq = robot_m[lib::ROBOT_SPEECHRECOGNITION]->ecp_reply_package.ecp_2_mp_string;
 		printf("commandRecognized = \"%s\"\n", qq);
 
 		const char *komunikat;
