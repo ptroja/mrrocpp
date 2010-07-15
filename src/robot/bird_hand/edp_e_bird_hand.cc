@@ -86,8 +86,13 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 	if (!robot_test_mode) {
 		for (uint8_t i = 0; i < BIRD_HAND_NUM_OF_SERVOS; i++) {
 			int16_t abspos;
+			//brak i==6 oraz i==7
 			if (i < 6)
 				device.getSynchroPos(i, abspos);
+			//uwzglednienie kierunkow obrotow enkoderow abspos
+			//ok -> i==2, i==0, i==4
+			if (i==3 || i==1 || i==5)
+				abspos = 4096 - abspos;
 			desired_joints_tmp[i] = (double)abspos / 4096.0 / 2.0 *2.0*M_PI;
 			//synchro_position[i] = (int32_t) ((double)abspos /4096 * 275 * 7.826 * 512);
 			//printf("[info] synchro position read : %d \n", synchro_position[i]);

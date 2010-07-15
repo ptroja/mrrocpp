@@ -15,30 +15,30 @@ namespace kinematics {
 namespace bird_hand {
 
 kinematic_parameters_bird_hand::kinematic_parameters_bird_hand() {
-	gear[0] = 						  //index_f[2]
-	gear[1] = 						  //index_f[1]
-	gear[2] = 						  //thumb_f[0]
-	gear[3] = 						  //thumb_f[1]
-	gear[4] = 						  //ring_f[1]
-	gear[5] = 1024.0 * 275.0 * (11.3/3.1 * 10.95/5.1) /2.0/M_PI;  //ring_f[2]
-	gear[6] = 						  //index_f[0] (rotation)
-	gear[7] = 512.0 * 275.0 * 2.1585; //index_f[0] (rotation)
+	gear[0] = 	//index_f[2]
+	gear[1] = 	//index_f[1]
+	gear[2] = 	//thumb_f[0]
+	gear[3] = 	//thumb_f[1]
+	gear[4] = 													//ring_f[1]
+	gear[5] = 1024.0 * 275.0 * (11.3/3.1 * 10.95/5.1) /2.0/M_PI;//ring_f[2]
+	gear[6] = 						  							//index_f[0] (rotation)
+	gear[7] = 1024.0 * 275.0 * 2.1585 /2.0/M_PI; 				//index_f[0] (rotation)
 
-	lower_limit_axis[0] = -335000;
-	lower_limit_axis[1] = -618000;
-	lower_limit_axis[2] = -725000;
-	lower_limit_axis[3] = -812000;
+	lower_limit_axis[0] = -370000;
+	lower_limit_axis[1] = -910000;
+	lower_limit_axis[2] = -720000;
+	lower_limit_axis[3] = -800000;
 	lower_limit_axis[4] = -300000;
-	lower_limit_axis[5] = -900000;
+	lower_limit_axis[5] = -680000;
 	lower_limit_axis[6] = -1000000;
 	lower_limit_axis[7] = -1000000;
 
-	upper_limit_axis[0] = -120000;
-	upper_limit_axis[1] = -471000;
-	upper_limit_axis[2] = -47000;
-	upper_limit_axis[3] = -628000;
-	upper_limit_axis[4] = -99000;
-	upper_limit_axis[5] = -694000;
+	upper_limit_axis[0] = -84000;
+	upper_limit_axis[1] = -600000;
+	upper_limit_axis[2] = -450000;
+	upper_limit_axis[3] = -450000;
+	upper_limit_axis[4] = -73000;
+	upper_limit_axis[5] = -400000;
 	upper_limit_axis[6] = 1000000;
 	upper_limit_axis[7] = 1000000;
 
@@ -60,16 +60,16 @@ kinematic_parameters_bird_hand::kinematic_parameters_bird_hand() {
 	upper_limit_joint[6] = 90.0 * M_PI / 180.0;
 	upper_limit_joint[7] = 90.0 * M_PI / 180.0;
 
-//	synchro_joint_position[0] = -0.8989;
-//	synchro_joint_position[1] = -0.5998;
-//	synchro_joint_position[2] = -1.9965;
-//	synchro_joint_position[3] = -1.1367;
-//	synchro_joint_position[4] = -0.7578;
-//	synchro_joint_position[5] = -1.3445;
-//	synchro_joint_position[6] = -1.3445;
-//	synchro_joint_position[7] = -1.3445;
+	synchro_joint_position[0] = -1.0393;
+//	synchro_joint_position[1] = -2.5863;
+//	synchro_joint_position[2] = -2.0233;
+//	synchro_joint_position[3] = -2.0325;
+//	synchro_joint_position[4] = -0.7992;
+//	synchro_joint_position[5] = -1.8922;
+//	synchro_joint_position[6] = -0.0;
+//	synchro_joint_position[7] = -0.0;
 
-	synchro_joint_position[0] = 0.0;
+//	synchro_joint_position[0] = 0.0;
 	synchro_joint_position[1] = 0.0;
 	synchro_joint_position[2] = 0.0;
 	synchro_joint_position[3] = 0.0;
