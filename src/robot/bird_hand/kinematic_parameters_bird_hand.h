@@ -38,8 +38,6 @@ public:
 	double lower_limit_joint[8];
 	double upper_limit_joint[8];
 
-	// Polozenia synchronizacji (polozenia walow silnikow).
-	double synchro_motor_position[8];
 	// Polozenia synchronizacji (polozenia we wspolrzednych wewnetrznych).
 	double synchro_joint_position[8];
 };

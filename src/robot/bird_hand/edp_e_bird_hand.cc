@@ -26,6 +26,7 @@
 
 // Kinematyki.
 #include "robot/bird_hand/kinematic_model_bird_hand.h"
+
 #include "base/edp/manip_trans_t.h"
 #include "base/edp/vis_server.h"
 
@@ -89,22 +90,20 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 			//brak i==6 oraz i==7
 			if (i < 6)
 				device.getSynchroPos(i, abspos);
-			//uwzglednienie kierunkow obrotow enkoderow abspos
+			//uwzglednienie kierunkow obrotow enkoderow dla abspos
 			//ok -> i==2, i==0, i==4
 			if (i==3 || i==1 || i==5)
 				abspos = 4096 - abspos;
 			desired_joints_tmp[i] = (double)abspos / 4096.0 / 2.0 *2.0*M_PI;
-			//synchro_position[i] = (int32_t) ((double)abspos /4096 * 275 * 7.826 * 512);
-			//printf("[info] synchro position read : %d \n", synchro_position[i]);
-			//fflush(stdout);
 		}
-		try{get_current_kinematic_model()->i2mp_transform(desired_motor_pos_new_tmp, desired_joints_tmp);}
-		catch(...){}
+
+		desired_motor_pos_new_tmp = desired_joints_tmp * 1024.0 * 275.0 * (11.3/3.1 * 10.95/5.1) /2.0/M_PI;
+
 		for (uint8_t i = 0; i < BIRD_HAND_NUM_OF_SERVOS; i++) {
 			synchro_position[i] = (int32_t) desired_motor_pos_new_tmp[i];
-			printf("[info] synchro position read: %d \n", synchro_position[i]);
-			printf("[info] abspos/4096.0 read: %f \n", desired_joints_tmp[i]);
-			fflush(stdout);
+			//printf("[info] synchro_position read: %d \n", synchro_position[i]);
+			//printf("[info] synchro_position (joints) read: %f \n", desired_joints_tmp[i]);
+			//fflush(stdout);
 		}
 
 		for (uint8_t i = 0; i < BIRD_HAND_NUM_OF_SERVOS; i++)
@@ -160,11 +159,12 @@ void effector::move_arm(const lib::c_buffer &instruction)
 	lib::MotorArray desired_motor_pos_new_tmp(BIRD_HAND_NUM_OF_SERVOS);
 
 	if (!robot_test_mode) {
+
 		for (unsigned int i = 0; i < BIRD_HAND_NUM_OF_SERVOS; i++) {
 			desired_joints_tmp[i] = ecp_edp_cbuffer.bird_hand_command_structure.finger[i].desired_position;
 		}
-		get_current_kinematic_model()->i2mp_transform(desired_motor_pos_new_tmp, desired_joints_tmp);
 
+		get_current_kinematic_model()->i2mp_transform(desired_motor_pos_new_tmp, desired_joints_tmp);
 
 		for (unsigned int i = 0; i < BIRD_HAND_NUM_OF_SERVOS; i++) {
 			switch (ecp_edp_cbuffer.bird_hand_command_structure.finger[i].profile_type) {
@@ -191,9 +191,6 @@ void effector::move_arm(const lib::c_buffer &instruction)
 						(int16_t) ecp_edp_cbuffer.bird_hand_command_structure.finger[i].reciprocal_of_damping,
 						(int16_t) ecp_edp_cbuffer.bird_hand_command_structure.finger[i].desired_torque,
 						(int32_t) desired_motor_pos_new_tmp[i] + synchro_position[i]);
-						//(int32_t) (ecp_edp_cbuffer.bird_hand_command_structure.finger[i].desired_position * 512 * 275 * 7.826) + synchro_position[i]);
-					//	printf("cmd pos: %lf * 275 * 7.826 * 512 + %d = %d \n", ecp_edp_cbuffer.bird_hand_command_structure.finger[i].desired_position, synchro_position[i], (int32_t) (ecp_edp_cbuffer.bird_hand_command_structure.finger[i].desired_position * 275 * 7.826 * 512) + synchro_position[i]);
-
 				break;
 
 			}
@@ -266,7 +263,6 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 				device.getStatus(i, status, pos, c, t);
 
 			desired_motor_pos_new_tmp[i] = (double)(pos - synchro_position[i]);
-			//edp_ecp_rbuffer.bird_hand_status_reply_structure.finger[i].meassured_position = (double)(pos - synchro_position[i]) * 1/512 * 1/275 * 1/7.826;
 			edp_ecp_rbuffer.bird_hand_status_reply_structure.finger[i].meassured_current = c;
 			edp_ecp_rbuffer.bird_hand_status_reply_structure.finger[i].meassured_torque = t;
 
@@ -275,7 +271,9 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 			edp_ecp_rbuffer.bird_hand_status_reply_structure.finger[i].upper_limit_of_absolute_position = status & (1<<UPPER_LIMIT);
 			edp_ecp_rbuffer.bird_hand_status_reply_structure.finger[i].upper_limit_of_meassured_current = status & (1<<CURRENT_LIMIT);
 		}
+
 		get_current_kinematic_model()->mp2i_transform(desired_motor_pos_new_tmp, desired_joints_tmp);
+
 		for (uint8_t i = 0; i < BIRD_HAND_NUM_OF_SERVOS; i++) {
 			edp_ecp_rbuffer.bird_hand_status_reply_structure.finger[i].meassured_position = desired_joints_tmp[i];
 		}
