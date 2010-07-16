@@ -11,6 +11,8 @@
 
 #include "neuron_sensor.h"
 
+#include <time.h>
+
 #include <sys/socket.h>
 #include <netinet/tcp.h>
 #include <netdb.h>
@@ -68,10 +70,27 @@ neuron_sensor::~neuron_sensor() {
 
 void neuron_sensor::get_reading(){
 	printf("getReading\n");
+	timespec acttime;
+	if( clock_gettime( CLOCK_REALTIME , &acttime) == -1 ){
+		printf("sleep generator: next step time measurement error");
+	}
+	std::cout << acttime.tv_sec << " ";
+	std::cout << acttime.tv_nsec <<std::endl;
+
 	char buff[26];
 
 	//Read packet from socket*/
+	if( clock_gettime( CLOCK_REALTIME , &acttime) == -1 ){
+			printf("sleep generator: next step time measurement error");
+		}
+		std::cout << acttime.tv_sec << " ";
+		std::cout << acttime.tv_nsec <<std::endl;
 	int result = read(socketDescriptor, buff, sizeof(buff));
+	if( clock_gettime( CLOCK_REALTIME , &acttime) == -1 ){
+			printf("sleep generator: next step time measurement error");
+		}
+		std::cout << acttime.tv_sec << " ";
+		std::cout << acttime.tv_nsec <<std::endl;
 	printf("size of buff %d %d\n",sizeof(buff),sizeof(double));
 	if (result < 0) {
 		throw std::runtime_error(std::string("read() failed: ") + strerror(errno));
@@ -87,6 +106,13 @@ void neuron_sensor::get_reading(){
 	memcpy(&(coordinates.x),buff+2,8);
 	memcpy(&(coordinates.y),buff+10,8);
 	memcpy(&(coordinates.z),buff+18,8);
+
+	//timespec acttime;
+	if( clock_gettime( CLOCK_REALTIME , &acttime) == -1 ){
+		printf("sleep generator: next step time measurement error");
+	}
+	std::cout << acttime.tv_sec << " ";
+	std::cout << acttime.tv_nsec <<std::endl;
 }
 
 /*Check whether appropriate information was sent from VSP, that finishes communication*/

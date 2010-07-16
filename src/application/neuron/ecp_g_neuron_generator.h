@@ -11,8 +11,10 @@
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 #include "neuron_sensor.h"
+#include "lib/mrmath/mrmath.h"
 
 #include "generator/ecp/ecp_g_teach_in.h"
+#include <vector>
 
 namespace mrrocpp{
 namespace ecp{
@@ -22,6 +24,18 @@ namespace generator{
 class neuron_generator: public common::generator::generator{
 	private:
 		ecp_mp::sensor::neuron_sensor *neuron_sensor;
+
+		lib::Homog_matrix actual_position_matrix;
+		//lib::Homog_matrix desired_position_matrix;
+		lib::Xyz_Angle_Axis_vector angle_axis_vector;
+		double actual_position[6];
+		double desired_position[6];
+		lib::Homog_matrix position_matrix;
+		double position[6];
+		/**
+		 * Vector filled with coordinates read from the robot.
+		 */
+		//vector<double> position;
 
 	public:
 		neuron_generator(common::task::task& _ecp_task);
