@@ -57,8 +57,8 @@ bool neuron_generator::next_step(){
 	//double general_temp[6];
 	//double coordinate_backup[6];
 
-	lib::Homog_matrix goal_frame;
-	lib::Homog_matrix begining_frame;
+	//lib::Homog_matrix goal_frame;
+	//lib::Homog_matrix begining_frame;
 
 	/*when current_period==0 get_reading is called, so new data is available*/
 	//printf("current_period: %d\n", neuron_sensor->current_period);
