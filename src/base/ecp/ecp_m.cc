@@ -179,6 +179,7 @@ int main(int argc, char *argv[])
 					break;
 				case ECP_STOP_ACCEPTED:
 					ecp::common::ecp_t->sr_ecp_msg->message("pierwszy catch stop");
+					ecp::common::ecp_t->ecp_stop_accepted_handler();
 					break;
 				default:
 					ecp::common::ecp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, 0, "ecp: Unidentified exception");
