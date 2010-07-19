@@ -21,6 +21,10 @@
 
 #define HEADER_LEN 3
 
+#define LOWER_LIMIT 0
+#define UPPER_LIMIT 1
+#define CURRENT_LIMIT 2
+#define TORQUE_LIMIT 3
 
 struct status_
 {
@@ -28,6 +32,7 @@ struct status_
 	int32_t position;
 	int16_t force;
 	int16_t current;
+	uint16_t abspos;
 }	__attribute__((__packed__));
 
 struct abspos_

@@ -67,7 +67,7 @@ public:
 
 };//: kinematic_model_conveyor;
 
-} // namespace irp6ot
+} // namespace sarkofag
 } // namespace kinematic
 } // namespace mrrocpp
 

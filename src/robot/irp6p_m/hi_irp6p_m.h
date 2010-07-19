@@ -41,7 +41,7 @@ const unsigned short int INT_FREC_DIVIDER = 8; // mnoznik czestotliwosci przerwa
 //                HARDWARE_INTERFACE class
 // ------------------------------------------------------------------------
 
-class hardware_interface: public common::hardware_interface {
+class hardware_interface: public common::HI_rydz {
 public:
     hardware_interface (common::motor_driven_effector &_master, int _hi_irq_real,
     		unsigned short int _hi_intr_freq_divider, unsigned int _hi_intr_timeout_high,

@@ -1,9 +1,9 @@
 // ------------------------------------------------------------------------
 // Proces:		EDP
-// Plik:			edp_irp6ot_effector.h
+// Plik:			edp_sarkofag_effector.h
 // System:	QNX/MRROC++  v. 6.3
-// Opis:		Robot IRp-6 na na torze jezdnym
-//				- deklaracja klasy edp_irp6ot_effector
+// Opis:		Robot sarkofag
+//				- deklaracja klasy edp_sarkofag_effector
 //
 // Autor:		tkornuta
 // Data:		17.01.2007
@@ -47,7 +47,7 @@ public:
 	void master_order(common::MT_ORDER nm_task, int nm_tryb);
 };
 
-} // namespace irp6ot
+} // namespace sarkofag
 } // namespace edp
 } // namespace mrrocpp
 

@@ -1001,11 +1001,6 @@ struct MP_COMMAND_PACKAGE
 };
 
 //------------------------------------------------------------------------------
-#ifndef SPEECH_RECOGNITION_TEXT_LEN
-#define SPEECH_RECOGNITION_TEXT_LEN 256
-#endif
-
-//------------------------------------------------------------------------------
 /*! ECP to MP reply. */
 struct ECP_REPLY_PACKAGE
 {
@@ -1013,7 +1008,7 @@ struct ECP_REPLY_PACKAGE
 
 	// TODO: this should be rather union, but it is not possible to union non-POD objects
 	r_buffer reply_package;
-	char commandRecognized[SPEECH_RECOGNITION_TEXT_LEN];
+	char ecp_2_mp_string[ECP_2_MP_STRING_SIZE];
 };
 // ------------------------------------------------------------------------
 

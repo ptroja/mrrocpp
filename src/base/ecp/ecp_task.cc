@@ -46,6 +46,10 @@ void task::mp_2_ecp_next_state_string_handler(void)
 {
 }
 
+void task::ecp_stop_accepted_handler(void)
+{
+}
+
 task::~task()
 {
 	// TODO: error check

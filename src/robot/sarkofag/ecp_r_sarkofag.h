@@ -1,7 +1,7 @@
 // -------------------------------------------------------------------------
 //                            ecp_local.h dla QNX6
 // Definicje struktur danych i metod dla procesow ECP
-// robot - irp6_on_track
+// robot - sarkofag
 //
 // -------------------------------------------------------------------------
 
@@ -21,19 +21,19 @@ namespace sarkofag {
 // ---------------------------------------------------------------
 class robot : public common::ecp_robot, public kinematics::common::kinematics_manager
 {
-	// Klasa dla robota irp6_on_track
+	// Klasa dla robota sarkofag
 protected:
-	// Metoda tworzy modele kinematyczne dla robota IRp-6 na torze.
+	// Metoda tworzy modele kinematyczne dla robota sarkofag.
 	virtual void create_kinematic_models_for_given_robot(void);
 
 public:
 	robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp);
 	robot(common::task::task& _ecp_object);
 
-}; // end: class ecp_irp6_on_track_robot
+}; // end: class ecp_sarkofag_robot
 // ---------------------------------------------------------------
 
-} // namespace irp6ot
+} // namespace sarkofag
 } // namespace ecp
 } // namespace mrrocpp
 

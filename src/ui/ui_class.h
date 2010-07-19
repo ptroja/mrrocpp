@@ -15,6 +15,7 @@
 #include "ui/src/irp6ot_tfg/ui_r_irp6ot_tfg.h"
 #include "ui/src/irp6p_m/ui_r_irp6p_m.h"
 #include "ui/src/irp6p_tfg/ui_r_irp6p_tfg.h"
+#include "ui/src/sarkofag/ui_r_sarkofag.h"
 #include "ui/src/irp6m_m/ui_r_irp6m_m.h"
 #include "ui/src/conveyor/ui_r_conveyor.h"
 #include "ui/src/speaker/ui_r_speaker.h"
@@ -37,7 +38,8 @@ class ui_ecp_buffer;
 // super klasa agregujaca porozrzucane struktury
 
 
-class Ui {
+class Ui
+{
 private:
 
 public:
@@ -47,15 +49,14 @@ public:
 
 	feb_thread* meb_tid;
 
-
 	function_execution_buffer main_eb;
 
 	typedef std::string list_t;
 
 	// listy sekcji i wezlow sieciowych plikow konfiguracyjnych
-	std::list<list_t> section_list, config_node_list, all_node_list;
+	std::list <list_t> section_list, config_node_list, all_node_list;
 	// lista nazw programow i wezlow na ktorych maja byc uruchamiane
-	std::list<program_node_def> program_node_list;
+	std::list <program_node_def> program_node_list;
 
 	int ui_node_nr; // numer wezla na ktorym jest uruchamiany UI
 	pid_t ui_pid; // pid UI
@@ -107,6 +108,7 @@ public:
 	UiRobotIrp6ot_tfg *irp6ot_tfg;
 	UiRobotIrp6p_m *irp6p_m;
 	UiRobotIrp6p_tfg *irp6p_tfg;
+	UiRobotSarkofag *sarkofag;
 	UiRobotIrp6m_m *irp6m_m;
 	UiRobotConveyor *conveyor;
 	UiRobotSpeaker *speaker;
@@ -133,8 +135,7 @@ public:
 	bool check_loaded(ecp_edp_ui_robot_def &robot);
 	int check_edps_state_and_modify_mp_state(void);
 	int check_gns(void);
-	bool check_node_existence(const std::string _node,
-			const std::string beginnig_of_message);
+	bool check_node_existence(const std::string _node, const std::string beginnig_of_message);
 	bool deactivate_ecp_trigger(ecp_edp_ui_robot_def &robot_l);
 	int execute_mp_pulse(char pulse_code);
 	int pulse_reader_execute(int coid, int pulse_code, int pulse_value);

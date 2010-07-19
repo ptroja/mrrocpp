@@ -36,8 +36,8 @@
 
 
 Ui::Ui() :
-	config(NULL), all_ecp_msg(NULL), ui_msg(NULL),
-			is_mp_and_ecps_active(false), all_edps(UI_ALL_EDPS_NONE_EDP_LOADED) {
+	config(NULL), all_ecp_msg(NULL), ui_msg(NULL), is_mp_and_ecps_active(false), all_edps(UI_ALL_EDPS_NONE_EDP_LOADED)
+{
 
 	mp.state = UI_MP_NOT_PERMITED_TO_RUN;// mp wylaczone
 	mp.last_state = UI_MP_NOT_PERMITED_TO_RUN;// mp wylaczone
@@ -52,7 +52,8 @@ Ui::Ui() :
 
 }
 
-void Ui::init() {
+void Ui::init()
+{
 
 	// ustalenie katalogow UI
 
@@ -74,6 +75,7 @@ void Ui::init() {
 	irp6ot_tfg = new UiRobotIrp6ot_tfg(*this);
 	irp6p_m = new UiRobotIrp6p_m(*this);
 	irp6p_tfg = new UiRobotIrp6p_tfg(*this);
+	sarkofag = new UiRobotSarkofag(*this);
 	irp6m_m = new UiRobotIrp6m_m(*this);
 	conveyor = new UiRobotConveyor(*this);
 	speaker = new UiRobotSpeaker(*this);
@@ -164,8 +166,7 @@ void Ui::init() {
 	strcpy(log_file_with_dir, "../logs/");
 
 	if (access(log_file_with_dir, R_OK) != 0) {
-		mkdir(log_file_with_dir, S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH
-				| S_IXOTH);
+		mkdir(log_file_with_dir, S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
 	}
 
 	strcat(log_file_with_dir, file_name);
@@ -183,17 +184,15 @@ void Ui::init() {
 
 // funkcja odpowiedzialna za wyglad aplikacji na podstawie jej stanu
 
-int Ui::manage_interface(void) {
+int Ui::manage_interface(void)
+{
 	int pt_res;
 	pt_res = PtEnter(0);
 
 	check_edps_state_and_modify_mp_state();
 
 	// na wstepie wylaczamy przyciski EDP z all robots menu. Sa one ewentualnie wlaczane dalej
-	ApModifyItemState(&all_robots_menu, AB_ITEM_DIM,
-			ABN_mm_all_robots_preset_positions,
-			ABN_mm_all_robots_synchronisation, ABN_mm_all_robots_edp_unload,
-			ABN_mm_all_robots_edp_load, NULL);
+	ApModifyItemState(&all_robots_menu, AB_ITEM_DIM, ABN_mm_all_robots_preset_positions, ABN_mm_all_robots_synchronisation, ABN_mm_all_robots_edp_unload, ABN_mm_all_robots_edp_load, NULL);
 
 	// menu file
 	// ApModifyItemState( &file_menu, AB_ITEM_DIM, NULL);
@@ -205,6 +204,7 @@ int Ui::manage_interface(void) {
 	// Dla robota IRP6 POSTUMENT
 	irp6p_m->manage_interface();
 	irp6p_tfg->manage_interface();
+	sarkofag->manage_interface();
 
 	// Dla robota CONVEYOR
 	conveyor->manage_interface();
@@ -229,103 +229,95 @@ int Ui::manage_interface(void) {
 	// wlasciwosci menu  ABW_base_all_robots
 
 
-	switch (all_edps) {
-	case UI_ALL_EDPS_NONE_EDP_ACTIVATED:
-		//				printf("UI_ALL_EDPS_NONE_EDP_ACTIVATED\n");
-		block_widget(ABW_base_all_robots);
-		PtSetResource(ABW_base_all_robots, Pt_ARG_COLOR, Pg_GRAY, 0);
-		block_widget(ABW_base_robot);
-		PtSetResource(ABW_base_robot, Pt_ARG_COLOR, Pg_GRAY, 0);
-		break;
-	case UI_ALL_EDPS_NONE_EDP_LOADED:
-		//				printf("UI_ALL_EDPS_NONE_EDP_LOADED\n");
-		ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL,
-				ABN_mm_all_robots_edp_load, NULL);
-		PtSetResource(ABW_base_all_robots, Pt_ARG_COLOR, Pg_BLACK, 0);
-		PtSetResource(ABW_base_robot, Pt_ARG_COLOR, Pg_BLACK, 0);
-		unblock_widget(ABW_base_all_robots);
-		unblock_widget(ABW_base_robot);
-		break;
-	case UI_ALL_EDPS_THERE_IS_EDP_LOADED_BUT_NOT_ALL_ARE_LOADED:
-		//			printf("UI_ALL_EDPS_THERE_IS_EDP_LOADED_BUT_NOT_ALL_ARE_LOADED\n");
-		ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL,
-				ABN_mm_all_robots_edp_unload, NULL);
-		ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL,
-				ABN_mm_all_robots_edp_load, NULL);
-		PtSetResource(ABW_base_all_robots, Pt_ARG_COLOR, Pg_BLACK, 0);
-		PtSetResource(ABW_base_robot, Pt_ARG_COLOR, Pg_BLACK, 0);
-		unblock_widget(ABW_base_all_robots);
-		unblock_widget(ABW_base_robot);
-		break;
-	case UI_ALL_EDPS_LOADED_BUT_NOT_SYNCHRONISED:
-		//			printf("UI_ALL_EDPS_LOADED_BUT_NOT_SYNCHRONISED\n");
-		ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL,
-				ABN_mm_all_robots_edp_unload, NULL);
-		PtSetResource(ABW_base_all_robots, Pt_ARG_COLOR, Pg_DBLUE, 0);
-		unblock_widget(ABW_base_all_robots);
-		unblock_widget(ABW_base_robot);
-		break;
-	case UI_ALL_EDPS_LOADED_AND_SYNCHRONISED:
-		//				printf("UI_ALL_EDPS_LOADED_AND_SYNCHRONISED\n");
-		PtSetResource(ABW_base_all_robots, Pt_ARG_COLOR, Pg_BLUE, 0);
-		unblock_widget(ABW_base_all_robots);
-		unblock_widget(ABW_base_robot);
+	switch (all_edps)
+	{
+		case UI_ALL_EDPS_NONE_EDP_ACTIVATED:
+			//				printf("UI_ALL_EDPS_NONE_EDP_ACTIVATED\n");
+			block_widget(ABW_base_all_robots);
+			PtSetResource(ABW_base_all_robots, Pt_ARG_COLOR, Pg_GRAY, 0);
+			block_widget(ABW_base_robot);
+			PtSetResource(ABW_base_robot, Pt_ARG_COLOR, Pg_GRAY, 0);
+			break;
+		case UI_ALL_EDPS_NONE_EDP_LOADED:
+			//				printf("UI_ALL_EDPS_NONE_EDP_LOADED\n");
+			ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_edp_load, NULL);
+			PtSetResource(ABW_base_all_robots, Pt_ARG_COLOR, Pg_BLACK, 0);
+			PtSetResource(ABW_base_robot, Pt_ARG_COLOR, Pg_BLACK, 0);
+			unblock_widget(ABW_base_all_robots);
+			unblock_widget(ABW_base_robot);
+			break;
+		case UI_ALL_EDPS_THERE_IS_EDP_LOADED_BUT_NOT_ALL_ARE_LOADED:
+			//			printf("UI_ALL_EDPS_THERE_IS_EDP_LOADED_BUT_NOT_ALL_ARE_LOADED\n");
+			ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_edp_unload, NULL);
+			ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_edp_load, NULL);
+			PtSetResource(ABW_base_all_robots, Pt_ARG_COLOR, Pg_BLACK, 0);
+			PtSetResource(ABW_base_robot, Pt_ARG_COLOR, Pg_BLACK, 0);
+			unblock_widget(ABW_base_all_robots);
+			unblock_widget(ABW_base_robot);
+			break;
+		case UI_ALL_EDPS_LOADED_BUT_NOT_SYNCHRONISED:
+			//			printf("UI_ALL_EDPS_LOADED_BUT_NOT_SYNCHRONISED\n");
+			ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_edp_unload, NULL);
+			PtSetResource(ABW_base_all_robots, Pt_ARG_COLOR, Pg_DBLUE, 0);
+			unblock_widget(ABW_base_all_robots);
+			unblock_widget(ABW_base_robot);
+			break;
+		case UI_ALL_EDPS_LOADED_AND_SYNCHRONISED:
+			//				printf("UI_ALL_EDPS_LOADED_AND_SYNCHRONISED\n");
+			PtSetResource(ABW_base_all_robots, Pt_ARG_COLOR, Pg_BLUE, 0);
+			unblock_widget(ABW_base_all_robots);
+			unblock_widget(ABW_base_robot);
 
-		// w zaleznosci od stanu MP
-		switch (mp.state) {
-		case UI_MP_NOT_PERMITED_TO_RUN:
-			ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL,
-					ABN_mm_all_robots_edp_unload, NULL);
-			break;
-		case UI_MP_PERMITED_TO_RUN:
-			ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL,
-					ABN_mm_all_robots_edp_unload,
-					ABN_mm_all_robots_preset_positions, NULL);
-			break;
-		case UI_MP_WAITING_FOR_START_PULSE:
-			ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL,
-					ABN_mm_all_robots_preset_positions, NULL);
-			break;
-		case UI_MP_TASK_RUNNING:
-		case UI_MP_TASK_PAUSED:
-			ApModifyItemState(&all_robots_menu, AB_ITEM_DIM,
-					ABN_mm_all_robots_preset_positions, NULL);
+			// w zaleznosci od stanu MP
+			switch (mp.state)
+			{
+				case UI_MP_NOT_PERMITED_TO_RUN:
+					ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_edp_unload, NULL);
+					break;
+				case UI_MP_PERMITED_TO_RUN:
+					ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_edp_unload, ABN_mm_all_robots_preset_positions, NULL);
+					break;
+				case UI_MP_WAITING_FOR_START_PULSE:
+					ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_preset_positions, NULL);
+					break;
+				case UI_MP_TASK_RUNNING:
+				case UI_MP_TASK_PAUSED:
+					ApModifyItemState(&all_robots_menu, AB_ITEM_DIM, ABN_mm_all_robots_preset_positions, NULL);
+					break;
+				default:
+					break;
+			}
 			break;
 		default:
 			break;
-		}
-		break;
-	default:
-		break;
 	}
 
 	// wlasciwosci menu task_menu
-	switch (mp.state) {
+	switch (mp.state)
+	{
 
-	case UI_MP_NOT_PERMITED_TO_RUN:
-		ApModifyItemState(&task_menu, AB_ITEM_DIM, ABN_mm_mp_load,
-				ABN_mm_mp_unload, NULL);
-		PtSetResource(ABW_base_task, Pt_ARG_COLOR, Pg_BLACK, 0);
-		break;
-	case UI_MP_PERMITED_TO_RUN:
-		ApModifyItemState(&task_menu, AB_ITEM_DIM, ABN_mm_mp_unload, NULL);
-		ApModifyItemState(&task_menu, AB_ITEM_NORMAL, ABN_mm_mp_load, NULL);
-		PtSetResource(ABW_base_task, Pt_ARG_COLOR, Pg_BLACK, 0);
-		break;
-	case UI_MP_WAITING_FOR_START_PULSE:
-		ApModifyItemState(&task_menu, AB_ITEM_NORMAL, ABN_mm_mp_unload, NULL);
-		ApModifyItemState(&task_menu, AB_ITEM_DIM, ABN_mm_mp_load, NULL);
-		//	ApModifyItemState( &all_robots_menu, AB_ITEM_DIM, ABN_mm_all_robots_edp_unload, NULL);
-		PtSetResource(ABW_base_task, Pt_ARG_COLOR, Pg_DBLUE, 0);
-		break;
-	case UI_MP_TASK_RUNNING:
-	case UI_MP_TASK_PAUSED:
-		ApModifyItemState(&task_menu, AB_ITEM_DIM, ABN_mm_mp_unload,
-				ABN_mm_mp_load, NULL);
-		PtSetResource(ABW_base_task, Pt_ARG_COLOR, Pg_BLUE, 0);
-		break;
-	default:
-		break;
+		case UI_MP_NOT_PERMITED_TO_RUN:
+			ApModifyItemState(&task_menu, AB_ITEM_DIM, ABN_mm_mp_load, ABN_mm_mp_unload, NULL);
+			PtSetResource(ABW_base_task, Pt_ARG_COLOR, Pg_BLACK, 0);
+			break;
+		case UI_MP_PERMITED_TO_RUN:
+			ApModifyItemState(&task_menu, AB_ITEM_DIM, ABN_mm_mp_unload, NULL);
+			ApModifyItemState(&task_menu, AB_ITEM_NORMAL, ABN_mm_mp_load, NULL);
+			PtSetResource(ABW_base_task, Pt_ARG_COLOR, Pg_BLACK, 0);
+			break;
+		case UI_MP_WAITING_FOR_START_PULSE:
+			ApModifyItemState(&task_menu, AB_ITEM_NORMAL, ABN_mm_mp_unload, NULL);
+			ApModifyItemState(&task_menu, AB_ITEM_DIM, ABN_mm_mp_load, NULL);
+			//	ApModifyItemState( &all_robots_menu, AB_ITEM_DIM, ABN_mm_all_robots_edp_unload, NULL);
+			PtSetResource(ABW_base_task, Pt_ARG_COLOR, Pg_DBLUE, 0);
+			break;
+		case UI_MP_TASK_RUNNING:
+		case UI_MP_TASK_PAUSED:
+			ApModifyItemState(&task_menu, AB_ITEM_DIM, ABN_mm_mp_unload, ABN_mm_mp_load, NULL);
+			PtSetResource(ABW_base_task, Pt_ARG_COLOR, Pg_BLUE, 0);
+			break;
+		default:
+			break;
 	}
 
 	//	PtFlush();
@@ -336,53 +328,53 @@ int Ui::manage_interface(void) {
 	return 1;
 }
 
-int Ui::reload_whole_configuration() {
+int Ui::reload_whole_configuration()
+{
 
 	if (access(config_file_relativepath.c_str(), R_OK) != 0) {
-		fprintf(
-				stderr,
-				"Wrong entry in default_file.cfg - load another configuration than: %s\n",
-				config_file_relativepath.c_str());
+		fprintf(stderr, "Wrong entry in default_file.cfg - load another configuration than: %s\n", config_file_relativepath.c_str());
 		config_file_relativepath = "../configs/common.ini";
 	}
 
-	if ((mp.state == UI_MP_NOT_PERMITED_TO_RUN) || (mp.state
-			== UI_MP_PERMITED_TO_RUN)) { // jesli nie dziala mp podmien mp ecp vsp
+	if ((mp.state == UI_MP_NOT_PERMITED_TO_RUN) || (mp.state == UI_MP_PERMITED_TO_RUN)) { // jesli nie dziala mp podmien mp ecp vsp
 
 		config->change_ini_file(config_file.c_str());
 
-		is_mp_and_ecps_active = config->value<int> ("is_mp_and_ecps_active");
+		is_mp_and_ecps_active = config->value <int> ("is_mp_and_ecps_active");
 
-		switch (all_edps) {
-		case UI_ALL_EDPS_NONE_EDP_ACTIVATED:
-		case UI_ALL_EDPS_NONE_EDP_LOADED:
+		switch (all_edps)
+		{
+			case UI_ALL_EDPS_NONE_EDP_ACTIVATED:
+			case UI_ALL_EDPS_NONE_EDP_LOADED:
 
-			// dla robota irp6 on_track
-			irp6ot_m->reload_configuration();
-			irp6ot_tfg->reload_configuration();
+				// dla robota irp6 on_track
+				irp6ot_m->reload_configuration();
+				irp6ot_tfg->reload_configuration();
 
-			// dla robota irp6 postument
-			irp6p_m->reload_configuration();
-			irp6p_tfg->reload_configuration();
+				// dla robota irp6 postument
+				irp6p_m->reload_configuration();
+				irp6p_tfg->reload_configuration();
 
-			// dla robota conveyor
-			conveyor->reload_configuration();
+				sarkofag->reload_configuration();
 
-			// ROBOTY SwamrmItFix
-			spkm->reload_configuration();
-			smb->reload_configuration();
-			shead->reload_configuration();
+				// dla robota conveyor
+				conveyor->reload_configuration();
 
-			bird_hand->reload_configuration();
+				// ROBOTY SwamrmItFix
+				spkm->reload_configuration();
+				smb->reload_configuration();
+				shead->reload_configuration();
 
-			// dla robota speaker
-			speaker->reload_configuration();
+				bird_hand->reload_configuration();
 
-			// dla robota irp6 mechatronika
-			irp6m_m->reload_configuration();
-			break;
-		default:
-			break;
+				// dla robota speaker
+				speaker->reload_configuration();
+
+				// dla robota irp6 mechatronika
+				irp6m_m->reload_configuration();
+				break;
+			default:
+				break;
 		}
 
 		// clearing of lists
@@ -418,23 +410,20 @@ int Ui::reload_whole_configuration() {
 		// zczytanie konfiguracji MP
 
 		if (is_mp_and_ecps_active) {
-			mp.network_pulse_attach_point = config->return_attach_point_name(
-					lib::configurator::CONFIG_SERVER, "mp_pulse_attach_point",
-					MP_SECTION);
-			mp.node_name = config->value<std::string> ("node_name", MP_SECTION);
+			mp.network_pulse_attach_point
+					= config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "mp_pulse_attach_point", MP_SECTION);
+			mp.node_name = config->value <std::string> ("node_name", MP_SECTION);
 			mp.pid = -1;
 		}
 
 		// inicjacja komunikacji z watkiem sr
 		if (ui_msg == NULL) {
-			ui_msg = new lib::sr_ui(lib::UI, ui_attach_point.c_str(),
-					network_sr_attach_point.c_str(), false);
+			ui_msg = new lib::sr_ui(lib::UI, ui_attach_point.c_str(), network_sr_attach_point.c_str(), false);
 		}
 
 		// inicjacja komunikacji z watkiem sr
 		if (all_ecp_msg == NULL) {
-			all_ecp_msg = new lib::sr_ecp(lib::ECP, "ui_all_ecp",
-					network_sr_attach_point.c_str(), false);
+			all_ecp_msg = new lib::sr_ecp(lib::ECP, "ui_all_ecp", network_sr_attach_point.c_str(), false);
 		}
 
 		// wypisanie komunikatu o odczytaniu konfiguracji
@@ -451,7 +440,8 @@ int Ui::reload_whole_configuration() {
 	return 1;
 }
 
-void Ui::UI_close(void) {
+void Ui::UI_close(void)
+{
 	printf("UI CLOSING\n");
 	delay(100);// czas na ustabilizowanie sie edp
 	ui_state = 2;// funcja OnTimer dowie sie ze aplikacja ma byc zamknieta
@@ -468,8 +458,8 @@ void Ui::abort_threads()
 #endif
 }
 
-bool Ui::check_node_existence(const std::string _node,
-		const std::string beginnig_of_message) {
+bool Ui::check_node_existence(const std::string _node, const std::string beginnig_of_message)
+{
 
 	std::string opendir_path("/net/");
 	opendir_path += _node;
@@ -487,10 +477,10 @@ bool Ui::check_node_existence(const std::string _node,
 // sprawdza czy sa postawione gns's i ew. stawia je
 // uwaga serwer powinien byc wczesniej postawiony (dokladnie jeden w sieci)
 
-int Ui::check_gns() {
+int Ui::check_gns()
+{
 	if (access("/etc/system/config/useqnet", R_OK)) {
-		printf(
-				"UI: There is no /etc/system/config/useqnet file; the qnet will not work properly.\n");
+		printf("UI: There is no /etc/system/config/useqnet file; the qnet will not work properly.\n");
 		PtExit(EXIT_SUCCESS);
 	}
 
@@ -498,8 +488,8 @@ int Ui::check_gns() {
 	std::string gns_server_node;
 
 	// poszukiwanie serwerow gns
-	for (std::list<Ui::list_t>::iterator node_list_iterator =
-			all_node_list.begin(); node_list_iterator != all_node_list.end(); node_list_iterator++) {
+	for (std::list <Ui::list_t>::iterator node_list_iterator = all_node_list.begin(); node_list_iterator
+			!= all_node_list.end(); node_list_iterator++) {
 		std::string opendir_path("/net/");
 
 		opendir_path += *node_list_iterator;
@@ -515,11 +505,9 @@ int Ui::check_gns() {
 
 	// there is more than one gns server in the QNX network
 	if (number_of_gns_servers > 1) {
-		printf(
-				"UI: There is more than one gns server in the QNX network; the qnet will not work properly.\n");
+		printf("UI: There is more than one gns server in the QNX network; the qnet will not work properly.\n");
 		// printing of gns server nodes
-		for (std::list<Ui::list_t>::iterator node_list_iterator =
-				all_node_list.begin(); node_list_iterator
+		for (std::list <Ui::list_t>::iterator node_list_iterator = all_node_list.begin(); node_list_iterator
 				!= all_node_list.end(); node_list_iterator++) {
 			std::string opendir_path("/net/");
 
@@ -528,16 +516,14 @@ int Ui::check_gns() {
 
 			// sprawdzenie czy dziala serwer gns
 			if (access(opendir_path.c_str(), R_OK) == 0) {
-				printf("There is gns server on %s node\n",
-						(*node_list_iterator).c_str());
+				printf("There is gns server on %s node\n", (*node_list_iterator).c_str());
 			}
 		}
 		PtExit(EXIT_SUCCESS);
 	}
 	// gns server was not found in the QNX network
 	else if (!number_of_gns_servers) {
-		printf(
-				"UI: gns server was not found in the QNX network, it will be automatically run on local node\n");
+		printf("UI: gns server was not found in the QNX network, it will be automatically run on local node\n");
 
 		// ew. zabicie klienta gns
 
@@ -549,8 +535,7 @@ int Ui::check_gns() {
 		system("gns -s");
 
 		// poszukiwanie serwerow gns
-		for (std::list<Ui::list_t>::iterator node_list_iterator =
-				all_node_list.begin(); node_list_iterator
+		for (std::list <Ui::list_t>::iterator node_list_iterator = all_node_list.begin(); node_list_iterator
 				!= all_node_list.end(); node_list_iterator++) {
 			std::string opendir_path("/net/");
 
@@ -575,8 +560,7 @@ int Ui::check_gns() {
 	}
 
 	// sprawdzenie czy wezly w konfiuracji sa uruchomione i ew. uruchomienie na nich brakujacych klientow gns
-	for (std::list<Ui::list_t>::iterator node_list_iterator =
-			config_node_list.begin(); node_list_iterator
+	for (std::list <Ui::list_t>::iterator node_list_iterator = config_node_list.begin(); node_list_iterator
 			!= config_node_list.end(); node_list_iterator++) {
 		std::string opendir_path("/net/");
 
@@ -598,16 +582,12 @@ int Ui::check_gns() {
 			}
 
 		} else {
-			fprintf(
-					stderr,
-					"check_gns - Nie wykryto wezla: %s, ktory wystepuje w pliku konfiguracyjnym\n",
-					(*node_list_iterator).c_str());
+			fprintf(stderr, "check_gns - Nie wykryto wezla: %s, ktory wystepuje w pliku konfiguracyjnym\n", (*node_list_iterator).c_str());
 
 			if ((is_sr_thread_loaded) && (ui_msg != NULL)) {
 				std::string tmp;
-				tmp = std::string("check_gns - Nie wykryto wezla: ")
-						+ (*node_list_iterator) + std::string(
-						", ktory wystepuje w pliku konfiguracyjnym");
+				tmp = std::string("check_gns - Nie wykryto wezla: ") + (*node_list_iterator)
+						+ std::string(", ktory wystepuje w pliku konfiguracyjnym");
 				ui_msg->message(lib::NON_FATAL_ERROR, tmp);
 			}
 
@@ -619,57 +599,43 @@ int Ui::check_gns() {
 }
 
 // ustala stan wszytkich EDP
-int Ui::check_edps_state_and_modify_mp_state() {
+int Ui::check_edps_state_and_modify_mp_state()
+{
 
 	// wyznaczenie stanu wszytkich EDP abstahujac od MP
 
 	// jesli wszytkie sa nieaktywne
-	if ((!(irp6p_m->state.is_active)) && (!(irp6ot_m->state.is_active))
-			&& (!(irp6ot_tfg->state.is_active))
-			&& (!(irp6p_tfg->state.is_active))
-			&& (!(conveyor->state.is_active)) && (!(speaker->state.is_active))
-			&& (!(irp6m_m->state.is_active)) && (!(bird_hand->state.is_active))
-			&& (!(spkm->state.is_active)) && (!(smb->state.is_active))
-			&& (!(shead->state.is_active))) {
+	if ((!(irp6p_m->state.is_active)) && (!(irp6ot_m->state.is_active)) && (!(irp6ot_tfg->state.is_active))
+			&& (!(irp6p_tfg->state.is_active)) && (!(sarkofag->state.is_active)) && (!(conveyor->state.is_active))
+			&& (!(speaker->state.is_active)) && (!(irp6m_m->state.is_active)) && (!(bird_hand->state.is_active))
+			&& (!(spkm->state.is_active)) && (!(smb->state.is_active)) && (!(shead->state.is_active))) {
 		all_edps = UI_ALL_EDPS_NONE_EDP_ACTIVATED;
 
 		// jesli wszystkie sa zsynchronizowane
-	} else if (check_synchronised_or_inactive(irp6p_m->state)
-			&& check_synchronised_or_inactive(irp6ot_m->state)
-			&& check_synchronised_or_inactive(conveyor->state)
-			&& check_synchronised_or_inactive(speaker->state)
-			&& check_synchronised_or_inactive(irp6m_m->state)
-			&& check_synchronised_or_inactive(irp6ot_tfg->state)
-			&& check_synchronised_or_inactive(irp6p_tfg->state)
-			&& check_synchronised_or_inactive(bird_hand->state)
-			&& check_synchronised_or_inactive(spkm->state)
-			&& check_synchronised_or_inactive(smb->state)
-			&& check_synchronised_or_inactive(shead->state)) {
+	} else if (check_synchronised_or_inactive(irp6p_m->state) && check_synchronised_or_inactive(irp6ot_m->state)
+			&& check_synchronised_or_inactive(conveyor->state) && check_synchronised_or_inactive(speaker->state)
+			&& check_synchronised_or_inactive(irp6m_m->state) && check_synchronised_or_inactive(irp6ot_tfg->state)
+			&& check_synchronised_or_inactive(irp6p_tfg->state) && check_synchronised_or_inactive(sarkofag->state)
+			&& check_synchronised_or_inactive(bird_hand->state) && check_synchronised_or_inactive(spkm->state)
+			&& check_synchronised_or_inactive(smb->state) && check_synchronised_or_inactive(shead->state)) {
 		all_edps = UI_ALL_EDPS_LOADED_AND_SYNCHRONISED;
 
 		// jesli wszystkie sa zaladowane
-	} else if (check_loaded_or_inactive(irp6p_m->state)
-			&& check_loaded_or_inactive(irp6ot_m->state)
-			&& check_loaded_or_inactive(conveyor->state)
-			&& check_loaded_or_inactive(speaker->state)
-			&& check_loaded_or_inactive(irp6m_m->state)
-			&& check_loaded_or_inactive(irp6ot_tfg->state)
-			&& check_loaded_or_inactive(irp6p_tfg->state)
-			&& check_loaded_or_inactive(bird_hand->state)
-			&& check_loaded_or_inactive(spkm->state)
-			&& check_loaded_or_inactive(smb->state)
-			&& check_loaded_or_inactive(shead->state))
+	} else if (check_loaded_or_inactive(irp6p_m->state) && check_loaded_or_inactive(irp6ot_m->state)
+			&& check_loaded_or_inactive(conveyor->state) && check_loaded_or_inactive(speaker->state)
+			&& check_loaded_or_inactive(irp6m_m->state) && check_loaded_or_inactive(irp6ot_tfg->state)
+			&& check_loaded_or_inactive(irp6p_tfg->state) && check_loaded_or_inactive(sarkofag->state)
+			&& check_loaded_or_inactive(bird_hand->state) && check_loaded_or_inactive(spkm->state)
+			&& check_loaded_or_inactive(smb->state) && check_loaded_or_inactive(shead->state))
 
 	{
 		all_edps = UI_ALL_EDPS_LOADED_BUT_NOT_SYNCHRONISED;
 
 		// jesli chociaz jeden jest zaladowany
-	} else if (check_loaded(irp6p_m->state) || check_loaded(irp6ot_m->state)
-			|| check_loaded(conveyor->state) || check_loaded(speaker->state)
-			|| check_loaded(irp6m_m->state) || check_loaded(irp6ot_tfg->state)
-			|| check_loaded(irp6p_tfg->state) || check_loaded(bird_hand->state)
-			|| check_loaded(spkm->state) || check_loaded(smb->state)
-			|| check_loaded(shead->state))
+	} else if (check_loaded(irp6p_m->state) || check_loaded(irp6ot_m->state) || check_loaded(conveyor->state)
+			|| check_loaded(speaker->state) || check_loaded(irp6m_m->state) || check_loaded(irp6ot_tfg->state)
+			|| check_loaded(irp6p_tfg->state) || check_loaded(sarkofag->state) || check_loaded(bird_hand->state)
+			|| check_loaded(spkm->state) || check_loaded(smb->state) || check_loaded(shead->state))
 
 	{
 		all_edps = UI_ALL_EDPS_THERE_IS_EDP_LOADED_BUT_NOT_ALL_ARE_LOADED;
@@ -682,51 +648,55 @@ int Ui::check_edps_state_and_modify_mp_state() {
 
 	// modyfikacja stanu MP przez stan wysztkich EDP
 
-	switch (all_edps) {
-	case UI_ALL_EDPS_NONE_EDP_ACTIVATED:
-	case UI_ALL_EDPS_LOADED_AND_SYNCHRONISED:
-		if ((mp.state == UI_MP_NOT_PERMITED_TO_RUN) && (is_mp_and_ecps_active)) {
-			mp.state = UI_MP_PERMITED_TO_RUN; // pozwol na uruchomienie mp
-		}
-		break;
+	switch (all_edps)
+	{
+		case UI_ALL_EDPS_NONE_EDP_ACTIVATED:
+		case UI_ALL_EDPS_LOADED_AND_SYNCHRONISED:
+			if ((mp.state == UI_MP_NOT_PERMITED_TO_RUN) && (is_mp_and_ecps_active)) {
+				mp.state = UI_MP_PERMITED_TO_RUN; // pozwol na uruchomienie mp
+			}
+			break;
 
-	case UI_ALL_EDPS_LOADED_BUT_NOT_SYNCHRONISED:
-	case UI_ALL_EDPS_THERE_IS_EDP_LOADED_BUT_NOT_ALL_ARE_LOADED:
-	case UI_ALL_EDPS_NONE_EDP_LOADED:
-		if (mp.state == UI_MP_PERMITED_TO_RUN) {
-			mp.state = UI_MP_NOT_PERMITED_TO_RUN; // nie pozwol na uruchomienie mp
-		}
-		break;
-	default:
-		break;
+		case UI_ALL_EDPS_LOADED_BUT_NOT_SYNCHRONISED:
+		case UI_ALL_EDPS_THERE_IS_EDP_LOADED_BUT_NOT_ALL_ARE_LOADED:
+		case UI_ALL_EDPS_NONE_EDP_LOADED:
+			if (mp.state == UI_MP_PERMITED_TO_RUN) {
+				mp.state = UI_MP_NOT_PERMITED_TO_RUN; // nie pozwol na uruchomienie mp
+			}
+			break;
+		default:
+			break;
 	}
 	return 1;
 }
 
 // ustala stan wszytkich EDP
-bool Ui::check_synchronised_or_inactive(ecp_edp_ui_robot_def& robot) {
-	return (((robot.is_active) && (robot.edp.is_synchronised))
-			|| (!(robot.is_active)));
+bool Ui::check_synchronised_or_inactive(ecp_edp_ui_robot_def& robot)
+{
+	return (((robot.is_active) && (robot.edp.is_synchronised)) || (!(robot.is_active)));
 
 }
 
-bool Ui::check_synchronised_and_loaded(ecp_edp_ui_robot_def& robot) {
+bool Ui::check_synchronised_and_loaded(ecp_edp_ui_robot_def& robot)
+{
 	return (((robot.edp.state > 0) && (robot.edp.is_synchronised)));
 
 }
 
-bool Ui::check_loaded_or_inactive(ecp_edp_ui_robot_def& robot) {
-	return (((robot.is_active) && (robot.edp.state > 0))
-			|| (!(robot.is_active)));
+bool Ui::check_loaded_or_inactive(ecp_edp_ui_robot_def& robot)
+{
+	return (((robot.is_active) && (robot.edp.state > 0)) || (!(robot.is_active)));
 
 }
 
-bool Ui::check_loaded(ecp_edp_ui_robot_def& robot) {
+bool Ui::check_loaded(ecp_edp_ui_robot_def& robot)
+{
 	return ((robot.is_active) && (robot.edp.state > 0));
 }
 
 // odczytuje nazwe domyslengo pliku konfiguracyjnego, w razie braku ustawia common.ini
-int Ui::get_default_configuration_file_name() {
+int Ui::get_default_configuration_file_name()
+{
 
 	FILE * fp = fopen("../configs/default_file.cfg", "r");
 	if (fp != NULL) {
@@ -765,7 +735,8 @@ int Ui::get_default_configuration_file_name() {
 }
 
 // zapisuje nazwe domyslengo pliku konfiguracyjnego
-int Ui::set_default_configuration_file_name() {
+int Ui::set_default_configuration_file_name()
+{
 
 	config_file_relativepath = "../";
 	config_file_relativepath += config_file;
@@ -781,11 +752,12 @@ int Ui::set_default_configuration_file_name() {
 }
 
 // fills program_node list
-int Ui::fill_program_node_list() {
+int Ui::fill_program_node_list()
+{
 	//	printf("fill_program_node_list\n");
 
-	for (std::list<Ui::list_t>::iterator section_list_iterator =
-			section_list.begin(); section_list_iterator != section_list.end(); section_list_iterator++) {
+	for (std::list <Ui::list_t>::iterator section_list_iterator = section_list.begin(); section_list_iterator
+			!= section_list.end(); section_list_iterator++) {
 
 		if ((config->exists("program_name", *section_list_iterator)
 				&& config->exists("node_name", *section_list_iterator))) {
@@ -794,10 +766,8 @@ int Ui::fill_program_node_list() {
 
 			program_node_def tmp_s;
 
-			tmp_s.program_name = config->value<std::string> ("program_name",
-					*section_list_iterator);
-			tmp_s.node_name = config->value<std::string> ("node_name",
-					*section_list_iterator);
+			tmp_s.program_name = config->value <std::string> ("program_name", *section_list_iterator);
+			tmp_s.node_name = config->value <std::string> ("node_name", *section_list_iterator);
 
 			program_node_list.push_back(tmp_s);
 		}
@@ -806,7 +776,8 @@ int Ui::fill_program_node_list() {
 	return 1;
 }
 
-int Ui::clear_all_configuration_lists() {
+int Ui::clear_all_configuration_lists()
+{
 	// clearing of lists
 	section_list.clear();
 	config_node_list.clear();
@@ -816,12 +787,10 @@ int Ui::clear_all_configuration_lists() {
 	return 1;
 }
 
-int Ui::initiate_configuration() {
+int Ui::initiate_configuration()
+{
 	if (access(config_file_relativepath.c_str(), R_OK) != 0) {
-		fprintf(
-				stderr,
-				"Wrong entry in default_file.cfg - load another configuration than: %s\n",
-				config_file_relativepath.c_str());
+		fprintf(stderr, "Wrong entry in default_file.cfg - load another configuration than: %s\n", config_file_relativepath.c_str());
 		config_file_relativepath = "../configs/common.ini";
 	}
 
@@ -838,13 +807,10 @@ int Ui::initiate_configuration() {
 		if (config) {
 			delete config;
 		}
-		config = new lib::configurator(ui_node_name, mrrocpp_local_path,
-				config_file, UI_SECTION, session_name);
+		config = new lib::configurator(ui_node_name, mrrocpp_local_path, config_file, UI_SECTION, session_name);
 
 		std::string attach_point =
-				config->return_attach_point_name(
-						lib::configurator::CONFIG_SERVER, "sr_attach_point",
-						UI_SECTION);
+				config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", UI_SECTION);
 
 		// wykrycie identycznych nazw sesji
 		wyjscie = true;
@@ -869,12 +835,10 @@ int Ui::initiate_configuration() {
 
 	}
 
-	ui_attach_point = config->return_attach_point_name(
-			lib::configurator::CONFIG_SERVER, "ui_attach_point", UI_SECTION);
-	sr_attach_point = config->return_attach_point_name(
-			lib::configurator::CONFIG_SERVER, "sr_attach_point", UI_SECTION);
-	network_sr_attach_point = config->return_attach_point_name(
-			lib::configurator::CONFIG_SERVER, "sr_attach_point", UI_SECTION);
+	ui_attach_point = config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "ui_attach_point", UI_SECTION);
+	sr_attach_point = config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", UI_SECTION);
+	network_sr_attach_point
+			= config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", UI_SECTION);
 
 	clear_all_configuration_lists();
 
@@ -888,7 +852,8 @@ int Ui::initiate_configuration() {
 }
 
 // fills section list of configuration files
-int Ui::fill_section_list(const char* file_name_and_path) {
+int Ui::fill_section_list(const char* file_name_and_path)
+{
 	static char line[256];
 
 	// otworz plik konfiguracyjny
@@ -910,11 +875,10 @@ int Ui::fill_section_list(const char* file_name_and_path) {
 			strncpy(current_section, line, strlen(line) - 1);
 			current_section[strlen(line) - 1] = '\0';
 
-			std::list<Ui::list_t>::iterator list_iterator;
+			std::list <Ui::list_t>::iterator list_iterator;
 
 			// checking if section is already considered
-			for (list_iterator = section_list.begin(); list_iterator
-					!= section_list.end(); list_iterator++) {
+			for (list_iterator = section_list.begin(); list_iterator != section_list.end(); list_iterator++) {
 				if ((*list_iterator) == current_section)
 					break;
 			}
@@ -937,7 +901,8 @@ int Ui::fill_section_list(const char* file_name_and_path) {
 }
 
 // fills node list
-int Ui::fill_node_list() {
+int Ui::fill_node_list()
+{
 	// fill all network nodes list
 
 	DIR* dirp = opendir("/net");
@@ -951,16 +916,14 @@ int Ui::fill_node_list() {
 		closedir(dirp);
 	}
 
-	for (std::list<Ui::list_t>::iterator section_list_iterator =
-			section_list.begin(); section_list_iterator != section_list.end(); section_list_iterator++) {
+	for (std::list <Ui::list_t>::iterator section_list_iterator = section_list.begin(); section_list_iterator
+			!= section_list.end(); section_list_iterator++) {
 		if (config->exists("node_name", *section_list_iterator)) {
-			std::string tmp = config->value<std::string> ("node_name",
-					*section_list_iterator);
+			std::string tmp = config->value <std::string> ("node_name", *section_list_iterator);
 
-			std::list<Ui::list_t>::iterator node_list_iterator;
+			std::list <Ui::list_t>::iterator node_list_iterator;
 
-			for (node_list_iterator = config_node_list.begin(); node_list_iterator
-					!= config_node_list.end(); node_list_iterator++) {
+			for (node_list_iterator = config_node_list.begin(); node_list_iterator != config_node_list.end(); node_list_iterator++) {
 				if (tmp == (*node_list_iterator)) {
 					break;
 				}
@@ -981,27 +944,24 @@ int Ui::pulse_reader_execute(int coid, int pulse_code, int pulse_value)
 
 {
 
-	if (MsgSendPulse(coid, sched_get_priority_min(SCHED_FIFO), pulse_code,
-			pulse_value) == -1) {
+	if (MsgSendPulse(coid, sched_get_priority_min(SCHED_FIFO), pulse_code, pulse_value) == -1) {
 		perror("Blad w wysylaniu pulsu do redera");
 	}
 
 	return 1;
 }
 
-int Ui::execute_mp_pulse(char pulse_code) {
+int Ui::execute_mp_pulse(char pulse_code)
+{
 	int ret = -2;
 
 	// printf("w send pulse\n");
 	if (mp.pulse_fd > 0) {
 		long pulse_value = 1;
-		if ((ret = MsgSendPulse(mp.pulse_fd,
-				sched_get_priority_min(SCHED_FIFO), pulse_code, pulse_value))
-				== -1) {
+		if ((ret = MsgSendPulse(mp.pulse_fd, sched_get_priority_min(SCHED_FIFO), pulse_code, pulse_value)) == -1) {
 
 			perror("Blad w wysylaniu pulsu do mp");
-			fprintf(stderr, "Blad w wysylaniu pulsu do mp error: %s \n",
-					strerror(errno));
+			fprintf(stderr, "Blad w wysylaniu pulsu do mp error: %s \n", strerror(errno));
 			delay(1000);
 		}
 	}
@@ -1009,7 +969,8 @@ int Ui::execute_mp_pulse(char pulse_code) {
 
 }
 
-bool Ui::deactivate_ecp_trigger(ecp_edp_ui_robot_def& robot_l) {
+bool Ui::deactivate_ecp_trigger(ecp_edp_ui_robot_def& robot_l)
+{
 
 	if (robot_l.is_active) {
 		if (robot_l.ecp.trigger_fd >= 0) {
@@ -1023,7 +984,8 @@ bool Ui::deactivate_ecp_trigger(ecp_edp_ui_robot_def& robot_l) {
 	return false;
 }
 
-int Ui::set_toggle_button(PtWidget_t * widget) {
+int Ui::set_toggle_button(PtWidget_t * widget)
+{
 
 	PtSetResource(widget, Pt_ARG_FLAGS, Pt_TRUE, Pt_SET);
 	PtDamageWidget(widget);
@@ -1031,7 +993,8 @@ int Ui::set_toggle_button(PtWidget_t * widget) {
 	return 1;
 }
 
-int Ui::unset_toggle_button(PtWidget_t * widget) {
+int Ui::unset_toggle_button(PtWidget_t * widget)
+{
 
 	PtSetResource(widget, Pt_ARG_FLAGS, Pt_FALSE, Pt_SET);
 	PtDamageWidget(widget);
@@ -1040,7 +1003,8 @@ int Ui::unset_toggle_button(PtWidget_t * widget) {
 }
 
 // blokowanie widgetu
-int Ui::block_widget(PtWidget_t *widget) {
+int Ui::block_widget(PtWidget_t *widget)
+{
 	PtSetResource(widget, Pt_ARG_FLAGS, Pt_TRUE, Pt_BLOCKED | Pt_GHOST);
 	PtDamageWidget(widget);
 
@@ -1048,7 +1012,8 @@ int Ui::block_widget(PtWidget_t *widget) {
 }
 
 // odblokowanie widgetu
-int Ui::unblock_widget(PtWidget_t *widget) {
+int Ui::unblock_widget(PtWidget_t *widget)
+{
 	PtSetResource(widget, Pt_ARG_FLAGS, Pt_FALSE, Pt_BLOCKED | Pt_GHOST);
 	PtDamageWidget(widget);
 
