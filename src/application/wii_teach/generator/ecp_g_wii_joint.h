@@ -4,13 +4,13 @@
 #include <string.h>
 #include <math.h>
 
-#include "ecp/common/generator/ecp_generator.h"
+#include "base/ecp/ecp_generator.h"
 #include "application/wii_teach/sensor/ecp_mp_s_wiimote.h"
 #include "application/wii_teach/generator/ecp_g_wii.h"
 
 namespace mrrocpp {
 namespace ecp {
-namespace irp6ot {
+namespace irp6ot_m {
 namespace generator {
 
 /** @addtogroup wii_teach
@@ -18,7 +18,7 @@ namespace generator {
  *  @{
  */
 
-class wii_joint : public irp6ot::generator::wii
+class wii_joint : public generator::wii
 {
     public:
 	/**

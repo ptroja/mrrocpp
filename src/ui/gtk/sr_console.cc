@@ -47,7 +47,7 @@ void *sr_thread(void* arg)
 {
 	messip_channel_t *ch;
 
-	// TODO: config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", UI_SECTION);
+	// TODO:ui.config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", UI_SECTION);
 	if ((ch = messip::port_create("sr")) == NULL) {
 		return NULL;
 	}
@@ -177,16 +177,16 @@ void *sr_thread(void* arg)
 
 			switch (sr_msg.process_type) {
 				case EDP:
-					strcat(current_line, "EDP: ");
+					strcat(current_line, "edp: ");
 					break;
 				case ECP:
-					strcat(current_line, "ECP: ");
+					strcat(current_line, "ecp: ");
 					break;
 				case MP:
-					strcat(current_line, "MP:  ");
+					strcat(current_line, "mp:  ");
 					break;
 				case VSP:
-					strcat(current_line, "VSP: ");
+					strcat(current_line, "vsp: ");
 					break;
 				case UI:
 					strcat(current_line, "UI:  ");

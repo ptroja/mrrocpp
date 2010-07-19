@@ -2,7 +2,8 @@
 #ifndef ECP_MP_TR_GRASPIT_H_
 #define ECP_MP_TR_GRASPIT_H_
 
-#include "ecp_mp/transmitter/transmitter.h"				// klasa bazowa transmitter
+#include "lib/sensor.h"
+#include "base/ecp_mp/transmitter.h" // klasa bazowa transmitter
 
 namespace mrrocpp {
 namespace ecp_mp {
@@ -11,16 +12,19 @@ namespace transmitter {
 
 /*==============================STRUCTURES===================================*/
 
-struct result_grasp{
-        char move[25];
-        char status;
-};
+typedef struct _from_graspit {
+	//double grasp_joint[2*6+1]; //tfg
+	double grasp_joint[2*6+8]; //bird_hand
+} from_graspit_t;
 
 /*===============================CLASS=======================================*/
 
-class TRGraspit: public transmitter{
+static const std::string TRANSMITTER_GRASPIT = "TRANSMITTER_GRASPIT";
+
+typedef transmitter<lib::empty_t, from_graspit_t> GraspitTransmitter_t;
+
+class TRGraspit: public GraspitTransmitter_t {
 	private:									// pola do komunikacji
-		struct result_grasp result;
 		int socketDescriptor;
 
 	public:

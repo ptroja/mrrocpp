@@ -13,10 +13,12 @@
 #include "lib/com_buf.h"
 
 #include "lib/srlib.h"
-#include "mp/mp.h"
+#include "base/mp/mp.h"
 #include "application/haptic/mp_g_haptic.h"
 #include "lib/mrmath/mrmath.h"
-#include "mp/generator/mp_g_common.h"
+#include "base/mp/mp_g_common.h"
+#include "robot/irp6ot_m/irp6ot_m_const.h"
+#include "robot/irp6p_m/irp6p_m_const.h"
 
 namespace mrrocpp {
 namespace mp {
@@ -42,8 +44,8 @@ bool haptic::first_step() {
 	// Funkcja zwraca false gdy koniec generacji trajektorii
 	// Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
 	// cout << "first_step" << endl;
-	irp6ot = robot_m[lib::ROBOT_IRP6_ON_TRACK];
-	irp6p = robot_m[lib::ROBOT_IRP6_POSTUMENT];
+	irp6ot = robot_m[lib::ROBOT_IRP6OT_M];
+	irp6p = robot_m[lib::ROBOT_IRP6P_M];
 
 	irp6ot->communicate = true;
 	irp6p->communicate = true;
@@ -74,9 +76,9 @@ bool haptic::first_step() {
 		irp6ot->mp_command.instruction.arm.pf_def.force_xyz_torque_xyz[i + 3]
 				= 0;
 		irp6ot->mp_command.instruction.arm.pf_def.reciprocal_damping[i]
-				= FORCE_RECIPROCAL_DAMPING/2;
+				= FORCE_RECIPROCAL_DAMPING / 2;
 		irp6ot->mp_command.instruction.arm.pf_def.reciprocal_damping[i + 3]
-				= TORQUE_RECIPROCAL_DAMPING/2;
+				= TORQUE_RECIPROCAL_DAMPING / 2;
 		//		irp6ot->mp_command.instruction.arm.pf_def.reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING / 40;
 		//		irp6ot->mp_command.instruction.arm.pf_def.reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING / 40;
 		irp6ot->mp_command.instruction.arm.pf_def.behaviour[i] = lib::CONTACT;
@@ -125,9 +127,9 @@ bool haptic::first_step() {
 		irp6p->mp_command.instruction.arm.pf_def.force_xyz_torque_xyz[i + 3]
 				= 0;
 		irp6p->mp_command.instruction.arm.pf_def.reciprocal_damping[i]
-				= FORCE_RECIPROCAL_DAMPING/2;
+				= FORCE_RECIPROCAL_DAMPING / 2;
 		irp6p->mp_command.instruction.arm.pf_def.reciprocal_damping[i + 3]
-				= TORQUE_RECIPROCAL_DAMPING/2;
+				= TORQUE_RECIPROCAL_DAMPING / 2;
 		//		irp6p->mp_command.instruction.arm.pf_def.reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING/40;
 		//		irp6p->mp_command.instruction.arm.pf_def.reciprocal_damping[i+3] = FORCE_RECIPROCAL_DAMPING/40;
 		irp6p->mp_command.instruction.arm.pf_def.behaviour[i]
@@ -172,25 +174,16 @@ bool haptic::next_step() {
 	if (node_counter < 3) { // Oczekiwanie na odczyt aktualnego polozenia koncowki
 		return true;
 	}
-	/*
-	 vsp_force_irp6ot->base_period=1;
-	 vsp_force_irp6p->base_period=1;
-	 */
 
 	if (check_and_null_trigger()) {
 		return false;
 	}
-
-	;
 
 	if (node_counter == 3) {
 
 		irp6ot->mp_command.instruction.instruction_type = lib::SET_GET;
 		irp6p->mp_command.instruction.instruction_type = lib::SET_GET;
 
-		irp6ot->mp_command.instruction.arm.pf_def.gripper_coordinate = 0;
-		irp6p->mp_command.instruction.arm.pf_def.gripper_coordinate
-				= irp6p->ecp_reply_package.reply_package.arm.pf_def.gripper_coordinate;
 	}
 
 	lib::Homog_matrix irp6ot_current_arm_frame(
@@ -224,8 +217,6 @@ bool haptic::next_step() {
 				= -irp6p_ECPtoMP_force_xyz_torque_xyz[i];
 	}
 
-
-
 	// modyfikacja dlugosci makrokroku postumenta na podstawie analizy wyprzedzenia pulse z ECP postumenta wzgledem pulsu z ECP traka
 	// sam proces korekty jest konieczny ze wzgledu na to ze przerwanie w EDP traka dochodzi co okolo 2,08 ms zamiast 2ms w postumecie i calosc sie rozjezdza.
 
@@ -234,10 +225,9 @@ bool haptic::next_step() {
 			- (irp6p->pulse_receive_time.tv_sec
 					+ irp6p->pulse_receive_time.tv_nsec / 1e9);
 
-
 	if (time_interval > 0.002) {
-		irp6p->mp_command.instruction.motion_steps = step_no+1;
-		irp6p->mp_command.instruction.value_in_step_no = step_no+1 - 4;
+		irp6p->mp_command.instruction.motion_steps = step_no + 1;
+		irp6p->mp_command.instruction.value_in_step_no = step_no + 1 - 4;
 	} else {
 		irp6p->mp_command.instruction.motion_steps = step_no;
 		irp6p->mp_command.instruction.value_in_step_no = step_no - 4;

@@ -3,12 +3,12 @@
 #if !defined(_ECP_T_smooth_TEST_H)
 #define _ECP_T_smooth_TEST_H
 
-#include "ecp/common/task/ecp_task.h"
-#include "ecp/common/generator/ecp_g_smooth.h"
+#include "base/ecp/ecp_task.h"
+#include "generator/ecp/ecp_g_smooth.h"
 
 namespace mrrocpp {
 namespace ecp {
-namespace irp6ot {
+namespace irp6ot_m {
 namespace task {
 
 class smooth_test: public common::task::task {

@@ -1,24 +1,21 @@
 #if !defined(_ECP_T_HAAR_IRP6OT_H)
 #define _ECP_T_HAAR_IRP6OT_H
 
-
-
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
-#include "ecp/common/task/ecp_task.h"
-
+#include "base/ecp/ecp_task.h"
 
 #include "lib/srlib.h"
 
-#include "ecp/irp6_on_track/ecp_r_irp6ot.h"
-#include "ecp/irp6_on_track/generator/ecp_g_vis_ib_eih_planar_irp6ot.h"
+#include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
+#include "robot/irp6ot_m/generator/ecp_g_vis_ib_eih_planar_irp6ot.h"
 #include "ecp_g_rotate_gripper.h"
-#include "ecp/common/generator/ecp_g_smooth.h"
-#include "ecp/common/generator/ecp_g_jarosz.h"
-#include "ecp/common/generator/ecp_g_force.h"
+#include "generator/ecp/ecp_g_smooth.h"
+#include "generator/ecp/ecp_g_jarosz.h"
+#include "generator/ecp/ecp_g_force.h"
 
-#include "ecp_mp/sensor/ecp_mp_s_cvfradia.h"
+#include "sensor/fradia/ecp_mp_s_fradia_sensor.h"
 
 //#define JAW_PINCHING_0 -0.016//zacisk szczeki dla puszki
 //#define JAW_PINCHING_1 -0.024//zacisk szczeki dla pudelka
@@ -29,10 +26,10 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace irp6ot {
+namespace irp6ot_m {
 namespace task {
 
-class haar: public common::task::task  {
+class haar: public common::task::task {
 	bool rotation;
 	std::string smooth_path;
 	int object_type;
@@ -45,7 +42,7 @@ class haar: public common::task::task  {
 	//Linear generator
 	common::generator::linear* linear_gen;
 	//Planar servoing.
-	irp6ot::generator::ecp_vis_ib_eih_planar_irp6ot* planar_vis;
+	generator::ecp_vis_ib_eih_planar_irp6ot* planar_vis;
 	//Trajectory description.
 	lib::trajectory_description td;
 	//Rotation generator.
@@ -63,7 +60,8 @@ public:
 	void main_task_algorithm(void);
 
 	//Metods modifing td.
-	void set_td_coordinates(double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6);
+	void set_td_coordinates(double cor0, double cor1, double cor2, double cor3,
+			double cor4, double cor5, double cor6);
 	void init_td(lib::ECP_POSE_SPECIFICATION ps, int internode_no);
 };
 

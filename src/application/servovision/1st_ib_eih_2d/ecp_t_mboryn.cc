@@ -12,7 +12,7 @@ namespace mrrocpp {
 
 namespace ecp {
 
-namespace irp6ot {
+namespace irp6ot_m {
 
 namespace task {
 
@@ -31,16 +31,16 @@ ecp_t_mboryn::ecp_t_mboryn(mrrocpp::lib::configurator& _configurator)
 :
 	task(_configurator)
 {
-	ecp_m_robot = new ecp::irp6ot::robot(*this);
+	ecp_m_robot = new ecp::irp6ot_m::robot(*this);
 	ecp_g_mboryn_ = new generator::ecp_g_mboryn(*this);
 	smooth_gen = new mrrocpp::ecp::common::generator::smooth(*this, true);
 
 	//sr_ecp_msg->message("ecp_t_mboryn::ecp_t_mboryn() fradia setup...");
 	vsp_fradia
-			= new ecp_mp::sensor::cvfradia(lib::SENSOR_CVFRADIA, "[vsp_cvfradia_servovision]", *this, sizeof(lib::sensor_image_t::sensor_union_t::object_tracker_t));
+			= new ecp_mp::sensor::fradia_sensor(ecp_mp::sensor::SENSOR_CVFRADIA, "[vsp_fradia_sensor_servovision]", *this, sizeof(lib::sensor_image_t::sensor_union_t::object_tracker_t));
 	vsp_fradia->configure_sensor();
 
-	sensor_m[lib::SENSOR_CVFRADIA] = vsp_fradia;
+	sensor_m[ecp_mp::sensor::SENSOR_CVFRADIA] = vsp_fradia;
 	ecp_g_mboryn_->sensor_m = sensor_m;
 	//sr_ecp_msg->message("ecp_t_mboryn::ecp_t_mboryn() finished.");
 }

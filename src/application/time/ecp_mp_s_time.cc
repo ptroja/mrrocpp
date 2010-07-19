@@ -12,7 +12,7 @@
 #include "lib/com_buf.h"
 
 // Zawiera klase bazowa ecp_mp_sensor.
-#include "ecp_mp/sensor/ecp_mp_sensor.h"
+#include "base/ecp_mp/ecp_mp_sensor.h"
 // Zawiera klase ecp_mp_time_sensor.
 #include "ecp_mp_s_time.h"
 
@@ -21,10 +21,11 @@ namespace ecp_mp {
 namespace sensor {
 
 /***************************** CONSTRUCTOR ********************************/
-time::time (lib::SENSOR_t _sensor_name, const char* _section_name, task::task& _ecp_mp_object):
-	sensor (_sensor_name, _section_name, _ecp_mp_object) {
-  union_size = sizeof(image.sensor_union.time);
-}//: ecp_mp_time_sensor
+time::time (lib::SENSOR_t _sensor_name, const std::string & _section_name, lib::sr_ecp & _sr_ecp_msg, lib::configurator & _config):
+	time_sensor_t (_sensor_name, _section_name, _sr_ecp_msg, _config)
+{
+
+}
 
 } // namespace sensor
 } // namespace ecp_mp

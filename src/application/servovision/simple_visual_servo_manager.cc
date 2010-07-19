@@ -7,9 +7,7 @@
 
 #include "simple_visual_servo_manager.h"
 
-#include "logger.h"
-
-using namespace logger;
+#include "lib/logger.h"
 
 namespace mrrocpp {
 
@@ -32,12 +30,12 @@ simple_visual_servo_manager::~simple_visual_servo_manager()
 
 lib::Homog_matrix simple_visual_servo_manager::get_aggregated_position_change()
 {
-	return servos[0]->get_position_change(get_current_position());
+	return servos[0]->get_position_change(get_current_position(), dt);
 }
 
 void simple_visual_servo_manager::configure_all_servos()
 {
-	//logDbg("simple_visual_servo_manager::configure_all_servos()\n");
+	//logger::logDbg("simple_visual_servo_manager::configure_all_servos()\n");
 }
 
 }//namespace generator

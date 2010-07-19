@@ -10,12 +10,12 @@
 #include "lib/impconst.h"		// lib::frame_tab
 #include "lib/com_buf.h"			// lib::trajectory_description
 
-#include "ecp/common/generator/ecp_generator.h"
+#include "base/ecp/ecp_generator.h"
 #include "lib/mrmath/mrmath.h"
 
 namespace mrrocpp {
 namespace ecp {
-namespace irp6p {
+namespace irp6p_m {
 namespace generator {
 
 // --------------------------------------------------------------------------

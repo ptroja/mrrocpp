@@ -4,7 +4,7 @@
  * \date 2010
  * \author yoyek
  *
- * \brief Template class for single robot communication port
+ * \brief Template class for a single robot communication port
  */
 
 #ifndef SINGLE_THREAD_PORT_H_
@@ -13,122 +13,164 @@
 #include <string>
 #include <map>
 
+#include <boost/cast.hpp>
+
 namespace mrrocpp {
 namespace lib {
 
-class single_thread_port_interface {
+class single_thread_port_manager;
+
+enum FlowStatus
+{
+	NoData, OldData, NewData
+};
+
+class single_thread_port_interface
+{
 private:
-	std::string name;
+	const std::string name;
 
 protected:
 	bool new_data;
 
 public:
-	virtual bool is_new_data() = 0;
 
-	single_thread_port_interface(std::string _name) :
-		name(_name), new_data(false) {
+	single_thread_port_interface(std::string _name, single_thread_port_manager & _port_manager);
+	/**
+	 * This is a base class, so virtual destructor is recommended
+	 * and it is also required for dynamic casting.
+	 */
+	virtual ~single_thread_port_interface()
+	{
 	}
-
-	std::string get_name() {
-		return name;
-	}
+	std::string get_name();
+	virtual void clear_all_flags()=0;
 
 };
 
-template<class T>
-class single_thread_port: public single_thread_port_interface {
-
+template <class T>
+class single_thread_port : public single_thread_port_interface
+{
 protected:
+	bool no_data;
 	T data;
 
 public:
-	single_thread_port(std::string _name) :
-		single_thread_port_interface(_name) {
+
+	single_thread_port(std::string _name, single_thread_port_manager & _port_manager) :
+		single_thread_port_interface(_name, _port_manager), no_data(true)
+
+	{
 	}
 
-	virtual void set(T& _data) {
+	virtual void set(const T& _data)
+	{
 		data = _data;
+		no_data = false;
 		new_data = true;
 	}
 
-	virtual T get() {
-		new_data = false;
-		return data;
+	virtual FlowStatus get(T& _data)
+	{
+		if (no_data) {
+			return NoData;
+		} else if (new_data) {
+			_data = data;
+			new_data = false;
+			return NewData;
+		} else {
+			_data = data;
+			return OldData;
+		}
 	}
 
-	bool is_new_data() {
-		return new_data;
+	void clear_new_data_flag()
+	{
+		new_data = false;
 	}
 
-	void clear_new_data_flag() {
-		new_data = false;
+	virtual void clear_all_flags()
+	{
+		clear_new_data_flag();
+	}
+
+	void test()
+	{
+
 	}
 
 };
 
-template<class T>
-class single_thread_request_port: public single_thread_port<T> {
-
+template <class T>
+class single_thread_request_port : public single_thread_port <T>
+{
 protected:
 	bool new_request;
 
 public:
-	single_thread_request_port(std::string _name) :
-		single_thread_port<T> (_name), new_request(false) {
+
+	single_thread_request_port(std::string _name, single_thread_port_manager & _port_manager) :
+		single_thread_port <T> (_name, _port_manager), new_request(false)
+
+	{
 	}
 
-	void set_request() {
+	void set_request()
+	{
 		new_request = true;
 	}
 
-	void set(T& _data) {
+	void set(const T& _data)
+	{
 		new_request = false;
-		single_thread_port<T>::set(_data);
+		single_thread_port <T>::set(_data);
 	}
 
-	bool is_new_request() {
+	void clear_all_flags()
+	{
+		single_thread_port <T>::clear_new_data_flag();
+		clear_new_request_flag();
+	}
+
+	bool is_new_request() const
+
+	{
 		return new_request;
 	}
 
-	void clear_new_request_flag() {
+	void clear_new_request_flag()
+	{
 		new_request = false;
 	}
-
-	T get() {
-		// dodac wyjatek jak nie ma nowych danych
-		return single_thread_port<T>::get();
-	}
-
 };
 
-class single_thread_port_manager {
+typedef std::map <std::string, single_thread_port_interface *> single_thread_port_interface_t;
+typedef single_thread_port_interface_t::value_type single_thread_port_interface_pair_t;
+
+class single_thread_port_manager
+{
 private:
-	std::map<std::string, single_thread_port_interface *>
-			single_thread_port_map;
+	single_thread_port_interface_t single_thread_port_map;
 
 public:
 
-	single_thread_port_manager() {
+	single_thread_port_manager();
+
+	void add_port(single_thread_port_interface* single_thread_port_inter);
+
+	void clear_data_ports();
+
+	template <class T>
+	single_thread_port <T>* get_port(const std::string & name)
+	{
+		return boost::polymorphic_cast <single_thread_port <T> *>(single_thread_port_map[name]);
 	}
 
-	void add_port(single_thread_port_interface* single_thread_port_inter) {
-		single_thread_port_map[single_thread_port_inter->get_name()]
-				= single_thread_port_inter;
+	template <class T>
+	single_thread_request_port <T>* get_request_port(const std::string & name)
+	{
+		return boost::polymorphic_cast <single_thread_request_port <T> *>(single_thread_port_map[name]);
 	}
-
-	template<class T>
-	single_thread_port<T>* get_port(std::string name) {
-		// TODO: dodac obsluge wyjatku w sytuacji gdy nie ma takiego pola lub typ sie nie zgadza
-		return dynamic_cast<single_thread_port<T>*> (single_thread_port_map[name]);
-	}
-
-	template<class T>
-	single_thread_request_port<T>* get_request_port(std::string name) {
-		// TODO: dodac obsluge wyjatku w sytuacji gdy nie ma takiego pola lub typ sie nie zgadza
-		return dynamic_cast<single_thread_request_port<T>*> (single_thread_port_map[name]);
-	}
-
 };
 
 }

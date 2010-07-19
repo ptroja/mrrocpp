@@ -21,7 +21,7 @@ ecp_g_pb_eih::ecp_g_pb_eih(mrrocpp::ecp::common::task::task & _ecp_task, ecp_mp:
 		pb_object_position> *vsp_fradia, visual_servo_regulator <4, 4> * regulator) :
 	visual_servo <4, 4> (_ecp_task, regulator), vsp_fradia(vsp_fradia), delta_t(MOTION_STEPS * 2e-3)
 {
-	sensor_m[lib::SENSOR_CVFRADIA] = vsp_fradia;
+	sensor_m[ecp_mp::sensor::SENSOR_CVFRADIA] = vsp_fradia;
 
 	max_v = _ecp_task.config.value <double> ("max_v", configSectionName);
 	max_a = _ecp_task.config.value <double> ("max_a", configSectionName);
@@ -100,19 +100,19 @@ bool ecp_g_pb_eih::next_step()
 
 	logDbg("ecp_g_ib_eih::next_step() 2\n");
 
-	if (vsp_fradia->received_object.size == sizeof(visual_object_tracker_t) && vsp_fradia->received_object.tracking) {
+	if (vsp_fradia->image.size == sizeof(visual_object_tracker_t) && vsp_fradia->image.tracking) {
 		logDbg("ecp_g_ib_eih::next_step() 3\n");
 		Eigen::Matrix <double, 4, 1> e;
-		e(0, 0) = vsp_fradia->received_object.x;
-		e(1, 0) = vsp_fradia->received_object.y;
+		e(0, 0) = vsp_fradia->image.x;
+		e(1, 0) = vsp_fradia->image.y;
 		//e(2, 0) = vsp_fradia->received_object.z;
 		e(2, 0) = 0;
-		e(3, 0) = vsp_fradia->received_object.alpha;
+		e(3, 0) = vsp_fradia->image.alpha;
 
-		log("ecp_g_ib_eih::next_step() vsp_fradia->received_object.x: %g\n", (double) vsp_fradia->received_object.x);
-		log("ecp_g_ib_eih::next_step() vsp_fradia->received_object.y: %g\n", (double) vsp_fradia->received_object.y);
-		log("ecp_g_ib_eih::next_step() vsp_fradia->received_object.z: %g\n", (double) vsp_fradia->received_object.z);
-		log("ecp_g_ib_eih::next_step() vsp_fradia->received_object.alpha: %g\n", vsp_fradia->received_object.alpha);
+		log("ecp_g_ib_eih::next_step() vsp_fradia->received_object.x: %g\n", (double) vsp_fradia->image.x);
+		log("ecp_g_ib_eih::next_step() vsp_fradia->received_object.y: %g\n", (double) vsp_fradia->image.y);
+		log("ecp_g_ib_eih::next_step() vsp_fradia->received_object.z: %g\n", (double) vsp_fradia->image.z);
+		log("ecp_g_ib_eih::next_step() vsp_fradia->received_object.alpha: %g\n", vsp_fradia->image.alpha);
 
 		logDbg("ecp_g_ib_eih::next_step() 4\n");
 
@@ -151,7 +151,7 @@ bool ecp_g_pb_eih::next_step()
 		logDbg("\n");
 
 		//logDbg("Tracking.\n");
-	} else if (vsp_fradia->received_object.size != sizeof(visual_object_tracker_t)) {
+	} else if (vsp_fradia->image.size != sizeof(visual_object_tracker_t)) {
 		log("Size of received structure doesn't match it's size field.\n");
 	}
 

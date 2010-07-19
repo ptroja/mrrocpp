@@ -140,6 +140,15 @@ Homog_matrix::Homog_matrix (double r11, double r12, double r13, double t1, doubl
 	matrix_m[2][0] = r31; 	matrix_m[2][1] = r32; 	matrix_m[2][2] = r33; 	matrix_m[2][3] = t3;
 }
 
+Homog_matrix::Homog_matrix(const Eigen::Matrix<double, 3, 4>& eigen_matrix)
+{
+	for (int i = 0; i < 3; ++i) {
+		for (int j = 0; j < 4; ++j) {
+			matrix_m[i][j] = eigen_matrix(i, j);
+		}
+	}
+}
+
 // Zwrocenie obecnej tablicy, zawierajacej dane macierzy jednorodnej.
 void Homog_matrix::get_frame_tab(frame_tab frame) const
 {
@@ -704,20 +713,21 @@ bool Homog_matrix::operator!=(const Homog_matrix & comp) const
 	return (!this->operator==(comp));
 }
 
-std::ostream & operator<<(std::ostream & stream, Homog_matrix & m)
+std::ostream & operator<<(std::ostream & stream, const Homog_matrix & m)
 {
 	// operator wypisania
 	// przedstawia macierz jednorodna w przyjaznej dla czlowieka formie
 
-	for(int j=0; j<3; j++)
-	{
-		for(int i=0; i<4; i++)
-		{
-			stream << m.matrix_m[j][i] << "\t\t";
+	stream << "[\n";
+	for (int j = 0; j < 3; j++) {
+		for (int i = 0; i < 4; i++) {
+			stream.width(8);
+			stream.setf(ios::showpos | ios::left);
+			stream << "\t" << m.matrix_m[j][i];
 		}
-		stream << std::endl;
+		stream << ";\n";
 	}
-	stream << "0\t\t0\t\t0\t\t1\t\t" << std::endl;
+	stream << "\t" << 0 << "\t" << 0 << "\t" << 0 << "\t" << 1 << "\n]\n";
 
 	return stream;
 }

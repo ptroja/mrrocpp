@@ -1,4 +1,4 @@
-/*
+	/*
  * $Id$
  *
  *  Created on: Mar 3, 2010
@@ -9,12 +9,11 @@
 #define VISUAL_SERVO_H_
 
 #include "lib/mrmath/mrmath.h"
-#include "ecp_mp/sensor/ecp_mp_s_fradia_sensor.h"
+#include "sensor/fradia/ecp_mp_s_fradia_sensor.h"
 #include <boost/shared_ptr.hpp>
 #include "visual_servo_regulator.h"
 
-#include "logger.h"
-#include "ecp_mp/sensor/ecp_mp_sensor.h"
+#include "base/ecp_mp/ecp_mp_sensor.h"
 
 namespace mrrocpp {
 
@@ -41,21 +40,22 @@ public:
 	 * @param currentPosition
 	 * @param newPosition
 	 */
-	virtual lib::Homog_matrix get_position_change(const lib::Homog_matrix& current_position) = 0;
+	virtual lib::Homog_matrix get_position_change(const lib::Homog_matrix& current_position, double dt) = 0;
 	/**
 	 * Returns fradia_sensor.
 	 * @return
 	 */
-	virtual boost::shared_ptr <mrrocpp::lib::sensor> get_vsp_fradia() = 0;
+	virtual boost::shared_ptr <ecp_mp::sensor::sensor_interface > get_vsp_fradia() = 0;
 
 	/**
 	 * Returns object visibility.
 	 * @return
 	 */
-	virtual bool is_object_visible() = 0;
+	virtual bool is_object_visible();
 protected:
 	visual_servo(boost::shared_ptr <visual_servo_regulator> regulator);
 	boost::shared_ptr <visual_servo_regulator> regulator;
+	bool object_visible;
 private:
 
 }; // class visual_servo

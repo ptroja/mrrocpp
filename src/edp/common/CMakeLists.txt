@@ -1,9 +1,0 @@
-add_library(edp
-	edp_m.cc edp_effector.cc
-	edp_e_manip.cc edp_e_motor_driven.cc
-	edp_force_sensor.cc
-	servo_gr.cc regulator.cc in_out.cc
-	trans_t.cc manip_trans_t.cc vis_server.cc reader.cc
-	hi_rydz.cc regulator_irp6ot_m.cc regulator_irp6ot_tfg.cc edp_irp6s_postument_track.cc
-	regulator_irp6p_m.cc regulator_irp6p_tfg.cc
-)

@@ -13,12 +13,11 @@
 #include "lib/com_buf.h"
 
 #include "lib/srlib.h"
-#include "ecp_mp/task/ecp_mp_t_rcsc.h"
+#include "application/rcsc/ecp_mp_t_rcsc.h"
 
-
-#include "ecp/irp6_on_track/ecp_r_irp6ot.h"
-#include "ecp/irp6_postument/ecp_r_irp6p.h"
-#include "ecp/common/generator/ecp_g_force.h"
+#include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
+#include "robot/irp6p_m/ecp_r_irp6p_m.h"
+#include "generator/ecp/ecp_g_force.h"
 #include "application/sk/ecp_g_sk.h"
 
 #include "application/sk/ecp_t_sk.h"
@@ -28,59 +27,45 @@ namespace ecp {
 namespace common {
 namespace task {
 
-
 // KONSTRUKTORY
-sk::sk(lib::configurator &_config) : task(_config)
+sk::sk(lib::configurator &_config) :
+	task(_config)
 {
 	// the robot is choose dependendant on the section of configuration file sent as argv[4]
-	if (config.section_name == ECP_IRP6_ON_TRACK_SECTION)
-	{
-		ecp_m_robot = new irp6ot::robot (*this);
-	}
-	else if (config.section_name == ECP_IRP6_POSTUMENT_SECTION)
-	{
-		ecp_m_robot = new irp6p::robot (*this);
+	if (config.section_name == ECP_IRP6OT_M_SECTION) {
+		ecp_m_robot = new irp6ot_m::robot(*this);
+	} else if (config.section_name == ECP_IRP6P_M_SECTION) {
+		ecp_m_robot = new irp6p_m::robot(*this);
 	} else {
 		// TODO: throw
 	}
 
 	nrg = new generator::tff_nose_run(*this, 8);
 
-	nrg->configure_pulse_check (true);
+	nrg->configure_pulse_check(true);
 
-	yefg = new generator::y_edge_follow_force (*this, 8);
+	yefg = new generator::y_edge_follow_force(*this, 8);
 	befg = new generator::bias_edp_force(*this);
 
-	switch (ecp_m_robot->robot_name)
-	{
-	case lib::ROBOT_IRP6_ON_TRACK:
-		sr_ecp_msg->message("ECP sk irp6ot loaded");
-		break;
-	case lib::ROBOT_IRP6_POSTUMENT:
-		sr_ecp_msg->message("ECP sk irp6p loaded");
-		break;
-	default:
-		fprintf(stderr, "%s:%d unknown robot type\n", __FILE__, __LINE__);
+	if (ecp_m_robot->robot_name == lib::ROBOT_IRP6OT_M) {
+		sr_ecp_msg->message("ecp sk irp6ot loaded");
+	} else if (ecp_m_robot->robot_name == lib::ROBOT_IRP6P_M) {
+		sr_ecp_msg->message("ecp sk irp6p loaded");
 	}
 
 	// sprawdzenie dodatkowej opcji w konfiguracji dotyczacej uruchomienie zapamietywania trajektorii do pliku
-	if (config.exists("save_activated"))
-	{
-		save_activated = (bool) config.value<int>("save_activated");
-	}
-	else
-	{
+	if (config.exists("save_activated")) {
+		save_activated = (bool) config.value <int> ("save_activated");
+	} else {
 		save_activated = false;
 	}
 }
-
 
 void sk::main_task_algorithm(void)
 {
 	//   weight_meassure_generator wmg(*this, 0.3, 2);
 
-	for(;;)
-	{
+	for (;;) {
 		sr_ecp_msg->message("NOWA SERIA");
 		sr_ecp_msg->message("FORCE SENSOR BIAS");
 		befg->Move();
@@ -96,16 +81,15 @@ void sk::main_task_algorithm(void)
 		sr_ecp_msg->message("Sledzenie konturu");
 		sr_ecp_msg->message("Nastepny etap - nacisnij PULSE ECP trigger");
 		yefg->Move();
-		if ( save_activated && operator_reaction ("Save drawing ") )
-		{
+		if (save_activated && operator_reaction("Save drawing ")) {
 			sr_ecp_msg->message("Zapisywanie trajektorii");
-			yefg->save_file (lib::ECP_PF_VELOCITY);
+			yefg->save_file(lib::ECP_PF_VELOCITY);
 		}
 
 	}
 }
 
-task* return_created_ecp_task (lib::configurator &_config)
+task* return_created_ecp_task(lib::configurator &_config)
 {
 	return new sk(_config);
 }

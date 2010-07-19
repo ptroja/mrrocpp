@@ -8,19 +8,19 @@
 #ifndef ECP_T_IB_EIH_TESTER_H_
 #define ECP_T_IB_EIH_TESTER_H_
 
-#include "ecp/common/task/ecp_task.h"
-#include "ecp/irp6_on_track/ecp_r_irp6ot.h"
-#include "ecp_mp/sensor/ecp_mp_s_fradia_sensor.h"
-#include "ecp/common/generator/ecp_g_smooth.h"
+#include "base/ecp/ecp_task.h"
+#include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
+#include "sensor/fradia/ecp_mp_s_fradia_sensor.h"
+#include "generator/ecp/ecp_g_smooth.h"
 #include "../ecp_g_ib_eih.h"
 #include "../visual_servo_regulator_p.h"
-#include "ecp/common/generator/ecp_g_force.h"
+#include "generator/ecp/ecp_g_force.h"
 
 namespace mrrocpp {
 
 namespace ecp {
 
-namespace irp6ot {
+namespace irp6ot_m {
 
 namespace task {
 

@@ -1,13 +1,13 @@
 #ifndef ECP_T_WII_ELLIPSE_H
 #define ECP_T_WII_ELLIPSE_H
 
-#include "ecp_mp/task/ecp_mp_task.h"
+#include "base/ecp_mp/ecp_mp_task.h"
 #include "application/wii_ellipse/generator/ecp_g_wii_ellipse.h"
-#include "ecp/common/generator/ecp_g_smooth.h"
+#include "generator/ecp/ecp_g_smooth.h"
 
 namespace mrrocpp {
 namespace ecp {
-namespace irp6ot {
+namespace irp6ot_m {
 namespace task {
 
 /** @defgroup wii_ellipse Wii ellipsis

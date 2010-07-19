@@ -1,6 +1,3 @@
-
-
-
 // -------------------------------------------------------------------------
 //                            ui_ecp->cc
 // Metody sluzace do komunikacji UI z EDP - zlecenia dla driver'a
@@ -9,86 +6,61 @@
 // -------------------------------------------------------------------------
 
 /* Standard headers */
+#include <cfloat>
+#include <iostream>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
 #include <assert.h>
-#include <cfloat>
-
+#include <math.h>
 #include <fcntl.h>
 #include <errno.h>
-#include <string.h>
-#include <iostream>
 
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 
-#include "lib/srlib.h"
-#include "ecp/irp6_on_track/ecp_r_irp6ot.h"
-#include "ecp/irp6_postument/ecp_r_irp6p.h"
-#include "ecp/irp6_mechatronika/ecp_r_irp6m.h"
-#include "ecp/polycrank/ecp_r_polycrank.h"
-#include "ecp/smb/ecp_r_smb.h"
-#include "ecp/spkm/ecp_r_spkm.h"
 #include "ui/ui_ecp_r_irp6_common.h"
 
-#include <math.h>
+#include "lib/srlib.h"
+
+#include "ui/ui_ecp_r_irp6_common.h"
+
+#include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
+#include "robot/irp6p_m/ecp_r_irp6p_m.h"
+#include "robot/irp6_mechatronika/ecp_r_irp6m.h"
+#include "robot/polycrank/ecp_r_polycrank.h"
+#include "robot/smb/ecp_r_smb.h"
+#include "robot/spkm/ecp_r_spkm.h"
 
 // ---------------------------------------------------------------
 ui_irp6_common_robot::ui_irp6_common_robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg, lib::robot_name_t _robot_name) :
 	ui_common_robot(_config, _sr_ecp_msg, _robot_name)
 {
 
-	switch (_robot_name)
-	{
-		case lib::ROBOT_IRP6_ON_TRACK:
-			ecp = new ecp::irp6ot::robot(_config, _sr_ecp_msg);
-			if ((_config.exists("is_gripper_active", EDP_IRP6_ON_TRACK_SECTION))
-					&& (_config.value <int> ("is_gripper_active", EDP_IRP6_ON_TRACK_SECTION))) {
-				MOTOR_GRIPPER_STEP = 0.5;
-				JOINT_GRIPPER_STEP = 0.000004; // Przyrost liniowy w chwytaku [m]
-				END_EFFECTOR_GRIPPER_STEP = 0.000005; // Przyrost wspolrzednej orientacji koncowki [rad]
-			} else { // eleliminujemy wplyw chaytaka
-				MOTOR_GRIPPER_STEP = DBL_MAX;
-				JOINT_GRIPPER_STEP = DBL_MAX;// Przyrost liniowy w chwytaku [m]
-				END_EFFECTOR_GRIPPER_STEP = DBL_MAX; // Przyrost wspolrzednej orientacji koncowki [rad]
-			}
+	if (_robot_name == lib::ROBOT_IRP6OT_M) {
 
-			break;
-		case lib::ROBOT_IRP6_POSTUMENT:
-			ecp = new ecp::irp6p::robot(_config, _sr_ecp_msg);
-			if ((_config.exists("is_gripper_active", EDP_IRP6_POSTUMENT_SECTION))
-					&& (_config.value <int> ("is_gripper_active", EDP_IRP6_POSTUMENT_SECTION))) {
-				MOTOR_GRIPPER_STEP = 0.5;
-				JOINT_GRIPPER_STEP = 0.000004; // Przyrost liniowy w chwytaku [m]
-				END_EFFECTOR_GRIPPER_STEP = 0.000005; // Przyrost wspolrzednej orientacji koncowki [rad]
-			} else { // eleliminujemy wplyw chaytaka
-				MOTOR_GRIPPER_STEP = DBL_MAX;
-				JOINT_GRIPPER_STEP = DBL_MAX;// Przyrost liniowy w chwytaku [m]
-				END_EFFECTOR_GRIPPER_STEP = DBL_MAX; // Przyrost wspolrzednej orientacji koncowki [rad]
-			}
-			break;
-		case lib::ROBOT_IRP6_MECHATRONIKA:
-			ecp = new ecp::irp6m::robot(_config, _sr_ecp_msg);
-			break;
-		case lib::ROBOT_POLYCRANK:
-			ecp = new ecp::polycrank::robot(_config, _sr_ecp_msg);
-			break;
-		case lib::ROBOT_SMB:
-			ecp = new ecp::smb::robot(_config, _sr_ecp_msg);
-			break;
-		case lib::ROBOT_SPKM:
-			ecp = new ecp::spkm::robot(_config, _sr_ecp_msg);
-			break;
-			//    case lib::ROBOT_SPEAKER:
-			//    case lib::ROBOT_CONVEYOR:
-			//        break;
-		default:
-			fprintf(stderr, "ERROR: unknown robot name in ecp_robot ui_irp6_common_robot::ui_irp6_common_robot\n");
-			ecp = NULL;
-			break;
+		ecp = new ecp::irp6ot_m::robot(_config, _sr_ecp_msg);
+
+		MOTOR_GRIPPER_STEP = DBL_MAX;
+		JOINT_GRIPPER_STEP = DBL_MAX;// Przyrost liniowy w chwytaku [m]
+		END_EFFECTOR_GRIPPER_STEP = DBL_MAX; // Przyrost wspolrzednej orientacji koncowki [rad]
+
+	} else if (_robot_name == lib::ROBOT_IRP6P_M) {
+		ecp = new ecp::irp6p_m::robot(_config, _sr_ecp_msg);
+
+		MOTOR_GRIPPER_STEP = DBL_MAX;
+		JOINT_GRIPPER_STEP = DBL_MAX;// Przyrost liniowy w chwytaku [m]
+		END_EFFECTOR_GRIPPER_STEP = DBL_MAX; // Przyrost wspolrzednej orientacji koncowki [rad]
+
+	} else if (_robot_name == lib::ROBOT_IRP6_MECHATRONIKA) {
+
+		ecp = new ecp::irp6m::robot(_config, _sr_ecp_msg);
+	} else if (_robot_name == lib::ROBOT_POLYCRANK) {
+
+		ecp = new ecp::polycrank::robot(_config, _sr_ecp_msg);
 	}
 
 	assert(ecp);
@@ -109,7 +81,6 @@ ui_irp6_common_robot::ui_irp6_common_robot(lib::configurator &_config, lib::sr_e
 	JOINT_LINEAR_STEP = 0.00004; // Przyrost liniowy w przegubach posuwistych [m]
 	END_EFFECTOR_LINEAR_STEP = 0.00002;// Przyrost wspolrzednej polozenia koncowki [m]
 	END_EFFECTOR_ANGULAR_STEP = 0.0002; // Przyrost wspolrzednej orientacji koncowki [rad]
-
 }
 
 // ZADANIE NARZEDZIA
@@ -277,7 +248,7 @@ void ui_irp6_common_robot::move_joints(const double final_position[])
 
 	for (int j = 0; j < ecp->number_of_servos; j++) {
 		temp = fabs(final_position[j] - current_position[j]);
-		if (ecp->robot_name == lib::ROBOT_IRP6_ON_TRACK && j == 0) // tor
+		if (ecp->robot_name == lib::ROBOT_IRP6OT_M && j == 0) // tor
 			max_inc_lin = (max_inc_lin > temp) ? max_inc_lin : temp;
 		else if (j == ecp->number_of_servos - 1) // gripper
 			max_inc_grip = (max_inc_grip > temp) ? max_inc_grip : temp;
@@ -289,7 +260,7 @@ void ui_irp6_common_robot::move_joints(const double final_position[])
 	nr_lin = (int) ceil(max_inc_lin / JOINT_LINEAR_STEP);
 	nr_grip = (int) ceil(max_inc_grip / JOINT_GRIPPER_STEP);
 	nr_of_steps = (nr_ang > nr_lin) ? nr_ang : nr_lin;
-	if (ecp->robot_name == lib::ROBOT_IRP6_ON_TRACK) {
+	if (ecp->robot_name == lib::ROBOT_IRP6OT_M) {
 		nr_of_steps = (nr_ang > nr_lin) ? nr_ang : nr_lin;
 	}
 	nr_of_steps = (nr_of_steps > nr_grip) ? nr_of_steps : nr_grip;
@@ -369,14 +340,12 @@ void ui_irp6_common_robot::move_xyz_euler_zyz(const double final_position[7])
 	tmp.set_from_xyz_euler_zyz(lib::Xyz_Euler_Zyz_vector(final_position));
 	tmp.get_frame_tab(ecp->ecp_command.instruction.arm.pf_def.arm_frame);
 
-	ecp->ecp_command.instruction.arm.pf_def.gripper_coordinate = final_position[6];
-
 	execute_motion();
 
 	for (int j = 0; j < 6; j++) { // Przepisanie aktualnych polozen
 		current_position[j] = ecp->reply_package.arm.pf_def.arm_coordinates[j];
 	}
-	current_position[6] = ecp->reply_package.arm.pf_def.gripper_coordinate;
+
 }
 // ---------------------------------------------------------------
 
@@ -448,13 +417,12 @@ void ui_irp6_common_robot::move_xyz_angle_axis(const double final_position[7])
 	tmp.set_from_xyz_angle_axis(lib::Xyz_Angle_Axis_vector(final_position));
 	tmp.get_frame_tab(ecp->ecp_command.instruction.arm.pf_def.arm_frame);
 
-	ecp->ecp_command.instruction.arm.pf_def.gripper_coordinate = final_position[6];
 	execute_motion();
 
 	for (int j = 0; j < 6; j++) { // Przepisanie aktualnych polozen
 		current_position[j] = ecp->reply_package.arm.pf_def.arm_coordinates[j];
 	}
-	current_position[6] = ecp->reply_package.arm.pf_def.gripper_coordinate;
+
 }
 
 void ui_irp6_common_robot::move_xyz_angle_axis_relative(const double position_increment[7])
@@ -500,7 +468,6 @@ void ui_irp6_common_robot::move_xyz_angle_axis_relative(const double position_in
 	tmp.set_from_xyz_angle_axis(lib::Xyz_Angle_Axis_vector(position_increment));
 	tmp.get_frame_tab(ecp->ecp_command.instruction.arm.pf_def.arm_frame);
 
-	ecp->ecp_command.instruction.arm.pf_def.gripper_coordinate = position_increment[6];
 	execute_motion();
 }
 
@@ -523,7 +490,6 @@ void ui_irp6_common_robot::read_xyz_euler_zyz(double current_position[])
 	tmp.get_xyz_euler_zyz(tmp_vector);
 	tmp_vector.to_table(current_position);
 
-	current_position[6] = ecp->reply_package.arm.pf_def.gripper_coordinate;
 }
 // ---------------------------------------------------------------
 
@@ -543,5 +509,5 @@ void ui_irp6_common_robot::read_xyz_angle_axis(double current_position[])
 	lib::Xyz_Angle_Axis_vector tmp_vector;
 	tmp.get_xyz_angle_axis(tmp_vector);
 	tmp_vector.to_table(current_position);
-	current_position[6] = ecp->reply_package.arm.pf_def.gripper_coordinate;
+
 }

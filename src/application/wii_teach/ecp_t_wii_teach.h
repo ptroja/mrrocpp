@@ -1,15 +1,16 @@
 #ifndef ECP_T_WII_TEACH_H
 #define ECP_T_WII_TEACH_H
 
-#include "ecp_mp/task/ecp_mp_task.h"
-#include "ecp/common/generator/ecp_g_smooth.h"
+#include "base/ecp_mp/ecp_mp_task.h"
+#include "generator/ecp/ecp_g_smooth.h"
 #include "application/wii_teach/generator/ecp_g_wii_relative.h"
 #include "application/wii_teach/generator/ecp_g_wii_absolute.h"
 #include "application/wii_teach/generator/ecp_g_wii_joint.h"
+#include "application/wii_teach/sensor/ecp_mp_s_wiimote.h"
 
 namespace mrrocpp {
 namespace ecp {
-namespace irp6ot {
+namespace irp6ot_m {
 namespace task {
 
 
@@ -30,11 +31,11 @@ class wii_teach: public common::task::task
     protected:
 	//Generator ruchu
         common::generator::smooth* sg;
-        irp6ot::generator::wii_absolute* ag;
-        irp6ot::generator::wii_relative* rg;
-        irp6ot::generator::wii_joint* jg;
-        lib::sensor_image_t::sensor_union_t::wiimote_t lastButtons;
-        lib::sensor_image_t::sensor_union_t::wiimote_t buttonsPressed;
+        irp6ot_m::generator::wii_absolute* ag;
+        irp6ot_m::generator::wii_relative* rg;
+        irp6ot_m::generator::wii_joint* jg;
+        ecp_mp::sensor::wiimote_t lastButtons;
+        ecp_mp::sensor::wiimote_t buttonsPressed;
         char path[80];
         char filename[20];
 

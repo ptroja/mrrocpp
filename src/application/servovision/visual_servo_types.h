@@ -28,21 +28,6 @@ struct image_based_position
 	double gamma;
 };
 
-/**
- * Structure for object position for position based visual servo.
- * Structure must be identical in MRROC++ and FraDIA.
- * This structure is sent from FraDIA to MRROC++.
- */
-struct object_position
-{
-	/** Set to true only if object is found in the image. */
-	bool tracking;
-	/** Translation in meters XYZ with respect to camera. */
-	double translation[3];
-	/** Rotation matrix with respect to camera. */
-	double rotation[3][3];
-};
-
 /** Camera parameters retrieved by cvCalibrateCamera2() from OpenCV. */
 struct distortion_correction_parameters
 {
@@ -61,9 +46,6 @@ struct position_based_configuration
 /** Configuration of image based visual servo. This structure is sent from MRROC++ to FraDIA. */
 struct image_based_configuration
 {
-	/** Set to true if dcp and desired_position are valid */
-	bool set_parameters;
-
 	distortion_correction_parameters dcp;
 	/** parameters for calculating camera-object distance: Z = A / (diameter + B) + C. */
 	double z_estimation_A;
@@ -80,6 +62,15 @@ struct image_based_reading
 	bool tracking;
 	/** Error calculated by FraDIA task and passed to MRROC++ ECP generator. */
 	image_based_position error;
+};
+
+struct position_based_reading
+{
+	/** Set to true only if object is found in the image. */
+	bool tracking;
+
+	/** Homogeneous matrix with object position with respect to the camera. */
+	double position[3][4];
 };
 
 } //namespace visual_servo_types
