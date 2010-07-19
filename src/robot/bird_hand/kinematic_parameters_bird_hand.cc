@@ -33,14 +33,32 @@ kinematic_parameters_bird_hand::kinematic_parameters_bird_hand() {
 	lower_limit_joint[6] = 0.0 * M_PI / 180.0;
 	lower_limit_joint[7] = 0.0 * M_PI / 180.0;
 
-	upper_limit_joint[0] = 60.0 * M_PI / 180.0;
-	upper_limit_joint[1] = 60.0 * M_PI / 180.0;
-	upper_limit_joint[2] = 60.0 * M_PI / 180.0;
-	upper_limit_joint[3] = 60.0 * M_PI / 180.0;
-	upper_limit_joint[4] = 60.0 * M_PI / 180.0;
-	upper_limit_joint[5] = 60.0 * M_PI / 180.0;
+	upper_limit_joint[0] = 0.45;//25.0 * M_PI / 180.0;
+	upper_limit_joint[1] = 0.55;//30.0 * M_PI / 180.0;
+	upper_limit_joint[2] = 0.55;//30.0 * M_PI / 180.0;
+	upper_limit_joint[3] = 0.45;//25.0 * M_PI / 180.0;
+	upper_limit_joint[4] = 0.55;//30.0 * M_PI / 180.0;
+	upper_limit_joint[5] = 0.45;//25.0 * M_PI / 180.0;
 	upper_limit_joint[6] = 90.0 * M_PI / 180.0;
 	upper_limit_joint[7] = 90.0 * M_PI / 180.0;
+
+	synchro_joint_position[0] = -1.0362;
+	synchro_joint_position[1] = -2.5380;
+	synchro_joint_position[2] = -2.0149;
+	synchro_joint_position[3] = -2.0302;
+	synchro_joint_position[4] = -0.7992;
+	synchro_joint_position[5] = -1.6360;
+	synchro_joint_position[6] = -1.6360;
+	synchro_joint_position[7] = -1.6360;
+
+//	synchro_joint_position[0] = 0.0;
+//	synchro_joint_position[1] = 0.0;
+//	synchro_joint_position[2] = 0.0;
+//	synchro_joint_position[3] = 0.0;
+//	synchro_joint_position[4] = 0.0;
+//	synchro_joint_position[5] = 0.0;
+//	synchro_joint_position[6] = 0.0;
+//	synchro_joint_position[7] = 0.0;
 }
 
 } // namespace bird_hand
