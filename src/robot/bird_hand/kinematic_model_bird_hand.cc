@@ -21,51 +21,6 @@ kinematic_model_bird_hand::kinematic_model_bird_hand(void)
 	set_kinematic_model_label("BIRD_HAND kinematic model");
 }
 
-void kinematic_model_bird_hand::check_motor_position(const lib::MotorArray & motor_position)
-{
-
-       if (motor_position[0] < params.lower_limit_axis[0])
-               throw NonFatal_error_2(BEYOND_LOWER_LIMIT_AXIS_0);
-       else if (motor_position[0] > params.upper_limit_axis[0])
-               throw NonFatal_error_2(BEYOND_UPPER_LIMIT_AXIS_0);
-
-       if (motor_position[1] < params.lower_limit_axis[1])
-               throw NonFatal_error_2(BEYOND_LOWER_LIMIT_AXIS_1);
-       else if (motor_position[1] > params.upper_limit_axis[1])
-               throw NonFatal_error_2(BEYOND_UPPER_LIMIT_AXIS_1);
-
-       if (motor_position[2] < params.lower_limit_axis[2])
-               throw NonFatal_error_2(BEYOND_LOWER_LIMIT_AXIS_2);
-       else if (motor_position[2] > params.upper_limit_axis[2])
-               throw NonFatal_error_2(BEYOND_UPPER_LIMIT_AXIS_2);
-
-       if (motor_position[3] < params.lower_limit_axis[3])
-               throw NonFatal_error_2(BEYOND_LOWER_LIMIT_AXIS_3);
-       else if (motor_position[3] > params.upper_limit_axis[3])
-               throw NonFatal_error_2(BEYOND_UPPER_LIMIT_AXIS_3);
-
-       if (motor_position[4] < params.lower_limit_axis[4])
-               throw NonFatal_error_2(BEYOND_LOWER_LIMIT_AXIS_4);
-       else if (motor_position[4] > params.upper_limit_axis[4])
-               throw NonFatal_error_2(BEYOND_UPPER_LIMIT_AXIS_4);
-
-       if (motor_position[5] < params.lower_limit_axis[5])
-               throw NonFatal_error_2(BEYOND_LOWER_LIMIT_AXIS_5);
-       else if (motor_position[5] > params.upper_limit_axis[5])
-               throw NonFatal_error_2(BEYOND_UPPER_LIMIT_AXIS_5);
-
-//       if (motor_position[6] < params.lower_limit_axis[6])
-//               throw NonFatal_error_2(BEYOND_LOWER_LIMIT_AXIS_6);
-//       else if (motor_position[6] > params.upper_limit_axis[6])
-//               throw NonFatal_error_2(BEYOND_UPPER_LIMIT_AXIS_6);
-//
-//       if (motor_position[7] < params.lower_limit_axis[7])
-//               throw NonFatal_error_2(BEYOND_LOWER_LIMIT_AXIS_7);
-//       else if (motor_position[7] > params.upper_limit_axis[7])
-//               throw NonFatal_error_2(BEYOND_UPPER_LIMIT_AXIS_7);
-}
-
-
 void kinematic_model_bird_hand::check_joints(const lib::JointArray & q)
 {
 
@@ -134,13 +89,10 @@ void kinematic_model_bird_hand::i2mp_transform(lib::MotorArray & local_desired_m
 	for (int i = 0; i < 8; ++i)
 		local_desired_motor_pos_new[i] = local_desired_joints[i] * params.gear[i];
 
-	//check_motor_position(local_desired_motor_pos_new);
 }
 
 void kinematic_model_bird_hand::mp2i_transform(const lib::MotorArray & local_current_motor_pos, lib::JointArray & local_current_joints)
 {
-
-	//check_motor_position(local_current_motor_pos);
 
 	for (int i = 0; i < 8; ++i)
 		local_current_joints[i] = local_current_motor_pos[i] / params.gear[i];

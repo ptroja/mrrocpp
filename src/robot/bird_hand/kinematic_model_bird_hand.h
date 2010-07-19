@@ -34,8 +34,10 @@ protected:
 	{
 	}
 
-	//! Checks whether given motor increments are valid.
-	void check_motor_position(const lib::MotorArray & motor_position);
+	//! Checks whether given motor increments are valid - will not be implemented
+	void check_motor_position(const lib::MotorArray & motor_position)
+	{
+	}
 
 	//! Checks whether given internal coordinates are valid.
 	void check_joints(const lib::JointArray & q);
