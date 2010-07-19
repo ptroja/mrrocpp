@@ -84,10 +84,22 @@ void kinematic_model_bird_hand::check_joints(const lib::JointArray & q)
 void kinematic_model_bird_hand::i2mp_transform(lib::MotorArray & local_desired_motor_pos_new, lib::JointArray & local_desired_joints)
 {
 
-	//check_joints(local_desired_joints);
-
 	for (int i = 0; i < 8; ++i)
 		local_desired_motor_pos_new[i] = local_desired_joints[i] * params.gear[i];
+
+}
+
+void kinematic_model_bird_hand::i2mp_transform_synch(lib::MotorArray & local_desired_motor_pos_new, lib::JointArray & local_desired_joints)
+{
+
+//    for (int i=0; i<8; ++i){
+//          printf("[info] local_desired_joints[%d]: %f \n", i, local_desired_joints[i]);
+//          fflush(stdout);
+//    }
+	check_joints(local_desired_joints);
+
+	for (int i = 0; i < 8; ++i)
+		local_desired_motor_pos_new[i] = (local_desired_joints[i] + params.synchro_joint_position[i]) * params.gear[i];
 
 }
 
@@ -97,7 +109,20 @@ void kinematic_model_bird_hand::mp2i_transform(const lib::MotorArray & local_cur
 	for (int i = 0; i < 8; ++i)
 		local_current_joints[i] = local_current_motor_pos[i] / params.gear[i];
 
-	//check_joints(local_current_joints);
+}
+
+void kinematic_model_bird_hand::mp2i_transform_synch(const lib::MotorArray & local_current_motor_pos, lib::JointArray & local_current_joints)
+{
+
+	for (int i = 0; i < 8; ++i)
+		local_current_joints[i] = local_current_motor_pos[i] / params.gear[i] - params.synchro_joint_position[i];
+
+//    for (int i=0; i<8; ++i){
+//          printf("[info] local_current_joints[%d]: %f \n", i, local_current_joints[i]);
+//          fflush(stdout);
+//    }
+	check_joints(local_current_joints);
+
 }
 
 } // namespace bird_hand
