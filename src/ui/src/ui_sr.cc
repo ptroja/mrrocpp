@@ -141,7 +141,8 @@ void ui_sr_buffer::put_one_msg(const lib::sr_package_t& new_msg) {
 	return;
 }
 
-void ui_sr_buffer::get_one_msg(lib::sr_package_t& new_msg) {
+void ui_sr_buffer::get_one_msg(lib::sr_package_t& new_msg)
+{
 	boost::mutex::scoped_lock lock(mtx);
 	new_msg = cb.front();
 	cb.pop_front();
