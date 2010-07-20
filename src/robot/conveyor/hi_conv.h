@@ -33,7 +33,7 @@ const unsigned short int INT_FREC_DIVIDER = 8; // mnoznik czestotliwosci przerwa
 //                HARDWARE_INTERFACE class
 // ------------------------------------------------------------------------
 
-class hardware_interface: public common::hardware_interface {
+class hardware_interface: public common::HI_rydz {
 
 public:
 

@@ -11,7 +11,7 @@
 #include <boost/utility.hpp>
 
 #include "base/edp/edp.h"
-#include "base/edp/hi_rydz.h"
+#include "base/edp/HardwareInterface.h"
 #include "base/edp/regulator.h"
 
 #define ERROR_DETECTED     1
@@ -42,7 +42,7 @@ private:
 protected:
 	boost::thread *thread_id;
 
-	hardware_interface* hi; // obiekt odpowiedzialny za kontakt ze sprzetem
+	HardwareInterface* hi; // obiekt odpowiedzialny za kontakt ze sprzetem
 
 	// regulator_group
 
