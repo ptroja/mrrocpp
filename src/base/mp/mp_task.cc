@@ -920,6 +920,7 @@ if(!mp_pulse_attach) {
 }
 
 ui_scoid = wait_for_name_open();
+// unexepected possible resolution of bug 1526
 delay(100);
 ui_opened = true;
 }
