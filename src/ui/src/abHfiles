@@ -1,1 +1,1 @@
-ABHDR = ../ui.h abdefine.h abimport.h 
+ABHDR = ../src/ui.h abdefine.h abimport.h 

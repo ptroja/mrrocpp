@@ -920,6 +920,7 @@ if(!mp_pulse_attach) {
 }
 
 ui_scoid = wait_for_name_open();
+delay(100);
 ui_opened = true;
 }
 // -------------------------------------------------------------------

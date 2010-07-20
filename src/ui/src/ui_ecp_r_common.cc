@@ -23,7 +23,7 @@
 
 #include "lib/srlib.h"
 
-#include "ui/ui_ecp_r_common.h"
+#include "ui/src/ui_ecp_r_common.h"
 
 // ---------------------------------------------------------------
 ui_common_robot::ui_common_robot(lib::configurator &_config,

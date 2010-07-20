@@ -22,11 +22,11 @@
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 
-#include "ui/ui_ecp_r_irp6_common.h"
+#include "ui/src/ui_ecp_r_irp6_common.h"
 
 #include "lib/srlib.h"
 
-#include "ui/ui_ecp_r_irp6_common.h"
+#include "ui/src/ui_ecp_r_irp6_common.h"
 
 #include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
 #include "robot/irp6p_m/ecp_r_irp6p_m.h"

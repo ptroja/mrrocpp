@@ -19,7 +19,7 @@
 #include <iostream>
 #include <fstream>
 
-#include "ui/ui_class.h"
+#include "ui/src/ui_class.h"
 #include "ui/src/ui_ecp.h"
 #include "ui/src/ui_sr.h"
 
