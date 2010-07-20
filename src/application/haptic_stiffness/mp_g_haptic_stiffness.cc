@@ -80,7 +80,7 @@ bool haptic_stiffness::first_step()
 		//		irp6ot->mp_command.instruction.arm.pf_def.reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING / 40;
 		//		irp6ot->mp_command.instruction.arm.pf_def.reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING / 40;
 		irp6ot->mp_command.instruction.arm.pf_def.behaviour[i] = lib::CONTACT;
-		irp6ot->mp_command.instruction.arm.pf_def.behaviour[i + 3] = lib::CONTACT;
+		irp6ot->mp_command.instruction.arm.pf_def.behaviour[i + 3] = lib::UNGUARDED_MOTION;
 		/*
 		 if(irp6ot_con) irp6ot->ecp_td.MPtoECP_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
 		 else irp6ot->ecp_td.MPtoECP_reciprocal_damping[i] = 0.0;
@@ -123,7 +123,7 @@ bool haptic_stiffness::first_step()
 		//		irp6p->mp_command.instruction.arm.pf_def.reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING/40;
 		//		irp6p->mp_command.instruction.arm.pf_def.reciprocal_damping[i+3] = FORCE_RECIPROCAL_DAMPING/40;
 		irp6p->mp_command.instruction.arm.pf_def.behaviour[i] = lib::GUARDED_MOTION;
-		irp6p->mp_command.instruction.arm.pf_def.behaviour[i + 3] = lib::GUARDED_MOTION;
+		irp6p->mp_command.instruction.arm.pf_def.behaviour[i + 3] = lib::UNGUARDED_MOTION;
 		/*
 		 if(irp6p_con) irp6p->ecp_td.MPtoECP_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
 		 else irp6p->ecp_td.MPtoECP_reciprocal_damping[i] = 0.0;
