@@ -101,7 +101,7 @@ public:
 private:
 	Bird_hand device;
 
-	lib::JointArray synchro_position;
+	lib::MotorArray synchro_position_motor;
 
 	/*!
 	 * \brief method to deserialize part of the reply
