@@ -214,6 +214,26 @@ bool haptic_stiffness::next_step()
 		irp6p->mp_command.instruction.value_in_step_no = step_no - 4;
 	}
 
+
+	// Estymacja sztywności w automacie skończonnym
+
+
+
+
+
+
+
+	// Korekta parametrów regulatora siłowego w robocie podrzednym na podstawie estymaty sztywnosci
+
+
+
+
+
+
+
+	// wypiski
+
+
 	if ((node_counter % 10) == 0) {
 		std::cout << "irp6p_ECPtoMP_force_xyz_torque_xyz\n" << irp6p_ECPtoMP_force_xyz_torque_xyz << "interval:"
 				<< time_interval << std::endl;
