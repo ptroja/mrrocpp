@@ -51,11 +51,9 @@ namespace lib {
 //typedef boost::tokenizer <boost::char_separator <char> > tokenizer;
 
 // Konstruktor obiektu - konfiguratora.
-configurator::configurator(const std::string & _node, const std::string & _dir,
-		const std::string & _ini_file, const std::string & _section_name,
-		const std::string & _session_name) :
-	node(_node), dir(_dir), ini_file(_ini_file), session_name(_session_name),
-			section_name(_section_name) {
+configurator::configurator(const std::string & _node, const std::string & _dir, const std::string & _ini_file, const std::string & _section_name, const std::string & _session_name) :
+	node(_node), dir(_dir), ini_file(_ini_file), session_name(_session_name), section_name(_section_name)
+{
 	if (uname(&sysinfo) == -1) {
 		perror("uname");
 	}
@@ -74,7 +72,8 @@ configurator::configurator(const std::string & _node, const std::string & _dir,
 #endif /* USE_MESSIP_SRR */
 }// : configurator
 
-void configurator::change_ini_file(const std::string & _ini_file) {
+void configurator::change_ini_file(const std::string & _ini_file)
+{
 #ifdef USE_MESSIP_SRR
 	configfile_t configfile;
 	snprintf(configfile, sizeof(configfile), "%s", _ini_file.c_str());
@@ -94,12 +93,14 @@ void configurator::change_ini_file(const std::string & _ini_file) {
 #endif /* USE_MESSIP_SRR */
 }
 
-bool configurator::check_config(const std::string & s) {
-	return (exists(s.c_str()) && value<int> (s.c_str()));
+bool configurator::check_config(const std::string & s)
+{
+	return (exists(s.c_str()) && value <int> (s.c_str()));
 }
 
 // Zwraca numer wezla.
-int configurator::return_node_number(const std::string & node_name_l) {
+int configurator::return_node_number(const std::string & node_name_l)
+{
 #if defined(PROCESS_SPAWN_RSH)
 	return ND_LOCAL_NODE;
 #else
@@ -109,32 +110,30 @@ int configurator::return_node_number(const std::string & node_name_l) {
 
 
 // Zwraca attach point'a dla serwerow.
-std::string configurator::return_attach_point_name(config_path_type_t _type,
-		const char* _key, const char* __section_name) const {
-	const char *_section_name = (__section_name) ? __section_name
-			: section_name.c_str();
+std::string configurator::return_attach_point_name(config_path_type_t _type, const char* _key, const char* __section_name) const
+{
+	const char *_section_name = (__section_name) ? __section_name : section_name.c_str();
 	std::string name;
 
 	if (_type == CONFIG_RESOURCEMAN_LOCAL) {
 		name = "/dev/";
-		name += value<std::string> (_key, _section_name);
+		name += value <std::string> (_key, _section_name);
 		name += session_name;
 
 	} else if (_type == CONFIG_RESOURCEMAN_GLOBAL) {
 		name = "/net/";
-		name += value<std::string> ("node_name", _section_name);
+		name += value <std::string> ("node_name", _section_name);
 		name += "/dev/";
-		name += value<std::string> (_key, _section_name);
+		name += value <std::string> (_key, _section_name);
 		name += session_name;
 
 	} else if (_type == CONFIG_SERVER) {
-		name = value<std::string> (_key, _section_name);
+		name = value <std::string> (_key, _section_name);
 		name += session_name;
 
 	} else {
-		fprintf(stderr,
-				"Nieznany argument w metodzie configuratora return_attach_point_name\n");
-		throw ;
+		fprintf(stderr, "Nieznany argument w metodzie configuratora return_attach_point_name\n");
+		throw;
 	}
 
 	// Zwrocenie atach_point'a.
@@ -200,16 +199,15 @@ bool configurator::exists(const char* _key, const char* __section_name) const
 	const char *_section_name = (__section_name) ? __section_name : section_name.c_str();
 	int value;
 	struct Config_Tag configs[] = {
-		// Pobierane pole.
-		{	(char *) _key, Int_Tag, &value},
-		// Pole konczace.
-		{	NULL , Error_Tag, NULL}
-	};
+	// Pobierane pole.
+	{ (char *) _key, Int_Tag, &value },
+	// Pole konczace.
+	{ NULL, Error_Tag, NULL } };
 
 	boost::mutex::scoped_lock l(file_mutex);
 
-	if (input_config(file_location, configs, _section_name)<1) {
-		if (input_config(common_file_location, configs, _section_name)<1) {
+	if (input_config(file_location, configs, _section_name) < 1) {
+		if (input_config(common_file_location, configs, _section_name) < 1) {
 			// Zwolnienie pamieci.
 
 			return false;
@@ -245,18 +243,16 @@ std::string configurator::return_string_value(const char* _key, const char*__sec
 	// Zwracana zmienna.
 	char tmp[200];
 	struct Config_Tag configs[] = {
-		// Pobierane pole.
-		{	(char *) _key, String_Tag, tmp},
-		// Pole konczace.
-		{	NULL , Error_Tag, NULL}
-	};
+	// Pobierane pole.
+	{ (char *) _key, String_Tag, tmp },
+	// Pole konczace.
+	{ NULL, Error_Tag, NULL } };
 
 	// Odczytanie zmiennej.
 	boost::mutex::scoped_lock l(file_mutex);
-	if (input_config(file_location, configs, _section_name)<1) {
-		if (input_config(common_file_location, configs, _section_name)<1) {
-			fprintf(stderr, "Blad input_config() w value<std::string> file_location:%s, _section_name:%s, _key:%s\n",
-					file_location.c_str(), _section_name, _key);
+	if (input_config(file_location, configs, _section_name) < 1) {
+		if (input_config(common_file_location, configs, _section_name) < 1) {
+			fprintf(stderr, "Blad input_config() w value<std::string> file_location:%s, _section_name:%s, _key:%s\n", file_location.c_str(), _section_name, _key);
 		}
 	}
 
@@ -349,53 +345,50 @@ std::string configurator::return_string_value(const char* _key, const char*__sec
 //	return value;
 //}
 
-pid_t configurator::process_spawn(const std::string & _section_name) {
+pid_t configurator::process_spawn(const std::string & _section_name)
+{
 #if defined(PROCESS_SPAWN_RSH)
 
+	std::string spawned_program_name = value <std::string> ("program_name", _section_name);
+	std::string spawned_node_name = value <std::string> ("node_name", _section_name);
 
-	std::string spawned_program_name = value<std::string>("program_name", _section_name);
-		std::string spawned_node_name = value<std::string>("node_name", _section_name);
+	std::string rsh_spawn_node;
 
-		std::string rsh_spawn_node;
+	if (spawned_node_name == sysinfo.nodename) {
+		rsh_spawn_node = "localhost";
+	} else {
+		rsh_spawn_node = spawned_node_name;
 
-		if (spawned_node_name == sysinfo.nodename)
-		{
-			rsh_spawn_node = "localhost";
-		} else {
-			rsh_spawn_node = spawned_node_name;
-
-			std::string opendir_path("/net/");
-			opendir_path += rsh_spawn_node;
-
-			if (access(opendir_path.c_str(), R_OK) != 0) {
-				printf("spawned node absent: %s\n", opendir_path.c_str());
-				throw std::logic_error("spawned node absent: "+opendir_path);
-			}
-
-		}
-
-		// Sciezka do binariow.
-		char bin_path[PATH_MAX];
-		if (exists("binpath", _section_name)) {
-			std::string _bin_path = value<std::string>("binpath", _section_name);
-			strcpy(bin_path, _bin_path.c_str());
-			if(strlen(bin_path) && bin_path[strlen(bin_path)-1] != '/') {
-				strcat(bin_path, "/");
-			}
-
-		} else {
-			snprintf(bin_path, sizeof(bin_path), "/net/%s%sbin/",
-					node.c_str(), dir.c_str());
-		}
-
-
-		std::string opendir_path(bin_path);
-		opendir_path += spawned_program_name;
+		std::string opendir_path("/net/");
+		opendir_path += rsh_spawn_node;
 
 		if (access(opendir_path.c_str(), R_OK) != 0) {
-			printf("spawned program absent: %s\n", opendir_path.c_str());
-			throw std::logic_error("spawned program absent: "+opendir_path);
+			printf("spawned node absent: %s\n", opendir_path.c_str());
+			throw std::logic_error("spawned node absent: " + opendir_path);
 		}
+
+	}
+
+	// Sciezka do binariow.
+	char bin_path[PATH_MAX];
+	if (exists("binpath", _section_name)) {
+		std::string _bin_path = value <std::string> ("binpath", _section_name);
+		strcpy(bin_path, _bin_path.c_str());
+		if (strlen(bin_path) && bin_path[strlen(bin_path) - 1] != '/') {
+			strcat(bin_path, "/");
+		}
+
+	} else {
+		snprintf(bin_path, sizeof(bin_path), "/net/%s%sbin/", node.c_str(), dir.c_str());
+	}
+
+	std::string opendir_path(bin_path);
+	opendir_path += spawned_program_name;
+
+	if (access(opendir_path.c_str(), R_OK) != 0) {
+		printf("spawned program absent: %s\n", opendir_path.c_str());
+		throw std::logic_error("spawned program absent: " + opendir_path);
+	}
 
 	pid_t child_pid = vfork();
 
@@ -404,34 +397,24 @@ pid_t configurator::process_spawn(const std::string & _section_name) {
 		//ewentualne dodatkowe argumenty wywolania np. przekierowanie na konsole
 		std::string asa;
 		if (exists("additional_spawn_argument", UI_SECTION)) {
-			asa = value<std::string>("additional_spawn_argument", UI_SECTION);
+			asa = value <std::string> ("additional_spawn_argument", UI_SECTION);
 		}
 
 		char process_path[PATH_MAX];
 		char *ui_host = getenv("UI_HOST");
-		snprintf(process_path, sizeof(process_path), "cd %s; UI_HOST=%s %s%s %s %s %s %s %s %s",
-				bin_path, ui_host ? ui_host : "",
-				bin_path, spawned_program_name.c_str(),
-				node.c_str(), dir.c_str(), ini_file.c_str(), _section_name.c_str(),
-				session_name.length() ? session_name.c_str() : "\"\"", asa.c_str()
-		);
+		snprintf(process_path, sizeof(process_path), "cd %s; UI_HOST=%s %s%s %s %s %s %s %s %s", bin_path, ui_host ? ui_host : "", bin_path, spawned_program_name.c_str(), node.c_str(), dir.c_str(), ini_file.c_str(), _section_name.c_str(), session_name.length() ? session_name.c_str() : "\"\"", asa.c_str());
 
 		// create new session for separation of signal delivery
-		if(setsid() == (pid_t) -1) {
+		if (setsid() == (pid_t) -1) {
 			perror("setsid()");
 		}
 
 		if (exists("username", _section_name)) {
-			std::string username = value<std::string>("username", _section_name);
+			std::string username = value <std::string> ("username", _section_name);
 
 			//			fprintf(stderr, "rsh -l %s %s \"%s\"\n", username.c_str(), rsh_spawn_node.c_str(), process_path);
 
-			execlp("rsh",
-					"rsh",
-					"-l", username.c_str(),
-					rsh_spawn_node.c_str(),
-					process_path,
-					NULL);
+			execlp("rsh", "rsh", "-l", username.c_str(), rsh_spawn_node.c_str(), process_path, NULL);
 		} else {
 			//			printf("rsh %s \"%s\"\n", rsh_spawn_node.c_str(), process_path);
 
@@ -452,11 +435,7 @@ pid_t configurator::process_spawn(const std::string & _section_name) {
 			//					asa.c_str()
 			//			);
 
-			execlp("rsh",
-					"rsh",
-					rsh_spawn_node.c_str(),
-					process_path,
-					NULL);
+			execlp("rsh", "rsh", rsh_spawn_node.c_str(), process_path, NULL);
 		}
 
 	} else if (child_pid > 0) {
@@ -573,7 +552,8 @@ pid_t configurator::process_spawn(const std::string & _section_name) {
 #endif
 }// : spawn
 
-configurator::~configurator() {
+configurator::~configurator()
+{
 #ifdef USE_MESSIP_SRR
 	messip::port_disconnect(ch);
 #endif /* USE_MESSIP_SRR */

@@ -23,7 +23,7 @@
 
 #include "lib/srlib.h"
 
-#include "ui/ui_ecp_r_tfg_and_conv.h"
+#include "ui/src/ui_ecp_r_tfg_and_conv.h"
 
 #include "robot/irp6ot_tfg/ecp_r_irp6ot_tfg.h"
 #include "robot/irp6p_tfg/ecp_r_irp6p_tfg.h"

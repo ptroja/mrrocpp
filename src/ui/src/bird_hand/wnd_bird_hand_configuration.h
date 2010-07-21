@@ -8,8 +8,8 @@
 #ifndef __WND_BIRD_HAND_CONFIGURATION_H
 #define __WND_BIRD_HAND_CONFIGURATION_H
 
-#include "ui/ui.h"
-#include "ui/ui_robot.h"
+#include "ui/src/ui.h"
+#include "ui/src/ui_robot.h"
 
 //
 //

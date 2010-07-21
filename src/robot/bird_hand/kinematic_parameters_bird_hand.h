@@ -37,6 +37,9 @@ public:
 	// Zakresy ruchu stopni swobody w radianach.
 	double lower_limit_joint[8];
 	double upper_limit_joint[8];
+
+	 // Polozenia synchronizacji (polozenia we wspolrzednych wewnetrznych).
+	double synchro_joint_position[8];
 };
 
 } // namespace bird_hand

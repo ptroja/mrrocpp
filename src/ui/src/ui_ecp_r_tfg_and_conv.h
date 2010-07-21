@@ -8,12 +8,12 @@
 #ifndef _UI_ECP_R_TFG_H
 #define _UI_ECP_R_TFG_H
 
-#include "ui/ui.h"
+#include "ui/src/ui.h"
 // Konfigurator.
 #include "lib/configurator.h"
 #include "lib/mrmath/mrmath.h"
 #include "base/ecp/ecp_robot.h"
-#include "ui/ui_ecp_r_common.h"
+#include "ui/src/ui_ecp_r_common.h"
 
 // ---------------------------------------------------------------
 class ui_tfg_and_conv_robot: public ui_common_robot {
