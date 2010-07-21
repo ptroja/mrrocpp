@@ -13,6 +13,9 @@
 #include <boost/shared_ptr.hpp>
 #include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
 #include "ecp_mp_bclike.h"
+#include "ecp_st_smooth_move.h"
+
+#include "ecp_mp_st_smooth_move.h"
 
 using boost::shared_ptr;
 
@@ -37,13 +40,25 @@ public:
 
     void mp_2_ecp_next_state_string_handler(void);
 
+	virtual boost::shared_ptr <bcl_fradia_sensor> get_vsp_fradia();
+
+	shared_ptr<bcl_fradia_sensor> vsp_fradia;
+
+	void addReading(regions& reg);
+	regions getReading();
 
 private:
 //	  generator::constant_velocity* cvgenjoint;; -- generator o stalej predkosci
 	shared_ptr<generator::bclike_smooth> bc_smooth;
 //    shared_ptr<generator::smooth> bc_smooth;
-};
 
+	std::vector<double> vec;
+
+	std::vector<regions> reading;
+
+//	shared_ptr<ecp_sub_task> bcl_recognition;
+//	shared_ptr<ecp_sub_task> bc_read;
+};
 }
 
 }

@@ -29,23 +29,29 @@ void bclike_mp::main_task_algorithm(void){
 	sr_ecp_msg->message("MP start");
 
 //	while(true){
-		set_next_ecps_state (ecp_mp::task::BCL_MOTION_DIR_STR, (int)mrrocpp::ecp::common::task::LEFT, "", 0, 1, lib::ROBOT_IRP6OT_M.c_str());
+//		set_next_ecps_state (ecp_mp::task::BCL_MOTION_DIR_STR, (int)mrrocpp::ecp::common::task::LEFT, "", 0, 1, lib::ROBOT_IRP6OT_M.c_str());
+//
+//		run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, lib::ROBOT_IRP6OT_M.c_str(), lib::ROBOT_IRP6OT_M.c_str());
+//
+//		sr_ecp_msg->message("LEFT send");
+//
+//		set_next_ecps_state (ecp_mp::task::BCL_MOTION_DIR_STR, (int)mrrocpp::ecp::common::task::RIGHT, "", 0, 1, lib::ROBOT_IRP6OT_M.c_str());
+//
+//		run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, lib::ROBOT_IRP6OT_M.c_str(), lib::ROBOT_IRP6OT_M.c_str());
+//
+//		sr_ecp_msg->message("RIGHT send");
 
-		run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, lib::ROBOT_IRP6OT_M.c_str(), lib::ROBOT_IRP6OT_M.c_str());
+	//Set robot to start position (center)
+	set_next_ecps_state (ecp_mp::task::BCL_MOTION_DIR_STR, (int)mrrocpp::ecp::common::task::START, "hmmm, ciekawe czy dizala", 0, 1, lib::ROBOT_IRP6OT_M.c_str());
 
-		sr_ecp_msg->message("LEFT send");
+	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, lib::ROBOT_IRP6OT_M.c_str(), lib::ROBOT_IRP6OT_M.c_str());
 
-		set_next_ecps_state (ecp_mp::task::BCL_MOTION_DIR_STR, (int)mrrocpp::ecp::common::task::RIGHT, "", 0, 1, lib::ROBOT_IRP6OT_M.c_str());
+	sr_ecp_msg->message("START send");
 
-		run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, lib::ROBOT_IRP6OT_M.c_str(), lib::ROBOT_IRP6OT_M.c_str());
-
-		sr_ecp_msg->message("RIGHT send");
-
-		set_next_ecps_state (ecp_mp::task::BCL_MOTION_DIR_STR, (int)mrrocpp::ecp::common::task::START, "", 0, 1, lib::ROBOT_IRP6OT_M.c_str());
-
-		run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, lib::ROBOT_IRP6OT_M.c_str(), lib::ROBOT_IRP6OT_M.c_str());
-
-		sr_ecp_msg->message("START send");
+//	while(1){
+//		char *qq = robot_m[lib::ROBOT_SPEECHRECOGNITION]->ecp_reply_package.ecp_2_mp_string;
+//
+//	}
 
 //	}
 

@@ -8,6 +8,8 @@
 #ifndef BCL_TYPES_H_
 #define BCL_TYPES_H_
 
+#include "sensor/fradia/ecp_mp_s_fradia_sensor.h"
+
 namespace mrrocpp {
 
 namespace ecp {
@@ -17,7 +19,7 @@ namespace common {
 namespace task {
 
 typedef struct {
-	std::vector<int> pos;
+	std::vector<std::pair<int, int> > pos;
 
 } regions;
 

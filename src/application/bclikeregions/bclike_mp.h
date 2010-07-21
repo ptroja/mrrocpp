@@ -11,6 +11,8 @@
 #include "base/mp/mp.h"
 #include "ecp_mp_bclike.h"
 
+#include "ecp_mp_st_smooth_move.h"
+
 namespace mrrocpp {
 
 namespace mp {

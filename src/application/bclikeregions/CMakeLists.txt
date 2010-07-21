@@ -13,6 +13,7 @@ add_executable(ecp_bclike_mp
 add_executable(ecp_bcl_t_switcher
 	bcl_t_switcher.cc
     bclike_smooth.cc
+    ecp_st_smooth_move.cc
 )
 
 target_link_libraries(ecp_bclikeregions
