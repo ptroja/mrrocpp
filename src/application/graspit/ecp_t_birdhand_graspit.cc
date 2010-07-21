@@ -35,6 +35,8 @@ void bird_hand_test::mp_2_ecp_next_state_string_handler(void)
 
 		sr_ecp_msg->message("ECP_GEN_BIRD_HAND");
 
+		g_bird_hand->Move();
+
 	} // end switch
 
 

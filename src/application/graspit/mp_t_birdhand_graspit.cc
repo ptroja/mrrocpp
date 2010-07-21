@@ -99,14 +99,14 @@ void graspit::main_task_algorithm(void)
 
 	for (int i=0; i<6; ++i)
 		mp_ecp_irp6_command.joint[i] = trgraspit->from_va.grasp_joint[i+6];
-	mp_ecp_bird_hand_command.thumb_f[0].desired_position = 0.0;
-	mp_ecp_bird_hand_command.thumb_f[1].desired_position = 0.0;
+	mp_ecp_bird_hand_command.thumb_f[0].desired_position = 0.5;
+	mp_ecp_bird_hand_command.thumb_f[1].desired_position = 0.4;
 	mp_ecp_bird_hand_command.index_f[0].desired_position = 0.0;
-	mp_ecp_bird_hand_command.index_f[1].desired_position = 0.0;
-	mp_ecp_bird_hand_command.index_f[2].desired_position = 0.0;
+	mp_ecp_bird_hand_command.index_f[1].desired_position = 0.5;
+	mp_ecp_bird_hand_command.index_f[2].desired_position = 0.4;
 	mp_ecp_bird_hand_command.ring_f[0].desired_position = 0.0;
-	mp_ecp_bird_hand_command.ring_f[1].desired_position = 0.0;
-	mp_ecp_bird_hand_command.ring_f[2].desired_position = 0.0;
+	mp_ecp_bird_hand_command.ring_f[1].desired_position = 0.5;
+	mp_ecp_bird_hand_command.ring_f[2].desired_position = 0.4;
 
 	memcpy(tmp_string1, &mp_ecp_bird_hand_command, sizeof(mp_ecp_bird_hand_command));
 	memcpy(tmp_string2, &mp_ecp_irp6_command, sizeof(mp_ecp_irp6_command));
@@ -123,14 +123,24 @@ void graspit::main_task_algorithm(void)
 
 	for (int i=0; i<6; ++i)
 		mp_ecp_irp6_command.joint[i] = trgraspit->from_va.grasp_joint[i];
-	mp_ecp_bird_hand_command.thumb_f[0].desired_position = trgraspit->from_va.grasp_joint[12];
-	mp_ecp_bird_hand_command.thumb_f[1].desired_position = trgraspit->from_va.grasp_joint[13];
-	mp_ecp_bird_hand_command.index_f[0].desired_position = trgraspit->from_va.grasp_joint[14];
-	mp_ecp_bird_hand_command.index_f[1].desired_position = trgraspit->from_va.grasp_joint[15];
-	mp_ecp_bird_hand_command.index_f[2].desired_position = trgraspit->from_va.grasp_joint[16];
-	mp_ecp_bird_hand_command.ring_f[0].desired_position = trgraspit->from_va.grasp_joint[17];
-	mp_ecp_bird_hand_command.ring_f[1].desired_position = trgraspit->from_va.grasp_joint[18];
-	mp_ecp_bird_hand_command.ring_f[2].desired_position = trgraspit->from_va.grasp_joint[19];
+	mp_ecp_bird_hand_command.thumb_f[0].desired_position = 0.55 - trgraspit->from_va.grasp_joint[18] - 0.1; //0.1 to zadana sila
+	mp_ecp_bird_hand_command.thumb_f[1].desired_position = 0.45 - trgraspit->from_va.grasp_joint[19] - 0.1;
+	mp_ecp_bird_hand_command.index_f[0].desired_position = 0.0;
+	mp_ecp_bird_hand_command.index_f[1].desired_position = 0.55 - trgraspit->from_va.grasp_joint[16] - 0.1;
+	mp_ecp_bird_hand_command.index_f[2].desired_position = 0.45 - trgraspit->from_va.grasp_joint[17] - 0.1;
+	mp_ecp_bird_hand_command.ring_f[0].desired_position = 0.0;
+	mp_ecp_bird_hand_command.ring_f[1].desired_position = 0.55 - trgraspit->from_va.grasp_joint[13] - 0.1;
+	mp_ecp_bird_hand_command.ring_f[2].desired_position = 0.45 - trgraspit->from_va.grasp_joint[14] - 0.1;
+
+	for (int i=0; i<2; ++i)
+		if (mp_ecp_bird_hand_command.thumb_f[i].desired_position < 0.0)
+			mp_ecp_bird_hand_command.thumb_f[i].desired_position = 0.0;
+	for (int i=0; i<3; ++i)
+		if (mp_ecp_bird_hand_command.index_f[i].desired_position < 0.0)
+			mp_ecp_bird_hand_command.index_f[i].desired_position = 0.0;
+	for (int i=0; i<3; ++i)
+		if (mp_ecp_bird_hand_command.ring_f[i].desired_position < 0.0)
+			mp_ecp_bird_hand_command.ring_f[i].desired_position = 0.0;
 
 	memcpy(tmp_string1, &mp_ecp_bird_hand_command, sizeof(mp_ecp_bird_hand_command));
 	memcpy(tmp_string2, &mp_ecp_irp6_command, sizeof(mp_ecp_irp6_command));

@@ -25,7 +25,7 @@ irp6_grasp::irp6_grasp(lib::configurator &_config) :
 		ecp_m_robot = new irp6p_m::robot(*this);
 	}
 
-	cvgenjoint = new generator::constant_velocity(*this, lib::ECP_JOINT, 6);
+	cvgenjoint = new generator::constant_velocity(*this, lib::ECP_JOINT, 7);
 	cvgenjoint->set_debug(true);
 
 	sr_ecp_msg->message("ecp IRP6 loaded");
@@ -40,7 +40,7 @@ void irp6_grasp::main_task_algorithm(void)
 	struct _irp6{
 		double joint[6];
 	} mp_ecp_irp6_command;
-	vector<double> coordinates1(6);
+	vector<double> coordinates1(7);
 
 	std::stringstream ss(std::stringstream::in | std::stringstream::out);
 
@@ -57,8 +57,9 @@ void irp6_grasp::main_task_algorithm(void)
 				sr_ecp_msg->message("ECP_GEN_IRP6");
 
 				memcpy(&mp_ecp_irp6_command, mp_command.ecp_next_state.mp_2_ecp_next_state_string, sizeof(mp_ecp_irp6_command));
+				coordinates1[0] = 0.0;
 				for (int i=0; i<6; ++i)
-					coordinates1[i] = mp_ecp_irp6_command.joint[i];
+					coordinates1[i+1] = mp_ecp_irp6_command.joint[i];
 
 				cvgenjoint->reset();
 				cvgenjoint->set_absolute();
