@@ -29,9 +29,11 @@ public:
 	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 	pb_eih_visual_servo( boost::shared_ptr <visual_servo_regulator> regulator, const std::string& section_name, mrrocpp::lib::configurator& configurator);
 	virtual ~pb_eih_visual_servo();
-	virtual lib::Homog_matrix get_position_change(const lib::Homog_matrix& current_position, double dt);
+
 	virtual boost::shared_ptr <ecp_mp::sensor::sensor_interface> get_vsp_fradia();
 protected:
+	virtual lib::Homog_matrix compute_position_change(const lib::Homog_matrix& current_position, double dt);
+
 	lib::Homog_matrix E_T_C;
 };
 

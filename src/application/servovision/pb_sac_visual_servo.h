@@ -32,8 +32,9 @@ public:
 	pb_sac_visual_servo(boost::shared_ptr <visual_servo_regulator> regulator, const std::string& section_name, mrrocpp::lib::configurator& configurator);
 	virtual ~pb_sac_visual_servo();
 
-	virtual lib::Homog_matrix get_position_change(const lib::Homog_matrix& current_position, double dt);
-private:
+protected:
+	virtual lib::Homog_matrix compute_position_change(const lib::Homog_matrix& current_position, double dt);
+
 	lib::Homog_matrix O_T_C;
 };
 

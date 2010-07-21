@@ -28,7 +28,10 @@ public:
 	pb_visual_servo(boost::shared_ptr <visual_servo_regulator> regulator, const std::string& section_name, mrrocpp::lib::configurator& configurator);
 	virtual ~pb_visual_servo();
 	virtual boost::shared_ptr <ecp_mp::sensor::sensor_interface> get_vsp_fradia();
+
+	virtual bool is_object_visible();
 protected:
+	virtual lib::VSP_REPORT_t get_sensor_report();
 	boost::shared_ptr <pb_fradia_sensor> vsp_fradia;
 
 	lib::Homog_matrix G_T_E_desired;
