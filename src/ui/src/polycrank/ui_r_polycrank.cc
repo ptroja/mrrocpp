@@ -4,7 +4,7 @@
 
 #include "ui/src/polycrank/ui_r_polycrank.h"
 #include "robot/polycrank/polycrank_const.h"
-#include "ui/ui_class.h"
+#include "ui/src/ui_class.h"
 
 /* Local headers */
 #include "../ablibs.h"

@@ -8,8 +8,8 @@
 #ifndef __UI_R_BIRD_HAND_H
 #define __UI_R_BIRD_HAND_H
 
-#include "ui/ui.h"
-#include "ui/ui_robot.h"
+#include "ui/src/ui.h"
+#include "ui/src/ui_robot.h"
 
 class Ui;
 

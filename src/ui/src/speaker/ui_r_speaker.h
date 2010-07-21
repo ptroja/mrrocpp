@@ -8,8 +8,8 @@
 #ifndef __UI_R_SPEAKER_H
 #define __UI_R_SPEAKER_H
 
-#include "ui/ui.h"
-#include "ui/ui_robot.h"
+#include "ui/src/ui.h"
+#include "ui/src/ui_robot.h"
 
 //
 //

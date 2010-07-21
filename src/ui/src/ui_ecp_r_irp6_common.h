@@ -9,11 +9,11 @@
 #ifndef _UI_ECP_R_MANIP_H
 #define _UI_ECP_R_MANIP_H
 
-#include "ui/ui.h"
+#include "ui/src/ui.h"
 // Konfigurator.
 #include "lib/configurator.h"
 #include "lib/mrmath/mrmath.h"
-#include "ui/ui_ecp_r_common.h"
+#include "ui/src/ui_ecp_r_common.h"
 
 #include "base/ecp/ecp_robot.h"
 

@@ -8,8 +8,8 @@
 #ifndef __UI_R_CONVEYOR_H
 #define __UI_R_CONVEYOR_H
 
-#include "ui/ui.h"
-#include "ui/ui_robot.h"
+#include "ui/src/ui.h"
+#include "ui/src/ui_robot.h"
 #include "robot/conveyor/conveyor_const.h"
 
 class Ui;

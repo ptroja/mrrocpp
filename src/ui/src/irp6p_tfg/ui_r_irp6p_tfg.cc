@@ -3,9 +3,9 @@
 /*                                         Version 2.01  */
 
 #include "ui/src/irp6p_tfg/ui_r_irp6p_tfg.h"
-#include "ui/ui_ecp_r_tfg_and_conv.h"
+#include "ui/src/ui_ecp_r_tfg_and_conv.h"
 #include "robot/irp6p_tfg/irp6p_tfg_const.h"
-#include "ui/ui_class.h"
+#include "ui/src/ui_class.h"
 
 /* Local headers */
 #include "../ablibs.h"

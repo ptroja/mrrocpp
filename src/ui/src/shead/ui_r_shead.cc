@@ -3,9 +3,9 @@
 /*                                         Version 2.01  */
 
 #include "ui/src/shead/ui_r_shead.h"
-#include "ui/ui_ecp_r_tfg_and_conv.h"
+#include "ui/src/ui_ecp_r_tfg_and_conv.h"
 #include "robot/shead/shead_const.h"
-#include "ui/ui_class.h"
+#include "ui/src/ui_class.h"
 
 /* Local headers */
 #include "../ablibs.h"
