@@ -49,7 +49,7 @@ public:
 	 * Returns object visibility.
 	 * @return
 	 */
-	virtual bool is_object_visible() = 0;
+	bool is_object_visible();
 protected:
 	visual_servo(boost::shared_ptr <visual_servo_regulator> regulator);
 
@@ -57,13 +57,14 @@ protected:
 
 	virtual lib::VSP_REPORT_t get_sensor_report() = 0;
 
+	virtual bool is_object_visible_reading() = 0;
+
 	boost::shared_ptr <visual_servo_regulator> regulator;
+private:
 	bool object_visible;
 
 	int max_steps_without_reading;
 	int steps_without_reading;
-private:
-
 }; // class visual_servo
 
 /** @} */

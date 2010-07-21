@@ -33,8 +33,6 @@ pb_sac_visual_servo::~pb_sac_visual_servo()
 
 lib::Homog_matrix pb_sac_visual_servo::compute_position_change(const lib::Homog_matrix& current_position, double dt)
 {
-	lib::Homog_matrix delta_position;
-
 	lib::Homog_matrix C_T_G(vsp_fradia->get_reading_message().position);
 	lib::Homog_matrix error_matrix;
 	lib::Homog_matrix E_T_O = !current_position;
@@ -70,8 +68,8 @@ lib::Homog_matrix pb_sac_visual_servo::compute_position_change(const lib::Homog_
 	aa_vector = regulator->compute_control(aa_vector, dt);
 	log_dbg("aa_vector after regulation: %10lg, %10lg, %10lg, %10lg, %10lg, %10lg\n", aa_vector(0, 0), aa_vector(1, 0), aa_vector(2, 0), aa_vector(3, 0), aa_vector(4, 0), aa_vector(5, 0));
 
+	lib::Homog_matrix delta_position;
 	delta_position.set_from_xyz_angle_axis(aa_vector);
-
 	return delta_position;
 }
 

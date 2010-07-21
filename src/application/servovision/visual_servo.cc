@@ -41,11 +41,18 @@ lib::Homog_matrix visual_servo::get_position_change(const lib::Homog_matrix& cur
 		steps_without_reading = 0; // reset counter
 	}
 
-	if (is_object_visible()) {
+	object_visible = is_object_visible_reading();
+
+	if (object_visible) {
 		return compute_position_change(current_position, dt);
 	}
 
 	return delta_position;
+}
+
+bool visual_servo::is_object_visible()
+{
+	return object_visible;
 }
 
 } // namespace servovision

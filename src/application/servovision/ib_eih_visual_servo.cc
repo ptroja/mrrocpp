@@ -110,7 +110,6 @@ lib::Homog_matrix ib_eih_visual_servo::compute_position_change(const lib::Homog_
 	lib::Homog_matrix delta_position;
 	delta_position.set_rotation_matrix(u_rotation);
 	delta_position.set_translation_vector(u_translation);
-
 	return delta_position;
 }
 
@@ -119,7 +118,7 @@ boost::shared_ptr <ecp_mp::sensor::sensor_interface> ib_eih_visual_servo::get_vs
 	return boost::dynamic_pointer_cast <ecp_mp::sensor::sensor_interface>(vsp_fradia);
 }
 
-bool ib_eih_visual_servo::is_object_visible()
+bool ib_eih_visual_servo::is_object_visible_reading()
 {
 	return vsp_fradia->get_reading_message().tracking;
 }

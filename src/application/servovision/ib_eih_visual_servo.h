@@ -36,10 +36,10 @@ public:
 	virtual ~ib_eih_visual_servo();
 
 	virtual boost::shared_ptr <ecp_mp::sensor::sensor_interface> get_vsp_fradia();
-	virtual bool is_object_visible();
 protected:
 	virtual lib::Homog_matrix compute_position_change(const lib::Homog_matrix& current_position, double dt);
 	virtual lib::VSP_REPORT_t get_sensor_report();
+	virtual bool is_object_visible_reading();
 	boost::shared_ptr <ib_fradia_sensor> vsp_fradia;
 
 	lib::Homog_matrix e_T_c_position;
