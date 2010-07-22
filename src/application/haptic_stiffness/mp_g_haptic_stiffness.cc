@@ -76,7 +76,7 @@ bool haptic_stiffness::first_step()
 		irp6ot->mp_command.instruction.arm.pf_def.force_xyz_torque_xyz[i] = 0;
 		irp6ot->mp_command.instruction.arm.pf_def.arm_coordinates[i + 3] = 0;
 		irp6ot->mp_command.instruction.arm.pf_def.force_xyz_torque_xyz[i + 3] = 0;
-		irp6ot->mp_command.instruction.arm.pf_def.reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING / 2;
+		irp6ot->mp_command.instruction.arm.pf_def.reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
 		irp6ot->mp_command.instruction.arm.pf_def.reciprocal_damping[i + 3] = TORQUE_RECIPROCAL_DAMPING / 2;
 		//		irp6ot->mp_command.instruction.arm.pf_def.reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING / 40;
 		//		irp6ot->mp_command.instruction.arm.pf_def.reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING / 40;
@@ -256,8 +256,21 @@ bool haptic_stiffness::next_step()
 	}
 
 	// Korekta parametrów regulatora siłowego w robocie podrzednym na podstawie estymaty sztywnosci
+	double divisor;
 
+	if (stiffness > 400.0) {
+		divisor = stiffness / 400.0;
+	} else {
+		divisor = 1;
+	}
 
+	for (int i = 0; i < 3; i++) {
+		irp6p->mp_command.instruction.arm.pf_def.reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING / divisor;
+		irp6p->mp_command.instruction.arm.pf_def.inertia[i] = FORCE_INERTIA / divisor;
+
+		irp6ot->mp_command.instruction.arm.pf_def.reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING / divisor;
+		irp6ot->mp_command.instruction.arm.pf_def.inertia[i] = FORCE_INERTIA / divisor;
+	}
 	// wypiski
 
 
