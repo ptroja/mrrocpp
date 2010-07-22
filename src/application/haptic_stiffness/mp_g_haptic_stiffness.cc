@@ -25,7 +25,8 @@ namespace mp {
 namespace generator {
 
 haptic_stiffness::haptic_stiffness(task::task& _mp_task, int step) :
-	generator(_mp_task), irp6ot_con(1), irp6p_con(1), global_base(1, 0, 0, -0.08, 0, 1, 0, 2.08, 0, 0, 1, -0.015)
+	generator(_mp_task), state(HS_LOW_FORCE), stiffness(0.0), initial_force(0.0), initial_position(0.0), irp6ot_con(1),
+			irp6p_con(1), global_base(1, 0, 0, -0.08, 0, 1, 0, 2.08, 0, 0, 1, -0.015)
 {
 	step_no = step;
 }
@@ -159,6 +160,9 @@ bool haptic_stiffness::next_step()
 	// UWAGA: dzialamy na jednoelementowej liscie robotow
 	//	cout << "next_step" << endl;
 
+	double current_force;
+	double current_position;
+
 	if (node_counter < 3) { // Oczekiwanie na odczyt aktualnego polozenia koncowki
 		return true;
 	}
@@ -214,29 +218,55 @@ bool haptic_stiffness::next_step()
 		irp6p->mp_command.instruction.value_in_step_no = step_no - 4;
 	}
 
-
-	// Estymacja sztywności w automacie skończonnym
-
+	// Estymacja sztywności w automacie skończonym
 
 
+	// pobranie biezacej sily i polozenia w osi z narzedzia
 
+	current_force = irp6p->ecp_reply_package.reply_package.arm.pf_def.force_xyz_torque_xyz[2];
 
+	lib::Homog_matrix irp6p_current_frame(irp6p->ecp_reply_package.reply_package.arm.pf_def.arm_frame);
 
+	current_position = irp6p_current_frame(2, 3);
+
+	switch (state)
+	{
+		case HS_LOW_FORCE:
+			//
+			if (current_force > MINIMAL_FORCE) {
+				state = HS_STIFNESS_ESTIMATION;
+				initial_force = current_force;
+				initial_position = current_position;
+			}
+
+			break;
+		case HS_STIFNESS_ESTIMATION:
+			if (current_force <= MINIMAL_FORCE) {
+				state = HS_LOW_FORCE;
+				stiffness = 0.0;
+			} else if ((fabs(current_force - initial_force) >= FORCE_INCREMENT) || (fabs(current_position
+					- initial_position) >= POSITION_INCREMENT)) {
+				double computed_stiffness = (current_force - initial_force) / -(current_position - initial_position);
+				if (computed_stiffness > 0.0) {
+					stiffness = computed_stiffness;
+				}
+			}
+			break;
+
+	}
 
 	// Korekta parametrów regulatora siłowego w robocie podrzednym na podstawie estymaty sztywnosci
-
-
-
-
-
 
 
 	// wypiski
 
 
 	if ((node_counter % 10) == 0) {
-		std::cout << "irp6p_ECPtoMP_force_xyz_torque_xyz\n" << irp6p_ECPtoMP_force_xyz_torque_xyz << "interval:"
-				<< time_interval << std::endl;
+		std::cout << "current_force: " << current_force << ", current_position: " << current_position
+				<< ", stiffness: " << stiffness << std::endl;
+
+		//std::cout << "irp6p_ECPtoMP_force_xyz_torque_xyz\n" << irp6p_ECPtoMP_force_xyz_torque_xyz << "interval:"
+		//		<< time_interval << std::endl;
 		//	std::cout << "irp6p_goal_xyz_angle_axis_increment_in_end_effector\n" << irp6p_goal_xyz_angle_axis_increment_in_end_effector << std::endl;
 
 	}
