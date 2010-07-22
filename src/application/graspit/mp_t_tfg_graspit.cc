@@ -12,6 +12,7 @@
 #include "lib/data_port_headers/tfg.h"
 #include "mp_t_tfg_graspit.h"
 #include "ecp_mp_t_graspit.h"
+#include "ecp_mp_g_birdhand.h"
 #include "robot/irp6ot_tfg/irp6ot_tfg_const.h"
 #include "robot/irp6ot_m/irp6ot_m_const.h"
 #include "robot/irp6p_m/irp6p_m_const.h"
