@@ -10,6 +10,8 @@
 
 #include "sensor/fradia/ecp_mp_s_fradia_sensor.h"
 
+#include "../servovision/visual_servo_types.h"
+
 namespace mrrocpp {
 
 namespace ecp {
@@ -19,11 +21,18 @@ namespace common {
 namespace task {
 
 typedef struct {
-	std::vector<std::pair<int, int> > pos;
+	double x;
+	double y;
 
 } regions;
 
+typedef struct {
+	bool a;
+	int x;
+}__attribute__((__packed__)) init;
+
 typedef ecp_mp::sensor::fradia_sensor<lib::empty_t, regions> bcl_fradia_sensor;
+//typedef ecp_mp::sensor::fradia_sensor<visual_servo_types::image_based_configuration, visual_servo_types::image_based_reading> bcl_fradia_sensor;
 
 }
 

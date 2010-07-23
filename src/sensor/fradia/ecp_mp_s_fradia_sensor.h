@@ -269,6 +269,7 @@ void fradia_sensor <CONFIGURE_T, READING_T, INITIATE_T>::configure_sensor()
 		throw std::runtime_error("FraDIA reply not recognized");
 	}
 	if (status.initiate_size != sizeof(INITIATE_T)) {
+		std::cout << "should be: " << status.initiate_size << " is " << sizeof(INITIATE_T) << std::endl;
 		throw std::runtime_error("status.initiate_size != sizeof(INITIATE_T)");
 	}
 	if (status.reading_size != sizeof(READING_T)) {

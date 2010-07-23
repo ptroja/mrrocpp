@@ -13,6 +13,7 @@
 #include "base/ecp_mp/ecp_mp_sensor.h"
 #include "bcl_types.h"
 
+using boost::shared_ptr;
 
 namespace mrrocpp {
 
@@ -31,6 +32,8 @@ class bclike_smooth: public mrrocpp::ecp::common::generator::newsmooth {
 public:
 	bclike_smooth(mrrocpp::ecp::common::task::task & ecp_task);
 	bclike_smooth(mrrocpp::ecp::common::task::bclikeregions_task & task);
+//	bclike_smooth(mrrocpp::ecp::common::task::bclikeregions_task & task, shared_ptr<task::bcl_fradia_sensor> fr);
+	bclike_smooth(mrrocpp::ecp::common::task::bclikeregions_task & task, task::bcl_fradia_sensor* fr);
 
 	virtual ~bclike_smooth();
 
@@ -46,7 +49,9 @@ private:
 
 //	boost::shared_ptr <ecp_mp::sensor::sensor_interface> vsp_fradia;
 //	boost::shared_ptr <ecp_mp::sensor::fradia_sensor> vsp_fradia;
-	boost::shared_ptr<task::bcl_fradia_sensor> vsp_fradia;
+//	shared_ptr<task::bcl_fradia_sensor> vsp_fradia;
+	task::bcl_fradia_sensor* vsp_fradia;
+
 };
 
 }

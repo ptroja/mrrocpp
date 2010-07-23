@@ -23,16 +23,15 @@ const double start[] = { 0.0, 0.0, -1.37, 0.100, -0.040, 4.627, 0.0, 0.0};
 bcl_t_switcher::bcl_t_switcher(lib::configurator &_config):
 		task(_config){
 
-	sensor_m[ecp_mp::sensor::SENSOR_CVFRADIA] = new bcl_fradia_sensor(this->config, "[vsp_fradia_sensor]");
+//	vsp_fradia = boost::shared_ptr<bcl_fradia_sensor>(new bcl_fradia_sensor(this->config, "[vsp_fradia_sensor]"));
+	vsp_fradia = new bcl_fradia_sensor(this->config, "[vsp_fradia_sensor]");
+	sensor_m[ecp_mp::sensor::SENSOR_CVFRADIA] = vsp_fradia;
 	sensor_m[ecp_mp::sensor::SENSOR_CVFRADIA]->configure_sensor();
 
 	ecp_m_robot = new ecp::irp6ot_m::robot(*this);
 
-//	bc_smooth = shared_ptr<generator::smooth> (new generator::smooth(*this, true));
 	bc_smooth = shared_ptr<generator::bclike_smooth> (new generator::bclike_smooth(*this));
 	bc_smooth->set_absolute();
-
-//	bcl_recognition = shared_ptr<ecp_sub_task>(new ecp_st_smooth_move(*this));
 
 	//dodanie subtaskow do wykonywania
 	ecp_sub_task* ecpst;
@@ -84,7 +83,11 @@ void bcl_t_switcher::mp_2_ecp_next_state_string_handler(void){
 
 }
 
-boost::shared_ptr <bcl_fradia_sensor> bcl_t_switcher::get_vsp_fradia(){
+//boost::shared_ptr <bcl_fradia_sensor> bcl_t_switcher::get_vsp_fradia(){
+//	return vsp_fradia;
+//}
+
+bcl_fradia_sensor*  bcl_t_switcher::get_vsp_fradia(){
 	return vsp_fradia;
 }
 

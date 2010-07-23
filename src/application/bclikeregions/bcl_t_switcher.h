@@ -17,6 +17,8 @@
 
 #include "ecp_mp_st_smooth_move.h"
 
+#include "bcl_types.h"
+
 using boost::shared_ptr;
 
 namespace mrrocpp {
@@ -40,21 +42,27 @@ public:
 
     void mp_2_ecp_next_state_string_handler(void);
 
-	virtual boost::shared_ptr <bcl_fradia_sensor> get_vsp_fradia();
+//	virtual boost::shared_ptr <bcl_fradia_sensor> get_vsp_fradia();
 
-	shared_ptr<bcl_fradia_sensor> vsp_fradia;
+	virtual bcl_fradia_sensor* get_vsp_fradia();
+
+//	shared_ptr<bcl_fradia_sensor> vsp_fradia;
+	bcl_fradia_sensor* vsp_fradia;
 
 	void addReading(regions& reg);
 	regions getReading();
 
 private:
 //	  generator::constant_velocity* cvgenjoint;; -- generator o stalej predkosci
-	shared_ptr<generator::bclike_smooth> bc_smooth;
 //    shared_ptr<generator::smooth> bc_smooth;
+	shared_ptr<generator::bclike_smooth> bc_smooth;
 
 	std::vector<double> vec;
 
 	std::vector<regions> reading;
+
+	visual_servo_types::image_based_configuration ib_config;
+	mrrocpp::lib::empty_t x;
 
 //	shared_ptr<ecp_sub_task> bcl_recognition;
 //	shared_ptr<ecp_sub_task> bc_read;

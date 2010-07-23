@@ -55,7 +55,7 @@ typedef struct _vis_sac
 typedef struct _empty
 {
 	//! This is empty data type
-} empty_t;
+}__attribute__((__packed__)) empty_t;
 
 typedef std::string SENSOR_t;
 
