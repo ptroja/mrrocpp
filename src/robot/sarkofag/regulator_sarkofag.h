@@ -15,7 +15,7 @@ namespace mrrocpp {
 namespace edp {
 namespace sarkofag {
 
-// stale dla automatu w regulatorze chwytka
+// stale dla automatu w regulatorze sarkofagu
 #define GRIPPER_BLOCKED_TIME_PERIOD 200
 #define MAX_GRIPPER_SUM_OF_CURRENTS_NR_OF_ELEMENTS 1000
 
@@ -51,7 +51,7 @@ public:
 // ----------------------------------------------------------------------
 
 
-} // namespace irp6ot
+} // namespace sarkofag
 } // namespace edp
 } // namespace mrrocpp
 

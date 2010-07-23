@@ -11,11 +11,11 @@
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 
-// Klasa edp_irp6ot_effector.
-//#include "base/edp/irp6_on_track/edp_irp6ot_effector.h"
+// Klasa edp_sarkofag_effector.
+//#include "base/edp/sarkofag/edp_sarkofag_effector.h"
 #include "base/edp/reader.h"
 // Klasa hardware_interface.
-//#include "base/edp/irp6_on_track/hi_irp6ot.h"
+//#include "base/edp/sarkofag/hi_sarkofag.h"
 // Klasa servo_buffer.
 #include "robot/sarkofag/regulator_sarkofag.h"
 
@@ -465,6 +465,6 @@ uint8_t NL_regulator_8_sarkofag::compute_set_value(void)
 }
 /*-----------------------------------------------------------------------*/
 
-} // namespace irp6ot
+} // namespace sarkofag
 } // namespace edp
 } // namespace mrrocpp

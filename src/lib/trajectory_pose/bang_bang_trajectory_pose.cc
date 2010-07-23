@@ -30,10 +30,11 @@ bang_bang_trajectory_pose::bang_bang_trajectory_pose(lib::ECP_POSE_SPECIFICATION
 	v_k = vector <double> (axes_num);
 	v_max = vector <double> (axes_num);
 	a_max = vector <double> (axes_num);
-	przysp = vector <double> (axes_num);
-	jedn = vector <double> (axes_num);
-	s_jedn = vector <double> (axes_num);
-	s_przysp = vector <double> (axes_num);
+	acc = vector <double> (axes_num);
+	uni = vector <double> (axes_num);
+	s_uni = vector <double> (axes_num);
+	s_acc = vector <double> (axes_num);
+	s_dec = vector <double> (axes_num);
 	start_position = vector <double> (axes_num);
 	a_r = vector <double> (axes_num);
 	v_r = vector <double> (axes_num);

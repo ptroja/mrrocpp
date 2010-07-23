@@ -23,10 +23,11 @@
 
 #include "lib/srlib.h"
 
-#include "ui/ui_ecp_r_tfg_and_conv.h"
+#include "ui/src/ui_ecp_r_tfg_and_conv.h"
 
 #include "robot/irp6ot_tfg/ecp_r_irp6ot_tfg.h"
 #include "robot/irp6p_tfg/ecp_r_irp6p_tfg.h"
+#include "robot/sarkofag/ecp_r_sarkofag.h"
 #include "robot/conveyor/ecp_r_conv.h"
 #include "robot/spkm/ecp_r_spkm.h"
 #include "robot/smb/ecp_r_smb.h"
@@ -45,6 +46,12 @@ ui_tfg_and_conv_robot::ui_tfg_and_conv_robot(lib::configurator &_config, lib::sr
 
 	} else if (_robot_name == lib::ROBOT_IRP6P_TFG) {
 		ecp = new ecp::irp6p_tfg::robot(_config, _sr_ecp_msg);
+
+		MOTOR_STEP = 0.4; // Przyrost kata obrotu walu silnika [rad]
+		JOINT_LINEAR_STEP = 0.00001; // Przyrost liniowy w przegubach posuwistych [m]
+
+	} else if (_robot_name == lib::ROBOT_SARKOFAG) {
+		ecp = new ecp::sarkofag::robot(_config, _sr_ecp_msg);
 
 		MOTOR_STEP = 0.4; // Przyrost kata obrotu walu silnika [rad]
 		JOINT_LINEAR_STEP = 0.00001; // Przyrost liniowy w przegubach posuwistych [m]

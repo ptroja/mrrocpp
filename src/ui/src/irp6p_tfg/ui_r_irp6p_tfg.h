@@ -8,8 +8,8 @@
 #ifndef __UI_R_IRP6P_TFG_H
 #define __UI_R_IRP6P_TFG_H
 
-#include "ui/ui.h"
-#include "ui/ui_robot.h"
+#include "ui/src/ui.h"
+#include "ui/src/ui_robot.h"
 #include "robot/irp6p_tfg/irp6p_tfg_const.h"
 
 //

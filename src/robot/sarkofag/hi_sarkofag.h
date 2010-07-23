@@ -31,7 +31,7 @@ const unsigned short int INT_FREC_DIVIDER = 8; // mnoznik czestotliwosci przerwa
 //                HARDWARE_INTERFACE class
 // ------------------------------------------------------------------------
 
-class hardware_interface : public common::hardware_interface
+class hardware_interface : public common::HI_rydz
 {
 
 public:
@@ -49,7 +49,7 @@ int_handler(void *arg, int id);
 }
 #endif
 
-} // namespace irp6ot
+} // namespace sarkofag
 } // namespace edp
 } // namespace mrrocpp
 

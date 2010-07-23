@@ -10,6 +10,7 @@
 
 #include <stdint.h>
 #include "base/edp/edp_e_motor_driven.h"
+#include "HardwareInterface.h"
 
 namespace mrrocpp {
 namespace edp {
@@ -97,40 +98,39 @@ typedef struct _irq_data
 	common::motor_data md; // Dane przesylane z/do funkcji obslugi przerwania
 } irq_data_t;
 
-class hardware_interface
+class HI_rydz : public HardwareInterface
 {
 public:
 	motor_driven_effector &master;
 
 	int max_current[MAX_SERVOS_NR];
-			hardware_interface(motor_driven_effector &_master, int _hi_irq_real, unsigned short int _hi_intr_freq_divider, unsigned int _hi_intr_timeout_high, unsigned int _hi_first_servo_ptr, unsigned int _hi_intr_generator_servo_ptr, unsigned int _hi_isa_card_offset, const int _max_current[]); // Konstruktor
+			HI_rydz(motor_driven_effector &_master, int _hi_irq_real, unsigned short int _hi_intr_freq_divider, unsigned int _hi_intr_timeout_high, unsigned int _hi_first_servo_ptr, unsigned int _hi_intr_generator_servo_ptr, unsigned int _hi_isa_card_offset, const int _max_current[]); // Konstruktor
 
-	virtual ~hardware_interface(void); // Destruktor
+	virtual ~HI_rydz(void); // Destruktor
+
 	virtual bool is_hardware_error(void); // Sprawdzenie czy wystapil blad sprzetowy
 
-	void init();
+	virtual void init();
 
-	void insert_set_value(int drive_number, double set_value);
+	virtual void insert_set_value(int drive_number, double set_value);
 
-	int get_current(int drive_number) const;
+	virtual int get_current(int drive_number);
 
-	double get_increment(int drive_number) const;
+	virtual double get_increment(int drive_number);
 
-	long int get_position(int drive_number) const;
+	virtual long int get_position(int drive_number);
 
 	virtual uint64_t read_write_hardware(void); // Obsluga sprzetu
+
 	virtual void reset_counters(void); // Zerowanie licznikow polozenia
 
 	virtual void start_synchro(int drive_number);
 
 	virtual void finish_synchro(int drive_number);
 
-	// oczekiwanie na przerwanie - tryb obslugi i delay(lag) po odebraniu przerwania
-	int hi_int_wait(interrupt_mode_t _interrupt_mode, int lag);
+	virtual bool is_impulse_zero(int drive_number);
 
-	bool is_impulse_zero(int drive_number) const;
-
-	void reset_position(int i);
+	virtual void reset_position(int i);
 
 private:
 	int int_id; // Identyfikator obslugi przerwania
@@ -149,6 +149,11 @@ private:
 	sigset_t mask;
 
 protected:
+
+	// oczekiwanie na przerwanie - tryb obslugi i delay(lag) po odebraniu przerwania
+	int hi_int_wait(interrupt_mode_t _interrupt_mode, int lag);
+
+
 	irq_data_t irq_data;
 
 	int meassured_current[MAX_SERVOS_NR]; // by Y - zmierzona wartosc pradu

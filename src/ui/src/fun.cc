@@ -20,11 +20,11 @@
 #include <assert.h>
 
 #include "lib/srlib.h"
-#include "ui/ui_const.h"
-#include "ui/ui_class.h"
+#include "ui/src/ui_const.h"
+#include "ui/src/ui_class.h"
 #include "ui/src/ui_ecp.h"
 
-// #include "ui/ui.h"
+// #include "ui/src/ui.h"
 // Konfigurator (dla PROCESS_SPAWN_RSH)
 #include "lib/configurator.h"
 #include "robot/irp6_mechatronika/irp6m_const.h"
@@ -32,6 +32,7 @@
 #include "robot/irp6ot_tfg/irp6ot_tfg_const.h"
 #include "robot/irp6p_m/irp6p_m_const.h"
 #include "robot/irp6p_tfg/irp6p_tfg_const.h"
+#include "robot/sarkofag/sarkofag_const.h"
 #include "robot/polycrank/polycrank_const.h"
 #include "robot/smb/smb_const.h"
 #include "robot/spkm/spkm_const.h"
@@ -1204,6 +1205,7 @@ int EDP_all_robots_synchronise(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackI
 	EDP_irp6_on_track_synchronise(widget, apinfo, cbinfo);
 	EDP_irp6ot_tfg_synchronise(widget, apinfo, cbinfo);
 	EDP_irp6p_tfg_synchronise(widget, apinfo, cbinfo);
+	EDP_sarkofag_synchronise(widget, apinfo, cbinfo);
 	EDP_irp6_postument_synchronise(widget, apinfo, cbinfo);
 	EDP_irp6_mechatronika_synchronise(widget, apinfo, cbinfo);
 
@@ -1259,6 +1261,8 @@ int all_robots_move_to_preset_position(PtWidget_t *widget, ApInfo_t *apinfo, PtC
 			irp6p_move_to_preset_position(widget, apinfo, cbinfo);
 		if (ui.check_synchronised_and_loaded(ui.irp6p_tfg->state))
 			irp6p_tfg_move_to_preset_position(widget, apinfo, cbinfo);
+		if (ui.check_synchronised_and_loaded(ui.sarkofag->state))
+			sarkofag_move_to_preset_position(widget, apinfo, cbinfo);
 		if (ui.check_synchronised_and_loaded(ui.conveyor->state))
 			conveyor_move_to_preset_position(widget, apinfo, cbinfo);
 		if (ui.check_synchronised_and_loaded(ui.irp6m_m->state))
@@ -1280,6 +1284,7 @@ int EDP_all_robots_create(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t
 	EDP_irp6ot_tfg_create(widget, apinfo, cbinfo);
 	EDP_irp6_postument_create(widget, apinfo, cbinfo);
 	EDP_irp6p_tfg_create(widget, apinfo, cbinfo);
+	EDP_sarkofag_create(widget, apinfo, cbinfo);
 	EDP_conveyor_create(widget, apinfo, cbinfo);
 	EDP_bird_hand_create(widget, apinfo, cbinfo);
 	EDP_spkm_create(widget, apinfo, cbinfo);
@@ -1302,6 +1307,7 @@ int EDP_all_robots_slay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *
 	EDP_irp6ot_tfg_slay(widget, apinfo, cbinfo);
 	EDP_irp6_postument_slay(widget, apinfo, cbinfo);
 	EDP_irp6p_tfg_slay(widget, apinfo, cbinfo);
+	EDP_sarkofag_slay(widget, apinfo, cbinfo);
 	EDP_conveyor_slay(widget, apinfo, cbinfo);
 	EDP_bird_hand_slay(widget, apinfo, cbinfo);
 	EDP_spkm_slay(widget, apinfo, cbinfo);
@@ -1443,6 +1449,7 @@ int pulse_start_mp(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinf
 		ui.conveyor->close_all_windows();
 		ui.irp6ot_tfg->close_all_windows();
 		ui.irp6p_tfg->close_all_windows();
+		ui.sarkofag->close_all_windows();
 		ui.speaker->close_all_windows();
 
 		ui.execute_mp_pulse(MP_START);

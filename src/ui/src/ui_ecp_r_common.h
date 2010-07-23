@@ -8,7 +8,7 @@
 #ifndef _UI_ECP_R_COMMON_H
 #define _UI_ECP_R_COMMON_H
 
-#include "ui/ui.h"
+#include "ui/src/ui.h"
 // Konfigurator.
 #include "lib/configurator.h"
 #include "lib/mrmath/mrmath.h"

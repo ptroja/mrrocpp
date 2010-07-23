@@ -58,7 +58,9 @@ extern ApWindowLink_t wnd_irp6p_tfg_servo_algorithm;
 extern ApWindowLink_t wnd_irp6p_tfg_moves;
 extern ApWindowLink_t wnd_bird_hand_configuration;
 extern ApWindowLink_t wnd_bird_hand_command_and_status;
-extern ApWidget_t AbWidgets[ 1164 ];
+extern ApWindowLink_t wnd_sarkofag_moves;
+extern ApWindowLink_t wnd_sarkofag_servo_algorithm;
+extern ApWidget_t AbWidgets[ 1186 ];
 
 extern ApMenuLink_t file_menu;
 extern ApMenuLink_t task_menu;
@@ -409,4 +411,16 @@ int init_wnd_bird_hand_configuration( PtWidget_t *widget, ApInfo_t *data, PtCall
 int copy_wnd_bird_hand_configuration( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 int clear_wnd_bird_hand_configuration( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 int execute_wnd_bird_hand_configuration( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int EDP_sarkofag_create( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int EDP_sarkofag_slay( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int EDP_sarkofag_synchronise( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int start_wind_sarkofag_moves( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int start_wnd_sarkofag_servo_algorithm( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int sarkofag_move_to_preset_position( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int init_wnd_sarkofag_servo_algorithm( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int clear_wnd_sarkofag_servo_algorithm_flag( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int sarkofag_servo_algorithm_set( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int wind_sarkofag_moves_init( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int clear_wind_sarkofag_moves_flag( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int wind_sarkofag_moves_move( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 #endif

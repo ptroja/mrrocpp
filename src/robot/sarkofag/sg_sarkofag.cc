@@ -11,7 +11,7 @@
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 
-// Klasa edp_irp6ot_effector.
+// Klasa edp_sarkofag_effector.
 #include "robot/sarkofag/edp_e_sarkofag.h"
 #include "base/edp/reader.h"
 // Klasa hardware_interface.
@@ -53,7 +53,7 @@ void servo_buffer::load_hardware_interface(void)
 	// Serwomechanizm 1
 
 	// regulator_ptr[1] = new NL_regulator_2 (0, 0, 0.71, 13./4, 12.57/4, 0.35);
-	// kolumna dla irp6 postument
+	// kolumna dla sarkofag
 	regulator_ptr[0] = new NL_regulator_8_sarkofag(0, 0, 0.39, 8.62 / 2., 7.89 / 2., 0.35, master);
 
 	common::servo_buffer::load_hardware_interface();

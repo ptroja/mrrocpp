@@ -10,7 +10,7 @@
 
 #include "lib/configurator.h"
 #include "lib/srlib.h"
-#include "ui/ui.h"
+#include "ui/src/ui.h"
 
 class ui_model
 {

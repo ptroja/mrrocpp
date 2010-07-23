@@ -43,7 +43,7 @@ namespace mrrocpp {
 namespace edp {
 namespace common {
 
-void hardware_interface::init()
+void HI_rydz::init()
 {
 	// Sledzenie zera rezolwera - wylaczane
 	trace_resolver_zero = false;
@@ -183,7 +183,7 @@ void hardware_interface::init()
 }
 
 // Konstruktor
-hardware_interface::hardware_interface(motor_driven_effector &_master, int _hi_irq_real, unsigned short int _hi_intr_freq_divider, unsigned int _hi_intr_timeout_high, unsigned int _hi_first_servo_ptr, unsigned int _hi_intr_generator_servo_ptr, unsigned int _hi_isa_card_offset, const int _max_current[]) :
+HI_rydz::HI_rydz(motor_driven_effector &_master, int _hi_irq_real, unsigned short int _hi_intr_freq_divider, unsigned int _hi_intr_timeout_high, unsigned int _hi_first_servo_ptr, unsigned int _hi_intr_generator_servo_ptr, unsigned int _hi_isa_card_offset, const int _max_current[]) :
 	master(_master), hi_irq_real(_hi_irq_real), hi_intr_freq_divider(_hi_intr_freq_divider),
 			hi_intr_timeout_high(_hi_intr_timeout_high), hi_first_servo_ptr(_hi_first_servo_ptr),
 			hi_isa_card_offset(_hi_isa_card_offset), hi_intr_generator_servo_ptr(_hi_intr_generator_servo_ptr)
@@ -193,7 +193,7 @@ hardware_interface::hardware_interface(motor_driven_effector &_master, int _hi_i
 	}
 }
 
-void hardware_interface::insert_set_value(int drive_number, double set_value)
+void HI_rydz::insert_set_value(int drive_number, double set_value)
 { // Wprowadzenie wartosci zadanej PWM
 	robot_control[drive_number].adr_offset_plus_0 = (uint16_t) fabs(set_value);
 	if (set_value < 0)
@@ -203,25 +203,25 @@ void hardware_interface::insert_set_value(int drive_number, double set_value)
 }
 
 // dla wybranej osi
-int hardware_interface::get_current(int drive_number) const
+int HI_rydz::get_current(int drive_number)
 { // Pobranie pradu
 	return meassured_current[drive_number];
 }
 
 // Pobranie przyrostu polozenia wybranej osi
-double hardware_interface::get_increment(int drive_number) const
+double HI_rydz::get_increment(int drive_number)
 {
 	return current_position_inc[drive_number];
 }
 
 // Pobranie polozenia wybranej osi
-long int hardware_interface::get_position(int drive_number) const
+long int HI_rydz::get_position(int drive_number)
 {
 	return current_absolute_position[drive_number];
 }
 
 // ------------------------------------------------------------------------
-hardware_interface::~hardware_interface(void) // destruktor
+HI_rydz::~HI_rydz(void) // destruktor
 {
 	if (master.robot_test_mode == 0) {
 		reset_counters();
@@ -245,7 +245,7 @@ hardware_interface::~hardware_interface(void) // destruktor
 // ------------------------------------------------------------------------
 
 // ------------------------------------------------------------------------
-uint64_t hardware_interface::read_write_hardware(void)
+uint64_t HI_rydz::read_write_hardware(void)
 {
 
 	// ------------------------------------------------------------------------
@@ -289,7 +289,7 @@ uint64_t hardware_interface::read_write_hardware(void)
 
 // ------------------------------------------------------------------------
 // Zerowanie licznikow polozenia wszystkich osi
-void hardware_interface::reset_counters(void)
+void HI_rydz::reset_counters(void)
 {
 
 	for (int i = 0; i < master.number_of_servos; i++) {
@@ -338,7 +338,7 @@ void hardware_interface::reset_counters(void)
 // ------------------------------------------------------------------------
 
 // ------------------------------------------------------------------------
-bool hardware_interface::is_hardware_error(void)
+bool HI_rydz::is_hardware_error(void)
 {
 	bool h_error = false;
 
@@ -358,7 +358,7 @@ bool hardware_interface::is_hardware_error(void)
 // ------------------------------------------------------------------------
 
 
-int hardware_interface::hi_int_wait(interrupt_mode_t _interrupt_mode, int lag)
+int HI_rydz::hi_int_wait(interrupt_mode_t _interrupt_mode, int lag)
 {
 	if (!master.robot_test_mode) {
 #ifdef __QNXNTO__
@@ -413,7 +413,7 @@ int hardware_interface::hi_int_wait(interrupt_mode_t _interrupt_mode, int lag)
 	}
 }
 
-void hardware_interface::start_synchro(int drive_number)
+void HI_rydz::start_synchro(int drive_number)
 {
 	trace_resolver_zero = true;
 	// Wlacz sledzenie zera rezolwera (synchronizacja robota)
@@ -423,7 +423,7 @@ void hardware_interface::start_synchro(int drive_number)
 	hi_int_wait(INT_SINGLE_COMMAND, 2);
 } // end: start_synchro()
 
-void hardware_interface::finish_synchro(int drive_number)
+void HI_rydz::finish_synchro(int drive_number)
 {
 	trace_resolver_zero = false;
 
@@ -440,7 +440,7 @@ void hardware_interface::finish_synchro(int drive_number)
 
 
 // Sprawdzenie czy pojawilo sie zero  (synchronizacji rezolwera)
-bool hardware_interface::is_impulse_zero(int drive_number) const
+bool HI_rydz::is_impulse_zero(int drive_number)
 {
 	if (robot_status[drive_number].adr_offset_plus_0 & 0x0100)
 		return true;
@@ -449,7 +449,7 @@ bool hardware_interface::is_impulse_zero(int drive_number) const
 }
 
 // Zerowanie licznikow polozenia
-void hardware_interface::reset_position(int i)
+void HI_rydz::reset_position(int i)
 {
 	current_absolute_position[i] = 0L;
 	previous_absolute_position[i] = 0L;

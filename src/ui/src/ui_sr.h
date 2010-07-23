@@ -21,7 +21,7 @@
 #include "lib/srlib.h"
 #include "lib/mis_fun.h"
 
-#include "ui/ui.h"
+#include "ui/src/ui.h"
 
 #define UI_SR_BUFFER_LENGHT 50
 
