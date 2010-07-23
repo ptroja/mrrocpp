@@ -55,14 +55,13 @@ public:
 private:
 //	  generator::constant_velocity* cvgenjoint;; -- generator o stalej predkosci
 //    shared_ptr<generator::smooth> bc_smooth;
-	shared_ptr<generator::bclike_smooth> bc_smooth;
+
+//	shared_ptr<generator::bclike_smooth> bc_smooth;
+	shared_ptr<generator::newsmooth> bc_smooth;
 
 	std::vector<double> vec;
 
 	std::vector<regions> reading;
-
-	visual_servo_types::image_based_configuration ib_config;
-	mrrocpp::lib::empty_t x;
 
 //	shared_ptr<ecp_sub_task> bcl_recognition;
 //	shared_ptr<ecp_sub_task> bc_read;

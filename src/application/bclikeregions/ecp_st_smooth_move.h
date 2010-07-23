@@ -34,6 +34,7 @@ public:
 
 private:
 	shared_ptr<generator::bclike_smooth> bcl_smooth;
+	bcl_t_switcher & bcl_ecp;
 };
 
 // TODO dolozyc bc_smooth i przekazac mu fradia sensor

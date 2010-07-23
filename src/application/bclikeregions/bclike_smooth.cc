@@ -28,7 +28,7 @@ bclike_smooth::bclike_smooth(mrrocpp::ecp::common::task::task & ecp_task) :
 	no_fradia = true;
 }
 
-bclike_smooth::bclike_smooth(mrrocpp::ecp::common::task::bclikeregions_task & task):
+bclike_smooth::bclike_smooth(mrrocpp::ecp::common::task::bcl_t_switcher & task):
 				common::generator::newsmooth((mrrocpp::ecp::common::task::task &)task, lib::ECP_JOINT, 8),
 				bcl_ecp((task::bcl_t_switcher &)ecp_t){
 //				vsp_fradia(vsp_fradia){
@@ -42,22 +42,24 @@ bclike_smooth::bclike_smooth(mrrocpp::ecp::common::task::bclikeregions_task & ta
 		sensor_m[ecp_mp::sensor::SENSOR_CVFRADIA] = vsp_fradia;//.get();
 		vsp_fradia->base_period = 1;
 
-		std::cout << "SENSOR ADD" << std::endl;
+		std::cout << "SENSOR ADD no vsp constructor" << std::endl;
 	}
 
 }
 
 //bclike_smooth::bclike_smooth(mrrocpp::ecp::common::task::bclikeregions_task & task, shared_ptr<task::bcl_fradia_sensor> fr):
-bclike_smooth::bclike_smooth(mrrocpp::ecp::common::task::bclikeregions_task & task, task::bcl_fradia_sensor* fr):
+bclike_smooth::bclike_smooth(mrrocpp::ecp::common::task::bcl_t_switcher & task, task::bcl_fradia_sensor* fr):
 						common::generator::newsmooth((mrrocpp::ecp::common::task::task &)task, lib::ECP_JOINT, 8),
 						bcl_ecp((task::bcl_t_switcher &)ecp_t),
 						vsp_fradia(fr){
+
+	no_fradia = false;
 
 	if(vsp_fradia != NULL){
 		sensor_m[ecp_mp::sensor::SENSOR_CVFRADIA] = vsp_fradia;//.get();
 		vsp_fradia->base_period = 1;
 
-		std::cout << "SENSOR ADD" << std::endl;
+		std::cout << "SENSOR ADD vsp constructor" << std::endl;
 	}
 }
 

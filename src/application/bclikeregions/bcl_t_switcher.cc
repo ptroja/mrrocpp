@@ -30,7 +30,8 @@ bcl_t_switcher::bcl_t_switcher(lib::configurator &_config):
 
 	ecp_m_robot = new ecp::irp6ot_m::robot(*this);
 
-	bc_smooth = shared_ptr<generator::bclike_smooth> (new generator::bclike_smooth(*this));
+//	bc_smooth = shared_ptr<generator::bclike_smooth> (new generator::bclike_smooth(*this, vsp_fradia));
+	bc_smooth = shared_ptr<generator::newsmooth> (new generator::newsmooth(*this, lib::ECP_JOINT, 8));
 	bc_smooth->set_absolute();
 
 	//dodanie subtaskow do wykonywania
@@ -41,6 +42,8 @@ bcl_t_switcher::bcl_t_switcher(lib::configurator &_config):
 }
 
 bcl_t_switcher::~bcl_t_switcher() {
+//	delete vsp_fradia;
+	delete ecp_m_robot;
 }
 
 void bcl_t_switcher::mp_2_ecp_next_state_string_handler(void){
