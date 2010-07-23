@@ -30,7 +30,7 @@ public:
 	virtual boost::shared_ptr <ecp_mp::sensor::sensor_interface> get_vsp_fradia();
 protected:
 	virtual lib::VSP_REPORT_t get_sensor_report();
-	virtual bool is_object_visible_reading();
+	virtual bool is_object_visible_in_latest_reading();
 
 	boost::shared_ptr <pb_fradia_sensor> vsp_fradia;
 

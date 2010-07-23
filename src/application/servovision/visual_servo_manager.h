@@ -126,7 +126,7 @@ private:
 	void constrain_position(lib::Homog_matrix & new_position);
 
 	/**
-	 * Apply constraints for speed and acceleration.
+	 * Apply constraints for velocity and acceleration on single 3 element vector.
 	 * @param ds
 	 * @param prev_v
 	 * @param v
@@ -136,6 +136,12 @@ private:
 	 */
 	void constrain_vector(Eigen::Matrix <double, 3, 1> &ds, Eigen::Matrix <double, 3, 1> &prev_v, Eigen::Matrix <
 			double, 3, 1> &v, Eigen::Matrix <double, 3, 1> &a, double max_v, double max_a);
+
+	/**
+	 * Apply constraints for velocity and acceleration, both linear and angular.
+	 * @param position_change
+	 */
+	void constrain_speed_accel(lib::Homog_matrix & position_change);
 
 	//	timer_t timerek;
 	//	itimerspec max_t;

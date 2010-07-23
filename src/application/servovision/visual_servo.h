@@ -57,7 +57,7 @@ protected:
 
 	virtual lib::VSP_REPORT_t get_sensor_report() = 0;
 
-	virtual bool is_object_visible_reading() = 0;
+	virtual bool is_object_visible_in_latest_reading() = 0;
 
 	boost::shared_ptr <visual_servo_regulator> regulator;
 private:

@@ -88,50 +88,37 @@ bool visual_servo_manager::first_step()
 //	timer_settime(timerek, 0, &max_t, NULL);
 //}
 
+//	timer_gettime(timerek, &curr_t);
+//	log("timer_gettime(timerek, &curr_t): %d.%09d\n", curr_t.it_value.tv_sec, curr_t.it_value.tv_nsec);
+//	setup_timer();
+
 bool visual_servo_manager::next_step()
 {
-	//	timer_gettime(timerek, &curr_t);
-	//	log("timer_gettime(timerek, &curr_t): %d.%09d\n", curr_t.it_value.tv_sec, curr_t.it_value.tv_nsec);
-	//	setup_timer();
-
-	//	log_dbg("bool visual_servo_manager::next_step() begin\n");
-	the_robot->ecp_command.instruction.instruction_type = lib::SET_GET;
-
-	if (!current_position_saved) { // save first frame
+	if (!current_position_saved) { // save first position
 		current_position.set_from_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame);
 		current_position_saved = true;
 	}
 
-	// get readings from all servos and aggregate
+	// get aggregated position change from all servos
 	lib::Homog_matrix position_change = get_aggregated_position_change();
-	//	log_dbg("bool visual_servo_manager::next_step(): position_change = (%+07.3lg, %+07.3lg, %+07.3lg)\n", position_change(0, 3), position_change(1, 3), position_change(2, 3));
 
+	// calculate new position with respect to robot's base
 	lib::Homog_matrix next_position = current_position * position_change;
-
-	//	log_dbg("bool visual_servo_manager::next_step(): next_position = (%+07.3lg, %+07.3lg, %+07.3lg)\n", next_position(0, 3), next_position(1, 3), next_position(2, 3));
 
 	// apply weak position constraints
 	constrain_position(next_position);
 
+	// position change is now different, because position constraints were applied
 	position_change = (!current_position) * next_position;
 
-	lib::Xyz_Angle_Axis_vector aa_vector;
-	position_change.get_xyz_angle_axis(aa_vector);
-	Eigen::Matrix <double, 3, 1> ds = aa_vector.block(0, 0, 3, 1);
-	Eigen::Matrix <double, 3, 1> dalpha = aa_vector.block(3, 0, 3, 1);
+	// change representation to AA, because in AA form it's easier to constrain velocity and acceleration
+	constrain_speed_accel(position_change);
 
-	constrain_vector(ds, prev_velocity, velocity, acceleration, max_speed, max_acceleration);
-	constrain_vector(dalpha, prev_angular_velocity, angular_velocity, angular_acceleration, max_angular_speed, max_angular_acceleration);
-
-	aa_vector.block(0, 0, 3, 1) = ds;
-	aa_vector.block(3, 0, 3, 1) = dalpha;
-
-	position_change.set_from_xyz_angle_axis(aa_vector);
-
+	// update next position, because it may have changed by velocity and acceleration constraints
 	next_position = current_position * position_change;
 
-	//	log_dbg("bool visual_servo_manager::next_step(): next_position = (%+07.3lg, %+07.3lg, %+07.3lg)\n", next_position(0, 3), next_position(1, 3), next_position(2, 3));
-	// send command to the robot
+	// prepare command to EDP
+	the_robot->ecp_command.instruction.instruction_type = lib::SET_GET;
 	next_position.get_frame_tab(the_robot->ecp_command.instruction.arm.pf_def.arm_frame);
 
 	// save next position
@@ -158,8 +145,8 @@ void visual_servo_manager::constrain_position(lib::Homog_matrix & new_position)
 
 	for (int i = 0; i < position_constraints.size(); ++i) {
 		position_constraints[i]->set_new_position(new_position);
-		if (position_constraints[i]->is_translation_ok()) {	// end effector is in allowed region
-			if (!position_constraints[i]->is_rotation_ok()) {	// correct end effector's rotation if necessary
+		if (position_constraints[i]->is_translation_ok()) { // end effector is in allowed region
+			if (!position_constraints[i]->is_rotation_ok()) { // correct end effector's rotation if necessary
 				position_constraints[i]->apply_constraint();
 				new_position = position_constraints[i]->get_constrained_position();
 			}
@@ -201,6 +188,22 @@ void visual_servo_manager::constrain_vector(Eigen::Matrix <double, 3, 1> &ds, Ei
 	a = dv / dt;
 
 	prev_v = v;
+}
+
+void visual_servo_manager::constrain_speed_accel(lib::Homog_matrix & position_change)
+{
+	lib::Xyz_Angle_Axis_vector aa_vector;
+	position_change.get_xyz_angle_axis(aa_vector);
+	Eigen::Matrix <double, 3, 1> ds = aa_vector.block(0, 0, 3, 1);
+	Eigen::Matrix <double, 3, 1> dalpha = aa_vector.block(3, 0, 3, 1);
+
+	constrain_vector(ds, prev_velocity, velocity, acceleration, max_speed, max_acceleration);
+	constrain_vector(dalpha, prev_angular_velocity, angular_velocity, angular_acceleration, max_angular_speed, max_angular_acceleration);
+
+	aa_vector.block(0, 0, 3, 1) = ds;
+	aa_vector.block(3, 0, 3, 1) = dalpha;
+	// get back to homogeneous matrix representation
+	position_change.set_from_xyz_angle_axis(aa_vector);
 }
 
 const lib::Homog_matrix& visual_servo_manager::get_current_position() const

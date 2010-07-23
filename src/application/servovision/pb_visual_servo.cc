@@ -46,7 +46,7 @@ boost::shared_ptr <ecp_mp::sensor::sensor_interface> pb_visual_servo::get_vsp_fr
 	return boost::dynamic_pointer_cast <ecp_mp::sensor::sensor_interface>(vsp_fradia);
 }
 
-bool pb_visual_servo::is_object_visible_reading()
+bool pb_visual_servo::is_object_visible_in_latest_reading()
 {
 	return vsp_fradia->get_reading_message().tracking;
 }
