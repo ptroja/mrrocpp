@@ -13,12 +13,12 @@
 #include <fstream>
 #include <boost/circular_buffer.hpp>
 
-#include "ui/ui.h"
+#include "ui/src/ui.h"
 
 #include "lib/srlib.h"
 // #include "base/ecp/ecp.h"
 #include "lib/com_buf.h"
-#include "ui/ui_class.h"
+#include "ui/src/ui_class.h"
 #include "ui/src/ui_sr.h"
 
 /* Local headers */

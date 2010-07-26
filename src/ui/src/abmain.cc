@@ -33,7 +33,7 @@ Examples:
 
 /* Local headers */
 #include "ablibs.h"
-#include "../ui.h"
+#include "../src/ui.h"
 #include "abimport.h"
 #include "proto.h"
 #include "abwidgets.h"

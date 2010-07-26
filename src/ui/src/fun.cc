@@ -20,11 +20,11 @@
 #include <assert.h>
 
 #include "lib/srlib.h"
-#include "ui/ui_const.h"
-#include "ui/ui_class.h"
+#include "ui/src/ui_const.h"
+#include "ui/src/ui_class.h"
 #include "ui/src/ui_ecp.h"
 
-// #include "ui/ui.h"
+// #include "ui/src/ui.h"
 // Konfigurator (dla PROCESS_SPAWN_RSH)
 #include "lib/configurator.h"
 #include "robot/irp6_mechatronika/irp6m_const.h"

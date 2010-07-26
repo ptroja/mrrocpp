@@ -28,14 +28,14 @@
 #include <pthread.h>
 #include <errno.h>
 
-#include "ui/ui.h"
-#include "ui/ui_class.h"
+#include "ui/src/ui.h"
+#include "ui/src/ui_class.h"
 #include "ui/src/ui_ecp.h"
 #include "ui/src/ui_sr.h"
 
 #include "lib/mis_fun.h"
 #include "lib/srlib.h"
-#include "ui/ui_const.h"
+#include "ui/src/ui_const.h"
 #include "lib/configurator.h"
 #include "lib/mis_fun.h"
 

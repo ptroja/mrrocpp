@@ -5,7 +5,7 @@
 
 #include "messip_dataport.h"
 
-#include "ui/ui.h"
+#include "ui/src/ui.h"
 
 extern "C" {
 	void on_window_input_number_response(GtkDialog *dialog, gint arg1, gpointer user_data)

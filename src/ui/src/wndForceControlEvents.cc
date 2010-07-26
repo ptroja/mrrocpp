@@ -22,10 +22,10 @@
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 
-#include "ui/ui.h"
+#include "ui/src/ui.h"
 #include "robot/irp6ot_m/irp6ot_m_const.h"
-#include "ui/ui_const.h"
-#include "ui/ui_class.h"
+#include "ui/src/ui_const.h"
+#include "ui/src/ui_class.h"
 // #include "common/y_config.h"
 // Konfigurator.
 #include "lib/configurator.h"
