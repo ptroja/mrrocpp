@@ -258,8 +258,10 @@ bool haptic_stiffness::next_step()
 	// Korekta parametrów regulatora siłowego w robocie podrzednym na podstawie estymaty sztywnosci
 	double divisor;
 
-	if (stiffness > 400.0) {
-		divisor = stiffness / 400.0;
+#define ADAPTATION_FACTOR 800.0
+
+	if (stiffness > ADAPTATION_FACTOR) {
+		divisor = stiffness / ADAPTATION_FACTOR;
 	} else {
 		divisor = 1;
 	}
@@ -274,15 +276,15 @@ bool haptic_stiffness::next_step()
 	// wypiski
 
 
-	if ((node_counter % 10) == 0) {
-		std::cout << "current_force: " << current_force << ", current_position: " << current_position
-				<< ", stiffness: " << stiffness << std::endl;
+	//	if ((node_counter % 10) == 0) {
+	std::cout << "current_force: " << current_force << ", current_position: " << current_position << ", stiffness: "
+			<< stiffness << std::endl;
 
-		//std::cout << "irp6p_ECPtoMP_force_xyz_torque_xyz\n" << irp6p_ECPtoMP_force_xyz_torque_xyz << "interval:"
-		//		<< time_interval << std::endl;
-		//	std::cout << "irp6p_goal_xyz_angle_axis_increment_in_end_effector\n" << irp6p_goal_xyz_angle_axis_increment_in_end_effector << std::endl;
+	//std::cout << "irp6p_ECPtoMP_force_xyz_torque_xyz\n" << irp6p_ECPtoMP_force_xyz_torque_xyz << "interval:"
+	//		<< time_interval << std::endl;
+	//	std::cout << "irp6p_goal_xyz_angle_axis_increment_in_end_effector\n" << irp6p_goal_xyz_angle_axis_increment_in_end_effector << std::endl;
 
-	}
+	//	}
 
 	if ((irp6ot->ecp_reply_package.reply == lib::TASK_TERMINATED) || (irp6p->ecp_reply_package.reply
 			== lib::TASK_TERMINATED)) {
