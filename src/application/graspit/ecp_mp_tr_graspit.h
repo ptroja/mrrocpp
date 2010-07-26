@@ -12,6 +12,12 @@ namespace transmitter {
 
 /*==============================STRUCTURES===================================*/
 
+/**
+ * structure for communication with GraspIt
+ * 6 values for IRp6 middle position
+ * 6 values for IRp6 last position
+ * 8 values for Bird Hand last position
+ */
 typedef struct _from_graspit {
 	//double grasp_joint[2*6+1]; //tfg
 	double grasp_joint[2*6+8]; //bird_hand
@@ -23,13 +29,16 @@ static const std::string TRANSMITTER_GRASPIT = "TRANSMITTER_GRASPIT";
 
 typedef transmitter<lib::empty_t, from_graspit_t> GraspitTransmitter_t;
 
+/**
+ * Class for communication with GraspIt
+ */
 class TRGraspit: public GraspitTransmitter_t {
 	private:									// pola do komunikacji
 		int socketDescriptor;
 
 	public:
 		TRGraspit(TRANSMITTER_ENUM _transmitter_name, const char* _section_name, task::task& _ecp_mp_object);
-		~TRGraspit(); 	// destruktor czujnika virtualnego
+		~TRGraspit(); 	// destruktor czujnika wirtualnego
 		void TRconnect(const char *host,unsigned short int serverPort);
 		void TRdisconnect();
 		virtual bool t_read ();	// odczyt z zawieszaniem lub bez

@@ -84,13 +84,14 @@ bool bird_hand::first_step() {
 	des_ring_f[1] = bird_hand_command_structure.ring_f[1].desired_position;
 	des_ring_f[2] = bird_hand_command_structure.ring_f[2].desired_position;
 
-	for (int i=0; i<2; ++i)
-		std::cout << "\n des_thumb_f[i]: " << des_thumb_f[i];
-	for (int i=0; i<3; ++i)
-		std::cout << "\n des_index_f[i]: " << des_index_f[i];
-	for (int i=0; i<3; ++i)
-		std::cout << "\n des_ring_f[i]: " << des_ring_f[i];
-	fflush(stdout);
+	//debugging
+//	for (int i=0; i<2; ++i)
+//		std::cout << "\n des_thumb_f[i]: " << des_thumb_f[i];
+//	for (int i=0; i<3; ++i)
+//		std::cout << "\n des_index_f[i]: " << des_index_f[i];
+//	for (int i=0; i<3; ++i)
+//		std::cout << "\n des_ring_f[i]: " << des_ring_f[i];
+//	fflush(stdout);
 
 	//pierwszy next_step pusty
 	bird_hand_command_structure.thumb_f[0].desired_position = 0.5;
@@ -159,7 +160,7 @@ bool bird_hand::next_step() {
 			std::cout << "\n max_dist: " << max_dist;
 			std::cout << "\n max_v: " << MAX_V;
 		}
-
+		//debugging
 //		std::cout << "\n thumb_f[0].meassured_position: " << bird_hand_status_reply_structure.thumb_f[0].meassured_position;
 //		std::cout << "\n thumb_f[1].meassured_position: " << bird_hand_status_reply_structure.thumb_f[1].meassured_position;
 //		std::cout << "\n index_f[0].meassured_position: " << bird_hand_status_reply_structure.index_f[0].meassured_position;

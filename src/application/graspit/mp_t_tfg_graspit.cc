@@ -1,3 +1,8 @@
+//!!!
+//!!! This MP TFG task (mp_t_tfg_graspit) was created for testing purposes only and should be deleted eventually.
+//!!! Use MP Bird Hand task instead (mp_t_birdhand_graspit).
+//!!!
+
 #include <iostream>
 #include <string>
 #include <sstream>
@@ -26,9 +31,7 @@ namespace task {
 graspit::graspit(lib::configurator &_config) :
 	task(_config)
 {
-
-	trgraspit
-			= new ecp_mp::transmitter::TRGraspit(ecp_mp::transmitter::TRANSMITTER_GRASPIT, "[transmitter_graspit]", *this);
+	trgraspit = new ecp_mp::transmitter::TRGraspit(ecp_mp::transmitter::TRANSMITTER_GRASPIT, "[transmitter_graspit]", *this);
 }
 
 void graspit::main_task_algorithm(void)
@@ -56,7 +59,7 @@ void graspit::main_task_algorithm(void)
 	trgraspit->from_va.grasp_joint[8] += trgraspit->from_va.grasp_joint[7];
 	trgraspit->from_va.grasp_joint[9] += trgraspit->from_va.grasp_joint[8];
 
-	//synchro with GraspIt
+	//IRp6 synchro with GraspIt
 	//trgraspit->from_va.grasp_joint[0] ;
 	trgraspit->from_va.grasp_joint[1] -= 1.542;
 	//trgraspit->from_va.grasp_joint[2] ;
@@ -71,6 +74,7 @@ void graspit::main_task_algorithm(void)
 	trgraspit->from_va.grasp_joint[10] += 4.712;
 	//trgraspit->from_va.grasp_joint[11] ;
 
+	//TFG synchro with GraspIt
 	trgraspit->from_va.grasp_joint[12] = (45.5 - trgraspit->from_va.grasp_joint[12]) * 2;
 	trgraspit->from_va.grasp_joint[12] /= 1000;
 

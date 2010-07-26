@@ -23,12 +23,14 @@ namespace task {
 graspit::graspit(lib::configurator &_config) :
 	task(_config)
 {
-
 	trgraspit = new ecp_mp::transmitter::TRGraspit(ecp_mp::transmitter::TRANSMITTER_GRASPIT, "[transmitter_graspit]", *this);
 }
 
 void graspit::main_task_algorithm(void)
 {
+
+	//delta for hand position control
+	const double delta_pos = 0.1;
 
 	sr_ecp_msg->message("START GRASP");
 
@@ -52,7 +54,7 @@ void graspit::main_task_algorithm(void)
 	trgraspit->from_va.grasp_joint[8] += trgraspit->from_va.grasp_joint[7];
 	trgraspit->from_va.grasp_joint[9] += trgraspit->from_va.grasp_joint[8];
 
-	//synchro with GraspIt
+	//IRp6 synchro with GraspIt
 	//trgraspit->from_va.grasp_joint[0] ;
 	trgraspit->from_va.grasp_joint[1] -= 1.542;
 	//trgraspit->from_va.grasp_joint[2] ;
@@ -67,9 +69,8 @@ void graspit::main_task_algorithm(void)
 	trgraspit->from_va.grasp_joint[10] += 4.712;
 	//trgraspit->from_va.grasp_joint[11] ;
 
-	//Bird Hand synchro?
-	//trgraspit->from_va.grasp_joint[12] += 0.0;
-
+	//Bird Hand synchro with GraspIt
+	//already ok
 
 	// ROBOT IRP6_ON_TRACK
 	if (config.value <int> ("is_irp6ot_m_active", UI_SECTION)) {
@@ -98,8 +99,10 @@ void graspit::main_task_algorithm(void)
 	} mp_ecp_irp6_command;
 	lib::bird_hand_command mp_ecp_bird_hand_command;
 
+	//middle IRp6 position from GraspIt
 	for (int i=0; i<6; ++i)
 		mp_ecp_irp6_command.joint[i] = trgraspit->from_va.grasp_joint[i+6];
+	//we want opened hand
 	mp_ecp_bird_hand_command.thumb_f[0].desired_position = 0.5;
 	mp_ecp_bird_hand_command.thumb_f[1].desired_position = 0.4;
 	mp_ecp_bird_hand_command.index_f[0].desired_position = 0.0;
@@ -121,18 +124,20 @@ void graspit::main_task_algorithm(void)
 
 	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, manipulator_name.c_str(), manipulator_name.c_str());
 
-
+	//last IRp6 position from GraspI
 	for (int i=0; i<6; ++i)
 		mp_ecp_irp6_command.joint[i] = trgraspit->from_va.grasp_joint[i];
-	mp_ecp_bird_hand_command.thumb_f[0].desired_position = 0.55 - trgraspit->from_va.grasp_joint[18] - 0.1; //0.1 to zadana sila
-	mp_ecp_bird_hand_command.thumb_f[1].desired_position = 0.45 - trgraspit->from_va.grasp_joint[19] - 0.1;
+	//we want closed hand (desired_position from GraspIt), add delta_pos to apply forces
+	mp_ecp_bird_hand_command.thumb_f[0].desired_position = 0.55 - trgraspit->from_va.grasp_joint[18] - delta_pos;
+	mp_ecp_bird_hand_command.thumb_f[1].desired_position = 0.45 - trgraspit->from_va.grasp_joint[19] - delta_pos;
 	mp_ecp_bird_hand_command.index_f[0].desired_position = 0.0;
-	mp_ecp_bird_hand_command.index_f[1].desired_position = 0.55 - trgraspit->from_va.grasp_joint[16] - 0.1;
-	mp_ecp_bird_hand_command.index_f[2].desired_position = 0.45 - trgraspit->from_va.grasp_joint[17] - 0.1;
+	mp_ecp_bird_hand_command.index_f[1].desired_position = 0.55 - trgraspit->from_va.grasp_joint[16] - delta_pos;
+	mp_ecp_bird_hand_command.index_f[2].desired_position = 0.45 - trgraspit->from_va.grasp_joint[17] - delta_pos;
 	mp_ecp_bird_hand_command.ring_f[0].desired_position = 0.0;
-	mp_ecp_bird_hand_command.ring_f[1].desired_position = 0.55 - trgraspit->from_va.grasp_joint[13] - 0.1;
-	mp_ecp_bird_hand_command.ring_f[2].desired_position = 0.45 - trgraspit->from_va.grasp_joint[14] - 0.1;
+	mp_ecp_bird_hand_command.ring_f[1].desired_position = 0.55 - trgraspit->from_va.grasp_joint[13] - delta_pos;
+	mp_ecp_bird_hand_command.ring_f[2].desired_position = 0.45 - trgraspit->from_va.grasp_joint[14] - delta_pos;
 
+	//check if adding delta_pos didn't cause out-of-boundary move
 	for (int i=0; i<2; ++i)
 		if (mp_ecp_bird_hand_command.thumb_f[i].desired_position < 0.0)
 			mp_ecp_bird_hand_command.thumb_f[i].desired_position = 0.0;
@@ -156,10 +161,11 @@ void graspit::main_task_algorithm(void)
 	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, gripper_name.c_str(), gripper_name.c_str());
 
 
-	std::stringstream ss(std::stringstream::in | std::stringstream::out);
-	for (int i=12; i<20; ++i)
-		ss << "\n rec_val: " << trgraspit->from_va.grasp_joint[i];
-	sr_ecp_msg->message(ss.str().c_str());
+	//debugging
+//	std::stringstream ss(std::stringstream::in | std::stringstream::out);
+//	for (int i=12; i<20; ++i)
+//		ss << "\n rec_val: " << trgraspit->from_va.grasp_joint[i];
+//	sr_ecp_msg->message(ss.str().c_str());
 
 	sr_ecp_msg->message("END GRASP");
 }

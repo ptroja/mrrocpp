@@ -12,12 +12,22 @@ namespace task {
 class graspit: public task {
 
 	private:
+	/**
+	 * transmitter for communication with GraspIt
+	 */
 		ecp_mp::transmitter::TRGraspit* trgraspit;
 
 	public:
+		/**
+		 * constructor
+		 * @param _config
+		 * @return
+		 */
 		graspit(lib::configurator &_config);
 
-		// methods for mp template
+		/**
+		 * methods for mp template
+		 */
 		void main_task_algorithm(void);
 
 };
