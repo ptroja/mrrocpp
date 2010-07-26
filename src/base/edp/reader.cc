@@ -42,7 +42,7 @@ namespace edp {
 namespace common {
 
 reader_config::reader_config() :
-	step(false), msec(false), servo_mode(false)
+	step(false), measure_time(false), servo_mode(false)
 {
 	for (int i = 0; i < MAX_SERVOS_NR; ++i) {
 		desired_inc[i] = false;
@@ -110,7 +110,7 @@ void reader_buffer::operator()()
 
 	reader_cnf.step = 1;
 	reader_cnf.servo_mode = master.config.check_config("servo_tryb");
-	reader_cnf.msec = master.config.check_config("msec");
+	reader_cnf.measure_time = master.config.check_config("measure_time");
 
 	char tmp_string[50];
 
@@ -402,8 +402,8 @@ void reader_buffer::write_header_old_format(std::ofstream& outfile)
 void reader_buffer::write_data_old_format(std::ofstream& outfile, const reader_data & data)
 {
 	outfile << data.step << " ";
-	if (reader_cnf.msec)
-		outfile << data.msec << " ";
+	if (reader_cnf.measure_time)
+		outfile << ((int) (data.measure_time.tv_nsec / 1000000)) << " ";
 	if (reader_cnf.servo_mode)
 		outfile << (data.servo_mode ? "1" : "0") << " ";
 	for (int j = 0; j < master.number_of_servos; j++) {
@@ -473,8 +473,8 @@ void reader_buffer::write_data_old_format(std::ofstream& outfile, const reader_d
 void reader_buffer::write_header_csv(std::ofstream& outfile)
 {
 	outfile << "step;";
-	if (reader_cnf.msec)
-		outfile << "msec;";
+	if (reader_cnf.measure_time)
+		outfile << "measure_time_sec;measure_time_nsec;";
 	if (reader_cnf.servo_mode)
 		outfile << "servo_mode;";
 	for (int j = 0; j < master.number_of_servos; j++) {
@@ -530,8 +530,8 @@ void reader_buffer::write_header_csv(std::ofstream& outfile)
 void reader_buffer::write_data_csv(std::ofstream& outfile, const reader_data & data)
 {
 	outfile << data.step << ";";
-	if (reader_cnf.msec)
-		outfile << data.msec << ";";
+	if (reader_cnf.measure_time)
+		outfile << data.measure_time.tv_sec << ";" << data.measure_time.tv_nsec << ";";
 	if (reader_cnf.servo_mode)
 		outfile << (data.servo_mode ? "1" : "0") << ";";
 	for (int j = 0; j < master.number_of_servos; j++) {

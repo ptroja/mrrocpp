@@ -12,6 +12,8 @@
 #include <boost/thread/condition_variable.hpp>
 #include <boost/circular_buffer.hpp>
 
+#include <time.h>
+
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
@@ -32,7 +34,7 @@ struct reader_config
 
 	bool step;       // numer kroku
 
-    bool msec; // czas wykonania pomiaru (w ms)
+    bool measure_time; // czas wykonania pomiaru (w ms)
 
     bool desired_inc[MAX_SERVOS_NR];       // wejscie dla osi 0,2,3,4
     bool current_inc[MAX_SERVOS_NR]; // wyjscie
@@ -57,7 +59,7 @@ struct reader_config
 struct reader_data
 {   // Struktura z danymi pomiarowymi w reader do zapisu do pliku
     unsigned long step;       // numer kroku
-    unsigned int msec; // czas wykonania pomiaru (w ms)
+    struct timespec measure_time; // czas wykonania pomiaru (w ms)
 
     float desired_inc[MAX_SERVOS_NR];       // wejscie dla osi 0,2,3,4
     short int current_inc[MAX_SERVOS_NR]; // wyjscie
