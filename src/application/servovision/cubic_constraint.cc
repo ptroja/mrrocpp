@@ -104,18 +104,19 @@ double cubic_constraint::get_distance_from_allowed_area()
 
 void cubic_constraint::apply_constraint()
 {
-	log("cubic_constraint::apply_constraint()\n");
-
-	lib::Homog_matrix rot = (!cone_rotation) * new_position;
-
-	lib::Xyz_Angle_Axis_vector position_aa;
-	rot.get_xyz_angle_axis(position_aa);
-
+	// constrain translation
 	for (int i = 0; i < 3; ++i) {
 		new_position(i, 3) = min(translation_max(i, 0), new_position(i, 3));
 		new_position(i, 3) = max(translation_min(i, 0), new_position(i, 3));
 	}
 
+	// calculate difference between actual rotation and allowed rotation
+	lib::Homog_matrix rot = (!cone_rotation) * new_position;
+
+	lib::Xyz_Angle_Axis_vector position_aa;
+	rot.get_xyz_angle_axis(position_aa);
+
+	// get AA representation, where Z coordinate is always non-negative
 	Eigen::Matrix <double, 3, 1> axis = position_aa.block(3, 0, 3, 1);
 	double wrist_rotation = axis.norm();
 	axis = axis / wrist_rotation;
@@ -127,27 +128,24 @@ void cubic_constraint::apply_constraint()
 		wrist_rotation = -wrist_rotation;
 	}
 
+	// project rotation versor on XY plane
 	Eigen::Matrix <double, 2, 1> projected_axis = axis.block(0, 0, 2, 1);
+	// calculate inclination - angle between rotation versor and XY plane
 	double inclination = atan2(axis(2, 0), projected_axis.norm());
-	cout << "inclination= " << inclination << endl;
-	cout << "axis = " << axis << endl;
+	// constrain inclination
 	if (inclination < min_inclination) {
 		inclination = min_inclination;
 
 		axis(2, 0) = sin(inclination);
 		axis.block(0, 0, 2, 1) = cos(inclination) * projected_axis / projected_axis.norm();
-		cout << "axis = " << axis << endl;
 	}
-
+	// constrain wrist rotation
 	wrist_rotation = constrain_angle(wrist_rotation, wrist_rotation_min, wrist_rotation_max);
-
+	// get back from AA to rotation matrix
 	position_aa.block(3, 0, 3, 1) = axis * wrist_rotation;
-
 	rot.set_from_xyz_angle_axis(position_aa);
-	rot = cone_rotation * rot;
-	double r[3][3];
-	rot.get_rotation_matrix(r);
-	new_position.set_rotation_matrix(r);
+	// get back to rotation relative to robot's base
+	new_position.set_rotation_matrix(cone_rotation * rot);
 }
 
 } // namespace generator

@@ -37,7 +37,8 @@ public:
 	 * @param dt time between calls to get_position_change.
 	 * @return
 	 */
-	virtual lib::Homog_matrix get_position_change(const lib::Homog_matrix& current_position, double dt) = 0;
+	lib::Homog_matrix get_position_change(const lib::Homog_matrix& current_position, double dt);
+
 	/**
 	 * Returns fradia_sensor.
 	 * @return
@@ -48,16 +49,22 @@ public:
 	 * Returns object visibility.
 	 * @return
 	 */
-	virtual bool is_object_visible();
+	bool is_object_visible();
 protected:
 	visual_servo(boost::shared_ptr <visual_servo_regulator> regulator);
+
+	virtual lib::Homog_matrix compute_position_change(const lib::Homog_matrix& current_position, double dt) = 0;
+
+	virtual lib::VSP_REPORT_t get_sensor_report() = 0;
+
+	virtual bool is_object_visible_in_latest_reading() = 0;
+
 	boost::shared_ptr <visual_servo_regulator> regulator;
+private:
 	bool object_visible;
 
 	int max_steps_without_reading;
 	int steps_without_reading;
-private:
-
 }; // class visual_servo
 
 /** @} */

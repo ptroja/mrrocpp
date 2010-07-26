@@ -65,7 +65,7 @@ reader_config::reader_config() :
 }
 
 reader_buffer::reader_buffer(motor_driven_effector &_master) :
-	master(_master), new_data(false)
+	new_data(false), master(_master), write_csv(true)
 {
 	thread_id = new boost::thread(boost::bind(&reader_buffer::operator(), this));
 }
@@ -361,6 +361,13 @@ void reader_buffer::operator()()
 			// TODO: throw
 		} else { // jesli plik istnieje
 
+			if(write_csv){
+				write_header_csv(outfile);
+			}
+			else{
+				write_header_old_format(outfile);
+			}
+
 			// TODO: sprawdzenie czy bufor byl przepelniony i odpowiednie
 			// przygotowanie granic bufora przy zapi sie do pliku
 
@@ -372,73 +379,12 @@ void reader_buffer::operator()()
 
 				reader_data & data = reader_buf.front();
 
-				outfile << data.step << " ";
-				if (reader_cnf.msec)
-					outfile << data.msec << " ";
-				if (reader_cnf.servo_mode)
-					outfile << (data.servo_mode ? "1" : "0") << " ";
-				for (int j = 0; j < master.number_of_servos; j++) {
-					if (reader_cnf.desired_inc[j])
-						outfile << data.desired_inc[j] << " ";
-					if (reader_cnf.current_inc[j])
-						outfile << data.current_inc[j] << " ";
-					if (reader_cnf.pwm[j])
-						outfile << data.pwm[j] << " ";
-					if (reader_cnf.uchyb[j])
-						outfile << data.uchyb[j] << " ";
-					if (reader_cnf.abs_pos[j])
-						outfile << data.abs_pos[j] << " ";
+				if(write_csv){
+					write_data_csv(outfile, data);
 				}
-
-				outfile << "j: ";
-
-				for (int j = 0; j < master.number_of_servos; j++) {
-					if (reader_cnf.current_joints[j])
-						outfile << data.current_joints[j] << " ";
+				else{
+					write_data_old_format(outfile, data);
 				}
-
-				outfile << "f: ";
-
-				for (int j = 0; j < 6; j++) {
-					if (reader_cnf.force[j])
-						outfile << data.force[j] << " ";
-					if (reader_cnf.desired_force[j])
-						outfile << data.desired_force[j] << " ";
-					if (reader_cnf.filtered_force[j])
-						outfile << data.filtered_force[j] << " ";
-				}
-
-				outfile << "k: ";
-
-				for (int j = 0; j < 6; j++) {
-					if (reader_cnf.desired_cartesian_position[j])
-						outfile << data.desired_cartesian_position[j] << " ";
-				}
-
-				outfile << "r: ";
-
-				for (int j = 0; j < 6; j++) {
-					if (reader_cnf.real_cartesian_position[j])
-						outfile << data.real_cartesian_position[j] << " ";
-				}
-
-				outfile << "v: ";
-
-				for (int j = 0; j < 6; j++) {
-					if (reader_cnf.real_cartesian_vel[j])
-						outfile << data.real_cartesian_vel[j] << " ";
-				}
-
-				outfile << "a: ";
-
-				for (int j = 0; j < 6; j++) {
-					if (reader_cnf.real_cartesian_acc[j])
-						outfile << data.real_cartesian_acc[j] << " ";
-				}
-
-				outfile << "t: " << data.ui_trigger;
-
-				outfile << '\n';
 
 				reader_buf.pop_front();
 			}
@@ -446,6 +392,196 @@ void reader_buffer::operator()()
 			master.msg->message("file writing is finished");
 		}
 	} // end: for (;;)
+}
+
+void reader_buffer::write_header_old_format(std::ofstream& outfile)
+{
+	// does nothing
+}
+
+void reader_buffer::write_data_old_format(std::ofstream& outfile, const reader_data & data)
+{
+	outfile << data.step << " ";
+	if (reader_cnf.msec)
+		outfile << data.msec << " ";
+	if (reader_cnf.servo_mode)
+		outfile << (data.servo_mode ? "1" : "0") << " ";
+	for (int j = 0; j < master.number_of_servos; j++) {
+		if (reader_cnf.desired_inc[j])
+			outfile << data.desired_inc[j] << " ";
+		if (reader_cnf.current_inc[j])
+			outfile << data.current_inc[j] << " ";
+		if (reader_cnf.pwm[j])
+			outfile << data.pwm[j] << " ";
+		if (reader_cnf.uchyb[j])
+			outfile << data.uchyb[j] << " ";
+		if (reader_cnf.abs_pos[j])
+			outfile << data.abs_pos[j] << " ";
+	}
+
+	outfile << "j: ";
+
+	for (int j = 0; j < master.number_of_servos; j++) {
+		if (reader_cnf.current_joints[j])
+			outfile << data.current_joints[j] << " ";
+	}
+
+	outfile << "f: ";
+
+	for (int j = 0; j < 6; j++) {
+		if (reader_cnf.force[j])
+			outfile << data.force[j] << " ";
+		if (reader_cnf.desired_force[j])
+			outfile << data.desired_force[j] << " ";
+		if (reader_cnf.filtered_force[j])
+			outfile << data.filtered_force[j] << " ";
+	}
+
+	outfile << "k: ";
+
+	for (int j = 0; j < 6; j++) {
+		if (reader_cnf.desired_cartesian_position[j])
+			outfile << data.desired_cartesian_position[j] << " ";
+	}
+
+	outfile << "r: ";
+
+	for (int j = 0; j < 6; j++) {
+		if (reader_cnf.real_cartesian_position[j])
+			outfile << data.real_cartesian_position[j] << " ";
+	}
+
+	outfile << "v: ";
+
+	for (int j = 0; j < 6; j++) {
+		if (reader_cnf.real_cartesian_vel[j])
+			outfile << data.real_cartesian_vel[j] << " ";
+	}
+
+	outfile << "a: ";
+
+	for (int j = 0; j < 6; j++) {
+		if (reader_cnf.real_cartesian_acc[j])
+			outfile << data.real_cartesian_acc[j] << " ";
+	}
+
+	outfile << "t: " << data.ui_trigger;
+
+	outfile << '\n';
+}
+
+void reader_buffer::write_header_csv(std::ofstream& outfile)
+{
+	outfile << "step;";
+	if (reader_cnf.msec)
+		outfile << "msec;";
+	if (reader_cnf.servo_mode)
+		outfile << "servo_mode;";
+	for (int j = 0; j < master.number_of_servos; j++) {
+		if (reader_cnf.desired_inc[j])
+			outfile << "desired_inc[" << j << "];";
+		if (reader_cnf.current_inc[j])
+			outfile << "current_inc[" << j << "];";
+		if (reader_cnf.pwm[j])
+			outfile << "pwm[" << j << "];";
+		if (reader_cnf.uchyb[j])
+			outfile << "uchyb[" << j << "];";
+		if (reader_cnf.abs_pos[j])
+			outfile << "abs_pos[" << j << "];";
+	}
+
+	for (int j = 0; j < master.number_of_servos; j++) {
+		if (reader_cnf.current_joints[j])
+			outfile << "current_joints[" << j << "];";
+	}
+
+	for (int j = 0; j < 6; j++) {
+		if (reader_cnf.force[j])
+			outfile << "force[" << j << "];";
+		if (reader_cnf.desired_force[j])
+			outfile << "desired_force[" << j << "];";
+		if (reader_cnf.filtered_force[j])
+			outfile << "filtered_force[" << j << "];";
+	}
+
+	for (int j = 0; j < 6; j++) {
+		if (reader_cnf.desired_cartesian_position[j])
+			outfile << "desired_cartesian_position[" << j << "];";
+	}
+
+	for (int j = 0; j < 6; j++) {
+		if (reader_cnf.real_cartesian_position[j])
+			outfile << "real_cartesian_position[" << j << "];";
+	}
+
+	for (int j = 0; j < 6; j++) {
+		if (reader_cnf.real_cartesian_vel[j])
+			outfile << "real_cartesian_vel[" << j << "];";
+	}
+
+	for (int j = 0; j < 6; j++) {
+		if (reader_cnf.real_cartesian_acc[j])
+			outfile << "real_cartesian_acc[" << j << "];";
+	}
+
+	outfile << "ui_trigger\n";
+}
+
+void reader_buffer::write_data_csv(std::ofstream& outfile, const reader_data & data)
+{
+	outfile << data.step << ";";
+	if (reader_cnf.msec)
+		outfile << data.msec << ";";
+	if (reader_cnf.servo_mode)
+		outfile << (data.servo_mode ? "1" : "0") << ";";
+	for (int j = 0; j < master.number_of_servos; j++) {
+		if (reader_cnf.desired_inc[j])
+			outfile << data.desired_inc[j] << ";";
+		if (reader_cnf.current_inc[j])
+			outfile << data.current_inc[j] << ";";
+		if (reader_cnf.pwm[j])
+			outfile << data.pwm[j] << ";";
+		if (reader_cnf.uchyb[j])
+			outfile << data.uchyb[j] << ";";
+		if (reader_cnf.abs_pos[j])
+			outfile << data.abs_pos[j] << ";";
+	}
+
+	for (int j = 0; j < master.number_of_servos; j++) {
+		if (reader_cnf.current_joints[j])
+			outfile << data.current_joints[j] << ";";
+	}
+
+	for (int j = 0; j < 6; j++) {
+		if (reader_cnf.force[j])
+			outfile << data.force[j] << ";";
+		if (reader_cnf.desired_force[j])
+			outfile << data.desired_force[j] << ";";
+		if (reader_cnf.filtered_force[j])
+			outfile << data.filtered_force[j] << ";";
+	}
+
+	for (int j = 0; j < 6; j++) {
+		if (reader_cnf.desired_cartesian_position[j])
+			outfile << data.desired_cartesian_position[j] << ";";
+	}
+
+	for (int j = 0; j < 6; j++) {
+		if (reader_cnf.real_cartesian_position[j])
+			outfile << data.real_cartesian_position[j] << ";";
+	}
+
+	for (int j = 0; j < 6; j++) {
+		if (reader_cnf.real_cartesian_vel[j])
+			outfile << data.real_cartesian_vel[j] << ";";
+	}
+
+	for (int j = 0; j < 6; j++) {
+		if (reader_cnf.real_cartesian_acc[j])
+			outfile << data.real_cartesian_acc[j] << ";";
+	}
+
+	outfile << data.ui_trigger << '\n';
 }
 
 } // namespace common

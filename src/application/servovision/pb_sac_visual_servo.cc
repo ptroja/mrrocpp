@@ -31,64 +31,45 @@ pb_sac_visual_servo::~pb_sac_visual_servo()
 {
 }
 
-lib::Homog_matrix pb_sac_visual_servo::get_position_change(const lib::Homog_matrix& current_position, double dt)
+lib::Homog_matrix pb_sac_visual_servo::compute_position_change(const lib::Homog_matrix& current_position, double dt)
 {
+	lib::Homog_matrix C_T_G(vsp_fradia->get_reading_message().position);
+	lib::Homog_matrix error_matrix;
+	lib::Homog_matrix E_T_O = !current_position;
+
+	{
+		cout << "\nC_T_G:\n" << C_T_G << endl;
+
+		lib::Homog_matrix O_T_G = O_T_C * C_T_G;
+		cout << "\nO_T_G:\n" << O_T_G << endl;
+
+		cout << "\ncurrent_position:\n" << current_position << endl;
+		cout << "\nE_T_O:\n" << E_T_O << endl;
+
+		lib::Homog_matrix E_T_C = E_T_O * O_T_C;
+		cout << "\nE_T_O * O_T_C:\n" << E_T_C << endl;
+
+		lib::Homog_matrix E_T_G = E_T_O * O_T_C * C_T_G;
+		cout << "\nE_T_O * O_T_C * C_T_G:\n" << E_T_G << endl;
+	}
+
+	error_matrix = G_T_E_desired * E_T_O * O_T_C * C_T_G;
+
+	//error_matrix = E_T_O * O_T_C * C_T_G;
+
+	cout << "\nerror_matrix:\n" << error_matrix << endl;
+	cout.flush();
+
+	lib::Xyz_Angle_Axis_vector aa_vector;
+	error_matrix.get_xyz_angle_axis(aa_vector);
+
+	log_dbg("aa_vector: %10lg, %10lg, %10lg, %10lg, %10lg, %10lg\n", aa_vector(0, 0), aa_vector(1, 0), aa_vector(2, 0), aa_vector(3, 0), aa_vector(4, 0), aa_vector(5, 0));
+
+	aa_vector = regulator->compute_control(aa_vector, dt);
+	log_dbg("aa_vector after regulation: %10lg, %10lg, %10lg, %10lg, %10lg, %10lg\n", aa_vector(0, 0), aa_vector(1, 0), aa_vector(2, 0), aa_vector(3, 0), aa_vector(4, 0), aa_vector(5, 0));
+
 	lib::Homog_matrix delta_position;
-
-	if (vsp_fradia->get_report() == lib::VSP_SENSOR_NOT_CONFIGURED) { // sensor not yet ready
-		return delta_position;
-	} else if (vsp_fradia->get_report() == lib::VSP_READING_NOT_READY) { // maybe there was a reading
-		if (steps_without_reading > max_steps_without_reading) { // but if it was too long ago
-			object_visible = false; // we have to consider object not longer visible
-			log_dbg("pb_sac_visual_servo::get_position_change(): object considered no longer visible\n");
-			return delta_position;
-		} else {
-			steps_without_reading++;
-		}
-	} else if (vsp_fradia->get_report() == lib::VSP_REPLY_OK) { // we have a reading
-		steps_without_reading = 0; // reset counter
-	}
-
-	object_visible = vsp_fradia->get_reading_message().tracking;
-	if (object_visible) {
-		lib::Homog_matrix C_T_G(vsp_fradia->get_reading_message().position);
-		lib::Homog_matrix error_matrix;
-		lib::Homog_matrix E_T_O = !current_position;
-
-		{
-			cout << "\nC_T_G:\n" << C_T_G << endl;
-
-			lib::Homog_matrix O_T_G = O_T_C * C_T_G;
-			cout << "\nO_T_G:\n" << O_T_G << endl;
-
-			cout << "\ncurrent_position:\n" << current_position << endl;
-			cout << "\nE_T_O:\n" << E_T_O << endl;
-
-			lib::Homog_matrix E_T_C = E_T_O * O_T_C;
-			cout << "\nE_T_O * O_T_C:\n" << E_T_C << endl;
-
-			lib::Homog_matrix E_T_G = E_T_O * O_T_C * C_T_G;
-			cout << "\nE_T_O * O_T_C * C_T_G:\n" << E_T_G << endl;
-		}
-
-		error_matrix = G_T_E_desired * E_T_O * O_T_C * C_T_G;
-
-		//error_matrix = E_T_O * O_T_C * C_T_G;
-
-		cout << "\nerror_matrix:\n" << error_matrix << endl;
-		cout.flush();
-
-		lib::Xyz_Angle_Axis_vector aa_vector;
-		error_matrix.get_xyz_angle_axis(aa_vector);
-
-		log_dbg("aa_vector: %10lg, %10lg, %10lg, %10lg, %10lg, %10lg\n", aa_vector(0, 0), aa_vector(1, 0), aa_vector(2, 0), aa_vector(3, 0), aa_vector(4, 0), aa_vector(5, 0));
-
-		aa_vector = regulator->compute_control(aa_vector, dt);
-		log_dbg("aa_vector after regulation: %10lg, %10lg, %10lg, %10lg, %10lg, %10lg\n", aa_vector(0, 0), aa_vector(1, 0), aa_vector(2, 0), aa_vector(3, 0), aa_vector(4, 0), aa_vector(5, 0));
-
-		delta_position.set_from_xyz_angle_axis(aa_vector);
-	}
-
+	delta_position.set_from_xyz_angle_axis(aa_vector);
 	return delta_position;
 }
 

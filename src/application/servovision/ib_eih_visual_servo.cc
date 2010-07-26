@@ -73,73 +73,59 @@ ib_eih_visual_servo::~ib_eih_visual_servo()
 {
 }
 
-lib::Homog_matrix ib_eih_visual_servo::get_position_change(const lib::Homog_matrix& current_position, double dt)
+lib::Homog_matrix ib_eih_visual_servo::compute_position_change(const lib::Homog_matrix& current_position, double dt)
 {
-	lib::Homog_matrix delta_position;
-
 	lib::K_vector u_translation(0, 0, 0);
 	lib::Homog_matrix u_rotation;
 	Eigen::Matrix <double, 6, 1> e;
 	Eigen::Matrix <double, 3, 1> e_translation;
 
-	if (vsp_fradia->get_report() == lib::VSP_SENSOR_NOT_CONFIGURED) { // sensor not yet ready
-		return delta_position;
-	} else if (vsp_fradia->get_report() == lib::VSP_READING_NOT_READY) { // maybe there was a reading
-		if (steps_without_reading > max_steps_without_reading) { // but if it was too long ago
-			object_visible = false; // we have to consider object not longer visible
-			log_dbg("ib_eih_visual_servo::get_position_change(): object considered no longer visible\n");
-			return delta_position;
-		} else {
-			steps_without_reading++;
-		}
-	} else if (vsp_fradia->get_report() == lib::VSP_REPLY_OK) { // we have a reading
-		steps_without_reading = 0; // reset counter
-	}
+	e(0, 0) = vsp_fradia->get_reading_message().error.x;
+	e(1, 0) = vsp_fradia->get_reading_message().error.y;
+	e(2, 0) = vsp_fradia->get_reading_message().error.z;
+	e(3, 0) = vsp_fradia->get_reading_message().error.gamma;
 
-	//	logDbg("ecp_g_ib_eih::next_step() 2\n");
-	object_visible = vsp_fradia->get_reading_message().tracking;
-	if (vsp_fradia->get_reading_message().tracking) {
-		//		logDbg("ecp_g_ib_eih::next_step() 3\n");
+	e_translation(0, 0) = e(0, 0);
+	e_translation(1, 0) = e(1, 0);
+	e_translation(2, 0) = e(2, 0);
 
-		e(0, 0) = vsp_fradia->get_reading_message().error.x;
-		e(1, 0) = vsp_fradia->get_reading_message().error.y;
-		e(2, 0) = vsp_fradia->get_reading_message().error.z;
-		e(3, 0) = vsp_fradia->get_reading_message().error.gamma;
+	//		logDbg("ib_eih_visual_servo::get_position_change() %d, %d, %d, %+7.3lg\n", vsp_fradia->received_object.error.x, vsp_fradia->received_object.error.y, vsp_fradia->received_object.error.z, vsp_fradia->received_object.error.gamma);
 
-		e_translation(0, 0) = e(0, 0);
-		e_translation(1, 0) = e(1, 0);
-		e_translation(2, 0) = e(2, 0);
+	Eigen::Matrix <double, 6, 1> control;
 
-		//		logDbg("ib_eih_visual_servo::get_position_change() %d, %d, %d, %+7.3lg\n", vsp_fradia->received_object.error.x, vsp_fradia->received_object.error.y, vsp_fradia->received_object.error.z, vsp_fradia->received_object.error.gamma);
+	control = regulator->compute_control(e, dt);
+	//logDbg("ib_eih_visual_servo::get_position_change() control: %+07.3lg, %+07.3lg, %+07.3lg\n", control(0, 0), control(1, 0), control(2, 0));
 
-		Eigen::Matrix <double, 6, 1> control;
+	Eigen::Matrix <double, 3, 1> camera_to_object_translation;
+	camera_to_object_translation(0, 0) = control(0, 0);
+	camera_to_object_translation(1, 0) = control(1, 0);
+	camera_to_object_translation(2, 0) = control(2, 0);
 
-		control = regulator->compute_control(e, dt);
-		//logDbg("ib_eih_visual_servo::get_position_change() control: %+07.3lg, %+07.3lg, %+07.3lg\n", control(0, 0), control(1, 0), control(2, 0));
+	u_translation = e_T_c_position * camera_to_object_translation;
 
-		Eigen::Matrix <double, 3, 1> camera_to_object_translation;
-		camera_to_object_translation(0, 0) = control(0, 0);
-		camera_to_object_translation(1, 0) = control(1, 0);
-		camera_to_object_translation(2, 0) = control(2, 0);
+	//		logDbg("ib_eih_visual_servo::get_position_change() u_translation: %+07.3lg, %+07.3lg, %+07.3lg\n", u_translation(0, 0), u_translation(1, 0), u_translation(2, 0));
 
-		u_translation = e_T_c_position * camera_to_object_translation;
+	u_rotation.set_from_xyz_angle_axis(lib::Xyz_Angle_Axis_vector(0, 0, 0, 0, 0, control(3, 0)));
 
-		//		logDbg("ib_eih_visual_servo::get_position_change() u_translation: %+07.3lg, %+07.3lg, %+07.3lg\n", u_translation(0, 0), u_translation(1, 0), u_translation(2, 0));
-
-		u_rotation.set_from_xyz_angle_axis(lib::Xyz_Angle_Axis_vector(0, 0, 0, 0, 0, control(3, 0)));
-	}
-
+	lib::Homog_matrix delta_position;
 	delta_position.set_rotation_matrix(u_rotation);
 	delta_position.set_translation_vector(u_translation);
-
-	//	logDbg("ib_eih_visual_servo::get_position_change() delta_position: %+07.3lg, %+07.3lg, %+07.3lg\n", delta_position(0, 3), delta_position(1, 3), delta_position(2, 3));
-
 	return delta_position;
 }
 
 boost::shared_ptr <ecp_mp::sensor::sensor_interface> ib_eih_visual_servo::get_vsp_fradia()
 {
 	return boost::dynamic_pointer_cast <ecp_mp::sensor::sensor_interface>(vsp_fradia);
+}
+
+bool ib_eih_visual_servo::is_object_visible_in_latest_reading()
+{
+	return vsp_fradia->get_reading_message().tracking;
+}
+
+lib::VSP_REPORT_t ib_eih_visual_servo::get_sensor_report()
+{
+	return vsp_fradia->get_report();
 }
 
 }//namespace generator

@@ -84,10 +84,6 @@ struct reader_data
 
 class reader_buffer : public boost::noncopyable
 {
-private:
-    motor_driven_effector &master;
-
-    boost::thread *thread_id;
 public:
 	boost::mutex reader_mutex;
 
@@ -103,8 +99,18 @@ public:
 
     reader_buffer(motor_driven_effector &_master);
     ~reader_buffer();
+private:
+    motor_driven_effector &master;
 
+    boost::thread *thread_id;
 
+    bool write_csv;
+
+    void write_header_old_format(std::ofstream& outfile);
+    void write_data_old_format(std::ofstream& outfile, const reader_data & data);
+
+    void write_header_csv(std::ofstream& outfile);
+    void write_data_csv(std::ofstream& outfile, const reader_data & data);
 };
 /**************************** end of reader_buffer *****************************/
 
