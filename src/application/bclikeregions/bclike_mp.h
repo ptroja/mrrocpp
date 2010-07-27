@@ -10,6 +10,7 @@
 
 #include "base/mp/mp.h"
 #include "ecp_mp_bclike.h"
+#include "bcl_message.h"
 
 #include "ecp_mp_st_smooth_move.h"
 
@@ -25,6 +26,9 @@ public:
 	virtual ~bclike_mp();
 
 	void main_task_algorithm(void);
+
+private:
+	ecp::common::bcl_message msg;
 
 };
 

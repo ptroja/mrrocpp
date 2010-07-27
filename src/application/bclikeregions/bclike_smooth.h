@@ -12,6 +12,7 @@
 #include "sensor/fradia/ecp_mp_s_fradia_sensor.h"
 #include "base/ecp_mp/ecp_mp_sensor.h"
 #include "bcl_types.h"
+#include "bcl_message.h"
 
 using boost::shared_ptr;
 
@@ -44,6 +45,8 @@ private:
 	task::regions reading;
 	bool no_fradia;
 	task::bcl_t_switcher & bcl_ecp;
+
+	bcl_message msg;
 
 //	task::bcl_fradia_sensor *vsp_fradia;
 

@@ -12,6 +12,7 @@
 #include "bcl_types.h"
 #include <boost/shared_ptr.hpp>
 #include "bclike_smooth.h"
+#include "bcl_message.h"
 
 using boost::shared_ptr;
 
@@ -35,9 +36,10 @@ public:
 private:
 	shared_ptr<generator::bclike_smooth> bcl_smooth;
 	bcl_t_switcher & bcl_ecp;
+
+	bcl_message msg;
 };
 
-// TODO dolozyc bc_smooth i przekazac mu fradia sensor
 }
 
 }

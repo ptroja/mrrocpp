@@ -19,9 +19,10 @@ namespace common {
 namespace generator {
 
 bclike_smooth::bclike_smooth(mrrocpp::ecp::common::task::task & ecp_task) :
-		common::generator::newsmooth(ecp_task, lib::ECP_JOINT, 8),
+		common::generator::newsmooth(ecp_task, lib::ECP_JOINT, 7),
 		bcl_ecp((task::bcl_t_switcher &)ecp_t){
 //		vsp_fradia(vsp_fradia){
+
 
 //	vsp_fradia = boost::shared_ptr<task::bcl_fradia_sensor>();//bcl.get_vsp_fradia();
 	vsp_fradia = NULL;
@@ -29,7 +30,7 @@ bclike_smooth::bclike_smooth(mrrocpp::ecp::common::task::task & ecp_task) :
 }
 
 bclike_smooth::bclike_smooth(mrrocpp::ecp::common::task::bcl_t_switcher & task):
-				common::generator::newsmooth((mrrocpp::ecp::common::task::task &)task, lib::ECP_JOINT, 8),
+				common::generator::newsmooth((mrrocpp::ecp::common::task::task &)task, lib::ECP_JOINT, 7),
 				bcl_ecp((task::bcl_t_switcher &)ecp_t){
 //				vsp_fradia(vsp_fradia){
 	std::cout << "FRADIA VERSION" << std::endl;
@@ -49,7 +50,7 @@ bclike_smooth::bclike_smooth(mrrocpp::ecp::common::task::bcl_t_switcher & task):
 
 //bclike_smooth::bclike_smooth(mrrocpp::ecp::common::task::bclikeregions_task & task, shared_ptr<task::bcl_fradia_sensor> fr):
 bclike_smooth::bclike_smooth(mrrocpp::ecp::common::task::bcl_t_switcher & task, task::bcl_fradia_sensor* fr):
-						common::generator::newsmooth((mrrocpp::ecp::common::task::task &)task, lib::ECP_JOINT, 8),
+						common::generator::newsmooth((mrrocpp::ecp::common::task::task &)task, lib::ECP_JOINT, 7),
 						bcl_ecp((task::bcl_t_switcher &)ecp_t),
 						vsp_fradia(fr){
 
@@ -82,7 +83,9 @@ bool bclike_smooth::first_step(){
 
 bool bclike_smooth::next_step(){
 
-//	reading = bcl_ecp.vsp_fradia->get_reading_message();
+	reading = bcl_ecp.vsp_fradia->get_reading_message();
+
+	std::cout << "FR DATA RECV x = " << reading.x << " y = " << reading.y << std::endl;
 
 //	bcl_ecp.robot_m[lib::ROBOT_IRP6OT_M]->ecp_replay_package.ecp_2_mp_string
 
