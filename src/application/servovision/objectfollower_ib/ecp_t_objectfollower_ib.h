@@ -21,10 +21,7 @@
 //using mrrocpp::ecp::common::generator::smooth;
 using mrrocpp::ecp::common::generator::simple_visual_servo_manager;
 using mrrocpp::ecp::common::generator::visual_servo_manager;
-using mrrocpp::ecp::common::generator::visual_servo;
-using mrrocpp::ecp::common::generator::visual_servo_regulator;
-using mrrocpp::ecp::common::generator::object_reached_termination_condition;
-using mrrocpp::ecp::common::generator::termination_condition;
+using namespace mrrocpp::ecp::servovision;
 using boost::shared_ptr;
 
 namespace mrrocpp {

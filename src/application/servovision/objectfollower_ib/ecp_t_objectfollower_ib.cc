@@ -32,23 +32,7 @@ ecp_t_objectfollower_ib::ecp_t_objectfollower_ib(mrrocpp::lib::configurator& con
 
 	log_dbg_enabled = true;
 
-	Eigen::Matrix <double, 3, 1> p1, p2;
-	//	p1(0, 0) = 0.6;
-	//	p1(1, 0) = -0.4;
-	//	p1(2, 0) = 0.1;
-	//
-	//	p2(0, 0) = 0.95;
-	//	p2(1, 0) = 0.4;
-	//	p2(2, 0) = 0.3;
-	p1(0, 0) = 0.6;
-	p1(1, 0) = -1.7;
-	p1(2, 0) = 0.1;
-
-	p2(0, 0) = 0.98;
-	p2(1, 0) = 2.3;
-	p2(2, 0) = 0.3;
-
-	shared_ptr <position_constraint> cube(new cubic_constraint(p1, p2));
+	shared_ptr <position_constraint> cube(new cubic_constraint(configurator, config_section_name));
 
 	log_dbg("ecp_t_objectfollower_ib::ecp_t_objectfollower_ib(): 1\n");
 	reg = shared_ptr <visual_servo_regulator> (new regulator_p(configurator, config_section_name));
