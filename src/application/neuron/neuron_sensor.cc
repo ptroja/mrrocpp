@@ -22,6 +22,12 @@ namespace mrrocpp {
 namespace ecp_mp {
 namespace sensor {
 
+#define NR_OF_TRAJECTORIES		1
+#define FIRST_COORDINATES		2
+#define TRAJECTORY				3
+#define TRAJECTORY_END			4
+#define FINISH_COMMUNICATION	5
+
 /*Sensor creation along with initialization of communication*/
 neuron_sensor::neuron_sensor(mrrocpp::lib::configurator& _configurator):config(_configurator) {
 
@@ -69,55 +75,60 @@ neuron_sensor::~neuron_sensor() {
 }
 
 void neuron_sensor::get_reading(){
-	printf("getReading\n");
-	timespec acttime;
+	counter++;
+	/*timespec acttime;
 	if( clock_gettime( CLOCK_REALTIME , &acttime) == -1 ){
 		printf("sleep generator: next step time measurement error");
 	}
 	std::cout << acttime.tv_sec << " ";
-	std::cout << acttime.tv_nsec <<std::endl;
+	std::cout << acttime.tv_nsec <<std::endl;*/
 
-	char buff[26];
+	char buff[25];
 
 	//Read packet from socket*/
-	if( clock_gettime( CLOCK_REALTIME , &acttime) == -1 ){
-			printf("sleep generator: next step time measurement error");
-		}
-		std::cout << acttime.tv_sec << " ";
-		std::cout << acttime.tv_nsec <<std::endl;
 	int result = read(socketDescriptor, buff, sizeof(buff));
-	if( clock_gettime( CLOCK_REALTIME , &acttime) == -1 ){
-			printf("sleep generator: next step time measurement error");
-		}
-		std::cout << acttime.tv_sec << " ";
-		std::cout << acttime.tv_nsec <<std::endl;
-	printf("size of buff %d %d\n",sizeof(buff),sizeof(double));
 	if (result < 0) {
 		throw std::runtime_error(std::string("read() failed: ") + strerror(errno));
 	}
 
 	//check whether whole incoming packet received
-	if (result != sizeof(buff)) {
-		throw std::runtime_error("read() failed: result != sizeof(MESSAGE_T)");
-	}
+	//if (result != sizeof(buff)) {
+	//	throw std::runtime_error("read() failed: result != sizeof(MESSAGE_T)");
+	//}
 
 	//copy data from packet to variables
-	memcpy(&command,buff,2);
-	memcpy(&(coordinates.x),buff+2,8);
-	memcpy(&(coordinates.y),buff+10,8);
-	memcpy(&(coordinates.z),buff+18,8);
+	memcpy(&command,buff,1);
+	switch(command){
+		case NR_OF_TRAJECTORIES:
+			memcpy(&(numberOfTrajectories),buff+1,4);
+			break;
 
-	//timespec acttime;
-	if( clock_gettime( CLOCK_REALTIME , &acttime) == -1 ){
-		printf("sleep generator: next step time measurement error");
+		case FIRST_COORDINATES:
+		case TRAJECTORY:
+			memcpy(&(coordinates.x),buff+1,8);
+			memcpy(&(coordinates.y),buff+9,8);
+			memcpy(&(coordinates.z),buff+17,8);
+			printf("coordinates %d, %lf %lf %lf\n",command,coordinates.x,coordinates.y,coordinates.z);
+			break;
+
+		case TRAJECTORY_END:
+			printf("Neuron Sensor->get_Reading: Trajectory End\n");
+			break;
+
+		case FINISH_COMMUNICATION:
+			printf("communication finished\n");
+			break;
+
+		default:
+			printf("unknown command %d\n",command);
 	}
-	std::cout << acttime.tv_sec << " ";
-	std::cout << acttime.tv_nsec <<std::endl;
+
+
 }
 
 /*Check whether appropriate information was sent from VSP, that finishes communication*/
 bool neuron_sensor::transmissionFinished(){
-	if(command==0)
+	if(command==TRAJECTORY_END)
 		return true;
 	return false;
 }
@@ -126,8 +137,41 @@ Coordinates neuron_sensor::getCoordinates(){
 	return coordinates;
 }
 
-uint16_t neuron_sensor::getCommand(){
+uint8_t neuron_sensor::getCommand(){
 	return command;
+}
+
+void neuron_sensor::sendCommand(uint8_t command){
+	printf("neuron_sensor->sendCommand: command : %d\n",command);
+	int result = write(socketDescriptor, &command, sizeof(uint8_t));
+
+	if (result < 0) {
+		throw std::runtime_error(std::string("write() failed: ") + strerror(errno));
+	}
+	if (result != sizeof(uint8_t)) {
+		throw std::runtime_error("write() failed: result != sizeof(uint8_t)");
+	}
+}
+
+int neuron_sensor::getNumberOfTrajectories(){
+	sendCommand(NR_OF_TRAJECTORIES);
+	get_reading();
+	return numberOfTrajectories;
+}
+
+Coordinates neuron_sensor::getFirstCoordinates(){
+	sendCommand(FIRST_COORDINATES);
+	get_reading();
+	return coordinates;
+}
+
+void neuron_sensor::startGettingTrajectory(){
+	current_period=1;
+	sendCommand(TRAJECTORY);
+}
+
+void neuron_sensor::sendCommunicationFinished(){
+	sendCommand(FINISH_COMMUNICATION);
 }
 
 void neuron_sensor::configure_sensor(){

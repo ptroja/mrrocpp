@@ -30,7 +30,8 @@ class neuron_sensor : public ecp_mp::sensor::sensor_interface {
 		/** Configurator. */
 		mrrocpp::lib::configurator& config;
 		int socketDescriptor;
-		uint16_t command;
+		uint8_t command;
+		int numberOfTrajectories;
 		Coordinates coordinates;
 
 	public:
@@ -40,8 +41,14 @@ class neuron_sensor : public ecp_mp::sensor::sensor_interface {
 		void configure_sensor();
 		void initiate_reading();
 		bool transmissionFinished();
-		uint16_t getCommand();
+		uint8_t getCommand();
+		int getNumberOfTrajectories();
+		Coordinates getFirstCoordinates();
 		Coordinates getCoordinates();
+		void startGettingTrajectory();
+		void sendCommunicationFinished();
+		void sendCommand(uint8_t command);
+		int counter; //for testig only
 };
 
 } //sensor

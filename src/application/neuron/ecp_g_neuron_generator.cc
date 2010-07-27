@@ -37,19 +37,21 @@ bool neuron_generator::first_step(){
 	//the_robot->communicate_with_edp = false;
 
 	neuron_sensor=(ecp_mp::sensor::neuron_sensor*)sensor_m[ecp_mp::sensor::ECP_MP_NEURON_SENSOR];
+	neuron_sensor->startGettingTrajectory();
+	neuron_sensor->counter=0;
+	printf("firstStep: currentPeriod: %d\n",neuron_sensor->current_period);
 	return true;
 }
 
 bool neuron_generator::next_step(){
 	//the_robot->communicate_with_edp = true;
 	the_robot->ecp_command.instruction.instruction_type = lib::SET;
-	printf("neuron generator next step: ");
 	flushall();
 	int i; //lop counter
 
 	/*Check if entire trajectory was already sent, if so, finish the generator*/
 	if(neuron_sensor->transmissionFinished()){
-		printf("End of transmission\n");
+		printf("End of transmission %d\n",neuron_sensor->counter);
 		flushall();
 		return false;
 	}
@@ -62,8 +64,9 @@ bool neuron_generator::next_step(){
 
 	/*when current_period==0 get_reading is called, so new data is available*/
 	//printf("current_period: %d\n", neuron_sensor->current_period);
+	printf("nextStep: currentPeriod: %d\n",neuron_sensor->current_period);
 	if(neuron_sensor->current_period==5){
-		//printf("x:%lf y:%lf z:%lf\n",neuron_sensor->getCoordinates().x,neuron_sensor->getCoordinates().y,neuron_sensor->getCoordinates().z);
+		//printf("period 5: x:%lf y:%lf z:%lf\n",neuron_sensor->getCoordinates().x,neuron_sensor->getCoordinates().y,neuron_sensor->getCoordinates().z);
 		flushall();
 		actual_position_matrix.set_from_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame);
 		actual_position_matrix.get_xyz_angle_axis(angle_axis_vector);
@@ -143,6 +146,7 @@ bool neuron_generator::next_step(){
 
 		if (desired_position[i] == actual_position[i]) {//if no motion in the axis
 			position[i] = actual_position[i];
+			printf("%f\t", position[i]);
 			continue;
 		}
 
@@ -160,13 +164,6 @@ bool neuron_generator::next_step(){
 	}
 	printf("\n");
 	flushall();
-
-	timespec acttime;
-	if( clock_gettime( CLOCK_REALTIME , &acttime) == -1 ){
-		printf("sleep generator: next step time measurement error");
-	}
-	std::cout << acttime.tv_sec << " ";
-	std::cout << acttime.tv_nsec <<std::endl;
 
 	position_matrix.set_from_xyz_angle_axis(lib::Xyz_Angle_Axis_vector(position));
 	position_matrix.get_frame_tab(the_robot->ecp_command.instruction.arm.pf_def.arm_frame);
