@@ -59,7 +59,7 @@ bool cubic_constraint::is_translation_ok()
 
 bool cubic_constraint::is_rotation_ok()
 {
-	log("cubic_constraint::is_rotation_ok()\n");
+//	log("cubic_constraint::is_rotation_ok()\n");
 
 	lib::Homog_matrix rot = (!cone_rotation) * new_position;
 
@@ -79,21 +79,21 @@ bool cubic_constraint::is_rotation_ok()
 
 	Eigen::Matrix <double, 2, 1> projected_axis = axis.block(0, 0, 2, 1);
 	double inclination = atan2(axis(2, 0), projected_axis.norm());
-	cout << "axis = " << axis << endl;
-	cout << "projected_axis = " << projected_axis << endl;
-	cout << "inclination = " << inclination << endl;
-	cout.flush();
+//	cout << "axis = " << axis << endl;
+//	cout << "projected_axis = " << projected_axis << endl;
+//	cout << "inclination = " << inclination << endl;
+//	cout.flush();
 
 	if (inclination < min_inclination) {
-		log("inclination < min_inclination\n");
+//		log("inclination < min_inclination\n");
 		return false;
 	}
 
 	if (!is_angle_between(wrist_rotation, wrist_rotation_min, wrist_rotation_max)) {
-		log("!is_angle_between\n");
+//		log("!is_angle_between\n");
 		return false;
 	}
-	log("rotation_ok()\n");
+//	log("rotation_ok()\n");
 	return true;
 }
 
