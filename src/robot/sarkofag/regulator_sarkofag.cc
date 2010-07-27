@@ -83,8 +83,8 @@ uint8_t NL_regulator_8_sarkofag::compute_set_value(void) {
 			/ (2 * M_PI);
 	//position_increment_new=position_increment_new/AXE_0_TO_5_POSTUMENT_TO_TRACK_RATIO;
 
-	printf("(%d) step_new_pulse: %f, position_increment_new: %f\n", ++iteracja, step_new_pulse,
-			position_increment_new);
+//	printf("(%d) step_new_pulse: %f, position_increment_new: %f\n", ++iteracja, step_new_pulse,
+//			position_increment_new);
 
 	/*
 	 if (!aaa)

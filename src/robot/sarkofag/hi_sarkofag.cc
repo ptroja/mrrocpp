@@ -12,7 +12,9 @@ namespace mrrocpp {
 namespace edp {
 namespace sarkofag {
 
-HI_moxa::HI_moxa() {
+HI_moxa::HI_moxa(effector &_master):
+		master(_master)
+{
 #ifdef T_INFO_FUNC
 	std::cout << "[func] Hi, Moxa!" << std::endl;
 #endif
@@ -37,6 +39,10 @@ void HI_moxa::init() {
 #ifdef T_INFO_FUNC
 	std::cout << "[func] HI_moxa::init()" << std::endl;
 #endif
+
+	// inicjalizacja zmiennych
+	first_hardware_read = true;
+	command_params = 0;
 
 	for (unsigned int i = 0; i < 8; i++) {
 		std::cout << "[info] opening port : "
@@ -84,7 +90,7 @@ void HI_moxa::insert_set_value(int drive_number, double set_value) {
 	buf[2] = 0x00;
 	buf[3] = 0x00;
 	buf[4] = START_BYTE;
-	buf[5] = SET_PWM;
+	buf[5] = COMMAND_MODE_PWM | command_params;
 	struct pwm_St* temp = (pwm_St*) &buf[6];
 	temp->pwm = set_value / 0.190;
 
@@ -106,22 +112,17 @@ int HI_moxa::get_current(int drive_number) {
 }
 
 double HI_moxa::get_increment(int drive_number) {
-	static int32_t oldPosition;
-	double ret;
-
-	ret = (double) (sarkofag_status.position - oldPosition);
-	oldPosition = sarkofag_status.position;
 
 #ifdef T_INFO_FUNC
-	std::cout << "[func] HI_moxa::get_increment(" << drive_number << ") = " << ret << std::endl;
+	std::cout << "[func] HI_moxa::get_increment(" << drive_number << ") = " << current_position_inc << std::endl;
 #endif
-	return ret;
+	return current_position_inc;
 }
 
 long int HI_moxa::get_position(int drive_number) {
 	int ret;
 
-	ret = sarkofag_status.position;
+	ret = current_absolute_position;
 
 #ifdef T_INFO_FUNC
 	std::cout << "[func] HI_moxa::get_position(" << drive_number << ") = " << ret << std::endl;
@@ -131,8 +132,10 @@ long int HI_moxa::get_position(int drive_number) {
 
 uint64_t HI_moxa::read_write_hardware(void) {
 	static int64_t receive_attempts = 0, receive_timeouts = 0;
+	bool hardware_read_ok = true;
 	unsigned int dlen = 0;
 	fd_set rfds;
+	uint64_t ret=0;
 
 	write(fd[0], buf, WRITE_BYTES);
 
@@ -152,8 +155,9 @@ uint64_t HI_moxa::read_write_hardware(void) {
 			//throw(std::runtime_error("communication timeout !!!"));
 			std::cout << "[error] communication timeout ("
 					<< ++receive_timeouts << "/" << receive_attempts << "="
-					<< (float) (receive_timeouts / receive_attempts) << ")"
+					<< ((float)receive_timeouts / receive_attempts) << ")"
 					<< std::endl;
+			hardware_read_ok = false;
 			break;
 		} else {
 			dlen += read(fd[0], (char*) (&sarkofag_status) + dlen, READ_BYTES
@@ -161,15 +165,41 @@ uint64_t HI_moxa::read_write_hardware(void) {
 		}
 	}
 
-	//usleep(1000);
+	// Wypelnienie pol odebranymi danymi
+	if(first_hardware_read && hardware_read_ok){
+		position_offset = sarkofag_status.position;
+		first_hardware_read = false;
+	}
+	previous_absolute_position = current_absolute_position;
+	current_absolute_position = sarkofag_status.position - position_offset;
+	current_position_inc = (double) (current_absolute_position - previous_absolute_position);
 
-	clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &wake_time, NULL);
+	// ########### TODO:
+
+//	master.controller_state_edp_buf.is_robot_blocked = sarkofag_status.powerStageFault;
+//	master.controller_state_edp_buf.is_synchronised = sarkofag_status.isSynchronized;
+
+
+	if(sarkofag_status.sw1 != 0)
+		ret |= UPPER_LIMIT_SWITCH;
+	if(sarkofag_status.sw2 != 0)
+		ret |= LOWER_LIMIT_SWITCH;
+	if(sarkofag_status.swSynchr != 0)
+		ret |= SYNCHRO_SWITCH_ON;
+	if(sarkofag_status.synchroZero != 0)
+		ret |= SYNCHRO_ZERO;
+	if(sarkofag_status.overcurrent != 0)
+		ret |= OVER_CURRENT;
+
 
 	while ((wake_time.tv_nsec += COMMCYCLE_TIME_NS) > 1000000000) {
 		wake_time.tv_sec += 1;
 		wake_time.tv_nsec -= 1000000000;
 	}
 
+	clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &wake_time, NULL);
+
+	return ret;
 }
 
 void HI_moxa::reset_counters(void) {
@@ -179,28 +209,36 @@ void HI_moxa::reset_counters(void) {
 }
 
 void HI_moxa::start_synchro(int drive_number) {
-#ifdef T_INFO_FUNC
+	command_params |= COMMAND_PARAM_SYNCHRO;
+
+//#ifdef T_INFO_FUNC
 	std::cout << "[func] HI_moxa::start_synchro(" << drive_number << ")" << std::endl;
-#endif
+//#endif
 }
 
 void HI_moxa::finish_synchro(int drive_number) {
-#ifdef T_INFO_FUNC
+	command_params &= ~COMMAND_PARAM_SYNCHRO;
+
+//#ifdef T_INFO_FUNC
 	std::cout << "[func] HI_moxa::finish_synchro(" << drive_number << ")" << std::endl;
-#endif
+//#endif
 }
 
 bool HI_moxa::is_impulse_zero(int drive_number) {
-#ifdef T_INFO_FUNC
+//#ifdef T_INFO_FUNC
 	std::cout << "[func] HI_moxa::is_impulse_zero(" << drive_number << ")" << std::endl;
-#endif
-	return true;
+//#endif
+	return false;
 }
 
 void HI_moxa::reset_position(int i) {
-#ifdef T_INFO_FUNC
+	current_absolute_position = 0L;
+	previous_absolute_position = 0L;
+	current_position_inc = 0.0;
+	first_hardware_read = true;
+//#ifdef T_INFO_FUNC11
 	std::cout << "[func] HI_moxa::reset_position(" << i << ")" << std::endl;
-#endif
+//#endif
 }
 
 } // namespace sarkofag

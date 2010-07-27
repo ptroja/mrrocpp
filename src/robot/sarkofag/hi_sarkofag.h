@@ -17,6 +17,9 @@
 
 #include "base/edp/HardwareInterface.h"
 #include "edp_sarkofag_combuf.h"
+//#include "base/edp/edp_e_motor_driven.h"
+
+#include "edp_e_sarkofag.h"
 
 #include <inttypes.h>
 #include <termios.h>
@@ -48,10 +51,14 @@ namespace sarkofag {
 //                HARDWARE_INTERFACE class
 // ------------------------------------------------------------------------
 
+
+
 class HI_moxa: public common::HardwareInterface {
 
 public:
-	HI_moxa(); // Konstruktor
+	effector &master;
+
+	HI_moxa(effector &_master); // Konstruktor
 	~HI_moxa();
 
 	virtual void init();
@@ -76,8 +83,15 @@ private:
 	struct termios oldtio[8];
 	struct timespec wake_time;
 
-	struct status_St sarkofag_status;
 	char buf[30];
+	uint8_t command_params;
+	struct status_St sarkofag_status;
+	int32_t position_offset;
+	int32_t current_absolute_position;
+	int32_t previous_absolute_position;
+	bool first_hardware_read;
+	double current_position_inc;
+	bool trace_resolver_zero;
 
 }; // koniec: class hardware_interface
 

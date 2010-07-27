@@ -8,6 +8,8 @@
 #ifndef HARDWAREINTERFACE_H_
 #define HARDWAREINTERFACE_H_
 
+#include <inttypes.h>
+
 namespace mrrocpp {
 namespace edp {
 namespace common {
