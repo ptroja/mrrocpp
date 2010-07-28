@@ -38,7 +38,7 @@ lib::Homog_matrix pb_eih_visual_servo::compute_position_change(const lib::Homog_
 
 	error_matrix = G_T_E_desired * E_T_C * C_T_G;
 
-	vs_log.log(current_position, current_position * E_T_C * C_T_G, C_T_G, error_matrix);
+	vs_log.log(current_position * !G_T_E_desired, current_position * E_T_C * C_T_G, C_T_G, error_matrix);
 
 	lib::Xyz_Angle_Axis_vector aa_vector;
 	error_matrix.get_xyz_angle_axis(aa_vector);

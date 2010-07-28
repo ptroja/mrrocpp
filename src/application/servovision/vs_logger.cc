@@ -48,10 +48,10 @@ void vs_logger::start()
 	fprintf(fp, "measure_time_sec;measure_time_nsec");
 	for (int i = 0; i < 3; ++i)
 		for (int j = 0; j < 4; ++j)
-			fprintf(fp, ";O_T_E[%d][%d]", i, j);
+			fprintf(fp, ";O_T_G_desired[%d][%d]", i, j);
 	for (int i = 0; i < 3; ++i)
 		for (int j = 0; j < 4; ++j)
-			fprintf(fp, ";O_T_G[%d][%d]", i, j);
+			fprintf(fp, ";O_T_G_camera[%d][%d]", i, j);
 	for (int i = 0; i < 3; ++i)
 		for (int j = 0; j < 4; ++j)
 			fprintf(fp, ";C_T_G[%d][%d]", i, j);
@@ -69,7 +69,7 @@ void vs_logger::stop()
 	}
 }
 
-void vs_logger::log(const lib::Homog_matrix &O_T_E, const lib::Homog_matrix &O_T_G, const lib::Homog_matrix &C_T_G, const lib::Homog_matrix &error)
+void vs_logger::log(const lib::Homog_matrix &O_T_G_desired, const lib::Homog_matrix &O_T_G_camera, const lib::Homog_matrix &C_T_G, const lib::Homog_matrix &error)
 {
 	if (fp == NULL) {
 		return;
@@ -81,10 +81,10 @@ void vs_logger::log(const lib::Homog_matrix &O_T_E, const lib::Homog_matrix &O_T
 	fprintf(fp, "%d;%d", ts.tv_sec, ts.tv_nsec);
 	for (int i = 0; i < 3; ++i)
 		for (int j = 0; j < 4; ++j)
-			fprintf(fp, ";%lg", O_T_E(i, j));
+			fprintf(fp, ";%lg", O_T_G_desired(i, j));
 	for (int i = 0; i < 3; ++i)
 		for (int j = 0; j < 4; ++j)
-			fprintf(fp, ";%lg", O_T_G(i, j));
+			fprintf(fp, ";%lg", O_T_G_camera(i, j));
 	for (int i = 0; i < 3; ++i)
 		for (int j = 0; j < 4; ++j)
 			fprintf(fp, ";%lg", C_T_G(i, j));
