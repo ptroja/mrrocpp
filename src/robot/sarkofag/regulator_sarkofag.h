@@ -29,7 +29,7 @@ namespace sarkofag {
 
 #define SARKOFAG_AXE8_MAX_PWM_INCREMENT	1000
 
-#define SARKOFAG_AXIS_7_INC_PER_REVOLUTION  128.0  // Liczba impulsow enkodera na obrot walu - musi byc float
+#define SARKOFAG_AXIS_7_INC_PER_REVOLUTION  4000.0  // Liczba impulsow enkodera na obrot walu - musi byc float
 
 /*-----------------------------------------------------------------------*/
 class NL_regulator_8_sarkofag : public common::NL_regulator
