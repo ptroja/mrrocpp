@@ -52,8 +52,8 @@ void model::set_kinematic_parameters(void) {
 	/* -----------------------------------------------------------------------
 	 Zakresy ruchu walow silnikow w radianach.
 	 ------------------------------------------------------------------------- */
-	lower_limit_axis = -375;
-	upper_limit_axis = 375;
+	lower_limit_axis = -375.0;
+	upper_limit_axis = 375.0;
 
 	/* -----------------------------------------------------------------------
 	 Zakresy ruchu poszczegolnych stopni swobody (w radianach lub milimetrach).
