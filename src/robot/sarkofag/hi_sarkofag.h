@@ -84,14 +84,14 @@ private:
 	struct timespec wake_time;
 
 	char buf[30];
-	uint8_t command_params;
-	struct status_St sarkofag_status;
-	int32_t position_offset;
-	int32_t current_absolute_position;
-	int32_t previous_absolute_position;
-	bool first_hardware_read;
-	double current_position_inc;
-	bool trace_resolver_zero;
+	uint8_t command_params[8];
+	struct status_St drive_status[8];
+	int32_t position_offset[8];
+	int32_t current_absolute_position[8];
+	int32_t previous_absolute_position[8];
+	double current_position_inc[8];
+	bool first_hardware_read[8];
+	bool trace_resolver_zero[8];
 
 }; // koniec: class hardware_interface
 

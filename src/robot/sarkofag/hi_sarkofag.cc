@@ -41,8 +41,8 @@ void HI_moxa::init() {
 #endif
 
 	// inicjalizacja zmiennych
-	first_hardware_read = true;
-	command_params = 0;
+	first_hardware_read[0] = true;
+	command_params[0] = 0;
 
 	for (unsigned int i = 0; i < 8; i++) {
 		std::cout << "[info] opening port : "
@@ -90,7 +90,7 @@ void HI_moxa::insert_set_value(int drive_number, double set_value) {
 	buf[2] = 0x00;
 	buf[3] = 0x00;
 	buf[4] = START_BYTE;
-	buf[5] = COMMAND_MODE_PWM | command_params;
+	buf[5] = COMMAND_MODE_PWM | command_params[0];
 	struct pwm_St* temp = (pwm_St*) &buf[6];
 	temp->pwm = set_value / 0.190;
 
@@ -102,7 +102,7 @@ void HI_moxa::insert_set_value(int drive_number, double set_value) {
 int HI_moxa::get_current(int drive_number) {
 	int ret;
 
-	ret = sarkofag_status.current;
+	ret = drive_status[0].current;
 
 #ifdef T_INFO_FUNC
 	std::cout << "[func] HI_moxa::get_current(" << drive_number << ") = " << ret << std::endl;
@@ -116,13 +116,13 @@ double HI_moxa::get_increment(int drive_number) {
 #ifdef T_INFO_FUNC
 	std::cout << "[func] HI_moxa::get_increment(" << drive_number << ") = " << current_position_inc << std::endl;
 #endif
-	return current_position_inc;
+	return current_position_inc[0];
 }
 
 long int HI_moxa::get_position(int drive_number) {
 	int ret;
 
-	ret = current_absolute_position;
+	ret = current_absolute_position[0];
 
 #ifdef T_INFO_FUNC
 	std::cout << "[func] HI_moxa::get_position(" << drive_number << ") = " << ret << std::endl;
@@ -160,35 +160,39 @@ uint64_t HI_moxa::read_write_hardware(void) {
 			hardware_read_ok = false;
 			break;
 		} else {
-			dlen += read(fd[0], (char*) (&sarkofag_status) + dlen, READ_BYTES
+			dlen += read(fd[0], (char*) (drive_status) + dlen, READ_BYTES
 					- dlen);
 		}
 	}
 
 	// Wypelnienie pol odebranymi danymi
-	if(first_hardware_read && hardware_read_ok){
-		position_offset = sarkofag_status.position;
-		first_hardware_read = false;
+
+	previous_absolute_position[0] = current_absolute_position[0];
+	current_absolute_position[0] = drive_status[0].position;
+
+	// W pierwszym odczycie danych z napedu przyrost pozycji musi byc 0.
+	if(first_hardware_read[0] && hardware_read_ok){
+		previous_absolute_position[0] = current_absolute_position[0];
+		first_hardware_read[0] = false;
 	}
-	previous_absolute_position = current_absolute_position;
-	current_absolute_position = sarkofag_status.position - position_offset;
-	current_position_inc = (double) (current_absolute_position - previous_absolute_position);
+
+	current_position_inc[0] = (double) (current_absolute_position[0] - previous_absolute_position[0]);
 
 	// ########### TODO:
 
-//	master.controller_state_edp_buf.is_robot_blocked = sarkofag_status.powerStageFault;
-//	master.controller_state_edp_buf.is_synchronised = sarkofag_status.isSynchronized;
+	master.controller_state_edp_buf.is_robot_blocked = (drive_status[0].powerStageFault != 0)? true : false;
+	master.controller_state_edp_buf.is_synchronised = (drive_status[0].isSynchronized != 0)? true : false;
 
 
-	if(sarkofag_status.sw1 != 0)
+	if(drive_status[0].sw1 != 0)
 		ret |= UPPER_LIMIT_SWITCH;
-	if(sarkofag_status.sw2 != 0)
+	if(drive_status[0].sw2 != 0)
 		ret |= LOWER_LIMIT_SWITCH;
-	if(sarkofag_status.swSynchr != 0)
+	if(drive_status[0].swSynchr != 0)
 		ret |= SYNCHRO_SWITCH_ON;
-	if(sarkofag_status.synchroZero != 0)
+	if(drive_status[0].synchroZero != 0)
 		ret |= SYNCHRO_ZERO;
-	if(sarkofag_status.overcurrent != 0)
+	if(drive_status[0].overcurrent != 0)
 		ret |= OVER_CURRENT;
 
 
@@ -203,13 +207,13 @@ uint64_t HI_moxa::read_write_hardware(void) {
 }
 
 void HI_moxa::reset_counters(void) {
-#ifdef T_INFO_FUNC
+//#ifdef T_INFO_FUNC
 	std::cout << "[func] HI_moxa::reset_counters" << std::endl;
-#endif
+//#endif
 }
 
 void HI_moxa::start_synchro(int drive_number) {
-	command_params |= COMMAND_PARAM_SYNCHRO;
+	command_params[0] |= COMMAND_PARAM_SYNCHRO;
 
 //#ifdef T_INFO_FUNC
 	std::cout << "[func] HI_moxa::start_synchro(" << drive_number << ")" << std::endl;
@@ -217,7 +221,7 @@ void HI_moxa::start_synchro(int drive_number) {
 }
 
 void HI_moxa::finish_synchro(int drive_number) {
-	command_params &= ~COMMAND_PARAM_SYNCHRO;
+	command_params[0] &= 0;
 
 //#ifdef T_INFO_FUNC
 	std::cout << "[func] HI_moxa::finish_synchro(" << drive_number << ")" << std::endl;
@@ -232,10 +236,10 @@ bool HI_moxa::is_impulse_zero(int drive_number) {
 }
 
 void HI_moxa::reset_position(int i) {
-	current_absolute_position = 0L;
-	previous_absolute_position = 0L;
-	current_position_inc = 0.0;
-	first_hardware_read = true;
+	current_absolute_position[0] = 0L;
+	previous_absolute_position[0] = 0L;
+	current_position_inc[0] = 0.0;
+	first_hardware_read[0] = true;
 //#ifdef T_INFO_FUNC11
 	std::cout << "[func] HI_moxa::reset_position(" << i << ")" << std::endl;
 //#endif
