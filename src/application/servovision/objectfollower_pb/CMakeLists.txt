@@ -10,6 +10,7 @@ add_executable(ecp_objectfollower_pb
     ../cubic_constraint.cc
     ../object_reached_termination_condition.cc
     ../termination_condition.cc
+    ../vs_logger.cc
 )
 
 target_link_libraries(ecp_objectfollower_pb
