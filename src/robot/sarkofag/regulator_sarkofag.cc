@@ -30,9 +30,7 @@ NL_regulator_8_sarkofag::NL_regulator_8_sarkofag(uint8_t reg_no,
 	NL_regulator(reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master) {
 	reg_state = next_reg_state = prev_reg_state = lib::GRIPPER_START_STATE;
 	sum_of_currents = current_index = 0;
-	for (int i = 0; i < SARKOFAG_GRIPPER_SUM_OF_CURRENTS_NR_OF_ELEMENTS; i++) {
-		currents[i] = 0;
-	}
+
 	display = 0;
 
 	// Konstruktor regulatora konkretnego
@@ -43,7 +41,7 @@ NL_regulator_8_sarkofag::NL_regulator_8_sarkofag(uint8_t reg_no,
 
 /*-----------------------------------------------------------------------*/
 uint8_t NL_regulator_8_sarkofag::compute_set_value(void) {
-	static long iteracja=0;
+	static long iteracja = 0;
 
 	// algorytm regulacji dla serwomechanizmu
 	// position_increment_old - przedostatnio odczytany przyrost polozenie
@@ -83,8 +81,8 @@ uint8_t NL_regulator_8_sarkofag::compute_set_value(void) {
 			/ (2 * M_PI);
 	//position_increment_new=position_increment_new/AXE_0_TO_5_POSTUMENT_TO_TRACK_RATIO;
 
-//	printf("(%d) step_new_pulse: %f, position_increment_new: %f\n", ++iteracja, step_new_pulse,
-//			position_increment_new);
+	//	printf("(%d) step_new_pulse: %f, position_increment_new: %f\n", ++iteracja, step_new_pulse,
+	//			position_increment_new);
 
 	/*
 	 if (!aaa)
@@ -248,10 +246,10 @@ uint8_t NL_regulator_8_sarkofag::compute_set_value(void) {
 
 	// ograniczenie przyrostu PWM
 	// ma na celu zapobiegac osiaganiu zbyt duzych pradow we wzmacniaczach mocy
-	if (set_value_new - set_value_old > SARKOFAG_AXE8_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old + SARKOFAG_AXE8_MAX_PWM_INCREMENT;
-	if (set_value_new - set_value_old < -SARKOFAG_AXE8_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old - SARKOFAG_AXE8_MAX_PWM_INCREMENT;
+	if (set_value_new - set_value_old > SARKOFAG_MAX_PWM_INCREMENT)
+		set_value_new = set_value_old + SARKOFAG_MAX_PWM_INCREMENT;
+	if (set_value_new - set_value_old < -SARKOFAG_MAX_PWM_INCREMENT)
+		set_value_new = set_value_old - SARKOFAG_MAX_PWM_INCREMENT;
 
 	// przepisanie nowych wartosci zmiennych do zmiennych przechowujacych wartosci poprzednie
 	position_increment_old = position_increment_new;

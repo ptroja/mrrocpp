@@ -52,8 +52,8 @@ void model::set_kinematic_parameters(void) {
 	/* -----------------------------------------------------------------------
 	 Zakresy ruchu walow silnikow w radianach.
 	 ------------------------------------------------------------------------- */
-	lower_limit_axis = -375.0;
-	upper_limit_axis = 375.0;
+	lower_limit_axis = -450.0;
+	upper_limit_axis = 450.0;
 
 	/* -----------------------------------------------------------------------
 	 Zakresy ruchu poszczegolnych stopni swobody (w radianach lub milimetrach).
@@ -99,6 +99,9 @@ void model::mp2i_transform(const lib::MotorArray & local_current_motor_pos,
 
 	local_current_joints[0] = (local_current_motor_pos[0]
 			- synchro_motor_position) / gear + theta;
+
+	// Sprawdzenie obliczonych wartosci.
+	check_motor_position(local_current_motor_pos);
 
 	// Sprawdzenie obliczonych wartosci wspolrzednych wewnetrznych.
 	check_joints(local_current_joints);
