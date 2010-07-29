@@ -1,5 +1,5 @@
-#include "robot/sarkofag/edp_e_sarkofag.h"
-#include "robot/sarkofag/hi_sarkofag.h"
+//#include "robot/sarkofag/edp_e_sarkofag.h"
+#include "robot/hi_moxa/hi_moxa.h"
 
 //#include "hi_sarkofag.h"
 
@@ -10,9 +10,9 @@
 
 namespace mrrocpp {
 namespace edp {
-namespace sarkofag {
+namespace common {
 
-HI_moxa::HI_moxa(effector &_master) :
+HI_moxa::HI_moxa(motor_driven_effector &_master) :
 	HardwareInterface(_master)
 {
 #ifdef T_INFO_FUNC
@@ -261,7 +261,7 @@ void HI_moxa::reset_position(int i)
 	//#endif
 }
 
-} // namespace sarkofag
+} // namespace common
 } // namespace edp
 } // namespace mrrocpp
 

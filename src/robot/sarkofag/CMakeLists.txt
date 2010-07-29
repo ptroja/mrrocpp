@@ -2,13 +2,12 @@
 
 add_executable(edp_sarkofag
 	edp_e_sarkofag.cc
-	hi_sarkofag.cc
 	int_hand_sarkofag.cc
 	sg_sarkofag.cc
 	 regulator_sarkofag.cc
 )
 
-target_link_libraries(edp_sarkofag kinematicssarkofag edp
+target_link_libraries(edp_sarkofag kinematicssarkofag edp hi_moxa
 	${COMMON_LIBRARIES})
 
 	
