@@ -8,49 +8,95 @@
 #ifndef __HI_LOCAL_SARKOFAG_H
 #define __HI_LOCAL_SARKOFAG_H
 
-#include "base/edp/hi_rydz.h"
+// // // // // // // //
+// TERMINAL INFO
+//#define T_INFO_FUNC
+//#define T_INFO_CALC
+
+#define USLEEP_US 500000
+
+#include "base/edp/HardwareInterface.h"
+#include "edp_sarkofag_combuf.h"
+//#include "base/edp/edp_e_motor_driven.h"
+
+#include "edp_e_sarkofag.h"
+
+#include <inttypes.h>
+#include <termios.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <sys/select.h>
+
+#include <string>
+
+
+
+#define PORT "/dev/ser"
+#define BAUD 921600
+#define START_BYTE '#'
+#define WRITE_BYTES 10
+#define READ_BYTES 8
+
+#define COMMCYCLE_TIME_NS	2000000
 
 namespace mrrocpp {
 namespace edp {
 namespace sarkofag {
 
-// Struktury danych wykorzystywane w hardware_interface
-const int IRQ_REAL = 10; // Numer przerwania sprzetowego
-const unsigned short int INT_FREC_DIVIDER = 8; // mnoznik czestotliwosci przerwan (odpowiada 2ms)
-
-#define HI_RYDZ_INTR_TIMEOUT_HIGH 10000000 // by Y - timeout przerwania z szafy badz zegara
-#define FIRST_SERVO_PTR           0xC7
-#define INTERRUPT_GENERATOR_SERVO_PTR	 0xC0
-
-#define ISA_CARD_OFFSET 0x20 // w zaleznosci od ustawienia na karcie isa
-#define SARKOFAG_AXIS_7_MAX_CURRENT           0x2430 // ustawienie pradu maksymalnego dla zacisku chwytaka
-// 34,7 j na 100ma, streafa nieczulosci 40ma
-
-#define SARKOFAG_AXIS_7_INC_PER_REVOLUTION  128.0  // Liczba impulsow enkodera na obrot walu - musi byc float
 // ------------------------------------------------------------------------
 //                HARDWARE_INTERFACE class
 // ------------------------------------------------------------------------
 
-class hardware_interface : public common::HI_rydz
-{
+
+
+class HI_moxa: public common::HardwareInterface {
 
 public:
-			hardware_interface(common::motor_driven_effector &_master, int _hi_irq_real, unsigned short int _hi_intr_freq_divider, unsigned int _hi_intr_timeout_high, unsigned int _hi_first_servo_ptr, unsigned int _hi_intr_generator_servo_ptr, unsigned int _hi_isa_card_offset, const int _max_current[]); // Konstruktor
+	effector &master;
 
+	HI_moxa(effector &_master); // Konstruktor
+	~HI_moxa();
+
+	virtual void init();
+	virtual void insert_set_value(int drive_number, double set_value);
+	virtual int get_current(int drive_number);
+	virtual double get_increment(int drive_number);
+	virtual long int get_position(int drive_number);
+	virtual uint64_t read_write_hardware(void); // Obsluga sprzetu
+	virtual void reset_counters(void); // Zerowanie licznikow polozenia
+	virtual void start_synchro(int drive_number);
+	virtual void finish_synchro(int drive_number);
+
+	virtual bool is_impulse_zero(int drive_number);
+	virtual void reset_position(int i);
+
+protected:
+private:
+
+	void write_read(int fd, char* buf, unsigned int w_len, unsigned int r_len);
+
+	int fd[8];
+	struct termios oldtio[8];
+	struct timespec wake_time;
+
+	char buf[30];
+	uint8_t command_params[8];
+	struct status_St drive_status[8];
+	int32_t position_offset[8];
+	int32_t current_absolute_position[8];
+	int32_t previous_absolute_position[8];
+	double current_position_inc[8];
+	bool first_hardware_read[8];
+	bool trace_resolver_zero[8];
 
 }; // koniec: class hardware_interface
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-const struct sigevent *
-int_handler(void *arg, int id);
-#ifdef __cplusplus
-}
-#endif
 
 } // namespace sarkofag
 } // namespace edp
 } // namespace mrrocpp
 
-#endif // __HI_RYDZ_H
+#endif // __HI_LOCAL_SARKOFAG_H
