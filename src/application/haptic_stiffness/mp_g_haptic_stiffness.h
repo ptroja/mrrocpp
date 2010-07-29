@@ -37,10 +37,10 @@ class haptic_stiffness : public generator
 protected:
 	robot::robot *irp6ot, *irp6p;
 
-	HAPTIC_STIFFNESS_STATES state;
-	double stiffness;
-	double initial_force;
-	double initial_position;
+	HAPTIC_STIFFNESS_STATES irp6p_state;
+	double irp6p_stiffness;
+	double initial_irp6p_force;
+	double initial_irp6p_position;
 
 	// do konfiguracji pracy generatora
 	unsigned short irp6ot_con, irp6p_con;

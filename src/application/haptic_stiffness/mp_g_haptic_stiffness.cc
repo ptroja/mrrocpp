@@ -25,8 +25,9 @@ namespace mp {
 namespace generator {
 
 haptic_stiffness::haptic_stiffness(task::task& _mp_task, int step) :
-	generator(_mp_task), state(HS_LOW_FORCE), stiffness(0.0), initial_force(0.0), initial_position(0.0), irp6ot_con(1),
-			irp6p_con(1), global_base(1, 0, 0, -0.08, 0, 1, 0, 2.08, 0, 0, 1, -0.015)
+	generator(_mp_task), irp6p_state(HS_LOW_FORCE), irp6p_stiffness(0.0), initial_irp6p_force(0.0),
+			initial_irp6p_position(0.0), irp6ot_con(1), irp6p_con(1),
+			global_base(1, 0, 0, -0.08, 0, 1, 0, 2.08, 0, 0, 1, -0.015)
 {
 	step_no = step;
 }
@@ -160,8 +161,11 @@ bool haptic_stiffness::next_step()
 	// UWAGA: dzialamy na jednoelementowej liscie robotow
 	//	cout << "next_step" << endl;
 
-	double current_force;
-	double current_position;
+	double current_irp6p_force;
+	double current_irp6p_position;
+
+	double current_irp6ot_force;
+	double current_irp6ot_position;
 
 	if (node_counter < 3) { // Oczekiwanie na odczyt aktualnego polozenia koncowki
 		return true;
@@ -223,32 +227,38 @@ bool haptic_stiffness::next_step()
 
 	// pobranie biezacej sily i polozenia w osi z narzedzia
 
-	current_force = irp6p->ecp_reply_package.reply_package.arm.pf_def.force_xyz_torque_xyz[2];
+	current_irp6p_force = irp6p->ecp_reply_package.reply_package.arm.pf_def.force_xyz_torque_xyz[2];
 
-	lib::Homog_matrix irp6p_current_frame(irp6p->ecp_reply_package.reply_package.arm.pf_def.arm_frame);
+	current_irp6ot_force = irp6ot->ecp_reply_package.reply_package.arm.pf_def.force_xyz_torque_xyz[2];
 
-	current_position = irp6p_current_frame(2, 3);
+	lib::Homog_matrix current_irp6p_frame(irp6p->ecp_reply_package.reply_package.arm.pf_def.arm_frame);
 
-	switch (state)
+	lib::Homog_matrix current_irp6ot_frame(irp6ot->ecp_reply_package.reply_package.arm.pf_def.arm_frame);
+
+	current_irp6p_position = current_irp6p_frame(2, 3);
+	current_irp6ot_position = current_irp6ot_frame(2, 3);
+
+	switch (irp6p_state)
 	{
 		case HS_LOW_FORCE:
 			//
-			if (current_force > MINIMAL_FORCE) {
-				state = HS_STIFNESS_ESTIMATION;
-				initial_force = current_force;
-				initial_position = current_position;
+			if (current_irp6p_force > MINIMAL_FORCE) {
+				irp6p_state = HS_STIFNESS_ESTIMATION;
+				initial_irp6p_force = current_irp6p_force;
+				initial_irp6p_position = current_irp6p_position;
 			}
 
 			break;
 		case HS_STIFNESS_ESTIMATION:
-			if (current_force <= MINIMAL_FORCE) {
-				state = HS_LOW_FORCE;
-				stiffness = 0.0;
-			} else if ((fabs(current_force - initial_force) >= FORCE_INCREMENT) || (fabs(current_position
-					- initial_position) >= POSITION_INCREMENT)) {
-				double computed_stiffness = (current_force - initial_force) / -(current_position - initial_position);
-				if (computed_stiffness > 0.0) {
-					stiffness = computed_stiffness;
+			if (current_irp6p_force <= MINIMAL_FORCE) {
+				irp6p_state = HS_LOW_FORCE;
+				irp6p_stiffness = 0.0;
+			} else if ((fabs(current_irp6p_force - initial_irp6p_force) >= FORCE_INCREMENT)
+					|| (fabs(current_irp6p_position - initial_irp6p_position) >= POSITION_INCREMENT)) {
+				double computed_irp6p_stiffness = (current_irp6p_force - initial_irp6p_force)
+						/ -(current_irp6p_position - initial_irp6p_position);
+				if (computed_irp6p_stiffness > 0.0) {
+					irp6p_stiffness = computed_irp6p_stiffness;
 				}
 			}
 			break;
@@ -260,8 +270,8 @@ bool haptic_stiffness::next_step()
 
 #define ADAPTATION_FACTOR 200.0
 
-	if (stiffness > ADAPTATION_FACTOR) {
-		divisor = stiffness / ADAPTATION_FACTOR;
+	if (irp6p_stiffness > ADAPTATION_FACTOR) {
+		divisor = irp6p_stiffness / ADAPTATION_FACTOR;
 	} else {
 		divisor = 1;
 	}
@@ -277,8 +287,9 @@ bool haptic_stiffness::next_step()
 
 
 	//	if ((node_counter % 10) == 0) {
-	std::cout << "current_force: " << current_force << ", current_position: " << current_position << ", stiffness: "
-			<< stiffness << std::endl;
+	std::cout << "irp6p_f: " << current_irp6p_force << ", irp6p_p: " << current_irp6p_position << ", irp6p_s: "
+			<< irp6p_stiffness << ", irp6ot_f: " << current_irp6ot_force << ", irp6ot_p: " << current_irp6ot_position
+			<< std::endl;
 
 	//std::cout << "irp6p_ECPtoMP_force_xyz_torque_xyz\n" << irp6p_ECPtoMP_force_xyz_torque_xyz << "interval:"
 	//		<< time_interval << std::endl;
