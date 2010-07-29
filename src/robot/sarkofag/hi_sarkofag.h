@@ -56,7 +56,7 @@ namespace sarkofag {
 class HI_moxa: public common::HardwareInterface {
 
 public:
-	effector &master;
+
 
 	HI_moxa(effector &_master); // Konstruktor
 	~HI_moxa();

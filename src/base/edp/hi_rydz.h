@@ -38,15 +38,7 @@ const uint64_t MASK_RESOLVER_ZERO = 0x3F7BDEF7BDEF7BDEULL;
 #define MICROCONTROLLER_MODE             0x4C00
 #define ZERO_ORDER                       0x0000
 #define STOP_MOTORS                      0x0200 // Zatrzymanie silnikow (W.S. ???)
-// tryby obslugi przerwania
-typedef enum INTERRUPT_MODE
-{
-	INT_EMPTY, // obluga pusta
-	INT_SERVOING, // tryb regulacji osi
-	INT_SINGLE_COMMAND, // do synchronizacji, inicjacji, etc.
-	INT_CHECK_STATE
-// do odczytu stanu z adresu 0x220
-} interrupt_mode_t;
+
 
 // ISA_CARD_OFFSET needs to be defined in hi_local.h
 #define ADR_OF_SERVO_PTR          (0x305)
@@ -58,50 +50,10 @@ typedef enum INTERRUPT_MODE
 #define SERVO_REPLY_POS_HIGH_ADR  (0x206)
 #define SERVO_REPLY_REG_1_ADR     (0x208)
 
-struct control_a_dof
-{
-	uint16_t adr_offset_plus_0;
-	uint16_t adr_offset_plus_2;
-};
-
-struct status_of_a_dof
-{
-	uint16_t adr_offset_plus_0;
-	uint16_t adr_offset_plus_2;
-	uint16_t adr_offset_plus_4;
-	uint16_t adr_offset_plus_6;
-};
-
-struct motor_data
-{
-	bool is_synchronised; // czy robot jest zsynchronizowany
-	bool is_power_on; // czy wzmacniacze mocy sa wlaczone
-	bool is_robot_blocked; // czy robot jest zablokowany
-
-	interrupt_mode_t interrupt_mode;
-	uint8_t card_adress; // adres karty dla trybu INT_SINGLE_COMMAND
-	uint16_t register_adress; // adres rejestru dla trybu INT_SINGLE_COMMAND
-	uint16_t value; // wartosc do wstawienia dla trybu INT_SINGLE_COMMAND
-
-	long int current_absolute_position[MAX_SERVOS_NR];
-	control_a_dof robot_control[MAX_SERVOS_NR];
-	status_of_a_dof robot_status[MAX_SERVOS_NR];
-
-	uint64_t hardware_error;
-};
-
-typedef struct _irq_data
-{
-#ifdef __QNXNTO__
-	struct sigevent event; // sygnalilzacja przerwania dla glownego watku
-#endif
-	common::motor_data md; // Dane przesylane z/do funkcji obslugi przerwania
-} irq_data_t;
 
 class HI_rydz : public HardwareInterface
 {
 public:
-	motor_driven_effector &master;
 
 	int max_current[MAX_SERVOS_NR];
 			HI_rydz(motor_driven_effector &_master, int _hi_irq_real, unsigned short int _hi_intr_freq_divider, unsigned int _hi_intr_timeout_high, unsigned int _hi_first_servo_ptr, unsigned int _hi_intr_generator_servo_ptr, unsigned int _hi_isa_card_offset, const int _max_current[]); // Konstruktor

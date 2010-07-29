@@ -13,7 +13,7 @@ namespace edp {
 namespace sarkofag {
 
 HI_moxa::HI_moxa(effector &_master) :
-	master(_master)
+	HardwareInterface(_master)
 {
 #ifdef T_INFO_FUNC
 	std::cout << "[func] Hi, Moxa!" << std::endl;
