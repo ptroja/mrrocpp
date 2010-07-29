@@ -10,6 +10,8 @@
 
 #include "lib/logger.h"
 
+#include "../ecp_mp_g_visual_servo_tester.h"
+
 using namespace boost;
 using namespace std;
 using namespace logger;
@@ -33,7 +35,8 @@ ecp_t_conveyor_uniform_acceleration::ecp_t_conveyor_uniform_acceleration(mrrocpp
 
 	log_dbg("ecp_t_conveyor_uniform_acceleration::ecp_t_conveyor_uniform_acceleration() 2\n");
 
-	uniform_acceleration_gen = shared_ptr <ecp_g_conveyor_uniform_acceleration> (new ecp_g_conveyor_uniform_acceleration(*this, "[uniform_acceleration_generator]"));
+	uniform_acceleration_gen
+			= shared_ptr <ecp_g_conveyor_uniform_acceleration> (new ecp_g_conveyor_uniform_acceleration(*this, "[uniform_acceleration_generator]"));
 	log_dbg("ecp_t_conveyor_uniform_acceleration::ecp_t_conveyor_uniform_acceleration() 3\n");
 }
 
@@ -44,12 +47,12 @@ ecp_t_conveyor_uniform_acceleration::~ecp_t_conveyor_uniform_acceleration()
 
 void ecp_t_conveyor_uniform_acceleration::main_task_algorithm(void)
 {
-	while(1){
+	while (1) {
 		get_next_state();
-		if(mp_2_ecp_next_state_string == "CONVEYOR ASDF"){
-			log_dbg("ecp_t_conveyor_uniform_acceleration::main_task_algorithm() 1\n");
+		if (mp_2_ecp_next_state_string == mrrocpp::ecp_mp::common::generator::ECP_GEN_CONVEYOR_VS_TEST) {
 			uniform_acceleration_gen->Move();
-			log_dbg("ecp_t_conveyor_uniform_acceleration::main_task_algorithm() 2\n");
+		} else {
+			log("ecp_t_conveyor_uniform_acceleration::main_task_algorithm(void) mp_2_ecp_next_state_string: \"%s\"\n", mp_2_ecp_next_state_string.c_str());
 		}
 	}
 

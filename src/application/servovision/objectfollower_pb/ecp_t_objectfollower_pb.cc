@@ -7,6 +7,8 @@
 
 #include "ecp_t_objectfollower_pb.h"
 
+#include "../ecp_mp_g_visual_servo_tester.h"
+
 using namespace mrrocpp::ecp::common::generator;
 using namespace logger;
 
@@ -54,20 +56,14 @@ void ecp_t_objectfollower_pb::main_task_algorithm(void)
 {
 	while (1) {
 		get_next_state();
-
-		log("ecp_t_objectfollower_pb::main_task_algorithm(void) mp_2_ecp_next_state_string: \"%s\"\n", mp_2_ecp_next_state_string.c_str());
-
-		if (mp_2_ecp_next_state_string == "IRP6P VS ASDF") {
-			log_dbg("ecp_t_objectfollower_pb::main_task_algorithm(void) begin\n");
-
+		if (mp_2_ecp_next_state_string == mrrocpp::ecp_mp::common::generator::ECP_GEN_VISUAL_SERVO_TEST) {
 			sm->Move();
-
-			log("ecp_t_objectfollower_pb::main_task_algorithm(void) 2\n");
+		} else {
+			log("ecp_t_objectfollower_pb::main_task_algorithm(void) mp_2_ecp_next_state_string: \"%s\"\n", mp_2_ecp_next_state_string.c_str());
 		}
 	}
 
 	ecp_termination_notice();
-	log_dbg("ecp_t_objectfollower_pb::main_task_algorithm(void) end\n");
 }
 
 task* return_created_ecp_task(lib::configurator &config)

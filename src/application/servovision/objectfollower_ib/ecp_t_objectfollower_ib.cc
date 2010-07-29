@@ -7,6 +7,8 @@
 
 #include "ecp_t_objectfollower_ib.h"
 
+#include "../ecp_mp_g_visual_servo_tester.h"
+
 using namespace mrrocpp::ecp::common::generator;
 using namespace logger;
 
@@ -26,7 +28,7 @@ ecp_t_objectfollower_ib::ecp_t_objectfollower_ib(mrrocpp::lib::configurator& con
 {
 	ecp_m_robot = new ecp::irp6p_m::robot(*this);
 	//ecp_m_robot = new ecp::irp6ot_m::robot(*this);
-//	smooth_gen = shared_ptr <smooth> (new smooth(*this, true));
+	//	smooth_gen = shared_ptr <smooth> (new smooth(*this, true));
 
 	char config_section_name[] = { "[object_follower_ib]" };
 
@@ -62,26 +64,17 @@ ecp_t_objectfollower_ib::~ecp_t_objectfollower_ib()
 
 void ecp_t_objectfollower_ib::main_task_algorithm(void)
 {
-	log_dbg("ecp_t_objectfollower_ib::main_task_algorithm(void) begin\n");
-	//moveToInitialPosition();
-	log("ecp_t_objectfollower_ib::main_task_algorithm(void) 1\n");
-	sm->Move();
-	log("ecp_t_objectfollower_ib::main_task_algorithm(void) 2\n");
+	while (1) {
+		get_next_state();
+		if (mp_2_ecp_next_state_string == mrrocpp::ecp_mp::common::generator::ECP_GEN_VISUAL_SERVO_TEST) {
+			sm->Move();
+		} else {
+			log("ecp_t_objectfollower_ib::main_task_algorithm(void) mp_2_ecp_next_state_string: \"%s\"\n", mp_2_ecp_next_state_string.c_str());
+		}
+	}
 
 	ecp_termination_notice();
-	log_dbg("ecp_t_objectfollower_ib::main_task_algorithm(void) end\n");
 }
-
-//void ecp_t_objectfollower_ib::moveToInitialPosition()
-//{
-//	double a[MAX_SERVOS_NR] = { 0.15, 0.15, 0.5, 0.15, 0.15, 0.15, 0.15, 0.001 };
-//	double v[MAX_SERVOS_NR] = { 0.20, 0.20, 0.01, 0.20, 0.20, 0.20, 0.20, 0.01 };
-//
-//	smooth_gen->reset();
-//	smooth_gen->set_absolute();
-//	smooth_gen->load_coordinates(lib::ECP_JOINT, v, a, (double *) initial_position_joints, true);
-//	smooth_gen->Move();
-//}
 
 task* return_created_ecp_task(lib::configurator &config)
 {
