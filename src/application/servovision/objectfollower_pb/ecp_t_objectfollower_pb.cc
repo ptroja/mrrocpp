@@ -52,10 +52,19 @@ ecp_t_objectfollower_pb::~ecp_t_objectfollower_pb()
 
 void ecp_t_objectfollower_pb::main_task_algorithm(void)
 {
-	log_dbg("ecp_t_objectfollower_pb::main_task_algorithm(void) begin\n");
+	while (1) {
+		get_next_state();
 
-	sm->Move();
-	log("ecp_t_objectfollower_pb::main_task_algorithm(void) 2\n");
+		log("ecp_t_objectfollower_pb::main_task_algorithm(void) mp_2_ecp_next_state_string: \"%s\"\n", mp_2_ecp_next_state_string.c_str());
+
+		if (mp_2_ecp_next_state_string == "IRP6P VS ASDF") {
+			log_dbg("ecp_t_objectfollower_pb::main_task_algorithm(void) begin\n");
+
+			sm->Move();
+
+			log("ecp_t_objectfollower_pb::main_task_algorithm(void) 2\n");
+		}
+	}
 
 	ecp_termination_notice();
 	log_dbg("ecp_t_objectfollower_pb::main_task_algorithm(void) end\n");

@@ -32,12 +32,13 @@ private:
 
 	int motion_steps;
 	double dt;
-	double A;
-	double f;
+	double acceleration;
+	double current_speed;
+	double max_speed;
 	double t;
 
 	bool initial_position_saved;
-	double initial_position;
+	double current_position;
 };
 
 }//namespace

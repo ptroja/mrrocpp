@@ -7,6 +7,7 @@
 
 #include "ecp_g_conveyor_uniform_acceleration.h"
 #include <math.h>
+#include <stdexcept>
 
 #include "lib/logger.h"
 
@@ -26,10 +27,15 @@ ecp_g_conveyor_uniform_acceleration::ecp_g_conveyor_uniform_acceleration(mrrocpp
 {
 	motion_steps = 30;
 	dt = motion_steps * 0.002;
-	A = ecp_task.config.value <double> ("sinus_A", section_name);
-	f = ecp_task.config.value <double> ("sinus_f", section_name);
+	acceleration = ecp_task.config.value <double> ("acceleration", section_name);
+	max_speed = ecp_task.config.value <double> ("max_speed", section_name);
+
+	if( !(max_speed * acceleration > 0) ){
+		throw runtime_error("ecp_g_conveyor_uniform_acceleration: !(max_speed * acceleration > 0)");
+	}
+
 	t = 0;
-	initial_position = 0;
+	current_speed = 0;
 }
 
 ecp_g_conveyor_uniform_acceleration::~ecp_g_conveyor_uniform_acceleration()
@@ -54,6 +60,8 @@ bool ecp_g_conveyor_uniform_acceleration::first_step()
 	//	}
 
 	initial_position_saved = false;
+	t = 0;
+	current_speed = 0;
 
 	log_dbg("bool ecp_g_conveyor_uniform_acceleration::first_step()\n");
 
@@ -64,15 +72,24 @@ bool ecp_g_conveyor_uniform_acceleration::next_step()
 	the_robot->ecp_command.instruction.instruction_type = lib::SET_GET;
 
 	if(!initial_position_saved){
-		initial_position = the_robot->reply_package.arm.pf_def.arm_coordinates[0];
+		current_position = the_robot->reply_package.arm.pf_def.arm_coordinates[0];
 		initial_position_saved = true;
 	}
 
-	double new_position = A * (1 - cos(2 * M_PI * f * t));
+	double dv = acceleration * dt;
 
-//	log_dbg("bool ecp_g_conveyor_uniform_acceleration::next_step(): new_position = %+8.6lg     initial_position = %+8.6lg\n", new_position, initial_position);
+	if( fabs(current_speed) < max_speed){
+		current_speed = current_speed + dv;
+	}
+	else{
+		current_speed = max_speed;
+	}
 
-	the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[0] = initial_position + new_position;
+	double ds = current_speed * dt;
+
+	current_position = current_position + ds;
+
+	the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[0] = current_position;
 
 	t += dt;
 	return true;

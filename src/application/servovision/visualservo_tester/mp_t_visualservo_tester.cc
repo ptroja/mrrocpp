@@ -12,6 +12,8 @@
 
 #include "lib/logger.h"
 
+#include <unistd.h>
+
 using namespace logger;
 
 namespace mrrocpp {
@@ -37,10 +39,20 @@ visualservo_tester::~visualservo_tester()
 void visualservo_tester::main_task_algorithm(void)
 {
 	log("visualservo_tester::main_task_algorithm() 1\n");
-	set_next_ecps_state("1", 0, "", 0, 1, lib::ROBOT_IRP6P_M.c_str());
-	log("visualservo_tester::main_task_algorithm() 2\n");
-	set_next_ecps_state("2", 0, "", 0, 1, lib::ROBOT_CONVEYOR.c_str());
+
+	set_next_ecps_state("IRP6P VS ASDF", 0, "", 0, 1, lib::ROBOT_IRP6P_M.c_str());
+
+	for(int i=15; i; --i){
+		log("visualservo_tester::main_task_algorithm() waiting for VS to stabilize %-4d   \r", i);
+		sleep(1);
+	}
+
+	log("\n");
+	log("Starting conveyor..\n");
+
+	set_next_ecps_state("CONVEYOR ASDF", 0, "", 0, 1, lib::ROBOT_CONVEYOR.c_str());
 	log("visualservo_tester::main_task_algorithm() 3\n");
+
 	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(2, 2, lib::ROBOT_IRP6P_M.c_str(), lib::ROBOT_CONVEYOR.c_str(), lib::ROBOT_IRP6P_M.c_str(), lib::ROBOT_CONVEYOR.c_str());
 	log("visualservo_tester::main_task_algorithm() 4\n");
 }
