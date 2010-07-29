@@ -8,7 +8,7 @@ add_executable(edp_irp6p_tfg
 	 regulator_irp6p_tfg.cc
 )
 
-target_link_libraries(edp_irp6p_tfg kinematicsirp6p_tfg edp
+target_link_libraries(edp_irp6p_tfg kinematicsirp6p_tfg edp hi_rydz
 	${COMMON_LIBRARIES})
 
 	

@@ -37,7 +37,7 @@
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
-#include "base/edp/hi_rydz.h"
+#include "robot/hi_rydz/hi_rydz.h"
 
 namespace mrrocpp {
 namespace edp {

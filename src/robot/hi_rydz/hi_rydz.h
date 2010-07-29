@@ -10,7 +10,7 @@
 
 #include <stdint.h>
 #include "base/edp/edp_e_motor_driven.h"
-#include "HardwareInterface.h"
+#include "base/edp/HardwareInterface.h"
 
 namespace mrrocpp {
 namespace edp {
@@ -39,7 +39,6 @@ const uint64_t MASK_RESOLVER_ZERO = 0x3F7BDEF7BDEF7BDEULL;
 #define ZERO_ORDER                       0x0000
 #define STOP_MOTORS                      0x0200 // Zatrzymanie silnikow (W.S. ???)
 
-
 // ISA_CARD_OFFSET needs to be defined in hi_local.h
 #define ADR_OF_SERVO_PTR          (0x305)
 #define SERVO_COMMAND1_ADR        (0x200)
@@ -49,7 +48,6 @@ const uint64_t MASK_RESOLVER_ZERO = 0x3F7BDEF7BDEF7BDEULL;
 #define SERVO_REPLY_POS_LOW_ADR   (0x204)
 #define SERVO_REPLY_POS_HIGH_ADR  (0x206)
 #define SERVO_REPLY_REG_1_ADR     (0x208)
-
 
 class HI_rydz : public HardwareInterface
 {
@@ -104,7 +102,6 @@ protected:
 
 	// oczekiwanie na przerwanie - tryb obslugi i delay(lag) po odebraniu przerwania
 	int hi_int_wait(interrupt_mode_t _interrupt_mode, int lag);
-
 
 	irq_data_t irq_data;
 
