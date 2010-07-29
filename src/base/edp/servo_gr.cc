@@ -18,7 +18,7 @@
 #include "lib/mis_fun.h"
 #include "base/edp/edp.h"
 #include "base/edp/reader.h"
-#include "base/edp/hi_rydz.h"
+#include "base/edp/HardwareInterface.h"
 #include "base/edp/servo_gr.h"
 #include "base/edp/regulator.h"
 
@@ -116,12 +116,12 @@ void servo_buffer::send_to_SERVO_GROUP()
 	}
 #else
 	{
-		boost::lock_guard <boost::mutex> lock(servo_command_mtx);
+		boost::lock_guard < boost::mutex > lock(servo_command_mtx);
 		servo_command_rdy = true;
 	}
 
 	{
-		boost::unique_lock <boost::mutex> lock(sg_reply_mtx);
+		boost::unique_lock < boost::mutex > lock(sg_reply_mtx);
 		while (!sg_reply_rdy) {
 			sg_reply_cond.wait(sg_reply_mtx);
 		}
@@ -297,7 +297,7 @@ bool servo_buffer::get_command(void)
 	new_command_available = true;
 #else
 	{
-		boost::lock_guard <boost::mutex> lock(servo_command_mtx);
+		boost::lock_guard < boost::mutex > lock(servo_command_mtx);
 		if (servo_command_rdy) {
 			command = servo_command;
 			servo_command_rdy = false;
@@ -538,7 +538,7 @@ void servo_buffer::reply_to_EDP_MASTER(void)
 	perror(" Reply to EDP_MASTER error");
 #else
 	{
-		boost::lock_guard <boost::mutex> lock(sg_reply_mtx);
+		boost::lock_guard < boost::mutex > lock(sg_reply_mtx);
 
 		sg_reply = servo_data;
 		sg_reply_rdy = true;

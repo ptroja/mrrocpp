@@ -258,7 +258,7 @@ bool haptic_stiffness::next_step()
 	// Korekta parametrów regulatora siłowego w robocie podrzednym na podstawie estymaty sztywnosci
 	double divisor;
 
-#define ADAPTATION_FACTOR 800.0
+#define ADAPTATION_FACTOR 200.0
 
 	if (stiffness > ADAPTATION_FACTOR) {
 		divisor = stiffness / ADAPTATION_FACTOR;
