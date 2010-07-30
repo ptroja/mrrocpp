@@ -18,6 +18,8 @@ namespace generator {
 #define MINIMAL_FORCE 1.0
 #define FORCE_INCREMENT 2.0
 #define POSITION_INCREMENT 0.005
+#define HIGH_FORCE_INCREMENT 30.0
+#define HIGH_POSITION_INCREMENT 0.015
 
 enum HAPTIC_STIFFNESS_STATES
 {
@@ -38,9 +40,12 @@ protected:
 	robot::robot *irp6ot, *irp6p;
 
 	HAPTIC_STIFFNESS_STATES irp6p_state;
-	double irp6p_stiffness;
+	double total_irp6p_stiffness;
+	double last_irp6p_stiffness;
 	double initial_irp6p_force;
 	double initial_irp6p_position;
+	double intermediate_irp6p_force;
+	double intermediate_irp6p_position;
 
 	// do konfiguracji pracy generatora
 	unsigned short irp6ot_con, irp6p_con;

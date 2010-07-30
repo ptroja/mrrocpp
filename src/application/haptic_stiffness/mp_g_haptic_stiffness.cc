@@ -25,8 +25,9 @@ namespace mp {
 namespace generator {
 
 haptic_stiffness::haptic_stiffness(task::task& _mp_task, int step) :
-	generator(_mp_task), irp6p_state(HS_LOW_FORCE), irp6p_stiffness(0.0), initial_irp6p_force(0.0),
-			initial_irp6p_position(0.0), irp6ot_con(1), irp6p_con(1),
+	generator(_mp_task), irp6p_state(HS_LOW_FORCE), total_irp6p_stiffness(0.0), last_irp6p_stiffness(0.0),
+			initial_irp6p_force(0.0), initial_irp6p_position(0.0), intermediate_irp6p_force(0.0),
+			intermediate_irp6p_position(0.0), irp6ot_con(1), irp6p_con(1),
 			global_base(1, 0, 0, -0.08, 0, 1, 0, 2.08, 0, 0, 1, -0.015)
 {
 	step_no = step;
@@ -188,6 +189,8 @@ bool haptic_stiffness::next_step()
 	lib::Homog_matrix irp6p_goal_frame(global_base * irp6ot_current_arm_frame);
 	irp6p_goal_frame.get_frame_tab(irp6p->mp_command.instruction.arm.pf_def.arm_frame);
 
+	lib::Homog_matrix irp6ot_goal_frame;
+
 	/*
 	 lib::Homog_matrix irp6p_goal_frame_increment_in_end_effector ((!irp6p_current_arm_frame)*irp6p_goal_frame);
 	 lib::Ft_v_vector irp6p_goal_xyz_angle_axis_increment_in_end_effector;
@@ -242,24 +245,59 @@ bool haptic_stiffness::next_step()
 	{
 		case HS_LOW_FORCE:
 			//
+			for (int i = 0; i < 3; i++) {
+				irp6ot->mp_command.instruction.arm.pf_def.behaviour[i] = lib::CONTACT;
+				irp6p->mp_command.instruction.arm.pf_def.behaviour[i] = lib::GUARDED_MOTION;
+			}
+
+			//std::cout << "HS_LOW_FORCE" << std::endl;
+
 			if (current_irp6p_force > MINIMAL_FORCE) {
 				irp6p_state = HS_STIFNESS_ESTIMATION;
 				initial_irp6p_force = current_irp6p_force;
 				initial_irp6p_position = current_irp6p_position;
+				//	std::cout << "HS_STIFNESS_ESTIMATION" << std::endl;
+				/*
+				 for (int i = 0; i < 3; i++) {
+				 irp6ot->mp_command.instruction.arm.pf_def.behaviour[i] = lib::UNGUARDED_MOTION;
+				 irp6p->mp_command.instruction.arm.pf_def.behaviour[i] = lib::UNGUARDED_MOTION;
+				 lib::Xyz_Angle_Axis_vector irp6ot_desired_velocity(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+				 irp6ot_desired_velocity.to_table(irp6ot->mp_command.instruction.arm.pf_def.arm_coordinates);
+				 }
+				 */
 			}
 
 			break;
 		case HS_STIFNESS_ESTIMATION:
 			if (current_irp6p_force <= MINIMAL_FORCE) {
 				irp6p_state = HS_LOW_FORCE;
-				irp6p_stiffness = 0.0;
+				total_irp6p_stiffness = 0.0;
 			} else if ((fabs(current_irp6p_force - initial_irp6p_force) >= FORCE_INCREMENT)
 					|| (fabs(current_irp6p_position - initial_irp6p_position) >= POSITION_INCREMENT)) {
 				double computed_irp6p_stiffness = (current_irp6p_force - initial_irp6p_force)
 						/ -(current_irp6p_position - initial_irp6p_position);
+				//	std::cout << "STIFNESS_ESTIMATION" << std::endl;
+				/*
+				 if ((fabs(current_irp6p_force - initial_irp6p_force) >= HIGH_FORCE_INCREMENT)
+				 || (fabs(current_irp6p_position - initial_irp6p_position) >= HIGH_POSITION_INCREMENT)) {
+
+				 for (int i = 0; i < 3; i++) {
+				 irp6ot->mp_command.instruction.arm.pf_def.behaviour[i] = lib::CONTACT;
+				 irp6p->mp_command.instruction.arm.pf_def.behaviour[i] = lib::GUARDED_MOTION;
+				 lib::Xyz_Angle_Axis_vector irp6ot_desired_velocity(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+				 irp6ot_desired_velocity.to_table(irp6ot->mp_command.instruction.arm.pf_def.arm_coordinates);
+				 }
+				 }
+				 */
 				if (computed_irp6p_stiffness > 0.0) {
-					irp6p_stiffness = computed_irp6p_stiffness;
+					total_irp6p_stiffness = computed_irp6p_stiffness;
 				}
+
+			} else {
+				/*
+				 lib::Xyz_Angle_Axis_vector irp6ot_desired_velocity(0.0, 0.0, 0.005, 0.0, 0.0, 0.0);
+				 irp6ot_desired_velocity.to_table(irp6ot->mp_command.instruction.arm.pf_def.arm_coordinates);
+				 */
 			}
 			break;
 
@@ -268,10 +306,10 @@ bool haptic_stiffness::next_step()
 	// Korekta parametrów regulatora siłowego w robocie podrzednym na podstawie estymaty sztywnosci
 	double divisor;
 
-#define ADAPTATION_FACTOR 200.0
+#define ADAPTATION_FACTOR 50.0
 
-	if (irp6p_stiffness > ADAPTATION_FACTOR) {
-		divisor = irp6p_stiffness / ADAPTATION_FACTOR;
+	if (total_irp6p_stiffness > ADAPTATION_FACTOR) {
+		divisor = total_irp6p_stiffness / ADAPTATION_FACTOR;
 	} else {
 		divisor = 1;
 	}
@@ -287,9 +325,9 @@ bool haptic_stiffness::next_step()
 
 
 	//	if ((node_counter % 10) == 0) {
-	std::cout << "irp6p_f: " << current_irp6p_force << ", irp6p_p: " << current_irp6p_position << ", irp6p_s: "
-			<< irp6p_stiffness << ", irp6ot_f: " << current_irp6ot_force << ", irp6ot_p: " << current_irp6ot_position
-			<< std::endl;
+	std::cout << "irp6p_f: " << current_irp6p_force << ", irp6p_p: " << current_irp6p_position << ", irp6p_ts: "
+			<< total_irp6p_stiffness << ", irp6ot_f: " << current_irp6ot_force << ", irp6ot_p: "
+			<< current_irp6ot_position << std::endl;
 
 	//std::cout << "irp6p_ECPtoMP_force_xyz_torque_xyz\n" << irp6p_ECPtoMP_force_xyz_torque_xyz << "interval:"
 	//		<< time_interval << std::endl;
