@@ -16,6 +16,7 @@
 #include "ecp_mp_bclike.h"
 #include "ecp_st_smooth_move.h"
 #include "bcl_message.h"
+#include "../../generator/ecp/ecp_g_constant_velocity.h"
 
 #include "ecp_mp_st_smooth_move.h"
 
@@ -31,7 +32,34 @@ namespace common {
 
 namespace task {
 
-//const std::string BCL_MOTION_DIR_STR = "BCL_MOTION_DIR";
+//#define IRP6_OT
+#define IRP6_P
+//#define JOINT
+#define EULER
+
+#ifdef IRP6_OT
+#define VEC_SIZE 8
+#ifdef JOINT
+	const double left[] = { 0.0, 0.5, -1.87, 0.100, -0.040, 4.627, -1.57, 0.0};
+	const double right[] = { 0.0, -0.55, -1.37, 0.100, -0.040, 4.627, -1.57, 0.0};
+	const double start[] = { 0.0, 0.0, -1.37, 0.100, -0.040, 4.627, 0.0, 0.0};
+#endif//JOINT
+#endif//IRP6_OT
+
+#ifdef IRP6_P
+#define VEC_SIZE 7
+#ifdef JOINT
+	const double left[] = { 0.5, -1.87, 0.100, -0.040, 4.627, -1.57, 0.0};
+	const double right[] = {-0.55, -1.37, 0.100, -0.040, 4.627, -1.57, 0.0};
+	const double start[] = {0.0, -1.37, 0.100, -0.040, 4.627, 0.0, 0.0};
+#endif //JOINT
+#endif//IRP6_P
+
+#ifdef EULER
+	const double left[] = { 0.83, 2.45, 0.100, -0.59, 3.035, -1.055, 0.0};
+	const double right[] = {0.83, 1.45, 0.100, -0.59, 3.035, -1.055, 0.0};
+	const double start[] = {0.83, 1.95, 0.100, -0.59, 3.035, -1.055, 0.0};
+#endif
 
 enum BCL_MOTION_DIR{
 	LEFT, RIGHT, START
@@ -55,10 +83,11 @@ public:
 	regions getReading();
 
 private:
-//	  generator::constant_velocity* cvgenjoint;; -- generator o stalej predkosci
 //    shared_ptr<generator::smooth> bc_smooth;
 
 //	shared_ptr<generator::bclike_smooth> bc_smooth;
+
+//	shared_ptr<generator::constant_velocity> bc_smooth;// -- generator o stalej predkosci
 
 	shared_ptr<generator::newsmooth> bc_smooth;
 

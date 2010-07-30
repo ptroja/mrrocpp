@@ -73,6 +73,10 @@ bool bclike_smooth::first_step(){
 
 	std::cout << "FIRST STEP" << std::endl;
 
+	the_robot->ecp_command.instruction.instruction_type = lib::GET;
+	the_robot->ecp_command.instruction.get_type = ARM_DEFINITION;
+	the_robot->ecp_command.instruction.get_arm_type = lib::JOINT;
+
 	if(no_fradia){
 		std::cout << "ERROR: no fradia == TRUE" << std::endl;
 		return false;
@@ -85,11 +89,22 @@ bool bclike_smooth::next_step(){
 
 	reading = bcl_ecp.vsp_fradia->get_reading_message();
 
-	std::cout << "FR DATA RECV x = " << reading.x << " y = " << reading.y << std::endl;
+	std::vector<double> vec;
+	vec.assign(the_robot->reply_package.arm.pf_def.arm_coordinates, the_robot->reply_package.arm.pf_def.arm_coordinates + 7);
+
+	for(std::vector<double>::iterator it = vec.begin(); it != vec.end(); ++it)
+		std::cout << *it << std::endl;
+
+	if(reading.code_found){
+		strcpy(ecp_t.ecp_reply.ecp_2_mp_string, msg.fradiaOrderToString(reading, vec));
+	}
+//	std::cout << "FR DATA RECV x = " << reading.x << " y = " << reading.y << std::endl;
 
 //	bcl_ecp.robot_m[lib::ROBOT_IRP6OT_M]->ecp_replay_package.ecp_2_mp_string
 
-	return newsmooth::next_step();
+	return true;
+
+//	return newsmooth::next_step();
 
 }
 

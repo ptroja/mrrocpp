@@ -21,15 +21,32 @@ namespace common {
 namespace task {
 
 typedef struct {
-	double x;
-	double y;
+	bool code_found;
+	int num_found;
+	double x_k0;
+	double y_k0;
+	double w_k0;
+	double h_k0;
+	double x_k1;
+	double y_k1;
+	double w_k1;
+	double h_k1;
+	double x_k2;
+	double y_k2;
+	double w_k2;
+	double h_k2;
+	double x_k3;
+	double y_k3;
+	double w_k3;
+	double h_k3;
+	double x_k4;
+	double y_k4;
+	double w_k4;
+	double h_k4;
+
 
 } regions;
 
-typedef struct {
-	bool a;
-	int x;
-}__attribute__((__packed__)) init;
 
 typedef ecp_mp::sensor::fradia_sensor<lib::empty_t, regions> bcl_fradia_sensor;
 //typedef ecp_mp::sensor::fradia_sensor<visual_servo_types::image_based_configuration, visual_servo_types::image_based_reading> bcl_fradia_sensor;

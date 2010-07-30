@@ -28,17 +28,17 @@ ecp_st_smooth_move::ecp_st_smooth_move(task & _ecp_t):
 }
 
 ecp_st_smooth_move::~ecp_st_smooth_move() {
-	// TODO Auto-generated destructor stub
+
 }
 
 void ecp_st_smooth_move::conditional_execution(){
 	std::cout << "CONDITIONAL EXECUTION" << std::endl;
 //	std::cout << "MESSAGE REVC " << ecp_t.mp_command.ecp_next_state.mp_2_ecp_next_state_string << std::endl;
-	strcpy(ecp_t.ecp_reply.ecp_2_mp_string, "Tekst odpowiedzi");
+//	strcpy(ecp_t.ecp_reply.ecp_2_mp_string, "Tekst odpowiedzi");
 
 	std::vector<double>vec;
-	vec = msg.stringToData(ecp_t.mp_command.ecp_next_state.mp_2_ecp_next_state_string);
-	bcl_smooth->set_debug(true);
+	vec = msg.stringToTrajectory(ecp_t.mp_command.ecp_next_state.mp_2_ecp_next_state_string);
+//	bcl_smooth->set_debug(true);
 	bcl_smooth->load_absolute_joint_trajectory_pose(vec);
 
 	if(bcl_smooth->calculate_interpolate())

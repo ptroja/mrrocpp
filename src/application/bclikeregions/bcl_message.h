@@ -9,6 +9,7 @@
 #define BCL_MESSAGE_H_
 
 #include <vector>
+#include "bcl_types.h"
 
 namespace mrrocpp {
 
@@ -26,20 +27,15 @@ public:
 	bcl_message();
 	~bcl_message();
 
-//	template <class T>
-//	char* dataToString(std::vector<T> vec);
-//
-//	template <class T>
-//	char* dataToString(T& par0, T& par1, T& par2, T& par3, T& par4, T& par5, T& par6, T& par7);
-//
-//	template <class T>
-//	std::vector<T> stringToData(const char *str, int cnt);
+	char* trajectoryToString(std::vector<double> vec);
 
-	char* dataToString(std::vector<double> vec);
+	char* trajectoryToString(double& par0, double& par1, double& par2, double& par3, double& par4, double& par5, double& par6, double& par7);
 
-	char* dataToString(double& par0, double& par1, double& par2, double& par3, double& par4, double& par5, double& par6, double& par7);
+	std::vector<double> stringToTrajectory(char *str);
 
-	std::vector<double> stringToData(char *str);
+	char* fradiaOrderToString(task::regions& reg, std::vector<double> vec);
+
+	std::vector<double> stringToFradiaOrder(char* str, task::regions reg);
 };
 
 }
