@@ -305,7 +305,7 @@ bool haptic_stiffness::next_step()
 					double computed_intermiediate_irp6p_stiffness = (current_irp6p_force - intermediate_irp6p_force)
 							/ -(current_irp6p_position - intermediate_irp6p_position);
 
-					if (computed_irp6p_stiffness > 0.0) {
+					if (computed_intermiediate_irp6p_stiffness > 0.0) {
 						last_irp6p_stiffness = computed_intermiediate_irp6p_stiffness;
 					}
 
