@@ -256,6 +256,10 @@ bool haptic_stiffness::next_step()
 				irp6p_state = HS_STIFNESS_ESTIMATION;
 				initial_irp6p_force = current_irp6p_force;
 				initial_irp6p_position = current_irp6p_position;
+
+				intermediate_irp6p_force = current_irp6p_force;
+				intermediate_irp6p_position = current_irp6p_position;
+
 				//	std::cout << "HS_STIFNESS_ESTIMATION" << std::endl;
 				/*
 				 for (int i = 0; i < 3; i++) {
@@ -272,6 +276,8 @@ bool haptic_stiffness::next_step()
 			if (current_irp6p_force <= MINIMAL_FORCE) {
 				irp6p_state = HS_LOW_FORCE;
 				total_irp6p_stiffness = 0.0;
+				last_irp6p_stiffness = 0.0;
+
 			} else if ((fabs(current_irp6p_force - initial_irp6p_force) >= FORCE_INCREMENT)
 					|| (fabs(current_irp6p_position - initial_irp6p_position) >= POSITION_INCREMENT)) {
 				double computed_irp6p_stiffness = (current_irp6p_force - initial_irp6p_force)
@@ -291,6 +297,21 @@ bool haptic_stiffness::next_step()
 				 */
 				if (computed_irp6p_stiffness > 0.0) {
 					total_irp6p_stiffness = computed_irp6p_stiffness;
+				}
+
+				if ((fabs(current_irp6p_force - intermediate_irp6p_force) >= FORCE_INCREMENT)
+						|| (fabs(current_irp6p_position - intermediate_irp6p_position) >= POSITION_INCREMENT)) {
+
+					double computed_intermiediate_irp6p_stiffness = (current_irp6p_force - intermediate_irp6p_force)
+							/ -(current_irp6p_position - intermediate_irp6p_position);
+
+					if (computed_irp6p_stiffness > 0.0) {
+						last_irp6p_stiffness = computed_intermiediate_irp6p_stiffness;
+					}
+
+					intermediate_irp6p_force = current_irp6p_force;
+					intermediate_irp6p_position = current_irp6p_position;
+
 				}
 
 			} else {
@@ -326,8 +347,8 @@ bool haptic_stiffness::next_step()
 
 	//	if ((node_counter % 10) == 0) {
 	std::cout << "irp6p_f: " << current_irp6p_force << ", irp6p_p: " << current_irp6p_position << ", irp6p_ts: "
-			<< total_irp6p_stiffness << ", irp6ot_f: " << current_irp6ot_force << ", irp6ot_p: "
-			<< current_irp6ot_position << std::endl;
+			<< total_irp6p_stiffness << ", irp6p_ls: " << last_irp6p_stiffness << ", irp6ot_f: "
+			<< current_irp6ot_force << ", irp6ot_p: " << current_irp6ot_position << std::endl;
 
 	//std::cout << "irp6p_ECPtoMP_force_xyz_torque_xyz\n" << irp6p_ECPtoMP_force_xyz_torque_xyz << "interval:"
 	//		<< time_interval << std::endl;

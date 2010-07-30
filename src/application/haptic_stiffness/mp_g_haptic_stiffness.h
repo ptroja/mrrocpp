@@ -16,7 +16,7 @@ namespace mp {
 namespace generator {
 
 #define MINIMAL_FORCE 1.0
-#define FORCE_INCREMENT 2.0
+#define FORCE_INCREMENT 4.0
 #define POSITION_INCREMENT 0.005
 #define HIGH_FORCE_INCREMENT 30.0
 #define HIGH_POSITION_INCREMENT 0.015
