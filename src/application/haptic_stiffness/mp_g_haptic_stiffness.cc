@@ -247,7 +247,7 @@ bool haptic_stiffness::next_step()
 			//
 			for (int i = 0; i < 3; i++) {
 				irp6ot->mp_command.instruction.arm.pf_def.behaviour[i] = lib::CONTACT;
-				irp6p->mp_command.instruction.arm.pf_def.behaviour[i] = lib::GUARDED_MOTION;
+				irp6p->mp_command.instruction.arm.pf_def.behaviour[i] = lib::UNGUARDED_MOTION;
 			}
 
 			//std::cout << "HS_LOW_FORCE" << std::endl;
@@ -261,14 +261,14 @@ bool haptic_stiffness::next_step()
 				intermediate_irp6p_position = current_irp6p_position;
 
 				//	std::cout << "HS_STIFNESS_ESTIMATION" << std::endl;
-				/*
-				 for (int i = 0; i < 3; i++) {
-				 irp6ot->mp_command.instruction.arm.pf_def.behaviour[i] = lib::UNGUARDED_MOTION;
-				 irp6p->mp_command.instruction.arm.pf_def.behaviour[i] = lib::UNGUARDED_MOTION;
-				 lib::Xyz_Angle_Axis_vector irp6ot_desired_velocity(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
-				 irp6ot_desired_velocity.to_table(irp6ot->mp_command.instruction.arm.pf_def.arm_coordinates);
-				 }
-				 */
+
+				for (int i = 0; i < 3; i++) {
+					irp6ot->mp_command.instruction.arm.pf_def.behaviour[i] = lib::UNGUARDED_MOTION;
+					irp6p->mp_command.instruction.arm.pf_def.behaviour[i] = lib::UNGUARDED_MOTION;
+					lib::Xyz_Angle_Axis_vector irp6ot_desired_velocity(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+					irp6ot_desired_velocity.to_table(irp6ot->mp_command.instruction.arm.pf_def.arm_coordinates);
+				}
+
 			}
 
 			break;
@@ -283,18 +283,18 @@ bool haptic_stiffness::next_step()
 				double computed_irp6p_stiffness = (current_irp6p_force - initial_irp6p_force)
 						/ -(current_irp6p_position - initial_irp6p_position);
 				//	std::cout << "STIFNESS_ESTIMATION" << std::endl;
-				/*
-				 if ((fabs(current_irp6p_force - initial_irp6p_force) >= HIGH_FORCE_INCREMENT)
-				 || (fabs(current_irp6p_position - initial_irp6p_position) >= HIGH_POSITION_INCREMENT)) {
 
-				 for (int i = 0; i < 3; i++) {
-				 irp6ot->mp_command.instruction.arm.pf_def.behaviour[i] = lib::CONTACT;
-				 irp6p->mp_command.instruction.arm.pf_def.behaviour[i] = lib::GUARDED_MOTION;
-				 lib::Xyz_Angle_Axis_vector irp6ot_desired_velocity(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
-				 irp6ot_desired_velocity.to_table(irp6ot->mp_command.instruction.arm.pf_def.arm_coordinates);
-				 }
-				 }
-				 */
+				if ((fabs(current_irp6p_force - initial_irp6p_force) >= HIGH_FORCE_INCREMENT)
+						|| (fabs(current_irp6p_position - initial_irp6p_position) >= HIGH_POSITION_INCREMENT)) {
+
+					for (int i = 0; i < 3; i++) {
+						irp6ot->mp_command.instruction.arm.pf_def.behaviour[i] = lib::CONTACT;
+						irp6p->mp_command.instruction.arm.pf_def.behaviour[i] = lib::GUARDED_MOTION;
+						lib::Xyz_Angle_Axis_vector irp6ot_desired_velocity(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+						irp6ot_desired_velocity.to_table(irp6ot->mp_command.instruction.arm.pf_def.arm_coordinates);
+					}
+				}
+
 				if (computed_irp6p_stiffness > 0.0) {
 					total_irp6p_stiffness = computed_irp6p_stiffness;
 				}
@@ -315,10 +315,10 @@ bool haptic_stiffness::next_step()
 				}
 
 			} else {
-				/*
-				 lib::Xyz_Angle_Axis_vector irp6ot_desired_velocity(0.0, 0.0, 0.005, 0.0, 0.0, 0.0);
-				 irp6ot_desired_velocity.to_table(irp6ot->mp_command.instruction.arm.pf_def.arm_coordinates);
-				 */
+
+				lib::Xyz_Angle_Axis_vector irp6ot_desired_velocity(0.0, 0.0, APPROACH_VELOCITY, 0.0, 0.0, 0.0);
+				irp6ot_desired_velocity.to_table(irp6ot->mp_command.instruction.arm.pf_def.arm_coordinates);
+
 			}
 			break;
 
@@ -326,8 +326,6 @@ bool haptic_stiffness::next_step()
 
 	// Korekta parametrów regulatora siłowego w robocie podrzednym na podstawie estymaty sztywnosci
 	double divisor;
-
-#define ADAPTATION_FACTOR 50.0
 
 	if (total_irp6p_stiffness > ADAPTATION_FACTOR) {
 		divisor = total_irp6p_stiffness / ADAPTATION_FACTOR;
