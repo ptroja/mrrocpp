@@ -42,6 +42,15 @@ bool newsmooth::calculate() {
 		pose_vector_iterator++;
 	}
 
+	//------------- testowo ----------
+	if (pose_spec == lib::ECP_XYZ_ANGLE_AXIS) {
+		set_relative();
+		if (!vpc.calculate_relative_angle_axis_vector(pose_vector_iterator)) {
+			return false;
+		}
+	}
+	//------------ testowo end ---------
+
 	pose_vector_iterator = pose_vector.begin();
 
 	for (i = 0; i < pose_vector.size(); i++) {//calculate distances, directions
@@ -308,7 +317,7 @@ bool newsmooth::load_trajectory_pose(const vector<double> & coordinates, lib::MO
 	ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose pose; //new trajectory pose
 	pose = ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose(pose_spec, coordinates, v, a); //create new trajectory pose
 	pose.v_max = v_max; //set the v_max vector
-	pose.a_max = a_max;
+	pose.a_max = a_max; //set the a_max vector
 
 	if (pose_vector.empty()) {
 		pose.pos_num = 1;

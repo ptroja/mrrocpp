@@ -16,6 +16,7 @@ namespace generator{
 
 neuron_generator::neuron_generator(common::task::task& _ecp_task):generator(_ecp_task) {
 
+	reset();
 }
 
 neuron_generator::~neuron_generator() {
@@ -68,9 +69,11 @@ bool neuron_generator::next_step(){
 	if(neuron_sensor->current_period==5){
 		//printf("period 5: x:%lf y:%lf z:%lf\n",neuron_sensor->getCoordinates().x,neuron_sensor->getCoordinates().y,neuron_sensor->getCoordinates().z);
 		flushall();
+		// ------------ read the current robot position ----------
 		actual_position_matrix.set_from_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame);
 		actual_position_matrix.get_xyz_angle_axis(angle_axis_vector);
 		angle_axis_vector.to_table(actual_position);
+		// ------------ read the current robot position (end) ---------
 
 		//printf("actual_pos: \t");
 		for (i = 0; i < 6; i++) {
@@ -150,16 +153,30 @@ bool neuron_generator::next_step(){
 			continue;
 		}
 
-		if (desired_position[i] - actual_position[i] > 0) {
-			k[i] = 1;
-		} else {
-			k[i] = -1;
+		if (!breaking) {
+			if (desired_position[i] - actual_position[i] > 0) {
+				k[i] = 1;
+			} else {
+				k[i] = -1;
+			}
 		}
 
 		s[i] = fabs(desired_position[i] - actual_position[i]);
 
-		position[i] = actual_position[i] + (k[i] * (s[i]/5) * node);
+		if (breaking) {
+			if (s[i] < (0.5 * v[i])) {
+				position[i] = actual_position[i] + (k[i] * 0.5 * a_max[i] * 0.02 * 0.02 * breaking_node);
+			} else {
+				double a = (v * v) / (2 * s);
+				position[i] = actual_position[i] + (k[i] * 0.5 * a * 0.02 * 0.02 * breaking_node);
+			}
 
+			breaking_node++;
+		} else {
+
+			position[i] = actual_position[i] + (k[i] * (s[i]/5) * node);
+			v[i] = (s[i]/5)/0.02;
+		}
 		printf("%f\t", position[i]);
 	}
 	printf("\n");
@@ -170,6 +187,29 @@ bool neuron_generator::next_step(){
 
 	return true;
 
+}
+
+double * neuron_generator::get_position() {
+	return position;
+}
+
+void neuron_generator::reset() {
+
+	breaking = false;
+
+	for (int i = 0 ; i < 6; i++) {
+		v[i] = 0;
+	}
+
+	for (int i = 0 ; i < 6; i++) {
+		a_max[i] = 0.1;
+	}
+
+	breaking_node = 0;
+}
+
+void neuron_generator::set_breaking(bool breaking) {
+	this->breaking = breaking;
 }
 
 }//generator

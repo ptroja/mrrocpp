@@ -36,13 +36,28 @@ class neuron_generator: public common::generator::generator{
 		 * Vector filled with coordinates read from the robot.
 		 */
 		//vector<double> position;
+		/**
+		 * If true, generator tries to break in each axis until robot stops.
+		 */
+		bool breaking;
+		/**
+		 * Current velocity in all axes.
+		 */
+		double v[6];
+		double a_max[6];
+		int breaking_node;
 
 	public:
 		neuron_generator(common::task::task& _ecp_task);
 		virtual ~neuron_generator();
 		virtual bool first_step();
 		virtual bool next_step();
-
+		/**
+		 * Returns current robot position.
+		 */
+		double * get_position();
+		void reset();
+		void set_breaking(bool breaking);
 };
 
 }//generator

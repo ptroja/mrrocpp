@@ -172,6 +172,17 @@ class velocity_profile {
 			}
 			return true;
 		}
+		/**
+		 * Calculates the relative angle axis vector. The relative distance is calculated between the start position and coordinates vectors.
+		 * Result is stored in coordinates vector of the current pose.
+		 * @return true if the calculation was successful
+		 */
+		bool calculate_relative_angle_axis_vector(typename vector<Pos>::iterator & it) {
+//			homog_matrix.set_from_xyz_angle_axis(pose_list_iterator->start_position);
+//			homog_matrix2.set_from_xyz_angle_axis(pose_list_iterator->coordinates);
+//			((!homog_matrix) * homog_matrix2).get_xyz_angle_axis(tmp_angle_axis_vector);
+//			tmp_angle_axis_vector.to_table(pose_list_iterator->coordinates);
+		}
 };
 
 } // namespace velocity_profile_calculator
