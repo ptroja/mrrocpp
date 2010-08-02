@@ -164,11 +164,17 @@ bool neuron_generator::next_step(){
 		s[i] = fabs(desired_position[i] - actual_position[i]);
 
 		if (breaking) {
+			double a;
 			if (s[i] < (0.5 * v[i])) {
-				position[i] = actual_position[i] + (k[i] * 0.5 * a_max[i] * 0.02 * 0.02 * breaking_node);
+				a = a_max[i];
 			} else {
-				double a = (v * v) / (2 * s);
-				position[i] = actual_position[i] + (k[i] * 0.5 * a * 0.02 * 0.02 * breaking_node);
+				a = (v[i] * v[i]) / (2 * s[i]);
+			}
+
+			position[i] = actual_position[i] + (k[i] * breaking_node * 0.02 * v[i] - breaking_node * breaking_node * 0.02 * 0.02 * a / 2);
+
+			if (breaking_node * 0.02 >= v[i]/a) {
+				reached[i] = true;
 			}
 
 			breaking_node++;
@@ -185,7 +191,13 @@ bool neuron_generator::next_step(){
 	position_matrix.set_from_xyz_angle_axis(lib::Xyz_Angle_Axis_vector(position));
 	position_matrix.get_frame_tab(the_robot->ecp_command.instruction.arm.pf_def.arm_frame);
 
-	return true;
+	for (i = 0; i < 6; i++) {
+		if (reached[i] == false) {
+			return true;
+		}
+	}
+
+	return false;
 
 }
 
@@ -195,17 +207,23 @@ double * neuron_generator::get_position() {
 
 void neuron_generator::reset() {
 
+	int i;
+
 	breaking = false;
 
-	for (int i = 0 ; i < 6; i++) {
+	for (i = 0 ; i < 6; i++) {
 		v[i] = 0;
 	}
 
-	for (int i = 0 ; i < 6; i++) {
+	for (i = 0 ; i < 6; i++) {
 		a_max[i] = 0.1;
 	}
 
-	breaking_node = 0;
+	for (i = 0 ; i < 6; i++) {
+		reached[i] = false;
+	}
+
+	breaking_node = 1;
 }
 
 void neuron_generator::set_breaking(bool breaking) {

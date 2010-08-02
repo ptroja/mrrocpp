@@ -44,8 +44,18 @@ class neuron_generator: public common::generator::generator{
 		 * Current velocity in all axes.
 		 */
 		double v[6];
+		/**
+		 * Maximal allowed acceleration in all axes.
+		 */
 		double a_max[6];
+		/**
+		 * Node counter used for breaking.
+		 */
 		int breaking_node;
+		/**
+		 * Set to true if robot reached desired position for the whole trajectory in each axis.
+		 */
+		bool reached[6];
 
 	public:
 		neuron_generator(common::task::task& _ecp_task);
