@@ -122,7 +122,10 @@ void neuron_sensor::get_reading(){
 			break;
 
 		case START_BREAKING:
-			printf("neuron_sensor->get_reading: start breaking");
+			memcpy(&(coordinates.x),buff+1,8);
+			memcpy(&(coordinates.y),buff+9,8);
+			memcpy(&(coordinates.z),buff+17,8);
+			printf("neuron_sensor->get_reading: start breaking %lf %lf %lf",coordinates.x,coordinates.y,coordinates.z);
 			break;
 
 		default:
