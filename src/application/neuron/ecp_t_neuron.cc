@@ -65,6 +65,7 @@ void Neuron::mp_2_ecp_next_state_string_handler(void){
 			if(smoothGenerator->calculate_interpolate())
 				smoothGenerator->Move();
 
+			neuronGenerator->reset();
 			neuronGenerator->Move();
 		}
 
