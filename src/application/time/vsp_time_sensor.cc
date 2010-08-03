@@ -22,7 +22,7 @@ namespace vsp {
 namespace sensor {
 
 time::time(lib::configurator &_config) :
-	vsp::sensor::sensor <struct timespec>(_config)
+	mrrocpp::vsp::common::sensor <struct timespec>(_config)
 {
 }
 
@@ -59,8 +59,10 @@ void time::get_reading(void)
 	is_reading_ready = false;
 } // end: get_reading
 
-VSP_REGISTER_SENSOR(time)
-
 } // namespace sensor
 } // namespace vsp
 } // namespace mrrocpp
+
+// Register time sensor.
+mrrocpp::vsp::common::VSP_REGISTER_SENSOR(mrrocpp::vsp::sensor::time)
+

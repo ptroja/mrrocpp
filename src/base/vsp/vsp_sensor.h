@@ -1,9 +1,11 @@
 /*!
  * @file vsp_sensor.h
  * @brief File containing declaration of the base sensor_interface class.
+ *
+ * @date 09.11.2005
  * @author tkornuta <tkornuta@ia.pw.edu.pl>, Warsaw University of Technology
  * @author ptrojane <piotr.trojanek@gmail.com>, Warsaw University of Technology
- * @date 09.11.2005
+ *
  * @ingroup VSP
  */
 
@@ -18,7 +20,7 @@ namespace vsp {
 namespace common {
 
 /**
- * Structure used during the communication with the VSP via DEVCTL.
+ * @brief Structure used during the communication with the VSP via DEVCTL.
  */
 typedef struct
 {
@@ -32,21 +34,21 @@ typedef struct
  * @brief Macro used for shortening the call to message data during the read operation.
  * @author tkornuta
  */
-#define DEVCTL_RD __DIOF(_DCMD_MISC, 1, mrrocpp::vsp::sensor::DEVCTL_MSG)
+#define DEVCTL_RD __DIOF(_DCMD_MISC, 1, mrrocpp::vsp::common::DEVCTL_MSG)
 
 /**
  * @def DEVCTL_RD __DIOF
  * @brief Macro used for shortening the call to message data during the write operation.
  * @author tkornuta
  */
-#define DEVCTL_WT __DIOT(_DCMD_MISC, 2, mrrocpp::vsp::sensor::DEVCTL_MSG)
+#define DEVCTL_WT __DIOT(_DCMD_MISC, 2, mrrocpp::vsp::common::DEVCTL_MSG)
 
 /**
  * @def DEVCTL_RD __DIOF
  * @brief Macro used for shortening the call to message data during the read-write operation.
  * @author tkornuta
  */
-#define DEVCTL_RW __DIOTF(_DCMD_MISC, 3, mrrocpp::vsp::sensor::DEVCTL_MSG)
+#define DEVCTL_RW __DIOTF(_DCMD_MISC, 3, mrrocpp::vsp::common::DEVCTL_MSG)
 
 
 
@@ -54,7 +56,6 @@ typedef struct
  * @brief Interface class for all sensors that are used in the Resource Manager based shells.
  * @author ptrojane
  * @author tkornuta
- * @ingroup VSP
  */
 class sensor_interface : public lib::sensor_interface
 {
@@ -151,7 +152,7 @@ public:
 
 	int msgwrite(resmgr_context_t *ctp)
 	{
-		// Count the start address of reply message content.
+		// Compute  the start address of reply message content.
 		/*
 		 struct _io_devctl_reply {
 		 uint32_t                  zero;
@@ -178,21 +179,19 @@ public:
 
 /**
  * @brief Function returns created sensor - implemented once in every VSP.
- * Users should use the  VSP_CREATE_SENSOR macro, which shortens the definition.
+ * Users should use the  \link mrrocpp::vsp::common::VSP_REGISTER_SENSOR VSP_REGISTER_SENSOR\endlink macro, which shortens the definition.
  * @param _config Configurator object passed to sensor
  * @return Created sensor inherited from the sensor_interface class
- * @ingroup VSP
  */
 sensor_interface * return_created_sensor(lib::configurator &_config);
 
 
 /**
- * @def VSP_CREATE_SENSOR
+ * @def VSP_REGISTER_SENSOR
  * @brief Macro used for sensor registration - should be used once for each VSP process.
- * @ingroup VSP
  */
 #define VSP_REGISTER_SENSOR(NAME) \
-sensor_interface * return_created_sensor (lib::configurator &_config) \
+sensor_interface * mrrocpp::vsp::common::return_created_sensor (lib::configurator &_config) \
 { \
 	return new NAME(_config); \
 }

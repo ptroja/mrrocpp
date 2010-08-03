@@ -1,4 +1,40 @@
-/** @defgroup VSP Virtual Sensor Process
+/** 
+@namespace mrrocpp::vsp
+@brief Main namespace for issues related to the Virtual Sensor Process.
+@date 03.08.2010 
+@author tkornuta
+@ingroup VSP
+
+
+@namespace mrrocpp::vsp::common
+@brief Common classes, functions and macros, used in different VSP shells and kernels (sensors). 
+@date 03.08.2010 
+@author tkornuta
+@ingroup VSP
+
+
+@namespace mrrocpp::vsp::nint_shell
+@brief Namespace containing functions required by the \b noninteractive VSP shell. 
+@date 03.08.2010 
+@author tkornuta
+@ingroup VSP
+
+
+@namespace mrrocpp::vsp::int_shell
+@brief Namespace containing functions required by the \b interactive VSP shell. 
+@date 03.08.2010 
+@author tkornuta
+@ingroup VSP
+
+
+@namespace mrrocpp::vsp::int_nw_shell
+@brief Namespace containing functions required by the <b>interactive communication without delay</b> VSP shell. 
+@date 03.08.2010 
+@author tkornuta
+@ingroup VSP
+
+
+@defgroup VSP Virtual Sensor Process
 @{
 
 @section role The role of VSP (Virtual Sensor Process)
@@ -81,6 +117,40 @@ The VSP process can reply with one of the following codes:
     came,
  - <b>INVALID_VSP_COMMAND</b> - Unrecognized command has been received.
 The above error codes form the enumerated type \link mrrocpp::lib::VSP_REPORT_t VSP_REPORT\endlink.
+
+
+@subsection cooperation Types of communication
+
+There are three types of the VSP shells, depending on the way they
+communicate with other MRROC++ processes.
+
+First type of shells repeatedly collect and aggregate measurements,
+regardless of whether they are needed by other processes or not. The
+frequency of initiating readings depends on the sensor type and task
+requirements. In this case, if the MP or the ECP requests
+readings, the VSP sends the latest virtual sensor readings stored
+in its internal sensor image. As such VSP processes initiate the
+readings on their own, this communication type is called \b noninteractive.
+
+
+In opposition to the noninteractive communication, in the \b interactive 
+form of communication the VSPs collect new measurements only when an 
+explicit reading initiation request arrives.
+
+There are two kinds of interactive communication. Communication, in which 
+the higher layer processes must wait until the VSP finishes ordered task, 
+is simply called interactive communication. In the second kind of interactive 
+communication, before the execution of the command, the VSP replies a 
+confirmation message, which enables the MP or the ECP to proceed with 
+other tasks. This type of communication is called <b>interactive communication 
+without delay</b>.
+
+All three types of communications are implemented, each as a different VSP 
+shell. When the <b>system builder</b> adds a new sensor to the system, he 
+can change the communication type at any time, simply by recompilating the VSP
+process with the same kernel and another shell. However, he must remember 
+that during the noninteractive communication an additional <b>wait_for_event()</b> 
+method is used.
 
 
 @todo Describe adding sensors
