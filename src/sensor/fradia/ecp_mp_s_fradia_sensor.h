@@ -73,57 +73,7 @@ private:
 		/** Status. */
 		TASK_LOAD_STATUS status;
 	};
-public:
 
-	/**
-	 * Create FraDIA sensor.
-	 * Specified section in config must contain following options: fradia_node_name, fradia_port, fradia_task.
-	 * Creates socket and connects to FraDIA, but doesn't send any data.
-	 * @param configurator
-	 * @param section_name
-	 * @param configure_message will be send by configure_sensor()
-	 */
-	fradia_sensor(mrrocpp::lib::configurator& _configurator, const std::string& section_name, const CONFIGURE_T& configure_message = CONFIGURE_T());
-
-	/**
-	 * Closes cvFraDIA socket connection.
-	 */
-	~fradia_sensor();
-
-	/**
-	 * Sends configuration message (with task name and CONFIGURE_T  message). Then waits for reply.
-	 * Exception is thrown if task has not been loaded.
-	 */
-	void configure_sensor();
-
-	/**
-	 * Sends INITIATE_T
-	 */
-	void initiate_reading();
-
-	/**
-	 * Receives READING_T
-	 */
-	void get_reading();
-
-	/**
-	 * Get report of the last data query
-	 * @return status of the last communication with FraDIA
-	 */
-	lib::VSP_REPORT_t get_report(void) const;
-
-	/**
-	 * Set message to be sent by initiate_reading().
-	 * @param msg
-	 */
-	void set_initiate_message(const INITIATE_T& msg);
-	/**
-	 * Get message received by get_reading().
-	 * Throws exception if sensor is not configured.
-	 * @return
-	 */
-	const READING_T& get_reading_message() const;
-private:
 	/** Task name to load. */
 	const std::string fradia_task;
 
@@ -135,10 +85,18 @@ private:
 
 	/** Report set by get_reading(). */
 	lib::VSP_REPORT_t report;
+
+	/** Sensor configuration message. */
 	CONFIGURE_T configure_message;
-	bool send_initiate_message;
+
+	/**  Reading initialization message. */
 	INITIATE_T initiate_message;
+
+	/** Retrieved reading. */
 	READING_T reading_message;
+
+	/**  */
+	bool send_initiate_message;
 
 	/**
 	 * Send one message to FraDIA.
@@ -155,6 +113,56 @@ private:
 	 */
 	template <typename MESSAGE_T>
 	MESSAGE_T receive_from_fradia();
+
+public:
+
+	/**
+	 * FraDIA sensor constructor. Creates socket and connects to FraDIA, but doesn't send any data.
+	 * @param configurator Configuration object.
+	 * @param section_name Name of the section in ini file. Specified section in config must contain following options: fradia_node_name, fradia_port, fradia_task.
+	 * @param configure_message Message that will be send by configure_sensor().
+	 */
+	fradia_sensor(mrrocpp::lib::configurator& _configurator, const std::string& section_name, const CONFIGURE_T& configure_message = CONFIGURE_T());
+
+	/**
+	 * Closes FraDIA socket connection.
+	 */
+	~fradia_sensor();
+
+	/**
+	 * Sends configuration message (with task name and CONFIGURE_T  message). Then waits for reply.
+	 * Exception is thrown if task has not been loaded.
+	 */
+	void configure_sensor();
+
+	/**
+	 * Sends INITIATE_T command to FraDIA.
+	 */
+	void initiate_reading();
+
+	/**
+	 * Receives READING_T message.
+	 */
+	void get_reading();
+
+	/**
+	 * Get report of the last data query.
+	 * @return status of the last communication with FraDIA
+	 */
+	lib::VSP_REPORT_t get_report(void) const;
+
+	/**
+	 * Set message to be sent by initiate_reading().
+	 * @param msg message to be sent.
+	 */
+	void set_initiate_message(const INITIATE_T& msg);
+	/**
+	 * Get message received by get_reading().
+	 * Throws exception if sensor is not configured.
+	 * @return
+	 */
+	const READING_T& get_reading_message() const;
+
 }; // class fradia_sensor
 
 template <typename CONFIGURE_T, typename READING_T, typename INITIATE_T>
@@ -278,7 +286,7 @@ void fradia_sensor <CONFIGURE_T, READING_T, INITIATE_T>::configure_sensor()
 		throw std::runtime_error("Failed to load FraDIA task \"" + fradia_task + "\"");
 	}
 
-	logger::log_dbg("fradia_sensor::configure_sensor() end\n");
+	// logger::log_dbg("fradia_sensor::configure_sensor() end\n");
 }
 
 template <typename CONFIGURE_T, typename READING_T, typename INITIATE_T>

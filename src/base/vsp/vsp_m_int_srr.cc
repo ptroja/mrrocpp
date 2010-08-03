@@ -1,17 +1,18 @@
-// ------------------------------------------------------------------------
-// Proces:		VIRTUAL SENSOR PROCESS (lib::VSP)
-// Plik:            vsp_m_nint.cc
-// System:	QNX/MRROC++  v. 6.3
-// Opis:		Interaktywna powloka procesow VSP
-//
-// 	-	interaktywne odczytywanie stanu czujnika rzeczywistego, oczekiwanie na zakonczenie operacji
-// 	-	jednowatkowy
-//
-// Autor:		ptrojane
-// Data:		11.10.2007
-// ------------------------------------------------------------------------
+/*!
+ \file vsp_m_int_srr.cc
 
-/********************************* INCLUDES *********************************/
+ \brief file contains the interactive VSP shell
+
+ The interactive VSP shell should be used for all sensors,  that are required to cooperate with MP/ECP processes interativelly, which means that they should perform reading initiation and aggregation to the form useful in control only when such command will be received.
+
+
+ \date 11.10.2007
+ \author ptrojane <piotr.trojanek@gmail.com>, Warsaw University of Technology
+ \author tkornuta <tkornuta@ia.pw.edu.pl>, Warsaw University of Technology
+
+ \defgroup VSP -- Virtual Sensor Process
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -21,9 +22,9 @@
 #include "lib/com_buf.h"
 
 #include "lib/srlib.h"
-#include "base/vsp/vsp_sensor.h"				// zawiera deklaracje klasy vsp_sensor + struktury komunikacyjne
-// Konfigurator
 #include "lib/configurator.h"
+#include "base/vsp/vsp_sensor.h"
+#include "base/vsp/vsp_error.h"
 
 #if defined(USE_MESSIP_SRR)
 #include "messip_dataport.h"
@@ -33,13 +34,18 @@ namespace mrrocpp {
 namespace vsp {
 namespace common {
 
-/********************************* GLOBALS **********************************/
-static sensor::sensor *vs; // czujnik wirtualny
+/** Global pointer to sensor object. */
+static sensor::sensor_interface *vs;
 
-static bool TERMINATE = false; // zakonczenie obu watkow
+/** Threads termination flag. */
+static bool TERMINATE = false;
 
 
-/***************************** ERROR_HANDLER ******************************/
+/**
+ * @brief Function responsible for handling errors.
+ * @author tkornuta
+ * @param e Handled error
+ */
 template <class ERROR>
 void error_handler(ERROR & e)
 {
@@ -73,14 +79,19 @@ void error_handler(ERROR & e)
 			break;
 		default:
 			vs->sr_msg->message(lib::NON_FATAL_ERROR, VSP_UNIDENTIFIED_ERROR);
-	} // end switch
-} // end error_handler
+	} //: switch
+} //: error_handler
 
 } // namespace common
 } // namespace vsp
 } // namespace mrrocpp
 
-/*********************************** MAIN ***********************************/
+/**
+ * @brief Main body of the interactive VSP shell.
+ * @param argc Number of passed arguments
+ * @param argv Process arguments - first five are parameters of the Configurator object
+ * @return Status
+ */
 int main(int argc, char *argv[])
 {
 
@@ -88,13 +99,13 @@ int main(int argc, char *argv[])
 	signal(SIGINT, SIG_IGN);
 #endif
 
-	// liczba argumentow
+	// Check number of arguments.
 	if (argc <= 6) {
-		printf("Za malo argumentow VSP\n");
+		printf("Number of required arguments is insufficient.\n");
 		return -1;
 	}
 
-	// zczytanie konfiguracji calego systemu
+	// Read system configuration.
 	lib::configurator _config(argv[1], argv[2], argv[3], argv[4], argv[5]);
 
 	const std::string attach_point =
@@ -102,25 +113,28 @@ int main(int argc, char *argv[])
 
 	try {
 
-		// Stworzenie nowego czujnika za pomoca funkcji (cos na ksztalt szablonu abstract factory).
+		// Create sensor - abstract factory sensor.
 		vsp::common::vs = vsp::sensor::return_created_sensor(_config);
 
+		// Create messip communication channel.
 		messip_channel_t *ch;
 		if ((ch = messip::port_create(attach_point)) == NULL) {
 			fprintf(stderr, "creating channel failed\n");
 			return -1;
 		}
 
-		/* start the resource manager message loop */
+		// Start the resource manager message loop.
 		vsp::common::vs->sr_msg->message("Device is waiting for clients...");
 
-		while (!vsp::common::TERMINATE) { // for(;;)
-
+		// Main processing loop.
+		while (!vsp::common::TERMINATE) {
 			int32_t type, subtype;
 
+			// Receive message via messip port..
 			int rcvid = messip::port_receive(ch, type, subtype, vsp::common::vs->to_vsp);
 
-			if (rcvid == -1) /* Error condition, exit */
+			 // Check error condition.
+			if (rcvid == -1)
 			{
 				perror("vsp: Receive failed");
 				break;
@@ -130,8 +144,10 @@ int main(int argc, char *argv[])
 				continue;
 			}
 
+			 // Set default report.
 			vsp::common::vs->from_vsp.vsp_report = lib::VSP_REPLY_OK;
 
+			// Check command.
 			try {
 				switch (vsp::common::vs->to_vsp.i_code)
 				{
@@ -149,23 +165,24 @@ int main(int argc, char *argv[])
 						vsp::common::TERMINATE = true;
 						break;
 					default:
-						throw lib::VSP_main_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_VSP);
+						throw lib::vsp_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_VSP);
 				}
 			}
 
-			catch (lib::VSP_main_error & e) {
+			catch (lib::vsp_error & e) {
 				vsp::common::error_handler(e);
-			} // end CATCH
+			} //: catch
 			catch (lib::sensor::sensor_error & e) {
 				vsp::common::error_handler(e);
-			} // end CATCH
+			} //: catch
 
+			// Send message via reply port.
 			messip::port_reply(ch, rcvid, 0, vsp::common::vs->from_vsp);
-		} // end while()
+		} //: while
 		vsp::common::vs->sr_msg->message("vsp  terminated");
-	} // koniec TRY
-	catch (lib::VSP_main_error & e) {
+	} //: try
+	catch (lib::vsp_error & e) {
 		vsp::common::error_handler(e);
 		exit(EXIT_FAILURE);
-	} // end CATCH
-} // end MAIN
+	} //: catch
+} //: main

@@ -20,7 +20,8 @@ namespace sensor {
 
 /*****************************************************/
 // do komunikacji za pomoca devctl()
-typedef struct {
+typedef struct
+{
 	char foo[2048];
 } DEVCTL_MSG;
 
@@ -32,20 +33,10 @@ typedef struct {
 // zapis i odczyt
 #define DEVCTL_RW __DIOTF(_DCMD_MISC, 3, mrrocpp::vsp::sensor::DEVCTL_MSG)
 
-// Klasa obslugi bledow procesu VSP.
-class VSP_main_error
-{
-public:
-	const lib::error_class_t error_class;
-	const uint64_t error_no;
-	VSP_main_error(lib::error_class_t err_cl, uint64_t err_no) :
-		error_class(err_cl), error_no(err_no)
-	{
-	}
-};
 
 /********** klasa czujnikow po stronie VSP **************/
-class sensor_interface : public lib::sensor_interface {
+class sensor_interface : public lib::sensor_interface
+{
 protected:
 	// Flaga - czy czujnik jest skonfigurowany.
 	bool is_sensor_configured;
@@ -62,7 +53,7 @@ public:
 
 	virtual lib::VSP_COMMAND_t get_command(void) const = 0;
 
-	sensor_interface (lib::configurator &_config);
+	sensor_interface(lib::configurator &_config);
 
 	// Metoda uzywana przy wspolpracy nieinteraktywnej.
 	virtual void wait_for_event(void);
@@ -74,23 +65,24 @@ public:
 	virtual int msgwrite(resmgr_context_t *ctp) = 0;
 };
 
-template <
-	typename VSP_ECP_MSG,
-	typename ECP_VSP_MSG = lib::empty_t
->
-class sensor : public sensor_interface {
+template <typename VSP_ECP_MSG, typename ECP_VSP_MSG = lib::empty_t>
+class sensor : public sensor_interface
+{
 protected:
-	struct {
+	struct
+	{
 		lib::VSP_REPORT_t vsp_report;
 		VSP_ECP_MSG comm_image;
 	} from_vsp;
 
-	struct {
+	struct
+	{
 		lib::VSP_COMMAND_t i_code;
 		ECP_VSP_MSG to_vsp;
 	} to_vsp;
 public:
-	sensor(lib::configurator &_config) : sensor_interface(_config)
+	sensor(lib::configurator &_config) :
+		sensor_interface(_config)
 	{
 	}
 
@@ -127,7 +119,7 @@ public:
 };
 
 // Zwrocenie stworzonego obiektu - czujnika. Funkcja implementowana w plikach klas dziedziczacych.
-sensor_interface * return_created_sensor (lib::configurator &_config);
+sensor_interface * return_created_sensor(lib::configurator &_config);
 
 #define VSP_CREATE_SENSOR(NAME) \
 sensor_interface * return_created_sensor (lib::configurator &_config) \
