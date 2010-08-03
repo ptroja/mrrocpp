@@ -44,7 +44,7 @@ bool newsmooth::calculate() {
 
 
 	//------------- testowo ----------
-	pose_vector_iterator = pose_vector.begin();
+	/*pose_vector_iterator = pose_vector.begin();
 
 	for (i = 0; i < pose_vector.size(); i++) {
 		if (pose_spec == lib::ECP_XYZ_ANGLE_AXIS) {
@@ -54,7 +54,7 @@ bool newsmooth::calculate() {
 			}
 		}
 		pose_vector_iterator++;
-	}
+	}*/
 	//------------ testowo end ---------
 
 	pose_vector_iterator = pose_vector.begin();

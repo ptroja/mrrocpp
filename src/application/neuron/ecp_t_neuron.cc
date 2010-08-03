@@ -61,7 +61,7 @@ void Neuron::mp_2_ecp_next_state_string_handler(void){
 			coordinates1[5]=-0.294;
 			smoothGenerator->load_absolute_angle_axis_trajectory_pose(coordinates1);
 
-			smoothGenerator->set_debug(true);
+			//smoothGenerator->set_debug(true);
 			if(smoothGenerator->calculate_interpolate())
 				smoothGenerator->Move();
 
