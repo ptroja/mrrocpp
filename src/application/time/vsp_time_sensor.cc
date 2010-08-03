@@ -59,7 +59,7 @@ void time::get_reading(void)
 	is_reading_ready = false;
 } // end: get_reading
 
-VSP_CREATE_SENSOR(time)
+VSP_REGISTER_SENSOR(time)
 
 } // namespace sensor
 } // namespace vsp

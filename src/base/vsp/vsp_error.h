@@ -1,9 +1,9 @@
 /*!
- * \file vsp_error.h
- * \brief File containing class representing VSP errors.
- * \date 30.11.2006
- * \author tkornuta <tkornuta@ia.pw.edu.pl>, Warsaw University of Technology
- * \defgroup VSP -- Virtual Sensor Process
+ * @file vsp_error.h
+ * @brief File containing class that represents errors (exceptions) passed in VSPs.
+ * @date 30.11.2006
+ * @author tkornuta <tkornuta@ia.pw.edu.pl>, Warsaw University of Technology
+ * @ingroup VSP
  */
 
 #if !defined(_VSP_ERROR_H)
@@ -17,9 +17,9 @@ namespace common {
 
 
 /*!
- * \class vsp_error
- * \brief Class representing the exceptions thrown and handled in VSP.
- * \author tkornuta
+ * @class vsp_error
+ * @brief Class representing the exceptions thrown and handled in VSP.
+ * @author tkornuta
  */
 class vsp_error : public std::exception
 {

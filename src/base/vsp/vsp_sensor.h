@@ -1,70 +1,128 @@
-// -------------------------------------------------------------------------
-// Proces: 	VIRTUAL SENSOR PROCESS (lib::VSP)
-// Plik:			vsp_sensor.h
-// System:	QNX/MRROCPP  v. 6.3
-// Opis:		Deklaracja klasy bazowej vsp_sensor - bazy czujnikow po stronie procesu VSP.
-// Autor:		tkornuta
-// Data:		09.11.2005
-// -------------------------------------------------------------------------
+/*!
+ * @file vsp_sensor.h
+ * @brief File containing declaration of the base sensor_interface class.
+ * @author tkornuta <tkornuta@ia.pw.edu.pl>, Warsaw University of Technology
+ * @author ptrojane <piotr.trojanek@gmail.com>, Warsaw University of Technology
+ * @date 09.11.2005
+ * @ingroup VSP
+ */
 
 #if !defined(_VSP_SENSOR_H)
 #define _VSP_SENSOR_H
 
 #include "lib/sensor.h"
-// Konfigurator
 #include "lib/configurator.h"
 
 namespace mrrocpp {
 namespace vsp {
-namespace sensor {
+namespace common {
 
-/*****************************************************/
-// do komunikacji za pomoca devctl()
+/**
+ * Structure used during the communication with the VSP via DEVCTL.
+ */
 typedef struct
 {
+	/** Block of memory for message.  */
 	char foo[2048];
 } DEVCTL_MSG;
 
-// ROZKAZY uzywane w devctl()
-// odczyt z czujnika
+
+/**
+ * @def DEVCTL_RD __DIOF
+ * @brief Macro used for shortening the call to message data during the read operation.
+ * @author tkornuta
+ */
 #define DEVCTL_RD __DIOF(_DCMD_MISC, 1, mrrocpp::vsp::sensor::DEVCTL_MSG)
-// zapis do czujnika
+
+/**
+ * @def DEVCTL_RD __DIOF
+ * @brief Macro used for shortening the call to message data during the write operation.
+ * @author tkornuta
+ */
 #define DEVCTL_WT __DIOT(_DCMD_MISC, 2, mrrocpp::vsp::sensor::DEVCTL_MSG)
-// zapis i odczyt
+
+/**
+ * @def DEVCTL_RD __DIOF
+ * @brief Macro used for shortening the call to message data during the read-write operation.
+ * @author tkornuta
+ */
 #define DEVCTL_RW __DIOTF(_DCMD_MISC, 3, mrrocpp::vsp::sensor::DEVCTL_MSG)
 
 
-/********** klasa czujnikow po stronie VSP **************/
+
+/**
+ * @brief Interface class for all sensors that are used in the Resource Manager based shells.
+ * @author ptrojane
+ * @author tkornuta
+ * @ingroup VSP
+ */
 class sensor_interface : public lib::sensor_interface
 {
 protected:
-	// Flaga - czy czujnik jest skonfigurowany.
+	/** Flag used for determination whether sensor is configured. */
 	bool is_sensor_configured;
-	// Flaga - czy jakikolwiek odczyt jest gotowy.
+
+	/** Flag used for determination whether reading is ready. */
 	bool is_reading_ready;
 
 public:
+	/** Configuration object. */
 	lib::configurator &config;
+
+	/** Object used for communication with the SR thread of the UI. */
 	lib::sr_vsp *sr_msg;
 
+	/** Network path to the MRROC++ binaries. */
 	const std::string mrrocpp_network_path;
 
-	virtual void set_vsp_report(lib::VSP_REPORT_t) = 0;
-
-	virtual lib::VSP_COMMAND_t get_command(void) const = 0;
-
+	/**
+	 * Constructor.
+	 * @param _config Configuration object.
+	 * @return Newly created sensor object.
+	 */
 	sensor_interface(lib::configurator &_config);
 
-	// Metoda uzywana przy wspolpracy nieinteraktywnej.
-	virtual void wait_for_event(void);
-
+	/**
+	 * Destructor.
+	 */
 	virtual ~sensor_interface(void);
 
+	/**
+	 * Abstract method for setting the results of the sensor data aggregation.
+	 * @param  Result that is to be set.
+	 */
+	virtual void set_vsp_report(lib::VSP_REPORT_t) = 0;
+
+	/**
+	 * Abstract method returning command sent to VSP.
+	 * @return Retrieved command.
+	 */
+	virtual lib::VSP_COMMAND_t get_command(void) const = 0;
+
+	/**
+	 * Method used by the non-interactive VSP shell - used as a trigger for next data processing start.
+	 */
+	virtual void wait_for_event(void);
+
+	/**
+	 * Abstract method used for reading the message (retrieved command) from the Resource Manager context.
+	 * @param ctp Resource Manager context.
+	 * @return Operation status.
+	 */
 	virtual int msgread(resmgr_context_t *ctp) = 0;
 
+	/**
+	 * Abstract method used for writing the message (newest reading) to the Resource Manager context.
+	 * @param ctp Resource Manager context.
+	 * @return Operation status.
+	 */
 	virtual int msgwrite(resmgr_context_t *ctp) = 0;
+
 };
 
+/**
+ *
+ */
 template <typename VSP_ECP_MSG, typename ECP_VSP_MSG = lib::empty_t>
 class sensor : public sensor_interface
 {
@@ -118,16 +176,28 @@ public:
 	}
 };
 
-// Zwrocenie stworzonego obiektu - czujnika. Funkcja implementowana w plikach klas dziedziczacych.
+/**
+ * @brief Function returns created sensor - implemented once in every VSP.
+ * Users should use the  VSP_CREATE_SENSOR macro, which shortens the definition.
+ * @param _config Configurator object passed to sensor
+ * @return Created sensor inherited from the sensor_interface class
+ * @ingroup VSP
+ */
 sensor_interface * return_created_sensor(lib::configurator &_config);
 
-#define VSP_CREATE_SENSOR(NAME) \
+
+/**
+ * @def VSP_CREATE_SENSOR
+ * @brief Macro used for sensor registration - should be used once for each VSP process.
+ * @ingroup VSP
+ */
+#define VSP_REGISTER_SENSOR(NAME) \
 sensor_interface * return_created_sensor (lib::configurator &_config) \
 { \
 	return new NAME(_config); \
 }
 
-} // namespace sensor
+} // namespace common
 } // namespace vsp
 } // namespace mrrocpp
 

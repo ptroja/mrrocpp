@@ -1,7 +1,8 @@
 /*!
- * \file sensor.h
- * \brief File containing sensor interface - a base class for MP, ECP, VSP (and future EDP ) sensors.
- * \author tkornuta <tkornuta@ia.pw.edu.pl>, Warsaw University of Technology
+ * @file sensor.h
+ * @brief File containing sensor interface - a base class for MP, ECP, VSP (and future EDP ) sensors.
+ * @author ptrojane <piotr.trojanek@gmail.com>, Warsaw University of Technology
+ * @author tkornuta <tkornuta@ia.pw.edu.pl>, Warsaw University of Technology
  */
 
 #if !defined(_SENSOR_H)
@@ -86,9 +87,9 @@ const SENSOR_t SENSOR_CAMERA_POSTUMENT = "SENSOR_CAMERA_POSTUMENT";
 
 
 /**
- * \brief Base class for MP, ECP, VSP (and future EDP ) sensors.
- * \author tkornuta
- * \author ptrojane
+ * @brief Base class for MP, ECP, VSP (and future EDP ) sensors.
+ * @author tkornuta
+ * @author ptrojane
  */
 class sensor_interface
 {

@@ -1,17 +1,12 @@
 /*!
- \file vsp_m_int_nw.cc
-
- \brief file contains the interactive VSP shell
-
- The interactive VSP shell should be used for all sensors,
- that are required to cooperate with MP/ECP processes interativelly, which means that they should perform reading initiation and aggregation to the form useful in control only when such command will be received.
-
-The nw stands for NO WAIT, which means that the VSP sends response right after the command was received and the command is in fact being executed separatedly - in another thread.
-
- \date 30.11.2006
- \author tkornuta <tkornuta@ia.pw.edu.pl>, Warsaw University of Technology
-
- \defgroup VSP -- Virtual Sensor Process
+ *  \file vsp_m_int_nw.cc
+ * @brief file contains the interactive VSP shell
+ *
+ * The interactive VSP shell should be used for all sensors, that are required to cooperate with MP/ECP processes interativelly, which means that they should perform reading initiation and aggregation to the form useful in control only when such command will be received.
+ * The nw stands for NO WAIT, which means that the VSP sends response right after the command was received and the command is in fact being executed separatedly - in another thread.
+ * @date 30.11.2006
+ * @author tkornuta <tkornuta@ia.pw.edu.pl>, Warsaw University of Technology
+ * @ingroup VSP
  */
 
 #include <stdio.h>

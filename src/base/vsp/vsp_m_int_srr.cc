@@ -1,16 +1,12 @@
 /*!
- \file vsp_m_int_srr.cc
-
- \brief file contains the interactive VSP shell
-
- The interactive VSP shell should be used for all sensors,  that are required to cooperate with MP/ECP processes interativelly, which means that they should perform reading initiation and aggregation to the form useful in control only when such command will be received.
-
-
- \date 11.10.2007
- \author ptrojane <piotr.trojanek@gmail.com>, Warsaw University of Technology
- \author tkornuta <tkornuta@ia.pw.edu.pl>, Warsaw University of Technology
-
- \defgroup VSP -- Virtual Sensor Process
+ * @file vsp_m_int_srr.cc
+ * @brief file contains the interactive VSP shell
+ *
+ * The interactive VSP shell should be used for all sensors,  that are required to cooperate with MP/ECP processes interativelly, which means that they should perform reading initiation and aggregation to the form useful in control only when such command will be received.
+ * @date 11.10.2007
+ * @author ptrojane <piotr.trojanek@gmail.com>, Warsaw University of Technology
+ * @author tkornuta <tkornuta@ia.pw.edu.pl>, Warsaw University of Technology
+ * @ingroup VSP
  */
 
 #include <stdio.h>
@@ -35,7 +31,7 @@ namespace vsp {
 namespace common {
 
 /** Global pointer to sensor object. */
-static sensor::sensor_interface *vs;
+static mrrocpp::vsp::common::sensor_interface *vs;
 
 /** Threads termination flag. */
 static bool TERMINATE = false;
