@@ -27,6 +27,8 @@ namespace sensor {
 #define TRAJECTORY				3
 #define TRAJECTORY_END			4
 #define FINISH_COMMUNICATION	5
+#define ACTUAL_POSITION			6
+#define START_BREAKING			7
 
 /*Sensor creation along with initialization of communication*/
 neuron_sensor::neuron_sensor(mrrocpp::lib::configurator& _configurator):config(_configurator) {
@@ -119,6 +121,10 @@ void neuron_sensor::get_reading(){
 			printf("communication finished\n");
 			break;
 
+		case START_BREAKING:
+			printf("neuron_sensor->get_reading: start breaking");
+			break;
+
 		default:
 			printf("unknown command %d\n",command);
 	}
@@ -148,9 +154,32 @@ void neuron_sensor::sendCommand(uint8_t command){
 	if (result < 0) {
 		throw std::runtime_error(std::string("write() failed: ") + strerror(errno));
 	}
+
 	if (result != sizeof(uint8_t)) {
 		throw std::runtime_error("write() failed: result != sizeof(uint8_t)");
 	}
+}
+
+void neuron_sensor::sendCoordinates(double x, double y, double z){
+	char buff[25];
+	uint8_t temp_command=ACTUAL_POSITION;
+	memcpy(buff,&temp_command,1);
+	memcpy(buff+1,&x,8);
+	memcpy(buff+9,&y,8);
+	memcpy(buff+17,&z,8);
+
+	printf("neuron_sensor->sendCoordinates: command : %d x:%lf y:%lf z:%lf\n",temp_command,x,y,z);
+
+	int result=write(socketDescriptor,buff,sizeof(buff));
+
+	if (result < 0) {
+		throw std::runtime_error(std::string("write() failed: ") + strerror(errno));
+	}
+
+	if (result != sizeof(buff)) {
+		throw std::runtime_error("write() failed: result != sizeof(buff)");
+	}
+
 }
 
 int neuron_sensor::getNumberOfTrajectories(){

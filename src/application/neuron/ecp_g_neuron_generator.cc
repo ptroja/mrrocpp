@@ -14,6 +14,8 @@ namespace ecp{
 namespace common{
 namespace generator{
 
+#define START_BREAKING			7
+
 neuron_generator::neuron_generator(common::task::task& _ecp_task):generator(_ecp_task) {
 
 	reset();
@@ -65,8 +67,12 @@ bool neuron_generator::next_step(){
 
 	/*when current_period==0 get_reading is called, so new data is available*/
 	//printf("current_period: %d\n", neuron_sensor->current_period);
-	printf("nextStep: currentPeriod: %d\n",neuron_sensor->current_period);
+	//printf("nextStep: currentPeriod: %d\n",neuron_sensor->current_period);
+
 	if(neuron_sensor->current_period==5){
+		if(neuron_sensor->getCommand()==START_BREAKING)
+			breaking=true;
+
 		//printf("period 5: x:%lf y:%lf z:%lf\n",neuron_sensor->getCoordinates().x,neuron_sensor->getCoordinates().y,neuron_sensor->getCoordinates().z);
 		flushall();
 		// ------------ read the current robot position ----------
@@ -190,6 +196,9 @@ bool neuron_generator::next_step(){
 
 	position_matrix.set_from_xyz_angle_axis(lib::Xyz_Angle_Axis_vector(position));
 	position_matrix.get_frame_tab(the_robot->ecp_command.instruction.arm.pf_def.arm_frame);
+
+	if(neuron_sensor->current_period==1)
+		neuron_sensor->sendCoordinates(position[0],position[1],position[2]);
 
 	for (i = 0; i < 6; i++) {
 		if (reached[i] == false) {
