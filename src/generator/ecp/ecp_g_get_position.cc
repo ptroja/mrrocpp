@@ -52,17 +52,17 @@ bool get_position::first_step() {
 bool get_position::next_step() {
 	if (pose_spec == lib::ECP_XYZ_ANGLE_AXIS || pose_spec == lib::ECP_XYZ_EULER_ZYZ) {
 
-		lib::Homog_matrix actual_position;
-		actual_position.set_from_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame);
+		lib::Homog_matrix actual_position_matrix;
+		actual_position_matrix.set_from_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame);
 
 		if (pose_spec == lib::ECP_XYZ_ANGLE_AXIS) {
 			lib::Xyz_Angle_Axis_vector angle_axis_vector;
-			actual_position.get_xyz_angle_axis(angle_axis_vector);
+			actual_position_matrix.get_xyz_angle_axis(angle_axis_vector);
 			angle_axis_vector.to_vector(position);
 
 		} else if (pose_spec == lib::ECP_XYZ_EULER_ZYZ) {
 			lib::Xyz_Euler_Zyz_vector euler_vector;
-			actual_position.get_xyz_euler_zyz(euler_vector);
+			actual_position_matrix.get_xyz_euler_zyz(euler_vector);
 			euler_vector.to_vector(position);
 
 		} else {

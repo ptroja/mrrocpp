@@ -26,7 +26,7 @@ namespace generator {
  * %constant_velocity_trajectory_pose objects.
  *
  * Usage:
- * Load one or more of trajectory poses using one of the load methods. Velocities are set autimatically. Call %calculate_interpolate() method.
+ * Load one or more of trajectory poses using one of the load methods. Velocities are set automatically. Call %calculate_interpolate() method.
  * If it returns true generator is ready to communicate with the robot. Call the %Move() method. The generator resets itself automatically after
  * successfull termination of the assumed trajectory, however it is safe to call the %reset() method before the next use of the generator.
  */
