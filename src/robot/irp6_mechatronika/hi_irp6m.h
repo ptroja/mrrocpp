@@ -11,7 +11,7 @@
 #include <signal.h>
 #include <time.h>
 
-#include "base/edp/hi_rydz.h"
+#include "robot/hi_rydz/hi_rydz.h"
 
 namespace mrrocpp {
 namespace edp {
