@@ -1,107 +1,95 @@
-// -------------------------------------------------------------------------
-// Proces: 	VIRTUAL SENSOR PROCESS (lib::VSP)
-// Plik:			vsp_sensor.h
-// System:	QNX/MRROCPP  v. 6.3
-// Opis:		Deklaracja klasy bazowej vsp_sensor - bazy czujnikow po stronie procesu VSP.
-// Autor:		tkornuta
-// Data:		09.11.2005
-// -------------------------------------------------------------------------
+/*!
+ * @file vsp_sensor.h
+ * @brief File containing declaration of the vsp sensor base template class.
+ *
+ * @date 09.11.2005
+ * @author tkornuta <tkornuta@ia.pw.edu.pl>, Warsaw University of Technology
+ * @author ptrojane <piotr.trojanek@gmail.com>, Warsaw University of Technology
+ *
+ * @ingroup VSP
+ */
 
 #if !defined(_VSP_SENSOR_H)
 #define _VSP_SENSOR_H
 
-#include "lib/sensor.h"
-// Konfigurator
 #include "lib/configurator.h"
+#include "base/vsp/vsp_sensor_interface.h"
 
 namespace mrrocpp {
 namespace vsp {
-namespace sensor {
+namespace common {
 
-/*****************************************************/
-// do komunikacji za pomoca devctl()
-typedef struct {
-	char foo[2048];
-} DEVCTL_MSG;
 
-// ROZKAZY uzywane w devctl()
-// odczyt z czujnika
-#define DEVCTL_RD __DIOF(_DCMD_MISC, 1, mrrocpp::vsp::sensor::DEVCTL_MSG)
-// zapis do czujnika
-#define DEVCTL_WT __DIOT(_DCMD_MISC, 2, mrrocpp::vsp::sensor::DEVCTL_MSG)
-// zapis i odczyt
-#define DEVCTL_RW __DIOTF(_DCMD_MISC, 3, mrrocpp::vsp::sensor::DEVCTL_MSG)
-
-// Klasa obslugi bledow procesu VSP.
-class VSP_main_error
+/**
+ * @brief Base template class, from which VSP kernels (sensors) should be derived.
+ * @tparam VSP_ECP_MSG Response structure - sent from VSP to ECP.
+ * @tparam ECP_VSP_MSG Command - structure sent from ECP to VSP, empty as default.
+ *
+ * @author ptrojane
+ * @author tkornuta
+ */
+template <typename VSP_ECP_MSG, typename ECP_VSP_MSG = lib::empty_t>
+class sensor : public sensor_interface
 {
-public:
-	const lib::error_class_t error_class;
-	const uint64_t error_no;
-	VSP_main_error(lib::error_class_t err_cl, uint64_t err_no) :
-		error_class(err_cl), error_no(err_no)
+protected:
+
+	/**
+	 * @brief Message sent from VSP as response, containing operation status and its aggregated reading.
+	 * @author ptrojane
+	 * @author tkornuta
+	 */
+	struct
 	{
-	}
-};
+		/** Report - status of the operation. */
+		lib::sensor::VSP_REPORT_t vsp_report;
 
-/********** klasa czujnikow po stronie VSP **************/
-class sensor_interface : public lib::sensor_interface {
-protected:
-	// Flaga - czy czujnik jest skonfigurowany.
-	bool is_sensor_configured;
-	// Flaga - czy jakikolwiek odczyt jest gotowy.
-	bool is_reading_ready;
-
-public:
-	lib::configurator &config;
-	lib::sr_vsp *sr_msg;
-
-	const std::string mrrocpp_network_path;
-
-	virtual void set_vsp_report(lib::VSP_REPORT_t) = 0;
-
-	virtual lib::VSP_COMMAND_t get_command(void) const = 0;
-
-	sensor_interface (lib::configurator &_config);
-
-	// Metoda uzywana przy wspolpracy nieinteraktywnej.
-	virtual void wait_for_event(void);
-
-	virtual ~sensor_interface(void);
-
-	virtual int msgread(resmgr_context_t *ctp) = 0;
-
-	virtual int msgwrite(resmgr_context_t *ctp) = 0;
-};
-
-template <
-	typename VSP_ECP_MSG,
-	typename ECP_VSP_MSG = lib::empty_t
->
-class sensor : public sensor_interface {
-protected:
-	struct {
-		lib::VSP_REPORT_t vsp_report;
+		/** Aggregated reading - communication image. */
 		VSP_ECP_MSG comm_image;
 	} from_vsp;
 
-	struct {
-		lib::VSP_COMMAND_t i_code;
+	/**
+	 * @brief Message received by VSP, containing command and additional parameters.
+	 * @author ptrojane
+	 * @author tkornuta
+	 */
+	struct
+	{
+		/** Command sent to VSP. */
+		lib::sensor::VSP_COMMAND_t i_code;
+
+		/** Additional command parameters. */
 		ECP_VSP_MSG to_vsp;
 	} to_vsp;
+
 public:
-	sensor(lib::configurator &_config) : sensor_interface(_config)
+
+	/**
+	 * @brief Default Constructor.
+	 * @param _config Configuration object.
+	 */
+	sensor(lib::configurator &_config) :
+		sensor_interface(_config)
 	{
 	}
 
+	/**
+	 * @brief Reads retrieved message from context to communication buffer.
+	 * @param ctp Resource manager context.
+	 * @return Status of the operation.
+	 */
 	int msgread(resmgr_context_t *ctp)
 	{
 		return resmgr_msgread(ctp, &to_vsp, sizeof(to_vsp), sizeof(struct _io_write));
 	}
 
+	/**
+	 * @brief Writes reply message from communication buffer to context.
+	 * @param ctp Resource manager context.
+	 * @return Status of the operation.
+	 */
 	int msgwrite(resmgr_context_t *ctp)
 	{
-		// Count the start address of reply message content.
+		// Compute  the start address of reply message content.
 		/*
 		 struct _io_devctl_reply {
 		 uint32_t                  zero;
@@ -115,27 +103,28 @@ public:
 		return resmgr_msgwrite(ctp, &from_vsp, sizeof(from_vsp), 0);
 	}
 
-	void set_vsp_report(lib::VSP_REPORT_t r)
+	/**
+	 * @brief Sets report returned by VSP.
+	 * @param r Report to be set.
+	 */
+	void set_vsp_report(lib::sensor::VSP_REPORT_t r)
 	{
 		from_vsp.vsp_report = r;
 	}
 
-	lib::VSP_COMMAND_t get_command(void) const
+	/**
+	 * @brief Returns command sent to VSP.
+	 * @return Received command.
+	 */
+	lib::sensor::VSP_COMMAND_t get_command(void) const
 	{
 		return to_vsp.i_code;
 	}
+
 };
 
-// Zwrocenie stworzonego obiektu - czujnika. Funkcja implementowana w plikach klas dziedziczacych.
-sensor_interface * return_created_sensor (lib::configurator &_config);
 
-#define VSP_CREATE_SENSOR(NAME) \
-sensor_interface * return_created_sensor (lib::configurator &_config) \
-{ \
-	return new NAME(_config); \
-}
-
-} // namespace sensor
+} // namespace common
 } // namespace vsp
 } // namespace mrrocpp
 

@@ -1,0 +1,32 @@
+/** 
+@namespace mrrocpp::ecp_mp::sensor
+@brief Main namespace for issues related to sensors used by the ECPs and MPs.
+@date 03.08.2010 
+@author tkornuta
+@ingroup SENSORS
+
+
+
+
+@defgroup SENSORS Sensors
+@{
+
+@section role AAA
+
+Sensors are used to gather information for the purpose of motion
+control. However, usually hardware sensors deliver measurements that
+cannot be used for that purpose directly - they need to be
+processed beforehand. For instance, in the case of such a complex
+sensor as a camera, a bit-map has to be processed to obtain the
+grasping location of an object. In some other cases a simple sensor
+in its own right would not suffice to control the motion (e.g., a
+single touch sensor), but several such sensors deliver meaningful
+data. The process of extracting meaningful information for the
+purpose of motion control is named <b>data aggregation</b> and is 
+performed by <b>virtual sensors</b>. As a result virtual sensor readings
+ are obtained. This is the main reason for the existence of the VSPs.
+
+
+@}
+*/
+

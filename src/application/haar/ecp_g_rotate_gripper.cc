@@ -29,7 +29,7 @@ ecp_g_rotate_gripper::~ecp_g_rotate_gripper() {
 
 
 bool ecp_g_rotate_gripper::first_step() {
-	vsp_fradia = dynamic_cast<fradia_sensor_haar_detect *> (sensor_m[ecp_mp::sensor::SENSOR_CVFRADIA]);
+	vsp_fradia = dynamic_cast<fradia_sensor_haar_detect *> (sensor_m[ecp_mp::sensor::SENSOR_FRADIA]);
 
 	vsp_fradia->set_initiate_message(PERFORM_ROTATION);
 
@@ -58,8 +58,8 @@ bool ecp_g_rotate_gripper::next_step() {
 	HD_READING state;
 
 	//Sprwadz czy otrzymano rozwiazanie od VSP.
-	lib::VSP_REPORT_t vsp_report = vsp_fradia->get_report();
-	if (vsp_report == lib::VSP_REPLY_OK) {
+	lib::sensor::VSP_REPORT_t vsp_report = vsp_fradia->get_report();
+	if (vsp_report == lib::sensor::VSP_REPLY_OK) {
 		ecp_t.sr_ecp_msg->message("Weszlo do  VSP_REP_OK\n");
 		state = vsp_fradia->get_reading_message().reading_state;
 		if(state == HD_SOLUTION_NOTFOUND){
@@ -78,7 +78,7 @@ bool ecp_g_rotate_gripper::next_step() {
 			vsp_fradia->set_initiate_message(WITHOUT_ROTATION);
 			lastStep = true;
 		}
-	}else if (vsp_report == lib::VSP_READING_NOT_READY){
+	}else if (vsp_report == lib::sensor::VSP_READING_NOT_READY){
 		angle = 0.0;
 		td.internode_step_no = 30;
 		//Rotacja sie wykonuje nastepny krok bez rotacji.

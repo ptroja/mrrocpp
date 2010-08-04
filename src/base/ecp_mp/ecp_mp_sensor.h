@@ -5,7 +5,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
-#include "lib/sensor.h"
+#include "lib/sensor_interface.h"
 #include "lib/srlib.h"
 #include "lib/configurator.h"
 
@@ -19,7 +19,12 @@ namespace mrrocpp {
 namespace ecp_mp {
 namespace sensor {
 
-class sensor_interface : public lib::sensor_interface
+const lib::sensor::SENSOR_t SENSOR_CAMERA_SA = "SENSOR_CAMERA_SA";
+const lib::sensor::SENSOR_t SENSOR_CAMERA_ON_TRACK = "SENSOR_CAMERA_ON_TRACK";
+const lib::sensor::SENSOR_t SENSOR_CAMERA_POSTUMENT = "SENSOR_CAMERA_POSTUMENT";
+
+
+class sensor_interface : public lib::sensor::sensor_interface
 {
 public:
 	// ponizsze zmienne pozwalaja na odczyty z roznym okresem z czujnikow (mierzonym w krokach generatora)
@@ -54,7 +59,7 @@ private:
 	//! Buffer for data to VSP
 	struct VSP_ECP_MSG
 	{
-		lib::VSP_REPORT_t vsp_report;
+		lib::sensor::VSP_REPORT_t vsp_report;
 		SENSOR_IMAGE comm_image;
 	} from_vsp;
 
@@ -64,14 +69,14 @@ public:
 
 	//! Buffer for data from VSP
 	struct ECP_VSP_MSG {
-		lib::VSP_COMMAND_t i_code;
+		lib::sensor::VSP_COMMAND_t i_code;
 		CONFIGURE_DATA command;
 	} to_vsp;
 
-	const lib::SENSOR_t sensor_name; // nazwa czujnika z define w impconst.h
+	const lib::sensor::SENSOR_t sensor_name; // nazwa czujnika z define w impconst.h
 
 	// Wlasciwy konstruktor czujnika wirtualnego.
-	sensor(lib::SENSOR_t _sensor_name, const std::string & _section_name, lib::sr_ecp & _sr_ecp_msg, lib::configurator & config)
+	sensor(lib::sensor::SENSOR_t _sensor_name, const std::string & _section_name, lib::sr_ecp & _sr_ecp_msg, lib::configurator & config)
 		: sr_ecp_msg(_sr_ecp_msg), sensor_name(_sensor_name)
 	{
 		// cout<<"ecp_mp_sensor - konstruktor: "<<_section_name<<endl;
@@ -146,7 +151,7 @@ public:
 	// TODO: Destruktor czujnika wirtualnego
 	virtual ~sensor()
 	{
-		to_vsp.i_code = lib::VSP_TERMINATE;
+		to_vsp.i_code = lib::sensor::VSP_TERMINATE;
 
 	#if !defined(USE_MESSIP_SRR)
 		if(write(sd, &to_vsp, sizeof(to_vsp)) == -1)
@@ -170,7 +175,7 @@ public:
 
 	virtual void configure_sensor(void)
 	{
-		to_vsp.i_code= lib::VSP_CONFIGURE_SENSOR;
+		to_vsp.i_code= lib::sensor::VSP_CONFIGURE_SENSOR;
 	#if !defined(USE_MESSIP_SRR)
 		if(write(sd, &to_vsp, sizeof(to_vsp)) != sizeof(to_vsp))
 	#else /* USE_MESSIP_SRR */
@@ -181,7 +186,7 @@ public:
 
 	virtual void initiate_reading(void)
 	{
-		to_vsp.i_code= lib::VSP_INITIATE_READING;
+		to_vsp.i_code= lib::sensor::VSP_INITIATE_READING;
 	#if !defined(USE_MESSIP_SRR)
 		if(write(sd, &to_vsp, sizeof(to_vsp)) == -1)
 	#else /* USE_MESSIP_SRR */
@@ -197,7 +202,7 @@ public:
 	void get_reading(SENSOR_IMAGE & sensor_image)
 	{
 		// Sprawdzenie, czy uzyc domyslnego obrazu.
-		to_vsp.i_code= lib::VSP_GET_READING;
+		to_vsp.i_code= lib::sensor::VSP_GET_READING;
 	#if !defined(USE_MESSIP_SRR)
 		if(read(sd, &from_vsp, sizeof(from_vsp)) == -1)
 	#else /* USE_MESSIP_SRR */
@@ -206,7 +211,7 @@ public:
 			sr_ecp_msg.message (lib::SYSTEM_ERROR, CANNOT_READ_FROM_DEVICE, VSP_NAME);
 
 		// jesli odczyt sie powodl, przepisanie pol obrazu z bufora komunikacyjnego do image;
-		if(from_vsp.vsp_report == lib::VSP_REPLY_OK) {
+		if(from_vsp.vsp_report == lib::sensor::VSP_REPLY_OK) {
 			image = from_vsp.comm_image;
 		} else {
 			sr_ecp_msg.message ("Reply from VSP not ok");
@@ -217,7 +222,7 @@ public:
 } // namespace sensor
 
 // Kontener zawierajacy wykorzystywane czyjniki
-typedef std::map<lib::SENSOR_t, sensor::sensor_interface *> sensors_t;
+typedef std::map<lib::sensor::SENSOR_t, ecp_mp::sensor::sensor_interface *> sensors_t;
 typedef sensors_t::value_type sensor_item_t;
 
 } // namespace ecp_mp

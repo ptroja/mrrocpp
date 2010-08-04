@@ -55,7 +55,7 @@ ecp_g_mboryn::~ecp_g_mboryn()
 bool ecp_g_mboryn::first_step()
 {
 	log("ecp_g_mboryn::first_step()\n");
-	vsp_fradia = sensor_m[ecp_mp::sensor::SENSOR_CVFRADIA];
+	vsp_fradia = sensor_m[ecp_mp::sensor::SENSOR_FRADIA];
 
 	the_robot->ecp_command.instruction.instruction_type = lib::GET;
 	the_robot->ecp_command.instruction.get_type = ARM_DEFINITION;

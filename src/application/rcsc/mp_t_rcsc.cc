@@ -12,6 +12,7 @@
 #include "base/mp/mp.h"
 #include "base/mp/mp_g_common.h"
 #include "mp_t_rcsc.h"
+#include "cube_face.h"
 #include "ecp_mp_tr_rc_windows.h"
 #include "robot/festival/ecp_g_festival.h"
 #include "robot/festival/ecp_mp_t_festival.h"
@@ -89,7 +90,7 @@ for(int k=0; k<6; k++)
 
 	if (vis_servoing)
 	{
-		ecp_mp::sensor::sensor<lib::cube_face_t> * cube_recognition = dynamic_cast<ecp_mp::sensor::sensor<lib::cube_face_t> *> (sensor_m[lib::SENSOR_CAMERA_ON_TRACK]);
+		ecp_mp::sensor::sensor<mrrocpp::mp::task::cube_face_t> * cube_recognition = dynamic_cast<ecp_mp::sensor::sensor<mrrocpp::mp::task::cube_face_t> *> (sensor_m[mrrocpp::ecp_mp::sensor::SENSOR_CAMERA_ON_TRACK]);
 
 		wait_ms(5000);
 		cube_recognition->initiate_reading();
@@ -805,7 +806,7 @@ run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_mes
 (3, 1, lib::ROBOT_IRP6OT_M.c_str(), lib::ROBOT_IRP6P_M.c_str(), lib::ROBOT_FESTIVAL.c_str(),
 		lib::ROBOT_IRP6OT_M.c_str());
 
-//podnoszenie o 2 milimetry nad kostkę
+//podnoszenie o 2 milimetry nad kostk
 set_next_ecps_state (ecp_mp::common::generator::ECP_GEN_SMOOTH, (int) ecp_mp::task::RELATIVE, "src/application/rcsc/trj/irp6ot_sm_raising_up.trj", 0,1, lib::ROBOT_IRP6OT_M.c_str());
 
 run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
