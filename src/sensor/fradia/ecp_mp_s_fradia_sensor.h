@@ -50,6 +50,8 @@ const lib::sensor::SENSOR_t SENSOR_FRADIA = "SENSOR_FRADIA";
  *
  * @author mboryn
  * @author tkornuta
+ *
+ * @ingroup SENSORS
  */
 template <typename CONFIGURE_T, typename READING_T, typename INITIATE_T = lib::empty_t>
 class fradia_sensor : public ecp_mp::sensor::sensor_interface

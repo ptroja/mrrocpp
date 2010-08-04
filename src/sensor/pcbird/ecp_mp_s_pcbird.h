@@ -1,9 +1,11 @@
-/*!
- * \file ecp_mp_s_pcbird.h
- * \brief Virtual sensor on the ECP/MP side used for communication with pcbird.
- * - class declaration
- * \author tkornuta
- * \date 24.06.2008
+/**
+ * @file ecp_mp_s_pcbird.h
+ * @brief Virtual sensor on the ECP/MP side used for communication with the PCBird.
+ *
+ * @author tkornuta
+ * @date 24.06.2008
+ *
+ * @ingroup SENSORS
  */
 
 #ifndef __ECP_PCBIRD_H
@@ -12,38 +14,32 @@
 #include <netdb.h>
 
 #include "base/ecp_mp/ecp_mp_sensor.h"
+#include "sensor/pcbird/birdclient.h"
 
 namespace mrrocpp {
 namespace ecp_mp {
 namespace sensor {
 
 
-// struktura z pozycja i katami pcbirda
-typedef struct _pcbird
-{
-	float x, y, z; // pozycja
-	float a, b, g; // katy (a = azimuth, b = elevation, g = roll)
-	float distance; // odleglosc
-	uint32_t ts_sec, ts_usec; // timestamp
-} pcbird_t;
-
 const lib::sensor::SENSOR_t SENSOR_PCBIRD = "SENSOR_PCBIRD";
 
 /*!
- * \class ecp_mp_s_pcbird.h
- * \brief Virtual sensor on the ECP/MP side used for communication with pcbird.
- * \author tkornuta
+ * @class pcbird
+ * @brief Sensor responsible for communication with the PCBird.
+ * @author tkornuta
+ *
+ * @ingroup SENSORS
  */
 class pcbird : public ecp_mp::sensor::sensor_interface
 {
 private:
 	/*!
-      * Socket file descriptor.
+      * @brief Socket file descriptor.
       */
 	int sockfd;
 
 	/*!
-      * Link to the SRP communication object.
+      *@brief  Link to the SRP communication object.
       */
 	lib::sr_ecp& sr_ecp_msg;
 
@@ -54,32 +50,32 @@ private:
 
 public:
 	/*!
-	 * Data image
+	 * @brief Data image
 	 */
-	pcbird_t image;
+	pcbird_pos_t image;
 
 	/*!
-      * Constructor. Creates socket connection to pcbird.
+      * @brief Constructor. Creates socket connection to pcbird.
       */
  	pcbird (const std::string & _section_name, lib::sr_ecp & _sr_ecp_msg, lib::configurator & config);
 
 	/*!
-      * Sends sensor configuration to pcbird.
+      * @brief Sends sensor configuration to pcbird.
       */
 	void configure_sensor (void);
 
 	/*!
-      * Sends initiation reading command to pcbird.
+      * @brief Sends initiation reading command to pcbird.
       */
 	void initiate_reading (void);
 
 	/*!
-      * Retrieves aggregated data from pcbird.
+      * @brief Retrieves aggregated data from pcbird.
       */
 	void get_reading (void);
 
 	/*!
-      * Closes pcbird socket connection.
+      * @brief Closes pcbird socket connection.
       */
 	~pcbird();
 

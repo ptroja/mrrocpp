@@ -1,3 +1,13 @@
+/**
+ * @file
+ * @brief
+ *
+ * @author tkornuta
+ * @date
+ *
+ * @ingroup SENSORS
+ */
+
 #ifndef __BIRDCLIENT_H
 #define __BIRDCLIENT_H
 
@@ -5,14 +15,16 @@
 
 namespace mrrocpp {
 namespace ecp_mp {
+namespace sensor {
 
 // struktura z pozycja i katami pcbirda
-typedef struct {
-    float x, y, z;	// pozycja
-    float a, b, g;	// katy (a = azimuth, b = elevation, g = roll)
-    float distance;	// odleglosc
-    uint32_t ts_sec, ts_usec;	// timestamp
-} pcbird_pos_t;
+typedef struct pcbird_pos_t
+{
+	float x, y, z; // pozycja
+	float a, b, g; // katy (a = azimuth, b = elevation, g = roll)
+	float distance; // odleglosc
+	uint32_t ts_sec, ts_usec; // timestamp
+};
 
 // polaczenie z serwerem PCBird, zwraca deskryptor socketa
 int pcbird_connect(const char *addr, unsigned short port);
@@ -35,6 +47,7 @@ int pcbird_data_avail(int fd);
 // nieblokujacy odczyt pozycji w trybie streaming
 int pcbird_get_streaming_position(int fd, pcbird_pos_t *p);
 
+} // namespace sensor
 } // namespace ecp_mp
 } // namespace mrrocpp
 

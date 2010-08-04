@@ -1,8 +1,10 @@
 /*!
- * \file sensor_error.h
- * \brief File containing class representing sensor errors.
- * \author tkornuta <tkornuta@ia.pw.edu.pl>, Warsaw University of Technology
- * \date Aug 3, 2010
+ * @file sensor_error.h
+ * @brief File containing class representing sensor errors.
+ * @author tkornuta <tkornuta@ia.pw.edu.pl>, Warsaw University of Technology
+ * @date Aug 3, 2010
+ *
+ * @ingroup SENSORS
  */
 
 #ifndef SENSOR_ERROR_H_
@@ -15,9 +17,11 @@ namespace lib {
 namespace sensor {
 
 /*!
- * \class sensor_error
- * \brief Class representing the exceptions thrown by and handled by MRROC++ sensors.
- * \author tkornuta
+ * @class sensor_error
+ * @brief Class representing the exceptions thrown by and handled by MRROC++ sensors.
+ * @author tkornuta
+  *
+ * @ingroup SENSORS
  */
 class sensor_error : public std::exception
 {

@@ -7,25 +7,19 @@
 
 
 
-
 @defgroup SENSORS Sensors
 @{
 
-@section role AAA
+Sensors are used to gather information for the purpose of motion control. 
+In MRROC++ the VSPs are responsible for gathering sensory data from 
+hardware and its aggregation into form usefull in control. Different sensors 
+have different roles, however from the MP or ECP point of view sensors should 
+behave similarily, thus posses similar interfaces in order to facilitate 
+tasks implementation.    
 
-Sensors are used to gather information for the purpose of motion
-control. However, usually hardware sensors deliver measurements that
-cannot be used for that purpose directly - they need to be
-processed beforehand. For instance, in the case of such a complex
-sensor as a camera, a bit-map has to be processed to obtain the
-grasping location of an object. In some other cases a simple sensor
-in its own right would not suffice to control the motion (e.g., a
-single touch sensor), but several such sensors deliver meaningful
-data. The process of extracting meaningful information for the
-purpose of motion control is named <b>data aggregation</b> and is 
-performed by <b>virtual sensors</b>. As a result virtual sensor readings
- are obtained. This is the main reason for the existence of the VSPs.
-
+The \link mrrocpp::ecp_mp::sensor::sensor_interface ecp_mp::sensor_interface\endlink 
+plays a role of such interface, but one should inherit from the template 
+\link mrrocpp::ecp_mp::sensor::sensor ecp_mp::sensor\endlink class.
 
 @}
 */

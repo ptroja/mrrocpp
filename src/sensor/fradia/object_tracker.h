@@ -1,9 +1,9 @@
 /*!
- * \file object_tracker.h
- * \brief Structure used in the object tracking tasks.
+ * @file object_tracker.h
+ * @brief Structure used in the object tracking tasks.
  * 
- * \author  tkornuta
- * \date Aug 4, 2010
+ * @author  tkornuta
+ * @date Aug 4, 2010
  */
 
 

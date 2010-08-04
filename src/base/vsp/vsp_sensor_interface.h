@@ -22,7 +22,7 @@ namespace common {
 /**
  * @brief Structure used during the communication with the VSP via DEVCTL.
  */
-typedef struct
+typedef struct DEVCTL_MSG_t
 {
 	/** Block of memory for message.  */
 	char foo[2048];
