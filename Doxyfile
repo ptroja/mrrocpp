@@ -585,9 +585,11 @@ WARN_LOGFILE           =
 # with spaces.
 
 INPUT                  = src/base/vsp \
+                         src/lib/lib.dox \
                          src/lib/sensor_error.h \
-                         src/lib/sensor.h \
-#                         src/sensor/fradia \
+                         src/lib/sensor_interface.h \
+                         src/sensor/sensors.dox \
+                         src/sensor/fradia \
 #                         src/sensor/pcbird \
 #                         src/base/kinematics \
 #                         src/robot/conveyor \
