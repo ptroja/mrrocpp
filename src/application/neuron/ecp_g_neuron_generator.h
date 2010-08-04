@@ -56,6 +56,14 @@ class neuron_generator: public common::generator::generator{
 		 * Set to true if robot reached desired position for the whole trajectory in each axis.
 		 */
 		bool reached[6];
+		/**
+		 * Motion direction.
+		 */
+		double k[6]; // motion direction
+		/**
+		 * Distance covered in the set of five macrosteps.
+		 */
+		double s[6];
 
 	public:
 		neuron_generator(common::task::task& _ecp_task);

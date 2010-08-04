@@ -196,7 +196,7 @@ class velocity_profile {
 			return true;
 		}
 
-	private:
+	/*private:
 		void get_double_array_from_vector(vector<double> vector, double * double_array) {
 			double new_double_array[vector.size()];
 
@@ -205,7 +205,7 @@ class velocity_profile {
 			}
 
 			double_array = new_double_array;
-		}
+		}*/
 };
 
 } // namespace velocity_profile_calculator
