@@ -42,12 +42,18 @@ bool newsmooth::calculate() {
 		pose_vector_iterator++;
 	}
 
+
 	//------------- testowo ----------
-	/*if (pose_spec == lib::ECP_XYZ_ANGLE_AXIS) {
-		set_relative();
-		if (!vpc.calculate_relative_angle_axis_vector(pose_vector_iterator)) {
-			return false;
+	/*pose_vector_iterator = pose_vector.begin();
+
+	for (i = 0; i < pose_vector.size(); i++) {
+		if (pose_spec == lib::ECP_XYZ_ANGLE_AXIS) {
+			set_relative();
+			if (!vpc.calculate_relative_angle_axis_vector(pose_vector_iterator)) {
+				return false;
+			}
 		}
+		pose_vector_iterator++;
 	}*/
 	//------------ testowo end ---------
 

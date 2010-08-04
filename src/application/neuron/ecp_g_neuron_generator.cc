@@ -70,15 +70,20 @@ bool neuron_generator::next_step(){
 	//printf("nextStep: currentPeriod: %d\n",neuron_sensor->current_period);
 
 	if(neuron_sensor->current_period==5){
-		if(neuron_sensor->getCommand()==START_BREAKING)
+		if(neuron_sensor->getCommand()==START_BREAKING) {
 			breaking=true;
+			printf("\n-------- breaking ----------\n");
+			flushall();
+		}
 
 		//printf("period 5: x:%lf y:%lf z:%lf\n",neuron_sensor->getCoordinates().x,neuron_sensor->getCoordinates().y,neuron_sensor->getCoordinates().z);
 		flushall();
 		// ------------ read the current robot position ----------
-		actual_position_matrix.set_from_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame);
-		actual_position_matrix.get_xyz_angle_axis(angle_axis_vector);
-		angle_axis_vector.to_table(actual_position);
+		if (!breaking) {
+			actual_position_matrix.set_from_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame);
+			actual_position_matrix.get_xyz_angle_axis(angle_axis_vector);
+			angle_axis_vector.to_table(actual_position);
+			}
 		// ------------ read the current robot position (end) ---------
 
 		//printf("actual_pos: \t");
@@ -105,9 +110,9 @@ bool neuron_generator::next_step(){
 
 		printf("x: %f\t y: %f\t z: %f\n %f\t %f\t %f\n", desired_position[0], desired_position[1], desired_position[2], desired_position[3], desired_position[4], desired_position[5]);
 		flushall();*/
-
-		//printf("desired: %f\t %f\t %f\t %f\t %f\t %f\n", desired_position[0], desired_position[1], desired_position[2], desired_position[3], desired_position[4], desired_position[5]);
-
+		if (breaking) {
+			printf("desired: %f\t %f\t %f\t %f\t %f\t %f\n", desired_position[0], desired_position[1], desired_position[2], desired_position[3], desired_position[4], desired_position[5]);
+		}
 	}
 /*
 	printf("poza if\n");
@@ -147,10 +152,8 @@ bool neuron_generator::next_step(){
 */
 
 	int node = 6 - neuron_sensor->current_period;
-	double k[6]; // motion direction
-	double s[6];
 
-	printf(" position: \t");
+	//printf(" position: \t");
 	for (i = 0; i < 6; i ++) {
 
 		if (desired_position[i] == actual_position[i]) {//if no motion in the axis
@@ -170,16 +173,23 @@ bool neuron_generator::next_step(){
 		s[i] = fabs(desired_position[i] - actual_position[i]);
 
 		if (breaking) {
+			printf("v: %f ", v[i]);
 			double a;
 			if (s[i] < (0.5 * v[i])) {
+				//printf("breaking with a_max\n");
 				a = a_max[i];
 			} else {
+
 				a = (v[i] * v[i]) / (2 * s[i]);
 			}
 
-			position[i] = actual_position[i] + (k[i] * breaking_node * 0.02 * v[i] - breaking_node * breaking_node * 0.02 * 0.02 * a / 2);
+			if (v[i] <= 0) {
+				position[i] = actual_position[i];
+			} else {
+				position[i] = actual_position[i] + (k[i] * (breaking_node * 0.02 * v[i] - breaking_node * breaking_node * 0.02 * 0.02 * a / 2));
+			}
 
-			if (breaking_node * 0.02 >= v[i]/a) {
+			if ((breaking_node * 0.02 * v[i] - breaking_node * breaking_node * 0.02 * 0.02 * a / 2) <= 0) {
 				reached[i] = true;
 			}
 
@@ -188,6 +198,7 @@ bool neuron_generator::next_step(){
 
 			position[i] = actual_position[i] + (k[i] * (s[i]/5) * node);
 			v[i] = (s[i]/5)/0.02;
+			printf("v: %f ", v[i]);
 		}
 		printf("%f\t", position[i]);
 	}
@@ -206,6 +217,9 @@ bool neuron_generator::next_step(){
 		}
 	}
 
+	printf("return false\n");
+	flushall();
+
 	return false;
 
 }
@@ -221,11 +235,19 @@ void neuron_generator::reset() {
 	breaking = false;
 
 	for (i = 0 ; i < 6; i++) {
-		v[i] = 0;
+		v[i] = 0.0;
 	}
 
 	for (i = 0 ; i < 6; i++) {
 		a_max[i] = 0.1;
+	}
+
+	for (i = 0 ; i < 6; i++) {
+		s[i] = 0.0;
+	}
+
+	for (i = 0 ; i < 6; i++) {
+		k[i] = 0.0;
 	}
 
 	for (i = 0 ; i < 6; i++) {
