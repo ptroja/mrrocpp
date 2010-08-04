@@ -18,7 +18,7 @@
 #include "lib/mis_fun.h"
 #include "base/edp/edp.h"
 #include "base/edp/reader.h"
-#include "base/edp/hi_rydz.h"
+#include "base/edp/HardwareInterface.h"
 #include "base/edp/regulator.h"
 
 namespace mrrocpp {
