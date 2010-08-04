@@ -47,8 +47,9 @@ void Neuron::mp_2_ecp_next_state_string_handler(void){
 		ecp_mp::sensor::Coordinates coordinates;
 		for(int i=0;i<numberOfTrajectories;++i){
 			printf("Loop number %d\n",i);
+
 			coordinates=neuronSensor->getFirstCoordinates();
-			printf("coordinates: %lf %lf %lf\n",coordinates.x,coordinates.y,coordinates.z);
+			printf("coordinates: %d %lf %lf %lf\n",neuronSensor->getCommand(),coordinates.x,coordinates.y,coordinates.z);
 
 			smoothGenerator->reset();
 			smoothGenerator->set_absolute();
@@ -61,7 +62,7 @@ void Neuron::mp_2_ecp_next_state_string_handler(void){
 			coordinates1[5]=-0.294;
 			smoothGenerator->load_absolute_angle_axis_trajectory_pose(coordinates1);
 
-			//smoothGenerator->set_debug(true);
+			smoothGenerator->set_debug(true);
 			if(smoothGenerator->calculate_interpolate())
 				smoothGenerator->Move();
 

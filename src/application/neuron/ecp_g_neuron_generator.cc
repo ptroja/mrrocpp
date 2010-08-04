@@ -79,11 +79,11 @@ bool neuron_generator::next_step(){
 		//printf("period 5: x:%lf y:%lf z:%lf\n",neuron_sensor->getCoordinates().x,neuron_sensor->getCoordinates().y,neuron_sensor->getCoordinates().z);
 		flushall();
 		// ------------ read the current robot position ----------
-		if (!breaking) {
+		//if (!breaking) {
 			actual_position_matrix.set_from_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame);
 			actual_position_matrix.get_xyz_angle_axis(angle_axis_vector);
 			angle_axis_vector.to_table(actual_position);
-			}
+		//}
 		// ------------ read the current robot position (end) ---------
 
 		//printf("actual_pos: \t");
@@ -111,6 +111,7 @@ bool neuron_generator::next_step(){
 		printf("x: %f\t y: %f\t z: %f\n %f\t %f\t %f\n", desired_position[0], desired_position[1], desired_position[2], desired_position[3], desired_position[4], desired_position[5]);
 		flushall();*/
 		if (breaking) {
+			printf("actual: %f\t %f\t %f\t %f\t %f\t %f\n", actual_position[0], actual_position[1], actual_position[2], actual_position[3], actual_position[4], actual_position[5]);
 			printf("desired: %f\t %f\t %f\t %f\t %f\t %f\n", desired_position[0], desired_position[1], desired_position[2], desired_position[3], desired_position[4], desired_position[5]);
 		}
 	}
@@ -202,15 +203,20 @@ bool neuron_generator::next_step(){
 				if (v[i] <= 0) {
 					position[i] = actual_position[i];
 				} else {
+					double act_v = fabs(position[i] - (actual_position[i] + (k[i] * (breaking_node * 0.02 * v[i] - breaking_node * breaking_node * 0.02 * 0.02 * a / 2))))/0.02;
+					printf("v: %f\t", act_v);
 					position[i] = actual_position[i] + (k[i] * (breaking_node * 0.02 * v[i] - breaking_node * breaking_node * 0.02 * 0.02 * a / 2));
 				}
 			}
+
+
 
 			breaking_node++;
 		} else {
 
 			position[i] = actual_position[i] + (k[i] * (s[i]/5) * node);
 			v[i] = (s[i]/5)/0.02;
+			printf("v: %f\t", v[i]);
 		}
 		printf("%f\t", position[i]);
 	}
