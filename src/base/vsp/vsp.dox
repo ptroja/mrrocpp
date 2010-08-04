@@ -153,7 +153,6 @@ that during the noninteractive communication an additional <b>wait_for_event()</
 method is used.
 
 
-@todo Describe adding sensors
 @}
 */
 

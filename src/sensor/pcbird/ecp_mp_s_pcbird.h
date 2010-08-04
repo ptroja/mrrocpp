@@ -17,11 +17,6 @@ namespace mrrocpp {
 namespace ecp_mp {
 namespace sensor {
 
-/*!
- * \class ecp_mp_s_pcbird.h
- * \brief Virtual sensor on the ECP/MP side used for communication with pcbird.
- * \author tkornuta
- */
 
 // struktura z pozycja i katami pcbirda
 typedef struct _pcbird
@@ -32,9 +27,14 @@ typedef struct _pcbird
 	uint32_t ts_sec, ts_usec; // timestamp
 } pcbird_t;
 
-const lib::SENSOR_t SENSOR_PCBIRD = "SENSOR_PCBIRD";
+const lib::sensor::SENSOR_t SENSOR_PCBIRD = "SENSOR_PCBIRD";
 
-class pcbird : public sensor_interface
+/*!
+ * \class ecp_mp_s_pcbird.h
+ * \brief Virtual sensor on the ECP/MP side used for communication with pcbird.
+ * \author tkornuta
+ */
+class pcbird : public ecp_mp::sensor::sensor_interface
 {
 private:
 	/*!
@@ -50,7 +50,7 @@ private:
 	/*!
       * Sensor name as defined in impconst.h
       */
-	const lib::SENSOR_t sensor_name;
+	const lib::sensor::SENSOR_t sensor_name;
 
 public:
 	/*!

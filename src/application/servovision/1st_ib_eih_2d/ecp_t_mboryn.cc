@@ -37,10 +37,10 @@ ecp_t_mboryn::ecp_t_mboryn(mrrocpp::lib::configurator& _configurator)
 
 	//sr_ecp_msg->message("ecp_t_mboryn::ecp_t_mboryn() fradia setup...");
 	vsp_fradia
-			= new ecp_mp::sensor::fradia_sensor(ecp_mp::sensor::SENSOR_CVFRADIA, "[vsp_fradia_sensor_servovision]", *this, sizeof(lib::sensor_image_t::sensor_union_t::object_tracker_t));
+			= new ecp_mp::sensor::fradia_sensor(ecp_mp::sensor::SENSOR_FRADIA, "[vsp_fradia_sensor_servovision]", *this, sizeof(lib::sensor_image_t::sensor_union_t::object_tracker_t));
 	vsp_fradia->configure_sensor();
 
-	sensor_m[ecp_mp::sensor::SENSOR_CVFRADIA] = vsp_fradia;
+	sensor_m[ecp_mp::sensor::SENSOR_FRADIA] = vsp_fradia;
 	ecp_g_mboryn_->sensor_m = sensor_m;
 	//sr_ecp_msg->message("ecp_t_mboryn::ecp_t_mboryn() finished.");
 }

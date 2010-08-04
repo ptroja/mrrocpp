@@ -40,10 +40,10 @@ ecp_t_fradia_lag_test::ecp_t_fradia_lag_test(mrrocpp::lib::configurator& _config
 
 	//sr_ecp_msg->message("ecp_t_fradia_lag_test::ecp_t_fradia_lag_test() fradia setup...");
 	vsp_fradia
-			= new ecp_mp::sensor::fradia_sensor(ecp_mp::sensor::SENSOR_CVFRADIA, "[vsp_fradia_sensor_servovision]", *this, sizeof(lib::sensor_image_t::sensor_union_t::object_tracker_t));
+			= new ecp_mp::sensor::fradia_sensor(ecp_mp::sensor::SENSOR_FRADIA, "[vsp_fradia_sensor_servovision]", *this, sizeof(lib::sensor_image_t::sensor_union_t::object_tracker_t));
 	vsp_fradia->configure_sensor();
 
-	sensor_m[ecp_mp::sensor::SENSOR_CVFRADIA] = vsp_fradia;
+	sensor_m[ecp_mp::sensor::SENSOR_FRADIA] = vsp_fradia;
 	//sr_ecp_msg->message("ecp_t_fradia_lag_test::ecp_t_fradia_lag_test() finished.");
 }
 

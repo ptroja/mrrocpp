@@ -21,7 +21,7 @@ ecp_g_pb_eih::ecp_g_pb_eih(mrrocpp::ecp::common::task::task & _ecp_task, ecp_mp:
 		pb_object_position> *vsp_fradia, visual_servo_regulator <4, 4> * regulator) :
 	visual_servo <4, 4> (_ecp_task, regulator), vsp_fradia(vsp_fradia), delta_t(MOTION_STEPS * 2e-3)
 {
-	sensor_m[ecp_mp::sensor::SENSOR_CVFRADIA] = vsp_fradia;
+	sensor_m[ecp_mp::sensor::SENSOR_FRADIA] = vsp_fradia;
 
 	max_v = _ecp_task.config.value <double> ("max_v", configSectionName);
 	max_a = _ecp_task.config.value <double> ("max_a", configSectionName);

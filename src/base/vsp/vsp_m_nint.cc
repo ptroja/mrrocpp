@@ -40,7 +40,7 @@
 
 #include "lib/srlib.h"
 #include "lib/configurator.h"
-#include "base/vsp/vsp_sensor.h"
+#include "base/vsp/vsp_sensor_interface.h"
 #include "base/vsp/vsp_error.h"
 
 namespace mrrocpp {
@@ -90,15 +90,15 @@ void error_handler(ERROR & e)
 			switch (e.error_no)
 			{
 				case INVALID_COMMAND_TO_VSP:
-					vsp::nint_shell::vs->set_vsp_report(lib::INVALID_VSP_COMMAND);
+					vsp::nint_shell::vs->set_vsp_report(lib::sensor::INVALID_VSP_COMMAND);
 					vsp::nint_shell::vs->sr_msg->message(lib::NON_FATAL_ERROR, e.error_no);
 					break;
 				case SENSOR_NOT_CONFIGURED:
-					vsp::nint_shell::vs->set_vsp_report(lib::VSP_SENSOR_NOT_CONFIGURED);
+					vsp::nint_shell::vs->set_vsp_report(lib::sensor::VSP_SENSOR_NOT_CONFIGURED);
 					vsp::nint_shell::vs->sr_msg->message(lib::NON_FATAL_ERROR, e.error_no);
 					break;
 				case READING_NOT_READY:
-					vsp::nint_shell::vs->set_vsp_report(lib::VSP_READING_NOT_READY);
+					vsp::nint_shell::vs->set_vsp_report(lib::sensor::VSP_READING_NOT_READY);
 					break;
 				default:
 					vsp::nint_shell::vs->sr_msg->message(lib::NON_FATAL_ERROR, VSP_UNIDENTIFIED_ERROR);
@@ -171,18 +171,18 @@ void* cyclic_read(void* arg)
  */
 void parse_command()
 {
-	lib::VSP_COMMAND_t i_code = vsp::nint_shell::vs->get_command();
-	vsp::nint_shell::vs->set_vsp_report(lib::VSP_REPLY_OK);
+	lib::sensor::VSP_COMMAND_t i_code = vsp::nint_shell::vs->get_command();
+	vsp::nint_shell::vs->set_vsp_report(lib::sensor::VSP_REPLY_OK);
 	switch (i_code)
 	{
-		case lib::VSP_CONFIGURE_SENSOR:
+		case lib::sensor::VSP_CONFIGURE_SENSOR:
 			vsp::nint_shell::vs->configure_sensor();
 			vsp_synchroniser.command();
 			break;
-		case lib::VSP_GET_READING:
+		case lib::sensor::VSP_GET_READING:
 			vsp::nint_shell::vs->get_reading();
 			break;
-		case lib::VSP_TERMINATE:
+		case lib::sensor::VSP_TERMINATE:
 			delete vsp::nint_shell::vs;
 			TERMINATED = true;
 			break;
@@ -212,7 +212,7 @@ int io_read(resmgr_context_t *ctp, io_read_t *msg, RESMGR_OCB_T *ocb)
 	// Critical section.
 	pthread_mutex_lock(&mutex);
 	try {
-		vsp::nint_shell::vs->set_vsp_report(lib::VSP_REPLY_OK);
+		vsp::nint_shell::vs->set_vsp_report(lib::sensor::VSP_REPLY_OK);
 		vsp::nint_shell::vs->get_reading();
 	} //: try
 	catch (vsp::common::vsp_error & e) {
@@ -306,7 +306,7 @@ int io_devctl(resmgr_context_t *ctp, io_devctl_t *msg, RESMGR_OCB_T *ocb)
 		case DEVCTL_RD:
 			pthread_mutex_lock(&mutex);
 			try {
-				vsp::nint_shell::vs->set_vsp_report(lib::VSP_REPLY_OK);
+				vsp::nint_shell::vs->set_vsp_report(lib::sensor::VSP_REPLY_OK);
 				vsp::nint_shell::vs->get_reading();
 			} //: try
 			catch (vsp::common::vsp_error & e) {

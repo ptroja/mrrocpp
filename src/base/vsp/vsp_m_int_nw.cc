@@ -34,7 +34,7 @@
 
 #include "lib/srlib.h"
 #include "lib/configurator.h"
-#include "base/vsp/vsp_sensor.h"
+#include "base/vsp/vsp_sensor_interface.h"
 #include "base/vsp/vsp_error.h"
 
 namespace mrrocpp {
@@ -45,7 +45,7 @@ namespace int_nw_shell {
 static mrrocpp::vsp::common::sensor_interface *vs;
 
 /** Returned message. */
-lib::VSP_ECP_MSG ret_msg;
+lib::sensor::VSP_ECP_MSG ret_msg;
 
 /** Mutex utilized for read/write sensor image synchronization. */
 static pthread_mutex_t image_mutex = PTHREAD_MUTEX_INITIALIZER;
@@ -99,15 +99,15 @@ void error_handler(ERROR & e)
 			switch (e.error_no)
 			{
 				case INVALID_COMMAND_TO_VSP:
-					ret_msg.vsp_report = lib::INVALID_VSP_COMMAND;
+					ret_msg.vsp_report = lib::sensor::INVALID_VSP_COMMAND;
 					vs->sr_msg->message(lib::NON_FATAL_ERROR, e.error_no);
 					break;
 				case SENSOR_NOT_CONFIGURED:
-					ret_msg.vsp_report = lib::VSP_SENSOR_NOT_CONFIGURED;
+					ret_msg.vsp_report = lib::sensor::VSP_SENSOR_NOT_CONFIGURED;
 					vs->sr_msg->message(lib::NON_FATAL_ERROR, e.error_no);
 					break;
 				case READING_NOT_READY:
-					ret_msg.vsp_report = lib::VSP_READING_NOT_READY;
+					ret_msg.vsp_report = lib::sensor::VSP_READING_NOT_READY;
 					vs->sr_msg->message(lib::NON_FATAL_ERROR, e.error_no);
 					break;
 
@@ -197,17 +197,17 @@ void* execute_command(void* arg)
  */
 void parse_command()
 {
-	lib::VSP_COMMAND_t i_code = vs->get_command();
+	lib::sensor::VSP_COMMAND_t i_code = vs->get_command();
 
 	switch (i_code)
 	{
-		case lib::VSP_CONFIGURE_SENSOR:
-			ret_msg.vsp_report = lib::VSP_REPLY_OK;
+		case lib::sensor::VSP_CONFIGURE_SENSOR:
+			ret_msg.vsp_report = lib::sensor::VSP_REPLY_OK;
 			sensor_configuration_task = true;
 			synchroniser.command();
 			return;
-		case lib::VSP_INITIATE_READING:
-			ret_msg.vsp_report = lib::VSP_REPLY_OK;
+		case lib::sensor::VSP_INITIATE_READING:
+			ret_msg.vsp_report = lib::sensor::VSP_REPLY_OK;
 			try {
 				if (!CONFIGURED_FLAG)
 					throw vsp::common::vsp_error(lib::NON_FATAL_ERROR, SENSOR_NOT_CONFIGURED);
@@ -221,7 +221,7 @@ void parse_command()
 				error_handler(e);
 			} //: catch
 			return;
-		case lib::VSP_GET_READING:
+		case lib::sensor::VSP_GET_READING:
 			try {
 				if (!CONFIGURED_FLAG)
 					throw vsp::common::vsp_error(lib::NON_FATAL_ERROR, SENSOR_NOT_CONFIGURED);
@@ -229,7 +229,7 @@ void parse_command()
 					throw vsp::common::vsp_error(lib::NON_FATAL_ERROR, READING_NOT_READY);
 				// Critical section.
 				pthread_mutex_lock(&image_mutex);
-				vs->set_vsp_report(lib::VSP_REPLY_OK);
+				vs->set_vsp_report(lib::sensor::VSP_REPLY_OK);
 				vs->get_reading();
 				// Copy current sensory data to output buffer.
 				ret_msg = vs->from_vsp;
@@ -243,8 +243,8 @@ void parse_command()
 				error_handler(e);
 			} //: catch
 			return;
-		case lib::VSP_TERMINATE:
-			vs->set_vsp_report(lib::VSP_REPLY_OK);
+		case lib::sensor::VSP_TERMINATE:
+			vs->set_vsp_report(lib::sensor::VSP_REPLY_OK);
 			TERMINATED = true;
 			synchroniser.command();
 			return;
@@ -275,7 +275,7 @@ int io_read(resmgr_context_t *ctp, io_read_t *msg, RESMGR_OCB_T *ocb)
 			throw vsp::common::vsp_error(lib::NON_FATAL_ERROR, READING_NOT_READY);
 		// Critical section.
 		pthread_mutex_lock(&image_mutex);
-		vs->set_vsp_report(lib::VSP_REPLY_OK);
+		vs->set_vsp_report(lib::sensor::VSP_REPLY_OK);
 		vs->get_reading();
 		// Copy current sensory data to output buffer.
 		ret_msg = vs->from_vsp;
@@ -357,7 +357,7 @@ int io_devctl(resmgr_context_t *ctp, io_devctl_t *msg, RESMGR_OCB_T *ocb)
 					throw vsp::common::vsp_error(lib::NON_FATAL_ERROR, READING_NOT_READY);
 				// Critical section.
 				pthread_mutex_lock(&image_mutex);
-				vs->set_vsp_report(lib::VSP_REPLY_OK);
+				vs->set_vsp_report(lib::sensor::VSP_REPLY_OK);
 				vs->get_reading();
 				// Copy current sensory data to output buffer.
 				ret_msg = vs->from_vsp;

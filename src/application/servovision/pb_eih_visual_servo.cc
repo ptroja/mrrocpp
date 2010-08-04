@@ -64,9 +64,9 @@ lib::Homog_matrix pb_eih_visual_servo::get_position_change(const lib::Homog_matr
 
 	//	log_dbg("pb_eih_visual_servo::get_position_change(): report: %d\n", vsp_fradia->get_report());
 
-	if (vsp_fradia->get_report() == lib::VSP_SENSOR_NOT_CONFIGURED) {	// sensor not yet ready
+	if (vsp_fradia->get_report() == lib::sensor::VSP_SENSOR_NOT_CONFIGURED) {	// sensor not yet ready
 		return delta_position;
-	} else if (vsp_fradia->get_report() == lib::VSP_READING_NOT_READY) { // maybe there was a reading
+	} else if (vsp_fradia->get_report() == lib::sensor::VSP_READING_NOT_READY) { // maybe there was a reading
 		if (steps_without_reading > max_steps_without_reading) { // but if it was too long ago
 			object_visible = false;	// we have to consider object not longer visible
 			log_dbg("pb_eih_visual_servo::get_position_change(): object considered no longer visible\n");
@@ -74,7 +74,7 @@ lib::Homog_matrix pb_eih_visual_servo::get_position_change(const lib::Homog_matr
 		} else {
 			steps_without_reading++;
 		}
-	} else if (vsp_fradia->get_report() == lib::VSP_REPLY_OK) { // we have a reading
+	} else if (vsp_fradia->get_report() == lib::sensor::VSP_REPLY_OK) { // we have a reading
 		steps_without_reading = 0; // reset counter
 	}
 

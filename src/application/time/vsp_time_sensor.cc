@@ -51,7 +51,7 @@ void time::get_reading(void)
 		return;
 
 	// Odczyt w porzadku.
-	from_vsp.vsp_report = lib::VSP_REPLY_OK;
+	from_vsp.vsp_report = lib::sensor::VSP_REPLY_OK;
 
 	clock_gettime(CLOCK_REALTIME, &from_vsp.comm_image);
 

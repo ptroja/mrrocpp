@@ -33,7 +33,7 @@
 #include "lib/com_buf.h"
 #include "lib/srlib.h"
 #include "lib/configurator.h"
-#include "base/vsp/vsp_sensor.h"
+#include "base/vsp/vsp_sensor_interface.h"
 #include "base/vsp/vsp_error.h"
 
 namespace mrrocpp {
@@ -77,15 +77,15 @@ void error_handler(ERROR & e)
 			switch (e.error_no)
 			{
 				case INVALID_COMMAND_TO_VSP:
-					vs->set_vsp_report(lib::INVALID_VSP_COMMAND);
+					vs->set_vsp_report(lib::sensor::INVALID_VSP_COMMAND);
 					vs->sr_msg->message(lib::NON_FATAL_ERROR, e.error_no);
 					break;
 				case SENSOR_NOT_CONFIGURED:
-					vs->set_vsp_report(lib::VSP_SENSOR_NOT_CONFIGURED);
+					vs->set_vsp_report(lib::sensor::VSP_SENSOR_NOT_CONFIGURED);
 					vs->sr_msg->message(lib::NON_FATAL_ERROR, e.error_no);
 					break;
 				case READING_NOT_READY:
-					vs->set_vsp_report(lib::VSP_READING_NOT_READY);
+					vs->set_vsp_report(lib::sensor::VSP_READING_NOT_READY);
 					break;
 				default:
 					vs->sr_msg->message(lib::NON_FATAL_ERROR, VSP_UNIDENTIFIED_ERROR);
@@ -123,21 +123,21 @@ void catch_signal(int sig)
  */
 void parse_command(void)
 {
-	lib::VSP_COMMAND_t i_code = vs->get_command();
-	vs->set_vsp_report(lib::VSP_REPLY_OK);
+	lib::sensor::VSP_COMMAND_t i_code = vs->get_command();
+	vs->set_vsp_report(lib::sensor::VSP_REPLY_OK);
 
 	switch (i_code)
 	{
-		case lib::VSP_CONFIGURE_SENSOR:
+		case lib::sensor::VSP_CONFIGURE_SENSOR:
 			vs->configure_sensor();
 			break;
-		case lib::VSP_INITIATE_READING:
+		case lib::sensor::VSP_INITIATE_READING:
 			vs->initiate_reading();
 			break;
-		case lib::VSP_GET_READING:
+		case lib::sensor::VSP_GET_READING:
 			vs->get_reading();
 			break;
-		case lib::VSP_TERMINATE:
+		case lib::sensor::VSP_TERMINATE:
 			TERMINATED = true;
 			break;
 		default:
@@ -166,7 +166,7 @@ int io_read(resmgr_context_t *ctp, io_read_t *msg, RESMGR_OCB_T *ocb)
 	}
 	// Critical section.
 	try {
-		vs->set_vsp_report(lib::VSP_REPLY_OK);
+		vs->set_vsp_report(lib::sensor::VSP_REPLY_OK);
 		vs->get_reading();
 	} //: try
 	catch (vsp::common::vsp_error & e) {
@@ -254,7 +254,7 @@ int io_devctl(resmgr_context_t *ctp, io_devctl_t *msg, RESMGR_OCB_T *ocb)
 			break;
 		case DEVCTL_RD:
 			try {
-				vs->set_vsp_report(lib::VSP_REPLY_OK);
+				vs->set_vsp_report(lib::sensor::VSP_REPLY_OK);
 				vs->get_reading();
 			} //: try
 			catch (vsp::common::vsp_error & e) {
