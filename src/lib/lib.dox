@@ -1,0 +1,9 @@
+/** 
+@namespace mrrocpp::lib::sensor
+@brief Namespace containing classes and types related to sensors common to all MRROC++ processes.
+@date 04.08.2010 
+@author tkornuta
+@ingroup SENSORS
+
+
+*/

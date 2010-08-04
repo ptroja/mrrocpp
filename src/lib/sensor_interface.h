@@ -38,7 +38,7 @@ typedef enum _VSP_REPORT
 
 
 /**
- * Sensor names type.
+ * @brief Sensor names type.
  */
 typedef std::string SENSOR_t;
 

@@ -14,7 +14,7 @@ namespace mrrocpp {
 namespace ecp_mp {
 namespace sensor {
 
-/*
+/**
  * @brief Structure used in the object tracking tasks.
  */
 typedef struct _object_tracker

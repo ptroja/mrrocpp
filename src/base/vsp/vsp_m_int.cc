@@ -40,10 +40,10 @@ namespace mrrocpp {
 namespace vsp {
 namespace int_shell {
 
-/** Global pointer to sensor object. */
+/** @brief Global pointer to sensor object. */
 static mrrocpp::vsp::common::sensor_interface *vs;
 
-/** Threads termination flag. */
+/** @brief Threads termination flag. */
 static bool TERMINATED = false;
 
 
@@ -293,7 +293,7 @@ int io_devctl(resmgr_context_t *ctp, io_devctl_t *msg, RESMGR_OCB_T *ocb)
 
 
 /**
- * Main body of the interactive VSP shell.
+ * @brief Main body of the interactive VSP shell.
  * @param argc Number of passed arguments.
  * @param argv Process arguments - network node, path to the MRROC++ binaries, name of the current configuration file, etc.
  * @return Process status.
