@@ -289,7 +289,7 @@ bool haptic_stiffness::next_step()
 
 					for (int i = 0; i < 3; i++) {
 						irp6ot->mp_command.instruction.arm.pf_def.behaviour[i] = lib::CONTACT;
-						irp6p->mp_command.instruction.arm.pf_def.behaviour[i] = lib::GUARDED_MOTION;
+						irp6p->mp_command.instruction.arm.pf_def.behaviour[i] = lib::UNGUARDED_MOTION;
 						lib::Xyz_Angle_Axis_vector irp6ot_desired_velocity(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 						irp6ot_desired_velocity.to_table(irp6ot->mp_command.instruction.arm.pf_def.arm_coordinates);
 					}
