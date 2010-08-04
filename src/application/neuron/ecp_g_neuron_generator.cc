@@ -169,7 +169,7 @@ bool neuron_generator::next_step(){
 			continue;
 		}
 
-		if (!breaking) {
+		if (!breaking) { //if breaking the direction is not changed
 			if (desired_position[i] - actual_position[i] > 0) {
 				k[i] = 1;
 			} else {
@@ -180,10 +180,9 @@ bool neuron_generator::next_step(){
 		s[i] = fabs(desired_position[i] - actual_position[i]);
 
 		if (breaking) {
-			//printf("v: %f ", v[i]);
 			double a;
 
-			if (s[i] == 0) {
+			if (s[i] == 0 || v[i] == 0) {
 				reached[i] = true;
 			}
 
@@ -195,7 +194,6 @@ bool neuron_generator::next_step(){
 				a = (v[i] * v[i]) / (2 * s[i]);
 			}
 
-			//printf("k: %f\t act pos + %f\t", k[i], (breaking_node * 0.02 * v[i]/2 - breaking_node * breaking_node * 0.02 * 0.02 * a / 2));
 			if ((breaking_node * 0.02 * v[i]/2 - breaking_node * breaking_node * 0.02 * 0.02 * a / 2) <= 0) {
 				reached[i] = true;
 			}
@@ -206,18 +204,15 @@ bool neuron_generator::next_step(){
 				} else {
 					position[i] = actual_position[i] + (k[i] * (breaking_node * 0.02 * v[i] - breaking_node * breaking_node * 0.02 * 0.02 * a / 2));
 				}
-			} //else {
-			//	position[i] = actual_position[i];
-			//}
+			}
 
 			breaking_node++;
 		} else {
 
 			position[i] = actual_position[i] + (k[i] * (s[i]/5) * node);
 			v[i] = (s[i]/5)/0.02;
-			printf("v: %f ", v[i]);
 		}
-		printf("%f r: %d\t", position[i], reached[i]);
+		printf("%f\t", position[i]);
 	}
 	printf("\n");
 	flushall();
