@@ -3,6 +3,8 @@
  * @brief File contains sensor interface - a base class for MP, ECP, VSP (and future EDP ) sensors.
  * @author ptrojane <piotr.trojanek@gmail.com>, Warsaw University of Technology
  * @author tkornuta <tkornuta@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup SENSORS
  */
 
 #if !defined(_SENSOR_H)
@@ -21,6 +23,8 @@ namespace sensor {
 /**
  * @brief Commands send to VSP.
  * @author tkornuta
+ *
+ * @ingroup SENSORS
  */
 typedef enum _VSP_COMMAND
 {
@@ -30,6 +34,8 @@ typedef enum _VSP_COMMAND
 /**
  * @brief VSP responses.
  * @author tkornuta
+ *
+ * @ingroup SENSORS
  */
 typedef enum _VSP_REPORT
 {
@@ -38,7 +44,9 @@ typedef enum _VSP_REPORT
 
 
 /**
- * Sensor names type.
+ * @brief Sensor names type.
+ *
+ * @ingroup SENSORS
  */
 typedef std::string SENSOR_t;
 
@@ -46,6 +54,8 @@ typedef std::string SENSOR_t;
  * @brief Base class for MP, ECP, VSP (and future EDP ) sensors.
  * @author tkornuta
  * @author ptrojane
+ *
+ * @ingroup SENSORS
  */
 class sensor_interface
 {

@@ -38,12 +38,12 @@ protected:
 	 * @author ptrojane
 	 * @author tkornuta
 	 */
-	struct
+	struct from_vsp_t
 	{
-		/** Report - status of the operation. */
+		/** @brief Report - status of the operation. */
 		lib::sensor::VSP_REPORT_t vsp_report;
 
-		/** Aggregated reading - communication image. */
+		/** @brief Aggregated reading - communication image. */
 		VSP_ECP_MSG comm_image;
 	} from_vsp;
 
@@ -52,12 +52,12 @@ protected:
 	 * @author ptrojane
 	 * @author tkornuta
 	 */
-	struct
+	struct to_vsp_t
 	{
-		/** Command sent to VSP. */
+		/** \brief Command sent to VSP. */
 		lib::sensor::VSP_COMMAND_t i_code;
 
-		/** Additional command parameters. */
+		/** \brief Additional command parameters. */
 		ECP_VSP_MSG to_vsp;
 	} to_vsp;
 

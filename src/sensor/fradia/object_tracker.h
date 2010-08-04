@@ -1,9 +1,9 @@
 /*!
- * \file object_tracker.h
- * \brief Structure used in the object tracking tasks.
+ * @file object_tracker.h
+ * @brief Structure used in the object tracking tasks.
  * 
- * \author  tkornuta
- * \date Aug 4, 2010
+ * @author  tkornuta
+ * @date Aug 4, 2010
  */
 
 
@@ -14,7 +14,7 @@ namespace mrrocpp {
 namespace ecp_mp {
 namespace sensor {
 
-/*
+/**
  * @brief Structure used in the object tracking tasks.
  */
 typedef struct _object_tracker

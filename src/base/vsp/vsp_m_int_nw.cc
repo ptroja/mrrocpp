@@ -41,31 +41,31 @@ namespace mrrocpp {
 namespace vsp {
 namespace int_nw_shell {
 
-/** Global pointer to sensor object. */
+/** @brief Global pointer to sensor object. */
 static mrrocpp::vsp::common::sensor_interface *vs;
 
-/** Returned message. */
+/** @brief Returned message. */
 lib::sensor::VSP_ECP_MSG ret_msg;
 
-/** Mutex utilized for read/write sensor image synchronization. */
+/** @brief Mutex utilized for read/write sensor image synchronization. */
 static pthread_mutex_t image_mutex = PTHREAD_MUTEX_INITIALIZER;
 
-/**  Condition synchronizer. */
+/**  @brief Condition synchronizer. */
 static lib::condition_synchroniser synchroniser;
 
-/** Threads termination flag. */
+/** @brief Threads termination flag. */
 static bool TERMINATED = false;
 
-/** Sensor configured flag. */
+/** @brief Sensor configured flag. */
 static bool CONFIGURED_FLAG = false;
 
-/** Reading initialized flag. */
+/** @brief Reading initialized flag. */
 static bool INITIATED_FLAG = false;
 
-/** Flag used for passing the sensor configuration command. */
+/** @brief Flag used for passing the sensor configuration command. */
 static bool sensor_configuration_task = false;
 
-/** Flag used for passing the reading initiation command. */
+/** @brief Flag used for passing the reading initiation command. */
 static bool reading_initiation_task = false;
 
 /**
@@ -391,7 +391,7 @@ int io_devctl(resmgr_context_t *ctp, io_devctl_t *msg, RESMGR_OCB_T *ocb)
 
 
 /**
- * Main body of the interactive without wait VSP shell.
+ * @brief Main body of the interactive without wait VSP shell.
  * @param argc Number of passed arguments.
  * @param argv Process arguments - network node, path to the MRROC++ binaries, name of the current configuration file, etc.
  * @return Process status.
@@ -471,7 +471,7 @@ int main(int argc, char *argv[])
 		// Allocate a context structure.
 		ctp = dispatch_context_alloc(dpp);
 
-		/* uruchomienie drugiego watku */
+		// Start second thread.
 		pthread_attr_t tattr;
 		pthread_attr_init(&tattr);
 		pthread_attr_setdetachstate(&tattr, PTHREAD_CREATE_DETACHED);
