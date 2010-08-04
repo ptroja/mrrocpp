@@ -23,28 +23,31 @@ namespace task {
 typedef struct {
 	bool code_found;
 	int num_found;
-	double x_k0;
-	double y_k0;
-	double w_k0;
-	double h_k0;
+	double x_k0;//Code center X
+	double y_k0;//Code center Y
+	double w_k0;//Code width
+	double h_k0;//Code height
+	double a_k0;//Code rotation deg.
 	double x_k1;
 	double y_k1;
 	double w_k1;
 	double h_k1;
+	double a_k1;
 	double x_k2;
 	double y_k2;
 	double w_k2;
 	double h_k2;
+	double a_k2;
 	double x_k3;
 	double y_k3;
 	double w_k3;
 	double h_k3;
+	double a_k3;
 	double x_k4;
 	double y_k4;
 	double w_k4;
 	double h_k4;
-
-
+	double a_k4;
 } regions;
 
 
