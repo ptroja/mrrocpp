@@ -1,0 +1,16 @@
+/** 
+@namespace mrrocpp::kinematics
+@brief Namespace containing items related to the robots kinematics.
+@date Nov 26, 2009
+@author tkornuta
+@ingroup KINEMATICS
+
+
+@defgroup KINEMATICS Kinematics: Basics.
+@{
+
+
+
+@}
+
+*/
