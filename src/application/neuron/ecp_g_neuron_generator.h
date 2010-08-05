@@ -25,17 +25,30 @@ class neuron_generator: public common::generator::generator{
 	private:
 		ecp_mp::sensor::neuron_sensor *neuron_sensor;
 
-		lib::Homog_matrix actual_position_matrix;
-		//lib::Homog_matrix desired_position_matrix;
-		lib::Xyz_Angle_Axis_vector angle_axis_vector;
-		double actual_position[6];
-		double desired_position[6];
-		lib::Homog_matrix position_matrix;
-		double position[6];
 		/**
-		 * Vector filled with coordinates read from the robot.
+		 * Matrix to which the current position of the robot is written.
 		 */
-		//vector<double> position;
+		lib::Homog_matrix actual_position_matrix;
+		/**
+		 * Matrix to which the new position for the robot is written.
+		 */
+		lib::Homog_matrix position_matrix;
+		/**
+		 * Temporary angle vector used while reading the current robot position.
+		 */
+		lib::Xyz_Angle_Axis_vector angle_axis_vector;
+		/**
+		 * Current position of the robot.
+		 */
+		double actual_position[6];
+		/**
+		 * Desired position received from vsp.
+		 */
+		double desired_position[6];
+		/**
+		 * Array filled with coordinates send to the robot.
+		 */
+		double position[6];
 		/**
 		 * If true, generator tries to break in each axis until robot stops.
 		 */
@@ -59,7 +72,7 @@ class neuron_generator: public common::generator::generator{
 		/**
 		 * Motion direction.
 		 */
-		double k[6]; // motion direction
+		int k[6]; // motion direction
 		/**
 		 * Distance covered in the set of five macrosteps.
 		 */
@@ -74,7 +87,13 @@ class neuron_generator: public common::generator::generator{
 		 * Returns current robot position.
 		 */
 		double * get_position();
+		/**
+		 * Resets all of the temporary variables. It is necessary to call the reset between the calls of the generator Move() method.
+		 */
 		void reset();
+		/**
+		 * Sets the breaking variable.
+		 */
 		void set_breaking(bool breaking);
 };
 
