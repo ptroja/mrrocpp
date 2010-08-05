@@ -79,14 +79,9 @@ bool neuron_generator::next_step(){
 		//printf("period 5: x:%lf y:%lf z:%lf\n",neuron_sensor->getCoordinates().x,neuron_sensor->getCoordinates().y,neuron_sensor->getCoordinates().z);
 		flushall();
 		// ------------ read the current robot position ----------
-		if (!having_actual) {
-			actual_position_matrix.set_from_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame);
-			actual_position_matrix.get_xyz_angle_axis(angle_axis_vector);
-			angle_axis_vector.to_table(actual_position);
-			if (breaking) {
-				having_actual = true;
-			}
-		}
+		actual_position_matrix.set_from_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame);
+		actual_position_matrix.get_xyz_angle_axis(angle_axis_vector);
+		angle_axis_vector.to_table(actual_position);
 		// ------------ read the current robot position (end) ---------
 
 		//printf("actual_pos: \t");
@@ -259,8 +254,6 @@ void neuron_generator::reset() {
 	int i;
 
 	breaking = false;
-	having_actual = false;
-
 
 	for (i = 0 ; i < 6; i++) {
 		v[i] = 0.0;
