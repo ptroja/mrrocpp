@@ -32,7 +32,7 @@ void model::mp2i_transform(const lib::MotorArray & local_current_motor_pos, lib:
 {
 }
 
-void model::i2mp_transform(lib::MotorArray & local_desired_motor_pos_new, lib::JointArray & local_desired_joints)
+void model::i2mp_transform(lib::MotorArray & local_desired_motor_pos_new, const lib::JointArray & local_desired_joints)
 {
 }
 

@@ -1,9 +1,11 @@
 /*!
- * \file kinematic_model.cc
- * \brief File containing definitions of kinematic_model class methods.
+ * @file kinematic_model.cc
+ * @brief File containing definitions of kinematic_model class methods.
  *
- * \author tkornuta
- * \date Nov 26, 2009
+ * @author tkornuta
+ * @date Nov 26, 2009
+ *
+ * @ingroup KINEMATICS
  */
 
 #include "base/kinematics/kinematic_model.h"

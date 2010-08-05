@@ -29,7 +29,7 @@ void kinematic_model_spkm::check_joints(const lib::JointArray & q)
 {
 }
 
-void kinematic_model_spkm::i2mp_transform(lib::MotorArray & local_desired_motor_pos_new, lib::JointArray & local_desired_joints)
+void kinematic_model_spkm::i2mp_transform(lib::MotorArray & local_desired_motor_pos_new, const lib::JointArray & local_desired_joints)
 {
 }
 

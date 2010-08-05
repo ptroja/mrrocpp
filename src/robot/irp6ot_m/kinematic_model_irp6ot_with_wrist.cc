@@ -469,11 +469,11 @@ void model_with_wrist::mp2i_transform(const lib::MotorArray & local_current_moto
  Przeliczenie wspolrzednych wewnetrznych na polozenia walow silnikow
  (i2mp - internal to motor position)
  ------------------------------------------------------------------------ */
-void model_with_wrist::i2mp_transform(lib::MotorArray & local_desired_motor_pos_new, lib::JointArray & local_desired_joints)
+void model_with_wrist::i2mp_transform(lib::MotorArray & local_desired_motor_pos_new, const lib::JointArray & local_desired_joints)
 {
-	// Niejednoznacznosc polozenia dla 4-tej osi (obrot kisci < 180���������������������������������������������������������������������������������).
+	// Niejednoznacznosc polozenia dla 4-tej osi (obrot kisci < 180).
 	double joint_4_revolution = M_PI;
-	// Niejednoznacznosc polozenia dla 5-tej osi (obrot kisci > 360���������������������������������������������������������������������������������).
+	// Niejednoznacznosc polozenia dla 5-tej osi (obrot kisci > 360).
 	double axis_5_revolution = 2*M_PI;
 
 	// Sprawdzenie wartosci wspolrzednych wewnetrznych.
@@ -495,9 +495,10 @@ void model_with_wrist::i2mp_transform(lib::MotorArray & local_desired_motor_pos_
 
 	// Obliczanie kata obrotu walu silnika napedowego obotu kisci T
 	// jesli jest mniejsze od -pi/2
-	if (local_desired_joints[4] < lower_limit_joint[4])
-		local_desired_joints[4] += joint_4_revolution;
-	local_desired_motor_pos_new[4] = gear[4] * (local_desired_joints[4] + theta[4]) + synchro_joint_position[4];
+	double tmp_local_desired_joints4 = local_desired_joints[4];
+	if ( tmp_local_desired_joints4 < lower_limit_joint[4])
+		 tmp_local_desired_joints4 += joint_4_revolution;
+	local_desired_motor_pos_new[4] = gear[4] * ( tmp_local_desired_joints4 + theta[4]) + synchro_joint_position[4];
 
 	// Obliczanie kata obrotu walu silnika napedowego obrotu kisci V
 	local_desired_motor_pos_new[5] = gear[5] * local_desired_joints[5] + synchro_joint_position[5]

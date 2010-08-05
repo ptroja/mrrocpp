@@ -37,7 +37,7 @@ typedef struct pcbird_pos_t
 	float x;
 
 	/** @brief Y coordinate.*/
-	float y
+	float y;
 
 	/** @brief Z coordinate.*/
 	float z;

@@ -50,7 +50,7 @@ class kinematic_model_spkm: public common::kinematic_model
 		void direct_kinematics_transform(const lib::JointArray & local_current_joints, lib::Homog_matrix& local_current_end_effector_frame) { }
 
 		//! Computes motor increments from joint values (i2mp from internal to motor position).
-		void i2mp_transform(lib::MotorArray & local_desired_motor_pos_new, lib::JointArray & local_desired_joints);
+		void i2mp_transform(lib::MotorArray & local_desired_motor_pos_new, const lib::JointArray & local_desired_joints);
 
 		//! Solves inverse kinematics.
 		void inverse_kinematics_transform(lib::JointArray & local_desired_joints, lib::JointArray & local_current_joints, const lib::Homog_matrix& local_desired_end_effector_frame);

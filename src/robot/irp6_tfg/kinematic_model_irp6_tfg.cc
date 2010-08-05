@@ -73,7 +73,7 @@ void kinematic_model_irp6_tfg::mp2i_transform(const lib::MotorArray & local_curr
  Przeliczenie wspolrzednych wewnetrznych na polozenia walow silnikow
  (i2mp - internal to motor position)
  ------------------------------------------------------------------------ */
-void kinematic_model_irp6_tfg::i2mp_transform(lib::MotorArray & local_desired_motor_pos_new, lib::JointArray & local_desired_joints)
+void kinematic_model_irp6_tfg::i2mp_transform(lib::MotorArray & local_desired_motor_pos_new, const lib::JointArray & local_desired_joints)
 {
 
 	// Obliczenie kata obrotu walu silnika napedowego chwytaka.

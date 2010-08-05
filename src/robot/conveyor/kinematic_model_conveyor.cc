@@ -74,7 +74,7 @@ void model::mp2i_transform(const lib::MotorArray & local_current_motor_pos, lib:
  Przeliczenie wspolrzednych wewnetrznych na polozenia walow silnikow
  (i2mp - internal to motor position)
  ------------------------------------------------------------------------ */
-void model::i2mp_transform(lib::MotorArray & local_desired_motor_pos_new, lib::JointArray & local_desired_joints)
+void model::i2mp_transform(lib::MotorArray & local_desired_motor_pos_new, const lib::JointArray & local_desired_joints)
 {
 	local_desired_motor_pos_new[0] = local_desired_joints[0] * motor_to_intext_ratio;
 } //: i2mp_transform

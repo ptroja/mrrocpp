@@ -1,9 +1,11 @@
 /*!
  * \file kinematic_model.h
- * \brief File containing the declaration of kinematic_model class.
+ * \brief File containing the declaration of the kinematic_model class.
  *
  * \author tkornuta
  * \date Nov 26, 2009
+ *
+ * @ingroup KINEMATICS
  */
 
 #ifndef KINEMATIC_MODEL_H_
@@ -21,12 +23,16 @@ namespace kinematics {
 namespace common {
 
 /*!
- * \class kinematic_model
- * \brief Base and simplest class of all kinematic models. Its simplicity is related to the fact, that it offers only
+ * @class kinematic_model
+ * @brief Base and simplest class of all kinematic models.
+ *
+ * Class simplicity is related to the fact, that it offers only
  * basic six kinematic methods: direct, inverse, i2e, e2i, mp2i and i2mp.
  *
- * \author tkornuta
- * \date Nov 26, 2009
+ * @author tkornuta
+ * @date Nov 26, 2009
+ *
+ * @ingroup KINEMATICS
  */
 class kinematic_model {
 protected:
@@ -36,10 +42,16 @@ protected:
 	//! Sets parameters used by given kinematics.
 	virtual void set_kinematic_parameters(void) = 0;
 
-	//! Checks whether given motor increments are valid.
+	/**
+	 * @brief Checks whether given motor increments are valid.
+	 * @param motor_position Motor position to be validated.
+	 */
 	virtual void check_motor_position(const lib::MotorArray & motor_position) = 0;
 
-	//! Checks whether given internal coordinates are valid.
+	/**
+	 * @brief Checks whether given internal coordinates are valid.
+	 * @param q Joints to be validated.
+	 */
 	virtual void check_joints(const lib::JointArray & q) = 0;
 
 public:
@@ -47,11 +59,19 @@ public:
 	//! Class virtual destructor - empty.
 	virtual ~kinematic_model() { }
 
-	//! Computes internal coordinates basing on the motor increments (position).
+	/**
+	 * @brief Computes internal coordinates basing on the motor increments (position).
+	 * @param[in] local_current_motor_pos Motor increments.
+	 * @param[out] local_current_joints Computed joints.
+	 */
 	virtual void mp2i_transform(const lib::MotorArray &local_current_motor_pos, lib::JointArray & local_current_joints) = 0;
 
-	//! Computes motor increments from internal coordinates.
-	virtual void i2mp_transform(lib::MotorArray & local_desired_motor_pos_new, lib::JointArray & local_desired_joints) = 0;
+	/**
+	 * @brief Computes motor increments from internal coordinates.
+	 * @param[out] local_desired_motor_pos_new Computed motor increment.
+	 * @param[in] local_desired_joints Current joints settings.
+	 */
+	virtual void i2mp_transform(lib::MotorArray & local_desired_motor_pos_new, const lib::JointArray & local_desired_joints) = 0;
 
 	//! Computes external coordinates on the base of internal coordinates (i2e - internal to external). In this kinematic_model_with_tool calls only one method - direct kinematics.
 	virtual void i2e_transform(const lib::JointArray & local_current_joints, lib::Homog_matrix& local_current_end_effector_frame);
@@ -65,10 +85,16 @@ public:
 	//! Solves inverse kinematics.
 	virtual void inverse_kinematics_transform(lib::JointArray & local_desired_joints, const lib::JointArray & local_current_joints, const lib::Homog_matrix & local_desired_end_effector_frame);
 
-	//! Sets kinematics description.
+	/**
+	 * @brief Sets kinematics description.
+	 * @param Kinematics description to be set.
+	 */
 	virtual void set_kinematic_model_label(const std::string &);
 
-	//! Returns description of kinematics.
+	/**
+	 * @brief Returns description of kinematics.
+	 * @return Kinematics description (label).
+	 */
 	virtual std::string get_kinematic_model_label(void);
 };
 

@@ -9,9 +9,7 @@
 #include "base/kinematics/kinematic_model_with_local_corrector.h"
 
 namespace mrrocpp {
-
 namespace kinematics {
-
 namespace common {
 
 void kinematic_model_with_local_corrector::local_corrector_transform(lib::Homog_matrix& current_end_effector_matrix)

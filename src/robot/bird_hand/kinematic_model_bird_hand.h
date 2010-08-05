@@ -53,10 +53,10 @@ public:
 	void mp2i_transform_synch(const lib::MotorArray & local_current_motor_pos, lib::JointArray & local_current_joints);
 
 	//! Computes motor increments from joint values (i2mp from internal to motor position).
-	void i2mp_transform(lib::MotorArray & local_desired_motor_pos_new, lib::JointArray & local_desired_joints);
+	void i2mp_transform(lib::MotorArray & local_desired_motor_pos_new, const lib::JointArray & local_desired_joints);
 
 	//! Computes motor increments from joint values (i2mp from internal to motor position) + synch.
-	void i2mp_transform_synch(lib::MotorArray & local_desired_motor_pos_new, lib::JointArray & local_desired_joints);
+	void i2mp_transform_synch(lib::MotorArray & local_desired_motor_pos_new, const lib::JointArray & local_desired_joints);
 
 	//! Solves direct kinematics - will not be implemented
 	void direct_kinematics_transform(const lib::JointArray & local_current_joints, lib::Homog_matrix& local_current_end_effector_frame)

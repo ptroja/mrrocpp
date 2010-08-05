@@ -42,7 +42,7 @@ public:
   virtual void mp2i_transform(const lib::MotorArray & local_current_motor_pos, lib::JointArray & local_current_joints);
 
   // Przeliczenie wspolrzednych wewnetrznych na polozenia walow silnikow.
-  virtual void i2mp_transform(lib::MotorArray & local_desired_motor_pos_new, lib::JointArray & local_desired_joints);
+  virtual void i2mp_transform(lib::MotorArray & local_desired_motor_pos_new, const lib::JointArray & local_desired_joints);
 
 
 };//: kinematic_model_conveyor;

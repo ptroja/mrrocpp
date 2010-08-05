@@ -1,9 +1,11 @@
 /*!
- * \file kinematics_manager.h
- * \brief File containing the declaration of kinematics_manager class.
+ * @file kinematics_manager.h
+ * @brief File containing the declaration of kinematics_manager class.
  *
- * \author tkornuta
- * \date Nov 26, 2009
+ * @author tkornuta
+ * @date Nov 26, 2009
+ *
+ * @ingroup KINEMATICS
  */
 
 #ifndef __EDP_KIN_MAN_H
@@ -19,11 +21,13 @@ namespace kinematics {
 namespace common {
 
 /*!
- * \class kinematic_manager
- * \brief Class responsible for management of multiple kinematic models. Base class of all embodied-robot effectors.
+ * @class kinematics_manager
+ * @brief Class responsible for management of multiple kinematic models. Base class of all embodied-robot effectors.
  *
- * \author tkornuta
- * \date Nov 26, 2009
+ * @author tkornuta
+ * @date Nov 26, 2009
+ *
+ * @ingroup KINEMATICS
  */
 class kinematics_manager
 {
@@ -44,10 +48,16 @@ class kinematics_manager
 		//! Destroys kinematics available on the list.
 		virtual ~kinematics_manager(void);
 
-		//! Adds new kinematic model to the list.
+		/**
+		 * @brief Adds new kinematic model to the list.
+		 * @param _model Added mode.
+		 */
 		void add_kinematic_model(kinematic_model* _model);
 
-		//! Sets current kinematic model.
+		/**
+		 * @brief Sets current kinematic model.
+		 * @param Number of kinematic model  to be set.
+		 */
 		void set_kinematic_model(unsigned int);
 
 		//! Returns pointer to current kinematic model.
