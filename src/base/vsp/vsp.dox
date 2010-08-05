@@ -34,7 +34,7 @@
 @ingroup VSP
 
 
-@defgroup VSP Virtual Sensor Process
+@defgroup VSP Sensors: The VSP process.
 @{
 
 @section role The role of VSP (Virtual Sensor Process)
@@ -104,7 +104,7 @@ required.
  - <b>VSP_TERMINATE</b> - Request for the termination of the VSP process.
 
 The operational codes of these commands form the enumerated type
-\link mrrocpp::lib::VSP_COMMAND_t VSP_COMMAND\endlink.
+\link mrrocpp::lib::sensor::VSP_COMMAND_t VSP_COMMAND\endlink.
 
 @subsection responses Responses
 
@@ -116,7 +116,7 @@ The VSP process can reply with one of the following codes:
  - <b>VSP_READING_NOT_READY</b> - the reading cannot be send back, because it had not been ready when the request
     came,
  - <b>INVALID_VSP_COMMAND</b> - Unrecognized command has been received.
-The above error codes form the enumerated type \link mrrocpp::lib::VSP_REPORT_t VSP_REPORT\endlink.
+The above error codes form the enumerated type \link mrrocpp::lib::sensor::VSP_REPORT_t VSP_REPORT\endlink.
 
 
 @subsection cooperation Types of communication

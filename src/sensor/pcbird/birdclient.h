@@ -1,11 +1,14 @@
 /**
- * @file
- * @brief
+ * @file birdclient.h
+ * @brief File containing declarations of structure for storing data retrieved from the PcBird sensor and low-level (hardware access) functions.
  *
+ * @author B.Bielawski
+ * @author T.Wlostowski
+ * @author T.Adamczyk
  * @author tkornuta
- * @date
+ * @date 16.06.2008
  *
- * @ingroup SENSORS
+ * @ingroup PCBIRD
  */
 
 #ifndef __BIRDCLIENT_H
@@ -17,39 +20,137 @@ namespace mrrocpp {
 namespace ecp_mp {
 namespace sensor {
 
-// struktura z pozycja i katami pcbirda
+/**
+ * @brief Structure for storing position and orientation of the PcBird other transceiver in relation to its base.
+ *
+ * The pose is stored in the form of Euler Angles (azimuth, elevation, roll).
+ *
+ * @author B.Bielawski
+ * @author T.Wlostowski
+ * @author T.Adamczyk
+ *
+ * @ingroup PCBIRD
+ */
 typedef struct pcbird_pos_t
 {
-	float x, y, z; // pozycja
-	float a, b, g; // katy (a = azimuth, b = elevation, g = roll)
-	float distance; // odleglosc
-	uint32_t ts_sec, ts_usec; // timestamp
-};
+	/** @brief X coordinate.*/
+	float x;
 
-// polaczenie z serwerem PCBird, zwraca deskryptor socketa
+	/** @brief Y coordinate.*/
+	float y
+
+	/** @brief Z coordinate.*/
+	float z;
+
+	/** @brief Azimuth angle.*/
+	float a;
+
+	/** @brief Elevation angle.*/
+	float b;
+
+	/** @brief Roll angle.*/
+	float g;
+
+	/** @brief Distance.*/
+	float distance;
+
+	/** @brief Timestamp - seconds part. */
+	uint32_t ts_sec;
+
+	/** @brief Timestamp - microseconds part. */
+	uint32_t ts_usec;
+} pcbird_pos;
+
+/** @ingroup PCBIRD
+ * \{
+ */
+
+/**
+ * @brief Connects with the PcBird process.
+ * @param addr Node name.
+ * @param port Socket port.
+ * @return Socket descriptor.
+ *
+ * @author B.Bielawski
+ * @author T.Wlostowski
+ * @author T.Adamczyk
+ */
 int pcbird_connect(const char *addr, unsigned short port);
 
-// koniec sesji PCBird
+/**
+ * @brief Ends the PcBird connection.
+ * @param fd Socket descriptor.
+ *
+ * @author B.Bielawski
+ * @author T.Wlostowski
+ * @author T.Adamczyk
+ */
 void pcbird_disconnect(int fd);
 
-// rozpoczyna streaming pozycji
+/**
+ * @brief Starts data streaming.
+ * @param fd Socket descriptor.
+ * @return Operation status.
+ */
 int pcbird_start_streaming(int fd);
 
-// konczy streaming pozycji
+/**
+ * @brief Ends data streaming.
+ * @param fd
+ * @return Operation status.
+ *
+ * @author B.Bielawski
+ * @author T.Wlostowski
+ * @author T.Adamczyk
+ */
 int pcbird_stop_streaming(int fd);
 
-// pojedynczy odczyt pozycji
+/**
+ * @brief Retrieval of single pose from the PcBird.
+ * @param fd Socket descriptor.
+ * @param p
+ * @return Operation status.
+ *
+ * @author B.Bielawski
+ * @author T.Wlostowski
+ * @author T.Adamczyk
+ */
 int pcbird_get_single_position(int fd, pcbird_pos_t *p);
 
-// czy dane do gniazda nadeszly? (uzywane przy streamingu)
+/**
+ * @brief Checks whether new data arrived.
+ *
+ * Used in the streaming mode.
+ *
+ * @param fd Socket descriptor.
+ * @return Operation status.
+ *
+ * @author B.Bielawski
+ * @author T.Wlostowski
+ * @author T.Adamczyk
+ */
 int pcbird_data_avail(int fd);
 
-// nieblokujacy odczyt pozycji w trybie streaming
+/**
+ * @brief Unblocking position retrieval.
+ *
+ * Used in the streaming mode.
+ *
+ * @param fd Socket descriptor.
+ * @param p
+ * @return Operation status.
+ *
+ * @author B.Bielawski
+ * @author T.Wlostowski
+ * @author T.Adamczyk
+ */
 int pcbird_get_streaming_position(int fd, pcbird_pos_t *p);
+
+/** \} */
 
 } // namespace sensor
 } // namespace ecp_mp
 } // namespace mrrocpp
 
-#endif
 
+#endif

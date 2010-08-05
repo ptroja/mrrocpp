@@ -1,11 +1,14 @@
 /**
- * @file
- * @brief
+ * @file birdclient.cc
+ * @brief File containing definitions of low-level (hardware access) functions.
  *
+ * @author B.Bielawski
+ * @author T.Wlostowski
+ * @author T.Adamczyk
  * @author tkornuta
- * @date
+ * @date 16.06.2008
  *
- * @ingroup SENSORS
+ * @ingroup PCBIRD
  */
 
 

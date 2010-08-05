@@ -1,11 +1,14 @@
 /**
  * @file ecp_mp_s_pcbird.h
- * @brief Virtual sensor on the ECP/MP side used for communication with the PCBird.
+ * @brief Virtual sensor on the ECP/MP side used for communication with PcBird - declaration of the pcbird class.
  *
+  * @author B.Bielawski
+ * @author T.Wlostowski
+ * @author T.Adamczyk
  * @author tkornuta
- * @date 24.06.2008
+ * @date 16.06.2008
  *
- * @ingroup SENSORS
+ * @ingroup SENSORS,PCBIRD
  */
 
 #ifndef __ECP_PCBIRD_H
@@ -28,7 +31,7 @@ const lib::sensor::SENSOR_t SENSOR_PCBIRD = "SENSOR_PCBIRD";
  * @brief Sensor responsible for communication with the PCBird.
  * @author tkornuta
  *
- * @ingroup SENSORS
+ * @ingroup SENSORS,PCBIRD
  */
 class pcbird : public ecp_mp::sensor::sensor_interface
 {
