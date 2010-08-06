@@ -71,6 +71,45 @@ void Neuron::mp_2_ecp_next_state_string_handler(void){
 		}
 
 		neuronSensor->sendCommunicationFinished();
+
+		/*smoothGenerator->reset();
+		smoothGenerator->set_absolute();
+		vector<double> coordinates1(6);
+		coordinates1[0]=0.500000;
+		coordinates1[1]=-0.324591;
+		coordinates1[2]=0.016722;
+		coordinates1[3]=1.203;
+		coordinates1[4]=-1.447;
+		coordinates1[5]=-0.294;
+		smoothGenerator->load_absolute_angle_axis_trajectory_pose(coordinates1);
+
+		coordinates1[0]=0.350000;
+		coordinates1[1]=-0.124591;
+		coordinates1[2]=0.316722;
+		coordinates1[3]=1.203;
+		coordinates1[4]=-1.447;
+		coordinates1[5]=-0.294;
+		smoothGenerator->load_absolute_angle_axis_trajectory_pose(coordinates1);
+
+		coordinates1[0]=0.550000;
+		coordinates1[1]=-0.024591;
+		coordinates1[2]=0.116722;
+		coordinates1[3]=1.203;
+		coordinates1[4]=-1.447;
+		coordinates1[5]=-0.294;
+		smoothGenerator->load_absolute_angle_axis_trajectory_pose(coordinates1);
+
+		coordinates1[0]=0.350000;
+		coordinates1[1]=0.175409;
+		coordinates1[2]=0.316722;
+		coordinates1[3]=1.203;
+		coordinates1[4]=-1.447;
+		coordinates1[5]=-0.294;
+		smoothGenerator->load_absolute_angle_axis_trajectory_pose(coordinates1);
+
+		smoothGenerator->set_debug(true);
+		if(smoothGenerator->calculate_interpolate())
+			smoothGenerator->Move();*/
 	}
 
 
