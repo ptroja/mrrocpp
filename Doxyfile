@@ -585,16 +585,6 @@ WARN_LOGFILE           =
 # with spaces.
 
 INPUT                  = src/base/kinematics \
-#src/base/vsp \
-#                         src/base/ecp_mp/ecp_mp_sensor_interface.h \
-#                         src/base/ecp_mp/ecp_mp_sensor.h \
-#                         src/lib/lib.dox \
-#                         src/lib/sensor_error.h \
-#                         src/lib/sensor_interface.h \
-#                         src/sensor/sensors.dox \
-#                         src/sensor/fradia \
-#                         src/sensor/pcbird \
-                         
 #                         src/robot/conveyor \
 #                         src/robot/epos \
 #                         src/robot/irp6_tfg/kinematic_model_irp6_tfg.h \
@@ -606,6 +596,16 @@ INPUT                  = src/base/kinematics \
 #                         src/robot/shead \
 #                         src/robot/smb \
 #                        src/robot/spkm \
+#						 src/base/vsp \
+#                         src/base/ecp_mp/ecp_mp_sensor_interface.h \
+#                         src/base/ecp_mp/ecp_mp_sensor.h \
+#                         src/lib/lib.dox \
+#                         src/lib/sensor_error.h \
+#                         src/lib/sensor_interface.h \
+#                         src/sensor/sensors.dox \
+#                         src/sensor/fradia \
+#                         src/sensor/pcbird \
+                     
 
 # This tag can be used to specify the character encoding of the source files 
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding, which is 

@@ -56,9 +56,9 @@ class kinematics_manager
 
 		/**
 		 * @brief Sets current kinematic model.
-		 * @param Number of kinematic model  to be set.
+		 * @param _desired_kinematic_model_nr Number of kinematic model  to be set.
 		 */
-		void set_kinematic_model(unsigned int);
+		void set_kinematic_model(unsigned int _desired_kinematic_model_nr);
 
 		//! Returns pointer to current kinematic model.
 		kinematic_model* get_current_kinematic_model(void);
