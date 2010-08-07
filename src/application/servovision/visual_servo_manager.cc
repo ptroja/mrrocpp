@@ -221,7 +221,7 @@ void visual_servo_manager::configure(const std::string & sensor_prefix)
 		(*it)->get_vsp_fradia()->configure_sensor();
 		char sensor_suffix[64];
 		sprintf(sensor_suffix, "%02d", i);
-		lib::SENSOR_t sensor_id = sensor_prefix + sensor_suffix;
+		lib::sensor::SENSOR_t sensor_id = sensor_prefix + sensor_suffix;
 		sensor_m[sensor_id] = (*it)->get_vsp_fradia().get();
 	}
 	//	log_dbg("void visual_servo_manager::configure() 3\n");

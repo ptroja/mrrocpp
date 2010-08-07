@@ -123,7 +123,7 @@ bool ib_eih_visual_servo::is_object_visible_in_latest_reading()
 	return vsp_fradia->get_reading_message().tracking;
 }
 
-lib::VSP_REPORT_t ib_eih_visual_servo::get_sensor_report()
+lib::sensor::VSP_REPORT_t ib_eih_visual_servo::get_sensor_report()
 {
 	return vsp_fradia->get_report();
 }

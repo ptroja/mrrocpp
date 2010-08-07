@@ -27,7 +27,7 @@
 // Klasa edp_sarkofag_effector.
 #include "robot/sarkofag/edp_e_sarkofag.h"
 // Klasa hardware_interface.
-#include "robot/sarkofag/hi_sarkofag.h"
+#include "robot/hi_moxa/hi_moxa.h"
 
 namespace mrrocpp {
 namespace edp {

@@ -15,7 +15,7 @@
 #include "robot/sarkofag/edp_e_sarkofag.h"
 #include "base/edp/reader.h"
 // Klasa hardware_interface.
-#include "robot/sarkofag/hi_sarkofag.h"
+#include "robot/hi_moxa/hi_moxa.h"
 // Klasa servo_buffer.
 #include "robot/sarkofag/sg_sarkofag.h"
 #include "robot/sarkofag/regulator_sarkofag.h"
@@ -26,7 +26,8 @@ namespace sarkofag {
 
 /*-----------------------------------------------------------------------*/
 servo_buffer::servo_buffer(effector &_master) :
-	common::servo_buffer(_master), master(_master) {
+	common::servo_buffer(_master), master(_master)
+{
 
 	synchro_axis_order[0] = 0;
 
@@ -38,12 +39,13 @@ servo_buffer::servo_buffer(effector &_master) :
 }
 /*-----------------------------------------------------------------------*/
 
-void servo_buffer::load_hardware_interface(void) {
+void servo_buffer::load_hardware_interface(void)
+{
 
 	// tablica pradow maksymalnych dla poszczegolnych osi
 	//	int max_current[SARKOFAG_NUM_OF_SERVOS] = { SARKOFAG_AXIS_7_MAX_CURRENT };
 
-	hi = new HI_moxa(master);
+	hi = new common::HI_moxa(master);
 	hi->init();
 
 	// utworzenie tablicy regulatorow
@@ -51,15 +53,15 @@ void servo_buffer::load_hardware_interface(void) {
 
 	// regulator_ptr[1] = new NL_regulator_2 (0, 0, 0.71, 13./4, 12.57/4, 0.35);
 	// kolumna dla sarkofag
-	regulator_ptr[0] = new NL_regulator_8_sarkofag(0, 0, 0.39, 8.62 / 2., 7.89
-			/ 2., 0.35, master);
+	regulator_ptr[0] = new NL_regulator_8_sarkofag(0, 0, 0.39, 8.62 / 2., 7.89 / 2., 0.35, master);
 
 	common::servo_buffer::load_hardware_interface();
 
 }
 
 /*-----------------------------------------------------------------------*/
-void servo_buffer::get_all_positions(void) {
+void servo_buffer::get_all_positions(void)
+{
 	common::servo_buffer::get_all_positions();
 
 	// przepisanie stanu regulatora chwytaka do bufora odpowiedzi dla EDP_master
@@ -71,7 +73,8 @@ void servo_buffer::get_all_positions(void) {
 } // namespace sarkofag
 namespace common {
 
-servo_buffer* return_created_servo_buffer(motor_driven_effector &_master) {
+servo_buffer* return_created_servo_buffer(motor_driven_effector &_master)
+{
 	return new sarkofag::servo_buffer((sarkofag::effector &) (_master));
 }
 

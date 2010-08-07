@@ -55,7 +55,7 @@ protected:
 
 	virtual lib::Homog_matrix compute_position_change(const lib::Homog_matrix& current_position, double dt) = 0;
 
-	virtual lib::VSP_REPORT_t get_sensor_report() = 0;
+	virtual lib::sensor::VSP_REPORT_t get_sensor_report() = 0;
 
 	virtual bool is_object_visible_in_latest_reading() = 0;
 

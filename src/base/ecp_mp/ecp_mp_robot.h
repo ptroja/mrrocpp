@@ -3,7 +3,6 @@
 
 #include <map>
 #include "lib/srlib.h"
-#include "lib/sensor.h"
 #include "base/ecp_mp/transmitter.h"
 
 namespace mrrocpp {

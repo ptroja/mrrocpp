@@ -1,4 +1,4 @@
-/*
+/*!
  * \file kinematic_model_spkm.h
  * \brief File containing declaration of the kinematic_model_spkm class.
  *

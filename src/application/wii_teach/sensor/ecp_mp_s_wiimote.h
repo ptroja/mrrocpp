@@ -40,7 +40,7 @@ typedef struct _wii_command
   bool rumble;
 } wii_command_t;
 
-const lib::SENSOR_t SENSOR_WIIMOTE = "SENSOR_WIIMOTE";
+const lib::sensor::SENSOR_t SENSOR_WIIMOTE = "SENSOR_WIIMOTE";
 
 /**
  * Virtual sensor that communicates with the Wii-mote
@@ -63,15 +63,15 @@ private:
 	lib::sr_ecp& sr_ecp_msg;
 
 	//sensor name
-	const lib::SENSOR_t sensor_name;
+	const lib::sensor::SENSOR_t sensor_name;
 
 	struct _to_vsp {
-		lib::VSP_COMMAND_t i_code;
+		lib::sensor::VSP_COMMAND_t i_code;
 		wii_command_t wii_command;
 	} to_vsp;
 
 	struct _from_vsp {
-		lib::VSP_REPORT_t vsp_report;
+		lib::sensor::VSP_REPORT_t vsp_report;
 		wiimote_t wiimote;
 	} from_vsp;
 
@@ -88,7 +88,7 @@ public:
 	 *
 	 * @author jedrzej
 	 */
-	wiimote (lib::SENSOR_t _sensor_name, const std::string & _section_name, lib::sr_ecp & _sr_ecp_msg, lib::configurator & config);
+	wiimote (lib::sensor::SENSOR_t _sensor_name, const std::string & _section_name, lib::sr_ecp & _sr_ecp_msg, lib::configurator & config);
 
 	/**
 	 * Sends sensor configuration to the Wii-mote server

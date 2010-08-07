@@ -1,6 +1,7 @@
+#ifndef __HI_MOXA_COMBUF_H
+#define __HI_MOXA_COMBUF_H
 
 #include <inttypes.h>
-
 
 #define START_BYTE '#'
 
@@ -23,21 +24,21 @@
 struct status_St
 {
 	uint8_t startByte;
-	uint8_t sw1				:1;
-	uint8_t sw2				:1;
-	uint8_t swSynchr		:1;
-	uint8_t synchroZero		:1;
-	uint8_t powerStageFault	:1;
-	uint8_t overcurrent		:1;
-	uint8_t error			:1;
-	uint8_t isSynchronized	:1;
+	uint8_t sw1 :1;
+	uint8_t sw2 :1;
+	uint8_t swSynchr :1;
+	uint8_t synchroZero :1;
+	uint8_t powerStageFault :1;
+	uint8_t overcurrent :1;
+	uint8_t error :1;
+	uint8_t isSynchronized :1;
 	int16_t current;
 	int32_t position;
-}	__attribute__((__packed__));
+}__attribute__((__packed__));
 
 struct pwm_St
 {
 	int16_t pwm;
-}	__attribute__((__packed__));
+}__attribute__((__packed__));
 
-
+#endif // __HI_MOXA_COMBUF_H

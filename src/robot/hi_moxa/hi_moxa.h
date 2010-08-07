@@ -5,8 +5,8 @@
 // Ostatnia modyfikacja: 16.04.98
 // -------------------------------------------------------------------------
 
-#ifndef __HI_LOCAL_SARKOFAG_H
-#define __HI_LOCAL_SARKOFAG_H
+#ifndef __HI_MOXA_H
+#define __HI_MOXA_H
 
 // // // // // // // //
 // TERMINAL INFO
@@ -15,11 +15,12 @@
 
 #define USLEEP_US 500000
 
+#include "base/edp/edp_e_motor_driven.h"
 #include "base/edp/HardwareInterface.h"
-#include "edp_sarkofag_combuf.h"
+#include "robot/hi_moxa/hi_moxa_combuf.h"
 //#include "base/edp/edp_e_motor_driven.h"
 
-#include "edp_e_sarkofag.h"
+//#include "edp_e_sarkofag.h"
 
 #include <inttypes.h>
 #include <termios.h>
@@ -33,8 +34,6 @@
 
 #include <string>
 
-
-
 #define PORT "/dev/ser"
 #define BAUD 921600
 #define START_BYTE '#'
@@ -45,20 +44,19 @@
 
 namespace mrrocpp {
 namespace edp {
-namespace sarkofag {
+namespace common {
 
 // ------------------------------------------------------------------------
 //                HARDWARE_INTERFACE class
 // ------------------------------------------------------------------------
 
 
-
-class HI_moxa: public common::HardwareInterface {
+class HI_moxa : public common::HardwareInterface
+{
 
 public:
 
-
-	HI_moxa(effector &_master); // Konstruktor
+	HI_moxa(motor_driven_effector &_master); // Konstruktor
 	~HI_moxa();
 
 	virtual void init();
@@ -95,8 +93,8 @@ private:
 
 }; // koniec: class hardware_interface
 
-} // namespace sarkofag
+} // namespace common
 } // namespace edp
 } // namespace mrrocpp
 
-#endif // __HI_LOCAL_SARKOFAG_H
+#endif // __HI_MOXA_H

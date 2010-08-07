@@ -849,7 +849,7 @@ typedef struct _controller_state_t
 	 */
 	bool is_power_on;
 	/*!
-	 *  Czy szafa jest w���aczona?
+	 *  Czy szafa jest waczona?
 	 *  @todo Translate to English.
 	 *        Change the "wardrobe" thing for God's sake !!!
 	 */
@@ -1011,6 +1011,15 @@ struct ECP_REPLY_PACKAGE
 	char ecp_2_mp_string[ECP_2_MP_STRING_SIZE];
 };
 // ------------------------------------------------------------------------
+
+
+/**
+ * @brief Empty data structure.
+ */
+typedef struct _empty
+{
+	//! This is empty data type
+} empty_t;
 
 /*
  // by Y

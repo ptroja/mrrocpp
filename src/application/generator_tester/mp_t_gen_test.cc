@@ -22,12 +22,12 @@ gen_test::gen_test(lib::configurator &_config) :
 void gen_test::main_task_algorithm(void)
 {
 
-	sr_ecp_msg->message("Gen Test (MP)");
+	sr_ecp_msg->message("Gen Test (MP) START");
 
 	lib::robot_name_t manipulator_name;
 	lib::robot_name_t gripper_name;
 
-	// ROBOT IRP6_ON_TRACK
+	// ROBOT IRP6_ON_TRACK_MANIPULATOR
 	if (config.value <int> ("is_irp6ot_m_active", UI_SECTION)) {
 		manipulator_name = lib::ROBOT_IRP6OT_M;
 		if (config.value <int> ("is_irp6ot_tfg_active", UI_SECTION)) {
@@ -35,6 +35,7 @@ void gen_test::main_task_algorithm(void)
 		} else {
 			// TODO: throw
 		}
+	// ROBOT IRP6_POSTUMENT_MANIPULATOR
 	} else if (config.value <int> ("is_irp6p_m_active", UI_SECTION)) {
 		manipulator_name = lib::ROBOT_IRP6P_M;
 		if (config.value <int> ("is_irp6p_tfg_active", UI_SECTION)) {
@@ -58,7 +59,7 @@ void gen_test::main_task_algorithm(void)
 	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, manipulator_name.c_str(), manipulator_name.c_str());
 	//------------------- SMOOTH GENERATOR END -------------------
 
-	sr_ecp_msg->message("GEN TEST END");
+	sr_ecp_msg->message("Gen Test END");
 
 }
 

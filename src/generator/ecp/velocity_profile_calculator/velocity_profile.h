@@ -14,6 +14,7 @@
 #include <vector>
 
 #include "lib/trajectory_pose/trajectory_pose.h"
+#include "lib/mrmath/mrmath.h"
 
 using namespace std;
 
@@ -172,6 +173,39 @@ class velocity_profile {
 			}
 			return true;
 		}
+		/**
+		 * Calculates the relative angle axis vector. The relative distance is calculated between the start position and coordinates vectors.
+		 * Result is stored in coordinates vector of the current pose.
+		 * @return true if the calculation was successful
+		 */
+		bool calculate_relative_angle_axis_vector(typename vector<Pos>::iterator & it) {
+			lib::Homog_matrix start_position_matrix;
+			lib::Homog_matrix desired_position_matrix;
+			lib::Xyz_Angle_Axis_vector relative_angle_axis_vector;
+			double start_position[6];
+			double coordinates[6];
+
+			memcpy( start_position, &it->start_position[0], sizeof(int) * it->start_position.size() );
+			memcpy( coordinates, &it->coordinates[0], sizeof(int) * it->coordinates.size() );
+
+			start_position_matrix.set_from_xyz_angle_axis(start_position);
+			desired_position_matrix.set_from_xyz_angle_axis(coordinates);
+			((!start_position_matrix) * desired_position_matrix).get_xyz_angle_axis(relative_angle_axis_vector);
+			relative_angle_axis_vector.to_vector(it->coordinates);
+
+			return true;
+		}
+
+	/*private:
+		void get_double_array_from_vector(vector<double> vector, double * double_array) {
+			double new_double_array[vector.size()];
+
+			for (int i = 0; i < vector.size(); i++) {
+				new_double_array[i] = vector[i];
+			}
+
+			double_array = new_double_array;
+		}*/
 };
 
 } // namespace velocity_profile_calculator
