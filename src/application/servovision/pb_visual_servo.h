@@ -18,22 +18,26 @@ namespace mrrocpp {
 
 namespace ecp {
 
-namespace common {
-
-namespace generator {
+namespace servovision {
 
 typedef ecp_mp::sensor::fradia_sensor <position_based_configuration, position_based_reading> pb_fradia_sensor;
 
-class pb_visual_servo : public mrrocpp::ecp::common::generator::visual_servo
+class pb_visual_servo : public visual_servo
 {
 public:
-	pb_visual_servo(boost::shared_ptr <visual_servo_regulator> regulator);
+	pb_visual_servo(boost::shared_ptr <visual_servo_regulator> regulator, const std::string& section_name, mrrocpp::lib::configurator& configurator);
 	virtual ~pb_visual_servo();
+	virtual boost::shared_ptr <ecp_mp::sensor::sensor_interface> get_vsp_fradia();
+protected:
+	virtual lib::sensor::VSP_REPORT_t get_sensor_report();
+	virtual bool is_object_visible_in_latest_reading();
+
+	boost::shared_ptr <pb_fradia_sensor> vsp_fradia;
+
+	lib::Homog_matrix G_T_E_desired;
 };
 
 }//namespace generator {
-
-}
 
 }
 

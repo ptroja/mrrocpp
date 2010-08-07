@@ -14,16 +14,14 @@ namespace mrrocpp {
 
 namespace ecp {
 
-namespace common {
-
-namespace generator {
+namespace servovision {
 
 /** @addtogroup servovision
  *  @{
  */
 
 //template <int ERROR_SIZE, int CONTROL_SIZE>
-class regulator_p: public mrrocpp::ecp::common::generator::visual_servo_regulator
+class regulator_p: public visual_servo_regulator
 {
 public:
 	regulator_p(const lib::configurator & config, const std::string& config_section_name) :
@@ -37,10 +35,10 @@ public:
 	virtual ~regulator_p()
 	{
 	}
-	virtual const Eigen::Matrix <double, 6, 1> & calculate_control(const Eigen::Matrix <double, 6, 1> & error, double dt)
+	virtual const Eigen::Matrix <double, 6, 1> & compute_control(const Eigen::Matrix <double, 6, 1> & error, double dt)
 	{
-		this->calculated_control = Kp * error;
-		return this->calculated_control;
+		this->computed_control = Kp * error;
+		return this->computed_control;
 	}
 protected:
 	Eigen::Matrix <double, 6, 6> Kp;
@@ -48,12 +46,8 @@ protected:
 
 /** @} */
 
-} // namespace generator
-
+} // namespace servovision
 }
-
-}
-
 }
 
 #endif /* VISUAL_SERVO_REGULATOR_P_H_ */

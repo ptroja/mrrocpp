@@ -10,8 +10,8 @@
  * @ingroup SENSORS,FRADIA
  */
 
-#ifndef __FRADIA_SENSOR_BLOCKING_H
-#define __FRADIA_SENSOR_BLOCKING_H
+#ifndef ECP_MP_S_FRADIA_SENSOR_H
+#define ECP_MP_S_FRADIA_SENSOR_H
 
 #include <netdb.h>
 #include <netinet/in.h>
@@ -311,9 +311,13 @@ void fradia_sensor <CONFIGURE_T, READING_T, INITIATE_T>::configure_sensor()
 		throw std::runtime_error("FraDIA reply not recognized");
 	}
 	if (status.initiate_size != sizeof(INITIATE_T)) {
+		logger::log("sizeof(INITIATE_T): %d\n", sizeof(INITIATE_T));
+		logger::log("status.initiate_size: %d\n", status.initiate_size);
 		throw std::runtime_error("status.initiate_size != sizeof(INITIATE_T)");
 	}
 	if (status.reading_size != sizeof(READING_T)) {
+		logger::log("sizeof(INITIATE_T): %d\n", sizeof(READING_T));
+		logger::log("status.initiate_size: %d\n", status.reading_size);
 		throw std::runtime_error("status.reading_size != sizeof(READING_T)");
 	}
 	if (status.status != FRADIA_TASK_LOADED) {

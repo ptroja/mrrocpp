@@ -10,6 +10,8 @@
 
 #include "lib/logger.h"
 
+#include "../ecp_mp_g_visual_servo_tester.h"
+
 using namespace boost;
 using namespace std;
 using namespace logger;
@@ -45,9 +47,14 @@ ecp_t_conveyor_test::~ecp_t_conveyor_test()
 void ecp_t_conveyor_test::main_task_algorithm(void)
 {
 
-	log_dbg("ecp_t_conveyor_test::main_task_algorithm() 1\n");
-	sinus_gen->Move();
-	log_dbg("ecp_t_conveyor_test::main_task_algorithm() 2\n");
+	while (1) {
+		get_next_state();
+		if (mp_2_ecp_next_state_string == mrrocpp::ecp_mp::common::generator::ECP_GEN_CONVEYOR_VS_TEST) {
+			sinus_gen->Move();
+		} else {
+			log("ecp_t_conveyor_test::main_task_algorithm(void) mp_2_ecp_next_state_string: \"%s\"\n", mp_2_ecp_next_state_string.c_str());
+		}
+	}
 
 	ecp_termination_notice();
 }

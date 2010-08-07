@@ -153,6 +153,10 @@ bool neuron_generator::next_step(){
 
 	int node = 6 - neuron_sensor->current_period;
 
+	if(breaking){
+		neuron_sensor->current_period=4;
+	}
+
 	//printf(" position: \t");
 	for (i = 0; i < 6; i ++) {
 

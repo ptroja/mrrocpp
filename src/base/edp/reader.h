@@ -12,6 +12,8 @@
 #include <boost/thread/condition_variable.hpp>
 #include <boost/circular_buffer.hpp>
 
+#include <time.h>
+
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
@@ -28,9 +30,11 @@ namespace common {
 // Struktura z informacja, ktore elementy struktury reader_data maja byc zapisane do pliku
 struct reader_config
 {
+	reader_config();
+
 	bool step;       // numer kroku
 
-    bool msec; // czas wykonania pomiaru (w ms)
+    bool measure_time; // czas wykonania pomiaru (w ms)
 
     bool desired_inc[MAX_SERVOS_NR];       // wejscie dla osi 0,2,3,4
     bool current_inc[MAX_SERVOS_NR]; // wyjscie
@@ -55,7 +59,7 @@ struct reader_config
 struct reader_data
 {   // Struktura z danymi pomiarowymi w reader do zapisu do pliku
     unsigned long step;       // numer kroku
-    unsigned int msec; // czas wykonania pomiaru (w ms)
+    struct timespec measure_time; // czas wykonania pomiaru (w ms)
 
     float desired_inc[MAX_SERVOS_NR];       // wejscie dla osi 0,2,3,4
     short int current_inc[MAX_SERVOS_NR]; // wyjscie
@@ -82,10 +86,6 @@ struct reader_data
 
 class reader_buffer : public boost::noncopyable
 {
-private:
-    motor_driven_effector &master;
-
-    boost::thread *thread_id;
 public:
 	boost::mutex reader_mutex;
 
@@ -101,8 +101,18 @@ public:
 
     reader_buffer(motor_driven_effector &_master);
     ~reader_buffer();
+private:
+    motor_driven_effector &master;
 
+    boost::thread *thread_id;
 
+    bool write_csv;
+
+    void write_header_old_format(std::ofstream& outfile);
+    void write_data_old_format(std::ofstream& outfile, const reader_data & data);
+
+    void write_header_csv(std::ofstream& outfile);
+    void write_data_csv(std::ofstream& outfile, const reader_data & data);
 };
 /**************************** end of reader_buffer *****************************/
 
