@@ -8,7 +8,7 @@
 #ifndef __HI_LOCAL_IRP6P_M_H
 #define __HI_LOCAL_IRP6P_M_H
 
-#include "base/edp/hi_rydz.h"
+#include "robot/hi_rydz/hi_rydz.h"
 
 namespace mrrocpp {
 namespace edp {
@@ -27,9 +27,9 @@ const unsigned short int INT_FREC_DIVIDER = 8; // mnoznik czestotliwosci przerwa
 #define ISA_CARD_OFFSET 0x20 // w zaleznosci od ustawienia na karcie isa
 
 #define IRP6_POSTUMENT_AXIS_1_MAX_CURRENT           0x24FF // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
-#define IRP6_POSTUMENT_AXIS_2_MAX_CURRENT           0x24FF // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
-#define IRP6_POSTUMENT_AXIS_3_MAX_CURRENT           0x24FF // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
-#define IRP6_POSTUMENT_AXIS_4_MAX_CURRENT           0x24FF // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
+#define IRP6_POSTUMENT_AXIS_2_MAX_CURRENT           0x34FF // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
+#define IRP6_POSTUMENT_AXIS_3_MAX_CURRENT           0x34FF // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
+#define IRP6_POSTUMENT_AXIS_4_MAX_CURRENT           0x34FF // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
 #define IRP6_POSTUMENT_AXIS_5_MAX_CURRENT           0x24FF // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
 #define IRP6_POSTUMENT_AXIS_6_MAX_CURRENT           0x24FF // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
 // 13,7 j na amper

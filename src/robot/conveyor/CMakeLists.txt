@@ -9,7 +9,7 @@ add_executable(edp_conveyor
 )
 
 
-target_link_libraries(edp_conveyor kinematicsconveyor edp mrrocpp
+target_link_libraries(edp_conveyor kinematicsconveyor edp hi_rydz mrrocpp
 	${COMMON_LIBRARIES}
 	)
 	

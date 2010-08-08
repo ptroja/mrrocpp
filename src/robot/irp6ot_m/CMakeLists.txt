@@ -11,7 +11,7 @@ add_executable(edp_irp6ot_m
 target_link_libraries(
 	edp_irp6ot_m
 	kinematicsirp6ot_m
-	edp ${COMMON_LIBRARIES}
+	edp hi_rydz ${COMMON_LIBRARIES}
 )
 
 if(QNXNTO)

@@ -8,7 +8,7 @@ add_executable(edp_irp6_mechatronika
 	regulator_irp6m.cc
 	sg_irp6m.cc
 )
-target_link_libraries(edp_irp6_mechatronika kinematicsirp6m edp
+target_link_libraries(edp_irp6_mechatronika kinematicsirp6m edp hi_rydz
 	${COMMON_LIBRARIES})
 
 

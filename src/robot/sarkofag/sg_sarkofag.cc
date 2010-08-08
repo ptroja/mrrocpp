@@ -15,7 +15,7 @@
 #include "robot/sarkofag/edp_e_sarkofag.h"
 #include "base/edp/reader.h"
 // Klasa hardware_interface.
-#include "robot/sarkofag/hi_sarkofag.h"
+#include "robot/hi_moxa/hi_moxa.h"
 // Klasa servo_buffer.
 #include "robot/sarkofag/sg_sarkofag.h"
 #include "robot/sarkofag/regulator_sarkofag.h"
@@ -31,9 +31,9 @@ servo_buffer::servo_buffer(effector &_master) :
 
 	synchro_axis_order[0] = 0;
 
-	axe_inc_per_revolution[0] = SARKOFAG_AXIS_7_INC_PER_REVOLUTION;
-	synchro_step_coarse[0] = SARKOFAG_AXIS_7_SYNCHRO_STEP_COARSE;
-	synchro_step_fine[0] = SARKOFAG_AXIS_7_SYNCHRO_STEP_FINE;
+	axe_inc_per_revolution[0] = SARKOFAG_INC_PER_REVOLUTION;
+	synchro_step_coarse[0] = SARKOFAG_SYNCHRO_STEP_COARSE;
+	synchro_step_fine[0] = SARKOFAG_SYNCHRO_STEP_FINE;
 
 	thread_id = new boost::thread(boost::bind(&servo_buffer::operator(), this));
 }
@@ -43,10 +43,9 @@ void servo_buffer::load_hardware_interface(void)
 {
 
 	// tablica pradow maksymalnych dla poszczegolnych osi
-	int max_current[SARKOFAG_NUM_OF_SERVOS] = { SARKOFAG_AXIS_7_MAX_CURRENT };
+	//	int max_current[SARKOFAG_NUM_OF_SERVOS] = { SARKOFAG_AXIS_7_MAX_CURRENT };
 
-	hi
-			= new hardware_interface(master, IRQ_REAL, INT_FREC_DIVIDER, HI_RYDZ_INTR_TIMEOUT_HIGH, FIRST_SERVO_PTR, INTERRUPT_GENERATOR_SERVO_PTR, ISA_CARD_OFFSET, max_current);
+	hi = new common::HI_moxa(master);
 	hi->init();
 
 	// utworzenie tablicy regulatorow

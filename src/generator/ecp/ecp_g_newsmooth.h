@@ -26,6 +26,11 @@ namespace generator {
 
 /**
  * Smooth trajectory generator which has an ability to calculate every trajectory (posiada moce super krowy).
+ *
+ * Usage:
+ * Load one or more of trajectory poses using one of the load methods. Velocities and accelerations are set automatically. Call %calculate_interpolate() method.
+ * If it returns true generator is ready to communicate with the robot. Call the %Move() method. The generator resets itself automatically after
+ * successfull termination of the assumed trajectory, however it is safe to call the %reset() method before the next use of the generator.
  */
 class newsmooth : public multiple_position<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose,
 ecp::common::generator::trajectory_interpolator::bang_bang_interpolator,

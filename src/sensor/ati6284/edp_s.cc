@@ -114,7 +114,7 @@ void ATI6284_force::connect_to_hardware(void)
 		if (ThreadCtl(_NTO_TCTL_IO, NULL) == -1) //!< dostep do sprzetu
 			printf("Unable to connect to card\n");
 
-		bus = acquireBoard(0x10932CA0); //!< funkcja uruchamiaj�ca kart�
+		bus = acquireBoard(0x10932CA0); //!< funkcja uruchamiajca kart
 
 		if (bus == NULL) {
 			printf("Error accessing the PCI device.  Exiting.\n");
@@ -432,7 +432,7 @@ void ATI6284_force::initiate_reading(void)
 {
 	short int no_result = 0; //brak wyniku
 	static short int show = 0; //wyswietl
-	float force_torque[6]; //wektor z si�ami i napi�ciami
+	float force_torque[6]; //wektor z siami i napiciami
 	force_readring_status_t sensor_status = EDP_FORCE_SENSOR_READING_CORRECT;
 
 	if (!is_sensor_configured)
@@ -547,7 +547,7 @@ void ATI6284_force::initiate_reading(void)
 			}
 		}
 		//!< ok
-		from_vsp.vsp_report = lib::VSP_REPLY_OK;
+		from_vsp.vsp_report = lib::sensor::VSP_REPLY_OK;
 		//!< tutaj: czujnik skalibrowany, odczyt dokonany, przepisanie wszystkich pol
 		//!< przepisanie do bufora komunikacyjnego
 #if WYNIKI_MRROCPP

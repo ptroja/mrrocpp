@@ -22,11 +22,11 @@ namespace generator {
  *  @{
  */
 
-class simple_visual_servo_manager: public mrrocpp::ecp::common::generator::visual_servo_manager
+class simple_visual_servo_manager : public visual_servo_manager
 {
 public:
 			simple_visual_servo_manager(mrrocpp::ecp::common::task::task & ecp_task, const char * section_name, boost::shared_ptr <
-					visual_servo> vs);
+					mrrocpp::ecp::servovision::visual_servo> vs);
 	virtual ~simple_visual_servo_manager();
 protected:
 	virtual lib::Homog_matrix get_aggregated_position_change();
