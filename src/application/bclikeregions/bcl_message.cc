@@ -14,8 +14,6 @@ namespace ecp {
 
 namespace common {
 
-#define MP_2_ECP_STRING_SIZE 300
-#define VEC_POS 27
 
 bcl_message::bcl_message(){
 }
@@ -77,36 +75,69 @@ std::vector<double> bcl_message::stringToTrajectory(char* str){
 	return ret;
 }
 
-char* bcl_message::fradiaOrderToString(task::regions& reg, std::vector<double> vec){
+void bcl_message::addFradiaOrderToVector(task::fradia_regions& reg, std::vector<task::mrrocpp_regions>& vec){
+
+	task::mrrocpp_regions m_reg;
+
+	switch(reg.num_found){
+		case 3:
+			m_reg.x = reg.x_k2;
+			m_reg.y = reg.y_k2;
+			m_reg.w = reg.w_k2;
+			m_reg.h = reg.h_k2;
+			m_reg.a = reg.a_k2;
+			vec.push_back(m_reg);
+		case 2:
+			m_reg.x = reg.x_k1;
+			m_reg.y = reg.y_k1;
+			m_reg.w = reg.w_k1;
+			m_reg.h = reg.h_k1;
+			m_reg.a = reg.a_k1;
+			vec.push_back(m_reg);
+		case 1:
+			m_reg.x = reg.x_k0;
+			m_reg.y = reg.y_k0;
+			m_reg.w = reg.w_k0;
+			m_reg.h = reg.h_k0;
+			m_reg.a = reg.a_k0;
+			vec.push_back(m_reg);
+		default:
+			return;
+	}
+
+
+}
+
+char* bcl_message::fradiaOrderToString(task::fradia_regions& reg, std::vector<double> vec){
 	char* ret = new char[MP_2_ECP_STRING_SIZE];
 
 	double *tab = reinterpret_cast<double*>(ret);
 
 	switch(reg.num_found){
-		case 5:
-			tab[21] = reg.x_k4;
-			tab[22] = reg.y_k4;
-			tab[23] = reg.w_k4;
-			tab[24] = reg.h_k4;
-			tab[25] = reg.a_k0;
-		case 4:
-			tab[16] = reg.x_k3;
-			tab[17] = reg.y_k3;
-			tab[18] = reg.w_k3;
-			tab[19] = reg.h_k3;
-			tab[20] = reg.a_k0;
+//		case 5:
+//			tab[21] = reg.x_k4;
+//			tab[22] = reg.y_k4;
+//			tab[23] = reg.w_k4;
+//			tab[24] = reg.h_k4;
+//			tab[25] = reg.a_k3;
+//		case 4:
+//			tab[16] = reg.x_k3;
+//			tab[17] = reg.y_k3;
+//			tab[18] = reg.w_k3;
+//			tab[19] = reg.h_k3;
+//			tab[20] = reg.a_k3;
 		case 3:
 			tab[11] = reg.x_k2;
 			tab[12] = reg.y_k2;
 			tab[13] = reg.w_k2;
 			tab[14] = reg.h_k2;
-			tab[15] = reg.a_k0;
+			tab[15] = reg.a_k2;
 		case 2:
 			tab[6] = reg.x_k1;
 			tab[7] = reg.y_k1;
 			tab[8] = reg.w_k1;
 			tab[9] = reg.h_k1;
-			tab[10] = reg.a_k0;
+			tab[10] = reg.a_k1;
 		case 1:
 			tab[1] = reg.x_k0;
 			tab[2] = reg.y_k0;
@@ -131,35 +162,35 @@ char* bcl_message::fradiaOrderToString(task::regions& reg, std::vector<double> v
 	return ret;
 }
 
-std::vector<double> bcl_message::stringToFradiaOrder(char* str, task::regions reg){
+std::vector<double> bcl_message::stringToFradiaOrder(char* str, task::fradia_regions reg){
 	std::vector<double> ret;
 	double *tab = reinterpret_cast<double*>(str);
 
 	switch((int)tab[0]){
-		case 5:
-			reg.x_k4 = tab[21];
-			reg.y_k4 = tab[22];
-			reg.w_k4 = tab[23];
-			reg.h_k4 = tab[24];
-			reg.a_k0 = tab[25];
-		case 4:
-			reg.x_k3 = tab[16];
-			reg.y_k3 = tab[17];
-			reg.w_k3 = tab[18];
-			reg.h_k3 = tab[19];
-			reg.a_k0 = tab[20];
+//		case 5:
+//			reg.x_k4 = tab[21];
+//			reg.y_k4 = tab[22];
+//			reg.w_k4 = tab[23];
+//			reg.h_k4 = tab[24];
+//			reg.a_k4 = tab[25];
+//		case 4:
+//			reg.x_k3 = tab[16];
+//			reg.y_k3 = tab[17];
+//			reg.w_k3 = tab[18];
+//			reg.h_k3 = tab[19];
+//			reg.a_k3 = tab[20];
 		case 3:
 			reg.x_k2 = tab[11];
 			reg.y_k2 = tab[12];
 			reg.w_k2 = tab[13];
 			reg.h_k2 = tab[14];
-			reg.a_k0 = tab[15];
+			reg.a_k2 = tab[15];
 		case 2:
 			reg.x_k1 = tab[6];
 			reg.y_k1 = tab[7];
 			reg.w_k1 = tab[8];
 			reg.h_k1 = tab[9];
-			reg.a_k0 = tab[10];
+			reg.a_k1 = tab[10];
 		case 1:
 			reg.x_k0 = tab[1];
 			reg.y_k0 = tab[2];

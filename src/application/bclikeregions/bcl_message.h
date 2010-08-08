@@ -33,9 +33,11 @@ public:
 
 	std::vector<double> stringToTrajectory(char *str);
 
-	char* fradiaOrderToString(task::regions& reg, std::vector<double> vec);
+	char* fradiaOrderToString(task::fradia_regions& reg, std::vector<double> vec);
 
-	std::vector<double> stringToFradiaOrder(char* str, task::regions reg);
+	std::vector<double> stringToFradiaOrder(char* str, task::fradia_regions reg);
+
+	void addFradiaOrderToVector(task::fradia_regions& reg, std::vector<task::mrrocpp_regions>& vec);
 };
 
 }

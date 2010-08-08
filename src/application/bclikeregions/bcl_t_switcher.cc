@@ -21,25 +21,12 @@ bcl_t_switcher::bcl_t_switcher(lib::configurator &_config):
 
 //	Powolanie do zycia sensora fradii
 //	vsp_fradia = boost::shared_ptr<bcl_fradia_sensor>(new bcl_fradia_sensor(this->config, "[vsp_fradia_sensor]"));
-	vsp_fradia = new bcl_fradia_sensor(this->config, "[vsp_fradia_sensor]");
-	sensor_m[ecp_mp::sensor::SENSOR_CVFRADIA] = vsp_fradia;
-	sensor_m[ecp_mp::sensor::SENSOR_CVFRADIA]->configure_sensor();
+//	vsp_fradia = new bcl_fradia_sensor(this->config, "[vsp_fradia_sensor]");
+//	sensor_m[ecp_mp::sensor::SENSOR_CVFRADIA] = vsp_fradia;
+//	sensor_m[ecp_mp::sensor::SENSOR_CVFRADIA]->configure_sensor();
 
 #ifdef IRP6_OT
 	ecp_m_robot = new ecp::irp6ot_m::robot(*this);
-
-#ifdef JOINT
-	bc_smooth = shared_ptr<generator::newsmooth> (new generator::newsmooth(*this, lib::ECP_JOINT, 8));
-#endif//JOINT
-
-#ifdef EULER
-	bc_smooth = shared_ptr<generator::newsmooth> (new generator::newsmooth(*this, lib::ECP_XYZ_EULER_ZYZ, 8));
-#endif//EULER
-
-#endif//IRP6_OT
-
-#ifdef IRP6_P
-	ecp_m_robot = new ecp::irp6p_m::robot(*this);
 
 #ifdef JOINT
 	bc_smooth = shared_ptr<generator::newsmooth> (new generator::newsmooth(*this, lib::ECP_JOINT, 7));
@@ -49,15 +36,28 @@ bcl_t_switcher::bcl_t_switcher(lib::configurator &_config):
 	bc_smooth = shared_ptr<generator::newsmooth> (new generator::newsmooth(*this, lib::ECP_XYZ_EULER_ZYZ, 7));
 #endif//EULER
 
+#endif//IRP6_OT
+
+#ifdef IRP6_P
+	ecp_m_robot = new ecp::irp6p_m::robot(*this);
+
+#ifdef JOINT
+	bc_smooth = shared_ptr<generator::newsmooth> (new generator::newsmooth(*this, lib::ECP_JOINT, 6));
+#endif//JOINT
+
+#ifdef EULER
+	bc_smooth = shared_ptr<generator::newsmooth> (new generator::newsmooth(*this, lib::ECP_XYZ_EULER_ZYZ, 6));
+#endif//EULER
+
 #endif//IRP6_P
 
 //	bc_smooth = shared_ptr<generator::bclike_smooth> (new generator::bclike_smooth(*this, vsp_fradia));
 	bc_smooth->set_absolute();
 
 	//dodanie subtaskow do wykonywania
-	ecp_sub_task* ecpst;
-	ecpst = new ecp_st_smooth_move(*this);
-	subtask_m[ecp_mp::task::ECP_ST_SMOOTH_MOVE] = ecpst;
+//	ecp_sub_task* ecpst;
+//	ecpst = new ecp_st_smooth_move(*this);
+//	subtask_m[ecp_mp::task::ECP_ST_SMOOTH_MOVE] = ecpst;
 
 }
 
@@ -94,6 +94,7 @@ void bcl_t_switcher::mp_2_ecp_next_state_string_handler(void){
 		}
 		#ifdef JOINT
 			bc_smooth->load_absolute_joint_trajectory_pose(vec);
+//			bc_smooth->set_debug(true);
 		#endif//JOINT
 
 		#ifdef EULER

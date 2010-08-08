@@ -24,6 +24,7 @@ namespace common {
 
 namespace task {
 
+
 class bcl_t_switcher;
 
 class ecp_st_smooth_move : public ecp_sub_task {

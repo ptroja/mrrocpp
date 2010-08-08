@@ -12,6 +12,17 @@
 
 #include "../servovision/visual_servo_types.h"
 
+#define SINGLE_MOVE
+//#define TEST_MODE
+
+//#define IRP6_OT
+#define IRP6_P
+//#define JOINT
+#define EULER
+
+#define MP_2_ECP_STRING_SIZE 300
+#define VEC_POS 27
+
 namespace mrrocpp {
 
 namespace ecp {
@@ -38,20 +49,29 @@ typedef struct {
 	double w_k2;
 	double h_k2;
 	double a_k2;
-	double x_k3;
-	double y_k3;
-	double w_k3;
-	double h_k3;
-	double a_k3;
-	double x_k4;
-	double y_k4;
-	double w_k4;
-	double h_k4;
-	double a_k4;
-} regions;
+//	double x_k3;
+//	double y_k3;
+//	double w_k3;
+//	double h_k3;
+//	double a_k3;
+//	double x_k4;
+//	double y_k4;
+//	double w_k4;
+//	double h_k4;
+//	double a_k4;
+} fradia_regions;
+
+typedef struct {
+	double x;
+	double y;
+	double w;
+	double h;
+	double a;
+
+} mrrocpp_regions;
 
 
-typedef ecp_mp::sensor::fradia_sensor<lib::empty_t, regions> bcl_fradia_sensor;
+typedef ecp_mp::sensor::fradia_sensor<lib::empty_t, fradia_regions> bcl_fradia_sensor;
 //typedef ecp_mp::sensor::fradia_sensor<visual_servo_types::image_based_configuration, visual_servo_types::image_based_reading> bcl_fradia_sensor;
 
 }

@@ -92,19 +92,35 @@ bool bclike_smooth::next_step(){
 	std::vector<double> vec;
 	vec.assign(the_robot->reply_package.arm.pf_def.arm_coordinates, the_robot->reply_package.arm.pf_def.arm_coordinates + 7);
 
-	for(std::vector<double>::iterator it = vec.begin(); it != vec.end(); ++it)
-		std::cout << *it << std::endl;
+	if(reading.code_found)
+		translateToRobotPosition(reading);
+
+#ifdef SINGLE_MOVE //robot's move to the end, and then found codes are sent to MP
+
+	msg.addFradiaOrderToVector(reading, readings);
+
+	if(newsmooth::next_step())
+		return true;
+
+//	strcpy(ecp_t.ecp_reply.ecp_2_mp_string, msg.fradiaOrderToString(reading, vec));
+
+	return false;
+
+#else //robot's move stopped each time when code detected
+
 
 	if(reading.code_found){
 		strcpy(ecp_t.ecp_reply.ecp_2_mp_string, msg.fradiaOrderToString(reading, vec));
+		return false;
 	}
-//	std::cout << "FR DATA RECV x = " << reading.x << " y = " << reading.y << std::endl;
 
-//	bcl_ecp.robot_m[lib::ROBOT_IRP6OT_M]->ecp_replay_package.ecp_2_mp_string
+	return newsmooth::next_step();
 
-	return true;
+#endif
 
-//	return newsmooth::next_step();
+}
+
+void bclike_smooth::translateToRobotPosition(task::fradia_regions& regs){
 
 }
 

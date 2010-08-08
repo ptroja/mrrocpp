@@ -32,26 +32,21 @@ namespace common {
 
 namespace task {
 
-//#define IRP6_OT
-#define IRP6_P
-//#define JOINT
-#define EULER
-
 #ifdef IRP6_OT
-#define VEC_SIZE 8
+#define VEC_SIZE 7
 #ifdef JOINT
-	const double left[] = { 0.0, 0.5, -1.87, 0.100, -0.040, 4.627, -1.57, 0.0};
-	const double right[] = { 0.0, -0.55, -1.37, 0.100, -0.040, 4.627, -1.57, 0.0};
-	const double start[] = { 0.0, 0.0, -1.37, 0.100, -0.040, 4.627, 0.0, 0.0};
+	const double left[] = { 0.0, 0.5, -1.87, 0.100, -0.040, 4.627, -1.57};
+	const double right[] = { 0.0, -0.55, -1.37, 0.100, -0.040, 4.627, -1.57};
+	const double start[] = { 0.0, 0.0, -1.37, 0.100, -0.040, 4.627, 0.0};
 #endif//JOINT
 #endif//IRP6_OT
 
 #ifdef IRP6_P
 #define VEC_SIZE 7
 #ifdef JOINT
-	const double left[] = { 0.5, -1.87, 0.100, -0.040, 4.627, -1.57, 0.0};
-	const double right[] = {-0.55, -1.37, 0.100, -0.040, 4.627, -1.57, 0.0};
-	const double start[] = {0.0, -1.37, 0.100, -0.040, 4.627, 0.0, 0.0};
+	const double left[] = { 0.5, -1.87, 0.100, -0.040, 4.627, -1.57};
+	const double right[] = {-0.55, -1.37, 0.100, -0.040, 4.627, -1.57};
+	const double start[] = {0.0, -1.37, 0.100, -0.040, 4.627, 0.0};
 #endif //JOINT
 #endif//IRP6_P
 
@@ -79,8 +74,8 @@ public:
 //	shared_ptr<bcl_fradia_sensor> vsp_fradia;
 	bcl_fradia_sensor* vsp_fradia;
 
-	void addReading(regions& reg);
-	regions getReading();
+	void addReading(mrrocpp_regions& reg);
+	mrrocpp_regions getReading();
 
 private:
 //    shared_ptr<generator::smooth> bc_smooth;
@@ -93,7 +88,7 @@ private:
 
 	std::vector<double> vec;
 
-	std::vector<regions> reading;
+	std::vector<mrrocpp_regions> reading;
 
 	bcl_message msg;
 

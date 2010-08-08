@@ -20,6 +20,7 @@ namespace mp {
 
 namespace task {
 
+
 class bclike_mp: public task {
 public:
 	bclike_mp(lib::configurator &_config);

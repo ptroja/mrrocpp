@@ -41,13 +41,16 @@ public:
 	virtual bool first_step();
 
 private:
-	task::regions reading;
+	task::fradia_regions reading;
+	std::vector<task::mrrocpp_regions> readings;
 	bool no_fradia;
 	task::bcl_t_switcher & bcl_ecp;
 
 	bcl_message msg;
 
 	task::bcl_fradia_sensor* vsp_fradia;
+
+	void translateToRobotPosition(task::fradia_regions& regs);
 
 };
 
