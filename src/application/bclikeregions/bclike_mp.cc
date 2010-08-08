@@ -45,6 +45,7 @@ void bclike_mp::main_task_algorithm(void){
 	tab = msg.trajectoryToString(vec);
 
 	set_next_ecps_state (ecp_mp::task::BCL_MOTION_DIR_STR, (int)mrrocpp::ecp::common::task::START, tab, 300, 1, actual_robot.c_str());
+	sr_ecp_msg->message("MOVE left");
 	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, actual_robot.c_str(), actual_robot.c_str());
 
 
@@ -95,11 +96,38 @@ void bclike_mp::main_task_algorithm(void){
 	tab = msg.trajectoryToString(vec);
 
 	set_next_ecps_state (ecp_mp::task::ECP_ST_SMOOTH_MOVE, (int)mrrocpp::ecp::common::task::START, tab, 300, 1, actual_robot.c_str());
+	sr_ecp_msg->message("MOVE right");
 	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, actual_robot.c_str(), actual_robot.c_str());
 
-	std::cout << "REPLY PKG " << robot_m[lib::ROBOT_IRP6P_M]->ecp_reply_package.ecp_2_mp_string << std::endl;
+	while(!strcmp(robot_m[lib::ROBOT_IRP6P_M]->ecp_reply_package.ecp_2_mp_string, "KONIEC")){
+			//odczyt + wywołanie subtaska Marcina
+	}
 
+#else
 
+	bool run = true;
+
+	vec.clear();
+	vec.assign(ecp::common::task::right, ecp::common::task::right + VEC_SIZE);
+	tab = msg.trajectoryToString(vec);
+
+	while(run){
+
+		set_next_ecps_state (ecp_mp::task::ECP_ST_SMOOTH_MOVE, (int)mrrocpp::ecp::common::task::START, tab, 300, 1, actual_robot.c_str());
+		run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, actual_robot.c_str(), actual_robot.c_str());
+
+		if(!strcmp(robot_m[lib::ROBOT_IRP6P_M]->ecp_reply_package.ecp_2_mp_string, "KONIEC")){
+			run = false;
+		}else{
+
+			pos = msg.stringToFradiaOrder(robot_m[lib::ROBOT_IRP6P_M]->ecp_reply_package.ecp_2_mp_string, reg);
+
+			for(int i = 0; i < reg.num_found; ++i){
+				//wywołać Marcina subtask
+			}
+		}
+
+	}
 
 #endif
 

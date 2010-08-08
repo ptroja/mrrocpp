@@ -11,6 +11,7 @@
 #include "base/mp/mp.h"
 #include "ecp_mp_bclike.h"
 #include "bcl_message.h"
+#include "bcl_types.h"
 
 #include "ecp_mp_st_smooth_move.h"
 
@@ -30,6 +31,8 @@ public:
 
 private:
 	ecp::common::bcl_message msg;
+	ecp::common::task::fradia_regions reg;
+	std::vector<double> pos;
 
 };
 

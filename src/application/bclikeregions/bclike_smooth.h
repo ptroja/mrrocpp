@@ -43,6 +43,7 @@ public:
 private:
 	task::fradia_regions reading;
 	std::vector<task::mrrocpp_regions> readings;
+	int num_send;
 	bool no_fradia;
 	task::bcl_t_switcher & bcl_ecp;
 

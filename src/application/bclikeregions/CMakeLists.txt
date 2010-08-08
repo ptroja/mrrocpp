@@ -3,8 +3,7 @@ add_executable(ecp_bclikeregions
     bclikeregions_gen.cc
     bclike_smooth.cc
     bcl_message.cc
-    ../servovision/position_constraint.cc    
-    ../servovision/cubic_constraint.cc
+
 )
 
 add_executable(ecp_bclike_mp

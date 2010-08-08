@@ -21,9 +21,9 @@ bcl_t_switcher::bcl_t_switcher(lib::configurator &_config):
 
 //	Powolanie do zycia sensora fradii
 //	vsp_fradia = boost::shared_ptr<bcl_fradia_sensor>(new bcl_fradia_sensor(this->config, "[vsp_fradia_sensor]"));
-//	vsp_fradia = new bcl_fradia_sensor(this->config, "[vsp_fradia_sensor]");
-//	sensor_m[ecp_mp::sensor::SENSOR_CVFRADIA] = vsp_fradia;
-//	sensor_m[ecp_mp::sensor::SENSOR_CVFRADIA]->configure_sensor();
+	vsp_fradia = new bcl_fradia_sensor(this->config, "[vsp_fradia_sensor]");
+	sensor_m[ecp_mp::sensor::SENSOR_FRADIA] = vsp_fradia;
+	sensor_m[ecp_mp::sensor::SENSOR_FRADIA]->configure_sensor();
 
 #ifdef IRP6_OT
 	ecp_m_robot = new ecp::irp6ot_m::robot(*this);
@@ -55,9 +55,9 @@ bcl_t_switcher::bcl_t_switcher(lib::configurator &_config):
 	bc_smooth->set_absolute();
 
 	//dodanie subtaskow do wykonywania
-//	ecp_sub_task* ecpst;
-//	ecpst = new ecp_st_smooth_move(*this);
-//	subtask_m[ecp_mp::task::ECP_ST_SMOOTH_MOVE] = ecpst;
+	ecp_sub_task* ecpst;
+	ecpst = new ecp_st_smooth_move(*this);
+	subtask_m[ecp_mp::task::ECP_ST_SMOOTH_MOVE] = ecpst;
 
 }
 

@@ -20,27 +20,23 @@ namespace generator {
 
 bclike_smooth::bclike_smooth(mrrocpp::ecp::common::task::task & ecp_task) :
 		common::generator::newsmooth(ecp_task, lib::ECP_JOINT, 7),
-		bcl_ecp((task::bcl_t_switcher &)ecp_t){
-//		vsp_fradia(vsp_fradia){
+		bcl_ecp((task::bcl_t_switcher &)ecp_t), num_send(0){
 
-
-//	vsp_fradia = boost::shared_ptr<task::bcl_fradia_sensor>();//bcl.get_vsp_fradia();
 	vsp_fradia = NULL;
 	no_fradia = true;
 }
 
 bclike_smooth::bclike_smooth(mrrocpp::ecp::common::task::bcl_t_switcher & task):
 				common::generator::newsmooth((mrrocpp::ecp::common::task::task &)task, lib::ECP_JOINT, 7),
-				bcl_ecp((task::bcl_t_switcher &)ecp_t){
-//				vsp_fradia(vsp_fradia){
+				bcl_ecp((task::bcl_t_switcher &)ecp_t), num_send(0){
+
 	std::cout << "FRADIA VERSION" << std::endl;
 	no_fradia = false;
-//	vsp_fradia = boost::shared_ptr<task::bcl_fradia_sensor>(bcl_ecp.get_vsp_fradia());
 	vsp_fradia = bcl_ecp.get_vsp_fradia();
 
 
 	if(vsp_fradia != NULL){
-		sensor_m[ecp_mp::sensor::SENSOR_CVFRADIA] = vsp_fradia;//.get();
+		sensor_m[ecp_mp::sensor::SENSOR_FRADIA] = vsp_fradia;
 		vsp_fradia->base_period = 1;
 
 		std::cout << "SENSOR ADD no vsp constructor" << std::endl;
@@ -48,16 +44,15 @@ bclike_smooth::bclike_smooth(mrrocpp::ecp::common::task::bcl_t_switcher & task):
 
 }
 
-//bclike_smooth::bclike_smooth(mrrocpp::ecp::common::task::bclikeregions_task & task, shared_ptr<task::bcl_fradia_sensor> fr):
 bclike_smooth::bclike_smooth(mrrocpp::ecp::common::task::bcl_t_switcher & task, task::bcl_fradia_sensor* fr):
 						common::generator::newsmooth((mrrocpp::ecp::common::task::task &)task, lib::ECP_JOINT, 7),
 						bcl_ecp((task::bcl_t_switcher &)ecp_t),
-						vsp_fradia(fr){
+						vsp_fradia(fr), num_send(0){
 
 	no_fradia = false;
 
 	if(vsp_fradia != NULL){
-		sensor_m[ecp_mp::sensor::SENSOR_CVFRADIA] = vsp_fradia;//.get();
+		sensor_m[ecp_mp::sensor::SENSOR_FRADIA] = vsp_fradia;//.get();
 		vsp_fradia->base_period = 1;
 
 		std::cout << "SENSOR ADD vsp constructor" << std::endl;
@@ -102,7 +97,11 @@ bool bclike_smooth::next_step(){
 	if(newsmooth::next_step())
 		return true;
 
-//	strcpy(ecp_t.ecp_reply.ecp_2_mp_string, msg.fradiaOrderToString(reading, vec));
+	if(num_send < readings.size())
+		strcpy(ecp_t.ecp_reply.ecp_2_mp_string, msg.regionsVectorToString(readings, num_send));
+	else
+		strcpy(ecp_t.ecp_reply.ecp_2_mp_string, "KONIEC");
+
 
 	return false;
 
@@ -114,7 +113,12 @@ bool bclike_smooth::next_step(){
 		return false;
 	}
 
-	return newsmooth::next_step();
+	if(newsmooth::next_step())
+		return true;
+	else{
+		strcpy(ecp_t.ecp_reply.ecp_2_mp_string, "KONIEC");
+		return false;
+	}
 
 #endif
 

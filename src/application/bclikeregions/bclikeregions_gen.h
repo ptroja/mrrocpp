@@ -42,8 +42,6 @@ private:
 	bool first_pos_saved;
 	bool on_position;
 
-	boost::shared_ptr <position_constraint> cubic_constr;
-
 	lib::Homog_matrix first_pos;
 	lib::Homog_matrix actual_pos;
 	lib::Homog_matrix prev_pos;

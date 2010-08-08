@@ -212,6 +212,30 @@ std::vector<double> bcl_message::stringToFradiaOrder(char* str, task::fradia_reg
 	return ret;
 }
 
+char* bcl_message::regionsVectorToString(std::vector<task::mrrocpp_regions> readings, int& num){
+	char* ret = new char[MP_2_ECP_STRING_SIZE];
+	double *tab = reinterpret_cast<double*>(ret);
+	int cnt = 0;
+
+	std::vector<task::mrrocpp_regions>::iterator it = readings.begin();
+	it += num;
+
+	for(; it != readings.end() && (5*cnt + 1 < MP_2_ECP_STRING_SIZE); ++it){
+		tab[5 * cnt + 1] = (*it).x;
+		tab[5 * cnt + 2] = (*it).y;
+		tab[5 * cnt + 3] = (*it).w;
+		tab[5 * cnt + 4] = (*it).h;
+		tab[5 * cnt + 5] = (*it).a;
+		cnt++;
+	}
+
+	tab[0] = cnt;
+
+	num += 5 * cnt + 1;
+
+	return ret;
+}
+
 }
 
 }

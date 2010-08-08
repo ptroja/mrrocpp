@@ -42,7 +42,6 @@ bclikeregions_gen::bclikeregions_gen(mrrocpp::ecp::common::task::task & ecp_task
 		p2(1, 0) = 0.3;
 		p2(2, 0) = 0.3;
 
-	cubic_constr = boost::shared_ptr <position_constraint> (new cubic_constraint(p1, p2));
 
 }
 
@@ -145,9 +144,9 @@ bool bclikeregions_gen::next_step(){
 //		next_pos = actual_pos * next_pos;
 //	}
 
-	if(!cubic_constr->is_position_ok(actual_pos))
+//	if(!cubic_constr->is_position_ok(actual_pos))
 //		return false
-		angle *= -1;
+//		angle *= -1;
 
 	countTranslationMatrix(next_pos, 0.0, angle, 0.0);
 

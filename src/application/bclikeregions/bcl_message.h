@@ -38,6 +38,8 @@ public:
 	std::vector<double> stringToFradiaOrder(char* str, task::fradia_regions reg);
 
 	void addFradiaOrderToVector(task::fradia_regions& reg, std::vector<task::mrrocpp_regions>& vec);
+
+	char* regionsVectorToString(std::vector<task::mrrocpp_regions> readings, int& num);
 };
 
 }
