@@ -66,19 +66,19 @@ void kinematic_model_bird_hand::check_joints(const lib::JointArray & q)
 	else if (q[5] > params.upper_limit_joint[5])
 		throw NonFatal_error_2(BEYOND_UPPER_THETA5_LIMIT);
 
-//	if (isnan(q[6]))
-//		throw NonFatal_error_2(NOT_A_NUMBER_JOINT_VALUE_THETA6);
-//	if (q[6] < params.lower_limit_joint[6])
-//		throw NonFatal_error_2(BEYOND_LOWER_THETA6_LIMIT);
-//	else if (q[6] > params.upper_limit_joint[6])
-//		throw NonFatal_error_2(BEYOND_UPPER_THETA6_LIMIT);
-//
-//	if (isnan(q[7]))
-//		throw NonFatal_error_2(NOT_A_NUMBER_JOINT_VALUE_THETA7);
-//	if (q[7] < params.lower_limit_joint[7])
-//		throw NonFatal_error_2(BEYOND_LOWER_THETA7_LIMIT);
-//	else if (q[7] > params.upper_limit_joint[7])
-//		throw NonFatal_error_2(BEYOND_UPPER_THETA7_LIMIT);
+	//	if (isnan(q[6]))
+	//		throw NonFatal_error_2(NOT_A_NUMBER_JOINT_VALUE_THETA6);
+	//	if (q[6] < params.lower_limit_joint[6])
+	//		throw NonFatal_error_2(BEYOND_LOWER_THETA6_LIMIT);
+	//	else if (q[6] > params.upper_limit_joint[6])
+	//		throw NonFatal_error_2(BEYOND_UPPER_THETA6_LIMIT);
+	//
+	//	if (isnan(q[7]))
+	//		throw NonFatal_error_2(NOT_A_NUMBER_JOINT_VALUE_THETA7);
+	//	if (q[7] < params.lower_limit_joint[7])
+	//		throw NonFatal_error_2(BEYOND_LOWER_THETA7_LIMIT);
+	//	else if (q[7] > params.upper_limit_joint[7])
+	//		throw NonFatal_error_2(BEYOND_UPPER_THETA7_LIMIT);
 }
 
 void kinematic_model_bird_hand::i2mp_transform(lib::MotorArray & local_desired_motor_pos_new, lib::JointArray & local_desired_joints)
@@ -92,10 +92,10 @@ void kinematic_model_bird_hand::i2mp_transform(lib::MotorArray & local_desired_m
 void kinematic_model_bird_hand::i2mp_transform_synch(lib::MotorArray & local_desired_motor_pos_new, lib::JointArray & local_desired_joints)
 {
 
-//    for (int i=0; i<8; ++i){
-//          printf("[info] local_desired_joints[%d]: %f \n", i, local_desired_joints[i]);
-//          fflush(stdout);
-//    }
+	//    for (int i=0; i<8; ++i){
+	//          printf("[info] local_desired_joints[%d]: %f \n", i, local_desired_joints[i]);
+	//          fflush(stdout);
+	//    }
 	check_joints(local_desired_joints);
 
 	for (int i = 0; i < 8; ++i)
@@ -117,11 +117,11 @@ void kinematic_model_bird_hand::mp2i_transform_synch(const lib::MotorArray & loc
 	for (int i = 0; i < 8; ++i)
 		local_current_joints[i] = local_current_motor_pos[i] / params.gear[i] - params.synchro_joint_position[i];
 
-//    for (int i=0; i<8; ++i){
-//          printf("[info] local_current_joints[%d]: %f \n", i, local_current_joints[i]);
-//          fflush(stdout);
-//    }
-	check_joints(local_current_joints);
+	//    for (int i=0; i<8; ++i){
+	//          printf("[info] local_current_joints[%d]: %f \n", i, local_current_joints[i]);
+	//          fflush(stdout);
+	//    }
+	//check_joints(local_current_joints);
 
 }
 

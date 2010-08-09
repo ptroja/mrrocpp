@@ -29,10 +29,10 @@ void force::operator()(void)
 		switch (e.error_no)
 		{
 			case SENSOR_NOT_CONFIGURED:
-				from_vsp.vsp_report = lib::VSP_SENSOR_NOT_CONFIGURED;
+				from_vsp.vsp_report = lib::sensor::VSP_SENSOR_NOT_CONFIGURED;
 				break;
 			case READING_NOT_READY:
-				from_vsp.vsp_report = lib::VSP_READING_NOT_READY;
+				from_vsp.vsp_report = lib::sensor::VSP_READING_NOT_READY;
 				break;
 		}
 		sr_msg->message(lib::FATAL_ERROR, e.error_no);
@@ -100,10 +100,10 @@ void force::operator()(void)
 			switch (e.error_no)
 			{
 				case SENSOR_NOT_CONFIGURED:
-					from_vsp.vsp_report = lib::VSP_SENSOR_NOT_CONFIGURED;
+					from_vsp.vsp_report = lib::sensor::VSP_SENSOR_NOT_CONFIGURED;
 					break;
 				case READING_NOT_READY:
-					from_vsp.vsp_report = lib::VSP_READING_NOT_READY;
+					from_vsp.vsp_report = lib::sensor::VSP_READING_NOT_READY;
 					break;
 			}
 			sr_msg->message(lib::FATAL_ERROR, e.error_no);

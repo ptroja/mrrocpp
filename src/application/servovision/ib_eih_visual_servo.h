@@ -20,9 +20,7 @@ namespace mrrocpp {
 
 namespace ecp {
 
-namespace common {
-
-namespace generator {
+namespace servovision {
 
 /** @addtogroup servovision
  *  @{
@@ -31,15 +29,17 @@ namespace generator {
 /**
  *
  */
-class ib_eih_visual_servo : public mrrocpp::ecp::common::generator::visual_servo
+class ib_eih_visual_servo : public visual_servo
 {
 public:
 			ib_eih_visual_servo(boost::shared_ptr <visual_servo_regulator> regulator, const std::string & section_name, mrrocpp::lib::configurator& configurator);
 	virtual ~ib_eih_visual_servo();
 
-	virtual lib::Homog_matrix get_position_change(const lib::Homog_matrix& current_position, double dt);
 	virtual boost::shared_ptr <ecp_mp::sensor::sensor_interface> get_vsp_fradia();
 protected:
+	virtual lib::Homog_matrix compute_position_change(const lib::Homog_matrix& current_position, double dt);
+	virtual lib::sensor::VSP_REPORT_t get_sensor_report();
+	virtual bool is_object_visible_in_latest_reading();
 	boost::shared_ptr <ib_fradia_sensor> vsp_fradia;
 
 	lib::Homog_matrix e_T_c_position;
@@ -49,8 +49,6 @@ private:
 /** @} */
 
 }//namespace generator
-
-}
 
 }
 

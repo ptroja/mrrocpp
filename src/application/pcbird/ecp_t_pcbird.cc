@@ -32,10 +32,10 @@ namespace task {
 /*!
  * Initialize task - robot, sensors and generators.
  */
-pcbird::pcbird(lib::configurator &_config) : task(_config)
+pcbird_pos::pcbird_pos(lib::configurator &_config) : task(_config)
 {
 	// Create pcbird sensor - for testing purposes.
-	sensor_m[lib::SENSOR_PCBIRD] = new ecp_mp::sensor::pcbird("[vsp_pcbird]", *this);
+	sensor_m[lib::SENSOR_PCBIRD] = new ecp_mp::sensor::pcbird_pos("[vsp_pcbird]", *this);
 	// Configure sensor.
 	sensor_m[lib::SENSOR_PCBIRD]->configure_sensor();
 
@@ -59,7 +59,7 @@ pcbird::pcbird(lib::configurator &_config) : task(_config)
 /*!
  * Main algorithm loop. Retrieves information from pcbird.
  */
-void pcbird::main_task_algorithm(void)
+void pcbird_pos::main_task_algorithm(void)
 {
 	cvg->Move();
 }
@@ -69,7 +69,7 @@ void pcbird::main_task_algorithm(void)
  */
 task* return_created_ecp_task (lib::configurator &_config)
 {
-	return new pcbird(_config);
+	return new pcbird_pos(_config);
 }
 
 } // namespace task

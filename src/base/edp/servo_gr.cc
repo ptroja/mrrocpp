@@ -18,7 +18,7 @@
 #include "lib/mis_fun.h"
 #include "base/edp/edp.h"
 #include "base/edp/reader.h"
-#include "base/edp/hi_rydz.h"
+#include "base/edp/HardwareInterface.h"
 #include "base/edp/servo_gr.h"
 #include "base/edp/regulator.h"
 
@@ -116,12 +116,12 @@ void servo_buffer::send_to_SERVO_GROUP()
 	}
 #else
 	{
-		boost::lock_guard <boost::mutex> lock(servo_command_mtx);
+		boost::lock_guard < boost::mutex > lock(servo_command_mtx);
 		servo_command_rdy = true;
 	}
 
 	{
-		boost::unique_lock <boost::mutex> lock(sg_reply_mtx);
+		boost::unique_lock < boost::mutex > lock(sg_reply_mtx);
 		while (!sg_reply_rdy) {
 			sg_reply_cond.wait(sg_reply_mtx);
 		}
@@ -297,7 +297,7 @@ bool servo_buffer::get_command(void)
 	new_command_available = true;
 #else
 	{
-		boost::lock_guard <boost::mutex> lock(servo_command_mtx);
+		boost::lock_guard < boost::mutex > lock(servo_command_mtx);
 		if (servo_command_rdy) {
 			command = servo_command;
 			servo_command_rdy = false;
@@ -366,9 +366,7 @@ uint8_t servo_buffer::Move_1_step(void)
 	{
 		boost::mutex::scoped_lock lock(master.rb_obj->reader_mutex);
 
-		struct timespec step_time;
-
-		if (clock_gettime(CLOCK_REALTIME, &step_time) == -1) {
+		if (clock_gettime(CLOCK_REALTIME, &master.rb_obj->step_data.measure_time) == -1) {
 			/*
 			 BOOST_THROW_EXCEPTION(
 			 System_error() <<
@@ -380,7 +378,6 @@ uint8_t servo_buffer::Move_1_step(void)
 		}
 
 		master.rb_obj->step_data.step = master.step_counter;
-		master.rb_obj->step_data.msec = (int) (step_time.tv_nsec / 1000000);
 
 		master.rb_obj->new_data = true;
 		master.rb_obj->cond.notify_one();
@@ -541,7 +538,7 @@ void servo_buffer::reply_to_EDP_MASTER(void)
 	perror(" Reply to EDP_MASTER error");
 #else
 	{
-		boost::lock_guard <boost::mutex> lock(sg_reply_mtx);
+		boost::lock_guard < boost::mutex > lock(sg_reply_mtx);
 
 		sg_reply = servo_data;
 		sg_reply_rdy = true;

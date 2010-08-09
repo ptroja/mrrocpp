@@ -8,7 +8,7 @@
 #ifndef __HI_LOCAL_IRP6OT_M_H
 #define __HI_LOCAL_IRP6OT_M_H
 
-#include "base/edp/hi_rydz.h"
+#include "robot/hi_rydz/hi_rydz.h"
 
 namespace mrrocpp {
 namespace edp {
