@@ -23,7 +23,7 @@ plays a role of such interface, but one should inherit from the template
 
 
 
-@defgroup PCBIRD Sensors: PcBird - Detection of object position and orientation.   
+@defgroup PCBIRD_SENSOR Sensors: PcBird - Detection of object position and orientation.   
 @{
 Ascension pcBIRD is a magnetic tracker with an electronics unit powered by the ISA bus on your personal computer. 
 The pcBIRD is a six degrees-of-freedom measuring device that measures the position and orientation of a small body-mounted sensor.
@@ -37,12 +37,12 @@ In the Robotics Lab it was utilized for:
  - localization of objects for grasping purposes.  
 
 First version of the PcBird VSP (working under the Linux control) was created by B.Bielawski, T.Wlostowski and T.Adamczyk 
-as a project from the ISR (Intelligent Robotic Systems) led by T.Kornuta.
+as a project from the ISR (polish: Inteligentne Systemy Robotyczne, Intelligent Robotic Systems) led by T.Kornuta.
 @}
 
 
 
-@defgroup FRADIA Sensors: FraDIA - Framework for Digital Images Analysis.   
+@defgroup FRADIA_SENSOR Sensors: FraDIA - Framework for Digital Images Analysis.   
 @{
 Most of the historical MRROC++ vision-based applications were written each time from the scratch, thus there was a gap
 for a specialized tool for development of vision subsystems. 

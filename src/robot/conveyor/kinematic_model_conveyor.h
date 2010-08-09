@@ -1,13 +1,12 @@
-// ------------------------------------------------------------------------
-// Proces:		EDP
-// Plik:			kinematic_model_conveyor.h
-// System:	QNX/MRROC++  v. 6.3
-// Opis:		Model kinematyki tasmociogu
-//				- deklaracja klasy
-//
-// Autor:		tkornuta
-// Data:		31.01.2007
-// ------------------------------------------------------------------------
+/*!
+ * @file kinematic_model_conveyor.h
+ * @brief File containing the declaration of the class representing the conveyor kinematic model.
+ *
+ * @author tkornuta
+ * @date 31.01.2007
+ *
+ * @ingroup KINEMATICS,CONVEYOR_KINEMATICS
+ */
 
 #if !defined(_CONVEYOR_KIN_MODEL)
 #define _CONVEYOR_KIN_MODEL
@@ -18,34 +17,60 @@ namespace mrrocpp {
 namespace kinematics {
 namespace conveyor {
 
+/*!
+ * @class model
+ * @brief Class represents the conveyor kinematic model.
+ *
+ * @author tkornuta
+ * @date Jan 04, 2010
+ *
+ * @ingroup KINEMATICS,CONVEYOR_KINEMATICS
+ */
 class model : public common::kinematic_model
 {
 protected:
-  // Polozenie synchronizacji.
-  double synchro_motor_position;
-  // Stosunek polozenia walu silnika do polozenia we wsp. wewn (zewn) w metrach.
-  double motor_to_intext_ratio;
+	//! Synchronization position.
+	double synchro_motor_position;
 
-  // Ustawienie parametrow kinematycznych.
-  virtual void set_kinematic_parameters(void);
+	//! Motor increments to external position (in meters) ratio.
+	double motor_to_intext_ratio;
 
-  // Sprawdzenie ograniczen na polozenia katowe walow silnikow
-  virtual void check_motor_position(const lib::MotorArray & motor_position);
-  // Sprawdzenie ograniczen na wspolrzedne wewnetrzne
-  virtual void check_joints(const lib::JointArray & q);
+	//! Method responsible for kinematic parameters setting.
+	virtual void set_kinematic_parameters(void);
+
+	/**
+	 * @brief Checks whether given motor increments are valid.
+	 * @param motor_position Motor position to be validated.
+	 */
+	virtual void check_motor_position(const lib::MotorArray & motor_position);
+
+	/**
+	 * @brief Checks whether given internal coordinates are valid.
+	 * @param q Joints to be validated.
+	 */
+	virtual void check_joints(const lib::JointArray & q);
 
 public:
-  // Konstruktor.
-  model (void);
+	//! Constructor.
+	model(void);
 
-  // Przeliczenie polozenia walow silnikow na wspolrzedne wewnetrzne.
-  virtual void mp2i_transform(const lib::MotorArray & local_current_motor_pos, lib::JointArray & local_current_joints);
+	/**
+	 * @brief Computes internal coordinates for given the motor increments (position) values.
+	 * @param[in] local_current_motor_pos Motor increments.
+	 * @param[out] local_current_joints Computed joints.
+	 */
+	virtual void
+		mp2i_transform(const lib::MotorArray & local_current_motor_pos, lib::JointArray & local_current_joints);
 
-  // Przeliczenie wspolrzednych wewnetrznych na polozenia walow silnikow.
-  virtual void i2mp_transform(lib::MotorArray & local_desired_motor_pos_new, const lib::JointArray & local_desired_joints);
+	/**
+	 * @brief Computes motor increments from internal coordinates.
+	 * @param[out] local_desired_motor_pos_new Computed motor increment.
+	 * @param[in] local_desired_joints Current joints settings.
+	 */
+	virtual void
+		i2mp_transform(lib::MotorArray & local_desired_motor_pos_new, const lib::JointArray & local_desired_joints);
 
-
-};//: kinematic_model_conveyor;
+};//: kinematic_model_conveyor
 
 } // namespace conveyor
 } // namespace kinematic

@@ -1,96 +1,162 @@
-// ------------------------------------------------------------------------
-// Proces:		EDP
-// Plik:			kinematic_model_irp6ot_with_wrist.h
-// System:	QNX/MRROC++  v. 6.3
-// Opis:		Model kinematyki robota IRp-6 na torze
-//				- deklaracja klasy
-//				- wykorzystanie nowego stopnia swobody  jako czynnego stopnia swobody
-//				- tor jest biernym stopniem swobody.
-//
-// Autor:		tkornuta
-// Data:		31.01.2007
-// ------------------------------------------------------------------------
+/*!
+ * @file kinematic_model_irp6ot_with_wrist.h
+ * @brief File containing the declaration of the model_with_wrist class.
+ *
+ * The model_with_wrist kinematic model utilizes six out of seven IRP-6ot DOF - the track is treated as a passive one.
+ *
+ * @author tkornuta
+ * @date 31.01.2007
+ *
+ * @ingroup KINEMATICS,IRP6OT_KINEMATICS
+ */
+
 
 #if !defined(_IRP6OT_KIN_MODEL_WITH_WRIST)
 #define _IRP6OT_KIN_MODEL_WITH_WRIST
 
-// Definicja klasy kinematic_model.
 #include "base/kinematics/kinematic_model_with_tool.h"
 
 namespace mrrocpp {
 namespace kinematics {
 namespace irp6ot {
 
+/*!
+ * @class model_with_wrist
+ * @brief The kinematic model utilizes six out of seven IRP-6ot DOF - the track is treated as a passive one.
+ *
+ * @author tkornuta
+ * @date 31.01.2007
+ *
+ * @ingroup KINEMATICS,IRP6OT_KINEMATICS
+ */
 class model_with_wrist : public common::kinematic_model_with_tool
 {
 protected:
-  // Dlugosci czlonow
-  double d1;
-  double a2;
-  double a3;
-  double d5;
-  double d6;
-  double d7;
+	//! D-H kinematic parameters - length of 1st segment.
+	double d1;
 
-  // Zmienne opisujace przekladnie dla wszystkich stopni swobody.
-  double gear[8];
-  double theta[8];
+	//! D-H kinematic parameters - length of 2nd segment.
+	double a2;
 
-  // Zmienne uzywane przy obliczeniach zwiazanych z ramieniami dolnym i gornym.
-  double sl123;
-  double mi2;
-  double ni2;
-  double mi3;
-  double ni3;
+	//! D-H kinematic parameters - length of 3rd segment.
+	double a3;
 
-  // Zmienne zwiazane z obliczeniami zwarcia/rozwarcia chwytaka.
-  double dir_a_7;
-  double dir_b_7;
-  double dir_c_7;
-  double inv_a_7;
-  double inv_b_7;
-  double inv_c_7;
-  double inv_d_7;
+	//! D-H kinematic parameters - length of 4th segment.
+	double d5;
 
-  // Zakresy ruchu walow silnikow w radianach.
-  double lower_limit_axis[8];
-  double upper_limit_axis[8];
-  // Zakresy ruchu poszczegolnych stopni swobody (w radianach lub milimetrach).
-  double lower_limit_joint[8];
-  double upper_limit_joint[8];
+	//! D-H kinematic parameters - length of 5th segment.
+	double d6;
 
-  // Polozenia synchronizacji (polozenia walow silnikow).
-  double synchro_motor_position[8];
-  // Polozenia synchronizacji (polozenia we wspolrzednych wewnetrznych).
-  double synchro_joint_position[8];
+	//! D-H kinematic parameters - length of 6th segment.
+	double d7;
 
-  // Ustawienie parametrow kinematycznych.
-  virtual void set_kinematic_parameters(void);
+	//! Table storing gear ratio for all DOF.
+	double gear[8];
+
+	//! Variable storing gear additional rotation for all DOF.
+	double theta[8];
+
+	//! Variable utilized in computations related to upper and lower arm.
+	double sl123;
+	//! Variable utilized in computations related to upper and lower arm.
+	double mi2;
+	//! Variable utilized in computations related to upper and lower arm.
+	double ni2;
+	//! Variable utilized in computations related to upper and lower arm.
+	double mi3;
+	//! Variable utilized in computations related to upper and lower arm.
+	double ni3;
 
 
-  // Sprawdzenie ograniczen na polozenia katowe walow silnikow
-  virtual void check_motor_position(const lib::MotorArray & motor_position);
-  // Sprawdzenie ograniczen na wspolrzedne wewnetrzne
-  virtual void check_joints(const lib::JointArray & q);
+	//! DEPRICATED: Variable related to the computations of the gripper spread (moved to gripper kinematics).
+	double dir_a_7;
+	//! DEPRICATED: Variable related to the computations of the gripper spread (moved to gripper kinematics).
+	double dir_b_7;
+	//! DEPRICATED: Variable related to the computations of the gripper spread (moved to gripper kinematics).
+	double dir_c_7;
+	//! DEPRICATED: Variable related to the computations of the gripper spread (moved to gripper kinematics).
+	double inv_a_7;
+	//! DEPRICATED: Variable related to the computations of the gripper spread (moved to gripper kinematics).
+	double inv_b_7;
+	//! DEPRICATED: Variable related to the computations of the gripper spread (moved to gripper kinematics).
+	double inv_c_7;
+	//! DEPRICATED: Variable related to the computations of the gripper spread (moved to gripper kinematics).
+	double inv_d_7;
+
+
+	//! Lower limits of motor movement.
+	double lower_limit_axis[8];
+
+	//! Upper limits of motor movement.
+	double upper_limit_axis[8];
+
+	//! Lower limit of joint movement (in radians or meters).
+	double lower_limit_joint[8];
+
+	//! Upper limit of joint movement (in radians or meters).
+	double upper_limit_joint[8];
+
+	//! Synchronization positions of each motor - in motor increments.
+	double synchro_motor_position[8];
+
+	//! Synchronization positions of each joint - in internal coordinates.
+	double synchro_joint_position[8];
+
+	//! Method responsible for kinematic parameters setting.
+	virtual void set_kinematic_parameters(void);
+
+	/**
+	 * @brief Checks whether given motor increments are valid.
+	 * @param motor_position Motor position to be validated.
+	 */
+	void check_motor_position(const lib::MotorArray & motor_position);
+
+	/**
+	 * @brief Checks whether given internal coordinates are valid.
+	 * @param q Joints to be validated.
+	 */
+	void check_joints(const lib::JointArray & q);
 
 public:
-
+	//! Number of degrees of freedom (thus joints and servos).
 	int number_of_servos;
 
-  // Konstruktor.
-  model_with_wrist (int number_of_servos);
+	/**
+	 * @brief Constructor.
+	 * @param number_of_servos Number of servos (joints).
+	 */
+	model_with_wrist(int number_of_servos);
 
-  // Przeliczenie polozenia walow silnikow na wspolrzedne wewnetrzne.
-  virtual void mp2i_transform(const lib::MotorArray & local_current_motor_pos, lib::JointArray & local_current_joints);
+	/**
+	 * @brief Computes internal coordinates for given the motor increments (position) values.
+	 * @param[in] local_current_motor_pos Motor increments.
+	 * @param[out] local_current_joints Computed joints.
+	 */
+	virtual void mp2i_transform(const lib::MotorArray & local_current_motor_pos, lib::JointArray & local_current_joints);
 
-  // Przeliczenie wspolrzednych wewnetrznych na polozenia walow silnikow.
-  virtual void i2mp_transform(lib::MotorArray & local_desired_motor_pos_new, const lib::JointArray & local_desired_joints);
+	/**
+	 * @brief Computes motor increments from internal coordinates.
+	 * @param[out] local_desired_motor_pos_new Computed motor increment.
+	 * @param[in] local_desired_joints Current joints settings.
+	 */
+	virtual void i2mp_transform(lib::MotorArray & local_desired_motor_pos_new, const lib::JointArray & local_desired_joints);
 
-  // Rozwiazanie prostego zagadnienia kinematyki.
-  virtual void direct_kinematics_transform(const lib::JointArray & local_current_joints, lib::Homog_matrix& local_current_end_effector_frame);
+	/**
+	 * @brief Solves direct kinematics. The new, additional DOF is active, while the track is treated as passive one.
+	 * @param[in] local_current_joints Given internal (joints) values.
+	 * @param[out] local_current_end_effector_frame Computed end-effector frame (a homogeneous matrix).
+	 */
+	virtual void
+			direct_kinematics_transform(const lib::JointArray & local_current_joints, lib::Homog_matrix& local_current_end_effector_frame);
 
-  // Rozwiazanie odwrotnego zagadnienia kinematyki.
-  virtual void inverse_kinematics_transform(lib::JointArray & local_desired_joints, const lib::JointArray & local_current_joints, const lib::Homog_matrix& local_desired_end_effector_frame);
+	/**
+	 * @brief Solves inverse kinematics. The new, additional DOF is active, while the track is treated as passive one.
+	 * @param[out] local_desired_joints Computed join values.
+	 * @param[in] local_current_joints Current (in fact previous) internal values.
+	 * @param[in] local_desired_end_effector_frame Given end-effector frame.
+	 */
+	virtual void
+			inverse_kinematics_transform(lib::JointArray & local_desired_joints, const lib::JointArray & local_current_joints, const lib::Homog_matrix& local_desired_end_effector_frame);
 
 };//: kinematic_model_irp6ot_with_wrist;
 

@@ -7,7 +7,7 @@
  * @author mboryn
  * @date 15.03.2008
  *
- * @ingroup SENSORS,FRADIA
+ * @ingroup SENSORS,FRADIA_SENSOR
  */
 
 #ifndef ECP_MP_S_FRADIA_SENSOR_H
@@ -51,7 +51,7 @@ const lib::sensor::SENSOR_t SENSOR_FRADIA = "SENSOR_FRADIA";
  * @author mboryn
  * @author tkornuta
  *
- * @ingroup SENSORS,FRADIA
+ * @ingroup SENSORS,FRADIA_SENSOR
  */
 template <typename CONFIGURE_T, typename READING_T, typename INITIATE_T = lib::empty_t>
 class fradia_sensor : public ecp_mp::sensor::sensor_interface

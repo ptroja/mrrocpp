@@ -5,7 +5,7 @@
  * @author  tkornuta
  * @date Aug 4, 2010
  *
- * @ingroup FRADIA
+ * @ingroup FRADIA_SENSOR
  */
 
 
@@ -19,7 +19,7 @@ namespace sensor {
 /**
  * @brief Structure used in the object tracking tasks.
  * @author mboryn
- * @ingroup FRADIA
+ * @ingroup FRADIA_SENSOR
  */
 typedef struct _object_tracker
 {

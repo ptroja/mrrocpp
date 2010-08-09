@@ -8,7 +8,7 @@
  * @author tkornuta
  * @date 16.06.2008
  *
- * @ingroup PCBIRD
+ * @ingroup PCBIRD_SENSOR
  */
 
 #ifndef __BIRDCLIENT_H
@@ -29,7 +29,7 @@ namespace sensor {
  * @author T.Wlostowski
  * @author T.Adamczyk
  *
- * @ingroup PCBIRD
+ * @ingroup PCBIRD_SENSOR
  */
 typedef struct pcbird_pos_t
 {

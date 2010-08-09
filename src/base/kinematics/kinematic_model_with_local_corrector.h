@@ -3,7 +3,7 @@
  * @brief File containing the declaration of kinematic_model_with_local_corrector class.
  *
  * @author tkornuta
- * @date Jan 04, 2010
+ * @date Nov 26, 2009
  *
  * @ingroup KINEMATICS
  */
@@ -22,7 +22,7 @@ namespace common {
  * @brief Abstract class with methods for local end-effector position correction with the use of local correction matrices.
  *
  * @author tkornuta
- * @date Jan 04, 2010
+ * @date Nov 26, 2009
  *
  * @ingroup KINEMATICS
  */

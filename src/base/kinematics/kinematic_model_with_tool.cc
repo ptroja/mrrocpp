@@ -3,7 +3,7 @@
  * @brief File containing the definition of kinematic_model_with_tool class methods.
  *
  * @author tkornuta
- * @date Jan 04, 2010
+ * @date Nov 26, 2009
  *
  * @ingroup KINEMATICS
  */

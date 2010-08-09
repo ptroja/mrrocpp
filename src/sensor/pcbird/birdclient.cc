@@ -8,7 +8,7 @@
  * @author tkornuta
  * @date 16.06.2008
  *
- * @ingroup PCBIRD
+ * @ingroup PCBIRD_SENSOR
  */
 
 

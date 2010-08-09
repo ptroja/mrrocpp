@@ -64,7 +64,7 @@ public:
 	}
 
 	/**
-	 * @brief Computes internal coordinates basing on the motor increments (position).
+	 * @brief Computes internal coordinates for given the motor increments (position) values.
 	 * @param[in] local_current_motor_pos Motor increments.
 	 * @param[out] local_current_joints Computed joints.
 	 */

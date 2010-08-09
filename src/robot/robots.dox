@@ -1,0 +1,55 @@
+/** 
+
+@namespace mrrocpp::kinematics::conveyor
+@brief Namespace containing classes related to the kinematics of the conveyor.
+@date Nov 26, 2009
+@author tkornuta
+@ingroup KINEMATICS,CONVEYOR_KINEMATICS
+
+
+@defgroup CONVEYOR_KINEMATICS Kinematics: The Conveyor - a 1-DOF robot.
+@{
+
+The \link mrrocpp::kinematics::conveyor::model model\endlink 
+is a class responsible for kinematics computations required to control the conveyor - a single motor, thus DOF robot. 
+@}
+
+
+
+@namespace mrrocpp::kinematics::irp6ot_tfg
+@brief Namespace containing classes related to the kinematics of the IRp-6 on track manipulator two fingered gripper.
+@date Nov 26, 2009
+@author tkornuta
+@ingroup KINEMATICS,IRP6OT_KINEMATICS
+
+
+@defgroup IRP6OT_KINEMATICS Kinematics: The IRp-6 on track manipulator and its grippers.
+@{
+
+Multiple kinematic models, two different grippers.
+
+The \link mrrocpp::kinematics::conveyor::model model\endlink 
+is a class responsible for kinematics computations required to control the conveyor - a single motor, thus DOF robot.
+
+aaaaaaaaaa
+ 
+@}
+
+
+
+@namespace mrrocpp::kinematics::irp6p_tfg
+@brief Namespace containing classes related to the kinematics of the IRp-6 on track manipulator two fingered gripper.
+@date Nov 26, 2009
+@author tkornuta
+@ingroup KINEMATICS,IRP6P_KINEMATICS
+
+
+@defgroup IRP6P_KINEMATICS Kinematics: The IRp-6 on postument manipulator and its grippers.
+@{
+
+ 
+@}
+
+
+
+*/

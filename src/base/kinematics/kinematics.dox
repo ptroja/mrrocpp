@@ -1,6 +1,13 @@
 /** 
 @namespace mrrocpp::kinematics
-@brief Namespace containing items related to the robots kinematics.
+@brief Namespace containing all classes and functioncs related to the robots kinematics.
+@date Nov 26, 2009
+@author tkornuta
+@ingroup KINEMATICS
+
+
+@namespace mrrocpp::kinematics::common
+@brief Namespace containing base kinematics classes (managers, models).
 @date Nov 26, 2009
 @author tkornuta
 @ingroup KINEMATICS
