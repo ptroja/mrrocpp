@@ -1,9 +1,11 @@
 /*!
- * \file kinematic_model_spkm.cc
- * \brief File containing definition of kinematic_model_spkm class methods.
+ * @file kinematic_model_spkm.cc
+ * @brief File containing definition of kinematic_model_spkm class methods.
  *
- * \author tkornuta
- * \date Jan 05, 2010
+ * @author tkornuta
+ * @date Jan 05, 2010
+ *
+ * @ingroup KINEMATICS SIF_KINEMATICS
  */
 
 #include <math.h>
@@ -33,7 +35,7 @@ void kinematic_model_spkm::i2mp_transform(lib::MotorArray & local_desired_motor_
 {
 }
 
-void kinematic_model_spkm::inverse_kinematics_transform(lib::JointArray & local_desired_joints, lib::JointArray & local_current_joints, const lib::Homog_matrix& local_desired_end_effector_frame)
+void kinematic_model_spkm::inverse_kinematics_transform(lib::JointArray & local_desired_joints, const lib::JointArray & local_current_joints, const lib::Homog_matrix& local_desired_end_effector_frame)
 {
 	// Transform Homog_matrix to Matrix4d.
 	Homog4d O_W_T;

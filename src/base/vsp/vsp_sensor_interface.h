@@ -90,9 +90,9 @@ public:
 
 	/**
 	 * @brief Abstract method for setting the results of the sensor data aggregation.
-	 * @param  Result that is to be set.
+	 * @param _report Result that is to be set.
 	 */
-	virtual void set_vsp_report(lib::sensor::VSP_REPORT_t) = 0;
+	virtual void set_vsp_report(lib::sensor::VSP_REPORT_t _report) = 0;
 
 	/**
 	 * @brief Abstract method returning command sent to VSP.

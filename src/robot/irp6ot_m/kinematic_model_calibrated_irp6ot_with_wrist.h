@@ -1,5 +1,5 @@
 /*!
- * @file model_calibrated_with_wrist.h
+ * @file kinematic_model_calibrated_irp6ot_with_wrist.h
  * @brief File containing the model_calibrated_with_wrist class.
  *
  * The model_calibrated_with_wrist kinematic model utilizes six out of seven IRP-6ot DOF - the newly added one is active, the track is passive.

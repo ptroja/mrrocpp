@@ -612,19 +612,23 @@ INPUT                  = src/base/kinematics \
                          src/robot/irp6p_m/kinematic_model_irp6p_jacobian_with_wrist.cc \
                          src/robot/irp6p_m/kinematic_model_irp6p_jacobian_transpose_with_wrist.h \
                          src/robot/irp6p_m/kinematic_model_irp6p_jacobian_transpose_with_wrist.cc \
-#						 src/base/vsp \
-#                         src/base/ecp_mp/ecp_mp_sensor_interface.h \
-#                         src/base/ecp_mp/ecp_mp_sensor.h \
-#                         src/lib/lib.dox \
-#                         src/lib/sensor_error.h \
-#                         src/lib/sensor_interface.h \
-#                         src/sensor/sensors.dox \
-#                         src/sensor/fradia \
-#                         src/sensor/pcbird \
-#                         src/robot/shead \
-#                         src/robot/smb \
-#                        src/robot/spkm \
-#                         src/robot/epos \
+                         src/robot/shead/kinematic_model_shead.h \
+                         src/robot/shead/kinematic_model_shead.cc \
+                         src/robot/smb/kinematic_model_smb.h \
+                         src/robot/smb/kinematic_model_smb.cc \
+                         src/robot/spkm/kinematic_parameters_spkm.h \
+                         src/robot/spkm/kinematic_parameters_spkm.cc \
+                         src/robot/spkm/kinematic_model_spkm.h \
+                         src/robot/spkm/kinematic_model_spkm.cc \
+						 src/base/vsp \
+                         src/base/ecp_mp/ecp_mp_sensor_interface.h \
+                         src/base/ecp_mp/ecp_mp_sensor.h \
+                         src/lib/lib.dox \
+                         src/lib/sensor_error.h \
+                         src/lib/sensor_interface.h \
+                         src/sensor/sensors.dox \
+                         src/sensor/fradia \
+                         src/sensor/pcbird \
                      
 
 # This tag can be used to specify the character encoding of the source files 

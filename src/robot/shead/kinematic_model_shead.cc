@@ -1,6 +1,14 @@
-#include "lib/com_buf.h"
+/*!
+ * @file kinematic_model_shead.cc
+ * @brief File containing methods of the kinematic model for the SwarmItFix agent's head class.
+ *
+ * @author yoyek
+ * @date 2010.02.01
+ *
+ * @ingroup KINEMATICS SIF_KINEMATICS
+ */
 
-// Klasa kinematic_model_irp6m_with_wrist.
+#include "lib/com_buf.h"
 #include "robot/shead/kinematic_model_shead.h"
 
 namespace mrrocpp {
@@ -9,10 +17,10 @@ namespace shead {
 
 model::model(void)
 {
-	// Ustawienie etykiety modelu kinematycznego.
+	// Set label.
 	set_kinematic_model_label("Switching to simple kinematic model");
 
-	// Ustawienie parametrow kinematycznych.
+	// Set kinematics parameters.
 	set_kinematic_parameters();
 }
 

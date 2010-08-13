@@ -129,7 +129,7 @@ private:
 	 * Throws exception on error.
 	 *
 	 * @tparam MESSAGE_T Type of sent message.
-	 * @param Sent message.
+	 * @param message Sent message.
 	 */
 	template <typename MESSAGE_T>
 	void send_to_fradia(const MESSAGE_T& message);
@@ -150,7 +150,7 @@ public:
 	/**
 	 * @brief FraDIA sensor constructor. Creates socket and connects to FraDIA, but doesn't send any data.
 	 *
-	 * @param configurator Configuration object.
+	 * @param _configurator Configuration object.
 	 * @param section_name Name of the section in ini file. Specified section in config must contain following options: fradia_node_name, fradia_port, fradia_task.
 	 * @param configure_message Message that will be send by configure_sensor().
 	 */
