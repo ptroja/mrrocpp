@@ -78,18 +78,11 @@ private:
 	void write_read(int fd, char* buf, unsigned int w_len, unsigned int r_len);
 
 	int fd[8];
+	struct servo_St servo_data[8];
 	struct termios oldtio[8];
 	struct timespec wake_time;
 
-	char buf[30];
-	uint8_t command_params[8];
-	struct status_St drive_status[8];
-	int32_t position_offset[8];
-	int32_t current_absolute_position[8];
-	int32_t previous_absolute_position[8];
-	double current_position_inc[8];
-	bool first_hardware_read[8];
-	bool trace_resolver_zero[8];
+
 
 }; // koniec: class hardware_interface
 
