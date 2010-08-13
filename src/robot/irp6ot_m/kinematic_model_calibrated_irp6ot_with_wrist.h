@@ -8,7 +8,7 @@
  * @author tkornuta
  * @date 14.02.2007
  *
- * @ingroup KINEMATICS,IRP6OT_KINEMATICS
+ * @ingroup KINEMATICS IRP6OT_KINEMATICS
  */
 
 #if !defined(_IRP6OT_KIN_MODEL_WITH_WRIST_CALIBRATED)

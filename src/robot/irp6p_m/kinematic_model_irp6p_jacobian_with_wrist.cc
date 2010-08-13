@@ -1,26 +1,20 @@
-// ------------------------------------------------------------------------
-// Proces:		EDP
-// Plik:			kinematic_model_irp6p_jacobian_with_wrist.cc
-// System:	QNX/MRROC++  v. 6.3
-// Opis:		Model kinematyki robota IRp-6 na postumencie
-//				- deklaracja klasy
-//				- przedefiniowanie rozwiazania odwrotnego zadania
-//				  kinematyki - metoda uwzgledniajaca jakobian
-//
-// Autor:		Anna Maria Sibilska
-// Data:		18.07.2007
-// ------------------------------------------------------------------------
+/*!
+ * @file kinematic_model_irp6p_jacobian_with_wrist.cc
+ * @brief File containing methods of the IRp-6p with wrist (6DOF) jacobian based kinematic model class.
+ *
+ * @author Anna Maria Sibilska
+ * @author tkornuta
+ * @date 18.07.2007
+ *
+ * @ingroup KINEMATICS IRP6P_KINEMATICS
+ */
 
-// Klasa kinematic_model_calibrated_irp6p_with_wrist.
 #include "robot/irp6p_m/kinematic_model_irp6p_jacobian_with_wrist.h"
 
 namespace mrrocpp {
 namespace kinematics {
 namespace irp6p {
 
-/* -----------------------------------------------------------------------
-  Konstruktor.
- ------------------------------------------------------------------------- */
 model_jacobian_with_wrist::model_jacobian_with_wrist (int _number_of_servos):
 	model_with_wrist(_number_of_servos)
 {
@@ -32,25 +26,14 @@ model_jacobian_with_wrist::model_jacobian_with_wrist (int _number_of_servos):
   // Wykonywac przeliczenia zwiazane z narzedziem.
   attached_tool_computations = true;
 
-} //konstruktor
+}
 
-/* ------------------------------------------------------------------------
-  Zadanie odwrotne kinematyki dla robota IRp-6 na postumencie w oparciu o odwrotnosc jakobianu
-
-  Wejscie:
-  * local_current_joints - obecne (w rzeczywistosci poprzednie) wspolrzedne wewnetrzne robota (kolejno q0, q1, q2, ...)
-  * local_desired_end_effector_frame - macierz przeksztacenia jednorodnego (MPJ)
-		opisujca zadane poloenie i orientacje koncowki (narzedzia) w ukladzie bazowym.
-
-  Wyjscie:
-  * local_desired_joints - wyliczone wspolrzedne wewnetrzne robota (kolejno q0, q1, q2, ...)
- ------------------------------------------------------------------------ */
 
 void model_jacobian_with_wrist::inverse_kinematics_transform(lib::JointArray & local_desired_joints, lib::JointArray & local_current_joints, const lib::Homog_matrix& local_desired_end_effector_frame)
 {
 
   double K=1; 			//Zadane wzmocnienie
-  double E=0.00001;		//Uchyb dla kt�rego rozwiazanie zaakceptowane
+  double E=0.00001;		//Uchyb dla ktorego rozwiazanie zaakceptowane
   double Max;			//pomocnbicza zmienna - max element wektora
 
   lib::Homog_matrix local_current_end_effector_frame;	//Ramka odpowiadajaca aktualnej pozycji

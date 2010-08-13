@@ -6,7 +6,7 @@
  * @author tkornuta
  * @date Jun 21, 2010
  *
- * @ingroup KINEMATICS,IRP6OT_KINEMATICS
+ * @ingroup KINEMATICS IRP6OT_KINEMATICS
  */
 
 
@@ -26,7 +26,7 @@ namespace irp6ot_tfg {
  * @author tkornuta
  * @date Jun 21, 2010
  *
- * @ingroup KINEMATICS,IRP6OT_KINEMATICS
+ * @ingroup KINEMATICS IRP6OT_KINEMATICS
  */
 class model: public common::kinematic_model_irp6_tfg
 {
@@ -39,7 +39,7 @@ public:
 	//! Constructor.
 	model(void);
 
-};//: kinematic_model_conveyor;
+};
 
 } // namespace irp6ot_tfg
 } // namespace kinematic

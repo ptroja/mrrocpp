@@ -6,7 +6,7 @@
  * @author tkornuta
  * @date Jun 21, 2010
  *
- * @ingroup KINEMATICS,IRP6P_KINEMATICS
+ * @ingroup KINEMATICS IRP6P_KINEMATICS
  */
 
 
@@ -26,7 +26,7 @@ namespace irp6p_tfg {
  * @author tkornuta
  * @date Jun 21, 2010
  *
- * @ingroup KINEMATICS,IRP6P_KINEMATICS
+ * @ingroup KINEMATICS IRP6P_KINEMATICS
  */
 class model: public common::kinematic_model_irp6_tfg
 {
