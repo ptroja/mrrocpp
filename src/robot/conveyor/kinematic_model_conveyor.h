@@ -5,7 +5,7 @@
  * @author tkornuta
  * @date 31.01.2007
  *
- * @ingroup KINEMATICS,CONVEYOR_KINEMATICS
+ * @ingroup KINEMATICS CONVEYOR_KINEMATICS
  */
 
 #if !defined(_CONVEYOR_KIN_MODEL)
@@ -24,7 +24,7 @@ namespace conveyor {
  * @author tkornuta
  * @date Jan 04, 2010
  *
- * @ingroup KINEMATICS,CONVEYOR_KINEMATICS
+ * @ingroup KINEMATICS CONVEYOR_KINEMATICS
  */
 class model : public common::kinematic_model
 {

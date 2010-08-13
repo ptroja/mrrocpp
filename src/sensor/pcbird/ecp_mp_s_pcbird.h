@@ -8,7 +8,7 @@
  * @author tkornuta
  * @date 16.06.2008
  *
- * @ingroup SENSORS,PCBIRD_SENSOR
+ * @ingroup SENSORS PCBIRD_SENSOR
  */
 
 #ifndef __ECP_PCBIRD_H

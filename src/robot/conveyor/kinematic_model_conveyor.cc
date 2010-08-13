@@ -5,7 +5,7 @@
  * @author tkornuta
  * @date 24.02.2007
  *
- * @ingroup KINEMATICS,CONVEYOR_KINEMATICS
+ * @ingroup KINEMATICS CONVEYOR_KINEMATICS
  */
 
 

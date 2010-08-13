@@ -10,7 +10,6 @@
  * @ingroup KINEMATICS,IRP6OT_KINEMATICS
  */
 
-
 #if !defined(_IRP6OT_KIN_MODEL_WITH_WRIST)
 #define _IRP6OT_KIN_MODEL_WITH_WRIST
 
@@ -50,10 +49,10 @@ protected:
 	//! D-H kinematic parameters - length of 6th segment.
 	double d7;
 
-	//! Table storing gear ratio for all DOF.
+	//! Table storing gear ratio for all DOFs.
 	double gear[8];
 
-	//! Variable storing gear additional rotation for all DOF.
+	//! Variable storing gear additional rotation for all DOFs.
 	double theta[8];
 
 	//! Variable utilized in computations related to upper and lower arm.
@@ -66,7 +65,6 @@ protected:
 	double mi3;
 	//! Variable utilized in computations related to upper and lower arm.
 	double ni3;
-
 
 	//! DEPRICATED: Variable related to the computations of the gripper spread (moved to gripper kinematics).
 	double dir_a_7;
@@ -82,7 +80,6 @@ protected:
 	double inv_c_7;
 	//! DEPRICATED: Variable related to the computations of the gripper spread (moved to gripper kinematics).
 	double inv_d_7;
-
 
 	//! Lower limits of motor movement.
 	double lower_limit_axis[8];
@@ -123,9 +120,9 @@ public:
 
 	/**
 	 * @brief Constructor.
-	 * @param number_of_servos Number of servos (joints).
+	 * @param _number_of_servos Number of servos (joints).
 	 */
-	model_with_wrist(int number_of_servos);
+	model_with_wrist(int _number_of_servos);
 
 	/**
 	 * @brief Computes internal coordinates for given the motor increments (position) values.
@@ -143,22 +140,20 @@ public:
 
 	/**
 	 * @brief Solves direct kinematics. The new, additional DOF is active, while the track is treated as passive one.
-	 * @param[in] local_current_joints Given internal (joints) values.
+	 * @param[in] local_current_joints Given internal (joints) values (d0, q1, q2, ...).
 	 * @param[out] local_current_end_effector_frame Computed end-effector frame (a homogeneous matrix).
 	 */
-	virtual void
-			direct_kinematics_transform(const lib::JointArray & local_current_joints, lib::Homog_matrix& local_current_end_effector_frame);
+	virtual void direct_kinematics_transform(const lib::JointArray & local_current_joints, lib::Homog_matrix& local_current_end_effector_frame);
 
 	/**
 	 * @brief Solves inverse kinematics. The new, additional DOF is active, while the track is treated as passive one.
-	 * @param[out] local_desired_joints Computed join values.
+	 * @param[out] local_desired_joints Computed join values (d0, q1, q2, ...).
 	 * @param[in] local_current_joints Current (in fact previous) internal values.
 	 * @param[in] local_desired_end_effector_frame Given end-effector frame.
 	 */
-	virtual void
-			inverse_kinematics_transform(lib::JointArray & local_desired_joints, const lib::JointArray & local_current_joints, const lib::Homog_matrix& local_desired_end_effector_frame);
+	virtual void inverse_kinematics_transform(lib::JointArray & local_desired_joints, const lib::JointArray & local_current_joints, const lib::Homog_matrix& local_desired_end_effector_frame);
 
-};//: kinematic_model_irp6ot_with_wrist;
+};
 
 } // namespace irp6ot
 } // namespace kinematic

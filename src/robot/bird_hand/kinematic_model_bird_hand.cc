@@ -1,9 +1,11 @@
 /*!
- * \file kinematic_model_bird_hand.cc
- * \brief File containing definition of kinematic_model_bird_hand class methods.
+ * @file kinematic_model_bird_hand.cc
+ * @brief File containing definition of kinematic_model_bird_hand class methods.
  *
- * \author kczajkowski
- * \date May 28, 2010
+ * @author kczajkowski
+ * @date May 28, 2010
+ *
+ * @ingroup KINEMATICS IRP6OT_KINEMATICS
  */
 
 #include <math.h>

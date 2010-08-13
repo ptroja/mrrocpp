@@ -24,7 +24,6 @@ namespace irp6ot {
 model_with_wrist::model_with_wrist(int _number_of_servos) :
 	number_of_servos(_number_of_servos)
 {
-
 	// Ustawienie etykiety modelu kinematycznego.
 	set_kinematic_model_label("Switching to  kinematic model with active wrist");
 
@@ -33,7 +32,6 @@ model_with_wrist::model_with_wrist(int _number_of_servos) :
 
 	// Wykonywac przeliczenia zwiazane z narzedziami.
 	attached_tool_computations = true;
-
 }
 
 void model_with_wrist::set_kinematic_parameters(void)

@@ -7,7 +7,7 @@
  * @author mboryn
  * @date 15.03.2008
  *
- * @ingroup SENSORS,FRADIA_SENSOR
+ * @ingroup SENSORS FRADIA_SENSOR
  */
 
 #ifndef ECP_MP_S_FRADIA_SENSOR_H

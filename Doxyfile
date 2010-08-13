@@ -590,21 +590,18 @@ INPUT                  = src/base/kinematics \
                          src/robot/conveyor/kinematic_model_conveyor.cc \
                          src/robot/irp6_tfg/kinematic_model_irp6_tfg.h \
                          src/robot/irp6_tfg/kinematic_model_irp6_tfg.cc \
+                         src/robot/bird_hand/kinematic_parameters_bird_hand.h \
+                         src/robot/bird_hand/kinematic_parameters_bird_hand.cc \
+                         src/robot/bird_hand/kinematic_model_bird_hand.h \
+                         src/robot/bird_hand/kinematic_model_bird_hand.cc \
                          src/robot/irp6ot_tfg/kinematic_model_irp6ot_tfg.h \
                          src/robot/irp6ot_tfg/kinematic_model_irp6ot_tfg.cc \
                          src/robot/irp6ot_m/kinematic_model_irp6ot_with_wrist.h \
                          src/robot/irp6ot_m/kinematic_model_irp6ot_with_wrist.cc \
-#                         src/robot/irp6ot_m/kinematic_model_calibrated_irp6ot_with_wrist.h \
-#                         src/robot/irp6ot_m/kinematic_model_calibrated_irp6ot_with_wrist.cc \
-#                         src/robot/irp6ot_m/kinematic_model_irp6ot_with_track.h \
-#                         src/robot/irp6ot_m/kinematic_model_irp6ot_with_track.cc \
-#                         src/robot/irp6p_tfg/kinematic_model_irp6p_tfg.h \
-#                         src/robot/irp6p_tfg/kinematic_model_irp6p_tfg.cc \
-#                         src/robot/irp6p_m \
-#                         src/robot/shead \
-#                         src/robot/smb \
-#                        src/robot/spkm \
-#                         src/robot/epos \
+                         src/robot/irp6ot_m/kinematic_model_calibrated_irp6ot_with_wrist.h \
+                         src/robot/irp6ot_m/kinematic_model_calibrated_irp6ot_with_wrist.cc \
+                         src/robot/irp6ot_m/kinematic_model_irp6ot_with_track.h \
+                         src/robot/irp6ot_m/kinematic_model_irp6ot_with_track.cc \
 #						 src/base/vsp \
 #                         src/base/ecp_mp/ecp_mp_sensor_interface.h \
 #                         src/base/ecp_mp/ecp_mp_sensor.h \
@@ -614,6 +611,13 @@ INPUT                  = src/base/kinematics \
 #                         src/sensor/sensors.dox \
 #                         src/sensor/fradia \
 #                         src/sensor/pcbird \
+#                         src/robot/irp6p_tfg/kinematic_model_irp6p_tfg.h \
+#                         src/robot/irp6p_tfg/kinematic_model_irp6p_tfg.cc \
+#                         src/robot/irp6p_m \
+#                         src/robot/shead \
+#                         src/robot/smb \
+#                        src/robot/spkm \
+#                         src/robot/epos \
                      
 
 # This tag can be used to specify the character encoding of the source files 

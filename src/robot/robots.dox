@@ -1,7 +1,7 @@
 /** 
 
 @namespace mrrocpp::kinematics::conveyor
-@brief Namespace containing classes related to the kinematics of the conveyor.
+@brief Contains classes related to the kinematics of the conveyor.
 @date Nov 26, 2009
 @author tkornuta
 @ingroup KINEMATICS,CONVEYOR_KINEMATICS
@@ -15,9 +15,22 @@ is a class responsible for kinematics computations required to control the conve
 @}
 
 
-
 @namespace mrrocpp::kinematics::irp6ot_tfg
-@brief Namespace containing classes related to the kinematics of the IRp-6 on track manipulator two fingered gripper.
+@brief Contains classes related to the two fingered gripper kinematics of the IRp-6 on track manipulator.
+@date Nov 26, 2009
+@author tkornuta
+@ingroup KINEMATICS,IRP6OT_KINEMATICS
+
+
+@namespace mrrocpp::kinematics::bird_hand
+@brief Contains classes related to the kinematics of the bird-hand gripper mounted on the IRp-6 on track manipulator.
+@date Jan 05, 2010
+@author tkornuta
+@ingroup KINEMATICS,IRP6OT_KINEMATICS
+
+
+@namespace mrrocpp::kinematics::irp6ot
+@brief Contains classes related to the kinematics of the IRp-6 on track manipulator.
 @date Nov 26, 2009
 @author tkornuta
 @ingroup KINEMATICS,IRP6OT_KINEMATICS
@@ -26,19 +39,21 @@ is a class responsible for kinematics computations required to control the conve
 @defgroup IRP6OT_KINEMATICS Kinematics: The IRp-6 on track manipulator and its grippers.
 @{
 
-Multiple kinematic models, two different grippers.
+The group contains classes related to two main parts of the IRp-6 on track manipulator.
 
-The \link mrrocpp::kinematics::conveyor::model model\endlink 
-is a class responsible for kinematics computations required to control the conveyor - a single motor, thus DOF robot.
+The first part contains different kinematic models of the manipulator itself:
+ - \link mrrocpp::kinematics::irp6ot::model_with_wrist model_with_wrist\endlink model with active wrist and passive track DOFs, 
+ - \link mrrocpp::kinematics::irp6ot::model_with_track model_with_track\endlink model with active track and passive wrist DOFs,
+ - \link mrrocpp::kinematics::irp6ot::model_calibrated_with_wrist model_calibrated_with_wrist\endlink model with active wrist and passive track DOFs and kinematic values computed in the calibration. 
 
-aaaaaaaaaa
- 
+The other one contains kinematics of its grippers:
+ - \link mrrocpp::kinematics::irp6ot_tfg::model tfg\endlink model of the two finger gripper,
+ - \link mrrocpp::kinematics::bird_hand::kinematic_model_bird_hand bird_hand\endlink model ot the three finger gripper.
 @}
 
 
-
 @namespace mrrocpp::kinematics::irp6p_tfg
-@brief Namespace containing classes related to the kinematics of the IRp-6 on track manipulator two fingered gripper.
+@brief Contains classes related to the kinematics of the IRp-6 on track manipulator two fingered gripper.
 @date Nov 26, 2009
 @author tkornuta
 @ingroup KINEMATICS,IRP6P_KINEMATICS
