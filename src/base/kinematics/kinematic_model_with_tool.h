@@ -11,8 +11,6 @@
 #if !defined(__EDP_KIN_MODEL)
 #define __EDP_KIN_MODEL
 
-#include <string>
-#include "lib/mrmath/mrmath.h"
 #include "lib/impconst.h"
 #include "base/kinematics/kinematic_model.h"
 

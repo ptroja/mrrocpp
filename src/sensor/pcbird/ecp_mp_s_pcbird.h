@@ -31,7 +31,7 @@ const lib::sensor::SENSOR_t SENSOR_PCBIRD = "SENSOR_PCBIRD";
  * @brief Sensor responsible for communication with the PCBird.
  * @author tkornuta
  *
- * @ingroup SENSORS,PCBIRD
+ * @ingroup SENSORS PCBIRD_SENSOR
  */
 class pcbird : public ecp_mp::sensor::sensor_interface
 {
