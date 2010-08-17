@@ -27,6 +27,11 @@ namespace task {
 bclike_mp::bclike_mp(lib::configurator &_config) :
 	task(_config) {
 
+	second_task = config.value<std::string>("fradia_task", "[vsp_second_task]");
+	std::cout << "DRUGI TASK: " << second_task << std::endl;
+
+	//TODO: Wczytywanie z konfiga informacji o drugim zadaniu
+
 }
 
 bclike_mp::~bclike_mp() {
@@ -99,11 +104,24 @@ void bclike_mp::main_task_algorithm(void){
 	sr_ecp_msg->message("MOVE right");
 	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, actual_robot.c_str(), actual_robot.c_str());
 
-	while(!strcmp(robot_m[lib::ROBOT_IRP6P_M]->ecp_reply_package.ecp_2_mp_string, "KONIEC")){
-			//odczyt + wywołanie subtaska Marcina
+
+	while(strcmp(robot_m[actual_robot]->ecp_reply_package.ecp_2_mp_string, "KONIEC")){
+
+		msg.stringToECPOrder(robot_m[actual_robot]->ecp_reply_package.ecp_2_mp_string, regions);
+
+		set_next_ecps_state (ecp_mp::task::ECP_ST_SMOOTH_MOVE, (int)mrrocpp::ecp::common::task::START, tab, 300, 1, actual_robot.c_str());
+		sr_ecp_msg->message("MOVE right");
+		run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, actual_robot.c_str(), actual_robot.c_str());
 	}
 
-#else
+
+	std::vector<ecp::common::task::mrrocpp_regions>::iterator it;
+
+	for(it = regions.begin(); it != regions.end(); ++it){
+		//TODO: przelaczyc zadanie FrDIA + wywolac subtaks Marcina
+	}
+
+	#else
 
 	bool run = true;
 
@@ -116,20 +134,24 @@ void bclike_mp::main_task_algorithm(void){
 		set_next_ecps_state (ecp_mp::task::ECP_ST_SMOOTH_MOVE, (int)mrrocpp::ecp::common::task::START, tab, 300, 1, actual_robot.c_str());
 		run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, actual_robot.c_str(), actual_robot.c_str());
 
-		if(!strcmp(robot_m[lib::ROBOT_IRP6P_M]->ecp_reply_package.ecp_2_mp_string, "KONIEC")){
+		if(!strcmp(robot_m[actual_robot]->ecp_reply_package.ecp_2_mp_string, "KONIEC")){
 			run = false;
 		}else{
 
-			pos = msg.stringToFradiaOrder(robot_m[lib::ROBOT_IRP6P_M]->ecp_reply_package.ecp_2_mp_string, reg);
+			pos = msg.stringToFradiaOrder(robot_m[actual_robot]->ecp_reply_package.ecp_2_mp_string, reg);
 
 			for(int i = 0; i < reg.num_found; ++i){
-				//wywołać Marcina subtask
+				//TODO: wywołać Marcina subtask + przelaczyc zadanie FrDIA
 			}
+
+			//TODO: wrocic z zadaniem do mojego
 		}
 
 	}
 
 #endif
+
+	sr_ecp_msg->message("KONIEC");
 
 }
 

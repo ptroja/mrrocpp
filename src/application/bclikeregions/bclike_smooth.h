@@ -14,6 +14,11 @@
 #include "bcl_types.h"
 #include "bcl_message.h"
 
+//#include "../servovision/simple_visual_servo_manager.h"
+//#include "../servovision/ib_eih_visual_servo.h"
+//#include "../servovision/visual_servo_regulator_p.h"
+
+
 using boost::shared_ptr;
 
 namespace mrrocpp {
@@ -42,8 +47,7 @@ public:
 
 private:
 	task::fradia_regions reading;
-	std::vector<task::mrrocpp_regions> readings;
-	int num_send;
+	std::vector<std::pair<task::mrrocpp_regions, bool> > readings;
 	bool no_fradia;
 	task::bcl_t_switcher & bcl_ecp;
 
@@ -51,8 +55,16 @@ private:
 
 	task::bcl_fradia_sensor* vsp_fradia;
 
-	void translateToRobotPosition(task::fradia_regions& regs);
+	int num_send;
 
+	lib::Homog_matrix actual_pos;
+	lib::Homog_matrix tmp_pos;
+
+	void translateToRobotPosition(task::fradia_regions& regs);
+	void addCodesToVector(task::fradia_regions reading);
+	bool checkIfCodeBeenRead(task::mrrocpp_regions& code);
+	bool codesIntersect(task::mrrocpp_regions& c1, task::mrrocpp_regions& c2);
+	void sendNextPart();
 };
 
 }

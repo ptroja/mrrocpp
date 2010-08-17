@@ -75,38 +75,38 @@ std::vector<double> bcl_message::stringToTrajectory(char* str){
 	return ret;
 }
 
-void bcl_message::addFradiaOrderToVector(task::fradia_regions& reg, std::vector<task::mrrocpp_regions>& vec){
-
-	task::mrrocpp_regions m_reg;
-
-	switch(reg.num_found){
-		case 3:
-			m_reg.x = reg.x_k2;
-			m_reg.y = reg.y_k2;
-			m_reg.w = reg.w_k2;
-			m_reg.h = reg.h_k2;
-			m_reg.a = reg.a_k2;
-			vec.push_back(m_reg);
-		case 2:
-			m_reg.x = reg.x_k1;
-			m_reg.y = reg.y_k1;
-			m_reg.w = reg.w_k1;
-			m_reg.h = reg.h_k1;
-			m_reg.a = reg.a_k1;
-			vec.push_back(m_reg);
-		case 1:
-			m_reg.x = reg.x_k0;
-			m_reg.y = reg.y_k0;
-			m_reg.w = reg.w_k0;
-			m_reg.h = reg.h_k0;
-			m_reg.a = reg.a_k0;
-			vec.push_back(m_reg);
-		default:
-			return;
-	}
-
-
-}
+//void bcl_message::addFradiaOrderToVector(task::fradia_regions& reg, std::vector<task::mrrocpp_regions>& vec){
+//
+//	task::mrrocpp_regions m_reg;
+//
+//	switch(reg.num_found){
+//		case 3:
+//			m_reg.x = reg.x_k2;
+//			m_reg.y = reg.y_k2;
+//			m_reg.w = reg.w_k2;
+//			m_reg.h = reg.h_k2;
+//			m_reg.a = reg.a_k2;
+//			vec.push_back(m_reg);
+//		case 2:
+//			m_reg.x = reg.x_k1;
+//			m_reg.y = reg.y_k1;
+//			m_reg.w = reg.w_k1;
+//			m_reg.h = reg.h_k1;
+//			m_reg.a = reg.a_k1;
+//			vec.push_back(m_reg);
+//		case 1:
+//			m_reg.x = reg.x_k0;
+//			m_reg.y = reg.y_k0;
+//			m_reg.w = reg.w_k0;
+//			m_reg.h = reg.h_k0;
+//			m_reg.a = reg.a_k0;
+//			vec.push_back(m_reg);
+//		default:
+//			return;
+//	}
+//
+//
+//}
 
 char* bcl_message::fradiaOrderToString(task::fradia_regions& reg, std::vector<double> vec){
 	char* ret = new char[MP_2_ECP_STRING_SIZE];
@@ -212,29 +212,51 @@ std::vector<double> bcl_message::stringToFradiaOrder(char* str, task::fradia_reg
 	return ret;
 }
 
-char* bcl_message::regionsVectorToString(std::vector<task::mrrocpp_regions> readings, int& num){
-	char* ret = new char[MP_2_ECP_STRING_SIZE];
-	double *tab = reinterpret_cast<double*>(ret);
-	int cnt = 0;
+/**
+ *
+ * @param str Order sent from ECP to MP
+ * @param vec std::vector to which data is written
+ */
+void bcl_message::stringToECPOrder(char* str, std::vector<task::mrrocpp_regions>& vec){
 
-	std::vector<task::mrrocpp_regions>::iterator it = readings.begin();
-	it += num;
+	task::mrrocpp_regions tmp;
 
-	for(; it != readings.end() && (5*cnt + 1 < MP_2_ECP_STRING_SIZE); ++it){
-		tab[5 * cnt + 1] = (*it).x;
-		tab[5 * cnt + 2] = (*it).y;
-		tab[5 * cnt + 3] = (*it).w;
-		tab[5 * cnt + 4] = (*it).h;
-		tab[5 * cnt + 5] = (*it).a;
-		cnt++;
+	double *tab = reinterpret_cast<double *>(str);
+
+	for(int i = 0; i < (int)tab[0]; ++i){
+		tmp.x = tab[5 * i + 1];
+		tmp.y = tab[5 * i + 2];
+		tmp.w = tab[5 * i + 3];
+		tmp.h = tab[5 * i + 4];
+		tmp.a = tab[5 * i + 5];
+
+		vec.push_back(tmp);
 	}
-
-	tab[0] = cnt;
-
-	num += 5 * cnt + 1;
-
-	return ret;
 }
+
+//char* bcl_message::regionsVectorToString(std::vector<task::mrrocpp_regions> readings, int& num){
+//	char* ret = new char[MP_2_ECP_STRING_SIZE];
+//	double *tab = reinterpret_cast<double*>(ret);
+//	int cnt = 0;
+//
+//	std::vector<task::mrrocpp_regions>::iterator it = readings.begin();
+//	it += num;
+//
+//	for(; it != readings.end() && (5*cnt + 1 < MP_2_ECP_STRING_SIZE); ++it){
+//		tab[5 * cnt + 1] = (*it).x;
+//		tab[5 * cnt + 2] = (*it).y;
+//		tab[5 * cnt + 3] = (*it).w;
+//		tab[5 * cnt + 4] = (*it).h;
+//		tab[5 * cnt + 5] = (*it).a;
+//		cnt++;
+//	}
+//
+//	tab[0] = cnt;
+//
+//	num += 5 * cnt + 1;
+//
+//	return ret;
+//}
 
 }
 

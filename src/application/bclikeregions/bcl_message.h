@@ -37,9 +37,11 @@ public:
 
 	std::vector<double> stringToFradiaOrder(char* str, task::fradia_regions reg);
 
-	void addFradiaOrderToVector(task::fradia_regions& reg, std::vector<task::mrrocpp_regions>& vec);
+	void stringToECPOrder(char* str, std::vector<task::mrrocpp_regions> &vec);
 
-	char* regionsVectorToString(std::vector<task::mrrocpp_regions> readings, int& num);
+//	void addFradiaOrderToVector(task::fradia_regions& reg, std::vector<std::pair<task::mrrocpp_regions, bool> >& vec);
+//
+//	char* regionsVectorToString(std::vector<task::mrrocpp_regions> readings, int& num);
 };
 
 }

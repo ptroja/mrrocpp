@@ -42,7 +42,7 @@ namespace task {
 #endif//IRP6_OT
 
 #ifdef IRP6_P
-#define VEC_SIZE 7
+#define VEC_SIZE 6
 #ifdef JOINT
 	const double left[] = { 0.5, -1.87, 0.100, -0.040, 4.627, -1.57};
 	const double right[] = {-0.55, -1.37, 0.100, -0.040, 4.627, -1.57};
@@ -51,9 +51,9 @@ namespace task {
 #endif//IRP6_P
 
 #ifdef EULER
-	const double left[] = { 0.83, 2.45, 0.100, -0.59, 3.035, -1.055, 0.0};
-	const double right[] = {0.83, 1.45, 0.100, -0.59, 3.035, -1.055, 0.0};
-	const double start[] = {0.83, 1.95, 0.100, -0.59, 3.035, -1.055, 0.0};
+	const double left[] = { 0.83, 2.45, 0.100, -0.59, 3.035, -1.055};
+	const double right[] = {0.83, 1.45, 0.100, -0.59, 3.035, -1.055};
+	const double start[] = {0.83, 1.95, 0.100, -0.59, 3.035, -1.055};
 #endif
 
 enum BCL_MOTION_DIR{

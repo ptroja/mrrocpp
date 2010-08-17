@@ -15,8 +15,8 @@
 #define SINGLE_MOVE
 //#define TEST_MODE
 
-//#define IRP6_OT
-#define IRP6_P
+#define IRP6_OT
+//#define IRP6_P
 //#define JOINT
 #define EULER
 
