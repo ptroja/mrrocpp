@@ -12,8 +12,8 @@
 
 #include "../servovision/visual_servo_types.h"
 
-#define SINGLE_MOVE
-//#define TEST_MODE
+//#define SINGLE_MOVE
+#define TEST_MODE
 
 #define IRP6_OT
 //#define IRP6_P

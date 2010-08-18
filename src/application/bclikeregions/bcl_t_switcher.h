@@ -39,6 +39,13 @@ namespace task {
 	const double right[] = { 0.0, -0.55, -1.37, 0.100, -0.040, 4.627, -1.57};
 	const double start[] = { 0.0, 0.0, -1.37, 0.100, -0.040, 4.627, 0.0};
 #endif//JOINT
+
+#ifdef EULER
+	const double left[] = { 0.83, 0.5, 0.100, -0.59, 3.035, -1.055};
+	const double right[] = {0.83, -0.5, 0.100, -0.59, 3.035, -1.055};
+	const double start[] = {0.83, -0.02, 0.100, -0.59, 3.035, -1.055};
+#endif //EULER
+
 #endif//IRP6_OT
 
 #ifdef IRP6_P
@@ -48,13 +55,15 @@ namespace task {
 	const double right[] = {-0.55, -1.37, 0.100, -0.040, 4.627, -1.57};
 	const double start[] = {0.0, -1.37, 0.100, -0.040, 4.627, 0.0};
 #endif //JOINT
-#endif//IRP6_P
 
 #ifdef EULER
 	const double left[] = { 0.83, 2.45, 0.100, -0.59, 3.035, -1.055};
 	const double right[] = {0.83, 1.45, 0.100, -0.59, 3.035, -1.055};
 	const double start[] = {0.83, 1.95, 0.100, -0.59, 3.035, -1.055};
-#endif
+#endif //EULER
+
+#endif//IRP6_P
+
 
 enum BCL_MOTION_DIR{
 	LEFT, RIGHT, START
