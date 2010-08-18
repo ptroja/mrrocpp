@@ -40,8 +40,6 @@ bool neuron_generator::first_step(){
 
 	neuron_sensor=(ecp_mp::sensor::neuron_sensor*)sensor_m[ecp_mp::sensor::ECP_MP_NEURON_SENSOR];
 	neuron_sensor->startGettingTrajectory();
-	neuron_sensor->counter=0;
-	printf("firstStep: currentPeriod: %d\n",neuron_sensor->current_period);
 	return true;
 }
 
@@ -52,8 +50,7 @@ bool neuron_generator::next_step(){
 
 	/*Check if entire trajectory was already sent, if so, finish the generator*/
 	if(neuron_sensor->transmissionFinished()){
-		printf("End of transmission %d\n",neuron_sensor->counter);
-		flushall();
+		printf("End of transmission\n");
 		return false;
 	}
 

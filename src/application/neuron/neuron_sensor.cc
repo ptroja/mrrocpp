@@ -77,7 +77,6 @@ neuron_sensor::~neuron_sensor() {
 }
 
 void neuron_sensor::get_reading(){
-	counter++;
 	/*timespec acttime;
 	if( clock_gettime( CLOCK_REALTIME , &acttime) == -1 ){
 		printf("sleep generator: next step time measurement error");

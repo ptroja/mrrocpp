@@ -49,7 +49,6 @@ class neuron_sensor : public ecp_mp::sensor::sensor_interface {
 		void sendCommunicationFinished();
 		void sendCommand(uint8_t command);
 		void sendCoordinates(double x, double y, double z);
-		int counter; //for testig only
 };
 
 } //sensor
