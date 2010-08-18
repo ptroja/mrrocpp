@@ -112,48 +112,58 @@ bool bclike_smooth::first_step(){
 
 bool bclike_smooth::next_step(){
 
+	//Get FraDIA reading
 	reading = bcl_ecp.vsp_fradia->get_reading_message();
-	actual_pos.set_from_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame);
 
+	//Get actual robot's position
+	actual_pos.set_from_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame);
 	std::vector<double> vec;
 	vec.assign(the_robot->reply_package.arm.pf_def.arm_coordinates, the_robot->reply_package.arm.pf_def.arm_coordinates + VEC_SIZE);
 
+	//If there are new bar code like areas translate their positions and check existance in vector
 	if(reading.code_found){
 		translateToRobotPosition(reading);
 		addCodesToVector(reading);
 	}
 
-//	msg.addFradiaOrderToVector(reading, readings);
 
-#ifdef SINGLE_MOVE //robot's move to the end, and then found codes are sent to MP
+//#ifdef SINGLE_MOVE //robot's move to the end, and then found codes are sent to MP
+//
+//	if(newsmooth::next_step())
+//		return true;
+//
+//	sendNextPart();
+//	return false;
+//
+//#else //robot's move stopped each time when code detected
+//
+//
+//	if(reading.code_found){
+//		strcpy(ecp_t.ecp_reply.ecp_2_mp_string, msg.fradiaOrderToString(reading, vec));
+//		return false;
+//	}
+//
+//	if(newsmooth::next_step())
+//		return true;
+//	else{
+//		strcpy(ecp_t.ecp_reply.ecp_2_mp_string, "KONIEC");
+//		return false;
+//	}
+//
+//#endif
 
+	//If there is something to send, do it
+	if(sendNextPart())
+		return false;
+
+	//If there is nothing to send and robot is still moving, go on
 	if(newsmooth::next_step())
 		return true;
 
-//	if(num_send < readings.size())
-		sendNextPart();
-//	else
-//		strcpy(ecp_t.ecp_reply.ecp_2_mp_string, "KONIEC");
-
-
+	//End everything, when there is nothing to send and robot stops
+	strcpy(ecp_t.ecp_reply.ecp_2_mp_string, "KONIEC");
 	return false;
 
-#else //robot's move stopped each time when code detected
-
-
-	if(reading.code_found){
-		strcpy(ecp_t.ecp_reply.ecp_2_mp_string, msg.fradiaOrderToString(reading, vec));
-		return false;
-	}
-
-	if(newsmooth::next_step())
-		return true;
-	else{
-		strcpy(ecp_t.ecp_reply.ecp_2_mp_string, "KONIEC");
-		return false;
-	}
-
-#endif
 
 }
 
@@ -334,35 +344,53 @@ bool bclike_smooth::codesIntersect(task::mrrocpp_regions& c1, task::mrrocpp_regi
 /**
  * Rewriting data from vector to buffer to send to MP
  */
-void bclike_smooth::sendNextPart(){
+bool bclike_smooth::sendNextPart(){
 
 	char* ret = new char[MP_2_ECP_STRING_SIZE];
 	double *tab = reinterpret_cast<double*>(ret);
 //	int cnt = 0;
 
+	//Write to matrix number of elements which will be written to
+	lib::Xyz_Euler_Zyz_vector new_pos;
+	std::vector<double> vec;
+	actual_pos.get_xyz_euler_zyz(new_pos);
+	new_pos.to_vector(vec);
+	tab[0] = vec.size();
+
+	int i = 1;
+	//Rewrite vector elements to matrix
+	for(std::vector<double>::iterator it = vec.begin(); (it != vec.end()) && (i < MP_2_ECP_STRING_SIZE/sizeof(double)); ++it, ++i){
+		tab[i] = *it;
+	}
+
+
 	std::vector<std::pair<task::mrrocpp_regions, bool> >::iterator it;// = readings.begin();
 //	it += num_send;
 
-	tab[0] = 0;
+	tab[i] = 0;
 
-	for(it = readings.begin(); it != readings.end() && ((5 * tab[0] + 1) * sizeof(double) < MP_2_ECP_STRING_SIZE); ++it){
+	for(it = readings.begin(); it != readings.end() && ((5 * tab[i] + 1) * sizeof(double) < MP_2_ECP_STRING_SIZE); ++it){
 		if(!(*it).second){
-			tab[5 * (int)tab[0] + 1] = (*it).first.x;
-			tab[5 * (int)tab[0] + 2] = (*it).first.y;
-			tab[5 * (int)tab[0] + 3] = (*it).first.w;
-			tab[5 * (int)tab[0] + 4] = (*it).first.h;
-			tab[5 * (int)tab[0] + 5] = (*it).first.a;
-			tab[0]++;
+			tab[i + 5 * (int)tab[i] + 1] = (*it).first.x;
+			tab[i + 5 * (int)tab[i] + 2] = (*it).first.y;
+			tab[i + 5 * (int)tab[i] + 3] = (*it).first.w;
+			tab[i + 5 * (int)tab[i] + 4] = (*it).first.h;
+			tab[i + 5 * (int)tab[i] + 5] = (*it).first.a;
+			tab[i]++;
 			(*it).second = true;
 		}
 	}
 
-	if((int)tab[0])
+	if((int)tab[i]){
 		strcpy(ecp_t.ecp_reply.ecp_2_mp_string, ret);
-	else
-		strcpy(ecp_t.ecp_reply.ecp_2_mp_string, "KONIEC");
+		delete(ret);
+		return true;
+	}else{
+//		strcpy(ecp_t.ecp_reply.ecp_2_mp_string, "NIC");
+		delete(ret);
+		return false;
+	}
 
-	delete(ret);
 
 
 //	tab[0] = cnt;

@@ -64,7 +64,7 @@ private:
 	void addCodesToVector(task::fradia_regions reading);
 	bool checkIfCodeBeenRead(task::mrrocpp_regions& code);
 	bool codesIntersect(task::mrrocpp_regions& c1, task::mrrocpp_regions& c2);
-	void sendNextPart();
+	bool sendNextPart();
 };
 
 }

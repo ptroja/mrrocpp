@@ -34,10 +34,11 @@ private:
 	ecp::common::task::fradia_regions reg;
 	std::vector<double> pos;
 
-	std::vector<ecp::common::task::mrrocpp_regions> regions;
+	std::vector<std::pair<ecp::common::task::mrrocpp_regions, bool> > regions;
 
 	//Second FraDIA task definition
 	std::string second_task;
+
 
 };
 

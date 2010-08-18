@@ -18,8 +18,9 @@ namespace ecp {
 namespace common {
 
 
-/**Template class used to make messages from vectors for sending coordinates,
- * and making coordinates vectors from received string messages.
+/**C
+ * lass used to make messages from various types of data
+ * and data from strings sent as orders
  */
 class bcl_message
 {
@@ -37,11 +38,8 @@ public:
 
 	std::vector<double> stringToFradiaOrder(char* str, task::fradia_regions reg);
 
-	void stringToECPOrder(char* str, std::vector<task::mrrocpp_regions> &vec);
+	std::vector<double> stringToECPOrder(char* str, std::vector<std::pair<ecp::common::task::mrrocpp_regions, bool> > &vec);
 
-//	void addFradiaOrderToVector(task::fradia_regions& reg, std::vector<std::pair<task::mrrocpp_regions, bool> >& vec);
-//
-//	char* regionsVectorToString(std::vector<task::mrrocpp_regions> readings, int& num);
 };
 
 }

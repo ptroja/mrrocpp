@@ -42,6 +42,7 @@ void bclike_mp::main_task_algorithm(void){
 	sr_ecp_msg->message("MP start");
 
 	char* tab;
+	char* tmp;
 	std::vector<double> vec;
 
 //	Set robot to start position (center)
@@ -94,16 +95,18 @@ void bclike_mp::main_task_algorithm(void){
 	return;
 #endif
 
-#ifdef SINGLE_MOVE
-
+	//Setup end position
 	vec.clear();
 	vec.assign(ecp::common::task::right, ecp::common::task::right + VEC_SIZE);
 	tab = msg.trajectoryToString(vec);
 
+	//Start moving
 	set_next_ecps_state (ecp_mp::task::ECP_ST_SMOOTH_MOVE, (int)mrrocpp::ecp::common::task::START, tab, 300, 1, actual_robot.c_str());
 	sr_ecp_msg->message("MOVE right");
 	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, actual_robot.c_str(), actual_robot.c_str());
 
+
+#ifdef SINGLE_MOVE
 
 	while(strcmp(robot_m[actual_robot]->ecp_reply_package.ecp_2_mp_string, "KONIEC")){
 
@@ -114,42 +117,108 @@ void bclike_mp::main_task_algorithm(void){
 		run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, actual_robot.c_str(), actual_robot.c_str());
 	}
 
-
-	std::vector<ecp::common::task::mrrocpp_regions>::iterator it;
+	std::vector<std::pair<ecp::common::task::mrrocpp_regions, bool> >::iterator it;
 
 	for(it = regions.begin(); it != regions.end(); ++it){
-		//TODO: przelaczyc zadanie FrDIA + wywolac subtaks Marcina
-	}
+		//Create vector with code position
+		vec[0] = (*it).first.x;
+		vec[1] = (*it).first.y;
 
-	#else
-
-	bool run = true;
-
-	vec.clear();
-	vec.assign(ecp::common::task::right, ecp::common::task::right + VEC_SIZE);
-	tab = msg.trajectoryToString(vec);
-
-	while(run){
-
-		set_next_ecps_state (ecp_mp::task::ECP_ST_SMOOTH_MOVE, (int)mrrocpp::ecp::common::task::START, tab, 300, 1, actual_robot.c_str());
+		//Move to code position
+		tmp = msg.trajectoryToString(vec);
+		set_next_ecps_state (ecp_mp::task::BCL_MOTION_DIR_STR, (int)mrrocpp::ecp::common::task::START, tmp, 300, 1, actual_robot.c_str());
 		run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, actual_robot.c_str(), actual_robot.c_str());
 
-		if(!strcmp(robot_m[actual_robot]->ecp_reply_package.ecp_2_mp_string, "KONIEC")){
-			run = false;
-		}else{
-
-			pos = msg.stringToFradiaOrder(robot_m[actual_robot]->ecp_reply_package.ecp_2_mp_string, reg);
-
-			for(int i = 0; i < reg.num_found; ++i){
-				//TODO: wywołać Marcina subtask + przelaczyc zadanie FrDIA
-			}
-
-			//TODO: wrocic z zadaniem do mojego
-		}
-
+		//TODO: przelaczyc zadanie FrDIA
+		//TODO: wywolac subtaks Marcina
 	}
 
-#endif
+
+#else
+
+	std::vector<std::pair<ecp::common::task::mrrocpp_regions, bool> >::iterator it;
+
+	while(strcmp(robot_m[actual_robot]->ecp_reply_package.ecp_2_mp_string, "KONIEC")){
+
+		pos = msg.stringToECPOrder(robot_m[actual_robot]->ecp_reply_package.ecp_2_mp_string, regions);
+
+		for(it = regions.begin(); it!= regions.end(); ++it){
+			if(!(*it).second){
+				//TODO: Przelaczyc Task we FraDIA
+				//TODO: Wywolac subtask Marcina
+				(*it).second = true;
+			}
+			//Get back to previous position
+			tab = msg.trajectoryToString(pos);
+			set_next_ecps_state (ecp_mp::task::BCL_MOTION_DIR_STR, (int)mrrocpp::ecp::common::task::START, tab, 300, 1, actual_robot.c_str());
+			run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, actual_robot.c_str(), actual_robot.c_str());
+
+		}
+
+		set_next_ecps_state (ecp_mp::task::ECP_ST_SMOOTH_MOVE, (int)mrrocpp::ecp::common::task::START, tab, 300, 1, actual_robot.c_str());
+		sr_ecp_msg->message("MOVE right");
+		run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, actual_robot.c_str(), actual_robot.c_str());
+	}
+
+
+#endif //SINGLE_MOVE
+
+//#ifdef SINGLE_MOVE
+//
+//	vec.clear();
+//	vec.assign(ecp::common::task::right, ecp::common::task::right + VEC_SIZE);
+//	tab = msg.trajectoryToString(vec);
+//
+//	set_next_ecps_state (ecp_mp::task::ECP_ST_SMOOTH_MOVE, (int)mrrocpp::ecp::common::task::START, tab, 300, 1, actual_robot.c_str());
+//	sr_ecp_msg->message("MOVE right");
+//	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, actual_robot.c_str(), actual_robot.c_str());
+//
+
+//	while(strcmp(robot_m[actual_robot]->ecp_reply_package.ecp_2_mp_string, "KONIEC")){
+//
+//		msg.stringToECPOrder(robot_m[actual_robot]->ecp_reply_package.ecp_2_mp_string, regions);
+//
+//		set_next_ecps_state (ecp_mp::task::ECP_ST_SMOOTH_MOVE, (int)mrrocpp::ecp::common::task::START, tab, 300, 1, actual_robot.c_str());
+//		sr_ecp_msg->message("MOVE right");
+//		run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, actual_robot.c_str(), actual_robot.c_str());
+//	}
+//
+//
+//	std::vector<ecp::common::task::mrrocpp_regions>::iterator it;
+//
+//	for(it = regions.begin(); it != regions.end(); ++it){
+//		//TODO: przelaczyc zadanie FrDIA + wywolac subtaks Marcina
+//	}
+//
+//	#else
+//
+//	bool run = true;
+//
+//	vec.clear();
+//	vec.assign(ecp::common::task::right, ecp::common::task::right + VEC_SIZE);
+//	tab = msg.trajectoryToString(vec);
+//
+//	while(run){
+//
+//		set_next_ecps_state (ecp_mp::task::ECP_ST_SMOOTH_MOVE, (int)mrrocpp::ecp::common::task::START, tab, 300, 1, actual_robot.c_str());
+//		run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, actual_robot.c_str(), actual_robot.c_str());
+//
+//		if(!strcmp(robot_m[actual_robot]->ecp_reply_package.ecp_2_mp_string, "KONIEC")){
+//			run = false;
+//		}else{
+//
+//			pos = msg.stringToFradiaOrder(robot_m[actual_robot]->ecp_reply_package.ecp_2_mp_string, reg);
+//
+//			for(int i = 0; i < reg.num_found; ++i){
+//				//TODO: wywołać Marcina subtask + przelaczyc zadanie FrDIA
+//			}
+//
+//			//TODO: wrocic z zadaniem do mojego
+//		}
+//
+//	}
+//
+//#endif
 
 	sr_ecp_msg->message("KONIEC");
 
