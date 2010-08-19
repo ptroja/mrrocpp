@@ -15,7 +15,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <sys/types.h>
-#include <inttypes.h>
+#include <stdint.h>
 #include <fcntl.h>
 #include <cstring>
 #include <unistd.h>
