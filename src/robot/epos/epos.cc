@@ -14,7 +14,7 @@
 #include <errno.h>   /* Error number definitions */
 #include <stdlib.h>
 #include <stdint.h>  /* int types with given size */
-#include <math.h>
+#include <cmath>
 #include <sys/select.h>
 
 #include "epos.h"

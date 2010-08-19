@@ -43,7 +43,7 @@
 #include <termios.h> /* POSIX terminal control definitions */
 #include <stdlib.h>
 #include <stdint.h>  /* int types with given size */
-#include <math.h>
+#include <cmath>
 
 #include <boost/exception.hpp>
 #include <boost/type_traits/is_same.hpp>

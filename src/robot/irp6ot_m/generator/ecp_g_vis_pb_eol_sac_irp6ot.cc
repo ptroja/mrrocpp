@@ -14,7 +14,7 @@
  */
 
 #include <cstdio>
-#include <math.h>
+#include <cmath>
 #include <iostream>
 
 #include "lib/typedefs.h"

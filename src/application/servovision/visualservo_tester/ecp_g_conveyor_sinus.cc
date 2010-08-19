@@ -6,7 +6,7 @@
  */
 
 #include "ecp_g_conveyor_sinus.h"
-#include <math.h>
+#include <cmath>
 
 #include "lib/logger.h"
 

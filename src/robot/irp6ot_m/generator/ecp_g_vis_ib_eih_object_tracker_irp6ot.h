@@ -11,7 +11,7 @@
 
 #include <iostream>
 #include <string.h>
-#include <math.h>
+#include <cmath>
 
 #include "lib/impconst.h"
 #include "lib/com_buf.h"

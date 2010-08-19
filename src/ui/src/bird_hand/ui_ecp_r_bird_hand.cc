@@ -15,7 +15,7 @@
 #include <assert.h>
 #include <fcntl.h>
 #include <errno.h>
-#include <math.h>
+#include <cmath>
 
 #include "lib/typedefs.h"
 #include "lib/impconst.h"

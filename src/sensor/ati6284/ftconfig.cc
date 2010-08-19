@@ -23,7 +23,7 @@
      * OTHER DEALINGS IN THE SOFTWARE.
      */
 
-#include <math.h>              //!<  sin(), cos()
+#include <cmath>              //!<  sin(), cos()
 #include <cstdio>
 #include "dom.h"				//!<  GBB: added
 #include "ftconfig.h"			//!<  GBB: ftconfig.h modified to include strcutures in ftrt.h

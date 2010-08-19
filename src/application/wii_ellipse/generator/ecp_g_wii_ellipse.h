@@ -2,7 +2,7 @@
 #define ECP_WII_ELLIPSE_GENERATOR_H
 
 #include <string.h>
-#include <math.h>
+#include <cmath>
 
 #include "base/ecp/ecp_generator.h"
 

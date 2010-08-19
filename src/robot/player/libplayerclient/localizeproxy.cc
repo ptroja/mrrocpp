@@ -49,7 +49,7 @@
 #include <playerclient.h>
 #include <netinet/in.h>
 #include <stdlib.h>
-#include <math.h>
+#include <cmath>
 #include <string.h> // for memset
 #include <cstdio>
 

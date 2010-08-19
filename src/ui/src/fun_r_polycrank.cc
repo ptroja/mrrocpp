@@ -16,7 +16,7 @@
 #include <sys/netmgr.h>
 #include <errno.h>
 #include <process.h>
-#include <math.h>
+#include <cmath>
 
 #include "lib/srlib.h"
 #include "ui/src/ui_const.h"

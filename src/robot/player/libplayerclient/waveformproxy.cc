@@ -42,7 +42,7 @@
 #include <stdlib.h>
 #include <cstdio>
 #include <cstdio>
-#include <math.h>
+#include <cmath>
 #include <unistd.h>
 
 #if HAVE_SYS_SOUNDCARD_H

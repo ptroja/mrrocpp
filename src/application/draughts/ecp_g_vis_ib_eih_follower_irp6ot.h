@@ -10,7 +10,7 @@
 
 #include <iostream>
 #include <string.h>
-#include <math.h>
+#include <cmath>
 
 #include "generator/ecp/ecp_g_visual_servo.h"
 #include "sensor/fradia/ecp_mp_s_fradia_sensor.h"

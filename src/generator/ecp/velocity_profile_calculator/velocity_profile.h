@@ -9,7 +9,7 @@
 #define _VELOCITY_PROFILE_H_
 
 //#include <list>
-#include <math.h>
+#include <cmath>
 #include <algorithm>
 #include <vector>
 

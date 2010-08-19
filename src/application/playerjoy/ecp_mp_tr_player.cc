@@ -1,7 +1,7 @@
 #include <unistd.h>
 #include <pthread.h>
 #include <string.h>
-#include <math.h>
+#include <cmath>
 
 #include "lib/typedefs.h"
 #include "lib/impconst.h"

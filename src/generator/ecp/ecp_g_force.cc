@@ -24,7 +24,7 @@
 #include <iostream>
 #include <time.h>
 #include <unistd.h>
-#include <math.h>
+#include <cmath>
 #include <iostream>
 #include <string>
 

@@ -14,7 +14,7 @@
 #include <string.h>
 #include <signal.h>
 #include <process.h>
-#include <math.h>
+#include <cmath>
 #include <sys/wait.h>
 #include <sys/types.h>
 #include <sys/sched.h>

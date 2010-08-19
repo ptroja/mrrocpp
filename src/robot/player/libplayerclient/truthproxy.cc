@@ -50,7 +50,7 @@
 #include <netinet/in.h>
 #include <string.h>
 #include <cstdio>
-#include <math.h>
+#include <cmath>
 
 // angles must be transmitted as integers on [0..359]
 #define RAD_TO_POS_DEG(x) (((((int) (x * 180 / M_PI)) % 360) + 360) % 360)

@@ -51,7 +51,7 @@
 
 #include <playerclient.h>
 #include <cstdio>
-#include <math.h>
+#include <cmath>
 #include <netinet/in.h>
 
 IRProxy::IRProxy(PlayerClient *pc, unsigned short index,

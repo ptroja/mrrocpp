@@ -1,5 +1,5 @@
 #include <string.h>
-#include <math.h>
+#include <cmath>
 #include <errno.h>
 #include <ctype.h>
 #include <cstdio>

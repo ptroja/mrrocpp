@@ -15,7 +15,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
-#include <math.h>
+#include <cmath>
 #include <signal.h>
 #include <errno.h>
 #include <sys/wait.h>

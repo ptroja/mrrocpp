@@ -1,5 +1,5 @@
 #include <cstdio>
-#include <math.h>
+#include <cmath>
 
 #include "lib/typedefs.h"
 #include "lib/impconst.h"

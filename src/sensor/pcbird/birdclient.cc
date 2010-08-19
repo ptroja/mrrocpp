@@ -24,7 +24,7 @@
 #include <arpa/inet.h>
 #include <errno.h>
 #include <netdb.h>
-#include <math.h>
+#include <cmath>
 #include <sys/poll.h>
 #include <netinet/in.h>
 

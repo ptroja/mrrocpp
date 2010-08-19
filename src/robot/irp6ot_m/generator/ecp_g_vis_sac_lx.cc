@@ -8,7 +8,7 @@
 // Funkcje do konstruowania procesow MP
 
 #include <cstdio>
-#include <math.h>
+#include <cmath>
 #include <iostream>
 
 #include "lib/typedefs.h"

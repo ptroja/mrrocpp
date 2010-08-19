@@ -11,7 +11,7 @@
 #include "generator/ecp/ecp_g_visual_servo.h"
 
 #include <string.h>
-#include <math.h>
+#include <cmath>
 
 #include "lib/impconst.h"
 #include "lib/com_buf.h"

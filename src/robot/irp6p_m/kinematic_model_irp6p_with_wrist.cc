@@ -11,7 +11,7 @@
  */
 
 #include <cstdio>
-#include <math.h>
+#include <cmath>
 
 #include "lib/com_buf.h"
 #include "robot/irp6p_m/kinematic_model_irp6p_with_wrist.h"

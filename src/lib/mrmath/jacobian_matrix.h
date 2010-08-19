@@ -14,7 +14,7 @@
 #define __JACOBIAN_MATRIX_H
 
 #include <iostream>
-#include <math.h>
+#include <cmath>
 #include <string.h>
 
 #include "lib/impconst.h"	// frame_tab

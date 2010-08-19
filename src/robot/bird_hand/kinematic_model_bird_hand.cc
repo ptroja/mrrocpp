@@ -8,7 +8,7 @@
  * @ingroup KINEMATICS IRP6OT_KINEMATICS
  */
 
-#include <math.h>
+#include <cmath>
 
 #include "lib/com_buf.h"
 #include "robot/bird_hand/kinematic_model_bird_hand.h"

@@ -12,7 +12,7 @@
 
 #include <cstdio>
 #include <stdlib.h>
-#include <math.h>
+#include <cmath>
 #include <ctype.h>
 
 #include <libxml/xmlmemory.h>

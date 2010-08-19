@@ -2,7 +2,7 @@
 #define ECP_WII_GENERATOR_H
 
 #include <string.h>
-#include <math.h>
+#include <cmath>
 
 #include "lib/mrmath/mrmath.h"
 

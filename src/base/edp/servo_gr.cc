@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <iostream>
 #include <fstream>
-#include <math.h>
+#include <cmath>
 #include <unistd.h>
 #include <errno.h>
 #include <time.h>

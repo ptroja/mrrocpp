@@ -6,7 +6,7 @@
 // -------------------------------------------------------------------------
 
 #include <cstdio>
-#include <math.h>
+#include <cmath>
 #include <map>
 #include <string.h>
 

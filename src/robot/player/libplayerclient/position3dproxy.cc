@@ -49,7 +49,7 @@
 #include <playerclient.h>
 #include <netinet/in.h>
 #include <string.h>
-#include <math.h>
+#include <cmath>
 #include <cstdio>
 
 #define PTOHL(x) static_cast<int32_t>(ntohl(x))/1e3

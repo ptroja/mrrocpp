@@ -9,7 +9,7 @@
 // Data:		14.02.2007
 // ------------------------------------------------------------------------
 
-#include <math.h>
+#include <cmath>
 
 #include "lib/mrmath/mathtr.h"
 

@@ -50,7 +50,7 @@
 #include <netinet/in.h>
 #include <string.h>
 #include <cstdio>
-#include <math.h>
+#include <cmath>
     
 // send a camera command
 //

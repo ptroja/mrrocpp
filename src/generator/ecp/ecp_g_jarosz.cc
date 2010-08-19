@@ -11,7 +11,7 @@
 
 #include <cstdio>
 #include <string.h>
-#include <math.h>
+#include <cmath>
 #include <errno.h>
 #include <unistd.h>
 #include <fstream>

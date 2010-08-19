@@ -16,7 +16,7 @@
 #include <sys/netmgr.h>
 #include <errno.h>
 #include <process.h>
-#include <math.h>
+#include <cmath>
 #include <boost/bind.hpp>
 
 #include "lib/srlib.h"

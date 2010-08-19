@@ -1,7 +1,7 @@
 #include <cstdio>
 #include <string.h>
 #include <unistd.h>
-#include <math.h>
+#include <cmath>
 #include <iostream>
 #include <cstdlib>
 

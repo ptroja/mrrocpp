@@ -1,5 +1,5 @@
 #include <cstdio>
-#include <math.h>
+#include <cmath>
 #include <assert.h>
 #include <sys/types.h>
 #include <sys/socket.h>

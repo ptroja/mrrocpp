@@ -10,7 +10,7 @@
 // Data:		24.02.2007
 // ------------------------------------------------------------------------
 
-#include <math.h>
+#include <cmath>
 
 #include "lib/com_buf.h"
 #include "robot/polycrank/kinematic_model_polycrank.h"
