@@ -8,7 +8,7 @@
 // -------------------------------------------------------------------------
 
 #include <cstdio>
-#include <string.h>
+#include <cstring>
 #include <unistd.h>
 #include <arpa/inet.h>
 #include <sys/select.h>

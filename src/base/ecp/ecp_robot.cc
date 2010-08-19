@@ -1,12 +1,12 @@
-#include <string.h>
+#include <cstring>
 #include <unistd.h>
 #include <cstdio>
-#include <errno.h>
+#include <cerrno>
 #include <stdint.h>
 
 #include <sys/types.h>
 #include <sys/wait.h>
-#include <signal.h>
+#include <csignal>
 
 #ifdef __gnu_linux__
 #include <execinfo.h>

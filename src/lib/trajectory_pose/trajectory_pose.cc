@@ -5,7 +5,7 @@
  * Contains bodies of the methods of trajectory_pose class.
  */
 
-#include <string.h>
+#include <cstring>
 
 #include "lib/trajectory_pose/trajectory_pose.h"
 

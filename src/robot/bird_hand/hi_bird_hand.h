@@ -1,5 +1,5 @@
 
-#include <inttypes.h>
+#include <stdint.h>
 #include <termios.h>
 #include <cstdlib>
 #include <cstdio>

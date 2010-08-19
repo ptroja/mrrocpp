@@ -10,9 +10,9 @@
 // -------------------------------------------------------------------------
 
 #include <cstdio>
-#include <string.h>
+#include <cstring>
 #include <cmath>
-#include <errno.h>
+#include <cerrno>
 #include <unistd.h>
 #include <fstream>
 #if defined(__QNXNTO__)

@@ -47,7 +47,7 @@
  */
 
 #include <playerclient.h>
-#include <string.h> // for memset
+#include <cstring> // for memset
 #include <cstdio>
 
 // constructor will try to get access to the device

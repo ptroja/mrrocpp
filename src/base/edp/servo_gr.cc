@@ -9,8 +9,8 @@
 #include <fstream>
 #include <cmath>
 #include <unistd.h>
-#include <errno.h>
-#include <time.h>
+#include <cerrno>
+#include <ctime>
 
 #include "lib/typedefs.h"
 #include "lib/impconst.h"

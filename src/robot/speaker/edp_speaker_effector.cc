@@ -11,20 +11,20 @@
 // ------------------------------------------------------------------------
 
 #include <cstdio>
-#include <ctype.h>
+#include <cctype>
 #include <cstdlib>
 #include <unistd.h>
-#include <string.h>
+#include <cstring>
 #include <cmath>
-#include <signal.h>
-#include <errno.h>
+#include <csignal>
+#include <cerrno>
 #include <sys/wait.h>
 #include <sys/types.h>
 #include <sys/neutrino.h>
 #include <sys/sched.h>
 #include <sys/iofunc.h>
 #include <sys/dispatch.h>
-#include <errno.h>
+#include <cerrno>
 #include <pthread.h>
 #include <process.h>
 #include <sys/netmgr.h>

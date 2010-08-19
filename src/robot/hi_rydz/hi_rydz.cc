@@ -9,10 +9,10 @@
 // ------------------------------------------------------------------------
 
 #include <cstdio>
-#include <string.h>
+#include <cstring>
 #include <cstdlib>
-#include <signal.h>
-#include <time.h>
+#include <csignal>
+#include <ctime>
 #include <sys/types.h>
 #include <unistd.h>
 #include <stdint.h>

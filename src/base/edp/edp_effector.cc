@@ -10,8 +10,8 @@
 #include <cstdio>
 #include <cstdlib>
 #include <unistd.h>
-#include <string.h>
-#include <signal.h>
+#include <cstring>
+#include <csignal>
 #include <sys/wait.h>
 #include <sys/types.h>
 #if !defined(USE_MESSIP_SRR)
@@ -24,7 +24,7 @@
 #include "messip_dataport.h"
 #endif /* !USE_MESSIP_SRR */
 #include <pthread.h>
-#include <errno.h>
+#include <cerrno>
 
 #include "lib/mis_fun.h"
 #include "base/edp/edp_effector.h"

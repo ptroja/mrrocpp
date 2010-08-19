@@ -9,10 +9,6 @@
 #ifndef ECP_VIS_IB_EIH_OBJECT_TRACKER_IRP6OT_H_
 #define ECP_VIS_IB_EIH_OBJECT_TRACKER_IRP6OT_H_
 
-#include <iostream>
-#include <string.h>
-#include <cmath>
-
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 

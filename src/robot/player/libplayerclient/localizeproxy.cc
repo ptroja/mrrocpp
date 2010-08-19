@@ -50,7 +50,7 @@
 #include <netinet/in.h>
 #include <cstdlib>
 #include <cmath>
-#include <string.h> // for memset
+#include <cstring> // for memset
 #include <cstdio>
 
 #ifndef MIN

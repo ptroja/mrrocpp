@@ -1,9 +1,6 @@
 #if !defined(_ECP_T_AXZB_FORCE_H)
 #define _ECP_T_AXZB_FORCE_H
 
-#include <string.h>
-#include <unistd.h>
-
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 #include "lib/srlib.h"

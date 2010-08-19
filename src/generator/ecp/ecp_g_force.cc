@@ -22,7 +22,7 @@
 #include <cstdio>
 #include <fstream>
 #include <iostream>
-#include <time.h>
+#include <ctime>
 #include <unistd.h>
 #include <cmath>
 #include <iostream>

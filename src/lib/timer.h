@@ -1,7 +1,7 @@
 #ifndef TIMER_H
 #define TIMER_H
 
-#include <time.h>
+#include <ctime>
 
 namespace mrrocpp {
 namespace lib {

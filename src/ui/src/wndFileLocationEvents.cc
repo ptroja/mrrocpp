@@ -14,7 +14,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <unistd.h>
-#include <string.h>
+#include <cstring>
 
 /* MRROC++ headers */
 #include "lib/typedefs.h"

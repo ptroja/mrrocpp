@@ -8,10 +8,6 @@
 #ifndef ECP_G_ROTATE_GRIPPER_H_
 #define  ECP_G_ROTATE_GRIPPER_H_
 
-#include <iostream>
-#include <string.h>
-#include <cmath>
-
 #include "base/ecp/ecp_generator.h"
 #include "sensor/fradia/ecp_mp_s_fradia_sensor.h"
 

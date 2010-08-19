@@ -1,7 +1,7 @@
-#include <string.h>
+#include <cstring>
 #include <cmath>
-#include <errno.h>
-#include <ctype.h>
+#include <cerrno>
+#include <cctype>
 #include <cstdio>
 #include <fstream>
 #include <unistd.h>

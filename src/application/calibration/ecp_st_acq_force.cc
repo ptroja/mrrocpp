@@ -1,5 +1,5 @@
 #include <cstdio>
-#include <string.h>
+#include <cstring>
 #include <unistd.h>
 #include <cmath>
 #include <iostream>
@@ -47,7 +47,7 @@ void acq_force::conditional_execution()
 
 }
 
-void acq_force::write_data(std::string _K_fp, std::string _kk_fp, std::string _M_fp, std::string _mm_fp, int _number_of_measures)
+void acq_force::write_data(const std::string & _K_fp, const std::string & _kk_fp, const std::string & _M_fp, const std::string & _mm_fp, int _number_of_measures)
 {
 	K_fp = _K_fp;
 	kk_fp = _kk_fp;

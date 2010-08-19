@@ -1,9 +1,6 @@
 #ifndef ECP_WII_GENERATOR_H
 #define ECP_WII_GENERATOR_H
 
-#include <string.h>
-#include <cmath>
-
 #include "lib/mrmath/mrmath.h"
 
 #include "base/ecp/ecp_generator.h"

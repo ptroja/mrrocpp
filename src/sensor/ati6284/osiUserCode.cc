@@ -12,7 +12,7 @@
 
 //!< Platform independent headers
 #include <stdint.h>
-#include <string.h>
+#include <cstring>
 
 #include <hw/pci.h>
 #include <sys/mman.h>

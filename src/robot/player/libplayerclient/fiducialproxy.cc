@@ -50,7 +50,7 @@
 #include <cmath>
 #include <assert.h>
 #include <netinet/in.h>
-#include <string.h>
+#include <cstring>
 #include <cstdio>
 #include "playerpacket.h"
 

@@ -7,7 +7,7 @@
 #include <netdb.h>
 #include <unistd.h>
 #include <fcntl.h>
-#include <string.h>
+#include <cstring>
 
 #include "lib/typedefs.h"
 #include "lib/impconst.h"

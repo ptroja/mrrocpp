@@ -44,7 +44,7 @@
 
 #include <playerclient.h>
 #include <assert.h>
-#include <string.h>
+#include <cstring>
 #include <cstdio>
 
 bool

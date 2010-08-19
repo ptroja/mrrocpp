@@ -6,9 +6,9 @@
  */
 
 #include <cstdio>
-#include <string.h>
+#include <cstring>
 #include <stdint.h>
-#include <errno.h>
+#include <cerrno>
 
 #include <iostream>
 #include <fstream>

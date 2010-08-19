@@ -49,7 +49,7 @@
 #include <playerclient.h>
 #include <netinet/in.h>
 #include <cstdio>
-#include <string.h> // for memset
+#include <cstring> // for memset
     
 // enable/disable the sonars
 //

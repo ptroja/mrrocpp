@@ -50,7 +50,7 @@
 #include <assert.h>
 #include <sys/time.h>
 #include <netinet/in.h>
-#include <string.h>
+#include <cstring>
 #include <cstdio>
 #include <netdb.h> // for gethostbyname(3)
 

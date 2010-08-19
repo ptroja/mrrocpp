@@ -12,11 +12,11 @@
 #include <cstdio>
 #include <cstdlib>
 #include <unistd.h>
-#include <string.h>
+#include <cstring>
 #include <cassert>
 #include <cmath>
 #include <fcntl.h>
-#include <errno.h>
+#include <cerrno>
 
 #include "lib/typedefs.h"
 #include "lib/impconst.h"

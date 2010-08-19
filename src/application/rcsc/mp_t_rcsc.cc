@@ -1,6 +1,6 @@
 #include <cstdio>
 #include <unistd.h>
-#include <string.h>
+#include <cstring>
 #include <list>
 #include <map>
 

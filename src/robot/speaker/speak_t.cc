@@ -5,8 +5,8 @@
 
 /********************************* INCLUDES *********************************/
 #include <cstdio>
-#include <string.h>
-#include <signal.h>
+#include <cstring>
+#include <csignal>
 #include <cstdlib>
 
 #include "lib/typedefs.h"

@@ -47,7 +47,7 @@
  */
 
 #include <playerclient.h>
-#include <string.h>  // for memcpy
+#include <cstring>  // for memcpy
 #include <cstdio>
 #include "replace.h"  // for poll
 

@@ -9,9 +9,9 @@
 #include <cstdio>
 #include <cstdlib>
 #include <unistd.h>
-#include <string.h>
-#include <signal.h>
-#include <ctype.h>
+#include <cstring>
+#include <csignal>
+#include <cctype>
 #include <sys/wait.h>
 #include <sys/types.h>
 #ifdef __QNXNTO__

@@ -9,13 +9,13 @@
 #include <cstdio>
 #include <sys/types.h>
 #include <sys/wait.h>
-#include <signal.h>
-#include <stdarg.h>
-#include <errno.h>
+#include <csignal>
+#include <cstdarg>
+#include <cerrno>
 #include <cstdlib>
 #include <unistd.h>
 #include <fstream>
-#include <string.h>
+#include <cstring>
 
 #include <boost/foreach.hpp>
 

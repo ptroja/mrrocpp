@@ -23,9 +23,9 @@
  	* ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  	* OTHER DEALINGS IN THE SOFTWARE. */
 
-#include <limits.h>
+#include <climits>
 #include <cstdlib>
-#include <string.h>
+#include <cstring>
 #include <cstdio>
 #include "dom.h"
 

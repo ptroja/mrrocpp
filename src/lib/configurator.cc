@@ -8,15 +8,15 @@
 
 #include <cstdio>
 #include <cstdlib>
-#include <string.h>
+#include <cstring>
 #include <cassert>
-#include <errno.h>
+#include <cerrno>
 #include <unistd.h>
 #include <sys/wait.h>
 #include <iostream>
 #include <strings.h>
 #include <sys/utsname.h>
-#include <time.h>
+#include <ctime>
 #include <fcntl.h>
 #include <unistd.h>
 #include <cstdlib>

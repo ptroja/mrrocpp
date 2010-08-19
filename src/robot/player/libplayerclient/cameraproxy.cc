@@ -48,9 +48,9 @@
 
 #include <playerclient.h>
 #include <netinet/in.h>
-#include <string.h>
+#include <cstring>
 #include <cmath>
-#include <limits.h>
+#include <climits>
 #include <cstdio>
 #include <assert.h>
 #include <cstdlib>

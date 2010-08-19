@@ -6,7 +6,7 @@
 
 #include <cstdio>
 #include <cstdlib>
-#include <signal.h>
+#include <csignal>
 #include <sys/types.h>
 #include <sys/wait.h>
 

@@ -1,7 +1,7 @@
 #if !defined(_VSP_TIME_SENSOR_H)
 #define _VSP_TIME_SENSOR_H
 
-#include <time.h>
+#include <ctime>
 
 #include "base/vsp/vsp_sensor.h"
 

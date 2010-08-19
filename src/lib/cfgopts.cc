@@ -59,7 +59,7 @@
 
 #include <cstdio>
 #include <cstdlib>
-#include <string.h>
+#include <cstring>
 #include <strings.h>
 #include "lib/cfgopts.h"
 

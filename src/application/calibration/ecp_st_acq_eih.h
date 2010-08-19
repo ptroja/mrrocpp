@@ -6,13 +6,11 @@
 #if !defined(_ECP_ST_ACQ_EIH_H)
 #define _ECP_ST_ACQ_EIH_H
 
+#include <string>
+
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
-#include <cstdio>
-#include <fstream>
-#include <iostream>
-#include <unistd.h>
 
 #include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
 #include "robot/irp6p_m/ecp_r_irp6p_m.h"
@@ -76,7 +74,7 @@ public:
 	void conditional_execution();
 	acq_eih(task &_ecp_t);
 	void
-			write_data(std::string _K_fp, std::string _k_fp, std::string _M_fp, std::string _m_fp, int _number_of_measures);
+			write_data(const std::string & _K_fp, const std::string & _k_fp, const std::string & _M_fp, const std::string & _m_fp, int _number_of_measures);
 };
 
 }

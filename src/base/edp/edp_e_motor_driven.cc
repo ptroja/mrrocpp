@@ -10,17 +10,17 @@
 // -------------------------------------------------------------------------
 
 #include <cstdio>
-#include <ctype.h>
+#include <cctype>
 #include <cstdlib>
 #include <unistd.h>
-#include <string.h>
+#include <cstring>
 #include <cmath>
 #include <iostream>
-#include <signal.h>
-#include <errno.h>
+#include <csignal>
+#include <cerrno>
 #include <sys/wait.h>
 #include <sys/types.h>
-#include <errno.h>
+#include <cerrno>
 #include <pthread.h>
 #ifdef __QNXNTO__
 #include <sys/neutrino.h>

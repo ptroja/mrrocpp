@@ -8,7 +8,7 @@
 
 #include <cstdio>
 #include <strings.h>
-#include <string.h>
+#include <cstring>
 
 #include <cstdarg>
 

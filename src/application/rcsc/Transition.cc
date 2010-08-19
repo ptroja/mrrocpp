@@ -1,6 +1,6 @@
 
 #include <cstdio>
-#include <string.h>
+#include <cstring>
 
 #include "Transition.h"
 

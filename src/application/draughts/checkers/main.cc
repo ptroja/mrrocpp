@@ -1,6 +1,6 @@
 #include <cstdlib>
-#include <ctype.h>
-#include <string.h>
+#include <cctype>
+#include <cstring>
 #include <cstdio>
 
 #include <arpa/inet.h>

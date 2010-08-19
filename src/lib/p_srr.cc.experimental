@@ -5,7 +5,7 @@
 #include <cstdio>
 #include <cstring>
 #include <cstdint>
-#include <errno.h>
+#include <cerrno>
 
 #include "lib/p_srr.h"
 

@@ -17,12 +17,12 @@
 #include <sys/types.h>
 #include <inttypes.h>
 #include <fcntl.h>
-#include <string.h>
+#include <cstring>
 #include <unistd.h>
 #include <sys/time.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
-#include <errno.h>
+#include <cerrno>
 #include <netdb.h>
 #include <cmath>
 #include <sys/poll.h>

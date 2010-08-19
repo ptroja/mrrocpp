@@ -8,10 +8,10 @@
  */
 
 #include <cstdio>   /* Standard input/output definitions */
-#include <string.h>  /* String function definitions */
+#include <cstring>  /* String function definitions */
 #include <unistd.h>  /* UNIX standard function definitions */
 #include <fcntl.h>   /* File control definitions */
-#include <errno.h>   /* Error number definitions */
+#include <cerrno>   /* Error number definitions */
 #include <cstdlib>
 #include <stdint.h>  /* int types with given size */
 #include <cmath>

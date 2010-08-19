@@ -4,11 +4,11 @@
 // -------------------------------------------------------------------------
 
 #include <cstdio>
-#include <string.h>
+#include <cstring>
 #include <cstdio>
 #include <unistd.h>
 #include <stdint.h>
-#include <errno.h>
+#include <cerrno>
 #include <cassert>
 #include <sys/utsname.h>
 

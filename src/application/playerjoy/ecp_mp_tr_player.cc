@@ -1,6 +1,6 @@
 #include <unistd.h>
 #include <pthread.h>
-#include <string.h>
+#include <cstring>
 #include <cmath>
 
 #include "lib/typedefs.h"

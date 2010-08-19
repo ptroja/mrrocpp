@@ -11,10 +11,10 @@
 #include <cstdio>
 #include <cstdlib>
 #include <unistd.h>
-#include <string.h>
+#include <cstring>
 #include <cassert>
 #include <fcntl.h>
-#include <errno.h>
+#include <cerrno>
 #include <cmath>
 
 #include "lib/typedefs.h"

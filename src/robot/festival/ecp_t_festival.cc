@@ -1,5 +1,5 @@
 #include <cstdio>
-#include <string.h>
+#include <cstring>
 #include <unistd.h>
 
 #include "robot/festival/ecp_g_festival.h"

@@ -49,7 +49,7 @@
 #include <playerclient.h>
 #include <netinet/in.h>
 #include <cstdio>
-#include <string.h> // for memset(3)
+#include <cstring> // for memset(3)
 
 BlobfinderProxy::BlobfinderProxy(PlayerClient* pc, unsigned short index, 
             unsigned char access):

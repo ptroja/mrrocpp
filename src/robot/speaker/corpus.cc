@@ -7,7 +7,7 @@
 #include <fstream>	// unitsel
 #include <vector>	// untisel [Standard Template Library]
 #include <cmath>	// unitsel - ceil(), floor()
-#include <time.h>	// unitsel - clock()
+#include <ctime>	// unitsel - clock()
 #include <cstdlib>
 #include <cstdio>
 //#include <windows.h> //WIN

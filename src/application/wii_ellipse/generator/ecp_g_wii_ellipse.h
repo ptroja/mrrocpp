@@ -1,9 +1,6 @@
 #ifndef ECP_WII_ELLIPSE_GENERATOR_H
 #define ECP_WII_ELLIPSE_GENERATOR_H
 
-#include <string.h>
-#include <cmath>
-
 #include "base/ecp/ecp_generator.h"
 
 namespace mrrocpp {

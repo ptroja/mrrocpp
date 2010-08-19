@@ -6,7 +6,7 @@
 // ------------------------------------------------------------------------
 
 #include <cstdio>
-#include <string.h>
+#include <cstring>
 #include <iostream>
 #include <dlfcn.h>
 

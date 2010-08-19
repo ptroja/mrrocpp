@@ -7,7 +7,7 @@
 // ------------------------------------------------------------------------
 
 #include <cstdio>
-#include <signal.h>
+#include <csignal>
 #include <cstdlib>
 
 #include "lib/impconst.h"

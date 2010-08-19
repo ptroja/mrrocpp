@@ -9,8 +9,9 @@
 #define VS_LOGGER_H_
 
 #include <cstdio>
-#include <time.h>
+#include <ctime>
 #include <string>
+
 #include <boost/thread/thread.hpp>
 #include <boost/utility.hpp>
 #include <boost/thread/mutex.hpp>

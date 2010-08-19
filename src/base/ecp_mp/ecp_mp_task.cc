@@ -7,13 +7,13 @@
 #include <cstdio>
 #include <iostream>
 #include <stdint.h>
-#include <string.h>
-#include <errno.h>
+#include <cstring>
+#include <cerrno>
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-#include <signal.h>
+#include <csignal>
 #if defined(__QNXNTO__)
 #include <sys/neutrino.h>
 #include <sys/netmgr.h>

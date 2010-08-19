@@ -48,7 +48,7 @@
 
 #include <playerclient.h>
 #include <netinet/in.h>
-#include <string.h>
+#include <cstring>
 #include <cstdio>
 
 void SimulationProxy::FillData(player_msghdr_t hdr, const char* buffer)

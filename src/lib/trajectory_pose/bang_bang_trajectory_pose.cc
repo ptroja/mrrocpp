@@ -5,7 +5,7 @@
  * Contains bodies of the methods of bang_bang_trajectory_pose class.
  */
 
-#include <string.h>
+#include <cstring>
 
 #include "lib/trajectory_pose/bang_bang_trajectory_pose.h"
 

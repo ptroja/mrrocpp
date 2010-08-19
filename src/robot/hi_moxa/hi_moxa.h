@@ -22,17 +22,9 @@
 
 //#include "edp_e_sarkofag.h"
 
-#include <inttypes.h>
+#include <stdint.h>
 #include <termios.h>
-#include <cstdlib>
-#include <cstdio>
-#include <unistd.h>
-#include <fcntl.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <sys/select.h>
-
-#include <string>
+#include <ctime>
 
 #define PORT "/dev/ser"
 #define BAUD 921600

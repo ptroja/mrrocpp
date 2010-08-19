@@ -6,7 +6,7 @@
 
 
 #include <cstdio>
-#include <string.h>
+#include <cstring>
 #include <map>
 
 #include "lib/typedefs.h"

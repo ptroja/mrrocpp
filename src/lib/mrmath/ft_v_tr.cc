@@ -1,5 +1,5 @@
 #include <cmath>
-#include <string.h>
+#include <cstring>
 #include <ostream>
 
 #include "lib/mis_fun.h"

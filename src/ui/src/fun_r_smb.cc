@@ -6,15 +6,15 @@
 #include <cstdio>
 #include <cstdlib>
 #include <unistd.h>
-#include <string.h>
+#include <cstring>
 #include <strings.h>
 #include <iostream>
 #include <fstream>
 #include <dirent.h>
 #include <sys/types.h>
-#include <signal.h>
+#include <csignal>
 #include <sys/netmgr.h>
-#include <errno.h>
+#include <cerrno>
 #include <process.h>
 #include <cmath>
 

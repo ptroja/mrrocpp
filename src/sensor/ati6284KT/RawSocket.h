@@ -6,7 +6,7 @@
 #include <cstring>
 #include <stdint.h>
 
-#include <signal.h>
+#include <csignal>
 #include <net/if_dl.h>
 #include <net/if_ether.h>
 #include <net/bpf.h>

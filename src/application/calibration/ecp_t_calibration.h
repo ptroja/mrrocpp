@@ -1,15 +1,8 @@
 #if !defined(_ECP_T_CALIBRATION_H)
 #define _ECP_T_CALIBRATION_H
 
-#include <string.h>
-#include <unistd.h>
-#include <cmath>
-#include <iostream>
-#include <cstdio>
-
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
-#include "lib/srlib.h"
 #include "lib/configurator.h"
 #include "base/ecp/ecp_task.h"
 #include "gsl/gsl_vector.h"

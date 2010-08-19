@@ -8,9 +8,9 @@
 #ifndef HARDWAREINTERFACE_H_
 #define HARDWAREINTERFACE_H_
 
-#include "base/edp/edp_e_motor_driven.h"
+#include <stdint.h>
 
-#include <inttypes.h>
+#include "base/edp/edp_e_motor_driven.h"
 
 namespace mrrocpp {
 namespace edp {

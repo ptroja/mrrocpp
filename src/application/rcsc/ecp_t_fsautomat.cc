@@ -7,7 +7,7 @@
 // -------------------------------------------------------------------------
 
 #include <cstdio>
-#include <string.h>
+#include <cstring>
 
 #include <libxml/xmlmemory.h>
 #include <libxml/parser.h>

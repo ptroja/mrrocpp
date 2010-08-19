@@ -5,7 +5,7 @@
 /********************************* INCLUDES *********************************/
 #include <cstdio>
 #include <cstdlib>
-#include <string.h>
+#include <cstring>
 
 #include "lib/typedefs.h"
 #include "lib/impconst.h"

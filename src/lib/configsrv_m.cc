@@ -1,8 +1,8 @@
 #include <cstdio>
 #include <stdint.h>
 #include <cassert>
-#include <string.h>
-#include <signal.h>
+#include <cstring>
+#include <csignal>
 #include <cstdlib>
 #include <string>
 

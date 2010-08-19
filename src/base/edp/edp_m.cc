@@ -10,9 +10,9 @@
 #include <cstdio>
 #include <cstdlib>
 #include <unistd.h>
-#include <string.h>
-#include <signal.h>
-#include <errno.h>
+#include <cstring>
+#include <csignal>
+#include <cerrno>
 #include <sys/wait.h>
 #ifdef __QNXNTO__
 #include <sys/neutrino.h>

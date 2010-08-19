@@ -8,7 +8,7 @@
 #include <cstdio>
 #include <cmath>
 #include <map>
-#include <string.h>
+#include <cstring>
 
 #include "lib/srlib.h"
 #include "base/mp/mp.h"
