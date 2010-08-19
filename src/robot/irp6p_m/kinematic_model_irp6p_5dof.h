@@ -1,19 +1,16 @@
-// ------------------------------------------------------------------------
-// Proces:		EDP
-// Plik:			kinematic_model_irp6p_5dof.h
-// System:	QNX/MRROC++  v. 6.3
-// Opis:		Model kinematyki robota IRp-6 na torze
-//				- deklaracja klasy
-//				- wykorzystanie toru jako czynnego stopnia swobody
-//
-// Autor:		tkornuta
-// Data:		31.01.2007
-// ------------------------------------------------------------------------
+/*!
+ * @file kinematic_model_irp6p_5dof.h
+ * @brief File containing the IRp-6p 5DOFs kinematic model class.
+ *
+ * @author tkornuta
+ * @date 31.01.2007
+ *
+ * @ingroup KINEMATICS IRP6P_KINEMATICS
+ */
 
 #if !defined(_IRP6P_KIN_MODEL_5DOF)
 #define _IRP6P_KIN_MODEL_5DOF
 
-// Definicja klasy kinematic_model.
 #include "robot/irp6p_m/kinematic_model_irp6p_with_wrist.h"
 
 namespace mrrocpp {
@@ -134,6 +131,14 @@ typedef struct AngleTheta
 } THETA_NODE;
 
 
+/*!
+ * @class model_5dof
+ * @brief The kinematic model utilizing five IRP-6p DOFs.
+ *
+ * @date 31.01.2007
+ *
+ * @ingroup KINEMATICS IRP6P_KINEMATICS
+ */
 class model_5dof : public model_with_wrist
 {
 	private:

@@ -1,4 +1,5 @@
 # Recurse into subdirectories.
+add_subdirectory (sarkofag)
 add_subdirectory (bird_hand)
 add_subdirectory (conveyor)
 add_subdirectory (shead)
@@ -15,3 +16,5 @@ add_subdirectory (irp6p_tfg)
 add_subdirectory (irp6_tfg)
 add_subdirectory (irp6ot_m)
 add_subdirectory (irp6p_m)
+add_subdirectory (hi_rydz)
+add_subdirectory (hi_moxa)

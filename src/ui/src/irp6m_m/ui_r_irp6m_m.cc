@@ -3,9 +3,9 @@
 /*                                         Version 2.01  */
 
 #include "ui/src/irp6m_m/ui_r_irp6m_m.h"
-#include "ui/ui_ecp_r_irp6_common.h"
+#include "ui/src/ui_ecp_r_irp6_common.h"
 #include "robot/irp6_mechatronika/irp6m_const.h"
-#include "ui/ui_class.h"
+#include "ui/src/ui_class.h"
 
 /* Local headers */
 #include "../ablibs.h"

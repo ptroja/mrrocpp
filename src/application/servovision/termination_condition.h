@@ -10,13 +10,20 @@
 
 #include <Eigen/Core>
 
-namespace mrrocpp {
+#include "visual_servo_manager.h"
 
+//class mrrocpp::ecp::common::generator::visual_servo_manager;
+
+namespace mrrocpp {
 namespace ecp {
 
 namespace common {
-
 namespace generator {
+class visual_servo_manager;
+}//namespace generator
+}//namespace common
+
+namespace servovision {
 
 /** @addtogroup servovision
  *  @{
@@ -35,48 +42,29 @@ public:
 
 	/**
 	 * Reset condition state.
+	 *
 	 * Called in first_step() of visual_servo_manager in order to reset condition state.
 	 */
 	virtual void reset() = 0;
 
 	/**
+	 * Make termination condition update itself.
+	 * @param vsm
+	 */
+	virtual void update(const mrrocpp::ecp::common::generator::visual_servo_manager* vsm) = 0;
+
+	/**
+	 * Check if condition is met.
 	 * Implement this to indicate when generator should be terminated.
 	 * @return true if generator should be terminated.
 	 */
-	virtual bool terminate_now() = 0;
-
-	/**
-	 * Set end effector's speed.
-	 * @param current_speed
-	 */
-	virtual void update_end_effector_speed(const Eigen::Matrix<double, 3, 1>& current_speed);
-
-	/**
-	 * Update end effector's acceleration.
-	 * @param current_accel
-	 */
-	virtual void update_end_effector_accel(const Eigen::Matrix<double, 3, 1>& current_accel);
-
-	/**
-	 *
-	 * @param object_visible
-	 */
-	virtual void update_object_visibility(bool object_visible);
-
-protected:
-	Eigen::Matrix<double, 3, 1> current_speed;
-	Eigen::Matrix<double, 3, 1> current_accel;
-	bool object_visible;
+	virtual bool is_condition_met() const = 0;
 };
 
 /** @} */
 
 }//namespace generator
-
 }
-
-}
-
 }
 
 #endif /* TERMINATION_CONDITION_H_ */

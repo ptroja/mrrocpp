@@ -26,7 +26,8 @@ namespace task {
 class task;
 } // namespace task
 
-class ecp_robot: public ecp_mp::robot {
+class ecp_robot : public ecp_mp::robot
+{
 	friend class ui_common_robot;
 	friend class ecp::common::generator::transparent;
 
@@ -64,7 +65,6 @@ public:
 	bool communicate_with_edp;
 	virtual void create_command();
 	virtual void get_reply();
-	virtual void clear_data_ports();
 
 	//! Wyslanie do EDP polecenia
 	void send();
@@ -90,11 +90,8 @@ public:
 	// Zlecenie wykonania ruchu przez robota (realizowane przez klase konkretna):
 	// na poziomie ECP jest to polecenie dla EDP
 
-	ecp_robot(lib::robot_name_t _robot_name, int _number_of_servos,
-			const std::string &_edp_section, lib::configurator &_config,
-			lib::sr_ecp &_sr_ecp);
-	ecp_robot(lib::robot_name_t _robot_name, int _number_of_servos,
-			const std::string &_edp_section, common::task::task& _ecp_object);
+			ecp_robot(lib::robot_name_t _robot_name, int _number_of_servos, const std::string &_edp_section, lib::configurator &_config, lib::sr_ecp &_sr_ecp);
+			ecp_robot(lib::robot_name_t _robot_name, int _number_of_servos, const std::string &_edp_section, common::task::task& _ecp_object);
 
 	pid_t get_EDP_pid(void) const;
 

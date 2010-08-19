@@ -72,6 +72,9 @@ public: // TODO: following packages should be 'protected'
 	virtual void main_task_algorithm(void);
 
 	virtual void mp_2_ecp_next_state_string_handler(void);
+
+	virtual void ecp_stop_accepted_handler(void);
+
 	// Informacja dla MP o zakonczeniu zadania uzytkownika
 	void ecp_termination_notice(void);
 

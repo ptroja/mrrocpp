@@ -8,7 +8,7 @@
 #ifndef __HI_LOCAL_IRP6OT_M_H
 #define __HI_LOCAL_IRP6OT_M_H
 
-#include "base/edp/hi_rydz.h"
+#include "robot/hi_rydz/hi_rydz.h"
 
 namespace mrrocpp {
 namespace edp {
@@ -40,7 +40,7 @@ const unsigned short int INT_FREC_DIVIDER = 4; // Dzielnik czestotliwosci przerw
 //                HARDWARE_INTERFACE class
 // ------------------------------------------------------------------------
 
-class hardware_interface: public common::hardware_interface {
+class hardware_interface: public common::HI_rydz {
 public:
     hardware_interface (common::motor_driven_effector &_master, int _hi_irq_real,
     		unsigned short int _hi_intr_freq_divider, unsigned int _hi_intr_timeout_high,

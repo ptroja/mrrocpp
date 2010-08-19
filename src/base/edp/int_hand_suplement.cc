@@ -3,7 +3,7 @@
 #endif
 
 #include "base/edp/edp_e_motor_driven.h"
-#include "base/edp/hi_rydz.h"
+#include "base/edp/HardwareInterface.h"
 
 namespace mrrocpp {
 namespace edp {

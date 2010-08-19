@@ -13,12 +13,12 @@
 #include <fstream>
 #include <boost/circular_buffer.hpp>
 
-#include "ui/ui.h"
+#include "ui/src/ui.h"
 
 #include "lib/srlib.h"
 // #include "base/ecp/ecp.h"
 #include "lib/com_buf.h"
-#include "ui/ui_class.h"
+#include "ui/src/ui_class.h"
 #include "ui/src/ui_sr.h"
 
 /* Local headers */
@@ -68,63 +68,63 @@ int OnTimer(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 			snprintf(current_line, 100, "%-10s", sr_msg.host_name);
 			strcat(current_line, "  ");
-			strftime(current_line + 12, 100, "%H:%M:%S", localtime(
-					&sr_msg.ts.tv_sec));
+			strftime(current_line + 12, 100, "%H:%M:%S", localtime(&sr_msg.ts.tv_sec));
 			sprintf(current_line + 20, ".%03d   ", sr_msg.ts.tv_nsec / 1000000);
 
-			switch (sr_msg.process_type) {
-			case lib::EDP:
-				strcat(current_line, "edp: ");
-				break;
-			case lib::ECP:
-				strcat(current_line, "ecp: ");
-				break;
-			case lib::MP:
-				// printf("mp w ontimer\n");
-				strcat(current_line, "mp:  ");
-				break;
-			case lib::VSP:
-				strcat(current_line, "vsp: ");
-				break;
-			case lib::UI:
-				strcat(current_line, "UI:  ");
-				break;
-			default:
-				strcat(current_line, "???: ");
-				continue;
+			switch (sr_msg.process_type)
+			{
+				case lib::EDP:
+					strcat(current_line, "edp: ");
+					break;
+				case lib::ECP:
+					strcat(current_line, "ecp: ");
+					break;
+				case lib::MP:
+					// printf("mp w ontimer\n");
+					strcat(current_line, "mp:  ");
+					break;
+				case lib::VSP:
+					strcat(current_line, "vsp: ");
+					break;
+				case lib::UI:
+					strcat(current_line, "UI:  ");
+					break;
+				default:
+					strcat(current_line, "???: ");
+					continue;
 			} // end: switch (message_buffer[reader_buf_position].process_type)
 
 			// FIXME: ?
 			sr_msg.process_type = lib::UNKNOWN_PROCESS_TYPE;
 
 			char process_name_buffer[NAME_LENGTH + 1];
-			snprintf(process_name_buffer, sizeof(process_name_buffer), "%-21s",
-					sr_msg.process_name);
+			snprintf(process_name_buffer, sizeof(process_name_buffer), "%-21s", sr_msg.process_name);
 
 			strcat(current_line, process_name_buffer);
 
-			switch (sr_msg.message_type) {
-			case lib::FATAL_ERROR:
-				strcat(current_line, "FATAL_ERROR:     ");
-				attr.text_color = Pg_RED;
-				break;
-			case lib::NON_FATAL_ERROR:
-				strcat(current_line, "NON_FATAL_ERROR: ");
-				attr.text_color = Pg_BLUE;
-				break;
-			case lib::SYSTEM_ERROR:
-				// printf("SYSTEM ERROR W ONTIMER\n");
-				// Informacja do UI o koniecznosci zmiany stanu na INITIAL_STATE
-				strcat(current_line, "SYSTEM_ERROR:    ");
-				attr.text_color = Pg_PURPLE;
-				break;
-			case lib::NEW_MESSAGE:
-				strcat(current_line, "MESSAGE:         ");
-				attr.text_color = Pg_BLACK;
-				break;
-			default:
-				strcat(current_line, "UNKNOWN ERROR:   ");
-				attr.text_color = Pg_YELLOW;
+			switch (sr_msg.message_type)
+			{
+				case lib::FATAL_ERROR:
+					strcat(current_line, "FATAL_ERROR:     ");
+					attr.text_color = Pg_RED;
+					break;
+				case lib::NON_FATAL_ERROR:
+					strcat(current_line, "NON_FATAL_ERROR: ");
+					attr.text_color = Pg_BLUE;
+					break;
+				case lib::SYSTEM_ERROR:
+					// printf("SYSTEM ERROR W ONTIMER\n");
+					// Informacja do UI o koniecznosci zmiany stanu na INITIAL_STATE
+					strcat(current_line, "SYSTEM_ERROR:    ");
+					attr.text_color = Pg_PURPLE;
+					break;
+				case lib::NEW_MESSAGE:
+					strcat(current_line, "MESSAGE:         ");
+					attr.text_color = Pg_BLACK;
+					break;
+				default:
+					strcat(current_line, "UNKNOWN ERROR:   ");
+					attr.text_color = Pg_YELLOW;
 			}; // end: switch (message.message_type)
 
 			strcat(current_line, sr_msg.description);
@@ -134,8 +134,8 @@ int OnTimer(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 			// 	attr.text_color=Pg_DBLUE;
 
 			attributes_mask = Pt_MT_TEXT_COLOR;
-			PtMultiTextModifyText(ABW_PtMultiText_sr_window, NULL, NULL, -1,
-					current_line, strlen(current_line), &attr, attributes_mask);
+
+			PtMultiTextModifyText(ABW_PtMultiText_sr_window, NULL, NULL, -1, current_line, strlen(current_line), &attr, attributes_mask);
 
 			(*ui.log_file_outfile) << current_line;
 		}

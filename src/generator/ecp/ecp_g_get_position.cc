@@ -22,7 +22,7 @@ namespace common {
 namespace generator {
 
 
-get_position::get_position(common::task::task& _ecp_task, bool _is_synchronised, lib::ECP_POSE_SPECIFICATION pose_spec, int axes_num) :
+get_position::get_position(common::task::task& _ecp_task, lib::ECP_POSE_SPECIFICATION pose_spec, int axes_num) :
         generator (_ecp_task) {
 	position = vector<double>();
 	this->axes_num = axes_num;
@@ -34,6 +34,11 @@ get_position::~get_position() {
 }
 
 bool get_position::first_step() {
+	the_robot->ecp_command.instruction.get_type = ARM_DEFINITION;
+	the_robot->ecp_command.instruction.instruction_type = lib::GET;
+	the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE; //aqui siempre ABSOLUTE, RELATIVE makes no sense here
+	the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
+
 	switch (pose_spec) {
 		case lib::ECP_XYZ_ANGLE_AXIS:
 			the_robot->ecp_command.instruction.get_arm_type = lib::FRAME;
@@ -56,17 +61,17 @@ bool get_position::first_step() {
 bool get_position::next_step() {
 	if (pose_spec == lib::ECP_XYZ_ANGLE_AXIS || pose_spec == lib::ECP_XYZ_EULER_ZYZ) {
 
-		lib::Homog_matrix actual_position;
-		actual_position.set_from_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame);
+		lib::Homog_matrix actual_position_matrix;
+		actual_position_matrix.set_from_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame);
 
 		if (pose_spec == lib::ECP_XYZ_ANGLE_AXIS) {
 			lib::Xyz_Angle_Axis_vector angle_axis_vector;
-			actual_position.get_xyz_angle_axis(angle_axis_vector);
+			actual_position_matrix.get_xyz_angle_axis(angle_axis_vector);
 			angle_axis_vector.to_vector(position);
 
 		} else if (pose_spec == lib::ECP_XYZ_EULER_ZYZ) {
 			lib::Xyz_Euler_Zyz_vector euler_vector;
-			actual_position.get_xyz_euler_zyz(euler_vector);
+			actual_position_matrix.get_xyz_euler_zyz(euler_vector);
 			euler_vector.to_vector(position);
 
 		} else {
@@ -80,7 +85,7 @@ bool get_position::next_step() {
 	} else {
 		THROW_NONFATAL_ERROR(INVALID_POSE_SPECIFICATION);
 	}
-	return true;
+	return false;
 }
 
 vector<double> get_position::get_position_vector() {

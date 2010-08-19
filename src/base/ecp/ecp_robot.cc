@@ -181,8 +181,7 @@ void ecp_robot::create_command()
 void ecp_robot::get_reply() {
 }
 
-void ecp_robot::clear_data_ports() {
-}
+
 
 void ecp_robot::query()
 {
@@ -193,6 +192,7 @@ void ecp_robot::query()
 void ecp_robot::execute_motion(void)
 {
 	send();
+
 	if (reply_package.reply_type == lib::ERROR) {
 		query();
 		BOOST_THROW_EXCEPTION(
@@ -202,6 +202,7 @@ void ecp_robot::execute_motion(void)
 	}
 
 	query();
+
 	if (reply_package.reply_type == lib::ERROR) {
 		BOOST_THROW_EXCEPTION(
 				lib::exception::NonFatal_error() <<

@@ -103,6 +103,10 @@ extern const int ABI_wnd_bird_hand_command_and_status;
 #define ABM_wnd_bird_hand_command_and_status &AbInternalLinks[ABI_wnd_bird_hand_command_and_status]
 extern const int ABI_wnd_bird_hand_configuration;
 #define ABM_wnd_bird_hand_configuration      &AbInternalLinks[ABI_wnd_bird_hand_configuration]
+extern const int ABI_wnd_sarkofag_moves;
+#define ABM_wnd_sarkofag_moves               &AbInternalLinks[ABI_wnd_sarkofag_moves]
+extern const int ABI_wnd_sarkofag_servo_algorithm;
+#define ABM_wnd_sarkofag_servo_algorithm     &AbInternalLinks[ABI_wnd_sarkofag_servo_algorithm]
 
 /* 'task_config_window' Window link */
 extern const int ABN_task_config_window;
@@ -2532,6 +2536,54 @@ extern const int ABN_PtLabel110010001;
 extern const int ABN_PtLabel110010011;
 #define ABW_PtLabel110010011                 AbGetABW( ABN_PtLabel110010011 )
 
+/* 'wnd_sarkofag_moves' Window link */
+extern const int ABN_wnd_sarkofag_moves;
+#define ABW_wnd_sarkofag_moves               AbGetABW( ABN_wnd_sarkofag_moves )
+extern const int ABN_PtButton_wind_sarkofag_moves_inc_right;
+#define ABW_PtButton_wind_sarkofag_moves_inc_right AbGetABW( ABN_PtButton_wind_sarkofag_moves_inc_right )
+extern const int ABN_PtButton_wind_sarkofag_moves_inc_left;
+#define ABW_PtButton_wind_sarkofag_moves_inc_left AbGetABW( ABN_PtButton_wind_sarkofag_moves_inc_left )
+extern const int ABN_PtButton_wind_sarkofag_moves_inc_exec;
+#define ABW_PtButton_wind_sarkofag_moves_inc_exec AbGetABW( ABN_PtButton_wind_sarkofag_moves_inc_exec )
+extern const int ABN_PtNumericFloat_wind_sarkofag_moves_inc_step;
+#define ABW_PtNumericFloat_wind_sarkofag_moves_inc_step AbGetABW( ABN_PtNumericFloat_wind_sarkofag_moves_inc_step )
+extern const int ABN_PtNumericFloat_wind_sarkofag_moves_inc_pos;
+#define ABW_PtNumericFloat_wind_sarkofag_moves_inc_pos AbGetABW( ABN_PtNumericFloat_wind_sarkofag_moves_inc_pos )
+extern const int ABN_PtButton_wind_sarkofag_moves_int_right;
+#define ABW_PtButton_wind_sarkofag_moves_int_right AbGetABW( ABN_PtButton_wind_sarkofag_moves_int_right )
+extern const int ABN_PtButton_wind_sarkofag_moves_int_left;
+#define ABW_PtButton_wind_sarkofag_moves_int_left AbGetABW( ABN_PtButton_wind_sarkofag_moves_int_left )
+extern const int ABN_PtButton_wind_sarkofag_moves_int_exec;
+#define ABW_PtButton_wind_sarkofag_moves_int_exec AbGetABW( ABN_PtButton_wind_sarkofag_moves_int_exec )
+extern const int ABN_PtNumericFloat_wind_sarkofag_moves_int_step;
+#define ABW_PtNumericFloat_wind_sarkofag_moves_int_step AbGetABW( ABN_PtNumericFloat_wind_sarkofag_moves_int_step )
+extern const int ABN_PtNumericFloat_wind_sarkofag_moves_int_pos;
+#define ABW_PtNumericFloat_wind_sarkofag_moves_int_pos AbGetABW( ABN_PtNumericFloat_wind_sarkofag_moves_int_pos )
+extern const int ABN_PtNumericFloat_wind_sarkofag_moves_read_motor_pos;
+#define ABW_PtNumericFloat_wind_sarkofag_moves_read_motor_pos AbGetABW( ABN_PtNumericFloat_wind_sarkofag_moves_read_motor_pos )
+extern const int ABN_PtButton_wind_sarkofag_moves_inc_read;
+#define ABW_PtButton_wind_sarkofag_moves_inc_read AbGetABW( ABN_PtButton_wind_sarkofag_moves_inc_read )
+extern const int ABN_PtButton_wind_sarkofag_moves_int_read;
+#define ABW_PtButton_wind_sarkofag_moves_int_read AbGetABW( ABN_PtButton_wind_sarkofag_moves_int_read )
+extern const int ABN_PtNumericFloat_wind_sarkofag_moves_read_int_pos;
+#define ABW_PtNumericFloat_wind_sarkofag_moves_read_int_pos AbGetABW( ABN_PtNumericFloat_wind_sarkofag_moves_read_int_pos )
+
+/* 'wnd_sarkofag_servo_algorithm' Window link */
+extern const int ABN_wnd_sarkofag_servo_algorithm;
+#define ABW_wnd_sarkofag_servo_algorithm     AbGetABW( ABN_wnd_sarkofag_servo_algorithm )
+extern const int ABN_PtButton_wnd_sarkofag_servo_algorithm_set;
+#define ABW_PtButton_wnd_sarkofag_servo_algorithm_set AbGetABW( ABN_PtButton_wnd_sarkofag_servo_algorithm_set )
+extern const int ABN_PtNumericInteger_wnd_sarkofag_servo_algorithm_alg_1;
+#define ABW_PtNumericInteger_wnd_sarkofag_servo_algorithm_alg_1 AbGetABW( ABN_PtNumericInteger_wnd_sarkofag_servo_algorithm_alg_1 )
+extern const int ABN_PtNumericInteger_wnd_sarkofag_servo_algorithm_par_1;
+#define ABW_PtNumericInteger_wnd_sarkofag_servo_algorithm_par_1 AbGetABW( ABN_PtNumericInteger_wnd_sarkofag_servo_algorithm_par_1 )
+extern const int ABN_PtButton_wnd_sarkofag_servo_algorithm_read;
+#define ABW_PtButton_wnd_sarkofag_servo_algorithm_read AbGetABW( ABN_PtButton_wnd_sarkofag_servo_algorithm_read )
+extern const int ABN_PtNumericInteger_wnd_sarkofag_servo_algorithm_read_alg_1;
+#define ABW_PtNumericInteger_wnd_sarkofag_servo_algorithm_read_alg_1 AbGetABW( ABN_PtNumericInteger_wnd_sarkofag_servo_algorithm_read_alg_1 )
+extern const int ABN_PtNumericInteger_wnd_sarkofag_servo_algorithm_read_par_1;
+#define ABW_PtNumericInteger_wnd_sarkofag_servo_algorithm_read_par_1 AbGetABW( ABN_PtNumericInteger_wnd_sarkofag_servo_algorithm_read_par_1 )
+
 #define AbGetABW( n ) ( AbWidgets[ n ].wgt )
 
 /* 'file_menu' Menu link */
@@ -2664,6 +2716,17 @@ extern const int ABN_mm_bird_hand_edp_load;
 extern const int ABN_mm_bird_hand_edp_unload;
 extern const int ABN_mm_bird_hand_command;
 extern const int ABN_mm_bird_hand_configuration;
+extern const int ABN_mm_sarkofag;
+extern const int ABN_mm_sarkofag_edp_load;
+extern const int ABN_mm_sarkofag_edp_unload;
+extern const int ABN_mm_sarkofag_synchronisation;
+extern const int ABN_mm_sarkofag_move;
+extern const int ABN_mm_sarkofag_preset_positions;
+extern const int ABN_mm_sarkofag_preset_position_synchro;
+extern const int ABN_mm_sarkofag_preset_position_0;
+extern const int ABN_mm_sarkofag_preset_position_1;
+extern const int ABN_mm_sarkofag_preset_position_2;
+extern const int ABN_mm_sarkofag_servo_algorithm;
 extern const int ABN_mm_speaker;
 extern const int ABN_mm_speaker_edp_load;
 extern const int ABN_mm_speaker_edp_unload;

@@ -22,6 +22,8 @@
 #include "subtask/ecp_mp_st_gripper_opening.h"
 #include "application/servovision/ecp_mp_g_simple_visual_servo_manager.h"
 
+using namespace mrrocpp::ecp::servovision;
+
 namespace mrrocpp {
 namespace ecp {
 namespace irp6ot_m {
@@ -52,14 +54,14 @@ rcsc::rcsc(lib::configurator &_config) :
 		p2(1, 0) = 0.4;
 		p2(2, 0) = 0.3;
 
-		shared_ptr <position_constraint> cube(new cubic_constraint(p1, p2));
+		//shared_ptr <position_constraint> cube(new cubic_constraint(p1, p2));
 
 		reg = shared_ptr <visual_servo_regulator> (new regulator_p(_config, fradia_config_section_name));
 		vs = shared_ptr <visual_servo> (new ib_eih_visual_servo(reg, fradia_config_section_name, _config));
-		term_cond = shared_ptr <termination_condition> (new object_reached_termination_condition(0.005, 0.005, 50));
+		term_cond = shared_ptr <termination_condition> (new servovision::object_reached_termination_condition(0.005, 0.005, 50));
 		sm
 				= shared_ptr <simple_visual_servo_manager> (new simple_visual_servo_manager(*this, fradia_config_section_name, vs));
-		sm->add_position_constraint(cube);
+		//sm->add_position_constraint(cube);
 		sm->add_termination_condition(term_cond);
 		sm->configure();
 	}

@@ -44,21 +44,29 @@ public:
    */
   vector<double> a;
   /**
-   * Number of the macrostep in which the first part of the movement ends (first out of three).
+   * Maximal acceleration set for the given robot (a_r = a * a_max).
    */
-  vector<double> przysp;
+  vector<double> a_max;
   /**
-   * Number of the macrostep in which the seconde part of the movement ends.
+   * Number of the macrostep in which the first part of the movement ends (first out of three). Duration of the first part of the motion in macrosteps.
    */
-  vector<double> jedn;
+  vector<double> acc;
+  /**
+   * Duration of the second part of the motion in macrosteps.
+   */
+  vector<double> uni;
   /**
    * Distance covered in the second part of the movement.
    */
-  vector<double> s_jedn;
+  vector<double> s_uni;
   /**
    * Distance covered in the first part of the movement.
    */
-  vector<double> s_przysp;
+  vector<double> s_acc;
+  /**
+   * Distance covered in the third part of the movement.
+   */
+  vector<double> s_dec;
   /**
    * Initial position for the pose.
    */

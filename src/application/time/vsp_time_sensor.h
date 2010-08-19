@@ -10,7 +10,7 @@ namespace vsp {
 namespace sensor {
 
 /********** klasa czujnikow po stronie VSP **************/
-class time : public sensor<struct timespec> {
+class time : public mrrocpp::vsp::common::sensor<struct timespec> {
 public:
     // Konstruktor czujnika wirtualnego.
     time (lib::configurator &_config);

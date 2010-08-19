@@ -16,13 +16,13 @@
 #include <unistd.h>
 #include <string.h>
 
-#include "ui/ui.h"
+#include "ui/src/ui.h"
 
 /* MRROC++ headers */
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
-#include "ui/ui_class.h"
+#include "ui/src/ui_class.h"
 #include "ui/src/ui_ecp.h"
 
 #include "lib/srlib.h"

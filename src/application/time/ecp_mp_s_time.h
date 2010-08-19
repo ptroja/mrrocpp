@@ -20,12 +20,12 @@ namespace sensor {
 
 typedef sensor<struct timespec> time_sensor_t;
 
-const lib::SENSOR_t SENSOR_TIME = "SENSOR_TIME";
+const lib::sensor::SENSOR_t SENSOR_TIME = "SENSOR_TIME";
 
 class time: public time_sensor_t {
   public:
 	// Konstruktor czujnika wirtualnego - wywolanie konstruktora klasy bazowej.
- 	time (lib::SENSOR_t _sensor_name, const std::string & _section_name, lib::sr_ecp & _sr_ecp_msg, lib::configurator & _config);
+ 	time (lib::sensor::SENSOR_t _sensor_name, const std::string & _section_name, lib::sr_ecp & _sr_ecp_msg, lib::configurator & _config);
 
 };// end: class time_sensor
 

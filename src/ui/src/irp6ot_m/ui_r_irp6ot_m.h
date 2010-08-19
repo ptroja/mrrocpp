@@ -8,8 +8,8 @@
 #ifndef __UI_R_IRP6OT_M_H
 #define __UI_R_IRP6OT_M_H
 
-#include "ui/ui.h"
-#include "ui/ui_robot.h"
+#include "ui/src/ui.h"
+#include "ui/src/ui_robot.h"
 #include "robot/irp6ot_m/irp6ot_m_const.h"
 
 //

@@ -8,7 +8,7 @@
 #ifndef __HI_LOCAL_CONV_H
 #define __HI_LOCAL_CONV_H
 
-#include "base/edp/hi_rydz.h"
+#include "robot/hi_rydz/hi_rydz.h"
 
 namespace mrrocpp {
 namespace edp {
@@ -33,7 +33,7 @@ const unsigned short int INT_FREC_DIVIDER = 8; // mnoznik czestotliwosci przerwa
 //                HARDWARE_INTERFACE class
 // ------------------------------------------------------------------------
 
-class hardware_interface: public common::hardware_interface {
+class hardware_interface: public common::HI_rydz {
 
 public:
 

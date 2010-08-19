@@ -19,7 +19,7 @@ namespace mrrocpp {
 namespace ecp_mp {
 namespace sensor {
 
-wiimote::wiimote(lib::SENSOR_t _sensor_name, const std::string & _section_name, lib::sr_ecp & _sr_ecp_msg, lib::configurator & config)
+wiimote::wiimote(lib::sensor::SENSOR_t _sensor_name, const std::string & _section_name, lib::sr_ecp & _sr_ecp_msg, lib::configurator & config)
 	: sr_ecp_msg(_sr_ecp_msg), sensor_name(_sensor_name)
 {
 	// Set period variables.
@@ -92,7 +92,7 @@ void wiimote::configure_sensor()
 void wiimote::initiate_reading()
 {
 	// Send adequate command to wiimote.
-	to_vsp.i_code = lib::VSP_INITIATE_READING;
+	to_vsp.i_code = lib::sensor::VSP_INITIATE_READING;
 
 	if (write(sockfd, &to_vsp, sizeof(to_vsp)) == -1) {
 		BOOST_THROW_EXCEPTION(
@@ -107,7 +107,6 @@ void wiimote::initiate_reading()
 void wiimote::send_reading(const wii_command_t & to)
 {
 	// Send any command to wiimote.
-
 	if (write(sockfd, &to, sizeof(to)) == -1) {
 		BOOST_THROW_EXCEPTION(
 				lib::exception::System_error() <<
@@ -130,7 +129,7 @@ void wiimote::get_reading()
 void wiimote::get_reading(const wii_command_t & message)
 {
 	// Send adequate command to wiimote.
-	to_vsp.i_code = lib::VSP_GET_READING;
+	to_vsp.i_code = lib::sensor::VSP_GET_READING;
 	to_vsp.wii_command = message;
 
 	if (write(sockfd, &to_vsp, sizeof(to_vsp)) == -1) {
@@ -153,7 +152,8 @@ void wiimote::get_reading(const wii_command_t & message)
 	}
 
 	// Check and copy data from buffer to image.
-	if (from_vsp.vsp_report == lib::VSP_REPLY_OK)
+//	if (from_vsp.vsp_report == lib::VSP_REPLY_OK)
+	if(from_vsp.vsp_report == lib::sensor::VSP_REPLY_OK)
 		image = from_vsp.wiimote;
 	else
 		sr_ecp_msg.message("Reply from VSP not ok");

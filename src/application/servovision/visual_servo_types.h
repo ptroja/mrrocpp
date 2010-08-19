@@ -17,11 +17,11 @@ namespace visual_servo_types {
  */
 struct image_based_position
 {
-	/** Translation along X axis, from the center of the image. */
+	/** Error along X axis, from the desired position [pixels]. */
 	int x;
-	/** Translation along Y axis, from the center of the image. */
+	/** Error along Y axis. */
 	int y;
-	/** Translation along Z axis, distance from point located in front of the camera. */
+	/** Error along Z axis, distance from point located in front of the camera. */
 	int z;
 
 	/** Rotation along Z axis. */

@@ -11,18 +11,18 @@ namespace generator {
 
 generator::generator(common::task::task& _ecp_task) :
 	ecp_mp::generator::generator(*(ecp_t.sr_ecp_msg)), ecp_t(_ecp_task),
-			the_robot(ecp_t.ecp_m_robot)
+	the_robot(ecp_t.ecp_m_robot)
 {
 }
 
-generator::~generator() {
+generator::~generator()
+{
 }
 
 void generator::move_init()
 {
 	// domyslnie komunikumemy sie z robotem o ile on jest
-	if (the_robot)
-	{
+	if (the_robot) {
 		// default communication mode
 		the_robot->communicate_with_edp = true;
 		// clear data ports in case there is old data in it;
@@ -36,7 +36,8 @@ void generator::move_init()
 	ecp_t.set_ecp_reply(lib::ECP_ACKNOWLEDGE);
 }
 
-void generator::Move() {
+void generator::Move()
+{
 	// Funkcja ruchu dla ECP
 
 	move_init();
@@ -64,6 +65,7 @@ void generator::Move() {
 
 			// Execute motion command
 			if (the_robot->communicate_with_edp) {
+
 				execute_motion();
 
 				the_robot->get_reply();
@@ -92,7 +94,8 @@ void generator::Move() {
 	//(next_step() && (!communicate_with_mp_in_move || ecp_t.mp_buffer_receive_and_send()));
 }
 
-void generator::execute_motion(void) {
+void generator::execute_motion(void)
+{
 	the_robot->execute_motion();
 }
 

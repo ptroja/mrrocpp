@@ -10,6 +10,8 @@
 
 #include "base/mp/mp.h"
 
+#include <string>
+
 namespace mrrocpp {
 
 namespace mp {
@@ -22,6 +24,11 @@ public:
 	visualservo_tester(lib::configurator &config);
 	virtual ~visualservo_tester();
 	void main_task_algorithm(void);
+private:
+	const std::string config_section_name;
+	bool run_vs;
+	bool run_conveyor;
+	int vs_settle_time;
 };
 
 }

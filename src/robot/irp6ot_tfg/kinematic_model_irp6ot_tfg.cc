@@ -1,26 +1,22 @@
-// ------------------------------------------------------------------------
-// Proces:		EDP
-// Plik:			kinematic_model_conveyor.cc
-// System:	QNX/MRROC++  v. 6.3
-// Opis:		Model kinematyki tasmociogu
-//				- definicja metod klasy
-//
-// Autor:		yoyek
-// Data:		24.02.2007
-// ------------------------------------------------------------------------
+/*!
+ * @file kinematic_model_irp6ot_tfg.cc
+ * @brief File containing methods of the IRp-6ot two fingered gripper kinematic model.
+ *
+ * @author yoyek
+ * @author tkornuta
+ * @date Jun 21, 2010
+ *
+ * @ingroup KINEMATICS IRP6OT_KINEMATICS
+ */
+
 
 #include "lib/com_buf.h"
-
-// Klasa kinematic_model_conveyor.
 #include "robot/irp6ot_tfg/kinematic_model_irp6ot_tfg.h"
 
 namespace mrrocpp {
 namespace kinematics {
 namespace irp6ot_tfg {
 
-/* -----------------------------------------------------------------------
- Konstruktor.
- ------------------------------------------------------------------------- */
 model::model(void)
 {
 	// Ustawienie etykiety modelu kinematycznego.
@@ -29,11 +25,9 @@ model::model(void)
 	// Ustawienie parametrow kinematycznych.
 	set_kinematic_parameters();
 
-} //: set_kinematic_parameters
+}
 
-/* -----------------------------------------------------------------------
- Ustawienia wszystkie parametry modelu kinematycznego danego modelu.
- ------------------------------------------------------------------------- */
+
 void model::set_kinematic_parameters(void)
 {
 
@@ -44,12 +38,12 @@ void model::set_kinematic_parameters(void)
 	inv_b_7 = 0.2622172716e19;
 	inv_c_7 = -0.2831300000e20;
 	inv_d_7 = -2564.034320;
-	gear = 0.0;
-	theta = 0.000000e+00;
+//	gear = 0.0;
+//	theta = 0.000000e+00;
 
 	synchro_motor_position = 4830; // chwytak [-]
 
-	synchro_joint_position = synchro_motor_position - gear * theta;
+	synchro_joint_position = synchro_motor_position;// - gear * theta;
 
 	/* -----------------------------------------------------------------------
 	 Zakresy ruchu walow silnikow w radianach.
@@ -63,10 +57,10 @@ void model::set_kinematic_parameters(void)
 	lower_limit_joint = 0.053;
 	upper_limit_joint = 0.091;
 
-} // end: set_kinematic_parameters
+} //: set_kinematic_parameters
 
 
-} // namespace irp6ot
+} // namespace irp6ot_tfg
 } // namespace kinematic
 } // namespace mrrocpp
 

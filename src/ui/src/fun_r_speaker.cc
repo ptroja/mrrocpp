@@ -19,9 +19,9 @@
 #include <math.h>
 
 #include "lib/srlib.h"
-#include "ui/ui_const.h"
-#include "ui/ui_class.h"
-// #include "ui/ui.h"
+#include "ui/src/ui_const.h"
+#include "ui/src/ui_class.h"
+// #include "ui/src/ui.h"
 // Konfigurator.
 // #include "lib/configurator.h"
 #include "robot/speaker/speaker_const.h"

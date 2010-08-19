@@ -378,7 +378,7 @@ void ATI6284_force::get_reading(void)
 {
 	short int no_result = 0; //brak wyniku
 	static short int show = 0; //wyswietl
-	float force_torque[6]; //wektor z si�ami i napi�ciami
+	float force_torque[6]; //wektor z siami i napiciami
 	force_readring_status_t sensor_status = EDP_FORCE_SENSOR_READING_CORRECT;
 
 #if	 WITHOUT_INTERRUPT
@@ -467,6 +467,7 @@ void ATI6284_force::get_reading(void)
 				sensor_status = EDP_FORCE_SENSOR_OVERLOAD;
 			}
 		}
+
 		for (int i = 0; i < 6; i++) {
 			force_torque[i] = last_correct[i];
 		}

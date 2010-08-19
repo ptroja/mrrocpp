@@ -1,6 +1,6 @@
 /**
- * \file trajectory_pose.h
- * \brief Header file for trajectory_pose
+ * @file trajectory_pose.h
+ * @rief Header file for trajectory_pose
  *
  * Contains declaration of trajectory_pose class and its methods.
  */
@@ -8,7 +8,7 @@
 #if !defined(_TRAJECTORY_POSE_H)
 #define  _TRAJECTORY_POSE_H
 
-#include "lib/com_buf.h"		// contains lib::POSE_SPECIFICATION
+#include "lib/com_buf.h"
 #include <vector>
 
 using namespace std;
@@ -46,13 +46,13 @@ public:
   /**
    * Direction of the motion. Either equal to 1 or -1.
    */
-  vector<double> k;
+  vector<double> k;//TODO change to int
   /**
    * Number of the given position in whole trajectory chain.
    */
   int pos_num;
   /**
-   * Number of axes in which we want to move in the given representation
+   * Number of axes in which we want the robot to move in the given representation
    */
   int axes_num;
   /**
@@ -65,9 +65,8 @@ public:
   trajectory_pose(void);
   /**
      * Constructor which initiates some variables (those which can be found in the file containing trajectory).
-     * \param at representation used in the given pose
-     * \param coordinates desired position for all of the axes
-     * \param axes_num number of axes
+     * @param arm_type representation used in the given pose
+     * @param coordinates desired position for all of the axes
      */
   trajectory_pose (lib::ECP_POSE_SPECIFICATION arm_type,
 			const vector<double> & coordinates);

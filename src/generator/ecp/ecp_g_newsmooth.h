@@ -1,36 +1,21 @@
 /**
-* \file	ecp_g_newsmooth.h
-* \brief Smooth class and its methods.
-* \author rtulwin
-* \date	2009
-*
-* Smooth trajectory generator having an ability to calculate every trajectory.
+* @file	ecp_g_newsmooth.h
+* @brief Smooth class and its methods.
+* @author rtulwin
+* @date	2010
 */
 
 #if !defined(_ECP_GEN_NEWSMOOTH_H)
 # define _ECP_GEN_NEWSMOOTH_H
 
-#include <stdio.h>
-#include <stdlib.h>
 #include <math.h>
-#include <ctype.h>
-#include <iostream>
-
-#include <fstream>
-#include <string.h>
-#include <vector>
 
 using namespace std;
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
-#include "lib/datastr.h"
-#include "lib/srlib.h"
-#include "lib/mrmath/mrmath.h"
-
 #include "generator/ecp/ecp_g_multiple_position.h"
 #include "lib/trajectory_pose/bang_bang_trajectory_pose.h"
+#include "generator/ecp/velocity_profile_calculator/bang_bang_profile.h"
+#include "generator/ecp/trajectory_interpolator/bang_bang_interpolator.h"
 
 using namespace std;
 
@@ -40,64 +25,99 @@ namespace common {
 namespace generator {
 
 /**
+ * Smooth trajectory generator which has an ability to calculate every trajectory (posiada moce super krowy).
  *
+ * Usage:
+ * Load one or more of trajectory poses using one of the load methods. Velocities and accelerations are set automatically. Call %calculate_interpolate() method.
+ * If it returns true generator is ready to communicate with the robot. Call the %Move() method. The generator resets itself automatically after
+ * successfull termination of the assumed trajectory, however it is safe to call the %reset() method before the next use of the generator.
  */
-class newsmooth : public multiple_position<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose> {
+class newsmooth : public multiple_position<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose,
+ecp::common::generator::trajectory_interpolator::bang_bang_interpolator,
+ecp::common::generator::velocity_profile_calculator::bang_bang_profile> {
 
-	protected:
+	private:
 		/**
-		 *
+		 * Creates the vectors containning the information about the maximal and typical velocities and accelerations for each representation.
+		 * @axes_num actual number of axes
 		 */
-		bool debug; //czy maja byc wyswietlane debugi
+		void create_velocity_vectors(int axes_num);
 		/**
-		 *
+		 * Calculates trajectory.
+		 * @return true if calculation was successful.
 		 */
-		//void generate_coords();
+		bool calculate();
 		/**
-		 *
+		 * Loads trajectory pose.
+		 * @return true if the addition was successful
 		 */
-		//void calculate(void);
+		bool load_trajectory_pose(const vector<double> & coordinates, lib::MOTION_TYPE motion_type, lib::ECP_POSE_SPECIFICATION pose_spec, const vector<double> & v, const vector<double> & a, const vector<double> & v_max, const vector<double> & a_max);
 		/**
-		 *
+		 * Method used to print list of positions.
 		 */
-		//void send_coordinates(void);
+		void print_pose_vector();
 		/**
-		 *
+		 * Prints single pose.
 		 */
-		//double generate_next_coords(int node_counter, int interpolation_node_no, double start_position, double v_p, double v_r, double v_k, double a_r, int k, double przysp, double jedn, double s_przysp, double s_jedn);
-		/**
-		 *
-		 */
-		void insert_pose_list_element(lib::ECP_POSE_SPECIFICATION ps, vector<double> v, vector<double> a, vector<double> coordinates);
+		void print_pose(vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator & it);
+
 	public:
-		/**
-		 *
-		 */
-		bool calculate_interpolate();
 		/**
 		 * Constructor.
 		 */
-		newsmooth(common::task::task& _ecp_task, bool _is_synchronised, bool _debug);
+		newsmooth(common::task::task& _ecp_task, lib::ECP_POSE_SPECIFICATION pose_spec, int axes_num);
 		/**
 		 * Destructor.
 		 */
 		virtual ~newsmooth();
 		/**
-		 *
+		 * Loads a single trajectory pose described in joint coordinates (absolute motion) to the list. Maximal velocities and accelerations are set automatically.
+		 * @param coordinates desired position
+		 * @return true if the addition was succesfull
 		 */
-		void reset(void);
+		bool load_absolute_joint_trajectory_pose(const vector<double> & coordinates);
 		/**
-		 *
+		 * Loads a single trajectory pose described in joint coordinates (relative motion) to the list. Maximal velocities and accelerations are set automatically.
+		 * @param coordinates desired position
+		 * @return true if the addition was succesfull
 		 */
-		void load_a_v_max_from_file(const char* file_name);
+		bool load_relative_joint_trajectory_pose(const vector<double> & coordinates);
 		/**
-		 *
+		 * Loads a single trajectory pose described in motor coordinates (absolute motion) to the list. Maximal velocities and accelerations are set automatically.
+		 * @param coordinates desired position
+		 * @return true if the addition was succesfull
 		 */
-		virtual bool first_step();
+		bool load_absolute_motor_trajectory_pose(const vector<double> & coordinates);
 		/**
-		 *
+		 * Loads a single trajectory pose described in motor coordinates (relative motion) to the list. Maximal velocities and accelerations are set automatically.
+		 * @param coordinates desired position
+		 * @return true if the addition was succesfull
 		 */
-		virtual bool next_step();
+		bool load_relative_motor_trajectory_pose(const vector<double> & coordinates);
+		/**
+		 * Loads a single trajectory pose described in euler zyz coordinates (absolute motion) to the list. Maximal velocities and accelerations are set automatically.
+		 * @param coordinates desired position
+		 * @return true if the addition was succesfull
+		 */
+		bool load_absolute_euler_zyz_trajectory_pose(const vector<double> & coordinates);
+		/**
+		 * Loads a single trajectory pose described in euler zyz coordinates (relative motion) to the list. Maximal velocities and accelerations are set automatically.
+		 * @param coordinates desired position
+		 * @return true if the addition was succesfull
+		 */
+		bool load_relative_euler_zyz_trajectory_pose(const vector<double> & coordinates);
+		/**
+		 * Loads a single trajectory pose described in angle axis coordinates (absolute motion) to the list. Maximal velocities and accelerations are set automatically.
+		 * @param coordinates desired position
+		 * @return true if the addition was succesfull
+		 */
+		bool load_absolute_angle_axis_trajectory_pose(const vector<double> & coordinates);
+		/**
+		 * Loads a single trajectory pose described in angle axis coordinates (relative motion) to the list. Maximal velocities and accelerations are set automatically.
+		 * @param coordinates desired position
+		 * @return true if the addition was succesfull
+		 */
+		bool load_relative_angle_axis_trajectory_pose(const vector<double> & coordinates);
 
 };
 

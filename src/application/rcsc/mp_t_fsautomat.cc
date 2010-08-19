@@ -1,6 +1,6 @@
 // -------------------------------------------------------------------------
 //
-// MP Master Process - methods���for task sporadic coordination
+// MP Master Process - methods for task sporadic coordination
 //
 // -------------------------------------------------------------------------
 
@@ -34,6 +34,8 @@
 
 #include "lib/datastr.h"
 #include "generator/ecp/ecp_mp_g_smooth.h"
+#include "cube_face.h"
+
 
 namespace mrrocpp {
 namespace mp {
@@ -409,6 +411,7 @@ void fsautomat::writeCubeState(common::State &state)
 	int index = state.getNumArgument();
 
 	ecp_mp::sensor::sensor<lib::cube_face_t> * cube_recognition = dynamic_cast<ecp_mp::sensor::sensor<lib::cube_face_t> *> (sensor_m[ecp_mp::sensor::SENSOR_CAMERA_ON_TRACK]);
+	//ecp_mp::sensor::sensor<mrrocpp::mp::task::cube_face_t> * cube_recognition = dynamic_cast<ecp_mp::sensor::sensor<mrrocpp::mp::task::cube_face_t> *> (sensor_m[mrrocpp::ecp_mp::sensor::SENSOR_CAMERA_ON_TRACK]);
 
 	cube_recognition->initiate_reading();
 	wait_ms(1000);

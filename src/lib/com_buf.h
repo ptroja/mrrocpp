@@ -900,7 +900,7 @@ typedef struct _controller_state_t
 	 */
 	bool is_power_on;
 	/*!
-	 *  Czy szafa jest w���aczona?
+	 *  Czy szafa jest waczona?
 	 *  @todo Translate to English.
 	 *        Change the "wardrobe" thing for God's sake !!!
 	 */
@@ -1124,11 +1124,6 @@ struct MP_COMMAND_PACKAGE
 };
 
 //------------------------------------------------------------------------------
-#ifndef SPEECH_RECOGNITION_TEXT_LEN
-#define SPEECH_RECOGNITION_TEXT_LEN 256
-#endif
-
-//------------------------------------------------------------------------------
 /*! ECP to MP reply. */
 struct ECP_REPLY_PACKAGE
 {
@@ -1150,7 +1145,28 @@ struct ECP_REPLY_PACKAGE
 	}
 };
 
+<<<<<<< HEAD
 // ------------------------------------------------------------------------
+=======
+
+/**
+ * @brief Empty data structure.
+ */
+typedef struct _empty
+{
+	//! This is empty data type
+} empty_t;
+
+/*
+ // by Y
+ inline void copy_frame(frame_tab destination_frame, frame_tab source_frame)
+ {
+ for (int   column = 0; column < 4; column++)
+ for (int row = 0; row < 3; row++)
+ destination_frame[column][row] = source_frame[column][row];
+ }
+ */
+>>>>>>> origin/master
 
 } // namespace lib
 } // namespace mrrocpp

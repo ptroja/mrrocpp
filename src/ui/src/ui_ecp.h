@@ -12,7 +12,7 @@
 #include "lib/srlib.h"
 #include "lib/mis_fun.h"
 
-#include "ui/ui.h"
+#include "ui/src/ui.h"
 
 /**************************** ui_ecp_buffer *****************************/
 

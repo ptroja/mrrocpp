@@ -13,7 +13,7 @@
 #include <Eigen/Core>
 
 #include "lib/mrmath/ForceTrans.h"
-#include "lib/sensor.h"				// klasa bazowa sensor
+#include "lib/sensor_interface.h"				// klasa bazowa sensor
 #include "base/edp/edp.h"				// klasa bazowa sensor
 #include "lib/condition_synchroniser.h"
 
@@ -41,7 +41,7 @@ typedef struct _force_data
 } force_data_t;
 
 /********** klasa czujnikow po stronie EDP **************/
-class force : public lib::sensor_interface
+class force : public lib::sensor::sensor_interface
 {
 private:
 	//! Coordinator interested in direct force readings
@@ -63,7 +63,7 @@ protected:
 
 	struct _from_vsp
 	{
-		lib::VSP_REPORT_t vsp_report;
+		lib::sensor::VSP_REPORT_t vsp_report;
 		force_data_t force;
 	} from_vsp;
 

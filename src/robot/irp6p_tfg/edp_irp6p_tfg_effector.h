@@ -18,14 +18,12 @@
 #include "base/edp/edp_e_motor_driven.h"
 #include "robot/irp6p_tfg/irp6p_tfg_const.h"
 
-#define IRP6P_GRIPPER_CATCH_AXE 6
-
 namespace mrrocpp {
 namespace edp {
 namespace irp6p_tfg {
 
 // Klasa reprezentujaca tasmociag.
-class effector: public common::motor_driven_effector
+class effector : public common::motor_driven_effector
 {
 protected:
 	// Metoda tworzy modele kinematyczne dla robota IRp-6 na postumencie.

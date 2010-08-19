@@ -8,7 +8,7 @@
 #ifndef _UI_ECP_R_SPEAKER_H
 #define _UI_ECP_R_SPEAKER_H
 
-#include "ui/ui.h"
+#include "ui/src/ui.h"
 
 #include "robot/speaker/ecp_r_speaker.h"
 // Konfigurator.

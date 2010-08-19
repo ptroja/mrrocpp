@@ -21,12 +21,12 @@
 #include <boost/bind.hpp>
 
 #include "lib/srlib.h"
-#include "ui/ui_const.h"
-#include "ui/ui_class.h"
-// #include "ui/ui.h"
+#include "ui/src/ui_const.h"
+#include "ui/src/ui_class.h"
+// #include "ui/src/ui.h"
 // Konfigurator.
 #include "lib/configurator.h"
-#include "ui/ui_ecp_r_tfg_and_conv.h"
+#include "ui/src/ui_ecp_r_tfg_and_conv.h"
 #include "robot/smb/smb_const.h"
 
 /* Local headers */

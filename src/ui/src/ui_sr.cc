@@ -28,14 +28,14 @@
 #include <pthread.h>
 #include <errno.h>
 
-#include "ui/ui.h"
-#include "ui/ui_class.h"
+#include "ui/src/ui.h"
+#include "ui/src/ui_class.h"
 #include "ui/src/ui_ecp.h"
 #include "ui/src/ui_sr.h"
 
 #include "lib/mis_fun.h"
 #include "lib/srlib.h"
-#include "ui/ui_const.h"
+#include "ui/src/ui_const.h"
 #include "lib/configurator.h"
 #include "lib/mis_fun.h"
 
@@ -60,6 +60,7 @@ void ui_sr_buffer::operator()() {
 				"BLAD SR ATTACH, przypuszczalnie nie uruchomiono gns, albo blad wczytywania konfiguracji");
 		return;
 	}
+
 	ui.is_sr_thread_loaded = true;
 	while (1) {
 		lib::sr_package_t sr_msg;
@@ -122,7 +123,6 @@ void ui_sr_buffer::operator()() {
 
 ui_sr_buffer::ui_sr_buffer(Ui& _ui) :
 	ui(_ui), cb(UI_SR_BUFFER_LENGHT) {
-
 	thread_id = new boost::thread(boost::bind(&ui_sr_buffer::operator(), this));
 }
 
@@ -141,7 +141,8 @@ void ui_sr_buffer::put_one_msg(const lib::sr_package_t& new_msg) {
 	return;
 }
 
-void ui_sr_buffer::get_one_msg(lib::sr_package_t& new_msg) {
+void ui_sr_buffer::get_one_msg(lib::sr_package_t& new_msg)
+{
 	boost::mutex::scoped_lock lock(mtx);
 	new_msg = cb.front();
 	cb.pop_front();
