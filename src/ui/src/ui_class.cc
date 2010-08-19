@@ -15,7 +15,7 @@
 #include <errno.h>
 #include <spawn.h>
 #include <process.h>
-#include <assert.h>
+#include <cassert>
 #include <iostream>
 #include <fstream>
 

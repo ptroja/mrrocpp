@@ -1,6 +1,6 @@
 #include <cstdio>
 #include <cmath>
-#include <assert.h>
+#include <cassert>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>

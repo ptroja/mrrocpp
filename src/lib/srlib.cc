@@ -9,7 +9,7 @@
 #include <unistd.h>
 #include <stdint.h>
 #include <errno.h>
-#include <assert.h>
+#include <cassert>
 #include <sys/utsname.h>
 
 #include <boost/thread/mutex.hpp>

@@ -13,7 +13,7 @@
 #include <cstdlib>
 #include <unistd.h>
 #include <string.h>
-#include <assert.h>
+#include <cassert>
 #include <cmath>
 #include <fcntl.h>
 #include <errno.h>

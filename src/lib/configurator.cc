@@ -9,7 +9,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <string.h>
-#include <assert.h>
+#include <cassert>
 #include <errno.h>
 #include <unistd.h>
 #include <sys/wait.h>

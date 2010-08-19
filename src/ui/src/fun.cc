@@ -17,7 +17,7 @@
 #include <errno.h>
 #include <spawn.h>
 #include <process.h>
-#include <assert.h>
+#include <cassert>
 
 #include "lib/srlib.h"
 #include "ui/src/ui_const.h"

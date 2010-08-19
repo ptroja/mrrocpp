@@ -1,6 +1,6 @@
 #include <cstdio>
 #include <stdint.h>
-#include <assert.h>
+#include <cassert>
 #include <string.h>
 #include <signal.h>
 #include <cstdlib>
