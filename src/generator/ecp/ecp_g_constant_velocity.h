@@ -43,49 +43,49 @@ class constant_velocity : public multiple_position<ecp_mp::common::trajectory_po
 		/**
 		 * Loads a single trajectory pose described in joint coordinates (absolute motion) to the list. Maximal velocities are set automatically.
 		 * @param coordinates desired position
-		 * @return true if the addition was succesfull
+		 * @return true if the addition was successful
 		 */
 		bool load_absolute_joint_trajectory_pose(const vector<double> & coordinates);
 		/**
 		 * Loads a single trajectory pose described in joint coordinates (relative motion) to the list. Maximal velocities are set automatically.
 		 * @param coordinates desired position
-		 * @return true if the addition was succesfull
+		 * @return true if the addition was successful
 		 */
 		bool load_relative_joint_trajectory_pose(const vector<double> & coordinates);
 		/**
 		 * Loads a single trajectory pose described in motor coordinates (absolute motion) to the list. Maximal velocities are set automatically.
 		 * @param coordinates desired position
-		 * @return true if the addition was succesfull
+		 * @return true if the addition was successful
 		 */
 		bool load_absolute_motor_trajectory_pose(const vector<double> & coordinates);
 		/**
 		 * Loads a single trajectory pose described in motor coordinates (relative motion) to the list. Maximal velocities are set automatically.
 		 * @param coordinates desired position
-		 * @return true if the addition was succesfull
+		 * @return true if the addition was successful
 		 */
 		bool load_relative_motor_trajectory_pose(const vector<double> & coordinates);
 		/**
 		 * Loads a single trajectory pose described in euler zyz coordinates (absolute motion) to the list. Maximal velocities are set automatically.
 		 * @param coordinates desired position
-		 * @return true if the addition was succesfull
+		 * @return true if the addition was successful
 		 */
 		bool load_absolute_euler_zyz_trajectory_pose(const vector<double> & coordinates);
 		/**
 		 * Loads a single trajectory pose described in euler zyz coordinates (relative motion) to the list. Maximal velocities are set automatically.
 		 * @param coordinates desired position
-		 * @return true if the addition was succesfull
+		 * @return true if the addition was successful
 		 */
 		bool load_relative_euler_zyz_trajectory_pose(const vector<double> & coordinates);
 		/**
 		 * Loads a single trajectory pose described in angle axis coordinates (absolute motion) to the list. Maximal velocities are set automatically.
 		 * @param coordinates desired position
-		 * @return true if the addition was succesfull
+		 * @return true if the addition was successful
 		 */
 		bool load_absolute_angle_axis_trajectory_pose(const vector<double> & coordinates);
 		/**
 		 * Loads a single trajectory pose described in angle axis coordinates (relative motion) to the list. Maximal velocities are set automatically.
 		 * @param coordinates desired position
-		 * @return true if the addition was succesfull
+		 * @return true if the addition was successful
 		 */
 		bool load_relative_angle_axis_trajectory_pose(const vector<double> & coordinates);
 		/**

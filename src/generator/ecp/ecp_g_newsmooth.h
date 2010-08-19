@@ -30,7 +30,7 @@ namespace generator {
  * Usage:
  * Load one or more of trajectory poses using one of the load methods. Velocities and accelerations are set automatically. Call %calculate_interpolate() method.
  * If it returns true generator is ready to communicate with the robot. Call the %Move() method. The generator resets itself automatically after
- * successfull termination of the assumed trajectory, however it is safe to call the %reset() method before the next use of the generator.
+ * successful termination of the assumed trajectory, however it is safe to call the %reset() method before the next use of the generator.
  */
 class newsmooth : public multiple_position<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose,
 ecp::common::generator::trajectory_interpolator::bang_bang_interpolator,
@@ -73,49 +73,49 @@ ecp::common::generator::velocity_profile_calculator::bang_bang_profile> {
 		/**
 		 * Loads a single trajectory pose described in joint coordinates (absolute motion) to the list. Maximal velocities and accelerations are set automatically.
 		 * @param coordinates desired position
-		 * @return true if the addition was succesfull
+		 * @return true if the addition was successful
 		 */
 		bool load_absolute_joint_trajectory_pose(const vector<double> & coordinates);
 		/**
 		 * Loads a single trajectory pose described in joint coordinates (relative motion) to the list. Maximal velocities and accelerations are set automatically.
 		 * @param coordinates desired position
-		 * @return true if the addition was succesfull
+		 * @return true if the addition was successful
 		 */
 		bool load_relative_joint_trajectory_pose(const vector<double> & coordinates);
 		/**
 		 * Loads a single trajectory pose described in motor coordinates (absolute motion) to the list. Maximal velocities and accelerations are set automatically.
 		 * @param coordinates desired position
-		 * @return true if the addition was succesfull
+		 * @return true if the addition was successful
 		 */
 		bool load_absolute_motor_trajectory_pose(const vector<double> & coordinates);
 		/**
 		 * Loads a single trajectory pose described in motor coordinates (relative motion) to the list. Maximal velocities and accelerations are set automatically.
 		 * @param coordinates desired position
-		 * @return true if the addition was succesfull
+		 * @return true if the addition was successful
 		 */
 		bool load_relative_motor_trajectory_pose(const vector<double> & coordinates);
 		/**
 		 * Loads a single trajectory pose described in euler zyz coordinates (absolute motion) to the list. Maximal velocities and accelerations are set automatically.
 		 * @param coordinates desired position
-		 * @return true if the addition was succesfull
+		 * @return true if the addition was successful
 		 */
 		bool load_absolute_euler_zyz_trajectory_pose(const vector<double> & coordinates);
 		/**
 		 * Loads a single trajectory pose described in euler zyz coordinates (relative motion) to the list. Maximal velocities and accelerations are set automatically.
 		 * @param coordinates desired position
-		 * @return true if the addition was succesfull
+		 * @return true if the addition was successful
 		 */
 		bool load_relative_euler_zyz_trajectory_pose(const vector<double> & coordinates);
 		/**
 		 * Loads a single trajectory pose described in angle axis coordinates (absolute motion) to the list. Maximal velocities and accelerations are set automatically.
 		 * @param coordinates desired position
-		 * @return true if the addition was succesfull
+		 * @return true if the addition was successful
 		 */
 		bool load_absolute_angle_axis_trajectory_pose(const vector<double> & coordinates);
 		/**
 		 * Loads a single trajectory pose described in angle axis coordinates (relative motion) to the list. Maximal velocities and accelerations are set automatically.
 		 * @param coordinates desired position
-		 * @return true if the addition was succesfull
+		 * @return true if the addition was successful
 		 */
 		bool load_relative_angle_axis_trajectory_pose(const vector<double> & coordinates);
 

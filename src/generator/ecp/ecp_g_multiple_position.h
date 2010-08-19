@@ -481,7 +481,7 @@ public:
 	}
 	/**
 	 * Performs calculation of the trajectory and interpolation. Fills in pose_vector and coordinate_vector.
-	 * @return true if the calculation was succesfull
+	 * @return true if the calculation was successful
 	 */
 	virtual bool calculate_interpolate() {
 
