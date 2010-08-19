@@ -13,6 +13,8 @@ namespace common {
 namespace generator {
 namespace trajectory_interpolator {
 
+using namespace std;
+
 constant_velocity_interpolator::constant_velocity_interpolator() {
 	// TODO Auto-generated constructor stub
 

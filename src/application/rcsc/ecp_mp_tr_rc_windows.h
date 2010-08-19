@@ -12,11 +12,13 @@
 #define __ECP_MP_TR_RC_WINDOWS_H
 
 #include <pthread.h>
+#include <string>
 
-#include "base/ecp_mp/transmitter.h"				// klasa bazowa transmitter
 #include <boost/thread/condition_variable.hpp>
 #include <boost/thread/mutex.hpp>
 #include <boost/circular_buffer.hpp>
+
+#include "base/ecp_mp/transmitter.h"				// klasa bazowa transmitter
 
 namespace mrrocpp {
 namespace ecp_mp {

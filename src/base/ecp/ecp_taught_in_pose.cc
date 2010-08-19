@@ -1,4 +1,4 @@
-#include <string.h>
+#include <cstring>
 
 #include "base/ecp/ecp_taught_in_pose.h"
 #include "lib/impconst.h"

@@ -8,7 +8,7 @@
  * @ingroup KINEMATICS SIF_KINEMATICS
  */
 
-#include <math.h>
+#include <cmath>
 
 #include "lib/com_buf.h"
 #include "robot/spkm/kinematic_model_spkm.h"

@@ -3,13 +3,13 @@
 /*                                         Version 2.01  */
 
 /* Standard headers */
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #include <unistd.h>
 #include <strings.h>
 
-#include <string.h>
-#include <signal.h>
+#include <cstring>
+#include <csignal>
 #include <dirent.h>
 
 #include <boost/bind.hpp>
@@ -19,14 +19,14 @@
 #include <boost/circular_buffer.hpp>
 
 #include <fcntl.h>
-#include <string.h>
+#include <cstring>
 #include <sys/types.h>
 #include <sys/utsname.h>
 #include <iostream>
 #include <fstream>
 
 #include <pthread.h>
-#include <errno.h>
+#include <cerrno>
 
 #include "ui/src/ui.h"
 #include "ui/src/ui_class.h"

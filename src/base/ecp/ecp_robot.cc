@@ -1,12 +1,12 @@
-#include <string.h>
+#include <cstring>
 #include <unistd.h>
-#include <stdio.h>
-#include <errno.h>
+#include <cstdio>
+#include <cerrno>
 #include <stdint.h>
 
 #include <sys/types.h>
 #include <sys/wait.h>
-#include <signal.h>
+#include <csignal>
 
 #include "lib/exception.h"
 #include <boost/throw_exception.hpp>

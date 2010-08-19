@@ -47,9 +47,9 @@
  */
 
 #include <playerclient.h>
-#include <stdio.h>
+#include <cstdio>
 #include <netinet/in.h>
-#include <string.h>
+#include <cstring>
 
 void GpsProxy::FillData(player_msghdr_t hdr, const char* buffer)
 {

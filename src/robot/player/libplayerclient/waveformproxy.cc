@@ -39,10 +39,10 @@
 #include <fcntl.h>
 #include <sys/types.h>
 #include <sys/ioctl.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <stdio.h>
-#include <math.h>
+#include <cstdlib>
+#include <cstdio>
+#include <cstdio>
+#include <cmath>
 #include <unistd.h>
 
 #if HAVE_SYS_SOUNDCARD_H

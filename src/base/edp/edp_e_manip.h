@@ -16,7 +16,7 @@
 #include "lib/srlib.h"
 
 #if defined(USE_MESSIP_SRR)
-#include <messip.h>
+#include "messip.h"
 #endif
 
 #include "base/kinematics/kinematics_manager.h"

@@ -4,7 +4,7 @@
  * Autor: Krzysztof Dziubek	*/
 
 #include <unistd.h>
-#include <time.h>
+#include <ctime>
 
 #include "lib/typedefs.h"
 #include "lib/impconst.h"

@@ -8,7 +8,7 @@
  * @ingroup IRP6OT_KINEMATICS
  */
 
-#include <math.h>
+#include <cmath>
 
 #include "kinematic_parameters_bird_hand.h"
 

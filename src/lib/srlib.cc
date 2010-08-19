@@ -3,13 +3,13 @@
 // Opis:		metody klas SR
 // -------------------------------------------------------------------------
 
-#include <stdio.h>
-#include <string.h>
-#include <stdio.h>
+#include <cstdio>
+#include <cstring>
+#include <cstdio>
 #include <unistd.h>
 #include <stdint.h>
-#include <errno.h>
-#include <assert.h>
+#include <cerrno>
+#include <cassert>
 #include <sys/utsname.h>
 
 #include <boost/thread/mutex.hpp>

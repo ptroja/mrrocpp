@@ -3,14 +3,14 @@
 // ostatnia modyfikacja - styczen 2005
 /* --------------------------------------------------------------------- */
 
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #include <iostream>
 #include <fstream>
-#include <math.h>
+#include <cmath>
 #include <unistd.h>
-#include <errno.h>
-#include <time.h>
+#include <cerrno>
+#include <ctime>
 
 #include <boost/throw_exception.hpp>
 #include <boost/exception/info.hpp>

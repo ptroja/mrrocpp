@@ -14,7 +14,7 @@
 #ifndef __BIRDCLIENT_H
 #define __BIRDCLIENT_H
 
-#include <inttypes.h>
+#include <stdint.h>
 
 namespace mrrocpp {
 namespace ecp_mp {

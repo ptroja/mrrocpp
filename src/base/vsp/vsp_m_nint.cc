@@ -17,16 +17,16 @@
  * @ingroup VSP
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <errno.h>
-#include <stddef.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cerrno>
+#include <cstddef>
 #include <unistd.h>
 #include <sys/iofunc.h>
 #include <sys/dispatch.h>
 #include <devctl.h>
-#include <string.h>
-#include <signal.h>
+#include <cstring>
+#include <csignal>
 #include <process.h>
 #include <sys/wait.h>
 #include <sys/types.h>

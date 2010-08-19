@@ -24,9 +24,9 @@
 
 
 
-#include <stdlib.h>
-#include <assert.h>
-#include <stdio.h>
+#include <cstdlib>
+#include <cassert>
+#include <cstdio>
 #include "stack.h"
 
 #define STACK_INIT_SIZE 32

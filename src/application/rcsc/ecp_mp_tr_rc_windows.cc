@@ -7,8 +7,8 @@
 // Data:		10.11.2005
 // -------------------------------------------------------------------------
 
-#include <stdio.h>
-#include <string.h>
+#include <cstdio>
+#include <cstring>
 #include <unistd.h>
 #include <arpa/inet.h>
 #include <sys/select.h>

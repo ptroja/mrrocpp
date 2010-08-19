@@ -10,7 +10,8 @@
 #include "lib/agent/RemoteAgent.h"
 #include "lib/agent/RemoteBuffer.h"
 
-#include <time.h>
+#include <ctime>
+#include <sys/types.h>
 
 namespace mrrocpp {
 namespace mp {

@@ -1,5 +1,5 @@
-#include <stdio.h>
-#include <string.h>
+#include <cstdio>
+#include <cstring>
 
 #include "lib/srlib.h"
 #include "ecp_mp_t_multiplayer.h"

@@ -13,6 +13,8 @@ namespace common {
 namespace generator {
 namespace trajectory_interpolator {
 
+using namespace std;
+
 bang_bang_interpolator::bang_bang_interpolator() {
 	// TODO Auto-generated constructor stub
 

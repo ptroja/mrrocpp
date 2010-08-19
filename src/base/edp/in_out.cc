@@ -1,4 +1,4 @@
-#include <string.h>
+#include <cstring>
 #include <stdint.h>
 #ifdef __QNXNTO__
 #include <sys/neutrino.h>

@@ -1,9 +1,9 @@
-#include <stdio.h>
+#include <cstdio>
 #include <stdint.h>
-#include <assert.h>
-#include <string.h>
-#include <signal.h>
-#include <stdlib.h>
+#include <cassert>
+#include <cstring>
+#include <csignal>
+#include <cstdlib>
 #include <string>
 
 #if defined(USE_MESSIP_SRR)

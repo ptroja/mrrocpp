@@ -8,8 +8,8 @@
 // Autor: Yoyek (Tomek Winiarski)
 // na podstawie szablonu vsp Tomka Kornuty i programu obslugi czujnika Artura Zarzyckiego
 // -------------------------------------------------------------------------
-#include <stdio.h>
-#include <string.h>
+#include <cstdio>
+#include <cstring>
 #include <exception>
 
 #include <boost/date_time/posix_time/posix_time.hpp>
@@ -62,7 +62,6 @@ void ATI6284_force::connect_to_hardware(void) {
 	try {
 		//sendSocket = new RawSocket("en1", TARGET_ETHERNET_ADDRESS);
 		//recvSocket = new RawSockeib -t("en1");
-
 	} catch (std::exception & e) {
 		throw runtime_error("Could not open device");
 	}

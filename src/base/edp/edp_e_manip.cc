@@ -9,14 +9,14 @@
 // Data:		14.02.2007
 // -------------------------------------------------------------------------
 
-#include <stdio.h>
-#include <ctype.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cctype>
+#include <cstdlib>
 #include <unistd.h>
-#include <string.h>
-#include <math.h>
+#include <cstring>
+#include <cmath>
 #include <iostream>
-#include <errno.h>
+#include <cerrno>
 
 #include "lib/typedefs.h"
 #include "lib/impconst.h"

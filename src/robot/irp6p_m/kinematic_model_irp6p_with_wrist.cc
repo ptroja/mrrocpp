@@ -10,8 +10,8 @@
  * @ingroup KINEMATICS IRP6P_KINEMATICS
  */
 
-#include <stdio.h>
-#include <math.h>
+#include <cstdio>
+#include <cmath>
 
 #include "lib/com_buf.h"
 #include "robot/irp6p_m/kinematic_model_irp6p_with_wrist.h"

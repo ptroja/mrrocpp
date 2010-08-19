@@ -47,8 +47,8 @@
 
 #include <playerclient.h>
 #include <netinet/in.h>
-#include <string.h>
-#include <stdio.h>
+#include <cstring>
+#include <cstdio>
 
 void 
 LogProxy::FillData(player_msghdr_t hdr, const char* buffer)

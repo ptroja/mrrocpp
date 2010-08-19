@@ -1,4 +1,4 @@
-#include <assert.h>
+#include <cassert>
 #include <unistd.h>
 
 #include "base/ecp/player/generator/ecp_g_playerpos.h"

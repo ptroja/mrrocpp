@@ -11,7 +11,7 @@
 
 #include "neuron_sensor.h"
 
-#include <time.h>
+#include <ctime>
 
 #include <sys/socket.h>
 #include <netinet/tcp.h>

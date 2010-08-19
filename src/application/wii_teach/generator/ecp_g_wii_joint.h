@@ -1,9 +1,6 @@
 #ifndef ECP_WII_JOINT_GENERATOR_H
 #define ECP_WII_JOINT_GENERATOR_H
 
-#include <string.h>
-#include <math.h>
-
 #include "base/ecp/ecp_generator.h"
 #include "application/wii_teach/sensor/ecp_mp_s_wiimote.h"
 #include "application/wii_teach/generator/ecp_g_wii.h"

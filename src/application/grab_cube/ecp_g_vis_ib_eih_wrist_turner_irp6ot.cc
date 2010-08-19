@@ -5,7 +5,7 @@
  *      Author: rtulwin
  */
 
-#include <math.h>
+#include <cmath>
 
 #include "ecp_g_vis_ib_eih_wrist_turner_irp6ot.h"
 

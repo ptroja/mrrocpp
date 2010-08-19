@@ -22,8 +22,8 @@
  */
 
 #include <playerclient.h>
-#include <string.h>
-#include <stdio.h>
+#include <cstring>
+#include <cstdio>
 
 
 void

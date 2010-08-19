@@ -21,7 +21,7 @@
 #include <Eigen/Core>
 
 #if defined(USE_MESSIP_SRR)
-#include <messip.h>
+#include "messip.h"
 #else
 #include <boost/property_tree/ptree.hpp>
 #endif

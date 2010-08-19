@@ -12,19 +12,19 @@
  */
 
 
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #include <sys/types.h>
-#include <inttypes.h>
+#include <stdint.h>
 #include <fcntl.h>
-#include <string.h>
+#include <cstring>
 #include <unistd.h>
 #include <sys/time.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
-#include <errno.h>
+#include <cerrno>
 #include <netdb.h>
-#include <math.h>
+#include <cmath>
 #include <sys/poll.h>
 #include <netinet/in.h>
 

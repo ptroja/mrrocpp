@@ -1,4 +1,4 @@
-#include <stdio.h>
+#include <cstdio>
 
 #include "lib/typedefs.h"
 #include "lib/impconst.h"

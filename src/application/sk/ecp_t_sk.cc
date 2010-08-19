@@ -4,8 +4,8 @@
 // Ostatnia modyfikacja: 2007
 // ------------------------------------------------------------------------
 
-#include <stdio.h>
-#include <string.h>
+#include <cstdio>
+#include <cstring>
 #include <unistd.h>
 
 #include "lib/typedefs.h"

@@ -1,5 +1,5 @@
 #include <gtk/gtk.h>
-#include <errno.h>
+#include <cerrno>
 
 #include "ui_model.h"
 

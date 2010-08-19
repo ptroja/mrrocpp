@@ -10,7 +10,7 @@
 #ifndef __Y_SPAWN_H
 #define __Y_SPAWN_H
 
-#include <limits.h>
+#include <climits>
 #include "lib/typedefs.h"
 
 namespace mrrocpp {

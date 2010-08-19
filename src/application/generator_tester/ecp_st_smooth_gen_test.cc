@@ -29,7 +29,7 @@ ecp_sub_task_smooth_gen_test::ecp_sub_task_smooth_gen_test(task & _ecp_t) :
 
 void ecp_sub_task_smooth_gen_test::conditional_execution() {
 
-	vector<double> coordinates1(6);
+	std::vector<double> coordinates1(6);
 
 	// POSTUMENT
 

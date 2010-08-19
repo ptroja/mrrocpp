@@ -3,7 +3,7 @@
 /*                                         Version 2.01  */
 
 /* Standard headers */
-#include <stdio.h>
+#include <cstdio>
 
 #include "ui/src/ui.h"
 #include "ui/src/ui_const.h"

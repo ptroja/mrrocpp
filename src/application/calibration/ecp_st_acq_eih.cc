@@ -377,8 +377,8 @@ bool acq_eih::store_data(void )
 	return true;
 }
 
-void acq_eih::write_data(std::string _K_fp, std::string _kk_fp,
-		std::string _M_fp, std::string _mm_fp, int _number_of_measures) {
+void acq_eih::write_data(const std::string & _K_fp, const std::string & _kk_fp,
+		const std::string & _M_fp, const std::string & _mm_fp, int _number_of_measures) {
 	K_fp = _K_fp;
 	kk_fp = _kk_fp;
 	M_fp = _M_fp;

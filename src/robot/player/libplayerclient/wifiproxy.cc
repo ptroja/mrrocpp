@@ -49,8 +49,8 @@
 
 #include <playerclient.h>
 #include <netinet/in.h>
-#include <stdio.h>
-#include <math.h>
+#include <cstdio>
+#include <cmath>
 
 /* fills in all the data....
  *

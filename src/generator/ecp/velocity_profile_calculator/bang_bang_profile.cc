@@ -14,6 +14,8 @@ namespace common {
 namespace generator {
 namespace velocity_profile_calculator {
 
+using namespace std;
+
 bang_bang_profile::bang_bang_profile() {
 	// TODO Auto-generated constructor stub
 

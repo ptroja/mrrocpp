@@ -21,6 +21,7 @@ namespace ecp {
 namespace common {
 namespace generator {
 
+using namespace std;
 
 get_position::get_position(common::task::task& _ecp_task, lib::ECP_POSE_SPECIFICATION pose_spec, int axes_num) :
         generator (_ecp_task) {

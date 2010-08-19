@@ -1,8 +1,8 @@
 #include <termios.h>
 #include <unistd.h>
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
+#include <cstring>
+#include <cstdlib>
+#include <cstdio>
 #include <termios.h>
 #include <sys/types.h>
 #include <sys/stat.h>

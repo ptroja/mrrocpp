@@ -11,7 +11,6 @@
 #define _SENSOR_H
 
 #include <string>
-#include <stdint.h>
 
 #include "lib/com_buf.h"
 #include "sensor_error.h"

@@ -43,7 +43,7 @@ public:
 	 * @param mc time of a single macrostep
 	 * @return true if the interpolation was successful
 	 */
-	virtual bool interpolate_relative_pose(typename vector<Pos>::iterator & pose_vector_iterator, vector<vector<double> > & coordinate_vector, const double & mc) = 0;
+	virtual bool interpolate_relative_pose(typename std::vector<Pos>::iterator & pose_vector_iterator, std::vector<std::vector<double> > & coordinate_vector, const double & mc) = 0;
 	/**
 	 * Method interpolates the absolute type trajectory basing on the list of poses of stored in objects of types derived from %trajectory_pose.
 	 * @param it iterator to the list of positions
@@ -51,7 +51,7 @@ public:
 	 * @param mc time of a single macrostep
 	 * @return true if the interpolation was successful
 	 */
-	virtual bool interpolate_absolute_pose(typename vector<Pos>::iterator & pose_vector_iterator, vector<vector<double> > & coordinate_vector, const double & mc) = 0;
+	virtual bool interpolate_absolute_pose(typename std::vector<Pos>::iterator & pose_vector_iterator, std::vector<std::vector<double> > & coordinate_vector, const double & mc) = 0;
 };
 
 } // namespace trajectory_interpolator

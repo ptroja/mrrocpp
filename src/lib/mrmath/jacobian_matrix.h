@@ -9,20 +9,13 @@
 // Data:		14.02.2007
 // ------------------------------------------------------------------------
 
-
 #ifndef __JACOBIAN_MATRIX_H
 #define __JACOBIAN_MATRIX_H
-
-#include <iostream>
-#include <math.h>
-#include <string.h>
 
 #include "lib/impconst.h"	// frame_tab
 
 namespace mrrocpp {
 namespace lib {
-
-
 
 //Sibi
 // klasa reprezentujaca macierz jakobianu 6 na 6

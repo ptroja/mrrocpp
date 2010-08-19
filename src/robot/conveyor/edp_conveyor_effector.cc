@@ -10,7 +10,7 @@
 // Data:		24.02.2007
 // ------------------------------------------------------------------------
 
-#include <stdio.h>
+#include <cstdio>
 
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
