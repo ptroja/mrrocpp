@@ -18,7 +18,7 @@
  */
 
 #include <cstdio>
-#include <stdlib.h>
+#include <cstdlib>
 #include <errno.h>
 #include <stddef.h>
 #include <unistd.h>

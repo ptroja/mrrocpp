@@ -8,7 +8,7 @@
 // -------------------------------------------------------------------------
 
 #include <cstdio>
-#include <stdlib.h>
+#include <cstdlib>
 #include <unistd.h>
 #include <string.h>
 #include <signal.h>

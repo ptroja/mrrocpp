@@ -24,7 +24,7 @@
  	* OTHER DEALINGS IN THE SOFTWARE. */
 
 #include <limits.h>
-#include <stdlib.h>
+#include <cstdlib>
 #include <string.h>
 #include <cstdio>
 #include "dom.h"

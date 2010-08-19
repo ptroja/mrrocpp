@@ -27,7 +27,7 @@ Examples:
 
 /* Standard headers */
 #include <cstdio>
-#include <stdlib.h>
+#include <cstdlib>
 #include <string.h>
 #include <unistd.h>
 

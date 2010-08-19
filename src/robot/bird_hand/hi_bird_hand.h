@@ -1,7 +1,7 @@
 
 #include <inttypes.h>
 #include <termios.h>
-#include <stdlib.h>
+#include <cstdlib>
 #include <cstdio>
 #include <unistd.h>
 #include <fcntl.h>

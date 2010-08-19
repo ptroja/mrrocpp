@@ -10,7 +10,7 @@
 #include <iostream>
 
 #include <cstdio>
-#include <stdlib.h>
+#include <cstdlib>
 #include <unistd.h>
 #include <string.h>
 #include <assert.h>

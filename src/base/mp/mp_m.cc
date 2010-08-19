@@ -5,7 +5,7 @@
 // ------------------------------------------------------------------------
 
 #include <cstdio>
-#include <stdlib.h>
+#include <cstdlib>
 #include <signal.h>
 #include <sys/types.h>
 #include <sys/wait.h>

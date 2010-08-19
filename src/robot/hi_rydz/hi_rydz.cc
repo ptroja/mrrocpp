@@ -10,7 +10,7 @@
 
 #include <cstdio>
 #include <string.h>
-#include <stdlib.h>
+#include <cstdlib>
 #include <signal.h>
 #include <time.h>
 #include <sys/types.h>

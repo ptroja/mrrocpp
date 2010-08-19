@@ -1,7 +1,7 @@
 #include <termios.h>
 #include <unistd.h>
 #include <string.h>
-#include <stdlib.h>
+#include <cstdlib>
 #include <cstdio>
 #include <termios.h>
 #include <sys/types.h>

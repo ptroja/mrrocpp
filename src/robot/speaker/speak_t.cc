@@ -7,7 +7,7 @@
 #include <cstdio>
 #include <string.h>
 #include <signal.h>
-#include <stdlib.h>
+#include <cstdlib>
 
 #include "lib/typedefs.h"
 #include "lib/impconst.h"

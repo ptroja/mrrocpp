@@ -13,7 +13,7 @@
 
 
 #include <cstdio>
-#include <stdlib.h>
+#include <cstdlib>
 #include <sys/types.h>
 #include <inttypes.h>
 #include <fcntl.h>

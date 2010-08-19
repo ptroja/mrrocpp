@@ -12,7 +12,7 @@
 
 /* Standard headers */
 #include <cstdio>
-#include <stdlib.h>
+#include <cstdlib>
 #include <unistd.h>
 #include <string.h>
 #include <errno.h>

@@ -53,7 +53,7 @@
 #include <limits.h>
 #include <cstdio>
 #include <assert.h>
-#include <stdlib.h>
+#include <cstdlib>
 
 #include "playerpacket.h"
 

@@ -7,7 +7,7 @@
 // -------------------------------------------------------------------------
 
 #include <cstdio>
-#include <stdlib.h>
+#include <cstdlib>
 #include <string.h>
 #include <assert.h>
 #include <errno.h>
@@ -19,7 +19,7 @@
 #include <time.h>
 #include <fcntl.h>
 #include <unistd.h>
-#include <stdlib.h>
+#include <cstdlib>
 #include <stdexcept>
 
 //#include <boost/algorithm/string/trim.hpp>

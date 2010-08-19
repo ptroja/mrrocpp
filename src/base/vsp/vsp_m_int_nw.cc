@@ -12,7 +12,7 @@
  */
 
 #include <cstdio>
-#include <stdlib.h>
+#include <cstdlib>
 #include <fstream>
 #include <errno.h>
 #include <stddef.h>

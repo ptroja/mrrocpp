@@ -1,5 +1,5 @@
 #include <cstdio>
-#include <stdlib.h>
+#include <cstdlib>
 #include <unistd.h>
 #include <errno.h>
 #include <string.h>

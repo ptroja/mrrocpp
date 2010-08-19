@@ -39,7 +39,7 @@
 #include <fcntl.h>
 #include <sys/types.h>
 #include <sys/ioctl.h>
-#include <stdlib.h>
+#include <cstdlib>
 #include <cstdio>
 #include <cstdio>
 #include <cmath>

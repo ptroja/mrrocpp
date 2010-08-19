@@ -3,7 +3,7 @@
 #include <assert.h>
 #include <string.h>
 #include <signal.h>
-#include <stdlib.h>
+#include <cstdlib>
 #include <string>
 
 #if defined(USE_MESSIP_SRR)

@@ -9,7 +9,7 @@
  */
 
 
-#include <stdlib.h>
+#include <cstdlib>
 #include <cmath>
 
 #include "lib/com_buf.h"

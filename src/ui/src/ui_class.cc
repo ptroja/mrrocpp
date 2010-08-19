@@ -2,7 +2,7 @@
 /*                            AppBuilder Photon Code Lib */
 /*                     Version 2.01  */
 #include <cstdio>
-#include <stdlib.h>
+#include <cstdlib>
 #include <unistd.h>
 #include <string.h>
 #include <strings.h>

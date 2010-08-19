@@ -11,7 +11,7 @@
 # define _ECP_GEN_SMOOTH_H
 
 #include <cstdio>
-#include <stdlib.h>
+#include <cstdlib>
 #include <cmath>
 #include <ctype.h>
 

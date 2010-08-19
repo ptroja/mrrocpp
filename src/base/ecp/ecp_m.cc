@@ -8,7 +8,7 @@
 
 #include <cstdio>
 #include <signal.h>
-#include <stdlib.h>
+#include <cstdlib>
 
 #include "lib/impconst.h"
 #include "lib/com_buf.h"

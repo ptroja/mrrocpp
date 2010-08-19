@@ -10,7 +10,7 @@
 // na podstawie szablonu vsp Tomka Kornuty i programu obslugi czujnika Artura Zarzyckiego
 // -------------------------------------------------------------------------
 #include <cstdio>
-#include <stdlib.h>
+#include <cstdlib>
 #include <unistd.h>
 #include <string.h>
 #include <signal.h>

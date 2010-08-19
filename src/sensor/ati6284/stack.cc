@@ -24,7 +24,7 @@
 
 
 
-#include <stdlib.h>
+#include <cstdlib>
 #include <assert.h>
 #include <cstdio>
 #include "stack.h"

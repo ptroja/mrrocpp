@@ -41,7 +41,7 @@
 #include <fcntl.h>   /* File control definitions */
 #include <errno.h>   /* Error number definitions */
 #include <termios.h> /* POSIX terminal control definitions */
-#include <stdlib.h>
+#include <cstdlib>
 #include <stdint.h>  /* int types with given size */
 #include <cmath>
 

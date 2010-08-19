@@ -4,7 +4,7 @@
 /* --------------------------------------------------------------------- */
 
 #include <cstdio>
-#include <stdlib.h>
+#include <cstdlib>
 #include <unistd.h>
 
 #include "lib/typedefs.h"

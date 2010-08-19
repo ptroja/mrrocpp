@@ -58,7 +58,7 @@
 /---------------------------------------------------------------------*/
 
 #include <cstdio>
-#include <stdlib.h>
+#include <cstdlib>
 #include <string.h>
 #include <strings.h>
 #include "lib/cfgopts.h"

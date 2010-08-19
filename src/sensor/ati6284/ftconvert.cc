@@ -24,7 +24,7 @@
      */
  
 #include <cstdio>
-#include <stdlib.h>
+#include <cstdlib>
 #include "ftconfig.h"
 #include "display.h"
 

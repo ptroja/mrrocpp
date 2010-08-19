@@ -4,7 +4,7 @@
 
 /********************************* INCLUDES *********************************/
 #include <cstdio>
-#include <stdlib.h>
+#include <cstdlib>
 #include <string.h>
 
 #include "lib/typedefs.h"
