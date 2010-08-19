@@ -410,7 +410,7 @@ void fsautomat::writeCubeState(common::State &state)
 {
 	int index = state.getNumArgument();
 
-	ecp_mp::sensor::sensor<lib::cube_face_t> * cube_recognition = dynamic_cast<ecp_mp::sensor::sensor<lib::cube_face_t> *> (sensor_m[ecp_mp::sensor::SENSOR_CAMERA_ON_TRACK]);
+	ecp_mp::sensor::sensor<mp::task::cube_face_t> * cube_recognition = dynamic_cast<ecp_mp::sensor::sensor<mp::task::cube_face_t> *> (sensor_m[ecp_mp::sensor::SENSOR_CAMERA_ON_TRACK]);
 	//ecp_mp::sensor::sensor<mrrocpp::mp::task::cube_face_t> * cube_recognition = dynamic_cast<ecp_mp::sensor::sensor<mrrocpp::mp::task::cube_face_t> *> (sensor_m[mrrocpp::ecp_mp::sensor::SENSOR_CAMERA_ON_TRACK]);
 
 	cube_recognition->initiate_reading();

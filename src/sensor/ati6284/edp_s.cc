@@ -486,7 +486,7 @@ void ATI6284_force::get_reading(void)
 		}
 	}
 	//!< ok
-	from_vsp.vsp_report = lib::VSP_REPLY_OK;
+	from_vsp.vsp_report = lib::sensor::VSP_REPLY_OK;
 	//!< tutaj: czujnik skalibrowany, odczyt dokonany, przepisanie wszystkich pol
 	//!< przepisanie do bufora komunikacyjnego
 #if WYNIKI_MRROCPP

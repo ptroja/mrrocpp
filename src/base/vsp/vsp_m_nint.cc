@@ -1,4 +1,4 @@
-
+/*
  * @file vsp_m_nint.cc
  * @brief File containing the \b noninteractive VSP shell.
  *

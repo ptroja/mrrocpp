@@ -55,12 +55,8 @@ reader_config::reader_config() :
 
 	for (int i = 0; i < 6; ++i) {
 		force[i] = false;
-		desired_force[i] = false;
-		filtered_force[i] = false;
 		desired_cartesian_position[i] = false;
 		real_cartesian_position[i] = false;
-		real_cartesian_vel[i] = false;
-		real_cartesian_acc[i] = false;
 	}
 }
 
@@ -389,12 +385,6 @@ void reader_buffer::write_header_old_format(std::ofstream& outfile)
 	// does nothing
 }
 
-<<<<<<< HEAD
-				for (int j = 0; j < 6; j++) {
-					if (reader_cnf.force[j])
-						outfile << data.force[j] << " ";
-				}
-=======
 void reader_buffer::write_data_old_format(std::ofstream& outfile, const reader_data & data)
 {
 	outfile << data.step << " ";
@@ -414,7 +404,6 @@ void reader_buffer::write_data_old_format(std::ofstream& outfile, const reader_d
 		if (reader_cnf.abs_pos[j])
 			outfile << data.abs_pos[j] << " ";
 	}
->>>>>>> origin/master
 
 	outfile << "j: ";
 
@@ -428,15 +417,8 @@ void reader_buffer::write_data_old_format(std::ofstream& outfile, const reader_d
 	for (int j = 0; j < 6; j++) {
 		if (reader_cnf.force[j])
 			outfile << data.force[j] << " ";
-		if (reader_cnf.desired_force[j])
-			outfile << data.desired_force[j] << " ";
-		if (reader_cnf.filtered_force[j])
-			outfile << data.filtered_force[j] << " ";
 	}
 
-<<<<<<< HEAD
-				outfile << "t: " << data.ui_trigger;
-=======
 	outfile << "k: ";
 
 	for (int j = 0; j < 6; j++) {
@@ -451,24 +433,9 @@ void reader_buffer::write_data_old_format(std::ofstream& outfile, const reader_d
 			outfile << data.real_cartesian_position[j] << " ";
 	}
 
-	outfile << "v: ";
->>>>>>> origin/master
-
-	for (int j = 0; j < 6; j++) {
-		if (reader_cnf.real_cartesian_vel[j])
-			outfile << data.real_cartesian_vel[j] << " ";
-	}
-
-	outfile << "a: ";
-
-	for (int j = 0; j < 6; j++) {
-		if (reader_cnf.real_cartesian_acc[j])
-			outfile << data.real_cartesian_acc[j] << " ";
-	}
-
 	outfile << "t: " << data.ui_trigger;
 
-	outfile << '\n';
+	outfile << std::endl;
 }
 
 void reader_buffer::write_header_csv(std::ofstream& outfile)
@@ -499,10 +466,6 @@ void reader_buffer::write_header_csv(std::ofstream& outfile)
 	for (int j = 0; j < 6; j++) {
 		if (reader_cnf.force[j])
 			outfile << "force[" << j << "];";
-		if (reader_cnf.desired_force[j])
-			outfile << "desired_force[" << j << "];";
-		if (reader_cnf.filtered_force[j])
-			outfile << "filtered_force[" << j << "];";
 	}
 
 	for (int j = 0; j < 6; j++) {
@@ -515,17 +478,9 @@ void reader_buffer::write_header_csv(std::ofstream& outfile)
 			outfile << "real_cartesian_position[" << j << "];";
 	}
 
-	for (int j = 0; j < 6; j++) {
-		if (reader_cnf.real_cartesian_vel[j])
-			outfile << "real_cartesian_vel[" << j << "];";
-	}
+	outfile << "ui_trigger";
 
-	for (int j = 0; j < 6; j++) {
-		if (reader_cnf.real_cartesian_acc[j])
-			outfile << "real_cartesian_acc[" << j << "];";
-	}
-
-	outfile << "ui_trigger\n";
+	outfile << std::endl;
 }
 
 void reader_buffer::write_data_csv(std::ofstream& outfile, const reader_data & data)
@@ -556,10 +511,6 @@ void reader_buffer::write_data_csv(std::ofstream& outfile, const reader_data & d
 	for (int j = 0; j < 6; j++) {
 		if (reader_cnf.force[j])
 			outfile << data.force[j] << ";";
-		if (reader_cnf.desired_force[j])
-			outfile << data.desired_force[j] << ";";
-		if (reader_cnf.filtered_force[j])
-			outfile << data.filtered_force[j] << ";";
 	}
 
 	for (int j = 0; j < 6; j++) {
@@ -572,17 +523,9 @@ void reader_buffer::write_data_csv(std::ofstream& outfile, const reader_data & d
 			outfile << data.real_cartesian_position[j] << ";";
 	}
 
-	for (int j = 0; j < 6; j++) {
-		if (reader_cnf.real_cartesian_vel[j])
-			outfile << data.real_cartesian_vel[j] << ";";
-	}
+	outfile << data.ui_trigger;
 
-	for (int j = 0; j < 6; j++) {
-		if (reader_cnf.real_cartesian_acc[j])
-			outfile << data.real_cartesian_acc[j] << ";";
-	}
-
-	outfile << data.ui_trigger << '\n';
+	outfile << std::endl;
 }
 
 } // namespace common

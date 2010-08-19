@@ -26,12 +26,9 @@ robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
 			epos_operational_command_data_port(lib::EPOS_OPERATIONAL_COMMAND_DATA_PORT, port_manager),
 			epos_brake_command_data_port(lib::EPOS_BRAKE_COMMAND_DATA_PORT, port_manager),
 			epos_reply_data_request_port(lib::EPOS_REPLY_DATA_REQUEST_PORT, port_manager)
-
 {
-
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();
-
 }
 
 robot::robot(common::task::task& _ecp_object) :
@@ -43,14 +40,12 @@ robot::robot(common::task::task& _ecp_object) :
 			epos_reply_data_request_port(lib::EPOS_REPLY_DATA_REQUEST_PORT, port_manager)
 
 {
-
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();
 }
 
 void robot::create_command()
 {
-
 	//	int new_data_counter;
 	bool is_new_data;
 	bool is_new_request;
@@ -107,7 +102,10 @@ void robot::create_command()
 		ecp_edp_cbuffer.epos_operational_command_structure = epos_operational_command_structure;
 
 		if (is_new_data) {
-			throw ecp_robot::ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
+			BOOST_THROW_EXCEPTION(
+					lib::exception::NonFatal_error() <<
+					lib::exception::error_code(INVALID_COMMAND_TO_EDP)
+			);
 		} else {
 			is_new_data = true;
 		}
@@ -120,7 +118,10 @@ void robot::create_command()
 		ecp_edp_cbuffer.variant = lib::SPKM_CBUFFER_EPOS_BRAKE_COMMAND;
 
 		if (is_new_data) {
-			throw ecp_robot::ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
+			BOOST_THROW_EXCEPTION(
+				lib::exception::NonFatal_error() <<
+				lib::exception::error_code(INVALID_COMMAND_TO_EDP)
+			);
 		} else {
 			is_new_data = true;
 		}

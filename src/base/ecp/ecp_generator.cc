@@ -26,7 +26,7 @@ void generator::move_init()
 		// default communication mode
 		the_robot->communicate_with_edp = true;
 		// clear data ports in case there is old data in it;
-		the_robot->clear_data_ports();
+		the_robot->port_manager.clear_data_ports();
 	}
 	// domyslny tryb koordynacji
 	ecp_t.continuous_coordination = false;

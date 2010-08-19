@@ -35,7 +35,7 @@ protected:
 
 public:
 
-	single_thread_port_interface(std::string _name, single_thread_port_manager & _port_manager);
+	single_thread_port_interface(const std::string & _name, single_thread_port_manager & _port_manager);
 	/**
 	 * This is a base class, so virtual destructor is recommended
 	 * and it is also required for dynamic casting.
@@ -43,7 +43,7 @@ public:
 	virtual ~single_thread_port_interface()
 	{
 	}
-	std::string get_name();
+	std::string get_name() const;
 	virtual void clear_all_flags()=0;
 
 };

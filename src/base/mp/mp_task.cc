@@ -232,23 +232,13 @@ generator::set_next_ecps_state mp_snes_gen (*this);
 va_list arguments; // A place to store the list of arguments
 lib::robot_name_t robot_l;
 
-<<<<<<< HEAD
-	va_start ( arguments, number_of_robots ); // Initializing arguments to store all values after num
-	for ( int x = 0; x < number_of_robots; x++ ) // Loop until all numbers are added
-	{
-		robot_l = (lib::robot_name_t) (va_arg ( arguments, char * )); // Adds the next value in argument list to sum.
-		mp_snes_gen.robot_m[robot_l] = robot_m[robot_l];
-	}
-	va_end ( arguments ); // Cleans up the list
-=======
 va_start ( arguments, number_of_robots ); // Initializing arguments to store all values after num
 for ( int x = 0; x < number_of_robots; x++ ) // Loop until all numbers are added
 {
-	robot_l = (lib::robot_name_t) (va_arg ( arguments, char* )); // Adds the next value in argument list to sum.
+	robot_l = (lib::robot_name_t) (va_arg ( arguments, char * )); // Adds the next value in argument list to sum.
 	mp_snes_gen.robot_m[robot_l] = robot_m[robot_l];
 }
 va_end ( arguments ); // Cleans up the list
->>>>>>> origin/master
 
 mp_snes_gen.configure (l_state, l_variant, l_string, str_len);
 
@@ -271,15 +261,6 @@ generator::send_end_motion_to_ecps mp_semte_gen (*this);
 va_list arguments; // A place to store the list of arguments
 lib::robot_name_t robot_l;
 
-<<<<<<< HEAD
-	va_start ( arguments, number_of_robots ); // Initializing arguments to store all values after num
-	for ( int x = 0; x < number_of_robots; x++ ) // Loop until all numbers are added
-	{
-		robot_l = (lib::robot_name_t) (va_arg ( arguments, char * )); // Adds the next value in argument list to sum.
-		mp_semte_gen.robot_m[robot_l] = robot_m[robot_l];
-	}
-	va_end ( arguments ); // Cleans up the list
-=======
 va_start ( arguments, number_of_robots ); // Initializing arguments to store all values after num
 for ( int x = 0; x < number_of_robots; x++ ) // Loop until all numbers are added
 {
@@ -287,7 +268,6 @@ for ( int x = 0; x < number_of_robots; x++ ) // Loop until all numbers are added
 	mp_semte_gen.robot_m[robot_l] = robot_m[robot_l];
 }
 va_end ( arguments ); // Cleans up the list
->>>>>>> origin/master
 
 mp_semte_gen.Move();
 }
@@ -315,15 +295,6 @@ generator::extended_empty mp_ext_empty_gen (*this);
 va_list arguments; // A place to store the list of arguments
 lib::robot_name_t robot_l;
 
-<<<<<<< HEAD
-	va_start ( arguments, number_of_robots ); // Initializing arguments to store all values after num
-	for ( int x = 0; x < number_of_robots; x++ ) // Loop until all numbers are added
-	{
-		robot_l = (lib::robot_name_t) (va_arg ( arguments, char * )); // Adds the next value in argument list to sum.
-		mp_ext_empty_gen.robot_m[robot_l] = robot_m[robot_l];
-	}
-	va_end ( arguments ); // Cleans up the list
-=======
 va_start ( arguments, number_of_robots ); // Initializing arguments to store all values after num
 for ( int x = 0; x < number_of_robots; x++ ) // Loop until all numbers are added
 {
@@ -331,7 +302,6 @@ for ( int x = 0; x < number_of_robots; x++ ) // Loop until all numbers are added
 	mp_ext_empty_gen.robot_m[robot_l] = robot_m[robot_l];
 }
 va_end ( arguments ); // Cleans up the list
->>>>>>> origin/master
 
 mp_ext_empty_gen.configure (activate_trigger);
 
@@ -341,32 +311,10 @@ mp_ext_empty_gen.Move();
 void task::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 (int number_of_robots_to_move, int number_of_robots_to_wait_for_task_termin, ... )
 {
-<<<<<<< HEAD
-	// CZYNNOSCI WSTEPNE
-	// utworzenie zbiorow robotow robots_to_move i robots_to_wait_for_task_termination
-	common::robots_t robots_to_move, robots_to_wait_for_task_termination;
-	common::robots_t robots_to_move_tmp, robots_to_wait_for_task_termination_tmp;
-
-	// powolanie generatora i jego konfiguracja
-	generator::extended_empty mp_ext_empty_gen (*this);
-	mp_ext_empty_gen.configure (false);
-
-	// na podstawie argumentow wywolania biezacej metody
-	va_list arguments; // A place to store the list of arguments
-	lib::robot_name_t robot_l;
-
-	// przypisanie robotow do zbiorow robots_to_move i robots_to_wait_for_task_termination, eliminacja robotow ktorych nie ma w systemie
-	va_start ( arguments, number_of_robots_to_wait_for_task_termin);
-	// najpierw zbior robots_to_move...
-	for ( int x = 0; x < number_of_robots_to_move; x++ ) // Loop until all numbers are added
-	{
-		robot_l = (lib::robot_name_t) (va_arg ( arguments, char * )); // Adds the next value in argument list to sum.
-=======
 // CZYNNOSCI WSTEPNE
 // utworzenie zbiorow robotow robots_to_move i robots_to_wait_for_task_termination
 common::robots_t robots_to_move, robots_to_wait_for_task_termination;
 common::robots_t robots_to_move_tmp, robots_to_wait_for_task_termination_tmp;
->>>>>>> origin/master
 
 // powolanie generatora i jego konfiguracja
 generator::extended_empty mp_ext_empty_gen (*this);
@@ -396,7 +344,6 @@ for ( int x = 0; x < number_of_robots_to_wait_for_task_termin; x++ ) // Loop unt
 	robot_l = (lib::robot_name_t) (va_arg ( arguments, char* )); // Adds the next value in argument list to sum.
 	if (robot_m.count(robot_l) == 0)
 	{
-<<<<<<< HEAD
 		robot_l = (lib::robot_name_t) (va_arg ( arguments, char * )); // Adds the next value in argument list to sum.
 		if (robot_m.count(robot_l) == 0)
 		{
@@ -404,11 +351,6 @@ for ( int x = 0; x < number_of_robots_to_wait_for_task_termin; x++ ) // Loop unt
 		} else {
 			robots_to_wait_for_task_termination[robot_l] = robot_m[robot_l];
 		}
-=======
-		sr_ecp_msg->message ("run_..._for_set_of_robots_... usunieto nadmiarowe roboty 2");
-	} else {
-		robots_to_wait_for_task_termination[robot_l] = robot_m[robot_l];
->>>>>>> origin/master
 	}
 }
 va_end ( arguments ); // Cleans up the list
@@ -419,20 +361,13 @@ BOOST_FOREACH(const common::robot_pair_t & robot_node, robots_to_wait_for_task_t
 
 	common::robots_t::iterator robots_map_iter = robots_to_move.find(robot_node.first);
 
-<<<<<<< HEAD
 		if (robots_map_iter == robots_to_move.end()) {
 			sr_ecp_msg->message (lib::FATAL_ERROR, 0, "run_ext_empty_gen_for_set_of_robots_... wrong execution arguments");
 			BOOST_THROW_EXCEPTION(
 					lib::exception::Fatal_error()
 			);
 		}
-=======
-	if (robots_map_iter == robots_to_move.end()) {
-		sr_ecp_msg->message (lib::SYSTEM_ERROR, 0, "run_ext_empty_gen_for_set_of_robots_... wrong execution arguments");
-		throw common::MP_main_error(lib::SYSTEM_ERROR, 0);
->>>>>>> origin/master
 	}
-}
 
 // GLOWNA PETLA
 
@@ -464,17 +399,10 @@ do {
 		}
 	}
 
-<<<<<<< HEAD
-		// sprawdzenie czy zbior robots_to_wait_for_task_termination jest pusty.
-		// Jesli tak wyjscie z petli i w konsekwencji wyjscie z calej metody
-		if (robots_to_wait_for_task_termination.empty())
-			break;
-=======
 	// sprawdzenie czy zbior robots_to_wait_for_task_termination jest pusty.
 	// Jesli tak wyjscie z petli i w konsekwencji wyjscie z calej metody
 	if (robots_to_wait_for_task_termination.empty())
 	break;
->>>>>>> origin/master
 
 	// przypisanie generatorowi mp_ext_empty_gen zbioru robots_to_move
 	mp_ext_empty_gen.robot_m = robots_to_move;
@@ -486,6 +414,7 @@ do {
 	//		if (debug_tmp) printf("ZA MOVE move run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots 1\n");
 }while (true);
 }
+
 
 void task::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 (int number_of_robots_to_move, int number_of_robots_to_wait_for_task_termin, lib::robot_name_t *robotsToMove, lib::robot_name_t *robotsWaitingForTaskTermination)
@@ -598,34 +527,9 @@ void task::initialize_communication()
 	const std::string sr_net_attach_point = config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", UI_SECTION);
 	const std::string mp_attach_point = config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "mp_attach_point");
 
-<<<<<<< HEAD
 	// Obiekt do komuniacji z SR
 	sr_ecp_msg = new lib::sr_ecp(lib::MP, mp_attach_point, sr_net_attach_point, true); // Obiekt do komuniacji z SR
 	sh_msg = new lib::sr_ecp(lib::MP, mp_attach_point, sr_net_attach_point, false); // Obiekt do komuniacji z SR
-=======
-const std::string mp_pulse_attach_point = config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "mp_pulse_attach_point");
-
-// Rejestracja kanalu dla pulsow z procesu UI
-if(!mp_pulse_attach) {
-#if !defined(USE_MESSIP_SRR)
-	if ((mp_pulse_attach = name_attach(NULL, mp_pulse_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) == NULL)
-#else
-	if ((mp_pulse_attach = messip::port_create(mp_pulse_attach_point)) == NULL)
-#endif
-	{
-		uint64_t e = errno; // kod bledu systemowego
-		perror("Failed to attach UI Pulse chanel for Master Process");
-		sr_ecp_msg->message (lib::SYSTEM_ERROR, e, "mp: Failed to attach UI Pulse channel");
-
-		throw common::MP_main_error(lib::SYSTEM_ERROR, 0);
-	}
-}
-
-ui_scoid = wait_for_name_open();
-// unexepected possible resolution of bug 1526
-delay(100);
-ui_opened = true;
->>>>>>> origin/master
 }
 // -------------------------------------------------------------------
 

@@ -24,6 +24,12 @@ namespace ecp {
 namespace common {
 namespace generator {
 
+#define THROW_NONFATAL_ERROR(x) \
+    BOOST_THROW_EXCEPTION(\
+        lib::exception::NonFatal_error() << \
+        lib::exception::error_code(x) \
+    )
+
 /**
  * Base class for the motion generators interpolating between fixed trajectory points.
  */
@@ -191,7 +197,7 @@ protected:
 			pose_vector_iterator->start_position = vector<double>(axes_num,0);
 		} else {
 			sr_ecp_msg.message("Wrong motion type");
-			throw ECP_error(lib::NON_FATAL_ERROR, ECP_ERRORS);//TODO change the second argument
+			THROW_NONFATAL_ERROR(ECP_ERRORS);//TODO change the second argument
 		}
 	}
 	/**
@@ -235,7 +241,7 @@ protected:
 			}
 		} else {
 			sr_ecp_msg.message("Wrong motion type");
-			throw ECP_error(lib::NON_FATAL_ERROR, ECP_ERRORS);//TODO change the second argument
+			THROW_NONFATAL_ERROR(ECP_ERRORS);//TODO change the second argument
 		}
 
 		return trueFlag;
@@ -276,7 +282,6 @@ public:
 		motion_type = lib::ABSOLUTE;
 		nmc = 10;
 		mc = nmc * STEP;
-
 	}
 	/**
 	 * Destructor.
@@ -316,7 +321,7 @@ public:
 			the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
 		} else {
 			sr_ecp_msg.message("Wrong motion type");
-			throw ECP_error(lib::NON_FATAL_ERROR, ECP_ERRORS);//TODO change the second argument
+			THROW_NONFATAL_ERROR(ECP_ERRORS);//TODO change the second argument
 		}
 
 		switch (pose_spec) {
@@ -352,7 +357,7 @@ public:
 				break;
 			default:
 				reset();
-				throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+				THROW_NONFATAL_ERROR(INVALID_POSE_SPECIFICATION);
 		}
 
 		coordinate_vector_iterator = coordinate_vector.begin();
@@ -467,7 +472,7 @@ public:
 
 			default:
 				reset();
-				throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+				THROW_NONFATAL_ERROR(INVALID_POSE_SPECIFICATION);
 		}// end:switch
 
 		coordinate_vector_iterator++;
@@ -481,7 +486,7 @@ public:
 	}
 	/**
 	 * Performs calculation of the trajectory and interpolation. Fills in pose_vector and coordinate_vector.
-	 * @return true if the calculation was succesfull
+	 * @return true if the calculation was successful
 	 */
 	virtual bool calculate_interpolate() {
 

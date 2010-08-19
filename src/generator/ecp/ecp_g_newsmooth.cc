@@ -24,10 +24,6 @@ newsmooth::newsmooth(common::task::task& _ecp_task, lib::ECP_POSE_SPECIFICATION 
 	create_velocity_vectors(axes_num);
 }
 
-newsmooth::~newsmooth() {
-
-}
-
 bool newsmooth::calculate() {
 	//printf("\n################################## Calculate #################################\n");
 	sr_ecp_msg.message("Calculating...");
@@ -71,7 +67,7 @@ bool newsmooth::calculate() {
 			}
 		} else {
 			sr_ecp_msg.message("Wrong motion type");
-			throw ECP_error(lib::NON_FATAL_ERROR, ECP_ERRORS);//TODO change the second argument
+			THROW_NONFATAL_ERROR(ECP_ERRORS);//TODO change the second argument
 		}
 
 		pose_vector_iterator++;

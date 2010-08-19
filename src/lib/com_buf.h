@@ -1131,7 +1131,7 @@ struct ECP_REPLY_PACKAGE
 
 	// TODO: this should be rather union, but it is not possible to union non-POD objects
 	r_buffer reply_package;
-	char commandRecognized[SPEECH_RECOGNITION_TEXT_LEN];
+	//char commandRecognized[SPEECH_RECOGNITION_TEXT_LEN];
 
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
@@ -1144,10 +1144,6 @@ struct ECP_REPLY_PACKAGE
 		// ar & commandRecognized; // TODO: this should be handled in better way...
 	}
 };
-
-<<<<<<< HEAD
-// ------------------------------------------------------------------------
-=======
 
 /**
  * @brief Empty data structure.
@@ -1166,7 +1162,6 @@ typedef struct _empty
  destination_frame[column][row] = source_frame[column][row];
  }
  */
->>>>>>> origin/master
 
 } // namespace lib
 } // namespace mrrocpp

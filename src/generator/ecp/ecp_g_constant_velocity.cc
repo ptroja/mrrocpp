@@ -24,10 +24,6 @@ constant_velocity::constant_velocity(common::task::task& _ecp_task, lib::ECP_POS
 	create_velocity_vectors(axes_num);
 }
 
-constant_velocity::~constant_velocity() {
-
-}
-
 void constant_velocity::print_pose_vector() {
 	printf("------------------ Pose List ------------------\n");
 	pose_vector_iterator = pose_vector.begin();
@@ -78,7 +74,7 @@ bool constant_velocity::calculate() {
 			}
 		} else {
 			sr_ecp_msg.message("Wrong motion type");
-			throw ECP_error(lib::NON_FATAL_ERROR, ECP_ERRORS);//TODO change the second argument
+			THROW_NONFATAL_ERROR(ECP_ERRORS);//TODO change the second argument
 		}
 
 		if(!vpc.calculate_time_pose(pose_vector_iterator) ||//calculate times for each of the axes
