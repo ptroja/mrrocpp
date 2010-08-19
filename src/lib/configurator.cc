@@ -17,7 +17,6 @@
 #include <ctime>
 #include <fcntl.h>
 #include <unistd.h>
-#include <cstdlib.h>
 
 #include <stdexcept>
 #include "lib/exception.h"

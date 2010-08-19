@@ -63,7 +63,7 @@ void ATI6284_force::connect_to_hardware(void) {
 		//sendSocket = new RawSocket("en1", TARGET_ETHERNET_ADDRESS);
 		//recvSocket = new RawSockeib -t("en1");
 	} catch (std::exception & e) {
-		throw runtime_error("Could not open device");
+		throw std::runtime_error("Could not open device");
 	}
 }
 
