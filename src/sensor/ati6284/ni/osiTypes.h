@@ -8,7 +8,7 @@
     */
 #ifndef __osiTypes_h__
 #define __osiTypes_h__
-#include <cstdio>
+#include <stdio.h>
 
 //!< Note: these different typedef's may be different
 //!< depending on you system.  On a 32 bit processor with a 32 bit

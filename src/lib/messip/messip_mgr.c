@@ -29,7 +29,7 @@
 	ans the proxies (non blocking fixed messages).
 */
 
-#include <cstdio>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>

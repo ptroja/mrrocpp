@@ -27,7 +27,7 @@
 #if HAVE_JPEGLIB_H
 
 #include <assert.h>
-#include <cstdio>
+#include <stdio.h>
 #include <string.h>
 #include <jpeglib.h>
 #include <jerror.h>

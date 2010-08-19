@@ -1,6 +1,6 @@
 // This is the server
 
-#include <cstdio>
+#include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
 #include <sched.h>

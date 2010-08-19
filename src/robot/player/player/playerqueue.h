@@ -30,7 +30,7 @@
 #ifndef _PLAYERQUEUE_H
 #define _PLAYERQUEUE_H
 
-#include <cstdio>
+#include <stdio.h>
 #include <sys/time.h>
 
 #include <player.h>

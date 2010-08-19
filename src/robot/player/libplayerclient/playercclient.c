@@ -50,7 +50,7 @@
 #include <assert.h>
 #include <netdb.h>
 #include <unistd.h>
-#include <cstdio>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h> /* for memset() */
 #include <sys/types.h>
