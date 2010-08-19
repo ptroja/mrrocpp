@@ -6,7 +6,7 @@
  * \date 17.03.2008
  */
 
-#include <stdio.h>
+#include <cstdio>
 #include <string.h>
 #include <unistd.h>
 

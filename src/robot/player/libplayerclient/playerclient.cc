@@ -51,7 +51,7 @@
 #include <sys/time.h>
 #include <netinet/in.h>
 #include <string.h>
-#include <stdio.h>
+#include <cstdio>
 #include <netdb.h> // for gethostbyname(3)
 
 // just make a client, and connect, if instructed

@@ -3,7 +3,7 @@
 // Date: maj 2006
 //
 
-#include <stdio.h>
+#include <cstdio>
 #include <ctype.h>
 #include <stdlib.h>
 #include <unistd.h>

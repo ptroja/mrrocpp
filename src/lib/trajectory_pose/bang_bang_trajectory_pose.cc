@@ -14,6 +14,8 @@ namespace ecp_mp {
 namespace common {
 namespace trajectory_pose {
 
+using namespace std;
+
 bang_bang_trajectory_pose::bang_bang_trajectory_pose(void)
 {
 }

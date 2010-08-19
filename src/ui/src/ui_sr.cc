@@ -3,7 +3,7 @@
 /*                                         Version 2.01  */
 
 /* Standard headers */
-#include <stdio.h>
+#include <cstdio>
 #include <stdlib.h>
 #include <unistd.h>
 #include <strings.h>

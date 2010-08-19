@@ -9,7 +9,7 @@
 // Autor: Yoyek (Tomek Winiarski)
 // na podstawie szablonu vsp Tomka Kornuty i programu obslugi czujnika Artura Zarzyckiego
 // -------------------------------------------------------------------------
-#include <stdio.h>
+#include <cstdio>
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
@@ -128,7 +128,7 @@ void ATI6284_force::connect_to_hardware(void)
 			//recvSocket = new RawSockeib -t("en1");
 
 		} catch (std::exception & e) {
-			throw runtime_error("Could not open device");
+			throw std::runtime_error("Could not open device");
 		}
 
 	}

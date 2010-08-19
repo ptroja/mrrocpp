@@ -48,7 +48,7 @@
 
 #include <playerclient.h>
 #include <string.h> // for memset
-#include <stdio.h>
+#include <cstdio>
 
 // constructor will try to get access to the device
 ClientProxy::ClientProxy(PlayerClient* pc, 

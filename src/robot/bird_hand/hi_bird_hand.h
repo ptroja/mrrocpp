@@ -2,7 +2,7 @@
 #include <inttypes.h>
 #include <termios.h>
 #include <stdlib.h>
-#include <stdio.h>
+#include <cstdio>
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/types.h>

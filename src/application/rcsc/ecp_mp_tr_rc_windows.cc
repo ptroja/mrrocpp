@@ -7,7 +7,7 @@
 // Data:		10.11.2005
 // -------------------------------------------------------------------------
 
-#include <stdio.h>
+#include <cstdio>
 #include <string.h>
 #include <unistd.h>
 #include <arpa/inet.h>

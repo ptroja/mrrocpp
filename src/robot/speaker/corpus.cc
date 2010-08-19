@@ -9,7 +9,7 @@
 #include <math.h>	// unitsel - ceil(), floor()
 #include <time.h>	// unitsel - clock()
 #include <cstdlib>
-#include <stdio.h>
+#include <cstdio>
 //#include <windows.h> //WIN
 
 #include "robot/speaker/tts.h" //QNX

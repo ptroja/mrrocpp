@@ -13,7 +13,7 @@
  * \date 20.08.2008
  */
 
-#include <stdio.h>
+#include <cstdio>
 #include <math.h>
 #include <iostream>
 

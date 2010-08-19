@@ -26,7 +26,7 @@
 					2001, 2002, 2003
 */
 
-#include <stdio.h>
+#include <cstdio>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>

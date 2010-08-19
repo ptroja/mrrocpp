@@ -31,7 +31,7 @@
 	message or a qnx4-like proxy).
 */
 
-#include <stdio.h>
+#include <cstdio>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>

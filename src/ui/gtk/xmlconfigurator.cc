@@ -6,7 +6,7 @@
 
 #include <gtk/gtktreestore.h>
 
-#include <stdio.h>
+#include <cstdio>
 #include <strings.h>
 #include <string.h>
 

@@ -1,7 +1,7 @@
 #if !defined(_ECP_T_GEN_TEST_H)
 #define _ECP_T_GEN_TEST_H
 
-#include <stdio.h>
+#include <cstdio>
 
 #include "lib/typedefs.h"
 #include "lib/impconst.h"

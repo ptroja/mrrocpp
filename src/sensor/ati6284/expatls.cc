@@ -25,7 +25,7 @@
 
 #include <limits.h>
 #include <ctype.h>
-#include <stdio.h>
+#include <cstdio>
 #include "xmlparse.h"
 #include "stack.h"
 #include "dom.h"

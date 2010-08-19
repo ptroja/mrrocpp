@@ -26,7 +26,7 @@
 #ifndef CONFFILE_H
 #define CONFFILE_H
 
-#include <stdio.h>
+#include <cstdio>
 #include "playercommon.h"
 #include "player.h"
 

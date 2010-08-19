@@ -19,7 +19,7 @@
 // Ostatnia modyfikacja: 2004r.
 // -------------------------------------------------------------------------
 
-#include <stdio.h>
+#include <cstdio>
 #include <fstream>
 #include <iostream>
 #include <time.h>

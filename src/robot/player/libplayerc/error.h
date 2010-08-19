@@ -48,7 +48,7 @@
 #ifndef PLAYERC_PRIVATE_H
 #define PLAYERC_PRIVATE_H
 
-#include <stdio.h>
+#include <cstdio>
 
 // Use this function to read the error string
 extern const char *playerc_error_str(void);

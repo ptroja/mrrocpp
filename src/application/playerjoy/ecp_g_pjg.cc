@@ -1,4 +1,4 @@
-#include <stdio.h>
+#include <cstdio>
 #include <math.h>
 
 #include "lib/typedefs.h"

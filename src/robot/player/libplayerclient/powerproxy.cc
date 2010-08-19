@@ -45,7 +45,7 @@
 #include <playerclient.h>
 #include <netinet/in.h>
 #include <string.h>
-#include <stdio.h>
+#include <cstdio>
 
 void
 PowerProxy::FillData(player_msghdr_t hdr, const char *buffer)

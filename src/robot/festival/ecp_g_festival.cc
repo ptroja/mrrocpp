@@ -1,4 +1,4 @@
-#include <stdio.h>
+#include <cstdio>
 #include <math.h>
 #include <assert.h>
 #include <sys/types.h>

@@ -14,6 +14,8 @@ namespace ecp_mp {
 namespace common {
 namespace trajectory_pose {
 
+using namespace std;
+
 constant_velocity_trajectory_pose::constant_velocity_trajectory_pose (void) {
 
 }

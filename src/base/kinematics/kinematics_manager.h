@@ -14,8 +14,6 @@
 #include <map>
 #include "base/kinematics/kinematic_model.h"
 
-using namespace std;
-
 namespace mrrocpp {
 namespace kinematics {
 namespace common {
@@ -33,7 +31,7 @@ class kinematics_manager
 {
 	protected:
 		//! List of available kinematic models for given effector.
-		map<unsigned int, kinematic_model*> kinematic_models_list;
+		std::map<unsigned int, kinematic_model*> kinematic_models_list;
 
 		//! Number of currently selected model.
 		unsigned int current_kinematic_model_no;

@@ -40,8 +40,8 @@
 #include <sys/types.h>
 #include <sys/ioctl.h>
 #include <stdlib.h>
-#include <stdio.h>
-#include <stdio.h>
+#include <cstdio>
+#include <cstdio>
 #include <math.h>
 #include <unistd.h>
 

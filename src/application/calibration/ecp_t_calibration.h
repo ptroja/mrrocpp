@@ -5,7 +5,7 @@
 #include <unistd.h>
 #include <cmath>
 #include <iostream>
-#include <stdio.h>
+#include <cstdio>
 
 #include "lib/impconst.h"
 #include "lib/com_buf.h"

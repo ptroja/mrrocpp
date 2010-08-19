@@ -48,7 +48,7 @@
 
 #include <playerclient.h>
 #include <netinet/in.h>
-#include <stdio.h>
+#include <cstdio>
 #include <string.h>
 
 SpeechRecognitionProxy::SpeechRecognitionProxy (PlayerClient *pc, unsigned short index, unsigned char access)

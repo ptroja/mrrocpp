@@ -9,7 +9,7 @@
 // Data:		14.02.2007
 // -------------------------------------------------------------------------
 
-#include <stdio.h>
+#include <cstdio>
 #include <ctype.h>
 #include <stdlib.h>
 #include <unistd.h>

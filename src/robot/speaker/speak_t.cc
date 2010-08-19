@@ -4,7 +4,7 @@
 // ------------------------------------------------------------------------
 
 /********************************* INCLUDES *********************************/
-#include <stdio.h>
+#include <cstdio>
 #include <string.h>
 #include <signal.h>
 #include <stdlib.h>

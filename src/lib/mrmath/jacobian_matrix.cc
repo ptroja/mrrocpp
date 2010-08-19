@@ -10,7 +10,7 @@
 // ------------------------------------------------------------------------
 
 #include <math.h>
-#include <stdio.h>
+#include <cstdio>
 
 #include "lib/mrmath/mrmath.h"
 

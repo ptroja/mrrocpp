@@ -9,7 +9,7 @@
 #define __MP_H
 
 #include <map>
-#include <stdio.h>
+#include <cstdio>
 
 #if defined(__QNXNTO__)
 #include <sys/iofunc.h>

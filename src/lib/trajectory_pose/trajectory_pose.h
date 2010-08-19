@@ -8,10 +8,9 @@
 #if !defined(_TRAJECTORY_POSE_H)
 #define  _TRAJECTORY_POSE_H
 
-#include "lib/com_buf.h"
 #include <vector>
 
-using namespace std;
+#include "lib/com_buf.h"
 
 namespace mrrocpp {
 namespace ecp_mp {
@@ -30,7 +29,7 @@ public:
   /**
    * Desired position
    */
-  vector<double> coordinates;
+  std::vector<double> coordinates;
   /**
    * Number of macrosteps in pose.
    */
@@ -42,11 +41,11 @@ public:
   /**
    * Times needed to perform a movement in each of the axes.
    */
-  vector<double> times;
+  std::vector<double> times;
   /**
    * Direction of the motion. Either equal to 1 or -1.
    */
-  vector<double> k;//TODO change to int
+  std::vector<double> k;//TODO change to int
   /**
    * Number of the given position in whole trajectory chain.
    */
@@ -58,7 +57,7 @@ public:
   /**
    * Vector of distances to be covered in all axes.
    */
-  vector<double> s;
+  std::vector<double> s;
   /**
    * Empty constructor.
    */
@@ -69,7 +68,7 @@ public:
      * @param coordinates desired position for all of the axes
      */
   trajectory_pose (lib::ECP_POSE_SPECIFICATION arm_type,
-			const vector<double> & coordinates);
+			const std::vector<double> & coordinates);
   /**
    * Destructor.
    */

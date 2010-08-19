@@ -6,7 +6,7 @@
 // Ostatnia modyfikacja: 2008
 // -------------------------------------------------------------------------
 
-#include <stdio.h>
+#include <cstdio>
 #include <string.h>
 
 #include <libxml/xmlmemory.h>

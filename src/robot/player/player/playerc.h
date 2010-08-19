@@ -46,7 +46,7 @@
 #ifndef PLAYERC_H
 #define PLAYERC_H
 
-#include <stdio.h>
+#include <cstdio>
 #include <arpa/inet.h>
 
 // Get the message structures from Player

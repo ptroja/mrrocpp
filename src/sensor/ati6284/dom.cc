@@ -26,7 +26,7 @@
 #include <limits.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdio.h>
+#include <cstdio>
 #include "dom.h"
 
 unsigned short DOM_Exception; 

@@ -7,7 +7,7 @@
 // -------------------------------------------------------------------------
 // Funkcje do konstruowania procesow MP
 
-#include <stdio.h>
+#include <cstdio>
 #include <math.h>
 #include <iostream>
 

@@ -51,7 +51,7 @@
 #include <string.h>
 #include <math.h>
 #include <limits.h>
-#include <stdio.h>
+#include <cstdio>
 #include <assert.h>
 #include <stdlib.h>
 

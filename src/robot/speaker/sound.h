@@ -1,7 +1,7 @@
 #ifndef __EDP_SPEAKER_SOUND_H
 #define __EDP_SPEAKER_SOUND_H
 
-#include <stdio.h>
+#include <cstdio>
 
 typedef struct
 {

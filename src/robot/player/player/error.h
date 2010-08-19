@@ -9,7 +9,7 @@
 #ifndef ERROR_HH
 #define ERROR_HH
 
-#include <stdio.h>
+#include <cstdio>
 #include <errno.h>
 
 #ifdef __cplusplus

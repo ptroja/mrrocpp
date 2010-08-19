@@ -10,7 +10,7 @@
  * @ingroup KINEMATICS IRP6P_KINEMATICS
  */
 
-#include <stdio.h>
+#include <cstdio>
 #include <math.h>
 
 #include "lib/com_buf.h"

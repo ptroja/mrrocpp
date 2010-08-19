@@ -3,9 +3,9 @@
 // Opis:		metody klas SR
 // -------------------------------------------------------------------------
 
-#include <stdio.h>
+#include <cstdio>
 #include <string.h>
-#include <stdio.h>
+#include <cstdio>
 #include <unistd.h>
 #include <stdint.h>
 #include <errno.h>

@@ -4,7 +4,7 @@
 // Ostatnia modyfikacja: 2007
 // ------------------------------------------------------------------------
 
-#include <stdio.h>
+#include <cstdio>
 #include <string.h>
 #include <unistd.h>
 

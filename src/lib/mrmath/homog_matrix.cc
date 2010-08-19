@@ -1,5 +1,5 @@
 #include <math.h>
-#include <stdio.h>
+#include <cstdio>
 #include <ostream>
 
 #include "lib/mis_fun.h"

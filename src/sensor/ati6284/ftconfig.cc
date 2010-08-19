@@ -24,7 +24,7 @@
      */
 
 #include <math.h>              //!<  sin(), cos()
-#include <stdio.h>
+#include <cstdio>
 #include "dom.h"				//!<  GBB: added
 #include "ftconfig.h"			//!<  GBB: ftconfig.h modified to include strcutures in ftrt.h
 

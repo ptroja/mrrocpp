@@ -23,7 +23,7 @@
      * OTHER DEALINGS IN THE SOFTWARE.
      */
  
-#include <stdio.h>
+#include <cstdio>
 #include <stdlib.h>
 #include "ftconfig.h"
 #include "display.h"

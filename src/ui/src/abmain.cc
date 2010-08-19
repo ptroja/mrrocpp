@@ -26,7 +26,7 @@ Examples:
 #endif
 
 /* Standard headers */
-#include <stdio.h>
+#include <cstdio>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>

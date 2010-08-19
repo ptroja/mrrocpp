@@ -27,7 +27,7 @@
 extern "C" {
 #endif
 
-#include <stdio.h>
+#include <cstdio>
 
 int 
 jpeg_compress(char *dst, char *src, int width, int height, int dstsize, int quality);

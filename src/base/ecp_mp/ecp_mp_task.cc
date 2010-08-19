@@ -4,7 +4,7 @@
 //
 // -------------------------------------------------------------------------
 
-#include <stdio.h>
+#include <cstdio>
 #include <iostream>
 #include <stdint.h>
 #include <string.h>

@@ -5,7 +5,7 @@
  *      Author: ptroja
  */
 
-#include <stdio.h>
+#include <cstdio>
 #include <string.h>
 #include <stdint.h>
 #include <errno.h>

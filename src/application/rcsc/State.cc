@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string.h>
 #include <stdlib.h>
-#include <stdio.h>
+#include <cstdio>
 
 #include "lib/datastr.h"
 #include "State.h"

@@ -1,7 +1,7 @@
 #include "ecp_t_haar_irp6ot.h"
 
 #include <iostream>
-#include <stdio.h>
+#include <cstdio>
 #include <unistd.h>
 namespace mrrocpp {
 namespace ecp {

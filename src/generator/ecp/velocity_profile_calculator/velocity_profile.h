@@ -16,8 +16,6 @@
 #include "lib/trajectory_pose/trajectory_pose.h"
 #include "lib/mrmath/mrmath.h"
 
-using namespace std;
-
 namespace mrrocpp {
 namespace ecp {
 namespace common {
@@ -56,7 +54,7 @@ class velocity_profile {
 		 * Checks if the distance covered in the given axis is equal to 0.
 		 * @return true if the distance covered in the given pose and axis is equal to 0.
 		 */
-		bool check_if_no_movement(typename vector<Pos>::iterator & it, int i) {
+		bool check_if_no_movement(typename std::vector<Pos>::iterator & it, int i) {
 			if (eq(it->s[i],0.0)) {
 				return true;
 			} else {
@@ -68,7 +66,7 @@ class velocity_profile {
 		 * @param it iterator to the list of positions
 		 * @return true if the set of the distance and direction was successful (usually is if the vectors start_position and coordinates were initiated and filled in before)
 		 */
-		bool calculate_absolute_distance_direction_pose(typename vector<Pos>::iterator & it) {
+		bool calculate_absolute_distance_direction_pose(typename std::vector<Pos>::iterator & it) {
 
 			if (it->coordinates.size() < it->axes_num || it->start_position.size() < it->axes_num) {
 				return false;
@@ -94,7 +92,7 @@ class velocity_profile {
 		 * @param it iterator to the list of positions
 		 * @return true if the set of the distance and direction was successful (usually is if the coordinates vector was initiated and filled in before)
 		 */
-		bool calculate_relative_distance_direction_pose(typename vector<Pos>::iterator & it) {
+		bool calculate_relative_distance_direction_pose(typename std::vector<Pos>::iterator & it) {
 
 			if (it->coordinates.size() < it->axes_num) {
 				return false;
@@ -119,13 +117,13 @@ class velocity_profile {
 		 * @param i number of axis for which the calculations are performed
 		 * @return true if the time was calculated successfully (if all of the necessary information was provided)
 		 */
-		virtual bool calculate_time(typename vector<Pos>::iterator & it, int i) = 0;
+		virtual bool calculate_time(typename std::vector<Pos>::iterator & it, int i) = 0;
 		/**
 		 * Calculates time for the given velocity and distance for all axes in a single pose.
 		 * @param it iterator to the list of positions
 		 * @return true if the time was calculated successfully (if all of the necessary information was provided)
 		 */
-		bool calculate_time_pose(typename vector<Pos>::iterator & it) {
+		bool calculate_time_pose(typename std::vector<Pos>::iterator & it) {
 
 			bool trueFlag = true;
 
@@ -143,7 +141,7 @@ class velocity_profile {
 		 * @param mc macrostep time
 		 * @return true if the set of the time was successful (usually is if the vector times was initiated and filled in before)
 		 */
-		bool calculate_pose_time(typename vector<Pos>::iterator & it, const double & mc) {
+		bool calculate_pose_time(typename std::vector<Pos>::iterator & it, const double & mc) {
 			if (it->times.size() == it->axes_num) {
 				double t_max = *max_element(it->times.begin(), it->times.end());
 
@@ -167,7 +165,7 @@ class velocity_profile {
 		 * Sets all of the values in %times vector to t.
 		 * @return true if the calculation was successful
 		 */
-		bool set_times_to_t(typename vector<Pos>::iterator & it) {
+		bool set_times_to_t(typename std::vector<Pos>::iterator & it) {
 			for (int i = 0; i < it->axes_num; i++) {
 				it->times[i] = it->t;
 			}
@@ -178,7 +176,7 @@ class velocity_profile {
 		 * Result is stored in coordinates vector of the current pose.
 		 * @return true if the calculation was successful
 		 */
-		bool calculate_relative_angle_axis_vector(typename vector<Pos>::iterator & it) {
+		bool calculate_relative_angle_axis_vector(typename std::vector<Pos>::iterator & it) {
 			lib::Homog_matrix start_position_matrix;
 			lib::Homog_matrix desired_position_matrix;
 			lib::Xyz_Angle_Axis_vector relative_angle_axis_vector;
@@ -197,7 +195,7 @@ class velocity_profile {
 		}
 
 	/*private:
-		void get_double_array_from_vector(vector<double> vector, double * double_array) {
+		void get_double_array_from_vector(std::vector<double> vector, double * double_array) {
 			double new_double_array[vector.size()];
 
 			for (int i = 0; i < vector.size(); i++) {

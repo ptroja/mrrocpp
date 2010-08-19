@@ -2,7 +2,7 @@
 #include <math.h>
 #include <errno.h>
 #include <ctype.h>
-#include <stdio.h>
+#include <cstdio>
 #include <fstream>
 #include <unistd.h>
 

@@ -10,7 +10,7 @@
 #if !defined(_ECP_GEN_SMOOTH_H)
 # define _ECP_GEN_SMOOTH_H
 
-#include <stdio.h>
+#include <cstdio>
 #include <stdlib.h>
 #include <math.h>
 #include <ctype.h>

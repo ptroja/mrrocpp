@@ -50,7 +50,7 @@
 #include <netinet/in.h>
 #include <string.h>
 #include <math.h>
-#include <stdio.h>
+#include <cstdio>
 
 // send a motor command
 //

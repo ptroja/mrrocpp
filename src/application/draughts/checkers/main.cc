@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
-#include <stdio.h>
+#include <cstdio>
 
 #include <arpa/inet.h>
 #include <netdb.h>

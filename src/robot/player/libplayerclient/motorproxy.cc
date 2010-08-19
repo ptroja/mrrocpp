@@ -50,7 +50,7 @@
 #include <netinet/in.h>
 #include <string.h>
 #include <math.h>
-#include <stdio.h>
+#include <cstdio>
 
 #define PTOHL(x) static_cast<int32_t>(ntohl(x))/1e3
 #define HTOPL(x) htonl(static_cast<int32_t>(rint(x*1e3)))

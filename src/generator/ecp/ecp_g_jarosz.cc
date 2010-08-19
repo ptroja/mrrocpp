@@ -9,7 +9,7 @@
 // autor: tkornuta
 // -------------------------------------------------------------------------
 
-#include <stdio.h>
+#include <cstdio>
 #include <string.h>
 #include <math.h>
 #include <errno.h>

@@ -3,7 +3,7 @@
 // ostatnia modyfikacja - styczen 2005
 /* --------------------------------------------------------------------- */
 
-#include <stdio.h>
+#include <cstdio>
 #include <stdlib.h>
 #include <iostream>
 #include <fstream>

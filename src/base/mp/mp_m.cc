@@ -4,7 +4,7 @@
 //
 // ------------------------------------------------------------------------
 
-#include <stdio.h>
+#include <cstdio>
 #include <stdlib.h>
 #include <signal.h>
 #include <sys/types.h>

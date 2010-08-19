@@ -48,7 +48,7 @@
 
 #include <assert.h>
 #include <math.h>
-#include <stdio.h>
+#include <cstdio>
 
 #include <playerclient.h>
 

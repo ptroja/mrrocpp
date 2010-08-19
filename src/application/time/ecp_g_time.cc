@@ -5,7 +5,7 @@
 // 			Ostatnia modyfikacja: 01.06.2006r.
 // -------------------------------------------------------------------------
 
-#include <stdio.h>
+#include <cstdio>
 
 #include "lib/typedefs.h"
 #include "lib/impconst.h"

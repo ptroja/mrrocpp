@@ -6,7 +6,7 @@
 // Ostatnia modyfikacja: 2007
 // ------------------------------------------------------------------------
 
-#include <stdio.h>
+#include <cstdio>
 #include <signal.h>
 #include <stdlib.h>
 

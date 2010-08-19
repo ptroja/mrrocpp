@@ -9,7 +9,7 @@
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
-#include <stdio.h>
+#include <cstdio>
 #include <fstream>
 #include <iostream>
 #include <unistd.h>

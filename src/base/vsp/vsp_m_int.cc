@@ -11,7 +11,7 @@
  * @ingroup VSP
  */
 
-#include <stdio.h>
+#include <cstdio>
 #include <stdlib.h>
 #include <memory>
 #include <errno.h>

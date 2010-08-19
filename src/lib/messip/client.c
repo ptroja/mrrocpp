@@ -1,6 +1,6 @@
 // This is the client
 
-#include <stdio.h>
+#include <cstdio>
 #include <stdlib.h>
 #include <assert.h>
 #include <time.h>
