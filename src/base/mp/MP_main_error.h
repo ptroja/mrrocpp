@@ -9,16 +9,8 @@
 #define _MP_MAIN_ERROR_H
 
 #include <map>
-#include <cstdio>
 
-#if defined(__QNXNTO__)
-#include <sys/iofunc.h>
-#include <sys/dispatch.h>
-#endif
-
-#include "lib/impconst.h"
 #include "lib/com_buf.h"
-#include "lib/configurator.h"
 
 namespace mrrocpp {
 namespace mp {

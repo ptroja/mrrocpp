@@ -19,6 +19,7 @@
 
 #include "base/mp/MP_main_error.h"
 #include "base/mp/mp_task.h"
+#include "base/mp/mp_robot.h"
 
 #if defined(USE_MESSIP_SRR)
 #include "messip_dataport.h"

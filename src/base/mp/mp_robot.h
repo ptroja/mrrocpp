@@ -1,11 +1,7 @@
 #ifndef MP_ROBOT_H_
 #define MP_ROBOT_H_
 
-#include "base/mp/mp_task.h"
 #include "base/ecp_mp/ecp_mp_robot.h"
-
-#include <ctime>
-#include <sys/types.h>
 
 namespace mrrocpp {
 namespace mp {

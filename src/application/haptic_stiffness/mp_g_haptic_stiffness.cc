@@ -15,6 +15,7 @@
 #include "lib/srlib.h"
 
 #include "base/mp/MP_main_error.h"
+#include "base/mp/mp_robot.h"
 #include "application/haptic_stiffness/mp_g_haptic_stiffness.h"
 #include "lib/mrmath/mrmath.h"
 #include "base/mp/mp_g_common.h"

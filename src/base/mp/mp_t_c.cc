@@ -1,6 +1,7 @@
 #include <cstdio>
 #include <unistd.h>
 #include "base/mp/mp_task.h"
+#include "base/mp/mp_robot.h"
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
