@@ -87,6 +87,12 @@ public:
 };
 
 } // namespace robot
+
+namespace common {
+typedef std::map <lib::robot_name_t, robot::robot*> robots_t;
+typedef robots_t::value_type robot_pair_t;
+
+} // namespace common
 } // namespace mp
 } // namespace mrrocpp
 #endif /*MP_ROBOT_H_*/
