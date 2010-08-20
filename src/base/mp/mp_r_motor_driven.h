@@ -2,7 +2,7 @@
 #define MP_R_motor_driven_H_
 
 #include "lib/impconst.h"
-#include "base/mp/mp.h"
+
 #include "base/mp/MP_main_error.h"
 #include "base/mp/mp_robot.h"
 

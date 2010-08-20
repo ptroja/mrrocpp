@@ -15,7 +15,7 @@
 #include "lib/com_buf.h"
 
 #include "lib/srlib.h"
-#include "base/mp/mp.h"
+
 #include "base/mp/MP_main_error.h"
 
 #include "robot/player/ecp_mp_t_player.h"
