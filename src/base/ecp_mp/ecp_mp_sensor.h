@@ -183,7 +183,7 @@ sensor <SENSOR_IMAGE, CONFIGURE_DATA>::sensor(lib::sensor::SENSOR_t _sensor_name
 
 	// Stworzenie nowego procesu.
 	if ((pid = config.process_spawn(_section_name)) == -1)
-	throw sensor_error(lib::SYSTEM_ERROR, CANNOT_SPAWN_VSP);
+	throw lib::sensor::sensor_error(lib::SYSTEM_ERROR, CANNOT_SPAWN_VSP);
 
 	short tmp = 0;
 	// Kilka sekund  (~2) na otworzenie urzadzenia.
@@ -194,7 +194,8 @@ sensor <SENSOR_IMAGE, CONFIGURE_DATA>::sensor(lib::sensor::SENSOR_t _sensor_name
 		usleep(1000*CONNECT_DELAY);
 		else {
 			std::cerr << "ecp_mp_sensor: messip::port_connect(" << VSP_NAME << ") failed" << std::endl;
-			throw sensor_error(lib::SYSTEM_ERROR, CANNOT_LOCATE_DEVICE);
+			throw lib::sensor::sensor_error(lib::SYSTEM_ERROR, CANNOT_LOCATE_DEVICE);
+			throw lib::sensor::sensor_error(lib::SYSTEM_ERROR, CANNOT_LOCATE_DEVICE);
 		}
 	}// end: while
 #endif /* !USE_MESSIP_SRR */
