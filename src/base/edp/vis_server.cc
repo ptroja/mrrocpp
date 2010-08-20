@@ -9,10 +9,10 @@
 #include <arpa/inet.h>
 #include <cassert>
 
-#include "lib/impconst.h"
+#include "base/lib/impconst.h"
 #include "base/edp/edp_e_motor_driven.h"
 #include "base/edp/vis_server.h"
-#include "lib/mis_fun.h"
+#include "base/lib/mis_fun.h"
 #include "robot/irp6ot_m/irp6ot_m_const.h"
 #include "robot/irp6p_m/irp6p_m_const.h"
 

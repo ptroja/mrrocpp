@@ -7,9 +7,9 @@
 
 #ifndef _BANG_BANG_INTERPOLATOR_H_
 #define _BANG_BANG_INTERPOLATOR_H_
-#include "lib/com_buf.h"
+#include "base/lib/com_buf.h"
 #include "trajectory_interpolator.h"
-#include "lib/trajectory_pose/bang_bang_trajectory_pose.h"
+#include "base/lib/trajectory_pose/bang_bang_trajectory_pose.h"
 
 namespace mrrocpp {
 namespace ecp {

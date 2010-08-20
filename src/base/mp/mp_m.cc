@@ -10,11 +10,11 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
 
-#include "lib/srlib.h"
-#include "lib/mis_fun.h"
+#include "base/lib/srlib.h"
+#include "base/lib/mis_fun.h"
 
 #include "base/ecp_mp/transmitter.h"
 

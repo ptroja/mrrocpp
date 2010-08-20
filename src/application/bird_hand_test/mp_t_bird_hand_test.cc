@@ -5,19 +5,19 @@
 //
 // -------------------------------------------------------------------------
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
 
-#include "lib/srlib.h"
+#include "base/lib/srlib.h"
 
 #include "base/mp/mp_task.h"
 #include "base/mp/MP_main_error.h"
 #include "ecp_mp_t_bird_hand_test.h"
 #include "mp_t_bird_hand_test.h"
-#include "lib/single_thread_port.h"
-#include "lib/mrmath/mrmath.h"
-#include "lib/data_port_headers/bird_hand.h"
+#include "base/lib/single_thread_port.h"
+#include "base/lib/mrmath/mrmath.h"
+#include "base/lib/data_port_headers/bird_hand.h"
 #include "robot/bird_hand/bird_hand_const.h"
 #include "generator/ecp/ecp_mp_g_transparent.h"
 #include "ecp_mp_g_bird_hand_test.h"

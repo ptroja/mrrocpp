@@ -10,7 +10,7 @@
 #include <list>
 
 #include "ecp_mp_t_fsautomat.h"
-#include "lib/impconst.h"
+#include "base/lib/impconst.h"
 #include "Transition.h"
 
 namespace mrrocpp {

@@ -1,7 +1,7 @@
 #ifndef ECP_MP_GENERATOR_H_
 #define ECP_MP_GENERATOR_H_
 
-#include "lib/srlib.h"
+#include "base/lib/srlib.h"
 #include "base/ecp_mp/ecp_mp_typedefs.h"
 
 namespace mrrocpp {

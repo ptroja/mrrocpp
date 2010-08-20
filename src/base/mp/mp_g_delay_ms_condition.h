@@ -2,7 +2,7 @@
 #define MP_DELAY_MS_CONDITION_H_
 
 #include "base/mp/mp_generator.h"
-#include "lib/timer.h"
+#include "base/lib/timer.h"
 
 namespace mrrocpp {
 namespace mp {

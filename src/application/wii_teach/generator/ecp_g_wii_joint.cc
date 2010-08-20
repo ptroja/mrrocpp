@@ -1,5 +1,5 @@
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
 #include "math.h"
 #include "base/ecp/ecp_task.h"
 #include "base/ecp/ecp_robot.h"

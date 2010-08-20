@@ -1,21 +1,21 @@
 #include "base/mp/mp_task.h"
 #include "mp_t_gen_test.h"
 
-#include "lib/mrmath/mrmath.h"
+#include "base/lib/mrmath/mrmath.h"
 
-#include "lib/data_port_headers/tfg.h"
+#include "base/lib/data_port_headers/tfg.h"
 #include "robot/irp6ot_tfg/irp6ot_tfg_const.h"
 #include "robot/irp6p_tfg/irp6p_tfg_const.h"
 #include "robot/irp6ot_m/irp6ot_m_const.h"
 #include "robot/irp6p_m/irp6p_m_const.h"
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
 #include <iostream>
 #include <string>
 #include <sstream>
-#include "lib/srlib.h"
+#include "base/lib/srlib.h"
 
 #include "ecp_mp_t_gen_test.h"
 #include "application/generator_tester/ecp_mp_st_const_vel_gen_test.h"

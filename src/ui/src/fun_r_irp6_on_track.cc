@@ -20,12 +20,12 @@
 
 #include <boost/bind.hpp>
 
-#include "lib/srlib.h"
+#include "base/lib/srlib.h"
 #include "ui/src/ui_const.h"
 #include "ui/src/ui_class.h"
 // #include "ui/src/ui.h"
 // Konfigurator.
-#include "lib/configurator.h"
+#include "base/lib/configurator.h"
 #include "ui/src/ui_ecp_r_tfg_and_conv.h"
 
 #include "ui/src/ui_ecp_r_irp6_common.h"

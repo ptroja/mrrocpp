@@ -10,7 +10,7 @@
 #include "robot/irp6p_m/irp6p_m_const.h"
 #include "robot/conveyor/conveyor_const.h"
 
-#include "lib/logger.h"
+#include "base/lib/logger.h"
 
 #include "../ecp_mp_g_visual_servo_tester.h"
 

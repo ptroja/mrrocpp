@@ -12,8 +12,8 @@
 
 #include <boost/any.hpp>
 
-#include "lib/configurator.h"
-#include "lib/srlib.h"
+#include "base/lib/configurator.h"
+#include "base/lib/srlib.h"
 #include "base/ecp_mp/ecp_mp_typedefs.h"
 
 #include <libxml/tree.h>

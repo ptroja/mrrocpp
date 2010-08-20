@@ -1,7 +1,7 @@
 #if !defined(_TRANSMITTER_H)
 #define _TRANSMITTER_H
 
-#include "lib/srlib.h"
+#include "base/lib/srlib.h"
 
 namespace mrrocpp {
 namespace ecp_mp {

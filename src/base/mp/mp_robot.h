@@ -1,7 +1,7 @@
 #ifndef MP_ROBOT_H_
 #define MP_ROBOT_H_
 
-#include "lib/srlib.h"
+#include "base/lib/srlib.h"
 #include "base/ecp_mp/ecp_mp_robot.h"
 
 namespace mrrocpp {

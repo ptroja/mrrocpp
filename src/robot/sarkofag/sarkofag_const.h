@@ -1,7 +1,7 @@
 #if !defined(_SARKOFAG_CONST_H)
 #define _SARKOFAG_CONST_H
 
-#include "lib/impconst.h"
+#include "base/lib/impconst.h"
 
 namespace mrrocpp {
 namespace lib {

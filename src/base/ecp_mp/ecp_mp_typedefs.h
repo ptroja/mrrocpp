@@ -10,8 +10,8 @@
 
 #include <map>
 
-#include "lib/impconst.h"
-#include "lib/sensor_interface.h"
+#include "base/lib/impconst.h"
+#include "base/lib/sensor_interface.h"
 
 namespace mrrocpp {
 namespace ecp_mp {

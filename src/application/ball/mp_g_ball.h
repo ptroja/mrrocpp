@@ -7,7 +7,7 @@
 #if !defined(__MP_GEN_HAPTIC_H)
 #define __MP_GEN_HAPTIC_H
 
-#include "lib/mrmath/mrmath.h"
+#include "base/lib/mrmath/mrmath.h"
 
 #include "base/mp/mp_generator.h"
 

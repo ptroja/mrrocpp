@@ -8,7 +8,7 @@
 #ifndef _BANG_BANG_PROFILE_H_
 #define _BANG_BANG_PROFILE_H_
 
-#include "lib/trajectory_pose/bang_bang_trajectory_pose.h"
+#include "base/lib/trajectory_pose/bang_bang_trajectory_pose.h"
 #include "generator/ecp/velocity_profile_calculator/velocity_profile.h"
 
 namespace mrrocpp {

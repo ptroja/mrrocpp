@@ -9,12 +9,12 @@
 #define _MULTIPLE_POSITION_H_
 
 #include "base/ecp/ecp_robot.h"
-#include "lib/trajectory_pose/trajectory_pose.h"
+#include "base/lib/trajectory_pose/trajectory_pose.h"
 #include "generator/ecp/ecp_g_get_position.h"
 #include "base/ecp/ecp_generator.h"
 #include "generator/ecp/velocity_profile_calculator/velocity_profile.h"
 #include "generator/ecp/trajectory_interpolator/trajectory_interpolator.h"
-#include "lib/mrmath/mrmath.h"
+#include "base/lib/mrmath/mrmath.h"
 
 #include <vector>
 

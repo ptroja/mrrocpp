@@ -114,7 +114,6 @@ set(COMMON_LIBRARIES mrrocpp ${COMMON_LIBRARIES}
 )
 
 # Recurse into subdirectories.
-add_subdirectory (lib)
 add_subdirectory (base)
 add_subdirectory (sensor)
 add_subdirectory (generator)

@@ -26,8 +26,8 @@
 
 #include "base/ecp_mp/ecp_mp_sensor.h"
 
-#include "lib/logger.h"
-#include "lib/configurator.h"
+#include "base/lib/logger.h"
+#include "base/lib/configurator.h"
 
 namespace mrrocpp {
 namespace ecp_mp {

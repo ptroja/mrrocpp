@@ -12,8 +12,8 @@
 #if !defined(_VSP_SENSOR_INTERFACE_H)
 #define _VSP_SENSOR_INTERFACE_H
 
-#include "lib/sensor_interface.h"
-#include "lib/configurator.h"
+#include "base/lib/sensor_interface.h"
+#include "base/lib/configurator.h"
 
 namespace mrrocpp {
 namespace vsp {

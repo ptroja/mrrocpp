@@ -10,13 +10,13 @@
 #include <csignal>
 #include <cstdlib>
 
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
 
 #include "base/ecp_mp/transmitter.h"
 
-#include "lib/srlib.h"
-#include "lib/mis_fun.h"
+#include "base/lib/srlib.h"
+#include "base/lib/mis_fun.h"
 #include "base/ecp/ecp_task.h"
 #include "base/ecp/ecp_robot.h"
 #include "base/ecp/ECP_main_error.h"

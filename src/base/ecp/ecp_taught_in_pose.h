@@ -1,8 +1,8 @@
 #if !defined(_ECP_TAUGHT_IN_POSE_H)
 #define  _ECP_TAUGHT_IN_POSE_H
 
-#include "lib/com_buf.h"		// lib::POSE_SPECIFICATION
-#include "lib/impconst.h"	// MAX_SERVOS_NR
+#include "base/lib/com_buf.h"		// lib::POSE_SPECIFICATION
+#include "base/lib/impconst.h"	// MAX_SERVOS_NR
 namespace mrrocpp {
 namespace ecp {
 namespace common {

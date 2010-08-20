@@ -28,9 +28,9 @@
 #include <sys/sched.h>
 #include <fstream>
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/srlib.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/srlib.h"
 #include "base/vsp/vsp_sensor_interface.h"
 #include "base/vsp/vsp_error.h"
 

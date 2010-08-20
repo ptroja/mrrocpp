@@ -2,8 +2,8 @@
 #include "application/wii_teach/sensor/ecp_mp_s_wiimote.h"
 
 #include "base/ecp/ecp_robot.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
 #include "math.h"
 
 namespace mrrocpp {

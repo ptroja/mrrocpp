@@ -2,16 +2,16 @@
 #include <string>
 #include <sstream>
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
 
-#include "lib/srlib.h"
+#include "base/lib/srlib.h"
 #include "base/mp/mp_task.h"
 
 #include "base/mp/MP_main_error.h"
-#include "lib/mrmath/mrmath.h"
-#include "lib/data_port_headers/tfg.h"
+#include "base/lib/mrmath/mrmath.h"
+#include "base/lib/data_port_headers/tfg.h"
 #include "mp_t_tfg_graspit.h"
 #include "ecp_mp_t_graspit.h"
 #include "robot/irp6ot_tfg/irp6ot_tfg_const.h"

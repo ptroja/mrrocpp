@@ -12,11 +12,11 @@
 
 #include <cstdio>
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
-#include "lib/mis_fun.h"
-#include "lib/mrmath/mrmath.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
+#include "base/lib/mis_fun.h"
+#include "base/lib/mrmath/mrmath.h"
 
 // Klasa edp_irp6ot_effector.
 #include "robot/smb/edp_e_smb.h"
@@ -27,7 +27,7 @@
 #include "base/edp/vis_server.h"
 #include "robot/epos/epos_gen.h"
 
-#include "lib/exception.h"
+#include "base/lib/exception.h"
 using namespace mrrocpp::lib::exception;
 
 namespace mrrocpp {

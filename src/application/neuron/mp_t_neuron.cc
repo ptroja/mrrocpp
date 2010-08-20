@@ -5,9 +5,9 @@
  *      Author: tbem
  */
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
 
 #include "robot/irp6ot_m/irp6ot_m_const.h"
 

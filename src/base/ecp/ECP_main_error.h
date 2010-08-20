@@ -1,7 +1,7 @@
 #if !defined(_ECP_MAIN_ERROR_H)
 #define  _ECP_MAIN_ERROR_H
 
-#include "lib/com_buf.h"
+#include "base/lib/com_buf.h"
 
 namespace mrrocpp {
 namespace ecp {

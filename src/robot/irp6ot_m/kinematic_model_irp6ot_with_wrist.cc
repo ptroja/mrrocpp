@@ -14,7 +14,7 @@
 #include <cstdio>
 #include <cmath>
 
-#include "lib/com_buf.h"
+#include "base/lib/com_buf.h"
 #include "robot/irp6ot_m/kinematic_model_irp6ot_with_wrist.h"
 
 namespace mrrocpp {

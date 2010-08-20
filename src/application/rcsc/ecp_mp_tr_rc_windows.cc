@@ -16,12 +16,12 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"				// numery bledow
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"				// numery bledow
 #include "base/ecp_mp/transmitter.h"
 #include "base/ecp_mp/ecp_mp_task.h"
-#include "lib/srlib.h"					// klasy bledow
+#include "base/lib/srlib.h"					// klasy bledow
 #include "ecp_mp_tr_rc_windows.h"
 
 namespace mrrocpp {

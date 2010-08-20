@@ -4,11 +4,11 @@
 #include <list>
 #include <map>
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
 
-#include "lib/srlib.h"
+#include "base/lib/srlib.h"
 
 #include "base/ecp_mp/ecp_mp_sensor.h"
 #include "base/mp/MP_main_error.h"

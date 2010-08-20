@@ -1,11 +1,11 @@
 #if !defined(_ECP_ROBOT_H)
 #define _ECP_ROBOT_H
 
-#include "lib/com_buf.h"
-#include "lib/srlib.h"
-#include "lib/configurator.h"
+#include "base/lib/com_buf.h"
+#include "base/lib/srlib.h"
+#include "base/lib/configurator.h"
 #include "base/ecp_mp/ecp_mp_robot.h"
-#include "lib/single_thread_port.h"
+#include "base/lib/single_thread_port.h"
 
 #if defined(USE_MESSIP_SRR)
 #include "messip.h"

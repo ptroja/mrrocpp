@@ -12,7 +12,7 @@
 #include "robot/spkm/spkm_const.h"
 #include "base/kinematics/kinematics_manager.h"
 #include "robot/spkm/kinematic_model_spkm.h"
-#include "lib/data_port_headers/epos.h"
+#include "base/lib/data_port_headers/epos.h"
 
 namespace mrrocpp {
 namespace ecp {

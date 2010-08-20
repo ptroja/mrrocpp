@@ -17,9 +17,9 @@
 #include <string>
 #include <list>
 
-#include "lib/com_buf.h"
-#include "lib/srlib.h"
-#include "lib/mis_fun.h"
+#include "base/lib/com_buf.h"
+#include "base/lib/srlib.h"
+#include "base/lib/mis_fun.h"
 
 #define CATCH_SECTION_UI catch (ecp::common::ecp_robot::ECP_main_error & e) { \
 	/* Obsluga bledow ECP */ \

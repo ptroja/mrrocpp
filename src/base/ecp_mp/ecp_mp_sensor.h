@@ -13,8 +13,8 @@
 #include <fcntl.h>
 
 #include "base/ecp_mp/ecp_mp_sensor_interface.h"
-#include "lib/srlib.h"
-#include "lib/configurator.h"
+#include "base/lib/srlib.h"
+#include "base/lib/configurator.h"
 
 #if defined(USE_MESSIP_SRR)
 #include "messip.h"
