@@ -7,6 +7,7 @@
 
 #ifndef _BANG_BANG_INTERPOLATOR_H_
 #define _BANG_BANG_INTERPOLATOR_H_
+
 #include "lib/com_buf.h"
 #include "trajectory_interpolator.h"
 #include "lib/trajectory_pose/bang_bang_trajectory_pose.h"
@@ -51,7 +52,6 @@ public:
 
 private:
 	double generate_next_coords(int node_counter, int interpolation_node_no, double start_position, double v_p, double v_r, double v_k, double a_r, double k, double przysp, double jedn, double s_przysp, double s_jedn, lib::MOTION_TYPE type);
-
 };
 
 } // namespace trajectory_interpolator
