@@ -5,8 +5,8 @@
 // Ostatnia modyfikacja: 2006
 // ------------------------------------------------------------------------
 
-#include <stdio.h>
-#include <string.h>
+#include <cstdio>
+#include <cstring>
 #include <iostream>
 #include <dlfcn.h>
 

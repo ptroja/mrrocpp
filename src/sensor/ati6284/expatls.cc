@@ -23,9 +23,9 @@
      * OTHER DEALINGS IN THE SOFTWARE.
      */
 
-#include <limits.h>
-#include <ctype.h>
-#include <stdio.h>
+#include <climits>
+#include <cctype>
+#include <cstdio>
 #include "xmlparse.h"
 #include "stack.h"
 #include "dom.h"

@@ -5,7 +5,7 @@
  * Contains bodies of the methods of bang_bang_trajectory_pose class.
  */
 
-#include <string.h>
+#include <cstring>
 
 #include "lib/trajectory_pose/constant_velocity_trajectory_pose.h"
 
@@ -13,6 +13,8 @@ namespace mrrocpp {
 namespace ecp_mp {
 namespace common {
 namespace trajectory_pose {
+
+using namespace std;
 
 constant_velocity_trajectory_pose::constant_velocity_trajectory_pose (void) {
 

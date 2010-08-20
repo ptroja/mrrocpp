@@ -1,13 +1,13 @@
-#include <stdio.h>
-#include <math.h>
-#include <assert.h>
+#include <cstdio>
+#include <cmath>
+#include <cassert>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <netdb.h>
 #include <unistd.h>
 #include <fcntl.h>
-#include <string.h>
+#include <cstring>
 
 #include "lib/typedefs.h"
 #include "lib/impconst.h"

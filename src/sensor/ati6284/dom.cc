@@ -23,10 +23,10 @@
  	* ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  	* OTHER DEALINGS IN THE SOFTWARE. */
 
-#include <limits.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
+#include <climits>
+#include <cstdlib>
+#include <cstring>
+#include <cstdio>
 #include "dom.h"
 
 unsigned short DOM_Exception; 

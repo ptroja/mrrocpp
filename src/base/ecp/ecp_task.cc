@@ -1,8 +1,8 @@
-#include <string.h>
+#include <cstring>
 #include <unistd.h>
-#include <errno.h>
-#include <ctype.h>
-#include <stdio.h>
+#include <cerrno>
+#include <cctype>
+#include <cstdio>
 #include <boost/foreach.hpp>
 
 #include "lib/mis_fun.h"

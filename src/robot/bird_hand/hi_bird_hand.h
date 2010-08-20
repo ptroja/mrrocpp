@@ -1,8 +1,8 @@
 
-#include <inttypes.h>
+#include <stdint.h>
 #include <termios.h>
-#include <stdlib.h>
-#include <stdio.h>
+#include <cstdlib>
+#include <cstdio>
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/types.h>

@@ -11,8 +11,6 @@
 #include "lib/trajectory_pose/trajectory_pose.h"
 #include <vector>
 
-using namespace std;
-
 namespace mrrocpp {
 namespace ecp_mp {
 namespace common {
@@ -26,63 +24,63 @@ public:
   /**
    * Initial velocity for the pose, for each axis.
    */
-  vector<double> v_p;
+  std::vector<double> v_p;
   /**
    * Final velocity for the pose, for each axis.
    */
-  vector<double> v_k;
+  std::vector<double> v_k;
   /**
    * Maximal velocity for the movement, for each axis. Percent of the v_max value. Should be a value between 0 - 1.
    */
-  vector<double> v;
+  std::vector<double> v;
   /**
    * Maximal velocity set for the given robot (v_r = v * v_max).
    */
-  vector<double> v_max;
+  std::vector<double> v_max;
   /**
    * Maximal acceleration for the motion, for each axis.
    */
-  vector<double> a;
+  std::vector<double> a;
   /**
    * Maximal acceleration set for the given robot (a_r = a * a_max).
    */
-  vector<double> a_max;
+  std::vector<double> a_max;
   /**
    * Number of the macrostep in which the first part of the movement ends (first out of three). Duration of the first part of the motion in macrosteps.
    */
-  vector<double> acc;
+  std::vector<double> acc;
   /**
    * Duration of the second part of the motion in macrosteps.
    */
-  vector<double> uni;
+  std::vector<double> uni;
   /**
    * Distance covered in the second part of the movement.
    */
-  vector<double> s_uni;
+  std::vector<double> s_uni;
   /**
    * Distance covered in the first part of the movement.
    */
-  vector<double> s_acc;
+  std::vector<double> s_acc;
   /**
    * Distance covered in the third part of the movement.
    */
-  vector<double> s_dec;
+  std::vector<double> s_dec;
   /**
    * Initial position for the pose.
    */
-  vector<double> start_position;
+  std::vector<double> start_position;
   /**
    * Maximal acceleration for the given segment (pose) (calculated, can be smaller or equal to a).
    */
-  vector<double> a_r;
+  std::vector<double> a_r;
   /**
    * Maximal velocity for the given segment (pose) (calculated, can be smaller or equal to v).
    */
-  vector<double> v_r;
+  std::vector<double> v_r;
   /**
    * Motion kinematic_model_with_tool.
    */
-  vector<int> model;
+  std::vector<int> model;
 
   /**
    * Empty constructor.
@@ -97,9 +95,9 @@ public:
    * \param axes_num number of axes
    */
   bang_bang_trajectory_pose (lib::ECP_POSE_SPECIFICATION arm_type,
-		  const vector<double> & coordinates,
-		  const vector<double> & v,
-		  const vector<double> & a);
+		  const std::vector<double> & coordinates,
+		  const std::vector<double> & v,
+		  const std::vector<double> & a);
   /**
    * Destructor.
    */

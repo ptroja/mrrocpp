@@ -4,10 +4,10 @@
 // ------------------------------------------------------------------------
 
 /********************************* INCLUDES *********************************/
-#include <stdio.h>
-#include <string.h>
-#include <signal.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstring>
+#include <csignal>
+#include <cstdlib>
 
 #include "lib/typedefs.h"
 #include "lib/impconst.h"

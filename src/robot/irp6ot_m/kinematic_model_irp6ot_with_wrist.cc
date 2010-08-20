@@ -1,35 +1,29 @@
-// ------------------------------------------------------------------------
-// Proces:		EDP
-// Plik:			kinematic_model_irp6ot_with_wrist.cc
-// System:	QNX/MRROC++  v. 6.3
-// Opis:		Model kinematyki robota IRp-6 na torze
-//				- definicja metod klasy
-//				- wykorzystanie nowego stopnia swobody  jako czynnego stopnia swobody
-//				- tor jest biernym stopniem swobody.
-//
-// Autor:		tkornuta
-// Data:		24.02.2007
-// ------------------------------------------------------------------------
+/*!
+ * @file kinematic_model_irp6ot_with_wrist.cc
+ * @brief File containing the methods of the model_with_wrist class.
+ *
+ * The model_with_wrist kinematic model utilizes six out of seven IRP-6ot DOF - the track is treated as a passive one.
+ *
+ * @author tkornuta
+ * @date 24.02.2007
+ *
+ * @ingroup KINEMATICS IRP6OT_KINEMATICS
+ */
 
-#include <stdio.h>
-#include <math.h>
+
+#include <cstdio>
+#include <cmath>
 
 #include "lib/com_buf.h"
-
-// Klasa kinematic_model_irp6ot_with_wrist.
 #include "robot/irp6ot_m/kinematic_model_irp6ot_with_wrist.h"
 
 namespace mrrocpp {
 namespace kinematics {
 namespace irp6ot {
 
-/* -----------------------------------------------------------------------
- Konstruktor.
- ------------------------------------------------------------------------- */
 model_with_wrist::model_with_wrist(int _number_of_servos) :
 	number_of_servos(_number_of_servos)
 {
-
 	// Ustawienie etykiety modelu kinematycznego.
 	set_kinematic_model_label("Switching to  kinematic model with active wrist");
 
@@ -38,12 +32,8 @@ model_with_wrist::model_with_wrist(int _number_of_servos) :
 
 	// Wykonywac przeliczenia zwiazane z narzedziami.
 	attached_tool_computations = true;
+}
 
-} //: set_kinematic_parameters
-
-/* -----------------------------------------------------------------------
- Ustawienia wszystkie parametry modelu kinematycznego danego modelu.
- ------------------------------------------------------------------------- */
 void model_with_wrist::set_kinematic_parameters(void)
 {
 	/* -----------------------------------------------------------------------
@@ -269,12 +259,9 @@ void model_with_wrist::set_kinematic_parameters(void)
 	upper_limit_joint[6] = 2.93;
 	upper_limit_joint[7] = 0.091;
 
-} // end: set_kinematic_parameters
+}// end: set_kinematic_parameters
 
 
-/* ------------------------------------------------------------------------
- Sprawdzenie ograniczen na polozenia katowe walow silnikow.
- ------------------------------------------------------------------------ */
 void model_with_wrist::check_motor_position(const lib::MotorArray & motor_position)
 {
 
@@ -320,12 +307,9 @@ void model_with_wrist::check_motor_position(const lib::MotorArray & motor_positi
 			throw NonFatal_error_2(BEYOND_UPPER_LIMIT_AXIS_7);
 	}
 
-} // end: kinematic_model_irp6ot_with_wrist::check_motor_position(const )
+}//: check_motor_position
 
 
-/* ------------------------------------------------------------------------
- Sprawdzenie ograniczen na wspolrzedne wewnetrzne.
- ------------------------------------------------------------------------ */
 void model_with_wrist::check_joints(const lib::JointArray & q)
 {
 
@@ -395,13 +379,9 @@ void model_with_wrist::check_joints(const lib::JointArray & q)
 		if (q[7] > upper_limit_joint[7]) // 7 st. swobody
 			throw NonFatal_error_2(BEYOND_UPPER_THETA7_LIMIT);
 	}
-} // end: kinematic_model_irp6ot_with_wrist::check_joints(const )
+}//: check_joints
 
 
-/* ------------------------------------------------------------------------
- Przeliczenie polozenia walow silnikow na wspolrzedne wewnetrzne
- (mp2i - motor position to internal)
- ------------------------------------------------------------------------ */
 void model_with_wrist::mp2i_transform(const lib::MotorArray & local_current_motor_pos, lib::JointArray & local_current_joints)
 {
 
@@ -465,15 +445,11 @@ void model_with_wrist::mp2i_transform(const lib::MotorArray & local_current_moto
 }//: mp2i_transform
 
 
-/* ------------------------------------------------------------------------
- Przeliczenie wspolrzednych wewnetrznych na polozenia walow silnikow
- (i2mp - internal to motor position)
- ------------------------------------------------------------------------ */
-void model_with_wrist::i2mp_transform(lib::MotorArray & local_desired_motor_pos_new, lib::JointArray & local_desired_joints)
+void model_with_wrist::i2mp_transform(lib::MotorArray & local_desired_motor_pos_new, const lib::JointArray & local_desired_joints)
 {
-	// Niejednoznacznosc polozenia dla 4-tej osi (obrot kisci < 180���������������������������������������������������������������������������������).
+	// Niejednoznacznosc polozenia dla 4-tej osi (obrot kisci < 180).
 	double joint_4_revolution = M_PI;
-	// Niejednoznacznosc polozenia dla 5-tej osi (obrot kisci > 360���������������������������������������������������������������������������������).
+	// Niejednoznacznosc polozenia dla 5-tej osi (obrot kisci > 360).
 	double axis_5_revolution = 2*M_PI;
 
 	// Sprawdzenie wartosci wspolrzednych wewnetrznych.
@@ -495,9 +471,10 @@ void model_with_wrist::i2mp_transform(lib::MotorArray & local_desired_motor_pos_
 
 	// Obliczanie kata obrotu walu silnika napedowego obotu kisci T
 	// jesli jest mniejsze od -pi/2
-	if (local_desired_joints[4] < lower_limit_joint[4])
-		local_desired_joints[4] += joint_4_revolution;
-	local_desired_motor_pos_new[4] = gear[4] * (local_desired_joints[4] + theta[4]) + synchro_joint_position[4];
+	double tmp_local_desired_joints4 = local_desired_joints[4];
+	if ( tmp_local_desired_joints4 < lower_limit_joint[4])
+		 tmp_local_desired_joints4 += joint_4_revolution;
+	local_desired_motor_pos_new[4] = gear[4] * ( tmp_local_desired_joints4 + theta[4]) + synchro_joint_position[4];
 
 	// Obliczanie kata obrotu walu silnika napedowego obrotu kisci V
 	local_desired_motor_pos_new[5] = gear[5] * local_desired_joints[5] + synchro_joint_position[5]
@@ -520,21 +497,9 @@ void model_with_wrist::i2mp_transform(lib::MotorArray & local_desired_motor_pos_
 	// Sprawdzenie obliczonych wartosci.
 	check_motor_position(local_desired_motor_pos_new);
 
-} //: i2mp_transform
+}//: i2mp_transform
 
 
-/* ------------------------------------------------------------------------
- Zadanie proste kinematyki dla robota IRp-6 na torze.
- Wykorzystanie nowego stopnia swobody  jako czynnego stopnia swobody.
- Tor jest biernym stopniem swobody.
-
- Wejscie:
- * current_joints[6] - wspolrzedne wewnetrzne robota (kolejno d0, q1, q2, ...)
-
- Wyjscie:
- * current_end_effector_frame[4][3] - macierz przeksztacenia jednorodnego (MPJ)
- opisujca aktualne poloenie i orientacje koncowki (narzedzia) w ukladzie bazowym.
- ------------------------------------------------------------------------ */
 void model_with_wrist::direct_kinematics_transform(const lib::JointArray & local_current_joints, lib::Homog_matrix& local_current_end_effector_frame)
 {
 
@@ -570,21 +535,9 @@ void model_with_wrist::direct_kinematics_transform(const lib::JointArray & local
 	local_current_end_effector_frame(2,2) = c4 * s5; //AZ
 	local_current_end_effector_frame(2,3) = -a2 * s2 - a3 * s3 - d5 * s4; //PZ
 
-} //:: direct_kinematics_transform()
+}//:: direct_kinematics_transform()
 
-/* ------------------------------------------------------------------------
- Zadanie odwrotne kinematyki dla robota IRp-6 na torze.
- Wykorzystanie nowego stopnia swobody  jako czynnego stopnia swobody.
- Tor jest biernym stopniem swobody.
 
- Wejscie:
- * local_current_joints - obecne (w rzeczywistosci poprzednie) wspolrzedne wewnetrzne robota (kolejno d0, q1, q2, ...)
- * local_desired_end_effector_frame - macierz przeksztacenia jednorodnego (MPJ)
- opisujca zadane poloenie i orientacje koncowki (narzedzia) w ukladzie bazowym.
-
- Wyjscie:
- * local_desired_joints - wyliczone wspolrzedne wewnetrzne robota (kolejno d0, q1, q2, ...)
- ------------------------------------------------------------------------ */
 void model_with_wrist::inverse_kinematics_transform(lib::JointArray & local_desired_joints, const lib::JointArray & local_current_joints, const lib::Homog_matrix& local_desired_end_effector_frame)
 {
 
@@ -733,8 +686,8 @@ void model_with_wrist::inverse_kinematics_transform(lib::JointArray & local_desi
 	// Sprawdzenie ograniczen na wspolrzedne wewnetrzne.
 	check_joints(local_desired_joints);
 
-} //: inverse_kinematics_transform()
+}//: inverse_kinematics_transform()
 
-} // namespace irp6ot
-} // namespace kinematic
-} // namespace mrrocpp
+}// namespace irp6ot
+}// namespace kinematic
+}// namespace mrrocpp

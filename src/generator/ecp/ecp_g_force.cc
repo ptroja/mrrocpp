@@ -19,12 +19,12 @@
 // Ostatnia modyfikacja: 2004r.
 // -------------------------------------------------------------------------
 
-#include <stdio.h>
+#include <cstdio>
 #include <fstream>
 #include <iostream>
-#include <time.h>
+#include <ctime>
 #include <unistd.h>
-#include <math.h>
+#include <cmath>
 #include <iostream>
 #include <string>
 

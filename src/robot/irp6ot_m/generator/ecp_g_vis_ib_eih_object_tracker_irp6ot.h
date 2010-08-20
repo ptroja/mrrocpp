@@ -9,15 +9,12 @@
 #ifndef ECP_VIS_IB_EIH_OBJECT_TRACKER_IRP6OT_H_
 #define ECP_VIS_IB_EIH_OBJECT_TRACKER_IRP6OT_H_
 
-#include <iostream>
-#include <string.h>
-#include <math.h>
-
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 
 #include "generator/ecp/ecp_g_visual_servo.h"
 #include "sensor/fradia/ecp_mp_s_fradia_sensor.h"
+#include "sensor/fradia/object_tracker.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -27,7 +24,7 @@ namespace generator {
 #define MOTION_STEPS 25
 #define MAX_AXES_NUM 3
 
-typedef ecp_mp::sensor::fradia_sensor<lib::empty_t, lib::object_tracker_t> fradia_sensor_tracker;
+typedef ecp_mp::sensor::fradia_sensor<lib::empty_t, ecp_mp::sensor::object_tracker_t> fradia_sensor_tracker;
 
 /**
  *
@@ -45,7 +42,7 @@ public:
 	/**
 	 *
 	 */
-    double u[MAX_AXES_NUM]; //tablica uchybów
+    double u[MAX_AXES_NUM]; //tablica uchybw
 	/**
 	 *
 	 */

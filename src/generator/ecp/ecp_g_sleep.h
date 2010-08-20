@@ -7,7 +7,8 @@
 #ifndef ECP_G_SLEEP_H_
 #define ECP_G_SLEEP_H_
 
-#include <time.h>
+#include <ctime>
+
 #include "base/ecp/ecp_generator.h"
 
 namespace mrrocpp {

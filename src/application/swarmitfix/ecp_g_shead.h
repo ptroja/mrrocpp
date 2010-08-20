@@ -7,7 +7,6 @@
 #ifndef ECP_G_SHEAD_H_
 #define ECP_G_SHEAD_H_
 
-#include <time.h>
 #include "base/ecp/ecp_generator.h"
 #include "lib/data_port_headers/shead.h"
 

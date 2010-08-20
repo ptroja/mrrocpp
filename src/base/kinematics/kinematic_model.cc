@@ -1,9 +1,11 @@
 /*!
- * \file kinematic_model.cc
- * \brief File containing definitions of kinematic_model class methods.
+ * @file kinematic_model.cc
+ * @brief File containing definitions of kinematic_model class methods.
  *
- * \author tkornuta
- * \date Nov 26, 2009
+ * @author tkornuta
+ * @date Nov 26, 2009
+ *
+ * @ingroup KINEMATICS
  */
 
 #include "base/kinematics/kinematic_model.h"
@@ -30,20 +32,18 @@ void kinematic_model::i2e_transform(const lib::JointArray& local_current_joints,
 }
 
 
-void kinematic_model::e2i_transform(lib::JointArray & local_desired_joints, lib::JointArray & local_current_joints, const lib::Homog_matrix& local_desired_end_effector_frame)
+void kinematic_model::e2i_transform(lib::JointArray & local_desired_joints, const lib::JointArray & local_current_joints, const lib::Homog_matrix& local_desired_end_effector_frame)
 {
 	// Inverse kinematics solution.
 	inverse_kinematics_transform(local_desired_joints, local_current_joints, local_desired_end_effector_frame);
 
 }
 
-//! Solves direct kinematics.
 void kinematic_model::direct_kinematics_transform(const lib::JointArray & local_current_joints, lib::Homog_matrix& local_current_end_effector_frame)
 {
 
 }
 
-//! Solves inverse kinematics.
 void kinematic_model::inverse_kinematics_transform(lib::JointArray & local_desired_joints, const lib::JointArray & local_current_joints, const lib::Homog_matrix& local_desired_end_effector_frame)
 {
 

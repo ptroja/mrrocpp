@@ -1,7 +1,7 @@
 #include <gtk/gtk.h>
 #include <gtk/gtktreemodel.h>
 
-#include <stdlib.h>
+#include <cstdlib>
 
 #include <gtkmm.h>
 

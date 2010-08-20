@@ -48,9 +48,9 @@
 
 #include <playerclient.h>
 #include <netinet/in.h>
-#include <string.h>
-#include <math.h>
-#include <stdio.h>
+#include <cstring>
+#include <cmath>
+#include <cstdio>
 
 // send a motor command
 //

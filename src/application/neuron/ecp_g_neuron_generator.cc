@@ -7,7 +7,7 @@
 
 #include "ecp_g_neuron_generator.h"
 #include "ecp_mp_neuron_sensor.h"
-#include <time.h>
+#include <ctime>
 
 namespace mrrocpp{
 namespace ecp{

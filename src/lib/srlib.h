@@ -7,7 +7,7 @@
 #if !defined(__SRLIB_H)
 #define __SRLIB_H
 
-#include <time.h>
+#include <ctime>
 #include <string>
 
 #include <boost/thread/condition_variable.hpp>
@@ -17,7 +17,7 @@
 #include <boost/thread/thread.hpp>
 
 #if defined(USE_MESSIP_SRR)
-#include <messip.h>
+#include "messip.h"
 #endif
 
 #include "lib/typedefs.h"

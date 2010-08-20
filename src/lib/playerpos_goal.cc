@@ -1,4 +1,4 @@
-#include <math.h>
+#include <cmath>
 
 #include "lib/com_buf.h"
 

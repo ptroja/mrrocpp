@@ -12,6 +12,8 @@ namespace ecp {
 namespace common {
 namespace generator {
 
+using namespace std;
+
 constant_velocity::constant_velocity(common::task::task& _ecp_task, lib::ECP_POSE_SPECIFICATION pose_spec, int axes_num) :
 		multiple_position<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose,
 		ecp::common::generator::trajectory_interpolator::constant_velocity_interpolator,

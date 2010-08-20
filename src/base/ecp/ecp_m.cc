@@ -6,9 +6,9 @@
 // Ostatnia modyfikacja: 2007
 // ------------------------------------------------------------------------
 
-#include <stdio.h>
-#include <signal.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <csignal>
+#include <cstdlib>
 
 #include "lib/impconst.h"
 #include "lib/com_buf.h"

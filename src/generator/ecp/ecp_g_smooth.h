@@ -10,19 +10,15 @@
 #if !defined(_ECP_GEN_SMOOTH_H)
 # define _ECP_GEN_SMOOTH_H
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
-#include <ctype.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <list>
 
 #include <libxml/xmlmemory.h>
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 #include <libxml/xinclude.h>
-
-#include <fstream>
-#include <string.h>
-#include <list>
 
 #include "lib/typedefs.h"
 #include "lib/impconst.h"

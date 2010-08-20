@@ -35,15 +35,15 @@
 #ifndef _EPOS_H
 #define _EPOS_H
 
-#include <stdio.h>   /* Standard input/output definitions */
-#include <string.h>  /* String function definitions */
+#include <cstdio>   /* Standard input/output definitions */
+#include <cstring>  /* String function definitions */
 #include <unistd.h>  /* UNIX standard function definitions */
 #include <fcntl.h>   /* File control definitions */
-#include <errno.h>   /* Error number definitions */
+#include <cerrno>   /* Error number definitions */
 #include <termios.h> /* POSIX terminal control definitions */
-#include <stdlib.h>
+#include <cstdlib>
 #include <stdint.h>  /* int types with given size */
-#include <math.h>
+#include <cmath>
 
 #include <boost/exception.hpp>
 #include <boost/type_traits/is_same.hpp>

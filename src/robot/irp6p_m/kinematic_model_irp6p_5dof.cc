@@ -1,17 +1,16 @@
-// ------------------------------------------------------------------------
-// Proces:		EDP
-// Plik:			kinematic_model_irp6p_5dof.cc
-// System:	QNX/MRROC++  v. 6.3
-// Opis:		Model kinematyki robota IRp-6 na postumencie
-//				- definicja metod klasy
-//				- kinematyka 5stopniowa
-//
-// Autor:		tkornuta
-// Data:		24.02.2007
-// ------------------------------------------------------------------------
+/*!
+ * @file kinematic_model_irp6p_5dof.cc
+ * @brief File containing methods of the IRp-6p 5DOFs kinematic model class.
+ *
+ * @author tkornuta
+ * @date 31.01.2007
+ *
+ * @ingroup KINEMATICS IRP6P_KINEMATICS
+ */
 
-#include <stdlib.h>
-#include <math.h>
+
+#include <cstdlib>
+#include <cmath>
 
 #include "lib/com_buf.h"
 
@@ -22,20 +21,17 @@ namespace mrrocpp {
 namespace kinematics {
 namespace irp6p {
 
-/* -----------------------------------------------------------------------
- Konstruktor.
- ------------------------------------------------------------------------- */
 model_5dof::model_5dof(int _number_of_servos) :
 	model_with_wrist(_number_of_servos)
 {
 	// Ustawienie etykiety modelu kinematycznego.
-	set_kinematic_model_label("Switching to 5 DOF kinematic model");
+	set_kinematic_model_label("Switching to 5 DOFs kinematic model");
 
 	// Ustawienie parametrow kinematycznych.
-	// Podstawowe parametry ustawione przez sa konstruktor with_wrist.
+	// Podstawowe parametry ustawione sa przez konstruktor with_wrist.
 	set_kinematic_parameters();
 
-} // end: kinematic_model::kinematic_model
+}
 
 
 void model_5dof::set_kinematic_parameters(void)

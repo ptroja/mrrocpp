@@ -1,3 +1,5 @@
+#include <vector>
+
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
@@ -29,7 +31,7 @@ ecp_sub_task_const_vel_gen_test::ecp_sub_task_const_vel_gen_test(task & _ecp_t) 
 
 void ecp_sub_task_const_vel_gen_test::conditional_execution() {
 
-	vector<double> coordinates1(6);
+	std::vector<double> coordinates1(6);
 
 	// POSTUMENT
 

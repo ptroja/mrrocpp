@@ -2,7 +2,7 @@
 #ifndef ECP_MP_TR_GRASPIT_H_
 #define ECP_MP_TR_GRASPIT_H_
 
-#include "lib/sensor.h"
+//#include "lib/sensor_image.h"
 #include "base/ecp_mp/transmitter.h" // klasa bazowa transmitter
 
 namespace mrrocpp {

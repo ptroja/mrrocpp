@@ -1,80 +1,67 @@
-// ------------------------------------------------------------------------
-// Proces:		VIRTUAL SENSOR PROCESS (lib::VSP)
-// Plik:            vsp_m_nint.cc
-// System:	QNX/MRROC++  v. 6.3
-// Opis:		Nieinteraktywna powloka procesow VSP
-//
-// 	-	nieinteraktywne odczytywanie stanu czujnika rzeczywistego
-// 	-	operacje read-write + devctl->(write, read, rw)
-// 	-	dwuwatkowy
-//
-// Autor:		tkornuta
-// Data:		30.11.2006
-// ------------------------------------------------------------------------
+/*!
+ * @file vsp_m_nint.cc
+ * @brief File containing the \b noninteractive VSP shell.
+ *
+ * The \b noninteractive shell repeatedly collects and aggregates measurements,
+ * regardless of whether they are needed by other processes or not. The
+ * frequency of initiating readings depends on the sensor type and task
+ * requirements. In this case, if the MP or the ECP requests
+ * readings, the VSP sends the latest virtual sensor readings stored
+ * in its internal sensor image. As such VSP processes initiate the
+ * readings on their own, this communication type is called \b noninteractive.
+ *
+ * @date 30.11.2006
+ * @author tkornuta <tkornuta@ia.pw.edu.pl>, Warsaw University of Technology
+ * @author ptrojane <piotr.trojanek@gmail.com>, Warsaw University of Technology
+ *
+ * @ingroup VSP
+ */
 
-
-/********************************* INCLUDES *********************************/
-#include <stdio.h>
-#include <stdlib.h>
-
-#include <errno.h>
-#include <stddef.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cerrno>
+#include <cstddef>
 #include <unistd.h>
 #include <sys/iofunc.h>
 #include <sys/dispatch.h>
-#include <devctl.h>			// do devctl()
-#include <string.h>
-#include <signal.h>
+#include <devctl.h>
+#include <cstring>
+#include <csignal>
 #include <process.h>
 #include <sys/wait.h>
 #include <sys/types.h>
 #include <sys/sched.h>
+#include <fstream>
 
-#include <fstream>						// do sprawdzenia czy istnieje plik /dev/TWOJSENSOR
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
-#include "lib/com_buf.h"
 #include "lib/mis_fun.h"
-
 #include "lib/srlib.h"
-#include "base/vsp/vsp_sensor.h"				// zawiera deklaracje klasy vsp_sensor + struktury komunikacyjne
-// Konfigurator
-#include "lib/configurator.h"
+#include "base/vsp/vsp_sensor_interface.h"
+#include "base/vsp/vsp_error.h"
 
 namespace mrrocpp {
 namespace vsp {
-namespace common {
+namespace nint_shell {
 
-/********************************* GLOBALS **********************************/
-static sensor::sensor_interface *vs; // czujnik wirtualny
+/** @brief Global pointer to sensor object. */
+static mrrocpp::vsp::common::sensor_interface *vs;
 
+/** @brief Condition synchronizer. */
 static lib::condition_synchroniser vsp_synchroniser;
 
-static bool TERMINATE = false; // zakonczenie obu watkow
+/** @brief Threads termination flag. */
+static bool TERMINATED = false;
 
-static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER; // inicjalizacja MUTEXa
+/** @brief Mutex utilized for read/write sensor image synchronization. */
+static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 
-/********************************** SIGCATCH ********************************/
-void catch_signal(int sig)
-{
-	switch (sig)
-	{
-		case SIGTERM:
-			TERMINATE = true;
-			break;
-		case SIGSEGV:
-			fprintf(stderr, "Segmentation fault in VSP process\n");
-			signal(SIGSEGV, SIG_DFL);
-			break;
-	} // end: switch
-}
 
-/******************************** PROTOTYPES ********************************/
-int io_read(resmgr_context_t *ctp, io_read_t *msg, RESMGR_OCB_T *ocb);
-int io_write(resmgr_context_t *ctp, io_write_t *msg, RESMGR_OCB_T *ocb);
-int io_devctl(resmgr_context_t *ctp, io_devctl_t *msg, RESMGR_OCB_T *ocb);
-
-/***************************** ERROR_HANDLER ******************************/
+/**
+ * @brief Function responsible for handling errors.
+ * @author tkornuta
+ * @param e Handled error
+ */
 template <class ERROR>
 void error_handler(ERROR & e)
 {
@@ -90,89 +77,126 @@ void error_handler(ERROR & e)
 			if (e.error_no == DISPATCH_LOOP_ERROR)
 				printf("ERROR: Block error in main dispatch loop.\n");
 			printf("vsp  aborted due to lib::SYSTEM_ERROR\n");
-			vsp::common::vs->sr_msg->message(lib::SYSTEM_ERROR, e.error_no);
-			TERMINATE = true;
+			vsp::nint_shell::vs->sr_msg->message(lib::SYSTEM_ERROR, e.error_no);
+			TERMINATED = true;
 			break;
 		case lib::FATAL_ERROR:
-			vsp::common::vs->sr_msg->message(lib::FATAL_ERROR, e.error_no);
+			vsp::nint_shell::vs->sr_msg->message(lib::FATAL_ERROR, e.error_no);
 			break;
 		case lib::NON_FATAL_ERROR:
 			switch (e.error_no)
 			{
 				case INVALID_COMMAND_TO_VSP:
-					vsp::common::vs->set_vsp_report(lib::INVALID_VSP_COMMAND);
-					vsp::common::vs->sr_msg->message(lib::NON_FATAL_ERROR, e.error_no);
+					vsp::nint_shell::vs->set_vsp_report(lib::sensor::INVALID_VSP_COMMAND);
+					vsp::nint_shell::vs->sr_msg->message(lib::NON_FATAL_ERROR, e.error_no);
 					break;
 				case SENSOR_NOT_CONFIGURED:
-					vsp::common::vs->set_vsp_report(lib::VSP_SENSOR_NOT_CONFIGURED);
-					vsp::common::vs->sr_msg->message(lib::NON_FATAL_ERROR, e.error_no);
+					vsp::nint_shell::vs->set_vsp_report(lib::sensor::VSP_SENSOR_NOT_CONFIGURED);
+					vsp::nint_shell::vs->sr_msg->message(lib::NON_FATAL_ERROR, e.error_no);
 					break;
 				case READING_NOT_READY:
-					vsp::common::vs->set_vsp_report(lib::VSP_READING_NOT_READY);
+					vsp::nint_shell::vs->set_vsp_report(lib::sensor::VSP_READING_NOT_READY);
 					break;
 				default:
-					vsp::common::vs->sr_msg->message(lib::NON_FATAL_ERROR, VSP_UNIDENTIFIED_ERROR);
+					vsp::nint_shell::vs->sr_msg->message(lib::NON_FATAL_ERROR, VSP_UNIDENTIFIED_ERROR);
 			}
 			break;
 		default:
-			vsp::common::vs->sr_msg->message(lib::NON_FATAL_ERROR, VSP_UNIDENTIFIED_ERROR);
-	} // end switch
-} // end error_handler
+			vsp::nint_shell::vs->sr_msg->message(lib::NON_FATAL_ERROR, VSP_UNIDENTIFIED_ERROR);
+	} //:switch
+} //:error_handler
 
-/****************************** SECOND THREAD ******************************/
+
+/**
+ * @brief Signal handler. Sets terminate flag in case of the SIGTERM signal.
+ * @author tkornuta
+ * @param sig Catched signal.
+ */
+void catch_signal(int sig)
+{
+	switch (sig)
+	{
+		case SIGTERM:
+			TERMINATED = true;
+			break;
+		case SIGSEGV:
+			fprintf(stderr, "Segmentation fault in the VSP process\n");
+			signal(SIGSEGV, SIG_DFL);
+			break;
+	} //: switch
+}
+
+
+/**
+ * @brief Body of the thread responsible for cyclic readings initialization.
+ * @author tkornuta
+ * @param arg Thread arguments - not used.
+ */
 void* cyclic_read(void* arg)
 {
-	// ustawienie priorytetow
+	// Set thread priority.
 	setprio(0, MAX_PRIORITY - 5);
 
-	// aktywne oczekiwanie na zainicjowanie czujnika
+	// Wait for command,.
 	vsp_synchroniser.wait();
 
-	while (!TERMINATE) { // for (;;)
+	while (!TERMINATED) {
 		try {
-			// oczekiwanie na zdarzenie
-			vsp::common::vs->wait_for_event();
-			// SEKCJA KRYTYCZNA - nie moze byc naraz odczyt z urzadzenia i zapis nowego odczytu
+			// Wait for event.
+			vsp::nint_shell::vs->wait_for_event();
+			// Critical section.
 			pthread_mutex_lock(&mutex);
-			vsp::common::vs->initiate_reading();
+			vsp::nint_shell::vs->initiate_reading();
 			pthread_mutex_unlock(&mutex);
-		} // koniec TRY
-		catch (vsp::sensor::VSP_main_error & e) {
+		} //: try
+		catch (vsp::common::vsp_error & e) {
 			error_handler(e);
 			pthread_mutex_unlock(&mutex);
-		} // end CATCH
+		} //: catch
 		catch (lib::sensor::sensor_error & e) {
 			error_handler(e);
 			pthread_mutex_unlock(&mutex);
 		}
-	} // end for(;;)
+	} //:for
 	return (0);
 }
 
-/**************************** WRITE_TO_SENSOR ******************************/
-void write_to_sensor()
+
+/**
+ * @brief Function responsible for parsing the command send by the ECP/MP and - in case of GET_READING - copies current reading to returned message buffer.
+ * @author tkornuta
+ */
+void parse_command()
 {
-	lib::VSP_COMMAND_t i_code = vsp::common::vs->get_command();
-	vsp::common::vs->set_vsp_report(lib::VSP_REPLY_OK);
+	lib::sensor::VSP_COMMAND_t i_code = vsp::nint_shell::vs->get_command();
+	vsp::nint_shell::vs->set_vsp_report(lib::sensor::VSP_REPLY_OK);
 	switch (i_code)
 	{
-		case lib::VSP_CONFIGURE_SENSOR:
-			vsp::common::vs->configure_sensor();
+		case lib::sensor::VSP_CONFIGURE_SENSOR:
+			vsp::nint_shell::vs->configure_sensor();
 			vsp_synchroniser.command();
 			break;
-		case lib::VSP_GET_READING:
-			vsp::common::vs->get_reading();
+		case lib::sensor::VSP_GET_READING:
+			vsp::nint_shell::vs->get_reading();
 			break;
-		case lib::VSP_TERMINATE:
-			delete vsp::common::vs;
-			TERMINATE = true;
+		case lib::sensor::VSP_TERMINATE:
+			delete vsp::nint_shell::vs;
+			TERMINATED = true;
 			break;
 		default:
-			throw vsp::sensor::VSP_main_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_VSP);
+			throw vsp::common::vsp_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_VSP);
 	}
 }
 
-/********************************* IO_READ **********************************/
+
+/**
+ * @brief The io_read handler is responsible for returning data bytes to the client after receiving an _IO_READ message.
+ * @author tkornuta
+ * @param ctp Resource manager context.
+ * @param msg Returned message.
+ * @param ocb Position within the buffer that will be returned to the client.
+ * @return Status of the operation.
+ */
 int io_read(resmgr_context_t *ctp, io_read_t *msg, RESMGR_OCB_T *ocb)
 {
 	int status;
@@ -182,107 +206,130 @@ int io_read(resmgr_context_t *ctp, io_read_t *msg, RESMGR_OCB_T *ocb)
 	if (msg->i.xtype & (_IO_XTYPE_MASK != _IO_XTYPE_NONE)) {
 		return (ENOSYS);
 	}
-	// SEKCJA KRYTYCZNA - nie moze byc naraz odczyt z urzadzenia i zapis nowego odczytu
+	// Critical section.
 	pthread_mutex_lock(&mutex);
 	try {
-		vsp::common::vs->set_vsp_report(lib::VSP_REPLY_OK);
-		vsp::common::vs->get_reading();
-	} // end TRY
-	catch (vsp::sensor::VSP_main_error & e) {
+		vsp::nint_shell::vs->set_vsp_report(lib::sensor::VSP_REPLY_OK);
+		vsp::nint_shell::vs->get_reading();
+	} //: try
+	catch (vsp::common::vsp_error & e) {
 		error_handler(e);
-	} // end CATCH
+	} //: catch
 	catch (lib::sensor::sensor_error & e) {
 		error_handler(e);
-	} // end CATCH
-	vs->msgwrite(ctp);
+	} //: catch
+	// Write response to context.
+	vsp::nint_shell::vs->msgwrite(ctp);
 	pthread_mutex_unlock(&mutex);
 	return (EOK);
-} // end io_read
+} //:io_read
 
-/********************************* IO_WRITE *********************************/
+
+/**
+ * @brief The io_write handler is responsible for writing data bytes to the media after receiving a client's _IO_WRITE message.
+ * @author tkornuta
+ * @param ctp Resource manager context.
+ * @param msg Retrieved message.
+ * @param ocb Position within the buffer retrieved from the client.
+ * @return Status of the operation.
+ */
 int io_write(resmgr_context_t *ctp, io_write_t *msg, RESMGR_OCB_T *ocb)
 {
 	int status;
+	// Check operation status.
 	if ((status = iofunc_write_verify(ctp, msg, ocb, NULL)) != EOK) {
 		return (status);
 	}
+	// Check message type.
 	if (msg->i.xtype & (_IO_XTYPE_MASK != _IO_XTYPE_NONE)) {
 		return (ENOSYS);
 	}
+	// Set up the number of bytes (returned by client's write()).
 	_IO_SET_WRITE_NBYTES(ctp, msg->i.nbytes);
-	vs->msgread(ctp);
+	// Read message from the context.
+	vsp::nint_shell::vs->msgread(ctp);
 	pthread_mutex_lock(&mutex);
 	try {
-		write_to_sensor();
-	} // end TRY
-	catch (vsp::sensor::VSP_main_error & e) {
+		parse_command();
+	} //: try
+	catch (vsp::common::vsp_error & e) {
 		error_handler(e);
-	} // end CATCH
+	} //: catch
 	catch (lib::sensor::sensor_error & e) {
 		error_handler(e);
-	} // end CATCH
+	} //: catch
 	pthread_mutex_unlock(&mutex);
 	return (EOK);
-} // end io_write
+} //:io_write
 
 
-/******************************** IO_DEVCTL *********************************/
+/**
+ * @brief Handler function for handling the _IO_DEVCTL messages.
+ * @author tkornuta
+ * @param ctp Resource manager context.
+ * @param msg Retrieved/send back message.
+ * @param ocb Position within the buffer retrieved from/send back to the client.
+ * @return Status of the operation.
+ */
 int io_devctl(resmgr_context_t *ctp, io_devctl_t *msg, RESMGR_OCB_T *ocb)
 {
 	unsigned int status;
-	//	int *addr;
-
+	// Check operation status.
 	if ((status = iofunc_devctl_default(ctp, msg, ocb)) != _RESMGR_DEFAULT)
 		return (status);
 
+	// Set up the number of bytes (returned by client's write()).
 	_IO_SET_WRITE_NBYTES(ctp, msg->i.nbytes);
-	vs->msgread(ctp);
+	// Read message from the context.
+	vsp::nint_shell::vs->msgread(ctp);
 
+	// Check devctl operation type.
 	switch (msg->i.dcmd)
 	{
 		case DEVCTL_WT:
 			pthread_mutex_lock(&mutex);
 			try {
-				write_to_sensor();
-			} // end TRY
-			catch (vsp::sensor::VSP_main_error & e) {
+				parse_command();
+			} //: try
+			catch (vsp::common::vsp_error & e) {
 				error_handler(e);
-			} // end CATCH
+			} //: catch
 			catch (lib::sensor::sensor_error & e) {
 				error_handler(e);
-			} // end CATCH
+			} //: catch
 			pthread_mutex_unlock(&mutex);
 			return (EOK);
 			break;
 		case DEVCTL_RD:
 			pthread_mutex_lock(&mutex);
 			try {
-				vsp::common::vs->set_vsp_report(lib::VSP_REPLY_OK);
-				vsp::common::vs->get_reading();
-			} // end TRY
-			catch (vsp::sensor::VSP_main_error & e) {
+				vsp::nint_shell::vs->set_vsp_report(lib::sensor::VSP_REPLY_OK);
+				vsp::nint_shell::vs->get_reading();
+			} //: try
+			catch (vsp::common::vsp_error & e) {
 				error_handler(e);
-			} // end CATCH
+			} //: catch
 			catch (lib::sensor::sensor_error & e) {
 				error_handler(e);
-			} // end CATCH
-			// Count the start address of reply message content.
-			vs->msgwrite(ctp);
+			} //: catch
+			// Write response to the resource manager context..
+			vsp::nint_shell::vs->msgwrite(ctp);
 			pthread_mutex_unlock(&mutex);
 			return (EOK);
 			break;
 		case DEVCTL_RW:
 			pthread_mutex_lock(&mutex);
 			try {
-				write_to_sensor();
-			} // end TRY
-			catch (vsp::sensor::VSP_main_error & e) {
+				parse_command();
+			} //: try
+			catch (vsp::common::vsp_error & e) {
 				error_handler(e);
-			} // end CATCH
+			} //: catch
 			catch (lib::sensor::sensor_error & e) {
 				error_handler(e);
-			} // end CATCH
-			vs->msgwrite(ctp);
+			} //: catch
+			// Write response to the resource manager context..
+			vsp::nint_shell::vs->msgwrite(ctp);
 			pthread_mutex_unlock(&mutex);
 			return (EOK);
 			break;
@@ -292,16 +339,20 @@ int io_devctl(resmgr_context_t *ctp, io_devctl_t *msg, RESMGR_OCB_T *ocb)
 	return (EOK);
 }
 
-} // namespace common
+} // namespace nint_shell
 } // namespace vsp
 } // namespace mrrocpp
 
 
-/*********************************** MAIN ***********************************/
+/**
+ * @brief Main body of the noninteractive VSP shell.
+ * @param argc Number of passed arguments.
+ * @param argv Process arguments - network node, path to the MRROC++ binaries, name of the current configuration file, etc.
+ * @return Process status.
+ */
 int main(int argc, char *argv[])
 {
-
-	/* declare variables we'll be using */
+	// Declare variables we'll be using.
 	resmgr_attr_t resmgr_attr;
 	dispatch_t *dpp;
 	dispatch_context_t *ctp;
@@ -311,58 +362,56 @@ int main(int argc, char *argv[])
 	static resmgr_io_funcs_t io_funcs;
 	static iofunc_attr_t attr;
 
-	// ustawienie priorytetow
+	// Set thread priority.
 	setprio(0, MAX_PRIORITY - 1);
-	// wylapywanie sygnalow
-	signal(SIGTERM, &vsp::common::catch_signal);
-	signal(SIGSEGV, &vsp::common::catch_signal);
+
+	// Attach signal handlers.
+	signal(SIGTERM, &vsp::nint_shell::catch_signal);
+	signal(SIGSEGV, &vsp::nint_shell::catch_signal);
 #if defined(PROCESS_SPAWN_RSH)
 	signal(SIGINT, SIG_IGN);
 #endif
 
-	// liczba argumentow
-	if (argc < 6) {
-		printf("Za malo argumentow VSP\n");
+	// Check number of arguments.
+	if (argc <= 6) {
+		printf("Number of required arguments is insufficient.\n");
 		return -1;
 	}
 
-	// zczytanie konfiguracji calego systemu
+	// Read system configuration.
 	lib::configurator _config(argv[1], argv[2], argv[3], argv[4], argv[5]);
 
-	resourceman_attach_point
-			= _config.return_attach_point_name(lib::configurator::CONFIG_RESOURCEMAN_LOCAL, "resourceman_attach_point");
+	resourceman_attach_point = _config.return_attach_point_name(lib::configurator::CONFIG_RESOURCEMAN_LOCAL, "resourceman_attach_point");
 
 	try {
+		// Create sensor - abstract factory pattern.
+		vsp::nint_shell::vs = vsp::common::return_created_sensor(_config);
 
-		// Stworzenie nowego czujnika za pomoca funkcji (cos na ksztalt szablonu abstract factory).
-		vsp::common::vs = vsp::sensor::return_created_sensor(_config);
-
-		// Sprawdzenie czy istnieje /dev/TWOJSENSOR.
-
+		// Check resource attach point.
 		if (access(resourceman_attach_point.c_str(), R_OK) == 0) {
-			throw vsp::sensor::VSP_main_error(lib::SYSTEM_ERROR, DEVICE_EXISTS); // wyrzucany blad
+			throw vsp::common::vsp_error(lib::SYSTEM_ERROR, DEVICE_EXISTS);
 		}
 
-		/* initialize dispatch interface */
+		// Initialize dispatch interface.
 		if ((dpp = dispatch_create()) == NULL)
-			throw vsp::sensor::VSP_main_error(lib::SYSTEM_ERROR, DISPATCH_ALLOCATION_ERROR); // wyrzucany blad
+			throw vsp::common::vsp_error(lib::SYSTEM_ERROR, DISPATCH_ALLOCATION_ERROR); // wyrzucany blad
 
-		/* initialize resource manager attributes */
+		// Initialize resource manager attributes.
 		memset(&resmgr_attr, 0, sizeof resmgr_attr);
 		resmgr_attr.nparts_max = 1;
-		resmgr_attr.msg_max_size = sizeof(mrrocpp::vsp::sensor::DEVCTL_MSG);
+		resmgr_attr.msg_max_size = sizeof(mrrocpp::vsp::common::DEVCTL_MSG);
 
-		/* initialize functions for handling messages */
+		// Initialize functions for handling messages.
 		iofunc_func_init(_RESMGR_CONNECT_NFUNCS, &connect_funcs, _RESMGR_IO_NFUNCS, &io_funcs);
-		io_funcs.read = vsp::common::io_read;
-		io_funcs.write = vsp::common::io_write;
-		io_funcs.devctl = vsp::common::io_devctl;
+		io_funcs.read = vsp::nint_shell::io_read;
+		io_funcs.write = vsp::nint_shell::io_write;
+		io_funcs.devctl = vsp::nint_shell::io_devctl;
 
-		/* initialize attribute structure used by the device */
+		// Initialize attribute structure used by the device.
 		iofunc_attr_init(&attr, S_IFNAM | 0666, 0, 0);
-		attr.nbytes = sizeof(mrrocpp::vsp::sensor::DEVCTL_MSG);
+		attr.nbytes = sizeof(mrrocpp::vsp::common::DEVCTL_MSG);
 
-		/* attach our device name */
+		// Attach device name.
 		if ((id = resmgr_attach(dpp, /* dispatch handle        */
 		&resmgr_attr, /* resource manager attrs */
 		resourceman_attach_point.c_str(), /* device name            */
@@ -371,31 +420,31 @@ int main(int argc, char *argv[])
 		&connect_funcs, /* connect routines       */
 		&io_funcs, /* I/O routines           */
 		&attr)) == -1) { /* handle                 */
-			throw vsp::sensor::VSP_main_error(lib::SYSTEM_ERROR, DEVICE_CREATION_ERROR); // wyrzucany blad
+			throw vsp::common::vsp_error(lib::SYSTEM_ERROR, DEVICE_CREATION_ERROR);
 		}
 
-		/* allocate a context structure */
+		// Allocate a context structure.
 		ctp = dispatch_context_alloc(dpp);
 
-		/* uruchomienie drugiego watku */
+		// Run second thread.
 		pthread_attr_t tattr;
 		pthread_attr_init(&tattr);
 		pthread_attr_setdetachstate(&tattr, PTHREAD_CREATE_DETACHED );
-		pthread_create(NULL, &tattr, &vsp::common::cyclic_read, NULL );
+		pthread_create(NULL, &tattr, &vsp::nint_shell::cyclic_read, NULL );
 
-		/* start the resource manager message loop */
-		while (!vsp::common::TERMINATE) { // for (;;)
+		// Start the resource manager message loop.
+		while (!vsp::nint_shell::TERMINATED) {
 			if ((ctp = dispatch_block(ctp)) == NULL)
-				throw vsp::sensor::VSP_main_error(lib::SYSTEM_ERROR, DISPATCH_LOOP_ERROR); // wyrzucany blad
+				throw vsp::common::vsp_error(lib::SYSTEM_ERROR, DISPATCH_LOOP_ERROR);
 			dispatch_handler(ctp);
-		} // end for(;;)
-		vsp::common::vs->sr_msg->message("vsp  terminated");
-		delete vsp::common::vs;
-	} // koniec TRY
-	catch (vsp::sensor::VSP_main_error & e) {
-		vsp::common::error_handler(e);
+		} //: for
+		vsp::nint_shell::vs->sr_msg->message("VSP  terminated");
+		delete vsp::nint_shell::vs;
+	} //: try
+	catch (vsp::common::vsp_error & e) {
+		vsp::nint_shell::error_handler(e);
 		exit(EXIT_FAILURE);
-	} // end CATCH
-} // end MAIN
+	} //: catch
+} //: main
 
 

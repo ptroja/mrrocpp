@@ -5,10 +5,10 @@
  *      Author: ptroja
  */
 
-#include <stdio.h>
-#include <string.h>
+#include <cstdio>
+#include <cstring>
 #include <stdint.h>
-#include <errno.h>
+#include <cerrno>
 
 #include <iostream>
 #include <fstream>

@@ -9,8 +9,8 @@
 // Data:		14.02.2007
 // ------------------------------------------------------------------------
 
-#include <math.h>
-#include <stdio.h>
+#include <cmath>
+#include <cstdio>
 
 #include "lib/mrmath/mrmath.h"
 

@@ -13,8 +13,6 @@
 
 #include <vector>
 
-using namespace std;
-
 namespace mrrocpp {
 namespace ecp {
 namespace common {
@@ -47,13 +45,13 @@ class get_position : public generator {
 		 * Returns actual position.
 		 * @return array containing actual robot position expressed in representation specified by pose_spec variable
 		 */
-		vector<double> get_position_vector();
+		std::vector<double> get_position_vector();
 
 	private:
 		/**
 		 * Vector filled with coordinates read from the robot.
 		 */
-		vector<double> position;
+		std::vector<double> position;
 		/**
 		 * Number of axes for a given robot in used representation.
 		 */

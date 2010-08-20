@@ -4,9 +4,9 @@
 //
 // -------------------------------------------------------------------------
 
-#include <string.h>
+#include <cstring>
 #include <unistd.h>
-#include <errno.h>
+#include <cerrno>
 #include <sys/types.h>
 #include <sys/wait.h>
 

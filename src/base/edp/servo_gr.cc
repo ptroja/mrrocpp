@@ -3,14 +3,14 @@
 // ostatnia modyfikacja - styczen 2005
 /* --------------------------------------------------------------------- */
 
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #include <iostream>
 #include <fstream>
-#include <math.h>
+#include <cmath>
 #include <unistd.h>
-#include <errno.h>
-#include <time.h>
+#include <cerrno>
+#include <ctime>
 
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
@@ -366,9 +366,7 @@ uint8_t servo_buffer::Move_1_step(void)
 	{
 		boost::mutex::scoped_lock lock(master.rb_obj->reader_mutex);
 
-		struct timespec step_time;
-
-		if (clock_gettime(CLOCK_REALTIME, &step_time) == -1) {
+		if (clock_gettime(CLOCK_REALTIME, &master.rb_obj->step_data.measure_time) == -1) {
 			/*
 			 BOOST_THROW_EXCEPTION(
 			 System_error() <<
@@ -380,7 +378,6 @@ uint8_t servo_buffer::Move_1_step(void)
 		}
 
 		master.rb_obj->step_data.step = master.step_counter;
-		master.rb_obj->step_data.msec = (int) (step_time.tv_nsec / 1000000);
 
 		master.rb_obj->new_data = true;
 		master.rb_obj->cond.notify_one();

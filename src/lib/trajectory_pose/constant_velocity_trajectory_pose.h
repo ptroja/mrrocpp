@@ -11,8 +11,6 @@
 #include "lib/trajectory_pose/trajectory_pose.h"
 #include <vector>
 
-using namespace std;
-
 namespace mrrocpp {
 namespace ecp_mp {
 namespace common {
@@ -27,19 +25,19 @@ public:
   /**
    * Maximal velocity for the movement, for each axis. Percent of the v_max value. Should be a value between 0 - 1.
    */
-  vector<double> v;
+  std::vector<double> v;
   /**
    * Maximal velocity set for the given robot (v_r = v * v_max).
    */
-  vector<double> v_max;
+  std::vector<double> v_max;
   /**
    * Initial position for the pose.
    */
-  vector<double> start_position;
+  std::vector<double> start_position;
   /**
    * Maximal velocity for the given segment (pose) (calculated, can be smaller or equal to v).
    */
-  vector<double> v_r;
+  std::vector<double> v_r;
   /**
    * Empty constructor.
    */
@@ -51,14 +49,14 @@ public:
    * \param v maximal velocities for the trajectory segment for all of the axes
    */
   constant_velocity_trajectory_pose (lib::ECP_POSE_SPECIFICATION arm_type,
-		  const vector<double> & coordinates,
-		  const vector<double> & v);
+		  const std::vector<double> & coordinates,
+		  const std::vector<double> & v);
   /**
    * Destructor.
    */
   ~constant_velocity_trajectory_pose();
 
-  //bool set_max_velocity(const vector<double> & v);
+  //bool set_max_velocity(const std::vector<double> & v);
 
 };
 

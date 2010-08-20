@@ -5,7 +5,7 @@
  *      Author: rtulwin
  */
 
-#include <math.h>
+#include <cmath>
 
 #include "ecp_g_vis_ib_eih_follower_irp6ot.h"
 
@@ -146,8 +146,8 @@ bool ecp_vis_ib_eih_follower_irp6ot::next_step_without_constraints() {
 	printf("ux: %f\t", u[0]);
 	printf("uy: %f\n", u[1]);
 
-	lib::VSP_REPORT_t vsp_report = vsp_fradia->get_report();
-	if (vsp_report == lib::VSP_REPLY_OK) {
+	lib::sensor::VSP_REPORT_t vsp_report = vsp_fradia->get_report();
+	if (vsp_report == lib::sensor::VSP_REPLY_OK) {
 
 		if (fabs(u[0]) < 20 && fabs(u[1]) < 20 && v[0] <= v_stop[0] && v[1]
 				<= v_stop[1]) {

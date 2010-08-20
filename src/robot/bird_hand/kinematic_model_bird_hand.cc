@@ -1,12 +1,14 @@
 /*!
- * \file kinematic_model_bird_hand.cc
- * \brief File containing definition of kinematic_model_bird_hand class methods.
+ * @file kinematic_model_bird_hand.cc
+ * @brief File containing definition of kinematic_model_bird_hand class methods.
  *
- * \author kczajkowski
- * \date May 28, 2010
+ * @author kczajkowski
+ * @date May 28, 2010
+ *
+ * @ingroup KINEMATICS IRP6OT_KINEMATICS
  */
 
-#include <math.h>
+#include <cmath>
 
 #include "lib/com_buf.h"
 #include "robot/bird_hand/kinematic_model_bird_hand.h"
@@ -81,7 +83,7 @@ void kinematic_model_bird_hand::check_joints(const lib::JointArray & q)
 	//		throw NonFatal_error_2(BEYOND_UPPER_THETA7_LIMIT);
 }
 
-void kinematic_model_bird_hand::i2mp_transform(lib::MotorArray & local_desired_motor_pos_new, lib::JointArray & local_desired_joints)
+void kinematic_model_bird_hand::i2mp_transform(lib::MotorArray & local_desired_motor_pos_new, const lib::JointArray & local_desired_joints)
 {
 
 	for (int i = 0; i < 8; ++i)
@@ -89,7 +91,7 @@ void kinematic_model_bird_hand::i2mp_transform(lib::MotorArray & local_desired_m
 
 }
 
-void kinematic_model_bird_hand::i2mp_transform_synch(lib::MotorArray & local_desired_motor_pos_new, lib::JointArray & local_desired_joints)
+void kinematic_model_bird_hand::i2mp_transform_synch(lib::MotorArray & local_desired_motor_pos_new, const lib::JointArray & local_desired_joints)
 {
 
 	//    for (int i=0; i<8; ++i){
