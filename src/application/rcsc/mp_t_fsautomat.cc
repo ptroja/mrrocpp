@@ -25,6 +25,7 @@
 
 #include "lib/srlib.h"
 #include "base/mp/mp.h"
+#include "base/mp/mp_task.h"
 #include "base/mp/MP_main_error.h"
 #include "mp_t_fsautomat.h"
 
@@ -35,7 +36,6 @@
 #include "lib/datastr.h"
 #include "generator/ecp/ecp_mp_g_smooth.h"
 #include "cube_face.h"
-
 
 namespace mrrocpp {
 namespace mp {
@@ -136,159 +136,159 @@ fsautomat::fsautomat(lib::configurator &_config) :
 
 	// Konfiguracja wszystkich czujnikow
 	BOOST_FOREACH(ecp_mp::sensor_item_t & sensor_item, sensor_m)
-{	sensor_item.second->configure_sensor();
-}
+	{	sensor_item.second->configure_sensor();
+	}
 
-// dodanie transmitter'a
-transmitter_m[ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS] = new ecp_mp::transmitter::rc_windows(ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS,
-		"[transmitter_rc_windows]", *this);
+	// dodanie transmitter'a
+	transmitter_m[ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS]
+			= new ecp_mp::transmitter::rc_windows(ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS, "[transmitter_rc_windows]", *this);
 
-cube_state = new common::CubeState();
+	cube_state = new common::CubeState();
 }
 
 common::State * fsautomat::createState(xmlNodePtr stateNode)
 {
-common::State * actState = new common::State();
+	common::State * actState = new common::State();
 
-xmlChar * stateID = xmlGetProp(stateNode, (const xmlChar *) "id");
+	xmlChar * stateID = xmlGetProp(stateNode, (const xmlChar *) "id");
 
-if (stateID) {
-	actState->setStateID((char*) stateID);
-}
+	if (stateID) {
+		actState->setStateID((char*) stateID);
+	}
 
-xmlChar * stateType = xmlGetProp(stateNode, (const xmlChar *) "type");
+	xmlChar * stateType = xmlGetProp(stateNode, (const xmlChar *) "type");
 
-if (stateType) {
-	actState->setType((char*) stateType);
-}
+	if (stateType) {
+		actState->setType((char*) stateType);
+	}
 
-// For each child of state: i.e. Robot
-for (xmlNodePtr child_node = stateNode->children; child_node != NULL; child_node = child_node->next) {
-	if (child_node->type == XML_ELEMENT_NODE) {
-		if(!xmlStrcmp(child_node->name, (const xmlChar *) "base/ecpGeneratorType")) {
-			xmlChar * ecpGeneratorType = xmlNodeGetContent(child_node);
-			if (ecpGeneratorType)
-			actState->setGeneratorType((char*) ecpGeneratorType);
-			xmlFree(ecpGeneratorType);
-		}
-		else if (!xmlStrcmp(child_node->name, (const xmlChar *) "ROBOT")) {
-			xmlChar * robot = xmlNodeGetContent(child_node);
-			if (robot)
-			actState->setRobot((char*) robot);
-			xmlFree(robot);
-		}
-		else if (!xmlStrcmp(child_node->name, (const xmlChar *) "SetOfRobots")) {
-			actState->robotSet = new common::State::RobotSets();
-			for (xmlNodePtr cchild_node = child_node->children; cchild_node != NULL; cchild_node = cchild_node->next) {
-				if (cchild_node->type == XML_ELEMENT_NODE
-						&& !xmlStrcmp(cchild_node->name, (const xmlChar *) "FirstSet")) {
-					actState->robotSet->firstSetCount = ((xmlLsCountNode(cchild_node)) - 1) / 2;
-					actState->robotSet->firstSet = new lib::robot_name_t[actState->robotSet->firstSetCount];
-					int index = 0;
-					for (xmlNodePtr set_node = cchild_node->children; set_node != NULL; set_node = set_node->next)
-					if (set_node->type == XML_ELEMENT_NODE && !xmlStrcmp(set_node->name, (const xmlChar *) "ROBOT"))
-					actState->robotSet->firstSet[index++] = lib::returnProperRobot(
-							(char *) xmlNodeGetContent(set_node));
+	// For each child of state: i.e. Robot
+	for (xmlNodePtr child_node = stateNode->children; child_node != NULL; child_node = child_node->next) {
+		if (child_node->type == XML_ELEMENT_NODE) {
+			if (!xmlStrcmp(child_node->name, (const xmlChar *) "base/ecpGeneratorType")) {
+				xmlChar * ecpGeneratorType = xmlNodeGetContent(child_node);
+				if (ecpGeneratorType)
+					actState->setGeneratorType((char*) ecpGeneratorType);
+				xmlFree(ecpGeneratorType);
+			} else if (!xmlStrcmp(child_node->name, (const xmlChar *) "ROBOT")) {
+				xmlChar * robot = xmlNodeGetContent(child_node);
+				if (robot)
+					actState->setRobot((char*) robot);
+				xmlFree(robot);
+			} else if (!xmlStrcmp(child_node->name, (const xmlChar *) "SetOfRobots")) {
+				actState->robotSet = new common::State::RobotSets();
+				for (xmlNodePtr cchild_node = child_node->children; cchild_node != NULL; cchild_node
+						= cchild_node->next) {
+					if (cchild_node->type == XML_ELEMENT_NODE
+							&& !xmlStrcmp(cchild_node->name, (const xmlChar *) "FirstSet")) {
+						actState->robotSet->firstSetCount = ((xmlLsCountNode(cchild_node)) - 1) / 2;
+						actState->robotSet->firstSet = new lib::robot_name_t[actState->robotSet->firstSetCount];
+						int index = 0;
+						for (xmlNodePtr set_node = cchild_node->children; set_node != NULL; set_node = set_node->next)
+							if (set_node->type == XML_ELEMENT_NODE
+									&& !xmlStrcmp(set_node->name, (const xmlChar *) "ROBOT"))
+								actState->robotSet->firstSet[index++]
+										= lib::returnProperRobot((char *) xmlNodeGetContent(set_node));
+					}
+					if (cchild_node->type == XML_ELEMENT_NODE
+							&& !xmlStrcmp(cchild_node->name, (const xmlChar *) "SecSet")) {
+						actState->robotSet->secondSetCount = ((xmlLsCountNode(cchild_node)) - 1) / 2;
+						actState->robotSet->secondSet = new lib::robot_name_t[actState->robotSet->secondSetCount];
+						int index = 0;
+						for (xmlNodePtr set_node = cchild_node->children; set_node != NULL; set_node = set_node->next)
+							if (set_node->type == XML_ELEMENT_NODE
+									&& !xmlStrcmp(set_node->name, (const xmlChar *) "ROBOT"))
+								actState->robotSet->secondSet[index++]
+										= lib::returnProperRobot((char *) xmlNodeGetContent(set_node));
+					}
 				}
-				if (cchild_node->type == XML_ELEMENT_NODE && !xmlStrcmp(cchild_node->name, (const xmlChar *) "SecSet")) {
-					actState->robotSet->secondSetCount = ((xmlLsCountNode(cchild_node)) - 1) / 2;
-					actState->robotSet->secondSet = new lib::robot_name_t[actState->robotSet->secondSetCount];
-					int index = 0;
-					for (xmlNodePtr set_node = cchild_node->children; set_node != NULL; set_node = set_node->next)
-					if (set_node->type == XML_ELEMENT_NODE && !xmlStrcmp(set_node->name, (const xmlChar *) "ROBOT"))
-					actState->robotSet->secondSet[index++] = lib::returnProperRobot(
-							(char *) xmlNodeGetContent(set_node));
-				}
+			} else if (!xmlStrcmp(child_node->name, (const xmlChar *) "TrajectoryFilePath")
+					|| !xmlStrcmp(child_node->name, (const xmlChar *) "GeneratorParameters")
+					|| !xmlStrcmp(child_node->name, (const xmlChar *) "Parameters")
+					|| !xmlStrcmp(child_node->name, (const xmlChar *) "Sensor")
+					|| !xmlStrcmp(child_node->name, (const xmlChar *) "Speech")) {
+				xmlChar * stringArgument = xmlNodeGetContent(child_node);
+				if (stringArgument)
+					actState->setStringArgument((char*) stringArgument);
+				xmlFree(stringArgument);
+			} else if (!xmlStrcmp(child_node->name, (const xmlChar *) "TimeSpan")
+					|| !xmlStrcmp(child_node->name, (const xmlChar *) "AddArg")) {
+				xmlChar * numArgument = xmlNodeGetContent(child_node);
+				if (numArgument)
+					actState->setNumArgument((const char *) numArgument);
+				xmlFree(numArgument);
+			} else if (!xmlStrcmp(child_node->name, (const xmlChar *) "transition")) {
+				//printf("name: %s\n", (char *)child_node->name);
+				xmlChar *cond = xmlGetProp(child_node, (const xmlChar *) "condition");
+				xmlChar *trans = xmlGetProp(child_node, (const xmlChar *) "target");
+				if (cond && trans)
+					actState->setTransition((const char *) cond, (const char *) trans, config);
 			}
 		}
-		else if (!xmlStrcmp(child_node->name, (const xmlChar *) "TrajectoryFilePath") ||
-				!xmlStrcmp(child_node->name, (const xmlChar *) "GeneratorParameters") ||
-				!xmlStrcmp(child_node->name, (const xmlChar *) "Parameters") ||
-				!xmlStrcmp(child_node->name, (const xmlChar *) "Sensor") ||
-				!xmlStrcmp(child_node->name, (const xmlChar *) "Speech")) {
-			xmlChar * stringArgument = xmlNodeGetContent(child_node);
-			if (stringArgument)
-			actState->setStringArgument((char*) stringArgument);
-			xmlFree(stringArgument);
-		}
-		else if (!xmlStrcmp(child_node->name, (const xmlChar *) "TimeSpan") ||
-				!xmlStrcmp(child_node->name, (const xmlChar *) "AddArg")) {
-			xmlChar * numArgument = xmlNodeGetContent(child_node);
-			if (numArgument)
-			actState->setNumArgument((const char *)numArgument);
-			xmlFree(numArgument);
-		}
-		else if (!xmlStrcmp(child_node->name, (const xmlChar *) "transition")) {
-			//printf("name: %s\n", (char *)child_node->name);
-			xmlChar *cond = xmlGetProp(child_node, (const xmlChar *) "condition");
-			xmlChar *trans = xmlGetProp(child_node, (const xmlChar *) "target");
-			if (cond && trans)
-			actState->setTransition((const char *) cond, (const char *) trans, config);
-		}
 	}
-}
-xmlFree(stateType);
-xmlFree(stateID);
+	xmlFree(stateType);
+	xmlFree(stateID);
 
-return actState;
+	return actState;
 }
 
-std::map<const char *, common::State, ecp_mp::task::task::str_cmp> * fsautomat::takeStatesMap()
+std::map <const char *, common::State, ecp_mp::task::task::str_cmp> * fsautomat::takeStatesMap()
 {
-std::map<const char *, common::State, ecp_mp::task::task::str_cmp> * statesMap = new std::map<const char *, common::State, ecp_mp::task::task::str_cmp>();
+	std::map <const char *, common::State, ecp_mp::task::task::str_cmp> * statesMap = new std::map <const char *,
+			common::State, ecp_mp::task::task::str_cmp>();
 
-std::string fileName(config.value<std::string>("xml_file", "[xml_settings]"));
-std::string filePath(mrrocpp_network_path);
-filePath += fileName;
+	std::string fileName(config.value <std::string> ("xml_file", "[xml_settings]"));
+	std::string filePath(mrrocpp_network_path);
+	filePath += fileName;
 
-// open xml document
-xmlDocPtr doc = xmlParseFile(filePath.c_str());
-xmlXIncludeProcess(doc);
-if (doc == NULL) {
-	std::cout << "ERROR: could not parse file: \"" << fileName << "\"." << std::endl;
-	return statesMap;
-}
+	// open xml document
+	xmlDocPtr doc = xmlParseFile(filePath.c_str());
+	xmlXIncludeProcess(doc);
+	if (doc == NULL) {
+		std::cout << "ERROR: could not parse file: \"" << fileName << "\"." << std::endl;
+		return statesMap;
+	}
 
-// XML root
-xmlNode *root = xmlDocGetRootElement(doc);
-if (!root || !root->name) {
-	std::cout << "Bad root node name!" << std::endl;
-	xmlFreeDoc(doc);
-	return statesMap;
-}
+	// XML root
+	xmlNode *root = xmlDocGetRootElement(doc);
+	if (!root || !root->name) {
+		std::cout << "Bad root node name!" << std::endl;
+		xmlFreeDoc(doc);
+		return statesMap;
+	}
 
-// for each root children
-for (xmlNodePtr cur_node = root->children; cur_node != NULL; cur_node = cur_node->next) {
-	if (cur_node->type == XML_ELEMENT_NODE && !xmlStrcmp(cur_node->name, (const xmlChar *) "SubTask")) {
-		for (xmlNodePtr child_node = cur_node->children; child_node != NULL; child_node = child_node->next) {
-			if (child_node->type == XML_ELEMENT_NODE && !xmlStrcmp(child_node->name, (const xmlChar *) "State")) {
-				common::State * actState = createState(child_node);
-				statesMap->insert(std::map<const char *, common::State>::value_type(actState->getStateID(), *actState));
+	// for each root children
+	for (xmlNodePtr cur_node = root->children; cur_node != NULL; cur_node = cur_node->next) {
+		if (cur_node->type == XML_ELEMENT_NODE && !xmlStrcmp(cur_node->name, (const xmlChar *) "SubTask")) {
+			for (xmlNodePtr child_node = cur_node->children; child_node != NULL; child_node = child_node->next) {
+				if (child_node->type == XML_ELEMENT_NODE && !xmlStrcmp(child_node->name, (const xmlChar *) "State")) {
+					common::State * actState = createState(child_node);
+					statesMap->insert(std::map <const char *, common::State>::value_type(actState->getStateID(), *actState));
+				}
 			}
 		}
+		if (cur_node->type == XML_ELEMENT_NODE && !xmlStrcmp(cur_node->name, (const xmlChar *) "State")) {
+			common::State * actState = createState(cur_node);
+			statesMap->insert(std::map <const char *, common::State>::value_type(actState->getStateID(), *actState));
+		}
 	}
-	if (cur_node->type == XML_ELEMENT_NODE && !xmlStrcmp(cur_node->name, (const xmlChar *) "State")) {
-		common::State * actState = createState(cur_node);
-		statesMap->insert(std::map<const char *, common::State>::value_type(actState->getStateID(), *actState));
-	}
-}
-// free the document
-xmlFreeDoc(doc);
-// free the global variables that may
-// have been allocated by the parser
-xmlCleanupParser();
-return statesMap;
+	// free the document
+	xmlFreeDoc(doc);
+	// free the global variables that may
+	// have been allocated by the parser
+	xmlCleanupParser();
+	return statesMap;
 }
 
 void fsautomat::configureProperSensor(const char *propSensor)
 {
-// Powolanie czujnikow
+	// Powolanie czujnikow
 
-if (config.value<int>("vis_servoing")) {
+	if (config.value <int> ("vis_servoing")) {
 
-}
+	}
 
-// Konfiguracja wszystkich czujnikow
+	// Konfiguracja wszystkich czujnikow
 BOOST_FOREACH(ecp_mp::sensor_item_t & sensor_item, sensor_m) {
 	sensor_item.second->configure_sensor();
 }

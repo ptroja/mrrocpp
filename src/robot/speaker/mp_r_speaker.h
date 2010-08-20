@@ -12,6 +12,9 @@
 
 namespace mrrocpp {
 namespace mp {
+namespace task {
+class task;
+} // namespace task
 namespace robot {
 
 class speaker : public robot

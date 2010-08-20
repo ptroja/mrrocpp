@@ -8,6 +8,8 @@
 #if !defined(__MP_ROBOTS_T_TYPEDEF_H)
 #define __MP_ROBOTS_T_TYPEDEF_H
 
+#include <map>
+
 #include "lib/impconst.h"
 
 namespace mrrocpp {

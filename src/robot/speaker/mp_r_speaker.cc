@@ -5,6 +5,7 @@
 #include "lib/com_buf.h"
 
 #include "lib/srlib.h"
+#include "base/mp/mp_task.h"
 #include "robot/speaker/mp_r_speaker.h"
 
 namespace mrrocpp {

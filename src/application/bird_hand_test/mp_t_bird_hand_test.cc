@@ -11,6 +11,7 @@
 
 #include "lib/srlib.h"
 #include "base/mp/mp.h"
+#include "base/mp/mp_task.h"
 #include "base/mp/MP_main_error.h"
 #include "ecp_mp_t_bird_hand_test.h"
 #include "mp_t_bird_hand_test.h"

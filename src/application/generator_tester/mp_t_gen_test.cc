@@ -1,4 +1,4 @@
-
+#include "base/mp/mp_task.h"
 #include "mp_t_gen_test.h"
 
 //#include "subtask/ecp_mp_st_bias_edp_force.h"
@@ -35,7 +35,7 @@ void gen_test::main_task_algorithm(void)
 		} else {
 			// TODO: throw
 		}
-	// ROBOT IRP6_POSTUMENT_MANIPULATOR
+		// ROBOT IRP6_POSTUMENT_MANIPULATOR
 	} else if (config.value <int> ("is_irp6p_m_active", UI_SECTION)) {
 		manipulator_name = lib::ROBOT_IRP6P_M;
 		if (config.value <int> ("is_irp6p_tfg_active", UI_SECTION)) {
