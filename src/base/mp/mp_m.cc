@@ -16,6 +16,7 @@
 #include "lib/srlib.h"
 #include "lib/mis_fun.h"
 #include "base/mp/mp.h"
+#include "base/mp/MP_main_error.h"
 
 
 namespace mrrocpp {

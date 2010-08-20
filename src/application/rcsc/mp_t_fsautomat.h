@@ -10,6 +10,7 @@
 #define __MP_TASK_FSAUTOMAT
 
 #include "base/mp/mp.h"
+#include "base/mp/MP_main_error.h"
 #include "base/ecp_mp/ecp_mp_task.h"
 //#include "subtask/ecp_mp_t_fsautomat.h"
 #include "State.h"

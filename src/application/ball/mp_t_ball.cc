@@ -11,6 +11,7 @@
 
 #include "lib/srlib.h"
 #include "base/mp/mp.h"
+#include "base/mp/MP_main_error.h"
 #include "application/ball/mp_g_ball.h"
 #include "application/ball/mp_t_ball.h"
 #include "application/rcsc/ecp_mp_t_rcsc.h"

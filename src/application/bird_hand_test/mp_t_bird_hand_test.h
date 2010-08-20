@@ -9,6 +9,7 @@
 #define __MP_T_BIRD_HAND_TEST_H
 
 #include "base/mp/mp.h"
+#include "base/mp/MP_main_error.h"
 
 namespace mrrocpp {
 namespace mp {

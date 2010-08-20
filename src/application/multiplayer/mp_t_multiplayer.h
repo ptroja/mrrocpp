@@ -2,6 +2,7 @@
 #define _MP_T_MULTIPLAYER_H
 
 #include "base/mp/mp.h"
+#include "base/mp/MP_main_error.h"
 
 namespace mrrocpp {
 namespace mp {

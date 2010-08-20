@@ -11,6 +11,7 @@
 
 #include "lib/srlib.h"
 #include "base/mp/mp.h"
+#include "base/mp/MP_main_error.h"
 #include "application/haptic/mp_g_haptic.h"
 #include "application/haptic/mp_t_haptic.h"
 #include "application/rcsc/ecp_mp_t_rcsc.h"

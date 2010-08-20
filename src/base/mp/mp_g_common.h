@@ -4,6 +4,7 @@
 #include "base/mp/mp_generator.h"
 #include "base/mp/mp_task.h"
 #include "base/mp/mp.h"
+#include "base/mp/MP_main_error.h"
 
 // generator for setting the next ecps state
 

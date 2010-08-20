@@ -14,6 +14,7 @@
 
 #include "lib/srlib.h"
 #include "base/mp/mp.h"
+#include "base/mp/MP_main_error.h"
 #include "ecp_mp_t_sk_mr.h"
 #include "mp_t_sk_mr.h"
 #include "lib/mrmath/mrmath.h"

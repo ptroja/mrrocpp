@@ -2,6 +2,7 @@
 #define MP_DELAY_MS_CONDITION_H_
 
 #include "base/mp/mp.h"
+#include "base/mp/MP_main_error.h"
 #include "lib/timer.h"
 
 namespace mrrocpp {

@@ -10,6 +10,7 @@
 
 #include "lib/srlib.h"
 #include "base/mp/mp.h"
+#include "base/mp/MP_main_error.h"
 #include "base/mp/mp_g_common.h"
 #include "mp_t_rcsc.h"
 #include "cube_face.h"

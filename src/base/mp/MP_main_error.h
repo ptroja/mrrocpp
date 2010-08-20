@@ -5,8 +5,8 @@
 // Ostatnia modyfikacja: 16.04.98
 // -------------------------------------------------------------------------
 
-#if !defined(__MP_H)
-#define __MP_H
+#if !defined(_MP_MAIN_ERROR_H)
+#define _MP_MAIN_ERROR_H
 
 #include <map>
 #include <cstdio>
@@ -28,18 +28,22 @@ class robot;
 
 namespace common {
 
-typedef std::map <lib::robot_name_t, robot::robot*> robots_t;
-typedef robots_t::value_type robot_pair_t;
+// ---------------------------------------------------------------
+class MP_main_error
+{ // Klasa obslugi bledow poziomie MP
+public:
+	const lib::error_class_t error_class;
+	const uint64_t error_no;
+
+	MP_main_error(lib::error_class_t err0, uint64_t err1);
+
+};
+// ---------------------------------------------------------------
 
 } // namespace common
 
 } // namespace mp
 } // namespace mrrocpp
 
-// to fix forward declaration issues
-#include "base/mp/mp_generator.h"
-#include "base/mp/mp_task.h"
-#include "base/mp/mp_robot.h"
-#include "lib/com_buf.h"
 
 #endif

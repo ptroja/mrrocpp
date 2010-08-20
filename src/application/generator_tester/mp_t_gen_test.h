@@ -2,6 +2,7 @@
 #define __MP_T_GEN_TEST_H
 
 #include "base/mp/mp.h"
+#include "base/mp/MP_main_error.h"
 #include "lib/mrmath/mrmath.h"
 
 #include "lib/data_port_headers/tfg.h"
