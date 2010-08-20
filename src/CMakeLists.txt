@@ -61,7 +61,7 @@ if (QNXNTO)
 	# keep this flag until bug in QNX stack alignment is fixed
 	add_definitions (-DEIGEN_DONT_ALIGN)	
 	set(EIGEN2_INCLUDE_DIR "${MRLIB}/include/eigen2") 
-	set(LIBXML2_INCLUDE_DIR "${MRLIB}/include")
+	set(LIBXML2_INCLUDE_DIR "${MRLIB}/include/libxml2")
 	set(Boost_INCLUDE_DIR "${MRLIB}/include")
 
 	# Boost is provided by mrlib repository
