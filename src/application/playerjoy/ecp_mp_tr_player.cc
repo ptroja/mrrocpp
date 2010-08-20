@@ -15,7 +15,7 @@ namespace ecp_mp {
 namespace transmitter {
 
 player::player  (
-    TRANSMITTER_ENUM _transmitter_name, const char* _section_name, task::task& _ecp_mp_object,
+    TRANSMITTER_t _transmitter_name, const char* _section_name, task::task& _ecp_mp_object,
     const char *host, unsigned int port,
     const char *devname, int devindex, int access
 )  :

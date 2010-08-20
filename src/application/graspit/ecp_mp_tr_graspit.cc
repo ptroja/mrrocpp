@@ -14,7 +14,7 @@ namespace mrrocpp {
 namespace ecp_mp {
 namespace transmitter {
 
-TRGraspit::TRGraspit(TRANSMITTER_ENUM _transmitter_name, const char* _section_name, task::task& _ecp_mp_object) :
+TRGraspit::TRGraspit(lib::TRANSMITTER_t _transmitter_name, const char* _section_name, task::task& _ecp_mp_object) :
 	GraspitTransmitter_t(_transmitter_name, _section_name, _ecp_mp_object),
 	socketDescriptor(-1)
 {

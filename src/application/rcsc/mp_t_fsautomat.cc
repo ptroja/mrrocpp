@@ -25,6 +25,8 @@
 
 #include "lib/srlib.h"
 
+#include "base/ecp_mp/ecp_mp_sensor.h"
+
 #include "base/mp/mp_task.h"
 #include "base/mp/MP_main_error.h"
 #include "mp_t_fsautomat.h"

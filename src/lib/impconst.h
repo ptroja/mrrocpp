@@ -47,6 +47,7 @@ typedef double frame_tab[3][4];
 #define UI_SECTION "[ui]"
 
 typedef std::string robot_name_t;
+typedef std::string TRANSMITTER_t;
 
 const robot_name_t ROBOT_UNDEFINED = "ROBOT_UNDEFINED";
 
