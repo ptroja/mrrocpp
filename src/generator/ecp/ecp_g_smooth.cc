@@ -40,7 +40,6 @@ bool smooth::eq(double a, double b)
 
 void smooth::load_trajectory_from_xml(ecp_mp::common::Trajectory &trajectory)
 {
-	bool first_time = true;
 	int numOfPoses = trajectory.getNumberOfPoses();
 	trajectory.showTime();
 
