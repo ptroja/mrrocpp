@@ -1,9 +1,12 @@
 /*!
- * \file kinematic_parameters_bird_hand.h
- * \brief File containing the declaration of kinematic_parameters class.
+ * @file kinematic_parameters_bird_hand.h
+ * @brief File containing the declaration of kinematic_parameters class.
  *
- * \author tkornuta
- * \date Jan 5, 2010
+ * @author kczajkowski
+ * @author tkornuta
+ * @date May 28, 2010
+ *
+ * @ingroup IRP6OT_KINEMATICS
  */
 
 #ifndef KINEMATIC_PARAMETERS_BIRD_HAND_H_
@@ -16,29 +19,35 @@ namespace kinematics {
 namespace bird_hand {
 
 /*!
- * \struct kinematic_parameters_bird_hand
- * \brief Class storing parameters.
+ * @struct kinematic_parameters_bird_hand
+ * @brief Class storing parameters.
  *
- * \author kczajkowski
- * \date May 28, 2010
+ * @author kczajkowski
+ * @date May 28, 2010
+ *
+ * @ingroup KINEMATICS IRP6OT_KINEMATICS
  */
 struct kinematic_parameters_bird_hand {
 public:
 	//! Constructor - sets the values of the BIRD_HAND geometric parameters.
 	kinematic_parameters_bird_hand();
 
-	// Zmienne opisujace przekladnie dla wszystkich stopni swobody.
+	//! Table storing gear ratio for all DOFs.
 	double gear[8];
 
-	// Zakresy ruchu walow silnikow
+	//! Lower limits of motor movement.
 	double lower_limit_axis[8];
+
+	//! Upper limits of motor movement.
 	double upper_limit_axis[8];
 
-	// Zakresy ruchu stopni swobody w radianach.
+	//! Lower limit of joint movement (in radians).
 	double lower_limit_joint[8];
+
+	//! Upper limit of joint movement (in radians).
 	double upper_limit_joint[8];
 
-	 // Polozenia synchronizacji (polozenia we wspolrzednych wewnetrznych).
+	//! Synchronization positions of each joint - in internal coordinates.
 	double synchro_joint_position[8];
 };
 

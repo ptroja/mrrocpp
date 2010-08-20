@@ -17,8 +17,6 @@
 
 #include <vector>
 
-using namespace std;
-
 namespace mrrocpp {
 namespace ecp {
 namespace common {
@@ -34,23 +32,23 @@ protected:
 	/**
 	 * Vector of positions (vector of velocity profiles).
 	 */
-	vector<Pos> pose_vector;
+	std::vector<Pos> pose_vector;
 	/**
 	 * Position vector iterator.
 	 */
-	typename vector<Pos>::iterator pose_vector_iterator;
+	typename std::vector<Pos>::iterator pose_vector_iterator;
 	/**
 	 * Vector of coordinates.
 	 */
-	vector<vector<double> > coordinate_vector;
+	std::vector<std::vector<double> > coordinate_vector;
 	/**
 	 * Coordinate vector iterator.
 	 */
-	vector<vector<double> >::iterator coordinate_vector_iterator;
+	std::vector<std::vector<double> >::iterator coordinate_vector_iterator;
 	/**
 	 * Temporary iterator used mainly to iterate through a single position which is always of type vector<double>.
 	 */
-	vector<double>::iterator tempIter;
+	std::vector<double>::iterator tempIter;
 	/**
 	 * Type of the commanded motion (absolute or relative)
 	 */
@@ -96,67 +94,67 @@ protected:
 	/**
 	 * Standard velocity in joint coordinates.
 	 */
-	vector<double> joint_velocity;
+	std::vector<double> joint_velocity;
 	/**
 	 * Maximal velocity in joint coordinates.
 	 */
-	vector<double> joint_max_velocity;
+	std::vector<double> joint_max_velocity;
 	/**
 	 * Standard velocity in motor coordinates.
 	 */
-	vector<double> motor_velocity;
+	std::vector<double> motor_velocity;
 	/**
 	 * Maximal velocity in motor coordinates.
 	 */
-	vector<double> motor_max_velocity;
+	std::vector<double> motor_max_velocity;
 	/**
 	 * Standard velocity in euler zyz coordinates.
 	 */
-	vector<double> euler_zyz_velocity;
+	std::vector<double> euler_zyz_velocity;
 	/**
 	 * Maximal velocity in euler zyz coordinates.
 	 */
-	vector<double> euler_zyz_max_velocity;
+	std::vector<double> euler_zyz_max_velocity;
 	/**
 	 * Standard velocity in angle axis coordinates.
 	 */
-	vector<double> angle_axis_velocity;
+	std::vector<double> angle_axis_velocity;
 	/**
 	 * Maximal velocity in angle axis coordinates.
 	 */
-	vector<double> angle_axis_max_velocity;
+	std::vector<double> angle_axis_max_velocity;
 	/**
 	 * Standard acceleration in joint coordinates.
 	 */
-	vector<double> joint_acceleration;
+	std::vector<double> joint_acceleration;
 	/**
 	 * Maximal acceleration in joint coordinates.
 	 */
-	vector<double> joint_max_acceleration;
+	std::vector<double> joint_max_acceleration;
 	/**
 	 * Standard acceleration in motor coordinates.
 	 */
-	vector<double> motor_acceleration;
+	std::vector<double> motor_acceleration;
 	/**
 	 * Maximal acceleration in motor coordinates.
 	 */
-	vector<double> motor_max_acceleration;
+	std::vector<double> motor_max_acceleration;
 	/**
 	 * Standard acceleration in euler zyz coordinates.
 	 */
-	vector<double> euler_zyz_acceleration;
+	std::vector<double> euler_zyz_acceleration;
 	/**
 	 * Maximal acceleration in euler zyz coordinates.
 	 */
-	vector<double> euler_zyz_max_acceleration;
+	std::vector<double> euler_zyz_max_acceleration;
 	/**
 	 * Standard acceleration in angle axis coordinates.
 	 */
-	vector<double> angle_axis_acceleration;
+	std::vector<double> angle_axis_acceleration;
 	/**
 	 * Maximal acceleration in angle axis coordinates.
 	 */
-	vector<double> angle_axis_max_acceleration;
+	std::vector<double> angle_axis_max_acceleration;
 	//--------- VELOCITY AND ACCELERATION VECTORS END ---------
 
 	/**
@@ -188,7 +186,7 @@ protected:
 			pose_vector_iterator->start_position = get_pos->get_position_vector();//get actual position of the robot
 			delete get_pos;
 		} else if (motion_type == lib::RELATIVE) {
-			pose_vector_iterator->start_position = vector<double>(axes_num,0);
+			pose_vector_iterator->start_position = std::vector<double>(axes_num,0);
 		} else {
 			sr_ecp_msg.message("Wrong motion type");
 			throw ECP_error(lib::NON_FATAL_ERROR, ECP_ERRORS);//TODO change the second argument
@@ -481,7 +479,7 @@ public:
 	}
 	/**
 	 * Performs calculation of the trajectory and interpolation. Fills in pose_vector and coordinate_vector.
-	 * @return true if the calculation was succesfull
+	 * @return true if the calculation was successful
 	 */
 	virtual bool calculate_interpolate() {
 

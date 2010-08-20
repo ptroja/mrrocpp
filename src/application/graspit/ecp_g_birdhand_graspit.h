@@ -7,7 +7,6 @@
 #ifndef ECP_G_BIRDHAND_GRASPIT_H_
 #define ECP_G_BIRDHAND_GRASPIT_H_
 
-#include <time.h>
 #include "base/ecp/ecp_generator.h"
 #include "lib/data_port_headers/bird_hand.h"
 
@@ -60,7 +59,6 @@ public:
 	bird_hand(common::task::task& _ecp_task); //constructor
 	bool first_step(); //first step generation
 	bool next_step(); //next step generation
-
 };
 
 } // namespace generator

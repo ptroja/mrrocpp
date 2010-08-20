@@ -1,7 +1,7 @@
 #ifndef __HI_MOXA_COMBUF_H
 #define __HI_MOXA_COMBUF_H
 
-#include <inttypes.h>
+#include <stdint.h>
 
 #define START_BYTE '#'
 

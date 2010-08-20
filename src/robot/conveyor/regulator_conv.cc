@@ -7,8 +7,8 @@
 // Ostatnia modyfikacja: styczen 2005
 // -------------------------------------------------------------------------
 
-#include <stdio.h>
-#include <math.h>
+#include <cstdio>
+#include <cmath>
 #include <iostream>
 
 #include "lib/typedefs.h"

@@ -7,7 +7,7 @@
 #include <stdint.h>
 #include <pthread.h>
 #include <sys/neutrino.h>
-#include <inttypes.h>
+#include <stdint.h>
 
 #define SPEED B115200
 #define PORT "/dev/ser1"

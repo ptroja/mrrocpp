@@ -1,11 +1,11 @@
-#include <assert.h>
-#include <stdlib.h>
+#include <cassert>
+#include <cstdlib>
 #include <pthread.h>
 #include <semaphore.h>
-#include <stdio.h>
-#include <string.h>
-#include <stdint.h>
-#include <errno.h>
+#include <cstdio>
+#include <cstring>
+#include <cstdint>
+#include <cerrno>
 
 #include "lib/p_srr.h"
 

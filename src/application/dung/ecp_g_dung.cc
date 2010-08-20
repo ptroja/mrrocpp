@@ -6,7 +6,7 @@
 //			Ostatnia modyfikacja: 05.01.2006r.
 // -------------------------------------------------------------------------
 
-#include <stdio.h>
+#include <cstdio>
 #include <iostream>
 
 #include "lib/typedefs.h"

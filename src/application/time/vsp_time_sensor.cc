@@ -7,7 +7,7 @@
 // Data:		29.11.2006
 // -------------------------------------------------------------------------
 
-#include <time.h>
+#include <ctime>
 
 #include "lib/typedefs.h"
 #include "lib/impconst.h"

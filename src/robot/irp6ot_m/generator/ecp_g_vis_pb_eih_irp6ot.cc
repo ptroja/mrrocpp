@@ -13,8 +13,8 @@
  * \date 20.08.2008
  */
 
-#include <stdio.h>
-#include <math.h>
+#include <cstdio>
+#include <cmath>
 #include <iostream>
 
 #include "lib/typedefs.h"

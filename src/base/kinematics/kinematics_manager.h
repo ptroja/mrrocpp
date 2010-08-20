@@ -1,9 +1,11 @@
 /*!
- * \file kinematics_manager.h
- * \brief File containing the declaration of kinematics_manager class.
+ * @file kinematics_manager.h
+ * @brief File containing the declaration of kinematics_manager class.
  *
- * \author tkornuta
- * \date Nov 26, 2009
+ * @author tkornuta
+ * @date Nov 26, 2009
+ *
+ * @ingroup KINEMATICS
  */
 
 #ifndef __EDP_KIN_MAN_H
@@ -12,24 +14,24 @@
 #include <map>
 #include "base/kinematics/kinematic_model.h"
 
-using namespace std;
-
 namespace mrrocpp {
 namespace kinematics {
 namespace common {
 
 /*!
- * \class kinematic_manager
- * \brief Class responsible for management of multiple kinematic models. Base class of all embodied-robot effectors.
+ * @class kinematics_manager
+ * @brief Class responsible for management of multiple kinematic models. Base class of all embodied-robot effectors.
  *
- * \author tkornuta
- * \date Nov 26, 2009
+ * @author tkornuta
+ * @date Nov 26, 2009
+ *
+ * @ingroup KINEMATICS
  */
 class kinematics_manager
 {
 	protected:
 		//! List of available kinematic models for given effector.
-		map<unsigned int, kinematic_model*> kinematic_models_list;
+		std::map<unsigned int, kinematic_model*> kinematic_models_list;
 
 		//! Number of currently selected model.
 		unsigned int current_kinematic_model_no;
@@ -44,11 +46,17 @@ class kinematics_manager
 		//! Destroys kinematics available on the list.
 		virtual ~kinematics_manager(void);
 
-		//! Adds new kinematic model to the list.
+		/**
+		 * @brief Adds new kinematic model to the list.
+		 * @param _model Added mode.
+		 */
 		void add_kinematic_model(kinematic_model* _model);
 
-		//! Sets current kinematic model.
-		void set_kinematic_model(unsigned int);
+		/**
+		 * @brief Sets current kinematic model.
+		 * @param _desired_kinematic_model_nr Number of kinematic model  to be set.
+		 */
+		void set_kinematic_model(unsigned int _desired_kinematic_model_nr);
 
 		//! Returns pointer to current kinematic model.
 		kinematic_model* get_current_kinematic_model(void);

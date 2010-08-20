@@ -26,7 +26,7 @@
 #include <Eigen/Core>
 
 #if defined(USE_MESSIP_SRR)
-#include <messip.h>
+#include "messip.h"
 #endif
 // Typy zmiennych odczytywanych z pliku INI.
 #include "lib/cfgopts.h"

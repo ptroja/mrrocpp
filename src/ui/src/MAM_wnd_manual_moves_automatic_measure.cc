@@ -11,10 +11,10 @@
 /********************************* INCLUDES *********************************/
 
 /* Standard headers */
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #include <unistd.h>
-#include <string.h>
+#include <cstring>
 
 #include "ui/src/ui.h"
 

@@ -10,7 +10,7 @@
 // Data:		24.02.2007
 // ------------------------------------------------------------------------
 
-#include <math.h>
+#include <cmath>
 
 #include "lib/com_buf.h"
 
@@ -399,11 +399,11 @@ void model_with_wrist::mp2i_transform(const lib::MotorArray & local_current_moto
  Przeliczenie wspolrzednych wewnetrznych na polozenia walow silnikow
  (i2mp - internal to motor position)
  ------------------------------------------------------------------------ */
-void model_with_wrist::i2mp_transform(lib::MotorArray & local_desired_motor_pos_new, lib::JointArray & local_desired_joints)
+void model_with_wrist::i2mp_transform(lib::MotorArray & local_desired_motor_pos_new, const lib::JointArray & local_desired_joints)
 {
-	// Niejednoznacznosc polozenia dla 3-tej osi (obrot kisci < 180�).
+	// Niejednoznacznosc polozenia dla 3-tej osi (obrot kisci < 180).
 	double joint_3_revolution = M_PI;
-	// Niejednoznacznosc polozenia dla 4-tej osi (obrot kisci > 360�).
+	// Niejednoznacznosc polozenia dla 4-tej osi (obrot kisci > 360).
 	double axis_4_revolution = 2 * M_PI;
 
 	// Sprawdzenie wartosci wspolrzednych wewnetrznych.
@@ -422,9 +422,10 @@ void model_with_wrist::i2mp_transform(lib::MotorArray & local_desired_motor_pos_
 
 	// Obliczanie kata obrotu walu silnika napedowego obotu kisci T
 	// jesli jest mniejsze od -pi/2
-	if (local_desired_joints[3] < lower_limit_joint[3])
-		local_desired_joints[3] += joint_3_revolution;
-	local_desired_motor_pos_new[3] = gear[3] * (local_desired_joints[3] + theta[3]) + synchro_joint_position[3];
+	double tmp_local_desired_joints3 = local_desired_joints[3];
+	if (tmp_local_desired_joints3 < lower_limit_joint[3])
+		tmp_local_desired_joints3 += joint_3_revolution;
+	local_desired_motor_pos_new[3] = gear[3] * (tmp_local_desired_joints3 + theta[3]) + synchro_joint_position[3];
 
 	// Obliczanie kata obrotu walu silnika napedowego obrotu kisci V
 	local_desired_motor_pos_new[4] = gear[4] * local_desired_joints[4] + synchro_joint_position[4]

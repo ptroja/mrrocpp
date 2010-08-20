@@ -1,27 +1,19 @@
-// ------------------------------------------------------------------------
-// Proces:		EDP
-// Plik:			kinematic_model_calibrated_irp6ot_with_wrist.cc
-// System:	QNX/MRROC++  v. 6.3
-// Opis:		Model kinematyki robota IRp-6 na torze
-//				- definicja metod klasy
-//				- wykorzystanie nowego stopnia swobody  jako czynnego stopnia swobody
-//				- tor jest biernym stopniem swobody
-//				- parametry obliczone zostaly podczas kalibracji
-//
-// Autor:		tkornuta
-// Data:		24.02.2007
-// ------------------------------------------------------------------------
+/*!
+ * @file kinematic_model_calibrated_irp6ot_with_wrist.cc
+ * @brief File containing the methods of the kinematic_model_calibrated_irp6ot_with_wrist class.
+ *
+ * @author tkornuta
+ * @date 24.02.2007
+ *
+ * @ingroup KINEMATICS IRP6OT_KINEMATICS
+ */
 
-// Klasa kinematic_model_calibrated_irp6ot_with_wrist.
 #include "robot/irp6ot_m/kinematic_model_calibrated_irp6ot_with_wrist.h"
 
 namespace mrrocpp {
 namespace kinematics {
 namespace irp6ot {
 
-/* -----------------------------------------------------------------------
- Konstruktor.
- ------------------------------------------------------------------------- */
 model_calibrated_with_wrist::model_calibrated_with_wrist(int _number_of_servos) :
 	model_with_wrist(_number_of_servos)
 {
@@ -31,11 +23,8 @@ model_calibrated_with_wrist::model_calibrated_with_wrist(int _number_of_servos) 
 	// Ustawienie parametrow kinematycznych.
 	set_kinematic_parameters();
 
-} //: set_kinematic_parameters
+}
 
-/* -----------------------------------------------------------------------
- Ustawienia wszystkie parametry modelu kinematycznego danego modelu.
- ------------------------------------------------------------------------- */
 void model_calibrated_with_wrist::set_kinematic_parameters(void)
 {
 	/* -----------------------------------------------------------------------
@@ -97,7 +86,7 @@ void model_calibrated_with_wrist::set_kinematic_parameters(void)
 	synchro_joint_position[6] = synchro_motor_position[6] - gear[6] * theta[6];
 	synchro_joint_position[7] = synchro_motor_position[7] - gear[7] * theta[7];
 
-} // end: set_kinematic_parameters
+}//: set_kinematic_parameters
 
 
 } // namespace irp6ot

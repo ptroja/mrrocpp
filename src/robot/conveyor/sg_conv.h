@@ -8,8 +8,6 @@
 #ifndef __SG_CONVEYOR_H
 #define __SG_CONVEYOR_H
 
-#include <stdint.h>
-
 #include "base/edp/edp.h"
 #include "base/edp/servo_gr.h"
 

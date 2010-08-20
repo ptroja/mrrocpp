@@ -6,7 +6,7 @@
  */
 
 #include "ecp_g_conveyor_uniform_acceleration.h"
-#include <math.h>
+#include <cmath>
 #include <stdexcept>
 
 #include "lib/logger.h"

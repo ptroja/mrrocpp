@@ -13,6 +13,8 @@ namespace common {
 namespace generator {
 namespace velocity_profile_calculator {
 
+using namespace std;
+
 constant_velocity_profile::constant_velocity_profile() {
 	// TODO Auto-generated constructor stub
 

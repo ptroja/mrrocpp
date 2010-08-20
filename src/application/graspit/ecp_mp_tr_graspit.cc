@@ -3,7 +3,7 @@
 #include <iostream>
 #include <cstring>
 #include <unistd.h>
-#include <string.h>
+#include <cstring>
 #include <arpa/inet.h>
 
 #include "ecp_mp_tr_graspit.h"

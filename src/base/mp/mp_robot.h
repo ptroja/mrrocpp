@@ -4,7 +4,8 @@
 #include "base/mp/mp_task.h"
 #include "base/ecp_mp/ecp_mp_robot.h"
 
-#include <time.h>
+#include <ctime>
+#include <sys/types.h>
 
 namespace mrrocpp {
 namespace mp {
@@ -33,11 +34,9 @@ private:
 #endif
 
 protected:
-
 	task::task &mp_object;
 
 public:
-
 	//ew. koordynacja ciagla domyslnie wylaczona ma wplyw na instrukcje move
 	bool continuous_coordination;
 
@@ -85,7 +84,6 @@ public:
 	void terminate_ecp(void);
 
 	void start_ecp(void);
-
 };
 
 } // namespace robot

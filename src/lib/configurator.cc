@@ -6,20 +6,20 @@
 // Data:		10.11.2005
 // -------------------------------------------------------------------------
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <assert.h>
-#include <errno.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <cassert>
+#include <cerrno>
 #include <unistd.h>
 #include <sys/wait.h>
 #include <iostream>
 #include <strings.h>
 #include <sys/utsname.h>
-#include <time.h>
+#include <ctime>
 #include <fcntl.h>
 #include <unistd.h>
-#include <stdlib.h>
+#include <cstdlib>
 #include <stdexcept>
 
 //#include <boost/algorithm/string/trim.hpp>

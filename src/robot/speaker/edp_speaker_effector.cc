@@ -10,21 +10,21 @@
 // Data:		17.01.2007
 // ------------------------------------------------------------------------
 
-#include <stdio.h>
-#include <ctype.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cctype>
+#include <cstdlib>
 #include <unistd.h>
-#include <string.h>
-#include <math.h>
-#include <signal.h>
-#include <errno.h>
+#include <cstring>
+#include <cmath>
+#include <csignal>
+#include <cerrno>
 #include <sys/wait.h>
 #include <sys/types.h>
 #include <sys/neutrino.h>
 #include <sys/sched.h>
 #include <sys/iofunc.h>
 #include <sys/dispatch.h>
-#include <errno.h>
+#include <cerrno>
 #include <pthread.h>
 #include <process.h>
 #include <sys/netmgr.h>

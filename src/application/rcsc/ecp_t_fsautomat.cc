@@ -6,8 +6,8 @@
 // Ostatnia modyfikacja: 2008
 // -------------------------------------------------------------------------
 
-#include <stdio.h>
-#include <string.h>
+#include <cstdio>
+#include <cstring>
 
 #include <libxml/xmlmemory.h>
 #include <libxml/parser.h>

@@ -20,7 +20,7 @@ typedef struct { // wiadomosc odbierana przez readera
 
 #else
 #include <stdint.h>
-#include <signal.h>
+#include <csignal>
 
 /* --- Symbolic names of the error return conditions --- */
 

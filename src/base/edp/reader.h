@@ -12,7 +12,7 @@
 #include <boost/thread/condition_variable.hpp>
 #include <boost/circular_buffer.hpp>
 
-#include <time.h>
+#include <ctime>
 
 #include "lib/typedefs.h"
 #include "lib/impconst.h"

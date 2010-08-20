@@ -12,6 +12,8 @@ namespace ecp {
 namespace common {
 namespace generator {
 
+using namespace std;
+
 newsmooth::newsmooth(common::task::task& _ecp_task, lib::ECP_POSE_SPECIFICATION pose_spec, int axes_num) :
 				multiple_position<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose,
 				ecp::common::generator::trajectory_interpolator::bang_bang_interpolator,

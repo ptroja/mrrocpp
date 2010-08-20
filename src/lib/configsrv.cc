@@ -6,7 +6,7 @@
 // Data:		10.11.2005
 // -------------------------------------------------------------------------
 
-#include <stdio.h>
+#include <cstdio>
 
 #include <boost/thread/mutex.hpp>
 #include <boost/thread/locks.hpp>

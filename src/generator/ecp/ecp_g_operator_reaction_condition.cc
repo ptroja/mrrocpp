@@ -1,4 +1,4 @@
-#include <string.h>
+#include <cstring>
 
 #include "generator/ecp/ecp_g_operator_reaction_condition.h"
 

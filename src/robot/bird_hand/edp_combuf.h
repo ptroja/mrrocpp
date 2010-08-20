@@ -1,6 +1,5 @@
 
-#include <inttypes.h>
-
+#include <stdint.h>
 
 #define START_BYTE '#'
 

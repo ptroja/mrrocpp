@@ -1,7 +1,7 @@
 #include "lib/mis_fun.h"
 
 #include <pthread.h>
-#include <stdio.h>
+#include <cstdio>
 
 #if defined(linux)
 #include <sys/prctl.h>

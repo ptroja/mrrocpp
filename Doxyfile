@@ -584,7 +584,43 @@ WARN_LOGFILE           =
 # directories like "/usr/src/myproject". Separate the files or directories 
 # with spaces.
 
-INPUT                  = src/base/vsp \
+INPUT                  = src/base/kinematics \
+                         src/robot/robots.dox \
+                         src/robot/conveyor/kinematic_model_conveyor.h \
+                         src/robot/conveyor/kinematic_model_conveyor.cc \
+                         src/robot/irp6_tfg/kinematic_model_irp6_tfg.h \
+                         src/robot/irp6_tfg/kinematic_model_irp6_tfg.cc \
+                         src/robot/bird_hand/kinematic_parameters_bird_hand.h \
+                         src/robot/bird_hand/kinematic_parameters_bird_hand.cc \
+                         src/robot/bird_hand/kinematic_model_bird_hand.h \
+                         src/robot/bird_hand/kinematic_model_bird_hand.cc \
+                         src/robot/irp6ot_tfg/kinematic_model_irp6ot_tfg.h \
+                         src/robot/irp6ot_tfg/kinematic_model_irp6ot_tfg.cc \
+                         src/robot/irp6ot_m/kinematic_model_irp6ot_with_wrist.h \
+                         src/robot/irp6ot_m/kinematic_model_irp6ot_with_wrist.cc \
+                         src/robot/irp6ot_m/kinematic_model_calibrated_irp6ot_with_wrist.h \
+                         src/robot/irp6ot_m/kinematic_model_calibrated_irp6ot_with_wrist.cc \
+                         src/robot/irp6ot_m/kinematic_model_irp6ot_with_track.h \
+                         src/robot/irp6ot_m/kinematic_model_irp6ot_with_track.cc \
+                         src/robot/irp6p_tfg/kinematic_model_irp6p_tfg.h \
+                         src/robot/irp6p_tfg/kinematic_model_irp6p_tfg.cc \
+                         src/robot/irp6p_m/kinematic_model_irp6p_with_wrist.h \
+                         src/robot/irp6p_m/kinematic_model_irp6p_with_wrist.cc \
+                         src/robot/irp6p_m/kinematic_model_calibrated_irp6p_with_wrist.h \
+                         src/robot/irp6p_m/kinematic_model_calibrated_irp6p_with_wrist.cc \
+                         src/robot/irp6p_m/kinematic_model_irp6p_jacobian_with_wrist.h \
+                         src/robot/irp6p_m/kinematic_model_irp6p_jacobian_with_wrist.cc \
+                         src/robot/irp6p_m/kinematic_model_irp6p_jacobian_transpose_with_wrist.h \
+                         src/robot/irp6p_m/kinematic_model_irp6p_jacobian_transpose_with_wrist.cc \
+                         src/robot/shead/kinematic_model_shead.h \
+                         src/robot/shead/kinematic_model_shead.cc \
+                         src/robot/smb/kinematic_model_smb.h \
+                         src/robot/smb/kinematic_model_smb.cc \
+                         src/robot/spkm/kinematic_parameters_spkm.h \
+                         src/robot/spkm/kinematic_parameters_spkm.cc \
+                         src/robot/spkm/kinematic_model_spkm.h \
+                         src/robot/spkm/kinematic_model_spkm.cc \
+						 src/base/vsp \
                          src/base/ecp_mp/ecp_mp_sensor_interface.h \
                          src/base/ecp_mp/ecp_mp_sensor.h \
                          src/lib/lib.dox \
@@ -593,18 +629,7 @@ INPUT                  = src/base/vsp \
                          src/sensor/sensors.dox \
                          src/sensor/fradia \
                          src/sensor/pcbird \
-#                         src/base/kinematics \
-#                         src/robot/conveyor \
-#                         src/robot/epos \
-#                         src/robot/irp6_tfg/kinematic_model_irp6_tfg.h \
-#                         src/robot/irp6_tfg/kinematic_model_irp6_tfg.cc \
-#                         src/robot/irp6ot_m \
-#                         src/robot/irp6ot_tfg \
-#                         src/robot/irp6p_m \
-#                         src/robot/irp6p_tfg \
-#                         src/robot/shead \
-#                         src/robot/smb \
-#                        src/robot/spkm \
+                     
 
 # This tag can be used to specify the character encoding of the source files 
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding, which is 
@@ -1469,7 +1494,7 @@ COLLABORATION_GRAPH    = NO
 # If the GROUP_GRAPHS and HAVE_DOT tags are set to YES then doxygen 
 # will generate a graph for groups, showing the direct groups dependencies
 
-GROUP_GRAPHS           = NO
+GROUP_GRAPHS           = YES
 
 # If the UML_LOOK tag is set to YES doxygen will generate inheritance and 
 # collaboration diagrams in a style similar to the OMG's Unified Modeling 
@@ -1487,14 +1512,14 @@ TEMPLATE_RELATIONS     = NO
 # file showing the direct and indirect include dependencies of the file with 
 # other documented files.
 
-INCLUDE_GRAPH          = NO
+INCLUDE_GRAPH          = YES
 
 # If the ENABLE_PREPROCESSING, SEARCH_INCLUDES, INCLUDED_BY_GRAPH, and 
 # HAVE_DOT tags are set to YES then doxygen will generate a graph for each 
 # documented header file showing the documented files that directly or 
 # indirectly include this file.
 
-INCLUDED_BY_GRAPH      = NO
+INCLUDED_BY_GRAPH      = YES
 
 # If the CALL_GRAPH and HAVE_DOT options are set to YES then 
 # doxygen will generate a call dependency graph for every global function 
@@ -1502,7 +1527,7 @@ INCLUDED_BY_GRAPH      = NO
 # the time of a run. So in most cases it will be better to enable call graphs 
 # for selected functions only using the \callgraph command.
 
-CALL_GRAPH             = NO
+CALL_GRAPH             = YES
 
 # If the CALLER_GRAPH and HAVE_DOT tags are set to YES then 
 # doxygen will generate a caller dependency graph for every global function 

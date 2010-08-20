@@ -1,18 +1,11 @@
 #if !defined(_ECP_T_AXXB_EIH_H)
 #define _ECP_T_AXXB_EIH_H
 
-#include <string.h>
-#include <unistd.h>
-
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
-#include "lib/srlib.h"
 #include "lib/configurator.h"
 #include "base/ecp/ecp_task.h"
 #include "ecp_t_calib_axxb.h"
-#include "gsl/gsl_vector.h"
-#include "gsl/gsl_matrix.h"
-#include "gsl/gsl_multimin.h"
 
 namespace mrrocpp {
 namespace ecp {

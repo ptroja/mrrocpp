@@ -3,12 +3,12 @@
 /*                                         Version 2.01  */
 
 /* Standard headers */
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #include <unistd.h>
-#include <string.h>
-#include <errno.h>// Y&7
-#include <time.h>
+#include <cstring>
+#include <cerrno>// Y&7
+#include <ctime>
 #include <iostream>
 #include <fstream>
 #include <boost/circular_buffer.hpp>

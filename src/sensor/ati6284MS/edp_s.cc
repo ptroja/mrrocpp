@@ -9,21 +9,21 @@
 // Autor: Yoyek (Tomek Winiarski)
 // na podstawie szablonu vsp Tomka Kornuty i programu obslugi czujnika Artura Zarzyckiego
 // -------------------------------------------------------------------------
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #include <unistd.h>
-#include <string.h>
-#include <signal.h>
+#include <cstring>
+#include <csignal>
 #include <process.h>
-#include <math.h>
+#include <cmath>
 #include <sys/wait.h>
 #include <sys/types.h>
 #include <sys/sched.h>
-#include <string.h>
+#include <cstring>
 #include <fstream>
 #include <iomanip>
-#include <ctype.h>
-#include <errno.h>
+#include <cctype>
+#include <cerrno>
 #include <sys/iofunc.h>
 #include <sys/dispatch.h>
 #include <iostream>
@@ -32,9 +32,9 @@
 #include <sys/dispatch.h>
 #include <hw/pci.h>
 #include <hw/pci_devices.h>
-#include <stddef.h>
+#include <cstddef>
 #include <sys/mman.h>
-#include <time.h>
+#include <ctime>
 
 #include "lib/typedefs.h"
 #include "lib/impconst.h"

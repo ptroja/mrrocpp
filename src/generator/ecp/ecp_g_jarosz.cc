@@ -9,10 +9,10 @@
 // autor: tkornuta
 // -------------------------------------------------------------------------
 
-#include <stdio.h>
-#include <string.h>
-#include <math.h>
-#include <errno.h>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <cerrno>
 #include <unistd.h>
 #include <fstream>
 #if defined(__QNXNTO__)

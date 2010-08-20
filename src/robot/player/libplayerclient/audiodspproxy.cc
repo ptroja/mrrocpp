@@ -23,8 +23,8 @@
 
 #include <playerclient.h>
 #include <netinet/in.h>
-#include <string.h>
-#include <stdio.h>
+#include <cstring>
+#include <cstdio>
 
 int AudioDSPProxy::Configure( uint8_t _channels, uint16_t _sampleRate,
     int16_t _sampleFormat)
