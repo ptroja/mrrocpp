@@ -38,7 +38,7 @@ public:
 	 * @param it iterator to the list of positions
 	 * @param cv list of coordinates
 	 * @param mc time of a single macrostep
-	 * @return true if the interpolation was succesful
+	 * @return true if the interpolation was successful
 	 */
 	bool interpolate_relative_pose(std::vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator & it, std::vector<std::vector<double> > & cv, const double & mc);
 	/**
@@ -46,7 +46,7 @@ public:
 	 * @param it iterator to the list of positions
 	 * @param cv list of coordinates
 	 * @param mc time of a single macrostep
-	 * @return true if the interpolation was succesful
+	 * @return true if the interpolation was successful
 	 */
 	bool interpolate_absolute_pose(std::vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator & it, std::vector<std::vector<double> > & cv, const double & mc);
 

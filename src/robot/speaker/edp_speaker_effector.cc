@@ -173,7 +173,7 @@ int effector::init()
 	FD_SET (snd_mixer_file_descriptor (mixer_handle), &rfds);
 	FD_SET (snd_pcm_file_descriptor (pcm_handle, SND_PCM_CHANNEL_PLAYBACK), &wfds);
 
-	msg->message("Initialization succesfull");
+	msg->message("Initialization successful");
 
 	return 0;
 }
