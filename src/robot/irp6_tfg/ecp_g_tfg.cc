@@ -32,6 +32,8 @@
 
 #include "lib/srlib.h"
 #include "robot/irp6_tfg/ecp_g_tfg.h"
+#include "base/ecp/ecp_task.h"
+#include "base/ecp/ecp_robot.h"
 
 namespace mrrocpp {
 namespace ecp {

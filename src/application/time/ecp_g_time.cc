@@ -11,6 +11,7 @@
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 
+#include "base/ecp/ecp_robot.h"
 #include "lib/srlib.h"
 #include "ecp_g_time.h"
 

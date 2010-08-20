@@ -5,6 +5,8 @@
  *      Author: mboryn
  */
 
+#include "base/ecp/ecp_task.h"
+#include "base/ecp/ecp_robot.h"
 #include "ecp_g_conveyor_uniform_acceleration.h"
 #include <cmath>
 #include <stdexcept>
@@ -30,7 +32,7 @@ ecp_g_conveyor_uniform_acceleration::ecp_g_conveyor_uniform_acceleration(mrrocpp
 	acceleration = ecp_task.config.value <double> ("acceleration", section_name);
 	max_speed = ecp_task.config.value <double> ("max_speed", section_name);
 
-	if( !(max_speed * acceleration > 0) ){
+	if (!(max_speed * acceleration > 0)) {
 		throw runtime_error("ecp_g_conveyor_uniform_acceleration: !(max_speed * acceleration > 0)");
 	}
 
@@ -71,17 +73,16 @@ bool ecp_g_conveyor_uniform_acceleration::next_step()
 {
 	the_robot->ecp_command.instruction.instruction_type = lib::SET_GET;
 
-	if(!initial_position_saved){
+	if (!initial_position_saved) {
 		current_position = the_robot->reply_package.arm.pf_def.arm_coordinates[0];
 		initial_position_saved = true;
 	}
 
 	double dv = acceleration * dt;
 
-	if( fabs(current_speed) < max_speed){
+	if (fabs(current_speed) < max_speed) {
 		current_speed = current_speed + dv;
-	}
-	else{
+	} else {
 		current_speed = max_speed;
 	}
 

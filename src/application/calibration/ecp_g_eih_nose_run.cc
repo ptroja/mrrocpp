@@ -31,6 +31,7 @@
 #include "lib/com_buf.h"
 
 #include "lib/srlib.h"
+#include "base/ecp/ecp_robot.h"
 #include "ecp_g_eih_nose_run.h"
 
 namespace mrrocpp {

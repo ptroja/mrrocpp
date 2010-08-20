@@ -1,5 +1,7 @@
 #include <cstring>
 
+#include "base/ecp/ecp_task.h"
+#include "base/ecp/ecp_robot.h"
 #include "generator/ecp/ecp_g_operator_reaction_condition.h"
 
 namespace mrrocpp {

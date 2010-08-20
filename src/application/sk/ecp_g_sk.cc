@@ -31,6 +31,8 @@
 #include "lib/com_buf.h"
 
 #include "lib/srlib.h"
+#include "base/ecp/ecp_task.h"
+#include "base/ecp/ecp_robot.h"
 #include "application/sk/ecp_g_sk.h"
 
 namespace mrrocpp {

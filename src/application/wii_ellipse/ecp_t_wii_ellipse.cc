@@ -8,6 +8,7 @@
 #include "lib/srlib.h"
 #include "application/wii_teach/sensor/ecp_mp_s_wiimote.h"
 
+#include "base/ecp/ecp_task.h"
 #include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
 #include "application/wii_ellipse/ecp_t_wii_ellipse.h"
 #include "lib/mrmath/mrmath.h"

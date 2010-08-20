@@ -1,6 +1,8 @@
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 #include "math.h"
+
+#include "base/ecp/ecp_robot.h"
 #include "application/wii_teach/generator/ecp_g_wii.h"
 #include "ecp_g_wii.h"
 
