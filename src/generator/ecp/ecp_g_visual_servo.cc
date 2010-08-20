@@ -13,6 +13,7 @@
  * \date 04.08.2008
  */
 
+#include "base/ecp/ecp_robot.h"
 #include "generator/ecp/ecp_g_visual_servo.h"
 
 namespace mrrocpp {

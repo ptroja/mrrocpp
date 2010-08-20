@@ -13,6 +13,7 @@
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 
+#include "base/ecp/ecp_task.h"
 #include "robot/festival/ecp_g_festival.h"
 
 namespace mrrocpp {
@@ -21,11 +22,11 @@ namespace festival {
 namespace generator {
 
 generator::generator(common::task::task& _ecp_task) :
-		common::generator::generator (_ecp_task)
+	common::generator::generator(_ecp_task)
 {
-	host = ecp_t.config.value<std::string>("server_host");
-	portnum = ecp_t.config.value<int>("server_port");
-	test_mode = ecp_t.config.value<int>("test_mode");
+	host = ecp_t.config.value <std::string> ("server_host");
+	portnum = ecp_t.config.value <int> ("server_port");
+	test_mode = ecp_t.config.value <int> ("test_mode");
 	voice = "";
 	sock = -1;
 }
@@ -37,7 +38,8 @@ char * generator::set_phrase(const char *text)
 
 bool generator::set_voice(VOICE voice_id)
 {
-	switch (voice_id) {
+	switch (voice_id)
+	{
 		case CURRENT_VOICE:
 			break;
 		case POLISH_VOICE:
@@ -49,11 +51,11 @@ bool generator::set_voice(VOICE voice_id)
 		default:
 			return false;
 	}
-	
-	return true;			
+
+	return true;
 }
 
-bool generator::first_step ( )
+bool generator::first_step()
 {
 	std::string command;
 
@@ -76,36 +78,36 @@ bool generator::first_step ( )
 	 * this is okay to do, because gethostbyname(3) does no lookup if the 
 	 * 'host' * arg is already an IP addr
 	 */
-	if((entp = gethostbyname(host.c_str())) == NULL) {
+	if ((entp = gethostbyname(host.c_str())) == NULL) {
 		fprintf(stderr, "festival_generator::first_step(): \"%s\" is unknown host; "
-		        "can't connect to Festival\n", host.c_str());
+			"can't connect to Festival\n", host.c_str());
 		return false;
 	}
 
 	memcpy(&server.sin_addr, entp->h_addr_list[0], entp->h_length);
 
 	server.sin_port = htons(portnum);
-	
-	if (sock >=0) {
+
+	if (sock >= 0) {
 		if (close(sock) == -1) {
 			perror("festival_generator::first_step(): close()");
 		}
 	}
 
 	/* make a new socket */
-	if((sock = socket(PF_INET, SOCK_STREAM, 0)) < 0) {
+	if ((sock = socket(PF_INET, SOCK_STREAM, 0)) < 0) {
 		perror("festival_generator::first_step(): socket()");
 		return false;
 	}
 
 	/* hook it up */
-	if(connect(sock, (struct sockaddr*)&server, sizeof(server)) == -1) {
+	if (connect(sock, (struct sockaddr*) &server, sizeof(server)) == -1) {
 		perror("festival_generator::first_step(): connect()");
 		return false;
 	}
 
 	/* make it nonblocking */
-	if(fcntl(sock,F_SETFL,O_NONBLOCK) < 0) {
+	if (fcntl(sock, F_SETFL, O_NONBLOCK) < 0) {
 		perror("festival_generator::first_step(): fcntl()");
 		return false;
 	}
@@ -116,8 +118,7 @@ bool generator::first_step ( )
 		close(sock);
 		return false;
 	} else if (written < (int) command.length()) {
-		fprintf(stderr, "festival_generator::first_step(): write() %d of %d bytes written\n",
-		        written, command.length());
+		fprintf(stderr, "festival_generator::first_step(): write() %d of %d bytes written\n", written, command.length());
 		return false;
 	}
 
@@ -127,9 +128,9 @@ bool generator::first_step ( )
 	return true;
 }
 
-bool generator::next_step ( )
+bool generator::next_step()
 {
-	if(test_mode) {
+	if (test_mode) {
 		return false;
 	}
 
@@ -152,7 +153,8 @@ bool generator::next_step ( )
 	bool has_data = false;
 
 	/* read the resultant string back */
-	switch (select(sock + 1, &rd, NULL, NULL, &timeout)) {
+	switch (select(sock + 1, &rd, NULL, NULL, &timeout))
+	{
 		case -1:
 			perror("festival_generator::next_step(): select()");
 			break;
@@ -168,7 +170,7 @@ bool generator::next_step ( )
 		if (numread < (int) strlen(FESTIVAL_CODE_OK)) {
 			int numthisread;
 
-			if ((numthisread = read(sock, buf+numread, sizeof(buf)-numread)) == -1) {
+			if ((numthisread = read(sock, buf + numread, sizeof(buf) - numread)) == -1) {
 				perror("festival_generator::next_step(): read()");
 			}
 
@@ -178,8 +180,7 @@ bool generator::next_step ( )
 
 		if (numread < (int) strlen(FESTIVAL_CODE_OK)) {
 			fprintf(stderr, "festival_generator::next_step(): something went wrong, "
-			        "expected %d bytes of code, but got %d\n",
-			        (int) strlen(FESTIVAL_CODE_OK),numread);
+				"expected %d bytes of code, but got %d\n", (int) strlen(FESTIVAL_CODE_OK), numread);
 			close(sock);
 			sock = -1;
 			return false;
@@ -187,7 +188,7 @@ bool generator::next_step ( )
 
 		char *ptr = buf;
 		while (ptr && *ptr) {
-			if (!strncmp(ptr,FESTIVAL_CODE_OK, strlen(FESTIVAL_CODE_OK))) {
+			if (!strncmp(ptr, FESTIVAL_CODE_OK, strlen(FESTIVAL_CODE_OK))) {
 				/* command OK */
 				read_pending_status--;
 			} else if (!strncmp(ptr, FESTIVAL_CODE_ERR, strlen(FESTIVAL_CODE_ERR))) {

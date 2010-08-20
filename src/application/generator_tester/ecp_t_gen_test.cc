@@ -5,6 +5,7 @@
 //#include "subtask/ecp_st_tff_nose_run.h"
 //#include "generator/ecp/ecp_g_force.h"
 
+#include "base/ecp/ecp_task.h"
 #include "ecp_t_gen_test.h"
 
 namespace mrrocpp {

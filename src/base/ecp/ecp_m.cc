@@ -18,6 +18,7 @@
 #include "lib/srlib.h"
 #include "lib/mis_fun.h"
 #include "base/ecp/ecp_task.h"
+#include "base/ecp/ecp_robot.h"
 #include "base/ecp/ECP_main_error.h"
 #include "base/ecp/ecp_generator.h"
 

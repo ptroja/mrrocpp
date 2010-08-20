@@ -8,6 +8,7 @@
 #define ECP_G_BIRD_HAND_H_
 
 #include "base/ecp/ecp_generator.h"
+#include "lib/single_thread_port.h"
 #include "lib/data_port_headers/bird_hand.h"
 
 namespace mrrocpp {
