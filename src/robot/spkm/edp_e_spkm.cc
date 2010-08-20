@@ -25,7 +25,7 @@
 #include "robot/spkm/kinematic_model_spkm.h"
 #include "base/edp/manip_trans_t.h"
 #include "base/edp/vis_server.h"
-#include "lib/epos_gen.h"
+#include "robot/epos/epos_gen.h"
 
 using namespace mrrocpp::lib::exception;
 
