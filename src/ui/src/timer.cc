@@ -15,9 +15,9 @@
 
 #include "ui/src/ui.h"
 
-#include "lib/srlib.h"
+#include "base/lib/srlib.h"
 // #include "base/ecp/ecp.h"
-#include "lib/com_buf.h"
+#include "base/lib/com_buf.h"
 #include "ui/src/ui_class.h"
 #include "ui/src/ui_sr.h"
 

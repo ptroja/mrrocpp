@@ -1,8 +1,8 @@
 #ifndef MP_DELAY_MS_CONDITION_H_
 #define MP_DELAY_MS_CONDITION_H_
 
-#include "base/mp/mp.h"
-#include "lib/timer.h"
+#include "base/mp/mp_generator.h"
+#include "base/lib/timer.h"
 
 namespace mrrocpp {
 namespace mp {
@@ -10,7 +10,7 @@ namespace generator {
 
 // condition to wait for desired time in ms
 
-class delay_ms_condition: public generator
+class delay_ms_condition : public generator
 {
 protected:
 	lib::timer local_timer;
@@ -19,13 +19,13 @@ protected:
 
 public:
 
-    // konstruktor
-    delay_ms_condition(task::task& _mp_task, int _ms_delay);
+	// konstruktor
+	delay_ms_condition(task::task& _mp_task, int _ms_delay);
 
-	void configure (int _ms_delay);
+	void configure(int _ms_delay);
 
-	virtual bool first_step ();
-	virtual bool next_step ();
+	virtual bool first_step();
+	virtual bool next_step();
 };
 
 } // namespace generator

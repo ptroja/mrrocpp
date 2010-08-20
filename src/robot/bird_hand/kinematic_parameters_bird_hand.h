@@ -12,7 +12,7 @@
 #ifndef KINEMATIC_PARAMETERS_BIRD_HAND_H_
 #define KINEMATIC_PARAMETERS_BIRD_HAND_H_
 
-#include "lib/typedefs.h"
+#include "base/lib/typedefs.h"
 
 namespace mrrocpp {
 namespace kinematics {

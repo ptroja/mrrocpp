@@ -1,14 +1,14 @@
 #if !defined(_ECP_TASK_H)
 #define _ECP_TASK_H
 
-
-
 #include "base/ecp_mp/ecp_mp_task.h"
-#include "base/ecp/ecp_robot.h"
 
 namespace mrrocpp {
 namespace ecp {
 namespace common {
+
+class ecp_robot;
+
 namespace task {
 
 class ecp_sub_task;

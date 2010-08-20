@@ -2,7 +2,7 @@
 
 #include "base/edp/edp.h"
 #include "base/edp/edp_e_manip.h"
-#include "lib/mis_fun.h"
+#include "base/lib/mis_fun.h"
 #include "base/edp/reader.h"
 #include "base/kinematics/kinematic_model_with_tool.h"
 

@@ -9,7 +9,7 @@
 // Data:		24.02.2007
 // ------------------------------------------------------------------------
 
-#include "lib/com_buf.h"
+#include "base/lib/com_buf.h"
 
 // Klasa kinematic_model_conveyor.
 #include "robot/sarkofag/kinematic_model_sarkofag.h"

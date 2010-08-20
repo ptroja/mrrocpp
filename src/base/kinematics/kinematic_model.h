@@ -13,9 +13,9 @@
 
 #include <string>
 #include <vector>
-#include "lib/mrmath/mrmath.h"
+#include "base/lib/mrmath/mrmath.h"
 
-#include "lib/exception.h"
+#include "base/lib/exception.h"
 
 using namespace mrrocpp::lib::exception;
 

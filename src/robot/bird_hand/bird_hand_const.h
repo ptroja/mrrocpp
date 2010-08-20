@@ -1,9 +1,9 @@
 #if !defined(_BIRD_HAND_CONST_H)
 #define _BIRD_HAND_CONST_H
 
-#include "lib/data_port_headers/bird_hand.h"
+#include "base/lib/data_port_headers/bird_hand.h"
 
-#include "lib/impconst.h"
+#include "base/lib/impconst.h"
 
 namespace mrrocpp {
 namespace lib {

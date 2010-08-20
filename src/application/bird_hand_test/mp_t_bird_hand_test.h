@@ -8,7 +8,6 @@
 #if !defined(__MP_T_BIRD_HAND_TEST_H)
 #define __MP_T_BIRD_HAND_TEST_H
 
-#include "base/mp/mp.h"
 
 namespace mrrocpp {
 namespace mp {

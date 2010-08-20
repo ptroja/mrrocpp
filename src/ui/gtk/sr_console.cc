@@ -17,7 +17,7 @@
 
 #include "ui_model.h"
 
-#include "lib/srlib.h"
+#include "base/lib/srlib.h"
 
 #if defined(USE_MESSIP_SRR)
 #include "messip_dataport.h"

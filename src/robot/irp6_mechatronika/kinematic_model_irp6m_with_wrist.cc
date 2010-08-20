@@ -12,7 +12,7 @@
 
 #include <cmath>
 
-#include "lib/com_buf.h"
+#include "base/lib/com_buf.h"
 
 // Klasa kinematic_model_irp6m_with_wrist.
 #include "robot/irp6_mechatronika/kinematic_model_irp6m_with_wrist.h"

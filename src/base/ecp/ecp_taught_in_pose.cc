@@ -1,7 +1,7 @@
 #include <cstring>
 
 #include "base/ecp/ecp_taught_in_pose.h"
-#include "lib/impconst.h"
+#include "base/lib/impconst.h"
 
 namespace mrrocpp {
 namespace ecp {

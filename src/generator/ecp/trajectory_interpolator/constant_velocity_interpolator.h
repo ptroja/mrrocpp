@@ -9,7 +9,7 @@
 #define _CONSTANT_VELOCITY_INTERPOLATOR_H_
 
 #include "trajectory_interpolator.h"
-#include "lib/trajectory_pose/constant_velocity_trajectory_pose.h"
+#include "base/lib/trajectory_pose/constant_velocity_trajectory_pose.h"
 
 namespace mrrocpp {
 namespace ecp {

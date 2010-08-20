@@ -13,7 +13,7 @@
 #ifndef ECP_MP_SENSOR_INTERFACE_H_
 #define ECP_MP_SENSOR_INTERFACE_H_
 
-#include "lib/sensor_interface.h"
+#include "base/lib/sensor_interface.h"
 
 namespace mrrocpp {
 namespace ecp_mp {

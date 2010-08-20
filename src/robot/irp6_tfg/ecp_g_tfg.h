@@ -8,12 +8,12 @@
 #if !defined(_ECP_GEN_TFG_H)
 #define _ECP_GEN_TFG_H
 
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
 
 #include "generator/ecp/ecp_g_teach_in.h"
-#include "lib/mrmath/mrmath.h"
-#include "lib/data_port_headers/tfg.h"
+#include "base/lib/mrmath/mrmath.h"
+#include "base/lib/data_port_headers/tfg.h"
 
 namespace mrrocpp {
 namespace ecp {

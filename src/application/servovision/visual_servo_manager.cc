@@ -5,6 +5,9 @@
  *      Author: mboryn
  */
 
+#include "base/ecp/ecp_task.h"
+#include "base/ecp/ecp_robot.h"
+
 #include "visual_servo_manager.h"
 
 using namespace logger;

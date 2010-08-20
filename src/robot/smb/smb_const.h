@@ -1,10 +1,10 @@
 #if !defined(_SMB_CONST_H)
 #define _SMB_CONST_H
 
-#include "lib/data_port_headers/smb.h"
-#include "lib/data_port_headers/epos.h"
+#include "base/lib/data_port_headers/smb.h"
+#include "base/lib/data_port_headers/epos.h"
 
-#include "lib/impconst.h"
+#include "base/lib/impconst.h"
 
 namespace mrrocpp {
 namespace lib {

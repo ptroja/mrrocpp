@@ -1,10 +1,6 @@
 #ifndef ECP_MP_ROBOT_H_
 #define ECP_MP_ROBOT_H_
 
-#include <map>
-#include "lib/srlib.h"
-#include "base/ecp_mp/transmitter.h"
-
 namespace mrrocpp {
 namespace ecp_mp {
 

@@ -21,7 +21,7 @@
 #include "messip_dataport.h"
 #endif
 
-#include "lib/mis_fun.h"
+#include "base/lib/mis_fun.h"
 
 namespace mrrocpp {
 namespace ecp {

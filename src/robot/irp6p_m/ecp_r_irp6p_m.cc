@@ -6,9 +6,9 @@
 //
 // -------------------------------------------------------------------------
 
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
-#include "lib/mis_fun.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
+#include "base/lib/mis_fun.h"
 
 #include "robot/irp6p_m/ecp_r_irp6p_m.h"
 

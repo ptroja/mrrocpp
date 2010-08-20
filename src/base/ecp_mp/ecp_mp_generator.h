@@ -1,10 +1,8 @@
 #ifndef ECP_MP_GENERATOR_H_
 #define ECP_MP_GENERATOR_H_
 
-#include <map>
-#include "lib/srlib.h"
-#include "base/ecp_mp/ecp_mp_sensor.h"
-#include "base/ecp_mp/transmitter.h"
+#include "base/lib/srlib.h"
+#include "base/ecp_mp/ecp_mp_typedefs.h"
 
 namespace mrrocpp {
 namespace ecp_mp {
