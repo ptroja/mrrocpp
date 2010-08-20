@@ -15,13 +15,17 @@ namespace common {
 
 namespace task {
 
+/**
+ * Class constructor, creating FraDIA sensor, smooth generator, insance
+ * of robot object. Also take care about creating subtasks
+ * @param _config reference to configuration file parser object
+ */
+
 bcl_t_switcher::bcl_t_switcher(lib::configurator &_config):
 		task(_config){
 	std::cout << "TWORZE BCL SWITCHER" << std::endl;
 
-//	Powolanie do zycia sensora fradii
-//	vsp_fradia = boost::shared_ptr<bcl_fradia_sensor>(new bcl_fradia_sensor(this->config, "[vsp_fradia_sensor]"));
-
+	//Creating new fradia sensor
 	vsp_fradia = new bcl_fradia_sensor(this->config, "[vsp_fradia_sensor]");
 	sensor_m[ecp_mp::sensor::SENSOR_FRADIA] = vsp_fradia;
 	sensor_m[ecp_mp::sensor::SENSOR_FRADIA]->configure_sensor();
@@ -55,23 +59,29 @@ bcl_t_switcher::bcl_t_switcher(lib::configurator &_config):
 
 	bc_smooth->set_absolute();
 
-	//dodanie subtaskow do wykonywania
+	//Adding additional subtasks
 	ecp_sub_task* ecpst;
 	ecpst = new ecp_st_smooth_move(*this);
 	subtask_m[ecp_mp::task::ECP_ST_SMOOTH_MOVE] = ecpst;
 
 }
 
+/**
+ * Class destuctor, do the celaning up
+ */
 bcl_t_switcher::~bcl_t_switcher() {
 	std::cout << "ZABIJAM BCL SWITCHER" << std::endl;
-//	delete vsp_fradia;
 	delete ecp_m_robot;
 }
 
+/**
+ * Method for handling communication with MP
+ */
 void bcl_t_switcher::mp_2_ecp_next_state_string_handler(void){
 
 	sr_ecp_msg->message("SWITCHER begin");
 
+	//TODO: Jakos to przemielic bo i tak wykorzystywane jest tylko START
 	if (mp_2_ecp_next_state_string == ecp_mp::task::BCL_MOTION_DIR_STR){
 		switch((BCL_MOTION_DIR)mp_command.ecp_next_state.mp_2_ecp_next_state_variant){
 			case LEFT:
@@ -87,7 +97,7 @@ void bcl_t_switcher::mp_2_ecp_next_state_string_handler(void){
 			case START:
 //				bc_smooth->load_coordinates(lib::ECP_JOINT, 0.0, 0.0, -1.37, 0.100, -0.040, 4.627, 0.0, 0.0, true);
 //				std::cout << "MESSAGE: " << mp_command.ecp_next_state.mp_2_ecp_next_state_string << std::endl;
-				vec = msg.stringToTrajectory(mp_command.ecp_next_state.mp_2_ecp_next_state_string);
+				vec = msg.stringToRobotPosition(mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 //				std::cout << "ODCZYTANE " << vec.size() << std::endl;
 //				vec.assign(start, start + 7);
 //				sr_ecp_msg->message("SWITCHER start");
@@ -115,6 +125,10 @@ void bcl_t_switcher::mp_2_ecp_next_state_string_handler(void){
 
 }
 
+/**
+ * Method used by subtask to get access to FraDIA sensor
+ * @return pointer to fradia sensor structure
+ */
 bcl_fradia_sensor*  bcl_t_switcher::get_vsp_fradia(){
 	return vsp_fradia;
 }

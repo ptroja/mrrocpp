@@ -28,11 +28,11 @@ public:
 	bcl_message();
 	~bcl_message();
 
-	char* trajectoryToString(std::vector<double> vec);
+	char* robotPositionToString(std::vector<double> vec);
 
-	char* trajectoryToString(double& par0, double& par1, double& par2, double& par3, double& par4, double& par5, double& par6, double& par7);
+	char* robotPositionToString(double& par0, double& par1, double& par2, double& par3, double& par4, double& par5, double& par6, double& par7);
 
-	std::vector<double> stringToTrajectory(char *str);
+	std::vector<double> stringToRobotPosition(char *str);
 
 	char* fradiaOrderToString(task::fradia_regions& reg, std::vector<double> vec);
 

@@ -31,6 +31,9 @@ namespace common {
 
 namespace task {
 
+/**
+ * Structure used in communication between MRROC++ and FraDIA
+ */
 typedef struct {
 	bool code_found;
 	int num_found;
@@ -61,6 +64,10 @@ typedef struct {
 //	double a_k4;
 } fradia_regions;
 
+
+/**
+ * Structure used in communication between ECP and MP
+ */
 typedef struct {
 	double x;
 	double y;
@@ -70,7 +77,9 @@ typedef struct {
 
 } mrrocpp_regions;
 
-
+/**
+ * Definition of FraDIA sensor type with specified structures
+ */
 typedef ecp_mp::sensor::fradia_sensor<lib::empty_t, fradia_regions> bcl_fradia_sensor;
 //typedef ecp_mp::sensor::fradia_sensor<visual_servo_types::image_based_configuration, visual_servo_types::image_based_reading> bcl_fradia_sensor;
 

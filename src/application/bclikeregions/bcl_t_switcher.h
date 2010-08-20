@@ -75,24 +75,11 @@ public:
 	virtual ~bcl_t_switcher();
 
     void mp_2_ecp_next_state_string_handler(void);
+    virtual bcl_fradia_sensor* get_vsp_fradia();
 
-//	virtual boost::shared_ptr <bcl_fradia_sensor> get_vsp_fradia();
-
-	virtual bcl_fradia_sensor* get_vsp_fradia();
-
-//	shared_ptr<bcl_fradia_sensor> vsp_fradia;
 	bcl_fradia_sensor* vsp_fradia;
 
-	void addReading(mrrocpp_regions& reg);
-	mrrocpp_regions getReading();
-
 private:
-//    shared_ptr<generator::smooth> bc_smooth;
-
-//	shared_ptr<generator::bclike_smooth> bc_smooth;
-
-//	shared_ptr<generator::constant_velocity> bc_smooth;// -- generator o stalej predkosci
-
 	shared_ptr<generator::newsmooth> bc_smooth;
 
 	std::vector<double> vec;
@@ -100,9 +87,6 @@ private:
 	std::vector<mrrocpp_regions> reading;
 
 	bcl_message msg;
-
-//	shared_ptr<ecp_sub_task> bcl_recognition;
-//	shared_ptr<ecp_sub_task> bc_read;
 };
 }
 

@@ -14,11 +14,6 @@
 #include "bcl_types.h"
 #include "bcl_message.h"
 
-//#include "../servovision/simple_visual_servo_manager.h"
-//#include "../servovision/ib_eih_visual_servo.h"
-//#include "../servovision/visual_servo_regulator_p.h"
-
-
 using boost::shared_ptr;
 
 namespace mrrocpp {

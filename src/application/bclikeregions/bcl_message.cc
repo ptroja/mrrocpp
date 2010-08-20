@@ -22,11 +22,11 @@ bcl_message::~bcl_message(){
 }
 
 /**
- * Function converting robot position held in vector to char order
+ * Function converting robot position held in vector to char matrix
  * @param vec vector with data to send
  * @return matrix of chars, size MP_2_ECP_STRING_SIZE, containing data from vector
  */
-char* bcl_message::trajectoryToString(std::vector<double> vec){
+char* bcl_message::robotPositionToString(std::vector<double> vec){
 	char *ret = new char[MP_2_ECP_STRING_SIZE];
 	double* tab = reinterpret_cast<double*>(ret);
 
@@ -44,7 +44,12 @@ char* bcl_message::trajectoryToString(std::vector<double> vec){
 	return ret;
 }
 
-char* bcl_message::trajectoryToString(double& par0, double& par1, double& par2, double& par3, double& par4, double& par5, double& par6, double& par7){
+/**
+ * Function converting robot position given as seven parameters to char matrix
+ * @param vec vector with data to send
+ * @return matrix of chars, size MP_2_ECP_STRING_SIZE, containing data from vector
+ */
+char* bcl_message::robotPositionToString(double& par0, double& par1, double& par2, double& par3, double& par4, double& par5, double& par6, double& par7){
 	char *ret = new char[MP_2_ECP_STRING_SIZE];
 
 	double* tab = reinterpret_cast<double*>(ret);
@@ -63,7 +68,12 @@ char* bcl_message::trajectoryToString(double& par0, double& par1, double& par2, 
 	return ret;
 }
 
-std::vector<double> bcl_message::stringToTrajectory(char* str){
+/**
+ * Method converting matrix of char to std::vector with robot position
+ * @param str pointer to matrix first element
+ * @return vector with read position
+ */
+std::vector<double> bcl_message::stringToRobotPosition(char* str){
 
 	std::vector<double> ret;
 
@@ -71,15 +81,19 @@ std::vector<double> bcl_message::stringToTrajectory(char* str){
 
 	ret.clear();
 
-	std::cout << "STRING TO DATA " << ((double *)str)[0] << std::endl;
-
 	ret.assign(tab + 1, tab + (int)tab[0]);
 
 
 	return ret;
 }
 
-
+/**
+ * Method converting MRROC++<->FraDIA communication structure and
+ * actual robot position to matrix of char
+ * @param reg communication structure to parse
+ * @param vec vectorcontaining robot's position
+ * @return matrix of chars, size MP_2_ECP_STRING_SIZE, containing data from vector and structure
+ */
 char* bcl_message::fradiaOrderToString(task::fradia_regions& reg, std::vector<double> vec){
 	char* ret = new char[MP_2_ECP_STRING_SIZE];
 
@@ -134,6 +148,13 @@ char* bcl_message::fradiaOrderToString(task::fradia_regions& reg, std::vector<do
 	return ret;
 }
 
+/**
+ * Method to convert data from matrix of char to MRROC++<->FraDIA communication strucure
+ * and vector containing robot's position
+ * @param str pointer to matrix first element
+ * @param reg structure to which data will be written
+ * @return vector containing robot's position
+ */
 std::vector<double> bcl_message::stringToFradiaOrder(char* str, task::fradia_regions reg){
 	std::vector<double> ret;
 	double *tab = reinterpret_cast<double*>(str);
@@ -185,9 +206,11 @@ std::vector<double> bcl_message::stringToFradiaOrder(char* str, task::fradia_reg
 }
 
 /**
- *
+ * Method to convert matrix of char to vecotrs containing robot's position and
+ * founded regions data.
  * @param str Order sent from ECP to MP
- * @param vec std::vector to which data is written
+ * @param vec std::vector to which regions data will be written
+ * @return vecotr containing robot's position
  */
 std::vector<double> bcl_message::stringToECPOrder(char* str, std::vector<std::pair<ecp::common::task::mrrocpp_regions, bool> >& vec){
 

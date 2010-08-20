@@ -36,6 +36,11 @@ const lib::ECP_POSE_SPECIFICATION move_type = lib::ECP_XYZ_EULER_ZYZ;
 const lib::POSE_SPECIFICATION return_pos_type = lib::FRAME;
 #endif //EULER
 
+
+/**
+ * Class constructor without creating FraDIA sensor
+ * @param ecp_task parent task
+ */
 bclike_smooth::bclike_smooth(mrrocpp::ecp::common::task::task & ecp_task) :
 		common::generator::newsmooth(ecp_task, move_type, joint_num),
 		bcl_ecp((task::bcl_t_switcher &)ecp_t), num_send(0){
@@ -43,13 +48,12 @@ bclike_smooth::bclike_smooth(mrrocpp::ecp::common::task::task & ecp_task) :
 	vsp_fradia = NULL;
 	no_fradia = true;
 
-//	reg = shared_ptr <visual_servo_regulator> (new regulator_p(configurator, config_section_name));
-//
-//	vs = shared_ptr <visual_servo> (new ib_eih_visual_servo(reg, config_section_name, configurator));
-
-
 }
 
+/**
+ * Class constructor, FraDIA sensor is acquired from parent task
+ * @param task parent task
+ */
 bclike_smooth::bclike_smooth(mrrocpp::ecp::common::task::bcl_t_switcher & task):
 				common::generator::newsmooth((mrrocpp::ecp::common::task::task &)task, move_type, joint_num),
 				bcl_ecp((task::bcl_t_switcher &)ecp_t), num_send(0){
@@ -66,14 +70,14 @@ bclike_smooth::bclike_smooth(mrrocpp::ecp::common::task::bcl_t_switcher & task):
 		std::cout << "SENSOR ADD no vsp constructor" << std::endl;
 	}
 
-//	log_dbg("ecp_t_objectfollower_ib::ecp_t_objectfollower_ib(): 1\n");
-//	reg = shared_ptr <visual_servo_regulator> (new regulator_p(configurator, config_section_name));
-//
-//	log_dbg("ecp_t_objectfollower_ib::ecp_t_objectfollower_ib(): 2\n");
-//	vs = shared_ptr <visual_servo> (new ib_eih_visual_servo(reg, config_section_name, configurator));
-
 }
 
+
+/**
+ * Class constructor, FraDIA sensor is given as a parameter
+ * @param task parent task
+ * @param fr pointer to FraDIA sensor structure
+ */
 bclike_smooth::bclike_smooth(mrrocpp::ecp::common::task::bcl_t_switcher & task, task::bcl_fradia_sensor* fr):
 						common::generator::newsmooth((mrrocpp::ecp::common::task::task &)task, move_type, joint_num),
 						bcl_ecp((task::bcl_t_switcher &)ecp_t),
@@ -82,7 +86,7 @@ bclike_smooth::bclike_smooth(mrrocpp::ecp::common::task::bcl_t_switcher & task, 
 	no_fradia = false;
 
 	if(vsp_fradia != NULL){
-		sensor_m[ecp_mp::sensor::SENSOR_FRADIA] = vsp_fradia;//.get();
+		sensor_m[ecp_mp::sensor::SENSOR_FRADIA] = vsp_fradia;
 		vsp_fradia->base_period = 1;
 
 		std::cout << "SENSOR ADD vsp constructor" << std::endl;
@@ -90,10 +94,11 @@ bclike_smooth::bclike_smooth(mrrocpp::ecp::common::task::bcl_t_switcher & task, 
 }
 
 bclike_smooth::~bclike_smooth() {
-	// TODO Auto-generated destructor stub
 }
 
-//set necessary instructions, and other data for preparing the robot
+/**
+ * Set necessary instructions, and other data for preparing the robot to move
+ */
 bool bclike_smooth::first_step(){
 
 	std::cout << "FIRST STEP" << std::endl;
@@ -125,32 +130,6 @@ bool bclike_smooth::next_step(){
 		translateToRobotPosition(reading);
 		addCodesToVector(reading);
 	}
-
-
-//#ifdef SINGLE_MOVE //robot's move to the end, and then found codes are sent to MP
-//
-//	if(newsmooth::next_step())
-//		return true;
-//
-//	sendNextPart();
-//	return false;
-//
-//#else //robot's move stopped each time when code detected
-//
-//
-//	if(reading.code_found){
-//		strcpy(ecp_t.ecp_reply.ecp_2_mp_string, msg.fradiaOrderToString(reading, vec));
-//		return false;
-//	}
-//
-//	if(newsmooth::next_step())
-//		return true;
-//	else{
-//		strcpy(ecp_t.ecp_reply.ecp_2_mp_string, "KONIEC");
-//		return false;
-//	}
-//
-//#endif
 
 	//If there is something to send, do it
 	if(sendNextPart())
@@ -348,7 +327,6 @@ bool bclike_smooth::sendNextPart(){
 
 	char* ret = new char[MP_2_ECP_STRING_SIZE];
 	double *tab = reinterpret_cast<double*>(ret);
-//	int cnt = 0;
 
 	//Write to matrix number of elements which will be written to
 	lib::Xyz_Euler_Zyz_vector new_pos;
@@ -363,9 +341,7 @@ bool bclike_smooth::sendNextPart(){
 		tab[i] = *it;
 	}
 
-
 	std::vector<std::pair<task::mrrocpp_regions, bool> >::iterator it;// = readings.begin();
-//	it += num_send;
 
 	tab[i] = 0;
 
@@ -386,17 +362,9 @@ bool bclike_smooth::sendNextPart(){
 		delete(ret);
 		return true;
 	}else{
-//		strcpy(ecp_t.ecp_reply.ecp_2_mp_string, "NIC");
 		delete(ret);
 		return false;
 	}
-
-
-
-//	tab[0] = cnt;
-
-//	num_send += (int)tab[0];
-
 }
 
 }
