@@ -8,8 +8,6 @@
 #if !defined(__MP_TASK_RCSC_H)
 #define __MP_TASK_RCSC_H
 
-
-#include "base/mp/MP_main_error.h"
 #include "application/rcsc/ecp_mp_t_rcsc.h"
 #include "robot/festival/ecp_mp_t_festival.h"
 

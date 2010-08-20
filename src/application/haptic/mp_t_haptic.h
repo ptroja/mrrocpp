@@ -8,9 +8,6 @@
 #if !defined(__MP_T_HAPTIC_H)
 #define __MP_T_HAPTIC_H
 
-
-#include "base/mp/MP_main_error.h"
-
 namespace mrrocpp {
 namespace mp {
 namespace task {

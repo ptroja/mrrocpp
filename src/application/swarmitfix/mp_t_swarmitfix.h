@@ -8,10 +8,6 @@
 #if !defined(__MP_T_SWARMITFIX_H)
 #define __MP_T_SWARMITFIX_H
 
-
-#include "base/mp/MP_main_error.h"
-
-
 namespace mrrocpp {
 namespace mp {
 namespace task {
@@ -26,7 +22,6 @@ class swarmitfix : public task
 {
 protected:
 
-
 public:
 
 	swarmitfix(lib::configurator &_config);
@@ -36,7 +31,7 @@ public:
 
 };
 
-/** @} */ // end of edge_following
+/** @} */// end of edge_following
 
 } // namespace task
 } // namespace mp

@@ -10,7 +10,6 @@
 #include "lib/mrmath/mrmath.h"
 
 #include "base/mp/mp_generator.h"
-#include "base/mp/mp_robot.h"
 
 namespace mrrocpp {
 namespace mp {
