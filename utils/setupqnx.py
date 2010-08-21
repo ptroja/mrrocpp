@@ -173,10 +173,10 @@ mrlib_svn_url=r"http://segomo.elka.pw.edu.pl/svn/mrrocpp/mrlib/"
 mrlib_target_dir=os.environ["QNX_TARGET"] + "/mrlib"
 if os.path.exists(mrlib_target_dir):
     info("Updating mrlib")
-    os.system("/usr/pkg/bin/svn update \"%s\"" % (mrlib_target_dir))
+    os.system("svn update \"%s\"" % (mrlib_target_dir))
 else:
     info("Checking out mrlib")
-    os.system("/usr/pkg/bin/svn checkout \"%s\" \"%s\"" % (mrlib_svn_url, mrlib_target_dir))
+    os.system("svn checkout \"%s\" \"%s\"" % (mrlib_svn_url, mrlib_target_dir))
 
 # Disable storing passwords in svn
 enable_cfg_file_entry(r"/root/.subversion/config", "store_passwords=no", "store-passwords\s*=\s*no")
