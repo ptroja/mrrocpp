@@ -150,6 +150,7 @@ add_cfg_file_entry(profile_file_name, \
 
 # Add required packages
 packages = \
+    "boost-headers-1.42.0", \
     "vim-share-7.2.411", \
     "vim-7.2.411", \
     "gsl-1.14", \
@@ -160,7 +161,6 @@ for package in packages:
 
 our_packages = \
     "boost-libs-1.42.0", \
-    "boost-headers-1.42.0", \
     "libxml2-2.7.7", \
     "cmake-2.8.0", \
     "xerces-c-3.0.1"
