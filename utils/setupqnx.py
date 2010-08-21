@@ -181,22 +181,24 @@ else:
 # Disable storing passwords in svn
 enable_cfg_file_entry(r"/root/.subversion/config", "store_passwords=no", "store-passwords\s*=\s*no")
 
-# Optional: checkout MRROC++
-mrrocpp_svn_target_dir = r"/home/mrrocpp"
-info("Checkout MRROC++ trunk to %s? [y/n] n" % mrrocpp_svn_target_dir)
-answer = ""
-while True:
-    co_mrrocpp = raw_input()
-    if co_mrrocpp == "y" or co_mrrocpp == "n" or co_mrrocpp == "":
-        break
-if (co_mrrocpp == "y"):
-    mrrocpp_svn_username=""
-    while True:
-        info("Enter svn username:")
-        mrrocpp_svn_username = raw_input()
-        if mrrocpp_svn_username != "":
-            break
-    mrrocpp_svn_url = r"https://segomo.elka.pw.edu.pl/svn/mrrocpp/base/trunk/"
-    os.system("/usr/pkg/bin/svn checkout --username %s \"%s\" \"%s\"" % \
-      (mrrocpp_svn_username, mrrocpp_svn_url, mrrocpp_svn_target_dir))
+# This is no longer valid since we moved from SVN to Git
+## Optional: checkout MRROC++
+#mrrocpp_svn_target_dir = r"/home/mrrocpp"
+#info("Checkout MRROC++ trunk to %s? [y/n] n" % mrrocpp_svn_target_dir)
+#answer = ""
+#while True:
+#    co_mrrocpp = raw_input()
+#    if co_mrrocpp == "y" or co_mrrocpp == "n" or co_mrrocpp == "":
+#        break
+#if (co_mrrocpp == "y"):
+#    mrrocpp_svn_username=""
+#    while True:
+#        info("Enter svn username:")
+#        mrrocpp_svn_username = raw_input()
+#        if mrrocpp_svn_username != "":
+#            break
+#    mrrocpp_svn_url = r"https://segomo.elka.pw.edu.pl/svn/mrrocpp/base/trunk/"
+#    os.system("/usr/pkg/bin/svn checkout --username %s \"%s\" \"%s\"" % \
+#      (mrrocpp_svn_username, mrrocpp_svn_url, mrrocpp_svn_target_dir))
+
 info("Configuration complete. Please reboot.")
