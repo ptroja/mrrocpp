@@ -121,10 +121,10 @@ os.system(r"chmod go-w /var/chroot/sshd")
 
 # Download bootstrap-pkgsrc
 pkgsrc_url_prefix = \
-  r"http://segomo.elka.pw.edu.pl/qnx/QNX/i386/6.4.1_head_20090724/"
-pkgsrc_our_url_prefix=r"http://segomo.elka.pw.edu.pl/qnx/QNX/i386/6.4.1_head_our_packages/"
+  r"http://segomo.elka.pw.edu.pl/qnx/QNX/i386/6.5.0_head_20100424/"
+pkgsrc_our_url_prefix=r"http://segomo.elka.pw.edu.pl/qnx/QNX/i386/6.5.0_head_our_packages/"
 
-bootstrap_file_url = pkgsrc_url_prefix + "bootstrap.tar.gz"
+bootstrap_file_url = pkgsrc_our_url_prefix + "6.5.0_bootstrap.tar.gz"
 
 info("Downloading %s" % bootstrap_file_url)
 bootstrap_file = urllib.urlretrieve(bootstrap_file_url, "/tmp/" + bname(bootstrap_file_url), urlretrieve_hook)[0]
@@ -150,12 +150,10 @@ add_cfg_file_entry(profile_file_name, \
 
 # Add required packages
 packages = \
-    "subversion-base-1.5.6nb3", \
-    "vim-share-7.2.184", \
-    "vim-7.2.184", \
-    "libxml2-2.7.3", \
-    "gsl-1.12", \
-    "ncurses-5.7nb1"
+    "vim-share-7.2.411", \
+    "vim-7.2.411", \
+    "gsl-1.14", \
+    "ncurses-5.7nb3"
 
 for package in packages:
     os.system(r"/usr/pkg/sbin/pkg_add " + pkgsrc_url_prefix + "All/" + package + ".tgz")
@@ -163,6 +161,7 @@ for package in packages:
 our_packages = \
     "boost-libs-1.42.0", \
     "boost-headers-1.42.0", \
+    "libxml2-2.7.7", \
     "cmake-2.8.0", \
     "xerces-c-3.0.1"
 
