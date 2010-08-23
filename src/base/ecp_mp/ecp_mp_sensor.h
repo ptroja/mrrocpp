@@ -14,6 +14,7 @@
 
 #include "base/ecp_mp/ecp_mp_sensor_interface.h"
 #include "base/lib/srlib.h"
+// niezbedny naglowek z definiacja PROCESS_SPAWN_RSH
 #include "base/lib/configurator.h"
 
 #if defined(USE_MESSIP_SRR)
