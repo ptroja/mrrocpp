@@ -45,7 +45,7 @@ public:
   /**
    * Direction of the motion. Either equal to 1 or -1.
    */
-  std::vector<double> k;//TODO change to int
+  std::vector<double> k;//TODO change to ENUM
   /**
    * Number of the given position in whole trajectory chain.
    */
