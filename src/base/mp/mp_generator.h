@@ -1,7 +1,7 @@
 #ifndef MP_GENERATOR_H_
 #define MP_GENERATOR_H_
 
-#include "base/mp/mp_robots_t_typedefs.h"
+#include "base/mp/mp_typedefs.h"
 #include "base/ecp_mp/ecp_mp_generator.h"
 
 namespace mrrocpp {

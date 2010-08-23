@@ -10,11 +10,13 @@
 
 #include <stdint.h>
 
-#include "base/edp/edp_e_motor_driven.h"
+#include "base/lib/impconst.h"
 
 namespace mrrocpp {
 namespace edp {
 namespace common {
+
+class motor_driven_effector;
 
 // tryby obslugi przerwania
 typedef enum INTERRUPT_MODE

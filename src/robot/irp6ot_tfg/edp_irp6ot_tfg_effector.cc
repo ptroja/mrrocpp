@@ -14,6 +14,8 @@
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
 
+
+#include "robot/irp6ot_tfg/sg_irp6ot_tfg.h"
 // Klasa edp_irp6ot_effector.
 #include "robot/irp6ot_tfg/edp_irp6ot_tfg_effector.h"
 // Kinematyki.

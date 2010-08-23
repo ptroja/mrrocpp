@@ -9,12 +9,14 @@
 #define __HI_RYDZ_H
 
 #include <stdint.h>
-#include "base/edp/edp_e_motor_driven.h"
+
 #include "base/edp/HardwareInterface.h"
 
 namespace mrrocpp {
 namespace edp {
 namespace common {
+
+class motor_driven_effector;
 
 const uint64_t HARDWARE_ERROR_MASK = 0xE739CCE739CE739CULL;
 const uint64_t MASK_RESOLVER_ZERO = 0x3F7BDEF7BDEF7BDEULL;
@@ -38,7 +40,6 @@ const uint64_t MASK_RESOLVER_ZERO = 0x3F7BDEF7BDEF7BDEULL;
 #define MICROCONTROLLER_MODE             0x4C00
 #define ZERO_ORDER                       0x0000
 #define STOP_MOTORS                      0x0200 // Zatrzymanie silnikow (W.S. ???)
-
 // ISA_CARD_OFFSET needs to be defined in hi_local.h
 #define ADR_OF_SERVO_PTR          (0x305)
 #define SERVO_COMMAND1_ADR        (0x200)

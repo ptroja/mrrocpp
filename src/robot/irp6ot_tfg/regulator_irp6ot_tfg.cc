@@ -9,9 +9,7 @@
 
 #include "robot/irp6ot_tfg/irp6ot_tfg_const.h"
 
-#include "base/lib/typedefs.h"
-#include "base/lib/impconst.h"
-#include "base/lib/com_buf.h"
+#include "base/edp/edp_e_motor_driven.h"
 
 // Klasa edp_irp6ot_effector.
 //#include "base/edp/irp6_on_track/edp_irp6ot_effector.h"

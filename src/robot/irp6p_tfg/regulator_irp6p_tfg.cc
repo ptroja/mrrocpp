@@ -11,6 +11,8 @@
 #include <cmath>
 #include <iostream>
 
+#include "base/edp/edp_e_motor_driven.h"
+
 #include "robot/irp6p_tfg/irp6p_tfg_const.h"
 #include "base/lib/typedefs.h"
 #include "base/lib/impconst.h"

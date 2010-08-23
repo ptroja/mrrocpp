@@ -14,11 +14,6 @@
 #include <boost/thread/mutex.hpp>
 #include <boost/thread/condition.hpp>
 
-#include "base/edp/in_out.h"
-#include "base/edp/vis_server.h"
-#include "base/edp/reader.h"
-#include "base/edp/manip_trans_t.h"
-
 #include "base/kinematics/kinematics_manager.h"
 
 #include "base/edp/edp_effector.h"
@@ -37,6 +32,15 @@ namespace common {
 // TODO: remove forward declarations
 class servo_buffer;
 class edp_vsp;
+class manip_trans_t;
+class reader_buffer;
+class vis_server;
+class in_out_buffer;
+
+enum STATE
+{
+	GET_STATE, GET_SYNCHRO, SYNCHRO_TERMINATED, GET_INSTRUCTION, EXECUTE_INSTRUCTION, WAIT, WAIT_Q
+};
 
 /*!
  * \class motor_driven_effector
