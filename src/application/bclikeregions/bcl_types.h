@@ -12,7 +12,7 @@
 
 #include "../servovision/visual_servo_types.h"
 
-//#define SINGLE_MOVE
+#define SINGLE_MOVE
 #define TEST_MODE
 
 #define IRP6_OT

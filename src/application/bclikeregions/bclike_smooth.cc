@@ -29,6 +29,7 @@ const int joint_num = 6;
 
 #ifdef JOINT
 const  lib::ECP_POSE_SPECIFICATION move_type = lib::ECP_JOINT;
+const lib::POSE_SPECIFICATION return_pos_type = lib::FRAME;
 #endif //JOINT
 
 #ifdef EULER

@@ -33,17 +33,18 @@ namespace common {
 namespace task {
 
 #ifdef IRP6_OT
-#define VEC_SIZE 7
 #ifdef JOINT
+#define VEC_SIZE 7
 	const double left[] = { 0.0, 0.5, -1.87, 0.100, -0.040, 4.627, -1.57};
 	const double right[] = { 0.0, -0.55, -1.37, 0.100, -0.040, 4.627, -1.57};
 	const double start[] = { 0.0, 0.0, -1.37, 0.100, -0.040, 4.627, 0.0};
 #endif//JOINT
 
 #ifdef EULER
-	const double left[] = { 0.83, 0.5, 0.100, -0.59, 3.035, -1.055};
-	const double right[] = {0.83, -0.5, 0.100, -0.59, 3.035, -1.055};
-	const double start[] = {0.83, -0.02, 0.100, -0.59, 3.035, -1.055};
+#define VEC_SIZE 6
+	const double left[] = { 0.83, 0.5, 0.200, -0.59, 3.035, -1.055};
+	const double right[] = {0.83, -0.5, 0.200, -0.59, 3.035, -1.055};
+	const double start[] = {0.83, -0.02, 0.200, -0.59, 3.035, -1.055};
 #endif //EULER
 
 #endif//IRP6_OT
@@ -57,9 +58,9 @@ namespace task {
 #endif //JOINT
 
 #ifdef EULER
-	const double left[] = { 0.83, 2.45, 0.100, -0.59, 3.035, -1.055};
-	const double right[] = {0.83, 1.45, 0.100, -0.59, 3.035, -1.055};
-	const double start[] = {0.83, 1.95, 0.100, -0.59, 3.035, -1.055};
+	const double left[] = { 0.83, 2.45, 0.200, -0.59, 3.035, -1.055};
+	const double right[] = {0.83, 1.45, 0.200, -0.59, 3.035, -1.055};
+	const double start[] = {0.83, 1.95, 0.200, -0.59, 3.035, -1.055};
 #endif //EULER
 
 #endif//IRP6_P

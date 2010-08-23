@@ -81,7 +81,7 @@ std::vector<double> bcl_message::stringToRobotPosition(char* str){
 
 	ret.clear();
 
-	ret.assign(tab + 1, tab + (int)tab[0]);
+	ret.assign(tab + 1, tab + (int)tab[0] + 1);
 
 
 	return ret;

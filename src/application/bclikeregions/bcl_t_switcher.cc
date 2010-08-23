@@ -33,13 +33,12 @@ bcl_t_switcher::bcl_t_switcher(lib::configurator &_config):
 #ifdef IRP6_OT
 	ecp_m_robot = new ecp::irp6ot_m::robot(*this);
 
-
 #ifdef JOINT
 	bc_smooth = shared_ptr<generator::newsmooth> (new generator::newsmooth(*this, lib::ECP_JOINT, 7));
 #endif//JOINT
 
 #ifdef EULER
-	bc_smooth = shared_ptr<generator::newsmooth> (new generator::newsmooth(*this, lib::ECP_XYZ_EULER_ZYZ, 7));
+	bc_smooth = shared_ptr<generator::newsmooth> (new generator::newsmooth(*this, lib::ECP_XYZ_EULER_ZYZ, 6));
 #endif//EULER
 
 #endif//IRP6_OT
@@ -81,37 +80,30 @@ void bcl_t_switcher::mp_2_ecp_next_state_string_handler(void){
 
 	sr_ecp_msg->message("SWITCHER begin");
 
+
+	std::cout << "SWITCHER begin" << std::endl;
+
 	//TODO: Jakos to przemielic bo i tak wykorzystywane jest tylko START
 	if (mp_2_ecp_next_state_string == ecp_mp::task::BCL_MOTION_DIR_STR){
-		switch((BCL_MOTION_DIR)mp_command.ecp_next_state.mp_2_ecp_next_state_variant){
-			case LEFT:
-//				std::vector<double> vec(tmp, tmp + 8);//sizeof(double) * 8);
-				vec.assign(left, left + VEC_SIZE);
-				sr_ecp_msg->message("SWITCHER left");
-				break;
-			case RIGHT:
-//				bc_smooth->load_coordinates(lib::ECP_JOINT, 0.0, -0.55, -1.37, 0.100, -0.040, 4.627, -1.57, 0.0, true);
-				vec.assign(right, right + VEC_SIZE);
-				sr_ecp_msg->message("SWITCHER right");
-				break;
-			case START:
-//				bc_smooth->load_coordinates(lib::ECP_JOINT, 0.0, 0.0, -1.37, 0.100, -0.040, 4.627, 0.0, 0.0, true);
-//				std::cout << "MESSAGE: " << mp_command.ecp_next_state.mp_2_ecp_next_state_string << std::endl;
-				vec = msg.stringToRobotPosition(mp_command.ecp_next_state.mp_2_ecp_next_state_string);
-//				std::cout << "ODCZYTANE " << vec.size() << std::endl;
-//				vec.assign(start, start + 7);
-//				sr_ecp_msg->message("SWITCHER start");
-				break;
-		}
+
+//		vec.assign(left, left + VEC_SIZE);
+		vec = msg.stringToRobotPosition(mp_command.ecp_next_state.mp_2_ecp_next_state_string);
+		std::cout << "ODCZYTANE " << vec.size() << std::endl;
+		for(std::vector<double>::iterator it = vec.begin(); it != vec.end(); ++it)
+			std::cout << *it << " ";
+		std::cout << std::endl;
+
 		#ifdef JOINT
 			bc_smooth->load_absolute_joint_trajectory_pose(vec);
 //			bc_smooth->set_debug(true);
 		#endif//JOINT
 
 		#ifdef EULER
+			std::cout << "load trajectory" << std::endl;
 			bc_smooth->load_absolute_euler_zyz_trajectory_pose(vec);
 		#endif//EULER
 
+		std::cout << "Interpolate" << std::endl;
 		if(bc_smooth->calculate_interpolate()){
 			sr_ecp_msg->message("Move before");
 			bc_smooth->Move();
@@ -121,7 +113,6 @@ void bcl_t_switcher::mp_2_ecp_next_state_string_handler(void){
 	}
 
 	sr_ecp_msg->message("SWITCHER end");
-
 
 }
 
