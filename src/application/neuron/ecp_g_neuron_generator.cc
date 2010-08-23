@@ -14,8 +14,6 @@ namespace ecp{
 namespace common{
 namespace generator{
 
-#define START_BREAKING			7
-
 neuron_generator::neuron_generator(common::task::task& _ecp_task):generator(_ecp_task) {
 
 	reset();
@@ -55,7 +53,7 @@ bool neuron_generator::next_step(){
 	}
 
 	if(neuron_sensor->current_period==5){ //this section is not performed during breaking
-		if(neuron_sensor->getCommand()==START_BREAKING) {
+		if(neuron_sensor->startBraking()) {
 			breaking=true;
 			printf("\n-------- breaking ----------\n");
 			flushall();

@@ -33,6 +33,7 @@ class neuron_sensor : public ecp_mp::sensor::sensor_interface {
 		uint8_t command;
 		int numberOfTrajectories;
 		Coordinates coordinates;
+		void sendCommand(uint8_t command);
 
 	public:
 		neuron_sensor(mrrocpp::lib::configurator& _configurator);
@@ -47,7 +48,8 @@ class neuron_sensor : public ecp_mp::sensor::sensor_interface {
 		Coordinates getCoordinates();
 		void startGettingTrajectory();
 		void sendCommunicationFinished();
-		void sendCommand(uint8_t command);
+		void waitForVSPStart();
+		bool startBraking();
 		void sendCoordinates(double x, double y, double z);
 };
 

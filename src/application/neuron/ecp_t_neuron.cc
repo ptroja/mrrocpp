@@ -39,17 +39,11 @@ void Neuron::mp_2_ecp_next_state_string_handler(void){
 		neuronGenerator = new common::generator::neuron_generator(*this);
 		neuronGenerator->sensor_m=sensor_m;
 
-		int numberOfTrajectories=neuronSensor->getNumberOfTrajectories();
-		printf("Number of trajecotries %d\n",numberOfTrajectories);
-
 		std::vector<double> coordinates1(6);
-		//smoothGenerator->set_debug(true);
 		ecp_mp::sensor::Coordinates coordinates;
-		for(int i=0;i<numberOfTrajectories;++i){
-			printf("Loop number %d\n",i);
-
+		neuronSensor->waitForVSPStart();
+		while(true){
 			coordinates=neuronSensor->getFirstCoordinates();
-			printf("coordinates: %d %lf %lf %lf\n",neuronSensor->getCommand(),coordinates.x,coordinates.y,coordinates.z);
 
 			smoothGenerator->reset();
 			smoothGenerator->set_absolute();
@@ -62,15 +56,19 @@ void Neuron::mp_2_ecp_next_state_string_handler(void){
 			coordinates1[5]=-0.294;
 			smoothGenerator->load_absolute_angle_axis_trajectory_pose(coordinates1);
 
-			smoothGenerator->set_debug(true);
+			smoothGenerator->set_debug(false);
 			if(smoothGenerator->calculate_interpolate())
 				smoothGenerator->Move();
 
 			neuronGenerator->reset();
 			neuronGenerator->Move();
+
+			if(neuronSensor->transmissionFinished())
+				break;
 		}
 
 		neuronSensor->sendCommunicationFinished();
+
 
 		/*smoothGenerator->reset();
 		smoothGenerator->set_absolute();
@@ -111,8 +109,6 @@ void Neuron::mp_2_ecp_next_state_string_handler(void){
 		if(smoothGenerator->calculate_interpolate())
 			smoothGenerator->Move();*/
 	}
-
-
 }
 
 /*====================mp_2_ecp_next_state_string_handler=====================*/
