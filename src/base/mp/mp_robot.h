@@ -1,6 +1,8 @@
 #ifndef MP_ROBOT_H_
 #define MP_ROBOT_H_
 
+// niezbedny naglowek z definiacja PROCESS_SPAWN_RSH
+#include "base/lib/configurator.h"
 #include "base/lib/srlib.h"
 #include "base/ecp_mp/ecp_mp_robot.h"
 

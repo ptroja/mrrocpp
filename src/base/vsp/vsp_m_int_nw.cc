@@ -27,6 +27,9 @@
 #include <sys/types.h>
 #include <sys/sched.h>
 
+// niezbedny naglowek z definiacja PROCESS_SPAWN_RSH
+#include "base/lib/configurator.h"
+
 #include "base/lib/typedefs.h"
 #include "base/lib/impconst.h"
 #include "base/lib/mis_fun.h"
