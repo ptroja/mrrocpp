@@ -20,14 +20,14 @@
 
 #include <boost/bind.hpp>
 
-#include "lib/srlib.h"
+#include "base/lib/srlib.h"
 #include "ui/src/ui_const.h"
 #include "ui/src/ui_class.h"
 #include "ui/src/bird_hand/wnd_bird_hand_command_and_status.h"
 #include "ui/src/bird_hand/wnd_bird_hand_configuration.h"
 // #include "ui/src/ui.h"
 // Konfigurator.
-#include "lib/configurator.h"
+#include "base/lib/configurator.h"
 #include "ui/src/bird_hand/ui_ecp_r_bird_hand.h"
 #include "robot/bird_hand/bird_hand_const.h"
 

@@ -40,18 +40,18 @@
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/bind.hpp>
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
 
-#include "lib/srlib.h"
+#include "base/lib/srlib.h"
 #include "edp_s.h"
 
 #include <sys/syspage.h>
 #include <sys/neutrino.h>
 
 // Konfigurator
-#include "lib/configurator.h"
+#include "base/lib/configurator.h"
 
 namespace mrrocpp {
 namespace edp {

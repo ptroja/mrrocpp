@@ -34,10 +34,10 @@
 #include <fstream>
 #include <iostream>
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
-#include "lib/mis_fun.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
+#include "base/lib/mis_fun.h"
 
 #include "robot/speaker/sound.h" // MAC7
 //#include "robot/speaker/stdafx.h" // MAC& [ARTUR]
@@ -47,7 +47,7 @@
 #include "robot/speaker/speak_t.h"
 #include "robot/speaker/speaker_const.h"
 
-#include "lib/exception.h"
+#include "base/lib/exception.h"
 using namespace mrrocpp::lib::exception;
 
 namespace mrrocpp {
@@ -173,7 +173,7 @@ int effector::init()
 	FD_SET (snd_mixer_file_descriptor (mixer_handle), &rfds);
 	FD_SET (snd_pcm_file_descriptor (pcm_handle, SND_PCM_CHANNEL_PLAYBACK), &wfds);
 
-	msg->message("Initialization succesfull");
+	msg->message("Initialization successful");
 
 	return 0;
 }

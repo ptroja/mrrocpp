@@ -1,13 +1,11 @@
 #if !defined(__MP_TASK_C_H)
 #define __MP_TASK_C_H
 
-#include "base/mp/mp.h"
-
 namespace mrrocpp {
 namespace mp {
 namespace task {
 
-class cxx: public task
+class cxx : public task
 {
 
 public:

@@ -5,6 +5,7 @@
  *      Author: rtulwin
  */
 
+#include "base/ecp/ecp_robot.h"
 #include "ecp_g_get_position.h"
 
 namespace mrrocpp {
@@ -15,23 +16,27 @@ namespace generator {
 using namespace std;
 
 get_position::get_position(common::task::task& _ecp_task, lib::ECP_POSE_SPECIFICATION pose_spec, int axes_num) :
-        generator (_ecp_task) {
-	position = vector<double>();
+	generator(_ecp_task)
+{
+	position = vector <double> ();
 	this->axes_num = axes_num;
 	this->pose_spec = pose_spec;
 }
 
-get_position::~get_position() {
+get_position::~get_position()
+{
 
 }
 
-bool get_position::first_step() {
+bool get_position::first_step()
+{
 	the_robot->ecp_command.instruction.get_type = ARM_DEFINITION;
 	the_robot->ecp_command.instruction.instruction_type = lib::GET;
 	the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE; //aqui siempre ABSOLUTE, RELATIVE makes no sense here
 	the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
 
-	switch (pose_spec) {
+	switch (pose_spec)
+	{
 		case lib::ECP_XYZ_ANGLE_AXIS:
 			the_robot->ecp_command.instruction.get_arm_type = lib::FRAME;
 			break;
@@ -45,12 +50,13 @@ bool get_position::first_step() {
 			the_robot->ecp_command.instruction.get_arm_type = lib::JOINT;
 			break;
 		default:
-			throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+			throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 	}
 	return true;
 }
 
-bool get_position::next_step() {
+bool get_position::next_step()
+{
 	if (pose_spec == lib::ECP_XYZ_ANGLE_AXIS || pose_spec == lib::ECP_XYZ_EULER_ZYZ) {
 
 		lib::Homog_matrix actual_position_matrix;
@@ -67,7 +73,7 @@ bool get_position::next_step() {
 			euler_vector.to_vector(position);
 
 		} else {
-			throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+			throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 		}
 
 	} else if (pose_spec == lib::ECP_JOINT || pose_spec == lib::ECP_MOTOR) {
@@ -75,12 +81,13 @@ bool get_position::next_step() {
 			position.push_back(the_robot->reply_package.arm.pf_def.arm_coordinates[i]);
 		}
 	} else {
-		throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+		throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 	}
 	return false;
 }
 
-vector<double> get_position::get_position_vector() {
+vector <double> get_position::get_position_vector()
+{
 	return position;
 }
 

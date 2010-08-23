@@ -39,10 +39,10 @@
 
 #include "ui/src/ui_class.h"
 
-#include "lib/mis_fun.h"
-#include "lib/srlib.h"
+#include "base/lib/mis_fun.h"
+#include "base/lib/srlib.h"
 #include "ui/src/ui_const.h"
-#include "lib/mis_fun.h"
+#include "base/lib/mis_fun.h"
 
 #if defined(USE_MESSIP_SRR)
 #include "messip.h"

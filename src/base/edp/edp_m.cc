@@ -18,11 +18,11 @@
 #include <sys/neutrino.h>
 #endif /* __QNXNTO__ */
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
-#include "lib/srlib.h"
-#include "lib/mis_fun.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
+#include "base/lib/srlib.h"
+#include "base/lib/mis_fun.h"
 #include "base/edp/edp_effector.h"
 
 namespace mrrocpp {
@@ -45,7 +45,7 @@ void catch_signal(int sig)
 			ClockPeriod(CLOCK_REALTIME, &old_cp, NULL, 0);
 #endif /* __QNXNTO__ */
 			master->sh_msg->message("edp terminated");
-			_exit(EXIT_SUCCESS);
+			_exit( EXIT_SUCCESS);
 			break;
 		case SIGSEGV:
 			fprintf(stderr, "Segmentation fault in EDP process\n");
@@ -67,7 +67,7 @@ int main(int argc, char *argv[])
 		// allow for empty session name for easier valgrind/tcheck_cl launching
 		if (argc < 5) {
 			fprintf(stderr, "Usage: edp_m binaries_node_name mrrocpp_path config_file edp_config_section <session_name> [rsp_attach_name]\n");
-			exit(EXIT_FAILURE);
+			exit( EXIT_FAILURE);
 		}
 
 #ifdef __QNXNTO__

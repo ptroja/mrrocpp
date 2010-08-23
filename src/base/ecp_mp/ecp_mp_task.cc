@@ -19,12 +19,12 @@
 #include <sys/netmgr.h>
 #endif /* __QNXNTO__ */
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
 
-#include "lib/datastr.h"
-#include "lib/srlib.h"
+#include "base/lib/datastr.h"
+#include "base/lib/srlib.h"
 #include "base/ecp_mp/ecp_mp_task.h"
 #include "base/ecp_mp/ecp_mp_sensor.h"
 #include "base/ecp/ECP_main_error.h"

@@ -6,7 +6,7 @@
  * @ingroup VSP
  */
 
-#include "lib/srlib.h"
+#include "base/lib/srlib.h"
 #include "base/vsp/vsp_sensor_interface.h"
 
 namespace mrrocpp {

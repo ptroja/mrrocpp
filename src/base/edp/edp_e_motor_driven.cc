@@ -30,16 +30,16 @@
 #include <boost/bind.hpp>
 #include <boost/thread/thread.hpp>
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
 #include "base/edp/servo_gr.h"
 #include "base/edp/reader.h"
 #include "base/edp/edp_e_motor_driven.h"
 #include "base/edp/manip_trans_t.h"
 #include "base/edp/vis_server.h"
 
-#include "lib/mrmath/mrmath.h"
+#include "base/lib/mrmath/mrmath.h"
 
 //#include "base/kinematics/kinematic_model.h"
 #include "base/edp/in_out.h"

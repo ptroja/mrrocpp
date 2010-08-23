@@ -12,10 +12,10 @@
 
 #include <cstdio>
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
-#include "lib/mrmath/mrmath.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
+#include "base/lib/mrmath/mrmath.h"
 #include "base/edp/reader.h"
 
 // Klasa edp_conveyor_effector.

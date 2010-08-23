@@ -8,12 +8,13 @@
 #ifndef _MULTIPLE_POSITION_H_
 #define _MULTIPLE_POSITION_H_
 
-#include "lib/trajectory_pose/trajectory_pose.h"
+#include "base/ecp/ecp_robot.h"
+#include "base/lib/trajectory_pose/trajectory_pose.h"
 #include "generator/ecp/ecp_g_get_position.h"
 #include "base/ecp/ecp_generator.h"
 #include "generator/ecp/velocity_profile_calculator/velocity_profile.h"
 #include "generator/ecp/trajectory_interpolator/trajectory_interpolator.h"
-#include "lib/mrmath/mrmath.h"
+#include "base/lib/mrmath/mrmath.h"
 
 #include <vector>
 
@@ -26,29 +27,30 @@ namespace generator {
  * Base class for the motion generators interpolating between fixed trajectory points.
  */
 template <class Pos, class Inter, class Calc>
-class multiple_position : public generator {
+class multiple_position : public generator
+{
 protected:
 
 	/**
 	 * Vector of positions (vector of velocity profiles).
 	 */
-	std::vector<Pos> pose_vector;
+	std::vector <Pos> pose_vector;
 	/**
 	 * Position vector iterator.
 	 */
-	typename std::vector<Pos>::iterator pose_vector_iterator;
+	typename std::vector <Pos>::iterator pose_vector_iterator;
 	/**
 	 * Vector of coordinates.
 	 */
-	std::vector<std::vector<double> > coordinate_vector;
+	std::vector <std::vector <double> > coordinate_vector;
 	/**
 	 * Coordinate vector iterator.
 	 */
-	std::vector<std::vector<double> >::iterator coordinate_vector_iterator;
+	std::vector <std::vector <double> >::iterator coordinate_vector_iterator;
 	/**
 	 * Temporary iterator used mainly to iterate through a single position which is always of type vector<double>.
 	 */
-	std::vector<double>::iterator tempIter;
+	std::vector <double>::iterator tempIter;
 	/**
 	 * Type of the commanded motion (absolute or relative)
 	 */
@@ -94,67 +96,67 @@ protected:
 	/**
 	 * Standard velocity in joint coordinates.
 	 */
-	std::vector<double> joint_velocity;
+	std::vector <double> joint_velocity;
 	/**
 	 * Maximal velocity in joint coordinates.
 	 */
-	std::vector<double> joint_max_velocity;
+	std::vector <double> joint_max_velocity;
 	/**
 	 * Standard velocity in motor coordinates.
 	 */
-	std::vector<double> motor_velocity;
+	std::vector <double> motor_velocity;
 	/**
 	 * Maximal velocity in motor coordinates.
 	 */
-	std::vector<double> motor_max_velocity;
+	std::vector <double> motor_max_velocity;
 	/**
 	 * Standard velocity in euler zyz coordinates.
 	 */
-	std::vector<double> euler_zyz_velocity;
+	std::vector <double> euler_zyz_velocity;
 	/**
 	 * Maximal velocity in euler zyz coordinates.
 	 */
-	std::vector<double> euler_zyz_max_velocity;
+	std::vector <double> euler_zyz_max_velocity;
 	/**
 	 * Standard velocity in angle axis coordinates.
 	 */
-	std::vector<double> angle_axis_velocity;
+	std::vector <double> angle_axis_velocity;
 	/**
 	 * Maximal velocity in angle axis coordinates.
 	 */
-	std::vector<double> angle_axis_max_velocity;
+	std::vector <double> angle_axis_max_velocity;
 	/**
 	 * Standard acceleration in joint coordinates.
 	 */
-	std::vector<double> joint_acceleration;
+	std::vector <double> joint_acceleration;
 	/**
 	 * Maximal acceleration in joint coordinates.
 	 */
-	std::vector<double> joint_max_acceleration;
+	std::vector <double> joint_max_acceleration;
 	/**
 	 * Standard acceleration in motor coordinates.
 	 */
-	std::vector<double> motor_acceleration;
+	std::vector <double> motor_acceleration;
 	/**
 	 * Maximal acceleration in motor coordinates.
 	 */
-	std::vector<double> motor_max_acceleration;
+	std::vector <double> motor_max_acceleration;
 	/**
 	 * Standard acceleration in euler zyz coordinates.
 	 */
-	std::vector<double> euler_zyz_acceleration;
+	std::vector <double> euler_zyz_acceleration;
 	/**
 	 * Maximal acceleration in euler zyz coordinates.
 	 */
-	std::vector<double> euler_zyz_max_acceleration;
+	std::vector <double> euler_zyz_max_acceleration;
 	/**
 	 * Standard acceleration in angle axis coordinates.
 	 */
-	std::vector<double> angle_axis_acceleration;
+	std::vector <double> angle_axis_acceleration;
 	/**
 	 * Maximal acceleration in angle axis coordinates.
 	 */
-	std::vector<double> angle_axis_max_acceleration;
+	std::vector <double> angle_axis_max_acceleration;
 	//--------- VELOCITY AND ACCELERATION VECTORS END ---------
 
 	/**
@@ -164,7 +166,8 @@ protected:
 	/**
 	 * Sets up the start position vector of the first position in the trajectory chain.
 	 */
-	void get_initial_position() {
+	void get_initial_position()
+	{
 		pose_vector_iterator = pose_vector.begin();
 		if (motion_type == lib::ABSOLUTE) {
 			get_position * get_pos = new get_position(ecp_t, pose_spec, axes_num); //generator used to get the actual position of the robot
@@ -186,7 +189,7 @@ protected:
 			pose_vector_iterator->start_position = get_pos->get_position_vector();//get actual position of the robot
 			delete get_pos;
 		} else if (motion_type == lib::RELATIVE) {
-			pose_vector_iterator->start_position = std::vector<double>(axes_num,0);
+			pose_vector_iterator->start_position = std::vector <double>(axes_num, 0);
 		} else {
 			sr_ecp_msg.message("Wrong motion type");
 			throw ECP_error(lib::NON_FATAL_ERROR, ECP_ERRORS);//TODO change the second argument
@@ -200,7 +203,8 @@ protected:
 	 * Performs interpolation of the trajectory. Fills in the coordinates vector.
 	 * @return true if interpolation was successful
 	 */
-	bool interpolate() {
+	bool interpolate()
+	{
 
 		sr_ecp_msg.message("Interpolating...");
 
@@ -219,14 +223,14 @@ protected:
 
 		if (motion_type == lib::ABSOLUTE) {
 			for (i = 0; i < pose_vector.size(); i++) {//interpolate trajectory, fill in the coordinate list
-				if(inter.interpolate_absolute_pose(pose_vector_iterator, coordinate_vector, mc) == false) {
+				if (inter.interpolate_absolute_pose(pose_vector_iterator, coordinate_vector, mc) == false) {
 					trueFlag = false;
 				}
 				pose_vector_iterator++;
 			}
 		} else if (motion_type == lib::RELATIVE) {
 			for (i = 0; i < pose_vector.size(); i++) {//interpolate trajectory, fill in the coordinate list
-				if(inter.interpolate_relative_pose(pose_vector_iterator, coordinate_vector, mc) == false) {
+				if (inter.interpolate_relative_pose(pose_vector_iterator, coordinate_vector, mc) == false) {
 					trueFlag = false;
 				}
 				pose_vector_iterator++;
@@ -250,12 +254,13 @@ protected:
 	/**
 	 * Method used to print list of coordinates.
 	 */
-	virtual void print_coordinate_vector() {
+	virtual void print_coordinate_vector()
+	{
 		coordinate_vector_iterator = coordinate_vector.begin();
 		printf("coordinate_vector_size: %d\n", coordinate_vector.size());
 		for (int i = 0; i < coordinate_vector.size(); i++) {
 			tempIter = (*coordinate_vector_iterator).begin();
-			printf("%d:\t", (i+1));
+			printf("%d:\t", (i + 1));
 			for (tempIter = (*coordinate_vector_iterator).begin(); tempIter != (*coordinate_vector_iterator).end(); tempIter++) {
 				printf(" %f\t", *tempIter);
 			}
@@ -269,7 +274,9 @@ public:
 	/**
 	 * Constructor.
 	 */
-	multiple_position(common::task::task& _ecp_task) : generator (_ecp_task) {
+	multiple_position(common::task::task& _ecp_task) :
+		generator(_ecp_task)
+	{
 		debug = false;
 		motion_type = lib::ABSOLUTE;
 		nmc = 10;
@@ -279,19 +286,22 @@ public:
 	/**
 	 * Destructor.
 	 */
-	virtual ~multiple_position() {
+	virtual ~multiple_position()
+	{
 
 	}
 	/**
 	 * Set debug variable.
 	 */
-	void set_debug(bool debug) {
+	void set_debug(bool debug)
+	{
 		this->debug = debug;
 	}
 	/**
 	 * Implementation of the first_step method.
 	 */
-	bool first_step() {
+	bool first_step()
+	{
 
 		if (debug) {
 			printf("\n##################################### first_step ####################################\n");
@@ -317,12 +327,13 @@ public:
 			throw ECP_error(lib::NON_FATAL_ERROR, ECP_ERRORS);//TODO change the second argument
 		}
 
-		switch (pose_spec) {
+		switch (pose_spec)
+		{
 			case lib::ECP_XYZ_EULER_ZYZ:
 				the_robot->ecp_command.instruction.set_arm_type = lib::FRAME;
 				if (motion_type == lib::RELATIVE) {
 					the_robot->ecp_command.instruction.interpolation_type = lib::TCIM;
-					for (int i=0; i<axes_num; i++) {
+					for (int i = 0; i < axes_num; i++) {
 						the_robot->ecp_command.instruction.arm.pf_def.behaviour[i] = lib::UNGUARDED_MOTION;
 					}
 				} else {
@@ -333,7 +344,7 @@ public:
 				the_robot->ecp_command.instruction.set_arm_type = lib::FRAME;
 				if (motion_type == lib::RELATIVE) {
 					the_robot->ecp_command.instruction.interpolation_type = lib::TCIM;
-					for (int i=0; i<axes_num; i++) {
+					for (int i = 0; i < axes_num; i++) {
 						the_robot->ecp_command.instruction.arm.pf_def.behaviour[i] = lib::UNGUARDED_MOTION;
 					}
 				} else {
@@ -350,7 +361,7 @@ public:
 				break;
 			default:
 				reset();
-				throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+				throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 		}
 
 		coordinate_vector_iterator = coordinate_vector.begin();
@@ -360,7 +371,8 @@ public:
 	/**
 	 * Implementation of the next_step method.
 	 */
-	bool next_step() {
+	bool next_step()
+	{
 
 		if (debug) {
 			//printf("\n##################################### next_step ####################################\n");
@@ -381,14 +393,14 @@ public:
 
 		double coordinates[axes_num];
 
-		switch (pose_spec) {
+		switch (pose_spec)
+		{
 
 			case lib::ECP_JOINT:
 
 				tempIter = (*coordinate_vector_iterator).begin();
 				for (i = 0; i < axes_num; i++) {
-					the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
-							= *tempIter;
+					the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = *tempIter;
 					if (debug) {
 						printf("%f\t", *tempIter);
 					}
@@ -405,8 +417,7 @@ public:
 
 				tempIter = (*coordinate_vector_iterator).begin();
 				for (i = 0; i < axes_num; i++) {
-					the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
-							= *tempIter;
+					the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = *tempIter;
 					if (debug) {
 						printf("%f\t", *tempIter);
 					}
@@ -481,7 +492,8 @@ public:
 	 * Performs calculation of the trajectory and interpolation. Fills in pose_vector and coordinate_vector.
 	 * @return true if the calculation was successful
 	 */
-	virtual bool calculate_interpolate() {
+	virtual bool calculate_interpolate()
+	{
 
 		if (debug) {
 			printf("\n##################################### calculate_interpolate ####################################\n");
@@ -512,32 +524,37 @@ public:
 	/**
 	 * Sets the number of axes in which the generator will move the robot.
 	 */
-	virtual void set_axes_num(int axes_num) {
+	virtual void set_axes_num(int axes_num)
+	{
 		this->axes_num = axes_num;
 		create_velocity_vectors(axes_num);
 	}
 	/**
 	 * Sets the chosen type of interpolation.
 	 */
-	void set_interpolation_type() {
+	void set_interpolation_type()
+	{
 
 	}
 	/**
 	 * Sets the relative type of motion.
 	 */
-	void set_relative(void) {
-		motion_type=lib::RELATIVE;
+	void set_relative(void)
+	{
+		motion_type = lib::RELATIVE;
 	}
 	/**
 	 * Sets the absolute type of motion.
 	 */
-	void set_absolute(void) {
-		motion_type=lib::ABSOLUTE;
+	void set_absolute(void)
+	{
+		motion_type = lib::ABSOLUTE;
 	}
 	/**
 	 * Clears vectors of positions and coordinates. Sets %calculated and %interpolated flags to false;
 	 */
-	virtual void reset() {
+	virtual void reset()
+	{
 		pose_vector.clear();
 		coordinate_vector.clear();
 		calculated = false;

@@ -5,6 +5,8 @@
  *      Author: pwilkows
  */
 
+#include "base/ecp/ecp_task.h"
+#include "base/ecp/ecp_robot.h"
 #include "robot/irp6ot_m/generator/ecp_g_vis_ib_eih_planar_irp6ot.h"
 
 namespace mrrocpp {
@@ -53,8 +55,8 @@ bool ecp_vis_ib_eih_planar_irp6ot::first_step()
 	 //z = 0;
 
 	 above_object = false;
-*/
-	 return true;
+	 */
+	return true;
 
 }
 

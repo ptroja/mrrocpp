@@ -1,9 +1,9 @@
 #if !defined(_SHEAD_CONST_H)
 #define _SHEAD_CONST_H
 
-#include "lib/data_port_headers/shead.h"
+#include "base/lib/data_port_headers/shead.h"
 
-#include "lib/impconst.h"
+#include "base/lib/impconst.h"
 
 namespace mrrocpp {
 namespace lib {

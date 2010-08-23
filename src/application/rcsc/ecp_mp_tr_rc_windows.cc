@@ -16,12 +16,12 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"				// numery bledow
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"				// numery bledow
 #include "base/ecp_mp/transmitter.h"
 #include "base/ecp_mp/ecp_mp_task.h"
-#include "lib/srlib.h"					// klasy bledow
+#include "base/lib/srlib.h"					// klasy bledow
 #include "ecp_mp_tr_rc_windows.h"
 
 namespace mrrocpp {
@@ -30,7 +30,7 @@ namespace transmitter {
 
 rc_win_buf_typedef *rc_windows::rc_win_buf = NULL;
 
-rc_windows::rc_windows(TRANSMITTER_ENUM _transmitter_name, const char* _section_name, task::task& _ecp_mp_object) :
+rc_windows::rc_windows(lib::TRANSMITTER_t _transmitter_name, const char* _section_name, task::task& _ecp_mp_object) :
 	rc_windows_transmitter_t(_transmitter_name, _section_name, _ecp_mp_object)
 {
 	if (!rc_win_buf) {
@@ -90,14 +90,15 @@ void * rc_windows::do_query(void * arg)
 	}
 
 	/* Initialize the file descriptor set. */
-	FD_ZERO (&fds);
-	FD_SET (sock, &fds);
+	FD_ZERO(&fds);
+	FD_SET(sock, &fds);
 
 	/* Initialize the timeout data structure. */
-	timeout.tv_sec = 60* 2 ;timeout.tv_usec = 0;
+	timeout.tv_sec = 60 * 2;
+	timeout.tv_usec = 0;
 
 	/* `select' returns 0 if timeout, 1 if input available, -1 if error. */
-	retval = select (FD_SETSIZE, &fds, NULL, NULL, &timeout);
+	retval = select(FD_SETSIZE, &fds, NULL, NULL, &timeout);
 	if (retval == -1) {
 		perror("select()");
 		close(sock);
@@ -124,29 +125,29 @@ void * rc_windows::do_query(void * arg)
 	return NULL;
 }
 
-int rc_windows::make_socket (const std::string & hostname, uint16_t port)
+int rc_windows::make_socket(const std::string & hostname, uint16_t port)
 {
 	int sock;
 	struct sockaddr_in server;
 	struct hostent *hostinfo;
 
 	/* Create the socket. */
-	sock = socket (PF_INET, SOCK_STREAM, 0);
+	sock = socket(PF_INET, SOCK_STREAM, 0);
 	if (sock < 0) {
-		perror ("socket");
+		perror("socket");
 		return -1;
 	}
 
 	server.sin_family = AF_INET;
-	server.sin_port = htons (port);
-	hostinfo = gethostbyname (hostname.c_str());
+	server.sin_port = htons(port);
+	hostinfo = gethostbyname(hostname.c_str());
 	if (hostinfo == NULL) {
 		std::cerr << "Unknown host: " << hostname << std::endl;
 		return -1;
 	}
 	server.sin_addr = *(struct in_addr *) hostinfo->h_addr;
 
-	if(connect(sock, (struct sockaddr*) &server, sizeof(server)) == -1) {
+	if (connect(sock, (struct sockaddr*) &server, sizeof(server)) == -1) {
 		perror("connect");
 		return -1;
 	}
@@ -154,7 +155,8 @@ int rc_windows::make_socket (const std::string & hostname, uint16_t port)
 	return sock;
 }
 
-bool rc_windows::t_write() {
+bool rc_windows::t_write()
+{
 
 	snprintf(rc_win_buf->request, sizeof(rc_win_buf->request), "GET /?%s HTTP/1.0\r\n", to_va.rc_state);
 
@@ -163,27 +165,30 @@ bool rc_windows::t_write() {
 	return true;
 }
 
-bool rc_windows::t_read(bool wait) {
+bool rc_windows::t_read(bool wait)
+{
 
 	if (wait) {
 
 		boost::mutex::scoped_lock lock(rc_win_buf->mtx);
 
-		printf("W SEMAFORZE 1 %d\n", strlen(rc_win_buf->response)-33);
+		printf("W SEMAFORZE 1 %d\n", strlen(rc_win_buf->response) - 33);
 
-		int l=strlen(rc_win_buf->response)-33-16;
-		if(l<0) l=0;
+		int l = strlen(rc_win_buf->response) - 33 - 16;
+		if (l < 0)
+			l = 0;
 
-		strncpy(from_va.sequence, rc_win_buf->response+33, l);
-		from_va.sequence[l]='\0';
+		strncpy(from_va.sequence, rc_win_buf->response + 33, l);
+		from_va.sequence[l] = '\0';
 
 	} else {
 
-		printf("W SEMAFORZE2 %d\n", strlen(rc_win_buf->response)-33);
-		int l=strlen(rc_win_buf->response)-33-16;
-		if(l<0) l=0;
-		strncpy(from_va.sequence, rc_win_buf->response+33, l);
-		from_va.sequence[l]='\0';
+		printf("W SEMAFORZE2 %d\n", strlen(rc_win_buf->response) - 33);
+		int l = strlen(rc_win_buf->response) - 33 - 16;
+		if (l < 0)
+			l = 0;
+		strncpy(from_va.sequence, rc_win_buf->response + 33, l);
+		from_va.sequence[l] = '\0';
 
 	}
 	return true;

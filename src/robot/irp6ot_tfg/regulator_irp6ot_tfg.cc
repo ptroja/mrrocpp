@@ -7,9 +7,9 @@
 #include <cstdlib>
 #include <unistd.h>
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
 
 // Klasa edp_irp6ot_effector.
 //#include "base/edp/irp6_on_track/edp_irp6ot_effector.h"

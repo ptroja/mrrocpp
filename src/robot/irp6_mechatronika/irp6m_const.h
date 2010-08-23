@@ -1,7 +1,7 @@
 #if !defined(_IRP6M_CONST_H)
 #define _IRP6M_CONST_H
 
-#include "lib/impconst.h"
+#include "base/lib/impconst.h"
 
 namespace mrrocpp {
 namespace lib {

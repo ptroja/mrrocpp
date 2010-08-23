@@ -9,16 +9,18 @@
 #include <string>
 #include <sstream>
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
-#include "lib/srlib.h"
-#include "base/mp/mp.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
+#include "base/lib/srlib.h"
+
+#include "base/mp/mp_task.h"
+#include "base/mp/MP_main_error.h"
 #include "ecp_mp_t_swarmitfix.h"
 #include "mp_t_swarmitfix.h"
-#include "lib/single_thread_port.h"
-#include "lib/mrmath/mrmath.h"
-#include "lib/data_port_headers/epos.h"
+#include "base/lib/single_thread_port.h"
+#include "base/lib/mrmath/mrmath.h"
+#include "base/lib/data_port_headers/epos.h"
 #include "robot/smb/smb_const.h"
 #include "robot/spkm/spkm_const.h"
 #include "robot/shead/shead_const.h"

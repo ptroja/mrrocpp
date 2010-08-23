@@ -8,14 +8,14 @@ namespace ecp {
 namespace common {
 namespace task {
 
-
 /** @defgroup edge_following Edge following
  *  @ingroup application
  *  Single robot application of IRp6 manipulator following of an uknown contour
  *  @{
  */
 
-class sk: public common::task::task  {
+class sk : public common::task::task
+{
 protected:
 	generator::tff_nose_run* nrg;
 	generator::y_edge_follow_force* yefg;
@@ -30,7 +30,7 @@ public:
 	void main_task_algorithm(void);
 };
 
-/** @} */ // end of edge_following
+/** @} */// end of edge_following
 
 } // namespace task
 } // namespace common
