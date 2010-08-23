@@ -8,10 +8,10 @@
 #ifndef ECP_G_NEURON_GENERATOR_H_
 #define ECP_G_NEURON_GENERATOR_H_
 
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
 #include "neuron_sensor.h"
-#include "lib/mrmath/mrmath.h"
+#include "base/lib/mrmath/mrmath.h"
 
 #include "generator/ecp/ecp_g_teach_in.h"
 #include <vector>

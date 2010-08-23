@@ -17,9 +17,9 @@
 #include <cstring>
 
 /* MRROC++ headers */
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
 
 #include "ui/src/ui.h"
 #include "robot/irp6ot_m/irp6ot_m_const.h"
@@ -27,7 +27,7 @@
 #include "ui/src/ui_class.h"
 #include "ui/src/ui_ecp.h"
 // Konfigurator.
-#include "lib/configurator.h"
+#include "base/lib/configurator.h"
 
 /* Local headers */
 #include "ablibs.h"

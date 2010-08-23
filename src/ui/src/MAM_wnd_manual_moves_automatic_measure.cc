@@ -19,16 +19,16 @@
 #include "ui/src/ui.h"
 
 /* MRROC++ headers */
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
 #include "ui/src/ui_class.h"
 #include "ui/src/ui_ecp.h"
 
-#include "lib/srlib.h"
+#include "base/lib/srlib.h"
 
 // Konfigurator.
-#include "lib/configurator.h"
+#include "base/lib/configurator.h"
 
 /* Local headers */
 #include "ablibs.h"

@@ -61,7 +61,7 @@ if (QNXNTO)
 	# keep this flag until bug in QNX stack alignment is fixed
 	add_definitions (-DEIGEN_DONT_ALIGN)	
 	set(EIGEN2_INCLUDE_DIR "${MRLIB}/include/eigen2") 
-	set(LIBXML2_INCLUDE_DIR "${MRLIB}/include")
+	set(LIBXML2_INCLUDE_DIR "${MRLIB}/include/libxml2")
 	set(Boost_INCLUDE_DIR "${MRLIB}/include")
 
 	# Boost is provided by mrlib repository
@@ -72,8 +72,7 @@ if (QNXNTO)
 
 	# FIXME: define libxml2 libraries to use
 	find_library(LIBXML2_LIBRARY xml2 "${MRLIB}/lib")
-	find_library(LIBICONV_LIBRARY iconv "${MRLIB}/lib")
-	set(LIBXML2_LIBRARIES ${LIBXML2_LIBRARY} ${LIBICONV_LIBRARY})
+	set(LIBXML2_LIBRARIES ${LIBXML2_LIBRARY})
 	
 	# QNX provides networking with separate library
 	set (COMPATIBILITY_LIBRARIES socket m)
@@ -114,7 +113,6 @@ set(COMMON_LIBRARIES mrrocpp ${COMMON_LIBRARIES}
 )
 
 # Recurse into subdirectories.
-add_subdirectory (lib)
 add_subdirectory (base)
 add_subdirectory (sensor)
 add_subdirectory (generator)

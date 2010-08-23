@@ -9,7 +9,7 @@
  * @ingroup KINEMATICS IRP6P_KINEMATICS
  */
 
-#include "lib/com_buf.h"
+#include "base/lib/com_buf.h"
 #include "robot/irp6p_tfg/kinematic_model_irp6p_tfg.h"
 
 namespace mrrocpp {

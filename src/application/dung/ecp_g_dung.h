@@ -7,11 +7,11 @@
 #if !defined(_ECP_GEN_DUNG_H)
 #define _ECP_GEN_DUNG_H
 
-#include "lib/impconst.h"		// lib::frame_tab
-#include "lib/com_buf.h"			// lib::trajectory_description
+#include "base/lib/impconst.h"		// lib::frame_tab
+#include "base/lib/com_buf.h"			// lib::trajectory_description
 
 #include "base/ecp/ecp_generator.h"
-#include "lib/mrmath/mrmath.h"
+#include "base/lib/mrmath/mrmath.h"
 
 namespace mrrocpp {
 namespace ecp {

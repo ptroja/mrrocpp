@@ -14,8 +14,8 @@ namespace mrrocpp {
 namespace ecp_mp {
 namespace transmitter {
 
-TRDraughtsAI::TRDraughtsAI(TRANSMITTER_ENUM _transmitter_name, const char* _section_name, task::task& _ecp_mp_object) :
-	DraughtsAI_transmitter_t (_transmitter_name, _section_name, _ecp_mp_object)
+TRDraughtsAI::TRDraughtsAI(lib::TRANSMITTER_t _transmitter_name, const char* _section_name, task::task& _ecp_mp_object) :
+	DraughtsAI_transmitter_t(_transmitter_name, _section_name, _ecp_mp_object)
 {
 }
 

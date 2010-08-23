@@ -5,8 +5,9 @@
 #include <cstdio>
 #include <boost/foreach.hpp>
 
-#include "lib/mis_fun.h"
+#include "base/lib/mis_fun.h"
 #include "base/ecp/ecp_task.h"
+#include "base/ecp/ecp_robot.h"
 #include "base/ecp/ECP_main_error.h"
 #include "base/ecp/ecp_generator.h"
 
@@ -234,7 +235,7 @@ void task::subtasks_conditional_execution()
 
 	subtasks_t subtasks_m_tmp = subtask_m;
 
-	BOOST_FOREACH(const subtask_pair_t & subtask_node, subtasks_m_tmp)
+BOOST_FOREACH(const subtask_pair_t & subtask_node, subtasks_m_tmp)
 {	if (mp_2_ecp_next_state_string == subtask_node.first) {
 
 		subtask_node.second->conditional_execution();

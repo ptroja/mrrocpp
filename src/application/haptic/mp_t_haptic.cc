@@ -5,13 +5,17 @@
 //
 // -------------------------------------------------------------------------
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
 
-#include "lib/srlib.h"
-#include "base/mp/mp.h"
+#include "base/lib/srlib.h"
+
+#include "base/mp/MP_main_error.h"
+#include "base/mp/mp_robot.h"
+#include "base/mp/mp_task.h"
 #include "application/haptic/mp_g_haptic.h"
+
 #include "application/haptic/mp_t_haptic.h"
 #include "application/rcsc/ecp_mp_t_rcsc.h"
 #include "robot/irp6ot_m/irp6ot_m_const.h"

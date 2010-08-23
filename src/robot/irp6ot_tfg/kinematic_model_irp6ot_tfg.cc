@@ -10,7 +10,7 @@
  */
 
 
-#include "lib/com_buf.h"
+#include "base/lib/com_buf.h"
 #include "robot/irp6ot_tfg/kinematic_model_irp6ot_tfg.h"
 
 namespace mrrocpp {

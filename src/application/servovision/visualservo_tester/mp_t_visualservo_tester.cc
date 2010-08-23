@@ -4,13 +4,13 @@
  *  Created on: May 28, 2010
  *      Author: mboryn
  */
-
+#include "base/mp/mp_task.h"
 #include "mp_t_visualservo_tester.h"
 
 #include "robot/irp6p_m/irp6p_m_const.h"
 #include "robot/conveyor/conveyor_const.h"
 
-#include "lib/logger.h"
+#include "base/lib/logger.h"
 
 #include "../ecp_mp_g_visual_servo_tester.h"
 

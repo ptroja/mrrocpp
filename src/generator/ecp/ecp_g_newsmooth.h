@@ -9,7 +9,7 @@
 # define _ECP_GEN_NEWSMOOTH_H
 
 #include "generator/ecp/ecp_g_multiple_position.h"
-#include "lib/trajectory_pose/bang_bang_trajectory_pose.h"
+#include "base/lib/trajectory_pose/bang_bang_trajectory_pose.h"
 #include "generator/ecp/velocity_profile_calculator/bang_bang_profile.h"
 #include "generator/ecp/trajectory_interpolator/bang_bang_interpolator.h"
 

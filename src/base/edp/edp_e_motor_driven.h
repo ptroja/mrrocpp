@@ -19,16 +19,16 @@
 #include "base/edp/reader.h"
 #include "base/edp/manip_trans_t.h"
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
-#include "lib/srlib.h"
-#include "lib/mis_fun.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
+#include "base/lib/srlib.h"
+#include "base/lib/mis_fun.h"
 
 #include "base/edp/edp_effector.h"
 
 // Konfigurator
-#include "lib/configurator.h"
+#include "base/lib/configurator.h"
 
 //#ifdef DOCENT_SENSOR
 #include <boost/function.hpp>

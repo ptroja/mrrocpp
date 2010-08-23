@@ -12,10 +12,10 @@
 #include <boost/thread/mutex.hpp>
 #include <Eigen/Core>
 
-#include "lib/mrmath/ForceTrans.h"
-#include "lib/sensor_interface.h"				// klasa bazowa sensor
+#include "base/lib/mrmath/ForceTrans.h"
+#include "base/lib/sensor_interface.h"				// klasa bazowa sensor
 #include "base/edp/edp.h"				// klasa bazowa sensor
-#include "lib/mis_fun.h"
+#include "base/lib/mis_fun.h"
 
 namespace mrrocpp {
 namespace edp {

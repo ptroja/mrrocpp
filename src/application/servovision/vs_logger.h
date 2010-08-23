@@ -18,8 +18,8 @@
 #include <boost/thread/condition_variable.hpp>
 #include <boost/circular_buffer.hpp>
 
-#include "lib/mrmath/mrmath.h"
-#include "lib/configurator.h"
+#include "base/lib/mrmath/mrmath.h"
+#include "base/lib/configurator.h"
 
 namespace mrrocpp {
 

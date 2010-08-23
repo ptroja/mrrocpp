@@ -1,24 +1,23 @@
-
 #if !defined(__MP_T_TFG_GRASPIT_H)
 #define __MP_T_TFG_GRASPIT_H
 
-#include "base/mp/mp.h"
 #include "ecp_mp_tr_graspit.h"
 
 namespace mrrocpp {
 namespace mp {
 namespace task {
 
-class graspit: public task {
+class graspit : public task
+{
 
-	private:
-		ecp_mp::transmitter::TRGraspit* trgraspit;
+private:
+	ecp_mp::transmitter::TRGraspit* trgraspit;
 
-	public:
-		graspit(lib::configurator &_config);
+public:
+	graspit(lib::configurator &_config);
 
-		// methods for mp template
-		void main_task_algorithm(void);
+	// methods for mp template
+	void main_task_algorithm(void);
 
 };
 

@@ -11,8 +11,8 @@
 #include <algorithm>
 #include <vector>
 
-#include "lib/trajectory_pose/trajectory_pose.h"
-#include "lib/mrmath/mrmath.h"
+#include "base/lib/trajectory_pose/trajectory_pose.h"
+#include "base/lib/mrmath/mrmath.h"
 
 namespace mrrocpp {
 namespace ecp {

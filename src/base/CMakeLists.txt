@@ -1,4 +1,5 @@
 # Recurse into subdirectories.
+add_subdirectory (lib)
 add_subdirectory (kinematics)
 add_subdirectory (edp)
 add_subdirectory (ecp)

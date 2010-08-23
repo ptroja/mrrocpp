@@ -8,7 +8,7 @@
 #include "ecp_t_conveyor_test.h"
 #include "robot/conveyor/ecp_r_conv.h"
 
-#include "lib/logger.h"
+#include "base/lib/logger.h"
 
 #include "../ecp_mp_g_visual_servo_tester.h"
 

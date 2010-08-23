@@ -5,8 +5,8 @@
 #include <list>
 #include <string>
 
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
 #include "base/ecp_mp/smooth_trajectory_pose.h"
 
 #include <boost/serialization/utility.hpp>

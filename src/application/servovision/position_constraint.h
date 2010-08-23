@@ -8,7 +8,7 @@
 #ifndef POSITION_CONSTRAINT_H_
 #define POSITION_CONSTRAINT_H_
 
-#include "lib/mrmath/mrmath.h"
+#include "base/lib/mrmath/mrmath.h"
 
 namespace mrrocpp {
 namespace ecp {

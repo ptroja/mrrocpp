@@ -1,14 +1,16 @@
 #ifndef MP_ROBOT_H_
 #define MP_ROBOT_H_
 
-#include "base/mp/mp_task.h"
+#include "base/lib/srlib.h"
 #include "base/ecp_mp/ecp_mp_robot.h"
-
-#include <ctime>
-#include <sys/types.h>
 
 namespace mrrocpp {
 namespace mp {
+
+namespace task {
+class task;
+} // namespace task
+
 namespace robot {
 
 class robot : public ecp_mp::robot

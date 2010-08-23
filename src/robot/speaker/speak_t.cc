@@ -9,17 +9,17 @@
 #include <csignal>
 #include <cstdlib>
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
-#include "lib/srlib.h"
-#include "lib/mis_fun.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
+#include "base/lib/srlib.h"
+#include "base/lib/mis_fun.h"
 
 // Klasa edp_speaker_effector.
 #include "robot/speaker/edp_speaker_effector.h"
 #include "robot/speaker/speak_t.h"
 
-#include "lib/exception.h"
+#include "base/lib/exception.h"
 using namespace mrrocpp::lib::exception;
 
 namespace mrrocpp {

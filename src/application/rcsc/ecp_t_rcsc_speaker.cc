@@ -6,11 +6,11 @@
 // Ostatnia modyfikacja: 2006
 // ------------------------------------------------------------------------
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
 
-#include "lib/srlib.h"
+#include "base/lib/srlib.h"
 #include "robot/speaker/ecp_r_speaker.h"
 #include "ecp_t_rcsc_speaker.h"
 #include "application/rcsc/ecp_mp_t_rcsc.h"

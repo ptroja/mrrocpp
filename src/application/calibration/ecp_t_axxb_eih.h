@@ -1,9 +1,9 @@
 #if !defined(_ECP_T_AXXB_EIH_H)
 #define _ECP_T_AXXB_EIH_H
 
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
-#include "lib/configurator.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
+#include "base/lib/configurator.h"
 #include "base/ecp/ecp_task.h"
 #include "ecp_t_calib_axxb.h"
 

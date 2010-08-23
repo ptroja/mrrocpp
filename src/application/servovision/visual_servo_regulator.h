@@ -12,7 +12,7 @@
 
 #include <Eigen/Core>
 
-#include "lib/configurator.h"
+#include "base/lib/configurator.h"
 
 namespace mrrocpp {
 namespace ecp {

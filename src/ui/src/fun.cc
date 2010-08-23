@@ -19,14 +19,14 @@
 #include <process.h>
 #include <cassert>
 
-#include "lib/srlib.h"
+#include "base/lib/srlib.h"
 #include "ui/src/ui_const.h"
 #include "ui/src/ui_class.h"
 #include "ui/src/ui_ecp.h"
 
 // #include "ui/src/ui.h"
 // Konfigurator (dla PROCESS_SPAWN_RSH)
-#include "lib/configurator.h"
+#include "base/lib/configurator.h"
 #include "robot/irp6_mechatronika/irp6m_const.h"
 #include "robot/irp6ot_m/irp6ot_m_const.h"
 #include "robot/irp6ot_tfg/irp6ot_tfg_const.h"

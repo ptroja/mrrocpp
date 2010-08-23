@@ -11,7 +11,7 @@
 #include "Task.hh"
 #include "../../rcsc/ecp_mp_t_fsautomat.h"
 
-#include "lib/datastr.h"
+#include "base/lib/datastr.h"
 
 namespace pnexec {
 

@@ -7,7 +7,7 @@
 
 #include "capture_task.h"
 
-#include "lib/logger.h"
+#include "base/lib/logger.h"
 #include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
 
 using namespace logger;

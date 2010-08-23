@@ -9,7 +9,7 @@
 #define CUBIC_CONSTRAINT_H_
 
 #include <string>
-#include "lib/configurator.h"
+#include "base/lib/configurator.h"
 
 #include "position_constraint.h"
 

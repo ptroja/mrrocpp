@@ -18,11 +18,11 @@
 #include <iostream>
 #include <cerrno>
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
-#include "lib/mis_fun.h"
-#include "lib/mrmath/mrmath.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
+#include "base/lib/mis_fun.h"
+#include "base/lib/mrmath/mrmath.h"
 #include "base/edp/servo_gr.h"
 #include "base/edp/reader.h"
 #include "base/edp/manip_trans_t.h"

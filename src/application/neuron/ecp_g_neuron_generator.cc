@@ -4,26 +4,29 @@
  *  Created on: Jul 2, 2010
  *      Author: tbem
  */
-
+#include "base/ecp/ecp_task.h"
+#include "base/ecp/ecp_robot.h"
 #include "ecp_g_neuron_generator.h"
 #include "ecp_mp_neuron_sensor.h"
 #include <ctime>
 
-namespace mrrocpp{
-namespace ecp{
-namespace common{
-namespace generator{
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+namespace generator {
+
 
 neuron_generator::neuron_generator(common::task::task& _ecp_task):generator(_ecp_task) {
-
 	reset();
 }
 
-neuron_generator::~neuron_generator() {
+neuron_generator::~neuron_generator()
+{
 	delete neuron_sensor;
 }
 
-bool neuron_generator::first_step(){
+bool neuron_generator::first_step()
+{
 	ecp_t.sr_ecp_msg->message("neuron generator first step");
 	printf("neuron generator first step\n");
 	the_robot->ecp_command.instruction.instruction_type = lib::GET;
@@ -36,12 +39,14 @@ bool neuron_generator::first_step(){
 	the_robot->ecp_command.instruction.value_in_step_no = 10 - 2;
 	the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
 
-	neuron_sensor=(ecp_mp::sensor::neuron_sensor*)sensor_m[ecp_mp::sensor::ECP_MP_NEURON_SENSOR];
+	neuron_sensor = (ecp_mp::sensor::neuron_sensor*) sensor_m[ecp_mp::sensor::ECP_MP_NEURON_SENSOR];
 	neuron_sensor->startGettingTrajectory();
+
 	return true;
 }
 
 bool neuron_generator::next_step(){
+
 	the_robot->ecp_command.instruction.instruction_type = lib::SET;
 	flushall();
 	int i; //loop counter
@@ -55,12 +60,14 @@ bool neuron_generator::next_step(){
 	if(neuron_sensor->current_period==5){ //this section is not performed during breaking
 		if(neuron_sensor->startBraking()) {
 			breaking=true;
+
 			printf("\n-------- breaking ----------\n");
 			flushall();
 		}
 
 		flushall();
 		// ------------ read the current robot position ----------
+
 		actual_position_matrix.set_from_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame);
 		actual_position_matrix.get_xyz_angle_axis(angle_axis_vector);
 		angle_axis_vector.to_table(actual_position);
@@ -87,7 +94,6 @@ bool neuron_generator::next_step(){
 	}
 
 	for (i = 0; i < 6; i ++) { //for all of the axes...
-
 		if (desired_position[i] == actual_position[i]) {//if no motion in the axis
 			position[i] = actual_position[i]; //position remains the same
 			printf("%f\t", position[i]);
@@ -161,40 +167,43 @@ bool neuron_generator::next_step(){
 
 }
 
-double * neuron_generator::get_position() {
+double * neuron_generator::get_position()
+{
 	return position;
 }
 
-void neuron_generator::reset() {
+void neuron_generator::reset()
+{
 
 	int i;
 
 	breaking = false;
 
-	for (i = 0 ; i < 6; i++) {
+	for (i = 0; i < 6; i++) {
 		v[i] = 0.0;
 	}
 
-	for (i = 0 ; i < 6; i++) {
+	for (i = 0; i < 6; i++) {
 		a_max[i] = 0.1;
 	}
 
-	for (i = 0 ; i < 6; i++) {
+	for (i = 0; i < 6; i++) {
 		s[i] = 0.0;
 	}
 
-	for (i = 0 ; i < 6; i++) {
+	for (i = 0; i < 6; i++) {
 		k[i] = 0.0;
 	}
 
-	for (i = 0 ; i < 6; i++) {
+	for (i = 0; i < 6; i++) {
 		reached[i] = false;
 	}
 
 	breaking_node = 1;
 }
 
-void neuron_generator::set_breaking(bool breaking) {
+void neuron_generator::set_breaking(bool breaking)
+{
 	this->breaking = breaking;
 }
 

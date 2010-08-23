@@ -9,7 +9,7 @@
 #define __UI_CLASS_H
 
 #include "ui/src/ui.h"
-#include "lib/configurator.h"
+#include "base/lib/configurator.h"
 #include "ui/src/bird_hand/ui_r_bird_hand.h"
 #include "ui/src/irp6ot_m/ui_r_irp6ot_m.h"
 #include "ui/src/irp6ot_tfg/ui_r_irp6ot_tfg.h"
