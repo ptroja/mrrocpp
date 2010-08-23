@@ -5,9 +5,8 @@
 // Ostatnia modyfikacja: 16.04.98
 // -------------------------------------------------------------------------
 
-#ifndef __EDP_H
-#define __EDP_H
-
+#ifndef __EDP_TYPEDEFS_H
+#define __EDP_TYPEDEFS_H
 
 namespace mrrocpp {
 namespace edp {

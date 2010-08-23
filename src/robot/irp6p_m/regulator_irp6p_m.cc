@@ -14,7 +14,7 @@
 #include "base/lib/typedefs.h"
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
-#include "base/edp/edp.h"
+#include "base/edp/edp_typedefs.h"
 #include "base/edp/reader.h"
 #include "robot/irp6p_m/regulator_irp6p_m.h"
 #include "robot/irp6p_m/irp6p_m_const.h"

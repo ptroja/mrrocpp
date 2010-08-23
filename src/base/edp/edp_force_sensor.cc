@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "base/edp/edp.h"
+#include "base/edp/edp_typedefs.h"
 #include "base/edp/edp_e_manip.h"
 #include "base/lib/mis_fun.h"
 #include "base/edp/reader.h"
