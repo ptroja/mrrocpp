@@ -10,7 +10,7 @@
 
 #include <boost/utility.hpp>
 
-#include "base/edp/edp.h"
+#include "base/edp/edp_typedefs.h"
 #include "base/edp/HardwareInterface.h"
 #include "base/edp/regulator.h"
 

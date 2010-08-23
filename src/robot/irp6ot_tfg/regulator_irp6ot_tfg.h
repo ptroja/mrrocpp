@@ -9,7 +9,7 @@
 
 #ifndef __REGULATOR_IRP6OT_TFG_H
 #define __REGULATOR_IRP6OT_TFG_H
-#include "base/edp/edp.h"
+#include "base/edp/edp_typedefs.h"
 #include "base/edp/regulator.h"
 
 

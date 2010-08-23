@@ -14,9 +14,10 @@
 #include "base/lib/typedefs.h"
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
-#include "base/edp/edp.h"
+#include "base/edp/edp_typedefs.h"
 #include "base/edp/reader.h"
 #include "robot/irp6p_m/regulator_irp6p_m.h"
+#include "robot/irp6p_m/irp6p_m_const.h"
 
 #include "base/lib/mrmath/mrmath.h"
 
@@ -28,10 +29,9 @@ namespace irp6p_m {
 
 
 /*-----------------------------------------------------------------------*/
-NL_regulator_2_irp6p::NL_regulator_2_irp6p(uint8_t reg_no, uint8_t reg_par_no,
-		double aa, double bb0, double bb1, double k_ff,
-		common::motor_driven_effector &_master) :
-	NL_regulator(reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master) {
+NL_regulator_2_irp6p::NL_regulator_2_irp6p(uint8_t reg_no, uint8_t reg_par_no, double aa, double bb0, double bb1, double k_ff, common::motor_driven_effector &_master) :
+	NL_regulator(reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master)
+{
 	// Konstruktor regulatora konkretnego
 	// Przy inicjacji nalezy dopilnowac, zeby numery algorytmu regulacji oraz zestawu jego parametrow byly
 	// zgodne z faktycznie przekazywanym zestawem parametrow inicjujacych.
@@ -41,10 +41,9 @@ NL_regulator_2_irp6p::NL_regulator_2_irp6p(uint8_t reg_no, uint8_t reg_par_no,
 /*-----------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------*/
-NL_regulator_3_irp6p::NL_regulator_3_irp6p(uint8_t reg_no, uint8_t reg_par_no,
-		double aa, double bb0, double bb1, double k_ff,
-		common::motor_driven_effector &_master) :
-	NL_regulator(reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master) {
+NL_regulator_3_irp6p::NL_regulator_3_irp6p(uint8_t reg_no, uint8_t reg_par_no, double aa, double bb0, double bb1, double k_ff, common::motor_driven_effector &_master) :
+	NL_regulator(reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master)
+{
 	// Konstruktor regulatora konkretnego
 	// Przy inicjacji nalezy dopilnowac, zeby numery algorytmu regulacji oraz zestawu jego parametrow byly
 	// zgodne z faktycznie przekazywanym zestawem parametrow inicjujacych.
@@ -54,10 +53,9 @@ NL_regulator_3_irp6p::NL_regulator_3_irp6p(uint8_t reg_no, uint8_t reg_par_no,
 /*-----------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------*/
-NL_regulator_4_irp6p::NL_regulator_4_irp6p(uint8_t reg_no, uint8_t reg_par_no,
-		double aa, double bb0, double bb1, double k_ff,
-		common::motor_driven_effector &_master) :
-	NL_regulator(reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master) {
+NL_regulator_4_irp6p::NL_regulator_4_irp6p(uint8_t reg_no, uint8_t reg_par_no, double aa, double bb0, double bb1, double k_ff, common::motor_driven_effector &_master) :
+	NL_regulator(reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master)
+{
 	// Konstruktor regulatora konkretnego
 	// Przy inicjacji nalezy dopilnowac, zeby numery algorytmu regulacji oraz zestawu jego parametrow byly
 	// zgodne z faktycznie przekazywanym zestawem parametrow inicjujacych.
@@ -67,10 +65,9 @@ NL_regulator_4_irp6p::NL_regulator_4_irp6p(uint8_t reg_no, uint8_t reg_par_no,
 /*-----------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------*/
-NL_regulator_5_irp6p::NL_regulator_5_irp6p(uint8_t reg_no, uint8_t reg_par_no,
-		double aa, double bb0, double bb1, double k_ff,
-		common::motor_driven_effector &_master) :
-	NL_regulator(reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master) {
+NL_regulator_5_irp6p::NL_regulator_5_irp6p(uint8_t reg_no, uint8_t reg_par_no, double aa, double bb0, double bb1, double k_ff, common::motor_driven_effector &_master) :
+	NL_regulator(reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master)
+{
 	// Konstruktor regulatora konkretnego
 	// Przy inicjacji nalezy dopilnowac, zeby numery algorytmu regulacji oraz zestawu jego parametrow byly
 	// zgodne z faktycznie przekazywanym zestawem parametrow inicjujacych.
@@ -82,10 +79,9 @@ NL_regulator_5_irp6p::NL_regulator_5_irp6p(uint8_t reg_no, uint8_t reg_par_no,
 /*-----------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------*/
-NL_regulator_6_irp6p::NL_regulator_6_irp6p(uint8_t reg_no, uint8_t reg_par_no,
-		double aa, double bb0, double bb1, double k_ff,
-		common::motor_driven_effector &_master) :
-	NL_regulator(reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master) {
+NL_regulator_6_irp6p::NL_regulator_6_irp6p(uint8_t reg_no, uint8_t reg_par_no, double aa, double bb0, double bb1, double k_ff, common::motor_driven_effector &_master) :
+	NL_regulator(reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master)
+{
 	// Konstruktor regulatora konkretnego
 	// Przy inicjacji nalezy dopilnowac, zeby numery algorytmu regulacji oraz zestawu jego parametrow byly
 	// zgodne z faktycznie przekazywanym zestawem parametrow inicjujacych.
@@ -95,10 +91,9 @@ NL_regulator_6_irp6p::NL_regulator_6_irp6p(uint8_t reg_no, uint8_t reg_par_no,
 /*-----------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------*/
-NL_regulator_7_irp6p::NL_regulator_7_irp6p(uint8_t reg_no, uint8_t reg_par_no,
-		double aa, double bb0, double bb1, double k_ff,
-		common::motor_driven_effector &_master) :
-	NL_regulator(reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master) {
+NL_regulator_7_irp6p::NL_regulator_7_irp6p(uint8_t reg_no, uint8_t reg_par_no, double aa, double bb0, double bb1, double k_ff, common::motor_driven_effector &_master) :
+	NL_regulator(reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master)
+{
 	// Konstruktor regulatora konkretnego
 	// Przy inicjacji nalezy dopilnowac, zeby numery algorytmu regulacji oraz zestawu jego parametrow byly
 	// zgodne z faktycznie przekazywanym zestawem parametrow inicjujacych.
@@ -109,7 +104,8 @@ NL_regulator_7_irp6p::NL_regulator_7_irp6p(uint8_t reg_no, uint8_t reg_par_no,
 
 // kolumna i tak dalej
 /*-----------------------------------------------------------------------*/
-uint8_t NL_regulator_2_irp6p::compute_set_value(void) {
+uint8_t NL_regulator_2_irp6p::compute_set_value(void)
+{
 	// algorytm regulacji dla serwomechanizmu
 
 	// position_increment_old - przedostatnio odczytany przyrost polozenie
@@ -149,8 +145,7 @@ uint8_t NL_regulator_2_irp6p::compute_set_value(void) {
 
 	// przeliczenie radianow na impulsy
 	// step_new_pulse = step_new*IRP6_POSTUMENT_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
-	step_new_pulse = step_new * IRP6_POSTUMENT_AXIS_0_TO_5_INC_PER_REVOLUTION
-			/ (2 * M_PI);
+	step_new_pulse = step_new * IRP6_POSTUMENT_AXIS_0_TO_5_INC_PER_REVOLUTION / (2 * M_PI);
 	//position_increment_new= position_increment_new/AXE_0_TO_5_POSTUMENT_TO_TRACK_RATIO;
 
 	// if (step_new!=0.0) printf(" 2 reg:%f\n", step_new);
@@ -187,77 +182,78 @@ uint8_t NL_regulator_2_irp6p::compute_set_value(void) {
 	// servo_pos_increment_new_sum += position_increment_new;// by Y
 
 	// Przyrost calki uchybu
-	delta_eint = delta_eint_old + 1.010 * (step_new_pulse
-			- position_increment_new) - 0.990 * (step_old_pulse
+	delta_eint = delta_eint_old + 1.010 * (step_new_pulse - position_increment_new) - 0.990 * (step_old_pulse
 			- position_increment_old);
 
 	// Sprawdzenie czy numer algorytmu lub zestawu parametrow sie zmienil?
 	// Jezeli tak, to nalezy dokonac uaktualnienia numerow (ewentualnie wykryc niewlasciwosc numerow)
-	if ((current_algorithm_no != algorithm_no)
-			|| (current_algorithm_parameters_no != algorithm_parameters_no)) {
-		switch (algorithm_no) {
-		case 0: // algorytm nr 0
-			switch (algorithm_parameters_no) {
-			case 0: // zestaw parametrow nr 0
+	if ((current_algorithm_no != algorithm_no) || (current_algorithm_parameters_no != algorithm_parameters_no)) {
+		switch (algorithm_no)
+		{
+			case 0: // algorytm nr 0
+				switch (algorithm_parameters_no)
+				{
+					case 0: // zestaw parametrow nr 0
+						current_algorithm_parameters_no = algorithm_parameters_no;
+						current_algorithm_no = algorithm_no;
+						a = 0.3079;
+						b0 = 2.3100 * 1.5;
+						b1 = 2.0312 * 1.5;
+						k_feedforward = 0.35;
+						break;
+					case 1: // zestaw parametrow nr 1
+						current_algorithm_parameters_no = algorithm_parameters_no;
+						current_algorithm_no = algorithm_no;
+						a = 0.3079;
+						b0 = 2.3100 * 2.0;
+						b1 = 2.0312 * 2.0;
+						k_feedforward = 0;
+						break;
+					default: // blad => przywrocic stary algorytm i j stary zestaw parametrow
+						algorithm_no = current_algorithm_no;
+						algorithm_parameters_no = current_algorithm_parameters_no;
+						alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
+						break;
+				}
+				break;
+			case 1: // algorytm nr 1
+				switch (algorithm_parameters_no)
+				{
+					case 0: // zestaw parametrow nr 0
+						current_algorithm_parameters_no = algorithm_parameters_no;
+						current_algorithm_no = algorithm_no;
+						a = 0;
+						b0 = 0;
+						b1 = 0;
+						k_feedforward = 0;
+						break;
+					case 1: // zestaw parametrow nr 1
+						current_algorithm_parameters_no = algorithm_parameters_no;
+						current_algorithm_no = algorithm_no;
+						a = 0;
+						b0 = 0;
+						b1 = 0;
+						k_feedforward = 0;
+						break;
+					default: // blad - nie ma takiego zestawu parametrow dla tego algorytmu
+						// => przywrocic stary algorytm i j stary zestaw parametrow
+						algorithm_no = current_algorithm_no;
+						algorithm_parameters_no = current_algorithm_parameters_no;
+						alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
+						break;
+				}
+				; // end: switch (algorithm_parameters_no)
+				break;
+			case 2: // algorytm nr 2 - sterowanie pradowe
 				current_algorithm_parameters_no = algorithm_parameters_no;
 				current_algorithm_no = algorithm_no;
-				a = 0.3079;
-				b0 = 2.3100 * 1.5;
-				b1 = 2.0312 * 1.5;
-				k_feedforward = 0.35;
 				break;
-			case 1: // zestaw parametrow nr 1
-				current_algorithm_parameters_no = algorithm_parameters_no;
-				current_algorithm_no = algorithm_no;
-				a = 0.3079;
-				b0 = 2.3100 * 2.0;
-				b1 = 2.0312 * 2.0;
-				k_feedforward = 0;
-				break;
-			default: // blad => przywrocic stary algorytm i j stary zestaw parametrow
-				algorithm_no = current_algorithm_no;
-				algorithm_parameters_no = current_algorithm_parameters_no;
-				alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
-				break;
-			}
-			break;
-		case 1: // algorytm nr 1
-			switch (algorithm_parameters_no) {
-			case 0: // zestaw parametrow nr 0
-				current_algorithm_parameters_no = algorithm_parameters_no;
-				current_algorithm_no = algorithm_no;
-				a = 0;
-				b0 = 0;
-				b1 = 0;
-				k_feedforward = 0;
-				break;
-			case 1: // zestaw parametrow nr 1
-				current_algorithm_parameters_no = algorithm_parameters_no;
-				current_algorithm_no = algorithm_no;
-				a = 0;
-				b0 = 0;
-				b1 = 0;
-				k_feedforward = 0;
-				break;
-			default: // blad - nie ma takiego zestawu parametrow dla tego algorytmu
+			default: // blad - nie ma takiego algorytmu
 				// => przywrocic stary algorytm i j stary zestaw parametrow
 				algorithm_no = current_algorithm_no;
 				algorithm_parameters_no = current_algorithm_parameters_no;
-				alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
+				alg_par_status = UNIDENTIFIED_ALGORITHM_NO;
 				break;
-			}
-			; // end: switch (algorithm_parameters_no)
-			break;
-		case 2: // algorytm nr 2 - sterowanie pradowe
-			current_algorithm_parameters_no = algorithm_parameters_no;
-			current_algorithm_no = algorithm_no;
-			break;
-		default: // blad - nie ma takiego algorytmu
-			// => przywrocic stary algorytm i j stary zestaw parametrow
-			algorithm_no = current_algorithm_no;
-			algorithm_parameters_no = current_algorithm_parameters_no;
-			alg_par_status = UNIDENTIFIED_ALGORITHM_NO;
-			break;
 		}
 	}
 
@@ -265,40 +261,38 @@ uint8_t NL_regulator_2_irp6p::compute_set_value(void) {
 	b0 = 2.594932; //stara z przelicz rezolwer/enkoder 15.219541375872
 	b1 = 2.504769; //
 
-	switch (algorithm_no) {
-	case 0: // algorytm nr 0
-		// obliczenie nowej wartosci wypelnienia PWM algorytm PD + I
-		set_value_new = (1 + a) * set_value_old - a * set_value_very_old + b0
-				* delta_eint - b1 * delta_eint_old;
-		// cout<<a<<" "<<b0<<" "<<b1<<"\n";
-		break;
-	case 1: // algorytm nr 1
-		// obliczenie nowej wartosci wypelnienia PWM algorytm PD + I
-		set_value_new = (1 + a) * set_value_old - a * set_value_very_old + b0
-				* (step_new_pulse - position_increment_new) - b1
-				* (step_old_pulse - position_increment_old);
-		break;
-	case 2: // algorytm nr 2 - sterowanie pradowe
-		// DUNG START
-		current_desired = 0.4 * 9.52
-				* (master.instruction.arm.pf_def.desired_torque[0] / 158);
-		current_measured = (meassured_current - 128 - 3) * 0.035;
-		current_error = current_desired - current_measured;
-		int_current_error = int_current_error + current_error * 0.02; // 500Hz => 0.02s
-		//int_current_error = 0;
-		set_value_new = -30 * current_error - 6.0 * int_current_error;
+	switch (algorithm_no)
+	{
+		case 0: // algorytm nr 0
+			// obliczenie nowej wartosci wypelnienia PWM algorytm PD + I
+			set_value_new = (1 + a) * set_value_old - a * set_value_very_old + b0 * delta_eint - b1 * delta_eint_old;
+			// cout<<a<<" "<<b0<<" "<<b1<<"\n";
+			break;
+		case 1: // algorytm nr 1
+			// obliczenie nowej wartosci wypelnienia PWM algorytm PD + I
+			set_value_new = (1 + a) * set_value_old - a * set_value_very_old + b0 * (step_new_pulse
+					- position_increment_new) - b1 * (step_old_pulse - position_increment_old);
+			break;
+		case 2: // algorytm nr 2 - sterowanie pradowe
+			// DUNG START
+			current_desired = 0.4 * 9.52 * (master.instruction.arm.pf_def.desired_torque[0] / 158);
+			current_measured = (meassured_current - 128 - 3) * 0.035;
+			current_error = current_desired - current_measured;
+			int_current_error = int_current_error + current_error * 0.02; // 500Hz => 0.02s
+			//int_current_error = 0;
+			set_value_new = -30 * current_error - 6.0 * int_current_error;
 
-		display++;
-		if (display >= 500) {
-			display = 0;
-			//printf("joint 1:   desired_current = %f,    current_error = %f,    out = %f\n", master.instruction.arm.pf_def.desired_torque[0] / 158, current_error, -30 * current_error - 4.0*int_current_error);
-		}
-		// DUNG END
-		break;
-	default: // w tym miejscu nie powinien wystapic blad zwiazany z
-		// nieistniejacym numerem algorytmu
-		set_value_new = 0; // zerowe nowe sterowanie
-		break;
+			display++;
+			if (display >= 500) {
+				display = 0;
+				//printf("joint 1:   desired_current = %f,    current_error = %f,    out = %f\n", master.instruction.arm.pf_def.desired_torque[0] / 158, current_error, -30 * current_error - 4.0*int_current_error);
+			}
+			// DUNG END
+			break;
+		default: // w tym miejscu nie powinien wystapic blad zwiazany z
+			// nieistniejacym numerem algorytmu
+			set_value_new = 0; // zerowe nowe sterowanie
+			break;
 	}
 
 	// scope-locked reader data update
@@ -306,11 +300,9 @@ uint8_t NL_regulator_2_irp6p::compute_set_value(void) {
 		boost::mutex::scoped_lock lock(master.rb_obj->reader_mutex);
 
 		master.rb_obj->step_data.desired_inc[1] = (float) step_new_pulse; // pozycja osi 0
-		master.rb_obj->step_data.current_inc[1]
-				= (short int) position_increment_new;
+		master.rb_obj->step_data.current_inc[1] = (short int) position_increment_new;
 		master.rb_obj->step_data.pwm[1] = (float) set_value_new;
-		master.rb_obj->step_data.uchyb[1] = (float) (step_new_pulse
-				- position_increment_new);
+		master.rb_obj->step_data.uchyb[1] = (float) (step_new_pulse - position_increment_new);
 	}
 
 	//  	set_value_new=set_value_new;
@@ -342,7 +334,8 @@ uint8_t NL_regulator_2_irp6p::compute_set_value(void) {
 /*-----------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------*/
-uint8_t NL_regulator_3_irp6p::compute_set_value(void) {
+uint8_t NL_regulator_3_irp6p::compute_set_value(void)
+{
 	// algorytm regulacji dla serwomechanizmu
 
 	// position_increment_old - przedostatnio odczytany przyrost polozenie
@@ -382,8 +375,7 @@ uint8_t NL_regulator_3_irp6p::compute_set_value(void) {
 
 	// przeliczenie radianow na impulsy
 	// step_new_pulse = step_new*IRP6_POSTUMENT_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
-	step_new_pulse = step_new * IRP6_POSTUMENT_AXIS_0_TO_5_INC_PER_REVOLUTION
-			/ (2 * M_PI);
+	step_new_pulse = step_new * IRP6_POSTUMENT_AXIS_0_TO_5_INC_PER_REVOLUTION / (2 * M_PI);
 	///position_increment_new= position_increment_new;
 
 	// if (step_new!=0.0) printf(" 3 reg:%f\n", step_new);
@@ -419,77 +411,78 @@ uint8_t NL_regulator_3_irp6p::compute_set_value(void) {
 	// servo_pos_increment_new_sum += root_position_increment_new;// by Y
 
 	// Przyrost calki uchybu
-	delta_eint = delta_eint_old + 1.008 * (step_new_pulse
-			- position_increment_new) - 0.992 * (step_old_pulse
+	delta_eint = delta_eint_old + 1.008 * (step_new_pulse - position_increment_new) - 0.992 * (step_old_pulse
 			- position_increment_old);
 
 	// Sprawdzenie czy numer algorytmu lub zestawu parametrow sie zmienil?
 	// Jezeli tak, to nalezy dokonac uaktualnienia numerow (ewentualnie wykryc niewlasciwosc numerow)
-	if ((current_algorithm_no != algorithm_no)
-			|| (current_algorithm_parameters_no != algorithm_parameters_no)) {
-		switch (algorithm_no) {
-		case 0: // algorytm nr 0
-			switch (algorithm_parameters_no) {
-			case 0: // zestaw parametrow nr 0
+	if ((current_algorithm_no != algorithm_no) || (current_algorithm_parameters_no != algorithm_parameters_no)) {
+		switch (algorithm_no)
+		{
+			case 0: // algorytm nr 0
+				switch (algorithm_parameters_no)
+				{
+					case 0: // zestaw parametrow nr 0
+						current_algorithm_parameters_no = algorithm_parameters_no;
+						current_algorithm_no = algorithm_no;
+						a = 0.4152;
+						b0 = 1.2500 * 1.5;
+						b1 = 1.0998 * 1.5;
+						k_feedforward = 0.35;
+						break;
+					case 1: // zestaw parametrow nr 1
+						current_algorithm_parameters_no = algorithm_parameters_no;
+						current_algorithm_no = algorithm_no;
+						a = 0.4152;
+						b0 = 1.2500 * 2.5;
+						b1 = 1.0998 * 2.5;
+						k_feedforward = 0;
+						break;
+					default: // blad => przywrocic stary algorytm i j stary zestaw parametrow
+						algorithm_no = current_algorithm_no;
+						algorithm_parameters_no = current_algorithm_parameters_no;
+						alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
+						break;
+				}
+				break;
+			case 1: // algorytm nr 1
+				switch (algorithm_parameters_no)
+				{
+					case 0: // zestaw parametrow nr 0
+						current_algorithm_parameters_no = algorithm_parameters_no;
+						current_algorithm_no = algorithm_no;
+						a = 0;
+						b0 = 0;
+						b1 = 0;
+						k_feedforward = 0;
+						break;
+					case 1: // zestaw parametrow nr 1
+						current_algorithm_parameters_no = algorithm_parameters_no;
+						current_algorithm_no = algorithm_no;
+						a = 0;
+						b0 = 0;
+						b1 = 0;
+						k_feedforward = 0;
+						break;
+					default: // blad - nie ma takiego zestawu parametrow dla tego algorytmu
+						// => przywrocic stary algorytm i j stary zestaw parametrow
+						algorithm_no = current_algorithm_no;
+						algorithm_parameters_no = current_algorithm_parameters_no;
+						alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
+						break;
+				}
+				; // end: switch (algorithm_parameters_no)
+				break;
+			case 2: // algorytm nr 2 - sterowanie pradowe
 				current_algorithm_parameters_no = algorithm_parameters_no;
 				current_algorithm_no = algorithm_no;
-				a = 0.4152;
-				b0 = 1.2500 * 1.5;
-				b1 = 1.0998 * 1.5;
-				k_feedforward = 0.35;
 				break;
-			case 1: // zestaw parametrow nr 1
-				current_algorithm_parameters_no = algorithm_parameters_no;
-				current_algorithm_no = algorithm_no;
-				a = 0.4152;
-				b0 = 1.2500 * 2.5;
-				b1 = 1.0998 * 2.5;
-				k_feedforward = 0;
-				break;
-			default: // blad => przywrocic stary algorytm i j stary zestaw parametrow
-				algorithm_no = current_algorithm_no;
-				algorithm_parameters_no = current_algorithm_parameters_no;
-				alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
-				break;
-			}
-			break;
-		case 1: // algorytm nr 1
-			switch (algorithm_parameters_no) {
-			case 0: // zestaw parametrow nr 0
-				current_algorithm_parameters_no = algorithm_parameters_no;
-				current_algorithm_no = algorithm_no;
-				a = 0;
-				b0 = 0;
-				b1 = 0;
-				k_feedforward = 0;
-				break;
-			case 1: // zestaw parametrow nr 1
-				current_algorithm_parameters_no = algorithm_parameters_no;
-				current_algorithm_no = algorithm_no;
-				a = 0;
-				b0 = 0;
-				b1 = 0;
-				k_feedforward = 0;
-				break;
-			default: // blad - nie ma takiego zestawu parametrow dla tego algorytmu
+			default: // blad - nie ma takiego algorytmu
 				// => przywrocic stary algorytm i j stary zestaw parametrow
 				algorithm_no = current_algorithm_no;
 				algorithm_parameters_no = current_algorithm_parameters_no;
-				alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
+				alg_par_status = UNIDENTIFIED_ALGORITHM_NO;
 				break;
-			}
-			; // end: switch (algorithm_parameters_no)
-			break;
-		case 2: // algorytm nr 2 - sterowanie pradowe
-			current_algorithm_parameters_no = algorithm_parameters_no;
-			current_algorithm_no = algorithm_no;
-			break;
-		default: // blad - nie ma takiego algorytmu
-			// => przywrocic stary algorytm i j stary zestaw parametrow
-			algorithm_no = current_algorithm_no;
-			algorithm_parameters_no = current_algorithm_parameters_no;
-			alg_par_status = UNIDENTIFIED_ALGORITHM_NO;
-			break;
 		}
 	}
 
@@ -497,39 +490,37 @@ uint8_t NL_regulator_3_irp6p::compute_set_value(void) {
 	b0 = 1.030178; //6.042100283822;
 	b1 = 0.986142;
 
-	switch (algorithm_no) {
-	case 0: // algorytm nr 0
-		// obliczenie nowej wartosci wypelnienia PWM algorytm PD + I
-		set_value_new = (1 + a) * set_value_old - a * set_value_very_old + b0
-				* delta_eint - b1 * delta_eint_old;
-		break;
-	case 1: // algorytm nr 1
-		// obliczenie nowej wartosci wypelnienia PWM algorytm PD + I
-		set_value_new = (1 + a) * set_value_old - a * set_value_very_old + b0
-				* (step_new_pulse - position_increment_new) - b1
-				* (step_old_pulse - position_increment_old);
-		break;
-	case 2: // algorytm nr 2 - sterowanie pradowe
-		// DUNG START
-		current_desired = 0.4 * 9.52
-				* (master.instruction.arm.pf_def.desired_torque[1] / 158);
-		current_measured = (meassured_current - 128 - 3) * 0.035;
-		current_error = current_desired - current_measured;
-		int_current_error = int_current_error + current_error * 0.02; // 500Hz => 0.02s
-		//int_current_error = 0;
-		set_value_new = -33 * current_error - 6.4 * int_current_error;
+	switch (algorithm_no)
+	{
+		case 0: // algorytm nr 0
+			// obliczenie nowej wartosci wypelnienia PWM algorytm PD + I
+			set_value_new = (1 + a) * set_value_old - a * set_value_very_old + b0 * delta_eint - b1 * delta_eint_old;
+			break;
+		case 1: // algorytm nr 1
+			// obliczenie nowej wartosci wypelnienia PWM algorytm PD + I
+			set_value_new = (1 + a) * set_value_old - a * set_value_very_old + b0 * (step_new_pulse
+					- position_increment_new) - b1 * (step_old_pulse - position_increment_old);
+			break;
+		case 2: // algorytm nr 2 - sterowanie pradowe
+			// DUNG START
+			current_desired = 0.4 * 9.52 * (master.instruction.arm.pf_def.desired_torque[1] / 158);
+			current_measured = (meassured_current - 128 - 3) * 0.035;
+			current_error = current_desired - current_measured;
+			int_current_error = int_current_error + current_error * 0.02; // 500Hz => 0.02s
+			//int_current_error = 0;
+			set_value_new = -33 * current_error - 6.4 * int_current_error;
 
-		display++;
-		if (display >= 500) {
-			display = 0;
-			//printf("joint 2:   desired_current = %f(A),    current_error = %f(A),    out = %f\n", current_desired, current_error, -30 * current_error - 6*int_current_error);
-		}
-		// DUNG END
-		break;
-	default: // w tym miejscu nie powinien wystapic blad zwiazany z
-		// nieistniejacym numerem algorytmu
-		set_value_new = 0; // zerowe nowe sterowanie
-		break;
+			display++;
+			if (display >= 500) {
+				display = 0;
+				//printf("joint 2:   desired_current = %f(A),    current_error = %f(A),    out = %f\n", current_desired, current_error, -30 * current_error - 6*int_current_error);
+			}
+			// DUNG END
+			break;
+		default: // w tym miejscu nie powinien wystapic blad zwiazany z
+			// nieistniejacym numerem algorytmu
+			set_value_new = 0; // zerowe nowe sterowanie
+			break;
 	}
 
 	// scope-locked reader data update
@@ -537,11 +528,9 @@ uint8_t NL_regulator_3_irp6p::compute_set_value(void) {
 		boost::mutex::scoped_lock lock(master.rb_obj->reader_mutex);
 
 		master.rb_obj->step_data.desired_inc[2] = (float) step_new_pulse; // pozycja osi 0
-		master.rb_obj->step_data.current_inc[2]
-				= (short int) position_increment_new;
+		master.rb_obj->step_data.current_inc[2] = (short int) position_increment_new;
 		master.rb_obj->step_data.pwm[2] = (float) set_value_new;
-		master.rb_obj->step_data.uchyb[2] = (float) (step_new_pulse
-				- position_increment_new);
+		master.rb_obj->step_data.uchyb[2] = (float) (step_new_pulse - position_increment_new);
 	}
 
 	// ograniczenie na sterowanie
@@ -571,7 +560,8 @@ uint8_t NL_regulator_3_irp6p::compute_set_value(void) {
 /*-----------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------*/
-uint8_t NL_regulator_4_irp6p::compute_set_value(void) {
+uint8_t NL_regulator_4_irp6p::compute_set_value(void)
+{
 	// algorytm regulacji dla serwomechanizmu
 
 	// position_increment_old - przedostatnio odczytany przyrost polozenie
@@ -613,8 +603,7 @@ uint8_t NL_regulator_4_irp6p::compute_set_value(void) {
 
 	// przeliczenie radianow na impulsy
 	// step_new_pulse = step_new*IRP6_POSTUMENT_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
-	step_new_pulse = step_new * IRP6_POSTUMENT_AXIS_0_TO_5_INC_PER_REVOLUTION
-			/ (2 * M_PI);
+	step_new_pulse = step_new * IRP6_POSTUMENT_AXIS_0_TO_5_INC_PER_REVOLUTION / (2 * M_PI);
 	//position_increment_new= position_increment_new/AXE_0_TO_5_POSTUMENT_TO_TRACK_RATIO;
 
 	// if (step_new!=0.0) printf(" 4 reg:%f\n", step_new);
@@ -650,76 +639,77 @@ uint8_t NL_regulator_4_irp6p::compute_set_value(void) {
 	// servo_pos_increment_new_sum += root_position_increment_new;// by Y
 
 	// Przyrost calki uchybu
-	delta_eint = delta_eint_old + 1.008 * (step_new_pulse
-			- position_increment_new) - 0.992 * (step_old_pulse
+	delta_eint = delta_eint_old + 1.008 * (step_new_pulse - position_increment_new) - 0.992 * (step_old_pulse
 			- position_increment_old);
 
 	// Sprawdzenie czy numer algorytmu lub zestawu parametrow sie zmienil?
 	// Jezeli tak, to nalezy dokonac uaktualnienia numerow (ewentualnie wykryc niewlasciwosc numerow)
-	if ((current_algorithm_no != algorithm_no)
-			|| (current_algorithm_parameters_no != algorithm_parameters_no)) {
-		switch (algorithm_no) {
-		case 0: // algorytm nr 0
-			switch (algorithm_parameters_no) {
-			case 0: // zestaw parametrow nr 0
+	if ((current_algorithm_no != algorithm_no) || (current_algorithm_parameters_no != algorithm_parameters_no)) {
+		switch (algorithm_no)
+		{
+			case 0: // algorytm nr 0
+				switch (algorithm_parameters_no)
+				{
+					case 0: // zestaw parametrow nr 0
+						current_algorithm_parameters_no = algorithm_parameters_no;
+						current_algorithm_no = algorithm_no;
+						a = 0.3079;
+						b0 = 1.0942 * 1.0;
+						b1 = 0.9166 * 1.0;
+						k_feedforward = 0.35;
+						break;
+					case 1: // zestaw parametrow nr 1
+						current_algorithm_parameters_no = algorithm_parameters_no;
+						current_algorithm_no = algorithm_no;
+						a = 0.3079;
+						b0 = 1.0942 * 2.5;
+						b1 = 0.9166 * 2.5;
+						k_feedforward = 0;
+						break;
+					default: // blad => przywrocic stary algorytm i j stary zestaw parametrow
+						algorithm_no = current_algorithm_no;
+						algorithm_parameters_no = current_algorithm_parameters_no;
+						alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
+						break;
+				}
+				break;
+			case 1: // algorytm nr 1
+				switch (algorithm_parameters_no)
+				{
+					case 0: // zestaw parametrow nr 0
+						current_algorithm_parameters_no = algorithm_parameters_no;
+						current_algorithm_no = algorithm_no;
+						a = 0;
+						b0 = 0;
+						b1 = 0;
+						k_feedforward = 0;
+						break;
+					case 1: // zestaw parametrow nr 1
+						current_algorithm_parameters_no = algorithm_parameters_no;
+						current_algorithm_no = algorithm_no;
+						a = 0;
+						b0 = 0;
+						b1 = 0;
+						k_feedforward = 0;
+						break;
+					default: // blad - nie ma takiego zestawu parametrow dla tego algorytmu
+						// => przywrocic stary algorytm i j stary zestaw parametrow
+						algorithm_no = current_algorithm_no;
+						algorithm_parameters_no = current_algorithm_parameters_no;
+						alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
+						break;
+				}
+				break;
+			case 2: // algorytm nr 2 - sterowanie pradowe
 				current_algorithm_parameters_no = algorithm_parameters_no;
 				current_algorithm_no = algorithm_no;
-				a = 0.3079;
-				b0 = 1.0942 * 1.0;
-				b1 = 0.9166 * 1.0;
-				k_feedforward = 0.35;
 				break;
-			case 1: // zestaw parametrow nr 1
-				current_algorithm_parameters_no = algorithm_parameters_no;
-				current_algorithm_no = algorithm_no;
-				a = 0.3079;
-				b0 = 1.0942 * 2.5;
-				b1 = 0.9166 * 2.5;
-				k_feedforward = 0;
-				break;
-			default: // blad => przywrocic stary algorytm i j stary zestaw parametrow
-				algorithm_no = current_algorithm_no;
-				algorithm_parameters_no = current_algorithm_parameters_no;
-				alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
-				break;
-			}
-			break;
-		case 1: // algorytm nr 1
-			switch (algorithm_parameters_no) {
-			case 0: // zestaw parametrow nr 0
-				current_algorithm_parameters_no = algorithm_parameters_no;
-				current_algorithm_no = algorithm_no;
-				a = 0;
-				b0 = 0;
-				b1 = 0;
-				k_feedforward = 0;
-				break;
-			case 1: // zestaw parametrow nr 1
-				current_algorithm_parameters_no = algorithm_parameters_no;
-				current_algorithm_no = algorithm_no;
-				a = 0;
-				b0 = 0;
-				b1 = 0;
-				k_feedforward = 0;
-				break;
-			default: // blad - nie ma takiego zestawu parametrow dla tego algorytmu
+			default: // blad - nie ma takiego algorytmu
 				// => przywrocic stary algorytm i j stary zestaw parametrow
 				algorithm_no = current_algorithm_no;
 				algorithm_parameters_no = current_algorithm_parameters_no;
-				alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
+				alg_par_status = UNIDENTIFIED_ALGORITHM_NO;
 				break;
-			}
-			break;
-		case 2: // algorytm nr 2 - sterowanie pradowe
-			current_algorithm_parameters_no = algorithm_parameters_no;
-			current_algorithm_no = algorithm_no;
-			break;
-		default: // blad - nie ma takiego algorytmu
-			// => przywrocic stary algorytm i j stary zestaw parametrow
-			algorithm_no = current_algorithm_no;
-			algorithm_parameters_no = current_algorithm_parameters_no;
-			alg_par_status = UNIDENTIFIED_ALGORITHM_NO;
-			break;
 		}
 	}
 
@@ -727,39 +717,37 @@ uint8_t NL_regulator_4_irp6p::compute_set_value(void) {
 	b0 = 1.997464;
 	b1 = 1.904138;
 
-	switch (algorithm_no) {
-	case 0: // algorytm nr 0
-		// obliczenie nowej wartosci wypelnienia PWM algorytm PD + I
-		set_value_new = (1 + a) * set_value_old - a * set_value_very_old + b0
-				* delta_eint - b1 * delta_eint_old;
-		break;
-	case 1: // algorytm nr 1
-		// obliczenie nowej wartosci wypelnienia PWM algorytm PD + I
-		set_value_new = (1 + a) * set_value_old - a * set_value_very_old + b0
-				* (step_new_pulse - position_increment_new) - b1
-				* (step_old_pulse - position_increment_old);
-		break;
-	case 2: // algorytm nr 2 - sterowanie pradowe
-		// DUNG START
-		current_desired = 0.4 * 9.52
-				* (master.instruction.arm.pf_def.desired_torque[2] / 158);
-		current_measured = (meassured_current - 128 - 3) * 0.035;
-		current_error = current_desired - current_measured;
-		int_current_error = int_current_error + current_error * 0.02; // 500Hz => 0.02s
-		//int_current_error = 0;
-		set_value_new = 32 * current_error + 5.5 * int_current_error;
+	switch (algorithm_no)
+	{
+		case 0: // algorytm nr 0
+			// obliczenie nowej wartosci wypelnienia PWM algorytm PD + I
+			set_value_new = (1 + a) * set_value_old - a * set_value_very_old + b0 * delta_eint - b1 * delta_eint_old;
+			break;
+		case 1: // algorytm nr 1
+			// obliczenie nowej wartosci wypelnienia PWM algorytm PD + I
+			set_value_new = (1 + a) * set_value_old - a * set_value_very_old + b0 * (step_new_pulse
+					- position_increment_new) - b1 * (step_old_pulse - position_increment_old);
+			break;
+		case 2: // algorytm nr 2 - sterowanie pradowe
+			// DUNG START
+			current_desired = 0.4 * 9.52 * (master.instruction.arm.pf_def.desired_torque[2] / 158);
+			current_measured = (meassured_current - 128 - 3) * 0.035;
+			current_error = current_desired - current_measured;
+			int_current_error = int_current_error + current_error * 0.02; // 500Hz => 0.02s
+			//int_current_error = 0;
+			set_value_new = 32 * current_error + 5.5 * int_current_error;
 
-		display++;
-		if (display >= 500) {
-			display = 0;
-			//printf("joint 3:   current_error = %f,    out = %f\n", current_error, 30 * current_error + 5.0*int_current_error);
-		}
-		// DUNG END
-		break;
-	default: // w tym miejscu nie powinien wystapic blad zwiazany z
-		// nieistniejacym numerem algorytmu
-		set_value_new = 0; // zerowe nowe sterowanie
-		break;
+			display++;
+			if (display >= 500) {
+				display = 0;
+				//printf("joint 3:   current_error = %f,    out = %f\n", current_error, 30 * current_error + 5.0*int_current_error);
+			}
+			// DUNG END
+			break;
+		default: // w tym miejscu nie powinien wystapic blad zwiazany z
+			// nieistniejacym numerem algorytmu
+			set_value_new = 0; // zerowe nowe sterowanie
+			break;
 	}
 
 	// scope-locked reader data update
@@ -767,11 +755,9 @@ uint8_t NL_regulator_4_irp6p::compute_set_value(void) {
 		boost::mutex::scoped_lock lock(master.rb_obj->reader_mutex);
 
 		master.rb_obj->step_data.desired_inc[3] = (float) step_new_pulse; // pozycja osi 0
-		master.rb_obj->step_data.current_inc[3]
-				= (short int) position_increment_new;
+		master.rb_obj->step_data.current_inc[3] = (short int) position_increment_new;
 		master.rb_obj->step_data.pwm[3] = (float) set_value_new;
-		master.rb_obj->step_data.uchyb[3] = (float) (step_new_pulse
-				- position_increment_new);
+		master.rb_obj->step_data.uchyb[3] = (float) (step_new_pulse - position_increment_new);
 		// master.rb_obj->step_data.uchyb[3]=(float) (step_new_pulse - position_increment_new);
 	}
 
@@ -802,7 +788,8 @@ uint8_t NL_regulator_4_irp6p::compute_set_value(void) {
 /*-----------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------*/
-uint8_t NL_regulator_5_irp6p::compute_set_value(void) {
+uint8_t NL_regulator_5_irp6p::compute_set_value(void)
+{
 	// algorytm regulacji dla serwomechanizmu
 
 	// position_increment_old - przedostatnio odczytany przyrost polozenie
@@ -843,8 +830,7 @@ uint8_t NL_regulator_5_irp6p::compute_set_value(void) {
 
 	// przeliczenie radianow na impulsy
 	// step_new_pulse = step_new*IRP6_POSTUMENT_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
-	step_new_pulse = step_new * IRP6_POSTUMENT_AXIS_0_TO_5_INC_PER_REVOLUTION
-			/ (2 * M_PI);
+	step_new_pulse = step_new * IRP6_POSTUMENT_AXIS_0_TO_5_INC_PER_REVOLUTION / (2 * M_PI);
 	//position_increment_new= position_increment_new/AXE_0_TO_5_POSTUMENT_TO_TRACK_RATIO;
 	/*
 	 if (!eee)
@@ -876,76 +862,77 @@ uint8_t NL_regulator_5_irp6p::compute_set_value(void) {
 	// servo_pos_increment_new_sum += root_position_increment_new;// by Y
 
 	// Przyrost calki uchybu
-	delta_eint = delta_eint_old + 1.010 * (step_new_pulse
-			- position_increment_new) - 0.990 * (step_old_pulse
+	delta_eint = delta_eint_old + 1.010 * (step_new_pulse - position_increment_new) - 0.990 * (step_old_pulse
 			- position_increment_old);
 
 	// Sprawdzenie czy numer algorytmu lub zestawu parametrow sie zmienil?
 	// Jezeli tak, to nalezy dokonac uaktualnienia numerow (ewentualnie wykryc niewlasciwosc numerow)
-	if ((current_algorithm_no != algorithm_no)
-			|| (current_algorithm_parameters_no != algorithm_parameters_no)) {
-		switch (algorithm_no) {
-		case 0: // algorytm nr 0
-			switch (algorithm_parameters_no) {
-			case 0: // zestaw parametrow nr 0
+	if ((current_algorithm_no != algorithm_no) || (current_algorithm_parameters_no != algorithm_parameters_no)) {
+		switch (algorithm_no)
+		{
+			case 0: // algorytm nr 0
+				switch (algorithm_parameters_no)
+				{
+					case 0: // zestaw parametrow nr 0
+						current_algorithm_parameters_no = algorithm_parameters_no;
+						current_algorithm_no = algorithm_no;
+						a = 0.3079;
+						b0 = 1.0942 * 1.5;
+						b1 = 0.9166 * 1.5;
+						k_feedforward = 0.35;
+						break;
+					case 1: // zestaw parametrow nr 1
+						current_algorithm_parameters_no = algorithm_parameters_no;
+						current_algorithm_no = algorithm_no;
+						a = 0.3079;
+						b0 = 1.0942 * 2.5;
+						b1 = 0.9166 * 2.5;
+						k_feedforward = 0;
+						break;
+					default: // blad => przywrocic stary algorytm i j stary zestaw parametrow
+						algorithm_no = current_algorithm_no;
+						algorithm_parameters_no = current_algorithm_parameters_no;
+						alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
+						break;
+				}
+				break;
+			case 1: // algorytm nr 1
+				switch (algorithm_parameters_no)
+				{
+					case 0: // zestaw parametrow nr 0
+						current_algorithm_parameters_no = algorithm_parameters_no;
+						current_algorithm_no = algorithm_no;
+						a = 0;
+						b0 = 0;
+						b1 = 0;
+						k_feedforward = 0;
+						break;
+					case 1: // zestaw parametrow nr 1
+						current_algorithm_parameters_no = algorithm_parameters_no;
+						current_algorithm_no = algorithm_no;
+						a = 0;
+						b0 = 0;
+						b1 = 0;
+						k_feedforward = 0;
+						break;
+					default: // blad - nie ma takiego zestawu parametrow dla tego algorytmu
+						// => przywrocic stary algorytm i j stary zestaw parametrow
+						algorithm_no = current_algorithm_no;
+						algorithm_parameters_no = current_algorithm_parameters_no;
+						alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
+						break;
+				}
+				break;
+			case 2: // algorytm nr 2 - sterowanie pradowe
 				current_algorithm_parameters_no = algorithm_parameters_no;
 				current_algorithm_no = algorithm_no;
-				a = 0.3079;
-				b0 = 1.0942 * 1.5;
-				b1 = 0.9166 * 1.5;
-				k_feedforward = 0.35;
 				break;
-			case 1: // zestaw parametrow nr 1
-				current_algorithm_parameters_no = algorithm_parameters_no;
-				current_algorithm_no = algorithm_no;
-				a = 0.3079;
-				b0 = 1.0942 * 2.5;
-				b1 = 0.9166 * 2.5;
-				k_feedforward = 0;
-				break;
-			default: // blad => przywrocic stary algorytm i j stary zestaw parametrow
-				algorithm_no = current_algorithm_no;
-				algorithm_parameters_no = current_algorithm_parameters_no;
-				alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
-				break;
-			}
-			break;
-		case 1: // algorytm nr 1
-			switch (algorithm_parameters_no) {
-			case 0: // zestaw parametrow nr 0
-				current_algorithm_parameters_no = algorithm_parameters_no;
-				current_algorithm_no = algorithm_no;
-				a = 0;
-				b0 = 0;
-				b1 = 0;
-				k_feedforward = 0;
-				break;
-			case 1: // zestaw parametrow nr 1
-				current_algorithm_parameters_no = algorithm_parameters_no;
-				current_algorithm_no = algorithm_no;
-				a = 0;
-				b0 = 0;
-				b1 = 0;
-				k_feedforward = 0;
-				break;
-			default: // blad - nie ma takiego zestawu parametrow dla tego algorytmu
+			default: // blad - nie ma takiego algorytmu
 				// => przywrocic stary algorytm i j stary zestaw parametrow
 				algorithm_no = current_algorithm_no;
 				algorithm_parameters_no = current_algorithm_parameters_no;
-				alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
+				alg_par_status = UNIDENTIFIED_ALGORITHM_NO;
 				break;
-			}
-			break;
-		case 2: // algorytm nr 2 - sterowanie pradowe
-			current_algorithm_parameters_no = algorithm_parameters_no;
-			current_algorithm_no = algorithm_no;
-			break;
-		default: // blad - nie ma takiego algorytmu
-			// => przywrocic stary algorytm i j stary zestaw parametrow
-			algorithm_no = current_algorithm_no;
-			algorithm_parameters_no = current_algorithm_parameters_no;
-			alg_par_status = UNIDENTIFIED_ALGORITHM_NO;
-			break;
 		}
 	}
 
@@ -954,43 +941,38 @@ uint8_t NL_regulator_5_irp6p::compute_set_value(void) {
 	b1 = 1.468599; //8.613484947882;
 
 
-	switch (algorithm_no) {
-	case 0: // algorytm nr 0
-		// obliczenie nowej wartosci wypelnienia PWM algorytm PD + I
-		set_value_new = (1 + a) * set_value_old - a * set_value_very_old + b0
-				* delta_eint - b1 * delta_eint_old;
-		break;
-	case 1: // algorytm nr 1
-		// obliczenie nowej wartosci wypelnienia PWM algorytm PD + I
-		set_value_new = (1 + a) * set_value_old - a * set_value_very_old + b0
-				* (step_new_pulse - position_increment_new) - b1
-				* (step_old_pulse - position_increment_old);
-		break;
-	case 2: // algorytm nr 2 - sterowanie pradowe
-		// DUNG START
-		current_desired = 0.4 * 9.52
-				* (master.instruction.arm.pf_def.desired_torque[3] / 158);
-		current_measured = (meassured_current - 128 - 3) * 0.035;
-		current_error = current_desired - current_measured;
-		int_current_error = int_current_error + current_error * 0.02; // 500Hz => 0.02s
-		//int_current_error = 0;
-		set_value_new = -31 * current_error - 5.3 * int_current_error;
+	switch (algorithm_no)
+	{
+		case 0: // algorytm nr 0
+			// obliczenie nowej wartosci wypelnienia PWM algorytm PD + I
+			set_value_new = (1 + a) * set_value_old - a * set_value_very_old + b0 * delta_eint - b1 * delta_eint_old;
+			break;
+		case 1: // algorytm nr 1
+			// obliczenie nowej wartosci wypelnienia PWM algorytm PD + I
+			set_value_new = (1 + a) * set_value_old - a * set_value_very_old + b0 * (step_new_pulse
+					- position_increment_new) - b1 * (step_old_pulse - position_increment_old);
+			break;
+		case 2: // algorytm nr 2 - sterowanie pradowe
+			// DUNG START
+			current_desired = 0.4 * 9.52 * (master.instruction.arm.pf_def.desired_torque[3] / 158);
+			current_measured = (meassured_current - 128 - 3) * 0.035;
+			current_error = current_desired - current_measured;
+			int_current_error = int_current_error + current_error * 0.02; // 500Hz => 0.02s
+			//int_current_error = 0;
+			set_value_new = -31 * current_error - 5.3 * int_current_error;
 
-		display++;
-		if (display >= 500) {
-			display = 0;
-			printf(
-					"joint 4:   desired_current = %f,    current_error = %f,    out = %f\n",
-					master.instruction.arm.pf_def.desired_torque[3] / 158,
-					current_error, -30 * current_error - 4.0
-							* int_current_error);
-		}
-		// DUNG END
-		break;
-	default: // w tym miejscu nie powinien wystapic blad zwiazany z
-		// nieistniejacym numerem algorytmu
-		set_value_new = 0; // zerowe nowe sterowanie
-		break;
+			display++;
+			if (display >= 500) {
+				display = 0;
+				printf("joint 4:   desired_current = %f,    current_error = %f,    out = %f\n", master.instruction.arm.pf_def.desired_torque[3]
+						/ 158, current_error, -30 * current_error - 4.0 * int_current_error);
+			}
+			// DUNG END
+			break;
+		default: // w tym miejscu nie powinien wystapic blad zwiazany z
+			// nieistniejacym numerem algorytmu
+			set_value_new = 0; // zerowe nowe sterowanie
+			break;
 	}
 
 	// scope-locked reader data update
@@ -998,11 +980,9 @@ uint8_t NL_regulator_5_irp6p::compute_set_value(void) {
 		boost::mutex::scoped_lock lock(master.rb_obj->reader_mutex);
 
 		master.rb_obj->step_data.desired_inc[4] = (float) step_new_pulse; // pozycja osi 0
-		master.rb_obj->step_data.current_inc[4]
-				= (short int) position_increment_new;
+		master.rb_obj->step_data.current_inc[4] = (short int) position_increment_new;
 		master.rb_obj->step_data.pwm[4] = (float) set_value_new;
-		master.rb_obj->step_data.uchyb[4] = (float) (step_new_pulse
-				- position_increment_new);
+		master.rb_obj->step_data.uchyb[4] = (float) (step_new_pulse - position_increment_new);
 	}
 
 	// ograniczenie na sterowanie
@@ -1040,7 +1020,8 @@ uint8_t NL_regulator_5_irp6p::compute_set_value(void) {
 /*-----------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------*/
-uint8_t NL_regulator_6_irp6p::compute_set_value(void) {
+uint8_t NL_regulator_6_irp6p::compute_set_value(void)
+{
 	// algorytm regulacji dla serwomechanizmu
 
 	// position_increment_old - przedostatnio odczytany przyrost polozenie
@@ -1080,8 +1061,7 @@ uint8_t NL_regulator_6_irp6p::compute_set_value(void) {
 
 	// przeliczenie radianow na impulsy
 	// step_new_pulse = step_new*IRP6_POSTUMENT_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
-	step_new_pulse = step_new * IRP6_POSTUMENT_AXIS_0_TO_5_INC_PER_REVOLUTION
-			/ (2 * M_PI);
+	step_new_pulse = step_new * IRP6_POSTUMENT_AXIS_0_TO_5_INC_PER_REVOLUTION / (2 * M_PI);
 	//position_increment_new= position_increment_new/AXE_0_TO_5_POSTUMENT_TO_TRACK_RATIO;
 
 	/*
@@ -1114,76 +1094,77 @@ uint8_t NL_regulator_6_irp6p::compute_set_value(void) {
 	servo_pos_increment_new_sum += root_position_increment_new;// by Y
 
 	// Przyrost calki uchybu
-	delta_eint = delta_eint_old + 1.020 * (step_new_pulse
-			- position_increment_new) - 0.980 * (step_old_pulse
+	delta_eint = delta_eint_old + 1.020 * (step_new_pulse - position_increment_new) - 0.980 * (step_old_pulse
 			- position_increment_old);
 
 	// Sprawdzenie czy numer algorytmu lub zestawu parametrow sie zmienil?
 	// Jezeli tak, to nalezy dokonac uaktualnienia numerow (ewentualnie wykryc niewlasciwosc numerow)
-	if ((current_algorithm_no != algorithm_no)
-			|| (current_algorithm_parameters_no != algorithm_parameters_no)) {
-		switch (algorithm_no) {
-		case 0: // algorytm nr 0
-			switch (algorithm_parameters_no) {
-			case 0: // zestaw parametrow nr 0
+	if ((current_algorithm_no != algorithm_no) || (current_algorithm_parameters_no != algorithm_parameters_no)) {
+		switch (algorithm_no)
+		{
+			case 0: // algorytm nr 0
+				switch (algorithm_parameters_no)
+				{
+					case 0: // zestaw parametrow nr 0
+						current_algorithm_parameters_no = algorithm_parameters_no;
+						current_algorithm_no = algorithm_no;
+						a = 0.3079;
+						b0 = 1.0942 * 1.5;
+						b1 = 0.9166 * 1.5;
+						k_feedforward = 0.35;
+						break;
+					case 1: // zestaw parametrow nr 1
+						current_algorithm_parameters_no = algorithm_parameters_no;
+						current_algorithm_no = algorithm_no;
+						a = 0.3079;
+						b0 = 1.0942 * 2.5;
+						b1 = 0.9166 * 2.5;
+						k_feedforward = 0;
+						break;
+					default: // blad => przywrocic stary algorytm i j stary zestaw parametrow
+						algorithm_no = current_algorithm_no;
+						algorithm_parameters_no = current_algorithm_parameters_no;
+						alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
+						break;
+				}
+				break;
+			case 1: // algorytm nr 1
+				switch (algorithm_parameters_no)
+				{
+					case 0: // zestaw parametrow nr 0
+						current_algorithm_parameters_no = algorithm_parameters_no;
+						current_algorithm_no = algorithm_no;
+						a = 0;
+						b0 = 0;
+						b1 = 0;
+						k_feedforward = 0;
+						break;
+					case 1: // zestaw parametrow nr 1
+						current_algorithm_parameters_no = algorithm_parameters_no;
+						current_algorithm_no = algorithm_no;
+						a = 0;
+						b0 = 0;
+						b1 = 0;
+						k_feedforward = 0;
+						break;
+					default: // blad - nie ma takiego zestawu parametrow dla tego algorytmu
+						// => przywrocic stary algorytm i j stary zestaw parametrow
+						algorithm_no = current_algorithm_no;
+						algorithm_parameters_no = current_algorithm_parameters_no;
+						alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
+						break;
+				}
+				break;
+			case 2: // algorytm nr 2 - sterowanie pradowe
 				current_algorithm_parameters_no = algorithm_parameters_no;
 				current_algorithm_no = algorithm_no;
-				a = 0.3079;
-				b0 = 1.0942 * 1.5;
-				b1 = 0.9166 * 1.5;
-				k_feedforward = 0.35;
 				break;
-			case 1: // zestaw parametrow nr 1
-				current_algorithm_parameters_no = algorithm_parameters_no;
-				current_algorithm_no = algorithm_no;
-				a = 0.3079;
-				b0 = 1.0942 * 2.5;
-				b1 = 0.9166 * 2.5;
-				k_feedforward = 0;
-				break;
-			default: // blad => przywrocic stary algorytm i j stary zestaw parametrow
-				algorithm_no = current_algorithm_no;
-				algorithm_parameters_no = current_algorithm_parameters_no;
-				alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
-				break;
-			}
-			break;
-		case 1: // algorytm nr 1
-			switch (algorithm_parameters_no) {
-			case 0: // zestaw parametrow nr 0
-				current_algorithm_parameters_no = algorithm_parameters_no;
-				current_algorithm_no = algorithm_no;
-				a = 0;
-				b0 = 0;
-				b1 = 0;
-				k_feedforward = 0;
-				break;
-			case 1: // zestaw parametrow nr 1
-				current_algorithm_parameters_no = algorithm_parameters_no;
-				current_algorithm_no = algorithm_no;
-				a = 0;
-				b0 = 0;
-				b1 = 0;
-				k_feedforward = 0;
-				break;
-			default: // blad - nie ma takiego zestawu parametrow dla tego algorytmu
+			default: // blad - nie ma takiego algorytmu
 				// => przywrocic stary algorytm i j stary zestaw parametrow
 				algorithm_no = current_algorithm_no;
 				algorithm_parameters_no = current_algorithm_parameters_no;
-				alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
+				alg_par_status = UNIDENTIFIED_ALGORITHM_NO;
 				break;
-			}
-			break;
-		case 2: // algorytm nr 2 - sterowanie pradowe
-			current_algorithm_parameters_no = algorithm_parameters_no;
-			current_algorithm_no = algorithm_no;
-			break;
-		default: // blad - nie ma takiego algorytmu
-			// => przywrocic stary algorytm i j stary zestaw parametrow
-			algorithm_no = current_algorithm_no;
-			algorithm_parameters_no = current_algorithm_parameters_no;
-			alg_par_status = UNIDENTIFIED_ALGORITHM_NO;
-			break;
 		}
 	}
 
@@ -1192,39 +1173,37 @@ uint8_t NL_regulator_6_irp6p::compute_set_value(void) {
 	b1 = 1.021348; //5.990311804009;
 
 
-	switch (algorithm_no) {
-	case 0: // algorytm nr 0
-		// obliczenie nowej wartosci wypelnienia PWM algorytm PD + I
-		set_value_new = (1 + a) * set_value_old - a * set_value_very_old + b0
-				* delta_eint - b1 * delta_eint_old;
-		break;
-	case 1: // algorytm nr 1
-		// obliczenie nowej wartosci wypelnienia PWM algorytm PD + I
-		set_value_new = (1 + a) * set_value_old - a * set_value_very_old + b0
-				* (step_new_pulse - position_increment_new) - b1
-				* (step_old_pulse - position_increment_old);
-		break;
-	case 2: // algorytm nr 2 - sterowanie pradowe
-		// DUNG START
-		current_desired = 0.4 * 9.52
-				* (master.instruction.arm.pf_def.desired_torque[4] / 158);
-		current_measured = (meassured_current - 128 - 3) * 0.035;
-		current_error = current_desired - current_measured;
-		int_current_error = int_current_error + current_error * 0.02; // 500Hz => 0.02s
-		//int_current_error = 0;
-		set_value_new = -33 * current_error - 6.0 * int_current_error;
+	switch (algorithm_no)
+	{
+		case 0: // algorytm nr 0
+			// obliczenie nowej wartosci wypelnienia PWM algorytm PD + I
+			set_value_new = (1 + a) * set_value_old - a * set_value_very_old + b0 * delta_eint - b1 * delta_eint_old;
+			break;
+		case 1: // algorytm nr 1
+			// obliczenie nowej wartosci wypelnienia PWM algorytm PD + I
+			set_value_new = (1 + a) * set_value_old - a * set_value_very_old + b0 * (step_new_pulse
+					- position_increment_new) - b1 * (step_old_pulse - position_increment_old);
+			break;
+		case 2: // algorytm nr 2 - sterowanie pradowe
+			// DUNG START
+			current_desired = 0.4 * 9.52 * (master.instruction.arm.pf_def.desired_torque[4] / 158);
+			current_measured = (meassured_current - 128 - 3) * 0.035;
+			current_error = current_desired - current_measured;
+			int_current_error = int_current_error + current_error * 0.02; // 500Hz => 0.02s
+			//int_current_error = 0;
+			set_value_new = -33 * current_error - 6.0 * int_current_error;
 
-		display++;
-		if (display >= 500) {
-			display = 0;
-			//printf("joint 5:   desired_current = %f,    current_error = %f,    out = %f\n", master.instruction.arm.pf_def.desired_torque[4] / 158, current_error, -30 * current_error - 4.0*int_current_error);
-		}
-		// DUNG END
-		break;
-	default: // w tym miejscu nie powinien wystapic blad zwiazany z
-		// nieistniejacym numerem algorytmu
-		set_value_new = 0; // zerowe nowe sterowanie
-		break;
+			display++;
+			if (display >= 500) {
+				display = 0;
+				//printf("joint 5:   desired_current = %f,    current_error = %f,    out = %f\n", master.instruction.arm.pf_def.desired_torque[4] / 158, current_error, -30 * current_error - 4.0*int_current_error);
+			}
+			// DUNG END
+			break;
+		default: // w tym miejscu nie powinien wystapic blad zwiazany z
+			// nieistniejacym numerem algorytmu
+			set_value_new = 0; // zerowe nowe sterowanie
+			break;
 	}
 
 	// ograniczenie na sterowanie
@@ -1245,11 +1224,9 @@ uint8_t NL_regulator_6_irp6p::compute_set_value(void) {
 		boost::mutex::scoped_lock lock(master.rb_obj->reader_mutex);
 
 		master.rb_obj->step_data.desired_inc[5] = (float) step_new_pulse; // pozycja osi 0
-		master.rb_obj->step_data.current_inc[5]
-				= (short int) position_increment_new;
+		master.rb_obj->step_data.current_inc[5] = (short int) position_increment_new;
 		master.rb_obj->step_data.pwm[5] = (float) set_value_new;
-		master.rb_obj->step_data.uchyb[5] = (float) (step_new_pulse
-				- position_increment_new);
+		master.rb_obj->step_data.uchyb[5] = (float) (step_new_pulse - position_increment_new);
 	}
 
 	// if (set_value_new > 0.0) {
@@ -1270,7 +1247,8 @@ uint8_t NL_regulator_6_irp6p::compute_set_value(void) {
 /*-----------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------*/
-uint8_t NL_regulator_7_irp6p::compute_set_value(void) {
+uint8_t NL_regulator_7_irp6p::compute_set_value(void)
+{
 	// algorytm regulacji dla serwomechanizmu
 
 	// position_increment_old - przedostatnio odczytany przyrost polozenia
@@ -1310,8 +1288,7 @@ uint8_t NL_regulator_7_irp6p::compute_set_value(void) {
 
 	// przeliczenie radianow na impulsy
 	// step_new_pulse = step_new*IRP6_POSTUMENT_AXIS_6_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
-	step_new_pulse = step_new * IRP6_POSTUMENT_AXIS_6_INC_PER_REVOLUTION / (2
-			* M_PI);
+	step_new_pulse = step_new * IRP6_POSTUMENT_AXIS_6_INC_PER_REVOLUTION / (2 * M_PI);
 	//position_increment_new= position_increment_new/AXE_6_POSTUMENT_TO_TRACK_RATIO;
 
 	// if (step_new!=0.0) printf(" 7 reg:%f\n", step_new);
@@ -1346,77 +1323,78 @@ uint8_t NL_regulator_7_irp6p::compute_set_value(void) {
 	//servo_pos_increment_new_sum += root_position_increment_new;// by Y
 
 	// Przyrost calki uchybu
-	delta_eint = delta_eint_old + 1.020 * (step_new_pulse
-			- position_increment_new) - 0.980 * (step_old_pulse
+	delta_eint = delta_eint_old + 1.020 * (step_new_pulse - position_increment_new) - 0.980 * (step_old_pulse
 			- position_increment_old);
 
 	// Sprawdzenie czy numer algorytmu lub zestawu parametrow sie zmienil?
 	// Jezeli tak, to nalezy dokonac uaktualnienia numerow (ewentualnie wykryc niewlasciwosc numerow)
-	if ((current_algorithm_no != algorithm_no)
-			|| (current_algorithm_parameters_no != algorithm_parameters_no)) {
-		switch (algorithm_no) {
-		case 0: // algorytm nr 0
-			switch (algorithm_parameters_no) {
-			case 0: // zestaw parametrow nr 0
+	if ((current_algorithm_no != algorithm_no) || (current_algorithm_parameters_no != algorithm_parameters_no)) {
+		switch (algorithm_no)
+		{
+			case 0: // algorytm nr 0
+				switch (algorithm_parameters_no)
+				{
+					case 0: // zestaw parametrow nr 0
+						current_algorithm_parameters_no = algorithm_parameters_no;
+						current_algorithm_no = algorithm_no;
+						a = 0.3079;
+						b0 = 1.0942 * 1.5;
+						b1 = 0.9166 * 1.5;
+						k_feedforward = 0.35;
+						break;
+					case 1: // zestaw parametrow nr 1
+						current_algorithm_parameters_no = algorithm_parameters_no;
+						current_algorithm_no = algorithm_no;
+						a = 0.3079;
+						b0 = 1.0942 * 2.5;
+						b1 = 0.9166 * 2.5;
+						k_feedforward = 0;
+						break;
+					default: // blad => przywrocic stary algorytm i j stary zestaw parametrow
+						algorithm_no = current_algorithm_no;
+						algorithm_parameters_no = current_algorithm_parameters_no;
+						alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
+						break;
+				}
+				break;
+			case 1: // algorytm nr 1
+				switch (algorithm_parameters_no)
+				{
+					case 0: // zestaw parametrow nr 0
+						current_algorithm_parameters_no = algorithm_parameters_no;
+						current_algorithm_no = algorithm_no;
+						a = 0;
+						b0 = 0;
+						b1 = 0;
+						k_feedforward = 0;
+						break;
+					case 1: // zestaw parametrow nr 1
+						current_algorithm_parameters_no = algorithm_parameters_no;
+						current_algorithm_no = algorithm_no;
+						a = 0;
+						b0 = 0;
+						b1 = 0;
+						k_feedforward = 0;
+						break;
+					default: // blad - nie ma takiego zestawu parametrow dla tego algorytmu
+						// => przywrocic stary algorytm i j stary zestaw parametrow
+						algorithm_no = current_algorithm_no;
+						algorithm_parameters_no = current_algorithm_parameters_no;
+						alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
+						break;
+				}
+				; // end: switch (algorithm_parameters_no)
+				break;
+			case 2: // algorytm nr 2 - sterowanie pradowe
 				current_algorithm_parameters_no = algorithm_parameters_no;
 				current_algorithm_no = algorithm_no;
-				a = 0.3079;
-				b0 = 1.0942 * 1.5;
-				b1 = 0.9166 * 1.5;
-				k_feedforward = 0.35;
 				break;
-			case 1: // zestaw parametrow nr 1
-				current_algorithm_parameters_no = algorithm_parameters_no;
-				current_algorithm_no = algorithm_no;
-				a = 0.3079;
-				b0 = 1.0942 * 2.5;
-				b1 = 0.9166 * 2.5;
-				k_feedforward = 0;
-				break;
-			default: // blad => przywrocic stary algorytm i j stary zestaw parametrow
-				algorithm_no = current_algorithm_no;
-				algorithm_parameters_no = current_algorithm_parameters_no;
-				alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
-				break;
-			}
-			break;
-		case 1: // algorytm nr 1
-			switch (algorithm_parameters_no) {
-			case 0: // zestaw parametrow nr 0
-				current_algorithm_parameters_no = algorithm_parameters_no;
-				current_algorithm_no = algorithm_no;
-				a = 0;
-				b0 = 0;
-				b1 = 0;
-				k_feedforward = 0;
-				break;
-			case 1: // zestaw parametrow nr 1
-				current_algorithm_parameters_no = algorithm_parameters_no;
-				current_algorithm_no = algorithm_no;
-				a = 0;
-				b0 = 0;
-				b1 = 0;
-				k_feedforward = 0;
-				break;
-			default: // blad - nie ma takiego zestawu parametrow dla tego algorytmu
+			default: // blad - nie ma takiego algorytmu
 				// => przywrocic stary algorytm i j stary zestaw parametrow
 				algorithm_no = current_algorithm_no;
 				algorithm_parameters_no = current_algorithm_parameters_no;
-				alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
+				alg_par_status = UNIDENTIFIED_ALGORITHM_NO;
 				break;
-			}
-			; // end: switch (algorithm_parameters_no)
-			break;
-		case 2: // algorytm nr 2 - sterowanie pradowe
-			current_algorithm_parameters_no = algorithm_parameters_no;
-			current_algorithm_no = algorithm_no;
-			break;
-		default: // blad - nie ma takiego algorytmu
-			// => przywrocic stary algorytm i j stary zestaw parametrow
-			algorithm_no = current_algorithm_no;
-			algorithm_parameters_no = current_algorithm_parameters_no;
-			alg_par_status = UNIDENTIFIED_ALGORITHM_NO;
-			break;
 		}
 	}
 
@@ -1430,43 +1408,38 @@ uint8_t NL_regulator_7_irp6p::compute_set_value(void) {
 	b0 = 1.364; //4
 	b1 = 1.264; //1.364//4
 
-	switch (algorithm_no) {
-	case 0: // algorytm nr 0
-		// obliczenie nowej wartosci wypelnienia PWM algorytm PD + I
-		set_value_new = (1 + a) * set_value_old - a * set_value_very_old + b0
-				* delta_eint - b1 * delta_eint_old;
-		break;
-	case 1: // algorytm nr 1
-		// obliczenie nowej wartosci wypelnienia PWM algorytm PD + I
-		set_value_new = (1 + a) * set_value_old - a * set_value_very_old + b0
-				* (step_new_pulse - position_increment_new) - b1
-				* (step_old_pulse - position_increment_old);
-		break;
-	case 2: // algorytm nr 2 - sterowanie pradowe
-		// DUNG START
-		current_desired = 0.4 * 9.52
-				* (master.instruction.arm.pf_def.desired_torque[5] / 158);
-		current_measured = (meassured_current - 128 - 3) * 0.02;
-		current_error = current_desired - current_measured;
-		int_current_error = int_current_error + current_error * 0.02; // 500Hz => 0.02s
-		//int_current_error = 0;
-		set_value_new = -30 * current_error - 4.0 * int_current_error;
+	switch (algorithm_no)
+	{
+		case 0: // algorytm nr 0
+			// obliczenie nowej wartosci wypelnienia PWM algorytm PD + I
+			set_value_new = (1 + a) * set_value_old - a * set_value_very_old + b0 * delta_eint - b1 * delta_eint_old;
+			break;
+		case 1: // algorytm nr 1
+			// obliczenie nowej wartosci wypelnienia PWM algorytm PD + I
+			set_value_new = (1 + a) * set_value_old - a * set_value_very_old + b0 * (step_new_pulse
+					- position_increment_new) - b1 * (step_old_pulse - position_increment_old);
+			break;
+		case 2: // algorytm nr 2 - sterowanie pradowe
+			// DUNG START
+			current_desired = 0.4 * 9.52 * (master.instruction.arm.pf_def.desired_torque[5] / 158);
+			current_measured = (meassured_current - 128 - 3) * 0.02;
+			current_error = current_desired - current_measured;
+			int_current_error = int_current_error + current_error * 0.02; // 500Hz => 0.02s
+			//int_current_error = 0;
+			set_value_new = -30 * current_error - 4.0 * int_current_error;
 
-		display++;
-		if (display >= 500) {
-			display = 0;
-			printf(
-					"joint 6:   desired_current = %f,    current_error = %f,    out = %f\n",
-					master.instruction.arm.pf_def.desired_torque[5] / 158,
-					current_error, -30 * current_error - 4.0
-							* int_current_error);
-		}
-		// DUNG END
-		break;
-	default: // w tym miejscu nie powinien wystapic blad zwiazany z
-		// nieistniejacym numerem algorytmu
-		set_value_new = 0; // zerowe nowe sterowanie
-		break;
+			display++;
+			if (display >= 500) {
+				display = 0;
+				printf("joint 6:   desired_current = %f,    current_error = %f,    out = %f\n", master.instruction.arm.pf_def.desired_torque[5]
+						/ 158, current_error, -30 * current_error - 4.0 * int_current_error);
+			}
+			// DUNG END
+			break;
+		default: // w tym miejscu nie powinien wystapic blad zwiazany z
+			// nieistniejacym numerem algorytmu
+			set_value_new = 0; // zerowe nowe sterowanie
+			break;
 	}
 
 	// ograniczenie na sterowanie
@@ -1489,11 +1462,9 @@ uint8_t NL_regulator_7_irp6p::compute_set_value(void) {
 		boost::mutex::scoped_lock lock(master.rb_obj->reader_mutex);
 
 		master.rb_obj->step_data.desired_inc[6] = (float) step_new_pulse; // pozycja osi 0
-		master.rb_obj->step_data.current_inc[6]
-				= (short int) position_increment_new;
+		master.rb_obj->step_data.current_inc[6] = (short int) position_increment_new;
 		master.rb_obj->step_data.pwm[6] = (float) set_value_new;
-		master.rb_obj->step_data.uchyb[6] = (float) (step_new_pulse
-				- position_increment_new);
+		master.rb_obj->step_data.uchyb[6] = (float) (step_new_pulse - position_increment_new);
 	}
 
 	// if (set_value_new > 0.0) {

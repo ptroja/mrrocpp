@@ -10,6 +10,9 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
+// niezbedny naglowek z definiacja PROCESS_SPAWN_RSH
+#include "base/lib/configurator.h"
+
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
 

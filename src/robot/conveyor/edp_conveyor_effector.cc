@@ -19,7 +19,7 @@
 #include "base/edp/reader.h"
 
 // Klasa edp_conveyor_effector.
-#include "base/edp/edp.h"
+#include "base/edp/edp_typedefs.h"
 #include "base/edp/manip_trans_t.h"
 #include "robot/conveyor/edp_conveyor_effector.h"
 #include "base/edp/servo_gr.h"

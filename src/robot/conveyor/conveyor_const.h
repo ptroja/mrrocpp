@@ -6,6 +6,7 @@
 namespace mrrocpp {
 namespace lib {
 
+#define CONVEYOR_INC_PER_REVOLUTION  4000.0  // Liczba impulsow enkodera na obrot walu - musi byc float
 const robot_name_t ROBOT_CONVEYOR = "ROBOT_CONVEYOR";
 
 #define EDP_CONVEYOR_SECTION "[edp_conveyor]"
