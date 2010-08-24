@@ -7,7 +7,6 @@
 #include "base/mp/mp_task.h"
 #include "mp_t_visualservo_tester.h"
 
-#include "robot/irp6p_m/irp6p_m_const.h"
 #include "robot/conveyor/conveyor_const.h"
 
 #include "base/lib/logger.h"
@@ -15,6 +14,8 @@
 #include "../ecp_mp_g_visual_servo_tester.h"
 
 #include <unistd.h>
+
+#include "../defines.h"
 
 using namespace logger;
 
@@ -45,7 +46,7 @@ void visualservo_tester::main_task_algorithm(void)
 {
 	if (run_vs) {
 		sr_ecp_msg->message("Starting visual servo");
-		set_next_ecps_state(mrrocpp::ecp_mp::common::generator::ECP_GEN_VISUAL_SERVO_TEST, 0, "", 0, 1, lib::ROBOT_IRP6P_M.c_str());
+		set_next_ecps_state(mrrocpp::ecp_mp::common::generator::ECP_GEN_VISUAL_SERVO_TEST, 0, "", 0, 1, ROBOT_NAME.c_str());
 		sr_ecp_msg->message("Visual servo started.");
 
 		char txt[128];
@@ -66,7 +67,7 @@ void visualservo_tester::main_task_algorithm(void)
 		sr_ecp_msg->message("Conveyor started.");
 	}
 
-	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(2, 2, lib::ROBOT_IRP6P_M.c_str(), lib::ROBOT_CONVEYOR.c_str(), lib::ROBOT_IRP6P_M.c_str(), lib::ROBOT_CONVEYOR.c_str());
+	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(2, 2, ROBOT_NAME.c_str(), lib::ROBOT_CONVEYOR.c_str(), ROBOT_NAME.c_str(), lib::ROBOT_CONVEYOR.c_str());
 
 	log("visualservo_tester::main_task_algorithm() 4\n");
 }
