@@ -43,6 +43,9 @@
 #include "base/lib/com_buf.h"
 
 #include "base/lib/srlib.h"
+
+#include "base/edp/edp_e_manip.h"
+
 #include "sensor/ati3084/edp_s.h"
 
 // Konfigurator

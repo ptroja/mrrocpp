@@ -19,6 +19,8 @@
 // Klasa servo_buffer.
 #include "robot/sarkofag/regulator_sarkofag.h"
 
+#include "base/edp/edp_e_motor_driven.h"
+
 namespace mrrocpp {
 namespace edp {
 namespace sarkofag {

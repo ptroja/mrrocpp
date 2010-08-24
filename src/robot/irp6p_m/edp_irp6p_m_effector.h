@@ -14,7 +14,7 @@
 #define __EDP_IRP6P_M_H
 
 // Klasa edp_irp6s_robot.
-#include "robot/irp6p_m/sg_irp6p_m.h"
+
 #include "base/edp/edp_e_manip.h"
 #include "robot/irp6p_m/irp6p_m_const.h"
 

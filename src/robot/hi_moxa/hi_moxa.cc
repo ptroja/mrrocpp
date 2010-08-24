@@ -12,6 +12,8 @@
 #include <cstring>
 #include <iostream>
 
+#include "base/edp/edp_e_motor_driven.h"
+
 namespace mrrocpp {
 namespace edp {
 namespace common {

@@ -10,11 +10,9 @@
 // Data:		14.02.2007
 // ------------------------------------------------------------------------
 
-#include "base/lib/typedefs.h"
-#include "base/lib/impconst.h"
-#include "base/lib/com_buf.h"
 
 // Klasa edp_sarkofag_effector.
+#include "robot/sarkofag/sg_sarkofag.h"
 #include "robot/sarkofag/edp_e_sarkofag.h"
 // Kinematyki.
 #include "robot/sarkofag/kinematic_model_sarkofag.h"

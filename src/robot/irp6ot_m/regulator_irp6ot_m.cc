@@ -7,10 +7,6 @@
 #include <cstdlib>
 #include <unistd.h>
 
-#include "base/lib/typedefs.h"
-#include "base/lib/impconst.h"
-#include "base/lib/com_buf.h"
-
 // Klasa edp_irp6ot_effector.
 //#include "robot/irp6ot_tfg/edp_irp6ot_tfg_effector.h"
 #include "base/edp/reader.h"
@@ -18,7 +14,7 @@
 //#include "base/edp/irp6_on_track/hi_irp6ot.h"
 // Klasa servo_buffer.
 
-
+#include "base/edp/edp_e_motor_driven.h"
 #include "robot/irp6ot_m/irp6ot_m_const.h"
 #include "robot/irp6ot_m/regulator_irp6ot_m.h"
 

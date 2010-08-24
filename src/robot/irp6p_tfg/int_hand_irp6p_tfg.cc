@@ -20,9 +20,7 @@
 #include <hw/inout.h>
 #endif
 
-#include "base/lib/typedefs.h"
-#include "base/lib/impconst.h"
-#include "base/lib/com_buf.h"
+#include "robot/irp6p_tfg/sg_irp6p_tfg.h"
 
 // Klasa edp_irp6p_effector.
 #include "robot/irp6p_tfg/edp_irp6p_tfg_effector.h"

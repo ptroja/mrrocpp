@@ -21,6 +21,8 @@
 
 #include "base/lib/mrmath/mrmath.h"
 
+#include "base/edp/edp_e_motor_driven.h"
+
 namespace mrrocpp {
 namespace edp {
 namespace irp6p_m {

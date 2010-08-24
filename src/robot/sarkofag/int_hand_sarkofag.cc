@@ -20,12 +20,11 @@
 #include <hw/inout.h>
 #endif
 
-#include "base/lib/typedefs.h"
-#include "base/lib/impconst.h"
-#include "base/lib/com_buf.h"
+#include "robot/sarkofag/sg_sarkofag.h"
 
 // Klasa edp_sarkofag_effector.
 #include "robot/sarkofag/edp_e_sarkofag.h"
+
 // Klasa hardware_interface.
 #include "robot/hi_moxa/hi_moxa.h"
 

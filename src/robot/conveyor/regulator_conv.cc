@@ -19,6 +19,8 @@
 #include "robot/conveyor/conveyor_const.h"
 #include "robot/conveyor/regulator_conv.h"
 
+#include "base/edp/edp_e_motor_driven.h"
+
 #include "base/lib/mrmath/mrmath.h"
 
 namespace mrrocpp {

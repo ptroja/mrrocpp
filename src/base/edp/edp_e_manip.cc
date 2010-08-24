@@ -27,7 +27,7 @@
 #include "base/edp/reader.h"
 #include "base/edp/manip_trans_t.h"
 #include "base/edp/edp_e_manip.h"
-
+#include "base/edp/edp_force_sensor.h"
 #include "base/kinematics/kinematic_model_with_tool.h"
 
 using std::cout;

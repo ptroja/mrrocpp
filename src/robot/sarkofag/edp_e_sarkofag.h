@@ -14,7 +14,7 @@
 #define __EDP_SARKOFAG_H
 
 // Klasa edp_irp6s_robot.
-#include "robot/sarkofag/sg_sarkofag.h"
+
 #include "base/edp/edp_e_motor_driven.h"
 #include "robot/sarkofag/sarkofag_const.h"
 
