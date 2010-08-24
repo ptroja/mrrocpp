@@ -7,7 +7,7 @@
 // -------------------------------------------------------------------------
 
 #include "base/lib/impconst.h"
-#include "base/lib/com_buf.h"
+
 #include "base/lib/mis_fun.h"
 
 #include "robot/sarkofag/ecp_r_sarkofag.h"
@@ -25,8 +25,7 @@ robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
 }
 
 robot::robot(common::task::task& _ecp_object) :
-	ecp_robot(lib::ROBOT_SARKOFAG, SARKOFAG_NUM_OF_SERVOS, EDP_SARKOFAG_SECTION, _ecp_object),
-			kinematics_manager()
+	ecp_robot(lib::ROBOT_SARKOFAG, SARKOFAG_NUM_OF_SERVOS, EDP_SARKOFAG_SECTION, _ecp_object), kinematics_manager()
 {
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();

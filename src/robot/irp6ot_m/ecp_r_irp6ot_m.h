@@ -13,16 +13,14 @@
 
 #include "base/kinematics/kinematics_manager.h"
 #include "robot/irp6ot_m/kinematic_model_irp6ot_with_track.h"
-#include "robot/irp6ot_m/kinematic_model_irp6ot_with_wrist.h"
 #include "robot/irp6ot_m/kinematic_model_calibrated_irp6ot_with_wrist.h"
-#include "base/kinematics/kinematic_model_with_tool.h"
 
 namespace mrrocpp {
 namespace ecp {
 namespace irp6ot_m {
 
 // ---------------------------------------------------------------
-class robot: public common::ecp_robot, public kinematics::common::kinematics_manager
+class robot : public common::ecp_robot, public kinematics::common::kinematics_manager
 {
 	// Klasa dla robota irp6_on_track
 protected:

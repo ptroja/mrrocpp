@@ -592,22 +592,42 @@ INPUT                  = src/base/kinematics \
                          src/robot/robots.dox \
                          src/robot/conveyor/kinematic_model_conveyor.h \
                          src/robot/conveyor/kinematic_model_conveyor.cc \
+                         src/robot/conveyor/mp_r_conveyor.h \
+                         src/robot/conveyor/mp_r_conveyor.cc \
+                         src/robot/conveyor/ecp_r_conv.h \
+                         src/robot/conveyor/ecp_r_conv.cc \ 
                          src/robot/irp6_tfg/kinematic_model_irp6_tfg.h \
                          src/robot/irp6_tfg/kinematic_model_irp6_tfg.cc \
                          src/robot/bird_hand/kinematic_parameters_bird_hand.h \
                          src/robot/bird_hand/kinematic_parameters_bird_hand.cc \
                          src/robot/bird_hand/kinematic_model_bird_hand.h \
                          src/robot/bird_hand/kinematic_model_bird_hand.cc \
+                         src/robot/bird_hand/mp_r_bird_hand.h \
+                         src/robot/bird_hand/mp_r_bird_hand.cc \
+                         src/robot/bird_hand/ecp_r_bird_hand.h \
+                         src/robot/bird_hand/ecp_r_bird_hand.cc \ 
                          src/robot/irp6ot_tfg/kinematic_model_irp6ot_tfg.h \
                          src/robot/irp6ot_tfg/kinematic_model_irp6ot_tfg.cc \
+                         src/robot/irp6ot_tfg/mp_r_irp6ot_tfg.h \
+                         src/robot/irp6ot_tfg/mp_r_irp6ot_tfg.cc \
+                         src/robot/irp6ot_tfg/ecp_r_irp6ot_tfg.h \
+                         src/robot/irp6ot_tfg/ecp_r_irp6ot_tfg.cc \ 
                          src/robot/irp6ot_m/kinematic_model_irp6ot_with_wrist.h \
                          src/robot/irp6ot_m/kinematic_model_irp6ot_with_wrist.cc \
                          src/robot/irp6ot_m/kinematic_model_calibrated_irp6ot_with_wrist.h \
                          src/robot/irp6ot_m/kinematic_model_calibrated_irp6ot_with_wrist.cc \
                          src/robot/irp6ot_m/kinematic_model_irp6ot_with_track.h \
                          src/robot/irp6ot_m/kinematic_model_irp6ot_with_track.cc \
+                         src/robot/irp6ot_m/mp_r_irp6ot_m.h \
+                         src/robot/irp6ot_m/mp_r_irp6ot_m.cc \
+                         src/robot/irp6ot_m/ecp_r_irp6ot_m.h \
+                         src/robot/irp6ot_m/ecp_r_irp6ot_m.cc \ 
                          src/robot/irp6p_tfg/kinematic_model_irp6p_tfg.h \
                          src/robot/irp6p_tfg/kinematic_model_irp6p_tfg.cc \
+                         src/robot/irp6p_tfg/mp_r_irp6p_tfg.h \
+                         src/robot/irp6p_tfg/mp_r_irp6p_tfg.cc \
+                         src/robot/irp6p_tfg/ecp_r_irp6p_tfg.h \
+                         src/robot/irp6p_tfg/ecp_r_irp6p_tfg.cc \ 
                          src/robot/irp6p_m/kinematic_model_irp6p_with_wrist.h \
                          src/robot/irp6p_m/kinematic_model_irp6p_with_wrist.cc \
                          src/robot/irp6p_m/kinematic_model_calibrated_irp6p_with_wrist.h \
@@ -616,20 +636,45 @@ INPUT                  = src/base/kinematics \
                          src/robot/irp6p_m/kinematic_model_irp6p_jacobian_with_wrist.cc \
                          src/robot/irp6p_m/kinematic_model_irp6p_jacobian_transpose_with_wrist.h \
                          src/robot/irp6p_m/kinematic_model_irp6p_jacobian_transpose_with_wrist.cc \
+                         src/robot/irp6p_m/mp_r_irp6p_m.h \
+                         src/robot/irp6p_m/mp_r_irp6p_m.cc \
+                         src/robot/irp6p_m/ecp_r_irp6p_m.h \
+                         src/robot/irp6p_m/ecp_r_irp6p_m.cc \ 
                          src/robot/shead/kinematic_model_shead.h \
                          src/robot/shead/kinematic_model_shead.cc \
+                         src/robot/shead/mp_r_shead.h \
+                         src/robot/shead/mp_r_shead.cc \
+                         src/robot/shead/ecp_r_shead.h \
+                         src/robot/shead/ecp_r_shead.cc \ 
                          src/robot/smb/kinematic_model_smb.h \
                          src/robot/smb/kinematic_model_smb.cc \
+                         src/robot/smb/mp_r_smb.h \
+                         src/robot/smb/mp_r_smb.cc \
+                         src/robot/smb/ecp_r_smb.h \
+                         src/robot/smb/ecp_r_smb.cc \ 
                          src/robot/spkm/kinematic_parameters_spkm.h \
                          src/robot/spkm/kinematic_parameters_spkm.cc \
                          src/robot/spkm/kinematic_model_spkm.h \
                          src/robot/spkm/kinematic_model_spkm.cc \
+                         src/robot/spkm/mp_r_spkm.h \
+                         src/robot/spkm/mp_r_spkm.cc \
+                         src/robot/spkm/ecp_r_spkm.h \
+                         src/robot/spkm/ecp_r_spkm.cc \ 
+                         src/robot/sarkofag/kinematic_model_sarkofag.h \
+                         src/robot/sarkofag/kinematic_model_sarkofag.cc \
+                         src/robot/sarkofag/mp_r_sarkofag.h \
+                         src/robot/sarkofag/mp_r_sarkofag.cc \
+                         src/robot/sarkofag/ecp_r_sarkofag.h \
+                         src/robot/sarkofag/ecp_r_sarkofag.cc \ 
 						 src/base/lib/lib.dox \
                          src/base/lib/sensor_error.h \
                          src/base/lib/sensor_interface.h \
+                         src/base/lib/single_thread_port.h \
+                         src/base/lib/single_thread_port.cc \
                          src/sensor/sensors.dox \
                          src/sensor/fradia \
                          src/sensor/pcbird \
+                         src/application/sk \
                      
 
 # This tag can be used to specify the character encoding of the source files 
