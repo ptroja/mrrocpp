@@ -30,15 +30,8 @@
 #include <machine/cpufunc.h>
 #endif
 
-#include "base/lib/typedefs.h"
-#include "base/lib/impconst.h"
-#include "base/lib/com_buf.h"
-
-#include "base/lib/typedefs.h"
-#include "base/lib/impconst.h"
-#include "base/lib/com_buf.h"
 #include "robot/hi_rydz/hi_rydz.h"
-
+#include "base/edp/edp_e_motor_driven.h"
 namespace mrrocpp {
 namespace edp {
 namespace common {

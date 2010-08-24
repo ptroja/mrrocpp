@@ -19,15 +19,16 @@
 // Klasa servo_buffer.
 #include "robot/sarkofag/regulator_sarkofag.h"
 
+#include "base/edp/edp_e_motor_driven.h"
+
 namespace mrrocpp {
 namespace edp {
 namespace sarkofag {
 
 /*-----------------------------------------------------------------------*/
-NL_regulator_8_sarkofag::NL_regulator_8_sarkofag(uint8_t reg_no,
-		uint8_t reg_par_no, double aa, double bb0, double bb1, double k_ff,
-		common::motor_driven_effector &_master) :
-	NL_regulator(reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master) {
+NL_regulator_8_sarkofag::NL_regulator_8_sarkofag(uint8_t reg_no, uint8_t reg_par_no, double aa, double bb0, double bb1, double k_ff, common::motor_driven_effector &_master) :
+	NL_regulator(reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master)
+{
 	reg_state = next_reg_state = prev_reg_state = lib::GRIPPER_START_STATE;
 	sum_of_currents = current_index = 0;
 
@@ -40,7 +41,8 @@ NL_regulator_8_sarkofag::NL_regulator_8_sarkofag(uint8_t reg_no,
 /*-----------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------*/
-uint8_t NL_regulator_8_sarkofag::compute_set_value(void) {
+uint8_t NL_regulator_8_sarkofag::compute_set_value(void)
+{
 	static long iteracja = 0;
 
 	// algorytm regulacji dla serwomechanizmu
@@ -77,8 +79,7 @@ uint8_t NL_regulator_8_sarkofag::compute_set_value(void) {
 
 	// przeliczenie radianow na impulsy
 	// step_new_pulse = step_new*IRP6_POSTUMENT_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
-	step_new_pulse = step_new * IRP6_POSTUMENT_AXIS_0_TO_5_INC_PER_REVOLUTION
-			/ (2 * M_PI);
+	step_new_pulse = step_new * SARKOFAG_INC_PER_REVOLUTION / (2 * M_PI);
 	//position_increment_new=position_increment_new/AXE_0_TO_5_POSTUMENT_TO_TRACK_RATIO;
 
 	//	printf("(%d) step_new_pulse: %f, position_increment_new: %f\n", ++iteracja, step_new_pulse,
@@ -114,8 +115,7 @@ uint8_t NL_regulator_8_sarkofag::compute_set_value(void) {
 
 
 	// Przyrost calki uchybu
-	delta_eint = delta_eint_old + 1.008 * (step_new_pulse
-			- position_increment_new) - 0.992 * (step_old_pulse
+	delta_eint = delta_eint_old + 1.008 * (step_new_pulse - position_increment_new) - 0.992 * (step_old_pulse
 			- position_increment_old);
 
 	// if (fabs(step_new_pulse) > 70.0) {
@@ -128,67 +128,69 @@ uint8_t NL_regulator_8_sarkofag::compute_set_value(void) {
 
 	// Sprawdzenie czy numer algorytmu lub zestawu parametrow sie zmienil?
 	// Jezeli tak, to nalezy dokonac uaktualnienia numerow (ewentualnie wykryc niewlasciwosc numerow)
-	if ((current_algorithm_no != algorithm_no)
-			|| (current_algorithm_parameters_no != algorithm_parameters_no)) {
-		switch (algorithm_no) {
-		case 0: // algorytm nr 0
-			switch (algorithm_parameters_no) {
-			case 0: // zestaw parametrow nr 0
-				current_algorithm_parameters_no = algorithm_parameters_no;
-				current_algorithm_no = algorithm_no;
-				a = 0.4152;
-				b0 = 0.9017 * 1.5;
-				b1 = 0.7701 * 1.5;
-				k_feedforward = 0.35;
+	if ((current_algorithm_no != algorithm_no) || (current_algorithm_parameters_no != algorithm_parameters_no)) {
+		switch (algorithm_no)
+		{
+			case 0: // algorytm nr 0
+				switch (algorithm_parameters_no)
+				{
+					case 0: // zestaw parametrow nr 0
+						current_algorithm_parameters_no = algorithm_parameters_no;
+						current_algorithm_no = algorithm_no;
+						a = 0.4152;
+						b0 = 0.9017 * 1.5;
+						b1 = 0.7701 * 1.5;
+						k_feedforward = 0.35;
+						break;
+					case 1: // zestaw parametrow nr 1
+						current_algorithm_parameters_no = algorithm_parameters_no;
+						current_algorithm_no = algorithm_no;
+						a = 0.4152;
+						b0 = 0.9017 * 1.0;
+						b1 = 0.7701 * 1.0;
+						k_feedforward = 0;
+						break;
+					default: // blad => przywrocic stary algorytm i j stary zestaw parametrow
+						algorithm_no = current_algorithm_no;
+						algorithm_parameters_no = current_algorithm_parameters_no;
+						alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
+						break;
+				}
 				break;
-			case 1: // zestaw parametrow nr 1
-				current_algorithm_parameters_no = algorithm_parameters_no;
-				current_algorithm_no = algorithm_no;
-				a = 0.4152;
-				b0 = 0.9017 * 1.0;
-				b1 = 0.7701 * 1.0;
-				k_feedforward = 0;
+			case 1: // algorytm nr 1
+				switch (algorithm_parameters_no)
+				{
+					case 0: // zestaw parametrow nr 0
+						current_algorithm_parameters_no = algorithm_parameters_no;
+						current_algorithm_no = algorithm_no;
+						a = 0;
+						b0 = 0;
+						b1 = 0;
+						k_feedforward = 0;
+						break;
+					case 1: // zestaw parametrow nr 1
+						current_algorithm_parameters_no = algorithm_parameters_no;
+						current_algorithm_no = algorithm_no;
+						a = 0;
+						b0 = 0;
+						b1 = 0;
+						k_feedforward = 0;
+						break;
+					default: // blad - nie ma takiego zestawu parametrow dla tego algorytmu
+						// => przywrocic stary algorytm i j stary zestaw parametrow
+						algorithm_no = current_algorithm_no;
+						algorithm_parameters_no = current_algorithm_parameters_no;
+						alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
+						break;
+				}
+				; // end: switch (algorithm_parameters_no)
 				break;
-			default: // blad => przywrocic stary algorytm i j stary zestaw parametrow
-				algorithm_no = current_algorithm_no;
-				algorithm_parameters_no = current_algorithm_parameters_no;
-				alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
-				break;
-			}
-			break;
-		case 1: // algorytm nr 1
-			switch (algorithm_parameters_no) {
-			case 0: // zestaw parametrow nr 0
-				current_algorithm_parameters_no = algorithm_parameters_no;
-				current_algorithm_no = algorithm_no;
-				a = 0;
-				b0 = 0;
-				b1 = 0;
-				k_feedforward = 0;
-				break;
-			case 1: // zestaw parametrow nr 1
-				current_algorithm_parameters_no = algorithm_parameters_no;
-				current_algorithm_no = algorithm_no;
-				a = 0;
-				b0 = 0;
-				b1 = 0;
-				k_feedforward = 0;
-				break;
-			default: // blad - nie ma takiego zestawu parametrow dla tego algorytmu
+			default: // blad - nie ma takiego algorytmu
 				// => przywrocic stary algorytm i j stary zestaw parametrow
 				algorithm_no = current_algorithm_no;
 				algorithm_parameters_no = current_algorithm_parameters_no;
-				alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
+				alg_par_status = UNIDENTIFIED_ALGORITHM_NO;
 				break;
-			}
-			; // end: switch (algorithm_parameters_no)
-			break;
-		default: // blad - nie ma takiego algorytmu
-			// => przywrocic stary algorytm i j stary zestaw parametrow
-			algorithm_no = current_algorithm_no;
-			algorithm_parameters_no = current_algorithm_parameters_no;
-			alg_par_status = UNIDENTIFIED_ALGORITHM_NO;
-			break;
 		}; // end: switch (algorithm_no)
 	}
 
@@ -197,33 +199,30 @@ uint8_t NL_regulator_8_sarkofag::compute_set_value(void) {
 	b1 = 1.468599 / 2; //8.613484947882;
 
 
-	switch (algorithm_no) {
-	case 0: // algorytm nr 0
-		// obliczenie nowej wartosci wypelnienia PWM algorytm PD + I
-		set_value_new = (1 + a) * set_value_old - a * set_value_very_old + b0
-				* delta_eint - b1 * delta_eint_old;
-		if ((fabs(set_value_new)) < 0.1)
-			counter++;
-		else
-			counter = 0;
+	switch (algorithm_no)
+	{
+		case 0: // algorytm nr 0
+			// obliczenie nowej wartosci wypelnienia PWM algorytm PD + I
+			set_value_new = (1 + a) * set_value_old - a * set_value_very_old + b0 * delta_eint - b1 * delta_eint_old;
+			if ((fabs(set_value_new)) < 0.1)
+				counter++;
+			else
+				counter = 0;
 
-		if (fabs(step_new) < EPS && fabs(position_increment_new) < EPS
-				&& (counter > integrator_off)) {
-			set_value_new = (1 + a) * set_value_old - a * set_value_very_old
-					+ b0 * (step_new_pulse - position_increment_new) - b1
-					* (step_old_pulse - position_increment_old);
-		}
-		break;
-	case 1: // algorytm nr 1
-		// obliczenie nowej wartosci wypelnienia PWM algorytm PD + I
-		set_value_new = (1 + a) * set_value_old - a * set_value_very_old + b0
-				* (step_new_pulse - position_increment_new) - b1
-				* (step_old_pulse - position_increment_old);
-		break;
-	default: // w tym miejscu nie powinien wystapic blad zwiazany z
-		// nieistniejacym numerem algorytmu
-		set_value_new = 0; // zerowe nowe sterowanie
-		break;
+			if (fabs(step_new) < EPS && fabs(position_increment_new) < EPS && (counter > integrator_off)) {
+				set_value_new = (1 + a) * set_value_old - a * set_value_very_old + b0 * (step_new_pulse
+						- position_increment_new) - b1 * (step_old_pulse - position_increment_old);
+			}
+			break;
+		case 1: // algorytm nr 1
+			// obliczenie nowej wartosci wypelnienia PWM algorytm PD + I
+			set_value_new = (1 + a) * set_value_old - a * set_value_very_old + b0 * (step_new_pulse
+					- position_increment_new) - b1 * (step_old_pulse - position_increment_old);
+			break;
+		default: // w tym miejscu nie powinien wystapic blad zwiazany z
+			// nieistniejacym numerem algorytmu
+			set_value_new = 0; // zerowe nowe sterowanie
+			break;
 	}
 
 	// scope-locked reader data update
@@ -231,11 +230,9 @@ uint8_t NL_regulator_8_sarkofag::compute_set_value(void) {
 		boost::mutex::scoped_lock lock(master.rb_obj->reader_mutex);
 
 		master.rb_obj->step_data.desired_inc[0] = (float) step_new_pulse; // pozycja osi 0
-		master.rb_obj->step_data.current_inc[0]
-				= (short int) position_increment_new;
+		master.rb_obj->step_data.current_inc[0] = (short int) position_increment_new;
 		master.rb_obj->step_data.pwm[0] = (float) set_value_new;
-		master.rb_obj->step_data.uchyb[0] = (float) (step_new_pulse
-				- position_increment_new);
+		master.rb_obj->step_data.uchyb[0] = (float) (step_new_pulse - position_increment_new);
 	}
 
 	// ograniczenie na sterowanie

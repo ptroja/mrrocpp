@@ -1,4 +1,3 @@
-
 #include <stdint.h>
 #include <termios.h>
 #include <cstdlib>
@@ -18,7 +17,7 @@
  */
 class Bird_hand
 {
-	public:
+public:
 	Bird_hand();
 	~Bird_hand();
 
@@ -31,21 +30,21 @@ class Bird_hand
 	 * \brief method disconnect from hardware controller.
 	 */
 	void disconnect();
-	
+
 	/*!
 	 * \brief method get synchronization position.
 	 *
 	 * Get initial position of gripper joint.
 	 */
 	void getSynchroPos(uint8_t id, int16_t &pos);
-	
+
 	/*!
 	 * \brief method get status.
 	 *
 	 * Get actual status of gripper joint.
 	 */
 	void getStatus(uint8_t id, uint8_t &status, int32_t &position, int16_t &current, int16_t &torque);
-	
+
 	/*!
 	 * \brief method get PID parameters.
 	 *
@@ -59,7 +58,7 @@ class Bird_hand
 	 * Set PID regulator parameters of gripper joint.
 	 */
 	void setPID(uint8_t id, int16_t p, int16_t i, int16_t d);
-	
+
 	/*!
 	 * \brief method get limits parameters.
 	 *
@@ -73,7 +72,7 @@ class Bird_hand
 	 * Set limits parameters of gripper joint.
 	 */
 	void setLimit(uint8_t id, int16_t upper, int16_t lower);
-	
+
 	/*!
 	 * \brief method set command for gripper joint.
 	 *
@@ -94,7 +93,7 @@ class Bird_hand
 	 * Set command for gripper joint in absolut position mode.
 	 */
 	void setCMD3(uint8_t id, int16_t t, int16_t b, int16_t Fd, int32_t rd);
-	
+
 	/*!
 	 * \brief method time synchronization.
 	 *
@@ -103,11 +102,11 @@ class Bird_hand
 	 */
 	void synchronize(uint8_t id, uint16_t step);
 
-	protected:
-	private:
-	
+protected:
+private:
+
 	void write_read(int fd, char* buf, unsigned int w_len, unsigned int r_len);
-	
+
 	int fd[8];
 	struct termios oldtio[8];
 

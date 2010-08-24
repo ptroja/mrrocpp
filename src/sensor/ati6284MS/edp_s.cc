@@ -43,7 +43,7 @@
 #include "base/lib/srlib.h"
 #include "edp_s.h"
 
-
+#include "base/edp/edp_e_manip.h"
 // Konfigurator
 #include "base/lib/configurator.h"
 
@@ -51,22 +51,19 @@ namespace mrrocpp {
 namespace edp {
 namespace sensor {
 
-
 int sint_id;
 struct sigevent sevent;
 
 uint64_t *int_timeout;// by Y
 struct sigevent tim_event;
 
-
 struct timespec start[9];
 
 static const char* interface = "en0";
-static uint8_t boardMac[6] = {0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
+static uint8_t boardMac[6] = { 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
 
 static const char* host = "192.168.18.200";
 static const uint16_t port = 55555;
-
 
 // #pragma off(check_stack);
 
@@ -76,21 +73,20 @@ static const uint16_t port = 55555;
 ATI6284_force::ATI6284_force(common::manip_effector &_master) :
 	force(_master),
 #ifdef USE_RAW
-    client(interface, boardMac),
+			client(interface, boardMac),
 #else
-    client(host, port),
+			client(host, port),
 #endif
-    service(&client),
-    rpcController(boost::posix_time::microseconds(1000))
+			service(&client), rpcController(boost::posix_time::microseconds(1000))
 {
 	frame_counter = 0; //licznik wyslanych pakietow
-    printf("Initialized docent sensor\n");
+	printf("Initialized docent sensor\n");
 	//sendSocket = NULL;
 	//recvSocket = NULL;
 
-	for(int i = 0;i<6;++i){
-		adc_data[i]=0;
-		bias_data[i]=0;
+	for (int i = 0; i < 6; ++i) {
+		adc_data[i] = 0;
+		bias_data[i] = 0;
 	}
 
 }
@@ -102,20 +98,19 @@ void ATI6284_force::connect_to_hardware(void)
 
 		ThreadCtl(_NTO_TCTL_IO, NULL); // nadanie odpowiednich uprawnien watkowi
 
-        tim_event.sigev_notify = SIGEV_UNBLOCK;// by Y
-        int_timeout = new (uint64_t);
-
+		tim_event.sigev_notify = SIGEV_UNBLOCK;// by Y
+		int_timeout = new (uint64_t);
 
 		delay(100);
 
 		//inicjalizacja
-		try{
-		    //sendSocket = new RawSocket("en1", TARGET_ETHERNET_ADDRESS);
-		    //recvSocket = new RawSocket("en1");
+		try {
+			//sendSocket = new RawSocket("en1", TARGET_ETHERNET_ADDRESS);
+			//recvSocket = new RawSocket("en1");
 
-		} catch(std::exception & e) {
-			  throw runtime_error("Could not open device");
-		  }
+		} catch (std::exception & e) {
+			throw runtime_error("Could not open device");
+		}
 
 	}
 
@@ -139,10 +134,7 @@ void ATI6284_force::configure_sensor(void)
 	//  printf("edp Sensor configured\n");
 	sr_msg->message("edp Sensor configured");
 
-
 	if (!(master.test_mode)) {
-
-
 
 		// synchronize gravity transformation
 
@@ -162,9 +154,8 @@ void ATI6284_force::configure_sensor(void)
 		wait_for_event();
 
 		for (int i = 0; i < 6; ++i) {
-			bias_data[i]=adc_data[i];
+			bias_data[i] = adc_data[i];
 		}
-
 
 		if (!gravity_transformation) // nie powolano jeszcze obiektu
 		{
@@ -208,56 +199,55 @@ void ATI6284_force::wait_for_event()
 	int iw_ret;
 	int iter_counter = 0; // okresla ile razy pod rzad zostala uruchomiona ta metoda
 
-    //TODO: Jesli test mode, dopuszczac wylaczenie sensora
+	//TODO: Jesli test mode, dopuszczac wylaczenie sensora
 
-    iter_counter++;
-    usleep(200);
-    service.GetGenGForceReading(&rpcController, NULL, &response, NULL);
-    if (rpcController.expired()) {
-        printf("Expired!!!\n");
-    } else {
-			adc_data[0] = response.fx();
-            adc_data[1] = response.fy();
-            adc_data[2] = response.fz();
-            adc_data[3] = response.tx();
-            adc_data[4] = response.ty();
-            adc_data[5] = response.tz();
-    }
+	iter_counter++;
+	usleep(200);
+	service.GetGenGForceReading(&rpcController, NULL, &response, NULL);
+	if (rpcController.expired()) {
+		printf("Expired!!!\n");
+	} else {
+		adc_data[0] = response.fx();
+		adc_data[1] = response.fy();
+		adc_data[2] = response.fz();
+		adc_data[3] = response.tx();
+		adc_data[4] = response.ty();
+		adc_data[5] = response.tz();
+	}
 
-    rpcController.reset();
+	rpcController.reset();
 }
 
 /*************************** inicjacja odczytu ******************************/
 void ATI6284_force::initiate_reading(void)
 {
 	lib::Ft_vector kartez_force;
-    double force_fresh[6] = { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f };
+	double force_fresh[6] = { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f };
 	short measure_report;
 
 	if (!is_sensor_configured) {
 		throw sensor_error(lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
-    }
+	}
 
-    lib::Ft_vector ft_table;
+	lib::Ft_vector ft_table;
 
-    convert_data(adc_data, bias_data, force_fresh);
+	convert_data(adc_data, bias_data, force_fresh);
 
-    for (int i = 0; i < 6; ++i) {
-        ft_table[i] = force_fresh[i];
-    }
+	for (int i = 0; i < 6; ++i) {
+		ft_table[i] = force_fresh[i];
+	}
 
-    is_reading_ready = true;
+	is_reading_ready = true;
 
-    // jesli ma byc wykorzytstywana biblioteka transformacji sil
-    if (gravity_transformation) {
+	// jesli ma byc wykorzytstywana biblioteka transformacji sil
+	if (gravity_transformation) {
 
+		lib::Homog_matrix frame = master.return_current_frame(common::WITH_TRANSLATION);
+		// lib::Homog_matrix frame(master.force_current_end_effector_frame);
+		lib::Ft_vector output = gravity_transformation->getForce(ft_table, frame);
+		master.force_msr_upload(output);
 
-        lib::Homog_matrix frame = master.return_current_frame(common::WITH_TRANSLATION);
-        // lib::Homog_matrix frame(master.force_current_end_effector_frame);
-        lib::Ft_vector output = gravity_transformation->getForce(ft_table, frame);
-        master.force_msr_upload(output);
-
-    }
+	}
 }
 
 /***************************** odczyt z czujnika *****************************/
@@ -272,11 +262,12 @@ force* return_created_edp_force_sensor(common::manip_effector &_master)
 
 
 /*******************************************************************/
-void send_request(uint64_t &counter) {
-  unsigned char send_buffer[8];
-  ++counter;
-  memcpy((void *)(send_buffer), (void *)(&(counter)), 8);     //64bit unsigned counter
-  //sock->send(send_buffer, 8);                           //64bit counter = 8 bytes
+void send_request(uint64_t &counter)
+{
+	unsigned char send_buffer[8];
+	++counter;
+	memcpy((void *) (send_buffer), (void *) (&(counter)), 8); //64bit unsigned counter
+	//sock->send(send_buffer, 8);                           //64bit counter = 8 bytes
 
 }
 /***************************** konwersja danych z danych binarnych na sile *****************************/
@@ -284,75 +275,73 @@ void send_request(uint64_t &counter) {
 // int16_t result_raw[6] - input data in hex
 // int16_t bias_raw[6] - bias data in hex
 // double force[6] - output data in N, N*m
-void convert_data(int16_t result_raw[6], int16_t bias_raw[6], double force[6]) {
-  int i, j;
-  double result_voltage[6] = { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f };
+void convert_data(int16_t result_raw[6], int16_t bias_raw[6], double force[6])
+{
+	int i, j;
+	double result_voltage[6] = { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f };
 
-  for (i = 0; i < 6; ++i) {
-    result_voltage[i] =
-        (double) ((result_raw[i] - bias_raw[i]) * 10.0f / 2048.0f);
-    force[i]=0.0;
-  }
-
-  for (i = 0; i < 6; ++i) {
-    for (j = 0; j < 6; ++j) {
-      force[i] += (double) (result_voltage[j] * conversion_matrix[i][j]);
-    }
-    force[i] /= conversion_scale[i];
-  }
-
-/*
-	printf("\n-----------------------------------------------------------------------------------------------\n");
-	printf("%c\t%c\t%c\t%c\t%c\t%c\n",'X','Y','Z','X','Y','Z');
-	printf("\n-----------------------------------------------------------------------------------------------\n");
-	printf("Bias reading:\n");
-	for (i=0;i<6;i++)
-		printf("%9.6f[V] ",bias_voltage[i]);
-	printf("\n\nMeasurement:\n\n");
-	for (i=0;i<6;i++)
-		printf("%9.6f[V] ",voltage[i]);
-	printf("\n\nDifference Measurement - Bias reading :\n\n");
-	for (i=0;i<6;i++)
-		printf("%9.6f[V] ",voltage[i]-bias_voltage[i]);
-	printf("\n\nResult (force/torque):\n\n");
-	for (i=0;i<6;i++){
-		if (i<3)
-			printf("%9.6f[N] ",force[i]);
-		else
-			printf("%9.6f[N-m] ",force[i]);
+	for (i = 0; i < 6; ++i) {
+		result_voltage[i] = (double) ((result_raw[i] - bias_raw[i]) * 10.0f / 2048.0f);
+		force[i] = 0.0;
 	}
-	printf("\n\nResult local (force/torque):\n\n");
-	for (i=0;i<6;i++){
-		if (i<3)
-			printf("%9.6f[N] ",force_local[i]);
-		else
-			printf("%9.6f[N-m] ",force_local[i]);
+
+	for (i = 0; i < 6; ++i) {
+		for (j = 0; j < 6; ++j) {
+			force[i] += (double) (result_voltage[j] * conversion_matrix[i][j]);
+		}
+		force[i] /= conversion_scale[i];
 	}
-	printf("\n-----------------------------------------------------------------------------------------------\n");
 
-*/
+	/*
+	 printf("\n-----------------------------------------------------------------------------------------------\n");
+	 printf("%c\t%c\t%c\t%c\t%c\t%c\n",'X','Y','Z','X','Y','Z');
+	 printf("\n-----------------------------------------------------------------------------------------------\n");
+	 printf("Bias reading:\n");
+	 for (i=0;i<6;i++)
+	 printf("%9.6f[V] ",bias_voltage[i]);
+	 printf("\n\nMeasurement:\n\n");
+	 for (i=0;i<6;i++)
+	 printf("%9.6f[V] ",voltage[i]);
+	 printf("\n\nDifference Measurement - Bias reading :\n\n");
+	 for (i=0;i<6;i++)
+	 printf("%9.6f[V] ",voltage[i]-bias_voltage[i]);
+	 printf("\n\nResult (force/torque):\n\n");
+	 for (i=0;i<6;i++){
+	 if (i<3)
+	 printf("%9.6f[N] ",force[i]);
+	 else
+	 printf("%9.6f[N-m] ",force[i]);
+	 }
+	 printf("\n\nResult local (force/torque):\n\n");
+	 for (i=0;i<6;i++){
+	 if (i<3)
+	 printf("%9.6f[N] ",force_local[i]);
+	 else
+	 printf("%9.6f[N-m] ",force_local[i]);
+	 }
+	 printf("\n-----------------------------------------------------------------------------------------------\n");
 
-
+	 */
 
 }
 /*******************************************************************/
 /* gets data from ethernet and store it in int16_t data_raw[6] */
-int get_data_from_ethernet(unsigned char buffer[512],
-                           int16_t data_raw[6]) {
-  std::size_t recvd = 0;//sock->recv(buffer, 512);
-  unsigned char *buffer_data = buffer + 8;  //8 bytes for uint64_t
+int get_data_from_ethernet(unsigned char buffer[512], int16_t data_raw[6])
+{
+	std::size_t recvd = 0;//sock->recv(buffer, 512);
+	unsigned char *buffer_data = buffer + 8; //8 bytes for uint64_t
 
-  if (recvd >= 20) {            //12B - ADC data, 8B - counter
+	if (recvd >= 20) { //12B - ADC data, 8B - counter
 
-    //convert two bytes to one word. &0xFF - take only one byte, not four...
-    for (int i = 0; i < 6; ++i) {
-      data_raw[i] = (((buffer_data[2 * i] & 0xFF) << 8) | (buffer_data[2 * i + 1] & 0xFF));
+		//convert two bytes to one word. &0xFF - take only one byte, not four...
+		for (int i = 0; i < 6; ++i) {
+			data_raw[i] = (((buffer_data[2 * i] & 0xFF) << 8) | (buffer_data[2 * i + 1] & 0xFF));
 
-    }
-    return 0;
-  } else {
-    return -1;
-  }
+		}
+		return 0;
+	} else {
+		return -1;
+	}
 }
 
 /*****************************  *****************************/

@@ -22,7 +22,7 @@
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
 #include "base/lib/srlib.h"
-#include "base/edp/edp.h"
+#include "base/edp/edp_typedefs.h"
 
 
 // Konfigurator

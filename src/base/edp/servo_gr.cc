@@ -13,14 +13,14 @@
 #include <ctime>
 
 #include "base/lib/typedefs.h"
-#include "base/lib/impconst.h"
-#include "base/lib/com_buf.h"
 #include "base/lib/mis_fun.h"
-#include "base/edp/edp.h"
+#include "base/edp/edp_typedefs.h"
 #include "base/edp/reader.h"
 #include "base/edp/HardwareInterface.h"
 #include "base/edp/servo_gr.h"
 #include "base/edp/regulator.h"
+
+#include "base/edp/edp_e_motor_driven.h"
 
 #include "base/lib/exception.h"
 using namespace mrrocpp::lib::exception;
