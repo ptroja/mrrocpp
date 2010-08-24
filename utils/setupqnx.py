@@ -153,6 +153,8 @@ packages = \
     "boost-headers-1.42.0", \
     "vim-share-7.2.411", \
     "vim-7.2.411", \
+    "subversion-base-1.6.9nb1", \
+    "scmgit-base-1.6.6.2", \
     "gsl-1.14", \
     "ncurses-5.7nb3"
 
