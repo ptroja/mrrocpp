@@ -19,11 +19,6 @@
 
 #include <boost/foreach.hpp>
 
-#include "base/lib/typedefs.h"
-#include "base/lib/impconst.h"
-#include "base/lib/com_buf.h"
-
-#include "base/lib/srlib.h"
 #include "base/lib/datastr.h"
 
 #include "base/mp/MP_main_error.h"
