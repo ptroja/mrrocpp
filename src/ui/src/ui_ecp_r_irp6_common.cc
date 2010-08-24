@@ -9,22 +9,22 @@
 #include <cfloat>
 #include <iostream>
 
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #include <unistd.h>
-#include <string.h>
-#include <assert.h>
-#include <math.h>
+#include <cstring>
+#include <cassert>
+#include <cmath>
 #include <fcntl.h>
-#include <errno.h>
+#include <cerrno>
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
 
 #include "ui/src/ui_ecp_r_irp6_common.h"
 
-#include "lib/srlib.h"
+#include "base/lib/srlib.h"
 
 #include "ui/src/ui_ecp_r_irp6_common.h"
 

@@ -9,21 +9,21 @@
 // Autor: Yoyek (Tomek Winiarski)
 // na podstawie szablonu vsp Tomka Kornuty i programu obslugi czujnika Artura Zarzyckiego
 // -------------------------------------------------------------------------
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #include <unistd.h>
-#include <string.h>
-#include <signal.h>
+#include <cstring>
+#include <csignal>
 #include <process.h>
-#include <math.h>
+#include <cmath>
 #include <sys/wait.h>
 #include <sys/types.h>
 #include <sys/sched.h>
-#include <string.h>
+#include <cstring>
 #include <fstream>
 #include <iomanip>
-#include <ctype.h>
-#include <errno.h>
+#include <cctype>
+#include <cerrno>
 #include <sys/iofunc.h>
 #include <sys/dispatch.h>
 #include <iostream>
@@ -32,26 +32,26 @@
 #include <sys/dispatch.h>
 #include <hw/pci.h>
 #include <hw/pci_devices.h>
-#include <stddef.h>
+#include <cstddef>
 #include <sys/mman.h>
-#include <time.h>
+#include <ctime>
 #include <fstream>
 
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/bind.hpp>
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
 
-#include "lib/srlib.h"
+#include "base/lib/srlib.h"
 #include "edp_s.h"
 
 #include <sys/syspage.h>
 #include <sys/neutrino.h>
 
 // Konfigurator
-#include "lib/configurator.h"
+#include "base/lib/configurator.h"
 
 namespace mrrocpp {
 namespace edp {
@@ -128,7 +128,7 @@ void ATI6284_force::connect_to_hardware(void)
 			//recvSocket = new RawSockeib -t("en1");
 
 		} catch (std::exception & e) {
-			throw runtime_error("Could not open device");
+			throw std::runtime_error("Could not open device");
 		}
 
 	}

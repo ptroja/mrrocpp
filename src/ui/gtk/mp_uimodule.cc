@@ -9,7 +9,7 @@
 
 #include <sys/types.h>
 #include <sys/wait.h>
-#include <signal.h>
+#include <csignal>
 
 #include "ui_config_entry.h"
 #include "ui_model.h"

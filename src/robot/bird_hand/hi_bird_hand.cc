@@ -3,7 +3,7 @@
 
 #include <exception>
 #include <stdexcept>
-#include <string.h>
+#include <cstring>
 #include <iostream>
 
 #define BAUD 921600

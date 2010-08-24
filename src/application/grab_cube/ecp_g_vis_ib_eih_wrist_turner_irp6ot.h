@@ -10,16 +10,11 @@
 
 #include "generator/ecp/ecp_g_visual_servo.h"
 
-#include <string.h>
-#include <math.h>
-
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
 
 #include "sensor/fradia/ecp_mp_s_fradia_sensor.h"
 #include "sensor/fradia/object_tracker.h"
-
-#include <iostream>
 
 namespace mrrocpp {
 namespace ecp {

@@ -6,18 +6,18 @@
 //			Ostatnia modyfikacja: 05.01.2006r.
 // -------------------------------------------------------------------------
 
-#include <stdio.h>
+#include <cstdio>
 #include <iostream>
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
 
-#include "lib/srlib.h"
+#include "base/lib/srlib.h"
 #include "robot/irp6p_m/ecp_r_irp6p_m.h"
 #include "ecp_g_dung.h"
 
-#include "lib/mrmath/mrmath.h"
+#include "base/lib/mrmath/mrmath.h"
 #include "math.h"
 
 namespace mrrocpp {

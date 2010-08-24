@@ -48,10 +48,10 @@
 
 #include <playerclient.h>
 #include <netinet/in.h>
-#include <stdlib.h>
-#include <math.h>
-#include <string.h> // for memset
-#include <stdio.h>
+#include <cstdlib>
+#include <cmath>
+#include <cstring> // for memset
+#include <cstdio>
 
 #ifndef MIN
   #define MIN(a,b) (a < b) ? a : b

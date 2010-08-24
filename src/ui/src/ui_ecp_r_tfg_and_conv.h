@@ -10,8 +10,8 @@
 
 #include "ui/src/ui.h"
 // Konfigurator.
-#include "lib/configurator.h"
-#include "lib/mrmath/mrmath.h"
+#include "base/lib/configurator.h"
+#include "base/lib/mrmath/mrmath.h"
 #include "base/ecp/ecp_robot.h"
 #include "ui/src/ui_ecp_r_common.h"
 

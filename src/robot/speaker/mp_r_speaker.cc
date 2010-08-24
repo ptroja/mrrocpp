@@ -1,10 +1,11 @@
-#include <string.h>
+#include <cstring>
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
 
-#include "lib/srlib.h"
+#include "base/lib/srlib.h"
+#include "base/mp/mp_task.h"
 #include "robot/speaker/mp_r_speaker.h"
 
 namespace mrrocpp {

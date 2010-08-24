@@ -8,12 +8,12 @@
 #if !defined(_ECP_GEN_EIH_H)
 #define _ECP_GEN_EIH_H
 
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
 
 #include "generator/ecp/ecp_g_teach_in.h"
 #include "generator/ecp/ecp_g_force.h"
-#include "lib/mrmath/mrmath.h"
+#include "base/lib/mrmath/mrmath.h"
 
 
 namespace mrrocpp {

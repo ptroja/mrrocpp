@@ -7,9 +7,9 @@
 #ifndef ECP_G_BIRD_HAND_H_
 #define ECP_G_BIRD_HAND_H_
 
-#include <time.h>
 #include "base/ecp/ecp_generator.h"
-#include "lib/data_port_headers/bird_hand.h"
+#include "base/lib/single_thread_port.h"
+#include "base/lib/data_port_headers/bird_hand.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -42,7 +42,6 @@ public:
 	bird_hand(common::task::task& _ecp_task); //constructor
 	bool first_step(); //first step generation
 	bool next_step(); //next step generation
-
 };
 
 } // namespace generator

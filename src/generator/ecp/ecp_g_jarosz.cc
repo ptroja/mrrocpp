@@ -9,32 +9,33 @@
 // autor: tkornuta
 // -------------------------------------------------------------------------
 
-#include <stdio.h>
-#include <string.h>
-#include <math.h>
-#include <errno.h>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <cerrno>
 #include <unistd.h>
 #include <fstream>
 #if defined(__QNXNTO__)
 #include <sys/neutrino.h>
 #endif /* __QNXNTO__ */
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
 
 #if defined(USE_MESSIP_SRR)
 #include "messip_dataport.h"
 #endif
 
-#include "lib/srlib.h"
+#include "base/lib/srlib.h"
+#include "base/ecp/ecp_task.h"
+#include "base/ecp/ecp_robot.h"
 #include "generator/ecp/ecp_g_jarosz.h"
 
 namespace mrrocpp {
 namespace ecp {
 namespace common {
 namespace generator {
-
 
 // ####################################################################################################
 // Generator prostoliniowy o zadany przyrost polozenia/orientacji
@@ -51,7 +52,7 @@ linear::linear(common::task::task& _ecp_task, lib::trajectory_description tr_des
 	delta(_ecp_task)
 {
 
-	mp_communication_mode=mp_communication_mode_arg;
+	mp_communication_mode = mp_communication_mode_arg;
 
 	td = tr_des;
 
@@ -67,16 +68,16 @@ linear::linear(common::task::task& _ecp_task, lib::trajectory_description tr_des
 	}
 	for (int i = 0; i < 3; i++) {
 		a_max_zyz[i] = 5.0; // przyspieszenie liniowe koncowki 0.1G
-		a_max_zyz[i+3] = 5.0; // przyspieszenie katowe koncowki 1rad/s^2
+		a_max_zyz[i + 3] = 5.0; // przyspieszenie katowe koncowki 1rad/s^2
 		// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
 		v_max_zyz[i] = 5.0; // predkosc liniowa 1m/s
-		v_max_zyz[i+3] = 5.0; // predkosc katowa 1rad/s
+		v_max_zyz[i + 3] = 5.0; // predkosc katowa 1rad/s
 		// tablica dopuszczalnych predkosci dla kolejnych osi/wspolrzednych
 		a_max_aa[i] = 0.0;
-		a_max_aa[i+3] = 0.0;
+		a_max_aa[i + 3] = 0.0;
 		// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
 		v_max_aa[i] = 0.0;
-		v_max_aa[i+3] = 0.0;
+		v_max_aa[i + 3] = 0.0;
 		// tablica dopuszczalnych predkosci dla kolejnych osi/wspolrzednych
 	}
 	a_max_zyz[6] = 5.0; // przyspieszenie katowe koncowki 1rad/s^2
@@ -93,7 +94,8 @@ linear::linear(common::task::task& _ecp_task, lib::trajectory_description tr_des
 bool linear::first_step()
 {
 
-	switch (td.arm_type) {
+	switch (td.arm_type)
+	{
 		case lib::MOTOR:
 			the_robot->ecp_command.instruction.instruction_type = lib::GET;
 			the_robot->ecp_command.instruction.get_type = ARM_DEFINITION;
@@ -117,31 +119,31 @@ bool linear::first_step()
 			the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
 			break;
 			/*
-		case lib::XYZ_EULER_ZYZ:
-			the_robot->ecp_command.instruction.instruction_type = lib::GET;
-			the_robot->ecp_command.instruction.get_type = ARM_DEFINITION;
-			the_robot->ecp_command.instruction.set_type = ARM_DEFINITION;
-			the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
-			the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_EULER_ZYZ;
-			the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
-			the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-			the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
-			the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
-			break;
-		case lib::XYZ_ANGLE_AXIS:
-			the_robot->ecp_command.instruction.instruction_type = lib::GET;
-			the_robot->ecp_command.instruction.get_type = ARM_DEFINITION;
-			the_robot->ecp_command.instruction.set_type = ARM_DEFINITION;
-			the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
-			the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_ANGLE_AXIS;
-			the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
-			the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-			the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
-			the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
-			break;
-			*/
+			 case lib::XYZ_EULER_ZYZ:
+			 the_robot->ecp_command.instruction.instruction_type = lib::GET;
+			 the_robot->ecp_command.instruction.get_type = ARM_DEFINITION;
+			 the_robot->ecp_command.instruction.set_type = ARM_DEFINITION;
+			 the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
+			 the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_EULER_ZYZ;
+			 the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
+			 the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
+			 the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
+			 the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
+			 break;
+			 case lib::XYZ_ANGLE_AXIS:
+			 the_robot->ecp_command.instruction.instruction_type = lib::GET;
+			 the_robot->ecp_command.instruction.get_type = ARM_DEFINITION;
+			 the_robot->ecp_command.instruction.set_type = ARM_DEFINITION;
+			 the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
+			 the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_ANGLE_AXIS;
+			 the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
+			 the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
+			 the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
+			 the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
+			 break;
+			 */
 		default:
-			throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+			throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 	} // end : switch (td.arm_type)
 
 	return true;
@@ -167,60 +169,61 @@ bool linear::next_step()
 	the_robot->ecp_command.instruction.get_type = NOTHING_DEFINITION;
 	the_robot->ecp_command.instruction.get_arm_type = lib::INVALID_END_EFFECTOR;
 
-	switch (td.arm_type) {
+	switch (td.arm_type)
+	{
 		case lib::MOTOR:
 			the_robot->ecp_command.instruction.instruction_type = lib::SET;
 			the_robot->ecp_command.instruction.set_type = ARM_DEFINITION; // ARM
 			the_robot->ecp_command.instruction.set_arm_type = lib::MOTOR;
 			the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
 			the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-			for (i=0; i<MAX_SERVOS_NR; i++) {
+			for (i = 0; i < MAX_SERVOS_NR; i++) {
 				the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
-						= the_robot->reply_package.arm.pf_def.arm_coordinates[i] + node_counter*td.coordinate_delta[i]
-								/td.interpolation_node_no;
+						= the_robot->reply_package.arm.pf_def.arm_coordinates[i] + node_counter
+								* td.coordinate_delta[i] / td.interpolation_node_no;
 			} // end:for
 			break;
 
 		case lib::JOINT:
-			for (i=0; i<MAX_SERVOS_NR; i++) {
+			for (i = 0; i < MAX_SERVOS_NR; i++) {
 				the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
-						= the_robot->reply_package.arm.pf_def.arm_coordinates[i] + node_counter*td.coordinate_delta[i]
-								/td.interpolation_node_no;
+						= the_robot->reply_package.arm.pf_def.arm_coordinates[i] + node_counter
+								* td.coordinate_delta[i] / td.interpolation_node_no;
 			} // end:for
 			break;
-/*
-		case lib::XYZ_EULER_ZYZ:
-			the_robot->ecp_command.instruction.instruction_type = lib::SET;
-			the_robot->ecp_command.instruction.set_type = ARM_DEFINITION; // ARM
-			the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
-			the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
-			the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-			for (i=0; i<6; i++) {
-				the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
-						= the_robot->reply_package.arm.pf_def.arm_coordinates[i] + node_counter*td.coordinate_delta[i]
-								/td.interpolation_node_no;
-			} // end:for
-			the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = the_robot->reply_package.arm.pf_def.gripper_coordinate + node_counter
-					*td.coordinate_delta[6]/td.interpolation_node_no;
-			break;
+			/*
+			 case lib::XYZ_EULER_ZYZ:
+			 the_robot->ecp_command.instruction.instruction_type = lib::SET;
+			 the_robot->ecp_command.instruction.set_type = ARM_DEFINITION; // ARM
+			 the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
+			 the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
+			 the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
+			 for (i=0; i<6; i++) {
+			 the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
+			 = the_robot->reply_package.arm.pf_def.arm_coordinates[i] + node_counter*td.coordinate_delta[i]
+			 /td.interpolation_node_no;
+			 } // end:for
+			 the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = the_robot->reply_package.arm.pf_def.gripper_coordinate + node_counter
+			 *td.coordinate_delta[6]/td.interpolation_node_no;
+			 break;
 
-		case lib::XYZ_ANGLE_AXIS:
-			the_robot->ecp_command.instruction.instruction_type = lib::SET;
-			the_robot->ecp_command.instruction.set_type = ARM_DEFINITION; // ARM
-			the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
-			the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
-			the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-			for (i=0; i<6; i++) {
-				the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
-						= the_robot->reply_package.arm.pf_def.arm_coordinates[i] + node_counter*td.coordinate_delta[i]
-								/td.interpolation_node_no;
-			} // end:for
-			the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = the_robot->reply_package.arm.pf_def.gripper_coordinate + node_counter
-					*td.coordinate_delta[6]/td.interpolation_node_no;
-			break;
-			*/
+			 case lib::XYZ_ANGLE_AXIS:
+			 the_robot->ecp_command.instruction.instruction_type = lib::SET;
+			 the_robot->ecp_command.instruction.set_type = ARM_DEFINITION; // ARM
+			 the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
+			 the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
+			 the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
+			 for (i=0; i<6; i++) {
+			 the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
+			 = the_robot->reply_package.arm.pf_def.arm_coordinates[i] + node_counter*td.coordinate_delta[i]
+			 /td.interpolation_node_no;
+			 } // end:for
+			 the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = the_robot->reply_package.arm.pf_def.gripper_coordinate + node_counter
+			 *td.coordinate_delta[6]/td.interpolation_node_no;
+			 break;
+			 */
 		default:
-			throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+			throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 
 	}// end:switch
 
@@ -241,15 +244,15 @@ linear_parabolic::linear_parabolic(common::task::task& _ecp_task, lib::trajector
 {
 	td = tr_des;
 
-	for (int i=0; i<MAX_SERVOS_NR; i++) {
-		ta[i]=time_a[i];
-		if ( (ta[i]=time_a[i]) <=0 || ta[i] > 1)
+	for (int i = 0; i < MAX_SERVOS_NR; i++) {
+		ta[i] = time_a[i];
+		if ((ta[i] = time_a[i]) <= 0 || ta[i] > 1)
 			throw ECP_error(lib::NON_FATAL_ERROR, INVALID_TIME_SPECIFICATION);
 	}
 
-	for (int i=0; i<MAX_SERVOS_NR; i++) {
-		tb[i]=time_b[i];
-		if ( (tb[i]=time_b[i]) <=0 || tb[i] > 1)
+	for (int i = 0; i < MAX_SERVOS_NR; i++) {
+		tb[i] = time_b[i];
+		if ((tb[i] = time_b[i]) <= 0 || tb[i] > 1)
 			throw ECP_error(lib::NON_FATAL_ERROR, INVALID_TIME_SPECIFICATION);
 	}
 
@@ -265,16 +268,16 @@ linear_parabolic::linear_parabolic(common::task::task& _ecp_task, lib::trajector
 	}
 	for (int i = 0; i < 3; i++) {
 		a_max_zyz[i] = 5.0; // przyspieszenie liniowe koncowki 0.1G
-		a_max_zyz[i+3] = 5.0; // przyspieszenie katowe koncowki 1rad/s^2
+		a_max_zyz[i + 3] = 5.0; // przyspieszenie katowe koncowki 1rad/s^2
 		// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
 		v_max_zyz[i] = 5.0; // predkosc liniowa 1m/s
-		v_max_zyz[i+3] = 5.0; // predkosc katowa 1rad/s
+		v_max_zyz[i + 3] = 5.0; // predkosc katowa 1rad/s
 		// tablica dopuszczalnych predkosci dla kolejnych osi/wspolrzednych
 		a_max_aa[i] = 0.0;
-		a_max_aa[i+3] = 0.0;
+		a_max_aa[i + 3] = 0.0;
 		// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
 		v_max_aa[i] = 0.0;
-		v_max_aa[i+3] = 0.0;
+		v_max_aa[i + 3] = 0.0;
 		// tablica dopuszczalnych predkosci dla kolejnych osi/wspolrzednych
 	}
 
@@ -292,28 +295,23 @@ linear_parabolic::linear_parabolic(common::task::task& _ecp_task, lib::trajector
 
 double linear_parabolic::calculate_s(const double t, const double ta, const double tb)
 {
-	double s=0;
+	double s = 0;
 
-	if (t <0 || t >1 ){
+	if (t < 0 || t > 1) {
 		throw ECP_error(lib::NON_FATAL_ERROR, INVALID_TIME_SPECIFICATION);
 	}
 
-	if (t<ta)
-	{
+	if (t < ta) {
 		// przyspieszenie=1
-		s=0.5*t*t;
-	}
-	else if (t<tb)
-	{
+		s = 0.5 * t * t;
+	} else if (t < tb) {
 		// przyspieszenie = 1
-		s=0.5*ta*ta +ta*(t-ta);
-	}
-	else
-	{ // tb<czas<=1
+		s = 0.5 * ta * ta + ta * (t - ta);
+	} else { // tb<czas<=1
 		// przyspieszenie=-ta/(1-tb) (wynika z rownosci predkosci 1*ta=a*(1-tb) )
-		s=0.5*ta*ta + ta*(tb-ta) + ta*(t-tb)-0.5*(ta/(1-tb))*(t-tb)*(t-tb);
+		s = 0.5 * ta * ta + ta * (tb - ta) + ta * (t - tb) - 0.5 * (ta / (1 - tb)) * (t - tb) * (t - tb);
 	}
-	s= s / (0.5*ta*ta+ta*(tb-ta)+0.5*(ta*(1-tb)) ); // przyrost/calka z predkosci
+	s = s / (0.5 * ta * ta + ta * (tb - ta) + 0.5 * (ta * (1 - tb))); // przyrost/calka z predkosci
 
 	return s;
 
@@ -326,7 +324,8 @@ double linear_parabolic::calculate_s(const double t, const double ta, const doub
 bool linear_parabolic::first_step()
 {
 
-	switch (td.arm_type) {
+	switch (td.arm_type)
+	{
 
 		case lib::MOTOR:
 			the_robot->ecp_command.instruction.instruction_type = lib::GET;
@@ -351,31 +350,31 @@ bool linear_parabolic::first_step()
 			the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
 			break;
 			/*
-		case lib::XYZ_EULER_ZYZ:
-			the_robot->ecp_command.instruction.instruction_type = lib::GET;
-			the_robot->ecp_command.instruction.get_type = ARM_DEFINITION;
-			the_robot->ecp_command.instruction.set_type = ARM_DEFINITION;
-			the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
-			the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_EULER_ZYZ;
-			the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
-			the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-			the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
-			the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
-			break;
-		case lib::XYZ_ANGLE_AXIS:
-			the_robot->ecp_command.instruction.instruction_type = lib::GET;
-			the_robot->ecp_command.instruction.get_type = ARM_DEFINITION;
-			the_robot->ecp_command.instruction.set_type = ARM_DEFINITION;
-			the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
-			the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_ANGLE_AXIS;
-			the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
-			the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-			the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
-			the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
-			break;
-			*/
+			 case lib::XYZ_EULER_ZYZ:
+			 the_robot->ecp_command.instruction.instruction_type = lib::GET;
+			 the_robot->ecp_command.instruction.get_type = ARM_DEFINITION;
+			 the_robot->ecp_command.instruction.set_type = ARM_DEFINITION;
+			 the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
+			 the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_EULER_ZYZ;
+			 the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
+			 the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
+			 the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
+			 the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
+			 break;
+			 case lib::XYZ_ANGLE_AXIS:
+			 the_robot->ecp_command.instruction.instruction_type = lib::GET;
+			 the_robot->ecp_command.instruction.get_type = ARM_DEFINITION;
+			 the_robot->ecp_command.instruction.set_type = ARM_DEFINITION;
+			 the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
+			 the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_ANGLE_AXIS;
+			 the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
+			 the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
+			 the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
+			 the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
+			 break;
+			 */
 		default:
-			throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+			throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 	} // end : switch ( td.arm_type )
 
 	return true;
@@ -398,34 +397,35 @@ bool linear_parabolic::next_step()
 		// aktualnego polozenia ramienia jeszcze nie zostanie zrealizowany. Zrobi
 		// to dopiero execute_motion po wyjsciu z first_step.
 
-		switch (td.arm_type) {
+		switch (td.arm_type)
+		{
 			case lib::MOTOR:
-				for (int i=0; i<MAX_SERVOS_NR; i++) {
-					prev_s[i]= the_robot->reply_package.arm.pf_def.arm_coordinates[i];
+				for (int i = 0; i < MAX_SERVOS_NR; i++) {
+					prev_s[i] = the_robot->reply_package.arm.pf_def.arm_coordinates[i];
 				} // end:for
 				break;
 
 			case lib::JOINT:
-				for (int i=0; i<MAX_SERVOS_NR; i++) {
-					prev_s[i]= the_robot->reply_package.arm.pf_def.arm_coordinates[i];
+				for (int i = 0; i < MAX_SERVOS_NR; i++) {
+					prev_s[i] = the_robot->reply_package.arm.pf_def.arm_coordinates[i];
 				} // end:for
 				break;
-/*
-			case lib::XYZ_EULER_ZYZ:
-				for (int i=0; i<6; i++) {
-					prev_s[i]= the_robot->reply_package.arm.pf_def.arm_coordinates[i];
-				} // end:for
-				prev_s[7] = the_robot->reply_package.arm.pf_def.gripper_coordinate;
-				break;
-			case lib::XYZ_ANGLE_AXIS:
-				for (int i=0; i<6; i++) {
-					prev_s[i]= the_robot->reply_package.arm.pf_def.arm_coordinates[i];
-				} // end:for
-				prev_s[7] = the_robot->reply_package.arm.pf_def.gripper_coordinate;
-				break;
-				*/
+				/*
+				 case lib::XYZ_EULER_ZYZ:
+				 for (int i=0; i<6; i++) {
+				 prev_s[i]= the_robot->reply_package.arm.pf_def.arm_coordinates[i];
+				 } // end:for
+				 prev_s[7] = the_robot->reply_package.arm.pf_def.gripper_coordinate;
+				 break;
+				 case lib::XYZ_ANGLE_AXIS:
+				 for (int i=0; i<6; i++) {
+				 prev_s[i]= the_robot->reply_package.arm.pf_def.arm_coordinates[i];
+				 } // end:for
+				 prev_s[7] = the_robot->reply_package.arm.pf_def.gripper_coordinate;
+				 break;
+				 */
 			default:
-				throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+				throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 		} // end:switch
 
 		first_interval = false;
@@ -435,7 +435,7 @@ bool linear_parabolic::next_step()
 
 
 	// Kontakt z MP
-	if (node_counter-1 == td.interpolation_node_no) { // Koniec odcinka
+	if (node_counter - 1 == td.interpolation_node_no) { // Koniec odcinka
 
 		return false;
 	}
@@ -450,17 +450,18 @@ bool linear_parabolic::next_step()
 	double vel[MAX_SERVOS_NR];
 	double vel_avg[MAX_SERVOS_NR];
 
-	switch (td.arm_type) {
+	switch (td.arm_type)
+	{
 		case lib::MOTOR:
 			the_robot->ecp_command.instruction.instruction_type = lib::SET;
 			the_robot->ecp_command.instruction.set_type = ARM_DEFINITION; // ARM
 			the_robot->ecp_command.instruction.set_arm_type = lib::MOTOR;
 			the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
 			the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-			for (i=0; i<MAX_SERVOS_NR; i++) {
-				double s = calculate_s((double)node_counter/td.interpolation_node_no, ta[i], tb[i]);
+			for (i = 0; i < MAX_SERVOS_NR; i++) {
+				double s = calculate_s((double) node_counter / td.interpolation_node_no, ta[i], tb[i]);
 				the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
-						= the_robot->reply_package.arm.pf_def.arm_coordinates[i] + s*td.coordinate_delta[i];
+						= the_robot->reply_package.arm.pf_def.arm_coordinates[i] + s * td.coordinate_delta[i];
 				vel_avg[i] = the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] - prev_s[i];
 				acc[i] = vel_avg[i] - prev_vel_avg[i];
 				vel[i] = acc[i] * node_counter;
@@ -489,114 +490,114 @@ bool linear_parabolic::next_step()
 			the_robot->ecp_command.instruction.set_arm_type = lib::JOINT;
 			the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
 			the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-			for (i=0; i<MAX_SERVOS_NR; i++) {
-				double s = calculate_s((double)node_counter/td.interpolation_node_no, ta[i], tb[i]);
+			for (i = 0; i < MAX_SERVOS_NR; i++) {
+				double s = calculate_s((double) node_counter / td.interpolation_node_no, ta[i], tb[i]);
 				the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
-						= the_robot->reply_package.arm.pf_def.arm_coordinates[i] + s*td.coordinate_delta[i];
+						= the_robot->reply_package.arm.pf_def.arm_coordinates[i] + s * td.coordinate_delta[i];
 				vel_avg[i] = the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] - prev_s[i];
 				acc[i] = vel_avg[i] - prev_vel_avg[i];
 				vel[i] = acc[i] * node_counter;
 
-				if (fabs(acc[i]*(1/STEP*STEP)) > a_max_joint[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
+				if (fabs(acc[i] * (1 / STEP * STEP)) > a_max_joint[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
 					sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i, fabs(acc[i]), a_max_joint[i]);
 					sr_ecp_msg.message(messg);
-					throw ECP_error (lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
+					throw ECP_error(lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
 				} // end : if
-				if (fabs(vel[i] * (1/STEP)) > v_max_joint[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
-					sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i, fabs(vel[i]) , v_max_joint[i]);
+				if (fabs(vel[i] * (1 / STEP)) > v_max_joint[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
+					sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i, fabs(vel[i]), v_max_joint[i]);
 					sr_ecp_msg.message(messg);
-					throw ECP_error (lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
+					throw ECP_error(lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
 				} // end : if
 				prev_s[i] = the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i];
 				prev_vel_avg[i] = vel_avg[i];
 			} // end:for
 			break;
-/*
-		case lib::XYZ_EULER_ZYZ:
-			the_robot->ecp_command.instruction.instruction_type = lib::SET;
-			the_robot->ecp_command.instruction.set_type = ARM_DEFINITION; // ARM
-			the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
-			the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
-			the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-			for (i=0; i<7; i++) {
-				double s = calculate_s((double)node_counter/td.interpolation_node_no, ta[i], tb[i]);
+			/*
+			 case lib::XYZ_EULER_ZYZ:
+			 the_robot->ecp_command.instruction.instruction_type = lib::SET;
+			 the_robot->ecp_command.instruction.set_type = ARM_DEFINITION; // ARM
+			 the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
+			 the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
+			 the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
+			 for (i=0; i<7; i++) {
+			 double s = calculate_s((double)node_counter/td.interpolation_node_no, ta[i], tb[i]);
 
-				if (i==6) {
-					the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = the_robot->reply_package.arm.pf_def.gripper_coordinate + s
-							*td.coordinate_delta[i];
-					vel_avg[i] = the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate - prev_s[i];
-				} else {
-					the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
-							= the_robot->reply_package.arm.pf_def.arm_coordinates[i] + s*td.coordinate_delta[i];
-					vel_avg[i] = the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] - prev_s[i];
-				}
-				acc[i] = vel_avg[i] - prev_vel_avg[i];
-				vel[i] = acc[i] * node_counter;
+			 if (i==6) {
+			 the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = the_robot->reply_package.arm.pf_def.gripper_coordinate + s
+			 *td.coordinate_delta[i];
+			 vel_avg[i] = the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate - prev_s[i];
+			 } else {
+			 the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
+			 = the_robot->reply_package.arm.pf_def.arm_coordinates[i] + s*td.coordinate_delta[i];
+			 vel_avg[i] = the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] - prev_s[i];
+			 }
+			 acc[i] = vel_avg[i] - prev_vel_avg[i];
+			 vel[i] = acc[i] * node_counter;
 
-				if (fabs(acc[i]*(1/STEP*STEP)) > a_max_zyz[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
-					sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i, fabs(acc[i]), a_max_zyz[i]);
-					sr_ecp_msg.message(messg);
-					throw ECP_error (lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
-				} // end : if
-				if (fabs(vel[i] * (1/STEP)) > v_max_zyz[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
-					sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i, fabs(vel[i]) , v_max_zyz[i]);
-					sr_ecp_msg.message(messg);
-					throw ECP_error (lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
-				} // end : if
+			 if (fabs(acc[i]*(1/STEP*STEP)) > a_max_zyz[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
+			 sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i, fabs(acc[i]), a_max_zyz[i]);
+			 sr_ecp_msg.message(messg);
+			 throw ECP_error (lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
+			 } // end : if
+			 if (fabs(vel[i] * (1/STEP)) > v_max_zyz[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
+			 sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i, fabs(vel[i]) , v_max_zyz[i]);
+			 sr_ecp_msg.message(messg);
+			 throw ECP_error (lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
+			 } // end : if
 
-				if (i==6) {
-					prev_s[i] = the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate;
-				} else {
-					prev_s[i] = the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i];
-				}
+			 if (i==6) {
+			 prev_s[i] = the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate;
+			 } else {
+			 prev_s[i] = the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i];
+			 }
 
-				prev_vel_avg[i] = vel_avg[i];
-			} // end:for
-			break;
+			 prev_vel_avg[i] = vel_avg[i];
+			 } // end:for
+			 break;
 
-		case lib::XYZ_ANGLE_AXIS:
-			the_robot->ecp_command.instruction.instruction_type = lib::SET;
-			the_robot->ecp_command.instruction.set_type = ARM_DEFINITION; // ARM
-			the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
-			the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
-			the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-			for (i=0; i<7; i++) {
-				double s = calculate_s((double)node_counter/td.interpolation_node_no, ta[i], tb[i]);
+			 case lib::XYZ_ANGLE_AXIS:
+			 the_robot->ecp_command.instruction.instruction_type = lib::SET;
+			 the_robot->ecp_command.instruction.set_type = ARM_DEFINITION; // ARM
+			 the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
+			 the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
+			 the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
+			 for (i=0; i<7; i++) {
+			 double s = calculate_s((double)node_counter/td.interpolation_node_no, ta[i], tb[i]);
 
-				if (i==6) {
-					the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = the_robot->reply_package.arm.pf_def.gripper_coordinate + s
-							*td.coordinate_delta[i];
-					vel_avg[i] = the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate - prev_s[i];
-				} else {
-					the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
-							= the_robot->reply_package.arm.pf_def.arm_coordinates[i] + s*td.coordinate_delta[i];
-					vel_avg[i] = the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] - prev_s[i];
-				}
+			 if (i==6) {
+			 the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = the_robot->reply_package.arm.pf_def.gripper_coordinate + s
+			 *td.coordinate_delta[i];
+			 vel_avg[i] = the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate - prev_s[i];
+			 } else {
+			 the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
+			 = the_robot->reply_package.arm.pf_def.arm_coordinates[i] + s*td.coordinate_delta[i];
+			 vel_avg[i] = the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] - prev_s[i];
+			 }
 
-				acc[i] = vel_avg[i] - prev_vel_avg[i];
-				vel[i] = acc[i] * node_counter;
+			 acc[i] = vel_avg[i] - prev_vel_avg[i];
+			 vel[i] = acc[i] * node_counter;
 
-				if (fabs(acc[i]*(1/STEP*STEP)) > a_max_aa[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
-					sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i, fabs(acc[i]), a_max_aa[i]);
-					sr_ecp_msg.message(messg);
-					throw ECP_error (lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
-				} // end : if
-				if (fabs(vel[i] * (1/STEP)) > v_max_aa[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
-					sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i, fabs(vel[i]) , v_max_aa[i]);
-					sr_ecp_msg.message(messg);
-					throw ECP_error (lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
-				} // end : if
-				if (i==6) {
-					prev_s[i] = the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate;
-				} else {
-					prev_s[i] = the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i];
-				}
-				prev_vel_avg[i] = vel_avg[i];
-			} // end:for
-			break;
-			*/
+			 if (fabs(acc[i]*(1/STEP*STEP)) > a_max_aa[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
+			 sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i, fabs(acc[i]), a_max_aa[i]);
+			 sr_ecp_msg.message(messg);
+			 throw ECP_error (lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
+			 } // end : if
+			 if (fabs(vel[i] * (1/STEP)) > v_max_aa[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
+			 sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i, fabs(vel[i]) , v_max_aa[i]);
+			 sr_ecp_msg.message(messg);
+			 throw ECP_error (lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
+			 } // end : if
+			 if (i==6) {
+			 prev_s[i] = the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate;
+			 } else {
+			 prev_s[i] = the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i];
+			 }
+			 prev_vel_avg[i] = vel_avg[i];
+			 } // end:for
+			 break;
+			 */
 		default:
-			throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+			throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 	}// end:switch
 
 
@@ -625,7 +626,8 @@ bool polynomial::first_step()
 	// wyznaczyc parametr A0 wielomianu, kt�ry wymaga znajomo�ci pozycji aktualnej ramienia
 	first_interval = true;
 
-	switch (td.arm_type) {
+	switch (td.arm_type)
+	{
 		case lib::MOTOR:
 			the_robot->ecp_command.instruction.instruction_type = lib::GET;
 			the_robot->ecp_command.instruction.get_type = ARM_DEFINITION;
@@ -649,32 +651,32 @@ bool polynomial::first_step()
 			the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
 			break;
 			/*
-		case lib::XYZ_EULER_ZYZ:
-			the_robot->ecp_command.instruction.instruction_type = lib::GET;
-			the_robot->ecp_command.instruction.get_type = ARM_DEFINITION;
-			the_robot->ecp_command.instruction.set_type = ARM_DEFINITION;
-			the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
-			the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_EULER_ZYZ;
-			the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
-			the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-			the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
-			the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
-			break;
+			 case lib::XYZ_EULER_ZYZ:
+			 the_robot->ecp_command.instruction.instruction_type = lib::GET;
+			 the_robot->ecp_command.instruction.get_type = ARM_DEFINITION;
+			 the_robot->ecp_command.instruction.set_type = ARM_DEFINITION;
+			 the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
+			 the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_EULER_ZYZ;
+			 the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
+			 the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
+			 the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
+			 the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
+			 break;
 
-		case lib::XYZ_ANGLE_AXIS:
-			the_robot->ecp_command.instruction.instruction_type = lib::GET;
-			the_robot->ecp_command.instruction.get_type = ARM_DEFINITION;
-			the_robot->ecp_command.instruction.set_type = ARM_DEFINITION;
-			the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
-			the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_ANGLE_AXIS;
-			the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
-			the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-			the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
-			the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
-			break;
-			*/
+			 case lib::XYZ_ANGLE_AXIS:
+			 the_robot->ecp_command.instruction.instruction_type = lib::GET;
+			 the_robot->ecp_command.instruction.get_type = ARM_DEFINITION;
+			 the_robot->ecp_command.instruction.set_type = ARM_DEFINITION;
+			 the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
+			 the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_ANGLE_AXIS;
+			 the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
+			 the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
+			 the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
+			 the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
+			 break;
+			 */
 		default:
-			throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+			throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 	} // end : switch ( td.arm_type )
 
 	return true;
@@ -695,15 +697,15 @@ cubic::cubic(common::task::task& _ecp_task, lib::trajectory_description tr_des, 
 	polynomial(_ecp_task)
 {
 	td = tr_des;
-	int tf=td.interpolation_node_no;
+	int tf = td.interpolation_node_no;
 
-	for (int i=0; i<MAX_SERVOS_NR; i++) {
-		A1[i]=vp[i];
-		A2[i]=((3.0*td.coordinate_delta[i])/(tf*tf)) - (2.0*vp[i])/tf - (vk[i]/tf);
-		A3[i]=(((-2.0)*td.coordinate_delta[i])/(tf*tf*tf)) + ((vk[i] + vp[i])/(tf*tf));
+	for (int i = 0; i < MAX_SERVOS_NR; i++) {
+		A1[i] = vp[i];
+		A2[i] = ((3.0 * td.coordinate_delta[i]) / (tf * tf)) - (2.0 * vp[i]) / tf - (vk[i] / tf);
+		A3[i] = (((-2.0) * td.coordinate_delta[i]) / (tf * tf * tf)) + ((vk[i] + vp[i]) / (tf * tf));
 	} // end:for
 
-	for (int i = 0; i <MAX_SERVOS_NR; i++) {
+	for (int i = 0; i < MAX_SERVOS_NR; i++) {
 		a_max_motor[i] = 100.0;
 		// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
 		v_max_motor[i] = 120.0;
@@ -715,16 +717,16 @@ cubic::cubic(common::task::task& _ecp_task, lib::trajectory_description tr_des, 
 	}
 	for (int i = 0; i < 3; i++) {
 		a_max_zyz[i] = 100.0; // przyspieszenie liniowe koncowki 0.1G
-		a_max_zyz[i+3] = 100.0; // przyspieszenie katowe koncowki 1rad/s^2
+		a_max_zyz[i + 3] = 100.0; // przyspieszenie katowe koncowki 1rad/s^2
 		// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
 		v_max_zyz[i] = 10.0; // predkosc liniowa 1m/s
-		v_max_zyz[i+3] = 10.0; // predkosc katowa 1rad/s
+		v_max_zyz[i + 3] = 10.0; // predkosc katowa 1rad/s
 		// tablica dopuszczalnych predkosci dla kolejnych osi/wspolrzednych
 		a_max_aa[i] = 0.0;
-		a_max_aa[i+3] = 0.0;
+		a_max_aa[i + 3] = 0.0;
 		// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
 		v_max_aa[i] = 0.0;
-		v_max_aa[i+3] = 0.0;
+		v_max_aa[i + 3] = 0.0;
 		// tablica dopuszczalnych predkosci dla kolejnych osi/wspolrzednych
 	}
 	a_max_zyz[6] = 5.0; // przyspieszenie katowe koncowki 1rad/s^2
@@ -751,34 +753,35 @@ bool cubic::next_step()
 		// aktualnego polozenia ramienia jeszcze nie zostanie zrealizowany. Zrobi
 		// to dopiero execute_motion po wyjsciu z first_step.
 
-		switch (td.arm_type) {
+		switch (td.arm_type)
+		{
 			case lib::MOTOR:
-				for (int i=0; i<MAX_SERVOS_NR; i++) {
-					A0[i]= the_robot->reply_package.arm.pf_def.arm_coordinates[i];
+				for (int i = 0; i < MAX_SERVOS_NR; i++) {
+					A0[i] = the_robot->reply_package.arm.pf_def.arm_coordinates[i];
 				} // end:for
 				break;
 
 			case lib::JOINT:
-				for (int i=0; i<MAX_SERVOS_NR; i++) {
-					A0[i]= the_robot->reply_package.arm.pf_def.arm_coordinates[i];
+				for (int i = 0; i < MAX_SERVOS_NR; i++) {
+					A0[i] = the_robot->reply_package.arm.pf_def.arm_coordinates[i];
 				} // end:for
 				break;
-/*
-			case lib::XYZ_EULER_ZYZ:
-				for (int i=0; i<6; i++) {
-					A0[i]= the_robot->reply_package.arm.pf_def.arm_coordinates[i];
-				} // end:for
-				A0[6]= the_robot->reply_package.arm.pf_def.gripper_coordinate;
-				break;
-			case lib::XYZ_ANGLE_AXIS:
-				for (int i=0; i<6; i++) {
-					A0[i]= the_robot->reply_package.arm.pf_def.arm_coordinates[i];
-				} // end:for
-				A0[6]= the_robot->reply_package.arm.pf_def.gripper_coordinate;
-				break;
-				*/
+				/*
+				 case lib::XYZ_EULER_ZYZ:
+				 for (int i=0; i<6; i++) {
+				 A0[i]= the_robot->reply_package.arm.pf_def.arm_coordinates[i];
+				 } // end:for
+				 A0[6]= the_robot->reply_package.arm.pf_def.gripper_coordinate;
+				 break;
+				 case lib::XYZ_ANGLE_AXIS:
+				 for (int i=0; i<6; i++) {
+				 A0[i]= the_robot->reply_package.arm.pf_def.arm_coordinates[i];
+				 } // end:for
+				 A0[6]= the_robot->reply_package.arm.pf_def.gripper_coordinate;
+				 break;
+				 */
 			default:
-				throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+				throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 		}// end:switch
 
 		first_interval = false;
@@ -787,7 +790,7 @@ bool cubic::next_step()
 	// -------------------------------------------------------------------------------------------
 
 	// Kontakt z MP
-	if (node_counter-1 == td.interpolation_node_no) { // Koniec odcinka
+	if (node_counter - 1 == td.interpolation_node_no) { // Koniec odcinka
 		//     ecp_t.set_ecp_reply (lib::TASK_TERMINATED); // by Y
 
 		return false;
@@ -802,34 +805,36 @@ bool cubic::next_step()
 	double acc[MAX_SERVOS_NR];
 	double vel[MAX_SERVOS_NR];
 
-	switch (td.arm_type) {
+	switch (td.arm_type)
+	{
 		case lib::MOTOR:
 			the_robot->ecp_command.instruction.instruction_type = lib::SET;
 			the_robot->ecp_command.instruction.set_type = ARM_DEFINITION; // ARM
 			the_robot->ecp_command.instruction.set_arm_type = lib::MOTOR;
 			the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
 			the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-			for (i=0; i<MAX_SERVOS_NR; i++) {
-				acc[i] = ( 2.0*A2[i] + 6.0*A3[i]*(node_counter) ) * ( 1.0
-						/ (STEP*the_robot->ecp_command.instruction.motion_steps*STEP*the_robot->ecp_command.instruction.motion_steps));
+			for (i = 0; i < MAX_SERVOS_NR; i++) {
+				acc[i] = (2.0 * A2[i] + 6.0 * A3[i] * (node_counter)) * (1.0 / (STEP
+						* the_robot->ecp_command.instruction.motion_steps * STEP
+						* the_robot->ecp_command.instruction.motion_steps));
 
 				if (fabs(acc[i]) > a_max_motor[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
 					sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i, fabs(acc[i]), a_max_motor[i]);
 					sr_ecp_msg.message(messg);
-					throw ECP_error (lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
+					throw ECP_error(lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
 				} // end : if
 
-				vel[i] = (A1[i] + 2.0*A2[i]*(node_counter) + 3.0*A3[i]*(node_counter*node_counter) ) * ( 1.0
-						/ (STEP*the_robot->ecp_command.instruction.motion_steps));
+				vel[i] = (A1[i] + 2.0 * A2[i] * (node_counter) + 3.0 * A3[i] * (node_counter * node_counter)) * (1.0
+						/ (STEP * the_robot->ecp_command.instruction.motion_steps));
 
 				if (fabs(vel[i]) > v_max_motor[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
-					sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i, fabs(vel[i]) , v_max_motor[i]);
+					sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i, fabs(vel[i]), v_max_motor[i]);
 					sr_ecp_msg.message(messg);
-					throw ECP_error (lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
+					throw ECP_error(lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
 				} // end : if
 
-				the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = A0[i] + A1[i]*(node_counter) + A2[i]*(node_counter
-						*node_counter) + A3[i]*(node_counter*node_counter*node_counter);
+				the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = A0[i] + A1[i] * (node_counter)
+						+ A2[i] * (node_counter * node_counter) + A3[i] * (node_counter * node_counter * node_counter);
 			} // end:for
 			break;
 
@@ -839,90 +844,92 @@ bool cubic::next_step()
 			the_robot->ecp_command.instruction.set_arm_type = lib::JOINT;
 			the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
 			the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-			for (i=0; i<MAX_SERVOS_NR; i++) {
-				acc[i] = ( 2.0*A2[i] + 6.0*A3[i]*(node_counter) ) * ( 1.0 / (STEP*(the_robot->ecp_command.instruction.motion_steps)*STEP*(the_robot->ecp_command.instruction.motion_steps)));
+			for (i = 0; i < MAX_SERVOS_NR; i++) {
+				acc[i] = (2.0 * A2[i] + 6.0 * A3[i] * (node_counter)) * (1.0 / (STEP
+						* (the_robot->ecp_command.instruction.motion_steps) * STEP
+						* (the_robot->ecp_command.instruction.motion_steps)));
 
 				if (fabs(acc[i]) > a_max_joint[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
 					sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i, fabs(acc[i]), a_max_joint[i]);
 					sr_ecp_msg.message(messg);
-					throw ECP_error (lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
+					throw ECP_error(lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
 				} // end : if
 
-				vel[i] =(A1[i] + 2.0*A2[i]*(node_counter) + 3.0*A3[i]*(node_counter*node_counter) ) * ( 1.0
-						/ (STEP*the_robot->ecp_command.instruction.motion_steps));
+				vel[i] = (A1[i] + 2.0 * A2[i] * (node_counter) + 3.0 * A3[i] * (node_counter * node_counter)) * (1.0
+						/ (STEP * the_robot->ecp_command.instruction.motion_steps));
 
 				if (fabs(vel[i]) > v_max_joint[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
-					sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i, fabs(vel[i]) , v_max_joint[i]);
+					sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i, fabs(vel[i]), v_max_joint[i]);
 					sr_ecp_msg.message(messg);
-					throw ECP_error (lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
+					throw ECP_error(lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
 				} // end : if
 
-				the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = A0[i] + A1[i]*(node_counter) + A2[i]*(node_counter
-						*node_counter) + A3[i]*(node_counter*node_counter*node_counter);
+				the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = A0[i] + A1[i] * (node_counter)
+						+ A2[i] * (node_counter * node_counter) + A3[i] * (node_counter * node_counter * node_counter);
 			} // end:for
 			break;
-/*
-		case lib::XYZ_EULER_ZYZ:
-			the_robot->ecp_command.instruction.instruction_type = lib::SET;
-			the_robot->ecp_command.instruction.set_type = ARM_DEFINITION; // ARM
-			the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
-			the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
-			the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-			for (i=0; i<7; i++) {
-				acc[i] = 2.0*A2[i] + 6.0*A3[i]*(node_counter);
-				if (fabs(acc[i] * (1.0/(STEP*STEP))) > a_max_zyz[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
-					sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i, fabs(acc[i]), a_max_zyz[i]);
-					sr_ecp_msg.message(messg);
-					throw ECP_error (lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
-				} // end : if
-				vel[i] = A1[i] + 2.0*A2[i]*(node_counter) + 3.0*A3[i]*(node_counter*node_counter);
-				if (fabs(vel[i] * (1.0/STEP)) > v_max_zyz[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
-					sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i, fabs(vel[i]) , v_max_zyz[i]);
-					sr_ecp_msg.message(messg);
-					throw ECP_error (lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
-				} // end : if
-				if (i==6) {
-					the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = A0[i] + A1[i]*(node_counter) + A2[i]*(node_counter
-							*node_counter) + A3[i]*(node_counter*node_counter*node_counter);
-				} else {
-					the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = A0[i] + A1[i]*(node_counter) + A2[i]
-							*(node_counter*node_counter) + A3[i]*(node_counter*node_counter*node_counter);
-				}
+			/*
+			 case lib::XYZ_EULER_ZYZ:
+			 the_robot->ecp_command.instruction.instruction_type = lib::SET;
+			 the_robot->ecp_command.instruction.set_type = ARM_DEFINITION; // ARM
+			 the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
+			 the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
+			 the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
+			 for (i=0; i<7; i++) {
+			 acc[i] = 2.0*A2[i] + 6.0*A3[i]*(node_counter);
+			 if (fabs(acc[i] * (1.0/(STEP*STEP))) > a_max_zyz[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
+			 sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i, fabs(acc[i]), a_max_zyz[i]);
+			 sr_ecp_msg.message(messg);
+			 throw ECP_error (lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
+			 } // end : if
+			 vel[i] = A1[i] + 2.0*A2[i]*(node_counter) + 3.0*A3[i]*(node_counter*node_counter);
+			 if (fabs(vel[i] * (1.0/STEP)) > v_max_zyz[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
+			 sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i, fabs(vel[i]) , v_max_zyz[i]);
+			 sr_ecp_msg.message(messg);
+			 throw ECP_error (lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
+			 } // end : if
+			 if (i==6) {
+			 the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = A0[i] + A1[i]*(node_counter) + A2[i]*(node_counter
+			 *node_counter) + A3[i]*(node_counter*node_counter*node_counter);
+			 } else {
+			 the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = A0[i] + A1[i]*(node_counter) + A2[i]
+			 *(node_counter*node_counter) + A3[i]*(node_counter*node_counter*node_counter);
+			 }
 
-			} // end:for
-			break;
+			 } // end:for
+			 break;
 
-		case lib::XYZ_ANGLE_AXIS:
-			the_robot->ecp_command.instruction.instruction_type = lib::SET;
-			the_robot->ecp_command.instruction.set_type = ARM_DEFINITION; // ARM
-			the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
-			the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
-			the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-			for (i=0; i<6; i++) {
-				acc[i] = 2.0*A2[i] + 6.0*A3[i]*(node_counter);
-				if (fabs(acc[i] * (1.0/(STEP*STEP))) > a_max_aa[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
-					sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i, fabs(acc[i]), a_max_aa[i]);
-					sr_ecp_msg.message(messg);
-					throw ECP_error (lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
-				} // end : if
-				vel[i] = A1[i] + 2.0*A2[i]*(node_counter) + 3.0*A3[i]*(node_counter*node_counter);
-				if (fabs(vel[i] * (1.0/STEP)) > v_max_aa[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
-					sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i, fabs(vel[i]) , v_max_aa[i]);
-					sr_ecp_msg.message(messg);
-					throw ECP_error (lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
-				} // end : if
-				if (i==6) {
-					the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = A0[i] + A1[i]*(node_counter) + A2[i]*(node_counter
-							*node_counter) + A3[i]*(node_counter*node_counter*node_counter);
-				} else {
-					the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = A0[i] + A1[i]*(node_counter) + A2[i]
-							*(node_counter*node_counter) + A3[i]*(node_counter*node_counter*node_counter);
-				}
-			} // end:for
-			break;
-*/
+			 case lib::XYZ_ANGLE_AXIS:
+			 the_robot->ecp_command.instruction.instruction_type = lib::SET;
+			 the_robot->ecp_command.instruction.set_type = ARM_DEFINITION; // ARM
+			 the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
+			 the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
+			 the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
+			 for (i=0; i<6; i++) {
+			 acc[i] = 2.0*A2[i] + 6.0*A3[i]*(node_counter);
+			 if (fabs(acc[i] * (1.0/(STEP*STEP))) > a_max_aa[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
+			 sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i, fabs(acc[i]), a_max_aa[i]);
+			 sr_ecp_msg.message(messg);
+			 throw ECP_error (lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
+			 } // end : if
+			 vel[i] = A1[i] + 2.0*A2[i]*(node_counter) + 3.0*A3[i]*(node_counter*node_counter);
+			 if (fabs(vel[i] * (1.0/STEP)) > v_max_aa[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
+			 sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i, fabs(vel[i]) , v_max_aa[i]);
+			 sr_ecp_msg.message(messg);
+			 throw ECP_error (lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
+			 } // end : if
+			 if (i==6) {
+			 the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = A0[i] + A1[i]*(node_counter) + A2[i]*(node_counter
+			 *node_counter) + A3[i]*(node_counter*node_counter*node_counter);
+			 } else {
+			 the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = A0[i] + A1[i]*(node_counter) + A2[i]
+			 *(node_counter*node_counter) + A3[i]*(node_counter*node_counter*node_counter);
+			 }
+			 } // end:for
+			 break;
+			 */
 		default:
-			throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+			throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 	}// end:switch
 
 	// skopiowac przygotowany rozkaz dla EDP do bufora wysylkowego
@@ -945,20 +952,21 @@ quintic::quintic(common::task::task& _ecp_task, lib::trajectory_description tr_d
 	polynomial(_ecp_task)
 {
 	td = tr_des;
-	int tf=td.interpolation_node_no;
+	int tf = td.interpolation_node_no;
 
-	for (int i=0; i<MAX_SERVOS_NR; i++) {
-		A1[i]=vp[i];
-		A2[i]=(ap[i]) / 2.0;
-		A3[i]=( (20.0*td.coordinate_delta[i]) - ( ( (8.0*vk[i]) + (12.0*vp[i]) )*tf )
-				- ( (3.0*ap[i]) - (ak[i])*(tf*tf) ) ) / ( 2.0*(tf*tf*tf) );
-		A4[i]=( (-30.0*td.coordinate_delta[i]) + ( ( (14.0*vk[i]) + (16.0*vp[i]) )*tf ) +( (3.0*ap[i]) - (2.0*ak[i])
-				*(tf*tf) ) ) / ( 2.0*(tf*tf*tf*tf) );
-		A5[i]=( (12.0*td.coordinate_delta[i]) - ( ( (6.0*vk[i]) + (6.0*vp[i]) )*tf ) - (ap[i] - ak[i])*(tf*tf) ) / ( 2.0
-				*(tf*tf*tf*tf*tf) );
+	for (int i = 0; i < MAX_SERVOS_NR; i++) {
+		A1[i] = vp[i];
+		A2[i] = (ap[i]) / 2.0;
+		A3[i] = ((20.0 * td.coordinate_delta[i]) - (((8.0 * vk[i]) + (12.0 * vp[i])) * tf) - ((3.0 * ap[i]) - (ak[i])
+				* (tf * tf))) / (2.0 * (tf * tf * tf));
+		A4[i] = ((-30.0 * td.coordinate_delta[i]) + (((14.0 * vk[i]) + (16.0 * vp[i])) * tf) + ((3.0 * ap[i]) - (2.0
+				* ak[i]) * (tf * tf))) / (2.0 * (tf * tf * tf * tf));
+		A5[i]
+				= ((12.0 * td.coordinate_delta[i]) - (((6.0 * vk[i]) + (6.0 * vp[i])) * tf) - (ap[i] - ak[i]) * (tf
+						* tf)) / (2.0 * (tf * tf * tf * tf * tf));
 	} // end:for
 
-	for (int i = 0; i <MAX_SERVOS_NR; i++) {
+	for (int i = 0; i < MAX_SERVOS_NR; i++) {
 		a_max_motor[i] = 100.0;
 		// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
 		v_max_motor[i] = 120.0;
@@ -970,16 +978,16 @@ quintic::quintic(common::task::task& _ecp_task, lib::trajectory_description tr_d
 	}
 	for (int i = 0; i < 3; i++) {
 		a_max_zyz[i] = 5.0; // przyspieszenie liniowe koncowki 0.1G
-		a_max_zyz[i+3] = 5.0; // przyspieszenie katowe koncowki 1rad/s^2
+		a_max_zyz[i + 3] = 5.0; // przyspieszenie katowe koncowki 1rad/s^2
 		// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
 		v_max_zyz[i] = 5.0; // predkosc liniowa 1m/s
-		v_max_zyz[i+3] = 5.0; // predkosc katowa 1rad/s
+		v_max_zyz[i + 3] = 5.0; // predkosc katowa 1rad/s
 		// tablica dopuszczalnych predkosci dla kolejnych osi/wspolrzednych
 		a_max_aa[i] = 0.0;
-		a_max_aa[i+3] = 0.0;
+		a_max_aa[i + 3] = 0.0;
 		// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
 		v_max_aa[i] = 0.0;
-		v_max_aa[i+3] = 0.0;
+		v_max_aa[i + 3] = 0.0;
 		// tablica dopuszczalnych predkosci dla kolejnych osi/wspolrzednych
 	}
 	a_max_zyz[6] = 5.0; // przyspieszenie katowe koncowki 1rad/s^2
@@ -1006,34 +1014,35 @@ bool quintic::next_step()
 		// aktualnego polozenia ramienia jeszcze nie zostanie zrealizowany. Zrobi
 		// to dopiero execute_motion po wyjsciu z first_step.
 
-		switch (td.arm_type) {
+		switch (td.arm_type)
+		{
 			case lib::MOTOR:
-				for (int i=0; i<MAX_SERVOS_NR; i++) {
-					A0[i]= the_robot->reply_package.arm.pf_def.arm_coordinates[i];
+				for (int i = 0; i < MAX_SERVOS_NR; i++) {
+					A0[i] = the_robot->reply_package.arm.pf_def.arm_coordinates[i];
 				} // end:for
 				break;
 
 			case lib::JOINT:
-				for (int i=0; i<MAX_SERVOS_NR; i++) {
-					A0[i]= the_robot->reply_package.arm.pf_def.arm_coordinates[i];
+				for (int i = 0; i < MAX_SERVOS_NR; i++) {
+					A0[i] = the_robot->reply_package.arm.pf_def.arm_coordinates[i];
 				} // end:for
 				break;
-/*
-			case lib::XYZ_EULER_ZYZ:
-				for (int i=0; i<6; i++) {
-					A0[i]= the_robot->reply_package.arm.pf_def.arm_coordinates[i];
-				} // end:for
-				A0[6]= the_robot->reply_package.arm.pf_def.gripper_coordinate;
-				break;
-			case lib::XYZ_ANGLE_AXIS:
-				for (int i=0; i<6; i++) {
-					A0[i]= the_robot->reply_package.arm.pf_def.arm_coordinates[i];
-				} // end:for
-				A0[6]= the_robot->reply_package.arm.pf_def.gripper_coordinate;
-				break;
-				*/
+				/*
+				 case lib::XYZ_EULER_ZYZ:
+				 for (int i=0; i<6; i++) {
+				 A0[i]= the_robot->reply_package.arm.pf_def.arm_coordinates[i];
+				 } // end:for
+				 A0[6]= the_robot->reply_package.arm.pf_def.gripper_coordinate;
+				 break;
+				 case lib::XYZ_ANGLE_AXIS:
+				 for (int i=0; i<6; i++) {
+				 A0[i]= the_robot->reply_package.arm.pf_def.arm_coordinates[i];
+				 } // end:for
+				 A0[6]= the_robot->reply_package.arm.pf_def.gripper_coordinate;
+				 break;
+				 */
 			default:
-				throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+				throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 		}// end:switch
 
 		first_interval = false;
@@ -1042,7 +1051,7 @@ bool quintic::next_step()
 	// -------------------------------------------------------------------------------------------
 
 	// Kontakt z MP
-	if (node_counter-1 == td.interpolation_node_no) { // Koniec odcinka
+	if (node_counter - 1 == td.interpolation_node_no) { // Koniec odcinka
 
 		return false;
 	}
@@ -1056,33 +1065,34 @@ bool quintic::next_step()
 	double acc[MAX_SERVOS_NR];
 	double vel[MAX_SERVOS_NR];
 
-	switch (td.arm_type) {
+	switch (td.arm_type)
+	{
 		case lib::MOTOR:
 			the_robot->ecp_command.instruction.instruction_type = lib::SET;
 			the_robot->ecp_command.instruction.set_type = ARM_DEFINITION; // ARM
 			the_robot->ecp_command.instruction.set_arm_type = lib::MOTOR;
 			the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
 			the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-			for (int i=0; i<MAX_SERVOS_NR; i++) {
-				acc[i] = 2.0*A2[i] + 6.0*A3[i]*(node_counter) + 12.0*A4[i]*(node_counter*node_counter) + 20.0*A5[i]
-						*(node_counter*node_counter*node_counter);
-				if (fabs(acc[i] * (1.0/(STEP*STEP))) > a_max_motor[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
+			for (int i = 0; i < MAX_SERVOS_NR; i++) {
+				acc[i] = 2.0 * A2[i] + 6.0 * A3[i] * (node_counter) + 12.0 * A4[i] * (node_counter * node_counter)
+						+ 20.0 * A5[i] * (node_counter * node_counter * node_counter);
+				if (fabs(acc[i] * (1.0 / (STEP * STEP))) > a_max_motor[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
 					sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i, fabs(acc[i]), a_max_motor[i]);
 					sr_ecp_msg.message(messg);
-					throw ECP_error (lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
+					throw ECP_error(lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
 				} // end : if
-				vel[i] = A1[i] + 2*A2[i]*(node_counter) + 3.0*A3[i]*(node_counter*node_counter) + 4.0*A4[i]
-						*(node_counter*node_counter*node_counter) + 5.0*A5[i]*(node_counter*node_counter*node_counter
-						*node_counter);
-				if (fabs(vel[i] * (1.0/STEP)) > v_max_motor[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
-					sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i, fabs(vel[i]) , v_max_motor[i]);
+				vel[i] = A1[i] + 2 * A2[i] * (node_counter) + 3.0 * A3[i] * (node_counter * node_counter) + 4.0 * A4[i]
+						* (node_counter * node_counter * node_counter) + 5.0 * A5[i] * (node_counter * node_counter
+						* node_counter * node_counter);
+				if (fabs(vel[i] * (1.0 / STEP)) > v_max_motor[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
+					sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i, fabs(vel[i]), v_max_motor[i]);
 					sr_ecp_msg.message(messg);
-					throw ECP_error (lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
+					throw ECP_error(lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
 				} // end : if
-				the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = A0[i] + A1[i]*(node_counter) + A2[i]*(node_counter
-						*node_counter) + A3[i]*(node_counter*node_counter*node_counter) + A4[i]*(node_counter
-						*node_counter*node_counter*node_counter) + A5[i]*(node_counter*node_counter*node_counter
-						*node_counter*node_counter);
+				the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = A0[i] + A1[i] * (node_counter)
+						+ A2[i] * (node_counter * node_counter) + A3[i] * (node_counter * node_counter * node_counter)
+						+ A4[i] * (node_counter * node_counter * node_counter * node_counter) + A5[i] * (node_counter
+						* node_counter * node_counter * node_counter * node_counter);
 			} // end:for
 			break;
 
@@ -1092,105 +1102,105 @@ bool quintic::next_step()
 			the_robot->ecp_command.instruction.set_arm_type = lib::JOINT;
 			the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
 			the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-			for (int i=0; i<MAX_SERVOS_NR; i++) {
-				acc[i] = 2.0*A2[i] + 6.0*A3[i]*(node_counter) + 12.0*A4[i]*(node_counter*node_counter) + 20.0*A5[i]
-						*(node_counter*node_counter*node_counter);
-				if (fabs(acc[i] * (1.0/(STEP*STEP))) > a_max_joint[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
+			for (int i = 0; i < MAX_SERVOS_NR; i++) {
+				acc[i] = 2.0 * A2[i] + 6.0 * A3[i] * (node_counter) + 12.0 * A4[i] * (node_counter * node_counter)
+						+ 20.0 * A5[i] * (node_counter * node_counter * node_counter);
+				if (fabs(acc[i] * (1.0 / (STEP * STEP))) > a_max_joint[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
 					sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i, fabs(acc[i]), a_max_joint[i]);
 					sr_ecp_msg.message(messg);
-					throw ECP_error (lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
+					throw ECP_error(lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
 				} // end : if
-				vel[i] = A1[i] + 2*A2[i]*(node_counter) + 3.0*A3[i]*(node_counter*node_counter) + 4.0*A4[i]
-						*(node_counter*node_counter*node_counter) + 5.0*A5[i]*(node_counter*node_counter*node_counter
-						*node_counter);
-				if (fabs(vel[i] * (1.0/STEP)) > v_max_joint[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
-					sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i, fabs(vel[i]) , v_max_joint[i]);
+				vel[i] = A1[i] + 2 * A2[i] * (node_counter) + 3.0 * A3[i] * (node_counter * node_counter) + 4.0 * A4[i]
+						* (node_counter * node_counter * node_counter) + 5.0 * A5[i] * (node_counter * node_counter
+						* node_counter * node_counter);
+				if (fabs(vel[i] * (1.0 / STEP)) > v_max_joint[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
+					sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i, fabs(vel[i]), v_max_joint[i]);
 					sr_ecp_msg.message(messg);
-					throw ECP_error (lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
+					throw ECP_error(lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
 				} // end : if
-				the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = A0[i] + A1[i]*(node_counter) + A2[i]*(node_counter
-						*node_counter) + A3[i]*(node_counter*node_counter*node_counter) + A4[i]*(node_counter
-						*node_counter*node_counter*node_counter) + A5[i]*(node_counter*node_counter*node_counter
-						*node_counter*node_counter);
+				the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = A0[i] + A1[i] * (node_counter)
+						+ A2[i] * (node_counter * node_counter) + A3[i] * (node_counter * node_counter * node_counter)
+						+ A4[i] * (node_counter * node_counter * node_counter * node_counter) + A5[i] * (node_counter
+						* node_counter * node_counter * node_counter * node_counter);
 			} // end:for
 			break;
-/*
-		case lib::XYZ_EULER_ZYZ:
-			the_robot->ecp_command.instruction.instruction_type = lib::SET;
-			the_robot->ecp_command.instruction.set_type = ARM_DEFINITION; // ARM
-			the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
-			the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
-			the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-			for (int i=0; i<6; i++) {
-				acc[i] = 2.0*A2[i] + 6.0*A3[i]*(node_counter) + 12.0*A4[i]*(node_counter*node_counter) + 20.0*A5[i]
-						*(node_counter*node_counter*node_counter);
-				if (fabs(acc[i] * (1.0/(STEP*STEP))) > a_max_zyz[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
-					sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i, fabs(acc[i]), a_max_zyz[i]);
-					sr_ecp_msg.message(messg);
-					throw ECP_error (lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
-				} // end : if
-				vel[i] = A1[i] + 2*A2[i]*(node_counter) + 3.0*A3[i]*(node_counter*node_counter) + 4.0*A4[i]
-						*(node_counter*node_counter*node_counter) + 5.0*A5[i]*(node_counter*node_counter*node_counter
-						*node_counter);
-				if (fabs(vel[i] * (1.0/STEP)) > v_max_zyz[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
-					sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i, fabs(vel[i]) , v_max_zyz[i]);
-					sr_ecp_msg.message(messg);
-					throw ECP_error (lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
-				} // end : if
-				if (i==6) {
-					the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = A0[i] + A1[i]*(node_counter) + A2[i]*(node_counter
-							*node_counter) + A3[i]*(node_counter*node_counter*node_counter) + A4[i]*(node_counter
-							*node_counter*node_counter*node_counter) + A5[i]*(node_counter*node_counter*node_counter
-							*node_counter*node_counter);
-				} else {
-					the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = A0[i] + A1[i]*(node_counter) + A2[i]
-							*(node_counter*node_counter) + A3[i]*(node_counter*node_counter*node_counter) + A4[i]
-							*(node_counter*node_counter*node_counter*node_counter) + A5[i]*(node_counter*node_counter
-							*node_counter*node_counter*node_counter);
-				}
+			/*
+			 case lib::XYZ_EULER_ZYZ:
+			 the_robot->ecp_command.instruction.instruction_type = lib::SET;
+			 the_robot->ecp_command.instruction.set_type = ARM_DEFINITION; // ARM
+			 the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
+			 the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
+			 the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
+			 for (int i=0; i<6; i++) {
+			 acc[i] = 2.0*A2[i] + 6.0*A3[i]*(node_counter) + 12.0*A4[i]*(node_counter*node_counter) + 20.0*A5[i]
+			 *(node_counter*node_counter*node_counter);
+			 if (fabs(acc[i] * (1.0/(STEP*STEP))) > a_max_zyz[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
+			 sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i, fabs(acc[i]), a_max_zyz[i]);
+			 sr_ecp_msg.message(messg);
+			 throw ECP_error (lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
+			 } // end : if
+			 vel[i] = A1[i] + 2*A2[i]*(node_counter) + 3.0*A3[i]*(node_counter*node_counter) + 4.0*A4[i]
+			 *(node_counter*node_counter*node_counter) + 5.0*A5[i]*(node_counter*node_counter*node_counter
+			 *node_counter);
+			 if (fabs(vel[i] * (1.0/STEP)) > v_max_zyz[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
+			 sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i, fabs(vel[i]) , v_max_zyz[i]);
+			 sr_ecp_msg.message(messg);
+			 throw ECP_error (lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
+			 } // end : if
+			 if (i==6) {
+			 the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = A0[i] + A1[i]*(node_counter) + A2[i]*(node_counter
+			 *node_counter) + A3[i]*(node_counter*node_counter*node_counter) + A4[i]*(node_counter
+			 *node_counter*node_counter*node_counter) + A5[i]*(node_counter*node_counter*node_counter
+			 *node_counter*node_counter);
+			 } else {
+			 the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = A0[i] + A1[i]*(node_counter) + A2[i]
+			 *(node_counter*node_counter) + A3[i]*(node_counter*node_counter*node_counter) + A4[i]
+			 *(node_counter*node_counter*node_counter*node_counter) + A5[i]*(node_counter*node_counter
+			 *node_counter*node_counter*node_counter);
+			 }
 
-			} // end:for
-			break;
+			 } // end:for
+			 break;
 
-		case lib::XYZ_ANGLE_AXIS:
-			the_robot->ecp_command.instruction.instruction_type = lib::SET;
-			the_robot->ecp_command.instruction.set_type = ARM_DEFINITION; // ARM
-			the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
-			the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
-			the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-			for (int i=0; i<6; i++) {
-				acc[i] = 2.0*A2[i] + 6.0*A3[i]*(node_counter) + 12.0*A4[i]*(node_counter*node_counter) + 20.0*A5[i]
-						*(node_counter*node_counter*node_counter);
-				if (fabs(acc[i] * (1.0/(STEP*STEP))) > a_max_aa[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
-					sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i, fabs(acc[i]), a_max_aa[i]);
-					sr_ecp_msg.message(messg);
-					throw ECP_error (lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
-				} // end : if
-				vel[i] = A1[i] + 2*A2[i]*(node_counter) + 3.0*A3[i]*(node_counter*node_counter) + 4.0*A4[i]
-						*(node_counter*node_counter*node_counter) + 5.0*A5[i]*(node_counter*node_counter*node_counter
-						*node_counter);
-				if (fabs(vel[i] * (1.0/STEP)) > v_max_aa[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
-					sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i, fabs(vel[i]) , v_max_aa[i]);
-					sr_ecp_msg.message(messg);
-					throw ECP_error (lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
-				} // end : if
-				if (i==6) {
-					the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = A0[i] + A1[i]*(node_counter) + A2[i]*(node_counter
-							*node_counter) + A3[i]*(node_counter*node_counter*node_counter) + A4[i]*(node_counter
-							*node_counter*node_counter*node_counter) + A5[i]*(node_counter*node_counter*node_counter
-							*node_counter*node_counter);
-				} else {
-					the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = A0[i] + A1[i]*(node_counter) + A2[i]
-							*(node_counter*node_counter) + A3[i]*(node_counter*node_counter*node_counter) + A4[i]
-							*(node_counter*node_counter*node_counter*node_counter) + A5[i]*(node_counter*node_counter
-							*node_counter*node_counter*node_counter);
-				}
+			 case lib::XYZ_ANGLE_AXIS:
+			 the_robot->ecp_command.instruction.instruction_type = lib::SET;
+			 the_robot->ecp_command.instruction.set_type = ARM_DEFINITION; // ARM
+			 the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
+			 the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
+			 the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
+			 for (int i=0; i<6; i++) {
+			 acc[i] = 2.0*A2[i] + 6.0*A3[i]*(node_counter) + 12.0*A4[i]*(node_counter*node_counter) + 20.0*A5[i]
+			 *(node_counter*node_counter*node_counter);
+			 if (fabs(acc[i] * (1.0/(STEP*STEP))) > a_max_aa[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
+			 sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i, fabs(acc[i]), a_max_aa[i]);
+			 sr_ecp_msg.message(messg);
+			 throw ECP_error (lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
+			 } // end : if
+			 vel[i] = A1[i] + 2*A2[i]*(node_counter) + 3.0*A3[i]*(node_counter*node_counter) + 4.0*A4[i]
+			 *(node_counter*node_counter*node_counter) + 5.0*A5[i]*(node_counter*node_counter*node_counter
+			 *node_counter);
+			 if (fabs(vel[i] * (1.0/STEP)) > v_max_aa[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
+			 sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i, fabs(vel[i]) , v_max_aa[i]);
+			 sr_ecp_msg.message(messg);
+			 throw ECP_error (lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
+			 } // end : if
+			 if (i==6) {
+			 the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = A0[i] + A1[i]*(node_counter) + A2[i]*(node_counter
+			 *node_counter) + A3[i]*(node_counter*node_counter*node_counter) + A4[i]*(node_counter
+			 *node_counter*node_counter*node_counter) + A5[i]*(node_counter*node_counter*node_counter
+			 *node_counter*node_counter);
+			 } else {
+			 the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = A0[i] + A1[i]*(node_counter) + A2[i]
+			 *(node_counter*node_counter) + A3[i]*(node_counter*node_counter*node_counter) + A4[i]
+			 *(node_counter*node_counter*node_counter*node_counter) + A5[i]*(node_counter*node_counter
+			 *node_counter*node_counter*node_counter);
+			 }
 
-			} // end:for
-			break;
-*/
+			 } // end:for
+			 break;
+			 */
 		default:
-			throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+			throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 	}// end:switch
 
 	// skopiowac przygotowany rozkaz dla EDP do bufora wysylkowego
@@ -1225,7 +1235,7 @@ parabolic_teach_in::parabolic_teach_in(common::task::task& _ecp_task, double int
 	INTERVAL = interval; // Dlugosc okresu interpolacji w [sek]
 	int i;
 
-	for (i = 0; i <MAX_SERVOS_NR; i++) {
+	for (i = 0; i < MAX_SERVOS_NR; i++) {
 		a_max_motor[i] = 100.0;
 		// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
 		v_max_motor[i] = 120.0;
@@ -1237,16 +1247,16 @@ parabolic_teach_in::parabolic_teach_in(common::task::task& _ecp_task, double int
 	}
 	for (i = 0; i < 3; i++) {
 		a_max_zyz[i] = 5.0; // przyspieszenie liniowe koncowki 0.1G
-		a_max_zyz[i+3] = 5.0; // przyspieszenie katowe koncowki 1rad/s^2
+		a_max_zyz[i + 3] = 5.0; // przyspieszenie katowe koncowki 1rad/s^2
 		// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
 		v_max_zyz[i] = 5.0; // predkosc liniowa 1m/s
-		v_max_zyz[i+3] = 5.0; // predkosc katowa 1rad/s
+		v_max_zyz[i + 3] = 5.0; // predkosc katowa 1rad/s
 		// tablica dopuszczalnych predkosci dla kolejnych osi/wspolrzednych
 		a_max_aa[i] = 0.0;
-		a_max_aa[i+3] = 0.0;
+		a_max_aa[i + 3] = 0.0;
 		// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
 		v_max_aa[i] = 0.0;
-		v_max_aa[i+3] = 0.0;
+		v_max_aa[i + 3] = 0.0;
 		// tablica dopuszczalnych predkosci dla kolejnych osi/wspolrzednych
 	}
 	// 	sr_ecp_msg.message("Skonstruowano obiekt klasy ecp_parabolic_teach_in_generator");
@@ -1277,7 +1287,8 @@ bool parabolic_teach_in::first_step()
 	// Zaznaczenie, ze bedzie realizowany pierwszy przedzial interpolacji, wiec trzeba
 	// wyznaczyc parametry ruchu
 	first_interval = true;
-	switch (tip.arm_type) {
+	switch (tip.arm_type)
+	{
 		case lib::MOTOR:
 			the_robot->ecp_command.instruction.instruction_type = lib::GET;
 			the_robot->ecp_command.instruction.get_type = ARM_DEFINITION; // ARM
@@ -1289,19 +1300,19 @@ bool parabolic_teach_in::first_step()
 			the_robot->ecp_command.instruction.get_arm_type = lib::JOINT;
 			break;
 			/*
-		case lib::XYZ_EULER_ZYZ:
-			the_robot->ecp_command.instruction.instruction_type = lib::GET;
-			the_robot->ecp_command.instruction.get_type = ARM_DEFINITION; // ARM
-			the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_EULER_ZYZ;
-			break;
-		case lib::XYZ_ANGLE_AXIS:
-			the_robot->ecp_command.instruction.instruction_type = lib::GET;
-			the_robot->ecp_command.instruction.get_type = ARM_DEFINITION; // ARM
-			the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_ANGLE_AXIS;
-			break;
-			*/
+			 case lib::XYZ_EULER_ZYZ:
+			 the_robot->ecp_command.instruction.instruction_type = lib::GET;
+			 the_robot->ecp_command.instruction.get_type = ARM_DEFINITION; // ARM
+			 the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_EULER_ZYZ;
+			 break;
+			 case lib::XYZ_ANGLE_AXIS:
+			 the_robot->ecp_command.instruction.instruction_type = lib::GET;
+			 the_robot->ecp_command.instruction.get_type = ARM_DEFINITION; // ARM
+			 the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_ANGLE_AXIS;
+			 break;
+			 */
 		default:
-			throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+			throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 	} // end: switch
 
 	return true;
@@ -1325,112 +1336,113 @@ bool parabolic_teach_in::next_step()
 		// to dopiero execute_motion po wyjsciu z first_step.
 
 		// Wyznaczenie liczby przedzialow interpolacji oraz pozostalych parametrow ruchu
-		number_of_intervals = (int) ceil(tip.motion_time/INTERVAL);
-		if ( (number_of_intervals % 2) == 1)
+		number_of_intervals = (int) ceil(tip.motion_time / INTERVAL);
+		if ((number_of_intervals % 2) == 1)
 			number_of_intervals++;
 
 		half_number_of_intervals = number_of_intervals / 2;
 		// Wyznaczenie przyspieszen oraz sprawdzenie,
 		// czy nie zostaly przekroczone wartosci maksymalne przyspieszen i predkosci
-		switch (tip.arm_type) {
+		switch (tip.arm_type)
+		{
 			case lib::MOTOR:
 				the_robot->ecp_command.instruction.set_arm_type = lib::MOTOR;
-				for (i=0; i <MAX_SERVOS_NR; i++) {
-					a[i] = 4.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i])
-							/(number_of_intervals*INTERVAL*number_of_intervals*INTERVAL);
+				for (i = 0; i < MAX_SERVOS_NR; i++) {
+					a[i] = 4.0 * (tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i])
+							/ (number_of_intervals * INTERVAL * number_of_intervals * INTERVAL);
 					if (fabs(a[i]) > a_max_motor[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
-						sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i+1, fabs(a[i]), a_max_motor[i]);
+						sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i + 1, fabs(a[i]), a_max_motor[i]);
 						sr_ecp_msg.message(messg);
-						throw ECP_error (lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
+						throw ECP_error(lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
 					}
-					if ( 0.5*fabs(a[i] * tip.motion_time) > v_max_motor[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
-						sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i+1, 0.5 * a[i] * tip.motion_time, v_max_motor[i]);
+					if (0.5 * fabs(a[i] * tip.motion_time) > v_max_motor[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
+						sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i + 1, 0.5 * a[i] * tip.motion_time, v_max_motor[i]);
 						sr_ecp_msg.message(messg);
-						throw ECP_error (lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
+						throw ECP_error(lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
 					}
 				}
 				break;
 			case lib::JOINT:
 				the_robot->ecp_command.instruction.set_arm_type = lib::JOINT;
-				for (i=0; i <MAX_SERVOS_NR; i++) {
-					a[i] = 4.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i])
-							/(number_of_intervals*INTERVAL*number_of_intervals*INTERVAL);
+				for (i = 0; i < MAX_SERVOS_NR; i++) {
+					a[i] = 4.0 * (tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i])
+							/ (number_of_intervals * INTERVAL * number_of_intervals * INTERVAL);
 					if (fabs(a[i]) > a_max_joint[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
-						sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i+1, fabs(a[i]), a_max_joint[i]);
+						sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i + 1, fabs(a[i]), a_max_joint[i]);
 						sr_ecp_msg.message(messg);
-						throw ECP_error (lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
+						throw ECP_error(lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
 					}
-					if ( 0.5*fabs(a[i] * tip.motion_time) > v_max_joint[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
-						sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i+1, 0.5*a[i] * tip.motion_time, v_max_joint[i]);
+					if (0.5 * fabs(a[i] * tip.motion_time) > v_max_joint[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
+						sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i + 1, 0.5 * a[i] * tip.motion_time, v_max_joint[i]);
 						sr_ecp_msg.message(messg);
-						throw ECP_error (lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
+						throw ECP_error(lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
 					}
 				}
 				break;
 				/*
-			case lib::XYZ_EULER_ZYZ:
-				the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
-				for (i=0; i < 7; i++) {
-					if (i==6) {
-						Delta = tip.coordinates[i] - the_robot->reply_package.arm.pf_def.gripper_coordinate;
-					} else {
-						Delta = tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i];
-					}
+				 case lib::XYZ_EULER_ZYZ:
+				 the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
+				 for (i=0; i < 7; i++) {
+				 if (i==6) {
+				 Delta = tip.coordinates[i] - the_robot->reply_package.arm.pf_def.gripper_coordinate;
+				 } else {
+				 Delta = tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i];
+				 }
 
-					if (i > 2 && i < 6) // Wymuszenie ruchu po krotszym luku okregu
-						if (Delta > M_PI) // przy zamianie kata orientacji
-							Delta -= 2.0*M_PI;
-					if (Delta < -M_PI)
-						Delta += 2.0*M_PI;
-					a[i] = 4.0*(Delta)/(number_of_intervals*INTERVAL*number_of_intervals*INTERVAL);
-					if (fabs(a[i]) > a_max_zyz[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
-						sprintf(messg, "Acceleration in coordinate %d is %f, max. acc = %f", i+1, fabs(a[i]), a_max_zyz[i]);
-						sr_ecp_msg.message(messg);
-						throw ECP_error (lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
-					}
-					if ( 0.5*fabs(a[i] * tip.motion_time) > v_max_zyz[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
-						sprintf(messg, "Velocity in coordinate %d is %f, max. vel = %f", i+1, 0.5*a[i]
-								* tip.motion_time, v_max_zyz[i]);
-						sr_ecp_msg.message(messg);
-						throw ECP_error (lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
-					}
-				}
-				break;
-			case lib::XYZ_ANGLE_AXIS:
-				the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
-				for (i=0; i < 7; i++) {
-					if (i==6) {
-						a[i] = 4.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.gripper_coordinate)
-								/(number_of_intervals*INTERVAL*number_of_intervals*INTERVAL);
-					} else {
-						a[i] = 4.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i])
-								/(number_of_intervals*INTERVAL*number_of_intervals*INTERVAL);
-					}
+				 if (i > 2 && i < 6) // Wymuszenie ruchu po krotszym luku okregu
+				 if (Delta > M_PI) // przy zamianie kata orientacji
+				 Delta -= 2.0*M_PI;
+				 if (Delta < -M_PI)
+				 Delta += 2.0*M_PI;
+				 a[i] = 4.0*(Delta)/(number_of_intervals*INTERVAL*number_of_intervals*INTERVAL);
+				 if (fabs(a[i]) > a_max_zyz[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
+				 sprintf(messg, "Acceleration in coordinate %d is %f, max. acc = %f", i+1, fabs(a[i]), a_max_zyz[i]);
+				 sr_ecp_msg.message(messg);
+				 throw ECP_error (lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
+				 }
+				 if ( 0.5*fabs(a[i] * tip.motion_time) > v_max_zyz[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
+				 sprintf(messg, "Velocity in coordinate %d is %f, max. vel = %f", i+1, 0.5*a[i]
+				 * tip.motion_time, v_max_zyz[i]);
+				 sr_ecp_msg.message(messg);
+				 throw ECP_error (lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
+				 }
+				 }
+				 break;
+				 case lib::XYZ_ANGLE_AXIS:
+				 the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
+				 for (i=0; i < 7; i++) {
+				 if (i==6) {
+				 a[i] = 4.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.gripper_coordinate)
+				 /(number_of_intervals*INTERVAL*number_of_intervals*INTERVAL);
+				 } else {
+				 a[i] = 4.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i])
+				 /(number_of_intervals*INTERVAL*number_of_intervals*INTERVAL);
+				 }
 
-					if (fabs(a[i]) > a_max_aa[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
-						sprintf(messg, "Velocity in coordinate %d is %f, max. vel = %f", i+1, 0.5* a[i]
-								* tip.motion_time, v_max_aa[i]);
-						sr_ecp_msg.message(messg);
-						throw ECP_error (lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
-					}
-					if ( 0.5*fabs(a[i] * tip.motion_time) > v_max_aa[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
-						sprintf(messg, "Velocity in coordinate %d is %f, max. vel = %f", i+1, 0.5*a[i]
-								* tip.motion_time, v_max_aa[i]);
-						sr_ecp_msg.message(messg);
-						throw ECP_error (lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
-					}
-				}
-				break;
-				*/
+				 if (fabs(a[i]) > a_max_aa[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
+				 sprintf(messg, "Velocity in coordinate %d is %f, max. vel = %f", i+1, 0.5* a[i]
+				 * tip.motion_time, v_max_aa[i]);
+				 sr_ecp_msg.message(messg);
+				 throw ECP_error (lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
+				 }
+				 if ( 0.5*fabs(a[i] * tip.motion_time) > v_max_aa[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
+				 sprintf(messg, "Velocity in coordinate %d is %f, max. vel = %f", i+1, 0.5*a[i]
+				 * tip.motion_time, v_max_aa[i]);
+				 sr_ecp_msg.message(messg);
+				 throw ECP_error (lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
+				 }
+				 }
+				 break;
+				 */
 			default:
-				throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+				throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 		} // end: switch
 		the_robot->ecp_command.instruction.instruction_type = lib::SET;
 		the_robot->ecp_command.instruction.set_type = ARM_DEFINITION; // ARM
 		the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
 		the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-		the_robot->ecp_command.instruction.motion_steps = (uint16_t) (INTERVAL/STEP);
-		the_robot->ecp_command.instruction.value_in_step_no = the_robot->ecp_command.instruction.motion_steps-2;
+		the_robot->ecp_command.instruction.motion_steps = (uint16_t)(INTERVAL / STEP);
+		the_robot->ecp_command.instruction.value_in_step_no = the_robot->ecp_command.instruction.motion_steps - 2;
 		first_interval = false;
 
 	}
@@ -1439,75 +1451,76 @@ bool parabolic_teach_in::next_step()
 
 	if (node_counter <= number_of_intervals) {
 		// Obliczenie polozenia na podstawie danych interpolacyjnych (zgodnie z uplywem czasu)
-		switch (tip.arm_type) {
+		switch (tip.arm_type)
+		{
 			case lib::MOTOR:
 
-				for (i = 0; i <MAX_SERVOS_NR; i++) {
+				for (i = 0; i < MAX_SERVOS_NR; i++) {
 					if (node_counter < half_number_of_intervals)
 						the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
-								= the_robot->reply_package.arm.pf_def.arm_coordinates[i] + 0.5* a[i]* node_counter
-										*INTERVAL*node_counter*INTERVAL;
+								= the_robot->reply_package.arm.pf_def.arm_coordinates[i] + 0.5 * a[i] * node_counter
+										* INTERVAL * node_counter * INTERVAL;
 					else
-						the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = tip.coordinates[i] - 0.5 * a[i]
-								* (number_of_intervals*INTERVAL - node_counter*INTERVAL)* (number_of_intervals*INTERVAL
-								- node_counter*INTERVAL);
+						the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = tip.coordinates[i] - 0.5
+								* a[i] * (number_of_intervals * INTERVAL - node_counter * INTERVAL)
+								* (number_of_intervals * INTERVAL - node_counter * INTERVAL);
 				}
 				break;
 			case lib::JOINT:
-				for (i = 0; i <MAX_SERVOS_NR; i++)
+				for (i = 0; i < MAX_SERVOS_NR; i++)
 					if (node_counter < half_number_of_intervals)
 						the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
-								= the_robot->reply_package.arm.pf_def.arm_coordinates[i] + 0.5* a[i]* node_counter
-										*INTERVAL*node_counter*INTERVAL;
+								= the_robot->reply_package.arm.pf_def.arm_coordinates[i] + 0.5 * a[i] * node_counter
+										* INTERVAL * node_counter * INTERVAL;
 					else
-						the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = tip.coordinates[i] - 0.5 * a[i]
-								* (number_of_intervals*INTERVAL - node_counter*INTERVAL)* (number_of_intervals*INTERVAL
-								- node_counter*INTERVAL);
+						the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = tip.coordinates[i] - 0.5
+								* a[i] * (number_of_intervals * INTERVAL - node_counter * INTERVAL)
+								* (number_of_intervals * INTERVAL - node_counter * INTERVAL);
 				break;
 				/*
-			case lib::XYZ_EULER_ZYZ:
-				for (i = 0; i < 6; i++)
-					if (node_counter < half_number_of_intervals)
-						the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
-								= the_robot->reply_package.arm.pf_def.arm_coordinates[i] + 0.5* a[i]* node_counter
-										*INTERVAL*node_counter*INTERVAL;
-					else
-						the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = tip.coordinates[i] - 0.5 * a[i]
-								* (number_of_intervals*INTERVAL - node_counter*INTERVAL)* (number_of_intervals*INTERVAL
-								- node_counter*INTERVAL);
+				 case lib::XYZ_EULER_ZYZ:
+				 for (i = 0; i < 6; i++)
+				 if (node_counter < half_number_of_intervals)
+				 the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
+				 = the_robot->reply_package.arm.pf_def.arm_coordinates[i] + 0.5* a[i]* node_counter
+				 *INTERVAL*node_counter*INTERVAL;
+				 else
+				 the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = tip.coordinates[i] - 0.5 * a[i]
+				 * (number_of_intervals*INTERVAL - node_counter*INTERVAL)* (number_of_intervals*INTERVAL
+				 - node_counter*INTERVAL);
 
-				if (node_counter < half_number_of_intervals)
-					the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = the_robot->reply_package.arm.pf_def.gripper_coordinate + 0.5
-							* a[6]* node_counter*INTERVAL*node_counter*INTERVAL;
-				else
-					the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = tip.coordinates[6] - 0.5 * a[6]
-							* (number_of_intervals*INTERVAL - node_counter*INTERVAL)* (number_of_intervals*INTERVAL
-							- node_counter*INTERVAL);
+				 if (node_counter < half_number_of_intervals)
+				 the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = the_robot->reply_package.arm.pf_def.gripper_coordinate + 0.5
+				 * a[6]* node_counter*INTERVAL*node_counter*INTERVAL;
+				 else
+				 the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = tip.coordinates[6] - 0.5 * a[6]
+				 * (number_of_intervals*INTERVAL - node_counter*INTERVAL)* (number_of_intervals*INTERVAL
+				 - node_counter*INTERVAL);
 
-				break;
-			case lib::XYZ_ANGLE_AXIS:
-				for (i = 0; i < 6; i++)
-					if (node_counter < half_number_of_intervals)
-						the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
-								= the_robot->reply_package.arm.pf_def.arm_coordinates[i] + 0.5* a[i]* node_counter
-										*INTERVAL*node_counter*INTERVAL;
-					else
-						the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = tip.coordinates[i] - 0.5 * a[i]
-								* (number_of_intervals*INTERVAL - node_counter*INTERVAL)* (number_of_intervals*INTERVAL
-								- node_counter*INTERVAL);
+				 break;
+				 case lib::XYZ_ANGLE_AXIS:
+				 for (i = 0; i < 6; i++)
+				 if (node_counter < half_number_of_intervals)
+				 the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
+				 = the_robot->reply_package.arm.pf_def.arm_coordinates[i] + 0.5* a[i]* node_counter
+				 *INTERVAL*node_counter*INTERVAL;
+				 else
+				 the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = tip.coordinates[i] - 0.5 * a[i]
+				 * (number_of_intervals*INTERVAL - node_counter*INTERVAL)* (number_of_intervals*INTERVAL
+				 - node_counter*INTERVAL);
 
-				if (node_counter < half_number_of_intervals)
-					the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = the_robot->reply_package.arm.pf_def.gripper_coordinate + 0.5
-							* a[6]* node_counter*INTERVAL*node_counter*INTERVAL;
-				else
-					the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = tip.coordinates[6] - 0.5 * a[6]
-							* (number_of_intervals*INTERVAL - node_counter*INTERVAL)* (number_of_intervals*INTERVAL
-							- node_counter*INTERVAL);
+				 if (node_counter < half_number_of_intervals)
+				 the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = the_robot->reply_package.arm.pf_def.gripper_coordinate + 0.5
+				 * a[6]* node_counter*INTERVAL*node_counter*INTERVAL;
+				 else
+				 the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = tip.coordinates[6] - 0.5 * a[6]
+				 * (number_of_intervals*INTERVAL - node_counter*INTERVAL)* (number_of_intervals*INTERVAL
+				 - node_counter*INTERVAL);
 
-				break;
-				*/
+				 break;
+				 */
 			default:
-				throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+				throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 		} // end: switch
 	}
 
@@ -1542,7 +1555,7 @@ calibration::calibration(common::task::task& _ecp_task, double interval) :
 	INTERVAL = interval; // Dlugosc okresu interpolacji w [sek]
 	int i; // Licznik
 
-	for (i = 0; i <MAX_SERVOS_NR; i++) {
+	for (i = 0; i < MAX_SERVOS_NR; i++) {
 		a_max_motor[i] = 200.0;
 		// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
 		v_max_motor[i] = 120.0;
@@ -1554,16 +1567,16 @@ calibration::calibration(common::task::task& _ecp_task, double interval) :
 	}
 	for (i = 0; i < 3; i++) {
 		a_max_zyz[i] = 1000.0; // przyspieszenie liniowe koncowki 0.1G
-		a_max_zyz[i+3] = 1.0; // przyspieszenie katowe koncowki 1rad/s^2
+		a_max_zyz[i + 3] = 1.0; // przyspieszenie katowe koncowki 1rad/s^2
 		// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
 		v_max_zyz[i] = 1000.0; // predkosc liniowa 1m/s
-		v_max_zyz[i+3] = 1.0; // predkosc katowa 1rad/s
+		v_max_zyz[i + 3] = 1.0; // predkosc katowa 1rad/s
 		// tablica dopuszczalnych predkosci dla kolejnych osi/wspolrzednych
 		a_max_aa[i] = 0.0;
-		a_max_aa[i+3] = 0.0;
+		a_max_aa[i + 3] = 0.0;
 		// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
 		v_max_aa[i] = 0.0;
-		v_max_aa[i+3] = 0.0;
+		v_max_aa[i + 3] = 0.0;
 		// tablica dopuszczalnych predkosci dla kolejnych osi/wspolrzednych
 	}
 	//  	sr_ecp_msg.message("Skonstruowano obiekt klasy ecp_calibration_generator");
@@ -1572,8 +1585,6 @@ calibration::calibration(common::task::task& _ecp_task, double interval) :
 	a_max_aa[6] = 0.0; // przyspieszenie katowe koncowki 1rad/s^2
 	v_max_aa[6] = 0.0;
 }
-
-
 
 // --------------------------------------------------------------------------
 // Zapis danych z kalibracji do pliku
@@ -1593,11 +1604,11 @@ void calibration::ecp_save_extended_file(operator_reaction_condition& the_condit
 	strcpy(ecp_to_ui_msg.string, "*.cdt"); // Wzorzec nazwy pliku
 	// if ( Send (UI_pid, &ecp_to_ui_msg, &ui_to_ecp_rep, sizeof(lib::ECP_message), sizeof(lib::UI_reply)) == -1) {
 #if !defined(USE_MESSIP_SRR)
-	ecp_to_ui_msg.hdr.type=0;
+	ecp_to_ui_msg.hdr.type = 0;
 
 	if (MsgSend(ecp_t.UI_fd, &ecp_to_ui_msg, sizeof(lib::ECP_message), &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0) {// by Y&W
 #else
-	if (messip::port_send(ecp_t.UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0) {
+		if (messip::port_send(ecp_t.UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0) {
 #endif
 		e = errno;
 		perror("ecp: Send() to UI failed");
@@ -1630,11 +1641,11 @@ void calibration::ecp_save_extended_file(operator_reaction_condition& the_condit
 		for (i = 0; i < number_of_poses; i++) {
 			to_file << i << ' ';
 			get_pose(tip);
-			for (j = 0; j <MAX_SERVOS_NR; j++)
+			for (j = 0; j < MAX_SERVOS_NR; j++)
 				to_file << tip.coordinates[j] << ' ';
 			to_file << "    ";
 			the_condition.get_supplementary(etip);
-			for (j = 0; j <MAX_SERVOS_NR; j++)
+			for (j = 0; j < MAX_SERVOS_NR; j++)
 				to_file << etip.coordinates[j] << ' ';
 			to_file << '\n';
 			next_pose_list_ptr();
@@ -1645,8 +1656,6 @@ void calibration::ecp_save_extended_file(operator_reaction_condition& the_condit
 	}
 }
 // --------------------------------------------------------------------------
-
-
 
 
 // ----------------------------------------------------------------------------------------------
@@ -1672,7 +1681,8 @@ bool calibration::first_step()
 	// Zaznaczenie, ze bedzie realizowany pierwszy przedzial interpolacji, wiec trzeba
 	// wyznaczyc parametry ruchu
 	first_interval = true;
-	switch (tip.arm_type) {
+	switch (tip.arm_type)
+	{
 		case lib::MOTOR:
 			the_robot->ecp_command.instruction.instruction_type = lib::GET;
 			the_robot->ecp_command.instruction.get_type = ARM_DEFINITION; // ARM
@@ -1684,19 +1694,19 @@ bool calibration::first_step()
 			the_robot->ecp_command.instruction.get_arm_type = lib::JOINT;
 			break;
 			/*
-		case lib::XYZ_EULER_ZYZ:
-			the_robot->ecp_command.instruction.instruction_type = lib::GET;
-			the_robot->ecp_command.instruction.get_type = ARM_DEFINITION; // ARM
-			the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_EULER_ZYZ;
-			break;
-		case lib::XYZ_ANGLE_AXIS:
-			the_robot->ecp_command.instruction.instruction_type = lib::GET;
-			the_robot->ecp_command.instruction.get_type = ARM_DEFINITION; // ARM
-			the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_ANGLE_AXIS;
-			break;
-			*/
+			 case lib::XYZ_EULER_ZYZ:
+			 the_robot->ecp_command.instruction.instruction_type = lib::GET;
+			 the_robot->ecp_command.instruction.get_type = ARM_DEFINITION; // ARM
+			 the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_EULER_ZYZ;
+			 break;
+			 case lib::XYZ_ANGLE_AXIS:
+			 the_robot->ecp_command.instruction.instruction_type = lib::GET;
+			 the_robot->ecp_command.instruction.get_type = ARM_DEFINITION; // ARM
+			 the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_ANGLE_AXIS;
+			 break;
+			 */
 		default:
-			throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+			throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 	} // end: switch
 
 	return true;
@@ -1720,107 +1730,108 @@ bool calibration::next_step()
 		// to dopiero execute_motion po wyjsciu z first_step.
 
 		// Wyznaczenie liczby przedzialow interpolacji oraz pozostalych parametrow ruchu
-		number_of_intervals = (int) ceil(tip.motion_time/INTERVAL);
-		if ( (number_of_intervals % 2) == 1)
+		number_of_intervals = (int) ceil(tip.motion_time / INTERVAL);
+		if ((number_of_intervals % 2) == 1)
 			number_of_intervals++;
 
 		half_number_of_intervals = number_of_intervals / 2;
 		// Wyznaczenie przyspieszen oraz sprawdzenie,
 		// czy nie zostaly przekroczone wartosci maksymalne przyspieszen i predkosci
-		switch (tip.arm_type) {
+		switch (tip.arm_type)
+		{
 			case lib::MOTOR:
 				the_robot->ecp_command.instruction.set_arm_type = lib::MOTOR;
-				for (i=0; i <MAX_SERVOS_NR; i++) {
-					a[i] = 4.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i])
-							/(number_of_intervals*INTERVAL*number_of_intervals*INTERVAL);
+				for (i = 0; i < MAX_SERVOS_NR; i++) {
+					a[i] = 4.0 * (tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i])
+							/ (number_of_intervals * INTERVAL * number_of_intervals * INTERVAL);
 					if (fabs(a[i]) > a_max_motor[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
-						sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i+1, fabs(a[i]), a_max_motor[i]);
+						sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i + 1, fabs(a[i]), a_max_motor[i]);
 						sr_ecp_msg.message(messg);
-						throw ECP_error (lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
+						throw ECP_error(lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
 					}
-					if (fabs(0.5* a[i] * tip.motion_time) > v_max_motor[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
-						sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i+1, 0.5* a[i] * tip.motion_time, v_max_motor[i]);
+					if (fabs(0.5 * a[i] * tip.motion_time) > v_max_motor[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
+						sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i + 1, 0.5 * a[i] * tip.motion_time, v_max_motor[i]);
 						sr_ecp_msg.message(messg);
-						throw ECP_error (lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
+						throw ECP_error(lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
 					}
 				}
 				break;
 			case lib::JOINT:
 				the_robot->ecp_command.instruction.set_arm_type = lib::JOINT;
-				for (i=0; i <MAX_SERVOS_NR; i++) {
-					a[i] = 4.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i])
-							/(number_of_intervals*INTERVAL*number_of_intervals*INTERVAL);
+				for (i = 0; i < MAX_SERVOS_NR; i++) {
+					a[i] = 4.0 * (tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i])
+							/ (number_of_intervals * INTERVAL * number_of_intervals * INTERVAL);
 					if (fabs(a[i]) > a_max_joint[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
-						sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i+1, fabs(a[i]), a_max_joint[i]);
+						sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i + 1, fabs(a[i]), a_max_joint[i]);
 						sr_ecp_msg.message(messg);
-						throw ECP_error (lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
+						throw ECP_error(lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
 					}
-					if (fabs(0.5* a[i] * tip.motion_time) > v_max_joint[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
-						sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i+1, 0.5* a[i] * tip.motion_time, v_max_joint[i]);
+					if (fabs(0.5 * a[i] * tip.motion_time) > v_max_joint[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
+						sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i + 1, 0.5 * a[i] * tip.motion_time, v_max_joint[i]);
 						sr_ecp_msg.message(messg);
-						throw ECP_error (lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
+						throw ECP_error(lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
 					}
 				}
 				break;
 				/*
-			case lib::XYZ_EULER_ZYZ:
-				the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
-				for (i=0; i < 7; i++) {
-					if (i==6) {
-						a[i] = 4.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.gripper_coordinate)
-								/(number_of_intervals*INTERVAL*number_of_intervals*INTERVAL);
-					} else {
-						a[i] = 4.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i])
-								/(number_of_intervals*INTERVAL*number_of_intervals*INTERVAL);
-					}
+				 case lib::XYZ_EULER_ZYZ:
+				 the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
+				 for (i=0; i < 7; i++) {
+				 if (i==6) {
+				 a[i] = 4.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.gripper_coordinate)
+				 /(number_of_intervals*INTERVAL*number_of_intervals*INTERVAL);
+				 } else {
+				 a[i] = 4.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i])
+				 /(number_of_intervals*INTERVAL*number_of_intervals*INTERVAL);
+				 }
 
-					if (fabs(a[i]) > a_max_zyz[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
-						sprintf(messg, "Acceleration in coordinate %d is %f, max. acc = %f", i+1, fabs(a[i]), a_max_zyz[i]);
-						sr_ecp_msg.message(messg);
-						throw ECP_error (lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
-					}
-					if (fabs(0.5* a[i] * tip.motion_time) > v_max_zyz[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
-						sprintf(messg, "Velocity in coordinate %d is %f, max. vel = %f", i+1, 0.5* a[i]
-								* tip.motion_time, v_max_zyz[i]);
-						sr_ecp_msg.message(messg);
-						throw ECP_error (lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
-					}
-				}
-				break;
-			case lib::XYZ_ANGLE_AXIS:
-				the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
-				for (i=0; i < 7; i++) {
-					if (i==6) {
-						a[i] = 4.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.gripper_coordinate)
-								/(number_of_intervals*INTERVAL*number_of_intervals*INTERVAL);
-					} else {
-						a[i] = 4.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i])
-								/(number_of_intervals*INTERVAL*number_of_intervals*INTERVAL);
-					}
-					if (fabs(a[i]) > a_max_aa[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
-						sprintf(messg, "Velocity in coordinate %d is %f, max. vel = %f", i+1, 0.5* a[i]
-								* tip.motion_time, v_max_aa[i]);
-						sr_ecp_msg.message(messg);
-						throw ECP_error (lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
-					}
-					if (fabs(0.5* a[i] * tip.motion_time) > v_max_aa[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
-						sprintf(messg, "Velocity in coordinate %d is %f, max. vel = %f", i+1, 0.5* a[i]
-								* tip.motion_time, v_max_aa[i]);
-						sr_ecp_msg.message(messg);
-						throw ECP_error (lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
-					}
-				}
-				break;
-				*/
+				 if (fabs(a[i]) > a_max_zyz[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
+				 sprintf(messg, "Acceleration in coordinate %d is %f, max. acc = %f", i+1, fabs(a[i]), a_max_zyz[i]);
+				 sr_ecp_msg.message(messg);
+				 throw ECP_error (lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
+				 }
+				 if (fabs(0.5* a[i] * tip.motion_time) > v_max_zyz[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
+				 sprintf(messg, "Velocity in coordinate %d is %f, max. vel = %f", i+1, 0.5* a[i]
+				 * tip.motion_time, v_max_zyz[i]);
+				 sr_ecp_msg.message(messg);
+				 throw ECP_error (lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
+				 }
+				 }
+				 break;
+				 case lib::XYZ_ANGLE_AXIS:
+				 the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
+				 for (i=0; i < 7; i++) {
+				 if (i==6) {
+				 a[i] = 4.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.gripper_coordinate)
+				 /(number_of_intervals*INTERVAL*number_of_intervals*INTERVAL);
+				 } else {
+				 a[i] = 4.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i])
+				 /(number_of_intervals*INTERVAL*number_of_intervals*INTERVAL);
+				 }
+				 if (fabs(a[i]) > a_max_aa[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
+				 sprintf(messg, "Velocity in coordinate %d is %f, max. vel = %f", i+1, 0.5* a[i]
+				 * tip.motion_time, v_max_aa[i]);
+				 sr_ecp_msg.message(messg);
+				 throw ECP_error (lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
+				 }
+				 if (fabs(0.5* a[i] * tip.motion_time) > v_max_aa[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
+				 sprintf(messg, "Velocity in coordinate %d is %f, max. vel = %f", i+1, 0.5* a[i]
+				 * tip.motion_time, v_max_aa[i]);
+				 sr_ecp_msg.message(messg);
+				 throw ECP_error (lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
+				 }
+				 }
+				 break;
+				 */
 			default:
-				throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+				throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 		} // end: switch
 		the_robot->ecp_command.instruction.instruction_type = lib::SET;
 		the_robot->ecp_command.instruction.set_type = ARM_DEFINITION; // ARM
 		the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
 		the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-		the_robot->ecp_command.instruction.motion_steps = (uint16_t) (INTERVAL/STEP);
-		the_robot->ecp_command.instruction.value_in_step_no = the_robot->ecp_command.instruction.motion_steps-2;
+		the_robot->ecp_command.instruction.motion_steps = (uint16_t)(INTERVAL / STEP);
+		the_robot->ecp_command.instruction.value_in_step_no = the_robot->ecp_command.instruction.motion_steps - 2;
 		first_interval = false;
 
 	}
@@ -1829,108 +1840,114 @@ bool calibration::next_step()
 
 	if (node_counter <= number_of_intervals)
 		// Obliczenie polozenia na podstawie danych interpolacyjnych (zgodnie z uplywem czasu)
-		switch (tip.arm_type) {
+		switch (tip.arm_type)
+		{
 			case lib::MOTOR:
-				for (i = 0; i <MAX_SERVOS_NR; i++) {
+				for (i = 0; i < MAX_SERVOS_NR; i++) {
 					if (node_counter < half_number_of_intervals)
 						the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
-								= the_robot->reply_package.arm.pf_def.arm_coordinates[i] + 0.5* a[i]* node_counter
-										*INTERVAL*node_counter*INTERVAL;
-					else
-						the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
-								= the_robot->reply_package.arm.pf_def.arm_coordinates[i] + a[i] * (node_counter*INTERVAL
-										*number_of_intervals*INTERVAL -0.5*node_counter*INTERVAL*node_counter*INTERVAL
-										-0.25*number_of_intervals*INTERVAL*number_of_intervals*INTERVAL);
-				}
-				break;
-			case lib::JOINT:
-				for (i = 0; i <MAX_SERVOS_NR; i++)
-					if (node_counter < half_number_of_intervals)
-						the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
-								= the_robot->reply_package.arm.pf_def.arm_coordinates[i] + 0.5* a[i]* node_counter
-										*INTERVAL*node_counter*INTERVAL;
-					else
-						the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
-								= the_robot->reply_package.arm.pf_def.arm_coordinates[i] + a[i] * (node_counter*INTERVAL
-										*number_of_intervals*INTERVAL -0.5*node_counter*INTERVAL*node_counter*INTERVAL
-										-0.25*number_of_intervals*INTERVAL*number_of_intervals*INTERVAL);
-				break;
-				/*
-			case lib::XYZ_EULER_ZYZ:
-				for (i = 0; i < 6; i++)
-					if (node_counter < half_number_of_intervals)
-						the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
-								= the_robot->reply_package.arm.pf_def.arm_coordinates[i] + 0.5* a[i]* node_counter
-										*INTERVAL*node_counter*INTERVAL;
+								= the_robot->reply_package.arm.pf_def.arm_coordinates[i] + 0.5 * a[i] * node_counter
+										* INTERVAL * node_counter * INTERVAL;
 					else
 						the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
 								= the_robot->reply_package.arm.pf_def.arm_coordinates[i] + a[i] * (node_counter
-										*INTERVAL*number_of_intervals*INTERVAL -0.5*node_counter*INTERVAL*node_counter
-										*INTERVAL -0.25*number_of_intervals*INTERVAL*number_of_intervals*INTERVAL);
-
-				if (node_counter < half_number_of_intervals)
-					the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[6]
-							= the_robot->reply_package.arm.pf_def.arm_coordinates[6] + 0.5* a[6]* node_counter*INTERVAL
-									*node_counter*INTERVAL;
-				else
-					the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[6]
-							= the_robot->reply_package.arm.pf_def.arm_coordinates[6] + a[6] * (node_counter*INTERVAL
-									*number_of_intervals*INTERVAL -0.5*node_counter*INTERVAL*node_counter*INTERVAL
-									-0.25*number_of_intervals*INTERVAL*number_of_intervals*INTERVAL);
-
+										* INTERVAL * number_of_intervals * INTERVAL - 0.5 * node_counter * INTERVAL
+										* node_counter * INTERVAL - 0.25 * number_of_intervals * INTERVAL
+										* number_of_intervals * INTERVAL);
+				}
 				break;
-			case lib::XYZ_ANGLE_AXIS:
-				for (i = 0; i < 6; i++)
+			case lib::JOINT:
+				for (i = 0; i < MAX_SERVOS_NR; i++)
 					if (node_counter < half_number_of_intervals)
 						the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
-								= the_robot->reply_package.arm.pf_def.arm_coordinates[i] + 0.5* a[i]* node_counter
-										*INTERVAL*node_counter*INTERVAL;
+								= the_robot->reply_package.arm.pf_def.arm_coordinates[i] + 0.5 * a[i] * node_counter
+										* INTERVAL * node_counter * INTERVAL;
 					else
 						the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
-								= the_robot->reply_package.arm.pf_def.arm_coordinates[i] + a[i] * (node_counter*INTERVAL
-										*number_of_intervals*INTERVAL -0.5*node_counter*INTERVAL*node_counter*INTERVAL
-										-0.25*number_of_intervals*INTERVAL*number_of_intervals*INTERVAL);
-
-				if (node_counter < half_number_of_intervals)
-					the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[6]
-							= the_robot->reply_package.arm.pf_def.arm_coordinates[6] + 0.5* a[6]* node_counter*INTERVAL
-									*node_counter*INTERVAL;
-				else
-					the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[6]
-							= the_robot->reply_package.arm.pf_def.arm_coordinates[6] + a[6] * (node_counter*INTERVAL
-									*number_of_intervals*INTERVAL -0.5*node_counter*INTERVAL*node_counter*INTERVAL
-									-0.25*number_of_intervals*INTERVAL*number_of_intervals*INTERVAL);
-
+								= the_robot->reply_package.arm.pf_def.arm_coordinates[i] + a[i] * (node_counter
+										* INTERVAL * number_of_intervals * INTERVAL - 0.5 * node_counter * INTERVAL
+										* node_counter * INTERVAL - 0.25 * number_of_intervals * INTERVAL
+										* number_of_intervals * INTERVAL);
 				break;
-				*/
+				/*
+				 case lib::XYZ_EULER_ZYZ:
+				 for (i = 0; i < 6; i++)
+				 if (node_counter < half_number_of_intervals)
+				 the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
+				 = the_robot->reply_package.arm.pf_def.arm_coordinates[i] + 0.5* a[i]* node_counter
+				 *INTERVAL*node_counter*INTERVAL;
+				 else
+				 the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
+				 = the_robot->reply_package.arm.pf_def.arm_coordinates[i] + a[i] * (node_counter
+				 *INTERVAL*number_of_intervals*INTERVAL -0.5*node_counter*INTERVAL*node_counter
+				 *INTERVAL -0.25*number_of_intervals*INTERVAL*number_of_intervals*INTERVAL);
+
+				 if (node_counter < half_number_of_intervals)
+				 the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[6]
+				 = the_robot->reply_package.arm.pf_def.arm_coordinates[6] + 0.5* a[6]* node_counter*INTERVAL
+				 *node_counter*INTERVAL;
+				 else
+				 the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[6]
+				 = the_robot->reply_package.arm.pf_def.arm_coordinates[6] + a[6] * (node_counter*INTERVAL
+				 *number_of_intervals*INTERVAL -0.5*node_counter*INTERVAL*node_counter*INTERVAL
+				 -0.25*number_of_intervals*INTERVAL*number_of_intervals*INTERVAL);
+
+				 break;
+				 case lib::XYZ_ANGLE_AXIS:
+				 for (i = 0; i < 6; i++)
+				 if (node_counter < half_number_of_intervals)
+				 the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
+				 = the_robot->reply_package.arm.pf_def.arm_coordinates[i] + 0.5* a[i]* node_counter
+				 *INTERVAL*node_counter*INTERVAL;
+				 else
+				 the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
+				 = the_robot->reply_package.arm.pf_def.arm_coordinates[i] + a[i] * (node_counter*INTERVAL
+				 *number_of_intervals*INTERVAL -0.5*node_counter*INTERVAL*node_counter*INTERVAL
+				 -0.25*number_of_intervals*INTERVAL*number_of_intervals*INTERVAL);
+
+				 if (node_counter < half_number_of_intervals)
+				 the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[6]
+				 = the_robot->reply_package.arm.pf_def.arm_coordinates[6] + 0.5* a[6]* node_counter*INTERVAL
+				 *node_counter*INTERVAL;
+				 else
+				 the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[6]
+				 = the_robot->reply_package.arm.pf_def.arm_coordinates[6] + a[6] * (node_counter*INTERVAL
+				 *number_of_intervals*INTERVAL -0.5*node_counter*INTERVAL*node_counter*INTERVAL
+				 -0.25*number_of_intervals*INTERVAL*number_of_intervals*INTERVAL);
+
+				 break;
+				 */
 			default:
-				throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+				throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 		} // end: switch
 	else { // Zniwelowanie ewentualnego bledu miedzy efektem interpolacji a faktyczna pozycja nauczona - celem ruchu
 		the_robot->ecp_command.instruction.motion_steps = 25;
 		the_robot->ecp_command.instruction.value_in_step_no = the_robot->ecp_command.instruction.motion_steps;
-		switch (tip.arm_type) {
+		switch (tip.arm_type)
+		{
 			case lib::MOTOR:
-				memcpy(the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates, tip.coordinates, MAX_SERVOS_NR*sizeof (double));
+				memcpy(the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates, tip.coordinates, MAX_SERVOS_NR
+						* sizeof(double));
 				break;
 			case lib::JOINT:
-				memcpy(the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates, tip.coordinates, MAX_SERVOS_NR*sizeof (double));
+				memcpy(the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates, tip.coordinates, MAX_SERVOS_NR
+						* sizeof(double));
 				break;
 				/*
-			case lib::XYZ_EULER_ZYZ:
-				memcpy(the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates, tip.coordinates, MAX_SERVOS_NR*sizeof (double));
-				break;
-			case lib::XYZ_ANGLE_AXIS:
-				memcpy(the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates, tip.coordinates, MAX_SERVOS_NR*sizeof (double));
-				break;
-				*/
+				 case lib::XYZ_EULER_ZYZ:
+				 memcpy(the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates, tip.coordinates, MAX_SERVOS_NR*sizeof (double));
+				 break;
+				 case lib::XYZ_ANGLE_AXIS:
+				 memcpy(the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates, tip.coordinates, MAX_SERVOS_NR*sizeof (double));
+				 break;
+				 */
 			default:
-				throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+				throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 		} // end: switch
 	}
 
 	// Czy skonczono interpolacje oraz zniwelowano blad interpolacji?
-	if (node_counter <= number_of_intervals+1) {
+	if (node_counter <= number_of_intervals + 1) {
 		// Ruch do kolejnej pozycji na liscie pozycji nauczonych nie zostal
 		// zakonczony - informacja dla Move()
 		//   the_robot->create_command (); // Przygotowanie rozkazu dla EDP
@@ -1958,7 +1975,7 @@ cubic_spline::cubic_spline(common::task::task& _ecp_task, double interval = 0.02
 	INTERVAL = interval; // Dlugosc okresu interpolacji w [sek]
 	int i;
 
-	for (i = 0; i <MAX_SERVOS_NR; i++) {
+	for (i = 0; i < MAX_SERVOS_NR; i++) {
 		a_max_motor[i] = 100.0;
 		// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
 		v_max_motor[i] = 120.0;
@@ -1970,16 +1987,16 @@ cubic_spline::cubic_spline(common::task::task& _ecp_task, double interval = 0.02
 	}
 	for (i = 0; i < 3; i++) {
 		a_max_zyz[i] = 5.0; // przyspieszenie liniowe koncowki 0.1G
-		a_max_zyz[i+3] = 5.0; // przyspieszenie katowe koncowki 1rad/s^2
+		a_max_zyz[i + 3] = 5.0; // przyspieszenie katowe koncowki 1rad/s^2
 		// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
 		v_max_zyz[i] = 5.0; // predkosc liniowa 1m/s
-		v_max_zyz[i+3] = 5.0; // predkosc katowa 1rad/s
+		v_max_zyz[i + 3] = 5.0; // predkosc katowa 1rad/s
 		// tablica dopuszczalnych predkosci dla kolejnych osi/wspolrzednych
 		a_max_aa[i] = 0.0;
-		a_max_aa[i+3] = 0.0;
+		a_max_aa[i + 3] = 0.0;
 		// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
 		v_max_aa[i] = 0.0;
-		v_max_aa[i+3] = 0.0;
+		v_max_aa[i + 3] = 0.0;
 		// tablica dopuszczalnych predkosci dla kolejnych osi/wspolrzednych
 	}
 
@@ -2009,7 +2026,8 @@ bool cubic_spline::first_step()
 	// Zaznaczenie, ze bedzie realizowany pierwszy przedzial interpolacji, wiec trzeba
 	// wyznaczyc parametry ruchu
 	first_interval = true;
-	switch (tip.arm_type) {
+	switch (tip.arm_type)
+	{
 		case lib::MOTOR:
 			the_robot->ecp_command.instruction.instruction_type = lib::GET;
 			the_robot->ecp_command.instruction.get_type = ARM_DEFINITION; // ARM
@@ -2021,19 +2039,19 @@ bool cubic_spline::first_step()
 			the_robot->ecp_command.instruction.get_arm_type = lib::JOINT;
 			break;
 			/*
-		case lib::XYZ_EULER_ZYZ:
-			the_robot->ecp_command.instruction.instruction_type = lib::GET;
-			the_robot->ecp_command.instruction.get_type = ARM_DEFINITION; // ARM
-			the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_EULER_ZYZ;
-			break;
-		case lib::XYZ_ANGLE_AXIS:
-			the_robot->ecp_command.instruction.instruction_type = lib::GET;
-			the_robot->ecp_command.instruction.get_type = ARM_DEFINITION; // ARM
-			the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_ANGLE_AXIS;
-			break;
-			*/
+			 case lib::XYZ_EULER_ZYZ:
+			 the_robot->ecp_command.instruction.instruction_type = lib::GET;
+			 the_robot->ecp_command.instruction.get_type = ARM_DEFINITION; // ARM
+			 the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_EULER_ZYZ;
+			 break;
+			 case lib::XYZ_ANGLE_AXIS:
+			 the_robot->ecp_command.instruction.instruction_type = lib::GET;
+			 the_robot->ecp_command.instruction.get_type = ARM_DEFINITION; // ARM
+			 the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_ANGLE_AXIS;
+			 break;
+			 */
 		default:
-			throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+			throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 	} // end: switch
 
 	return true;
@@ -2056,73 +2074,74 @@ bool cubic_spline::next_step()
 		// to dopiero execute_motion po wyjsciu z first_step.
 
 		// Wyznaczenie liczby przedzialow interpolacji oraz pozostalych parametrow ruchu
-		number_of_intervals = (int) ceil(tip.motion_time/INTERVAL);
+		number_of_intervals = (int) ceil(tip.motion_time / INTERVAL);
 
-		switch (tip.arm_type) {
+		switch (tip.arm_type)
+		{
 			case lib::MOTOR:
 				the_robot->ecp_command.instruction.set_arm_type = lib::MOTOR;
-				for (int i=0; i<MAX_SERVOS_NR; i++) {
-					A0[i]= the_robot->reply_package.arm.pf_def.arm_coordinates[i];
-					A2[i]=(3.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i]) )
-							/ (number_of_intervals*number_of_intervals);
-					A3[i]=(-2.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i]) )
-							/ (number_of_intervals*number_of_intervals*number_of_intervals);
+				for (int i = 0; i < MAX_SERVOS_NR; i++) {
+					A0[i] = the_robot->reply_package.arm.pf_def.arm_coordinates[i];
+					A2[i] = (3.0 * (tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i]))
+							/ (number_of_intervals * number_of_intervals);
+					A3[i] = (-2.0 * (tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i]))
+							/ (number_of_intervals * number_of_intervals * number_of_intervals);
 				} // end:for
 				break;
 
 			case lib::JOINT:
 				the_robot->ecp_command.instruction.set_arm_type = lib::JOINT;
-				for (int i=0; i<MAX_SERVOS_NR; i++) {
-					A0[i]= the_robot->reply_package.arm.pf_def.arm_coordinates[i];
-					A2[i]=(3.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i]) )
-							/ (number_of_intervals*number_of_intervals);
-					A3[i]=(-2.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i]) )
-							/ (number_of_intervals*number_of_intervals*number_of_intervals);
+				for (int i = 0; i < MAX_SERVOS_NR; i++) {
+					A0[i] = the_robot->reply_package.arm.pf_def.arm_coordinates[i];
+					A2[i] = (3.0 * (tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i]))
+							/ (number_of_intervals * number_of_intervals);
+					A3[i] = (-2.0 * (tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i]))
+							/ (number_of_intervals * number_of_intervals * number_of_intervals);
 				} // end:for
 				break;
-/*
-			case lib::XYZ_EULER_ZYZ:
-				the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
-				for (int i=0; i<6; i++) {
-					A0[i]= the_robot->reply_package.arm.pf_def.arm_coordinates[i];
-					A2[i]=(3.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i]) )
-							/ (number_of_intervals*number_of_intervals);
-					A3[i]=(-2.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i]) )
-							/ (number_of_intervals*number_of_intervals*number_of_intervals);
-				} // end:for
+				/*
+				 case lib::XYZ_EULER_ZYZ:
+				 the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
+				 for (int i=0; i<6; i++) {
+				 A0[i]= the_robot->reply_package.arm.pf_def.arm_coordinates[i];
+				 A2[i]=(3.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i]) )
+				 / (number_of_intervals*number_of_intervals);
+				 A3[i]=(-2.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i]) )
+				 / (number_of_intervals*number_of_intervals*number_of_intervals);
+				 } // end:for
 
-				A0[6]= the_robot->reply_package.arm.pf_def.gripper_coordinate;
-				A2[6]=(3.0*(tip.coordinates[6] - the_robot->reply_package.arm.pf_def.gripper_coordinate) )
-						/ (number_of_intervals*number_of_intervals);
-				A3[6]=(-2.0*(tip.coordinates[6] - the_robot->reply_package.arm.pf_def.gripper_coordinate) )
-						/ (number_of_intervals*number_of_intervals*number_of_intervals);
-				break;
-			case lib::XYZ_ANGLE_AXIS:
-				the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
-				for (int i=0; i<6; i++) {
-					A0[i]= the_robot->reply_package.arm.pf_def.arm_coordinates[i];
-					A2[i]=(3.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i]) )
-							/ (number_of_intervals*number_of_intervals);
-					A3[i]=(-2.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i]) )
-							/ (number_of_intervals*number_of_intervals*number_of_intervals);
-				} // end:for
-				A0[6]= the_robot->reply_package.arm.pf_def.gripper_coordinate;
-				A2[6]=(3.0*(tip.coordinates[6] - the_robot->reply_package.arm.pf_def.gripper_coordinate) )
-						/ (number_of_intervals*number_of_intervals);
-				A3[6]=(-2.0*(tip.coordinates[6] - the_robot->reply_package.arm.pf_def.gripper_coordinate) )
-						/ (number_of_intervals*number_of_intervals*number_of_intervals);
-				break;
-				*/
+				 A0[6]= the_robot->reply_package.arm.pf_def.gripper_coordinate;
+				 A2[6]=(3.0*(tip.coordinates[6] - the_robot->reply_package.arm.pf_def.gripper_coordinate) )
+				 / (number_of_intervals*number_of_intervals);
+				 A3[6]=(-2.0*(tip.coordinates[6] - the_robot->reply_package.arm.pf_def.gripper_coordinate) )
+				 / (number_of_intervals*number_of_intervals*number_of_intervals);
+				 break;
+				 case lib::XYZ_ANGLE_AXIS:
+				 the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
+				 for (int i=0; i<6; i++) {
+				 A0[i]= the_robot->reply_package.arm.pf_def.arm_coordinates[i];
+				 A2[i]=(3.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i]) )
+				 / (number_of_intervals*number_of_intervals);
+				 A3[i]=(-2.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i]) )
+				 / (number_of_intervals*number_of_intervals*number_of_intervals);
+				 } // end:for
+				 A0[6]= the_robot->reply_package.arm.pf_def.gripper_coordinate;
+				 A2[6]=(3.0*(tip.coordinates[6] - the_robot->reply_package.arm.pf_def.gripper_coordinate) )
+				 / (number_of_intervals*number_of_intervals);
+				 A3[6]=(-2.0*(tip.coordinates[6] - the_robot->reply_package.arm.pf_def.gripper_coordinate) )
+				 / (number_of_intervals*number_of_intervals*number_of_intervals);
+				 break;
+				 */
 			default:
-				throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+				throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 		}// end:switch
 
 		the_robot->ecp_command.instruction.instruction_type = lib::SET;
 		the_robot->ecp_command.instruction.set_type = ARM_DEFINITION; // ARM
 		the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
 		the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-		the_robot->ecp_command.instruction.motion_steps = (uint16_t) (INTERVAL/STEP);
-		the_robot->ecp_command.instruction.value_in_step_no = the_robot->ecp_command.instruction.motion_steps-2;
+		the_robot->ecp_command.instruction.motion_steps = (uint16_t)(INTERVAL / STEP);
+		the_robot->ecp_command.instruction.value_in_step_no = the_robot->ecp_command.instruction.motion_steps - 2;
 
 		first_interval = false;
 
@@ -2140,97 +2159,98 @@ bool cubic_spline::next_step()
 		double vel[MAX_SERVOS_NR];
 
 		// Obliczenie polozenia na podstawie danych interpolacyjnych (zgodnie z uplywem czasu)
-		switch (tip.arm_type) {
+		switch (tip.arm_type)
+		{
 			case lib::MOTOR:
-				for (int i = 0; i <MAX_SERVOS_NR; i++) {
-					acc[i] = 2.0*A2[i] + 6.0*A3[i]*(node_counter);
-					if (fabs(acc[i] * (1.0/(STEP*STEP))) > a_max_motor[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
+				for (int i = 0; i < MAX_SERVOS_NR; i++) {
+					acc[i] = 2.0 * A2[i] + 6.0 * A3[i] * (node_counter);
+					if (fabs(acc[i] * (1.0 / (STEP * STEP))) > a_max_motor[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
 						sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i, fabs(acc[i]), a_max_motor[i]);
 						sr_ecp_msg.message(messg);
-						throw ECP_error (lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
+						throw ECP_error(lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
 					} // end : if
-					vel[i] = 2.0*A2[i]*(node_counter) + 3.0*A3[i]*(node_counter*node_counter);
-					if (fabs(vel[i] * (1.0/STEP)) > v_max_motor[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
-						sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i, fabs(vel[i]) , v_max_motor[i]);
+					vel[i] = 2.0 * A2[i] * (node_counter) + 3.0 * A3[i] * (node_counter * node_counter);
+					if (fabs(vel[i] * (1.0 / STEP)) > v_max_motor[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
+						sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i, fabs(vel[i]), v_max_motor[i]);
 						sr_ecp_msg.message(messg);
-						throw ECP_error (lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
+						throw ECP_error(lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
 					} // end : if
-					the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = A0[i] + A2[i]*(node_counter*node_counter)
-							+ A3[i]*(node_counter*node_counter*node_counter);
+					the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = A0[i] + A2[i] * (node_counter
+							* node_counter) + A3[i] * (node_counter * node_counter * node_counter);
 				} // end : for
 				break;
 				// ---------------------------------------------------------------------------------------------------------
 			case lib::JOINT:
-				for (int i=0; i <MAX_SERVOS_NR; i++) {
-					acc[i] = 2.0*A2[i] + 6.0*A3[i]*(node_counter);
-					if (fabs(acc[i] * (1.0/(STEP*STEP))) > a_max_joint[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
+				for (int i = 0; i < MAX_SERVOS_NR; i++) {
+					acc[i] = 2.0 * A2[i] + 6.0 * A3[i] * (node_counter);
+					if (fabs(acc[i] * (1.0 / (STEP * STEP))) > a_max_joint[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
 						sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i, fabs(acc[i]), a_max_joint[i]);
 						sr_ecp_msg.message(messg);
-						throw ECP_error (lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
+						throw ECP_error(lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
 					} // end : if
-					vel[i] = 2.0*A2[i]*(node_counter) + 3.0*A3[i]*(node_counter*node_counter);
-					if (fabs(vel[i] * (1.0/STEP)) > v_max_joint[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
-						sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i, fabs(vel[i]) , v_max_joint[i]);
+					vel[i] = 2.0 * A2[i] * (node_counter) + 3.0 * A3[i] * (node_counter * node_counter);
+					if (fabs(vel[i] * (1.0 / STEP)) > v_max_joint[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
+						sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i, fabs(vel[i]), v_max_joint[i]);
 						sr_ecp_msg.message(messg);
-						throw ECP_error (lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
+						throw ECP_error(lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
 					} // end : if
-					the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = A0[i] + A2[i]*(node_counter*node_counter)
-							+ A3[i]*(node_counter*node_counter*node_counter);
+					the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = A0[i] + A2[i] * (node_counter
+							* node_counter) + A3[i] * (node_counter * node_counter * node_counter);
 				} // end : for
 				break;
 				/*
-				// ---------------------------------------------------------------------------------------------------------
-			case lib::XYZ_EULER_ZYZ:
-				for (int i = 0; i < 7; i++) {
-					acc[i] = 2.0*A2[i] + 6.0*A3[i]*(node_counter);
-					if (fabs(acc[i] * (1.0/(STEP*STEP))) > a_max_zyz[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
-						sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i, fabs(acc[i]), a_max_zyz[i]);
-						sr_ecp_msg.message(messg);
-						throw ECP_error (lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
-					} // end : if
-					vel[i] = 2.0*A2[i]*(node_counter) + 3.0*A3[i]*(node_counter*node_counter);
-					if (fabs(vel[i] * (1.0/STEP)) > v_max_zyz[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
-						sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i, fabs(vel[i]) , v_max_zyz[i]);
-						sr_ecp_msg.message(messg);
-						throw ECP_error (lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
-					} // end : if
-					if (i==6) {
-						the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = A0[i] + A2[i]*(node_counter*node_counter) + A3[i]
-								*(node_counter*node_counter*node_counter);
-					} else {
-						the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = A0[i] + A2[i]*(node_counter*node_counter)
-								+ A3[i]*(node_counter*node_counter*node_counter);
-					}
-				} // end : for
-				break;
-				// ---------------------------------------------------------------------------------------------------------
-			case lib::XYZ_ANGLE_AXIS:
-				for (int i = 0; i < 7; i++) {
-					acc[i] = 2.0*A2[i] + 6.0*A3[i]*(node_counter);
-					if (fabs(acc[i] * (1.0/(STEP*STEP))) > a_max_aa[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
-						sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i, fabs(acc[i]), a_max_aa[i]);
-						sr_ecp_msg.message(messg);
-						throw ECP_error (lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
-					} // end : if
-					vel[i] = 2.0*A2[i]*(node_counter) + 3.0*A3[i]*(node_counter*node_counter);
-					if (fabs(vel[i] * (1.0/STEP)) > v_max_aa[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
-						sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i, fabs(vel[i]) , v_max_aa[i]);
-						sr_ecp_msg.message(messg);
-						throw ECP_error (lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
-					} // end : if
-					if (i==6) {
-						the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = A0[i] + A2[i]*(node_counter*node_counter) + A3[i]
-								*(node_counter*node_counter*node_counter);
-					} else {
-						the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = A0[i] + A2[i]*(node_counter*node_counter)
-								+ A3[i]*(node_counter*node_counter*node_counter);
-					}
-				} // end : for
-				break;
-				*/
+				 // ---------------------------------------------------------------------------------------------------------
+				 case lib::XYZ_EULER_ZYZ:
+				 for (int i = 0; i < 7; i++) {
+				 acc[i] = 2.0*A2[i] + 6.0*A3[i]*(node_counter);
+				 if (fabs(acc[i] * (1.0/(STEP*STEP))) > a_max_zyz[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
+				 sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i, fabs(acc[i]), a_max_zyz[i]);
+				 sr_ecp_msg.message(messg);
+				 throw ECP_error (lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
+				 } // end : if
+				 vel[i] = 2.0*A2[i]*(node_counter) + 3.0*A3[i]*(node_counter*node_counter);
+				 if (fabs(vel[i] * (1.0/STEP)) > v_max_zyz[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
+				 sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i, fabs(vel[i]) , v_max_zyz[i]);
+				 sr_ecp_msg.message(messg);
+				 throw ECP_error (lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
+				 } // end : if
+				 if (i==6) {
+				 the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = A0[i] + A2[i]*(node_counter*node_counter) + A3[i]
+				 *(node_counter*node_counter*node_counter);
+				 } else {
+				 the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = A0[i] + A2[i]*(node_counter*node_counter)
+				 + A3[i]*(node_counter*node_counter*node_counter);
+				 }
+				 } // end : for
+				 break;
+				 // ---------------------------------------------------------------------------------------------------------
+				 case lib::XYZ_ANGLE_AXIS:
+				 for (int i = 0; i < 7; i++) {
+				 acc[i] = 2.0*A2[i] + 6.0*A3[i]*(node_counter);
+				 if (fabs(acc[i] * (1.0/(STEP*STEP))) > a_max_aa[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
+				 sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i, fabs(acc[i]), a_max_aa[i]);
+				 sr_ecp_msg.message(messg);
+				 throw ECP_error (lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
+				 } // end : if
+				 vel[i] = 2.0*A2[i]*(node_counter) + 3.0*A3[i]*(node_counter*node_counter);
+				 if (fabs(vel[i] * (1.0/STEP)) > v_max_aa[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
+				 sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i, fabs(vel[i]) , v_max_aa[i]);
+				 sr_ecp_msg.message(messg);
+				 throw ECP_error (lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
+				 } // end : if
+				 if (i==6) {
+				 the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = A0[i] + A2[i]*(node_counter*node_counter) + A3[i]
+				 *(node_counter*node_counter*node_counter);
+				 } else {
+				 the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = A0[i] + A2[i]*(node_counter*node_counter)
+				 + A3[i]*(node_counter*node_counter*node_counter);
+				 }
+				 } // end : for
+				 break;
+				 */
 				// ---------------------------------------------------------------------------------------------------------
 			default:
-				throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+				throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 		} // end: switch
 
 	} // end : if (node_counter <= number_of_intervals)
@@ -2278,7 +2298,7 @@ smooth_cubic_spline::smooth_cubic_spline(common::task::task& _ecp_task, double *
 	t.resize(pose_list_length() + 1, 6);
 	a.resize(pose_list_length() + 1, 6);
 
-	for (int i = 0; i <MAX_SERVOS_NR; i++) {
+	for (int i = 0; i < MAX_SERVOS_NR; i++) {
 		a_max_motor[i] = 100.0;
 		// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
 		v_max_motor[i] = 120.0;
@@ -2290,16 +2310,16 @@ smooth_cubic_spline::smooth_cubic_spline(common::task::task& _ecp_task, double *
 	}
 	for (int i = 0; i < 3; i++) {
 		a_max_zyz[i] = 5.0; // przyspieszenie liniowe koncowki 0.1G
-		a_max_zyz[i+3] = 5.0; // przyspieszenie katowe koncowki 1rad/s^2
+		a_max_zyz[i + 3] = 5.0; // przyspieszenie katowe koncowki 1rad/s^2
 		// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
 		v_max_zyz[i] = 5.0; // predkosc liniowa 1m/s
-		v_max_zyz[i+3] = 5.0; // predkosc katowa 1rad/s
+		v_max_zyz[i + 3] = 5.0; // predkosc katowa 1rad/s
 		// tablica dopuszczalnych predkosci dla kolejnych osi/wspolrzednych
 		a_max_aa[i] = 0.0;
-		a_max_aa[i+3] = 0.0;
+		a_max_aa[i + 3] = 0.0;
 		// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
 		v_max_aa[i] = 0.0;
-		v_max_aa[i+3] = 0.0;
+		v_max_aa[i + 3] = 0.0;
 		// tablica dopuszczalnych predkosci dla kolejnych osi/wspolrzednych
 	}
 	// 	sr_ecp_msg.message("Skonstruowano obiekt klasy ecp_smooth_cubic_spline_generator");
@@ -2318,27 +2338,27 @@ void smooth_cubic_spline::Build_Coeff(double *tt, double *yy, int nn, double vvp
 	sr_ecp_msg.message("Metoda Build_Coeff wyznacza przyspieszenia w punktach wezlowych");
 	double p, qn, sig, un;
 
-	double uu[nn-2];
+	double uu[nn - 2];
 
-	aa[0]= -0.5;
-	uu[0]=( 3.0 /(tt[1]-tt[0]) ) * ( (yy[1]-yy[0]) / (tt[1]-tt[0])-vvp);
+	aa[0] = -0.5;
+	uu[0] = (3.0 / (tt[1] - tt[0])) * ((yy[1] - yy[0]) / (tt[1] - tt[0]) - vvp);
 
-	for (int i=1; i<=nn-2; i++) { // petla algorytmu trojdiagonalnego
+	for (int i = 1; i <= nn - 2; i++) { // petla algorytmu trojdiagonalnego
 
-		sig=(tt[i]-tt[i-1])/(tt[i+1]-tt[i-1]);
-		p=sig*aa[i-1]+2.0;
-		aa[i]=(sig-1.0)/p;
-		uu[i]=(yy[i+1]-yy[i])/(tt[i+1]-tt[i]) - (yy[i]-yy[i-1])/(tt[i]-tt[i-1]);
-		uu[i]=(6.0*uu[i]/(tt[i+1]-tt[i-1])-sig*uu[i-1])/p;
+		sig = (tt[i] - tt[i - 1]) / (tt[i + 1] - tt[i - 1]);
+		p = sig * aa[i - 1] + 2.0;
+		aa[i] = (sig - 1.0) / p;
+		uu[i] = (yy[i + 1] - yy[i]) / (tt[i + 1] - tt[i]) - (yy[i] - yy[i - 1]) / (tt[i] - tt[i - 1]);
+		uu[i] = (6.0 * uu[i] / (tt[i + 1] - tt[i - 1]) - sig * uu[i - 1]) / p;
 	}
 
-	qn=0.5;
-	un=( 3.0 /(tt[nn-1]-tt[nn-2]) )*(vvk-(yy[nn-1]-yy[nn-2]) / (tt[nn-1]-tt[nn-2]));
-	aa[nn-1]=(un-qn*uu[nn-2])/(qn*aa[nn-2]+1.0);
+	qn = 0.5;
+	un = (3.0 / (tt[nn - 1] - tt[nn - 2])) * (vvk - (yy[nn - 1] - yy[nn - 2]) / (tt[nn - 1] - tt[nn - 2]));
+	aa[nn - 1] = (un - qn * uu[nn - 2]) / (qn * aa[nn - 2] + 1.0);
 
-	for (int k=nn-2; k>=0; k--) // petla wstecznego zastepowania algorytmu trojdiagonalnego
+	for (int k = nn - 2; k >= 0; k--) // petla wstecznego zastepowania algorytmu trojdiagonalnego
 	{
-		aa[k]=aa[k]*aa[k+1]+uu[k];
+		aa[k] = aa[k] * aa[k + 1] + uu[k];
 	}
 }
 
@@ -2362,7 +2382,8 @@ bool smooth_cubic_spline::first_step()
 	// Zaznaczenie, ze bedzie realizowany pierwszy przedzial interpolacji, wiec trzeba
 	// wyznaczyc parametry ruchu
 	first_interval = true;
-	switch (tip.arm_type) {
+	switch (tip.arm_type)
+	{
 		case lib::MOTOR:
 			the_robot->ecp_command.instruction.instruction_type = lib::GET;
 			the_robot->ecp_command.instruction.get_type = ARM_DEFINITION; // ARM
@@ -2374,19 +2395,19 @@ bool smooth_cubic_spline::first_step()
 			the_robot->ecp_command.instruction.get_arm_type = lib::JOINT;
 			break;
 			/*
-		case lib::XYZ_EULER_ZYZ:
-			the_robot->ecp_command.instruction.instruction_type = lib::GET;
-			the_robot->ecp_command.instruction.get_type = ARM_DEFINITION; // ARM
-			the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_EULER_ZYZ;
-			break;
-		case lib::XYZ_ANGLE_AXIS:
-			the_robot->ecp_command.instruction.instruction_type = lib::GET;
-			the_robot->ecp_command.instruction.get_type = ARM_DEFINITION; // ARM
-			the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_ANGLE_AXIS;
-			break;
-			*/
+			 case lib::XYZ_EULER_ZYZ:
+			 the_robot->ecp_command.instruction.instruction_type = lib::GET;
+			 the_robot->ecp_command.instruction.get_type = ARM_DEFINITION; // ARM
+			 the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_EULER_ZYZ;
+			 break;
+			 case lib::XYZ_ANGLE_AXIS:
+			 the_robot->ecp_command.instruction.instruction_type = lib::GET;
+			 the_robot->ecp_command.instruction.get_type = ARM_DEFINITION; // ARM
+			 the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_ANGLE_AXIS;
+			 break;
+			 */
 		default:
-			throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+			throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 	} // end: switch
 
 	return true;
@@ -2404,12 +2425,13 @@ bool smooth_cubic_spline::next_step()
 	// ---------------------------------   BUILD COEFF    ---------------------------------------
 	if (build_coeff) {
 
-		j=0;
+		j = 0;
 
-		switch (tip.arm_type) {
+		switch (tip.arm_type)
+		{
 			case lib::MOTOR:
 				the_robot->ecp_command.instruction.set_arm_type = lib::MOTOR;
-				for (int i=0; i<MAX_SERVOS_NR; i++) {
+				for (int i = 0; i < MAX_SERVOS_NR; i++) {
 					y(0, i) = the_robot->reply_package.arm.pf_def.arm_coordinates[i];
 					t(0, i) = (double) 0;
 				} // end:for
@@ -2417,85 +2439,86 @@ bool smooth_cubic_spline::next_step()
 
 			case lib::JOINT:
 				the_robot->ecp_command.instruction.set_arm_type = lib::JOINT;
-				for (int i=0; i<MAX_SERVOS_NR; i++) {
+				for (int i = 0; i < MAX_SERVOS_NR; i++) {
 					y(0, i) = the_robot->reply_package.arm.pf_def.arm_coordinates[i];
 					t(0, i) = (double) 0;
 				} // end:for
 				break;
-/*
-			case lib::XYZ_EULER_ZYZ:
-				the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
-				for (int i=0; i<7; i++) {
-					if (i==6) {
-						y(0, i) = the_robot->reply_package.arm.pf_def.gripper_coordinate;
-					} else {
-						y(0, i) = the_robot->reply_package.arm.pf_def.arm_coordinates[i];
-					}
-					t(0, i) = (double) 0;
-				} // end:for
-				break;
+				/*
+				 case lib::XYZ_EULER_ZYZ:
+				 the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
+				 for (int i=0; i<7; i++) {
+				 if (i==6) {
+				 y(0, i) = the_robot->reply_package.arm.pf_def.gripper_coordinate;
+				 } else {
+				 y(0, i) = the_robot->reply_package.arm.pf_def.arm_coordinates[i];
+				 }
+				 t(0, i) = (double) 0;
+				 } // end:for
+				 break;
 
-			case lib::XYZ_ANGLE_AXIS:
-				the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
-				for (int i=0; i<7; i++) {
-					if (i==6) {
-						y(0, i) = the_robot->reply_package.arm.pf_def.gripper_coordinate;
-					} else {
-						y(0, i) = the_robot->reply_package.arm.pf_def.arm_coordinates[i];
-					}
-					t(0, i) = (double) 0;
-					t(0, i) = (double) 0;
-				} // end:for
-				break;
-*/
+				 case lib::XYZ_ANGLE_AXIS:
+				 the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
+				 for (int i=0; i<7; i++) {
+				 if (i==6) {
+				 y(0, i) = the_robot->reply_package.arm.pf_def.gripper_coordinate;
+				 } else {
+				 y(0, i) = the_robot->reply_package.arm.pf_def.arm_coordinates[i];
+				 }
+				 t(0, i) = (double) 0;
+				 t(0, i) = (double) 0;
+				 } // end:for
+				 break;
+				 */
 			default:
-				throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+				throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 		}// end:switch
 
 		// Nastepne wartosci przemieszczen wraz z czasami
 
-		for (j=1; j<=pose_list_length(); j++) {
+		for (j = 1; j <= pose_list_length(); j++) {
 
-			switch (tip.arm_type) {
+			switch (tip.arm_type)
+			{
 				case lib::MOTOR:
 					the_robot->ecp_command.instruction.set_arm_type = lib::MOTOR;
-					for (int i=0; i<MAX_SERVOS_NR; i++) {
+					for (int i = 0; i < MAX_SERVOS_NR; i++) {
 
 						y(j, i) = tip.coordinates[i];
-						t(j, i) = (double) ( t(j-1 ,i) + (tip.motion_time/INTERVAL) );
+						t(j, i) = (double) (t(j - 1, i) + (tip.motion_time / INTERVAL));
 					} // end:for
 					break;
 
 				case lib::JOINT:
 					the_robot->ecp_command.instruction.set_arm_type = lib::JOINT;
-					for (int i=0; i<MAX_SERVOS_NR; i++) {
+					for (int i = 0; i < MAX_SERVOS_NR; i++) {
 						y(j, i) = tip.coordinates[i];
-						t(j, i) = (double) ( t(j-1 ,i) + (tip.motion_time/INTERVAL) );
+						t(j, i) = (double) (t(j - 1, i) + (tip.motion_time / INTERVAL));
 					} // end:for
 					break;
-/*
-				case lib::XYZ_EULER_ZYZ:
-					the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
-					for (int i=0; i<7; i++) {
-						y(j, i) = tip.coordinates[i];
-						t(j, i) = (double) ( t(j-1 ,i) + (tip.motion_time/INTERVAL) );
-					} // end:for
-					break;
+					/*
+					 case lib::XYZ_EULER_ZYZ:
+					 the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
+					 for (int i=0; i<7; i++) {
+					 y(j, i) = tip.coordinates[i];
+					 t(j, i) = (double) ( t(j-1 ,i) + (tip.motion_time/INTERVAL) );
+					 } // end:for
+					 break;
 
-				case lib::XYZ_ANGLE_AXIS:
-					the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
-					for (int i=0; i<7; i++) {
-						y(j, i) = tip.coordinates[i];
-						t(j, i) = (double) ( t(j-1 ,i) + (tip.motion_time/INTERVAL) );
-					} // end:for
-					break;
-*/
+					 case lib::XYZ_ANGLE_AXIS:
+					 the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
+					 for (int i=0; i<7; i++) {
+					 y(j, i) = tip.coordinates[i];
+					 t(j, i) = (double) ( t(j-1 ,i) + (tip.motion_time/INTERVAL) );
+					 } // end:for
+					 break;
+					 */
 				default:
-					throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+					throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 			}// end:switch
 
 			next_pose_list_ptr(); // do nastepnej pozycji na liscie
-			if (is_pose_list_element() ) {
+			if (is_pose_list_element()) {
 				get_pose(tip);
 			} // end : if
 
@@ -2505,30 +2528,30 @@ bool smooth_cubic_spline::next_step()
 		// ALGORYTM OBLICZANIA WSPOLCZYNNIKOW WIELOMIANU
 		// // // // // // // // // // // // // // // // // // // // // // // // // // // // /
 
-		for (int i=0; i<MAX_SERVOS_NR; i++) { // DLA KAZDEJ WSPOLRZEDNEJ BUDUJEMY WSPOLCZYNNIKI METODA BUILD_COEFF
+		for (int i = 0; i < MAX_SERVOS_NR; i++) { // DLA KAZDEJ WSPOLRZEDNEJ BUDUJEMY WSPOLCZYNNIKI METODA BUILD_COEFF
 
 			double t_temp[pose_list_length() + 1];
 			double y_temp[pose_list_length() + 1];
 			double a_temp[pose_list_length() + 1];
 
-			for (int z=0; z<=pose_list_length(); z++) {
+			for (int z = 0; z <= pose_list_length(); z++) {
 				t_temp[z] = t(z, i);
 				y_temp[z] = y(z, i);
 			}// end:for
 
-			Build_Coeff(t_temp, y_temp, pose_list_length()+1, vp[i], vk[i], a_temp);
+			Build_Coeff(t_temp, y_temp, pose_list_length() + 1, vp[i], vk[i], a_temp);
 
-			for (int z=0; z<=pose_list_length(); z++) {
-				a(z, i)= a_temp[z];
+			for (int z = 0; z <= pose_list_length(); z++) {
+				a(z, i) = a_temp[z];
 			}// end:for
 
 		} // end:for DLA KAZDEJ WSPOLRZEDNEJ
 
-		j=0;
+		j = 0;
 
 		build_coeff = false;
 		initiate_pose_list(); // powrot do pierwszej pozycji na liscie
-		if (is_pose_list_element() ) {
+		if (is_pose_list_element()) {
 			get_pose(tip);
 		} // end : if
 
@@ -2546,9 +2569,10 @@ bool smooth_cubic_spline::next_step()
 
 		// Wyznaczenie liczby przedzialow interpolacji oraz pozostalych parametrow ruchu
 
-		number_of_intervals = (int) ceil(tip.motion_time/INTERVAL);
+		number_of_intervals = (int) ceil(tip.motion_time / INTERVAL);
 
-		switch (tip.arm_type) {
+		switch (tip.arm_type)
+		{
 			case lib::MOTOR:
 				the_robot->ecp_command.instruction.set_arm_type = lib::MOTOR;
 				break;
@@ -2556,17 +2580,17 @@ bool smooth_cubic_spline::next_step()
 			case lib::JOINT:
 				the_robot->ecp_command.instruction.set_arm_type = lib::JOINT;
 				break;
-/*
-			case lib::XYZ_EULER_ZYZ:
-				the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
-				break;
+				/*
+				 case lib::XYZ_EULER_ZYZ:
+				 the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
+				 break;
 
-			case lib::XYZ_ANGLE_AXIS:
-				the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
-				break;
-*/
+				 case lib::XYZ_ANGLE_AXIS:
+				 the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
+				 break;
+				 */
 			default:
-				throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+				throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 		}// end:switch
 
 
@@ -2574,8 +2598,8 @@ bool smooth_cubic_spline::next_step()
 		the_robot->ecp_command.instruction.set_type = ARM_DEFINITION; // ARM
 		the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
 		the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-		the_robot->ecp_command.instruction.motion_steps = (uint16_t) (INTERVAL/STEP);
-		the_robot->ecp_command.instruction.value_in_step_no = the_robot->ecp_command.instruction.motion_steps-2;
+		the_robot->ecp_command.instruction.motion_steps = (uint16_t)(INTERVAL / STEP);
+		the_robot->ecp_command.instruction.value_in_step_no = the_robot->ecp_command.instruction.motion_steps - 2;
 
 		first_interval = false;
 
@@ -2583,7 +2607,7 @@ bool smooth_cubic_spline::next_step()
 	// -------------------------------------------------------------------------------------------
 
 
-	if (node_counter <= t(j+1, 1)) {
+	if (node_counter <= t(j + 1, 1)) {
 
 		double A;
 		double B;
@@ -2593,34 +2617,36 @@ bool smooth_cubic_spline::next_step()
 		double acc[MAX_SERVOS_NR];
 		double vel[MAX_SERVOS_NR];
 
-		switch (tip.arm_type) {
+		switch (tip.arm_type)
+		{
 			// ---------------------------------------------------------------------------------------------------------
 			case lib::MOTOR:
 				the_robot->ecp_command.instruction.set_arm_type = lib::MOTOR;
 
-				for (int i = 0; i <MAX_SERVOS_NR; i++) {
-					A = (t(j+1, i) - node_counter) / (t(j+1, i) - t(j, i));
-					B = 1-A;
-					C = (1.0/6.0)*(A*A*A-A)*(t(j+1, i)-t(j, i))*(t(j+1, i)-t(j, i) );
-					D = (1.0/6.0)*(B*B*B-B)*(t(j+1, i)-t(j, i))*(t(j+1, i)-t(j, i) );
+				for (int i = 0; i < MAX_SERVOS_NR; i++) {
+					A = (t(j + 1, i) - node_counter) / (t(j + 1, i) - t(j, i));
+					B = 1 - A;
+					C = (1.0 / 6.0) * (A * A * A - A) * (t(j + 1, i) - t(j, i)) * (t(j + 1, i) - t(j, i));
+					D = (1.0 / 6.0) * (B * B * B - B) * (t(j + 1, i) - t(j, i)) * (t(j + 1, i) - t(j, i));
 
-					acc[i] = A*a(j, i) + B*a(j+1, i);
-					if (fabs(acc[i] * (1.0/(STEP*STEP))) > a_max_motor[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
+					acc[i] = A * a(j, i) + B * a(j + 1, i);
+					if (fabs(acc[i] * (1.0 / (STEP * STEP))) > a_max_motor[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
 						sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i, fabs(acc[i]), a_max_motor[i]);
 						sr_ecp_msg.message(messg);
-						throw ECP_error (lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
+						throw ECP_error(lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
 					} // end : if
 
-					vel[i] = ( (y(j+1, i) - y(j, i)) / (t(j+1, i) - t(j, i)) ) - ((3.0*A*A - 1.0)/6.0 ) * (t(j+1, i)
-							- t(j, i)) * a(j, i) + ((3.0*B*B - 1.0)/6.0 ) * (t(j+1, i) - t(j, i)) * a(j+1, i) ;
-					if (fabs(vel[i] * (1.0/STEP)) > v_max_motor[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
-						sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i, fabs(vel[i]) , v_max_motor[i]);
+					vel[i] = ((y(j + 1, i) - y(j, i)) / (t(j + 1, i) - t(j, i))) - ((3.0 * A * A - 1.0) / 6.0) * (t(j
+							+ 1, i) - t(j, i)) * a(j, i) + ((3.0 * B * B - 1.0) / 6.0) * (t(j + 1, i) - t(j, i)) * a(j
+							+ 1, i);
+					if (fabs(vel[i] * (1.0 / STEP)) > v_max_motor[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
+						sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i, fabs(vel[i]), v_max_motor[i]);
 						sr_ecp_msg.message(messg);
-						throw ECP_error (lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
+						throw ECP_error(lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
 					} // end : if
 
-					the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = A*y(j, i) + B*y(j+1, i) + C*a(j, i) +D
-							*a(j+1, i);
+					the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = A * y(j, i) + B * y(j + 1, i)
+							+ C * a(j, i) + D * a(j + 1, i);
 
 				} // end:for
 				break;
@@ -2628,98 +2654,99 @@ bool smooth_cubic_spline::next_step()
 			case lib::JOINT:
 				the_robot->ecp_command.instruction.set_arm_type = lib::JOINT;
 
-				for (int i = 0; i <MAX_SERVOS_NR; i++) {
-					A = (t(j+1, i) - node_counter) / (t(j+1, i) - t(j, i));
-					B = 1-A;
-					C = (1.0/6.0)*(A*A*A-A)*(t(j+1, i)-t(j, i))*(t(j+1, i)-t(j, i) );
-					D = (1.0/6.0)*(B*B*B-B)*(t(j+1, i)-t(j, i))*(t(j+1, i)-t(j, i) );
+				for (int i = 0; i < MAX_SERVOS_NR; i++) {
+					A = (t(j + 1, i) - node_counter) / (t(j + 1, i) - t(j, i));
+					B = 1 - A;
+					C = (1.0 / 6.0) * (A * A * A - A) * (t(j + 1, i) - t(j, i)) * (t(j + 1, i) - t(j, i));
+					D = (1.0 / 6.0) * (B * B * B - B) * (t(j + 1, i) - t(j, i)) * (t(j + 1, i) - t(j, i));
 
-					acc[i] = A*a(j, i) + B*a(j+1, i);
-					if (fabs(acc[i] * (1.0/(STEP*STEP))) > a_max_joint[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
+					acc[i] = A * a(j, i) + B * a(j + 1, i);
+					if (fabs(acc[i] * (1.0 / (STEP * STEP))) > a_max_joint[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
 						sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i, fabs(acc[i]), a_max_joint[i]);
 						sr_ecp_msg.message(messg);
-						throw ECP_error (lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
+						throw ECP_error(lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
 					} // end : if
 
-					vel[i] = ( (y(j+1, i) - y(j, i)) / (t(j+1, i) - t(j, i)) ) - ((3.0*A*A - 1.0)/6.0 ) * (t(j+1, i)
-							- t(j, i)) * a(j, i) + ((3.0*B*B - 1.0)/6.0 ) * (t(j+1, i) - t(j, i)) * a(j+1, i) ;
-					if (fabs(vel[i] * (1.0/STEP)) > v_max_joint[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
-						sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i, fabs(vel[i]) , v_max_joint[i]);
+					vel[i] = ((y(j + 1, i) - y(j, i)) / (t(j + 1, i) - t(j, i))) - ((3.0 * A * A - 1.0) / 6.0) * (t(j
+							+ 1, i) - t(j, i)) * a(j, i) + ((3.0 * B * B - 1.0) / 6.0) * (t(j + 1, i) - t(j, i)) * a(j
+							+ 1, i);
+					if (fabs(vel[i] * (1.0 / STEP)) > v_max_joint[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
+						sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i, fabs(vel[i]), v_max_joint[i]);
 						sr_ecp_msg.message(messg);
-						throw ECP_error (lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
+						throw ECP_error(lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
 					} // end : if
 
-					the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = A*y(j, i) + B*y(j+1, i) + C*a(j, i) +D
-							*a(j+1, i) ;
+					the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = A * y(j, i) + B * y(j + 1, i)
+							+ C * a(j, i) + D * a(j + 1, i);
 
 				} // end:for
 				break;
 				/*
-				// ---------------------------------------------------------------------------------------------------------
-			case lib::XYZ_EULER_ZYZ:
-				the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
+				 // ---------------------------------------------------------------------------------------------------------
+				 case lib::XYZ_EULER_ZYZ:
+				 the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
 
-				for (int i = 0; i < 7; i++) {
-					A = (t(j+1, i) - node_counter) / (t(j+1, i) - t(j, i));
-					B					= 1-A;
-					C = (1.0/6.0)*(A*A*A-A)*(t(j+1, i)-t(j, i))*(t(j+1, i)-t(j, i) );
-					D = (1.0/6.0)*(B*B*B-B)*(t(j+1, i)-t(j, i))*(t(j+1, i)-t(j, i) );
+				 for (int i = 0; i < 7; i++) {
+				 A = (t(j+1, i) - node_counter) / (t(j+1, i) - t(j, i));
+				 B					= 1-A;
+				 C = (1.0/6.0)*(A*A*A-A)*(t(j+1, i)-t(j, i))*(t(j+1, i)-t(j, i) );
+				 D = (1.0/6.0)*(B*B*B-B)*(t(j+1, i)-t(j, i))*(t(j+1, i)-t(j, i) );
 
-					acc[i] = A*a(j, i) + B*a(j+1, i);
-					if (fabs(acc[i] * (1.0/(STEP*STEP))) > a_max_zyz[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
-						sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i, fabs(acc[i]), a_max_zyz[i]);
-						sr_ecp_msg.message(messg);
-						throw ECP_error (lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
-					} // end : if
+				 acc[i] = A*a(j, i) + B*a(j+1, i);
+				 if (fabs(acc[i] * (1.0/(STEP*STEP))) > a_max_zyz[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
+				 sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i, fabs(acc[i]), a_max_zyz[i]);
+				 sr_ecp_msg.message(messg);
+				 throw ECP_error (lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
+				 } // end : if
 
-					vel[i] = ( (y(j+1, i) - y(j, i)) / (t(j+1, i) - t(j, i)) ) - ((3.0*A*A - 1.0)/6.0 ) * (t(j+1, i)
-							- t(j, i)) * a(j, i) + ((3.0*B*B - 1.0)/6.0 ) * (t(j+1, i) - t(j, i)) * a(j+1, i) ;
-					if (fabs(vel[i] * (1.0/STEP)) > v_max_zyz[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
-						sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i, fabs(vel[i]) , v_max_zyz[i]);
-						sr_ecp_msg.message(messg);
-						throw ECP_error (lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
-					} // end : if
-					if (i==6) {
-						the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = A*y(j, i) + B*y(j+1, i) + C*a(j, i) +D*a(j+1, i) ;
-					} else {
-						the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = A*y(j, i) + B*y(j+1, i) + C*a(j, i) +D
-								*a(j+1, i) ;
-					}
-				} // end:for
-				break;
-				// ---------------------------------------------------------------------------------------------------------
-			case lib::XYZ_ANGLE_AXIS:
-				the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
+				 vel[i] = ( (y(j+1, i) - y(j, i)) / (t(j+1, i) - t(j, i)) ) - ((3.0*A*A - 1.0)/6.0 ) * (t(j+1, i)
+				 - t(j, i)) * a(j, i) + ((3.0*B*B - 1.0)/6.0 ) * (t(j+1, i) - t(j, i)) * a(j+1, i) ;
+				 if (fabs(vel[i] * (1.0/STEP)) > v_max_zyz[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
+				 sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i, fabs(vel[i]) , v_max_zyz[i]);
+				 sr_ecp_msg.message(messg);
+				 throw ECP_error (lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
+				 } // end : if
+				 if (i==6) {
+				 the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = A*y(j, i) + B*y(j+1, i) + C*a(j, i) +D*a(j+1, i) ;
+				 } else {
+				 the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = A*y(j, i) + B*y(j+1, i) + C*a(j, i) +D
+				 *a(j+1, i) ;
+				 }
+				 } // end:for
+				 break;
+				 // ---------------------------------------------------------------------------------------------------------
+				 case lib::XYZ_ANGLE_AXIS:
+				 the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
 
-				for (int i = 0; i < 6; i++) {
-					A = (t(j+1, i) - node_counter) / (t(j+1, i) - t(j, i));
-					B = 1-A;
-					C = (1.0/6.0)*(A*A*A-A)*(t(j+1, i)-t(j, i))*(t(j+1, i)-t(j, i) );
-					D = (1.0/6.0)*(B*B*B-B)*(t(j+1, i)-t(j, i))*(t(j+1, i)-t(j, i) );
+				 for (int i = 0; i < 6; i++) {
+				 A = (t(j+1, i) - node_counter) / (t(j+1, i) - t(j, i));
+				 B = 1-A;
+				 C = (1.0/6.0)*(A*A*A-A)*(t(j+1, i)-t(j, i))*(t(j+1, i)-t(j, i) );
+				 D = (1.0/6.0)*(B*B*B-B)*(t(j+1, i)-t(j, i))*(t(j+1, i)-t(j, i) );
 
-					acc[i] = A*a(j, i) + B*a(j+1, i);
-					if (fabs(acc[i] * (1.0/(STEP*STEP))) > a_max_aa[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
-						sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i, fabs(acc[i]), a_max_aa[i]);
-						sr_ecp_msg.message(messg);
-						throw ECP_error (lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
-					} // end : if
+				 acc[i] = A*a(j, i) + B*a(j+1, i);
+				 if (fabs(acc[i] * (1.0/(STEP*STEP))) > a_max_aa[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
+				 sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i, fabs(acc[i]), a_max_aa[i]);
+				 sr_ecp_msg.message(messg);
+				 throw ECP_error (lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
+				 } // end : if
 
-					vel[i] = ( (y(j+1, i) - y(j, i)) / (t(j+1, i) - t(j, i)) ) - ((3.0*A*A - 1.0)/6.0 ) * (t(j+1, i)
-							- t(j, i)) * a(j, i) + ((3.0*B*B - 1.0)/6.0 ) * (t(j+1, i) - t(j, i)) * a(j+1, i) ;
-					if (fabs(vel[i] * (1.0/STEP)) > v_max_aa[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
-						sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i, fabs(vel[i]) , v_max_aa[i]);
-						sr_ecp_msg.message(messg);
-						throw ECP_error (lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
-					} // end : if
-					if (i==6) {
-						the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = A*y(j, i) + B*y(j+1, i) + C*a(j, i) +D*a(j+1, i) ;
-					} else {
-						the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = A*y(j, i) + B*y(j+1, i) + C*a(j, i) +D*a(j
-								+1, i) ;
-					}
-				} // end:for
-				break;
-				*/
+				 vel[i] = ( (y(j+1, i) - y(j, i)) / (t(j+1, i) - t(j, i)) ) - ((3.0*A*A - 1.0)/6.0 ) * (t(j+1, i)
+				 - t(j, i)) * a(j, i) + ((3.0*B*B - 1.0)/6.0 ) * (t(j+1, i) - t(j, i)) * a(j+1, i) ;
+				 if (fabs(vel[i] * (1.0/STEP)) > v_max_aa[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
+				 sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i, fabs(vel[i]) , v_max_aa[i]);
+				 sr_ecp_msg.message(messg);
+				 throw ECP_error (lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
+				 } // end : if
+				 if (i==6) {
+				 the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = A*y(j, i) + B*y(j+1, i) + C*a(j, i) +D*a(j+1, i) ;
+				 } else {
+				 the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = A*y(j, i) + B*y(j+1, i) + C*a(j, i) +D*a(j
+				 +1, i) ;
+				 }
+				 } // end:for
+				 break;
+				 */
 			default:
 				break;
 				// ---------------------------------------------------------------------------------------------------------
@@ -2731,7 +2758,7 @@ bool smooth_cubic_spline::next_step()
 	// Czy skonczono interpolacje oraz zniwelowano blad interpolacji?
 
 
-	if (node_counter <= t(j+1, 1) ) {
+	if (node_counter <= t(j + 1, 1)) {
 		// Ruch do kolejnej pozycji na liscie pozycji nauczonych nie zostal
 		// zakonczony - informacja dla Move()
 		//    the_robot->create_command (); // Przygotowanie rozkazu dla EDP
@@ -2763,7 +2790,7 @@ quintic_spline::quintic_spline(common::task::task& _ecp_task, double interval = 
 {
 	INTERVAL = interval; // Dlugosc okresu interpolacji w [sek]
 
-	for (int i = 0; i <MAX_SERVOS_NR; i++) {
+	for (int i = 0; i < MAX_SERVOS_NR; i++) {
 		a_max_motor[i] = 100.0;
 		// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
 		v_max_motor[i] = 120.0;
@@ -2776,16 +2803,16 @@ quintic_spline::quintic_spline(common::task::task& _ecp_task, double interval = 
 
 	for (int i = 0; i < 3; i++) {
 		a_max_zyz[i] = 5.0; // przyspieszenie liniowe koncowki 0.1G
-		a_max_zyz[i+3] = 5.0; // przyspieszenie katowe koncowki 1rad/s^2
+		a_max_zyz[i + 3] = 5.0; // przyspieszenie katowe koncowki 1rad/s^2
 		// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
 		v_max_zyz[i] = 5.0; // predkosc liniowa 1m/s
-		v_max_zyz[i+3] = 5.0; // predkosc katowa 1rad/s
+		v_max_zyz[i + 3] = 5.0; // predkosc katowa 1rad/s
 		// tablica dopuszczalnych predkosci dla kolejnych osi/wspolrzednych
 		a_max_aa[i] = 0.0;
-		a_max_aa[i+3] = 0.0;
+		a_max_aa[i + 3] = 0.0;
 		// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
 		v_max_aa[i] = 0.0;
-		v_max_aa[i+3] = 0.0;
+		v_max_aa[i + 3] = 0.0;
 		// tablica dopuszczalnych predkosci dla kolejnych osi/wspolrzednych
 	}
 	// 	sr_ecp_msg.message("Skonstruowano obiekt klasy ecp_quintic_spline_generator");
@@ -2820,7 +2847,8 @@ bool quintic_spline::first_step()
 	// Zaznaczenie, ze bedzie realizowany pierwszy przedzial interpolacji, wiec trzeba
 	// wyznaczyc parametry ruchu
 	first_interval = true;
-	switch (tip.arm_type) {
+	switch (tip.arm_type)
+	{
 		case lib::MOTOR:
 			the_robot->ecp_command.instruction.instruction_type = lib::GET;
 			the_robot->ecp_command.instruction.get_type = ARM_DEFINITION; // ARM
@@ -2832,19 +2860,19 @@ bool quintic_spline::first_step()
 			the_robot->ecp_command.instruction.get_arm_type = lib::JOINT;
 			break;
 			/*
-		case lib::XYZ_EULER_ZYZ:
-			the_robot->ecp_command.instruction.instruction_type = lib::GET;
-			the_robot->ecp_command.instruction.get_type = ARM_DEFINITION; // ARM
-			the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_EULER_ZYZ;
-			break;
-		case lib::XYZ_ANGLE_AXIS:
-			the_robot->ecp_command.instruction.instruction_type = lib::GET;
-			the_robot->ecp_command.instruction.get_type = ARM_DEFINITION; // ARM
-			the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_ANGLE_AXIS;
-			break;
-			*/
+			 case lib::XYZ_EULER_ZYZ:
+			 the_robot->ecp_command.instruction.instruction_type = lib::GET;
+			 the_robot->ecp_command.instruction.get_type = ARM_DEFINITION; // ARM
+			 the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_EULER_ZYZ;
+			 break;
+			 case lib::XYZ_ANGLE_AXIS:
+			 the_robot->ecp_command.instruction.instruction_type = lib::GET;
+			 the_robot->ecp_command.instruction.get_type = ARM_DEFINITION; // ARM
+			 the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_ANGLE_AXIS;
+			 break;
+			 */
 		default:
-			throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+			throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 	} // end: switch
 
 	return true;
@@ -2867,91 +2895,92 @@ bool quintic_spline::next_step()
 		// to dopiero execute_motion po wyjsciu z first_step.
 
 		// Wyznaczenie liczby przedzialow interpolacji oraz pozostalych parametrow ruchu
-		number_of_intervals = (int) ceil(tip.motion_time/INTERVAL);
+		number_of_intervals = (int) ceil(tip.motion_time / INTERVAL);
 
-		switch (tip.arm_type) {
+		switch (tip.arm_type)
+		{
 			case lib::MOTOR:
-				for (int i=0; i<MAX_SERVOS_NR; i++) {
+				for (int i = 0; i < MAX_SERVOS_NR; i++) {
 					the_robot->ecp_command.instruction.set_arm_type = lib::MOTOR;
-					A0[i]= the_robot->reply_package.arm.pf_def.arm_coordinates[i];
-					A3[i]=(10.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i]) )
-							/ (number_of_intervals*number_of_intervals*number_of_intervals);
-					A4[i]=(-15.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i]) )
-							/ (number_of_intervals*number_of_intervals*number_of_intervals*number_of_intervals);
-					A5[i]=(6.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i]) )
-							/ (number_of_intervals*number_of_intervals*number_of_intervals *number_of_intervals
-									*number_of_intervals);
+					A0[i] = the_robot->reply_package.arm.pf_def.arm_coordinates[i];
+					A3[i] = (10.0 * (tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i]))
+							/ (number_of_intervals * number_of_intervals * number_of_intervals);
+					A4[i] = (-15.0 * (tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i]))
+							/ (number_of_intervals * number_of_intervals * number_of_intervals * number_of_intervals);
+					A5[i] = (6.0 * (tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i]))
+							/ (number_of_intervals * number_of_intervals * number_of_intervals * number_of_intervals
+									* number_of_intervals);
 				} // end:for
 				break;
 
 			case lib::JOINT:
 				the_robot->ecp_command.instruction.set_arm_type = lib::JOINT;
-				for (int i=0; i<MAX_SERVOS_NR; i++) {
-					A0[i]= the_robot->reply_package.arm.pf_def.arm_coordinates[i];
-					A3[i]=(10.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i]) )
-							/ (number_of_intervals*number_of_intervals*number_of_intervals);
-					A4[i]=(-15.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i]) )
-							/ (number_of_intervals*number_of_intervals*number_of_intervals*number_of_intervals);
-					A5[i]=(6.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i]) )
-							/ (number_of_intervals*number_of_intervals*number_of_intervals *number_of_intervals
-									*number_of_intervals);
+				for (int i = 0; i < MAX_SERVOS_NR; i++) {
+					A0[i] = the_robot->reply_package.arm.pf_def.arm_coordinates[i];
+					A3[i] = (10.0 * (tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i]))
+							/ (number_of_intervals * number_of_intervals * number_of_intervals);
+					A4[i] = (-15.0 * (tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i]))
+							/ (number_of_intervals * number_of_intervals * number_of_intervals * number_of_intervals);
+					A5[i] = (6.0 * (tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i]))
+							/ (number_of_intervals * number_of_intervals * number_of_intervals * number_of_intervals
+									* number_of_intervals);
 				} // end:for
 				break;
-/*
-			case lib::XYZ_EULER_ZYZ:
-				the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
-				for (int i=0; i<6; i++) {
-					A0[i]= the_robot->reply_package.arm.pf_def.arm_coordinates[i];
-					A3[i]=(10.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i]) )
-							/ (number_of_intervals*number_of_intervals*number_of_intervals);
-					A4[i]=(-15.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i]) )
-							/ (number_of_intervals*number_of_intervals*number_of_intervals*number_of_intervals);
-					A5[i]=(6.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i]) )
-							/ (number_of_intervals*number_of_intervals*number_of_intervals *number_of_intervals
-									*number_of_intervals);
-				} // end:for
-				A0[6]= the_robot->reply_package.arm.pf_def.gripper_coordinate;
-				A3[6]=(10.0*(tip.coordinates[6] - the_robot->reply_package.arm.pf_def.gripper_coordinate) )
-						/ (number_of_intervals*number_of_intervals*number_of_intervals);
-				A4[6]=(-15.0*(tip.coordinates[6] - the_robot->reply_package.arm.pf_def.gripper_coordinate) )
-						/ (number_of_intervals*number_of_intervals*number_of_intervals*number_of_intervals);
-				A5[6]=(6.0*(tip.coordinates[6] - the_robot->reply_package.arm.pf_def.gripper_coordinate) )
-						/ (number_of_intervals*number_of_intervals*number_of_intervals *number_of_intervals
-								*number_of_intervals);
+				/*
+				 case lib::XYZ_EULER_ZYZ:
+				 the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
+				 for (int i=0; i<6; i++) {
+				 A0[i]= the_robot->reply_package.arm.pf_def.arm_coordinates[i];
+				 A3[i]=(10.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i]) )
+				 / (number_of_intervals*number_of_intervals*number_of_intervals);
+				 A4[i]=(-15.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i]) )
+				 / (number_of_intervals*number_of_intervals*number_of_intervals*number_of_intervals);
+				 A5[i]=(6.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i]) )
+				 / (number_of_intervals*number_of_intervals*number_of_intervals *number_of_intervals
+				 *number_of_intervals);
+				 } // end:for
+				 A0[6]= the_robot->reply_package.arm.pf_def.gripper_coordinate;
+				 A3[6]=(10.0*(tip.coordinates[6] - the_robot->reply_package.arm.pf_def.gripper_coordinate) )
+				 / (number_of_intervals*number_of_intervals*number_of_intervals);
+				 A4[6]=(-15.0*(tip.coordinates[6] - the_robot->reply_package.arm.pf_def.gripper_coordinate) )
+				 / (number_of_intervals*number_of_intervals*number_of_intervals*number_of_intervals);
+				 A5[6]=(6.0*(tip.coordinates[6] - the_robot->reply_package.arm.pf_def.gripper_coordinate) )
+				 / (number_of_intervals*number_of_intervals*number_of_intervals *number_of_intervals
+				 *number_of_intervals);
 
-				break;
-			case lib::XYZ_ANGLE_AXIS:
-				the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
-				for (int i=0; i<6; i++) {
-					A0[i]= the_robot->reply_package.arm.pf_def.arm_coordinates[i];
-					A3[i]=(10.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i]) )
-							/ (number_of_intervals*number_of_intervals*number_of_intervals);
-					A4[i]=(-15.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i]) )
-							/ (number_of_intervals*number_of_intervals*number_of_intervals*number_of_intervals);
-					A5[i]=(6.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i]) )
-							/ (number_of_intervals*number_of_intervals*number_of_intervals *number_of_intervals
-									*number_of_intervals);
-				} // end:for
-				A0[6]= the_robot->reply_package.arm.pf_def.gripper_coordinate;
-				A3[6]=(10.0*(tip.coordinates[6] - the_robot->reply_package.arm.pf_def.gripper_coordinate) )
-						/ (number_of_intervals*number_of_intervals*number_of_intervals);
-				A4[6]=(-15.0*(tip.coordinates[6] - the_robot->reply_package.arm.pf_def.gripper_coordinate) )
-						/ (number_of_intervals*number_of_intervals*number_of_intervals*number_of_intervals);
-				A5[6]=(6.0*(tip.coordinates[6] - the_robot->reply_package.arm.pf_def.gripper_coordinate) )
-						/ (number_of_intervals*number_of_intervals*number_of_intervals *number_of_intervals
-								*number_of_intervals);
-				break;
-				*/
+				 break;
+				 case lib::XYZ_ANGLE_AXIS:
+				 the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
+				 for (int i=0; i<6; i++) {
+				 A0[i]= the_robot->reply_package.arm.pf_def.arm_coordinates[i];
+				 A3[i]=(10.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i]) )
+				 / (number_of_intervals*number_of_intervals*number_of_intervals);
+				 A4[i]=(-15.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i]) )
+				 / (number_of_intervals*number_of_intervals*number_of_intervals*number_of_intervals);
+				 A5[i]=(6.0*(tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i]) )
+				 / (number_of_intervals*number_of_intervals*number_of_intervals *number_of_intervals
+				 *number_of_intervals);
+				 } // end:for
+				 A0[6]= the_robot->reply_package.arm.pf_def.gripper_coordinate;
+				 A3[6]=(10.0*(tip.coordinates[6] - the_robot->reply_package.arm.pf_def.gripper_coordinate) )
+				 / (number_of_intervals*number_of_intervals*number_of_intervals);
+				 A4[6]=(-15.0*(tip.coordinates[6] - the_robot->reply_package.arm.pf_def.gripper_coordinate) )
+				 / (number_of_intervals*number_of_intervals*number_of_intervals*number_of_intervals);
+				 A5[6]=(6.0*(tip.coordinates[6] - the_robot->reply_package.arm.pf_def.gripper_coordinate) )
+				 / (number_of_intervals*number_of_intervals*number_of_intervals *number_of_intervals
+				 *number_of_intervals);
+				 break;
+				 */
 			default:
-				throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+				throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 		}// end:switch
 
 		the_robot->ecp_command.instruction.instruction_type = lib::SET;
 		the_robot->ecp_command.instruction.set_type = ARM_DEFINITION; // ARM
 		the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
 		the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-		the_robot->ecp_command.instruction.motion_steps = (uint16_t) (INTERVAL/STEP);
-		the_robot->ecp_command.instruction.value_in_step_no = the_robot->ecp_command.instruction.motion_steps-2;
+		the_robot->ecp_command.instruction.motion_steps = (uint16_t)(INTERVAL / STEP);
+		the_robot->ecp_command.instruction.value_in_step_no = the_robot->ecp_command.instruction.motion_steps - 2;
 
 		first_interval = false;
 
@@ -2968,115 +2997,118 @@ bool quintic_spline::next_step()
 		double acc[MAX_SERVOS_NR];
 		double vel[MAX_SERVOS_NR];
 
-		switch (tip.arm_type) {
+		switch (tip.arm_type)
+		{
 			// ---------------------------------------------------------------------------------------------------------
 			case lib::MOTOR:
-				for (int i = 0; i <MAX_SERVOS_NR; i++) {
-					acc[i] = 6.0*A3[i]*(node_counter) + 12.0*A4[i]*(node_counter*node_counter) + 20.0*A5[i]
-							*(node_counter*node_counter*node_counter);
-					if (fabs(acc[i] * (1.0/(STEP*STEP))) > a_max_motor[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
+				for (int i = 0; i < MAX_SERVOS_NR; i++) {
+					acc[i] = 6.0 * A3[i] * (node_counter) + 12.0 * A4[i] * (node_counter * node_counter) + 20.0 * A5[i]
+							* (node_counter * node_counter * node_counter);
+					if (fabs(acc[i] * (1.0 / (STEP * STEP))) > a_max_motor[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
 						sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i, fabs(acc[i]), a_max_motor[i]);
 						sr_ecp_msg.message(messg);
-						throw ECP_error (lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
+						throw ECP_error(lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
 					} // end : if
-					vel[i] = 3.0*A3[i]*(node_counter*node_counter) + 4.0*A4[i]*(node_counter*node_counter*node_counter)
-							+ 5.0*A5[i]*(node_counter*node_counter*node_counter*node_counter);
-					if (fabs(vel[i] * (1.0/STEP)) > v_max_motor[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
-						sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i, fabs(vel[i]) , v_max_motor[i]);
+					vel[i] = 3.0 * A3[i] * (node_counter * node_counter) + 4.0 * A4[i] * (node_counter * node_counter
+							* node_counter) + 5.0 * A5[i] * (node_counter * node_counter * node_counter * node_counter);
+					if (fabs(vel[i] * (1.0 / STEP)) > v_max_motor[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
+						sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i, fabs(vel[i]), v_max_motor[i]);
 						sr_ecp_msg.message(messg);
-						throw ECP_error (lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
+						throw ECP_error(lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
 					} // end : if
-					the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = A0[i] + A3[i]*(node_counter*node_counter
-							*node_counter) + A4[i]*(node_counter*node_counter*node_counter*node_counter) + A5[i]
-							*(node_counter*node_counter*node_counter*node_counter*node_counter);
+					the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = A0[i] + A3[i] * (node_counter
+							* node_counter * node_counter) + A4[i] * (node_counter * node_counter * node_counter
+							* node_counter) + A5[i] * (node_counter * node_counter * node_counter * node_counter
+							* node_counter);
 				} // end : for
 				break;
 				// ---------------------------------------------------------------------------------------------------------
 			case lib::JOINT:
-				for (int i = 0; i <MAX_SERVOS_NR; i++) {
-					acc[i] = 6.0*A3[i]*(node_counter) + 12.0*A4[i]*(node_counter*node_counter) + 20.0*A5[i]
-							*(node_counter*node_counter*node_counter);
-					if (fabs(acc[i] * (1.0/(STEP*STEP))) > a_max_joint[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
+				for (int i = 0; i < MAX_SERVOS_NR; i++) {
+					acc[i] = 6.0 * A3[i] * (node_counter) + 12.0 * A4[i] * (node_counter * node_counter) + 20.0 * A5[i]
+							* (node_counter * node_counter * node_counter);
+					if (fabs(acc[i] * (1.0 / (STEP * STEP))) > a_max_joint[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
 						sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i, fabs(acc[i]), a_max_joint[i]);
 						sr_ecp_msg.message(messg);
-						throw ECP_error (lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
+						throw ECP_error(lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
 					} // end : if
-					vel[i] = 3.0*A3[i]*(node_counter*node_counter) + 4.0*A4[i]*(node_counter*node_counter*node_counter)
-							+ 5.0*A5[i]*(node_counter*node_counter*node_counter*node_counter);
-					if (fabs(vel[i] * (1.0/STEP)) > v_max_joint[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
-						sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i, fabs(vel[i]) , v_max_joint[i]);
+					vel[i] = 3.0 * A3[i] * (node_counter * node_counter) + 4.0 * A4[i] * (node_counter * node_counter
+							* node_counter) + 5.0 * A5[i] * (node_counter * node_counter * node_counter * node_counter);
+					if (fabs(vel[i] * (1.0 / STEP)) > v_max_joint[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
+						sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i, fabs(vel[i]), v_max_joint[i]);
 						sr_ecp_msg.message(messg);
-						throw ECP_error (lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
+						throw ECP_error(lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
 					} // end : if
 
-					the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = A0[i] + A3[i]*(node_counter*node_counter
-							*node_counter) + A4[i]*(node_counter*node_counter*node_counter*node_counter) + A5[i]
-							*(node_counter*node_counter*node_counter*node_counter*node_counter);
+					the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = A0[i] + A3[i] * (node_counter
+							* node_counter * node_counter) + A4[i] * (node_counter * node_counter * node_counter
+							* node_counter) + A5[i] * (node_counter * node_counter * node_counter * node_counter
+							* node_counter);
 				} // end : for
 				break;
 				/*
-				// ---------------------------------------------------------------------------------------------------------
-			case lib::XYZ_EULER_ZYZ:
-				for (int i = 0; i < 7; i++) {
-					acc[i] = 6.0*A3[i]*(node_counter) + 12.0*A4[i]*(node_counter*node_counter) + 20.0*A5[i]
-							*(node_counter*node_counter*node_counter);
-					if (fabs(acc[i] * (1.0/(STEP*STEP))) > a_max_zyz[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
-						sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i, fabs(acc[i]), a_max_zyz[i]);
-						sr_ecp_msg.message(messg);
-						throw ECP_error (lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
-					} // end : if
-					vel[i] = 3.0*A3[i]*(node_counter*node_counter) + 4.0*A4[i]*(node_counter*node_counter*node_counter)
-							+ 5.0*A5[i]*(node_counter*node_counter*node_counter*node_counter);
-					if (fabs(vel[i] * (1.0/STEP)) > v_max_zyz[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
-						sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i, fabs(vel[i]) , v_max_zyz[i]);
-						sr_ecp_msg.message(messg);
-						throw ECP_error (lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
-					} // end : if
+				 // ---------------------------------------------------------------------------------------------------------
+				 case lib::XYZ_EULER_ZYZ:
+				 for (int i = 0; i < 7; i++) {
+				 acc[i] = 6.0*A3[i]*(node_counter) + 12.0*A4[i]*(node_counter*node_counter) + 20.0*A5[i]
+				 *(node_counter*node_counter*node_counter);
+				 if (fabs(acc[i] * (1.0/(STEP*STEP))) > a_max_zyz[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
+				 sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i, fabs(acc[i]), a_max_zyz[i]);
+				 sr_ecp_msg.message(messg);
+				 throw ECP_error (lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
+				 } // end : if
+				 vel[i] = 3.0*A3[i]*(node_counter*node_counter) + 4.0*A4[i]*(node_counter*node_counter*node_counter)
+				 + 5.0*A5[i]*(node_counter*node_counter*node_counter*node_counter);
+				 if (fabs(vel[i] * (1.0/STEP)) > v_max_zyz[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
+				 sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i, fabs(vel[i]) , v_max_zyz[i]);
+				 sr_ecp_msg.message(messg);
+				 throw ECP_error (lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
+				 } // end : if
 
-					if (i==6) {
-						the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = A0[i] + A3[i]*(node_counter*node_counter
-								*node_counter) + A4[i]*(node_counter*node_counter*node_counter*node_counter) + A5[i]
-								*(node_counter*node_counter*node_counter*node_counter*node_counter);
-					} else {
-						the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = A0[i] + A3[i]*(node_counter*node_counter
-								*node_counter) + A4[i]*(node_counter*node_counter*node_counter*node_counter) + A5[i]
-								*(node_counter*node_counter*node_counter*node_counter*node_counter);
-					}
+				 if (i==6) {
+				 the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = A0[i] + A3[i]*(node_counter*node_counter
+				 *node_counter) + A4[i]*(node_counter*node_counter*node_counter*node_counter) + A5[i]
+				 *(node_counter*node_counter*node_counter*node_counter*node_counter);
+				 } else {
+				 the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = A0[i] + A3[i]*(node_counter*node_counter
+				 *node_counter) + A4[i]*(node_counter*node_counter*node_counter*node_counter) + A5[i]
+				 *(node_counter*node_counter*node_counter*node_counter*node_counter);
+				 }
 
-				} // end : for
-				break;
-				// ---------------------------------------------------------------------------------------------------------
-			case lib::XYZ_ANGLE_AXIS:
-				for (int i = 0; i < 7; i++) {
-					acc[i] = 6.0*A3[i]*(node_counter) + 12.0*A4[i]*(node_counter*node_counter) + 20.0*A5[i]
-							*(node_counter*node_counter*node_counter);
-					if (fabs(acc[i] * (1.0/(STEP*STEP))) > a_max_aa[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
-						sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i, fabs(acc[i]), a_max_aa[i]);
-						sr_ecp_msg.message(messg);
-						throw ECP_error (lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
-					} // end : if
-					vel[i] = 3.0*A3[i]*(node_counter*node_counter) + 4.0*A4[i]*(node_counter*node_counter*node_counter)
-							+ 5.0*A5[i]*(node_counter*node_counter*node_counter*node_counter);
-					if (fabs(vel[i] * (1.0/STEP)) > v_max_aa[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
-						sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i, fabs(vel[i]) , v_max_aa[i]);
-						sr_ecp_msg.message(messg);
-						throw ECP_error (lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
-					} // end : if
-					if (i==6) {
-						the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = A0[i] + A3[i]*(node_counter*node_counter
-								*node_counter) + A4[i]*(node_counter*node_counter*node_counter*node_counter) + A5[i]
-								*(node_counter*node_counter*node_counter*node_counter*node_counter);
-					} else {
-						the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = A0[i] + A3[i]*(node_counter*node_counter
-								*node_counter) + A4[i]*(node_counter*node_counter*node_counter*node_counter) + A5[i]
-								*(node_counter*node_counter*node_counter*node_counter*node_counter);
-					}
-				} // end : for
-				break;
-				*/
+				 } // end : for
+				 break;
+				 // ---------------------------------------------------------------------------------------------------------
+				 case lib::XYZ_ANGLE_AXIS:
+				 for (int i = 0; i < 7; i++) {
+				 acc[i] = 6.0*A3[i]*(node_counter) + 12.0*A4[i]*(node_counter*node_counter) + 20.0*A5[i]
+				 *(node_counter*node_counter*node_counter);
+				 if (fabs(acc[i] * (1.0/(STEP*STEP))) > a_max_aa[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
+				 sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i, fabs(acc[i]), a_max_aa[i]);
+				 sr_ecp_msg.message(messg);
+				 throw ECP_error (lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
+				 } // end : if
+				 vel[i] = 3.0*A3[i]*(node_counter*node_counter) + 4.0*A4[i]*(node_counter*node_counter*node_counter)
+				 + 5.0*A5[i]*(node_counter*node_counter*node_counter*node_counter);
+				 if (fabs(vel[i] * (1.0/STEP)) > v_max_aa[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
+				 sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i, fabs(vel[i]) , v_max_aa[i]);
+				 sr_ecp_msg.message(messg);
+				 throw ECP_error (lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
+				 } // end : if
+				 if (i==6) {
+				 the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = A0[i] + A3[i]*(node_counter*node_counter
+				 *node_counter) + A4[i]*(node_counter*node_counter*node_counter*node_counter) + A5[i]
+				 *(node_counter*node_counter*node_counter*node_counter*node_counter);
+				 } else {
+				 the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = A0[i] + A3[i]*(node_counter*node_counter
+				 *node_counter) + A4[i]*(node_counter*node_counter*node_counter*node_counter) + A5[i]
+				 *(node_counter*node_counter*node_counter*node_counter*node_counter);
+				 }
+				 } // end : for
+				 break;
+				 */
 				// ---------------------------------------------------------------------------------------------------------
 			default:
-				throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+				throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 		} // end: switch
 
 	} // end : if (node_counter <= number_of_intervals)
@@ -3131,16 +3163,16 @@ elipsoid::elipsoid(common::task::task& _ecp_task) :
 	}
 	for (int i = 0; i < 3; i++) {
 		a_max_zyz[i] = 5.0; // przyspieszenie liniowe koncowki 0.1G
-		a_max_zyz[i+3] = 5.0; // przyspieszenie katowe koncowki 1rad/s^2
+		a_max_zyz[i + 3] = 5.0; // przyspieszenie katowe koncowki 1rad/s^2
 		// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
 		v_max_zyz[i] = 5.0; // predkosc liniowa 1m/s
-		v_max_zyz[i+3] = 5.0; // predkosc katowa 1rad/s
+		v_max_zyz[i + 3] = 5.0; // predkosc katowa 1rad/s
 		// tablica dopuszczalnych predkosci dla kolejnych osi/wspolrzednych
 		a_max_aa[i] = 0.0;
-		a_max_aa[i+3] = 0.0;
+		a_max_aa[i + 3] = 0.0;
 		// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
 		v_max_aa[i] = 0.0;
-		v_max_aa[i+3] = 0.0;
+		v_max_aa[i + 3] = 0.0;
 		// tablica dopuszczalnych predkosci dla kolejnych osi/wspolrzednych
 	}
 	a_max_zyz[6] = 5.0; // przyspieszenie liniowe koncowki 0.1G
@@ -3151,8 +3183,6 @@ elipsoid::elipsoid(common::task::task& _ecp_task) :
 	// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
 	v_max_aa[6] = 0.0;
 }
-
-
 
 // --------------------------------------------------------------------------
 // Zapis rzeczywistej trajektorii do pliku
@@ -3170,11 +3200,11 @@ void elipsoid::ecp_save_trajectory()
 	strcpy(ecp_to_ui_msg.string, "*.dat"); // Wzorzec nazwy pliku
 	// if ( Send (UI_pid, &ecp_to_ui_msg, &ui_to_ecp_rep, sizeof(lib::ECP_message), sizeof(lib::UI_reply)) == -1) {
 #if !defined(USE_MESSIP_SRR)
-	ecp_to_ui_msg.hdr.type=0;
+	ecp_to_ui_msg.hdr.type = 0;
 
 	if (MsgSend(ecp_t.UI_fd, &ecp_to_ui_msg, sizeof(lib::ECP_message), &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0) {// by Y&W
 #else
-	if (messip::port_send(ecp_t.UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0) {
+		if (messip::port_send(ecp_t.UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0) {
 #endif
 		e = errno;
 		perror("ecp: Send() to UI failed");
@@ -3200,7 +3230,7 @@ void elipsoid::ecp_save_trajectory()
 		for (i = 0; i < number_of_poses; i++) {
 			get_sample(cp, i);
 			to_file << cp.ctime << ' ';
-			for (j = 0; j <MAX_SERVOS_NR; j++)
+			for (j = 0; j < MAX_SERVOS_NR; j++)
 				to_file << cp.coordinates[j] << ' ';
 			to_file << '\n';
 		}
@@ -3214,7 +3244,7 @@ void elipsoid::ecp_save_trajectory()
 void elipsoid::get_sample(one_sample& cp, int sn)
 {
 	cp.ctime = trj_ptr[sn].ctime;
-	memcpy(cp.coordinates, trj_ptr[sn].coordinates, MAX_SERVOS_NR*sizeof(double));
+	memcpy(cp.coordinates, trj_ptr[sn].coordinates, MAX_SERVOS_NR * sizeof(double));
 }
 
 void elipsoid::clear_buffer(void)
@@ -3240,7 +3270,8 @@ bool elipsoid::first_step()
 	// Zaznaczenie, ze bedzie realizowany pierwszy przedzial interpolacji, wiec trzeba
 	// wyznaczyc parametry ruchu
 	first_interval = true;
-	switch (tip.arm_type) {
+	switch (tip.arm_type)
+	{
 		case lib::MOTOR:
 			the_robot->ecp_command.instruction.instruction_type = lib::GET;
 			the_robot->ecp_command.instruction.get_type = ARM_DEFINITION; // ARM
@@ -3252,19 +3283,19 @@ bool elipsoid::first_step()
 			the_robot->ecp_command.instruction.get_arm_type = lib::JOINT;
 			break;
 			/*
-		case lib::XYZ_EULER_ZYZ:
-			the_robot->ecp_command.instruction.instruction_type = lib::GET;
-			the_robot->ecp_command.instruction.get_type = ARM_DEFINITION; // ARM
-			the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_EULER_ZYZ;
-			break;
-		case lib::XYZ_ANGLE_AXIS:
-			the_robot->ecp_command.instruction.instruction_type = lib::GET;
-			the_robot->ecp_command.instruction.get_type = ARM_DEFINITION; // ARM
-			the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_ANGLE_AXIS;
-			break;
-			*/
+			 case lib::XYZ_EULER_ZYZ:
+			 the_robot->ecp_command.instruction.instruction_type = lib::GET;
+			 the_robot->ecp_command.instruction.get_type = ARM_DEFINITION; // ARM
+			 the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_EULER_ZYZ;
+			 break;
+			 case lib::XYZ_ANGLE_AXIS:
+			 the_robot->ecp_command.instruction.instruction_type = lib::GET;
+			 the_robot->ecp_command.instruction.get_type = ARM_DEFINITION; // ARM
+			 the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_ANGLE_AXIS;
+			 break;
+			 */
 		default:
-			throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+			throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 	} // end: switch
 
 	return true;
@@ -3282,18 +3313,19 @@ bool elipsoid::next_step()
 		// to dopiero execute_motion po wyjsciu z first_step.
 
 		// Wyznaczenie liczby przedzialow interpolacji oraz pozostalych parametrow ruchu
-		number_of_intervals = (int) ceil(tip.motion_time/INTERVAL);
-		if ( (number_of_intervals % 2) == 1)
+		number_of_intervals = (int) ceil(tip.motion_time / INTERVAL);
+		if ((number_of_intervals % 2) == 1)
 			number_of_intervals++;
 
 		// Przydzial pamieci na pomiary
 		trj_ptr = new one_sample[number_of_intervals];
-		memset(trj_ptr, 0, number_of_intervals*sizeof(one_sample)); // zerowanie
+		memset(trj_ptr, 0, number_of_intervals * sizeof(one_sample)); // zerowanie
 
 		half_number_of_intervals = number_of_intervals / 2;
 		// Wyznaczenie przyspieszen oraz sprawdzenie,
 		// czy nie zostaly przekroczone wartosci maksymalne przyspieszen i predkosci
-		switch (tip.arm_type) {
+		switch (tip.arm_type)
+		{
 			case lib::MOTOR:
 				the_robot->ecp_command.instruction.set_arm_type = lib::MOTOR;
 				break;
@@ -3301,15 +3333,15 @@ bool elipsoid::next_step()
 				the_robot->ecp_command.instruction.set_arm_type = lib::JOINT;
 				break;
 				/*
-			case lib::XYZ_EULER_ZYZ:
-				the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
-				break;
-			case lib::XYZ_ANGLE_AXIS:
-				the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
-				break;
-				*/
+				 case lib::XYZ_EULER_ZYZ:
+				 the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
+				 break;
+				 case lib::XYZ_ANGLE_AXIS:
+				 the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
+				 break;
+				 */
 			default:
-				throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+				throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 		} // end: switch
 		the_robot->ecp_command.instruction.instruction_type = lib::SET_GET;
 		the_robot->ecp_command.instruction.set_type = ARM_DEFINITION; // ARM
@@ -3317,41 +3349,43 @@ bool elipsoid::next_step()
 		the_robot->ecp_command.instruction.get_arm_type = lib::JOINT;
 		the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
 		the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-		the_robot->ecp_command.instruction.motion_steps = (uint16_t) (INTERVAL/STEP);
-		the_robot->ecp_command.instruction.value_in_step_no = the_robot->ecp_command.instruction.motion_steps-2;
+		the_robot->ecp_command.instruction.motion_steps = (uint16_t)(INTERVAL / STEP);
+		the_robot->ecp_command.instruction.value_in_step_no = the_robot->ecp_command.instruction.motion_steps - 2;
 		first_interval = false;
 
 	}
-	trj_ptr[node_counter-1].ctime = (node_counter-1)*INTERVAL;
-	memcpy(trj_ptr[node_counter-1].coordinates, the_robot->reply_package.arm.pf_def.arm_coordinates, MAX_SERVOS_NR*sizeof(double));
+	trj_ptr[node_counter - 1].ctime = (node_counter - 1) * INTERVAL;
+	memcpy(trj_ptr[node_counter - 1].coordinates, the_robot->reply_package.arm.pf_def.arm_coordinates, MAX_SERVOS_NR
+			* sizeof(double));
 
 	// (ten, do ktorego zmierza ramie)
 
 	if (node_counter < number_of_intervals) {
 		// Obliczenie polozenia na podstawie danych interpolacyjnych (zgodnie z uplywem czasu)
-		switch (tip.arm_type) {
+		switch (tip.arm_type)
+		{
 			case lib::MOTOR:
 				break;
 			case lib::JOINT:
 				break;
 				/*
-			case lib::XYZ_EULER_ZYZ:
-				// trajektoria zadana
-				// elipsa
-				the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[0] = 0.7 * sin(0.03*(node_counter*INTERVAL-50));
-				the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[1] = 1.5 - 0.4 * cos(0.03*(node_counter*INTERVAL-50));
-				the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[2] = 1;
-				the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[3] = M_PI/2. -3./360.*M_PI * (node_counter*INTERVAL-50);
-				the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[4] = M_PI/2.;
-				the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[5] = -M_PI;
+				 case lib::XYZ_EULER_ZYZ:
+				 // trajektoria zadana
+				 // elipsa
+				 the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[0] = 0.7 * sin(0.03*(node_counter*INTERVAL-50));
+				 the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[1] = 1.5 - 0.4 * cos(0.03*(node_counter*INTERVAL-50));
+				 the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[2] = 1;
+				 the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[3] = M_PI/2. -3./360.*M_PI * (node_counter*INTERVAL-50);
+				 the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[4] = M_PI/2.;
+				 the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[5] = -M_PI;
 
 
-				break;
-			case lib::XYZ_ANGLE_AXIS:
-				break;
-				*/
+				 break;
+				 case lib::XYZ_ANGLE_AXIS:
+				 break;
+				 */
 			default:
-				throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+				throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 		} // end: switch
 	}
 

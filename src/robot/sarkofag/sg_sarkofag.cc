@@ -3,13 +3,13 @@
 // ostatnia modyfikacja - styczen 2005
 /* --------------------------------------------------------------------- */
 
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #include <unistd.h>
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
 
 // Klasa edp_sarkofag_effector.
 #include "robot/sarkofag/edp_e_sarkofag.h"

@@ -7,9 +7,8 @@
 #ifndef ECP_G_EPOS_H_
 #define ECP_G_EPOS_H_
 
-#include <time.h>
 #include "base/ecp/ecp_generator.h"
-#include "lib/data_port_headers/epos.h"
+#include "base/lib/data_port_headers/epos.h"
 
 namespace mrrocpp {
 namespace ecp {

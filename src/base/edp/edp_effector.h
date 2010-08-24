@@ -14,21 +14,21 @@
 #if !defined(USE_MESSIP_SRR)
 #include <sys/dispatch.h>
 #else
-#include <messip.h>
+#include "messip.h"
 #endif /* !USE_MESSIP_SRR */
 #include <string>
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
-#include "lib/srlib.h"
-#include "base/edp/edp.h"
-#include "base/kinematics/kinematics_manager.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
+#include "base/lib/srlib.h"
+#include "base/edp/edp_typedefs.h"
+
 
 // Konfigurator
-#include "lib/configurator.h"
+#include "base/lib/configurator.h"
 
-#include "lib/exception.h"
+#include "base/lib/exception.h"
 using namespace mrrocpp::lib::exception;
 
 namespace mrrocpp {

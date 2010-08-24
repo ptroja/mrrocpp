@@ -3,30 +3,30 @@
 /*                                         Version 2.01  */
 
 /* Standard headers */
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #include <unistd.h>
-#include <string.h>
+#include <cstring>
 #include <strings.h>
 #include <iostream>
 #include <fstream>
 #include <dirent.h>
 #include <sys/types.h>
-#include <signal.h>
+#include <csignal>
 #include <sys/netmgr.h>
-#include <errno.h>
+#include <cerrno>
 #include <spawn.h>
 #include <process.h>
-#include <assert.h>
+#include <cassert>
 
-#include "lib/srlib.h"
+#include "base/lib/srlib.h"
 #include "ui/src/ui_const.h"
 #include "ui/src/ui_class.h"
 #include "ui/src/ui_ecp.h"
 
 // #include "ui/src/ui.h"
 // Konfigurator (dla PROCESS_SPAWN_RSH)
-#include "lib/configurator.h"
+#include "base/lib/configurator.h"
 #include "robot/irp6_mechatronika/irp6m_const.h"
 #include "robot/irp6ot_m/irp6ot_m_const.h"
 #include "robot/irp6ot_tfg/irp6ot_tfg_const.h"

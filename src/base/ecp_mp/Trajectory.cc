@@ -1,5 +1,5 @@
-#include <stdio.h>
-#include <string.h>
+#include <cstdio>
+#include <cstring>
 
 #include <iostream>
 #include <sstream>
@@ -9,7 +9,7 @@
 #include <libxml/xmlmemory.h>
 #include <libxml/parser.h>
 
-#include "lib/datastr.h"
+#include "base/lib/datastr.h"
 #include "base/ecp_mp/Trajectory.h"
 
 namespace mrrocpp {

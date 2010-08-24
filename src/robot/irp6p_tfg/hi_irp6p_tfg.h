@@ -8,8 +8,8 @@
 #ifndef __HI_LOCAL_IRP6P_TFG_H
 #define __HI_LOCAL_IRP6P_TFG_H
 
-#include <signal.h>
-#include <time.h>
+#include <csignal>
+#include <ctime>
 
 #include "robot/hi_rydz/hi_rydz.h"
 

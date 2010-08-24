@@ -22,7 +22,7 @@ EDP IRp6 RCSC window callback signals
 
 
 #include &lt;iostream&gt;
-#include &lt;stdio.h&gt;
+#include &lt;cstdio&gt;
 #include &lt;math.h&gt;
 
 //GTK libraries

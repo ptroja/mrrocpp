@@ -9,10 +9,10 @@
  */
 
 
-#include <stdlib.h>
-#include <math.h>
+#include <cstdlib>
+#include <cmath>
 
-#include "lib/com_buf.h"
+#include "base/lib/com_buf.h"
 
 // Klasa kinematic_model_irp6p_5dof.
 #include "robot/irp6p_m/kinematic_model_irp6p_5dof.h"

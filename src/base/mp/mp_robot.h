@@ -1,13 +1,18 @@
 #ifndef MP_ROBOT_H_
 #define MP_ROBOT_H_
 
-#include "base/mp/mp_task.h"
+// niezbedny naglowek z definiacja PROCESS_SPAWN_RSH
+#include "base/lib/configurator.h"
+#include "base/lib/srlib.h"
 #include "base/ecp_mp/ecp_mp_robot.h"
-
-#include <time.h>
 
 namespace mrrocpp {
 namespace mp {
+
+namespace task {
+class task;
+} // namespace task
+
 namespace robot {
 
 class robot : public ecp_mp::robot
@@ -33,11 +38,9 @@ private:
 #endif
 
 protected:
-
 	task::task &mp_object;
 
 public:
-
 	//ew. koordynacja ciagla domyslnie wylaczona ma wplyw na instrukcje move
 	bool continuous_coordination;
 
@@ -85,7 +88,6 @@ public:
 	void terminate_ecp(void);
 
 	void start_ecp(void);
-
 };
 
 } // namespace robot

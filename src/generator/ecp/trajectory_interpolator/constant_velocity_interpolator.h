@@ -9,7 +9,7 @@
 #define _CONSTANT_VELOCITY_INTERPOLATOR_H_
 
 #include "trajectory_interpolator.h"
-#include "lib/trajectory_pose/constant_velocity_trajectory_pose.h"
+#include "base/lib/trajectory_pose/constant_velocity_trajectory_pose.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -37,17 +37,17 @@ public:
 	 * @param it iterator to the list of positions
 	 * @param cv list of coordinates
 	 * @param mc time of a single macrostep
-	 * @return true if the interpolation was succesful
+	 * @return true if the interpolation was successful
 	 */
-	bool interpolate_relative_pose(vector<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose>::iterator & it, vector<vector<double> > & cv, const double & mc);
+	bool interpolate_relative_pose(std::vector<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose>::iterator & it, std::vector<std::vector<double> > & cv, const double & mc);
 	/**
 	 * Method interpolates the absolute type trajectory basing on the list of poses of stored in objects of types derived from %trajectory_pose.
 	 * @param it iterator to the list of positions
 	 * @param cv list of coordinates
 	 * @param mc time of a single macrostep
-	 * @return true if the interpolation was succesful
+	 * @return true if the interpolation was successful
 	 */
-	bool interpolate_absolute_pose(vector<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose>::iterator & it, vector<vector<double> > & cv, const double & mc);
+	bool interpolate_absolute_pose(std::vector<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose>::iterator & it, std::vector<std::vector<double> > & cv, const double & mc);
 };
 
 } // namespace trajectory_interpolator

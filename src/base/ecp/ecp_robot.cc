@@ -1,12 +1,12 @@
-#include <string.h>
+#include <cstring>
 #include <unistd.h>
-#include <stdio.h>
-#include <errno.h>
+#include <cstdio>
+#include <cerrno>
 #include <stdint.h>
 
 #include <sys/types.h>
 #include <sys/wait.h>
-#include <signal.h>
+#include <csignal>
 
 #ifdef __gnu_linux__
 #include <execinfo.h>
@@ -21,7 +21,7 @@
 #include "messip_dataport.h"
 #endif
 
-#include "lib/mis_fun.h"
+#include "base/lib/mis_fun.h"
 
 namespace mrrocpp {
 namespace ecp {

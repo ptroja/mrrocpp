@@ -3,15 +3,15 @@
 // ------------------------------------------------------------------------
 
 /********************************* INCLUDES *********************************/
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
 
-#include "lib/mis_fun.h"
+#include "base/lib/mis_fun.h"
 #include "base/edp/trans_t.h"
 
 /********************************* GLOBALS **********************************/

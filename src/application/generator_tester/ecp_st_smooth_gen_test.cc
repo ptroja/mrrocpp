@@ -1,8 +1,8 @@
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
 
-#include "lib/srlib.h"
+#include "base/lib/srlib.h"
 #include "application/generator_tester/ecp_st_smooth_gen_test.h"
 #include "generator/ecp/ecp_g_newsmooth.h"
 
@@ -29,7 +29,7 @@ ecp_sub_task_smooth_gen_test::ecp_sub_task_smooth_gen_test(task & _ecp_t) :
 
 void ecp_sub_task_smooth_gen_test::conditional_execution() {
 
-	vector<double> coordinates1(6);
+	std::vector<double> coordinates1(6);
 
 	// POSTUMENT
 

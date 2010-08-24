@@ -1,4 +1,3 @@
-#include <assert.h>
 #include <unistd.h>
 
 #include "base/ecp/player/generator/ecp_g_speechrecognition.h"

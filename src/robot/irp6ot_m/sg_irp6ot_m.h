@@ -9,7 +9,7 @@
 #ifndef __SG_IRP6OT_M_H
 #define __SG_IRP6OT_M_H
 
-#include "base/edp/edp.h"
+#include "base/edp/edp_typedefs.h"
 #include "base/edp/servo_gr.h"
 
 namespace mrrocpp {

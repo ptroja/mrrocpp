@@ -1,23 +1,26 @@
 /* Y o u r   D e s c r i p t i o n                       */
 /*                            AppBuilder Photon Code Lib */
 /*                     Version 2.01  */
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #include <unistd.h>
-#include <string.h>
+#include <cstring>
 #include <strings.h>
 #include <iostream>
 #include <fstream>
 #include <dirent.h>
 #include <sys/types.h>
-#include <signal.h>
+#include <csignal>
 #include <sys/netmgr.h>
-#include <errno.h>
+#include <cerrno>
 #include <spawn.h>
 #include <process.h>
-#include <assert.h>
+#include <cassert>
 #include <iostream>
 #include <fstream>
+
+// niezbedny naglowek z definiacja PROCESS_SPAWN_RSH
+#include "base/lib/configurator.h"
 
 #include "ui/src/ui_class.h"
 #include "ui/src/ui_ecp.h"
@@ -131,7 +134,7 @@ void Ui::init()
 		check_gns();
 	} else {
 		printf("Blad manage_default_configuration_file\n");
-		PtExit(EXIT_SUCCESS);
+		PtExit( EXIT_SUCCESS);
 	}
 
 	create_threads();
@@ -146,7 +149,7 @@ void Ui::init()
 
 	} else {
 		printf("Blad manage_default_configuration_file\n");
-		PtExit(EXIT_SUCCESS);
+		PtExit( EXIT_SUCCESS);
 	}
 
 	// inicjacja pliku z logami sr
@@ -481,7 +484,7 @@ int Ui::check_gns()
 {
 	if (access("/etc/system/config/useqnet", R_OK)) {
 		printf("UI: There is no /etc/system/config/useqnet file; the qnet will not work properly.\n");
-		PtExit(EXIT_SUCCESS);
+		PtExit( EXIT_SUCCESS);
 	}
 
 	unsigned short number_of_gns_servers = 0;
@@ -519,7 +522,7 @@ int Ui::check_gns()
 				printf("There is gns server on %s node\n", (*node_list_iterator).c_str());
 			}
 		}
-		PtExit(EXIT_SUCCESS);
+		PtExit( EXIT_SUCCESS);
 	}
 	// gns server was not found in the QNX network
 	else if (!number_of_gns_servers) {
@@ -860,7 +863,7 @@ int Ui::fill_section_list(const char* file_name_and_path)
 	FILE * file = fopen(file_name_and_path, "r");
 	if (file == NULL) {
 		printf("UI fill_section_list Wrong file_name: %s\n", file_name_and_path);
-		PtExit(EXIT_SUCCESS);
+		PtExit( EXIT_SUCCESS);
 	}
 
 	// sczytaj nazwy wszytkich sekcji na liste dynamiczna

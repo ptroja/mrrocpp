@@ -8,11 +8,11 @@
 // ze wzgledu na drugi proces korzystajacy z tego samego przerwania - tasmociag
 // ------------------------------------------------------------------------
 
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <signal.h>
-#include <time.h>
+#include <cstdio>
+#include <cstring>
+#include <cstdlib>
+#include <csignal>
+#include <ctime>
 #include <sys/types.h>
 #include <unistd.h>
 #include <stdint.h>
@@ -30,13 +30,13 @@
 #include <machine/cpufunc.h>
 #endif
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
 #include "robot/hi_rydz/hi_rydz.h"
 
 namespace mrrocpp {

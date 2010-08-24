@@ -6,20 +6,20 @@
 // Ostatnia modyfikacja: 2008
 // -------------------------------------------------------------------------
 
-#include <stdio.h>
-#include <string.h>
+#include <cstdio>
+#include <cstring>
 
 #include <libxml/xmlmemory.h>
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
 
 #include "base/ecp_mp/Trajectory.h"
 
-#include "lib/srlib.h"
+#include "base/lib/srlib.h"
 #include "ecp_mp_t_fsautomat.h"
 
 #include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
@@ -36,7 +36,7 @@
 #include "generator/ecp/ecp_mp_g_force.h"
 #include "subtask/ecp_mp_st_gripper_opening.h"
 
-#include "lib/datastr.h"
+#include "base/lib/datastr.h"
 
 namespace mrrocpp {
 namespace ecp {

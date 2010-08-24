@@ -5,10 +5,10 @@
  *      Author: ptroja
  */
 
-#include <stdio.h>
-#include <string.h>
+#include <cstdio>
+#include <cstring>
 #include <stdint.h>
-#include <errno.h>
+#include <cerrno>
 
 #include <iostream>
 #include <fstream>
@@ -17,7 +17,7 @@
 
 #include "ui_model.h"
 
-#include "lib/srlib.h"
+#include "base/lib/srlib.h"
 
 #if defined(USE_MESSIP_SRR)
 #include "messip_dataport.h"

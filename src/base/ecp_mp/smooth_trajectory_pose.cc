@@ -5,10 +5,10 @@
  * Contains bodies of the methods of smooth_trajectory_pose class.
  */
 
-#include <string.h>
+#include <cstring>
 
 #include "base/ecp_mp/smooth_trajectory_pose.h"
-#include "lib/impconst.h"
+#include "base/lib/impconst.h"
 
 namespace mrrocpp {
 namespace ecp_mp {

@@ -10,16 +10,16 @@
 // Data:		24.02.2007
 // ------------------------------------------------------------------------
 
-#include <stdio.h>
+#include <cstdio>
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
-#include "lib/mrmath/mrmath.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
+#include "base/lib/mrmath/mrmath.h"
 #include "base/edp/reader.h"
 
 // Klasa edp_conveyor_effector.
-#include "base/edp/edp.h"
+#include "base/edp/edp_typedefs.h"
 #include "base/edp/manip_trans_t.h"
 #include "robot/conveyor/edp_conveyor_effector.h"
 #include "base/edp/servo_gr.h"

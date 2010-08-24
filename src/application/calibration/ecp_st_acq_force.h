@@ -25,7 +25,7 @@ class acq_force: public acquisition {
   public:
 	  common::generator::pcbird_nose_run* nose_run;
 	  acq_force(task &_ecp_t);
-	  void write_data(std::string _K_fp, std::string _kk_fp, std::string _M_fp, std::string _mm_fp, int _number_of_measures);
+	  void write_data(const std::string & _K_fp, const std::string & _kk_fp, const std::string & _M_fp, const std::string & _mm_fp, int _number_of_measures);
 	  void conditional_execution();
 
 };

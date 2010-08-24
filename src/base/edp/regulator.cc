@@ -3,20 +3,20 @@
 // ostatnia modyfikacja - styczen 2005
 /* --------------------------------------------------------------------- */
 
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #include <iostream>
 #include <fstream>
-#include <math.h>
+#include <cmath>
 #include <unistd.h>
-#include <errno.h>
-#include <time.h>
+#include <cerrno>
+#include <ctime>
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
-#include "lib/mis_fun.h"
-#include "base/edp/edp.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
+#include "base/lib/mis_fun.h"
+#include "base/edp/edp_typedefs.h"
 #include "base/edp/reader.h"
 #include "base/edp/HardwareInterface.h"
 #include "base/edp/regulator.h"

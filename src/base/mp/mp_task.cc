@@ -6,27 +6,28 @@
 // -------------------------------------------------------------------------
 // Funkcje do konstruowania procesow MP
 
-#include <stdio.h>
+#include <cstdio>
 #include <sys/types.h>
 #include <sys/wait.h>
-#include <signal.h>
-#include <stdarg.h>
-#include <errno.h>
-#include <stdlib.h>
+#include <csignal>
+#include <cstdarg>
+#include <cerrno>
+#include <cstdlib>
 #include <unistd.h>
 #include <fstream>
-#include <string.h>
+#include <cstring>
 
 #include <boost/foreach.hpp>
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
 
-#include "lib/srlib.h"
-#include "lib/datastr.h"
+#include "base/lib/srlib.h"
+#include "base/lib/datastr.h"
 
-#include "base/mp/mp.h"
+#include "base/mp/MP_main_error.h"
+#include "base/mp/mp_task.h"
 #include "base/mp/mp_g_common.h"
 #include "base/mp/mp_g_delay_ms_condition.h"
 
@@ -75,558 +76,553 @@ task::~task()
 {
 	// Remove (kill) all ECP from the container
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-{	delete robot_node.second;
-}
+	{	delete robot_node.second;
+	}
 
-// TODO: check for error
-if(mp_pulse_attach) {
+	// TODO: check for error
+	if (mp_pulse_attach) {
 #if !defined(USE_MESSIP_SRR)
-	name_detach(mp_pulse_attach, 0);
+		name_detach(mp_pulse_attach, 0);
 #else
-	messip::port_delete(mp_pulse_attach);
+		messip::port_delete(mp_pulse_attach);
 #endif
-	mp_pulse_attach = NULL;
-}
+		mp_pulse_attach = NULL;
+	}
 }
 
 void task::stop_and_terminate()
 {
-sr_ecp_msg->message("To terminate MP click STOP icon");
-try {
-	wait_for_stop ();
-} catch(common::MP_main_error & e) {
-	exit(EXIT_FAILURE);
-}
-terminate_all (robot_m);
+	sr_ecp_msg->message("To terminate MP click STOP icon");
+	try {
+		wait_for_stop();
+	} catch (common::MP_main_error & e) {
+		exit( EXIT_FAILURE);
+	}
+	terminate_all(robot_m);
 }
 
 // powolanie robotow w zaleznosci od zawartosci pliku konfiguracyjnego
 void task::create_robots()
 {
-/*
- * this is necessary to first create robot and then assign it to robot_m
- * reason: mp_robot() constructor uses this map (by calling
- * mp_task::mp_wait_for_name_open() so needs the map to be in
- * a consistent state
- */
-robot::robot* created_robot;
+	/*
+	 * this is necessary to first create robot and then assign it to robot_m
+	 * reason: mp_robot() constructor uses this map (by calling
+	 * mp_task::mp_wait_for_name_open() so needs the map to be in
+	 * a consistent state
+	 */
+	robot::robot* created_robot;
 
-// ROBOT CONVEYOR
-if (config.value<int>("is_conveyor_active", UI_SECTION)) {
-	created_robot = new robot::conveyor (*this);
-	robot_m[created_robot->robot_name] = created_robot;
-}
+	// ROBOT CONVEYOR
+	if (config.value <int> ("is_conveyor_active", UI_SECTION)) {
+		created_robot = new robot::conveyor(*this);
+		robot_m[created_robot->robot_name] = created_robot;
+	}
 
-// ROBOT SPEAKER
-if (config.value<int>("is_speaker_active", UI_SECTION)) {
-	created_robot = new robot::speaker (*this);
-	robot_m[created_robot->robot_name] = created_robot;
-}
+	// ROBOT SPEAKER
+	if (config.value <int> ("is_speaker_active", UI_SECTION)) {
+		created_robot = new robot::speaker(*this);
+		robot_m[created_robot->robot_name] = created_robot;
+	}
 
-// ROBOT IRP6_MECHATRONIKA
-if (config.value<int>("is_irp6_mechatronika_active", UI_SECTION)) {
-	created_robot = new robot::irp6_mechatronika (*this);
-	robot_m[created_robot->robot_name] = created_robot;
-}
+	// ROBOT IRP6_MECHATRONIKA
+	if (config.value <int> ("is_irp6_mechatronika_active", UI_SECTION)) {
+		created_robot = new robot::irp6_mechatronika(*this);
+		robot_m[created_robot->robot_name] = created_robot;
+	}
 
-// ROBOT POLYCRANK
-if (config.value<int>("is_polycrank_active", UI_SECTION)) {
-	created_robot = new robot::polycrank (*this);
-	robot_m[created_robot->robot_name] = created_robot;
-}
+	// ROBOT POLYCRANK
+	if (config.value <int> ("is_polycrank_active", UI_SECTION)) {
+		created_robot = new robot::polycrank(*this);
+		robot_m[created_robot->robot_name] = created_robot;
+	}
 
-// ROBOT BIRD_HAND
-if (config.value<int>("is_bird_hand_active", UI_SECTION)) {
-	created_robot = new robot::bird_hand (*this);
-	robot_m[created_robot->robot_name] = created_robot;
-}
+	// ROBOT BIRD_HAND
+	if (config.value <int> ("is_bird_hand_active", UI_SECTION)) {
+		created_robot = new robot::bird_hand(*this);
+		robot_m[created_robot->robot_name] = created_robot;
+	}
 
-// ROBOT SPKM
-if (config.value<int>("is_spkm_active", UI_SECTION)) {
-	created_robot = new robot::spkm (*this);
-	robot_m[created_robot->robot_name] = created_robot;
-}
+	// ROBOT SPKM
+	if (config.value <int> ("is_spkm_active", UI_SECTION)) {
+		created_robot = new robot::spkm(*this);
+		robot_m[created_robot->robot_name] = created_robot;
+	}
 
-// ROBOT SMB
-if (config.value<int>("is_smb_active", UI_SECTION)) {
-	created_robot = new robot::smb (*this);
-	robot_m[created_robot->robot_name] = created_robot;
-}
+	// ROBOT SMB
+	if (config.value <int> ("is_smb_active", UI_SECTION)) {
+		created_robot = new robot::smb(*this);
+		robot_m[created_robot->robot_name] = created_robot;
+	}
 
-// ROBOT SHEAD
-if (config.value<int>("is_shead_active", UI_SECTION)) {
-	created_robot = new robot::shead (*this);
-	robot_m[created_robot->robot_name] = created_robot;
-}
+	// ROBOT SHEAD
+	if (config.value <int> ("is_shead_active", UI_SECTION)) {
+		created_robot = new robot::shead(*this);
+		robot_m[created_robot->robot_name] = created_robot;
+	}
 
-// ROBOT IRP6OT_TFG
-if (config.value<int>("is_irp6ot_tfg_active", UI_SECTION)) {
-	created_robot = new robot::irp6ot_tfg (*this);
-	robot_m[created_robot->robot_name] = created_robot;
-}
+	// ROBOT IRP6OT_TFG
+	if (config.value <int> ("is_irp6ot_tfg_active", UI_SECTION)) {
+		created_robot = new robot::irp6ot_tfg(*this);
+		robot_m[created_robot->robot_name] = created_robot;
+	}
 
-// ROBOT SARKOFAG
-if (config.value<int>("is_sarkofag_active", UI_SECTION)) {
-	created_robot = new robot::sarkofag (*this);
-	robot_m[created_robot->robot_name] = created_robot;
-}
+	// ROBOT SARKOFAG
+	if (config.value <int> ("is_sarkofag_active", UI_SECTION)) {
+		created_robot = new robot::sarkofag(*this);
+		robot_m[created_robot->robot_name] = created_robot;
+	}
 
-// ROBOT IRP6P_TFG
-if (config.value<int>("is_irp6p_tfg_active", UI_SECTION)) {
-	created_robot = new robot::irp6p_tfg (*this);
-	robot_m[created_robot->robot_name] = created_robot;
-}
+	// ROBOT IRP6P_TFG
+	if (config.value <int> ("is_irp6p_tfg_active", UI_SECTION)) {
+		created_robot = new robot::irp6p_tfg(*this);
+		robot_m[created_robot->robot_name] = created_robot;
+	}
 
-// ROBOT IRP6OT_M
-if (config.value<int>("is_irp6ot_m_active", UI_SECTION)) {
-	created_robot = new robot::irp6ot_m (*this);
-	robot_m[created_robot->robot_name] = created_robot;
-}
+	// ROBOT IRP6OT_M
+	if (config.value <int> ("is_irp6ot_m_active", UI_SECTION)) {
+		created_robot = new robot::irp6ot_m(*this);
+		robot_m[created_robot->robot_name] = created_robot;
+	}
 
-// ROBOT IRP6P_M
-if (config.value<int>("is_irp6p_m_active", UI_SECTION)) {
-	created_robot = new robot::irp6p_m (*this);
-	robot_m[created_robot->robot_name] = created_robot;
-}
+	// ROBOT IRP6P_M
+	if (config.value <int> ("is_irp6p_m_active", UI_SECTION)) {
+		created_robot = new robot::irp6p_m(*this);
+		robot_m[created_robot->robot_name] = created_robot;
+	}
 
-// ROBOT_ELECTRON
-if (config.value<int>("is_electron_robot_active", UI_SECTION)) {
-	created_robot = new robot::robot (lib::ROBOT_ELECTRON, "[ecp_electron]", *this);
-	robot_m[created_robot->robot_name] = created_robot;
-}
+	// ROBOT_ELECTRON
+	if (config.value <int> ("is_electron_robot_active", UI_SECTION)) {
+		created_robot = new robot::robot(lib::ROBOT_ELECTRON, "[ecp_electron]", *this);
+		robot_m[created_robot->robot_name] = created_robot;
+	}
 
-// ROBOT_SPEECHRECOGNITION
-if (config.value<int>("is_speechrecognition_active", UI_SECTION)) {
-	created_robot = new robot::robot (lib::ROBOT_SPEECHRECOGNITION, "[ecp_speechrecognition]", *this);
-	robot_m[created_robot->robot_name] = created_robot;
-}
+	// ROBOT_SPEECHRECOGNITION
+	if (config.value <int> ("is_speechrecognition_active", UI_SECTION)) {
+		created_robot = new robot::robot(lib::ROBOT_SPEECHRECOGNITION, "[ecp_speechrecognition]", *this);
+		robot_m[created_robot->robot_name] = created_robot;
+	}
 
-// ROBOT_FESTIVAL
-if (config.value<int>("is_festival_active", UI_SECTION)) {
-	created_robot = new robot::robot (lib::ROBOT_FESTIVAL, "[ecp_festival]", *this);
-	robot_m[created_robot->robot_name] = created_robot;
-}
+	// ROBOT_FESTIVAL
+	if (config.value <int> ("is_festival_active", UI_SECTION)) {
+		created_robot = new robot::robot(lib::ROBOT_FESTIVAL, "[ecp_festival]", *this);
+		robot_m[created_robot->robot_name] = created_robot;
+	}
 
-}
-
-// metody do obslugi najczesniej uzywanych generatorow
-void task::set_next_playerpos_goal (lib::robot_name_t robot_l, const lib::playerpos_goal_t &goal)
-{
-// setting the next ecps state
-generator::set_next_ecps_state mp_snes_gen(*this);
-
-mp_snes_gen.robot_m[robot_l] = robot_m[robot_l];
-
-mp_snes_gen.configure(goal);
-
-mp_snes_gen.Move();
 }
 
 // metody do obslugi najczesniej uzywanych generatorow
-void task::set_next_ecps_state (std::string l_state, int l_variant, const char* l_string, int str_len, int number_of_robots, ... )
+void task::set_next_playerpos_goal(lib::robot_name_t robot_l, const lib::playerpos_goal_t &goal)
 {
-// setting the next ecps state
-generator::set_next_ecps_state mp_snes_gen (*this);
+	// setting the next ecps state
+	generator::set_next_ecps_state mp_snes_gen(*this);
 
-va_list arguments; // A place to store the list of arguments
-lib::robot_name_t robot_l;
-
-va_start ( arguments, number_of_robots ); // Initializing arguments to store all values after num
-for ( int x = 0; x < number_of_robots; x++ ) // Loop until all numbers are added
-{
-	robot_l = (lib::robot_name_t) (va_arg ( arguments, char* )); // Adds the next value in argument list to sum.
 	mp_snes_gen.robot_m[robot_l] = robot_m[robot_l];
+
+	mp_snes_gen.configure(goal);
+
+	mp_snes_gen.Move();
 }
-va_end ( arguments ); // Cleans up the list
 
-mp_snes_gen.configure (l_state, l_variant, l_string, str_len);
+// metody do obslugi najczesniej uzywanych generatorow
+void task::set_next_ecps_state(std::string l_state, int l_variant, const char* l_string, int str_len, int number_of_robots, ...)
+{
+	// setting the next ecps state
+	generator::set_next_ecps_state mp_snes_gen(*this);
 
-mp_snes_gen.Move();
+	va_list arguments; // A place to store the list of arguments
+	lib::robot_name_t robot_l;
+
+	va_start(arguments, number_of_robots); // Initializing arguments to store all values after num
+	for (int x = 0; x < number_of_robots; x++) // Loop until all numbers are added
+	{
+		robot_l = (lib::robot_name_t) (va_arg ( arguments, char* )); // Adds the next value in argument list to sum.
+		mp_snes_gen.robot_m[robot_l] = robot_m[robot_l];
+	}
+	va_end(arguments); // Cleans up the list
+
+	mp_snes_gen.configure(l_state, l_variant, l_string, str_len);
+
+	mp_snes_gen.Move();
 }
 
 // delay MP replacement
-void task::wait_ms (int _ms_delay) // zamiast delay
+void task::wait_ms(int _ms_delay) // zamiast delay
 {
-generator::delay_ms_condition mp_ds_ms (*this, _ms_delay);
+	generator::delay_ms_condition mp_ds_ms(*this, _ms_delay);
 
-mp_ds_ms.Move();
+	mp_ds_ms.Move();
 }
 
 // send_end_motion
-void task::send_end_motion_to_ecps (int number_of_robots, ... )
+void task::send_end_motion_to_ecps(int number_of_robots, ...)
 {
-generator::send_end_motion_to_ecps mp_semte_gen (*this);
+	generator::send_end_motion_to_ecps mp_semte_gen(*this);
 
-va_list arguments; // A place to store the list of arguments
-lib::robot_name_t robot_l;
+	va_list arguments; // A place to store the list of arguments
+	lib::robot_name_t robot_l;
 
-va_start ( arguments, number_of_robots ); // Initializing arguments to store all values after num
-for ( int x = 0; x < number_of_robots; x++ ) // Loop until all numbers are added
-{
-	robot_l = (lib::robot_name_t) (va_arg ( arguments, char* )); // Adds the next value in argument list to sum.
-	mp_semte_gen.robot_m[robot_l] = robot_m[robot_l];
-}
-va_end ( arguments ); // Cleans up the list
+	va_start(arguments, number_of_robots); // Initializing arguments to store all values after num
+	for (int x = 0; x < number_of_robots; x++) // Loop until all numbers are added
+	{
+		robot_l = (lib::robot_name_t) (va_arg ( arguments, char* )); // Adds the next value in argument list to sum.
+		mp_semte_gen.robot_m[robot_l] = robot_m[robot_l];
+	}
+	va_end(arguments); // Cleans up the list
 
-mp_semte_gen.Move();
+	mp_semte_gen.Move();
 }
 
 // send_end_motion
-void task::send_end_motion_to_ecps (int number_of_robots, lib::robot_name_t *properRobotsSet)
+void task::send_end_motion_to_ecps(int number_of_robots, lib::robot_name_t *properRobotsSet)
 {
-generator::send_end_motion_to_ecps mp_semte_gen (*this);
+	generator::send_end_motion_to_ecps mp_semte_gen(*this);
 
-lib::robot_name_t robot_l;
+	lib::robot_name_t robot_l;
 
-for ( int x = 0; x < number_of_robots; x++ ) // Loop until all numbers are added
-{
-	robot_l = properRobotsSet[x]; // Adds the next value in argument list to sum.
-	mp_semte_gen.robot_m[robot_l] = robot_m[robot_l];
-}
-
-mp_semte_gen.Move();
-}
-
-void task::run_extended_empty_gen (bool activate_trigger, int number_of_robots, ... )
-{
-generator::extended_empty mp_ext_empty_gen (*this);
-
-va_list arguments; // A place to store the list of arguments
-lib::robot_name_t robot_l;
-
-va_start ( arguments, number_of_robots ); // Initializing arguments to store all values after num
-for ( int x = 0; x < number_of_robots; x++ ) // Loop until all numbers are added
-{
-	robot_l = (lib::robot_name_t) (va_arg ( arguments, char* )); // Adds the next value in argument list to sum.
-	mp_ext_empty_gen.robot_m[robot_l] = robot_m[robot_l];
-}
-va_end ( arguments ); // Cleans up the list
-
-mp_ext_empty_gen.configure (activate_trigger);
-
-mp_ext_empty_gen.Move();
-}
-
-void task::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
-(int number_of_robots_to_move, int number_of_robots_to_wait_for_task_termin, ... )
-{
-// CZYNNOSCI WSTEPNE
-// utworzenie zbiorow robotow robots_to_move i robots_to_wait_for_task_termination
-common::robots_t robots_to_move, robots_to_wait_for_task_termination;
-common::robots_t robots_to_move_tmp, robots_to_wait_for_task_termination_tmp;
-
-// powolanie generatora i jego konfiguracja
-generator::extended_empty mp_ext_empty_gen (*this);
-mp_ext_empty_gen.configure (false);
-
-// na podstawie argumentow wywolania biezacej metody
-va_list arguments; // A place to store the list of arguments
-lib::robot_name_t robot_l;
-
-// przypisanie robotow do zbiorow robots_to_move i robots_to_wait_for_task_termination, eliminacja robotow ktorych nie ma w systemie
-va_start ( arguments, number_of_robots_to_wait_for_task_termin);
-// najpierw zbior robots_to_move...
-for ( int x = 0; x < number_of_robots_to_move; x++ ) // Loop until all numbers are added
-{
-	robot_l = (lib::robot_name_t) (va_arg ( arguments, char* )); // Adds the next value in argument list to sum.
-
-	if (robot_m.count(robot_l) == 0)
+	for (int x = 0; x < number_of_robots; x++) // Loop until all numbers are added
 	{
-		sr_ecp_msg->message ("run_..._for_set_of_robots_... usunieto nadmiarowe roboty");
-	} else {
-		robots_to_move[robot_l] = robot_m[robot_l];
+		robot_l = properRobotsSet[x]; // Adds the next value in argument list to sum.
+		mp_semte_gen.robot_m[robot_l] = robot_m[robot_l];
 	}
+
+	mp_semte_gen.Move();
 }
-// ...potem zbior robots_to_wait_for_task_termination
-for ( int x = 0; x < number_of_robots_to_wait_for_task_termin; x++ ) // Loop until all numbers are added
+
+void task::run_extended_empty_gen(bool activate_trigger, int number_of_robots, ...)
 {
-	robot_l = (lib::robot_name_t) (va_arg ( arguments, char* )); // Adds the next value in argument list to sum.
-	if (robot_m.count(robot_l) == 0)
+	generator::extended_empty mp_ext_empty_gen(*this);
+
+	va_list arguments; // A place to store the list of arguments
+	lib::robot_name_t robot_l;
+
+	va_start(arguments, number_of_robots); // Initializing arguments to store all values after num
+	for (int x = 0; x < number_of_robots; x++) // Loop until all numbers are added
 	{
-		sr_ecp_msg->message ("run_..._for_set_of_robots_... usunieto nadmiarowe roboty 2");
-	} else {
-		robots_to_wait_for_task_termination[robot_l] = robot_m[robot_l];
+		robot_l = (lib::robot_name_t) (va_arg ( arguments, char* )); // Adds the next value in argument list to sum.
+		mp_ext_empty_gen.robot_m[robot_l] = robot_m[robot_l];
 	}
-}
-va_end ( arguments ); // Cleans up the list
+	va_end(arguments); // Cleans up the list
 
-// sprawdzenie czy zbior robots_to_wait_for_task_termination nie zawiera robotow, ktorych nie ma w zbiorze robots_to_move
+	mp_ext_empty_gen.configure(activate_trigger);
 
-BOOST_FOREACH(const common::robot_pair_t & robot_node, robots_to_wait_for_task_termination) {
-
-	common::robots_t::iterator robots_map_iter = robots_to_move.find(robot_node.first);
-
-	if (robots_map_iter == robots_to_move.end()) {
-		sr_ecp_msg->message (lib::SYSTEM_ERROR, 0, "run_ext_empty_gen_for_set_of_robots_... wrong execution arguments");
-		throw common::MP_main_error(lib::SYSTEM_ERROR, 0);
-	}
-}
-
-// GLOWNA PETLA
-
-do {
-	// aktualizacja ziorow robotow i sprawdzenie czy zbior robots_to_wait_for_task_termination nie jest juz pusty
-	// wtedy wyjscie z petli
-
-	//	if (debug_tmp) printf(" run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots 1\n");
-	// przygotowanie zapasowych list robotow
-	robots_to_move_tmp.clear();
-	robots_to_wait_for_task_termination_tmp.clear();
-
-	robots_to_move_tmp = robots_to_move;
-	robots_to_wait_for_task_termination_tmp = robots_to_wait_for_task_termination;
-
-	// sprawdzenie zbioru robots_to_move
-	BOOST_FOREACH(const common::robot_pair_t & robot_node, robots_to_move_tmp) {
-		if (robot_node.second->ecp_reply_package.reply == lib::TASK_TERMINATED ) {
-			//	if (debug_tmp) robot_m_iterator->second->printf_state("1 ");
-			robots_to_move.erase (robot_node.first);
-		}
-	}
-
-	// sprawdzenie zbioru robots_to_wait_for_task_termination
-	BOOST_FOREACH(const common::robot_pair_t & robot_node, robots_to_wait_for_task_termination_tmp) {
-		if (robot_node.second->ecp_reply_package.reply == lib::TASK_TERMINATED ) {
-			//	if (debug_tmp) robot_m_iterator->second->printf_state("2 ");
-			robots_to_wait_for_task_termination.erase (robot_node.first);
-		}
-	}
-
-	// sprawdzenie czy zbior robots_to_wait_for_task_termination jest pusty.
-	// Jesli tak wyjscie z petli i w konsekwencji wyjscie z calej metody
-	if (robots_to_wait_for_task_termination.empty())
-	break;
-
-	// przypisanie generatorowi mp_ext_empty_gen zbioru robots_to_move
-	mp_ext_empty_gen.robot_m = robots_to_move;
-
-	//	if (debug_tmp) printf("PRZED MOVE run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots 1\n");
-	// uruchomienie generatora
 	mp_ext_empty_gen.Move();
-
-	//		if (debug_tmp) printf("ZA MOVE move run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots 1\n");
-}while (true);
 }
 
-void task::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
-(int number_of_robots_to_move, int number_of_robots_to_wait_for_task_termin, lib::robot_name_t *robotsToMove, lib::robot_name_t *robotsWaitingForTaskTermination)
+void task::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(int number_of_robots_to_move, int number_of_robots_to_wait_for_task_termin, ...)
 {
-// CZYNNOSCI WSTEPNE
-// utworzenie zbiorow robotow robots_to_move i robots_to_wait_for_task_termination
-common::robots_t robots_to_move, robots_to_wait_for_task_termination;
-common::robots_t robots_to_move_tmp, robots_to_wait_for_task_termination_tmp;
+	// CZYNNOSCI WSTEPNE
+	// utworzenie zbiorow robotow robots_to_move i robots_to_wait_for_task_termination
+	common::robots_t robots_to_move, robots_to_wait_for_task_termination;
+	common::robots_t robots_to_move_tmp, robots_to_wait_for_task_termination_tmp;
 
-// powolanie generatora i jego konfiguracja
-generator::extended_empty mp_ext_empty_gen (*this);
-mp_ext_empty_gen.configure (false);
+	// powolanie generatora i jego konfiguracja
+	generator::extended_empty mp_ext_empty_gen(*this);
+	mp_ext_empty_gen.configure(false);
 
-// na podstawie argumentow wywolania biezacej metody
-//va_list arguments;    // A place to store the list of arguments
-lib::robot_name_t robot_l;
+	// na podstawie argumentow wywolania biezacej metody
+	va_list arguments; // A place to store the list of arguments
+	lib::robot_name_t robot_l;
 
-// przypisanie robotow do zbiorow robots_to_move i robots_to_wait_for_task_termination, eliminacja robotow ktorych nie ma w systemie
-//va_start ( arguments, number_of_robots_to_wait_for_task_termin);
-// najpierw zbior robots_to_move...
-for ( int x = 0; x < number_of_robots_to_move; x++ ) // Loop until all numbers are added
-{
-	robot_l = robotsToMove[x]; // Adds the next value in argument list to sum.
-
-	if (robot_m.count(robot_l) == 0)
+	// przypisanie robotow do zbiorow robots_to_move i robots_to_wait_for_task_termination, eliminacja robotow ktorych nie ma w systemie
+	va_start(arguments, number_of_robots_to_wait_for_task_termin);
+	// najpierw zbior robots_to_move...
+	for (int x = 0; x < number_of_robots_to_move; x++) // Loop until all numbers are added
 	{
-		sr_ecp_msg->message ("run_..._for_set_of_robots_... usunieto nadmiarowe roboty");
-	} else {
-		robots_to_move[robot_l] = robot_m[robot_l];
+		robot_l = (lib::robot_name_t) (va_arg ( arguments, char* )); // Adds the next value in argument list to sum.
+
+		if (robot_m.count(robot_l) == 0) {
+			sr_ecp_msg->message("run_..._for_set_of_robots_... usunieto nadmiarowe roboty");
+		} else {
+			robots_to_move[robot_l] = robot_m[robot_l];
+		}
 	}
-}
-// ...potem zbior robots_to_wait_for_task_termination
-for ( int x = 0; x < number_of_robots_to_wait_for_task_termin; x++ ) // Loop until all numbers are added
-{
-	robot_l = robotsWaitingForTaskTermination[x]; // Adds the next value in argument list to sum.
-	if (robot_m.count(robot_l) == 0)
+	// ...potem zbior robots_to_wait_for_task_termination
+	for (int x = 0; x < number_of_robots_to_wait_for_task_termin; x++) // Loop until all numbers are added
 	{
-		sr_ecp_msg->message ("run_..._for_set_of_robots_... usunieto nadmiarowe roboty 2");
-	} else {
-		robots_to_wait_for_task_termination[robot_l] = robot_m[robot_l];
+		robot_l = (lib::robot_name_t) (va_arg ( arguments, char* )); // Adds the next value in argument list to sum.
+		if (robot_m.count(robot_l) == 0) {
+			sr_ecp_msg->message("run_..._for_set_of_robots_... usunieto nadmiarowe roboty 2");
+		} else {
+			robots_to_wait_for_task_termination[robot_l] = robot_m[robot_l];
+		}
 	}
-}
-//va_end ( arguments );              // Cleans up the list
+	va_end(arguments); // Cleans up the list
 
-// sprawdzenie czy zbior robots_to_wait_for_task_termination nie zawiera robotow, ktorych nie ma w zbiorze robots_to_move
+	// sprawdzenie czy zbior robots_to_wait_for_task_termination nie zawiera robotow, ktorych nie ma w zbiorze robots_to_move
 
-BOOST_FOREACH(const common::robot_pair_t & robot_node, robots_to_wait_for_task_termination) {
+	BOOST_FOREACH(const common::robot_pair_t & robot_node, robots_to_wait_for_task_termination) {
 
-	common::robots_t::iterator robots_map_iter = robots_to_move.find(robot_node.first);
+		common::robots_t::iterator robots_map_iter = robots_to_move.find(robot_node.first);
 
-	if (robots_map_iter == robots_to_move.end()) {
-		sr_ecp_msg->message (lib::SYSTEM_ERROR, 0, "run_ext_empty_gen_for_set_of_robots_... wrong execution arguments");
-		throw common::MP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
-	}
-}
-
-// GLOWNA PETLA
-
-do {
-	// aktualizacja ziorow robotow i sprawdzenie czy zbior robots_to_wait_for_task_termination nie jest juz pusty
-	// wtedy wyjscie z petli
-
-	//	if (debug_tmp) printf(" run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots 1\n");
-	// przygotowanie zapasowych list robotow
-	robots_to_move_tmp.clear();
-	robots_to_wait_for_task_termination_tmp.clear();
-
-	robots_to_move_tmp = robots_to_move;
-	robots_to_wait_for_task_termination_tmp = robots_to_wait_for_task_termination;
-
-	// sprawdzenie zbioru robots_to_move
-	BOOST_FOREACH(const common::robot_pair_t & robot_node, robots_to_move_tmp) {
-		if (robot_node.second->ecp_reply_package.reply == lib::TASK_TERMINATED ) {
-			//	if (debug_tmp) robot_m_iterator->second->printf_state("1 ");
-			robots_to_move.erase (robot_node.first);
+		if (robots_map_iter == robots_to_move.end()) {
+			sr_ecp_msg->message (lib::SYSTEM_ERROR, 0, "run_ext_empty_gen_for_set_of_robots_... wrong execution arguments");
+			throw common::MP_main_error(lib::SYSTEM_ERROR, 0);
 		}
 	}
 
-	// sprawdzenie zbioru robots_to_wait_for_task_termination
-	BOOST_FOREACH(const common::robot_pair_t & robot_node, robots_to_wait_for_task_termination_tmp) {
-		if (robot_node.second->ecp_reply_package.reply == lib::TASK_TERMINATED ) {
-			//	if (debug_tmp) robot_m_iterator->second->printf_state("2 ");
-			robots_to_wait_for_task_termination.erase (robot_node.first);
+	// GLOWNA PETLA
+
+	do {
+		// aktualizacja ziorow robotow i sprawdzenie czy zbior robots_to_wait_for_task_termination nie jest juz pusty
+		// wtedy wyjscie z petli
+
+		//	if (debug_tmp) printf(" run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots 1\n");
+		// przygotowanie zapasowych list robotow
+		robots_to_move_tmp.clear();
+		robots_to_wait_for_task_termination_tmp.clear();
+
+		robots_to_move_tmp = robots_to_move;
+		robots_to_wait_for_task_termination_tmp = robots_to_wait_for_task_termination;
+
+		// sprawdzenie zbioru robots_to_move
+		BOOST_FOREACH(const common::robot_pair_t & robot_node, robots_to_move_tmp) {
+			if (robot_node.second->ecp_reply_package.reply == lib::TASK_TERMINATED ) {
+				//	if (debug_tmp) robot_m_iterator->second->printf_state("1 ");
+				robots_to_move.erase (robot_node.first);
+			}
+		}
+
+		// sprawdzenie zbioru robots_to_wait_for_task_termination
+		BOOST_FOREACH(const common::robot_pair_t & robot_node, robots_to_wait_for_task_termination_tmp) {
+			if (robot_node.second->ecp_reply_package.reply == lib::TASK_TERMINATED ) {
+				//	if (debug_tmp) robot_m_iterator->second->printf_state("2 ");
+				robots_to_wait_for_task_termination.erase (robot_node.first);
+			}
+		}
+
+		// sprawdzenie czy zbior robots_to_wait_for_task_termination jest pusty.
+		// Jesli tak wyjscie z petli i w konsekwencji wyjscie z calej metody
+		if (robots_to_wait_for_task_termination.empty())
+			break;
+
+		// przypisanie generatorowi mp_ext_empty_gen zbioru robots_to_move
+		mp_ext_empty_gen.robot_m = robots_to_move;
+
+		//	if (debug_tmp) printf("PRZED MOVE run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots 1\n");
+		// uruchomienie generatora
+		mp_ext_empty_gen.Move();
+
+		//		if (debug_tmp) printf("ZA MOVE move run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots 1\n");
+	} while (true);
+}
+
+void task::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(int number_of_robots_to_move, int number_of_robots_to_wait_for_task_termin, lib::robot_name_t *robotsToMove, lib::robot_name_t *robotsWaitingForTaskTermination)
+{
+	// CZYNNOSCI WSTEPNE
+	// utworzenie zbiorow robotow robots_to_move i robots_to_wait_for_task_termination
+	common::robots_t robots_to_move, robots_to_wait_for_task_termination;
+	common::robots_t robots_to_move_tmp, robots_to_wait_for_task_termination_tmp;
+
+	// powolanie generatora i jego konfiguracja
+	generator::extended_empty mp_ext_empty_gen(*this);
+	mp_ext_empty_gen.configure(false);
+
+	// na podstawie argumentow wywolania biezacej metody
+	//va_list arguments;    // A place to store the list of arguments
+	lib::robot_name_t robot_l;
+
+	// przypisanie robotow do zbiorow robots_to_move i robots_to_wait_for_task_termination, eliminacja robotow ktorych nie ma w systemie
+	//va_start ( arguments, number_of_robots_to_wait_for_task_termin);
+	// najpierw zbior robots_to_move...
+	for (int x = 0; x < number_of_robots_to_move; x++) // Loop until all numbers are added
+	{
+		robot_l = robotsToMove[x]; // Adds the next value in argument list to sum.
+
+		if (robot_m.count(robot_l) == 0) {
+			sr_ecp_msg->message("run_..._for_set_of_robots_... usunieto nadmiarowe roboty");
+		} else {
+			robots_to_move[robot_l] = robot_m[robot_l];
+		}
+	}
+	// ...potem zbior robots_to_wait_for_task_termination
+	for (int x = 0; x < number_of_robots_to_wait_for_task_termin; x++) // Loop until all numbers are added
+	{
+		robot_l = robotsWaitingForTaskTermination[x]; // Adds the next value in argument list to sum.
+		if (robot_m.count(robot_l) == 0) {
+			sr_ecp_msg->message("run_..._for_set_of_robots_... usunieto nadmiarowe roboty 2");
+		} else {
+			robots_to_wait_for_task_termination[robot_l] = robot_m[robot_l];
+		}
+	}
+	//va_end ( arguments );              // Cleans up the list
+
+	// sprawdzenie czy zbior robots_to_wait_for_task_termination nie zawiera robotow, ktorych nie ma w zbiorze robots_to_move
+
+	BOOST_FOREACH(const common::robot_pair_t & robot_node, robots_to_wait_for_task_termination) {
+
+		common::robots_t::iterator robots_map_iter = robots_to_move.find(robot_node.first);
+
+		if (robots_map_iter == robots_to_move.end()) {
+			sr_ecp_msg->message (lib::SYSTEM_ERROR, 0, "run_ext_empty_gen_for_set_of_robots_... wrong execution arguments");
+			throw common::MP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 		}
 	}
 
-	// sprawdzenie czy zbior robots_to_wait_for_task_termination jest pusty.
-	// Jesli tak wyjscie z petli i w konsekwencji wyjscie z calej metody
-	if (robots_to_wait_for_task_termination.empty())
-	break;
+	// GLOWNA PETLA
 
-	// przypisanie generatorowi mp_ext_empty_gen zbioru robots_to_move
-	mp_ext_empty_gen.robot_m = robots_to_move;
+	do {
+		// aktualizacja ziorow robotow i sprawdzenie czy zbior robots_to_wait_for_task_termination nie jest juz pusty
+		// wtedy wyjscie z petli
 
-	//	if (debug_tmp) printf("PRZED MOVE run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots 1\n");
-	// uruchomienie generatora
-	mp_ext_empty_gen.Move();
-	//		if (debug_tmp) printf("ZA MOVE move run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots 1\n");
-}while (true);
-// koniec petli
+		//	if (debug_tmp) printf(" run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots 1\n");
+		// przygotowanie zapasowych list robotow
+		robots_to_move_tmp.clear();
+		robots_to_wait_for_task_termination_tmp.clear();
+
+		robots_to_move_tmp = robots_to_move;
+		robots_to_wait_for_task_termination_tmp = robots_to_wait_for_task_termination;
+
+		// sprawdzenie zbioru robots_to_move
+		BOOST_FOREACH(const common::robot_pair_t & robot_node, robots_to_move_tmp) {
+			if (robot_node.second->ecp_reply_package.reply == lib::TASK_TERMINATED ) {
+				//	if (debug_tmp) robot_m_iterator->second->printf_state("1 ");
+				robots_to_move.erase (robot_node.first);
+			}
+		}
+
+		// sprawdzenie zbioru robots_to_wait_for_task_termination
+		BOOST_FOREACH(const common::robot_pair_t & robot_node, robots_to_wait_for_task_termination_tmp) {
+			if (robot_node.second->ecp_reply_package.reply == lib::TASK_TERMINATED ) {
+				//	if (debug_tmp) robot_m_iterator->second->printf_state("2 ");
+				robots_to_wait_for_task_termination.erase (robot_node.first);
+			}
+		}
+
+		// sprawdzenie czy zbior robots_to_wait_for_task_termination jest pusty.
+		// Jesli tak wyjscie z petli i w konsekwencji wyjscie z calej metody
+		if (robots_to_wait_for_task_termination.empty())
+			break;
+
+		// przypisanie generatorowi mp_ext_empty_gen zbioru robots_to_move
+		mp_ext_empty_gen.robot_m = robots_to_move;
+
+		//	if (debug_tmp) printf("PRZED MOVE run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots 1\n");
+		// uruchomienie generatora
+		mp_ext_empty_gen.Move();
+		//		if (debug_tmp) printf("ZA MOVE move run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots 1\n");
+	} while (true);
+	// koniec petli
 }
 
 int task::wait_for_name_open(void)
 {
 #if !defined(USE_MESSIP_SRR)
-/* Do your MsgReceive's here now with the chid */
-while (1) {
-	struct _pulse msg;
-	struct _msg_info info;
+	/* Do your MsgReceive's here now with the chid */
+	while (1) {
+		struct _pulse msg;
+		struct _msg_info info;
 
-	int rcvid = MsgReceive(mp_pulse_attach->chid, &msg, sizeof(msg), &info);
+		int rcvid = MsgReceive(mp_pulse_attach->chid, &msg, sizeof(msg), &info);
 
-	if (rcvid == -1) {/* Error condition, exit */
-		int e = errno;
-		perror("mp: MsgReceivePulse()");
-		throw common::MP_main_error(lib::SYSTEM_ERROR, e);
+		if (rcvid == -1) {/* Error condition, exit */
+			int e = errno;
+			perror("mp: MsgReceivePulse()");
+			throw common::MP_main_error(lib::SYSTEM_ERROR, e);
+		}
+
+		if (rcvid == 0) {/* Pulse received */
+			switch (msg.code)
+			{
+				case _PULSE_CODE_DISCONNECT:
+					/*
+					 * A client disconnected all its connections (called
+					 * name_close() for each name_open() of our name) or
+					 * terminated
+					 */
+					ConnectDetach(msg.scoid);
+					break;
+				case _PULSE_CODE_UNBLOCK:
+					/*
+					 * REPLY blocked client wants to unblock (was hit by
+					 * a signal or timed out).  It's up to you if you
+					 * reply now or later.
+					 */
+					break;
+				default:
+					/*
+					 * A pulse sent by one of your processes or a
+					 * _PULSE_CODE_COIDDEATH or _PULSE_CODE_THREADDEATH
+					 * from the kernel?
+					 */
+
+					if (ui_opened && ui_scoid == msg.scoid) {
+						ui_new_pulse = true;
+						ui_pulse_code = msg.code;
+						// continue; ?
+					}
+
+					BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m) {
+						if (robot_node.second->opened && robot_node.second->scoid == msg.scoid) {
+							robot_node.second->new_pulse = true;
+							robot_node.second->pulse_code = msg.code;
+							//						fprintf(stderr, "robot %s pulse %d\n", lib::toString(robot_node.second->robot_name).c_str(), robot_node.second->pulse_code);
+						}
+					}
+
+					break;
+			}
+			continue;
+		}
+
+		/* name_open() sends a connect message, must EOK this */
+		if (msg.type == _IO_CONNECT) {
+			MsgReply(rcvid, EOK, NULL, 0);
+			return info.scoid;
+		}
+
+		/* Some other QNX IO message was received; reject it */
+		if (msg.type > _IO_BASE && msg.type <= _IO_MAX) {
+			MsgError(rcvid, ENOSYS);
+			continue;
+		}
+
+		/* A message (presumable ours) received, handle */
+		fprintf(stderr, "mp: unexpected message received\n");
+		MsgReply(rcvid, ENOSYS, 0, 0);
+
+		throw common::MP_main_error(lib::SYSTEM_ERROR, 0);
 	}
+#else
+	while(1) {
+		int32_t type, subtype;
+		int rcvid = messip::port_receive_pulse(mp_pulse_attach, type, subtype);
 
-	if (rcvid == 0) {/* Pulse received */
-		switch (msg.code) {
-			case _PULSE_CODE_DISCONNECT:
-			/*
-			 * A client disconnected all its connections (called
-			 * name_close() for each name_open() of our name) or
-			 * terminated
-			 */
-			ConnectDetach(msg.scoid);
-			break;
-			case _PULSE_CODE_UNBLOCK:
-			/*
-			 * REPLY blocked client wants to unblock (was hit by
-			 * a signal or timed out).  It's up to you if you
-			 * reply now or later.
-			 */
-			break;
-			default:
-			/*
-			 * A pulse sent by one of your processes or a
-			 * _PULSE_CODE_COIDDEATH or _PULSE_CODE_THREADDEATH
-			 * from the kernel?
-			 */
-
-			if (ui_opened && ui_scoid == msg.scoid) {
+		if (rcvid == -1) {
+			int e = errno;
+			perror("mp: messip::port_receive_pulse()");
+			throw common::MP_main_error(lib::SYSTEM_ERROR, e);
+		} else if (rcvid >= 0) {
+			fprintf(stderr, "mp: unexpected message received\n");
+			throw common::MP_main_error(lib::SYSTEM_ERROR, 0);
+		} else if (rcvid == MESSIP_MSG_NOREPLY) {
+			// handle pulse
+			if (ui_opened && ui_scoid == mp_pulse_attach->lastmsg_sockfd) {
 				ui_new_pulse = true;
-				ui_pulse_code = msg.code;
-				// continue; ?
+				ui_pulse_code = type;
 			}
 
 			BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m) {
-				if (robot_node.second->opened && robot_node.second->scoid == msg.scoid) {
+				if (robot_node.second->opened && robot_node.second->scoid == mp_pulse_attach->lastmsg_sockfd) {
 					robot_node.second->new_pulse = true;
-					robot_node.second->pulse_code = msg.code;
-					//						fprintf(stderr, "robot %s pulse %d\n", lib::toString(robot_node.second->robot_name).c_str(), robot_node.second->pulse_code);
+					robot_node.second->pulse_code = type;
 				}
 			}
-
-			break;
+		} else if (rcvid == MESSIP_MSG_CONNECTING) {
+			return mp_pulse_attach->lastmsg_sockfd;
 		}
-		continue;
 	}
-
-	/* name_open() sends a connect message, must EOK this */
-	if (msg.type == _IO_CONNECT ) {
-		MsgReply( rcvid, EOK, NULL, 0 );
-		return info.scoid;
-	}
-
-	/* Some other QNX IO message was received; reject it */
-	if (msg.type > _IO_BASE && msg.type <= _IO_MAX ) {
-		MsgError( rcvid, ENOSYS );
-		continue;
-	}
-
-	/* A message (presumable ours) received, handle */
-	fprintf(stderr, "mp: unexpected message received\n");
-	MsgReply(rcvid, ENOSYS, 0, 0);
-
-	throw common::MP_main_error(lib::SYSTEM_ERROR, 0);
-}
-#else
-while(1) {
-	int32_t type, subtype;
-	int rcvid = messip::port_receive_pulse(mp_pulse_attach, type, subtype);
-
-	if (rcvid == -1) {
-		int e = errno;
-		perror("mp: messip::port_receive_pulse()");
-		throw common::MP_main_error(lib::SYSTEM_ERROR, e);
-	} else if (rcvid >= 0) {
-		fprintf(stderr, "mp: unexpected message received\n");
-		throw common::MP_main_error(lib::SYSTEM_ERROR, 0);
-	} else if (rcvid == MESSIP_MSG_NOREPLY) {
-		// handle pulse
-		if (ui_opened && ui_scoid == mp_pulse_attach->lastmsg_sockfd) {
-			ui_new_pulse = true;
-			ui_pulse_code = type;
-		}
-
-		BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m) {
-			if (robot_node.second->opened && robot_node.second->scoid == mp_pulse_attach->lastmsg_sockfd) {
-				robot_node.second->new_pulse = true;
-				robot_node.second->pulse_code = type;
-			}
-		}
-	} else if (rcvid == MESSIP_MSG_CONNECTING) {
-		return mp_pulse_attach->lastmsg_sockfd;
-	}
-}
 #endif
 }
 
-bool task::check_and_optional_wait_for_new_pulse (WAIT_FOR_NEW_PULSE_MODE process_type, const RECEIVE_PULSE_MODE desired_wait_mode)
+bool task::check_and_optional_wait_for_new_pulse(WAIT_FOR_NEW_PULSE_MODE process_type, const RECEIVE_PULSE_MODE desired_wait_mode)
 {
-RECEIVE_PULSE_MODE current_wait_mode(NONBLOCK);
+	RECEIVE_PULSE_MODE current_wait_mode(NONBLOCK);
 
-bool desired_pulse_found = false;
+	bool desired_pulse_found = false;
 
-// checking of already registered pulses
-if ((process_type == NEW_ECP_PULSE) || (process_type == NEW_UI_OR_ECP_PULSE)) {
-	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m) {
+	// checking of already registered pulses
+	if ((process_type == NEW_ECP_PULSE) || (process_type == NEW_UI_OR_ECP_PULSE)) {
+BOOST_FOREACH	(const common::robot_pair_t & robot_node, robot_m) {
 		if ((robot_node.second->new_pulse) && !(robot_node.second->new_pulse_checked)) {
 			desired_pulse_found = true;
 		}

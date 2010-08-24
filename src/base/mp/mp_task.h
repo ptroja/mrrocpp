@@ -1,15 +1,14 @@
 #ifndef MP_TASK_H_
 #define MP_TASK_H_
 
-#include "base/mp/mp_generator.h"
-#include "base/mp/mp.h"
+#include "base/mp/mp_robots_t_typedefs.h"
 #include "base/ecp_mp/ecp_mp_task.h"
 
 #if !defined(USE_MESSIP_SRR)
 #include <sys/iofunc.h>
 #include <sys/dispatch.h>
 #else
-#include <messip.h>
+#include "messip.h"
 #endif
 
 namespace mrrocpp {

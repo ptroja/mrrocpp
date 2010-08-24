@@ -10,7 +10,10 @@
 // Ostatnia modyfikacja: 2009
 // -------------------------------------------------------------------------
 
+#include <fstream>
+#include "base/ecp/ecp_task.h"
 #include "generator/ecp/ecp_g_smooth.h"
+#include "base/ecp/ecp_robot.h"
 #include "robot/irp6ot_m/irp6ot_m_const.h"
 #include "robot/irp6p_m/irp6p_m_const.h"
 
@@ -38,7 +41,6 @@ bool smooth::eq(double a, double b)
 
 void smooth::load_trajectory_from_xml(ecp_mp::common::Trajectory &trajectory)
 {
-	bool first_time = true;
 	int numOfPoses = trajectory.getNumberOfPoses();
 	trajectory.showTime();
 
@@ -1196,7 +1198,7 @@ void smooth::calculate(void)
 	double t_max; //nadluzszy czas ruchu w jednej osi w jednym ruchu
 	int i;
 	double tk = 10 * STEP; //czas jednego makrokroku
-	int gripp=0; //os grippera
+	int gripp = 0; //os grippera
 
 	trajectory_calculated = false;
 	//TODO dorobic zabezpieczenia dla 0 predkosci w osmej wspolrzednej postumenta i w angle axes

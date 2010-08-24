@@ -7,7 +7,7 @@
 
 #include "ui_model.h"
 
-#include "lib/configurator.h"
+#include "base/lib/configurator.h"
 
 ui_model * ui_model::pointerToTheSingletonInstance = NULL;
 

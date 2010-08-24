@@ -3,16 +3,16 @@
 // Date: maj 2006
 //
 
-#include <stdio.h>
-#include <ctype.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cctype>
+#include <cstdlib>
 #include <unistd.h>
-#include <string.h>
-#include <math.h>
+#include <cstring>
+#include <cmath>
 #include <iostream>
 #include <fstream>
-#include <signal.h>
-#include <errno.h>
+#include <csignal>
+#include <cerrno>
 #include <sys/wait.h>
 #include <sys/types.h>
 #if !defined(USE_MESSIP_SRR)
@@ -24,16 +24,16 @@
 #else
 #include "messip_dataport.h"
 #endif
-#include <errno.h>
+#include <cerrno>
 #include <pthread.h>
-#include <time.h>
+#include <ctime>
 
 #include <boost/scoped_array.hpp>
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
-#include "lib/mis_fun.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
+#include "base/lib/mis_fun.h"
 #include "base/edp/edp_e_motor_driven.h"
 #include "base/edp/reader.h"
 

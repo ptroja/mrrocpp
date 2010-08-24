@@ -9,20 +9,20 @@
 // Data:		14.02.2007
 // -------------------------------------------------------------------------
 
-#include <stdio.h>
-#include <ctype.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cctype>
+#include <cstdlib>
 #include <unistd.h>
-#include <string.h>
-#include <math.h>
+#include <cstring>
+#include <cmath>
 #include <iostream>
-#include <errno.h>
+#include <cerrno>
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
-#include "lib/mis_fun.h"
-#include "lib/mrmath/mrmath.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
+#include "base/lib/mis_fun.h"
+#include "base/lib/mrmath/mrmath.h"
 #include "base/edp/servo_gr.h"
 #include "base/edp/reader.h"
 #include "base/edp/manip_trans_t.h"

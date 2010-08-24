@@ -7,9 +7,8 @@
 #ifndef ECP_G_SMB_H_
 #define ECP_G_SMB_H_
 
-#include <time.h>
 #include "base/ecp/ecp_generator.h"
-#include "lib/data_port_headers/smb.h"
+#include "base/lib/data_port_headers/smb.h"
 
 namespace mrrocpp {
 namespace ecp {

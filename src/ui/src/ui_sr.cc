@@ -3,13 +3,13 @@
 /*                                         Version 2.01  */
 
 /* Standard headers */
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #include <unistd.h>
 #include <strings.h>
 
-#include <string.h>
-#include <signal.h>
+#include <cstring>
+#include <csignal>
 #include <dirent.h>
 
 #include <boost/bind.hpp>
@@ -19,27 +19,27 @@
 #include <boost/circular_buffer.hpp>
 
 #include <fcntl.h>
-#include <string.h>
+#include <cstring>
 #include <sys/types.h>
 #include <sys/utsname.h>
 #include <iostream>
 #include <fstream>
 
 #include <pthread.h>
-#include <errno.h>
+#include <cerrno>
 
 #include "ui/src/ui.h"
 #include "ui/src/ui_class.h"
 #include "ui/src/ui_ecp.h"
 #include "ui/src/ui_sr.h"
 
-#include "lib/mis_fun.h"
-#include "lib/srlib.h"
+#include "base/lib/mis_fun.h"
+#include "base/lib/srlib.h"
 #include "ui/src/ui_const.h"
-#include "lib/configurator.h"
-#include "lib/mis_fun.h"
+#include "base/lib/configurator.h"
+#include "base/lib/mis_fun.h"
 
-#include "lib/srlib.h"
+#include "base/lib/srlib.h"
 
 #if !defined(USE_MESSIP_SRR)
 /* Local headers */

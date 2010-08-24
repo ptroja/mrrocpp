@@ -7,10 +7,10 @@
 // ------------------------------------------------------------------------
 
 
-#include <stdio.h>
-#include <string.h>
+#include <cstdio>
+#include <cstring>
 
-#include "lib/srlib.h"
+#include "base/lib/srlib.h"
 
 #include "robot/irp6ot_tfg/ecp_r_irp6ot_tfg.h"
 #include "robot/irp6ot_m/ecp_r_irp6ot_m.h"

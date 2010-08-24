@@ -17,26 +17,29 @@
  * @ingroup VSP
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <errno.h>
-#include <stddef.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cerrno>
+#include <cstddef>
 #include <unistd.h>
 #include <sys/iofunc.h>
 #include <sys/dispatch.h>
 #include <devctl.h>
-#include <string.h>
-#include <signal.h>
+#include <cstring>
+#include <csignal>
 #include <process.h>
 #include <sys/wait.h>
 #include <sys/types.h>
 #include <sys/sched.h>
 #include <fstream>
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/mis_fun.h"
-#include "lib/srlib.h"
+// niezbedny naglowek z definiacja PROCESS_SPAWN_RSH
+#include "base/lib/configurator.h"
+
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/mis_fun.h"
+#include "base/lib/srlib.h"
 #include "base/vsp/vsp_sensor_interface.h"
 #include "base/vsp/vsp_error.h"
 

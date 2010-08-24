@@ -8,7 +8,6 @@
 #if !defined(__MP_T_SK_MR_H)
 #define __MP_T_SK_MR_H
 
-#include "base/mp/mp.h"
 
 namespace mrrocpp {
 namespace mp {

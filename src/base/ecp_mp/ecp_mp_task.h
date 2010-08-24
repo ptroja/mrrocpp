@@ -7,20 +7,14 @@
 // autor modyfikacji: tkornuta
 // -------------------------------------------------------------------------
 
-#if !defined(_ECP_MP_H)
-#define _ECP_MP_H
+#if !defined(_ECP_MP_TASK_H)
+#define _ECP_MP_TASK_H
 
-#include <stdint.h>
-#include <map>
 #include <boost/any.hpp>
 
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
-#include "lib/srlib.h"
-#include "lib/configurator.h"
-
-#include "base/ecp_mp/transmitter.h"
-#include "base/ecp_mp/ecp_mp_sensor.h"
+#include "base/lib/configurator.h"
+#include "base/lib/srlib.h"
+#include "base/ecp_mp/ecp_mp_typedefs.h"
 
 #include <libxml/tree.h>
 

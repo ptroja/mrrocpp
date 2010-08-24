@@ -4,18 +4,18 @@
  * Autor: Krzysztof Dziubek	*/
 
 #include <unistd.h>
-#include <time.h>
+#include <ctime>
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
 
-#include "lib/srlib.h"
+#include "base/lib/srlib.h"
 #include "sensor/ati6284/edp_s.h"
 #include "base/edp/edp_e_manip.h"
 
-#include "lib/configurator.h"
-#include "lib/timer.h"
+#include "base/lib/configurator.h"
+#include "base/lib/timer.h"
 #include "tSTC.h"
 #include "tESeries.h"
 #include "osiBus.h"
