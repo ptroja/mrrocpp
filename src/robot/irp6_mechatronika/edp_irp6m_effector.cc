@@ -19,6 +19,7 @@
 #include "base/lib/mrmath/mrmath.h"
 
 // Klasa edp_irp6ot_effector.
+#include "robot/irp6_mechatronika/sg_irp6m.h"
 #include "robot/irp6_mechatronika/edp_irp6m_effector.h"
 #include "base/edp/reader.h"
 // Kinematyki.

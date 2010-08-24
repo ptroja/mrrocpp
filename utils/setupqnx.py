@@ -162,8 +162,9 @@ for package in packages:
 our_packages = \
     "boost-libs-1.42.0", \
     "libxml2-2.7.7", \
-    "cmake-2.8.0", \
     "xerces-c-3.0.1"
+
+#    "cmake-2.8.0", \
 
 for package in our_packages:
     os.system(r"/usr/pkg/sbin/pkg_add " + pkgsrc_our_url_prefix + "All/" + package + ".tgz")

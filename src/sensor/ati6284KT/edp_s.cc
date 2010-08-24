@@ -46,7 +46,7 @@
 
 #include "base/lib/srlib.h"
 #include "edp_s.h"
-
+#include "base/edp/edp_e_manip.h"
 #include <sys/syspage.h>
 #include <sys/neutrino.h>
 

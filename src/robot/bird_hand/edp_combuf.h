@@ -1,4 +1,3 @@
-
 #include <stdint.h>
 
 #define START_BYTE '#'
@@ -32,13 +31,12 @@ struct status_
 	int16_t force;
 	int16_t current;
 	uint16_t abspos;
-}	__attribute__((__packed__));
+}__attribute__((__packed__));
 
 struct abspos_
 {
 	int16_t abspos;
-}	__attribute__((__packed__));
-
+}__attribute__((__packed__));
 
 struct cmd_
 {
@@ -46,14 +44,14 @@ struct cmd_
 	uint16_t fd;
 	uint16_t b;
 	uint16_t t;
-}	__attribute__((__packed__));
+}__attribute__((__packed__));
 
 struct pid_
 {
 	int16_t p;
 	int16_t i;
 	int16_t d;
-}	__attribute__((__packed__));
+}__attribute__((__packed__));
 
 struct limit_
 {
@@ -61,9 +59,9 @@ struct limit_
 	int16_t l_limit;
 	int16_t cur_limit;
 	int16_t f_limit;
-}	__attribute__((__packed__));
+}__attribute__((__packed__));
 
 struct synchro_
 {
 	uint16_t n;
-}	__attribute__((__packed__));
+}__attribute__((__packed__));

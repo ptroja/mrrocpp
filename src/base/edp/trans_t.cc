@@ -7,11 +7,6 @@
 #include <cstdlib>
 #include <cstring>
 
-#include "base/lib/typedefs.h"
-#include "base/lib/impconst.h"
-#include "base/lib/com_buf.h"
-
-#include "base/lib/mis_fun.h"
 #include "base/edp/trans_t.h"
 
 /********************************* GLOBALS **********************************/

@@ -18,6 +18,9 @@
 #include <sys/neutrino.h>
 #endif /* __QNXNTO__ */
 
+// niezbedny naglowek z definiacja PROCESS_SPAWN_RSH
+#include "base/lib/configurator.h"
+
 #include "base/lib/typedefs.h"
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"

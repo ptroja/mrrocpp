@@ -14,21 +14,9 @@
 #include <boost/thread/mutex.hpp>
 #include <boost/thread/condition.hpp>
 
-#include "base/edp/in_out.h"
-#include "base/edp/vis_server.h"
-#include "base/edp/reader.h"
-#include "base/edp/manip_trans_t.h"
-
-#include "base/lib/typedefs.h"
-#include "base/lib/impconst.h"
-#include "base/lib/com_buf.h"
-#include "base/lib/srlib.h"
-#include "base/lib/mis_fun.h"
+#include "base/kinematics/kinematics_manager.h"
 
 #include "base/edp/edp_effector.h"
-
-// Konfigurator
-#include "base/lib/configurator.h"
 
 //#ifdef DOCENT_SENSOR
 #include <boost/function.hpp>
@@ -44,6 +32,15 @@ namespace common {
 // TODO: remove forward declarations
 class servo_buffer;
 class edp_vsp;
+class manip_trans_t;
+class reader_buffer;
+class vis_server;
+class in_out_buffer;
+
+enum STATE
+{
+	GET_STATE, GET_SYNCHRO, SYNCHRO_TERMINATED, GET_INSTRUCTION, EXECUTE_INSTRUCTION, WAIT, WAIT_Q
+};
 
 /*!
  * \class motor_driven_effector
@@ -57,7 +54,7 @@ class edp_vsp;
  * *
  * \author yoyek
  */
-class motor_driven_effector: public effector, public kinematics::common::kinematics_manager
+class motor_driven_effector : public effector, public kinematics::common::kinematics_manager
 {
 protected:
 	/*!
@@ -74,12 +71,12 @@ protected:
 	 */
 	uint16_t value_in_step_no;
 
-//#ifdef DOCENT_SENSOR
-	boost::function<void()> startedCallback_;
+	//#ifdef DOCENT_SENSOR
+	boost::function <void()> startedCallback_;
 	bool startedCallbackRegistered_;
-	boost::function<void()> stoppedCallback_;
+	boost::function <void()> stoppedCallback_;
 	bool stoppedCallbackRegistered_;
-//#endif
+	//#endif
 
 	/*!
 	 * \brief friend class of servo thread to handle the motion controllers
@@ -186,7 +183,6 @@ protected:
 	 */
 	lib::MotorArray current_motor_pos;
 
-
 public:
 
 	/*!
@@ -195,12 +191,12 @@ public:
 	 * It is used for the purpose of the visualisation thread
 	 */
 	void master_joints_read(double[]);
-//#ifdef DOCENT_SENSOR
-	void registerReaderStartedCallback(boost::function<void()> startedCallback);
-	void registerReaderStoppedCallback(boost::function<void()> stoppedCallback);
+	//#ifdef DOCENT_SENSOR
+	void registerReaderStartedCallback(boost::function <void()> startedCallback);
+	void registerReaderStoppedCallback(boost::function <void()> stoppedCallback);
 	void onReaderStarted();
 	void onReaderStopped();
-//#endif
+	//#endif
 
 	/*!
 	 * \brief object to store output and input data
@@ -293,7 +289,6 @@ public:
 	 * It is set by the specific robots.
 	 */
 	short number_of_servos;
-
 
 	/*!
 	 * \brief pure virtual method of move arm to be implemented in specific robot.
@@ -445,7 +440,6 @@ public:
 	 */
 	bool pre_synchro_motion(lib::c_buffer &instruction) const;
 
-
 	/*!
 	 * \brief Method informing if the robot is synchronised or not.
 	 *
@@ -481,7 +475,6 @@ public:
 	 */
 	void single_thread_master_order(common::MT_ORDER nm_task, int nm_tryb);
 };
-
 
 } // namespace common
 } // namespace edp

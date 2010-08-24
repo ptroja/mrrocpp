@@ -15,7 +15,6 @@
 
 #define USLEEP_US 500000
 
-#include "base/edp/edp_e_motor_driven.h"
 #include "base/edp/HardwareInterface.h"
 #include "robot/hi_moxa/hi_moxa_combuf.h"
 //#include "base/edp/edp_e_motor_driven.h"
@@ -37,6 +36,8 @@
 namespace mrrocpp {
 namespace edp {
 namespace common {
+
+class motor_driven_effector;
 
 // ------------------------------------------------------------------------
 //                HARDWARE_INTERFACE class

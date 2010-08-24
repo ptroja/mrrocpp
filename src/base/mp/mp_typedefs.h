@@ -5,8 +5,8 @@
 // Ostatnia modyfikacja: 16.04.98
 // -------------------------------------------------------------------------
 
-#if !defined(__MP_ROBOTS_T_TYPEDEF_H)
-#define __MP_ROBOTS_T_TYPEDEF_H
+#if !defined(__MP_TYPEDEFS_H)
+#define __MP_TYPEDEFS_H
 
 #include <map>
 
