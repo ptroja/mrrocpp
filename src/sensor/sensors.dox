@@ -21,44 +21,4 @@ plays a role of such interface, but one should inherit from the template
 \link mrrocpp::ecp_mp::sensor::sensor ecp_mp::sensor\endlink class.
 @}
 
-
-
-@defgroup PCBIRD_SENSOR Sensors: PcBird - Detection of object position and orientation.   
-@{
-Ascension pcBIRD is a magnetic tracker with an electronics unit powered by the ISA bus on your personal computer. 
-The pcBIRD is a six degrees-of-freedom measuring device that measures the position and orientation of a small body-mounted sensor.
-
-More information can be found at the 
-<a href="http://www.inition.co.uk/inition/dispatcher.php?action=get&model=products&URL_=product_mocaptrack_ascension_pcbird&SubCatID_=18&tab=blurb">Ascension</a>
- webpage.
-
-In the Robotics Lab it was utilized for:
- - calibration of a dual-arm robot,
- - localization of objects for grasping purposes.  
-
-First version of the PcBird VSP (working under the Linux control) was created by B.Bielawski, T.Wlostowski and T.Adamczyk 
-as a project from the ISR (polish: Inteligentne Systemy Robotyczne, Intelligent Robotic Systems) led by T.Kornuta.
-@}
-
-
-
-@defgroup FRADIA_SENSOR Sensors: FraDIA - Framework for Digital Images Analysis.   
-@{
-Most of the historical MRROC++ vision-based applications were written each time from the scratch, thus there was a gap
-for a specialized tool for development of vision subsystems. 
-
-The gap was filled by FraDIA (Framework for Digital Image Analysis), an object-oriented framework written mostly in C++. 
-One of the goals was to develop patterns and mechanisms which will simplify the process of vision task creation and impose 
-general implementation method of image processing and analysis algorithms, offering a clear method of their separation. 
-Besides, it also offers components responsible for image acquisition and methods for communication with rest of the MRROCPP
-processes.
-
-FraDIA also facilitates the way that user interface is extended with panels related to exchangeable components, which might be 
-required for algorithms management and testing. User interface also enables switching between components during the application work.
-
-FraDIA, working under the Linux control, from the MRROC++ point of view plays a role of a specialized VSP - responsible for 
-visual information aggregation. First version of the FraDIA was developed by T.Kornuta.
-@}
-
 */
-

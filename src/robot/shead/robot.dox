@@ -1,0 +1,13 @@
+/** 
+
+
+@namespace mrrocpp::kinematics::shead
+@brief Contains classes related to the kinematics of the SwarmItFIX agent's head.
+@date 2010.02.01 
+@author yoyek
+@ingroup KINEMATICS SIF_KINEMATICS
+
+
+
+
+*/

@@ -1,0 +1,13 @@
+/** 
+
+
+
+@namespace mrrocpp::kinematics::irp6p_tfg
+@brief Contains classes related to the kinematics of the IRp-6 on track manipulator two fingered gripper.
+@date Nov 26, 2009
+@author tkornuta
+@ingroup KINEMATICS IRP6P_KINEMATICS
+
+
+
+*/
