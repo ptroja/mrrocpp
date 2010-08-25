@@ -15,6 +15,7 @@ add_executable(ecp_objectfollower_pb
 
 target_link_libraries(ecp_objectfollower_pb
 	ecp_r_irp6p_m
+	ecp_r_irp6ot_m
 	ecp ${COMMON_LIBRARIES}
 )
 

@@ -7,7 +7,20 @@
 
 #include "ecp_t_objectfollower_ib.h"
 
+#include "../defines.h"
+
+#ifdef ROBOT_P
+#include "robot/irp6p_m/ecp_r_irp6p_m.h"
+#endif
+
+#ifdef ROBOT_OT
+#include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
+#endif
+
+
 #include "../ecp_mp_g_visual_servo_tester.h"
+
+
 
 using namespace mrrocpp::ecp::common::generator;
 using namespace logger;
@@ -26,10 +39,12 @@ const double
 ecp_t_objectfollower_ib::ecp_t_objectfollower_ib(mrrocpp::lib::configurator& configurator) :
 	task(configurator)
 {
+#ifdef ROBOT_P
 	ecp_m_robot = new ecp::irp6p_m::robot(*this);
-	//ecp_m_robot = new ecp::irp6ot_m::robot(*this);
-	//	smooth_gen = shared_ptr <smooth> (new smooth(*this, true));
-
+#endif
+#ifdef ROBOT_OT
+	ecp_m_robot = new ecp::irp6ot_m::robot(*this);
+#endif
 	char config_section_name[] = { "[object_follower_ib]" };
 
 	log_dbg_enabled = true;
