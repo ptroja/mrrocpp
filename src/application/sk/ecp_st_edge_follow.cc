@@ -6,11 +6,7 @@
 // Ostatnia modyfikacja: 2007
 // -------------------------------------------------------------------------
 
-#include "base/lib/typedefs.h"
-#include "base/lib/impconst.h"
-#include "base/lib/com_buf.h"
 
-#include "base/lib/srlib.h"
 #include "application/sk/ecp_g_sk.h"
 #include "application/sk/ecp_st_edge_follow.h"
 

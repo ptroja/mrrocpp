@@ -1,10 +1,5 @@
 #include <cstdio>
 
-#include "base/lib/typedefs.h"
-#include "base/lib/impconst.h"
-#include "base/lib/com_buf.h"
-
-#include "base/lib/srlib.h"
 #include "ecp_mp_t_sk_mr.h"
 
 #include "generator/ecp/ecp_g_smooth.h"

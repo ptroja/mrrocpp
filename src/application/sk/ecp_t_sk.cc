@@ -8,11 +8,6 @@
 #include <cstring>
 #include <unistd.h>
 
-#include "base/lib/typedefs.h"
-#include "base/lib/impconst.h"
-#include "base/lib/com_buf.h"
-
-#include "base/lib/srlib.h"
 #include "application/rcsc/ecp_mp_t_rcsc.h"
 
 #include "robot/irp6ot_m/ecp_r_irp6ot_m.h"

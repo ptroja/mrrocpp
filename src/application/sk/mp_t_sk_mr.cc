@@ -5,14 +5,9 @@
 //
 // -------------------------------------------------------------------------
 
-#include "base/lib/typedefs.h"
-#include "base/lib/impconst.h"
-#include "base/lib/com_buf.h"
-#include <iostream>
-#include <string>
-#include <sstream>
 
-#include "base/lib/srlib.h"
+#include <iostream>
+#include <sstream>
 
 #include "base/mp/mp_task.h"
 #include "base/mp/MP_main_error.h"
