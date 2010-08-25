@@ -1,0 +1,13 @@
+/** 
+
+   @defgroup edge_following Edge following
+   @ingroup applications
+   Single robot application of IRp6 manipulator following of an uknown contour
+  
+   
+  @defgroup sk_mr sk_mr
+  @ingroup applications
+  A sk_mr (with active coordinator) QNX test application
+
+  
+*/

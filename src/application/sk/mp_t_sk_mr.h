@@ -8,18 +8,12 @@
 #if !defined(__MP_T_SK_MR_H)
 #define __MP_T_SK_MR_H
 
-
 namespace mrrocpp {
 namespace mp {
 namespace task {
 
-/** @defgroup sk_mr sk_mr
- *  @ingroup application
- *  A sk_mr (with active coordinator) QNX test application
- *  @{
- */
-
-class sk_mr: public task {
+class sk_mr : public task
+{
 protected:
 
 public:
