@@ -6,7 +6,7 @@
  * @author tkornuta
  * @date Jun 21, 2010
  *
- * @ingroup KINEMATICS IRP6P_KINEMATICS
+ * @ingroup KINEMATICS IRP6P_KINEMATICS irp6ot_tfg
  */
 
 #include "base/lib/com_buf.h"

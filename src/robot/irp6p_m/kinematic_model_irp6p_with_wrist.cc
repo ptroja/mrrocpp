@@ -7,7 +7,7 @@
  * @author tkornuta
  * @date 24.02.2007
  *
- * @ingroup KINEMATICS IRP6P_KINEMATICS
+ * @ingroup KINEMATICS IRP6P_KINEMATICS irp6p_m
  */
 
 #include <cstdio>

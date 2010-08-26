@@ -13,7 +13,7 @@
 
 #include "generator/ecp/ecp_g_teach_in.h"
 #include "base/lib/mrmath/mrmath.h"
-#include "base/lib/data_port_headers/tfg.h"
+#include "robot/irp6_tfg/dp_tfg.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -25,7 +25,8 @@ namespace generator {
  *  @{
  */
 
-class tfg: public common::generator::generator {
+class tfg : public common::generator::generator
+{
 protected:
 
 	const int step_no;

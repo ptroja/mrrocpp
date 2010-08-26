@@ -8,7 +8,7 @@
  * @author tkornuta
  * @date 14.02.2007
  *
- * @ingroup KINEMATICS IRP6OT_KINEMATICS
+ * @ingroup KINEMATICS IRP6OT_KINEMATICS irp6ot_m
  */
 
 #if !defined(_IRP6OT_KIN_MODEL_WITH_WRIST_CALIBRATED)
@@ -44,7 +44,6 @@ public:
 	model_calibrated_with_wrist(int _number_of_servos);
 
 };
-
 
 } // namespace irp6ot
 } // namespace kinematic

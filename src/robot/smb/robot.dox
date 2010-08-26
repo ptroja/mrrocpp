@@ -1,0 +1,14 @@
+/** 
+
+
+@namespace mrrocpp::kinematics::smb
+@brief Contains classes related to the kinematics of the SwarmItFIX agent's mobile base.
+@date 2010.02.01 
+@author yoyek
+@ingroup KINEMATICS SIF_KINEMATICS
+
+   @defgroup smb SwarmItFix mobile base
+   @ingroup robots
+
+
+*/

@@ -1,12 +1,13 @@
-// -------------------------------------------------------------------------
-//                            generator/ecp_g_force.h dla QNX6
-// Deklaracje generatorow dla procesow ECP z wykorzystaniem sily
-//
-// -------------------------------------------------------------------------
+#if !defined(_ECP_GEN_edge_follow_H)
+#define _ECP_GEN_edge_follow_H
 
-
-#if !defined(_ECP_GEN_SK_H)
-#define _ECP_GEN_SK_H
+/*!
+ * @file ecp_g_edge_follow.h
+ * @brief File contains ecp_generator class declaration of unknown contour following application.
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup edge_follow
+ */
 
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
@@ -19,12 +20,8 @@ namespace ecp {
 namespace common {
 namespace generator {
 
-/** @addtogroup edge_following
- *
- *  @{
- */
-
-class y_edge_follow_force: public teach_in {
+class y_edge_follow_force : public teach_in
+{
 protected:
 
 	lib::ECP_POSE_SPECIFICATION emptyps;
@@ -45,9 +42,6 @@ public:
 	virtual bool next_step();
 
 }; // end:
-///
-
-/** @} */// end of edge_following
 
 
 } // namespace generator

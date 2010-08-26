@@ -6,7 +6,7 @@
  * @author tkornuta
  * @date May 28, 2010
  *
- * @ingroup IRP6OT_KINEMATICS
+ * @ingroup IRP6OT_KINEMATICS bird_hand
  */
 
 #ifndef KINEMATIC_PARAMETERS_BIRD_HAND_H_

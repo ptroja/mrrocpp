@@ -12,8 +12,6 @@
 #include "base/kinematics/kinematics_manager.h"
 #include "robot/smb/kinematic_model_smb.h"
 #include "robot/smb/smb_const.h"
-#include "base/lib/data_port_headers/epos.h"
-#include "base/lib/data_port_headers/smb.h"
 
 namespace mrrocpp {
 namespace ecp {

@@ -6,8 +6,7 @@
 //
 // -------------------------------------------------------------------------
 
-#include "base/lib/impconst.h"
-#include "base/lib/com_buf.h"
+
 #include "base/lib/mis_fun.h"
 
 #include "robot/bird_hand/ecp_r_bird_hand.h"
@@ -39,8 +38,6 @@ robot::robot(common::task::task& _ecp_object) :
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();
 }
-
-
 
 void robot::create_command()
 {

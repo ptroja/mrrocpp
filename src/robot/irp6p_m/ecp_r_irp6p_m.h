@@ -12,12 +12,10 @@
 #include "robot/irp6p_m/irp6p_m_const.h"
 
 #include "base/kinematics/kinematics_manager.h"
-#include "robot/irp6p_m/kinematic_model_irp6p_with_wrist.h"
 #include "robot/irp6p_m/kinematic_model_irp6p_5dof.h"
 #include "robot/irp6p_m/kinematic_model_calibrated_irp6p_with_wrist.h"
 #include "robot/irp6p_m/kinematic_model_irp6p_jacobian_with_wrist.h"
 #include "robot/irp6p_m/kinematic_model_irp6p_jacobian_transpose_with_wrist.h"
-#include "base/kinematics/kinematic_model_with_tool.h"
 
 namespace mrrocpp {
 namespace ecp {

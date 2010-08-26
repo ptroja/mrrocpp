@@ -1,0 +1,12 @@
+/** 
+
+@namespace mrrocpp::kinematics::bird_hand
+@brief Contains classes related to the kinematics of the bird-hand gripper mounted on the IRp-6 on track manipulator.
+@date Jan 05, 2010
+@author tkornuta
+@ingroup KINEMATICS IRP6OT_KINEMATICS
+
+   @defgroup bird_hand Bird Hand gripper
+   @ingroup robots
+
+*/

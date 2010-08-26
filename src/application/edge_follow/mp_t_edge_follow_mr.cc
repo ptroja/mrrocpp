@@ -1,32 +1,26 @@
-// -------------------------------------------------------------------------
-//                              task/mp_t_haptic.cc
-//
-// MP task for two robot haptic device
-//
-// -------------------------------------------------------------------------
+/*!
+ * @file mp_t_edge_follow_mr.cc
+ * @brief File contains edge_follow_mr mp_task class definition of unknown contour following application.
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup edge_follow
+ */
 
-#include "base/lib/typedefs.h"
-#include "base/lib/impconst.h"
-#include "base/lib/com_buf.h"
 #include <iostream>
-#include <string>
 #include <sstream>
-
-#include "base/lib/srlib.h"
 
 #include "base/mp/mp_task.h"
 #include "base/mp/MP_main_error.h"
-#include "ecp_mp_t_sk_mr.h"
-#include "mp_t_sk_mr.h"
+#include "mp_t_edge_follow_mr.h"
 #include "base/lib/mrmath/mrmath.h"
 
-#include "base/lib/data_port_headers/tfg.h"
+#include "robot/irp6_tfg/dp_tfg.h"
 #include "robot/irp6ot_tfg/irp6ot_tfg_const.h"
 #include "robot/irp6p_tfg/irp6p_tfg_const.h"
 #include "robot/irp6ot_m/irp6ot_m_const.h"
 #include "robot/irp6p_m/irp6p_m_const.h"
 
-#include "application/sk/ecp_mp_st_edge_follow.h"
+#include "application/edge_follow/ecp_mp_st_edge_follow.h"
 #include "subtask/ecp_mp_st_bias_edp_force.h"
 #include "subtask/ecp_mp_st_tff_nose_run.h"
 #include "generator/ecp/ecp_mp_g_tfg.h"
@@ -37,18 +31,18 @@ namespace task {
 
 task* return_created_mp_task(lib::configurator &_config)
 {
-	return new sk_mr(_config);
+	return new edge_follow_mr(_config);
 }
 
-sk_mr::sk_mr(lib::configurator &_config) :
+edge_follow_mr::edge_follow_mr(lib::configurator &_config) :
 	task(_config)
 {
 }
 
-void sk_mr::main_task_algorithm(void)
+void edge_follow_mr::main_task_algorithm(void)
 {
 
-	sr_ecp_msg->message("New sk_mr series");
+	sr_ecp_msg->message("New edge_follow_mr series");
 
 	std::stringstream ss(std::stringstream::in | std::stringstream::out);
 

@@ -5,7 +5,7 @@
  * @author tkornuta
  * @date 31.01.2007
  *
- * @ingroup KINEMATICS IRP6P_KINEMATICS
+ * @ingroup KINEMATICS IRP6P_KINEMATICS irp6p_m
  */
 
 #if !defined(_IRP6P_KIN_MODEL_5DOF)

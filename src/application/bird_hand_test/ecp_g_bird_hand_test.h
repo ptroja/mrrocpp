@@ -1,6 +1,7 @@
 /*
  * generator/ecp_g_bird_hand_test.h
  *
+ *
  *Author: yoyek
  */
 
@@ -9,7 +10,7 @@
 
 #include "base/ecp/ecp_generator.h"
 #include "base/lib/single_thread_port.h"
-#include "base/lib/data_port_headers/bird_hand.h"
+#include "robot/bird_hand/dp_bird_hand.h"
 
 namespace mrrocpp {
 namespace ecp {

@@ -5,7 +5,7 @@
  * @author kczajkowski
  * @date May 28, 2010
  *
- * @ingroup IRP6OT_KINEMATICS
+ * @ingroup IRP6OT_KINEMATICS bird_hand
  */
 
 #include <cmath>

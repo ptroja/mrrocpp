@@ -1,12 +1,16 @@
-// -------------------------------------------------------------------------
-//                            ecp_st_go.h
-// -------------------------------------------------------------------------
+#if !defined(_ECP_SUB_task_EDGE_FOLLOW_H)
+#define _ECP_SUB_task_EDGE_FOLLOW_H
 
-#if !defined(_ECP_SUB_TASK_EDGE_FOLLOW_H)
-#define _ECP_SUB_TASK_EDGE_FOLLOW_H
+/*!
+ * @file ecp_st_edge_follow.h
+ * @brief File contains edge_follow sub_task class declaration of unknown contour following application.
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup edge_follow
+ */
 
 #include "base/ecp/ecp_task.h"
-#include "application/sk/ecp_mp_st_edge_follow.h"
+#include "application/edge_follow/ecp_mp_st_edge_follow.h"
 
 namespace mrrocpp {
 namespace ecp {

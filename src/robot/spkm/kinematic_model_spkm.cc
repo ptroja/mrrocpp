@@ -5,7 +5,7 @@
  * @author tkornuta
  * @date Jan 05, 2010
  *
- * @ingroup KINEMATICS SIF_KINEMATICS
+ * @ingroup KINEMATICS SIF_KINEMATICS spkm
  */
 
 #include <cmath>
@@ -61,12 +61,12 @@ void kinematic_model_spkm::inverse_kinematics_transform(lib::JointArray & local_
 	Vector3d SW_joints = SW_inverse(P_W_T);
 
 	// Fill joints array.
-/*	local_desired_joints[0] = PKM_joints[0];
-	local_desired_joints[1] = PKM_joints[1];
-	local_desired_joints[2] = PKM_joints[2];
-	local_desired_joints[3] = SW_joints[0];
-	local_desired_joints[4] = SW_joints[1];
-	local_desired_joints[5] = SW_joints[2];*/
+	/*	local_desired_joints[0] = PKM_joints[0];
+	 local_desired_joints[1] = PKM_joints[1];
+	 local_desired_joints[2] = PKM_joints[2];
+	 local_desired_joints[3] = SW_joints[0];
+	 local_desired_joints[4] = SW_joints[1];
+	 local_desired_joints[5] = SW_joints[2];*/
 }
 
 Vector5d kinematic_model_spkm::PKM_S_to_e(const Vector3d & _O_S_P)
