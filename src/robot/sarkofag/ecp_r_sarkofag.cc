@@ -6,8 +6,6 @@
 //
 // -------------------------------------------------------------------------
 
-#include "base/lib/impconst.h"
-
 #include "base/lib/mis_fun.h"
 
 #include "robot/sarkofag/ecp_r_sarkofag.h"
