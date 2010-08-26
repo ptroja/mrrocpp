@@ -1,12 +1,12 @@
-#if !defined(_ECP_GEN_SK_H)
-#define _ECP_GEN_SK_H
+#if !defined(_ECP_GEN_edge_follow_H)
+#define _ECP_GEN_edge_follow_H
 
 /*!
- * @file ecp_g_sk.h
+ * @file ecp_g_edge_follow.h
  * @brief File contains ecp_generator class declaration of unknown contour following application.
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *
- * @ingroup edge_following
+ * @ingroup edge_follow
  */
 
 #include "base/lib/impconst.h"

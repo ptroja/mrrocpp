@@ -1,9 +1,9 @@
 /*!
- * @file mp_t_sk_mr.cc
- * @brief File contains sk_mr mp_task class definition of unknown contour following application.
+ * @file mp_t_edge_follow_mr.cc
+ * @brief File contains edge_follow_mr mp_task class definition of unknown contour following application.
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *
- * @ingroup edge_following
+ * @ingroup edge_follow
  */
 
 #include <iostream>
@@ -11,7 +11,7 @@
 
 #include "base/mp/mp_task.h"
 #include "base/mp/MP_main_error.h"
-#include "mp_t_sk_mr.h"
+#include "mp_t_edge_follow_mr.h"
 #include "base/lib/mrmath/mrmath.h"
 
 #include "base/lib/data_port_headers/tfg.h"
@@ -31,18 +31,18 @@ namespace task {
 
 task* return_created_mp_task(lib::configurator &_config)
 {
-	return new sk_mr(_config);
+	return new edge_follow_mr(_config);
 }
 
-sk_mr::sk_mr(lib::configurator &_config) :
+edge_follow_mr::edge_follow_mr(lib::configurator &_config) :
 	task(_config)
 {
 }
 
-void sk_mr::main_task_algorithm(void)
+void edge_follow_mr::main_task_algorithm(void)
 {
 
-	sr_ecp_msg->message("New sk_mr series");
+	sr_ecp_msg->message("New edge_follow_mr series");
 
 	std::stringstream ss(std::stringstream::in | std::stringstream::out);
 

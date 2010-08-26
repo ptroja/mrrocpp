@@ -1,9 +1,9 @@
 /*!
- * @file ecp_t_sk_mr.cc
- * @brief File contains sk_mr ecp_task class definition of unknown contour following application.
+ * @file ecp_t_edge_follow_mr.cc
+ * @brief File contains edge_follow_mr ecp_task class definition of unknown contour following application.
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *
- * @ingroup edge_following
+ * @ingroup edge_follow
  */
 
 #include <cstdio>
@@ -11,7 +11,7 @@
 #include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
 #include "robot/irp6p_m/ecp_r_irp6p_m.h"
 
-#include "ecp_t_sk_mr.h"
+#include "ecp_t_edge_follow_mr.h"
 
 #include "ecp_st_edge_follow.h"
 #include "subtask/ecp_st_bias_edp_force.h"
@@ -24,7 +24,7 @@ namespace common {
 namespace task {
 
 // KONSTRUKTORY
-sk_mr::sk_mr(lib::configurator &_config) :
+edge_follow_mr::edge_follow_mr(lib::configurator &_config) :
 	task(_config)
 {
 	// the robot is choose dependendat on the section of configuration file sent as argv[4]
@@ -53,12 +53,12 @@ sk_mr::sk_mr(lib::configurator &_config) :
 		ecpst->nrg->configure_pulse_check(true);
 	}
 
-	sr_ecp_msg->message("ecp SK_MR loaded");
+	sr_ecp_msg->message("ecp edge_follow_MR loaded");
 }
 
 task* return_created_ecp_task(lib::configurator &_config)
 {
-	return new common::task::sk_mr(_config);
+	return new common::task::edge_follow_mr(_config);
 }
 
 }

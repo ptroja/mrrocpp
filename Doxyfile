@@ -685,7 +685,7 @@ INPUT                  = src/base/kinematics \
                          src/sensor/fradia \
                          src/sensor/pcbird \
                          src/application/applications.dox \
-                         src/application/sk \
+                         src/application/edge_follow \
                      
 
 # This tag can be used to specify the character encoding of the source files 

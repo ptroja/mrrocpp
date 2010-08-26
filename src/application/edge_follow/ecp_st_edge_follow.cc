@@ -3,10 +3,10 @@
  * @brief File contains edge_follow sub_task class definition of unknown contour following application.
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *
- * @ingroup edge_following
+ * @ingroup edge_follow
  */
 
-#include "application/edge_follow/ecp_g_sk.h"
+#include "application/edge_follow/ecp_g_edge_follow.h"
 #include "application/edge_follow/ecp_st_edge_follow.h"
 
 namespace mrrocpp {
