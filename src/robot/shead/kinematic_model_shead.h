@@ -2,10 +2,10 @@
  * @file kinematic_model_shead.h
  * @brief File containing the declaration of the kinematic model for the SwarmItFix agent's head class.
  *
- * @author yoyek
+ * @author tkornuta
  * @date 2010.02.01
  *
- * @ingroup KINEMATICS SIF_KINEMATICS
+ * @ingroup KINEMATICS SIF_KINEMATICS shead
  */
 
 #if !defined(_SHEAD_KIN_MODEL)

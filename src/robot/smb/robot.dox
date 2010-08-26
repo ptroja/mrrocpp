@@ -7,7 +7,8 @@
 @author yoyek
 @ingroup KINEMATICS SIF_KINEMATICS
 
-
+   @defgroup smb SwarmItFix mobile base
+   @ingroup robots
 
 
 */

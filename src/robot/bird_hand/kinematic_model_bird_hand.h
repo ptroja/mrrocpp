@@ -6,7 +6,7 @@
  * @author kczajkowski
  * @date May 28, 2010
  *
- * @ingroup KINEMATICS IRP6OT_KINEMATICS
+ * @ingroup KINEMATICS IRP6OT_KINEMATICS bird_hand
  */
 
 #ifndef KINEMATIC_MODEL_BIRD_HAND_H_

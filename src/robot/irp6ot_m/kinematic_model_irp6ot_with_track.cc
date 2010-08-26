@@ -7,7 +7,7 @@
  * @author tkornuta
  * @date 24.02.2007
  *
- * @ingroup KINEMATICS IRP6OT_KINEMATICS
+ * @ingroup KINEMATICS IRP6OT_KINEMATICS irp6ot_m
  */
 
 #include "robot/irp6ot_m/kinematic_model_irp6ot_with_track.h"

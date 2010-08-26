@@ -6,7 +6,7 @@
  * @author tkornuta
  * @date Jun 21, 2010
  *
- * @ingroup KINEMATICS
+ * @ingroup KINEMATICS irp6ot_tfg irp6p_tfg
  */
 
 

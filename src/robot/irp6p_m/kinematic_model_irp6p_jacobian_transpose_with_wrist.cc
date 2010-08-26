@@ -6,7 +6,7 @@
  * @author tkornuta
  * @date 18.07.2007
  *
- * @ingroup KINEMATICS IRP6P_KINEMATICS
+ * @ingroup KINEMATICS IRP6P_KINEMATICS irp6p_m
  */
 
 #include "robot/irp6p_m/kinematic_model_irp6p_jacobian_transpose_with_wrist.h"

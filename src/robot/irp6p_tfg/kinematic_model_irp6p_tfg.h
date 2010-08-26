@@ -6,9 +6,8 @@
  * @author tkornuta
  * @date Jun 21, 2010
  *
- * @ingroup KINEMATICS IRP6P_KINEMATICS
+ * @ingroup KINEMATICS IRP6P_KINEMATICS irp6ot_tfg
  */
-
 
 #if !defined(_IRP6P_TFG_KIN_MODEL)
 #define _IRP6P_TFG_KIN_MODEL
@@ -28,7 +27,7 @@ namespace irp6p_tfg {
  *
  * @ingroup KINEMATICS IRP6P_KINEMATICS
  */
-class model: public common::kinematic_model_irp6_tfg
+class model : public common::kinematic_model_irp6_tfg
 {
 protected:
 

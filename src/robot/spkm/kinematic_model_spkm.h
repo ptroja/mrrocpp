@@ -5,7 +5,7 @@
  * @author tkornuta
  * @date Jan 05, 2010
  *
- * @ingroup KINEMATICS SIF_KINEMATICS
+ * @ingroup KINEMATICS SIF_KINEMATICS spkm
  */
 
 #ifndef KINEMATIC_MODEL_SPKM_H_

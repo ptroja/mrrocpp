@@ -23,7 +23,8 @@ The other one contains kinematics of its grippers:
  - \link mrrocpp::kinematics::bird_hand::kinematic_model_bird_hand bird_hand\endlink model ot the three finger gripper.
 @}
 
-
+   @defgroup irp6p_m IRp6 postument manipulator
+   @ingroup robots
 
 
 */

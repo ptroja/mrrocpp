@@ -22,5 +22,8 @@ The division is as follows:
 
 @}
 
+   @defgroup spkm SwarmItFix parallel kinematic machine
+   @ingroup robots
+
 
 */

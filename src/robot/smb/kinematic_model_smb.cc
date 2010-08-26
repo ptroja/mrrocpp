@@ -2,10 +2,10 @@
  * @file kinematic_model_smb.cc
  * @brief File containing methods of the kinematic model for the SwarmItFix agent's mobile base class.
  *
- * @author yoyek
+ * @author tkornuta
  * @date 2010.02.01
  *
- * @ingroup KINEMATICS SIF_KINEMATICS
+ * @ingroup KINEMATICS SIF_KINEMATICS smb
  */
 
 #include "base/lib/com_buf.h"

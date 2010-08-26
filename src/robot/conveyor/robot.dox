@@ -14,5 +14,7 @@ The \link mrrocpp::kinematics::conveyor::model model\endlink
 is a class responsible for kinematics computations required to control the conveyor - a single motor, thus DOF robot. 
 @}
 
+   @defgroup conveyor Conveyor
+   @ingroup robots
 
 */

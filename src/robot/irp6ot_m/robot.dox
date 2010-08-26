@@ -1,7 +1,5 @@
 /** 
 
-   @defgroup irp6ot_m IRp6 on track manipulator
-   @ingroup robots
 
 
 @namespace mrrocpp::kinematics::irp6ot
@@ -27,6 +25,8 @@ The other one contains kinematics of its grippers:
 @}
 
 
+   @defgroup irp6ot_m IRp6 on track manipulator
+   @ingroup robots
 
 */
 

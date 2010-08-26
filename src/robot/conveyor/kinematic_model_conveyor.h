@@ -5,7 +5,7 @@
  * @author tkornuta
  * @date 31.01.2007
  *
- * @ingroup KINEMATICS CONVEYOR_KINEMATICS
+ * @ingroup KINEMATICS CONVEYOR_KINEMATICS conveyor
  */
 
 #if !defined(_CONVEYOR_KIN_MODEL)
