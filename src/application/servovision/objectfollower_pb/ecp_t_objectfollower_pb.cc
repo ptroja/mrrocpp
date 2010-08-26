@@ -53,7 +53,7 @@ ecp_t_objectfollower_pb::ecp_t_objectfollower_pb(mrrocpp::lib::configurator& con
 
 	term_cond = shared_ptr <termination_condition> (new object_reached_termination_condition(0.005, 0.005, 50));
 	log_dbg("ecp_t_objectfollower_pb::ecp_t_objectfollower_pb(): 3\n");
-	sm = shared_ptr <simple_visual_servo_manager> (new simple_visual_servo_manager(*this, config_section_name, vs));
+	sm = shared_ptr <single_visual_servo_manager> (new single_visual_servo_manager(*this, config_section_name, vs));
 	log_dbg("ecp_t_objectfollower_pb::ecp_t_objectfollower_pb(): 4\n");
 	sm->add_position_constraint(cube);
 	//sm->add_termination_condition(term_cond);

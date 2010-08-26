@@ -2,8 +2,8 @@
 //
 // -------------------------------------------------------------------------
 
-#if !defined(_ECP_MP_G_SIMPLE_VISUAL_SERVO_MANAGER_H)
-#define _ECP_MP_G_SIMPLE_VISUAL_SERVO_MANAGER_H
+#if !defined(_ECP_MP_G_single_visual_servo_manager_H)
+#define _ECP_MP_G_single_visual_servo_manager_H
 
 namespace mrrocpp {
 namespace ecp_mp {

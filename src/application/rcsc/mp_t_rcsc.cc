@@ -25,7 +25,7 @@
 #include "subtask/ecp_mp_st_tff_nose_run.h"
 #include "generator/ecp/ecp_mp_g_smooth.h"
 #include "generator/ecp/ecp_mp_g_force.h"
-#include "application/servovision/ecp_mp_g_simple_visual_servo_manager.h"
+#include "application/servovision/ecp_mp_g_single_visual_servo_manager.h"
 
 #include <boost/foreach.hpp>
 

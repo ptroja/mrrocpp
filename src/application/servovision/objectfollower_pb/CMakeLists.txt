@@ -5,7 +5,7 @@ add_executable(ecp_objectfollower_pb
     ../pb_visual_servo.cc
     ../visual_servo.cc
     ../visual_servo_manager.cc
-    ../simple_visual_servo_manager.cc
+    ../single_visual_servo_manager.cc
     ../position_constraint.cc
     ../cubic_constraint.cc
     ../object_reached_termination_condition.cc
