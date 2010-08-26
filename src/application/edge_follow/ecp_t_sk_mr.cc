@@ -1,3 +1,11 @@
+/*!
+ * @file ecp_t_sk_mr.cc
+ * @brief File contains sk_mr ecp_task class definition of unknown contour following application.
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup edge_following
+ */
+
 #include <cstdio>
 
 #include "robot/irp6ot_m/ecp_r_irp6ot_m.h"

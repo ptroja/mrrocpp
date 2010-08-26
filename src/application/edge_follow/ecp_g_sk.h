@@ -3,7 +3,7 @@
 
 /*!
  * @file ecp_g_sk.h
- * @brief File contains generator class declaration of unknown contour following application.
+ * @brief File contains ecp_generator class declaration of unknown contour following application.
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *
  * @ingroup edge_following

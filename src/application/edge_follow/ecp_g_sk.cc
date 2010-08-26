@@ -1,10 +1,10 @@
 /*!
  * @file ecp_g_sk.cc
- * @brief File contains generator class definition of unknown contour following application.
+ * @brief File contains ecp_generator class definition of unknown contour following application.
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *
  * @ingroup edge_following
-*/
+ */
 
 #include <cstdio>
 #include <fstream>
@@ -15,7 +15,7 @@
 
 #include "base/ecp/ecp_task.h"
 #include "base/ecp/ecp_robot.h"
-#include "application/sk/ecp_g_sk.h"
+#include "application/edge_follow/ecp_g_sk.h"
 
 namespace mrrocpp {
 namespace ecp {

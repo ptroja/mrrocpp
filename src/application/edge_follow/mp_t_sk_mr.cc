@@ -1,10 +1,10 @@
-// -------------------------------------------------------------------------
-//                              task/mp_t_haptic.cc
-//
-// MP task for two robot haptic device
-//
-// -------------------------------------------------------------------------
-
+/*!
+ * @file mp_t_sk_mr.cc
+ * @brief File contains sk_mr mp_task class definition of unknown contour following application.
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup edge_following
+ */
 
 #include <iostream>
 #include <sstream>
@@ -20,7 +20,7 @@
 #include "robot/irp6ot_m/irp6ot_m_const.h"
 #include "robot/irp6p_m/irp6p_m_const.h"
 
-#include "application/sk/ecp_mp_st_edge_follow.h"
+#include "application/edge_follow/ecp_mp_st_edge_follow.h"
 #include "subtask/ecp_mp_st_bias_edp_force.h"
 #include "subtask/ecp_mp_st_tff_nose_run.h"
 #include "generator/ecp/ecp_mp_g_tfg.h"
