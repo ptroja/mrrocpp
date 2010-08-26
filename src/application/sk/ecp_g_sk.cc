@@ -1,23 +1,10 @@
-/**
- * @file generator/ecp_g_force.cc
- * @brief ECP force generators
- * - class declaration
- * @author yoyek
- * @date 01.01.2002
+/*!
+ * @file ecp_g_sk.cc
+ * @brief File contains generator class definition of unknown contour following application.
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *
- * $URL: https://segomo.elka.pw.edu.pl/svn/mrrocpp/base/trunk/src/generator/ecp/ecp_g_force.cc $
- * $LastChangedRevision: 3198 $
- * $LastChangedDate: 2009-12-16 23:17:30 +0100 (Wed, 16 Dec 2009) $
- * $LastChangedBy: yoyek $
- */
-
-// -------------------------------------------------------------------------
-//                            ecp.cc
-//            Effector Control Process (lib::ECP) - force methods
-// Funkcje do tworzenia procesow ECP z wykorzystaniem sily
-//
-// Ostatnia modyfikacja: 2004r.
-// -------------------------------------------------------------------------
+ * @ingroup edge_following
+*/
 
 #include <cstdio>
 #include <fstream>

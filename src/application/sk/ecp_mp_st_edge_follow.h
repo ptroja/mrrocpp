@@ -5,7 +5,13 @@
 #if !defined(_ECP_MP_SUB_TASK_EDGE_FOLLOW_H)
 #define _ECP_MP_SUB_TASK_EDGE_FOLLOW_H
 
-
+/*!
+ * @file ecp_mp_st_edge_follow.h
+ * @brief File contains edge_follow subtask label definition of unknown contour following application.
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup edge_following
+ */
 
 
 namespace mrrocpp {

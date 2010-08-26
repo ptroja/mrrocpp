@@ -11,7 +11,6 @@
 
 #include "base/mp/mp_task.h"
 #include "base/mp/MP_main_error.h"
-#include "ecp_mp_t_sk_mr.h"
 #include "mp_t_sk_mr.h"
 #include "base/lib/mrmath/mrmath.h"
 
