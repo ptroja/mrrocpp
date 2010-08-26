@@ -8,7 +8,7 @@
 #define SMB_DATA_PORT_SERVOS_NUMBER 2
 #define SMB_DATA_PORT_LEG_CLAMP_NUMBER 3
 
-#include "epos.h"
+#include "robot/epos/dp_epos.h"
 
 namespace mrrocpp {
 namespace lib {

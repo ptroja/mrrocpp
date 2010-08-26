@@ -6,7 +6,7 @@
 #ifndef __EPOS_GEN_LIB_H
 #define __EPOS_GEN_LIB_H
 
-#include "base/lib/data_port_headers/epos.h"
+#include "robot/epos/dp_epos.h"
 
 namespace mrrocpp {
 namespace lib {

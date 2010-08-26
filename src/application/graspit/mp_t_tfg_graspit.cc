@@ -11,7 +11,7 @@
 
 #include "base/mp/MP_main_error.h"
 #include "base/lib/mrmath/mrmath.h"
-#include "base/lib/data_port_headers/tfg.h"
+#include "robot/irp6_tfg/dp_tfg.h"
 #include "mp_t_tfg_graspit.h"
 #include "ecp_mp_t_graspit.h"
 #include "robot/irp6ot_tfg/irp6ot_tfg_const.h"

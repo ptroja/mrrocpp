@@ -1,7 +1,7 @@
 #if !defined(_SPKM_CONST_H)
 #define _SPKM_CONST_H
 
-#include "base/lib/data_port_headers/epos.h"
+#include "robot/epos/dp_epos.h"
 
 #include "base/lib/impconst.h"
 #define SPKM_NUM_OF_SERVOS	7
