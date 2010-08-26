@@ -20,7 +20,7 @@
 #include "mp_t_swarmitfix.h"
 #include "base/lib/single_thread_port.h"
 #include "base/lib/mrmath/mrmath.h"
-#include "base/lib/data_port_headers/epos.h"
+#include "data_port_headers/epos.h"
 #include "robot/smb/smb_const.h"
 #include "robot/spkm/spkm_const.h"
 #include "robot/shead/shead_const.h"

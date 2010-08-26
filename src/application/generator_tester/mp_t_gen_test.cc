@@ -3,7 +3,7 @@
 
 #include "base/lib/mrmath/mrmath.h"
 
-#include "base/lib/data_port_headers/tfg.h"
+#include "data_port_headers/tfg.h"
 #include "robot/irp6ot_tfg/irp6ot_tfg_const.h"
 #include "robot/irp6p_tfg/irp6p_tfg_const.h"
 #include "robot/irp6ot_m/irp6ot_m_const.h"

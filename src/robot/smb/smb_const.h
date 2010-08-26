@@ -1,8 +1,8 @@
 #if !defined(_SMB_CONST_H)
 #define _SMB_CONST_H
 
-#include "base/lib/data_port_headers/smb.h"
-#include "base/lib/data_port_headers/epos.h"
+#include "data_port_headers/smb.h"
+#include "data_port_headers/epos.h"
 
 #include "base/lib/impconst.h"
 

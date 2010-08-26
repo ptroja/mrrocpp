@@ -1,7 +1,7 @@
 #if !defined(_BIRD_HAND_CONST_H)
 #define _BIRD_HAND_CONST_H
 
-#include "base/lib/data_port_headers/bird_hand.h"
+#include "data_port_headers/bird_hand.h"
 
 #include "base/lib/impconst.h"
 
