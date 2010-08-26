@@ -9,7 +9,7 @@
 
 #include "base/ecp/ecp_generator.h"
 #include "base/lib/single_thread_port.h"
-#include "data_port_headers/bird_hand.h"
+#include "robot/bird_hand/dp_bird_hand.h"
 
 namespace mrrocpp {
 namespace ecp {

@@ -7,7 +7,7 @@
 
 #include "base/mp/MP_main_error.h"
 #include "base/lib/mrmath/mrmath.h"
-#include "data_port_headers/bird_hand.h"
+#include "robot/bird_hand/dp_bird_hand.h"
 #include "mp_t_birdhand_graspit.h"
 #include "ecp_mp_t_graspit.h"
 #include "robot/bird_hand/bird_hand_const.h"

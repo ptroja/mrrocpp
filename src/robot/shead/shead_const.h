@@ -1,7 +1,7 @@
 #if !defined(_SHEAD_CONST_H)
 #define _SHEAD_CONST_H
 
-#include "data_port_headers/shead.h"
+#include "dp_shead.h"
 
 #include "base/lib/impconst.h"
 

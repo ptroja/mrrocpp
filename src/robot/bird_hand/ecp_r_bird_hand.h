@@ -12,7 +12,6 @@
 #include "robot/bird_hand/bird_hand_const.h"
 #include "base/kinematics/kinematics_manager.h"
 #include "robot/bird_hand/kinematic_model_bird_hand.h"
-#include "data_port_headers/bird_hand.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -45,14 +44,12 @@ protected:
 
 	void create_kinematic_models_for_given_robot(void);
 
-
 public:
 	robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp);
 	robot(common::task::task& _ecp_object);
 
 	void create_command();
 	void get_reply();
-
 
 };
 // ---------------------------------------------------------------
