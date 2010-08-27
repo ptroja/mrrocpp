@@ -1,6 +1,14 @@
 #if !defined(MP_R_IRP6OT_M_H_)
 #define MP_R_IRP6OT_M_H_
 
+/*!
+ * @file mp_r_irp6ot_m.h
+ * @brief File contains mp robot class declaration for IRp6 on track manipulator
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup irp6ot_m
+ */
+
 #include "base/mp/mp_r_motor_driven.h"
 
 namespace mrrocpp {

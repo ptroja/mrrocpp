@@ -1,6 +1,14 @@
 #if !defined(_CONVEYOR_CONST_H)
 #define _CONVEYOR_CONST_H
 
+/*!
+ * @file conveyor_const.h
+ * @brief File contains constants and structures for Conveyor
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup conveyor
+ */
+
 #include "base/lib/impconst.h"
 
 namespace mrrocpp {

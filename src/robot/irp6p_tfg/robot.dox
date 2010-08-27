@@ -9,7 +9,7 @@
 @ingroup KINEMATICS IRP6P_KINEMATICS
 
    @defgroup irp6p_tfg IRp6 postument two finger gripper
-   @ingroup robots
+   @ingroup grippers
 
 
 */

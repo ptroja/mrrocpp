@@ -24,7 +24,7 @@ The other one contains kinematics of its grippers:
 @}
 
    @defgroup irp6p_m IRp6 postument manipulator
-   @ingroup robots
+   @ingroup manipulators
 
 
 */

@@ -1,11 +1,10 @@
-// -------------------------------------------------------------------------
-//                            ecp.cc
-//            Effector Control Process (lib::ECP) - methods
-// Funkcje do tworzenia procesow ECP
-// robot - irp6_on_track
-//
-// -------------------------------------------------------------------------
-
+/*!
+ * @file ecp_r_irp6ot_m.cc
+ * @brief File contains ecp robot class definition for IRp6 on track manipulator
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup irp6ot_m
+ */
 
 #include "base/lib/mis_fun.h"
 

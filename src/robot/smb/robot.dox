@@ -8,7 +8,7 @@
 @ingroup KINEMATICS SIF_KINEMATICS
 
    @defgroup smb SwarmItFix mobile base
-   @ingroup robots
+   @ingroup swarm_robots mobile_bases
 
 
 */

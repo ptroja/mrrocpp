@@ -692,6 +692,7 @@ INPUT                  = src/base/kinematics \
                          src/robot/sarkofag/robot.dox \ 
                          src/robot/sarkofag/sarkofag_const.h \ 
                          src/robot/epos/dp_epos.h \ 
+                         src/robot/epos/robot.dox \ 
 						 src/base/lib/lib.dox \
                          src/base/lib/sensor_error.h \
                          src/base/lib/sensor_interface.h \

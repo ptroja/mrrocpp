@@ -1,9 +1,13 @@
-/*
- **  EPOS.H
- */
-
 #if !defined(__EPOS_DATA_PORT_H)
 #define __EPOS_DATA_PORT_H
+
+/*!
+ * @file dp_epos.h
+ * @brief File contains data port communication structures for processes cooperating with Epos2 Maxon controllers
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup epos
+ */
 
 #include <string>
 

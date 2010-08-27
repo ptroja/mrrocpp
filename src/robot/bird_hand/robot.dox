@@ -7,6 +7,6 @@
 @ingroup KINEMATICS IRP6OT_KINEMATICS
 
    @defgroup bird_hand Bird Hand gripper
-   @ingroup robots
+   @ingroup grippers
 
 */

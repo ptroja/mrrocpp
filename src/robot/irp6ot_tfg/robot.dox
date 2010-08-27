@@ -10,6 +10,6 @@
 @ingroup KINEMATICS IRP6OT_KINEMATICS
 
    @defgroup irp6ot_tfg IRp6 on track two finger gripper
-   @ingroup robots
+   @ingroup grippers
 
 */

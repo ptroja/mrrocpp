@@ -1,6 +1,14 @@
 #if !defined(_IRP6OT_TFG_CONST_H)
 #define _IRP6OT_TFG_CONST_H
 
+/*!
+ * @file irp6ot_tfg_const.h
+ * @brief File contains constants and structures for IRp6 on track two finger gripper
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup irp6ot_tfg
+ */
+
 #include "base/lib/impconst.h"
 
 namespace mrrocpp {

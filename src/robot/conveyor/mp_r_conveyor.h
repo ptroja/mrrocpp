@@ -1,6 +1,15 @@
 #if !defined(MP_R_CONVEYOR_H_)
 #define MP_R_CONVEYOR_H_
 
+/*!
+ * @file mp_r_conveyor.h
+ * @brief File contains mp robot class declaration for Conveyor
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup conveyor
+ */
+
+
 #include "base/mp/mp_r_motor_driven.h"
 
 namespace mrrocpp {

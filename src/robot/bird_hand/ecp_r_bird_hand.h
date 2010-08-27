@@ -1,12 +1,13 @@
-// -------------------------------------------------------------------------
-//                            ecp_local.h dla QNX6
-// Definicje struktur danych i metod dla procesow ECP
-// robot - irp6_mechatronika
-//
-// -------------------------------------------------------------------------
-
 #if !defined(_ECP_R_BIRD_HAND_H)
 #define _ECP_R_BIRD_HAND_H
+
+/*!
+ * @file ecp_r_bird_hand.h
+ * @brief File contains ecp robot class declaration for Bird Hand three finger gripper
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup bird_hand
+ */
 
 #include "base/ecp/ecp_robot.h"
 #include "robot/bird_hand/bird_hand_const.h"

@@ -1,9 +1,15 @@
-/*
- **  BIRD_HAND.H
- */
-
 #if !defined(__BIRD_HAND_DATA_PORT_H)
 #define __BIRD_HAND_DATA_PORT_H
+
+
+/*!
+ * @file dp_bird_hand.h
+ * @brief File contains data port communication structures for Bird Hand three finger gripper
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup bird_hand
+ */
+
 
 namespace mrrocpp {
 namespace lib {

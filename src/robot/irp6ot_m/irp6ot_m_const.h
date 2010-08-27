@@ -1,6 +1,14 @@
 #if !defined(_IRP6OT_M_CONST_H)
 #define _IRP6OT_M_CONST_H
 
+/*!
+ * @file irp6ot_m_const.h
+ * @brief File contains constants and structures for IRp6 on track manipulator
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup irp6ot_m
+ */
+
 #include "base/lib/impconst.h"
 
 namespace mrrocpp {
