@@ -7,7 +7,7 @@
 #include "base/mp/mp_task.h"
 #include "mp_t_visualservo_tester.h"
 
-#include "robot/conveyor/conveyor_const.h"
+#include "robot/conveyor/const_conveyor.h"
 
 #include "base/lib/logger.h"
 

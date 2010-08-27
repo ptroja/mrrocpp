@@ -11,7 +11,7 @@
 #define __EDP_E_SHEAD_H
 
 #include "base/edp/edp_e_motor_driven.h"
-#include "robot/shead/shead_const.h"
+#include "robot/shead/const_shead.h"
 
 namespace mrrocpp {
 namespace edp {

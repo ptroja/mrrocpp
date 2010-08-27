@@ -10,12 +10,12 @@
 #include "robot/bird_hand/dp_bird_hand.h"
 #include "mp_t_birdhand_graspit.h"
 #include "ecp_mp_t_graspit.h"
-#include "robot/bird_hand/bird_hand_const.h"
+#include "robot/bird_hand/const_bird_hand.h"
 #include <iostream>
 #include <string>
 #include <sstream>
-#include "robot/irp6ot_m/irp6ot_m_const.h"
-#include "robot/irp6p_m/irp6p_m_const.h"
+#include "robot/irp6ot_m/const_irp6ot_m.h"
+#include "robot/irp6p_m/const_irp6p_m.h"
 
 namespace mrrocpp {
 namespace mp {

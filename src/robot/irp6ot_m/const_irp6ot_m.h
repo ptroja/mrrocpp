@@ -2,7 +2,7 @@
 #define _IRP6OT_M_CONST_H
 
 /*!
- * @file irp6ot_m_const.h
+ * @file const_irp6ot_m.h
  * @brief File contains constants and structures for IRp6 on track manipulator
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *

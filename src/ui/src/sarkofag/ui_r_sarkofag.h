@@ -10,7 +10,7 @@
 
 #include "ui/src/ui.h"
 #include "ui/src/ui_robot.h"
-#include "robot/sarkofag/sarkofag_const.h"
+#include "robot/sarkofag/const_sarkofag.h"
 
 //
 //

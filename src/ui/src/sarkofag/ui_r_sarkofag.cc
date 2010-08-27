@@ -4,7 +4,7 @@
 
 #include "ui/src/sarkofag/ui_r_sarkofag.h"
 #include "ui/src/ui_ecp_r_tfg_and_conv.h"
-#include "robot/sarkofag/sarkofag_const.h"
+#include "robot/sarkofag/const_sarkofag.h"
 #include "ui/src/ui_class.h"
 
 /* Local headers */

@@ -9,7 +9,7 @@
 #define _ECP_R_SARKOFAG_H
 
 #include "base/ecp/ecp_robot.h"
-#include "robot/sarkofag/sarkofag_const.h"
+#include "robot/sarkofag/const_sarkofag.h"
 
 #include "base/kinematics/kinematics_manager.h"
 #include "robot/sarkofag/kinematic_model_sarkofag.h"

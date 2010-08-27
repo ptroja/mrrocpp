@@ -1,5 +1,5 @@
 #include "robot/smb/mp_r_smb.h"
-#include "robot/smb/smb_const.h"
+#include "robot/smb/const_smb.h"
 
 namespace mrrocpp {
 namespace mp {

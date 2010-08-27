@@ -1,5 +1,5 @@
 #include "robot/sarkofag/mp_r_sarkofag.h"
-#include "robot/sarkofag/sarkofag_const.h"
+#include "robot/sarkofag/const_sarkofag.h"
 
 namespace mrrocpp {
 namespace mp {

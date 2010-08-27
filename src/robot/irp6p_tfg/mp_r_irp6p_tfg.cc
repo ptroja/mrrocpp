@@ -1,5 +1,5 @@
 #include "robot/irp6p_tfg/mp_r_irp6p_tfg.h"
-#include "robot/irp6p_tfg/irp6p_tfg_const.h"
+#include "robot/irp6p_tfg/const_irp6p_tfg.h"
 
 namespace mrrocpp {
 namespace mp {

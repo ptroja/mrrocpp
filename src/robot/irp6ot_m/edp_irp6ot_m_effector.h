@@ -16,7 +16,7 @@
 // Klasa edp_irp6s_robot.
 
 #include "base/edp/edp_e_manip.h"
-#include "robot/irp6ot_m/irp6ot_m_const.h"
+#include "robot/irp6ot_m/const_irp6ot_m.h"
 
 #define IRP6OT_GRIPPER_TURN_AXE 6
 

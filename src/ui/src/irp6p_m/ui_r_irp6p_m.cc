@@ -4,7 +4,7 @@
 
 #include "ui/src/irp6p_m/ui_r_irp6p_m.h"
 #include "ui/src/ui_ecp_r_irp6_common.h"
-#include "robot/irp6p_m/irp6p_m_const.h"
+#include "robot/irp6p_m/const_irp6p_m.h"
 #include "ui/src/ui_class.h"
 
 /* Local headers */

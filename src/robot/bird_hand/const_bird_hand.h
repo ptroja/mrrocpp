@@ -2,7 +2,7 @@
 #define _BIRD_HAND_CONST_H
 
 /*!
- * @file bird_hand_const.h
+ * @file const_bird_hand.h
  * @brief File contains constants and structures for Bird Hand three finger gripper
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *

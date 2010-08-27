@@ -11,7 +11,7 @@
 
 #include "base/lib/mis_fun.h"
 #include "robot/irp6ot_m/mp_r_irp6ot_m.h"
-#include "robot/irp6ot_m/irp6ot_m_const.h"
+#include "robot/irp6ot_m/const_irp6ot_m.h"
 
 namespace mrrocpp {
 namespace mp {

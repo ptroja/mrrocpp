@@ -20,7 +20,7 @@
 #include <hw/inout.h>
 #endif
 
-#include "robot/irp6ot_m/irp6ot_m_const.h"
+#include "robot/irp6ot_m/const_irp6ot_m.h"
 
 #include "robot/irp6ot_m/sg_irp6ot_m.h"
 // Klasa edp_irp6ot_effector.

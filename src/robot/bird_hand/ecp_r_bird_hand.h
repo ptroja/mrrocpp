@@ -10,7 +10,7 @@
  */
 
 #include "base/ecp/ecp_robot.h"
-#include "robot/bird_hand/bird_hand_const.h"
+#include "robot/bird_hand/const_bird_hand.h"
 #include "base/kinematics/kinematics_manager.h"
 #include "robot/bird_hand/kinematic_model_bird_hand.h"
 

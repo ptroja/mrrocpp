@@ -4,7 +4,7 @@
 
 #include "ui/src/smb/ui_r_smb.h"
 #include "ui/src/ui_ecp_r_tfg_and_conv.h"
-#include "robot/smb/smb_const.h"
+#include "robot/smb/const_smb.h"
 #include "ui/src/ui_class.h"
 
 /* Local headers */

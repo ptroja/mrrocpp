@@ -9,7 +9,7 @@
 #define _ECP_R_SHEAD_H
 
 #include "base/ecp/ecp_robot.h"
-#include "robot/shead/shead_const.h"
+#include "robot/shead/const_shead.h"
 #include "base/kinematics/kinematics_manager.h"
 #include "robot/shead/kinematic_model_shead.h"
 

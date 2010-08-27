@@ -12,12 +12,12 @@
 //#define ROBOT_P
 
 #ifdef ROBOT_P
-#include "robot/irp6p_m/irp6p_m_const.h"
+#include "robot/irp6p_m/const_irp6p_m.h"
 #define ROBOT_NAME lib::ROBOT_IRP6P_M
 #endif
 
 #ifdef ROBOT_OT
-#include "robot/irp6ot_m/irp6ot_m_const.h"
+#include "robot/irp6ot_m/const_irp6ot_m.h"
 #define ROBOT_NAME lib::ROBOT_IRP6OT_M
 #endif
 

@@ -2,7 +2,7 @@
 #define _CONVEYOR_CONST_H
 
 /*!
- * @file conveyor_const.h
+ * @file const_conveyor.h
  * @brief File contains constants and structures for Conveyor
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *

@@ -29,7 +29,7 @@
 // Konfigurator.
 #include "base/lib/configurator.h"
 #include "ui/src/bird_hand/ui_ecp_r_bird_hand.h"
-#include "robot/bird_hand/bird_hand_const.h"
+#include "robot/bird_hand/const_bird_hand.h"
 
 /* Local headers */
 #include "ablibs.h"

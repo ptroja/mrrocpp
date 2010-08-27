@@ -13,8 +13,8 @@
 #include "base/edp/edp_e_motor_driven.h"
 #include "base/edp/vis_server.h"
 #include "base/lib/mis_fun.h"
-#include "robot/irp6ot_m/irp6ot_m_const.h"
-#include "robot/irp6p_m/irp6p_m_const.h"
+#include "robot/irp6ot_m/const_irp6ot_m.h"
+#include "robot/irp6p_m/const_irp6p_m.h"
 
 #define MAXBUFLEN 100
 
