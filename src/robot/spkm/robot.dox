@@ -1,5 +1,9 @@
 /** 
 
+@namespace mrrocpp::ecp::spkm
+@brief Namespace for ECP SwarmItFIX agent's parallel manipulator classes etc.
+@author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+
 @namespace mrrocpp::kinematics::spkm
 @brief Contains classes related to the kinematics of the SwarmItFIX hybrid, 7DOFs manipulator.
 @date 2010.02.01 

@@ -1,6 +1,8 @@
 /** 
 
-
+@namespace mrrocpp::ecp::irp6ot_tfg
+@brief Namespace for ECP IRp6 on track two finger gripper classes etc.
+@author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
 
 
 @namespace mrrocpp::kinematics::irp6ot_tfg

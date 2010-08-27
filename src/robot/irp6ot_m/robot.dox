@@ -1,6 +1,8 @@
 /** 
 
-
+@namespace mrrocpp::ecp::irp6ot_m
+@brief Namespace for ECP IRp6 on track manipulator classes etc.
+@author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
 
 @namespace mrrocpp::kinematics::irp6ot
 @brief Contains classes related to the kinematics of the IRp-6 on track manipulator.
