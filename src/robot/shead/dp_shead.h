@@ -1,9 +1,13 @@
-/*
- **  SHEAD.H
- */
-
 #if !defined(__SHEAD_DATA_PORT_H)
 #define __SHEAD_DATA_PORT_H
+
+/*!
+ * @file dp_shead.h
+ * @brief File contains data port communication structures for SwarmItFix Head
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup shead
+ */
 
 #include <string>
 

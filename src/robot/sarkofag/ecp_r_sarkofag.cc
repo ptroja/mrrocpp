@@ -1,10 +1,10 @@
-// -------------------------------------------------------------------------
-//                            ecp.cc
-//            Effector Control Process (lib::ECP) - methods
-// Funkcje do tworzenia procesow ECP
-// robot - sarkofag
-//
-// -------------------------------------------------------------------------
+/*!
+ * @file ecp_r_sarkofag.cc
+ * @brief File contains ecp robot class definition for Sarkofag
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup sarkofag
+ */
 
 #include "base/lib/mis_fun.h"
 

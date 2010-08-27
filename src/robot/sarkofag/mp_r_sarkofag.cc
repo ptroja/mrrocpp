@@ -1,3 +1,11 @@
+/*!
+ * @file mp_r_sarkofag.cc
+ * @brief File contains mp robot class definition for Sarkofag
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup sarkofag
+ */
+
 #include "robot/sarkofag/mp_r_sarkofag.h"
 #include "robot/sarkofag/const_sarkofag.h"
 

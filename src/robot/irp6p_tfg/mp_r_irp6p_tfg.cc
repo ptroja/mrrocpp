@@ -1,3 +1,11 @@
+/*!
+ * @file mp_r_irp6p_tfg.cc
+ * @brief File contains mp robot class definition for IRp6 postument two finger gripper
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup irp6p_tfg
+ */
+
 #include "robot/irp6p_tfg/mp_r_irp6p_tfg.h"
 #include "robot/irp6p_tfg/const_irp6p_tfg.h"
 

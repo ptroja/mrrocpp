@@ -1,6 +1,14 @@
 #if !defined(_IRP6P_M_CONST_H)
 #define _IRP6P_M_CONST_H
 
+/*!
+ * @file const_irp6p_m.h
+ * @brief File contains constants and structures for IRp6 postument manipulator
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup irp6p_m
+ */
+
 #include "base/lib/impconst.h"
 
 namespace mrrocpp {

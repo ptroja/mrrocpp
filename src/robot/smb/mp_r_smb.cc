@@ -1,3 +1,11 @@
+/*!
+ * @file mp_r_smb.cc
+ * @brief File contains mp robot class definition for SwarmItFix Mobile Base
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup smb
+ */
+
 #include "robot/smb/mp_r_smb.h"
 #include "robot/smb/const_smb.h"
 

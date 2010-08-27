@@ -1,6 +1,14 @@
 #if !defined(_SPKM_CONST_H)
 #define _SPKM_CONST_H
 
+/*!
+ * @file const_spkm.h
+ * @brief File contains constants and structures for SwarmItFix Parallel Kinematic Machine
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup spkm
+ */
+
 #include "robot/epos/dp_epos.h"
 
 #include "base/lib/impconst.h"

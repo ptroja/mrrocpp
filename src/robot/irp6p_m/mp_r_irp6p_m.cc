@@ -1,7 +1,10 @@
-#include "base/lib/impconst.h"
-#include "base/lib/com_buf.h"
-
-#include "base/lib/mis_fun.h"
+/*!
+ * @file mp_r_irp6p_m.cc
+ * @brief File contains mp robot class definition for IRp6 postument manipulator
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup irp6p_m
+ */
 
 #include "robot/irp6p_m/mp_r_irp6p_m.h"
 #include "robot/irp6p_m/const_irp6p_m.h"

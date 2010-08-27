@@ -1,16 +1,14 @@
-// ------------------------------------------------------------------------
-// Proces:		EDP
-// Plik:			kinematic_model_conveyor.h
-// System:	QNX/MRROC++  v. 6.3
-// Opis:		Model kinematyki tasmociogu
-//				- deklaracja klasy
-//
-// Autor:		yoyek
-// Data:		31.01.2007
-// ------------------------------------------------------------------------
-
 #if !defined(_SARKOFAG_KIN_MODEL)
 #define _SARKOFAG_KIN_MODEL
+
+/*!
+ * @file kinematic_model_sarkofag.h
+ * @brief File containing the Sarkofag kinematic model class declaration.
+ *
+ * @author tkornuta
+ *
+ * @ingroup KINEMATICS sarkofag
+ */
 
 #include "base/kinematics/kinematic_model.h"
 

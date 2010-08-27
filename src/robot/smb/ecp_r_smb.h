@@ -1,12 +1,13 @@
-// -------------------------------------------------------------------------
-//                            ecp_local.h dla QNX6
-// Definicje struktur danych i metod dla procesow ECP
-// robot - irp6_mechatronika
-//
-// -------------------------------------------------------------------------
-
 #if !defined(_ECP_R_SMB_H)
 #define _ECP_R_SMB_H
+
+/*!
+ * @file ecp_r_smb.h
+ * @brief File contains ecp robot class declaration for SwarmItFix Mobile Base
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup smb
+ */
 
 #include "base/ecp/ecp_robot.h"
 #include "base/kinematics/kinematics_manager.h"

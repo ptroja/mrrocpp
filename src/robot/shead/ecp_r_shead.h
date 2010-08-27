@@ -1,12 +1,13 @@
-// -------------------------------------------------------------------------
-//                            ecp_local.h dla QNX6
-// Definicje struktur danych i metod dla procesow ECP
-// robot - irp6_mechatronika
-//
-// -------------------------------------------------------------------------
-
 #if !defined(_ECP_R_SHEAD_H)
 #define _ECP_R_SHEAD_H
+
+/*!
+ * @file ecp_r_shead.h
+ * @brief File contains ecp robot class declaration for SwarmItFix Head
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup shead
+ */
 
 #include "base/ecp/ecp_robot.h"
 #include "robot/shead/const_shead.h"

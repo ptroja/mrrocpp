@@ -1,15 +1,13 @@
-// -------------------------------------------------------------------------
-//                            ecp.cc
-//            Effector Control Process (lib::ECP) - methods
-// Funkcje do tworzenia procesow ECP
-// robot - irp6_postument
-//
-// -------------------------------------------------------------------------
+/*!
+ * @file ecp_r_irp6p_tfg.cc
+ * @brief File contains ecp robot class definition for IRp6 postument two finger gripper
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup irp6p_tfg
+ */
 
 #include "base/lib/impconst.h"
-
 #include "base/lib/mis_fun.h"
-
 #include "robot/irp6p_tfg/ecp_r_irp6p_tfg.h"
 
 namespace mrrocpp {

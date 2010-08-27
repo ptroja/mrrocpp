@@ -1,6 +1,14 @@
 #if !defined(_SHEAD_CONST_H)
 #define _SHEAD_CONST_H
 
+/*!
+ * @file const_shead.h
+ * @brief File contains constants and structures for SwarmItFix Head
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup shead
+ */
+
 #include "dp_shead.h"
 
 #include "base/lib/impconst.h"

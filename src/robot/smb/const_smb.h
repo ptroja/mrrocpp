@@ -1,6 +1,14 @@
 #if !defined(_SMB_CONST_H)
 #define _SMB_CONST_H
 
+/*!
+ * @file const_smb.h
+ * @brief File contains constants and structures for SwarmItFix Mobile Base
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup smb
+ */
+
 #include "dp_smb.h"
 
 #include "base/lib/impconst.h"

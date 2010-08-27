@@ -1,12 +1,13 @@
-// -------------------------------------------------------------------------
-//                            ecp_local.h dla QNX6
-// Definicje struktur danych i metod dla procesow ECP
-// robot - sarkofag
-//
-// -------------------------------------------------------------------------
-
 #if !defined(_ECP_R_SARKOFAG_H)
 #define _ECP_R_SARKOFAG_H
+
+/*!
+ * @file ecp_r_sarkofag.h
+ * @brief File contains ecp robot class declaration for Sarkofag
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup sarkofag
+ */
 
 #include "base/ecp/ecp_robot.h"
 #include "robot/sarkofag/const_sarkofag.h"

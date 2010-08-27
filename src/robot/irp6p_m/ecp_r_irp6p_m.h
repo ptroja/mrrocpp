@@ -1,12 +1,13 @@
-// -------------------------------------------------------------------------
-//                            ecp_local.h dla QNX6
-// Definicje struktur danych i metod dla procesow ECP
-// robot - irp6_postument
-//
-// -------------------------------------------------------------------------
-
 #if !defined(_ECP_R_IRP6P_M_H)
 #define _ECP_R_IRP6P_M_H
+
+/*!
+ * @file ecp_r_irp6p_m.h
+ * @brief File contains ecp robot class declaration for IRp6 postument manipulator
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup irp6p_m
+ */
 
 #include "base/ecp/ecp_robot.h"
 #include "robot/irp6p_m/const_irp6p_m.h"

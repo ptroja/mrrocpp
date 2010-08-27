@@ -1,6 +1,14 @@
 #if !defined(_SARKOFAG_CONST_H)
 #define _SARKOFAG_CONST_H
 
+/*!
+ * @file const_sarkofag.h
+ * @brief File contains constants and structures for Sarkofag
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup sarkofag
+ */
+
 #include "base/lib/impconst.h"
 
 namespace mrrocpp {

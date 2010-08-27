@@ -1,10 +1,10 @@
-// -------------------------------------------------------------------------
-//                            ecp.cc
-//            Effector Control Process (lib::ECP) - methods
-// Funkcje do tworzenia procesow ECP
-// robot - irp6_mechatronika
-//
-// -------------------------------------------------------------------------
+/*!
+ * @file ecp_r_smb.cc
+ * @brief File contains ecp robot class definition for SwarmItFix Mobile Base
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup smb
+ */
 
 #include "base/lib/impconst.h"
 
