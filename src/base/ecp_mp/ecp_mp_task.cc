@@ -1,8 +1,10 @@
-// -------------------------------------------------------------------------
-//                            ecp_mp_task.cc
-//            Effector Control Process (lib::ECP) i MP - methods
-//
-// -------------------------------------------------------------------------
+/*!
+ * @file
+ * @brief File contains ecp_mp base task definition
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup ecp_mp
+ */
 
 #include <cstdio>
 #include <iostream>

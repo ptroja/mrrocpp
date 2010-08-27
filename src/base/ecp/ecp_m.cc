@@ -1,10 +1,10 @@
-// ------------------------------------------------------------------------
-//   ecp_m.cc - szablon dla procesow ECP
-//
-//                     EFFECTOR CONTROL PROCESS (lib::ECP) - main()
-//
-// Ostatnia modyfikacja: 2007
-// ------------------------------------------------------------------------
+/*!
+ * @file
+ * @brief File contains main ecp loop definition
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup ecp
+ */
 
 #include <cstdio>
 #include <csignal>

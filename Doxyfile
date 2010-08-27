@@ -589,6 +589,7 @@ INPUT                  = src/base/kinematics \
                          src/base/ecp_mp \
                          src/base/ecp \
                          src/base/mp \
+                         src/base/base.dox \
                          src/robot/robots.dox \
                          src/robot/conveyor/kinematic_model_conveyor.h \
                          src/robot/conveyor/kinematic_model_conveyor.cc \

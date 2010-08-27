@@ -1,6 +1,15 @@
 #ifndef ECP_MP_ROBOT_H_
 #define ECP_MP_ROBOT_H_
 
+
+/*!
+ * @file
+ * @brief File contains ecp_mp base robot declaration
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup ecp_mp
+ */
+
 namespace mrrocpp {
 namespace ecp_mp {
 

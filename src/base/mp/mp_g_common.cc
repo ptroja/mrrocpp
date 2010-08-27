@@ -1,10 +1,10 @@
-// -------------------------------------------------------------------------
-//                              mp.cc
-//
-// MP Master Process - methods
-//
-// -------------------------------------------------------------------------
-// Funkcje do konstruowania procesow MP
+/*!
+ * @file
+ * @brief File contains mp common generators definition
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup mp
+ */
 
 #include <cstring>
 

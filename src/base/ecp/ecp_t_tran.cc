@@ -1,11 +1,10 @@
-// ------------------------------------------------------------------------
-//   task/ecp_t_tran.cc - przezroczyste wersja dla dowolnego z robotow
-//
-//                     EFFECTOR CONTROL PROCESS (lib::ECP) - main()
-//
-// Ostatnia modyfikacja: 2006
-// ------------------------------------------------------------------------
-
+/*!
+ * @file
+ * @brief File contains ecp transparent task definition
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup ecp
+ */
 
 #include <cstdio>
 #include <cstring>

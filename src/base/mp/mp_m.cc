@@ -1,8 +1,10 @@
-// ------------------------------------------------------------------------
-//
-//                      MASTER PROCESS (MP) - main()
-//
-// ------------------------------------------------------------------------
+/*!
+ * @file
+ * @brief File contains main mp loop definition
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup mp
+ */
 
 #include <cstdio>
 #include <cstdlib>

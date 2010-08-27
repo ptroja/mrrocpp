@@ -1,3 +1,10 @@
+/*!
+ * @file
+ * @brief File contains ecp transparent generator definition
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup ecp
+ */
 
 #include "base/ecp/ecp_task.h"
 #include "base/ecp/ecp_robot.h"

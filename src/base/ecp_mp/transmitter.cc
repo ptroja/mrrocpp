@@ -1,3 +1,11 @@
+/*!
+ * @file
+ * @brief File contains ecp_mp transmitter base class definition
+ * @author ptroja, Warsaw University of Technology
+ *
+ * @ingroup ecp_mp
+ */
+
 #include "base/ecp_mp/transmitter.h"
 #include "base/ecp_mp/ecp_mp_task.h"
 

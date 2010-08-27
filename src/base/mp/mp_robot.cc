@@ -1,8 +1,10 @@
-// -------------------------------------------------------------------------
-//
-// MP Master Process - methods
-//
-// -------------------------------------------------------------------------
+/*!
+ * @file
+ * @brief File contains mp base robot definition
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup mp
+ */
 
 #include <cstring>
 #include <unistd.h>

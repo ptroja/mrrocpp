@@ -1,6 +1,15 @@
 #if !defined(_ECP_TASK_H)
 #define _ECP_TASK_H
 
+
+/*!
+ * @file
+ * @brief File contains ecp base task declaration
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup ecp
+ */
+
 #include "base/ecp_mp/ecp_mp_task.h"
 
 namespace mrrocpp {

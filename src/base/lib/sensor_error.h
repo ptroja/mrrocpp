@@ -4,7 +4,7 @@
  * @author tkornuta <tkornuta@ia.pw.edu.pl>, Warsaw University of Technology
  * @date Aug 3, 2010
  *
- * @ingroup SENSORS
+ * @ingroup SENSORS lib
  */
 
 #ifndef SENSOR_ERROR_H_

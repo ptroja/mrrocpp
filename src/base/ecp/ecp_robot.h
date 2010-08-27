@@ -1,6 +1,14 @@
 #if !defined(_ECP_ROBOT_H)
 #define _ECP_ROBOT_H
 
+/*!
+ * @file
+ * @brief File contains ecp base robot declaration
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup ecp
+ */
+
 #include "base/lib/com_buf.h"
 #include "base/lib/srlib.h"
 #include "base/lib/configurator.h"

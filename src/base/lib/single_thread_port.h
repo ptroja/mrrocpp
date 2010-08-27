@@ -1,14 +1,13 @@
-/**
- * \file single_thread_port.h
- *
- * \date 2010
- * \author yoyek
- *
- * \brief Template class for a single robot communication port
- */
-
 #ifndef SINGLE_THREAD_PORT_H_
 #define SINGLE_THREAD_PORT_H_
+
+/*!
+ * @file single_thread_port.h
+ * @brief File contains template class declaration for a single thread communication ports
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup lib
+ */
 
 #include <string>
 #include <map>

@@ -5,5 +5,7 @@
 @author tkornuta
 @ingroup SENSORS
 
+ @defgroup lib Libraries
+ @ingroup base
 
 */

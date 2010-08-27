@@ -1,3 +1,11 @@
+/*!
+ * @file
+ * @brief File contains mp base generator definition
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup mp
+ */
+
 #include "base/mp/mp_generator.h"
 #include "base/mp/mp_robot.h"
 #include "base/mp/mp_task.h"
