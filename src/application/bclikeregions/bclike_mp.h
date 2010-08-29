@@ -8,7 +8,8 @@
 #ifndef BCLIKE_MP_H_
 #define BCLIKE_MP_H_
 
-#include "base/mp/mp.h"
+//#include "base/mp/mp.h"
+#include "base/mp/mp_task.h"
 #include "ecp_mp_bclike.h"
 #include "bcl_message.h"
 #include "bcl_types.h"

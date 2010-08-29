@@ -9,6 +9,8 @@
 #include "bcl_t_switcher.h"
 #include "ecp_mp_st_smooth_move.h"
 
+#include "base/mp/mp_robot.h"
+
 namespace mrrocpp {
 
 namespace mp {

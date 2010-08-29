@@ -128,7 +128,11 @@ bool bclike_smooth::next_step(){
 
 	//If there are new bar code like areas translate their positions and check existance in vector
 	if(reading.code_found){
+		double t[3];
 		translateToRobotPosition(reading);
+		std::cout << " x = " <<  reading.x_k0 << " y = " << reading.y_k0 << std::endl;
+		actual_pos.get_translation_vector(t);
+		std::cout << "ROBOT x = " <<  t[0] << "ROBOT y = " << t[1] << std::endl;
 		addCodesToVector(reading);
 	}
 
