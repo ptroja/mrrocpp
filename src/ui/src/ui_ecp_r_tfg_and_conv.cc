@@ -56,13 +56,13 @@ ui_tfg_and_conv_robot::ui_tfg_and_conv_robot(lib::configurator &_config,
 		MOTOR_STEP = 0.1; // Przyrost kata obrotu walu silnika [rad]
 		JOINT_LINEAR_STEP = 0.001; // Przyrost liniowy w przegubach posuwistych [m]
 
-	} else if (_robot_name == lib::ROBOT_CONVEYOR) {
+	} else if (_robot_name == lib::conveyor::ROBOT_CONVEYOR) {
 		ecp = new ecp::conveyor::robot(_config, _sr_ecp_msg);
 
 		MOTOR_STEP = 0.1; // Przyrost kata obrotu walu silnika [rad]
 		JOINT_LINEAR_STEP = 0.00004; // Przyrost liniowy w przegubach posuwistych [m]
 
-	} else if (_robot_name == lib::ROBOT_CONVEYOR) {
+	} else if (_robot_name == lib::conveyor::ROBOT_CONVEYOR) {
 
 	} else if (_robot_name == lib::ROBOT_SPKM) {
 		ecp = new ecp::spkm::robot(_config, _sr_ecp_msg);

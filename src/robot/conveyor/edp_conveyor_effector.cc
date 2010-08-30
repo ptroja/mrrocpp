@@ -51,7 +51,7 @@ void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
 
 // Konstruktor.
 effector::effector(lib::configurator &_config) :
-	motor_driven_effector(_config, lib::ROBOT_CONVEYOR)
+	motor_driven_effector(_config, lib::conveyor::ROBOT_CONVEYOR)
 {
 	//  Stworzenie listy dostepnych kinematyk.
 	number_of_servos = CONVEYOR_NUM_OF_SERVOS;

@@ -94,8 +94,8 @@ struct configuration
 	single_joint_configuration ring_f[BIRD_HAND_RING_F_NUM_OF_SERVOS];
 };
 
-}
-}
-}
+} // namespace bird_hand
+} // namespace lib
+} // namespace mrrocpp
 
 #endif
