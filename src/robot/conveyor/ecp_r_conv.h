@@ -2,7 +2,7 @@
 #define _ECP_R_CONVEYOR_H
 
 /*!
- * @file ecp_r_conv.h
+ * @file
  * @brief File contains ecp robot class declaration for Conveyor
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *

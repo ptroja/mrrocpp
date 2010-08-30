@@ -1,5 +1,5 @@
 /*!
- * @file ecp_g_edge_follow.cc
+ * @file
  * @brief File contains ecp_generator class definition of unknown contour following application.
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *

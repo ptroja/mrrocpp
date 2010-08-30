@@ -1,5 +1,5 @@
 /*!
- * @file single_thread_port.cc
+ * @file
  * @brief File contains template class definition for a single thread communication ports
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *

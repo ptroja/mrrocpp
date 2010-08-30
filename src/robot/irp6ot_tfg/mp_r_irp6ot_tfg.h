@@ -2,7 +2,7 @@
 #define MP_R_IRP6OT_TFG_H_
 
 /*!
- * @file mp_r_irp6ot_tfg.h
+ * @file
  * @brief File contains mp robot class declaration for IRp6 on track two finger gripper
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *

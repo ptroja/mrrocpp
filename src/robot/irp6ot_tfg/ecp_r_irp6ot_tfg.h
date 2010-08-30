@@ -2,7 +2,7 @@
 #define _ECP_R_IRP6OT_TFG_H
 
 /*!
- * @file ecp_r_irp6ot_tfg.h
+ * @file
  * @brief File contains ecp robot class declaration for IRp6 on track two finger gripper
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *

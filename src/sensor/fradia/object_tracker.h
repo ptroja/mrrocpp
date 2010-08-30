@@ -1,5 +1,5 @@
 /*!
- * @file object_tracker.h
+ * @file
  * @brief Structure used in the object tracking tasks.
  * 
  * @author  tkornuta

@@ -1,5 +1,5 @@
 /*!
- * @file ecp_r_sarkofag.cc
+ * @file
  * @brief File contains ecp robot class definition for Sarkofag
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *

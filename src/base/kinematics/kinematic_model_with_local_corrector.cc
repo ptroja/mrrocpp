@@ -1,5 +1,5 @@
 /*!
- * @file kinematic_model_with_local_corrector.cc
+ * @file
  * @brief File containing definitions of kinematic_model_with_local_corrector class methods.
  *
  * @author tkornuta

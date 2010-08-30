@@ -1,5 +1,5 @@
 /*!
- * @file mp_r_conveyor.cc
+ * @file
  * @brief File contains mp robot class definition for Conveyor
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *

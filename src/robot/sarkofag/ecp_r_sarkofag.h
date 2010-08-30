@@ -2,7 +2,7 @@
 #define _ECP_R_SARKOFAG_H
 
 /*!
- * @file ecp_r_sarkofag.h
+ * @file
  * @brief File contains ecp robot class declaration for Sarkofag
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *

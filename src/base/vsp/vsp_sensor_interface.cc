@@ -1,5 +1,5 @@
 /*!
- * @file vsp_sensor_interface.cc
+ * @file
  * @brief File containing methods of the base sensor_interface class.
  * @author ptrojane <piotr.trojanek@gmail.com>, Warsaw University of Technology
  * @author tkornuta <tkornuta@ia.pw.edu.pl>, Warsaw University of Technology

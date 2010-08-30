@@ -1,5 +1,5 @@
 /*!
- * @file ecp_mp_sensor.h
+ * @file
  * @brief File contains sensor class - a template base class for MP and ECP  sensors.
  * @author ptrojane <piotr.trojanek@gmail.com>, Warsaw University of Technology
  * @author tkornuta <tkornuta@ia.pw.edu.pl>, Warsaw University of Technology

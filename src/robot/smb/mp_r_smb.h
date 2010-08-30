@@ -2,7 +2,7 @@
 #define MP_R_SMB_H_
 
 /*!
- * @file mp_r_smb.h
+ * @file
  * @brief File contains mp robot class declaration for SwarmItFix Mobile Base
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *

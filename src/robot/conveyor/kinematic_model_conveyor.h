@@ -1,5 +1,5 @@
 /*!
- * @file kinematic_model_conveyor.h
+ * @file
  * @brief File containing the declaration of the class representing the conveyor kinematic model.
  *
  * @author tkornuta
@@ -18,7 +18,7 @@ namespace kinematics {
 namespace conveyor {
 
 /*!
- * @class model
+ *
  * @brief Class represents the conveyor kinematic model.
  *
  * @author tkornuta

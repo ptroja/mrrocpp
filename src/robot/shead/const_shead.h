@@ -2,7 +2,7 @@
 #define _SHEAD_CONST_H
 
 /*!
- * @file const_shead.h
+ * @file
  * @brief File contains constants and structures for SwarmItFix Head
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *

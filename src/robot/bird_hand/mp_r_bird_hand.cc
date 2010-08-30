@@ -1,5 +1,5 @@
 /*!
- * @file mp_r_bird_hand.cc
+ * @file
  * @brief File contains mp robot class definition for Bird Hand three finger gripper
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *

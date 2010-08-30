@@ -2,7 +2,7 @@
 #define _IRP6P_TFG_CONST_H
 
 /*!
- * @file const_irp6p_tfg.h
+ * @file
  * @brief File contains constants and structures for IRp6 postument two finger gripper
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *

@@ -1,5 +1,5 @@
 /*!
- * @file mp_t_edge_follow_mr.cc
+ * @file
  * @brief File contains edge_follow_mr mp_task class definition of unknown contour following application.
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *

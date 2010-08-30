@@ -1,5 +1,5 @@
 /*!
- * @file mp_r_irp6p_m.cc
+ * @file
  * @brief File contains mp robot class definition for IRp6 postument manipulator
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *

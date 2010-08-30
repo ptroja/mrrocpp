@@ -2,7 +2,7 @@
 #define _ECP_R_BIRD_HAND_H
 
 /*!
- * @file ecp_r_bird_hand.h
+ * @file
  * @brief File contains ecp robot class declaration for Bird Hand three finger gripper
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *

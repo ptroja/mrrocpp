@@ -2,7 +2,7 @@
 #define __SPKM_DATA_PORT_H
 
 /*!
- * @file dp_spkm.h
+ * @file
  * @brief File contains data port communication structures for SwarmItFix Parallel Kinematic Machine
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *

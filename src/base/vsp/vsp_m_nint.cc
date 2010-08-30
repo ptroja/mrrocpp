@@ -1,5 +1,5 @@
 /*!
- * @file vsp_m_nint.cc
+ * @file
  * @brief File containing the \b noninteractive VSP shell.
  *
  * The \b noninteractive shell repeatedly collects and aggregates measurements,

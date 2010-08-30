@@ -1,5 +1,5 @@
 /*!
- * @file kinematic_model_irp6ot_tfg.h
+ * @file
  * @brief File containing the IRp-6ot two fingered gripper kinematic model class.
  *
  * @author yoyek
@@ -20,7 +20,7 @@ namespace kinematics {
 namespace irp6ot_tfg {
 
 /*!
- * @class model
+ *
  * @brief Kinematic model for two fingered gripper of Ithe Rp-6 on track manipulator.
  *
  * @author tkornuta

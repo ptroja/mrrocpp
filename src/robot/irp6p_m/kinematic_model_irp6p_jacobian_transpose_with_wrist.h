@@ -1,5 +1,5 @@
 /*!
- * @file kinematic_model_irp6p_jacobian_transpose_with_wrist.h
+ * @file
  * @brief File containing the IRp-6p with wrist (6DOFs) transposed jacobian based kinematic model class.
  *
  * @author Anna Maria Sibilska
@@ -20,7 +20,7 @@ namespace kinematics {
 namespace irp6p {
 
 /*!
- * @class model_jacobian_transpose_with_wrist
+ *
  * @brief The IRp-6p with wrist (6DOFs) transposed jacobian based kinematic model class.
  *
  * @author Anna Maria Sibilska

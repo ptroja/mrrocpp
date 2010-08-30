@@ -2,7 +2,7 @@
 #define _SARKOFAG_KIN_MODEL
 
 /*!
- * @file kinematic_model_sarkofag.h
+ * @file
  * @brief File containing the Sarkofag kinematic model class declaration.
  *
  * @author tkornuta

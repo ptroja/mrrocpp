@@ -2,7 +2,7 @@
 #define MP_R_CONVEYOR_H_
 
 /*!
- * @file mp_r_conveyor.h
+ * @file
  * @brief File contains mp robot class declaration for Conveyor
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *

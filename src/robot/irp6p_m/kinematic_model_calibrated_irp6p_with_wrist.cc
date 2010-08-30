@@ -1,5 +1,5 @@
 /*!
- * @file kinematic_model_calibrated_irp6p_with_wrist.cc
+ * @file
  * @brief File containing methods the IRp-6p with wrist (6DOFs) calibrated kinematic model class.
  *
  * @author tkornuta

@@ -2,7 +2,7 @@
 #define __SMB_DATA_PORT_H
 
 /*!
- * @file dp_smb.h
+ * @file
  * @brief File contains data port communication structures for SwarmItFix Mobile Base
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *

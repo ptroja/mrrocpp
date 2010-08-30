@@ -1,5 +1,5 @@
 /*!
- * @file ecp_r_irp6p_tfg.cc
+ * @file
  * @brief File contains ecp robot class definition for IRp6 postument two finger gripper
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *

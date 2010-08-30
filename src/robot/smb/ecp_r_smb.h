@@ -2,7 +2,7 @@
 #define _ECP_R_SMB_H
 
 /*!
- * @file ecp_r_smb.h
+ * @file
  * @brief File contains ecp robot class declaration for SwarmItFix Mobile Base
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *

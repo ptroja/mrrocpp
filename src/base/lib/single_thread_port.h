@@ -2,7 +2,7 @@
 #define SINGLE_THREAD_PORT_H_
 
 /*!
- * @file single_thread_port.h
+ * @file
  * @brief File contains template class declaration for a single thread communication ports
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *

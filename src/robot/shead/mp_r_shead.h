@@ -2,7 +2,7 @@
 #define MP_R_SHEAD_H_
 
 /*!
- * @file mp_r_shead.h
+ * @file
  * @brief File contains mp robot class declaration for SwarmItFix Head
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *

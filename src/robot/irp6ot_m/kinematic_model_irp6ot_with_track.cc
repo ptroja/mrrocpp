@@ -1,5 +1,5 @@
 /*!
- * @file kinematic_model_irp6ot_with_track.cc
+ * @file
  * @brief File containing methods of the kinematic_model_irp6ot_with_track class.
  *
  * The model_with_wrist kinematic model utilizes six out of seven IRP-6ot DOF - the newly added one is passive.

@@ -2,7 +2,7 @@
 #define MP_R_SARKOFAG_H_
 
 /*!
- * @file mp_r_sarkofag.h
+ * @file
  * @brief File contains mp robot class declaration for Sarkofag
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *

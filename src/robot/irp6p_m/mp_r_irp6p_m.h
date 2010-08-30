@@ -2,7 +2,7 @@
 #define MP_R_IRP6P_M_H_
 
 /*!
- * @file mp_r_irp6p_m.h
+ * @file
  * @brief File contains mp robot class declaration for IRp6 postument manipulator
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *

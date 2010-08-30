@@ -2,7 +2,7 @@
 #define _ECP_R_SHEAD_H
 
 /*!
- * @file ecp_r_shead.h
+ * @file
  * @brief File contains ecp robot class declaration for SwarmItFix Head
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *

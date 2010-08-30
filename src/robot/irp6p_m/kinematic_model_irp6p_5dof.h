@@ -1,5 +1,5 @@
 /*!
- * @file kinematic_model_irp6p_5dof.h
+ * @file
  * @brief File containing the IRp-6p 5DOFs kinematic model class.
  *
  * @author tkornuta
@@ -142,7 +142,7 @@ typedef struct AngleTheta
 
 
 /*!
- * @class model_5dof
+ *
  * @brief The kinematic model utilizing five IRP-6p DOFs.
  *
  * @date 31.01.2007

@@ -1,5 +1,5 @@
 /*!
- * @file kinematic_model_shead.h
+ * @file
  * @brief File containing the declaration of the kinematic model for the SwarmItFix agent's head class.
  *
  * @author tkornuta
@@ -18,7 +18,7 @@ namespace kinematics {
 namespace shead {
 
 /*!
- * @class model
+ *
  * @brief Kinematic model for the SwarmItFix agent's head class.
  *
  * @author yoyek

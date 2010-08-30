@@ -1,5 +1,5 @@
 /*!
- * @file ecp_r_shead.cc
+ * @file
  * @brief File contains ecp robot class definition for SwarmItFix Head
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *

@@ -1,5 +1,5 @@
 /**
- * @file birdclient.h
+ * @file
  * @brief File containing declarations of structure for storing data retrieved from the PcBird sensor and low-level (hardware access) functions.
  *
  * @author B.Bielawski

@@ -2,7 +2,7 @@
 #define _SARKOFAG_CONST_H
 
 /*!
- * @file const_sarkofag.h
+ * @file
  * @brief File contains constants and structures for Sarkofag
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *

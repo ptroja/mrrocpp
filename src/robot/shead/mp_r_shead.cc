@@ -1,5 +1,5 @@
 /*!
- * @file mp_r_shead.cc
+ * @file
  * @brief File contains mp robot class definition for SwarmItFix Head
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *

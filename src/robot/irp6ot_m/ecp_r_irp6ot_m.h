@@ -2,7 +2,7 @@
 #define _ECP_R_IRP6OT_M_H
 
 /*!
- * @file ecp_r_irp6ot_m.h
+ * @file
  * @brief File contains ecp robot class declaration for IRp6 on track manipulator
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *

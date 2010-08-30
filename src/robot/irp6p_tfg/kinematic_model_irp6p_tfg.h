@@ -1,5 +1,5 @@
 /*!
- * @file kinematic_model_irp6p_tfg.h
+ * @file
  * @brief File containing the IRp-6p two fingered gripper kinematic model class.
  *
  * @author yoyek
@@ -19,7 +19,7 @@ namespace kinematics {
 namespace irp6p_tfg {
 
 /*!
- * @class model
+ *
  * @brief Kinematic model for two fingered gripper of the IRp-6 on postument manipulator.
  *
  * @author tkornuta

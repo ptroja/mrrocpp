@@ -2,7 +2,7 @@
 #define __MP_T_edge_follow_MR_H
 
 /*!
- * @file mp_t_edge_follow_mr.h
+ * @file
  * @brief File contains edge_follow_mr mp_task class declaration of unknown contour following application.
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *

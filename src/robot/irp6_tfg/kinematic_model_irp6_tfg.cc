@@ -1,5 +1,5 @@
 /*!
- * @file kinematic_model_irp6_tfg.cc
+ * @file
  * @brief File containing methods of the base kinematic model for two fingered grippers.
  *
  * @author yoyek

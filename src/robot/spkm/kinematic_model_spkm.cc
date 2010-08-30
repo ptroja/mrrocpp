@@ -1,5 +1,5 @@
 /*!
- * @file kinematic_model_spkm.cc
+ * @file
  * @brief File containing definition of kinematic_model_spkm class methods.
  *
  * @author tkornuta

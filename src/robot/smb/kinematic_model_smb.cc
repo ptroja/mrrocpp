@@ -1,5 +1,5 @@
 /*!
- * @file kinematic_model_smb.cc
+ * @file
  * @brief File containing methods of the kinematic model for the SwarmItFix agent's mobile base class.
  *
  * @author tkornuta

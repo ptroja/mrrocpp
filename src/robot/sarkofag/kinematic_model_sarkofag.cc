@@ -1,5 +1,5 @@
 /*!
- * @file kinematic_model_sarkofag.cc
+ * @file
  * @brief File containing the Sarkofag kinematic model class definition.
  *
  * @author tkornuta

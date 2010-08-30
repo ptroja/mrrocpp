@@ -6,7 +6,7 @@
 #define _ECP_MP_SUB_task_EDGE_FOLLOW_H
 
 /*!
- * @file ecp_mp_st_edge_follow.h
+ * @file
  * @brief File contains edge_follow subtask label definition of unknown contour following application.
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *

@@ -1,5 +1,5 @@
 /*!
- * @file kinematic_model_irp6_tfg.h
+ * @file
  * @brief File containing base kinematic model for two fingered grippers.
  *
  * @author yoyek
@@ -21,7 +21,7 @@ namespace common {
 
 
 /*!
- * @class kinematic_model_irp6_tfg
+ *
  * @brief Base kinematic model for two fingered grippers.
  *
  * @author tkornuta

@@ -3,7 +3,7 @@
 
 
 /*!
- * @file dp_bird_hand.h
+ * @file
  * @brief File contains data port communication structures for Bird Hand three finger gripper
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *

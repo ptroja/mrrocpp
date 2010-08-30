@@ -1,5 +1,5 @@
 /*!
- * @file mp_r_spkm.cc
+ * @file
  * @brief File contains mp robot class definition for SwarmItFix Parallel Kinematic Machine
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *

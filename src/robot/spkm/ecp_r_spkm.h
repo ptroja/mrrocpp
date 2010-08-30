@@ -2,7 +2,7 @@
 #define _ECP_R_SPKM_H
 
 /*!
- * @file ecp_r_spkm.h
+ * @file
  * @brief File contains ecp robot class declaration for SwarmItFix Parallel Kinematic Machine
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *
