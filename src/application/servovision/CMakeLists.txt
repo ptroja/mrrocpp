@@ -13,6 +13,6 @@ target_link_libraries(ecp_image_capture
 install(TARGETS ecp_image_capture DESTINATION bin)
 
 add_subdirectory(objectfollower_ib)
-add_subdirectory(objectfollower_pb)
+add_subdirectory(objectfollower_pb_eih)
 add_subdirectory(objectfollower_pb_sac)
 add_subdirectory(visualservo_tester)

@@ -14,6 +14,13 @@ namespace mrrocpp {
 namespace ecp {
 namespace servovision {
 
+/** @addtogroup servovision
+ *  @{
+ */
+
+/**
+ *
+ */
 class timeout_termination_condition : public termination_condition
 {
 public:
@@ -26,6 +33,8 @@ protected:
 	double timeout;
 	double time_left;
 };
+
+/** @} */
 
 }//namespace generator
 }

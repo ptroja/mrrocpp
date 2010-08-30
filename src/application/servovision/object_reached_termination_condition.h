@@ -20,6 +20,9 @@ namespace servovision {
  *  @{
  */
 
+/**
+ *
+ */
 class object_reached_termination_condition: public termination_condition
 {
 public:

@@ -34,6 +34,9 @@ namespace task {
  *  @{
  */
 
+/**
+ *
+ */
 class ecp_t_objectfollower_ib: public mrrocpp::ecp::common::task::task
 {
 public:

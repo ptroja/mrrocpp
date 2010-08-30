@@ -1,12 +1,12 @@
 /*
- * ecp_t_objectfollower_pb.h
+ * ecp_t_objectfollower_pb_eih.h
  *
  *  Created on: Apr 21, 2010
  *      Author: mboryn
  */
 
-#ifndef ECP_T_OBJECTFOLLOWER_PB_H_
-#define ECP_T_OBJECTFOLLOWER_PB_H_
+#ifndef ECP_T_OBJECTFOLLOWER_PB_EIH_H_
+#define ECP_T_OBJECTFOLLOWER_PB_EIH_H_
 
 #include "base/ecp/ecp_task.h"
 #include <boost/shared_ptr.hpp>
@@ -34,11 +34,11 @@ namespace task {
  *  @{
  */
 
-class ecp_t_objectfollower_pb: public mrrocpp::ecp::common::task::task
+class ecp_t_objectfollower_pb_eih: public mrrocpp::ecp::common::task::task
 {
 public:
-	ecp_t_objectfollower_pb(mrrocpp::lib::configurator& config);
-	virtual ~ecp_t_objectfollower_pb();
+	ecp_t_objectfollower_pb_eih(mrrocpp::lib::configurator& config);
+	virtual ~ecp_t_objectfollower_pb_eih();
 	void main_task_algorithm(void);
 
 protected:

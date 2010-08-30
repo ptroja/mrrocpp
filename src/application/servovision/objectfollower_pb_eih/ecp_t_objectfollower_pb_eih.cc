@@ -1,11 +1,11 @@
 /*
- * ecp_t_objectfollower_pb.cc
+ * ecp_t_objectfollower_pb_eih.cc
  *
  *  Created on: Apr 21, 2010
  *      Author: mboryn
  */
 
-#include "ecp_t_objectfollower_pb.h"
+#include "ecp_t_objectfollower_pb_eih.h"
 
 #include "../defines.h"
 
@@ -30,7 +30,7 @@ namespace common {
 
 namespace task {
 
-ecp_t_objectfollower_pb::ecp_t_objectfollower_pb(mrrocpp::lib::configurator& config) :
+ecp_t_objectfollower_pb_eih::ecp_t_objectfollower_pb_eih(mrrocpp::lib::configurator& config) :
 	task(config)
 {
 #ifdef ROBOT_P
@@ -62,12 +62,12 @@ ecp_t_objectfollower_pb::ecp_t_objectfollower_pb(mrrocpp::lib::configurator& con
 	log_dbg("ecp_t_objectfollower_pb::ecp_t_objectfollower_pb(): 6\n");
 }
 
-ecp_t_objectfollower_pb::~ecp_t_objectfollower_pb()
+ecp_t_objectfollower_pb_eih::~ecp_t_objectfollower_pb_eih()
 {
 	delete ecp_m_robot;
 }
 
-void ecp_t_objectfollower_pb::main_task_algorithm(void)
+void ecp_t_objectfollower_pb_eih::main_task_algorithm(void)
 {
 	while (1) {
 		get_next_state();
@@ -83,7 +83,7 @@ void ecp_t_objectfollower_pb::main_task_algorithm(void)
 
 task* return_created_ecp_task(lib::configurator &config)
 {
-	return new ecp_t_objectfollower_pb(config);
+	return new ecp_t_objectfollower_pb_eih(config);
 }
 
 } // namespace task

@@ -1,6 +1,6 @@
 # object follower - PB - EIH
-add_executable(ecp_objectfollower_pb
-    ecp_t_objectfollower_pb.cc
+add_executable(ecp_objectfollower_pb_eih
+    ecp_t_objectfollower_pb_eih.cc
     ../pb_eih_visual_servo.cc
     ../pb_visual_servo.cc
     ../visual_servo.cc
@@ -13,11 +13,11 @@ add_executable(ecp_objectfollower_pb
     ../vs_logger.cc
 )
 
-target_link_libraries(ecp_objectfollower_pb
+target_link_libraries(ecp_objectfollower_pb_eih
 	ecp_r_irp6p_m
 	ecp_r_irp6ot_m
 	ecp ${COMMON_LIBRARIES}
 )
 
 ####################################3
-install(TARGETS ecp_objectfollower_pb DESTINATION bin)
+install(TARGETS ecp_objectfollower_pb_eih DESTINATION bin)

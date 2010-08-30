@@ -30,6 +30,13 @@ namespace irp6ot_m {
 
 namespace task {
 
+/** @addtogroup servovision
+ *  @{
+ */
+
+/**
+ *
+ */
 class ecp_t_objectfollower_pb_sac : public mrrocpp::ecp::common::task::task
 {
 public:
@@ -41,6 +48,8 @@ protected:
 	shared_ptr <single_visual_servo_manager> sm;
 	shared_ptr <visual_servo> vs;
 };
+
+/** @} */
 
 } // namespace task
 

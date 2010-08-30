@@ -22,6 +22,9 @@ namespace generator {
  *  @{
  */
 
+/**
+ *
+ */
 class single_visual_servo_manager : public visual_servo_manager
 {
 public:

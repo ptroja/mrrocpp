@@ -49,11 +49,6 @@ lib::Homog_matrix pb_eih_visual_servo::compute_position_change(const lib::Homog_
 	return delta_position;
 }
 
-boost::shared_ptr <ecp_mp::sensor::sensor_interface> pb_eih_visual_servo::get_vsp_fradia()
-{
-	return boost::dynamic_pointer_cast <ecp_mp::sensor::sensor_interface>(vsp_fradia);
-}
-
 } // namespace generator
 
 }

@@ -24,6 +24,13 @@ namespace conveyor {
 
 namespace task {
 
+/** @addtogroup servovision
+ *  @{
+ */
+
+/**
+ *
+ */
 class ecp_t_conveyor_test : public mrrocpp::ecp::common::task::task
 {
 public:
@@ -33,6 +40,8 @@ public:
 private:
 	boost::shared_ptr<ecp_g_conveyor_sinus> sinus_gen;
 };
+
+/** @} */
 
 } //namespace
 
