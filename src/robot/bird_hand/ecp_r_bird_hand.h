@@ -19,7 +19,7 @@ namespace ecp {
 namespace bird_hand {
 
 // ---------------------------------------------------------------
-class robot : public common::ecp_robot, public kinematics::common::kinematics_manager
+class robot : public common::robot::ecp_robot, public kinematics::common::kinematics_manager
 {
 protected:
 

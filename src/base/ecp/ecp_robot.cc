@@ -34,6 +34,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace common {
+namespace robot {
 
 // konstruktor wywolywany z UI
 ecp_robot::ecp_robot(lib::robot_name_t _robot_name, int _number_of_servos, const std::string &_edp_section, lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg) :
@@ -223,6 +224,7 @@ void ecp_robot::execute_motion(void)
 	}
 }
 
+}
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp

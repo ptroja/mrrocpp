@@ -17,7 +17,7 @@ namespace ecp {
 namespace spkm {
 
 robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
-	ecp_robot(lib::ROBOT_SPKM, SPKM_NUM_OF_SERVOS, EDP_SPKM_SECTION, _config, _sr_ecp), kinematics_manager(),
+	robot::ecp_robot(lib::ROBOT_SPKM, SPKM_NUM_OF_SERVOS, EDP_SPKM_SECTION, _config, _sr_ecp), kinematics_manager(),
 			epos_cubic_command_data_port(lib::EPOS_CUBIC_COMMAND_DATA_PORT, port_manager),
 			epos_trapezoidal_command_data_port(lib::EPOS_TRAPEZOIDAL_COMMAND_DATA_PORT, port_manager),
 			epos_operational_command_data_port(lib::EPOS_OPERATIONAL_COMMAND_DATA_PORT, port_manager),
@@ -32,7 +32,7 @@ robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
 }
 
 robot::robot(common::task::task& _ecp_object) :
-	ecp_robot(lib::ROBOT_SPKM, SPKM_NUM_OF_SERVOS, EDP_SPKM_SECTION, _ecp_object), kinematics_manager(),
+	robot::ecp_robot(lib::ROBOT_SPKM, SPKM_NUM_OF_SERVOS, EDP_SPKM_SECTION, _ecp_object), kinematics_manager(),
 			epos_cubic_command_data_port(lib::EPOS_CUBIC_COMMAND_DATA_PORT, port_manager),
 			epos_trapezoidal_command_data_port(lib::EPOS_TRAPEZOIDAL_COMMAND_DATA_PORT, port_manager),
 			epos_operational_command_data_port(lib::EPOS_OPERATIONAL_COMMAND_DATA_PORT, port_manager),
@@ -66,7 +66,7 @@ void robot::create_command()
 		ecp_edp_cbuffer.epos_cubic_command_structure = epos_cubic_command_structure;
 
 		if (is_new_data) {
-			throw ecp_robot::ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
+			throw robot::ecp_robot::ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
 		} else {
 			is_new_data = true;
 		}
@@ -82,7 +82,7 @@ void robot::create_command()
 		ecp_edp_cbuffer.epos_trapezoidal_command_structure = epos_trapezoidal_command_structure;
 
 		if (is_new_data) {
-			throw ecp_robot::ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
+			throw robot::ecp_robot::ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
 		} else {
 			is_new_data = true;
 		}
@@ -98,7 +98,7 @@ void robot::create_command()
 		ecp_edp_cbuffer.epos_operational_command_structure = epos_operational_command_structure;
 
 		if (is_new_data) {
-			throw ecp_robot::ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
+			throw robot::ecp_robot::ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
 		} else {
 			is_new_data = true;
 		}
@@ -111,7 +111,7 @@ void robot::create_command()
 		ecp_edp_cbuffer.variant = lib::SPKM_CBUFFER_EPOS_BRAKE_COMMAND;
 
 		if (is_new_data) {
-			throw ecp_robot::ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
+			throw robot::ecp_robot::ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
 		} else {
 			is_new_data = true;
 		}
@@ -127,7 +127,7 @@ void robot::create_command()
 	 ecp_edp_cbuffer.epos_gen_parameters_structure = epos_gen_parameters_structure;
 
 	 if (is_new_data) {
-	 throw ecp_robot::ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
+	 throw robot::ecp_robot::ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
 	 } else {
 	 is_new_data = true;
 	 }

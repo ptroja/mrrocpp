@@ -150,7 +150,7 @@ void wii::execute_motion(void)
     if (the_robot->reply_package.reply_type == lib::ERROR)
     {
 	the_robot->query();
-    	throw common::ecp_robot::ECP_error (lib::NON_FATAL_ERROR, EDP_ERROR);
+    	throw common::robot::ecp_robot::ECP_error (lib::NON_FATAL_ERROR, EDP_ERROR);
     }
     the_robot->query();
 
@@ -191,7 +191,7 @@ void wii::execute_motion(void)
                 rumble = true;
                 break;
             default:
-		throw common::ecp_robot::ECP_error (lib::NON_FATAL_ERROR, EDP_ERROR);
+		throw common::robot::ecp_robot::ECP_error (lib::NON_FATAL_ERROR, EDP_ERROR);
 		break;
 
 	} /* end: switch */

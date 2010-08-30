@@ -16,7 +16,7 @@ namespace ecp {
 namespace shead {
 
 robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
-	ecp_robot(lib::ROBOT_SHEAD, SHEAD_NUM_OF_SERVOS, EDP_SHEAD_SECTION, _config, _sr_ecp), kinematics_manager(),
+	robot::ecp_robot(lib::ROBOT_SHEAD, SHEAD_NUM_OF_SERVOS, EDP_SHEAD_SECTION, _config, _sr_ecp), kinematics_manager(),
 			shead_head_soldification_data_port(lib::SHEAD_HEAD_SOLIDIFICATION_DATA_PORT, port_manager),
 			shead_vacuum_activation_data_port(lib::SHEAD_VACUUM_ACTIVATION_DATA_PORT, port_manager),
 			shead_reply_data_request_port(lib::SHEAD_REPLY_DATA_REQUEST_PORT, port_manager)
@@ -27,7 +27,7 @@ robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
 }
 
 robot::robot(common::task::task& _ecp_object) :
-	ecp_robot(lib::ROBOT_SHEAD, SHEAD_NUM_OF_SERVOS, EDP_SHEAD_SECTION, _ecp_object), kinematics_manager(),
+	robot::ecp_robot(lib::ROBOT_SHEAD, SHEAD_NUM_OF_SERVOS, EDP_SHEAD_SECTION, _ecp_object), kinematics_manager(),
 			shead_head_soldification_data_port(lib::SHEAD_HEAD_SOLIDIFICATION_DATA_PORT, port_manager),
 			shead_vacuum_activation_data_port(lib::SHEAD_VACUUM_ACTIVATION_DATA_PORT, port_manager),
 			shead_reply_data_request_port(lib::SHEAD_REPLY_DATA_REQUEST_PORT, port_manager)
@@ -68,7 +68,7 @@ void robot::create_command()
 		ecp_edp_cbuffer.head_solidification = shead_head_soldification_structure;
 
 		if (is_new_data) {
-			throw ecp_robot::ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
+			throw robot::ecp_robot::ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
 		} else {
 			is_new_data = true;
 		}
@@ -85,7 +85,7 @@ void robot::create_command()
 		ecp_edp_cbuffer.vacuum_activation = shead_vacuum_activation_structure;
 
 		if (is_new_data) {
-			throw ecp_robot::ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
+			throw robot::ecp_robot::ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
 		} else {
 			is_new_data = true;
 		}

@@ -14,8 +14,9 @@
 namespace mrrocpp {
 namespace ecp {
 namespace common {
-
+namespace robot {
 class ecp_robot;
+}
 
 namespace task {
 class task;
@@ -39,13 +40,13 @@ public:
 
 	bool communicate_with_mp_in_move;
 
-	ecp_robot* the_robot;
+	robot::ecp_robot* the_robot;
 
 	generator(common::task::task& _ecp_task);
 
 	virtual ~generator();
 
-	bool is_EDP_error(ecp_robot& _robot) const;
+	bool is_EDP_error(robot::ecp_robot& _robot) const;
 
 	lib::trajectory_description td;
 

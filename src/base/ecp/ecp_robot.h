@@ -34,6 +34,7 @@ namespace task {
 class task;
 } // namespace task
 
+namespace robot {
 
 /*!
  * @brief Base class of all ecp robots
@@ -140,6 +141,7 @@ public:
 	};
 };
 
+} // namespace robot
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp

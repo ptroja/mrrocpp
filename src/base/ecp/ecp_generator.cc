@@ -25,7 +25,7 @@ generator::~generator()
 {
 }
 
-bool generator::is_EDP_error(ecp_robot& _robot) const
+bool generator::is_EDP_error(robot::ecp_robot& _robot) const
 {
 	// Sprawdzenie czy nie wystapil blad w EDP
 	// Funkcja zaklada, ze error_no zostalo zaktualizowane

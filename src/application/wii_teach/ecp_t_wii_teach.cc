@@ -44,26 +44,26 @@ int wii_teach::load_trajectory()
 
 	if (chdir(path) != 0) {
 		perror(path);
-		throw common::ecp_robot::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_DIRECTORY);
+		throw common::robot::ecp_robot::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_DIRECTORY);
 	}
 
 	std::ifstream from_file(filename); // otworz plik do zapisu
 	e = errno;
 	if (!from_file) {
 		perror(filename);
-		throw common::ecp_robot::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
+		throw common::robot::ecp_robot::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
 	}
 
 	if (chdir(gripper_path) != 0) {
 		perror(gripper_path);
-		throw common::ecp_robot::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_DIRECTORY);
+		throw common::robot::ecp_robot::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_DIRECTORY);
 	}
 
 	std::ifstream from_file_gripper(gripper_filename); // otworz plik do zapisu
 	e = errno;
 	if (!from_file_gripper) {
 		perror(gripper_filename);
-		throw common::ecp_robot::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
+		throw common::robot::ecp_robot::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
 	}
 
 	node* current = NULL;
@@ -129,7 +129,7 @@ bool wii_teach::get_filenames(void)
 		e = errno;
 		perror("ecp: Send() to UI failed");
 		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ecp: Send() to UI failed");
-		throw common::ecp_robot::ECP_error(lib::SYSTEM_ERROR, 0);
+		throw common::robot::ecp_robot::ECP_error(lib::SYSTEM_ERROR, 0);
 	}
 
 	if (ui_to_ecp_rep.reply == lib::QUIT) { // Nie wybrano nazwy pliku lub zrezygnowano z zapisu
@@ -152,7 +152,7 @@ bool wii_teach::get_filenames(void)
 		e = errno;
 		perror("ecp: Send() to UI failed");
 		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ecp: Send() to UI failed");
-		throw common::ecp_robot::ECP_error(lib::SYSTEM_ERROR, 0);
+		throw common::robot::ecp_robot::ECP_error(lib::SYSTEM_ERROR, 0);
 	}
 
 	if (ui_to_ecp_rep.reply == lib::QUIT) { // Nie wybrano nazwy pliku lub zrezygnowano z zapisu
@@ -171,20 +171,20 @@ void wii_teach::save_trajectory(void)
 
 	if (chdir(path) != 0) {
 		perror(path);
-		throw common::ecp_robot::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_DIRECTORY);
+		throw common::robot::ecp_robot::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_DIRECTORY);
 	}
 
 	std::ofstream to_file(filename); // otworz plik do zapisu
 	e = errno;
 	if (!to_file) {
 		perror(filename);
-		throw common::ecp_robot::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
+		throw common::robot::ecp_robot::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
 	}
 	std::ofstream to_file_gripper(gripper_filename); // otworz plik do zapisu
 	e = errno;
 	if (!to_file_gripper) {
 		perror(gripper_filename);
-		throw common::ecp_robot::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
+		throw common::robot::ecp_robot::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
 	}
 
 	node* current = trajectory.head;

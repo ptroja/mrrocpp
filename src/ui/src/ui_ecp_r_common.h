@@ -36,7 +36,7 @@ class ui_common_robot
 	double current_position[MAX_SERVOS_NR]; // polozenie aktualne
 
 public:
-	ecp::common::ecp_robot *ecp;
+	ecp::common::robot::ecp_robot *ecp;
 
 	// ecp_buffer ui_edp_package; // by Y
 	ui_common_robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg, lib::robot_name_t _robot_name); // Konstruktor

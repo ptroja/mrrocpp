@@ -15,7 +15,7 @@ namespace ecp {
 namespace bird_hand {
 
 robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
-	ecp_robot(lib::ROBOT_BIRD_HAND, BIRD_HAND_NUM_OF_SERVOS, EDP_BIRD_HAND_SECTION, _config, _sr_ecp),
+	robot::ecp_robot(lib::ROBOT_BIRD_HAND, BIRD_HAND_NUM_OF_SERVOS, EDP_BIRD_HAND_SECTION, _config, _sr_ecp),
 			kinematics_manager(), bird_hand_command_data_port(BIRD_HAND_COMMAND_DATA_PORT, port_manager),
 			bird_hand_configuration_command_data_port(BIRD_HAND_CONFIGURATION_DATA_PORT, port_manager),
 			bird_hand_status_reply_data_request_port(BIRD_HAND_STATUS_DATA_REQUEST_PORT, port_manager),
@@ -28,7 +28,7 @@ robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
 }
 
 robot::robot(common::task::task& _ecp_object) :
-	ecp_robot(lib::ROBOT_BIRD_HAND, BIRD_HAND_NUM_OF_SERVOS, EDP_BIRD_HAND_SECTION, _ecp_object), kinematics_manager(),
+	robot::ecp_robot(lib::ROBOT_BIRD_HAND, BIRD_HAND_NUM_OF_SERVOS, EDP_BIRD_HAND_SECTION, _ecp_object), kinematics_manager(),
 			bird_hand_command_data_port(BIRD_HAND_COMMAND_DATA_PORT, port_manager),
 			bird_hand_configuration_command_data_port(BIRD_HAND_CONFIGURATION_DATA_PORT, port_manager),
 			bird_hand_status_reply_data_request_port(BIRD_HAND_STATUS_DATA_REQUEST_PORT, port_manager),

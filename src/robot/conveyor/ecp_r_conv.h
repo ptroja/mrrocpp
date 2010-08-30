@@ -17,7 +17,7 @@ namespace ecp {
 namespace conveyor {
 
 // ---------------------------------------------------------------
-class robot : public common::ecp_robot
+class robot : public common::robot::ecp_robot
 {
 	// Klasa dla robota conveyor
 
