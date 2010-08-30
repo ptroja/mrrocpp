@@ -533,7 +533,7 @@ if (mp_ecp_randevouz) {
 		uint64_t e = errno; // kod bledu systemowego
 		perror("ecp: Reply to MP failed");
 		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ecp: Reply to MP failed");
-		throw robot::ecp_robot::ECP_error(lib::SYSTEM_ERROR, 0);
+		throw common::robot::ECP_error(lib::SYSTEM_ERROR, 0);
 	}
 
 	// ew. odebranie pulsu z MP
@@ -580,7 +580,7 @@ while (1) {
 		uint64_t e = errno; // kod bledu systemowego
 		perror("ecp: Receive from MP failed");
 		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ecp: Receive from MP failed");
-		throw robot::ecp_robot::ECP_error(lib::SYSTEM_ERROR, 0);
+		throw common::robot::ECP_error(lib::SYSTEM_ERROR, 0);
 	}
 #if !defined(USE_MESSIP_SRR)
 	if (caller == 0) {/* Pulse received */

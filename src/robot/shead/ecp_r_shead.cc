@@ -68,7 +68,7 @@ void robot::create_command()
 		ecp_edp_cbuffer.head_solidification = shead_head_soldification_structure;
 
 		if (is_new_data) {
-			throw robot::ecp_robot::ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
+			throw common::robot::ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
 		} else {
 			is_new_data = true;
 		}
@@ -85,7 +85,7 @@ void robot::create_command()
 		ecp_edp_cbuffer.vacuum_activation = shead_vacuum_activation_structure;
 
 		if (is_new_data) {
-			throw robot::ecp_robot::ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
+			throw common::robot::ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
 		} else {
 			is_new_data = true;
 		}

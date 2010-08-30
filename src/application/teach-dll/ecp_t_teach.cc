@@ -50,7 +50,7 @@ teach::teach(lib::configurator &_config) : task(_config)
     }
     else {
     	fprintf(stderr, "unknown robot \"%s\" in teach task\n", config.section_name.c_str());
-    	throw(robot::ecp_robot::ECP_main_error(lib::FATAL_ERROR, 0));
+    	throw(robot::ECP_main_error(lib::FATAL_ERROR, 0));
     }
 
     cout << "C++ dlopen demo\n\n";

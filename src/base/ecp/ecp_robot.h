@@ -121,24 +121,25 @@ public:
 
 	bool is_synchronised(void) const; // Czy robot zsynchronizowany?
 
-	class ECP_error
-	{ // Klasa obslugi bledow robota
-	public:
-		const lib::error_class_t error_class;
-		const uint64_t error_no;
-		lib::edp_error error;
+};
 
-		ECP_error(lib::error_class_t err_cl, uint64_t err_no, uint64_t err0 = 0, uint64_t err1 = 0);
-	};
+class ECP_error
+{ // Klasa obslugi bledow robota
+public:
+	const lib::error_class_t error_class;
+	const uint64_t error_no;
+	lib::edp_error error;
 
-	class ECP_main_error
-	{ // Klasa obslugi bledow ECP
-	public:
-		const lib::error_class_t error_class;
-		const uint64_t error_no;
+	ECP_error(lib::error_class_t err_cl, uint64_t err_no, uint64_t err0 = 0, uint64_t err1 = 0);
+};
 
-		ECP_main_error(lib::error_class_t err_cl, uint64_t err_no);
-	};
+class ECP_main_error
+{ // Klasa obslugi bledow ECP
+public:
+	const lib::error_class_t error_class;
+	const uint64_t error_no;
+
+	ECP_main_error(lib::error_class_t err_cl, uint64_t err_no);
 };
 
 } // namespace robot

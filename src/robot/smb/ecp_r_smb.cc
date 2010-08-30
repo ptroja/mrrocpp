@@ -72,7 +72,7 @@ void robot::create_command()
 		ecp_edp_cbuffer.epos_cubic_command_structure = epos_cubic_command_structure;
 
 		if (is_new_data) {
-			throw robot::ecp_robot::ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
+			throw common::robot::ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
 		} else {
 			is_new_data = true;
 		}
@@ -88,7 +88,7 @@ void robot::create_command()
 		ecp_edp_cbuffer.epos_trapezoidal_command_structure = epos_trapezoidal_command_structure;
 
 		if (is_new_data) {
-			throw robot::ecp_robot::ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
+			throw common::robot::ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
 		} else {
 			is_new_data = true;
 		}
@@ -105,7 +105,7 @@ void robot::create_command()
 	 ecp_edp_cbuffer.epos_gen_parameters_structure = epos_gen_parameters_structure;
 
 	 if (is_new_data) {
-	 throw robot::ecp_robot::ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
+	 throw common::robot::ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
 	 } else {
 	 is_new_data = true;
 	 }
@@ -121,7 +121,7 @@ void robot::create_command()
 		ecp_edp_cbuffer.multi_pin_insertion = smb_multi_pin_insertion_structure;
 
 		if (is_new_data) {
-			throw robot::ecp_robot::ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
+			throw common::robot::ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
 		} else {
 			is_new_data = true;
 		}
@@ -137,7 +137,7 @@ void robot::create_command()
 		ecp_edp_cbuffer.multi_pin_locking = smb_multi_pin_locking_structure;
 
 		if (is_new_data) {
-			throw robot::ecp_robot::ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
+			throw common::robot::ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
 		} else {
 			is_new_data = true;
 		}

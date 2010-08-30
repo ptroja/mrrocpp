@@ -73,7 +73,7 @@ int main(int argc, char *argv[])
 	} catch (ecp_mp::task::ECP_MP_main_error & e) {
 		if (e.error_class == lib::SYSTEM_ERROR)
 			exit( EXIT_FAILURE);
-	} catch (ecp::common::robot::ecp_robot::ECP_main_error & e) {
+	} catch (ecp::common::robot::ECP_main_error & e) {
 		switch (e.error_class)
 		{
 			case lib::SYSTEM_ERROR:
@@ -129,7 +129,7 @@ int main(int argc, char *argv[])
 				exit( EXIT_FAILURE);
 		}
 
-		catch (ecp::common::robot::ecp_robot::ECP_error & er) {
+		catch (ecp::common::robot::ECP_error & er) {
 			/* Wylapywanie bledow generowanych przez modul transmisji danych do EDP*/
 			if (er.error_class == lib::SYSTEM_ERROR) { /*blad systemowy juz wyslano komunukat do SR*/
 				perror("ecp aborted due to lib::SYSTEM_ERRORn");
