@@ -34,6 +34,13 @@ namespace task {
 class task;
 } // namespace task
 
+
+/*!
+ * @brief Base class of all ecp robots
+ *
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ * @ingroup ecp
+ */
 class ecp_robot : public ecp_mp::robot
 {
 	friend class ui_common_robot;

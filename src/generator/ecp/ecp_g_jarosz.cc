@@ -1613,7 +1613,7 @@ void calibration::ecp_save_extended_file(operator_reaction_condition& the_condit
 		e = errno;
 		perror("ecp: Send() to UI failed");
 		ecp_t.sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ecp: Send() to UI failed");
-		throw generator::ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
+		throw ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 	}
 	if (ui_to_ecp_rep.reply == lib::QUIT) // Nie wybrano nazwy pliku lub zrezygnowano z zapisu
 		return;
@@ -1622,20 +1622,20 @@ void calibration::ecp_save_extended_file(operator_reaction_condition& the_condit
 	cwd = getcwd(NULL, 0);
 	if (chdir(ui_to_ecp_rep.path) != 0) {
 		perror(ui_to_ecp_rep.path);
-		throw generator::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_DIRECTORY);
+		throw ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_DIRECTORY);
 	}
 	std::ofstream to_file(ui_to_ecp_rep.filename); // otworz plik do zapisu
 	e = errno;
 	if (!to_file) {
 		perror(ui_to_ecp_rep.filename);
-		throw generator::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
+		throw ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
 	} else {
 		initiate_pose_list(); // inicjacja listy nauczonych pozycji
 		the_condition.initiate_supplementary_list(); // inicjacja listy odczytanych pozycji
 		number_of_sup = the_condition.supplementary_list_length();
 		number_of_poses = pose_list_length(); // liczba pozycji
 		if (number_of_poses != number_of_sup)
-			throw generator::ECP_error(lib::NON_FATAL_ERROR, NON_COMPATIBLE_LISTS);
+			throw ECP_error(lib::NON_FATAL_ERROR, NON_COMPATIBLE_LISTS);
 
 		to_file << number_of_poses << '\n'; // ???
 		for (i = 0; i < number_of_poses; i++) {
@@ -3209,7 +3209,7 @@ void elipsoid::ecp_save_trajectory()
 		e = errno;
 		perror("ecp: Send() to UI failed");
 		ecp_t.sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ecp: Send() to UI failed");
-		throw generator::ECP_error(lib::SYSTEM_ERROR, 0);
+		throw ECP_error(lib::SYSTEM_ERROR, 0);
 	}
 
 	if (ui_to_ecp_rep.reply == lib::QUIT) // Nie wybrano nazwy pliku lub zrezygnowano z zapisu
@@ -3217,13 +3217,13 @@ void elipsoid::ecp_save_trajectory()
 
 	if (chdir(ui_to_ecp_rep.path) != 0) {
 		perror(ui_to_ecp_rep.path);
-		throw generator::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_DIRECTORY);
+		throw ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_DIRECTORY);
 	}
 	std::ofstream to_file(ui_to_ecp_rep.filename); // otworz plik do zapisu
 	e = errno;
 	if (!to_file.good()) {
 		perror(ui_to_ecp_rep.filename);
-		throw generator::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
+		throw ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
 	} else {
 		number_of_poses = get_number_of_intervals();
 		printf("OK=%lld   fn=%s\n", number_of_poses, ui_to_ecp_rep.filename);

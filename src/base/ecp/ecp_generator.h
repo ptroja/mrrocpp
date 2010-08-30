@@ -47,22 +47,22 @@ public:
 
 	bool is_EDP_error(ecp_robot& _robot) const;
 
-	class ECP_error
-	{ // Klasa obslugi bledow generatora
-	public:
-		const lib::error_class_t error_class;
-		const uint64_t error_no;
-		lib::edp_error error;
-
-		ECP_error(lib::error_class_t err_cl, uint64_t err_no, uint64_t err0 = 0, uint64_t err1 = 0);
-	}; // end: class ECP_error
-
 	lib::trajectory_description td;
 
 	//virtual bool first_step () = 0;
 	//virtual bool next_step () = 0;
 
 };
+
+class ECP_error
+{ // Klasa obslugi bledow generatora
+public:
+	const lib::error_class_t error_class;
+	const uint64_t error_no;
+	lib::edp_error error;
+
+	ECP_error(lib::error_class_t err_cl, uint64_t err_no, uint64_t err0 = 0, uint64_t err1 = 0);
+}; // end: class ECP_error
 
 } // namespace generator
 } // namespace common

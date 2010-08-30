@@ -71,7 +71,7 @@ void ui_ecp_buffer::operator()() {
 		communication_state = UI_ECP_AFTER_RECEIVE;
 		if (rcvid == -1) {/* Error condition, exit */
 			perror("UI: Receive failed");
-			// 	  throw generator::ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
+			// 	  throw ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 			continue;
 		}
 

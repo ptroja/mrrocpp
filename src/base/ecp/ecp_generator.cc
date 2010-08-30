@@ -25,13 +25,6 @@ generator::~generator()
 {
 }
 
-generator::ECP_error::ECP_error(lib::error_class_t err_cl, uint64_t err_no, uint64_t err0, uint64_t err1) :
-	error_class(err_cl), error_no(err_no)
-{
-	error.error0 = err0;
-	error.error1 = err1;
-}
-
 bool generator::is_EDP_error(ecp_robot& _robot) const
 {
 	// Sprawdzenie czy nie wystapil blad w EDP
@@ -109,6 +102,13 @@ void generator::Move()
 void generator::execute_motion(void)
 {
 	the_robot->execute_motion();
+}
+
+ECP_error::ECP_error(lib::error_class_t err_cl, uint64_t err_no, uint64_t err0, uint64_t err1) :
+	error_class(err_cl), error_no(err_no)
+{
+	error.error0 = err0;
+	error.error1 = err1;
 }
 
 } // namespace generator

@@ -12,20 +12,26 @@
 namespace mrrocpp {
 namespace ecp_mp {
 
+
 /*!
- *
- * @brief Banda żydów i gejow
+ * @brief Base class of all ecp and mp robots
  *
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
- * @date 31.01.2007
- *
- * @ingroup KINEMATICS IRP6OT_KINEMATICS
+ * @ingroup ecp_mp
  */
 class robot
 {
 public:
+	/**
+	 * @brief Unique robot name
+	 */
 	const lib::robot_name_t robot_name; // by Y - nazwa robota (track, postument etc.)
 
+
+	/**
+	 * @brief Constructor
+	 * @param _robot_name Unique robot name.
+	 */
 	robot(lib::robot_name_t _robot_name);
 };
 

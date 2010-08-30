@@ -69,6 +69,12 @@ void generator::Move()
 }
 // ------------------------------------------------------------------------
 
+
+MP_error::MP_error(lib::error_class_t err0, uint64_t err1) :
+	error_class(err0), error_no(err1)
+{
+}
+
 } // namespace generator
 } // namespace mp
 } // namespace mrrocpp

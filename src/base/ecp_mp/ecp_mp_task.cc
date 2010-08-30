@@ -306,12 +306,12 @@ uint8_t task::choose_option (const char* question, uint8_t nr_of_options_input )
 					if(doc == NULL)
 					{
 						fprintf(stderr, "loadTrajectories NON_EXISTENT_FILE\n");
-						// throw ecp::common::generator::generator::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
+						// throw ecp::common::generator::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
 					}
 
 					if(xmlXIncludeProcess(doc) < 0) {
 						fprintf(stderr, "loadTrajectories XInclude failed\n");
-						// throw ecp::common::generator::generator::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
+						// throw ecp::common::generator::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
 					}
 
 					xmlNodePtr root = xmlDocGetRootElement(doc);
@@ -319,7 +319,7 @@ uint8_t task::choose_option (const char* question, uint8_t nr_of_options_input )
 					{
 						xmlFreeDoc(doc);
 						printf("loadTrajectories READ_FILE_ERROR\n");
-						// throw ecp::common::generator::generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+						// throw ecp::common::generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
 					}
 
 					trajectories_t* trajectoriesMap = new trajectories_t();
