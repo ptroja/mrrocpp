@@ -7,13 +7,13 @@
 // Data:		29.11.2006
 // -------------------------------------------------------------------------
 
-#include <time.h>
+#include <ctime>
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
 
-#include "lib/srlib.h"
+#include "base/lib/srlib.h"
 
 #include "vsp_time_sensor.h"
 
@@ -22,7 +22,7 @@ namespace vsp {
 namespace sensor {
 
 time::time(lib::configurator &_config) :
-	vsp::sensor::sensor <struct timespec>(_config)
+	mrrocpp::vsp::common::sensor <struct timespec>(_config)
 {
 }
 
@@ -51,7 +51,7 @@ void time::get_reading(void)
 		return;
 
 	// Odczyt w porzadku.
-	from_vsp.vsp_report = lib::VSP_REPLY_OK;
+	from_vsp.vsp_report = lib::sensor::VSP_REPLY_OK;
 
 	clock_gettime(CLOCK_REALTIME, &from_vsp.comm_image);
 
@@ -59,8 +59,10 @@ void time::get_reading(void)
 	is_reading_ready = false;
 } // end: get_reading
 
-VSP_CREATE_SENSOR(time)
-
 } // namespace sensor
 } // namespace vsp
 } // namespace mrrocpp
+
+// Register time sensor.
+mrrocpp::vsp::common::VSP_REGISTER_SENSOR(mrrocpp::vsp::sensor::time)
+

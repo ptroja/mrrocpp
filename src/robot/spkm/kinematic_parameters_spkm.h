@@ -1,9 +1,11 @@
 /*!
- * \file kinematic_parameters_spkm.h
- * \brief File containing the declaration of kinematic_parameters class.
+ * @file
+ * @brief File containing the declaration of kinematic_parameters class.
  *
- * \author tkornuta
- * \date Jan 5, 2010
+ * @author tkornuta
+ * @date Jan 5, 2010
+ *
+ * @ingroup SIF_KINEMATICS spkm
  */
 
 #ifndef KINEMATIC_PARAMETERS_SPKM_H_
@@ -26,11 +28,13 @@ typedef Matrix<double, 5, 1> Vector5d;
 typedef Transform<double, 3> Homog4d;
 
 /*!
- * \struct kinematic_parameters_spkm
- * \brief Class storing parameters for PKM and spherical wrist attached to it.
+ * @struct kinematic_parameters_spkm
+ * @brief Class storing parameters for PKM and spherical wrist attached to it.
  *
- * \author tkornuta
- * \date Jan 05, 2010
+ * @author tkornuta
+ * @date Jan 05, 2010
+ *
+ * @ingroup SIF_KINEMATICS
  */
 struct kinematic_parameters_spkm {
 public:

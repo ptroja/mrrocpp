@@ -1,11 +1,17 @@
-#include <stdio.h>
-#include <unistd.h>
+/*!
+ * @file
+ * @brief File contains mp common task definition
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup mp
+ */
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
-#include "lib/srlib.h"
-#include "base/mp/mp.h"
+#include <cstdio>
+#include <unistd.h>
+#include "base/mp/mp_task.h"
+#include "base/mp/mp_robot.h"
+
+#include "base/mp/MP_main_error.h"
 #include "base/mp/mp_t_c.h"
 #include "base/mp/mp_g_common.h"
 
@@ -28,16 +34,16 @@ void cxx::main_task_algorithm(void)
 {
 
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-{
-	robot_node.second->ecp_reply_package.reply = lib::ECP_ACKNOWLEDGE;
+	{
+		robot_node.second->ecp_reply_package.reply = lib::ECP_ACKNOWLEDGE;
 
-}
+	}
 
-generator::extended_empty empty_gen (*this); // "Pusty" generator
-empty_gen.robot_m = robot_m;
+	generator::extended_empty empty_gen(*this); // "Pusty" generator
+	empty_gen.robot_m = robot_m;
 
-// Zlecenie wykonania kolejnego makrokroku
-empty_gen.Move();
+	// Zlecenie wykonania kolejnego makrokroku
+	empty_gen.Move();
 }
 
 } // namespace task

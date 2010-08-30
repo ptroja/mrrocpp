@@ -1,14 +1,16 @@
 /*!
- * \file kinematic_model_spkm.cc
- * \brief File containing definition of kinematic_model_spkm class methods.
+ * @file
+ * @brief File containing definition of kinematic_model_spkm class methods.
  *
- * \author tkornuta
- * \date Jan 05, 2010
+ * @author tkornuta
+ * @date Jan 05, 2010
+ *
+ * @ingroup KINEMATICS SIF_KINEMATICS spkm
  */
 
-#include <math.h>
+#include <cmath>
 
-#include "lib/com_buf.h"
+#include "base/lib/com_buf.h"
 #include "robot/spkm/kinematic_model_spkm.h"
 
 namespace mrrocpp {
@@ -29,11 +31,11 @@ void kinematic_model_spkm::check_joints(const lib::JointArray & q)
 {
 }
 
-void kinematic_model_spkm::i2mp_transform(lib::MotorArray & local_desired_motor_pos_new, lib::JointArray & local_desired_joints)
+void kinematic_model_spkm::i2mp_transform(lib::MotorArray & local_desired_motor_pos_new, const lib::JointArray & local_desired_joints)
 {
 }
 
-void kinematic_model_spkm::inverse_kinematics_transform(lib::JointArray & local_desired_joints, lib::JointArray & local_current_joints, const lib::Homog_matrix& local_desired_end_effector_frame)
+void kinematic_model_spkm::inverse_kinematics_transform(lib::JointArray & local_desired_joints, const lib::JointArray & local_current_joints, const lib::Homog_matrix& local_desired_end_effector_frame)
 {
 	// Transform Homog_matrix to Matrix4d.
 	Homog4d O_W_T;
@@ -59,12 +61,12 @@ void kinematic_model_spkm::inverse_kinematics_transform(lib::JointArray & local_
 	Vector3d SW_joints = SW_inverse(P_W_T);
 
 	// Fill joints array.
-	local_current_joints[0] = PKM_joints[0];
-	local_current_joints[1] = PKM_joints[1];
-	local_current_joints[2] = PKM_joints[2];
-	local_current_joints[3] = SW_joints[0];
-	local_current_joints[4] = SW_joints[1];
-	local_current_joints[5] = SW_joints[2];
+	/*	local_desired_joints[0] = PKM_joints[0];
+	 local_desired_joints[1] = PKM_joints[1];
+	 local_desired_joints[2] = PKM_joints[2];
+	 local_desired_joints[3] = SW_joints[0];
+	 local_desired_joints[4] = SW_joints[1];
+	 local_desired_joints[5] = SW_joints[2];*/
 }
 
 Vector5d kinematic_model_spkm::PKM_S_to_e(const Vector3d & _O_S_P)

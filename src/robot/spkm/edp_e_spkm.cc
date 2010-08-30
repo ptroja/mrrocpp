@@ -10,13 +10,13 @@
 // Data:		14.02.2007
 // ------------------------------------------------------------------------
 
-#include <stdio.h>
+#include <cstdio>
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
-#include "lib/mis_fun.h"
-#include "lib/mrmath/mrmath.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
+#include "base/lib/mis_fun.h"
+#include "base/lib/mrmath/mrmath.h"
 
 // Klasa edp_irp6ot_effector.
 #include "robot/spkm/edp_e_spkm.h"
@@ -25,7 +25,7 @@
 #include "robot/spkm/kinematic_model_spkm.h"
 #include "base/edp/manip_trans_t.h"
 #include "base/edp/vis_server.h"
-#include "lib/epos_gen.h"
+#include "robot/epos/epos_gen.h"
 
 using namespace mrrocpp::lib::exception;
 

@@ -1,22 +1,25 @@
-// ------------------------------------------------------------------------
-//
-//                      MASTER PROCESS (MP) - main()
-//
-// ------------------------------------------------------------------------
+/*!
+ * @file
+ * @brief File contains main mp loop definition
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup mp
+ */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <signal.h>
+#include <cstdio>
+#include <cstdlib>
+#include <csignal>
 #include <sys/types.h>
 #include <sys/wait.h>
 
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
+#include "base/lib/mis_fun.h"
 
-#include "lib/srlib.h"
-#include "lib/mis_fun.h"
-#include "base/mp/mp.h"
+#include "base/ecp_mp/transmitter.h"
 
+#include "base/mp/mp_task.h"
+#include "base/mp/mp_generator.h"
+#include "base/mp/mp_robot.h"
+#include "base/mp/MP_main_error.h"
 
 namespace mrrocpp {
 namespace mp {
@@ -31,50 +34,49 @@ void catch_signal_in_mp(int sig)
 	fprintf(stderr, "mp: %s\n", strsignal(sig));
 	pid_t child_pid;
 	int status;
-	switch (sig) {
-	case SIGTERM:
-		mp_t->sh_msg->message("mp terminated");
-		// restore default (none) handler for SIGCHLD
-		signal(SIGCHLD, SIG_DFL);
-		delete mp_t;
-		exit(EXIT_SUCCESS);
-		break;
-	case SIGSEGV:
-		signal(SIGSEGV, SIG_DFL);
-		break;
-	case SIGCHLD:
-		child_pid = waitpid(-1, &status, 0);
-		if (child_pid == -1) {
-			perror("mp: waitpid()");
-		} else if (child_pid == 0) {
-			fprintf(stderr, "mp: no child exited\n");
-		} else {
-			//fprintf(stderr, "UI: child %d...\n", child_pid);
-			if (WIFEXITED(status)) {
-				fprintf(stderr, "mp: child %d exited normally with status %d\n",
-						child_pid, WEXITSTATUS(status));
-			}
-			if (WIFSIGNALED(status)) {
+	switch (sig)
+	{
+		case SIGTERM:
+			mp_t->sh_msg->message("mp terminated");
+			// restore default (none) handler for SIGCHLD
+			signal(SIGCHLD, SIG_DFL);
+			delete mp_t;
+			exit( EXIT_SUCCESS);
+			break;
+		case SIGSEGV:
+			signal(SIGSEGV, SIG_DFL);
+			break;
+		case SIGCHLD:
+			child_pid = waitpid(-1, &status, 0);
+			if (child_pid == -1) {
+				perror("mp: waitpid()");
+			} else if (child_pid == 0) {
+				fprintf(stderr, "mp: no child exited\n");
+			} else {
+				//fprintf(stderr, "UI: child %d...\n", child_pid);
+				if (WIFEXITED(status)) {
+					fprintf(stderr, "mp: child %d exited normally with status %d\n", child_pid, WEXITSTATUS(status));
+				}
+				if (WIFSIGNALED(status)) {
 #ifdef WCOREDUMP
-				if (WCOREDUMP(status)) {
-					fprintf(stderr, "mp: child %d terminated by signal %d (core dumped)\n",
-							child_pid, WTERMSIG(status));
-				}
-				else
+					if (WCOREDUMP(status)) {
+						fprintf(stderr, "mp: child %d terminated by signal %d (core dumped)\n",
+								child_pid, WTERMSIG(status));
+					}
+					else
 #endif /* WCOREDUMP */
-				{
-					fprintf(stderr, "mp: child %d terminated by signal %d\n",
-							child_pid, WTERMSIG(status));
+					{
+						fprintf(stderr, "mp: child %d terminated by signal %d\n", child_pid, WTERMSIG(status));
+					}
+				}
+				if (WIFSTOPPED(status)) {
+					fprintf(stderr, "mp: child %d stopped\n", child_pid);
+				}
+				if (WIFCONTINUED(status)) {
+					fprintf(stderr, "mp: child %d resumed\n", child_pid);
 				}
 			}
-			if (WIFSTOPPED(status)) {
-				fprintf(stderr, "mp: child %d stopped\n", child_pid);
-			}
-			if (WIFCONTINUED(status)) {
-				fprintf(stderr, "mp: child %d resumed\n", child_pid);
-			}
-		}
-		break;
+			break;
 	}
 	flushall();
 }
@@ -84,18 +86,17 @@ void catch_signal_in_mp(int sig)
 } // namespace mrrocpp
 
 
-
-int main (int argc, char *argv[], char **arge)
+int main(int argc, char *argv[], char **arge)
 {
 	// zewnetrzne try
 	try {
 
 		if (argc < 6) {
 			printf("Usage: mp_m_c <ui_node_name> <mrrocpp_local_path> <config_file> <session_name>\n");
-			exit(EXIT_FAILURE);
+			exit( EXIT_FAILURE);
 		}
 
-		try	{
+		try {
 			// TODO: new/delete fixup
 			lib::configurator * _config = new lib::configurator(argv[1], argv[2], argv[3], MP_SECTION, argv[5]);
 
@@ -103,7 +104,7 @@ int main (int argc, char *argv[], char **arge)
 
 			mp::common::mp_t->sr_ecp_msg->message("mp loaded");
 
-			lib::set_thread_priority(pthread_self(), MAX_PRIORITY-4);
+			lib::set_thread_priority(pthread_self(), MAX_PRIORITY - 4);
 
 			signal(SIGTERM, &(mp::common::catch_signal_in_mp));
 			//signal(SIGINT,  &(catch_signal_in_mp));
@@ -113,20 +114,20 @@ int main (int argc, char *argv[], char **arge)
 			// ignore Ctrl-C signal, which cames from UI console
 			signal(SIGINT, SIG_IGN);
 #endif
-		}
-		catch (ecp_mp::task::ECP_MP_main_error & e) {
+		} catch (ecp_mp::task::ECP_MP_main_error & e) {
 			/* Obsluga bledow ECP_MP_main_error */
 			if (e.error_class == lib::SYSTEM_ERROR)
-				exit(EXIT_FAILURE);
+				exit( EXIT_FAILURE);
 		} /*end: catch */
 		catch (mp::common::MP_main_error & e) {
 
 			perror("initialize incorrect");
 			if (e.error_class == lib::SYSTEM_ERROR)
-				exit(EXIT_FAILURE);
+				exit( EXIT_FAILURE);
 
 			/* Obsluga lib::NON_FATAL_ERROR*/
-			switch (e.error_no) {
+			switch (e.error_no)
+			{
 				case ECP_ERRORS:
 				case INVALID_ECP_PULSE_IN_MP_START_ALL:
 				case INVALID_ECP_PULSE_IN_MP_EXECUTE_ALL:
@@ -141,36 +142,35 @@ int main (int argc, char *argv[], char **arge)
 
 		catch (lib::sensor::sensor_error & e) {
 			/* Wyswietlenie komunikatu. */
-			mp::common::mp_t->sr_ecp_msg->message (e.error_class, e.error_no);
+			mp::common::mp_t->sr_ecp_msg->message(e.error_class, e.error_no);
 			printf("Mam blad czujnika section 1 (@%s:%d)\n", __FILE__, __LINE__);
 		} /* end: catch sensor_error  */
 		catch (mp::generator::generator::MP_error & e) {
-					/* Wyswietlenie komunikatu. */
+			/* Wyswietlenie komunikatu. */
 			mp::common::mp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, e.error_no);
-					printf("Mam blad mp_generator section 1 (@%s:%d)\n", __FILE__, __LINE__);
+			printf("Mam blad mp_generator section 1 (@%s:%d)\n", __FILE__, __LINE__);
 		} /* end: catch sensor_error  */
 		catch (ecp_mp::transmitter::transmitter_base::transmitter_error & e) {
 			/* Wyswietlenie komunikatu. */
-			mp::common::mp_t->sr_ecp_msg->message (e.error_class, 0);
+			mp::common::mp_t->sr_ecp_msg->message(e.error_class, 0);
 			printf("Mam blad trasnmittera section 1 (@%s:%d)\n", __FILE__, __LINE__);
 		} /* end: catch sensor_error  */
 
-		catch(const std::exception& e){
+		catch (const std::exception& e) {
 			std::string tmp_string(" The following error has been detected: ");
 			tmp_string += e.what();
-			mp::common::mp_t->sr_ecp_msg->message (lib::NON_FATAL_ERROR, tmp_string.c_str());
-		   std::cerr<<"mp: The following error has been detected :\n\t"<<e.what()<<std::endl;
+			mp::common::mp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, tmp_string.c_str());
+			std::cerr << "mp: The following error has been detected :\n\t" << e.what() << std::endl;
 		}
 
-
-		catch (...) {  /* Dla zewnetrznej petli try*/
+		catch (...) { /* Dla zewnetrznej petli try*/
 			/*   Wylapywanie niezdfiniowanych bledow  */
 			/*  Komunikat o bledzie wysylamy do SR */
-			mp::common::mp_t->sr_ecp_msg->message (lib::NON_FATAL_ERROR, MP_UNIDENTIFIED_ERROR);
-			exit(EXIT_FAILURE);
+			mp::common::mp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, MP_UNIDENTIFIED_ERROR);
+			exit( EXIT_FAILURE);
 		} /*end: catch  */
 
-		for (;;) {  // Wewnetrzna petla nieskonczona
+		for (;;) { // Wewnetrzna petla nieskonczona
 
 			try {
 				mp::common::mp_t->sr_ecp_msg->message("mp - wcisnij start");
@@ -187,21 +187,22 @@ int main (int argc, char *argv[], char **arge)
 				mp::common::mp_t->wait_for_stop();
 
 				// Wyslanie STOP do wszystkich ECP po zakonczeniu programu uzytkownika
-				mp::common::mp_t->terminate_all (mp::common::mp_t->robot_m);
-			}  // end: try
+				mp::common::mp_t->terminate_all(mp::common::mp_t->robot_m);
+			} // end: try
 
 			catch (ecp_mp::task::ECP_MP_main_error & e) {
 				/* Obsluga bledow ECP_MP_main_error */
 				if (e.error_class == lib::SYSTEM_ERROR)
-					exit(EXIT_FAILURE);
+					exit( EXIT_FAILURE);
 			} /*end: catch */
 			catch (mp::common::MP_main_error & e) {
 
 				if (e.error_class == lib::SYSTEM_ERROR)
-					exit(EXIT_FAILURE);
+					exit( EXIT_FAILURE);
 
 				/* Obsluga lib::NON_FATAL_ERROR */
-				switch (e.error_no) {
+				switch (e.error_no)
+				{
 					case ECP_ERRORS:
 					case INVALID_ECP_PULSE_IN_MP_START_ALL:
 					case INVALID_ECP_PULSE_IN_MP_EXECUTE_ALL:
@@ -211,22 +212,21 @@ int main (int argc, char *argv[], char **arge)
 						break;
 					case ECP_STOP_ACCEPTED:
 						mp::common::mp_t->sr_ecp_msg->message("ecp STOP ACCEPTED");
-					break;
+						break;
 					default:
 						perror("Unidentified mp error");
 						mp::common::mp_t->stop_and_terminate();
 				}/*end:switch*/
 
-
-
 			} /*end: catch */
 			catch (mp::robot::robot::MP_error & e) {
 				if (e.error_class == lib::SYSTEM_ERROR) {
-					exit(EXIT_FAILURE);
+					exit( EXIT_FAILURE);
 				}
 
 				/* Obsluga lib::NON_FATAL_ERROR */
-				switch (e.error_no) {
+				switch (e.error_no)
+				{
 					case ECP_ERRORS:
 					case INVALID_POSE_SPECIFICATION:
 					case INVALID_COMMAND_TO_EDP:
@@ -244,10 +244,11 @@ int main (int argc, char *argv[], char **arge)
 			catch (mp::generator::generator::MP_error & e) {
 
 				if (e.error_class == lib::SYSTEM_ERROR)
-					exit(EXIT_FAILURE);
+					exit( EXIT_FAILURE);
 
 				/* Obsluga lib::NON_FATAL_ERROR*/
-				switch (e.error_no) {
+				switch (e.error_no)
+				{
 					case ECP_ERRORS:
 					case INVALID_POSE_SPECIFICATION:
 					case NON_EXISTENT_DIRECTORY:
@@ -268,38 +269,37 @@ int main (int argc, char *argv[], char **arge)
 
 			catch (lib::sensor::sensor_error & e) {
 				/* Wyswietlenie komunikatu. */
-				mp::common::mp_t->sr_ecp_msg->message (e.error_class, e.error_no);
+				mp::common::mp_t->sr_ecp_msg->message(e.error_class, e.error_no);
 				printf("Mam blad czujnika section 2 (@%s:%d)\n", __FILE__, __LINE__);
 			} /* end: catch sensor_error  */
 			catch (ecp_mp::transmitter::transmitter_base::transmitter_error & e) {
 				/* Wyswietlenie komunikatu. */
-				mp::common::mp_t->sr_ecp_msg->message (e.error_class, 0);
+				mp::common::mp_t->sr_ecp_msg->message(e.error_class, 0);
 				printf("Mam blad trasnmittera section 2 (@%s:%d)\n", __FILE__, __LINE__);
 			} /* end: catch sensor_error  */
 
-			catch(const std::exception& e){
+			catch (const std::exception& e) {
 				std::string tmp_string(" The following error has been detected: ");
 				tmp_string += e.what();
-				mp::common::mp_t->sr_ecp_msg->message (lib::NON_FATAL_ERROR, tmp_string.c_str());
-			   std::cerr<<"mp: The following error has been detected :\n\t"<<e.what()<<std::endl;
+				mp::common::mp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, tmp_string.c_str());
+				std::cerr << "mp: The following error has been detected :\n\t" << e.what() << std::endl;
 			}
 
-			catch (...) {  /* Dla zewnetrznej petli try*/
+			catch (...) { /* Dla zewnetrznej petli try*/
 				/*   Wylapywanie niezdfiniowanych bledow  */
 				/*  Komunikat o bledzie wysylamy do SR */
-				mp::common::mp_t->sr_ecp_msg->message (lib::NON_FATAL_ERROR, MP_UNIDENTIFIED_ERROR);
-				exit(EXIT_FAILURE);
+				mp::common::mp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, MP_UNIDENTIFIED_ERROR);
+				exit( EXIT_FAILURE);
 			} /*end: catch  */
 
 		} // koniec: for(;;) - zewnetrzna petla
 
-	}
-	catch (...) {  /* Dla zewnetrznej petli try*/
+	} catch (...) { /* Dla zewnetrznej petli try*/
 		/* Wylapywanie niezdefiniowanych bledow  */
 		/* Komunikat o bledzie wysylamy do SR */
 		printf("unexpected exception throw from catch section (@%s:%d)\n", __FILE__, __LINE__);
-		mp::common::mp_t->sr_ecp_msg->message (lib::FATAL_ERROR, MP_UNIDENTIFIED_ERROR);
-		exit(EXIT_FAILURE);
+		mp::common::mp_t->sr_ecp_msg->message(lib::FATAL_ERROR, MP_UNIDENTIFIED_ERROR);
+		exit( EXIT_FAILURE);
 	} /* end: catch  */
 
 }

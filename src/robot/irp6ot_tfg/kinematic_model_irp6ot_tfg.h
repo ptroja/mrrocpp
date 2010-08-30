@@ -1,13 +1,14 @@
-// ------------------------------------------------------------------------
-// Proces:		EDP
-// Plik:			kinematic_model_conveyor.h
-// System:	QNX/MRROC++  v. 6.3
-// Opis:		Model kinematyki tasmociogu
-//				- deklaracja klasy
-//
-// Autor:		yoyek
-// Data:		31.01.2007
-// ------------------------------------------------------------------------
+/*!
+ * @file
+ * @brief File containing the IRp-6ot two fingered gripper kinematic model class.
+ *
+ * @author yoyek
+ * @author tkornuta
+ * @date Jun 21, 2010
+ *
+ * @ingroup KINEMATICS IRP6OT_KINEMATICS irp6ot_tfg
+ */
+
 
 #if !defined(_IRP6OT_TFG_KIN_MODEL)
 #define _IRP6OT_TFG_KIN_MODEL
@@ -18,20 +19,29 @@ namespace mrrocpp {
 namespace kinematics {
 namespace irp6ot_tfg {
 
+/*!
+ *
+ * @brief Kinematic model for two fingered gripper of Ithe Rp-6 on track manipulator.
+ *
+ * @author tkornuta
+ * @date Jun 21, 2010
+ *
+ * @ingroup KINEMATICS IRP6OT_KINEMATICS
+ */
 class model: public common::kinematic_model_irp6_tfg
 {
 protected:
 
-	// Ustawienie parametrow kinematycznych.
+	//! Method responsible for kinematic parameters setting.
 	void set_kinematic_parameters(void);
 
 public:
-	// Konstruktor.
+	//! Constructor.
 	model(void);
 
-};//: kinematic_model_conveyor;
+};
 
-} // namespace irp6ot
+} // namespace irp6ot_tfg
 } // namespace kinematic
 } // namespace mrrocpp
 

@@ -1,18 +1,18 @@
-// -------------------------------------------------------------------------
-//                            ecp_local.h dla QNX6
-// Definicje struktur danych i metod dla procesow ECP
-// robot - irp6_mechatronika
-//
-// -------------------------------------------------------------------------
-
 #if !defined(_ECP_R_SPKM_H)
 #define _ECP_R_SPKM_H
 
+/*!
+ * @file
+ * @brief File contains ecp robot class declaration for SwarmItFix Parallel Kinematic Machine
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup spkm
+ */
+
 #include "base/ecp/ecp_robot.h"
-#include "robot/spkm/spkm_const.h"
+#include "robot/spkm/const_spkm.h"
 #include "base/kinematics/kinematics_manager.h"
 #include "robot/spkm/kinematic_model_spkm.h"
-#include "lib/data_port_headers/epos.h"
 
 namespace mrrocpp {
 namespace ecp {

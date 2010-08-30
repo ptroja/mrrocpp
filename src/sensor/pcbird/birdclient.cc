@@ -1,16 +1,30 @@
-#include <stdio.h>
-#include <stdlib.h>
+/**
+ * @file
+ * @brief File containing definitions of low-level (hardware access) functions.
+ *
+ * @author B.Bielawski
+ * @author T.Wlostowski
+ * @author T.Adamczyk
+ * @author tkornuta
+ * @date 16.06.2008
+ *
+ * @ingroup PCBIRD_SENSOR
+ */
+
+
+#include <cstdio>
+#include <cstdlib>
 #include <sys/types.h>
-#include <inttypes.h>
+#include <stdint.h>
 #include <fcntl.h>
-#include <string.h>
+#include <cstring>
 #include <unistd.h>
 #include <sys/time.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
-#include <errno.h>
+#include <cerrno>
 #include <netdb.h>
-#include <math.h>
+#include <cmath>
 #include <sys/poll.h>
 #include <netinet/in.h>
 
@@ -18,6 +32,7 @@
 
 namespace mrrocpp {
 namespace ecp_mp {
+namespace sensor {
 
 #define MAX_RANGE ( 36.0 * 0.0254 )
 
@@ -26,8 +41,6 @@ namespace ecp_mp {
 #define SVCMD_STOP_STREAMING 3
 #define SVCMD_END_SESSION 4
 
-/*extern "C"
- {*/
 
 int pcbird_connect(const char *addr, unsigned short port)
 {
@@ -144,7 +157,7 @@ int pcbird_get_streaming_position(int fd, pcbird_pos_t *p)
 	return 0;
 }
 
-//}// extern
 
+} // namespace sensor
 } // namespace ecp_mp
 } // namespace mrrocpp

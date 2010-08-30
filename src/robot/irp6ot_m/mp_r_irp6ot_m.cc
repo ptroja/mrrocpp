@@ -1,10 +1,13 @@
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
+/*!
+ * @file
+ * @brief File contains mp robot class definition for IRp6 on track manipulator
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup irp6ot_m
+ */
 
-#include "lib/mis_fun.h"
-#include "lib/srlib.h"
 #include "robot/irp6ot_m/mp_r_irp6ot_m.h"
-#include "robot/irp6ot_m/irp6ot_m_const.h"
+#include "robot/irp6ot_m/const_irp6ot_m.h"
 
 namespace mrrocpp {
 namespace mp {

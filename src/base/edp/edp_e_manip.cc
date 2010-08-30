@@ -9,25 +9,25 @@
 // Data:		14.02.2007
 // -------------------------------------------------------------------------
 
-#include <stdio.h>
-#include <ctype.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cctype>
+#include <cstdlib>
 #include <unistd.h>
-#include <string.h>
-#include <math.h>
+#include <cstring>
+#include <cmath>
 #include <iostream>
-#include <errno.h>
+#include <cerrno>
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
-#include "lib/mis_fun.h"
-#include "lib/mrmath/mrmath.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
+#include "base/lib/mis_fun.h"
+#include "base/lib/mrmath/mrmath.h"
 #include "base/edp/servo_gr.h"
 #include "base/edp/reader.h"
 #include "base/edp/manip_trans_t.h"
 #include "base/edp/edp_e_manip.h"
-
+#include "base/edp/edp_force_sensor.h"
 #include "base/kinematics/kinematic_model_with_tool.h"
 
 using std::cout;
@@ -48,9 +48,9 @@ bool manip_effector::compute_servo_joints_and_frame(void)
 
 			lib::Homog_matrix local_matrix;
 
-			// Obliczenie lokalnej macierzy oraz obliczenie po��o��enia robota we wsp. zewn��trznych.
+			// Obliczenie lokalnej macierzy oraz obliczenie polozenia robota we wsp. zewnetrznych.
 			get_current_kinematic_model()->i2e_transform(servo_current_joints, local_matrix);
-			// Pobranie wsp. zewn��trznych w uk��adzie
+			// Pobranie wsp. zewnetrznych w ukladzie
 
 			lib::Xyz_Euler_Zyz_vector servo_real_kartez_pos; // by Y polozenie we wspolrzednych xyz_euler_zyz obliczane co krok servo   XXXXX
 			local_matrix.get_xyz_euler_zyz(servo_real_kartez_pos);
@@ -64,7 +64,7 @@ bool manip_effector::compute_servo_joints_and_frame(void)
 
 			get_current_kinematic_model()->mp2i_transform(servo_desired_motor_pos, servo_desired_joints);
 			get_current_kinematic_model()->i2e_transform(servo_desired_joints, local_matrix);
-			// Pobranie wsp. zewn��trznych w uk��adzie
+			// Pobranie wsp. zewnetrznych w ukladzie
 
 			lib::Xyz_Euler_Zyz_vector servo_desired_kartez_pos; // by Y polozenie we wspolrzednych xyz_euler_zyz obliczane co krok servo   XXXXX
 			local_matrix.get_xyz_euler_zyz(servo_desired_kartez_pos);

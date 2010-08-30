@@ -5,8 +5,9 @@
  *      Author: rtulwin
  */
 
-#include <math.h>
+#include <cmath>
 
+#include "base/ecp/ecp_robot.h"
 #include "ecp_g_vis_ib_eih_wrist_turner_irp6ot.h"
 
 namespace mrrocpp {
@@ -46,7 +47,7 @@ bool ecp_vis_ib_eih_wrist_turner_irp6ot::first_step()
 	 }
 	 printf("dochodzi tutaj\n");
 	 */
-	 return true;
+	return true;
 
 }
 
@@ -57,8 +58,8 @@ bool ecp_vis_ib_eih_wrist_turner_irp6ot::next_step_without_constraints()
 
 	printf("next step\n");
 
-	lib::VSP_REPORT_t vsp_report = vsp_fradia->get_report();
-	if (vsp_report == lib::VSP_REPLY_OK) {
+	lib::sensor::VSP_REPORT_t vsp_report = vsp_fradia->get_report();
+	if (vsp_report == lib::sensor::VSP_REPLY_OK) {
 
 		tracking = vsp_fradia->get_reading_message().tracking;
 		reached = vsp_fradia->get_reading_message().reached;

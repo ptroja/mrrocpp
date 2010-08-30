@@ -1,7 +1,7 @@
 #include "ecp_t_haar_irp6ot.h"
 
 #include <iostream>
-#include <stdio.h>
+#include <cstdio>
 #include <unistd.h>
 namespace mrrocpp {
 namespace ecp {
@@ -42,10 +42,10 @@ haar::haar(lib::configurator &_config) :
 	}
 
 	//Create cvFraDIA sensor - for testing purposes.
-	sensor_m[ecp_mp::sensor::SENSOR_CVFRADIA] = new fradia_sensor_haar_detect(this->config, "[vsp_cvfradia]");
+	sensor_m[ecp_mp::sensor::SENSOR_FRADIA] = new fradia_sensor_haar_detect(this->config, "[vsp_cvfradia]");
 
 	//Configure sensor.
-	sensor_m[ecp_mp::sensor::SENSOR_CVFRADIA]->configure_sensor();
+	sensor_m[ecp_mp::sensor::SENSOR_FRADIA]->configure_sensor();
 
 	ecp_m_robot = new robot(*this);
 

@@ -8,13 +8,15 @@
 #ifndef HARDWAREINTERFACE_H_
 #define HARDWAREINTERFACE_H_
 
-#include "base/edp/edp_e_motor_driven.h"
+#include <stdint.h>
 
-#include <inttypes.h>
+#include "base/lib/impconst.h"
 
 namespace mrrocpp {
 namespace edp {
 namespace common {
+
+class motor_driven_effector;
 
 // tryby obslugi przerwania
 typedef enum INTERRUPT_MODE

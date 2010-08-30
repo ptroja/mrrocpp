@@ -44,8 +44,8 @@
 
 #include <playerclient.h>
 #include <assert.h>
-#include <string.h>
-#include <stdio.h>
+#include <cstring>
+#include <cstdio>
 
 bool
 BumperProxy::BumpedAny()

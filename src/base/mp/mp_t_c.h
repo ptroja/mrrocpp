@@ -1,13 +1,19 @@
 #if !defined(__MP_TASK_C_H)
 #define __MP_TASK_C_H
 
-#include "base/mp/mp.h"
+/*!
+ * @file
+ * @brief File contains mp common task declaration
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup mp
+ */
 
 namespace mrrocpp {
 namespace mp {
 namespace task {
 
-class cxx: public task
+class cxx : public task
 {
 
 public:

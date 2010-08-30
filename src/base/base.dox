@@ -1,0 +1,10 @@
+/** 
+
+@namespace mrrocpp
+@brief Main, base namespace for MRROC++
+@author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+
+
+ @defgroup base Foundation
+  
+*/

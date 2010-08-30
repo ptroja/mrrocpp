@@ -10,14 +10,16 @@
 // Data:		14.02.2007
 // ------------------------------------------------------------------------
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
-#include "lib/mrmath/mrmath.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
+#include "base/lib/mrmath/mrmath.h"
+
+#include "robot/irp6p_m/sg_irp6p_m.h"
 
 // Klasa edp_irp6ot_effector.
 #include "robot/irp6p_m/edp_irp6p_m_effector.h"
-
+#include "base/edp/edp_force_sensor.h"
 // Kinematyki.
 #include "robot/irp6p_m/kinematic_model_irp6p_with_wrist.h"
 #include "robot/irp6p_m/kinematic_model_irp6p_5dof.h"

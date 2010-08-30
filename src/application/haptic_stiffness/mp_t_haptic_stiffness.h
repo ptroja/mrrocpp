@@ -8,8 +8,6 @@
 #if !defined(__MP_T_HAPTIC_STIFFNESS_H)
 #define __MP_T_HAPTIC_STIFFNESS_H
 
-#include "base/mp/mp.h"
-
 namespace mrrocpp {
 namespace mp {
 namespace task {

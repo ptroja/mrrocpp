@@ -1,17 +1,17 @@
 /*!
- * \file kinematic_model_with_local_corrector.cc
- * \brief File containing definitions of kinematic_model_with_local_corrector class methods.
+ * @file
+ * @brief File containing definitions of kinematic_model_with_local_corrector class methods.
  *
- * \author tkornuta
- * \date Jan 04, 2010
+ * @author tkornuta
+ * @date Nov 26, 2009
+ *
+ * @ingroup KINEMATICS
  */
 
 #include "base/kinematics/kinematic_model_with_local_corrector.h"
 
 namespace mrrocpp {
-
 namespace kinematics {
-
 namespace common {
 
 void kinematic_model_with_local_corrector::local_corrector_transform(lib::Homog_matrix& current_end_effector_matrix)
@@ -128,7 +128,7 @@ void kinematic_model_with_local_corrector::i2e_wo_tool_transform(const lib::Join
 
 }
 
-void kinematic_model_with_local_corrector::e2i_transform(lib::JointArray & local_desired_joints, lib::JointArray & local_current_joints, const lib::Homog_matrix& local_desired_end_effector_frame)
+void kinematic_model_with_local_corrector::e2i_transform(lib::JointArray & local_desired_joints, const lib::JointArray & local_current_joints, const lib::Homog_matrix& local_desired_end_effector_frame)
 {
 	// Copy end effector frame.
 	lib::Homog_matrix local_desired_end_effector_matrix(local_desired_end_effector_frame);
@@ -144,15 +144,12 @@ void kinematic_model_with_local_corrector::e2i_transform(lib::JointArray & local
 	if (global_frame_computations)
 		global_frame_inverse_transform(local_desired_end_effector_matrix);
 
-	// Retrieve computations result.
-
-
 	// Compute inverse kinematics transformation.
 	inverse_kinematics_transform(local_desired_joints, local_current_joints, local_desired_end_effector_matrix);
 
 }
 
-void kinematic_model_with_local_corrector::e2i_wo_tool_transform(lib::JointArray& local_desired_joints, lib::JointArray & local_current_joints, lib::Homog_matrix& local_desired_end_effector_frame)
+void kinematic_model_with_local_corrector::e2i_wo_tool_transform(lib::JointArray& local_desired_joints, const lib::JointArray & local_current_joints, const lib::Homog_matrix& local_desired_end_effector_frame)
 {
 	// Copy end effector frame.
 	lib::Homog_matrix local_desired_end_effector_matrix(local_desired_end_effector_frame);
@@ -165,10 +162,10 @@ void kinematic_model_with_local_corrector::e2i_wo_tool_transform(lib::JointArray
 		global_frame_inverse_transform(local_desired_end_effector_matrix);
 
 	// Retrieve computations result.
-	local_desired_end_effector_frame = local_desired_end_effector_matrix;
+	//local_desired_end_effector_frame = local_desired_end_effector_matrix;
 
 	// Compute inverse kinematics transformation.
-	inverse_kinematics_transform(local_desired_joints, local_current_joints, local_desired_end_effector_frame);
+	inverse_kinematics_transform(local_desired_joints, local_current_joints, local_desired_end_effector_matrix);
 }
 
 } // namespace common

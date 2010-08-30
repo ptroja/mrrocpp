@@ -3,21 +3,21 @@
 /*                                         Version 2.01  */
 
 /* Standard headers */
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #include <unistd.h>
-#include <string.h>
-#include <errno.h>// Y&7
-#include <time.h>
+#include <cstring>
+#include <cerrno>// Y&7
+#include <ctime>
 #include <iostream>
 #include <fstream>
 #include <boost/circular_buffer.hpp>
 
 #include "ui/src/ui.h"
 
-#include "lib/srlib.h"
+#include "base/lib/srlib.h"
 // #include "base/ecp/ecp.h"
-#include "lib/com_buf.h"
+#include "base/lib/com_buf.h"
 #include "ui/src/ui_class.h"
 #include "ui/src/ui_sr.h"
 

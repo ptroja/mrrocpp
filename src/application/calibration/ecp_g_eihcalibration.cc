@@ -5,6 +5,7 @@
  *      Author: jkosiore
  */
 
+#include "base/ecp/ecp_robot.h"
 #include "ecp_g_eihcalibration.h"
 
 #include <stdexcept>
@@ -16,23 +17,22 @@ namespace generator {
 
 using namespace std;
 
-
-eihgenerator::eihgenerator (common::task::task& _ecp_task)
-        : generator (_ecp_task)
+eihgenerator::eihgenerator(common::task::task& _ecp_task) :
+	generator(_ecp_task)
 {
 	count = -1;
 }
 
-
-eihgenerator::~eihgenerator ()
+eihgenerator::~eihgenerator()
 {
 
 }
 
 bool eihgenerator::first_step()
 {
-	sensor = dynamic_cast<ecp_mp::sensor::fradia_sensor<lib::empty_t, chessboard_t, eihcalibration_t> *> (sensor_m[ecp_mp::sensor::SENSOR_CVFRADIA]);
-	if(sensor == NULL){
+	sensor
+			= dynamic_cast <ecp_mp::sensor::fradia_sensor <lib::empty_t, chessboard_t, eihcalibration_t> *> (sensor_m[ecp_mp::sensor::SENSOR_FRADIA]);
+	if (sensor == NULL) {
 		throw std::logic_error("bool eihgenerator::first_step()");
 	}
 
@@ -43,15 +43,17 @@ bool eihgenerator::first_step()
 
 	//sensor->to_vsp.i_code = lib::VSP_INITIATE_READING;
 
-	printf("bool eihgenerator::first_step()\n"); fflush(stdout);
+	printf("bool eihgenerator::first_step()\n");
+	fflush( stdout);
 	return true;
 }
 
 bool eihgenerator::next_step()
 {
-	printf("bool eihgenerator::next_step()\n"); fflush(stdout);
-	if(sensor->get_reading_message().found == true)
-	count++;
+	printf("bool eihgenerator::next_step()\n");
+	fflush( stdout);
+	if (sensor->get_reading_message().found == true)
+		count++;
 	get_frame();
 	eihcalibration_t command;
 	command.frame_number = count;
@@ -62,14 +64,12 @@ bool eihgenerator::next_step()
 
 void eihgenerator::get_frame()
 {
-/*	std::cout.precision(3);
-	std::cout.width(6);
-	std::cout.setf(ios::fixed,ios::floatfield);
-*/	for(int i=0; i<3; i++)
-	{
-		for(int j=0; j<4; j++)
-		{
-			tab[4*i+j] = the_robot->reply_package.arm.pf_def.arm_frame[i][j];
+	/*	std::cout.precision(3);
+	 std::cout.width(6);
+	 std::cout.setf(ios::fixed,ios::floatfield);
+	 */for (int i = 0; i < 3; i++) {
+		for (int j = 0; j < 4; j++) {
+			tab[4 * i + j] = the_robot->reply_package.arm.pf_def.arm_frame[i][j];
 			//std::cout << t[4*i+j] << "\t";
 		}
 		//std::cout<<std::endl;
@@ -77,7 +77,6 @@ void eihgenerator::get_frame()
 	//std::cout<<std::endl;
 
 }
-
 
 }
 } // namespace common

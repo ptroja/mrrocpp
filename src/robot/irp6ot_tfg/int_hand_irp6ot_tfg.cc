@@ -6,12 +6,12 @@
 // Ostatnia modyfikacja: 2006
 // ------------------------------------------------------------------------
 
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #include <unistd.h>
-#include <string.h>
-#include <signal.h>
-#include <ctype.h>
+#include <cstring>
+#include <csignal>
+#include <cctype>
 #include <sys/wait.h>
 #include <sys/types.h>
 #ifdef __QNXNTO__
@@ -20,10 +20,7 @@
 #include <hw/inout.h>
 #endif
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
-
+#include "robot/irp6ot_tfg/sg_irp6ot_tfg.h"
 // Klasa edp_irp6ot_effector.
 #include "robot/irp6ot_tfg/edp_irp6ot_tfg_effector.h"
 // Klasa hardware_interface.

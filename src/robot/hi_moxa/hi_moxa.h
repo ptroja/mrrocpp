@@ -15,24 +15,15 @@
 
 #define USLEEP_US 500000
 
-#include "base/edp/edp_e_motor_driven.h"
 #include "base/edp/HardwareInterface.h"
 #include "robot/hi_moxa/hi_moxa_combuf.h"
 //#include "base/edp/edp_e_motor_driven.h"
 
 //#include "edp_e_sarkofag.h"
 
-#include <inttypes.h>
+#include <stdint.h>
 #include <termios.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <sys/select.h>
-
-#include <string>
+#include <ctime>
 
 #define PORT "/dev/ser"
 #define BAUD 921600
@@ -45,6 +36,8 @@
 namespace mrrocpp {
 namespace edp {
 namespace common {
+
+class motor_driven_effector;
 
 // ------------------------------------------------------------------------
 //                HARDWARE_INTERFACE class

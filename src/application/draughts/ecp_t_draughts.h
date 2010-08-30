@@ -4,7 +4,7 @@
 #include "base/ecp/ecp_task.h"
 #include "generator/ecp/ecp_g_smooth.h"
 #include "generator/ecp/ecp_g_force.h"
-#include "lib/com_buf.h"
+#include "base/lib/com_buf.h"
 #include "subtask/ecp_st_go.h"
 #include "generator/ecp/ecp_g_sleep.h"
 #include "sensor/fradia/ecp_mp_s_fradia_sensor.h"

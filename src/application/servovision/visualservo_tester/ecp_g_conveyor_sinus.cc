@@ -5,10 +5,12 @@
  *      Author: mboryn
  */
 
+#include "base/ecp/ecp_task.h"
+#include "base/ecp/ecp_robot.h"
 #include "ecp_g_conveyor_sinus.h"
-#include <math.h>
+#include <cmath>
 
-#include "lib/logger.h"
+#include "base/lib/logger.h"
 
 using namespace std;
 using namespace logger;
@@ -63,14 +65,14 @@ bool ecp_g_conveyor_sinus::next_step()
 {
 	the_robot->ecp_command.instruction.instruction_type = lib::SET_GET;
 
-	if(!initial_position_saved){
+	if (!initial_position_saved) {
 		initial_position = the_robot->reply_package.arm.pf_def.arm_coordinates[0];
 		initial_position_saved = true;
 	}
 
 	double new_position = A * (1 - cos(2 * M_PI * f * t));
 
-//	log_dbg("bool ecp_g_conveyor_sinus::next_step(): new_position = %+8.6lg     initial_position = %+8.6lg\n", new_position, initial_position);
+	//	log_dbg("bool ecp_g_conveyor_sinus::next_step(): new_position = %+8.6lg     initial_position = %+8.6lg\n", new_position, initial_position);
 
 	the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[0] = initial_position + new_position;
 

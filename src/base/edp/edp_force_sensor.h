@@ -12,15 +12,21 @@
 #include <boost/thread/mutex.hpp>
 #include <Eigen/Core>
 
-#include "lib/mrmath/ForceTrans.h"
-#include "lib/sensor.h"				// klasa bazowa sensor
-#include "base/edp/edp.h"				// klasa bazowa sensor
-#include "lib/mis_fun.h"
+#include "base/lib/mrmath/ForceTrans.h"
+#include "base/lib/sensor_interface.h"				// klasa bazowa sensor
+#include "base/edp/edp_typedefs.h"				// klasa bazowa sensor
+#include "base/lib/mis_fun.h"
 
 namespace mrrocpp {
 namespace edp {
 namespace common {
 class manip_effector;
+
+enum FORCE_ORDER
+{
+	FORCE_SET_TOOL, FORCE_CONFIGURE
+};
+
 }
 namespace sensor {
 
@@ -38,7 +44,7 @@ typedef struct _force_data
 } force_data_t;
 
 /********** klasa czujnikow po stronie EDP **************/
-class force : public lib::sensor_interface
+class force : public lib::sensor::sensor_interface
 {
 protected:
 	bool is_reading_ready; // czy jakikolwiek odczyt jest gotowy?
@@ -53,7 +59,7 @@ protected:
 
 	struct _from_vsp
 	{
-		lib::VSP_REPORT_t vsp_report;
+		lib::sensor::VSP_REPORT_t vsp_report;
 		force_data_t force;
 	} from_vsp;
 

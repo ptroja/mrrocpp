@@ -1,8 +1,14 @@
-#ifndef MP_R_motor_driven_H_
-#define MP_R_motor_driven_H_
+#ifndef MP_R_MOTOR_DRIVEN_H_
+#define MP_R_MOTOR_DRIVEN_H_
 
-#include "lib/impconst.h"
-#include "base/mp/mp.h"
+/*!
+ * @file
+ * @brief File contains mp motor_driven robot declaration
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup mp
+ */
+
 #include "base/mp/mp_robot.h"
 
 namespace mrrocpp {
@@ -15,7 +21,7 @@ private:
 	const int servos_number;
 
 public:
-	motor_driven(lib::robot_name_t l_robot_name, const std::string & _section_name, task::task &mp_object_l, int _number_of_servos);
+			motor_driven(lib::robot_name_t l_robot_name, const std::string & _section_name, task::task &mp_object_l, int _number_of_servos);
 };
 
 } // namespace robot

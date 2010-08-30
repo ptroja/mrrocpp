@@ -6,12 +6,12 @@
 // Ostatnia modyfikacja: 2005
 // ------------------------------------------------------------------------
 
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #include <unistd.h>
-#include <string.h>
-#include <signal.h>
-#include <ctype.h>
+#include <cstring>
+#include <csignal>
+#include <cctype>
 #include <sys/wait.h>
 #include <sys/types.h>
 #ifdef __QNXNTO__
@@ -20,12 +20,11 @@
 #include <hw/inout.h>
 #endif
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
+#include "robot/sarkofag/sg_sarkofag.h"
 
 // Klasa edp_sarkofag_effector.
 #include "robot/sarkofag/edp_e_sarkofag.h"
+
 // Klasa hardware_interface.
 #include "robot/hi_moxa/hi_moxa.h"
 

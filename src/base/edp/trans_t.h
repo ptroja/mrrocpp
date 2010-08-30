@@ -1,4 +1,3 @@
-
 // -------------------------------------------------------------------------
 //                                   edp.h
 // Definicje struktur danych i metod dla procesu EDP
@@ -9,14 +8,14 @@
 #ifndef __TRANS_T_H
 #define __TRANS_T_H
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
-#include "lib/mis_fun.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
+#include "base/lib/mis_fun.h"
 
-#include "base/edp/edp.h"
+#include "base/edp/edp_typedefs.h"
 
-#include "lib/exception.h"
+#include "base/lib/exception.h"
 
 #include <boost/utility.hpp>
 #include <boost/thread/thread.hpp>
@@ -35,35 +34,32 @@ class trans_t : public boost::noncopyable
 {
 private:
 
-    effector &master;
+	effector &master;
 
 protected:
-    boost::thread *thread_id;
+	boost::thread *thread_id;
 	lib::c_buffer instruction;
 
 public:
 	lib::condition_synchroniser master_to_trans_synchroniser;
 	lib::condition_synchroniser trans_t_to_master_synchroniser;
 
-    MT_ORDER trans_t_task;
-    int trans_t_tryb;
-    ERROR_TYPE error;
+	MT_ORDER trans_t_task;
+	int trans_t_tryb;
+	ERROR_TYPE error;
 
-    virtual void operator()() = 0;
+	virtual void operator()() = 0;
 
-    // wskaznik na bledy (rzutowany na odpowiedni blad)
-    void* error_pointer;
+	// wskaznik na bledy (rzutowany na odpowiedni blad)
+	void* error_pointer;
 
-    trans_t(effector& _master);
-    virtual ~trans_t();
+	trans_t(effector& _master);
+	virtual ~trans_t();
 
-    void master_to_trans_t_order(MT_ORDER nm_task, int nm_tryb, const lib::c_buffer& _instruction);
+	void master_to_trans_t_order(MT_ORDER nm_task, int nm_tryb, const lib::c_buffer& _instruction);
 
 };
 /**************************** trans_t *****************************/
-
-
-
 
 } // namespace common
 } // namespace edp

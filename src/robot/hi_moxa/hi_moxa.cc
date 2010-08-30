@@ -3,10 +3,16 @@
 
 //#include "hi_sarkofag.h"
 
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+
 #include <exception>
 #include <stdexcept>
-#include <string.h>
+#include <cstring>
 #include <iostream>
+
+#include "base/edp/edp_e_motor_driven.h"
 
 namespace mrrocpp {
 namespace edp {

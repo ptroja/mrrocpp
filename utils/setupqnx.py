@@ -121,10 +121,10 @@ os.system(r"chmod go-w /var/chroot/sshd")
 
 # Download bootstrap-pkgsrc
 pkgsrc_url_prefix = \
-  r"http://segomo.elka.pw.edu.pl/qnx/QNX/i386/6.4.1_head_20090724/"
-pkgsrc_our_url_prefix=r"http://segomo.elka.pw.edu.pl/qnx/QNX/i386/6.4.1_head_our_packages/"
+  r"http://segomo.elka.pw.edu.pl/qnx/QNX/i386/6.5.0_head_20100424/"
+pkgsrc_our_url_prefix=r"http://segomo.elka.pw.edu.pl/qnx/QNX/i386/6.5.0_head_our_packages/"
 
-bootstrap_file_url = pkgsrc_url_prefix + "bootstrap.tar.gz"
+bootstrap_file_url = pkgsrc_our_url_prefix + "6.5.0_bootstrap.tar.gz"
 
 info("Downloading %s" % bootstrap_file_url)
 bootstrap_file = urllib.urlretrieve(bootstrap_file_url, "/tmp/" + bname(bootstrap_file_url), urlretrieve_hook)[0]
@@ -150,21 +150,25 @@ add_cfg_file_entry(profile_file_name, \
 
 # Add required packages
 packages = \
-    "subversion-base-1.5.6nb3", \
-    "vim-share-7.2.184", \
-    "vim-7.2.184", \
-    "libxml2-2.7.3", \
-    "gsl-1.12", \
-    "ncurses-5.7nb1"
+    "boost-headers-1.42.0", \
+    "vim-share-7.2.411", \
+    "vim-7.2.411", \
+    "subversion-base-1.6.9nb1", \
+    "scmgit-base-1.6.6.2", \
+    "gsl-1.14", \
+    "ncurses-5.7nb3" \
+    "bash-4.1" \
+    "bash-completion-1.0nb1"
 
 for package in packages:
     os.system(r"/usr/pkg/sbin/pkg_add " + pkgsrc_url_prefix + "All/" + package + ".tgz")
 
 our_packages = \
     "boost-libs-1.42.0", \
-    "boost-headers-1.42.0", \
-    "cmake-2.8.0", \
+    "libxml2-2.7.7", \
     "xerces-c-3.0.1"
+
+#    "cmake-2.8.0", \
 
 for package in our_packages:
     os.system(r"/usr/pkg/sbin/pkg_add " + pkgsrc_our_url_prefix + "All/" + package + ".tgz")
@@ -174,30 +178,32 @@ mrlib_svn_url=r"http://segomo.elka.pw.edu.pl/svn/mrrocpp/mrlib/"
 mrlib_target_dir=os.environ["QNX_TARGET"] + "/mrlib"
 if os.path.exists(mrlib_target_dir):
     info("Updating mrlib")
-    os.system("/usr/pkg/bin/svn update \"%s\"" % (mrlib_target_dir))
+    os.system("svn update \"%s\"" % (mrlib_target_dir))
 else:
     info("Checking out mrlib")
-    os.system("/usr/pkg/bin/svn checkout \"%s\" \"%s\"" % (mrlib_svn_url, mrlib_target_dir))
+    os.system("svn checkout \"%s\" \"%s\"" % (mrlib_svn_url, mrlib_target_dir))
 
 # Disable storing passwords in svn
 enable_cfg_file_entry(r"/root/.subversion/config", "store_passwords=no", "store-passwords\s*=\s*no")
 
-# Optional: checkout MRROC++
-mrrocpp_svn_target_dir = r"/home/mrrocpp"
-info("Checkout MRROC++ trunk to %s? [y/n] n" % mrrocpp_svn_target_dir)
-answer = ""
-while True:
-    co_mrrocpp = raw_input()
-    if co_mrrocpp == "y" or co_mrrocpp == "n" or co_mrrocpp == "":
-        break
-if (co_mrrocpp == "y"):
-    mrrocpp_svn_username=""
-    while True:
-        info("Enter svn username:")
-        mrrocpp_svn_username = raw_input()
-        if mrrocpp_svn_username != "":
-            break
-    mrrocpp_svn_url = r"https://segomo.elka.pw.edu.pl/svn/mrrocpp/base/trunk/"
-    os.system("/usr/pkg/bin/svn checkout --username %s \"%s\" \"%s\"" % \
-      (mrrocpp_svn_username, mrrocpp_svn_url, mrrocpp_svn_target_dir))
+# This is no longer valid since we moved from SVN to Git
+## Optional: checkout MRROC++
+#mrrocpp_svn_target_dir = r"/home/mrrocpp"
+#info("Checkout MRROC++ trunk to %s? [y/n] n" % mrrocpp_svn_target_dir)
+#answer = ""
+#while True:
+#    co_mrrocpp = raw_input()
+#    if co_mrrocpp == "y" or co_mrrocpp == "n" or co_mrrocpp == "":
+#        break
+#if (co_mrrocpp == "y"):
+#    mrrocpp_svn_username=""
+#    while True:
+#        info("Enter svn username:")
+#        mrrocpp_svn_username = raw_input()
+#        if mrrocpp_svn_username != "":
+#            break
+#    mrrocpp_svn_url = r"https://segomo.elka.pw.edu.pl/svn/mrrocpp/base/trunk/"
+#    os.system("/usr/pkg/bin/svn checkout --username %s \"%s\" \"%s\"" % \
+#      (mrrocpp_svn_username, mrrocpp_svn_url, mrrocpp_svn_target_dir))
+
 info("Configuration complete. Please reboot.")

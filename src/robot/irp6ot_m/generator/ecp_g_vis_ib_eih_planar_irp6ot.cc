@@ -5,6 +5,8 @@
  *      Author: pwilkows
  */
 
+#include "base/ecp/ecp_task.h"
+#include "base/ecp/ecp_robot.h"
 #include "robot/irp6ot_m/generator/ecp_g_vis_ib_eih_planar_irp6ot.h"
 
 namespace mrrocpp {
@@ -53,8 +55,8 @@ bool ecp_vis_ib_eih_planar_irp6ot::first_step()
 	 //z = 0;
 
 	 above_object = false;
-*/
-	 return true;
+	 */
+	return true;
 
 }
 
@@ -94,8 +96,8 @@ bool ecp_vis_ib_eih_planar_irp6ot::next_step_without_constraints()
 		double uy = vsp_fradia->get_reading_message().y;
 
 		//Sprawdz czy jest odczyt z fradii.
-		lib::VSP_REPORT_t vsp_report = vsp_fradia->get_report();
-		if (vsp_report == lib::VSP_REPLY_OK) {
+		lib::sensor::VSP_REPORT_t vsp_report = vsp_fradia->get_report();
+		if (vsp_report == lib::sensor::VSP_REPLY_OK) {
 			//Sprawdzam czy osiagnieto odleglosc przy ktorej hamujemy.
 			if (fabs(ux) < breaking_dist && fabs(uy) < breaking_dist)
 				breaking = true;

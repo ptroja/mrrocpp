@@ -1,20 +1,20 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #include <unistd.h>
-#include <errno.h>
-#include <string.h>
+#include <cerrno>
+#include <cstring>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-#include <assert.h>
+#include <cassert>
 
-#include "lib/impconst.h"
+#include "base/lib/impconst.h"
 #include "base/edp/edp_e_motor_driven.h"
 #include "base/edp/vis_server.h"
-#include "lib/mis_fun.h"
-#include "robot/irp6ot_m/irp6ot_m_const.h"
-#include "robot/irp6p_m/irp6p_m_const.h"
+#include "base/lib/mis_fun.h"
+#include "robot/irp6ot_m/const_irp6ot_m.h"
+#include "robot/irp6p_m/const_irp6p_m.h"
 
 #define MAXBUFLEN 100
 

@@ -1,15 +1,23 @@
-#include <stdio.h>
-#include <string.h>
+/*!
+ * @file
+ * @brief File contains Trajectory class definition
+ * @author lorenzo, Warsaw University of Technology
+ *
+ * @ingroup ecp_mp
+ */
+
+
+#include <cstdio>
+#include <cstring>
 
 #include <iostream>
 #include <sstream>
-#include <string>
 #include <boost/lexical_cast.hpp>
 
 #include <libxml/xmlmemory.h>
 #include <libxml/parser.h>
 
-#include "lib/datastr.h"
+#include "base/lib/datastr.h"
 #include "base/ecp_mp/Trajectory.h"
 
 namespace mrrocpp {

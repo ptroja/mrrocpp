@@ -8,7 +8,7 @@
 
 #ifndef __REGULATOR_SARKOFAG_H
 #define __REGULATOR_SARKOFAG_H
-#include "base/edp/edp.h"
+#include "base/edp/edp_typedefs.h"
 #include "base/edp/regulator.h"
 
 namespace mrrocpp {

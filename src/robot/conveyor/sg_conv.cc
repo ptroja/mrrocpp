@@ -3,9 +3,9 @@
 // ostatnia modyfikacja - styczen 2005
 /* --------------------------------------------------------------------- */
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
 
 // Klasa edp_conveyor_effector.
 #include "robot/conveyor/edp_conveyor_effector.h"
@@ -24,7 +24,7 @@ servo_buffer::servo_buffer(effector &_master) :
 	common::servo_buffer(_master), master(_master)
 {
 	for (int j = 0; j < CONVEYOR_NUM_OF_SERVOS; j++) {
-		axe_inc_per_revolution[j] = IRP6_POSTUMENT_AXIS_0_TO_5_INC_PER_REVOLUTION;
+		axe_inc_per_revolution[j] = CONVEYOR_INC_PER_REVOLUTION;
 	}
 
 	thread_id = new boost::thread(boost::bind(&servo_buffer::operator(), this));

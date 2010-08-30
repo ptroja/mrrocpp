@@ -3,43 +3,43 @@
 /*                                         Version 2.01  */
 
 /* Standard headers */
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #include <unistd.h>
-#include <string.h>
+#include <cstring>
 #include <strings.h>
 #include <iostream>
 #include <fstream>
 #include <dirent.h>
 #include <sys/types.h>
-#include <signal.h>
+#include <csignal>
 #include <sys/netmgr.h>
-#include <errno.h>
+#include <cerrno>
 #include <spawn.h>
 #include <process.h>
-#include <assert.h>
+#include <cassert>
 
-#include "lib/srlib.h"
+#include "base/lib/srlib.h"
 #include "ui/src/ui_const.h"
 #include "ui/src/ui_class.h"
 #include "ui/src/ui_ecp.h"
 
 // #include "ui/src/ui.h"
 // Konfigurator (dla PROCESS_SPAWN_RSH)
-#include "lib/configurator.h"
+#include "base/lib/configurator.h"
 #include "robot/irp6_mechatronika/irp6m_const.h"
-#include "robot/irp6ot_m/irp6ot_m_const.h"
-#include "robot/irp6ot_tfg/irp6ot_tfg_const.h"
-#include "robot/irp6p_m/irp6p_m_const.h"
-#include "robot/irp6p_tfg/irp6p_tfg_const.h"
-#include "robot/sarkofag/sarkofag_const.h"
+#include "robot/irp6ot_m/const_irp6ot_m.h"
+#include "robot/irp6ot_tfg/const_irp6ot_tfg.h"
+#include "robot/irp6p_m/const_irp6p_m.h"
+#include "robot/irp6p_tfg/const_irp6p_tfg.h"
+#include "robot/sarkofag/const_sarkofag.h"
 #include "robot/polycrank/polycrank_const.h"
-#include "robot/smb/smb_const.h"
-#include "robot/spkm/spkm_const.h"
-#include "robot/shead/shead_const.h"
+#include "robot/smb/const_smb.h"
+#include "robot/spkm/const_spkm.h"
+#include "robot/shead/const_shead.h"
 #include "robot/speaker/speaker_const.h"
-#include "robot/conveyor/conveyor_const.h"
-#include "robot/bird_hand/bird_hand_const.h"
+#include "robot/conveyor/const_conveyor.h"
+#include "robot/bird_hand/const_bird_hand.h"
 
 /* Local headers */
 #include "ablibs.h"

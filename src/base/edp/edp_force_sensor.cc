@@ -1,10 +1,11 @@
 #include <iostream>
 
-#include "base/edp/edp.h"
+#include "base/edp/edp_typedefs.h"
 #include "base/edp/edp_e_manip.h"
-#include "lib/mis_fun.h"
+#include "base/lib/mis_fun.h"
 #include "base/edp/reader.h"
 #include "base/kinematics/kinematic_model_with_tool.h"
+#include "base/edp/edp_force_sensor.h"
 
 namespace mrrocpp {
 namespace edp {
@@ -29,10 +30,10 @@ void force::operator()(void)
 		switch (e.error_no)
 		{
 			case SENSOR_NOT_CONFIGURED:
-				from_vsp.vsp_report = lib::VSP_SENSOR_NOT_CONFIGURED;
+				from_vsp.vsp_report = lib::sensor::VSP_SENSOR_NOT_CONFIGURED;
 				break;
 			case READING_NOT_READY:
-				from_vsp.vsp_report = lib::VSP_READING_NOT_READY;
+				from_vsp.vsp_report = lib::sensor::VSP_READING_NOT_READY;
 				break;
 		}
 		sr_msg->message(lib::FATAL_ERROR, e.error_no);
@@ -100,10 +101,10 @@ void force::operator()(void)
 			switch (e.error_no)
 			{
 				case SENSOR_NOT_CONFIGURED:
-					from_vsp.vsp_report = lib::VSP_SENSOR_NOT_CONFIGURED;
+					from_vsp.vsp_report = lib::sensor::VSP_SENSOR_NOT_CONFIGURED;
 					break;
 				case READING_NOT_READY:
-					from_vsp.vsp_report = lib::VSP_READING_NOT_READY;
+					from_vsp.vsp_report = lib::sensor::VSP_READING_NOT_READY;
 					break;
 			}
 			sr_msg->message(lib::FATAL_ERROR, e.error_no);

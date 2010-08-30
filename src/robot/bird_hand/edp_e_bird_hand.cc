@@ -10,13 +10,7 @@
 // Data:		14.02.2007
 // ------------------------------------------------------------------------
 
-#include <stdio.h>
-
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
-#include "lib/mis_fun.h"
-#include "lib/mrmath/mrmath.h"
+#include <cstdio>
 
 #include "edp_combuf.h"
 

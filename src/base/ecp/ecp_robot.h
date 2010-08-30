@@ -1,14 +1,22 @@
 #if !defined(_ECP_ROBOT_H)
 #define _ECP_ROBOT_H
 
-#include "lib/com_buf.h"
-#include "lib/srlib.h"
-#include "lib/configurator.h"
+/*!
+ * @file
+ * @brief File contains ecp base robot declaration
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup ecp
+ */
+
+#include "base/lib/com_buf.h"
+#include "base/lib/srlib.h"
+#include "base/lib/configurator.h"
 #include "base/ecp_mp/ecp_mp_robot.h"
-#include "lib/single_thread_port.h"
+#include "base/lib/single_thread_port.h"
 
 #if defined(USE_MESSIP_SRR)
-#include <messip.h>
+#include "messip.h"
 #endif
 
 class ui_common_robot;

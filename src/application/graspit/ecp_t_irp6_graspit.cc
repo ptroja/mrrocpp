@@ -1,4 +1,4 @@
-#include <stdio.h>
+#include <cstdio>
 #include <string>
 #include <unistd.h>
 #include <iostream>
@@ -40,7 +40,7 @@ void irp6_grasp::main_task_algorithm(void)
 	struct _irp6{
 		double joint[6];
 	} mp_ecp_irp6_command;
-	vector<double> coordinates1(6);
+	std::vector<double> coordinates1(6);
 
 	std::stringstream ss(std::stringstream::in | std::stringstream::out);
 

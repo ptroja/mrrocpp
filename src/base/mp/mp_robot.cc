@@ -1,23 +1,22 @@
-// -------------------------------------------------------------------------
-//
-// MP Master Process - methods
-//
-// -------------------------------------------------------------------------
+/*!
+ * @file
+ * @brief File contains mp base robot definition
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup mp
+ */
 
-#include <string.h>
+#include <cstring>
 #include <unistd.h>
-#include <errno.h>
+#include <cerrno>
 #include <sys/types.h>
 #include <sys/wait.h>
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
-#include "lib/datastr.h"
+#include "base/lib/datastr.h"
 
-#include "lib/srlib.h"
-#include "base/mp/mp.h"
+#include "base/mp/MP_main_error.h"
 #include "base/mp/mp_task.h"
+#include "base/mp/mp_robot.h"
 
 #if defined(USE_MESSIP_SRR)
 #include "messip_dataport.h"

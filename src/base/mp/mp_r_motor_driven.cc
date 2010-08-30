@@ -1,3 +1,11 @@
+/*!
+ * @file
+ * @brief File contains mp motor_driven robot definition
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup mp
+ */
+
 #include "base/mp/mp_r_motor_driven.h"
 
 namespace mrrocpp {

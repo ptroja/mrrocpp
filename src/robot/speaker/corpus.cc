@@ -6,10 +6,10 @@
 #include <iomanip>	// unitsel - setw, setfill
 #include <fstream>	// unitsel
 #include <vector>	// untisel [Standard Template Library]
-#include <math.h>	// unitsel - ceil(), floor()
-#include <time.h>	// unitsel - clock()
+#include <cmath>	// unitsel - ceil(), floor()
+#include <ctime>	// unitsel - clock()
 #include <cstdlib>
-#include <stdio.h>
+#include <cstdio>
 //#include <windows.h> //WIN
 
 #include "robot/speaker/tts.h" //QNX

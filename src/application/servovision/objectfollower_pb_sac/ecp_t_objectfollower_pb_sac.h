@@ -10,9 +10,8 @@
 
 #include "base/ecp/ecp_task.h"
 #include <boost/shared_ptr.hpp>
-#include "lib/logger.h"
-#include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
-//#include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
+#include "base/lib/logger.h"
+#include "robot/irp6p_m/ecp_r_irp6p_m.h"
 #include "../simple_visual_servo_manager.h"
 #include "../pb_sac_visual_servo.h"
 #include "../cubic_constraint.h"
@@ -20,9 +19,8 @@
 #include "../visual_servo_regulator_p.h"
 
 using mrrocpp::ecp::common::generator::simple_visual_servo_manager;
-using mrrocpp::ecp::common::generator::visual_servo;
-using mrrocpp::ecp::common::generator::visual_servo_regulator;
 using boost::shared_ptr;
+using namespace mrrocpp::ecp::servovision;
 
 namespace mrrocpp {
 

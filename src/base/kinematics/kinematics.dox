@@ -1,0 +1,30 @@
+/** 
+@namespace mrrocpp::kinematics
+@brief Namespace containing all classes and functioncs related to the robots kinematics.
+@date Nov 26, 2009
+@author tkornuta
+@ingroup KINEMATICS
+
+
+@namespace mrrocpp::kinematics::common
+@brief Namespace containing base kinematics classes (managers, models).
+@date Nov 26, 2009
+@author tkornuta
+@ingroup KINEMATICS
+
+
+@defgroup KINEMATICS Kinematics: The foundations.
+@{
+
+The \link mrrocpp::kinematics::common::kinematics_manager kinematics_manager\endlink 
+is a parent class, from which all effectors inherit by default. It offers functionality 
+related to the management of kinematics available for given robot.
+
+Single kinematics must be implemented as a class derived from one the base abstract classes:
+ - \link mrrocpp::kinematics::common::kinematic_model kinematic_model\endlink - simple kinematics, 
+ - \link mrrocpp::kinematics::common::kinematic_model_with_tool kinematic_model_with_tool\endlink - kinematics with calculations related to the global reference frame and an additional tool attached,  
+ - \link mrrocpp::kinematics::common::kinematic_model_with_local_corrector kinematic_model_with_local_corrector\endlink - kinematics with correction matrices. 
+
+@}
+
+*/

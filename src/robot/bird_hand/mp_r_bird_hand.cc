@@ -1,5 +1,13 @@
+/*!
+ * @file
+ * @brief File contains mp robot class definition for Bird Hand three finger gripper
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup bird_hand
+ */
+
 #include "mp_r_bird_hand.h"
-#include "bird_hand_const.h"
+#include "const_bird_hand.h"
 
 namespace mrrocpp {
 namespace mp {

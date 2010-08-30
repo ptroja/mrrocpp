@@ -10,26 +10,22 @@
 #if !defined(_ECP_GEN_SMOOTH_H)
 # define _ECP_GEN_SMOOTH_H
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
-#include <ctype.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <list>
 
 #include <libxml/xmlmemory.h>
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 #include <libxml/xinclude.h>
 
-#include <fstream>
-#include <string.h>
-#include <list>
-
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
-#include "lib/datastr.h"
-#include "lib/srlib.h"
-#include "lib/mrmath/mrmath.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
+#include "base/lib/datastr.h"
+#include "base/lib/srlib.h"
+#include "base/lib/mrmath/mrmath.h"
 
 #include "base/ecp_mp/smooth_trajectory_pose.h"
 

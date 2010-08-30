@@ -1,5 +1,6 @@
-#include <math.h>
+#include <cmath>
 
+#include "base/ecp/ecp_robot.h"
 #include "application/wii_ellipse/generator/ecp_g_wii_ellipse.h"
 #include "application/wii_teach/sensor/ecp_mp_s_wiimote.h"
 

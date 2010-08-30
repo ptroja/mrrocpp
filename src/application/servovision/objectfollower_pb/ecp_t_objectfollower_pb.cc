@@ -7,6 +7,18 @@
 
 #include "ecp_t_objectfollower_pb.h"
 
+#include "../defines.h"
+
+#ifdef ROBOT_P
+#include "robot/irp6p_m/ecp_r_irp6p_m.h"
+#endif
+
+#ifdef ROBOT_OT
+#include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
+#endif
+
+#include "../ecp_mp_g_visual_servo_tester.h"
+
 using namespace mrrocpp::ecp::common::generator;
 using namespace logger;
 
@@ -21,29 +33,25 @@ namespace task {
 ecp_t_objectfollower_pb::ecp_t_objectfollower_pb(mrrocpp::lib::configurator& config) :
 	task(config)
 {
+#ifdef ROBOT_P
+	ecp_m_robot = new ecp::irp6p_m::robot(*this);
+#endif
+#ifdef ROBOT_OT
 	ecp_m_robot = new ecp::irp6ot_m::robot(*this);
+#endif
 
-	char config_section_name[] = { "[object_follower_1]" };
+	char config_section_name[] = { "[object_follower_pb]" };
 
 	log_dbg_enabled = true;
 
-	Eigen::Matrix <double, 3, 1> p1, p2;
-	p1(0, 0) = 0.6;
-	p1(1, 0) = -0.3;
-	p1(2, 0) = 0.1;
-
-	p2(0, 0) = 0.98;
-	p2(1, 0) = 0.3;
-	p2(2, 0) = 0.3;
-
-	shared_ptr <position_constraint> cube(new cubic_constraint(p1, p2));
+	shared_ptr <position_constraint> cube(new cubic_constraint(config, config_section_name));
 
 	log_dbg("ecp_t_objectfollower_ib::ecp_t_objectfollower_ib(): 1\n");
 	reg = shared_ptr <visual_servo_regulator> (new regulator_p(config, config_section_name));
 	log_dbg("ecp_t_objectfollower_pb::ecp_t_objectfollower_pb(): 2\n");
 	vs = shared_ptr <visual_servo> (new pb_eih_visual_servo(reg, config_section_name, config));
 
-	term_cond = shared_ptr<termination_condition>(new object_reached_termination_condition(0.005, 0.005, 50));
+	term_cond = shared_ptr <termination_condition> (new object_reached_termination_condition(0.005, 0.005, 50));
 	log_dbg("ecp_t_objectfollower_pb::ecp_t_objectfollower_pb(): 3\n");
 	sm = shared_ptr <simple_visual_servo_manager> (new simple_visual_servo_manager(*this, config_section_name, vs));
 	log_dbg("ecp_t_objectfollower_pb::ecp_t_objectfollower_pb(): 4\n");
@@ -61,14 +69,16 @@ ecp_t_objectfollower_pb::~ecp_t_objectfollower_pb()
 
 void ecp_t_objectfollower_pb::main_task_algorithm(void)
 {
-	log_dbg("ecp_t_objectfollower_pb::main_task_algorithm(void) begin\n");
-
-
-	sm->Move();
-	log("ecp_t_objectfollower_pb::main_task_algorithm(void) 2\n");
+	while (1) {
+		get_next_state();
+		if (mp_2_ecp_next_state_string == mrrocpp::ecp_mp::common::generator::ECP_GEN_VISUAL_SERVO_TEST) {
+			sm->Move();
+		} else {
+			log("ecp_t_objectfollower_pb::main_task_algorithm(void) mp_2_ecp_next_state_string: \"%s\"\n", mp_2_ecp_next_state_string.c_str());
+		}
+	}
 
 	ecp_termination_notice();
-	log_dbg("ecp_t_objectfollower_pb::main_task_algorithm(void) end\n");
 }
 
 task* return_created_ecp_task(lib::configurator &config)

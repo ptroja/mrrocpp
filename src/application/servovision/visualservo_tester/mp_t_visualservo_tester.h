@@ -8,7 +8,10 @@
 #ifndef MP_T_VISUALSERVO_TESTER_H_
 #define MP_T_VISUALSERVO_TESTER_H_
 
-#include "base/mp/mp.h"
+
+#include "base/mp/MP_main_error.h"
+
+#include <string>
 
 namespace mrrocpp {
 
@@ -22,6 +25,11 @@ public:
 	visualservo_tester(lib::configurator &config);
 	virtual ~visualservo_tester();
 	void main_task_algorithm(void);
+private:
+	const std::string config_section_name;
+	bool run_vs;
+	bool run_conveyor;
+	int vs_settle_time;
 };
 
 }

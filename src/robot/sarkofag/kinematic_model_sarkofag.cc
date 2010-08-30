@@ -1,15 +1,13 @@
-// ------------------------------------------------------------------------
-// Proces:		EDP
-// Plik:			kinematic_model_conveyor.cc
-// System:	QNX/MRROC++  v. 6.3
-// Opis:		Model kinematyki tasmociogu
-//				- definicja metod klasy
-//
-// Autor:		yoyek
-// Data:		24.02.2007
-// ------------------------------------------------------------------------
+/*!
+ * @file
+ * @brief File containing the Sarkofag kinematic model class definition.
+ *
+ * @author tkornuta
+ *
+ * @ingroup KINEMATICS sarkofag
+ */
 
-#include "lib/com_buf.h"
+#include "base/lib/com_buf.h"
 
 // Klasa kinematic_model_conveyor.
 #include "robot/sarkofag/kinematic_model_sarkofag.h"
@@ -21,7 +19,8 @@ namespace sarkofag {
 /* -----------------------------------------------------------------------
  Konstruktor.
  ------------------------------------------------------------------------- */
-model::model(void) {
+model::model(void)
+{
 	// Ustawienie etykiety modelu kinematycznego.
 	set_kinematic_model_label("Switching to standard kinematic model");
 
@@ -33,7 +32,8 @@ model::model(void) {
 /* -----------------------------------------------------------------------
  Ustawienia wszystkie parametry modelu kinematycznego danego modelu.
  ------------------------------------------------------------------------- */
-void model::set_kinematic_parameters(void) {
+void model::set_kinematic_parameters(void)
+{
 
 	dir_a_7 = -0.00000000283130;
 	dir_b_7 = 0.00001451910074;
@@ -67,7 +67,8 @@ void model::set_kinematic_parameters(void) {
 /* ------------------------------------------------------------------------
  Sprawdzenie ograniczen na polozenia katowe walow silnikow.
  ------------------------------------------------------------------------ */
-void model::check_motor_position(const lib::MotorArray & motor_position) {
+void model::check_motor_position(const lib::MotorArray & motor_position)
+{
 	if (motor_position[0] < lower_limit_axis) // Kat f8 mniejszy od minimalnego
 		throw NonFatal_error_2(BEYOND_LOWER_LIMIT_AXIS_0);
 	else if (motor_position[0] > upper_limit_axis) // Kat f8 wiekszy od maksymalnego
@@ -78,7 +79,8 @@ void model::check_motor_position(const lib::MotorArray & motor_position) {
 /* ------------------------------------------------------------------------
  Sprawdzenie ograniczen na wspolrzedne wewnetrzne.
  ------------------------------------------------------------------------ */
-void model::check_joints(const lib::JointArray & q) {
+void model::check_joints(const lib::JointArray & q)
+{
 	if (isnan(q[0]))
 		throw NonFatal_error_2(NOT_A_NUMBER_JOINT_VALUE_THETA7);
 	if (q[0] < lower_limit_joint) // 7 st. swobody
@@ -94,11 +96,10 @@ void model::check_joints(const lib::JointArray & q) {
  Przeliczenie polozenia walow silnikow na wspolrzedne wewnetrzne
  (mp2i - motor position to internal)
  ------------------------------------------------------------------------ */
-void model::mp2i_transform(const lib::MotorArray & local_current_motor_pos,
-		lib::JointArray & local_current_joints) {
+void model::mp2i_transform(const lib::MotorArray & local_current_motor_pos, lib::JointArray & local_current_joints)
+{
 
-	local_current_joints[0] = (local_current_motor_pos[0]
-			- synchro_motor_position) / gear + theta;
+	local_current_joints[0] = (local_current_motor_pos[0] - synchro_motor_position) / gear + theta;
 
 	// Sprawdzenie obliczonych wartosci.
 	check_motor_position(local_current_motor_pos);
@@ -113,12 +114,11 @@ void model::mp2i_transform(const lib::MotorArray & local_current_motor_pos,
  Przeliczenie wspolrzednych wewnetrznych na polozenia walow silnikow
  (i2mp - internal to motor position)
  ------------------------------------------------------------------------ */
-void model::i2mp_transform(lib::MotorArray & local_desired_motor_pos_new,
-		lib::JointArray & local_desired_joints) {
+void model::i2mp_transform(lib::MotorArray & local_desired_motor_pos_new, const lib::JointArray & local_desired_joints)
+{
 
 	// Obliczenie kata obrotu walu silnika napedowego chwytaka.
-	local_desired_motor_pos_new[0] = gear * local_desired_joints[0]
-			+ synchro_joint_position;
+	local_desired_motor_pos_new[0] = gear * local_desired_joints[0] + synchro_joint_position;
 
 	// Sprawdzenie obliczonych wartosci wspolrzednych wewnetrznych.
 	check_joints(local_desired_joints);

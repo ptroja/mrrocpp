@@ -1,14 +1,12 @@
-// -------------------------------------------------------------------------
-//                            ecp.cc
-//            Effector Control Process (lib::ECP) - methods
-// Funkcje do tworzenia procesow ECP
-// robot - sarkofag
-//
-// -------------------------------------------------------------------------
+/*!
+ * @file
+ * @brief File contains ecp robot class definition for Sarkofag
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup sarkofag
+ */
 
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
-#include "lib/mis_fun.h"
+#include "base/lib/mis_fun.h"
 
 #include "robot/sarkofag/ecp_r_sarkofag.h"
 
@@ -25,8 +23,7 @@ robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
 }
 
 robot::robot(common::task::task& _ecp_object) :
-	ecp_robot(lib::ROBOT_SARKOFAG, SARKOFAG_NUM_OF_SERVOS, EDP_SARKOFAG_SECTION, _ecp_object),
-			kinematics_manager()
+	ecp_robot(lib::ROBOT_SARKOFAG, SARKOFAG_NUM_OF_SERVOS, EDP_SARKOFAG_SECTION, _ecp_object), kinematics_manager()
 {
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();

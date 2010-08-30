@@ -1,18 +1,18 @@
-// -------------------------------------------------------------------------
-//                            ecp_local.h dla QNX6
-// Definicje struktur danych i metod dla procesow ECP
-// robot - irp6_mechatronika
-//
-// -------------------------------------------------------------------------
-
 #if !defined(_ECP_R_BIRD_HAND_H)
 #define _ECP_R_BIRD_HAND_H
 
+/*!
+ * @file
+ * @brief File contains ecp robot class declaration for Bird Hand three finger gripper
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup bird_hand
+ */
+
 #include "base/ecp/ecp_robot.h"
-#include "robot/bird_hand/bird_hand_const.h"
+#include "robot/bird_hand/const_bird_hand.h"
 #include "base/kinematics/kinematics_manager.h"
 #include "robot/bird_hand/kinematic_model_bird_hand.h"
-#include "lib/data_port_headers/bird_hand.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -45,14 +45,12 @@ protected:
 
 	void create_kinematic_models_for_given_robot(void);
 
-
 public:
 	robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp);
 	robot(common::task::task& _ecp_object);
 
 	void create_command();
 	void get_reply();
-
 
 };
 // ---------------------------------------------------------------

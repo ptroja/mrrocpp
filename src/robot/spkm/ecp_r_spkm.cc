@@ -1,14 +1,14 @@
-// -------------------------------------------------------------------------
-//                            ecp.cc
-//            Effector Control Process (lib::ECP) - methods
-// Funkcje do tworzenia procesow ECP
-// robot - irp6_mechatronika
-//
-// -------------------------------------------------------------------------
+/*!
+ * @file
+ * @brief File contains ecp robot class definition for SwarmItFix Parallel Kinematic Machine
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup spkm
+ */
 
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
-#include "lib/mis_fun.h"
+#include "base/lib/impconst.h"
+
+#include "base/lib/mis_fun.h"
 
 #include "robot/spkm/ecp_r_spkm.h"
 

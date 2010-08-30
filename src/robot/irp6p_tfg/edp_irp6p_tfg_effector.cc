@@ -10,10 +10,8 @@
 // Data:		14.02.2007
 // ------------------------------------------------------------------------
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
-#include "lib/mrmath/mrmath.h"
+
+#include "robot/irp6p_tfg/sg_irp6p_tfg.h"
 
 // Klasa edp_irp6ot_effector.
 #include "robot/irp6p_tfg/edp_irp6p_tfg_effector.h"

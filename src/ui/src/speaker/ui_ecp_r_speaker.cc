@@ -8,20 +8,20 @@
 /* Standard headers */
 #include <iostream>
 
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #include <unistd.h>
-#include <string.h>
-#include <math.h>
+#include <cstring>
+#include <cmath>
 #include <fcntl.h>
-#include <errno.h>
+#include <cerrno>
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
 
-#include "lib/srlib.h"
-#include "lib/mrmath/mrmath.h"
+#include "base/lib/srlib.h"
+#include "base/lib/mrmath/mrmath.h"
 
 #include "ui/src/speaker/ui_ecp_r_speaker.h"
 

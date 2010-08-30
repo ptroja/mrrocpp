@@ -4,6 +4,8 @@
  *Author: yoyek
  */
 
+#include "base/ecp/ecp_task.h"
+#include "base/ecp/ecp_robot.h"
 #include "ecp_g_smb.h"
 
 namespace mrrocpp {

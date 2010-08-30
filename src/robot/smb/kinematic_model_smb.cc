@@ -1,6 +1,14 @@
-#include "lib/com_buf.h"
+/*!
+ * @file
+ * @brief File containing methods of the kinematic model for the SwarmItFix agent's mobile base class.
+ *
+ * @author tkornuta
+ * @date 2010.02.01
+ *
+ * @ingroup KINEMATICS SIF_KINEMATICS smb
+ */
 
-// Klasa kinematic_model_irp6m_with_wrist.
+#include "base/lib/com_buf.h"
 #include "robot/smb/kinematic_model_smb.h"
 
 namespace mrrocpp {
@@ -9,10 +17,10 @@ namespace smb {
 
 model::model(void)
 {
-	// Ustawienie etykiety modelu kinematycznego.
+	// Set label.
 	set_kinematic_model_label("Switching to simple kinematic model");
 
-	// Ustawienie parametrow kinematycznych.
+	// Set kinematics parameters.
 	set_kinematic_parameters();
 }
 
@@ -32,7 +40,7 @@ void model::mp2i_transform(const lib::MotorArray & local_current_motor_pos, lib:
 {
 }
 
-void model::i2mp_transform(lib::MotorArray & local_desired_motor_pos_new, lib::JointArray & local_desired_joints)
+void model::i2mp_transform(lib::MotorArray & local_desired_motor_pos_new, const lib::JointArray & local_desired_joints)
 {
 }
 

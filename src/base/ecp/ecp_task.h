@@ -2,13 +2,22 @@
 #define _ECP_TASK_H
 
 
+/*!
+ * @file
+ * @brief File contains ecp base task declaration
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup ecp
+ */
 
 #include "base/ecp_mp/ecp_mp_task.h"
-#include "base/ecp/ecp_robot.h"
 
 namespace mrrocpp {
 namespace ecp {
 namespace common {
+
+class ecp_robot;
+
 namespace task {
 
 class ecp_sub_task;

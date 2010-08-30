@@ -5,20 +5,22 @@
 // -------------------------------------------------------------------------
 // Funkcje do konstruowania procesow MP
 
-#include <stdio.h>
+#include <cstdio>
 #include <iostream>
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
 
-#include "lib/srlib.h"
-#include "base/mp/mp.h"
+#include "base/lib/srlib.h"
+
+#include "base/mp/MP_main_error.h"
+#include "base/mp/mp_robot.h"
 #include "application/ball/mp_g_ball.h"
-#include "lib/mrmath/mrmath.h"
+#include "base/lib/mrmath/mrmath.h"
 #include "base/mp/mp_g_common.h"
-#include "robot/irp6ot_m/irp6ot_m_const.h"
-#include "robot/irp6p_m/irp6p_m_const.h"
+#include "robot/irp6ot_m/const_irp6ot_m.h"
+#include "robot/irp6p_m/const_irp6p_m.h"
 
 namespace mrrocpp {
 namespace mp {

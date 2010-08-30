@@ -5,17 +5,19 @@
 //
 // -------------------------------------------------------------------------
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
 
-#include "lib/srlib.h"
-#include "base/mp/mp.h"
+#include "base/lib/srlib.h"
+
+#include "base/mp/MP_main_error.h"
+#include "base/mp/mp_task.h"
 #include "application/ball/mp_g_ball.h"
 #include "application/ball/mp_t_ball.h"
 #include "application/rcsc/ecp_mp_t_rcsc.h"
-#include "robot/irp6ot_m/irp6ot_m_const.h"
-#include "robot/irp6p_m/irp6p_m_const.h"
+#include "robot/irp6ot_m/const_irp6ot_m.h"
+#include "robot/irp6p_m/const_irp6p_m.h"
 #include "subtask/ecp_mp_st_bias_edp_force.h"
 #include "generator/ecp/ecp_mp_g_transparent.h"
 #include "generator/ecp/ecp_mp_g_smooth.h"

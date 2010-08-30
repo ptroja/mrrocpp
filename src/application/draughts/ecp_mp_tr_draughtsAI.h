@@ -54,7 +54,7 @@ private:
 	int socketDescriptor;
 
 public:
-	TRDraughtsAI(TRANSMITTER_ENUM _transmitter_name, const char* _section_name, task::task& _ecp_mp_object);
+	TRDraughtsAI(lib::TRANSMITTER_t _transmitter_name, const char* _section_name, task::task& _ecp_mp_object);
 	~TRDraughtsAI(); // destruktor czujnika virtualnego
 	void AIconnect(const char *host, unsigned short int serverPort);
 	void AIdisconnect();

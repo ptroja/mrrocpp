@@ -1,9 +1,15 @@
-/*! \file ecp_mp_s_pcbird.cc
- * \brief Virtual sensor on the ECP/MP side used for communication with pcbird framework.
- * - methods definition
- * \author tkornuta
- * \date 15.03.2008
+/**
+ * @file
+ * @brief Virtual sensor on the ECP/MP side used for communication with PcBird - definition of the pcbird class methods.
+ *
+ * @author B.Bielawski
+ * @author tkornuta
+ * @date 16.06.2008
+ *
+ * @ingroup SENSORS PCBIRD_SENSOR
  */
+
+
 
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -11,9 +17,7 @@
 #include <unistd.h>
 #include <iostream>
 
-#include "sensor/pcbird/birdclient.h"
 #include "sensor/pcbird/ecp_mp_s_pcbird.h"
-#include "base/ecp_mp/ecp_mp_task.h"
 
 using namespace std;
 
@@ -21,9 +25,7 @@ namespace mrrocpp {
 namespace ecp_mp {
 namespace sensor {
 
-/*!
- * Constructor. Creates socket connection to pcbird.
- */
+
 pcbird::pcbird(const std::string & _section_name, lib::sr_ecp & _sr_ecp_msg, lib::configurator & config) :
 	sr_ecp_msg(_sr_ecp_msg), sensor_name(SENSOR_PCBIRD)
 {
@@ -41,9 +43,7 @@ pcbird::pcbird(const std::string & _section_name, lib::sr_ecp & _sr_ecp_msg, lib
 	sr_ecp_msg.message("Connected to pcbird");
 }
 
-/*!
- * Sends sensor configuration to pcbird.
- */
+
 void pcbird::configure_sensor()
 {
 
@@ -53,21 +53,17 @@ void pcbird::configure_sensor()
 
 }
 
-/*!
- * Sends initiation reading command to pcbird.
- */
+
 void pcbird::initiate_reading()
 {
 }
 
-/*!
- * Retrieves aggregated data from pcbird.
- */
+
 void pcbird::get_reading()
 {
 	//	sr_ecp_msg.message("PCBIRD: before get_reading");
 
-	//  pcbird_get_streaming_position(sockfd, (pcbird_pos_t *)&image.sensor_union.pcbird);
+	//  pcbird_get_streaming_position(sockfd, (pcbird_t *)&image.sensor_union.pcbird);
 	pcbird_get_single_position(sockfd, (pcbird_pos_t*) &image);
 
 	/*
@@ -83,9 +79,7 @@ void pcbird::get_reading()
 	 */
 }
 
-/*!
- * Closes pcbird socket connection.
- */
+
 pcbird::~pcbird()
 {
 	close(sockfd);

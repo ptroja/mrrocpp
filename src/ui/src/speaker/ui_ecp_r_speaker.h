@@ -12,7 +12,7 @@
 
 #include "robot/speaker/ecp_r_speaker.h"
 // Konfigurator.
-#include "lib/configurator.h"
+#include "base/lib/configurator.h"
 
 
 // ---------------------------------------------------------------
