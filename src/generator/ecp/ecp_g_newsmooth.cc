@@ -37,6 +37,9 @@ bool newsmooth::calculate() {
 
 	for (i = 0; i < pose_vector.size(); i++) {
 		if (!vpc.calculate_v_r_a_r_pose(pose_vector_iterator)) {
+			if (debug) {
+				printf("calculate_v_r_a_r_pose returned false\n");
+			}
 			return false;
 		}
 		pose_vector_iterator++;
@@ -44,17 +47,24 @@ bool newsmooth::calculate() {
 
 
 	//------------- testowo ----------
-	/*pose_vector_iterator = pose_vector.begin();
+	pose_vector_iterator = pose_vector.begin();
+	if (pose_spec == lib::ECP_XYZ_ANGLE_AXIS && motion_type == lib::ABSOLUTE) {
 
-	for (i = 0; i < pose_vector.size(); i++) {
-		if (pose_spec == lib::ECP_XYZ_ANGLE_AXIS) {
-			set_relative();
+		set_relative();
+
+		for (i = 0; i < pose_vector.size(); i++) {
 			if (!vpc.calculate_relative_angle_axis_vector(pose_vector_iterator)) {
+				if (debug) {
+					printf("calculate_relative_angle_axis_vector returned false\n");
+				}
 				return false;
 			}
+			pose_vector_iterator++;
 		}
-		pose_vector_iterator++;
-	}*/
+
+	}
+
+
 	//------------ testowo end ---------
 
 	pose_vector_iterator = pose_vector.begin();
@@ -63,10 +73,16 @@ bool newsmooth::calculate() {
 
 		if(motion_type == lib::ABSOLUTE) {//absolute type of motion
 			if (!vpc.calculate_absolute_distance_direction_pose(pose_vector_iterator)) {
+				if (debug) {
+					printf("calculate_absolute_distance_direction_pose returned false\n");
+				}
 				return false;
 			}
 		} else if(motion_type == lib::RELATIVE) {//relative type of motion
 			if (!vpc.calculate_relative_distance_direction_pose(pose_vector_iterator)) {
+				if (debug) {
+					printf("calculate_relative_distance_direction_pose returned false\n");
+				}
 				return false;
 			}
 		} else {
@@ -156,6 +172,11 @@ void newsmooth::print_pose_vector() {
 
 void newsmooth::print_pose(vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator & it) {
 	int z;
+	printf("coords:\t");
+	for (z = 0; z < pose_vector_iterator->coordinates.size(); z++) {
+		printf("%f\t", pose_vector_iterator->coordinates[z]);
+	}
+	printf("\n");
 	printf("s:\t");
 	for (z = 0; z < pose_vector_iterator->s.size(); z++) {
 		printf("%f\t", pose_vector_iterator->s[z]);
