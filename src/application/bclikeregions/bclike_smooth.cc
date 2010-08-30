@@ -129,10 +129,11 @@ bool bclike_smooth::next_step(){
 	//If there are new bar code like areas translate their positions and check existance in vector
 	if(reading.code_found){
 		double t[3];
+		std::cout <<"BEFORE: x = " <<  reading.x_k0 << " y = " << reading.y_k0 << std::endl;
 		translateToRobotPosition(reading);
-		std::cout << " x = " <<  reading.x_k0 << " y = " << reading.y_k0 << std::endl;
+		std::cout << "AFTER: x = " <<  reading.x_k0 << " y = " << reading.y_k0 << std::endl;
 		actual_pos.get_translation_vector(t);
-		std::cout << "ROBOT x = " <<  t[0] << "ROBOT y = " << t[1] << std::endl;
+		std::cout << "ROBOT: x = " <<  t[0] << " y = " << t[1] << std::endl;
 		addCodesToVector(reading);
 	}
 
@@ -173,6 +174,7 @@ void bclike_smooth::translateToRobotPosition(task::fradia_regions& regs){
 
 	lib::Xyz_Euler_Zyz_vector new_pos;
 
+	std::cout << "REGS_FOUND = " << regs.num_found << std::endl;
 	for(int i = 0; i < regs.num_found; ++i){
 
 		e.setZero();
@@ -234,19 +236,22 @@ void bclike_smooth::translateToRobotPosition(task::fradia_regions& regs){
 
 		tmp_pos.get_xyz_euler_zyz(new_pos);
 
-
 		switch(i){
 			case 1:
-				regs.x_k0 = new_pos(1,1);
-				regs.y_k0 = new_pos(2,1);
+				regs.x_k0 = new_pos(1,0);
+				regs.y_k0 = new_pos(2,0);
 				break;
 			case 2:
-				regs.x_k1 = new_pos(1,1);
-				regs.y_k1 = new_pos(2,1);
+				regs.x_k1 = new_pos(1,0);
+				regs.y_k1 = new_pos(2,0);
 				break;
 			case 3:
-				regs.x_k2 = new_pos(1,1);
-				regs.y_k2 = new_pos(2,1);
+				regs.x_k2 = new_pos(1,0);
+				regs.y_k2 = new_pos(2,0);
+				break;
+			case 4:
+				regs.x_k3 = new_pos(1,0);
+				regs.y_k3 = new_pos(2,0);
 				break;
 		}
 	}
@@ -263,12 +268,18 @@ void bclike_smooth::addCodesToVector(task::fradia_regions reading){
 	task::mrrocpp_regions tmp;
 
 	switch(reading.num_found){
+		case 4:
+			tmp.x = reading.x_k3;
+			tmp.y = reading.y_k3;
+			tmp.h = reading.h_k3;
+			tmp.w = reading.w_k3;
+			if(!checkIfCodeBeenRead(tmp))
+				readings.push_back(std::pair<task::mrrocpp_regions, bool>(tmp, false));
 		case 3:
 			tmp.x = reading.x_k2;
 			tmp.y = reading.y_k2;
 			tmp.h = reading.h_k2;
 			tmp.w = reading.w_k2;
-			tmp.a = reading.a_k2;
 			if(!checkIfCodeBeenRead(tmp))
 				readings.push_back(std::pair<task::mrrocpp_regions, bool>(tmp, false));
 		case 2:
@@ -276,7 +287,6 @@ void bclike_smooth::addCodesToVector(task::fradia_regions reading){
 			tmp.y = reading.y_k1;
 			tmp.h = reading.h_k1;
 			tmp.w = reading.w_k1;
-			tmp.a = reading.a_k1;
 			if(!checkIfCodeBeenRead(tmp))
 				readings.push_back(std::pair<task::mrrocpp_regions, bool>(tmp, false));
 		case 1:
@@ -284,7 +294,6 @@ void bclike_smooth::addCodesToVector(task::fradia_regions reading){
 			tmp.y = reading.y_k0;
 			tmp.h = reading.h_k0;
 			tmp.w = reading.w_k0;
-			tmp.a = reading.a_k0;
 			if(!checkIfCodeBeenRead(tmp))
 				readings.push_back(std::pair<task::mrrocpp_regions, bool>(tmp, false));
 			break;

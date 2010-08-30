@@ -100,36 +100,26 @@ char* bcl_message::fradiaOrderToString(task::fradia_regions& reg, std::vector<do
 	double *tab = reinterpret_cast<double*>(ret);
 
 	switch(reg.num_found){
-//		case 5:
-//			tab[21] = reg.x_k4;
-//			tab[22] = reg.y_k4;
-//			tab[23] = reg.w_k4;
-//			tab[24] = reg.h_k4;
-//			tab[25] = reg.a_k3;
-//		case 4:
-//			tab[16] = reg.x_k3;
-//			tab[17] = reg.y_k3;
-//			tab[18] = reg.w_k3;
-//			tab[19] = reg.h_k3;
-//			tab[20] = reg.a_k3;
+		case 4:
+			tab[13] = reg.x_k3;
+			tab[14] = reg.y_k3;
+			tab[15] = reg.w_k3;
+			tab[16] = reg.h_k3;
 		case 3:
-			tab[11] = reg.x_k2;
-			tab[12] = reg.y_k2;
-			tab[13] = reg.w_k2;
-			tab[14] = reg.h_k2;
-			tab[15] = reg.a_k2;
+			tab[9] = reg.x_k2;
+			tab[10] = reg.y_k2;
+			tab[11] = reg.w_k2;
+			tab[12] = reg.h_k2;
 		case 2:
-			tab[6] = reg.x_k1;
-			tab[7] = reg.y_k1;
-			tab[8] = reg.w_k1;
-			tab[9] = reg.h_k1;
-			tab[10] = reg.a_k1;
+			tab[5] = reg.x_k1;
+			tab[6] = reg.y_k1;
+			tab[7] = reg.w_k1;
+			tab[8] = reg.h_k1;
 		case 1:
 			tab[1] = reg.x_k0;
 			tab[2] = reg.y_k0;
 			tab[3] = reg.w_k0;
 			tab[4] = reg.h_k0;
-			tab[5] = reg.a_k0;
 		case 0:
 			tab[0] = reg.num_found;
 			break;
@@ -160,36 +150,26 @@ std::vector<double> bcl_message::stringToFradiaOrder(char* str, task::fradia_reg
 	double *tab = reinterpret_cast<double*>(str);
 
 	switch((int)tab[0]){
-//		case 5:
-//			reg.x_k4 = tab[21];
-//			reg.y_k4 = tab[22];
-//			reg.w_k4 = tab[23];
-//			reg.h_k4 = tab[24];
-//			reg.a_k4 = tab[25];
-//		case 4:
-//			reg.x_k3 = tab[16];
-//			reg.y_k3 = tab[17];
-//			reg.w_k3 = tab[18];
-//			reg.h_k3 = tab[19];
-//			reg.a_k3 = tab[20];
+		case 4:
+			reg.x_k3 = tab[13];
+			reg.y_k3 = tab[14];
+			reg.w_k3 = tab[15];
+			reg.h_k3 = tab[16];
 		case 3:
-			reg.x_k2 = tab[11];
-			reg.y_k2 = tab[12];
-			reg.w_k2 = tab[13];
-			reg.h_k2 = tab[14];
-			reg.a_k2 = tab[15];
+			reg.x_k2 = tab[9];
+			reg.y_k2 = tab[10];
+			reg.w_k2 = tab[11];
+			reg.h_k2 = tab[12];
 		case 2:
-			reg.x_k1 = tab[6];
-			reg.y_k1 = tab[7];
-			reg.w_k1 = tab[8];
-			reg.h_k1 = tab[9];
-			reg.a_k1 = tab[10];
+			reg.x_k1 = tab[5];
+			reg.y_k1 = tab[6];
+			reg.w_k1 = tab[7];
+			reg.h_k1 = tab[8];
 		case 1:
 			reg.x_k0 = tab[1];
 			reg.y_k0 = tab[2];
 			reg.w_k0 = tab[3];
 			reg.h_k0 = tab[4];
-			reg.a_k0 = tab[5];
 			reg.code_found = true;
 			reg.num_found = tab[0];
 			ret.assign(tab + VEC_POS, tab + (int)tab[VEC_POS - 1]);
