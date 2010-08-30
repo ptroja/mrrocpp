@@ -18,16 +18,16 @@ bird_hand::bird_hand(common::task::task& _ecp_task) :
 	generator(_ecp_task), MAX_V(8000.0 / 275.0 / 7.826 / 60.0 / 1000.0), STEP_NO(50)
 {
 	bird_hand_command_data_port
-			= the_robot->port_manager.get_port <lib::bird_hand_command> (BIRD_HAND_COMMAND_DATA_PORT);
+			= the_robot->port_manager.get_port <lib::bird_hand::command> (BIRD_HAND_COMMAND_DATA_PORT);
 
 	bird_hand_configuration_command_data_port
-			= the_robot->port_manager.get_port <lib::bird_hand_configuration> (BIRD_HAND_CONFIGURATION_DATA_PORT);
+			= the_robot->port_manager.get_port <lib::bird_hand::configuration> (BIRD_HAND_CONFIGURATION_DATA_PORT);
 
 	bird_hand_status_reply_data_request_port
-			= the_robot->port_manager.get_request_port <lib::bird_hand_status> (BIRD_HAND_STATUS_DATA_REQUEST_PORT);
+			= the_robot->port_manager.get_request_port <lib::bird_hand::status> (BIRD_HAND_STATUS_DATA_REQUEST_PORT);
 
 	bird_hand_configuration_reply_data_request_port = the_robot->port_manager.get_request_port <
-			lib::bird_hand_configuration> (BIRD_HAND_CONFIGURATION_DATA_REQUEST_PORT);
+			lib::bird_hand::configuration> (BIRD_HAND_CONFIGURATION_DATA_REQUEST_PORT);
 }
 
 void bird_hand::create_ecp_mp_reply()
@@ -48,14 +48,14 @@ bool bird_hand::first_step()
 
 	//bird_hand_configuration_command_data_port->set(bird_hand_configuration_command_structure);
 
-	bird_hand_command_structure.thumb_f[0].profile_type = mrrocpp::lib::BIRD_HAND_MACROSTEP_POSITION_INCREMENT;
-	bird_hand_command_structure.thumb_f[1].profile_type = mrrocpp::lib::BIRD_HAND_MACROSTEP_POSITION_INCREMENT;
-	bird_hand_command_structure.index_f[0].profile_type = mrrocpp::lib::BIRD_HAND_MACROSTEP_POSITION_INCREMENT;
-	bird_hand_command_structure.index_f[1].profile_type = mrrocpp::lib::BIRD_HAND_MACROSTEP_POSITION_INCREMENT;
-	bird_hand_command_structure.index_f[2].profile_type = mrrocpp::lib::BIRD_HAND_MACROSTEP_POSITION_INCREMENT;
-	bird_hand_command_structure.ring_f[0].profile_type = mrrocpp::lib::BIRD_HAND_MACROSTEP_POSITION_INCREMENT;
-	bird_hand_command_structure.ring_f[1].profile_type = mrrocpp::lib::BIRD_HAND_MACROSTEP_POSITION_INCREMENT;
-	bird_hand_command_structure.ring_f[2].profile_type = mrrocpp::lib::BIRD_HAND_MACROSTEP_POSITION_INCREMENT;
+	bird_hand_command_structure.thumb_f[0].profile_type = mrrocpp::lib::bird_hand::BIRD_HAND_MACROSTEP_POSITION_INCREMENT;
+	bird_hand_command_structure.thumb_f[1].profile_type = mrrocpp::lib::bird_hand::BIRD_HAND_MACROSTEP_POSITION_INCREMENT;
+	bird_hand_command_structure.index_f[0].profile_type = mrrocpp::lib::bird_hand::BIRD_HAND_MACROSTEP_POSITION_INCREMENT;
+	bird_hand_command_structure.index_f[1].profile_type = mrrocpp::lib::bird_hand::BIRD_HAND_MACROSTEP_POSITION_INCREMENT;
+	bird_hand_command_structure.index_f[2].profile_type = mrrocpp::lib::bird_hand::BIRD_HAND_MACROSTEP_POSITION_INCREMENT;
+	bird_hand_command_structure.ring_f[0].profile_type = mrrocpp::lib::bird_hand::BIRD_HAND_MACROSTEP_POSITION_INCREMENT;
+	bird_hand_command_structure.ring_f[1].profile_type = mrrocpp::lib::bird_hand::BIRD_HAND_MACROSTEP_POSITION_INCREMENT;
+	bird_hand_command_structure.ring_f[2].profile_type = mrrocpp::lib::bird_hand::BIRD_HAND_MACROSTEP_POSITION_INCREMENT;
 
 	bird_hand_command_structure.thumb_f[0].desired_torque = 0;
 	bird_hand_command_structure.thumb_f[1].desired_torque = 0;

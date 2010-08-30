@@ -30,8 +30,8 @@ namespace bird_hand {
 class effector : public common::manip_effector
 {
 protected:
-	lib::bird_hand_cbuffer ecp_edp_cbuffer;
-	lib::bird_hand_rbuffer edp_ecp_rbuffer;
+	lib::bird_hand::cbuffer ecp_edp_cbuffer;
+	lib::bird_hand::rbuffer edp_ecp_rbuffer;
 
 	uint64_t macrostep_end_time;
 	uint64_t query_time;

@@ -1,5 +1,9 @@
 /** 
 
+@namespace mrrocpp::lib::bird_hand
+@brief Namespace for bird_hand gripper libraries etc.
+@author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+
 @namespace mrrocpp::ecp::bird_hand
 @brief Namespace for ECP bird_hand gripper classes etc.
 @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology

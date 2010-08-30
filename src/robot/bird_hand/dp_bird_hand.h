@@ -1,7 +1,6 @@
 #if !defined(__BIRD_HAND_DATA_PORT_H)
 #define __BIRD_HAND_DATA_PORT_H
 
-
 /*!
  * @file
  * @brief File contains data port communication structures for Bird Hand three finger gripper
@@ -10,9 +9,9 @@
  * @ingroup bird_hand
  */
 
-
 namespace mrrocpp {
 namespace lib {
+namespace bird_hand {
 
 // ponizej konieczne zdefiniowanie typu 64bitowego bo inaczej przepalnia sie typ 32bitowy przy mnozeniu
 #define BIRD_HAND_STEP_TIME_IN_NS ((uint64_t) 2000000)
@@ -35,7 +34,7 @@ enum BIRD_HAND_MOTION_VARIANT
 	BIRD_HAND_MACROSTEP_ABSOLUTE_POSITION = 2
 };
 
-struct bird_hand_single_joint_command
+struct single_joint_command
 {
 	BIRD_HAND_MOTION_VARIANT profile_type;
 	double reciprocal_of_damping;
@@ -43,7 +42,7 @@ struct bird_hand_single_joint_command
 	double desired_position;
 };
 
-struct bird_hand_single_joint_status
+struct single_joint_status
 {
 	double meassured_position;
 	double meassured_torque;
@@ -58,7 +57,7 @@ struct bird_hand_single_joint_status
 	bool upper_limit_of_meassured_current;
 };
 
-struct bird_hand_single_joint_configuration
+struct single_joint_configuration
 {
 	int p_factor;
 	int i_factor;
@@ -72,29 +71,30 @@ struct bird_hand_single_joint_configuration
 	int value_of_upper_limit_of_position_increment;
 };
 
-struct bird_hand_command
+struct command
 {
 	int motion_steps;
 	int ecp_query_step;
-	bird_hand_single_joint_command thumb_f[BIRD_HAND_THUMB_F_NUM_OF_SERVOS];
-	bird_hand_single_joint_command index_f[BIRD_HAND_INDEX_F_NUM_OF_SERVOS];
-	bird_hand_single_joint_command ring_f[BIRD_HAND_RING_F_NUM_OF_SERVOS];
+	single_joint_command thumb_f[BIRD_HAND_THUMB_F_NUM_OF_SERVOS];
+	single_joint_command index_f[BIRD_HAND_INDEX_F_NUM_OF_SERVOS];
+	single_joint_command ring_f[BIRD_HAND_RING_F_NUM_OF_SERVOS];
 };
 
-struct bird_hand_status
+struct status
 {
-	bird_hand_single_joint_status thumb_f[BIRD_HAND_THUMB_F_NUM_OF_SERVOS];
-	bird_hand_single_joint_status index_f[BIRD_HAND_INDEX_F_NUM_OF_SERVOS];
-	bird_hand_single_joint_status ring_f[BIRD_HAND_RING_F_NUM_OF_SERVOS];
+	single_joint_status thumb_f[BIRD_HAND_THUMB_F_NUM_OF_SERVOS];
+	single_joint_status index_f[BIRD_HAND_INDEX_F_NUM_OF_SERVOS];
+	single_joint_status ring_f[BIRD_HAND_RING_F_NUM_OF_SERVOS];
 };
 
-struct bird_hand_configuration
+struct configuration
 {
-	bird_hand_single_joint_configuration thumb_f[BIRD_HAND_THUMB_F_NUM_OF_SERVOS];
-	bird_hand_single_joint_configuration index_f[BIRD_HAND_INDEX_F_NUM_OF_SERVOS];
-	bird_hand_single_joint_configuration ring_f[BIRD_HAND_RING_F_NUM_OF_SERVOS];
+	single_joint_configuration thumb_f[BIRD_HAND_THUMB_F_NUM_OF_SERVOS];
+	single_joint_configuration index_f[BIRD_HAND_INDEX_F_NUM_OF_SERVOS];
+	single_joint_configuration ring_f[BIRD_HAND_RING_F_NUM_OF_SERVOS];
 };
 
+}
 }
 }
 

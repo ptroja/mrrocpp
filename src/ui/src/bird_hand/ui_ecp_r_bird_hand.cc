@@ -33,19 +33,19 @@ ui_bird_hand_robot::ui_bird_hand_robot(lib::configurator &_config,
 	the_robot = new ecp::bird_hand::robot(_config, _sr_ecp_msg);
 
 	bird_hand_command_data_port = the_robot->port_manager.get_port<
-			lib::bird_hand_command> (BIRD_HAND_COMMAND_DATA_PORT);
+			lib::bird_hand::command> (BIRD_HAND_COMMAND_DATA_PORT);
 
 	bird_hand_configuration_command_data_port
-			= the_robot->port_manager.get_port<lib::bird_hand_configuration> (
+			= the_robot->port_manager.get_port<lib::bird_hand::configuration> (
 					BIRD_HAND_CONFIGURATION_DATA_PORT);
 
 	bird_hand_status_reply_data_request_port
-			= the_robot->port_manager.get_request_port<lib::bird_hand_status> (
+			= the_robot->port_manager.get_request_port<lib::bird_hand::status> (
 					BIRD_HAND_STATUS_DATA_REQUEST_PORT);
 
 	bird_hand_configuration_reply_data_request_port
 			= the_robot->port_manager.get_request_port<
-					lib::bird_hand_configuration> (
+					lib::bird_hand::configuration> (
 					BIRD_HAND_CONFIGURATION_DATA_REQUEST_PORT);
 
 	assert(the_robot);
