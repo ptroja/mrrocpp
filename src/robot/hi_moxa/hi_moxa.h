@@ -25,13 +25,12 @@
 #include <termios.h>
 #include <ctime>
 
-#define PORT "/dev/ser"
-#define BAUD 921600
-#define START_BYTE '#'
-#define WRITE_BYTES 10
-#define READ_BYTES 8
+const std::string PORT = "/dev/ser";
+const int BAUD = 921600;
+const int WRITE_BYTES = 10;
+const int READ_BYTES = 8;
 
-#define COMMCYCLE_TIME_NS	2000000
+const long COMMCYCLE_TIME_NS = 2000000;
 
 namespace mrrocpp {
 namespace edp {

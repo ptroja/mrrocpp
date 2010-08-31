@@ -7,7 +7,7 @@ namespace mrrocpp {
 namespace edp {
 namespace hi_moxa {
 
-#define START_BYTE '#'
+const char START_BYTE = '#';
 
 // commands
 #define COMMAND_MODE_PWM			0x00
