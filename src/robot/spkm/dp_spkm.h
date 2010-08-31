@@ -27,6 +27,6 @@ struct spkm_mp_to_ecp_parameters
 };
 
 }
-}
+} // namespace mrrocpp
 
 #endif

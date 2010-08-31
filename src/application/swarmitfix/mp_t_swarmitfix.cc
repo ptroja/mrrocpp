@@ -89,7 +89,7 @@ void swarmitfix::main_task_algorithm(void)
 
 	char tmp_string[MP_2_ECP_STRING_SIZE];
 
-	lib::epos_cubic_command epos_params;
+	lib::epos::epos_cubic_command epos_params;
 
 	epos_params.da[4] = 3.7;
 

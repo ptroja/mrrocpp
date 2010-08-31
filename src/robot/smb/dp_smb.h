@@ -20,8 +20,8 @@ namespace lib {
 struct smb_mp_to_ecp_parameters
 {
 	int locking_device_clamp_number;
-	EPOS_GEN_PROFILE motion_type;
-	smb_mp_to_ecp_cubic_trapezoidal_parameters cubic_trapezoidal[SMB_DATA_PORT_SERVOS_NUMBER];
+	epos::EPOS_GEN_PROFILE motion_type;
+	epos::smb_mp_to_ecp_cubic_trapezoidal_parameters cubic_trapezoidal[SMB_DATA_PORT_SERVOS_NUMBER];
 };
 
 struct smb_leg_reply

@@ -30,16 +30,16 @@ struct spkm_cbuffer
 	SPKM_CBUFFER_VARIANT variant;
 	union
 	{
-		epos_cubic_command epos_cubic_command_structure;
-		epos_trapezoidal_command epos_trapezoidal_command_structure;
-		epos_operational_command epos_operational_command_structure;
+		epos::epos_cubic_command epos_cubic_command_structure;
+		epos::epos_trapezoidal_command epos_trapezoidal_command_structure;
+		epos::epos_operational_command epos_operational_command_structure;
 	};
 
 };
 
 struct spkm_rbuffer
 {
-	single_controller_epos_reply epos_controller[SPKM_NUM_OF_SERVOS];
+	epos::single_controller_epos_reply epos_controller[SPKM_NUM_OF_SERVOS];
 	bool contact;
 }__attribute__((__packed__));
 

@@ -31,9 +31,9 @@ struct smb_cbuffer
 	SMB_CBUFFER_VARIANT variant;
 	union
 	{
-		epos_cubic_command epos_cubic_command_structure;
-		epos_trapezoidal_command epos_trapezoidal_command_structure;
-		epos_operational_command epos_operational_command_structure;
+		epos::epos_cubic_command epos_cubic_command_structure;
+		epos::epos_trapezoidal_command epos_trapezoidal_command_structure;
+		epos::epos_operational_command epos_operational_command_structure;
 		smb_multi_pin_insertion multi_pin_insertion;
 		smb_multi_pin_locking multi_pin_locking;
 	};
@@ -44,7 +44,7 @@ struct smb_cbuffer
 struct smb_rbuffer
 {
 	smb_multi_leg_reply multi_leg_reply;
-	single_controller_epos_reply epos_controller[SMB_NUM_OF_SERVOS];
+	epos::single_controller_epos_reply epos_controller[SMB_NUM_OF_SERVOS];
 };
 
 #define EDP_SMB_SECTION "[edp_smb]"

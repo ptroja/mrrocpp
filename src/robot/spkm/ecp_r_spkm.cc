@@ -18,11 +18,11 @@ namespace spkm {
 
 robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
 	robot::ecp_robot(lib::ROBOT_SPKM, SPKM_NUM_OF_SERVOS, EDP_SPKM_SECTION, _config, _sr_ecp), kinematics_manager(),
-			epos_cubic_command_data_port(lib::EPOS_CUBIC_COMMAND_DATA_PORT, port_manager),
-			epos_trapezoidal_command_data_port(lib::EPOS_TRAPEZOIDAL_COMMAND_DATA_PORT, port_manager),
-			epos_operational_command_data_port(lib::EPOS_OPERATIONAL_COMMAND_DATA_PORT, port_manager),
-			epos_brake_command_data_port(lib::EPOS_BRAKE_COMMAND_DATA_PORT, port_manager),
-			epos_reply_data_request_port(lib::EPOS_REPLY_DATA_REQUEST_PORT, port_manager)
+			epos_cubic_command_data_port(lib::epos::EPOS_CUBIC_COMMAND_DATA_PORT, port_manager),
+			epos_trapezoidal_command_data_port(lib::epos::EPOS_TRAPEZOIDAL_COMMAND_DATA_PORT, port_manager),
+			epos_operational_command_data_port(lib::epos::EPOS_OPERATIONAL_COMMAND_DATA_PORT, port_manager),
+			epos_brake_command_data_port(lib::epos::EPOS_BRAKE_COMMAND_DATA_PORT, port_manager),
+			epos_reply_data_request_port(lib::epos::EPOS_REPLY_DATA_REQUEST_PORT, port_manager)
 
 {
 
@@ -33,11 +33,11 @@ robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
 
 robot::robot(common::task::task& _ecp_object) :
 	robot::ecp_robot(lib::ROBOT_SPKM, SPKM_NUM_OF_SERVOS, EDP_SPKM_SECTION, _ecp_object), kinematics_manager(),
-			epos_cubic_command_data_port(lib::EPOS_CUBIC_COMMAND_DATA_PORT, port_manager),
-			epos_trapezoidal_command_data_port(lib::EPOS_TRAPEZOIDAL_COMMAND_DATA_PORT, port_manager),
-			epos_operational_command_data_port(lib::EPOS_OPERATIONAL_COMMAND_DATA_PORT, port_manager),
-			epos_brake_command_data_port(lib::EPOS_BRAKE_COMMAND_DATA_PORT, port_manager),
-			epos_reply_data_request_port(lib::EPOS_REPLY_DATA_REQUEST_PORT, port_manager)
+			epos_cubic_command_data_port(lib::epos::EPOS_CUBIC_COMMAND_DATA_PORT, port_manager),
+			epos_trapezoidal_command_data_port(lib::epos::EPOS_TRAPEZOIDAL_COMMAND_DATA_PORT, port_manager),
+			epos_operational_command_data_port(lib::epos::EPOS_OPERATIONAL_COMMAND_DATA_PORT, port_manager),
+			epos_brake_command_data_port(lib::epos::EPOS_BRAKE_COMMAND_DATA_PORT, port_manager),
+			epos_reply_data_request_port(lib::epos::EPOS_REPLY_DATA_REQUEST_PORT, port_manager)
 
 {
 
