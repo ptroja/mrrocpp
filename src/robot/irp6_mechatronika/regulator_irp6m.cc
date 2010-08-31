@@ -122,7 +122,7 @@ uint8_t NL_regulator_2_irp6m::compute_set_value (void)
 
 	// przeliczenie radianow na impulsy
 	// step_new_pulse = step_new*IRP6_MECHATRONIKA_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
-	step_new_pulse = step_new*IRP6_MECHATRONIKA_AXIS_0_TO_5_INC_PER_REVOLUTION/(2*M_PI);
+	step_new_pulse = step_new*AXIS_0_TO_5_INC_PER_REVOLUTION/(2*M_PI);
 	//position_increment_new= position_increment_new/AXE_0_TO_5_MECHATRONIKA_TO_TRACK_RATIO;
 
 	// if (step_new!=0.0) printf(" 2 reg:%f\n", step_new);
@@ -332,7 +332,7 @@ uint8_t NL_regulator_3_irp6m::compute_set_value (void)
 
 	// przeliczenie radianow na impulsy
 	// step_new_pulse = step_new*IRP6_MECHATRONIKA_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
-	step_new_pulse = step_new*IRP6_MECHATRONIKA_AXIS_0_TO_5_INC_PER_REVOLUTION/(2*M_PI);
+	step_new_pulse = step_new*AXIS_0_TO_5_INC_PER_REVOLUTION/(2*M_PI);
 	///position_increment_new= position_increment_new;
 
 	// if (step_new!=0.0) printf(" 3 reg:%f\n", step_new);
@@ -539,7 +539,7 @@ uint8_t NL_regulator_4_irp6m::compute_set_value (void)
 
 	// przeliczenie radianow na impulsy
 	// step_new_pulse = step_new*IRP6_MECHATRONIKA_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
-	step_new_pulse = step_new*IRP6_MECHATRONIKA_AXIS_0_TO_5_INC_PER_REVOLUTION/(2*M_PI);
+	step_new_pulse = step_new*AXIS_0_TO_5_INC_PER_REVOLUTION/(2*M_PI);
 	//position_increment_new= position_increment_new/AXE_0_TO_5_MECHATRONIKA_TO_TRACK_RATIO;
 
 	// if (step_new!=0.0) printf(" 4 reg:%f\n", step_new);
@@ -743,7 +743,7 @@ uint8_t NL_regulator_5_irp6m::compute_set_value (void)
 
 	// przeliczenie radianow na impulsy
 	// step_new_pulse = step_new*IRP6_MECHATRONIKA_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
-	step_new_pulse = step_new*IRP6_MECHATRONIKA_AXIS_0_TO_5_INC_PER_REVOLUTION/(2*M_PI);
+	step_new_pulse = step_new*AXIS_0_TO_5_INC_PER_REVOLUTION/(2*M_PI);
 	//position_increment_new= position_increment_new/AXE_0_TO_5_MECHATRONIKA_TO_TRACK_RATIO;
 	/*
     if (!eee)
@@ -954,7 +954,7 @@ uint8_t NL_regulator_6_irp6m::compute_set_value (void)
 
 	// przeliczenie radianow na impulsy
 	// step_new_pulse = step_new*IRP6_MECHATRONIKA_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
-	step_new_pulse = step_new*IRP6_MECHATRONIKA_AXIS_0_TO_5_INC_PER_REVOLUTION/(2*M_PI);
+	step_new_pulse = step_new*AXIS_0_TO_5_INC_PER_REVOLUTION/(2*M_PI);
 	//position_increment_new= position_increment_new/AXE_0_TO_5_MECHATRONIKA_TO_TRACK_RATIO;
 
 	/*

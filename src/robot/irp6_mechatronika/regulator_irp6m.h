@@ -31,7 +31,7 @@ class effector;
 #define IRP6_MECHATRONIKA_SYNCHRO_STEP_COARSE -0.03
 #define IRP6_MECHATRONIKA_SYNCHRO_STEP_FINE   -0.007
 
-#define IRP6_MECHATRONIKA_AXIS_0_TO_5_INC_PER_REVOLUTION  2000.0  // Liczba impulsow enkodera na obrot walu - musi byc float
+#define AXIS_0_TO_5_INC_PER_REVOLUTION  2000.0  // Liczba impulsow enkodera na obrot walu - musi byc float
 
 // os od ktorej startuje synchronizacja - numeracja od 0
 #define IRP6M_SYN_INIT_AXE 1
