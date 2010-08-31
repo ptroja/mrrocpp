@@ -9,6 +9,7 @@
  * @ingroup ecp_mp
  */
 
+#include "base/lib/impconst.h"
 #include "base/lib/srlib.h"
 
 namespace mrrocpp {
@@ -36,7 +37,7 @@ protected:
 	lib::sr_ecp &sr_ecp_msg;
 
 public:
-			transmitter_base(lib::TRANSMITTER_t _transmitter_name, const std::string & _section_name, task::task& _ecp_mp_object);
+	transmitter_base(lib::TRANSMITTER_t _transmitter_name, const std::string & _section_name, task::task& _ecp_mp_object);
 
 	virtual ~transmitter_base()
 	{
@@ -88,6 +89,5 @@ public:
 
 } // namespace ecp_mp
 } // namespace mrrocpp
-
 
 #endif /* _TRANSMITTER_H */
