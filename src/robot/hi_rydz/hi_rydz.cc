@@ -88,11 +88,11 @@ void HI_rydz::init()
 		// 	w celu umozliwienia komunikacji z magistral isa i obslugi przerwania
 		ThreadCtl (_NTO_TCTL_IO, NULL);
 
-		if (mmap_device_io(0xC, (SERVO_COMMAND1_ADR + hi_isa_card_offset)) == MAP_DEVICE_FAILED) {
+		if (mmap_device_io(0xC, (hi_rydz::SERVO_COMMAND1_ADR + hi_isa_card_offset)) == MAP_DEVICE_FAILED) {
 			perror("mmap_device_io");
 		}
 
-		if (mmap_device_io(1, (ADR_OF_SERVO_PTR + hi_isa_card_offset)) == MAP_DEVICE_FAILED) {
+		if (mmap_device_io(1, (hi_rydz::ADR_OF_SERVO_PTR + hi_isa_card_offset)) == MAP_DEVICE_FAILED) {
 			perror("mmap_device_io");
 		}
 
@@ -100,12 +100,12 @@ void HI_rydz::init()
 		irq_data.event.sigev_notify = SIGEV_INTR;
 #elif defined(linux)
 		// grant I/O port permissions to the first card region
-		if (ioperm(SERVO_COMMAND1_ADR + hi_isa_card_offset, 0xC, 1) == -1) {
+		if (ioperm(hi_rydz::SERVO_COMMAND1_ADR + hi_isa_card_offset, 0xC, 1) == -1) {
 			perror("ioperm()");
 		}
 
 		// grant I/O port permissions to the second card region
-		if (ioperm(ADR_OF_SERVO_PTR + hi_isa_card_offset, 1, 1) == -1) {
+		if (ioperm(hi_rydz::ADR_OF_SERVO_PTR + hi_isa_card_offset, 1, 1) == -1) {
 			perror("ioperm()");
 		}
 #endif
@@ -113,9 +113,9 @@ void HI_rydz::init()
 		irq_data.md.interrupt_mode = common::INT_EMPTY;
 
 		// konieczne dla skasowania przyczyny przerwania
-		out8((ADR_OF_SERVO_PTR + hi_isa_card_offset), hi_intr_generator_servo_ptr);
-		in16((SERVO_REPLY_STATUS_ADR + hi_isa_card_offset)); // Odczyt stanu wylacznikow
-		in16((SERVO_REPLY_INT_ADR + hi_isa_card_offset));
+		out8((hi_rydz::ADR_OF_SERVO_PTR + hi_isa_card_offset), hi_intr_generator_servo_ptr);
+		in16((hi_rydz::SERVO_REPLY_STATUS_ADR + hi_isa_card_offset)); // Odczyt stanu wylacznikow
+		in16((hi_rydz::SERVO_REPLY_INT_ADR + hi_isa_card_offset));
 
 #ifdef __QNXNTO__
 		int irq_no = hi_irq_real; // Numer przerwania sprzetowego od karty ISA
@@ -133,10 +133,10 @@ void HI_rydz::init()
 		if (master.robot_test_mode == 0) {
 			// Ustawienie czestotliwosci przerwan
 			uint16_t int_freq = SET_INT_FREQUENCY | hi_intr_freq_divider;
-			out8((ADR_OF_SERVO_PTR + hi_isa_card_offset), hi_intr_generator_servo_ptr);
-			out16((SERVO_COMMAND1_ADR + hi_isa_card_offset), int_freq);
+			out8((hi_rydz::ADR_OF_SERVO_PTR + hi_isa_card_offset), hi_intr_generator_servo_ptr);
+			out16((hi_rydz::SERVO_COMMAND1_ADR + hi_isa_card_offset), int_freq);
 			delay(10);
-			out16((SERVO_COMMAND1_ADR + hi_isa_card_offset), START_CLOCK_INTERRUPTS);
+			out16((hi_rydz::SERVO_COMMAND1_ADR + hi_isa_card_offset), START_CLOCK_INTERRUPTS);
 		}
 	}
 
@@ -155,12 +155,12 @@ void HI_rydz::init()
 	if (master.robot_test_mode == 0) {
 		for (int i = 0; i < master.number_of_servos; i++) {
 			/*
-			 out8((ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), FIRST_SERVO_PTR + (uint8_t)i);
-			 out16((SERVO_COMMAND1_ADR + ISA_CARD_OFFSET),RESET_MANUAL_MODE); // Zerowanie ruchow recznych
-			 out16((SERVO_COMMAND1_ADR + ISA_CARD_OFFSET), PROHIBIT_MANUAL_MODE); // Zabrania ruchow za pomoca przyciskow w szafie
+			 out8((hi_rydz::ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), FIRST_SERVO_PTR + (uint8_t)i);
+			 out16((hi_rydz::SERVO_COMMAND1_ADR + ISA_CARD_OFFSET),RESET_MANUAL_MODE); // Zerowanie ruchow recznych
+			 out16((hi_rydz::SERVO_COMMAND1_ADR + ISA_CARD_OFFSET), PROHIBIT_MANUAL_MODE); // Zabrania ruchow za pomoca przyciskow w szafie
 			 */
 			irq_data.md.card_adress = hi_first_servo_ptr + (uint8_t) i;
-			irq_data.md.register_adress = (SERVO_COMMAND1_ADR + hi_isa_card_offset);
+			irq_data.md.register_adress = (hi_rydz::SERVO_COMMAND1_ADR + hi_isa_card_offset);
 			irq_data.md.value = RESET_MANUAL_MODE;
 			hi_int_wait(common::INT_SINGLE_COMMAND, 2);
 			irq_data.md.value = PROHIBIT_MANUAL_MODE;
@@ -222,7 +222,7 @@ HI_rydz::~HI_rydz(void) // destruktor
 		// Zezwolenie na prace reczna
 		for (int i = 0; i < master.number_of_servos; i++) {
 			irq_data.md.card_adress = hi_first_servo_ptr + (uint8_t) i;
-			irq_data.md.register_adress = (SERVO_COMMAND1_ADR + hi_isa_card_offset);
+			irq_data.md.register_adress = (hi_rydz::SERVO_COMMAND1_ADR + hi_isa_card_offset);
 			irq_data.md.value = ALLOW_MANUAL_MODE;
 			hi_int_wait(common::INT_SINGLE_COMMAND, 2);
 		}
@@ -287,10 +287,10 @@ void HI_rydz::reset_counters(void)
 
 	for (int i = 0; i < master.number_of_servos; i++) {
 		irq_data.md.card_adress = hi_first_servo_ptr + (uint8_t) i;
-		irq_data.md.register_adress = (SERVO_COMMAND1_ADR + hi_isa_card_offset);
-		irq_data.md.value = MICROCONTROLLER_MODE;
+		irq_data.md.register_adress = (hi_rydz::SERVO_COMMAND1_ADR + hi_isa_card_offset);
+		irq_data.md.value = hi_rydz::MICROCONTROLLER_MODE;
 		hi_int_wait(common::INT_SINGLE_COMMAND, 2);
-		irq_data.md.value = STOP_MOTORS;
+		irq_data.md.value = hi_rydz::STOP_MOTORS;
 		hi_int_wait(common::INT_SINGLE_COMMAND, 2);
 		irq_data.md.value = RESET_MANUAL_MODE;
 		hi_int_wait(common::INT_SINGLE_COMMAND, 2);
@@ -306,7 +306,7 @@ void HI_rydz::reset_counters(void)
 		previous_absolute_position[i] = 0;
 		current_position_inc[i] = 0.0;
 
-		// 	in16((SERVO_REPLY_INT_ADR + hi_isa_card_offset));
+		// 	in16((hi_rydz::SERVO_REPLY_INT_ADR + hi_isa_card_offset));
 
 	} // end: for
 
@@ -322,10 +322,10 @@ void HI_rydz::reset_counters(void)
 	read_write_hardware();
 	read_write_hardware();
 	// Odczyt polozenia osi slowo 32 bitowe - negacja licznikow 16-bitowych
-	// out8((ADR_OF_SERVO_PTR + hi_isa_card_offset), hi_first_servo_ptr);
-	// out16((SERVO_COMMAND1_ADR + hi_isa_card_offset), RESET_POSITION_COUNTER);
-	// robot_status[0].adr_offset_plus_4 = 0xFFFF ^ in16((SERVO_REPLY_POS_LOW_ADR + hi_isa_card_offset)); // Mlodsze slowo 16-bitowe
-	// robot_status[0].adr_offset_plus_6 = 0xFFFF ^ in16((SERVO_REPLY_POS_HIGH_ADR+ hi_isa_card_offset));// Starsze slowo 16-bitowe
+	// out8((hi_rydz::ADR_OF_SERVO_PTR + hi_isa_card_offset), hi_first_servo_ptr);
+	// out16((hi_rydz::SERVO_COMMAND1_ADR + hi_isa_card_offset), RESET_POSITION_COUNTER);
+	// robot_status[0].adr_offset_plus_4 = 0xFFFF ^ in16((hi_rydz::SERVO_REPLY_POS_LOW_ADR + hi_isa_card_offset)); // Mlodsze slowo 16-bitowe
+	// robot_status[0].adr_offset_plus_6 = 0xFFFF ^ in16((hi_rydz::SERVO_REPLY_POS_HIGH_ADR+ hi_isa_card_offset));// Starsze slowo 16-bitowe
 	// printf("L=%x U=%x  \n",robot_status[0].adr_offset_plus_4, robot_status[0].adr_offset_plus_6);
 } // end: hardware_interface::reset_counters()
 // ------------------------------------------------------------------------
@@ -411,7 +411,7 @@ void HI_rydz::start_synchro(int drive_number)
 	trace_resolver_zero = true;
 	// Wlacz sledzenie zera rezolwera (synchronizacja robota)
 	irq_data.md.card_adress = hi_first_servo_ptr + (uint8_t) drive_number;
-	irq_data.md.register_adress = (SERVO_COMMAND1_ADR + hi_isa_card_offset);
+	irq_data.md.register_adress = (hi_rydz::SERVO_COMMAND1_ADR + hi_isa_card_offset);
 	irq_data.md.value = START_SYNCHRO;
 	hi_int_wait(common::INT_SINGLE_COMMAND, 2);
 } // end: start_synchro()
@@ -422,12 +422,12 @@ void HI_rydz::finish_synchro(int drive_number)
 
 	// Zakonczyc sledzenie zera rezolwera i przejdz do trybu normalnej pracy
 	irq_data.md.card_adress = hi_first_servo_ptr + (uint8_t) drive_number;
-	irq_data.md.register_adress = (SERVO_COMMAND1_ADR + hi_isa_card_offset);
-	irq_data.md.value = FINISH_SYNCHRO;
+	irq_data.md.register_adress = (hi_rydz::SERVO_COMMAND1_ADR + hi_isa_card_offset);
+	irq_data.md.value = hi_rydz::FINISH_SYNCHRO;
 	hi_int_wait(common::INT_SINGLE_COMMAND, 2);
 
 	// by Y - UWAGA NIE WIEDZIEC CZEMU BEZ TEGO NIE ZAWSZE DZIALAJA RUCHY NA OSI PO SYNCHRONIZACJi
-	irq_data.md.value = MICROCONTROLLER_MODE;
+	irq_data.md.value = hi_rydz::MICROCONTROLLER_MODE;
 	hi_int_wait(common::INT_SINGLE_COMMAND, 2);
 } // end: finish_synchro()
 

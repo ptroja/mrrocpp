@@ -67,16 +67,16 @@ int_handler (void *arg, int int_id)
 	if (md.interrupt_mode == edp::common::INT_EMPTY)
 	{
 		// konieczne dla skasowania przyczyny przerwania
-		out8((ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), INTERRUPT_GENERATOR_SERVO_PTR);
-		in16((SERVO_REPLY_STATUS_ADR + ISA_CARD_OFFSET)); // Odczyt stanu wylacznikow
-		in16((SERVO_REPLY_INT_ADR + ISA_CARD_OFFSET));
+		out8((hi_rydz::ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), INTERRUPT_GENERATOR_SERVO_PTR);
+		in16((hi_rydz::SERVO_REPLY_STATUS_ADR + ISA_CARD_OFFSET)); // Odczyt stanu wylacznikow
+		in16((hi_rydz::SERVO_REPLY_INT_ADR + ISA_CARD_OFFSET));
 
 		md.is_synchronised = true;
 		for (int i = 0; i < common::master->number_of_servos; i++ )
 		{
-			out8((ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), FIRST_SERVO_PTR + (uint8_t)i);
-			md.robot_status[i].adr_offset_plus_0 = robot_status[i].adr_offset_plus_0 = in16((SERVO_REPLY_STATUS_ADR+ ISA_CARD_OFFSET)); // Odczyt stanu wylacznikow
-			md.robot_status[i].adr_offset_plus_2 = robot_status[i].adr_offset_plus_2 = in16((SERVO_REPLY_INT_ADR + ISA_CARD_OFFSET));
+			out8((hi_rydz::ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), FIRST_SERVO_PTR + (uint8_t)i);
+			md.robot_status[i].adr_offset_plus_0 = robot_status[i].adr_offset_plus_0 = in16((hi_rydz::SERVO_REPLY_STATUS_ADR+ ISA_CARD_OFFSET)); // Odczyt stanu wylacznikow
+			md.robot_status[i].adr_offset_plus_2 = robot_status[i].adr_offset_plus_2 = in16((hi_rydz::SERVO_REPLY_INT_ADR + ISA_CARD_OFFSET));
 
 			if (i>5) // dla osi mechatronicznych
 			{
@@ -96,21 +96,21 @@ int_handler (void *arg, int int_id)
 	{
 
 		// konieczne dla skasowania przyczyny przerwania
-		out8((ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), INTERRUPT_GENERATOR_SERVO_PTR);
-		in16((SERVO_REPLY_STATUS_ADR+ ISA_CARD_OFFSET)); // Odczyt stanu wylacznikow
-		in16((SERVO_REPLY_INT_ADR + ISA_CARD_OFFSET));
+		out8((hi_rydz::ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), INTERRUPT_GENERATOR_SERVO_PTR);
+		in16((hi_rydz::SERVO_REPLY_STATUS_ADR+ ISA_CARD_OFFSET)); // Odczyt stanu wylacznikow
+		in16((hi_rydz::SERVO_REPLY_INT_ADR + ISA_CARD_OFFSET));
 
 		for (int i = 0; i < common::master->number_of_servos; i++ )
 		{
 			// Odczyty stanu osi, polozenia oraz pradu wirnikow
-			out8((ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), FIRST_SERVO_PTR + (uint8_t)i);
-			md.robot_status[i].adr_offset_plus_0 = robot_status[i].adr_offset_plus_0 = in16((SERVO_REPLY_STATUS_ADR+ ISA_CARD_OFFSET)); // Odczyt stanu wylacznikow
+			out8((hi_rydz::ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), FIRST_SERVO_PTR + (uint8_t)i);
+			md.robot_status[i].adr_offset_plus_0 = robot_status[i].adr_offset_plus_0 = in16((hi_rydz::SERVO_REPLY_STATUS_ADR+ ISA_CARD_OFFSET)); // Odczyt stanu wylacznikow
 
-			md.robot_status[i].adr_offset_plus_2 = robot_status[i].adr_offset_plus_2 = in16((SERVO_REPLY_INT_ADR + ISA_CARD_OFFSET));
+			md.robot_status[i].adr_offset_plus_2 = robot_status[i].adr_offset_plus_2 = in16((hi_rydz::SERVO_REPLY_INT_ADR + ISA_CARD_OFFSET));
 
 			// Odczyt polozenia osi: slowo 32 bitowe - negacja licznikow 16-bitowych
-			robot_status[i].adr_offset_plus_4 = 0xFFFF ^ in16((SERVO_REPLY_POS_LOW_ADR + ISA_CARD_OFFSET)); // Mlodsze slowo 16-bitowe
-			robot_status[i].adr_offset_plus_6 = 0xFFFF ^ in16((SERVO_REPLY_POS_HIGH_ADR+ ISA_CARD_OFFSET));// Starsze slowo 16-bitowe
+			robot_status[i].adr_offset_plus_4 = 0xFFFF ^ in16((hi_rydz::SERVO_REPLY_POS_LOW_ADR + ISA_CARD_OFFSET)); // Mlodsze slowo 16-bitowe
+			robot_status[i].adr_offset_plus_6 = 0xFFFF ^ in16((hi_rydz::SERVO_REPLY_POS_HIGH_ADR+ ISA_CARD_OFFSET));// Starsze slowo 16-bitowe
 
 			if (i<6) // osie rezolwerowe
 			{
@@ -139,8 +139,8 @@ int_handler (void *arg, int int_id)
 			//   md.robot_status[i].adr_offset_plus_6 = robot_status[i].adr_offset_plus_6;
 			//   md.high_word = high_word;
 
-			//  md.robot_status[i].adr_offset_plus_8 = robot_status[i].adr_offset_plus_8 = in16((SERVO_REPLY_REG_1_ADR + ISA_CARD_OFFSET)); // Niewykorzystane
-			//  md.robot_status[i].adr_offset_plus_a = roblibot_status[i].adr_offset_plus_a = in16((SERVO_REPLY_REG_2_ADR + ISA_CARD_OFFSET)); // Niewykorzystane
+			//  md.robot_status[i].adr_offset_plus_8 = robot_status[i].adr_offset_plus_8 = in16((hi_rydz::SERVO_REPLY_REG_1_ADR + ISA_CARD_OFFSET)); // Niewykorzystane
+			//  md.robot_status[i].adr_offset_plus_a = roblibot_status[i].adr_offset_plus_a = in16((hi_rydz::SERVO_REPLY_REG_2_ADR + ISA_CARD_OFFSET)); // Niewykorzystane
 
 
 			// Obsluga bledow
@@ -162,8 +162,8 @@ int_handler (void *arg, int int_id)
 			{
 				if ( ~(robot_status[i].adr_offset_plus_0) & 0x1000 )
 				{
-					//	out8((ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), FIRST_SERVO_PTR + (uint8_t)i);
-					//	out16((SERVO_COMMAND1_ADR + ISA_CARD_OFFSET), RESET_ALARM); // Skasowanie alarmu i umozliwienie ruchu osi
+					//	out8((hi_rydz::ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), FIRST_SERVO_PTR + (uint8_t)i);
+					//	out16((hi_rydz::SERVO_COMMAND1_ADR + ISA_CARD_OFFSET), RESET_ALARM); // Skasowanie alarmu i umozliwienie ruchu osi
 					md.hardware_error |= (uint64_t) (common::UPPER_LIMIT_SWITCH << (5*i)); // Zadzialal wylacznik "gorny" krancowy
 				}
 				else if ( ~(robot_status[i].adr_offset_plus_0) & 0x2000 )
@@ -174,8 +174,8 @@ int_handler (void *arg, int int_id)
 			{
 				if ( ~(robot_status[i].adr_offset_plus_0) & 0x2000 )
 				{
-					//	out8((ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), FIRST_SERVO_PTR + (uint8_t)i);
-					//	out16((SERVO_COMMAND1_ADR + ISA_CARD_OFFSET), RESET_ALARM); // Skasowanie alarmu i umozliwienie ruchu osi
+					//	out8((hi_rydz::ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), FIRST_SERVO_PTR + (uint8_t)i);
+					//	out16((hi_rydz::SERVO_COMMAND1_ADR + ISA_CARD_OFFSET), RESET_ALARM); // Skasowanie alarmu i umozliwienie ruchu osi
 					md.hardware_error |= (uint64_t) (common::UPPER_LIMIT_SWITCH << (5*i)); // Zadzialal wylacznik "gorny" krancowy
 				}
 				else if ( ~(robot_status[i].adr_offset_plus_0) & 0x4000 )
@@ -187,8 +187,8 @@ int_handler (void *arg, int int_id)
 			if ( robot_status[i].adr_offset_plus_0 & 0x0400 )
 			{
 				md.hardware_error |= (uint64_t) (common::OVER_CURRENT << (5*i));
-				//     out8((ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), FIRST_SERVO_PTR + (uint8_t)i);
-				//     out16((SERVO_COMMAND1_ADR + ISA_CARD_OFFSET), RESET_ALARM); // Skasowanie alarmu i umozliwienie ruchu osi
+				//     out8((hi_rydz::ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), FIRST_SERVO_PTR + (uint8_t)i);
+				//     out16((hi_rydz::SERVO_COMMAND1_ADR + ISA_CARD_OFFSET), RESET_ALARM); // Skasowanie alarmu i umozliwienie ruchu osi
 			}
 		}
 
@@ -206,8 +206,8 @@ int_handler (void *arg, int int_id)
 			for (int i = 0; i < common::master->number_of_servos; i++ )
 			{
 				// Zapis wartosci zadanej wypelnienia PWM
-				out8((ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), FIRST_SERVO_PTR + (uint8_t)i);
-				out16((SERVO_COMMAND1_ADR + ISA_CARD_OFFSET), STOP_MOTORS);
+				out8((hi_rydz::ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), FIRST_SERVO_PTR + (uint8_t)i);
+				out16((hi_rydz::SERVO_COMMAND1_ADR + ISA_CARD_OFFSET), hi_rydz::STOP_MOTORS);
 			}
 			return (&event); // Yoyek & 7
 		}
@@ -215,10 +215,10 @@ int_handler (void *arg, int int_id)
 		for (int i = 0; i < common::master->number_of_servos; i++ )
 		{
 			// Zapis wartosci zadanej wypelnienia PWM
-			out8((ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), FIRST_SERVO_PTR + (uint8_t)i);
+			out8((hi_rydz::ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), FIRST_SERVO_PTR + (uint8_t)i);
 			if (md.is_robot_blocked)
 			md.robot_control[i].adr_offset_plus_0 &= 0xff00;
-			out16((SERVO_COMMAND1_ADR + ISA_CARD_OFFSET), md.robot_control[i].adr_offset_plus_0);
+			out16((hi_rydz::SERVO_COMMAND1_ADR + ISA_CARD_OFFSET), md.robot_control[i].adr_offset_plus_0);
 		}
 
 		uint16_t binary_input, binary_output;
@@ -226,23 +226,23 @@ int_handler (void *arg, int int_id)
 		uint16_t tmp_buf; // do uzyku przy odczcie wejsc
 
 		// odczyt wejsc analogowych (z przetwornikow) i binarnych
-		out8((ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), IN_OUT_PACKET);
+		out8((hi_rydz::ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), IN_OUT_PACKET);
 
-		binary_input = in16(SERVO_REPLY_REG_1_ADR + ISA_CARD_OFFSET);
+		binary_input = in16(hi_rydz::SERVO_REPLY_REG_1_ADR + ISA_CARD_OFFSET);
 
-		tmp_buf=in16(SERVO_REPLY_STATUS_ADR + ISA_CARD_OFFSET);
+		tmp_buf=in16(hi_rydz::SERVO_REPLY_STATUS_ADR + ISA_CARD_OFFSET);
 		analog_input[0]=0x00ff & tmp_buf;
 		analog_input[1]=((0xff00 & tmp_buf)>>8);
 
-		tmp_buf=in16(SERVO_REPLY_INT_ADR + ISA_CARD_OFFSET);
+		tmp_buf=in16(hi_rydz::SERVO_REPLY_INT_ADR + ISA_CARD_OFFSET);
 		analog_input[2]=0x00ff & tmp_buf;
 		analog_input[3]=((0xff00 & tmp_buf)>>8);
 
-		tmp_buf=in16(SERVO_REPLY_POS_LOW_ADR + ISA_CARD_OFFSET);
+		tmp_buf=in16(hi_rydz::SERVO_REPLY_POS_LOW_ADR + ISA_CARD_OFFSET);
 		analog_input[4]=0x00ff & tmp_buf;
 		analog_input[5]=((0xff00 & tmp_buf)>>8);
 
-		tmp_buf=in16(SERVO_REPLY_POS_HIGH_ADR + ISA_CARD_OFFSET);
+		tmp_buf=in16(hi_rydz::SERVO_REPLY_POS_HIGH_ADR + ISA_CARD_OFFSET);
 		analog_input[6]=0x00ff & tmp_buf;
 		analog_input[7]=((0xff00 & tmp_buf)>>8);
 
@@ -254,9 +254,9 @@ int_handler (void *arg, int int_id)
 			common::master->in_out_obj->set_output_flag=false;
 			common::master->in_out_obj->get_output(&binary_output);
 
-			out8((ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), IN_OUT_PACKET);
-			// (SERVO_COMMAND2_ADR + ISA_CARD_OFFSET)       0x212
-			out16((SERVO_COMMAND2_ADR + ISA_CARD_OFFSET), binary_output);
+			out8((hi_rydz::ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), IN_OUT_PACKET);
+			// (hi_rydz::SERVO_COMMAND2_ADR + ISA_CARD_OFFSET)       0x212
+			out16((hi_rydz::SERVO_COMMAND2_ADR + ISA_CARD_OFFSET), binary_output);
 		}
 
 		return (&event);
@@ -267,18 +267,18 @@ int_handler (void *arg, int int_id)
 	{
 
 		// konieczne dla skasowania przyczyny przerwania
-		out8((ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), INTERRUPT_GENERATOR_SERVO_PTR);
-		in16((SERVO_REPLY_STATUS_ADR+ ISA_CARD_OFFSET)); // Odczyt stanu wylacznikow
-		in16((SERVO_REPLY_INT_ADR + ISA_CARD_OFFSET));
+		out8((hi_rydz::ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), INTERRUPT_GENERATOR_SERVO_PTR);
+		in16((hi_rydz::SERVO_REPLY_STATUS_ADR+ ISA_CARD_OFFSET)); // Odczyt stanu wylacznikow
+		in16((hi_rydz::SERVO_REPLY_INT_ADR + ISA_CARD_OFFSET));
 
-		out8((ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), md.card_adress);
+		out8((hi_rydz::ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), md.card_adress);
 		out16(md .register_adress, md.value);
 
 		for (int i = 0; i < common::master->number_of_servos; i++ )
 		{
-			out8((ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), FIRST_SERVO_PTR + (uint8_t)i);
-			md.robot_status[i].adr_offset_plus_0 = robot_status[i].adr_offset_plus_0 = in16((SERVO_REPLY_STATUS_ADR+ ISA_CARD_OFFSET)); // Odczyt stanu wylacznikow
-			md.robot_status[i].adr_offset_plus_2 = robot_status[i].adr_offset_plus_2 = in16((SERVO_REPLY_INT_ADR + ISA_CARD_OFFSET));
+			out8((hi_rydz::ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), FIRST_SERVO_PTR + (uint8_t)i);
+			md.robot_status[i].adr_offset_plus_0 = robot_status[i].adr_offset_plus_0 = in16((hi_rydz::SERVO_REPLY_STATUS_ADR+ ISA_CARD_OFFSET)); // Odczyt stanu wylacznikow
+			md.robot_status[i].adr_offset_plus_2 = robot_status[i].adr_offset_plus_2 = in16((hi_rydz::SERVO_REPLY_INT_ADR + ISA_CARD_OFFSET));
 		}
 		md.interrupt_mode=edp::common::INT_EMPTY; // aby tylko raz wyslac polecenie
 
@@ -290,15 +290,15 @@ int_handler (void *arg, int int_id)
 	{
 
 		// konieczne dla skasowania przyczyny przerwania
-		out8((ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), INTERRUPT_GENERATOR_SERVO_PTR);
-		in16((SERVO_REPLY_STATUS_ADR+ ISA_CARD_OFFSET)); // Odczyt stanu wylacznikow
-		in16((SERVO_REPLY_INT_ADR + ISA_CARD_OFFSET));
+		out8((hi_rydz::ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), INTERRUPT_GENERATOR_SERVO_PTR);
+		in16((hi_rydz::SERVO_REPLY_STATUS_ADR+ ISA_CARD_OFFSET)); // Odczyt stanu wylacznikow
+		in16((hi_rydz::SERVO_REPLY_INT_ADR + ISA_CARD_OFFSET));
 
 		for (int i = 0; i < common::master->number_of_servos; i++ )
 		{
-			out8((ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), FIRST_SERVO_PTR + (uint8_t)i);
-			md.robot_status[i].adr_offset_plus_0 = robot_status[i].adr_offset_plus_0 = in16((SERVO_REPLY_STATUS_ADR+ ISA_CARD_OFFSET)); // Odczyt stanu wylacznikow
-			md.robot_status[i].adr_offset_plus_2 = robot_status[i].adr_offset_plus_2 = in16((SERVO_REPLY_INT_ADR + ISA_CARD_OFFSET));
+			out8((hi_rydz::ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), FIRST_SERVO_PTR + (uint8_t)i);
+			md.robot_status[i].adr_offset_plus_0 = robot_status[i].adr_offset_plus_0 = in16((hi_rydz::SERVO_REPLY_STATUS_ADR+ ISA_CARD_OFFSET)); // Odczyt stanu wylacznikow
+			md.robot_status[i].adr_offset_plus_2 = robot_status[i].adr_offset_plus_2 = in16((hi_rydz::SERVO_REPLY_INT_ADR + ISA_CARD_OFFSET));
 		}
 		md.interrupt_mode=edp::common::INT_EMPTY; // aby tylko raz sprawdzic stan
 

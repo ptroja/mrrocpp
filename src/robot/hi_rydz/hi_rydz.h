@@ -27,29 +27,29 @@ const uint64_t MASK_RESOLVER_ZERO = 0x3F7BDEF7BDEF7BDEULL;
 // ------------------------------------------------------------------------
 
 // Polecenia dla sterownikow mikroprocesorowych osi
-#define RESET_POSITION_COUNTER           0x0400 // Zerowanie licznika polozenia
-#define RESET_MANUAL_MODE                0x0800 // Zerowanie pracy recznej
-#define RESET_ALARM                      0x0C00 // Zerowanie alarmu sytuacji awaryjnej
-#define PROHIBIT_MANUAL_MODE             0x1000 // Zakaz pracy recznej
-#define ALLOW_MANUAL_MODE                0x1400 // Zezwolenie na prace reczna
-#define START_SYNCHRO                    0x1800 // Rozpoczecie synchronizacji
-#define FINISH_SYNCHRO                   0x1C00 // Zakoncz synchronizacje osi
-#define SET_INT_FREQUENCY                0x2000 // Ustaw dzielnik czestotliowsci przerwan
-#define SET_MAX_CURRENT                  0x2400 // Ustaw prad maksymalny
-#define START_CLOCK_INTERRUPTS           0x5000 // Wlacz przerwania zegarowe
-#define STOP_CLOCK_INTERRUPTS            0x5400 // Wylacz przerwania zegarowe
-#define MICROCONTROLLER_MODE             0x4C00
-#define ZERO_ORDER                       0x0000
-#define STOP_MOTORS                      0x0200 // Zatrzymanie silnikow (W.S. ???)
+const int RESET_POSITION_COUNTER = 0x0400; // Zerowanie licznika polozenia
+const int RESET_MANUAL_MODE = 0x0800;// Zerowanie pracy recznej
+const int RESET_ALARM = 0x0C00; // Zerowanie alarmu sytuacji awaryjnej
+const int PROHIBIT_MANUAL_MODE = 0x1000; // Zakaz pracy recznej
+const int ALLOW_MANUAL_MODE = 0x1400;// Zezwolenie na prace reczna
+const int START_SYNCHRO = 0x1800;// Rozpoczecie synchronizacji
+const int FINISH_SYNCHRO = 0x1C00;// Zakoncz synchronizacje osi
+const int SET_INT_FREQUENCY = 0x2000;// Ustaw dzielnik czestotliowsci przerwan
+const int SET_MAX_CURRENT = 0x2400;// Ustaw prad maksymalny
+const int START_CLOCK_INTERRUPTS = 0x5000; // Wlacz przerwania zegarowe
+const int STOP_CLOCK_INTERRUPTS = 0x5400; // Wylacz przerwania zegarowe
+const int MICROCONTROLLER_MODE = 0x4C00;
+const int ZERO_ORDER = 0x0000;
+const int STOP_MOTORS = 0x0200;// Zatrzymanie silnikow (W.S. ???)
 // ISA_CARD_OFFSET needs to be defined in hi_local.h
-#define ADR_OF_SERVO_PTR          (0x305)
-#define SERVO_COMMAND1_ADR        (0x200)
-#define SERVO_COMMAND2_ADR        (0x202)
-#define SERVO_REPLY_STATUS_ADR    (0x200)
-#define SERVO_REPLY_INT_ADR       (0x202)
-#define SERVO_REPLY_POS_LOW_ADR   (0x204)
-#define SERVO_REPLY_POS_HIGH_ADR  (0x206)
-#define SERVO_REPLY_REG_1_ADR     (0x208)
+const int ADR_OF_SERVO_PTR = 0x305;
+const int SERVO_COMMAND1_ADR = 0x200;
+const int SERVO_COMMAND2_ADR = 0x202;
+const int SERVO_REPLY_STATUS_ADR = 0x200;
+const int SERVO_REPLY_INT_ADR = 0x202;
+const int SERVO_REPLY_POS_LOW_ADR = 0x204;
+const int SERVO_REPLY_POS_HIGH_ADR = 0x206;
+const int SERVO_REPLY_REG_1_ADR = 0x208;
 
 class HI_rydz : public common::HardwareInterface
 {

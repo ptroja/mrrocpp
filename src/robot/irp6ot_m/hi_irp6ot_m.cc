@@ -77,13 +77,13 @@ void hardware_interface::finish_synchro(int drive_number)
 
 	// Zakonczyc sledzenie zera rezolwera i przejdz do trybu normalnej pracy
 	irq_data.md.card_adress = FIRST_SERVO_PTR + (uint8_t) drive_number;
-	irq_data.md.register_adress = (SERVO_COMMAND1_ADR + ISA_CARD_OFFSET);
-	irq_data.md.value = FINISH_SYNCHRO;
+	irq_data.md.register_adress = (hi_rydz::SERVO_COMMAND1_ADR + ISA_CARD_OFFSET);
+	irq_data.md.value = hi_rydz::FINISH_SYNCHRO;
 	hi_int_wait(edp::common::INT_SINGLE_COMMAND, 2);
 
 	// by Y - UWAGA NIE WIEDZIEC CZEMU BEZ TEGO NIE ZAWSZE DZIALAJA RUCHY NA OSI PO SYNCHRONIZACJi
 	if (drive_number > 5) {
-		irq_data.md.value = MICROCONTROLLER_MODE;
+		irq_data.md.value = hi_rydz::MICROCONTROLLER_MODE;
 		hi_int_wait(edp::common::INT_SINGLE_COMMAND, 2);
 	}
 
