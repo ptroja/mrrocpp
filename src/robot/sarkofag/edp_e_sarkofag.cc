@@ -37,7 +37,7 @@ effector::effector(lib::configurator &_config) :
 	motor_driven_effector(_config, lib::sarkofag::ROBOT_SARKOFAG)
 {
 
-	number_of_servos = SARKOFAG_NUM_OF_SERVOS;
+	number_of_servos = lib::sarkofag::SARKOFAG_NUM_OF_SERVOS;
 
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();

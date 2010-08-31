@@ -21,7 +21,7 @@ const robot_name_t ROBOT_SARKOFAG = "ROBOT_SARKOFAG";
 const std::string EDP_SECTION ="[edp_sarkofag]";
 const std::string ECP_SECTION ="[ecp_sarkofag]";
 
-#define SARKOFAG_NUM_OF_SERVOS	1
+const int SARKOFAG_NUM_OF_SERVOS = 1;
 
 }
 } // namespace lib

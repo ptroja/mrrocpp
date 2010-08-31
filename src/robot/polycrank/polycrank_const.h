@@ -12,7 +12,7 @@ const robot_name_t ROBOT_POLYCRANK = "ROBOT_POLYCRANK";
 const std::string EDP_SECTION = "[edp_polycrank]";
 const std::string ECP_SECTION = "[ecp_polycrank]";
 
-#define POLYCRANK_NUM_OF_SERVOS	8
+const int POLYCRANK_NUM_OF_SERVOS = 8;
 
 }
 } // namespace lib

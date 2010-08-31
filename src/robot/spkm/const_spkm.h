@@ -12,7 +12,7 @@
 #include "robot/epos/dp_epos.h"
 
 #include "base/lib/impconst.h"
-#define SPKM_NUM_OF_SERVOS	7
+const int SPKM_NUM_OF_SERVOS = 7;
 
 namespace mrrocpp {
 namespace lib {

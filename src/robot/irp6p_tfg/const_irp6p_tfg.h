@@ -20,7 +20,7 @@ const robot_name_t ROBOT_IRP6P_TFG = "ROBOT_IRP6P_TFG";
 const std::string EDP_SECTION ="[edp_irp6p_tfg]";
 const std::string ECP_SECTION ="[ecp_irp6p_tfg]";
 
-#define IRP6P_TFG_NUM_OF_SERVOS	1
+const int IRP6P_TFG_NUM_OF_SERVOS = 1;
 
 }
 } // namespace lib

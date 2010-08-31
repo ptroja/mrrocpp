@@ -78,7 +78,7 @@ effector::effector(lib::configurator &_config) :
 	manip_effector(_config, lib::irp6p_m::ROBOT_NAME)
 {
 
-	number_of_servos = IRP6P_M_NUM_OF_SERVOS;
+	number_of_servos = lib::irp6p_m::IRP6P_M_NUM_OF_SERVOS;
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();
 

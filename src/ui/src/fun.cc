@@ -1227,7 +1227,7 @@ int teaching_window_send_move(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackIn
 		for (int i = 0; i < lib::irp6ot_m::NUM_OF_SERVOS; i++)
 			ui.ui_ecp_obj->ui_rep.coordinates[i] = ui.irp6ot_m->irp6ot_current_pos[i];
 	} else if (ui.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6p_m::ROBOT_NAME) {
-		for (int i = 0; i < IRP6P_M_NUM_OF_SERVOS; i++)
+		for (int i = 0; i < lib::irp6p_m::IRP6P_M_NUM_OF_SERVOS; i++)
 			ui.ui_ecp_obj->ui_rep.coordinates[i] = ui.irp6p_m->irp6p_current_pos[i];
 	} else if (ui.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6m::ROBOT_NAME) {
 		for (int i = 0; i < lib::irp6m::NUM_OF_SERVOS; i++)

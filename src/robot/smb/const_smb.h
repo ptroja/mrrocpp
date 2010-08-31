@@ -37,12 +37,12 @@ struct cbuffer
 	};
 };
 
-#define SMB_NUM_OF_SERVOS	4
+const int SMB_NUM_OF_SERVOS = 4;
 
 struct rbuffer
 {
 	multi_leg_reply_td multi_leg_reply;
-	epos::single_controller_epos_reply epos_controller[SMB_NUM_OF_SERVOS];
+	epos::single_controller_epos_reply epos_controller[lib::smb::SMB_NUM_OF_SERVOS];
 };
 
 const std::string EDP_SECTION ="[edp_smb]";

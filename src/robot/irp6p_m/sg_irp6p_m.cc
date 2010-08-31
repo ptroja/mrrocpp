@@ -54,7 +54,7 @@ servo_buffer::servo_buffer(effector &_master) :
 void servo_buffer::load_hardware_interface(void) {
 
 	// tablica pradow maksymalnych dla poszczegolnych osi
-	int max_current[IRP6P_M_NUM_OF_SERVOS] = {
+	int max_current[lib::irp6p_m::IRP6P_M_NUM_OF_SERVOS] = {
 			IRP6_POSTUMENT_AXIS_1_MAX_CURRENT,
 			IRP6_POSTUMENT_AXIS_2_MAX_CURRENT,
 			IRP6_POSTUMENT_AXIS_3_MAX_CURRENT,
