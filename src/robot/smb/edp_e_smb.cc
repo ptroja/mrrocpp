@@ -72,7 +72,7 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 
 // Konstruktor.
 effector::effector(lib::configurator &_config) :
-	motor_driven_effector(_config, lib::smb::ROBOT_SMB)
+	motor_driven_effector(_config, lib::smb::ROBOT_NAME)
 {
 
 	number_of_servos = lib::smb::NUM_OF_SERVOS;

@@ -71,9 +71,9 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 
 // Konstruktor.
 effector::effector(lib::configurator &_config) :
-	manip_effector(_config, lib::spkm::ROBOT_SPKM)
+	manip_effector(_config, lib::spkm::ROBOT_NAME)
 {
-	number_of_servos = NUM_OF_SERVOS;
+	number_of_servos = lib::spkm::NUM_OF_SERVOS;
 
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();

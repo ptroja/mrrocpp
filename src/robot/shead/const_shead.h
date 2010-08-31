@@ -17,7 +17,7 @@ namespace mrrocpp {
 namespace lib {
 namespace shead {
 
-const robot_name_t ROBOT_SHEAD = "ROBOT_SHEAD";
+const robot_name_t ROBOT_NAME = "ROBOT_SHEAD";
 
 enum CBUFFER_VARIANT
 {

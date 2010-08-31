@@ -55,7 +55,7 @@ namespace edp {
 namespace speaker {
 
 effector::effector(lib::configurator &_config) :
-	common::effector(_config, lib::speaker::ROBOT_SPEAKER)
+	common::effector(_config, lib::speaker::ROBOT_NAME)
 {
 
 	real_reply_type = lib::ACKNOWLEDGE;

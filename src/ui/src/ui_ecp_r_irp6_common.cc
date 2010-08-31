@@ -58,7 +58,7 @@ ui_irp6_common_robot::ui_irp6_common_robot(lib::configurator &_config, lib::sr_e
 	} else if (_robot_name == lib::irp6m::ROBOT_NAME) {
 
 		ecp = new ecp::irp6m::robot(_config, _sr_ecp_msg);
-	} else if (_robot_name == lib::polycrank::ROBOT_POLYCRANK) {
+	} else if (_robot_name == lib::polycrank::ROBOT_NAME) {
 
 		ecp = new ecp::polycrank::robot(_config, _sr_ecp_msg);
 	}

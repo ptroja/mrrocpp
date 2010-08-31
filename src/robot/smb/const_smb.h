@@ -17,7 +17,7 @@ namespace mrrocpp {
 namespace lib {
 namespace smb {
 
-const robot_name_t ROBOT_SMB = "ROBOT_SMB";
+const robot_name_t ROBOT_NAME = "ROBOT_SMB";
 
 enum CBUFFER_VARIANT
 {

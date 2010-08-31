@@ -50,7 +50,7 @@ ui_tfg_and_conv_robot::ui_tfg_and_conv_robot(lib::configurator &_config,
 		MOTOR_STEP = 0.4; // Przyrost kata obrotu walu silnika [rad]
 		JOINT_LINEAR_STEP = 0.00001; // Przyrost liniowy w przegubach posuwistych [m]
 
-	} else if (_robot_name == lib::sarkofag::ROBOT_SARKOFAG) {
+	} else if (_robot_name == lib::sarkofag::ROBOT_NAME) {
 		ecp = new ecp::sarkofag::robot(_config, _sr_ecp_msg);
 
 		MOTOR_STEP = 0.1; // Przyrost kata obrotu walu silnika [rad]
@@ -64,19 +64,19 @@ ui_tfg_and_conv_robot::ui_tfg_and_conv_robot(lib::configurator &_config,
 
 	} else if (_robot_name == lib::conveyor::ROBOT_NAME) {
 
-	} else if (_robot_name == lib::spkm::ROBOT_SPKM) {
+	} else if (_robot_name == lib::spkm::ROBOT_NAME) {
 		ecp = new ecp::spkm::robot(_config, _sr_ecp_msg);
 
 		MOTOR_STEP = 0.1; // Przyrost kata obrotu walu silnika [rad]
 		JOINT_LINEAR_STEP = 0.00004; // Przyrost liniowy w przegubach posuwistych [m]
 
-	} else if (_robot_name == lib::smb::ROBOT_SMB) {
+	} else if (_robot_name == lib::smb::ROBOT_NAME) {
 		ecp = new ecp::smb::robot(_config, _sr_ecp_msg);
 
 		MOTOR_STEP = 0.1; // Przyrost kata obrotu walu silnika [rad]
 		JOINT_LINEAR_STEP = 0.00004; // Przyrost liniowy w przegubach posuwistych [m]
 
-	} else if (_robot_name == lib::shead::ROBOT_SHEAD) {
+	} else if (_robot_name == lib::shead::ROBOT_NAME) {
 		ecp = new ecp::shead::robot(_config, _sr_ecp_msg);
 
 		MOTOR_STEP = 0.1; // Przyrost kata obrotu walu silnika [rad]

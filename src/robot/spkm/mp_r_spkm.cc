@@ -14,7 +14,7 @@ namespace mp {
 namespace robot {
 
 spkm::spkm(task::task &mp_object_l) :
-	motor_driven(lib::spkm::ROBOT_SPKM, lib::spkm::ECP_SECTION, mp_object_l, NUM_OF_SERVOS)
+	motor_driven(lib::spkm::ROBOT_NAME, lib::spkm::ECP_SECTION, mp_object_l, lib::spkm::NUM_OF_SERVOS)
 {
 }
 
