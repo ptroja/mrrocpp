@@ -45,7 +45,7 @@ void servo_buffer::load_hardware_interface(void)
 {
 
 	// tablica pradow maksymalnych dla poszczegolnych osi
-	//	int max_current[SARKOFAG_NUM_OF_SERVOS] = { SARKOFAG_AXIS_7_MAX_CURRENT };
+	//	int max_current[NUM_OF_SERVOS] = { SARKOFAG_AXIS_7_MAX_CURRENT };
 
 	hi = new hi_moxa::HI_moxa(master);
 	hi->init();

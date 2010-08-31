@@ -33,11 +33,11 @@
 #include "robot/irp6p_m/const_irp6p_m.h"
 #include "robot/irp6p_tfg/const_irp6p_tfg.h"
 #include "robot/sarkofag/const_sarkofag.h"
-#include "robot/polycrank/polycrank_const.h"
+#include "robot/polycrank/const_polycrank.h"
 #include "robot/smb/const_smb.h"
 #include "robot/spkm/const_spkm.h"
 #include "robot/shead/const_shead.h"
-#include "robot/speaker/speaker_const.h"
+#include "robot/speaker/const_speaker.h"
 #include "robot/conveyor/const_conveyor.h"
 #include "robot/bird_hand/const_bird_hand.h"
 
@@ -1227,7 +1227,7 @@ int teaching_window_send_move(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackIn
 		for (int i = 0; i < lib::irp6ot_m::NUM_OF_SERVOS; i++)
 			ui.ui_ecp_obj->ui_rep.coordinates[i] = ui.irp6ot_m->irp6ot_current_pos[i];
 	} else if (ui.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6p_m::ROBOT_NAME) {
-		for (int i = 0; i < lib::irp6p_m::IRP6P_M_NUM_OF_SERVOS; i++)
+		for (int i = 0; i < lib::irp6p_m::NUM_OF_SERVOS; i++)
 			ui.ui_ecp_obj->ui_rep.coordinates[i] = ui.irp6p_m->irp6p_current_pos[i];
 	} else if (ui.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6m::ROBOT_NAME) {
 		for (int i = 0; i < lib::irp6m::NUM_OF_SERVOS; i++)

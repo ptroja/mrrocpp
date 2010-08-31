@@ -42,7 +42,7 @@ struct rbuffer
 const std::string EDP_SECTION ="[edp_shead]";
 const std::string ECP_SECTION ="[ecp_shead]";
 
-const int SHEAD_NUM_OF_SERVOS = 1;
+const int NUM_OF_SERVOS = 1;
 
 } // namespace shead
 } // namespace lib

@@ -14,7 +14,7 @@
 #define __EDP_E_POLYCRANK_H
 
 #include "base/edp/edp_e_manip.h"
-#include "robot/polycrank/polycrank_const.h"
+#include "robot/polycrank/const_polycrank.h"
 
 namespace mrrocpp {
 namespace edp {

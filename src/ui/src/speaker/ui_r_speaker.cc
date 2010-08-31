@@ -4,7 +4,7 @@
 
 #include "ui/src/speaker/ui_r_speaker.h"
 #include "ui/src/speaker/ui_ecp_r_speaker.h"
-#include "robot/speaker/speaker_const.h"
+#include "robot/speaker/const_speaker.h"
 #include "ui/src/ui_class.h"
 
 /* Local headers */

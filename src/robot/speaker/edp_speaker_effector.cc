@@ -45,7 +45,7 @@
 // Klasa edp_speaker_effector.
 #include "robot/speaker/edp_speaker_effector.h"
 #include "robot/speaker/speak_t.h"
-#include "robot/speaker/speaker_const.h"
+#include "robot/speaker/const_speaker.h"
 
 #include "base/lib/exception.h"
 using namespace mrrocpp::lib::exception;

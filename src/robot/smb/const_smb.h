@@ -37,16 +37,16 @@ struct cbuffer
 	};
 };
 
-const int SMB_NUM_OF_SERVOS = 4;
+const int NUM_OF_SERVOS = 4;
 
 struct rbuffer
 {
 	multi_leg_reply_td multi_leg_reply;
-	epos::single_controller_epos_reply epos_controller[lib::smb::SMB_NUM_OF_SERVOS];
+	epos::single_controller_epos_reply epos_controller[lib::smb::NUM_OF_SERVOS];
 };
 
-const std::string EDP_SECTION ="[edp_smb]";
-const std::string ECP_SECTION ="[ecp_smb]";
+const std::string EDP_SECTION = "[edp_smb]";
+const std::string ECP_SECTION = "[ecp_smb]";
 
 } // namespace smb
 } // namespace lib

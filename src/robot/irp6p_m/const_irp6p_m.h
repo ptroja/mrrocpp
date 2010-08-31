@@ -21,7 +21,7 @@ const robot_name_t ROBOT_NAME = "ROBOT_IRP6P_M";
 const std::string EDP_SECTION = "[edp_irp6p_m]";
 const std::string ECP_SECTION = "[ecp_irp6p_m]";
 
-const int IRP6P_M_NUM_OF_SERVOS = 6;
+const int NUM_OF_SERVOS = 6;
 
 } // namespace irp6p_m
 } // namespace lib

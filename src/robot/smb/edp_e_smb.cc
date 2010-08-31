@@ -75,7 +75,7 @@ effector::effector(lib::configurator &_config) :
 	motor_driven_effector(_config, lib::smb::ROBOT_SMB)
 {
 
-	number_of_servos = lib::smb::SMB_NUM_OF_SERVOS;
+	number_of_servos = lib::smb::NUM_OF_SERVOS;
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();
 

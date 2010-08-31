@@ -12,7 +12,7 @@
 #include "robot/epos/dp_epos.h"
 
 #include "base/lib/impconst.h"
-const int SPKM_NUM_OF_SERVOS = 7;
+const int NUM_OF_SERVOS = 7;
 
 namespace mrrocpp {
 namespace lib {
@@ -42,7 +42,7 @@ struct cbuffer
 
 struct rbuffer
 {
-	epos::single_controller_epos_reply epos_controller[SPKM_NUM_OF_SERVOS];
+	epos::single_controller_epos_reply epos_controller[NUM_OF_SERVOS];
 	bool contact;
 }__attribute__((__packed__));
 

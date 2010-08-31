@@ -9,7 +9,7 @@
 #define _ECP_R_POLYCRANK_H
 
 #include "base/ecp/ecp_robot.h"
-#include "robot/polycrank/polycrank_const.h"
+#include "robot/polycrank/const_polycrank.h"
 
 namespace mrrocpp {
 namespace ecp {

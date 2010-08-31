@@ -69,7 +69,7 @@ int UiRobotIrp6p_m::reload_configuration()
 						tmp1 = tmp
 								= strdup(ui.config->value <std::string> (tmp_string, state.edp.section_name).c_str());
 						char* toDel = tmp;
-						for (int j = 0; j < lib::irp6p_m::IRP6P_M_NUM_OF_SERVOS; j++) {
+						for (int j = 0; j < lib::irp6p_m::NUM_OF_SERVOS; j++) {
 							if (i < 3) {
 								state.edp.preset_position[i][j] = strtod(tmp1, &tmp1);
 							} else {
@@ -78,7 +78,7 @@ int UiRobotIrp6p_m::reload_configuration()
 						}
 						free(toDel);
 					} else {
-						for (int j = 0; j < lib::irp6p_m::IRP6P_M_NUM_OF_SERVOS; j++) {
+						for (int j = 0; j < lib::irp6p_m::NUM_OF_SERVOS; j++) {
 							if (i < 3) {
 								state.edp.preset_position[i][j] = 0.0;
 							} else {
