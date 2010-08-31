@@ -28,13 +28,13 @@ servo_buffer::servo_buffer(effector &_master) :
 		synchro_axis_order[j] = ((j + IRP6OT_SYN_INIT_AXE) % (master.number_of_servos));
 		switch (j)
 		{
-			case IRP6OT_GRIPPER_TURN_AXE:
-				axe_inc_per_revolution[j] = IRP6_ON_TRACK_AXIS_6_INC_PER_REVOLUTION;
+			case GRIPPER_TURN_AXE:
+				axe_inc_per_revolution[j] = AXIS_6_INC_PER_REVOLUTION;
 				synchro_step_coarse[j] = IRP6_ON_TRACK_AXIS_6_SYNCHRO_STEP_COARSE;
 				synchro_step_fine[j] = IRP6_ON_TRACK_AXIS_6_SYNCHRO_STEP_FINE;
 				break;
 			default:
-				axe_inc_per_revolution[j] = IRP6_ON_TRACK_AXIS_0_TO_5_INC_PER_REVOLUTION;
+				axe_inc_per_revolution[j] = AXIS_0_TO_5_INC_PER_REVOLUTION;
 				synchro_step_coarse[j] = IRP6_ON_TRACK_AXIS_0_TO_5_SYNCHRO_STEP_COARSE;
 				synchro_step_fine[j] = IRP6_ON_TRACK_AXIS_0_TO_5_SYNCHRO_STEP_FINE;
 				break;
@@ -49,7 +49,7 @@ void servo_buffer::load_hardware_interface(void)
 {
 	// tablica pradow maksymalnych d;a poszczegolnych osi
 	int
-			max_current[IRP6OT_M_NUM_OF_SERVOS] =
+			max_current[lib::irp6ot_m::NUM_OF_SERVOS] =
 					{ IRP6_ON_TRACK_AXIS_1_MAX_CURRENT, IRP6_ON_TRACK_AXIS_2_MAX_CURRENT, IRP6_ON_TRACK_AXIS_3_MAX_CURRENT, IRP6_ON_TRACK_AXIS_4_MAX_CURRENT, IRP6_ON_TRACK_AXIS_5_MAX_CURRENT, IRP6_ON_TRACK_AXIS_6_MAX_CURRENT, IRP6_ON_TRACK_AXIS_7_MAX_CURRENT };
 
 	hi

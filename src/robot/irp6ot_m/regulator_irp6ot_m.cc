@@ -14,9 +14,10 @@
 //#include "base/edp/irp6_on_track/hi_irp6ot.h"
 // Klasa servo_buffer.
 
-#include "base/edp/edp_e_motor_driven.h"
+
 #include "robot/irp6ot_m/const_irp6ot_m.h"
 #include "robot/irp6ot_m/regulator_irp6ot_m.h"
+#include "robot/irp6ot_m/edp_irp6ot_m_effector.h"
 
 namespace mrrocpp {
 namespace edp {
@@ -129,7 +130,7 @@ uint8_t NL_regulator_1_irp6ot::compute_set_value(void)
 	constraint_detector(common::SG_REG_1_MAX_ACC, common::SG_REG_1_MAX_SPEED);
 
 	// przeliczenie radianow na impulsy
-	step_new_pulse = step_new * IRP6_ON_TRACK_AXIS_0_TO_5_INC_PER_REVOLUTION / (2 * M_PI);
+	step_new_pulse = step_new * AXIS_0_TO_5_INC_PER_REVOLUTION / (2 * M_PI);
 	/*
 	 if (!aaa)
 	 if ( (fabs(step_new_pulse) < 0.0001) && (fabs(position_increment_new ) > 1) ) {
@@ -332,7 +333,7 @@ uint8_t NL_regulator_2_irp6ot::compute_set_value(void)
 	constraint_detector(common::SG_REG_2_MAX_ACC, common::SG_REG_2_MAX_SPEED, false);
 
 	// przeliczenie radianow na impulsy
-	step_new_pulse = step_new * IRP6_ON_TRACK_AXIS_0_TO_5_INC_PER_REVOLUTION / (2 * M_PI);
+	step_new_pulse = step_new * AXIS_0_TO_5_INC_PER_REVOLUTION / (2 * M_PI);
 
 	/*
 	 if (!bbb)
@@ -518,7 +519,7 @@ uint8_t NL_regulator_3_irp6ot::compute_set_value(void)
 	constraint_detector(common::SG_REG_3_MAX_ACC, common::SG_REG_3_MAX_SPEED);
 
 	// przeliczenie radianow na impulsy
-	step_new_pulse = step_new * IRP6_ON_TRACK_AXIS_0_TO_5_INC_PER_REVOLUTION / (2 * M_PI);
+	step_new_pulse = step_new * AXIS_0_TO_5_INC_PER_REVOLUTION / (2 * M_PI);
 	/*
 	 if (!ccc)
 	 if ( (fabs(step_new_pulse) < 0.0001) && (fabs(position_increment_new - position_increment_old ) > 40) ) {
@@ -701,7 +702,7 @@ uint8_t NL_regulator_4_irp6ot::compute_set_value(void)
 	constraint_detector(common::SG_REG_4_MAX_ACC, common::SG_REG_4_MAX_SPEED);
 
 	// przeliczenie radianow na impulsy
-	step_new_pulse = step_new * IRP6_ON_TRACK_AXIS_0_TO_5_INC_PER_REVOLUTION / (2 * M_PI);
+	step_new_pulse = step_new * AXIS_0_TO_5_INC_PER_REVOLUTION / (2 * M_PI);
 
 	/*
 	 if (!ddd)
@@ -886,7 +887,7 @@ uint8_t NL_regulator_5_irp6ot::compute_set_value(void)
 	constraint_detector(common::SG_REG_5_MAX_ACC, common::SG_REG_5_MAX_SPEED);
 
 	// przeliczenie radianow na impulsy
-	step_new_pulse = step_new * IRP6_ON_TRACK_AXIS_0_TO_5_INC_PER_REVOLUTION / (2 * M_PI);
+	step_new_pulse = step_new * AXIS_0_TO_5_INC_PER_REVOLUTION / (2 * M_PI);
 
 	/*
 	 if (!eee)
@@ -1074,7 +1075,7 @@ uint8_t NL_regulator_6_irp6ot::compute_set_value(void)
 	constraint_detector(common::SG_REG_6_MAX_ACC, common::SG_REG_6_MAX_SPEED);
 
 	// przeliczenie radianow na impulsy
-	step_new_pulse = step_new * IRP6_ON_TRACK_AXIS_0_TO_5_INC_PER_REVOLUTION / (2 * M_PI);
+	step_new_pulse = step_new * AXIS_0_TO_5_INC_PER_REVOLUTION / (2 * M_PI);
 
 	/*
 	 if (!fff)
@@ -1264,7 +1265,7 @@ uint8_t NL_regulator_7_irp6ot::compute_set_value(void)
 
 	// przeliczenie radianow na impulsy
 	// step_new_pulse = step_new*IRP6_POSTUMENT_AXIS_6_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
-	step_new_pulse = step_new * IRP6_ON_TRACK_AXIS_6_INC_PER_REVOLUTION / (2 * M_PI);
+	step_new_pulse = step_new * AXIS_6_INC_PER_REVOLUTION / (2 * M_PI);
 	//position_increment_new= position_increment_new/AXE_6_POSTUMENT_TO_TRACK_RATIO;
 
 	// if (step_new!=0.0) printf(" 7 reg:%f\n", step_new);

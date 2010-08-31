@@ -52,7 +52,7 @@ int_handler (void *arg, int int_id)
 	common::motor_data & md = irq_data->md;
 	struct sigevent & event = irq_data->event;
 
-	common::status_of_a_dof robot_status[IRP6OT_M_NUM_OF_SERVOS];
+	common::status_of_a_dof robot_status[lib::irp6ot_m::NUM_OF_SERVOS];
 	short int low_word, high_word;
 
 	md.hardware_error = (uint64_t) common::ALL_RIGHT; // Nie ma bledow sprzetowych
@@ -130,7 +130,7 @@ int_handler (void *arg, int int_id)
 
 			if (i<6) // osie z rezolwerami
 			{
-				md.current_absolute_position[i] = ((uint32_t) (high_word* (int)(IRP6_ON_TRACK_AXIS_0_TO_5_INC_PER_REVOLUTION))) + ((uint32_t) low_word);
+				md.current_absolute_position[i] = ((uint32_t) (high_word* (int)(AXIS_0_TO_5_INC_PER_REVOLUTION))) + ((uint32_t) low_word);
 			} else
 			{ // osie z enkoderami
 				md.current_absolute_position[i] = (((uint32_t) (high_word<<16)) & (0xFFFF0000)) | ((uint16_t) low_word);

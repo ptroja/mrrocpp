@@ -30,7 +30,7 @@ namespace task {
 teach::teach(lib::configurator &_config) :
 	task(_config)
 {
-	if (config.section_name == ECP_IRP6OT_M_SECTION) {
+	if (config.section_name == lib::irp6ot_m::ECP_SECTION) {
 		ecp_m_robot = new irp6ot_m::robot(*this);
 	} else if (config.section_name == ECP_IRP6P_M_SECTION) {
 		ecp_m_robot = new irp6p_m::robot(*this);
