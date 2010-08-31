@@ -7,23 +7,23 @@ namespace mrrocpp {
 namespace edp {
 namespace hi_moxa {
 
-#define START_BYTE '#'
+const char START_BYTE = '#';
 
 // commands
-#define COMMAND_MODE_PWM			0x00
-#define COMMAND_MODE_CURRENT		0x01
-#define COMMAND_MODE_POSITION		0x02
+const int COMMAND_MODE_PWM = 0x00;
+const int COMMAND_MODE_CURRENT = 0x01;
+const int COMMAND_MODE_POSITION = 0x02;
 
 // command params
-#define COMMAND_PARAM_SYNCHRO		0x10
+const int COMMAND_PARAM_SYNCHRO = 0x10;
 
 // error flags returned by hi::read_write_hardware (defined in servo_gr.h)
-#define ALL_RIGHT			0x0000000000000000ULL;
-#define SYNCHRO_ZERO		0x0000000000000001ULL;
-#define SYNCHRO_SWITCH_ON	0x0000000000000002ULL;
-#define LOWER_LIMIT_SWITCH	0x0000000000000004ULL;
-#define UPPER_LIMIT_SWITCH	0x0000000000000008ULL;
-#define OVER_CURRENT		0x0000000000000010ULL;
+const uint64_t ALL_RIGHT = 0x0000000000000000ULL;
+const uint64_t SYNCHRO_ZERO = 0x0000000000000001ULL;
+const uint64_t SYNCHRO_SWITCH_ON = 0x0000000000000002ULL;
+const uint64_t LOWER_LIMIT_SWITCH = 0x0000000000000004ULL;
+const uint64_t UPPER_LIMIT_SWITCH = 0x0000000000000008ULL;
+const uint64_t OVER_CURRENT = 0x0000000000000010ULL;
 
 struct status_St
 {
