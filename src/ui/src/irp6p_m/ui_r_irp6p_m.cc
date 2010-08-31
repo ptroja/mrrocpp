@@ -20,7 +20,7 @@
 
 
 UiRobotIrp6p_m::UiRobotIrp6p_m(Ui& _ui) :
-	UiRobot(_ui, lib::irp6p_m::EDP_IRP6P_M_SECTION, lib::irp6p_m::ECP_IRP6P_M_SECTION), is_wind_irp6p_int_open(false),
+	UiRobot(_ui, lib::irp6p_m::EDP_SECTION, lib::irp6p_m::ECP_SECTION), is_wind_irp6p_int_open(false),
 			is_wind_irp6p_inc_open(false), is_wind_irp6p_xyz_euler_zyz_open(false),
 			is_wind_irp6p_xyz_angle_axis_open(false), is_wind_irp6p_xyz_aa_relative_open(false),
 			is_wind_irp6p_xyz_angle_axis_ts_open(false), is_wind_irp6p_xyz_euler_zyz_ts_open(false),
@@ -34,7 +34,7 @@ int UiRobotIrp6p_m::reload_configuration()
 
 	// jesli IRP6 postument ma byc aktywne
 	if ((state.is_active = ui.config->value <int> ("is_irp6p_m_active")) == 1) {
-		// ini_con->create_ecp_irp6_postument (ini_con->ui->ECP_IRP6P_M_SECTION);
+		// ini_con->create_ecp_irp6_postument (ini_con->ui->ECP_SECTION);
 		//ui_state.is_any_edp_active = true;
 		if (ui.is_mp_and_ecps_active) {
 			state.ecp.network_trigger_attach_point
@@ -48,7 +48,7 @@ int UiRobotIrp6p_m::reload_configuration()
 		{
 			case -1:
 			case 0:
-				// ini_con->create_edp_irp6_postument (ini_con->ui->EDP_IRP6P_M_SECTION);
+				// ini_con->create_edp_irp6_postument (ini_con->ui->EDP_SECTION);
 
 				state.edp.pid = -1;
 				state.edp.reader_fd = -1;

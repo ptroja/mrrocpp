@@ -20,7 +20,7 @@
 
 
 UiRobotShead::UiRobotShead(Ui& _ui) :
-	UiRobot(_ui, lib::shead::EDP_SHEAD_SECTION, lib::shead::ECP_SHEAD_SECTION), ui_ecp_robot(NULL) {
+	UiRobot(_ui, lib::shead::EDP_SECTION, lib::shead::ECP_SECTION), ui_ecp_robot(NULL) {
 
 }
 

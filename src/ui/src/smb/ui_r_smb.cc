@@ -21,7 +21,7 @@
 
 
 UiRobotSmb::UiRobotSmb(Ui& _ui) :
-	UiRobot(_ui, lib::smb::EDP_SMB_SECTION, lib::smb::ECP_SMB_SECTION), ui_ecp_robot(NULL) {
+	UiRobot(_ui, lib::smb::EDP_SECTION, lib::smb::ECP_SECTION), ui_ecp_robot(NULL) {
 
 }
 

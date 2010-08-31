@@ -22,7 +22,7 @@
 
 
 UiRobotIrp6p_tfg::UiRobotIrp6p_tfg(Ui& _ui) :
-	UiRobot(_ui, lib::irp6p_tfg::EDP_IRP6P_TFG_SECTION, lib::irp6p_tfg::ECP_IRP6P_TFG_SECTION),
+	UiRobot(_ui, lib::irp6p_tfg::EDP_SECTION, lib::irp6p_tfg::ECP_SECTION),
 			is_wind_irp6p_tfg_moves_open(false),
 			is_wind_irp6p_tfg_servo_algorithm_open(false), ui_ecp_robot(NULL) {
 

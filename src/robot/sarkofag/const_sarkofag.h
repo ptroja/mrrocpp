@@ -18,8 +18,8 @@ namespace sarkofag {
 const robot_name_t ROBOT_SARKOFAG = "ROBOT_SARKOFAG";
 
 #define SARKOFAG_INC_PER_REVOLUTION  4000.0  // Liczba impulsow enkodera na obrot walu - musi byc float
-const std::string EDP_SARKOFAG_SECTION ="[edp_sarkofag]";
-const std::string ECP_SARKOFAG_SECTION ="[ecp_sarkofag]";
+const std::string EDP_SECTION ="[edp_sarkofag]";
+const std::string ECP_SECTION ="[ecp_sarkofag]";
 
 #define SARKOFAG_NUM_OF_SERVOS	1
 

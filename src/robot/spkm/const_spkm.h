@@ -46,8 +46,8 @@ struct rbuffer
 	bool contact;
 }__attribute__((__packed__));
 
-const std::string EDP_SPKM_SECTION ="[edp_spkm]";
-const std::string ECP_SPKM_SECTION ="[ecp_spkm]";
+const std::string EDP_SECTION ="[edp_spkm]";
+const std::string ECP_SECTION ="[ecp_spkm]";
 
 } // namespace spkm
 } // namespace lib

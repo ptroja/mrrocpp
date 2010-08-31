@@ -20,7 +20,7 @@
 
 
 UiRobotSpeaker::UiRobotSpeaker(Ui& _ui) :
-	UiRobot(_ui, lib::speaker::EDP_SPEAKER_SECTION, lib::speaker::ECP_SPEAKER_SECTION),
+	UiRobot(_ui, lib::speaker::EDP_SECTION, lib::speaker::ECP_SECTION),
 			is_wind_speaker_play_open(false), ui_ecp_robot(NULL)
 {
 
