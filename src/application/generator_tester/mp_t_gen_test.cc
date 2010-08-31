@@ -51,7 +51,7 @@ void gen_test::main_task_algorithm(void)
 	if (config.value <int> ("is_irp6ot_m_active", UI_SECTION)) {
 		manipulator_name = lib::irp6ot_m::ROBOT_IRP6OT_M;
 		if (config.value <int> ("is_irp6ot_tfg_active", UI_SECTION)) {
-			gripper_name = lib::irp6ot_tfg::ROBOT_IRP6OT_TFG;
+			gripper_name = lib::irp6ot_tfg::ROBOT_NAME;
 		} else {
 			// TODO: throw
 		}

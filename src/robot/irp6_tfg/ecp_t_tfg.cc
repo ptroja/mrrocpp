@@ -22,7 +22,7 @@ tfg::tfg(lib::configurator &_config) :
 	task(_config)
 {
 	// the robot is choose dependendat on the section of configuration file sent as argv[4]
-	if (config.section_name == ECP_IRP6OT_TFG_SECTION) {
+	if (config.section_name == lib::irp6ot_tfg::ECP_SECTION) {
 		ecp_m_robot = new irp6ot_tfg::robot(*this);
 	} else if (config.section_name == ECP_IRP6P_TFG_SECTION) {
 		ecp_m_robot = new irp6p_tfg::robot(*this);
