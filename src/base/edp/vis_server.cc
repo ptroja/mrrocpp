@@ -86,7 +86,7 @@ void vis_server::operator()(void)
 
 			tmp[3] -= tmp[2] + M_PI_2;
 			tmp[4] -= tmp[3] + tmp[2] + M_PI_2;
-		} else if (master.robot_name == lib::ROBOT_IRP6P_M) {
+		} else if (master.robot_name == lib::irp6p_m::ROBOT_IRP6P_M) {
 
 			tmp[2] -= tmp[1] + M_PI_2;
 			tmp[3] -= tmp[2] + tmp[1] + M_PI_2;

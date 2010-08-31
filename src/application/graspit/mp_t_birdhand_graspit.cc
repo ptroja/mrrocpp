@@ -82,7 +82,7 @@ void graspit::main_task_algorithm(void)
 			// TODO: throw
 		}
 	} else if (config.value <int> ("is_irp6p_m_active", UI_SECTION)) {
-		manipulator_name = lib::ROBOT_IRP6P_M;
+		manipulator_name = lib::irp6p_m::ROBOT_IRP6P_M;
 		if (config.value <int> ("is_bird_hand_active", UI_SECTION)) {
 			gripper_name = lib::bird_hand::ROBOT_BIRD_HAND;
 		} else {

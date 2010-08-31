@@ -614,7 +614,7 @@ smooth::smooth(common::task::task& _ecp_task, bool _is_synchronised) :
 
  if(the_robot->robot_name == lib::irp6ot_m::ROBOT_IRP6OT_M) {
  gripp=7;
- } else if(the_robot->robot_name == lib::ROBOT_IRP6P_M) {
+ } else if(the_robot->robot_name == lib::irp6p_m::ROBOT_IRP6P_M) {
  gripp=6;
  }
 
@@ -638,7 +638,7 @@ smooth::smooth(common::task::task& _ecp_task, bool _is_synchronised) :
 
  if(the_robot->robot_name == lib::irp6ot_m::ROBOT_IRP6OT_M) {
  gripp=7;
- } else if(the_robot->robot_name == lib::ROBOT_IRP6P_M) {
+ } else if(the_robot->robot_name == lib::irp6p_m::ROBOT_IRP6P_M) {
  gripp=6;
  }
 
@@ -989,7 +989,7 @@ void smooth::send_coordinates()
 
 			if (the_robot->robot_name == lib::irp6ot_m::ROBOT_IRP6OT_M) {
 				gripp = 7;
-			} else if (the_robot->robot_name == lib::ROBOT_IRP6P_M) {
+			} else if (the_robot->robot_name == lib::irp6p_m::ROBOT_IRP6P_M) {
 				gripp = 6;
 			}
 
@@ -1004,7 +1004,7 @@ void smooth::send_coordinates()
 
 			if (the_robot->robot_name == lib::irp6ot_m::ROBOT_IRP6OT_M) {
 				gripp = 7;
-			} else if (the_robot->robot_name == lib::ROBOT_IRP6P_M) {
+			} else if (the_robot->robot_name == lib::irp6p_m::ROBOT_IRP6P_M) {
 				gripp = 6;
 			}
 
@@ -1346,7 +1346,7 @@ void smooth::calculate(void)
 				case lib::ECP_JOINT:
 					if (the_robot->robot_name == lib::irp6ot_m::ROBOT_IRP6OT_M) {
 						gripp = 7;
-					} else if (the_robot->robot_name == lib::ROBOT_IRP6P_M) {
+					} else if (the_robot->robot_name == lib::irp6p_m::ROBOT_IRP6P_M) {
 						gripp = 6;
 					}
 
@@ -1372,7 +1372,7 @@ void smooth::calculate(void)
 					}
 
 					for (i = 0; i < MAX_SERVOS_NR; i++) {
-						if (!(the_robot->robot_name == lib::ROBOT_IRP6P_M && i == (MAX_SERVOS_NR - 1))) {
+						if (!(the_robot->robot_name == lib::irp6p_m::ROBOT_IRP6P_M && i == (MAX_SERVOS_NR - 1))) {
 							if (v_max_joint[i] == 0 || a_max_joint[i] == 0 || pose_list_iterator->v[i] == 0
 									|| pose_list_iterator->a[i] == 0) {
 								sr_ecp_msg.message("One or more of 'v' or 'a' values is 0");
@@ -1405,7 +1405,7 @@ void smooth::calculate(void)
 				case lib::ECP_MOTOR:
 					if (the_robot->robot_name == lib::irp6ot_m::ROBOT_IRP6OT_M) {
 						gripp = 7;
-					} else if (the_robot->robot_name == lib::ROBOT_IRP6P_M) {
+					} else if (the_robot->robot_name == lib::irp6p_m::ROBOT_IRP6P_M) {
 						gripp = 6;
 					}
 
@@ -1548,7 +1548,7 @@ void smooth::calculate(void)
 
 					if (the_robot->robot_name == lib::irp6ot_m::ROBOT_IRP6OT_M) {
 						gripp = 7;
-					} else if (the_robot->robot_name == lib::ROBOT_IRP6P_M) {
+					} else if (the_robot->robot_name == lib::irp6p_m::ROBOT_IRP6P_M) {
 						gripp = 6;
 					}
 
@@ -1594,7 +1594,7 @@ void smooth::calculate(void)
 
 					if (the_robot->robot_name == lib::irp6ot_m::ROBOT_IRP6OT_M) {
 						gripp = 7;
-					} else if (the_robot->robot_name == lib::ROBOT_IRP6P_M) {
+					} else if (the_robot->robot_name == lib::irp6p_m::ROBOT_IRP6P_M) {
 						gripp = 6;
 					}
 
