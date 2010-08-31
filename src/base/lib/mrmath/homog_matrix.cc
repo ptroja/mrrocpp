@@ -130,7 +130,6 @@ Homog_matrix::Homog_matrix(double x, double y, double z)
 	matrix_m[2][3] = z;
 }
 
-// Utworzenie macierzy jednorodnej na podstawie jej 12 elementow (notacja z Craiga)
 Homog_matrix::Homog_matrix (double r11, double r12, double r13, double t1, double r21, double r22, double r23,double t2, double r31, double r32,
  double r33, double t3)
 {
@@ -148,13 +147,11 @@ Homog_matrix::Homog_matrix(const Eigen::Matrix<double, 3, 4>& eigen_matrix)
 	}
 }
 
-// Zwrocenie obecnej tablicy, zawierajacej dane macierzy jednorodnej.
 void Homog_matrix::get_frame_tab(frame_tab frame) const
 {
 	copy_frame_tab(frame, matrix_m);
 }
 
-// Ustawienie tablicy, ktora zawiera dane macierzy jednorodnej.
 void Homog_matrix::set_from_frame_tab(const frame_tab & frame)
 {
 	copy_frame_tab(matrix_m, frame);

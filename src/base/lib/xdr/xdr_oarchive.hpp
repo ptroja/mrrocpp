@@ -1,3 +1,11 @@
+/**
+ * \file xdr_oarchive.hpp
+ *
+ * \brief XDR real-time output boost::archive
+ *
+ * \author Piotr Trojanek <piotr.trojanek@gmail.com>
+ */
+
 #ifndef XDR_OARCHIVE_HPP
 #define XDR_OARCHIVE_HPP
 
