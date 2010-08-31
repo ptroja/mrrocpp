@@ -202,7 +202,7 @@ int EDP_irp6_mechatronika_create(PtWidget_t *widget, ApInfo_t *apinfo,
 
 					ui.irp6m_m->ui_ecp_robot = new ui_irp6_common_robot(
 							*ui.config, *ui.all_ecp_msg,
-							lib::ROBOT_IRP6_MECHATRONIKA);
+							lib::irp6m::ROBOT_IRP6_MECHATRONIKA);
 				}
 
 				ui.irp6m_m->state.edp.pid

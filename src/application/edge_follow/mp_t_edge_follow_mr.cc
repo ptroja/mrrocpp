@@ -83,14 +83,14 @@ void edge_follow_mr::main_task_algorithm(void)
 
 	char tmp_string[MP_2_ECP_STRING_SIZE];
 
-	lib::tfg_command mp_ecp_tfg_command;
+	lib::irp6_tfg::command mp_ecp_command;
 
-	mp_ecp_tfg_command.desired_position = 0.078;
+	mp_ecp_command.desired_position = 0.078;
 
-	memcpy(tmp_string, &mp_ecp_tfg_command, sizeof(mp_ecp_tfg_command));
+	memcpy(tmp_string, &mp_ecp_command, sizeof(mp_ecp_command));
 	/*
 
-	 set_next_ecps_state(ecp_mp::common::generator::ECP_GEN_TFG, (int) 5, tmp_string, sizeof(mp_ecp_tfg_command), 1, gripper_name.c_str());
+	 set_next_ecps_state(ecp_mp::common::generator::ECP_GEN_TFG, (int) 5, tmp_string, sizeof(mp_ecp_command), 1, gripper_name.c_str());
 
 	 run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, gripper_name.c_str(), gripper_name.c_str());
 

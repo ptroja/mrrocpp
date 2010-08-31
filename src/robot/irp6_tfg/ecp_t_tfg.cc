@@ -6,7 +6,6 @@
 
 #include "base/lib/srlib.h"
 
-
 #include "robot/irp6ot_tfg/ecp_r_irp6ot_tfg.h"
 #include "robot/irp6p_tfg/ecp_r_irp6p_tfg.h"
 
@@ -15,7 +14,7 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6_tfg {
 namespace task {
 
 // KONSTRUKTORY
@@ -54,10 +53,10 @@ namespace task {
 
 task* return_created_ecp_task(lib::configurator &_config)
 {
-	return new common::task::tfg(_config);
+	return new irp6_tfg::task::tfg(_config);
 }
 
 }
-} // namespace common
+} // namespace irp6_tfg
 } // namespace ecp
 } // namespace mrrocpp
