@@ -38,7 +38,7 @@ ui_tfg_and_conv_robot::ui_tfg_and_conv_robot(lib::configurator &_config,
 		lib::sr_ecp &_sr_ecp_msg, lib::robot_name_t _robot_name) :
 	ui_common_robot(_config, _sr_ecp_msg, _robot_name) {
 
-	if (_robot_name == lib::ROBOT_IRP6OT_TFG) {
+	if (_robot_name == lib::irp6ot_tfg::ROBOT_IRP6OT_TFG) {
 		ecp = new ecp::irp6ot_tfg::robot(_config, _sr_ecp_msg);
 
 		MOTOR_STEP = 0.4; // Przyrost kata obrotu walu silnika [rad]
