@@ -447,7 +447,7 @@ int init_teaching_window(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t 
 			} else if (ui.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6p_m::ROBOT_IRP6P_M) {
 
 				start_wnd_irp6_postument_xyz_angle_axis(widget, apinfo, cbinfo);
-			} else if (ui.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6m::ROBOT_IRP6_MECHATRONIKA) {
+			} else if (ui.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6m::ROBOT_NAME) {
 				start_wnd_irp6m_xyz_angle_axis(widget, apinfo, cbinfo);
 			}
 			break;
@@ -457,7 +457,7 @@ int init_teaching_window(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t 
 				start_wnd_irp6_on_track_xyz_euler_zyz(widget, apinfo, cbinfo);
 			} else if (ui.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6p_m::ROBOT_IRP6P_M) {
 				start_wnd_irp6_postument_xyz_euler_zyz(widget, apinfo, cbinfo);
-			} else if (ui.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6m::ROBOT_IRP6_MECHATRONIKA) {
+			} else if (ui.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6m::ROBOT_NAME) {
 				start_wnd_irp6m_xyz_euler_zyz(widget, apinfo, cbinfo);
 			}
 
@@ -467,7 +467,7 @@ int init_teaching_window(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t 
 				start_wnd_irp6_on_track_int(widget, apinfo, cbinfo);
 			} else if (ui.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6p_m::ROBOT_IRP6P_M) {
 				start_wnd_irp6_postument_int(widget, apinfo, cbinfo);
-			} else if (ui.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6m::ROBOT_IRP6_MECHATRONIKA) {
+			} else if (ui.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6m::ROBOT_NAME) {
 				start_wnd_irp6m_int(widget, apinfo, cbinfo);
 			}
 
@@ -477,7 +477,7 @@ int init_teaching_window(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t 
 				start_wnd_irp6_on_track_inc(widget, apinfo, cbinfo);
 			} else if (ui.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6p_m::ROBOT_IRP6P_M) {
 				start_wnd_irp6_postument_inc(widget, apinfo, cbinfo);
-			} else if (ui.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6m::ROBOT_IRP6_MECHATRONIKA) {
+			} else if (ui.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6m::ROBOT_NAME) {
 				start_wnd_irp6m_inc(widget, apinfo, cbinfo);
 			}
 
@@ -1229,8 +1229,8 @@ int teaching_window_send_move(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackIn
 	} else if (ui.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6p_m::ROBOT_IRP6P_M) {
 		for (int i = 0; i < IRP6P_M_NUM_OF_SERVOS; i++)
 			ui.ui_ecp_obj->ui_rep.coordinates[i] = ui.irp6p_m->irp6p_current_pos[i];
-	} else if (ui.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6m::ROBOT_IRP6_MECHATRONIKA) {
-		for (int i = 0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++)
+	} else if (ui.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6m::ROBOT_NAME) {
+		for (int i = 0; i < lib::irp6m::NUM_OF_SERVOS; i++)
 			ui.ui_ecp_obj->ui_rep.coordinates[i] = ui.irp6m_m->irp6m_current_pos[i];
 	}
 

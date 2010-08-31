@@ -7,11 +7,11 @@ namespace mrrocpp {
 namespace lib {
 namespace irp6m {
 
-const robot_name_t ROBOT_IRP6_MECHATRONIKA = "ROBOT_IRP6_MECHATRONIKA";
-#define EDP_IRP6_MECHATRONIKA_SECTION "[edp_irp6_mechatronika]"
-#define ECP_IRP6_MECHATRONIKA_SECTION "[ecp_irp6_mechatronika]"
+const robot_name_t ROBOT_NAME = "ROBOT_IRP6_MECHATRONIKA";
+const std::string EDP_SECTION = "[edp_irp6_mechatronika]";
+const std::string ECP_SECTION = "[ecp_irp6_mechatronika]";
 
-#define IRP6_MECHATRONIKA_NUM_OF_SERVOS	5
+const int NUM_OF_SERVOS = 5;
 
 }
 } // namespace lib

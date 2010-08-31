@@ -44,7 +44,7 @@ teach::teach(lib::configurator &_config) : task(_config)
     {
         ecp_m_robot = new irp6p_m::robot (*this);
     }
-    else if (config.section_name == ECP_IRP6_MECHATRONIKA_SECTION)
+    else if (config.section_name == ECP_SECTION)
     {
         ecp_m_robot = new irp6m::robot (*this);
     }

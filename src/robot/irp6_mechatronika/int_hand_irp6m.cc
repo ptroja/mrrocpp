@@ -58,7 +58,7 @@ int_handler (void *arg, int int_id)
 		return (&event); // by Y&W
 	}
 
-	common::status_of_a_dof robot_status[IRP6_MECHATRONIKA_NUM_OF_SERVOS];
+	common::status_of_a_dof robot_status[lib::irp6m::NUM_OF_SERVOS];
 	short int low_word, high_word;
 	int i;
 
@@ -72,7 +72,7 @@ int_handler (void *arg, int int_id)
 		in16((SERVO_REPLY_INT_ADR + ISA_CARD_OFFSET));
 
 		md.is_synchronised = true;
-		for ( i = 0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++ )
+		for ( i = 0; i < lib::irp6m::NUM_OF_SERVOS; i++ )
 		{
 			out8((ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), FIRST_SERVO_PTR + (uint8_t)i);
 			md.robot_status[i].adr_offset_plus_0 = robot_status[i].adr_offset_plus_0 = in16((SERVO_REPLY_STATUS_ADR+ ISA_CARD_OFFSET)); // Odczyt stanu wylacznikow
@@ -97,7 +97,7 @@ int_handler (void *arg, int int_id)
 		in16((SERVO_REPLY_STATUS_ADR+ ISA_CARD_OFFSET)); // Odczyt stanu wylacznikow
 		in16((SERVO_REPLY_INT_ADR + ISA_CARD_OFFSET));
 
-		for ( i = 0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++ )
+		for ( i = 0; i < lib::irp6m::NUM_OF_SERVOS; i++ )
 		{
 			// Odczyty stanu osi, polozenia oraz pradu wirnikow
 			out8((ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), FIRST_SERVO_PTR + (uint8_t)i);
@@ -160,7 +160,7 @@ int_handler (void *arg, int int_id)
 
 		if ( md.hardware_error & hi_rydz::HARDWARE_ERROR_MASK ) // wyciecie SYNCHRO_ZERO i SYNCHRO_SWITCH_ON
 		{
-			for ( i = 0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++ ) {
+			for ( i = 0; i < lib::irp6m::NUM_OF_SERVOS; i++ ) {
 				// Zapis wartosci zadanej wypelnienia PWM
 				out8((ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), FIRST_SERVO_PTR + (uint8_t)i);
 				out16((SERVO_COMMAND1_ADR + ISA_CARD_OFFSET), STOP_MOTORS);
@@ -168,7 +168,7 @@ int_handler (void *arg, int int_id)
 			return (&event);
 		}
 
-		for ( i = 0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++ ) {
+		for ( i = 0; i < lib::irp6m::NUM_OF_SERVOS; i++ ) {
 			// Zapis wartosci zadanej wypelnienia PWM
 			out8((ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), FIRST_SERVO_PTR + (uint8_t)i);
 			if (md.is_robot_blocked) md.robot_control[i].adr_offset_plus_0 &= 0xff00;
@@ -190,7 +190,7 @@ int_handler (void *arg, int int_id)
 		out8((ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), md.card_adress);
 		out16(md.register_adress, md.value);
 
-		for ( i = 0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++ )
+		for ( i = 0; i < lib::irp6m::NUM_OF_SERVOS; i++ )
 		{
 			out8((ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), FIRST_SERVO_PTR + (uint8_t)i);
 			md.robot_status[i].adr_offset_plus_0 = robot_status[i].adr_offset_plus_0 = in16((SERVO_REPLY_STATUS_ADR+ ISA_CARD_OFFSET)); // Odczyt stanu wylacznikow
@@ -210,7 +210,7 @@ int_handler (void *arg, int int_id)
 		in16((SERVO_REPLY_STATUS_ADR+ ISA_CARD_OFFSET)); // Odczyt stanu wylacznikow
 		in16((SERVO_REPLY_INT_ADR + ISA_CARD_OFFSET));
 
-		for ( i = 0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++ )
+		for ( i = 0; i < lib::irp6m::NUM_OF_SERVOS; i++ )
 		{
 			out8((ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), FIRST_SERVO_PTR + (uint8_t)i);
 			md.robot_status[i].adr_offset_plus_0 = robot_status[i].adr_offset_plus_0 = in16((SERVO_REPLY_STATUS_ADR+ ISA_CARD_OFFSET)); // Odczyt stanu wylacznikow

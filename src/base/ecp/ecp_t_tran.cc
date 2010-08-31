@@ -43,7 +43,7 @@ tran::tran(lib::configurator &_config) :
 		ecp_m_robot = new conveyor::robot(*this);
 	} else if (config.section_name == ECP_SPEAKER_SECTION) {
 		ecp_m_robot = new speaker::robot(*this);
-	} else if (config.section_name == ECP_IRP6_MECHATRONIKA_SECTION) {
+	} else if (config.section_name == lib::irp6m::ECP_SECTION) {
 		ecp_m_robot = new irp6m::robot(*this);
 	} else if (config.section_name == ECP_POLYCRANK_SECTION) {
 		ecp_m_robot = new polycrank::robot(*this);
