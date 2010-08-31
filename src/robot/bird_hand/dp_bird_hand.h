@@ -13,8 +13,7 @@ namespace mrrocpp {
 namespace lib {
 namespace bird_hand {
 
-// ponizej konieczne zdefiniowanie typu 64bitowego bo inaczej przepalnia sie typ 32bitowy przy mnozeniu
-const uint64_t STEP_TIME_IN_NS = 2000000;
+
 
 const std::string COMMAND_DATA_PORT = "bird_hand_command_data_port";
 const std::string STATUS_DATA_REQUEST_PORT = "bird_hand_status_data_request_port";

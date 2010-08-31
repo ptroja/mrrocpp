@@ -174,19 +174,17 @@ void effector::move_arm(const lib::c_buffer &instruction)
 		// stan bierny
 
 
-		query_time = current_time + ecp_edp_cbuffer.command_structure.ecp_query_step * lib::bird_hand::STEP_TIME_IN_NS;
+		query_time = current_time + ecp_edp_cbuffer.command_structure.ecp_query_step * STEP_TIME_IN_NS;
 
-		macrostep_end_time = current_time + ecp_edp_cbuffer.command_structure.motion_steps
-				* lib::bird_hand::STEP_TIME_IN_NS;
+		macrostep_end_time = current_time + ecp_edp_cbuffer.command_structure.motion_steps * STEP_TIME_IN_NS;
 
 	} else {
 		// stan czynny
 		// UWAGA NA KOLEJNOSC OBLICZEN query_time i macrostep_end_time NIE ZAMIENIAC
 
-		query_time = macrostep_end_time + ecp_edp_cbuffer.command_structure.ecp_query_step
-				* lib::bird_hand::STEP_TIME_IN_NS;
+		query_time = macrostep_end_time + ecp_edp_cbuffer.command_structure.ecp_query_step * STEP_TIME_IN_NS;
 
-		macrostep_end_time += ecp_edp_cbuffer.command_structure.motion_steps * lib::bird_hand::STEP_TIME_IN_NS;
+		macrostep_end_time += ecp_edp_cbuffer.command_structure.motion_steps * STEP_TIME_IN_NS;
 
 	}
 
