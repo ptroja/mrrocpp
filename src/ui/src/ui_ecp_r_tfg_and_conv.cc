@@ -64,7 +64,7 @@ ui_tfg_and_conv_robot::ui_tfg_and_conv_robot(lib::configurator &_config,
 
 	} else if (_robot_name == lib::conveyor::ROBOT_CONVEYOR) {
 
-	} else if (_robot_name == lib::ROBOT_SPKM) {
+	} else if (_robot_name == lib::spkm::ROBOT_SPKM) {
 		ecp = new ecp::spkm::robot(_config, _sr_ecp_msg);
 
 		MOTOR_STEP = 0.1; // Przyrost kata obrotu walu silnika [rad]

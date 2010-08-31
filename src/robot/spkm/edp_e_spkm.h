@@ -27,8 +27,8 @@ class effector : public common::manip_effector
 {
 protected:
 
-	lib::spkm_cbuffer ecp_edp_cbuffer;
-	lib::spkm_rbuffer edp_ecp_rbuffer;
+	lib::spkm::cbuffer ecp_edp_cbuffer;
+	lib::spkm::rbuffer edp_ecp_rbuffer;
 
 	/*!
 	 * \brief method,  creates a list of available kinematic models for spkm effector.
