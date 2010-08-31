@@ -1,14 +1,10 @@
-// ------------------------------------------------------------------------
-// Proces:		-
-// Plik:			mathtr.h
-// System:	QNX/MRROC++  v. 6.3
-// Opis:		Klasy K_vector, Homog_matrix, Ft_v_vector,  Jacobian_matrix
-//				- definicja klas
-//
-// Autor:		tkornuta
-// Data:		14.02.2007
-// ------------------------------------------------------------------------
-
+/**
+ * \file mrmath.h
+ *
+ * \brief Common math routines header file
+ *
+ * \author Piotr Trojanek <piotr.trojanek@gmail.com>
+ */
 
 #ifndef __MRMATH_H
 #define __MRMATH_H

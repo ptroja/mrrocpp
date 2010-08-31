@@ -6,8 +6,6 @@
  * @ingroup bird_hand
  */
 
-#include "base/lib/mis_fun.h"
-
 #include "robot/bird_hand/ecp_r_bird_hand.h"
 
 namespace mrrocpp {

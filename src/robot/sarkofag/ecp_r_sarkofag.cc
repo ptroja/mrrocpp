@@ -6,8 +6,6 @@
  * @ingroup sarkofag
  */
 
-#include "base/lib/mis_fun.h"
-
 #include "robot/sarkofag/ecp_r_sarkofag.h"
 
 namespace mrrocpp {

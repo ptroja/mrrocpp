@@ -21,6 +21,7 @@
 
 // niezbedny naglowek z definiacja PROCESS_SPAWN_RSH
 #include "base/lib/configurator.h"
+#include "base/lib/mis_fun.h"
 
 #include "ui/src/ui_class.h"
 #include "ui/src/ui_ecp.h"

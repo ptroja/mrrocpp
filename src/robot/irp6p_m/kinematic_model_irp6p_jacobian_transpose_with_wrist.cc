@@ -65,7 +65,7 @@ void model_jacobian_transpose_with_wrist::inverse_kinematics_transform(lib::Join
 		jacobian_new.irp6_6dof_equations(current_joints);
 
 		//Wyznaczenie transpozycji jakobianu
-		jacobian_new.jacobian_transpose();
+		jacobian_new.transpose();
 
 		//Wyliczenie przyrostu zmiennych przegubowych
 		delta_q = jacobian_new * desired_distance_new;

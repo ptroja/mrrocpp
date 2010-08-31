@@ -1,13 +1,10 @@
-// ------------------------------------------------------------------------
-// Proces:		-
-// Plik:			mathtr.cc
-// System:	QNX/MRROC++  v. 6.3
-// Opis:		Klasy K_vector, Homog_matrix, Ft_v_vector
-//				- deklaracja metod klas
-//
-// Autor:		tkornuta
-// Data:		14.02.2007
-// ------------------------------------------------------------------------
+/**
+ * \file mathtr.cc
+ *
+ * \brief Angle range reduction routines
+ *
+ * \author Tomasz Kornuta <tkornuta@gmail.com>
+ */
 
 #include <cmath>
 
@@ -16,30 +13,27 @@
 namespace mrrocpp {
 namespace lib {
 
-// Sprowadzenie wartosci kata do przedzialu (-M_PI, M_PI >.
-double reduce (double angle)
+double reduce(double angle)
 {
-  while (angle > M_PI)
-	angle-=2*M_PI;
+	while (angle > M_PI)
+		angle -= 2 * M_PI;
 
-  while (angle <= -M_PI)
-	angle+=2*M_PI;
+	while (angle <= -M_PI)
+		angle += 2 * M_PI;
 
- return(angle);
-}// end reduce
+	return (angle);
+}
 
-// Sprowadzenie wartosci kata do przedzialu (min, max>.
 double reduce(double angle, double min, double max, double offset)
 {
-  while (angle >= max)
-	angle-= offset;
+	while (angle >= max)
+		angle -= offset;
 
-  while (angle < min)
-	angle+=offset;
+	while (angle < min)
+		angle += offset;
 
- return(angle);
-}// end reduce
-
+	return (angle);
+}
 
 } // namespace lib
 } // namespace mrrocpp

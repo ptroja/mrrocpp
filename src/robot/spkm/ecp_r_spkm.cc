@@ -8,8 +8,6 @@
 
 #include "base/lib/impconst.h"
 
-#include "base/lib/mis_fun.h"
-
 #include "robot/spkm/ecp_r_spkm.h"
 
 namespace mrrocpp {

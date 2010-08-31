@@ -15,6 +15,7 @@
 #include "base/lib/typedefs.h"
 #include "base/lib/mis_fun.h"
 #include "base/edp/edp_typedefs.h"
+#include "base/lib/mis_fun.h"
 #include "base/edp/reader.h"
 #include "base/edp/HardwareInterface.h"
 #include "base/edp/servo_gr.h"

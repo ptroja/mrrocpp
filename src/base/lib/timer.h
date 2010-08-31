@@ -1,3 +1,12 @@
+/*!
+ * @file timer.h
+ * @brief Utility timer class declaration.
+ *
+ * @author Piotr Trojanek <piotr.trojanek@gmail.com>
+ *
+ * @ingroup LIB
+ */
+
 #ifndef TIMER_H
 #define TIMER_H
 
@@ -6,9 +15,15 @@
 namespace mrrocpp {
 namespace lib {
 
-class timer {
+/**
+ * 	Utility timer class
+ */
+class timer
+{
 public:
-	typedef enum _timer_status_enum {
+	//! Timer status
+	typedef enum _timer_status_enum
+	{
 		TIMER_INITIALIZED,
 		TIMER_STARTED,
 		TIMER_STOPPED,
@@ -21,20 +36,36 @@ public:
 	} timer_status_t;
 
 private:
+	//! Last and current timestamps
 	struct timespec t1, t2;
-	bool timer_initialized;
-	bool timer_started;
-	bool timer_stopped;
+
+	//! Flag indicating initialization status
+	bool initialized;
+
+	//! Flag indicating started status
+	bool started;
+
+	//! Flag indicating stopped status
+	bool stopped;
+
+	//! Variable for last status
 	timer_status_t last_status;
 
 public:
-	// konstruktor
-	timer (void);
-	timer_status_t timer_start(void);
-	timer_status_t timer_stop(void);
-	timer_status_t get_time(float *sec);
-	void print_last_status(void);
+	//! Constructor
+	timer();
 
+	//! Start the timer
+	timer_status_t start();
+
+	//! Stop the timer
+	timer_status_t stop();
+
+	//! Get measured time
+	timer_status_t get_time(float & sec);
+
+	//! Print last status
+	void print_last_status() const;
 };
 
 } // namespace lib

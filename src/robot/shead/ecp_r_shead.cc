@@ -7,7 +7,6 @@
  */
 
 #include "base/lib/impconst.h"
-#include "base/lib/mis_fun.h"
 
 #include "robot/shead/ecp_r_shead.h"
 

@@ -6,7 +6,6 @@
  * @ingroup irp6p_m
  */
 
-#include "base/lib/mis_fun.h"
 #include "robot/irp6p_m/ecp_r_irp6p_m.h"
 
 namespace mrrocpp {

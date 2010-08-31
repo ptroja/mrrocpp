@@ -11,13 +11,13 @@
 #include <ctime>
 #include <iostream>
 #include <fstream>
-#include <boost/circular_buffer.hpp>
 
 #include "ui/src/ui.h"
 #include "ui/src/ui_const.h"
 #include "base/lib/srlib.h"
 // #include "base/ecp/ecp.h"
 #include "base/lib/com_buf.h"
+#include "base/lib/mis_fun.h"
 #include "ui/src/ui_class.h"
 #include "ui/src/ui_sr.h"
 #include "ui/src/ui_ecp.h"
