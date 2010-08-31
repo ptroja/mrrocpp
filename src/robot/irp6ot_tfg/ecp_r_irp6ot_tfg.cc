@@ -8,7 +8,6 @@
 
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
-#include "base/lib/mis_fun.h"
 
 #include "robot/irp6ot_tfg/ecp_r_irp6ot_tfg.h"
 

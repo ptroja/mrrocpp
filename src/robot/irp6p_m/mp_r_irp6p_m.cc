@@ -1,8 +1,6 @@
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
 
-#include "base/lib/mis_fun.h"
-#include "base/lib/srlib.h"
 #include "robot/irp6p_m/mp_r_irp6p_m.h"
 #include "robot/irp6p_m/irp6p_m_const.h"
 
