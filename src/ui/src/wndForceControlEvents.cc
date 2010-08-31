@@ -93,7 +93,7 @@ int FCCreateConnection(void) {
 	// Stworzenie nazwy.
 	std::string tmp_name = ui.config->return_attach_point_name(
 			lib::configurator::CONFIG_SERVER, "ecp_sec_chan_attach_point",
-			ECP_IRP6OT_M_SECTION);
+			lib::irp6ot_m::ECP_SECTION);
 
 #ifdef FCDEBUG
 	printf("FCCreateConnection: %s\n",tmp_name.c_str());

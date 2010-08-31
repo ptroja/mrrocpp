@@ -75,7 +75,7 @@ void effector::create_threads()
 
 // Konstruktor.
 effector::effector(lib::configurator &_config) :
-	manip_effector(_config, lib::ROBOT_IRP6P_M)
+	manip_effector(_config, lib::irp6p_m::ROBOT_IRP6P_M)
 {
 
 	number_of_servos = IRP6P_M_NUM_OF_SERVOS;

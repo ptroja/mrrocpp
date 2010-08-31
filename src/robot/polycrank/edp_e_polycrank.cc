@@ -34,7 +34,7 @@ namespace polycrank {
 
 // Konstruktor.
 effector::effector(lib::configurator &_config) :
-	manip_effector(_config, lib::ROBOT_POLYCRANK)
+	manip_effector(_config, lib::polycrank::ROBOT_POLYCRANK)
 {
 
 	number_of_servos = POLYCRANK_NUM_OF_SERVOS;

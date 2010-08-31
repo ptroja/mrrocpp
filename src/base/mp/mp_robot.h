@@ -77,14 +77,6 @@ public:
 	robot(lib::robot_name_t l_robot_name, const std::string & _section_name, task::task &mp_object_l);
 	virtual ~robot();
 
-	class MP_error
-	{ // Klasa obslugi bledow robotow
-	public:
-		const lib::error_class_t error_class;
-		const uint64_t error_no;
-		MP_error(lib::error_class_t err0, uint64_t err1);
-	};
-
 	// Zlecenie wykonania ruchu przez robota
 	// (realizowane przez klase konkretna):
 	// na poziomie MP jest to polecenie dla ECP.
@@ -96,6 +88,14 @@ public:
 	void terminate_ecp(void);
 
 	void start_ecp(void);
+};
+
+class MP_error
+{ // Klasa obslugi bledow robotow
+public:
+	const lib::error_class_t error_class;
+	const uint64_t error_no;
+	MP_error(lib::error_class_t err0, uint64_t err1);
 };
 
 } // namespace robot

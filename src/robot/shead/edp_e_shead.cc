@@ -39,7 +39,7 @@ void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
 
 // Konstruktor.
 effector::effector(lib::configurator &_config) :
-	motor_driven_effector(_config, lib::ROBOT_SHEAD)
+	motor_driven_effector(_config, lib::shead::ROBOT_SHEAD)
 {
 
 	number_of_servos = SHEAD_NUM_OF_SERVOS;
@@ -91,8 +91,8 @@ void effector::move_arm(const lib::c_buffer &instruction)
 
 	switch (ecp_edp_cbuffer.variant)
 	{
-		case lib::SHEAD_CBUFFER_HEAD_SOLIDIFICATION: {
-			lib::SHEAD_HEAD_SOLIDIFICATION head_solidification;
+		case lib::shead::CBUFFER_HEAD_SOLIDIFICATION: {
+			lib::shead::HEAD_SOLIDIFICATION head_solidification;
 
 			memcpy(&head_solidification, &(ecp_edp_cbuffer.head_solidification), sizeof(head_solidification));
 
@@ -105,8 +105,8 @@ void effector::move_arm(const lib::c_buffer &instruction)
 
 		}
 			break;
-		case lib::SHEAD_CBUFFER_VACUUM_ACTIVATION: {
-			lib::SHEAD_VACUUM_ACTIVATION vacuum_activation;
+		case lib::shead::CBUFFER_VACUUM_ACTIVATION: {
+			lib::shead::VACUUM_ACTIVATION vacuum_activation;
 
 			memcpy(&vacuum_activation, &(ecp_edp_cbuffer.vacuum_activation), sizeof(vacuum_activation));
 		}

@@ -18,6 +18,11 @@ transmitter_base::transmitter_base(lib::TRANSMITTER_t _transmitter_name, const s
 {
 }
 
+transmitter_error::transmitter_error(lib::error_class_t err_cl) :
+	error_class(err_cl)
+{
+}
+
 } // namespace transmitter
 } // namespace ecp_mp
 } // namespace mrrocpp

@@ -67,7 +67,7 @@ void teach_tmp::teach(lib::ECP_POSE_SPECIFICATION ps, const char *msg)
             e = errno;
             perror("ecp teach(): Send() to UI failed");
             sr_ecp_msg.message(lib::SYSTEM_ERROR, e, "ecp: Send() to UI failed");
-            throw generator::ECP_error(lib::SYSTEM_ERROR, 0);
+            throw ECP_error(lib::SYSTEM_ERROR, 0);
           }
         if (ui_to_ecp_rep.reply == lib::QUIT) // Koniec uczenia
           break;
@@ -115,7 +115,7 @@ void teach_tmp::save_file(lib::ECP_POSE_SPECIFICATION ps)
         e = errno;
         perror("ecp: Send() to UI failed");
         sr_ecp_msg.message(lib::SYSTEM_ERROR, e, "ecp: Send() to UI failed");
-        throw generator::ECP_error(lib::SYSTEM_ERROR, 0);
+        throw ECP_error(lib::SYSTEM_ERROR, 0);
       }
     if (ui_to_ecp_rep.reply == lib::QUIT)
       { // Nie wybrano nazwy pliku lub zrezygnowano z zapisu
@@ -141,14 +141,14 @@ void teach_tmp::save_file(lib::ECP_POSE_SPECIFICATION ps)
     if (chdir(ui_to_ecp_rep.path) != 0)
       {
         perror(ui_to_ecp_rep.path);
-        throw generator::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_DIRECTORY);
+        throw ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_DIRECTORY);
       }
     std::ofstream to_file(ui_to_ecp_rep.filename); // otworz plik do zapisu
     e = errno;
     if (!to_file)
       {
         perror(ui_to_ecp_rep.filename);
-        throw generator::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
+        throw ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
       }
     else
       {
@@ -198,14 +198,14 @@ bool teach_tmp::load_file_from_ui()
         e = errno;
         perror("ecp: Send() to UI failed");
         sr_ecp_msg.message(lib::SYSTEM_ERROR, e, "ecp: Send() to UI failed");
-        throw generator::ECP_error(lib::SYSTEM_ERROR, 0);
+        throw ECP_error(lib::SYSTEM_ERROR, 0);
       }
     if (ui_to_ecp_rep.reply == lib::QUIT) // Nie wybrano nazwy pliku lub zrezygnowano z zapisu
       return false;
     if (chdir(ui_to_ecp_rep.path) != 0)
       {
         perror(ui_to_ecp_rep.path);
-        throw generator::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_DIRECTORY);
+        throw ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_DIRECTORY);
       }
 
     return load_file_with_path(ui_to_ecp_rep.filename);
@@ -233,12 +233,12 @@ bool teach_tmp::load_file_with_path(const char* file_name)
     if (!from_file.good())
       {
         perror(file_name);
-        throw generator::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
+        throw ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
       }
 
     if ( !(from_file >> coordinate_type))
       {
-        throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+        throw ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
       }
 
     // Usuwanie spacji i tabulacji
@@ -267,24 +267,24 @@ bool teach_tmp::load_file_with_path(const char* file_name)
       ps = lib::ECP_PF_VELOCITY;
     else
       {
-        throw generator::ECP_error(lib::NON_FATAL_ERROR, NON_TRAJECTORY_FILE);
+        throw ECP_error(lib::NON_FATAL_ERROR, NON_TRAJECTORY_FILE);
       }
     if ( !(from_file >> number_of_poses))
       {
-        throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+        throw ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
       }
     flush_pose_list(); // Usuniecie listy pozycji, o ile istnieje
     for (i = 0; i < number_of_poses; i++)
       {
         if (!(from_file >> motion_time))
           {
-            throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+            throw ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
           }
         for (j = 0; j < MAX_SERVOS_NR; j++)
           {
             if ( !(from_file >> coordinates[j]))
               { // Zabezpieczenie przed danymi nienumerycznymi
-                throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+                throw ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
               }
           }
 
@@ -292,7 +292,7 @@ bool teach_tmp::load_file_with_path(const char* file_name)
           { // by Y
             if ( !(from_file >> extra_info))
               { // Zabezpieczenie przed danymi nienumerycznymi
-                throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+                throw ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
               }
             if (first_time)
               {

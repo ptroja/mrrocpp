@@ -16,15 +16,13 @@ namespace ecp {
 namespace speaker {
 
 // ---------------------------------------------------------------
-class robot: public common::ecp_robot
+class robot : public common::robot::ecp_robot
 {
 	// Klasa dla robota speaker
 
-	public:
-	robot (lib::configurator &_config, lib::sr_ecp &_sr_ecp);
-	robot (common::task::task& _ecp_object);
-
-
+public:
+	robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp);
+	robot(common::task::task& _ecp_object);
 
 }; // end: class ecp_speaker_robot
 // ---------------------------------------------------------------

@@ -35,15 +35,15 @@ tran::tran(lib::configurator &_config) :
 		ecp_m_robot = new irp6ot_tfg::robot(*this);
 	} else if (config.section_name == ECP_IRP6P_TFG_SECTION) {
 		ecp_m_robot = new irp6p_tfg::robot(*this);
-	} else if (config.section_name == ECP_IRP6OT_M_SECTION) {
+	} else if (config.section_name == lib::irp6ot_m::ECP_SECTION) {
 		ecp_m_robot = new irp6ot_m::robot(*this);
 	} else if (config.section_name == ECP_IRP6P_M_SECTION) {
 		ecp_m_robot = new irp6p_m::robot(*this);
-	} else if (config.section_name == ECP_CONVEYOR_SECTION) {
+	} else if (config.section_name == lib::conveyor::ECP_SECTION) {
 		ecp_m_robot = new conveyor::robot(*this);
 	} else if (config.section_name == ECP_SPEAKER_SECTION) {
 		ecp_m_robot = new speaker::robot(*this);
-	} else if (config.section_name == ECP_IRP6_MECHATRONIKA_SECTION) {
+	} else if (config.section_name == lib::irp6m::ECP_SECTION) {
 		ecp_m_robot = new irp6m::robot(*this);
 	} else if (config.section_name == ECP_POLYCRANK_SECTION) {
 		ecp_m_robot = new polycrank::robot(*this);

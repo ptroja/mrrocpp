@@ -92,7 +92,7 @@ int EDP_spkm_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 					boost::unique_lock<boost::mutex> lock(
 							ui.process_creation_mtx);
 					ui.spkm->ui_ecp_robot = new ui_tfg_and_conv_robot(
-							*ui.config, *ui.all_ecp_msg, lib::ROBOT_SPKM);
+							*ui.config, *ui.all_ecp_msg, lib::spkm::ROBOT_SPKM);
 
 				}
 

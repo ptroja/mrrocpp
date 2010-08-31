@@ -9,14 +9,14 @@
 #define _ECP_R_IRP6_MECHATRONIKA_H
 
 #include "base/ecp/ecp_robot.h"
-#include "robot/irp6_mechatronika/irp6m_const.h"
+#include "robot/irp6_mechatronika/const_irp6m.h"
 
 namespace mrrocpp {
 namespace ecp {
 namespace irp6m {
 
 // ---------------------------------------------------------------
-class robot: public common::ecp_robot
+class robot: public common::robot::ecp_robot
 {
 	// Klasa dla robota irp6_postument (sztywnego)
 

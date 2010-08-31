@@ -40,7 +40,7 @@ pcbird_pos::pcbird_pos(lib::configurator &_config) : task(_config)
 	sensor_m[lib::SENSOR_PCBIRD]->configure_sensor();
 
 	// Create an adequate robot. - depending on the ini section name.
-	if (config.section_name == ECP_IRP6OT_M_SECTION)
+	if (config.section_name == ECP_SECTION)
 	{
 		ecp_m_robot = new irp6ot_m::robot (*this);
 		sr_ecp_msg->message("IRp6ot loaded");

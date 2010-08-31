@@ -11,12 +11,14 @@
 
 namespace mrrocpp {
 namespace lib {
+namespace irp6_tfg {
 
-struct tfg_command
+struct command
 {
 	double desired_position;
 };
 
+}
 }
 }
 

@@ -13,15 +13,17 @@
 
 namespace mrrocpp {
 namespace lib {
+namespace conveyor {
 
-#define CONVEYOR_INC_PER_REVOLUTION  4000.0  // Liczba impulsow enkodera na obrot walu - musi byc float
-const robot_name_t ROBOT_CONVEYOR = "ROBOT_CONVEYOR";
+const double INC_PER_REVOLUTION = 4000; // Liczba impulsow enkodera na obrot walu - musi byc float
+const robot_name_t ROBOT_NAME = "ROBOT_CONVEYOR";
 
-#define EDP_CONVEYOR_SECTION "[edp_conveyor]"
-#define ECP_CONVEYOR_SECTION "[ecp_conveyor]"
+const std::string EDP_SECTION = "[edp_conveyor]";
+const std::string ECP_SECTION = "[ecp_conveyor]";
 
-#define CONVEYOR_NUM_OF_SERVOS		1
+const int NUM_OF_SERVOS = 1;
 
+} // namespace conveyor
 } // namespace lib
 } // namespace mrrocpp
 

@@ -16,7 +16,7 @@ namespace ecp {
 namespace polycrank {
 
 // ---------------------------------------------------------------
-class robot: public common::ecp_robot
+class robot: public common::robot::ecp_robot
 {
 	// Klasa dla robota irp6_postument (sztywnego)
 

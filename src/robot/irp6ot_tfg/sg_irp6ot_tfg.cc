@@ -25,9 +25,9 @@ servo_buffer::servo_buffer(effector &_master) :
 	common::servo_buffer(_master), master(_master)
 {
 	synchro_axis_order[0] = 0;
-	axe_inc_per_revolution[0] = IRP6_ON_TRACK_AXIS_7_INC_PER_REVOLUTION;
-	synchro_step_coarse[0] = IRP6_ON_TRACK_AXIS_7_SYNCHRO_STEP_COARSE;
-	synchro_step_fine[0] = IRP6_ON_TRACK_AXIS_7_SYNCHRO_STEP_FINE;
+	axe_inc_per_revolution[0] = AXIS_7_INC_PER_REVOLUTION;
+	synchro_step_coarse[0] = AXIS_7_SYNCHRO_STEP_COARSE;
+	synchro_step_fine[0] = AXIS_7_SYNCHRO_STEP_FINE;
 
 	thread_id = new boost::thread(boost::bind(&servo_buffer::operator(), this));
 }
@@ -36,7 +36,7 @@ servo_buffer::servo_buffer(effector &_master) :
 void servo_buffer::load_hardware_interface(void)
 {
 	// tablica pradow maksymalnych d;a poszczegolnych osi
-	int max_current[IRP6OT_TFG_NUM_OF_SERVOS] = { IRP6_ON_TRACK_AXIS_8_MAX_CURRENT };
+	int max_current[IRP6OT_TFG_NUM_OF_SERVOS] = { AXIS_8_MAX_CURRENT };
 
 	hi
 			= new hardware_interface(master, IRQ_REAL, INT_FREC_DIVIDER, HI_RYDZ_INTR_TIMEOUT_HIGH, FIRST_SERVO_PTR, INTERRUPT_GENERATOR_SERVO_PTR, ISA_CARD_OFFSET, max_current);

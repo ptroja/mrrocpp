@@ -29,18 +29,18 @@ const unsigned short int INT_FREC_DIVIDER = 4; // Dzielnik czestotliwosci przerw
 
 // 13,7 j na amper
 
-#define IRP6_ON_TRACK_AXIS_8_MAX_CURRENT           0x2427 // ustawienie pradu maksymalnego dla zacisku chwytaka
+#define AXIS_8_MAX_CURRENT           0x2427 // ustawienie pradu maksymalnego dla zacisku chwytaka
 // by Y - UWAGA nieczulosc nieznana, rozdzielczosc do ustalenia
 // 25,3 j na 100ma, strefa nieczulosci na poziomie 40ma
 
 
-#define IRP6_ON_TRACK_AXIS_7_INC_PER_REVOLUTION  128.0  // Liczba impulsow enkodera na obrot walu - musi byc float
+#define AXIS_7_INC_PER_REVOLUTION  128.0  // Liczba impulsow enkodera na obrot walu - musi byc float
 
 // ------------------------------------------------------------------------
 //                HARDWARE_INTERFACE class
 // ------------------------------------------------------------------------
 
-class hardware_interface: public common::HI_rydz {
+class hardware_interface: public hi_rydz::HI_rydz {
 
 public:
     hardware_interface (common::motor_driven_effector &_master, int _hi_irq_real,

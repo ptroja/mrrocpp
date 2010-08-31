@@ -22,11 +22,12 @@ namespace smb {
  *
  * This mobile platform is the base of the SPKM manipulator
  */
-class effector: public common::motor_driven_effector {
+class effector : public common::motor_driven_effector
+{
 protected:
 
-	lib::smb_cbuffer ecp_edp_cbuffer;
-	lib::smb_rbuffer edp_ecp_rbuffer;
+	lib::smb::cbuffer ecp_edp_cbuffer;
+	lib::smb::rbuffer edp_ecp_rbuffer;
 
 	// Metoda tworzy modele kinematyczne dla robota IRp-6 na postumencie.
 

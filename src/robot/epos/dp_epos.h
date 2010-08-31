@@ -15,6 +15,7 @@
 
 namespace mrrocpp {
 namespace lib {
+namespace epos {
 
 enum EPOS_GEN_PROFILE
 {
@@ -71,7 +72,8 @@ struct epos_reply
 	bool contact;
 };
 
-}
-}
+} // namespace epos
+} // namespace lib
+} // namespace mrrocpp
 
 #endif

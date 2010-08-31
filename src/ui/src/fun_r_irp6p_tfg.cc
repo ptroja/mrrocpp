@@ -129,7 +129,7 @@ int EDP_irp6p_tfg_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 							ui.process_creation_mtx);
 
 					ui.irp6p_tfg->ui_ecp_robot = new ui_tfg_and_conv_robot(
-							*ui.config, *ui.all_ecp_msg, lib::ROBOT_IRP6P_TFG);
+							*ui.config, *ui.all_ecp_msg, lib::irp6p_tfg::ROBOT_IRP6P_TFG);
 				}
 
 				ui.irp6p_tfg->state.edp.pid

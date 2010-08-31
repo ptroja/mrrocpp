@@ -29,7 +29,7 @@ public:
 	void mp_2_ecp_next_state_string_handler(void);
 };
 
-}
+} // namespace task
 } // namespace irp6p
 } // namespace ecp
 } // namespace mrrocpp

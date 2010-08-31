@@ -75,16 +75,16 @@ void graspit::main_task_algorithm(void)
 
 	// ROBOT IRP6_ON_TRACK
 	if (config.value <int> ("is_irp6ot_m_active", UI_SECTION)) {
-		manipulator_name = lib::ROBOT_IRP6OT_M;
+		manipulator_name = lib::irp6ot_m::ROBOT_IRP6OT_M;
 		if (config.value <int> ("is_bird_hand_active", UI_SECTION)) {
-			gripper_name = lib::ROBOT_BIRD_HAND;
+			gripper_name = lib::bird_hand::ROBOT_NAME;
 		} else {
 			// TODO: throw
 		}
 	} else if (config.value <int> ("is_irp6p_m_active", UI_SECTION)) {
-		manipulator_name = lib::ROBOT_IRP6P_M;
+		manipulator_name = lib::irp6p_m::ROBOT_IRP6P_M;
 		if (config.value <int> ("is_bird_hand_active", UI_SECTION)) {
-			gripper_name = lib::ROBOT_BIRD_HAND;
+			gripper_name = lib::bird_hand::ROBOT_NAME;
 		} else {
 			// TODO: throw
 		}
@@ -99,7 +99,7 @@ void graspit::main_task_algorithm(void)
 	{
 		double joint[6];
 	} mp_ecp_irp6_command;
-	lib::bird_hand_command mp_ecp_bird_hand_command;
+	lib::bird_hand::command mp_ecp_bird_hand_command;
 
 	for (int i = 0; i < 6; ++i)
 		mp_ecp_irp6_command.joint[i] = trgraspit->from_va.grasp_joint[i + 6];

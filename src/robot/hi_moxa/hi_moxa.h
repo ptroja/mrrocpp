@@ -25,19 +25,19 @@
 #include <termios.h>
 #include <ctime>
 
-#define PORT "/dev/ser"
-#define BAUD 921600
-#define START_BYTE '#'
-#define WRITE_BYTES 10
-#define READ_BYTES 8
-
-#define COMMCYCLE_TIME_NS	2000000
-
 namespace mrrocpp {
 namespace edp {
 namespace common {
-
 class motor_driven_effector;
+}
+namespace hi_moxa {
+
+const std::string PORT = "/dev/ser";
+const int BAUD = 921600;
+const int WRITE_BYTES = 10;
+const int READ_BYTES = 8;
+
+const long COMMCYCLE_TIME_NS = 2000000;
 
 // ------------------------------------------------------------------------
 //                HARDWARE_INTERFACE class
@@ -49,7 +49,7 @@ class HI_moxa : public common::HardwareInterface
 
 public:
 
-	HI_moxa(motor_driven_effector &_master); // Konstruktor
+	HI_moxa(common::motor_driven_effector &_master); // Konstruktor
 	~HI_moxa();
 
 	virtual void init();
@@ -86,7 +86,7 @@ private:
 
 }; // koniec: class hardware_interface
 
-} // namespace common
+} // namespace hi_moxa
 } // namespace edp
 } // namespace mrrocpp
 

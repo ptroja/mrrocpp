@@ -30,15 +30,15 @@ namespace task {
 teach::teach(lib::configurator &_config) :
 	task(_config)
 {
-	if (config.section_name == ECP_IRP6OT_M_SECTION) {
+	if (config.section_name == lib::irp6ot_m::ECP_SECTION) {
 		ecp_m_robot = new irp6ot_m::robot(*this);
 	} else if (config.section_name == ECP_IRP6P_M_SECTION) {
 		ecp_m_robot = new irp6p_m::robot(*this);
-	} else if (config.section_name == ECP_IRP6_MECHATRONIKA_SECTION) {
+	} else if (config.section_name == lib::irp6m::ECP_SECTION) {
 		ecp_m_robot = new irp6m::robot(*this);
 	} else {
 		fprintf(stderr, "unknown robot \"%s\" in teach task\n", config.section_name.c_str());
-		throw(ecp_robot::ECP_main_error(lib::FATAL_ERROR, 0));
+		throw(robot::ECP_main_error(lib::FATAL_ERROR, 0));
 	}
 
 	tig = new generator::teach_in(*this);
@@ -49,9 +49,9 @@ teach::teach(lib::configurator &_config) :
 void teach::main_task_algorithm(void)
 {
 
-	if (ecp_m_robot->robot_name == lib::ROBOT_IRP6OT_M) {
+	if (ecp_m_robot->robot_name == lib::irp6ot_m::ROBOT_IRP6OT_M) {
 		sr_ecp_msg->message("ecp teach irp6ot_m");
-	} else if (ecp_m_robot->robot_name == lib::ROBOT_IRP6P_M) {
+	} else if (ecp_m_robot->robot_name == lib::irp6p_m::ROBOT_IRP6P_M) {
 		sr_ecp_msg->message("ecp teach irp6p_m");
 	}
 

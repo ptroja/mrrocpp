@@ -5,6 +5,7 @@
 
 namespace mrrocpp {
 namespace lib {
+namespace polycrank {
 
 const robot_name_t ROBOT_POLYCRANK = "ROBOT_POLYCRANK";
 
@@ -13,6 +14,7 @@ const robot_name_t ROBOT_POLYCRANK = "ROBOT_POLYCRANK";
 
 #define POLYCRANK_NUM_OF_SERVOS	8
 
+}
 } // namespace lib
 } // namespace mrrocpp
 

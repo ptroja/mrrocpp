@@ -72,7 +72,7 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 
 // Konstruktor.
 effector::effector(lib::configurator &_config) :
-	motor_driven_effector(_config, lib::ROBOT_SMB)
+	motor_driven_effector(_config, lib::smb::ROBOT_SMB)
 {
 
 	number_of_servos = SMB_NUM_OF_SERVOS;
@@ -92,7 +92,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 	switch (ecp_edp_cbuffer.variant)
 	{
 		/*
-		 case lib::SMB_CBUFFER_EPOS_GEN_PARAMETERS: {
+		 case lib::smb::CBUFFER_EPOS_GEN_PARAMETERS: {
 		 // epos parameters computation basing on trajectory parameters
 		 lib::epos_gen_parameters epos_gen_parameters_structure;
 		 lib::epos_low_level_command epos_low_level_command_structure;
@@ -113,25 +113,25 @@ void effector::move_arm(const lib::c_buffer &instruction)
 		 }
 		 break;
 		 */
-		case lib::SMB_CBUFFER_EPOS_CUBIC_COMMAND: {
-			lib::epos_cubic_command epos_cubic_command_structure;
+		case lib::smb::CBUFFER_EPOS_CUBIC_COMMAND: {
+			lib::epos::epos_cubic_command epos_cubic_command_structure;
 			memcpy(&epos_cubic_command_structure, &(ecp_edp_cbuffer.epos_cubic_command_structure), sizeof(epos_cubic_command_structure));
 
 		}
-		break;
-		case lib::SMB_CBUFFER_EPOS_TRAPEZOIDAL_COMMAND: {
-			lib::epos_trapezoidal_command epos_trapezoidal_command_structure;
+			break;
+		case lib::smb::CBUFFER_EPOS_TRAPEZOIDAL_COMMAND: {
+			lib::epos::epos_trapezoidal_command epos_trapezoidal_command_structure;
 			memcpy(&epos_trapezoidal_command_structure, &(ecp_edp_cbuffer.epos_trapezoidal_command_structure), sizeof(epos_trapezoidal_command_structure));
 
 		}
-		break;
-		case lib::SMB_CBUFFER_PIN_INSERTION: {
-			lib::smb_multi_pin_insertion multi_pin_insertion;
+			break;
+		case lib::smb::CBUFFER_PIN_INSERTION: {
+			lib::smb::multi_pin_insertion_td multi_pin_insertion;
 			memcpy(&multi_pin_insertion, &(ecp_edp_cbuffer.multi_pin_insertion), sizeof(multi_pin_insertion));
 		}
 			break;
-		case lib::SMB_CBUFFER_PIN_LOCKING: {
-			lib::smb_multi_pin_locking multi_pin_locking;
+		case lib::smb::CBUFFER_PIN_LOCKING: {
+			lib::smb::multi_pin_locking_td multi_pin_locking;
 			memcpy(&multi_pin_locking, &(ecp_edp_cbuffer.multi_pin_locking), sizeof(multi_pin_locking));
 		}
 			break;

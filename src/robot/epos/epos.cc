@@ -21,6 +21,7 @@
 
 namespace mrrocpp {
 namespace edp {
+namespace epos {
 
 /* ********************************************* */
 /*    definitions used only internal in c   */
@@ -1925,5 +1926,6 @@ bool epos::bitcmp(WORD a, WORD b) const
 
 //! \@}
 
+}
 } /* namespace edp */
 } /* namespace mrrocpp */

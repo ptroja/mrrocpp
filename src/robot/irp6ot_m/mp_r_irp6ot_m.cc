@@ -14,7 +14,7 @@ namespace mp {
 namespace robot {
 
 irp6ot_m::irp6ot_m(task::task &mp_object_l) :
-	motor_driven(lib::ROBOT_IRP6OT_M, ECP_IRP6OT_M_SECTION, mp_object_l, IRP6OT_M_NUM_OF_SERVOS)
+	motor_driven(lib::irp6ot_m::ROBOT_IRP6OT_M, lib::irp6ot_m::ECP_SECTION, mp_object_l, lib::irp6ot_m::NUM_OF_SERVOS)
 {
 }
 
