@@ -3,6 +3,10 @@
 
 #include <stdint.h>
 
+namespace mrrocpp {
+namespace edp {
+namespace hi_moxa {
+
 #define START_BYTE '#'
 
 // commands
@@ -40,5 +44,9 @@ struct pwm_St
 {
 	int16_t pwm;
 }__attribute__((__packed__));
+
+} // namespace hi_moxa
+} // namespace edp
+} // namespace mrrocpp
 
 #endif // __HI_MOXA_COMBUF_H

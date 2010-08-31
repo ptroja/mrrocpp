@@ -36,6 +36,9 @@
 namespace mrrocpp {
 namespace edp {
 namespace common {
+class motor_driven_effector;
+}
+namespace hi_moxa {
 
 class motor_driven_effector;
 
@@ -49,7 +52,7 @@ class HI_moxa : public common::HardwareInterface
 
 public:
 
-	HI_moxa(motor_driven_effector &_master); // Konstruktor
+	HI_moxa(common::motor_driven_effector &_master); // Konstruktor
 	~HI_moxa();
 
 	virtual void init();
@@ -86,7 +89,7 @@ private:
 
 }; // koniec: class hardware_interface
 
-} // namespace common
+} // namespace hi_moxa
 } // namespace edp
 } // namespace mrrocpp
 
