@@ -39,11 +39,11 @@ protected:
 	 lib::epos_gen_parameters epos_gen_parameters_structure;
 	 */
 	//smb.h
-	lib::single_thread_port <lib::smb_multi_pin_insertion> smb_multi_pin_insertion_data_port;
-	lib::smb_multi_pin_insertion smb_multi_pin_insertion_structure;
+	lib::single_thread_port <lib::smb::multi_pin_insertion_td> smb_multi_pin_insertion_data_port;
+	lib::smb::multi_pin_insertion_td smb_multi_pin_insertion_structure;
 
-	lib::single_thread_port <lib::smb_multi_pin_locking> smb_multi_pin_locking_data_port;
-	lib::smb_multi_pin_locking smb_multi_pin_locking_structure;
+	lib::single_thread_port <lib::smb::multi_pin_locking_td> smb_multi_pin_locking_data_port;
+	lib::smb::multi_pin_locking_td smb_multi_pin_locking_structure;
 
 	// bufory wyjsciowe do generatora
 	// epos.h
@@ -51,13 +51,13 @@ protected:
 	lib::epos::epos_reply epos_reply_structure;
 
 	//smb.h
-	lib::single_thread_request_port <lib::smb_multi_leg_reply> smb_multi_leg_reply_data_request_port;
+	lib::single_thread_request_port <lib::smb::multi_leg_reply_td> smb_multi_leg_reply_data_request_port;
 
-	lib::smb_multi_leg_reply smb_multi_leg_reply_structure;
+	lib::smb::multi_leg_reply_td smb_multi_leg_reply_structure;
 
 	// bufory do edp
-	lib::smb_cbuffer ecp_edp_cbuffer;
-	lib::smb_rbuffer edp_ecp_rbuffer;
+	lib::smb::cbuffer ecp_edp_cbuffer;
+	lib::smb::rbuffer edp_ecp_rbuffer;
 
 public:
 	robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp);

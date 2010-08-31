@@ -17,26 +17,26 @@ namespace ecp {
 namespace smb {
 
 robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
-	robot::ecp_robot(lib::ROBOT_SMB, SMB_NUM_OF_SERVOS, EDP_SMB_SECTION, _config, _sr_ecp), kinematics_manager(),
+	robot::ecp_robot(lib::smb::ROBOT_SMB, SMB_NUM_OF_SERVOS, EDP_SMB_SECTION, _config, _sr_ecp), kinematics_manager(),
 			epos_cubic_command_data_port(lib::epos::EPOS_CUBIC_COMMAND_DATA_PORT, port_manager),
 			epos_trapezoidal_command_data_port(lib::epos::EPOS_TRAPEZOIDAL_COMMAND_DATA_PORT, port_manager),
-			smb_multi_pin_insertion_data_port(lib::SMB_MULTI_PIN_INSERTION_DATA_PORT, port_manager),
-			smb_multi_pin_locking_data_port(lib::SMB_MULTI_PIN_LOCKING_DATA_PORT, port_manager),
+			smb_multi_pin_insertion_data_port(lib::smb::MULTI_PIN_INSERTION_DATA_PORT, port_manager),
+			smb_multi_pin_locking_data_port(lib::smb::MULTI_PIN_LOCKING_DATA_PORT, port_manager),
 			epos_reply_data_request_port(lib::epos::EPOS_REPLY_DATA_REQUEST_PORT, port_manager),
-			smb_multi_leg_reply_data_request_port(lib::SMB_MULTI_LEG_REPLY_DATA_REQUEST_PORT, port_manager)
+			smb_multi_leg_reply_data_request_port(lib::smb::MULTI_LEG_REPLY_DATA_REQUEST_PORT, port_manager)
 {
 
 	create_kinematic_models_for_given_robot();
 }
 
 robot::robot(common::task::task& _ecp_object) :
-	robot::ecp_robot(lib::ROBOT_SMB, SMB_NUM_OF_SERVOS, EDP_SMB_SECTION, _ecp_object), kinematics_manager(),
+	robot::ecp_robot(lib::smb::ROBOT_SMB, SMB_NUM_OF_SERVOS, EDP_SMB_SECTION, _ecp_object), kinematics_manager(),
 			epos_cubic_command_data_port(lib::epos::EPOS_CUBIC_COMMAND_DATA_PORT, port_manager),
 			epos_trapezoidal_command_data_port(lib::epos::EPOS_TRAPEZOIDAL_COMMAND_DATA_PORT, port_manager),
-			smb_multi_pin_insertion_data_port(lib::SMB_MULTI_PIN_INSERTION_DATA_PORT, port_manager),
-			smb_multi_pin_locking_data_port(lib::SMB_MULTI_PIN_LOCKING_DATA_PORT, port_manager),
+			smb_multi_pin_insertion_data_port(lib::smb::MULTI_PIN_INSERTION_DATA_PORT, port_manager),
+			smb_multi_pin_locking_data_port(lib::smb::MULTI_PIN_LOCKING_DATA_PORT, port_manager),
 			epos_reply_data_request_port(lib::epos::EPOS_REPLY_DATA_REQUEST_PORT, port_manager),
-			smb_multi_leg_reply_data_request_port(lib::SMB_MULTI_LEG_REPLY_DATA_REQUEST_PORT, port_manager)
+			smb_multi_leg_reply_data_request_port(lib::smb::MULTI_LEG_REPLY_DATA_REQUEST_PORT, port_manager)
 {
 
 	create_kinematic_models_for_given_robot();
@@ -67,7 +67,7 @@ void robot::create_command()
 		// generator command interpretation
 		// narazie proste przepisanie
 
-		ecp_edp_cbuffer.variant = lib::SMB_CBUFFER_EPOS_CUBIC_COMMAND;
+		ecp_edp_cbuffer.variant = lib::smb::CBUFFER_EPOS_CUBIC_COMMAND;
 
 		ecp_edp_cbuffer.epos_cubic_command_structure = epos_cubic_command_structure;
 
@@ -83,7 +83,7 @@ void robot::create_command()
 		// generator command interpretation
 		// narazie proste przepisanie
 
-		ecp_edp_cbuffer.variant = lib::SMB_CBUFFER_EPOS_TRAPEZOIDAL_COMMAND;
+		ecp_edp_cbuffer.variant = lib::smb::CBUFFER_EPOS_TRAPEZOIDAL_COMMAND;
 
 		ecp_edp_cbuffer.epos_trapezoidal_command_structure = epos_trapezoidal_command_structure;
 
@@ -100,7 +100,7 @@ void robot::create_command()
 	 // generator command interpretation
 	 // narazie proste przepisanie
 
-	 ecp_edp_cbuffer.variant = lib::SMB_CBUFFER_EPOS_GEN_PARAMETERS;
+	 ecp_edp_cbuffer.variant = lib::smb::CBUFFER_EPOS_GEN_PARAMETERS;
 
 	 ecp_edp_cbuffer.epos_gen_parameters_structure = epos_gen_parameters_structure;
 
@@ -116,7 +116,7 @@ void robot::create_command()
 		// generator command interpretation
 		// narazie proste przepisanie
 
-		ecp_edp_cbuffer.variant = lib::SMB_CBUFFER_PIN_INSERTION;
+		ecp_edp_cbuffer.variant = lib::smb::CBUFFER_PIN_INSERTION;
 
 		ecp_edp_cbuffer.multi_pin_insertion = smb_multi_pin_insertion_structure;
 
@@ -132,7 +132,7 @@ void robot::create_command()
 		// generator command interpretation
 		// narazie proste przepisanie
 
-		ecp_edp_cbuffer.variant = lib::SMB_CBUFFER_PIN_LOCKING;
+		ecp_edp_cbuffer.variant = lib::smb::CBUFFER_PIN_LOCKING;
 
 		ecp_edp_cbuffer.multi_pin_locking = smb_multi_pin_locking_structure;
 
