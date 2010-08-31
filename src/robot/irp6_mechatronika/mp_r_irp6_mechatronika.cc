@@ -1,5 +1,5 @@
 #include "robot/irp6_mechatronika/mp_r_irp6_mechatronika.h"
-#include "robot/irp6_mechatronika/irp6m_const.h"
+#include "robot/irp6_mechatronika/const_irp6m.h"
 
 namespace mrrocpp {
 namespace mp {

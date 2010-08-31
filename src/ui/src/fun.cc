@@ -27,7 +27,7 @@
 // #include "ui/src/ui.h"
 // Konfigurator (dla PROCESS_SPAWN_RSH)
 #include "base/lib/configurator.h"
-#include "robot/irp6_mechatronika/irp6m_const.h"
+#include "robot/irp6_mechatronika/const_irp6m.h"
 #include "robot/irp6ot_m/const_irp6ot_m.h"
 #include "robot/irp6ot_tfg/const_irp6ot_tfg.h"
 #include "robot/irp6p_m/const_irp6p_m.h"
