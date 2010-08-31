@@ -18,7 +18,7 @@
 
 #ifdef ROBOT_OT
 #include "robot/irp6ot_m/const_irp6ot_m.h"
-#define ROBOT_NAME lib::ROBOT_IRP6OT_M
+#define ROBOT_NAME lib::irp6ot_m::ROBOT_IRP6OT_M
 #endif
 
 

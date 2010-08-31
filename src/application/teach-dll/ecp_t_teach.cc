@@ -90,7 +90,7 @@ void teach::main_task_algorithm(void)
 
     switch (ecp_m_robot->robot_name)
     {
-    case lib::ROBOT_IRP6OT_M:
+    case lib::irp6ot_m::ROBOT_IRP6OT_M:
         sr_ecp_msg->message("ecp teach irp6ot");
         break;
     case lib::ROBOT_IRP6P_M:

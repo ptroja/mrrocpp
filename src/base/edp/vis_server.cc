@@ -82,7 +82,7 @@ void vis_server::operator()(void)
 		// korekta aby polozenia byly wzgledem poprzedniego czlonu
 
 
-		if (master.robot_name == lib::ROBOT_IRP6OT_M) {
+		if (master.robot_name == lib::irp6ot_m::ROBOT_IRP6OT_M) {
 
 			tmp[3] -= tmp[2] + M_PI_2;
 			tmp[4] -= tmp[3] + tmp[2] + M_PI_2;

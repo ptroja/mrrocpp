@@ -13,6 +13,7 @@
 
 namespace mrrocpp {
 namespace lib {
+namespace irp6ot_m {
 
 const robot_name_t ROBOT_IRP6OT_M = "ROBOT_IRP6OT_M";
 
@@ -23,6 +24,7 @@ const robot_name_t ROBOT_IRP6OT_M = "ROBOT_IRP6OT_M";
 
 #define IRP6OT_M_NUM_OF_SERVOS	7
 
+}
 } // namespace lib
 } // namespace mrrocpp
 
