@@ -50,7 +50,7 @@ ui_tfg_and_conv_robot::ui_tfg_and_conv_robot(lib::configurator &_config,
 		MOTOR_STEP = 0.4; // Przyrost kata obrotu walu silnika [rad]
 		JOINT_LINEAR_STEP = 0.00001; // Przyrost liniowy w przegubach posuwistych [m]
 
-	} else if (_robot_name == lib::ROBOT_SARKOFAG) {
+	} else if (_robot_name == lib::sarkofag::ROBOT_SARKOFAG) {
 		ecp = new ecp::sarkofag::robot(_config, _sr_ecp_msg);
 
 		MOTOR_STEP = 0.1; // Przyrost kata obrotu walu silnika [rad]

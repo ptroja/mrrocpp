@@ -13,6 +13,8 @@
 
 namespace mrrocpp {
 namespace lib {
+namespace sarkofag {
+
 const robot_name_t ROBOT_SARKOFAG = "ROBOT_SARKOFAG";
 
 #define SARKOFAG_INC_PER_REVOLUTION  4000.0  // Liczba impulsow enkodera na obrot walu - musi byc float
@@ -21,6 +23,7 @@ const robot_name_t ROBOT_SARKOFAG = "ROBOT_SARKOFAG";
 
 #define SARKOFAG_NUM_OF_SERVOS	1
 
+}
 } // namespace lib
 } // namespace mrrocpp
 
