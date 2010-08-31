@@ -15,27 +15,28 @@
 
 namespace mrrocpp {
 namespace lib {
+namespace shead {
 
 const robot_name_t ROBOT_SHEAD = "ROBOT_SHEAD";
 
-enum SHEAD_CBUFFER_VARIANT
+enum CBUFFER_VARIANT
 {
-	SHEAD_CBUFFER_HEAD_SOLIDIFICATION, SHEAD_CBUFFER_VACUUM_ACTIVATION
+	CBUFFER_HEAD_SOLIDIFICATION, CBUFFER_VACUUM_ACTIVATION
 };
 
-struct shead_cbuffer
+struct cbuffer
 {
-	SHEAD_CBUFFER_VARIANT variant;
+	CBUFFER_VARIANT variant;
 	union
 	{
-		lib::SHEAD_HEAD_SOLIDIFICATION head_solidification;
-		lib::SHEAD_VACUUM_ACTIVATION vacuum_activation;
+		lib::shead::HEAD_SOLIDIFICATION head_solidification;
+		lib::shead::VACUUM_ACTIVATION vacuum_activation;
 	};
 };
 
-struct shead_rbuffer
+struct rbuffer
 {
-	shead_reply reply;
+	reply shead_reply;
 };
 
 #define EDP_SHEAD_SECTION "[edp_shead]"
@@ -43,6 +44,7 @@ struct shead_rbuffer
 
 #define SHEAD_NUM_OF_SERVOS	1
 
+} // namespace shead
 } // namespace lib
 } // namespace mrrocpp
 

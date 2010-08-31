@@ -16,10 +16,11 @@ namespace ecp {
 namespace shead {
 
 robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
-	robot::ecp_robot(lib::ROBOT_SHEAD, SHEAD_NUM_OF_SERVOS, EDP_SHEAD_SECTION, _config, _sr_ecp), kinematics_manager(),
-			shead_head_soldification_data_port(lib::SHEAD_HEAD_SOLIDIFICATION_DATA_PORT, port_manager),
-			shead_vacuum_activation_data_port(lib::SHEAD_VACUUM_ACTIVATION_DATA_PORT, port_manager),
-			shead_reply_data_request_port(lib::SHEAD_REPLY_DATA_REQUEST_PORT, port_manager)
+	robot::ecp_robot(lib::shead::ROBOT_SHEAD, SHEAD_NUM_OF_SERVOS, EDP_SHEAD_SECTION, _config, _sr_ecp),
+			kinematics_manager(),
+			shead_head_soldification_data_port(lib::shead::HEAD_SOLIDIFICATION_DATA_PORT, port_manager),
+			shead_vacuum_activation_data_port(lib::shead::VACUUM_ACTIVATION_DATA_PORT, port_manager),
+			shead_reply_data_request_port(lib::shead::REPLY_DATA_REQUEST_PORT, port_manager)
 
 {
 	//  Stworzenie listy dostepnych kinematyk.
@@ -27,10 +28,11 @@ robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
 }
 
 robot::robot(common::task::task& _ecp_object) :
-	robot::ecp_robot(lib::ROBOT_SHEAD, SHEAD_NUM_OF_SERVOS, EDP_SHEAD_SECTION, _ecp_object), kinematics_manager(),
-			shead_head_soldification_data_port(lib::SHEAD_HEAD_SOLIDIFICATION_DATA_PORT, port_manager),
-			shead_vacuum_activation_data_port(lib::SHEAD_VACUUM_ACTIVATION_DATA_PORT, port_manager),
-			shead_reply_data_request_port(lib::SHEAD_REPLY_DATA_REQUEST_PORT, port_manager)
+	robot::ecp_robot(lib::shead::ROBOT_SHEAD, SHEAD_NUM_OF_SERVOS, EDP_SHEAD_SECTION, _ecp_object),
+			kinematics_manager(),
+			shead_head_soldification_data_port(lib::shead::HEAD_SOLIDIFICATION_DATA_PORT, port_manager),
+			shead_vacuum_activation_data_port(lib::shead::VACUUM_ACTIVATION_DATA_PORT, port_manager),
+			shead_reply_data_request_port(lib::shead::REPLY_DATA_REQUEST_PORT, port_manager)
 
 {
 	//  Stworzenie listy dostepnych kinematyk.
@@ -63,7 +65,7 @@ void robot::create_command()
 		// generator command interpretation
 		// narazie proste przepisanie
 
-		ecp_edp_cbuffer.variant = lib::SHEAD_CBUFFER_HEAD_SOLIDIFICATION;
+		ecp_edp_cbuffer.variant = lib::shead::CBUFFER_HEAD_SOLIDIFICATION;
 
 		ecp_edp_cbuffer.head_solidification = shead_head_soldification_structure;
 
@@ -80,7 +82,7 @@ void robot::create_command()
 		// generator command interpretation
 		// narazie proste przepisanie
 
-		ecp_edp_cbuffer.variant = lib::SHEAD_CBUFFER_VACUUM_ACTIVATION;
+		ecp_edp_cbuffer.variant = lib::shead::CBUFFER_VACUUM_ACTIVATION;
 
 		ecp_edp_cbuffer.vacuum_activation = shead_vacuum_activation_structure;
 
@@ -125,7 +127,7 @@ void robot::get_reply()
 	// generator reply generation
 
 
-	shead_reply_structure = edp_ecp_rbuffer.reply;
+	shead_reply_structure = edp_ecp_rbuffer.shead_reply;
 
 	if (shead_reply_data_request_port.is_new_request()) {
 		shead_reply_data_request_port.set(shead_reply_structure);
