@@ -1,10 +1,13 @@
-// -------------------------------------------------------------------------
-//                            typedefs.h
-// Definicje typow calkowitych
-//
-// -------------------------------------------------------------------------
+/*!
+ * @file typedefs.h
+ * @brief Base typedefs for OS compatibility and communication structures.
+ *
+ * @author Piotr Trojanek <piotr.trojanek@gmail.com>
+ *
+ * @ingroup LIB
+ */
 
-#if !defined(__TYPEDEFS_H) // Czy 'typedefs.h' juz wczytany ?
+#if !defined(__TYPEDEFS_H)
 #define __TYPEDEFS_H
 
 #if defined(__QNXNTO__)
@@ -13,10 +16,12 @@
 
 typedef struct _pulse msg_header_t;
 
-typedef struct { // wiadomosc odbierana przez readera
+//! Pulse data structure
+typedef struct
+{
 	msg_header_t hdr;
-	int data; // TODO: to pole chyba nie jest potrzebne (ptroja)
-}_pulse_msg;
+	int data; // TODO: this probably is not needed anymore
+} _pulse_msg;
 
 #else
 #include <stdint.h>
